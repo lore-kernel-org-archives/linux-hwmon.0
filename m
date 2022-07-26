@@ -2,148 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE813C04A68
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Jul 2022 14:02:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32B7DC00140
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Jul 2022 14:31:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233247AbiGZOCM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Jul 2022 10:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
+        id S238987AbiGZObZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Jul 2022 10:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239184AbiGZOCL (ORCPT
+        with ESMTP id S239359AbiGZObT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Jul 2022 10:02:11 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D32E15FF6;
-        Tue, 26 Jul 2022 07:02:10 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id s204so17158432oif.5;
-        Tue, 26 Jul 2022 07:02:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Rl6MVE3aMomkDjnvOIHumxd0JS/5JLNfbjl5fhr8vOY=;
-        b=Icsi4QvSPFikvHEq8eo26Q80r+frOYeflQuqLiPA4s53ZENajUE6CcDI17C38XKRaL
-         F28Rko7J1HCiDho0gMfGIgkHPuygOjGdRaxfbtcmzhazvjwsSgWq2qxcA3sPFNpj5BJ+
-         rIF57ehAnnVw73X2N4ifGD8rk7fFM4naSaG+pZJ7cwpRXVqAFj3WQltACqRHzRryJy+Z
-         vBwQjoojsxzs7lwK80RSsVoHZEkMLjk4OAss1yyueE1aIjpjzf3kRiFnjYnUzeKMSImM
-         DJ7l1V08zQ7ufJBKJDAMt9aKyvTYjk/WLcdEvTn4MMgehh25hObLtREnPckzGQ8BnMVw
-         747Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=Rl6MVE3aMomkDjnvOIHumxd0JS/5JLNfbjl5fhr8vOY=;
-        b=KBhCZiEA67JHRbG4avyvELoixZw/5LfiW9HXzzs/v5jnIeJDswxdK43t1dPD0NXDVJ
-         2vqVMCIXxMr+5org45+yR+0l3wMFnNCKFQw81G0vKNG1fAm+TU/Np5rpYm48x2fDeJEh
-         ISKdOwPwxAq+ibBoU8ymOOOSma38pQD8dul/UIQMmey6pR17zvK/UKzA6zYZIR+BeySY
-         zFerwB/ilzP/2EYQ3eDPw+nkw68ogcuY5A1+F12Z0Z4pRzJ/iXvMO+zwM2Syfn/TJQ3b
-         F/8CciTpkcnAAkqWYjJaGLizUDe/fMPKlIZnfMOpTOCg5B9LsuQdwqkLw2pmZsVN2tM/
-         UV7Q==
-X-Gm-Message-State: AJIora+5vq29PKL4tRMwL2jHhcAvXsQknvYD5Tc21bGxsXF9yyiKzeTl
-        6IyX5dG05KuDovKGyae6YBYrj3KiUmNA0g==
-X-Google-Smtp-Source: AGRyM1uZTmbtncnEqSUIZx10k2gMkE6ccOrEFKt54pdLLktvZwzflWZVQTCVmvcHN6atG8a43beL3g==
-X-Received: by 2002:aca:1b0b:0:b0:33a:98d8:cd3d with SMTP id b11-20020aca1b0b000000b0033a98d8cd3dmr14370304oib.265.1658844129155;
-        Tue, 26 Jul 2022 07:02:09 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u189-20020acaabc6000000b003263cf0f282sm6027511oie.26.2022.07.26.07.02.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 07:02:08 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 26 Jul 2022 07:02:07 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] hwmon: sht15: Fix wrong assumptions in device remove
- callback
-Message-ID: <20220726140207.GA4117654@roeck-us.net>
-References: <20220725194344.150098-1-u.kleine-koenig@pengutronix.de>
+        Tue, 26 Jul 2022 10:31:19 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953C72DA;
+        Tue, 26 Jul 2022 07:31:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658845877; x=1690381877;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HyJuY4dDj8OhMbbzCipE0Oq++iocGKX3QqwG3vu56BM=;
+  b=M8TxrMtaYoiseamWYQCdT2JziBD5PecfJasRkRtCViNc08X9W9lQJhud
+   ZebtWsHcJo6Xmg7h8mKcRf6CSgJ9IZY0OT8JHSQzObWcc9F/Jo3LoxK1q
+   jXG1etU73OMWgGBD8qIce+0DQBlRqDo5nm1eKo9kRLJysFf8CBiclaPOM
+   hBu59QYynaiR8zTitRWlkmofJhKPdjZ/nYcLglWobzH0YvThgHwFRJDcw
+   fegfNwlvafVcV06qDcD0nE6cf0vOxBVH0jzZnF4BGWcKhoVAbWxVUxg8I
+   I9RwXs2Ca6Q7WLEui5lK5ztxRDFNFm6IJZEPNr1KyszeKA4Wc7OJAzfBc
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="349668376"
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="349668376"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 07:31:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="603776622"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 26 Jul 2022 07:31:03 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id E3F07F1; Tue, 26 Jul 2022 17:31:12 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Eddie James <eajames@linux.ibm.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] hwmon: (occ) Replace open-coded variant of %*phN specifier
+Date:   Tue, 26 Jul 2022 17:31:10 +0300
+Message-Id: <20220726143110.4809-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220725194344.150098-1-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 09:43:44PM +0200, Uwe Kleine-König wrote:
-> Taking a lock at the beginning of .remove() doesn't prevent new readers.
-> With the existing approach it can happen, that a read occurs just when
-> the lock was taken blocking the reader until the lock is released at the
-> end of the remove callback which then accessed *data that is already
-> freed then.
-> 
-> To actually fix this problem the hwmon core needs some adaption. Until
-> this is implemented take the optimistic approach of assuming that all
-> readers are gone after hwmon_device_unregister() and
-> sysfs_remove_group() as most other drivers do. (And once the core
-> implements that, taking the lock would deadlock.)
-> 
-> So drop the lock, move the reset to after device unregistration to keep
-> the device in a workable state until it's deregistered. Also add a error
-> message in case the reset fails and return 0 anyhow. (Returning an error
-> code, doesn't stop the platform device unregistration and only results
-> in a little helpful error message before the devm cleanup handlers are
-> called.)
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+printf()-like functions in the kernel have extensions, such as
+%*phN to dump small pieces of memory as hex bytes.
 
-Applied.
+Replace custom approach with the direct use of %*phN.
 
-Thanks,
-Guenter
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/hwmon/occ/common.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-> ---
-> Hello,
-> 
-> the motivation for this patch is to fix the driver to not return an
-> error code in .remove(). The long term goal is to make remove callbacks
-> return void as returning an error is nearly always wrong and doesn't
-> have the effect that driver authors think it has. This patch is a
-> preparation for this conversion.
-> 
-> Best regards
-> Uwe
-> 
->  drivers/hwmon/sht15.c | 17 ++++++-----------
->  1 file changed, 6 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
-> index 7f4a63959730..ae4d14257a11 100644
-> --- a/drivers/hwmon/sht15.c
-> +++ b/drivers/hwmon/sht15.c
-> @@ -1020,25 +1020,20 @@ static int sht15_probe(struct platform_device *pdev)
->  static int sht15_remove(struct platform_device *pdev)
->  {
->  	struct sht15_data *data = platform_get_drvdata(pdev);
-> +	int ret;
->  
-> -	/*
-> -	 * Make sure any reads from the device are done and
-> -	 * prevent new ones beginning
-> -	 */
-> -	mutex_lock(&data->read_lock);
-> -	if (sht15_soft_reset(data)) {
-> -		mutex_unlock(&data->read_lock);
-> -		return -EFAULT;
-> -	}
->  	hwmon_device_unregister(data->hwmon_dev);
->  	sysfs_remove_group(&pdev->dev.kobj, &sht15_attr_group);
-> +
-> +	ret = sht15_soft_reset(data);
-> +	if (ret)
-> +		dev_err(&pdev->dev, "Failed to reset device (%pe)\n", ERR_PTR(ret));
-> +
->  	if (!IS_ERR(data->reg)) {
->  		regulator_unregister_notifier(data->reg, &data->nb);
->  		regulator_disable(data->reg);
->  	}
->  
-> -	mutex_unlock(&data->read_lock);
-> -
->  	return 0;
->  }
->  
+diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+index 157b73a3da29..45407b12db4b 100644
+--- a/drivers/hwmon/occ/common.c
++++ b/drivers/hwmon/occ/common.c
+@@ -729,18 +729,14 @@ static ssize_t occ_show_extended(struct device *dev,
+ 			rc = sysfs_emit(buf, "%u",
+ 					get_unaligned_be32(&extn->sensor_id));
+ 		} else {
+-			rc = sysfs_emit(buf, "%02x%02x%02x%02x\n",
+-					extn->name[0], extn->name[1],
+-					extn->name[2], extn->name[3]);
++			rc = sysfs_emit(buf, "%4phN\n", extn->name);
+ 		}
+ 		break;
+ 	case 1:
+ 		rc = sysfs_emit(buf, "%02x\n", extn->flags);
+ 		break;
+ 	case 2:
+-		rc = sysfs_emit(buf, "%02x%02x%02x%02x%02x%02x\n",
+-				extn->data[0], extn->data[1], extn->data[2],
+-				extn->data[3], extn->data[4], extn->data[5]);
++		rc = sysfs_emit(buf, "%6phN\n", extn->data);
+ 		break;
+ 	default:
+ 		return -EINVAL;
+-- 
+2.35.1
+
