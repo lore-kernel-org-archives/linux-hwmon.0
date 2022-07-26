@@ -2,112 +2,85 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B811C00140
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Jul 2022 18:38:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1A44C00144
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Jul 2022 21:22:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239508AbiGZSi4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Jul 2022 14:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53478 "EHLO
+        id S229929AbiGZVWF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Jul 2022 17:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbiGZSiy (ORCPT
+        with ESMTP id S229926AbiGZVWE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Jul 2022 14:38:54 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D226A240B1
-        for <linux-hwmon@vger.kernel.org>; Tue, 26 Jul 2022 11:38:53 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-10d845dcf92so19623373fac.12
-        for <linux-hwmon@vger.kernel.org>; Tue, 26 Jul 2022 11:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+L9iG3M+cLhI/uPvCk2+ugn0i+cIF1nlT0roZ3dFnaw=;
-        b=c+CUMr+wMbFEVCY+iyUnimR34M1WTo8V0z+LRUAeOuaD9IvpZPvtwTKCIcEoB62Zee
-         xKGIsfVc8/ylUvPXxXwF+akEwwP6ra5UjjBERN4bcDeTECjHLOq1BbIwkr1EU/CaOtgr
-         7XWiksXSVL5yPZ3d6QyagCy0YJqssdfZhmI5mrCauPbCZhiTNDg6FWQ1CjInjclRWXI9
-         Oqh5cZdEfB4dULNQWTvM1Tsb/FG0HtKLbXxRY2q5imAlX9q6H6vY0G4WjEBSfdZRv1ct
-         xrFZRwO8L46GxgyNT4hcPWpHtUF/ZHaMbRZ+8oq0BGgFZmKRCC9csN6cV0L0Z8cP5DIt
-         uSEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=+L9iG3M+cLhI/uPvCk2+ugn0i+cIF1nlT0roZ3dFnaw=;
-        b=iRgksAUApY0VTvn3iIfFjPKzikeK6FSIar4/eRnWd0+NmVUO9Fq3ihDILUKQPEfxDs
-         1CDFsbWjdpuCGHK531CuB6IE6Tqz2ezhmxKfFDiFF60PN3MhAwf107L/hp1R7iOfUb5m
-         twf8tAd3AK8yniJ0FHJY/jfMZwoYFPSLW0opvt6QU10XL927dcg1O9/dxA7uDjBSb4Qg
-         dXsReQe91IN5ZHUKsEG3XWkhHmI/EJxvYnAliVS8GQbUN8nJJJVfsUdjyJfEKbXS3m0e
-         KubjHRzWow3xaYP+x3IC6TRdDVPyLpZm0XzYk6vSbINzbSOWwSsUru2MhfMOVuY2G4we
-         0UOA==
-X-Gm-Message-State: AJIora9+30PWxf5Lxvo5Gs2k0Mu6XJM85MDiffEps5yI9Dfm5qevM3PF
-        Vv7S6JfY50nuYZyLWJV4Z25/13zaWm8QEg==
-X-Google-Smtp-Source: AGRyM1tNxPoGjRCUcfC60aFwnt9tazcFKdwD2BAe+DfFunQHlDcxBrvJl5Yi9gTyCo5pO6TAn3Qidg==
-X-Received: by 2002:a05:6870:f149:b0:de:e873:4a46 with SMTP id l9-20020a056870f14900b000dee8734a46mr258417oac.286.1658860733098;
-        Tue, 26 Jul 2022 11:38:53 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l6-20020a056871068600b0010e20d0b2e3sm2566812oao.44.2022.07.26.11.38.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 11:38:52 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 26 Jul 2022 11:38:51 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Robert Schmidt <r-schmidt@web.de>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: Re: NCT6775F new mainboard ASUS TUF GAMING B550-PLUS WIFI II
-Message-ID: <20220726183842.GA933251@roeck-us.net>
-References: <20220725211246.14e87df2@hydra>
+        Tue, 26 Jul 2022 17:22:04 -0400
+Received: from mout.web.de (mout.web.de [217.72.192.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5152D2E9EE
+        for <linux-hwmon@vger.kernel.org>; Tue, 26 Jul 2022 14:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1658870517;
+        bh=8wuuq69QnBbwa7EsYo4BTFLaZyWE/g0sgsuOTyYkSzY=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=HqyR86lUsi6owhmKWAE/bfY52XyGU0EDI/TWfi2h1Bvps3CosU9QuwCsajSnp8Vyy
+         18tBVfaAA8beYpr47+h+FeRioegbVLXpBqt/Z2fjYfb1+mYGiQp1RKTht8DtBO2JzD
+         R2oNFOmZDZxzfewVUYueLrNk8PznB3aCxqOju/1I=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from hydra ([84.154.253.178]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MKdHC-1o24re25cK-00LDUT; Tue, 26
+ Jul 2022 23:16:34 +0200
+Date:   Tue, 26 Jul 2022 23:16:17 +0200
+From:   Robert Schmidt <r-schmidt@web.de>
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: (nct6775) add ASUS TUF GAMING B550-PLUS WIFI II
+Message-ID: <YuBZodZHOnDll5zy@hydra>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220725211246.14e87df2@hydra>
+X-Provags-ID: V03:K1:vAjsY+3BDwOkCLhUDqOoeK7fN80CdXRhen3Vjo3qmXalH4leEVa
+ lcI1SVcIFbLq3rW1cHwJEbXkIoBXsWhH5xex/gJsCbuHNKCNpDMnAcq5wek0vLtllZfVFp2
+ cLXWGURTXnIMMN2bmwbtKVqdkEErKxF8mOEzr7rkowxwvyIcNYvnURyftTFN+Ytabio0Yot
+ aJaTI8Ls0atY3/8cspKNg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ausHQxPQ4VQ=:CbQ9EKp5/TZYUqaeePS/30
+ zTc8EMVUVkh3lllBxGka9NJY3hfjbTRJo+OZ9bUdawpg1PdHP3dK9i5znm5j5k6dtaR6bAgJP
+ zwiBF3mymXH+CvvcVhv7yerUwAPc/G5/yWbaE3eoM25mJkmJgDgrE/AsxBu8+rY6jktLZQFZ/
+ 1lInVQRazPzsaOzk7Z/Km+0u3gdl7dVdnEkBbifKlvfZecAj0NAUBJxfz1hV/TsuZoyM6xPQW
+ iSAdVYRWCr861XaCxa9sRhvQmkBNKbEbJ95wsiI0u/+4hf1TE5Ck1iMrfVlG62yogKnwuqe2O
+ XVvKvZrVkrKoajXNJVjvW66c431SNVEFphYIx+bBXcFpXS1DnxW4M/GcSkCUs4WeN+gv5S8a4
+ c3PM0pjNswvn5wSysrPOReBP92YtZ1dHz6bF8UpL7Fxn8iU9s5H1U+f6rcdWTyNXd20lug4NS
+ lOBw3NgR/85o4c8VrLE7HTsuk/nuQP8NGlnGSkBqRJwb7rhniWMnvyo0+ZZ6TBM3MnoBY2Gwk
+ IumRo82LO6SWvJM8dtyUJ9vqIkFESHUza9p9n9vMJL8IMHt+AIbQca9MhtXCzWWRs2h5CeP+X
+ N+ys6yogWU1zdZUXlWONJNMV0MxT+SPtsUnC4z0fQNbKtS6okrbbcNAmo6zW6cWLgEb2Gt3uY
+ uumtUjOFaSKNBqE9/r0rPmmgY38NKHUAnFAkyy+WcgW7/p72uMKYSoaF+i059qrSZFsXfp17l
+ GEPEoDS2Em5JAdHuHqzmkD/oxlvmdbeG/nb1W4i0t+E8inZLjSNcgDDhIuuPhoyzoDfFbK6OD
+ HCUg8u71hrXwbsD0zcsactxUo95J1KcDFwJM5D+7gXT9lrAByGVAHRkQhrSDwnjcnEicli2Ke
+ mqli59os8JjLBQ0dkhZ5YWsLNhIJA1xVx4+VY8L4BnC2WcMrdVfZL6sxC22KMELnf7q4hQvjb
+ XbvpNRvFBmc7uYPlEfqH5d6SI6FWb9CQ4SwdGHzmPu7aFjYU3WJF701lq5MuSVfsnepzDoA2x
+ 7ZPWDQcaFfRVyPrj4I49tWgm9ggUjCi3QjIwG2Z6wHDQSlprefdEY7Um6pNQVXm5VKoD/KnXG
+ bt2dV7a3lAmIdlpzvJ0dUfmypWa6KrsRLuVjjmBZdzgg58SyD1GrEMwcA==
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 09:12:46PM +0200, Robert Schmidt wrote:
-> Hi,
-> 
-> can you please add the TUF GAMING B550-PLUS WIFI II to nct6775.c?
-> 
-> I'm running a locally modified version (from Linux 5.18.14) to get the
-> monitoring points from the board:
-> 
-> --- drivers/hwmon/nct6775.c.org	2022-07-25 21:09:50.494065595
-> +0200 +++ drivers/hwmon/nct6775.c	2022-07-25 01:00:35.904415955
-> +0200 @@ -5139,6 +5139,7 @@
->  	"TUF GAMING B550M-PLUS",
->  	"TUF GAMING B550M-PLUS (WI-FI)",
->  	"TUF GAMING B550-PLUS",
-> +	"TUF GAMING B550-PLUS WIFI II",
->  	"TUF GAMING B550-PRO",
->  	"TUF GAMING X570-PLUS",
->  	"TUF GAMING X570-PLUS (WI-FI)",
-> 
+Add ASUS TUF GAMING B550-PLUS WIFI II to the WMI monitoring list
+to enable support for HW monitoring on that board.
 
-Can you send me a patch ? Also, please always copy
-linux-hwmon@vger.kernel.org.
+Signed-off-by: Robert Schmidt <r-schmidt@web.de>
+=2D--
+ drivers/hwmon/nct6775-platform.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-plat=
+form.c
+index 6d46c9401898..adc9be817130 100644
+=2D-- a/drivers/hwmon/nct6775-platform.c
++++ b/drivers/hwmon/nct6775-platform.c
+@@ -1083,6 +1083,7 @@ static const char * const asus_wmi_boards[] =3D {
+ 	"TUF GAMING B550M-PLUS",
+ 	"TUF GAMING B550M-PLUS (WI-FI)",
+ 	"TUF GAMING B550-PLUS",
++	"TUF GAMING B550-PLUS WIFI II",
+ 	"TUF GAMING B550-PRO",
+ 	"TUF GAMING X570-PLUS",
+ 	"TUF GAMING X570-PLUS (WI-FI)",
+=2D-
+2.35.1
 
-> 
-> DMI data for the board is
-> 
-> Handle 0x0002, DMI type 2, 15 bytes
-> Base Board Information
-> 	Manufacturer: ASUSTeK COMPUTER INC.
-> 	Product Name: TUF GAMING B550-PLUS WIFI II
-> 	Version: Rev X.0x
-> 	Serial Number: 210991606300962
-> 	Asset Tag: Default string
-> 	Features:
-> 		Board is a hosting board
-> 		Board is replaceable
-> 	Location In Chassis: Default string
-> 	Chassis Handle: 0x0003
-> 	Type: Motherboard
-> 	Contained Object Handles: 0
-> 
-> 
-> Thanks in advance,
-> Robert
