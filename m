@@ -2,74 +2,94 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B169C3F6B0
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Jul 2022 13:59:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE813C04A68
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Jul 2022 14:02:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239104AbiGZN7R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Jul 2022 09:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
+        id S233247AbiGZOCM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Jul 2022 10:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239208AbiGZN7O (ORCPT
+        with ESMTP id S239184AbiGZOCL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Jul 2022 09:59:14 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82667101ED;
-        Tue, 26 Jul 2022 06:59:13 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id j70so17166312oih.10;
-        Tue, 26 Jul 2022 06:59:13 -0700 (PDT)
+        Tue, 26 Jul 2022 10:02:11 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D32E15FF6;
+        Tue, 26 Jul 2022 07:02:10 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id s204so17158432oif.5;
+        Tue, 26 Jul 2022 07:02:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3CE6r59UbZWFRPQFwsRGzWwILdcmigdGmimoBM3/j00=;
-        b=pLVkoY/T3ljaVdC9m7a8TyzJxnj9ZiqnL3DSFhSQYbL0BzS5ul69jv4gyPFUAc0N4W
-         iM1/JivjY6LCKVA/6KAKNrNw1/GVWkiQ+fWTEF5rOMKl+h8B8mlZoLJNZU3NbHx1vFGG
-         08sgN3KVZkWMCTTsGyUZNLRAq32KdZAvRg6FLeMT60ah1vaSoZjEVdEVyPrdH32rNjI5
-         GV89/Saor6vgwrDAjGDTWvY3mbjDHUSDzAtGBMARmiV7TI6iVqZofp3IeR0C8OWKUMHW
-         y1ThaFiXXi639p5buaJr28jBTfODqQbjIEK+E3Y5UVk5ctxAHicC7dktir7dkUiy4eN2
-         KGnA==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Rl6MVE3aMomkDjnvOIHumxd0JS/5JLNfbjl5fhr8vOY=;
+        b=Icsi4QvSPFikvHEq8eo26Q80r+frOYeflQuqLiPA4s53ZENajUE6CcDI17C38XKRaL
+         F28Rko7J1HCiDho0gMfGIgkHPuygOjGdRaxfbtcmzhazvjwsSgWq2qxcA3sPFNpj5BJ+
+         rIF57ehAnnVw73X2N4ifGD8rk7fFM4naSaG+pZJ7cwpRXVqAFj3WQltACqRHzRryJy+Z
+         vBwQjoojsxzs7lwK80RSsVoHZEkMLjk4OAss1yyueE1aIjpjzf3kRiFnjYnUzeKMSImM
+         DJ7l1V08zQ7ufJBKJDAMt9aKyvTYjk/WLcdEvTn4MMgehh25hObLtREnPckzGQ8BnMVw
+         747Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=3CE6r59UbZWFRPQFwsRGzWwILdcmigdGmimoBM3/j00=;
-        b=z2Ygn3w5IHTj2zqt2X8nw2nNahhQL7go1a5kli0WR4gVI3DT2ELXIzIoxD1tfbpeGg
-         D4lwMY0RxVimUZThkVEzxXhWsUVOoLy8cCT1GccGMG2/tuwGDllGb06DJxpPTvvvTXG2
-         RmoUOBnwJFe5KtOLAMWy6lvROkKFPX60S+mI5ytXeylDEde1oCsusAIUF5pYxz5Oht/2
-         xarcTB8kDfAkf738tLOerd3aNhPouo2P0zMgsdR0XaAqCRwOpP3CZxKphOwkySQo21yf
-         WLVlP3Nq+piMAGMW8O5TI8mJ9phXuD51VSH+foZ206ScFwVN1P3lHMlcYTO7cn8HzXoq
-         ILoQ==
-X-Gm-Message-State: AJIora8748IaTYnq3W1BOp+bkwIwmAt6K7XPeAChn/am+zMe6irMsLGt
-        /j/+VzLsu4wELqH5+gdOpBE=
-X-Google-Smtp-Source: AGRyM1tY0QAxhFowx0g8LT07J8LxkOMVr+l2dkYMDIsaCY9ybvV6LMjuhYC39eLOm8PspfukNdT37Q==
-X-Received: by 2002:aca:ac84:0:b0:33a:373f:878d with SMTP id v126-20020acaac84000000b0033a373f878dmr14910054oie.253.1658843952785;
-        Tue, 26 Jul 2022 06:59:12 -0700 (PDT)
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=Rl6MVE3aMomkDjnvOIHumxd0JS/5JLNfbjl5fhr8vOY=;
+        b=KBhCZiEA67JHRbG4avyvELoixZw/5LfiW9HXzzs/v5jnIeJDswxdK43t1dPD0NXDVJ
+         2vqVMCIXxMr+5org45+yR+0l3wMFnNCKFQw81G0vKNG1fAm+TU/Np5rpYm48x2fDeJEh
+         ISKdOwPwxAq+ibBoU8ymOOOSma38pQD8dul/UIQMmey6pR17zvK/UKzA6zYZIR+BeySY
+         zFerwB/ilzP/2EYQ3eDPw+nkw68ogcuY5A1+F12Z0Z4pRzJ/iXvMO+zwM2Syfn/TJQ3b
+         F/8CciTpkcnAAkqWYjJaGLizUDe/fMPKlIZnfMOpTOCg5B9LsuQdwqkLw2pmZsVN2tM/
+         UV7Q==
+X-Gm-Message-State: AJIora+5vq29PKL4tRMwL2jHhcAvXsQknvYD5Tc21bGxsXF9yyiKzeTl
+        6IyX5dG05KuDovKGyae6YBYrj3KiUmNA0g==
+X-Google-Smtp-Source: AGRyM1uZTmbtncnEqSUIZx10k2gMkE6ccOrEFKt54pdLLktvZwzflWZVQTCVmvcHN6atG8a43beL3g==
+X-Received: by 2002:aca:1b0b:0:b0:33a:98d8:cd3d with SMTP id b11-20020aca1b0b000000b0033a98d8cd3dmr14370304oib.265.1658844129155;
+        Tue, 26 Jul 2022 07:02:09 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d24-20020a05680805d800b0032f63c4638esm6115159oij.2.2022.07.26.06.59.11
+        by smtp.gmail.com with ESMTPSA id u189-20020acaabc6000000b003263cf0f282sm6027511oie.26.2022.07.26.07.02.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 06:59:12 -0700 (PDT)
+        Tue, 26 Jul 2022 07:02:08 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 26 Jul 2022 06:59:10 -0700
+Date:   Tue, 26 Jul 2022 07:02:07 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Aleksa Savic <savicaleksa83@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for reading the
- +12V voltage sensor on D5 Next
-Message-ID: <20220726133225.GA3021073@roeck-us.net>
-References: <20220726120203.33773-1-savicaleksa83@gmail.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH] hwmon: sht15: Fix wrong assumptions in device remove
+ callback
+Message-ID: <20220726140207.GA4117654@roeck-us.net>
+References: <20220725194344.150098-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220726120203.33773-1-savicaleksa83@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220725194344.150098-1-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 02:02:03PM +0200, Aleksa Savic wrote:
-> Add support for reading the +12V voltage that the D5 Next pump receives.
+On Mon, Jul 25, 2022 at 09:43:44PM +0200, Uwe Kleine-König wrote:
+> Taking a lock at the beginning of .remove() doesn't prevent new readers.
+> With the existing approach it can happen, that a read occurs just when
+> the lock was taken blocking the reader until the lock is released at the
+> end of the remove callback which then accessed *data that is already
+> freed then.
 > 
-> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+> To actually fix this problem the hwmon core needs some adaption. Until
+> this is implemented take the optimistic approach of assuming that all
+> readers are gone after hwmon_device_unregister() and
+> sysfs_remove_group() as most other drivers do. (And once the core
+> implements that, taking the lock would deadlock.)
+> 
+> So drop the lock, move the reset to after device unregistration to keep
+> the device in a workable state until it's deregistered. Also add a error
+> message in case the reset fails and return 0 anyhow. (Returning an error
+> code, doesn't stop the platform device unregistration and only results
+> in a little helpful error message before the devm cleanup handlers are
+> called.)
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
 Applied.
 
@@ -77,47 +97,53 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/aquacomputer_d5next.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+> Hello,
 > 
-> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-> index 997d72ea6182..738a1df8eae6 100644
-> --- a/drivers/hwmon/aquacomputer_d5next.c
-> +++ b/drivers/hwmon/aquacomputer_d5next.c
-> @@ -71,6 +71,7 @@ static u8 secondary_ctrl_report[] = {
->  #define D5NEXT_PUMP_OFFSET		0x6c
->  #define D5NEXT_FAN_OFFSET		0x5f
->  #define D5NEXT_5V_VOLTAGE		0x39
-> +#define D5NEXT_12V_VOLTAGE		0x37
->  #define D5NEXT_CTRL_REPORT_SIZE		0x329
->  static u8 d5next_sensor_fan_offsets[] = { D5NEXT_PUMP_OFFSET, D5NEXT_FAN_OFFSET };
+> the motivation for this patch is to fix the driver to not return an
+> error code in .remove(). The long term goal is to make remove callbacks
+> return void as returning an error is nearly always wrong and doesn't
+> have the effect that driver authors think it has. This patch is a
+> preparation for this conversion.
+> 
+> Best regards
+> Uwe
+> 
+>  drivers/hwmon/sht15.c | 17 ++++++-----------
+>  1 file changed, 6 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
+> index 7f4a63959730..ae4d14257a11 100644
+> --- a/drivers/hwmon/sht15.c
+> +++ b/drivers/hwmon/sht15.c
+> @@ -1020,25 +1020,20 @@ static int sht15_probe(struct platform_device *pdev)
+>  static int sht15_remove(struct platform_device *pdev)
+>  {
+>  	struct sht15_data *data = platform_get_drvdata(pdev);
+> +	int ret;
 >  
-> @@ -114,7 +115,8 @@ static const char *const label_d5next_power[] = {
->  static const char *const label_d5next_voltages[] = {
->  	"Pump voltage",
->  	"Fan voltage",
-> -	"+5V voltage"
-> +	"+5V voltage",
-> +	"+12V voltage"
->  };
+> -	/*
+> -	 * Make sure any reads from the device are done and
+> -	 * prevent new ones beginning
+> -	 */
+> -	mutex_lock(&data->read_lock);
+> -	if (sht15_soft_reset(data)) {
+> -		mutex_unlock(&data->read_lock);
+> -		return -EFAULT;
+> -	}
+>  	hwmon_device_unregister(data->hwmon_dev);
+>  	sysfs_remove_group(&pdev->dev.kobj, &sht15_attr_group);
+> +
+> +	ret = sht15_soft_reset(data);
+> +	if (ret)
+> +		dev_err(&pdev->dev, "Failed to reset device (%pe)\n", ERR_PTR(ret));
+> +
+>  	if (!IS_ERR(data->reg)) {
+>  		regulator_unregister_notifier(data->reg, &data->nb);
+>  		regulator_disable(data->reg);
+>  	}
 >  
->  static const char *const label_d5next_current[] = {
-> @@ -340,8 +342,8 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
->  	case hwmon_in:
->  		switch (priv->kind) {
->  		case d5next:
-> -			/* Special case to support voltage sensor */
-> -			if (channel < priv->num_fans + 1)
-> +			/* Special case to support +5V and +12V voltage sensors */
-> +			if (channel < priv->num_fans + 2)
->  				return 0444;
->  			break;
->  		default:
-> @@ -574,6 +576,7 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
->  	switch (priv->kind) {
->  	case d5next:
->  		priv->voltage_input[2] = get_unaligned_be16(data + D5NEXT_5V_VOLTAGE) * 10;
-> +		priv->voltage_input[3] = get_unaligned_be16(data + D5NEXT_12V_VOLTAGE) * 10;
->  		break;
->  	default:
->  		break;
+> -	mutex_unlock(&data->read_lock);
+> -
+>  	return 0;
+>  }
+>  
