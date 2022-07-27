@@ -2,85 +2,175 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1A44C00144
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Jul 2022 21:22:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AF13C00144
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jul 2022 02:45:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiGZVWF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Jul 2022 17:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
+        id S229906AbiG0Cpl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Jul 2022 22:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiGZVWE (ORCPT
+        with ESMTP id S229717AbiG0Cpk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Jul 2022 17:22:04 -0400
-Received: from mout.web.de (mout.web.de [217.72.192.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5152D2E9EE
-        for <linux-hwmon@vger.kernel.org>; Tue, 26 Jul 2022 14:21:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1658870517;
-        bh=8wuuq69QnBbwa7EsYo4BTFLaZyWE/g0sgsuOTyYkSzY=;
-        h=X-UI-Sender-Class:Date:From:To:Subject;
-        b=HqyR86lUsi6owhmKWAE/bfY52XyGU0EDI/TWfi2h1Bvps3CosU9QuwCsajSnp8Vyy
-         18tBVfaAA8beYpr47+h+FeRioegbVLXpBqt/Z2fjYfb1+mYGiQp1RKTht8DtBO2JzD
-         R2oNFOmZDZxzfewVUYueLrNk8PznB3aCxqOju/1I=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from hydra ([84.154.253.178]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MKdHC-1o24re25cK-00LDUT; Tue, 26
- Jul 2022 23:16:34 +0200
-Date:   Tue, 26 Jul 2022 23:16:17 +0200
-From:   Robert Schmidt <r-schmidt@web.de>
-To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: (nct6775) add ASUS TUF GAMING B550-PLUS WIFI II
-Message-ID: <YuBZodZHOnDll5zy@hydra>
+        Tue, 26 Jul 2022 22:45:40 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0C365C1
+        for <linux-hwmon@vger.kernel.org>; Tue, 26 Jul 2022 19:45:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658889940; x=1690425940;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=trtn3XVYsdaOEJdN4atxGNZuRatQMCB/R/h160AX9xg=;
+  b=miAGg9VJtu37sK6wXIkh1PoqzzG6h7MgRjQR8nSXV98nI84EfdP+UZsx
+   gYQuTsgLcK/rGbyAiJfzdmvJYNqc3zZTXWi7/FysqYa6ejWLJE7RSRJ5i
+   Af3S+G8H2yssrmZiDWi+9ESh1Rnuts3lEHHZ0R1D/j5rTUluqOZ6/b1oy
+   B9amyJIdBpLRwYqB96VHI7009BBad/brOBX9wcC4ItjlRx1R/9dBJuPJj
+   VJnTao+EQIu8Yz9wtsxoa4s0z/fYQ5gbws8Pcw9Mabf6LDfflO0WohH1b
+   rml8DJ8MO78S/TtOhbOc97/xlKsBGqVIoLSUQnaY+r1+qPn4j1il891eG
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="313903751"
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="313903751"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 19:45:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="575782332"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 26 Jul 2022 19:45:38 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oGX3J-0008CU-29;
+        Wed, 27 Jul 2022 02:45:37 +0000
+Date:   Wed, 27 Jul 2022 10:45:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 7d4edccc9bbfe1dcdff641343f7b0c6763fbe774
+Message-ID: <62e0a6bd.GRNdPlb96xRtJz+a%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Provags-ID: V03:K1:vAjsY+3BDwOkCLhUDqOoeK7fN80CdXRhen3Vjo3qmXalH4leEVa
- lcI1SVcIFbLq3rW1cHwJEbXkIoBXsWhH5xex/gJsCbuHNKCNpDMnAcq5wek0vLtllZfVFp2
- cLXWGURTXnIMMN2bmwbtKVqdkEErKxF8mOEzr7rkowxwvyIcNYvnURyftTFN+Ytabio0Yot
- aJaTI8Ls0atY3/8cspKNg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ausHQxPQ4VQ=:CbQ9EKp5/TZYUqaeePS/30
- zTc8EMVUVkh3lllBxGka9NJY3hfjbTRJo+OZ9bUdawpg1PdHP3dK9i5znm5j5k6dtaR6bAgJP
- zwiBF3mymXH+CvvcVhv7yerUwAPc/G5/yWbaE3eoM25mJkmJgDgrE/AsxBu8+rY6jktLZQFZ/
- 1lInVQRazPzsaOzk7Z/Km+0u3gdl7dVdnEkBbifKlvfZecAj0NAUBJxfz1hV/TsuZoyM6xPQW
- iSAdVYRWCr861XaCxa9sRhvQmkBNKbEbJ95wsiI0u/+4hf1TE5Ck1iMrfVlG62yogKnwuqe2O
- XVvKvZrVkrKoajXNJVjvW66c431SNVEFphYIx+bBXcFpXS1DnxW4M/GcSkCUs4WeN+gv5S8a4
- c3PM0pjNswvn5wSysrPOReBP92YtZ1dHz6bF8UpL7Fxn8iU9s5H1U+f6rcdWTyNXd20lug4NS
- lOBw3NgR/85o4c8VrLE7HTsuk/nuQP8NGlnGSkBqRJwb7rhniWMnvyo0+ZZ6TBM3MnoBY2Gwk
- IumRo82LO6SWvJM8dtyUJ9vqIkFESHUza9p9n9vMJL8IMHt+AIbQca9MhtXCzWWRs2h5CeP+X
- N+ys6yogWU1zdZUXlWONJNMV0MxT+SPtsUnC4z0fQNbKtS6okrbbcNAmo6zW6cWLgEb2Gt3uY
- uumtUjOFaSKNBqE9/r0rPmmgY38NKHUAnFAkyy+WcgW7/p72uMKYSoaF+i059qrSZFsXfp17l
- GEPEoDS2Em5JAdHuHqzmkD/oxlvmdbeG/nb1W4i0t+E8inZLjSNcgDDhIuuPhoyzoDfFbK6OD
- HCUg8u71hrXwbsD0zcsactxUo95J1KcDFwJM5D+7gXT9lrAByGVAHRkQhrSDwnjcnEicli2Ke
- mqli59os8JjLBQ0dkhZ5YWsLNhIJA1xVx4+VY8L4BnC2WcMrdVfZL6sxC22KMELnf7q4hQvjb
- XbvpNRvFBmc7uYPlEfqH5d6SI6FWb9CQ4SwdGHzmPu7aFjYU3WJF701lq5MuSVfsnepzDoA2x
- 7ZPWDQcaFfRVyPrj4I49tWgm9ggUjCi3QjIwG2Z6wHDQSlprefdEY7Um6pNQVXm5VKoD/KnXG
- bt2dV7a3lAmIdlpzvJ0dUfmypWa6KrsRLuVjjmBZdzgg58SyD1GrEMwcA==
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add ASUS TUF GAMING B550-PLUS WIFI II to the WMI monitoring list
-to enable support for HW monitoring on that board.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 7d4edccc9bbfe1dcdff641343f7b0c6763fbe774  hwmon: (sht15) Fix wrong assumptions in device remove callback
 
-Signed-off-by: Robert Schmidt <r-schmidt@web.de>
-=2D--
- drivers/hwmon/nct6775-platform.c | 1 +
- 1 file changed, 1 insertion(+)
+elapsed time: 724m
 
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-plat=
-form.c
-index 6d46c9401898..adc9be817130 100644
-=2D-- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -1083,6 +1083,7 @@ static const char * const asus_wmi_boards[] =3D {
- 	"TUF GAMING B550M-PLUS",
- 	"TUF GAMING B550M-PLUS (WI-FI)",
- 	"TUF GAMING B550-PLUS",
-+	"TUF GAMING B550-PLUS WIFI II",
- 	"TUF GAMING B550-PRO",
- 	"TUF GAMING X570-PLUS",
- 	"TUF GAMING X570-PLUS (WI-FI)",
-=2D-
-2.35.1
+configs tested: 99
+configs skipped: 2
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+powerpc              randconfig-c003-20220724
+i386                          randconfig-c001
+arc                        nsimosci_defconfig
+s390                             allmodconfig
+sh                          rsk7264_defconfig
+m68k                        m5272c3_defconfig
+ia64                      gensparse_defconfig
+alpha                            alldefconfig
+arc                     nsimosci_hs_defconfig
+sh                               j2_defconfig
+powerpc                  iss476-smp_defconfig
+powerpc                         ps3_defconfig
+arm                        keystone_defconfig
+arm                     eseries_pxa_defconfig
+powerpc                  storcenter_defconfig
+sh                           se7705_defconfig
+m68k                       m5275evb_defconfig
+arm                        shmobile_defconfig
+powerpc                 mpc837x_rdb_defconfig
+mips                         mpc30x_defconfig
+m68k                         apollo_defconfig
+nios2                         10m50_defconfig
+nios2                            allyesconfig
+arc                          axs103_defconfig
+nios2                               defconfig
+powerpc                       eiger_defconfig
+sparc64                          alldefconfig
+arm                           sama5_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+loongarch                           defconfig
+loongarch                         allnoconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220724
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                             allyesconfig
+i386                                defconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a005
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220724
+riscv                randconfig-r042-20220724
+s390                 randconfig-r044-20220724
+s390                 randconfig-r044-20220726
+riscv                randconfig-r042-20220726
+arc                  randconfig-r043-20220726
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+mips                           rs90_defconfig
+arm                  colibri_pxa300_defconfig
+powerpc                     powernv_defconfig
+powerpc                  mpc885_ads_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a006
+i386                          randconfig-a002
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r041-20220724
+hexagon              randconfig-r045-20220724
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
