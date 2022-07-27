@@ -2,175 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AF13C00144
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jul 2022 02:45:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CE44C19F21
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jul 2022 03:17:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiG0Cpl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Jul 2022 22:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
+        id S240313AbiG0DRg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Jul 2022 23:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiG0Cpk (ORCPT
+        with ESMTP id S240303AbiG0DRU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Jul 2022 22:45:40 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0C365C1
-        for <linux-hwmon@vger.kernel.org>; Tue, 26 Jul 2022 19:45:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658889940; x=1690425940;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=trtn3XVYsdaOEJdN4atxGNZuRatQMCB/R/h160AX9xg=;
-  b=miAGg9VJtu37sK6wXIkh1PoqzzG6h7MgRjQR8nSXV98nI84EfdP+UZsx
-   gYQuTsgLcK/rGbyAiJfzdmvJYNqc3zZTXWi7/FysqYa6ejWLJE7RSRJ5i
-   Af3S+G8H2yssrmZiDWi+9ESh1Rnuts3lEHHZ0R1D/j5rTUluqOZ6/b1oy
-   B9amyJIdBpLRwYqB96VHI7009BBad/brOBX9wcC4ItjlRx1R/9dBJuPJj
-   VJnTao+EQIu8Yz9wtsxoa4s0z/fYQ5gbws8Pcw9Mabf6LDfflO0WohH1b
-   rml8DJ8MO78S/TtOhbOc97/xlKsBGqVIoLSUQnaY+r1+qPn4j1il891eG
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="313903751"
-X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="313903751"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 19:45:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="575782332"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 26 Jul 2022 19:45:38 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oGX3J-0008CU-29;
-        Wed, 27 Jul 2022 02:45:37 +0000
-Date:   Wed, 27 Jul 2022 10:45:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
+        Tue, 26 Jul 2022 23:17:20 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901113DBDE
+        for <linux-hwmon@vger.kernel.org>; Tue, 26 Jul 2022 20:17:19 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id i4so9396689oif.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 26 Jul 2022 20:17:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Y/P14HDEuPtfGyQyACbXKlziRq+bgCk0xQ2fX5DFeIU=;
+        b=EPeQdC20zWtkuRuQ29ntbzNK9JTMj6YW2b1Mo2c2LA9uU9eoI7bFR65uoqXbb5Obil
+         3FPp0Lqowqky+UvGwqOgEPL7NASWboKVdPKSQDySHr7sl+X8N5pTKdkIqV4q6EHHjgAZ
+         68wlQe1Ko2oMsElh6Onnsfa9ruBHOGhpydN3gtT0fobKXEbYZ5hcBpkG9NMfFN1U4olk
+         kWxa+JO9T0zqCvyYL5KNJeektToyRcwgPfpikpc5RifLr9BVbH6qakJe8psypfmnKwio
+         yv3rVr/e3KNfZ82jLoXN8J7u3nxe7IUswLkE+t2ANN1LPZs6DvpWVcea4mPBTU0u1Hdx
+         e+LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Y/P14HDEuPtfGyQyACbXKlziRq+bgCk0xQ2fX5DFeIU=;
+        b=6tiLryHw9YUQqJmxgcrQ7NQNrdjHTLYDo9M5NZ9apfm3m9J4J06O75xxJ8IG9dT/KL
+         U1MzyGLxF+6aTLpiLUG4T7q/pjsDulm6g1wuDvpdo9/XS802BrgTQOHAuEjMzzn/ZBH2
+         D6Yd2Q819O/Kv+ezsZaOtK9oMaFNoVRWMl5BuzQlPI8L5stESWTgSs00AIbsVQtvVjV+
+         0WID9fuN8r4M13pTgXdWM5w0ixK0Hd4n7712uCbwNjZIEbRlfULmENeNfGL/GIsHZ720
+         kYCDct8nP2wLoIvcdZ/X136rRxclMHUFcMQ08/ZM1gyUPorvMP2pjZ8QMvpnKxVofcxQ
+         5Njg==
+X-Gm-Message-State: AJIora8sq1VntMpPyhrugh3jiX1ktXGWmJ4y+d1NfZfEVqR/UZWOmkKc
+        L9UVD0GYFfmrKpvUC1t1KyY=
+X-Google-Smtp-Source: AGRyM1sGKNaZ4nOWWQgWvcmMbNGepnBeTbMG/VUyBCfIVxr1jaI8PMsNU580jDC58M0BKRoGx89GzA==
+X-Received: by 2002:a05:6808:1b1f:b0:33a:df99:4616 with SMTP id bx31-20020a0568081b1f00b0033adf994616mr979234oib.289.1658891838852;
+        Tue, 26 Jul 2022 20:17:18 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id cz16-20020a056870649000b0010c17e6c699sm8382644oab.47.2022.07.26.20.17.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 20:17:17 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 26 Jul 2022 20:17:15 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Robert Schmidt <r-schmidt@web.de>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 7d4edccc9bbfe1dcdff641343f7b0c6763fbe774
-Message-ID: <62e0a6bd.GRNdPlb96xRtJz+a%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+Subject: Re: [PATCH] hwmon: (nct6775) add ASUS TUF GAMING B550-PLUS WIFI II
+Message-ID: <20220727031715.GA2012317@roeck-us.net>
+References: <YuBZodZHOnDll5zy@hydra>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <YuBZodZHOnDll5zy@hydra>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 7d4edccc9bbfe1dcdff641343f7b0c6763fbe774  hwmon: (sht15) Fix wrong assumptions in device remove callback
+On Tue, Jul 26, 2022 at 11:16:17PM +0200, Robert Schmidt wrote:
+> Add ASUS TUF GAMING B550-PLUS WIFI II to the WMI monitoring list
+> to enable support for HW monitoring on that board.
+> 
+> Signed-off-by: Robert Schmidt <r-schmidt@web.de>
 
-elapsed time: 724m
+Applied.
 
-configs tested: 99
-configs skipped: 2
+Thanks,
+Guenter
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-powerpc              randconfig-c003-20220724
-i386                          randconfig-c001
-arc                        nsimosci_defconfig
-s390                             allmodconfig
-sh                          rsk7264_defconfig
-m68k                        m5272c3_defconfig
-ia64                      gensparse_defconfig
-alpha                            alldefconfig
-arc                     nsimosci_hs_defconfig
-sh                               j2_defconfig
-powerpc                  iss476-smp_defconfig
-powerpc                         ps3_defconfig
-arm                        keystone_defconfig
-arm                     eseries_pxa_defconfig
-powerpc                  storcenter_defconfig
-sh                           se7705_defconfig
-m68k                       m5275evb_defconfig
-arm                        shmobile_defconfig
-powerpc                 mpc837x_rdb_defconfig
-mips                         mpc30x_defconfig
-m68k                         apollo_defconfig
-nios2                         10m50_defconfig
-nios2                            allyesconfig
-arc                          axs103_defconfig
-nios2                               defconfig
-powerpc                       eiger_defconfig
-sparc64                          alldefconfig
-arm                           sama5_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-loongarch                           defconfig
-loongarch                         allnoconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220724
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a005
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220724
-riscv                randconfig-r042-20220724
-s390                 randconfig-r044-20220724
-s390                 randconfig-r044-20220726
-riscv                randconfig-r042-20220726
-arc                  randconfig-r043-20220726
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-mips                           rs90_defconfig
-arm                  colibri_pxa300_defconfig
-powerpc                     powernv_defconfig
-powerpc                  mpc885_ads_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a006
-i386                          randconfig-a002
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r041-20220724
-hexagon              randconfig-r045-20220724
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  drivers/hwmon/nct6775-platform.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> --
+> 2.35.1
+> 
+> diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
+> index 6d46c9401898..adc9be817130 100644
+> --- a/drivers/hwmon/nct6775-platform.c
+> +++ b/drivers/hwmon/nct6775-platform.c
+> @@ -1083,6 +1083,7 @@ static const char * const asus_wmi_boards[] = {
+>  	"TUF GAMING B550M-PLUS",
+>  	"TUF GAMING B550M-PLUS (WI-FI)",
+>  	"TUF GAMING B550-PLUS",
+> +	"TUF GAMING B550-PLUS WIFI II",
+>  	"TUF GAMING B550-PRO",
+>  	"TUF GAMING X570-PLUS",
+>  	"TUF GAMING X570-PLUS (WI-FI)",
