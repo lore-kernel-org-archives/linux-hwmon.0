@@ -2,102 +2,135 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B308C3F6B0
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Aug 2022 19:48:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32920C19F29
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Aug 2022 19:51:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233510AbiHBTr6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 2 Aug 2022 15:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
+        id S229854AbiHBTvh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 2 Aug 2022 15:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232949AbiHBTrt (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Aug 2022 15:47:49 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D2152FCB;
-        Tue,  2 Aug 2022 12:47:47 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 272JFRUV008862;
-        Tue, 2 Aug 2022 19:47:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=noWbrVaOPUO/w0UphzMRye+2Bomv7aG3YuUle6322CI=;
- b=Xc625qQdZcOoiwDa+sMwikqBeMzu6geW27LxsAQyFuktyjtsCxR727oiPuNET3Cr9tsm
- 39vUhjJhGpPSzdpLRibacBvnyMzWsuGXLKvBqfeCkyNM+BvGIaQNq72O++9VA6u5gC7H
- tKWyEYgs1VsalFv/2iRxvQof0q7VW5tGW9VA3PYN8Pd9iWw+2bhSDlwVurNH3TBKmdR2
- ALVjpShqPaWgtwiN0snzZOXkjZN5CuppCPetnXetEaVZMvzUg/kOsNuXLEn/Lj6LmPmu
- 2+rUbMPBDRIRXDD+iIL5gZ322qO75zvX51M/rPUAl7xKFnWVo4/EuaMtgCwJfzkffprB XQ== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hq9x30ruh-1
+        with ESMTP id S231972AbiHBTvg (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Aug 2022 15:51:36 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D87713F24;
+        Tue,  2 Aug 2022 12:51:35 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 272JkFWd010802;
+        Tue, 2 Aug 2022 19:51:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=rnivLeUSdP+wbl0isK8o6unZYPkNKv5qWeUBsBCvnxU=;
+ b=ZRpJwdOKC8PNIgFjlClQhRhBQSQ8SctD39Zcy/n57Gn4lhC1aciElftZIDOgBgelAbYZ
+ 1RNVTHE9CYad5C7/WjUCRQZax1F5paaIiCp8HkId5tJdCLDbz1JZ+qYGMIdz7Uaz8FiT
+ AcYFkb2/Sxy7GgFMP6KDhAi5tOVHYllJkb6uWDsBkp8JjFRt11JdJO+zQyIVj5fyIj3x
+ vLgQ+X3e1h48e+Mz3IIzv0j6B/yIP8nkd1gGgYyJtrfyU7Ld4w1CKwWDIcb13CEruCJ6
+ VyXYNcvy4UPXNagz3b9ePcBoLF02CRTwMYTK+o88fqZQa5Navxf1R1BMALXit7sw6Els 4A== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hqac7r2sx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 Aug 2022 19:47:10 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 272JLOQ1020286;
-        Tue, 2 Aug 2022 19:47:10 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma05wdc.us.ibm.com with ESMTP id 3hmv99m074-1
+        Tue, 02 Aug 2022 19:51:20 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 272Jogxd009967;
+        Tue, 2 Aug 2022 19:51:19 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma04wdc.us.ibm.com with ESMTP id 3hmv99m12u-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 Aug 2022 19:47:10 +0000
+        Tue, 02 Aug 2022 19:51:19 +0000
 Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 272Jl9oj56230302
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 272JpJrt10682934
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 2 Aug 2022 19:47:09 GMT
+        Tue, 2 Aug 2022 19:51:19 GMT
 Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 90A6E124055;
-        Tue,  2 Aug 2022 19:47:09 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 1F5AC12405B;
+        Tue,  2 Aug 2022 19:51:19 +0000 (GMT)
 Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C5657124052;
-        Tue,  2 Aug 2022 19:47:08 +0000 (GMT)
-Received: from slate16.aus.stglabs.ibm.com (unknown [9.77.144.23])
+        by IMSVA (Postfix) with ESMTP id B328B124052;
+        Tue,  2 Aug 2022 19:51:18 +0000 (GMT)
+Received: from [9.77.144.23] (unknown [9.77.144.23])
         by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue,  2 Aug 2022 19:47:08 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     joel@jms.id.au
-Cc:     linux@roeck-us.net, jdelvare@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-        devicetree@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH 0/3] occ: Restore default behavior of polling OCC during init
-Date:   Tue,  2 Aug 2022 14:46:53 -0500
-Message-Id: <20220802194656.240564-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Tue,  2 Aug 2022 19:51:18 +0000 (GMT)
+Message-ID: <78bb351e-37de-bf62-dd16-67b2df7528ff@linux.ibm.com>
+Date:   Tue, 2 Aug 2022 14:51:18 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 1/1] hwmon: (occ) Replace open-coded variant of %*phN
+ specifier
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>
+References: <20220726143110.4809-1-andriy.shevchenko@linux.intel.com>
+ <833d605d-0605-9439-6544-885e6f5f75b0@roeck-us.net>
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <833d605d-0605-9439-6544-885e6f5f75b0@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: foUfB15FyPeo5IxQhrKPr7wYKmk9YzdO
-X-Proofpoint-GUID: foUfB15FyPeo5IxQhrKPr7wYKmk9YzdO
+X-Proofpoint-GUID: kE9cJc0-V4PZPiCi1P-jgcLmjX6Kt2la
+X-Proofpoint-ORIG-GUID: kE9cJc0-V4PZPiCi1P-jgcLmjX6Kt2la
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-02_14,2022-08-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- lowpriorityscore=0 bulkscore=0 malwarescore=0 impostorscore=0 adultscore=0
- mlxlogscore=707 priorityscore=1501 phishscore=0 clxscore=1011 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2208020092
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 malwarescore=0 phishscore=0 priorityscore=1501 suspectscore=0
+ mlxlogscore=999 mlxscore=0 impostorscore=0 clxscore=1011 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2208020092
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-A recent change to the OCC hwmon driver modified the default behavior to
-no longer poll the OCC during initialization. This does change the
-interface, meaning that old applications will not work with the more
-recent driver. To resolve this issue, introduce a new dts property to
-control the behavior of the driver during initialization, similar to the
-FSI master property "no-scan-on-init". Without the new
-"ibm,inactive-on-init" boolean present, the driver will now do the
-previous behavior of polling the OCC.
 
-Eddie James (3):
-  dt-bindings: hwmon: Add IBM OCC bindings
-  fsi: occ: Support probing the hwmon child device from dts node
-  hwmon: (occ) Check for device property for setting OCC active during
-    probe
+On 7/26/22 10:05, Guenter Roeck wrote:
+> On 7/26/22 07:31, Andy Shevchenko wrote:
+>> printf()-like functions in the kernel have extensions, such as
+>> %*phN to dump small pieces of memory as hex bytes.
+>>
+>> Replace custom approach with the direct use of %*phN.
+>>
+>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
- .../bindings/hwmon/ibm,occ-hmwon.yaml         | 40 ++++++++++++++++++
- drivers/fsi/fsi-occ.c                         | 41 +++++++++++++++----
- drivers/hwmon/occ/common.c                    | 11 ++++-
- drivers/hwmon/occ/p9_sbe.c                    |  9 ++++
- 4 files changed, 93 insertions(+), 8 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml
 
--- 
-2.31.1
+Email was acting up so I missed this at the time. Thanks Andy!
 
+
+>
+> Applied.
+>
+> Thanks,
+> Guenter
+>
+>> ---
+>>   drivers/hwmon/occ/common.c | 8 ++------
+>>   1 file changed, 2 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+>> index 157b73a3da29..45407b12db4b 100644
+>> --- a/drivers/hwmon/occ/common.c
+>> +++ b/drivers/hwmon/occ/common.c
+>> @@ -729,18 +729,14 @@ static ssize_t occ_show_extended(struct device 
+>> *dev,
+>>               rc = sysfs_emit(buf, "%u",
+>> get_unaligned_be32(&extn->sensor_id));
+>>           } else {
+>> -            rc = sysfs_emit(buf, "%02x%02x%02x%02x\n",
+>> -                    extn->name[0], extn->name[1],
+>> -                    extn->name[2], extn->name[3]);
+>> +            rc = sysfs_emit(buf, "%4phN\n", extn->name);
+>>           }
+>>           break;
+>>       case 1:
+>>           rc = sysfs_emit(buf, "%02x\n", extn->flags);
+>>           break;
+>>       case 2:
+>> -        rc = sysfs_emit(buf, "%02x%02x%02x%02x%02x%02x\n",
+>> -                extn->data[0], extn->data[1], extn->data[2],
+>> -                extn->data[3], extn->data[4], extn->data[5]);
+>> +        rc = sysfs_emit(buf, "%6phN\n", extn->data);
+>>           break;
+>>       default:
+>>           return -EINVAL;
+>
