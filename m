@@ -2,172 +2,234 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E7A9C00140
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Aug 2022 08:19:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4307DC00140
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Aug 2022 12:43:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235802AbiHBITD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 2 Aug 2022 04:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
+        id S233808AbiHBMnc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 2 Aug 2022 08:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236184AbiHBITC (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Aug 2022 04:19:02 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20607.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::607])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F355719285
-        for <linux-hwmon@vger.kernel.org>; Tue,  2 Aug 2022 01:19:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KXZn+plDVMPpwcONQlEUQiCsulDvbZB0b9/R+tGN9FcgeUiypk5WSuxrdxYI4loMKyBAhAfRXsM2G29KxzFUac+iuk+y5H8PWOl65D7hlUvjR2EkhHHJtu9/YmMtDDwMg9CGB1BAH6exd8C7NvHOl5XpdhlSq0Tb+d1xJXUA/mJrzKY7wu2dzlsect5mYuVT256n7wbcPK/AcAnt2E3J98xtqQAEttt/pthfL8sliruCAC3DuIC4b5OewL0HzOjdVqr5UJqjz3vo/JarA/d/XeyKN5ssWC7TR2FQZwaC4yPMqnX/PjGWVUSFT0x8vdJgwHRJ6ew2OIC2wmsh81Wslg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZkXvzgpj9E7kz/YhpR0nhPtHcC4y60tSoMNu3L4uW00=;
- b=icq64cgEfh9g2HnexKRYcMxFicHUpCWUrVamXEFn+9rKm4Lz63FkzPrAFgw2vbZVsRWC2mb/xObdgb0OmSeQXAdfR4unB093O1L4jeLN05oGeyHHNkz4MwXyrG38/mlWbf/cjSlAM6/b8+lblFOoiK+TO3J5LPLr5PXBOMHYpieMj7yOwnvd9+5qxkbRDiY5SigrmoJCvbmO4HPkYfKVycZXTC+ybBrYQjq6kPi+sB9ztcjUNl3DcNnestT+jn2dNIBaByoV2p8+BBE9r8BqHyD/le+NdHR31JHfYE0cfEc6VWTJ3bU/9pkOKNQ8QhUTX07+beTY6lt6Gy3aE13Enw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZkXvzgpj9E7kz/YhpR0nhPtHcC4y60tSoMNu3L4uW00=;
- b=F4QBJMIHqV54roMPjhgRvM38XCOmkgRY4N+RE+vdcCnaEjlB9VwygzcLUkUZwUZWP32/eiGdJFYcIiSAw27JnKp4VDSmRN/a1nvOGo9g56Hst/Otg1j/wECev13BC32zPpUfeJtQyoiK2l4nMs2NUEPtvQWAnwlZRkSbhOqIbt/bhlT7siEqp8QhVXoftXNHcR8jMY2CpP7Q/g5ngjL9W1twa/1PX2dW4Q4zUqFT4R7EtM1zxKEBNrev/HP/w987yBjN36A6bVYEg/Fx5ikfj+dOrZnCdO3+HZ6iOv69cTopaIIq59gyLeF++oOhHA8YBPDmzuCDRBTU3vZGXrr0Uw==
-Received: from DM6PR02CA0166.namprd02.prod.outlook.com (2603:10b6:5:332::33)
- by MN2PR12MB3744.namprd12.prod.outlook.com (2603:10b6:208:166::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.12; Tue, 2 Aug
- 2022 08:18:57 +0000
-Received: from DM6NAM11FT059.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:332:cafe::e1) by DM6PR02CA0166.outlook.office365.com
- (2603:10b6:5:332::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.15 via Frontend
- Transport; Tue, 2 Aug 2022 08:18:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.236) by
- DM6NAM11FT059.mail.protection.outlook.com (10.13.172.92) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5482.10 via Frontend Transport; Tue, 2 Aug 2022 08:18:57 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL109.nvidia.com
- (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 2 Aug
- 2022 08:18:44 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 2 Aug 2022
- 01:18:44 -0700
-Received: from r-build-bsp-02.mtr.labs.mlnx (10.127.8.9) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server id 15.2.986.26 via Frontend
- Transport; Tue, 2 Aug 2022 01:18:42 -0700
-From:   <michaelsh@nvidia.com>
-To:     <linux@roeck-us.net>
-CC:     <linux-hwmon@vger.kernel.org>, <vadimp@nvidia.com>,
-        Michael Shych <michaelsh@nvidia.com>
-Subject: [PATCH hwmon-next v5 3/3] docs: hwmon: add emc2305.rst to docs
-Date:   Tue, 2 Aug 2022 11:18:32 +0300
-Message-ID: <20220802081832.6692-4-michaelsh@nvidia.com>
-X-Mailer: git-send-email 2.14.1
-In-Reply-To: <20220802081832.6692-1-michaelsh@nvidia.com>
-References: <20220802081832.6692-1-michaelsh@nvidia.com>
+        with ESMTP id S235227AbiHBMna (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Aug 2022 08:43:30 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A819E37FB9;
+        Tue,  2 Aug 2022 05:43:29 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id q7-20020a17090a7a8700b001f300db8677so15183687pjf.5;
+        Tue, 02 Aug 2022 05:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=U9m3FQ39/4mYFptI4g6gXxTyAr9soFCJ8+yoeDOFuYE=;
+        b=i2Q8AEq1KNHeon8oovOfgQZVLe3KS3nqoU7VPppGG0qPugDAUwSenRTDP59HL+JmAc
+         POppR8p9f8SEZP/itNPUPvW1gb/7AyizvM7ycr9ukE6NXZRw3rMQJhd4097jNG8+gqFt
+         VKbG6SlXdmjPVoTA8fTjPk33Bu7/gFAkhZuQ/bKzeiit7n1l5ctyO73Mwex4wjbZ5zOv
+         d/McmwavwIO049aXxV7GBfF+3n0mzGNuKLulvO3JnoMoAeo359wjQhVlJMIv+ca3BdxM
+         hf2/Jk8oqWOzrWRyHunRbSC48OQx3yCFOw0dJROA92vx4u4W8JQMBay5swmGhXRu3geT
+         kaNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=U9m3FQ39/4mYFptI4g6gXxTyAr9soFCJ8+yoeDOFuYE=;
+        b=tK3sr2/gkovMAtaCj7BX55DZbakriam2nBbdCqbDlrMeN5hUYscooAEPO+XOhMa4Jd
+         fSY5+EZhSIpBh5IAXJGsU1o85NNJ30qEDFKg9zFVTMXsCu/pgnjtqpWGW3M+vp6I8zpf
+         xn0Z8se+pVTM9RO4/QpAJguGGXQu1smNHjyg3T4PFxdm5ZqJ4cRAUyufHxgfm2db3UGZ
+         s8if+S+WsD6b8+L60O+wR2jQKE9OW4ccOL8WfcysHYUJOFjvbwvLddQbCl+QFY2Vu3CV
+         TarXB5+fnR06Cw0Ob+RuD0YCzTNB6kNt8aVf77sXwe48siSxg0XoWjTQK+81ssqO9EHz
+         c22Q==
+X-Gm-Message-State: ACgBeo3/kZNt2sl0xwCdLVt31PzI7mHhK3dh4xyztxsPqV5XD2+aIroX
+        YiBr4mOSePK0qh7Cg1MVAtk3c8sX6SMQGq32jQM=
+X-Google-Smtp-Source: AA6agR43XCpLPTV1z8GO6mF5EYSfHI1FBFdyJ9uqiH9/FXtU0W+zqQqUBcZB+xxQvTIjrrBh2aUEIqE7in1fYQiNu9Q=
+X-Received: by 2002:a17:902:d4c2:b0:16d:c317:ee9d with SMTP id
+ o2-20020a170902d4c200b0016dc317ee9dmr19985383plg.25.1659444209092; Tue, 02
+ Aug 2022 05:43:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4095e0b7-89c3-4b64-ed18-08da745fa5a9
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3744:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KVwPSES+6F/IktCmHGpCGJvwBvNOx3vdqyQnHiCu2sxHOzzjwIRCfoO1QS3f9GJpn8vPwCwGZdiOMRC9zFhVr3FBt1tkGFajzh8cAgmqjO05bvKSY67h414S07QMluB+zMyqY2r8aFOqKsv6UTmDYD+itIHWDbZ8dnWrNy23o1AKkXEmm0kpAy/WTS6Ey4WDlrhC16BHHwRWU6+qeIs0+qOO8KO2bGmmrog5yCk3sKaRQtMddxAAg9vZS999rRiB1q7TARq+BpqLUUdLi3RSWbgLY0DEbLnvUkqeioWMLMWJmdxJx191n5McfQAG5DkvORM5fhz79vZK6jiP2xrdJ+lurKVFC8jIFbMv0KTpfLh4/5r6GL4x43JKc557xP5DUharIlXVSlbkoHu9Zl61/DkkPoO7enEpmHN5caccSwnA59IRd06vbEB9rhzSC3zQxiSl8MGc9F+VbECFpNXhJ4BOxJkfZoO7TNnSEcA9uUeZkgHLYMwRJsN/Rz/AliS8kGws8XrELVqVEpv3YGQzZeWM1xzjZKdwQu5v4PYdO+orbGOhRQlLzB31zIy8i9MqYZGb/B1nhlmNfUddVi4fi3HRNEhH2lZtMa76tyC+iT0YL4KUo7cOVxIw7wSUTea24aZrK4xQ8oq/+DQv68j/Cm0hvLdklt5R+DqiKqpNqTbtUvAVBhdflJFoE7BXAFrx+uZkH73+nn5LtL8CN5+CuKzZVCCxBOcFYlTbftuCRV5Gyx3lZXQzAkJDMnoErW7HdP4baWGW9p7toP378/dglEio6YU1/5Eh2ahr5u9LqFwtrBQiljo6e6IIVI550dEYtkEp42HB7kj4tYV+JfY1couMXqMtDn/QwiAlw78t+f+QDogiAOZFq0msrH4Ha33slM3OAxmm5Cns8xDaZoDvV3TqjYKkqZvVogG3ZnuY/j8=
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(346002)(136003)(39860400002)(36840700001)(46966006)(40470700004)(47076005)(426003)(336012)(186003)(1076003)(2616005)(107886003)(36756003)(26005)(36860700001)(6666004)(82310400005)(41300700001)(2906002)(478600001)(2876002)(40460700003)(5660300002)(86362001)(316002)(966005)(82740400003)(6916009)(54906003)(81166007)(40480700001)(8676002)(8936002)(4326008)(70586007)(70206006)(356005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 08:18:57.4251
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4095e0b7-89c3-4b64-ed18-08da745fa5a9
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT059.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3744
+References: <20220525115554.430971-1-alistair@alistair23.me>
+ <20220525115554.430971-5-alistair@alistair23.me> <ea5e1659-5842-6685-52eb-f77ac4247a2d@sholland.org>
+In-Reply-To: <ea5e1659-5842-6685-52eb-f77ac4247a2d@sholland.org>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Tue, 2 Aug 2022 22:43:02 +1000
+Message-ID: <CAKmqyKPLanGCWkofWh7rEiAhpTFF865BGQNg1q-8avpObJ+J3A@mail.gmail.com>
+Subject: Re: [PATCH v21 4/4] ARM: dts: imx7d-remarkable2: Enable lcdif
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Amit Kucheria <amitk@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-hwmon@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Zhang Rui <rui.zhang@intel.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Michael Shych <michaelsh@nvidia.com>
+On Sun, May 29, 2022 at 4:20 AM Samuel Holland <samuel@sholland.org> wrote:
+>
+> Hi Alistair,
+>
+> On 5/25/22 6:55 AM, Alistair Francis wrote:
+> > Connect the dispaly on the reMarkable2.
+> >
+> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> > ---
+> >  arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
+> >  1 file changed, 74 insertions(+)
+> >
+> > diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> > index 99ac0d242936..03a4029e1e57 100644
+> > --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
+> > +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> > @@ -68,6 +68,16 @@ reg_digitizer: regulator-digitizer {
+> >               startup-delay-us = <100000>; /* 100 ms */
+> >       };
+> >
+> > +     reg_sdoe: regulator-sdoe {
+> > +             compatible = "regulator-fixed";
+> > +             regulator-name = "SDOE";
+> > +             pinctrl-names = "default", "sleep";
+> > +             pinctrl-0 = <&pinctrl_sdoe_reg>;
+> > +             pinctrl-1 = <&pinctrl_sdoe_reg>;
+> > +             gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
+> > +             enable-active-high;
+> > +     };
+> > +
+> >       wifi_pwrseq: wifi_pwrseq {
+> >               compatible = "mmc-pwrseq-simple";
+> >               pinctrl-names = "default";
+> > @@ -76,6 +86,16 @@ wifi_pwrseq: wifi_pwrseq {
+> >               clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
+> >               clock-names = "ext_clock";
+> >       };
+> > +
+> > +     panel {
+> > +             compatible = "eink,vb3300-kca";
+> > +
+> > +             port {
+> > +                     panel_in: endpoint {
+> > +                             remote-endpoint = <&display_out>;
+> > +                     };
+> > +             };
+> > +     };
+>
+> From the discussion at [1], this is not safe to merge. It exposes an
+> electrophoretic display to fbcon/userspace as if it was an LCD, which it very
+> much is not. Trying to write RGB pixel data to the panel could damage it.
 
-Add description of emc2305 driver.
+Hey Samuel,
 
-Signed-off-by: Michael Shych <michaelsh@nvidia.com>
-Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
----
-v1->v2
-- Add document to index.rst
----
- Documentation/hwmon/emc2305.rst | 40 ++++++++++++++++++++++++++++++++++++++++
- Documentation/hwmon/index.rst   |  1 +
- 2 files changed, 41 insertions(+)
- create mode 100644 Documentation/hwmon/emc2305.rst
+From what I can tell it's difficult to damage the display, but I see your point.
 
-diff --git a/Documentation/hwmon/emc2305.rst b/Documentation/hwmon/emc2305.rst
-new file mode 100644
-index 000000000000..258da49d18f9
---- /dev/null
-+++ b/Documentation/hwmon/emc2305.rst
-@@ -0,0 +1,40 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver emc2305
-+=====================
-+
-+Supported chips:
-+   Microchip EMC2305, EMC2303, EMC2302, EMC2301
-+
-+   Addresses scanned: I2C 0x27, 0x2c, 0x2d, 0x2e, 0x2f, 0x4c, 0x4d
-+   Prefixes: 'emc2305'
-+
-+   Datasheet: Publicly available at the Microchip website :
-+      https://www.microchip.com/en-us/product/EMC2305
-+
-+Description:
-+-----------
-+This driver implements support for Microchip EMC2301/2/3/5 RPM-based PWM Fan Controller.
-+The EMC2305 Fan Controller supports up to 5 independently controlled PWM fan drives.
-+Fan rotation speeds are reported in RPM.
-+The driver supports the RPM-based PWM control to keep a fan at the desired speed.
-+The driver provides the possibility to have one common PWM interface for all FANs
-+or up to the maximum available or configured independent PWMs.
-+
-+The driver provides the following sysfs interfaces in hwmon subsystem:
-+
-+================= == ===================================================
-+fan[1-5]_fault    RO files for tachometers TACH1-TACH5 fault indication
-+fan[1-5]_input    RO files for tachometers TACH1-TACH5 input (in RPM)
-+pwm[1-5]          RW file for fan[1-5] target duty cycle (0..255)
-+================= == ===================================================
-+
-+sysfs interfaces in thermal subsystem:
-+
-+================= == ========================================================================
-+cur_state         RW file for the current cooling state of the cooling device (0..max_state)
-+max_state         RO file for the maximum cooling state of the cooling device
-+================= == ========================================================================
-+
-+Configuration is possible via device tree:
-+Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index f7113b0f8b2a..83b082d222af 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -63,6 +63,7 @@ Hardware Monitoring Kernel Drivers
-    ds620
-    emc1403
-    emc2103
-+   emc2305
-    emc6w201
-    f71805f
-    f71882fg
--- 
-2.14.1
+>
+> So at the very least before hooking this up, the LCD controller has to know that
+> the EPD needs special handling and that it cannot accept RGB.
 
+Looking at [1] it seems like no decision was made about how to handle
+a case like this where the EPC driving is all done in software. We
+currently drive it from userspace via proprietary software. It seems
+unlikely we will be able to support this in the kernel, so it would be
+nice to somehow expose it to userspace.
+
+>
+> That doesn't necessarily mean there is a problem with the content of this patch
+> -- the special handling may all be taken care of based on the compatible string
+
+Ah ok. So it sounds like adding a check to the LCD controller based on
+compatible string to reject RGB values would be a good start here.
+That would at least block bogus values from making it to the screen
+
+Alistair
+
+> -- but I think it's a really bad idea to merge this with how "eink,vb3300-kca"
+> is currently represented in panel-simple.
+>
+> Regards,
+> Samuel
+>
+> [1]: https://lore.kernel.org/lkml/Yo5kz%2F9cSd6ewC5f@phenom.ffwll.local/
+>
+> >  };
+> >
+> >  &clks {
+> > @@ -132,6 +152,20 @@ reg_epdpmic: vcom {
+> >       };
+> >  };
+> >
+> > +&lcdif {
+> > +     pinctrl-names = "default";
+> > +     pinctrl-0 = <&pinctrl_lcdif>;
+> > +     lcd-supply = <&reg_epdpmic>;
+> > +     lcd2-supply = <&reg_sdoe>;
+> > +     status = "okay";
+> > +
+> > +     port {
+> > +             display_out: endpoint {
+> > +                     remote-endpoint = <&panel_in>;
+> > +             };
+> > +     };
+> > +};
+> > +
+> >  &snvs_pwrkey {
+> >       status = "okay";
+> >  };
+> > @@ -246,6 +280,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL              0x4000007f
+> >               >;
+> >       };
+> >
+> > +     pinctrl_lcdif: lcdifgrp {
+> > +             fsl,pins = <
+> > +                     MX7D_PAD_LCD_DATA00__LCD_DATA0          0x79
+> > +                     MX7D_PAD_LCD_DATA01__LCD_DATA1          0x79
+> > +                     MX7D_PAD_LCD_DATA02__LCD_DATA2          0x79
+> > +                     MX7D_PAD_LCD_DATA03__LCD_DATA3          0x79
+> > +                     MX7D_PAD_LCD_DATA04__LCD_DATA4          0x79
+> > +                     MX7D_PAD_LCD_DATA05__LCD_DATA5          0x79
+> > +                     MX7D_PAD_LCD_DATA06__LCD_DATA6          0x79
+> > +                     MX7D_PAD_LCD_DATA07__LCD_DATA7          0x79
+> > +                     MX7D_PAD_LCD_DATA08__LCD_DATA8          0x79
+> > +                     MX7D_PAD_LCD_DATA09__LCD_DATA9          0x79
+> > +                     MX7D_PAD_LCD_DATA10__LCD_DATA10         0x79
+> > +                     MX7D_PAD_LCD_DATA11__LCD_DATA11         0x79
+> > +                     MX7D_PAD_LCD_DATA12__LCD_DATA12         0x79
+> > +                     MX7D_PAD_LCD_DATA13__LCD_DATA13         0x79
+> > +                     MX7D_PAD_LCD_DATA14__LCD_DATA14         0x79
+> > +                     MX7D_PAD_LCD_DATA15__LCD_DATA15         0x79
+> > +
+> > +                     MX7D_PAD_LCD_DATA17__LCD_DATA17         0x79
+> > +                     MX7D_PAD_LCD_DATA18__LCD_DATA18         0x79
+> > +                     MX7D_PAD_LCD_DATA19__LCD_DATA19         0x79
+> > +                     MX7D_PAD_LCD_DATA20__LCD_DATA20         0x79
+> > +                     MX7D_PAD_LCD_DATA21__LCD_DATA21         0x79
+> > +
+> > +                     MX7D_PAD_LCD_DATA23__LCD_DATA23         0x79
+> > +                     MX7D_PAD_LCD_CLK__LCD_CLK               0x79
+> > +                     MX7D_PAD_LCD_ENABLE__LCD_ENABLE         0x79
+> > +                     MX7D_PAD_LCD_VSYNC__LCD_VSYNC           0x79
+> > +                     MX7D_PAD_LCD_HSYNC__LCD_HSYNC           0x79
+> > +                     MX7D_PAD_LCD_RESET__LCD_RESET           0x79
+> > +             >;
+> > +     };
+> > +
+> > +     pinctrl_sdoe_reg: sdoereggrp {
+> > +             fsl,pins = <
+> > +                     MX7D_PAD_LCD_DATA22__GPIO3_IO27         0x74
+> > +             >;
+> > +     };
+> > +
+> >       pinctrl_uart1: uart1grp {
+> >               fsl,pins = <
+> >                       MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX    0x79
+> >
+>
