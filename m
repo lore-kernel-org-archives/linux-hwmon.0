@@ -2,71 +2,71 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01134C00140
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Aug 2022 19:47:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DCCFC25B06
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Aug 2022 19:47:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232059AbiHBTrp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 2 Aug 2022 15:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
+        id S232427AbiHBTrq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 2 Aug 2022 15:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiHBTrl (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Aug 2022 15:47:41 -0400
+        with ESMTP id S232123AbiHBTrp (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Aug 2022 15:47:45 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DDE4AD63;
-        Tue,  2 Aug 2022 12:47:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0144E4AD63;
+        Tue,  2 Aug 2022 12:47:44 -0700 (PDT)
 Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 272Jk1LZ010234;
-        Tue, 2 Aug 2022 19:47:15 GMT
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 272JkEE8010761;
+        Tue, 2 Aug 2022 19:47:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=0TU5DLp61xDyAb6KBH+NW4/5l6RU7u/o/UOxwNx8Wek=;
- b=kGoVyer1Z8fx2kWHIygrZuUsTWNwaGZGHPPHjsZs9MXZ32+0ZuEyXNne5U7KhX5YtAus
- 7njL0BaT3EASi0/7bwuA1R0WFGhYWFg+ThWP0bwwFM/NB3B7gYH7jqI3Gdc4UDJa/oB2
- JTXNHr/WV4ZrcK63yQhBt1/V0FpAPaS3+m4rxl9qQCQWHmtffYNMeuDhlVyyAW9TexUW
- pCuV6ZFauMYWGatmIo9z7O8eiuuGzZlGjlSPCDFuZMoNhvoLMeZ+Dk5YdBWp3FNk+Zkv
- omp2t6xquGP/quQsD56RFQgPSmEgvVwvcsh/g6I1cBmgi6RIZhFbwG0P8NfHQYmQUWAd ng== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hqac7r0f3-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=UCu96v+PoXqH6TThpduEionJ8Gjk0/uHBNwYtT0Bioo=;
+ b=Jh/0tCylrsH76M20KMM6rTUzE0CIEzbuArR/x8sD6WZ5JpfLboK6OJ3kaBv5WVH1gCUH
+ UGceaDaLhziQiRs3OPnLTyrVhTZEwNPze4EDzrUwTcFZTv13BuYfdjoKk/k0tDa8JNLF
+ fWQn1dKVqxzNBrZY93uQffJjaIz1LZn8TxfTsR0K9HyuFy/e81FLAUa+T6fa9LkqTJRD
+ Tk9KgXuYmH0RTyqhEkegJz/MuAiHsGvXN+U5npe5wR4QHWoEueNAvs4wNtIehK/IX+Yn
+ SL6OJ87rMiKo7nuYVCMOxy3Rc6QtQGLSFHvMRLP8CzRPvmNzasiqoeK8XdRua/9Hnvh+ rQ== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hqac7r0g7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 Aug 2022 19:47:15 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 272JK4Zk030027;
-        Tue, 2 Aug 2022 19:47:14 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma03dal.us.ibm.com with ESMTP id 3hmv99gx8d-1
+        Tue, 02 Aug 2022 19:47:20 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 272JKixv012973;
+        Tue, 2 Aug 2022 19:47:18 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma04wdc.us.ibm.com with ESMTP id 3hmv99m0kb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 Aug 2022 19:47:14 +0000
+        Tue, 02 Aug 2022 19:47:18 +0000
 Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 272JlD3157344452
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 272JlIwN50921870
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 2 Aug 2022 19:47:13 GMT
+        Tue, 2 Aug 2022 19:47:18 GMT
 Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 75F90124054;
-        Tue,  2 Aug 2022 19:47:13 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 3DD74124052;
+        Tue,  2 Aug 2022 19:47:18 +0000 (GMT)
 Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B6310124052;
-        Tue,  2 Aug 2022 19:47:12 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 6DF39124054;
+        Tue,  2 Aug 2022 19:47:17 +0000 (GMT)
 Received: from slate16.aus.stglabs.ibm.com (unknown [9.77.144.23])
         by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue,  2 Aug 2022 19:47:12 +0000 (GMT)
+        Tue,  2 Aug 2022 19:47:17 +0000 (GMT)
 From:   Eddie James <eajames@linux.ibm.com>
 To:     joel@jms.id.au
 Cc:     linux@roeck-us.net, jdelvare@suse.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
         devicetree@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH 1/3] dt-bindings: hwmon: Add IBM OCC bindings
-Date:   Tue,  2 Aug 2022 14:46:54 -0500
-Message-Id: <20220802194656.240564-2-eajames@linux.ibm.com>
+Subject: [PATCH 3/3] hwmon: (occ) Check for device property for setting OCC active during probe
+Date:   Tue,  2 Aug 2022 14:46:56 -0500
+Message-Id: <20220802194656.240564-4-eajames@linux.ibm.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220802194656.240564-1-eajames@linux.ibm.com>
 References: <20220802194656.240564-1-eajames@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: qJ9ewh5M9TPRC9a7zPaWUAGNa0BG__BH
-X-Proofpoint-ORIG-GUID: qJ9ewh5M9TPRC9a7zPaWUAGNa0BG__BH
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GyuehN5cECTtDHGRUBr-72EanMVEfRD-
+X-Proofpoint-ORIG-GUID: GyuehN5cECTtDHGRUBr-72EanMVEfRD-
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-02_14,2022-08-02_01,2022-06-22_01
@@ -79,61 +79,77 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-These bindings describe the POWER processor On Chip Controller accessed
-from a service processor or baseboard management controller (BMC).
+A previous commit changed the existing behavior of the driver to skip
+attempting to communicate with the OCC during probe. Return to the
+previous default behavior of automatically communicating with the OCC
+and make it optional with a new device-tree property.
 
 Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
- .../bindings/hwmon/ibm,occ-hmwon.yaml         | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml
+ drivers/hwmon/occ/common.c | 11 ++++++++++-
+ drivers/hwmon/occ/p9_sbe.c |  9 +++++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml b/Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml
-new file mode 100644
-index 000000000000..8f8c3b8d7129
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml
-@@ -0,0 +1,40 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/ibm,occ-hwmon.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+index 45407b12db4b..95f16bb0e685 100644
+--- a/drivers/hwmon/occ/common.c
++++ b/drivers/hwmon/occ/common.c
+@@ -10,6 +10,7 @@
+ #include <linux/math64.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
++#include <linux/property.h>
+ #include <linux/sysfs.h>
+ #include <asm/unaligned.h>
+ 
+@@ -1216,8 +1217,16 @@ int occ_setup(struct occ *occ)
+ 	occ->groups[0] = &occ->group;
+ 
+ 	rc = occ_setup_sysfs(occ);
+-	if (rc)
++	if (rc) {
+ 		dev_err(occ->bus_dev, "failed to setup sysfs: %d\n", rc);
++		return rc;
++	}
 +
-+title: IBM On-Chip Controller (OCC) accessed from a service processor
++	if (!device_property_read_bool(occ->bus_dev, "ibm,inactive-on-init")) {
++		rc = occ_active(occ, true);
++		if (rc)
++			occ_shutdown_sysfs(occ);
++	}
+ 
+ 	return rc;
+ }
+diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+index 4a1fe4ee8e2c..bc0f190065aa 100644
+--- a/drivers/hwmon/occ/p9_sbe.c
++++ b/drivers/hwmon/occ/p9_sbe.c
+@@ -7,6 +7,7 @@
+ #include <linux/fsi-occ.h>
+ #include <linux/mm.h>
+ #include <linux/module.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/mutex.h>
+ #include <linux/platform_device.h>
+ #include <linux/string.h>
+@@ -179,9 +180,17 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static const struct of_device_id p9_sbe_occ_of_match[] = {
++	{ .compatible = "ibm,p9-occ-hwmon" },
++	{ .compatible = "ibm,p10-occ-hwmon" },
++	{}
++};
++MODULE_DEVICE_TABLE(of, p8_i2c_occ_of_match);
 +
-+maintainers:
-+  - Eddie James <eajames@linux.ibm.com>
-+
-+description: |
-+  This binding describes a POWER processor On-Chip Controller (OCC)
-+  accessed from a service processor or baseboard management controller
-+  (BMC).
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ibm,p9-occ-hwmon
-+      - ibm,p10-occ-hwmon
-+
-+  ibm,inactive-on-init:
-+    description: This property describes whether or not the OCC should
-+      be marked as active during device initialization. The alternative
-+      is for user space to mark the device active based on higher level
-+      communications between the BMC and the host processor.
-+    type: boolean
-+
-+required:
-+  - compatible
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    occ-hmwon {
-+        compatible = "ibm,p9-occ-hwmon";
-+        ibm,inactive-on-init;
-+    };
+ static struct platform_driver p9_sbe_occ_driver = {
+ 	.driver = {
+ 		.name = "occ-hwmon",
++		.of_match_table = p9_sbe_occ_of_match,
+ 	},
+ 	.probe	= p9_sbe_occ_probe,
+ 	.remove = p9_sbe_occ_remove,
 -- 
 2.31.1
 
