@@ -2,182 +2,141 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 110EEC19F2C
-	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Aug 2022 21:26:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CD30C00140
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Aug 2022 08:18:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235331AbiHAV0e (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 1 Aug 2022 17:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
+        id S236309AbiHBISq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 2 Aug 2022 04:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235086AbiHAVZc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 1 Aug 2022 17:25:32 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB33648CBA
-        for <linux-hwmon@vger.kernel.org>; Mon,  1 Aug 2022 14:24:11 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id bk11so5758598wrb.10
-        for <linux-hwmon@vger.kernel.org>; Mon, 01 Aug 2022 14:24:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linexp-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=Mb4JyaEjxL4JDBtXDcGCWHFGP5KgiZCOnINym1JdoVI=;
-        b=8LvX3hXmElC8vSlXB0k6jIllDXIln1q2Ni9IjDdmOKW/j9Wnqjltk3vneDpOC9o2/l
-         BDXmHxRwSk1up75MHbh2IQ4M0jC5toG8f/AND9gZFUBe476A1F6Ydve9TKNR12Q//kJ+
-         7ULoAIgH1vtF/PlpWz3E45PY90R4syXyKxZs3jml9QWHKqIBgcI00bma4zDQu1Z9pUrm
-         91m2E7s0F64kUaxPtIOOWzEL8MIelEV9TvXZPguyEYryhQ7t602fqu87lqt9e/saqj1L
-         ZeTqEU5K+k6nurxjr+QQe3y6Ei4j4JPCFiNzNfTNCxelf+qcbzr7PZ2Xqq+oxHDrVK5E
-         MXPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=Mb4JyaEjxL4JDBtXDcGCWHFGP5KgiZCOnINym1JdoVI=;
-        b=czfdWMde1r4s6HvqSTYFPFLApi5aYlsmBB75TMhDhAca+HTrmWcgYSlcCXKdgpMH99
-         sUiIjBIAS+R7Fo2o4iyv74YS7xpCnCiEo+vmdTkRJG561go0R5ggjIUmjcOSI4mjo1R7
-         ocN7Yk5ppTxVxTSKZuWxXJQK7TxsFTLSd25NimEm/+8pKfVfAMPE/13OuNwMYoQS07Mn
-         aJ7/xKH0F21eOD/zf8XhjnEWyx/QBR7f9I1LRm2pTdoX4tdJJKWTZhCw3j4ln0UQFP0+
-         0AKhQWnBpA0u43VXGOnVoTDPLzSXPM4B6CCZ/UpaQDvD0m15G+LhN4XVv3mOUUlx4w44
-         AOhg==
-X-Gm-Message-State: ACgBeo2FGvCr8y+XQwgtt9Gs9jZ6gmK4/plpcNZZS/Q9xKKOzDJiyTI1
-        +ocoYy6eJU7gndEnzn+okO+rxg==
-X-Google-Smtp-Source: AA6agR4535ZJFSEIWDiDIyavvSySKf9lNKEx2n9jNeS7L/WY7knUsK+dx/YA7vbBcPdjU8TZPqHZRQ==
-X-Received: by 2002:a5d:6651:0:b0:21f:3890:810c with SMTP id f17-20020a5d6651000000b0021f3890810cmr8008825wrw.105.1659389045976;
-        Mon, 01 Aug 2022 14:24:05 -0700 (PDT)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:d00:ceb8:9c09:1302])
-        by smtp.gmail.com with ESMTPSA id c7-20020adffb07000000b0021e501519d3sm12995285wrr.67.2022.08.01.14.24.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 14:24:05 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linexp.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
-        damien.lemoal@opensource.wdc.com, heiko@sntech.de,
-        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
-        talel@amazon.com, thierry.reding@gmail.com, digetx@gmail.com,
-        jonathanh@nvidia.com, anarsoul@gmail.com, tiny.windzz@gmail.com,
-        baolin.wang7@gmail.com, f.fainelli@gmail.com,
-        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
-        glaroque@baylibre.com, miquel.raynal@bootlin.com,
-        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
-        matthias.bgg@gmail.com, j-keerthy@ti.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org (open list:HARDWARE MONITORING)
-Subject: [PATCH v4 26/32] hwmon/drivers: Switch to new of thermal API
-Date:   Mon,  1 Aug 2022 23:22:38 +0200
-Message-Id: <20220801212244.1124867-27-daniel.lezcano@linexp.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220801212244.1124867-1-daniel.lezcano@linexp.org>
-References: <20220801212244.1124867-1-daniel.lezcano@linexp.org>
+        with ESMTP id S236239AbiHBISo (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Aug 2022 04:18:44 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2052.outbound.protection.outlook.com [40.107.220.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF74537FAE
+        for <linux-hwmon@vger.kernel.org>; Tue,  2 Aug 2022 01:18:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ogyOyqHBzwFw/YCInA4QdCEr+GUyb1hg4l75LwfwXuSOTmiLm4Jgn5aqlqXAVJ2lNit9Wkedw0ZXTYwLEuTTpTUY1FRtow26r7LOA2re1HUSyHnwXMQqfS/At9hWTkWS+n55wtRPjAn0v1RVYitsxSFnHekUOrvvIOX9sHovNEnXG+tf3M1HjrGb5vw/yaLmXYU3FWrG2KiIjqZLnkFBNzOxReoERWCWgfQXLEqwOPWBcwLNPbw+hNPdrj/6olgiK1wlyW+xMRt9qDrprBc+69O1XdS/bJuKa60wkL9ab6b5159xG6aWff3w2yzzIgp2Gv0H9Rabd/CH5s5FrYtdqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5e4gZw4B/8oKczc3ChPEptCa4KGCmEptRIHmJzu08Es=;
+ b=LKG4Vjh5Dzou/JJx5gHxL+tIFRkNsa21uLt/9g4XiiGqKce+MYEc8cRV/lC+DAs4Y2x5fatY3J0lfBPY/2PGnNadR85IwLrhGxmS7avKt8T6mk6Cl9fGMjGKsiTU1w3UxqlhsbUHprYV69t2iKyK0kM5mZXOO9TdjIPV/LpPlKY9odI9Wq9BFgp7x7qbxMaoJt2gxItLl+BdoepKQDmXxpr1jUTRk/IEkgRkP9VEj0jsmg4zPlyhi1t3wRINFzAl/DU8pLt54DtsFeiZ80WuLShVOkLji2tat8diNSuQByCvfniWmoD0kzFguU6rvxcIUX3lvVdY4kd+WBzycFLE7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5e4gZw4B/8oKczc3ChPEptCa4KGCmEptRIHmJzu08Es=;
+ b=mlxNQvSseSAMCwZR58+7QWGqZb2Wskw16NLOJMIYWlQG/rFDW5SnXZQyGukuN7F5GGS92KPpGLkeNAnhDxbdilU9CGnH3xu8un0G+QMxKR8wHX/wRizaXEYNzrp0IP4dgEsv6xRUWw/rnqYnj9tKEqVDqAVFUeOl2yQgKl7/BhByMSaGobwmP6tvLVSl5aa1tQFEHMWoTp98FqtqzkcrJ/Fa1GmTqyOLocEMg1jHV7+pL4mDj+ljI0gNu5QYGvip3rAY60vJm3kROu7OyYgeojw8KSnAU8D6TJR0EQzWKCPxE8UgViJqeBfJHkV9Y5rrkZS2LzXdxDv8ngya27NnQA==
+Received: from DS7PR03CA0175.namprd03.prod.outlook.com (2603:10b6:5:3b2::30)
+ by DM5PR1201MB0009.namprd12.prod.outlook.com (2603:10b6:3:de::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Tue, 2 Aug
+ 2022 08:18:41 +0000
+Received: from DM6NAM11FT009.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b2:cafe::1f) by DS7PR03CA0175.outlook.office365.com
+ (2603:10b6:5:3b2::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.16 via Frontend
+ Transport; Tue, 2 Aug 2022 08:18:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.238) by
+ DM6NAM11FT009.mail.protection.outlook.com (10.13.173.20) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5482.10 via Frontend Transport; Tue, 2 Aug 2022 08:18:41 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 2 Aug
+ 2022 08:18:40 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 2 Aug 2022
+ 01:18:39 -0700
+Received: from r-build-bsp-02.mtr.labs.mlnx (10.127.8.9) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.986.26 via Frontend
+ Transport; Tue, 2 Aug 2022 01:18:38 -0700
+From:   <michaelsh@nvidia.com>
+To:     <linux@roeck-us.net>
+CC:     <linux-hwmon@vger.kernel.org>, <vadimp@nvidia.com>,
+        Michael Shych <michaelsh@nvidia.com>
+Subject: [PATCH hwmon-next v5 1/3] platform_data/emc2305: define platform data for EMC2305 driver
+Date:   Tue, 2 Aug 2022 11:18:30 +0300
+Message-ID: <20220802081832.6692-2-michaelsh@nvidia.com>
+X-Mailer: git-send-email 2.14.1
+In-Reply-To: <20220802081832.6692-1-michaelsh@nvidia.com>
+References: <20220802081832.6692-1-michaelsh@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 385c10d4-1d34-4aca-075e-08da745f9be9
+X-MS-TrafficTypeDiagnostic: DM5PR1201MB0009:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2KCnQb+2kDLQEBuzUUC/Tb00WHRahqW034HQjAaOK2xAVqUXw0OOeymB4i4P07LwfSlZmQTbHEqG2axxYhhdctyTw800O9/MzPIva4Fj8OiXggiGRC2sSz8U5OtSFXzWae7g+Yj99x7VNwcIb+y8IPizgZ5IiDKCPqPYmzkCB4/sPDgpj2A3XXP2wRF1qo/MIvlaaSonPsZFl2JgKBEFOSeiRbnwBtUev87m/7AQc4iSOTiduvjDJXY5GYb2RU3rzhM+vpzhtwKU3oUWvZM32+8AAizKV5OIvH/jY0zde0TosFji8ek9Q+VQmOv5DZzYzvFRY+CohsmCDLHxsNKA/CztD+9EsyNQdvQG6LLwzVntBSoUlbK1OZvxwOg1D3/iauGl/pYH2L8yel2/4Wid4LB9wnghgg8Br2VUUoKo+RCzVWtzOqyl/sCm/mWylQF0+/0K80dlZ4ePFT0xwd5Tb9kRKmwFP9LRbgmywG9Bd96E58RMNQhAI2SkEhO7DlXDaXivFjGTZVCEk7xqVEyS9qyIHAK60hdR9QQCd9pNHwXi47x2HleonjWViJXNDzib+H3JQPLZ9i6JlAcZ/r68G727e62iOEm6ifjrJgFfVCkTevN6tnuCqA/X6saldm3bU2oD0EbNjGhQIgwcBPQsrLKWDKSzK5e2wcAPcde+1vRKqX3fSBEjcWhob9vWK+sEg722Peos3fCraRVQcclAtcJxmnQvj6tkSW/ww1kIHRVzCjfSqsTlzO8VfrhEzRMSKnvlaHYyZwUTWmLtBKt87PArstySanl+kXzGMdOWkdytCWU4wmIQ3dbZWgSbt7ZrrY2tj6bgNy6/bJFJUxiOeQ==
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(346002)(376002)(136003)(46966006)(40470700004)(36840700001)(478600001)(336012)(426003)(47076005)(36756003)(186003)(40460700003)(1076003)(316002)(41300700001)(2906002)(6916009)(54906003)(107886003)(8936002)(6666004)(86362001)(2616005)(40480700001)(70206006)(8676002)(70586007)(4326008)(2876002)(5660300002)(26005)(36860700001)(82740400003)(356005)(81166007)(82310400005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 08:18:41.1864
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 385c10d4-1d34-4aca-075e-08da745f9be9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT009.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB0009
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The thermal OF code has a new API allowing to migrate the OF
-initialization to a simpler approach. The ops are no longer device
-tree specific and are the generic ones provided by the core code.
+From: Michael Shych <michaelsh@nvidia.com>
 
-Convert the ops to the thermal_zone_device_ops format and use the new
-API to register the thermal zone with these generic ops.
+Introduce platform data structure for EM2305 driver to allow configuration
+device PWMs and thermal zones by passing required platform data
+to the driver. If no platform data is provided, the driver is supposed
+to work with default settings.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Michael Shych <michaelsh@nvidia.com>
+Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
 ---
- drivers/hwmon/hwmon.c      | 14 +++++++-------
- drivers/hwmon/scpi-hwmon.c | 14 +++++++-------
- 2 files changed, 14 insertions(+), 14 deletions(-)
+ include/linux/platform_data/emc2305.h | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 include/linux/platform_data/emc2305.h
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 2e2cd79d89eb..4218750d5a66 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -151,9 +151,9 @@ static DEFINE_IDA(hwmon_ida);
-  * between hwmon and thermal_sys modules.
-  */
- #ifdef CONFIG_THERMAL_OF
--static int hwmon_thermal_get_temp(void *data, int *temp)
-+static int hwmon_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
- {
--	struct hwmon_thermal_data *tdata = data;
-+	struct hwmon_thermal_data *tdata = tz->devdata;
- 	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
- 	int ret;
- 	long t;
-@@ -168,9 +168,9 @@ static int hwmon_thermal_get_temp(void *data, int *temp)
- 	return 0;
- }
- 
--static int hwmon_thermal_set_trips(void *data, int low, int high)
-+static int hwmon_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
- {
--	struct hwmon_thermal_data *tdata = data;
-+	struct hwmon_thermal_data *tdata = tz->devdata;
- 	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
- 	const struct hwmon_chip_info *chip = hwdev->chip;
- 	const struct hwmon_channel_info **info = chip->info;
-@@ -203,7 +203,7 @@ static int hwmon_thermal_set_trips(void *data, int low, int high)
- 	return 0;
- }
- 
--static const struct thermal_zone_of_device_ops hwmon_thermal_ops = {
-+static const struct thermal_zone_device_ops hwmon_thermal_ops = {
- 	.get_temp = hwmon_thermal_get_temp,
- 	.set_trips = hwmon_thermal_set_trips,
- };
-@@ -227,8 +227,8 @@ static int hwmon_thermal_add_sensor(struct device *dev, int index)
- 	tdata->dev = dev;
- 	tdata->index = index;
- 
--	tzd = devm_thermal_zone_of_sensor_register(dev, index, tdata,
--						   &hwmon_thermal_ops);
-+	tzd = devm_thermal_of_zone_register(dev, index, tdata,
-+					    &hwmon_thermal_ops);
- 	if (IS_ERR(tzd)) {
- 		if (PTR_ERR(tzd) != -ENODEV)
- 			return PTR_ERR(tzd);
-diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
-index 5187c6dd5a4f..4d75385f7d5e 100644
---- a/drivers/hwmon/scpi-hwmon.c
-+++ b/drivers/hwmon/scpi-hwmon.c
-@@ -62,9 +62,9 @@ static void scpi_scale_reading(u64 *value, struct sensor_data *sensor)
- 	}
- }
- 
--static int scpi_read_temp(void *dev, int *temp)
-+static int scpi_read_temp(struct thermal_zone_device *tz, int *temp)
- {
--	struct scpi_thermal_zone *zone = dev;
-+	struct scpi_thermal_zone *zone = tz->devdata;
- 	struct scpi_sensors *scpi_sensors = zone->scpi_sensors;
- 	struct scpi_ops *scpi_ops = scpi_sensors->scpi_ops;
- 	struct sensor_data *sensor = &scpi_sensors->data[zone->sensor_id];
-@@ -121,7 +121,7 @@ scpi_show_label(struct device *dev, struct device_attribute *attr, char *buf)
- 	return sprintf(buf, "%s\n", sensor->info.name);
- }
- 
--static const struct thermal_zone_of_device_ops scpi_sensor_ops = {
-+static const struct thermal_zone_device_ops scpi_sensor_ops = {
- 	.get_temp = scpi_read_temp,
- };
- 
-@@ -275,10 +275,10 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
- 
- 		zone->sensor_id = i;
- 		zone->scpi_sensors = scpi_sensors;
--		z = devm_thermal_zone_of_sensor_register(dev,
--							 sensor->info.sensor_id,
--							 zone,
--							 &scpi_sensor_ops);
-+		z = devm_thermal_of_zone_register(dev,
-+						  sensor->info.sensor_id,
-+						  zone,
-+						  &scpi_sensor_ops);
- 		/*
- 		 * The call to thermal_zone_of_sensor_register returns
- 		 * an error for sensors that are not associated with
+diff --git a/include/linux/platform_data/emc2305.h b/include/linux/platform_data/emc2305.h
+new file mode 100644
+index 000000000000..54d672dd6f7d
+--- /dev/null
++++ b/include/linux/platform_data/emc2305.h
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __LINUX_PLATFORM_DATA_EMC2305__
++#define __LINUX_PLATFORM_DATA_EMC2305__
++
++#define EMC2305_PWM_MAX	5
++
++/**
++ * struct emc2305_platform_data - EMC2305 driver platform data
++ * @max_state: maximum cooling state of the cooling device;
++ * @pwm_num: number of active channels;
++ * @pwm_separate: separate PWM settings for every channel;
++ * @pwm_min: array of minimum PWM per channel;
++ */
++struct emc2305_platform_data {
++	u8 max_state;
++	u8 pwm_num;
++	bool pwm_separate;
++	u8 pwm_min[EMC2305_PWM_MAX];
++};
++
++#endif
 -- 
-2.25.1
+2.14.1
 
