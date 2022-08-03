@@ -2,152 +2,122 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C723AC19F2A
-	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Aug 2022 06:55:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF2D9C19F2D
+	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Aug 2022 12:22:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237269AbiHCGzv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 3 Aug 2022 02:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
+        id S237850AbiHCMWL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 3 Aug 2022 08:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234820AbiHCGzu (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 3 Aug 2022 02:55:50 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1737CB85F
-        for <linux-hwmon@vger.kernel.org>; Tue,  2 Aug 2022 23:55:48 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id s14so17946266ljh.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 02 Aug 2022 23:55:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=S4Cm3Xm7ps86QO+wm8sMu2JPYe6mqNw8F3bEMQJUUhc=;
-        b=O7q9zOMb+keix+65PNkbZrdMdNg8RruiIN6i52bJ3/4G61fat0QiJGihLnJBYb6rJe
-         JWLeQ53j3H5kjZv+9dsR/1/CtI+3O7jm2y1o4vLT6j/eTIidl8SKFoeTN6E68/metBV+
-         k8o9ZUPTqRaDEWCXCwRUunKub/t+fTDIxvVNQRvJIIp9cDOfz8vpWPuBPBDRBN5X2eZl
-         ntZ5aSlzBv00BVHlE0EUlYMBVYhayrKg8PZM04hryugMFw1z5w/BJ+F2lD/BAFiqjzC2
-         //qDr2s2bex7w//+mom1Q1MseoxDP6T89LFAQeMK/V1nv9lj/Qm79cUECHgXAGgCS5kz
-         CxHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=S4Cm3Xm7ps86QO+wm8sMu2JPYe6mqNw8F3bEMQJUUhc=;
-        b=fGJgAWNJ7QM/RJnHSCaBt6jw6+EbOS1q07pjU4+28UqgIckYzc4fRg4MbhV2QongTe
-         qSP1dH5qqK34WoRuxdMQqLRovmN/yihVxcYw2dROch+dPqjc/AfdFCRBPQg7oRFRGLDw
-         eNvCUMNw/fNB9wDfdgpVRYv61t1wew/9jvniRA34kzFBN1Vh/CfZHOsOqyFiK7eKPx/G
-         UAq2y0O3HpS1ddp2Yk7o5tF0XH239rzvbVUDUcl5W93RaQ2CXNPL61jpGGAgl0EgXO2Y
-         lapV7RSkT+yhXuWOHHvWVgMtJ9hoyRV9hNRj4HC0e2oIh4oj6xfNtFPcKHmF2eSXTIaz
-         Xr+w==
-X-Gm-Message-State: AJIora+lN9NCdyWSfEX1cEhsbGKk7bEj5rMhPs85YpDa6Icy7SL8zqHS
-        DkdKpX6bhMrl90hPSh8ZdxYCyA==
-X-Google-Smtp-Source: AGRyM1vEph3Ifvfbkg3uzqoCf0YQ14siBIj60BQr+NpQKcVngPKmsRZhSFDXn+Ia8zp9GK8enrJ02A==
-X-Received: by 2002:a05:651c:2208:b0:25d:ef2a:f092 with SMTP id y8-20020a05651c220800b0025def2af092mr8199475ljq.84.1659509746457;
-        Tue, 02 Aug 2022 23:55:46 -0700 (PDT)
-Received: from [192.168.1.6] ([213.161.169.44])
-        by smtp.gmail.com with ESMTPSA id f12-20020a05651c03cc00b0025e4474df71sm1457524ljp.135.2022.08.02.23.55.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 23:55:45 -0700 (PDT)
-Message-ID: <297ddf1f-8ddc-902c-ff3d-06b9d19c6a7b@linaro.org>
-Date:   Wed, 3 Aug 2022 08:55:43 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/3] dt-bindings: hwmon: Add IBM OCC bindings
-Content-Language: en-US
+        with ESMTP id S236097AbiHCMWK (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 3 Aug 2022 08:22:10 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B33D13D5B;
+        Wed,  3 Aug 2022 05:22:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659529329; x=1691065329;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5vBF8Ok5lBg7xULP4o1v53TnQYulqo1ZFvofkSMmRTc=;
+  b=nnrcFwt7L/ki9Xf9CAQEpVl0vsHdAGWIRCGu7F1GcbUMRPLsMuwNHwLO
+   yoxgtyR54ga04dLUo86/WQH0uya+qiqJa1/zeERmJOJEeV93sD9TAYlXZ
+   qArm7nR0thDseZ1ccEty5chNhk+fZotpFvHawrFUOxkFhNSS5Olxs9ciR
+   lelkF50xV+vGYFFSwGEPOdf59rsMmedMkMhzmZwZ8v6NXKhRVTZFFXDaa
+   zmH/0uQOehUr61atC+bJG05/pDQtmW5qZwQfEI1gKUWvHMRYLDgVQxc/M
+   Jq9y6nPfpCmz8GB9X0CGAdzVA47oo5DhvHw0Zj7hzYIFZtV84hQZMN17O
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="276571622"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="276571622"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 05:22:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="553301867"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 03 Aug 2022 05:22:05 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJDO1-000HFb-0I;
+        Wed, 03 Aug 2022 12:22:05 +0000
+Date:   Wed, 3 Aug 2022 20:21:42 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Eddie James <eajames@linux.ibm.com>, joel@jms.id.au
-Cc:     linux@roeck-us.net, jdelvare@suse.com, robh+dt@kernel.org,
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, linux@roeck-us.net,
+        jdelvare@suse.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-        devicetree@vger.kernel.org
-References: <20220802194656.240564-1-eajames@linux.ibm.com>
- <20220802194656.240564-2-eajames@linux.ibm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220802194656.240564-2-eajames@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        devicetree@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
+Subject: Re: [PATCH 3/3] hwmon: (occ) Check for device property for setting
+ OCC active during probe
+Message-ID: <202208032055.PEvfcqsc-lkp@intel.com>
+References: <20220802194656.240564-4-eajames@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802194656.240564-4-eajames@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 02/08/2022 21:46, Eddie James wrote:
-> These bindings describe the POWER processor On Chip Controller accessed
-> from a service processor or baseboard management controller (BMC).
-> 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->  .../bindings/hwmon/ibm,occ-hmwon.yaml         | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml b/Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml
-> new file mode 100644
-> index 000000000000..8f8c3b8d7129
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml
-> @@ -0,0 +1,40 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/ibm,occ-hwmon.yaml#
+Hi Eddie,
 
-typo here
+I love your patch! Yet something to improve:
 
-Does not look like you tested the bindings. Please run `make
-dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
+[auto build test ERROR on next-20220728]
+[also build test ERROR on v5.19]
+[cannot apply to groeck-staging/hwmon-next linus/master v5.19 v5.19-rc8 v5.19-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: IBM On-Chip Controller (OCC) accessed from a service processor
-> +
-> +maintainers:
-> +  - Eddie James <eajames@linux.ibm.com>
-> +
-> +description: |
-> +  This binding describes a POWER processor On-Chip Controller (OCC)
+url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/occ-Restore-default-behavior-of-polling-OCC-during-init/20220803-034854
+base:    7c5e07b73ff3011c9b82d4a3286a3362b951ad2b
+config: arm-randconfig-r021-20220803 (https://download.01.org/0day-ci/archive/20220803/202208032055.PEvfcqsc-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/31dc5bad51ddf22f4e097c0c5862d14341708188
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Eddie-James/occ-Restore-default-behavior-of-polling-OCC-during-init/20220803-034854
+        git checkout 31dc5bad51ddf22f4e097c0c5862d14341708188
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/hwmon/occ/
 
-s/This binding describes a//
-But instead describe the hardware. What is the OCC?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +  accessed from a service processor or baseboard management controller
-> +  (BMC).
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ibm,p9-occ-hwmon
-> +      - ibm,p10-occ-hwmon
-> +
-> +  ibm,inactive-on-init:
-> +    description: This property describes whether or not the OCC should
-> +      be marked as active during device initialization. The alternative
-> +      is for user space to mark the device active based on higher level
-> +      communications between the BMC and the host processor.
+All errors (new ones prefixed by >>):
 
-I find the combination property name with this description confusing. It
-sounds like init of OCC and somehow it should be inactive? I assume if
-you initialize device, it is active. Or maybe the "init" is of something
-else? What is more, non-negation is easier to understand, so rather
-"ibm,active-on-boot" (or something like that).
-
-> +    type: boolean
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    occ-hmwon {
-
-just "hwmon"
-
-> +        compatible = "ibm,p9-occ-hwmon";
-> +        ibm,inactive-on-init;
-> +    };
+>> drivers/hwmon/occ/p9_sbe.c:188:25: error: use of undeclared identifier 'p8_i2c_occ_of_match'; did you mean 'p9_sbe_occ_of_match'?
+   MODULE_DEVICE_TABLE(of, p8_i2c_occ_of_match);
+                           ^~~~~~~~~~~~~~~~~~~
+                           p9_sbe_occ_of_match
+   include/linux/module.h:244:15: note: expanded from macro 'MODULE_DEVICE_TABLE'
+   extern typeof(name) __mod_##type##__##name##_device_table               \
+                 ^
+   drivers/hwmon/occ/p9_sbe.c:183:34: note: 'p9_sbe_occ_of_match' declared here
+   static const struct of_device_id p9_sbe_occ_of_match[] = {
+                                    ^
+   1 error generated.
 
 
-Best regards,
-Krzysztof
+vim +188 drivers/hwmon/occ/p9_sbe.c
+
+   182	
+   183	static const struct of_device_id p9_sbe_occ_of_match[] = {
+   184		{ .compatible = "ibm,p9-occ-hwmon" },
+   185		{ .compatible = "ibm,p10-occ-hwmon" },
+   186		{}
+   187	};
+ > 188	MODULE_DEVICE_TABLE(of, p8_i2c_occ_of_match);
+   189	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
