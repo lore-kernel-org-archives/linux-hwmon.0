@@ -2,112 +2,122 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42B9FC19F28
-	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Aug 2022 17:44:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C5E2C00144
+	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Aug 2022 06:48:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238428AbiHCRoh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 3 Aug 2022 13:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
+        id S238382AbiHDGsB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 4 Aug 2022 02:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236893AbiHCRog (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 3 Aug 2022 13:44:36 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D9A558EC;
-        Wed,  3 Aug 2022 10:44:34 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id ey23so3500080qtb.11;
-        Wed, 03 Aug 2022 10:44:34 -0700 (PDT)
+        with ESMTP id S234863AbiHDGsA (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 4 Aug 2022 02:48:00 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFE63A485;
+        Wed,  3 Aug 2022 23:47:59 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id x2-20020a17090ab00200b001f4da5cdc9cso4371687pjq.0;
+        Wed, 03 Aug 2022 23:47:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=nKqR1/j9CCv0bYcQc50jHqzMbY2amMbbgZaTSlWN9A8=;
-        b=GGKa5CwpF4I2r+JNIjTsKqcqGN+l9IeJnEAJ8JyxCRUpEyT1DHqvxxX38MSP1lwQHx
-         O/aI2zVjC0Tbc5Ka64T5EUu7Y71PrrvAdoozF25naNV8mg4pDrMfHrasAxNzUBltkvR0
-         aQ0lhOS6A1nT1vzjJagRWPjFS7y8flkP0+VwB5KqCl4mT63srjGBKkTZJO/no5pgort4
-         6YeYBTJEGkRSyA4PF60sx7ADUFtNbWV24eGjTzbmL3jeEPyLuFf30eUl35XOkz5Bo5zZ
-         qGxLpk6Y2iWEUa6URiGtAplBAst/uIMs+UFt4NlE76HWSOLdaksKAdpTpjZp4CGA+n9R
-         Mdow==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=lJ2RcUH4YfpT8xs7Cl3kJdao+iEwbE0ETrJv8eZGZ68=;
+        b=pJ66Y+HXik9WqKVgF5atP1aNTacZkeLEM1AtfQWKWaBNA6QJLpA8yjCILmasHfZe7D
+         Mk2xj1+I6hLWfz84LI1ANXBKYUEIlv1Efp/jiLYPzlmV04nW1B+HgHjc089ep6D+M7Zk
+         PDk3zlAtKDac4MbAfXXHjrmTUTdqlr1lDcf74H/vHOrQyBI84cg/yvWVUXhFXDd7rwbd
+         h9gwh0MjsWX+p2xjvkh/KxbXzb/ETHEGGNmd5sf/LSN8Uu3hcgaYX4fnE60mGl0+SO5a
+         sdaE6VNRC7J+Fh9SiU8wJYDc22Tb3md0ECoU3Upw+7ZokkZZEPLz6yqVXek5jQoL/Wk0
+         RjvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=nKqR1/j9CCv0bYcQc50jHqzMbY2amMbbgZaTSlWN9A8=;
-        b=0C8u/hJhrq9tcS8szG8ySKtoB21c6Zcs8AF62ffe77w7KOwXQeQdq3PtvNDHGi7vTE
-         1vkNtK5ElJuXq5EuHenS86rdYlP+ASCERMEVv/PMCRr28KmZsMOmS5H4v/fD+Gf0KGBm
-         4/XY8z0LEDDNKTf3Gj9000VV1lc+OkOFBMu7w0GGuVBb4vmXgORmyjAgU65PBnNE5FxK
-         sxlHuMnaOeZUnn2sv3qWKslQtabnSiWUUdpAFivY52Y48YkDZ9U3EGYaA6rS7VVYQ1J6
-         SYzQ0/8toX8Ax3XbyS1ISrAsR40IF4s7cyzjh8kgPYPnVI0xDNTVQcPyHMMYUYmd9gQk
-         o9aA==
-X-Gm-Message-State: AJIora+GcHYMyTeJUMP9nn1vtNdvGZJVDVkSm/TECXz+0a1TDTXg/vji
-        KPnbVJOG8lKRI1UuqptFJn8=
-X-Google-Smtp-Source: AGRyM1vgBk6dLZ/gUFqfI6KsExv3IAivV/v7sW7ltWgRMRzL76j7J0UT49xM/qVxbPd7bbi9Z4+8kQ==
-X-Received: by 2002:ac8:5887:0:b0:31f:389a:2dd5 with SMTP id t7-20020ac85887000000b0031f389a2dd5mr23034524qta.33.1659548673997;
-        Wed, 03 Aug 2022 10:44:33 -0700 (PDT)
-Received: from BETA-0968.ad.beta.team ([167.224.123.60])
-        by smtp.gmail.com with ESMTPSA id t2-20020ac865c2000000b0033c9a0d5375sm2454047qto.66.2022.08.03.10.44.33
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=lJ2RcUH4YfpT8xs7Cl3kJdao+iEwbE0ETrJv8eZGZ68=;
+        b=h8cxgeEXa3thPmdDHn2/awvod+p2EXNmX8LuxrIPg+w8/3Efv/jKl8HyXrUUmK3g8k
+         VHhiozZbGZE4T4hOdhX84j6xbB8MTq9y15/RrTGgpWTb9bqDv4zHIPSbPcRR6pJSmTm0
+         f6j9nrNzRrHIyYuUkEzf4BzR/pBGgGXBKQzaZqXXZv/JHuEvO+vs0KKEgI/RRveVHUeC
+         6vauEKJ0kPj9I23pnYGVB4m3RrzFaARtwuhB8JM3z+qKiBupg/+3J2WfQdm0EFmax/aH
+         X749Tok0oL0BA7bIUwOWmLu5cszves4zzLgTzjS3NzTET6Nfyk8jpemE7byYk2fkvlve
+         y2CQ==
+X-Gm-Message-State: ACgBeo1hvMOY0Zhk9Oc0Ak0g6syg5uO6qEWPvJw0S//Uo7/d/LveV9qr
+        8E3ZgAabNSh6s/UGXPHVBp37niHCklC+f9SD
+X-Google-Smtp-Source: AA6agR5lzyXnqthclTBCvytEE7zd3YDciHYQ19JqVTciDnAc1KNZNlX65VcV2eJefP7u4brPPngVGw==
+X-Received: by 2002:a17:903:247:b0:16c:5017:9ad4 with SMTP id j7-20020a170903024700b0016c50179ad4mr560350plh.115.1659595678605;
+        Wed, 03 Aug 2022 23:47:58 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w1-20020aa79a01000000b00528f9597fb3sm19808pfj.197.2022.08.03.23.47.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 10:44:33 -0700 (PDT)
-From:   Jack Champagne <jackchampagne.r@gmail.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Stephen Kitt <steve@sk2.org>,
-        Jack Champagne <jackchampagne.r@gmail.com>
-Subject: [PATCH] hwmon: (ads7828) Rename regmap_config variable
-Date:   Wed,  3 Aug 2022 13:43:56 -0400
-Message-Id: <20220803174356.474969-1-jackchampagne.r@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 03 Aug 2022 23:47:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 3 Aug 2022 23:47:56 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jack Champagne <jackchampagne.r@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stephen Kitt <steve@sk2.org>
+Subject: Re: [PATCH] hwmon: (ads7828) Rename regmap_config variable
+Message-ID: <20220804063234.GA4122108@roeck-us.net>
+References: <20220803174356.474969-1-jackchampagne.r@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220803174356.474969-1-jackchampagne.r@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The regmap_config variable for the ads7828 and the ads7830 are both
-misnamed to `ads2828_regmap_config` and `ads2830_regmap_config`
-respectively. These variables refer to regmap configs for the ads7828
-and the ads7830 and should be named accordingly.
+On Wed, Aug 03, 2022 at 01:43:56PM -0400, Jack Champagne wrote:
+> The regmap_config variable for the ads7828 and the ads7830 are both
+> misnamed to `ads2828_regmap_config` and `ads2830_regmap_config`
+> respectively. These variables refer to regmap configs for the ads7828
+> and the ads7830 and should be named accordingly.
+> 
+> This patch does not introduce functional changes as the only two usages
+> of these regmap_config variables are within the changed file.
+> 
+> Signed-off-by: Jack Champagne <jackchampagne.r@gmail.com>
 
-This patch does not introduce functional changes as the only two usages
-of these regmap_config variables are within the changed file.
+Please refrain from submitting patches with non-functional changes
+like this one unless you are also submitting patches with functional
+changes.
 
-Signed-off-by: Jack Champagne <jackchampagne.r@gmail.com>
----
- drivers/hwmon/ads7828.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Guenter
 
-diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
-index 7246198f0901..20bdee769882 100644
---- a/drivers/hwmon/ads7828.c
-+++ b/drivers/hwmon/ads7828.c
-@@ -89,12 +89,12 @@ static struct attribute *ads7828_attrs[] = {
- 
- ATTRIBUTE_GROUPS(ads7828);
- 
--static const struct regmap_config ads2828_regmap_config = {
-+static const struct regmap_config ads7828_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 16,
- };
- 
--static const struct regmap_config ads2830_regmap_config = {
-+static const struct regmap_config ads7830_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
- };
-@@ -152,11 +152,11 @@ static int ads7828_probe(struct i2c_client *client)
- 	if (chip == ads7828) {
- 		data->lsb_resol = DIV_ROUND_CLOSEST(vref_mv * 1000, 4096);
- 		data->regmap = devm_regmap_init_i2c(client,
--						    &ads2828_regmap_config);
-+						    &ads7828_regmap_config);
- 	} else {
- 		data->lsb_resol = DIV_ROUND_CLOSEST(vref_mv * 1000, 256);
- 		data->regmap = devm_regmap_init_i2c(client,
--						    &ads2830_regmap_config);
-+						    &ads7830_regmap_config);
- 	}
- 
- 	if (IS_ERR(data->regmap))
--- 
-2.25.1
-
+> ---
+>  drivers/hwmon/ads7828.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
+> index 7246198f0901..20bdee769882 100644
+> --- a/drivers/hwmon/ads7828.c
+> +++ b/drivers/hwmon/ads7828.c
+> @@ -89,12 +89,12 @@ static struct attribute *ads7828_attrs[] = {
+>  
+>  ATTRIBUTE_GROUPS(ads7828);
+>  
+> -static const struct regmap_config ads2828_regmap_config = {
+> +static const struct regmap_config ads7828_regmap_config = {
+>  	.reg_bits = 8,
+>  	.val_bits = 16,
+>  };
+>  
+> -static const struct regmap_config ads2830_regmap_config = {
+> +static const struct regmap_config ads7830_regmap_config = {
+>  	.reg_bits = 8,
+>  	.val_bits = 8,
+>  };
+> @@ -152,11 +152,11 @@ static int ads7828_probe(struct i2c_client *client)
+>  	if (chip == ads7828) {
+>  		data->lsb_resol = DIV_ROUND_CLOSEST(vref_mv * 1000, 4096);
+>  		data->regmap = devm_regmap_init_i2c(client,
+> -						    &ads2828_regmap_config);
+> +						    &ads7828_regmap_config);
+>  	} else {
+>  		data->lsb_resol = DIV_ROUND_CLOSEST(vref_mv * 1000, 256);
+>  		data->regmap = devm_regmap_init_i2c(client,
+> -						    &ads2830_regmap_config);
+> +						    &ads7830_regmap_config);
+>  	}
+>  
+>  	if (IS_ERR(data->regmap))
+> -- 
+> 2.25.1
+> 
