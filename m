@@ -2,129 +2,37 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 090DBC25B08
-	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Aug 2022 22:55:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 494A9C25B08
+	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Aug 2022 15:53:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240376AbiHDWzd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 4 Aug 2022 18:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
+        id S241249AbiHEPxE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 5 Aug 2022 11:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240424AbiHDWyX (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 4 Aug 2022 18:54:23 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CA67437A
-        for <linux-hwmon@vger.kernel.org>; Thu,  4 Aug 2022 15:53:01 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id z16so1308907wrh.12
-        for <linux-hwmon@vger.kernel.org>; Thu, 04 Aug 2022 15:53:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linexp-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=507KINL6A4/AmFndHS1iP7gQvMCv3nao7sFdYMMwu/Q=;
-        b=SXwwjHMSFBkV6d3469j+NGk8We34QnvhrAFoCUQy19G/CXiE8tYZi9XqMgsGr+jFyE
-         Xelv0ZhLlbiXuGahZu23c1X6O1vdQ6ITYqy8IvtQ/E24plUi803+XJSfWsaQ9w9nAgNZ
-         o3Zo5Re3uYnblJhzl2e/gNOmbi08DEjJQvpRg50yZMDPblEi+5mJH5JPd8SsvhRWXoK/
-         WDZA8OdIGNiK5ve1+zUq1MyrGFmF5pKr9w/6AdTAYbdc//8sLdAHJjS5VLI37KWzLb/M
-         6X3a+fSAwCkyq5qGOCu0TcGWC3SXKqsmUBU+e0oHWEmzENa8hGpbpybU2AnNvQDwQ8q+
-         Q2AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=507KINL6A4/AmFndHS1iP7gQvMCv3nao7sFdYMMwu/Q=;
-        b=JP8Uq9X+KqyzBR1ZAKXCyKP+6My/R8jDCS8b2zYQwBbocQFe9qtESERDdON8ha2KmZ
-         93VOEQrq1k4fs8uCXDC0CY/ewPFmY8EBkRbRQWa+s4Rh1iy6MNCFoGuQseTQ9JkCFsu+
-         0+BCoWt+EXyPl5MBOm9DjUA+RRu13GyDMb7wVVQa9/3G7WSnePAxQMR4IOZkIB3mNIul
-         SDbpWo3m3LPcDuHcELk2TzdEhwF5Hq90qputxgsTvgdJVPusr3vEPyyxmQm723zkJetY
-         FebiSFSXYti1IBxHMYbNtJyJPCubrcjDZmQ+sMIXHagDmCZ6NCRFMtyfeZbw2bJnqgJb
-         ua0Q==
-X-Gm-Message-State: ACgBeo2cNqgNY62O0wY78Vik6Dt/wn3/5kojO+Fsy4Gdtxpk3dKHIPIL
-        i7xlYvozmMH+RVUhJ5kd64dzdA==
-X-Google-Smtp-Source: AA6agR5FB/1c0hMGtxm0/d0QPNlvMrEglZyNig5yfbDgVc3THf+62GhkvC52FzxRKY7DlFnXy24cQA==
-X-Received: by 2002:a05:6000:1447:b0:21d:b22b:e5d with SMTP id v7-20020a056000144700b0021db22b0e5dmr2442958wrx.189.1659653576746;
-        Thu, 04 Aug 2022 15:52:56 -0700 (PDT)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:31aa:ed2c:3f7:19d])
-        by smtp.gmail.com with ESMTPSA id a16-20020a056000051000b0021f87e8945asm2495906wrf.12.2022.08.04.15.52.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 15:52:56 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linexp.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
-        damien.lemoal@opensource.wdc.com, heiko@sntech.de,
-        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
-        talel@amazon.com, thierry.reding@gmail.com, digetx@gmail.com,
-        jonathanh@nvidia.com, anarsoul@gmail.com, tiny.windzz@gmail.com,
-        baolin.wang7@gmail.com, f.fainelli@gmail.com,
-        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
-        glaroque@baylibre.com, miquel.raynal@bootlin.com,
-        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
-        matthias.bgg@gmail.com, j-keerthy@ti.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org (open list:PMBUS HARDWARE MONITORING
-        DRIVERS)
-Subject: [PATCH v5 26/33] hwmon/drivers/pm_bus: Switch to new of thermal API
-Date:   Fri,  5 Aug 2022 00:43:42 +0200
-Message-Id: <20220804224349.1926752-27-daniel.lezcano@linexp.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
-References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
+        with ESMTP id S241322AbiHEPva (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 5 Aug 2022 11:51:30 -0400
+X-Greylist: delayed 400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 05 Aug 2022 08:50:31 PDT
+Received: from cloudhost-5228862.us-midwest-2.nxcli.net (cloudhost-5228862.us-midwest-2.nxcli.net [199.189.224.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA5632D84
+        for <linux-hwmon@vger.kernel.org>; Fri,  5 Aug 2022 08:50:31 -0700 (PDT)
+Received: (qmail 23413 invoked by uid 10016); 5 Aug 2022 15:43:50 +0000
+To:     linux-hwmon@vger.kernel.org
+Subject: =?us-ascii?Q?EARN_OVER_$1200_PER_DAY_ONLINE_WITH_THE_BITCOIN?=  =?us-ascii?Q?_PROFIT_METHOD!?=
+X-PHP-Originating-Script: 10016:PHPMailer.php
+Date:   Fri, 5 Aug 2022 15:43:50 +0000
+From:   Construction <info@yourdomain.com>
+Reply-To: info@yourdomain.com
+Message-ID: <EJF8aA2nBZwVSdpJdeIGZqgB3D5myo2EGutuRZcYlg@theinteriorfabricshoppe.com>
+X-Mailer: PHPMailer 6.6.0 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The thermal OF code has a new API allowing to migrate the OF
-initialization to a simpler approach. The ops are no longer device
-tree specific and are the generic ones provided by the core code.
+Message Body:
+CRYPTOCURRENCY DROP WILL MAKE YOU A MILLIONAIRE https://telegra.ph/Cryptocurrency-makes-people-millionaires-at-15-people-per-hour---Page-242412-08-02
 
-Convert the ops to the thermal_zone_device_ops format and use the new
-API to register the thermal zone with these generic ops.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
----
- drivers/hwmon/pmbus/pmbus_core.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 02912022853d..3b9bb2123a1a 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -1109,9 +1109,9 @@ struct pmbus_thermal_data {
- 	struct pmbus_sensor *sensor;
- };
- 
--static int pmbus_thermal_get_temp(void *data, int *temp)
-+static int pmbus_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
- {
--	struct pmbus_thermal_data *tdata = data;
-+	struct pmbus_thermal_data *tdata = tz->devdata;
- 	struct pmbus_sensor *sensor = tdata->sensor;
- 	struct pmbus_data *pmbus_data = tdata->pmbus_data;
- 	struct i2c_client *client = to_i2c_client(pmbus_data->dev);
-@@ -1135,7 +1135,7 @@ static int pmbus_thermal_get_temp(void *data, int *temp)
- 	return ret;
- }
- 
--static const struct thermal_zone_of_device_ops pmbus_thermal_ops = {
-+static const struct thermal_zone_device_ops pmbus_thermal_ops = {
- 	.get_temp = pmbus_thermal_get_temp,
- };
- 
-@@ -1153,8 +1153,8 @@ static int pmbus_thermal_add_sensor(struct pmbus_data *pmbus_data,
- 	tdata->sensor = sensor;
- 	tdata->pmbus_data = pmbus_data;
- 
--	tzd = devm_thermal_zone_of_sensor_register(dev, index, tdata,
--						   &pmbus_thermal_ops);
-+	tzd = devm_thermal_of_zone_register(dev, index, tdata,
-+					    &pmbus_thermal_ops);
- 	/*
- 	 * If CONFIG_THERMAL_OF is disabled, this returns -ENODEV,
- 	 * so ignore that error but forward any other error.
--- 
-2.25.1
+--
+This e-mail was sent from a contact form on Construction (http://yourdomain.com/)
 
