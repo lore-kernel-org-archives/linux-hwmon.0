@@ -2,145 +2,158 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97604C19F2A
-	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Aug 2022 10:07:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B37AC19F2A
+	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Aug 2022 15:02:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbiHGKHQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 7 Aug 2022 06:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51712 "EHLO
+        id S234190AbiHGPCd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 7 Aug 2022 11:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbiHGKHO (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Aug 2022 06:07:14 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324A0F67;
-        Sun,  7 Aug 2022 03:07:13 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a7so11902327ejp.2;
-        Sun, 07 Aug 2022 03:07:13 -0700 (PDT)
+        with ESMTP id S234670AbiHGPCc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Aug 2022 11:02:32 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C3F6263
+        for <linux-hwmon@vger.kernel.org>; Sun,  7 Aug 2022 08:02:31 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id g12so6147723pfb.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 07 Aug 2022 08:02:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=uZ4Y9ZBE3WzP0l02nv1M4Bipz183jpz7eunAyyqOylc=;
-        b=ab0vi6XHLcQOwyrH9tInhBDEQXy6BGMupGRD9gHvGE7ALE/OKrE9Y7yFyo7qcSXooe
-         I7JJqoQvt+dnzyLZ6bl8xvOliF3cwcWi5LeaItIN5Bfnglm3LjBe++F+zc9FufOja23x
-         UBKHfVO03TFbM2cKa+nN8GJoMt3rXgwze1PUDLxMXmpI35qNjOGlW/8ondlGg4PzziYG
-         scVEcpxLkj82ot6SGQ1aHMfLn2Tc5GOJ7hH+kahzno14YnAzsxWB/NYTi2Xo/6l7CbbF
-         ZfJC1Exyw0RfMrMVW6HNkztiU9INW0ASZikkNZCcAOGuk6IKWmGH3PN6jQyX+rwz9Paw
-         FZvg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=ZLrT+SYuYyrSNZJ4rIuWgT9eGjJ0lroXecUAQVDE4NU=;
+        b=YK6IhcjnGvxOgufslTR1eSsFMT3ZlK5xrm+GKO/rZd/2PctU4DreZv4pTq7yrb3+y4
+         W2lILp0VYB+3E8r0j0n//BEXDvg1sRUII0DgmMN6hVj+1jBI+APlpTLRfuTrx+XMSUWo
+         cKI9JORiCQMCkAiUhMN4dJG+v2Wopko0xvsdfq5056/vmrs5K8XNOttkI96322mhdSJK
+         And/LZx/1h5Ubj01NFDDPDaEzucnjwK4uxaHtl1mB7kba927eqi6jZ3fZVuuob19tEz2
+         WHq9eUhsu/H3wWkMnBOlTLWjb/6Bt0k4RtInGwWBG1nnoOaEILhHJu22dltONBI0AXC4
+         EgQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=uZ4Y9ZBE3WzP0l02nv1M4Bipz183jpz7eunAyyqOylc=;
-        b=pv7IQmzK+3FCDQKbKEMPyT5wUhMcP6pT0eryGIy1vuna2Npgaaps/EVuK3XfKz6oAT
-         BtzABn3cm3IwCttE9SycQ+GF5k7pE3mRCpM0oOFRIpuQoM7/ng7twWfwqKy2jFLDvj2d
-         xWrZnDooSUOC56KXlSF2nr5qE7mq/LT2+39YJpbWsxl3GpKd5X5DSEBdBETx2G71nC1m
-         rU2icrLvQkYuP1PV62PQHgASzilZIFf4PRqm1WPEqRCyPTT3g8/w9BKW4kgTDUBETl0M
-         7WQK8PxlkDpjN4ASOSEwNpyPrFdVdC/D2khsxL6yxMdcg050zSxYm+IpxcYA46Vop8+1
-         vj9Q==
-X-Gm-Message-State: ACgBeo3YxIRxS2GG+McUGQBEHrIrrMqCNvUicwiqkIbq/nngsLt9iskf
-        rtUVrtv+UM13382rBqIcCrAv9Xo1TVs=
-X-Google-Smtp-Source: AA6agR4wOnIGwY36ra18eh9mrxpc7bDv/cpaxYZKZAs6tUCcxtIGSutrpxaodcnab6hniAWT6dqt/A==
-X-Received: by 2002:a17:907:60c7:b0:731:4b42:4e3e with SMTP id hv7-20020a17090760c700b007314b424e3emr1701944ejc.236.1659866831761;
-        Sun, 07 Aug 2022 03:07:11 -0700 (PDT)
-Received: from gmail.com (195-38-112-141.pool.digikabel.hu. [195.38.112.141])
-        by smtp.gmail.com with ESMTPSA id c12-20020aa7d60c000000b0043d0955d546sm2839062edr.69.2022.08.07.03.07.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Aug 2022 03:07:11 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sun, 7 Aug 2022 12:07:09 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] hwmon updates for v5.20
-Message-ID: <Yu+OzWv2JDbI89mW@gmail.com>
-References: <20220730022529.497941-1-linux@roeck-us.net>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=ZLrT+SYuYyrSNZJ4rIuWgT9eGjJ0lroXecUAQVDE4NU=;
+        b=gvAFjGe6GTlz/VL1oBMVm6B2CuPY2SIB6ld1PTwlUlXKd2/qY6Rcc5SU1ufl6H2hQ7
+         fDP6/EEibWBAx4sNZvZlEEVJL9o2oWPBaRNWEipFuRgVmg2OljQ1G4NqLEMflt/xAjMe
+         VwKI/YFdZ7nweJt3tACtF4obIp735xtSQQa9mNbgkMQ6bWEdrLJ2oltBDQc1jrWJo2vD
+         T23HaQzBWse3C4fJnnaNkPi0RlNmQ7/aHiHfDNne/S3KFbJ/eD3+zKoEpIU9xXsgO5e2
+         gMCdRVzSwp707qIZcnwNn3oAOD/Y+fxJLYzMpp/PvEHt2uGbRt5X41OhehvE9r/ue0o9
+         7ECg==
+X-Gm-Message-State: ACgBeo3JvzjlDGwnq1fXhNz9FXR36WwZqeItxr5Foq2RP6+XAXaxnrW0
+        Jhf6HbwUND25zCTpsTNUMxY=
+X-Google-Smtp-Source: AA6agR48NUvw1x5BxFuh8rYRZe6hnS+0hd6TykhYwtdwdW9tPMlmZYttuFC7lq7YLAD79xVvAgpnBA==
+X-Received: by 2002:a62:6497:0:b0:52e:e0cd:1963 with SMTP id y145-20020a626497000000b0052ee0cd1963mr8159557pfb.58.1659884550448;
+        Sun, 07 Aug 2022 08:02:30 -0700 (PDT)
+Received: from [192.168.122.100] (M106072039032.v4.enabler.ne.jp. [106.72.39.32])
+        by smtp.gmail.com with ESMTPSA id x194-20020a6286cb000000b0052abfc4b4a4sm6994313pfd.12.2022.08.07.08.02.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Aug 2022 08:02:29 -0700 (PDT)
+Message-ID: <eb1722e2-8ce6-c30e-8728-8ab5e616413d@gmail.com>
+Date:   Mon, 8 Aug 2022 00:02:26 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] nvme: hwmon: Add support for throttling temperature
+ feature
+Content-Language: en-US
+To:     Armin Wolf <W_Armin@gmx.de>, Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-nvme@lists.infradead.org, linux-hwmon@vger.kernel.org
+References: <20220806054606.7280-1-ikegami.t@gmail.com>
+ <20220806083113.GA3986075@roeck-us.net>
+ <ae3a4377-440b-af9d-8033-cbfe2d76d135@gmail.com>
+ <354484dd-bf1f-8339-c68a-f950fb72d3f7@gmx.de>
+From:   Tokunori Ikegami <ikegami.t@gmail.com>
+In-Reply-To: <354484dd-bf1f-8339-c68a-f950fb72d3f7@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220730022529.497941-1-linux@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
-* Guenter Roeck <linux@roeck-us.net> wrote:
+On 2022/08/07 5:19, Armin Wolf wrote:
+> Am 06.08.22 um 13:58 schrieb Tokunori Ikegami:
+>
+>> Note: Sorry let me resend the mail below as text format since it was
+>> not delivered to the mailing lists as contained HTML subpart.
+>>
+>> Hi,
+>>
+>> Thanks for your comments.
+>>
+>> On 2022/08/06 17:31, Guenter Roeck wrote:
+>>> On Sat, Aug 06, 2022 at 02:46:06PM +0900, Tokunori Ikegami wrote:
+>>>> NVMe drives support host controlled thermal management feature as
+>>>> optional.
+>>>> The thermal management temperature are different from the
+>>>> temperature threshold.
+>>>> So add functionality to set the throttling temperature values.
+>>>>
+>>>> Signed-off-by: Tokunori Ikegami <ikegami.t@gmail.com>
+>>
+>> I think actually the suggested attributes are not met with the
+>> throttling temperatures as below.
+>>
+>>   temp[1-*]_emergency: Temperature emergency max value, for chips
+>> supporting more than two upper temperature limits.
+>>   temp[1-*]_lcrit: Temperature critical min value, typically lower
+>> than corresponding temp_min values.
+>>
+>>   Thermal Management Temperature 1 (TMT1): This field specifies the
+>> temperature, in Kelvins, when the controller begins to transition to
+>> lower power active power states or performs vendor specific thermal
+>> management actions while minimizing the impact on performance (e.g.,
+>> light throttling) in order to attempt to reduce the Composite
+>> Temperature.
+>>   Thermal Management Temperature 2 (TMT2): This field specifies the
+>> temperature, in Kelvins, when the controller begins to transition to
+>> lower power active power states or perform vendor specific thermal
+>> management actions regardless of the impact on performance (e.g.,
+>> heavy throttling) in order to attempt to reduce the Composite
+>> Temperature.
+>>
+> Maybe those two throttle thresholds could be represented by tempX_crit 
+> and tempX_emergency,
+> the special throttle effect could be documented in the drivers 
+> documentation.
+>
+> Since tempX_crit is already used to report CCTEMP, maybe this value 
+> could be reported with tempX_rated_max instead?
+> As far as i know, CCTEMP is the maximum composite temperature rating 
+> of the NVME device, so reporting is as tempX_rated_max would make sense.
 
-> Hi Linus,
-> 
-> I'll be traveling next week, so I am sending this pull request early,
-> in the hope that there won't be a v5.19-rc9.
-> 
-> Please pull hwmon updates for Linux v5.20 from signed tag:
-> 
->     git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.20
-> 
-> Thanks,
-> Guenter
-> ------
-> 
-> The following changes since commit 88084a3df1672e131ddc1b4e39eeacfd39864acf:
-> 
->   Linux 5.19-rc5 (2022-07-03 15:39:28 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.20
-> 
-> for you to fetch changes up to cdbe34da01e32024e56fff5c6854a263a012d7ff:
-> 
->   hwmon: (aquacomputer_d5next) Add support for Aquacomputer Quadro fan controller (2022-07-27 06:00:24 -0700)
+Thanks for your advice. But actually the throttle thresholds is lower 
+than both the current tempX_max and tempX_crit by default so it seems 
+that it is difficult to use the current tempX values for the throttle 
+thresholds.
 
->  drivers/hwmon/lm90.c                               | 2556 +++++++++++++-------
+Regards,
+Ikegami
 
-Just a quick build regression report, i386 allmodconfig fails to build due 
-to a 'string overread' compiler warning in drivers/hwmon/lm90.o:
-
-  # make ARCH=i386 allmodconfig
-  # make ARCH=i386 drivers/hwmon/lm90.o
-
-  CALL    scripts/atomic/check-atomics.sh
-  CALL    scripts/checksyscalls.sh
-  CC [M]  drivers/hwmon/lm90.o
-In file included from ./include/linux/string.h:253,
-                 from ./arch/x86/include/asm/page_32.h:22,
-                 from ./arch/x86/include/asm/page.h:14,
-                 from ./arch/x86/include/asm/thread_info.h:12,
-                 from ./include/linux/thread_info.h:60,
-                 from ./arch/x86/include/asm/preempt.h:7,
-                 from ./include/linux/preempt.h:78,
-                 from ./include/linux/rcupdate.h:27,
-                 from ./include/linux/rculist.h:11,
-                 from ./include/linux/pid.h:5,
-                 from ./include/linux/sched.h:14,
-                 from ./include/linux/ratelimit.h:6,
-                 from ./include/linux/dev_printk.h:16,
-                 from ./include/linux/device.h:15,
-                 from drivers/hwmon/lm90.c:99:
-  In function ‘__fortify_strlen’,
-      inlined from ‘strlcpy’ at ./include/linux/fortify-string.h:159:10,
-      inlined from ‘lm90_detect’ at drivers/hwmon/lm90.c:2550:2:
-  ./include/linux/fortify-string.h:50:33: error: ‘__builtin_strlen’ reading 1 or more bytes from a region of size 0 [-Werror=stringop-overread]
-     50 | #define __underlying_strlen     __builtin_strlen
-        |                                 ^
-  ./include/linux/fortify-string.h:141:24: note: in expansion of macro ‘__underlying_strlen’
-    141 |                 return __underlying_strlen(p);
-        |                        ^~~~~~~~~~~~~~~~~~~
-  cc1: all warnings being treated as errors
-  make[2]: *** [scripts/Makefile.build:249: drivers/hwmon/lm90.o] Error 1
-
-It's a build warning upgraded to a build error by CONFIG_WERROR=y, it 
-normally looks like this:
-
-                 from drivers/hwmon/lm90.c:99:
-  In function ‘__fortify_strlen’,
-      inlined from ‘strlcpy’ at ./include/linux/fortify-string.h:159:10,
-      inlined from ‘lm90_detect’ at drivers/hwmon/lm90.c:2550:2:
-  ./include/linux/fortify-string.h:50:33: warning: ‘__builtin_strlen’ reading 1 or more bytes from a region of size 0 [-Wstringop-overread]
-
-Thanks,
-
-	Ingo
+>
+> Armin Wolf
+>
+>>> NACK. There are several existing limit attributes which can be used
+>>> for this purpose. I would suggest to use EMERGENCY and LCRIT 
+>>> attributes.
+>>>
+>>> Furthermore, one can not just extend the hwmon ABI without discussion,
+>>> much less as part of a patch introducing its use. Any attribute
+>>> introduced
+>>> into the ABI must benefit more than one device, and a matching
+>>> implementation in the sensors command and the lm-sensors library is
+>>> expected.
+>>
+>> Sorry I am not sure about the hwmon ABI situation but if possible
+>> could you please consider or discuss to extend the attributes from
+>> this patch review since the suggested attributes seem difficult to use
+>> instead? (Is it difficult?)
+>> By the way I have already created the lm-sensors pull request below.
+>>   <https://github.com/lm-sensors/lm-sensors/pull/406>
+>>
+>> Regards,
+>> Ikegami
+>>
+>>>
+>>> Guenter
