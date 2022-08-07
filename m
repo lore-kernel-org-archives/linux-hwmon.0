@@ -2,107 +2,145 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38B6BC25B0C
-	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Aug 2022 09:20:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97604C19F2A
+	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Aug 2022 10:07:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233126AbiHGJUo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 7 Aug 2022 05:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33222 "EHLO
+        id S232878AbiHGKHQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 7 Aug 2022 06:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233727AbiHGJUn (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Aug 2022 05:20:43 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA852615;
-        Sun,  7 Aug 2022 02:20:42 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id d1so4640854qvs.0;
-        Sun, 07 Aug 2022 02:20:42 -0700 (PDT)
+        with ESMTP id S232211AbiHGKHO (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Aug 2022 06:07:14 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324A0F67;
+        Sun,  7 Aug 2022 03:07:13 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a7so11902327ejp.2;
+        Sun, 07 Aug 2022 03:07:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=hPq7Rs0PKAtGhzg20DKLKbGoILEjF6QA+sJshG/YwdQ=;
-        b=iwREscdJXw31Y55OGgafI0MwsZgG5unhAFC9fnZE2e+pEEwpKqkP0jGBMes8xBPMVc
-         eAseSILTPdg3KeXGeMoUhu0CZk+kiNmWLYjPITiRS0AMccFoiq8DcjY3uW9+6wgEY3PK
-         Dv3PHw/ysIaRUvgupwutjVxiucIZDaqe0FWNsZVnUhHwMk21Sch4YiUQK9b7aKjjQxY9
-         BHOjXfbvYkadE7Nhy5PlKvjrmeg5w9OMZ12T41l5ctSY6qoFrEXXM+soRt1PPPz8rgCL
-         c+nKcN9WqKaGsauLvf8TPFi22PkJcatsD3gmCZ3E7f6FrsSCIgpuCSNtS7zau1wAfl/P
-         0CHw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=uZ4Y9ZBE3WzP0l02nv1M4Bipz183jpz7eunAyyqOylc=;
+        b=ab0vi6XHLcQOwyrH9tInhBDEQXy6BGMupGRD9gHvGE7ALE/OKrE9Y7yFyo7qcSXooe
+         I7JJqoQvt+dnzyLZ6bl8xvOliF3cwcWi5LeaItIN5Bfnglm3LjBe++F+zc9FufOja23x
+         UBKHfVO03TFbM2cKa+nN8GJoMt3rXgwze1PUDLxMXmpI35qNjOGlW/8ondlGg4PzziYG
+         scVEcpxLkj82ot6SGQ1aHMfLn2Tc5GOJ7hH+kahzno14YnAzsxWB/NYTi2Xo/6l7CbbF
+         ZfJC1Exyw0RfMrMVW6HNkztiU9INW0ASZikkNZCcAOGuk6IKWmGH3PN6jQyX+rwz9Paw
+         FZvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=hPq7Rs0PKAtGhzg20DKLKbGoILEjF6QA+sJshG/YwdQ=;
-        b=EWXnooaJKp4+2wZbE16SGi359soRfw8UaZY7ikNMv4g4y17TFpMA6IwdPNROUNeo2f
-         /UQ9ssQiDGWacS/rCz8I4uu34nYw0qsROc7A7fVXIWGRJdvwwSut66qxRhnSnupUqrZd
-         hc/K4bsoPbZCZne2jj5LgOYgRV0b9tAi4xZx0wZxITOPCHsM0NtwUNnhml4KeizO4R5z
-         gnx1ROFepOivJl5JGW/ynG68LhX/GRPeA1mQkZ+JWF9VOTKjuEcBGUJI1BNAKB9Cz/dL
-         E4VCfWCHn6O9M3M8HwV7QMLKXqoQ3N3qRfeKr4ksr8zWfmuJ6ST17DagzZCkGCxWPY2C
-         f/9w==
-X-Gm-Message-State: ACgBeo0hIvja3VuHkDc9Q5vzbfh+VbtXrzeKF0Y3qxWRJz7SWh5cbJox
-        lw0cOErkLl1206TekXZZOwrXsg2JRb1Y4WVc9oNHYIThBcQ=
-X-Google-Smtp-Source: AA6agR5Z+5yEdIt0HqPLiFmmNHBxMho0YzeS+EthG+MoaA1QRlPxVKuCyxFD5HmD2RHMtJEtTGE3XORNR4PmaZYgX/8=
-X-Received: by 2002:a05:6214:5290:b0:479:5df:e654 with SMTP id
- kj16-20020a056214529000b0047905dfe654mr9829191qvb.97.1659864041026; Sun, 07
- Aug 2022 02:20:41 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=uZ4Y9ZBE3WzP0l02nv1M4Bipz183jpz7eunAyyqOylc=;
+        b=pv7IQmzK+3FCDQKbKEMPyT5wUhMcP6pT0eryGIy1vuna2Npgaaps/EVuK3XfKz6oAT
+         BtzABn3cm3IwCttE9SycQ+GF5k7pE3mRCpM0oOFRIpuQoM7/ng7twWfwqKy2jFLDvj2d
+         xWrZnDooSUOC56KXlSF2nr5qE7mq/LT2+39YJpbWsxl3GpKd5X5DSEBdBETx2G71nC1m
+         rU2icrLvQkYuP1PV62PQHgASzilZIFf4PRqm1WPEqRCyPTT3g8/w9BKW4kgTDUBETl0M
+         7WQK8PxlkDpjN4ASOSEwNpyPrFdVdC/D2khsxL6yxMdcg050zSxYm+IpxcYA46Vop8+1
+         vj9Q==
+X-Gm-Message-State: ACgBeo3YxIRxS2GG+McUGQBEHrIrrMqCNvUicwiqkIbq/nngsLt9iskf
+        rtUVrtv+UM13382rBqIcCrAv9Xo1TVs=
+X-Google-Smtp-Source: AA6agR4wOnIGwY36ra18eh9mrxpc7bDv/cpaxYZKZAs6tUCcxtIGSutrpxaodcnab6hniAWT6dqt/A==
+X-Received: by 2002:a17:907:60c7:b0:731:4b42:4e3e with SMTP id hv7-20020a17090760c700b007314b424e3emr1701944ejc.236.1659866831761;
+        Sun, 07 Aug 2022 03:07:11 -0700 (PDT)
+Received: from gmail.com (195-38-112-141.pool.digikabel.hu. [195.38.112.141])
+        by smtp.gmail.com with ESMTPSA id c12-20020aa7d60c000000b0043d0955d546sm2839062edr.69.2022.08.07.03.07.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Aug 2022 03:07:11 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sun, 7 Aug 2022 12:07:09 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] hwmon updates for v5.20
+Message-ID: <Yu+OzWv2JDbI89mW@gmail.com>
+References: <20220730022529.497941-1-linux@roeck-us.net>
 MIME-Version: 1.0
-References: <20220806152517.78159-1-andriy.shevchenko@linux.intel.com> <20220807083438.qqe3mzp43aytxbcl@pengutronix.de>
-In-Reply-To: <20220807083438.qqe3mzp43aytxbcl@pengutronix.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 7 Aug 2022 11:20:03 +0200
-Message-ID: <CAHp75VdYrnb8k72TFhB9eKDtyj_pm1gDqL+sDYixkuYy0Xb_Pw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] hwmon: (pwm-fan) Make use of device properties
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pwm@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220730022529.497941-1-linux@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Aug 7, 2022 at 10:38 AM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
 
-> at a quick glance this looks nice. I wonder if it makes sense to split
-> the patch. For example the change
->
-> -       ctx->pwm =3D devm_of_pwm_get(dev, dev->of_node, NULL);
-> +       ctx->pwm =3D devm_pwm_get(dev, NULL);
->
-> could stand alone. Also I think this change is the relevant part in
-> patch #1 that makes patches #2 and #3 possible.
+* Guenter Roeck <linux@roeck-us.net> wrote:
 
-True.
+> Hi Linus,
+> 
+> I'll be traveling next week, so I am sending this pull request early,
+> in the hope that there won't be a v5.19-rc9.
+> 
+> Please pull hwmon updates for Linux v5.20 from signed tag:
+> 
+>     git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.20
+> 
+> Thanks,
+> Guenter
+> ------
+> 
+> The following changes since commit 88084a3df1672e131ddc1b4e39eeacfd39864acf:
+> 
+>   Linux 5.19-rc5 (2022-07-03 15:39:28 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.20
+> 
+> for you to fetch changes up to cdbe34da01e32024e56fff5c6854a263a012d7ff:
+> 
+>   hwmon: (aquacomputer_d5next) Add support for Aquacomputer Quadro fan controller (2022-07-27 06:00:24 -0700)
 
-> When this patch doesn't get split, the series needs some coordination,
-> as patch #1 is for hwmon and patches #2 and #3 are for pwm.
->
-> Splitting the series into:
->
->         hwmon: (pwm-fan) Use of devm_pwm_get() instead of devm_of_pwm_get=
-()
->         pwm: core: Get rid of unused devm_of_pwm_get()
->         pwm: core: Make of_pwm_get() static
->
-> for pwm and the remainder of this patch for hwmon might make application
-> of the changes here easier to coordinate.
+>  drivers/hwmon/lm90.c                               | 2556 +++++++++++++-------
 
-Either way it will need the hwmon maintainer ACKs or alike.
-Since we have (plenty of) time I will wait a bit for hwmon maintainers
-to react. Guenter, what would you prefer?
+Just a quick build regression report, i386 allmodconfig fails to build due 
+to a 'string overread' compiler warning in drivers/hwmon/lm90.o:
 
-> But still: Thanks for your effort and
-> Acked-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+  # make ARCH=i386 allmodconfig
+  # make ARCH=i386 drivers/hwmon/lm90.o
 
-Thanks for looking into the series related to PWM core clean up!
+  CALL    scripts/atomic/check-atomics.sh
+  CALL    scripts/checksyscalls.sh
+  CC [M]  drivers/hwmon/lm90.o
+In file included from ./include/linux/string.h:253,
+                 from ./arch/x86/include/asm/page_32.h:22,
+                 from ./arch/x86/include/asm/page.h:14,
+                 from ./arch/x86/include/asm/thread_info.h:12,
+                 from ./include/linux/thread_info.h:60,
+                 from ./arch/x86/include/asm/preempt.h:7,
+                 from ./include/linux/preempt.h:78,
+                 from ./include/linux/rcupdate.h:27,
+                 from ./include/linux/rculist.h:11,
+                 from ./include/linux/pid.h:5,
+                 from ./include/linux/sched.h:14,
+                 from ./include/linux/ratelimit.h:6,
+                 from ./include/linux/dev_printk.h:16,
+                 from ./include/linux/device.h:15,
+                 from drivers/hwmon/lm90.c:99:
+  In function ‘__fortify_strlen’,
+      inlined from ‘strlcpy’ at ./include/linux/fortify-string.h:159:10,
+      inlined from ‘lm90_detect’ at drivers/hwmon/lm90.c:2550:2:
+  ./include/linux/fortify-string.h:50:33: error: ‘__builtin_strlen’ reading 1 or more bytes from a region of size 0 [-Werror=stringop-overread]
+     50 | #define __underlying_strlen     __builtin_strlen
+        |                                 ^
+  ./include/linux/fortify-string.h:141:24: note: in expansion of macro ‘__underlying_strlen’
+    141 |                 return __underlying_strlen(p);
+        |                        ^~~~~~~~~~~~~~~~~~~
+  cc1: all warnings being treated as errors
+  make[2]: *** [scripts/Makefile.build:249: drivers/hwmon/lm90.o] Error 1
 
---=20
-With Best Regards,
-Andy Shevchenko
+It's a build warning upgraded to a build error by CONFIG_WERROR=y, it 
+normally looks like this:
+
+                 from drivers/hwmon/lm90.c:99:
+  In function ‘__fortify_strlen’,
+      inlined from ‘strlcpy’ at ./include/linux/fortify-string.h:159:10,
+      inlined from ‘lm90_detect’ at drivers/hwmon/lm90.c:2550:2:
+  ./include/linux/fortify-string.h:50:33: warning: ‘__builtin_strlen’ reading 1 or more bytes from a region of size 0 [-Wstringop-overread]
+
+Thanks,
+
+	Ingo
