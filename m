@@ -2,141 +2,131 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC3A2C00140
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 10:29:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5CD3C00140
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 10:47:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234782AbiHHK3x (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 Aug 2022 06:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
+        id S242672AbiHHKrs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 Aug 2022 06:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiHHK3x (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Aug 2022 06:29:53 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49695273D;
-        Mon,  8 Aug 2022 03:29:52 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id h21-20020a17090aa89500b001f31a61b91dso14071764pjq.4;
-        Mon, 08 Aug 2022 03:29:52 -0700 (PDT)
+        with ESMTP id S242089AbiHHKrr (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Aug 2022 06:47:47 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5ED13CD8
+        for <linux-hwmon@vger.kernel.org>; Mon,  8 Aug 2022 03:47:45 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id o2so4746419lfb.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 08 Aug 2022 03:47:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=7sLJU4FguPl7so68C/rRxu5FseehgIH6MH51qVnSXUE=;
-        b=P/NWX6dxl3TJqkTMylsVm1Mdv3QGoXz14KS+vYLuvKMpB8dArK5DDhf3mLh964vy8N
-         NVtvO20HjvD0h306jLl42FSMXLwsmZq8N5+R4NyxyYpKiPllBtqBucuikoqRkO/WlmgE
-         sdeDLwA0U2wWuAHPrVwANRJjV+dcthfcXP7heXbd/dztPvppD6ORj4EYo8ydC3BLlzoB
-         tekVx+vBNuLqitLQXJUR6BSO9fbfC5O2cHQhgAFDNuE6+yGss2rD8sv7cEYaylXtZ+B+
-         lsVclH8QY3uIjKq/RbOZqvk8I4FmZSuRJVSlPGLqQNdzgO99rp67fmLm3ZXlK6RO/2dK
-         m51Q==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S/fyxO5UUrefZ9S+J35611sMDpHuXmlRV0zDBtFzDOI=;
+        b=QZmV3X54GBsXEmxf8s+h7eZi2Rxvs/eX19h95wNMagcOZG2BWqNyf/8uWSfXcXSi0H
+         D2J52UwtV2GSgQFWuxXsNus9vThvcOJ+x4rWJngGAMleFBFuIYAI5rvU+Il7yr8ctY4T
+         ZKaoTqZViE3AKz+HCKv1fFJIimhWLQHvetuyDAKU27eMoeyiFFrnREgMssyyOd/w2GQ+
+         8ro3IxWKXCe5zjT5FVpqNvP8n6eT0XZXVZDl3kWSWyluVjCgUzT86z2/dNAwYityi6wq
+         tmOAUw4lGusovZmiIyvBkv7UxmoTpR8kxI7MUaHqUlqx+lROUxJxkV2OFiZmJoQ7EpYE
+         HtnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=7sLJU4FguPl7so68C/rRxu5FseehgIH6MH51qVnSXUE=;
-        b=XOsykpaaW/0tvmlxVIrp0pf3jlTEwCdlCygAMFHzBHOYKUAcJEoFTWVmkJLYjAIhiT
-         hsxa3JYdIn0zc6u84jtCUYl8T+X/uQcrzcij0SxGXB9YesvW/Xc/YA3Kv7sy7+yv2ePo
-         v2zsFAyDPiW23UvSNnlABSBlFqAUoR/ZVUrV+Nr6p1oxAjSHi8VpJzi11QBT/GTLrrxc
-         8elM+G5Iu6BtBxw+ZmCVv1EEDeeBEW0bBnzGQOPQqYBMWxAbMLPFK8mHY5oGC15hnUog
-         ffLmQ1zUsL8JzgnOWjWIc11mSIXneaiXVnhTaYxJUf47HZ5SRbLS8u3NT2XXTJ6JpjEr
-         gp+w==
-X-Gm-Message-State: ACgBeo3jV8YXa4b9YHPNzqMOVEinGl7PJfMcGyXSfhtKRWn1yPoAZdgm
-        5zpsoXqQHZ4+B7TKK/rsUxc=
-X-Google-Smtp-Source: AA6agR7rAqZDjC1bWIsFIS0LlvTSmZ8wIDjccyreDG+sBmANFjonFe20Wpf/sLtDmjyHI2IivSjnUA==
-X-Received: by 2002:a17:903:292:b0:16d:5e43:bd9e with SMTP id j18-20020a170903029200b0016d5e43bd9emr18612707plr.116.1659954591793;
-        Mon, 08 Aug 2022 03:29:51 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k4-20020a17090a62c400b001f2fc3828e4sm7793385pjs.24.2022.08.08.03.29.50
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S/fyxO5UUrefZ9S+J35611sMDpHuXmlRV0zDBtFzDOI=;
+        b=WJPItSIcOy29JyyeyIvC9iD60/ocpgsmDkWdLkwxCnxd/w8CHgCuVW0yw3+YDX9kEC
+         SgC3bQWNeYEc5QydFSFUw0Y3qr8RJCl9AYYTOlAAO4Th1sH6oyFJa7UcnubnhlWpKezy
+         sHHUh6tZmh5YYqIGm8PMeUmmmGRkDnA/OeppJ7XghF4CR7IV2C2dve+w7VOt9Y8JQ0r2
+         aCaG078ggo1X9VkEPiOH2cdXAHCHf08agPwAy1RhpxaoUWPD38r4mxeO2OetZiJS2Lf0
+         tSy2G6am1y5gprA3ALQjfF9XVS1eULs3mbOjzgtQ4YEiGAyLbVgILcb2+p8cp6DxmBqo
+         G/9A==
+X-Gm-Message-State: ACgBeo1mTomFSX+xOkrwc9rr8VzAQQ6tWnNKinMu+kDBYAhTHnUltpZT
+        LTQ9XsAcYU6pgk+uQfI9CaC3ZA==
+X-Google-Smtp-Source: AA6agR5O0DrK81VJ8xxEeNLWmXoFfFeD2gJu+76VOqk+ccUPS09sI/bRAbVrJYxn5te/7qBFWz6vcA==
+X-Received: by 2002:ac2:4d29:0:b0:48a:eea7:4b92 with SMTP id h9-20020ac24d29000000b0048aeea74b92mr5781095lfk.400.1659955664258;
+        Mon, 08 Aug 2022 03:47:44 -0700 (PDT)
+Received: from localhost.localdomain ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id l18-20020a2ea312000000b0025e040510e7sm1314321lje.74.2022.08.08.03.47.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 03:29:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 8 Aug 2022 03:29:49 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, abailon@baylibre.com, lukasz.luba@arm.com,
-        broonie@kernel.org, damien.lemoal@opensource.wdc.com,
-        heiko@sntech.de, hayashi.kunihiko@socionext.com,
-        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
-        digetx@gmail.com, jonathanh@nvidia.com, anarsoul@gmail.com,
-        tiny.windzz@gmail.com, baolin.wang7@gmail.com,
-        f.fainelli@gmail.com, bjorn.andersson@linaro.org,
-        mcoquelin.stm32@gmail.com, glaroque@baylibre.com,
-        miquel.raynal@bootlin.com, shawnguo@kernel.org,
-        niklas.soderlund@ragnatech.se, matthias.bgg@gmail.com,
-        j-keerthy@ti.com, Jean Delvare <jdelvare@suse.com>,
-        "open list:PMBUS HARDWARE MONITORING DRIVERS" 
-        <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v5 26/33] hwmon/drivers/pm_bus: Switch to new of thermal
- API
-Message-ID: <20220808102949.GC1969424@roeck-us.net>
-References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
- <20220804224349.1926752-27-daniel.lezcano@linexp.org>
+        Mon, 08 Aug 2022 03:47:43 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Robert Jones <rjones@gateworks.com>,
+        Lee Jones <lee@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Ricardo Rivera-Matos <r-rivera-matos@ti.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 0/5] iio/hwmon/mfd/leds/net/power/ASoC: dt-bindings: few stale maintainers cleanup
+Date:   Mon,  8 Aug 2022 13:47:07 +0300
+Message-Id: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220804224349.1926752-27-daniel.lezcano@linexp.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 12:43:42AM +0200, Daniel Lezcano wrote:
-> The thermal OF code has a new API allowing to migrate the OF
-> initialization to a simpler approach. The ops are no longer device
-> tree specific and are the generic ones provided by the core code.
-> 
-> Convert the ops to the thermal_zone_device_ops format and use the new
-> API to register the thermal zone with these generic ops.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+Hi,
 
-Subject tag should be something like "hwmon: (pmbus) ...".
+A question:
 
-Also, from other patches it appears that this would or might result
-in a registration failure if a thermal zone for the sensor does not
-exist. This will need to be resolved before the patch is can be applied.
+Several of the bindings here had only one
+maintainer and history does not always point to a new one (although I did not
+perform extensive digging). I added subsystem maintainer, because dtschema
+requires such entry. This is not the best choice as simply subsystem maintainer
+might not have the actual device (or its datasheets or any interest in it).
 
-Guenter
+However dtschema requires a maintainer. Maybe we could add some
+"orphaned" entry in such case?
 
-> ---
->  drivers/hwmon/pmbus/pmbus_core.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 02912022853d..3b9bb2123a1a 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -1109,9 +1109,9 @@ struct pmbus_thermal_data {
->  	struct pmbus_sensor *sensor;
->  };
->  
-> -static int pmbus_thermal_get_temp(void *data, int *temp)
-> +static int pmbus_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
->  {
-> -	struct pmbus_thermal_data *tdata = data;
-> +	struct pmbus_thermal_data *tdata = tz->devdata;
->  	struct pmbus_sensor *sensor = tdata->sensor;
->  	struct pmbus_data *pmbus_data = tdata->pmbus_data;
->  	struct i2c_client *client = to_i2c_client(pmbus_data->dev);
-> @@ -1135,7 +1135,7 @@ static int pmbus_thermal_get_temp(void *data, int *temp)
->  	return ret;
->  }
->  
-> -static const struct thermal_zone_of_device_ops pmbus_thermal_ops = {
-> +static const struct thermal_zone_device_ops pmbus_thermal_ops = {
->  	.get_temp = pmbus_thermal_get_temp,
->  };
->  
-> @@ -1153,8 +1153,8 @@ static int pmbus_thermal_add_sensor(struct pmbus_data *pmbus_data,
->  	tdata->sensor = sensor;
->  	tdata->pmbus_data = pmbus_data;
->  
-> -	tzd = devm_thermal_zone_of_sensor_register(dev, index, tdata,
-> -						   &pmbus_thermal_ops);
-> +	tzd = devm_thermal_of_zone_register(dev, index, tdata,
-> +					    &pmbus_thermal_ops);
->  	/*
->  	 * If CONFIG_THERMAL_OF is disabled, this returns -ENODEV,
->  	 * so ignore that error but forward any other error.
-> -- 
-> 2.25.1
-> 
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (5):
+  dt-bindings: iio: Drop Joachim Eastwood
+  dt-bindings: iio: Drop Bogdan Pricop
+  dt-bindings: Drop Beniamin Bia and Stefan Popa
+  dt-bindings: Drop Robert Jones
+  dt-bindings: Drop Dan Murphy
+
+ Documentation/devicetree/bindings/hwmon/adi,adm1177.yaml       | 1 -
+ Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml   | 1 -
+ Documentation/devicetree/bindings/iio/adc/adi,ad7091r5.yaml    | 2 +-
+ Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml      | 3 +--
+ Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml | 2 +-
+ Documentation/devicetree/bindings/iio/adc/ti,adc108s102.yaml   | 2 +-
+ Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml    | 2 +-
+ .../devicetree/bindings/iio/amplifiers/adi,hmc425a.yaml        | 1 -
+ Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml    | 2 +-
+ .../devicetree/bindings/leds/leds-class-multicolor.yaml        | 2 +-
+ Documentation/devicetree/bindings/leds/leds-lp50xx.yaml        | 2 +-
+ Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml       | 1 -
+ Documentation/devicetree/bindings/net/ti,dp83822.yaml          | 2 +-
+ Documentation/devicetree/bindings/net/ti,dp83867.yaml          | 2 +-
+ Documentation/devicetree/bindings/net/ti,dp83869.yaml          | 2 +-
+ Documentation/devicetree/bindings/power/supply/bq2515x.yaml    | 1 -
+ Documentation/devicetree/bindings/power/supply/bq25980.yaml    | 1 -
+ Documentation/devicetree/bindings/sound/tas2562.yaml           | 2 +-
+ Documentation/devicetree/bindings/sound/tlv320adcx140.yaml     | 2 +-
+ 19 files changed, 13 insertions(+), 20 deletions(-)
+
+-- 
+2.34.1
+
