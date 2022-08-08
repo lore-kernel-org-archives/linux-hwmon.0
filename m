@@ -2,88 +2,267 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71C2FC00140
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 05:34:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CE23C00140
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 06:07:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbiHHFeq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 Aug 2022 01:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
+        id S233845AbiHHGHh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 Aug 2022 02:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232118AbiHHFep (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Aug 2022 01:34:45 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078C0B1E1;
-        Sun,  7 Aug 2022 22:34:44 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id x10so7607761plb.3;
-        Sun, 07 Aug 2022 22:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=5mx8frCO4JQPtx0aeLxBWUqJKTGhhLdcJJ3zxZKM3Zk=;
-        b=YQBW1FSvXmRBogXKLCzsWMgyT72qpOhkuBPgIBecilYJReYB0ZRJ4191vT1J/R2r/m
-         XpWR4UJuAx6KeGzyIA6an7+j8uoQ2Kju+VoVFhXnTUzp6sSIGS8nON3OH0nmVptnUsFs
-         nfI6OUMWbHh55bhElQppAsnW68yKCOS5pJHNjv05AjR/RkWMekb6rOdNoE6JT/Ufn64Y
-         G1+Mnhuz/2faEpv91CM6l4QQ93YFnr+CCTpGqJFhyFKYnRqawJij5hKwc3/PHT7Mq/wG
-         kh2zo3LOmdkx+eOsKybLLkpVK7UHUMbRJBX8x1Y9rUXnAVy7XdOfn2OhN302Rw75Dgab
-         ROtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=5mx8frCO4JQPtx0aeLxBWUqJKTGhhLdcJJ3zxZKM3Zk=;
-        b=AG2MPhb5En+gDJMfo95R/rCSmuz8qByJeoDD1LYYYzbB43J7yQ6I55mwzt4bQUtx+I
-         mFLrALKhl9tYk3KTlGuZbLCgIRPurUsyI8frSOVUEnEtQPKNDw/VMWQZXGa2w4AWpKLg
-         UBl/CJ+rRL2mgBirKrJb4n/D6mS3mtyn9Bun8CMTpz2k9glEajaP9JUAKZjzuA9p7w5U
-         BiD1a7P8ETPwV51CLsJUT1P+CST8hVyEqjW+67m0vfR1XOzII7QHR3cFajINzgzTgZBM
-         0S+Q0CeSKv5Fg1K19x4WkEm4lFik+nX3rZ415JMDSWE04P44jpaFqx7napHSWlbq/ndM
-         cFIw==
-X-Gm-Message-State: ACgBeo1f43mbP0iUel3nD+7LmmDmthXDXqM09OavccQ+w4Nufacp3lof
-        Qq7g5FQPgXmn2HkMI3L31QI=
-X-Google-Smtp-Source: AA6agR4MUv5BhhH63BDimTTz91vaQdqo+mPL9JtPgeddDcU8hjwwuiFVfV1d1/LUGmfpwB5kgOYX/Q==
-X-Received: by 2002:a17:902:f551:b0:16e:d000:543b with SMTP id h17-20020a170902f55100b0016ed000543bmr16691749plf.22.1659936883497;
-        Sun, 07 Aug 2022 22:34:43 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w79-20020a627b52000000b0052c0a9234e0sm7876006pfc.11.2022.08.07.22.34.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Aug 2022 22:34:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 7 Aug 2022 22:34:41 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ingo Molnar <mingo@kernel.org>, Kees Cook <keescook@chromium.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] hwmon updates for v5.20
-Message-ID: <20220808053441.GA556090@roeck-us.net>
-References: <20220730022529.497941-1-linux@roeck-us.net>
- <Yu+OzWv2JDbI89mW@gmail.com>
- <CAHk-=wiGO=pfxyW6E7HdxCnRwWOF_STL=z7yUNwZK__DrV1WmQ@mail.gmail.com>
+        with ESMTP id S229524AbiHHGHg (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Aug 2022 02:07:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C616010B8
+        for <linux-hwmon@vger.kernel.org>; Sun,  7 Aug 2022 23:07:34 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oKvv3-0002xh-JN; Mon, 08 Aug 2022 08:07:17 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oKvuu-002RHx-0Q; Mon, 08 Aug 2022 08:07:10 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oKvuv-00AIXg-Cj; Mon, 08 Aug 2022 08:07:09 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH] hwmon: Make use of devm_clk_get_enabled()
+Date:   Mon,  8 Aug 2022 08:06:40 +0200
+Message-Id: <20220808060640.272549-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiGO=pfxyW6E7HdxCnRwWOF_STL=z7yUNwZK__DrV1WmQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6257; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=WlGqjQhx5x/Cm8pqN8Iwq453zaD79vCbsN7288gPPz8=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi8KfqAr+J5U0wLptBSNQthZTfliYA9uNIEs6yKErb l95oIo+JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYvCn6gAKCRDB/BR4rcrsCbcJCA CeT+eofVlVaH9hih7k97PYnK20Hk0ueHCIfmNWXsjA3YvN2GAidQsNRd2DPZ89WvPFUztz9XLdlDlC hLp+3j+7VnK9FWZD9q+6RoRXBXDxcc7jGBAENMb8sEURkHxwZvh+Td/xYhu0IlVRXvSAlEOgh7BQpm R9/dwA4btIlxc8xm1kASfDpSJXCM6FlsnaVDqRbOUPnBBj8AWYnriaFy5FF16jultC8ucq0Ta39TVa +HFuv9ZU2hhjjBoB8/i9rTEWVu1/Rvoy3GAmBEc15zMRRXPS9ChTsb8JATo9WAj8j9EZqGwolDA2cV CEM1SMNGGBpIm4BLCr0x/jNK1tU74n
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Aug 07, 2022 at 09:45:08AM -0700, Linus Torvalds wrote:
-> Added Kees - this *looks* like it's a compiler bug.
-> 
-> On Sun, Aug 7, 2022 at 3:07 AM Ingo Molnar <mingo@kernel.org> wrote:
-> >
-> > Just a quick build regression report, i386 allmodconfig fails to build due
-> > to a 'string overread' compiler warning in drivers/hwmon/lm90.o:
-> 
-> I tried to see it here with gcc-12.1, but it's not triggering, so it's
-> presumably compiler-dependent.
-> 
+Several drivers manually register a devm handler to disable their clk.
+Convert them to devm_clk_get_enabled().
 
-I don't see it with gcc 11.3. either, but I do indeed see the problem
-with gcc 11.2.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Nuno Sá <nuno.sa@analog.com>
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+Hello,
 
-The problem is in lm90_detect_nuvoton() which returns ERR_PTR(-ENODEV)
-instead of NULL on error. I'll send a patch.
+previously this patch was an example to show the benefits of adding
+devm_clk_get_enabled() and its variants. Last submission was on 14 Mar
+2022
+(https://lore.kernel.org/all/20220314141643.22184-5-u.kleine-koenig@pengutronix.de).
 
-Thanks, and sorry for the problem.
+This patch obviously depends on
 
-Guenter
+	7ef9651e9792 clk: Provide new devm_clk helpers for prepared and enabled clocks
+
+and to actually work needs
+
+	8b3d743fc9e2 clk: Fix pointer casting to prevent oops in devm_clk_release()
+
+which are both in Linus' tree now.
+
+Best regards
+Uwe
+
+ drivers/hwmon/axi-fan-control.c | 15 +--------------
+ drivers/hwmon/ltc2947-core.c    | 17 +----------------
+ drivers/hwmon/mr75203.c         | 26 +-------------------------
+ drivers/hwmon/sparx5-temp.c     | 19 +------------------
+ 4 files changed, 4 insertions(+), 73 deletions(-)
+
+diff --git a/drivers/hwmon/axi-fan-control.c b/drivers/hwmon/axi-fan-control.c
+index 96c4a5c45291..6724e0dd3088 100644
+--- a/drivers/hwmon/axi-fan-control.c
++++ b/drivers/hwmon/axi-fan-control.c
+@@ -394,11 +394,6 @@ static int axi_fan_control_init(struct axi_fan_control_data *ctl,
+ 	return ret;
+ }
+ 
+-static void axi_fan_control_clk_disable(void *clk)
+-{
+-	clk_disable_unprepare(clk);
+-}
+-
+ static const struct hwmon_channel_info *axi_fan_control_info[] = {
+ 	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT),
+ 	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_LABEL),
+@@ -478,20 +473,12 @@ static int axi_fan_control_probe(struct platform_device *pdev)
+ 	if (IS_ERR(ctl->base))
+ 		return PTR_ERR(ctl->base);
+ 
+-	clk = devm_clk_get(&pdev->dev, NULL);
++	clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(clk)) {
+ 		dev_err(&pdev->dev, "clk_get failed with %ld\n", PTR_ERR(clk));
+ 		return PTR_ERR(clk);
+ 	}
+ 
+-	ret = clk_prepare_enable(clk);
+-	if (ret)
+-		return ret;
+-
+-	ret = devm_add_action_or_reset(&pdev->dev, axi_fan_control_clk_disable, clk);
+-	if (ret)
+-		return ret;
+-
+ 	ctl->clk_rate = clk_get_rate(clk);
+ 	if (!ctl->clk_rate)
+ 		return -EINVAL;
+diff --git a/drivers/hwmon/ltc2947-core.c b/drivers/hwmon/ltc2947-core.c
+index 5423466de697..626f5bf2c9c7 100644
+--- a/drivers/hwmon/ltc2947-core.c
++++ b/drivers/hwmon/ltc2947-core.c
+@@ -956,13 +956,6 @@ static struct attribute *ltc2947_attrs[] = {
+ };
+ ATTRIBUTE_GROUPS(ltc2947);
+ 
+-static void ltc2947_clk_disable(void *data)
+-{
+-	struct clk *extclk = data;
+-
+-	clk_disable_unprepare(extclk);
+-}
+-
+ static int ltc2947_setup(struct ltc2947_data *st)
+ {
+ 	int ret;
+@@ -989,7 +982,7 @@ static int ltc2947_setup(struct ltc2947_data *st)
+ 		return ret;
+ 
+ 	/* check external clock presence */
+-	extclk = devm_clk_get_optional(st->dev, NULL);
++	extclk = devm_clk_get_optional_enabled(st->dev, NULL);
+ 	if (IS_ERR(extclk))
+ 		return dev_err_probe(st->dev, PTR_ERR(extclk),
+ 				     "Failed to get external clock\n");
+@@ -1007,14 +1000,6 @@ static int ltc2947_setup(struct ltc2947_data *st)
+ 			return -EINVAL;
+ 		}
+ 
+-		ret = clk_prepare_enable(extclk);
+-		if (ret)
+-			return ret;
+-
+-		ret = devm_add_action_or_reset(st->dev, ltc2947_clk_disable,
+-					       extclk);
+-		if (ret)
+-			return ret;
+ 		/* as in table 1 of the datasheet */
+ 		if (rate_hz >= LTC2947_CLK_MIN && rate_hz <= 1000000)
+ 			pre = 0;
+diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+index 26278b0f17a9..cf9467d03531 100644
+--- a/drivers/hwmon/mr75203.c
++++ b/drivers/hwmon/mr75203.c
+@@ -451,24 +451,6 @@ static int pvt_get_regmap(struct platform_device *pdev, char *reg_name,
+ 	return 0;
+ }
+ 
+-static void pvt_clk_disable(void *data)
+-{
+-	struct pvt_device *pvt = data;
+-
+-	clk_disable_unprepare(pvt->clk);
+-}
+-
+-static int pvt_clk_enable(struct device *dev, struct pvt_device *pvt)
+-{
+-	int ret;
+-
+-	ret = clk_prepare_enable(pvt->clk);
+-	if (ret)
+-		return ret;
+-
+-	return devm_add_action_or_reset(dev, pvt_clk_disable, pvt);
+-}
+-
+ static void pvt_reset_control_assert(void *data)
+ {
+ 	struct pvt_device *pvt = data;
+@@ -505,16 +487,10 @@ static int mr75203_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
+-	pvt->clk = devm_clk_get(dev, NULL);
++	pvt->clk = devm_clk_get_enabled(dev, NULL);
+ 	if (IS_ERR(pvt->clk))
+ 		return dev_err_probe(dev, PTR_ERR(pvt->clk), "failed to get clock\n");
+ 
+-	ret = pvt_clk_enable(dev, pvt);
+-	if (ret) {
+-		dev_err(dev, "failed to enable clock\n");
+-		return ret;
+-	}
+-
+ 	pvt->rst = devm_reset_control_get_exclusive(dev, NULL);
+ 	if (IS_ERR(pvt->rst))
+ 		return dev_err_probe(dev, PTR_ERR(pvt->rst),
+diff --git a/drivers/hwmon/sparx5-temp.c b/drivers/hwmon/sparx5-temp.c
+index 98be48e3a22a..04fd8505e5d6 100644
+--- a/drivers/hwmon/sparx5-temp.c
++++ b/drivers/hwmon/sparx5-temp.c
+@@ -26,13 +26,6 @@ struct s5_hwmon {
+ 	struct clk *clk;
+ };
+ 
+-static void s5_temp_clk_disable(void *data)
+-{
+-	struct clk *clk = data;
+-
+-	clk_disable_unprepare(clk);
+-}
+-
+ static void s5_temp_enable(struct s5_hwmon *hwmon)
+ {
+ 	u32 val = readl(hwmon->base + TEMP_CFG);
+@@ -113,7 +106,6 @@ static int s5_temp_probe(struct platform_device *pdev)
+ {
+ 	struct device *hwmon_dev;
+ 	struct s5_hwmon *hwmon;
+-	int ret;
+ 
+ 	hwmon = devm_kzalloc(&pdev->dev, sizeof(*hwmon), GFP_KERNEL);
+ 	if (!hwmon)
+@@ -123,19 +115,10 @@ static int s5_temp_probe(struct platform_device *pdev)
+ 	if (IS_ERR(hwmon->base))
+ 		return PTR_ERR(hwmon->base);
+ 
+-	hwmon->clk = devm_clk_get(&pdev->dev, NULL);
++	hwmon->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(hwmon->clk))
+ 		return PTR_ERR(hwmon->clk);
+ 
+-	ret = clk_prepare_enable(hwmon->clk);
+-	if (ret)
+-		return ret;
+-
+-	ret = devm_add_action_or_reset(&pdev->dev, s5_temp_clk_disable,
+-				       hwmon->clk);
+-	if (ret)
+-		return ret;
+-
+ 	s5_temp_enable(hwmon);
+ 
+ 	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
+
+base-commit: 8b3d743fc9e2542822826890b482afabf0e7522a
+-- 
+2.36.1
+
