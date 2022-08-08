@@ -2,113 +2,89 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4887C25B0C
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 13:59:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D29D3C00140
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 14:30:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243491AbiHHN7c (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 Aug 2022 09:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
+        id S243134AbiHHOaP convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 Aug 2022 10:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243247AbiHHN7a (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Aug 2022 09:59:30 -0400
+        with ESMTP id S242421AbiHHOaN (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Aug 2022 10:30:13 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35635E0FF;
-        Mon,  8 Aug 2022 06:59:28 -0700 (PDT)
-Received: from fraeml708-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M1d4N2Sxyz67Y4H;
-        Mon,  8 Aug 2022 21:55:00 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61202DEC
+        for <linux-hwmon@vger.kernel.org>; Mon,  8 Aug 2022 07:30:10 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M1dns2bNrz67xX3;
+        Mon,  8 Aug 2022 22:27:29 +0800 (CST)
 Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 8 Aug 2022 15:59:25 +0200
-Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
+ 15.1.2375.24; Mon, 8 Aug 2022 16:30:08 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
  (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 8 Aug
- 2022 14:59:24 +0100
-Date:   Mon, 8 Aug 2022 14:59:24 +0100
+ 2022 15:30:08 +0100
+Date:   Mon, 8 Aug 2022 15:30:07 +0100
 From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
+To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+CC:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Tim Harvey" <tharvey@gateworks.com>,
-        Robert Jones <rjones@gateworks.com>,
-        "Lee Jones" <lee@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        "Liam Girdwood" <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Ricardo Rivera-Matos" <r-rivera-matos@ti.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-fbdev@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>
-Subject: Re: [PATCH 1/5] dt-bindings: iio: Drop Joachim Eastwood
-Message-ID: <20220808145924.00005e14@huawei.com>
-In-Reply-To: <20220808104712.54315-2-krzysztof.kozlowski@linaro.org>
-References: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
-        <20220808104712.54315-2-krzysztof.kozlowski@linaro.org>
-Organization: Huawei Technologies R&D (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
+        <linux-hwmon@vger.kernel.org>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        <kernel@pengutronix.de>,
+        Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] hwmon: Make use of devm_clk_get_enabled()
+Message-ID: <20220808153007.00007208@huawei.com>
+In-Reply-To: <20220808075408.i63dtoe66hm7xwta@pengutronix.de>
+References: <20220808060640.272549-1-u.kleine-koenig@pengutronix.de>
+        <20220808075408.i63dtoe66hm7xwta@pengutronix.de>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon,  8 Aug 2022 13:47:08 +0300
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On Mon, 8 Aug 2022 09:54:08 +0200
+Uwe Kleine-König <u.kleine-koenig@pengutronix.de> wrote:
 
-> Emails to Joachim Eastwood bounce ("552 5.2.2 The email account that you
-> tried to reach is over quota and inactive.").
+> On Mon, Aug 08, 2022 at 08:06:40AM +0200, Uwe Kleine-König wrote:
+> > Several drivers manually register a devm handler to disable their clk.
+> > Convert them to devm_clk_get_enabled().
+> > 
+> > Acked-by: Guenter Roeck <linux@roeck-us.net>
+> > Reviewed-by: Nuno Sá <nuno.sa@analog.com>
+> > Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>  
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-> ---
->  Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml   | 1 -
->  Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml | 2 +-
->  2 files changed, 1 insertion(+), 2 deletions(-)
+> Oh, the tags by Nuno Sá and Jonathan Cameron are a fake. I picked them
+> by mistake from the (similar) patch for iio. Please take care about that
+> before application. (i.e. drop them, or make me resend the patch without
+> the tags, or make the two give the tags post-factum :-)
 > 
-> diff --git a/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml b/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml
-> index 7c8f8bdc2333..9c7c66feeffc 100644
-> --- a/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml
-> +++ b/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml
-> @@ -7,7 +7,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Freescale MMA7455 and MMA7456 three axis accelerometers
->  
->  maintainers:
-> -  - Joachim Eastwood <manabian@gmail.com>
->    - Jonathan Cameron <jic23@kernel.org>
->  
->  description:
-> diff --git a/Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml b/Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml
-> index 6404fb73f8ed..43abb300fa3d 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: NXP LPC1850 ADC bindings
->  
->  maintainers:
-> -  - Joachim Eastwood <manabian@gmail.com>
-> +  - Jonathan Cameron <jic23@kernel.org>
->  
->  description:
->    Supports the ADC found on the LPC1850 SoC.
+> Best regards and sorry for the chaos,
+> Uwe
+> 
 
-lore
+Much like the IIO one you may get a request to split it by driver.
+I personally prefer per driver patches as Andy suggested, but meh, it is
+up to the hmwon maintainer.
+
+I'm feeling particularly unhelpful today. As it's not IIO patches going
+through another tree (like the IIO one was when I gave that tag):
++ simple patch to quickly review.
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+*evil laugh*
+
