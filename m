@@ -2,45 +2,45 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DAC4C25B07
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 01:37:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C72D7C19F2A
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 01:37:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242511AbiHHBhX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 7 Aug 2022 21:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
+        id S242439AbiHHBhr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 7 Aug 2022 21:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242374AbiHHBf5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Aug 2022 21:35:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3938CE38;
-        Sun,  7 Aug 2022 18:33:24 -0700 (PDT)
+        with ESMTP id S242438AbiHHBgf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Aug 2022 21:36:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309F2BE02;
+        Sun,  7 Aug 2022 18:33:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96C1DB80E0A;
-        Mon,  8 Aug 2022 01:33:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 674E6C433C1;
-        Mon,  8 Aug 2022 01:33:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89B9560CF7;
+        Mon,  8 Aug 2022 01:33:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3008BC43142;
+        Mon,  8 Aug 2022 01:33:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659922402;
-        bh=rWb1f1Z+DT94vEc9LqkW7nYkUu054H+aCua9enkzrAc=;
+        s=k20201202; t=1659922410;
+        bh=4pNbcfBY7sSXixtKDEXaS8TRXL9OvdOoDNaQXO+z7ao=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=loj2cF8xn8JPQ5FRghwx1pAj7IXjp3bT6u0SLy2L9aRlPTxoQPfV4NbmbVb1cZ18P
-         Rh2ah+bvZpZPhVAIKPuH3Orx4s05WQabdSNNQrli3sF5HmClvsMb1CALIkwb/HAfv/
-         y3lKJoy4kmfeHR63l2MFg0UhZ1uM+7uRbHpc6060eV0lMkPuKfq9tWbcIJ1d6k5sAn
-         s3/8bSXtReRD+MXN7j1R8Pa8KsmCPRgC0Ncps49vbXjxJBRgehwKrkBICPItKD9zKf
-         smlObyH7K561z3y3QjtxGUBgHttFw223X4PRmh3nL1p/G1e/sFwUyLqs1JXJloWsQW
-         xkjBw3Lf/V8Wg==
+        b=ej0Ok/orkWtSURumxuxWcRBdC5cEDPzI5EckSsPD3wgm0szj0DRBNPRSPtLgl3Wxc
+         lTvVDsKGYc+dflzvqvDG6gvUMDQ3/vsLyeIARPEZ3IcQ/8FV9uZcCPKFA6TCRvmV6v
+         G96b23ciCF78j1R6CelQXDKms5tHXXdcYBIYo/Bspvcz3SKocsi3CgloMwPONqqj0u
+         HG18rsWXzsxjo2bmsqWszU63MVWM5b5SDc/hwUHHhwUBqxZ8uhoBMIbmAnT0hAWndA
+         aarquRcFWoouB0ydEVplwb2fpBNMCtHVdBLo3yyzYRVtok4721/4ZiXb8bEfgHhxj/
+         gsRp3Li83saqA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Armin Wolf <W_Armin@gmx.de>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 48/58] hwmon: (dell-smm) Add Dell XPS 13 7390 to fan control whitelist
-Date:   Sun,  7 Aug 2022 21:31:06 -0400
-Message-Id: <20220808013118.313965-48-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.19 51/58] hwmon: (sht15) Fix wrong assumptions in device remove callback
+Date:   Sun,  7 Aug 2022 21:31:09 -0400
+Message-Id: <20220808013118.313965-51-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220808013118.313965-1-sashal@kernel.org>
 References: <20220808013118.313965-1-sashal@kernel.org>
@@ -53,45 +53,72 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Armin Wolf <W_Armin@gmx.de>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[ Upstream commit 385e5f57053ff293282fea84c1c27186d53f66e1 ]
+[ Upstream commit 7d4edccc9bbfe1dcdff641343f7b0c6763fbe774 ]
 
-A user reported that the program dell-bios-fan-control
-worked on his Dell XPS 13 7390 to switch off automatic
-fan control.
-Since it uses the same mechanism as the dell_smm_hwmon
-module, add this model to the fan control whitelist.
+Taking a lock at the beginning of .remove() doesn't prevent new readers.
+With the existing approach it can happen, that a read occurs just when
+the lock was taken blocking the reader until the lock is released at the
+end of the remove callback which then accessed *data that is already
+freed then.
 
-Compile-tested only.
+To actually fix this problem the hwmon core needs some adaption. Until
+this is implemented take the optimistic approach of assuming that all
+readers are gone after hwmon_device_unregister() and
+sysfs_remove_group() as most other drivers do. (And once the core
+implements that, taking the lock would deadlock.)
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-Acked-by: Pali Rohár <pali@kernel.org>
-Link: https://lore.kernel.org/r/20220612041806.11367-1-W_Armin@gmx.de
+So drop the lock, move the reset to after device unregistration to keep
+the device in a workable state until it's deregistered. Also add a error
+message in case the reset fails and return 0 anyhow. (Returning an error
+code, doesn't stop the platform device unregistration and only results
+in a little helpful error message before the devm cleanup handlers are
+called.)
+
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Link: https://lore.kernel.org/r/20220725194344.150098-1-u.kleine-koenig@pengutronix.de
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/hwmon/sht15.c | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index 071aa6f4e109..16c10ac84a91 100644
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -1365,6 +1365,14 @@ static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
- 		},
- 		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
- 	},
-+	{
-+		.ident = "Dell XPS 13 7390",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "XPS 13 7390"),
-+		},
-+		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
-+	},
- 	{ }
- };
+diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
+index 7f4a63959730..ae4d14257a11 100644
+--- a/drivers/hwmon/sht15.c
++++ b/drivers/hwmon/sht15.c
+@@ -1020,25 +1020,20 @@ static int sht15_probe(struct platform_device *pdev)
+ static int sht15_remove(struct platform_device *pdev)
+ {
+ 	struct sht15_data *data = platform_get_drvdata(pdev);
++	int ret;
+ 
+-	/*
+-	 * Make sure any reads from the device are done and
+-	 * prevent new ones beginning
+-	 */
+-	mutex_lock(&data->read_lock);
+-	if (sht15_soft_reset(data)) {
+-		mutex_unlock(&data->read_lock);
+-		return -EFAULT;
+-	}
+ 	hwmon_device_unregister(data->hwmon_dev);
+ 	sysfs_remove_group(&pdev->dev.kobj, &sht15_attr_group);
++
++	ret = sht15_soft_reset(data);
++	if (ret)
++		dev_err(&pdev->dev, "Failed to reset device (%pe)\n", ERR_PTR(ret));
++
+ 	if (!IS_ERR(data->reg)) {
+ 		regulator_unregister_notifier(data->reg, &data->nb);
+ 		regulator_disable(data->reg);
+ 	}
+ 
+-	mutex_unlock(&data->read_lock);
+-
+ 	return 0;
+ }
  
 -- 
 2.35.1
