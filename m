@@ -2,234 +2,97 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0B7EC3F6B0
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 10:49:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50B78C25B0C
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 10:56:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242579AbiHHKtE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 Aug 2022 06:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37012 "EHLO
+        id S242467AbiHHK4N (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 Aug 2022 06:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242821AbiHHKsJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Aug 2022 06:48:09 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A5713D17
-        for <linux-hwmon@vger.kernel.org>; Mon,  8 Aug 2022 03:47:59 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id t1so12057727lft.8
-        for <linux-hwmon@vger.kernel.org>; Mon, 08 Aug 2022 03:47:59 -0700 (PDT)
+        with ESMTP id S242501AbiHHK4L (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Aug 2022 06:56:11 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1969425CF;
+        Mon,  8 Aug 2022 03:56:06 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id tl27so15906006ejc.1;
+        Mon, 08 Aug 2022 03:56:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MC2v6NUHdyQnnZYkJCn4LjAypKIo0C8pXGhVxCJJimA=;
-        b=W9rPnh7bC1E2NKlPctj5CJl6XHy4ZUkYXokDx3/Y5yxoMPcuCFr+UQ2ZLBxyRfBHpx
-         2fAykpcZDEMCmok4jhq1A0Q7r822Vw7OIwnhxgOOyUAyl5usH7tCnO2N4vJ1cAAdmrKr
-         8t01asrDC5BVRDPZXYPeeR/SuAx+2SnbyK+jPWbNJDMA25+O7EP5otc5w2ClcuCblXGV
-         sR/adjLroM+SMGlbNTsPmF79C0Y7gBjkIvdrKPM3uMZP9qk0t1qECLfuDdgqrAbW8Xv0
-         dGfKVARp5SdlZvePRidCQGD8wavpowmm6cfXdPpItSs3NfoydSY5fhvk6+DfrMhH93sq
-         SQNQ==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OfXUJVLnl6t1vs9K722W72H/lAtYaMeuRcuxla5w7PQ=;
+        b=MxuBMpTCznH+agh0qoyleDhHBC46Hm5BoiZhxHHnM+jGUWY1fbWAFirCSDUAbTiA7p
+         WwXUSYLc1DGG1s4ozVYMh8c8x5uhRjmOLYJoZmUSnxg1kC3NnWhVXDYsg+hRkoqqBWbR
+         QolsKsHo2MAunnH1+swt3d8AjDxf9lWQPl2ySHYunxOBK2CDwrZD/5OxD9+9Pd1JSchW
+         lsIg7Df70wufCJ6QxaOwi6fHCua+xqhPMPHOuGEfovhoXZOeEWXdQTsW+zVQPqKqTaE4
+         4sHzcIYm/9RmjcsqYngm5ld6rMBGcdWYtGvofJdya0oofoIAnljqKbOWL/JaRzKOZkIJ
+         lvrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MC2v6NUHdyQnnZYkJCn4LjAypKIo0C8pXGhVxCJJimA=;
-        b=EQKC8dRczy1Q1DFstTLlc2baboxHUqzhA2hZQAItvX6VAlDRoUN9ifn7lJvWzbcpP5
-         8ZMWm2qP2adcFNkaykgGXZM73hVRJVPoiN29sTjKVu6ROGg19oYB4mOfaKg1tu4UBj8C
-         EX/e0SCsBLsXfyTTG6BHalFXsxn+hyH7YYFE+ICnoZ0Y7hgEcaHdoVFN4UG7sNPjW1hK
-         NhknjioLLifXzCC4K5N999DNR3SMoPsFI6ifil65GHakws9ANs+D8Bf7JUqTRhjqugEW
-         u5WPflCm2eR8v5/4g3pkaYYbwx3G1L2jw7H2TPgEwJtADqIRLAtWRM41OBeaO8CRGh8c
-         75pQ==
-X-Gm-Message-State: ACgBeo2WnpCmbosI9ZmlcqcW6WEJ3EOW9WUmFzaDirIEB/tGl6tapnZh
-        fdRSug7EteKGiXlMHfxlZWeEHQ==
-X-Google-Smtp-Source: AA6agR4QI9l+GRE03Zrm7i5mh9rcgI/S73YecChrNB3PcmYXz2UlrE8dBO5icUSF5md8laPwJNDO4w==
-X-Received: by 2002:a05:6512:2989:b0:48a:f4b9:84bf with SMTP id du9-20020a056512298900b0048af4b984bfmr6611596lfb.39.1659955677840;
-        Mon, 08 Aug 2022 03:47:57 -0700 (PDT)
-Received: from localhost.localdomain ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id l18-20020a2ea312000000b0025e040510e7sm1314321lje.74.2022.08.08.03.47.53
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=OfXUJVLnl6t1vs9K722W72H/lAtYaMeuRcuxla5w7PQ=;
+        b=ZauPnrcM4QRtYGgA5QR+pqi4n85OiHG93D+X2yk0KueJ2oy9IB+Q2k8yJOHYHn4VrY
+         qA/PNmLqADa9hPtzJIIJRxo5M2r1oWOpYXDVkDOBoNDZ/JASnmPaa8qYXWuYW/b+qyJK
+         sWAH9RIwzoz27pmKH9UpisvDq/6hN5ZYXij7BPDjAAvNOodIjKZrf9hea+nxCMK5Qwb+
+         Lij24r9p/kJLcJlP3MX7yOsyMGww2/SpZ6aEAutDqsh2rb9gN2F0IXxB/emygwh13eao
+         y+K+Qesu5ss79hVMmfyfKp65OuTyEgMFL1EjUkXHiU2oQvfiLnADUpY8R2OXZqD+1jT0
+         ckZg==
+X-Gm-Message-State: ACgBeo1pSqJxIgpCI2i3/5dOx0oYQ5JiExprHOAB9JEZm6FIWdKe2XIK
+        qwwK1iDoThGTUx5m+FNavE0=
+X-Google-Smtp-Source: AA6agR51CaFBVR3DasK6z+7ZBW8E5TyMvNqm7BlTN+Tkr8bzNkO8oDqEVagGuXc/JoL2o5usXiwFfA==
+X-Received: by 2002:a17:906:6a10:b0:730:e9bd:1110 with SMTP id qw16-20020a1709066a1000b00730e9bd1110mr11034384ejc.88.1659956164575;
+        Mon, 08 Aug 2022 03:56:04 -0700 (PDT)
+Received: from gmail.com (195-38-112-141.pool.digikabel.hu. [195.38.112.141])
+        by smtp.gmail.com with ESMTPSA id kg21-20020a17090776f500b0073132fa9393sm2644405ejc.65.2022.08.08.03.56.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 03:47:54 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Robert Jones <rjones@gateworks.com>,
-        Lee Jones <lee@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Ricardo Rivera-Matos <r-rivera-matos@ti.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 5/5] dt-bindings: Drop Dan Murphy
-Date:   Mon,  8 Aug 2022 13:47:12 +0300
-Message-Id: <20220808104712.54315-6-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
-References: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
+        Mon, 08 Aug 2022 03:56:03 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Mon, 8 Aug 2022 12:56:02 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] hwmon updates for v5.20
+Message-ID: <YvDrwutzv1zqQmzJ@gmail.com>
+References: <20220730022529.497941-1-linux@roeck-us.net>
+ <Yu+OzWv2JDbI89mW@gmail.com>
+ <CAHk-=wiGO=pfxyW6E7HdxCnRwWOF_STL=z7yUNwZK__DrV1WmQ@mail.gmail.com>
+ <20220808053441.GA556090@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220808053441.GA556090@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Emails to Dan Murphy bounce ("550 Invalid recipient <dmurphy@ti.com>
-(#5.1.1)").
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml     | 2 +-
- .../devicetree/bindings/leds/leds-class-multicolor.yaml         | 2 +-
- Documentation/devicetree/bindings/leds/leds-lp50xx.yaml         | 2 +-
- Documentation/devicetree/bindings/net/ti,dp83822.yaml           | 2 +-
- Documentation/devicetree/bindings/net/ti,dp83867.yaml           | 2 +-
- Documentation/devicetree/bindings/net/ti,dp83869.yaml           | 2 +-
- Documentation/devicetree/bindings/power/supply/bq2515x.yaml     | 1 -
- Documentation/devicetree/bindings/power/supply/bq25980.yaml     | 1 -
- Documentation/devicetree/bindings/sound/tas2562.yaml            | 2 +-
- Documentation/devicetree/bindings/sound/tlv320adcx140.yaml      | 2 +-
- 10 files changed, 8 insertions(+), 10 deletions(-)
+* Guenter Roeck <linux@roeck-us.net> wrote:
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml b/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml
-index 9f5e96439c01..8f50f0f719df 100644
---- a/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Texas Instruments' ads124s08 and ads124s06 ADC chip
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - Jonathan Cameron <jic23@kernel.org>
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml b/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
-index 12693483231f..1a9e5bd352c1 100644
---- a/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
-+++ b/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Common properties for the multicolor LED class.
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - Pavel Machek <pavel@ucw.cz>
- 
- description: |
-   Bindings for multi color LEDs show how to describe current outputs of
-diff --git a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-index e0b658f07973..7fdda32d0ff4 100644
---- a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-+++ b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: LED driver for LP50XX RGB LED from Texas Instruments.
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - Pavel Machek <pavel@ucw.cz>
- 
- description: |
-   The LP50XX is multi-channel, I2C RGB LED Drivers that can group RGB LEDs into
-diff --git a/Documentation/devicetree/bindings/net/ti,dp83822.yaml b/Documentation/devicetree/bindings/net/ti,dp83822.yaml
-index 75e8712e903a..ac329a9555bf 100644
---- a/Documentation/devicetree/bindings/net/ti,dp83822.yaml
-+++ b/Documentation/devicetree/bindings/net/ti,dp83822.yaml
-@@ -8,7 +8,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
- title: TI DP83822 ethernet PHY
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - David S. Miller <davem@davemloft.net>
- 
- description: |
-   The DP83822 is a low-power, single-port, 10/100 Mbps Ethernet PHY. It
-diff --git a/Documentation/devicetree/bindings/net/ti,dp83867.yaml b/Documentation/devicetree/bindings/net/ti,dp83867.yaml
-index 76ff08a477ba..b7a651443543 100644
---- a/Documentation/devicetree/bindings/net/ti,dp83867.yaml
-+++ b/Documentation/devicetree/bindings/net/ti,dp83867.yaml
-@@ -11,7 +11,7 @@ allOf:
-   - $ref: "ethernet-controller.yaml#"
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - David S. Miller <davem@davemloft.net>
- 
- description: |
-   The DP83867 device is a robust, low power, fully featured Physical Layer
-diff --git a/Documentation/devicetree/bindings/net/ti,dp83869.yaml b/Documentation/devicetree/bindings/net/ti,dp83869.yaml
-index 1b780dce61ab..4f6ad9d30d44 100644
---- a/Documentation/devicetree/bindings/net/ti,dp83869.yaml
-+++ b/Documentation/devicetree/bindings/net/ti,dp83869.yaml
-@@ -11,7 +11,7 @@ allOf:
-   - $ref: "ethernet-phy.yaml#"
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - David S. Miller <davem@davemloft.net>
- 
- description: |
-   The DP83869HM device is a robust, fully-featured Gigabit (PHY) transceiver
-diff --git a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-index 27db38577822..4376e6dca48d 100644
---- a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-@@ -8,7 +8,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: TI bq2515x 500-mA Linear charger family
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-   - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
- 
- description: |
-diff --git a/Documentation/devicetree/bindings/power/supply/bq25980.yaml b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-index 4883527ab5c7..509a0667b04e 100644
---- a/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-@@ -8,7 +8,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: TI BQ25980 Flash Charger
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-   - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
- 
- description: |
-diff --git a/Documentation/devicetree/bindings/sound/tas2562.yaml b/Documentation/devicetree/bindings/sound/tas2562.yaml
-index 5f7dd5d6cbca..3655d3077dc9 100644
---- a/Documentation/devicetree/bindings/sound/tas2562.yaml
-+++ b/Documentation/devicetree/bindings/sound/tas2562.yaml
-@@ -8,7 +8,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
- title: Texas Instruments TAS2562 Smart PA
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - Mark Brown <broonie@kernel.org>
- 
- description: |
-   The TAS2562 is a mono, digital input Class-D audio amplifier optimized for
-diff --git a/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml b/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
-index bc2fb1a80ed7..4ab57c835ba3 100644
---- a/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
-+++ b/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
-@@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Texas Instruments TLV320ADCX140 Quad Channel Analog-to-Digital Converter
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - Mark Brown <broonie@kernel.org>
- 
- description: |
-   The TLV320ADCX140 are multichannel (4-ch analog recording or 8-ch digital
--- 
-2.34.1
+> On Sun, Aug 07, 2022 at 09:45:08AM -0700, Linus Torvalds wrote:
+> > Added Kees - this *looks* like it's a compiler bug.
+> > 
+> > On Sun, Aug 7, 2022 at 3:07 AM Ingo Molnar <mingo@kernel.org> wrote:
+> > >
+> > > Just a quick build regression report, i386 allmodconfig fails to build due
+> > > to a 'string overread' compiler warning in drivers/hwmon/lm90.o:
+> > 
+> > I tried to see it here with gcc-12.1, but it's not triggering, so it's
+> > presumably compiler-dependent.
+> > 
+> 
+> I don't see it with gcc 11.3. either, but I do indeed see the problem
+> with gcc 11.2.
 
+Yeah, I'm seeing it with GCC 11.2:
+
+   gcc version 11.2.0 (Ubuntu 11.2.0-19ubuntu1) 
+
+> The problem is in lm90_detect_nuvoton() which returns ERR_PTR(-ENODEV)
+> instead of NULL on error. I'll send a patch.
+
+Thanks!
+
+	Ingo
