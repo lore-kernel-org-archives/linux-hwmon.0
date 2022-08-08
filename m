@@ -2,35 +2,35 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4783BC19F2A
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 01:57:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 849F3C25B0C
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 01:57:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243675AbiHHB5T (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 7 Aug 2022 21:57:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
+        id S243704AbiHHB5f (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 7 Aug 2022 21:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243814AbiHHB4F (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Aug 2022 21:56:05 -0400
+        with ESMTP id S244046AbiHHB4v (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Aug 2022 21:56:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840F4F5B7;
-        Sun,  7 Aug 2022 18:39:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4C26158;
+        Sun,  7 Aug 2022 18:40:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F8E560DF3;
-        Mon,  8 Aug 2022 01:39:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A05D7C433D6;
-        Mon,  8 Aug 2022 01:39:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C306B60DF3;
+        Mon,  8 Aug 2022 01:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CABBC43470;
+        Mon,  8 Aug 2022 01:40:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659922777;
-        bh=M1AyWmAGk+oh66zy1o1YHkgCt5uJYmz4Xr4V5wi3H8k=;
+        s=k20201202; t=1659922815;
+        bh=oSHs8yHh+tNGuzhpCCqaUU0KUfU9rV/2vXRXlTwIgaI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S1EVOo4d0gpi5dXf9hdXwESMyFNXgtWzOI2KakTIC/D8D2fY5mUsyt2iD9PcbhhjQ
-         5o5WVv8t/EeVKQj/740dPEtHfpwxh58ScECst7B89hovwdgj9gXho8PvNUo1R+NmAH
-         4meo5uVzi8SVkuUqEIDRwkr0XqVqsIpxWk3x+9lh2W4fUYQbSjJv2fqGYou8Go65Dn
-         hR+NhIZj6sMi338Z/lnwUZ/ohj1BX/hIxFYdAJxwwVVE/lyG4RWQI8eZNTsp1Xfl9t
-         gCKHyZVyhk1uQ2fOv0k1/YMwEq9/i6f30eq2uGjHwjS/yyuLU/YpMeRAEUYcmFSYNu
-         BS8nN4YWZe4eg==
+        b=V+pydwH87gK+NS0w2NLKYXHwtjDwgMrHO/JvpnwwxDxElDcVAONOcAsCTKadZy4kH
+         UEurA5Gx0yLVoRDZXcntnm21So+uDoeClqQdac+GxggHdzxt5LUqevlk8hlU9P6dLY
+         Lytg9+C3KBfg2z4wEN3rAZ1/1rUDHwfGS326jXPTsVnpm0Mt/OPwGmQOcVF1IMYKz/
+         Sh+ujlfPTc1pUczghBH5L8l8jc7n/iocrO30w1SsGJidiSBVi4I2X1F2E0DUiXjpkN
+         Hd8OWF0RWwo3weL5T5POY+JJgNbSxALmn1kwZ753OCFUOY55rSL9OYznNQaDrlzNhC
+         FVO8CWf+BlcVg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
@@ -38,12 +38,12 @@ Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?=
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 14/16] hwmon: (sht15) Fix wrong assumptions in device remove callback
-Date:   Sun,  7 Aug 2022 21:39:11 -0400
-Message-Id: <20220808013914.316709-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 6/8] hwmon: (sht15) Fix wrong assumptions in device remove callback
+Date:   Sun,  7 Aug 2022 21:40:01 -0400
+Message-Id: <20220808014005.317064-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220808013914.316709-1-sashal@kernel.org>
-References: <20220808013914.316709-1-sashal@kernel.org>
+In-Reply-To: <20220808014005.317064-1-sashal@kernel.org>
+References: <20220808014005.317064-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -85,10 +85,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
-index 2be77752cd56..0a4578aae85b 100644
+index a2fdbb7d20ed..3bff2dce3123 100644
 --- a/drivers/hwmon/sht15.c
 +++ b/drivers/hwmon/sht15.c
-@@ -1029,25 +1029,20 @@ static int sht15_probe(struct platform_device *pdev)
+@@ -1040,25 +1040,20 @@ static int sht15_probe(struct platform_device *pdev)
  static int sht15_remove(struct platform_device *pdev)
  {
  	struct sht15_data *data = platform_get_drvdata(pdev);
