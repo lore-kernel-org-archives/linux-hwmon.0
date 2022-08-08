@@ -2,150 +2,116 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE163C00140
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 08:10:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2904C00140
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 10:15:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234589AbiHHIKR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 Aug 2022 04:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
+        id S242198AbiHHKPz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 Aug 2022 06:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235829AbiHHIKN (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Aug 2022 04:10:13 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67F020B
-        for <linux-hwmon@vger.kernel.org>; Mon,  8 Aug 2022 01:10:11 -0700 (PDT)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27862o8j027571;
-        Mon, 8 Aug 2022 04:09:56 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3hsn773024-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 Aug 2022 04:09:55 -0400
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 27889stX038691
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 8 Aug 2022 04:09:54 -0400
-Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
- ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Mon, 8 Aug 2022 04:09:54 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Mon, 8 Aug 2022 04:09:53 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Mon, 8 Aug 2022 04:09:53 -0400
-Received: from euswvd-wpr-708.reddog.microsoft.com ([10.140.226.204])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 27889fqW014843;
-        Mon, 8 Aug 2022 04:09:46 -0400
-From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>
-CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        <linux-hwmon@vger.kernel.org>
-Subject: [PATCH v3 2/2] docs: hwmon: add max31760 documentation
-Date:   Mon, 8 Aug 2022 08:09:31 +0000
-Message-ID: <20220808080931.104-3-Ibrahim.Tilki@analog.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220808080931.104-1-Ibrahim.Tilki@analog.com>
-References: <20220808080931.104-1-Ibrahim.Tilki@analog.com>
+        with ESMTP id S242446AbiHHKPY (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Aug 2022 06:15:24 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B446421
+        for <linux-hwmon@vger.kernel.org>; Mon,  8 Aug 2022 03:15:11 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso14066696pjo.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 08 Aug 2022 03:15:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc;
+        bh=JGenpaCWyLLnK/xNR269H4GFp1amXxq0IdoGi7uZMtg=;
+        b=PSRmwMD7IUR7LPgrhZxIJXxzNlr81fD092xN5DECH1Ss7cHXVbjW6lFH80gysk3GjC
+         sLTQBiW+IS6s73vPgi0ThgP3LmBGUp+xdO6F/bvq0fhlyZWz2VBYC/+c11eh2K6ev6/s
+         asXKwJRDyCmhyCVCduLIw8+FvzOSBXGsSnaBxvRaMsxNJkIeYN9IKqbC8blQIAGuiQ/W
+         3/OSDfXZlDKpqT2Ia2pkuOsYb0/5JW2kNc3K9sz9hDSbXFxbPUKmy0rBe3j5KN4g+IHL
+         Ppww1zoIiwJ6rdghhgsMaqAW/QVUThynQhjTjRVECEWwc2zlveSKH//XoL8CA/FeEyji
+         omCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc;
+        bh=JGenpaCWyLLnK/xNR269H4GFp1amXxq0IdoGi7uZMtg=;
+        b=Wv6ZC5tdZN3XKGFiK+PlO3ur+yMDUcZ5jwIBY6tPO/k2hRiVstTB+OJc+tqe0tvhun
+         KyZZGlgSAvwznx1WXBzN+LoGeBfs+fmL4Vuw6VorUw8osHxIihGIom60O92K58CJR8Lz
+         vBDgOZgTozsM3Yp/InRzMS+PMwiMjV23gxOeWVgmY7OGNZd17xQzIECPDV6vApk638RS
+         A+6A52yKn9KJ2SfVI5lYXKNFHv43dZIYuc4I6tL9W2pUJvFiMrhX2jrwfJnUInjOImk6
+         6rfDCREeOic61IBMQ5jQHi45aQ/hxB6/FjoyhtPL9eizFT5radFjJtSBZRAYtioui6Eg
+         BoKQ==
+X-Gm-Message-State: ACgBeo2OIR0ktH322ntovLKtkwIPTDriI+sMgVhU6x6MZWm2Eg97NfXu
+        9wcmcADKSzpZYCc6ZPn9mC5WJk9m8kw=
+X-Google-Smtp-Source: AA6agR5G+dGrPkq7Q99qjXyxRzF+ponomRBI6Z8S4tz42QLPc8YRHujFl4ktscA2pX4cwU+LZ2cW+g==
+X-Received: by 2002:a17:90b:198a:b0:1f5:2f97:12a0 with SMTP id mv10-20020a17090b198a00b001f52f9712a0mr19360055pjb.97.1659953710262;
+        Mon, 08 Aug 2022 03:15:10 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l14-20020a170903244e00b001709f01c423sm3060685pls.32.2022.08.08.03.15.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 03:15:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ingo Molnar <mingo@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH] hwmon: (lm90) Fix error return value from detect function
+Date:   Mon,  8 Aug 2022 03:15:04 -0700
+Message-Id: <20220808101504.1933123-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.36.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: 9geBne6lqScFQeY54PoWBp6zNNDF1S0d
-X-Proofpoint-GUID: 9geBne6lqScFQeY54PoWBp6zNNDF1S0d
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-08_05,2022-08-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- priorityscore=1501 bulkscore=0 lowpriorityscore=0 mlxscore=0
- mlxlogscore=999 malwarescore=0 impostorscore=0 phishscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2208080041
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Adding documentation for max31760 fan speed controller
+lm90_detect_nuvoton() is supposed to return NULL if it can not detect
+a chip, or a pointer to the chip name if it does. Under some circumstances
+it returns an error pointer instead. Some versions of gcc interpret an
+ERR_PTR as region of size 0 and generate an error message.
 
-Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+  In function ‘__fortify_strlen’,
+      inlined from ‘strlcpy’ at ./include/linux/fortify-string.h:159:10,
+      inlined from ‘lm90_detect’ at drivers/hwmon/lm90.c:2550:2:
+  ./include/linux/fortify-string.h:50:33: error:
+      ‘__builtin_strlen’ reading 1 or more bytes from a region of size 0
+     50 | #define __underlying_strlen     __builtin_strlen
+        |                                 ^
+  ./include/linux/fortify-string.h:141:24: note:
+      in expansion of macro ‘__underlying_strlen’
+    141 |                 return __underlying_strlen(p);
+        |                        ^~~~~~~~~~~~~~~~~~~
+
+Returning NULL instead of ERR_PTR() fixes the problem.
+
+Fixes: c7cebce984a2 ("hwmon: (lm90) Rework detect function")
+Reported-by: Ingo Molnar <mingo@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Kees Cook <keescook@chromium.org>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- Documentation/hwmon/max31760.rst | 65 ++++++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 Documentation/hwmon/max31760.rst
+It is interesting that some versions of gcc interpret an ERR_PTR this way.
+It did find a real bug, though the error message is quite confusing.
+Would it be possible to enhance the fortify functions to detect a constant
+ERR_PTR at compile time ? I think that might be quite useful.
 
-diff --git a/Documentation/hwmon/max31760.rst b/Documentation/hwmon/max31760.rst
-new file mode 100644
-index 000000000..067b3a5ce
---- /dev/null
-+++ b/Documentation/hwmon/max31760.rst
-@@ -0,0 +1,65 @@
-+Kernel driver max31760
-+======================
-+
-+Supported chips:
-+  * Analog Devices MAX31760
-+
-+    Prefix: 'max31760'
-+
-+    Addresses scanned: none
-+
-+    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX31760.pdf
-+
-+
-+Author: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-+
-+Description
-+-----------
-+
-+MAX31760 is a precision fan speed controller with nonvolatile lookup table.
-+Device has one internal and one external temperature sensor support.
-+Controls two fans and measures their speeds.
-+Generates hardware alerts when programmable max and critical temperatures are exceeded.
-+Supports direct and temperature based automatic fan control.
-+
-+Temperature measurement range: from -55°C to 125°C
-+
-+Temperature Resolution: 11 Bits, ±0.125°C
-+
-+Please refer how to instantiate this driver: Documentation/i2c/instantiating-devices.rst
-+
-+Lookup table for auto fan control
-+---------------------------------
-+
-+========= =================================
-+LUT Index Name
-+========= =================================
-+1         PWM value for T < +18°C
-+2         PWM value for +18°C ≤ T < +20°C
-+3         PWM value for +20°C ≤ T < +22°C
-+...       ...
-+47        PWM value for +108°C ≤ T < +110°C
-+48        PWM value for T ≥ +110°C
-+========= =================================
-+
-+Sysfs entries
-+-------------
-+
-+=============================== =================================================================================
-+fan[1-2]_input                  Fan speed (in RPM)
-+fan[1-2]_enable                 Enable fan readings and fan fault alarms
-+fan[1-2]_fault                  Fan fault status
-+temp[1-2]_label                 "Remote" and "Local" temperature channel labels
-+temp[1-2]_input                 Temperature sensor readings (in millidegrees Celsius)
-+temp1_fault                     Remote temperature sensor fault status
-+temp[1-2]_max                   Temperature max value. Asserts "ALERT" pin when exceeded
-+temp[1-2]_max_alarm             Temperature max alarm status
-+temp[1-2]_crit                  Temperature critical value. Asserts "SHDN" pin when exceeded
-+temp[1-2]_crit_alarm            Temperature critical alarm status
-+pwm1                            PWM value for direct fan control
-+pwm1_enable                     1: direct fan control, 2: temperature based auto fan control
-+pwm1_freq                       PWM frequency in hertz
-+pwm1_auto_channels_temp         Temperature source for auto fan control. 1: temp1, 2: temp2, 3: max(temp1, temp2)
-+pwm1_auto_point[1-48]_pwm       PWM value for LUT point
-+pwm1_auto_point_temp_hyst       Temperature hysteresis for auto fan control. Can be either 2000mC or 4000mC
-+=============================== =================================================================================
+ drivers/hwmon/lm90.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index 03d07da8c2dc..221de01a327a 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -2321,7 +2321,7 @@ static const char *lm90_detect_nuvoton(struct i2c_client *client, int chip_id,
+ 	const char *name = NULL;
+ 
+ 	if (config2 < 0)
+-		return ERR_PTR(-ENODEV);
++		return NULL;
+ 
+ 	if (address == 0x4c && !(config1 & 0x2a) && !(config2 & 0xf8)) {
+ 		if (chip_id == 0x01 && convrate <= 0x09) {
 -- 
-2.36.1
+2.36.2
 
