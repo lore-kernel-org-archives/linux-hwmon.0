@@ -2,102 +2,114 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79B1FC00140
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 10:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97940C00140
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 11:08:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241944AbiHHK5k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 Aug 2022 06:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
+        id S242682AbiHHLIM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 Aug 2022 07:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237179AbiHHK5k (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Aug 2022 06:57:40 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3B12675
-        for <linux-hwmon@vger.kernel.org>; Mon,  8 Aug 2022 03:57:37 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id i14so15872969ejg.6
-        for <linux-hwmon@vger.kernel.org>; Mon, 08 Aug 2022 03:57:37 -0700 (PDT)
+        with ESMTP id S242505AbiHHLIK (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Aug 2022 07:08:10 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE12230C
+        for <linux-hwmon@vger.kernel.org>; Mon,  8 Aug 2022 04:08:07 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id by6so1021738ljb.11
+        for <linux-hwmon@vger.kernel.org>; Mon, 08 Aug 2022 04:08:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=By0NCMvGqGe44WabzwYtjJFldOAvIvsPsvPQbLvBDuw=;
-        b=qMFNUDtoK290Og+eo6Hel5K4fZPqejMbl49JwpF/WQPncX3BLnANRVYllEjhuL9uN5
-         3u3ZSiADpDGwQ9riw6rTgTL1gtE6FG3skhXSrA4m6WNqD4OOwrsMbDw2tUdIyDCuDxBm
-         eT0639CoMel69UprQ0qGM+Y4kmQAekkLqidTT5V6JovbvvcIhRZRF/lQ2cMujwgMY+CB
-         H8BuDIaOZzl7bU90Zu3mwLuvijqKvf3DD0L4IApR8hGKjHdBo7u+V+JvWIrMzifQQ+ix
-         /BQBRvmhXIRAmBGxPAOLi4SVMeJChdPwUvNQpw4cEqx+irmg1bguO5qfFrHW3qxhjepP
-         LWxA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=G5McPA5IZBMFjJ0FWkBGoduD3K8bZspnlviNAqde1yc=;
+        b=U/8GdIPAOfjfBSkPjG5qZxEpHYx+/y1PqJjkW7q9XPKi+rNH9/dxiBi1yihCy+h293
+         iNwxkcW7qy7LPeMGxSs5rHpkJQq5EwzuHdr+LCPHKjOeQ83rg8iKzV3zZarNThEsWH0w
+         CmC/o7Zp4FC1+BWdTxPiNp8JkSwzUoXh7tQIU56sUavV8iNgWPijx/uuF0xZaPPcxocb
+         /f7wX+tz8FQi5OrTmy4E+tsl100B6B6g7NsVYajrm5YYsymY0zrRboDLbi4cvxNVYAbc
+         0EoeM/cP8He8woq/BuYMI7uO1xTTlUTwupdPNkoU6aX4x7Uw/vfB35BO1qPupE6jKKH6
+         esHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=By0NCMvGqGe44WabzwYtjJFldOAvIvsPsvPQbLvBDuw=;
-        b=MHlIR8WKN2o1ZYEAW89jHCRqQVUa/2kAw/irAsU80LPI0PtuI90A5PF52vBI9o5SmU
-         +2FvZzb3fvjAXl3oYHdzXRljkncdds41wbAl6xlFF2z38SBwWoFnLomKGWpp5vay7/fp
-         jnuY4z+rnVVtfs7C+alxI05YXT0NKscJAaAI0QmXJwa3pqmZ/oP5okTtgnbJrfmNHoXf
-         o5FOVoqA9eFkyiAdtODqvJZev7LgxpyGvpg08fJd8ZaxgVh/e/A4jdjcnMe8+5TLVSQH
-         tojqLchQ2A4JTpnzKLNp0/rn8IlWt9CskgCKgclAURAXsBNBlbuqZ/6JQ7jwlluXwVKu
-         1PvQ==
-X-Gm-Message-State: ACgBeo0UN4N2lPxCabMrVTlQi6uKlTcK3Y/yI/jTRbZ1UxNPtbd41oqG
-        IdqB+FeuMGGc08Pi6puGHbI=
-X-Google-Smtp-Source: AA6agR6tMlAejeYH5YMZOuCx00VFKOFlPvDMARKWDIhY3t0HkBM93zVOHBu4H0yhwGbD3mx3nfWJoA==
-X-Received: by 2002:a17:906:cc56:b0:730:a2f0:7466 with SMTP id mm22-20020a170906cc5600b00730a2f07466mr12822716ejb.211.1659956256499;
-        Mon, 08 Aug 2022 03:57:36 -0700 (PDT)
-Received: from gmail.com (195-38-112-141.pool.digikabel.hu. [195.38.112.141])
-        by smtp.gmail.com with ESMTPSA id b19-20020aa7c913000000b004406f11ba7csm3584962edt.32.2022.08.08.03.57.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 03:57:36 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 8 Aug 2022 12:57:34 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Hardware Monitoring <linux-hwmon@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH] hwmon: (lm90) Fix error return value from detect function
-Message-ID: <YvDsHnAGWNWdoyAC@gmail.com>
-References: <20220808101504.1933123-1-linux@roeck-us.net>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=G5McPA5IZBMFjJ0FWkBGoduD3K8bZspnlviNAqde1yc=;
+        b=YKLh8kUnGuBhdIOhDKNkRfs/GADYAAYf7RFzpHuBWMrX9fiiKe0HgMPv5Aw923hg+7
+         YhRZs/iJsxwVI5HxBgD3FkrzP7y4D01lFiQvr5iyTKinBm5TvmGT9bhciicti5QFZF+s
+         k2UWoBqe++alHo6/I+yloBXfAqg5suEpLXKMqtwipx2YrCoD4dDQmKRuC7icBRb4a31Z
+         plwAftJW8e88Y9MVGIERQECtcP5n0FJy94dCssC36TM7GC+oEe+kENmpxw/+WZF2GptB
+         Y6QdzWVL8SeJYYzOrr9T+u7eS9mUx4WKjqBdFEoqsGlHoqC/MxPf5r9R6numkJARsnHi
+         toTg==
+X-Gm-Message-State: ACgBeo3SxKu0u9QnAh/xHKOjZQBKk8cMl4BbhiczBazYk1beYHAxjzO4
+        mx/Dob895X4XOwBQdCBLIXuRyg==
+X-Google-Smtp-Source: AA6agR5I5A6dxgwMS+V5R6U4to3TDtNl7lNnpi0SFDGcuvZCIrUri2LyMgMT9eOhaBiYlWL8+eDong==
+X-Received: by 2002:a2e:2ac1:0:b0:25e:4b39:e3cb with SMTP id q184-20020a2e2ac1000000b0025e4b39e3cbmr5854240ljq.458.1659956886352;
+        Mon, 08 Aug 2022 04:08:06 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id t16-20020a2e9d10000000b0025e6a598019sm1338801lji.131.2022.08.08.04.08.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 04:08:05 -0700 (PDT)
+Message-ID: <43b3c497-97fd-29aa-a07b-bcd6413802c4@linaro.org>
+Date:   Mon, 8 Aug 2022 14:08:03 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220808101504.1933123-1-linux@roeck-us.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 5/5] dt-bindings: Drop Dan Murphy
+Content-Language: en-US
+To:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Robert Jones <rjones@gateworks.com>,
+        Lee Jones <lee@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Ricardo Rivera-Matos <r-rivera-matos@ti.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org
+References: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
+ <20220808104712.54315-6-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220808104712.54315-6-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On 08/08/2022 13:47, Krzysztof Kozlowski wrote:
+> Emails to Dan Murphy bounce ("550 Invalid recipient <dmurphy@ti.com>
+> (#5.1.1)").
 
-* Guenter Roeck <linux@roeck-us.net> wrote:
 
-> lm90_detect_nuvoton() is supposed to return NULL if it can not detect
-> a chip, or a pointer to the chip name if it does. Under some circumstances
-> it returns an error pointer instead. Some versions of gcc interpret an
-> ERR_PTR as region of size 0 and generate an error message.
-> 
->   In function ‘__fortify_strlen’,
->       inlined from ‘strlcpy’ at ./include/linux/fortify-string.h:159:10,
->       inlined from ‘lm90_detect’ at drivers/hwmon/lm90.c:2550:2:
->   ./include/linux/fortify-string.h:50:33: error:
->       ‘__builtin_strlen’ reading 1 or more bytes from a region of size 0
->      50 | #define __underlying_strlen     __builtin_strlen
->         |                                 ^
->   ./include/linux/fortify-string.h:141:24: note:
->       in expansion of macro ‘__underlying_strlen’
->     141 |                 return __underlying_strlen(p);
->         |                        ^~~~~~~~~~~~~~~~~~~
-> 
-> Returning NULL instead of ERR_PTR() fixes the problem.
-> 
-> Fixes: c7cebce984a2 ("hwmon: (lm90) Rework detect function")
-> Reported-by: Ingo Molnar <mingo@kernel.org>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+(...)
 
-Tested-by: Ingo Molnar <mingo@kernel.org>
+>  description: |
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq25980.yaml b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
+> index 4883527ab5c7..509a0667b04e 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq25980.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
+> @@ -8,7 +8,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: TI BQ25980 Flash Charger
+>  
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+>    - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
 
-Thanks,
+Ricardo's also bounces... Does it mean TI is not interested in
+maintaining mainline support for its drivers?
 
-	Ingo
+Best regards,
+Krzysztof
