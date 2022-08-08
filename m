@@ -2,35 +2,35 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ED51C25B07
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 01:54:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 989E3C25B0F
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 01:57:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243280AbiHHByF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 7 Aug 2022 21:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
+        id S243659AbiHHB5R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 7 Aug 2022 21:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243655AbiHHBvc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Aug 2022 21:51:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC91819C2D;
-        Sun,  7 Aug 2022 18:38:27 -0700 (PDT)
+        with ESMTP id S243924AbiHHB4h (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Aug 2022 21:56:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3CA101F2;
+        Sun,  7 Aug 2022 18:40:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C9AF60E89;
-        Mon,  8 Aug 2022 01:38:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CDABC43141;
-        Mon,  8 Aug 2022 01:38:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEB7F60EC2;
+        Mon,  8 Aug 2022 01:39:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69AB4C433B5;
+        Mon,  8 Aug 2022 01:39:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659922705;
-        bh=4pNbcfBY7sSXixtKDEXaS8TRXL9OvdOoDNaQXO+z7ao=;
+        s=k20201202; t=1659922799;
+        bh=1dH2Dx20hOrtjBT3Z7RjtrEBHe0YZqJvzBWqMfso7aw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q630WT6m4/g02DG18BXvQIaArvlFx68k+zZT8XhOcbtRchaUf0FZGWmQbo8teh2bH
-         wJKEFv+dfxKl9M/JG37nsdB+N6uU/p7IolZZWorK2McCFk+z5ygqZyryCoYpe2BH/1
-         v1om5EHJLa9iWj+3vDXXyio7bXO5wLAANk/LxHIWPW1zi3nVsGSETM3F7qPSXoPMY1
-         YYL5izXG2byDGuUT+J9CgdwWxuHI/k5Lwg176D1dp/H5/kI8kQP93mLHVYYFfm+5XF
-         jsdjn2ex0WnBewuclRjzOvndyhiO8zhVviMi12BV1jqEW4j50NGBOV+A1WNQbA+w92
-         9vZMCZ/6Q+vWg==
+        b=Q1mmV/oMew9zhXy5Aoq3h1PweSoGQnKU/sdLbjFamV1b6Up+4Qul+Pp8aRNTxLStF
+         h1TNod6G1tM+hW6Icv5jQwCpLsUgcdrle1u7BRUbIgkQRLV3WactGevwtxvOQPm6uq
+         MByqfO3Yc1RER2OFXbUzficB3id4LB7sYo5Um+uw/6tPql+GgCHdPTYBFOGkJ+gtcD
+         hB6oERhsp3s/jxjKUxEoltGF01NW9vKfL7dk5OlOOkaD6XtJW13yeuGPVCBsciJDA0
+         7Xm4O88cS0BHlnMOdqOTZHuvLwWMbjsUC9cHfpsR0KuREDBXAH01U8B1wCuvxeZ+Xy
+         XecOh9R+CSZ/Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
@@ -38,12 +38,12 @@ Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?=
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 27/29] hwmon: (sht15) Fix wrong assumptions in device remove callback
-Date:   Sun,  7 Aug 2022 21:37:37 -0400
-Message-Id: <20220808013741.316026-27-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 10/12] hwmon: (sht15) Fix wrong assumptions in device remove callback
+Date:   Sun,  7 Aug 2022 21:39:40 -0400
+Message-Id: <20220808013943.316907-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220808013741.316026-1-sashal@kernel.org>
-References: <20220808013741.316026-1-sashal@kernel.org>
+In-Reply-To: <20220808013943.316907-1-sashal@kernel.org>
+References: <20220808013943.316907-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -85,10 +85,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
-index 7f4a63959730..ae4d14257a11 100644
+index e4d642b673c6..69fe8946442c 100644
 --- a/drivers/hwmon/sht15.c
 +++ b/drivers/hwmon/sht15.c
-@@ -1020,25 +1020,20 @@ static int sht15_probe(struct platform_device *pdev)
+@@ -1095,25 +1095,20 @@ static int sht15_probe(struct platform_device *pdev)
  static int sht15_remove(struct platform_device *pdev)
  {
  	struct sht15_data *data = platform_get_drvdata(pdev);
