@@ -2,35 +2,35 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BABDEC25B0C
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 01:54:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ED51C25B07
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Aug 2022 01:54:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243448AbiHHByD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 7 Aug 2022 21:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38622 "EHLO
+        id S243280AbiHHByF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 7 Aug 2022 21:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243280AbiHHBu2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Aug 2022 21:50:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B386186F1;
-        Sun,  7 Aug 2022 18:37:39 -0700 (PDT)
+        with ESMTP id S243655AbiHHBvc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Aug 2022 21:51:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC91819C2D;
+        Sun,  7 Aug 2022 18:38:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2AE8B80E0F;
-        Mon,  8 Aug 2022 01:37:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DAD1C43470;
-        Mon,  8 Aug 2022 01:37:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C9AF60E89;
+        Mon,  8 Aug 2022 01:38:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CDABC43141;
+        Mon,  8 Aug 2022 01:38:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659922646;
+        s=k20201202; t=1659922705;
         bh=4pNbcfBY7sSXixtKDEXaS8TRXL9OvdOoDNaQXO+z7ao=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LAO69gcvTHrDDgCxma32yzXotSjVXmuo9IP/Pukxx/CAh4ACOco2rYy5pmWqZvCcP
-         M6d5W5tOdKyOakqvsQefp1xO7LBeWV5NLs3TBFDRs9dkfngpQx14CKIh8IlGFEiaW8
-         NsmHhKtKH17hDNuA3VtG3FlGyYaBclPpYQxGG56CZE7u92uDFcu8BOmHg0Leg+97Md
-         eszwjbE1pfLUfptBj1FOt+GzVcfePmoe+CW2YstcC1CUIT0MpWdiV+OijTUfYKtviu
-         PBTwPfeLS4XUoQLHfl1AEKphYJVM70kxoRY6AXNXLZ9hdEwsHLiwqYd2WjLV10v7CN
-         Ki85UFMN6IRug==
+        b=Q630WT6m4/g02DG18BXvQIaArvlFx68k+zZT8XhOcbtRchaUf0FZGWmQbo8teh2bH
+         wJKEFv+dfxKl9M/JG37nsdB+N6uU/p7IolZZWorK2McCFk+z5ygqZyryCoYpe2BH/1
+         v1om5EHJLa9iWj+3vDXXyio7bXO5wLAANk/LxHIWPW1zi3nVsGSETM3F7qPSXoPMY1
+         YYL5izXG2byDGuUT+J9CgdwWxuHI/k5Lwg176D1dp/H5/kI8kQP93mLHVYYFfm+5XF
+         jsdjn2ex0WnBewuclRjzOvndyhiO8zhVviMi12BV1jqEW4j50NGBOV+A1WNQbA+w92
+         9vZMCZ/6Q+vWg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
@@ -38,12 +38,12 @@ Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?=
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 40/45] hwmon: (sht15) Fix wrong assumptions in device remove callback
-Date:   Sun,  7 Aug 2022 21:35:44 -0400
-Message-Id: <20220808013551.315446-40-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 27/29] hwmon: (sht15) Fix wrong assumptions in device remove callback
+Date:   Sun,  7 Aug 2022 21:37:37 -0400
+Message-Id: <20220808013741.316026-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220808013551.315446-1-sashal@kernel.org>
-References: <20220808013551.315446-1-sashal@kernel.org>
+In-Reply-To: <20220808013741.316026-1-sashal@kernel.org>
+References: <20220808013741.316026-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
