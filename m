@@ -2,97 +2,106 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9CB4C19F2D
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Aug 2022 11:22:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2718C19F2D
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Aug 2022 11:28:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240890AbiHILWW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Aug 2022 07:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48236 "EHLO
+        id S233269AbiHIL2l (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 9 Aug 2022 07:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240472AbiHILWV (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Aug 2022 07:22:21 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEBD1FCEF
-        for <linux-hwmon@vger.kernel.org>; Tue,  9 Aug 2022 04:22:19 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id r4so14648570edi.8
-        for <linux-hwmon@vger.kernel.org>; Tue, 09 Aug 2022 04:22:19 -0700 (PDT)
+        with ESMTP id S231308AbiHIL2k (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Aug 2022 07:28:40 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E80219292;
+        Tue,  9 Aug 2022 04:28:40 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d16so11040956pll.11;
+        Tue, 09 Aug 2022 04:28:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pOc3Bz12pMayO94jwlOggCztVRhbn75rrJuEq+4iDRs=;
-        b=5nanClqC7gUGBRKJRyyMG18QqI95z4Gf6/LlUYQBrhTiIWMxnbDYTfqUri3vFf2aP7
-         c38UBafW7cy8UtpEilMVcJ/GzYRI4s2DwD7csWAYMF13Z2PIf4op3Zhq5rqLJEIqps/w
-         aPXczj8EKwBpBHfDPH+yKAmMtwifXhRwajVGpKNVtDMMLR7dT/d0b0wra+JRhMRxCMrc
-         Yyxa2cwKe1g1vqb4kApbYuQxiRtBnSprDT9WhC10dEZ//huH4mKYIMR6xLDeQnNZrriO
-         iw/pkIm1RfABTPXduw06gYBtvQZDlH0wB9gU0um8bSruNWPSqvsfo/FIaTYTTwd7VeEb
-         pnFQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=VIiZZVAptd5oSBmx9Azfpj0vKhX9kuKTVoBaO2I82Tw=;
+        b=LgAxdbOWyuUIuL3YTJih5ytfqHTawzMlOfNpy9MIPTRVVVtIuhnPwmz10U7GTmxwoa
+         A7CU08LoPnc3dFyKheKIND6+C3FMOcv+Zec+PVO48Ig5UDN0+TpprbqmgdjW0FusXqjo
+         6JuU5KeMz/j2QDwmNX4l9I2K2xIKpvZc8ktQjHEQ/d3FJ7ntXXTOO7Z5yM/kxgWetyJw
+         g81gwpIbPYEpD7xHwGkiJJWpMyNLXWPqDDvX9UvXhQixmyYZGzkWuBk+sCZHkmawJvpR
+         eWh3sLR4E3WoaRrr1WAZ7ok4nX7tz64WlKXF7nc0e5hI3s3Jh45H6hWsMFyUNho9Dxxw
+         kPaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pOc3Bz12pMayO94jwlOggCztVRhbn75rrJuEq+4iDRs=;
-        b=4hvtFNITp9SZUl3VY7zf6jkG4NIUf/pZBi2Y5gKZfugRIgIBH0nsJagQVi2YcYbqc/
-         NYmd2qbigwmtIODOwTgaXBZg9d8q4Nl71bkkJX9IaVVuGa0kAuRl12V7yYihXm/ktjz2
-         Wdr1QQNp7A2AgrZT/Zk195L0WpJ/CBUzgOTpPZZtEHwQOHIDaGPtiOqV8x7mli+nBLgP
-         Y15u3YUmDj7Zas0zQ+WzxE4/Bd3FaVgu++La7QvgbsHkvSXQe7fdm+jKTXwATOqtwx+z
-         Jgc6dlDNGfwHGU6Nq/ksEVNzkiqFqt1Zdv8Jo2mM6aE+G95LdpCIErtKNLI13WkFXNku
-         6j9Q==
-X-Gm-Message-State: ACgBeo25ATcXNCp6XZv+uGGkYK3ttmClElew38MnUjqCSOyWMUjJmlzi
-        0qRwDOfPgJaZAJTSdfQ+OqJouQ==
-X-Google-Smtp-Source: AA6agR7vtXurWB1a07/O+GNYr9tc4q9IST9idRSP6HWjaX2/KN7WGXZ7PlkRaaKef32KAQSZH/eAvw==
-X-Received: by 2002:a05:6402:424d:b0:43e:95d8:eb46 with SMTP id g13-20020a056402424d00b0043e95d8eb46mr21158481edb.306.1660044137704;
-        Tue, 09 Aug 2022 04:22:17 -0700 (PDT)
-Received: from fedora.robimarko.hr (cpe-188-129-118-148.dynamic.amis.hr. [188.129.118.148])
-        by smtp.googlemail.com with ESMTPSA id me25-20020a170906aed900b007317f017e64sm1007581ejb.134.2022.08.09.04.22.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 04:22:17 -0700 (PDT)
-From:   Robert Marko <robert.marko@sartura.hr>
-To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lars.povlsen@microchip.com,
-        Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     luka.perkov@sartura.hr, Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH 2/2] arm64: dts: microchip: sparx5: use correct clock for tmon
-Date:   Tue,  9 Aug 2022 13:22:09 +0200
-Message-Id: <20220809112209.241045-2-robert.marko@sartura.hr>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809112209.241045-1-robert.marko@sartura.hr>
-References: <20220809112209.241045-1-robert.marko@sartura.hr>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=VIiZZVAptd5oSBmx9Azfpj0vKhX9kuKTVoBaO2I82Tw=;
+        b=pgSdgLHOITuulg0Vppj+g8fIpunPPJEfA7XyjLXn4T6YsQavYHJ1Hj4cP3ezSir4ML
+         KmNpNst2oT+svEba4pBelzeoWK2sBOuxTchtYGrVVSImMgdWnqiEwiZYRteCBk9JjtNL
+         oWGXPe57OfztxrQKU9Lpz2VV+GkD+hO4tfFvcTprJBNTHxYe7UVS8M7a7hzk3ZsawlAE
+         g0NhbEH5I2Yd7dbneXdrqoKjrR7/9S/nbu0hkrKhwSflja6bhJdbm6Qt9Zl8T4FUmgp+
+         tnV3sc7ZxQznZXjUhtteMH2+DSBHEs3Eq2Elnw5L1ledAHCh186QxhmweuUsjucY9Miq
+         SVsg==
+X-Gm-Message-State: ACgBeo1KSDkICOaMUkSUou6WvaspPndgYXIEx9RafEhs2kMzpmh33THf
+        uu3ED6qijs/vyxr+zTNMiXqMRbNLPPybebcXBsA=
+X-Google-Smtp-Source: AA6agR45VCQGXf/7Di9MAsVfM1ob5MNVs/XZtyhXe84XqAGlWYokWouUAXa/mdqnKk+nv6X7bGSqAGb+8u6s77Mnnb4=
+X-Received: by 2002:a17:902:e5c8:b0:16f:1511:7575 with SMTP id
+ u8-20020a170902e5c800b0016f15117575mr23196630plf.83.1660044519576; Tue, 09
+ Aug 2022 04:28:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220525115554.430971-1-alistair@alistair23.me>
+ <20220525115554.430971-2-alistair@alistair23.me> <Yo5vjlsc0J1S70zN@sirena.org.uk>
+ <Yo86jpMrKR0Dj/HB@google.com>
+In-Reply-To: <Yo86jpMrKR0Dj/HB@google.com>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Tue, 9 Aug 2022 21:28:13 +1000
+Message-ID: <CAKmqyKOrtHHGOB81UvHQX=bMke_1e5Y7GPcSrqFcMtEvL6EtJw@mail.gmail.com>
+Subject: Re: [PATCH v21 1/4] mfd: silergy,sy7636a: Add config option
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Alistair Francis <alistair@alistair23.me>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Amit Kucheria <amitk@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-hwmon@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Zhang Rui <rui.zhang@intel.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-SparX-5 temperature sensor uses system reference clock and not the AHB bus
-clock as indicated by the register information [1].
+On Thu, May 26, 2022 at 6:30 PM Lee Jones <lee.jones@linaro.org> wrote:
+>
+> On Wed, 25 May 2022, Mark Brown wrote:
+>
+> > On Wed, May 25, 2022 at 09:55:51PM +1000, Alistair Francis wrote:
+> > > Add a specific MFD_SY7636A config option.
+> > >
+> > > As part of this change we can use MFD_SY7636A as a dependency for all
+> > > SY7636a components and also remove the name from MFD_SIMPLE_MFD_I2C a=
+s
+> > > it no longer needs to be selectable.
+> >
+> > Acked-by: Mark Brown <broonie@kernel.org>
+>
+> Full disclosure; I've already made my cut for v5.19.
+>
+> This is due for v5.20.
 
-Configured number of system clock cycles in one 1us is now almost spot on
-to the default register value.
+I just wanted to double check that this is still going in for 5.20
 
-[1] https://microchip-ung.github.io/sparx-5_reginfo/reginfo_sparx-5.html?select=hsiowrap,temp_sensor,temp_sensor_cfg,clk_cycles_1us
+Alistair
 
-Fixes: d14f6a1ae07f ("arm64: dts: sparx5: Add hwmon temperature sensor")
-Signed-off-by: Robert Marko <robert.marko@sartura.hr>
----
- arch/arm64/boot/dts/microchip/sparx5.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/microchip/sparx5.dtsi b/arch/arm64/boot/dts/microchip/sparx5.dtsi
-index 6f6aab48516e..c9367127670b 100644
---- a/arch/arm64/boot/dts/microchip/sparx5.dtsi
-+++ b/arch/arm64/boot/dts/microchip/sparx5.dtsi
-@@ -421,7 +421,7 @@ tmon0: tmon@610508110 {
- 			compatible = "microchip,sparx5-temp";
- 			reg = <0x6 0x10508110 0xc>;
- 			#thermal-sensor-cells = <0>;
--			clocks = <&ahb_clk>;
-+			clocks = <&sys_clk>;
- 		};
- 
- 		mdio0: mdio@6110102b0 {
--- 
-2.37.1
-
+>
+> --
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+> Principal Technical Lead - Developer Services
+> Linaro.org =E2=94=82 Open source software for Arm SoCs
+> Follow Linaro: Facebook | Twitter | Blog
