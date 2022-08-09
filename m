@@ -2,106 +2,87 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2718C19F2D
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Aug 2022 11:28:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80D8FC3F6B0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Aug 2022 11:31:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233269AbiHIL2l (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Aug 2022 07:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
+        id S238977AbiHILbg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 9 Aug 2022 07:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbiHIL2k (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Aug 2022 07:28:40 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E80219292;
-        Tue,  9 Aug 2022 04:28:40 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d16so11040956pll.11;
-        Tue, 09 Aug 2022 04:28:40 -0700 (PDT)
+        with ESMTP id S241882AbiHILbc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Aug 2022 07:31:32 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC97095B2
+        for <linux-hwmon@vger.kernel.org>; Tue,  9 Aug 2022 04:31:30 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id w15so12704007ljw.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 09 Aug 2022 04:31:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=VIiZZVAptd5oSBmx9Azfpj0vKhX9kuKTVoBaO2I82Tw=;
-        b=LgAxdbOWyuUIuL3YTJih5ytfqHTawzMlOfNpy9MIPTRVVVtIuhnPwmz10U7GTmxwoa
-         A7CU08LoPnc3dFyKheKIND6+C3FMOcv+Zec+PVO48Ig5UDN0+TpprbqmgdjW0FusXqjo
-         6JuU5KeMz/j2QDwmNX4l9I2K2xIKpvZc8ktQjHEQ/d3FJ7ntXXTOO7Z5yM/kxgWetyJw
-         g81gwpIbPYEpD7xHwGkiJJWpMyNLXWPqDDvX9UvXhQixmyYZGzkWuBk+sCZHkmawJvpR
-         eWh3sLR4E3WoaRrr1WAZ7ok4nX7tz64WlKXF7nc0e5hI3s3Jh45H6hWsMFyUNho9Dxxw
-         kPaw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Xb312PhkB7YHxkGgBMD9Hd3iz4ffA4SEHUAo6HB/S+U=;
+        b=dIq5ojBaaimvdme0pZvsU8xPrCKLNL0+SW3jmtRxipsdVvPR5tNbP3tJnqK5opmM9S
+         6piOkZ5syV68RtIQlm1MgDu4GT33R4rEu15XjzD+XTI7M8LgI08gFgU6uvirdfUSvYkG
+         0nibekfBzqTCU65K96/U1Hbgz0yPkB8VLqvp8RLnKN6NJ6XGLuvniIXLxrv5DC9L+amH
+         USMgw8X3h0179ir2scyKCTvPiuqZTzUZ+Lzn+iWHpWNYf9yooLb/yDq+L8Zc2YG5rRz+
+         vi917ZEL5c3B/EurcAgj6Q/BxAgM56ANSllJ0kVhQ4TPLD4+S7jIcpVXi3v8YkohCxsa
+         A3wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=VIiZZVAptd5oSBmx9Azfpj0vKhX9kuKTVoBaO2I82Tw=;
-        b=pgSdgLHOITuulg0Vppj+g8fIpunPPJEfA7XyjLXn4T6YsQavYHJ1Hj4cP3ezSir4ML
-         KmNpNst2oT+svEba4pBelzeoWK2sBOuxTchtYGrVVSImMgdWnqiEwiZYRteCBk9JjtNL
-         oWGXPe57OfztxrQKU9Lpz2VV+GkD+hO4tfFvcTprJBNTHxYe7UVS8M7a7hzk3ZsawlAE
-         g0NhbEH5I2Yd7dbneXdrqoKjrR7/9S/nbu0hkrKhwSflja6bhJdbm6Qt9Zl8T4FUmgp+
-         tnV3sc7ZxQznZXjUhtteMH2+DSBHEs3Eq2Elnw5L1ledAHCh186QxhmweuUsjucY9Miq
-         SVsg==
-X-Gm-Message-State: ACgBeo1KSDkICOaMUkSUou6WvaspPndgYXIEx9RafEhs2kMzpmh33THf
-        uu3ED6qijs/vyxr+zTNMiXqMRbNLPPybebcXBsA=
-X-Google-Smtp-Source: AA6agR45VCQGXf/7Di9MAsVfM1ob5MNVs/XZtyhXe84XqAGlWYokWouUAXa/mdqnKk+nv6X7bGSqAGb+8u6s77Mnnb4=
-X-Received: by 2002:a17:902:e5c8:b0:16f:1511:7575 with SMTP id
- u8-20020a170902e5c800b0016f15117575mr23196630plf.83.1660044519576; Tue, 09
- Aug 2022 04:28:39 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Xb312PhkB7YHxkGgBMD9Hd3iz4ffA4SEHUAo6HB/S+U=;
+        b=nH4CNivg0GzwO1VAKQN8LU2m9CQOypZGUdenobyGe/I8hr/FmbnX4EN2RaRw/3J47p
+         39Ma0Oo1UZ93ZJOWyBgR/Lan75zR2Q9S2ZjgROzpHJFllMTz1ZH78LEeLWJF6qYCqA+R
+         NLXS+P/dRlFkn5H/OGB9NUT3NCEJEnyC1e2LikPNYuX8efy6ih9S6cIZmUxyFuQhWD2L
+         +1zJR9vGFPqxUa975PRoh1QP28/ysOA7rEDWv/c/rPN3E6kPq/5rRdI7zll6IYQCWV1h
+         69dI1PHPq6t7UOGbLL2FdJtX6NegmIC0sI5DTwn/KTzogUJcmx0XeRWSdm353iQYveDe
+         fcLg==
+X-Gm-Message-State: ACgBeo2rLR+pjjvHBkiLEObqCmqxmtgjkSzxogCUOEVK5wm+gyTg3RmZ
+        hxzKH77v3QjXDmqYDo0JJas2MQ==
+X-Google-Smtp-Source: AA6agR5gwuiC/4kIkC3bJMYhMSbSSdvyfE+myCW+6MmOnCCX1bW7ArSs7UKo3B+1+qDdKjhdMj5KBA==
+X-Received: by 2002:a2e:bf01:0:b0:25f:df1a:f39d with SMTP id c1-20020a2ebf01000000b0025fdf1af39dmr2845463ljr.365.1660044689140;
+        Tue, 09 Aug 2022 04:31:29 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id f3-20020a05651232c300b0048af464559esm1724043lfg.293.2022.08.09.04.31.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 04:31:28 -0700 (PDT)
+Message-ID: <1585ea75-9454-acdc-6232-25c951563107@linaro.org>
+Date:   Tue, 9 Aug 2022 14:31:27 +0300
 MIME-Version: 1.0
-References: <20220525115554.430971-1-alistair@alistair23.me>
- <20220525115554.430971-2-alistair@alistair23.me> <Yo5vjlsc0J1S70zN@sirena.org.uk>
- <Yo86jpMrKR0Dj/HB@google.com>
-In-Reply-To: <Yo86jpMrKR0Dj/HB@google.com>
-From:   Alistair Francis <alistair23@gmail.com>
-Date:   Tue, 9 Aug 2022 21:28:13 +1000
-Message-ID: <CAKmqyKOrtHHGOB81UvHQX=bMke_1e5Y7GPcSrqFcMtEvL6EtJw@mail.gmail.com>
-Subject: Re: [PATCH v21 1/4] mfd: silergy,sy7636a: Add config option
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Alistair Francis <alistair@alistair23.me>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Amit Kucheria <amitk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-hwmon@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Zhang Rui <rui.zhang@intel.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: sparx5: use correct clock
+Content-Language: en-US
+To:     Robert Marko <robert.marko@sartura.hr>, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lars.povlsen@microchip.com,
+        Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     luka.perkov@sartura.hr
+References: <20220809112209.241045-1-robert.marko@sartura.hr>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220809112209.241045-1-robert.marko@sartura.hr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, May 26, 2022 at 6:30 PM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Wed, 25 May 2022, Mark Brown wrote:
->
-> > On Wed, May 25, 2022 at 09:55:51PM +1000, Alistair Francis wrote:
-> > > Add a specific MFD_SY7636A config option.
-> > >
-> > > As part of this change we can use MFD_SY7636A as a dependency for all
-> > > SY7636a components and also remove the name from MFD_SIMPLE_MFD_I2C a=
-s
-> > > it no longer needs to be selectable.
-> >
-> > Acked-by: Mark Brown <broonie@kernel.org>
->
-> Full disclosure; I've already made my cut for v5.19.
->
-> This is due for v5.20.
+On 09/08/2022 14:22, Robert Marko wrote:
+> SparX-5 temperature sensor uses system reference clock and not the AHB bus
+> clock as indicated by the register information [1].
+> 
+> So, correct the clock description as well the included example.
+> 
+> [1] https://microchip-ung.github.io/sparx-5_reginfo/reginfo_sparx-5.html?select=hsiowrap,temp_sensor,temp_sensor_cfg,clk_cycles_1us
+> 
 
-I just wanted to double check that this is still going in for 5.20
 
-Alistair
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
->
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> Principal Technical Lead - Developer Services
-> Linaro.org =E2=94=82 Open source software for Arm SoCs
-> Follow Linaro: Facebook | Twitter | Blog
+
+Best regards,
+Krzysztof
