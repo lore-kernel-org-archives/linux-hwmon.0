@@ -2,91 +2,110 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CDBEC19F2D
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Aug 2022 13:33:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53E44C19F2D
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Aug 2022 14:21:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243101AbiHINdz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Aug 2022 09:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45058 "EHLO
+        id S232429AbiHIOVp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 9 Aug 2022 10:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbiHINdy (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Aug 2022 09:33:54 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EFB1901D
-        for <linux-hwmon@vger.kernel.org>; Tue,  9 Aug 2022 06:33:53 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id s11-20020a1cf20b000000b003a52a0945e8so4122336wmc.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 09 Aug 2022 06:33:53 -0700 (PDT)
+        with ESMTP id S231130AbiHIOVo (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Aug 2022 10:21:44 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C297812745;
+        Tue,  9 Aug 2022 07:21:43 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id c19-20020a17090ae11300b001f2f94ed5c6so1305137pjz.1;
+        Tue, 09 Aug 2022 07:21:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=qDs3v/+2gBoPPTdjMsAIc3WC8rX3YXkWxxonQKGl4/w=;
-        b=KXL2NUWmqPFko1XMcwYNAF4yLqrFdYZ7RUQo+B+ik3rzRGdaZDhSjTb1RZuaxEUFLx
-         TJhTj6a87LkmuY67UEMMkfqawtVRA8wd/vp+KeZJfGfeRDwLGp6cORXFWRNmZ2Rs7vlG
-         428ZrWeyxSXsHKH16eDUE3abwgJoNTbbMqm4WtkS3lNsIOLtSObFCKtE16h/brgAO4Tx
-         DEfNDXI+qNcvGGfXUbLBZZdYFfwYzQjGPsQJmnOnfSmOcZ5r/SzJRvuQdV8e/a8aQasE
-         /V7TDBSIsSpUQXvQyblVgN5tfNCkoE/kisoTB3alYsIbpLzCCbsLkZylILz8ayfQTjVs
-         vU0g==
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=bEh+wwLVHA5bFmeGIiv3pq/kyT0bJnwEWBvwDkgXm6g=;
+        b=HHzzaBhUEV9ZA0bnSyzbjihYJV0FW/lD7Di40zWTTS8aBbRJOjP0CAGQ1BGZkSGG8Q
+         jWV3nNmtuIiTCus+Av5mFEp6Ybc2lf4ro/rJyvPob2KZ/LyezvLuKjEMzl2Widmio4Ub
+         CUB6IkVIFPnCjSt4kFJTbVpNYtsUR8mIpa27SAqjVRBWJS/QDFM7VucLLARp/4zq1Qqv
+         lETbWuIBUaqHNZKqFYnpCVKOOdgcSK4HvOi3nNakQg2IF4yqD72qW3i9sdg0B2yPmLNp
+         0FBrdikul9Tf29TC4Pz0bjZulJIbyfRwh4kD+/WR6cFydb2GOpZsi0OXgc6q8W2YKNlm
+         TryQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=qDs3v/+2gBoPPTdjMsAIc3WC8rX3YXkWxxonQKGl4/w=;
-        b=e+C5Z/jSlwyYmKvk9I9tZ62iz8gnnng0UamE5DFwNmRwk0Qac2vvhjWnSgREOmfSoy
-         FZn8+5s7LOTruPMRS0RetoThgbZtBenMBSkzmQVyAJ3sXbXCfik6U0bNzJT0dZHuaxSu
-         y5VxMK5CAn0DDF+4hfIPtz2zpSPyNDgq1yyoWnBfDT9KG2ZleRzG3pXQXnM4Kb7maC88
-         Dbzx3LTlrasI/qK2+5yK6NOVWSDTS9kNCfIUS35QYzzk/NutyGek+vdYzaw4TzzAkE2T
-         j5W1AD2UiVbcraiPoY1zYMQLKiEs2xrqCSZ3TI6DJhD/PZCdGYAB6jxQQmZw4FqmX0hs
-         CpSA==
-X-Gm-Message-State: ACgBeo01nSd1xrDDPmnpLH2wd2VtmPIDk921f1/IjekLCsA2XQQNvsls
-        zx5swbQEJ+PXXUf46fdUkJRUMQ==
-X-Google-Smtp-Source: AA6agR5Vw/hb9AVtINItYDqXRX7S16jDBHR9oXX97sa2DaTwoEP2cNEyV2erhdztP6VJgZ5ukYQEwg==
-X-Received: by 2002:a05:600c:a02:b0:39c:97cc:82e3 with SMTP id z2-20020a05600c0a0200b0039c97cc82e3mr20753390wmp.97.1660052031819;
-        Tue, 09 Aug 2022 06:33:51 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id k30-20020a05600c1c9e00b003a38606385esm2261133wms.3.2022.08.09.06.33.50
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=bEh+wwLVHA5bFmeGIiv3pq/kyT0bJnwEWBvwDkgXm6g=;
+        b=dwt0tlqbRRTjZgEy75dWNORyqrOfRK/kSXHgcc1fTpOeAvKj4vp9BRxJlKzTd6M//V
+         sDiHlXYHXgKKuTspdxS7CtdXeKZNBBssEgPHpue+fuI7j+d0P/PYAn3sbk8XuE+Ap0ee
+         F5voRPzMU4dKByxE1z3LFNGxreSMNtXmvZJ4e1pdi3kgkiX9TYZJNbA5YCiTcBFlwoCq
+         NT53MFiEdcP7ha+4r0lKrfPvOYFdQLjD+HdAITYBcyoZPkVW29pty5Sfs5NsZSWyopec
+         92FsVFwbv7Xi1J1cZAULGvAoglM8h42Tq+aQbfyagizb1SgORFob4X9tygM5+JJUOHSU
+         bgxw==
+X-Gm-Message-State: ACgBeo1x7BZaOa1JhPMTqjiYk5/Ucctbi+/56fdpYEoJzRhtWgb6Q9nH
+        b737jQx/YcYCf55CeaRyGsY=
+X-Google-Smtp-Source: AA6agR6bbPT492glnh8e1KF/bFik6WFEaYwUy+ijzOEiB+PSGLMMb1oVudpZL1GuyNmIOwsjmiVJKw==
+X-Received: by 2002:a17:902:d48f:b0:16f:a73:bf04 with SMTP id c15-20020a170902d48f00b0016f0a73bf04mr23963872plg.43.1660054903206;
+        Tue, 09 Aug 2022 07:21:43 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x66-20020a626345000000b0052e987c64efsm10352651pfb.174.2022.08.09.07.21.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 06:33:51 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 14:33:48 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        kernel@pengutronix.de, s.hauer@pengutronix.de,
-        alistair23@gmail.com, linux-arm-kernel@lists.infradead.org,
-        andreas@kemnade.info, amitk@kernel.org, shawnguo@kernel.org,
-        linux-kernel@vger.kernel.org, geert@linux-m68k.org,
-        linux-hwmon@vger.kernel.org, linux-imx@nxp.com, linux@roeck-us.net,
-        rui.zhang@intel.com, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH v21 1/4] mfd: silergy,sy7636a: Add config option
-Message-ID: <YvJiPM0Ak1Z34Bog@google.com>
-References: <20220525115554.430971-1-alistair@alistair23.me>
- <20220525115554.430971-2-alistair@alistair23.me>
+        Tue, 09 Aug 2022 07:21:41 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 9 Aug 2022 07:21:39 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Robert Marko <robert.marko@sartura.hr>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lars.povlsen@microchip.com,
+        Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        luka.perkov@sartura.hr
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: sparx5: use correct clock
+Message-ID: <20220809142139.GA2105857@roeck-us.net>
+References: <20220809112209.241045-1-robert.marko@sartura.hr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220525115554.430971-2-alistair@alistair23.me>
+In-Reply-To: <20220809112209.241045-1-robert.marko@sartura.hr>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 25 May 2022, Alistair Francis wrote:
+On Tue, Aug 09, 2022 at 01:22:08PM +0200, Robert Marko wrote:
+> SparX-5 temperature sensor uses system reference clock and not the AHB bus
+> clock as indicated by the register information [1].
+> 
+> So, correct the clock description as well the included example.
+> 
+> [1] https://microchip-ung.github.io/sparx-5_reginfo/reginfo_sparx-5.html?select=hsiowrap,temp_sensor,temp_sensor_cfg,clk_cycles_1us
+> 
+> Fixes: f5520753c16f ("dt-bindings: hwmon: Add Sparx5 temperature sensor")
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> Add a specific MFD_SY7636A config option.
-> 
-> As part of this change we can use MFD_SY7636A as a dependency for all
-> SY7636a components and also remove the name from MFD_SIMPLE_MFD_I2C as
-> it no longer needs to be selectable.
-> 
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Applied.
+
+Thanks,
+Guenter
+
 > ---
->  drivers/hwmon/Kconfig     |  1 +
->  drivers/mfd/Kconfig       | 12 +++++++++++-
->  drivers/regulator/Kconfig |  1 +
->  3 files changed, 13 insertions(+), 1 deletion(-)
-
-Applied, thanks.
-
--- 
-DEPRECATED: Please use lee@kernel.org
+>  .../devicetree/bindings/hwmon/microchip,sparx5-temp.yaml      | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,sparx5-temp.yaml b/Documentation/devicetree/bindings/hwmon/microchip,sparx5-temp.yaml
+> index 76be625d5646..51e8619dbf3c 100644
+> --- a/Documentation/devicetree/bindings/hwmon/microchip,sparx5-temp.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/microchip,sparx5-temp.yaml
+> @@ -22,7 +22,7 @@ properties:
+>  
+>    clocks:
+>      items:
+> -      - description: AHB reference clock
+> +      - description: System reference clock
+>  
+>    '#thermal-sensor-cells':
+>      const: 0
+> @@ -40,5 +40,5 @@ examples:
+>          compatible = "microchip,sparx5-temp";
+>          reg = <0x10508110 0xc>;
+>          #thermal-sensor-cells = <0>;
+> -        clocks = <&ahb_clk>;
+> +        clocks = <&sys_clk>;
+>      };
