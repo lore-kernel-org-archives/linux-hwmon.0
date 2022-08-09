@@ -2,114 +2,101 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99CFDC19F2D
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Aug 2022 05:25:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA267C19F2D
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Aug 2022 11:22:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233122AbiHIFZh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Aug 2022 01:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33068 "EHLO
+        id S240747AbiHILWW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 9 Aug 2022 07:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234311AbiHIFZg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Aug 2022 01:25:36 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D887C186D3
-        for <linux-hwmon@vger.kernel.org>; Mon,  8 Aug 2022 22:25:33 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id o2so8222456lfb.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 08 Aug 2022 22:25:33 -0700 (PDT)
+        with ESMTP id S237719AbiHILWU (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Aug 2022 07:22:20 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FB21EC65
+        for <linux-hwmon@vger.kernel.org>; Tue,  9 Aug 2022 04:22:17 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id kb8so21646079ejc.4
+        for <linux-hwmon@vger.kernel.org>; Tue, 09 Aug 2022 04:22:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=MN/PfmZxhZGkUDtNPw5NWgDuHq3bhLxgM7464BOCO7A=;
-        b=XZrgPN9JLTKg8atSdFLRTYNXR78mzwUKGoKE9+m3YvMPYebYYnJTS2thkWjAOgWbk5
-         Gp59g/B0MEDTGRnUhfBxEFnRud/VlvToqjXrovIy0Www+xC4rMQN3M3WlpGAbdXu09r6
-         ZpdXLzv7X/df/4F54dEYXnKNlQcjkeSqIKEs9oRRrN9KDCqhEqsNKlPW5qpnFWxw93a2
-         fD6udybTtwWNYP6Qi8hXEoBOF9+yyEZKAkAw1EcPulVs4hk6FaEf1LKr6fnW8Y4DVqPe
-         7HU6MNS2/1x5Zi85kq9xobr759btcJdBQJgsSBzQgBwkk/zspIwOMZRYwN818GbG+x2+
-         T5RQ==
+        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bs2fGCCkc2i9GgsvwKl491tj5ookRO+wJSTW2OEqR3M=;
+        b=VJb9zJ/PZhORR9RBOkdVYOzLGPQtXBAhAx60nCXdVCdzLiU5rxjtt9t3SP68aJzPLf
+         mJtLb2jPrL39bWcQUUUMs843YToAwhK13dbbbj4mugqcp+qRSO20fHbDAXmU8TRauV/F
+         nSguaulCuRFKGL9hyMQm3T9Ch7pXUqseq5Wfm0Y6nIsWbf3MygTRna/8P79qNZZgePQQ
+         aojxIxk4+gTbCDuFqFOZO1Yc/mR+nvQPeXNUs+71y0K5l7zEIxephLNe8A3pkvFsamuc
+         dMW169eVljYxqeZ5aG/EFYGuVK7+yWIdsDuf2iKg0utAcZ7dWpAcelr9GRAmYz+bwd2M
+         SupA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=MN/PfmZxhZGkUDtNPw5NWgDuHq3bhLxgM7464BOCO7A=;
-        b=Oyqyo0QjgfpTZ5dK5JmyI1CaEcsDweiC9jGvxdzZJHCWQAiL1KSOs/Ah4K3vh5HDlf
-         Izt2N6nYZNlzYzfMEUbhbDXkx2+kU8NFKxox85M1JzXS6EYUfRwgaIt20ol4okmKuJUR
-         8M9+/ibdQRbme3NzThyPiw7P7Yz+Mq+X72pwvyB32RUc33WVYlxgjlFF3OF0qs4e8DVv
-         OaXCoA2haJ3LQdmNUHOz3r93nrttJyGOqn0mmLz2QEGls1SizQ7sTTobygXG5/k1KVk8
-         spJ0/GyhHS1XaRk2Bbmw04oiTP/i9YkUI1IoqjLYxNcmYf2M9b3ELSYAADrCp0rzLZ9r
-         pS0A==
-X-Gm-Message-State: ACgBeo2+E2v1RKgal2ZzrQ2LvULbYUbTu+7rjiGBqgWzzxvj263P9eC+
-        U2l/qIKYsm3yl8gDfz79jr34wg==
-X-Google-Smtp-Source: AA6agR6hw1vEdUjRQW20Lnu2pJAqZx/55rR0g6ua4dI5DTsbMqQXBvmrnt/fWy/9kP3zcmoMbyohMQ==
-X-Received: by 2002:a05:6512:3b85:b0:48b:36d0:6cde with SMTP id g5-20020a0565123b8500b0048b36d06cdemr7082766lfv.247.1660022732045;
-        Mon, 08 Aug 2022 22:25:32 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id j3-20020a056512344300b0048a921664e8sm1632860lfr.37.2022.08.08.22.25.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 22:25:31 -0700 (PDT)
-Message-ID: <c6b890b6-e72f-0377-f0ae-cd15d29c23a1@linaro.org>
-Date:   Tue, 9 Aug 2022 08:25:29 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 0/5] iio/hwmon/mfd/leds/net/power/ASoC: dt-bindings: few
- stale maintainers cleanup
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Robert Jones <rjones@gateworks.com>,
-        Lee Jones <lee@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Ricardo Rivera-Matos <r-rivera-matos@ti.com>,
+        bh=bs2fGCCkc2i9GgsvwKl491tj5ookRO+wJSTW2OEqR3M=;
+        b=n3QflryAdi7eXldeo/5ail3zRAWqvKSsUs5sioKF3938WvB3z3WOLMP8fNGSSLevWV
+         +t/igUSfuyk4gJ2sKNi9XKF1z62DEufzVR+92+vMdLQvsh7NgAeTU5VX6VcB2S0SVDnU
+         j49YZec+10vhrSVpAOx3tgRu2E/Ox90AMswHlWVpvJ6eOxJKU+GuJSESxjR4O8/i5v30
+         VGSv0Zf4cAbdpVNO0K08emEEIWQJ0chUEIjENj3BvQKJYHk+rNQNMU53bKtgIE+Rdh9B
+         sMtiFvsW9O/lDzEYSwQ+7ip/YYR1iNqStKFjDSa91IunB8i6xpCsiXwvP+iNWz0JP8L2
+         44iA==
+X-Gm-Message-State: ACgBeo13i8q+TIaiTDHTLCxOHTDbLp7AZQRlMmmttGCjEvRPmwopbURT
+        aGsdw1KV+ZbU8wM+VKIVW1woCw==
+X-Google-Smtp-Source: AA6agR78Z7HuD7og8dYS+mFbUdm3BH5S3Gw88EcrwaztVepcpvssJmeElwyEOWkYNPDlYQlEuuuWGA==
+X-Received: by 2002:a17:907:9491:b0:72f:2827:37c3 with SMTP id dm17-20020a170907949100b0072f282737c3mr16629419ejc.306.1660044136529;
+        Tue, 09 Aug 2022 04:22:16 -0700 (PDT)
+Received: from fedora.robimarko.hr (cpe-188-129-118-148.dynamic.amis.hr. [188.129.118.148])
+        by smtp.googlemail.com with ESMTPSA id me25-20020a170906aed900b007317f017e64sm1007581ejb.134.2022.08.09.04.22.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 04:22:16 -0700 (PDT)
+From:   Robert Marko <robert.marko@sartura.hr>
+To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lars.povlsen@microchip.com,
+        Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-References: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
- <20220808115202.3175eb1f@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220808115202.3175eb1f@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     luka.perkov@sartura.hr, Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH 1/2] dt-bindings: hwmon: sparx5: use correct clock
+Date:   Tue,  9 Aug 2022 13:22:08 +0200
+Message-Id: <20220809112209.241045-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 08/08/2022 21:52, Jakub Kicinski wrote:
-> On Mon,  8 Aug 2022 13:47:07 +0300 Krzysztof Kozlowski wrote:
->> Several of the bindings here had only one
->> maintainer and history does not always point to a new one (although I did not
->> perform extensive digging). I added subsystem maintainer, because dtschema
->> requires such entry. This is not the best choice as simply subsystem maintainer
->> might not have the actual device (or its datasheets or any interest in it).
->>
->> However dtschema requires a maintainer. Maybe we could add some
->> "orphaned" entry in such case?
-> 
-> Integrating it with MAINTAINERS would be another option worth exploring
-> although slightly tangential.
-> 
-> How do you want this merged? It's all over the place subsystem-wise.
+SparX-5 temperature sensor uses system reference clock and not the AHB bus
+clock as indicated by the register information [1].
 
-I was thinking this could go via Rob's tree as fixes for current cycle,
-so your Ack would be great. If there is preference, I can split it per
-subsystem, but for such trivial updates it's a bit of a churn.
+So, correct the clock description as well the included example.
 
+[1] https://microchip-ung.github.io/sparx-5_reginfo/reginfo_sparx-5.html?select=hsiowrap,temp_sensor,temp_sensor_cfg,clk_cycles_1us
 
-Best regards,
-Krzysztof
+Fixes: f5520753c16f ("dt-bindings: hwmon: Add Sparx5 temperature sensor")
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+ .../devicetree/bindings/hwmon/microchip,sparx5-temp.yaml      | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/hwmon/microchip,sparx5-temp.yaml b/Documentation/devicetree/bindings/hwmon/microchip,sparx5-temp.yaml
+index 76be625d5646..51e8619dbf3c 100644
+--- a/Documentation/devicetree/bindings/hwmon/microchip,sparx5-temp.yaml
++++ b/Documentation/devicetree/bindings/hwmon/microchip,sparx5-temp.yaml
+@@ -22,7 +22,7 @@ properties:
+ 
+   clocks:
+     items:
+-      - description: AHB reference clock
++      - description: System reference clock
+ 
+   '#thermal-sensor-cells':
+     const: 0
+@@ -40,5 +40,5 @@ examples:
+         compatible = "microchip,sparx5-temp";
+         reg = <0x10508110 0xc>;
+         #thermal-sensor-cells = <0>;
+-        clocks = <&ahb_clk>;
++        clocks = <&sys_clk>;
+     };
+-- 
+2.37.1
+
