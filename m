@@ -2,51 +2,51 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE890C25B07
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Aug 2022 16:28:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62478C25B0C
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Aug 2022 16:28:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245021AbiHIQ2M (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Aug 2022 12:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
+        id S245054AbiHIQ2R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 9 Aug 2022 12:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245017AbiHIQ2D (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Aug 2022 12:28:03 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA2A18359
-        for <linux-hwmon@vger.kernel.org>; Tue,  9 Aug 2022 09:28:00 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id x25so13512494ljm.5
-        for <linux-hwmon@vger.kernel.org>; Tue, 09 Aug 2022 09:28:00 -0700 (PDT)
+        with ESMTP id S245029AbiHIQ2G (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Aug 2022 12:28:06 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB3A11C3E
+        for <linux-hwmon@vger.kernel.org>; Tue,  9 Aug 2022 09:28:03 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id s9so13526275ljs.6
+        for <linux-hwmon@vger.kernel.org>; Tue, 09 Aug 2022 09:28:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vvjM538Lt57aPAtY3bjfgbW8emF1tmOhCzp45F4HTBs=;
-        b=ICG/3Y0P4RWgA/0Gi/4UlpWVRyTdyma//p23F60dT0+Zmw3VXvEqVGA5ukzEv+cw2t
-         PnWHJ99YeOEmlzLjMF9eAACAKuU7E1VvZ8UeYybhftlXIDyduv8eOqYd7Fm+zF+1mXws
-         bzmQoxqiwasnz+YqZtVqpfpQacvrfybziWBylA2q9ia2G/5HJiSA+mqhSx4FIBF0yYEK
-         b8Xkwbr0Mh61hsjdAUOMku/GiQW51z6ykQ/t9abh5f+VkoRpAP7VfIEEu0R2AAgysp7O
-         UA1RmYBz2NzfEidhLjPpQ5vQ3muEqkJ5DE7PX6mVHQuay4bboakfxaxkS5MZB6JEhCuz
-         SgMg==
+        bh=Ga227+XjHKmXNlFWhnddLRopISEjRlyyZsIFo+W6TcM=;
+        b=mlu+D/EMEEHlsnta+8nZjM0nCqo+gd1HvEXHMt62Z74w1o2AtTP5JFxw1CnAN20pZY
+         EZY2VFYMSQKXzeuEjiLr4a4LIrZFNY4ixXvQ8oL5W5qXYH85nDxeu7eC3zrpD42akHek
+         S5HLu5bSfKgpIMSZt0NhyyJ6x6ImIkXMnNwmmh+7zACr/8GLxQ6DzxUpLCKILO2NlVIL
+         dgho7fuH5A8ok9nIND+dcEl7PIhUCaWKrffwPlHp2XrsXFSyGZuSPF1DGrwDqNXFEJMS
+         MoIKDpYb1wMhceALamx0BueFXHlzlWdu0ZS4LY67cpbz8X1jbsg2KJ2awajWOldBSgbG
+         upNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vvjM538Lt57aPAtY3bjfgbW8emF1tmOhCzp45F4HTBs=;
-        b=OIw8Ka2Cy6E4MUxTPPsF4IPD8f/9DsNIaxUH7OOwFkW4uy4XIkZG3U+62wJX7mWuRg
-         VOLuQCC6Jx5gKMLf03olr8JfmaZvBykSnc13k2FVlNp0/iCrwWEQWZaB21y6vUcSKKDk
-         GHOYIztTgZqoquf/+2Xt/38VodK1dP0oURFPOfPTHIX48vOPjzOo2ErVtk8RqrCTot6H
-         VQAFLWsrY6GTf5LCGY4A/QFVdrD+Rj/f6KI2PHhgtnymRrwjKiE2zpMSra+MG6fuyfg8
-         B9yDVcQY8QJ/A4EudsXUGfcQmxDdR87xfxZ07BvjDgf6Y+n0qWDz586Wznlcm5F7TsZW
-         pjwg==
-X-Gm-Message-State: ACgBeo0irZ2ea7qafWxQu5eqxHnIOgNwUFkhYBoZym7Sl0irMOhjAEv2
-        KiVDVe8xiE3Qgy2mIsvDz2fZxA==
-X-Google-Smtp-Source: AA6agR4nSP4Nvz03+ppBOMLl8U1WhyjNooB6UiKwR/ZbuBfV0W58Zp1a5YPASidYywxtpOignuTHhw==
-X-Received: by 2002:a2e:a884:0:b0:25d:d8a2:d18c with SMTP id m4-20020a2ea884000000b0025dd8a2d18cmr6982978ljq.305.1660062478560;
-        Tue, 09 Aug 2022 09:27:58 -0700 (PDT)
+        bh=Ga227+XjHKmXNlFWhnddLRopISEjRlyyZsIFo+W6TcM=;
+        b=OIEt2YfasjiICmwScCTrhd3NYH4zj/idgd7hbhldzUDyVJwi21qi8sSn45aFuzax7S
+         5VUtL3k6T024xN4C+M9esYqvC2Ucj6K5NFXqn8yzy0XyZRUCPe+z2R3WtDiXbH4riBMA
+         5/Cu7UUnPUkSGBkfQ1A2ueBjJ4QqiXM8ly5aMZcxWLF1fW3iaOPQnSBKUCqB4k+Y/uxL
+         U7kWx7BSJXs8SuW3WhTm+mhAjfsDT2wUzm4zf8l5mrxFtyEWkI19xX2iy6WTdWeouWmr
+         VGBQx9IlVrfIdDez7yNF4wTDMN5DIlY8EAEjDKpDLZqCyt2lGBkOr1CeHP/BiKrLCZyV
+         Z09A==
+X-Gm-Message-State: ACgBeo39hrizAeZEpPY9Vb1O6EplxCkI7cY0oxs5n8KaZIF8Ja/iCMjH
+        cdj45l94yt9Ob0qxPFMZ4XYJoA==
+X-Google-Smtp-Source: AA6agR68t7e6d0SYEAm2VxRd0F+y6tYKyy/R418cX2x3f087AlM7cpFl57QIeo13lmkWFE5jzF41Gw==
+X-Received: by 2002:a2e:7804:0:b0:25e:5b54:74ae with SMTP id t4-20020a2e7804000000b0025e5b5474aemr7133252ljc.173.1660062481891;
+        Tue, 09 Aug 2022 09:28:01 -0700 (PDT)
 Received: from localhost.localdomain ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id h7-20020ac24d27000000b0048a8c907fe9sm20999lfk.167.2022.08.09.09.27.56
+        by smtp.gmail.com with ESMTPSA id h7-20020ac24d27000000b0048a8c907fe9sm20999lfk.167.2022.08.09.09.28.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 09:27:57 -0700 (PDT)
+        Tue, 09 Aug 2022 09:28:01 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Michael Hennerich <Michael.Hennerich@analog.com>,
         Jean Delvare <jdelvare@suse.com>,
@@ -71,9 +71,9 @@ To:     Michael Hennerich <Michael.Hennerich@analog.com>,
         alsa-devel@alsa-project.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v2 1/5] dt-bindings: iio: Drop Joachim Eastwood
-Date:   Tue,  9 Aug 2022 19:27:48 +0300
-Message-Id: <20220809162752.10186-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 3/5] dt-bindings: Drop Beniamin Bia and Stefan Popa
+Date:   Tue,  9 Aug 2022 19:27:50 +0300
+Message-Id: <20220809162752.10186-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
 References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
@@ -83,41 +83,70 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Emails to Joachim Eastwood bounce ("552 5.2.2 The email account that you
-tried to reach is over quota and inactive.").
+Emails to Beniamin Bia and Stefan Popa bounce ("550 5.1.10
+RESOLVER.ADR.RecipientNotFound; Recipient not found by SMTP address
+lookup").
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml   | 1 -
- Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ Documentation/devicetree/bindings/hwmon/adi,adm1177.yaml       | 1 -
+ Documentation/devicetree/bindings/iio/adc/adi,ad7091r5.yaml    | 2 +-
+ Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml      | 3 +--
+ .../devicetree/bindings/iio/amplifiers/adi,hmc425a.yaml        | 1 -
+ 4 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml b/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml
-index 7c8f8bdc2333..9c7c66feeffc 100644
---- a/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml
-+++ b/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml
-@@ -7,7 +7,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Freescale MMA7455 and MMA7456 three axis accelerometers
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1177.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1177.yaml
+index 154bee851139..d794deb08bb7 100644
+--- a/Documentation/devicetree/bindings/hwmon/adi,adm1177.yaml
++++ b/Documentation/devicetree/bindings/hwmon/adi,adm1177.yaml
+@@ -8,7 +8,6 @@ title: Analog Devices ADM1177 Hot Swap Controller and Digital Power Monitor
  
  maintainers:
--  - Joachim Eastwood <manabian@gmail.com>
-   - Jonathan Cameron <jic23@kernel.org>
+   - Michael Hennerich <michael.hennerich@analog.com>
+-  - Beniamin Bia <beniamin.bia@analog.com>
  
- description:
-diff --git a/Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml b/Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml
-index 6404fb73f8ed..43abb300fa3d 100644
---- a/Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml
+ description: |
+   Analog Devices ADM1177 Hot Swap Controller and Digital Power Monitor
+diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7091r5.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7091r5.yaml
+index 31ffa275f5fa..b97559f23b3a 100644
+--- a/Documentation/devicetree/bindings/iio/adc/adi,ad7091r5.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7091r5.yaml
 @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: NXP LPC1850 ADC bindings
+ title: Analog Devices AD7091R5 4-Channel 12-Bit ADC
  
  maintainers:
--  - Joachim Eastwood <manabian@gmail.com>
-+  - Jonathan Cameron <jic23@kernel.org>
+-  - Beniamin Bia <beniamin.bia@analog.com>
++  - Michael Hennerich <michael.hennerich@analog.com>
  
- description:
-   Supports the ADC found on the LPC1850 SoC.
+ description: |
+   Analog Devices AD7091R5 4-Channel 12-Bit ADC
+diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml
+index 73775174cf57..516fc24d3346 100644
+--- a/Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml
+@@ -7,8 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Analog Devices AD7606 Simultaneous Sampling ADC
+ 
+ maintainers:
+-  - Beniamin Bia <beniamin.bia@analog.com>
+-  - Stefan Popa <stefan.popa@analog.com>
++  - Michael Hennerich <michael.hennerich@analog.com>
+ 
+ description: |
+   Analog Devices AD7606 Simultaneous Sampling ADC
+diff --git a/Documentation/devicetree/bindings/iio/amplifiers/adi,hmc425a.yaml b/Documentation/devicetree/bindings/iio/amplifiers/adi,hmc425a.yaml
+index a557761d8016..9fda56fa49c3 100644
+--- a/Documentation/devicetree/bindings/iio/amplifiers/adi,hmc425a.yaml
++++ b/Documentation/devicetree/bindings/iio/amplifiers/adi,hmc425a.yaml
+@@ -8,7 +8,6 @@ title: HMC425A 6-bit Digital Step Attenuator
+ 
+ maintainers:
+   - Michael Hennerich <michael.hennerich@analog.com>
+-  - Beniamin Bia <beniamin.bia@analog.com>
+ 
+ description: |
+   Digital Step Attenuator IIO device with gpio interface.
 -- 
 2.34.1
 
