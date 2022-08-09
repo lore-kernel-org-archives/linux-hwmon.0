@@ -2,193 +2,115 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01C5EC3F6B0
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Aug 2022 19:43:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D9BCC25B08
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Aug 2022 19:45:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344806AbiHITna (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Aug 2022 15:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
+        id S1344305AbiHITob (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 9 Aug 2022 15:44:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344958AbiHITmw (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Aug 2022 15:42:52 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF7D2656F;
-        Tue,  9 Aug 2022 12:42:51 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 279JZ8CR010407;
-        Tue, 9 Aug 2022 19:42:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=8GHTxJxSue6pJbphfO1vtqP9e/vY/kGFFepmcQaEPF0=;
- b=WEb4jQEfYo3CMrJWUVnl4X/IZVXLfgWqK8d5w32XYzvcPdGFIAZeFFbMt2AFi3uqtEqB
- ToydP7hGovJhQ2ey6yzWm7XbNhlocPoLaf/n8kJoT3Zx217Fw8CQzq2NGIMvWPasPNpU
- tL8naG3jymFMbTo5Mwy2pdfMHW2uCbI12xyrU16lxOMGAltd6BK4MgqMIl+HOtAm0duP
- glTuV+h3akIe8xnGX1kJ/pQFUFTwRiU5SVecjqqDZoIpcPN2n3szQpcDm4KpYAMkYQDF
- EbAvyvtHd563O3I07uoQbxywkiDznUr10GD/IxODwAHlpNA2mekHrbt+qyNxR4Eonnwg YA== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3huwv6r69s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Aug 2022 19:42:21 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 279JZjcE031712;
-        Tue, 9 Aug 2022 19:42:20 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma03dal.us.ibm.com with ESMTP id 3huwvk8190-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Aug 2022 19:42:20 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 279JgJrL34865624
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 9 Aug 2022 19:42:19 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3047CBE051;
-        Tue,  9 Aug 2022 19:42:19 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 248BDBE04F;
-        Tue,  9 Aug 2022 19:42:18 +0000 (GMT)
-Received: from [9.160.17.179] (unknown [9.160.17.179])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue,  9 Aug 2022 19:42:17 +0000 (GMT)
-Message-ID: <59ee8c2f-3d6c-14ed-c9f8-2bbd9377a7da@linux.ibm.com>
-Date:   Tue, 9 Aug 2022 14:42:17 -0500
+        with ESMTP id S1344255AbiHITn6 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Aug 2022 15:43:58 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04ED826572;
+        Tue,  9 Aug 2022 12:43:57 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id f65so12273602pgc.12;
+        Tue, 09 Aug 2022 12:43:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc;
+        bh=nHDRknKkSxBf5+yxWGf1TayINvpuh1YnMsi4TGI5L64=;
+        b=lPLNxLCIX1dwtCnrB9EVgaGgZ0kfoSlR7Lzq5TksRxAT6RbMZF7upqWuXEUbx5DWI+
+         LWNEth7+Xh5uWJKhSta+2lJrg0YcB03xDPRCYAil2HABXwqGWWyghvsDRc/6cxDkoSHj
+         xjZcBnq5GeeshdMUdUCKgtvN/sKsENokj/a4C1sLyRoWFdBBSflFD7jwvdadF77UW9uL
+         ME6QZeEuGjGkDiZH5eDPnqIzMc5/3smeCDpoWuS73feGVRbqpvgZvn4pjZLDWtbEnjWB
+         MNkS4DytYBFJvI7ufEDOg1jjw8IkzBtBp/ImSyn56vKSIB4slVkFn5ufDBlFRSCSjr6c
+         g4cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc;
+        bh=nHDRknKkSxBf5+yxWGf1TayINvpuh1YnMsi4TGI5L64=;
+        b=6lYOj29dZnTp8b1z7Mh6NB221cyHHh9w6W2CSOERkrIdXxcwn3DdFS7ZxHDpmtaHrI
+         fsoZZYLtGFnVrFNbUinAQ+P2L7K8UAtFz/xBYa3mGrV0mACTz1/eDQGLbmGCsJTHdGvs
+         w3Guh2srfou1jWmP9vlntq8ErVYd8IXm/eLdxAqGraU+503gJFyzpZOlArbdP8hffH5k
+         BuNYDfzxJiBI/0zHnVa3fuy68BHGrhAwpPkWjBSBwaVY5XPxsCqyfWmGWgW+zhJ5XnMd
+         U/VzjRD1xkjYQu2Xobtp6ZJPp6tghJSeY1HmHoRO3t3pmVdAEZmfCSuYXPCWeJ/zo3aq
+         Hazw==
+X-Gm-Message-State: ACgBeo3bq+n36HVBkM+jPHPO5XrxexAQDPleJfjfzZuyzAsQKTinPKNo
+        NseOaEJhn5gT/TnmoEf7/RQ=
+X-Google-Smtp-Source: AA6agR62P4yfUsDnyBdYd0rvlFO2PQLOfIoZuXbrinTjsSQUQXH9GtfIrD9ZA45qpzIadoh6nbfPtA==
+X-Received: by 2002:a05:6a00:21c2:b0:52b:ff44:666a with SMTP id t2-20020a056a0021c200b0052bff44666amr24416045pfj.83.1660074236466;
+        Tue, 09 Aug 2022 12:43:56 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y1-20020a655a01000000b0041a5e8dedaasm8270435pgs.92.2022.08.09.12.43.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 12:43:55 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <df5eaddd-4d41-348e-9d60-b302815f2970@roeck-us.net>
+Date:   Tue, 9 Aug 2022 12:43:52 -0700
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 1/3] dt-bindings: hwmon: Add IBM OCC bindings
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        joel@jms.id.au
-Cc:     linux@roeck-us.net, jdelvare@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-        devicetree@vger.kernel.org
-References: <20220802194656.240564-1-eajames@linux.ibm.com>
- <20220802194656.240564-2-eajames@linux.ibm.com>
- <297ddf1f-8ddc-902c-ff3d-06b9d19c6a7b@linaro.org>
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <297ddf1f-8ddc-902c-ff3d-06b9d19c6a7b@linaro.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Documentation List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pwm@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>
+References: <20220806152517.78159-1-andriy.shevchenko@linux.intel.com>
+ <20220807083438.qqe3mzp43aytxbcl@pengutronix.de>
+ <CAHp75VdYrnb8k72TFhB9eKDtyj_pm1gDqL+sDYixkuYy0Xb_Pw@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v1 1/3] hwmon: (pwm-fan) Make use of device properties
+In-Reply-To: <CAHp75VdYrnb8k72TFhB9eKDtyj_pm1gDqL+sDYixkuYy0Xb_Pw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uvO5j0nznAN3zuD0hi5jl8v32rvo6bQD
-X-Proofpoint-ORIG-GUID: uvO5j0nznAN3zuD0hi5jl8v32rvo6bQD
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-09_05,2022-08-09_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- malwarescore=0 adultscore=0 clxscore=1011 priorityscore=1501
- suspectscore=0 impostorscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208090073
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-
-On 8/3/22 01:55, Krzysztof Kozlowski wrote:
-> On 02/08/2022 21:46, Eddie James wrote:
->> These bindings describe the POWER processor On Chip Controller accessed
->> from a service processor or baseboard management controller (BMC).
+On 8/7/22 02:20, Andy Shevchenko wrote:
+> On Sun, Aug 7, 2022 at 10:38 AM Uwe Kleine-König
+> <u.kleine-koenig@pengutronix.de> wrote:
+> 
+>> at a quick glance this looks nice. I wonder if it makes sense to split
+>> the patch. For example the change
 >>
->> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->> ---
->>   .../bindings/hwmon/ibm,occ-hmwon.yaml         | 40 +++++++++++++++++++
->>   1 file changed, 40 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml
+>> -       ctx->pwm = devm_of_pwm_get(dev, dev->of_node, NULL);
+>> +       ctx->pwm = devm_pwm_get(dev, NULL);
 >>
->> diff --git a/Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml b/Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml
->> new file mode 100644
->> index 000000000000..8f8c3b8d7129
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml
->> @@ -0,0 +1,40 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/hwmon/ibm,occ-hwmon.yaml#
-> typo here
->
-> Does not look like you tested the bindings. Please run `make
-> dt_binding_check` (see
-> Documentation/devicetree/bindings/writing-schema.rst for instructions).
+>> could stand alone. Also I think this change is the relevant part in
+>> patch #1 that makes patches #2 and #3 possible.
+> 
+> True.
+> 
+>> When this patch doesn't get split, the series needs some coordination,
+>> as patch #1 is for hwmon and patches #2 and #3 are for pwm.
+>>
+>> Splitting the series into:
+>>
+>>          hwmon: (pwm-fan) Use of devm_pwm_get() instead of devm_of_pwm_get()
+>>          pwm: core: Get rid of unused devm_of_pwm_get()
+>>          pwm: core: Make of_pwm_get() static
+>>
+>> for pwm and the remainder of this patch for hwmon might make application
+>> of the changes here easier to coordinate.
+> 
+> Either way it will need the hwmon maintainer ACKs or alike.
+> Since we have (plenty of) time I will wait a bit for hwmon maintainers
+> to react. Guenter, what would you prefer?
+> 
 
+I have a substantial number of patches pending for the pwm-fan driver.
+Some of those will conflict with this patch. I'll have to spend more time
+to be able to understand the implications.
 
-I actually did but it didn't catch that somehow. I had to use a somewhat 
-hacked together python/pip on my system so perhaps that's to blame.
-
-
->
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: IBM On-Chip Controller (OCC) accessed from a service processor
->> +
->> +maintainers:
->> +  - Eddie James <eajames@linux.ibm.com>
->> +
->> +description: |
->> +  This binding describes a POWER processor On-Chip Controller (OCC)
-> s/This binding describes a//
-> But instead describe the hardware. What is the OCC?
-
-
-OK I'll fix that. It's a management engine for system power and thermals.
-
-
->
->> +  accessed from a service processor or baseboard management controller
->> +  (BMC).
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - ibm,p9-occ-hwmon
->> +      - ibm,p10-occ-hwmon
->> +
->> +  ibm,inactive-on-init:
->> +    description: This property describes whether or not the OCC should
->> +      be marked as active during device initialization. The alternative
->> +      is for user space to mark the device active based on higher level
->> +      communications between the BMC and the host processor.
-> I find the combination property name with this description confusing. It
-> sounds like init of OCC and somehow it should be inactive? I assume if
-> you initialize device, it is active. Or maybe the "init" is of something
-> else? What is more, non-negation is easier to understand, so rather
-> "ibm,active-on-boot" (or something like that).
-
-
-Well, the host processor initializes the OCC during it's boot, but this 
-document is describing a binding to be used by a service processor 
-talking to the OCC. So the OCC may be in any state. The init meant 
-driver init, but I will simply the description and change the property 
-to be more explicit: ibm,no-poll-on-init since that is what is actually 
-happening. Similar to the FSI binding for no-scan-on-init.
-
-
->
->> +    type: boolean
->> +
->> +required:
->> +  - compatible
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    occ-hmwon {
-> just "hwmon"
->
->> +        compatible = "ibm,p9-occ-hwmon";
->> +        ibm,inactive-on-init;
->> +    };
-
-
-Thanks for the review!
-
-Eddie
-
-
->
-> Best regards,
-> Krzysztof
+Guenter
