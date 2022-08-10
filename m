@@ -2,45 +2,47 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F3ACC00140
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Aug 2022 17:35:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D66AC3F6B0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Aug 2022 17:49:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232296AbiHJRfs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Aug 2022 13:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
+        id S232178AbiHJRt3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Aug 2022 13:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbiHJRfq (ORCPT
+        with ESMTP id S232821AbiHJRtE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Aug 2022 13:35:46 -0400
+        Wed, 10 Aug 2022 13:49:04 -0400
 Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D3F58B58
-        for <linux-hwmon@vger.kernel.org>; Wed, 10 Aug 2022 10:35:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E288C478
+        for <linux-hwmon@vger.kernel.org>; Wed, 10 Aug 2022 10:48:56 -0700 (PDT)
 Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id CFE60240106
-        for <linux-hwmon@vger.kernel.org>; Wed, 10 Aug 2022 19:35:43 +0200 (CEST)
+        by mout02.posteo.de (Postfix) with ESMTPS id 4F048240101
+        for <linux-hwmon@vger.kernel.org>; Wed, 10 Aug 2022 19:48:54 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1660152943; bh=XrwCglE9bKXMgEZnO62BEsdmCMy5RjaDtuIUp+Juvxw=;
+        t=1660153734; bh=jy6n1S3YeB0RcKIkxKT4aPXQLVnQFIHbNqQoHkyrx/E=;
         h=Date:From:To:Cc:Subject:From;
-        b=MHEooSvmk1OPETItSd7jtOSLB6RW7JLBi17zVdcTBk9LZoL2r/JaCPHJ/FTZXO2Iu
-         brC/Z1XFGfjDoVAizB9if14/pszEMCd3/O4vGZBoc5x7VU2f5PPm93P8SVyy2EbuOw
-         +kv3tgxYypsXL+cHk9bw1+KZFhB8vyWOnyqSYh1MvziIDYuYMjC+J1AxGAiycKleKG
-         C+YXmqxW7smWs2F/4vwXLYQSRSVUoUHh2gItU4a0aMdMg6pGiZt0OQ/EUhQlSsQ1Hk
-         UNVA5FdpdlZSPaapne5pfNgE9+JQAu43cX7Xsk0kkNRr4mHtuFAbSpPyNhNI0xLz2x
-         8wj/cCSMMyeKQ==
+        b=TC7LrVgItVOFl+957ue9Tii1LbUJjTzOFcYT9wqYUdAk+gxs68o1Q43wkSbm/7Klj
+         gQSxslQRRMqFhh5s3lx3er+FtZnr4CQYsYo+C5twL6OYu47Qx3Z7ETXtwb7y8AtjVh
+         kQ091uEfMiHKRbvR1W2/qsddJfwiVv1WwweIQU9iOHzDjRurOHbUH+PJSvvobbptuV
+         Egh/1WdRInOBHFvbAEH9zej4j3B1uMSBtIizfYOr54m6zWKY6tz7MbOJ16ygFq9sI1
+         kIv0qvm4t0yqD6ugP1L7DivjSgBGiVmi2qdWPdawXlf2mhb4ULJhuV8Le2bot5uado
+         fiFv6bd1eEeDg==
 Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4M2xt65cPKz9rxQ;
-        Wed, 10 Aug 2022 19:35:42 +0200 (CEST)
-Date:   Wed, 10 Aug 2022 17:35:41 +0000
+        by submission (posteo.de) with ESMTPSA id 4M2y9K4vnfz6tmQ;
+        Wed, 10 Aug 2022 19:48:53 +0200 (CEST)
+Date:   Wed, 10 Aug 2022 17:48:52 +0000
 From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: corsair-psu: add reporting of rail mode via
+Subject: Re: [PATCH v2] hwmon: corsair-psu: add reporting of rail mode via
  debugfs
-Message-ID: <20220810193541.29f95ec5@posteo.net>
-In-Reply-To: <20220810133012.GB274220@roeck-us.net>
-References: <YvN4SbnAp3jl+Vzo@monster.localdomain>
-        <20220810133012.GB274220@roeck-us.net>
+Message-ID: <20220810194852.78536153@posteo.net>
+In-Reply-To: <bc1d22d1-45b4-7d49-bedd-f0eafdc035cd@roeck-us.net>
+References: <YvO4cfx12Q9gcmPg@monster.localdomain>
+        <ace70782-777f-ab7c-d190-735f5c65a5e4@roeck-us.net>
+        <20220810185658.6e27d9bd@posteo.net>
+        <bc1d22d1-45b4-7d49-bedd-f0eafdc035cd@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -48,40 +50,52 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 10 Aug 2022 06:30:12 -0700
+On Wed, 10 Aug 2022 10:29:08 -0700
 Guenter Roeck <linux@roeck-us.net> wrote:
 
-> > +static int ocpmode_show(struct seq_file *seqf, void *unused)
-> > +{
-> > +	struct corsairpsu_data *priv = seqf->private;
-> > +	long val;
-> > +	int ret;
-> > +
-> > +	ret = corsairpsu_get_value(priv, PSU_CMD_OCPMODE, 0, &val);
-> > +	if (ret < 0)
-> > +		seq_puts(seqf, "N/A\n");
-> > +	else
-> > +		seq_printf(seqf, "%s\n", (val == 0x02) ? "multi rail" : "single rail");
+> On 8/10/22 09:56, Wilken Gottwalt wrote:
+> > On Wed, 10 Aug 2022 09:31:21 -0700
+> > Guenter Roeck <linux@roeck-us.net> wrote:
+> > 
+> >> On 8/10/22 06:53, Wilken Gottwalt wrote:
+> >>> Add reporting if the PSU is running in single or multi rail mode via
+> >>> ocpmode debugfs entry. Also update the documentation accordingly.
+> >>>
+> >>> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+> >>> ---
+> >>> Changes in v2:
+> >>>     - fixed spelling issues in commit message
+> >>
+> >> You did not address or even provide feedback on my second comment.
+> > 
+> > Oh darn ... sorry, I was quite busy and didn't really pay attention. I will
+> > answer the earlier mail and think about it.
+> > 
+> > Though, maybe you can help me with that what keeps me so busy. Would it be okay
+> > to use a kthread in a hwmon driver to do sampling (500ms - 10s) in conjunction
+> > with HWMON_C_UPDATE_INTERVAL, or is this a strict no-no? I know it is actually
+> > used to set a sample/update rate in a sensor (-register), but this USB-HID
+> > approach is a pure polling thing. It seems to work quite and enables the driver
+> > to collect data quite early in the boot process.
+> > 
 > 
-> If this is not always available, would it be better not to create the file
-> in the first place ? If that is not feasible, it should at least be
-> documented that the value is not always available to ensure that no one
-> complains about it (or at least no one who read the documentation).
-> 
-> Also, is the value strictly 0x02 for multi-rail configurations, or
-> is that possibly just a bit or the number of rails ?
+> It really depends. Is it _necessary_ ? The pwm-fan driver uses a timer for
+> periodic polling, but that is because it has to. We should not do it purely
+> for convenience, and from the code I don't immediately see why it would
+> be necessary.
 
-The mode is actually switchable on fly, similar to the fan. I do not want to
-provide the switching functionality, because also similar to the fan controls,
-it can be used to damage the PSU. It is part of the over current protection
-system (hence the name ocpmode) and people use the RAW interface to switch the
-fans and the ocpmode. This is also the reason I made it that way, because you
-could poll the information right in the process of switching, which can result
-in bogus values. 0x02 is the value for "switching to multi rail was successful",
-every other value is considered "single rail mode". Or you get a malformed
-message which results in "N/A" or unknown. So yes, you are right, I could at
-least add a define for the value and be more clear in the documentation. Would
-that be okay for you?
+Together with the polling I would add encountered lowest and highest values and
+the average of basically all available sensors (kind of session statistics). I
+know it is a bit odd, but currently these power supplies are sold again in a
+newer version and people really like to use them in their servers/workstations
+because of the "realtime" data and this driver. No joke, but I really got
+several requests to add this and I must admit I have quite some fun implementing
+it.
+
+Maybe I can provide a patch after I'm done and you can decide if this is okay
+or not. After all I provide an external more enhanced driver via github where
+some features are added, which are a clear no-go. It would be nice to have that
+in mainline, but I'm absolutely fine with a "no".
 
 greetings,
 Wilken
