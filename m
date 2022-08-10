@@ -2,133 +2,68 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49A67C00140
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Aug 2022 18:21:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82A49C25B0C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Aug 2022 18:33:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbiHJSVk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Aug 2022 14:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
+        id S233689AbiHJSdo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Aug 2022 14:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiHJSVk (ORCPT
+        with ESMTP id S233163AbiHJSdk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Aug 2022 14:21:40 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5DA79A66;
-        Wed, 10 Aug 2022 11:21:39 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id gj1so15605667pjb.0;
-        Wed, 10 Aug 2022 11:21:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=BdGTPiXk6CTaW5FzVUwAa4QoLiC6hNTwBQkDXRoMqck=;
-        b=eREwCFIGqwJDyWSaCwO/sHCEBk4IR646/rSrVtloa55NAy9PnO5O6lbp3MQSVprAFq
-         JCVY4c+v9nFzSECvIljqYpHv7lKm5PYzitrCvk9WfR3Xt1Df/4pNvOBtwDPBHhfJ30vQ
-         wSVwlE2xBcu0vrqSGJlp2lFoxtR9wXrwRrCPxe9SD3nNfRNEgEFanwgwIpUpmz1OzHIp
-         /j+xUN4XbUwUF4HaPctD84fI2byfO/wPFV8WQJvVTVVDutaO4jzhiKCatNdQfdimpO4Y
-         X6pBZ13FAsEkie6DxOZZhp+vKxfAjVhPCZU1CMZfUI0mdgXsHCDHtcKsN54dhngA33NC
-         Frfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=BdGTPiXk6CTaW5FzVUwAa4QoLiC6hNTwBQkDXRoMqck=;
-        b=BHWv4nIrRrTixRAooL1WmkRvs5G7JnOCZ02wHPBOcXb7iyjtQKo7iDtUquFUoQgY7B
-         /wvvReZYjOeA5q53hPQqEf28eL5hCwgTVPCi2G/d7JfpeGROHZz7vHpsUpspHEGhhNws
-         CYZ9IQ23Y+FcX54BUEj+KWQWVaixgvus/zg8DlvN4XUSI6XWYgH8/ga7/+ei/9MZh3Fa
-         xfL9MmL9P9PbfXdgN7jDY2+dBFxi+0rh+oinWC6P336njWp8dt/2uHve0OaAFxbELG2F
-         h+8Yo1XmfyvPvVMPHGgUI/bXX6daaKoqQw+/t4inLO+MAGAkzcHgDGZwKye1UcYp2CQq
-         yHMg==
-X-Gm-Message-State: ACgBeo2AbRMpri9NSZo5+IvfqemW+NRHDCaVyupJfiSc3ZVWC+u2wDbT
-        AwsCPbNa921K4RUVvfE+RWWgsKuVmqM=
-X-Google-Smtp-Source: AA6agR4+Gap920jMlVC1TQg34bq9ieJThFhzCTs8IuNAkqW7fWVZLPnWbijugn25nRKaTxd90c/LXg==
-X-Received: by 2002:a17:90b:3947:b0:1f5:104:f8cd with SMTP id oe7-20020a17090b394700b001f50104f8cdmr4845428pjb.26.1660155698818;
-        Wed, 10 Aug 2022 11:21:38 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g4-20020aa796a4000000b0052e67e9402dsm2302937pfk.106.2022.08.10.11.21.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 11:21:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8beb8ae2-04cd-fa37-5dbe-8d18e6a53f4d@roeck-us.net>
-Date:   Wed, 10 Aug 2022 11:21:36 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] hwmon: corsair-psu: add reporting of rail mode via
- debugfs
-Content-Language: en-US
-To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-References: <YvO4cfx12Q9gcmPg@monster.localdomain>
- <ace70782-777f-ab7c-d190-735f5c65a5e4@roeck-us.net>
- <20220810185658.6e27d9bd@posteo.net>
- <bc1d22d1-45b4-7d49-bedd-f0eafdc035cd@roeck-us.net>
- <20220810194852.78536153@posteo.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220810194852.78536153@posteo.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Wed, 10 Aug 2022 14:33:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2084C8C00E;
+        Wed, 10 Aug 2022 11:33:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BBC46145E;
+        Wed, 10 Aug 2022 18:33:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D20D8C43140;
+        Wed, 10 Aug 2022 18:33:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660156418;
+        bh=HGMKA+Q/KnafgwGINIM+LJIuf5lEDJIsbcMjjP0o8hs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=JiOrJy+6RmfQxqUEjc2HZnj5kN+4k7SoYRPWpNnjENKUb1wfFyyWKIwniAFmWVDim
+         zlOBl0SAHglRMHGdMe+F1Jk+xgZpztqXycN0Nw8Q/I34aHXxLIOiazbMlrooWWDCmZ
+         fbIXU7cGqJGU9/rb51Gsqut+VkkC9tCF+7rR8x1B+lKweBirOopFMhx4ZYejySvE6/
+         MHeItlEkXwYQdGLL0E6hdF/2Gmvvh3IFhx7ncgZkWKNvPzyXaM44lj3tVnXsLc1tR5
+         Dz5YaJzE77/A+5TcCAxGyXbLBreblvypqMXSd/ZdpL4t+64253LN8nLY7FD7BlGCjk
+         keolhL01EXjag==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BF43CC43141;
+        Wed, 10 Aug 2022 18:33:38 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon fixes for hwmon-fixes-for-v6.0-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220810134533.380417-1-linux@roeck-us.net>
+References: <20220810134533.380417-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220810134533.380417-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-fixes-for-v6.0-rc1
+X-PR-Tracked-Commit-Id: f4e6960f4f16b1ca5da16cec7612ecc86402ac05
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f41445645ab5d172e6090d00c332c335d8dba337
+Message-Id: <166015641877.32353.6766035225478723944.pr-tracker-bot@kernel.org>
+Date:   Wed, 10 Aug 2022 18:33:38 +0000
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/10/22 10:48, Wilken Gottwalt wrote:
-> On Wed, 10 Aug 2022 10:29:08 -0700
-> Guenter Roeck <linux@roeck-us.net> wrote:
-> 
->> On 8/10/22 09:56, Wilken Gottwalt wrote:
->>> On Wed, 10 Aug 2022 09:31:21 -0700
->>> Guenter Roeck <linux@roeck-us.net> wrote:
->>>
->>>> On 8/10/22 06:53, Wilken Gottwalt wrote:
->>>>> Add reporting if the PSU is running in single or multi rail mode via
->>>>> ocpmode debugfs entry. Also update the documentation accordingly.
->>>>>
->>>>> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
->>>>> ---
->>>>> Changes in v2:
->>>>>      - fixed spelling issues in commit message
->>>>
->>>> You did not address or even provide feedback on my second comment.
->>>
->>> Oh darn ... sorry, I was quite busy and didn't really pay attention. I will
->>> answer the earlier mail and think about it.
->>>
->>> Though, maybe you can help me with that what keeps me so busy. Would it be okay
->>> to use a kthread in a hwmon driver to do sampling (500ms - 10s) in conjunction
->>> with HWMON_C_UPDATE_INTERVAL, or is this a strict no-no? I know it is actually
->>> used to set a sample/update rate in a sensor (-register), but this USB-HID
->>> approach is a pure polling thing. It seems to work quite and enables the driver
->>> to collect data quite early in the boot process.
->>>
->>
->> It really depends. Is it _necessary_ ? The pwm-fan driver uses a timer for
->> periodic polling, but that is because it has to. We should not do it purely
->> for convenience, and from the code I don't immediately see why it would
->> be necessary.
-> 
-> Together with the polling I would add encountered lowest and highest values and
-> the average of basically all available sensors (kind of session statistics). I
-> know it is a bit odd, but currently these power supplies are sold again in a
-> newer version and people really like to use them in their servers/workstations
-> because of the "realtime" data and this driver. No joke, but I really got
-> several requests to add this and I must admit I have quite some fun implementing
-> it.
-> 
+The pull request you sent on Wed, 10 Aug 2022 06:45:33 -0700:
 
-That is out of scope for a kernel driver. If desired, a user space application
-should do the polling and calculate statistics such as lowest/highest or averages.
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-fixes-for-v6.0-rc1
 
-Guenter
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f41445645ab5d172e6090d00c332c335d8dba337
 
-> Maybe I can provide a patch after I'm done and you can decide if this is okay
-> or not. After all I provide an external more enhanced driver via github where
-> some features are added, which are a clear no-go. It would be nice to have that
-> in mainline, but I'm absolutely fine with a "no".
-> 
-> greetings,
-> Wilken
+Thank you!
 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
