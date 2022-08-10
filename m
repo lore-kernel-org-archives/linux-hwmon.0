@@ -2,130 +2,86 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF365C00140
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Aug 2022 17:31:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F3ACC00140
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Aug 2022 17:35:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232473AbiHJRbV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Aug 2022 13:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
+        id S232296AbiHJRfs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Aug 2022 13:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiHJRbU (ORCPT
+        with ESMTP id S231750AbiHJRfq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Aug 2022 13:31:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EFE80F51;
-        Wed, 10 Aug 2022 10:31:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F9FD6137C;
-        Wed, 10 Aug 2022 17:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF27CC4347C;
-        Wed, 10 Aug 2022 17:31:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660152679;
-        bh=KTakSvJdgaEdUCE1FVY2mNbaWd62GwRcpnAR76FW0pU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kkhYMz2bDm9t3ifQYbZZe3Pzo6zT+6IwXmdDJaNScZbY6jR9qiaXUQdsU0/Qd1lTP
-         TLrLjg8MFjMtEfCXPHfnWfe/pJFi+Py4Xdi/ptfeg/zEmz4xE9hZEfwMMM/Joe/DuQ
-         ZbHdZ3TyvUCAg4uPUCyMlSg2vCXKQAOFvdCW+q9NVSKiIZKZQndGvdVWbPcHfqM8at
-         hAQfnnxMNVf93DqQmtbhkTZP7HYuM+/pav0lGLiQNsrFW2LU9N5HOlzJeBZRpOaJUO
-         xuBvf+nwQpe6JKmklULzrpdJiCFPwBdS96DdfAhBSiLmNzXMQ3WNtJ/n6Hcb7z/L1k
-         MyAIkNihb13CQ==
-Received: by mail-vk1-f174.google.com with SMTP id j11so2950110vkk.11;
-        Wed, 10 Aug 2022 10:31:18 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2DsejWG/mSC8fhzi3ic5efFlv8iePSUS/cEmbpOdlDqVJMfa7y
-        VsuL5/SKIoUC5V/iplzJI9hrC2Mb7Sa5VAlPYw==
-X-Google-Smtp-Source: AA6agR450r97FWohT5npUNpdZSdV2sVG3Atx2FNYkYVFZnj+PkX8eozzHVZlj56s2fGI/bbpDI+B0Kf11N2Rwfn4k4Q=
-X-Received: by 2002:ac5:c959:0:b0:377:adad:62cb with SMTP id
- s25-20020ac5c959000000b00377adad62cbmr11992262vkm.26.1660152677838; Wed, 10
- Aug 2022 10:31:17 -0700 (PDT)
+        Wed, 10 Aug 2022 13:35:46 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D3F58B58
+        for <linux-hwmon@vger.kernel.org>; Wed, 10 Aug 2022 10:35:45 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id CFE60240106
+        for <linux-hwmon@vger.kernel.org>; Wed, 10 Aug 2022 19:35:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1660152943; bh=XrwCglE9bKXMgEZnO62BEsdmCMy5RjaDtuIUp+Juvxw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MHEooSvmk1OPETItSd7jtOSLB6RW7JLBi17zVdcTBk9LZoL2r/JaCPHJ/FTZXO2Iu
+         brC/Z1XFGfjDoVAizB9if14/pszEMCd3/O4vGZBoc5x7VU2f5PPm93P8SVyy2EbuOw
+         +kv3tgxYypsXL+cHk9bw1+KZFhB8vyWOnyqSYh1MvziIDYuYMjC+J1AxGAiycKleKG
+         C+YXmqxW7smWs2F/4vwXLYQSRSVUoUHh2gItU4a0aMdMg6pGiZt0OQ/EUhQlSsQ1Hk
+         UNVA5FdpdlZSPaapne5pfNgE9+JQAu43cX7Xsk0kkNRr4mHtuFAbSpPyNhNI0xLz2x
+         8wj/cCSMMyeKQ==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4M2xt65cPKz9rxQ;
+        Wed, 10 Aug 2022 19:35:42 +0200 (CEST)
+Date:   Wed, 10 Aug 2022 17:35:41 +0000
+From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: corsair-psu: add reporting of rail mode via
+ debugfs
+Message-ID: <20220810193541.29f95ec5@posteo.net>
+In-Reply-To: <20220810133012.GB274220@roeck-us.net>
+References: <YvN4SbnAp3jl+Vzo@monster.localdomain>
+        <20220810133012.GB274220@roeck-us.net>
 MIME-Version: 1.0
-References: <20220809200701.218059-1-eajames@linux.ibm.com> <20220809200701.218059-2-eajames@linux.ibm.com>
-In-Reply-To: <20220809200701.218059-2-eajames@linux.ibm.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 10 Aug 2022 11:31:06 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLS2RdUVOA51YibxzY+Npd1GG6NQJTkid8Ppm2mLEFtgQ@mail.gmail.com>
-Message-ID: <CAL_JsqLS2RdUVOA51YibxzY+Npd1GG6NQJTkid8Ppm2mLEFtgQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: Add IBM OCC bindings
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     joel@jms.id.au, jdelvare@suse.com, linux@roeck-us.net,
-        krzysztof.kozlowski+dt@linaro.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsi@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 2:07 PM Eddie James <eajames@linux.ibm.com> wrote:
->
-> These bindings describe the POWER processor On Chip Controller accessed
-> from a service processor or baseboard management controller (BMC).
->
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->  .../bindings/hwmon/ibm,occ-hwmon.yaml         | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ibm,occ-hwmon.yaml
+On Wed, 10 Aug 2022 06:30:12 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-What about Documentation/devicetree/bindings/hwmon/ibm,p8-occ-hwmon.txt?
+> > +static int ocpmode_show(struct seq_file *seqf, void *unused)
+> > +{
+> > +	struct corsairpsu_data *priv = seqf->private;
+> > +	long val;
+> > +	int ret;
+> > +
+> > +	ret = corsairpsu_get_value(priv, PSU_CMD_OCPMODE, 0, &val);
+> > +	if (ret < 0)
+> > +		seq_puts(seqf, "N/A\n");
+> > +	else
+> > +		seq_printf(seqf, "%s\n", (val == 0x02) ? "multi rail" : "single rail");
+> 
+> If this is not always available, would it be better not to create the file
+> in the first place ? If that is not feasible, it should at least be
+> documented that the value is not always available to ensure that no one
+> complains about it (or at least no one who read the documentation).
+> 
+> Also, is the value strictly 0x02 for multi-rail configurations, or
+> is that possibly just a bit or the number of rails ?
 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ibm,occ-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/ibm,occ-hwmon.yaml
-> new file mode 100644
-> index 000000000000..3dbdc5af2804
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/ibm,occ-hwmon.yaml
-> @@ -0,0 +1,39 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/ibm,occ-hwmon.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: IBM On-Chip Controller (OCC) accessed from a service processor
-> +
-> +maintainers:
-> +  - Eddie James <eajames@linux.ibm.com>
-> +
-> +description: |
+The mode is actually switchable on fly, similar to the fan. I do not want to
+provide the switching functionality, because also similar to the fan controls,
+it can be used to damage the PSU. It is part of the over current protection
+system (hence the name ocpmode) and people use the RAW interface to switch the
+fans and the ocpmode. This is also the reason I made it that way, because you
+could poll the information right in the process of switching, which can result
+in bogus values. 0x02 is the value for "switching to multi rail was successful",
+every other value is considered "single rail mode". Or you get a malformed
+message which results in "N/A" or unknown. So yes, you are right, I could at
+least add a define for the value and be more clear in the documentation. Would
+that be okay for you?
 
-Don't need '|' if there is no formatting.
-
-> +  The POWER processor On-Chip Controller (OCC) helps manage power and
-> +  thermals for the system. A service processor or baseboard management
-> +  controller can query the OCC for it's power and thermal data to report
-
-s/it's/its/
-
-> +  through hwmon.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ibm,p9-occ-hwmon
-> +      - ibm,p10-occ-hwmon
-> +
-> +  ibm,no-poll-on-init:
-> +    description: This property describes whether or not the OCC should
-> +      be polled during driver initialization.
-> +    type: boolean
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    hwmon {
-> +        compatible = "ibm,p10-occ-hwmon";
-> +        ibm,no-poll-on-init;
-
-How does one access this device? There is no address.
-
-> +    };
-
-> --
-> 2.31.1
->
+greetings,
+Wilken
