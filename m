@@ -2,132 +2,171 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E70E6C25B08
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Aug 2022 12:53:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 759F3C00140
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Aug 2022 12:58:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbiHJMxI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Aug 2022 08:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
+        id S232385AbiHJM6a (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Aug 2022 08:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232412AbiHJMxB (ORCPT
+        with ESMTP id S232378AbiHJM6H (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Aug 2022 08:53:01 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FBA7E827;
-        Wed, 10 Aug 2022 05:52:59 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id f11so14257419pgj.7;
-        Wed, 10 Aug 2022 05:52:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc;
-        bh=AntC5mRDzJTqMnizzXcGjI604N3lWRDUOH1hw5226rg=;
-        b=TcyZu08ifEO7Hr7qHyiXZk8WMISO4ddMtJ5adxJwMfnAuUQnwDuae34T81/9W3cvwL
-         1cLkZI/UzxKWf4H6H9vQd3Up8pAjNxegzJvnH9+LRdP9jLKLLYY7ZpNg9PMFIrR3OVOu
-         eOGj8ahdQkneouAzrgUC2I/PBaEgegz4aeVWuIwjf5SRRACkSv2TFzK/dkfSV/Acnjtv
-         i9UjUjUFwAIOQaFZOgHF59kxmngugqkzpDd3IXtbk5egT/8FMO6GMJ++d5/mCJscs0WP
-         QwcQ/hjYBZ8X02wvV+NWkl/TZ0dYV4DfdeggDJv0oEdj6KVGLbyyaiHoQGdvCZE4z+IO
-         kwFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc;
-        bh=AntC5mRDzJTqMnizzXcGjI604N3lWRDUOH1hw5226rg=;
-        b=Ynsfv32UGEp01Y4EQzizwVs1dxo3UwRZFmruVOl9HrA/UWBPAYPkyenj/zks4ujt0n
-         ft7CDwYGmrEf0lGE8+mj6Y5W3zOAEB8iE4RTwmwvtru8PCOnECQgXI3lqxMgj7aUy/q0
-         Rq5Wdy9nlOoeJp1mHzEAF6bJqDAmWyslcxaAgvOAYRuHdheudUm98qKkPgws5JpNhrCW
-         9gGnIO9gGJx8pSuhnezBad2UH/J9iX3ZzhQJ/MtcolR1nsd8HHOIj1fHigS5sRA2HkLA
-         ShqcgMwVr6M7WXjFIp6u9tr8m1Dq//FfBsQh2hrlfcZ7/t+EVC7HKwNVDRwoqy9cXyWU
-         yzbg==
-X-Gm-Message-State: ACgBeo0zN3WZxSLa2I2s3eUTZdbcB6IbbZ/XOJKYbqawhPVe+H5rfr1+
-        AmxuBynFIbqducOm2dqWTEVq6QcLemQ=
-X-Google-Smtp-Source: AA6agR7y4+2XTKx0yON0/9igDgzYahoYSfO3zhsgie6o7dVjVyRYiHlaZUk786YDWzEQ+M/L7UFakA==
-X-Received: by 2002:a05:6a00:3408:b0:52f:9dd0:4b21 with SMTP id cn8-20020a056a00340800b0052f9dd04b21mr8758660pfb.39.1660135979503;
-        Wed, 10 Aug 2022 05:52:59 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y17-20020a170902cad100b0016d9d6d05f7sm12543100pld.273.2022.08.10.05.52.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 05:52:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2c78b4e7-f481-e29d-1196-a1b73d232635@roeck-us.net>
-Date:   Wed, 10 Aug 2022 05:52:57 -0700
+        Wed, 10 Aug 2022 08:58:07 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D6160525;
+        Wed, 10 Aug 2022 05:57:59 -0700 (PDT)
+Received: from mercury (dyndsl-095-033-155-153.ewe-ip-backbone.de [95.33.155.153])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 968926601C2A;
+        Wed, 10 Aug 2022 13:57:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660136277;
+        bh=AXUViYjkfsjlWnyiLgWqWN9MZttYpnjGIynZu5rUAaw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jDXgdsOidzYTu2oNC1erHn44vbS2vts5ReWdZHenahU9BENWCkA4038OA+Nwkkb+4
+         /kUOsqVguBjz/1jC3F/3t7A+gXlSVVaUyNWk07nXB7dJANymSbUxRqRYy/NimPHiiS
+         8TexTLunA86QqT9HLoeMK639uFUaEd+QyFrVsOa8lUvBsCK6Y53MhOqGIF8FJ/oDvL
+         0jPcOgPamgd6afMYuUC20rxuBlJHdk02soJI8TezMQTsf0BgCoubktSvLhHNq9SOpi
+         tgbaI3K6qgahfLujBtUwX+9h/7FcziktKvhn7YNwpMiqeyYQmJGwfD5r9CrDeT5NAS
+         42j7pvI156W/A==
+Received: by mercury (Postfix, from userid 1000)
+        id E7D8A1060840; Wed, 10 Aug 2022 14:57:55 +0200 (CEST)
+Date:   Wed, 10 Aug 2022 14:57:55 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tim Harvey <tharvey@gateworks.com>, Lee Jones <lee@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Andrew Davis <afd@ti.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2 5/5] dt-bindings: Drop Dan Murphy and Ricardo
+ Rivera-Matos
+Message-ID: <20220810125755.l6ou6imgbeuj37ir@mercury.elektranox.org>
+References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
+ <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        matti.vaittinen@fi.rohmeurope.com
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1660127865.git.mazziesaccount@gmail.com>
- <4565950ddca2f78209dad49e169d4af7517db27e.1660127865.git.mazziesaccount@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC PATCH 6/7] hwmon: lm90: simplify using
- devm_regulator_get_enable()
-In-Reply-To: <4565950ddca2f78209dad49e169d4af7517db27e.1660127865.git.mazziesaccount@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qodvu6jzbg5jdb43"
+Content-Disposition: inline
+In-Reply-To: <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/10/22 04:32, Matti Vaittinen wrote:
-> Drop open-coded pattern: 'devm_regulator_get(), regulator_enable(),
-> add_action_or_reset(regulator_disable)' and use the
-> devm_regulator_get_enable().
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+--qodvu6jzbg5jdb43
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hi,
+
+On Tue, Aug 09, 2022 at 07:27:52PM +0300, Krzysztof Kozlowski wrote:
+> Emails to Dan Murphy and Ricardo Rivera-Matos bounce ("550 Invalid
+> recipient").  Andrew Davis agreed to take over the bindings.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>=20
 > ---
->   drivers/hwmon/lm90.c | 21 ++-------------------
->   1 file changed, 2 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-> index 3820f0e61510..2ab561ec367c 100644
-> --- a/drivers/hwmon/lm90.c
-> +++ b/drivers/hwmon/lm90.c
-> @@ -1848,12 +1848,6 @@ static void lm90_remove_pec(void *dev)
->   	device_remove_file(dev, &dev_attr_pec);
->   }
->   
-> -static void lm90_regulator_disable(void *regulator)
-> -{
-> -	regulator_disable(regulator);
-> -}
-> -
-> -
->   static const struct hwmon_ops lm90_ops = {
->   	.is_visible = lm90_is_visible,
->   	.read = lm90_read,
-> @@ -1865,24 +1859,13 @@ static int lm90_probe(struct i2c_client *client)
->   	struct device *dev = &client->dev;
->   	struct i2c_adapter *adapter = client->adapter;
->   	struct hwmon_channel_info *info;
-> -	struct regulator *regulator;
->   	struct device *hwmon_dev;
->   	struct lm90_data *data;
->   	int err;
->   
-> -	regulator = devm_regulator_get(dev, "vcc");
-> -	if (IS_ERR(regulator))
-> -		return PTR_ERR(regulator);
-> -
-> -	err = regulator_enable(regulator);
-> -	if (err < 0) {
-> -		dev_err(dev, "Failed to enable regulator: %d\n", err);
-> -		return err;
-> -	}
-> -
-> -	err = devm_add_action_or_reset(dev, lm90_regulator_disable, regulator);
-> +	err = devm_regulator_get_enable(dev, "vcc");
->   	if (err)
-> -		return err;
-> +		return dev_err_probe(dev, err, "Failed to enable regulator\n");
->   
->   	data = devm_kzalloc(dev, sizeof(struct lm90_data), GFP_KERNEL);
->   	if (!data)
+>=20
+> Changes since v1:
+> 1. Add Andrew Davis instead.
+> 2. Not adding accumulated ack due to change above.
+> ---
+=2E..
+>  Documentation/devicetree/bindings/power/supply/bq2515x.yaml    | 3 +--
+>  Documentation/devicetree/bindings/power/supply/bq256xx.yaml    | 2 +-
+>  Documentation/devicetree/bindings/power/supply/bq25980.yaml    | 3 +--
 
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+> [...]
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml =
+b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> index 27db38577822..1a1b240034ef 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> @@ -8,8 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: TI bq2515x 500-mA Linear charger family
+> =20
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+> -  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+> =20
+>  description: |
+>    The BQ2515x family is a highly integrated battery charge management IC=
+ that
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml =
+b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+> index 91abe5733c41..82f382a7ffb3 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+> @@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: TI bq256xx Switch Mode Buck Charger
+> =20
+>  maintainers:
+> -  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+> =20
+>  description: |
+>    The bq256xx devices are a family of highly-integrated battery charge
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq25980.yaml =
+b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
+> index 4883527ab5c7..b687b8bcd705 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq25980.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
+> @@ -8,8 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: TI BQ25980 Flash Charger
+> =20
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+> -  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+> =20
+>  description: |
+>    The BQ25980, BQ25975, and BQ25960 are a series of flash chargers inten=
+ded
+> [...]
+
+--qodvu6jzbg5jdb43
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmLzq1MACgkQ2O7X88g7
++prR3RAAguNXBrOMU277Ao4ijuGi+QU6SzrNjySRdOiRVoG9Jn3Zo3D6969KokAP
+JfuYQLSClNfcDgaNVQPpXT5TG377q5ZerWaqfEFCXAy+cp0RIZWXdpDhb+2A5gCU
+gISuq5p61V0AQM6xyU+E9q+q9ZzQ8Qjjo2ckVFCqfcxe3pX4YUUXYu39ieKJqX7G
+juQsf03XgmKXT9PfPpBvMpPe7PqYlFzZqkuvfpNILNtksDBasHS2Tm998RXq3OTe
+hTlItrD65Mb4EEkhtuhj4Xkm6VbW6PXMAJiTCWraJsBZV+aZMdPWeoC5RsnhEDjM
+XcwnQGGy7VZYotwFMBYv1AtxiP6YNim1aYyReT/LA/+HBcIBGmD8Q0v3tgO9ruou
+Gx3DlkUgoo+q1cOLP0dzb+BWxSEx1VlNwONhIv/5bciur7BLTgVPt/1Vt2qLle0V
+1oEq90rdpUTv2poZn3cTd7+Qt99Eld3cVZ/JUFxrXywZkDuKMXB0Krnbg+sOeLfn
+dCWCe7fKeqgEIL71rna2j5BwCGFazcU3JeB2WdncDLqpFQaeb/0OPB8zw6RnC+oM
+PA+3qhtyhYYbcRMP7enDBV4skvpNTlJMD+tYQdzFWkcotVCvXho+7mI/Us+KZwBC
++CQWd+WnX+l91INLir3KpF7b3yR5BZeo5MYQND5yD7ZKylUXcRo=
+=yGj8
+-----END PGP SIGNATURE-----
+
+--qodvu6jzbg5jdb43--
