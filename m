@@ -2,114 +2,246 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1069C00140
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Aug 2022 10:01:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28F53C00140
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Aug 2022 10:11:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbiHJKBu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Aug 2022 06:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37246 "EHLO
+        id S229511AbiHJKLd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Aug 2022 06:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiHJKBq (ORCPT
+        with ESMTP id S229455AbiHJKLd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Aug 2022 06:01:46 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955755FAF0
-        for <linux-hwmon@vger.kernel.org>; Wed, 10 Aug 2022 03:01:45 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id b4so14242657pji.4
-        for <linux-hwmon@vger.kernel.org>; Wed, 10 Aug 2022 03:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=pQ7xq1c5LS3WVJ3SFc0OCPtwMnaOoVGBpwbytLweJQk=;
-        b=ROPFz5B5gUngALaT+Q67jfY4cSVI4kwr84/ZDOQivjqVGwydi10zaa9z7sxs9rhLF8
-         cu89OEtCgO2cIADRKEswph2LFlutbja0oiH8Ycxmxy35bs8i16nPPntabr/HT2IAWhRe
-         NVJaLtjmv7EDWY6yt/H0tG0X+LTvuNxYAdn/EPUWiZwBXmTyHWSM+ooSU8xxIb1BkTtT
-         Ml19wGhxiD9mTk5lfbbPK4kiyKtarQ3XgrbGF9NqupQrFb8YOCup4DVgsb0yj2g6Kuim
-         tev69lQEubjQx6ry+2VTGm2vzWvm3EQvGZpYXJ/KGzaYCYRA6uh2DsFAlBkMzo94+LLD
-         vj/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=pQ7xq1c5LS3WVJ3SFc0OCPtwMnaOoVGBpwbytLweJQk=;
-        b=pzMSNxetBjOGzFz0s3Q01INfYXzTHlYZOujAH2iW5bm3CiNxnFAJkwGLRwgGZss3vH
-         +aQ9n7x0BtNhtA3kK/UBfVDeNugG8grssRSFUL4S6n1rtg0kAfrcN2PfA97S1BLDi34O
-         mHUVN59y+PxlQ1H0BPP6F9RsO9ZUU+76kLhbNbUVhRX7jKdmSfzsUHaVJqhkbc2cWwub
-         xT7ZK7Q9Z0EwrD3sGNTEVKfd4sZKbpZxU1PffxAOMNTKyaeQdE+GU50hqbcU+o5C3anw
-         HPqMMpLGAlYUFuG4LeLI57FjvG24GfQrzcNIptmVdDNus9xfBXfGQ5CmcDHffL2xhJZy
-         r3pg==
-X-Gm-Message-State: ACgBeo0qxwbE6YfEka+Hb7mI0p3A/+o/Gj8sn7P9y5HZCt44TdPSCHfs
-        up+iKTVnH3PmzBCk8rg5S0g0MnIQjCY=
-X-Google-Smtp-Source: AA6agR5gt0v31YIHq/6YQ8orYgO+nGlLBugYV0poIxDhGGrfYKhW0ggp3bXfALNLxVmqNZy+s6wriA==
-X-Received: by 2002:a17:90b:1e11:b0:1f4:ee94:6236 with SMTP id pg17-20020a17090b1e1100b001f4ee946236mr2937351pjb.63.1660125705063;
-        Wed, 10 Aug 2022 03:01:45 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h14-20020a170902f54e00b0016db441edd7sm12655093plf.40.2022.08.10.03.01.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 03:01:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <84bbd5ae-44e7-35de-c190-21bdd9af8aaa@roeck-us.net>
-Date:   Wed, 10 Aug 2022 03:01:41 -0700
+        Wed, 10 Aug 2022 06:11:33 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F37B6FA02;
+        Wed, 10 Aug 2022 03:11:31 -0700 (PDT)
+Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M2lyN2W4vz67xMg;
+        Wed, 10 Aug 2022 18:08:44 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Wed, 10 Aug 2022 12:11:28 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 10 Aug
+ 2022 11:11:28 +0100
+Date:   Wed, 10 Aug 2022 11:11:27 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Tim Harvey" <tharvey@gateworks.com>, Lee Jones <lee@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Andrew Davis <afd@ti.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-fbdev@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+Subject: Re: [PATCH v2 5/5] dt-bindings: Drop Dan Murphy and Ricardo
+ Rivera-Matos
+Message-ID: <20220810111127.00003b83@huawei.com>
+In-Reply-To: <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
+References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
+        <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH hwmon-next v5 0/3] Add support for EMC2305 Fan Speed
- Controller.
-Content-Language: en-US
-To:     michaelsh@nvidia.com
-Cc:     linux-hwmon@vger.kernel.org, vadimp@nvidia.com
-References: <20220802081832.6692-1-michaelsh@nvidia.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220802081832.6692-1-michaelsh@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/2/22 01:18, michaelsh@nvidia.com wrote:
-> From: Michael Shych <michaelsh@nvidia.com>
-> 
-> Introduce EMC2305 RPM-based PWM Fan Speed Controller
-> The EMC2305 is an SMBus compliant fan controller with up to five
-> controlled PWM fan drivers. All fan drivers are
-> controlled by a programmable frequency PWM driver and Fan Speed
-> Control algorithm that operates as a directly PWM-controlled device.
-> 
-> The closed-loop Fan Speed Control algorithm (FSC) has the capability to
-> detect aging fans and alert the system. It will likewise detect stalled
-> or locked fans and trigger an interrupt.
-> 
-> EMC2305 offers a clock output so that multiple devices may be chained
-> and slaved to the same clock source for optimal performance in large
-> distributed systems.
-> 
-> Patch set includes:
-> Patch#1 - define platform data for EMC2305 driver.
-> Patch#2 - add support for EMC2301/2/3/5 RPM-based PWM Fan Speed Controller.
-> Patch#3 - add emc2305.rst into docs.
-> 
-> Michael Shych (3):
->    platform_data/emc2305: define platform data for EMC2305 driver
->    hwmon: (emc2305) add support for EMC2301/2/3/5 RPM-based PWM Fan Speed
->      Controller.
->    docs: hwmon: add emc2305.rst to docs
-> 
->   Documentation/hwmon/emc2305.rst       |  40 +++
->   Documentation/hwmon/index.rst         |   1 +
->   drivers/hwmon/Kconfig                 |  13 +
->   drivers/hwmon/Makefile                |   1 +
->   drivers/hwmon/emc2305.c               | 624 ++++++++++++++++++++++++++++++++++
->   include/linux/platform_data/emc2305.h |  22 ++
->   6 files changed, 701 insertions(+)
->   create mode 100644 Documentation/hwmon/emc2305.rst
->   create mode 100644 drivers/hwmon/emc2305.c
->   create mode 100644 include/linux/platform_data/emc2305.h
-> 
-Please provide a change log.
+On Tue,  9 Aug 2022 19:27:52 +0300
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-Guenter
+> Emails to Dan Murphy and Ricardo Rivera-Matos bounce ("550 Invalid
+> recipient").  Andrew Davis agreed to take over the bindings.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Changes since v1:
+> 1. Add Andrew Davis instead.
+> 2. Not adding accumulated ack due to change above.
+> ---
+>  Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml    | 2 +-
+>  .../devicetree/bindings/leds/leds-class-multicolor.yaml        | 2 +-
+>  Documentation/devicetree/bindings/leds/leds-lp50xx.yaml        | 2 +-
+>  Documentation/devicetree/bindings/net/ti,dp83822.yaml          | 2 +-
+>  Documentation/devicetree/bindings/net/ti,dp83867.yaml          | 2 +-
+>  Documentation/devicetree/bindings/net/ti,dp83869.yaml          | 2 +-
+>  Documentation/devicetree/bindings/power/supply/bq2515x.yaml    | 3 +--
+>  Documentation/devicetree/bindings/power/supply/bq256xx.yaml    | 2 +-
+>  Documentation/devicetree/bindings/power/supply/bq25980.yaml    | 3 +--
+>  Documentation/devicetree/bindings/sound/tas2562.yaml           | 2 +-
+>  Documentation/devicetree/bindings/sound/tlv320adcx140.yaml     | 2 +-
+>  11 files changed, 11 insertions(+), 13 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml b/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml
+> index 9f5e96439c01..2e6abc9d746a 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Texas Instruments' ads124s08 and ads124s06 ADC chip
+>  
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+For this one.
+
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+>  
+>  properties:
+>    compatible:
+> diff --git a/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml b/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
+> index 12693483231f..31840e33dcf5 100644
+> --- a/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
+> +++ b/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Common properties for the multicolor LED class.
+>  
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+>  
+>  description: |
+>    Bindings for multi color LEDs show how to describe current outputs of
+> diff --git a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
+> index e0b658f07973..63da380748bf 100644
+> --- a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
+> +++ b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: LED driver for LP50XX RGB LED from Texas Instruments.
+>  
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+>  
+>  description: |
+>    The LP50XX is multi-channel, I2C RGB LED Drivers that can group RGB LEDs into
+> diff --git a/Documentation/devicetree/bindings/net/ti,dp83822.yaml b/Documentation/devicetree/bindings/net/ti,dp83822.yaml
+> index 75e8712e903a..f2489a9c852f 100644
+> --- a/Documentation/devicetree/bindings/net/ti,dp83822.yaml
+> +++ b/Documentation/devicetree/bindings/net/ti,dp83822.yaml
+> @@ -8,7 +8,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>  title: TI DP83822 ethernet PHY
+>  
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+>  
+>  description: |
+>    The DP83822 is a low-power, single-port, 10/100 Mbps Ethernet PHY. It
+> diff --git a/Documentation/devicetree/bindings/net/ti,dp83867.yaml b/Documentation/devicetree/bindings/net/ti,dp83867.yaml
+> index 76ff08a477ba..b8c0e4b5b494 100644
+> --- a/Documentation/devicetree/bindings/net/ti,dp83867.yaml
+> +++ b/Documentation/devicetree/bindings/net/ti,dp83867.yaml
+> @@ -11,7 +11,7 @@ allOf:
+>    - $ref: "ethernet-controller.yaml#"
+>  
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+>  
+>  description: |
+>    The DP83867 device is a robust, low power, fully featured Physical Layer
+> diff --git a/Documentation/devicetree/bindings/net/ti,dp83869.yaml b/Documentation/devicetree/bindings/net/ti,dp83869.yaml
+> index 1b780dce61ab..b04ff0014a59 100644
+> --- a/Documentation/devicetree/bindings/net/ti,dp83869.yaml
+> +++ b/Documentation/devicetree/bindings/net/ti,dp83869.yaml
+> @@ -11,7 +11,7 @@ allOf:
+>    - $ref: "ethernet-phy.yaml#"
+>  
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+>  
+>  description: |
+>    The DP83869HM device is a robust, fully-featured Gigabit (PHY) transceiver
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> index 27db38577822..1a1b240034ef 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> @@ -8,8 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: TI bq2515x 500-mA Linear charger family
+>  
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+> -  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+>  
+>  description: |
+>    The BQ2515x family is a highly integrated battery charge management IC that
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+> index 91abe5733c41..82f382a7ffb3 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+> @@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: TI bq256xx Switch Mode Buck Charger
+>  
+>  maintainers:
+> -  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+>  
+>  description: |
+>    The bq256xx devices are a family of highly-integrated battery charge
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq25980.yaml b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
+> index 4883527ab5c7..b687b8bcd705 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq25980.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
+> @@ -8,8 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: TI BQ25980 Flash Charger
+>  
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+> -  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+>  
+>  description: |
+>    The BQ25980, BQ25975, and BQ25960 are a series of flash chargers intended
+> diff --git a/Documentation/devicetree/bindings/sound/tas2562.yaml b/Documentation/devicetree/bindings/sound/tas2562.yaml
+> index 5f7dd5d6cbca..30f6b029ac08 100644
+> --- a/Documentation/devicetree/bindings/sound/tas2562.yaml
+> +++ b/Documentation/devicetree/bindings/sound/tas2562.yaml
+> @@ -8,7 +8,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>  title: Texas Instruments TAS2562 Smart PA
+>  
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+>  
+>  description: |
+>    The TAS2562 is a mono, digital input Class-D audio amplifier optimized for
+> diff --git a/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml b/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
+> index bc2fb1a80ed7..ee698614862e 100644
+> --- a/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
+> +++ b/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
+> @@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Texas Instruments TLV320ADCX140 Quad Channel Analog-to-Digital Converter
+>  
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+>  
+>  description: |
+>    The TLV320ADCX140 are multichannel (4-ch analog recording or 8-ch digital
 
