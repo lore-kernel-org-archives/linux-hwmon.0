@@ -2,116 +2,132 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF3FBC25B0C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Aug 2022 12:41:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E70E6C25B08
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Aug 2022 12:53:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbiHJMlZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Aug 2022 08:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
+        id S231499AbiHJMxI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Aug 2022 08:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbiHJMlZ (ORCPT
+        with ESMTP id S232412AbiHJMxB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Aug 2022 08:41:25 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC07D75FD5;
-        Wed, 10 Aug 2022 05:41:22 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso1981143pjl.4;
-        Wed, 10 Aug 2022 05:41:22 -0700 (PDT)
+        Wed, 10 Aug 2022 08:53:01 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FBA7E827;
+        Wed, 10 Aug 2022 05:52:59 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id f11so14257419pgj.7;
+        Wed, 10 Aug 2022 05:52:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=paIljyHrUvej+/v+fGWG6Ry2j3rdU6vBvSRVU4+Ng94=;
-        b=CNXtsRPrb/GrYK/cLLTUVSxVh2X5WYkC3jRbKLtfBZ2x6Su/TzrAztaLxy2clwDaqC
-         bVlb/4nrQ+h8TKXpnnFmrj/ksn7HWP+fYvQmj8fuvmf7ucuJoFdnVf6Ab9Zk21Fn0Vzu
-         nhhyqdX/qyyWYK2qPvLz2JiuuHBgl7UH9MG65Ap6gyCAXVns2NKLSiU3FiYh5ycsazru
-         Zs4qG0S2L152zYMTtciGSD19q1KPYmb0bYYQVMNd5J0WL2cFAcVLB5y/11ugPghc/elg
-         Obt9bcqzGslBJ6gB8Z/QB5nS3rsZEdyI1Gmq9MmiCOCr0fFmW/KF79be491zY5Vw8o1l
-         NGgw==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc;
+        bh=AntC5mRDzJTqMnizzXcGjI604N3lWRDUOH1hw5226rg=;
+        b=TcyZu08ifEO7Hr7qHyiXZk8WMISO4ddMtJ5adxJwMfnAuUQnwDuae34T81/9W3cvwL
+         1cLkZI/UzxKWf4H6H9vQd3Up8pAjNxegzJvnH9+LRdP9jLKLLYY7ZpNg9PMFIrR3OVOu
+         eOGj8ahdQkneouAzrgUC2I/PBaEgegz4aeVWuIwjf5SRRACkSv2TFzK/dkfSV/Acnjtv
+         i9UjUjUFwAIOQaFZOgHF59kxmngugqkzpDd3IXtbk5egT/8FMO6GMJ++d5/mCJscs0WP
+         QwcQ/hjYBZ8X02wvV+NWkl/TZ0dYV4DfdeggDJv0oEdj6KVGLbyyaiHoQGdvCZE4z+IO
+         kwFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=paIljyHrUvej+/v+fGWG6Ry2j3rdU6vBvSRVU4+Ng94=;
-        b=CnE5UugXJsOMi9IocR/DuA+BNND6XbmSGZpO9qd2utOpMlhCIe+Gv4EyJak88KWj9t
-         kLr3Zg5F4im7fGuB0lA1NqngBbfdfBalfq6raCjjPkp3Qll3VGDjMWTfd2Qp4vzC9Hb8
-         Zcm8aeIENtUiA7owrkT9oGegZcFOZtBTGxOJdJAFCupAWtheQM5pWRydaQRH5vERvZoK
-         vb2wfIez7jeN65JnNvH1pUOjF2OBNshW/YpKOYaR7OmMasELycBb+VeJctURYfG5hpw0
-         pg8+7oO1ITkmTU5xyNWy5H0tYLyH6dlSpPe/cxy5ek0HP3MuVqF44S8aznLXrb9Jbcy/
-         OksQ==
-X-Gm-Message-State: ACgBeo3qWP6Izwa0jwV0RylLwtXC0DaFDWmgLkG1dRYO2putOj1zYLJ+
-        L7b8b3KeTOyCVz9MLhgTw2s=
-X-Google-Smtp-Source: AA6agR7XAtjBC8yH4qNC8ojRXQc2+OqICsXEy04ur7rcG7rKpV2LpLk4MuLwWRTziU5gsZlCfR8tXA==
-X-Received: by 2002:a17:90b:100b:b0:1f7:68e8:dcb1 with SMTP id gm11-20020a17090b100b00b001f768e8dcb1mr3575262pjb.198.1660135282341;
-        Wed, 10 Aug 2022 05:41:22 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc;
+        bh=AntC5mRDzJTqMnizzXcGjI604N3lWRDUOH1hw5226rg=;
+        b=Ynsfv32UGEp01Y4EQzizwVs1dxo3UwRZFmruVOl9HrA/UWBPAYPkyenj/zks4ujt0n
+         ft7CDwYGmrEf0lGE8+mj6Y5W3zOAEB8iE4RTwmwvtru8PCOnECQgXI3lqxMgj7aUy/q0
+         Rq5Wdy9nlOoeJp1mHzEAF6bJqDAmWyslcxaAgvOAYRuHdheudUm98qKkPgws5JpNhrCW
+         9gGnIO9gGJx8pSuhnezBad2UH/J9iX3ZzhQJ/MtcolR1nsd8HHOIj1fHigS5sRA2HkLA
+         ShqcgMwVr6M7WXjFIp6u9tr8m1Dq//FfBsQh2hrlfcZ7/t+EVC7HKwNVDRwoqy9cXyWU
+         yzbg==
+X-Gm-Message-State: ACgBeo0zN3WZxSLa2I2s3eUTZdbcB6IbbZ/XOJKYbqawhPVe+H5rfr1+
+        AmxuBynFIbqducOm2dqWTEVq6QcLemQ=
+X-Google-Smtp-Source: AA6agR7y4+2XTKx0yON0/9igDgzYahoYSfO3zhsgie6o7dVjVyRYiHlaZUk786YDWzEQ+M/L7UFakA==
+X-Received: by 2002:a05:6a00:3408:b0:52f:9dd0:4b21 with SMTP id cn8-20020a056a00340800b0052f9dd04b21mr8758660pfb.39.1660135979503;
+        Wed, 10 Aug 2022 05:52:59 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r11-20020a170902c60b00b0016dd6929af5sm12601477plr.206.2022.08.10.05.41.18
+        by smtp.gmail.com with ESMTPSA id y17-20020a170902cad100b0016d9d6d05f7sm12543100pld.273.2022.08.10.05.52.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 05:41:20 -0700 (PDT)
+        Wed, 10 Aug 2022 05:52:58 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <684fa47a-d8a8-3b4c-7749-438128e8efec@roeck-us.net>
-Date:   Wed, 10 Aug 2022 05:41:17 -0700
+Message-ID: <2c78b4e7-f481-e29d-1196-a1b73d232635@roeck-us.net>
+Date:   Wed, 10 Aug 2022 05:52:57 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v5 26/33] hwmon/drivers/pm_bus: Switch to new of thermal
- API
 Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
-        damien.lemoal@opensource.wdc.com, heiko@sntech.de,
-        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
-        talel@amazon.com, thierry.reding@gmail.com, digetx@gmail.com,
-        jonathanh@nvidia.com, anarsoul@gmail.com, tiny.windzz@gmail.com,
-        baolin.wang7@gmail.com, f.fainelli@gmail.com,
-        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
-        glaroque@baylibre.com, miquel.raynal@bootlin.com,
-        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
-        matthias.bgg@gmail.com, j-keerthy@ti.com,
-        Jean Delvare <jdelvare@suse.com>,
-        "open list:PMBUS HARDWARE MONITORING DRIVERS" 
-        <linux-hwmon@vger.kernel.org>
-References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
- <20220804224349.1926752-27-daniel.lezcano@linexp.org>
- <20220808102949.GC1969424@roeck-us.net>
- <61109578-8136-d544-0bdc-d65c0736c566@linaro.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        matti.vaittinen@fi.rohmeurope.com
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1660127865.git.mazziesaccount@gmail.com>
+ <4565950ddca2f78209dad49e169d4af7517db27e.1660127865.git.mazziesaccount@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <61109578-8136-d544-0bdc-d65c0736c566@linaro.org>
+Subject: Re: [RFC PATCH 6/7] hwmon: lm90: simplify using
+ devm_regulator_get_enable()
+In-Reply-To: <4565950ddca2f78209dad49e169d4af7517db27e.1660127865.git.mazziesaccount@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/10/22 03:23, Daniel Lezcano wrote:
-> On 08/08/2022 12:29, Guenter Roeck wrote:
->> On Fri, Aug 05, 2022 at 12:43:42AM +0200, Daniel Lezcano wrote:
->>> The thermal OF code has a new API allowing to migrate the OF
->>> initialization to a simpler approach. The ops are no longer device
->>> tree specific and are the generic ones provided by the core code.
->>>
->>> Convert the ops to the thermal_zone_device_ops format and use the new
->>> API to register the thermal zone with these generic ops.
->>>
->>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
->>
->> Subject tag should be something like "hwmon: (pmbus) ...".
->>
->> Also, from other patches it appears that this would or might result
->> in a registration failure if a thermal zone for the sensor does not
->> exist. This will need to be resolved before the patch is can be applied.
+On 8/10/22 04:32, Matti Vaittinen wrote:
+> Drop open-coded pattern: 'devm_regulator_get(), regulator_enable(),
+> add_action_or_reset(regulator_disable)' and use the
+> devm_regulator_get_enable().
 > 
-> With the subject fixed, shall I add your Acked-by ?
-> 
-
-Yes. With subject fixed:
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
 Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-Thanks,
-Guenter
+> ---
+>   drivers/hwmon/lm90.c | 21 ++-------------------
+>   1 file changed, 2 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+> index 3820f0e61510..2ab561ec367c 100644
+> --- a/drivers/hwmon/lm90.c
+> +++ b/drivers/hwmon/lm90.c
+> @@ -1848,12 +1848,6 @@ static void lm90_remove_pec(void *dev)
+>   	device_remove_file(dev, &dev_attr_pec);
+>   }
+>   
+> -static void lm90_regulator_disable(void *regulator)
+> -{
+> -	regulator_disable(regulator);
+> -}
+> -
+> -
+>   static const struct hwmon_ops lm90_ops = {
+>   	.is_visible = lm90_is_visible,
+>   	.read = lm90_read,
+> @@ -1865,24 +1859,13 @@ static int lm90_probe(struct i2c_client *client)
+>   	struct device *dev = &client->dev;
+>   	struct i2c_adapter *adapter = client->adapter;
+>   	struct hwmon_channel_info *info;
+> -	struct regulator *regulator;
+>   	struct device *hwmon_dev;
+>   	struct lm90_data *data;
+>   	int err;
+>   
+> -	regulator = devm_regulator_get(dev, "vcc");
+> -	if (IS_ERR(regulator))
+> -		return PTR_ERR(regulator);
+> -
+> -	err = regulator_enable(regulator);
+> -	if (err < 0) {
+> -		dev_err(dev, "Failed to enable regulator: %d\n", err);
+> -		return err;
+> -	}
+> -
+> -	err = devm_add_action_or_reset(dev, lm90_regulator_disable, regulator);
+> +	err = devm_regulator_get_enable(dev, "vcc");
+>   	if (err)
+> -		return err;
+> +		return dev_err_probe(dev, err, "Failed to enable regulator\n");
+>   
+>   	data = devm_kzalloc(dev, sizeof(struct lm90_data), GFP_KERNEL);
+>   	if (!data)
+
