@@ -2,151 +2,146 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A293C19F2D
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Aug 2022 08:26:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B478DC19F2A
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Aug 2022 15:02:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234417AbiHKI0n (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Aug 2022 04:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
+        id S235284AbiHKPCc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Aug 2022 11:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234197AbiHKI0n (ORCPT
+        with ESMTP id S235445AbiHKPCb (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Aug 2022 04:26:43 -0400
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B1E9018F
-        for <linux-hwmon@vger.kernel.org>; Thu, 11 Aug 2022 01:26:42 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id B79AA240026
-        for <linux-hwmon@vger.kernel.org>; Thu, 11 Aug 2022 10:26:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1660206400; bh=IQQ5KDmcSz5WBtG8+8SvMOP9W1JF4P20u5LWb4UEqag=;
-        h=Date:From:To:Cc:Subject:From;
-        b=fhCfRwhbJCGxtFngRaQU08y4JxgX6a0bsZf0ASdaC4G6DgHnaeq7UnqccLgKRRYLn
-         Fw2xReH9W5iwh1BMxG8CnQbLyULuykQ8eiaiKQUllxyH26luqjj8PEnpukkts11V6f
-         wahguTTGXh7lKlqo+wSwouEYj0g7uUXIus5j4MEV/DTHxKtsnEL//afMjApviQrbsP
-         pZ/LB0eDqoHc039uhXssO0p9CoG0M5QFCX5ivNREVhMnUDheHnMN96B4s7nUP3Wp4L
-         k2Ec48T4PchGpRrLrPjB9kQfKuePDGPmrY6yVvPQBfdMg5hNOOb/SrUvDR/SGnsBGb
-         0YUzCvUeScGcQ==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4M3Kf74vZwz6tnd;
-        Thu, 11 Aug 2022 10:26:39 +0200 (CEST)
-Date:   Thu, 11 Aug 2022 08:26:37 +0000
-From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH v3] hwmon: corsair-psu: add reporting of rail mode via debugfs
-Message-ID: <YvS9PZKr0xqFqJny@monster.localdomain>
+        Thu, 11 Aug 2022 11:02:31 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3554026540;
+        Thu, 11 Aug 2022 08:02:30 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id r69so10814742pgr.2;
+        Thu, 11 Aug 2022 08:02:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc;
+        bh=PdxjyG4o129tv5D6bBFrRNKETbxKBwJPUxDMzvux7fQ=;
+        b=Yjzv7ukSa1e49QP+0UORQLT4AfgMOH13n925fw7D1p0anHZp+kw6vrg0rJlkopgfpo
+         Bwj813DpHXYKz/i9Eh3uid9RYJM1qQmc1gybbQfTcJOYXqNku/JgeEXwyKat10Nt1LxS
+         UbxDp3kmcs39ZWa3fs2C6fbrWavJqeVyWiuqZsmYB3LOM8QAx0vPPXqOWKHm03ZJBRoP
+         4+Pl9oW9YDCdVOzHjeBj07OhfOaWMjXdVGIYGADpiUldrRqpqH4xxOpC8CJgGu9dyGw+
+         d8By8bRMY6wFdanKsMoHpBDldr6fx8Z7QTFGOqF7JnJVZ3yNVlCrqeLa02QNKiVp6DA3
+         3GJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc;
+        bh=PdxjyG4o129tv5D6bBFrRNKETbxKBwJPUxDMzvux7fQ=;
+        b=4nifBiZiyo1m3LDlqRTrGzZYIO8jBZqDOI/CALNE1AZWc5YMYHgVFK4NUN1Cu53e00
+         z4s8syMfSMC8mnjdNTqr8ycSdD8ntHnQ7eu2ld82OrJLa6Tlfs+B5Gyr7FfEpMJbkwyx
+         nMcoROEMg3HlqZlWOL0g69oZakC+XIPgbbz9Lka6omC0yE5iEeX8fWlkdRIIkUbniyAq
+         vea94zKcG3PLA6nJNvhLpPIuOCOwnc6HR5066i8iVMEHAtnV3JR+ThCTxWBswPtF+oW3
+         74RhEghLLh5Pk1A3Z0eTdPQlc2tIBo63UqXrMc4jV5ddCupJ0DE2HuILM+6xS3S6Zkba
+         ArCw==
+X-Gm-Message-State: ACgBeo1xVX1G4R+WPLl1wIxafUe7quUu1LvNYdJyRLmi+e2gQ+J7fRDg
+        HFbAlFyiMfrquE/XX/RUrz8=
+X-Google-Smtp-Source: AA6agR4ac+p0iDbzB4anSBk/axdljzlGUCKwJ8GLULUNQggGjBmnT0WenqTW9hJVvlMkh8exuQtyng==
+X-Received: by 2002:a05:6a00:23d0:b0:52e:74be:d52 with SMTP id g16-20020a056a0023d000b0052e74be0d52mr32180482pfc.62.1660230149535;
+        Thu, 11 Aug 2022 08:02:29 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l7-20020a170902f68700b0016eede528b4sm15183659plg.61.2022.08.11.08.02.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Aug 2022 08:02:28 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <5474a8db-4f15-5f83-7685-de43183b0fb1@roeck-us.net>
+Date:   Thu, 11 Aug 2022 08:02:26 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+References: <YvO4cfx12Q9gcmPg@monster.localdomain>
+ <ace70782-777f-ab7c-d190-735f5c65a5e4@roeck-us.net>
+ <20220810185658.6e27d9bd@posteo.net>
+ <bc1d22d1-45b4-7d49-bedd-f0eafdc035cd@roeck-us.net>
+ <20220810194852.78536153@posteo.net>
+ <8beb8ae2-04cd-fa37-5dbe-8d18e6a53f4d@roeck-us.net>
+ <20220811100506.4d69b027@posteo.net>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2] hwmon: corsair-psu: add reporting of rail mode via
+ debugfs
+In-Reply-To: <20220811100506.4d69b027@posteo.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add reporting if the PSU is running in single or multi rail mode via
-ocpmode debugfs entry. Also update the documentation and driver comments
-accordingly.
+On 8/11/22 01:05, Wilken Gottwalt wrote:
+> On Wed, 10 Aug 2022 11:21:36 -0700
+> Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+>> On 8/10/22 10:48, Wilken Gottwalt wrote:
+>>> On Wed, 10 Aug 2022 10:29:08 -0700
+>>> Guenter Roeck <linux@roeck-us.net> wrote:
+>>>
+>>>> On 8/10/22 09:56, Wilken Gottwalt wrote:
+>>>>> On Wed, 10 Aug 2022 09:31:21 -0700
+>>>>> Guenter Roeck <linux@roeck-us.net> wrote:
+>>>>>
+>>>>>> On 8/10/22 06:53, Wilken Gottwalt wrote:
+>>>>>>> Add reporting if the PSU is running in single or multi rail mode via
+>>>>>>> ocpmode debugfs entry. Also update the documentation accordingly.
+>>>>>>>
+>>>>>>> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+>>>>>>> ---
+>>>>>>> Changes in v2:
+>>>>>>>       - fixed spelling issues in commit message
+>>>>>>
+>>>>>> You did not address or even provide feedback on my second comment.
+>>>>>
+>>>>> Oh darn ... sorry, I was quite busy and didn't really pay attention. I will
+>>>>> answer the earlier mail and think about it.
+>>>>>
+>>>>> Though, maybe you can help me with that what keeps me so busy. Would it be okay
+>>>>> to use a kthread in a hwmon driver to do sampling (500ms - 10s) in conjunction
+>>>>> with HWMON_C_UPDATE_INTERVAL, or is this a strict no-no? I know it is actually
+>>>>> used to set a sample/update rate in a sensor (-register), but this USB-HID
+>>>>> approach is a pure polling thing. It seems to work quite and enables the driver
+>>>>> to collect data quite early in the boot process.
+>>>>>
+>>>>
+>>>> It really depends. Is it _necessary_ ? The pwm-fan driver uses a timer for
+>>>> periodic polling, but that is because it has to. We should not do it purely
+>>>> for convenience, and from the code I don't immediately see why it would
+>>>> be necessary.
+>>>
+>>> Together with the polling I would add encountered lowest and highest values and
+>>> the average of basically all available sensors (kind of session statistics). I
+>>> know it is a bit odd, but currently these power supplies are sold again in a
+>>> newer version and people really like to use them in their servers/workstations
+>>> because of the "realtime" data and this driver. No joke, but I really got
+>>> several requests to add this and I must admit I have quite some fun implementing
+>>> it.
+>>>
+>>
+>> That is out of scope for a kernel driver. If desired, a user space application
+>> should do the polling and calculate statistics such as lowest/highest or averages.
+> 
+> That is exactly what I told the requesting people. Now it is in the public
+> record and I hope that kind of requests go down a bit, at least for pushing
+> this in the mainline kernel.
+> 
 
-Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
----
-Changes in v3:
-  - added more explanations in the driver
+ From Documentation/hwmon/sysfs-interface.rst:
 
-Changes in v2:
-  - fixed spelling issues in commit message
----
- Documentation/hwmon/corsair-psu.rst |  5 +++--
- drivers/hwmon/corsair-psu.c         | 29 ++++++++++++++++++++++++++++-
- 2 files changed, 31 insertions(+), 3 deletions(-)
+"
+All entries (except name) are optional, and should only be created in a
+given driver if the chip has the feature.
+"
 
-diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
-index e8378e7a1d8c..c3a76305c587 100644
---- a/Documentation/hwmon/corsair-psu.rst
-+++ b/Documentation/hwmon/corsair-psu.rst
-@@ -86,8 +86,9 @@ Debugfs entries
- ---------------
- 
- =======================	========================================================
--uptime			Current uptime of the psu
-+ocpmode                 Single or multi rail mode of the PCIe power connectors
-+product                 Product name of the psu
-+uptime			Session uptime of the psu
- uptime_total		Total uptime of the psu
- vendor			Vendor name of the psu
--product			Product name of the psu
- =======================	========================================================
-diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-index 14389fd7afb8..c99e4c6afc2d 100644
---- a/drivers/hwmon/corsair-psu.c
-+++ b/drivers/hwmon/corsair-psu.c
-@@ -55,6 +55,7 @@
- #define SECONDS_PER_DAY		(SECONDS_PER_HOUR * 24)
- #define RAIL_COUNT		3 /* 3v3 + 5v + 12v */
- #define TEMP_COUNT		2
-+#define OCP_MULTI_RAIL		0x02
- 
- #define PSU_CMD_SELECT_RAIL	0x00 /* expects length 2 */
- #define PSU_CMD_RAIL_VOLTS_HCRIT 0x40 /* the rest of the commands expect length 3 */
-@@ -71,9 +72,10 @@
- #define PSU_CMD_RAIL_WATTS	0x96
- #define PSU_CMD_VEND_STR	0x99
- #define PSU_CMD_PROD_STR	0x9A
--#define PSU_CMD_TOTAL_WATTS	0xEE
- #define PSU_CMD_TOTAL_UPTIME	0xD1
- #define PSU_CMD_UPTIME		0xD2
-+#define PSU_CMD_OCPMODE		0xD8
-+#define PSU_CMD_TOTAL_WATTS	0xEE
- #define PSU_CMD_INIT		0xFE
- 
- #define L_IN_VOLTS		"v_in"
-@@ -268,6 +270,7 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, l
- 		break;
- 	case PSU_CMD_TOTAL_UPTIME:
- 	case PSU_CMD_UPTIME:
-+	case PSU_CMD_OCPMODE:
- 		*val = tmp;
- 		break;
- 	default:
-@@ -660,6 +663,29 @@ static int product_show(struct seq_file *seqf, void *unused)
- }
- DEFINE_SHOW_ATTRIBUTE(product);
- 
-+static int ocpmode_show(struct seq_file *seqf, void *unused)
-+{
-+	struct corsairpsu_data *priv = seqf->private;
-+	long val;
-+	int ret;
-+
-+	/*
-+	 * The rail mode is switchable on the fly. The RAW interface can be used for this. But it
-+	 * will not be included here, because I consider it somewhat dangerous for the health of the
-+	 * PSU. The returned value can be a bogus one, if the PSU is in the process of switching and
-+	 * getting of the value itself can also fail during this. Because of this every other value
-+	 * than OCP_MULTI_RAIL can be considered as "single rail".
-+	 */
-+	ret = corsairpsu_get_value(priv, PSU_CMD_OCPMODE, 0, &val);
-+	if (ret < 0)
-+		seq_puts(seqf, "N/A\n");
-+	else
-+		seq_printf(seqf, "%s\n", (val == OCP_MULTI_RAIL) ? "multi rail" : "single rail");
-+
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(ocpmode);
-+
- static void corsairpsu_debugfs_init(struct corsairpsu_data *priv)
- {
- 	char name[32];
-@@ -671,6 +697,7 @@ static void corsairpsu_debugfs_init(struct corsairpsu_data *priv)
- 	debugfs_create_file("uptime_total", 0444, priv->debugfs, priv, &uptime_total_fops);
- 	debugfs_create_file("vendor", 0444, priv->debugfs, priv, &vendor_fops);
- 	debugfs_create_file("product", 0444, priv->debugfs, priv, &product_fops);
-+	debugfs_create_file("ocpmode", 0444, priv->debugfs, priv, &ocpmode_fops);
- }
- 
- #else
--- 
-2.37.1
+Think about it - having the kernel collect statistics like this would only
+make sense if it was added for all drivers, ie in the hwmon core. That would
+end up burdening everyone, not just the few people who want it.
 
+Guenter
