@@ -2,117 +2,77 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE025C19F2D
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Aug 2022 17:11:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A895C19F2D
+	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Aug 2022 17:24:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239778AbiHMRLF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 13 Aug 2022 13:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
+        id S239847AbiHMRYR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 13 Aug 2022 13:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239571AbiHMRLE (ORCPT
+        with ESMTP id S235606AbiHMRYR (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 13 Aug 2022 13:11:04 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103102637;
-        Sat, 13 Aug 2022 10:11:04 -0700 (PDT)
+        Sat, 13 Aug 2022 13:24:17 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE11AEE14;
+        Sat, 13 Aug 2022 10:24:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660410664; x=1691946664;
+  t=1660411454; x=1691947454;
   h=message-id:subject:from:to:cc:date:in-reply-to:
    references:content-transfer-encoding:mime-version;
-  bh=UB/HG76gAn+zrQXdjvwtxR+sGlTnn9ErzdyW2t0elws=;
-  b=UKlKf/W0Gnnc5WxOOqjv30MvDMxck1Y91nks5ypYJj/pw5oYcCTFbwQl
-   ErYfeaYpUUdxDafEg/dRAoYj1d8/rpJ/qQ8A6/oZkUfsEFjb98ZoNGMr7
-   CLjqITaZByDXbYfhdDPayMfhA1yKDKYQgJE/o0La8gn+D27wX0ixVttN4
-   HjNd1okucM8F51nlvHSak7LBAktKIDmslycjFyiYSKcbSqeTMquuDpvSy
-   T2crTkMDJELI6Z/kddm75NeQsWq9R7PZQbugXCN2ccOcROp6vefObW7KD
-   5gag0zQvU4D4SqTgzHQy0M7hnn83sAiP5Ddr5FJexxeJ4sAlLrV7OBVNx
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="291765171"
+  bh=drAJ73d8g21/UQBfJAYbb6kkFeqrg2he9yg5G3knW70=;
+  b=l0MfYK/qpLAFr7txnSwWAVZ2h+RBhTHhMiFcAEjqZMYymIu5ckbzC7Y0
+   ceUoLpZMpgU7wpbwdEr935yshhS9NXiuiHB/nYL/oqS+Lgd9bTt0MwMA4
+   RI+Tb7xuJej2zeevvqSjWoMcnHFpdqGnRIw0WQT48LaPqvVvgdgkvV7a0
+   HxwTRXv7FicpNTmK79NR+WkzPbHuc1E/1Thfxewn+vtItbb5wKjm+IRUF
+   9BIFUMu03OLfBfqA76ydyaLhIZOhXkCERayihV5OvBM1lz1RPINaOwksZ
+   xgpCb2DGQkn0lptgGWIEmrR2/JaKOW/xdjqqbo3M3lBIZ+3hGAC9uOBxy
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="293036684"
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="291765171"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 10:11:03 -0700
+   d="scan'208";a="293036684"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 10:24:14 -0700
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="851865651"
+   d="scan'208";a="666184563"
 Received: from zhenghwe-mobl.gar.corp.intel.com ([10.214.145.151])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 10:10:58 -0700
-Message-ID: <9a1063a26351f859376ffae747fa0c89d73bdbc4.camel@intel.com>
-Subject: Re: [PATCH 0/7] x86/topology: Improve CPUID.1F handling
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 10:24:09 -0700
+Message-ID: <a5d596ca81243ba446be012a0f6d3bc01582f01f.camel@intel.com>
+Subject: Re: [PATCH 3/7] hwmon/coretemp: Handle large core id value
 From:   Zhang Rui <rui.zhang@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
         linux-hwmon@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
         corbet@lwn.net, fenghua.yu@intel.com, jdelvare@suse.com,
-        linux@roeck-us.net, len.brown@intel.com
-Date:   Sun, 14 Aug 2022 01:10:51 +0800
-In-Reply-To: <YveAp8W3zZliQXrq@gmail.com>
+        len.brown@intel.com
+Date:   Sun, 14 Aug 2022 01:24:01 +0800
+In-Reply-To: <20220812171600.GB2960077@roeck-us.net>
 References: <20220812164144.30829-1-rui.zhang@intel.com>
-         <YveAp8W3zZliQXrq@gmail.com>
+         <20220812164144.30829-4-rui.zhang@intel.com>
+         <20220812171600.GB2960077@roeck-us.net>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: base64
 User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi, Ingo,
+SGksIEd1ZW50ZXIsCgpPbiBGcmksIDIwMjItMDgtMTIgYXQgMTA6MTYgLTA3MDAsIEd1ZW50ZXIg
+Um9lY2sgd3JvdGU6Cj4gCj4gPiAtwqDCoMKgwqDCoMKgwqAvKiBUaGUgY29yZSBpZCBpcyB0b28g
+YmlnLCBqdXN0IHJldHVybiAqLwo+ID4gLcKgwqDCoMKgwqDCoMKgaW5keCA9IFRPX0FUVFJfTk8o
+Y3B1KTsKPiA+IC3CoMKgwqDCoMKgwqDCoGlmIChpbmR4ID4gTUFYX0NPUkVfREFUQSAtIDEpCj4g
+PiArwqDCoMKgwqDCoMKgwqBwZCA9IHBsYXRmb3JtX2dldF9kcnZkYXRhKHBkZXYpOwo+ID4gKwo+
+ID4gK8KgwqDCoMKgwqDCoMKgZm9yIChpID0gMDsgaSA8IE5VTV9SRUFMX0NPUkVTOyBpKyspIHsK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAocGQtPmNwdV9tYXBbaV0gPT0g
+dG9wb2xvZ3lfY29yZV9pZChjcHUpKSB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoGluZHggPSBpICsgQkFTRV9TWVNGU19BVFRSX05POwo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBicmVhazsKPiA+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiArwqDCoMKgwqDCoMKgwqB9Cj4gPiAr
+Cj4gPiArwqDCoMKgwqDCoMKgwqAvKiBUb28gbWFueSBjb3JlcyBhbmQgdGhpcyBjb3JlIGlzIG5v
+dCBwdXBvbGF0ZWQsIGp1c3QKPiA+IHJldHVybiAqLwo+IAo+IHBvcHVsYXRlZAo+IAo+IE90aGVy
+IHRoYW4gdGhhdCBsb29rcyBnb29kLgo+IAo+IEFja2VkLWJ5OiBHdWVudGVyIFJvZWNrIDxsaW51
+eEByb2Vjay11cy5uZXQ+CgpUaGFua3MgZm9yIHJldmlld2luZywgd2lsbCBmaXggaW4gbmV4dCB2
+ZXJzaW9uLgoKdGhhbmtzLApydWkK
 
-Thanks for reviewing this patch series.
-
-On Sat, 2022-08-13 at 12:44 +0200, Ingo Molnar wrote:
->=20
-> * Zhang Rui <rui.zhang@intel.com> wrote:
->=20
-> > On Intel AlderLake-N platforms where there are Ecores only, the
-> > Ecore
-> > Module topology is enumerated via CPUID.1F Module level, which has
-> > not
-> > been supported by Linux kernel yet.
-> >=20
-> > This exposes two issues in current CPUID.1F handling code.
-> > 1. Linux interprets the Module id bits as package id and
-> > erroneously
-> > =C2=A0=C2=A0 reports a multi module system as a multi-package system.
-> > 2. Linux excludes the unknown Module id bits from the core_id, and
-> > results
-> > =C2=A0=C2=A0 in duplicate core_id=E2=80=99s shown in a package after th=
-e first issue
-> > solved.
-> >=20
-> > Plus that, a third problem is observed on Intel Hybrid ADL-S/P
-> > platforms.
-> > The return value of CPUID.1F SMT level EBX (number of siblings)
-> > differs on
-> > Pcore CPUs and Ecore CPUs, and results in inconsistent
-> > smp_num_siblings
-> > value based on the Pcore/Ecore CPU enumeration order. This could
-> > bring
-> > some potential issues although we have not observed any
-> > functionalities
-> > issues so far.
-> >=20
-> > Patch 1/7 and 2/7 fix the first two issues. And at the same time,
-> > it
-> > reveals a reality that the core_id could be sparse on platforms
-> > with
-> > CPUID.1F support.
-> > Patch 3/7 improves coretemp driver code to be able to handle sparse
-> > core
-> > id, which is the only driver that uses core_id as array index and
-> > run on
-> > platforms with CPUID.1F support.
-> >=20
-> > Patch 4/7 to 7/7 propose a fix for the third problem and update the
-> > related Documents.
->=20
-> Yeah, so patch 3/7 probably needs to come first - otherwise there's a
-> window for bisection breakage.
-
-Sure, I will re-arrange this.
-
-
-thanks,
-rui
