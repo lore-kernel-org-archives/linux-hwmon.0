@@ -2,101 +2,139 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 172BBC19F2D
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Aug 2022 17:29:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ACC4C25B06
+	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Aug 2022 09:12:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239809AbiHMR3q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 13 Aug 2022 13:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
+        id S230464AbiHNJMP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 14 Aug 2022 05:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235606AbiHMR3p (ORCPT
+        with ESMTP id S229485AbiHNJMO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 13 Aug 2022 13:29:45 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0C212600;
-        Sat, 13 Aug 2022 10:29:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660411785; x=1691947785;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=6Xw2/z1zsnTRRBBcfa/hlj7wwo+Ed84nrD4IBqhA9Sg=;
-  b=XrIVYRzD7Jr30yVrcVReZys0tvPuxWt4MNUzN0S/34g0FuJMyLeURL8s
-   pADNhoMZdfgo2zr6ZNk7fhxgGj7oLgvrAfubBG5ZZW0oZ9MRjs6gRdbdx
-   PtSQDW5SVLy2cElKgYEta/HMzza9vh9x4P9G/T3cUYGkjsKkk1LwX1wUY
-   sNyvz7klVgXPwOAfilVgd+9N/+60G+15NnJeQ+dSfzn63oS8Crx7NQTTA
-   ZJgrE8CNoIoHRqaFCoU3LKgJriUDFlZicSh3IYpWec/ECiHkRljYrLoPm
-   vPPNxz4YdVf0NBcBMdbXAi5PzZ8gvsH2gp6GSYIj+8chKY2Q1i8NpaUKd
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="291766198"
-X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="291766198"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 10:29:44 -0700
-X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="732530537"
-Received: from zhenghwe-mobl.gar.corp.intel.com ([10.214.145.151])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 10:29:39 -0700
-Message-ID: <132858ae66f1cffeb32cc39b788647f52957fd5e.camel@intel.com>
-Subject: Re: [PATCH 7/7] perf/x86/intel/P4: Fix smp_num_siblings usage
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
+        Sun, 14 Aug 2022 05:12:14 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCB930F74;
+        Sun, 14 Aug 2022 02:12:13 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id y13so8870730ejp.13;
+        Sun, 14 Aug 2022 02:12:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc;
+        bh=OVl5WwZ+rC/n/1eWPeM+OsUxxYZUFvZkzjci5mIvKY4=;
+        b=YXtShR4m9kiYeT0WkRWu/ot1EzFyfuWzx3Dn2tkQZ8zOSjjo5yXKj0+mNuyIcfEco5
+         YjD2MWjggJUT+Lp2XD6eeD4Hir3y8F46x7iD+D56sH6zvKXTS9eb3ONEiPI0omf2VYrC
+         j1wscWBKv54JohAIIhtOGGlUdEvYyC23v8uiuZnIejGS1Ct7mQ6bXfjtPdbHnMdsL2a6
+         7wrfY5SYrH0BnKXU+91vYFqyJ/RPptug7BK7te37ZJw+4W8bfLKer6L2oJCsHdiEmqzd
+         qSqTgqnZsWl84XoYBTXMxm9PThEqrbCT/rbN2tsmQacrpxKbdv6d2kBI8OHU1bXEj2uD
+         RuAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc;
+        bh=OVl5WwZ+rC/n/1eWPeM+OsUxxYZUFvZkzjci5mIvKY4=;
+        b=CfntsJXlNv7fBNB2nxTNS6EJdNHWu/2LUdaO7dqR04I7EGIWZ3b5rFDpICVNEqaq86
+         jl+ig6gPedtP3tzaGBsE7ACb0CU4bplANRlEn6tfxw/uluTmFFrbUa5LxbnPboNd1v02
+         NgF0UTO6TCjWB1WuWjveK3K1Hzdw8ZCD4PvREpGOZgNUWn+uj3NFwemkQzdfrTXsCsO2
+         +6rpwjqJYfwhCoLtLZe462SbI2DgiMhtGHiJiiHGnrxOuuxIzgd2Oe/u4dx6Ii2xqQUE
+         rKiyb+lzpBzfhfoxc2smQ3yThd1xoPyDOhLmoprKEE3iflu/j7da3t12XNwnJyW0a0ld
+         eL2g==
+X-Gm-Message-State: ACgBeo2kRD7ghkblFn+tGYeCfhlHCe6ip2ZuWWwC0g/YvgTIThlw/isa
+        czvVxN1ROgj8zvn7XJ9B5uU=
+X-Google-Smtp-Source: AA6agR6RKoK46K88EqkeoAQJcJbbFf37K9T1OqvCbGqVz7wZgWG381Fn4KK/6QNvpqlrF2dvDo1kYQ==
+X-Received: by 2002:a17:906:8461:b0:730:a43a:9981 with SMTP id hx1-20020a170906846100b00730a43a9981mr7191753ejc.552.1660468331834;
+        Sun, 14 Aug 2022 02:12:11 -0700 (PDT)
+Received: from gmail.com (195-38-113-253.pool.digikabel.hu. [195.38.113.253])
+        by smtp.gmail.com with ESMTPSA id q23-20020a056402041700b0043cfda1368fsm4459654edv.82.2022.08.14.02.12.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 02:12:11 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sun, 14 Aug 2022 11:12:08 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Zhang Rui <rui.zhang@intel.com>
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
         linux-hwmon@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
         corbet@lwn.net, fenghua.yu@intel.com, jdelvare@suse.com,
         linux@roeck-us.net, len.brown@intel.com
-Date:   Sun, 14 Aug 2022 01:29:31 +0800
-In-Reply-To: <YveCBx/X/YyoccI0@gmail.com>
+Subject: Re: [PATCH 3/7] hwmon/coretemp: Handle large core id value
+Message-ID: <Yvi8aBtytJ1pEDoe@gmail.com>
 References: <20220812164144.30829-1-rui.zhang@intel.com>
-         <20220812164144.30829-8-rui.zhang@intel.com> <YveCBx/X/YyoccI0@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1-0ubuntu1 
+ <20220812164144.30829-4-rui.zhang@intel.com>
+ <YveBgsVINyKjXW9g@gmail.com>
+ <e5a8d07eda23baf07a89ebf54b70d1cfab183837.camel@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e5a8d07eda23baf07a89ebf54b70d1cfab183837.camel@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi, Ingo,
 
-On Sat, 2022-08-13 at 12:50 +0200, Ingo Molnar wrote:
->=20
-> * Zhang Rui <rui.zhang@intel.com> wrote:
->=20
-> > smp_num_siblings can be larger than 2.
-> >=20
-> > Any value larger than 1 suggests HT is supported.
-> >=20
-> > Reviewed-by: Len Brown <len.brown@intel.com>
-> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> > ---
-> > =C2=A0arch/x86/include/asm/perf_event_p4.h | 2 +-
-> > =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/arch/x86/include/asm/perf_event_p4.h
-> > b/arch/x86/include/asm/perf_event_p4.h
-> > index 94de1a05aeba..b14e9a20a7c0 100644
-> > --- a/arch/x86/include/asm/perf_event_p4.h
-> > +++ b/arch/x86/include/asm/perf_event_p4.h
-> > @@ -189,7 +189,7 @@ static inline int p4_ht_active(void)
-> > =C2=A0static inline int p4_ht_thread(int cpu)
-> > =C2=A0{
-> > =C2=A0#ifdef CONFIG_SMP
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (smp_num_siblings =3D=3D =
-2)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (smp_num_siblings > 1)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0return cpu !=3D
-> > cpumask_first(this_cpu_cpumask_var_ptr(cpu_sibling_map));
->=20
-> This fix too should probably come before all the other changes.
->=20
-> (Not that Pentium 4 code is expected to ever see such SMT thread
-> values.)
->=20
-Do you mean that this is a clean fix, and there is no reason for this
-patch to be blocked by any of the other patches in this series?
+* Zhang Rui <rui.zhang@intel.com> wrote:
 
-thanks,
-rui
+> On Sat, 2022-08-13 at 12:48 +0200, Ingo Molnar wrote:
+> > 
+> > * Zhang Rui <rui.zhang@intel.com> wrote:
+> > 
+> > > The coretemp driver supports up to a hard-coded limit of 128 cores.
+> > > 
+> > > Today, the driver can not support a core with an id above that
+> > > limit.
+> > > Yet, the encoding of core_id's is arbitrary (BIOS APIC-id) and so
+> > > they
+> > > may be sparse and they may be large.
+> > > 
+> > > Update the driver to map arbitrary core_id numbers into appropriate
+> > > array indexes so that 128 cores can be supported, no matter the
+> > > encoding
+> > > of core_ids's.
+> > 
+> > Please capitalize 'ID' consistently throughout the series.
+> > 
+> > > -       attr_no = pkg_flag ? PKG_SYSFS_ATTR_NO : TO_ATTR_NO(cpu);
+> > > +       if (pkg_flag)
+> > > +               attr_no = PKG_SYSFS_ATTR_NO;
+> > > +       else {
+> > > +               index = ida_alloc(&pdata->ida, GFP_KERNEL);
+> > > +               if (index < 0)
+> > > +                       return index;
+> > > +               pdata->cpu_map[index] = topology_core_id(cpu);
+> > > +               attr_no = index + BASE_SYSFS_ATTR_NO;
+> > > +       }
+> > 
+> > Unbalanced curly braces.
+> 
+> Sure, will fix these two issues in next version.
+> 
+> > 
+> > > -       int err, attr_no;
+> > > +       int err, index, attr_no;
+> > 
+> > So it's 'index' here.
+> > 
+> > > @@ -524,6 +538,8 @@ static void coretemp_remove_core(struct
+> > > platform_data *pdata, int indx)
+> > 
+> > But 'indx' here.
+> > 
+> > > -       int indx, target;
+> > > +       int i, indx = -1, target;
+> > 
+> > And 'indx' again. Did we run out of the letter 'e'? Either use
+> > 'index' 
+> > naming consistently, or 'idx' if it has to be abbreviated.
+> 
+> I'd prefer 'index', but here, this 'indx' is from previous code and
+> this patch just initializes it to -1.
+
+Then queue up a cleanup patch as patch #1 - but idiosyncratic noise like 
+that makes review harder.
+
+Thanks,
+
+	Ingo
