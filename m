@@ -2,81 +2,136 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C731C25B08
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Aug 2022 09:12:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75890C3F6B0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Aug 2022 15:55:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbiHOJMb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Aug 2022 05:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
+        id S232234AbiHOPzH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Aug 2022 11:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231760AbiHOJMa (ORCPT
+        with ESMTP id S232201AbiHOPzF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Aug 2022 05:12:30 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB5621E2D;
-        Mon, 15 Aug 2022 02:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=TfpBC458fNMwuJim+LX9wzEgy0r+1CzNINaC0XhHYTY=; b=pv21Q2xcgWo0gE35aU+detWxmJ
-        FohGIgaoPUblYdGr+/ltk9hGqBbCgZYoJbUiUCR3FBIEhFeAIy6+4QAoed9VCpE6AEv6X0UtrNoaM
-        sTi/7pI4z/5bkAHhWl5R4R0Do75U1KZdf8I+ofdx9iDzz4CcTvk8c8k/0FPImew6PYsxqkO44881U
-        lP/Zzzifrad+Hyr8hovemYDrLtlcHv8vR2ag1gC78n6RA63/ICnhgIF3Ng4MHRdVajWOts8v5jiVV
-        3Tyunvs7yY8KRMICOkVJ7Km9HYE5d0WU/RE/euGsWlFpv3q/1uX2+KIUGCACQLObeTIQtv5Dn7CsB
-        ZoaMNKhA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oNW8X-005aEr-6K; Mon, 15 Aug 2022 09:11:53 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 55537980153; Mon, 15 Aug 2022 11:11:52 +0200 (CEST)
-Date:   Mon, 15 Aug 2022 11:11:52 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-hwmon@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        corbet@lwn.net, fenghua.yu@intel.com, jdelvare@suse.com,
-        linux@roeck-us.net, len.brown@intel.com
-Subject: Re: [PATCH 7/7] perf/x86/intel/P4: Fix smp_num_siblings usage
-Message-ID: <YvoN2DTABnRZiJhf@worktop.programming.kicks-ass.net>
-References: <20220812164144.30829-1-rui.zhang@intel.com>
- <20220812164144.30829-8-rui.zhang@intel.com>
+        Mon, 15 Aug 2022 11:55:05 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5191A05A;
+        Mon, 15 Aug 2022 08:55:02 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 26F5656D;
+        Mon, 15 Aug 2022 17:54:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1660578899;
+        bh=S8j7GbNbq17SRBvgGdMvUVVVDhDYQu28yqUMRIme4pw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KkMqLgeA3Hlou6eQxDNwuj/cAMOGRuZWf6psOJwAoE+lkqdgWTBYLUFWFiFmirC11
+         MV/sX2S9rJ9pHMvTFjbnnwFQbUhcqWxVXtYbPHGpZY4nQn8qmWU8YDavgsBevmlt5n
+         2eecXKodkdAhl5/HdCyGSGest6FWKhs5flNo+vq8=
+Date:   Mon, 15 Aug 2022 18:54:45 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        dri-devel@lists.freedesktop.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        linux-amlogic@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-doc@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        linux-hwmon@vger.kernel.org, linux-clk@vger.kernel.org,
+        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        David Airlie <airlied@linux.ie>, linux-iio@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 0/7] Devm helpers for regulator get and enable
+Message-ID: <YvpsRbguMXn74GhR@pendragon.ideasonboard.com>
+References: <cover.1660292316.git.mazziesaccount@gmail.com>
+ <166057828406.697572.228317501909350108.b4-ty@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220812164144.30829-8-rui.zhang@intel.com>
+In-Reply-To: <166057828406.697572.228317501909350108.b4-ty@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Aug 13, 2022 at 12:41:44AM +0800, Zhang Rui wrote:
-> smp_num_siblings can be larger than 2.
-
-Not on a P4 it can't ;-)
-
+On Mon, Aug 15, 2022 at 04:44:44PM +0100, Mark Brown wrote:
+> On Fri, 12 Aug 2022 13:08:17 +0300, Matti Vaittinen wrote:
+> > Devm helpers for regulator get and enable
+> > 
+> > First patch in the series is actually just a simple documentation fix
+> > which could be taken in as it is now.
+> > 
+> > A few* drivers seem to use pattern demonstrated by pseudocode:
+> > 
+> > [...]
 > 
-> Any value larger than 1 suggests HT is supported.
+> Applied to
 > 
-> Reviewed-by: Len Brown <len.brown@intel.com>
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->  arch/x86/include/asm/perf_event_p4.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 > 
-> diff --git a/arch/x86/include/asm/perf_event_p4.h b/arch/x86/include/asm/perf_event_p4.h
-> index 94de1a05aeba..b14e9a20a7c0 100644
-> --- a/arch/x86/include/asm/perf_event_p4.h
-> +++ b/arch/x86/include/asm/perf_event_p4.h
-> @@ -189,7 +189,7 @@ static inline int p4_ht_active(void)
->  static inline int p4_ht_thread(int cpu)
->  {
->  #ifdef CONFIG_SMP
-> -	if (smp_num_siblings == 2)
-> +	if (smp_num_siblings > 1)
->  		return cpu != cpumask_first(this_cpu_cpumask_var_ptr(cpu_sibling_map));
->  #endif
->  	return 0;
+> Thanks!
+> 
+> [1/7] docs: devres: regulator: Add missing devm_* functions to devres.rst
+>       commit: 9b6744f60b6b47bc0757a1955adb4d2c3ab22e13
+> [2/7] regulator: Add devm helpers for get and enable
+>       (no commit info)
 
-Unless Intel plans to respin an P4 with extra siblings on, I don't think
-this qualifies for the word 'fix'.
+I didn't have time to reply to the series yet, but I think this isn't a
+great idea. There are two issues:
+
+- With devres, you don't have full control over the order in which
+  resources will be released, which means that you can't control the
+  power off sequence, in particular if it needs to be sequenced with
+  GPIOs and clocks. That's not a concern for all drivers, but this API
+  will creep in in places where it shouldn't be used, driver authours
+  should really pay attention to power management and not live with the
+  false impression that everything will be handled automatically for
+  them. In the worst cases, an incorrect power off sequence could lead
+  to hardware damage.
+
+- Powering regulators on at probe time and leaving them on is a very bad
+  practice from a power management point of view, and should really be
+  discouraged. Adding convenience helpers to make this easy is the wrong
+  message, we should instead push driver authors to implement proper
+  runtime PM.
+
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+> 
+> You may get further e-mails resulting from automated or manual testing
+> and review of the tree, please engage with people reporting problems and
+> send followup patches addressing any issues that are reported if needed.
+> 
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
+> 
+> Please add any relevant lists and maintainers to the CCs when replying
+> to this mail.
+
+-- 
+Regards,
+
+Laurent Pinchart
