@@ -2,156 +2,137 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E08ACC32772
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 10:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E741C32772
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 10:10:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233650AbiHPKIp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Aug 2022 06:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
+        id S231991AbiHPKKn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Aug 2022 06:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234262AbiHPKID (ORCPT
+        with ESMTP id S234344AbiHPKJk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:08:03 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB1E356F4;
-        Tue, 16 Aug 2022 01:42:58 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id b2so7628325qkh.12;
-        Tue, 16 Aug 2022 01:42:58 -0700 (PDT)
+        Tue, 16 Aug 2022 06:09:40 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDA112309F;
+        Tue, 16 Aug 2022 01:28:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=M8+zN5n51GohpbStdjKXmJWXHgqhXr7wmE0QoYJl1Tg=;
-        b=qLuGJVydbZapmuhh/ri/mPvYA5bm4nMtIaG76TKtA3Mvo/gBhkJK17beJcQl4lBkM0
-         iPBdZSSrCNgcezsRIABTJwp7UtgOhSIzqLsuYw6uKZIdWj2+EzGX4Ynvo2pcygJ3ES0H
-         rNv2bDiwY+8yFgEBX8y3Q+RZ0w+7z61uHWS67T1C+ZdmOf9xIz3+Ss494E0LnAKj62KJ
-         uuV7tjhnSgJ133uq7dK9dc8YkqzpGgSLl11+J0G8NNyLbKRknzb7wyR2X4f7YRD/3396
-         ChRcoJ8Z8tpfDVeQs7eHQAwLSDOEU4j8m9CRydpoEnGFQI0rjqmOED+9BOVCNq8moS5U
-         UQgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=M8+zN5n51GohpbStdjKXmJWXHgqhXr7wmE0QoYJl1Tg=;
-        b=Nepdhtws48v2xij5S/nWebWOJnxuWP4JOjF/2KqaCvOgfmk3TiLhtYBKBiom95hkNS
-         gjU0XOwr5MW8JOxkNuPDG6BBnecPqoc09gvIePtGlb7iPAGaRs4Qo+5b28OYCPcgC+43
-         6Pty5tXDIzbhTHaXVTpEIitd1Qn2ZlJScZDw8ffK/aZUzgt22Xf+Z/o51x/oYWOVoAqF
-         gndFTmrZnjwe7UmD2gFmx9lPVUwkOnsUldY6hrO2HaZOHoRcb5eVIxDxyuyTBIZ/xz/M
-         uiDUCOmdl7judNDA1Pv8TNapNmlFTMwTYeev0jkQKrr4gRq7KWUX8Nhr7Hr/7OT2JfAW
-         Pinw==
-X-Gm-Message-State: ACgBeo0uJw2fp/LLnGgtYGDsjU4qdXa/Lai1LTrrKIn0na9QclHQfC75
-        hAcLSuZIYCKtjqJHK9m8xBDMqPvqpvdgcDp7bds=
-X-Google-Smtp-Source: AA6agR4R4lk0CDBQHZmGfGnS3MaEvTJE6k0Sqbe/jCHB+ee624GaEK+KH/pS5yDyRz1iFyVysOe/Lnz9Oes4idkTrfs=
-X-Received: by 2002:ae9:e311:0:b0:6ba:e711:fb27 with SMTP id
- v17-20020ae9e311000000b006bae711fb27mr11131735qkf.320.1660639377250; Tue, 16
- Aug 2022 01:42:57 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1660638504; x=1692174504;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=FNHPX12Pit1WxIpHyPTouV10hppwOlS2zHdFi1vLKSQ=;
+  b=anChMr3piLQwLFYGojdKtN7uUC+VQMcms+54NFx+LPI6TNxoxw+lYnsc
+   rz+4LkSI+f46QlnTyIerS/UjDAbOS9d7NaHNDUh1rnjVUGDK+oQD+aDzD
+   LnVv2IWrk75Ka09y8ETlYQc2HyfYQ6zlFmX/koDV+f1cqLp3XCC+OhOkL
+   g=;
+X-IronPort-AV: E=Sophos;i="5.93,240,1654560000"; 
+   d="scan'208";a="1044708753"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-10222bbc.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 08:28:22 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-10222bbc.us-east-1.amazon.com (Postfix) with ESMTPS id 792FD1A17C2;
+        Tue, 16 Aug 2022 08:28:20 +0000 (UTC)
+Received: from EX19D013UWA002.ant.amazon.com (10.13.138.210) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 16 Aug 2022 08:28:00 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX19D013UWA002.ant.amazon.com (10.13.138.210) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Tue, 16 Aug 2022 08:27:59 +0000
+Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
+ (172.19.116.181) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 16 Aug 2022 08:27:59
+ +0000
+Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
+        id 5E7E84C1C; Tue, 16 Aug 2022 08:27:57 +0000 (UTC)
+From:   Eliav Farber <farbere@amazon.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <linux-hwmon@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
+        <jonnyc@amazon.com>, <hanochu@amazon.com>, <ronenk@amazon.com>,
+        <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
+        <amitlavi@amazon.com>, <almogbs@amazon.com>, <dwmw@amazon.co.uk>,
+        <rtanwar@maxlinear.com>
+Subject: [PATCH 13/16] hwmon: (mr75203) add thermal coefficient properties for Moortec PVT controller
+Date:   Tue, 16 Aug 2022 08:27:54 +0000
+Message-ID: <20220816082757.11990-14-farbere@amazon.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220816082757.11990-1-farbere@amazon.com>
+References: <20220816082757.11990-1-farbere@amazon.com>
 MIME-Version: 1.0
-References: <cover.1660292316.git.mazziesaccount@gmail.com>
- <166057828406.697572.228317501909350108.b4-ty@kernel.org> <YvpsRbguMXn74GhR@pendragon.ideasonboard.com>
- <Yvp1Qkuh7xfeb/B2@sirena.org.uk> <YvqV9Mq6I3gXQaf2@pendragon.ideasonboard.com>
- <20220815205857.308B1C433D6@smtp.kernel.org> <Yvq33T+XCduoqv7Z@pendragon.ideasonboard.com>
-In-Reply-To: <Yvq33T+XCduoqv7Z@pendragon.ideasonboard.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 16 Aug 2022 11:42:20 +0300
-Message-ID: <CAHp75VefRphjAhSmrUVC8aaAhrwMD+9Jr=OROFU-0JuNhuFYDw@mail.gmail.com>
-Subject: Re: (subset) [PATCH v2 0/7] Devm helpers for regulator get and enable
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-amlogic <linux-amlogic@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Michael Turq uette <mturquette@baylibre.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        linux-hwmon@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        David Airlie <airlied@linux.ie>,
-        linux-iio <linux-iio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 8:37 AM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
-> On Mon, Aug 15, 2022 at 01:58:55PM -0700, Stephen Boyd wrote:
-> > Quoting Laurent Pinchart (2022-08-15 11:52:36)
-> > > On Mon, Aug 15, 2022 at 05:33:06PM +0100, Mark Brown wrote:
+Add optional "ts-coeff-g", "ts-coeff-h", "ts-coeff-cal5" and
+"ts-coeff-j" properties to be used instead of defaults for the
+thermal equasion.
 
-...
+Signed-off-by: Eliav Farber <farbere@amazon.com>
+---
+ .../bindings/hwmon/moortec,mr75203.yaml       | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-> > > we'll run into trouble. Supplying active high input signals
-> > > to a device that is not powered can lead to latch-up, which tends to
-> > > only manifest after a statistically significant number of occurrences of
-> > > the condition, and can slowly damage the hardware over time. This is a
-> > > real concern as it will typically not be caught during early
-> > > development. I think we would still be better off with requiring drivers
-> > > to manually handle powering off the device until we provide a mechanism
-> > > that can do so safely in an automated way.
-> >
-> > Can you describe the error scenario further? I think it's driver author
-> > error that would lead to getting and enabling the regulator after
-> > getting and enabling a clk that drives out a clock signal on some pins
-> > that aren't powered yet. I'm not sure that's all that much easier to do
-> > with these sorts of devm APIs, but if it is then I'm concerned.
->
-> You will very quickly see drivers doing this (either directly or
-> indirectly):
->
-> probe()
-> {
->         devm_clk_get_enabled();
->         devm_regulator_get_enable();
-> }
-
-And how is it devm specific? If the author puts the same without devm
-the ordering would be wrong, correct? devm allows us to focus on
-ordering in a *single* place, which is a win. You seem to be proposing
-to make a high burden on a driver's author to focus on ordering in the
-*three* places. I disagree with that. Yet the driver author has to
-understand many issues with any tool they use. So the root cause of
-your whining is rather on the edge of documentation and education.
-(Yes, I have heard about issues with object lifetime in v4l2
-subdevices regarding to devm, but it seems irrelevant to devm
-mechanism itself.)
-
-> Without a devres-based get+enable API drivers can get the resources they
-> need in any order, possibly moving some of those resource acquisition
-> operations to different functions, and then have a clear block of code
-> that enables the resources in the right order. These devres helpers give
-> a false sense of security to driver authors and they will end up
-> introducing problems, the same way that devm_kzalloc() makes it
-> outrageously easy to crash the kernel by disconnecting a device that is
-> in use.
-
-
-
+diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+index e2a55001eefc..867664bd937f 100644
+--- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
++++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+@@ -62,6 +62,30 @@ properties:
+       used to normalzie the voltage output results.
+     $ref: /schemas/types.yaml#definitions/uint32
+ 
++  ts-coeff-g:
++    description:
++      G coefficient for thermal equation.
++    maxItems: 1
++    $ref: /schemas/types.yaml#definitions/uint32
++
++  ts-coeff-h:
++    description:
++      H coefficient for thermal equation.
++    maxItems: 1
++    $ref: /schemas/types.yaml#definitions/uint32
++
++  ts-coeff-cal5:
++    description:
++      cal5 coefficient for thermal equation (can't be 0).
++    maxItems: 1
++    $ref: /schemas/types.yaml#definitions/uint32
++
++  ts-coeff-j:
++    description:
++      J coefficient for thermal equation.
++    maxItems: 1
++    $ref: /schemas/types.yaml#definitions/int32
++
+ required:
+   - compatible
+   - reg
+@@ -75,6 +99,10 @@ additionalProperties:
+   - reset-control-skip
+   - vm-active-channels
+   - vm-pre-scalar-ch#
++  - ts-coeff-g
++  - ts-coeff-h
++  - ts-coeff-cal5
++  - ts-coeff-j
+ 
+ examples:
+   - |
+@@ -90,5 +118,10 @@ examples:
+         resets = <&rcu0 0x40 7>;
+         vm-active-channels = [08 10 02];
+         vm-pre-scalar-ch5 = <2>;
++        ts-coeff-g = <57400>;
++        ts-coeff-h = <249400>;
++        ts-coeff-cal5 = <4096>;
++        ts-coeff-j = <0>;
++
+         #thermal-sensor-cells = <1>;
+     };
 -- 
-With Best Regards,
-Andy Shevchenko
+2.37.1
+
