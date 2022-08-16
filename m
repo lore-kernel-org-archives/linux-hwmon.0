@@ -2,113 +2,257 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92962C32773
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 10:20:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12765C32772
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 10:22:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233744AbiHPKUz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Aug 2022 06:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
+        id S234402AbiHPKWf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Aug 2022 06:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234444AbiHPKUY (ORCPT
+        with ESMTP id S234476AbiHPKWO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:20:24 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3974116ECD;
-        Tue, 16 Aug 2022 01:24:11 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id s11so7593785qtx.6;
-        Tue, 16 Aug 2022 01:24:11 -0700 (PDT)
+        Tue, 16 Aug 2022 06:22:14 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCAE11DD45;
+        Tue, 16 Aug 2022 01:28:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=URNWhoG6Jht3PNpZTFjRMq9C2xuK/GPJGs5c4/qP8Qo=;
-        b=WMTSsJZCsuR2GWexgektS/N4A4uFwS5j+U4U9bXLj9a3L47qI380JV+vKz4DRgUo7m
-         JQ0ZPw6GRXuu40crI4HPnyfuU8Mwuj1qNeEIP4TcZGai2JWBghl1MLZHSVb55P06F6bx
-         B1nlcqlENsza+hf4Ohd1X2ICgnXG9gNZC7PGiYkFdA7ZFjkUfcc87MSd36YKblkLzxGa
-         2BnwA9oruaCFleVvpGTBbHY4dKpfAmqqekOjjv8m9YDssWVu8bRB/z5KMz8EGrrjZ7Sy
-         Eu4fOB4U87dlJ/FQykdL1H5XL0UdE1RlRY7jmsZJ10A3yVUtG2esLd0xOaEnLq9ua0pr
-         3xdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=URNWhoG6Jht3PNpZTFjRMq9C2xuK/GPJGs5c4/qP8Qo=;
-        b=e4x9YMl4hoo1y89HM5Ci5Jp5LKPTYqOmkNWgQFQGsjBx+NmR/0QUz+lTTckOgi277Y
-         sAPdfcHZjQVHg9hewQQXtcxUg8RTEZ0j0pQeKcviFFrL/+4ut/xbVyRtEUekQNnY2qEI
-         VzS4MtsQsQGYk0G0/k7AvC2pWn/Z/BDD8tERXZkBi74SqtUBkVnPc7OXkocfF1JTGqZo
-         ogb/nuvWjIZ5Jk8m2li+OOEKJtoKZSdhxg4OpDOjm35js34vAhrN/VQ0qsx1jRJaErS6
-         ezntuXFXJbWCkWpKmsnSXfai1RWb1MqbM3wOpdvOwxAKC90BGy1fhg0KFjiqZN132yPx
-         N4tw==
-X-Gm-Message-State: ACgBeo3Zxe0nTE8F6Trk56qb222CQX/jl1QENzmY1g7Hj5bNS+aTtykf
-        p2fkJqHSkNCgnflRw6RnvDqcOgJL2AFJiZ3AUyk=
-X-Google-Smtp-Source: AA6agR5pnQGi7oingWiXnnixDq3edlax9wsTNuhcRBi9pIKjuflZ8obEieyrcjYpsw/u/5tbgjY0kZ/rOVvlBmyXAN8=
-X-Received: by 2002:a05:622a:14cf:b0:343:5b6:68ca with SMTP id
- u15-20020a05622a14cf00b0034305b668camr16705479qtx.195.1660638245828; Tue, 16
- Aug 2022 01:24:05 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1660638502; x=1692174502;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=LT+uQKQYay0NpQ9akz1XWeAUd+sCergcYHUcmH9Mcb4=;
+  b=NU3F5EARCxaO+empSVoMZXjc/FDnf8g4zVyS2iFQeVWCwsdU+qOBxTVO
+   1TuhD5wWx7KQOhJUaEs4irsFsJ6Nr6UVvOVDfsgzKaDe6QjrU0jhBDs+1
+   uDdmlWwjqi8CueGFOlGlMyK4yOYUaI8BgKlYncSNow90qN5yC9fOfyrpB
+   o=;
+X-IronPort-AV: E=Sophos;i="5.93,240,1654560000"; 
+   d="scan'208";a="1044708734"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 08:28:21 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com (Postfix) with ESMTPS id BDFF4853FB;
+        Tue, 16 Aug 2022 08:28:18 +0000 (UTC)
+Received: from EX19D013UWA003.ant.amazon.com (10.13.138.202) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 16 Aug 2022 08:27:59 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX19D013UWA003.ant.amazon.com (10.13.138.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Tue, 16 Aug 2022 08:27:58 +0000
+Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
+ (172.19.116.181) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 16 Aug 2022 08:27:58
+ +0000
+Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
+        id 5954C4C10; Tue, 16 Aug 2022 08:27:57 +0000 (UTC)
+From:   Eliav Farber <farbere@amazon.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <linux-hwmon@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
+        <jonnyc@amazon.com>, <hanochu@amazon.com>, <ronenk@amazon.com>,
+        <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
+        <amitlavi@amazon.com>, <almogbs@amazon.com>, <dwmw@amazon.co.uk>,
+        <rtanwar@maxlinear.com>
+Subject: [PATCH 08/16] hwmon: (mr75203) add VM active channel support
+Date:   Tue, 16 Aug 2022 08:27:49 +0000
+Message-ID: <20220816082757.11990-9-farbere@amazon.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220816082757.11990-1-farbere@amazon.com>
+References: <20220816082757.11990-1-farbere@amazon.com>
 MIME-Version: 1.0
-References: <cover.1660292316.git.mazziesaccount@gmail.com>
- <166057828406.697572.228317501909350108.b4-ty@kernel.org> <YvpsRbguMXn74GhR@pendragon.ideasonboard.com>
- <Yvp1Qkuh7xfeb/B2@sirena.org.uk> <YvqV9Mq6I3gXQaf2@pendragon.ideasonboard.com>
-In-Reply-To: <YvqV9Mq6I3gXQaf2@pendragon.ideasonboard.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 16 Aug 2022 11:23:29 +0300
-Message-ID: <CAHp75VcAS2Km_aWOV-XhMe9JkLER-1DYbJbkM9pa-i9yhHqsFQ@mail.gmail.com>
-Subject: Re: (subset) [PATCH v2 0/7] Devm helpers for regulator get and enable
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-amlogic <linux-amlogic@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        linux-hwmon@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        David Airlie <airlied@linux.ie>,
-        linux-iio <linux-iio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 11:20 PM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
-> On Mon, Aug 15, 2022 at 05:33:06PM +0100, Mark Brown wrote:
+Add active channel support per VM, which is useful when not all VM
+channels are used.
+Number of active channel is read from device-tree.
+When absent in device-tree, all channels are assumed to be used.
+Setting number of active channels to 0, means that entire VM sesnor is
+not used (this can partially replace the "intel,vm-map" functionality).
 
-...
+Signed-off-by: Eliav Farber <farbere@amazon.com>
+---
+ drivers/hwmon/mr75203.c | 92 +++++++++++++++++++++++++++++++----------
+ 1 file changed, 70 insertions(+), 22 deletions(-)
 
-> However, should a devm_clk_get_enable() or similar function be
-> implemented, we'll run into trouble.
-
-And in 5.19 we have devm_clk_get_enable(), are we already in trouble?
-
+diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+index 4419e481d47c..9b45fd089fcf 100644
+--- a/drivers/hwmon/mr75203.c
++++ b/drivers/hwmon/mr75203.c
+@@ -107,6 +107,11 @@
+ #define PVT_N_CONST		90
+ #define PVT_R_CONST		245805
+ 
++struct voltage_device {
++	u8 vm_map;
++	u8 ch_map;
++};
++
+ struct pvt_device {
+ 	struct regmap		*c_map;
+ 	struct regmap		*t_map;
+@@ -114,12 +119,13 @@ struct pvt_device {
+ 	struct regmap		*v_map;
+ 	struct clk		*clk;
+ 	struct reset_control	*rst;
++	struct voltage_device	*vd;
+ 	u32			t_num;
+ 	u32			p_num;
+ 	u32			v_num;
+-	u32			c_num;
+ 	u32			ip_freq;
+-	u8			*vm_idx;
++	u8			vm_ch_max;
++	u8			vm_ch_total;
+ };
+ 
+ static umode_t pvt_is_visible(const void *data, enum hwmon_sensor_types type,
+@@ -186,11 +192,11 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+ 	u8 ch_idx;
+ 	int ret;
+ 
+-	if (channel >= pvt->v_num * pvt->c_num)
++	if (channel >= pvt->vm_ch_total)
+ 		return -EINVAL;
+ 
+-	vm_idx = pvt->vm_idx[channel / pvt->c_num];
+-	ch_idx = channel % pvt->c_num;
++	vm_idx = pvt->vd[channel].vm_map;
++	ch_idx = pvt->vd[channel].ch_map;
+ 
+ 	switch (attr) {
+ 	case hwmon_in_input:
+@@ -390,7 +396,7 @@ static int pvt_init(struct pvt_device *pvt)
+ 		if (ret)
+ 			return ret;
+ 
+-		val = GENMASK(pvt->c_num - 1, 0) | VM_CH_INIT |
++		val = GENMASK(pvt->vm_ch_max - 1, 0) | VM_CH_INIT |
+ 		      IP_POLL << SDIF_ADDR_SFT |
+ 		      SDIF_WRN_W | SDIF_PROG;
+ 		ret = regmap_write(v_map, SDIF_W, val);
+@@ -519,7 +525,7 @@ static int pvt_reset_control_deassert(struct device *dev, struct pvt_device *pvt
+ static int mr75203_probe(struct platform_device *pdev)
+ {
+ 	const struct hwmon_channel_info **pvt_info;
+-	u32 ts_num, vm_num, pd_num, ch_num, val, index, i;
++	u32 ts_num, vm_num, pd_num, ch_num, val, index, i, j, k;
+ 	struct device *dev = &pdev->dev;
+ 	u32 *temp_config, *in_config;
+ 	struct device *hwmon_dev;
+@@ -569,7 +575,6 @@ static int mr75203_probe(struct platform_device *pdev)
+ 	pvt->t_num = ts_num;
+ 	pvt->p_num = pd_num;
+ 	pvt->v_num = vm_num;
+-	pvt->c_num = ch_num;
+ 	val = 0;
+ 	if (ts_num)
+ 		val++;
+@@ -606,43 +611,86 @@ static int mr75203_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	if (vm_num) {
+-		u32 total_ch = ch_num * vm_num;
++		u8 vm_idx[vm_num];
++		u8 vm_active_ch[vm_num];
+ 
+ 		ret = pvt_get_regmap(pdev, "vm", pvt);
+ 		if (ret)
+ 			return ret;
+ 
+-		pvt->vm_idx = devm_kcalloc(dev, vm_num, sizeof(*pvt->vm_idx),
+-					   GFP_KERNEL);
+-		if (!pvt->vm_idx)
+-			return -ENOMEM;
+-
+-		ret = device_property_read_u8_array(dev, "intel,vm-map",
+-						    pvt->vm_idx, vm_num);
++		ret = device_property_read_u8_array(dev, "intel,vm-map", vm_idx,
++						    vm_num);
+ 		if (ret) {
+ 			/*
+ 			 * Incase intel,vm-map property is not defined, we
+ 			 * assume incremental channel numbers.
+ 			 */
+ 			for (i = 0; i < vm_num; i++)
+-				pvt->vm_idx[i] = i;
++				vm_idx[i] = i;
+ 		} else {
+ 			for (i = 0; i < vm_num; i++)
+-				if (pvt->vm_idx[i] >= vm_num ||
+-				    pvt->vm_idx[i] == 0xff)
++				if (vm_idx[i] >= vm_num || vm_idx[i] == 0xff)
+ 					break;
+ 
+ 			vm_num = i;
+ 			pvt->v_num = i;
+ 		}
+ 
+-		in_config = devm_kcalloc(dev, total_ch + 1,
++		ret = device_property_read_u8_array(dev, "vm-active-channels",
++						    vm_active_ch, vm_num);
++		if (ret) {
++			/*
++			 * Incase vm-active-channels property is not defined,
++			 * we assume each VM sensor has all of its channels
++			 * active.
++			 */
++			for (i = 0; i < vm_num; i++)
++				vm_active_ch[i] = ch_num;
++
++			pvt->vm_ch_max = ch_num;
++			pvt->vm_ch_total = ch_num * vm_num;
++		} else {
++			for (i = 0; i < vm_num; i++) {
++				if (vm_active_ch[i] > ch_num) {
++					dev_err(dev,
++						"invalid active channels: %u\n",
++						vm_active_ch[i]);
++					return -EINVAL;
++				}
++
++				pvt->vm_ch_total += vm_active_ch[i];
++
++				if (vm_active_ch[i] > pvt->vm_ch_max)
++					pvt->vm_ch_max = vm_active_ch[i];
++			}
++		}
++
++		/*
++		 * Map between the channel-number to VM-index and channel-index.
++		 * Example - 3 VMs, vm_active_ch = [05 02 04]:
++		 * vm_map = [0 0 0 0 0 1 1 2 2 2 2]
++		 * ch_map = [0 1 2 3 4 0 1 0 1 2 3]
++		 */
++		pvt->vd = devm_kcalloc(dev, pvt->vm_ch_total, sizeof(*pvt->vd),
++				       GFP_KERNEL);
++		if (!pvt->vd)
++			return -ENOMEM;
++
++		k = 0;
++		for (i = 0; i < vm_num; i++)
++			for (j = 0; j < vm_active_ch[i]; j++) {
++				pvt->vd[k].vm_map = vm_idx[i];
++				pvt->vd[k].ch_map = j;
++				k++;
++			}
++
++		in_config = devm_kcalloc(dev, pvt->vm_ch_total + 1,
+ 					 sizeof(*in_config), GFP_KERNEL);
+ 		if (!in_config)
+ 			return -ENOMEM;
+ 
+-		memset32(in_config, HWMON_I_INPUT, total_ch);
+-		in_config[total_ch] = 0;
++		memset32(in_config, HWMON_I_INPUT, pvt->vm_ch_total);
++		in_config[pvt->vm_ch_total] = 0;
+ 		pvt_in.config = in_config;
+ 
+ 		pvt_info[index++] = &pvt_in;
 -- 
-With Best Regards,
-Andy Shevchenko
+2.37.1
+
