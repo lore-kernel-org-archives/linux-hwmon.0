@@ -2,49 +2,48 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FCE6C2BB41
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 09:43:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B906C2BB41
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 09:47:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233854AbiHPJnd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Aug 2022 05:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
+        id S234000AbiHPJrs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Aug 2022 05:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233851AbiHPJm4 (ORCPT
+        with ESMTP id S233969AbiHPJrT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Aug 2022 05:42:56 -0400
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E13135AF3;
-        Tue, 16 Aug 2022 01:28:11 -0700 (PDT)
+        Tue, 16 Aug 2022 05:47:19 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1814137918;
+        Tue, 16 Aug 2022 01:28:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1660638492; x=1692174492;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5uH3xAWY1NPlAqbvwT+BOwsnVqZsYpICWoOmCTyNqN4=;
-  b=Z5bmZwYk8L9u+JvWeFcpHaV7Fd819UXSjxOAvW9o7G6Dvv5IHXuwNRcZ
-   D5NrnwOxHp5ZMPcPPMN3Q2BMCGxjjs0UCiEI3tnDOY0RzclvzMVeUJ1Q1
-   a1Pi26Xznb3lQe9kyUCjA3QsxhcwnW2E+qr6xLKbb08+v5c7kvxpQYKRK
+  t=1660638496; x=1692174496;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Qa2GdofisJzXGHq+6k4uRChibu19E7Wu/JMM8sLS54o=;
+  b=FHarqwvgNZxHZv6/PxnHmNevIZqH3otBo64+34X8oSi99LOlRVBr7SKA
+   HyV8+ppjsS7xX5C/BS3p6cFKTa9O01AoDONBwbNwwKq/yiUebAZuoz7Jx
+   xELPRHQWbYVyZ33/RAsKwEWkBNplHxx1vDgCLuHjnm9OOtYpmK/EdPRAz
    I=;
 X-IronPort-AV: E=Sophos;i="5.93,240,1654560000"; 
-   d="scan'208";a="230105244"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-8be8ed69.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 08:28:00 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-8be8ed69.us-east-1.amazon.com (Postfix) with ESMTPS id 90397C0865;
+   d="scan'208";a="1044708625"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-388992e0.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 08:27:59 +0000
+Received: from EX13MTAUEE001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-388992e0.us-west-2.amazon.com (Postfix) with ESMTPS id 551641040FB;
         Tue, 16 Aug 2022 08:27:59 +0000 (UTC)
-Received: from EX19D013UWA001.ant.amazon.com (10.13.138.253) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 16 Aug 2022 08:27:59 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX19D013UWA001.ant.amazon.com (10.13.138.253) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Tue, 16 Aug 2022 08:27:58 +0000
+Received: from EX13D08UEB004.ant.amazon.com (10.43.60.142) by
+ EX13MTAUEE001.ant.amazon.com (10.43.62.226) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 16 Aug 2022 08:27:58 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
+ EX13D08UEB004.ant.amazon.com (10.43.60.142) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 16 Aug 2022 08:27:58 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
+ (172.19.116.181) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
  Server id 15.0.1497.38 via Frontend Transport; Tue, 16 Aug 2022 08:27:58
  +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 5A2094C22; Tue, 16 Aug 2022 08:27:57 +0000 (UTC)
+        id 55ADE4C75; Tue, 16 Aug 2022 08:27:57 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <mark.rutland@arm.com>, <linux-hwmon@vger.kernel.org>,
@@ -54,12 +53,10 @@ CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
         <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
         <amitlavi@amazon.com>, <almogbs@amazon.com>, <dwmw@amazon.co.uk>,
         <rtanwar@maxlinear.com>
-Subject: [PATCH 12/16] hwmon: (mr75203) modify the temperature equation
-Date:   Tue, 16 Aug 2022 08:27:53 +0000
-Message-ID: <20220816082757.11990-13-farbere@amazon.com>
+Subject: [PATCH 00/16] Variety of fixes and new features for mr75203 driver
+Date:   Tue, 16 Aug 2022 08:27:41 +0000
+Message-ID: <20220816082757.11990-1-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220816082757.11990-1-farbere@amazon.com>
-References: <20220816082757.11990-1-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -67,73 +64,47 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Modify the equation and coefficients to convert the digital output to
-temperature according to series 5 of the Moortec Embedded Temperature
-Sensor (METS) datasheet:
-T = G + H * (n / cal5 - 0.5) + J * F
+List of fixes:
+ - Fix for VM sensor allocation
+ - Fix multi-channel voltage reading
+ - Protect from negative voltage value
+ - Fix temperature equation and coefficients
 
-The G, H and J coefficients are multiplied by 1000 to get the
-temperature in milli-Celsius.
+List of new features:
+ - Add option to skip reset controller
+ - Add VM active channel support
+ - Add VM pre-scalar support
+ - Add parsing of thermal coefficients from device-tree
+ - Add debugfs to updater temperature coefficients on the fly
 
-Signed-off-by: Eliav Farber <farbere@amazon.com>
----
- drivers/hwmon/mr75203.c | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+Eliav Farber (16):
+  hwmon: (mr75203) fix VM sensor allocation when "intel,vm-map" not
+    defined
+  hwmon: (mr75203) update pvt->v_num to the actual number of used
+    sensors
+  hwmon: (mr75203) update Moortec PVT controller intel,vm-map property
+  hwmon: (mr75203) add Moortec PVT controller reset-control-skip
+    property
+  hwmon: (mr75203) add option to skip reset controller
+  hwmon: (mr75203) fix multi-channel voltage reading
+  hwmon: (mr75203) add VM active channels property for Moortec PVT
+    controller
+  hwmon: (mr75203) add VM active channel support
+  hwmon: (mr75203) add VM pre-scalar property for Moortec PVT controller
+  hwmon: (mr75203) add VM pre-scalar support
+  hwmon: (mr75203) add protection for negative voltage value
+  hwmon: (mr75203) modify the temperature equation
+  hwmon: (mr75203) add thermal coefficient properties for Moortec PVT
+    controller
+  hwmon: (mr75203) parse thermal coefficients from device-tree
+  hwmon: (mr75203) fix coding style space errors
+  hwmon: (mr75203) add debugfs to read and write temperature
+    coefficients
 
-diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-index 8d8883301ff5..59e2dc8fa333 100644
---- a/drivers/hwmon/mr75203.c
-+++ b/drivers/hwmon/mr75203.c
-@@ -100,9 +100,10 @@
- 
- #define PVT_POLL_DELAY_US	20
- #define PVT_POLL_TIMEOUT_US	20000
--#define PVT_H_CONST		100000
--#define PVT_CAL5_CONST		2047
--#define PVT_G_CONST		40000
-+#define PVT_H_CONST		60000
-+#define PVT_G_CONST		200000
-+#define PVT_J_CONST		-100
-+#define PVT_CAL5_CONST		4094
- #define PVT_CONV_BITS		10
- #define PVT_N_CONST		90
- #define PVT_R_CONST		245805
-@@ -156,7 +157,6 @@ static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
- 	struct regmap *t_map = pvt->t_map;
- 	u32 stat, nbs;
- 	int ret;
--	u64 tmp;
- 
- 	switch (attr) {
- 	case hwmon_temp_input:
-@@ -174,12 +174,13 @@ static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
- 		nbs &= SAMPLE_DATA_MSK;
- 
- 		/*
--		 * Convert the register value to
--		 * degrees centigrade temperature
-+		 * Convert the register value to degrees centigrade temperature:
-+		 * T = G + H * (n / cal5 - 0.5) + J * F
- 		 */
--		tmp = nbs * PVT_H_CONST;
--		do_div(tmp, PVT_CAL5_CONST);
--		*val = tmp - PVT_G_CONST - pvt->ip_freq;
-+		*val = PVT_G_CONST;
-+		*val += PVT_H_CONST * nbs / PVT_CAL5_CONST;
-+		*val -= PVT_H_CONST / 2;
-+		*val += PVT_J_CONST * pvt->ip_freq / HZ_PER_MHZ;
- 
- 		return 0;
- 	default:
-@@ -311,7 +312,7 @@ static int pvt_init(struct pvt_device *pvt)
- 		    (key >> 1) << CLK_SYNTH_HI_SFT |
- 		    (key >> 1) << CLK_SYNTH_HOLD_SFT | CLK_SYNTH_EN;
- 
--	pvt->ip_freq = sys_freq * 100 / (key + 2);
-+	pvt->ip_freq = clk_get_rate(pvt->clk) / (key + 2);
- 
- 	if (t_num) {
- 		ret = regmap_write(t_map, SDIF_SMPL_CTRL, 0x0);
+ .../bindings/hwmon/moortec,mr75203.yaml       |  60 ++-
+ drivers/hwmon/mr75203.c                       | 465 +++++++++++++++---
+ 2 files changed, 459 insertions(+), 66 deletions(-)
+
 -- 
 2.37.1
 
