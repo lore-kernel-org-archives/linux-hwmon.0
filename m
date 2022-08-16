@@ -2,48 +2,48 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2228CC32772
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 10:32:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F89CC32772
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 10:34:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbiHPKcm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Aug 2022 06:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
+        id S234782AbiHPKef (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Aug 2022 06:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234685AbiHPKcV (ORCPT
+        with ESMTP id S234772AbiHPKdx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:32:21 -0400
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F650B9406;
-        Tue, 16 Aug 2022 01:28:19 -0700 (PDT)
+        Tue, 16 Aug 2022 06:33:53 -0400
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656771394FC;
+        Tue, 16 Aug 2022 01:28:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1660638499; x=1692174499;
+  t=1660638501; x=1692174501;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=c8/SDcTJ30dbsZp2QPCvuIMC9D3VXp4QdqzbVFqmdMU=;
-  b=gzng2BZWA2tgDnctUO+lpBuDgCvhWSipfgHkhidylqiBrt/EcnQ2O1TH
-   1IdI6PU34Garc6Z6qgLHTltan+ttWhNYaayVtD4tmbXlMO7T2q+MseXOW
-   l7wsFL4Qn2RfmZqF0zQdDO+F+8io0C1vug4DiaLfEStFjCSSAUM9esy3m
-   I=;
+  bh=Y+K+ejUZbidNdp7fNJrcGWpO2dwpzC63OfGNy7Tg6HU=;
+  b=tFp9P8UBnrsEy8IR1Nt7lPX29/pIfPkXVhvTmB1Qdz/VbtPXanOBwNgU
+   bLFHEKRQoBupD5zPcdXS8f7/eIccdJXrgU8rx2lMoFYMrIxcvbfqNe7Ck
+   TE/nk4THH7XfKl3AzNg0O7i/8ZGsHHoO8A6dnq8E54ULxcICTiz792Tc1
+   8=;
 X-IronPort-AV: E=Sophos;i="5.93,240,1654560000"; 
-   d="scan'208";a="233486620"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-718d0906.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 08:28:17 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-718d0906.us-west-2.amazon.com (Postfix) with ESMTPS id EBFE43E0053;
-        Tue, 16 Aug 2022 08:28:16 +0000 (UTC)
-Received: from EX13D08UEE003.ant.amazon.com (10.43.62.118) by
- EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
+   d="scan'208";a="119633964"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-b09d0114.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 08:28:04 +0000
+Received: from EX13MTAUEB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-b09d0114.us-east-1.amazon.com (Postfix) with ESMTPS id 0D5CF8130A;
+        Tue, 16 Aug 2022 08:28:00 +0000 (UTC)
+Received: from EX13D08UEB003.ant.amazon.com (10.43.60.11) by
+ EX13MTAUEB001.ant.amazon.com (10.43.60.96) with Microsoft SMTP Server (TLS)
  id 15.0.1497.38; Tue, 16 Aug 2022 08:27:59 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX13D08UEE003.ant.amazon.com (10.43.62.118) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 16 Aug 2022 08:27:59 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX13D08UEB003.ant.amazon.com (10.43.60.11) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 16 Aug 2022 08:27:58 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Tue, 16 Aug 2022 08:27:59
+ (172.19.116.181) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 16 Aug 2022 08:27:58
  +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 5CD724C0C; Tue, 16 Aug 2022 08:27:57 +0000 (UTC)
+        id 5BF784C4B; Tue, 16 Aug 2022 08:27:57 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <mark.rutland@arm.com>, <linux-hwmon@vger.kernel.org>,
@@ -53,9 +53,9 @@ CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
         <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
         <amitlavi@amazon.com>, <almogbs@amazon.com>, <dwmw@amazon.co.uk>,
         <rtanwar@maxlinear.com>
-Subject: [PATCH 10/16] hwmon: (mr75203) add VM pre-scalar support
-Date:   Tue, 16 Aug 2022 08:27:51 +0000
-Message-ID: <20220816082757.11990-11-farbere@amazon.com>
+Subject: [PATCH 04/16] hwmon: (mr75203) add Moortec PVT controller reset-control-skip property
+Date:   Tue, 16 Aug 2022 08:27:45 +0000
+Message-ID: <20220816082757.11990-5-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220816082757.11990-1-farbere@amazon.com>
 References: <20220816082757.11990-1-farbere@amazon.com>
@@ -66,93 +66,38 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add pre-scalar support to normalzie the voltage output results for
-channels the use pre-scalar units to get the measurement to be within
-the range that the sensor supports.
-The pre-scalar value is used if it exists in device-tree, otherwise
-default value of 1 is used.
+Adding a "reset-control-skip" bool property to the mr75203 node will
+avoid looking up and obtaining a reference to a reset controller.
 
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- drivers/hwmon/mr75203.c | 28 ++++++++++++++++++++++++++--
- 1 file changed, 26 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/hwmon/moortec,mr75203.yaml          | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-index 9b45fd089fcf..417b135c1b3f 100644
---- a/drivers/hwmon/mr75203.c
-+++ b/drivers/hwmon/mr75203.c
-@@ -110,8 +110,12 @@
- struct voltage_device {
- 	u8 vm_map;
- 	u8 ch_map;
-+	u32 pre_scaler;
- };
+diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+index f9e849cc73e0..da9c3cdcb6f0 100644
+--- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
++++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+@@ -44,6 +44,11 @@ properties:
+   "#thermal-sensor-cells":
+     const: 1
  
-+#define PRE_SCALR_PROPERTY_NAME	32
-+#define PRE_SCALR_DEFAULT_VAL	1
++  reset-control-skip:
++    description:
++      reset-control-skip bool property defines if obtaining a
++      reference to a reset controller should be skipped.
 +
- struct pvt_device {
- 	struct regmap		*c_map;
- 	struct regmap		*t_map;
-@@ -213,7 +217,9 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+ required:
+   - compatible
+   - reg
+@@ -54,6 +59,7 @@ required:
  
- 		n &= SAMPLE_DATA_MSK;
- 		/* Convert the N bitstream count into voltage */
--		*val = (PVT_N_CONST * n - PVT_R_CONST) >> PVT_CONV_BITS;
-+		*val = pvt->vd[channel].pre_scaler;
-+		*val *= (PVT_N_CONST * n - PVT_R_CONST);
-+		*val >>= PVT_CONV_BITS;
+ additionalProperties:
+   - intel,vm-map
++  - reset-control-skip
  
- 		return 0;
- 	default:
-@@ -525,6 +531,7 @@ static int pvt_reset_control_deassert(struct device *dev, struct pvt_device *pvt
- static int mr75203_probe(struct platform_device *pdev)
- {
- 	const struct hwmon_channel_info **pvt_info;
-+	const struct device_node *np = pdev->dev.of_node;
- 	u32 ts_num, vm_num, pd_num, ch_num, val, index, i, j, k;
- 	struct device *dev = &pdev->dev;
- 	u32 *temp_config, *in_config;
-@@ -550,7 +557,7 @@ static int mr75203_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	if (of_property_read_bool(dev->of_node, "reset-control-skip")) {
-+	if (of_property_read_bool(np, "reset-control-skip")) {
- 		dev_info(dev, "skipping reset-control\n");
- 	} else {
- 		pvt->rst = devm_reset_control_get_exclusive(dev, NULL);
-@@ -613,6 +620,8 @@ static int mr75203_probe(struct platform_device *pdev)
- 	if (vm_num) {
- 		u8 vm_idx[vm_num];
- 		u8 vm_active_ch[vm_num];
-+		char prop_name[PRE_SCALR_PROPERTY_NAME] = {0};
-+		u32 pre_scaler;
- 
- 		ret = pvt_get_regmap(pdev, "vm", pvt);
- 		if (ret)
-@@ -684,6 +693,21 @@ static int mr75203_probe(struct platform_device *pdev)
- 				k++;
- 			}
- 
-+		/*
-+		 * Incase vm-pre-scalar-ch# property is not defined, we assume
-+		 * default pre-scaler of 1.
-+		 */
-+		for (i = 0; i < pvt->vm_ch_total; i++) {
-+			snprintf(prop_name, sizeof(prop_name),
-+				 "vm-pre-scalar-ch%u", i);
-+
-+			ret = of_property_read_u32(np, prop_name, &pre_scaler);
-+			if (ret)
-+				pvt->vd[i].pre_scaler = PRE_SCALR_DEFAULT_VAL;
-+			else
-+				pvt->vd[i].pre_scaler = pre_scaler;
-+		}
-+
- 		in_config = devm_kcalloc(dev, pvt->vm_ch_total + 1,
- 					 sizeof(*in_config), GFP_KERNEL);
- 		if (!in_config)
+ examples:
+   - |
 -- 
 2.37.1
 
