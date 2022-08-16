@@ -2,72 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C339C2BB41
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 10:18:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92962C32773
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 10:20:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233350AbiHPKSO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Aug 2022 06:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
+        id S233744AbiHPKUz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Aug 2022 06:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233386AbiHPKRw (ORCPT
+        with ESMTP id S234444AbiHPKUY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:17:52 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401151A05A;
-        Tue, 16 Aug 2022 01:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=cPJaW2xNn/yDTjrJigRQCIHe05jeFSkKn2MM46dKM5E=; b=rBh97mMKFKdKhEHk1XRKoVzQSl
-        VI6XhdyrcrXj8l5sw7dnz71HqVm9wIR9D/pcaacpx0G94JDYlbxXHPJ3sabDcoMAcChgY4VVtjS1J
-        0JJB6SscnBDyYaR/NhS1mSATM9tfPgdD8V0a9nm2FdhZ1GEy2IcQzC7MBnXV4Od27kgoRPl4Fu8x2
-        Oen1u4lY8W9BnGp0iq2KVW5u1LugL593i5maWV78yYkuOhW4wZW7TZ2q9lrhcXEBCC4rPtoBq22zK
-        /H3pnQPRW50TLDBBNodKjNa8M0D8M4fopXRf/XmSdL/UC3CS7wzQ5+6vOO6QRscnc5VONjtV1JS3j
-        KKxh7agA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oNru9-006iZ7-IE; Tue, 16 Aug 2022 08:26:29 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CC7D0980264; Tue, 16 Aug 2022 10:26:27 +0200 (CEST)
-Date:   Tue, 16 Aug 2022 10:26:27 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-hwmon@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        corbet@lwn.net, fenghua.yu@intel.com, jdelvare@suse.com,
-        linux@roeck-us.net, len.brown@intel.com
-Subject: Re: [PATCH 7/7] perf/x86/intel/P4: Fix smp_num_siblings usage
-Message-ID: <YvtUs4o00xYV8BGD@worktop.programming.kicks-ass.net>
-References: <20220812164144.30829-1-rui.zhang@intel.com>
- <20220812164144.30829-8-rui.zhang@intel.com>
- <YvoN2DTABnRZiJhf@worktop.programming.kicks-ass.net>
- <66dfcffec12b3558c36007eacec8f91fb91ca04b.camel@intel.com>
+        Tue, 16 Aug 2022 06:20:24 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3974116ECD;
+        Tue, 16 Aug 2022 01:24:11 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id s11so7593785qtx.6;
+        Tue, 16 Aug 2022 01:24:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=URNWhoG6Jht3PNpZTFjRMq9C2xuK/GPJGs5c4/qP8Qo=;
+        b=WMTSsJZCsuR2GWexgektS/N4A4uFwS5j+U4U9bXLj9a3L47qI380JV+vKz4DRgUo7m
+         JQ0ZPw6GRXuu40crI4HPnyfuU8Mwuj1qNeEIP4TcZGai2JWBghl1MLZHSVb55P06F6bx
+         B1nlcqlENsza+hf4Ohd1X2ICgnXG9gNZC7PGiYkFdA7ZFjkUfcc87MSd36YKblkLzxGa
+         2BnwA9oruaCFleVvpGTBbHY4dKpfAmqqekOjjv8m9YDssWVu8bRB/z5KMz8EGrrjZ7Sy
+         Eu4fOB4U87dlJ/FQykdL1H5XL0UdE1RlRY7jmsZJ10A3yVUtG2esLd0xOaEnLq9ua0pr
+         3xdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=URNWhoG6Jht3PNpZTFjRMq9C2xuK/GPJGs5c4/qP8Qo=;
+        b=e4x9YMl4hoo1y89HM5Ci5Jp5LKPTYqOmkNWgQFQGsjBx+NmR/0QUz+lTTckOgi277Y
+         sAPdfcHZjQVHg9hewQQXtcxUg8RTEZ0j0pQeKcviFFrL/+4ut/xbVyRtEUekQNnY2qEI
+         VzS4MtsQsQGYk0G0/k7AvC2pWn/Z/BDD8tERXZkBi74SqtUBkVnPc7OXkocfF1JTGqZo
+         ogb/nuvWjIZ5Jk8m2li+OOEKJtoKZSdhxg4OpDOjm35js34vAhrN/VQ0qsx1jRJaErS6
+         ezntuXFXJbWCkWpKmsnSXfai1RWb1MqbM3wOpdvOwxAKC90BGy1fhg0KFjiqZN132yPx
+         N4tw==
+X-Gm-Message-State: ACgBeo3Zxe0nTE8F6Trk56qb222CQX/jl1QENzmY1g7Hj5bNS+aTtykf
+        p2fkJqHSkNCgnflRw6RnvDqcOgJL2AFJiZ3AUyk=
+X-Google-Smtp-Source: AA6agR5pnQGi7oingWiXnnixDq3edlax9wsTNuhcRBi9pIKjuflZ8obEieyrcjYpsw/u/5tbgjY0kZ/rOVvlBmyXAN8=
+X-Received: by 2002:a05:622a:14cf:b0:343:5b6:68ca with SMTP id
+ u15-20020a05622a14cf00b0034305b668camr16705479qtx.195.1660638245828; Tue, 16
+ Aug 2022 01:24:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <66dfcffec12b3558c36007eacec8f91fb91ca04b.camel@intel.com>
+References: <cover.1660292316.git.mazziesaccount@gmail.com>
+ <166057828406.697572.228317501909350108.b4-ty@kernel.org> <YvpsRbguMXn74GhR@pendragon.ideasonboard.com>
+ <Yvp1Qkuh7xfeb/B2@sirena.org.uk> <YvqV9Mq6I3gXQaf2@pendragon.ideasonboard.com>
+In-Reply-To: <YvqV9Mq6I3gXQaf2@pendragon.ideasonboard.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 16 Aug 2022 11:23:29 +0300
+Message-ID: <CAHp75VcAS2Km_aWOV-XhMe9JkLER-1DYbJbkM9pa-i9yhHqsFQ@mail.gmail.com>
+Subject: Re: (subset) [PATCH v2 0/7] Devm helpers for regulator get and enable
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-amlogic <linux-amlogic@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Documentation List <linux-doc@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        linux-hwmon@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
+        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        David Airlie <airlied@linux.ie>,
+        linux-iio <linux-iio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 10:26:19AM +0800, Zhang Rui wrote:
-> On Mon, 2022-08-15 at 11:11 +0200, Peter Zijlstra wrote:
-> > On Sat, Aug 13, 2022 at 12:41:44AM +0800, Zhang Rui wrote:
-> > > smp_num_siblings can be larger than 2.
-> > 
-> > Not on a P4 it can't ;-)
-> 
-> Kernel code doesn't prevent this from happening, so it just depends on
-> how SMT ID is encoded in APICID.
+On Mon, Aug 15, 2022 at 11:20 PM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+> On Mon, Aug 15, 2022 at 05:33:06PM +0100, Mark Brown wrote:
 
-No P4 ever encountered had it different and since no P4 will ever be
-made again (I sincerely hope) we have a complete case.
+...
 
-> Checking for smp_num_sibling > 1 is the right logic to detect HT
-> support, which is followed by all other kernel code except this one. :)
+> However, should a devm_clk_get_enable() or similar function be
+> implemented, we'll run into trouble.
 
-I'm fine with making it consistent, I'm arguing with the subject calling
-this a fix, it is not, it's a functional no-op.
+And in 5.19 we have devm_clk_get_enable(), are we already in trouble?
 
+-- 
+With Best Regards,
+Andy Shevchenko
