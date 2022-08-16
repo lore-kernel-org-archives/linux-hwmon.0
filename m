@@ -2,192 +2,217 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16E70C32772
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 07:22:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38D85C32773
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 07:57:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbiHPHWl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Aug 2022 03:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
+        id S229999AbiHPH5V (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Aug 2022 03:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231847AbiHPHW0 (ORCPT
+        with ESMTP id S229585AbiHPH4m (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Aug 2022 03:22:26 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E68E2B70BD;
-        Mon, 15 Aug 2022 21:56:12 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id z20so9551441ljq.3;
-        Mon, 15 Aug 2022 21:56:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc;
-        bh=lMyaBQ0fr/YKfcqNoaKSdb+50RM2Rxj1DLsmzLOg6p8=;
-        b=emj3c4qKkUjUv1uibUM0Ft8DTfEO05AQs/3Y741be7NMkNUqfjGZwGCKNZo9C6YjXp
-         T3u8ogp+Q7xyqUvWTbVxqcfKvlVXs+sCdEW176mhvN95YWDcTH1MCuzscHr20UM4t23y
-         efx6c0daYiXNg01uKsfggL1TIi4sG62wT7fq7xNMdYWmSyv0IojrLQ3X+x3JlfiYjCWI
-         ZGleJlTBA7imnc87Mtsd2wKxuRqiB4CfXoOM/VC02Ai37op0ZH3k+3vNM5TFazrPwDbX
-         I3K6wSQIq8cyMpVj2t+/iVXSTMsuGrDBGJEDknJ3KmY9XUsqIPVIorSVNOoEmEoQm85s
-         ld9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=lMyaBQ0fr/YKfcqNoaKSdb+50RM2Rxj1DLsmzLOg6p8=;
-        b=06RuMdOREB1iZHynztVX70X9jzVEPb5+aCMjJLwDUrBp6brrkz54u0d/NP1XjA1t0r
-         vLTPtDXbYl3lNx4dprlUjMiOz4fmj+mpgH+MixdP8qHqgzKCDBI3e6fCEgcRX2hOc/Ky
-         3FJU9dr/881+QVIaX3facFlua5Prv566fzjbCWTzsz7nuy7/8cqKskEbK1N0RpOsxu8j
-         eRPp2iHplznsh6R8X9qNb6E92hKQRWRa+dmxGf8+oMU2BZHD9Ni+snK3r1Kn8FdyscL5
-         0ikcCRUc3aNZfyg7bF56N//ky0+qbt8M2cT6OCtW7aUQnAR9XCmWZxRSGdh2MSFFJdTC
-         7snw==
-X-Gm-Message-State: ACgBeo2PFMiyiGOQqi6dB1A261Fp8aoAnk9y3qZimBklcpmSZ7lp31Fl
-        0oXLo7Gn4s2PKG/nXPkB6+c=
-X-Google-Smtp-Source: AA6agR5Now0GlaC9p5MWRyZT/Uc6WkRd+5NRB4I7ljhPTH6IshCkE/HR/M28GX+goQncDQyVAAYQYQ==
-X-Received: by 2002:a05:651c:1241:b0:261:9313:9cb9 with SMTP id h1-20020a05651c124100b0026193139cb9mr1021791ljh.213.1660625769185;
-        Mon, 15 Aug 2022 21:56:09 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16ee:fa00::9? (dc73szyyyyyyyyyyyyyft-3.rev.dnainternet.fi. [2001:14ba:16ee:fa00::9])
-        by smtp.gmail.com with ESMTPSA id w9-20020ac24429000000b0048a7b1530cesm1254427lfl.284.2022.08.15.21.56.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 21:56:08 -0700 (PDT)
-Message-ID: <57c312b3-ca5b-6efb-6356-43b6513a0c88@gmail.com>
-Date:   Tue, 16 Aug 2022 07:56:06 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        dri-devel@lists.freedesktop.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        linux-amlogic@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-doc@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Michael Turq uette <mturquette@baylibre.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        linux-hwmon@vger.kernel.org, linux-clk@vger.kernel.org,
-        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        David Airlie <airlied@linux.ie>, linux-iio@vger.kernel.org
-References: <cover.1660292316.git.mazziesaccount@gmail.com>
- <166057828406.697572.228317501909350108.b4-ty@kernel.org>
- <YvpsRbguMXn74GhR@pendragon.ideasonboard.com>
- <Yvp1Qkuh7xfeb/B2@sirena.org.uk>
- <YvqV9Mq6I3gXQaf2@pendragon.ideasonboard.com>
- <20220815205857.308B1C433D6@smtp.kernel.org>
- <Yvq33T+XCduoqv7Z@pendragon.ideasonboard.com>
- <YvrO+velKdYdGVve@sirena.org.uk>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: (subset) [PATCH v2 0/7] Devm helpers for regulator get and enable
-In-Reply-To: <YvrO+velKdYdGVve@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Tue, 16 Aug 2022 03:56:42 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4106DEA5F;
+        Mon, 15 Aug 2022 22:12:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660626777; x=1692162777;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=izKx2i2YnCzZigJqPxNJZEiqz/oZMoOAlgtG1yN62lw=;
+  b=Izg9Tw+JoCEGCexUmzYxTF41KV2iSrCwtoDdyr3HqbK9ziHAqA5yhBwV
+   eCchMJhqJqgz5owOg3DWOeE/xT3zrOzsw5WrC3MInTebXkcjhw5Pl7YQ2
+   Vq0BogENj9tTk0Ge755cdK4j/r2Mq9gt47lu8M/S9fEZzuMzjkiVaGR8q
+   3b448CcIdzjcPcJWPvBhZ767xpBmrbkhRiGHhFm3PAemia8Zoh4iZI9GG
+   +gWSpFiNLs09LERS5T1vZt/PNdm5ByptlgesyHOEtWJm8qExA/fl2gdBV
+   urgpiIM1XjLAAJTfSmWfq+uyI5LNM3xVxaBzar0WgXVA0/4+Vw3I1T6YS
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="356130150"
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="356130150"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 22:12:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
+   d="scan'208";a="666953462"
+Received: from power-sh.sh.intel.com ([10.239.183.122])
+  by fmsmga008.fm.intel.com with ESMTP; 15 Aug 2022 22:12:54 -0700
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hwmon@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, corbet@lwn.net,
+        fenghua.yu@intel.com, jdelvare@suse.com, linux@roeck-us.net,
+        len.brown@intel.com, rui.zhang@intel.com
+Subject: [PATCH V2 3/8] hwmon/coretemp: Handle large core ID value
+Date:   Tue, 16 Aug 2022 13:16:28 +0800
+Message-Id: <20220816051633.17775-4-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220816051633.17775-1-rui.zhang@intel.com>
+References: <20220816051633.17775-1-rui.zhang@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi dee Ho Mark, Laurent, Stephen, all
+The coretemp driver supports up to a hard-coded limit of 128 cores.
 
-On 8/16/22 01:55, Mark Brown wrote:
-> On Tue, Aug 16, 2022 at 12:17:17AM +0300, Laurent Pinchart wrote:
->> On Mon, Aug 15, 2022 at 01:58:55PM -0700, Stephen Boyd wrote:
-> 
->> You will very quickly see drivers doing this (either directly or
->> indirectly):
-> 
->> probe()
->> {
->> 	devm_clk_get_enabled();
->> 	devm_regulator_get_enable();
->> }
-> 
->> Without a devres-based get+enable API drivers can get the resources they
->> need in any order, possibly moving some of those resource acquisition
->> operations to different functions, and then have a clear block of code
->> that enables the resources in the right order.
+Today, the driver can not support a core with an ID above that limit.
+Yet, the encoding of core ID's is arbitrary (BIOS APIC-ID) and so they
+may be sparse and they may be large.
 
-I agree. And I think that drivers which do that should stick with it. 
-Still, as you know the devm-unwinding is also done in well defined 
-order. I believe that instead of fighting against the devm we should try 
-educate people to pay attention in the order of unwinding (also when not 
-handled by the devm. Driver writers occasionally break things also w/o 
-devm for example by freeing resources needed by IRQ handlers prior 
-freeing the IRQ.)
+Update the driver to map arbitrary core ID numbers into appropriate
+array indexes so that 128 cores can be supported, no matter the encoding
+of core ID's.
 
-If "purging" must not be done in reverse order compared to the 
-aquisition - then one should not use devm. I know people have done 
-errors with devm - OTOH, I've seen devm also fixing bunch of errors.
+Acked-by: Len Brown <len.brown@intel.com>
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+---
+ drivers/hwmon/coretemp.c | 56 +++++++++++++++++++++++++++++-----------
+ 1 file changed, 41 insertions(+), 15 deletions(-)
 
->> These devres helpers give
->> a false sense of security to driver authors and they will end up
->> introducing problems, the same way that devm_kzalloc() makes it
->> outrageously easy to crash the kernel by disconnecting a device that is
->> in use.
-
-I think this is going a bit "off-topic" but I'd like to understand what 
-is behind this statement? From device-writer's perspective - I don't 
-know much better alternatives to free up the memory. I don't see how 
-freeing stuff at .remove would be any better? As far as I understand - 
-if someone is using driver's resources after the device has gone and the 
-driver is detached, then there is not much the driver could do to 
-free-up the stuff be it devm or not? This sounds like fundamentally 
-different problem (to me).
-
-> TBH I think the problem you have here is with devm not with this
-> particular function.
-
-I must say I kind of agree with Mark. If we stop for a second to think 
-what would the Laurent's example look like if there were no 
-devm_regulator_get_enable() provided. I bet the poor driver author could 
-have used devm_clk_get_enabled() - and then implemented a .remove for 
-disabling the regulator. That would be even worse, right?
-
-> That's a different conversation, and a totally
-> valid one especially when you start looking at things like implementing
-> userspace APIs which need to cope with hardware going away while still
-> visible to userspace.
-
-This is interesting. It's not easy for me to spot how devm changes 
-things here? If we consider some removable device - then I guess also 
-the .remove() is ran only after HW has already gone? Yes, devm might 
-make the time window when userspace can see hardware that has gone 
-longer but does it bring any new problem there? It seems to me devm can 
-make hitting the spot more likely - but I don't think it brings 
-completely new issues? (Well, I may be wrong here - wouldn't be the 
-first time :])
-
-> It's *probably* more of a subsystem conversation
-> than a driver one though, or at least I think subsystems should try to
-> arrange to make it so.
-
-
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index bfdcfe8ccb34..291566aeb703 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -46,9 +46,6 @@ MODULE_PARM_DESC(tjmax, "TjMax value in degrees Celsius");
+ #define TOTAL_ATTRS		(MAX_CORE_ATTRS + 1)
+ #define MAX_CORE_DATA		(NUM_REAL_CORES + BASE_SYSFS_ATTR_NO)
+ 
+-#define TO_CORE_ID(cpu)		(cpu_data(cpu).cpu_core_id)
+-#define TO_ATTR_NO(cpu)		(TO_CORE_ID(cpu) + BASE_SYSFS_ATTR_NO)
+-
+ #ifdef CONFIG_SMP
+ #define for_each_sibling(i, cpu) \
+ 	for_each_cpu(i, topology_sibling_cpumask(cpu))
+@@ -91,6 +88,8 @@ struct temp_data {
+ struct platform_data {
+ 	struct device		*hwmon_dev;
+ 	u16			pkg_id;
++	u16			cpu_map[NUM_REAL_CORES];
++	struct ida		ida;
+ 	struct cpumask		cpumask;
+ 	struct temp_data	*core_data[MAX_CORE_DATA];
+ 	struct device_attribute name_attr;
+@@ -441,7 +440,7 @@ static struct temp_data *init_temp_data(unsigned int cpu, int pkg_flag)
+ 							MSR_IA32_THERM_STATUS;
+ 	tdata->is_pkg_data = pkg_flag;
+ 	tdata->cpu = cpu;
+-	tdata->cpu_core_id = TO_CORE_ID(cpu);
++	tdata->cpu_core_id = topology_core_id(cpu);
+ 	tdata->attr_size = MAX_CORE_ATTRS;
+ 	mutex_init(&tdata->update_lock);
+ 	return tdata;
+@@ -454,7 +453,7 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
+ 	struct platform_data *pdata = platform_get_drvdata(pdev);
+ 	struct cpuinfo_x86 *c = &cpu_data(cpu);
+ 	u32 eax, edx;
+-	int err, attr_no;
++	int err, index, attr_no;
+ 
+ 	/*
+ 	 * Find attr number for sysfs:
+@@ -462,14 +461,26 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
+ 	 * The attr number is always core id + 2
+ 	 * The Pkgtemp will always show up as temp1_*, if available
+ 	 */
+-	attr_no = pkg_flag ? PKG_SYSFS_ATTR_NO : TO_ATTR_NO(cpu);
++	if (pkg_flag) {
++		attr_no = PKG_SYSFS_ATTR_NO;
++	} else {
++		index = ida_alloc(&pdata->ida, GFP_KERNEL);
++		if (index < 0)
++			return index;
++		pdata->cpu_map[index] = topology_core_id(cpu);
++		attr_no = index + BASE_SYSFS_ATTR_NO;
++	}
+ 
+-	if (attr_no > MAX_CORE_DATA - 1)
+-		return -ERANGE;
++	if (attr_no > MAX_CORE_DATA - 1) {
++		err = -ERANGE;
++		goto ida_free;
++	}
+ 
+ 	tdata = init_temp_data(cpu, pkg_flag);
+-	if (!tdata)
+-		return -ENOMEM;
++	if (!tdata) {
++		err = -ENOMEM;
++		goto ida_free;
++	}
+ 
+ 	/* Test if we can access the status register */
+ 	err = rdmsr_safe_on_cpu(cpu, tdata->status_reg, &eax, &edx);
+@@ -505,6 +516,9 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
+ exit_free:
+ 	pdata->core_data[attr_no] = NULL;
+ 	kfree(tdata);
++ida_free:
++	if (!pkg_flag)
++		ida_free(&pdata->ida, index);
+ 	return err;
+ }
+ 
+@@ -524,6 +538,9 @@ static void coretemp_remove_core(struct platform_data *pdata, int index)
+ 
+ 	kfree(pdata->core_data[index]);
+ 	pdata->core_data[index] = NULL;
++
++	if (index >= BASE_SYSFS_ATTR_NO)
++		ida_free(&pdata->ida, index - BASE_SYSFS_ATTR_NO);
+ }
+ 
+ static int coretemp_probe(struct platform_device *pdev)
+@@ -537,6 +554,7 @@ static int coretemp_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	pdata->pkg_id = pdev->id;
++	ida_init(&pdata->ida);
+ 	platform_set_drvdata(pdev, pdata);
+ 
+ 	pdata->hwmon_dev = devm_hwmon_device_register_with_groups(dev, DRVNAME,
+@@ -553,6 +571,7 @@ static int coretemp_remove(struct platform_device *pdev)
+ 		if (pdata->core_data[i])
+ 			coretemp_remove_core(pdata, i);
+ 
++	ida_destroy(&pdata->ida);
+ 	return 0;
+ }
+ 
+@@ -647,7 +666,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
+ 	struct platform_device *pdev = coretemp_get_pdev(cpu);
+ 	struct platform_data *pd;
+ 	struct temp_data *tdata;
+-	int index, target;
++	int i, index = -1, target;
+ 
+ 	/*
+ 	 * Don't execute this on suspend as the device remove locks
+@@ -660,12 +679,19 @@ static int coretemp_cpu_offline(unsigned int cpu)
+ 	if (!pdev)
+ 		return 0;
+ 
+-	/* The core id is too big, just return */
+-	index = TO_ATTR_NO(cpu);
+-	if (index > MAX_CORE_DATA - 1)
++	pd = platform_get_drvdata(pdev);
++
++	for (i = 0; i < NUM_REAL_CORES; i++) {
++		if (pd->cpu_map[i] == topology_core_id(cpu)) {
++			index = i + BASE_SYSFS_ATTR_NO;
++			break;
++		}
++	}
++
++	/* Too many cores and this core is not populated, just return */
++	if (index < 0)
+ 		return 0;
+ 
+-	pd = platform_get_drvdata(pdev);
+ 	tdata = pd->core_data[index];
+ 
+ 	cpumask_clear_cpu(cpu, &pd->cpumask);
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+2.25.1
 
-~~ When things go utterly wrong vim users can always type :help! ~~
-
-Discuss - Estimate - Plan - Report and finally accomplish this:
-void do_work(int time) __attribute__ ((const));
