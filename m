@@ -2,102 +2,81 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F89CC32772
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 10:34:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7907C32772
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 10:47:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234782AbiHPKef (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Aug 2022 06:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
+        id S234977AbiHPKrt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Aug 2022 06:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234772AbiHPKdx (ORCPT
+        with ESMTP id S235005AbiHPKrd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:33:53 -0400
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656771394FC;
-        Tue, 16 Aug 2022 01:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1660638501; x=1692174501;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Y+K+ejUZbidNdp7fNJrcGWpO2dwpzC63OfGNy7Tg6HU=;
-  b=tFp9P8UBnrsEy8IR1Nt7lPX29/pIfPkXVhvTmB1Qdz/VbtPXanOBwNgU
-   bLFHEKRQoBupD5zPcdXS8f7/eIccdJXrgU8rx2lMoFYMrIxcvbfqNe7Ck
-   TE/nk4THH7XfKl3AzNg0O7i/8ZGsHHoO8A6dnq8E54ULxcICTiz792Tc1
-   8=;
-X-IronPort-AV: E=Sophos;i="5.93,240,1654560000"; 
-   d="scan'208";a="119633964"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-b09d0114.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 08:28:04 +0000
-Received: from EX13MTAUEB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1a-b09d0114.us-east-1.amazon.com (Postfix) with ESMTPS id 0D5CF8130A;
-        Tue, 16 Aug 2022 08:28:00 +0000 (UTC)
-Received: from EX13D08UEB003.ant.amazon.com (10.43.60.11) by
- EX13MTAUEB001.ant.amazon.com (10.43.60.96) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 16 Aug 2022 08:27:59 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D08UEB003.ant.amazon.com (10.43.60.11) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 16 Aug 2022 08:27:58 +0000
-Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Tue, 16 Aug 2022 08:27:58
- +0000
-Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 5BF784C4B; Tue, 16 Aug 2022 08:27:57 +0000 (UTC)
-From:   Eliav Farber <farbere@amazon.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <linux-hwmon@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
-        <jonnyc@amazon.com>, <hanochu@amazon.com>, <ronenk@amazon.com>,
-        <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
-        <amitlavi@amazon.com>, <almogbs@amazon.com>, <dwmw@amazon.co.uk>,
-        <rtanwar@maxlinear.com>
-Subject: [PATCH 04/16] hwmon: (mr75203) add Moortec PVT controller reset-control-skip property
-Date:   Tue, 16 Aug 2022 08:27:45 +0000
-Message-ID: <20220816082757.11990-5-farbere@amazon.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220816082757.11990-1-farbere@amazon.com>
-References: <20220816082757.11990-1-farbere@amazon.com>
+        Tue, 16 Aug 2022 06:47:33 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA610DF70;
+        Tue, 16 Aug 2022 03:09:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6BlpTwVx92rbeofMgr6BndByubfCRJy+MP8PnqkqRTU=; b=eYxw3R0fddjtO4kCgfEOWZVfd4
+        Bx85zGpyU007xVdxqdsTrh3JXX3JK1cgrmg70Wz6sGC8i/d9q8gJEfp1DtTeuTQ9Il3lUQ/XvwjA1
+        /3HU+UcdQmp3GBF3rJLD8fc2D4qWckYf2mQtu32UL8r38MUc6hg3s71RoWogX/UCHIkPOlAL185ja
+        3L3DLjB0hft7JKww/ZZOeRagnXyMIleVsy6kLAshN4mNw8YeC76FOnWM7p3vOaNwteQrFjGa9zLdI
+        +9VaJJO7z8eh9BEzwJJWNS/20DaMCC/pOgnadM0yFkCgw1fdU8+KWMFyhhrrfRqCymOCdtwpHXwqb
+        LldqktVQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oNtVJ-006oGs-Sn; Tue, 16 Aug 2022 10:08:58 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D3109980083; Tue, 16 Aug 2022 12:08:55 +0200 (CEST)
+Date:   Tue, 16 Aug 2022 12:08:55 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hwmon@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        corbet@lwn.net, fenghua.yu@intel.com, jdelvare@suse.com,
+        linux@roeck-us.net, len.brown@intel.com
+Subject: Re: [PATCH V2 1/8] perf/x86/intel/P4: Fix smp_num_siblings usage
+Message-ID: <Yvtst7ga6TaMsHeb@worktop.programming.kicks-ass.net>
+References: <20220816051633.17775-1-rui.zhang@intel.com>
+ <20220816051633.17775-2-rui.zhang@intel.com>
+ <YvtU2VKtpGCIOes4@worktop.programming.kicks-ass.net>
+ <8496afee057d63b83a7ff02ec7f1de8c2d0e97ae.camel@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8496afee057d63b83a7ff02ec7f1de8c2d0e97ae.camel@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Adding a "reset-control-skip" bool property to the mr75203 node will
-avoid looking up and obtaining a reference to a reset controller.
+On Tue, Aug 16, 2022 at 05:47:14PM +0800, Zhang Rui wrote:
+> On Tue, 2022-08-16 at 10:27 +0200, Peter Zijlstra wrote:
+> > On Tue, Aug 16, 2022 at 01:16:26PM +0800, Zhang Rui wrote:
+> > > smp_num_siblings can be larger than 2.
+> > > 
+> > > Any value larger than 1 suggests HT is supported.
+> > 
+> > Subject and Changelog are still utterly insane.
+> 
+> what about this one, do I need to resend the full series?
+> 
+> thanks,
+> rui
+> 
+> From 2e368e6afa83cb73e44ac8c3cf8339207097d9e1 Mon Sep 17 00:00:00 2001
+> From: Zhang Rui <rui.zhang@intel.com>
+> Date: Tue, 28 Jun 2022 11:02:12 +0800
+> Subject: [PATCH V3 1/8] perf/x86/intel/P4: unify logic for detecting HT
+> 
+> Any value larger than 1 suggests HT is supported.
+> 
+> Although smp_num_siblings cannot be larger than 2 on P4 platform, it is
+> better to keep this logic consistent across the kernel.
+> 
+> Reviewed-by: Len Brown <len.brown@intel.com>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 
-Signed-off-by: Eliav Farber <farbere@amazon.com>
----
- .../devicetree/bindings/hwmon/moortec,mr75203.yaml          | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-index f9e849cc73e0..da9c3cdcb6f0 100644
---- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-@@ -44,6 +44,11 @@ properties:
-   "#thermal-sensor-cells":
-     const: 1
- 
-+  reset-control-skip:
-+    description:
-+      reset-control-skip bool property defines if obtaining a
-+      reference to a reset controller should be skipped.
-+
- required:
-   - compatible
-   - reg
-@@ -54,6 +59,7 @@ required:
- 
- additionalProperties:
-   - intel,vm-map
-+  - reset-control-skip
- 
- examples:
-   - |
--- 
-2.37.1
-
+Yes that works for me; thanks!
