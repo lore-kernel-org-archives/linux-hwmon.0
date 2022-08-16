@@ -2,235 +2,136 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BF35C28B2B
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 11:45:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EAF46C32773
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 11:54:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235071AbiHPLpA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Aug 2022 07:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
+        id S235123AbiHPLyk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Aug 2022 07:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235037AbiHPLon (ORCPT
+        with ESMTP id S234969AbiHPLyX (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:44:43 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E82489926;
-        Tue, 16 Aug 2022 04:16:18 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id pm17so9454164pjb.3;
-        Tue, 16 Aug 2022 04:16:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=Xy+EaOiEc1JCMZ8GINadKxdPfXI92avbQ2dDQK0SSyk=;
-        b=Xw+Q+ixzKywCpKI5OZPEmzO6giboj540bxTt+7cQMRYaS6/csJqsBo4sOcrUDxzSDL
-         q5Yph0HXl6F6+lhbiCCT8T7EqLpsmiUADfE5A1nnzD7Zs34+SNJIfLJkPmDrLKmBu8Xl
-         zRu72buqGGIJCJreBso2QDF4egDplidn+mSjzZNZOgrPfHYPUdgIv0cQ1hbDx3QzwZbT
-         RYMrs7Sz9e/hrtHuPeUrLPVdFHTn5IDS5wNWDjXdYSuoicEbgswUtJwJQEAsa8RxFBxA
-         9uCydaqGW7tOkr2U+f6QpyvqxteiNq74eSLG9k9TPVW5E62beoaHZQgqYVS6eW+pbycz
-         5Fhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=Xy+EaOiEc1JCMZ8GINadKxdPfXI92avbQ2dDQK0SSyk=;
-        b=PlhxKHqVOP3zEac5MdLgeXVOcvlXsCnYk8+QGFz+GuYgd7KfRky4N7PDp+eUVBA8Wm
-         SbZZfQdSSNHueTe2yBEoFF/J3Dyf3y+jxB8TGBZla9PfgEcxGw1LIYiFS11qt1g0pdXX
-         X7A0gGNOtESvIXg9CZU595ms/yqcoBhmwde4LlcxddeIPO6mZi2BvOVJjSRJoq3GTjI2
-         Ej270TZGTlVJ918deUfYzY6w2rO5GOHMWHVf4sprcR7iNcC+nHfz+RphqUpK47+n9Skf
-         ztMCmaJfjn258nXR3SEg6xH2WAdKe31rQGh4F3XWal4eU2Ztjdn/hwE64IPX6qqttA4k
-         KEWQ==
-X-Gm-Message-State: ACgBeo17mP/mind72+KNnLFGwR2uy4GVknvdq9V//AmuyEGwTjGdnPCf
-        jzuZ7kFELst00+fiJn3bEOE=
-X-Google-Smtp-Source: AA6agR7TL3UsCCadTluDBmqUz/Qr3DXI4cN3/IuBOlSn8FFltQnRci7VdgGqxItSk4ar5OG7sBahzQ==
-X-Received: by 2002:a17:90b:350a:b0:1f5:6a5e:5d12 with SMTP id ls10-20020a17090b350a00b001f56a5e5d12mr32988249pjb.46.1660648577156;
-        Tue, 16 Aug 2022 04:16:17 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g28-20020aa79f1c000000b00518a473265csm1032805pfr.217.2022.08.16.04.16.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 04:16:16 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 16 Aug 2022 04:16:15 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-hwmon@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        corbet@lwn.net, fenghua.yu@intel.com, jdelvare@suse.com,
-        len.brown@intel.com
-Subject: Re: [PATCH V2 3/8] hwmon/coretemp: Handle large core ID value
-Message-ID: <20220816111615.GD1108868@roeck-us.net>
-References: <20220816051633.17775-1-rui.zhang@intel.com>
- <20220816051633.17775-4-rui.zhang@intel.com>
+        Tue, 16 Aug 2022 07:54:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08E0A4063;
+        Tue, 16 Aug 2022 04:31:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66ABFB816A7;
+        Tue, 16 Aug 2022 11:31:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF9B8C433C1;
+        Tue, 16 Aug 2022 11:31:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660649502;
+        bh=DNGxZGCzNE/W9SNa3AOcpRXwEUSzLHawjI4GPUOozEs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ibyaO5o/Nr/cFFgJEL7PPVekFs+0Q3USPuDu3QwvW87IXj9cmqYanCsbSmFkhICCI
+         /bS/xCmD23/cb+FBxGnzpVz3kjeVAkO2lYjT75WQKNF5axNhVAwouihZTg6FbLvEAY
+         J4D9uKaJlitqM9D4ZYgx+VikKjvj7peGJBkuhBXKCVwCi46fJVtOhi63JN8hMrZFCH
+         UkfZ0SYPO3LlM1dZqhAEgMC/gX42n3x6mQYJi/OWry/0M9xvDVAnxC5iuOOswm5mZI
+         QOIIYWVpSbd9EF5OhCbydJMADpl7C+bCAHQspCqNHYt9riKK17LZaBtj0TiuX1S5h2
+         kfxfjwbz6D43A==
+Date:   Tue, 16 Aug 2022 12:31:31 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Kevin Hilman <khilman@baylibre.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Michael Turq uette <mturquette@baylibre.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        David Airlie <airlied@linux.ie>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: (subset) [PATCH v2 0/7] Devm helpers for regulator get and enable
+Message-ID: <YvuAE0Y3QbAf9Zh/@sirena.org.uk>
+References: <166057828406.697572.228317501909350108.b4-ty@kernel.org>
+ <YvpsRbguMXn74GhR@pendragon.ideasonboard.com>
+ <Yvp1Qkuh7xfeb/B2@sirena.org.uk>
+ <YvqV9Mq6I3gXQaf2@pendragon.ideasonboard.com>
+ <20220815205857.308B1C433D6@smtp.kernel.org>
+ <Yvq33T+XCduoqv7Z@pendragon.ideasonboard.com>
+ <YvrO+velKdYdGVve@sirena.org.uk>
+ <57c312b3-ca5b-6efb-6356-43b6513a0c88@gmail.com>
+ <YvtzJw3jmocM0JFi@sirena.org.uk>
+ <bb590e14-f99b-5bfb-414b-a45ca77045c2@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GRi4H55EvexP+ViS"
 Content-Disposition: inline
-In-Reply-To: <20220816051633.17775-4-rui.zhang@intel.com>
+In-Reply-To: <bb590e14-f99b-5bfb-414b-a45ca77045c2@fi.rohmeurope.com>
+X-Cookie: A bachelor is an unaltared male.
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 01:16:28PM +0800, Zhang Rui wrote:
-> The coretemp driver supports up to a hard-coded limit of 128 cores.
-> 
-> Today, the driver can not support a core with an ID above that limit.
-> Yet, the encoding of core ID's is arbitrary (BIOS APIC-ID) and so they
-> may be sparse and they may be large.
-> 
-> Update the driver to map arbitrary core ID numbers into appropriate
-> array indexes so that 128 cores can be supported, no matter the encoding
-> of core ID's.
-> 
-> Acked-by: Len Brown <len.brown@intel.com>
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+--GRi4H55EvexP+ViS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  drivers/hwmon/coretemp.c | 56 +++++++++++++++++++++++++++++-----------
->  1 file changed, 41 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> index bfdcfe8ccb34..291566aeb703 100644
-> --- a/drivers/hwmon/coretemp.c
-> +++ b/drivers/hwmon/coretemp.c
-> @@ -46,9 +46,6 @@ MODULE_PARM_DESC(tjmax, "TjMax value in degrees Celsius");
->  #define TOTAL_ATTRS		(MAX_CORE_ATTRS + 1)
->  #define MAX_CORE_DATA		(NUM_REAL_CORES + BASE_SYSFS_ATTR_NO)
->  
-> -#define TO_CORE_ID(cpu)		(cpu_data(cpu).cpu_core_id)
-> -#define TO_ATTR_NO(cpu)		(TO_CORE_ID(cpu) + BASE_SYSFS_ATTR_NO)
-> -
->  #ifdef CONFIG_SMP
->  #define for_each_sibling(i, cpu) \
->  	for_each_cpu(i, topology_sibling_cpumask(cpu))
-> @@ -91,6 +88,8 @@ struct temp_data {
->  struct platform_data {
->  	struct device		*hwmon_dev;
->  	u16			pkg_id;
-> +	u16			cpu_map[NUM_REAL_CORES];
-> +	struct ida		ida;
->  	struct cpumask		cpumask;
->  	struct temp_data	*core_data[MAX_CORE_DATA];
->  	struct device_attribute name_attr;
-> @@ -441,7 +440,7 @@ static struct temp_data *init_temp_data(unsigned int cpu, int pkg_flag)
->  							MSR_IA32_THERM_STATUS;
->  	tdata->is_pkg_data = pkg_flag;
->  	tdata->cpu = cpu;
-> -	tdata->cpu_core_id = TO_CORE_ID(cpu);
-> +	tdata->cpu_core_id = topology_core_id(cpu);
->  	tdata->attr_size = MAX_CORE_ATTRS;
->  	mutex_init(&tdata->update_lock);
->  	return tdata;
-> @@ -454,7 +453,7 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
->  	struct platform_data *pdata = platform_get_drvdata(pdev);
->  	struct cpuinfo_x86 *c = &cpu_data(cpu);
->  	u32 eax, edx;
-> -	int err, attr_no;
-> +	int err, index, attr_no;
->  
->  	/*
->  	 * Find attr number for sysfs:
-> @@ -462,14 +461,26 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
->  	 * The attr number is always core id + 2
->  	 * The Pkgtemp will always show up as temp1_*, if available
->  	 */
-> -	attr_no = pkg_flag ? PKG_SYSFS_ATTR_NO : TO_ATTR_NO(cpu);
-> +	if (pkg_flag) {
-> +		attr_no = PKG_SYSFS_ATTR_NO;
-> +	} else {
-> +		index = ida_alloc(&pdata->ida, GFP_KERNEL);
-> +		if (index < 0)
-> +			return index;
-> +		pdata->cpu_map[index] = topology_core_id(cpu);
-> +		attr_no = index + BASE_SYSFS_ATTR_NO;
-> +	}
->  
-> -	if (attr_no > MAX_CORE_DATA - 1)
-> -		return -ERANGE;
-> +	if (attr_no > MAX_CORE_DATA - 1) {
-> +		err = -ERANGE;
-> +		goto ida_free;
-> +	}
->  
->  	tdata = init_temp_data(cpu, pkg_flag);
-> -	if (!tdata)
-> -		return -ENOMEM;
-> +	if (!tdata) {
-> +		err = -ENOMEM;
-> +		goto ida_free;
-> +	}
->  
->  	/* Test if we can access the status register */
->  	err = rdmsr_safe_on_cpu(cpu, tdata->status_reg, &eax, &edx);
-> @@ -505,6 +516,9 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
->  exit_free:
->  	pdata->core_data[attr_no] = NULL;
->  	kfree(tdata);
-> +ida_free:
-> +	if (!pkg_flag)
-> +		ida_free(&pdata->ida, index);
->  	return err;
->  }
->  
-> @@ -524,6 +538,9 @@ static void coretemp_remove_core(struct platform_data *pdata, int index)
->  
->  	kfree(pdata->core_data[index]);
->  	pdata->core_data[index] = NULL;
-> +
-> +	if (index >= BASE_SYSFS_ATTR_NO)
-> +		ida_free(&pdata->ida, index - BASE_SYSFS_ATTR_NO);
->  }
->  
->  static int coretemp_probe(struct platform_device *pdev)
-> @@ -537,6 +554,7 @@ static int coretemp_probe(struct platform_device *pdev)
->  		return -ENOMEM;
->  
->  	pdata->pkg_id = pdev->id;
-> +	ida_init(&pdata->ida);
->  	platform_set_drvdata(pdev, pdata);
->  
->  	pdata->hwmon_dev = devm_hwmon_device_register_with_groups(dev, DRVNAME,
-> @@ -553,6 +571,7 @@ static int coretemp_remove(struct platform_device *pdev)
->  		if (pdata->core_data[i])
->  			coretemp_remove_core(pdata, i);
->  
-> +	ida_destroy(&pdata->ida);
->  	return 0;
->  }
->  
-> @@ -647,7 +666,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
->  	struct platform_device *pdev = coretemp_get_pdev(cpu);
->  	struct platform_data *pd;
->  	struct temp_data *tdata;
-> -	int index, target;
-> +	int i, index = -1, target;
->  
->  	/*
->  	 * Don't execute this on suspend as the device remove locks
-> @@ -660,12 +679,19 @@ static int coretemp_cpu_offline(unsigned int cpu)
->  	if (!pdev)
->  		return 0;
->  
-> -	/* The core id is too big, just return */
-> -	index = TO_ATTR_NO(cpu);
-> -	if (index > MAX_CORE_DATA - 1)
-> +	pd = platform_get_drvdata(pdev);
-> +
-> +	for (i = 0; i < NUM_REAL_CORES; i++) {
-> +		if (pd->cpu_map[i] == topology_core_id(cpu)) {
-> +			index = i + BASE_SYSFS_ATTR_NO;
-> +			break;
-> +		}
-> +	}
-> +
-> +	/* Too many cores and this core is not populated, just return */
-> +	if (index < 0)
->  		return 0;
->  
-> -	pd = platform_get_drvdata(pdev);
->  	tdata = pd->core_data[index];
->  
->  	cpumask_clear_cpu(cpu, &pd->cpumask);
-> -- 
-> 2.25.1
-> 
+On Tue, Aug 16, 2022 at 11:06:21AM +0000, Vaittinen, Matti wrote:
+
+> I wonder if writing such 'release callbacks' is compulsory? I mean, if I=
+=20
+> was writing a driver to some new (to me) subsystem and was required to=20
+> write an explicit release-callback for a resource - then it'd surely=20
+> rang a bell about potentially double freeing stuff with devm. Especially=
+=20
+> if the doc stated the callback can be called after the driver has been=20
+> detached.
+
+Generally yes, thoguh people can and do leave them blank and it's easy
+enough to do some cleanup in there that assumes that the device is still
+present and not think the device might've gone away especially if the
+hardware isn't practically hotpluggable.
+
+--GRi4H55EvexP+ViS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL7gBIACgkQJNaLcl1U
+h9AzDwf9HyzkouCr6DLxGa2jy+krXW2whkKczGUewYVjLonIovCKJI3OKOOMeqaZ
+rggHFUZDlyHpe4f23sQn190TBdngSGLYf1nrOt1WMUf3vCkLA05c7RcsGPCZdlGm
+TaL1HglUSxZ6Mce97JyRZ3k3Uw28ImBl0LWx3nunXvOqv6UUjs0cc0NdiGSD3JEA
+q7cLUiSYA4BzPVJg8bAXNNgXRdqY08D9aqih79uT+vgmcurosxM9InLGjKWb4xRw
+UlVPhgqtHOGKTfgLfNuPG7s+nSv91LUEf43AMjI0HE92IutdyHoYhleNfB5V7kAU
+vbqH3vEZToSso212DUSGKfURUbqHBg==
+=2bTO
+-----END PGP SIGNATURE-----
+
+--GRi4H55EvexP+ViS--
