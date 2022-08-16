@@ -2,136 +2,103 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAF46C32773
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 11:54:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4254BC25B0E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 14:44:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235123AbiHPLyk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Aug 2022 07:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
+        id S229536AbiHPOob (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Aug 2022 10:44:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234969AbiHPLyX (ORCPT
+        with ESMTP id S235472AbiHPOo1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:54:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08E0A4063;
-        Tue, 16 Aug 2022 04:31:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66ABFB816A7;
-        Tue, 16 Aug 2022 11:31:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF9B8C433C1;
-        Tue, 16 Aug 2022 11:31:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660649502;
-        bh=DNGxZGCzNE/W9SNa3AOcpRXwEUSzLHawjI4GPUOozEs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ibyaO5o/Nr/cFFgJEL7PPVekFs+0Q3USPuDu3QwvW87IXj9cmqYanCsbSmFkhICCI
-         /bS/xCmD23/cb+FBxGnzpVz3kjeVAkO2lYjT75WQKNF5axNhVAwouihZTg6FbLvEAY
-         J4D9uKaJlitqM9D4ZYgx+VikKjvj7peGJBkuhBXKCVwCi46fJVtOhi63JN8hMrZFCH
-         UkfZ0SYPO3LlM1dZqhAEgMC/gX42n3x6mQYJi/OWry/0M9xvDVAnxC5iuOOswm5mZI
-         QOIIYWVpSbd9EF5OhCbydJMADpl7C+bCAHQspCqNHYt9riKK17LZaBtj0TiuX1S5h2
-         kfxfjwbz6D43A==
-Date:   Tue, 16 Aug 2022 12:31:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Michael Turq uette <mturquette@baylibre.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        David Airlie <airlied@linux.ie>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: (subset) [PATCH v2 0/7] Devm helpers for regulator get and enable
-Message-ID: <YvuAE0Y3QbAf9Zh/@sirena.org.uk>
-References: <166057828406.697572.228317501909350108.b4-ty@kernel.org>
- <YvpsRbguMXn74GhR@pendragon.ideasonboard.com>
- <Yvp1Qkuh7xfeb/B2@sirena.org.uk>
- <YvqV9Mq6I3gXQaf2@pendragon.ideasonboard.com>
- <20220815205857.308B1C433D6@smtp.kernel.org>
- <Yvq33T+XCduoqv7Z@pendragon.ideasonboard.com>
- <YvrO+velKdYdGVve@sirena.org.uk>
- <57c312b3-ca5b-6efb-6356-43b6513a0c88@gmail.com>
- <YvtzJw3jmocM0JFi@sirena.org.uk>
- <bb590e14-f99b-5bfb-414b-a45ca77045c2@fi.rohmeurope.com>
+        Tue, 16 Aug 2022 10:44:27 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4495552E41;
+        Tue, 16 Aug 2022 07:44:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1660661063;
+  x=1692197063;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Z5emoo7NBWj2lZE555Og82r9rkmvgnhnuQSLaJvTEog=;
+  b=A3VzGtynkhLlLX7SEuVoeijVHQtfpAtJ8EJ02/XRTl/lY9dLyZENJuCK
+   L3gZ0qP/JehCIOJH6U06RgnJa7DYDeW/ErML+PMqnk4c200/myLbxnMi8
+   1zkwpkLf/hDAJcOLv3EdMaMsbjaLIc7BOv+toinwLh3ytfjVn6jn/nD4p
+   2mpYlUnkNe6DAxR+hsybVrVRgBAsEs7tuySBa54OyzQ5CapmScbsvkOrv
+   JFP4WlpceDJBgAWVxC/mhi8fiuD86GpTPlukgBE+9cB/wLAw/Ix2/KYIz
+   yGYIS8G4ZXvj9G6xBX9nlkmF6Z5ZcKZFWAfV+xPYFlAvaeiE1oZIMtNEn
+   A==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+CC:     <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] hwmon: (pmbus) Fix vout margin caching
+Date:   Tue, 16 Aug 2022 16:44:14 +0200
+Message-ID: <20220816144414.2358974-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GRi4H55EvexP+ViS"
-Content-Disposition: inline
-In-Reply-To: <bb590e14-f99b-5bfb-414b-a45ca77045c2@fi.rohmeurope.com>
-X-Cookie: A bachelor is an unaltared male.
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+The code currently uses a zero margin to mean not cached, but this
+results in the cache being bypassed if the (low) margin is set to zero,
+leading to lots of unnecessary SMBus transactions in that case.  Use a
+negative value instead.
 
---GRi4H55EvexP+ViS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 07fb76273db89d93 ("hwmon: (pmbus) Introduce and use cached vout margins")
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-On Tue, Aug 16, 2022 at 11:06:21AM +0000, Vaittinen, Matti wrote:
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index f10bac8860fc..d06b04543fd8 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2861,7 +2861,7 @@ static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
+ 		.data = -1,
+ 	};
+ 
+-	if (!data->vout_low[page]) {
++	if (data->vout_low[page] < 0) {
+ 		if (pmbus_check_word_register(client, page, PMBUS_MFR_VOUT_MIN))
+ 			s.data = _pmbus_read_word_data(client, page, 0xff,
+ 						       PMBUS_MFR_VOUT_MIN);
+@@ -2887,7 +2887,7 @@ static int pmbus_regulator_get_high_margin(struct i2c_client *client, int page)
+ 		.data = -1,
+ 	};
+ 
+-	if (!data->vout_high[page]) {
++	if (data->vout_high[page] < 0) {
+ 		if (pmbus_check_word_register(client, page, PMBUS_MFR_VOUT_MAX))
+ 			s.data = _pmbus_read_word_data(client, page, 0xff,
+ 						       PMBUS_MFR_VOUT_MAX);
+@@ -3320,6 +3320,7 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
+ 	struct pmbus_data *data;
+ 	size_t groups_num = 0;
+ 	int ret;
++	int i;
+ 	char *name;
+ 
+ 	if (!info)
+@@ -3353,6 +3354,11 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
+ 	data->currpage = -1;
+ 	data->currphase = -1;
+ 
++	for (i = 0; i < ARRAY_SIZE(data->vout_low); i++) {
++		data->vout_low[i] = -1;
++		data->vout_high[i] = -1;
++	}
++
+ 	ret = pmbus_init_common(client, data, info);
+ 	if (ret < 0)
+ 		return ret;
+-- 
+2.34.1
 
-> I wonder if writing such 'release callbacks' is compulsory? I mean, if I=
-=20
-> was writing a driver to some new (to me) subsystem and was required to=20
-> write an explicit release-callback for a resource - then it'd surely=20
-> rang a bell about potentially double freeing stuff with devm. Especially=
-=20
-> if the doc stated the callback can be called after the driver has been=20
-> detached.
-
-Generally yes, thoguh people can and do leave them blank and it's easy
-enough to do some cleanup in there that assumes that the device is still
-present and not think the device might've gone away especially if the
-hardware isn't practically hotpluggable.
-
---GRi4H55EvexP+ViS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL7gBIACgkQJNaLcl1U
-h9AzDwf9HyzkouCr6DLxGa2jy+krXW2whkKczGUewYVjLonIovCKJI3OKOOMeqaZ
-rggHFUZDlyHpe4f23sQn190TBdngSGLYf1nrOt1WMUf3vCkLA05c7RcsGPCZdlGm
-TaL1HglUSxZ6Mce97JyRZ3k3Uw28ImBl0LWx3nunXvOqv6UUjs0cc0NdiGSD3JEA
-q7cLUiSYA4BzPVJg8bAXNNgXRdqY08D9aqih79uT+vgmcurosxM9InLGjKWb4xRw
-UlVPhgqtHOGKTfgLfNuPG7s+nSv91LUEf43AMjI0HE92IutdyHoYhleNfB5V7kAU
-vbqH3vEZToSso212DUSGKfURUbqHBg==
-=2bTO
------END PGP SIGNATURE-----
-
---GRi4H55EvexP+ViS--
