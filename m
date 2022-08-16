@@ -2,47 +2,47 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2B1EC25B0E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 18:18:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92379C2BB41
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 19:56:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236556AbiHPSSF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Aug 2022 14:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
+        id S237336AbiHPT4I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Aug 2022 15:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiHPSSE (ORCPT
+        with ESMTP id S236924AbiHPT4G (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Aug 2022 14:18:04 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D182861E0;
-        Tue, 16 Aug 2022 11:18:03 -0700 (PDT)
+        Tue, 16 Aug 2022 15:56:06 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FD779604;
+        Tue, 16 Aug 2022 12:56:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660673883; x=1692209883;
+  t=1660679765; x=1692215765;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=JnZ+/9C5jcfCqjDZytcjZuBiCh23D0qZXJHc8J+J2JY=;
-  b=ljIrwL0TJC4MqYosOM9/NeZcik4H/6X6kbFOF7huNY7E+Chzydl1nG0E
-   rxjBe8P64JgTzuG9fb2Xr/Y+6ITkLO6bCfDRVMdzeQ5tpobAe4E3Rna7A
-   NNjBZl3C2V5aJmnn6ZVYPDJ3FeEM8TpZycK9mRrz8gphv9N0bZJ2KgfG9
-   yQ1LE4Jc3LTVcLP6gSc8CdpXs2QYGTQbCCJZ0fb2UiU4FSJDhFZDZ5Qnr
-   ubw00RZ3PFbE4Vg+YjBjzlmBuf9Eu+j0kCsjxUt+MiNKSrnTZB24iN7XJ
-   SNpGSkOmCKHlf/A9EBjqyj+ZnCV7YHxxTc9+Qw72Hwj7AvAlrq5gclolH
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="272063867"
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="272063867"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 11:18:03 -0700
+  bh=yixfxwAxzM7YBQGZsa87NJ7t2jyl79YfbDujqx61tcE=;
+  b=SOuWDChFpfHWPnCZEh5nbGfZBCKvfaEc5YtwisZtcOoRyQZLnu5G1Yx0
+   LiA4hxEBm6rytT6Dj8RA2FshQ02qnY9Od1Oh6dXNBTjofge01+zrWzIXH
+   mwZum6wDhF5xyZXWDbLrtsZNP2Z9NwEbcVdNyjtch2VeExyIqgBVTforY
+   xwHdhOIR8dF8Fb1wBTFANuJCGqOiWSwEF/6/DrlyLyoH273DiiimJAKHP
+   3Qv6924/YU5CFvasicw14xH9vYLCVzFm6O+TflK7GKZmd3zSOSElFtMW/
+   DVtpqtj3wBUpZdtsPnLRKpu/RenA96XCCGZDYev60NGeExberAhCoK5mQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="272708982"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="272708982"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 12:56:05 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="749407845"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="935057276"
 Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Aug 2022 11:17:59 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 16 Aug 2022 12:56:00 -0700
 Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oO18Y-00007s-1N;
-        Tue, 16 Aug 2022 18:17:58 +0000
-Date:   Wed, 17 Aug 2022 02:17:10 +0800
+        id 1oO2fQ-0000C8-13;
+        Tue, 16 Aug 2022 19:56:00 +0000
+Date:   Wed, 17 Aug 2022 03:55:15 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Eliav Farber <farbere@amazon.com>, jdelvare@suse.com,
         linux@roeck-us.net, robh+dt@kernel.org, mark.rutland@arm.com,
@@ -54,7 +54,7 @@ Cc:     kbuild-all@lists.01.org, farbere@amazon.com, talel@amazon.com,
         shorer@amazon.com, amitlavi@amazon.com, almogbs@amazon.com,
         dwmw@amazon.co.uk, rtanwar@maxlinear.com
 Subject: Re: [PATCH 08/16] hwmon: (mr75203) add VM active channel support
-Message-ID: <202208170228.YsVOxCg7-lkp@intel.com>
+Message-ID: <202208170350.3yIFIWEk-lkp@intel.com>
 References: <20220816082757.11990-9-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -76,29 +76,34 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Eliav-Farber/Variety-of-fixes-and-new-features-for-mr75203-driver/20220816-183655
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: powerpc-randconfig-s031-20220816 (https://download.01.org/0day-ci/archive/20220817/202208170228.YsVOxCg7-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce:
+config: microblaze-randconfig-r013-20220815 (https://download.01.org/0day-ci/archive/20220817/202208170350.3yIFIWEk-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
         # https://github.com/intel-lab-lkp/linux/commit/75e49737eb6188733096da72eb4692cfed872101
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Eliav-Farber/Variety-of-fixes-and-new-features-for-mr75203-driver/20220816-183655
         git checkout 75e49737eb6188733096da72eb4692cfed872101
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/hwmon/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/hwmon/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/hwmon/mr75203.c:604:27: sparse: sparse: Variable length array is used.
-   drivers/hwmon/mr75203.c:605:33: sparse: sparse: Variable length array is used.
+All warnings (new ones prefixed by >>):
 
-vim +604 drivers/hwmon/mr75203.c
+   drivers/hwmon/mr75203.c: In function 'mr75203_probe':
+>> drivers/hwmon/mr75203.c:604:17: warning: ISO C90 forbids variable length array 'vm_idx' [-Wvla]
+     604 |                 u8 vm_idx[vm_num];
+         |                 ^~
+>> drivers/hwmon/mr75203.c:605:17: warning: ISO C90 forbids variable length array 'vm_active_ch' [-Wvla]
+     605 |                 u8 vm_active_ch[vm_num];
+         |                 ^~
+
+
+vim +/vm_idx +604 drivers/hwmon/mr75203.c
 
    514	
    515	static int mr75203_probe(struct platform_device *pdev)
@@ -191,7 +196,7 @@ vim +604 drivers/hwmon/mr75203.c
    602	
    603		if (vm_num) {
  > 604			u8 vm_idx[vm_num];
-   605			u8 vm_active_ch[vm_num];
+ > 605			u8 vm_active_ch[vm_num];
    606	
    607			ret = pvt_get_regmap(pdev, "vm", pvt);
    608			if (ret)
