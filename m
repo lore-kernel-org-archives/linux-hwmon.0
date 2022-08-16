@@ -2,59 +2,59 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10AB9C3F6B0
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 16:53:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2B1EC25B0E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 18:18:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235678AbiHPQxG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Aug 2022 12:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
+        id S236556AbiHPSSF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Aug 2022 14:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiHPQxF (ORCPT
+        with ESMTP id S229887AbiHPSSE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Aug 2022 12:53:05 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E98B7B1D9;
-        Tue, 16 Aug 2022 09:53:03 -0700 (PDT)
+        Tue, 16 Aug 2022 14:18:04 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D182861E0;
+        Tue, 16 Aug 2022 11:18:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660668783; x=1692204783;
+  t=1660673883; x=1692209883;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=JMQasI3jp4QSDblLur902dOnDKdWj/6zrU1a6jWVATA=;
-  b=V+B01D04kNbPKb8NNuU5aDXwhu+2ZpnrnAO/oT9BITkOk+PpSDu1ABhO
-   3OIVJ5EoRMDs1hCQQLZbTbyT/QT4eZAP7tmrH2GCxaD2ImlCCsA4z3KHr
-   NWtbvXLRlwlcleLvhgTibYXSeJf4CQUt0Ex+cSST1RA0YfafhhV2xQ7EN
-   hL2AaHdd7E0xkqN0FI465h+QQ4BAzhoAC7Cryo7jCbDOOFhPh5SLrQ6Ic
-   10iiljmRI5qpQhy23e5Ob/xED9XJMKeQEWqABAznIolUtWxj1iYhgj4h8
-   GmiLTGboWe9rCmqag7o0vfLaXvUFD3WFSKw7ofzfmYM9I7RG6UUb2mmQf
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="356274496"
+  bh=JnZ+/9C5jcfCqjDZytcjZuBiCh23D0qZXJHc8J+J2JY=;
+  b=ljIrwL0TJC4MqYosOM9/NeZcik4H/6X6kbFOF7huNY7E+Chzydl1nG0E
+   rxjBe8P64JgTzuG9fb2Xr/Y+6ITkLO6bCfDRVMdzeQ5tpobAe4E3Rna7A
+   NNjBZl3C2V5aJmnn6ZVYPDJ3FeEM8TpZycK9mRrz8gphv9N0bZJ2KgfG9
+   yQ1LE4Jc3LTVcLP6gSc8CdpXs2QYGTQbCCJZ0fb2UiU4FSJDhFZDZ5Qnr
+   ubw00RZ3PFbE4Vg+YjBjzlmBuf9Eu+j0kCsjxUt+MiNKSrnTZB24iN7XJ
+   SNpGSkOmCKHlf/A9EBjqyj+ZnCV7YHxxTc9+Qw72Hwj7AvAlrq5gclolH
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="272063867"
 X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="356274496"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 09:53:03 -0700
+   d="scan'208";a="272063867"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 11:18:03 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="733362460"
+   d="scan'208";a="749407845"
 Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 Aug 2022 09:52:58 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 16 Aug 2022 11:17:59 -0700
 Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oNzoH-00005Y-1A;
-        Tue, 16 Aug 2022 16:52:57 +0000
-Date:   Wed, 17 Aug 2022 00:52:20 +0800
+        id 1oO18Y-00007s-1N;
+        Tue, 16 Aug 2022 18:17:58 +0000
+Date:   Wed, 17 Aug 2022 02:17:10 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Eliav Farber <farbere@amazon.com>, jdelvare@suse.com,
         linux@roeck-us.net, robh+dt@kernel.org, mark.rutland@arm.com,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, farbere@amazon.com,
-        talel@amazon.com, hhhawa@amazon.com, jonnyc@amazon.com,
-        hanochu@amazon.com, ronenk@amazon.com, itamark@amazon.com,
-        shellykz@amazon.com, shorer@amazon.com, amitlavi@amazon.com,
-        almogbs@amazon.com, dwmw@amazon.co.uk, rtanwar@maxlinear.com
+Cc:     kbuild-all@lists.01.org, farbere@amazon.com, talel@amazon.com,
+        hhhawa@amazon.com, jonnyc@amazon.com, hanochu@amazon.com,
+        ronenk@amazon.com, itamark@amazon.com, shellykz@amazon.com,
+        shorer@amazon.com, amitlavi@amazon.com, almogbs@amazon.com,
+        dwmw@amazon.co.uk, rtanwar@maxlinear.com
 Subject: Re: [PATCH 08/16] hwmon: (mr75203) add VM active channel support
-Message-ID: <202208170047.kXOyBIXA-lkp@intel.com>
+Message-ID: <202208170228.YsVOxCg7-lkp@intel.com>
 References: <20220816082757.11990-9-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -76,140 +76,27 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Eliav-Farber/Variety-of-fixes-and-new-features-for-mr75203-driver/20220816-183655
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: powerpc-randconfig-r024-20220815 (https://download.01.org/0day-ci/archive/20220817/202208170047.kXOyBIXA-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
+config: powerpc-randconfig-s031-20220816 (https://download.01.org/0day-ci/archive/20220817/202208170228.YsVOxCg7-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
         # https://github.com/intel-lab-lkp/linux/commit/75e49737eb6188733096da72eb4692cfed872101
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Eliav-Farber/Variety-of-fixes-and-new-features-for-mr75203-driver/20220816-183655
         git checkout 75e49737eb6188733096da72eb4692cfed872101
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/hwmon/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/hwmon/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:43:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insb, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:178:1: note: expanded from here
-   __do_insb
-   ^
-   arch/powerpc/include/asm/io.h:577:56: note: expanded from macro '__do_insb'
-   #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/hwmon/mr75203.c:19:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:45:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:180:1: note: expanded from here
-   __do_insw
-   ^
-   arch/powerpc/include/asm/io.h:578:56: note: expanded from macro '__do_insw'
-   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/hwmon/mr75203.c:19:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:182:1: note: expanded from here
-   __do_insl
-   ^
-   arch/powerpc/include/asm/io.h:579:56: note: expanded from macro '__do_insl'
-   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/hwmon/mr75203.c:19:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:184:1: note: expanded from here
-   __do_outsb
-   ^
-   arch/powerpc/include/asm/io.h:580:58: note: expanded from macro '__do_outsb'
-   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/hwmon/mr75203.c:19:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:186:1: note: expanded from here
-   __do_outsw
-   ^
-   arch/powerpc/include/asm/io.h:581:58: note: expanded from macro '__do_outsw'
-   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/hwmon/mr75203.c:19:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:188:1: note: expanded from here
-   __do_outsl
-   ^
-   arch/powerpc/include/asm/io.h:582:58: note: expanded from macro '__do_outsl'
-   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
->> drivers/hwmon/mr75203.c:604:13: warning: variable length array used [-Wvla]
-                   u8 vm_idx[vm_num];
-                             ^~~~~~
-   drivers/hwmon/mr75203.c:605:19: warning: variable length array used [-Wvla]
-                   u8 vm_active_ch[vm_num];
-                                   ^~~~~~
-   8 warnings generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
-   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
-   Selected by [y]:
-   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=y] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
-
+sparse warnings: (new ones prefixed by >>)
+>> drivers/hwmon/mr75203.c:604:27: sparse: sparse: Variable length array is used.
+   drivers/hwmon/mr75203.c:605:33: sparse: sparse: Variable length array is used.
 
 vim +604 drivers/hwmon/mr75203.c
 
