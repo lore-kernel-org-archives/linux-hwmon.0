@@ -2,135 +2,72 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20BCEC2BB41
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 10:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C339C2BB41
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 10:18:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234112AbiHPKRS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Aug 2022 06:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
+        id S233350AbiHPKSO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Aug 2022 06:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234397AbiHPKQg (ORCPT
+        with ESMTP id S233386AbiHPKRw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:16:36 -0400
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3548DF0B3;
-        Tue, 16 Aug 2022 01:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1660638501; x=1692174501;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ULkqAHITNyNY+nb/F2KUcwZfWxaEdjYhDYRpVxQWyfI=;
-  b=vZF3rZuQuo4YNJXjDkVRkT9o0m6qo8vDPkO3XxIGS/qT3SAelrx6VY8k
-   1gVd89lxvtmr2KxQ+r+Ll8HtSPn7jvSngY/rJOHNkEzp4jegBvZzBZR3S
-   +e5v+XBZXhAvPB0Xkk0Mcs+l/WE6HiXbUhtEfUWnLcp9W7NJy4TTvg4TK
-   Q=;
-X-IronPort-AV: E=Sophos;i="5.93,240,1654560000"; 
-   d="scan'208";a="233486642"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-2d7489a4.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 08:28:20 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1a-2d7489a4.us-east-1.amazon.com (Postfix) with ESMTPS id 9A42C8705F;
-        Tue, 16 Aug 2022 08:28:20 +0000 (UTC)
-Received: from EX19D013UWA004.ant.amazon.com (10.13.138.207) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 16 Aug 2022 08:28:00 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX19D013UWA004.ant.amazon.com (10.13.138.207) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Tue, 16 Aug 2022 08:27:59 +0000
-Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Tue, 16 Aug 2022 08:27:59
- +0000
-Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 61ACF4C09; Tue, 16 Aug 2022 08:27:57 +0000 (UTC)
-From:   Eliav Farber <farbere@amazon.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <linux-hwmon@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
-        <jonnyc@amazon.com>, <hanochu@amazon.com>, <ronenk@amazon.com>,
-        <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
-        <amitlavi@amazon.com>, <almogbs@amazon.com>, <dwmw@amazon.co.uk>,
-        <rtanwar@maxlinear.com>
-Subject: [PATCH 01/16] hwmon: (mr75203) fix VM sensor allocation when "intel,vm-map" not defined
-Date:   Tue, 16 Aug 2022 08:27:42 +0000
-Message-ID: <20220816082757.11990-2-farbere@amazon.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220816082757.11990-1-farbere@amazon.com>
-References: <20220816082757.11990-1-farbere@amazon.com>
+        Tue, 16 Aug 2022 06:17:52 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401151A05A;
+        Tue, 16 Aug 2022 01:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=cPJaW2xNn/yDTjrJigRQCIHe05jeFSkKn2MM46dKM5E=; b=rBh97mMKFKdKhEHk1XRKoVzQSl
+        VI6XhdyrcrXj8l5sw7dnz71HqVm9wIR9D/pcaacpx0G94JDYlbxXHPJ3sabDcoMAcChgY4VVtjS1J
+        0JJB6SscnBDyYaR/NhS1mSATM9tfPgdD8V0a9nm2FdhZ1GEy2IcQzC7MBnXV4Od27kgoRPl4Fu8x2
+        Oen1u4lY8W9BnGp0iq2KVW5u1LugL593i5maWV78yYkuOhW4wZW7TZ2q9lrhcXEBCC4rPtoBq22zK
+        /H3pnQPRW50TLDBBNodKjNa8M0D8M4fopXRf/XmSdL/UC3CS7wzQ5+6vOO6QRscnc5VONjtV1JS3j
+        KKxh7agA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oNru9-006iZ7-IE; Tue, 16 Aug 2022 08:26:29 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CC7D0980264; Tue, 16 Aug 2022 10:26:27 +0200 (CEST)
+Date:   Tue, 16 Aug 2022 10:26:27 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hwmon@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        corbet@lwn.net, fenghua.yu@intel.com, jdelvare@suse.com,
+        linux@roeck-us.net, len.brown@intel.com
+Subject: Re: [PATCH 7/7] perf/x86/intel/P4: Fix smp_num_siblings usage
+Message-ID: <YvtUs4o00xYV8BGD@worktop.programming.kicks-ass.net>
+References: <20220812164144.30829-1-rui.zhang@intel.com>
+ <20220812164144.30829-8-rui.zhang@intel.com>
+ <YvoN2DTABnRZiJhf@worktop.programming.kicks-ass.net>
+ <66dfcffec12b3558c36007eacec8f91fb91ca04b.camel@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <66dfcffec12b3558c36007eacec8f91fb91ca04b.camel@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Fix a bug that in case "intel,vm-map" is missing 'num' is set to 0,
-and no voltage channel infos are allocated.
+On Tue, Aug 16, 2022 at 10:26:19AM +0800, Zhang Rui wrote:
+> On Mon, 2022-08-15 at 11:11 +0200, Peter Zijlstra wrote:
+> > On Sat, Aug 13, 2022 at 12:41:44AM +0800, Zhang Rui wrote:
+> > > smp_num_siblings can be larger than 2.
+> > 
+> > Not on a P4 it can't ;-)
+> 
+> Kernel code doesn't prevent this from happening, so it just depends on
+> how SMT ID is encoded in APICID.
 
-Signed-off-by: Eliav Farber <farbere@amazon.com>
----
- drivers/hwmon/mr75203.c | 28 ++++++++++++----------------
- 1 file changed, 12 insertions(+), 16 deletions(-)
+No P4 ever encountered had it different and since no P4 will ever be
+made again (I sincerely hope) we have a complete case.
 
-diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-index 046523d47c29..0e29877a1a9c 100644
---- a/drivers/hwmon/mr75203.c
-+++ b/drivers/hwmon/mr75203.c
-@@ -580,8 +580,6 @@ static int mr75203_probe(struct platform_device *pdev)
- 	}
- 
- 	if (vm_num) {
--		u32 num = vm_num;
--
- 		ret = pvt_get_regmap(pdev, "vm", pvt);
- 		if (ret)
- 			return ret;
-@@ -594,30 +592,28 @@ static int mr75203_probe(struct platform_device *pdev)
- 		ret = device_property_read_u8_array(dev, "intel,vm-map",
- 						    pvt->vm_idx, vm_num);
- 		if (ret) {
--			num = 0;
-+			/*
-+			 * Incase intel,vm-map property is not defined, we
-+			 * assume incremental channel numbers.
-+			 */
-+			for (i = 0; i < vm_num; i++)
-+				pvt->vm_idx[i] = i;
- 		} else {
- 			for (i = 0; i < vm_num; i++)
- 				if (pvt->vm_idx[i] >= vm_num ||
--				    pvt->vm_idx[i] == 0xff) {
--					num = i;
-+				    pvt->vm_idx[i] == 0xff)
- 					break;
--				}
--		}
- 
--		/*
--		 * Incase intel,vm-map property is not defined, we assume
--		 * incremental channel numbers.
--		 */
--		for (i = num; i < vm_num; i++)
--			pvt->vm_idx[i] = i;
-+			vm_num = i;
-+		}
- 
--		in_config = devm_kcalloc(dev, num + 1,
-+		in_config = devm_kcalloc(dev, vm_num + 1,
- 					 sizeof(*in_config), GFP_KERNEL);
- 		if (!in_config)
- 			return -ENOMEM;
- 
--		memset32(in_config, HWMON_I_INPUT, num);
--		in_config[num] = 0;
-+		memset32(in_config, HWMON_I_INPUT, vm_num);
-+		in_config[vm_num] = 0;
- 		pvt_in.config = in_config;
- 
- 		pvt_info[index++] = &pvt_in;
--- 
-2.37.1
+> Checking for smp_num_sibling > 1 is the right logic to detect HT
+> support, which is followed by all other kernel code except this one. :)
+
+I'm fine with making it consistent, I'm arguing with the subject calling
+this a fix, it is not, it's a functional no-op.
 
