@@ -2,42 +2,42 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 078E1C32771
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 07:57:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9CECC32772
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 07:57:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbiHPH53 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Aug 2022 03:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
+        id S229627AbiHPH5b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Aug 2022 03:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232064AbiHPH4n (ORCPT
+        with ESMTP id S230383AbiHPH4w (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Aug 2022 03:56:43 -0400
+        Tue, 16 Aug 2022 03:56:52 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35E6DB7ED;
-        Mon, 15 Aug 2022 22:12:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427ACF47E4;
+        Mon, 15 Aug 2022 22:13:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660626774; x=1692162774;
+  t=1660626790; x=1692162790;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=uNmyJGFQ0sIPiZsSeZdd651qCRfEeR1fmTyxguCl9bY=;
-  b=WiU607FOLSw+SPGbfyQBWNdhaazxcoHui9/vt7osQprx1JV7i/HVlPxJ
-   6oAD+JdHutU8YMzk/jQZ1UfFC7b0CZuIUtnqElS5cjU3DFcR5qgVhi4It
-   htG2RZvNr/mrT6AlBBFZgv5Ydot/T3SR6zFo/8BAHViT75gPuHpdL9Rdv
-   6lVw3407NGFaoyTr48Cp+7tmz4PlXSZX7+x/tF07A1l6o6wOEUqyPYg8b
-   gMkgd3/469TAslPRhou0Nviak8GJ2uFOx3voyZqk+ROFBd0LDdhXDz/+6
-   teXCP8QWvmiu5U2LRT1BKkOKKc+L3hmeYrwxU7hbVYTN4mERHyAOcQYnc
+  bh=u+ZvcOj9M2zkdP1mQyjcoYw0fYKI0r1gp+/88xhN1yA=;
+  b=Srm1zOzumwswv84gJwzNYsGXTvNptIFlqkj+tpZjD2fbTALrwfk6/HVj
+   iUWEIMZXDesgcj//0wG2Fq1HDWzE6CeuitPyMtWSHMsZZycBrz5rM09ay
+   u/iG/J7CFHV0Rj6t4WrZLdlxS0mXXQOSkZWX4N75dwVxFRAeNlGpqr9gS
+   tBjGjaoTUZ5LIFsbO3zT/3vAupUl8FCtJHdl2xtKXqK71c6y3it3/u8F/
+   l/rqZivoIJVM6ede+PdvNQMVZro7xz3DxFW2RZm2llOB9WKuU2nqNUfHu
+   hL9XiKtKLNYreLDbgfIARFD9gbvZ4cKb9cP4626mx3LZfUpTKpxxPSX0u
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="356130141"
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="356130180"
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="356130141"
+   d="scan'208";a="356130180"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 22:12:54 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 22:13:10 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="666953455"
+   d="scan'208";a="666953525"
 Received: from power-sh.sh.intel.com ([10.239.183.122])
-  by fmsmga008.fm.intel.com with ESMTP; 15 Aug 2022 22:12:51 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 15 Aug 2022 22:13:07 -0700
 From:   Zhang Rui <rui.zhang@intel.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org,
         linux-hwmon@vger.kernel.org
@@ -45,9 +45,9 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, hpa@zytor.com, corbet@lwn.net,
         fenghua.yu@intel.com, jdelvare@suse.com, linux@roeck-us.net,
         len.brown@intel.com, rui.zhang@intel.com
-Subject: [PATCH V2 2/8] hwmon/coretemp: Rename indx to index
-Date:   Tue, 16 Aug 2022 13:16:27 +0800
-Message-Id: <20220816051633.17775-3-rui.zhang@intel.com>
+Subject: [PATCH V2 7/8] Documentation: x86: Update smp_num_siblings/x86_max_cores description
+Date:   Tue, 16 Aug 2022 13:16:32 +0800
+Message-Id: <20220816051633.17775-8-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220816051633.17775-1-rui.zhang@intel.com>
 References: <20220816051633.17775-1-rui.zhang@intel.com>
@@ -55,73 +55,47 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Use variable name 'index' instead of 'indx' for the index in the
-core_data[] array.
+smp_num_siblings/cpuinfo_x86.x86_max_cores are retrieved via CPUID EAX
+bit_shift value, and they represent the maximum possible number of threads
+in a core, and the maximum possible number of cores in a package.
 
-Suggested-by: Ingo Molnar <mingo@kernel.org>
+Update the smp_num_siblings/cpuinfo_x86.x86_max_cores description in the
+documentation.
+
+Reviewed-by: Len Brown <len.brown@intel.com>
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
- drivers/hwmon/coretemp.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ Documentation/x86/topology.rst | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index ccf0af5b988a..bfdcfe8ccb34 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -515,15 +515,15 @@ coretemp_add_core(struct platform_device *pdev, unsigned int cpu, int pkg_flag)
- 		dev_err(&pdev->dev, "Adding Core %u failed\n", cpu);
- }
+diff --git a/Documentation/x86/topology.rst b/Documentation/x86/topology.rst
+index 7f58010ea86a..c5eb5bc42380 100644
+--- a/Documentation/x86/topology.rst
++++ b/Documentation/x86/topology.rst
+@@ -49,7 +49,8 @@ AMD nomenclature for package is 'Node'.
  
--static void coretemp_remove_core(struct platform_data *pdata, int indx)
-+static void coretemp_remove_core(struct platform_data *pdata, int index)
- {
--	struct temp_data *tdata = pdata->core_data[indx];
-+	struct temp_data *tdata = pdata->core_data[index];
+   - cpuinfo_x86.x86_max_cores:
  
- 	/* Remove the sysfs attributes */
- 	sysfs_remove_group(&pdata->hwmon_dev->kobj, &tdata->attr_group);
+-    The number of cores in a package. This information is retrieved via CPUID.
++    The maximum possible number of cores in a package. This information is
++    retrieved via CPUID.
  
--	kfree(pdata->core_data[indx]);
--	pdata->core_data[indx] = NULL;
-+	kfree(pdata->core_data[index]);
-+	pdata->core_data[index] = NULL;
- }
+   - cpuinfo_x86.x86_max_dies:
  
- static int coretemp_probe(struct platform_device *pdev)
-@@ -647,7 +647,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	struct platform_device *pdev = coretemp_get_pdev(cpu);
- 	struct platform_data *pd;
- 	struct temp_data *tdata;
--	int indx, target;
-+	int index, target;
+@@ -102,10 +103,10 @@ AMDs nomenclature for a CMT core is "Compute Unit". The kernel always uses
  
- 	/*
- 	 * Don't execute this on suspend as the device remove locks
-@@ -661,12 +661,12 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 		return 0;
+   - smp_num_siblings:
  
- 	/* The core id is too big, just return */
--	indx = TO_ATTR_NO(cpu);
--	if (indx > MAX_CORE_DATA - 1)
-+	index = TO_ATTR_NO(cpu);
-+	if (index > MAX_CORE_DATA - 1)
- 		return 0;
+-    The number of threads in a core. The number of threads in a package can be
+-    calculated by::
++    The maximum possible number of threads in a core. The maximum possible
++    number of threads in a package can be calculated by::
  
- 	pd = platform_get_drvdata(pdev);
--	tdata = pd->core_data[indx];
-+	tdata = pd->core_data[index];
+-	threads_per_package = cpuinfo_x86.x86_max_cores * smp_num_siblings
++	maximum_threads_per_package = cpuinfo_x86.x86_max_cores * smp_num_siblings
  
- 	cpumask_clear_cpu(cpu, &pd->cpumask);
  
-@@ -677,7 +677,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	 */
- 	target = cpumask_any_and(&pd->cpumask, topology_sibling_cpumask(cpu));
- 	if (target >= nr_cpu_ids) {
--		coretemp_remove_core(pd, indx);
-+		coretemp_remove_core(pd, index);
- 	} else if (tdata && tdata->cpu == cpu) {
- 		mutex_lock(&tdata->update_lock);
- 		tdata->cpu = target;
+ Threads
 -- 
 2.25.1
 
