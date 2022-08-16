@@ -2,41 +2,41 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E741C32772
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 10:10:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20BCEC2BB41
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 10:17:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbiHPKKn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Aug 2022 06:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
+        id S234112AbiHPKRS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Aug 2022 06:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234344AbiHPKJk (ORCPT
+        with ESMTP id S234397AbiHPKQg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:09:40 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDA112309F;
-        Tue, 16 Aug 2022 01:28:24 -0700 (PDT)
+        Tue, 16 Aug 2022 06:16:36 -0400
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3548DF0B3;
+        Tue, 16 Aug 2022 01:28:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1660638504; x=1692174504;
+  t=1660638501; x=1692174501;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=FNHPX12Pit1WxIpHyPTouV10hppwOlS2zHdFi1vLKSQ=;
-  b=anChMr3piLQwLFYGojdKtN7uUC+VQMcms+54NFx+LPI6TNxoxw+lYnsc
-   rz+4LkSI+f46QlnTyIerS/UjDAbOS9d7NaHNDUh1rnjVUGDK+oQD+aDzD
-   LnVv2IWrk75Ka09y8ETlYQc2HyfYQ6zlFmX/koDV+f1cqLp3XCC+OhOkL
-   g=;
+  bh=ULkqAHITNyNY+nb/F2KUcwZfWxaEdjYhDYRpVxQWyfI=;
+  b=vZF3rZuQuo4YNJXjDkVRkT9o0m6qo8vDPkO3XxIGS/qT3SAelrx6VY8k
+   1gVd89lxvtmr2KxQ+r+Ll8HtSPn7jvSngY/rJOHNkEzp4jegBvZzBZR3S
+   +e5v+XBZXhAvPB0Xkk0Mcs+l/WE6HiXbUhtEfUWnLcp9W7NJy4TTvg4TK
+   Q=;
 X-IronPort-AV: E=Sophos;i="5.93,240,1654560000"; 
-   d="scan'208";a="1044708753"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-10222bbc.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 08:28:22 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-10222bbc.us-east-1.amazon.com (Postfix) with ESMTPS id 792FD1A17C2;
+   d="scan'208";a="233486642"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-2d7489a4.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 08:28:20 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-2d7489a4.us-east-1.amazon.com (Postfix) with ESMTPS id 9A42C8705F;
         Tue, 16 Aug 2022 08:28:20 +0000 (UTC)
-Received: from EX19D013UWA002.ant.amazon.com (10.13.138.210) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
+Received: from EX19D013UWA004.ant.amazon.com (10.13.138.207) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
  id 15.0.1497.38; Tue, 16 Aug 2022 08:28:00 +0000
 Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX19D013UWA002.ant.amazon.com (10.13.138.210) with Microsoft SMTP Server
+ EX19D013UWA004.ant.amazon.com (10.13.138.207) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
  Tue, 16 Aug 2022 08:27:59 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
@@ -44,7 +44,7 @@ Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
  Server id 15.0.1497.38 via Frontend Transport; Tue, 16 Aug 2022 08:27:59
  +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 5E7E84C1C; Tue, 16 Aug 2022 08:27:57 +0000 (UTC)
+        id 61ACF4C09; Tue, 16 Aug 2022 08:27:57 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <mark.rutland@arm.com>, <linux-hwmon@vger.kernel.org>,
@@ -54,9 +54,9 @@ CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
         <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
         <amitlavi@amazon.com>, <almogbs@amazon.com>, <dwmw@amazon.co.uk>,
         <rtanwar@maxlinear.com>
-Subject: [PATCH 13/16] hwmon: (mr75203) add thermal coefficient properties for Moortec PVT controller
-Date:   Tue, 16 Aug 2022 08:27:54 +0000
-Message-ID: <20220816082757.11990-14-farbere@amazon.com>
+Subject: [PATCH 01/16] hwmon: (mr75203) fix VM sensor allocation when "intel,vm-map" not defined
+Date:   Tue, 16 Aug 2022 08:27:42 +0000
+Message-ID: <20220816082757.11990-2-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220816082757.11990-1-farbere@amazon.com>
 References: <20220816082757.11990-1-farbere@amazon.com>
@@ -67,72 +67,70 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add optional "ts-coeff-g", "ts-coeff-h", "ts-coeff-cal5" and
-"ts-coeff-j" properties to be used instead of defaults for the
-thermal equasion.
+Fix a bug that in case "intel,vm-map" is missing 'num' is set to 0,
+and no voltage channel infos are allocated.
 
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- .../bindings/hwmon/moortec,mr75203.yaml       | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ drivers/hwmon/mr75203.c | 28 ++++++++++++----------------
+ 1 file changed, 12 insertions(+), 16 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-index e2a55001eefc..867664bd937f 100644
---- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-@@ -62,6 +62,30 @@ properties:
-       used to normalzie the voltage output results.
-     $ref: /schemas/types.yaml#definitions/uint32
+diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+index 046523d47c29..0e29877a1a9c 100644
+--- a/drivers/hwmon/mr75203.c
++++ b/drivers/hwmon/mr75203.c
+@@ -580,8 +580,6 @@ static int mr75203_probe(struct platform_device *pdev)
+ 	}
  
-+  ts-coeff-g:
-+    description:
-+      G coefficient for thermal equation.
-+    maxItems: 1
-+    $ref: /schemas/types.yaml#definitions/uint32
-+
-+  ts-coeff-h:
-+    description:
-+      H coefficient for thermal equation.
-+    maxItems: 1
-+    $ref: /schemas/types.yaml#definitions/uint32
-+
-+  ts-coeff-cal5:
-+    description:
-+      cal5 coefficient for thermal equation (can't be 0).
-+    maxItems: 1
-+    $ref: /schemas/types.yaml#definitions/uint32
-+
-+  ts-coeff-j:
-+    description:
-+      J coefficient for thermal equation.
-+    maxItems: 1
-+    $ref: /schemas/types.yaml#definitions/int32
-+
- required:
-   - compatible
-   - reg
-@@ -75,6 +99,10 @@ additionalProperties:
-   - reset-control-skip
-   - vm-active-channels
-   - vm-pre-scalar-ch#
-+  - ts-coeff-g
-+  - ts-coeff-h
-+  - ts-coeff-cal5
-+  - ts-coeff-j
+ 	if (vm_num) {
+-		u32 num = vm_num;
+-
+ 		ret = pvt_get_regmap(pdev, "vm", pvt);
+ 		if (ret)
+ 			return ret;
+@@ -594,30 +592,28 @@ static int mr75203_probe(struct platform_device *pdev)
+ 		ret = device_property_read_u8_array(dev, "intel,vm-map",
+ 						    pvt->vm_idx, vm_num);
+ 		if (ret) {
+-			num = 0;
++			/*
++			 * Incase intel,vm-map property is not defined, we
++			 * assume incremental channel numbers.
++			 */
++			for (i = 0; i < vm_num; i++)
++				pvt->vm_idx[i] = i;
+ 		} else {
+ 			for (i = 0; i < vm_num; i++)
+ 				if (pvt->vm_idx[i] >= vm_num ||
+-				    pvt->vm_idx[i] == 0xff) {
+-					num = i;
++				    pvt->vm_idx[i] == 0xff)
+ 					break;
+-				}
+-		}
  
- examples:
-   - |
-@@ -90,5 +118,10 @@ examples:
-         resets = <&rcu0 0x40 7>;
-         vm-active-channels = [08 10 02];
-         vm-pre-scalar-ch5 = <2>;
-+        ts-coeff-g = <57400>;
-+        ts-coeff-h = <249400>;
-+        ts-coeff-cal5 = <4096>;
-+        ts-coeff-j = <0>;
-+
-         #thermal-sensor-cells = <1>;
-     };
+-		/*
+-		 * Incase intel,vm-map property is not defined, we assume
+-		 * incremental channel numbers.
+-		 */
+-		for (i = num; i < vm_num; i++)
+-			pvt->vm_idx[i] = i;
++			vm_num = i;
++		}
+ 
+-		in_config = devm_kcalloc(dev, num + 1,
++		in_config = devm_kcalloc(dev, vm_num + 1,
+ 					 sizeof(*in_config), GFP_KERNEL);
+ 		if (!in_config)
+ 			return -ENOMEM;
+ 
+-		memset32(in_config, HWMON_I_INPUT, num);
+-		in_config[num] = 0;
++		memset32(in_config, HWMON_I_INPUT, vm_num);
++		in_config[vm_num] = 0;
+ 		pvt_in.config = in_config;
+ 
+ 		pvt_info[index++] = &pvt_in;
 -- 
 2.37.1
 
