@@ -2,46 +2,49 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E37EC25B08
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Aug 2022 05:44:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76E0EC25B08
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Aug 2022 05:44:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238763AbiHQFom (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 17 Aug 2022 01:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
+        id S238706AbiHQFot (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 17 Aug 2022 01:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238699AbiHQFoH (ORCPT
+        with ESMTP id S238707AbiHQFoP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 17 Aug 2022 01:44:07 -0400
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4747726BB;
-        Tue, 16 Aug 2022 22:43:51 -0700 (PDT)
+        Wed, 17 Aug 2022 01:44:15 -0400
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088E07CB50;
+        Tue, 16 Aug 2022 22:43:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1660715032; x=1692251032;
+  t=1660715038; x=1692251038;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=NUVwpERCm95Kj0g+5lmwIVfkVMiD6QAcR9x2CsyUtlc=;
-  b=uH+YR2csXv8akWiaJnFO2+QqMmLFvO9KflE0S0GFLc2CmKSeyjdpG3r0
-   9XmHGKqZyjaw+jOPCijTMKZEfI2T0U6SmcUFnjnqQulEVBKctCpMzQby0
-   p+b1kKfe49rEwXErSpHiar2A9VjmxmiO0Nr8Wd+AMmcoKK2PvutgwjDpu
+  bh=zDa/OToZ/vYiAzKBvDIfF4630+PtGKDsU6JSOj2YYVc=;
+  b=qDRlQpZ088xOdvaptCHrNGt0E/QR5idS1h9HDwWwFMhFolvoPiIHREbV
+   5QKnJ56qm91Hcq7bBO5/d2Eec7rnYO4xE1wcWm5ShbJnIeYFMbMAA4/i1
+   EdVgUrPBYxOTXJ5Gjxt8xWTX1CoJO5fLyKuGXs+56d78nNPGpU1aN7SmH
    o=;
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-90419278.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 05:43:39 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2c-90419278.us-west-2.amazon.com (Postfix) with ESMTPS id 6D5A544E5D;
-        Wed, 17 Aug 2022 05:43:38 +0000 (UTC)
-Received: from EX13D08UEE003.ant.amazon.com (10.43.62.118) by
- EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Wed, 17 Aug 2022 05:43:22 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX13D08UEE003.ant.amazon.com (10.43.62.118) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Wed, 17 Aug 2022 05:43:22 +0000
+X-IronPort-AV: E=Sophos;i="5.93,242,1654560000"; 
+   d="scan'208";a="233936718"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-c92fe759.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 05:43:46 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-c92fe759.us-east-1.amazon.com (Postfix) with ESMTPS id 45499C08A4;
+        Wed, 17 Aug 2022 05:43:44 +0000 (UTC)
+Received: from EX19D013UWA002.ant.amazon.com (10.13.138.210) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Wed, 17 Aug 2022 05:43:23 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX19D013UWA002.ant.amazon.com (10.13.138.210) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Wed, 17 Aug 2022 05:43:22 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
+ (172.19.116.181) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
  Server id 15.0.1497.38 via Frontend Transport; Wed, 17 Aug 2022 05:43:22
  +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 97D864CA6; Wed, 17 Aug 2022 05:43:21 +0000 (UTC)
+        id 8A3C24C6A; Wed, 17 Aug 2022 05:43:21 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <mark.rutland@arm.com>, <linux-hwmon@vger.kernel.org>,
@@ -51,9 +54,9 @@ CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
         <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
         <amitlavi@amazon.com>, <almogbs@amazon.com>, <dwmw@amazon.co.uk>,
         <rtanwar@maxlinear.com>
-Subject: [PATCH v2 14/16] hwmon: (mr75203) parse thermal coefficients from device-tree
-Date:   Wed, 17 Aug 2022 05:43:19 +0000
-Message-ID: <20220817054321.6519-15-farbere@amazon.com>
+Subject: [PATCH v2 10/16] hwmon: (mr75203) add VM pre-scalar support
+Date:   Wed, 17 Aug 2022 05:43:15 +0000
+Message-ID: <20220817054321.6519-11-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220817054321.6519-1-farbere@amazon.com>
 References: <20220817054321.6519-1-farbere@amazon.com>
@@ -64,94 +67,93 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Use thermal coefficients from the device tree if they exist.
-Otherwise, use default values.
-
-The equation used in the driver is:
-  T = G + H * (n / cal5 - 0.5) + J * F
-
-With this change we can support also Mode 1 Conversion, which
-uses A instead of G, and B instead of H.
-
-We can also support the series 6 equation that has different
-coefficients and has a slightly different format:
-  T = G + H * (n / cal5 - 0.5)
-by setting J to 0.
+Add pre-scalar support to normalzie the voltage output results for
+channels the use pre-scalar units to get the measurement to be within
+the range that the sensor supports.
+The pre-scalar value is used if it exists in device-tree, otherwise
+default value of 1 is used.
 
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- drivers/hwmon/mr75203.c | 44 +++++++++++++++++++++++++++++++++++++----
- 1 file changed, 40 insertions(+), 4 deletions(-)
+ drivers/hwmon/mr75203.c | 28 ++++++++++++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-index e500897585e4..e54a4d1803e4 100644
+index 2e6139c09efc..24a00339cfd8 100644
 --- a/drivers/hwmon/mr75203.c
 +++ b/drivers/hwmon/mr75203.c
-@@ -131,6 +131,10 @@ struct pvt_device {
- 	u32			p_num;
- 	u32			v_num;
- 	u32			ip_freq;
-+	u32			ts_coeff_h;
-+	u32			ts_coeff_g;
-+	s32			ts_coeff_j;
-+	u32			ts_coeff_cal5;
- 	u8			vm_ch_max;
- 	u8			vm_ch_total;
+@@ -112,8 +112,12 @@
+ struct voltage_device {
+ 	u8 vm_map;
+ 	u8 ch_map;
++	u32 pre_scaler;
  };
-@@ -179,10 +183,10 @@ static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
- 		 * Convert the register value to degrees centigrade temperature:
- 		 * T = G + H * (n / cal5 - 0.5) + J * F
- 		 */
--		*val = PVT_G_CONST;
--		*val += PVT_H_CONST * nbs / PVT_CAL5_CONST;
--		*val -= PVT_H_CONST / 2;
--		*val += PVT_J_CONST * pvt->ip_freq / HZ_PER_MHZ;
-+		*val = pvt->ts_coeff_g;
-+		*val += pvt->ts_coeff_h * nbs / pvt->ts_coeff_cal5;
-+		*val -= pvt->ts_coeff_h / 2;
-+		*val += pvt->ts_coeff_j * pvt->ip_freq / HZ_PER_MHZ;
+ 
++#define PRE_SCALR_PROPERTY_NAME	32
++#define PRE_SCALR_DEFAULT_VAL	1
++
+ struct pvt_device {
+ 	struct regmap		*c_map;
+ 	struct regmap		*t_map;
+@@ -215,7 +219,9 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+ 
+ 		n &= SAMPLE_DATA_MSK;
+ 		/* Convert the N bitstream count into voltage */
+-		*val = (PVT_N_CONST * n - PVT_R_CONST) >> PVT_CONV_BITS;
++		*val = pvt->vd[channel].pre_scaler;
++		*val *= (PVT_N_CONST * n - PVT_R_CONST);
++		*val >>= PVT_CONV_BITS;
  
  		return 0;
  	default:
-@@ -619,6 +623,38 @@ static int mr75203_probe(struct platform_device *pdev)
- 		memset32(temp_config, HWMON_T_INPUT, ts_num);
- 		pvt_temp.config = temp_config;
- 		pvt_info[index++] = &pvt_temp;
-+
-+		/*
-+		 * Incase ts-coeff-h/g/j/cal5 property is not defined, use
-+		 * default value.
-+		 */
-+		ret = of_property_read_u32(np, "ts-coeff-h", &pvt->ts_coeff_h);
-+		if (ret)
-+			pvt->ts_coeff_h = PVT_H_CONST;
-+
-+		ret = of_property_read_u32(np, "ts-coeff-g", &pvt->ts_coeff_g);
-+		if (ret)
-+			pvt->ts_coeff_g = PVT_G_CONST;
-+
-+		ret = of_property_read_s32(np, "ts-coeff-j", &pvt->ts_coeff_j);
-+		if (ret)
-+			pvt->ts_coeff_j = PVT_J_CONST;
-+
-+		ret = of_property_read_u32(np, "ts-coeff-cal5",
-+					   &pvt->ts_coeff_cal5);
-+		if (ret) {
-+			pvt->ts_coeff_cal5 = PVT_CAL5_CONST;
-+		} else {
-+			if (pvt->ts_coeff_cal5 == 0) {
-+				dev_err(dev, "invalid ts-coeff-cal5 (%u)\n",
-+					pvt->ts_coeff_cal5);
-+				return -EINVAL;
-+			}
-+		}
-+
-+		dev_dbg(dev, "ts-coeff: h = %u, g = %u, j = %d, cal5 = %u\n",
-+			pvt->ts_coeff_h, pvt->ts_coeff_g, pvt->ts_coeff_j,
-+			pvt->ts_coeff_cal5);
+@@ -527,6 +533,7 @@ static int pvt_reset_control_deassert(struct device *dev, struct pvt_device *pvt
+ static int mr75203_probe(struct platform_device *pdev)
+ {
+ 	const struct hwmon_channel_info **pvt_info;
++	const struct device_node *np = pdev->dev.of_node;
+ 	u32 ts_num, vm_num, pd_num, ch_num, val, index, i, j, k;
+ 	struct device *dev = &pdev->dev;
+ 	u32 *temp_config, *in_config;
+@@ -552,7 +559,7 @@ static int mr75203_probe(struct platform_device *pdev)
+ 		return ret;
  	}
  
- 	if (pd_num) {
+-	if (of_property_read_bool(dev->of_node, "reset-control-skip")) {
++	if (of_property_read_bool(np, "reset-control-skip")) {
+ 		dev_info(dev, "skipping reset-control\n");
+ 	} else {
+ 		pvt->rst = devm_reset_control_get_exclusive(dev, NULL);
+@@ -615,6 +622,8 @@ static int mr75203_probe(struct platform_device *pdev)
+ 	if (vm_num) {
+ 		u8 vm_idx[VM_NUM_MAX];
+ 		u8 vm_active_ch[VM_NUM_MAX];
++		char prop_name[PRE_SCALR_PROPERTY_NAME] = {0};
++		u32 pre_scaler;
+ 
+ 		ret = pvt_get_regmap(pdev, "vm", pvt);
+ 		if (ret)
+@@ -686,6 +695,21 @@ static int mr75203_probe(struct platform_device *pdev)
+ 				k++;
+ 			}
+ 
++		/*
++		 * Incase vm-pre-scalar-ch# property is not defined, we assume
++		 * default pre-scaler of 1.
++		 */
++		for (i = 0; i < pvt->vm_ch_total; i++) {
++			snprintf(prop_name, sizeof(prop_name),
++				 "vm-pre-scalar-ch%u", i);
++
++			ret = of_property_read_u32(np, prop_name, &pre_scaler);
++			if (ret)
++				pvt->vd[i].pre_scaler = PRE_SCALR_DEFAULT_VAL;
++			else
++				pvt->vd[i].pre_scaler = pre_scaler;
++		}
++
+ 		in_config = devm_kcalloc(dev, pvt->vm_ch_total + 1,
+ 					 sizeof(*in_config), GFP_KERNEL);
+ 		if (!in_config)
 -- 
 2.37.1
 
