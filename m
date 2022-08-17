@@ -2,73 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C560C25B08
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Aug 2022 13:12:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39275C25B08
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Aug 2022 15:31:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239806AbiHQNMD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 17 Aug 2022 09:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
+        id S240734AbiHQPbR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 17 Aug 2022 11:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239696AbiHQNL6 (ORCPT
+        with ESMTP id S240840AbiHQPbO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 17 Aug 2022 09:11:58 -0400
-X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 17 Aug 2022 06:11:36 PDT
-Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2505A4D153
-        for <linux-hwmon@vger.kernel.org>; Wed, 17 Aug 2022 06:11:35 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id OIiHo1kjmGDTnOIiHo5A9C; Wed, 17 Aug 2022 15:04:02 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 17 Aug 2022 15:04:02 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: (pmbus) Use dev_err_probe() to filter -EPROBE_DEFER error messages
-Date:   Wed, 17 Aug 2022 15:04:00 +0200
-Message-Id: <3adf1cea6e32e54c0f71f4604b4e98d992beaa71.1660741419.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Wed, 17 Aug 2022 11:31:14 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB25D9926E;
+        Wed, 17 Aug 2022 08:31:13 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id f65so12236815pgc.12;
+        Wed, 17 Aug 2022 08:31:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=oKzPScXM6OjwBLoPDXjdugzEKQj4ZD8Vn9KIxJ4y7IA=;
+        b=hbka5dkjg8rkSbSyeI54ZJETf23SZG8GuxIvflGwBLK34hMlbpEFApPkKI5Kw9yFHr
+         3aV/P+uEEQroh+34+EuBbsum7n29zfob0bcC6av6RBGa6RQC/I+xW+7Qq580cL3PDQd/
+         Fp8fcSNDyteKSrtby3Ca6qpAsGUaue+DeUcm/Cu1qsPUtBQq50DixqLmh7nS6pRgnwLC
+         fqKJqVGB9bH315ps2R3/BPObv+hQSYt2FEWCSvvi+NUSg5m/XI6nVsz139GNQ6BEMIVK
+         w3iOoiYxCgRy5BHgTKT+JT0CMBHCMSbEdzjuMoLUGMA9bdobdlrEMM1rpLd2TQHK3B+V
+         tBKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=oKzPScXM6OjwBLoPDXjdugzEKQj4ZD8Vn9KIxJ4y7IA=;
+        b=nqv8tQySMTVpADVQeVABn5aJtmDI28cLs2dVvIc04BT4f1EtD/z9zINaSqEPsVBN4r
+         0l+XGrwaEl8sekqdK0yUTJhbEs/UExnykVusQ/xhIj0OaYAjU9uDJQB051j33zd3Jouk
+         +o/MjZaZgMFPA2Dka3r45OBpO+iZ8gy1kpKltwxFOtYmXn0YZKA+4XY8OSB7m7jln33L
+         eFhUcD6yNgfHtkCzBPqA4996s/CbE2OIGmail1Rmw5Av6EJmpcohgN3oYSeoPCW3JyJk
+         GEDdBX1E+xZrUhHw4qQVvMWRibfmcOxlDQXtR7f05XtWKHS04iRrULM+pJipoWuKsjxF
+         ltbg==
+X-Gm-Message-State: ACgBeo0UZfQkeophIEai5O+dqk1p7P6CP3l7KuutIrSMANKmD/V8FA61
+        enIPEO9xXfXJqJ57pMEtrSI=
+X-Google-Smtp-Source: AA6agR41iXoCj3uxN9u9K6zpVYayiQ48GBRaWNbVS2Out6kHHqGz3aytlODtJiPVzYW2cpn6ykmAew==
+X-Received: by 2002:a63:684a:0:b0:421:904f:d38c with SMTP id d71-20020a63684a000000b00421904fd38cmr21894799pgc.238.1660750273269;
+        Wed, 17 Aug 2022 08:31:13 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bi2-20020a170902bf0200b0017128185043sm41094plb.191.2022.08.17.08.31.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 08:31:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 17 Aug 2022 08:31:10 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (pmbus) Use dev_err_probe() to filter
+ -EPROBE_DEFER error messages
+Message-ID: <20220817153110.GA1333586@roeck-us.net>
+References: <3adf1cea6e32e54c0f71f4604b4e98d992beaa71.1660741419.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3adf1cea6e32e54c0f71f4604b4e98d992beaa71.1660741419.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-devm_regulator_register() can return -EPROBE_DEFER, so better use
-dev_err_probe() instead of dev_err(), it is less verbose in such a case.
+On Wed, Aug 17, 2022 at 03:04:00PM +0200, Christophe JAILLET wrote:
+> devm_regulator_register() can return -EPROBE_DEFER, so better use
+> dev_err_probe() instead of dev_err(), it is less verbose in such a case.
+> 
+> It is also more informative, which can't hurt.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-It is also more informative, which can't hurt.
+Applied
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/hwmon/pmbus/pmbus_core.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+Thanks,
+Guenter
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 5541d26e8623..e000674d50df 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -3016,11 +3016,10 @@ static int pmbus_regulator_register(struct pmbus_data *data)
- 
- 		rdev = devm_regulator_register(dev, &info->reg_desc[i],
- 					       &config);
--		if (IS_ERR(rdev)) {
--			dev_err(dev, "Failed to register %s regulator\n",
--				info->reg_desc[i].name);
--			return PTR_ERR(rdev);
--		}
-+		if (IS_ERR(rdev))
-+			return dev_err_probe(dev, PTR_ERR(rdev),
-+					     "Failed to register %s regulator\n",
-+					     info->reg_desc[i].name);
- 	}
- 
- 	return 0;
--- 
-2.34.1
-
+> ---
+>  drivers/hwmon/pmbus/pmbus_core.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 5541d26e8623..e000674d50df 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -3016,11 +3016,10 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+>  
+>  		rdev = devm_regulator_register(dev, &info->reg_desc[i],
+>  					       &config);
+> -		if (IS_ERR(rdev)) {
+> -			dev_err(dev, "Failed to register %s regulator\n",
+> -				info->reg_desc[i].name);
+> -			return PTR_ERR(rdev);
+> -		}
+> +		if (IS_ERR(rdev))
+> +			return dev_err_probe(dev, PTR_ERR(rdev),
+> +					     "Failed to register %s regulator\n",
+> +					     info->reg_desc[i].name);
+>  	}
+>  
+>  	return 0;
