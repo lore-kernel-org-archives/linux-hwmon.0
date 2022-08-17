@@ -2,104 +2,127 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39275C25B08
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Aug 2022 15:31:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A741DC25B08
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Aug 2022 15:32:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240734AbiHQPbR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 17 Aug 2022 11:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42562 "EHLO
+        id S240031AbiHQPc3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 17 Aug 2022 11:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240840AbiHQPbO (ORCPT
+        with ESMTP id S237831AbiHQPcZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 17 Aug 2022 11:31:14 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB25D9926E;
-        Wed, 17 Aug 2022 08:31:13 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id f65so12236815pgc.12;
-        Wed, 17 Aug 2022 08:31:13 -0700 (PDT)
+        Wed, 17 Aug 2022 11:32:25 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211889D665;
+        Wed, 17 Aug 2022 08:32:25 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id y4so651135plb.2;
+        Wed, 17 Aug 2022 08:32:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc;
-        bh=oKzPScXM6OjwBLoPDXjdugzEKQj4ZD8Vn9KIxJ4y7IA=;
-        b=hbka5dkjg8rkSbSyeI54ZJETf23SZG8GuxIvflGwBLK34hMlbpEFApPkKI5Kw9yFHr
-         3aV/P+uEEQroh+34+EuBbsum7n29zfob0bcC6av6RBGa6RQC/I+xW+7Qq580cL3PDQd/
-         Fp8fcSNDyteKSrtby3Ca6qpAsGUaue+DeUcm/Cu1qsPUtBQq50DixqLmh7nS6pRgnwLC
-         fqKJqVGB9bH315ps2R3/BPObv+hQSYt2FEWCSvvi+NUSg5m/XI6nVsz139GNQ6BEMIVK
-         w3iOoiYxCgRy5BHgTKT+JT0CMBHCMSbEdzjuMoLUGMA9bdobdlrEMM1rpLd2TQHK3B+V
-         tBKQ==
+        bh=73FaRCn+5oc2kapfRzFRCxI6Oq2Jq2UUrBMElX+XfF8=;
+        b=hhvO3kVzDwc4dR462vuO2pEWAoMgnGRvqovyIzNH5+EwaiROhSZNV34FWaoP9v/mXX
+         NgwUVxvmqDft1kYBSmWVTRKMH2YKf4jzzmrTI58TqeCLUtfE7sNjCVxiz6QDX80d5XmB
+         QjphJiOK/nCD48A1Co7Z7RYcDpvn7sDRPdzhWI0vK1CZU2C21R3kkCmEwGKCe3/qlfvd
+         3l7baxZW4WIimBFktJBhPSFlagpJPQz93jHO4IgczIoa6sPTLU+xV1j5ziLHCw3Cy8+P
+         OH4fayEGXoZ+tozWHNn3noIomkDyskyCl2+j619XLxadjWE/+q6qpAa0I1PW50d1c+9f
+         81Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=oKzPScXM6OjwBLoPDXjdugzEKQj4ZD8Vn9KIxJ4y7IA=;
-        b=nqv8tQySMTVpADVQeVABn5aJtmDI28cLs2dVvIc04BT4f1EtD/z9zINaSqEPsVBN4r
-         0l+XGrwaEl8sekqdK0yUTJhbEs/UExnykVusQ/xhIj0OaYAjU9uDJQB051j33zd3Jouk
-         +o/MjZaZgMFPA2Dka3r45OBpO+iZ8gy1kpKltwxFOtYmXn0YZKA+4XY8OSB7m7jln33L
-         eFhUcD6yNgfHtkCzBPqA4996s/CbE2OIGmail1Rmw5Av6EJmpcohgN3oYSeoPCW3JyJk
-         GEDdBX1E+xZrUhHw4qQVvMWRibfmcOxlDQXtR7f05XtWKHS04iRrULM+pJipoWuKsjxF
-         ltbg==
-X-Gm-Message-State: ACgBeo0UZfQkeophIEai5O+dqk1p7P6CP3l7KuutIrSMANKmD/V8FA61
-        enIPEO9xXfXJqJ57pMEtrSI=
-X-Google-Smtp-Source: AA6agR41iXoCj3uxN9u9K6zpVYayiQ48GBRaWNbVS2Out6kHHqGz3aytlODtJiPVzYW2cpn6ykmAew==
-X-Received: by 2002:a63:684a:0:b0:421:904f:d38c with SMTP id d71-20020a63684a000000b00421904fd38cmr21894799pgc.238.1660750273269;
-        Wed, 17 Aug 2022 08:31:13 -0700 (PDT)
+        bh=73FaRCn+5oc2kapfRzFRCxI6Oq2Jq2UUrBMElX+XfF8=;
+        b=lG9tXVotFEQV4x4iP7Nui1mg0orp5i6MgP1Xi7V5c5/tzyjBJ8wMqs9fOA/Qonc2VC
+         +4pJWZuRe91UJqshRumvuA8HeKXVP743a55frXZd/WVtCkVEWn9MNQ/svcmygsNXwBr7
+         asIw80UUKmhLLJcuv9d75nLr6RPeuicuSsM3oZZeSQfKPsn4dW5SuyVuki5gwUmCB57J
+         oz2Fi+mK8gTOnnhHUsx3OQ0w4P8mQ4rfAxb5TbZCJ4a5Aayt30jMBxhULVUEP88EC6Yt
+         +19n/wg/WPHYyn7ygsKaX/YBE5uDDPL+hiKxZZ6/kxFeTdA+5T8mKCaD/M1gjunnqxUV
+         +VAw==
+X-Gm-Message-State: ACgBeo2tEDJ6dtaiv3dqFsOC/k0mlhAcXub4Me+uNNZsqJswZffAUrlJ
+        XGYf0KLDYYZTaIfPRcnHBZs=
+X-Google-Smtp-Source: AA6agR6OPrub3jXiDSjK2BcseW8YYMQ/Q3GBA2/jx/K3qTIbemwaNa2dcsZDN7zREvtuoZSzH2Mhsg==
+X-Received: by 2002:a17:903:11d2:b0:172:6ea1:b6e6 with SMTP id q18-20020a17090311d200b001726ea1b6e6mr15124903plh.72.1660750344621;
+        Wed, 17 Aug 2022 08:32:24 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bi2-20020a170902bf0200b0017128185043sm41094plb.191.2022.08.17.08.31.11
+        by smtp.gmail.com with ESMTPSA id y23-20020a17090264d700b0016b81679c1fsm35925pli.216.2022.08.17.08.32.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 08:31:11 -0700 (PDT)
+        Wed, 17 Aug 2022 08:32:23 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 17 Aug 2022 08:31:10 -0700
+Date:   Wed, 17 Aug 2022 08:32:22 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (pmbus) Use dev_err_probe() to filter
- -EPROBE_DEFER error messages
-Message-ID: <20220817153110.GA1333586@roeck-us.net>
-References: <3adf1cea6e32e54c0f71f4604b4e98d992beaa71.1660741419.git.christophe.jaillet@wanadoo.fr>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, kernel@axis.com,
+        =?iso-8859-1?Q?M=E5rten?= Lindahl <marten.lindahl@axis.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (pmbus) Fix vout margin caching
+Message-ID: <20220817153222.GA1333882@roeck-us.net>
+References: <20220816144414.2358974-1-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3adf1cea6e32e54c0f71f4604b4e98d992beaa71.1660741419.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220816144414.2358974-1-vincent.whitchurch@axis.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 03:04:00PM +0200, Christophe JAILLET wrote:
-> devm_regulator_register() can return -EPROBE_DEFER, so better use
-> dev_err_probe() instead of dev_err(), it is less verbose in such a case.
+On Tue, Aug 16, 2022 at 04:44:14PM +0200, Vincent Whitchurch wrote:
+> The code currently uses a zero margin to mean not cached, but this
+> results in the cache being bypassed if the (low) margin is set to zero,
+> leading to lots of unnecessary SMBus transactions in that case.  Use a
+> negative value instead.
 > 
-> It is also more informative, which can't hurt.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Fixes: 07fb76273db89d93 ("hwmon: (pmbus) Introduce and use cached vout margins")
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-Applied
+Applied.
 
 Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/pmbus/pmbus_core.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+>  drivers/hwmon/pmbus/pmbus_core.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 5541d26e8623..e000674d50df 100644
+> index f10bac8860fc..d06b04543fd8 100644
 > --- a/drivers/hwmon/pmbus/pmbus_core.c
 > +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -3016,11 +3016,10 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+> @@ -2861,7 +2861,7 @@ static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
+>  		.data = -1,
+>  	};
 >  
->  		rdev = devm_regulator_register(dev, &info->reg_desc[i],
->  					       &config);
-> -		if (IS_ERR(rdev)) {
-> -			dev_err(dev, "Failed to register %s regulator\n",
-> -				info->reg_desc[i].name);
-> -			return PTR_ERR(rdev);
-> -		}
-> +		if (IS_ERR(rdev))
-> +			return dev_err_probe(dev, PTR_ERR(rdev),
-> +					     "Failed to register %s regulator\n",
-> +					     info->reg_desc[i].name);
->  	}
+> -	if (!data->vout_low[page]) {
+> +	if (data->vout_low[page] < 0) {
+>  		if (pmbus_check_word_register(client, page, PMBUS_MFR_VOUT_MIN))
+>  			s.data = _pmbus_read_word_data(client, page, 0xff,
+>  						       PMBUS_MFR_VOUT_MIN);
+> @@ -2887,7 +2887,7 @@ static int pmbus_regulator_get_high_margin(struct i2c_client *client, int page)
+>  		.data = -1,
+>  	};
 >  
->  	return 0;
+> -	if (!data->vout_high[page]) {
+> +	if (data->vout_high[page] < 0) {
+>  		if (pmbus_check_word_register(client, page, PMBUS_MFR_VOUT_MAX))
+>  			s.data = _pmbus_read_word_data(client, page, 0xff,
+>  						       PMBUS_MFR_VOUT_MAX);
+> @@ -3320,6 +3320,7 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
+>  	struct pmbus_data *data;
+>  	size_t groups_num = 0;
+>  	int ret;
+> +	int i;
+>  	char *name;
+>  
+>  	if (!info)
+> @@ -3353,6 +3354,11 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
+>  	data->currpage = -1;
+>  	data->currphase = -1;
+>  
+> +	for (i = 0; i < ARRAY_SIZE(data->vout_low); i++) {
+> +		data->vout_low[i] = -1;
+> +		data->vout_high[i] = -1;
+> +	}
+> +
+>  	ret = pmbus_init_common(client, data, info);
+>  	if (ret < 0)
+>  		return ret;
