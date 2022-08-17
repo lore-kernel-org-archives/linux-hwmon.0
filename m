@@ -2,300 +2,269 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92379C2BB41
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Aug 2022 19:56:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 370E5C32771
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Aug 2022 03:21:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237336AbiHPT4I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Aug 2022 15:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
+        id S229849AbiHQDV0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Aug 2022 23:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236924AbiHPT4G (ORCPT
+        with ESMTP id S229448AbiHQDVY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Aug 2022 15:56:06 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FD779604;
-        Tue, 16 Aug 2022 12:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660679765; x=1692215765;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yixfxwAxzM7YBQGZsa87NJ7t2jyl79YfbDujqx61tcE=;
-  b=SOuWDChFpfHWPnCZEh5nbGfZBCKvfaEc5YtwisZtcOoRyQZLnu5G1Yx0
-   LiA4hxEBm6rytT6Dj8RA2FshQ02qnY9Od1Oh6dXNBTjofge01+zrWzIXH
-   mwZum6wDhF5xyZXWDbLrtsZNP2Z9NwEbcVdNyjtch2VeExyIqgBVTforY
-   xwHdhOIR8dF8Fb1wBTFANuJCGqOiWSwEF/6/DrlyLyoH273DiiimJAKHP
-   3Qv6924/YU5CFvasicw14xH9vYLCVzFm6O+TflK7GKZmd3zSOSElFtMW/
-   DVtpqtj3wBUpZdtsPnLRKpu/RenA96XCCGZDYev60NGeExberAhCoK5mQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="272708982"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="272708982"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 12:56:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="935057276"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Aug 2022 12:56:00 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oO2fQ-0000C8-13;
-        Tue, 16 Aug 2022 19:56:00 +0000
-Date:   Wed, 17 Aug 2022 03:55:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Eliav Farber <farbere@amazon.com>, jdelvare@suse.com,
-        linux@roeck-us.net, robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Tue, 16 Aug 2022 23:21:24 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A4E6CF59;
+        Tue, 16 Aug 2022 20:21:23 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id p125so11008484pfp.2;
+        Tue, 16 Aug 2022 20:21:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=cOr6gkZL5EYRbTmZIAth2irEiQu6fAMwiaRXpZKh5rw=;
+        b=h2K7d+BBbZCOkkh6OHJGvRUcsxU0NErLoLx9BxXaCdloz3CRjpYTgUJQXOMCREoL3t
+         t9zHeQPJidoDG/1PWIAXUowZUWYnPQHcem12GAXjko4yEXD6CxXTwv4FPu8gt36yEdQy
+         4R3dCXBfKGjzEpSmBsbdZGEIe8545keEgzsU3f/cd1cuXutWOWHGKj7Z2kCHVPdXWhMR
+         okYyqwA6l+8WGpl2lmeQHzENj8hGs8JDt0/wgIu0Wl1yI5xCqY8GYeLxBQUVBLGL/+Nd
+         DK8VM69uHIA+pRy9h6EbusxLFCfJYNu2dsL4k+OrKYOlBEfwfYJSvmvdqUVU9e5jqs0M
+         IcpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=cOr6gkZL5EYRbTmZIAth2irEiQu6fAMwiaRXpZKh5rw=;
+        b=B1CK8hNEaq/+4LN+yfFFSOix4o16O1ec0qX/FulyfOH3xU1ED1XqUM2xPxNGPwK/No
+         cYYdSeSSnpKNCQyiCTY/G7ZmcTiKzECC/dFi+6Uh9xalqLhq4N2FizukqxVkCFo7y0fz
+         jVGVL669I6qJEU/+VUEl7SK40/RhnMu8X1kwIay6VweD05bb5dBwfhHI8JIGlVE47II7
+         s/VM7fmVPjv+iUbqlMA6CaLhf498tE8ZynsBSynb5RhkWuu8WFwwAQQIadBcLpGM/Pg3
+         QaoK51lgXQUJcN2vULWMRCMGcpYLdVWd5CDIoTCKndpDuHuJbN/+Q4Vz9wDGRMLeHyfD
+         yDNg==
+X-Gm-Message-State: ACgBeo3L++3RIV3pQ64W/gV6gJIQoKKRSa1YbC5WHU0lhvfZa51OKffb
+        uE64C1D68k/10+lLWoQlzSs=
+X-Google-Smtp-Source: AA6agR7GEtUqMPz4OWJj8k2Jj27LS6TDrRlNOFAyAIXIU+UzEASSS7gW/GmqbRF+8LyA1/x2zl86LQ==
+X-Received: by 2002:a05:6a00:2195:b0:52e:6157:904d with SMTP id h21-20020a056a00219500b0052e6157904dmr23795022pfi.44.1660706482618;
+        Tue, 16 Aug 2022 20:21:22 -0700 (PDT)
+Received: from dusj-System-Product-Name.dhcpserver.bu9bmc.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
+        by smtp.gmail.com with ESMTPSA id m4-20020a170902d18400b0016ef7235e09sm147988plb.168.2022.08.16.20.21.20
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 16 Aug 2022 20:21:22 -0700 (PDT)
+From:   Duke Du <dukedu83@gmail.com>
+X-Google-Original-From: Duke Du <Duke.Du@quantatw.com>
+To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, farbere@amazon.com, talel@amazon.com,
-        hhhawa@amazon.com, jonnyc@amazon.com, hanochu@amazon.com,
-        ronenk@amazon.com, itamark@amazon.com, shellykz@amazon.com,
-        shorer@amazon.com, amitlavi@amazon.com, almogbs@amazon.com,
-        dwmw@amazon.co.uk, rtanwar@maxlinear.com
-Subject: Re: [PATCH 08/16] hwmon: (mr75203) add VM active channel support
-Message-ID: <202208170350.3yIFIWEk-lkp@intel.com>
-References: <20220816082757.11990-9-farbere@amazon.com>
+Cc:     fran.hsu@quantatw.com, charles.hsu@quantatw.com,
+        duke.du@quantatw.com
+Subject: [PATCH v1] hwmon: Add the pmbus driver for the TEXAS TPS546D24 Buck Converter.
+Date:   Wed, 17 Aug 2022 11:19:19 +0800
+Message-Id: <1660706359-29076-1-git-send-email-Duke.Du@quantatw.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816082757.11990-9-farbere@amazon.com>
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Eliav,
+make the PMBUS_VOUT_MODE return value 0x17,
+VOUT returned value is linear11.
 
-Thank you for the patch! Perhaps something to improve:
+v1: Initial patchset.
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.0-rc1 next-20220816]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Duke Du <Duke.Du@quantatw.com>
+---
+ Documentation/hwmon/index.rst     |  1 +
+ Documentation/hwmon/tps546d24.rst | 35 +++++++++++++++++++
+ MAINTAINERS                       |  7 ++++
+ drivers/hwmon/pmbus/Kconfig       |  9 +++++
+ drivers/hwmon/pmbus/Makefile      |  1 +
+ drivers/hwmon/pmbus/tps546d24.c   | 73 +++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 126 insertions(+)
+ create mode 100644 Documentation/hwmon/tps546d24.rst
+ create mode 100644 drivers/hwmon/pmbus/tps546d24.c
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eliav-Farber/Variety-of-fixes-and-new-features-for-mr75203-driver/20220816-183655
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: microblaze-randconfig-r013-20220815 (https://download.01.org/0day-ci/archive/20220817/202208170350.3yIFIWEk-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/75e49737eb6188733096da72eb4692cfed872101
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Eliav-Farber/Variety-of-fixes-and-new-features-for-mr75203-driver/20220816-183655
-        git checkout 75e49737eb6188733096da72eb4692cfed872101
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/hwmon/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/hwmon/mr75203.c: In function 'mr75203_probe':
->> drivers/hwmon/mr75203.c:604:17: warning: ISO C90 forbids variable length array 'vm_idx' [-Wvla]
-     604 |                 u8 vm_idx[vm_num];
-         |                 ^~
->> drivers/hwmon/mr75203.c:605:17: warning: ISO C90 forbids variable length array 'vm_active_ch' [-Wvla]
-     605 |                 u8 vm_active_ch[vm_num];
-         |                 ^~
-
-
-vim +/vm_idx +604 drivers/hwmon/mr75203.c
-
-   514	
-   515	static int mr75203_probe(struct platform_device *pdev)
-   516	{
-   517		const struct hwmon_channel_info **pvt_info;
-   518		u32 ts_num, vm_num, pd_num, ch_num, val, index, i, j, k;
-   519		struct device *dev = &pdev->dev;
-   520		u32 *temp_config, *in_config;
-   521		struct device *hwmon_dev;
-   522		struct pvt_device *pvt;
-   523		int ret;
-   524	
-   525		pvt = devm_kzalloc(dev, sizeof(*pvt), GFP_KERNEL);
-   526		if (!pvt)
-   527			return -ENOMEM;
-   528	
-   529		ret = pvt_get_regmap(pdev, "common", pvt);
-   530		if (ret)
-   531			return ret;
-   532	
-   533		pvt->clk = devm_clk_get(dev, NULL);
-   534		if (IS_ERR(pvt->clk))
-   535			return dev_err_probe(dev, PTR_ERR(pvt->clk), "failed to get clock\n");
-   536	
-   537		ret = pvt_clk_enable(dev, pvt);
-   538		if (ret) {
-   539			dev_err(dev, "failed to enable clock\n");
-   540			return ret;
-   541		}
-   542	
-   543		if (of_property_read_bool(dev->of_node, "reset-control-skip")) {
-   544			dev_info(dev, "skipping reset-control\n");
-   545		} else {
-   546			pvt->rst = devm_reset_control_get_exclusive(dev, NULL);
-   547			if (IS_ERR(pvt->rst))
-   548				return dev_err_probe(dev, PTR_ERR(pvt->rst),
-   549						     "failed to get reset control\n");
-   550	
-   551			ret = pvt_reset_control_deassert(dev, pvt);
-   552			if (ret)
-   553				return dev_err_probe(dev, ret,
-   554						     "cannot deassert reset control\n");
-   555		}
-   556	
-   557		ret = regmap_read(pvt->c_map, PVT_IP_CONFIG, &val);
-   558		if(ret < 0)
-   559			return ret;
-   560	
-   561		ts_num = (val & TS_NUM_MSK) >> TS_NUM_SFT;
-   562		pd_num = (val & PD_NUM_MSK) >> PD_NUM_SFT;
-   563		vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
-   564		ch_num = (val & CH_NUM_MSK) >> CH_NUM_SFT;
-   565		pvt->t_num = ts_num;
-   566		pvt->p_num = pd_num;
-   567		pvt->v_num = vm_num;
-   568		val = 0;
-   569		if (ts_num)
-   570			val++;
-   571		if (vm_num)
-   572			val++;
-   573		if (!val)
-   574			return -ENODEV;
-   575	
-   576		pvt_info = devm_kcalloc(dev, val + 2, sizeof(*pvt_info), GFP_KERNEL);
-   577		if (!pvt_info)
-   578			return -ENOMEM;
-   579		pvt_info[0] = HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ);
-   580		index = 1;
-   581	
-   582		if (ts_num) {
-   583			ret = pvt_get_regmap(pdev, "ts", pvt);
-   584			if (ret)
-   585				return ret;
-   586	
-   587			temp_config = devm_kcalloc(dev, ts_num + 1,
-   588						   sizeof(*temp_config), GFP_KERNEL);
-   589			if (!temp_config)
-   590				return -ENOMEM;
-   591	
-   592			memset32(temp_config, HWMON_T_INPUT, ts_num);
-   593			pvt_temp.config = temp_config;
-   594			pvt_info[index++] = &pvt_temp;
-   595		}
-   596	
-   597		if (pd_num) {
-   598			ret = pvt_get_regmap(pdev, "pd", pvt);
-   599			if (ret)
-   600				return ret;
-   601		}
-   602	
-   603		if (vm_num) {
- > 604			u8 vm_idx[vm_num];
- > 605			u8 vm_active_ch[vm_num];
-   606	
-   607			ret = pvt_get_regmap(pdev, "vm", pvt);
-   608			if (ret)
-   609				return ret;
-   610	
-   611			ret = device_property_read_u8_array(dev, "intel,vm-map", vm_idx,
-   612							    vm_num);
-   613			if (ret) {
-   614				/*
-   615				 * Incase intel,vm-map property is not defined, we
-   616				 * assume incremental channel numbers.
-   617				 */
-   618				for (i = 0; i < vm_num; i++)
-   619					vm_idx[i] = i;
-   620			} else {
-   621				for (i = 0; i < vm_num; i++)
-   622					if (vm_idx[i] >= vm_num || vm_idx[i] == 0xff)
-   623						break;
-   624	
-   625				vm_num = i;
-   626				pvt->v_num = i;
-   627			}
-   628	
-   629			ret = device_property_read_u8_array(dev, "vm-active-channels",
-   630							    vm_active_ch, vm_num);
-   631			if (ret) {
-   632				/*
-   633				 * Incase vm-active-channels property is not defined,
-   634				 * we assume each VM sensor has all of its channels
-   635				 * active.
-   636				 */
-   637				for (i = 0; i < vm_num; i++)
-   638					vm_active_ch[i] = ch_num;
-   639	
-   640				pvt->vm_ch_max = ch_num;
-   641				pvt->vm_ch_total = ch_num * vm_num;
-   642			} else {
-   643				for (i = 0; i < vm_num; i++) {
-   644					if (vm_active_ch[i] > ch_num) {
-   645						dev_err(dev,
-   646							"invalid active channels: %u\n",
-   647							vm_active_ch[i]);
-   648						return -EINVAL;
-   649					}
-   650	
-   651					pvt->vm_ch_total += vm_active_ch[i];
-   652	
-   653					if (vm_active_ch[i] > pvt->vm_ch_max)
-   654						pvt->vm_ch_max = vm_active_ch[i];
-   655				}
-   656			}
-   657	
-   658			/*
-   659			 * Map between the channel-number to VM-index and channel-index.
-   660			 * Example - 3 VMs, vm_active_ch = [05 02 04]:
-   661			 * vm_map = [0 0 0 0 0 1 1 2 2 2 2]
-   662			 * ch_map = [0 1 2 3 4 0 1 0 1 2 3]
-   663			 */
-   664			pvt->vd = devm_kcalloc(dev, pvt->vm_ch_total, sizeof(*pvt->vd),
-   665					       GFP_KERNEL);
-   666			if (!pvt->vd)
-   667				return -ENOMEM;
-   668	
-   669			k = 0;
-   670			for (i = 0; i < vm_num; i++)
-   671				for (j = 0; j < vm_active_ch[i]; j++) {
-   672					pvt->vd[k].vm_map = vm_idx[i];
-   673					pvt->vd[k].ch_map = j;
-   674					k++;
-   675				}
-   676	
-   677			in_config = devm_kcalloc(dev, pvt->vm_ch_total + 1,
-   678						 sizeof(*in_config), GFP_KERNEL);
-   679			if (!in_config)
-   680				return -ENOMEM;
-   681	
-   682			memset32(in_config, HWMON_I_INPUT, pvt->vm_ch_total);
-   683			in_config[pvt->vm_ch_total] = 0;
-   684			pvt_in.config = in_config;
-   685	
-   686			pvt_info[index++] = &pvt_in;
-   687		}
-   688	
-   689		ret = pvt_init(pvt);
-   690		if (ret) {
-   691			dev_err(dev, "failed to init pvt: %d\n", ret);
-   692			return ret;
-   693		}
-   694	
-   695		pvt_chip_info.info = pvt_info;
-   696		hwmon_dev = devm_hwmon_device_register_with_info(dev, "pvt",
-   697								 pvt,
-   698								 &pvt_chip_info,
-   699								 NULL);
-   700	
-   701		return PTR_ERR_OR_ZERO(hwmon_dev);
-   702	}
-   703	
-
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index f7113b0..d3eede4 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -205,6 +205,7 @@ Hardware Monitoring Kernel Drivers
+    tps23861
+    tps40422
+    tps53679
++   tps546d24
+    twl4030-madc-hwmon
+    ucd9000
+    ucd9200
+diff --git a/Documentation/hwmon/tps546d24.rst b/Documentation/hwmon/tps546d24.rst
+new file mode 100644
+index 0000000..1219013
+--- /dev/null
++++ b/Documentation/hwmon/tps546d24.rst
+@@ -0,0 +1,35 @@
++.. SPDX-License-Identifier: GPL-2.0-only
++
++Kernel driver tps546d24
++======================
++
++Supported chips:
++
++  * TI TPS546D24
++
++    Prefix: 'tps546d24'
++
++    Addresses scanned: -
++
++    Datasheet: https://www.ti.com/lit/gpn/tps546d24
++
++Author: Duke Du <dukedu83@gmail.com>
++
++
++Description
++-----------
++
++The TPS546D24A is a highly integrated, non-isolated DC/DC converter capable
++of high frequency operation and 40-A current output from a 7-mm × 5-mm
++package.
++
++Two, three, and four TPS546D24A devices can be interconnected
++to provide up to 160 A on a single output. The device has an option to
++overdrive the internal 5-V LDO with an external 5-V supply via the VDD5
++pin to improve efficiency and reduce power dissipation of the converter.
++
++
++Platform data support
++---------------------
++
++The driver supports standard PMBus driver platform data.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8a5012b..fa2d4fb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20583,6 +20583,13 @@ Q:	https://patchwork.kernel.org/project/linux-integrity/list/
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+ F:	drivers/char/tpm/
+ 
++TPS546D24 DRIVER
++M:	Duke Du <dukedu83@gmail.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/hwmon/tps546d24.rst
++F:	drivers/hwmon/pmbus/tps546d24.c
++
+ TRACING
+ M:	Steven Rostedt <rostedt@goodmis.org>
+ M:	Ingo Molnar <mingo@redhat.com>
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 951e4a9..89668af 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -397,6 +397,15 @@ config SENSORS_TPS53679
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called tps53679.
+ 
++config SENSORS_TPS546D24
++	tristate "TPS546D24"
++	help
++	  If you say yes here you get hardware monitoring support for TEXAS
++	  TPS546D24.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called tps546d24
++
+ config SENSORS_UCD9000
+ 	tristate "TI UCD90120, UCD90124, UCD90160, UCD90320, UCD9090, UCD90910"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index e2fe86f..0002dbe 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -41,6 +41,7 @@ obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
+ obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
+ obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
+ obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
++obj-$(CONFIG_SENSORS_TPS546D24)	+= tps546d24.o
+ obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
+ obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
+ obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
+diff --git a/drivers/hwmon/pmbus/tps546d24.c b/drivers/hwmon/pmbus/tps546d24.c
+new file mode 100644
+index 0000000..f6f79d3
+--- /dev/null
++++ b/drivers/hwmon/pmbus/tps546d24.c
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Hardware monitoring driver for TEXAS TPS546D24 buck converter
++ */
++
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/pmbus.h>
++#include "pmbus.h"
++
++static int tps546d24_read_byte_data(struct i2c_client *client, int page, int reg)
++{
++	int ret;
++
++	switch (reg) {
++	case PMBUS_VOUT_MODE:
++		ret = 0x17;
++		break;
++	default:
++		ret = -ENODATA;
++		break;
++	}
++	return ret;
++}
++
++static struct pmbus_driver_info tps546d24_info = {
++	.pages = 1,
++	.format[PSC_VOLTAGE_IN] = linear,
++	.format[PSC_VOLTAGE_OUT] = linear,
++	.format[PSC_TEMPERATURE] = linear,
++	.format[PSC_CURRENT_OUT] = linear,
++	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |
++	    PMBUS_HAVE_IOUT | PMBUS_HAVE_VOUT |
++		PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
++		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
++	.read_byte_data = tps546d24_read_byte_data,
++};
++
++static int tps546d24_probe(struct i2c_client *client)
++{
++	return pmbus_do_probe(client, &tps546d24_info);
++}
++
++static const struct i2c_device_id tps546d24_id[] = {
++	{"tps546d24", 0},
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, tps546d24_id);
++
++static const struct of_device_id __maybe_unused tps546d24_of_match[] = {
++	{.compatible = "tps546d24"},
++	{}
++};
++
++/* This is the driver that will be inserted */
++static struct i2c_driver tps546d24_driver = {
++	.driver = {
++		   .name = "tps546d24",
++		   .of_match_table = of_match_ptr(tps546d24_of_match),
++	   },
++	.probe_new = tps546d24_probe,
++	.id_table = tps546d24_id,
++};
++
++module_i2c_driver(tps546d24_driver);
++
++MODULE_AUTHOR("Duke Du <dukedu83@gmail.com>");
++MODULE_DESCRIPTION("PMBus driver for TI tps546d24");
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(PMBUS);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.7.4
+
