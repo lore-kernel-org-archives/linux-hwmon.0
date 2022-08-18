@@ -2,54 +2,54 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED126C00140
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 20:13:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B919FC00140
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 20:15:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345663AbiHRUNa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Aug 2022 16:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
+        id S1345917AbiHRUPC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Aug 2022 16:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345607AbiHRUNI (ORCPT
+        with ESMTP id S1345914AbiHRUOn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:13:08 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74D4B8F29;
-        Thu, 18 Aug 2022 13:11:40 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id a22so2531332pfg.3;
-        Thu, 18 Aug 2022 13:11:40 -0700 (PDT)
+        Thu, 18 Aug 2022 16:14:43 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D39CB5E7;
+        Thu, 18 Aug 2022 13:14:02 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id jm11so2395933plb.13;
+        Thu, 18 Aug 2022 13:14:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc;
-        bh=keeiDaK9Q+Jdo90jj1BSU2Ge6qhncob/UO4SDy8WdlY=;
-        b=fHlgswuc4yHJpES0GrJgQ2nYRNd6KIPJGokMB5R43+hsmIl/yScP3PLabbkWDJoA6M
-         itbHDxtVkf2EFRZWuSYVPgVsdW3cpj/X6sF815f3tE7p8IIWi0UN5E6qh3FaTUP1s6MQ
-         /mvqXnieTaO1WCT78vNk97MTZC7y4+vDP/YKstrauwle9g+o71ecxT5e6AHpZ54Rp/X7
-         AbptsNPOlbcBu75KYydWRQ3RsV82HNw34KilZrNCXf5Hd4xjR8R7e2GvB3IGQaKU5Csa
-         pnlYSPCDAstOwnUetKn3ZkOdTWwINBtKRQxfEMF6vAZjprVlHCa2am8AvpAY+tjpR1Pj
-         uWoQ==
+        bh=egYSJNbQxtbIjtuZxTLb7Op2z9efDIBz0CVG82pd35Q=;
+        b=OrdgxQZHf0g36dqgz8oBTc9Pw5flV5lUnAKO+L/BXl1IbHMz6Y0SdtGaYvkVBINho4
+         lDQxJFuriCNhvRWKDJNhT68uzk2DPMhppFWOYNcSIqRtXgQ007eDkXLtc+jww6Lj5KLD
+         bi5Hl0bUgFcwQCWbAGu7DenppWIMcGBnYco7S8QPnPoDXHha8aQzzDXNw1MH45MtU5YD
+         h79Ex5qk3hBSkTCq5yMPSmY4oysetZiE+lOLmlZG0IiY73TIsd5bixD5Ch64z4MmscdV
+         7xJE0+dTV8j1ZGcn7S3l71FVgayPZcdCrd1NjyNiOIJhXeHyVtH+Ok8VxHPO6GsW1++T
+         q1ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=keeiDaK9Q+Jdo90jj1BSU2Ge6qhncob/UO4SDy8WdlY=;
-        b=xfZ7zhjNGXpuIpePirDKBm43p7Nhgz99a9mBIbfnWXbUz9PwBYstnVWvWBLB+5aoJL
-         VdPNlsE6PS2F89syE9lGavVRWlF1w9V0ffTZQlKJuC6vulhafaIpkV59X2PdoXiSeVQL
-         q5MvnbpUaGKbf2pHv/0Hg/nAqEgNZEWv/E9NVvFZEUiP5ruzDU/zQJoK0zTzT+0lMo/s
-         Toc0XXqy804ZXC9Y87aNnrTNO0eaUtjKFkVH9sQXg5T+68sCMbusYumMMdB3HvhLez9r
-         zvHbn6hcupifEN+fqE9IUV9JiZ7RVPosND1n4nc62lnQMmcPNhilQsPO7SIJTDZLk5oy
-         egIg==
-X-Gm-Message-State: ACgBeo0e8uDyJqH4rqaK9bKsMFaOZFbsciAIU6BiXCaRqcMjk3ccPuD0
-        yN3t6JchmsbKHRLhjPsroRYjpxUnJ5w=
-X-Google-Smtp-Source: AA6agR5uEc8aeOY6+WeukG1fydlhDLzISuJ21H4VGppEP0Mx432m2/yOrx2isICQGqmhSJG2z9CKPA==
-X-Received: by 2002:a05:6a00:2906:b0:52a:bc7f:f801 with SMTP id cg6-20020a056a00290600b0052abc7ff801mr4513710pfb.49.1660853500357;
-        Thu, 18 Aug 2022 13:11:40 -0700 (PDT)
+        bh=egYSJNbQxtbIjtuZxTLb7Op2z9efDIBz0CVG82pd35Q=;
+        b=RLE+omWKLqZU1kiF1oKN0jXPYrYf+X3C+PFVXDU5LIicpP6m5L+3c5vetN9Jxn28Ls
+         dpQSw27C3gdcCn2NYTpmEgE1IubqgVW9hyx8SMFwY8LBM2yuu0QJv2wNF0FF3A0Q6eg/
+         FA3lCUAg4kDDaUQlB6yckvnqrtvBn7Xt6LLHj2ldH6tFZqVmYAETT9/xTb1v4WG/YoSv
+         KnqzD9kStnlTJWWUDoVzcVreBCtot73sH2dPvjsAyndsGofDVFrbYPwf0iov9DsugTsQ
+         j4BwwOPlC6sH5ZtilECeiPt4layNNxOO/r1lyxVN0Sq8ZOKZ0oJAsCxFB3AgstzCUO9Y
+         dVqQ==
+X-Gm-Message-State: ACgBeo0VRBv4ln+k2cNfhOVOkNK9RovyIuMy82PARqvRdJXr1RxW2YLR
+        gvq1OZ8mz3CeR9J3fDP4hvE=
+X-Google-Smtp-Source: AA6agR4k9h5ht6adNQ4cG6aZIayrOdx0qxU/jk7nZlcuvmViw6faXm9ppDtDbTHN6V4LU/YdyEvwDA==
+X-Received: by 2002:a17:90b:4653:b0:1f3:1ce3:2cb with SMTP id jw19-20020a17090b465300b001f31ce302cbmr10134904pjb.176.1660853641591;
+        Thu, 18 Aug 2022 13:14:01 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b191-20020a621bc8000000b0052d2b55be32sm2066951pfb.171.2022.08.18.13.11.39
+        by smtp.gmail.com with ESMTPSA id n3-20020aa79843000000b0052dd7d0ad04sm2058779pfq.88.2022.08.18.13.14.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 13:11:39 -0700 (PDT)
+        Thu, 18 Aug 2022 13:14:00 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 18 Aug 2022 13:11:38 -0700
+Date:   Thu, 18 Aug 2022 13:13:59 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Eliav Farber <farbere@amazon.com>
 Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
@@ -59,65 +59,49 @@ Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
         itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
         amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
         rtanwar@maxlinear.com
-Subject: Re: [PATCH v2 09/16] hwmon: (mr75203) add VM pre-scalar property for
- Moortec PVT controller
-Message-ID: <20220818201138.GA3423710@roeck-us.net>
+Subject: Re: [PATCH v2 11/16] hwmon: (mr75203) add protection for negative
+ voltage value
+Message-ID: <20220818201359.GA3430651@roeck-us.net>
 References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-10-farbere@amazon.com>
+ <20220817054321.6519-12-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817054321.6519-10-farbere@amazon.com>
+In-Reply-To: <20220817054321.6519-12-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 05:43:14AM +0000, Eliav Farber wrote:
-> vm-pre-scalar-ch# is a per channel optional parameter that can be
-> used to normalzie the voltage output results.
+On Wed, Aug 17, 2022 at 05:43:16AM +0000, Eliav Farber wrote:
+> This change makes sure the returned voltage vlaue is 0 or positive.
 > 
 > Signed-off-by: Eliav Farber <farbere@amazon.com>
 > ---
->  .../devicetree/bindings/hwmon/moortec,mr75203.yaml        | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  drivers/hwmon/mr75203.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> index 6111b5069b3c..e2a55001eefc 100644
-> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> @@ -56,6 +56,12 @@ properties:
->        A value of 0 means that the entire VM sensor is nou used.
->      $ref: /schemas/types.yaml#definitions/uint8-array
+> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+> index 24a00339cfd8..e3191f590167 100644
+> --- a/drivers/hwmon/mr75203.c
+> +++ b/drivers/hwmon/mr75203.c
+> @@ -218,6 +218,13 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+>  			return ret;
 >  
-> +  vm-pre-scalar-ch#:
+>  		n &= SAMPLE_DATA_MSK;
+> +
+> +		/* Voltage can't be negative */
 
-Is that how such properties are implemented ? Seems to me that
-results in a lot of decode complexity.
-
-Why not use an array property like the other properties ?
+Who says, and what does that mean ? Under which conditions would
+the value be negative, and why would that be a problem / bug ?
+After all, negative voltages do exist.
 
 Guenter
 
-> +    description:
-> +      vm-active-channels defines the pre-scalar per channel value
-> +      used to normalzie the voltage output results.
-> +    $ref: /schemas/types.yaml#definitions/uint32
+> +		if (PVT_N_CONST * n < PVT_R_CONST) {
+> +			*val = 0;
+> +			return 0;
+> +		}
 > +
->  required:
->    - compatible
->    - reg
-> @@ -68,6 +74,7 @@ additionalProperties:
->    - intel,vm-map
->    - reset-control-skip
->    - vm-active-channels
-> +  - vm-pre-scalar-ch#
->  
->  examples:
->    - |
-> @@ -82,5 +89,6 @@ examples:
->          clocks = <&osc0>;
->          resets = <&rcu0 0x40 7>;
->          vm-active-channels = [08 10 02];
-> +        vm-pre-scalar-ch5 = <2>;
->          #thermal-sensor-cells = <1>;
->      };
+>  		/* Convert the N bitstream count into voltage */
+>  		*val = pvt->vd[channel].pre_scaler;
+>  		*val *= (PVT_N_CONST * n - PVT_R_CONST);
