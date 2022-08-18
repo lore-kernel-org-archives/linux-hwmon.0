@@ -2,54 +2,54 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3D9BC32772
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 20:12:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED126C00140
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 20:13:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241330AbiHRUMa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Aug 2022 16:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
+        id S1345663AbiHRUNa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Aug 2022 16:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345490AbiHRUMP (ORCPT
+        with ESMTP id S1345607AbiHRUNI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:12:15 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066DCD31F7;
-        Thu, 18 Aug 2022 13:07:56 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id m2so2410289pls.4;
-        Thu, 18 Aug 2022 13:07:56 -0700 (PDT)
+        Thu, 18 Aug 2022 16:13:08 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74D4B8F29;
+        Thu, 18 Aug 2022 13:11:40 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id a22so2531332pfg.3;
+        Thu, 18 Aug 2022 13:11:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc;
-        bh=SHmhnKOWEnMPXTr1npqUAIqccKa9qmawwg5jERMog4k=;
-        b=dY+MC654YJKie0TQlbszc5HqEHdSZD4JcFCRHXXwd9QyR1bvRrP5uMIlIvrgCyhfTz
-         6K87i7oljTIb7BSYyX55/9upwqGa2NvJgp5dZgL3hq0+0ls9tUk2CpyhD0WZ84RTsDBF
-         ZHCyQPkDrRHCh73W0YFPt9HFQ+a4awysQS4M+NAKX76YJd2nRkDd+yqQg2cMF26PzOxP
-         PJd8zi5wPjRdwlE3/fOnD4tIaZgZAtErOoqCINemD17Pniw2rB7xXrhuC3s0yBbd/APb
-         nF+ks9TrtiyOM8QlKYvXH+TpYJ8thVd5fLohK6NIkN9omcUBapu1rDt7rCV9bQE9YTkY
-         zO1Q==
+        bh=keeiDaK9Q+Jdo90jj1BSU2Ge6qhncob/UO4SDy8WdlY=;
+        b=fHlgswuc4yHJpES0GrJgQ2nYRNd6KIPJGokMB5R43+hsmIl/yScP3PLabbkWDJoA6M
+         itbHDxtVkf2EFRZWuSYVPgVsdW3cpj/X6sF815f3tE7p8IIWi0UN5E6qh3FaTUP1s6MQ
+         /mvqXnieTaO1WCT78vNk97MTZC7y4+vDP/YKstrauwle9g+o71ecxT5e6AHpZ54Rp/X7
+         AbptsNPOlbcBu75KYydWRQ3RsV82HNw34KilZrNCXf5Hd4xjR8R7e2GvB3IGQaKU5Csa
+         pnlYSPCDAstOwnUetKn3ZkOdTWwINBtKRQxfEMF6vAZjprVlHCa2am8AvpAY+tjpR1Pj
+         uWoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=SHmhnKOWEnMPXTr1npqUAIqccKa9qmawwg5jERMog4k=;
-        b=wE1aR1lW8xqeIszQGZ0nOwQvo7ifIXX1yNFUuJ7Vz+xxp8LZ1Q/0lMMXtLvXAY4aTt
-         UflMJ2MCxYR8W28oEuDv6yeE7aYVvmjqm8lpAGU0F/sPIGljubWXYJWFoNhK8pS5y/tJ
-         l/206O6U0PwA1miF71GIvGFmH6grdKFxkILJVSCqg4sNzJoggsbfXI7dfS35r6Sa7NBG
-         5pfGZaP7Hx8BIYamTEn9uahDEm3VAqFVaLuDYGqB9m2AUj6MP0QW5ch9Xj8hcRbu2out
-         YEzLiAgYQJJA/MLLqhx8rT8YuS3d8olkS7ztaDLNFS9jXCMte5TCl/CHTVkfTjcNcxVc
-         kuIw==
-X-Gm-Message-State: ACgBeo08ZrGly6qXGZP1PY6mFxPIUZIqVGMkC+s/DMHnv+4sbQ4c9ylp
-        7gqkr/RNc64ZXRqYfByioKM=
-X-Google-Smtp-Source: AA6agR6zivLRd+05MWUWn3NuX3B6pr3e+82o1RPZZGqNFpjIlLsoNlJXbfdh1CKOefzRR24+LpcYqg==
-X-Received: by 2002:a17:903:41cd:b0:16e:e0c0:96d1 with SMTP id u13-20020a17090341cd00b0016ee0c096d1mr4221306ple.169.1660853275519;
-        Thu, 18 Aug 2022 13:07:55 -0700 (PDT)
+        bh=keeiDaK9Q+Jdo90jj1BSU2Ge6qhncob/UO4SDy8WdlY=;
+        b=xfZ7zhjNGXpuIpePirDKBm43p7Nhgz99a9mBIbfnWXbUz9PwBYstnVWvWBLB+5aoJL
+         VdPNlsE6PS2F89syE9lGavVRWlF1w9V0ffTZQlKJuC6vulhafaIpkV59X2PdoXiSeVQL
+         q5MvnbpUaGKbf2pHv/0Hg/nAqEgNZEWv/E9NVvFZEUiP5ruzDU/zQJoK0zTzT+0lMo/s
+         Toc0XXqy804ZXC9Y87aNnrTNO0eaUtjKFkVH9sQXg5T+68sCMbusYumMMdB3HvhLez9r
+         zvHbn6hcupifEN+fqE9IUV9JiZ7RVPosND1n4nc62lnQMmcPNhilQsPO7SIJTDZLk5oy
+         egIg==
+X-Gm-Message-State: ACgBeo0e8uDyJqH4rqaK9bKsMFaOZFbsciAIU6BiXCaRqcMjk3ccPuD0
+        yN3t6JchmsbKHRLhjPsroRYjpxUnJ5w=
+X-Google-Smtp-Source: AA6agR5uEc8aeOY6+WeukG1fydlhDLzISuJ21H4VGppEP0Mx432m2/yOrx2isICQGqmhSJG2z9CKPA==
+X-Received: by 2002:a05:6a00:2906:b0:52a:bc7f:f801 with SMTP id cg6-20020a056a00290600b0052abc7ff801mr4513710pfb.49.1660853500357;
+        Thu, 18 Aug 2022 13:11:40 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c10-20020aa7952a000000b005281d926733sm2003202pfp.199.2022.08.18.13.07.54
+        by smtp.gmail.com with ESMTPSA id b191-20020a621bc8000000b0052d2b55be32sm2066951pfb.171.2022.08.18.13.11.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 13:07:54 -0700 (PDT)
+        Thu, 18 Aug 2022 13:11:39 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 18 Aug 2022 13:07:53 -0700
+Date:   Thu, 18 Aug 2022 13:11:38 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Eliav Farber <farbere@amazon.com>
 Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
@@ -59,72 +59,65 @@ Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
         itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
         amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
         rtanwar@maxlinear.com
-Subject: Re: [PATCH v2 07/16] hwmon: (mr75203) add VM active channels
- property for Moortec PVT controller
-Message-ID: <20220818200753.GA3288506@roeck-us.net>
+Subject: Re: [PATCH v2 09/16] hwmon: (mr75203) add VM pre-scalar property for
+ Moortec PVT controller
+Message-ID: <20220818201138.GA3423710@roeck-us.net>
 References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-8-farbere@amazon.com>
+ <20220817054321.6519-10-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817054321.6519-8-farbere@amazon.com>
+In-Reply-To: <20220817054321.6519-10-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 05:43:12AM +0000, Eliav Farber wrote:
-> Add optional "vm-active-channels" property to define the number of
-> active channels per VM.
+On Wed, Aug 17, 2022 at 05:43:14AM +0000, Eliav Farber wrote:
+> vm-pre-scalar-ch# is a per channel optional parameter that can be
+> used to normalzie the voltage output results.
 > 
 > Signed-off-by: Eliav Farber <farbere@amazon.com>
 > ---
->  .../devicetree/bindings/hwmon/moortec,mr75203.yaml       | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  .../devicetree/bindings/hwmon/moortec,mr75203.yaml        | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
 > diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> index da9c3cdcb6f0..6111b5069b3c 100644
+> index 6111b5069b3c..e2a55001eefc 100644
 > --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
 > +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> @@ -49,6 +49,13 @@ properties:
->        reset-control-skip bool property defines if obtaining a
->        reference to a reset controller should be skipped.
+> @@ -56,6 +56,12 @@ properties:
+>        A value of 0 means that the entire VM sensor is nou used.
+>      $ref: /schemas/types.yaml#definitions/uint8-array
 >  
-> +  vm-active-channels:
+> +  vm-pre-scalar-ch#:
+
+Is that how such properties are implemented ? Seems to me that
+results in a lot of decode complexity.
+
+Why not use an array property like the other properties ?
+
+Guenter
+
 > +    description:
-> +      vm-active-channels defines the number of channels per VM
-> +      that are actually used and are connected to some source.
-> +      A value of 0 means that the entire VM sensor is nou used.
-
-not ?
-
-> +    $ref: /schemas/types.yaml#definitions/uint8-array
+> +      vm-active-channels defines the pre-scalar per channel value
+> +      used to normalzie the voltage output results.
+> +    $ref: /schemas/types.yaml#definitions/uint32
 > +
 >  required:
 >    - compatible
 >    - reg
-> @@ -60,6 +67,7 @@ required:
->  additionalProperties:
+> @@ -68,6 +74,7 @@ additionalProperties:
 >    - intel,vm-map
 >    - reset-control-skip
-> +  - vm-active-channels
+>    - vm-active-channels
+> +  - vm-pre-scalar-ch#
 >  
 >  examples:
 >    - |
-> @@ -73,5 +81,6 @@ examples:
->          intel,vm-map = [03 01 04 ff ff];
+> @@ -82,5 +89,6 @@ examples:
 >          clocks = <&osc0>;
 >          resets = <&rcu0 0x40 7>;
-> +        vm-active-channels = [08 10 02];
-
-Is that how properties are defined nowadays ? I am left with
-no clues how this is supposed to be interpreted by a driver.
-What does "08 10 02" mean ? How does that refer to "the number of
-active channels per VM" ?
-
-Also, I am not a devicetree expert, but I am quite sure that all
-those chip specific properties would need a vendor prefix.
-
-Guenter
-
+>          vm-active-channels = [08 10 02];
+> +        vm-pre-scalar-ch5 = <2>;
 >          #thermal-sensor-cells = <1>;
 >      };
