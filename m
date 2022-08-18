@@ -2,54 +2,54 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A92BC28B2B
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 20:25:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C01D0C25B0E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 20:28:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345953AbiHRUZh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Aug 2022 16:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41352 "EHLO
+        id S244289AbiHRU2v (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Aug 2022 16:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345954AbiHRUZf (ORCPT
+        with ESMTP id S1346048AbiHRU2p (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:25:35 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EC6E5C;
-        Thu, 18 Aug 2022 13:25:34 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id c2so2446633plo.3;
-        Thu, 18 Aug 2022 13:25:34 -0700 (PDT)
+        Thu, 18 Aug 2022 16:28:45 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408E310D3;
+        Thu, 18 Aug 2022 13:28:42 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id r22so2145837pgm.5;
+        Thu, 18 Aug 2022 13:28:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc;
-        bh=hawSr6EW79x1Tt14JmxznMiR5uu37L77vXSBKHyhS2M=;
-        b=dFAjWjouQfBXw/HNVPbxT+n8+WwbRR/BhhbJtDnmXhXukoRr0zKdG+AKlkUrdt5DKB
-         Hv13SgrJUnOkvByLfwy86T3cyIzXlaTRL7ZGqk7z2SMPnJO84baoJq6+zYU0umPCzKIw
-         iTdZAOfJMaYG42bXDRgFvjsaUgn0sAPqg4Cnjzr7h1eQf+ncIIdAP3rnNTitf984QZUt
-         /7BTLeyGF0cCPeOceEty7QrAhEMXpuUgEBJp4p3ndA810SQQbeurNydj1l2ur2NYzzIn
-         NJXUcK3X8GUFRWLgGZUFYW32egLt54HoadrdpZTanK6+TigYu1B2QbL11T1xRhlclHbq
-         I+2A==
+        bh=0S9pswd0lTMDAoOgJNHN+XxSC6Y9mGzIwVS4d8zY1N8=;
+        b=E/rJybmsbBHMKkh5f9OrGyDmQ9hv7D0HN0E6tJ2fom+248IJqK4aQpe2Ah1SDzVzkN
+         yOtJwOfFWNtrtaFLPsbmG8KDTyrX6OOp5L6tZSTF/pqEmAVXUhOPagt+1R8SpOnZbFrC
+         ksH12jYXNj3wm459DXRP69ZaYafKXhDj8G5XvwMJzLeIMhWLCb311F0adAjCUpAwq0ym
+         1W8RwRJ3BjWjX75AQZ0kdKl9Gn4sxz46GiwyWWA/DyKKc/VMhFKonmMccYshkHYdzU9n
+         T1K/CzGqo0PQ9DE37IgfGfqLFC6MwKsUcPqTAWZjDwMTxc1+K7/ZD7FNEuV2tvuekuwU
+         FcRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=hawSr6EW79x1Tt14JmxznMiR5uu37L77vXSBKHyhS2M=;
-        b=pMw5990vPHBpRkOwMcZ26ta2iNqlnJCZSlyQC3eSU4a1bY95+Vcg37jMrpxWICI8Cj
-         d2+zB8+FpI1aX705GaJitYMHhXcDKRGcCW/D0ad5825oagE+H3Hk4iIo0wfseEitTceg
-         udrhxlc9bnmmx8ehxzOid2VOJ8/nvrNFN7zVptYwYsAf+H2tdHiTHiYvqr5GT462mIbR
-         ycXveJyfbXMovJL8jyLrfE3xXpMeyUc1lYfxYpnyd4eL0RKXeGBs9W/QE2IqErOrtWcq
-         WKiwA9GwxLS3N+EtQ/venBtzMoXuxx7xeYETiw2MhCmZBMlMF3lhQXCL6/Af0+tADvrB
-         Shig==
-X-Gm-Message-State: ACgBeo2Nq0cvptNY45Ux58/wlU4TXWH/uF9CdLawxtamf/Rmg1Btomwq
-        7ovPEQArDt+Af1Ln2k8bXMw=
-X-Google-Smtp-Source: AA6agR6+79n1acOYDvuegoZ4V3jl1ePIl+Fdn8o458LQhkyXsXLvxhkIyCtHVKfxU8NutAFG1ahXQQ==
-X-Received: by 2002:a17:902:d489:b0:172:bedc:995c with SMTP id c9-20020a170902d48900b00172bedc995cmr559670plg.162.1660854333306;
-        Thu, 18 Aug 2022 13:25:33 -0700 (PDT)
+        bh=0S9pswd0lTMDAoOgJNHN+XxSC6Y9mGzIwVS4d8zY1N8=;
+        b=U21P2yxlROo+kUzczilsJ5Iu3NN7pqsvLQQanFPPRwWylu3//dnNg8Juc4E+43bvF/
+         elOdkZSgn97737CKuArQ6+D2siQe/uiDSQoMm9r2y8VjZZdS2MkHGxhStELUT0WmCxu2
+         zrM/oOaMSyup4ZY/jCwNUOu1ALot8e3U7fqYVolTr6dvnw6bpldt7MNKOHTBj1WPVZSM
+         13ufhBI40ByZraNujO9rKP9ElUja+qJnjF6JaDH55GXXeyL8oKmzaxMAm0wZ8Dgf4uCj
+         67hFts3ki7wCB52DoKyM08g16KIp8dBXQKPhLP6oGk2kpqjrpu1MH2bwax8Siiom7Brr
+         v7Kw==
+X-Gm-Message-State: ACgBeo3S16ea8n7JIEsWA9d8JVwegl7MwbH78WMXC0UTvqXjkgeAodeE
+        ONF7HJgNiB3orADrrVZ+a28=
+X-Google-Smtp-Source: AA6agR69yMkB0QYmmTxyIbimAV01u677JPoOEX75/EsidU+JD+0KFzfUJ5UdMucRJKxTGN1JIsME1Q==
+X-Received: by 2002:a05:6a00:88f:b0:530:dec:81fd with SMTP id q15-20020a056a00088f00b005300dec81fdmr4536094pfj.64.1660854522402;
+        Thu, 18 Aug 2022 13:28:42 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s7-20020a170902ea0700b0016f1aa00abbsm1800402plg.195.2022.08.18.13.25.31
+        by smtp.gmail.com with ESMTPSA id p124-20020a62d082000000b0052dd95e72bcsm2022083pfg.193.2022.08.18.13.28.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 13:25:32 -0700 (PDT)
+        Thu, 18 Aug 2022 13:28:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 18 Aug 2022 13:25:31 -0700
+Date:   Thu, 18 Aug 2022 13:28:39 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Eliav Farber <farbere@amazon.com>
 Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
@@ -59,88 +59,116 @@ Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
         itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
         amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
         rtanwar@maxlinear.com
-Subject: Re: [PATCH v2 13/16] hwmon: (mr75203) add thermal coefficient
- properties for Moortec PVT controller
-Message-ID: <20220818202531.GA3431466@roeck-us.net>
+Subject: Re: [PATCH v2 14/16] hwmon: (mr75203) parse thermal coefficients
+ from device-tree
+Message-ID: <20220818202839.GA3431511@roeck-us.net>
 References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-14-farbere@amazon.com>
+ <20220817054321.6519-15-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817054321.6519-14-farbere@amazon.com>
+In-Reply-To: <20220817054321.6519-15-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 05:43:18AM +0000, Eliav Farber wrote:
-> Add optional "ts-coeff-g", "ts-coeff-h", "ts-coeff-cal5" and
-> "ts-coeff-j" properties to be used instead of defaults for the
-> thermal equasion.
+On Wed, Aug 17, 2022 at 05:43:19AM +0000, Eliav Farber wrote:
+> Use thermal coefficients from the device tree if they exist.
+> Otherwise, use default values.
 > 
-Vendor prefix again, and shouldn;t there be some note about the
-to-be-used defaults ?
+> The equation used in the driver is:
+>   T = G + H * (n / cal5 - 0.5) + J * F
+> 
+> With this change we can support also Mode 1 Conversion, which
+> uses A instead of G, and B instead of H.
+> 
+> We can also support the series 6 equation that has different
+> coefficients and has a slightly different format:
+>   T = G + H * (n / cal5 - 0.5)
+> by setting J to 0.
+> 
+
+The calculation was just changed to use new defaults in a previous
+patch. This patch makes it quite clear that the coefficients
+are implementation (?) dependent. So the previous patch just changes
+the defaults to (presumably) the coefficients used in your system.
+That is inappropriate. Adding non-default corefficients is ok
+and makes sense is supported by the chip, but changing defaults
+isn't.
 
 Guenter
 
 > Signed-off-by: Eliav Farber <farbere@amazon.com>
 > ---
->  .../bindings/hwmon/moortec,mr75203.yaml       | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
+>  drivers/hwmon/mr75203.c | 44 +++++++++++++++++++++++++++++++++++++----
+>  1 file changed, 40 insertions(+), 4 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> index e2a55001eefc..867664bd937f 100644
-> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> @@ -62,6 +62,30 @@ properties:
->        used to normalzie the voltage output results.
->      $ref: /schemas/types.yaml#definitions/uint32
+> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+> index e500897585e4..e54a4d1803e4 100644
+> --- a/drivers/hwmon/mr75203.c
+> +++ b/drivers/hwmon/mr75203.c
+> @@ -131,6 +131,10 @@ struct pvt_device {
+>  	u32			p_num;
+>  	u32			v_num;
+>  	u32			ip_freq;
+> +	u32			ts_coeff_h;
+> +	u32			ts_coeff_g;
+> +	s32			ts_coeff_j;
+> +	u32			ts_coeff_cal5;
+>  	u8			vm_ch_max;
+>  	u8			vm_ch_total;
+>  };
+> @@ -179,10 +183,10 @@ static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
+>  		 * Convert the register value to degrees centigrade temperature:
+>  		 * T = G + H * (n / cal5 - 0.5) + J * F
+>  		 */
+> -		*val = PVT_G_CONST;
+> -		*val += PVT_H_CONST * nbs / PVT_CAL5_CONST;
+> -		*val -= PVT_H_CONST / 2;
+> -		*val += PVT_J_CONST * pvt->ip_freq / HZ_PER_MHZ;
+> +		*val = pvt->ts_coeff_g;
+> +		*val += pvt->ts_coeff_h * nbs / pvt->ts_coeff_cal5;
+> +		*val -= pvt->ts_coeff_h / 2;
+> +		*val += pvt->ts_coeff_j * pvt->ip_freq / HZ_PER_MHZ;
 >  
-> +  ts-coeff-g:
-> +    description:
-> +      G coefficient for thermal equation.
-> +    maxItems: 1
-> +    $ref: /schemas/types.yaml#definitions/uint32
+>  		return 0;
+>  	default:
+> @@ -619,6 +623,38 @@ static int mr75203_probe(struct platform_device *pdev)
+>  		memset32(temp_config, HWMON_T_INPUT, ts_num);
+>  		pvt_temp.config = temp_config;
+>  		pvt_info[index++] = &pvt_temp;
 > +
-> +  ts-coeff-h:
-> +    description:
-> +      H coefficient for thermal equation.
-> +    maxItems: 1
-> +    $ref: /schemas/types.yaml#definitions/uint32
+> +		/*
+> +		 * Incase ts-coeff-h/g/j/cal5 property is not defined, use
+> +		 * default value.
+> +		 */
+> +		ret = of_property_read_u32(np, "ts-coeff-h", &pvt->ts_coeff_h);
+> +		if (ret)
+> +			pvt->ts_coeff_h = PVT_H_CONST;
 > +
-> +  ts-coeff-cal5:
-> +    description:
-> +      cal5 coefficient for thermal equation (can't be 0).
-> +    maxItems: 1
-> +    $ref: /schemas/types.yaml#definitions/uint32
+> +		ret = of_property_read_u32(np, "ts-coeff-g", &pvt->ts_coeff_g);
+> +		if (ret)
+> +			pvt->ts_coeff_g = PVT_G_CONST;
 > +
-> +  ts-coeff-j:
-> +    description:
-> +      J coefficient for thermal equation.
-> +    maxItems: 1
-> +    $ref: /schemas/types.yaml#definitions/int32
+> +		ret = of_property_read_s32(np, "ts-coeff-j", &pvt->ts_coeff_j);
+> +		if (ret)
+> +			pvt->ts_coeff_j = PVT_J_CONST;
 > +
->  required:
->    - compatible
->    - reg
-> @@ -75,6 +99,10 @@ additionalProperties:
->    - reset-control-skip
->    - vm-active-channels
->    - vm-pre-scalar-ch#
-> +  - ts-coeff-g
-> +  - ts-coeff-h
-> +  - ts-coeff-cal5
-> +  - ts-coeff-j
+> +		ret = of_property_read_u32(np, "ts-coeff-cal5",
+> +					   &pvt->ts_coeff_cal5);
+> +		if (ret) {
+> +			pvt->ts_coeff_cal5 = PVT_CAL5_CONST;
+> +		} else {
+> +			if (pvt->ts_coeff_cal5 == 0) {
+> +				dev_err(dev, "invalid ts-coeff-cal5 (%u)\n",
+> +					pvt->ts_coeff_cal5);
+> +				return -EINVAL;
+> +			}
+> +		}
+> +
+> +		dev_dbg(dev, "ts-coeff: h = %u, g = %u, j = %d, cal5 = %u\n",
+> +			pvt->ts_coeff_h, pvt->ts_coeff_g, pvt->ts_coeff_j,
+> +			pvt->ts_coeff_cal5);
+>  	}
 >  
->  examples:
->    - |
-> @@ -90,5 +118,10 @@ examples:
->          resets = <&rcu0 0x40 7>;
->          vm-active-channels = [08 10 02];
->          vm-pre-scalar-ch5 = <2>;
-> +        ts-coeff-g = <57400>;
-> +        ts-coeff-h = <249400>;
-> +        ts-coeff-cal5 = <4096>;
-> +        ts-coeff-j = <0>;
-> +
->          #thermal-sensor-cells = <1>;
->      };
+>  	if (pd_num) {
