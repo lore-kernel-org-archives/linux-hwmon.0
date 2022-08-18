@@ -2,93 +2,129 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9E90C32773
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 20:11:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3D9BC32772
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 20:12:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232038AbiHRULl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Aug 2022 16:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
+        id S241330AbiHRUMa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Aug 2022 16:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241330AbiHRUKX (ORCPT
+        with ESMTP id S1345490AbiHRUMP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:10:23 -0400
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D1CD476C;
-        Thu, 18 Aug 2022 13:05:21 -0700 (PDT)
+        Thu, 18 Aug 2022 16:12:15 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066DCD31F7;
+        Thu, 18 Aug 2022 13:07:56 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id m2so2410289pls.4;
+        Thu, 18 Aug 2022 13:07:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1660853122; x=1692389122;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=lv07QCNfWXt+ZVjahIKXTMyMvM6zNtVFv07gtD8Z56c=;
-  b=rKXaUdL+MyaqZHZAZovyWNgiGk1Zh6TycoxhckDfw+GujuSa2s8VKMEA
-   SQtQ6nAxhvjMjmSPVjcK/rocfBQVTce1xM5i/u8f7/dKVHI3oj2kFUKQ5
-   ldJdy7GYijXmQiJHUBWRND13vgh/jgPie81DXCEzsJ2xYfoZoaHPbNQmS
-   Y=;
-X-IronPort-AV: E=Sophos;i="5.93,247,1654560000"; 
-   d="scan'208";a="234686975"
-Subject: Re: [PATCH v2 01/16] hwmon: (mr75203) fix VM sensor allocation when "intel,
- vm-map" not defined
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-10222bbc.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 20:02:01 +0000
-Received: from EX13MTAUEB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-10222bbc.us-east-1.amazon.com (Postfix) with ESMTPS id 412871A0029;
-        Thu, 18 Aug 2022 20:01:59 +0000 (UTC)
-Received: from EX13D08UEB003.ant.amazon.com (10.43.60.11) by
- EX13MTAUEB001.ant.amazon.com (10.43.60.96) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 18 Aug 2022 20:01:59 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D08UEB003.ant.amazon.com (10.43.60.11) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 18 Aug 2022 20:01:58 +0000
-Received: from [192.168.92.216] (10.85.143.172) by mail-relay.amazon.com
- (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Thu, 18 Aug 2022 20:01:54 +0000
-Message-ID: <4814ab5d-1e7c-996a-0c3d-226fc16752c0@amazon.com>
-Date:   Thu, 18 Aug 2022 23:01:53 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
-        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
-        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
-        <dwmw@amazon.co.uk>, <rtanwar@maxlinear.com>,
-        "Farber, Eliav" <farbere@amazon.com>
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=SHmhnKOWEnMPXTr1npqUAIqccKa9qmawwg5jERMog4k=;
+        b=dY+MC654YJKie0TQlbszc5HqEHdSZD4JcFCRHXXwd9QyR1bvRrP5uMIlIvrgCyhfTz
+         6K87i7oljTIb7BSYyX55/9upwqGa2NvJgp5dZgL3hq0+0ls9tUk2CpyhD0WZ84RTsDBF
+         ZHCyQPkDrRHCh73W0YFPt9HFQ+a4awysQS4M+NAKX76YJd2nRkDd+yqQg2cMF26PzOxP
+         PJd8zi5wPjRdwlE3/fOnD4tIaZgZAtErOoqCINemD17Pniw2rB7xXrhuC3s0yBbd/APb
+         nF+ks9TrtiyOM8QlKYvXH+TpYJ8thVd5fLohK6NIkN9omcUBapu1rDt7rCV9bQE9YTkY
+         zO1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=SHmhnKOWEnMPXTr1npqUAIqccKa9qmawwg5jERMog4k=;
+        b=wE1aR1lW8xqeIszQGZ0nOwQvo7ifIXX1yNFUuJ7Vz+xxp8LZ1Q/0lMMXtLvXAY4aTt
+         UflMJ2MCxYR8W28oEuDv6yeE7aYVvmjqm8lpAGU0F/sPIGljubWXYJWFoNhK8pS5y/tJ
+         l/206O6U0PwA1miF71GIvGFmH6grdKFxkILJVSCqg4sNzJoggsbfXI7dfS35r6Sa7NBG
+         5pfGZaP7Hx8BIYamTEn9uahDEm3VAqFVaLuDYGqB9m2AUj6MP0QW5ch9Xj8hcRbu2out
+         YEzLiAgYQJJA/MLLqhx8rT8YuS3d8olkS7ztaDLNFS9jXCMte5TCl/CHTVkfTjcNcxVc
+         kuIw==
+X-Gm-Message-State: ACgBeo08ZrGly6qXGZP1PY6mFxPIUZIqVGMkC+s/DMHnv+4sbQ4c9ylp
+        7gqkr/RNc64ZXRqYfByioKM=
+X-Google-Smtp-Source: AA6agR6zivLRd+05MWUWn3NuX3B6pr3e+82o1RPZZGqNFpjIlLsoNlJXbfdh1CKOefzRR24+LpcYqg==
+X-Received: by 2002:a17:903:41cd:b0:16e:e0c0:96d1 with SMTP id u13-20020a17090341cd00b0016ee0c096d1mr4221306ple.169.1660853275519;
+        Thu, 18 Aug 2022 13:07:55 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c10-20020aa7952a000000b005281d926733sm2003202pfp.199.2022.08.18.13.07.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 13:07:54 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 18 Aug 2022 13:07:53 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
+        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
+        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
+        amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
+        rtanwar@maxlinear.com
+Subject: Re: [PATCH v2 07/16] hwmon: (mr75203) add VM active channels
+ property for Moortec PVT controller
+Message-ID: <20220818200753.GA3288506@roeck-us.net>
 References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-2-farbere@amazon.com>
- <20220818194008.GA3118944@roeck-us.net>
-Content-Language: en-US
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <20220818194008.GA3118944@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+ <20220817054321.6519-8-farbere@amazon.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817054321.6519-8-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/18/2022 10:40 PM, Guenter Roeck wrote:
-> "intel,vm-map" is listed as required property in moortec,mr75203.yaml.
-> If it is missing, the probe function should fail.
+On Wed, Aug 17, 2022 at 05:43:12AM +0000, Eliav Farber wrote:
+> Add optional "vm-active-channels" property to define the number of
+> active channels per VM.
+> 
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> ---
+>  .../devicetree/bindings/hwmon/moortec,mr75203.yaml       | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> index da9c3cdcb6f0..6111b5069b3c 100644
+> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> @@ -49,6 +49,13 @@ properties:
+>        reset-control-skip bool property defines if obtaining a
+>        reference to a reset controller should be skipped.
+>  
+> +  vm-active-channels:
+> +    description:
+> +      vm-active-channels defines the number of channels per VM
+> +      that are actually used and are connected to some source.
+> +      A value of 0 means that the entire VM sensor is nou used.
 
-Indeed according to moortec,mr75203.yaml "intel,vm-map" is listed as 
-required
-but the code indicates otherwise:
+not ?
 
-/*
-  * Incase intel,vm-map property is not defined, we assume
-  * incremental channel numbers.
-  */
+> +    $ref: /schemas/types.yaml#definitions/uint8-array
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -60,6 +67,7 @@ required:
+>  additionalProperties:
+>    - intel,vm-map
+>    - reset-control-skip
+> +  - vm-active-channels
+>  
+>  examples:
+>    - |
+> @@ -73,5 +81,6 @@ examples:
+>          intel,vm-map = [03 01 04 ff ff];
+>          clocks = <&osc0>;
+>          resets = <&rcu0 0x40 7>;
+> +        vm-active-channels = [08 10 02];
 
-The probe function takes care in case it is missing and does not fail.
-It also seems less reasonable that an Intel proprietary parameter will be
-required and not optional.
-So in patch 03 I fixed the moortec,mr75203.yaml documentation and 
-changed it to
-be optional.
+Is that how properties are defined nowadays ? I am left with
+no clues how this is supposed to be interpreted by a driver.
+What does "08 10 02" mean ? How does that refer to "the number of
+active channels per VM" ?
 
---
-Regards, Eliav
+Also, I am not a devicetree expert, but I am quite sure that all
+those chip specific properties would need a vendor prefix.
 
+Guenter
+
+>          #thermal-sensor-cells = <1>;
+>      };
