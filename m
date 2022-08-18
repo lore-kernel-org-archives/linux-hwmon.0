@@ -2,173 +2,872 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C01D0C25B0E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 20:28:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B720C00140
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 21:01:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244289AbiHRU2v (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Aug 2022 16:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
+        id S1346292AbiHRVBj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Aug 2022 17:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346048AbiHRU2p (ORCPT
+        with ESMTP id S1346291AbiHRVAx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:28:45 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408E310D3;
-        Thu, 18 Aug 2022 13:28:42 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id r22so2145837pgm.5;
-        Thu, 18 Aug 2022 13:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=0S9pswd0lTMDAoOgJNHN+XxSC6Y9mGzIwVS4d8zY1N8=;
-        b=E/rJybmsbBHMKkh5f9OrGyDmQ9hv7D0HN0E6tJ2fom+248IJqK4aQpe2Ah1SDzVzkN
-         yOtJwOfFWNtrtaFLPsbmG8KDTyrX6OOp5L6tZSTF/pqEmAVXUhOPagt+1R8SpOnZbFrC
-         ksH12jYXNj3wm459DXRP69ZaYafKXhDj8G5XvwMJzLeIMhWLCb311F0adAjCUpAwq0ym
-         1W8RwRJ3BjWjX75AQZ0kdKl9Gn4sxz46GiwyWWA/DyKKc/VMhFKonmMccYshkHYdzU9n
-         T1K/CzGqo0PQ9DE37IgfGfqLFC6MwKsUcPqTAWZjDwMTxc1+K7/ZD7FNEuV2tvuekuwU
-         FcRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=0S9pswd0lTMDAoOgJNHN+XxSC6Y9mGzIwVS4d8zY1N8=;
-        b=U21P2yxlROo+kUzczilsJ5Iu3NN7pqsvLQQanFPPRwWylu3//dnNg8Juc4E+43bvF/
-         elOdkZSgn97737CKuArQ6+D2siQe/uiDSQoMm9r2y8VjZZdS2MkHGxhStELUT0WmCxu2
-         zrM/oOaMSyup4ZY/jCwNUOu1ALot8e3U7fqYVolTr6dvnw6bpldt7MNKOHTBj1WPVZSM
-         13ufhBI40ByZraNujO9rKP9ElUja+qJnjF6JaDH55GXXeyL8oKmzaxMAm0wZ8Dgf4uCj
-         67hFts3ki7wCB52DoKyM08g16KIp8dBXQKPhLP6oGk2kpqjrpu1MH2bwax8Siiom7Brr
-         v7Kw==
-X-Gm-Message-State: ACgBeo3S16ea8n7JIEsWA9d8JVwegl7MwbH78WMXC0UTvqXjkgeAodeE
-        ONF7HJgNiB3orADrrVZ+a28=
-X-Google-Smtp-Source: AA6agR69yMkB0QYmmTxyIbimAV01u677JPoOEX75/EsidU+JD+0KFzfUJ5UdMucRJKxTGN1JIsME1Q==
-X-Received: by 2002:a05:6a00:88f:b0:530:dec:81fd with SMTP id q15-20020a056a00088f00b005300dec81fdmr4536094pfj.64.1660854522402;
-        Thu, 18 Aug 2022 13:28:42 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p124-20020a62d082000000b0052dd95e72bcsm2022083pfg.193.2022.08.18.13.28.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 13:28:41 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 18 Aug 2022 13:28:39 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
-        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
-        amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
-        rtanwar@maxlinear.com
-Subject: Re: [PATCH v2 14/16] hwmon: (mr75203) parse thermal coefficients
- from device-tree
-Message-ID: <20220818202839.GA3431511@roeck-us.net>
-References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-15-farbere@amazon.com>
+        Thu, 18 Aug 2022 17:00:53 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D93AD39A1
+        for <linux-hwmon@vger.kernel.org>; Thu, 18 Aug 2022 14:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=Gi7rDacDB0jNUuW0kmljaQOgKvP
+        GLoDE7xln/YBciT4=; b=nsEBO7xGBEVqpRGwQgMa/46MMk3jSn8cwmR4WYmfHh3
+        fd0K60CeRRTjkqCCT/2tRxDFuEzrWylmxpu2utGYPSg+zHIgWc6nrx2lgpf7QMf6
+        RXoN0HBMt/+jI/rfvgyLn0Y3hNTFrvnFP8eWJXACwcVnaJAME9e51QTCLnHsZf5k
+        =
+Received: (qmail 3960115 invoked from network); 18 Aug 2022 23:00:15 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Aug 2022 23:00:15 +0200
+X-UD-Smtp-Session: l3s3148p1@v0qhRIrmSecucref
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        George Joseph <george.joseph@fairview5.com>,
+        Juerg Haefliger <juergh@gmail.com>,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        Riku Voipio <riku.voipio@iki.fi>,
+        Guillaume Ligneul <guillaume.ligneul@gmail.com>,
+        Marc Hulsman <m.hulsman@tudelft.nl>,
+        Rudolf Marek <r.marek@assembler.cz>,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: move from strlcpy with unused retval to strscpy
+Date:   Thu, 18 Aug 2022 23:00:11 +0200
+Message-Id: <20220818210014.6769-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817054321.6519-15-farbere@amazon.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 05:43:19AM +0000, Eliav Farber wrote:
-> Use thermal coefficients from the device tree if they exist.
-> Otherwise, use default values.
-> 
-> The equation used in the driver is:
->   T = G + H * (n / cal5 - 0.5) + J * F
-> 
-> With this change we can support also Mode 1 Conversion, which
-> uses A instead of G, and B instead of H.
-> 
-> We can also support the series 6 equation that has different
-> coefficients and has a slightly different format:
->   T = G + H * (n / cal5 - 0.5)
-> by setting J to 0.
-> 
+Follow the advice of the below link and prefer 'strscpy' in this
+subsystem. Conversion is 1:1 because the return value is not used.
+Generated by a coccinelle script.
 
-The calculation was just changed to use new defaults in a previous
-patch. This patch makes it quite clear that the coefficients
-are implementation (?) dependent. So the previous patch just changes
-the defaults to (presumably) the coefficients used in your system.
-That is inappropriate. Adding non-default corefficients is ok
-and makes sense is supported by the chip, but changing defaults
-isn't.
+Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ drivers/hwmon/adc128d818.c  |  2 +-
+ drivers/hwmon/adm1021.c     |  2 +-
+ drivers/hwmon/adm1025.c     |  2 +-
+ drivers/hwmon/adm1026.c     |  2 +-
+ drivers/hwmon/adm1029.c     |  2 +-
+ drivers/hwmon/adm1031.c     |  2 +-
+ drivers/hwmon/adt7411.c     |  2 +-
+ drivers/hwmon/adt7462.c     |  2 +-
+ drivers/hwmon/adt7475.c     |  2 +-
+ drivers/hwmon/amc6821.c     |  2 +-
+ drivers/hwmon/asb100.c      |  2 +-
+ drivers/hwmon/asc7621.c     |  2 +-
+ drivers/hwmon/dme1737.c     |  2 +-
+ drivers/hwmon/emc1403.c     | 12 ++++++------
+ drivers/hwmon/emc2103.c     |  2 +-
+ drivers/hwmon/emc6w201.c    |  2 +-
+ drivers/hwmon/f75375s.c     |  2 +-
+ drivers/hwmon/fschmd.c      |  2 +-
+ drivers/hwmon/ftsteutates.c |  2 +-
+ drivers/hwmon/gl518sm.c     |  2 +-
+ drivers/hwmon/gl520sm.c     |  2 +-
+ drivers/hwmon/jc42.c        |  2 +-
+ drivers/hwmon/lm63.c        |  6 +++---
+ drivers/hwmon/lm73.c        |  2 +-
+ drivers/hwmon/lm75.c        |  2 +-
+ drivers/hwmon/lm77.c        |  2 +-
+ drivers/hwmon/lm78.c        |  2 +-
+ drivers/hwmon/lm80.c        |  2 +-
+ drivers/hwmon/lm83.c        |  2 +-
+ drivers/hwmon/lm85.c        |  2 +-
+ drivers/hwmon/lm87.c        |  2 +-
+ drivers/hwmon/lm90.c        |  2 +-
+ drivers/hwmon/lm92.c        |  2 +-
+ drivers/hwmon/lm93.c        |  2 +-
+ drivers/hwmon/lm95234.c     |  2 +-
+ drivers/hwmon/lm95241.c     |  2 +-
+ drivers/hwmon/lm95245.c     |  2 +-
+ drivers/hwmon/max1619.c     |  2 +-
+ drivers/hwmon/max1668.c     |  2 +-
+ drivers/hwmon/max31730.c    |  2 +-
+ drivers/hwmon/max6639.c     |  2 +-
+ drivers/hwmon/max6642.c     |  2 +-
+ drivers/hwmon/nct7802.c     |  2 +-
+ drivers/hwmon/nct7904.c     |  2 +-
+ drivers/hwmon/smsc47m192.c  |  2 +-
+ drivers/hwmon/stts751.c     |  2 +-
+ drivers/hwmon/thmc50.c      |  2 +-
+ drivers/hwmon/tmp401.c      |  2 +-
+ drivers/hwmon/tmp421.c      |  2 +-
+ drivers/hwmon/w83781d.c     |  2 +-
+ drivers/hwmon/w83791d.c     |  2 +-
+ drivers/hwmon/w83792d.c     |  2 +-
+ drivers/hwmon/w83793.c      |  2 +-
+ drivers/hwmon/w83795.c      |  2 +-
+ drivers/hwmon/w83l785ts.c   |  2 +-
+ drivers/hwmon/w83l786ng.c   |  2 +-
+ 56 files changed, 63 insertions(+), 63 deletions(-)
 
-Guenter
+diff --git a/drivers/hwmon/adc128d818.c b/drivers/hwmon/adc128d818.c
+index fd938c70293f..e7b9578631ec 100644
+--- a/drivers/hwmon/adc128d818.c
++++ b/drivers/hwmon/adc128d818.c
+@@ -384,7 +384,7 @@ static int adc128_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 	if (i2c_smbus_read_byte_data(client, ADC128_REG_BUSY_STATUS) & 0xfc)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, "adc128d818", I2C_NAME_SIZE);
++	strscpy(info->type, "adc128d818", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/adm1021.c b/drivers/hwmon/adm1021.c
+index 91ecfee243bf..2dc45e958730 100644
+--- a/drivers/hwmon/adm1021.c
++++ b/drivers/hwmon/adm1021.c
+@@ -426,7 +426,7 @@ static int adm1021_detect(struct i2c_client *client,
+ 
+ 	pr_debug("Detected chip %s at adapter %d, address 0x%02x.\n",
+ 		 type_name, i2c_adapter_id(adapter), client->addr);
+-	strlcpy(info->type, type_name, I2C_NAME_SIZE);
++	strscpy(info->type, type_name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/adm1025.c b/drivers/hwmon/adm1025.c
+index 4352f6a884e8..2984c4f98496 100644
+--- a/drivers/hwmon/adm1025.c
++++ b/drivers/hwmon/adm1025.c
+@@ -470,7 +470,7 @@ static int adm1025_detect(struct i2c_client *client,
+ 	else
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, name, I2C_NAME_SIZE);
++	strscpy(info->type, name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/adm1026.c b/drivers/hwmon/adm1026.c
+index 69b3ec752944..1f084f708743 100644
+--- a/drivers/hwmon/adm1026.c
++++ b/drivers/hwmon/adm1026.c
+@@ -1610,7 +1610,7 @@ static int adm1026_detect(struct i2c_client *client,
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, "adm1026", I2C_NAME_SIZE);
++	strscpy(info->type, "adm1026", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/adm1029.c b/drivers/hwmon/adm1029.c
+index 3e1999413f32..eaf6e5e04aac 100644
+--- a/drivers/hwmon/adm1029.c
++++ b/drivers/hwmon/adm1029.c
+@@ -329,7 +329,7 @@ static int adm1029_detect(struct i2c_client *client,
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, "adm1029", I2C_NAME_SIZE);
++	strscpy(info->type, "adm1029", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/adm1031.c b/drivers/hwmon/adm1031.c
+index ac841fa3a369..b42797bcb5b4 100644
+--- a/drivers/hwmon/adm1031.c
++++ b/drivers/hwmon/adm1031.c
+@@ -985,7 +985,7 @@ static int adm1031_detect(struct i2c_client *client,
+ 		return -ENODEV;
+ 	name = (id == 0x30) ? "adm1030" : "adm1031";
+ 
+-	strlcpy(info->type, name, I2C_NAME_SIZE);
++	strscpy(info->type, name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/adt7411.c b/drivers/hwmon/adt7411.c
+index fad74aa62b64..bf5c5618f8d0 100644
+--- a/drivers/hwmon/adt7411.c
++++ b/drivers/hwmon/adt7411.c
+@@ -590,7 +590,7 @@ static int adt7411_detect(struct i2c_client *client,
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, "adt7411", I2C_NAME_SIZE);
++	strscpy(info->type, "adt7411", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/adt7462.c b/drivers/hwmon/adt7462.c
+index e75bbd87ad09..9c0235849d4b 100644
+--- a/drivers/hwmon/adt7462.c
++++ b/drivers/hwmon/adt7462.c
+@@ -1782,7 +1782,7 @@ static int adt7462_detect(struct i2c_client *client,
+ 	if (revision != ADT7462_REVISION)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, "adt7462", I2C_NAME_SIZE);
++	strscpy(info->type, "adt7462", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+index ac480e6e4818..51b3d16c3223 100644
+--- a/drivers/hwmon/adt7475.c
++++ b/drivers/hwmon/adt7475.c
+@@ -1342,7 +1342,7 @@ static int adt7475_detect(struct i2c_client *client,
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, name, I2C_NAME_SIZE);
++	strscpy(info->type, name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
+index 0c16face3fd3..3bfd12ff4b3c 100644
+--- a/drivers/hwmon/amc6821.c
++++ b/drivers/hwmon/amc6821.c
+@@ -809,7 +809,7 @@ static int amc6821_detect(
+ 	}
+ 
+ 	dev_info(&adapter->dev, "amc6821: chip found at 0x%02x.\n", address);
+-	strlcpy(info->type, "amc6821", I2C_NAME_SIZE);
++	strscpy(info->type, "amc6821", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/asb100.c b/drivers/hwmon/asb100.c
+index 8cf0bcb85eb4..45bedf619457 100644
+--- a/drivers/hwmon/asb100.c
++++ b/drivers/hwmon/asb100.c
+@@ -769,7 +769,7 @@ static int asb100_detect(struct i2c_client *client,
+ 	if (val1 != 0x31 || val2 != 0x06)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, "asb100", I2C_NAME_SIZE);
++	strscpy(info->type, "asb100", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/asc7621.c b/drivers/hwmon/asc7621.c
+index e835605a7456..8385dadf7e19 100644
+--- a/drivers/hwmon/asc7621.c
++++ b/drivers/hwmon/asc7621.c
+@@ -1153,7 +1153,7 @@ static int asc7621_detect(struct i2c_client *client,
+ 
+ 		if (company == asc7621_chips[chip_index].company_id &&
+ 		    verstep == asc7621_chips[chip_index].verstep_id) {
+-			strlcpy(info->type, asc7621_chips[chip_index].name,
++			strscpy(info->type, asc7621_chips[chip_index].name,
+ 				I2C_NAME_SIZE);
+ 
+ 			dev_info(&adapter->dev, "Matched %s at 0x%02x\n",
+diff --git a/drivers/hwmon/dme1737.c b/drivers/hwmon/dme1737.c
+index e3ad4c2d0038..ae309e90477a 100644
+--- a/drivers/hwmon/dme1737.c
++++ b/drivers/hwmon/dme1737.c
+@@ -2456,7 +2456,7 @@ static int dme1737_i2c_detect(struct i2c_client *client,
+ 	dev_info(dev, "Found a %s chip at 0x%02x (rev 0x%02x).\n",
+ 		 verstep == SCH5027_VERSTEP ? "SCH5027" : "DME1737",
+ 		 client->addr, verstep);
+-	strlcpy(info->type, name, I2C_NAME_SIZE);
++	strscpy(info->type, name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
+index 314838272049..61d59189a6d1 100644
+--- a/drivers/hwmon/emc1403.c
++++ b/drivers/hwmon/emc1403.c
+@@ -329,22 +329,22 @@ static int emc1403_detect(struct i2c_client *client,
+ 	id = i2c_smbus_read_byte_data(client, THERMAL_PID_REG);
+ 	switch (id) {
+ 	case 0x20:
+-		strlcpy(info->type, "emc1402", I2C_NAME_SIZE);
++		strscpy(info->type, "emc1402", I2C_NAME_SIZE);
+ 		break;
+ 	case 0x21:
+-		strlcpy(info->type, "emc1403", I2C_NAME_SIZE);
++		strscpy(info->type, "emc1403", I2C_NAME_SIZE);
+ 		break;
+ 	case 0x22:
+-		strlcpy(info->type, "emc1422", I2C_NAME_SIZE);
++		strscpy(info->type, "emc1422", I2C_NAME_SIZE);
+ 		break;
+ 	case 0x23:
+-		strlcpy(info->type, "emc1423", I2C_NAME_SIZE);
++		strscpy(info->type, "emc1423", I2C_NAME_SIZE);
+ 		break;
+ 	case 0x25:
+-		strlcpy(info->type, "emc1404", I2C_NAME_SIZE);
++		strscpy(info->type, "emc1404", I2C_NAME_SIZE);
+ 		break;
+ 	case 0x27:
+-		strlcpy(info->type, "emc1424", I2C_NAME_SIZE);
++		strscpy(info->type, "emc1424", I2C_NAME_SIZE);
+ 		break;
+ 	default:
+ 		return -ENODEV;
+diff --git a/drivers/hwmon/emc2103.c b/drivers/hwmon/emc2103.c
+index e4c95ca9e19f..361cf9292456 100644
+--- a/drivers/hwmon/emc2103.c
++++ b/drivers/hwmon/emc2103.c
+@@ -643,7 +643,7 @@ emc2103_detect(struct i2c_client *new_client, struct i2c_board_info *info)
+ 	if ((product != 0x24) && (product != 0x26))
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, "emc2103", I2C_NAME_SIZE);
++	strscpy(info->type, "emc2103", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/emc6w201.c b/drivers/hwmon/emc6w201.c
+index 29082c8463f4..bcd93f0fe982 100644
+--- a/drivers/hwmon/emc6w201.c
++++ b/drivers/hwmon/emc6w201.c
+@@ -439,7 +439,7 @@ static int emc6w201_detect(struct i2c_client *client,
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, "emc6w201", I2C_NAME_SIZE);
++	strscpy(info->type, "emc6w201", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/f75375s.c b/drivers/hwmon/f75375s.c
+index 57c8a473698d..8a469b2df5e1 100644
+--- a/drivers/hwmon/f75375s.c
++++ b/drivers/hwmon/f75375s.c
+@@ -897,7 +897,7 @@ static int f75375_detect(struct i2c_client *client,
+ 
+ 	version = f75375_read8(client, F75375_REG_VERSION);
+ 	dev_info(&adapter->dev, "found %s version: %02X\n", name, version);
+-	strlcpy(info->type, name, I2C_NAME_SIZE);
++	strscpy(info->type, name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/fschmd.c b/drivers/hwmon/fschmd.c
+index c26195e3aad7..82652990063a 100644
+--- a/drivers/hwmon/fschmd.c
++++ b/drivers/hwmon/fschmd.c
+@@ -1075,7 +1075,7 @@ static int fschmd_detect(struct i2c_client *client,
+ 	else
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, fschmd_id[kind].name, I2C_NAME_SIZE);
++	strscpy(info->type, fschmd_id[kind].name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
+index ceffc76a0c51..bb26ca97abbd 100644
+--- a/drivers/hwmon/ftsteutates.c
++++ b/drivers/hwmon/ftsteutates.c
+@@ -739,7 +739,7 @@ static int fts_detect(struct i2c_client *client,
+ 	if (val != 0x11)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, fts_id[0].name, I2C_NAME_SIZE);
++	strscpy(info->type, fts_id[0].name, I2C_NAME_SIZE);
+ 	info->flags = 0;
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/gl518sm.c b/drivers/hwmon/gl518sm.c
+index dd683b0a648f..95286c40f55a 100644
+--- a/drivers/hwmon/gl518sm.c
++++ b/drivers/hwmon/gl518sm.c
+@@ -586,7 +586,7 @@ static int gl518_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 	if (rev != 0x00 && rev != 0x80)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, "gl518sm", I2C_NAME_SIZE);
++	strscpy(info->type, "gl518sm", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/gl520sm.c b/drivers/hwmon/gl520sm.c
+index 096ba9797211..394da4ac977c 100644
+--- a/drivers/hwmon/gl520sm.c
++++ b/drivers/hwmon/gl520sm.c
+@@ -811,7 +811,7 @@ static int gl520_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, "gl520sm", I2C_NAME_SIZE);
++	strscpy(info->type, "gl520sm", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
+index 07f7f8b5b73d..8379a5da46b8 100644
+--- a/drivers/hwmon/jc42.c
++++ b/drivers/hwmon/jc42.c
+@@ -441,7 +441,7 @@ static int jc42_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 		struct jc42_chips *chip = &jc42_chips[i];
+ 		if (manid == chip->manid &&
+ 		    (devid & chip->devid_mask) == chip->devid) {
+-			strlcpy(info->type, "jc42", I2C_NAME_SIZE);
++			strscpy(info->type, "jc42", I2C_NAME_SIZE);
+ 			return 0;
+ 		}
+ 	}
+diff --git a/drivers/hwmon/lm63.c b/drivers/hwmon/lm63.c
+index 339a145afc09..9ab2cab4c710 100644
+--- a/drivers/hwmon/lm63.c
++++ b/drivers/hwmon/lm63.c
+@@ -996,11 +996,11 @@ static int lm63_detect(struct i2c_client *client,
+ 	}
+ 
+ 	if (chip_id == 0x41 && address == 0x4c)
+-		strlcpy(info->type, "lm63", I2C_NAME_SIZE);
++		strscpy(info->type, "lm63", I2C_NAME_SIZE);
+ 	else if (chip_id == 0x51 && (address == 0x18 || address == 0x4e))
+-		strlcpy(info->type, "lm64", I2C_NAME_SIZE);
++		strscpy(info->type, "lm64", I2C_NAME_SIZE);
+ 	else if (chip_id == 0x49 && address == 0x4c)
+-		strlcpy(info->type, "lm96163", I2C_NAME_SIZE);
++		strscpy(info->type, "lm96163", I2C_NAME_SIZE);
+ 	else
+ 		return -ENODEV;
+ 
+diff --git a/drivers/hwmon/lm73.c b/drivers/hwmon/lm73.c
+index beb0d61bcd82..1346b3b3f463 100644
+--- a/drivers/hwmon/lm73.c
++++ b/drivers/hwmon/lm73.c
+@@ -257,7 +257,7 @@ static int lm73_detect(struct i2c_client *new_client,
+ 	if (id < 0 || id != LM73_ID)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, "lm73", I2C_NAME_SIZE);
++	strscpy(info->type, "lm73", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+index 66dc826f7962..bcc3adcb3af1 100644
+--- a/drivers/hwmon/lm75.c
++++ b/drivers/hwmon/lm75.c
+@@ -893,7 +893,7 @@ static int lm75_detect(struct i2c_client *new_client,
+ 			return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, is_lm75a ? "lm75a" : "lm75", I2C_NAME_SIZE);
++	strscpy(info->type, is_lm75a ? "lm75a" : "lm75", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/lm77.c b/drivers/hwmon/lm77.c
+index df6af85e170a..645cb2191abe 100644
+--- a/drivers/hwmon/lm77.c
++++ b/drivers/hwmon/lm77.c
+@@ -302,7 +302,7 @@ static int lm77_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 	 || i2c_smbus_read_word_data(client, 7) != min)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, "lm77", I2C_NAME_SIZE);
++	strscpy(info->type, "lm77", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/lm78.c b/drivers/hwmon/lm78.c
+index 5e129cbec1cb..694e171cab7f 100644
+--- a/drivers/hwmon/lm78.c
++++ b/drivers/hwmon/lm78.c
+@@ -617,7 +617,7 @@ static int lm78_i2c_detect(struct i2c_client *client,
+ 	if (isa)
+ 		mutex_unlock(&isa->update_lock);
+ 
+-	strlcpy(info->type, client_name, I2C_NAME_SIZE);
++	strscpy(info->type, client_name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ 
+diff --git a/drivers/hwmon/lm80.c b/drivers/hwmon/lm80.c
+index e85e062bbf32..35db0b97f912 100644
+--- a/drivers/hwmon/lm80.c
++++ b/drivers/hwmon/lm80.c
+@@ -586,7 +586,7 @@ static int lm80_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 		name = "lm80";
+ 	}
+ 
+-	strlcpy(info->type, name, I2C_NAME_SIZE);
++	strscpy(info->type, name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/lm83.c b/drivers/hwmon/lm83.c
+index 905f5689f907..616449f2cc50 100644
+--- a/drivers/hwmon/lm83.c
++++ b/drivers/hwmon/lm83.c
+@@ -412,7 +412,7 @@ static int lm83_detect(struct i2c_client *client,
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, name, I2C_NAME_SIZE);
++	strscpy(info->type, name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/lm85.c b/drivers/hwmon/lm85.c
+index 88cf2012d34b..8d33c2484755 100644
+--- a/drivers/hwmon/lm85.c
++++ b/drivers/hwmon/lm85.c
+@@ -1539,7 +1539,7 @@ static int lm85_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 	if (!type_name)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, type_name, I2C_NAME_SIZE);
++	strscpy(info->type, type_name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
+index 1750bc588856..818fb6195245 100644
+--- a/drivers/hwmon/lm87.c
++++ b/drivers/hwmon/lm87.c
+@@ -833,7 +833,7 @@ static int lm87_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, name, I2C_NAME_SIZE);
++	strscpy(info->type, name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index 221de01a327a..c151c0bf43f2 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -2547,7 +2547,7 @@ static int lm90_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, name, I2C_NAME_SIZE);
++	strscpy(info->type, name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/lm92.c b/drivers/hwmon/lm92.c
+index 5bae6eedcaf1..2ff3044a677d 100644
+--- a/drivers/hwmon/lm92.c
++++ b/drivers/hwmon/lm92.c
+@@ -287,7 +287,7 @@ static int lm92_detect(struct i2c_client *new_client,
+ 	else
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, "lm92", I2C_NAME_SIZE);
++	strscpy(info->type, "lm92", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/lm93.c b/drivers/hwmon/lm93.c
+index dc67bf954b21..4cf50d5f4f59 100644
+--- a/drivers/hwmon/lm93.c
++++ b/drivers/hwmon/lm93.c
+@@ -2575,7 +2575,7 @@ static int lm93_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, name, I2C_NAME_SIZE);
++	strscpy(info->type, name, I2C_NAME_SIZE);
+ 	dev_dbg(&adapter->dev, "loading %s at %d, 0x%02x\n",
+ 		client->name, i2c_adapter_id(client->adapter),
+ 		client->addr);
+diff --git a/drivers/hwmon/lm95234.c b/drivers/hwmon/lm95234.c
+index ac169a994ae0..b4a9d0c223c4 100644
+--- a/drivers/hwmon/lm95234.c
++++ b/drivers/hwmon/lm95234.c
+@@ -644,7 +644,7 @@ static int lm95234_detect(struct i2c_client *client,
+ 	if (val & model_mask)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, name, I2C_NAME_SIZE);
++	strscpy(info->type, name, I2C_NAME_SIZE);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/hwmon/lm95241.c b/drivers/hwmon/lm95241.c
+index 8ea46ff20be5..f1ed777a8735 100644
+--- a/drivers/hwmon/lm95241.c
++++ b/drivers/hwmon/lm95241.c
+@@ -389,7 +389,7 @@ static int lm95241_detect(struct i2c_client *new_client,
+ 	}
+ 
+ 	/* Fill the i2c board info */
+-	strlcpy(info->type, name, I2C_NAME_SIZE);
++	strscpy(info->type, name, I2C_NAME_SIZE);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/hwmon/lm95245.c b/drivers/hwmon/lm95245.c
+index 29388fcf5f74..c433f0af2d31 100644
+--- a/drivers/hwmon/lm95245.c
++++ b/drivers/hwmon/lm95245.c
+@@ -461,7 +461,7 @@ static int lm95245_detect(struct i2c_client *new_client,
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, name, I2C_NAME_SIZE);
++	strscpy(info->type, name, I2C_NAME_SIZE);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/hwmon/max1619.c b/drivers/hwmon/max1619.c
+index eae9e68027bc..445c77197f69 100644
+--- a/drivers/hwmon/max1619.c
++++ b/drivers/hwmon/max1619.c
+@@ -241,7 +241,7 @@ static int max1619_detect(struct i2c_client *client,
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, "max1619", I2C_NAME_SIZE);
++	strscpy(info->type, "max1619", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/max1668.c b/drivers/hwmon/max1668.c
+index 78688e6cb87d..9f748973d6a3 100644
+--- a/drivers/hwmon/max1668.c
++++ b/drivers/hwmon/max1668.c
+@@ -386,7 +386,7 @@ static int max1668_detect(struct i2c_client *client,
+ 	if (!type_name)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, type_name, I2C_NAME_SIZE);
++	strscpy(info->type, type_name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/max31730.c b/drivers/hwmon/max31730.c
+index 23598b8b8793..9bdff881f59c 100644
+--- a/drivers/hwmon/max31730.c
++++ b/drivers/hwmon/max31730.c
+@@ -399,7 +399,7 @@ static int max31730_detect(struct i2c_client *client,
+ 			return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, "max31730", I2C_NAME_SIZE);
++	strscpy(info->type, "max31730", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
+index 14bb7726f8d7..936861131d74 100644
+--- a/drivers/hwmon/max6639.c
++++ b/drivers/hwmon/max6639.c
+@@ -514,7 +514,7 @@ static int max6639_detect(struct i2c_client *client,
+ 	if (dev_id != 0x58 || manu_id != 0x4D)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, "max6639", I2C_NAME_SIZE);
++	strscpy(info->type, "max6639", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/max6642.c b/drivers/hwmon/max6642.c
+index 699d265aae2e..47ea34ff78f3 100644
+--- a/drivers/hwmon/max6642.c
++++ b/drivers/hwmon/max6642.c
+@@ -148,7 +148,7 @@ static int max6642_detect(struct i2c_client *client,
+ 	if ((reg_status & 0x2b) != 0x00)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, "max6642", I2C_NAME_SIZE);
++	strscpy(info->type, "max6642", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/nct7802.c b/drivers/hwmon/nct7802.c
+index d1eeef02b6dc..a175f8283695 100644
+--- a/drivers/hwmon/nct7802.c
++++ b/drivers/hwmon/nct7802.c
+@@ -1038,7 +1038,7 @@ static int nct7802_detect(struct i2c_client *client,
+ 	if (reg < 0 || (reg & 0x3f))
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, "nct7802", I2C_NAME_SIZE);
++	strscpy(info->type, "nct7802", I2C_NAME_SIZE);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
+index b1c837fc407a..ecc5db0011a3 100644
+--- a/drivers/hwmon/nct7904.c
++++ b/drivers/hwmon/nct7904.c
+@@ -798,7 +798,7 @@ static int nct7904_detect(struct i2c_client *client,
+ 	    (i2c_smbus_read_byte_data(client, BANK_SEL_REG) & 0xf8) != 0x00)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, "nct7904", I2C_NAME_SIZE);
++	strscpy(info->type, "nct7904", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/smsc47m192.c b/drivers/hwmon/smsc47m192.c
+index a5db15c087ae..70d2152234e2 100644
+--- a/drivers/hwmon/smsc47m192.c
++++ b/drivers/hwmon/smsc47m192.c
+@@ -582,7 +582,7 @@ static int smsc47m192_detect(struct i2c_client *client,
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, "smsc47m192", I2C_NAME_SIZE);
++	strscpy(info->type, "smsc47m192", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/stts751.c b/drivers/hwmon/stts751.c
+index 0ed28408aa07..2f67c6747ead 100644
+--- a/drivers/hwmon/stts751.c
++++ b/drivers/hwmon/stts751.c
+@@ -692,7 +692,7 @@ static int stts751_detect(struct i2c_client *new_client,
+ 	}
+ 	dev_dbg(&new_client->dev, "Chip %s detected", name);
+ 
+-	strlcpy(info->type, stts751_id[0].name, I2C_NAME_SIZE);
++	strscpy(info->type, stts751_id[0].name, I2C_NAME_SIZE);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/hwmon/thmc50.c b/drivers/hwmon/thmc50.c
+index 6a804f5036f4..81cdb012993c 100644
+--- a/drivers/hwmon/thmc50.c
++++ b/drivers/hwmon/thmc50.c
+@@ -352,7 +352,7 @@ static int thmc50_detect(struct i2c_client *client,
+ 	pr_debug("thmc50: Detected %s (version %x, revision %x)\n",
+ 		 type_name, (revision >> 4) - 0xc, revision & 0xf);
+ 
+-	strlcpy(info->type, type_name, I2C_NAME_SIZE);
++	strscpy(info->type, type_name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
+index cc0a1c219b1f..f358ba679626 100644
+--- a/drivers/hwmon/tmp401.c
++++ b/drivers/hwmon/tmp401.c
+@@ -671,7 +671,7 @@ static int tmp401_detect(struct i2c_client *client,
+ 	if (reg > 15)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, tmp401_id[kind].name, I2C_NAME_SIZE);
++	strscpy(info->type, tmp401_id[kind].name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
+index 1fd8d41d90c8..45fd7fb5ee01 100644
+--- a/drivers/hwmon/tmp421.c
++++ b/drivers/hwmon/tmp421.c
+@@ -353,7 +353,7 @@ static int tmp421_detect(struct i2c_client *client,
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, tmp421_id[kind].name, I2C_NAME_SIZE);
++	strscpy(info->type, tmp421_id[kind].name, I2C_NAME_SIZE);
+ 	dev_info(&adapter->dev, "Detected TI %s chip at 0x%02x\n",
+ 		 names[kind], client->addr);
+ 
+diff --git a/drivers/hwmon/w83781d.c b/drivers/hwmon/w83781d.c
+index b3579721265f..35a847dfce68 100644
+--- a/drivers/hwmon/w83781d.c
++++ b/drivers/hwmon/w83781d.c
+@@ -1171,7 +1171,7 @@ w83781d_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 	if (isa)
+ 		mutex_unlock(&isa->update_lock);
+ 
+-	strlcpy(info->type, client_name, I2C_NAME_SIZE);
++	strscpy(info->type, client_name, I2C_NAME_SIZE);
+ 
+ 	return 0;
+ 
+diff --git a/drivers/hwmon/w83791d.c b/drivers/hwmon/w83791d.c
+index 80a9a78d7ce9..85ea408e28d1 100644
+--- a/drivers/hwmon/w83791d.c
++++ b/drivers/hwmon/w83791d.c
+@@ -1333,7 +1333,7 @@ static int w83791d_detect(struct i2c_client *client,
+ 	if (val1 != 0x71 || val2 != 0x5c)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, "w83791d", I2C_NAME_SIZE);
++	strscpy(info->type, "w83791d", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/w83792d.c b/drivers/hwmon/w83792d.c
+index 31a1cdc30877..2c766a9209da 100644
+--- a/drivers/hwmon/w83792d.c
++++ b/drivers/hwmon/w83792d.c
+@@ -1346,7 +1346,7 @@ w83792d_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 	if (val1 != 0x7a || val2 != 0x5c)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, "w83792d", I2C_NAME_SIZE);
++	strscpy(info->type, "w83792d", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/w83793.c b/drivers/hwmon/w83793.c
+index 0a65d164c8f0..0c59162a7bf5 100644
+--- a/drivers/hwmon/w83793.c
++++ b/drivers/hwmon/w83793.c
+@@ -1636,7 +1636,7 @@ static int w83793_detect(struct i2c_client *client,
+ 	if (chip_id != 0x7b)
+ 		return -ENODEV;
+ 
+-	strlcpy(info->type, "w83793", I2C_NAME_SIZE);
++	strscpy(info->type, "w83793", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/w83795.c b/drivers/hwmon/w83795.c
+index 45b12c4287df..be5bb19e9afe 100644
+--- a/drivers/hwmon/w83795.c
++++ b/drivers/hwmon/w83795.c
+@@ -1967,7 +1967,7 @@ static int w83795_detect(struct i2c_client *client,
+ 	else
+ 		chip_name = "w83795g";
+ 
+-	strlcpy(info->type, chip_name, I2C_NAME_SIZE);
++	strscpy(info->type, chip_name, I2C_NAME_SIZE);
+ 	dev_info(&adapter->dev, "Found %s rev. %c at 0x%02hx\n", chip_name,
+ 		 'A' + (device_id & 0xf), address);
+ 
+diff --git a/drivers/hwmon/w83l785ts.c b/drivers/hwmon/w83l785ts.c
+index a41f989d66e2..56359350fd7f 100644
+--- a/drivers/hwmon/w83l785ts.c
++++ b/drivers/hwmon/w83l785ts.c
+@@ -157,7 +157,7 @@ static int w83l785ts_detect(struct i2c_client *client,
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, "w83l785ts", I2C_NAME_SIZE);
++	strscpy(info->type, "w83l785ts", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/w83l786ng.c b/drivers/hwmon/w83l786ng.c
+index 11ba23c1af85..2c4646fa8426 100644
+--- a/drivers/hwmon/w83l786ng.c
++++ b/drivers/hwmon/w83l786ng.c
+@@ -687,7 +687,7 @@ w83l786ng_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 		return -ENODEV;
+ 	}
+ 
+-	strlcpy(info->type, "w83l786ng", I2C_NAME_SIZE);
++	strscpy(info->type, "w83l786ng", I2C_NAME_SIZE);
+ 
+ 	return 0;
+ }
+-- 
+2.35.1
 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
->  drivers/hwmon/mr75203.c | 44 +++++++++++++++++++++++++++++++++++++----
->  1 file changed, 40 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-> index e500897585e4..e54a4d1803e4 100644
-> --- a/drivers/hwmon/mr75203.c
-> +++ b/drivers/hwmon/mr75203.c
-> @@ -131,6 +131,10 @@ struct pvt_device {
->  	u32			p_num;
->  	u32			v_num;
->  	u32			ip_freq;
-> +	u32			ts_coeff_h;
-> +	u32			ts_coeff_g;
-> +	s32			ts_coeff_j;
-> +	u32			ts_coeff_cal5;
->  	u8			vm_ch_max;
->  	u8			vm_ch_total;
->  };
-> @@ -179,10 +183,10 @@ static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
->  		 * Convert the register value to degrees centigrade temperature:
->  		 * T = G + H * (n / cal5 - 0.5) + J * F
->  		 */
-> -		*val = PVT_G_CONST;
-> -		*val += PVT_H_CONST * nbs / PVT_CAL5_CONST;
-> -		*val -= PVT_H_CONST / 2;
-> -		*val += PVT_J_CONST * pvt->ip_freq / HZ_PER_MHZ;
-> +		*val = pvt->ts_coeff_g;
-> +		*val += pvt->ts_coeff_h * nbs / pvt->ts_coeff_cal5;
-> +		*val -= pvt->ts_coeff_h / 2;
-> +		*val += pvt->ts_coeff_j * pvt->ip_freq / HZ_PER_MHZ;
->  
->  		return 0;
->  	default:
-> @@ -619,6 +623,38 @@ static int mr75203_probe(struct platform_device *pdev)
->  		memset32(temp_config, HWMON_T_INPUT, ts_num);
->  		pvt_temp.config = temp_config;
->  		pvt_info[index++] = &pvt_temp;
-> +
-> +		/*
-> +		 * Incase ts-coeff-h/g/j/cal5 property is not defined, use
-> +		 * default value.
-> +		 */
-> +		ret = of_property_read_u32(np, "ts-coeff-h", &pvt->ts_coeff_h);
-> +		if (ret)
-> +			pvt->ts_coeff_h = PVT_H_CONST;
-> +
-> +		ret = of_property_read_u32(np, "ts-coeff-g", &pvt->ts_coeff_g);
-> +		if (ret)
-> +			pvt->ts_coeff_g = PVT_G_CONST;
-> +
-> +		ret = of_property_read_s32(np, "ts-coeff-j", &pvt->ts_coeff_j);
-> +		if (ret)
-> +			pvt->ts_coeff_j = PVT_J_CONST;
-> +
-> +		ret = of_property_read_u32(np, "ts-coeff-cal5",
-> +					   &pvt->ts_coeff_cal5);
-> +		if (ret) {
-> +			pvt->ts_coeff_cal5 = PVT_CAL5_CONST;
-> +		} else {
-> +			if (pvt->ts_coeff_cal5 == 0) {
-> +				dev_err(dev, "invalid ts-coeff-cal5 (%u)\n",
-> +					pvt->ts_coeff_cal5);
-> +				return -EINVAL;
-> +			}
-> +		}
-> +
-> +		dev_dbg(dev, "ts-coeff: h = %u, g = %u, j = %d, cal5 = %u\n",
-> +			pvt->ts_coeff_h, pvt->ts_coeff_g, pvt->ts_coeff_j,
-> +			pvt->ts_coeff_cal5);
->  	}
->  
->  	if (pd_num) {
