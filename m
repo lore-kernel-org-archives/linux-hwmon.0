@@ -2,54 +2,54 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22690C00140
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 19:40:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DFBEC00140
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 19:44:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239301AbiHRTkO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Aug 2022 15:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53326 "EHLO
+        id S232038AbiHRTon (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Aug 2022 15:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239149AbiHRTkN (ORCPT
+        with ESMTP id S243724AbiHRTom (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:40:13 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674171057F;
-        Thu, 18 Aug 2022 12:40:12 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id f4so208120pgc.12;
-        Thu, 18 Aug 2022 12:40:12 -0700 (PDT)
+        Thu, 18 Aug 2022 15:44:42 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EA35C372;
+        Thu, 18 Aug 2022 12:44:41 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id f21so2677473pjt.2;
+        Thu, 18 Aug 2022 12:44:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc;
-        bh=ulMg8tTHr07JXADnsATIwJjQyIx3Snpx5qARr9jK6UA=;
-        b=n9xlbNi8id94f4BxSUtpst7ZPal3m8sIo8LIC6dMnklQbgk3mkRVYEPstoDKAdpjcm
-         /RMlGcKEXZxSGd3YjFd5R6chTO7+VYz0302lCBLpMn9jPUdn5oUybzWJQjEkqydKp4so
-         UvkBu6UWzAos5J6ih9d29NCqHH+QVb/oRKOy+5iWNTS1QQzOJYeJIAVPGPirM+4lhadx
-         22ezxtRRy56V1ylvsCi+WO8szAQFY4Q2kHXGBiimnGk4h0nPyzvrdBnyogic4XCGUcw/
-         NeUq2Ylp7RvsWn8YgxOgt8jOibWYJ8k8D01K6DkXY3tLcARu0XvUCIvbzx91DwW6W/4y
-         8UNw==
+        bh=W5e17+6oMWWVgLvMfPt1qnfpuP7V0mz0KRYnC4cgIVo=;
+        b=HpqQOsLa5ecdX7tYB3ulW6lzQI9ks3T2jeG4Kpym11YEQcQz4c+9sL7uJK/2hrw5tz
+         ykan/swKvpwVrFhhUT2Cyyt9E5bFftqcbHZWreEYQazkNWx4HbeeM3lPvjXEqXAZxYAX
+         TY2XQ1vYu5BwHBW0fPB4Vftlj3Jb9BZEMHVS5OjnbB/F/xv1SPNikfjZzDR1Pgsf7EHe
+         3Z/KZhIYbsAN3H5IxHNH1K+zfdugfWswvP2wxKkHh6LaShRswPBaDfOSAoPlc59qAe/c
+         eJqA40KOl4907vNgkZS/ID2Z4SFgm70OFpSkW4o4aKwMFDGnXuI2o0U/V7uKpDq4mXDS
+         T5WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=ulMg8tTHr07JXADnsATIwJjQyIx3Snpx5qARr9jK6UA=;
-        b=5c6Y+AWzMwCnSyJ1rsHKO8+wN5GUpLlz+cToRSAhzkBn//cV7enyp1G5akM9EecVjX
-         pVJk8ZScZZaKn69WUgUvyO8NQqLLWSG0MR401v3EJbGbEeGaypqG6pFgL9R5BMn4hIEG
-         a5xU5XFDkSvjpldjREDx7tQovw+BJ//cgHen5aDGs3w/4J8Wn4KE4LZXmTwCFFeN/ouq
-         R2nK6C/my+Orbb4Oo0P6UMK2Te/ZPtCmMXC35WAQBIlmFLjb9t3QKF80J1MMOWz0LdGV
-         ukHG65h5qa95MSeTIBX05TOXbUSe9wrsn4YcW41nRdtcPHduavzJ7HhV5ZUUF/qxZohD
-         ntIg==
-X-Gm-Message-State: ACgBeo0/J9BUfgifFXM9vV7GIL6CaAOUQLpaSdi94S21jlB11GAcVIxU
-        nNQfT+4geW4vTeP3Ev5ZguU=
-X-Google-Smtp-Source: AA6agR4FefTBHo9ngDpHXcHDxebo2RSaUqagrN+Kjesfv4bVTdERIQ1NvP2huUDMIRbJeSw94+jv5Q==
-X-Received: by 2002:a05:6a00:1996:b0:52e:b0f7:8c83 with SMTP id d22-20020a056a00199600b0052eb0f78c83mr4342979pfl.59.1660851611848;
-        Thu, 18 Aug 2022 12:40:11 -0700 (PDT)
+        bh=W5e17+6oMWWVgLvMfPt1qnfpuP7V0mz0KRYnC4cgIVo=;
+        b=fpXP+G0x7nCw2svgAtKdcdvtoeG+FzGB6f4oLHuXXB7wMtvSXX54+hg7gcUi5Z+GxQ
+         53qPzPvdjye79iLoj9ktVVH74NChVaLmX/JW346HAHtNnS+0qbmh9oTZf6hXdgnLx57i
+         uEcw9U+OSC0yohTylLK3Ey5RlLcEFqyUE7wI8BgesM3ubqW5Aa92+CE21qOhoXd9/sKq
+         00/X9xIYlzUmxG4o+92aLqcOa6gGrWtPolqRWI6SjqLtuELhWYFwO8JLvy+d51Nm2VQ/
+         YWoBBLmWJ32FegPNsT6nH5wLegLvVnio83DAQ8Lot+MRzSkBKLNlQdQm17Z7W2oPHAsz
+         7dKQ==
+X-Gm-Message-State: ACgBeo24Y4Zxp6L+KKMoGqaBrVdiPiUGVy+Pdx3yDViPd2dAK3ycfj12
+        MwsmD6Vtw1JVC+FiEXdXp1c=
+X-Google-Smtp-Source: AA6agR5eZF5pR7nr99GV0b64Rd0OjCavWMRpEiftpGEjOFlcRq1OF0Q7+E5NJ379ZDa13a9N0J1+1A==
+X-Received: by 2002:a17:902:cf4c:b0:170:5b7a:8f89 with SMTP id e12-20020a170902cf4c00b001705b7a8f89mr3816249plg.121.1660851881184;
+        Thu, 18 Aug 2022 12:44:41 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e25-20020aa79819000000b0052895642037sm1991984pfl.139.2022.08.18.12.40.09
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902ea0700b0016f1aa00abbsm1772297plg.195.2022.08.18.12.44.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 12:40:10 -0700 (PDT)
+        Thu, 18 Aug 2022 12:44:40 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 18 Aug 2022 12:40:08 -0700
+Date:   Thu, 18 Aug 2022 12:44:38 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Eliav Farber <farbere@amazon.com>
 Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
@@ -59,87 +59,48 @@ Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
         itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
         amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
         rtanwar@maxlinear.com
-Subject: Re: [PATCH v2 01/16] hwmon: (mr75203) fix VM sensor allocation when
- "intel,vm-map" not defined
-Message-ID: <20220818194008.GA3118944@roeck-us.net>
+Subject: Re: [PATCH v2 02/16] hwmon: (mr75203) update pvt->v_num to the
+ actual number of used sensors
+Message-ID: <20220818194438.GA3216536@roeck-us.net>
 References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-2-farbere@amazon.com>
+ <20220817054321.6519-3-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817054321.6519-2-farbere@amazon.com>
+In-Reply-To: <20220817054321.6519-3-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 05:43:06AM +0000, Eliav Farber wrote:
-> Fix a bug that in case "intel,vm-map" is missing 'num' is set to 0,
-> and no voltage channel infos are allocated.
+On Wed, Aug 17, 2022 at 05:43:07AM +0000, Eliav Farber wrote:
+> This issue is relevant when intel,vm-map is set, and defines a lower
+> number of VMs than actually supported.
 > 
+> This change is needed for all places that use pvt->v_num later on in the
+> code.
+> 
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> ---
+>  drivers/hwmon/mr75203.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+> index 0e29877a1a9c..f89f7bb5d698 100644
+> --- a/drivers/hwmon/mr75203.c
+> +++ b/drivers/hwmon/mr75203.c
+> @@ -605,6 +605,7 @@ static int mr75203_probe(struct platform_device *pdev)
+>  					break;
+>  
+>  			vm_num = i;
+> +			pvt->v_num = i;
 
-"intel,vm-map" is listed as required property in moortec,mr75203.yaml.
-If it is missing, the probe function should fail.
+This code is changed to no longer set pvt->v_num in the previous patch.
+Do not send patches which fix issues introduced in an earlier patch of
+the same series. Besides, again, regarding "when intel,vm-map is set":
+That is not an optional property.
 
 Guenter
 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
->  drivers/hwmon/mr75203.c | 28 ++++++++++++----------------
->  1 file changed, 12 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-> index 046523d47c29..0e29877a1a9c 100644
-> --- a/drivers/hwmon/mr75203.c
-> +++ b/drivers/hwmon/mr75203.c
-> @@ -580,8 +580,6 @@ static int mr75203_probe(struct platform_device *pdev)
->  	}
+>  		}
 >  
->  	if (vm_num) {
-> -		u32 num = vm_num;
-> -
->  		ret = pvt_get_regmap(pdev, "vm", pvt);
->  		if (ret)
->  			return ret;
-> @@ -594,30 +592,28 @@ static int mr75203_probe(struct platform_device *pdev)
->  		ret = device_property_read_u8_array(dev, "intel,vm-map",
->  						    pvt->vm_idx, vm_num);
->  		if (ret) {
-> -			num = 0;
-> +			/*
-> +			 * Incase intel,vm-map property is not defined, we
-> +			 * assume incremental channel numbers.
-> +			 */
-> +			for (i = 0; i < vm_num; i++)
-> +				pvt->vm_idx[i] = i;
->  		} else {
->  			for (i = 0; i < vm_num; i++)
->  				if (pvt->vm_idx[i] >= vm_num ||
-> -				    pvt->vm_idx[i] == 0xff) {
-> -					num = i;
-> +				    pvt->vm_idx[i] == 0xff)
->  					break;
-> -				}
-> -		}
->  
-> -		/*
-> -		 * Incase intel,vm-map property is not defined, we assume
-> -		 * incremental channel numbers.
-> -		 */
-> -		for (i = num; i < vm_num; i++)
-> -			pvt->vm_idx[i] = i;
-> +			vm_num = i;
-> +		}
->  
-> -		in_config = devm_kcalloc(dev, num + 1,
-> +		in_config = devm_kcalloc(dev, vm_num + 1,
->  					 sizeof(*in_config), GFP_KERNEL);
->  		if (!in_config)
->  			return -ENOMEM;
->  
-> -		memset32(in_config, HWMON_I_INPUT, num);
-> -		in_config[num] = 0;
-> +		memset32(in_config, HWMON_I_INPUT, vm_num);
-> +		in_config[vm_num] = 0;
->  		pvt_in.config = in_config;
->  
->  		pvt_info[index++] = &pvt_in;
+>  		in_config = devm_kcalloc(dev, vm_num + 1,
