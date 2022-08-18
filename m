@@ -2,144 +2,93 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 843A9C00140
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 15:05:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 093CBC00140
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 16:59:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344013AbiHRPFR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Aug 2022 11:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
+        id S1344075AbiHRQ7A (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Aug 2022 12:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344028AbiHRPFP (ORCPT
+        with ESMTP id S1344234AbiHRQ67 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:05:15 -0400
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6A056BAA;
-        Thu, 18 Aug 2022 08:05:14 -0700 (PDT)
-Received: by mail-qt1-f173.google.com with SMTP id h21so1304778qta.3;
-        Thu, 18 Aug 2022 08:05:14 -0700 (PDT)
+        Thu, 18 Aug 2022 12:58:59 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DCA25EBA;
+        Thu, 18 Aug 2022 09:58:58 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id s36-20020a17090a69a700b001faad0a7a34so5283645pjj.4;
+        Thu, 18 Aug 2022 09:58:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=0n9tWOogStpbIbnmWH7Eo4QUmY/hJM++qXM5c0cYsTk=;
+        b=Viw8yH65VIqN8l3cnTRg0RzdQHLNDbMjaC+hk2aDzMyaRV+4y8T/DfcCTjijBMt/Je
+         OF48l7R8nrZR6jjbPIlrnK/ITMX38ct0vxN22HxBuT3Ol5kI0n+bOLQ5vLwrj1T+91Db
+         KSyuy8NLjyJ3iycM/+f1iVDUjS86FdSYvvo2MVp+uLShqGIig4NYZ+3SMWWhm7WvsPCK
+         vQrT4EOc2ciWwrCVdeDBzmgsjFKv/QLdEuvAuj5WXLYu3eCj35gl+ZG58x32Wkioi5f8
+         1pvNPw/v+Gal6LtPmA/7laVujzgmv1DHd0+dRelmyUsdvLf8LZfobHhAEC8rtDoNUAjN
+         4K/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=UuLLOoIfXDmSYWjZC290GUw+IzJXaVpWsPuShy/dmPI=;
-        b=B5Ujm8eW2Q1/s7Z+vq8H1AizL2iy91WEZB4ME7JRAsBsBx9ZJRbcBpUYrgeam78M35
-         6tQ5PGNoNlKPmqg8Wrpth9W3EAAYsx/j1XoFHV14pOSmuKyUAd5kKgOGYzAK+2RvA7Yb
-         s6gZKTmaw5bvhYHDsG4Soqeha/hXEQvfGdukx6ebSuG6WRklRCHEPrhX9xgRCsfH8tb/
-         tIc4N814gw4pir+dUW3xQSPaUWvHPI9SQWP9O60/lhnRDWv3F8hiUHQGKeD39U3gOE2s
-         1cKTHxJDziOdZA70pCZeEPADm/covHtOJe7k8g6rNWXXjmnBh4DlFDjmrFZXqavlGRe1
-         iReQ==
-X-Gm-Message-State: ACgBeo0k4h6Jt++rSH53ILbdw9JU9KQrS/Cm67Eer30IqGRpLiBChieY
-        kyKNJg1KAPEKcdmZZwd5WQ==
-X-Google-Smtp-Source: AA6agR4JUcSJgb/u8fdF/2bXPaKAB3WimFqT3XSc0IWlU8K2rDZ891Q/oFgGD9Ass8SXa2uJp5YBDQ==
-X-Received: by 2002:ac8:5d49:0:b0:344:9232:be56 with SMTP id g9-20020ac85d49000000b003449232be56mr2377878qtx.122.1660835113502;
-        Thu, 18 Aug 2022 08:05:13 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:5fe0:b4f5:6e22:4704:df60:73a3])
-        by smtp.gmail.com with ESMTPSA id o10-20020ac87c4a000000b0034305a91aaesm1220545qtv.83.2022.08.18.08.05.11
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=0n9tWOogStpbIbnmWH7Eo4QUmY/hJM++qXM5c0cYsTk=;
+        b=Y2yL/Hx7vi7FpGREqiTlfKEwHp2+KuxkVRG2wrH3w9DnwXUUM8ujvfJ6k0zfwHfFVa
+         cuG1bZf/xesYtxmeVR6y0Ig4XiKN3l7Xjm7o847hIPJjEG95RyIlhvZV/K/JNXWp38la
+         H+KDlUKYY7wDYZeae6O3eb7hqeqE/k9FCyrAIG69+kT9Ivw6snRdbXC2RyFU5/pYoN/3
+         zv9F0TaukR+pYbg+q02akwiDexhiTCB/GpqR5kVWlCyFLial0BXo9iJIoWuIFXLqY7kl
+         MZlLPTUVr1R8MKPal86nUJRR8okHmRihWDfa2p+tE4NjbcunFjsppF+O6TpQSbtA0BD9
+         WDLQ==
+X-Gm-Message-State: ACgBeo24LxaezQIOJOjXuzR+dKi7B4ZvkPATkCx5RjXzgQcw+FFwhryQ
+        gsGvH+4aUuMY2MKambFj1Pk=
+X-Google-Smtp-Source: AA6agR5lBmspmR10hcKMnwyTbmxXDAGnszViVDrN089oPWq6GKTzSc4CsmlTVi9ldu+vfthJuh1cBQ==
+X-Received: by 2002:a17:903:11c7:b0:170:a74e:3803 with SMTP id q7-20020a17090311c700b00170a74e3803mr3550130plh.156.1660841938495;
+        Thu, 18 Aug 2022 09:58:58 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n11-20020a63a50b000000b0041c8e489cc2sm1513506pgf.19.2022.08.18.09.58.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 08:05:13 -0700 (PDT)
-Received: (nullmailer pid 1868209 invoked by uid 1000);
-        Thu, 18 Aug 2022 15:05:10 -0000
-Date:   Thu, 18 Aug 2022 09:05:10 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, mark.rutland@arm.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
-        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
-        amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
-        rtanwar@maxlinear.com
-Subject: Re: [PATCH 13/16] hwmon: (mr75203) add thermal coefficient
- properties for Moortec PVT controller
-Message-ID: <20220818150510.GI1829017-robh@kernel.org>
-References: <20220816082757.11990-1-farbere@amazon.com>
- <20220816082757.11990-14-farbere@amazon.com>
+        Thu, 18 Aug 2022 09:58:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 18 Aug 2022 09:58:56 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Beniamin Sandu <beniaminsandu@gmail.com>, hkallweit1@gmail.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] net: sfp: use simplified HWMON_CHANNEL_INFO macro
+Message-ID: <20220818165856.GC923105@roeck-us.net>
+References: <20220813204658.848372-1-beniaminsandu@gmail.com>
+ <20220817085429.4f7e4aac@kernel.org>
+ <Yv0TaF+So0euV0DR@shell.armlinux.org.uk>
+ <20220817101916.10dec387@kernel.org>
+ <Yv2UMcVUSwiaFyH6@lunn.ch>
+ <20220817191916.6043f04d@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220816082757.11990-14-farbere@amazon.com>
+In-Reply-To: <20220817191916.6043f04d@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 08:27:54AM +0000, Eliav Farber wrote:
-> Add optional "ts-coeff-g", "ts-coeff-h", "ts-coeff-cal5" and
-> "ts-coeff-j" properties to be used instead of defaults for the
-> thermal equasion.
+On Wed, Aug 17, 2022 at 07:19:16PM -0700, Jakub Kicinski wrote:
+> On Thu, 18 Aug 2022 03:21:53 +0200 Andrew Lunn wrote:
+> > > > I had a quick look and couldn't see anything obviously wrong, but then
+> > > > I'm no expert with the hwmon code.  
+> > > 
+> > > That makes two of us, good enough! :) Thanks for taking a look.  
+> > 
+> > It would of been nice to Cc: the HWMON maintainer. His input would of
+> > been just as valuable as a PHY Maintainer.
 > 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
->  .../bindings/hwmon/moortec,mr75203.yaml       | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> index e2a55001eefc..867664bd937f 100644
-> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> @@ -62,6 +62,30 @@ properties:
->        used to normalzie the voltage output results.
->      $ref: /schemas/types.yaml#definitions/uint32
->  
-> +  ts-coeff-g:
+> Fair point, I lazy'd out and only checked that everyone get_maintainers
+> asks for was CCed. Perhaps it'd be worth extending the hwmon's keyword
+> match to trigger on the structs or the constants if it matters.
+> Adding hwmon@ to CC just in case.
 
-Needs a vendor prefix
+And you expect me to dig up the actual patch ?
 
-> +    description:
-> +      G coefficient for thermal equation.
-> +    maxItems: 1
-
-It's a scalar. 'maxItems' is for arrays/matrices.
-
-> +    $ref: /schemas/types.yaml#definitions/uint32
-> +
-> +  ts-coeff-h:
-> +    description:
-> +      H coefficient for thermal equation.
-> +    maxItems: 1
-> +    $ref: /schemas/types.yaml#definitions/uint32
-> +
-> +  ts-coeff-cal5:
-> +    description:
-> +      cal5 coefficient for thermal equation (can't be 0).
-
-minimum: 1
-
-Other constraints on all these?
-
-> +    maxItems: 1
-> +    $ref: /schemas/types.yaml#definitions/uint32
-> +
-> +  ts-coeff-j:
-> +    description:
-> +      J coefficient for thermal equation.
-> +    maxItems: 1
-> +    $ref: /schemas/types.yaml#definitions/int32
-> +
->  required:
->    - compatible
->    - reg
-> @@ -75,6 +99,10 @@ additionalProperties:
->    - reset-control-skip
->    - vm-active-channels
->    - vm-pre-scalar-ch#
-> +  - ts-coeff-g
-> +  - ts-coeff-h
-> +  - ts-coeff-cal5
-> +  - ts-coeff-j
->  
->  examples:
->    - |
-> @@ -90,5 +118,10 @@ examples:
->          resets = <&rcu0 0x40 7>;
->          vm-active-channels = [08 10 02];
->          vm-pre-scalar-ch5 = <2>;
-> +        ts-coeff-g = <57400>;
-> +        ts-coeff-h = <249400>;
-> +        ts-coeff-cal5 = <4096>;
-> +        ts-coeff-j = <0>;
-> +
->          #thermal-sensor-cells = <1>;
->      };
-> -- 
-> 2.37.1
-> 
+Guenter
