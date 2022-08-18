@@ -2,54 +2,54 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BB8DC32773
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 20:07:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D61EFC00140
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 20:09:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345873AbiHRUHf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Aug 2022 16:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
+        id S1345273AbiHRUJo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Aug 2022 16:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344438AbiHRUHP (ORCPT
+        with ESMTP id S240933AbiHRUJS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:07:15 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C10D2EB6;
-        Thu, 18 Aug 2022 13:01:57 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d16so2376632pll.11;
-        Thu, 18 Aug 2022 13:01:57 -0700 (PDT)
+        Thu, 18 Aug 2022 16:09:18 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B163B9413;
+        Thu, 18 Aug 2022 13:04:14 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id pm17so2702589pjb.3;
+        Thu, 18 Aug 2022 13:04:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc;
-        bh=newzkmQUzujson7EueJWeL6KafDp3tWYzRmXIinSpck=;
-        b=LbWXzPDPIJnzBvBCuHqGYaktwpuVJXJNXnNAOOUvoMJP1qrn3rhXXAWE+3U0bqg1Ds
-         KddsXqzbWB/x3u0VN63w5ML89naR2sReYQ8xU+mXmt8UCW5zxXNHnf8e+LsZSaRFbZc5
-         b2fuHAFmnnECXn7pH97L6Xv/+vweM7ifsqR0v8VzAYziIC87tmwv6gprUMUa8R99S7WO
-         LV6QlWem4VKDYviRA3xzulChoT/PdU8hXoKR9/f/7bFLizlNWTHk4u9bCl8eSdblTuIB
-         6MAfFd44xE2FXTQEE81r6THLpJH5XKMsRkG/ME0gwiDNZs4uV1+dAPYWPp9pQRPyhz59
-         xwBw==
+        bh=9PaorD7ptOW+52yf4c1JDmGGs6/j3AuHVebm2R4Z+Hk=;
+        b=pedI4ABZKurUA/d45RDd5khivUXZ8QnGeNZ/azvY3tRsY0ULVjsazPK8KceoC/7uWA
+         xheEWWmaPDm1UypPXIuGyOCp8qGQI8WkJWx0fA4ffURS5NV9l0fnjypKqpCTbO98E8bV
+         SN7+3eWFUOmhVs5+z5jRYHI6r3eUe169xmusgRfwaH0jZbPMlux1O3Yhml2g8EP83A45
+         Akx3DEnT8gCpwht646xC9TmUyDaPuQygELVCVF9qSBGncIspRCMtexDmVdJcdGUVeEsQ
+         LobdYHGdwh0eoS3IFWAI31tJH8WsLIvTitWZntpGdCWnDgpPK3cTdwxBnsBb/9RsjNic
+         ClKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=newzkmQUzujson7EueJWeL6KafDp3tWYzRmXIinSpck=;
-        b=rnrH7QkOf4Z2vFZUPOZXdLZjNY69ycFbqjQnZY7M7HPzNoLVeMww/L0tM28WuO2pZw
-         jxZcHcKAhoUIq33yYbM7GP7nBMsPdpMFAQnajVkrXBnXhF1zzUWQ1144qPxoO2ZljoO3
-         MZpogTq4DnWwRL1w8N+xWI1aDVztGU+qi/TG5NxbQciaHOoK8TKlK18HRR8QAXGaM4s/
-         7W551Kt8tV0RlaVg9Ayoplb3qBiZ6uSx3OJkrtVfTpDKQU4isdESUrBfuGoQPwe2YTvU
-         CpCnkRcQ/1cD4sDhWpEdYbw3WXI1x/jO/NU2uljGF4iuBUwNbIy/5v3qDV6JNNhWxVTF
-         7pWA==
-X-Gm-Message-State: ACgBeo36VGhclmEFnDq+oDdLSfwAL/Kd+k0AbUoGGKUJXt8ikw/S+u/6
-        OfAz6DV+DgOUATpwjnt9oF8=
-X-Google-Smtp-Source: AA6agR7t0BR3+os83cK8htKnmIBZHqLnfhYRUc3qgjeRF6BNxBmbyyp0Y9i1ZMw7nCakzzywCp4VBw==
-X-Received: by 2002:a17:902:788f:b0:170:8b18:8812 with SMTP id q15-20020a170902788f00b001708b188812mr3878338pll.1.1660852901678;
-        Thu, 18 Aug 2022 13:01:41 -0700 (PDT)
+        bh=9PaorD7ptOW+52yf4c1JDmGGs6/j3AuHVebm2R4Z+Hk=;
+        b=0PIUWfYME3zXwk2s6K+ZNhbRwFF4lZpAQePo9XkLKMeLgJs4irotY3vYkOeBW9KeMQ
+         ZZIy+Ah50UgaiCw7TYFdmI7MCFyvLUBk98V2obScy3e92zCFwt8GdFvlhPVhspwqaDLa
+         Djj7jwCrKkiLTQAKCfStJvyyx+e5wPk2XSWi9RjIvFjBzF0afehaBgnI+E5/dD849QO9
+         wo79H7Q4DomXALS7DRKem9oic8FzmHz7z19bsJSeMr61IRk2RuEjNwFCyxM+lrBfYXQS
+         863HlBmJ2k9ozcBCtLVae5CtkxzJ+q1T91KzwSUpbc1tyWTUr4rY0SWGNuYuFsacWxHj
+         fEsA==
+X-Gm-Message-State: ACgBeo1zUnEJz4dmRMI+4vZY9hOxRqi613AJ4FY+W8uC1/mUoQ1oQIgQ
+        PSZGJDOP8izb5i3Lskhdm1s=
+X-Google-Smtp-Source: AA6agR66ckJGxLP/0hrH7I8sjnhPx7o7drf2O1fuc4b+RQNt3wRKXBSG+3e0BMis36MWLZ15T3WnjA==
+X-Received: by 2002:a17:902:7b87:b0:172:8ae9:2015 with SMTP id w7-20020a1709027b8700b001728ae92015mr4002415pll.112.1660853032104;
+        Thu, 18 Aug 2022 13:03:52 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x63-20020a623142000000b00528c066678csm2054256pfx.72.2022.08.18.13.01.39
+        by smtp.gmail.com with ESMTPSA id h7-20020a170902680700b0016d4f05eb95sm1736192plk.272.2022.08.18.13.03.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 13:01:40 -0700 (PDT)
+        Thu, 18 Aug 2022 13:03:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 18 Aug 2022 13:01:38 -0700
+Date:   Thu, 18 Aug 2022 13:03:50 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Eliav Farber <farbere@amazon.com>
 Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
@@ -59,55 +59,147 @@ Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
         itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
         amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
         rtanwar@maxlinear.com
-Subject: Re: [PATCH v2 04/16] hwmon: (mr75203) add Moortec PVT controller
- reset-control-skip property
-Message-ID: <20220818195742.GA3287145@roeck-us.net>
+Subject: Re: [PATCH v2 06/16] hwmon: (mr75203) fix multi-channel voltage
+ reading
+Message-ID: <20220818200350.GA3287916@roeck-us.net>
 References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-5-farbere@amazon.com>
+ <20220817054321.6519-7-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817054321.6519-5-farbere@amazon.com>
+In-Reply-To: <20220817054321.6519-7-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 05:43:09AM +0000, Eliav Farber wrote:
-> Adding a "reset-control-skip" bool property to the mr75203 node will
-> avoid looking up and obtaining a reference to a reset controller.
+On Wed, Aug 17, 2022 at 05:43:11AM +0000, Eliav Farber wrote:
+> - Fix voltage reading to support number of channels in VM IP (CH_NUM).
+> - Configure the ip-polling register to enable polling for all channels.
 > 
 
-This seems overly complex. WHy not just declare the "resets"
-property optional ?
-
-Guenter
+That fails to explain what is actually wrong in the current code.
+Also, one fix per patch, please.
 
 > Signed-off-by: Eliav Farber <farbere@amazon.com>
 > ---
->  .../devicetree/bindings/hwmon/moortec,mr75203.yaml          | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  drivers/hwmon/mr75203.c | 40 +++++++++++++++++++++++++++++++---------
+>  1 file changed, 31 insertions(+), 9 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> index f9e849cc73e0..da9c3cdcb6f0 100644
-> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> @@ -44,6 +44,11 @@ properties:
->    "#thermal-sensor-cells":
->      const: 1
+> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+> index bec63b611eb4..4419e481d47c 100644
+> --- a/drivers/hwmon/mr75203.c
+> +++ b/drivers/hwmon/mr75203.c
+> @@ -69,8 +69,9 @@
 >  
-> +  reset-control-skip:
-> +    description:
-> +      reset-control-skip bool property defines if obtaining a
-> +      reference to a reset controller should be skipped.
+>  /* VM Individual Macro Register */
+>  #define VM_COM_REG_SIZE	0x200
+> -#define VM_SDIF_DONE(n)	(VM_COM_REG_SIZE + 0x34 + 0x200 * (n))
+> -#define VM_SDIF_DATA(n)	(VM_COM_REG_SIZE + 0x40 + 0x200 * (n))
+> +#define VM_SDIF_DONE(vm)	(VM_COM_REG_SIZE + 0x34 + 0x200 * (vm))
+> +#define VM_SDIF_DATA(vm, ch)	\
+> +	(VM_COM_REG_SIZE + 0x40 + 0x200 * (vm) + 0x4 * (ch))
+>  
+>  /* SDA Slave Register */
+>  #define IP_CTRL			0x00
+> @@ -116,6 +117,7 @@ struct pvt_device {
+>  	u32			t_num;
+>  	u32			p_num;
+>  	u32			v_num;
+> +	u32			c_num;
+>  	u32			ip_freq;
+>  	u8			*vm_idx;
+>  };
+> @@ -181,12 +183,14 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+>  	struct regmap *v_map = pvt->v_map;
+>  	u32 n, stat;
+>  	u8 vm_idx;
+> +	u8 ch_idx;
+>  	int ret;
+>  
+> -	if (channel >= pvt->v_num)
+> +	if (channel >= pvt->v_num * pvt->c_num)
+>  		return -EINVAL;
+>  
+> -	vm_idx = pvt->vm_idx[channel];
+> +	vm_idx = pvt->vm_idx[channel / pvt->c_num];
+> +	ch_idx = channel % pvt->c_num;
+>  
+>  	switch (attr) {
+>  	case hwmon_in_input:
+> @@ -197,7 +201,7 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+>  		if (ret)
+>  			return ret;
+>  
+> -		ret = regmap_read(v_map, VM_SDIF_DATA(vm_idx), &n);
+> +		ret = regmap_read(v_map, VM_SDIF_DATA(vm_idx, ch_idx), &n);
+>  		if(ret < 0)
+>  			return ret;
+>  
+> @@ -386,6 +390,20 @@ static int pvt_init(struct pvt_device *pvt)
+>  		if (ret)
+>  			return ret;
+>  
+> +		val = GENMASK(pvt->c_num - 1, 0) | VM_CH_INIT |
+> +		      IP_POLL << SDIF_ADDR_SFT |
+> +		      SDIF_WRN_W | SDIF_PROG;
+> +		ret = regmap_write(v_map, SDIF_W, val);
+> +		if (ret < 0)
+> +			return ret;
 > +
->  required:
->    - compatible
->    - reg
-> @@ -54,6 +59,7 @@ required:
+> +		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
+> +					       val, !(val & SDIF_BUSY),
+> +					       PVT_POLL_DELAY_US,
+> +					       PVT_POLL_TIMEOUT_US);
+> +		if (ret)
+> +			return ret;
+> +
+>  		val = CFG1_VOL_MEAS_MODE | CFG1_PARALLEL_OUT |
+>  		      CFG1_14_BIT | IP_CFG << SDIF_ADDR_SFT |
+>  		      SDIF_WRN_W | SDIF_PROG;
+> @@ -501,7 +519,7 @@ static int pvt_reset_control_deassert(struct device *dev, struct pvt_device *pvt
+>  static int mr75203_probe(struct platform_device *pdev)
+>  {
+>  	const struct hwmon_channel_info **pvt_info;
+> -	u32 ts_num, vm_num, pd_num, val, index, i;
+> +	u32 ts_num, vm_num, pd_num, ch_num, val, index, i;
+>  	struct device *dev = &pdev->dev;
+>  	u32 *temp_config, *in_config;
+>  	struct device *hwmon_dev;
+> @@ -547,9 +565,11 @@ static int mr75203_probe(struct platform_device *pdev)
+>  	ts_num = (val & TS_NUM_MSK) >> TS_NUM_SFT;
+>  	pd_num = (val & PD_NUM_MSK) >> PD_NUM_SFT;
+>  	vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
+> +	ch_num = (val & CH_NUM_MSK) >> CH_NUM_SFT;
+>  	pvt->t_num = ts_num;
+>  	pvt->p_num = pd_num;
+>  	pvt->v_num = vm_num;
+> +	pvt->c_num = ch_num;
+>  	val = 0;
+>  	if (ts_num)
+>  		val++;
+> @@ -586,6 +606,8 @@ static int mr75203_probe(struct platform_device *pdev)
+>  	}
 >  
->  additionalProperties:
->    - intel,vm-map
-> +  - reset-control-skip
+>  	if (vm_num) {
+> +		u32 total_ch = ch_num * vm_num;
+> +
+>  		ret = pvt_get_regmap(pdev, "vm", pvt);
+>  		if (ret)
+>  			return ret;
+> @@ -614,13 +636,13 @@ static int mr75203_probe(struct platform_device *pdev)
+>  			pvt->v_num = i;
+>  		}
 >  
->  examples:
->    - |
+> -		in_config = devm_kcalloc(dev, vm_num + 1,
+> +		in_config = devm_kcalloc(dev, total_ch + 1,
+>  					 sizeof(*in_config), GFP_KERNEL);
+>  		if (!in_config)
+>  			return -ENOMEM;
+>  
+> -		memset32(in_config, HWMON_I_INPUT, vm_num);
+> -		in_config[vm_num] = 0;
+> +		memset32(in_config, HWMON_I_INPUT, total_ch);
+> +		in_config[total_ch] = 0;
+>  		pvt_in.config = in_config;
+>  
+>  		pvt_info[index++] = &pvt_in;
