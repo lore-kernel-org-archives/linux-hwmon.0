@@ -2,70 +2,103 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B1F6C00140
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 17:18:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5822FC00140
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Aug 2022 19:37:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344401AbiHRRSP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Aug 2022 13:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
+        id S230039AbiHRThI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Aug 2022 15:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345037AbiHRRR4 (ORCPT
+        with ESMTP id S232038AbiHRThI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:17:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30BD5D0E3;
-        Thu, 18 Aug 2022 10:14:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F38DB8221B;
-        Thu, 18 Aug 2022 17:14:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57E6EC433C1;
-        Thu, 18 Aug 2022 17:14:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660842873;
-        bh=SO6S+nYVGgIECexcS5Q0qSJRVc5nI71LwbXLEsu+7V4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kDX/pQxIhVoeupfJNlrmSxOxh2omYdXMJCOjPQlCmtKBwF+Nf+nbtsv+j9NUUw9s9
-         wGLQVYzPe1o9mrQnI+w8yL63os7AMkqPclTqjNJ+ClHkdaWOpKFU7SJad2FW9QSEOh
-         x0aNo5pMxvvyfaNorfwG05lB/d+9iDlPXvI++Qk06Nf0+nkPDZsR956Imro9sqjFnw
-         fUQetrTureDsy1/jfjbHtMp5odR2GKvKKebrRod1d0z3rzqf7LG7VNAkysZJa1jvZG
-         8vvjYDBX04/4we97CaD5HBqkt+WxMUMs4E/obAzp8lj4Qggiuk7ZV5OwcLBeIECAIm
-         20gFi1eQp0HKA==
-Date:   Thu, 18 Aug 2022 10:14:32 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Beniamin Sandu <beniaminsandu@gmail.com>, hkallweit1@gmail.com,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] net: sfp: use simplified HWMON_CHANNEL_INFO macro
-Message-ID: <20220818101432.3b14db4b@kernel.org>
-In-Reply-To: <20220818165856.GC923105@roeck-us.net>
-References: <20220813204658.848372-1-beniaminsandu@gmail.com>
-        <20220817085429.4f7e4aac@kernel.org>
-        <Yv0TaF+So0euV0DR@shell.armlinux.org.uk>
-        <20220817101916.10dec387@kernel.org>
-        <Yv2UMcVUSwiaFyH6@lunn.ch>
-        <20220817191916.6043f04d@kernel.org>
-        <20220818165856.GC923105@roeck-us.net>
+        Thu, 18 Aug 2022 15:37:08 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773E5CE4B1
+        for <linux-hwmon@vger.kernel.org>; Thu, 18 Aug 2022 12:37:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660851427; x=1692387427;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QRGfzkTxRhIIbzu38QpJYEX3mHcenSc9QgM8R+0E1dc=;
+  b=jEqHbNl6qWblL3pMXXCNnK63Dc+OUo0fQTAwO/eqYUnyl1x/YIgZjWca
+   JfECIHgHKbGCpxYBAaaAszuOUUKFHZGok8s9gZZe63OF1FEzCOS1NLnq4
+   iHOIlGK43AIgdr5w+7pmxgFFvcOIYuXsxJ85ejI0SRXXRP//mKG0q6iN4
+   4vmktj1CMhUhn4BtIO09PZ4Hijv1m09lZVY5Ed91see/PCI8B5tXUoUY/
+   dgA+RXaHBTo1ijUtalAttGxEqrBgsgMyDONAx1OXO0LI6JAPPNBUByKvJ
+   0Stm/2LPVEETsUR5VYeBZSDWQX6QPqq/Z8VqCNwrRgaNaAdkCuuEQrZeU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="272627847"
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="272627847"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 12:37:07 -0700
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="604364635"
+Received: from bnilawar-desk1.iind.intel.com ([10.145.169.158])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 12:37:04 -0700
+From:   Badal Nilawar <badal.nilawar@intel.com>
+To:     intel-gfx@lists.freedesktop.org
+Cc:     linux-hwmon@vger.kernel.org, ashutosh.dixit@intel.com,
+        riana.tauro@intel.com, anshuman.gupta@intel.com,
+        jon.ewins@intel.com, linux@roeck-us.net
+Subject: [PATCH 0/7] drm/i915: Add HWMON support 
+Date:   Fri, 19 Aug 2022 01:08:54 +0530
+Message-Id: <20220818193901.2974625-1-badal.nilawar@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 18 Aug 2022 09:58:56 -0700 Guenter Roeck wrote:
-> And you expect me to dig up the actual patch ?
+This series adds the HWMON support for DGFX
 
-Sorry, I assumed we all have some form of fast lore access built 
-into our email setups. Here's the link to your reply and therefore 
-the thread:
+v2:
+  - Reorganized series. Created first patch as infrastructure patch
+    followed by feature patches. (Ashutosh)
+  - Fixed review comments (Jani)
+  - Fixed review comments (Ashutosh)
 
-https://lore.kernel.org/all/20220818165856.GC923105@roeck-us.net/
+v3:
+  - Fixed review comments from Guenter
+  - Exposed energy inferface as standard hwmon interface (Ashutosh)
+  - For power interface added entries for critical power and maintained
+    standard interface for all the entries except 
+    power1_max_interval
+  - Extended support for XEHPSDV (Ashutosh)
 
-Speaking of expectations tho, I would expect you to not ask me
-rhetorical passive aggressive questions.
+v4:
+  - Fixed review comment from Guenter
+  - Cleaned up unused code
+
+Ashutosh Dixit (2):
+  drm/i915/hwmon: Expose card reactive critical power
+  drm/i915/hwmon: Expose power1_max_interval
+
+Dale B Stimson (4):
+  drm/i915/hwmon: Add HWMON infrastructure
+  drm/i915/hwmon: Power PL1 limit and TDP setting
+  drm/i915/hwmon: Show device level energy usage
+  drm/i915/hwmon: Extend power/energy for XEHPSDV
+
+Riana Tauro (1):
+  drm/i915/hwmon: Add HWMON current voltage support
+
+ .../ABI/testing/sysfs-driver-intel-i915-hwmon |  75 ++
+ drivers/gpu/drm/i915/Makefile                 |   3 +
+ drivers/gpu/drm/i915/gt/intel_gt_regs.h       |   8 +
+ drivers/gpu/drm/i915/i915_driver.c            |   7 +
+ drivers/gpu/drm/i915/i915_drv.h               |   2 +
+ drivers/gpu/drm/i915/i915_hwmon.c             | 787 ++++++++++++++++++
+ drivers/gpu/drm/i915/i915_hwmon.h             |  21 +
+ drivers/gpu/drm/i915/i915_reg.h               |  22 +
+ drivers/gpu/drm/i915/intel_mchbar_regs.h      |  13 +
+ 9 files changed, 938 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+ create mode 100644 drivers/gpu/drm/i915/i915_hwmon.c
+ create mode 100644 drivers/gpu/drm/i915/i915_hwmon.h
+
+-- 
+2.25.1
+
