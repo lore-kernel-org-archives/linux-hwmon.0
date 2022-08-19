@@ -2,91 +2,87 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34DA7C25B0E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Aug 2022 07:58:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EB04C32773
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Aug 2022 09:51:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346644AbiHSH61 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Aug 2022 03:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
+        id S1346395AbiHSJv0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 Aug 2022 05:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345812AbiHSH60 (ORCPT
+        with ESMTP id S1347553AbiHSJvY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Aug 2022 03:58:26 -0400
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6DF2409D;
-        Fri, 19 Aug 2022 00:58:24 -0700 (PDT)
+        Fri, 19 Aug 2022 05:51:24 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18680E3983;
+        Fri, 19 Aug 2022 02:51:23 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id g16so2901315qkl.11;
+        Fri, 19 Aug 2022 02:51:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1660895904; x=1692431904;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=M06Oj1qkv6JJea718PatCeXEmzeDxi4tt2ied10MpBY=;
-  b=qwQgry7cJUftHQNrDsKe8Rzf3kzLDH4tJ1QYqlyiBEOeXt9uWXuXRRRX
-   2vv1VmNcZhWjmFXpWyRaeGPIdHCmBDljrE2kmneZw1WxSSA2VoC6uIQBV
-   fmJnEgR/+310Eesh7L0yrI4QnqRG+JTFuqhruszVU+pGjrjbrXE/55rju
-   4=;
-X-IronPort-AV: E=Sophos;i="5.93,247,1654560000"; 
-   d="scan'208";a="120932219"
-Subject: Re: [PATCH v2 14/16] hwmon: (mr75203) parse thermal coefficients from
- device-tree
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-54a073b7.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 07:58:08 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-54a073b7.us-east-1.amazon.com (Postfix) with ESMTPS id E1B891A00B4;
-        Fri, 19 Aug 2022 07:58:05 +0000 (UTC)
-Received: from EX19D013UWA003.ant.amazon.com (10.13.138.202) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Fri, 19 Aug 2022 07:58:05 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX19D013UWA003.ant.amazon.com (10.13.138.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Fri, 19 Aug 2022 07:58:04 +0000
-Received: from [192.168.95.21] (10.85.143.173) by mail-relay.amazon.com
- (10.43.160.118) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Fri, 19 Aug 2022 07:57:59 +0000
-Message-ID: <e0b133e7-ac81-acf4-3783-44edf58d6426@amazon.com>
-Date:   Fri, 19 Aug 2022 10:57:58 +0300
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=h/PR0k733hyrl6lHcrFIlsUlVMQgdaDl258OUpePefw=;
+        b=OYQI3R9MZf0Gjf/yY1ii/zCSkw8hxBHExqiib71w8ptddLzO0/ZeQbNBp+PHGvtWHz
+         KwTxErR0W1FphOeNp7yjLv8g5o+HtHz+1Xbubnfu/k//8NMLLyItI40ddmQ9GYxfM37C
+         HC8BHltODVADzn59MtscT7kJIUiati2MyxOFIVbZ05gzsQOwWiYO0kdZI2gf5wO/K63C
+         8S+ezvVWsof+qRkD86RAVAkBvdfx2SZv0bdJGp7YN45CmZQpWrnyIGRx9r1J0KRszL5l
+         x1+pss4yFx1jGezHlIQ1eVYHKlMgq1mlHSkPqAVwnTcReUs9afw+KKinvLm51eK5qVAI
+         ITCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=h/PR0k733hyrl6lHcrFIlsUlVMQgdaDl258OUpePefw=;
+        b=tlb50mx4PieVNjWHkV8xIPzTH1GV4IkZWlECQm1WeMOqvCabfebob9MkGYlgAG6uUv
+         6rX0pg3g6Ff18SrlkM4JOtRJPgMfTv3HGKYX4aC5bJXzxpOZml4E/jYImEiCxnE1mOTR
+         u5P1QmWFqEgS6A2ZRcpP6HlHC/umZQ+GnrYozyqcDVbxZ5UR2USif5nzkV4kbqUzGeiP
+         Q6CYHNTd/o+VPGMKf1syva32Fb01gPTMVKOLPVf+vBqjWgKgHdGpsXJ2n3hPf/CLxdlX
+         dj4XcVxAvkXUHNwKpD6gW10sBPhUqapJ42227056jriTKnKUBCUEUDmzePUflbKs2bdH
+         Cwew==
+X-Gm-Message-State: ACgBeo0TXXaKD6KXPhCVWvBCTYOaf2rf28LLQgj8YkPO5NSQQUS4RZG0
+        9PiD74w4MYZQGubZKX+Mk5VcGwuUxPxCZwAqOrg=
+X-Google-Smtp-Source: AA6agR5hLMuik+jVmU8ueaGANnd5tx75g1qPiBYDm96WbaQK9YgqTHHggn6sU7WdKBihWqnIL4UotHq1oE5z/M1Dpa0=
+X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
+ s13-20020a05620a254d00b006ab84b825ebmr4630906qko.383.1660902682860; Fri, 19
+ Aug 2022 02:51:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Content-Language: en-US
+References: <20220730125024.87764-1-andriy.shevchenko@linux.intel.com> <20220818232256.GA3505808@roeck-us.net>
+In-Reply-To: <20220818232256.GA3505808@roeck-us.net>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 19 Aug 2022 12:50:46 +0300
+Message-ID: <CAHp75Vc5CtOwFFJxLEe2kNTpU0xqWmcwDLAYtFgkhJVx7KvwqA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] hwmon: (iio_hwmon) Make use of device properties
 To:     Guenter Roeck <linux@roeck-us.net>
-CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
-        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
-        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
-        <dwmw@amazon.co.uk>, <rtanwar@maxlinear.com>,
-        "Farber, Eliav" <farbere@amazon.com>
-References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-15-farbere@amazon.com>
- <20220818202839.GA3431511@roeck-us.net>
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <20220818202839.GA3431511@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/18/2022 11:28 PM, Guenter Roeck wrote:
-> The calculation was just changed to use new defaults in a previous
-> patch. This patch makes it quite clear that the coefficients
-> are implementation (?) dependent. So the previous patch just changes
-> the defaults to (presumably) the coefficients used in your system.
-> That is inappropriate. Adding non-default corefficients is ok
-> and makes sense is supported by the chip, but changing defaults
-> isn't.
-The calculation was changed in previous patch to match series 5 of the
-Moortec Embedded Temperature Sensor (METS) datasheet.
-In our SOC we use series 6 which has a slightly different equation and
-different coefficients.
-I did the changes in steps.
-With this last change, both series 5 and 6 are supported, in addition to
-calibrated vs. non-calibrated modes.
-In addition the data sheet just recommends default values but they also
-specifically mention that actual values might vary from product to product.
+On Fri, Aug 19, 2022 at 2:52 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> On Sat, Jul 30, 2022 at 03:50:24PM +0300, Andy Shevchenko wrote:
+> > Convert the module to be property provider agnostic and allow
+> > it to be used on non-OF platforms.
+> >
+> > Add mod_devicetable.h include.
+> >
+> What does that have to do with this patch ?
 
---
-Regards, Eliav
+See below.
+
+> > +#include <linux/mod_devicetable.h>
+
+> > -#include <linux/of.h>
+
+The of.h implicitly included missed headers. The mod_devicetable.h is
+necessary when we drop of.h. OTOH I haven't checked if
+mod_devicetable.h is still included indirectly. Either way the correct
+approach is to include mod_devicetable.h since we use a data type from
+it (of_device_id IIRC).
+
+-- 
+With Best Regards,
+Andy Shevchenko
