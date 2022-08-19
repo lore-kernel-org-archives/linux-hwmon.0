@@ -2,184 +2,166 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 846C9C32771
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Aug 2022 19:19:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB24CC32771
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Aug 2022 19:36:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350510AbiHSTTw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Aug 2022 15:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
+        id S1351490AbiHSTgi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 Aug 2022 15:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350478AbiHSTTQ (ORCPT
+        with ESMTP id S229469AbiHSTgh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Aug 2022 15:19:16 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB205E55F;
-        Fri, 19 Aug 2022 12:18:53 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id s1so4506404lfp.6;
-        Fri, 19 Aug 2022 12:18:53 -0700 (PDT)
+        Fri, 19 Aug 2022 15:36:37 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67ADC2FA5;
+        Fri, 19 Aug 2022 12:36:36 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id r14-20020a17090a4dce00b001faa76931beso8451469pjl.1;
+        Fri, 19 Aug 2022 12:36:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=aMEbqvytZlUJMMl28d1AuV3CNp9y2QjtQtIdhhovVv4=;
-        b=gIadf8mB2Kx9WMiePQZi9Jv0EZMezRfVqlRlhLK/Rd3UirsYohPD4aAmR8ITfT8hmc
-         qz7U91IXU+LY+ml/J1Lo3Ic5yozUw4GqaXyS7/8oCNhVJvHhXfQnYKpw8tJnEKw2pIj+
-         G1i0TC/dNk8cAJQWbPenl+QrqukEuD+qe/E4gblZA6GTmt3jnzxf7o9SbS8vENceGhy/
-         pqBv1HL0QtPiy4or77DQW1blIulx9JYRTPpPEoMvR8ByRt1+Tjc0isPhe50g+UJ/wjwv
-         pVOB9gvKHcHEO7YhRHp3sjd67dMvBor7Q8I4vbSNd2z26ith+qSQeb8R5xQWLQLAm0zO
-         Q7qA==
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=RGQInboxZApXDt02Ut7F/gX7q5m4BMuZBtDGjZ3GBqg=;
+        b=XoY5HbkeUs1Z1cPPS5VrIn5lnw/qF0mSlhb0qSo9SZmJWyoHoAnIRivwFzRbIB+C38
+         jSuiNJWcQtO5a2AMEQ1sfy1IH61nyB1Fb+ygSDdJqHVd/DMbifRohEGhX/lTZQjaIyfh
+         srToJBrF/XTDMelu/Ym0YYGRHidpJyxgFNtR3fOS7EjKnq1vWbg7qsruh3xr0LDpE1W1
+         aI3C8BB2xJD74jJdKGS+b7MHD+bnoTM1p3tGJzQcODpXDOiiCuCVkwnwMOqnwpXlDufZ
+         nbod4lfG3yelvnz/as6gcoOwB8OKCocV1THadfnXf3iChwGGvRgWf4FgJJ4u9/Srqqcp
+         TRfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=aMEbqvytZlUJMMl28d1AuV3CNp9y2QjtQtIdhhovVv4=;
-        b=tVJGSIvUQWVVOptlQfLLgoekWh/GS1Vx7qe2B+p/47HWFTNqTtK8MuqGYwm1mB0bkC
-         H06uN/rqg8KCHo5eLqPb6iQzlGIvwSmCeyawrRZbUsxTY/WQ8XqDhQHuHM6pqWIf1TJE
-         W8nMXDHQjHqFj4mIFZgtpgeXaivbrOZ7aOBnOSO+P/uWRitNe5uEsAoyVsAJdhph1GUW
-         9WxBnGlwGiuzmF974RFA3CvOoF7GIeuX/azO4qEqzrxF2dW6H3AfC6BYWvUH5Dxw4B6L
-         Z74GSoR5MnvnZkmUiy91RRQGiiI7abMYeSpELOQIACsSMlNOBpVhvN0/m36f6QBoJeF/
-         FmPg==
-X-Gm-Message-State: ACgBeo0iGN7jqFmkMLGmZ96LofZVBu85CCeVRw27cEsJfC0zoouH29YL
-        Xvci1siFWw3QbuyWMwfvCVxXdls4yo8=
-X-Google-Smtp-Source: AA6agR5nbDb+I2QpqHZOuRkjziXPveSnUcr5lKPFvl+QCrNtXuMvJZXULwp+DLeJ2qJBabFR5ptRcA==
-X-Received: by 2002:a05:6512:1c5:b0:48b:192:a29e with SMTP id f5-20020a05651201c500b0048b0192a29emr2697709lfp.250.1660936731449;
-        Fri, 19 Aug 2022 12:18:51 -0700 (PDT)
-Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id bf12-20020a056512258c00b0048a88c07bcdsm738818lfb.20.2022.08.19.12.18.50
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=RGQInboxZApXDt02Ut7F/gX7q5m4BMuZBtDGjZ3GBqg=;
+        b=rhHNTmuouZYBDstglRypSxEuXFdss4UwbLsmHzjp2VZ8Q4C5nU0nNEY2Kk8FN3Wvo0
+         fzX+p0RV1kbDzXjjK8zH3gGS42+V7nirREzSl4tafwK+XvYTB9O94X4NqigfcSBjWqDJ
+         dwG9Sv/hPF2GTWoypQizSM4Z5HLTuv/JXRLuQ+rHajUp+bUbl4vHOF+znVKzkzIWX3p5
+         gwXGBA2Ml1DlokMxLV3Wg0W6dUlxQQ5m/U29UYhEMp5QAFeM5VIZ8oDQW61S+bHobw6a
+         c0QQzlNArZgnnFCk21oA+mL4xKsm0/ULRRwnNYd4eZhhNGRVdjdO5QFhAI1wQfLbOcE6
+         DR2A==
+X-Gm-Message-State: ACgBeo3cV/BZjrzdKJ/3xIGSEAPyedm/Qrq9+i+SkZItV6ycYvhzMe3l
+        ifrvPtPhaNPDnzcO6JcDNNXOD1tGyQI=
+X-Google-Smtp-Source: AA6agR5sX008bzvMYeo8Dw+0EFf5/eaf5A4G1UPYTAB1q7yU+974jWXMyulUjO2f9YDipA6hId+AwQ==
+X-Received: by 2002:a17:903:120d:b0:171:4fa0:7b4a with SMTP id l13-20020a170903120d00b001714fa07b4amr8662135plh.45.1660937796270;
+        Fri, 19 Aug 2022 12:36:36 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k63-20020a17090a4cc500b001facb7bc1adsm3420475pjh.26.2022.08.19.12.36.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 12:18:50 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 22:18:46 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        Fri, 19 Aug 2022 12:36:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 19 Aug 2022 12:36:33 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 05/14] hwmon: adm1177: simplify using
+Subject: Re: [PATCH v3 05/14] hwmon: adm1177: simplify using
  devm_regulator_get_enable()
-Message-ID: <718e4ea3a54c036dcb59ff55c338e253735e516b.1660934107.git.mazziesaccount@gmail.com>
+Message-ID: <20220819193633.GA3150608@roeck-us.net>
 References: <cover.1660934107.git.mazziesaccount@gmail.com>
+ <718e4ea3a54c036dcb59ff55c338e253735e516b.1660934107.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="u4933oyvJYU7rlVS"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1660934107.git.mazziesaccount@gmail.com>
+In-Reply-To: <718e4ea3a54c036dcb59ff55c338e253735e516b.1660934107.git.mazziesaccount@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Fri, Aug 19, 2022 at 10:18:46PM +0300, Matti Vaittinen wrote:
+> Drop open-coded pattern: 'devm_regulator_get(), regulator_enable(),
+> add_action_or_reset(regulator_disable)' and use the
+> devm_regulator_get_enable() and drop the pointer to the regulator.
+> This simplifies code and makes it less tempting to add manual control
+> for the regulator which is also controlled by devm.
+> 
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
---u4933oyvJYU7rlVS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-Drop open-coded pattern: 'devm_regulator_get(), regulator_enable(),
-add_action_or_reset(regulator_disable)' and use the
-devm_regulator_get_enable() and drop the pointer to the regulator.
-This simplifies code and makes it less tempting to add manual control
-for the regulator which is also controlled by devm.
+> 
+> ---
+> v2 => v3:
+> New patch
+> ---
+>  drivers/hwmon/adm1177.c | 27 +++------------------------
+>  1 file changed, 3 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/hwmon/adm1177.c b/drivers/hwmon/adm1177.c
+> index 0c5dbc5e33b4..be17a26a84f1 100644
+> --- a/drivers/hwmon/adm1177.c
+> +++ b/drivers/hwmon/adm1177.c
+> @@ -26,14 +26,12 @@
+>  /**
+>   * struct adm1177_state - driver instance specific data
+>   * @client:		pointer to i2c client
+> - * @reg:		regulator info for the power supply of the device
+>   * @r_sense_uohm:	current sense resistor value
+>   * @alert_threshold_ua:	current limit for shutdown
+>   * @vrange_high:	internal voltage divider
+>   */
+>  struct adm1177_state {
+>  	struct i2c_client	*client;
+> -	struct regulator	*reg;
+>  	u32			r_sense_uohm;
+>  	u32			alert_threshold_ua;
+>  	bool			vrange_high;
+> @@ -189,13 +187,6 @@ static const struct hwmon_chip_info adm1177_chip_info = {
+>  	.info = adm1177_info,
+>  };
+>  
+> -static void adm1177_remove(void *data)
+> -{
+> -	struct adm1177_state *st = data;
+> -
+> -	regulator_disable(st->reg);
+> -}
+> -
+>  static int adm1177_probe(struct i2c_client *client)
+>  {
+>  	struct device *dev = &client->dev;
+> @@ -210,21 +201,9 @@ static int adm1177_probe(struct i2c_client *client)
+>  
+>  	st->client = client;
+>  
+> -	st->reg = devm_regulator_get_optional(&client->dev, "vref");
+> -	if (IS_ERR(st->reg)) {
+> -		if (PTR_ERR(st->reg) == -EPROBE_DEFER)
+> -			return -EPROBE_DEFER;
+> -
+> -		st->reg = NULL;
+> -	} else {
+> -		ret = regulator_enable(st->reg);
+> -		if (ret)
+> -			return ret;
+> -		ret = devm_add_action_or_reset(&client->dev, adm1177_remove,
+> -					       st);
+> -		if (ret)
+> -			return ret;
+> -	}
+> +	ret = devm_regulator_get_enable_optional(&client->dev, "vref");
+> +	if (ret == -EPROBE_DEFER)
+> +		return -EPROBE_DEFER;
+>  
+>  	if (device_property_read_u32(dev, "shunt-resistor-micro-ohms",
+>  				     &st->r_sense_uohm))
+> -- 
+> 2.37.1
+> 
+> 
+> -- 
+> Matti Vaittinen, Linux device drivers
+> ROHM Semiconductors, Finland SWDC
+> Kiviharjunlenkki 1E
+> 90220 OULU
+> FINLAND
+> 
+> ~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+> Simon says - in Latin please.
+> ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+> Thanks to Simon Glass for the translation =] 
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
----
-v2 =3D> v3:
-New patch
----
- drivers/hwmon/adm1177.c | 27 +++------------------------
- 1 file changed, 3 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/hwmon/adm1177.c b/drivers/hwmon/adm1177.c
-index 0c5dbc5e33b4..be17a26a84f1 100644
---- a/drivers/hwmon/adm1177.c
-+++ b/drivers/hwmon/adm1177.c
-@@ -26,14 +26,12 @@
- /**
-  * struct adm1177_state - driver instance specific data
-  * @client:		pointer to i2c client
-- * @reg:		regulator info for the power supply of the device
-  * @r_sense_uohm:	current sense resistor value
-  * @alert_threshold_ua:	current limit for shutdown
-  * @vrange_high:	internal voltage divider
-  */
- struct adm1177_state {
- 	struct i2c_client	*client;
--	struct regulator	*reg;
- 	u32			r_sense_uohm;
- 	u32			alert_threshold_ua;
- 	bool			vrange_high;
-@@ -189,13 +187,6 @@ static const struct hwmon_chip_info adm1177_chip_info =
-=3D {
- 	.info =3D adm1177_info,
- };
-=20
--static void adm1177_remove(void *data)
--{
--	struct adm1177_state *st =3D data;
--
--	regulator_disable(st->reg);
--}
--
- static int adm1177_probe(struct i2c_client *client)
- {
- 	struct device *dev =3D &client->dev;
-@@ -210,21 +201,9 @@ static int adm1177_probe(struct i2c_client *client)
-=20
- 	st->client =3D client;
-=20
--	st->reg =3D devm_regulator_get_optional(&client->dev, "vref");
--	if (IS_ERR(st->reg)) {
--		if (PTR_ERR(st->reg) =3D=3D -EPROBE_DEFER)
--			return -EPROBE_DEFER;
--
--		st->reg =3D NULL;
--	} else {
--		ret =3D regulator_enable(st->reg);
--		if (ret)
--			return ret;
--		ret =3D devm_add_action_or_reset(&client->dev, adm1177_remove,
--					       st);
--		if (ret)
--			return ret;
--	}
-+	ret =3D devm_regulator_get_enable_optional(&client->dev, "vref");
-+	if (ret =3D=3D -EPROBE_DEFER)
-+		return -EPROBE_DEFER;
-=20
- 	if (device_property_read_u32(dev, "shunt-resistor-micro-ohms",
- 				     &st->r_sense_uohm))
---=20
-2.37.1
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---u4933oyvJYU7rlVS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmL/4hUACgkQeFA3/03a
-ocUNjwgAyCPy737spbVpgQaN6ZKyydBYYE2OFVzkMXRTIRlB7/POi3ZdPDiZTgcP
-RUMt/nprmh1Gq6OgTbcXoI3hLcqdMAIYZy+JOV02zhqfDvFHPpex2TnTvi39546n
-fDzS83O9DJqMs9RutKxZnpU1ZJqFa1BYQN9jy3dJmAdjKK8un47/QILBWnTJoH0Z
-NE0cMUFjulUyV6HwG+OJ62z6mjiMaYHHiY3K5jo48Jo3UGmXWI3eLUbUXdIugnZb
-RLtmax91JSbEFCTYQIB6qVnyBD1Foe2Sr14ZB4919p7hEZUWXrLeOSrQIJA7FpFJ
-oTzFozHrx1gQKXg3dwMYAS9clqWfAA==
-=jkTb
------END PGP SIGNATURE-----
-
---u4933oyvJYU7rlVS--
