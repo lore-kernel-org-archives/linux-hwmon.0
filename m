@@ -2,153 +2,123 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F4197C32792
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Aug 2022 23:28:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66924C32792
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Aug 2022 23:33:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234988AbiHSX2C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Aug 2022 19:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
+        id S240904AbiHSXdC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 Aug 2022 19:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235388AbiHSX2A (ORCPT
+        with ESMTP id S240543AbiHSXdA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Aug 2022 19:28:00 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846E4114196;
-        Fri, 19 Aug 2022 16:27:52 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id j2so5904294vsp.1;
-        Fri, 19 Aug 2022 16:27:52 -0700 (PDT)
+        Fri, 19 Aug 2022 19:33:00 -0400
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CB3114A5C;
+        Fri, 19 Aug 2022 16:32:59 -0700 (PDT)
+Received: by mail-vk1-xa2a.google.com with SMTP id i67so2957627vkb.2;
+        Fri, 19 Aug 2022 16:32:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=S5hEEHWwiNg2k4v549E4aszQCunYEI4sx3nLM1GzVyw=;
-        b=Xo91q4wHdMEv6mkWdK1iVOirDjLT9n3Hl7r1ukV7j2UkFCo69Rc+cAHQMIr1eD12OJ
-         FScZar+W3DjhY6S+6le54/2QZIsoh/afIDT24EA6uTWEczNr8RscpQWFedIKwWpqg996
-         1J+uRNjyLWZLyH7ziBd3dPGeQnVjPAK7nrs6YF7pv0iK4twegX2QCKjsuRaKZUb5Iizt
-         EFAU7Abe29FkXsO5iccQWa0/Yp1yl1y8xl5g6tia4xHtwIff/+MbReupf82asEusb+CF
-         UQu54CzuidnIGK99Fb5PihHw8JHX24b9cSoHnjXW6rYAqHfizVxmfwXK3bXSVc4vpdGM
-         nxBQ==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=8Ftt3u2zVCJ1XlR/QC6Ig2RR9m+8QvnAb/eHfD5q1ag=;
+        b=eo8bqwAPmtSdzpfC2DXbNh1J+I4B3JgMZPZGvQwqJZ8zZiILLZeVZxbp+nNPCMQgir
+         ND29DitHrMJ5vWipZ//ZPEFizYP6eeFn/DiDdrGg26CZgXcvLA5j9Ho1GTHzhZ3t7oE/
+         luOF4fjMXtVJfi6YzE9a+DljBgBmoaUjqr2KlVEzzppf9JjF3cZlhZmh/vGq5IkcfnLj
+         XfGp407fNCISq1mZdY79HdDwvNEm3o6fg8NwGfoAUDlzbAzu3EXnYacVWVN3XYTruSi3
+         yRvda0WWPHy0zxa7c2Fm/RjxoFZS0HwBAL9/nxZVcMgSdywfaH3wZjxC3J7qQVyB3Wn/
+         8pRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=S5hEEHWwiNg2k4v549E4aszQCunYEI4sx3nLM1GzVyw=;
-        b=MPA/XF1Eb1Z4bQe04Au3F2O0fBCQUD/RGOGcGomDFz4xjHGveZIn1Le0qEu1p+YUGd
-         w6tYIA7J+UAoevRkW16NX7JepMxVDHA18dASMzMjKMKJ/fLC9PEFwXbki6Xedfcd3mLk
-         pFsRZvW3Fi02FP3pf4pEOuWIVu8SZj2LkSCORTbNNZYIU2etMJrXf8cuVtgshLNAr5Pu
-         Y5MJR3CH+5PWMJxW1gssZQzAzzsbeRdu+BvrJHToak/Rvc0SI3avKwrHX+gC9CtFqIxJ
-         da5KSvXw2m0IcU3HDG9uzr/1OduIlPYqPDDT9y9yHxE+gTF//56bIgKj3g5oupDByNTb
-         IsRQ==
-X-Gm-Message-State: ACgBeo0C9pSXx9vZIDjtVSMFbrQQCLqjePVVPz98Oe6D1HnbwBFC2U3E
-        ourSwA5GFInkB9jLPENr0J5cqL3MVMgSqe7lMxk=
-X-Google-Smtp-Source: AA6agR4aZOaEro5daSKUdeT2RJVo7AImgpeqXvvIo0V84bpkcQrdEfkHLqcHycEYpUgzgMskEPDS+gA/3V8uYDpz4MQ=
-X-Received: by 2002:a67:e050:0:b0:390:3963:eb5b with SMTP id
- n16-20020a67e050000000b003903963eb5bmr1017980vsl.7.1660951671566; Fri, 19 Aug
- 2022 16:27:51 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=8Ftt3u2zVCJ1XlR/QC6Ig2RR9m+8QvnAb/eHfD5q1ag=;
+        b=m7fw3visih2cB3/NcyKErXYIwXNaGIO3i68WqwLKzwn0zQtedodzegUSpmikgPr7JI
+         9tEgPKMoKD+S0TzjOdG/ishXb6E3ZQuGW8STj6SQ0M/d9vfFHSVVQw4vFlFnIWAgnk7o
+         hJNMAYRvwgpdUmyt9jm2z1CHw8J/9C7udYqW6h7mwLXCJOcsr2z1/Z4h4IEa/ESe5xR1
+         +IUfWm2M5/o5KnfCpjraoAWETeGCuJ7pQKTwYvCw6cp1w9dJ4R6DHsENynqMFRV06CIj
+         T5wAYbbUdkxJEbWXL3Jh2Jth1I3/Lkb6f0yxNiUUPFM7uEfcefDhh1cX8pBLJNZxPLp3
+         Reqg==
+X-Gm-Message-State: ACgBeo2qCKPU2Z/vdHwRgXTBpJtkGSMg9oISfWkVFVlzx5FKFDAK+PF+
+        eodEyqbwMZD8HpR8vEpjG8JM9mlDqFYiuR6NUIA=
+X-Google-Smtp-Source: AA6agR6eJaaqNg8VDsxPvmfVCSoGG2OIUBTxkWbH6MePnRJAOqSfJjo7UZdduGoUilT7hODPdRuYkkP+jlm7KDQsFVY=
+X-Received: by 2002:ac5:c7d7:0:b0:389:61cd:ac2d with SMTP id
+ e23-20020ac5c7d7000000b0038961cdac2dmr1482277vkn.27.1660951978768; Fri, 19
+ Aug 2022 16:32:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1660934107.git.mazziesaccount@gmail.com>
-In-Reply-To: <cover.1660934107.git.mazziesaccount@gmail.com>
+References: <20220806152517.78159-1-andriy.shevchenko@linux.intel.com>
+ <20220818232040.GA3505561@roeck-us.net> <CAHp75Vf+-4U6OW4sf+mKsPt8WoRL_jN-sYtzOMzhhH8--+OU1w@mail.gmail.com>
+ <20220819130955.GB3108215@roeck-us.net>
+In-Reply-To: <20220819130955.GB3108215@roeck-us.net>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 20 Aug 2022 02:27:14 +0300
-Message-ID: <CAHp75VfZ+aoo9btTk+8kmOak4PN0Pc7L7RBQMv2SNC2agMbpsg@mail.gmail.com>
-Subject: Re: [PATCH v3 00/14] Use devm helpers for regulator get and enable
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Peter Rosin <peda@axentia.se>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Alexandru Lazar <alazar@startmail.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Xiang wangx <wangxiang@cdjrlc.com>,
+Date:   Sat, 20 Aug 2022 02:32:22 +0300
+Message-ID: <CAHp75VetU7_sJ-n6UHgFE+NU56t2Gw83x9E+OHETZkyxyF1qBQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] hwmon: (pwm-fan) Make use of device properties
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Linux Documentation List <linux-doc@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-amlogic <linux-amlogic@lists.infradead.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org, linux-iio <linux-iio@vger.kernel.org>
+        linux-pwm@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 10:20 PM Matti Vaittinen
-<mazziesaccount@gmail.com> wrote:
+On Fri, Aug 19, 2022 at 4:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> Use devm helpers for regulator get and enable
->
-> NOTE: The series depends on commit
-> ee94aff2628b ("Devm helpers for regulator get and enable")
-> which currently sits in Mark's regulator/for-next
->
-> A few* drivers seem to pattern demonstrated by pseudocode:
->
-> - devm_regulator_get()
-> - regulator_enable()
-> - devm_add_action_or_reset(regulator_disable())
->
-> devm helpers for this pattern were added to remove bunch of code from
+> On Fri, Aug 19, 2022 at 12:56:42PM +0300, Andy Shevchenko wrote:
+> > On Fri, Aug 19, 2022 at 2:41 AM Guenter Roeck <linux@roeck-us.net> wrot=
+e:
+> > > On Sat, Aug 06, 2022 at 06:25:15PM +0300, Andy Shevchenko wrote:
+> > > > Convert the module to be property provider agnostic and allow
+> > > > it to be used on non-OF platforms.
+> > > >
+> > > > Add mod_devicetable.h include.
+> > > >
+> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > Acked-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> > >
+> > > I had another look at this patch. A substantial part of the changes
+> > > is because device properties don't support of_property_read_u32_index=
+(),
+> > > reworking the code to use device_property_read_u32_array() instead.
+> > > Sorry, I don't like it, it results in a substantial number of unneces=
+sary
+> > > changes. Device properties should support the equivalent of
+> > > of_property_read_u32_index() instead to simplify conversions.
+> >
+> > Not all (device property) providers can have such API available. Are
+> > you suggesting to
+> >  a) alloc memory for entire array;
+> >  b) cache one for a given index;
+> >  c) free a memory;
+> >  d) loop as many times as index op is called.
+> >
+> > Sorry, this is way too far and non-optimal in comparison to the
+> > substantial number of unnecessary changes (two or three small
+> > refactorings?).
+> >
+> > Another way is to provide a pwm-fan-acpi, which will be the copy of
+> > the driver after this patch is applied. I don't think it's a very
+> > bright idea either.
+> >
+> An alternative might be to split the patch in two parts, one replacing
+> of_property_read_u32_index() with of_property_read_u32_array() as
+> preparation, with the above rationale and a note that this is to
+> prepare for the switch to device properties, and then the actual device
+> property switch. Some context showing how other conversions handled this
+> problem would also be nice, though not necessary.
 
-remove a bunch
+Thanks for the idea, I like it and it would indeed simplify the
+understanding of the changes made.
 
-> drivers. Typically following:
->
-> - replace 3 calls (devm_regulator_get[_optional](), regulator_enable(),
->   devm_add_action_or_reset()) with just one
->   (devm_regulator_get_enable[_optional]()).
-> - drop disable callback.
->
-> I believe this simplifies things by removing some dublicated code.
-
-duplicated
-
-> This series reowrks a few drivers. There is still plenty of fish in the
-
-reworks
-
-> sea for people who like to improve the code (or count the beans ;]).
->
-> Finally - most of the converted drivers have not been tested (other than
-> compile-tested) due to lack of HW. All reviews and testing is _highly_
-> appreciated (as always!).
-
-...
-
->   docs: devres: regulator: Add new get_enable functions to devres.rst
->   clk: cdce925: simplify using devm_regulator_get_enable()
->   gpu: drm: simplify drivers using devm_regulator_*get_enable*()
->   hwmon: lm90: simplify using devm_regulator_get_enable()
->   hwmon: adm1177: simplify using devm_regulator_get_enable()
-
-hwmon uses a different pattern for the Subject line.
-
--- 
+--=20
 With Best Regards,
 Andy Shevchenko
