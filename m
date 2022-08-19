@@ -2,76 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58CF0C25B0E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Aug 2022 05:51:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F3B1C25B0E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Aug 2022 07:13:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiHSFvX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Aug 2022 01:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
+        id S241321AbiHSHNn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 Aug 2022 03:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiHSFvW (ORCPT
+        with ESMTP id S1344799AbiHSHNl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Aug 2022 01:51:22 -0400
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F800BD2AE
-        for <linux-hwmon@vger.kernel.org>; Thu, 18 Aug 2022 22:51:18 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 05:51:09 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1660888276; x=1661147476;
-        bh=cz10ipUno8dD1+pM5LF8YqsHsL6C1fEdrMtk+bGlqNg=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:Feedback-ID:From:To:
-         Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID;
-        b=A72YWD2c7K2rv8qx0B1eu3fm+yFSUNfI1ypCP0JNTAbsuJwm/KFGfFq8x4LoZ8+J2
-         mbMMvICfRXRCRtsg3RW8ySZB8emnUiRhpNoGeL/dMYYrnx19ChZg70PB7dZu2f6Nr8
-         aOk0fLzTZpuscZZCCm29nqeVBjrB1OfgJclv/9hMWHabEEfxRBE3a3My+F1A+dbz4L
-         LWFKfZ1qrQn8J4wXwj3ZPp8Jnh4oOEWx/b5WbbJwJul2EVjbzDlntm7a3Y7BPR2aj4
-         S83xsLD4iLNLLcPMa4TY2Vo3+mfoIGweZbIMQITQATSeUU5ipfEF8becWY59cl6tDC
-         zBHCDD5wQqENQ==
-To:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
-From:   Juerg Haefliger <juergh@proton.me>
-Cc:     linux-kernel@vger.kernel.org, Juerg Haefliger <juergh@proton.me>
-Reply-To: Juerg Haefliger <juergh@proton.me>
-Subject: [PATCH] MAINTAINERS: Update Juerg Haefliger's email address
-Message-ID: <20220819055039.840221-1-juergh@proton.me>
-Feedback-ID: 45149698:user:proton
+        Fri, 19 Aug 2022 03:13:41 -0400
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D212F676;
+        Fri, 19 Aug 2022 00:13:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1660893221; x=1692429221;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=IbYBPJ+G32c9+JDgUOIkmcCLLurLRBV2IsJAkpWtx94=;
+  b=QSWojJCmrw/0stNv1wO9Lh/IZjwLuDi9TH2zzIbybDeBd91g4Z/YpgXR
+   nUGLYCgQz9bUi1MENpvJ/vT4Ha/RN/1TDtiRJG/elgCeep5fep8cfCtKC
+   RdM4431bwvudZvF8LBpyc7MPg05bYcIxIUT80NevxXzp5niaMWbnzP2Tf
+   o=;
+X-IronPort-AV: E=Sophos;i="5.93,247,1654560000"; 
+   d="scan'208";a="234849990"
+Subject: Re: [PATCH v2 09/16] hwmon: (mr75203) add VM pre-scalar property for Moortec
+ PVT controller
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-b09d0114.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 07:13:29 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-b09d0114.us-east-1.amazon.com (Postfix) with ESMTPS id AE34781619;
+        Fri, 19 Aug 2022 07:13:26 +0000 (UTC)
+Received: from EX19D013UWA004.ant.amazon.com (10.13.138.207) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Fri, 19 Aug 2022 07:13:26 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX19D013UWA004.ant.amazon.com (10.13.138.207) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Fri, 19 Aug 2022 07:13:25 +0000
+Received: from [192.168.95.21] (10.85.143.173) by mail-relay.amazon.com
+ (10.43.160.118) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Fri, 19 Aug 2022 07:13:20 +0000
+Message-ID: <2ed7d787-f4ee-55af-5279-b13377ea0ec3@amazon.com>
+Date:   Fri, 19 Aug 2022 10:13:20 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
+        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
+        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
+        <dwmw@amazon.co.uk>, <rtanwar@maxlinear.com>,
+        "Farber, Eliav" <farbere@amazon.com>
+References: <20220817054321.6519-1-farbere@amazon.com>
+ <20220817054321.6519-10-farbere@amazon.com>
+ <20220818201138.GA3423710@roeck-us.net>
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <20220818201138.GA3423710@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Use my main @proton.me email address.
+On 8/18/2022 11:11 PM, Guenter Roeck wrote:
+> Is that how such properties are implemented ? Seems to me that
+> results in a lot of decode complexity.
+>
+> Why not use an array property like the other properties ?
 
-Signed-off-by: Juerg Haefliger <juergh@proton.me>
----
- MAINTAINERS | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f512b430c7cb..d7efa940dc37 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6178,7 +6178,7 @@ F:=09Documentation/devicetree/bindings/memory-control=
-lers/samsung,exynos5422-dmc.y
- F:=09drivers/memory/samsung/exynos5422-dmc.c
-
- DME1737 HARDWARE MONITOR DRIVER
--M:=09Juerg Haefliger <juergh@gmail.com>
-+M:=09Juerg Haefliger <juergh@proton.me>
- L:=09linux-hwmon@vger.kernel.org
- S:=09Maintained
- F:=09Documentation/hwmon/dme1737.rst
-@@ -21784,7 +21784,7 @@ F:=09lib/test_scanf.c
- F:=09lib/vsprintf.c
-
- VT1211 HARDWARE MONITOR DRIVER
--M:=09Juerg Haefliger <juergh@gmail.com>
-+M:=09Juerg Haefliger <juergh@proton.me>
- L:=09linux-hwmon@vger.kernel.org
- S:=09Maintained
- F:=09Documentation/hwmon/vt1211.rst
---
-2.34.1
-
+Each VM has up to 16 inputs and there might be more than one VM.
+Assuming an example of 2 VMs, and channels 5 and 6 in first VM have pre-
+scalar of 2, while channel 2 in the second VM has pre-scalar of 3 and
+channel 11 has pre-scalar of 2, the alternative was to do something like
+this:
+vm-pre-scalar-0=[01 01 01 01 01 02 02 01 01 01 01 01 01 01 01 01];
+vm-pre-scalar-1=[01 01 03 01 01 01 01 01 01 01 01 02 01 01 01 01];
+Most of the inputs are 01, which are anyway the default.
+I don't see a difference in decoding complexity between the different
+approaches but if you prefer this I'll modify my patches.
 
