@@ -2,123 +2,196 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66924C32792
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Aug 2022 23:33:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2066C28D13
+	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Aug 2022 02:34:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240904AbiHSXdC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Aug 2022 19:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39172 "EHLO
+        id S232439AbiHTCeY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 Aug 2022 22:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240543AbiHSXdA (ORCPT
+        with ESMTP id S230039AbiHTCeY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Aug 2022 19:33:00 -0400
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CB3114A5C;
-        Fri, 19 Aug 2022 16:32:59 -0700 (PDT)
-Received: by mail-vk1-xa2a.google.com with SMTP id i67so2957627vkb.2;
-        Fri, 19 Aug 2022 16:32:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=8Ftt3u2zVCJ1XlR/QC6Ig2RR9m+8QvnAb/eHfD5q1ag=;
-        b=eo8bqwAPmtSdzpfC2DXbNh1J+I4B3JgMZPZGvQwqJZ8zZiILLZeVZxbp+nNPCMQgir
-         ND29DitHrMJ5vWipZ//ZPEFizYP6eeFn/DiDdrGg26CZgXcvLA5j9Ho1GTHzhZ3t7oE/
-         luOF4fjMXtVJfi6YzE9a+DljBgBmoaUjqr2KlVEzzppf9JjF3cZlhZmh/vGq5IkcfnLj
-         XfGp407fNCISq1mZdY79HdDwvNEm3o6fg8NwGfoAUDlzbAzu3EXnYacVWVN3XYTruSi3
-         yRvda0WWPHy0zxa7c2Fm/RjxoFZS0HwBAL9/nxZVcMgSdywfaH3wZjxC3J7qQVyB3Wn/
-         8pRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=8Ftt3u2zVCJ1XlR/QC6Ig2RR9m+8QvnAb/eHfD5q1ag=;
-        b=m7fw3visih2cB3/NcyKErXYIwXNaGIO3i68WqwLKzwn0zQtedodzegUSpmikgPr7JI
-         9tEgPKMoKD+S0TzjOdG/ishXb6E3ZQuGW8STj6SQ0M/d9vfFHSVVQw4vFlFnIWAgnk7o
-         hJNMAYRvwgpdUmyt9jm2z1CHw8J/9C7udYqW6h7mwLXCJOcsr2z1/Z4h4IEa/ESe5xR1
-         +IUfWm2M5/o5KnfCpjraoAWETeGCuJ7pQKTwYvCw6cp1w9dJ4R6DHsENynqMFRV06CIj
-         T5wAYbbUdkxJEbWXL3Jh2Jth1I3/Lkb6f0yxNiUUPFM7uEfcefDhh1cX8pBLJNZxPLp3
-         Reqg==
-X-Gm-Message-State: ACgBeo2qCKPU2Z/vdHwRgXTBpJtkGSMg9oISfWkVFVlzx5FKFDAK+PF+
-        eodEyqbwMZD8HpR8vEpjG8JM9mlDqFYiuR6NUIA=
-X-Google-Smtp-Source: AA6agR6eJaaqNg8VDsxPvmfVCSoGG2OIUBTxkWbH6MePnRJAOqSfJjo7UZdduGoUilT7hODPdRuYkkP+jlm7KDQsFVY=
-X-Received: by 2002:ac5:c7d7:0:b0:389:61cd:ac2d with SMTP id
- e23-20020ac5c7d7000000b0038961cdac2dmr1482277vkn.27.1660951978768; Fri, 19
- Aug 2022 16:32:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220806152517.78159-1-andriy.shevchenko@linux.intel.com>
- <20220818232040.GA3505561@roeck-us.net> <CAHp75Vf+-4U6OW4sf+mKsPt8WoRL_jN-sYtzOMzhhH8--+OU1w@mail.gmail.com>
- <20220819130955.GB3108215@roeck-us.net>
-In-Reply-To: <20220819130955.GB3108215@roeck-us.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 20 Aug 2022 02:32:22 +0300
-Message-ID: <CAHp75VetU7_sJ-n6UHgFE+NU56t2Gw83x9E+OHETZkyxyF1qBQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] hwmon: (pwm-fan) Make use of device properties
+        Fri, 19 Aug 2022 22:34:24 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4717884ECC
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 Aug 2022 19:34:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660962863; x=1692498863;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uYrN3a2J5JESK3nMc75KjwoXQUaDh9FnLtpoHNIsA/M=;
+  b=LSbWuCgFKSx4GTx+4MR2rCfg5UtHez3Tn6zCoH0j24dEIDt/XIZHH0pv
+   Ye1CrDEy+Bp0dSAwUZlb5M5PyeilWy9RCaDeCy5e0DBz5tM/BbcdVghIY
+   uV6wHrXYNAFRI/XsKiqbwmbgllIdLWaDOsCyh3+kdybqaAtiYa9CpAkZp
+   vOoemzcoqirTsNtXXbNFg6mjmZuLrEY3UBW9LZBWzv4OSj7v2O6ahYfWX
+   8jk7gRd1W42Is8+wKaqEoaMPWb1/qEYjIcoTBa3UspQcuOV0beoVxlfJ+
+   XMbiXiSB6BtUjdNFKvfSUmwzyb2kuK+q818viLEtWCMRSgJxMzcSMo0HT
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="280106558"
+X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
+   d="scan'208";a="280106558"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 19:34:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
+   d="scan'208";a="734587112"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 19 Aug 2022 19:34:21 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oPEJY-00022L-1r;
+        Sat, 20 Aug 2022 02:34:20 +0000
+Date:   Sat, 20 Aug 2022 10:33:33 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pwm@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 1ad7a62d52e8af61b0b8b32e8fd38b68c0501ae5
+Message-ID: <630047fd.d9yjlzO9guNVd09z%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 4:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Fri, Aug 19, 2022 at 12:56:42PM +0300, Andy Shevchenko wrote:
-> > On Fri, Aug 19, 2022 at 2:41 AM Guenter Roeck <linux@roeck-us.net> wrot=
-e:
-> > > On Sat, Aug 06, 2022 at 06:25:15PM +0300, Andy Shevchenko wrote:
-> > > > Convert the module to be property provider agnostic and allow
-> > > > it to be used on non-OF platforms.
-> > > >
-> > > > Add mod_devicetable.h include.
-> > > >
-> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > > Acked-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> > >
-> > > I had another look at this patch. A substantial part of the changes
-> > > is because device properties don't support of_property_read_u32_index=
-(),
-> > > reworking the code to use device_property_read_u32_array() instead.
-> > > Sorry, I don't like it, it results in a substantial number of unneces=
-sary
-> > > changes. Device properties should support the equivalent of
-> > > of_property_read_u32_index() instead to simplify conversions.
-> >
-> > Not all (device property) providers can have such API available. Are
-> > you suggesting to
-> >  a) alloc memory for entire array;
-> >  b) cache one for a given index;
-> >  c) free a memory;
-> >  d) loop as many times as index op is called.
-> >
-> > Sorry, this is way too far and non-optimal in comparison to the
-> > substantial number of unnecessary changes (two or three small
-> > refactorings?).
-> >
-> > Another way is to provide a pwm-fan-acpi, which will be the copy of
-> > the driver after this patch is applied. I don't think it's a very
-> > bright idea either.
-> >
-> An alternative might be to split the patch in two parts, one replacing
-> of_property_read_u32_index() with of_property_read_u32_array() as
-> preparation, with the above rationale and a note that this is to
-> prepare for the switch to device properties, and then the actual device
-> property switch. Some context showing how other conversions handled this
-> problem would also be nice, though not necessary.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 1ad7a62d52e8af61b0b8b32e8fd38b68c0501ae5  MAINTAINERS: Update Juerg Haefliger's email address
 
-Thanks for the idea, I like it and it would indeed simplify the
-understanding of the changes made.
+elapsed time: 724m
 
---=20
-With Best Regards,
-Andy Shevchenko
+configs tested: 120
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                           x86_64_defconfig
+um                             i386_defconfig
+i386                             allyesconfig
+i386                                defconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+i386                          randconfig-a012
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220819
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+x86_64                              defconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+m68k                             allyesconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+riscv             nommu_k210_sdcard_defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+alpha                            allyesconfig
+i386                          randconfig-c001
+loongarch                           defconfig
+loongarch                         allnoconfig
+riscv                randconfig-r042-20220820
+s390                 randconfig-r044-20220820
+arc                  randconfig-r043-20220820
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+powerpc                    amigaone_defconfig
+arm                         lpc18xx_defconfig
+arm                          iop32x_defconfig
+arm                        mini2440_defconfig
+microblaze                          defconfig
+powerpc                 linkstation_defconfig
+arm                             ezx_defconfig
+ia64                                defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+arm                           u8500_defconfig
+ia64                        generic_defconfig
+powerpc                  storcenter_defconfig
+arc                    vdk_hs38_smp_defconfig
+powerpc                 mpc834x_itx_defconfig
+m68k                                defconfig
+powerpc                     asp8347_defconfig
+mips                             allmodconfig
+powerpc                         wii_defconfig
+arm                         at91_dt_defconfig
+powerpc                     ep8248e_defconfig
+mips                         db1xxx_defconfig
+s390                          debug_defconfig
+powerpc                     rainier_defconfig
+csky                                defconfig
+loongarch                 loongson3_defconfig
+openrisc                 simple_smp_defconfig
+s390                                defconfig
+s390                             allmodconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allyesconfig
+sh                      rts7751r2d1_defconfig
+mips                      fuloong2e_defconfig
+powerpc                    klondike_defconfig
+m68k                             alldefconfig
+sh                           se7722_defconfig
+arm                        spear6xx_defconfig
+sh                            hp6xx_defconfig
+sh                     sh7710voipgw_defconfig
+xtensa                generic_kc705_defconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+um                                  defconfig
+arm                          simpad_defconfig
+powerpc                  iss476-smp_defconfig
+s390                       zfcpdump_defconfig
+mips                           jazz_defconfig
+m68k                            mac_defconfig
+
+clang tested configs:
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220819
+hexagon              randconfig-r045-20220819
+s390                 randconfig-r044-20220819
+riscv                randconfig-r042-20220819
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+powerpc                      ppc64e_defconfig
+mips                malta_qemu_32r6_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+mips                        omega2p_defconfig
+mips                          malta_defconfig
+powerpc                    gamecube_defconfig
+arm                         orion5x_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
