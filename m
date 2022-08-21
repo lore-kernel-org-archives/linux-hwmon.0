@@ -2,200 +2,83 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02D5BC28D13
-	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Aug 2022 02:35:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBBAFC00140
+	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Aug 2022 15:17:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238811AbiHTCfY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Aug 2022 22:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
+        id S230446AbiHUPRl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 21 Aug 2022 11:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiHTCfX (ORCPT
+        with ESMTP id S229505AbiHUPRk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Aug 2022 22:35:23 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800479590
-        for <linux-hwmon@vger.kernel.org>; Fri, 19 Aug 2022 19:35:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660962922; x=1692498922;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=BDc0gyosEvuYKg0ydylK780gYwQbgNMoLRc2aWTD3Uo=;
-  b=GBCGgVEiGxt9Jl6z+xdDRZRVBitEmvvE1oQ4rYPWwpB019CsbNjniEck
-   9jDg3mgoUW+ex8z6GuQIMH9LbqoZbT0IFS8aWDylv9X4FRxIALidtKy93
-   /aM2Ayn7AK7I4mmGWIE+nNT5gp1lHn9WQFBBN4oyc7dTjXkrW6ME0PApW
-   aKVP6A9wq8jSD44wJw6Igm8hU3Zx+33ojWWokYQ8PtsaEEyZgb9th3R8J
-   qb0mgfNb0G+5e8lIgqv/IQn6LZWY8OYKgWSFDOWedBtoh2TDiq6Y/RK+e
-   EDOHIohAEQAJnk4tEdoANMKbiBPvNUYFT5ortBzkaubo3rj56pJfE2O1T
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="319171736"
-X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="319171736"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 19:35:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="853946131"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 19 Aug 2022 19:35:21 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPEKW-00022R-1w;
-        Sat, 20 Aug 2022 02:35:20 +0000
-Date:   Sat, 20 Aug 2022 10:35:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- ed3590561f5d3343a1717396307d0942eda472ed
-Message-ID: <6300485b.YAtxNEVowFwwG9uZ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 21 Aug 2022 11:17:40 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA5222BE5;
+        Sun, 21 Aug 2022 08:17:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661095038;
+        bh=qiFAEB6kLO6vd4/naW3KidfbELsu1my2GKINEWhHBiw=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=EwuiN9UhZJFzqWKrxsIoUeHv5FtAlnXPWGhg3VvXAUnaMKyj3tI/cfsG9000Tlh03
+         vHlZb3jH/E0/Aq+UH079/G9DAuOV7TYXPOturRjUOoUfrAbvSWsY6g8Ts7LllB338E
+         W4EE3/dmAuYDAlBoMx/hTwyDMvc2XGf+bQ8qgV94=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1N4QwW-1pQ21I0lD4-011STb; Sun, 21 Aug 2022 17:17:18 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] hwmon: (dell-smm) Minor fixes
+Date:   Sun, 21 Aug 2022 17:17:10 +0200
+Message-Id: <20220821151713.11198-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:9rfTF+/+9RrIhC2h/TLGuZ0tcDzh0C12tVlTQXoXPFePOP3UgRJ
+ jpvmYk0zrr5TbTZ3U/JVf46DUQ+sgXZXM5CbjUndtkBBEBW7pa8i5Y3t9+N4D8n7ls7egPy
+ pt5IllEzz315IHsR885vEps25mqcuuCNlMbAMdqtD8o3U9tu/kBIbqTBel1hxpW5/Sj+zN/
+ aX4MzdLaL57AXhIJJl5pA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:d0c5Hh79L9A=:6ft+RkrTLDw3t3oW+OhpOC
+ pwGi5f0nif4K6P+vGObAqIyr+B3hDiY4vJpJZRdGv3CgDQfg5pmTrSPYkQSksKL+W8AfiRGD8
+ sQdjuSXuuN2gTmqj5oExe2ZpLg8RDoZSCv/fDQcV9NT/2PdXISTHPKFUOedd7G4qOpddr6M2y
+ x85RYYANxCV5q34RYaBiTFZUIhpbFiVtLL5f4IoeuRhWGH1v0U0RrkfBXIsms3NTi78iaVplL
+ sqAy75Fy0NzzltmyWCvLjhRIMPBC1nm0wLGl9mab2wuiqY983Wt4CaXNah3IHpayUMJY9ediA
+ wZUMNm2RdyYZjt10Y06n8tScYsffE9j425r61LRjwL1jWvnI5kMSWbNpA6urIjNUl2v67DE0T
+ PAR6WvKigzvZXfAGJQ1VhRwRZlFTyBOGBHbgaevsvmj9h3gsKBupfd7qLieaXuYkz9Ar0073Q
+ wfl+uE7xN03L2Os6xJGteWH41LnDxIcluxE89TJNyXf/wd1OYziQwXcpPwBto29SPy0YATQsA
+ 1wLtznT/aO9Pxnouol/LQqxA19FGYzproWAyzYi6bs74YQIFPBTVrNFv2dfWnrSXZATdc6g3q
+ npERy5t6xPpalk3JoFqJERqktQ9uZ+vHUcAG/S1s2uqExznG+PyumZkurnvH7GnNkg3CMneCz
+ 5aRau3yWQRwBhrPYmvntN+fvKl+XXWkHvzQ6GWpjPqtIOrc34RnK/e7LkIaONH8KRFklpTxRJ
+ +XzaV3NM5ggJKFd1ry4PNCOQE/C31lYlTNer3dUjbRAp1Coy2PfT7nVZeR25VdCJf2JaQk7iI
+ Zg92pbD6gEI7T8SXgGEYCN7YN2yo30vHmXm/1hv/Re2CjpZFtB5CN5ROwxFdIVZn9z2LNLxC/
+ BYCb8QSTgaakziLN+RKM7Wlg0hG9oddavq/KnBTMUAqNTkmK/yIIZDyfFNIeV3YNbju4ZWcQZ
+ 3F9WAdfrZpbDQDTorfqVT8pbZ+GWGHphfClaZYSUmr1U1tL09Y4o7pzQ9DLPRe2+2/SzvOd5i
+ WyKpah9bQQ8rFsT67trIHoRhQaGC52EuzDXk8U5Is3tmVUFkiSi/sty7ayMdxD65VBcean+Qi
+ c+WJeyXLAauLQPzpmClvXGoBJm6RXagJx95UEIb/ApiHLArwfIHUj93QA==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: ed3590561f5d3343a1717396307d0942eda472ed  hwmon: (pmbus) Fix vout margin caching
+This patch series fixes some minor issues inside dell-smm-hwmon.
+The first patch causes the driver to fail probing when registration
+of a cooling device fails, so that userspace can actually depend
+on those cooling devices representing all fans.
 
-elapsed time: 726m
+The other two patches change some warning messages to be more
+informative/unambiguous.
 
-configs tested: 124
-configs skipped: 3
+All changes where tested on a Dell Inspiron 3505.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Armin Wolf (3):
+  hwmon: (dell-smm) Fail probing when cooling device registration fails
+  hwmon: (dell-smm) Add FW_BUG to SMM warning message
+  hwmon: (dell-smm) Improve warning messages
 
-gcc tested configs:
-arc                  randconfig-r043-20220819
-x86_64                              defconfig
-x86_64                               rhel-8.3
-arc                              allyesconfig
-alpha                            allyesconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                           allyesconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a014
-i386                          randconfig-a005
-i386                             allyesconfig
-i386                                defconfig
-i386                          randconfig-a012
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-randconfig                      r005-20220819
-i386                          randconfig-a016
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a015
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-riscv             nommu_k210_sdcard_defconfig
-i386                          randconfig-c001
-loongarch                           defconfig
-loongarch                         allnoconfig
-riscv                randconfig-r042-20220820
-s390                 randconfig-r044-20220820
-arc                  randconfig-r043-20220820
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-powerpc                    amigaone_defconfig
-arm                         lpc18xx_defconfig
-arm                          iop32x_defconfig
-arm                        mini2440_defconfig
-microblaze                          defconfig
-powerpc                 linkstation_defconfig
-arm                             ezx_defconfig
-ia64                                defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-arm                           u8500_defconfig
-ia64                        generic_defconfig
-powerpc                  storcenter_defconfig
-arc                    vdk_hs38_smp_defconfig
-powerpc                 mpc834x_itx_defconfig
-m68k                                defconfig
-powerpc                     asp8347_defconfig
-mips                             allmodconfig
-powerpc                         wii_defconfig
-arm                         at91_dt_defconfig
-powerpc                     ep8248e_defconfig
-mips                         db1xxx_defconfig
-s390                          debug_defconfig
-powerpc                     rainier_defconfig
-csky                                defconfig
-loongarch                 loongson3_defconfig
-openrisc                 simple_smp_defconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-sh                      rts7751r2d1_defconfig
-mips                      fuloong2e_defconfig
-powerpc                    klondike_defconfig
-m68k                             alldefconfig
-sh                           se7722_defconfig
-arm                        spear6xx_defconfig
-sh                            hp6xx_defconfig
-sh                     sh7710voipgw_defconfig
-xtensa                generic_kc705_defconfig
-um                                  defconfig
-arm                          simpad_defconfig
-powerpc                  iss476-smp_defconfig
-s390                       zfcpdump_defconfig
-mips                           jazz_defconfig
-m68k                            mac_defconfig
+ drivers/hwmon/dell-smm-hwmon.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-clang tested configs:
-hexagon              randconfig-r045-20220819
-hexagon              randconfig-r041-20220819
-riscv                randconfig-r042-20220819
-s390                 randconfig-r044-20220819
-x86_64                        randconfig-a012
-i386                          randconfig-a013
-i386                          randconfig-a002
-i386                          randconfig-a011
-i386                          randconfig-a004
-i386                          randconfig-a015
-i386                          randconfig-a006
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-powerpc                      ppc64e_defconfig
-mips                malta_qemu_32r6_defconfig
-x86_64                        randconfig-k001
-mips                        omega2p_defconfig
-mips                          malta_defconfig
-powerpc                    gamecube_defconfig
-arm                         orion5x_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
+=2D-
+2.30.2
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
