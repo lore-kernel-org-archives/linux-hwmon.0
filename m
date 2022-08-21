@@ -2,102 +2,105 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8E5DC32772
-	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Aug 2022 15:17:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6055CC28D13
+	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Aug 2022 15:17:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbiHUPRt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S231410AbiHUPRt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Sun, 21 Aug 2022 11:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiHUPRo (ORCPT
+        with ESMTP id S231400AbiHUPRp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 21 Aug 2022 11:17:44 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6816C22BE5;
-        Sun, 21 Aug 2022 08:17:41 -0700 (PDT)
+        Sun, 21 Aug 2022 11:17:45 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC2323145;
+        Sun, 21 Aug 2022 08:17:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661095041;
-        bh=en7w682FC7Y6FJWxYUFaDykyxS5US63bp0vKvCbq3Rs=;
+        s=badeba3b8450; t=1661095044;
+        bh=yQ6H3evZ+n5AN+xHPSsx/w1PB3pFNVVt3/y4SP2JWe8=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=fyGN4ZUn4WV+7elwTy/v5IHqACeQuX5dUVMEpAGv2m6ChEcVTorGAQL5rNt/bb5kS
-         PkFVw3ym6IBjNAIjLw/0b6uQi07lXAQ0icCtBcLtJjdI6x7x8q86bezLlXTdXisb6m
-         ZUDsbsUAGHakAX9PdSKzV/2G2M9jfs7gfKizUtvo=
+        b=CmNAHT8r9KE673c9Tq8J3cs3leLysMZdSAJ27m7PKAeu1muN+Dr73Cqb6BAq4O6Ky
+         ccRdA6//8y/Zy3wP3Ke9Rdg5y4o5lRxCbi5Y6dbKJb/pUMSz8wszY/9ivInltd0z8d
+         pmSsh5skXDwPlNxWvs5XH9WcPjobtrTZM5VPEgY4=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1McH5a-1p2PF63tz2-00cjxc; Sun, 21 Aug 2022 17:17:21 +0200
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MeCpR-1ozwX50keV-00bIWz; Sun, 21 Aug 2022 17:17:24 +0200
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     pali@kernel.org
 Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] hwmon: (dell-smm) Fail probing when cooling device registration fails
-Date:   Sun, 21 Aug 2022 17:17:11 +0200
-Message-Id: <20220821151713.11198-2-W_Armin@gmx.de>
+Subject: [PATCH 3/3] hwmon: (dell-smm) Improve warning messages
+Date:   Sun, 21 Aug 2022 17:17:13 +0200
+Message-Id: <20220821151713.11198-4-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220821151713.11198-1-W_Armin@gmx.de>
 References: <20220821151713.11198-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:SRoUDshao4ff5gMfwaYqJmJd4r9daDJMSgAIDGFWLOCyPfO+pMl
- HTUPIAVA1/b4YiayzHyY+mT2ceOID7D+ZZYR1KaVW0FE/yRrmvNDu850hxliZzemiPL59kZ
- HCr2p1PcLeGLjyYEzHqxzjbj8AiincD0f5HnirST8H+bts+D4fPGjP7faYixDjjKDlUcQU4
- EExn0dRhIMwSCZIXzMjqQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:42C14LqFIMY=:JmdXi8kACUkI5kxNxDvC+m
- zqDz3dSEW7RTiEZDYwnPCELoAe++r+OmSAJpnkQ1SwOJtFgm6t+++gki57ey6CarLJ0xuYc+A
- sY7xDprLuuxZ7TqFQp0pUNSBxMAqGtxju2xvOHzO3+SvJUyYw0MusuRV/13I502JVZlbcZC/y
- a96HUPlA42oVl79Bbmk0dLSkqNda1EnRW/S/UAY3QGZCCMiHyeXIRIGdMSKDPcVfEIa5MJ+Zj
- d6HsFb6qaGqWhvOXedPauEX7aSfBBkscn4fHu9VlEuxeD8ROKt/PDLUVuC6+lKLqQi5oacEPI
- EhMVqgFfIVJ5XCvaqno1Br4dp799aXmmKdbxoQukzrXh/svgMpUjfmlsChTy9dRMPAnb0EyHX
- u8vHalBxgwWBBx5wP27d5G05v1HWJ8b+FGw6+k+4/n+rT3RrqwOgorYUizSkBuCYusD/zmj+5
- irUbAnnMm76AXOGYICKYAzIKlYaUcQ7RLJ3B8lmYT1MV/kDx/0Trfvw8wCdvfCAqeG9pQoLYO
- EhC2MmSX+tR3aToCqw9fS2662krwwLT0YqW1R6jU2sTuoqzM4YxhONPFamR7jr3Z7esSbvc3D
- EWQ4nlw79eImr5iqUZOrx+zMxWRGxIXWB70HJNsmwV8B/nJFVeXrKnmafWsJOy0mWPD3b+zdY
- WgLv1OpqBp/PnM3pH46HaOfJUyNZcvxuyZC2Z4TYkDumVywaQff0YHXypAxR8mrh9thsDCisj
- O+ZN+OYHK1yoYu7COVSNdla+IxHQqRR8bsmZqr3Iwey3FGz3EkE8BstsaJMyT++d1CpN5Zt6Z
- JjbRFsmt96vRBBWPJenOx4OfQP3x3KbE8DNMkNY60Stc5omHHhEQQRu9bufve5BwRBecXbnj0
- /M7evJSOyUbwxKBfgNpG84WETmZ80Ho0s/t00lgM6Kem6qrfeuTkcDouYjdoMmmhUSYsSI1ac
- SQPWxPc5KAG1dIEQr8JJq/YWVfR3O6m+Wzyjzkud1ynItCIfjbiF5ZKcsqXnGNbpJCQPwn67K
- 51S5nyQ/KPcDMnzqpBsgT+AMZcsQuaixn1zmioZKYlkNAyqKO02KrSDq75HZnJHo8ypOOzgDY
- W6/u1fEzXTwQkWcWR7z0bjq6xAjs6uoaN1OPhgwlmtvsKFLgNoAW/ttEg==
+X-Provags-ID: V03:K1:+svDwOC/DgC9j9SJAcrFZdjN03S1KvFROGsaCpLhKALBW82cTuu
+ 4ATw/vHZrF/9+d+1XGzzpg50+lbsyeYdU15MUOSvkp2AWePzf86OS7YOxLzk5uU83+ueyuT
+ kkaS8MR/u2WhR3De96961urN6uN8H1trcDnpenKHWkMAB3juongz2E4mLWxwpdTE27pNHKn
+ b54a8MiUphS0WmMOdHFdQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:niPkwH41xJc=:W8hZcjRzrQTRs7j9aXOBA9
+ /opH0lTEeB8Xahn+YhC8IZzfefRktyebCthxG6GGnbyHjUvH6R5tuJsG1yV7FG4bWe236+UVg
+ BbVVMfAkIRY1e7wFqKk/+DxdFE1EBKrGS6qXMADn3OJuPXDsfHfJj/SYzeHrFs3nPkJuSyoKU
+ 0deXCfNioi7WkeSVOoftAwnBj5AzNBdDOAcvSTYjUYDVEkGulVpK6e8A19QAgn3xhUjPPNNWd
+ 25VYtfFVa2NtT9n8AJQDD7K6y2RI+nkk5G7CAUx+uWkBHiuxe3LOP5HbwaOIsOgV3B2Ff+Qac
+ +qjjLc5viaM/UhbN0M9aFTR6/ShbGvwjz54rTqw5o8zmt2JceC5r6G3K8ekiOeZ5pDw/XgL6z
+ C+IJL+O6TIsrbaYoZbTJgdsDhLc9/idZFcK1BZt4SLDPd4rhmrNoKNclQ1fvfBkZ3AmTzyGNW
+ yoJpk2QrA7/778nl4QAS2/7l/Ox9DlM8V9azCvpcNYQwffoCLTh30QVLWEe+uLEAIl9c4IvDA
+ Dlyka70ZrNKup/SOeQiNxR3nquoEJ1NAxBrrBcUcBxjbUgn0SD5ci6Z9AJN+hbh+tzOw3fHjc
+ royDEDegdThiji1MW9n7XPgMq5QRy2Ypyq+TwKDBNQKyAhFdgeHt11SdcCvVRVgtoeWldCMvE
+ QKSeBoDQHLn/cQ/NPugVIQK9v8Dn0iiP6RSXWaMeKsl8IrPQhLyB+nA9rcuHUH5V6lfREENBi
+ cxvraSNx7pnQdvWrkoDR2eXukJjqhrMvCZHRUEnopCiY1t6hBGRnSF/t/42JjaWhkgr2T0M21
+ NiEgc3DPctw4v4WKF4G1+drbl8H8Dtt08wSKymJIPP6D5/KU9CZgynzrQHTmOoPq0Gsd8oTdm
+ vt7AbRb/pTN70z0BLpOaJs9hbxxRn3Q+MAq0k7X59oBOalBl3ci8XOMvZ5/J6S47+nYoRn0Zc
+ HdkONslw3gmVMQbdiCKGUPAYrgqIP10DTxldgMmaMaJL1Mvq6ctlaViUvyift7DCDeGl+08hd
+ WgsQYvPOoi1LksnydZyGEHU+Gu2zBoyY8Ws2HORmjVLLyGcoAFx6ioJUyJXTriStIKPh9KJ2Q
+ is3zs0OTUUUXa6gvdMDJ8ixnCKuDN4fVwirSnckr7x1BYbvraOgA0JQJA==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Previously, it was thought that failing to register a cooling device
-would not be critical, so the probing was not aborted in such a case.
-This however would lead to userspace being unable to rely on those
-cooling devices, since they might not represent all fans being present.
-Fix that by failing probing when cooling device registration fails.
+When dell-smm-hwmon is loaded on a machine with a buggy BIOS
+with the option "force" being enabled, it wrongly prints
+what the buggy features where disabled. This may cause
+users to wrongly assume that the driver still protects them
+from these BIOS bugs even with "force" being enabled.
+Change the warning message to avoid such a misunderstanding.
 
 Tested on a Dell Inspiron 3505.
 
-Fixes: e0d3f7cb2606 ("hwmon: (dell-smm) Add cooling device support")
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/hwmon/dell-smm-hwmon.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/hwmon/dell-smm-hwmon.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
 .c
-index 7f8d95dd2717..1dab7591576a 100644
+index f7bab1a91b93..bf13852afe48 100644
 =2D-- a/drivers/hwmon/dell-smm-hwmon.c
 +++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -1013,12 +1013,10 @@ static int __init dell_smm_init_hwmon(struct devic=
-e *dev)
+@@ -1354,13 +1354,13 @@ static int __init dell_smm_probe(struct platform_d=
+evice *pdev)
+ 	platform_set_drvdata(pdev, data);
 
- 		data->fan[i] =3D true;
+ 	if (dmi_check_system(i8k_blacklist_fan_support_dmi_table)) {
+-		dev_warn(&pdev->dev, "broken Dell BIOS detected, disallow fan support\n=
+");
++		dev_warn(&pdev->dev, "BIOS has broken fan support\n");
+ 		if (!force)
+ 			data->disallow_fan_support =3D true;
+ 	}
 
--		/* the cooling device is not critical, ignore failures */
- 		if (IS_REACHABLE(CONFIG_THERMAL)) {
- 			err =3D dell_smm_init_cdev(dev, i);
- 			if (err < 0)
--				dev_warn(dev, "Failed to register cooling device for fan %u\n",
--					 i + 1);
-+				return err;
- 		}
-
- 		data->fan_nominal_speed[i] =3D devm_kmalloc_array(dev, data->i8k_fan_ma=
-x + 1,
+ 	if (dmi_check_system(i8k_blacklist_fan_type_dmi_table)) {
+-		dev_warn(&pdev->dev, "broken Dell BIOS detected, disallow fan type call=
+\n");
++		dev_warn(&pdev->dev, "BIOS has broken fan type call\n");
+ 		if (!force)
+ 			data->disallow_fan_type_call =3D true;
+ 	}
 =2D-
 2.30.2
 
