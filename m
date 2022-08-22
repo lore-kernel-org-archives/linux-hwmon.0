@@ -2,84 +2,119 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCF58C32774
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Aug 2022 17:42:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BA20C32772
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Aug 2022 17:42:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237324AbiHVRmB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S237075AbiHVRmB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Mon, 22 Aug 2022 13:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237140AbiHVRlp (ORCPT
+        with ESMTP id S237151AbiHVRlr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:41:45 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821DE46220;
-        Mon, 22 Aug 2022 10:41:22 -0700 (PDT)
+        Mon, 22 Aug 2022 13:41:47 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E143242AD4;
+        Mon, 22 Aug 2022 10:41:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661190056;
-        bh=stxN6+y1GWeGayjroJnONDCpafhks7zou4w81FFKN70=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=JGZEekxgaXv6frvWca22vwhxUxPoGCLI9LLH5BpQQZ45qRljWrn73UeB2xLX8dJIO
-         zuY8aKHFFuXmKwit4lnuNB+3+xLnrHXFAK+zghm08ph9NsgfMDeFY7iHb2BqMKGNVU
-         JYJkwhpxgX7iXC0IPvK65/89UxwUHJsR92tQnGQE=
+        s=badeba3b8450; t=1661190060;
+        bh=hqkDwn7OyhVonBjYZ9m58CBvE/y0tsnF7VukoYGRL78=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=ESRCQkPjwaBt/cHauz0pDB3z5bPKPKkNaCwXYPkOqAGYtQTnahABDUWPckDzY+mKA
+         GZYvzsImxQbkcoqa39ZyeGE2hd2zCJPh0A0f7WzrtVhppHgYWVaBhYfu/HZObWdgC6
+         6sow7o1fQ8hO9nBUZ2Ca+dRvTeaeiNDX1awCz02s=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1N49lD-1pPOq92Hi5-01017t; Mon, 22 Aug 2022 19:40:56 +0200
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MIMfW-1oeQUp3mpo-00EJvN; Mon, 22 Aug 2022 19:40:59 +0200
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     pali@kernel.org
 Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/2] hwmon: (dell-smm) Minor fixes
-Date:   Mon, 22 Aug 2022 19:40:51 +0200
-Message-Id: <20220822174053.8750-1-W_Armin@gmx.de>
+Subject: [PATCH v2 2/2] hwmon: (dell-smm) Improve warning messages
+Date:   Mon, 22 Aug 2022 19:40:53 +0200
+Message-Id: <20220822174053.8750-3-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220822174053.8750-1-W_Armin@gmx.de>
+References: <20220822174053.8750-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:JRH70fYCno2PuVSQnm09rBin/9IRLCgv4TRlGzEvO9Mu8JgfaTR
- HYWH2cehxNJ51KRCeatZG2RpD9DidyAlQ28OI0ujffRppY6Mh9Z2XyvaBsRuuTfjk16S1ld
- yFUtQAqWYjHNwLSLPGpUgB0+t3BpLi3Og8LVVOJER+iRkL23MivvUkHNm4I9/sdkGTg+ag5
- 3t9BCZ6dJnnGI8K3x9n2Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YXcpkM//nsc=:EA+sBGIgHeMzttb+O/gVNu
- kwsXp8WSMrvA0OPVWC5d4ilFAKk3El+Pr+EJywwOxCzN87955hhnkdflCdg5FpiueZ41oBCSK
- F+Y3XWiyCwobLvK95kbcfpOiw6JX6L6MiXjeHm/k7/xYGRll+8Ugqi9UlhP54JGdZSwGAZEdK
- KxYmVlKnpl36lfyT1Aiu6aOH5MbkBOp2rOGw4+Jr2y5OfBT+NDCUyK9A98EWs23Wcia3ldE5p
- 7IKwe95yCnk2W56K3ApnhG1NBZG0tw/5OvPPv4N3MDO2g6VOkY8BfFxO1zJIZY4QrbrakG62s
- 7M7fv1pynwgExrCigwMEWSsR7OAQaVa2X0d5qKVLEI1QqYDvYAAaxvAXriuRpUSSpUKjX69Rg
- luEn38e8Sc2XD6OO1MDnL64+atmD1FAL2xIetI+FdTyk4ZUa9VwHaWIwFc3NQeQX++W+4SYkq
- JCM25CkytZwNqE5NgI+TEgKT3Gvt4pAfXvi1hlYj9lGoeSMrIWmo/YR/aMBH8zKG1dhrrs0JB
- SRYd0mVLuZ7GQ4YU7tDzIScuUeXmpKfUXQnRJSVgnp2MnvQVGlqCZAwzkN7iAgt0/emy7cdSi
- mmDFzxjDrR+qSSNvygFDrYmTCcXM84B6Ea18xZLG83NMZ/0U5GfD06NUWSHctOPFMTlibJjTo
- zcRQny3hBrtYvhiKeRE9H08Q+v3IXdNapRI8eejaD5psuhcSnCut6jAh70HerfHqTF0561Irg
- cRhCm+DbyD+62+TXKXLTYwCUWFrxUgtBbmKnbu5iD9xx4G54j/g0F1/z1610Cf8ODhNWpFeWZ
- Vhwf1pnp4TcYE0Hd9L6SiKTVg0BVttKMc1zy3RcQZpZrSTTXkFHJFqPF6Rc0YwuRqyN77heqy
- eBY3N/7IOsAKO21I9mzqBBP7sOYGfny2f1W5mseOlRAjy7WwRzeELdfKO38dt3pNkm8z2K27T
- aeiPXBA21DCFssS+4N7WQ6zNT1CvVVKLYzLTkwoIS1tTRbG6Lgbo7N6owasqmlQrkbGYsVuJ4
- 1bsToFAAuB30Efc5qY1PAXNXhuAfqLPU/RDLguivuug3vZpNZNwsI64+WtRmw7aPwGCRtQjY1
- cqUowckoFy+IyNkxwt8tO+CXg6Eg3cVbqkeTY7BOdmAYS/qkpUeEeBgHA==
+X-Provags-ID: V03:K1:37KllnKf28DLZhPTTlR/DsKuIv8Juob5XNapQ1Rb0oRcKXleYOR
+ ApOo+fZ/Ygjisj0cmKEvaiNrjLXStje0rSoU8AFnzES3DF1yWOUWxG6/OFtZeSW0txIu0SN
+ HX2RkdzDklrt9meKxIp+AnT3xPCU+i3Lx6Nr0hp7iY5Nv+vZELPoShRsPYuSiNlSscU+OrO
+ NyGKisuhPBn6vVq0lm1TA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dHPnzB/+6Os=:dyzBUUJD6vOW3yrvV14rTb
+ yRA4FRsuQs5zz/hA6k/+q8w+ilXrBglJNEZp+jp+XFky/TYI54ZgipevcwQWE0bPxrZgGuWnM
+ d1EnoDCDez54Tdm35DHdhAOhjfLqNwIhIzAx1osfbIW28YwIQpTsu+WLefsMFj2JuLcTQ5frd
+ VmfGtWfga7qydps6l6SZhfnwePevwhm1FjURVE6qe2FS1IkNFrWOmeDzQowKOePfG12kH8coQ
+ 2W00/N7Rt4U3+mCP8DmNC+1uTwgLGT2/MpA+W5/GWooA214B8l0V8L1yI+Olx13dLfchkzbtQ
+ CdkoSbKc2uWYE4AMOkmrvWRduRTMfzTHfYtVqLRfOWorGYSueCSWFcJ/FZyFnSEqocecSIe20
+ Dblf8uUIbCU1sjS2MzgOjlwY3SdobF1dgX2QiHj6a90xDSgWLuaVERfW7DT3DaKD00Lg2AnaL
+ qnYU8/SARTP2HzqgIyU+vNx+D7Wo8epGaf4sB75m2PCQth75VK2JDBfzehDyQgV3Y8ddsTpSB
+ czufSzC2XJHDwj8xaMqsmHQ2BoNwbqJvxEMKASrwJ4D7xmJrYG3ePoUO/SP2CM612Fe7JzEll
+ kdYpTSogIEP3ileHO78XdOJKqfGPqMQnhbxQohWA9dOklqTAkURBM9ak5E4UwAGK+tY8P9wTR
+ jl/rqpFltM4GbLXV2/VZllTp8YM3KQZn8yhZx/m40M2X9GkhgvwpGQl1/drNWNmas6IcM8FZD
+ pSsD1FODsicfoX/9ZE+sjf88du0+p8O0oqbtU1c3zGTbjHQvpvmUhy+Hsikzix2R3Mog4bZJD
+ +PsaUHGf/mNaJJ0BHvZbaeS9HiwxToJysixVMlzf4LVxOwspPlfNiCQVDQOJf7Wk6hFgzUfNH
+ OFswdqeyQNkhdJNrUPAKMukekiWXz/hSObN45T59MC0yAVpQKuDa5MqsoRWXJgF8Rt9/DP1av
+ CgDpt1MNsZerW5w2XGCnxWRU3uHfK2krYnyN9taLzDQ65UAHGfCMpwvNq6rY44L9961QYayXP
+ 0yAfchsb2ag6e2w2wL4JYYZ9FK/TA/7vqpDim/2uBT6Uf9qu6hJzIgbdD4kNzxYjnF3lsXoQ1
+ YaT12By/SaPczNsnI1i3HsMFiivUPXVxHBmLrtAOYa81RnGOZ5M/SI9mg==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This patch series fixes some minor issues inside dell-smm-hwmon.
-The two patches change some warning messages to be more
-informative/unambiguous.
+When dell-smm-hwmon is loaded on a machine with a buggy BIOS
+with the option "force" being enabled, it wrongly prints
+that the buggy features where disabled. This may cause
+users to wrongly assume that the driver still protects them
+from these BIOS bugs even with "force" being enabled.
 
-All changes where tested on a Dell Inspiron 3505.
+Replace the messages with two messages each which are depending
+on the value of the "force" parameter. The messages which are
+being printed when "force" is not set use dev_notice() instead
+of dev_warn() since they only serve as a notice.
+
+Tested on a Dell Inspiron 3505.
+
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
-Changes in v2:
-- drop patch which caused probe to fail when cooling device
-registration failed.
-- Change last patch so users are able to determine if any
-features where disabled due to BIOS bugs.
+ drivers/hwmon/dell-smm-hwmon.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-Armin Wolf (2):
-  hwmon: (dell-smm) Add FW_BUG to SMM warning message
-  hwmon: (dell-smm) Improve warning messages
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index 9cac80358072..01a94b62c2ab 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1356,15 +1356,21 @@ static int __init dell_smm_probe(struct platform_d=
+evice *pdev)
+ 	platform_set_drvdata(pdev, data);
 
- drivers/hwmon/dell-smm-hwmon.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ 	if (dmi_check_system(i8k_blacklist_fan_support_dmi_table)) {
+-		dev_warn(&pdev->dev, "broken Dell BIOS detected, disallow fan support\n=
+");
+-		if (!force)
++		if (!force) {
++			dev_notice(&pdev->dev, "Disabling fan support due to BIOS bugs\n");
+ 			data->disallow_fan_support =3D true;
++		} else {
++			dev_warn(&pdev->dev, "Enabling fan support despite BIOS bugs\n");
++		}
+ 	}
 
+ 	if (dmi_check_system(i8k_blacklist_fan_type_dmi_table)) {
+-		dev_warn(&pdev->dev, "broken Dell BIOS detected, disallow fan type call=
+\n");
+-		if (!force)
++		if (!force) {
++			dev_notice(&pdev->dev, "Disabling fan type call due to BIOS bugs\n");
+ 			data->disallow_fan_type_call =3D true;
++		} else {
++			dev_warn(&pdev->dev, "Enabling fan type call despite BIOS bugs\n");
++		}
+ 	}
+
+ 	strscpy(data->bios_version, i8k_get_dmi_data(DMI_BIOS_VERSION),
 =2D-
 2.30.2
 
