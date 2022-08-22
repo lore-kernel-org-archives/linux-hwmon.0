@@ -2,49 +2,49 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75B01C28D13
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Aug 2022 13:24:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B0ADC28D13
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Aug 2022 13:41:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234872AbiHVNY5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 22 Aug 2022 09:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
+        id S235258AbiHVNl3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Aug 2022 09:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234854AbiHVNY4 (ORCPT
+        with ESMTP id S235151AbiHVNl2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Aug 2022 09:24:56 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484172A404;
-        Mon, 22 Aug 2022 06:24:54 -0700 (PDT)
+        Mon, 22 Aug 2022 09:41:28 -0400
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56601835B;
+        Mon, 22 Aug 2022 06:41:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661174694; x=1692710694;
+  t=1661175688; x=1692711688;
   h=message-id:date:mime-version:to:cc:references:from:
    in-reply-to:content-transfer-encoding:subject;
-  bh=ooR8sB9GYGueiPCVBJSS4kl4I6TDSL4HppTzASXDEL0=;
-  b=LpuMzXp/3DJVYPhOBUqwB1UJEuHn3W30tQFZhiZm91gEGIscqBxJRnXq
-   vpodnZRLZ62qfjNZNxV1BS3vQLfkx0HK3/K7xQJWgXcEEZh5bZ8wM6KDZ
-   zmzOYaf/UB0JI6nBFgLmtDTUAI3QJPu/2znEh4+zT7/q5Vgomjbt6Cly0
-   o=;
-X-IronPort-AV: E=Sophos;i="5.93,254,1654560000"; 
-   d="scan'208";a="1046925892"
-Subject: Re: [PATCH v2 13/16] hwmon: (mr75203) add thermal coefficient properties for
- Moortec PVT controller
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-f771ae83.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 13:24:27 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1e-f771ae83.us-east-1.amazon.com (Postfix) with ESMTPS id CF3E112002B;
-        Mon, 22 Aug 2022 13:24:24 +0000 (UTC)
-Received: from EX13D08UEB002.ant.amazon.com (10.43.60.107) by
+  bh=I0ZGvHTbcv2oue53quGLVQQ+Ds1q2EaIxM9IzfK2BPM=;
+  b=efZKBa9mqMULv0sh33pXNQRAvXz06Lp5YWH2MfHWtwBWhU2XnkiXpVMU
+   VPrtjq0B0IvJ+WPTC7Qq2cHPqUPd4v5iIXX4RBcFAMuBhgRbxknwNqvJS
+   UYvPO0yPiH+XNwSTCye9TGoVJ/ELwha9gdGEw3nQEQ1Irz8jz2XanHIfe
+   w=;
+X-IronPort-AV: E=Sophos;i="5.93,255,1654560000"; 
+   d="scan'208";a="236024413"
+Subject: Re: [PATCH v2 14/16] hwmon: (mr75203) parse thermal coefficients from
+ device-tree
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-7d84505d.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 13:41:14 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-7d84505d.us-west-2.amazon.com (Postfix) with ESMTPS id DEE4F9A4ED;
+        Mon, 22 Aug 2022 13:41:12 +0000 (UTC)
+Received: from EX13D08UEB003.ant.amazon.com (10.43.60.11) by
  EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Mon, 22 Aug 2022 13:24:24 +0000
+ id 15.0.1497.38; Mon, 22 Aug 2022 13:41:12 +0000
 Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D08UEB002.ant.amazon.com (10.43.60.107) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Mon, 22 Aug 2022 13:24:24 +0000
+ EX13D08UEB003.ant.amazon.com (10.43.60.11) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Mon, 22 Aug 2022 13:41:12 +0000
 Received: from [10.220.236.67] (10.220.236.67) by mail-relay.amazon.com
  (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Mon, 22 Aug 2022 13:24:20 +0000
-Message-ID: <58a79e41-4d20-0e30-cecd-4ca37dd3dbfd@amazon.com>
-Date:   Mon, 22 Aug 2022 16:24:20 +0300
+ Transport; Mon, 22 Aug 2022 13:41:08 +0000
+Message-ID: <20200e60-c4e2-d272-1417-005994766380@amazon.com>
+Date:   Mon, 22 Aug 2022 16:41:07 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.2
@@ -56,34 +56,56 @@ CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
         <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
         <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
         <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
-        <dwmw@amazon.co.uk>, <rtanwar@maxlinear.com>
+        <dwmw@amazon.co.uk>, <rtanwar@maxlinear.com>,
+        "Farber, Eliav" <farbere@amazon.com>
 References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-14-farbere@amazon.com>
- <20220818202531.GA3431466@roeck-us.net>
+ <20220817054321.6519-15-farbere@amazon.com>
+ <20220818202839.GA3431511@roeck-us.net>
+ <e0b133e7-ac81-acf4-3783-44edf58d6426@amazon.com>
+ <20220819113842.GD3106213@roeck-us.net>
 From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <20220818202531.GA3431466@roeck-us.net>
+In-Reply-To: <20220819113842.GD3106213@roeck-us.net>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/18/2022 11:25 PM, Guenter Roeck wrote:
-> On Wed, Aug 17, 2022 at 05:43:18AM +0000, Eliav Farber wrote:
->> Add optional "ts-coeff-g", "ts-coeff-h", "ts-coeff-cal5" and
->> "ts-coeff-j" properties to be used instead of defaults for the
->> thermal equasion.
->>
-> Vendor prefix again, and shouldn;t there be some note about the
-> to-be-used defaults ?
-Can you please explain why to add a vendor prefix to these properties
-(and also to all other properties I added in this series)?
-All the properties I added are not specific to our SOC, and any other
-vendor using the same mr75203 ip block in their SOC, can also use the new
-properties.
-
-Regarding defaults, these properties are optional, so if they are absent
-in device tree, the current defaults in code are used.
+On 8/19/2022 2:38 PM, Guenter Roeck wrote:
+> On Fri, Aug 19, 2022 at 10:57:58AM +0300, Farber, Eliav wrote:
+>> On 8/18/2022 11:28 PM, Guenter Roeck wrote:
+>> > The calculation was just changed to use new defaults in a previous
+>> > patch. This patch makes it quite clear that the coefficients
+>> > are implementation (?) dependent. So the previous patch just changes
+>> > the defaults to (presumably) the coefficients used in your system.
+>> > That is inappropriate. Adding non-default corefficients is ok
+>> > and makes sense is supported by the chip, but changing defaults
+>> > isn't.
+>> The calculation was changed in previous patch to match series 5 of the
+>> Moortec Embedded Temperature Sensor (METS) datasheet.
+>> In our SOC we use series 6 which has a slightly different equation and
+>> different coefficients.
+>
+> If the coefficients are different based on the series, it would probably
+> make sense to create a separate devicetree compatible property for 
+> series 6
+> instead or requiring the user to list the actual coefficients. Those can
+> still be present, but the code should be able to use the defaults for
+> each series. 
+There is a different set of coefficients for series 5 and for series 6,
+so it would make sense to add a single property (e.g. series) instead
+of adding 4 properties, one for each coefficient.
+But that would not always be enough.
+The Moortec datasheet explicitly says that coefficients can vary between
+product and product, and be different from the default values.
+That is the situation in our SOC.
+The coefficients we use are slightly different from the defaults for
+series 6.
+So just adding a single series property would not be enough, and we would
+anyway want to have the option to specifically determine the coefficient
+values.
+Do you suggest to add both, also series and also coefficients? (and I can
+fail the probe in case both are set, to avoid conflicts).
 
 --
 Thanks, Eliav
