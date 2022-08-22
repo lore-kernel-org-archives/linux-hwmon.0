@@ -2,47 +2,48 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80FB2C28D13
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Aug 2022 11:55:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67DD3C28D13
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Aug 2022 12:37:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbiHVLzO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 22 Aug 2022 07:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
+        id S234182AbiHVMhv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Aug 2022 08:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiHVLzN (ORCPT
+        with ESMTP id S230503AbiHVMht (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Aug 2022 07:55:13 -0400
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109905F67;
-        Mon, 22 Aug 2022 04:55:12 -0700 (PDT)
+        Mon, 22 Aug 2022 08:37:49 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31D432EC4;
+        Mon, 22 Aug 2022 05:37:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661169314; x=1692705314;
+  t=1661171869; x=1692707869;
   h=message-id:date:mime-version:to:cc:references:from:
    in-reply-to:content-transfer-encoding:subject;
-  bh=LHol80d0QNnSsMm0XGb4D7IAnOiH2Nib3sBTmd/UCIc=;
-  b=cHXgaMuTzmF3SUsSQb0J2ML8bVw2N8tahmTpoUqlZpZ3LvEN+ODNAEMu
-   EvsfwobdkO9EjT8G5Mszq141L1X5CsIwrgzMlw/doQdX9wg9uJPF3cNXM
-   OspeaV6KOIExfuV/lxzcVmOb6rxrdloN1YYd8JY0n5KopHQoY6gihPsPy
-   E=;
-Subject: Re: [PATCH v2 04/16] hwmon: (mr75203) add Moortec PVT controller
- reset-control-skip property
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-6a4112b2.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 11:55:01 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-6a4112b2.us-west-2.amazon.com (Postfix) with ESMTPS id 938504C0013;
-        Mon, 22 Aug 2022 11:54:57 +0000 (UTC)
+  bh=e3JlxpdhiD9UYCrKvjGxLM7DfMY6XOiLi0Am25BRKKM=;
+  b=g9MGVxQ35MxG8BfOdm6Wy0iROMoRFqPcr9i6cW9AXiUDL/3eO9Pn4TAs
+   EF9cV/NmYRkb0SFpYYxOEhVIbr0SX4OroP9oKs7goUOWZ633uBxrmrGII
+   78/l85xz6JcWn20ZPZAq+7phfKOwqvJFEQd1wrvQzXXrCuffd0YAN6VgD
+   w=;
+X-IronPort-AV: E=Sophos;i="5.93,254,1654560000"; 
+   d="scan'208";a="122087194"
+Subject: Re: [PATCH v2 06/16] hwmon: (mr75203) fix multi-channel voltage reading
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-388992e0.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 12:37:28 +0000
+Received: from EX13MTAUEB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-388992e0.us-west-2.amazon.com (Postfix) with ESMTPS id 40D0EE04FA;
+        Mon, 22 Aug 2022 12:37:27 +0000 (UTC)
 Received: from EX13D08UEB003.ant.amazon.com (10.43.60.11) by
- EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Mon, 22 Aug 2022 11:54:56 +0000
+ EX13MTAUEB001.ant.amazon.com (10.43.60.96) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Mon, 22 Aug 2022 12:37:25 +0000
 Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
  EX13D08UEB003.ant.amazon.com (10.43.60.11) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Mon, 22 Aug 2022 11:54:57 +0000
+ id 15.0.1497.38; Mon, 22 Aug 2022 12:37:24 +0000
 Received: from [10.220.236.67] (10.220.236.67) by mail-relay.amazon.com
  (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Mon, 22 Aug 2022 11:54:52 +0000
-Message-ID: <9757d669-c205-4ccd-78e0-3af6941d3177@amazon.com>
-Date:   Mon, 22 Aug 2022 14:54:52 +0300
+ Transport; Mon, 22 Aug 2022 12:37:21 +0000
+Message-ID: <dd7eaa83-d8b4-c744-1611-d7b504e27a15@amazon.com>
+Date:   Mon, 22 Aug 2022 15:37:20 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.2
@@ -57,27 +58,33 @@ CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
         <dwmw@amazon.co.uk>, <rtanwar@maxlinear.com>,
         "Farber, Eliav" <farbere@amazon.com>
 References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-5-farbere@amazon.com>
- <20220818195742.GA3287145@roeck-us.net>
+ <20220817054321.6519-7-farbere@amazon.com>
+ <20220818200350.GA3287916@roeck-us.net>
 From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <20220818195742.GA3287145@roeck-us.net>
+In-Reply-To: <20220818200350.GA3287916@roeck-us.net>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/18/2022 11:01 PM, Guenter Roeck wrote:
-> On Wed, Aug 17, 2022 at 05:43:09AM +0000, Eliav Farber wrote:
->> Adding a "reset-control-skip" bool property to the mr75203 node will
->> avoid looking up and obtaining a reference to a reset controller.
+On 8/18/2022 11:03 PM, Guenter Roeck wrote:
+> On Wed, Aug 17, 2022 at 05:43:11AM +0000, Eliav Farber wrote:
+>> - Fix voltage reading to support number of channels in VM IP (CH_NUM).
+>> - Configure the ip-polling register to enable polling for all channels.
 >>
 >
-> This seems overly complex. WHy not just declare the "resets"
-> property optional ? 
-Fixed. I declared "resets" property  as optional, and modified the driver
-to support it being optional instead of the change I did.
-Will be part of next version.
+> That fails to explain what is actually wrong in the current code.
+> Also, one fix per patch, please.
+I moved the configuration of the ip-polling register to a separate patch.
+
+The problem in the current code is that it allocates in_config according
+to the total number of voltage monitors and not according to the total
+number of channels in all voltage monitors.
+Therefore it didn’t create enough sysfs to read all inputs.
+Also pvr_read_in() only tries to access the first channel in each voltage
+monitor.
+I will add this explanation to next version.
 
 --
 Thanks, Eliav
