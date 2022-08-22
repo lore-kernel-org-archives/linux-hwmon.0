@@ -2,48 +2,49 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67DD3C28D13
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Aug 2022 12:37:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75B01C28D13
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Aug 2022 13:24:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234182AbiHVMhv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 22 Aug 2022 08:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
+        id S234872AbiHVNY5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Aug 2022 09:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbiHVMht (ORCPT
+        with ESMTP id S234854AbiHVNY4 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Aug 2022 08:37:49 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31D432EC4;
-        Mon, 22 Aug 2022 05:37:48 -0700 (PDT)
+        Mon, 22 Aug 2022 09:24:56 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484172A404;
+        Mon, 22 Aug 2022 06:24:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661171869; x=1692707869;
+  t=1661174694; x=1692710694;
   h=message-id:date:mime-version:to:cc:references:from:
    in-reply-to:content-transfer-encoding:subject;
-  bh=e3JlxpdhiD9UYCrKvjGxLM7DfMY6XOiLi0Am25BRKKM=;
-  b=g9MGVxQ35MxG8BfOdm6Wy0iROMoRFqPcr9i6cW9AXiUDL/3eO9Pn4TAs
-   EF9cV/NmYRkb0SFpYYxOEhVIbr0SX4OroP9oKs7goUOWZ633uBxrmrGII
-   78/l85xz6JcWn20ZPZAq+7phfKOwqvJFEQd1wrvQzXXrCuffd0YAN6VgD
-   w=;
+  bh=ooR8sB9GYGueiPCVBJSS4kl4I6TDSL4HppTzASXDEL0=;
+  b=LpuMzXp/3DJVYPhOBUqwB1UJEuHn3W30tQFZhiZm91gEGIscqBxJRnXq
+   vpodnZRLZ62qfjNZNxV1BS3vQLfkx0HK3/K7xQJWgXcEEZh5bZ8wM6KDZ
+   zmzOYaf/UB0JI6nBFgLmtDTUAI3QJPu/2znEh4+zT7/q5Vgomjbt6Cly0
+   o=;
 X-IronPort-AV: E=Sophos;i="5.93,254,1654560000"; 
-   d="scan'208";a="122087194"
-Subject: Re: [PATCH v2 06/16] hwmon: (mr75203) fix multi-channel voltage reading
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-388992e0.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 12:37:28 +0000
-Received: from EX13MTAUEB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-388992e0.us-west-2.amazon.com (Postfix) with ESMTPS id 40D0EE04FA;
-        Mon, 22 Aug 2022 12:37:27 +0000 (UTC)
-Received: from EX13D08UEB003.ant.amazon.com (10.43.60.11) by
- EX13MTAUEB001.ant.amazon.com (10.43.60.96) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Mon, 22 Aug 2022 12:37:25 +0000
+   d="scan'208";a="1046925892"
+Subject: Re: [PATCH v2 13/16] hwmon: (mr75203) add thermal coefficient properties for
+ Moortec PVT controller
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-f771ae83.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 13:24:27 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1e-f771ae83.us-east-1.amazon.com (Postfix) with ESMTPS id CF3E112002B;
+        Mon, 22 Aug 2022 13:24:24 +0000 (UTC)
+Received: from EX13D08UEB002.ant.amazon.com (10.43.60.107) by
+ EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Mon, 22 Aug 2022 13:24:24 +0000
 Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D08UEB003.ant.amazon.com (10.43.60.11) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Mon, 22 Aug 2022 12:37:24 +0000
+ EX13D08UEB002.ant.amazon.com (10.43.60.107) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Mon, 22 Aug 2022 13:24:24 +0000
 Received: from [10.220.236.67] (10.220.236.67) by mail-relay.amazon.com
  (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Mon, 22 Aug 2022 12:37:21 +0000
-Message-ID: <dd7eaa83-d8b4-c744-1611-d7b504e27a15@amazon.com>
-Date:   Mon, 22 Aug 2022 15:37:20 +0300
+ Transport; Mon, 22 Aug 2022 13:24:20 +0000
+Message-ID: <58a79e41-4d20-0e30-cecd-4ca37dd3dbfd@amazon.com>
+Date:   Mon, 22 Aug 2022 16:24:20 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.2
@@ -55,36 +56,34 @@ CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
         <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
         <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
         <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
-        <dwmw@amazon.co.uk>, <rtanwar@maxlinear.com>,
-        "Farber, Eliav" <farbere@amazon.com>
+        <dwmw@amazon.co.uk>, <rtanwar@maxlinear.com>
 References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-7-farbere@amazon.com>
- <20220818200350.GA3287916@roeck-us.net>
+ <20220817054321.6519-14-farbere@amazon.com>
+ <20220818202531.GA3431466@roeck-us.net>
 From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <20220818200350.GA3287916@roeck-us.net>
+In-Reply-To: <20220818202531.GA3431466@roeck-us.net>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/18/2022 11:03 PM, Guenter Roeck wrote:
-> On Wed, Aug 17, 2022 at 05:43:11AM +0000, Eliav Farber wrote:
->> - Fix voltage reading to support number of channels in VM IP (CH_NUM).
->> - Configure the ip-polling register to enable polling for all channels.
+On 8/18/2022 11:25 PM, Guenter Roeck wrote:
+> On Wed, Aug 17, 2022 at 05:43:18AM +0000, Eliav Farber wrote:
+>> Add optional "ts-coeff-g", "ts-coeff-h", "ts-coeff-cal5" and
+>> "ts-coeff-j" properties to be used instead of defaults for the
+>> thermal equasion.
 >>
->
-> That fails to explain what is actually wrong in the current code.
-> Also, one fix per patch, please.
-I moved the configuration of the ip-polling register to a separate patch.
+> Vendor prefix again, and shouldn;t there be some note about the
+> to-be-used defaults ?
+Can you please explain why to add a vendor prefix to these properties
+(and also to all other properties I added in this series)?
+All the properties I added are not specific to our SOC, and any other
+vendor using the same mr75203 ip block in their SOC, can also use the new
+properties.
 
-The problem in the current code is that it allocates in_config according
-to the total number of voltage monitors and not according to the total
-number of channels in all voltage monitors.
-Therefore it didn’t create enough sysfs to read all inputs.
-Also pvr_read_in() only tries to access the first channel in each voltage
-monitor.
-I will add this explanation to next version.
+Regarding defaults, these properties are optional, so if they are absent
+in device tree, the current defaults in code are used.
 
 --
 Thanks, Eliav
