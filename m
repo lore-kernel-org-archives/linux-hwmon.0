@@ -2,54 +2,54 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4896FC28D13
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Aug 2022 16:28:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C98FC28D13
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Aug 2022 16:31:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237003AbiHVQ2K (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 22 Aug 2022 12:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
+        id S236643AbiHVQbq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Aug 2022 12:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiHVQ2J (ORCPT
+        with ESMTP id S236433AbiHVQbq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:28:09 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BFB40E35;
-        Mon, 22 Aug 2022 09:28:08 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id f21so11510505pjt.2;
-        Mon, 22 Aug 2022 09:28:08 -0700 (PDT)
+        Mon, 22 Aug 2022 12:31:46 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012ED7663;
+        Mon, 22 Aug 2022 09:31:45 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id x19so8063124pfq.1;
+        Mon, 22 Aug 2022 09:31:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc;
-        bh=YZmav0eU9Re8BRlMJU0qUlh7LdCj5JWcUumcigXHBac=;
-        b=eCDPhFB5hJl5EvTuxV5MVr5fM/PfS5HR20uStCf9L/RoP17bBuyr3VXqZ6N2fhTn1n
-         GIOLVWCSKjih3mnz0lIkMgI70fIpdlwq2iG7mqSPXz2TAbXbl8HLz/rMpOVYtWLBTP4N
-         DyiDazVAxuWWnoY02lSNoem2I9Xhi6NYB24nCzvntSs/yB1wCbSa3qbu76ENlJJxUtTr
-         BkpfebRdOhkLgPgtt+jsQ+Mo0+a8WU6SwRAwXWTk0ibV3/ISyQTu8x/X234QiEIqytRY
-         w83mPFAa2FfX+m7MQ8ktIWWv/eQXAGL9XhLp1tMCv1eQThcZvdJxZc+JLo5nRB6ilz7M
-         juKg==
+        bh=PtAIPgFqoQUO64v/KOef+4bUGN2kfRm6hDdkk4Zv0oY=;
+        b=e0sOAQG//vdFW8vX8cBOSYtya0lKnR3J+a2ptFpwoPbBYh7CqNBP3TeMwcDjOlHM7g
+         aG4pH3P3g/vp3zPV39J9NnnLtsGhOhP/mVWpqJY27K7VBzg//FdO0PjV9NkMAl+t6PBP
+         MktEu4fDcCGeOdNgaLF3JFuMZoCXnzrJrIbpiqkZf1IAvqJsFoD0WyDGNfli0n9KwDeg
+         YPBC9aXZJRUtElZZ8eOVdJqJj8a2KblBtOwuMCzuCOFFpGJnjPArfd24/2ncBlZ12ADw
+         tro1FiBMtkSu2aUyT4RZeM24z2CeBJv8+b5lbjpH1JKCOA6hWO0qFqMZOF3kr9ra2KFl
+         W/6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=YZmav0eU9Re8BRlMJU0qUlh7LdCj5JWcUumcigXHBac=;
-        b=7ZMX14RGQPYZRlYioIdSZVZj+5f7WrthkXAK86QKtQg0brXJlDshIVkVesTcr1ryf+
-         QWpsdvcapQ8aVCUAm6VkUCfses2v3Bilaqx6Dtf0FsKzUPFlj7fT1IkUZ3GiR6U4v500
-         A+qrmm/nPTKEBAIOoA4zST+LPjRz46CiLMboO3QuB6gc3Bxi1xhCQucvYflhez4fPn/t
-         OkPfFh5ooIDZ9T2iNogjkcpMZjkz2cBAftQJLxJV8+xmRPXCHXouiZnkXz0Vwkw3ZmCo
-         7004cbltLAtoHmNgGOcFYRQV6pnEGOS4O2eDaWO4sig8U1ysLN7XMhtP0d31dltsV9BS
-         KQnQ==
-X-Gm-Message-State: ACgBeo156Ugj1oBwSTHK3Km0qqYaPwNHHaB3f2wqapqgchFCzyS8pLo2
-        +GC1yznkCcite/hvWx1CmzE=
-X-Google-Smtp-Source: AA6agR473qXL38cHZi5R9+v5xe244jooMU//Vzuh+SV6bxCcqDn0LDVHT89UukOgNgLNxYQ38eNVoQ==
-X-Received: by 2002:a17:902:ce04:b0:172:9ff7:6747 with SMTP id k4-20020a170902ce0400b001729ff76747mr19929368plg.166.1661185687900;
-        Mon, 22 Aug 2022 09:28:07 -0700 (PDT)
+        bh=PtAIPgFqoQUO64v/KOef+4bUGN2kfRm6hDdkk4Zv0oY=;
+        b=39ddLldHcTCj98Vre3NH+TdJcqSIGl1IG7jw2EXmpNuB3TYk+XwJ3OpEhQXYIvwsPO
+         AmMUrFSGeB1jkwYjdVx5VCOjcrzHGoYpicj6GMrWlvmbRcFaRRjms2r6bgDNpB+h5Ev1
+         Ai3Tf5laJm1pELStWCmxAz1qMy0MIn1CBr3M0OGzf0Loi6tuQqbb6SfhRhKRspFyYu7V
+         vRv8DeU8Qc1NXh9A/1VRN11tQS6pjG3E+u1FqRkgCZRZpLG5WLrtI8YTSgY+cynYRbSn
+         s8gyfloRMeZUR9+CCYLLXXX6uxMXDUG6bg/0/E3EYcn6mxdWmTvfMXN8sgMuU9yZbtiI
+         3+/A==
+X-Gm-Message-State: ACgBeo0/KsPkd1xaxzTzy/KYB+e/xwSG+ssrgNmPTNKnZPcLZUjlnZzG
+        OMCYapEUHLosemVZMyr0JyU=
+X-Google-Smtp-Source: AA6agR7z5YapYBS8d6KsvLkx1zI+Bq8Uhhlzd9ItkhULgaEp2zf6sfdvo49KhvVG2pxr44J2zprxdA==
+X-Received: by 2002:a05:6a00:1a0c:b0:528:6baa:a2e3 with SMTP id g12-20020a056a001a0c00b005286baaa2e3mr21815051pfv.27.1661185904408;
+        Mon, 22 Aug 2022 09:31:44 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m21-20020a170902d19500b0016d1bee1519sm8525757plb.102.2022.08.22.09.28.06
+        by smtp.gmail.com with ESMTPSA id x64-20020a628643000000b005368192372fsm3251656pfd.200.2022.08.22.09.31.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 09:28:06 -0700 (PDT)
+        Mon, 22 Aug 2022 09:31:43 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 22 Aug 2022 09:28:05 -0700
+Date:   Mon, 22 Aug 2022 09:31:42 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     "Farber, Eliav" <farbere@amazon.com>
 Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
@@ -59,50 +59,69 @@ Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
         itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
         amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
         rtanwar@maxlinear.com
-Subject: Re: [PATCH v2 16/16] hwmon: (mr75203) add debugfs to read and write
- temperature coefficients
-Message-ID: <20220822162805.GD4098765@roeck-us.net>
+Subject: Re: [PATCH v2 14/16] hwmon: (mr75203) parse thermal coefficients
+ from device-tree
+Message-ID: <20220822163142.GE4098765@roeck-us.net>
 References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-17-farbere@amazon.com>
- <20220818231106.GA3505191@roeck-us.net>
- <75165e58-8601-1fe5-7bdb-98761a73701f@amazon.com>
+ <20220817054321.6519-15-farbere@amazon.com>
+ <20220818202839.GA3431511@roeck-us.net>
+ <e0b133e7-ac81-acf4-3783-44edf58d6426@amazon.com>
+ <20220819113842.GD3106213@roeck-us.net>
+ <20200e60-c4e2-d272-1417-005994766380@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <75165e58-8601-1fe5-7bdb-98761a73701f@amazon.com>
+In-Reply-To: <20200e60-c4e2-d272-1417-005994766380@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 04:59:43PM +0300, Farber, Eliav wrote:
-> On 8/19/2022 2:11 AM, Guenter Roeck wrote:
-> > On Wed, Aug 17, 2022 at 05:43:21AM +0000, Eliav Farber wrote:
-> > > This change adds debugfs to read and write TS coefficients - g, h, j and
-> > > cal5.
-> > > 
-> > > The coefficients can vary between product and product, so to calibrate
-> > > them it can be very useful to to be able to modify them on the fly.
-> > > 
-> > > e.g.
-> > > 
-> > > cat /sys/kernel/debug/940f23d0000.pvt/ts_coeff_cal5
-> > > 4096
-> > > 
-> > > echo 83000 > sys/kernel/debug/940f23d0000.pvt/ts_coeff_g
-> > > 
+On Mon, Aug 22, 2022 at 04:41:07PM +0300, Farber, Eliav wrote:
+> On 8/19/2022 2:38 PM, Guenter Roeck wrote:
+> > On Fri, Aug 19, 2022 at 10:57:58AM +0300, Farber, Eliav wrote:
+> > > On 8/18/2022 11:28 PM, Guenter Roeck wrote:
+> > > > The calculation was just changed to use new defaults in a previous
+> > > > patch. This patch makes it quite clear that the coefficients
+> > > > are implementation (?) dependent. So the previous patch just changes
+> > > > the defaults to (presumably) the coefficients used in your system.
+> > > > That is inappropriate. Adding non-default corefficients is ok
+> > > > and makes sense is supported by the chip, but changing defaults
+> > > > isn't.
+> > > The calculation was changed in previous patch to match series 5 of the
+> > > Moortec Embedded Temperature Sensor (METS) datasheet.
+> > > In our SOC we use series 6 which has a slightly different equation and
+> > > different coefficients.
 > > 
-> > What happens if you write 0 into all those attributes, or 0xffffffff ?
-> The driver equation is:
-> T = G + H * (n / cal5 - 0.5) + J * F
-> So I added protection for cal5 not being 0.
-> Besides that there is no limitation on what these values can be.
-> I can't really think of any other logical limitation I can apply.
+> > If the coefficients are different based on the series, it would probably
+> > make sense to create a separate devicetree compatible property for
+> > series 6
+> > instead or requiring the user to list the actual coefficients. Those can
+> > still be present, but the code should be able to use the defaults for
+> > each series.
+> There is a different set of coefficients for series 5 and for series 6,
+> so it would make sense to add a single property (e.g. series) instead
+> of adding 4 properties, one for each coefficient.
+> But that would not always be enough.
+> The Moortec datasheet explicitly says that coefficients can vary between
+> product and product, and be different from the default values.
+> That is the situation in our SOC.
+> The coefficients we use are slightly different from the defaults for
+> series 6.
+> So just adding a single series property would not be enough, and we would
+> anyway want to have the option to specifically determine the coefficient
+> values.
+> Do you suggest to add both, also series and also coefficients? (and I can
+> fail the probe in case both are set, to avoid conflicts).
 > 
-There needs to be an overflow protection. I am quite sure that 0xffffffff
-would result in overflows and thus in quite random reported values.
+
+It should not be necessary to provide explicit default values for any of the
+series. Yes, default values can be overwritten with explicit coefficient
+properties, but it should not be necessary to provide those if the defaults
+are used. So I would expect separate compatible properties for each of the
+supported series plus separate coefficient properties.
+
+However, since we are discussiong DT properties here, I'll step back and let
+DT maintainers decide.
 
 Thanks,
 Guenter
-
-> --
-> Regards, Eliav
