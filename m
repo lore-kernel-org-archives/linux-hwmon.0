@@ -2,95 +2,132 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BE0EC38145
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Aug 2022 14:01:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97DFFC28D13
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Aug 2022 16:17:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234215AbiHVOBY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 22 Aug 2022 10:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S235654AbiHVQRQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Aug 2022 12:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234651AbiHVOAW (ORCPT
+        with ESMTP id S234679AbiHVQRP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Aug 2022 10:00:22 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB4B2DA9F;
-        Mon, 22 Aug 2022 07:00:21 -0700 (PDT)
+        Mon, 22 Aug 2022 12:17:15 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24772399CF;
+        Mon, 22 Aug 2022 09:17:15 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id g18so11506936pju.0;
+        Mon, 22 Aug 2022 09:17:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661176822; x=1692712822;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=23Pw7AtYUTUUxaVyavtOrUwHZ9/LNGw1p2Y9Jhcb9RA=;
-  b=a4Y2bPLBrzyLCljjwj57hmTK/AONPeX+jYYUXIJwuzy1o3YTwVOu19ac
-   Qi19rfkoZOh7HJO2vNbGhvMSMTk3ED37sYygaufuwtr4NLrKk8Zuc0HO5
-   4e2LZ3sW4/pkNpzsNzTLBjFBo2iuZ7Q1XfPZOZHJQErngvZosQcd9cf2u
-   I=;
-X-IronPort-AV: E=Sophos;i="5.93,255,1654560000"; 
-   d="scan'208";a="251617938"
-Subject: Re: [PATCH v2 16/16] hwmon: (mr75203) add debugfs to read and write
- temperature coefficients
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-1c3c2014.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 13:59:51 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1d-1c3c2014.us-east-1.amazon.com (Postfix) with ESMTPS id C1DBF3C008F;
-        Mon, 22 Aug 2022 13:59:48 +0000 (UTC)
-Received: from EX13D08UEB002.ant.amazon.com (10.43.60.107) by
- EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Mon, 22 Aug 2022 13:59:47 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D08UEB002.ant.amazon.com (10.43.60.107) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Mon, 22 Aug 2022 13:59:47 +0000
-Received: from [10.220.236.67] (10.220.236.67) by mail-relay.amazon.com
- (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Mon, 22 Aug 2022 13:59:43 +0000
-Message-ID: <75165e58-8601-1fe5-7bdb-98761a73701f@amazon.com>
-Date:   Mon, 22 Aug 2022 16:59:43 +0300
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc;
+        bh=SpO1ZUZxHjqkqzt3Alck94fcA4kylx6d/PVTjW+B3W0=;
+        b=goZ7b8+sezuuKxI9mWamIEjv7pl+YPwrYBbF4DPBRDTkmxfMDwq5pwPO6D2RmdaPOy
+         3Akg+DR/eKSPlb5+JoM9QDsT/wME65UKotFq07k7P6bH9mBXx7aL2gZ4TppyRZ9WLFld
+         oJkzSYoHvQ5qNnyAs+Qu0kqNKxpSjxiDmGfS9EVXrPEe2lEFI5piuhsGRidU2JMvTy9n
+         sYhkmFaac9GGygQbD3pcV9CKyIrIvH46bWSqp6eI7kQKaM4kWrQyEGTOwwM6kc60+BTw
+         P8CbkBa8pUjdYEWqPN2XA76RrpdOZKI+6VWgqBPcXe+5zd/wzZpqnm1FX4GWHxWkXDgG
+         8QxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc;
+        bh=SpO1ZUZxHjqkqzt3Alck94fcA4kylx6d/PVTjW+B3W0=;
+        b=lGGMsSnTRyCi8evb6F0aEI84D6Ouph0ee0lzQZW8JYO8zBl/LfSKyAV8gaTU20mdQc
+         ZywBbeAlyE5s7GH2X65oW9xa5U+/i+jsCVeOoGIZDZ590vKtPnBvweNcqrAZJnt4WL4d
+         wvST367m9ymPWCW/3fGAYQosBjnXMI8RnJtwC4/YHZnOtEkfZ3oFQoiNDned3Hx02I9p
+         1adKPu3KX7/8OtAVufkrxdmIBoOZ5LUjQ/CI8aVLcy9fDwyWrKMIbzuTQLzAyXI6mvyj
+         FvsnZ5OIgHtcxL/TJyYesZsyfU1fWOqvSipovZMJV4U3x2g1+LJna+sMdSLyxMla2fS7
+         toQA==
+X-Gm-Message-State: ACgBeo05e1ty1s5LhpUlJxGtPWHhbga7TRlHo/ZAGRk1gz77tImYZL94
+        iJhvTfnDozUJaHuLXKSOI3htpiU7Ejs=
+X-Google-Smtp-Source: AA6agR5l7xd32VvovzNxuq1MOahelp+er/kaFnUnqzicC35PrwEkZorvAg5n1DCXEKV675INUcFSDA==
+X-Received: by 2002:a17:90b:3ec2:b0:1f7:3f49:17c3 with SMTP id rm2-20020a17090b3ec200b001f73f4917c3mr28930679pjb.203.1661185034526;
+        Mon, 22 Aug 2022 09:17:14 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e62-20020a621e41000000b0052da33fe7d2sm9071546pfe.95.2022.08.22.09.17.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 09:17:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 22 Aug 2022 09:17:12 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] hwmon: (dell-smm) Fail probing when cooling device
+ registration fails
+Message-ID: <20220822161712.GA4098765@roeck-us.net>
+References: <20220821151713.11198-1-W_Armin@gmx.de>
+ <20220821151713.11198-2-W_Armin@gmx.de>
+ <20220821154145.v7da76besv2qzqhj@pali>
+ <ea06f15d-cb22-1d5d-9437-59d595e24e43@gmx.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
-        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
-        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
-        <dwmw@amazon.co.uk>, <rtanwar@maxlinear.com>,
-        "Farber, Eliav" <farbere@amazon.com>
-References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-17-farbere@amazon.com>
- <20220818231106.GA3505191@roeck-us.net>
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <20220818231106.GA3505191@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ea06f15d-cb22-1d5d-9437-59d595e24e43@gmx.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/19/2022 2:11 AM, Guenter Roeck wrote:
-> On Wed, Aug 17, 2022 at 05:43:21AM +0000, Eliav Farber wrote:
->> This change adds debugfs to read and write TS coefficients - g, h, j and
->> cal5.
->>
->> The coefficients can vary between product and product, so to calibrate
->> them it can be very useful to to be able to modify them on the fly.
->>
->> e.g.
->>
->> cat /sys/kernel/debug/940f23d0000.pvt/ts_coeff_cal5
->> 4096
->>
->> echo 83000 > sys/kernel/debug/940f23d0000.pvt/ts_coeff_g
->>
->
-> What happens if you write 0 into all those attributes, or 0xffffffff ?
-The driver equation is:
-T = G + H * (n / cal5 - 0.5) + J * F
-So I added protection for cal5 not being 0.
-Besides that there is no limitation on what these values can be.
-I can't really think of any other logical limitation I can apply.
+On Sun, Aug 21, 2022 at 09:11:24PM +0200, Armin Wolf wrote:
+> Am 21.08.22 um 17:41 schrieb Pali Rohár:
+> 
+> > On Sunday 21 August 2022 17:17:11 Armin Wolf wrote:
+> > > Previously, it was thought that failing to register a cooling device
+> > > would not be critical, so the probing was not aborted in such a case.
+> > > This however would lead to userspace being unable to rely on those
+> > > cooling devices, since they might not represent all fans being present.
+> > > Fix that by failing probing when cooling device registration fails.
+> > This patch does not fix address this issue fully. CONFIG_THERMAL can be
+> > disabled during compile time and then cooling device would not be
+> > registered too.
+> 
+> I though of the cooling device feature as being optional "as a whole".
+> So when CONFIG_THERMAL is disabled during compile time, the driver does
+> not create any cooling devices. If however CONFIG_THERMAL was enabled
+> during compile time, the driver should fail probing if it cannot register
+> all cooling devices.
+> 
 
---
-Regards, Eliav
+I disagree. The primary objective of this driver is to report environmental
+data. Support for the thermal subsystem is an add-on. If instantiating
+the thermal device fails, the driver should at least report temperatures
+and fan speeds, as it did before thermal support was added.
+
+Thanks,
+Guenter
+
+> Armin Wolf
+> 
+> > > Tested on a Dell Inspiron 3505.
+> > > 
+> > > Fixes: e0d3f7cb2606 ("hwmon: (dell-smm) Add cooling device support")
+> > > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> > > ---
+> > >   drivers/hwmon/dell-smm-hwmon.c | 4 +---
+> > >   1 file changed, 1 insertion(+), 3 deletions(-)
+> > > 
+> > > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> > > index 7f8d95dd2717..1dab7591576a 100644
+> > > --- a/drivers/hwmon/dell-smm-hwmon.c
+> > > +++ b/drivers/hwmon/dell-smm-hwmon.c
+> > > @@ -1013,12 +1013,10 @@ static int __init dell_smm_init_hwmon(struct device *dev)
+> > > 
+> > >   		data->fan[i] = true;
+> > > 
+> > > -		/* the cooling device is not critical, ignore failures */
+> > >   		if (IS_REACHABLE(CONFIG_THERMAL)) {
+> > >   			err = dell_smm_init_cdev(dev, i);
+> > >   			if (err < 0)
+> > > -				dev_warn(dev, "Failed to register cooling device for fan %u\n",
+> > > -					 i + 1);
+> > > +				return err;
+> > >   		}
+> > > 
+> > >   		data->fan_nominal_speed[i] = devm_kmalloc_array(dev, data->i8k_fan_max + 1,
+> > > --
+> > > 2.30.2
+> > > 
