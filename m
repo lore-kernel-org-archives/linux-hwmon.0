@@ -2,126 +2,103 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C98FC28D13
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Aug 2022 16:31:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88977C28D13
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Aug 2022 17:42:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236643AbiHVQbq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 22 Aug 2022 12:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S237318AbiHVRmA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Aug 2022 13:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236433AbiHVQbq (ORCPT
+        with ESMTP id S237031AbiHVRlp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:31:46 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012ED7663;
-        Mon, 22 Aug 2022 09:31:45 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id x19so8063124pfq.1;
-        Mon, 22 Aug 2022 09:31:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=PtAIPgFqoQUO64v/KOef+4bUGN2kfRm6hDdkk4Zv0oY=;
-        b=e0sOAQG//vdFW8vX8cBOSYtya0lKnR3J+a2ptFpwoPbBYh7CqNBP3TeMwcDjOlHM7g
-         aG4pH3P3g/vp3zPV39J9NnnLtsGhOhP/mVWpqJY27K7VBzg//FdO0PjV9NkMAl+t6PBP
-         MktEu4fDcCGeOdNgaLF3JFuMZoCXnzrJrIbpiqkZf1IAvqJsFoD0WyDGNfli0n9KwDeg
-         YPBC9aXZJRUtElZZ8eOVdJqJj8a2KblBtOwuMCzuCOFFpGJnjPArfd24/2ncBlZ12ADw
-         tro1FiBMtkSu2aUyT4RZeM24z2CeBJv8+b5lbjpH1JKCOA6hWO0qFqMZOF3kr9ra2KFl
-         W/6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=PtAIPgFqoQUO64v/KOef+4bUGN2kfRm6hDdkk4Zv0oY=;
-        b=39ddLldHcTCj98Vre3NH+TdJcqSIGl1IG7jw2EXmpNuB3TYk+XwJ3OpEhQXYIvwsPO
-         AmMUrFSGeB1jkwYjdVx5VCOjcrzHGoYpicj6GMrWlvmbRcFaRRjms2r6bgDNpB+h5Ev1
-         Ai3Tf5laJm1pELStWCmxAz1qMy0MIn1CBr3M0OGzf0Loi6tuQqbb6SfhRhKRspFyYu7V
-         vRv8DeU8Qc1NXh9A/1VRN11tQS6pjG3E+u1FqRkgCZRZpLG5WLrtI8YTSgY+cynYRbSn
-         s8gyfloRMeZUR9+CCYLLXXX6uxMXDUG6bg/0/E3EYcn6mxdWmTvfMXN8sgMuU9yZbtiI
-         3+/A==
-X-Gm-Message-State: ACgBeo0/KsPkd1xaxzTzy/KYB+e/xwSG+ssrgNmPTNKnZPcLZUjlnZzG
-        OMCYapEUHLosemVZMyr0JyU=
-X-Google-Smtp-Source: AA6agR7z5YapYBS8d6KsvLkx1zI+Bq8Uhhlzd9ItkhULgaEp2zf6sfdvo49KhvVG2pxr44J2zprxdA==
-X-Received: by 2002:a05:6a00:1a0c:b0:528:6baa:a2e3 with SMTP id g12-20020a056a001a0c00b005286baaa2e3mr21815051pfv.27.1661185904408;
-        Mon, 22 Aug 2022 09:31:44 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x64-20020a628643000000b005368192372fsm3251656pfd.200.2022.08.22.09.31.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 09:31:43 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 22 Aug 2022 09:31:42 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Farber, Eliav" <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
-        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
-        amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
-        rtanwar@maxlinear.com
-Subject: Re: [PATCH v2 14/16] hwmon: (mr75203) parse thermal coefficients
- from device-tree
-Message-ID: <20220822163142.GE4098765@roeck-us.net>
-References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-15-farbere@amazon.com>
- <20220818202839.GA3431511@roeck-us.net>
- <e0b133e7-ac81-acf4-3783-44edf58d6426@amazon.com>
- <20220819113842.GD3106213@roeck-us.net>
- <20200e60-c4e2-d272-1417-005994766380@amazon.com>
+        Mon, 22 Aug 2022 13:41:45 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFBA46227;
+        Mon, 22 Aug 2022 10:41:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661190057;
+        bh=8NqP/LmFNkUsKE+lqDM8Vx1Qa5L+gzbvOwhUVr5t++g=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=N09sy2atR4PkdU5rlHrMkfG5BG2l4uP0Le5tWXlODd2QbCPxWNgkD/SMsCLRIzwoC
+         N5E9af2LcxAJxaN9VgPTRDSHOPXwp2TZULO6Hp7QCU/maBWGW+o0k6migFbvoHTbtG
+         W5t05W3u5F7u94JTNfu6i5sQZ+94JY0tjHPNjX4o=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1N95iH-1pUKGE3TyJ-0165DX; Mon, 22 Aug 2022 19:40:57 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] hwmon: (dell-smm) Add FW_BUG to SMM warning message
+Date:   Mon, 22 Aug 2022 19:40:52 +0200
+Message-Id: <20220822174053.8750-2-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220822174053.8750-1-W_Armin@gmx.de>
+References: <20220822174053.8750-1-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200e60-c4e2-d272-1417-005994766380@amazon.com>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Ujim6dMBvYZkQaEGMgdZAwDX17AMjv92ZepvD1xFZ7Ip+eD1x7u
+ f2h1L4fv9YVLJ1xQFX6F1M/i1gmb+cDJ5Pe+94b7sD6KKrLbF1al6/khHhuO+FfjWMhQDcW
+ wzIbHrMao8ubKItC5GAd9/qrjhSjSvWT+Ud7VEx372zVd2WGYt0TDEpP7wMtR8g2UVAGlu7
+ IHZbRDHsaR9iIHYfE2q9g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZZ2aeCu8VGE=:X1qtjCMDaP4azV/etqeWSj
+ b9YfX2H2NgwegaAa9aVOvES2OUOMUBgL3kV4eCC/aHNz5PcNi/sM1OLUy8nUeu+dh6Jrs61Hv
+ dYxdNEZZG4Ceif2DC5CxIFW1IdawvkWjAlp0ETS/2z+KbCltH3GB4lCErhyWXLO3zE6j8Soe/
+ wOTQOhrcFqPS5Zz6jlzN3gcPiUfD02eYnriGajpcpO7oTiAvnvfLDs9rd7heXuDT2RHCp6JzE
+ UXz0W5nFBfYADF6s2lasSOQZXTXtAukgT7yRulLu7yQCXUsrNE83oj55FF9MSfsu85rIdUXK7
+ fSfXB/Xz3Q+yex8eQD7k/qsTn24fXCJVBelDs6w/6BwuoYllu0ESSvm1be03E7A3hw4TRwOUn
+ 6jZtH/0J03FyylbZuihUp70XtLu5WH1KOv/37CH0o+WWb6PdmHwnpDZO5RAVP/1VXXz4yNkO4
+ kqGZTLpnNyTVw7S+FUrx6B0/C/KXw1QpRnDQuwjtN17hx7cfySw6GhBS0knNZIHsSifnUFPtg
+ fMUsVErBFtGRd21/1IpQGI8A0iNvgG43zLsdji5BPKknuUn2aVYFTN9rmMlZB//uzh3CdVc9a
+ D86w3MHeFp4RM2pXyKH57F4rP64i4av6FxZibwKW5mrTiDzG7yAJ+Xr7649tKSqbIF2nRoTEW
+ GB6XPETjLaFpm0henaUZ8NgZs8mMttTmmWAcbUR0uS4XcBJp094kv6JnAk/3RIFFLaprJ9JcW
+ MCyGSDXPtWvFBHr463P6oVRbhzJoEqVFf0GfM/lYJssjvEeLOyHwR3Nz6OQJz3ua6c5aDlU7i
+ axv2ac1BFObq0WtdgT9437GsiZE/2piHE6QSVAsZMr380AJPwebbNDCxXZJqdIdNnjMlLEpQL
+ FGapNeTYFYjjDYcrc8txwBnwG7IVVigZ2nFNRR+KYoevGRKOHYif/OpAc7e5GESxnc6/QOxoG
+ /j3k+cxgjMsvTMEL+8jtFFsdoX57WM+YyVh1GXlQiBkidk/L0MQ5GvvTZO9HV94KCFEp8SxHX
+ BDvu56YQKg2FR/nQJs5s6d3tHmwFXiAIzoM+fAPMWcKIH14Gu1q7PsdeO0nJN+a2+mMg32wjP
+ VSaEnG18qlc+c+B/UyNjPn6fkiIW621HzjR0MGqgscjj3Q7WfLM1CwuxA==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 04:41:07PM +0300, Farber, Eliav wrote:
-> On 8/19/2022 2:38 PM, Guenter Roeck wrote:
-> > On Fri, Aug 19, 2022 at 10:57:58AM +0300, Farber, Eliav wrote:
-> > > On 8/18/2022 11:28 PM, Guenter Roeck wrote:
-> > > > The calculation was just changed to use new defaults in a previous
-> > > > patch. This patch makes it quite clear that the coefficients
-> > > > are implementation (?) dependent. So the previous patch just changes
-> > > > the defaults to (presumably) the coefficients used in your system.
-> > > > That is inappropriate. Adding non-default corefficients is ok
-> > > > and makes sense is supported by the chip, but changing defaults
-> > > > isn't.
-> > > The calculation was changed in previous patch to match series 5 of the
-> > > Moortec Embedded Temperature Sensor (METS) datasheet.
-> > > In our SOC we use series 6 which has a slightly different equation and
-> > > different coefficients.
-> > 
-> > If the coefficients are different based on the series, it would probably
-> > make sense to create a separate devicetree compatible property for
-> > series 6
-> > instead or requiring the user to list the actual coefficients. Those can
-> > still be present, but the code should be able to use the defaults for
-> > each series.
-> There is a different set of coefficients for series 5 and for series 6,
-> so it would make sense to add a single property (e.g. series) instead
-> of adding 4 properties, one for each coefficient.
-> But that would not always be enough.
-> The Moortec datasheet explicitly says that coefficients can vary between
-> product and product, and be different from the default values.
-> That is the situation in our SOC.
-> The coefficients we use are slightly different from the defaults for
-> series 6.
-> So just adding a single series property would not be enough, and we would
-> anyway want to have the option to specifically determine the coefficient
-> values.
-> Do you suggest to add both, also series and also coefficients? (and I can
-> fail the probe in case both are set, to avoid conflicts).
-> 
+When a SMM call takes very long to execute, then it definitely
+is a firmware bug which should be marked with FW_BUG.
+Also add the number of the buggy SMM call to the warning message
+so BIOS developers, etc immediately know which part of the SMM
+interface is buggy.
 
-It should not be necessary to provide explicit default values for any of the
-series. Yes, default values can be overwritten with explicit coefficient
-properties, but it should not be necessary to provide those if the defaults
-are used. So I would expect separate compatible properties for each of the
-supported series plus separate coefficient properties.
+Tested on a Dell Inspiron 3505.
 
-However, since we are discussiong DT properties here, I'll step back and let
-DT maintainers decide.
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/dell-smm-hwmon.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index 7f8d95dd2717..9cac80358072 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -26,6 +26,7 @@
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/platform_device.h>
++#include <linux/printk.h>
+ #include <linux/proc_fs.h>
+ #include <linux/seq_file.h>
+ #include <linux/slab.h>
+@@ -198,7 +199,7 @@ static int i8k_smm_func(void *par)
+ 		 eax, ebx, regs->eax & 0xffff, carry, duration);
+
+ 	if (duration > DELL_SMM_MAX_DURATION)
+-		pr_warn_once("SMM call took %lld usecs!\n", duration);
++		pr_warn_once(FW_BUG "SMM call 0x%.4x took %lld usecs!\n", eax, duration=
+);
+
+ 	if (carry || (regs->eax & 0xffff) =3D=3D 0xffff || regs->eax =3D=3D eax)
+ 		return -EINVAL;
+=2D-
+2.30.2
+
