@@ -2,172 +2,340 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73716C32772
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Aug 2022 19:30:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7018C00140
+	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Aug 2022 05:58:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbiHWTaJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 23 Aug 2022 15:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
+        id S231307AbiHXF6r (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 24 Aug 2022 01:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbiHWT3y (ORCPT
+        with ESMTP id S229483AbiHXF6q (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:29:54 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417FF396;
-        Tue, 23 Aug 2022 11:18:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661278671;
-        bh=MqkG7FvKa/Y0ge/2gjNlCceo9f+qY9FbpVc/If9+cqU=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=IXS6s4MD5CojzSwSz1ijJfmLhypeTsudNj/8ESO3fIsCf3BSQf41prxMoq6nyH5cG
-         MWJymrSSzFx7M4QpgNzfrTkTZZNfYfIWW3BkMhR6GpW7ONJPegcCRcggGz6/BxI7wY
-         hEbjwAWx/0EzB34H0ljsFPfbpsX8mxoH6EsnxOGQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MEV3I-1ogVz30y1C-00FzL9; Tue, 23 Aug 2022 20:17:51 +0200
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (gpio-fan) Fix array out of bounds access
-Date:   Tue, 23 Aug 2022 20:17:42 +0200
-Message-Id: <20220823181742.5793-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
+        Wed, 24 Aug 2022 01:58:46 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FEA910B5;
+        Tue, 23 Aug 2022 22:58:45 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-335624d1e26so434789247b3.4;
+        Tue, 23 Aug 2022 22:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=PU8cmQdn0F5wEVMHI2WgiLgc0xHjaY5+OAnGBiLennw=;
+        b=IyBm7nbVJ5OtlgAoyBHDaodNuky5oJ/6uR5nK76nonqETiuZBtSCgOTKKoaVQs4ufj
+         /qtuF2grwjFCq9OwTXHoxIH8fr+iBzO7jzdKgRX9BCuYOY9/qCfKN17ZhG416GtA96+9
+         hivNuxERnjuS3C3s3mjXTnkMKg7rOKwfDz9/0VCms8GLcvZ4GKedM3nP9MKJVKFOSgcx
+         +Hl4YSYglcbi7s/MZ2UMHAfA077qBQWolGjOz+95YnSQ8rYs4IsYmt84g684dpFko+zu
+         BUJwy2a2eeKJNpeWRrPGsXIaCQq2S9mobthw6toLyty4J4xI8ukxox7Vo8VphHQ8/MAm
+         P2vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=PU8cmQdn0F5wEVMHI2WgiLgc0xHjaY5+OAnGBiLennw=;
+        b=slAs5UoNF125Qt2VpJkpsecmkQt9AKxmx7qT8HZBmhZACepkfsya1BHysmEp4ipweC
+         2hymQ3BSikovgsp/ux6TZs+FNdTNwuhAP1hvjkUxKQLxG+BGPUSFXwtMRYFntUcN29X2
+         0lpTwA0JMOUHL5t8uzves4awVejBLKdaG0IzlGMoq/uMTTE1WeVKLhsmiIYsghdLU4ee
+         LEqZjNrH2tD+Wh/m7kHprA9xNcjlLpUZ9mAmxlNaybtMU44+67xD6mObpK3zI44lEO5G
+         VF32YQMOLLwSBgemhr8ouTgab0tS/BBFLXUkbiI8nNbAGE4v6DqG1D0dGS6SMIdQZVKG
+         Titw==
+X-Gm-Message-State: ACgBeo3Wb4Yhh9JQEBsVlSw8L8sBRASnqtR95jafQfypb/B0yUbCSpWD
+        3UtX9aud+lRLxEkwvrlv3RXM9zGIM7Tq/IxPvBxToUVL7CoMcw==
+X-Google-Smtp-Source: AA6agR4+xVrjmoQhzAbX6hhI6O2iaAe0MZdaLyNA8+V56iuXkGonxPvM5EFFyQEKYNv6vj+GFQxL7C7DZ5abI9igMBE=
+X-Received: by 2002:a81:7c2:0:b0:335:90cb:1962 with SMTP id
+ 185-20020a8107c2000000b0033590cb1962mr29118746ywh.173.1661320724399; Tue, 23
+ Aug 2022 22:58:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:8PfkXy7Cie+0s0eZmsqd0RHmUKSw58VqNqm7ATz5/dKg8btZZo+
- nxxNOgRXH6X6GAgVvG2l//PmlE0lYnbhc/Lsi2l8sV9K0zxO4x6OKHJ6wg88eQCkIyArzLI
- JS/EA2aUfZqxpqVIjcmLO3Xa9cI5g9TfXdDEGYn3LmTox0Qcu1II/zxPUg+5qPSGmXYqTwh
- AWRhf4CC/+QIg+pJfeZ3Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/KCB1qO42BY=:VL4iQAlD8Ta8nbZcWU5SAX
- RG2rqqG+nGmqZpEpysrmhMw7ifi3Xy2pzmZ+xkXzFEAhoTcfwZ+3nmc+DPhnxXLWGCbnVk3ar
- zW8beX/8D36FWmd9Z5tu+rA+ld1uUU99SUBO8vV5NTLbXTXir5nT4rip7RF6IF1jzvpFdgfAd
- itCscWPdLwjoL5n/M/0UWSUzNkBvFWs7XUt/PHtNgYgBCgFE74H8uazYQ1VIQlE7QVIdLecyQ
- wS45aYFfHduQQPmR0FytSwfOxUTfXfDkU/aAD4S7/V7GLH/68yEw0Uc+ZwWQZfr/Ebf4jGj56
- hJIZfJU67w3zAUUx2FZnUVmnY47CJ+ED58sOYSTA/zLyXPbtmpmaZm1v9NzrXzsxgHAO+x+ZJ
- MA2d35Lp3kiRldLcHavJOVGq/Zaiv8xhX1laVentc6mDcSYLpeXLhGSYEKtZkHbAJhroRf0PQ
- 1Mps2rk1jpSkcwVWsAdH4/C+WaWc4dMp8aOBkihr+wCRXyrKxowKaeKkjZYBdb9+sbrgU4Pvu
- xw+kGSYamj5Gszq/R5lHeDlZKKXJ7T5eAAmPr8C++PvPo2nR/hrPMoTWdEPfSpjwehVaYIuA/
- HbSsRfSGeVuc+0VlzHcOt5KvMIfo+SXwseD/hdR4cr5tYXaT4qlsuEsHVqtqY3vWzqL/wcpdI
- qQn8k2+ajKNB4wrhtM42/cUIvjLTbqhtxVoEa1E40tZbLwmbZr0stDNGtvdDVC+4X1eaFNFat
- QrXaFQh510aewR+SKvFhCDFwL84ghgShh/UaJ/G2wv+MUCQ1pHpGP8UWXxfG+zgTf/UmSURpe
- TH6CSt9cSUB3RzmPaAPmMWgwVeYOH8m16eqxB4BSzZ61s4eE0QHVkRG5sxF4YZmpx5M4WRjcp
- dHhASgXvBDHrO+9e1feODOF1YgIGwhsUiONVdkjgGSkL6SlF37kL7J6dT0zXFcSs42d/8bdIb
- jo5j86akwMKbCT8iGmMsLdAA4+Exf8xFG+SrrwLpSrQRymFcLOKYPWMNDf0PfaTGL49DLFplS
- RtJdPhSEl9xbakI6R+rPj0Wc+vdcNlDLiH+i8TIXHOZ+R9PP/PVjj50ExfYcnTdbT/122EKwG
- BgqODEKyd8/VUilvwcrVSzaudCMTdYf4itNmOpC4mwou1MP1itN1H2ThA==
+References: <1660878283-9512-1-git-send-email-Duke.Du@quantatw.com> <20220819133458.GC3108215@roeck-us.net>
+In-Reply-To: <20220819133458.GC3108215@roeck-us.net>
+From:   Duke Du <dukedu83@gmail.com>
+Date:   Wed, 24 Aug 2022 13:58:33 +0800
+Message-ID: <CAJqQiD39b=n-Lsza_YUPQR2jm49a3ZLxT-x7eYUv=yhD4fiDJQ@mail.gmail.com>
+Subject: Re: [PATCH v3] hwmon: Add driver for the TEXAS TPS546D24 Buck Converter.
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fran.hsu@quantatw.com, charles.hsu@quantatw.com,
+        george.hung@quantatw.com, duke.du@quantatw.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-When set_fan_speed() is called with speed_index being
-greater than num_speed or less than 0, an array out of bounds
-access occurs. This can be exploited by setting the state of
-the thermal cooling device to arbitrary values, causing for example
-a kernel oops when unavailable memory is accessed this way.
+Hi Guenter,
+Thanks for your reply !
+But I have some confusion as following, please help to give me some feedback.
+Thanks a lot !
 
-Example kernel oops:
-[  807.987276] Unable to handle kernel paging request at virtual address f=
-fffff80d0588064
-[  807.987369] Mem abort info:
-[  807.987398]   ESR =3D 0x96000005
-[  807.987428]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
-[  807.987477]   SET =3D 0, FnV =3D 0
-[  807.987507]   EA =3D 0, S1PTW =3D 0
-[  807.987536]   FSC =3D 0x05: level 1 translation fault
-[  807.987570] Data abort info:
-[  807.987763]   ISV =3D 0, ISS =3D 0x00000005
-[  807.987801]   CM =3D 0, WnR =3D 0
-[  807.987832] swapper pgtable: 4k pages, 39-bit VAs, pgdp=3D0000000001165=
-000
-[  807.987872] [ffffff80d0588064] pgd=3D0000000000000000, p4d=3D0000000000=
-000000, pud=3D0000000000000000
-[  807.987961] Internal error: Oops: 96000005 [#1] PREEMPT SMP
-[  807.987992] Modules linked in: cmac algif_hash aes_arm64 algif_skcipher=
- af_alg bnep hci_uart btbcm bluetooth ecdh_generic ecc 8021q garp stp llc =
-snd_soc_hdmi_codec brcmfmac vc4 brcmutil cec drm_kms_helper snd_soc_core c=
-fg80211 snd_compress bcm2835_codec(C) snd_pcm_dmaengine syscopyarea bcm283=
-5_isp(C) bcm2835_v4l2(C) sysfillrect v4l2_mem2mem bcm2835_mmal_vchiq(C) ra=
-spberrypi_hwmon sysimgblt videobuf2_dma_contig videobuf2_vmalloc fb_sys_fo=
-ps videobuf2_memops rfkill videobuf2_v4l2 videobuf2_common i2c_bcm2835 snd=
-_bcm2835(C) videodev snd_pcm snd_timer snd mc vc_sm_cma(C) gpio_fan uio_pd=
-rv_genirq uio drm fuse drm_panel_orientation_quirks backlight ip_tables x_=
-tables ipv6
-[  807.988508] CPU: 0 PID: 1321 Comm: bash Tainted: G         C        5.1=
-5.56-v8+ #1575
-[  807.988548] Hardware name: Raspberry Pi 3 Model B Rev 1.2 (DT)
-[  807.988574] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=
-=3D--)
-[  807.988608] pc : set_fan_speed.part.5+0x34/0x80 [gpio_fan]
-[  807.988654] lr : gpio_fan_set_cur_state+0x34/0x50 [gpio_fan]
-[  807.988691] sp : ffffffc008cf3bd0
-[  807.988710] x29: ffffffc008cf3bd0 x28: ffffff80019edac0 x27: 0000000000=
-000000
-[  807.988762] x26: 0000000000000000 x25: 0000000000000000 x24: ffffff8007=
-47c920
-[  807.988787] x23: 000000000000000a x22: ffffff800369f000 x21: 0000000019=
-99997c
-[  807.988854] x20: ffffff800369f2e8 x19: ffffff8002ae8080 x18: 0000000000=
-000000
-[  807.988877] x17: 0000000000000000 x16: 0000000000000000 x15: 000000559e=
-271b70
-[  807.988938] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000=
-000000
-[  807.988960] x11: 0000000000000000 x10: ffffffc008cf3c20 x9 : ffffffcfb6=
-0c741c
-[  807.989018] x8 : 000000000000000a x7 : 00000000ffffffc9 x6 : 0000000000=
-000009
-[  807.989040] x5 : 000000000000002a x4 : 0000000000000000 x3 : ffffff8003=
-69f2e8
-[  807.989062] x2 : 000000000000e780 x1 : 0000000000000001 x0 : ffffff80d0=
-588060
-[  807.989084] Call trace:
-[  807.989091]  set_fan_speed.part.5+0x34/0x80 [gpio_fan]
-[  807.989113]  gpio_fan_set_cur_state+0x34/0x50 [gpio_fan]
-[  807.989199]  cur_state_store+0x84/0xd0
-[  807.989221]  dev_attr_store+0x20/0x38
-[  807.989262]  sysfs_kf_write+0x4c/0x60
-[  807.989282]  kernfs_fop_write_iter+0x130/0x1c0
-[  807.989298]  new_sync_write+0x10c/0x190
-[  807.989315]  vfs_write+0x254/0x378
-[  807.989362]  ksys_write+0x70/0xf8
-[  807.989379]  __arm64_sys_write+0x24/0x30
-[  807.989424]  invoke_syscall+0x4c/0x110
-[  807.989442]  el0_svc_common.constprop.3+0xfc/0x120
-[  807.989458]  do_el0_svc+0x2c/0x90
-[  807.989473]  el0_svc+0x24/0x60
-[  807.989544]  el0t_64_sync_handler+0x90/0xb8
-[  807.989558]  el0t_64_sync+0x1a0/0x1a4
-[  807.989579] Code: b9403801 f9402800 7100003f 8b35cc00 (b9400416)
-[  807.989627] ---[ end trace 8ded4c918658445b ]---
+On Fri, Aug 19, 2022 at 9:35 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Fri, Aug 19, 2022 at 11:04:43AM +0800, Duke Du wrote:
+> > Add the pmbus driver for TEXAS tps546d24 Buck Converter. The
+> > tps546d24 PMBUS_VOUT_MODE is 0x97 (i.e. the bit 5~7 are 100)
+> > which could not meet the standard pmbus spec, the standard mode
+> > of PMBUS_VOUT_MODE must be 000 (linear foramt) or 001 (vid format).
+> > Make the tps546d24 PMBUS_VOUT_MODE return value 0x17 (i.e. the
+> > bit5~7 are 000), VOUT returned value is linear11.
+> >
+>
+> First of all, the above should be documented as comment in the
+> implementation.
+>
+> Second, this is actually problematic. In PMBus version 1.3.1, bit
+> 7 of PMBUS_VOUT_MODE no longer describes the mode (linear, vid, direct,
+> IEEE) but Absolute vs/ Relative VOUT voltages. This affects vout fault
+> and warning limits. If the relative mode bit is set, those limits
+> are supposed to reflect percentages, not absolute voltages.
+>
+> This means that the driver interprets vout voltage limits wrongly,
+> at least if the chip works as described in the datasheet. Changing
+> the reported value of PMBUS_VOUT_MODE is actually counter-productive.
+>
+> This means we'll need a number of changes. At the very least, the
+> PMBus core needs to be be modified to only use bit 5 and 6 to determine
+> the mode. On top of that, the driver probe function should update
+> VOUT_MODE and clear bit 7. It might also make sense to warn in the
+> PMBus core if mode bit 7 is set.
+>
 
-Fix this by checking speed_index and return if it is out of bounds.
+When the vout mode bit 7 is set, we update vout mode and clear bit 7
+in the driver probe function, this operation is the same as changing
+the reported value of PMBUS_VOUT_MODE ?
+Maybe I misunderstood, could you please help to explain clearly about this ?
+Thanks again for your help :)
 
-Tested on a Raspberry Pi 3.
+Thanks,
+Duke
 
-Fixes: d6fe1360f42e ("hwmon: add generic GPIO fan driver")
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/gpio-fan.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-index befe989ca7b9..1d6facee44e0 100644
-=2D-- a/drivers/hwmon/gpio-fan.c
-+++ b/drivers/hwmon/gpio-fan.c
-@@ -128,6 +128,9 @@ static int __get_fan_ctrl(struct gpio_fan_data *fan_da=
-ta)
- /* Must be called with fan_data->lock held, except during initialization.=
- */
- static void set_fan_speed(struct gpio_fan_data *fan_data, int speed_index=
-)
- {
-+	if (speed_index >=3D fan_data->num_speed || speed_index < 0)
-+		return;
-+
- 	if (fan_data->speed_index =3D=3D speed_index)
- 		return;
-
-=2D-
-2.30.2
-
+> An alternative to the second change would be to implement relative
+> vout support in the PMBus core, but that would be much more complex.
+> We could also clear the relative bit in the PMBus core, but that might
+> lead to unexpected side effects (we don't know how various chips
+> respond to that) and thus probably not be a good idea.
+>
+> > Signed-off-by: Duke Du <Duke.Du@quantatw.com>
+>
+> This e-mail address does not match the e-mail address used to send
+> the patch, resulting in a checkpatch warning. Please fix.
+>
+> More comments inline.
+>
+> Thanks,
+> Guenter
+>
+> > ---
+> > Change in v1:
+> >     Initial patchset.
+> > Change in v2:
+> >     Correct the tps546d24.rst format.
+> > Change in v3:
+> >     1. Modify the patch description.
+> >     2. Put the change log between the dashes and diffstat.
+> > ---
+> > ---
+> >  Documentation/hwmon/index.rst     |  1 +
+> >  Documentation/hwmon/tps546d24.rst | 35 +++++++++++++++++++
+> >  MAINTAINERS                       |  7 ++++
+> >  drivers/hwmon/pmbus/Kconfig       |  9 +++++
+> >  drivers/hwmon/pmbus/Makefile      |  1 +
+> >  drivers/hwmon/pmbus/tps546d24.c   | 73 +++++++++++++++++++++++++++++++++++++++
+> >  6 files changed, 126 insertions(+)
+> >  create mode 100644 Documentation/hwmon/tps546d24.rst
+> >  create mode 100644 drivers/hwmon/pmbus/tps546d24.c
+> >
+> > diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> > index f7113b0..d3eede4 100644
+> > --- a/Documentation/hwmon/index.rst
+> > +++ b/Documentation/hwmon/index.rst
+> > @@ -205,6 +205,7 @@ Hardware Monitoring Kernel Drivers
+> >     tps23861
+> >     tps40422
+> >     tps53679
+> > +   tps546d24
+> >     twl4030-madc-hwmon
+> >     ucd9000
+> >     ucd9200
+> > diff --git a/Documentation/hwmon/tps546d24.rst b/Documentation/hwmon/tps546d24.rst
+> > new file mode 100644
+> > index 0000000..3061fd8
+> > --- /dev/null
+> > +++ b/Documentation/hwmon/tps546d24.rst
+> > @@ -0,0 +1,35 @@
+> > +.. SPDX-License-Identifier: GPL-2.0-only
+> > +
+> > +Kernel driver tps546d24
+> > +======================
+> > +
+> > +Supported chips:
+> > +
+> > +  * TI TPS546D24
+> > +
+> > +    Prefix: 'tps546d24'
+> > +
+> > +    Addresses scanned: -
+> > +
+> > +    Datasheet: https://www.ti.com/lit/gpn/tps546d24
+> > +
+> > +Author: Duke Du <dukedu83@gmail.com>
+>
+> This needs to match Author and Signed-off-by:. This applies to all
+> e-mail addresses.
+>
+> > +
+> > +
+> > +Description
+> > +-----------
+> > +
+> > +The TPS546D24A is a highly integrated, non-isolated DC/DC converter capable
+> > +of high frequency operation and 40-A current output from a 7-mm x 5-mm
+> > +package.
+> > +
+> > +Two, three, and four TPS546D24A devices can be interconnected
+> > +to provide up to 160 A on a single output. The device has an option to
+> > +overdrive the internal 5-V LDO with an external 5-V supply via the VDD5
+> > +pin to improve efficiency and reduce power dissipation of the converter.
+> > +
+> > +
+> > +Platform data support
+> > +---------------------
+> > +
+> > +The driver supports standard PMBus driver platform data.
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 8a5012b..fa2d4fb 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -20583,6 +20583,13 @@ Q:   https://patchwork.kernel.org/project/linux-integrity/list/
+> >  T:   git git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+> >  F:   drivers/char/tpm/
+> >
+> > +TPS546D24 DRIVER
+> > +M:   Duke Du <dukedu83@gmail.com>
+> > +L:   linux-hwmon@vger.kernel.org
+> > +S:   Maintained
+> > +F:   Documentation/hwmon/tps546d24.rst
+> > +F:   drivers/hwmon/pmbus/tps546d24.c
+> > +
+> >  TRACING
+> >  M:   Steven Rostedt <rostedt@goodmis.org>
+> >  M:   Ingo Molnar <mingo@redhat.com>
+> > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> > index 951e4a9..89668af 100644
+> > --- a/drivers/hwmon/pmbus/Kconfig
+> > +++ b/drivers/hwmon/pmbus/Kconfig
+> > @@ -397,6 +397,15 @@ config SENSORS_TPS53679
+> >         This driver can also be built as a module. If so, the module will
+> >         be called tps53679.
+> >
+> > +config SENSORS_TPS546D24
+> > +     tristate "TPS546D24"
+> > +     help
+> > +       If you say yes here you get hardware monitoring support for TEXAS
+> > +       TPS546D24.
+> > +
+> > +       This driver can also be built as a module. If so, the module will
+> > +       be called tps546d24
+> > +
+> >  config SENSORS_UCD9000
+> >       tristate "TI UCD90120, UCD90124, UCD90160, UCD90320, UCD9090, UCD90910"
+> >       help
+> > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> > index e2fe86f..0002dbe 100644
+> > --- a/drivers/hwmon/pmbus/Makefile
+> > +++ b/drivers/hwmon/pmbus/Makefile
+> > @@ -41,6 +41,7 @@ obj-$(CONFIG_SENSORS_Q54SJ108A2)    += q54sj108a2.o
+> >  obj-$(CONFIG_SENSORS_STPDDC60)       += stpddc60.o
+> >  obj-$(CONFIG_SENSORS_TPS40422)       += tps40422.o
+> >  obj-$(CONFIG_SENSORS_TPS53679)       += tps53679.o
+> > +obj-$(CONFIG_SENSORS_TPS546D24)      += tps546d24.o
+> >  obj-$(CONFIG_SENSORS_UCD9000)        += ucd9000.o
+> >  obj-$(CONFIG_SENSORS_UCD9200)        += ucd9200.o
+> >  obj-$(CONFIG_SENSORS_XDPE122)        += xdpe12284.o
+> > diff --git a/drivers/hwmon/pmbus/tps546d24.c b/drivers/hwmon/pmbus/tps546d24.c
+> > new file mode 100644
+> > index 0000000..f6f79d3
+> > --- /dev/null
+> > +++ b/drivers/hwmon/pmbus/tps546d24.c
+> > @@ -0,0 +1,73 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +/*
+> > + * Hardware monitoring driver for TEXAS TPS546D24 buck converter
+> > + */
+> > +
+> > +#include <linux/err.h>
+> > +#include <linux/i2c.h>
+> > +#include <linux/init.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +#include <linux/pmbus.h>
+> > +#include "pmbus.h"
+> > +
+> > +static int tps546d24_read_byte_data(struct i2c_client *client, int page, int reg)
+> > +{
+> > +     int ret;
+> > +
+> > +     switch (reg) {
+> > +     case PMBUS_VOUT_MODE:
+> > +             ret = 0x17;
+> > +             break;
+> > +     default:
+> > +             ret = -ENODATA;
+> > +             break;
+> > +     }
+> > +     return ret;
+> > +}
+> > +
+> > +static struct pmbus_driver_info tps546d24_info = {
+> > +     .pages = 1,
+> > +     .format[PSC_VOLTAGE_IN] = linear,
+> > +     .format[PSC_VOLTAGE_OUT] = linear,
+> > +     .format[PSC_TEMPERATURE] = linear,
+> > +     .format[PSC_CURRENT_OUT] = linear,
+> > +     .func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |
+> > +         PMBUS_HAVE_IOUT | PMBUS_HAVE_VOUT |
+> > +             PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
+> > +             PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+> > +     .read_byte_data = tps546d24_read_byte_data,
+>
+> The chip supports multiple phases, and per-phase telemetry.
+> Have you considered supporting it ?
+>
+> > +};
+> > +
+> > +static int tps546d24_probe(struct i2c_client *client)
+> > +{
+> > +     return pmbus_do_probe(client, &tps546d24_info);
+> > +}
+> > +
+> > +static const struct i2c_device_id tps546d24_id[] = {
+> > +     {"tps546d24", 0},
+> > +     {}
+> > +};
+> > +MODULE_DEVICE_TABLE(i2c, tps546d24_id);
+> > +
+> > +static const struct of_device_id __maybe_unused tps546d24_of_match[] = {
+> > +     {.compatible = "tps546d24"},
+>
+> This needs a vendor prefix.
+>
+> > +     {}
+> > +};
+> > +
+> > +/* This is the driver that will be inserted */
+> > +static struct i2c_driver tps546d24_driver = {
+> > +     .driver = {
+> > +                .name = "tps546d24",
+> > +                .of_match_table = of_match_ptr(tps546d24_of_match),
+> > +        },
+> > +     .probe_new = tps546d24_probe,
+> > +     .id_table = tps546d24_id,
+> > +};
+> > +
+> > +module_i2c_driver(tps546d24_driver);
+> > +
+> > +MODULE_AUTHOR("Duke Du <dukedu83@gmail.com>");
+> > +MODULE_DESCRIPTION("PMBus driver for TI tps546d24");
+> > +MODULE_LICENSE("GPL");
+> > +MODULE_IMPORT_NS(PMBUS);
+> > --
+> > 2.7.4
+> >
