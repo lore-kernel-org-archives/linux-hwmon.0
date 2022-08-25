@@ -2,351 +2,286 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB615C04AA5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Aug 2022 13:19:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BF0EC28D13
+	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Aug 2022 14:11:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241810AbiHYNTj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 25 Aug 2022 09:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
+        id S240733AbiHYOLf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 25 Aug 2022 10:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242054AbiHYNTi (ORCPT
+        with ESMTP id S240378AbiHYOLZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:19:38 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4F9AA345
-        for <linux-hwmon@vger.kernel.org>; Thu, 25 Aug 2022 06:19:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661433573; x=1692969573;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kDZ/CsJnR5Mp1MXH1MfReT7B5hirM4PpfP1onAo/Zb0=;
-  b=JuGnsF1eCY+XRrVkje4jKmQwCkls7luPcujFjM9eu5bbx/KvKhf7cJoZ
-   VzFvKtgxI+8mY7VL+LWZo+LjYzuhOigAyOeU6iTzlDnx6HWu0rD/bpem7
-   frBT76FLdlDo5prpP6NhGtqxNnadL9PnHjO277V+FdZIk+7h9gAhkTNE4
-   bnlmn7ZEcfkX5Yv2GQ85xLG2t9N2qByC+u9I873EHYugBzTKcRL/b7Pj3
-   MA2NwLp2yUmKqmT1nJTezsd5xcWCLUs9YazoAaSTPVMXwVgf+freNjPot
-   NDsxE0czNNnncDEUoKRytvIkGnddStTXqGdn0Hqpvvv39FDCE3UxNmzax
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="292977038"
-X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="292977038"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 06:19:32 -0700
-X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="670974980"
-Received: from bnilawar-desk1.iind.intel.com ([10.145.169.158])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 06:19:30 -0700
-From:   Badal Nilawar <badal.nilawar@intel.com>
-To:     intel-gfx@lists.freedesktop.org
-Cc:     ashutosh.dixit@intel.com, riana.tauro@intel.com,
-        anshuman.gupta@intel.com, jon.ewins@intel.com,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH 7/7] drm/i915/hwmon: Extend power/energy for XEHPSDV
-Date:   Thu, 25 Aug 2022 18:51:18 +0530
-Message-Id: <20220825132118.784407-8-badal.nilawar@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220825132118.784407-1-badal.nilawar@intel.com>
-References: <20220825132118.784407-1-badal.nilawar@intel.com>
+        Thu, 25 Aug 2022 10:11:25 -0400
+Received: from mail.aboehler.at (mail.aboehler.at [IPv6:2a01:4f8:121:5012::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAD06CD2D;
+        Thu, 25 Aug 2022 07:11:22 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.aboehler.at (Postfix) with ESMTP id 865E13CC0D34;
+        Thu, 25 Aug 2022 16:11:20 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at aboehler.at
+Received: from mail.aboehler.at ([127.0.0.1])
+        by localhost (aboehler.at [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 6Uvkmo1ZfxsZ; Thu, 25 Aug 2022 16:11:19 +0200 (CEST)
+Received: from x390y.lan (194-166-175-3.adsl.highway.telekom.at [194.166.175.3])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: andreas@aboehler.at)
+        by mail.aboehler.at (Postfix) with ESMTPSA id 41D283CC0293;
+        Thu, 25 Aug 2022 16:11:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aboehler.at;
+        s=default; t=1661436679;
+        bh=5T5F+IanDeqsi8Gi9ZtERNC01QLPNfQ3CdQY7ERZ1V8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kfMPfZy6VU7NwwHeUGBjLL4QCNisSS4v/cqr8N7MwJC+EdvHbuArwS9mnPQ7cCjcU
+         BNue8PUkcPrlyzVFfv8w/j3OxVJsSoY/k1B3QlGxjO6xz8J6EImLmy7pvdIsyXkKUi
+         zhtBhZni2v97np7uZBWxtq/5yEIrAGTq+a8O+fqE=
+From:   =?UTF-8?q?Andreas=20B=C3=B6hler?= <dev@aboehler.at>
+Cc:     dev@aboehler.at, Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: tps23861: add support for initializing the chip
+Date:   Thu, 25 Aug 2022 16:10:42 +0200
+Message-Id: <20220825141043.75354-1-dev@aboehler.at>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Dale B Stimson <dale.b.stimson@intel.com>
+The tps23861 driver does not initialize the chip and relies on it being
+in auto-mode by default. On some devices, these controllers default to
+OFF-Mode and hence cannot be used at all.
 
-Extend hwmon power/energy for XEHPSDV especially per gt level energy
-usage.
+This brings minimal support for initializing the controller in a user-
+defined mode.
 
-v2: Update to latest HWMON spec (Ashutosh)
+Tested on a TP-Link TL-SG2452P with 12x TI TPS23861 controllers.
 
-Signed-off-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
-Signed-off-by: Dale B Stimson <dale.b.stimson@intel.com>
-Signed-off-by: Badal Nilawar <badal.nilawar@intel.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Andreas Böhler <dev@aboehler.at>
 ---
- .../ABI/testing/sysfs-driver-intel-i915-hwmon |   7 +-
- drivers/gpu/drm/i915/gt/intel_gt_regs.h       |   5 +
- drivers/gpu/drm/i915/i915_hwmon.c             | 120 +++++++++++++++++-
- 3 files changed, 128 insertions(+), 4 deletions(-)
+ .../bindings/hwmon/ti,tps23861.yaml           | 76 +++++++++++++++++
+ drivers/hwmon/tps23861.c                      | 81 +++++++++++++++++++
+ 2 files changed, 157 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
-index 34668f6c2dc4..e69bc43d4c9e 100644
---- a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
-+++ b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
-@@ -65,6 +65,11 @@ What:		/sys/devices/.../hwmon/hwmon<i>/energy1_input
- Date:		June 2022
- KernelVersion:	5.19
- Contact:	dri-devel@lists.freedesktop.org
--Description:	RO. Energy input of device in microjoules.
-+Description:	RO. Energy input of device or gt in microjoules.
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+index 3bc8e73dfbf0..ed3a703478fb 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+@@ -35,6 +35,50 @@ required:
+   - compatible
+   - reg
+ 
++patternProperties:
++  "^port@([0-3])$":
++    type: object
++    description: Represents ports of the device and their specific configuration.
 +
-+		For i915 device level hwmon devices (name "i915") this
-+		reflects energy input for the entire device. For gt level
-+		hwmon devices (name "i915_gtN") this reflects energy input
-+		for the gt.
- 
- 		Only supported for particular Intel i915 graphics platforms.
-diff --git a/drivers/gpu/drm/i915/gt/intel_gt_regs.h b/drivers/gpu/drm/i915/gt/intel_gt_regs.h
-index 5d4fbda4d326..b7b343cec2da 100644
---- a/drivers/gpu/drm/i915/gt/intel_gt_regs.h
-+++ b/drivers/gpu/drm/i915/gt/intel_gt_regs.h
-@@ -1579,4 +1579,9 @@
- 
- #define GEN12_SFC_DONE(n)			_MMIO(0x1cc000 + (n) * 0x1000)
- 
-+#define GT0_PACKAGE_ENERGY_STATUS		_MMIO(0x250004)
-+#define GT0_PACKAGE_RAPL_LIMIT			_MMIO(0x250008)
-+#define GT0_PACKAGE_POWER_SKU_UNIT		_MMIO(0x250068)
-+#define GT0_PLATFORM_ENERGY_STATUS		_MMIO(0x25006c)
++    properties:
++      reg:
++        description: The port number
++        items:
++          minimum: 0
++          maximum: 3
 +
- #endif /* __INTEL_GT_REGS__ */
-diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
-index b8ac52f07681..76d73216c54e 100644
---- a/drivers/gpu/drm/i915/i915_hwmon.c
-+++ b/drivers/gpu/drm/i915/i915_hwmon.c
-@@ -12,6 +12,7 @@
- #include "i915_reg.h"
- #include "intel_mchbar_regs.h"
- #include "intel_pcode.h"
-+#include "gt/intel_gt.h"
- #include "gt/intel_gt_regs.h"
++      mode:
++        description: The operating mode the device should be initialized with
++        items:
++          - enum:
++              - auto
++              - semiauto
++              - manual
++              - off
++
++      enable:
++        description: Whether the port should be enabled
++        items:
++          minimum: 0
++          maximum: 1
++
++      power:
++        description: Whether the port should be powered on
++        items:
++          minimum: 0
++          maximum: 1
++
++      poe_plus:
++        description: Whether the port should support PoE+
++        items:
++          minimum: 0
++          maximum: 1
++
++    required:
++      - reg
++
++    additionalProperties: false
++
+ additionalProperties: false
  
- /*
-@@ -21,7 +22,7 @@
-  * - curr   - milliamperes
-  * - energy - microjoules
-  */
--#define SF_TIME            1000
-+#define SF_TIME		1000
- #define SF_POWER	1000000
- #define SF_CURR		1000
- #define SF_ENERGY	1000000
-@@ -37,6 +38,7 @@ struct hwm_reg {
- 	i915_reg_t pkg_power_sku;
- 	i915_reg_t pkg_rapl_limit;
- 	i915_reg_t energy_status_all;
-+	i915_reg_t energy_status_tile;
- };
+ examples:
+@@ -47,5 +91,37 @@ examples:
+               compatible = "ti,tps23861";
+               reg = <0x30>;
+               shunt-resistor-micro-ohms = <255000>;
++
++              port@0 {
++                  reg = <0>;
++                  mode = "auto";
++                  enable = <1>;
++                  power = <1>;
++                  poe_plus = <1>;
++              };
++
++              port@1 {
++                  reg = <1>;
++                  mode = "semiauto";
++                  enable = <1>;
++                  power = <0>;
++                  poe_plus = <1>;
++              };
++
++              port@2 {
++                  reg = <2>;
++                  mode = "manual";
++                  enable = <0>;
++                  power = <0>;
++                  poe_plus = <0>;
++              };
++
++              port@3 {
++                  reg = <3>;
++                  mode = "off";
++                  enable = <0>;
++                  power = <0>;
++                  poe_plus = <1>;
++              };
+           };
+     };
+diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
+index 42762e87b014..27bf8716cf12 100644
+--- a/drivers/hwmon/tps23861.c
++++ b/drivers/hwmon/tps23861.c
+@@ -85,6 +85,8 @@
+ #define PORT_DETECT_CAPACITANCE_INVALID_DELTA	11
+ #define PORT_DETECT_CAPACITANCE_OUT_OF_RANGE	12
+ #define POE_PLUS			0x40
++#define POE_PLUS_MASK(_port)	\
++	GENMASK(_port + 4, _port + 4)
+ #define OPERATING_MODE			0x12
+ #define OPERATING_MODE_OFF		0
+ #define OPERATING_MODE_MANUAL		1
+@@ -94,9 +96,22 @@
+ #define OPERATING_MODE_PORT_2_MASK	GENMASK(3, 2)
+ #define OPERATING_MODE_PORT_3_MASK	GENMASK(5, 4)
+ #define OPERATING_MODE_PORT_4_MASK	GENMASK(7, 6)
++#define OPERATING_MODE_PORT(_mode, _port)	\
++	(_mode << (_port * 2))
  
- struct hwm_energy_info {
-@@ -50,10 +52,12 @@ struct hwm_drvdata {
++#define DISCONNECT_ENABLE		0x13
++#define DISCONNECT_ENABLE_MASK(_port)	\
++	GENMASK(_port, _port)
++#define DISCONNECT_MASK(_port)	\
++	(GENMASK(_port, _port) | GENMASK(_port + 4, _port + 4))
++
++#define DETECT_CLASS_ENABLE		0x14
+ #define DETECT_CLASS_RESTART		0x18
+ #define POWER_ENABLE			0x19
++#define POWER_ENABLE_ON_MASK(_port)	\
++	GENMASK(_port, _port)
++#define POWER_ENABLE_OFF_MASK(_port)	\
++	GENMASK(_port + 4, _port + 4)
+ #define TPS23861_NUM_PORTS		4
+ 
+ #define TPS23861_GENERAL_MASK_1		0x17
+@@ -548,7 +563,16 @@ static int tps23861_probe(struct i2c_client *client)
+ 	struct device *dev = &client->dev;
+ 	struct tps23861_data *data;
  	struct device *hwmon_dev;
- 	struct hwm_energy_info ei;		/*  Energy info for energy1_input */
- 	char name[12];
-+	int gt_n;
- };
++	struct device_node *child;
+ 	u32 shunt_resistor;
++	u32 reg;
++	u32 temp;
++	const char *mode;
++	unsigned int poe_plusval;
++	unsigned int mode_val;
++	unsigned int power_val;
++	unsigned int enable_val;
++	unsigned int disconnect_enable_val;
  
- struct i915_hwmon {
- 	struct hwm_drvdata ddat;
-+	struct hwm_drvdata ddat_gt[I915_MAX_GT];
- 	struct mutex hwmon_lock;		/* counter overflow logic and rmw */
- 	struct hwm_reg rg;
- 	int scl_shift_power;
-@@ -148,7 +152,10 @@ hwm_energy(struct hwm_drvdata *ddat, long *energy)
- 	i915_reg_t rgaddr;
- 	u32 reg_val;
+ 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+@@ -577,6 +601,63 @@ static int tps23861_probe(struct i2c_client *client)
+ 				TPS23861_GENERAL_MASK_1,
+ 				TPS23861_CURRENT_SHUNT_MASK);
  
--	rgaddr = hwmon->rg.energy_status_all;
-+	if (ddat->gt_n >= 0)
-+		rgaddr = hwmon->rg.energy_status_tile;
-+	else
-+		rgaddr = hwmon->rg.energy_status_all;
- 
- 	if (!i915_mmio_reg_valid(rgaddr))
- 		return -EOPNOTSUPP;
-@@ -296,6 +303,11 @@ static const struct hwmon_channel_info *hwm_info[] = {
- 	NULL
- };
- 
-+static const struct hwmon_channel_info *hwm_gt_info[] = {
-+	HWMON_CHANNEL_INFO(energy, HWMON_E_INPUT),
-+	NULL
-+};
++	regmap_read(data->regmap, POE_PLUS, &poe_plusval);
++	regmap_read(data->regmap, POWER_ENABLE, &power_val);
++	regmap_read(data->regmap, OPERATING_MODE, &mode_val);
++	regmap_read(data->regmap, DETECT_CLASS_ENABLE, &enable_val);
++	regmap_read(data->regmap, DISCONNECT_ENABLE, &disconnect_enable_val);
 +
- /* I1 is exposed as power_crit or as curr_crit depending on bit 31 */
- static int hwm_pcode_read_i1(struct drm_i915_private *i915, u32 *uval)
- {
-@@ -428,7 +440,10 @@ hwm_energy_is_visible(const struct hwm_drvdata *ddat, u32 attr)
- 
- 	switch (attr) {
- 	case hwmon_energy_input:
--		rgaddr = hwmon->rg.energy_status_all;
-+		if (ddat->gt_n >= 0)
-+			rgaddr = hwmon->rg.energy_status_tile;
-+		else
-+			rgaddr = hwmon->rg.energy_status_all;
- 		return i915_mmio_reg_valid(rgaddr) ? 0444 : 0;
- 	default:
- 		return 0;
-@@ -563,6 +578,44 @@ static const struct hwmon_chip_info hwm_chip_info = {
- 	.info = hwm_info,
- };
- 
-+static umode_t
-+hwm_gt_is_visible(const void *drvdata, enum hwmon_sensor_types type,
-+		  u32 attr, int channel)
-+{
-+	struct hwm_drvdata *ddat = (struct hwm_drvdata *)drvdata;
-+
-+	switch (type) {
-+	case hwmon_energy:
-+		return hwm_energy_is_visible(ddat, attr);
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int
-+hwm_gt_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-+	    int channel, long *val)
-+{
-+	struct hwm_drvdata *ddat = dev_get_drvdata(dev);
-+
-+	switch (type) {
-+	case hwmon_energy:
-+		return hwm_energy_read(ddat, attr, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static const struct hwmon_ops hwm_gt_ops = {
-+	.is_visible = hwm_gt_is_visible,
-+	.read = hwm_gt_read,
-+};
-+
-+static const struct hwmon_chip_info hwm_gt_chip_info = {
-+	.ops = &hwm_gt_ops,
-+	.info = hwm_gt_info,
-+};
-+
- static void
- hwm_get_preregistration_info(struct drm_i915_private *i915)
- {
-@@ -571,7 +624,9 @@ hwm_get_preregistration_info(struct drm_i915_private *i915)
- 	struct hwm_drvdata *ddat = &hwmon->ddat;
- 	intel_wakeref_t wakeref;
- 	u32 val_sku_unit;
-+	struct intel_gt *gt;
- 	long energy;
-+	int i;
- 
- 	if (IS_DG1(i915) || IS_DG2(i915)) {
- 		hwmon->rg.gt_perf_status = GEN12_RPSTAT1;
-@@ -579,12 +634,21 @@ hwm_get_preregistration_info(struct drm_i915_private *i915)
- 		hwmon->rg.pkg_power_sku = INVALID_MMIO_REG;
- 		hwmon->rg.pkg_rapl_limit = PCU_PACKAGE_RAPL_LIMIT;
- 		hwmon->rg.energy_status_all = PCU_PACKAGE_ENERGY_STATUS;
-+		hwmon->rg.energy_status_tile = INVALID_MMIO_REG;
-+	} else if (IS_XEHPSDV(i915)) {
-+		hwmon->rg.pkg_power_sku_unit = GT0_PACKAGE_POWER_SKU_UNIT;
-+		hwmon->rg.pkg_power_sku = INVALID_MMIO_REG;
-+		hwmon->rg.pkg_rapl_limit = GT0_PACKAGE_RAPL_LIMIT;
-+		hwmon->rg.energy_status_all = GT0_PLATFORM_ENERGY_STATUS;
-+		hwmon->rg.energy_status_tile = GT0_PACKAGE_ENERGY_STATUS;
-+		hwmon->rg.gt_perf_status = INVALID_MMIO_REG;
- 	} else {
- 		hwmon->rg.gt_perf_status = INVALID_MMIO_REG;
- 		hwmon->rg.pkg_power_sku_unit = INVALID_MMIO_REG;
- 		hwmon->rg.pkg_power_sku = INVALID_MMIO_REG;
- 		hwmon->rg.pkg_rapl_limit = INVALID_MMIO_REG;
- 		hwmon->rg.energy_status_all = INVALID_MMIO_REG;
-+		hwmon->rg.energy_status_tile = INVALID_MMIO_REG;
- 	}
- 
- 	with_intel_runtime_pm(uncore->rpm, wakeref) {
-@@ -614,6 +678,10 @@ hwm_get_preregistration_info(struct drm_i915_private *i915)
- 	 */
- 	if (i915_mmio_reg_valid(hwmon->rg.energy_status_all))
- 		hwm_energy(ddat, &energy);
-+	if (i915_mmio_reg_valid(hwmon->rg.energy_status_tile)) {
-+		for_each_gt(gt, i915, i)
-+			hwm_energy(&hwmon->ddat_gt[i], &energy);
-+	}
- }
- 
- void i915_hwmon_register(struct drm_i915_private *i915)
-@@ -622,6 +690,10 @@ void i915_hwmon_register(struct drm_i915_private *i915)
- 	struct i915_hwmon *hwmon;
- 	struct device *hwmon_dev;
- 	struct hwm_drvdata *ddat;
-+	struct hwm_drvdata *ddat_gt;
-+	struct intel_gt *gt;
-+	const char *ddname;
-+	int i;
- 
- 	/* hwmon is available only for dGfx */
- 	if (!IS_DGFX(i915))
-@@ -638,6 +710,16 @@ void i915_hwmon_register(struct drm_i915_private *i915)
- 	ddat->hwmon = hwmon;
- 	ddat->uncore = &i915->uncore;
- 	snprintf(ddat->name, sizeof(ddat->name), "i915");
-+	ddat->gt_n = -1;
-+
-+	for_each_gt(gt, i915, i) {
-+		ddat_gt = hwmon->ddat_gt + i;
-+
-+		ddat_gt->hwmon = hwmon;
-+		ddat_gt->uncore = gt->uncore;
-+		snprintf(ddat_gt->name, sizeof(ddat_gt->name), "i915_gt%u", i);
-+		ddat_gt->gt_n = i;
-+	}
- 
- 	hwm_get_preregistration_info(i915);
- 
-@@ -654,18 +736,50 @@ void i915_hwmon_register(struct drm_i915_private *i915)
- 	}
- 
- 	ddat->hwmon_dev = hwmon_dev;
-+
-+	for_each_gt(gt, i915, i) {
-+		ddat_gt = hwmon->ddat_gt + i;
-+		/*
-+		 * Create per-gt directories only if a per-gt attribute is
-+		 * visible. Currently this is only energy
-+		 */
-+		if (!hwm_gt_is_visible(ddat_gt, hwmon_energy, hwmon_energy_input, 0))
++	for_each_child_of_node(dev->of_node, child) {
++		if (of_property_read_u32(child, "reg", &reg))
 +			continue;
 +
-+		ddname = ddat_gt->name;
-+		hwmon_dev = hwmon_device_register_with_info(dev, ddname,
-+							    ddat_gt,
-+							    &hwm_gt_chip_info,
-+							    NULL);
-+		if (!IS_ERR(hwmon_dev))
-+			ddat_gt->hwmon_dev = hwmon_dev;
-+	}
- }
- 
- void i915_hwmon_unregister(struct drm_i915_private *i915)
- {
- 	struct i915_hwmon *hwmon;
- 	struct hwm_drvdata *ddat;
-+	struct intel_gt *gt;
-+	int i;
- 
- 	hwmon = fetch_and_zero(&i915->hwmon);
- 	if (!hwmon)
- 		return;
- 
- 	ddat = &hwmon->ddat;
++		if (reg > (TPS23861_NUM_PORTS - 1) || reg < 0)
++			continue;
 +
-+	for_each_gt(gt, i915, i) {
-+		struct hwm_drvdata *ddat_gt;
++		if (!of_property_read_string(child, "mode", &mode)) {
++			if (!strncmp(mode, "manual", 6)) {
++				mode_val &= ~OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
++				mode_val |= OPERATING_MODE_PORT(OPERATING_MODE_MANUAL, reg);
++			} else if (!strncmp(mode, "semiauto", 8)) {
++				mode_val &= ~OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
++				mode_val |= OPERATING_MODE_PORT(OPERATING_MODE_SEMI, reg);
++			} else if (!strncmp(mode, "auto", 4))
++				mode_val |= OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
++			else
++				mode_val &= ~OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
++		}
 +
-+		ddat_gt = hwmon->ddat_gt + i;
++		if (!of_property_read_u32(child, "enable", &temp)) {
++			if (temp) {
++				enable_val |= DISCONNECT_MASK(reg);
++				disconnect_enable_val |= DISCONNECT_ENABLE_MASK(reg);
++			} else {
++				enable_val &= ~DISCONNECT_MASK(reg);
++				disconnect_enable_val &= ~DISCONNECT_ENABLE_MASK(reg);
++			}
++		}
 +
-+		if (ddat_gt->hwmon_dev) {
-+			hwmon_device_unregister(ddat_gt->hwmon_dev);
-+			ddat_gt->hwmon_dev = NULL;
++		if (!of_property_read_u32(child, "power", &temp)) {
++			if (temp)
++				power_val |= POWER_ENABLE_ON_MASK(reg);
++			else
++				power_val |= POWER_ENABLE_OFF_MASK(reg);
++		}
++
++		if (!of_property_read_u32(child, "poe_plus", &temp)) {
++			if (temp)
++				poe_plusval |= POE_PLUS_MASK(reg);
++			else
++				poe_plusval &= ~POE_PLUS_MASK(reg);
 +		}
 +	}
 +
- 	if (ddat->hwmon_dev)
- 		hwmon_device_unregister(ddat->hwmon_dev);
- 
++	regmap_write(data->regmap, POE_PLUS, poe_plusval);
++	regmap_write(data->regmap, POWER_ENABLE, power_val);
++	regmap_write(data->regmap, OPERATING_MODE, mode_val);
++	regmap_write(data->regmap, DETECT_CLASS_ENABLE, enable_val);
++	regmap_write(data->regmap, DISCONNECT_ENABLE, disconnect_enable_val);
++
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
+ 							 data, &tps23861_chip_info,
+ 							 NULL);
 -- 
-2.25.1
+2.37.2
 
