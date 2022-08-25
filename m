@@ -2,248 +2,365 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26E98C04AA5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Aug 2022 07:28:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CEB5C28D13
+	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Aug 2022 11:22:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237975AbiHYH2X (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 25 Aug 2022 03:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
+        id S240285AbiHYLWt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 25 Aug 2022 07:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237516AbiHYH2P (ORCPT
+        with ESMTP id S230395AbiHYLWs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 Aug 2022 03:28:15 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3377548E
-        for <linux-hwmon@vger.kernel.org>; Thu, 25 Aug 2022 00:27:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661412479; x=1692948479;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=7vWtmKIfPED/SvSTnUV5aNlYwEy2UBrQgkl/edtCQM0=;
-  b=hbgmbV4aSR/rzeDX9teIBu8YnP8K8JMrE2jBvpOaaAyOa8vorAyAf0Y9
-   YvwoiEtsS/g+7/2SRAxW8nqWNYazeiuIKZv/bl9+69TyL5f+l6jZvsqvj
-   33rDcpDHudU+8fGNUHPJKNKC7fszIgrk3zQ4P7SalPGOFtnvzu1ro6kfR
-   BxwzyrfUr0tUDxYcoDWaGvPvMplIMI12bgpv4PZWn/59SaIb9X4iHiHad
-   wMuv4xHzfehdBAoKSlkAgWv0cyZIGOsRl0iIljoiPFVdZmgHLIvOTLH4+
-   l64UnnOfEv76kBE8yYv0/Zohv3Ax6j5hN+x9mm+sxUS6yW+C69rfTII66
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="292914695"
-X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
-   d="scan'208";a="292914695"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 00:27:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
-   d="scan'208";a="670861123"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga008.fm.intel.com with ESMTP; 25 Aug 2022 00:27:58 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 25 Aug 2022 00:27:58 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 25 Aug 2022 00:27:57 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 25 Aug 2022 00:27:57 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 25 Aug 2022 00:27:57 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XsWbj0Zz4z+/fkxbP2RzI5MAEx1M+zbug6L/RjeSV9mvdlL9TUZlsYLUKBKoS3Y3DKJ2z3BfAAM+lvLguEkM1jP5q7NgOtTJPFlVTFhDajybxuzIVNcBK8TfaW9ONPufve/k68cCPB/pVa7gzSl7PqUrmdn15XgLeP2l/9E0voTn9g0iTLyVD4tmbSMQi4ib+GTWDxJKfhIqs4LlxJRrw6vqeIFgCayczVfqjmRRQR3aswE1C0/dKzAvVgC2gsnS0QyvcfyywD05+Oh0pAcW8pgU03WRl23jj1HN0U0QO3xy7Sf69AcHe9Sn0swrRou/xvm8c41WZSCjzH0AEF2AyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NDjUPwHMFH66iKTDxXFyxQPyLGuNhfXA3qVScANr2Dc=;
- b=Cd8rphSsiRcpwhPKShr9T8WZRp3DeGeUV4J7MNx6d8L+1XkaCchCX8M0VWf+1+EihyWUDUp8erC54tSU1A4d9SdXQEZMBm0YGZgZjcJ9MKNpkjshrvNNC1KS+qs2CokqvvNsEPuy8SfGCyKEFKWPatTxLlHEKWD4AZ5ogSDGei6Uxwin4bLeR9ssQL4HD15OGHNkI3yK6B1if/3SsLn/+JUirCfjMFIQ1ABLXgVmybDcwVVlVxlqXyJ1D2lW4RMdgxMJEEq6xt+xJc2iUfG7nOtpFwx2uRf0W2T6JjGQm6e86mRJns63XxYtGFy/Cq3hJDYl0TX7W7Vv873mEEHP5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BN9PR11MB5530.namprd11.prod.outlook.com (2603:10b6:408:103::8)
- by DM4PR11MB5357.namprd11.prod.outlook.com (2603:10b6:5:394::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.20; Thu, 25 Aug
- 2022 07:27:55 +0000
-Received: from BN9PR11MB5530.namprd11.prod.outlook.com
- ([fe80::f4e3:c92:77e5:3de3]) by BN9PR11MB5530.namprd11.prod.outlook.com
- ([fe80::f4e3:c92:77e5:3de3%7]) with mapi id 15.20.5566.014; Thu, 25 Aug 2022
- 07:27:55 +0000
-Message-ID: <95f3d282-bc2f-acb3-d633-045a68de1125@intel.com>
-Date:   Thu, 25 Aug 2022 12:57:46 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [Intel-gfx] [PATCH 1/7] drm/i915/hwmon: Add HWMON infrastructure
-Content-Language: en-US
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     <intel-gfx@lists.freedesktop.org>, <linux-hwmon@vger.kernel.org>,
-        "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
-References: <20220818193901.2974625-1-badal.nilawar@intel.com>
- <20220818193901.2974625-2-badal.nilawar@intel.com> <87ilmoo707.fsf@intel.com>
- <50a6d108-4518-c30e-5096-3ee921c75606@intel.com> <8735dnmgwp.fsf@intel.com>
- <20220823121926.GD203169@roeck-us.net> <8735dnkrpt.fsf@intel.com>
- <31f5e19e-1f74-9457-e9a8-b65a5094f1e4@intel.com> <87r117ja3l.fsf@intel.com>
-From:   "Nilawar, Badal" <badal.nilawar@intel.com>
-In-Reply-To: <87r117ja3l.fsf@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0006.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:95::10) To BN9PR11MB5530.namprd11.prod.outlook.com
- (2603:10b6:408:103::8)
+        Thu, 25 Aug 2022 07:22:48 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020CFAEDB0;
+        Thu, 25 Aug 2022 04:22:47 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-334dc616f86so532032677b3.8;
+        Thu, 25 Aug 2022 04:22:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=GRYO7G3mRjzW1fw3dAdOY31yO6ERGY2FYryEhajulBc=;
+        b=mS7tm2Rpqeui2+0n3Gz+dL+1z+AmeSnXczHefanziYona46q0IVYA/G+cwtVDrR3JS
+         53UnYtQlvRTKV95nP/S80TH+1qLBEsQOi+7EHAkeyj+I0+8bX/yzbHnvFK1xtSUrASE+
+         7alHaaebWF/35TG6n+d0v59ohlx5Bl0hgEtYhTTpKYt7bAA0fvY/NnR5mgZLnhne65GT
+         zFhlpXbwUSaEj1CaYU396c3Qsqr6oNm6kVGADkhluP9UnimSDvMFxAEjan3mVz1KOJhE
+         YFInXzaausEozggllP6Q2rP6HS7Dv+HnsX3WuF963/IBtL/cFFwKAIo4nA8aLNHPSVpU
+         Qf/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=GRYO7G3mRjzW1fw3dAdOY31yO6ERGY2FYryEhajulBc=;
+        b=3YAlkDrw57sl2FGuwkBXTXXX0tqpNfA6WM718Y5BAQ/0tRh//XoaiUQ3cr5ZWMW+m/
+         1MmfbcXYAzNaADTJRWSsHjeWqFNBtyi61Oq26ESpw4GQ4Hz2R9dF7NOJzQvfrdVMLb9+
+         60HmEKKDuOB2W7tmMQ40o9gAApZIuLFCkxq7Ban7oPUMDnk46Ws/BzO7rWFjcM61RS33
+         rEJ1qHBMSGjZkdUQrPBDz9wijTBQwWnazu35x3deGfJicebhgzabjc+d5crFstsksNLj
+         RbthZobi5DTgaFb6GYzq8e2E6+184dF8Lo/zv39Ttq2iBvexvb8Zlfjo0KkVz/IKxO3W
+         I7lg==
+X-Gm-Message-State: ACgBeo3/86vHPMfBgU2AMqkNMQ7BULKpvvTj/zdaY9/5W2XN6IZQ7a0S
+        Owsg7juNTe8+OtifM9Pd3HJUP7J6fY2Ra0VLRj3YTj5mKilsdw==
+X-Google-Smtp-Source: AA6agR4KxqKgfCWUZmHktmdpShpDtZweo4sTRhWjVNawu7ya9FNgOB05EydNM906dGurapfSAGgJvwmwj1Fq5zAmM2k=
+X-Received: by 2002:a81:1dd0:0:b0:33d:6c3e:ebc9 with SMTP id
+ d199-20020a811dd0000000b0033d6c3eebc9mr3293008ywd.491.1661426566162; Thu, 25
+ Aug 2022 04:22:46 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8fbbd87e-93fc-462f-3dab-08da866b53e8
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5357:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vphr9BnQeG3Tz8DEo2d5az7xwLob4w3mpETiUtyFYZx6LJ0Y2FlPMPTDk0pNfBq9OXjhTuo7xBCAxT296txlqZEAawZDgfxgJIfCMq6sFMli9cqVc5D9dQtVwyz2CQqElj702qO8t8Xo1ldDuz9mvYbU6nb/YYZ/CAqodqmTwZ+u4aI4Hv/p8dmENl7O6LuhRfo/u+UAnoUgzJzkVXUKvlB0vXqiAloy3aJrTTx81arIILQJ/b6PwXlTe1xVprTtnRNpvpANLugDbejvzQ+nRP3S5trQXBMw4r0Bcm/3Odp/RsAuz8WvWAqBQY7msFHg3XMhfu+Eqr6PTOeWuFGsnE8wwPTl06HGvAOK0ncNhVoCPdTUq2PeBUhQVfuXnk9CAibsHU6zON2Wqmy6aJFE+Se46m/OGwgmVk/e41kWBlgMmDkT9J6qAXXbGGhIV0k4wgf4vqDU0uE/H/9KQf1qJkcMTAQQaG5gwdOh3P6OiCfRkwUeYO+FxNCSL6xWPd5uMKeqySQ3ZRuhWjICGR7u7DTJJqCAtkqJSny6d0+TVD4uz76+POAgag6asYpn2YVFCc9uJmByRBCUhcCmbr+c51jy5dY5Q86KF71r28CqA/yiMSNFnHcsIEG7I1NBhYtE/QARJCCKSJyEKG+QuqEQQFewAGF8irhzWN8iO/bfxs6ZsOK5EYne8yzm+A6+p/FTj9ucDG9LsLiGOyQJqrGvxaTdW04BHE8FPH7DVtW7FoUAo4rB4aL0Z9zCu/BJ5R4jlGBGYNePCrJY0AN9Hk06tezMqCk233IM/fJcw10U2wM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5530.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(136003)(346002)(366004)(376002)(39860400002)(26005)(31686004)(38100700002)(110136005)(6512007)(316002)(36756003)(186003)(53546011)(66476007)(5660300002)(66946007)(8936002)(66556008)(31696002)(83380400001)(8676002)(478600001)(4326008)(6506007)(2906002)(6666004)(86362001)(6486002)(2616005)(41300700001)(82960400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y2VmbkJkdVNjM1lEUkhnc01VMFVveW9TWXl1T2tXa3FRSzdPTWk4UHJmamdr?=
- =?utf-8?B?Z1hyOUtEVUZTT09TNktvYm5zbDRBbk53c043WU9WYWdVMCtDNEh2MFJiQ1h4?=
- =?utf-8?B?czEwNHBoSHhtcGNyYWFqdDRaalRVdW5OMGJUenNVZVNKbG9kQ1gyWTZqOWVX?=
- =?utf-8?B?MTdoV1hnZS81TDExeGN6S01tV1JrRXozRDJLMkFPc21YTCtkQisxNFlwZ1BO?=
- =?utf-8?B?aFFCeEdydFJqeGRwZU1KVFM5cXRmNHVlUUxaNzA3a2xuYjRzTVAvNXJBWTMz?=
- =?utf-8?B?cDJjcXNtTEdqcXg1UTVic0NiTTVnMCtmcGxFUWV2UEl6UDBGbXk4L2d5VmV4?=
- =?utf-8?B?OTdSMXk4RVJXOVBIaUFrYm5TYkRSM0Z1UmsxOU95azYrUWRnOEtHajRMdkxM?=
- =?utf-8?B?RkFWWHA2MU5TeXJiWDUrTHg3QkExczBnR1VrSlRJR1lUMkc0cXducGFYZkht?=
- =?utf-8?B?bVdNSGFZSjVUN3NENHpxSFJ2QW50ZWh4bDJWRzF0NnpPdlkzMFZmWnRndUVZ?=
- =?utf-8?B?ZkRyYk1kRTNacnk2UVdFckhZam15R0Q1dU1uMkM1U0srVDJ1M1oxUWVhTTlh?=
- =?utf-8?B?WnlEd3I3OUEydk1rVmdmQnBEd0p2anZmK2dLUGJodHRBMUpwWG9Ta2t3Q3lr?=
- =?utf-8?B?RzZmajBpMTN0anNNNXRtVUJMODlMMlp4dmFVMm50S1RzRFd2SXZEenRyMUhu?=
- =?utf-8?B?Vlk0cHQxenBXN1BRZ3QwVFZJM1RvMC9LYjQxOGxCQjY0SmZUMkd5UzFRQlAx?=
- =?utf-8?B?THdyUDBxOTQ5Q1QyVUhnRExGWCtKSm5XRnVzZkhLS0VGUVRuZGdtbzJFaEVZ?=
- =?utf-8?B?RXk4TUJ0ODNlWDJ4R1ltQnF6MEk1MktBcFdnbWoxVWJYUTBDN0swL3c5c2xH?=
- =?utf-8?B?T1lldWIvRHRiN1orUDJJSTl3d2luYUY2UXQvbjEzbktWZFJ4OWdSRXJqLzZj?=
- =?utf-8?B?N0JaOTBhYW8xdWdMenRDdmNrL3Rtbjh0UHZ4c1VTZU9VMmlkQ2Q5VkVTTUFM?=
- =?utf-8?B?RzVkbjg0WUV6YldrOGkxZlpGOWUzRXdnUHF6dU9URnBrQXJyY01YV05kM0Uv?=
- =?utf-8?B?OVIrLzRwY3F1RHNMUHhxR2x4VjFyajI3eVBmdzFvVTlpOTFUTHZoaEtFY1E3?=
- =?utf-8?B?UEZxanRTbkR6VXkxTUVOcjJuMUVMSDcxbmpHVTF3aTVydVNkTlRHMGZNZTM5?=
- =?utf-8?B?SUg0Ky96Z29zbjVkb2h2cXVqZkpSemptRlI0Tk8wK3RoWHEweWd1OXJ0RDRZ?=
- =?utf-8?B?aFZPZG1aVnJVZnRHZWlyenJZN1BYQ2hSY2pMQm5LRTQ5L3VFZ0dzMWZGVkth?=
- =?utf-8?B?Qm1zTENPMjVBU3J5WXE1OHg5bWl0eTAzQVhoZDlwYkNlRi9MS29vcDkrQWxQ?=
- =?utf-8?B?TFpYWGg1REdTMzRaeStxNVZncy9jSlhpRFBXTHBNMnlHTTQzUnhON3VWV3FS?=
- =?utf-8?B?Uk9KQWdlY09JZ2I4cU9HUlJzT0Y1Mm9HSWJGbkZOY0dpVlN3WU45bk5SWVJr?=
- =?utf-8?B?eUppTXJqK0s0R1JoTXFMQU1jK09mSG1uOVNJdXJxRGJLYm9seEl5NlVraWw2?=
- =?utf-8?B?Y2VBYVVEczFPRGlMdG9LS1g0dXVpc3dkTjBISVlFYVR3WWppMnF1dTNHcU9Y?=
- =?utf-8?B?VWk4c0Fad3hQK2JKd1p0RmZVeVhwUkZlUHh5dUR3OCt0V0RWQ1BmUU5jWks0?=
- =?utf-8?B?eG5JZExvQlU1T0phYitFWmVtUW9WdjEwL0t4MlFTVDhVUUFrV1phZHQ4VlZt?=
- =?utf-8?B?MjNzNnA1WmtSVXpPQUpLK1FkN1doU0UwME9qRWFyYWlraGJCdFZvdEtXWitB?=
- =?utf-8?B?ZGZpVGhlVUNNNXQ2U3RBREszSEk1aXpjRjVqRngzZWhUSUVzdEQ0V1plblV3?=
- =?utf-8?B?U2dTMW5MSnVwWnRuWGxzUUJ6N2tjUld6NTdkWXJ0NDZ6NXNySXRHZHpuWWJO?=
- =?utf-8?B?U0pnRjgrQk1vdXJHVXVyL0dDelZhUlhzYmNJcGp0ZVBtejZxYkJ2aDhobG5u?=
- =?utf-8?B?c0VxenVWcDMxTjBJdXFNU0VFT2w5a1gwcGFwZHhhWEcvR1RCclppYjZSdGtR?=
- =?utf-8?B?VFhHcjhwRUNmL0FjdTJ6NmxYekZaTHB3T3V5MHlCd3pudlNYeHozVnNFNXBL?=
- =?utf-8?B?THZ4Z3pkdnZGY1MreThIZmRGZ2QzQ2JSanJzdDcweGZhUnRnNi9MeEFMUDVt?=
- =?utf-8?B?RFE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8fbbd87e-93fc-462f-3dab-08da866b53e8
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5530.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2022 07:27:55.7616
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uKp1qO6t3mbxmH6VC1Zk1HD8o0A+7BEPBHz1dX45LqsbsYCozxujrqy8Sf+H26lnxuJStE3RpNPKhz0XgneN1w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5357
-X-OriginatorOrg: intel.com
+References: <1660878283-9512-1-git-send-email-Duke.Du@quantatw.com>
+ <20220819133458.GC3108215@roeck-us.net> <CAJqQiD39b=n-Lsza_YUPQR2jm49a3ZLxT-x7eYUv=yhD4fiDJQ@mail.gmail.com>
+ <20220824105027.GA13261@roeck-us.net>
+In-Reply-To: <20220824105027.GA13261@roeck-us.net>
+From:   Duke Du <dukedu83@gmail.com>
+Date:   Thu, 25 Aug 2022 19:22:34 +0800
+Message-ID: <CAJqQiD2+6jo3h5Ymd2e7Th634gBZgijBxp5xRHB=h7-__8N0uQ@mail.gmail.com>
+Subject: Re: [PATCH v3] hwmon: Add driver for the TEXAS TPS546D24 Buck Converter.
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fran.hsu@quantatw.com, charles.hsu@quantatw.com,
+        george.hung@quantatw.com, duke.du@quantatw.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Wed, Aug 24, 2022 at 6:50 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Wed, Aug 24, 2022 at 01:58:33PM +0800, Duke Du wrote:
+> > Hi Guenter,
+> > Thanks for your reply !
+> > But I have some confusion as following, please help to give me some feedback.
+> > Thanks a lot !
+> >
+> > On Fri, Aug 19, 2022 at 9:35 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > >
+> > > On Fri, Aug 19, 2022 at 11:04:43AM +0800, Duke Du wrote:
+> > > > Add the pmbus driver for TEXAS tps546d24 Buck Converter. The
+> > > > tps546d24 PMBUS_VOUT_MODE is 0x97 (i.e. the bit 5~7 are 100)
+> > > > which could not meet the standard pmbus spec, the standard mode
+> > > > of PMBUS_VOUT_MODE must be 000 (linear foramt) or 001 (vid format).
+> > > > Make the tps546d24 PMBUS_VOUT_MODE return value 0x17 (i.e. the
+> > > > bit5~7 are 000), VOUT returned value is linear11.
+> > > >
+> > >
+> > > First of all, the above should be documented as comment in the
+> > > implementation.
+> > >
+> > > Second, this is actually problematic. In PMBus version 1.3.1, bit
+> > > 7 of PMBUS_VOUT_MODE no longer describes the mode (linear, vid, direct,
+> > > IEEE) but Absolute vs/ Relative VOUT voltages. This affects vout fault
+> > > and warning limits. If the relative mode bit is set, those limits
+> > > are supposed to reflect percentages, not absolute voltages.
+> > >
+> > > This means that the driver interprets vout voltage limits wrongly,
+> > > at least if the chip works as described in the datasheet. Changing
+> > > the reported value of PMBUS_VOUT_MODE is actually counter-productive.
+> > >
+> > > This means we'll need a number of changes. At the very least, the
+> > > PMBus core needs to be be modified to only use bit 5 and 6 to determine
+> > > the mode. On top of that, the driver probe function should update
+> > > VOUT_MODE and clear bit 7. It might also make sense to warn in the
+> > > PMBus core if mode bit 7 is set.
+> > >
+> >
+> > When the vout mode bit 7 is set, we update vout mode and clear bit 7
+> > in the driver probe function, this operation is the same as changing
+> > the reported value of PMBUS_VOUT_MODE ?
+>
+> Absolutely not. When changing the bit in the register, the chip operation
+> mode changes, and the associated values (VOUT*) change from relative
+> to absolute mode. When changing the value reported by the chip, nothing
+> changes from the chip side, it still operates in relative mode, and all
+> VOUT* registers are set to relative mode.
+>
+> Guenter
+>
+Got it, thanks for your reply !!
 
+Another question, If we don't need to change the mode from relative to absolute
+mode, could we just change the PMBus core to determine vout mode with only
+bit 5 and 6 ?
+And clearing the bit 7 in the driver (tps546d24.c) probe function
+would not be needed, right ?
 
-On 23-08-2022 20:11, Jani Nikula wrote:
-> On Tue, 23 Aug 2022, "Nilawar, Badal" <badal.nilawar@intel.com> wrote:
->> On 23-08-2022 19:05, Jani Nikula wrote:
->>> On Tue, 23 Aug 2022, Guenter Roeck <linux@roeck-us.net> wrote:
->>>> On Tue, Aug 23, 2022 at 12:46:14PM +0300, Jani Nikula wrote:
->>>> [ ... ]
->>>>>>>
->>>>>>> So why not do this in i915 Kconfig:
->>>>>>>
->>>>>>> config DRM_I915
->>>>>>> 	...
->>>>>>> 	depends on HWMON || HWMON=n
->>>>>> With this change I am getting recursive dependancy error when I run make
->>>>>> oldconfig
->>>>>>
->>>>>> badal@bnilawar-desk1:~/workspace/wp3/drm-tip$ make oldconfig
->>>>>>      HOSTCC  scripts/basic/fixdep
->>>>>>      HOSTCC  scripts/kconfig/conf.o
->>>>>>      HOSTCC  scripts/kconfig/confdata.o
->>>>>>      HOSTCC  scripts/kconfig/expr.o
->>>>>>      LEX     scripts/kconfig/lexer.lex.c
->>>>>>      YACC    scripts/kconfig/parser.tab.[ch]
->>>>>>      HOSTCC  scripts/kconfig/lexer.lex.o
->>>>>>      HOSTCC  scripts/kconfig/menu.o
->>>>>>      HOSTCC  scripts/kconfig/parser.tab.o
->>>>>>      HOSTCC  scripts/kconfig/preprocess.o
->>>>>>      HOSTCC  scripts/kconfig/symbol.o
->>>>>>      HOSTCC  scripts/kconfig/util.o
->>>>>>      HOSTLD  scripts/kconfig/conf
->>>>>> drivers/gpu/drm/i915/Kconfig:2:error: recursive dependency detected!
->>>>>> drivers/gpu/drm/i915/Kconfig:2: symbol DRM_I915 depends on HWMON
->>>>>> drivers/hwmon/Kconfig:6:        symbol HWMON is selected by EEEPC_LAPTOP
->>>>>> drivers/platform/x86/Kconfig:332:       symbol EEEPC_LAPTOP depends on INPUT
->>>>>> drivers/input/Kconfig:8:        symbol INPUT is selected by DRM_I915
->>>>>> For a resolution refer to Documentation/kbuild/kconfig-language.rst
->>>>>> subsection "Kconfig recursive dependency limitations"
->>>>>
->>>>> *sigh*
->>>>>
->>>>>     Note:
->>>>> 	select should be used with care. select will force
->>>>> 	a symbol to a value without visiting the dependencies.
->>>>> 	By abusing select you are able to select a symbol FOO even
->>>>> 	if FOO depends on BAR that is not set.
->>>>> 	In general use select only for non-visible symbols
->>>>> 	(no prompts anywhere) and for symbols with no dependencies.
->>>>> 	That will limit the usefulness but on the other hand avoid
->>>>> 	the illegal configurations all over.
->>>>>
->>>> Agreed. HWMON should not be selected anywhere. Unfortunately it is, and
->>>> drm is no exception. It is selected by DRM_RADEON and DRM_AMDGPU.
->>>> Maybe just select it in DRM_I915 as well after all; in practice it won't
->>>> make a difference.
->>>
->>> And I guess everyone just does what I'm about to do now, throw my hands
->>> up in the air in disgust and resignation. :p
->> How about sticking to existing approach only. In my previous response I
->> mentioned that for combo which we want to reject CONFIG_HWMON=m &&
->> CONFIG_DRM_I915=y combo i915_hwmon.o is not getting build.
->> It is only getting build for below combos
->> CONFIG_HWMON=m && CONFIG_DRM_I915=y
->> CONFIG_HWMON=m && CONFIG_DRM_I915=m
->> CONFIG_HWMON=y && CONFIG_DRM_I915=m
-> 
-> Then please hide the IS_REACHABLE() within i915_hwmon.h and add stubs as
-> is customary. Let's not clutter high level driver code with some random
-> #if directives.
+Thanks
+Duke
 
-Thanks, I will resolve this and float the new series.
-
-Regards,
-Badal
-> 
-> BR,
-> Jani.
-> 
-> 
->> Regards,
->> Badal
->>>
->>> BR,
->>> Jani.
->>>
->>>
->>>
-> 
+> > Maybe I misunderstood, could you please help to explain clearly about this ?
+> > Thanks again for your help :)
+> >
+> > Thanks,
+> > Duke
+> >
+> > > An alternative to the second change would be to implement relative
+> > > vout support in the PMBus core, but that would be much more complex.
+> > > We could also clear the relative bit in the PMBus core, but that might
+> > > lead to unexpected side effects (we don't know how various chips
+> > > respond to that) and thus probably not be a good idea.
+> > >
+> > > > Signed-off-by: Duke Du <Duke.Du@quantatw.com>
+> > >
+> > > This e-mail address does not match the e-mail address used to send
+> > > the patch, resulting in a checkpatch warning. Please fix.
+> > >
+> > > More comments inline.
+> > >
+> > > Thanks,
+> > > Guenter
+> > >
+> > > > ---
+> > > > Change in v1:
+> > > >     Initial patchset.
+> > > > Change in v2:
+> > > >     Correct the tps546d24.rst format.
+> > > > Change in v3:
+> > > >     1. Modify the patch description.
+> > > >     2. Put the change log between the dashes and diffstat.
+> > > > ---
+> > > > ---
+> > > >  Documentation/hwmon/index.rst     |  1 +
+> > > >  Documentation/hwmon/tps546d24.rst | 35 +++++++++++++++++++
+> > > >  MAINTAINERS                       |  7 ++++
+> > > >  drivers/hwmon/pmbus/Kconfig       |  9 +++++
+> > > >  drivers/hwmon/pmbus/Makefile      |  1 +
+> > > >  drivers/hwmon/pmbus/tps546d24.c   | 73 +++++++++++++++++++++++++++++++++++++++
+> > > >  6 files changed, 126 insertions(+)
+> > > >  create mode 100644 Documentation/hwmon/tps546d24.rst
+> > > >  create mode 100644 drivers/hwmon/pmbus/tps546d24.c
+> > > >
+> > > > diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> > > > index f7113b0..d3eede4 100644
+> > > > --- a/Documentation/hwmon/index.rst
+> > > > +++ b/Documentation/hwmon/index.rst
+> > > > @@ -205,6 +205,7 @@ Hardware Monitoring Kernel Drivers
+> > > >     tps23861
+> > > >     tps40422
+> > > >     tps53679
+> > > > +   tps546d24
+> > > >     twl4030-madc-hwmon
+> > > >     ucd9000
+> > > >     ucd9200
+> > > > diff --git a/Documentation/hwmon/tps546d24.rst b/Documentation/hwmon/tps546d24.rst
+> > > > new file mode 100644
+> > > > index 0000000..3061fd8
+> > > > --- /dev/null
+> > > > +++ b/Documentation/hwmon/tps546d24.rst
+> > > > @@ -0,0 +1,35 @@
+> > > > +.. SPDX-License-Identifier: GPL-2.0-only
+> > > > +
+> > > > +Kernel driver tps546d24
+> > > > +======================
+> > > > +
+> > > > +Supported chips:
+> > > > +
+> > > > +  * TI TPS546D24
+> > > > +
+> > > > +    Prefix: 'tps546d24'
+> > > > +
+> > > > +    Addresses scanned: -
+> > > > +
+> > > > +    Datasheet: https://www.ti.com/lit/gpn/tps546d24
+> > > > +
+> > > > +Author: Duke Du <dukedu83@gmail.com>
+> > >
+> > > This needs to match Author and Signed-off-by:. This applies to all
+> > > e-mail addresses.
+> > >
+> > > > +
+> > > > +
+> > > > +Description
+> > > > +-----------
+> > > > +
+> > > > +The TPS546D24A is a highly integrated, non-isolated DC/DC converter capable
+> > > > +of high frequency operation and 40-A current output from a 7-mm x 5-mm
+> > > > +package.
+> > > > +
+> > > > +Two, three, and four TPS546D24A devices can be interconnected
+> > > > +to provide up to 160 A on a single output. The device has an option to
+> > > > +overdrive the internal 5-V LDO with an external 5-V supply via the VDD5
+> > > > +pin to improve efficiency and reduce power dissipation of the converter.
+> > > > +
+> > > > +
+> > > > +Platform data support
+> > > > +---------------------
+> > > > +
+> > > > +The driver supports standard PMBus driver platform data.
+> > > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > > index 8a5012b..fa2d4fb 100644
+> > > > --- a/MAINTAINERS
+> > > > +++ b/MAINTAINERS
+> > > > @@ -20583,6 +20583,13 @@ Q:   https://patchwork.kernel.org/project/linux-integrity/list/
+> > > >  T:   git git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+> > > >  F:   drivers/char/tpm/
+> > > >
+> > > > +TPS546D24 DRIVER
+> > > > +M:   Duke Du <dukedu83@gmail.com>
+> > > > +L:   linux-hwmon@vger.kernel.org
+> > > > +S:   Maintained
+> > > > +F:   Documentation/hwmon/tps546d24.rst
+> > > > +F:   drivers/hwmon/pmbus/tps546d24.c
+> > > > +
+> > > >  TRACING
+> > > >  M:   Steven Rostedt <rostedt@goodmis.org>
+> > > >  M:   Ingo Molnar <mingo@redhat.com>
+> > > > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> > > > index 951e4a9..89668af 100644
+> > > > --- a/drivers/hwmon/pmbus/Kconfig
+> > > > +++ b/drivers/hwmon/pmbus/Kconfig
+> > > > @@ -397,6 +397,15 @@ config SENSORS_TPS53679
+> > > >         This driver can also be built as a module. If so, the module will
+> > > >         be called tps53679.
+> > > >
+> > > > +config SENSORS_TPS546D24
+> > > > +     tristate "TPS546D24"
+> > > > +     help
+> > > > +       If you say yes here you get hardware monitoring support for TEXAS
+> > > > +       TPS546D24.
+> > > > +
+> > > > +       This driver can also be built as a module. If so, the module will
+> > > > +       be called tps546d24
+> > > > +
+> > > >  config SENSORS_UCD9000
+> > > >       tristate "TI UCD90120, UCD90124, UCD90160, UCD90320, UCD9090, UCD90910"
+> > > >       help
+> > > > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> > > > index e2fe86f..0002dbe 100644
+> > > > --- a/drivers/hwmon/pmbus/Makefile
+> > > > +++ b/drivers/hwmon/pmbus/Makefile
+> > > > @@ -41,6 +41,7 @@ obj-$(CONFIG_SENSORS_Q54SJ108A2)    += q54sj108a2.o
+> > > >  obj-$(CONFIG_SENSORS_STPDDC60)       += stpddc60.o
+> > > >  obj-$(CONFIG_SENSORS_TPS40422)       += tps40422.o
+> > > >  obj-$(CONFIG_SENSORS_TPS53679)       += tps53679.o
+> > > > +obj-$(CONFIG_SENSORS_TPS546D24)      += tps546d24.o
+> > > >  obj-$(CONFIG_SENSORS_UCD9000)        += ucd9000.o
+> > > >  obj-$(CONFIG_SENSORS_UCD9200)        += ucd9200.o
+> > > >  obj-$(CONFIG_SENSORS_XDPE122)        += xdpe12284.o
+> > > > diff --git a/drivers/hwmon/pmbus/tps546d24.c b/drivers/hwmon/pmbus/tps546d24.c
+> > > > new file mode 100644
+> > > > index 0000000..f6f79d3
+> > > > --- /dev/null
+> > > > +++ b/drivers/hwmon/pmbus/tps546d24.c
+> > > > @@ -0,0 +1,73 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0+
+> > > > +/*
+> > > > + * Hardware monitoring driver for TEXAS TPS546D24 buck converter
+> > > > + */
+> > > > +
+> > > > +#include <linux/err.h>
+> > > > +#include <linux/i2c.h>
+> > > > +#include <linux/init.h>
+> > > > +#include <linux/kernel.h>
+> > > > +#include <linux/module.h>
+> > > > +#include <linux/pmbus.h>
+> > > > +#include "pmbus.h"
+> > > > +
+> > > > +static int tps546d24_read_byte_data(struct i2c_client *client, int page, int reg)
+> > > > +{
+> > > > +     int ret;
+> > > > +
+> > > > +     switch (reg) {
+> > > > +     case PMBUS_VOUT_MODE:
+> > > > +             ret = 0x17;
+> > > > +             break;
+> > > > +     default:
+> > > > +             ret = -ENODATA;
+> > > > +             break;
+> > > > +     }
+> > > > +     return ret;
+> > > > +}
+> > > > +
+> > > > +static struct pmbus_driver_info tps546d24_info = {
+> > > > +     .pages = 1,
+> > > > +     .format[PSC_VOLTAGE_IN] = linear,
+> > > > +     .format[PSC_VOLTAGE_OUT] = linear,
+> > > > +     .format[PSC_TEMPERATURE] = linear,
+> > > > +     .format[PSC_CURRENT_OUT] = linear,
+> > > > +     .func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |
+> > > > +         PMBUS_HAVE_IOUT | PMBUS_HAVE_VOUT |
+> > > > +             PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
+> > > > +             PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+> > > > +     .read_byte_data = tps546d24_read_byte_data,
+> > >
+> > > The chip supports multiple phases, and per-phase telemetry.
+> > > Have you considered supporting it ?
+> > >
+> > > > +};
+> > > > +
+> > > > +static int tps546d24_probe(struct i2c_client *client)
+> > > > +{
+> > > > +     return pmbus_do_probe(client, &tps546d24_info);
+> > > > +}
+> > > > +
+> > > > +static const struct i2c_device_id tps546d24_id[] = {
+> > > > +     {"tps546d24", 0},
+> > > > +     {}
+> > > > +};
+> > > > +MODULE_DEVICE_TABLE(i2c, tps546d24_id);
+> > > > +
+> > > > +static const struct of_device_id __maybe_unused tps546d24_of_match[] = {
+> > > > +     {.compatible = "tps546d24"},
+> > >
+> > > This needs a vendor prefix.
+> > >
+> > > > +     {}
+> > > > +};
+> > > > +
+> > > > +/* This is the driver that will be inserted */
+> > > > +static struct i2c_driver tps546d24_driver = {
+> > > > +     .driver = {
+> > > > +                .name = "tps546d24",
+> > > > +                .of_match_table = of_match_ptr(tps546d24_of_match),
+> > > > +        },
+> > > > +     .probe_new = tps546d24_probe,
+> > > > +     .id_table = tps546d24_id,
+> > > > +};
+> > > > +
+> > > > +module_i2c_driver(tps546d24_driver);
+> > > > +
+> > > > +MODULE_AUTHOR("Duke Du <dukedu83@gmail.com>");
+> > > > +MODULE_DESCRIPTION("PMBus driver for TI tps546d24");
+> > > > +MODULE_LICENSE("GPL");
+> > > > +MODULE_IMPORT_NS(PMBUS);
+> > > > --
+> > > > 2.7.4
+> > > >
