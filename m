@@ -2,127 +2,111 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE410C32774
-	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Aug 2022 15:32:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CE4CECAA24
+	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Aug 2022 18:51:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242758AbiHYPcS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 25 Aug 2022 11:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
+        id S243509AbiHYSvo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 25 Aug 2022 14:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241793AbiHYPcF (ORCPT
+        with ESMTP id S243590AbiHYSve (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:32:05 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07369F766
-        for <linux-hwmon@vger.kernel.org>; Thu, 25 Aug 2022 08:32:03 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id h20-20020a056830165400b00638ac7ddba5so14148654otr.4
-        for <linux-hwmon@vger.kernel.org>; Thu, 25 Aug 2022 08:32:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=Xp1nkevgvam4evex1VBaq84Y/tlFXUGnP5SjRSPeMOU=;
-        b=wmc9CsuP1JzA7LFdYsBPnZ96XWGlF56SC8pCn7lqq4c+n17qroMX6tkDUTACy17+eb
-         Wu7SYnZpNwUoPpKSs+txhfxE5rbO9i1Z5RmoehBhoMAVqonbtwoJHRD7f0JWFWxD3btP
-         Fv+3qMwqJhvh4MLBYs3x4Jlkcn0U8Wcz2rneIWakxdOuHcFNZ53qSIL4/LKZMaUQgmRh
-         uGSPAfBdhWObwscs7+QcttAm1avFDklIp14VKKaVsub8s0icd0xpT8TeuapsYsPUSPVg
-         IvDEb/glN0bIk3PLAsXsgZviTmt0i7tgV8aUp9guj87frvLtaOKXLXXRRAdcYpdfncsr
-         P7eQ==
+        Thu, 25 Aug 2022 14:51:34 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6273BD14F;
+        Thu, 25 Aug 2022 11:51:26 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-11c59785966so26045016fac.11;
+        Thu, 25 Aug 2022 11:51:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=Xp1nkevgvam4evex1VBaq84Y/tlFXUGnP5SjRSPeMOU=;
-        b=CeFzZxb8cozJCJxZ67HvvGO9abTqYpo2YTg39KT8WwSKv78rz443Bcxgcs4oAy9Pie
-         +GvmSLOWvOvXuHdPTRVAB6GD4JbWXkqiaGJ3KeMAeOfzg5lbViNSCum6FLv/QSKjtUeR
-         ljQ6g6zlRqC8L2S4/uji42QDIXSx4/LsKnPsSGdYl6SqiGKWdZUj4Z5sl5QbVfD6/jsl
-         ZwGIzVLpjcTA8UR+yiN0q6XEWjd/YRhbJMpDHPCZpstCaeB2OAJaakJB/6zTAlsN/YpY
-         wf1ITyBLCOxjzYeS/n5ORimsv4fBOB+WzjKA22JSPtnpumj29r/NdQjeBdCXHU0hJz4x
-         dOuA==
-X-Gm-Message-State: ACgBeo2EOn1Mj5oCaXhMMi+r13p6rXrmXZph1KQp/qrhVHeMqw5Rxnes
-        nLpo26djzY0arfBkDHDZFzA7kG+qedmjK9dH+rWtSA==
-X-Google-Smtp-Source: AA6agR70yB58v6+DBzgr9+5ArdgcwJi2J1FqY/nUHA61PKWbR3vJy3rcnTlTo1vJIq2QtWMkHlSnZz3jtI5EY3FAjIs=
-X-Received: by 2002:a9d:4592:0:b0:637:35cc:68e7 with SMTP id
- x18-20020a9d4592000000b0063735cc68e7mr1547028ote.355.1661441522937; Thu, 25
- Aug 2022 08:32:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220825143737.77732-1-dev@aboehler.at> <20220825150236.GB240395@roeck-us.net>
- <CA+HBbNEEvyn7a-CXzbFHywvHBky-Kwu8O3POrqo=huOJf-n2pQ@mail.gmail.com> <20220825152934.GA1439919@roeck-us.net>
-In-Reply-To: <20220825152934.GA1439919@roeck-us.net>
-From:   Robert Marko <robert.marko@sartura.hr>
-Date:   Thu, 25 Aug 2022 17:31:52 +0200
-Message-ID: <CA+HBbNH5GGrqN4mUB2hByVuTjc02f_t88pdpKEKXNjxScYyrtw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] Documentation: devicetree: update bindings for tps23861
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     =?UTF-8?Q?Andreas_B=C3=B6hler?= <dev@aboehler.at>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Jean Delvare <jdelvare@suse.com>,
+        h=message-id:date:subject:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc;
+        bh=/mQxvQUe1gZvztnNOjvvy0GAYtv4p8n82bdrYuXSJNc=;
+        b=SmxtThvt0xullVIzo+tu58M3kfxDoeNbYY3oomu4YexB98wxnj+U11QlSSavL+gpnq
+         qVgR7UoiqMwzENeVO4p3TW+H7NefI9L0PhfNGhkdSrW7+D4D+ic3xhNtP4tHzE0ekB9R
+         YJmxOEjEeebX4OuyfQElNtV5YYbRAoa5tKCyMEJLCMeaJZo1m0JHsIt4aW1uVLBz3WSL
+         YsPBLCU2y7Bt/tE9uZ5OS5iRqjZwAJv6iYAWL8Af+FauW365zPrPX4FePzJ14vLmdKSD
+         t72jaJZsxK8dvkVfSnJATRhI1SBnxT9v0sDdELOJ961BWsEKX+wubMDT3tPxRLj0lEL2
+         POOw==
+X-Gm-Message-State: ACgBeo2foa7Cx8BHXBOjvLfxv23ooDAcliJppRIIdySI2QOZ570aU99L
+        1x1yIB+HKTba3NjRt6yMQA==
+X-Google-Smtp-Source: AA6agR7VmIvwrjdERFhI9ibJJis5Ad/n5EP/mLtA9FAraPED+0yZNGZaOa0d6weoNURMUb/qtIHNOA==
+X-Received: by 2002:a05:6871:96:b0:11d:ca1b:db19 with SMTP id u22-20020a056871009600b0011dca1bdb19mr259813oaa.74.1661453485513;
+        Thu, 25 Aug 2022 11:51:25 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id n16-20020a056870971000b0011d2ec94fcasm3737802oaq.36.2022.08.25.11.51.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 11:51:24 -0700 (PDT)
+Received: (nullmailer pid 1486944 invoked by uid 1000);
+        Thu, 25 Aug 2022 18:51:19 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?q?Andreas_B=C3=B6hler?= <dev@aboehler.at>
+Cc:     linux-hwmon@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20220825143737.77732-1-dev@aboehler.at>
+References: <20220825143737.77732-1-dev@aboehler.at>
+Subject: Re: [PATCH v3 1/2] Documentation: devicetree: update bindings for tps23861
+Date:   Thu, 25 Aug 2022 13:51:19 -0500
+Message-Id: <1661453480.004870.1486943.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 5:29 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Thu, Aug 25, 2022 at 05:07:45PM +0200, Robert Marko wrote:
-> > On Thu, Aug 25, 2022 at 5:02 PM Guenter Roeck <linux@roeck-us.net> wrot=
-e:
-> > >
-> > > On Thu, Aug 25, 2022 at 04:37:36PM +0200, Andreas B=C3=B6hler wrote:
-> > > > The tps23861 driver does not initialize the chip and relies on it b=
-eing
-> > > > in auto-mode by default. On some devices, these controllers default=
- to
-> > > > OFF-Mode and hence cannot be used at all.
-> > > >
-> > > > This brings minimal support for initializing the controller in a us=
-er-
-> > > > defined mode.
-> > > >
-> > > > Signed-off-by: Andreas B=C3=B6hler <dev@aboehler.at>
-> > >
-> > > nack for the series, sorry. The suggested properties are not hardware
-> > > monitoring but phy properties. There should be a separate phy driver
-> > > to manage those.
-> > >
-> > > Also, as mentioned, the hwmon 'enable' attribute is abused to control
-> > > port functionality and should be removed.
-> >
-> > Hi Guenter,
-> > Are you referring to an ethernet PHY driver or the generic PHY framewor=
-k?
-> >
->
-> Could be both, though ethernet phy sounds about right for me.
-> I don't know where/how similar chips are handled. hwmon is most definitey
-> the wrong place.
+On Thu, 25 Aug 2022 16:37:36 +0200, Andreas Böhler wrote:
+> The tps23861 driver does not initialize the chip and relies on it being
+> in auto-mode by default. On some devices, these controllers default to
+> OFF-Mode and hence cannot be used at all.
+> 
+> This brings minimal support for initializing the controller in a user-
+> defined mode.
+> 
+> Signed-off-by: Andreas Böhler <dev@aboehler.at>
+> ---
+>  .../bindings/hwmon/ti,tps23861.yaml           | 76 +++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+> 
 
-Hi,
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Well, that is the thing, this is definitively not an ethernet PHY nor
-a PHY of any other kind.
-I dont see where it would fit if not hwmon, there is no more specific
-subsystem in the
-kernel.
+yamllint warnings/errors:
 
-Regards,
-Robert
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:28.23-33: Warning (reg_format): /example-0/i2c/tps23861@30/port@0:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:36.23-33: Warning (reg_format): /example-0/i2c/tps23861@30/port@1:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:44.23-33: Warning (reg_format): /example-0/i2c/tps23861@30/port@2:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:52.23-33: Warning (reg_format): /example-0/i2c/tps23861@30/port@3:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:27.26-33.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@0: Relying on default #address-cells value
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:27.26-33.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@0: Relying on default #size-cells value
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:35.26-41.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@1: Relying on default #address-cells value
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:35.26-41.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@1: Relying on default #size-cells value
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:43.26-49.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@2: Relying on default #address-cells value
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:43.26-49.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@2: Relying on default #size-cells value
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:51.26-57.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@3: Relying on default #address-cells value
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:51.26-57.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@3: Relying on default #size-cells value
+Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (unique_unit_address_if_enabled): Failed prerequisite 'avoid_default_addr_size'
 
->
-> Guenter
+doc reference errors (make refcheckdocs):
 
+See https://patchwork.ozlabs.org/patch/
 
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
---=20
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura Ltd.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
