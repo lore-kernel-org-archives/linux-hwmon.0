@@ -2,115 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38033ECAA28
-	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Aug 2022 18:51:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BC8EECAAA2
+	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Aug 2022 21:44:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242945AbiHYSvo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 25 Aug 2022 14:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S232482AbiHYVoI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 25 Aug 2022 17:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243591AbiHYSve (ORCPT
+        with ESMTP id S229519AbiHYVoH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:51:34 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93ED1BEB4;
-        Thu, 25 Aug 2022 11:51:24 -0700 (PDT)
-Received: by mail-ot1-f49.google.com with SMTP id l5-20020a05683004a500b0063707ff8244so14513343otd.12;
-        Thu, 25 Aug 2022 11:51:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc;
-        bh=Cg1AwP/ac5z/ltjeY4oKjrPpLfroVx5J9d1V+I/zl7Y=;
-        b=PVnuEj/kcC7v+LYtHJvlqzPAXS+dp5MDkKsX2my7FKLC6Nw8yl+edMre1vfuB6CAif
-         bxPhNHXqN2V8/Eo2ZTZh9a3+Dp0laeIfHWEqyBGSjhu0Ocq0ydO+aQmNIbEo3J5VUtEt
-         uMBcA/eSjduTT8DFhaYVLqOZRny4M7YceTCrtPgAmCJVtJZ0hTFRzeeX4B8aLwFvrypV
-         Mb+C3suPBBom+ElP5Am7mMmu5nqVrx7fHEzUIB3RRMijOe9aXhaSTxs0otLKU3ON+9Xx
-         ZpwynoACg0pcCKh3WXxzrBR05U1yPkwikpL8k0ss8Vklrt+YCmQ2d80bYxUdvJscziFa
-         VmJg==
-X-Gm-Message-State: ACgBeo3hZK/RttPefvmXZbMqAdY/rT16GjX3eiBYtVko/7mIvtkzVxph
-        6m2jBiLgs3K+CHjto/5idA==
-X-Google-Smtp-Source: AA6agR6ZiLQ5mKRIj8fQ1S1XR92OpZji2uNcYFZ7mkpk99hTwFk8xqDeu5bgdcWPR4OY3N9LrYVW7w==
-X-Received: by 2002:a05:6830:60c:b0:637:2636:eaf2 with SMTP id w12-20020a056830060c00b006372636eaf2mr179994oti.358.1661453482963;
-        Thu, 25 Aug 2022 11:51:22 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r8-20020a4ab508000000b004358b15cfe8sm41000ooo.13.2022.08.25.11.51.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 11:51:22 -0700 (PDT)
-Received: (nullmailer pid 1486940 invoked by uid 1000);
-        Thu, 25 Aug 2022 18:51:19 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?q?Andreas_B=C3=B6hler?= <dev@aboehler.at>
-Cc:     devicetree@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-hwmon@vger.kernel.org
-In-Reply-To: <20220825141043.75354-1-dev@aboehler.at>
-References: <20220825141043.75354-1-dev@aboehler.at>
-Subject: Re: [PATCH v2] hwmon: tps23861: add support for initializing the chip
-Date:   Thu, 25 Aug 2022 13:51:19 -0500
-Message-Id: <1661453479.990270.1486939.nullmailer@robh.at.kernel.org>
+        Thu, 25 Aug 2022 17:44:07 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C8C13F34;
+        Thu, 25 Aug 2022 14:44:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661463829;
+        bh=oHP17GZle9QsY5mloPe/0OhWATRtEk9UTdf5L/O9hTE=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=G3+dGjg7lOpBTtXrXJe4w08cgKQQvbDPooii1V3CWZgZzZFvRtpxElHPfP3IrBOZ6
+         KftbS3BM6owS6s3FgGkviysgEI5++ju1aHClks9/FOdLB+CemI9pcT/eDWloiLi8b4
+         WtkrBnWCeWhAEL2IKwWAxrathx8WUBQbXFBjYo3M=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1N3KTo-1pQ8lq42Og-010Lyy; Thu, 25 Aug 2022 23:43:49 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] hwmon: Add include stubs
+Date:   Thu, 25 Aug 2022 23:43:39 +0200
+Message-Id: <20220825214341.2743-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:bDEkywiWyKJRY0hUSsyJZ3TvgWekNIh3hGcBkGWp46d3+gPT1r1
+ u3FXTzvMViIKqcQxpCueGjyQjk2MoaPO+pOoDwHF+VpYZOZZ7Ktmuir2Ar1KhWSitpUY2T9
+ O3rsEPHhvSIP2/ael3JEAKGJ1BF8HJhUTwAb37fxZcRvs6/l7OK6XJe73qCxFtUohD2B7LX
+ l6WF3Gi9PMMjiBQLXFYPg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:P8m4/AtiHzU=:z4MJAWVc7o2JC88N1aCGIV
+ jmtIS734FLnYERRZPdxeaqliGezhXmd38PqIAgZh4MdFRKUbhw2TaTefMNdhkgAazhVo4rB2c
+ ouTcGE8hmoMgYZ6yP/YBara5yVs6oCsGlno2hNafu6+qmawhWqNBRYs91lUyzqlOhR/bO+jeT
+ SInrDPwCQKR0+Gb8JTKE+XnbYb/kTVCht3joaR1GhuGO/hxpDI1+4FhWp6SxqeBlBSoWtP5TY
+ TLNdG7oXe9lhVgoIDhRY8Ye+sa/L4eoQr96UxFgk0m4IFNrp5FmkKuKfyXdSFX4bvlZNdUbKb
+ kZzccC4/ZgxUgS1av+tlw/KwOlfkPbdff14NEjCi3w/DtjRW56Ll3sca+UUS9eM/taPFK2359
+ pjM0cHRZwnqj3z003TCh0VKD8jTQ/5dt4FZLiIKepuU+Vby4Y9JrYwwtV7mGOaxjfp3NfjAYU
+ gr9o6AopiCBa8e3HYLvu+00qFa6PcWxWawt2cy7gY1eujGribtxFTGYGuK1M12JB8e/aecpi3
+ 5APi77CFAJPwfCYnaEeUyuuPlvKcWWFIj/dtPq7VSUhcPK15D81Bo4CqkPjXv903igbjFPsMR
+ eeLzcpe6NHhvq98XYEa12tduOcPVcKEwLkWtQEBRqaYlooIekaSVgKtDgdMDov1cYd1ljiM53
+ oePYS9wcK6vaifz8supROIPSuXP5himG8U10VCDd2YLzQk4GZjYxp0mggVFZAkhG85BTCHz+U
+ TnCtaRc6zBy94KKfGYITfKQaEeAU0qReCwInJJPKg+7AugjhC7Bl2Hmi6hIPQadfylX6YK6ho
+ le+CKScnDQ5wZlK8O/2oYnNLZhpA8UnHYa1Ug0Sp9WDCgF2CNUb+e3/R7bpRJTsmPJRp4FB9V
+ R6mOhqVAK2taiwREJywPMxLGJV5zpT4dPZpbQVITGIfEQzS3WJRgDuUiZVI7V4vSauBs9eMkc
+ I4LeQ3Ko1k8qSWFWs6iaEP6Y5Jx62ZNJl3oHqz2Uxzn3whR/TU0VRGP98P4ysBgqpkabmFJEn
+ ng/FUbdSGOffpls9Tmj2HLhJCheMU6uQdkIG47VMtH1RtnfX/1FlHsxvkQFhFK6YJ0ju8O62u
+ 7A7OgK3XIX8g2vdvdtVfAfVJ1u42Lgdgta1ly2UP9HW1aqqsZih1yrO5w==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 25 Aug 2022 16:10:42 +0200, Andreas Böhler wrote:
-> The tps23861 driver does not initialize the chip and relies on it being
-> in auto-mode by default. On some devices, these controllers default to
-> OFF-Mode and hence cannot be used at all.
-> 
-> This brings minimal support for initializing the controller in a user-
-> defined mode.
-> 
-> Tested on a TP-Link TL-SG2452P with 12x TI TPS23861 controllers.
-> 
-> Signed-off-by: Andreas Böhler <dev@aboehler.at>
-> ---
->  .../bindings/hwmon/ti,tps23861.yaml           | 76 +++++++++++++++++
->  drivers/hwmon/tps23861.c                      | 81 +++++++++++++++++++
->  2 files changed, 157 insertions(+)
-> 
+Currently, hwmon.h and hwmon-vid.h provide no stub definitions
+in case hwmon/hwmon-vid support was disabled. This forces drivers
+using those functions to either select CONFIG_HWMON or to use
+lots of #ifdef to avoid compilation errors in such a case.
+One example is the ath10k driver, but radeon and amdgpu
+would also profit from being able to no longer having to select
+CONFIG_HWMON.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+The first patch adds include stubs to hwmon.h and hwmon-vid.h
+so that drivers can omit such workarounds.
 
-yamllint warnings/errors:
+The second patch fixes a minor issue in hwmon.h.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:28.23-33: Warning (reg_format): /example-0/i2c/tps23861@30/port@0:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:36.23-33: Warning (reg_format): /example-0/i2c/tps23861@30/port@1:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:44.23-33: Warning (reg_format): /example-0/i2c/tps23861@30/port@2:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:52.23-33: Warning (reg_format): /example-0/i2c/tps23861@30/port@3:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:27.26-33.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@0: Relying on default #address-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:27.26-33.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@0: Relying on default #size-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:35.26-41.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@1: Relying on default #address-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:35.26-41.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@1: Relying on default #size-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:43.26-49.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@2: Relying on default #address-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:43.26-49.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@2: Relying on default #size-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:51.26-57.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@3: Relying on default #address-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:51.26-57.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@3: Relying on default #size-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (unique_unit_address_if_enabled): Failed prerequisite 'avoid_default_addr_size'
+Both patches where tested with CONFIG_HWMON set to y, m and n,
+and the resulting kernel was able to boot successfully.
 
-doc reference errors (make refcheckdocs):
+Armin Wolf (2):
+  hwmon: Add include stubs
+  hwmon: Use struct definitions from header files
 
-See https://patchwork.ozlabs.org/patch/
+ include/linux/hwmon-vid.h | 18 +++++++++
+ include/linux/hwmon.h     | 81 +++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 95 insertions(+), 4 deletions(-)
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+=2D-
+2.30.2
 
