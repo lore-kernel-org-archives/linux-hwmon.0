@@ -2,41 +2,40 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6EAFC676B1
-	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Aug 2022 14:40:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 700EEC64990
+	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Aug 2022 14:40:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242239AbiHYOkj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 25 Aug 2022 10:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
+        id S242470AbiHYOkq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 25 Aug 2022 10:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241645AbiHYOjm (ORCPT
+        with ESMTP id S241979AbiHYOj7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:39:42 -0400
-X-Greylist: delayed 1632 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 Aug 2022 07:38:39 PDT
+        Thu, 25 Aug 2022 10:39:59 -0400
 Received: from mail.aboehler.at (mail.aboehler.at [178.63.100.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444C7B6D06;
-        Thu, 25 Aug 2022 07:38:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842B2B8A79;
+        Thu, 25 Aug 2022 07:38:43 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.aboehler.at (Postfix) with ESMTP id D43193CC0D34;
-        Thu, 25 Aug 2022 16:38:36 +0200 (CEST)
+        by mail.aboehler.at (Postfix) with ESMTP id 5F9B53CC0D35;
+        Thu, 25 Aug 2022 16:38:41 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at aboehler.at
 Received: from mail.aboehler.at ([127.0.0.1])
         by localhost (aboehler.at [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id PuSPUBzEpyfc; Thu, 25 Aug 2022 16:38:36 +0200 (CEST)
+        with ESMTP id B4aKBkGRdO_t; Thu, 25 Aug 2022 16:38:40 +0200 (CEST)
 Received: from x390y.lan (194-166-175-3.adsl.highway.telekom.at [194.166.175.3])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: andreas@aboehler.at)
-        by mail.aboehler.at (Postfix) with ESMTPSA id 91BD03CC0293;
-        Thu, 25 Aug 2022 16:38:35 +0200 (CEST)
+        by mail.aboehler.at (Postfix) with ESMTPSA id 400B73CC0293;
+        Thu, 25 Aug 2022 16:38:40 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aboehler.at;
-        s=default; t=1661438315;
-        bh=msAkpeofl6i76s1eFNpaXkmTSxKzyGsse6EZY2d6yfU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SmwVfalS4wgVYwCwtzw9cFmyzh/whzDnaTa3TzmbmnagCghewyQU/U788Ina4jInx
-         Bv+GtSAzlvzN//qW18XlzLaQSR56kpg6JAd1jMUd5IJlOYmkXpkFxYfH5zRTogQkyc
-         turotBGFXRqYgrXR1XfOKB0t3Ja6eYdCgPKXUxzM=
+        s=default; t=1661438320;
+        bh=EcUxe11FzBLI90bPdSZDAmeBp94OdNnbUJvnzQaEKG4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RmvsMqI1pYMSN88HFI4NuEzYYs+mFCu7uSa5P3MjiCfMsUlbUCjdKRwYLLBc7oeWP
+         gd2F108izNxLrg1Hx/eg7QEcYzNNbZYmzmc3LGlSXU/lNSg3b1V27rNA2Dmzp7EGH1
+         Yh4YDFl3BNjtKowLDcxvTdpWVmfEPlrxy0dP92kA=
 From:   =?UTF-8?q?Andreas=20B=C3=B6hler?= <dev@aboehler.at>
 Cc:     dev@aboehler.at, Robert Marko <robert.marko@sartura.hr>,
         Luka Perkov <luka.perkov@sartura.hr>,
@@ -46,10 +45,12 @@ Cc:     dev@aboehler.at, Robert Marko <robert.marko@sartura.hr>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/2] Documentation: devicetree: update bindings for tps23861
-Date:   Thu, 25 Aug 2022 16:37:36 +0200
-Message-Id: <20220825143737.77732-1-dev@aboehler.at>
+Subject: [PATCH v3 2/2] hwmon: tps23861: add support for initializing the chip
+Date:   Thu, 25 Aug 2022 16:37:37 +0200
+Message-Id: <20220825143737.77732-2-dev@aboehler.at>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220825143737.77732-1-dev@aboehler.at>
+References: <20220825143737.77732-1-dev@aboehler.at>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -65,104 +66,130 @@ OFF-Mode and hence cannot be used at all.
 This brings minimal support for initializing the controller in a user-
 defined mode.
 
+Tested on a TP-Link TL-SG2452P with 12x TI TPS23861 controllers.
+
 Signed-off-by: Andreas Böhler <dev@aboehler.at>
 ---
- .../bindings/hwmon/ti,tps23861.yaml           | 76 +++++++++++++++++++
- 1 file changed, 76 insertions(+)
+ drivers/hwmon/tps23861.c | 81 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 81 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
-index 3bc8e73dfbf0..ed3a703478fb 100644
---- a/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
-@@ -35,6 +35,50 @@ required:
-   - compatible
-   - reg
+diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
+index 42762e87b014..27bf8716cf12 100644
+--- a/drivers/hwmon/tps23861.c
++++ b/drivers/hwmon/tps23861.c
+@@ -85,6 +85,8 @@
+ #define PORT_DETECT_CAPACITANCE_INVALID_DELTA	11
+ #define PORT_DETECT_CAPACITANCE_OUT_OF_RANGE	12
+ #define POE_PLUS			0x40
++#define POE_PLUS_MASK(_port)	\
++	GENMASK(_port + 4, _port + 4)
+ #define OPERATING_MODE			0x12
+ #define OPERATING_MODE_OFF		0
+ #define OPERATING_MODE_MANUAL		1
+@@ -94,9 +96,22 @@
+ #define OPERATING_MODE_PORT_2_MASK	GENMASK(3, 2)
+ #define OPERATING_MODE_PORT_3_MASK	GENMASK(5, 4)
+ #define OPERATING_MODE_PORT_4_MASK	GENMASK(7, 6)
++#define OPERATING_MODE_PORT(_mode, _port)	\
++	(_mode << (_port * 2))
  
-+patternProperties:
-+  "^port@([0-3])$":
-+    type: object
-+    description: Represents ports of the device and their specific configuration.
++#define DISCONNECT_ENABLE		0x13
++#define DISCONNECT_ENABLE_MASK(_port)	\
++	GENMASK(_port, _port)
++#define DISCONNECT_MASK(_port)	\
++	(GENMASK(_port, _port) | GENMASK(_port + 4, _port + 4))
 +
-+    properties:
-+      reg:
-+        description: The port number
-+        items:
-+          minimum: 0
-+          maximum: 3
-+
-+      mode:
-+        description: The operating mode the device should be initialized with
-+        items:
-+          - enum:
-+              - auto
-+              - semiauto
-+              - manual
-+              - off
-+
-+      enable:
-+        description: Whether the port should be enabled
-+        items:
-+          minimum: 0
-+          maximum: 1
-+
-+      power:
-+        description: Whether the port should be powered on
-+        items:
-+          minimum: 0
-+          maximum: 1
-+
-+      poe_plus:
-+        description: Whether the port should support PoE+
-+        items:
-+          minimum: 0
-+          maximum: 1
-+
-+    required:
-+      - reg
-+
-+    additionalProperties: false
-+
- additionalProperties: false
++#define DETECT_CLASS_ENABLE		0x14
+ #define DETECT_CLASS_RESTART		0x18
+ #define POWER_ENABLE			0x19
++#define POWER_ENABLE_ON_MASK(_port)	\
++	GENMASK(_port, _port)
++#define POWER_ENABLE_OFF_MASK(_port)	\
++	GENMASK(_port + 4, _port + 4)
+ #define TPS23861_NUM_PORTS		4
  
- examples:
-@@ -47,5 +91,37 @@ examples:
-               compatible = "ti,tps23861";
-               reg = <0x30>;
-               shunt-resistor-micro-ohms = <255000>;
+ #define TPS23861_GENERAL_MASK_1		0x17
+@@ -548,7 +563,16 @@ static int tps23861_probe(struct i2c_client *client)
+ 	struct device *dev = &client->dev;
+ 	struct tps23861_data *data;
+ 	struct device *hwmon_dev;
++	struct device_node *child;
+ 	u32 shunt_resistor;
++	u32 reg;
++	u32 temp;
++	const char *mode;
++	unsigned int poe_plusval;
++	unsigned int mode_val;
++	unsigned int power_val;
++	unsigned int enable_val;
++	unsigned int disconnect_enable_val;
+ 
+ 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+@@ -577,6 +601,63 @@ static int tps23861_probe(struct i2c_client *client)
+ 				TPS23861_GENERAL_MASK_1,
+ 				TPS23861_CURRENT_SHUNT_MASK);
+ 
++	regmap_read(data->regmap, POE_PLUS, &poe_plusval);
++	regmap_read(data->regmap, POWER_ENABLE, &power_val);
++	regmap_read(data->regmap, OPERATING_MODE, &mode_val);
++	regmap_read(data->regmap, DETECT_CLASS_ENABLE, &enable_val);
++	regmap_read(data->regmap, DISCONNECT_ENABLE, &disconnect_enable_val);
 +
-+              port@0 {
-+                  reg = <0>;
-+                  mode = "auto";
-+                  enable = <1>;
-+                  power = <1>;
-+                  poe_plus = <1>;
-+              };
++	for_each_child_of_node(dev->of_node, child) {
++		if (of_property_read_u32(child, "reg", &reg))
++			continue;
 +
-+              port@1 {
-+                  reg = <1>;
-+                  mode = "semiauto";
-+                  enable = <1>;
-+                  power = <0>;
-+                  poe_plus = <1>;
-+              };
++		if (reg > (TPS23861_NUM_PORTS - 1) || reg < 0)
++			continue;
 +
-+              port@2 {
-+                  reg = <2>;
-+                  mode = "manual";
-+                  enable = <0>;
-+                  power = <0>;
-+                  poe_plus = <0>;
-+              };
++		if (!of_property_read_string(child, "mode", &mode)) {
++			if (!strncmp(mode, "manual", 6)) {
++				mode_val &= ~OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
++				mode_val |= OPERATING_MODE_PORT(OPERATING_MODE_MANUAL, reg);
++			} else if (!strncmp(mode, "semiauto", 8)) {
++				mode_val &= ~OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
++				mode_val |= OPERATING_MODE_PORT(OPERATING_MODE_SEMI, reg);
++			} else if (!strncmp(mode, "auto", 4))
++				mode_val |= OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
++			else
++				mode_val &= ~OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
++		}
 +
-+              port@3 {
-+                  reg = <3>;
-+                  mode = "off";
-+                  enable = <0>;
-+                  power = <0>;
-+                  poe_plus = <1>;
-+              };
-           };
-     };
++		if (!of_property_read_u32(child, "enable", &temp)) {
++			if (temp) {
++				enable_val |= DISCONNECT_MASK(reg);
++				disconnect_enable_val |= DISCONNECT_ENABLE_MASK(reg);
++			} else {
++				enable_val &= ~DISCONNECT_MASK(reg);
++				disconnect_enable_val &= ~DISCONNECT_ENABLE_MASK(reg);
++			}
++		}
++
++		if (!of_property_read_u32(child, "power", &temp)) {
++			if (temp)
++				power_val |= POWER_ENABLE_ON_MASK(reg);
++			else
++				power_val |= POWER_ENABLE_OFF_MASK(reg);
++		}
++
++		if (!of_property_read_u32(child, "poe_plus", &temp)) {
++			if (temp)
++				poe_plusval |= POE_PLUS_MASK(reg);
++			else
++				poe_plusval &= ~POE_PLUS_MASK(reg);
++		}
++	}
++
++	regmap_write(data->regmap, POE_PLUS, poe_plusval);
++	regmap_write(data->regmap, POWER_ENABLE, power_val);
++	regmap_write(data->regmap, OPERATING_MODE, mode_val);
++	regmap_write(data->regmap, DETECT_CLASS_ENABLE, enable_val);
++	regmap_write(data->regmap, DISCONNECT_ENABLE, disconnect_enable_val);
++
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
+ 							 data, &tps23861_chip_info,
+ 							 NULL);
 -- 
 2.37.2
 
