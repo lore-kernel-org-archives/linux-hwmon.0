@@ -2,256 +2,233 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EBDBECAAA3
-	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Aug 2022 18:07:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F70EECAAD7
+	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Aug 2022 20:37:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbiHZSHp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 26 Aug 2022 14:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        id S1344533AbiHZUhZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 26 Aug 2022 16:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiHZSHo (ORCPT
+        with ESMTP id S1344540AbiHZUhW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 26 Aug 2022 14:07:44 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4302F192BB;
-        Fri, 26 Aug 2022 11:07:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661537246;
-        bh=hRvarPt/vDEjfDmjGnhrdNuhWBISD4yTkXxXIrBjPH8=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=cRFzDJrMMCjBHSp1zbo9hLGg72uMaDYQW0UQL1A7pXJXvEZsl5F8n34U060qQoMJ8
-         a3E9wpIM1XPqIvY4FypzMp9kKQ7/IaslgXhrLDC5lsopwOf0yhVtpLLeOI2OI1Yyy9
-         zeEXTbjeIiWxkMzTESMAbliNeezsFlawTFquUF2E=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MKsjH-1ohvX91VO9-00LHX7; Fri, 26
- Aug 2022 20:07:26 +0200
-Subject: Re: [PATCH 1/2] hwmon: Add include stubs
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220825214341.2743-1-W_Armin@gmx.de>
- <20220825214341.2743-2-W_Armin@gmx.de>
- <20220826124742.GD2897306@roeck-us.net>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <2127da59-c8aa-301e-4648-2abf48ea7d61@gmx.de>
-Date:   Fri, 26 Aug 2022 20:07:25 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Fri, 26 Aug 2022 16:37:22 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4D7CCD73
+        for <linux-hwmon@vger.kernel.org>; Fri, 26 Aug 2022 13:37:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661546241; x=1693082241;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WNqQoPtoEDfuhKz78dK53UyLjWSJ01Su3d25/ZXnmFs=;
+  b=nnT2qageWehG+Pj2Bf4EIpbz5w7pCBHJcYrrh9ED8uRTVO7ysjpa9UEQ
+   i8OKDt0yf5jrRL1jKVH+fgUrf+HPjTqN3g8p/8fWRl6covxQwCNzLtmyo
+   K/gQxeNHZVoL6C5NZW03NCUUdb+RNsiQBRYWoblnSBXcC7Bwr7Vdqmc4W
+   c2lozrqlsTqojY7RVkDBXFLXDMVxk+mYgntqzmw4WnFPDz5CtU2N4KvfI
+   Hnw3cs7iuHBpsr1uigNwSyl/14tlKPPsZD+ZZ+i/rE3cQREGkKz2q0+Fu
+   nFilhJHPIZ9TYZ9njUqjbBjXJ/rjq3jyY/NJ9Hlt8xtn4Z3ouG9bABHiC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="274993875"
+X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
+   d="scan'208";a="274993875"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 13:37:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
+   d="scan'208";a="561564147"
+Received: from lkp-server01.sh.intel.com (HELO 71b0d3b5b1bc) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 26 Aug 2022 13:37:14 -0700
+Received: from kbuild by 71b0d3b5b1bc with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oRg4o-0000PO-0U;
+        Fri, 26 Aug 2022 20:37:14 +0000
+Date:   Sat, 27 Aug 2022 04:36:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ 8d0c42c9e80791e8baba2932d2cbd2dcead50d47
+Message-ID: <63092ee3./dumJHTXFZSIk6uT%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20220826124742.GD2897306@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:JRX2b73jr3GBB6kJTSCx+kfTwnxbMr2JBDz/M9uA2E5ks1tqc0+
- mlN7JimZNQBXFdEVVThFO1gfN9ciCMRRe3nrgUA7Si8uEoiFCVLql3Q+1wDiDSLu/QxmZjy
- y17Otnu9CNACzrpJVPCfTsM8ZQxl8tYQI9YHW6bFcOmaceICcOGViYiKvDBTo4Blh+CAJ7C
- 4Ax54RiCPIEVNm4QKuJ4Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5EPKsk3ZGKs=:X1soPrpPdhiYRzW0i8GXJd
- Aj82lLDcrOXncI84u3h97EAOWjFVTQDxHN//nojQNjHngOqnu5y1zq2LDs/I5xKnZZsJI4BNs
- XRWxVszOjXPKRsc0LzJLTMsXVE0qKvD9wI3HDTs0eiVz3V1U72UcD2hTs3QmQf9IYbiS8Rn9g
- lgxcIKy/Gwl+5o4hmnyKN1/XlElmvnCXcYqg19wzvJGIGwPx9b+qGpxWMVYizl8SWtQy9yMbR
- Np0UlDLUXDmSXUeeJ3yI/S8cbuUgG1urmAXQxPOathTSSeEEJaj47nrUnKD0EjuoBtidXi1NO
- lZWYg20bEaaAoGBcQsa9VmF03yoipr9hvUNYslOlareuchb964LN7AcHgb9CYeXOsHCXc6Ju4
- Tmiq+eaQXci6AokHaa9+3eWpticRPG6yR3vLk8Dgiy1pFHkcaxwAQt/KURkSMO60kREQbuiRZ
- OKjqEYz8iWgP6m0sowAWUNDXtx1PZLWpxFtQgS50jmWFDoMhlcZUD2yI4klsJya+8kI1pGbXN
- 1NKGtllkMnocAQrjYgMun05Qj+wu++UQdgQtlnJopg4Qr0gy9ovplnL38UAtC4vzSCeNmF4BB
- +5Iof9iy5xmKzbr1qM7HghywYWnJGNfpyHlbOc6O03+6Cc43GsA0JGPaFbWzxS9b8UzXahZiq
- cLThSkO0RJFqUslfQdq4stEJAmHURjIlz5pV9MKofFC3pPbOoFpsBNCcNnPpgVVHmfW3jLV2v
- MvSch6uaTf3gzvpgaMpJgCJm/OLtOrQki6F5RHVTJ77fbYx7qS/fYWuVWWtjHitjvdCWXVoAt
- 5zs94SuL4z759o3wG7MtotxIliPLUTb+VjNJHVfjPrQRKDcto/D6enhn4KDPnQWvOSyoQR2Ii
- 127t8saR66UgmP+dn6iC4dHvwFVPVIsH9sEc2dF/jL5orGoDjtKlc1yI7DomI8a8LsNIZYEEM
- VZ8WJy9PCJhhhQuqJnF6NkixxPpDBqwloJipxVaiQBVHyn1Ol6Mw50e2SlkfnekL+dKrc8d2V
- agb3lzGfgIG857Kdziaijup6rGYL1vHYx1iz9Ur+XjhHyeh2zArEHm6X9x30yEBDsx3qGL8yb
- umoLcM2iRk/1CEnGRb/3acqepUkGatFdCyrIaWKJrQWYirfSOT2XoTF7A==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am 26.08.22 um 14:47 schrieb Guenter Roeck:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: 8d0c42c9e80791e8baba2932d2cbd2dcead50d47  Add linux-next specific files for 20220826
 
-> On Thu, Aug 25, 2022 at 11:43:40PM +0200, Armin Wolf wrote:
->> If CONFIG_HWMON/CONFIG_HWMON_VID was disabled during compile
->> time, driver using the hwmon subsystem might fail to compile.
-> That would be a bug in driver dependencies and is not a problem
-> to be solved in the hwmon subsystem. Dummies are not provided on
-> purpose so far because we _want_ driver developers to think about
-> usage and for them to understand what happens if HWMON is not enabled.
+Error/Warning: (recently discovered and may have been fixed)
 
-My wording might have been incorrect, i meant that currently, code who uses
-the hwmon subsystem must either select CONFIG_HWMON or provide #ifdef guards.
+drivers/base/regmap/regmap-mmio.c:221:17: error: implicit declaration of function 'writesb'; did you mean 'writeb'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:224:17: error: implicit declaration of function 'writesw'; did you mean 'writew'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:227:17: error: implicit declaration of function 'writesl'; did you mean 'writel'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:231:17: error: implicit declaration of function 'writesq'; did you mean 'writeq'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:231:17: error: implicit declaration of function 'writesq'; did you mean 'writesl'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:358:17: error: implicit declaration of function 'readsb'; did you mean 'readb'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:361:17: error: implicit declaration of function 'readsw'; did you mean 'readw'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:364:17: error: implicit declaration of function 'readsl'; did you mean 'readl'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:368:17: error: implicit declaration of function 'readsq'; did you mean 'readq'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:368:17: error: implicit declaration of function 'readsq'; did you mean 'readsl'? [-Werror=implicit-function-declaration]
+drivers/gpu/drm/via/via_dri1.c:353:50: warning: Shifting signed 32-bit value by 31 bits is implementation-defined behaviour [shiftTooManyBitsSigned]
+drivers/gpu/drm/via/via_dri1.c:353:50: warning: Signed integer overflow for expression '1<<31'. [integerOverflow]
+drivers/hwmon/hwmon.c:1065:66: warning: Parameter 'data' can be declared with const [constParameter]
+drivers/hwmon/hwmon.c:288:15: warning: Uninitialized variable: tzdata->index [uninitvar]
+drivers/hwmon/pmbus/pmbus_core.c:165:24: warning: Either the condition 'page<0' is redundant or the array 'data->info->func[32]' is accessed at index 32, which is out of bounds. [arrayIndexOutOfBoundsCond]
+pci.c:(.text+0x1e0): undefined reference to `get_pch_msi_handle'
 
-> The benefit is that it would reduce the need for conditional code
-> in drivers registering with hwmon from outside the hwmon subsystem.
->
->> Provide stubs for such cases.
->>
-> HWMON_VID is not user selectable, it is only needed by hwmon drivers,
-> it is mandatory for the drivers needing it, those drivers _must_ select
-> it, and there must be no dummies.
->
-> I am not really sure about the benefits of dummies for HWMON either,
-> but I am open to discussion. Either case that must be accompanied
-> by matching driver patches to show its usage, to make sure that there
-> is no negative impact, to show the benefits, and to get a wider audience.
->
-Understandable, i will include such patches in the next revision.
+Error/Warning ids grouped by kconfigs:
 
->> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->> ---
->>   include/linux/hwmon-vid.h | 18 ++++++++++
->>   include/linux/hwmon.h     | 76 ++++++++++++++++++++++++++++++++++++++-
->>   2 files changed, 93 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/linux/hwmon-vid.h b/include/linux/hwmon-vid.h
->> index 9409e1d207ef..329151416c47 100644
->> --- a/include/linux/hwmon-vid.h
->> +++ b/include/linux/hwmon-vid.h
->> @@ -11,9 +11,27 @@
->>   #ifndef _LINUX_HWMON_VID_H
->>   #define _LINUX_HWMON_VID_H
->>
->> +#include <linux/kconfig.h>
->> +
->> +#if IS_ENABLED(CONFIG_HWMON_VID)
->> +
->>   int vid_from_reg(int val, u8 vrm);
->>   u8 vid_which_vrm(void);
->>
->> +#else
->> +
->> +static inline int vid_from_reg(int val, u8 vrm)
->> +{
->> +	return 0;
->> +}
->> +
->> +static inline u8 vid_which_vrm(void)
->> +{
->> +	return 0;
->> +}
->> +
->> +#endif /* CONFIG_HWMON_VID */
->> +
->>   /* vrm is the VRM/VRD document version multiplied by 10.
->>      val is in mV to avoid floating point in the kernel.
->>      Returned value is the 4-, 5- or 6-bit VID code.
->> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
->> index 14325f93c6b2..281387ee03bc 100644
->> --- a/include/linux/hwmon.h
->> +++ b/include/linux/hwmon.h
->> @@ -13,6 +13,9 @@
->>   #define _HWMON_H_
->>
->>   #include <linux/bitops.h>
->> +#include <linux/err.h>
->> +#include <linux/errno.h>
->> +#include <linux/kconfig.h>
->>
->>   struct device;
->>   struct attribute_group;
->> @@ -433,6 +436,8 @@ struct hwmon_chip_info {
->>   	const struct hwmon_channel_info **info;
->>   };
->>
->> +#if IS_ENABLED(CONFIG_HWMON)
-> This should be IS_REACHABLE(). It doesn't help if HWMON is built as
-> module and called from an in-kernel driver. Otherwise drivers using it
-> would still need "depends on HWMON || HWMON=n" and it would still require
-> conditional code to catch "HWMON enabled but not reachable".
->
->> +
->>   /* hwmon_device_register() is deprecated */
->>   struct device *hwmon_device_register(struct device *dev);
->>
->> @@ -467,6 +472,75 @@ int hwmon_notify_event(struct device *dev, enum hwmon_sensor_types type,
->>   char *hwmon_sanitize_name(const char *name);
->>   char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
->>
->> +#else
->> +
->> +static inline struct device *hwmon_device_register(struct device *dev)
->> +{
->> +	return ERR_PTR(-ENODEV);
-> -ENOTSUPP would probably be a more suitable error code.
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsq
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsw
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesq
+|   `-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesw
+|-- alpha-randconfig-r002-20220823
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsq
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsw
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesq
+|   `-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesw
+|-- alpha-randconfig-r014-20220824
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsq
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsw
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesq
+|   `-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesw
+|-- alpha-randconfig-r025-20220823
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsq
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsw
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesq
+|   `-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesw
+|-- loongarch-randconfig-r024-20220823
+|   `-- pci.c:(.text):undefined-reference-to-get_pch_msi_handle
+|-- mips-randconfig-p001-20220826
+|   |-- drivers-gpu-drm-via-via_dri1.c:warning:Shifting-signed-bit-value-by-bits-is-implementation-defined-behaviour-shiftTooManyBitsSigned
+|   |-- drivers-gpu-drm-via-via_dri1.c:warning:Signed-integer-overflow-for-expression-.-integerOverflow
+|   |-- drivers-hwmon-hwmon.c:warning:Parameter-data-can-be-declared-with-const-constParameter
+|   |-- drivers-hwmon-hwmon.c:warning:Uninitialized-variable:tzdata-index-uninitvar
+|   `-- drivers-hwmon-pmbus-pmbus_core.c:warning:Either-the-condition-page-is-redundant-or-the-array-data-info-func-is-accessed-at-index-which-is-out-of-bounds.-arrayIndexOutOfBoundsCond
+|-- parisc-allyesconfig
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsw
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesl
 
-The stubs found in other header files do return -ENODEV, so i though
-that this should also be done inside hwmon.h
+elapsed time: 724m
 
-Armin Wolf
+configs tested: 86
+configs skipped: 3
 
->> +}
->> +
->> +static inline struct device
->> +*hwmon_device_register_with_groups(struct device *dev, const char *name, void *drvdata,
->> +				   const struct attribute_group **groups)
->> +{
->> +	return ERR_PTR(-ENODEV);
->> +}
->> +
->> +static inline struct device
->> +*devm_hwmon_device_register_with_groups(struct device *dev, const char *name, void *drvdata,
->> +					const struct attribute_group **groups)
->> +{
->> +	return ERR_PTR(-ENODEV);
->> +}
->> +
->> +static inline struct device
->> +*hwmon_device_register_with_info(struct device *dev, const char *name, void *drvdata,
->> +				 const struct hwmon_chip_info *info,
->> +				 const struct attribute_group **extra_groups)
->> +{
->> +	return ERR_PTR(-ENODEV);
->> +}
->> +
->> +static inline struct device *hwmon_device_register_for_thermal(struct device *dev, const char *name,
->> +							       void *drvdata)
->> +{
->> +	return ERR_PTR(-ENODEV);
->> +}
->> +
->> +static inline struct device
->> +*devm_hwmon_device_register_with_info(struct device *dev, const char *name, void *drvdata,
->> +				      const struct hwmon_chip_info *info,
->> +				      const struct attribute_group **extra_groups)
->> +{
->> +	return ERR_PTR(-ENODEV);
->> +}
->> +
->> +static inline void hwmon_device_unregister(struct device *dev)
->> +{
->> +}
->> +
->> +static inline void devm_hwmon_device_unregister(struct device *dev)
->> +{
->> +}
->> +
->> +static inline int hwmon_notify_event(struct device *dev, enum hwmon_sensor_types type, u32 attr,
->> +				     int channel)
->> +{
->> +	return -ENODEV;
->> +}
->> +
->> +static inline char *hwmon_sanitize_name(const char *name)
->> +{
->> +	return ERR_PTR(-ENODEV);
->> +}
->> +
->> +static inline char *devm_hwmon_sanitize_name(struct device *dev, const char *name)
->> +{
->> +	return ERR_PTR(-ENODEV);
->> +}
->> +
->> +#endif /* CONFIG_HWMON */
->> +
->>   /**
->>    * hwmon_is_bad_char - Is the char invalid in a hwmon name
->>    * @ch: the char to be considered
->> @@ -490,4 +564,4 @@ static inline bool hwmon_is_bad_char(const char ch)
->>   	}
->>   }
->>
->> -#endif
->> +#endif /* _HWMON_H_ */
->> --
->> 2.30.2
->>
+gcc tested configs:
+i386                                defconfig
+um                             i386_defconfig
+powerpc                           allnoconfig
+um                           x86_64_defconfig
+parisc                              defconfig
+x86_64                        randconfig-a004
+i386                             allyesconfig
+x86_64                           rhel-8.3-kvm
+i386                          randconfig-a001
+x86_64                        randconfig-a002
+arc                               allnoconfig
+nios2                               defconfig
+alpha                             allnoconfig
+arm                                 defconfig
+x86_64                    rhel-8.3-kselftests
+riscv                             allnoconfig
+loongarch                         allnoconfig
+sh                               allmodconfig
+x86_64                              defconfig
+x86_64                           rhel-8.3-syz
+nios2                            allyesconfig
+csky                              allnoconfig
+loongarch                           defconfig
+x86_64                        randconfig-a013
+i386                          randconfig-a014
+parisc                           allyesconfig
+x86_64                               rhel-8.3
+i386                          randconfig-a003
+parisc64                            defconfig
+x86_64                        randconfig-a011
+x86_64                          rhel-8.3-func
+i386                          randconfig-a012
+mips                             allyesconfig
+i386                          randconfig-a005
+x86_64                         rhel-8.3-kunit
+x86_64                        randconfig-a006
+i386                          randconfig-a016
+powerpc                          allmodconfig
+riscv                            allmodconfig
+powerpc                          allyesconfig
+ia64                             allmodconfig
+x86_64                        randconfig-a015
+arc                              allyesconfig
+riscv                               defconfig
+alpha                            allyesconfig
+arm                              allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+arm64                            allyesconfig
+x86_64                           allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+arc                  randconfig-r043-20220823
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                            allyesconfig
+arc                  randconfig-r043-20220825
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+i386                          debian-10.3-kvm
+
+clang tested configs:
+i386                          randconfig-a013
+i386                          randconfig-a015
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+i386                          randconfig-a011
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a003
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r041-20220825
+hexagon              randconfig-r041-20220823
+hexagon              randconfig-r045-20220825
+riscv                randconfig-r042-20220825
+s390                 randconfig-r044-20220825
+riscv                randconfig-r042-20220823
+hexagon              randconfig-r045-20220823
+s390                 randconfig-r044-20220823
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
