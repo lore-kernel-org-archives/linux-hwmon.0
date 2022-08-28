@@ -2,127 +2,82 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ECB7C0502E
-	for <linux-hwmon@archiver.kernel.org>; Sun, 28 Aug 2022 07:46:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0649BECAAD2
+	for <linux-hwmon@archiver.kernel.org>; Sun, 28 Aug 2022 14:51:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232511AbiH1Hq4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 28 Aug 2022 03:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
+        id S229500AbiH1Ovj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 28 Aug 2022 10:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231990AbiH1Hqz (ORCPT
+        with ESMTP id S229483AbiH1Ovh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 28 Aug 2022 03:46:55 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EE3399E4;
-        Sun, 28 Aug 2022 00:46:54 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 4770332007F0;
-        Sun, 28 Aug 2022 03:46:51 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sun, 28 Aug 2022 03:46:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1661672810; x=1661759210; bh=xmumsxBjbgYu7DsPGi9nc0Yk4
-        a2Zt1uVg21vHFB9wxc=; b=aXN6PLz5r7vKhbuALbBvp3rNQiRaJLQEkhzNcMLQw
-        xt72NL2wUxTS+qC5lTzuPT48q2j8NEdgrJZIQEuYUCy3zznviT9ocrxNMIClT4Y8
-        kZ13y3gPAUA+R73gwiTUt1U3AdUybuEO6Mg7UANQndmti/T7lMGl0ynotiUW4ZEU
-        hzng5/WZUm/ypUgg33mjLUtUE9zLlJT6JVYfby43ud67lxHDWa9BJGxSmySKtYH/
-        b0ucW7FCxhUzAp9yUL73Bbh7/Y2DGJvSRT23ekd0I0TKxhdrSWgYiv3E5jkmcJO8
-        XfCFmzYFEx6han27GH2dQzLNlxFakKEeg8UWulyMu4I3g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1661672810; x=1661759210; bh=xmumsxBjbgYu7DsPGi9nc0Yk4a2Zt1uVg21
-        vHFB9wxc=; b=HpkWXBIs3kUyIyJ6pxAxWmlTe/UudOs6AIY2fTyXXtfOUR/sf12
-        fpUqX/Og5QswNA/lHmApML41gVcHczS4fLi++2nQIvtk+M9GIgHTiU1MTKv79dxr
-        Pwqlclxjq+8n76g93H+nENe2muh+X6A996SgEGekzBYBB05dpkqieHnnUCp3VuM4
-        pxYEXySr7NnZkZLrkE6wXp/H2q7ckgE0DSMMQpW+Kmvxowum+I7T1koNKgQQtJiT
-        h9m/7agzqzz2+jHZWZv/POgyew7uQeMPWq0iwY5YDuiA+Tbw3eMbAvkrO6GHAx4a
-        pq1+5pf7eJNi0kTy/GWLFPHK1aFApPEta4A==
-X-ME-Sender: <xms:ah0LY6N8rZ8ZNSaPnQUZJRDAk7aKyrpehXzqOoqBxjknBhfgilb6wA>
-    <xme:ah0LY4-fEmN7tvEGcPLzQ0aNFuC7jM2oZBisGkoyUmiTkbzP4OAJ3K3GC1sZRN3Xd
-    rLI063QnIjW4fPPtjc>
-X-ME-Received: <xmr:ah0LYxTCfPuBDx4QIBL2_3wfg1ErdnkxXUpNwNt4bHMqqDWurbRw2gghUm3c>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejkedguddviecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekre
-    dtredttdenucfhrhhomhepfdfnuhhkvgcuffdrucflohhnvghsfdcuoehluhhkvgeslhhj
-    ohhnvghsrdguvghvqeenucggtffrrghtthgvrhhnpefgudejtdfhuddukefffeekiefftd
-    dtvdfhgeduudeuffeuhfefgfegfeetvedvgeenucevlhhushhtvghrufhiiigvpedtnecu
-    rfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvgeslhhjohhnvghsrdguvghv
-X-ME-Proxy: <xmx:ah0LY6sG0LFDujpETdgXNbUBEBpvgLNGaZS3YIHNSkG6b5UMZMbB2w>
-    <xmx:ah0LYyc9eEcOcB1hamvngyoSB7rMURjKzmNVxn8krAfNxFhA8gaBAA>
-    <xmx:ah0LY-2v_SeE_YxZfngmduuM2aq3ek_DuZCDuM9VLGhF9JKHjR-WcQ>
-    <xmx:ah0LYy5G4T3LTbWDtkS01m05_IVKXPPBZP4vTh01OlGW1cIKei0X_w>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 28 Aug 2022 03:46:47 -0400 (EDT)
-From:   "Luke D. Jones" <luke@ljones.dev>
-To:     hdegoede@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, markgross@kernel.org,
-        "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH] asus-wmi: Increase FAN_CURVE_BUF_LEN to 32
-Date:   Sun, 28 Aug 2022 19:46:38 +1200
-Message-Id: <20220828074638.5473-1-luke@ljones.dev>
-X-Mailer: git-send-email 2.37.2
+        Sun, 28 Aug 2022 10:51:37 -0400
+X-Greylist: delayed 500 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 28 Aug 2022 07:51:36 PDT
+Received: from tulikuusama2.dnainternet.net (tulikuusama2.dnainternet.net [83.102.40.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E855F2A952
+        for <linux-hwmon@vger.kernel.org>; Sun, 28 Aug 2022 07:51:36 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by tulikuusama2.dnainternet.net (Postfix) with ESMTP id 4201B28874;
+        Sun, 28 Aug 2022 17:43:14 +0300 (EEST)
+X-Virus-Scanned: DNA Internet at dnainternet.net
+Received: from tulikuusama2.dnainternet.net ([83.102.40.151])
+        by localhost (tulikuusama2.dnainternet.net [127.0.0.1]) (DNA Internet, port 10041)
+        with ESMTP id c8DHOLzE7O2K; Sun, 28 Aug 2022 17:43:14 +0300 (EEST)
+Received: from oliivipuu2.dnainternet.net (oliivipuu2.dnainternet.net [83.102.40.53])
+        by tulikuusama2.dnainternet.net (Postfix) with ESMTP id 1230629831;
+        Sun, 28 Aug 2022 17:43:14 +0300 (EEST)
+Received: from 82-181-17-0.bb.dnainternet.fi (82-181-17-0.bb.dnainternet.fi [82.181.17.0])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by oliivipuu2.dnainternet.net (Postfix) with ESMTPS id 62BB19A;
+        Sun, 28 Aug 2022 17:43:09 +0300 (EEST)
+Received: from [IPV6:2001:14ba:4465:aa01:692:26ff:fed3:d163] (ryoko.home [IPv6:2001:14ba:4465:aa01:692:26ff:fed3:d163])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by 82-181-17-0.bb.dnainternet.fi (Postfix) with ESMTPSA id D6616EA017;
+        Sun, 28 Aug 2022 17:43:08 +0300 (EEST)
+Message-ID: <9f3cef03-6efd-138e-8552-e3078ed9b4f7@iki.fi>
+Date:   Sun, 28 Aug 2022 17:43:08 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+From:   Matti Kurkela <Matti.Kurkela@iki.fi>
+Subject: [PATCH] hwmon: (nct6775) Add Asus PRIME Z390-A to WMI monitoring list
+To:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@roeck-us.net
+Cc:     Matti.Kurkela@iki.fi
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Fix for TUF laptops returning with an -ENOSPC on calling
-asus_wmi_evaluate_method_buf() when fetching default curves. The TUF method
-requires at least 32 bytes space.
+Asus PRIME Z390-A (and presumably other Asus Z390 motherboard versions) 
+also requires the nct6775 chip to be accessed by the WMI method. Add it 
+to the asus_wmi_boards list.
 
-This also moves and changes the pr_debug() in fan_curve_check_present() to
-pr_warn() in fan_curve_get_factory_default() so that there is at least some
-indication in logs of why it fails.
-
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
+Tested-by: Matti Kurkela <Matti.Kurkela@iki.fi>
+Signed-off-by: Matti Kurkela <Matti.Kurkela@iki.fi>
 ---
- drivers/platform/x86/asus-wmi.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+Should apply to any kernel version that includes the commit 
+c3963bc0a0cf9ecb205a9d4976eb92b6df2fa3fd
+(hwmon: (nct6775) Split core and platform driver).
 
-diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-index 3d9fd58573f9..11203213e00d 100644
---- a/drivers/platform/x86/asus-wmi.c
-+++ b/drivers/platform/x86/asus-wmi.c
-@@ -108,7 +108,7 @@ module_param(fnlock_default, bool, 0444);
- #define WMI_EVENT_MASK			0xFFFF
- 
- #define FAN_CURVE_POINTS		8
--#define FAN_CURVE_BUF_LEN		(FAN_CURVE_POINTS * 2)
-+#define FAN_CURVE_BUF_LEN		32
- #define FAN_CURVE_DEV_CPU		0x00
- #define FAN_CURVE_DEV_GPU		0x01
- /* Mask to determine if setting temperature or percentage */
-@@ -2383,8 +2383,10 @@ static int fan_curve_get_factory_default(struct asus_wmi *asus, u32 fan_dev)
- 	curves = &asus->custom_fan_curves[fan_idx];
- 	err = asus_wmi_evaluate_method_buf(asus->dsts_id, fan_dev, mode, buf,
- 					   FAN_CURVE_BUF_LEN);
--	if (err)
-+	if (err) {
-+		pr_warn("%s (0x%08x) failed: %d\n", __func__, fan_dev, err);
- 		return err;
-+	}
- 
- 	fan_curve_copy_from_buf(curves, buf);
- 	curves->device_id = fan_dev;
-@@ -2402,9 +2404,6 @@ static int fan_curve_check_present(struct asus_wmi *asus, bool *available,
- 
- 	err = fan_curve_get_factory_default(asus, fan_dev);
- 	if (err) {
--		pr_debug("fan_curve_get_factory_default(0x%08x) failed: %d\n",
--			 fan_dev, err);
--		/* Don't cause probe to fail on devices without fan-curves */
- 		return 0;
- 	}
- 
+--- linux-5.19.4/drivers/hwmon/nct6775-platform.c.orig  2022-08-25 
+12:45:54.000000000 +0300
++++ linux-5.19.4/drivers/hwmon/nct6775-platform.c       2022-08-28 
+16:28:09.531738685 +0300
+@@ -1054,6 +1054,7 @@ static const char * const asus_wmi_board
+         "PRIME H410M-R",
+         "PRIME X570-P",
+         "PRIME X570-PRO",
++       "PRIME Z390-A",
+         "ROG CROSSHAIR VIII DARK HERO",
+         "ROG CROSSHAIR VIII FORMULA",
+         "ROG CROSSHAIR VIII HERO",
+
+
 -- 
-2.37.2
-
+Matti.Kurkela@iki.fi
