@@ -2,85 +2,89 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AF96ECAAD5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Aug 2022 13:52:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67651ECAAD5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Aug 2022 13:53:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiH2NwM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Aug 2022 09:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58948 "EHLO
+        id S229590AbiH2Nxq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Aug 2022 09:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiH2NwK (ORCPT
+        with ESMTP id S229932AbiH2Nxl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:52:10 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F18D93515;
-        Mon, 29 Aug 2022 06:52:08 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id x80so4175844pgx.0;
-        Mon, 29 Aug 2022 06:52:08 -0700 (PDT)
+        Mon, 29 Aug 2022 09:53:41 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDDF97511;
+        Mon, 29 Aug 2022 06:53:40 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id c24so7734051pgg.11;
+        Mon, 29 Aug 2022 06:53:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc;
-        bh=CizzwTQDrBW1pzG8I/tvVZktSfPvWVpP3oiGosqePuM=;
-        b=BFuBmpziPrpH+ToBnbBzhKoGCsrxb5bIPLToAdEtGFxp4a2CJe0pbvHqdAKBBI/To+
-         3Vz/oanucLjuB0IB1SG7/tWbb9Jr6dnVvg5ZiQoM81uV0T8vvkqpyIIz/ukBGyvwz8ll
-         TvQdHS3f0E2qE7qgyjRj4N46lzcrK+b+uCf5PnCnzxG6bxXzca5VEobpq1zCvtArYCXX
-         wL6udQc9MKcF434cBqGqg00hTZ51j6JzrjDXACQ/TMp0Pq2maYUcKkykod2dBeMWqUBF
-         7EFlG2kKKwgJcvBLvcxj3hSwr6X3KwYIAdxmM15EyIwQEoiRBQN337W/dO5F1bu4YlNC
-         Re1g==
+        bh=ENR6zXlzprDZixSeKqPFK+t4TDIeg7JZE6a8SVGK308=;
+        b=AWq+ofH1oIUg8rs4W95LjB2cXM5FY8EUmeMiY0qYklZnsdd07ZYpo8K8WstNc4XzYR
+         9+HdvZbOnuGit7LFpT++pBAMTAj8geXLb50DDLDrI/ajmVZaveD13FT0dKcFb1ZTLdoI
+         mzvfPWrSNePUTV9AcCFs7iODJeTZol49M7xI7BuwTd3QtL7Ui5zyAfwkTl7L4i5l08qF
+         kKGCk1E14eAe2Xqd5zn+nGxU4e9Lec+XvSA4sSqyTvcCIi4y+5wXmpeF2FAfusE01NWL
+         WYwASqFjUaUQU+vjZVdIAYFpEk7yroAtGWPEotsnuR0Yu+8L4zIX7kXaJmlFQ2ZJVB9j
+         e4Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=CizzwTQDrBW1pzG8I/tvVZktSfPvWVpP3oiGosqePuM=;
-        b=j4T7bX1DXJzKwrjYdry7inlq4pyHXDKnqgCdnGubg92HvdUmripEkVcypnVFahJqgf
-         1Uxmba0Zjy9KezNVwEE/0p1Negi73g00/RvPPHi3+IaIUzTjaIpV11M0Sqn7S3e7F1U3
-         CCYxsh3FqQ/xHfGfGus4oMmpHHs89XDsqqn/NFgMbZ4CwOgej++NEgsbr+wYe9VoIO62
-         AmnHlf1I6K+s7eaeYKF70GnQOArRG4NWM7temGEBKxQXvfsNBCBRFEXDJbT9vR2BlorZ
-         zatHvOkeaPvfdsKnRz9enODri5+Cec1cQXPJK1VeudsL4y/C+4/qIBV7X7ChaVS+s7+2
-         6WNg==
-X-Gm-Message-State: ACgBeo3HwPVe3mwPIj1bvKd15ht4yM4Lqn4ye+/N78FwMOXFS0YT4yuj
-        MA8bGZTUh6E2Md87AmUjadU=
-X-Google-Smtp-Source: AA6agR6vjOINy9txTO5/r6fE4Ijqn5Ri8OWcJpnMGkzgilblB4k6WB0TZJhDvhXb8ECFZ+XSVmqt5w==
-X-Received: by 2002:a05:6a00:1a93:b0:536:5dca:a685 with SMTP id e19-20020a056a001a9300b005365dcaa685mr16842223pfv.13.1661781127607;
-        Mon, 29 Aug 2022 06:52:07 -0700 (PDT)
+        bh=ENR6zXlzprDZixSeKqPFK+t4TDIeg7JZE6a8SVGK308=;
+        b=pAg7qlHbubVD+B9LAImf371LLMy04WWnMa2kdVJRrO/NdJl70TkuD2nWlsV9yecrPL
+         yy6G6Fd4TT+hVYYPaAaZppI00s/uELPRiJ5nL++W8RoJ2q2KKA0V0qJAd1pSEW7I+/xq
+         P2y544MGt0U9ko/AFAmTZehrwMddmbpvXU3Nb/iLHMVQ6m8dQCLFgeE7DGglM63VnfS9
+         Mc+c67Q79EW2fk14q0eRF0yjVFaJVaTecR6KE6gm1BJaF67HObfQxCa9cA5RBIjOAst3
+         4NVuq9xwCKwoBmIwDRbTOY9n/GLn9AVnHkUXVAa5rR78WOMvcVKYCTd+uXSZQvbmU2yq
+         /3XQ==
+X-Gm-Message-State: ACgBeo0HwKF483nf0oR4UciqxQuMaiVTFS+j9e20IwM6a/dKvDbgxHl4
+        MfwZzu0y7kCs2mom1+7yQLmADoY5lKukbg==
+X-Google-Smtp-Source: AA6agR75x82sSQ1XzmeJ6rgPwMc/ySBDjGhGNtf9HiwPGJGdolFJkT7h2+H3BNLmp+SYhltmGNeC0Q==
+X-Received: by 2002:a63:4547:0:b0:41d:ba0a:870a with SMTP id u7-20020a634547000000b0041dba0a870amr14272003pgk.216.1661781219647;
+        Mon, 29 Aug 2022 06:53:39 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id md10-20020a17090b23ca00b001f24c08c3fesm6852746pjb.1.2022.08.29.06.52.06
+        by smtp.gmail.com with ESMTPSA id k13-20020a170902c40d00b001743ba85d39sm7612123plk.110.2022.08.29.06.53.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 06:52:07 -0700 (PDT)
+        Mon, 29 Aug 2022 06:53:39 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 29 Aug 2022 06:52:06 -0700
+Date:   Mon, 29 Aug 2022 06:53:38 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (dell-smm) Improve warning messages
-Message-ID: <20220829135206.GA168015@roeck-us.net>
-References: <20220822174053.8750-1-W_Armin@gmx.de>
- <20220822174053.8750-3-W_Armin@gmx.de>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] hwmon: (sparx5) Use devm_clk_get_enabled() helper
+Message-ID: <20220829135338.GA229655@roeck-us.net>
+References: <cfe4c965074b5ecbe03830b05e038b4594c7b970.1661336689.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220822174053.8750-3-W_Armin@gmx.de>
+In-Reply-To: <cfe4c965074b5ecbe03830b05e038b4594c7b970.1661336689.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 07:40:53PM +0200, Armin Wolf wrote:
-> When dell-smm-hwmon is loaded on a machine with a buggy BIOS
-> with the option "force" being enabled, it wrongly prints
-> that the buggy features where disabled. This may cause
-> users to wrongly assume that the driver still protects them
-> from these BIOS bugs even with "force" being enabled.
+On Wed, Aug 24, 2022 at 12:25:13PM +0200, Christophe JAILLET wrote:
+> The devm_clk_get_enabled() helper:
+>    - calls devm_clk_get()
+>    - calls clk_prepare_enable() and registers what is needed in order to
+>      call clk_disable_unprepare() when needed, as a managed resource.
 > 
-> Replace the messages with two messages each which are depending
-> on the value of the "force" parameter. The messages which are
-> being printed when "force" is not set use dev_notice() instead
-> of dev_warn() since they only serve as a notice.
+> This simplifies the code, the error handling paths and avoid the need of
+> a dedicated function used with devm_add_action_or_reset().
 > 
-> Tested on a Dell Inspiron 3505.
+> Based on my test with allyesconfig, this reduces the .o size from:
+>    text	   data	    bss	    dec	    hex	filename
+>    2419	   1472	      0	   3891	    f33	drivers/hwmon/sparx5-temp.o
+> down to:
+>    2155	   1472	      0	   3627	    e2b	drivers/hwmon/sparx5-temp.o
 > 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
 Applied to hwmon-next.
 
@@ -88,39 +92,55 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/dell-smm-hwmon.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
+> devm_clk_get_enabled() is new and is part of 6.0-rc1
+> ---
+>  drivers/hwmon/sparx5-temp.c | 19 +------------------
+>  1 file changed, 1 insertion(+), 18 deletions(-)
 > 
-> --
-> 2.30.2
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 9cac80358072..01a94b62c2ab 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -1356,15 +1356,21 @@ static int __init dell_smm_probe(struct platform_device *pdev)
->  	platform_set_drvdata(pdev, data);
-> 
->  	if (dmi_check_system(i8k_blacklist_fan_support_dmi_table)) {
-> -		dev_warn(&pdev->dev, "broken Dell BIOS detected, disallow fan support\n");
-> -		if (!force)
-> +		if (!force) {
-> +			dev_notice(&pdev->dev, "Disabling fan support due to BIOS bugs\n");
->  			data->disallow_fan_support = true;
-> +		} else {
-> +			dev_warn(&pdev->dev, "Enabling fan support despite BIOS bugs\n");
-> +		}
->  	}
-> 
->  	if (dmi_check_system(i8k_blacklist_fan_type_dmi_table)) {
-> -		dev_warn(&pdev->dev, "broken Dell BIOS detected, disallow fan type call\n");
-> -		if (!force)
-> +		if (!force) {
-> +			dev_notice(&pdev->dev, "Disabling fan type call due to BIOS bugs\n");
->  			data->disallow_fan_type_call = true;
-> +		} else {
-> +			dev_warn(&pdev->dev, "Enabling fan type call despite BIOS bugs\n");
-> +		}
->  	}
-> 
->  	strscpy(data->bios_version, i8k_get_dmi_data(DMI_BIOS_VERSION),
+> diff --git a/drivers/hwmon/sparx5-temp.c b/drivers/hwmon/sparx5-temp.c
+> index 98be48e3a22a..04fd8505e5d6 100644
+> --- a/drivers/hwmon/sparx5-temp.c
+> +++ b/drivers/hwmon/sparx5-temp.c
+> @@ -26,13 +26,6 @@ struct s5_hwmon {
+>  	struct clk *clk;
+>  };
+>  
+> -static void s5_temp_clk_disable(void *data)
+> -{
+> -	struct clk *clk = data;
+> -
+> -	clk_disable_unprepare(clk);
+> -}
+> -
+>  static void s5_temp_enable(struct s5_hwmon *hwmon)
+>  {
+>  	u32 val = readl(hwmon->base + TEMP_CFG);
+> @@ -113,7 +106,6 @@ static int s5_temp_probe(struct platform_device *pdev)
+>  {
+>  	struct device *hwmon_dev;
+>  	struct s5_hwmon *hwmon;
+> -	int ret;
+>  
+>  	hwmon = devm_kzalloc(&pdev->dev, sizeof(*hwmon), GFP_KERNEL);
+>  	if (!hwmon)
+> @@ -123,19 +115,10 @@ static int s5_temp_probe(struct platform_device *pdev)
+>  	if (IS_ERR(hwmon->base))
+>  		return PTR_ERR(hwmon->base);
+>  
+> -	hwmon->clk = devm_clk_get(&pdev->dev, NULL);
+> +	hwmon->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+>  	if (IS_ERR(hwmon->clk))
+>  		return PTR_ERR(hwmon->clk);
+>  
+> -	ret = clk_prepare_enable(hwmon->clk);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = devm_add_action_or_reset(&pdev->dev, s5_temp_clk_disable,
+> -				       hwmon->clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	s5_temp_enable(hwmon);
+>  
+>  	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
