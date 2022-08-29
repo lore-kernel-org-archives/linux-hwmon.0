@@ -2,122 +2,115 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13DBBECAAD5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Aug 2022 13:36:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC6DDECAAD2
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Aug 2022 13:37:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiH2Ng2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Aug 2022 09:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
+        id S230118AbiH2NhW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Aug 2022 09:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiH2NgN (ORCPT
+        with ESMTP id S229701AbiH2NhT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:36:13 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224757E33E;
-        Mon, 29 Aug 2022 06:35:59 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 69so6064996pgb.13;
-        Mon, 29 Aug 2022 06:35:59 -0700 (PDT)
+        Mon, 29 Aug 2022 09:37:19 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEAC5C9E0;
+        Mon, 29 Aug 2022 06:37:18 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 69so6068098pgb.13;
+        Mon, 29 Aug 2022 06:37:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc;
-        bh=UVKTlnEIoldY+2ikvWrlNXqFFlr5euSvQ86GnWaZaho=;
-        b=YwxHVBDf26Yi73o5+r444WKY7QqwFOzTEnFjSo8Bow1lqIga+JCUW7EEEpDsZ6iPSK
-         Z04YZvt1Pt6J6R1j5ZWOXINdtvMh1pKvRTW8x5OhmpXBkvTcaZo99jG0R4UChrIVPpD/
-         GN3nf064cXJje0jWsQM+sFauz1vZ72PjZOG8m93aXj5VevRQMfTGagenqg8i79vq41t+
-         4EtR5LLe8uItIbwb9EYJ4VyQOrkBmI8ENvppF9JhEyUMFcTV0/F7ZyXRpsAeOX6AVX3f
-         CfKEhMu3GIXMTbOOXnQ5LfMsYV0Xsrua1peWIMOdlhxqLg+MBpyOigdEcuY+NT3ev+xs
-         cJSw==
+        bh=X3n9fRJaISOoKGJibDsyztvDNBHKFphlKvEWrr6bIeU=;
+        b=JmveZP+OCtghdybFvzZuRj03k/Ivj7Z4v78rEHsMaUQflE8XEa1FSSIPA4qxIysrsX
+         hRwLqoHh7RwiZWfeasksEzY1AZt4HO0w2Wh0vzOeAQvxVcjvePKk3/5NLe1P0jMzZPr0
+         C3w92DFNaqCYqp+A0tkGrgn/E6Ghwg79oBXmlhs0AukPkw7AOJf6KjMgI6Yf1MtZ3umw
+         kLgxEtSaK19JgXmRBT3LceBY3eeZA2rAyDaaLD/dF/Ztf83av5LsXcRwYeehHL+p35ZM
+         04IGdAVcT83avsiNnjG2yVExJOwkJoBEunJCeXcWP50c9tjx4xWNpAyf/CVPEpAgE4KW
+         owOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=UVKTlnEIoldY+2ikvWrlNXqFFlr5euSvQ86GnWaZaho=;
-        b=r6XP28DAGdnVxZ1mFxBVXmqSpjnNAUPijebHWBFQGgZ+dwZt2Pcu4VT0TrZS4Yhw3s
-         VsyN5wfzxsQyCe8XuQgvQJ4OHOL4feq9UD+SzvzReI4EoQmTDCTiiUhsWSr4G9E5bZxk
-         5yNciwzEZ5bK73u/PdDeDzBAUaSKHjtX480SIZVoMHkh1dgV+vPxRfF9Ow8tlpbW6M2J
-         atLn9A3WpoGrg91vErzunusNwAE60HtaVlVeHHs/exqOBd7rNV8GE6BCroJlmCxXjGPE
-         68bIIF61OddUdjrWKZpkU+JdJMb9VmvJ6Fa9pLXGw5f55ZbQ7AurXzPB0BF4vkGwz6It
-         g/hQ==
-X-Gm-Message-State: ACgBeo2iHFwllIFAyUeeLn4M7QJh7tq2wS5/WSMuEJjj/tuUUMZ9vj/4
-        ykV+R2P2xB2po7UL0NuQAjY=
-X-Google-Smtp-Source: AA6agR4Cq2eaFxLjb3w99Ke4qD7S6eU85utxglvjTiCUilxN+MxnvuBKvF7gr8nmE7JBAiM3RRhaPA==
-X-Received: by 2002:a63:6cc1:0:b0:42b:d2c5:74a2 with SMTP id h184-20020a636cc1000000b0042bd2c574a2mr6952942pgc.420.1661780158463;
-        Mon, 29 Aug 2022 06:35:58 -0700 (PDT)
+        bh=X3n9fRJaISOoKGJibDsyztvDNBHKFphlKvEWrr6bIeU=;
+        b=oWZWYylHJV1yxVhKchfyCqrLeXaEea1Tomkb1mbFO62LCF3EfU/AVc6Uqx+5MTOx6d
+         0offumDnEKRGjQLlDuuvlFT9g5XGncauhEGevda8PZSTmhm87jl40e5QFj8TAlnoBZ8j
+         lfw5+5lirbD0LUKtq0Op+f7smuVhl90A/vrI+UUYl4W74QEuaSel27RkL1BnvGkjIg4J
+         Z5FOUL9zJRfWaOLr5Yi3XYe0URkOkK1YU6ozoZsPsM2rOKGbxDH2L6WVl36eV+K9I7sy
+         P7OYvBt/X5KhH1dCGiEabKb2Rs0yeD7SJEqKZPyjy+YB/nsGHZ8xvaKO5guGErCAoOLW
+         ddGg==
+X-Gm-Message-State: ACgBeo3jLrCUo0KghCz7Lio0AR+LDGSdo2J/CwiWVDDEb54LNF+v9DFM
+        uiVzdUnnSeCii7PJ5EKuPhK6lFTH03zvMw==
+X-Google-Smtp-Source: AA6agR6npqtvrRablWh07/Vw19Q4Z94J2iztkOOWgCiPSa/C7qzH1PxhccJrg3G8KKctib1y/VU5Vw==
+X-Received: by 2002:a63:fa49:0:b0:429:fd87:3171 with SMTP id g9-20020a63fa49000000b00429fd873171mr13353291pgk.504.1661780238253;
+        Mon, 29 Aug 2022 06:37:18 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 35-20020a630c63000000b0041c35462316sm6409401pgm.26.2022.08.29.06.35.57
+        by smtp.gmail.com with ESMTPSA id e2-20020a17090a630200b001fdcfe9a731sm1962628pjj.50.2022.08.29.06.37.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 06:35:57 -0700 (PDT)
+        Mon, 29 Aug 2022 06:37:17 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 29 Aug 2022 06:35:56 -0700
+Date:   Mon, 29 Aug 2022 06:37:16 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Luke D. Jones" <luke@ljones.dev>
-Cc:     hdegoede@redhat.com, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        markgross@kernel.org
-Subject: Re: [PATCH] asus-wmi: Increase FAN_CURVE_BUF_LEN to 32
-Message-ID: <20220829133556.GA3766826@roeck-us.net>
-References: <20220828074638.5473-1-luke@ljones.dev>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH v2 1/1] hwmon: (iio_hwmon) Make use of device properties
+Message-ID: <20220829133716.GA3968626@roeck-us.net>
+References: <20220826173700.17395-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220828074638.5473-1-luke@ljones.dev>
+In-Reply-To: <20220826173700.17395-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Aug 28, 2022 at 07:46:38PM +1200, Luke D. Jones wrote:
-> Fix for TUF laptops returning with an -ENOSPC on calling
-> asus_wmi_evaluate_method_buf() when fetching default curves. The TUF method
-> requires at least 32 bytes space.
+On Fri, Aug 26, 2022 at 08:37:00PM +0300, Andy Shevchenko wrote:
+> Convert the module to be property provider agnostic and allow
+> it to be used on non-OF platforms.
 > 
-> This also moves and changes the pr_debug() in fan_curve_check_present() to
-> pr_warn() in fan_curve_get_factory_default() so that there is at least some
-> indication in logs of why it fails.
+> Include mod_devicetable.h explicitly to replace the dropped of.h
+> which included mod_devicetable.h indirectly.
 > 
-> Signed-off-by: Luke D. Jones <luke@ljones.dev>
-> ---
->  drivers/platform/x86/asus-wmi.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-> index 3d9fd58573f9..11203213e00d 100644
-> --- a/drivers/platform/x86/asus-wmi.c
-> +++ b/drivers/platform/x86/asus-wmi.c
-> @@ -108,7 +108,7 @@ module_param(fnlock_default, bool, 0444);
->  #define WMI_EVENT_MASK			0xFFFF
->  
->  #define FAN_CURVE_POINTS		8
-> -#define FAN_CURVE_BUF_LEN		(FAN_CURVE_POINTS * 2)
-> +#define FAN_CURVE_BUF_LEN		32
->  #define FAN_CURVE_DEV_CPU		0x00
->  #define FAN_CURVE_DEV_GPU		0x01
->  /* Mask to determine if setting temperature or percentage */
-> @@ -2383,8 +2383,10 @@ static int fan_curve_get_factory_default(struct asus_wmi *asus, u32 fan_dev)
->  	curves = &asus->custom_fan_curves[fan_idx];
->  	err = asus_wmi_evaluate_method_buf(asus->dsts_id, fan_dev, mode, buf,
->  					   FAN_CURVE_BUF_LEN);
-> -	if (err)
-> +	if (err) {
-> +		pr_warn("%s (0x%08x) failed: %d\n", __func__, fan_dev, err);
->  		return err;
-> +	}
->  
->  	fan_curve_copy_from_buf(curves, buf);
->  	curves->device_id = fan_dev;
-> @@ -2402,9 +2404,6 @@ static int fan_curve_check_present(struct asus_wmi *asus, bool *available,
->  
->  	err = fan_curve_get_factory_default(asus, fan_dev);
->  	if (err) {
-> -		pr_debug("fan_curve_get_factory_default(0x%08x) failed: %d\n",
-> -			 fan_dev, err);
-> -		/* Don't cause probe to fail on devices without fan-curves */
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-The pr_warn() should be here. If you want to have a message from the call
-in fan_curve_enable_store(), add dev_err() there.
+Applied to hwmon-next.
 
+Thanks,
 Guenter
 
->  		return 0;
->  	}
+> ---
+> v2: amended commit message (Guenter)
+>  drivers/hwmon/iio_hwmon.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
+> index 580a7d125b88..3aa40893fc09 100644
+> --- a/drivers/hwmon/iio_hwmon.c
+> +++ b/drivers/hwmon/iio_hwmon.c
+> @@ -6,11 +6,13 @@
 >  
+>  #include <linux/kernel.h>
+>  #include <linux/slab.h>
+> +#include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+>  #include <linux/err.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/property.h>
+> +
+>  #include <linux/hwmon.h>
+> -#include <linux/of.h>
+>  #include <linux/hwmon-sysfs.h>
+>  #include <linux/iio/consumer.h>
+>  #include <linux/iio/types.h>
+> @@ -149,8 +151,8 @@ static int iio_hwmon_probe(struct platform_device *pdev)
+>  	st->attr_group.attrs = st->attrs;
+>  	st->groups[0] = &st->attr_group;
+>  
+> -	if (dev->of_node) {
+> -		sname = devm_kasprintf(dev, GFP_KERNEL, "%pOFn", dev->of_node);
+> +	if (dev_fwnode(dev)) {
+> +		sname = devm_kasprintf(dev, GFP_KERNEL, "%pfwP", dev_fwnode(dev));
+>  		if (!sname)
+>  			return -ENOMEM;
+>  		strreplace(sname, '-', '_');
