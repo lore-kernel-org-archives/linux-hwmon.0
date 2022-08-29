@@ -2,51 +2,51 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC651ECAAA4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Aug 2022 17:46:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AEF2ECAAA4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Aug 2022 17:50:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiH2RqG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Aug 2022 13:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
+        id S229504AbiH2RuD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Aug 2022 13:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiH2RqF (ORCPT
+        with ESMTP id S230002AbiH2RuC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:46:05 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BD650189
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Aug 2022 10:46:01 -0700 (PDT)
+        Mon, 29 Aug 2022 13:50:02 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC8AD112
+        for <linux-hwmon@vger.kernel.org>; Mon, 29 Aug 2022 10:50:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661795161; x=1693331161;
+  t=1661795400; x=1693331400;
   h=date:message-id:from:to:cc:subject:in-reply-to:
    references:mime-version;
-  bh=EOoh8Z1bTbVb+Zuf2jt3wBpmQXyekMKn2KKHzrWDzes=;
-  b=liJpQjxTnESg25CNfHeLiPA4ELvGqtmC3eGhXkhCq9S+L/wPvh68pAc3
-   T6sbzTOwGCb469kPqwnfg2aCCe92JmuAJcYLWwaV79Xfw5K6t4BKOFTwB
-   TFqpC+y7KV7Dlajihvn90XNMAmwiT3porvIAWWVEMl1aJbGWO+EUaPhBl
-   3SA699ve5uPzlkrjMJWeqvhZlUUoQ54t9H0+SzyDpuriUnkuirBNrSzZ1
-   SfT4RoTg2jsOb5rMrdFJe52xkgqQe3HYtoDF0EXX86BL6XjYWcz4cctSK
-   kG2hhUcVhPyrqGUOb6nuK5YVilBdIP98hS/JaTgtSV4ZP84i90J2d0Ru2
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="294962713"
+  bh=YZAjn3EYxvM7jJwGlzaDfBUdPVSC/0b5H1i8NE4KnA0=;
+  b=d9zRtlQmpWjpwcBu3NmxCMY003OXb0HXqDrGcx0NKYCtkDJv+smJl0bm
+   BZ2c5dq/UCO9oiNeNHd4/Jj9oZBY3jfShJhgC8MssXOYudyn0cUcBZ86H
+   NM3fMBWzDkbnkqWSVyctv9NZvLxsIrxwiT+u48rIAm4+Q2Zg84rVBZ7m5
+   8n8pS0cmEUr/D/W0GZdLa7DKTV3WZEjL9G9Cq+H0RAdYz8BNvnsiqUavZ
+   1O4jiozabaA0d/qeYNcp5ngZq6a8Xf+K3bTzUO6fGL8qiyti50k3oE5I7
+   G9L27iSjPzLCvSM06jJ8Ld2AGzWRogsRH5Kn4Nq69bkQSuF564++Zbg7q
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="358924762"
 X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="294962713"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 10:46:01 -0700
+   d="scan'208";a="358924762"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 10:50:00 -0700
 X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="679707183"
+   d="scan'208";a="737424912"
 Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.212.207.96])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 10:46:00 -0700
-Date:   Mon, 29 Aug 2022 10:26:38 -0700
-Message-ID: <87pmgjyn8x.wl-ashutosh.dixit@intel.com>
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 10:50:00 -0700
+Date:   Mon, 29 Aug 2022 10:30:39 -0700
+Message-ID: <87o7w3yn28.wl-ashutosh.dixit@intel.com>
 From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
 To:     Badal Nilawar <badal.nilawar@intel.com>
 Cc:     <intel-gfx@lists.freedesktop.org>, <riana.tauro@intel.com>,
         <anshuman.gupta@intel.com>, <jon.ewins@intel.com>,
         <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH 1/7] drm/i915/hwmon: Add HWMON infrastructure
-In-Reply-To: <20220825132118.784407-2-badal.nilawar@intel.com>
-References: <20220825132118.784407-1-badal.nilawar@intel.com>   <20220825132118.784407-2-badal.nilawar@intel.com>
+Subject: Re: [PATCH 2/7] drm/i915/hwmon: Add HWMON current voltage support
+In-Reply-To: <20220825132118.784407-3-badal.nilawar@intel.com>
+References: <20220825132118.784407-1-badal.nilawar@intel.com>   <20220825132118.784407-3-badal.nilawar@intel.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
  Emacs/28.1 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -56,43 +56,55 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 25 Aug 2022 06:21:12 -0700, Badal Nilawar wrote:
+On Thu, 25 Aug 2022 06:21:13 -0700, Badal Nilawar wrote:
 >
+> From: Riana Tauro <riana.tauro@intel.com>
+>
+> Use i915 HWMON subsystem to display current input voltage.
 
-A couple of minor observations below but otherwise this patch is:
+A couple of suggestions to improve comments in this patch below and after
+addressing those this patch is:
 
 Reviewed-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
 
 > diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
-> new file mode 100644
-> index 000000000000..103dd543a214
-> --- /dev/null
+> index 103dd543a214..2192d0fd4c66 100644
+> --- a/drivers/gpu/drm/i915/i915_hwmon.c
 > +++ b/drivers/gpu/drm/i915/i915_hwmon.c
+> @@ -11,8 +11,10 @@
+>  #include "i915_hwmon.h"
+>  #include "i915_reg.h"
+>  #include "intel_mchbar_regs.h"
+> +#include "gt/intel_gt_regs.h"
 
-/snip/
+In later patches we have added units for different quantities here. So I
+think we should add those units for voltage to this patch too. It's in
+Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon but I think it's
+better to add to this file too otherwise if anyone looks at it is seems to
+be missing.
 
-> +struct hwm_reg {
-> +};
+So I would add the following to this patch:
+
+/*
+ * SF_* - scale factors for particular quantities according to hwmon spec.
+ * - voltage - millivolts
+ */
+#define SF_VOLTAGE	1000
+
+> +static int
+> +hwm_in_read(struct hwm_drvdata *ddat, u32 attr, long *val)
+> +{
+> +	struct i915_hwmon *hwmon = ddat->hwmon;
+> +	intel_wakeref_t wakeref;
+> +	u32 reg_value;
 > +
-> +struct hwm_drvdata {
-> +	struct i915_hwmon *hwmon;
-> +	struct intel_uncore *uncore;
+> +	switch (attr) {
+> +	case hwmon_in_input:
+> +		with_intel_runtime_pm(ddat->uncore->rpm, wakeref)
+> +			reg_value = intel_uncore_read(ddat->uncore, hwmon->rg.gt_perf_status);
+> +		/* In units of 2.5 millivolt */
+> +		*val = DIV_ROUND_CLOSEST(REG_FIELD_GET(GEN12_VOLTAGE_MASK, reg_value) * 25, 10);
 
-Instead of 'struct intel_uncore' we could have a 'struct intel_gt' here
-since intel_gt is a higher level but I think uncore is fine and anyway has
-a backpointer to intel_gt should we need it. So no changes needed.
+Let's complete this comment to so that it is clear what's happening:
 
-> +	struct device *hwmon_dev;
-> +	char name[12];
-> +};
-> +
-> +struct i915_hwmon {
-> +	struct hwm_drvdata ddat;
-> +	struct mutex hwmon_lock;		/* counter overflow logic and rmw */
-> +	struct hwm_reg rg;
-> +};
-
-Somebody looking at just this patch might wonder why we have two data
-structs hwm_drvdata and i915_hwmon, rather than just one. The answer
-becomes clear in a later patch and that of course is that i915 exposes
-multiple hwmon devices. Anyway, just an observation, no changes required.
+		/* HW register value is in units of 2.5 millivolt */
