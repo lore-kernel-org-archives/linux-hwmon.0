@@ -2,214 +2,97 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47038C6FA81
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Aug 2022 17:16:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC651ECAAA4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Aug 2022 17:46:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbiH2RQQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Aug 2022 13:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
+        id S229585AbiH2RqG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Aug 2022 13:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbiH2RQO (ORCPT
+        with ESMTP id S229567AbiH2RqF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Aug 2022 13:16:14 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE9879694
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Aug 2022 10:16:11 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id kk26so17002277ejc.11
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Aug 2022 10:16:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=j2z/n7eMw3f3j7EBd6Q4JVoMSwtLsVBiipYe75KuXHg=;
-        b=TKbYjetujPctiPYNjbkJ9aq8EL/rgg0D25oRV4c705d2jwFlUNO/wk19ajGMSNo2kw
-         8dycZyi9V+9vzrQURZiMwf+sb2PX62rESS1GXTknyDQeyrT2F5OuhWmYbp7Z4c22wCVf
-         1vUXRQ+2SR3kxT62M6Fpn7gn/0ZKbTLWESU0JvD76UPknnzefl3lKeHriXjdoavUAVD7
-         UChJhcg9PqFbrWkK/gzNRi6lcOlukmgk4Q3FTUDLOpNncjJDYn97S0vmiiaq+b835/Nj
-         Dlmym/55nlX5PdmBm6McpbjxtXq7ahtV5t162Zn57rjtzm+KkjAb+d8MG4OAqb8/mX1n
-         h7Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=j2z/n7eMw3f3j7EBd6Q4JVoMSwtLsVBiipYe75KuXHg=;
-        b=aCkOZSz+G9np4Me4m23GVWj5pXgQgGmcC9AC9czTv6VnNw1CypNUKiEEiVQ8D07YFW
-         o84FmCgV5BrbOtTwoStxwr2R855LH4JWq/3WJ80yNa4Jms9Ohdwg7UXmu/gLbjLsoROy
-         IiyZTmTuJbNPwwkEphfJRZn/5/fwK6doz9pgkma2skQvhfTKhn7kf6f/dHHhL+kk/gIu
-         57DsqK6U5c+sxFJ2nSvPvt52FHj4h1frv4BzR7XIaL0yjbgvq8VZrCceRAGLjlI/BXrA
-         cnqrcDA5GrFR3FlAGg+8LxOHo0pGDHLZO5Sc7YQe3nQcsxZVwSzqHko8hMhpbKXu9XwA
-         8fXA==
-X-Gm-Message-State: ACgBeo3WH0OV1W8apryT5hx2MYYYpbewTePMZ+1Mmr+4BcwwhOHpocEe
-        oJBRYhfCFDdKOy686beMFrruFnfIyBlKf6ic6M7ycw==
-X-Google-Smtp-Source: AA6agR5x6VZN3zVomElWr0Y4N4SPNr2IokZM89ZoLvJJ3bnv8SVxPEvKEdqtkCsXiLZxgIniRgJ3mxhx39JLn51f3Ks=
-X-Received: by 2002:a17:907:97cd:b0:731:5d0:4434 with SMTP id
- js13-20020a17090797cd00b0073105d04434mr13484082ejc.603.1661793369740; Mon, 29
- Aug 2022 10:16:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220829024351.2415147-1-justinledford@google.com>
- <20220829132017.GA3039965@roeck-us.net> <CAHCvCEcGvrS=3p2Whj0Cmx9sx+aSzX2097LahQ=f3eRCCAN_bA@mail.gmail.com>
- <20220829161135.GB1320973@roeck-us.net>
-In-Reply-To: <20220829161135.GB1320973@roeck-us.net>
-From:   Justin Ledford <justinledford@google.com>
-Date:   Mon, 29 Aug 2022 10:15:58 -0700
-Message-ID: <CAHCvCEc27ozgr6pthRZ84FzJnhM+X705RJpW4z4SB-P9dV_aSg@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (max31790) add fanN_enable
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 29 Aug 2022 13:46:05 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BD650189
+        for <linux-hwmon@vger.kernel.org>; Mon, 29 Aug 2022 10:46:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661795161; x=1693331161;
+  h=date:message-id:from:to:cc:subject:in-reply-to:
+   references:mime-version;
+  bh=EOoh8Z1bTbVb+Zuf2jt3wBpmQXyekMKn2KKHzrWDzes=;
+  b=liJpQjxTnESg25CNfHeLiPA4ELvGqtmC3eGhXkhCq9S+L/wPvh68pAc3
+   T6sbzTOwGCb469kPqwnfg2aCCe92JmuAJcYLWwaV79Xfw5K6t4BKOFTwB
+   TFqpC+y7KV7Dlajihvn90XNMAmwiT3porvIAWWVEMl1aJbGWO+EUaPhBl
+   3SA699ve5uPzlkrjMJWeqvhZlUUoQ54t9H0+SzyDpuriUnkuirBNrSzZ1
+   SfT4RoTg2jsOb5rMrdFJe52xkgqQe3HYtoDF0EXX86BL6XjYWcz4cctSK
+   kG2hhUcVhPyrqGUOb6nuK5YVilBdIP98hS/JaTgtSV4ZP84i90J2d0Ru2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="294962713"
+X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
+   d="scan'208";a="294962713"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 10:46:01 -0700
+X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
+   d="scan'208";a="679707183"
+Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.212.207.96])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 10:46:00 -0700
+Date:   Mon, 29 Aug 2022 10:26:38 -0700
+Message-ID: <87pmgjyn8x.wl-ashutosh.dixit@intel.com>
+From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
+To:     Badal Nilawar <badal.nilawar@intel.com>
+Cc:     <intel-gfx@lists.freedesktop.org>, <riana.tauro@intel.com>,
+        <anshuman.gupta@intel.com>, <jon.ewins@intel.com>,
+        <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH 1/7] drm/i915/hwmon: Add HWMON infrastructure
+In-Reply-To: <20220825132118.784407-2-badal.nilawar@intel.com>
+References: <20220825132118.784407-1-badal.nilawar@intel.com>   <20220825132118.784407-2-badal.nilawar@intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.1 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 9:11 AM Guenter Roeck <linux@roeck-us.net> wrote:
+On Thu, 25 Aug 2022 06:21:12 -0700, Badal Nilawar wrote:
 >
-> On Mon, Aug 29, 2022 at 08:09:21AM -0700, Justin Ledford wrote:
-> > The tach input isn't enabled in the device by default. So the only way
-> > to start using the fan input sensors is to set the regulator mode
-> > through the driver to RPM mode and then back to whatever mode you
-> > actually want to use. The I2C interface to the device doesn't couple
-> > the tach input to the regulator mode so I don't think it makes sense
-> > for the driver to do this either.
-> >
-> Please don't top-post.
->
-> The above does not answer my question why fan_config[] wound need to
-> be updated repeatedly.
->
-> Guenter
->
-> > On Mon, Aug 29, 2022 at 6:20 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> > >
-> > > On Mon, Aug 29, 2022 at 02:43:51AM +0000, Justin Ledford wrote:
-> > > > The MAX31790 has a tach input enable bit in each fan's configuration
-> > > > register. This is only enabled by the driver if RPM mode is selected,
-> > > > but the driver doesn't provide a way to independently enable tachometer
-> > > > input regardless of the regulator mode.
-> > > >
-> > > > By adding the fanN_enable sysfs files, we can decouple the tach input
-> > > > from the regulator mode. Also update the documentation.
-> > > >
-> > > > Signed-off-by: Justin Ledford <justinledford@google.com>
-> > > > ---
-> > > >  Documentation/hwmon/max31790.rst |  1 +
-> > > >  drivers/hwmon/max31790.c         | 44 +++++++++++++++++++++++++++-----
-> > > >  2 files changed, 38 insertions(+), 7 deletions(-)
-> > > >
-> > > > diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31790.rst
-> > > > index 7b097c3b9b90..33c5c7330efc 100644
-> > > > --- a/Documentation/hwmon/max31790.rst
-> > > > +++ b/Documentation/hwmon/max31790.rst
-> > > > @@ -38,6 +38,7 @@ Sysfs entries
-> > > >  fan[1-12]_input    RO  fan tachometer speed in RPM
-> > > >  fan[1-12]_fault    RO  fan experienced fault
-> > > >  fan[1-6]_target    RW  desired fan speed in RPM
-> > > > +fan[1-6]_enable    RW  enable or disable the tachometer input
-> > > >  pwm[1-6]_enable    RW  regulator mode, 0=disabled (duty cycle=0%), 1=manual mode, 2=rpm mode
-> > > >  pwm[1-6]           RW  read: current pwm duty cycle,
-> > > >                         write: target pwm duty cycle (0-255)
-> > > > diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-> > > > index 7e9362f6dc29..3ae02be4b41e 100644
-> > > > --- a/drivers/hwmon/max31790.c
-> > > > +++ b/drivers/hwmon/max31790.c
-> > > > @@ -118,6 +118,12 @@ static struct max31790_data *max31790_update_device(struct device *dev)
-> > > >                                       goto abort;
-> > > >                               data->target_count[i] = rv;
-> > > >                       }
-> > > > +
-> > > > +                     rv = i2c_smbus_read_byte_data(client,
-> > > > +                                     MAX31790_REG_FAN_CONFIG(i));
-> > > > +                     if (rv < 0)
-> > > > +                             goto abort;
-> > > > +                     data->fan_config[i] = rv;
-> > >
-> > > Why is this needed ?
-> > >
-> > > Guenter
-> > >
 
-This is needed in case the fan_config is changed outside the driver
-with something like i2ctransfer, so that the driver reports the actual
-state of the device, rather than the state at the time of the last
-write originating from the driver.
+A couple of minor observations below but otherwise this patch is:
 
-> > > >               }
-> > > >
-> > > >               data->last_updated = jiffies;
-> > > > @@ -202,6 +208,9 @@ static int max31790_read_fan(struct device *dev, u32 attr, int channel,
-> > > >               }
-> > > >               mutex_unlock(&data->update_lock);
-> > > >               return 0;
-> > > > +     case hwmon_fan_enable:
-> > > > +             *val = !!(data->fan_config[channel] & MAX31790_FAN_CFG_TACH_INPUT_EN);
-> > > > +             return 0;
-> > > >       default:
-> > > >               return -EOPNOTSUPP;
-> > > >       }
-> > > > @@ -214,7 +223,7 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
-> > > >       struct i2c_client *client = data->client;
-> > > >       int target_count;
-> > > >       int err = 0;
-> > > > -     u8 bits;
-> > > > +     u8 bits, fan_config;
-> > > >       int sr;
-> > > >
-> > > >       mutex_lock(&data->update_lock);
-> > > > @@ -243,6 +252,23 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
-> > > >                                       MAX31790_REG_TARGET_COUNT(channel),
-> > > >                                       data->target_count[channel]);
-> > > >               break;
-> > > > +     case hwmon_fan_enable:
-> > > > +             fan_config = data->fan_config[channel];
-> > > > +             if (val == 0) {
-> > > > +                     fan_config &= ~MAX31790_FAN_CFG_TACH_INPUT_EN;
-> > > > +             } else if (val == 1) {
-> > > > +                     fan_config |= MAX31790_FAN_CFG_TACH_INPUT_EN;
-> > > > +             } else {
-> > > > +                     err = -EINVAL;
-> > > > +                     break;
-> > > > +             }
-> > > > +             if (fan_config != data->fan_config[channel]) {
-> > > > +                     err = i2c_smbus_write_byte_data(client, MAX31790_REG_FAN_CONFIG(channel),
-> > > > +                                                     fan_config);
-> > > > +                     if (!err)
-> > > > +                             data->fan_config[channel] = fan_config;
-> > > > +             }
-> > > > +             break;
-> > > >       default:
-> > > >               err = -EOPNOTSUPP;
-> > > >               break;
-> > > > @@ -270,6 +296,10 @@ static umode_t max31790_fan_is_visible(const void *_data, u32 attr, int channel)
-> > > >                   !(fan_config & MAX31790_FAN_CFG_TACH_INPUT))
-> > > >                       return 0644;
-> > > >               return 0;
-> > > > +     case hwmon_fan_enable:
-> > > > +             if (channel < NR_CHANNEL)
-> > > > +                     return 0644;
-> > > > +             return 0;
-> > > >       default:
-> > > >               return 0;
-> > > >       }
-> > > > @@ -423,12 +453,12 @@ static umode_t max31790_is_visible(const void *data,
-> > > >
-> > > >  static const struct hwmon_channel_info *max31790_info[] = {
-> > > >       HWMON_CHANNEL_INFO(fan,
-> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> > > >                          HWMON_F_INPUT | HWMON_F_FAULT,
-> > > >                          HWMON_F_INPUT | HWMON_F_FAULT,
-> > > >                          HWMON_F_INPUT | HWMON_F_FAULT,
-> > > > --
-> > > > 2.37.2.672.g94769d06f0-goog
-> > > >
+Reviewed-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
+
+> diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
+> new file mode 100644
+> index 000000000000..103dd543a214
+> --- /dev/null
+> +++ b/drivers/gpu/drm/i915/i915_hwmon.c
+
+/snip/
+
+> +struct hwm_reg {
+> +};
+> +
+> +struct hwm_drvdata {
+> +	struct i915_hwmon *hwmon;
+> +	struct intel_uncore *uncore;
+
+Instead of 'struct intel_uncore' we could have a 'struct intel_gt' here
+since intel_gt is a higher level but I think uncore is fine and anyway has
+a backpointer to intel_gt should we need it. So no changes needed.
+
+> +	struct device *hwmon_dev;
+> +	char name[12];
+> +};
+> +
+> +struct i915_hwmon {
+> +	struct hwm_drvdata ddat;
+> +	struct mutex hwmon_lock;		/* counter overflow logic and rmw */
+> +	struct hwm_reg rg;
+> +};
+
+Somebody looking at just this patch might wonder why we have two data
+structs hwm_drvdata and i915_hwmon, rather than just one. The answer
+becomes clear in a later patch and that of course is that i915 exposes
+multiple hwmon devices. Anyway, just an observation, no changes required.
