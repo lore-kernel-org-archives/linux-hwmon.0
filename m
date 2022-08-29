@@ -2,192 +2,122 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39576ECAAD2
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Aug 2022 13:24:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13DBBECAAD5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Aug 2022 13:36:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiH2NYR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Aug 2022 09:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
+        id S229909AbiH2Ng2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Aug 2022 09:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbiH2NXx (ORCPT
+        with ESMTP id S230341AbiH2NgN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Aug 2022 09:23:53 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84662910AB;
-        Mon, 29 Aug 2022 06:21:05 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id x23so7959064pll.7;
-        Mon, 29 Aug 2022 06:21:04 -0700 (PDT)
+        Mon, 29 Aug 2022 09:36:13 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224757E33E;
+        Mon, 29 Aug 2022 06:35:59 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 69so6064996pgb.13;
+        Mon, 29 Aug 2022 06:35:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc;
-        bh=LgF/oNaf8LxpEpIqQcaXZqdbWnQJVUDcVOCF2bUqIdo=;
-        b=aoPhGeJ1kCT2x9VhlhuMthu2wau1MqlvSKTX32ZoxwXfJa9w0n+fpuDP4qe5fr88aX
-         NAwe5fxTht8YRxXXEiju0r5nu1E3Mx5wN8GwW+TwqwVpFi3KQGOPA8IIA1edLIr12lW/
-         jok3jCOPDkDMsIo5DjUsrcWUPZXRX3wH+zCg3Ny3PduhTPGKsf8rXcLdd/QliznWAp3f
-         V1TOZ94Qi2PCKqZJI+KeB7aPvzjpnq6z9goN0jipUIwGJAeZjoNNbZFx6x3Eyf0my+lz
-         88BFxzjQzfKP4juHAzqsdOXVGDMjr11bzFosgwvZPOdrsz1bQuen5kuUg0VFyd5H3iE0
-         qskw==
+        bh=UVKTlnEIoldY+2ikvWrlNXqFFlr5euSvQ86GnWaZaho=;
+        b=YwxHVBDf26Yi73o5+r444WKY7QqwFOzTEnFjSo8Bow1lqIga+JCUW7EEEpDsZ6iPSK
+         Z04YZvt1Pt6J6R1j5ZWOXINdtvMh1pKvRTW8x5OhmpXBkvTcaZo99jG0R4UChrIVPpD/
+         GN3nf064cXJje0jWsQM+sFauz1vZ72PjZOG8m93aXj5VevRQMfTGagenqg8i79vq41t+
+         4EtR5LLe8uItIbwb9EYJ4VyQOrkBmI8ENvppF9JhEyUMFcTV0/F7ZyXRpsAeOX6AVX3f
+         CfKEhMu3GIXMTbOOXnQ5LfMsYV0Xsrua1peWIMOdlhxqLg+MBpyOigdEcuY+NT3ev+xs
+         cJSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=LgF/oNaf8LxpEpIqQcaXZqdbWnQJVUDcVOCF2bUqIdo=;
-        b=ML/c8M1PWgcWzuP9u83rscu87QHQly8NIgqNWsACRCNIgIIFAhmqIcXENh2IPjes7C
-         +UrBcCnO8EBpL3uFZ1Mi2DAm5LmX71WBM6ldC83f+fFeZe6uM8gUM46RJGlJ80ERkVLl
-         7X62xA/vBZS6ysVKkiBs8H7aqMdJLXiMQiOTmuEO3PdjyYzZMEdWTgcercSoLuIaklEa
-         gxoA39N8mxqFtFI0v+GAwX2zUL3hdEnF9Z/CXOAk9gGU0z/XH40FxgzNS/U8vpM+v0Lh
-         qRGEVc5+u3ApKhgEcGjEYfZYpXS/r/+Qjyuh9AjbnpOTlqRkMt/ugzH84zK12p3VhaTH
-         ywgQ==
-X-Gm-Message-State: ACgBeo29GwR7LgxdLmeSSgrNh0f3JQVp9xb0LhX/qyrAsyVtiXSkYwki
-        EUAQ6MD63A2V99dzSTJ6SHs=
-X-Google-Smtp-Source: AA6agR6gqOqyfyzd4jDRPi0Q91Y6O6BWH/vghpZqDMO9GiFhOBWYhqOFxQ8m5UQbuihzsdPNhe6tlw==
-X-Received: by 2002:a17:90b:4d8e:b0:1fd:ce88:6920 with SMTP id oj14-20020a17090b4d8e00b001fdce886920mr5022660pjb.175.1661779220314;
-        Mon, 29 Aug 2022 06:20:20 -0700 (PDT)
+        bh=UVKTlnEIoldY+2ikvWrlNXqFFlr5euSvQ86GnWaZaho=;
+        b=r6XP28DAGdnVxZ1mFxBVXmqSpjnNAUPijebHWBFQGgZ+dwZt2Pcu4VT0TrZS4Yhw3s
+         VsyN5wfzxsQyCe8XuQgvQJ4OHOL4feq9UD+SzvzReI4EoQmTDCTiiUhsWSr4G9E5bZxk
+         5yNciwzEZ5bK73u/PdDeDzBAUaSKHjtX480SIZVoMHkh1dgV+vPxRfF9Ow8tlpbW6M2J
+         atLn9A3WpoGrg91vErzunusNwAE60HtaVlVeHHs/exqOBd7rNV8GE6BCroJlmCxXjGPE
+         68bIIF61OddUdjrWKZpkU+JdJMb9VmvJ6Fa9pLXGw5f55ZbQ7AurXzPB0BF4vkGwz6It
+         g/hQ==
+X-Gm-Message-State: ACgBeo2iHFwllIFAyUeeLn4M7QJh7tq2wS5/WSMuEJjj/tuUUMZ9vj/4
+        ykV+R2P2xB2po7UL0NuQAjY=
+X-Google-Smtp-Source: AA6agR4Cq2eaFxLjb3w99Ke4qD7S6eU85utxglvjTiCUilxN+MxnvuBKvF7gr8nmE7JBAiM3RRhaPA==
+X-Received: by 2002:a63:6cc1:0:b0:42b:d2c5:74a2 with SMTP id h184-20020a636cc1000000b0042bd2c574a2mr6952942pgc.420.1661780158463;
+        Mon, 29 Aug 2022 06:35:58 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j6-20020a170903024600b0016bffc59718sm7559003plh.58.2022.08.29.06.20.18
+        by smtp.gmail.com with ESMTPSA id 35-20020a630c63000000b0041c35462316sm6409401pgm.26.2022.08.29.06.35.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 06:20:19 -0700 (PDT)
+        Mon, 29 Aug 2022 06:35:57 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 29 Aug 2022 06:20:17 -0700
+Date:   Mon, 29 Aug 2022 06:35:56 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Justin Ledford <justinledford@google.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (max31790) add fanN_enable
-Message-ID: <20220829132017.GA3039965@roeck-us.net>
-References: <20220829024351.2415147-1-justinledford@google.com>
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     hdegoede@redhat.com, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        markgross@kernel.org
+Subject: Re: [PATCH] asus-wmi: Increase FAN_CURVE_BUF_LEN to 32
+Message-ID: <20220829133556.GA3766826@roeck-us.net>
+References: <20220828074638.5473-1-luke@ljones.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220829024351.2415147-1-justinledford@google.com>
+In-Reply-To: <20220828074638.5473-1-luke@ljones.dev>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 02:43:51AM +0000, Justin Ledford wrote:
-> The MAX31790 has a tach input enable bit in each fan's configuration
-> register. This is only enabled by the driver if RPM mode is selected,
-> but the driver doesn't provide a way to independently enable tachometer
-> input regardless of the regulator mode.
+On Sun, Aug 28, 2022 at 07:46:38PM +1200, Luke D. Jones wrote:
+> Fix for TUF laptops returning with an -ENOSPC on calling
+> asus_wmi_evaluate_method_buf() when fetching default curves. The TUF method
+> requires at least 32 bytes space.
 > 
-> By adding the fanN_enable sysfs files, we can decouple the tach input
-> from the regulator mode. Also update the documentation.
+> This also moves and changes the pr_debug() in fan_curve_check_present() to
+> pr_warn() in fan_curve_get_factory_default() so that there is at least some
+> indication in logs of why it fails.
 > 
-> Signed-off-by: Justin Ledford <justinledford@google.com>
+> Signed-off-by: Luke D. Jones <luke@ljones.dev>
 > ---
->  Documentation/hwmon/max31790.rst |  1 +
->  drivers/hwmon/max31790.c         | 44 +++++++++++++++++++++++++++-----
->  2 files changed, 38 insertions(+), 7 deletions(-)
+>  drivers/platform/x86/asus-wmi.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
 > 
-> diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31790.rst
-> index 7b097c3b9b90..33c5c7330efc 100644
-> --- a/Documentation/hwmon/max31790.rst
-> +++ b/Documentation/hwmon/max31790.rst
-> @@ -38,6 +38,7 @@ Sysfs entries
->  fan[1-12]_input    RO  fan tachometer speed in RPM
->  fan[1-12]_fault    RO  fan experienced fault
->  fan[1-6]_target    RW  desired fan speed in RPM
-> +fan[1-6]_enable    RW  enable or disable the tachometer input
->  pwm[1-6]_enable    RW  regulator mode, 0=disabled (duty cycle=0%), 1=manual mode, 2=rpm mode
->  pwm[1-6]           RW  read: current pwm duty cycle,
->                         write: target pwm duty cycle (0-255)
-> diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-> index 7e9362f6dc29..3ae02be4b41e 100644
-> --- a/drivers/hwmon/max31790.c
-> +++ b/drivers/hwmon/max31790.c
-> @@ -118,6 +118,12 @@ static struct max31790_data *max31790_update_device(struct device *dev)
->  					goto abort;
->  				data->target_count[i] = rv;
->  			}
-> +
-> +			rv = i2c_smbus_read_byte_data(client,
-> +					MAX31790_REG_FAN_CONFIG(i));
-> +			if (rv < 0)
-> +				goto abort;
-> +			data->fan_config[i] = rv;
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+> index 3d9fd58573f9..11203213e00d 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -108,7 +108,7 @@ module_param(fnlock_default, bool, 0444);
+>  #define WMI_EVENT_MASK			0xFFFF
+>  
+>  #define FAN_CURVE_POINTS		8
+> -#define FAN_CURVE_BUF_LEN		(FAN_CURVE_POINTS * 2)
+> +#define FAN_CURVE_BUF_LEN		32
+>  #define FAN_CURVE_DEV_CPU		0x00
+>  #define FAN_CURVE_DEV_GPU		0x01
+>  /* Mask to determine if setting temperature or percentage */
+> @@ -2383,8 +2383,10 @@ static int fan_curve_get_factory_default(struct asus_wmi *asus, u32 fan_dev)
+>  	curves = &asus->custom_fan_curves[fan_idx];
+>  	err = asus_wmi_evaluate_method_buf(asus->dsts_id, fan_dev, mode, buf,
+>  					   FAN_CURVE_BUF_LEN);
+> -	if (err)
+> +	if (err) {
+> +		pr_warn("%s (0x%08x) failed: %d\n", __func__, fan_dev, err);
+>  		return err;
+> +	}
+>  
+>  	fan_curve_copy_from_buf(curves, buf);
+>  	curves->device_id = fan_dev;
+> @@ -2402,9 +2404,6 @@ static int fan_curve_check_present(struct asus_wmi *asus, bool *available,
+>  
+>  	err = fan_curve_get_factory_default(asus, fan_dev);
+>  	if (err) {
+> -		pr_debug("fan_curve_get_factory_default(0x%08x) failed: %d\n",
+> -			 fan_dev, err);
+> -		/* Don't cause probe to fail on devices without fan-curves */
 
-Why is this needed ?
+The pr_warn() should be here. If you want to have a message from the call
+in fan_curve_enable_store(), add dev_err() there.
 
 Guenter
 
->  		}
->  
->  		data->last_updated = jiffies;
-> @@ -202,6 +208,9 @@ static int max31790_read_fan(struct device *dev, u32 attr, int channel,
->  		}
->  		mutex_unlock(&data->update_lock);
->  		return 0;
-> +	case hwmon_fan_enable:
-> +		*val = !!(data->fan_config[channel] & MAX31790_FAN_CFG_TACH_INPUT_EN);
-> +		return 0;
->  	default:
->  		return -EOPNOTSUPP;
->  	}
-> @@ -214,7 +223,7 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
->  	struct i2c_client *client = data->client;
->  	int target_count;
->  	int err = 0;
-> -	u8 bits;
-> +	u8 bits, fan_config;
->  	int sr;
->  
->  	mutex_lock(&data->update_lock);
-> @@ -243,6 +252,23 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
->  					MAX31790_REG_TARGET_COUNT(channel),
->  					data->target_count[channel]);
->  		break;
-> +	case hwmon_fan_enable:
-> +		fan_config = data->fan_config[channel];
-> +		if (val == 0) {
-> +			fan_config &= ~MAX31790_FAN_CFG_TACH_INPUT_EN;
-> +		} else if (val == 1) {
-> +			fan_config |= MAX31790_FAN_CFG_TACH_INPUT_EN;
-> +		} else {
-> +			err = -EINVAL;
-> +			break;
-> +		}
-> +		if (fan_config != data->fan_config[channel]) {
-> +			err = i2c_smbus_write_byte_data(client, MAX31790_REG_FAN_CONFIG(channel),
-> +							fan_config);
-> +			if (!err)
-> +				data->fan_config[channel] = fan_config;
-> +		}
-> +		break;
->  	default:
->  		err = -EOPNOTSUPP;
->  		break;
-> @@ -270,6 +296,10 @@ static umode_t max31790_fan_is_visible(const void *_data, u32 attr, int channel)
->  		    !(fan_config & MAX31790_FAN_CFG_TACH_INPUT))
->  			return 0644;
->  		return 0;
-> +	case hwmon_fan_enable:
-> +		if (channel < NR_CHANNEL)
-> +			return 0644;
-> +		return 0;
->  	default:
 >  		return 0;
 >  	}
-> @@ -423,12 +453,12 @@ static umode_t max31790_is_visible(const void *data,
 >  
->  static const struct hwmon_channel_info *max31790_info[] = {
->  	HWMON_CHANNEL_INFO(fan,
-> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
-> +			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
->  			   HWMON_F_INPUT | HWMON_F_FAULT,
->  			   HWMON_F_INPUT | HWMON_F_FAULT,
->  			   HWMON_F_INPUT | HWMON_F_FAULT,
-> -- 
-> 2.37.2.672.g94769d06f0-goog
-> 
