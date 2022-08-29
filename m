@@ -2,127 +2,214 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 890F8ECAAD5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Aug 2022 16:28:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47038C6FA81
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Aug 2022 17:16:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiH2Q2T (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Aug 2022 12:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35708 "EHLO
+        id S231443AbiH2RQQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Aug 2022 13:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiH2Q2R (ORCPT
+        with ESMTP id S231400AbiH2RQO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Aug 2022 12:28:17 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7D598A63;
-        Mon, 29 Aug 2022 09:28:17 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id q15so3314925pfn.11;
-        Mon, 29 Aug 2022 09:28:17 -0700 (PDT)
+        Mon, 29 Aug 2022 13:16:14 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE9879694
+        for <linux-hwmon@vger.kernel.org>; Mon, 29 Aug 2022 10:16:11 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id kk26so17002277ejc.11
+        for <linux-hwmon@vger.kernel.org>; Mon, 29 Aug 2022 10:16:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=gCZZsnbKqIn6Pul+FARDO4ikZmQMWaCl2U0vMfz40Lw=;
-        b=NliKrb0KmMdFjqeWvmk/hW6UCpph7Vkc3ZKnZ0W5VaJHKer0ZAsAuLL5XRNaC9GhLZ
-         LPqIohiEy/i36W5HJ6NbTRyu7CPWml6C5DPixaIlwXc2P6Z/csXi8cEe4njG8cUQDGgH
-         R6T2NgYG1fDvz8SotqNv5fGbzcWUj7ovg8O+irrqoviUctR6kTjTmA7yTCuvj3jq2Agd
-         1d605imz0wDaX5QSz2Sigcomfl00RIX7HhBT5aFiJ5yQ6w1X61adeFYSMWcH0QEbM1Or
-         b2epz7hUQZp4Wrl6uNuExKmHDUyivKGPvFh7a0vgLM9jBfzyB9cjlj7AA81Cy+OufdUO
-         +0AQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=j2z/n7eMw3f3j7EBd6Q4JVoMSwtLsVBiipYe75KuXHg=;
+        b=TKbYjetujPctiPYNjbkJ9aq8EL/rgg0D25oRV4c705d2jwFlUNO/wk19ajGMSNo2kw
+         8dycZyi9V+9vzrQURZiMwf+sb2PX62rESS1GXTknyDQeyrT2F5OuhWmYbp7Z4c22wCVf
+         1vUXRQ+2SR3kxT62M6Fpn7gn/0ZKbTLWESU0JvD76UPknnzefl3lKeHriXjdoavUAVD7
+         UChJhcg9PqFbrWkK/gzNRi6lcOlukmgk4Q3FTUDLOpNncjJDYn97S0vmiiaq+b835/Nj
+         Dlmym/55nlX5PdmBm6McpbjxtXq7ahtV5t162Zn57rjtzm+KkjAb+d8MG4OAqb8/mX1n
+         h7Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=gCZZsnbKqIn6Pul+FARDO4ikZmQMWaCl2U0vMfz40Lw=;
-        b=lY6qRAGqr4adokXrPCBPXZkjN4RSQbfeDb7q9j5ypPESV9f9uD3FmwujuvD9L5ergF
-         s4NQ4Y7mI1PDovcvFHAIdQrOBjICtoesCLJ+QXJ2ODt9wdenIf6ahFQxHm/TSx6bsHD3
-         8pCtELeID9LdweOAol4iOohP+5fbtMc6Nf91uSpdmEVdXDhsrKrvEsIK2Jitmmy3vTRU
-         zSj8cfRyhs4JPkdQ8BZm4phNPWQMQLYr39nDwq+3IBTSdKs3aRMNU5oFWgr9r9+1UTAp
-         LrhxUV3olZbkruaMWOHbZBOAlSu49Dc9dnh/Nk+DeF4AiWYUcIIszkp31yMLfrRL15RK
-         56NQ==
-X-Gm-Message-State: ACgBeo2TGHhAurihieeQuUJa39k1lX5gY1GgNEXlLsr3UhS0WnyswlqI
-        2iW/UkoNqgPzXCBP56RFui6r4zVLtXWa3Q==
-X-Google-Smtp-Source: AA6agR7l4fnmZgzT4CW8hKUqnsTD93wuUW9Tcg0UvC0CsZpOSqxVnvo+PI9cF8476jisS3+5qd+uXQ==
-X-Received: by 2002:a05:6a00:170a:b0:537:4212:5f5d with SMTP id h10-20020a056a00170a00b0053742125f5dmr17154647pfc.40.1661790496514;
-        Mon, 29 Aug 2022 09:28:16 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i196-20020a6287cd000000b00537dde5ff7csm6196855pfe.176.2022.08.29.09.28.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 09:28:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f1ea7ac6-092e-07de-0c51-eee7e13e34ee@roeck-us.net>
-Date:   Mon, 29 Aug 2022 09:28:14 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=j2z/n7eMw3f3j7EBd6Q4JVoMSwtLsVBiipYe75KuXHg=;
+        b=aCkOZSz+G9np4Me4m23GVWj5pXgQgGmcC9AC9czTv6VnNw1CypNUKiEEiVQ8D07YFW
+         o84FmCgV5BrbOtTwoStxwr2R855LH4JWq/3WJ80yNa4Jms9Ohdwg7UXmu/gLbjLsoROy
+         IiyZTmTuJbNPwwkEphfJRZn/5/fwK6doz9pgkma2skQvhfTKhn7kf6f/dHHhL+kk/gIu
+         57DsqK6U5c+sxFJ2nSvPvt52FHj4h1frv4BzR7XIaL0yjbgvq8VZrCceRAGLjlI/BXrA
+         cnqrcDA5GrFR3FlAGg+8LxOHo0pGDHLZO5Sc7YQe3nQcsxZVwSzqHko8hMhpbKXu9XwA
+         8fXA==
+X-Gm-Message-State: ACgBeo3WH0OV1W8apryT5hx2MYYYpbewTePMZ+1Mmr+4BcwwhOHpocEe
+        oJBRYhfCFDdKOy686beMFrruFnfIyBlKf6ic6M7ycw==
+X-Google-Smtp-Source: AA6agR5x6VZN3zVomElWr0Y4N4SPNr2IokZM89ZoLvJJ3bnv8SVxPEvKEdqtkCsXiLZxgIniRgJ3mxhx39JLn51f3Ks=
+X-Received: by 2002:a17:907:97cd:b0:731:5d0:4434 with SMTP id
+ js13-20020a17090797cd00b0073105d04434mr13484082ejc.603.1661793369740; Mon, 29
+ Aug 2022 10:16:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] hwmon: (nct6775) Add Asus PRIME Z390-A to WMI monitoring
- list
-Content-Language: en-US
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Matti Kurkela <Matti.Kurkela@iki.fi>, linux-hwmon@vger.kernel.org,
+References: <20220829024351.2415147-1-justinledford@google.com>
+ <20220829132017.GA3039965@roeck-us.net> <CAHCvCEcGvrS=3p2Whj0Cmx9sx+aSzX2097LahQ=f3eRCCAN_bA@mail.gmail.com>
+ <20220829161135.GB1320973@roeck-us.net>
+In-Reply-To: <20220829161135.GB1320973@roeck-us.net>
+From:   Justin Ledford <justinledford@google.com>
+Date:   Mon, 29 Aug 2022 10:15:58 -0700
+Message-ID: <CAHCvCEc27ozgr6pthRZ84FzJnhM+X705RJpW4z4SB-P9dV_aSg@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (max31790) add fanN_enable
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <9f3cef03-6efd-138e-8552-e3078ed9b4f7@iki.fi>
- <6015717f-baea-7baf-e834-bb087f34819a@roeck-us.net>
-In-Reply-To: <6015717f-baea-7baf-e834-bb087f34819a@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/29/22 09:25, Guenter Roeck wrote:
-> On 8/28/22 07:43, Matti Kurkela wrote:
->> Asus PRIME Z390-A (and presumably other Asus Z390 motherboard versions) also requires the nct6775 chip to be accessed by the WMI method. Add it to the asus_wmi_boards list.
->>
->> Tested-by: Matti Kurkela <Matti.Kurkela@iki.fi>
->> Signed-off-by: Matti Kurkela <Matti.Kurkela@iki.fi>
-> 
-> This is your patch. You should have tested it; that is implied in Signed-off-by:.
-> Tested-by: is not appropriate.
-> 
-
-Also, your patch didn't make it to patchwork, presumably due to a formatting
-problem. I would suggest to check your formatting and make sure that it is
-set to plain with no formatting options. I suspect that patchwork doesn't
-like
-
-Content-Type: text/plain; charset=UTF-8; format=flowed
-
-Thanks,
-Guenter
-
->> ---
->> Should apply to any kernel version that includes the commit c3963bc0a0cf9ecb205a9d4976eb92b6df2fa3fd
->> (hwmon: (nct6775) Split core and platform driver).
-> 
-> This is irrelevant; it is a functional change and will be applied
-> to linux-next.
->>
->> --- linux-5.19.4/drivers/hwmon/nct6775-platform.c.orig  2022-08-25 12:45:54.000000000 +0300
->> +++ linux-5.19.4/drivers/hwmon/nct6775-platform.c       2022-08-28 16:28:09.531738685 +0300
->> @@ -1054,6 +1054,7 @@ static const char * const asus_wmi_board
->>          "PRIME H410M-R",
->>          "PRIME X570-P",
->>          "PRIME X570-PRO",
->> +       "PRIME Z390-A",
-> 
-> checkpatch says:
-> 
-> WARNING: please, no spaces at the start of a line
-> #77: FILE: drivers/hwmon/nct6775-platform.c:1057:
-> +       "PRIME Z390-A",$
-> 
-> 
-> Please fix.
-> 
-> Thanks,
+On Mon, Aug 29, 2022 at 9:11 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Mon, Aug 29, 2022 at 08:09:21AM -0700, Justin Ledford wrote:
+> > The tach input isn't enabled in the device by default. So the only way
+> > to start using the fan input sensors is to set the regulator mode
+> > through the driver to RPM mode and then back to whatever mode you
+> > actually want to use. The I2C interface to the device doesn't couple
+> > the tach input to the regulator mode so I don't think it makes sense
+> > for the driver to do this either.
+> >
+> Please don't top-post.
+>
+> The above does not answer my question why fan_config[] wound need to
+> be updated repeatedly.
+>
 > Guenter
-> 
->>          "ROG CROSSHAIR VIII DARK HERO",
->>          "ROG CROSSHAIR VIII FORMULA",
->>          "ROG CROSSHAIR VIII HERO",
->>
->>
-> 
+>
+> > On Mon, Aug 29, 2022 at 6:20 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> > >
+> > > On Mon, Aug 29, 2022 at 02:43:51AM +0000, Justin Ledford wrote:
+> > > > The MAX31790 has a tach input enable bit in each fan's configuration
+> > > > register. This is only enabled by the driver if RPM mode is selected,
+> > > > but the driver doesn't provide a way to independently enable tachometer
+> > > > input regardless of the regulator mode.
+> > > >
+> > > > By adding the fanN_enable sysfs files, we can decouple the tach input
+> > > > from the regulator mode. Also update the documentation.
+> > > >
+> > > > Signed-off-by: Justin Ledford <justinledford@google.com>
+> > > > ---
+> > > >  Documentation/hwmon/max31790.rst |  1 +
+> > > >  drivers/hwmon/max31790.c         | 44 +++++++++++++++++++++++++++-----
+> > > >  2 files changed, 38 insertions(+), 7 deletions(-)
+> > > >
+> > > > diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31790.rst
+> > > > index 7b097c3b9b90..33c5c7330efc 100644
+> > > > --- a/Documentation/hwmon/max31790.rst
+> > > > +++ b/Documentation/hwmon/max31790.rst
+> > > > @@ -38,6 +38,7 @@ Sysfs entries
+> > > >  fan[1-12]_input    RO  fan tachometer speed in RPM
+> > > >  fan[1-12]_fault    RO  fan experienced fault
+> > > >  fan[1-6]_target    RW  desired fan speed in RPM
+> > > > +fan[1-6]_enable    RW  enable or disable the tachometer input
+> > > >  pwm[1-6]_enable    RW  regulator mode, 0=disabled (duty cycle=0%), 1=manual mode, 2=rpm mode
+> > > >  pwm[1-6]           RW  read: current pwm duty cycle,
+> > > >                         write: target pwm duty cycle (0-255)
+> > > > diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
+> > > > index 7e9362f6dc29..3ae02be4b41e 100644
+> > > > --- a/drivers/hwmon/max31790.c
+> > > > +++ b/drivers/hwmon/max31790.c
+> > > > @@ -118,6 +118,12 @@ static struct max31790_data *max31790_update_device(struct device *dev)
+> > > >                                       goto abort;
+> > > >                               data->target_count[i] = rv;
+> > > >                       }
+> > > > +
+> > > > +                     rv = i2c_smbus_read_byte_data(client,
+> > > > +                                     MAX31790_REG_FAN_CONFIG(i));
+> > > > +                     if (rv < 0)
+> > > > +                             goto abort;
+> > > > +                     data->fan_config[i] = rv;
+> > >
+> > > Why is this needed ?
+> > >
+> > > Guenter
+> > >
 
+This is needed in case the fan_config is changed outside the driver
+with something like i2ctransfer, so that the driver reports the actual
+state of the device, rather than the state at the time of the last
+write originating from the driver.
+
+> > > >               }
+> > > >
+> > > >               data->last_updated = jiffies;
+> > > > @@ -202,6 +208,9 @@ static int max31790_read_fan(struct device *dev, u32 attr, int channel,
+> > > >               }
+> > > >               mutex_unlock(&data->update_lock);
+> > > >               return 0;
+> > > > +     case hwmon_fan_enable:
+> > > > +             *val = !!(data->fan_config[channel] & MAX31790_FAN_CFG_TACH_INPUT_EN);
+> > > > +             return 0;
+> > > >       default:
+> > > >               return -EOPNOTSUPP;
+> > > >       }
+> > > > @@ -214,7 +223,7 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
+> > > >       struct i2c_client *client = data->client;
+> > > >       int target_count;
+> > > >       int err = 0;
+> > > > -     u8 bits;
+> > > > +     u8 bits, fan_config;
+> > > >       int sr;
+> > > >
+> > > >       mutex_lock(&data->update_lock);
+> > > > @@ -243,6 +252,23 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
+> > > >                                       MAX31790_REG_TARGET_COUNT(channel),
+> > > >                                       data->target_count[channel]);
+> > > >               break;
+> > > > +     case hwmon_fan_enable:
+> > > > +             fan_config = data->fan_config[channel];
+> > > > +             if (val == 0) {
+> > > > +                     fan_config &= ~MAX31790_FAN_CFG_TACH_INPUT_EN;
+> > > > +             } else if (val == 1) {
+> > > > +                     fan_config |= MAX31790_FAN_CFG_TACH_INPUT_EN;
+> > > > +             } else {
+> > > > +                     err = -EINVAL;
+> > > > +                     break;
+> > > > +             }
+> > > > +             if (fan_config != data->fan_config[channel]) {
+> > > > +                     err = i2c_smbus_write_byte_data(client, MAX31790_REG_FAN_CONFIG(channel),
+> > > > +                                                     fan_config);
+> > > > +                     if (!err)
+> > > > +                             data->fan_config[channel] = fan_config;
+> > > > +             }
+> > > > +             break;
+> > > >       default:
+> > > >               err = -EOPNOTSUPP;
+> > > >               break;
+> > > > @@ -270,6 +296,10 @@ static umode_t max31790_fan_is_visible(const void *_data, u32 attr, int channel)
+> > > >                   !(fan_config & MAX31790_FAN_CFG_TACH_INPUT))
+> > > >                       return 0644;
+> > > >               return 0;
+> > > > +     case hwmon_fan_enable:
+> > > > +             if (channel < NR_CHANNEL)
+> > > > +                     return 0644;
+> > > > +             return 0;
+> > > >       default:
+> > > >               return 0;
+> > > >       }
+> > > > @@ -423,12 +453,12 @@ static umode_t max31790_is_visible(const void *data,
+> > > >
+> > > >  static const struct hwmon_channel_info *max31790_info[] = {
+> > > >       HWMON_CHANNEL_INFO(fan,
+> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> > > > -                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
+> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
+> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
+> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
+> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
+> > > > +                        HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT | HWMON_F_ENABLE,
+> > > >                          HWMON_F_INPUT | HWMON_F_FAULT,
+> > > >                          HWMON_F_INPUT | HWMON_F_FAULT,
+> > > >                          HWMON_F_INPUT | HWMON_F_FAULT,
+> > > > --
+> > > > 2.37.2.672.g94769d06f0-goog
+> > > >
