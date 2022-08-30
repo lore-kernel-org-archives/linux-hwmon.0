@@ -2,49 +2,49 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FFB1ECAAD5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 19:24:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32051ECAAD5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 19:24:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbiH3TYO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 30 Aug 2022 15:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
+        id S231536AbiH3TYf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Aug 2022 15:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbiH3TXs (ORCPT
+        with ESMTP id S231547AbiH3TYH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:23:48 -0400
+        Tue, 30 Aug 2022 15:24:07 -0400
 Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61BD7C1C7;
-        Tue, 30 Aug 2022 12:23:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2297C311;
+        Tue, 30 Aug 2022 12:23:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661887389; x=1693423389;
+  t=1661887395; x=1693423395;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=D6zTFiLCs38Qd3fgLhl+xoNoittGTp7vL7ilYx1GgRc=;
-  b=PRkeegemkUS6UX0Xa9fb9S36ebzzIfJkBu6sA+p5t55cyumoD4uBr2os
-   Yk44NoxsAKODrBlCLs/HHDafOYEwZ5jdKLaNZnzSRsSiTxSNkqb4N/r2W
-   ugtiMaG9gc7YAGxMO6BrVV957YxxmliVRpOyV3RJHdvEGkt1NC7DDt6bs
-   4=;
+  bh=843kBT2eo8fZBeKaiWYGVSNFPK3qHfLWFvr35ISO3DM=;
+  b=PzXUUC855NsrLuKCVsCDt7/2niPV73pc3cYtCcjO6ol2LCPxRmtBGosN
+   h1vnM9hV1pBcRcMWlRfNYmrTAmBdHQ/7iexPCNYxqy07DEp1OcxyiAVlM
+   M/fPymgcbjdIK4nk6MWSeFTpiiY9BwUnDP5zVsSIVv6vN+A4/Q48Jog+s
+   E=;
 X-IronPort-AV: E=Sophos;i="5.93,275,1654560000"; 
-   d="scan'208";a="222136156"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-c92fe759.us-east-1.amazon.com) ([10.43.8.6])
+   d="scan'208";a="222136157"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com) ([10.43.8.6])
   by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:41 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1a-c92fe759.us-east-1.amazon.com (Postfix) with ESMTPS id 79FDEC0925;
+Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com (Postfix) with ESMTPS id 84690819D8;
         Tue, 30 Aug 2022 19:22:38 +0000 (UTC)
-Received: from EX19D013UWA004.ant.amazon.com (10.13.138.207) by
+Received: from EX19D013UWA001.ant.amazon.com (10.13.138.253) by
  EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
  id 15.0.1497.38; Tue, 30 Aug 2022 19:22:15 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX19D013UWA004.ant.amazon.com (10.13.138.207) with Microsoft SMTP Server
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX19D013UWA001.ant.amazon.com (10.13.138.253) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
  Tue, 30 Aug 2022 19:22:14 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Tue, 30 Aug 2022 19:22:13
+ (172.19.116.181) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 30 Aug 2022 19:22:14
  +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 5DA524D09; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
+        id 634754D4E; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
@@ -55,9 +55,9 @@ CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
         <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
         <amitlavi@amazon.com>, <almogbs@amazon.com>, <dkl@amazon.com>,
         <rahul.tanwar@linux.intel.com>, <andriy.shevchenko@intel.com>
-Subject: [PATCH v3 13/19] hwmon: (mr75203) modify the temperature equation according to series 5 datasheet
-Date:   Tue, 30 Aug 2022 19:22:06 +0000
-Message-ID: <20220830192212.28570-14-farbere@amazon.com>
+Subject: [PATCH v3 16/19] dt-bindings: hwmon: (mr75203) add coefficient properties for the thermal equation
+Date:   Tue, 30 Aug 2022 19:22:09 +0000
+Message-ID: <20220830192212.28570-17-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220830192212.28570-1-farbere@amazon.com>
 References: <20220830192212.28570-1-farbere@amazon.com>
@@ -68,104 +68,76 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Modify the equation and coefficients used to convert the digital output
-to temperature according to series 5 of the Moortec Embedded Temperature
-Sensor (METS) datasheet:
-T = G + H * (n / cal5 - 0.5) + J * F
+Add optional temperature coefficient properties:
+ *) moortec,ts-coeff-g
+ *) moortec,ts-coeff-h
+ *) moortec,ts-coeff-cal5
+ *) moortec,ts-coeff-j
+If defined they shall be used instead of defaults.
 
-Where:
-*) G = 60, H = 200, cal5 = 4094, J = -0.1.
-*) F = frequency clock in MHz.
-*) n is the digital output.
-
-In code, the G, H and J coefficients are multiplied by a factor of 1000
-to get the temperature in milli-Celsius.
-Final result is clamped in case it exceeds min/max thresholds.
-
-Change is done since it is not clear where the current equation and
-coefficients came from.
+The coefficients were added to device tree on top of the series property
+(which can be used to select between series 5 and series 6), because
+coefficients can vary between product and product, and code defaults might
+not be accurate enough.
 
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
 V3 -> V2:
-- Protect from overflow.
-- Add temperature clamping.
-- Add better documentation.
+- Add "moortec" prefix to property name.
 
- drivers/hwmon/mr75203.c | 29 +++++++++++++++++++++--------
- 1 file changed, 21 insertions(+), 8 deletions(-)
+ .../bindings/hwmon/moortec,mr75203.yaml       | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-index d1f090a9baac..5b8ca1ee4a54 100644
---- a/drivers/hwmon/mr75203.c
-+++ b/drivers/hwmon/mr75203.c
-@@ -103,13 +103,17 @@
+diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+index ec2dbe7da9c2..a92da6064285 100644
+--- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
++++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+@@ -74,6 +74,37 @@ properties:
+     default: 5
+     $ref: /schemas/types.yaml#definitions/uint32
  
- #define PVT_POLL_DELAY_US	20
- #define PVT_POLL_TIMEOUT_US	20000
--#define PVT_H_CONST		100000
--#define PVT_CAL5_CONST		2047
--#define PVT_G_CONST		40000
-+#define PVT_H_CONST		200000
-+#define PVT_G_CONST		60000
-+#define PVT_J_CONST		-100
-+#define PVT_CAL5_CONST		4094
- #define PVT_CONV_BITS		10
- #define PVT_N_CONST		90
- #define PVT_R_CONST		245805
- 
-+#define PVT_TEMP_MIN		-40000
-+#define PVT_TEMP_MAX		125000
++  moortec,ts-coeff-g:
++    description:
++      G coefficient for temperature equation.
++      Value should be multiplied by factor 1000.
++      Default for series 5 = 60000
++      Default for series 6 = 57400
++    $ref: /schemas/types.yaml#/definitions/uint32
 +
- #define PRE_SCALER_X1	1
- #define PRE_SCALER_X2	2
- 
-@@ -157,13 +161,24 @@ static umode_t pvt_is_visible(const void *data, enum hwmon_sensor_types type,
- 	return 0;
- }
- 
-+static long pvt_calc_temp(struct pvt_device *pvt, u32 nbs)
-+{
-+	/*
-+	 * Convert the register value to degrees centigrade temperature:
-+	 * T = G + H * (n / cal5 - 0.5) + J * F
-+	 */
-+	s64 tmp = PVT_G_CONST + PVT_H_CONST * (s64)nbs / PVT_CAL5_CONST -
-+		PVT_H_CONST / 2 + PVT_J_CONST * (s64)pvt->ip_freq / HZ_PER_MHZ;
++  moortec,ts-coeff-h:
++    description:
++      H coefficient for temperature equation.
++      Value should be multiplied by factor 1000.
++      Default for series 5 = 200000
++      Default for series 6 = 249400
++    $ref: /schemas/types.yaml#/definitions/uint32
 +
-+	return clamp_val(tmp, PVT_TEMP_MIN, PVT_TEMP_MAX);
-+}
++  moortec,ts-coeff-cal5:
++    description:
++      cal5 coefficient for temperature equation (can't be 0).
++      Default for series 5 = 4094
++      Default for series 6 = 4096
++    $ref: /schemas/types.yaml#/definitions/uint32
 +
- static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
- {
- 	struct pvt_device *pvt = dev_get_drvdata(dev);
- 	struct regmap *t_map = pvt->t_map;
- 	u32 stat, nbs;
- 	int ret;
--	u64 tmp;
- 
- 	switch (attr) {
- 	case hwmon_temp_input:
-@@ -184,9 +199,7 @@ static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
- 		 * Convert the register value to
- 		 * degrees centigrade temperature
- 		 */
--		tmp = nbs * PVT_H_CONST;
--		do_div(tmp, PVT_CAL5_CONST);
--		*val = tmp - PVT_G_CONST - pvt->ip_freq;
-+		*val = pvt_calc_temp(pvt, nbs);
- 
- 		return 0;
- 	default:
-@@ -311,7 +324,7 @@ static int pvt_init(struct pvt_device *pvt)
- 		    (key >> 1) << CLK_SYNTH_HI_SFT |
- 		    (key >> 1) << CLK_SYNTH_HOLD_SFT | CLK_SYNTH_EN;
- 
--	pvt->ip_freq = sys_freq * 100 / (key + 2);
-+	pvt->ip_freq = clk_get_rate(pvt->clk) / (key + 2);
- 
- 	if (t_num) {
- 		ret = regmap_write(t_map, SDIF_SMPL_CTRL, 0x0);
++  moortec,ts-coeff-j:
++    description:
++      J coefficient for temperature equation.
++      Value should be multiplied by factor 1000.
++      Default for series 5 = -100
++      Default for series 6 = 0
++    $ref: /schemas/types.yaml#/definitions/int32
++
+ required:
+   - compatible
+   - reg
+@@ -97,5 +128,7 @@ examples:
+         resets = <&rcu0 0x40 7>;
+         moortec,vm-active-channels = <0x10 0x05>;
+         moortec,vm-pre-scaler = <5 6>;
++        moortec,ts-coeff-g = <61400>;
++        moortec,ts-coeff-h = <253700>;
+         #thermal-sensor-cells = <1>;
+     };
 -- 
 2.37.1
 
