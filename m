@@ -2,41 +2,41 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEB6AECAAA1
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 19:23:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFF26ECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 19:23:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbiH3TXW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 30 Aug 2022 15:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
+        id S231670AbiH3TXb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Aug 2022 15:23:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiH3TXB (ORCPT
+        with ESMTP id S231448AbiH3TXB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Tue, 30 Aug 2022 15:23:01 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958FA7A77F;
-        Tue, 30 Aug 2022 12:22:43 -0700 (PDT)
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32BB77A52D;
+        Tue, 30 Aug 2022 12:22:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
   t=1661887364; x=1693423364;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=H+Q3pIefoo5VmiPth3Y5fvRbYEtr+wi/MT5kM6bWw7A=;
-  b=X3tSpAP9FxpZQZgw4vzh5D+bINAzfC3DY5lejeJVFsiZqzvfIKlWI/fZ
-   a4Teuu+ChvoDOHQ/X5nzyNCPCUQbe6fDrPA0tg3S81zGKID+pLqqp7G27
-   g+6hjcbZt8iw+duMe5QIhvY8ZcDt4+yL+2TTGw3F/bfLW7dSkBnNp5Q3K
-   o=;
+  bh=Z7jW+V8MpqUAQfk+WoYCzoX7Aq0MV4Sqe7/ddtn8+sU=;
+  b=Rq9EAdLx2/723Z873MozxMAl5DJywKtkaG2Cuq5ZvrsntCBTMlN/iNlF
+   T4TyvInFfr2BKhOdxc+sAvFpQzzTDKXRlEXvLIqrTtwTchx18TUboM28W
+   INXUmW97lzjfPAGczRgnwUTY2cohv+V2BkT+YIkQaG8rJJBvPHwnB7jGO
+   Q=;
 X-IronPort-AV: E=Sophos;i="5.93,275,1654560000"; 
-   d="scan'208";a="125055935"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-8be8ed69.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:42 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-8be8ed69.us-east-1.amazon.com (Postfix) with ESMTPS id C81DCC084B;
+   d="scan'208";a="1049655077"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-c92fe759.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:42 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-c92fe759.us-east-1.amazon.com (Postfix) with ESMTPS id CED54C091A;
         Tue, 30 Aug 2022 19:22:38 +0000 (UTC)
-Received: from EX19D013UWA003.ant.amazon.com (10.13.138.202) by
+Received: from EX19D013UWA002.ant.amazon.com (10.13.138.210) by
  EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
  id 15.0.1497.38; Tue, 30 Aug 2022 19:22:15 +0000
 Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX19D013UWA003.ant.amazon.com (10.13.138.202) with Microsoft SMTP Server
+ EX19D013UWA002.ant.amazon.com (10.13.138.210) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
  Tue, 30 Aug 2022 19:22:15 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
@@ -44,7 +44,7 @@ Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
  Server id 15.0.1497.38 via Frontend Transport; Tue, 30 Aug 2022 19:22:15
  +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 666674D3E; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
+        id 640D04D4C; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
@@ -55,9 +55,9 @@ CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
         <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
         <amitlavi@amazon.com>, <almogbs@amazon.com>, <dkl@amazon.com>,
         <rahul.tanwar@linux.intel.com>, <andriy.shevchenko@intel.com>
-Subject: [PATCH v3 08/19] dt-bindings: hwmon: (mr75203) add "moortec,vm-active-channels" property
-Date:   Tue, 30 Aug 2022 19:22:01 +0000
-Message-ID: <20220830192212.28570-9-farbere@amazon.com>
+Subject: [PATCH v3 19/19] hwmon: (mr75203) fix coding style space errors
+Date:   Tue, 30 Aug 2022 19:22:12 +0000
+Message-ID: <20220830192212.28570-20-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220830192212.28570-1-farbere@amazon.com>
 References: <20220830192212.28570-1-farbere@amazon.com>
@@ -68,49 +68,161 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add optional "moortec,vm-active-channels" property to define the number
-of active channels per VM.
-
-This shall be useful to avoid exposing sysfs for reading inputs that are
-not connected to any voltage source.
+Fix: "ERROR: space required before the open parenthesis '('"
 
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
-V3 -> V2:
-- Add "moortec" prefix to property name.
-- Add explanation why this change is needed.
+ drivers/hwmon/mr75203.c | 40 ++++++++++++++++++++--------------------
+ 1 file changed, 20 insertions(+), 20 deletions(-)
 
- .../devicetree/bindings/hwmon/moortec,mr75203.yaml    | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-index 2ec4b9da4b92..69cc6caceb2c 100644
---- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-@@ -44,6 +44,16 @@ properties:
-   "#thermal-sensor-cells":
-     const: 1
+diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+index 8c30f0521452..6a19f3d2a708 100644
+--- a/drivers/hwmon/mr75203.c
++++ b/drivers/hwmon/mr75203.c
+@@ -404,7 +404,7 @@ static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
+ 			return ret;
  
-+  moortec,vm-active-channels:
-+    description:
-+      moortec,vm-active-channels defines the number of channels per VM that are
-+      actually used and are connected to some source.
-+      Number of values in the array should be the number of VMs.
-+      A value of 0 means that the entire VM sensor is nou used.
-+    maximum: 16
-+    default: 16
-+    $ref: /schemas/types.yaml#definitions/uint8-array
-+
- required:
-   - compatible
-   - reg
-@@ -65,5 +75,6 @@ examples:
-         intel,vm-map = [03 01 04 ff ff];
-         clocks = <&osc0>;
-         resets = <&rcu0 0x40 7>;
-+        moortec,vm-active-channels = <0x10 0x05>;
-         #thermal-sensor-cells = <1>;
-     };
+ 		ret = regmap_read(t_map, SDIF_DATA(channel), &nbs);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		nbs &= SAMPLE_DATA_MSK;
+@@ -445,7 +445,7 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+ 			return ret;
+ 
+ 		ret = regmap_read(v_map, VM_SDIF_DATA(vm_idx, ch_idx), &n);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		n &= SAMPLE_DATA_MSK;
+@@ -542,19 +542,19 @@ static int pvt_init(struct pvt_device *pvt)
+ 
+ 	if (t_num) {
+ 		ret = regmap_write(t_map, SDIF_SMPL_CTRL, 0x0);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		ret = regmap_write(t_map, SDIF_HALT, 0x0);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		ret = regmap_write(t_map, CLK_SYNTH, clk_synth);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		ret = regmap_write(t_map, SDIF_DISABLE, 0x0);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
+@@ -567,7 +567,7 @@ static int pvt_init(struct pvt_device *pvt)
+ 		val = CFG0_MODE_2 | CFG0_PARALLEL_OUT | CFG0_12_BIT |
+ 		      IP_CFG << SDIF_ADDR_SFT | SDIF_WRN_W | SDIF_PROG;
+ 		ret = regmap_write(t_map, SDIF_W, val);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
+@@ -580,7 +580,7 @@ static int pvt_init(struct pvt_device *pvt)
+ 		val = POWER_DELAY_CYCLE_256 | IP_TMR << SDIF_ADDR_SFT |
+ 			      SDIF_WRN_W | SDIF_PROG;
+ 		ret = regmap_write(t_map, SDIF_W, val);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
+@@ -594,39 +594,39 @@ static int pvt_init(struct pvt_device *pvt)
+ 		      IP_CTRL << SDIF_ADDR_SFT |
+ 		      SDIF_WRN_W | SDIF_PROG;
+ 		ret = regmap_write(t_map, SDIF_W, val);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 	}
+ 
+ 	if (p_num) {
+ 		ret = regmap_write(p_map, SDIF_HALT, 0x0);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		ret = regmap_write(p_map, SDIF_DISABLE, BIT(p_num) - 1);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		ret = regmap_write(p_map, CLK_SYNTH, clk_synth);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 	}
+ 
+ 	if (v_num) {
+ 		ret = regmap_write(v_map, SDIF_SMPL_CTRL, 0x0);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		ret = regmap_write(v_map, SDIF_HALT, 0x0);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		ret = regmap_write(v_map, CLK_SYNTH, clk_synth);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		ret = regmap_write(v_map, SDIF_DISABLE, 0x0);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
+@@ -654,7 +654,7 @@ static int pvt_init(struct pvt_device *pvt)
+ 		      CFG1_14_BIT | IP_CFG << SDIF_ADDR_SFT |
+ 		      SDIF_WRN_W | SDIF_PROG;
+ 		ret = regmap_write(v_map, SDIF_W, val);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
+@@ -667,7 +667,7 @@ static int pvt_init(struct pvt_device *pvt)
+ 		val = POWER_DELAY_CYCLE_64 | IP_TMR << SDIF_ADDR_SFT |
+ 		      SDIF_WRN_W | SDIF_PROG;
+ 		ret = regmap_write(v_map, SDIF_W, val);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 
+ 		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
+@@ -681,7 +681,7 @@ static int pvt_init(struct pvt_device *pvt)
+ 		      IP_CTRL << SDIF_ADDR_SFT |
+ 		      SDIF_WRN_W | SDIF_PROG;
+ 		ret = regmap_write(v_map, SDIF_W, val);
+-		if(ret < 0)
++		if (ret < 0)
+ 			return ret;
+ 	}
+ 
+@@ -967,7 +967,7 @@ static int mr75203_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	ret = regmap_read(pvt->c_map, PVT_IP_CONFIG, &val);
+-	if(ret < 0)
++	if (ret < 0)
+ 		return ret;
+ 
+ 	ts_num = (val & TS_NUM_MSK) >> TS_NUM_SFT;
 -- 
 2.37.1
 
