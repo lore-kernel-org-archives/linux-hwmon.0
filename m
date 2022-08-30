@@ -2,51 +2,51 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C97E5ECAAD2
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 02:34:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB6CAECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 03:15:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiH3Ceh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Aug 2022 22:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
+        id S229524AbiH3DPt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Aug 2022 23:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiH3Ceg (ORCPT
+        with ESMTP id S229447AbiH3DPo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Aug 2022 22:34:36 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2269F0DA
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Aug 2022 19:34:36 -0700 (PDT)
+        Mon, 29 Aug 2022 23:15:44 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90A77D1FF
+        for <linux-hwmon@vger.kernel.org>; Mon, 29 Aug 2022 20:15:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661826876; x=1693362876;
+  t=1661829342; x=1693365342;
   h=date:message-id:from:to:cc:subject:in-reply-to:
    references:mime-version;
-  bh=6fkiP3XQ/jA9TKwDD6u9PsKjUczWwbdyItQgl5BekOA=;
-  b=g71c3iFI43gvIr+p4Q5NPipS4u+s9vrM1AXtFxBGRrx+aRqjQ0AaEzaD
-   nMG1U3M4wfizWtYLtL5Xco03OW+vG8jL7YWlpfSR95Xg1DINbD9+WGs0d
-   VoVl26PpBNA4dOVLmSbMcu/akgxGlJ0nlgbQ1gbWTdeIDcf+B3wyhJBy9
-   KvltnOiOxhjCvoGjM7ncLwPUaRhSFG1gA8YjsAtXKsbstN1GRCYD0tR3H
-   dzdkOSTHozRlk8CH0RF2t0X3rL7XTxsLRVD1ECKfnVciFHXvMSZtW8iHk
-   GhqlrYgb9IKifltHW677BMAbinFlreXLpPPr+a/pRzW0d/toRBsdGItZI
+  bh=r7ToRVv/oXCMQZupiqpbIgiIhrndlEsMz11PilAmA4c=;
+  b=h1Gb64r7ii01ip8Yf2BszpJQB+wHszLM+qWk0RpHVrWzb9U+1AO6pQow
+   TWpSbiHUxZLN4VQeq8k929T/1Nb538l8hGGWsKqET06j8MWKn8CrDU07d
+   fftYucx1QQotLHxNb4WZ5oDHsrd3EsQjYSOBz0acRJm5soz3x7RTmhO8m
+   ZOAtY8oi2ZE8bxIllwV4qT0O+EBT/XvdPDxJB8OrNfxJHzpkF9cSNOb18
+   6yvO9A3LLH2GyN0LhzaWwDbF6vpgr59rf85H6a5iVr0VSp5rZ1KMyPcYa
+   hp6KFKTsE3D2lddMy5+gzW594PuZXSzWXp+QPywQtHF+bx+Kj6qbPRbiU
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="278077177"
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="292643405"
 X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="278077177"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 19:34:35 -0700
+   d="scan'208";a="292643405"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 20:15:42 -0700
 X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="672638097"
+   d="scan'208";a="856950279"
 Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.252.143.205])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 19:34:35 -0700
-Date:   Mon, 29 Aug 2022 19:33:43 -0700
-Message-ID: <87k06qzchk.wl-ashutosh.dixit@intel.com>
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 20:15:42 -0700
+Date:   Mon, 29 Aug 2022 20:14:50 -0700
+Message-ID: <87ilmazal1.wl-ashutosh.dixit@intel.com>
 From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
 To:     Badal Nilawar <badal.nilawar@intel.com>
 Cc:     <intel-gfx@lists.freedesktop.org>, <riana.tauro@intel.com>,
         <anshuman.gupta@intel.com>, <jon.ewins@intel.com>,
         <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH 3/7] drm/i915/hwmon: Power PL1 limit and TDP setting
-In-Reply-To: <20220825132118.784407-4-badal.nilawar@intel.com>
-References: <20220825132118.784407-1-badal.nilawar@intel.com>   <20220825132118.784407-4-badal.nilawar@intel.com>
+Subject: Re: [PATCH 4/7] drm/i915/hwmon: Show device level energy usage
+In-Reply-To: <20220825132118.784407-5-badal.nilawar@intel.com>
+References: <20220825132118.784407-1-badal.nilawar@intel.com>   <20220825132118.784407-5-badal.nilawar@intel.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
  Emacs/28.1 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -56,147 +56,74 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 25 Aug 2022 06:21:14 -0700, Badal Nilawar wrote:
+On Thu, 25 Aug 2022 06:21:15 -0700, Badal Nilawar wrote:
 >
-> diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
-> index 2192d0fd4c66..922463da65bf 100644
-> --- a/drivers/gpu/drm/i915/i915_hwmon.c
-> +++ b/drivers/gpu/drm/i915/i915_hwmon.c
-> @@ -13,8 +13,22 @@
->  #include "intel_mchbar_regs.h"
->  #include "gt/intel_gt_regs.h"
+> From: Dale B Stimson <dale.b.stimson@intel.com>
 >
-> +/*
-> + * SF_* - scale factors for particular quantities according to hwmon spec.
-> + * - power  - microwatts
-> + */
-> +#define SF_POWER	1000000
+> Use i915 HWMON to display device level energy input.
+>
+> v2:
+>   - Updated the date and kernel version in feature description
+
+A few things to delete below but since no other changes this is:
+
+Reviewed-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
+
+> diff --git a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+> index 9a2d10edfce8..03d71c6869d3 100644
+> --- a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+> +++ b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+> @@ -25,3 +25,11 @@ Contact:	dri-devel@lists.freedesktop.org
+>  Description:	RO. Card default power limit (default TDP setting).
+>
+>		Only supported for particular Intel i915 graphics platforms.
 > +
-> +#define FIELD_SHIFT(__mask)				    \
-> +	(BUILD_BUG_ON_ZERO(!__builtin_constant_p(__mask)) + \
-> +		BUILD_BUG_ON_ZERO((__mask) == 0) +	    \
-> +		__bf_shf(__mask))
+> +What:		/sys/devices/.../hwmon/hwmon<i>/energy1_input
+> +Date:		June 2022
+> +KernelVersion:	5.19
 
-Let's remove this macro, it's not needed, see below.
+Need to update kernel version on all patches now at least to 6.0 if not
+6.1.
 
-> +/*
-> + * This function's return type of u64 allows for the case where the scaling
-> + * of the field taken from the 32-bit register value might cause a result to
-> + * exceed 32 bits.
-> + */
-> +static u64
-> +hwm_field_read_and_scale(struct hwm_drvdata *ddat, i915_reg_t rgadr,
-> +			 u32 field_msk, int field_shift,
-
-Let's remove field_shift arg.
-
-> +			 int nshift, u32 scale_factor)
+> +static int
+> +hwm_energy(struct hwm_drvdata *ddat, long *energy)
 > +{
 > +	struct intel_uncore *uncore = ddat->uncore;
+> +	struct i915_hwmon *hwmon = ddat->hwmon;
+> +	struct hwm_energy_info *ei = &ddat->ei;
 > +	intel_wakeref_t wakeref;
-> +	u32 reg_value;
+> +	i915_reg_t rgaddr;
+> +	u32 reg_val;
 > +
-> +	with_intel_runtime_pm(uncore->rpm, wakeref)
-> +		reg_value = intel_uncore_read(uncore, rgadr);
+> +	rgaddr = hwmon->rg.energy_status_all;
 > +
-> +	reg_value = (reg_value & field_msk) >> field_shift;
+> +	if (!i915_mmio_reg_valid(rgaddr))
+> +		return -EOPNOTSUPP;
 
-This is just 'REG_FIELD_GET(field_msk, reg_value)'.
+Delete two lines above. Something like this is only needed if we have
+i915_hwmon_energy_status_get() which we are deleting
+below. hwm_energy_is_visible() takes care of making the sysfs node
+invisible when something cannot be supported and has the same check.
 
-> +
-> +	return mul_u64_u32_shr(reg_value, scale_factor, nshift);
-> +}
-> +
-> +static void
-> +hwm_field_scale_and_write(struct hwm_drvdata *ddat, i915_reg_t rgadr,
-> +			  u32 field_msk, int field_shift,
-
-Let's remove field_shift arg.
-
-> +			  int nshift, unsigned int scale_factor, long lval)
+> +int
+> +i915_hwmon_energy_status_get(struct drm_i915_private *i915, long *energy)
 > +{
-> +	u32 nval;
-> +	u32 bits_to_clear;
-> +	u32 bits_to_set;
+> +	struct i915_hwmon *hwmon = i915->hwmon;
+> +	struct hwm_drvdata *ddat = &hwmon->ddat;
 > +
-> +	/* Computation in 64-bits to avoid overflow. Round to nearest. */
-> +	nval = DIV_ROUND_CLOSEST_ULL((u64)lval << nshift, scale_factor);
-> +
-> +	bits_to_clear = field_msk;
-> +	bits_to_set = (nval << field_shift) & field_msk;
+> +	return hwm_energy(ddat, energy);
+> +}
 
-This is just 'REG_FIELD_PREP(field_msk, nval)'.
+Let's delete this function, there are no users for it at present.
 
-> @@ -118,11 +260,40 @@ static void
->  hwm_get_preregistration_info(struct drm_i915_private *i915)
->  {
->	struct i915_hwmon *hwmon = i915->hwmon;
-> +	struct intel_uncore *uncore = &i915->uncore;
-> +	intel_wakeref_t wakeref;
-> +	u32 val_sku_unit;
+> diff --git a/drivers/gpu/drm/i915/i915_hwmon.h b/drivers/gpu/drm/i915/i915_hwmon.h
+> index 7ca9cf2c34c9..4e5b6c149f3a 100644
+> --- a/drivers/gpu/drm/i915/i915_hwmon.h
+> +++ b/drivers/gpu/drm/i915/i915_hwmon.h
+> @@ -17,4 +17,5 @@ static inline void i915_hwmon_register(struct drm_i915_private *i915) { };
+>  static inline void i915_hwmon_unregister(struct drm_i915_private *i915) { };
+>  #endif
 >
-> -	if (IS_DG1(i915) || IS_DG2(i915))
-> +	if (IS_DG1(i915) || IS_DG2(i915)) {
->		hwmon->rg.gt_perf_status = GEN12_RPSTAT1;
-> -	else
-> +		hwmon->rg.pkg_power_sku_unit = PCU_PACKAGE_POWER_SKU_UNIT;
-> +		hwmon->rg.pkg_power_sku = INVALID_MMIO_REG;
-> +		hwmon->rg.pkg_rapl_limit = PCU_PACKAGE_RAPL_LIMIT;
-> +	} else {
->		hwmon->rg.gt_perf_status = INVALID_MMIO_REG;
-> +		hwmon->rg.pkg_power_sku_unit = INVALID_MMIO_REG;
-> +		hwmon->rg.pkg_power_sku = INVALID_MMIO_REG;
-> +		hwmon->rg.pkg_rapl_limit = INVALID_MMIO_REG;
-> +	}
-> +
-> +	with_intel_runtime_pm(uncore->rpm, wakeref) {
-> +		/*
-> +		 * The contents of register hwmon->rg.pkg_power_sku_unit do not change,
-> +		 * so read it once and store the shift values.
-> +		 *
-> +		 * For some platforms, this value is defined as available "for all
-> +		 * tiles", with the values consistent across all tiles.
-> +		 * In this case, use the tile 0 value for all.
-> +		 */
+> +int i915_hwmon_energy_status_get(struct drm_i915_private *i915, long *energy);
 
-Let's delete this 2nd paragraph above, if values are available per tile we
-should just be using per tile counters consistently (this is only true for
-energy in our case, that patch will need to be fixed).
-
-> diff --git a/drivers/gpu/drm/i915/i915_reg.h b/drivers/gpu/drm/i915/i915_reg.h
-> index 2e3aa684cf1b..fd13411a28d9 100644
-> --- a/drivers/gpu/drm/i915/i915_reg.h
-> +++ b/drivers/gpu/drm/i915/i915_reg.h
-> @@ -1866,6 +1866,22 @@
->  #define   POWER_LIMIT_1_MASK		REG_BIT(11)
->  #define   POWER_LIMIT_2_MASK		REG_BIT(12)
->
-> +/*
-> + * *_PACKAGE_POWER_SKU - SKU power and timing parameters.
-> + * Used herein as a 64-bit register.
-> + * These masks are defined using GENMASK_ULL as REG_GENMASK is limited to u32
-> + * and as GENMASK is "long" and therefore 32-bits on a 32-bit system.
-> + * PKG_PKG_TDP, PKG_MIN_PWR, and PKG_MAX_PWR are scaled in the same way as
-> + * PKG_PWR_LIM_*, above.
-> + * PKG_MAX_WIN has sub-fields for x and y, and has the value: is 1.x * 2^y.
-> + */
-> +#define   PKG_PKG_TDP			GENMASK_ULL(14, 0)
-> +#define   PKG_MIN_PWR			GENMASK_ULL(30, 16)
-> +#define   PKG_MAX_PWR			GENMASK_ULL(46, 32)
-> +#define   PKG_MAX_WIN			GENMASK_ULL(54, 48)
-> +#define     PKG_MAX_WIN_Y		GENMASK_ULL(54, 53)
-> +#define     PKG_MAX_WIN_X		GENMASK_ULL(52, 48)
-
-Let's change this entire block above to just the following for this patch:
-
-/* *_PACKAGE_POWER_SKU - SKU power and timing parameters */
-#define   PKG_PKG_TDP			GENMASK_ULL(14, 0)
-
-That is because none of the following #define's are used in this patch,
-they will be added in the patches they are used (PKG_MIN_PWR and
-PKG_MAX_PWR are not used at all). Also these fields are explained in
-i915_hwmon.c, no need to explain so much in a common header file.
-
-Thanks.
---
-Ashutosh
+Delete.
