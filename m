@@ -2,49 +2,49 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D9FBECAAD5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 19:23:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93056ECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 19:24:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiH3TXw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 30 Aug 2022 15:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S231477AbiH3TYH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Aug 2022 15:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbiH3TXM (ORCPT
+        with ESMTP id S231685AbiH3TXh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:23:12 -0400
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D887B296;
-        Tue, 30 Aug 2022 12:22:49 -0700 (PDT)
+        Tue, 30 Aug 2022 15:23:37 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6D77B7A6;
+        Tue, 30 Aug 2022 12:22:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661887370; x=1693423370;
+  t=1661887379; x=1693423379;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=oKBXIGtN7Cud54nf08PbP0K1g2Fts4xlETNbDNNSKNU=;
-  b=rE+inkUa7MqImNoNuyXkUV1sPIlRC32dRRw6S8/gOXjh5lIwus9BMwll
-   v3u1ktopEHjNvwVyHP1E0NMCfC1otV5b5plEJOqvla/keTgnRNstC8U8n
-   fPQjz39FiwzsexiIi4ImRJQ6GWlRPWoMMB/VtdbjWXFLvRn+i6fdxDD9y
+  bh=o77vQ07d89glwBVV3yt+VAkiTa6XFTavUwgfAhgxg8E=;
+  b=NerQXSoR3gsGvgRzhp5psBrMikXSmqYfnF/8umK2IhvKpwA6ZZEcn3Fc
+   l2RfZtgjg9PYhOaTElmP0YQQy1ky03sHXKZb+5SbGReSKeq0nQ0Ilin9V
+   znPna3N9597ZT2DVj2ymJ/WLRawN7ji/Mmn1PMcQZlX57sr1O0i7wjOUP
    g=;
 X-IronPort-AV: E=Sophos;i="5.93,275,1654560000"; 
-   d="scan'208";a="235792567"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-c92fe759.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:42 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1a-c92fe759.us-east-1.amazon.com (Postfix) with ESMTPS id E152CC0920;
-        Tue, 30 Aug 2022 19:22:38 +0000 (UTC)
-Received: from EX19D013UWA004.ant.amazon.com (10.13.138.207) by
+   d="scan'208";a="222136159"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-b27d4a00.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:42 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-b27d4a00.us-east-1.amazon.com (Postfix) with ESMTPS id 44220811F5;
+        Tue, 30 Aug 2022 19:22:39 +0000 (UTC)
+Received: from EX19D013UWA002.ant.amazon.com (10.13.138.210) by
  EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 30 Aug 2022 19:22:15 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX19D013UWA004.ant.amazon.com (10.13.138.207) with Microsoft SMTP Server
+ id 15.0.1497.38; Tue, 30 Aug 2022 19:22:16 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX19D013UWA002.ant.amazon.com (10.13.138.210) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
  Tue, 30 Aug 2022 19:22:15 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Tue, 30 Aug 2022 19:22:14
+ (172.19.116.181) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 30 Aug 2022 19:22:15
  +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 628494D43; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
+        id 6C2ED4D4D; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
@@ -55,266 +55,163 @@ CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
         <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
         <amitlavi@amazon.com>, <almogbs@amazon.com>, <dkl@amazon.com>,
         <rahul.tanwar@linux.intel.com>, <andriy.shevchenko@intel.com>
-Subject: [PATCH v3 18/19] hwmon: (mr75203) add debugfs to read and write temperature coefficients
-Date:   Tue, 30 Aug 2022 19:22:11 +0000
-Message-ID: <20220830192212.28570-19-farbere@amazon.com>
+Subject: [PATCH v3 15/19] hwmon: (mr75203) add support for series 6 temperature equation
+Date:   Tue, 30 Aug 2022 19:22:08 +0000
+Message-ID: <20220830192212.28570-16-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220830192212.28570-1-farbere@amazon.com>
 References: <20220830192212.28570-1-farbere@amazon.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This change adds debugfs to read and write temperature sensor coefficients
-- g, h, j and cal5.
+The current equation used in code is aligned to series 5:
+T = G + H * (n / cal5 - 0.5) + J * F
+Where:
+G = 60, H = 200, cal5 = 4094, J = -0.1, F = frequency clock in MHz
 
-The coefficients can vary between product and product, so it can be very
-useful to be able to modify them on the fly during the calibration
-process.
+Series 6 has a slightly different equation:
+T = G + H * (n / cal5 - 0.5)
+and a different set of coefficients:
+G = 57.4, H = 249.4, cal5 = 4096
 
-e.g.:
+This change supports equation and coefficients for both series.
+(for series 6, J is set to 0).
 
-cat /sys/kernel/debug/940f23d0000.pvt/ts_coeff_cal5
-4096
-
-echo 83000 > sys/kernel/debug/940f23d0000.pvt/ts_coeff_g
+The series is determined according to “ts-series” property in device
+tree.
+If absent, series 5 is assumed to be the default.
 
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- drivers/hwmon/mr75203.c | 196 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 196 insertions(+)
+V3 -> V2:
+- New patch to support temperature sensor series 6 instead of having to
+  set all 4 coefficients.
+
+ drivers/hwmon/mr75203.c | 69 +++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 63 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-index d9fc5d225868..8c30f0521452 100644
+index 5b8ca1ee4a54..6a035fd115ca 100644
 --- a/drivers/hwmon/mr75203.c
 +++ b/drivers/hwmon/mr75203.c
-@@ -9,6 +9,7 @@
-  */
- #include <linux/bits.h>
- #include <linux/clk.h>
-+#include <linux/debugfs.h>
- #include <linux/hwmon.h>
- #include <linux/module.h>
- #include <linux/mod_devicetable.h>
-@@ -153,6 +154,7 @@ struct pvt_device {
- 	struct regmap		*v_map;
- 	struct clk		*clk;
+@@ -103,10 +103,6 @@
+ 
+ #define PVT_POLL_DELAY_US	20
+ #define PVT_POLL_TIMEOUT_US	20000
+-#define PVT_H_CONST		200000
+-#define PVT_G_CONST		60000
+-#define PVT_J_CONST		-100
+-#define PVT_CAL5_CONST		4094
+ #define PVT_CONV_BITS		10
+ #define PVT_N_CONST		90
+ #define PVT_R_CONST		245805
+@@ -114,9 +110,31 @@
+ #define PVT_TEMP_MIN		-40000
+ #define PVT_TEMP_MAX		125000
+ 
++/* Temperature coefficients for series 5 */
++#define PVT_SERIES5_H_CONST	200000
++#define PVT_SERIES5_G_CONST	60000
++#define PVT_SERIES5_J_CONST	-100
++#define PVT_SERIES5_CAL5_CONST	4094
++
++/* Temperature coefficients for series 6 */
++#define PVT_SERIES6_H_CONST	249400
++#define PVT_SERIES6_G_CONST	57400
++#define PVT_SERIES6_J_CONST	0
++#define PVT_SERIES6_CAL5_CONST	4096
++
++#define TEMPERATURE_SENSOR_SERIES_5	5
++#define TEMPERATURE_SENSOR_SERIES_6	6
++
+ #define PRE_SCALER_X1	1
+ #define PRE_SCALER_X2	2
+ 
++struct temp_coeff {
++	u32 h;
++	u32 g;
++	u32 cal5;
++	s32 j;
++};
++
+ struct voltage_device {
+ 	u32 vm_map;	/* Map channel number to VM index */
+ 	u32 ch_map;	/* Map channel number to channel index */
+@@ -137,6 +155,7 @@ struct pvt_device {
  	struct reset_control	*rst;
-+	struct dentry		*dbgfs_dir;
  	struct voltage_device	*vd;
  	struct voltage_channels	vm_channels;
- 	struct temp_coeff	ts_coeff;
-@@ -162,6 +164,198 @@ struct pvt_device {
- 	u32			ip_freq;
- };
++	struct temp_coeff	ts_coeff;
+ 	u32			t_num;
+ 	u32			p_num;
+ 	u32			v_num;
+@@ -167,8 +186,9 @@ static long pvt_calc_temp(struct pvt_device *pvt, u32 nbs)
+ 	 * Convert the register value to degrees centigrade temperature:
+ 	 * T = G + H * (n / cal5 - 0.5) + J * F
+ 	 */
+-	s64 tmp = PVT_G_CONST + PVT_H_CONST * (s64)nbs / PVT_CAL5_CONST -
+-		PVT_H_CONST / 2 + PVT_J_CONST * (s64)pvt->ip_freq / HZ_PER_MHZ;
++	struct temp_coeff *ts_coeff = &pvt->ts_coeff;
++	s64 tmp = ts_coeff->g + ts_coeff->h * (s64)nbs / ts_coeff->cal5 -
++		ts_coeff->h / 2 + ts_coeff->j * (s64)pvt->ip_freq / HZ_PER_MHZ;
  
-+static ssize_t pvt_ts_coeff_h_read(struct file *file,
-+				   char __user *user_buf,
-+				   size_t count, loff_t *ppos)
+ 	return clamp_val(tmp, PVT_TEMP_MIN, PVT_TEMP_MAX);
+ }
+@@ -652,6 +672,39 @@ static int pvt_get_pre_scaler(struct device *dev, struct pvt_device *pvt)
+ 	return ret;
+ }
+ 
++static int pvt_set_temp_coeff(struct device *dev, struct pvt_device *pvt)
 +{
-+	struct pvt_device *pvt = file->private_data;
-+	char buf[16];
-+	unsigned int len;
-+
-+	len = sprintf(buf, "%u\n", pvt->ts_coeff.h);
-+
-+	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
-+}
-+
-+static ssize_t pvt_ts_coeff_h_write(struct file *file,
-+				    const char __user *user_buf,
-+				    size_t count, loff_t *ppos)
-+{
-+	struct pvt_device *pvt = file->private_data;
++	struct temp_coeff *ts_coeff = &pvt->ts_coeff;
++	const struct device_node *np = dev->of_node;
++	u32 series;
 +	int ret;
-+	u32 coeff;
 +
-+	ret = kstrtou32_from_user(user_buf, count, 0, &coeff);
++	/* Incase ts-series property is not defined, use default 5. */
++	ret = of_property_read_u32(np, "moortec,ts-series", &series);
 +	if (ret)
-+		return ret;
++		series = TEMPERATURE_SENSOR_SERIES_5;
 +
-+	pvt->ts_coeff.h = coeff;
-+
-+	return count;
-+}
-+
-+static const struct file_operations pvt_ts_coeff_h_fops = {
-+	.read = pvt_ts_coeff_h_read,
-+	.write = pvt_ts_coeff_h_write,
-+	.open = simple_open,
-+	.owner = THIS_MODULE,
-+	.llseek = default_llseek,
-+};
-+
-+static ssize_t pvt_ts_coeff_g_read(struct file *file,
-+				   char __user *user_buf,
-+				   size_t count, loff_t *ppos)
-+{
-+	struct pvt_device *pvt = file->private_data;
-+	char buf[16];
-+	unsigned int len;
-+
-+	len = sprintf(buf, "%u\n", pvt->ts_coeff.g);
-+
-+	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
-+}
-+
-+static ssize_t pvt_ts_coeff_g_write(struct file *file,
-+				    const char __user *user_buf,
-+				    size_t count, loff_t *ppos)
-+{
-+	struct pvt_device *pvt = file->private_data;
-+	int ret;
-+	u32 coeff;
-+
-+	ret = kstrtou32_from_user(user_buf, count, 0, &coeff);
-+	if (ret)
-+		return ret;
-+
-+	pvt->ts_coeff.g = coeff;
-+
-+	return count;
-+}
-+
-+static const struct file_operations pvt_ts_coeff_g_fops = {
-+	.read = pvt_ts_coeff_g_read,
-+	.write = pvt_ts_coeff_g_write,
-+	.open = simple_open,
-+	.owner = THIS_MODULE,
-+	.llseek = default_llseek,
-+};
-+
-+static ssize_t pvt_ts_coeff_j_read(struct file *file,
-+				   char __user *user_buf,
-+				   size_t count, loff_t *ppos)
-+{
-+	struct pvt_device *pvt = file->private_data;
-+	char buf[16];
-+	unsigned int len;
-+
-+	len = sprintf(buf, "%d\n", pvt->ts_coeff.j);
-+
-+	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
-+}
-+
-+static ssize_t pvt_ts_coeff_j_write(struct file *file,
-+				    const char __user *user_buf,
-+				    size_t count, loff_t *ppos)
-+{
-+	struct pvt_device *pvt = file->private_data;
-+	int ret;
-+	s32 coeff;
-+
-+	ret = kstrtos32_from_user(user_buf, count, 0, &coeff);
-+	if (ret)
-+		return ret;
-+
-+	pvt->ts_coeff.j = coeff;
-+
-+	return count;
-+}
-+
-+static const struct file_operations pvt_ts_coeff_j_fops = {
-+	.read = pvt_ts_coeff_j_read,
-+	.write = pvt_ts_coeff_j_write,
-+	.open = simple_open,
-+	.owner = THIS_MODULE,
-+	.llseek = default_llseek,
-+};
-+
-+static ssize_t pvt_ts_coeff_cal5_read(struct file *file,
-+				      char __user *user_buf,
-+				      size_t count, loff_t *ppos)
-+{
-+	struct pvt_device *pvt = file->private_data;
-+	char buf[16];
-+	unsigned int len;
-+
-+	len = sprintf(buf, "%u\n", pvt->ts_coeff.cal5);
-+
-+	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
-+}
-+
-+static ssize_t pvt_ts_coeff_cal5_write(struct file *file,
-+				       const char __user *user_buf,
-+				       size_t count, loff_t *ppos)
-+{
-+	struct pvt_device *pvt = file->private_data;
-+	int ret;
-+	u32 coeff;
-+
-+	ret = kstrtou32_from_user(user_buf, count, 0, &coeff);
-+	if (ret)
-+		return ret;
-+
-+	if (coeff == 0)
-+		return -EINVAL;
-+
-+	pvt->ts_coeff.cal5 = coeff;
-+
-+	return count;
-+}
-+
-+static const struct file_operations pvt_ts_coeff_cal5_fops = {
-+	.read = pvt_ts_coeff_cal5_read,
-+	.write = pvt_ts_coeff_cal5_write,
-+	.open = simple_open,
-+	.owner = THIS_MODULE,
-+	.llseek = default_llseek,
-+};
-+
-+static void devm_pvt_ts_dbgfs_remove(void *data)
-+{
-+	struct pvt_device *pvt = (struct pvt_device *)data;
-+
-+	debugfs_remove_recursive(pvt->dbgfs_dir);
-+	pvt->dbgfs_dir = NULL;
-+}
-+
-+static int pvt_ts_dbgfs_create(struct pvt_device *pvt, struct device *dev)
-+{
-+	int ret;
-+
-+	pvt->dbgfs_dir = debugfs_create_dir(dev_name(dev), NULL);
-+	if (!pvt->dbgfs_dir) {
-+		dev_err(dev, "Failed to create dbgfs_dir\n");
++	if (series == TEMPERATURE_SENSOR_SERIES_5) {
++		ts_coeff->h = PVT_SERIES5_H_CONST;
++		ts_coeff->g = PVT_SERIES5_G_CONST;
++		ts_coeff->j = PVT_SERIES5_J_CONST;
++		ts_coeff->cal5 = PVT_SERIES5_CAL5_CONST;
++	} else if (series == TEMPERATURE_SENSOR_SERIES_6) {
++		ts_coeff->h = PVT_SERIES6_H_CONST;
++		ts_coeff->g = PVT_SERIES6_G_CONST;
++		ts_coeff->j = PVT_SERIES6_J_CONST;
++		ts_coeff->cal5 = PVT_SERIES6_CAL5_CONST;
++	} else {
++		dev_err(dev, "invalid temperature sensor series (%u)\n",
++			series);
 +		return -EINVAL;
 +	}
 +
-+	debugfs_create_file("ts_coeff_h", 0644, pvt->dbgfs_dir, pvt,
-+			    &pvt_ts_coeff_h_fops);
-+	debugfs_create_file("ts_coeff_g", 0644, pvt->dbgfs_dir, pvt,
-+			    &pvt_ts_coeff_g_fops);
-+	debugfs_create_file("ts_coeff_j", 0644, pvt->dbgfs_dir, pvt,
-+			    &pvt_ts_coeff_j_fops);
-+	debugfs_create_file("ts_coeff_cal5", 0644, pvt->dbgfs_dir,  pvt,
-+			    &pvt_ts_coeff_cal5_fops);
-+
-+	ret = devm_add_action_or_reset(dev, devm_pvt_ts_dbgfs_remove, pvt);
-+	if (ret) {
-+		dev_err(dev, "failed to add action to remove pvt dbgfs (%d)\n",
-+			ret);
-+		return ret;
-+	}
++	dev_dbg(dev, "temperature sensor series = %u\n", series);
 +
 +	return 0;
 +}
 +
- static umode_t pvt_is_visible(const void *data, enum hwmon_sensor_types type,
- 			      u32 attr, int channel)
+ static int mr75203_probe(struct platform_device *pdev)
  {
-@@ -814,6 +1008,8 @@ static int mr75203_probe(struct platform_device *pdev)
- 		memset32(temp_config, HWMON_T_INPUT, ts_num);
- 		pvt_temp.config = temp_config;
- 		pvt_info[index++] = &pvt_temp;
-+
-+		pvt_ts_dbgfs_create(pvt, dev);
- 	}
+ 	const struct hwmon_channel_info **pvt_info;
+@@ -722,6 +775,10 @@ static int mr75203_probe(struct platform_device *pdev)
+ 		if (ret)
+ 			return ret;
  
- 	if (pd_num) {
++		ret = pvt_set_temp_coeff(dev, pvt);
++		if (ret)
++			return ret;
++
+ 		temp_config = devm_kcalloc(dev, ts_num + 1,
+ 					   sizeof(*temp_config), GFP_KERNEL);
+ 		if (!temp_config)
 -- 
 2.37.1
 
