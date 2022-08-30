@@ -2,86 +2,194 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59549ECAAD4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 10:04:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0694ECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 10:05:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbiH3KEt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 30 Aug 2022 06:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
+        id S229952AbiH3KFU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Aug 2022 06:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiH3KD6 (ORCPT
+        with ESMTP id S230002AbiH3KEO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:03:58 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7110F61727
-        for <linux-hwmon@vger.kernel.org>; Tue, 30 Aug 2022 03:02:00 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id z6so14784013lfu.9
-        for <linux-hwmon@vger.kernel.org>; Tue, 30 Aug 2022 03:02:00 -0700 (PDT)
+        Tue, 30 Aug 2022 06:04:14 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2EBE9904
+        for <linux-hwmon@vger.kernel.org>; Tue, 30 Aug 2022 03:02:10 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id q7so14782710lfu.5
+        for <linux-hwmon@vger.kernel.org>; Tue, 30 Aug 2022 03:02:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=c6qafmfYY6lQC4Y0+wZr5Ybx3Q7TmzLJh34bfJvmCdI=;
-        b=Ok77HrRnMhSaGYWq/8pRsZBHzp7PAYMdXHsIHQ9Wy4uZWFH/yY3zg1Y5tZbF3KFfVp
-         pOMD3ULLmkpicTKMXrdcEQhVwlipMgy4NP4SvVVtF1pgR6svywEvlOuEkUhXEAHCItFs
-         youFgtIMSrwuwGMRkGRQW1IfaDuEPg3/BLy8I=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=XTo3q+mYdw/9PjZFiZ4r8XFtLJMcNPoTEDIQJX2GN1A=;
+        b=PMtleank1JlxTB9xtAYWSLgzJx5+N0S3rWQGvBrc4xHau8uCKKBNcWiA+YGgNIwucg
+         kFZfewjJDI7yS5rnFe+t3TeYIhNsg6LOgI7Q5IhxYkqNdmEdQ6XBX7LtgSNmNtUUCrSy
+         ZAqxYx/T+io8wNiFniaem6BXmx90apn8Fczns=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=c6qafmfYY6lQC4Y0+wZr5Ybx3Q7TmzLJh34bfJvmCdI=;
-        b=4G+UMNve0nxi17a0onGfOlM7j7lWPFhhYZa0T1gJYxsyOMDZ68al5569dhg8qecXz/
-         Lx9zYgdwmxu8bnVI5dKhAfUQ0N9hm2rZGzz/JTFhUEb/QhJORv0gjL4rbEkQ29V2Br0a
-         sPhtHpSOqtfTLcKbtlfknxnOox+HixAmDNrUjwJiwlN4SQaTtWgfD5UPemob5kTgNOG0
-         n+z9MpToz2vXlhM61mAGUrhHtDBUrgTso7+VP+QanYLhJVp/SjjJ0Iz+GMDwrXLEwh2h
-         +AG/6Jw0mrgVPJhad8/3V51WBY8TazJ/q1u1jV5sy87QTnScGaXckLavzAlu6hyRfP0u
-         zHFw==
-X-Gm-Message-State: ACgBeo1oGtBCCA1GMtn+5pi4YJus/OvojYZpvaAJWfPqk9NFfC4K+Df0
-        dnk8Mv6L87iW9uhel3NH3XtLWg==
-X-Google-Smtp-Source: AA6agR7cToP+DF+pA85UXzrPeuxMmB63NydDTabiisThD2OnK4ZcXHq1oCvWh0VUyZ5O6j/UEQyzAw==
-X-Received: by 2002:a05:6512:12d3:b0:493:187:e34d with SMTP id p19-20020a05651212d300b004930187e34dmr7204052lfg.402.1661853718784;
-        Tue, 30 Aug 2022 03:01:58 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=XTo3q+mYdw/9PjZFiZ4r8XFtLJMcNPoTEDIQJX2GN1A=;
+        b=01ulE5+ynHbASleNZ/oQNtZDOIeDojsZlUFgHJYUEPYvHWLYgpOkW5SuaErECEha2K
+         wHKyj5yXBvRZVvsigtmnpfxHE60rd33IGhu5zru4eA3cD4611W2p5FG2uAmijDx6iDu7
+         6cPZiMKekhyosXe/KC8T0Db8uxIDWxCySGhDVwY8s1K6DOFFxEI432GZC+C4ZsvjPuxZ
+         l/NpwGdFNly5N+jvFalD4l2nHtOf3YwS/81Hzd37snRwUZdGjWORdN08KQC9k7n9sig5
+         FiD0DzcWLoDTsfbmdDfb+6HM8C9tb0dDnPgmACpUtpvTM7Mtob942CM2hNuFE9j87ur7
+         YNYw==
+X-Gm-Message-State: ACgBeo0N6B3IYFSgyXqWnCdyzoHeqB4gTdpwlnkTLE3n58iMwRyvFhM4
+        TNjc/ZYvLVTYdHVqCsrvX4jhXq35Ox6ZXP2u
+X-Google-Smtp-Source: AA6agR7OkZ+mkz0MOg8POSt7JBF/h6f019AHL8Fu93/UAdUMpZ4aQjBCUvnFmcihuv0hxXKUkzv5kg==
+X-Received: by 2002:ac2:4c55:0:b0:492:d91d:363f with SMTP id o21-20020ac24c55000000b00492d91d363fmr8463727lfk.116.1661853729576;
+        Tue, 30 Aug 2022 03:02:09 -0700 (PDT)
 Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id m6-20020a056512114600b0048af6242892sm1573435lfg.14.2022.08.30.03.01.56
+        by smtp.gmail.com with ESMTPSA id m6-20020a056512114600b0048af6242892sm1573435lfg.14.2022.08.30.03.02.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 03:01:57 -0700 (PDT)
+        Tue, 30 Aug 2022 03:02:08 -0700 (PDT)
 From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: [PATCH 0/6] rtc: isl12022: cleanups and hwmon support
-Date:   Tue, 30 Aug 2022 12:01:46 +0200
-Message-Id: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH 6/6] rtc: isl12022: add support for temperature sensor
+Date:   Tue, 30 Aug 2022 12:01:52 +0200
+Message-Id: <20220830100152.698506-7-linux@rasmusvillemoes.dk>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
+References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This series does a few cleanups of the isl12022 driver,
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+ drivers/rtc/rtc-isl12022.c | 81 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 81 insertions(+)
 
-- removes use of deprecated function
-- removes some  redundant code
-- switches to regmap API instead of private helpers
-
-and finally hooks up the temperatur sensor to hwmon.
-
-Rasmus Villemoes (6):
-  rtc: isl12022: stop using deprecated devm_rtc_device_register()
-  rtc: isl12022: simplify some expressions
-  rtc: isl12022: use dev_set_drvdata() instead of i2c_set_clientdata()
-  rtc: isl12022: drop redundant write to HR register
-  rtc: isl12022: switch to using regmap API
-  rtc: isl12022: add support for temperature sensor
-
- drivers/rtc/Kconfig        |   1 +
- drivers/rtc/rtc-isl12022.c | 195 ++++++++++++++++++++-----------------
- 2 files changed, 107 insertions(+), 89 deletions(-)
-
+diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
+index b295ec92ee17..1bd72f436318 100644
+--- a/drivers/rtc/rtc-isl12022.c
++++ b/drivers/rtc/rtc-isl12022.c
+@@ -17,6 +17,8 @@
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/regmap.h>
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
+ 
+ /* ISL register offsets */
+ #define ISL12022_REG_SC		0x00
+@@ -30,6 +32,9 @@
+ #define ISL12022_REG_SR		0x07
+ #define ISL12022_REG_INT	0x08
+ 
++#define ISL12022_REG_BETA	0x0d
++#define ISL12022_REG_TEMP_L	0x28
++
+ /* ISL register bits */
+ #define ISL12022_HR_MIL		(1 << 7)	/* military or 24 hour time */
+ 
+@@ -38,6 +43,7 @@
+ 
+ #define ISL12022_INT_WRTC	(1 << 6)
+ 
++#define ISL12022_BETA_TSE	(1 << 7)
+ 
+ static struct i2c_driver isl12022_driver;
+ 
+@@ -48,6 +54,79 @@ struct isl12022 {
+ 	bool write_enabled;	/* true if write enable is set */
+ };
+ 
++/*
++ * A user-initiated temperature conversion is not started by this function,
++ * so the temperature is updated once every ~60 seconds.
++ */
++static int isl12022_hwmon_read_temp(struct device *dev, s32 *mC)
++{
++	struct isl12022 *isl12022 = dev_get_drvdata(dev);
++	struct regmap *regmap = isl12022->regmap;
++	u8 temp_buf[2];
++	s32 temp;
++	int ret;
++
++	ret = regmap_bulk_read(regmap, ISL12022_REG_TEMP_L,
++			       temp_buf, sizeof(temp_buf));
++	if (ret)
++		return ret;
++	/*
++	 * Temperature is represented as a 10-bit number, unit half-Kelvins.
++	 */
++	temp = (temp_buf[1] << 8) | temp_buf[0];
++	temp *= 500;
++	temp -= 273000;
++
++	*mC = temp;
++
++	return 0;
++}
++
++static ssize_t
++isl12022_hwmon_show_temp(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	int ret;
++	s32 temp;
++
++	ret = isl12022_hwmon_read_temp(dev, &temp);
++	if (ret)
++		return ret;
++
++	return sprintf(buf, "%d\n", temp);
++}
++static SENSOR_DEVICE_ATTR(temp1_input, 0444, isl12022_hwmon_show_temp,
++			  NULL, 0);
++
++static struct attribute *isl12022_hwmon_attrs[] = {
++	&sensor_dev_attr_temp1_input.dev_attr.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(isl12022_hwmon);
++
++static void isl12022_hwmon_register(struct device *dev)
++{
++	struct isl12022 *isl12022;
++	struct device *hwmon;
++	int ret;
++
++	if (!IS_REACHABLE(CONFIG_HWMON))
++		return;
++
++	isl12022 = dev_get_drvdata(dev);
++
++	ret = regmap_update_bits(isl12022->regmap, ISL12022_REG_BETA,
++				 ISL12022_BETA_TSE, ISL12022_BETA_TSE);
++	if (ret) {
++		dev_warn(dev, "unable to enable temperature sensor\n");
++		return;
++	}
++
++	hwmon = devm_hwmon_device_register_with_groups(dev, "isl12022", isl12022,
++						       isl12022_hwmon_groups);
++	if (IS_ERR(hwmon))
++		dev_warn(dev, "unable to register hwmon device: %pe\n", hwmon);
++}
++
+ /*
+  * In the routines that deal directly with the isl12022 hardware, we use
+  * rtc_time -- month 0-11, hour 0-23, yr = calendar year-epoch.
+@@ -179,6 +258,8 @@ static int isl12022_probe(struct i2c_client *client)
+ 		return PTR_ERR(isl12022->regmap);
+ 	}
+ 
++	isl12022_hwmon_register(&client->dev);
++
+ 	isl12022->rtc = devm_rtc_allocate_device(&client->dev);
+ 	if (IS_ERR(isl12022->rtc))
+ 		return PTR_ERR(isl12022->rtc);
 -- 
 2.37.2
 
