@@ -2,160 +2,91 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E154EECAAA1
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 17:02:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CFF7ECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 19:22:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiH3RCb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 30 Aug 2022 13:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
+        id S231211AbiH3TW3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Aug 2022 15:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiH3RCO (ORCPT
+        with ESMTP id S230330AbiH3TW3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 Aug 2022 13:02:14 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35D884EDE
-        for <linux-hwmon@vger.kernel.org>; Tue, 30 Aug 2022 10:01:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661878895; x=1693414895;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1K9kPxowut1VQk9X8tlYYJubh2B+ObjPbmCmQPSejr8=;
-  b=Na1iePKoubz4zr495upx6Z44++0j968Lta+F2dUdCbdn2+N2vKSaXWYy
-   TXtncmfXQHud+rtq19n+e2GKjgNFq5LgXV2f/is4T21keWylP0kqjBS+E
-   F/7+VHwHdPWkSAXRGDjKjJ+VOQDtH5GZ0nySK7Xg74YfAfMv7Hr4U8IQ/
-   a5a0YdjDyTlPDleiWjWTguFI6idhS2u7TWQmw2Ixce9LuBVITyg6gTNDR
-   /jURQNxhrVYWZZVjBH6BKABs2PBQWAqH5tOrqpNxi7uB9b0rcobDOXBrA
-   EFK9rJFpxPyo6c95eXDskyDcjNGh6wkLKtiLD7mSXA6l5hHsNYvHGuduR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="295245123"
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="295245123"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 10:01:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="857176217"
-Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Aug 2022 10:01:25 -0700
-Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oT4c8-0000QO-2d;
-        Tue, 30 Aug 2022 17:01:24 +0000
-Date:   Wed, 31 Aug 2022 01:00:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- f233d2be38dbbb22299192292983037f01ab363c
-Message-ID: <630e4231.l7Hm2GIhUMIGoJhk%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 30 Aug 2022 15:22:29 -0400
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA4279A41;
+        Tue, 30 Aug 2022 12:22:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1661887349; x=1693423349;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dUAtUowfndtQUTld7zE3vvVQEMIwQJ09YELan4asaoM=;
+  b=OytGhpZiE1ELjuy+aqrYQlFM8S7u5AaLmmtaXCmbcZe/ypaJYyvN0atz
+   Ymn5IxZzMQ4qQR8Jm7MdoFZdSXAFZbS4lf7aGLPtvac27T4dydtgsFSj5
+   xZkjWhYMvIGvkKfdAc+rVUiXrzfYsMMdxWwMEt+Qi/q6zcHFGqD51gu2W
+   4=;
+X-IronPort-AV: E=Sophos;i="5.93,275,1654560000"; 
+   d="scan'208";a="124960444"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-6a4112b2.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:17 +0000
+Received: from EX13D37EUA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-6a4112b2.us-west-2.amazon.com (Postfix) with ESMTPS id 76EE84C014E;
+        Tue, 30 Aug 2022 19:22:16 +0000 (UTC)
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX13D37EUA002.ant.amazon.com (10.43.165.200) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 30 Aug 2022 19:22:15 +0000
+Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
+ (172.19.116.181) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 30 Aug 2022 19:22:13
+ +0000
+Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
+        id 60EB84D48; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
+From:   Eliav Farber <farbere@amazon.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
+        <jonnyc@amazon.com>, <hanochu@amazon.com>, <ronenk@amazon.com>,
+        <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
+        <amitlavi@amazon.com>, <almogbs@amazon.com>, <dkl@amazon.com>,
+        <rahul.tanwar@linux.intel.com>, <andriy.shevchenko@intel.com>
+Subject: [PATCH v3 03/19] hwmon: (mr75203) update pvt->v_num to the actual number of used sensors
+Date:   Tue, 30 Aug 2022 19:21:56 +0000
+Message-ID: <20220830192212.28570-4-farbere@amazon.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220830192212.28570-1-farbere@amazon.com>
+References: <20220830192212.28570-1-farbere@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: f233d2be38dbbb22299192292983037f01ab363c  hwmon: (gpio-fan) Fix array out of bounds access
+This issue is relevant when "intel,vm-map" is set in device-tree, and
+defines a lower number of VMs than actually supported.
 
-elapsed time: 725m
+This change is needed for all places that use pvt->v_num later on in the
+code.
 
-configs tested: 84
-configs skipped: 3
+Signed-off-by: Eliav Farber <farbere@amazon.com>
+---
+ drivers/hwmon/mr75203.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-arc                  randconfig-r043-20220830
-x86_64                           allyesconfig
-powerpc                          allmodconfig
-x86_64                               rhel-8.3
-powerpc                           allnoconfig
-x86_64                        randconfig-a004
-sh                               allmodconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-i386                                defconfig
-x86_64                        randconfig-a013
-x86_64                    rhel-8.3-kselftests
-i386                          randconfig-a001
-x86_64                           rhel-8.3-syz
-i386                          randconfig-a003
-x86_64                           rhel-8.3-kvm
-mips                             allyesconfig
-x86_64                        randconfig-a011
-i386                          randconfig-a014
-x86_64                        randconfig-a015
-i386                          randconfig-a005
-i386                          randconfig-a012
-i386                          randconfig-a016
-arm                                 defconfig
-i386                             allyesconfig
-m68k                             allmodconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-m68k                             allyesconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-ia64                             allmodconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-powerpc                      mgcoge_defconfig
-mips                         db1xxx_defconfig
-sh                         ap325rxa_defconfig
-sh                        sh7785lcr_defconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-arc                        nsimosci_defconfig
-arm                            xcep_defconfig
-powerpc                 mpc837x_mds_defconfig
-sh                           se7705_defconfig
-arm                          pxa910_defconfig
-arc                                 defconfig
-sh                            hp6xx_defconfig
-arm                            pleb_defconfig
-openrisc                       virt_defconfig
-m68k                           sun3_defconfig
-sh                      rts7751r2d1_defconfig
-i386                          randconfig-c001
-riscv                    nommu_k210_defconfig
-arc                         haps_hs_defconfig
-mips                      fuloong2e_defconfig
-arm64                               defconfig
-s390                                defconfig
-sh                          rsk7264_defconfig
-arm                            zeus_defconfig
-parisc                generic-64bit_defconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20220830
-s390                 randconfig-r044-20220830
-hexagon              randconfig-r045-20220830
-riscv                randconfig-r042-20220830
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a013
-i386                          randconfig-a015
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a004
-i386                          randconfig-a011
-i386                          randconfig-a006
-x86_64                        randconfig-k001
-
+diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+index 0e29877a1a9c..f89f7bb5d698 100644
+--- a/drivers/hwmon/mr75203.c
++++ b/drivers/hwmon/mr75203.c
+@@ -605,6 +605,7 @@ static int mr75203_probe(struct platform_device *pdev)
+ 					break;
+ 
+ 			vm_num = i;
++			pvt->v_num = i;
+ 		}
+ 
+ 		in_config = devm_kcalloc(dev, vm_num + 1,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1
+
