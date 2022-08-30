@@ -2,49 +2,45 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30571ECAAD5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 19:22:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3085ECAAD8
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 19:22:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbiH3TWa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 30 Aug 2022 15:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
+        id S231263AbiH3TWd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Aug 2022 15:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbiH3TW3 (ORCPT
+        with ESMTP id S231269AbiH3TWa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:22:29 -0400
+        Tue, 30 Aug 2022 15:22:30 -0400
 Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B4879A46;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E86F79A41;
         Tue, 30 Aug 2022 12:22:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661887349; x=1693423349;
+  t=1661887350; x=1693423350;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7jM9bxUFTiRFdN9eRnLAR3tNYJTs9bs57sY6eoa56LY=;
-  b=KrrF4f0AGaOWgbevgpIQ/SPBB5lDbTbNFdast7FE3XaziHc4A3tEeJ2v
-   4k0l0uJ62DIWYV6leEFfuVdHpTy4Qve8lnDjfztTN81wDzGErapWSLrgJ
-   vCNHNrWjwSzqm6Y0srA3yHPG3uhinq8fiDNQjz9TwmJyzTBGL23P6r6MO
-   8=;
+  bh=CgCc/kIyAEbfD4l7q/Fx6aovclZtydu0RItcAhZsPf0=;
+  b=l6MY9ZqqAPIUinSrBBQSVnFTkRLQwkJf+xDvDYD48PcA8YIkznMzAIS+
+   oTOy0+mZL1k9L/O8aYcb01eUG3xwy0SSlcvzUSUB0uy/3wd5J+ANtCI8K
+   TFqEx5T0DakeTjBbnkS7losKCCGpBdYXG8Rsg+1SxR3n8MfjDlUnurSv1
+   c=;
 X-IronPort-AV: E=Sophos;i="5.93,275,1654560000"; 
-   d="scan'208";a="124960433"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-4213ea4c.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:15 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-4213ea4c.us-west-2.amazon.com (Postfix) with ESMTPS id 7544B81573;
-        Tue, 30 Aug 2022 19:22:14 +0000 (UTC)
-Received: from EX19D013UWB001.ant.amazon.com (10.13.138.52) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 30 Aug 2022 19:22:14 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX19D013UWB001.ant.amazon.com (10.13.138.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Tue, 30 Aug 2022 19:22:13 +0000
+   d="scan'208";a="124960453"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-6a4112b2.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:18 +0000
+Received: from EX13D44EUB004.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-6a4112b2.us-west-2.amazon.com (Postfix) with ESMTPS id 048C64C014E;
+        Tue, 30 Aug 2022 19:22:17 +0000 (UTC)
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX13D44EUB004.ant.amazon.com (10.43.166.198) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 30 Aug 2022 19:22:15 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Tue, 30 Aug 2022 19:22:13
+ (172.19.116.181) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 30 Aug 2022 19:22:14
  +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 6024C4D39; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
+        id 6752B4D44; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
@@ -55,9 +51,9 @@ CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
         <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
         <amitlavi@amazon.com>, <almogbs@amazon.com>, <dkl@amazon.com>,
         <rahul.tanwar@linux.intel.com>, <andriy.shevchenko@intel.com>
-Subject: [PATCH v3 12/19] hwmon: (mr75203) fix voltage equation for negative source input
-Date:   Tue, 30 Aug 2022 19:22:05 +0000
-Message-ID: <20220830192212.28570-13-farbere@amazon.com>
+Subject: [PATCH v3 06/19] hwmon: (mr75203) fix multi-channel voltage reading
+Date:   Tue, 30 Aug 2022 19:21:59 +0000
+Message-ID: <20220830192212.28570-7-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220830192212.28570-1-farbere@amazon.com>
 References: <20220830192212.28570-1-farbere@amazon.com>
@@ -68,41 +64,119 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-According to Moortec Embedded Voltage Monitor (MEVM) series 3 data sheet,
-the minimum input signal is -100mv and maximum input signal is +1000mv.
-When n was small enough, such that PVT_N_CONST * n < PVT_R_CONST it
-resulted in n overflowing to a very large number (since n is u32 type).
-
-This change fixes the problem by casting n to long and replacing shift
-right with div operation.
+Fix voltage allocation and reading to support all channels in all VMs.
+Prior to this change allocation and reading were done only for the first
+channel in each VM.
+This change counts the total number of channels for allocation, and takes
+into account the channel offset when reading the sample data register.
 
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
 V3 -> V2:
-- Fix equation to support negative values instead of limiting value to
-  zero.
+- Remove configuration of ip-polling register to a separate commit.
+- Explain the fix.
 
- drivers/hwmon/mr75203.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/hwmon/mr75203.c | 27 +++++++++++++++++----------
+ 1 file changed, 17 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-index 1cd5ff6eacce..d1f090a9baac 100644
+index 901030125127..639f5a300170 100644
 --- a/drivers/hwmon/mr75203.c
 +++ b/drivers/hwmon/mr75203.c
-@@ -222,10 +222,11 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+@@ -68,8 +68,9 @@
+ 
+ /* VM Individual Macro Register */
+ #define VM_COM_REG_SIZE	0x200
+-#define VM_SDIF_DONE(n)	(VM_COM_REG_SIZE + 0x34 + 0x200 * (n))
+-#define VM_SDIF_DATA(n)	(VM_COM_REG_SIZE + 0x40 + 0x200 * (n))
++#define VM_SDIF_DONE(vm)	(VM_COM_REG_SIZE + 0x34 + 0x200 * (vm))
++#define VM_SDIF_DATA(vm, ch)	\
++	(VM_COM_REG_SIZE + 0x40 + 0x200 * (vm) + 0x4 * (ch))
+ 
+ /* SDA Slave Register */
+ #define IP_CTRL			0x00
+@@ -115,6 +116,7 @@ struct pvt_device {
+ 	u32			t_num;
+ 	u32			p_num;
+ 	u32			v_num;
++	u32			c_num;
+ 	u32			ip_freq;
+ 	u8			*vm_idx;
+ };
+@@ -179,13 +181,14 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+ 	struct pvt_device *pvt = dev_get_drvdata(dev);
+ 	struct regmap *v_map = pvt->v_map;
+ 	u32 n, stat;
+-	u8 vm_idx;
++	u8 vm_idx, ch_idx;
+ 	int ret;
+ 
+-	if (channel >= pvt->v_num)
++	if (channel >= pvt->v_num * pvt->c_num)
+ 		return -EINVAL;
+ 
+-	vm_idx = pvt->vm_idx[channel];
++	vm_idx = pvt->vm_idx[channel / pvt->c_num];
++	ch_idx = channel % pvt->c_num;
+ 
+ 	switch (attr) {
+ 	case hwmon_in_input:
+@@ -196,7 +199,7 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+ 		if (ret)
  			return ret;
  
- 		n &= SAMPLE_DATA_MSK;
-+
- 		/* Convert the N bitstream count into voltage */
- 		pre_scaler = pvt->vd[channel].pre_scaler;
--		*val = pre_scaler * (PVT_N_CONST * n - PVT_R_CONST) >>
--			PVT_CONV_BITS;
-+		*val = pre_scaler * (PVT_N_CONST * (long)n - PVT_R_CONST) /
-+			(1 << PVT_CONV_BITS);
+-		ret = regmap_read(v_map, VM_SDIF_DATA(vm_idx), &n);
++		ret = regmap_read(v_map, VM_SDIF_DATA(vm_idx, ch_idx), &n);
+ 		if(ret < 0)
+ 			return ret;
  
- 		return 0;
- 	default:
+@@ -500,7 +503,7 @@ static int pvt_reset_control_deassert(struct device *dev, struct pvt_device *pvt
+ static int mr75203_probe(struct platform_device *pdev)
+ {
+ 	const struct hwmon_channel_info **pvt_info;
+-	u32 ts_num, vm_num, pd_num, val, index, i;
++	u32 ts_num, vm_num, pd_num, ch_num, val, index, i;
+ 	struct device *dev = &pdev->dev;
+ 	u32 *temp_config, *in_config;
+ 	struct device *hwmon_dev;
+@@ -544,9 +547,11 @@ static int mr75203_probe(struct platform_device *pdev)
+ 	ts_num = (val & TS_NUM_MSK) >> TS_NUM_SFT;
+ 	pd_num = (val & PD_NUM_MSK) >> PD_NUM_SFT;
+ 	vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
++	ch_num = (val & CH_NUM_MSK) >> CH_NUM_SFT;
+ 	pvt->t_num = ts_num;
+ 	pvt->p_num = pd_num;
+ 	pvt->v_num = vm_num;
++	pvt->c_num = ch_num;
+ 	val = 0;
+ 	if (ts_num)
+ 		val++;
+@@ -583,6 +588,8 @@ static int mr75203_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	if (vm_num) {
++		u32 total_ch = ch_num * vm_num;
++
+ 		ret = pvt_get_regmap(pdev, "vm", pvt);
+ 		if (ret)
+ 			return ret;
+@@ -611,13 +618,13 @@ static int mr75203_probe(struct platform_device *pdev)
+ 			pvt->v_num = i;
+ 		}
+ 
+-		in_config = devm_kcalloc(dev, vm_num + 1,
++		in_config = devm_kcalloc(dev, total_ch + 1,
+ 					 sizeof(*in_config), GFP_KERNEL);
+ 		if (!in_config)
+ 			return -ENOMEM;
+ 
+-		memset32(in_config, HWMON_I_INPUT, vm_num);
+-		in_config[vm_num] = 0;
++		memset32(in_config, HWMON_I_INPUT, total_ch);
++		in_config[total_ch] = 0;
+ 		pvt_in.config = in_config;
+ 
+ 		pvt_info[index++] = &pvt_in;
 -- 
 2.37.1
 
