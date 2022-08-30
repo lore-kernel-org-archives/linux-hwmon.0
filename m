@@ -2,43 +2,45 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8D3FC3DA6B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDCCEECAAD5
 	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 19:22:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbiH3TWf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 30 Aug 2022 15:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
+        id S231451AbiH3TWg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Aug 2022 15:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbiH3TWe (ORCPT
+        with ESMTP id S230330AbiH3TWe (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Tue, 30 Aug 2022 15:22:34 -0400
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CFA79A77;
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CBB79A41;
         Tue, 30 Aug 2022 12:22:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661887353; x=1693423353;
+  t=1661887354; x=1693423354;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7ifH3cIa9Vk5bt+LS9w+ApFk4pQIlZ4NAZMRDJUWzoU=;
-  b=fKHkZp2T/Mj9NhXDxIzLqIS05Xl1CwTe+wWKLMYEkT1iJx6ITLNVPue7
-   ZZCh6KGnMUrFE/o7EKSaCez2fwBvYYNjWxTwy5M3Sctw4f/N2qG46vs3V
-   ftmVxmHf4n8bWZNyk0sZ4UnnyaMU4jHfGuKrmsypVJ2XlKDaoU7aRTsmA
-   I=;
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:18 +0000
-Received: from EX13D37EUA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com (Postfix) with ESMTPS id 13A8344E0E;
+  bh=jpiHuxtmtOdbY+L9vFmRYPscv7SA5/m29+1SrabSDX0=;
+  b=hu03mqAsv9+9AZQHGMyZQ7TfdaFs34Fpo66hjJQRMLE85CVTstUtaaBv
+   AdHRv2QA6edzuEAQj9l38dRkiQshbPnTkY0AzvwE8zO2YzVn7sXzrffSG
+   hUtJqs3PJETwwLtcI88drexKxPMTBSXOFad0WQ4iB1l6393yY1xAGZV1+
+   M=;
+X-IronPort-AV: E=Sophos;i="5.93,275,1654560000"; 
+   d="scan'208";a="235792417"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:18 +0000
+Received: from EX13D40EUB003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com (Postfix) with ESMTPS id 01C7844DD0;
         Tue, 30 Aug 2022 19:22:17 +0000 (UTC)
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX13D37EUA001.ant.amazon.com (10.43.165.212) with Microsoft SMTP Server (TLS)
+Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
+ EX13D40EUB003.ant.amazon.com (10.43.166.128) with Microsoft SMTP Server (TLS)
  id 15.0.1497.38; Tue, 30 Aug 2022 19:22:15 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
+ (172.19.116.181) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
  Server id 15.0.1497.38 via Frontend Transport; Tue, 30 Aug 2022 19:22:14
  +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 659724D45; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
+        id 682B14D42; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
@@ -49,9 +51,9 @@ CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
         <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
         <amitlavi@amazon.com>, <almogbs@amazon.com>, <dkl@amazon.com>,
         <rahul.tanwar@linux.intel.com>, <andriy.shevchenko@intel.com>
-Subject: [PATCH v3 02/19] hwmon: (mr75203) fix VM sensor allocation when "intel,vm-map" not defined
-Date:   Tue, 30 Aug 2022 19:21:55 +0000
-Message-ID: <20220830192212.28570-3-farbere@amazon.com>
+Subject: [PATCH v3 14/19] dt-bindings: hwmon: (mr75203) add "moortec,ts-series" property
+Date:   Tue, 30 Aug 2022 19:22:07 +0000
+Message-ID: <20220830192212.28570-15-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220830192212.28570-1-farbere@amazon.com>
 References: <20220830192212.28570-1-farbere@amazon.com>
@@ -62,70 +64,48 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Bug fix - in case "intel,vm-map" is missing in device-tree ,'num' is set
-to 0, and no voltage channel infos are allocated.
+Add optional "moortec,ts-series" property to define the temperature
+equation and coefficients that shall be used to convert the digital
+output to value in milli-Celsius.
+Supported series: 5 (default) and 6.
+
+Series 5:
+  T = G + H * (n / cal5 - 0.5) + J * F
+Where: G = 60, H = 200, cal5 = 4094, J = -0.1, F = frequency clock in MHz
+
+Series 6:
+   T = G + H * (n / cal5 - 0.5)
+Where: G = 57.4, H = 249.4, cal5 = 4096
 
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- drivers/hwmon/mr75203.c | 28 ++++++++++++----------------
- 1 file changed, 12 insertions(+), 16 deletions(-)
+V3 -> V2:
+- New patch to introduce "moortec,ts-series" property.
 
-diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-index 046523d47c29..0e29877a1a9c 100644
---- a/drivers/hwmon/mr75203.c
-+++ b/drivers/hwmon/mr75203.c
-@@ -580,8 +580,6 @@ static int mr75203_probe(struct platform_device *pdev)
- 	}
+ .../devicetree/bindings/hwmon/moortec,mr75203.yaml     | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+index 4c983d8f8fe7..ec2dbe7da9c2 100644
+--- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
++++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+@@ -64,6 +64,16 @@ properties:
+     default: 1
+     $ref: /schemas/types.yaml#definitions/uint8-array
  
- 	if (vm_num) {
--		u32 num = vm_num;
--
- 		ret = pvt_get_regmap(pdev, "vm", pvt);
- 		if (ret)
- 			return ret;
-@@ -594,30 +592,28 @@ static int mr75203_probe(struct platform_device *pdev)
- 		ret = device_property_read_u8_array(dev, "intel,vm-map",
- 						    pvt->vm_idx, vm_num);
- 		if (ret) {
--			num = 0;
-+			/*
-+			 * Incase intel,vm-map property is not defined, we
-+			 * assume incremental channel numbers.
-+			 */
-+			for (i = 0; i < vm_num; i++)
-+				pvt->vm_idx[i] = i;
- 		} else {
- 			for (i = 0; i < vm_num; i++)
- 				if (pvt->vm_idx[i] >= vm_num ||
--				    pvt->vm_idx[i] == 0xff) {
--					num = i;
-+				    pvt->vm_idx[i] == 0xff)
- 					break;
--				}
--		}
- 
--		/*
--		 * Incase intel,vm-map property is not defined, we assume
--		 * incremental channel numbers.
--		 */
--		for (i = num; i < vm_num; i++)
--			pvt->vm_idx[i] = i;
-+			vm_num = i;
-+		}
- 
--		in_config = devm_kcalloc(dev, num + 1,
-+		in_config = devm_kcalloc(dev, vm_num + 1,
- 					 sizeof(*in_config), GFP_KERNEL);
- 		if (!in_config)
- 			return -ENOMEM;
- 
--		memset32(in_config, HWMON_I_INPUT, num);
--		in_config[num] = 0;
-+		memset32(in_config, HWMON_I_INPUT, vm_num);
-+		in_config[vm_num] = 0;
- 		pvt_in.config = in_config;
- 
- 		pvt_info[index++] = &pvt_in;
++  moortec,ts-series:
++    description:
++      moortec,ts-series defines the temperature equation and coefficients that
++      shall be used to convert the digital output to value in milli-Celsius.
++      Supported series are 5 and 6.
++    minimum: 5
++    maximum: 6
++    default: 5
++    $ref: /schemas/types.yaml#definitions/uint32
++
+ required:
+   - compatible
+   - reg
 -- 
 2.37.1
 
