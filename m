@@ -2,49 +2,49 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83C20C0502C
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 19:22:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F27E5ECAAD5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Aug 2022 19:22:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbiH3TWl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 30 Aug 2022 15:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
+        id S231269AbiH3TWm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Aug 2022 15:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbiH3TWf (ORCPT
+        with ESMTP id S231453AbiH3TWh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:22:35 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D141279EC6;
-        Tue, 30 Aug 2022 12:22:33 -0700 (PDT)
+        Tue, 30 Aug 2022 15:22:37 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AA479A77;
+        Tue, 30 Aug 2022 12:22:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661887354; x=1693423354;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4emJdCv2xuSuLRmEmSsy8bbTKz8TFWCnyVKKSowhnVE=;
-  b=Bt9/240H16IvUss0OibHMDbjLLmfN/UXk6gQrK8jMrt6NNWmGshitXsi
-   RwpZqL2ZNZeYl3rT/fB65XoH3TVPRbtahq9ZJqtpMPQrK0aHPt3+co/BL
-   UceTKESmvXJ8XuKZk2AY16cN4rzawyW4GQ0lCESFFbO3fo0BYYod7kM3A
-   U=;
+  t=1661887355; x=1693423355;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=uZ5Kav3Eb8Y3l4mIN9Xlarp03YVDMTfsrhtTfsYkWOw=;
+  b=lA4a/YtY5ndOijPL/rrcqb0ysn8KbF4lNbaIue1Jt1zVAqUymM8dzHRy
+   y2l1DBqjq/GlO909cQIio8JDeTcUzK7Oapf0cqnL7Jb76xatB9ew7QVRc
+   TKfpZKBgXKpWBjsoRBzEX9Rzj8mlK8YCO40PwwpTjvzuKQGYb+0c037Wu
+   c=;
 X-IronPort-AV: E=Sophos;i="5.93,275,1654560000"; 
-   d="scan'208";a="125055804"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-87b71607.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:18 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1a-87b71607.us-east-1.amazon.com (Postfix) with ESMTPS id 7160314109C;
-        Tue, 30 Aug 2022 19:22:15 +0000 (UTC)
-Received: from EX19D013UWA004.ant.amazon.com (10.13.138.207) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 30 Aug 2022 19:22:14 +0000
+   d="scan'208";a="1049654954"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-92ba9394.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:19 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-92ba9394.us-west-2.amazon.com (Postfix) with ESMTPS id F09DE4531D;
+        Tue, 30 Aug 2022 19:22:18 +0000 (UTC)
+Received: from EX19D013UWB004.ant.amazon.com (10.13.138.62) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 30 Aug 2022 19:22:15 +0000
 Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX19D013UWA004.ant.amazon.com (10.13.138.207) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Tue, 30 Aug 2022 19:22:13 +0000
+ EX19D013UWB004.ant.amazon.com (10.13.138.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.12; Tue, 30 Aug 2022 19:22:15 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
  (172.19.116.181) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Tue, 30 Aug 2022 19:22:13
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 30 Aug 2022 19:22:15
  +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 5BA6A4D50; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
+        id 69C594D40; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
@@ -55,10 +55,12 @@ CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
         <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
         <amitlavi@amazon.com>, <almogbs@amazon.com>, <dkl@amazon.com>,
         <rahul.tanwar@linux.intel.com>, <andriy.shevchenko@intel.com>
-Subject: [PATCH v3 00/19] Variety of fixes and new features for mr75203 driver
-Date:   Tue, 30 Aug 2022 19:21:53 +0000
-Message-ID: <20220830192212.28570-1-farbere@amazon.com>
+Subject: [PATCH v3 10/19] dt-bindings: hwmon: (mr75203) add "moortec,vm-pre-scaler" property
+Date:   Tue, 30 Aug 2022 19:22:03 +0000
+Message-ID: <20220830192212.28570-11-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220830192212.28570-1-farbere@amazon.com>
+References: <20220830192212.28570-1-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -66,79 +68,54 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-List of fixes:
- - Fix "intel,vm-map" property to be optional.
- - Fix VM sensor allocation when "intel,vm-map" not defined.
- - Fix multi-channel voltage reading.
- - Fix voltage equation for negative source input.
- - Modify the temperature equation according to series 5 datasheet.
- - Fix coding style issue.
+Add support for mr76006 pre-scaler which provides divide-by-2 scaling of
+input voltage, which can then be presented for VM for measurement within
+its range (the VM input range is limited to -0.1V to 1V).
 
-List of new features:
-- Modify "reset" property to be optional.
-- Add optional "moortec,vm-active-channels" property to define the number
-  of active channels per VM.
-- Add support for mr76006 pre-scaler to multiply the voltage result by 2.
-- Add support for series 6 temperature equation.
-- Add coefficient properties to fine tune the temperature equation.
-- Add debugfs to read and write temperature coefficients
+The new "moortec,vm-pre-scaler" property lists the channels that use a
+pre-scaler.
 
----------
+The driver will use this list to multiply the voltage result by 2, to
+present to the user the actual voltage input source.
 
-Changes between v2 and v3:
-*) Add "moortec" prefix to all new device-tree properties.
-*) Change order of patches.
-*) Add explanations to better understand the changes.
-*) Change "reset" property to be optional and remove the
-  "reset-control-skip" property.
-*) Split the patch for "fix multi-channel voltage reading" to two
-   patches.
-*) Change pre-scaler property format and fix typo (scalar --> scaler).
-*) Fix voltage equation to support negative values instead of limiting
-   value to zero.
-*) Temperature equation - protect from overflow and add clamping.
-*) Add new "moortec,ts-series" property to select between temperature
-   equation of series 5 or series 6.
+Signed-off-by: Eliav Farber <farbere@amazon.com>
+---
+V3 -> V2:
+- Add "moortec" prefix to property name.
+- Change property format to be a single u8 array.
+- Fix typo: scalar --> scaler.
 
-Changes between v1 and v2:
- *) Fix compilation error for patch 08/16:
-    "warning: ISO C90 forbids variable length array"
+ .../devicetree/bindings/hwmon/moortec,mr75203.yaml    | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
----------
-
-Eliav Farber (19):
-  dt-bindings: hwmon: (mr75203) update "intel,vm-map" property to be
-    optional
-  hwmon: (mr75203) fix VM sensor allocation when "intel,vm-map" not
-    defined
-  hwmon: (mr75203) update pvt->v_num to the actual number of used
-    sensors
-  dt-bindings: hwmon: (mr75203) change "reset" property to be optional
-  hwmon: (mr75203) skip reset-control deassert for SOCs that don't
-    support it
-  hwmon: (mr75203) fix multi-channel voltage reading
-  hwmon: (mr75203) enable polling for all VM channels
-  dt-bindings: hwmon: (mr75203) add "moortec,vm-active-channels"
-    property
-  hwmon: (mr75203) add VM active channel support
-  dt-bindings: hwmon: (mr75203) add "moortec,vm-pre-scaler" property
-  hwmon: (mr75203) add VM pre-scaler support
-  hwmon: (mr75203) fix voltage equation for negative source input
-  hwmon: (mr75203) modify the temperature equation according to series 5
-    datasheet
-  dt-bindings: hwmon: (mr75203) add "moortec,ts-series" property
-  hwmon: (mr75203) add support for series 6 temperature equation
-  dt-bindings: hwmon: (mr75203) add coefficient properties for the
-    thermal equation
-  hwmon: (mr75203) parse temperature coefficients from device-tree
-  hwmon: (mr75203) add debugfs to read and write temperature
-    coefficients
-  hwmon: (mr75203) fix coding style space errors
-
- .../bindings/hwmon/moortec,mr75203.yaml       |  67 ++-
- drivers/hwmon/mr75203.c                       | 568 ++++++++++++++++--
- 2 files changed, 569 insertions(+), 66 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+index 69cc6caceb2c..4c983d8f8fe7 100644
+--- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
++++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+@@ -54,6 +54,16 @@ properties:
+     default: 16
+     $ref: /schemas/types.yaml#definitions/uint8-array
+ 
++  moortec,vm-pre-scaler:
++    description:
++      moortec,vm-pre-scaler property is an array of channels that use a mr76006
++      pre-scaler to divides the input source by 2.
++      The pre-scaler is used for input sources that exceed the VM input range.
++      The driver uses this information to present to the user the actual value
++      of the voltage source.
++    default: 1
++    $ref: /schemas/types.yaml#definitions/uint8-array
++
+ required:
+   - compatible
+   - reg
+@@ -76,5 +86,6 @@ examples:
+         clocks = <&osc0>;
+         resets = <&rcu0 0x40 7>;
+         moortec,vm-active-channels = <0x10 0x05>;
++        moortec,vm-pre-scaler = <5 6>;
+         #thermal-sensor-cells = <1>;
+     };
 -- 
 2.37.1
 
