@@ -2,102 +2,129 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12507ECAAD1
-	for <linux-hwmon@archiver.kernel.org>; Wed, 31 Aug 2022 14:28:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03351ECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Wed, 31 Aug 2022 17:48:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiHaO2U (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 31 Aug 2022 10:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34760 "EHLO
+        id S229692AbiHaRsM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 31 Aug 2022 13:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiHaO2N (ORCPT
+        with ESMTP id S230355AbiHaRsL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 31 Aug 2022 10:28:13 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE52E2A26C
-        for <linux-hwmon@vger.kernel.org>; Wed, 31 Aug 2022 07:28:10 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso21234641pjk.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 31 Aug 2022 07:28:10 -0700 (PDT)
+        Wed, 31 Aug 2022 13:48:11 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBBBBB914;
+        Wed, 31 Aug 2022 10:48:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=OtM1Z44jy94uhzgK9Ckaw6XYgSFwvQu/NWvzCgrHipY=;
-        b=Dv+vyOfMuHORQXq8WUbwReMkPseeey2RVhyGzO7/sykFWrQC8PrbTjOimtM5OV7LX3
-         1BTrkOCrM87sKDv4X3g/qut30ERvpOzknVmpz0AYCRmDqDWhZgWwcsv+Qic1SmSFV/W4
-         X9Iv2GG1K8c6uSAxteHxHvg1eeSgtdWPABCBftVEMnhF3bnXqFpPCa8dstOcA9GCfQ1c
-         dEHF/LPNHrpVFy2dUECh5zGZ1op3liLDKTQwe/KpD1/77dPSII8dPvN0JXcwFHH2I4Ko
-         s6Kxsz6OmkhOoH5Gw7kdX9km2MGuZXHYjWPm8DVGZigdIy+H6eSKEOF5xF9tivolh9fI
-         0eWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=OtM1Z44jy94uhzgK9Ckaw6XYgSFwvQu/NWvzCgrHipY=;
-        b=8RRIXKyn/CGq3xRKaI7rFuPUj+UjnC5xxt2vZbyMZtbDI8D8ZyftTb/zD4zm6MOKRT
-         1W1rtAG+IFzJDy59SexWWKDwaBKkYp9q2TPDY+cFLEcbmfN1tYAoCtcaWLg+J/io5sqm
-         6dBr2JixyFz8Qf1GPFMc7PINf1+twvzZq722sfomnRAqjZPEleOPNOOUOSc55jXwWxh+
-         gUANBYg7RyHQ0nEXamB1gMuJTI0IOf8eUn+AA3mShLel+58P8RwF1k/F58PnpM6mikKy
-         bCoY1skpdmnFEiLJkkM8POWLNDDYOSmBbKV0iDanR9Bef1bvVQzenooNYqruGf+mkZBQ
-         UYKQ==
-X-Gm-Message-State: ACgBeo0IWr0WeTYD96eQrKy0JFlIbuaOYFSpAf69tnbNwLF8Xl8QaUcf
-        DnMsKnVtK5gz2wZlPZiwTLI=
-X-Google-Smtp-Source: AA6agR6h3ce7/tcqpktwlGe6qj6D9QYZmJyQKzsPJsPZeX21G+nUt+pd38kxuAkOHqLZSPTzEDQ9gg==
-X-Received: by 2002:a17:90b:3889:b0:1f5:88cd:350d with SMTP id mu9-20020a17090b388900b001f588cd350dmr3606573pjb.9.1661956090339;
-        Wed, 31 Aug 2022 07:28:10 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170902f14200b00173368e9dedsm8506349plb.252.2022.08.31.07.28.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 07:28:09 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <06ee9484-7c9c-caa7-4b9c-95e673e914bc@roeck-us.net>
-Date:   Wed, 31 Aug 2022 07:28:07 -0700
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1661968091; x=1693504091;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=p/GOqKIZDQTxNG42y21N79YylwcTQ9NvOofSnfIbNdc=;
+  b=pEoTtJy1TPIdjMvt/fRNLbg709wHOEaURvXJGxgH+RVvsqQXFA7KWdar
+   ldqohTAC3A1kAisfNBLMhTlxSe8F89F6ZCUKweC7Z7WtNL4CQgYJbWSjd
+   /AWtyqrhLUe6bkiTGqxt+oOCYTYaELidbR2XqkojrjYByBkseQbH1S7jX
+   A=;
+X-IronPort-AV: E=Sophos;i="5.93,278,1654560000"; 
+   d="scan'208";a="125450026"
+Subject: Re: [PATCH v3 08/19] dt-bindings: hwmon: (mr75203) add "moortec,
+ vm-active-channels" property
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-828bd003.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 17:47:54 +0000
+Received: from EX13D33EUA002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-828bd003.us-east-1.amazon.com (Postfix) with ESMTPS id 488AD80FD4;
+        Wed, 31 Aug 2022 17:47:51 +0000 (UTC)
+Received: from EX19D019EUA002.ant.amazon.com (10.252.50.84) by
+ EX13D33EUA002.ant.amazon.com (10.43.165.38) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Wed, 31 Aug 2022 17:47:50 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
+ EX19D019EUA002.ant.amazon.com (10.252.50.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.12; Wed, 31 Aug 2022 17:47:49 +0000
+Received: from [192.168.153.206] (10.85.143.179) by mail-relay.amazon.com
+ (10.43.61.243) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Wed, 31 Aug 2022 17:47:45 +0000
+Message-ID: <2508ecda-cfd2-96ba-a802-47d25f225dd0@amazon.com>
+Date:   Wed, 31 Aug 2022 20:47:44 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/1] docs: hwmon: fix make htmldocs warning
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+To:     Rob Herring <robh@kernel.org>
+CC:     <almogbs@amazon.com>, Rahul Tanwar <rtanwar@maxlinear.com>,
+        Talel Shenhar <talel@amazon.com>,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        <itamark@amazon.com>, <amitlavi@amazon.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Chocron <jonnyc@amazon.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>, <shellykz@amazon.com>,
+        Jean Delvare <jdelvare@suse.com>, <shorer@amazon.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <dkl@amazon.com>,
+        "Hanoch, Uri" <hanochu@amazon.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        "Hawa, Hanna" <hhhawa@amazon.com>,
+        "Krupnik, Ronen" <ronenk@amazon.com>,
+        "Farber, Eliav" <farbere@amazon.com>
+References: <20220830192212.28570-1-farbere@amazon.com>
+ <20220830192212.28570-9-farbere@amazon.com>
+ <1661945961.480039.3614528.nullmailer@robh.at.kernel.org>
+ <a8557b5a-6e27-2e66-161e-814fc0f69c1d@amazon.com>
+ <CAL_Jsq+c7DaJFCgeHDsXQT8oqHmPS57S-o_EALz=nHDREhqc7g@mail.gmail.com>
 Content-Language: en-US
-To:     michaelsh@nvidia.com
-Cc:     linux-hwmon@vger.kernel.org, vadimp@nvidia.com
-References: <20220831125237.44142-1-michaelsh@nvidia.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220831125237.44142-1-michaelsh@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <CAL_Jsq+c7DaJFCgeHDsXQT8oqHmPS57S-o_EALz=nHDREhqc7g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/31/22 05:52, michaelsh@nvidia.com wrote:
-> From: Michael Shych <michaelsh@nvidia.com>
-> 
-> Fix WARNING: Title underline too short.
-> 
-> Fixes: 25e11ea6ead1b ("docs: hwmon: add emc2305.rst to docs")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Michael Shych <michaelsh@nvidia.com>
-> ---
+On 8/31/2022 3:17 PM, Rob Herring wrote:
+> On Wed, Aug 31, 2022 at 6:53 AM Farber, Eliav <farbere@amazon.com> wrote:
+>>
+>> On 8/31/2022 2:39 PM, Rob Herring wrote:
+>>
+>> On Tue, 30 Aug 2022 19:22:01 +0000, Eliav Farber wrote:
+>>
+>> Add optional "moortec,vm-active-channels" property to define the number
+>> of active channels per VM.
+>>
+>> This shall be useful to avoid exposing sysfs for reading inputs that are
+>> not connected to any voltage source.
+>>
+>> Signed-off-by: Eliav Farber <farbere@amazon.com>
+>> ---
+>> V3 -> V2:
+>> - Add "moortec" prefix to property name.
+>> - Add explanation why this change is needed.
+>>
+>>  .../devicetree/bindings/hwmon/moortec,mr75203.yaml    | 11 +++++++++++
+>>  1 file changed, 11 insertions(+)
+>>
+>>
+>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>
+>> I used dt_binding_check on my changes (I ported it to my kernel).
+>> The error is related to "intel-vm-map" which I did not add.
+>
+> The error is the vendor prefix is not defined in vendor-prefixes.yaml.
 
-I squashed this into the original patch.
+I fixed the vendor prefix error (will be part of v4).
 
-Thanks,
-Guenter
+>> I don't mind fixing it if you wish.
+>> It requires changing:
+>>   intel,vm-map = [03 01 04 ff ff];
+>> to:
+>>   intel,vm-map = /bits/8 <0x03 0x01 0x04 0xff 0xff>;
+>
+> That is not the issue. The issue is the type is unknown because your
+> schema fails and we can't get the type from it. Once your schema
+> passes, this should go away.
+Even after fixing the vendor prefix error I still see this:
+moortec,mr75203.yaml: ignoring, error in schema: properties: intel,vm-map
+moortec,mr75203.example.dtb: pvt@e0680000: intel,vm-map: 
+b'\x03\x01\x04\xff\xff' is not of type 'object', 'array', 'boolean', 'null'
 
->   Documentation/hwmon/emc2305.rst | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/hwmon/emc2305.rst b/Documentation/hwmon/emc2305.rst
-> index 854edab99595..2403dbaf2728 100644
-> --- a/Documentation/hwmon/emc2305.rst
-> +++ b/Documentation/hwmon/emc2305.rst
-> @@ -13,7 +13,7 @@ Supported chips:
->         https://www.microchip.com/en-us/product/EMC2305
->   
->   Description:
-> ------------
-> +------------
->   This driver implements support for Microchip EMC2301/2/3/5 RPM-based PWM Fan Controller.
->   The EMC2305 Fan Controller supports up to 5 independently controlled PWM fan drives.
->   Fan rotation speeds are reported in RPM.
-
+--
+Regards, Eliav
