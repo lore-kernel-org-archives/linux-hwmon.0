@@ -2,77 +2,112 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31668ECAAD1
-	for <linux-hwmon@archiver.kernel.org>; Wed, 31 Aug 2022 12:15:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAED2ECAAD1
+	for <linux-hwmon@archiver.kernel.org>; Wed, 31 Aug 2022 12:17:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbiHaMPx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 31 Aug 2022 08:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
+        id S229732AbiHaMRt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 31 Aug 2022 08:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbiHaMPr (ORCPT
+        with ESMTP id S229518AbiHaMRs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:15:47 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE29190C7E;
-        Wed, 31 Aug 2022 05:15:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661948145; x=1693484145;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9/K4sY/ISZj7uQoVHgNrvGLV0hnzb2nkflnj/eF3v+c=;
-  b=g8Ux43FfUUF8YjmZLDZkdDwNH+MJrPlw2CnS4l+Ri9fQLeIJRGwPbtl0
-   kwa4qin+2D7uHXR9qcBX3erDCObVZe4/oFhMABtOmU6SKa6IUOAny96Rt
-   ELjFIBCIWMUQBnxADJkPQxe14+MTZSEkOQAfsiHG3PdEVjUj7Fv31atR4
-   NPH6YCKUovFoG/UiZdyrYpbxpm5UsuoaceDppOqoiA2LPrKxorAYbVVYC
-   T2znA/IouzxBBEGvXzzgzwQnpL216B1YgFbZkG1DWK/gZTqPyOqEKRsdC
-   Bf6W1vdydqu5hOEZBKWCC2REjDpLlEnBmKnlxqG0jvHExyTK+No8k6USG
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="381729293"
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="381729293"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 05:15:45 -0700
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="589009146"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 05:15:38 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oTMd5-006MuA-0b;
-        Wed, 31 Aug 2022 15:15:35 +0300
-Date:   Wed, 31 Aug 2022 15:15:34 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
-        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
-        amitlavi@amazon.com, almogbs@amazon.com, dkl@amazon.com,
-        rahul.tanwar@linux.intel.com
-Subject: Re: [PATCH v3 19/19] hwmon: (mr75203) fix coding style space errors
-Message-ID: <Yw9Q5krebHnb73vC@smile.fi.intel.com>
-References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-20-farbere@amazon.com>
+        Wed, 31 Aug 2022 08:17:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5B8CEB3F;
+        Wed, 31 Aug 2022 05:17:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F700B82059;
+        Wed, 31 Aug 2022 12:17:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3102C433C1;
+        Wed, 31 Aug 2022 12:17:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661948264;
+        bh=CO+Sz7LAJhdsmtQMBf/CpZLDa2m+oXHpOG6EDh1zmv4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ix2sbtIBzo556qH7pgNCD9Cr0dYRk9diX5SWzbci9PwaW/s4qWcDENqH7q5rvJ/RU
+         Vhh1Bzwfn/RMIuxj39XtdPwkbaziHjGnkkwNeuR7ZwUqu4xnBiVUCWeva28JbW914B
+         +6t9wjTRrGq1KVuE3sXH2FyNqzbz3aiQ43ZJgWVi+U1YTNKtulM9quwmgZAIHfNFYs
+         lLDe4d6LSQW/l8Nx/rgsqawP5/ujTO27EIasS1ue703kGThJhnxgOPf8+7HYjQadqP
+         Zed0pvPZwGK3bMWKZNXePDOuL2vJ9nbUPe8XaSOmUSF+zNKtsgnkp7p7NpofSMhT/B
+         MNZRaFAHssR2A==
+Received: by mail-vk1-f175.google.com with SMTP id b63so3131717vkh.5;
+        Wed, 31 Aug 2022 05:17:44 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1mbFoVAY798+9UR9ZxJ4SdFbodODm6ZW4/Wv+zvnoqgkESyHK/
+        Zvc2YVH2NSmXxyJwgmGGzbzbMREbH/aq4aPxIg==
+X-Google-Smtp-Source: AA6agR7vvn/itEutl10ZadIATfvb5bAUwUWEVlOfeioy9JowfYkjnkIVaB6v1NfPHZMIpmdFmA/1ZfBJp7unYIhxXbA=
+X-Received: by 2002:a1f:2416:0:b0:37c:382c:912a with SMTP id
+ k22-20020a1f2416000000b0037c382c912amr6979458vkk.12.1661948263818; Wed, 31
+ Aug 2022 05:17:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830192212.28570-20-farbere@amazon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220830192212.28570-1-farbere@amazon.com> <20220830192212.28570-9-farbere@amazon.com>
+ <1661945961.480039.3614528.nullmailer@robh.at.kernel.org> <a8557b5a-6e27-2e66-161e-814fc0f69c1d@amazon.com>
+In-Reply-To: <a8557b5a-6e27-2e66-161e-814fc0f69c1d@amazon.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 31 Aug 2022 07:17:32 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+c7DaJFCgeHDsXQT8oqHmPS57S-o_EALz=nHDREhqc7g@mail.gmail.com>
+Message-ID: <CAL_Jsq+c7DaJFCgeHDsXQT8oqHmPS57S-o_EALz=nHDREhqc7g@mail.gmail.com>
+Subject: Re: [PATCH v3 08/19] dt-bindings: hwmon: (mr75203) add "moortec,
+ vm-active-channels" property
+To:     "Farber, Eliav" <farbere@amazon.com>
+Cc:     almogbs@amazon.com, Rahul Tanwar <rtanwar@maxlinear.com>,
+        Talel Shenhar <talel@amazon.com>,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        itamark@amazon.com, amitlavi@amazon.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Chocron <jonnyc@amazon.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>, shellykz@amazon.com,
+        Jean Delvare <jdelvare@suse.com>, shorer@amazon.com,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, dkl@amazon.com,
+        "Hanoch, Uri" <hanochu@amazon.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        "Hawa, Hanna" <hhhawa@amazon.com>,
+        "Krupnik, Ronen" <ronenk@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 07:22:12PM +0000, Eliav Farber wrote:
-> Fix: "ERROR: space required before the open parenthesis '('"
+On Wed, Aug 31, 2022 at 6:53 AM Farber, Eliav <farbere@amazon.com> wrote:
+>
+> On 8/31/2022 2:39 PM, Rob Herring wrote:
+>
+> On Tue, 30 Aug 2022 19:22:01 +0000, Eliav Farber wrote:
+>
+> Add optional "moortec,vm-active-channels" property to define the number
+> of active channels per VM.
+>
+> This shall be useful to avoid exposing sysfs for reading inputs that are
+> not connected to any voltage source.
+>
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> ---
+> V3 -> V2:
+> - Add "moortec" prefix to property name.
+> - Add explanation why this change is needed.
+>
+>  .../devicetree/bindings/hwmon/moortec,mr75203.yaml    | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+>
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>
+> I used dt_binding_check on my changes (I ported it to my kernel).
+> The error is related to "intel-vm-map" which I did not add.
 
-This patch may have other fixes like adding new blank lines (noted in one
-of the patches in the series), etc.
+The error is the vendor prefix is not defined in vendor-prefixes.yaml.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> I don't mind fixing it if you wish.
+> It requires changing:
+>   intel,vm-map = [03 01 04 ff ff];
+> to:
+>   intel,vm-map = /bits/8 <0x03 0x01 0x04 0xff 0xff>;
 
+That is not the issue. The issue is the type is unknown because your
+schema fails and we can't get the type from it. Once your schema
+passes, this should go away.
 
+Rob
