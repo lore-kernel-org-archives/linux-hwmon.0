@@ -2,79 +2,101 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2069EECAAD4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 31 Aug 2022 09:38:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2274BECAAD4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 31 Aug 2022 09:42:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiHaJis (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 31 Aug 2022 05:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
+        id S229854AbiHaJmu convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 31 Aug 2022 05:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiHaJir (ORCPT
+        with ESMTP id S229871AbiHaJmt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:38:47 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3654CCEB26;
-        Wed, 31 Aug 2022 02:38:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661938727; x=1693474727;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jonMZ3l6rEd+wV3XzXM0LDE5/eeSVv24z4EqTQlOWwg=;
-  b=J5JlDKgONMF2hTOgJV+HYtm3p5ufPYzgZErRwFNxRGomrfj2dNHYFa5I
-   wIdmNetezlizSZUjlsptjgWv9OCB4b5mWw8zBFzoLO6WDXpJppopWu49b
-   xYtYPlOVeDB9VFtL8/cI6UpL2TCp9kWqysOWBog8YEFNcTom+KbITxIOd
-   AgGLNRHbMO4y/99eBxvFT/nTAAqzovGIhazakzhzFWPY03iMW52O8ZG1z
-   SvuKxSNSVdccLjhwZw5ZH++c7kxfC5/zuZHQIkvUysNIR5YDIIjz3LE1l
-   z7aLDepUGSCh20AK/2PhPVOI6rQFjWLyi7IqncPmx/xrTxv397d9Kt13f
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="296691649"
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="296691649"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 02:38:46 -0700
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="680371119"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 02:38:42 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oTKBD-006Jcd-0M;
-        Wed, 31 Aug 2022 12:38:39 +0300
-Date:   Wed, 31 Aug 2022 12:38:38 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
+        Wed, 31 Aug 2022 05:42:49 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8549979F0
+        for <linux-hwmon@vger.kernel.org>; Wed, 31 Aug 2022 02:42:48 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oTKF3-0007XE-60; Wed, 31 Aug 2022 11:42:37 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oTKF1-0032Xk-Sl; Wed, 31 Aug 2022 11:42:35 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oTKF1-0004Nl-9s; Wed, 31 Aug 2022 11:42:35 +0200
+Message-ID: <4ab6f79f54ad975d7c21c86c57fa2defbb8c98c0.camel@pengutronix.de>
+Subject: Re: [PATCH v3 14/19] dt-bindings: hwmon: (mr75203) add "moortec,
+ ts-series" property
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     "Farber, Eliav" <farbere@amazon.com>, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org, rtanwar@maxlinear.com,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
-        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
-        amitlavi@amazon.com, almogbs@amazon.com, dkl@amazon.com,
-        rahul.tanwar@linux.intel.com
-Subject: Re: [PATCH v3 02/19] hwmon: (mr75203) fix VM sensor allocation when
- "intel,vm-map" not defined
-Message-ID: <Yw8sHt0WLsEpL4bY@smile.fi.intel.com>
+        linux-kernel@vger.kernel.org
+Cc:     talel@amazon.com, hhhawa@amazon.com, jonnyc@amazon.com,
+        hanochu@amazon.com, ronenk@amazon.com, itamark@amazon.com,
+        shellykz@amazon.com, shorer@amazon.com, amitlavi@amazon.com,
+        almogbs@amazon.com, dkl@amazon.com, andriy.shevchenko@intel.com
+Date:   Wed, 31 Aug 2022 11:42:35 +0200
+In-Reply-To: <f49558fa-e987-145c-425e-0e8a7a9fba5f@amazon.com>
 References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-3-farbere@amazon.com>
+         <20220830192212.28570-15-farbere@amazon.com>
+         <89806ee9a80652d5877ef5c4a86574e82af48da4.camel@pengutronix.de>
+         <f49558fa-e987-145c-425e-0e8a7a9fba5f@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830192212.28570-3-farbere@amazon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 07:21:55PM +0000, Eliav Farber wrote:
-> Bug fix - in case "intel,vm-map" is missing in device-tree ,'num' is set
-> to 0, and no voltage channel infos are allocated.
+On Mi, 2022-08-31 at 12:23 +0300, Farber, Eliav wrote:
+> On 8/31/2022 11:23 AM, Philipp Zabel wrote:
+> > On Di, 2022-08-30 at 19:22 +0000, Eliav Farber wrote:
+> > > Add optional "moortec,ts-series" property to define the temperature
+> > > equation and coefficients that shall be used to convert the digital
+> > > output to value in milli-Celsius.
+> > > Supported series: 5 (default) and 6.
+> > 
+> > Is this the difference between mr75xxx and mr76xxx series?
+> > If so, should be a compatible "moortec,mr76006" instead?
+> > If the temperature equation could be derived from the compatible, this
+> > property would not be necessary.
+> The PVT (Process, Voltage, Temperature) monitoring logic can be
+> constructed from many different sub-blocks:
+> *) CONTROLLER (mr75203) - controlling TS, PD and VM.
+> *) TS (mr74137) - for measuring temperature in ring.
+> *) PD (mr74139) - for measuring IO based transistors.
+> *) VM (mr74138) - for measuring voltage rails across the SoC.
+> *) Ring oscillators (mr76007/mr76008)
+> *) Pre-scalers (mr76006)
+>
+> Besides mr75203 which is digital all other IPs are analog.
+> There is a single mr75203 and there can be several or none of the other
+> units.
 
-Care to provide a Fixes tag for all fixes in your series. Also don't forget to
-start series with fixes followed by cleanups and new features..
+Thank you for the explanation, I think this information would be nice
+to have in a description in moortec,mr75203.yaml.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> The kernel driver is only for the controller (mr75203).
+> The series 5 or 6 is relevant for the TS (mr74137) and not for the
+> controller (mr75203).
+> Each of the analog units can have a different series number (for example
+> we use series 3 of the VM).
+> 
+> That is why I didn't change the compatible of mr75203, and instead added
+> a TS-series parameter.
 
+I see, I mistakenly assumed mr76006 referred to a new controller
+version. This also invalidates my comment on patch 4.
 
+regards
+Philipp
