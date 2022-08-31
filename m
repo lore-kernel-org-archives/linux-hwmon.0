@@ -2,46 +2,46 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A42B6ECAAD1
-	for <linux-hwmon@archiver.kernel.org>; Wed, 31 Aug 2022 12:12:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D92DECAAD1
+	for <linux-hwmon@archiver.kernel.org>; Wed, 31 Aug 2022 12:14:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbiHaMMC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 31 Aug 2022 08:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
+        id S230341AbiHaMOw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 31 Aug 2022 08:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbiHaML6 (ORCPT
+        with ESMTP id S229599AbiHaMOv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:11:58 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDE6D1E2E;
-        Wed, 31 Aug 2022 05:11:55 -0700 (PDT)
+        Wed, 31 Aug 2022 08:14:51 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE034F189;
+        Wed, 31 Aug 2022 05:14:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661947915; x=1693483915;
+  t=1661948084; x=1693484084;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=lWa2PIIJurcrWbijboRRKWuKy75PsrE4Ts6KqX3c3mY=;
-  b=VpULw7K68ivqwHi1sBinAwaYsTiYUghqi5N8QXN5TLJ+sJKnYV6Jmgpy
-   8XgYpbA43Qyf2o9GwPbvWN2IoWFmotUpjAwGVJ6cZmsO9Ozxrn5j4sZAz
-   1lOJwo084Yi2MRKf43GBrFOWtVsjuYT2I6Qrnoi3bX0QoUb/BOVY5u3gC
-   eJkS4Hs7FjuqrqP7RKwSf49MATXJgumlV2Exua08DwCAjLOA/pNT3RJpd
-   lhKQHRzHuCYlLrlTjjmpLxgO53HlSwVe1FVdQExXqVPlQJRRdNEku5sMW
-   sf/7zgzBM//UO4xEOsfZJ4zIoJTx1exy3g11tKsVTAmaUkwF2lnU1ho04
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="293008254"
+  bh=ii7wOXgseh33MqqwvIDAG/cv8mjKfILjmc3KMhH/EP8=;
+  b=YeIuyNcUOPFLKnnUVrlS/hrxOEaHPA9EUwaMJXoMhqfSJpNoUlkDnWX+
+   GCoL1+RJw+ra3+cGp0abUqhWvPhzXzUCBnUFlBLe8EAZnJh7bDv1a7Y7Z
+   na85mIAdPcaZSxixPVpSM5tPFHhqLp6tu0AsKz2eiiVT4rX6xm6s2EhES
+   c5iZDBCkuxyIWAJQTcZ3sYoDg3NHE3zFOybTYNOMUoyT/EoG4XisbxIAe
+   EpVyXwk88EcmE/nEGOpRAD/t4wimnhB/LpEGbj4hI0xGx+qNZY5xokKLt
+   h56wFbeA0QDE9eOz+IbdV6WMVCy4NZOl8nLWxi1Ad+N//wL+rXZyFKztH
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="381729043"
 X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="293008254"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 05:11:55 -0700
+   d="scan'208";a="381729043"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 05:14:43 -0700
 X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="754403975"
+   d="scan'208";a="589008856"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 05:11:50 -0700
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 05:14:38 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oTMZP-006MlS-29;
-        Wed, 31 Aug 2022 15:11:47 +0300
-Date:   Wed, 31 Aug 2022 15:11:47 +0300
+        id 1oTMc7-006Mrc-25;
+        Wed, 31 Aug 2022 15:14:35 +0300
+Date:   Wed, 31 Aug 2022 15:14:35 +0300
 From:   Andy Shevchenko <andriy.shevchenko@intel.com>
 To:     Eliav Farber <farbere@amazon.com>
 Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
@@ -52,65 +52,69 @@ Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
         itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
         amitlavi@amazon.com, almogbs@amazon.com, dkl@amazon.com,
         rahul.tanwar@linux.intel.com
-Subject: Re: [PATCH v3 17/19] hwmon: (mr75203) parse temperature coefficients
- from device-tree
-Message-ID: <Yw9QAxIn10AKaV74@smile.fi.intel.com>
+Subject: Re: [PATCH v3 18/19] hwmon: (mr75203) add debugfs to read and write
+ temperature coefficients
+Message-ID: <Yw9Qq+PIfxgXRIK2@smile.fi.intel.com>
 References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-18-farbere@amazon.com>
+ <20220830192212.28570-19-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830192212.28570-18-farbere@amazon.com>
+In-Reply-To: <20220830192212.28570-19-farbere@amazon.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 07:22:10PM +0000, Eliav Farber wrote:
-> Use thermal coefficients from the device tree if they exist.
-> Otherwise, use default values according to the series (5 or 6).
-> All coefficients can be used or only part of them.
+On Tue, Aug 30, 2022 at 07:22:11PM +0000, Eliav Farber wrote:
+> This change adds debugfs to read and write temperature sensor coefficients
+> - g, h, j and cal5.
 > 
-> The coefficients shall be used for fine tuning the default values since
-> coefficients can vary between product and product.
+> The coefficients can vary between product and product, so it can be very
+> useful to be able to modify them on the fly during the calibration
+> process.
+> 
+> e.g.:
+> 
+> cat /sys/kernel/debug/940f23d0000.pvt/ts_coeff_cal5
+> 4096
+> 
+> echo 83000 > sys/kernel/debug/940f23d0000.pvt/ts_coeff_g
 
 ...
 
-> +	ret = of_property_read_u32(np, "moortec,ts-coeff-h", &coeff_h);
+> +	pvt->dbgfs_dir = debugfs_create_dir(dev_name(dev), NULL);
 
-of_ ?! Ditto for the rest.
-
-> +	if (!ret)
-> +		ts_coeff->h = coeff_h;
-
-...
-
-> +	ret = of_property_read_s32(np, "moortec,ts-coeff-j", &coeff_j);
-> +	if (!ret)
-> +		ts_coeff->j = coeff_j;
-
-You may avoid conditional:
-
-	_property_read_s32(..., "moortec,ts-coeff-j", &ts_coeff->j);
-
-
-...
-
-> +	ret = of_property_read_u32(np, "moortec,ts-coeff-cal5", &coeff_cal5);
-> +	if (!ret) {
-
-> +		if (coeff_cal5 == 0) {
-> +			dev_err(dev, "moortec,ts-coeff-cal5 can't be 0\n");
-> +			return -EINVAL;
-> +		}
-
-Code shouldn't be a YAML validator. Drop this and make sure you have correct
-DT schema.
-
-> +		ts_coeff->cal5 = coeff_cal5;
+> +	if (!pvt->dbgfs_dir) {
+> +		dev_err(dev, "Failed to create dbgfs_dir\n");
+> +		return -EINVAL;
 > +	}
 
-Also see above.
+No, just don't check the return value of debugfs API calls.
+
+> +	debugfs_create_file("ts_coeff_h", 0644, pvt->dbgfs_dir, pvt,
+> +			    &pvt_ts_coeff_h_fops);
+> +	debugfs_create_file("ts_coeff_g", 0644, pvt->dbgfs_dir, pvt,
+> +			    &pvt_ts_coeff_g_fops);
+> +	debugfs_create_file("ts_coeff_j", 0644, pvt->dbgfs_dir, pvt,
+> +			    &pvt_ts_coeff_j_fops);
+> +	debugfs_create_file("ts_coeff_cal5", 0644, pvt->dbgfs_dir,  pvt,
+> +			    &pvt_ts_coeff_cal5_fops);
+
+debugfs has helpers for POD types, use them and shrink your code by ~80%.
+
+...
+
+> +	ret = devm_add_action_or_reset(dev, devm_pvt_ts_dbgfs_remove, pvt);
+> +	if (ret) {
+> +		dev_err(dev, "failed to add action to remove pvt dbgfs (%d)\n",
+> +			ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+
+return devm_add_...
 
 -- 
 With Best Regards,
