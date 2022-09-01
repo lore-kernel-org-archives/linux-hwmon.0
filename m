@@ -2,142 +2,60 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84C9FECAAD4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 31 Aug 2022 19:56:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F3A7ECAAD4
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 02:23:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiHaT4b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 31 Aug 2022 15:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
+        id S232152AbiIACXr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 31 Aug 2022 22:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232072AbiHaT41 (ORCPT
+        with ESMTP id S230056AbiIACXr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 31 Aug 2022 15:56:27 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C0998A6E;
-        Wed, 31 Aug 2022 12:56:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661975779; x=1693511779;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=o4Q3yaPOi4KlTaXD7fEK3bIr7nuLBW2iHpygHPrCyzE=;
-  b=tBlbLw8xsJ1Jqiv+fD6X9cSzOYg88XX1wlnbhckLZei0eX1rCrl04XBn
-   Idc6iy/StBRpbX+5DSgL9VquCrAG3cV7ZWUrRTMhsemLgl4tkUVo9uc0b
-   6zcpDNuYfdmowAhLqklRuenQ1MP0aBEDisUkpD4uZSPmxNvKwL6+pwINw
-   I=;
-X-IronPort-AV: E=Sophos;i="5.93,278,1654560000"; 
-   d="scan'208";a="1050061081"
-Subject: Re: [PATCH v3 08/19] dt-bindings: hwmon: (mr75203) add "moortec,
- vm-active-channels" property
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-7d84505d.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 19:56:00 +0000
-Received: from EX13D27EUB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-7d84505d.us-west-2.amazon.com (Postfix) with ESMTPS id 5A26E81310;
-        Wed, 31 Aug 2022 19:55:58 +0000 (UTC)
-Received: from EX19D019EUB002.ant.amazon.com (10.252.51.33) by
- EX13D27EUB002.ant.amazon.com (10.43.166.103) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Wed, 31 Aug 2022 19:55:57 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX19D019EUB002.ant.amazon.com (10.252.51.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.12; Wed, 31 Aug 2022 19:55:57 +0000
-Received: from [192.168.153.206] (10.85.143.179) by mail-relay.amazon.com
- (10.43.61.243) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Wed, 31 Aug 2022 19:55:52 +0000
-Message-ID: <a6667978-3d26-945f-4bb7-e54f819211fc@amazon.com>
-Date:   Wed, 31 Aug 2022 22:55:52 +0300
+        Wed, 31 Aug 2022 22:23:47 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BB1163B41;
+        Wed, 31 Aug 2022 19:23:45 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R971e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VNu8bK2_1661999014;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VNu8bK2_1661999014)
+          by smtp.aliyun-inc.com;
+          Thu, 01 Sep 2022 10:23:43 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     jdelvare@suse.com
+Cc:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] hwmon: (emc2305) Remove unused including <linux/version.h>
+Date:   Thu,  1 Sep 2022 10:23:32 +0800
+Message-Id: <20220901022332.40248-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <almogbs@amazon.com>, Rahul Tanwar <rtanwar@maxlinear.com>,
-        Talel Shenhar <talel@amazon.com>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        <itamark@amazon.com>, <amitlavi@amazon.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Chocron <jonnyc@amazon.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>, <shellykz@amazon.com>,
-        Jean Delvare <jdelvare@suse.com>, <shorer@amazon.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <dkl@amazon.com>,
-        "Hanoch, Uri" <hanochu@amazon.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        "Hawa, Hanna" <hhhawa@amazon.com>,
-        "Krupnik, Ronen" <ronenk@amazon.com>,
-        "Farber, Eliav" <farbere@amazon.com>
-References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-9-farbere@amazon.com>
- <1661945961.480039.3614528.nullmailer@robh.at.kernel.org>
- <a8557b5a-6e27-2e66-161e-814fc0f69c1d@amazon.com>
- <CAL_Jsq+c7DaJFCgeHDsXQT8oqHmPS57S-o_EALz=nHDREhqc7g@mail.gmail.com>
- <2508ecda-cfd2-96ba-a802-47d25f225dd0@amazon.com>
- <CAL_Jsq+G4afxQ3mDBZQf_d-=twwM9-qRh0Y6ROByo+ti4tk6Pg@mail.gmail.com>
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <CAL_Jsq+G4afxQ3mDBZQf_d-=twwM9-qRh0Y6ROByo+ti4tk6Pg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/31/2022 10:19 PM, Rob Herring wrote:
-> On Wed, Aug 31, 2022 at 12:48 PM Farber, Eliav <farbere@amazon.com> 
-> wrote:
->>
->> On 8/31/2022 3:17 PM, Rob Herring wrote:
->> > On Wed, Aug 31, 2022 at 6:53 AM Farber, Eliav <farbere@amazon.com> 
->> wrote:
->> >>
->> >> On 8/31/2022 2:39 PM, Rob Herring wrote:
->> >>
->> >> On Tue, 30 Aug 2022 19:22:01 +0000, Eliav Farber wrote:
->> >>
->> >> Add optional "moortec,vm-active-channels" property to define the 
->> number
->> >> of active channels per VM.
->> >>
->> >> This shall be useful to avoid exposing sysfs for reading inputs 
->> that are
->> >> not connected to any voltage source.
->> >>
->> >> Signed-off-by: Eliav Farber <farbere@amazon.com>
->> >> ---
->> >> V3 -> V2:
->> >> - Add "moortec" prefix to property name.
->> >> - Add explanation why this change is needed.
->> >>
->> >>  .../devicetree/bindings/hwmon/moortec,mr75203.yaml | 11 +++++++++++
->> >>  1 file changed, 11 insertions(+)
->> >>
->> >>
->> >> My bot found errors running 'make DT_CHECKER_FLAGS=-m 
->> dt_binding_check'
->> >> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->> >>
->> >> I used dt_binding_check on my changes (I ported it to my kernel).
->> >> The error is related to "intel-vm-map" which I did not add.
->> >
->> > The error is the vendor prefix is not defined in vendor-prefixes.yaml.
->>
->> I fixed the vendor prefix error (will be part of v4).
->>
->> >> I don't mind fixing it if you wish.
->> >> It requires changing:
->> >>   intel,vm-map = [03 01 04 ff ff];
->> >> to:
->> >>   intel,vm-map = /bits/8 <0x03 0x01 0x04 0xff 0xff>;
->> >
->> > That is not the issue. The issue is the type is unknown because your
->> > schema fails and we can't get the type from it. Once your schema
->> > passes, this should go away.
->> Even after fixing the vendor prefix error I still see this:
->> moortec,mr75203.yaml: ignoring, error in schema: properties: 
->> intel,vm-map
->
-> You still have an error in the schema. You should see a more specific
-> reason before this message. 
+./drivers/hwmon/emc2305.c: 14 linux/version.h not needed.
 
-Thanks, I found the problem.
-I'm using an old version, and I'm missing this commit you did:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml?h=v6.0-rc3&id=d69c6ddd019f31081cc0232fa8ad8ea1cabdf22c
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2024
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/hwmon/emc2305.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
+index df4c5816f661..e5e96a895549 100644
+--- a/drivers/hwmon/emc2305.c
++++ b/drivers/hwmon/emc2305.c
+@@ -11,7 +11,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_data/emc2305.h>
+ #include <linux/thermal.h>
+-#include <linux/version.h>
+ 
+ static const unsigned short
+ emc2305_normal_i2c[] = { 0x27, 0x2c, 0x2d, 0x2e, 0x2f, 0x4c, 0x4d, I2C_CLIENT_END };
+-- 
+2.20.1.7.g153144c
+
