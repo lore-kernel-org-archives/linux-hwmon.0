@@ -2,110 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 055E1C64991
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 12:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 998C8ECAAD1
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 13:06:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232718AbiIAMsV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Sep 2022 08:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
+        id S233994AbiIANGv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Sep 2022 09:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233523AbiIAMsH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 08:48:07 -0400
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60234C630;
-        Thu,  1 Sep 2022 05:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1662036486; x=1693572486;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=ehNnTGB/3yBLxo2SXEg809giGBqrupHuGcsiJDh+Mns=;
-  b=PQQLP0CKbRKO4bkKttWQPVdLtVEGro3Dvp0Pz9SQ9wIVIhVTDkszozUG
-   lQQ5S/R3QdyX3SerLxt65XP810hEvRdDlYOAKsK24yEofSndEyzICSn3B
-   kdnct/HWV0cpNGQbtc6E/7RD2ngmgIe4llR6q14OYO2FZ8gY8OchNUOxi
-   A=;
-Subject: Re: [PATCH v3 12/19] hwmon: (mr75203) fix voltage equation for negative
- source input
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 12:47:53 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com (Postfix) with ESMTPS id D3918A28E5;
-        Thu,  1 Sep 2022 12:47:51 +0000 (UTC)
-Received: from EX19D013UWA004.ant.amazon.com (10.13.138.207) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 1 Sep 2022 12:47:51 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX19D013UWA004.ant.amazon.com (10.13.138.207) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Thu, 1 Sep 2022 12:47:50 +0000
-Received: from [192.168.93.228] (10.85.143.172) by mail-relay.amazon.com
- (10.43.161.249) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Thu, 1 Sep 2022 12:47:41 +0000
-Message-ID: <a05adc0e-35f8-9e77-9e3e-83de851b651b@amazon.com>
-Date:   Thu, 1 Sep 2022 15:47:39 +0300
+        with ESMTP id S233999AbiIANGb (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 09:06:31 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3541C92F7E
+        for <linux-hwmon@vger.kernel.org>; Thu,  1 Sep 2022 06:00:49 -0700 (PDT)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2819MuYM015367;
+        Thu, 1 Sep 2022 08:59:33 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3japt62bgy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Sep 2022 08:59:33 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 281CxWwS035901
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 1 Sep 2022 08:59:32 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 1 Sep 2022
+ 08:59:31 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Thu, 1 Sep 2022 08:59:31 -0400
+Received: from IST-LT-39247.mshome.net ([10.158.19.28])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 281CxFxI012333;
+        Thu, 1 Sep 2022 08:59:19 -0400
+From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>
+CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        <linux-hwmon@vger.kernel.org>
+Subject: [PATCH v5 0/4] hwmon: Add max31760 fan speed controller
+Date:   Thu, 1 Sep 2022 15:59:02 +0300
+Message-ID: <20220901125906.929-1-Ibrahim.Tilki@analog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-CC:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
-        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
-        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
-        <dkl@amazon.com>, "Farber, Eliav" <farbere@amazon.com>
-References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-13-farbere@amazon.com>
- <Yw9OSJogapyla1Jr@smile.fi.intel.com>
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <Yw9OSJogapyla1Jr@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: D5HXpmQKEUtD_f1dDej9ximmCTvvTGim
+X-Proofpoint-ORIG-GUID: D5HXpmQKEUtD_f1dDej9ximmCTvvTGim
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_08,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ mlxlogscore=866 malwarescore=0 priorityscore=1501 adultscore=0 spamscore=0
+ lowpriorityscore=0 mlxscore=0 phishscore=0 impostorscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209010059
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/31/2022 3:04 PM, Andy Shevchenko wrote:
-> On Tue, Aug 30, 2022 at 07:22:05PM +0000, Eliav Farber wrote:
->> According to Moortec Embedded Voltage Monitor (MEVM) series 3 data 
->> sheet,
->> the minimum input signal is -100mv and maximum input signal is +1000mv.
->> When n was small enough, such that PVT_N_CONST * n < PVT_R_CONST it
->> resulted in n overflowing to a very large number (since n is u32 type).
->>
->> This change fixes the problem by casting n to long and replacing shift
->> right with div operation.
->
-> Fixes tag?
+chages in v5:
+  - add dt-bindings documentation
+  - add maintainer
 
-For v4 I modified the commit message to (hopefully) be more
-understandable:
+changes in v4:
+  - use sysfs_emit instead of sprintf
+  - use kstrtou8 for pwm
+  - use closest match for pwm1_auto_point_temp_hyst
 
-"
-According to Moortec Embedded Voltage Monitor (MEVM) series 3 data
-sheet, the minimum input signal is -100mv and maximum input signal
-is +1000mv.
+changes in v3:
+  - add regmap cache
+  - remove pwm1_auto_point[1-48]_{temp,temp_hyst} attributes
+  - add pwm1_auto_point_temp_hyst attribute
 
-On 64 bit machines sizeof(u32) = 4 and sizeof(long) = 8.
-So when measuring a negative input and n is small enough, such that
-PVT_N_CONST * n < PVT_R_CONST, it results in n overflowing to a very
-large number which is not negative (because 4 MSB bytes of val are 0).
+changes in v2:
+  - remove pulse_per_rev variable in tach_to_rpm
+  - remove temperature max_hyst and crit_hyst
+  - strict value checking for fan_enable and pwm_enable
+  - do not clamp pwm value for Look-up table
+  - add sysfs_attr_init call
+  - add documentation
 
-This change fixes the sign problem and supports negative values by
-casting n to long and replacing shift right with div operation.
-"
+Ibrahim Tilki (4):
+  drivers: hwmon: Add max31760 fan speed controller driver
+  docs: hwmon: add max31760 documentation
+  dt-bindings: hwmon: Add bindings for max31760
+  MAINTAINERS: Add maintainer for hwmon/max31760
 
+ .../bindings/hwmon/adi,max31760.yaml          |  44 ++
+ Documentation/hwmon/max31760.rst              |  67 ++
+ MAINTAINERS                                   |   9 +
+ drivers/hwmon/Kconfig                         |  12 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/max31760.c                      | 594 ++++++++++++++++++
+ 6 files changed, 727 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
+ create mode 100644 Documentation/hwmon/max31760.rst
+ create mode 100644 drivers/hwmon/max31760.c
 
-> ...
->
->>               n &= SAMPLE_DATA_MSK;
->> +
->
-> Unrelated change.
+-- 
+2.36.1
 
-Removed.
-
---
-Thanks, Eliav
