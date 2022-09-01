@@ -2,130 +2,146 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0ACFECAAD8
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 14:55:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28CFDECAAD1
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 14:55:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233998AbiIAOzV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Sep 2022 10:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38200 "EHLO
+        id S234096AbiIAOzY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Sep 2022 10:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233953AbiIAOzT (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 10:55:19 -0400
-X-Greylist: delayed 321 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Sep 2022 07:55:14 PDT
+        with ESMTP id S234053AbiIAOzW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 10:55:22 -0400
 Received: from vorpal.se (vorpal.se [IPv6:2a01:7e00::f03c:91ff:fe73:398e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC922A95D;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7462A97A;
         Thu,  1 Sep 2022 07:55:11 -0700 (PDT)
-Received: by vorpal.se (Postfix) with ESMTPSA id D46C4147F2;
-        Thu,  1 Sep 2022 14:49:50 +0000 (UTC)
+Received: by vorpal.se (Postfix) with ESMTPSA id 524D9142D4;
+        Thu,  1 Sep 2022 14:49:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=vorpal.se; s=2019;
-        t=1662043791; bh=YT5aCybs7L+30oXxHy8U3ElGErnSTqxZvFsnbbgpccY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X2kDiQgQqcHXZ3w4nGIEqz2wzod//VEBgl07yCQorMDo/9xb0ArMV3CvbskE4/bWV
-         gZDbfqOke2gqet6+rxamKAso4eiCF2YjBTVtUjK7AhUoJ3ZmQWccsLPmqInfS4dFRo
-         FJOGrqILib29dvJzrnMD9UOpxZIWbLBfMgt5xisGka4S5W0k1HtOq4HNrFOmV81eNL
-         y2z8wLo8WyyYD2shXAdyDYAGOcfPD0/HQyfwnml2yoVX3EmR+anBvTZdw5f5bJ0rn9
-         jEH8zpHjpDtEIHu28FbdevXEk39Vm2LdHThEEzh+1z4vN21IaTc3Bk1NNdHn8wbFt0
-         VpZ5KSvpYfwaA==
+        t=1662043789; bh=9wAZDEmqI5kmRDrHJpuWqEbZxzWGX24kBv19o987EbQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JhPMOuCfB/zvq+dN0BqcQrjxq+Vwdddanr7DigfHmNhfA7H6JEh+7rJDNY7oMIfue
+         wopxZso0BhY4uQYbK7DlLdUwpzqMroJ4plEvhwEa7GvNoBZZu2XTXXi/C+uo1CDjTV
+         fdyaRatyE+0J7/VUbPnI8ExKBXgtQPhwQ/FEDNiIvJ7GfP/65sWYG1LqvGQjJaxvRt
+         92TENY4b5jXF2KoalivGlC2opHkaPo6lTANMWEzHOHncerUJgUVjOLNbEcxYREkjUS
+         GK/uyZ5QgCi/I+vo4cxlPjKxiU/g40SXhErOG+sPc3LtSbelU5FKTFjNDm1RNMGNMT
+         NUiP47hzgsteQ==
 From:   Arvid Norlander <lkml@vorpal.se>
 To:     platform-driver-x86@vger.kernel.org
 Cc:     Azael Avalos <coproscefalo@gmail.com>, linux-hwmon@vger.kernel.org,
         Arvid Norlander <lkml@vorpal.se>
-Subject: [PATCH 1/2] [RFC] platform/x86: toshiba_acpi: Add fan RPM reading (internals)
-Date:   Thu,  1 Sep 2022 16:49:40 +0200
-Message-Id: <20220901144941.1426407-2-lkml@vorpal.se>
+Subject: [PATCH 0/2] [RFC] platform/x86: toshiba_acpi: HWMON Fan RPM support
+Date:   Thu,  1 Sep 2022 16:49:39 +0200
+Message-Id: <20220901144941.1426407-1-lkml@vorpal.se>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220901144941.1426407-1-lkml@vorpal.se>
-References: <20220901144941.1426407-1-lkml@vorpal.se>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This add the internal feature detection and reading function for fan RPM.
+Fan
+===
 
-The approach is based on tracing ACPI calls using AMLI (a tracer/debugger
-built into ACPI.sys) while using the Windows cooling self-test software.
+Currently /sys/bus/acpi/devices/TOS6208:00/fan allows controlling the fan
+by writing 0 (off) or 1 (on at low speed). However when reading I have
+observed values up to 64 (fan at full speed during prime95 stress test).
 
-The call used is {HCI_GET, 0x45, 0, 1, 0, 0} which returns:
-{0x0, 0x45, fan_rpm, probably_max_rpm, 0x0, 0x0}
+Removing the check for "zero or one" shows that on the Z830 at least 64
+levels do indeed seem possible. In fact higher values can be written.
 
-What is probably the max RPM is not currently used.
+But anything above ~50 seems to max out the RPM.
 
-Signed-off-by: Arvid Norlander <lkml@vorpal.se>
----
- drivers/platform/x86/toshiba_acpi.c | 30 +++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+I don't know how to detect the supported range, so I have not created a
+patch for this. Advice is welcome.
 
-diff --git a/drivers/platform/x86/toshiba_acpi.c b/drivers/platform/x86/toshiba_acpi.c
-index 0fc9e8b8827b..02e3522f4eeb 100644
---- a/drivers/platform/x86/toshiba_acpi.c
-+++ b/drivers/platform/x86/toshiba_acpi.c
-@@ -106,6 +106,7 @@ MODULE_LICENSE("GPL");
- #define HCI_VIDEO_OUT			0x001c
- #define HCI_HOTKEY_EVENT		0x001e
- #define HCI_LCD_BRIGHTNESS		0x002a
-+#define HCI_FAN_RPM			0x0045
- #define HCI_WIRELESS			0x0056
- #define HCI_ACCELEROMETER		0x006d
- #define HCI_COOLING_METHOD		0x007f
-@@ -185,6 +186,7 @@ struct toshiba_acpi_dev {
- 	unsigned int illumination_supported:1;
- 	unsigned int video_supported:1;
- 	unsigned int fan_supported:1;
-+	unsigned int fan_rpm_supported:1;
- 	unsigned int system_event_supported:1;
- 	unsigned int ntfy_supported:1;
- 	unsigned int info_supported:1;
-@@ -1616,6 +1618,29 @@ static const struct proc_ops fan_proc_ops = {
- 	.proc_write	= fan_proc_write,
- };
- 
-+/* Fan RPM */
-+static int get_fan_rpm(struct toshiba_acpi_dev *dev, u32 *rpm)
-+{
-+	u32 in[TCI_WORDS] = { HCI_GET, HCI_FAN_RPM, 0, 1, 0, 0 };
-+	u32 out[TCI_WORDS];
-+	acpi_status status = tci_raw(dev, in, out);
-+
-+	if (ACPI_FAILURE(status)) {
-+		pr_err("ACPI call to get Fan speed failed\n");
-+		return -EIO;
-+	}
-+
-+	if (out[0] == TOS_NOT_SUPPORTED)
-+		return -ENODEV;
-+
-+	if (out[0] == TOS_SUCCESS) {
-+		*rpm = out[2];
-+		return 0;
-+	}
-+
-+	return -EIO;
-+}
-+
- static int keys_proc_show(struct seq_file *m, void *v)
- {
- 	struct toshiba_acpi_dev *dev = m->private;
-@@ -2928,6 +2953,8 @@ static void print_supported_features(struct toshiba_acpi_dev *dev)
- 		pr_cont(" video-out");
- 	if (dev->fan_supported)
- 		pr_cont(" fan");
-+	if (dev->fan_rpm_supported)
-+		pr_cont(" fan-rpm");
- 	if (dev->tr_backlight_supported)
- 		pr_cont(" transflective-backlight");
- 	if (dev->illumination_supported)
-@@ -3157,6 +3184,9 @@ static int toshiba_acpi_add(struct acpi_device *acpi_dev)
- 	ret = get_fan_status(dev, &dummy);
- 	dev->fan_supported = !ret;
- 
-+	ret = get_fan_rpm(dev, &dummy);
-+	dev->fan_rpm_supported = !ret;
-+
- 	toshiba_wwan_available(dev);
- 	if (dev->wwan_supported)
- 		toshiba_acpi_setup_wwan_rfkill(dev);
+
+Fan RPM
+=======
+
+There is a way to read Fan RPM:
+
+#define HCI_FAN_RPM 0x45
+
+This one is weird. On windows I have observed the cooling self test program
+(which supposedly verifies that the cooling is working correctly) calling
+this a few different ways. Here is a summary of what I managed to figure
+out:
+
+HCI_SET, 0x45, 0, 1, 0, 0: This sets the fan to run at max speed, but it
+will not be visible when reading /sys/bus/acpi/devices/TOS6208:00/fan.
+I will refer to this operation as "set-max-fan" below.
+
+The only way I found to stop it running at max RPM is to use HCI_FAN
+(e.g. 0 > /sys/bus/acpi/devices/TOS6208:00/fan or call the ACPI method
+directly).
+
+However the get method is more interesting:
+
+HCI_GET, 0x45, 0, 1, 0, 0 returns: {0x0, 0x45, fan_rpm, 0x1db0, 0x0, 0x0}
+
+I believe fan_rpm is accurate, without any scaling factors needed:
+* It behaves properly (higher value when fan is louder/faster/higher
+  pitched, 0 when fan is off).
+* It matches the value range reported by HwInfo64 on Windows (which seems
+  to be able to read this, I have not looked into how it does that).
+* Unfortunately there is no tool by Toshiba that exposes the numerical
+  value that I can find (that would have been ideal). Nor is it shown in
+  BIOS. The Windows tools "Toshiba PC Health Monitor" reports everything in
+  percentages. Yes even the temperatures!
+* It is definitely a loud and whiny fan, even by laptop standards, so the
+  high reported RPM range of 3540-7600 RPM could make sense. Though it did
+  seem a bit high.
+* Finally, to be sure, I borrowed a tachometer from work. Yes, the fan
+  really spins that fast. Byt it is only 30 mm, so I guess that makes
+  sense.
+
+HCI_GET 0x45, 0, 0, 0, 0 returns: {0x0, 0x45, fan_rpm, 0x0, 0x0, 0x0}
+
+The Windows software does *not* use this variant as far as I have observed.
+It appears to work the same except that it doesn't return 0x1db0 in index 3.
+
+I'm not sure, but I strongly suspect 0x1db0 could be the max RPM (7600).
+The most I have observed when using "set-max-fan" is 0x1da6 (7590 RPM),
+which is very close. Note that this is significantly more than I can get
+using just HCI_FAN, which seems to max out at 0x17ac (6060 RPM).
+
+
+Patches
+=======
+
+I'm not personally particularly interested in user space control of fan
+speed, plus the fact that there is a way to make the fan go faster than
+the *other* max speed makes me wonder about the safety of running the fan
+at that speed for prolonged periods of time. Thus, I have only added a
+read-only hwmon interface for reading the fan RPM.
+
+This is heavily based (read: copy, paste and modify) on the thinkpad_acpi
+hwmon-code. Note that unlike that driver, I do not create a separate
+platform device to be a parent to the hwmon interface. In my testing this
+was un-needed and the ACPI device worked fine as a parent. Should I be
+wrong about this, and there is a good reason to create a separate driver,
+please elucidate me!
+
+I elected to use the same call that the Windows code does, which fetches
+what I believe is the max RPM. I think it is safer to stay as close as
+possible to that code. However I don't currently make use of this value,
+suggestions for where to use it are welcome.
+
+Note! I assume that if the FAN RPM call do not result in an error, that
+it is in fact supported. This may not be true. I would welcome testing by
+anyone who owns a Toshiba laptop!
+
+
+Arvid Norlander (2):
+  platform/x86: toshiba_acpi: Add fan RPM reading (internals)
+  platform/x86: toshiba_acpi: Add fan RPM reading (hwmon interface)
+
+ drivers/platform/x86/Kconfig        |  1 +
+ drivers/platform/x86/toshiba_acpi.c | 79 +++++++++++++++++++++++++++++
+ 2 files changed, 80 insertions(+)
+
+
+base-commit: 1c23f9e627a7b412978b4e852793c5e3c3efc555
 -- 
 2.37.2
 
