@@ -2,266 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA912ECAAD3
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 19:26:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AF5AC6FA81
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 19:47:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234011AbiIAT0R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Sep 2022 15:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
+        id S234221AbiIATrB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Sep 2022 15:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232874AbiIAT0P (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 15:26:15 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544EA4E61C;
-        Thu,  1 Sep 2022 12:25:21 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id f24so15225826plr.1;
-        Thu, 01 Sep 2022 12:25:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=C6sKHTsSE/X9c2+J9QgkAtiQ7L50Tlqyc0fm3w0aWMI=;
-        b=UXoaUTKr0dnbx5dRk4uYqsLaXtX1VUkPS7MAikC1UpGIJ9/S21utmpR2yAEIfv0Mkh
-         5dhw3yp0ZQWk6DrilvAzqqpTrL7DYq5oJ5/bdZjoElSMnfLKN1MIaQkOwaImTlGpZZ2E
-         1lJC1nE21+c+T3KQyVIQyisSPYbpstmFG5uDz4NKalQxYUtZ5vdcc2jteWGoRqyeNq/A
-         ob/m/QL2upUdnwNf17dqLfX6Sp/qYkL2g91CtykNG/x0L59b47TBVprgkMbCswimomkB
-         RAA1vcBqJIPSVzY5yRQppNtOcJEVanrbgrHrSkxxmD043moILv55j8g9hl1Ou5my22tU
-         ykBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=C6sKHTsSE/X9c2+J9QgkAtiQ7L50Tlqyc0fm3w0aWMI=;
-        b=Stl4SLB/NvLyGoj+7PoP0Ke2v8Bt2nP8Ng8u4R3aTgMrH0SK6Ryi0oH9SesgcCXvop
-         u/URhQsdALcp95he7T+dOqugfns8TTgEOhCEihDjpT44Et8AEECm60McnFXgzUkg7PDX
-         mTZ41QiiwOnMBQElgwVZ/3mtb4QvTuvR7Rr3MWBonEf9fHTQs0hv7Si1jm8/HE+pcwEl
-         e0pIdtkqCvIzCOWOPlqaWNMInm2Rm34eNC8ARghidfDp+cDAnVE70+svnS7KQWXeo+W5
-         pxe/8Y2f/wRnVqQr3PHFDtSqNVkOOjqs8AnOuGBsFTTgzQgLs0YxlkugVxMpq11B294L
-         voCA==
-X-Gm-Message-State: ACgBeo1l9iw6pxtSy0Hy0R9dlbsKo2LxD50u1NG5v3WrWdXIE1M14Thq
-        QJ0/vib3+V8szL4b+nrT5VLB04vNhbDukw==
-X-Google-Smtp-Source: AA6agR40dbVSsTjS/+gDWWX+qOQDH8/azaHs9ltdhGtOQ7MpyhUH1OUjwcJajgb490PeQ0lhFq36XA==
-X-Received: by 2002:a17:90a:8b82:b0:1fa:973c:1d34 with SMTP id z2-20020a17090a8b8200b001fa973c1d34mr693556pjn.31.1662060320464;
-        Thu, 01 Sep 2022 12:25:20 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s66-20020a625e45000000b005350ea966c7sm13822199pfb.154.2022.09.01.12.25.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 12:25:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fa3e91f0-fae5-cfed-4656-c7be74e37a74@roeck-us.net>
-Date:   Thu, 1 Sep 2022 12:25:16 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 02/19] hwmon: (mr75203) fix VM sensor allocation when
- "intel, vm-map" not defined
-Content-Language: en-US
+        with ESMTP id S233919AbiIATrA (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 15:47:00 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F6286C05;
+        Thu,  1 Sep 2022 12:46:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662061619; x=1693597619;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=K+qjlCNhhEYa6vAoO0LiHSR2znEMey6RlkEGVK0g59g=;
+  b=je4i8lzInp2R93rbU5Qr55QCWvPZMnwqeICAdfwYiNoU0Q9syi3dCa8a
+   0aVT4zhIThO/2zo/0Otu1br3v/rpt69KwgTf6NJnTNdtTF/L1VdFA/+2B
+   Z6RN0PW9UIY/M0NYDNVD1wscWIA0xV0hoZhwBV06CQKvkZI4pLOrhWzYC
+   0EHdtJc9A4w96aqACCzMbg5nI0wjukZZcadfHx2D6VUa/F8oUHW/5X919
+   ynOlzb0BwjQofEB5aP4ti5U0zO73+KnCoBo9hsQYuTaefCWQ59byzrjJ/
+   9Tx414T8hRxNW2npsxRPyNZpEt4K6hAw2A7MgGJJq9dlpRke9wnreoX/w
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="293390887"
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="293390887"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 12:46:49 -0700
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="645796668"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 12:46:44 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oTq9B-0071NR-1w;
+        Thu, 01 Sep 2022 22:46:41 +0300
+Date:   Thu, 1 Sep 2022 22:46:41 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
 To:     "Farber, Eliav" <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
-        rtanwar@maxlinear.com, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        talel@amazon.com, hhhawa@amazon.com, jonnyc@amazon.com,
-        hanochu@amazon.com, ronenk@amazon.com, itamark@amazon.com,
-        shellykz@amazon.com, shorer@amazon.com, amitlavi@amazon.com,
-        almogbs@amazon.com, dkl@amazon.com, andriy.shevchenko@intel.com
+Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
+        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
+        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
+        amitlavi@amazon.com, almogbs@amazon.com, dkl@amazon.com
+Subject: Re: [PATCH v3 18/19] hwmon: (mr75203) add debugfs to read and write
+ temperature coefficients
+Message-ID: <YxEMIdBMOeDBsu5D@smile.fi.intel.com>
 References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-3-farbere@amazon.com>
- <cddebb5a-3b83-e89d-db00-9a59ddbd6741@roeck-us.net>
- <84a68eff-be64-71ce-1533-1e228d3da2a4@amazon.com>
- <71d6d57c-2165-5fe3-515d-9395022921e2@roeck-us.net>
- <2f5c5828-87b9-f3d2-e3d3-0200adbe830c@amazon.com>
- <20220901144434.GB3477025@roeck-us.net>
- <ceef1c33-1af5-53d1-5e5b-5aeb5d2679ca@amazon.com>
- <a48f6c26-232a-f3ae-01d1-277e5c9800ee@roeck-us.net>
- <3364aecd-c1d0-3929-9f51-4d90549d8731@amazon.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <3364aecd-c1d0-3929-9f51-4d90549d8731@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20220830192212.28570-19-farbere@amazon.com>
+ <Yw9Qq+PIfxgXRIK2@smile.fi.intel.com>
+ <646af681-38b0-1268-3798-c5434ca30bee@amazon.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <646af681-38b0-1268-3798-c5434ca30bee@amazon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/1/22 11:36, Farber, Eliav wrote:
-> On 9/1/2022 8:11 PM, Guenter Roeck wrote:
->> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
->>
->>
->>
->> On 9/1/22 08:24, Farber, Eliav wrote:
->>> On 9/1/2022 5:44 PM, Guenter Roeck wrote:
->>>> On Thu, Sep 01, 2022 at 11:39:58AM +0300, Farber, Eliav wrote:
->>>>> On 8/31/2022 2:48 PM, Guenter Roeck wrote:
->>>>> > On 8/30/22 22:49, Farber, Eliav wrote:
->>>>> > > On 8/31/2022 8:36 AM, Guenter Roeck wrote:
->>>>> > > > On 8/30/22 12:21, Eliav Farber wrote:
->>>>> > > > > Bug fix - in case "intel,vm-map" is missing in device-tree
->>>>> > > > > ,'num' is set
->>>>> > > > > to 0, and no voltage channel infos are allocated.
->>>>> > > > >
->>>>> > > > > Signed-off-by: Eliav Farber <farbere@amazon.com>
->>>>> > > > > ---
->>>>> > > > >   drivers/hwmon/mr75203.c | 28 ++++++++++++----------------
->>>>> > > > >   1 file changed, 12 insertions(+), 16 deletions(-)
->>>>> > > > >
->>>>> > > > > diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
->>>>> > > > > index 046523d47c29..0e29877a1a9c 100644
->>>>> > > > > --- a/drivers/hwmon/mr75203.c
->>>>> > > > > +++ b/drivers/hwmon/mr75203.c
->>>>> > > > > @@ -580,8 +580,6 @@ static int mr75203_probe(struct
->>>>> > > > > platform_device *pdev)
->>>>> > > > >       }
->>>>> > > > >
->>>>> > > > >       if (vm_num) {
->>>>> > > > > -             u32 num = vm_num;
->>>>> > > > > -
->>>>> > > > >               ret = pvt_get_regmap(pdev, "vm", pvt);
->>>>> > > > >               if (ret)
->>>>> > > > >                       return ret;
->>>>> > > > > @@ -594,30 +592,28 @@ static int mr75203_probe(struct
->>>>> > > > > platform_device *pdev)
->>>>> > > > >               ret = device_property_read_u8_array(dev, "intel,vm-map",
->>>>> > > > > pvt->vm_idx, vm_num);
->>>>> > > > >               if (ret) {
->>>>> > > > > -                     num = 0;
->>>>> > > > > +                     /*
->>>>> > > > > +                      * Incase intel,vm-map property is not
->>>>> > > > > defined, we
->>>>> > > > > +                      * assume incremental channel numbers.
->>>>> > > > > +                      */
->>>>> > > > > +                     for (i = 0; i < vm_num; i++)
->>>>> > > > > + pvt->vm_idx[i] = i;
->>>>> > > > >               } else {
->>>>> > > > >                       for (i = 0; i < vm_num; i++)
->>>>> > > > >                               if (pvt->vm_idx[i] >= vm_num ||
->>>>> > > > > - pvt->vm_idx[i] == 0xff) {
->>>>> > > > > - num = i;
->>>>> > > > > + pvt->vm_idx[i] == 0xff)
->>>>> > > > > break;
->>>>> > > >
->>>>> > > > So all vm_idx values from 0x00 to 0xfe would be acceptable ?
->>>>> > > > Does the chip really have that many registers (0x200 + 0x40 +
->>>>> > > > 0x200 * 0xfe) ?
->>>>> > > > Is that documented somewhere ?
->>>>> > > According to the code vm_num is limited to 32 because the mask is
->>>>> > > only 5 bits:
->>>>> > >
->>>>> > > #define VM_NUM_MSK    GENMASK(20, 16)
->>>>> > > #define VM_NUM_SFT    16
->>>>> > > vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
->>>>> > >
->>>>> > > In practice according to the data sheet I have:
->>>>> > > 0 <= VM instances <= 8
->>>>> > >
->>>>> > Sorry, my bad. I misread the patch and thought the first part of
->>>>> > the if statement was removed.
->>>>> >
->>>>> > Anyway, what is the difference between specifying an vm_idx value of
->>>>> > 0xff and not specifying anything ? Or, in other words, taking the dt
->>>>> > example, the difference between
->>>>> >        intel,vm-map = [03 01 04 ff ff];
->>>>> > and
->>>>> >        intel,vm-map = [03 01 04];
->>>>>
->>>>> The actual number of VMs is read from a HW register:
->>>>>     ret = regmap_read(pvt->c_map, PVT_IP_CONFIG, &val);
->>>>>     ...
->>>>>     vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
->>>>>
->>>>> Also, using:
->>>>>     ret = device_property_read_u8_array(dev, "intel,vm-map", vm_idx,
->>>>>                         vm_num);
->>>>> in the driver will fail if vm_num > sizeof array in device-tree.
->>>>>
->>>>> So, if for example vm_num = 5, but you will want to map only 3 of them
->>>>> you most set property to be:
->>>>>     intel,vm-map = [03 01 04 ff ff];
->>>>> otherwise if you set:
->>>>>     intel,vm-map = [03 01 04];
->>>>> it will assume the property doesn't, and will continue the flow in code
->>>>> as if it doesn’t exist (which is not what the user wanted, and before my
->>>>> fix also has a bug).
->>>>
->>>> There should be some error handling to catch this case (ie if the number
->>>> of entries does not match the expected count), or if a value in the array
->>>> is larger or equal to vm_num. Today the latter is silently handled as end
->>>> of entries (similar to 0xff), but that should result in an error.
->>>> This would avoid situations like
->>>>        intel,vm-map = [01 02 03 04 05];
->>>> ie where the person writing the devicetree file accidentally entered
->>>> index values starting with 1 instead of 0. A mismatch between vm_num
->>>> and the number of entries in the array is silently handled as if there
->>>> was no property at all, which is at the very least misleading and
->>>> most definitely unexpected and should also result in an error.
->>>
->>>
->>> I assume it is possible to tell according to the return value, if property
->>> doesn’t exist at all, or if it does exists and size of array in
->>> device-tree is smaller than vm_num.
->>> In [PATCH v3 17/19] Andy wrote that “code shouldn't be a YAML validator.
->>> Drop this and make sure you have correct DT schema” so I’m a bit confused
->>> if code should validate “intel,bm-map” or if it is the user responsibility.
->>> As this property was not added by me, I prefer not to fix it as part of
->>> this series of patches.
->>>
->>
->> You are changing the driver all over the place with 19 patches, including
->> this code, but you don't want to add code that validates the devicetree
->> data ? That seems odd.
->>
-> OK. I have added patch #20 to validate that same VM index doesn't appear
-> more than once in intel,vm-map.
-> 
-> u32 vm_mask = 0;
-> 
-> for (i = 0; i < vm_num; i++) {
->      if (vm_idx[i] >= vm_num || vm_idx[i] == 0xff)
+On Thu, Sep 01, 2022 at 09:54:21AM +0300, Farber, Eliav wrote:
+> On 8/31/2022 3:14 PM, Andy Shevchenko wrote:
+> > On Tue, Aug 30, 2022 at 07:22:11PM +0000, Eliav Farber wrote:
 
-I think "vm_idx[i] >= vm_num && vm_idx[i] != 0xff)
-should also be invalid, ie.
+...
 
-	if (vm_idx[i] == 0xff)
-		break;
-	if (vm_idx[i] >= vm_num)
-		return -EINVAL;
+> > > +���� pvt->dbgfs_dir = debugfs_create_dir(dev_name(dev), NULL);
+> > 
+> > > +���� if (!pvt->dbgfs_dir) {
+> > > +������������ dev_err(dev, "Failed to create dbgfs_dir\n");
+> > > +������������ return -EINVAL;
+> > > +���� }
+> > 
+> > No, just don't check the return value of debugfs API calls.
+> > 
+> Do you mean that I should just do:
+> debugfs_create_dir(dev_name(dev), NULL);
+> Can you please explain why it's OK to ignore the return value?
 
-Thanks,
-Guenter
+Author of the debugfs is speaking:
+https://patchwork.kernel.org/project/linux-wireless/patch/20190122152151.16139-38-gregkh@linuxfoundation.org/
 
->          break;
-> 
->      if (vm_mask & BIT(vm_idx[i])) {
->          dev_err(dev, "Same VM appears more than once in intel,vm-map\n",
->              vm_idx[i]);
->          return EINVAL;
->      }
-> 
->      vm_mask |= BIT(vm_idx[i]);
-> }
-> 
-> 
->>>
->>>> Also, what happens if the devicetree content is something like the
->>>> following ? Would that be valid ?
->>>>        intel,vm-map = [00 01 01 01 01 01];
->>>
->>> If device-tree content would be:
->>>      intel,vm-map = [00 01 01 01 01 01];
->>> and assuming 16 channels for each VM, the hwmon sub-system will expose 90
->>> sysfs to read voltage values.
->>> In practice 16 – 31, 32 – 47, 48 – 63, 64 – 89 will all report the same
->>> input signals for VM1.
->>>
->>
->> Does that make any sense, and is there a valid reason to have a mapping
->> table like the one in this example ?
-> 
-> I can't find any sense in having such a mapping.
-> Anyway the new patch will not allow it to happen.
-> 
-> -- 
-> Regards, Eliav
-> 
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
