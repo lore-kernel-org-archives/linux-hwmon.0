@@ -2,52 +2,53 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0110FECAAD1
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 09:55:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5B10C0502C
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 12:14:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234036AbiIAJzA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Sep 2022 05:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S232956AbiIAMO1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Sep 2022 08:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233997AbiIAJy5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 05:54:57 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607DF133;
-        Thu,  1 Sep 2022 02:54:51 -0700 (PDT)
+        with ESMTP id S231737AbiIAMO0 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 08:14:26 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A68B1157E3;
+        Thu,  1 Sep 2022 05:14:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1662026094; x=1693562094;
+  t=1662034466; x=1693570466;
   h=message-id:date:mime-version:to:cc:references:from:
    in-reply-to:content-transfer-encoding:subject;
-  bh=NX3N/paYyQqUhforgxYacBUvwbAZreQsVJx7Uym+9Mc=;
-  b=AlEW7beam5cKi6q9nIgO9MzwfSNljBYHImX3bgbC5BVDwmDs03s2ujpK
-   zdYHdgGZCIysDlKjhOGcrNS/auEAfvBwxB/Zy4Kid0Ee4Gpuj1R7ilson
-   vHXu0vZN+de77RUNPV7zPxYB09z6fffek82wxpRZzSaSZL4iEpmVquE98
-   4=;
+  bh=/vA7gC+PVHNkG1R/rakP0JdQCUqSGd0Sd7RAHPh/RrE=;
+  b=HmjLhhBDR3/a5jcsZF7TtG6yLsGJZ3ioJRFZadVyogu/NUPMaLG5yqDU
+   sMxvVeULMB97CFobbVruyjkWWC6sOcIDNa9Aurz7Eh3DcBAtXpjHHRmG0
+   EQRPbwqy1KdXJEgRdG/iwTXohQMmJgtbz6Rx1sfvKsnVkfgbJt7ysOXXx
+   I=;
 X-IronPort-AV: E=Sophos;i="5.93,280,1654560000"; 
-   d="scan'208";a="255127260"
-Subject: Re: [PATCH v3 17/19] hwmon: (mr75203) parse temperature coefficients from
- device-tree
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-51ba86d8.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 09:54:35 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2c-51ba86d8.us-west-2.amazon.com (Postfix) with ESMTPS id 00471121491;
-        Thu,  1 Sep 2022 09:54:34 +0000 (UTC)
-Received: from EX19D013UWA001.ant.amazon.com (10.13.138.253) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 1 Sep 2022 09:54:33 +0000
+   d="scan'208";a="1050300137"
+Subject: Re: [PATCH v3 15/19] hwmon: (mr75203) add support for series 6 temperature
+ equation
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 12:14:10 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com (Postfix) with ESMTPS id C5D72A25C2;
+        Thu,  1 Sep 2022 12:14:09 +0000 (UTC)
+Received: from EX19D013UWB004.ant.amazon.com (10.13.138.62) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Thu, 1 Sep 2022 12:14:09 +0000
 Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX19D013UWA001.ant.amazon.com (10.13.138.253) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Thu, 1 Sep 2022 09:54:32 +0000
+ EX19D013UWB004.ant.amazon.com (10.13.138.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.12; Thu, 1 Sep 2022 12:14:09 +0000
 Received: from [192.168.93.228] (10.85.143.172) by mail-relay.amazon.com
  (10.43.161.249) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Thu, 1 Sep 2022 09:54:27 +0000
-Message-ID: <edb52cfe-27c6-547f-962d-cde3a2ef4294@amazon.com>
-Date:   Thu, 1 Sep 2022 12:54:26 +0300
+ Transport; Thu, 1 Sep 2022 12:14:03 +0000
+Message-ID: <7b4baf42-eb8e-ad83-a259-a4a0e4e4ac01@amazon.com>
+Date:   Thu, 1 Sep 2022 15:14:02 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.1
+Content-Language: en-US
 To:     Andy Shevchenko <andriy.shevchenko@intel.com>
 CC:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
@@ -58,76 +59,91 @@ CC:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
         <dkl@amazon.com>, "Farber, Eliav" <farbere@amazon.com>
 References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-18-farbere@amazon.com>
- <Yw9QAxIn10AKaV74@smile.fi.intel.com>
-Content-Language: en-US
+ <20220830192212.28570-16-farbere@amazon.com>
+ <Yw9PTobSRlkh/0i4@smile.fi.intel.com>
 From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <Yw9QAxIn10AKaV74@smile.fi.intel.com>
+In-Reply-To: <Yw9PTobSRlkh/0i4@smile.fi.intel.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/31/2022 3:11 PM, Andy Shevchenko wrote:
-> On Tue, Aug 30, 2022 at 07:22:10PM +0000, Eliav Farber wrote:
->> Use thermal coefficients from the device tree if they exist.
->> Otherwise, use default values according to the series (5 or 6).
->> All coefficients can be used or only part of them.
+On 8/31/2022 3:08 PM, Andy Shevchenko wrote:
+> On Tue, Aug 30, 2022 at 07:22:08PM +0000, Eliav Farber wrote:
+>> The current equation used in code is aligned to series 5:
+>> T = G + H * (n / cal5 - 0.5) + J * F
+>> Where:
+>> G = 60, H = 200, cal5 = 4094, J = -0.1, F = frequency clock in MHz
 >>
->> The coefficients shall be used for fine tuning the default values since
->> coefficients can vary between product and product.
+>> Series 6 has a slightly different equation:
+>> T = G + H * (n / cal5 - 0.5)
+>> and a different set of coefficients:
+>> G = 57.4, H = 249.4, cal5 = 4096
+>>
+>> This change supports equation and coefficients for both series.
+>> (for series 6, J is set to 0).
+>>
+>> The series is determined according to “ts-series” property in device
+>> tree.
+>> If absent, series 5 is assumed to be the default.
 >
 > ...
 >
->> +     ret = of_property_read_u32(np, "moortec,ts-coeff-h", &coeff_h);
+>> -#define PVT_H_CONST          200000
+>> -#define PVT_G_CONST          60000
+>> -#define PVT_J_CONST          -100
+>> -#define PVT_CAL5_CONST               4094
 >
-> of_ ?! Ditto for the rest.
+> You just introduced them patch before. Please, avoid ping-pong style in
+> the same series.
 
 
 Fixed for v4.
-I replaced it with device_property_read_u32().
-
->> +     if (!ret)
->> +             ts_coeff->h = coeff_h;
->
-> ...
->
->> +     ret = of_property_read_s32(np, "moortec,ts-coeff-j", &coeff_j);
->> +     if (!ret)
->> +             ts_coeff->j = coeff_j;
->
-> You may avoid conditional:
->
->        _property_read_s32(..., "moortec,ts-coeff-j", &ts_coeff->j);
-
-
-Fixed for v4.
-I removed the condition.
+I now introduce these defines in patch 13 to avoid modifying the above
+ones and then remove them:
+/* Temperature coefficients for series 5 */
+#define PVT_SERIES5_H_CONST    200000
+#define PVT_SERIES5_G_CONST    60000
+#define PVT_SERIES5_J_CONST    -100
+#define PVT_SERIES5_CAL5_CONST    4094
 
 > ...
 >
->> +     ret = of_property_read_u32(np, "moortec,ts-coeff-cal5", 
->> &coeff_cal5);
->> +     if (!ret) {
+>> +     ret = of_property_read_u32(np, "moortec,ts-series", &series);
 >
->> +             if (coeff_cal5 == 0) {
->> +                     dev_err(dev, "moortec,ts-coeff-cal5 can't be 
->> 0\n");
->> +                     return -EINVAL;
->> +             }
+> of_ ?!
 >
-> Code shouldn't be a YAML validator. Drop this and make sure you have 
-> correct
-> DT schema.
-
+> Be consistent. Either you use OF everywhere, or device property APIs.
+>
 
 Fixed for v4.
-I dropped the validation check.
-The YAML already mentions that it can't be 0.
+Using device_property_read_u32() instead.
 
->> +             ts_coeff->cal5 = coeff_cal5;
+> ...
+>
+>> +     if (ret)
+>> +             series = TEMPERATURE_SENSOR_SERIES_5;
+>> +
+>> +     if (series == TEMPERATURE_SENSOR_SERIES_5) {
+>> +             ts_coeff->h = PVT_SERIES5_H_CONST;
+>> +             ts_coeff->g = PVT_SERIES5_G_CONST;
+>> +             ts_coeff->j = PVT_SERIES5_J_CONST;
+>> +             ts_coeff->cal5 = PVT_SERIES5_CAL5_CONST;
+>> +     } else if (series == TEMPERATURE_SENSOR_SERIES_6) {
+>> +             ts_coeff->h = PVT_SERIES6_H_CONST;
+>> +             ts_coeff->g = PVT_SERIES6_G_CONST;
+>> +             ts_coeff->j = PVT_SERIES6_J_CONST;
+>> +             ts_coeff->cal5 = PVT_SERIES6_CAL5_CONST;
+>> +     } else {
+>> +             dev_err(dev, "invalid temperature sensor series (%u)\n",
+>> +                     series);
+>> +             return -EINVAL;
 >> +     }
+>
+> switch-case? 
+
+Changed to switch-case (will be part of v4).
 
 --
 Thanks, Eliav
