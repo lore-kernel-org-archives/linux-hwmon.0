@@ -2,207 +2,145 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7E29ECAAD1
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 15:28:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83AECECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 15:34:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233807AbiIAP2m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Sep 2022 11:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
+        id S233225AbiIAPez (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Sep 2022 11:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234402AbiIAP2a (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 11:28:30 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D0673928;
-        Thu,  1 Sep 2022 08:28:26 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id j9-20020a17090a3e0900b001fd9568b117so2970380pjc.3;
-        Thu, 01 Sep 2022 08:28:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=wEerm5cbSJvTyiBOsASMxSPS6q8GA3C8ZDCfvaCuHPs=;
-        b=g95jufkFg2xQVNeZJrEE/E24jwvwaduqGGFnYBi3XNqjAM1SI/zdiTMhvsDaDR5H3x
-         C9D6EEFdNd41ZOwKYaagnXo4bxogP5FjzCAlsRT3tywKIt9yorckWVpxRa5tnyjEBfh1
-         ae1Y5GZvCzz11KiRKjTzI+Q1YS9UeWKphzK9GDNpdEehpgL7/Eflaavrpp/UG6VZCUKn
-         yemqWDTsfi7ts9EOFfkcDauHpF4QIpuR4HoYvD6EJTOSk1zGRC1NCBZ8r1Xp7x5dF36h
-         a+/nX62LOKfdwurK6XBhGuj4OVTDcUxgN4z1xa6WxJ1mK5mnmFcJOxf0yOfDddXyYbnX
-         hs8g==
+        with ESMTP id S233576AbiIAPev (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 11:34:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5255027F
+        for <linux-hwmon@vger.kernel.org>; Thu,  1 Sep 2022 08:34:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662046486;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EdU6kcxk31+NfDy/R26HslGdp1j7dLdIqqiHO/JJmC8=;
+        b=XUVMCgmIt7zgb1iQZn7DdvpuhJrMbmVssMFRazT7OQzsFvSO2M31mnm9UMiwfyF1ku4uay
+        QIp13hWRg61FUeF5nIc6kds+VGfLT1OpQznMn96BArBP/ZrY2guSRcAeyUDu5QYPpST1UU
+        cXvWuOHn4gjBh2IYnwYcq+S+2rzvi+I=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-564-gPJYzKOLMya8A-Huf9fJUw-1; Thu, 01 Sep 2022 11:34:45 -0400
+X-MC-Unique: gPJYzKOLMya8A-Huf9fJUw-1
+Received: by mail-ed1-f72.google.com with SMTP id v1-20020a056402348100b00448acc79177so6875036edc.23
+        for <linux-hwmon@vger.kernel.org>; Thu, 01 Sep 2022 08:34:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=wEerm5cbSJvTyiBOsASMxSPS6q8GA3C8ZDCfvaCuHPs=;
-        b=uON7mQgLGOqfdXjHa+vcNyJG1rB8bDFqjTkENHJMyBZKUcGyYcZ2ZF1rHGzDjwPlmY
-         91Eeg3ikjbuhUreVe1QtDCcZKS/yz5JILqRgbJfWqMRTu1aGhILjnfHoEY+F6svMra7Y
-         1EfBdDnk1pkygt/OJZRT5d7zmcLMlGDoXG34Holdnda6D9S5MauGqJ3vKoemSktS+iKF
-         2ulmWZSm1HLJ34hHPrsHWMKiRFEAP/QPXF4swk3B6Dv8dVLFovpr5R4J8IDKddnzq0mJ
-         eTJnGVFmI6Lb/DyRugfDcjrvMQsG9h54CZmo8sBSMD8ilI31rgLlPB4ZzK4ML1f6Yyrn
-         1a4Q==
-X-Gm-Message-State: ACgBeo1IBSCQBryVGWRTVkVU96ikKos+4IGzF2WyDrluAv3VTYGtpxrL
-        XgAsFO+/9pq6sFTjlNTSd+8lpo4JLdmnbQ==
-X-Google-Smtp-Source: AA6agR6x+PwArx26Qef/X/aA+gpcXsed/47WfSQNPZu46hmXulMsd8faOMmju9hcF9RG56Sjs2IQZw==
-X-Received: by 2002:a17:902:c401:b0:16f:b59:85a7 with SMTP id k1-20020a170902c40100b0016f0b5985a7mr30910891plk.115.1662046106097;
-        Thu, 01 Sep 2022 08:28:26 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 14-20020a62190e000000b005366696b735sm13433486pfz.77.2022.09.01.08.28.23
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=EdU6kcxk31+NfDy/R26HslGdp1j7dLdIqqiHO/JJmC8=;
+        b=T5eBfzO5W+QYh75iOvQ/7lcbNtZ6OnfoKmBBZnMxqMbBR7b1lclb3lou3pI05lOqC2
+         WtdsAsqZEWMhu479zrZo8T4+S+pdToVVKXgedBdJHsbGroAXEUwpOtVEPPPU3w3lr4gI
+         rLhy6IKCBqCZuArtfZ6KkqcowjNjp1hdxKa3YrfzLWliQz7APKc54R/iz3fL5mvnJpZV
+         vObuQnYDKJJM7SZsjFAWuNMZQj45DyKdUcDrHHQFtDZOcJG651yPBX3K/lYsl7CwVFAZ
+         U/sNSaQjNZIqgVKyOQPMCcpVfuNLpQEfL0PLBwNvSg28dhLnDQU21+Snb/4eEBucB/vx
+         k0MQ==
+X-Gm-Message-State: ACgBeo0zYyenZElNbBRTf/mh9FtGCjPTNxfGByQYgFA7XO243Rgb7d5F
+        4yaqvVwAaqeKXaExPcvnSlaDDOQGQ3arlEjUp7bOEpNcYIdX2gC8Qn1mjZBGRTjCkyoWWgvVFsw
+        bFr8CRQ6D+UWR6fqlTggC7y4=
+X-Received: by 2002:a17:907:3e06:b0:733:693:600e with SMTP id hp6-20020a1709073e0600b007330693600emr22714946ejc.410.1662046484226;
+        Thu, 01 Sep 2022 08:34:44 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6CGvsVadtU/FKpog77yx9E+0aH5YULUA3W4O38vGBKP5LbcMpEQQEm87QgPg9ZZYddq9+tLA==
+X-Received: by 2002:a17:907:3e06:b0:733:693:600e with SMTP id hp6-20020a1709073e0600b007330693600emr22714935ejc.410.1662046484002;
+        Thu, 01 Sep 2022 08:34:44 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id dy17-20020a05640231f100b0043cc66d7accsm1518518edb.36.2022.09.01.08.34.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 08:28:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c5f0f1c3-4cec-1f68-b83d-5277e18c050f@roeck-us.net>
-Date:   Thu, 1 Sep 2022 08:28:23 -0700
+        Thu, 01 Sep 2022 08:34:43 -0700 (PDT)
+Message-ID: <c23819ae-f7be-d07d-65bc-ea2c56a85b58@redhat.com>
+Date:   Thu, 1 Sep 2022 17:34:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] [RFC] platform/x86: toshiba_acpi: Add fan RPM reading
- (hwmon interface)
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] asus-wmi: Increase FAN_CURVE_BUF_LEN to 32
 Content-Language: en-US
-To:     Arvid Norlander <lkml@vorpal.se>,
-        platform-driver-x86@vger.kernel.org
-Cc:     Azael Avalos <coproscefalo@gmail.com>, linux-hwmon@vger.kernel.org
-References: <20220901144941.1426407-1-lkml@vorpal.se>
- <20220901144941.1426407-3-lkml@vorpal.se>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220901144941.1426407-3-lkml@vorpal.se>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, markgross@kernel.org
+References: <20220828074638.5473-1-luke@ljones.dev>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220828074638.5473-1-luke@ljones.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/1/22 07:49, Arvid Norlander wrote:
-> This expands on the previous commit, exporting the fan RPM via hwmon.
+Hi,
+
+On 8/28/22 09:46, Luke D. Jones wrote:
+> Fix for TUF laptops returning with an -ENOSPC on calling
+> asus_wmi_evaluate_method_buf() when fetching default curves. The TUF method
+> requires at least 32 bytes space.
 > 
-> This will look something like the following when using the "sensors"
-> command from lm_sensors:
+> This also moves and changes the pr_debug() in fan_curve_check_present() to
+> pr_warn() in fan_curve_get_factory_default() so that there is at least some
+> indication in logs of why it fails.
 > 
-> toshiba_acpi_sensors-acpi-0
-> Adapter: ACPI interface
-> fan1:           0 RPM
-> 
-> Signed-off-by: Arvid Norlander <lkml@vorpal.se>
+> Signed-off-by: Luke D. Jones <luke@ljones.dev>
+
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+
 > ---
->   drivers/platform/x86/Kconfig        |  1 +
->   drivers/platform/x86/toshiba_acpi.c | 49 +++++++++++++++++++++++++++++
->   2 files changed, 50 insertions(+)
+>  drivers/platform/x86/asus-wmi.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-> index f2f98e942cf2..9a98974ab8bf 100644
-> --- a/drivers/platform/x86/Kconfig
-> +++ b/drivers/platform/x86/Kconfig
-> @@ -799,6 +799,7 @@ config ACPI_TOSHIBA
->   	depends on ACPI_VIDEO || ACPI_VIDEO = n
->   	depends on RFKILL || RFKILL = n
->   	depends on IIO
-> +	select HWMON
-
-This is wrong. I know other drivers in this directory do it, but it is
-still wrong. It should be something like
-
-	depends on HWMON || HWMON=n
-
-and the code should deal with the conditionals.
-
->   	select INPUT_SPARSEKMAP
->   	help
->   	  This driver adds support for access to certain system settings
-> diff --git a/drivers/platform/x86/toshiba_acpi.c b/drivers/platform/x86/toshiba_acpi.c
-> index 02e3522f4eeb..2b71dac34cf0 100644
-> --- a/drivers/platform/x86/toshiba_acpi.c
-> +++ b/drivers/platform/x86/toshiba_acpi.c
-> @@ -39,6 +39,7 @@
->   #include <linux/i8042.h>
->   #include <linux/acpi.h>
->   #include <linux/dmi.h>
-> +#include <linux/hwmon.h>
->   #include <linux/uaccess.h>
->   #include <linux/miscdevice.h>
->   #include <linux/rfkill.h>
-> @@ -171,6 +172,7 @@ struct toshiba_acpi_dev {
->   	struct miscdevice miscdev;
->   	struct rfkill *wwan_rfk;
->   	struct iio_dev *indio_dev;
-> +	struct device *hwmon_device;
->   
->   	int force_fan;
->   	int last_key_event;
-> @@ -2941,6 +2943,38 @@ static int toshiba_acpi_setup_backlight(struct toshiba_acpi_dev *dev)
->   	return 0;
->   }
->   
-> +
-> +/* HWMON support for fan */
-> +static ssize_t fan_fan1_input_show(struct device *dev,
-> +				   struct device_attribute *attr,
-> +				   char *buf)
-> +{
-> +	u32 value;
-> +	int ret;
-> +
-> +	ret = get_fan_rpm(toshiba_acpi, &value);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sysfs_emit(buf, "%u\n", value);
-> +}
-> +
-> +static DEVICE_ATTR(fan1_input, S_IRUGO, fan_fan1_input_show, NULL);
-> +
-> +static struct attribute *fan_attributes[] = {
-> +	&dev_attr_fan1_input.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group fan_attr_group = {
-> +	.attrs = fan_attributes,
-> +};
-> +
-> +static const struct attribute_group *toshiba_acpi_hwmon_groups[] = {
-> +	&fan_attr_group,
-> +	NULL,
-> +};
-> +
->   static void print_supported_features(struct toshiba_acpi_dev *dev)
->   {
->   	pr_info("Supported laptop features:");
-> @@ -2995,6 +3029,9 @@ static int toshiba_acpi_remove(struct acpi_device *acpi_dev)
->   
->   	remove_toshiba_proc_entries(dev);
->   
-> +	if (dev->hwmon_device)
-> +		hwmon_device_unregister(dev->hwmon_device);
-> +
->   	if (dev->accelerometer_supported && dev->indio_dev) {
->   		iio_device_unregister(dev->indio_dev);
->   		iio_device_free(dev->indio_dev);
-> @@ -3187,6 +3224,18 @@ static int toshiba_acpi_add(struct acpi_device *acpi_dev)
->   	ret = get_fan_rpm(dev, &dummy);
->   	dev->fan_rpm_supported = !ret;
->   
-> +	if (dev->fan_rpm_supported) {
-> +		dev->hwmon_device = hwmon_device_register_with_groups(
-
-New drivers should register using [devm_]hwmon_device_register_with_info().
-
-> +			&dev->acpi_dev->dev, "toshiba_acpi_sensors", NULL,
-> +			toshiba_acpi_hwmon_groups);
-> +		if (IS_ERR(dev->hwmon_device)) {
-> +			ret = PTR_ERR(dev->hwmon_device);
-> +			dev->hwmon_device = NULL;
-> +			pr_err("unable to register hwmon device\n");
-> +			goto error;
-
-The driver works just fine without hwmon, and should not fail to probe
-if hwmon registration fails. It did not fail before this patch was applied
-either, and hwmon is not essential functionality for this driver.
-
-Guenter
-
-> +		}
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+> index 3d9fd58573f9..11203213e00d 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -108,7 +108,7 @@ module_param(fnlock_default, bool, 0444);
+>  #define WMI_EVENT_MASK			0xFFFF
+>  
+>  #define FAN_CURVE_POINTS		8
+> -#define FAN_CURVE_BUF_LEN		(FAN_CURVE_POINTS * 2)
+> +#define FAN_CURVE_BUF_LEN		32
+>  #define FAN_CURVE_DEV_CPU		0x00
+>  #define FAN_CURVE_DEV_GPU		0x01
+>  /* Mask to determine if setting temperature or percentage */
+> @@ -2383,8 +2383,10 @@ static int fan_curve_get_factory_default(struct asus_wmi *asus, u32 fan_dev)
+>  	curves = &asus->custom_fan_curves[fan_idx];
+>  	err = asus_wmi_evaluate_method_buf(asus->dsts_id, fan_dev, mode, buf,
+>  					   FAN_CURVE_BUF_LEN);
+> -	if (err)
+> +	if (err) {
+> +		pr_warn("%s (0x%08x) failed: %d\n", __func__, fan_dev, err);
+>  		return err;
 > +	}
-> +
->   	toshiba_wwan_available(dev);
->   	if (dev->wwan_supported)
->   		toshiba_acpi_setup_wwan_rfkill(dev);
+>  
+>  	fan_curve_copy_from_buf(curves, buf);
+>  	curves->device_id = fan_dev;
+> @@ -2402,9 +2404,6 @@ static int fan_curve_check_present(struct asus_wmi *asus, bool *available,
+>  
+>  	err = fan_curve_get_factory_default(asus, fan_dev);
+>  	if (err) {
+> -		pr_debug("fan_curve_get_factory_default(0x%08x) failed: %d\n",
+> -			 fan_dev, err);
+> -		/* Don't cause probe to fail on devices without fan-curves */
+>  		return 0;
+>  	}
+>  
 
