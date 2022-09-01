@@ -2,130 +2,62 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BAC14ECAAD1
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 06:54:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F2BDC64991
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 07:49:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbiIAGyw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Sep 2022 02:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
+        id S233071AbiIAHtf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Sep 2022 03:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233003AbiIAGyv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 02:54:51 -0400
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF514FDB;
-        Wed, 31 Aug 2022 23:54:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1662015288; x=1693551288;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=1SVd+phahoUIGBOGlWxPC1ufcvnAsdeeOKE5nHDZHUE=;
-  b=WRCVwYpybIuTmwNE6Lpa4cV3qpzRNKGAVc94zTDIg+KxDvleXxlZ6GUl
-   rAPUfVt9M5CW5aV/NB8OsMGOrX1/Y0wNY/UUUVBDltUnJsWVswpRzVjV8
-   ehqhMHZIFhUe/PbgFFb4VFtyvoojTwAJP/ju/Fogs/vw6Ozq554iQIXo7
-   4=;
-X-IronPort-AV: E=Sophos;i="5.93,280,1654560000"; 
-   d="scan'208";a="222563956"
-Subject: Re: [PATCH v3 18/19] hwmon: (mr75203) add debugfs to read and write
- temperature coefficients
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-828bd003.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 06:54:32 +0000
-Received: from EX13D40EUB003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1a-828bd003.us-east-1.amazon.com (Postfix) with ESMTPS id 9F02E80BA7;
-        Thu,  1 Sep 2022 06:54:28 +0000 (UTC)
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX13D40EUB003.ant.amazon.com (10.43.166.128) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 1 Sep 2022 06:54:27 +0000
-Received: from [192.168.93.228] (10.85.143.172) by mail-relay.amazon.com
- (10.43.62.224) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Thu, 1 Sep 2022 06:54:22 +0000
-Message-ID: <646af681-38b0-1268-3798-c5434ca30bee@amazon.com>
-Date:   Thu, 1 Sep 2022 09:54:21 +0300
+        with ESMTP id S232059AbiIAHsM (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 03:48:12 -0400
+Received: from mail.fadrush.pl (mail.fadrush.pl [54.37.225.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329A315739
+        for <linux-hwmon@vger.kernel.org>; Thu,  1 Sep 2022 00:47:02 -0700 (PDT)
+Received: by mail.fadrush.pl (Postfix, from userid 1002)
+        id 987BE22E94; Thu,  1 Sep 2022 07:46:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fadrush.pl; s=mail;
+        t=1662018420; bh=bD6j9gIFU6CLTaCGl0Ow9oeIxtirvTfMeNZSfLEZQ+I=;
+        h=Date:From:To:Subject:From;
+        b=hnBoYJHB61tteyJZm1Pt7BDqBMlLjkicucQgFXuMt6wqmbwagyS6CPphUbuJ0O7yA
+         Tw7z41V8wXj5jCwwfMEsLZ1rqggUsukTZhO9E2kpn0SijKuKA9mP+6jFFf/7SmAsK9
+         AqaTpWAB5Yglw/HVWJusPfv80APAlMr0hK5LrAWi/QKeWRC6tQ7NA6vAnC8gFXJ8kM
+         KYCSezYivo0QIn6uSoslANnBr8Ko87c9LO+WDKCXSRZDt5j9bCV3jIYa/ObYzQJfbx
+         oZiQzhVvG5rW8dcKdHbRNhMWLG9C/Su9hPLQ7wHZQ0YGaR27nYNSkWC2iakh6Mjqap
+         amPPD8mdwJo8w==
+Received: by mail.fadrush.pl for <linux-hwmon@vger.kernel.org>; Thu,  1 Sep 2022 07:46:04 GMT
+Message-ID: <20220901064500-0.1.1d.bqbg.0.e57c0qvcgm@fadrush.pl>
+Date:   Thu,  1 Sep 2022 07:46:04 GMT
+From:   "Jakub Olejniczak" <jakub.olejniczak@fadrush.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: =?UTF-8?Q?Zwi=C4=99kszenie_p=C5=82ynno=C5=9Bci_finansowej?=
+X-Mailer: mail.fadrush.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-CC:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
-        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
-        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
-        <dkl@amazon.com>, "Farber, Eliav" <farbere@amazon.com>
-References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-19-farbere@amazon.com>
- <Yw9Qq+PIfxgXRIK2@smile.fi.intel.com>
-Content-Language: en-US
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <Yw9Qq+PIfxgXRIK2@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/31/2022 3:14 PM, Andy Shevchenko wrote:
-> On Tue, Aug 30, 2022 at 07:22:11PM +0000, Eliav Farber wrote:
->> This change adds debugfs to read and write temperature sensor 
->> coefficients
->> - g, h, j and cal5.
->>
->> The coefficients can vary between product and product, so it can be very
->> useful to be able to modify them on the fly during the calibration
->> process.
->>
->> e.g.:
->>
->> cat /sys/kernel/debug/940f23d0000.pvt/ts_coeff_cal5
->> 4096
->>
->> echo 83000 > sys/kernel/debug/940f23d0000.pvt/ts_coeff_g
->
-> ...
->
->> +     pvt->dbgfs_dir = debugfs_create_dir(dev_name(dev), NULL);
->
->> +     if (!pvt->dbgfs_dir) {
->> +             dev_err(dev, "Failed to create dbgfs_dir\n");
->> +             return -EINVAL;
->> +     }
->
-> No, just don't check the return value of debugfs API calls.
->
-Do you mean that I should just do:
-debugfs_create_dir(dev_name(dev), NULL);
-Can you please explain why it's OK to ignore the return value?
+Dzie=C5=84 dobry,
 
->> +     debugfs_create_file("ts_coeff_h", 0644, pvt->dbgfs_dir, pvt,
->> +                         &pvt_ts_coeff_h_fops);
->> +     debugfs_create_file("ts_coeff_g", 0644, pvt->dbgfs_dir, pvt,
->> +                         &pvt_ts_coeff_g_fops);
->> +     debugfs_create_file("ts_coeff_j", 0644, pvt->dbgfs_dir, pvt,
->> +                         &pvt_ts_coeff_j_fops);
->> +     debugfs_create_file("ts_coeff_cal5", 0644, pvt->dbgfs_dir,  pvt,
->> +                         &pvt_ts_coeff_cal5_fops);
->
-> debugfs has helpers for POD types, use them and shrink your code by ~80%.
->
-Fixed for v4.
-I used debugfs_create_u32() for ts_coeff_h, ts_coeff_g and ts_coeff_j.
-For ts_coeff_cal5 I still use debugfs_create_file() because I must make
-sure it is not set to 0.
+kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, poniewa=C5=BC chcia=C5=82bym za=
+proponowa=C4=87 wygodne rozwi=C4=85zanie, kt=C3=B3re umo=C5=BCliwi Pa=C5=84=
+stwa firmie stabilny rozw=C3=B3j.=20
 
->> +     ret = devm_add_action_or_reset(dev, devm_pvt_ts_dbgfs_remove, 
->> pvt);
->> +     if (ret) {
->> +             dev_err(dev, "failed to add action to remove pvt dbgfs 
->> (%d)\n",
->> +                     ret);
->> +             return ret;
->> +     }
->> +
->> +     return 0;
->
-> return devm_add_...
-Fixed for v4.
+Konkurencyjne otoczenie wymaga ci=C4=85g=C5=82ego ulepszania i poszerzeni=
+a oferty, co z kolei wi=C4=85=C5=BCe si=C4=99 z konieczno=C5=9Bci=C4=85 i=
+nwestowania. Brak odpowiedniego kapita=C5=82u powa=C5=BCnie ogranicza tem=
+po rozwoju firmy.
 
---
-Thanks, Eliav
+Od wielu lat z powodzeniem pomagam firmom w uzyskaniu najlepszej formy fi=
+nansowania z banku oraz UE. Mam sta=C5=82ych Klient=C3=B3w, kt=C3=B3rzy n=
+adal ch=C4=99tnie korzystaj=C4=85 z moich us=C5=82ug, a tak=C5=BCe poleca=
+j=C4=85 je innym.
+
+Czy chcieliby Pa=C5=84stwo skorzysta=C4=87 z pomocy wykwalifikowanego i d=
+o=C5=9Bwiadczonego doradcy finansowego?
+
+
+Pozdrawiam
+Jakub Olejniczak
