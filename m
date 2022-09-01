@@ -2,104 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F8C4ECAAD3
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 19:51:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19DFFECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 20:08:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234650AbiIATvX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Sep 2022 15:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
+        id S232619AbiIAUI4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Sep 2022 16:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbiIATvW (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 15:51:22 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E13D474D9;
-        Thu,  1 Sep 2022 12:51:21 -0700 (PDT)
+        with ESMTP id S229584AbiIAUIy (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 16:08:54 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A77196764;
+        Thu,  1 Sep 2022 13:08:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662061881; x=1693597881;
+  t=1662062934; x=1693598934;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=k5zr5cn7hQsp9fLMDnqTgBbt08cY9uQCohw6Rm0BqxI=;
-  b=ZMvFsflWrWRlRo3AMQ/7bJvN0Ni4CAbAi4XH7R65BTO8iPxrWNOu7CW2
-   a16hubBIqCo4mm1wSerSYY7Po/+5YkgFcG6cy2F3Y7OwCmNJ4KVP1dV5j
-   8U2Ua+vG61kDbEaK2WSN1p6VUPUQ9GBlUCBObA+wjxO6g3XjTpLmX7aaa
-   U5CxIBMO0yzS8pfn8PGITlGNuSOrwlw+jmZ6kqIDjxzW09IYoIihyoDDb
-   /S0zN0SSCg3m7cQepPioMKxfv0zqsD9ElehYZp8t+7a7q+7xSyPBlxX2j
-   q1Zk7kxz6YaBabvggqbBpyxu/z6EE0/FNn4U5oB1vSZRj0Cl4OOYkrn5V
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="294554904"
+   mime-version:in-reply-to;
+  bh=tEaao3foBhQw2Xuc0GTtdg6hbZmqlCpEihIK2n8Jim8=;
+  b=TJayDPsgqEjk5tiHztuG8leDRBg/al8Rz3oAz5XsGuKpf7wwwciSmPgK
+   zzAKKuTDefjKawl21R0tm2BFEGZRecURim/V76lpJgKyzl2ovWDs3RP43
+   vRTSm5k/MrpRiHr8aW06H6CDHswJ57TRD+GE5dM3++Hh9yi9HAlCq1jwO
+   FhQDKE3SwGQkaKEvNYGvVcfzaPcmKXxj1HwlJsuJnh+9jQj0bfZc5ciIi
+   ZPHqukwuLFh6nzjMbjjWCiR9Msi9q5H7LE0r5Xe1TSOTWtP3J6jM786wO
+   wMxzeNNBN74Eq41uNvsAzboWrDa/VFRNBeZzggTeDLNwsqTwCrkFINNK0
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="382115562"
 X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="294554904"
+   d="scan'208";a="382115562"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 12:51:20 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 13:08:53 -0700
 X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="563598121"
+   d="scan'208";a="563603640"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 12:51:15 -0700
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 13:08:48 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oTqBQ-0071RD-3A;
-        Thu, 01 Sep 2022 22:49:00 +0300
-Date:   Thu, 1 Sep 2022 22:49:00 +0300
+        id 1oTqUX-0071pb-2n;
+        Thu, 01 Sep 2022 23:08:45 +0300
+Date:   Thu, 1 Sep 2022 23:08:45 +0300
 From:   Andy Shevchenko <andriy.shevchenko@intel.com>
 To:     "Farber, Eliav" <farbere@amazon.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, jdelvare@suse.com,
-        robh+dt@kernel.org, p.zabel@pengutronix.de, rtanwar@maxlinear.com,
+Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
         jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
         itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
         amitlavi@amazon.com, almogbs@amazon.com, dkl@amazon.com
-Subject: Re: [PATCH v3 02/19] hwmon: (mr75203) fix VM sensor allocation when
- "intel, vm-map" not defined
-Message-ID: <YxEMrF9lpNLiJwiO@smile.fi.intel.com>
+Subject: Re: [PATCH v3 12/19] hwmon: (mr75203) fix voltage equation for
+ negative source input
+Message-ID: <YxERTTubyKb9oy8P@smile.fi.intel.com>
 References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-3-farbere@amazon.com>
- <cddebb5a-3b83-e89d-db00-9a59ddbd6741@roeck-us.net>
- <84a68eff-be64-71ce-1533-1e228d3da2a4@amazon.com>
- <71d6d57c-2165-5fe3-515d-9395022921e2@roeck-us.net>
- <2f5c5828-87b9-f3d2-e3d3-0200adbe830c@amazon.com>
- <20220901144434.GB3477025@roeck-us.net>
- <ceef1c33-1af5-53d1-5e5b-5aeb5d2679ca@amazon.com>
+ <20220830192212.28570-13-farbere@amazon.com>
+ <Yw9OSJogapyla1Jr@smile.fi.intel.com>
+ <a05adc0e-35f8-9e77-9e3e-83de851b651b@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ceef1c33-1af5-53d1-5e5b-5aeb5d2679ca@amazon.com>
+In-Reply-To: <a05adc0e-35f8-9e77-9e3e-83de851b651b@amazon.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 06:24:51PM +0300, Farber, Eliav wrote:
-> On 9/1/2022 5:44 PM, Guenter Roeck wrote:
-> > On Thu, Sep 01, 2022 at 11:39:58AM +0300, Farber, Eliav wrote:
-
-...
-
-> > There should be some error handling to catch this case (ie if the number
-> > of entries does not match the expected count), or if a value in the array
-> > is larger or equal to vm_num. Today the latter is silently handled as end
-> > of entries (similar to 0xff), but that should result in an error.
-> > This would avoid situations like
-> >        intel,vm-map = [01 02 03 04 05];
-> > ie where the person writing the devicetree file accidentally entered
-> > index values starting with 1 instead of 0. A mismatch between vm_num
-> > and the number of entries in the array is silently handled as if there
-> > was no property at all, which is at the very least misleading and
-> > most definitely unexpected and should also result in an error.
+On Thu, Sep 01, 2022 at 03:47:39PM +0300, Farber, Eliav wrote:
+> On 8/31/2022 3:04 PM, Andy Shevchenko wrote:
+> > On Tue, Aug 30, 2022 at 07:22:05PM +0000, Eliav Farber wrote:
+> > > According to Moortec Embedded Voltage Monitor (MEVM) series 3 data
+> > > sheet,
+> > > the minimum input signal is -100mv and maximum input signal is +1000mv.
+> > > When n was small enough, such that PVT_N_CONST * n < PVT_R_CONST it
+> > > resulted in n overflowing to a very large number (since n is u32 type).
+> > > 
+> > > This change fixes the problem by casting n to long and replacing shift
+> > > right with div operation.
+> > 
+> > Fixes tag?
 > 
-> I assume it is possible to tell according to the return value, if property
-> doesn’t exist at all, or if it does exists and size of array in
-> device-tree is smaller than vm_num.
-> In [PATCH v3 17/19] Andy wrote that “code shouldn't be a YAML validator.
-> Drop this and make sure you have correct DT schema” so I’m a bit confused
-> if code should validate “intel,bm-map” or if it is the user responsibility.
-> As this property was not added by me, I prefer not to fix it as part of
-> this series of patches.
+> For v4 I modified the commit message to (hopefully) be more
+> understandable:
+> 
+> "
+> According to Moortec Embedded Voltage Monitor (MEVM) series 3 data
+> sheet, the minimum input signal is -100mv and maximum input signal
+> is +1000mv.
+> 
+> On 64 bit machines sizeof(u32) = 4 and sizeof(long) = 8.
+> So when measuring a negative input and n is small enough, such that
+> PVT_N_CONST * n < PVT_R_CONST, it results in n overflowing to a very
+> large number which is not negative (because 4 MSB bytes of val are 0).
+> 
+> This change fixes the sign problem and supports negative values by
+> casting n to long and replacing shift right with div operation.
+> "
 
-I'm just a messenger of Rob's words. If I'm mistaken I would like Rob to
-correct me.
+What I meant is to add the tag of the commit which this one is fixing.
+We have Fixes tag format for that. You may see how it's done by looking
+into Git history: git log --grep Fixes:
 
 -- 
 With Best Regards,
