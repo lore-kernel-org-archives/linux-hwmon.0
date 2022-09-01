@@ -2,142 +2,203 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CAB1ECAAD3
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 14:58:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31188ECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 15:26:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233986AbiIAO6n (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Sep 2022 10:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S233448AbiIAP0T (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Sep 2022 11:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234488AbiIAO6m (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 10:58:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CE57A533
-        for <linux-hwmon@vger.kernel.org>; Thu,  1 Sep 2022 07:58:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662044320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bE0TdgbHTlPub8+p6QK52e8GGKi3CU/yaDOC4uYWKQc=;
-        b=MbMqew7jKnAwnZSw1KyqruS+AdPl4wnoft7GP5ZSMtyBEyey31y1IqUza/FZW4KEVGlAOK
-        Ru8Oks78N/xQnGs3hiho6SJvS+D9mx5Lk/VPyPZCPWj9gpmwN5HffIq3T0JBCcsUGem/K2
-        /2vDqwLpsfThkHJNZLT0L2/IEsTCG4k=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-571-CwpH2wmvMeyzbrnccbvvKg-1; Thu, 01 Sep 2022 10:58:39 -0400
-X-MC-Unique: CwpH2wmvMeyzbrnccbvvKg-1
-Received: by mail-ej1-f72.google.com with SMTP id qf22-20020a1709077f1600b00741638c5f3cso5975589ejc.23
-        for <linux-hwmon@vger.kernel.org>; Thu, 01 Sep 2022 07:58:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=bE0TdgbHTlPub8+p6QK52e8GGKi3CU/yaDOC4uYWKQc=;
-        b=F7T2SHsIYfAaoTir3d59dOUZI9qZObnRQ3cLZ5ssQFF+nsRSMzwGBOaVkatNp+781v
-         moBNuriV2WzTabnmz83vOgF+Rm/edAyuIQaugmv69O6/1vAc2m52ZfCkW1/lfSSppju8
-         KXrjySy/g1xKTXBO/GJEHV8k3hZL7894//pNkM9wChZ9RoUiiMt/O8nJV5a47H2j1T6i
-         QhRRCa3LTFYv0z7d4SKip6PtON1VXaNhuoM3kxM3UG33hJx3o6BFQJ5jWrzKcKck3nlt
-         CaMbHuVKqBKfXjk8jw6RGcCuscMGbo5FIGccYVPMVHXIhbhREchPzTEnasTD04fqpUiS
-         34zQ==
-X-Gm-Message-State: ACgBeo0RjXD4LACHr/AhztzcxoAC3XxUB2LsnJADhMieXOwiyXe9ISDC
-        upNgSUWPvblLzK2pkkXe41OLF4ZjZNEVfBrapXfoBzy1Glux/hjIPNkZYYiZhBy3hASs499z+5g
-        VlmknJIeSMV/fLunWQivBiYA=
-X-Received: by 2002:a17:906:99c1:b0:6fe:b01d:134 with SMTP id s1-20020a17090699c100b006feb01d0134mr23529858ejn.598.1662044318570;
-        Thu, 01 Sep 2022 07:58:38 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR58ylG7U3rzoPStiTD88Zrl0UoM9RaMtg4Tbq8sHhi5YXMNCfe2Ur7IUrMZc7HoxVjyrPA0Lw==
-X-Received: by 2002:a17:906:99c1:b0:6fe:b01d:134 with SMTP id s1-20020a17090699c100b006feb01d0134mr23529848ejn.598.1662044318384;
-        Thu, 01 Sep 2022 07:58:38 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id o1-20020a170906768100b0073d5e1edd1csm8506873ejm.225.2022.09.01.07.58.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 07:58:37 -0700 (PDT)
-Message-ID: <5bd15802-a269-420c-7071-1cae63fa6070@redhat.com>
-Date:   Thu, 1 Sep 2022 16:58:37 +0200
+        with ESMTP id S231668AbiIAP0O (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 11:26:14 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F86048EA3;
+        Thu,  1 Sep 2022 08:25:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1662045912; x=1693581912;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=ThCcDc02Fnh0N75Y6vq9PwesblySqNiNxskJBN7lQ4U=;
+  b=GFA/tvJU6WRLkpIsT5WYRhqGyJYbRH8EgfXanO0RdHZkBoPts2btoSBz
+   ZKIS7fCk/cK5N1HFVkARVcvvzhjmUIyncYRmkrLUza1YFXH1jLccm2CCA
+   /eerQG4cmNI9tAxKGRFKPN4jJQKskoRAFCf5x2bXLbCAfyzpIXGmachoV
+   Q=;
+Subject: Re: [PATCH v3 02/19] hwmon: (mr75203) fix VM sensor allocation when "intel,
+ vm-map" not defined
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-7a21ed79.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 15:25:00 +0000
+Received: from EX13D37EUA003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-7a21ed79.us-east-1.amazon.com (Postfix) with ESMTPS id C9F0F22005B;
+        Thu,  1 Sep 2022 15:24:57 +0000 (UTC)
+Received: from EX19D005EUA002.ant.amazon.com (10.252.50.11) by
+ EX13D37EUA003.ant.amazon.com (10.43.165.7) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Thu, 1 Sep 2022 15:24:56 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX19D005EUA002.ant.amazon.com (10.252.50.11) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.12; Thu, 1 Sep 2022 15:24:56 +0000
+Received: from [192.168.93.228] (10.85.143.172) by mail-relay.amazon.com
+ (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Thu, 1 Sep 2022 15:24:51 +0000
+Message-ID: <ceef1c33-1af5-53d1-5e5b-5aeb5d2679ca@amazon.com>
+Date:   Thu, 1 Sep 2022 18:24:51 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] asus-wmi: Increase FAN_CURVE_BUF_LEN to 32
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>,
+        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
+        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
+        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
+        <dkl@amazon.com>, <andriy.shevchenko@intel.com>,
+        "Farber, Eliav" <farbere@amazon.com>
+References: <20220830192212.28570-1-farbere@amazon.com>
+ <20220830192212.28570-3-farbere@amazon.com>
+ <cddebb5a-3b83-e89d-db00-9a59ddbd6741@roeck-us.net>
+ <84a68eff-be64-71ce-1533-1e228d3da2a4@amazon.com>
+ <71d6d57c-2165-5fe3-515d-9395022921e2@roeck-us.net>
+ <2f5c5828-87b9-f3d2-e3d3-0200adbe830c@amazon.com>
+ <20220901144434.GB3477025@roeck-us.net>
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "Luke D. Jones" <luke@ljones.dev>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, markgross@kernel.org
-References: <20220828074638.5473-1-luke@ljones.dev>
- <20220829133556.GA3766826@roeck-us.net>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220829133556.GA3766826@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <20220901144434.GB3477025@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi All,
-
-On 8/29/22 15:35, Guenter Roeck wrote:
-> On Sun, Aug 28, 2022 at 07:46:38PM +1200, Luke D. Jones wrote:
->> Fix for TUF laptops returning with an -ENOSPC on calling
->> asus_wmi_evaluate_method_buf() when fetching default curves. The TUF method
->> requires at least 32 bytes space.
+On 9/1/2022 5:44 PM, Guenter Roeck wrote:
+> On Thu, Sep 01, 2022 at 11:39:58AM +0300, Farber, Eliav wrote:
+>> On 8/31/2022 2:48 PM, Guenter Roeck wrote:
+>> > On 8/30/22 22:49, Farber, Eliav wrote:
+>> > > On 8/31/2022 8:36 AM, Guenter Roeck wrote:
+>> > > > On 8/30/22 12:21, Eliav Farber wrote:
+>> > > > > Bug fix - in case "intel,vm-map" is missing in device-tree
+>> > > > > ,'num' is set
+>> > > > > to 0, and no voltage channel infos are allocated.
+>> > > > >
+>> > > > > Signed-off-by: Eliav Farber <farbere@amazon.com>
+>> > > > > ---
+>> > > > >   drivers/hwmon/mr75203.c | 28 ++++++++++++----------------
+>> > > > >   1 file changed, 12 insertions(+), 16 deletions(-)
+>> > > > >
+>> > > > > diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+>> > > > > index 046523d47c29..0e29877a1a9c 100644
+>> > > > > --- a/drivers/hwmon/mr75203.c
+>> > > > > +++ b/drivers/hwmon/mr75203.c
+>> > > > > @@ -580,8 +580,6 @@ static int mr75203_probe(struct
+>> > > > > platform_device *pdev)
+>> > > > >       }
+>> > > > >
+>> > > > >       if (vm_num) {
+>> > > > > -             u32 num = vm_num;
+>> > > > > -
+>> > > > >               ret = pvt_get_regmap(pdev, "vm", pvt);
+>> > > > >               if (ret)
+>> > > > >                       return ret;
+>> > > > > @@ -594,30 +592,28 @@ static int mr75203_probe(struct
+>> > > > > platform_device *pdev)
+>> > > > >               ret = device_property_read_u8_array(dev, 
+>> "intel,vm-map",
+>> > > > > pvt->vm_idx, vm_num);
+>> > > > >               if (ret) {
+>> > > > > -                     num = 0;
+>> > > > > +                     /*
+>> > > > > +                      * Incase intel,vm-map property is not
+>> > > > > defined, we
+>> > > > > +                      * assume incremental channel numbers.
+>> > > > > +                      */
+>> > > > > +                     for (i = 0; i < vm_num; i++)
+>> > > > > + pvt->vm_idx[i] = i;
+>> > > > >               } else {
+>> > > > >                       for (i = 0; i < vm_num; i++)
+>> > > > >                               if (pvt->vm_idx[i] >= vm_num ||
+>> > > > > - pvt->vm_idx[i] == 0xff) {
+>> > > > > -                                     num = i;
+>> > > > > + pvt->vm_idx[i] == 0xff)
+>> > > > >                                       break;
+>> > > >
+>> > > > So all vm_idx values from 0x00 to 0xfe would be acceptable ?
+>> > > > Does the chip really have that many registers (0x200 + 0x40 +
+>> > > > 0x200 * 0xfe) ?
+>> > > > Is that documented somewhere ?
+>> > > According to the code vm_num is limited to 32 because the mask is
+>> > > only 5 bits:
+>> > >
+>> > > #define VM_NUM_MSK    GENMASK(20, 16)
+>> > > #define VM_NUM_SFT    16
+>> > > vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
+>> > >
+>> > > In practice according to the data sheet I have:
+>> > > 0 <= VM instances <= 8
+>> > >
+>> > Sorry, my bad. I misread the patch and thought the first part of
+>> > the if statement was removed.
+>> >
+>> > Anyway, what is the difference between specifying an vm_idx value of
+>> > 0xff and not specifying anything ? Or, in other words, taking the dt
+>> > example, the difference between
+>> >        intel,vm-map = [03 01 04 ff ff];
+>> > and
+>> >        intel,vm-map = [03 01 04];
 >>
->> This also moves and changes the pr_debug() in fan_curve_check_present() to
->> pr_warn() in fan_curve_get_factory_default() so that there is at least some
->> indication in logs of why it fails.
+>> The actual number of VMs is read from a HW register:
+>>     ret = regmap_read(pvt->c_map, PVT_IP_CONFIG, &val);
+>>     ...
+>>     vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
 >>
->> Signed-off-by: Luke D. Jones <luke@ljones.dev>
->> ---
->>  drivers/platform/x86/asus-wmi.c | 9 ++++-----
->>  1 file changed, 4 insertions(+), 5 deletions(-)
+>> Also, using:
+>>     ret = device_property_read_u8_array(dev, "intel,vm-map", vm_idx,
+>>                         vm_num);
+>> in the driver will fail if vm_num > sizeof array in device-tree.
 >>
->> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
->> index 3d9fd58573f9..11203213e00d 100644
->> --- a/drivers/platform/x86/asus-wmi.c
->> +++ b/drivers/platform/x86/asus-wmi.c
->> @@ -108,7 +108,7 @@ module_param(fnlock_default, bool, 0444);
->>  #define WMI_EVENT_MASK			0xFFFF
->>  
->>  #define FAN_CURVE_POINTS		8
->> -#define FAN_CURVE_BUF_LEN		(FAN_CURVE_POINTS * 2)
->> +#define FAN_CURVE_BUF_LEN		32
->>  #define FAN_CURVE_DEV_CPU		0x00
->>  #define FAN_CURVE_DEV_GPU		0x01
->>  /* Mask to determine if setting temperature or percentage */
->> @@ -2383,8 +2383,10 @@ static int fan_curve_get_factory_default(struct asus_wmi *asus, u32 fan_dev)
->>  	curves = &asus->custom_fan_curves[fan_idx];
->>  	err = asus_wmi_evaluate_method_buf(asus->dsts_id, fan_dev, mode, buf,
->>  					   FAN_CURVE_BUF_LEN);
->> -	if (err)
->> +	if (err) {
->> +		pr_warn("%s (0x%08x) failed: %d\n", __func__, fan_dev, err);
->>  		return err;
->> +	}
->>  
->>  	fan_curve_copy_from_buf(curves, buf);
->>  	curves->device_id = fan_dev;
->> @@ -2402,9 +2404,6 @@ static int fan_curve_check_present(struct asus_wmi *asus, bool *available,
->>  
->>  	err = fan_curve_get_factory_default(asus, fan_dev);
->>  	if (err) {
->> -		pr_debug("fan_curve_get_factory_default(0x%08x) failed: %d\n",
->> -			 fan_dev, err);
->> -		/* Don't cause probe to fail on devices without fan-curves */
-> 
-> The pr_warn() should be here. If you want to have a message from the call
-> in fan_curve_enable_store(), add dev_err() there.
+>> So, if for example vm_num = 5, but you will want to map only 3 of them
+>> you most set property to be:
+>>     intel,vm-map = [03 01 04 ff ff];
+>> otherwise if you set:
+>>     intel,vm-map = [03 01 04];
+>> it will assume the property doesn't, and will continue the flow in code
+>> as if it doesn’t exist (which is not what the user wanted, and before my
+>> fix also has a bug).
+>
+> There should be some error handling to catch this case (ie if the number
+> of entries does not match the expected count), or if a value in the array
+> is larger or equal to vm_num. Today the latter is silently handled as end
+> of entries (similar to 0xff), but that should result in an error.
+> This would avoid situations like
+>        intel,vm-map = [01 02 03 04 05];
+> ie where the person writing the devicetree file accidentally entered
+> index values starting with 1 instead of 0. A mismatch between vm_num
+> and the number of entries in the array is silently handled as if there
+> was no property at all, which is at the very least misleading and
+> most definitely unexpected and should also result in an error.
 
-Guenter I can understand where you are coming from with the warn vs err
-thing but IMHO that is a minor concern and I'm actually a fan of pushing
-error logging closer to the first failing call so that we only have
-one place to log the error instead of having to log it separately in
-all the callers.
 
-So I'm going to take this patch as is.
+I assume it is possible to tell according to the return value, if property
+doesn’t exist at all, or if it does exists and size of array in
+device-tree is smaller than vm_num.
+In [PATCH v3 17/19] Andy wrote that “code shouldn't be a YAML validator.
+Drop this and make sure you have correct DT schema” so I’m a bit confused
+if code should validate “intel,bm-map” or if it is the user responsibility.
+As this property was not added by me, I prefer not to fix it as part of
+this series of patches.
 
-Regards,
 
-Hans
+> Also, what happens if the devicetree content is something like the
+> following ? Would that be valid ?
+>        intel,vm-map = [00 01 01 01 01 01];
 
+If device-tree content would be:
+     intel,vm-map = [00 01 01 01 01 01];
+and assuming 16 channels for each VM, the hwmon sub-system will expose 90
+sysfs to read voltage values.
+In practice 16 – 31, 32 – 47, 48 – 63, 64 – 89 will all report the same
+input signals for VM1.
+
+--
+Regards, Eliav
