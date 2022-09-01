@@ -2,125 +2,103 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62005ECAAD1
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 13:06:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5D57C0502C
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Sep 2022 13:15:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234117AbiIANGx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Sep 2022 09:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
+        id S233850AbiIANPD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Sep 2022 09:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234011AbiIANGc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 09:06:32 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD629E693
-        for <linux-hwmon@vger.kernel.org>; Thu,  1 Sep 2022 06:00:54 -0700 (PDT)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 281CJEU0023992;
-        Thu, 1 Sep 2022 08:59:41 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3j7g67thx4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Sep 2022 08:59:41 -0400
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 281CxeEU035920
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 1 Sep 2022 08:59:40 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 1 Sep 2022
- 08:59:39 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Thu, 1 Sep 2022 08:59:39 -0400
-Received: from IST-LT-39247.mshome.net ([10.158.19.28])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 281CxFxL012333;
-        Thu, 1 Sep 2022 08:59:31 -0400
-From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>
-CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        <linux-hwmon@vger.kernel.org>
-Subject: [PATCH v5 3/4] dt-bindings: hwmon: Add bindings for max31760
-Date:   Thu, 1 Sep 2022 15:59:05 +0300
-Message-ID: <20220901125906.929-4-Ibrahim.Tilki@analog.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220901125906.929-1-Ibrahim.Tilki@analog.com>
-References: <20220901125906.929-1-Ibrahim.Tilki@analog.com>
+        with ESMTP id S233915AbiIANOk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Sep 2022 09:14:40 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6516BCF1;
+        Thu,  1 Sep 2022 06:13:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1662037982; x=1693573982;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=K4Ki6DT09Ff4lH/DOomelev8LgCFLE5AfE5kHY7YHSs=;
+  b=szngYYs9DgKIoZ5PF+sbjdxFt9wtqPiEIdd0167mUar8Yzs8FPJXOLCz
+   5MHjPmSsKocE0xAARQlF0Z+flsqniPJ+1Hoyj0Dv78AxBbyTZcamA3UtW
+   kaZyuJ+Vu/m1Z8DL+nYAtwqNF4bvCqB0aJCyuANI5s/KJzpSWTiv99wEj
+   I=;
+X-IronPort-AV: E=Sophos;i="5.93,280,1654560000"; 
+   d="scan'208";a="125767607"
+Subject: Re: [PATCH v3 06/19] hwmon: (mr75203) fix multi-channel voltage reading
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-1box-2b-3386f33d.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 13:12:43 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-1box-2b-3386f33d.us-west-2.amazon.com (Postfix) with ESMTPS id 26F10A279D;
+        Thu,  1 Sep 2022 13:12:41 +0000 (UTC)
+Received: from EX19D013UWA001.ant.amazon.com (10.13.138.253) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Thu, 1 Sep 2022 13:12:40 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX19D013UWA001.ant.amazon.com (10.13.138.253) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Thu, 1 Sep 2022 13:12:40 +0000
+Received: from [192.168.93.228] (10.85.143.172) by mail-relay.amazon.com
+ (10.43.161.249) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Thu, 1 Sep 2022 13:12:34 +0000
+Message-ID: <319ee468-dcdc-51c1-38a3-b67d5048000e@amazon.com>
+Date:   Thu, 1 Sep 2022 16:12:34 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: mAUKm1w1mWqgSOrx5UhOD4otMwjxWtsb
-X-Proofpoint-GUID: mAUKm1w1mWqgSOrx5UhOD4otMwjxWtsb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-01_08,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 phishscore=0 mlxlogscore=926 malwarescore=0
- impostorscore=0 mlxscore=0 adultscore=0 bulkscore=0 suspectscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209010059
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+CC:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
+        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
+        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
+        <dkl@amazon.com>, "Farber, Eliav" <farbere@amazon.com>
+References: <20220830192212.28570-1-farbere@amazon.com>
+ <20220830192212.28570-7-farbere@amazon.com>
+ <Yw8t8v9rdeR4wAIK@smile.fi.intel.com>
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <Yw8t8v9rdeR4wAIK@smile.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Adding bindings for Analog Devices MAX31760 Fan-Speed Controller
+On 8/31/2022 12:46 PM, Andy Shevchenko wrote:
+> On Tue, Aug 30, 2022 at 07:21:59PM +0000, Eliav Farber wrote:
+>> Fix voltage allocation and reading to support all channels in all VMs.
+>> Prior to this change allocation and reading were done only for the first
+>> channel in each VM.
+>> This change counts the total number of channels for allocation, and 
+>> takes
+>> into account the channel offset when reading the sample data register.
+>
+> ...
+>
+>>       struct pvt_device *pvt = dev_get_drvdata(dev);
+>>       struct regmap *v_map = pvt->v_map;
+>>       u32 n, stat;
+>> -     u8 vm_idx;
+>> +     u8 vm_idx, ch_idx;
+>
+> Can you keep it sorted by line length?
 
-Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
----
- .../bindings/hwmon/adi,max31760.yaml          | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
+Fixed.
 
-diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31760.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
-new file mode 100644
-index 000000000..003ec1317
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/adi,max31760.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Analog Devices MAX31760 Fan-Speed Controller
-+
-+maintainers:
-+  - Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-+
-+description: |
-+  Analog Devices MAX31760 Fan-Speed Controller
-+  https://datasheets.maximintegrated.com/en/ds/MAX31760.pdf
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,max31760
-+
-+  reg:
-+    description: |
-+      I2C address of slave device.
-+    items:
-+      minimum: 0x50
-+      maximum: 0x57
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c0 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        max31760@50 {
-+                reg = <0x50>;
-+                compatible = "adi,max31760";
-+        };
-+    };
--- 
-2.36.1
+>>       int ret;
+>
+> ...
+>
+>>       const struct hwmon_channel_info **pvt_info;
+>> -     u32 ts_num, vm_num, pd_num, val, index, i;
+>> +     u32 ts_num, vm_num, pd_num, ch_num, val, index, i;
+>
+> Ditto. 
+Fixed.
 
+--
+Thanks, Eliav
