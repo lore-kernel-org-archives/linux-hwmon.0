@@ -2,89 +2,152 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F13DBECAAD5
-	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Sep 2022 14:52:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1026CC001B5
+	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Sep 2022 17:18:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237059AbiIBOwP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 2 Sep 2022 10:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
+        id S235710AbiIBRSm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 2 Sep 2022 13:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236981AbiIBOvx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Sep 2022 10:51:53 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE6B260;
-        Fri,  2 Sep 2022 07:15:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662128109; x=1693664109;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=c6y+jVROuQJauil5q7w8LAFf1FLBa2IkXRbAj2IPLiE=;
-  b=c9KAZNsf/IbNGUQxTcwnA6fwrdxzdR9wgA63FwTRTFFF+v7FLaTDVXTk
-   GRPBuwx2DSGR8inX+S3XnIlXg7n4lSaUGS5qljTzBeEzSaxDNlHtJnl1S
-   Q4zYOFwe6bkGG47gezp+tfkcIrQMeYF7Ct/idIJRyjbR1uWj9Hip7jZ//
-   XtIaT2J3rMrQI+a/PVgSeos8wcKQU/S8Ll3jU6JJpfTJyduVgpCIs6W8x
-   +2W7tqUplYrsihU3NPMPaqLoycGqIl9/H3OEUtlJFdvFpvHd6jVDUFSXM
-   G9Gc9BlmAdrGMJDdft23LpFSUCV5UgIL/8p2C7sbgxak129mqGvNq3qT1
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="294727926"
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="294727926"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:15:08 -0700
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="755273094"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:15:04 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oU7Rl-007Q5R-1P;
-        Fri, 02 Sep 2022 17:15:01 +0300
-Date:   Fri, 2 Sep 2022 17:15:01 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     "Farber, Eliav" <farbere@amazon.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
-        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
-        amitlavi@amazon.com, almogbs@amazon.com, dkl@amazon.com
-Subject: Re: [PATCH v3 02/19] hwmon: (mr75203) fix VM sensor allocation when
- "intel, vm-map" not defined
-Message-ID: <YxIP5aZv16WFPC4P@smile.fi.intel.com>
-References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-3-farbere@amazon.com>
- <Yw8sHt0WLsEpL4bY@smile.fi.intel.com>
- <30729f4c-895f-235a-3342-93669160201c@amazon.com>
+        with ESMTP id S234963AbiIBRSl (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Sep 2022 13:18:41 -0400
+Received: from vorpal.se (vorpal.se [IPv6:2a01:7e00::f03c:91ff:fe73:398e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6F21151B7;
+        Fri,  2 Sep 2022 10:18:39 -0700 (PDT)
+Received: by vorpal.se (Postfix) with ESMTPSA id 22DEB142D4;
+        Fri,  2 Sep 2022 17:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=vorpal.se; s=2019;
+        t=1662139117; bh=DjSd4kSuTsFRl7nABnQE8EUqNlXBFwLDuMwx6RmVyGs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RzOdlxTo8sUHpsvfIp7JmORUqjsL4z/NEEmQXL35VCn4ZSMPDAWyQgul2+yCNlyax
+         KmZe/FJdqQxbaErPd+gfcgoi+AWGselrn/fvXv/mSX8ynfR9zywTH4lUBd1rXCfjlZ
+         zL15HrnoQBjql4/06S0iYUfAFVIM8P5jdvCP4p8I1IyNUr663Es/XH/gl7AFdg9Lus
+         dvwHgGMEdwsWgsWy3qMMOQxprNFaBggVP04f1OUwOZFfr0knUZDr/5HDdTPadUVY7D
+         5oMpvf6R1ChSeEw1rx1aYEkuTfEL1pYcewVPbw7zaKBKbR/AIcLLcx6ivawQittNDB
+         wZa4ShY+L04ig==
+Message-ID: <139e7c94-157a-d7f9-7ec1-eea2b5375ee1@vorpal.se>
+Date:   Fri, 2 Sep 2022 19:18:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <30729f4c-895f-235a-3342-93669160201c@amazon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 2/2] platform/x86: toshiba_acpi: Add fan RPM reading
+ (hwmon interface)
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        platform-driver-x86@vger.kernel.org
+Cc:     Azael Avalos <coproscefalo@gmail.com>, linux-hwmon@vger.kernel.org
+References: <20220901215819.1608723-1-lkml@vorpal.se>
+ <20220901215819.1608723-3-lkml@vorpal.se>
+ <0e31840d-aaf3-d2fb-f490-848e30f626a8@roeck-us.net>
+ <891c2cd5-cacc-f19d-0334-0186d37b9bd2@redhat.com>
+Content-Language: en-US
+From:   Arvid Norlander <lkml@vorpal.se>
+In-Reply-To: <891c2cd5-cacc-f19d-0334-0186d37b9bd2@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 03:08:41PM +0300, Farber, Eliav wrote:
-> On 8/31/2022 12:38 PM, Andy Shevchenko wrote:
-> > On Tue, Aug 30, 2022 at 07:21:55PM +0000, Eliav Farber wrote:
-> > > Bug fix - in case "intel,vm-map" is missing in device-tree ,'num' is set
-> > > to 0, and no voltage channel infos are allocated.
-> > 
-> > Care to provide a Fixes tag for all fixes in your series. Also don't
-> > forget to
-> > start series with fixes followed by cleanups and new features..
-> For v4 I provided a Fixes tag where it was relevant.
+Hi,
 
-Thanks!
+On 2022-09-02 10:29, Hans de Goede wrote:
+> Hi Guenter, Arvid,
+<snip>
+> 
+> Actually that should be IS_ENABLED since you suggested that
+> Arvid should use:
+> 
+> 	depends on HWMON || HWMON = n
+> 
+> In the Kconfig bit there is no need for IS_REACHABLE,
+> note IS_REACHABLE will work too but I generally prefer
+> to avoid it because cases which actually need it lead
+> to weirdness where e.g. both HWMON and TOSHIBA_ACPI are
+> enabled yet TOSHIBA_ACPI will still not have HWMON
+> support.
+> 
+> Arvid, sorry about the "noise" here, let me try to
+> explain.
+> 
+> First of all lets explain this bit of magic:
+> 
+> 	depends on HWMON || HWMON = n
+> 
+> What this says is that if HWMON is enabled it must
+> be able to satisfy dependencies on it in toshiba_acpi.c
+> (or it may also be fully disabled).
+> 
+> This magic is necessary to avoid a case where
+> toshiba_acpi gets build into the kernel, but the
+> hwmon code is a module. In that case linking errors
+> (unresolved hwmon symbols) will happen when building
+> the main vmlinuz kernel image.
+> 
+> So basically what this does is if HWMON is configured
+> as a module, it limits the choices for TOSHIBA_ACPI
+> to either n or m and disallows y.
+> 
+> I hope that so far I'm making sense...
 
-> I also changed the order of some patches so that all fixes will be first.
+Thanks, this clears up quite a bit of confusion.
 
-Note, fixes should prepend the other patches in the series.
+> 
+> So now to the #ifdef-ery. Since HWMON can be a module
+> when enabled the #define's from Kconfig will either
+> contain:
+> 
+> #define CONFIG_HWMON 1   // when builtin, HWMON=y
+> 
+> or:
+> 
+> #define CONFIG_HWMON_MODULE 1   // when a module, HWMON=m
+> 
+> So you would need to write:
+> 
+> #if defined CONFIG_HWMON || defined CONFIG_HWMON_MODULE
+> 
+> as a condition
+> 
+> #if IS_ENABLED(CONFIG_HWMON)
+> 
+> is a shorthand (macro) for this.
+> 
+> ###
+> 
+> Now back to:
+> 
+> #if IS_REACHABLE(CONFIG_HWMON)
+> 
+> This is a special macro for when your Kconfig bit would just be:
+> 
+> 	depends on HWMON
+> 
+> in that case TOSHIBA_ACPI might be set to builtin (y)
+> while the HWMON core/class code is a module. As mentioned
+> above that would lead to undefined hwmon symbols when
+> using "#if IS_ENABLED(CONFIG_HWMON)" as test. IS_REACHABLE
+> is special in that it will disable (evaluate to false)
+> in the case where the code being build is builtin and
+> the dependency is a module.
+> 
+> But that cannot happen here because your Kconfig bit is:
+> 
+> 	depends on HWMON || HWMON = n
+> 
+> So "#if IS_ENABLED(CONFIG_HWMON)" is sufficient.
+> 
+> TL;DR: please use "#if IS_ENABLED(CONFIG_HWMON)" to test
+> if the hwmon code should be build.
+> 
+> Regards,
+> 
+> Hans
 
--- 
-With Best Regards,
-Andy Shevchenko
+All of this will be useful to know in the future as well I imagine, so
+thanks again.
 
+<snip>
 
+Best regards,
+Arvid Norlander
