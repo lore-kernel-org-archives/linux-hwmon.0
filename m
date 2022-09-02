@@ -2,43 +2,43 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB47AC6FA83
-	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Sep 2022 19:59:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D0E4ECAAD5
+	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Sep 2022 20:03:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbiIBT7l (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 2 Sep 2022 15:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
+        id S229847AbiIBUD5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 2 Sep 2022 16:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbiIBT7j (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Sep 2022 15:59:39 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FAE25E86;
-        Fri,  2 Sep 2022 12:59:37 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-11e7e0a63e2so7390114fac.4;
-        Fri, 02 Sep 2022 12:59:37 -0700 (PDT)
+        with ESMTP id S229637AbiIBUD4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Sep 2022 16:03:56 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB7FB9434;
+        Fri,  2 Sep 2022 13:03:55 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-11edd61a9edso7392918fac.5;
+        Fri, 02 Sep 2022 13:03:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZSEmsdnAFtwpYkxc3t+QPwYaZfaZrvyrotsB92ufTO8=;
-        b=dc+3Xlrc4yX8A5D8/Cq6c99VN6irr9ywG8NKw85V1fiDlQU8K1/fUDkEajVUjpsiIK
-         FPNWt0niXva5a+sXeqFX8B6jFucUeLVkHbPrEB/6220dUYMGP/t18da+L3uyilqfwnTH
-         KzaLms78D2eDWr2O5j1yYJabrbx0NwRw/FP94P64bgcBxl+RRcgpG+v63A989VViI8a4
-         7zOjZY+tSehyFYs83EoS+6DTSCWPo2EMIFwuFMW/EQOJ09YCv2rFdlWpATmQDoTXSg7h
-         mbWM9XcjlKfzP1ih+Ql5EMH1wyvm6L2dp1tNtiI5yzzum3nxJsiC7IeNZTknbVyRK9Rj
-         DIBw==
-X-Gm-Message-State: ACgBeo2+XrtXUzGh38TAggLBAn+0+SeQiSrJyG4gvDCDo0iJ1v5smLAt
-        wkl7pV98JukqK1o0FXEfUg==
-X-Google-Smtp-Source: AA6agR43YPE8TVECqeQQqdUwOh3eaXK4PDTZ3FBl10Zjbsalg/baeh5PB0L4dhWZHlr7INACa7NLtw==
-X-Received: by 2002:a05:6808:1381:b0:345:fdd:554e with SMTP id c1-20020a056808138100b003450fdd554emr2740963oiw.278.1662148777217;
-        Fri, 02 Sep 2022 12:59:37 -0700 (PDT)
+        bh=C9aW5y522OX/8JtSB5bbTEMWELASaLGWe8KFzDOic70=;
+        b=ePNjTgPcRC77mtehZ51e/DIyp7snYPjvKToDI3GkT4YFy3n7AQPi3idZEJJcraEFWR
+         SvzRlHiFkXzH+vyIouIkK0JGpwRzWl/J/taeHiouCgc5YE8hDsDVXWm0eIFufhgs4O9a
+         PbpwBO4Nc8Xg+WL7tUFEY0dOqzGUN7B7AQntaryAIL/ak6Z7erk1inUwplrBl2JIiBzr
+         pyJ4TDqgdEl1D9chxTLXeGEE+pBCupmz0hLa8wSVxhLJB4Yiowh3UDRwYp9CCAGMXgJs
+         EFZyNa/kUXCAgfds4b+2/n50HMtVL0qXBoeae3WALE0V75hly4K1lhBCTESq7iPWMmnf
+         Zgzg==
+X-Gm-Message-State: ACgBeo02lKmRWWgOH61Lb3nDKS3RZj1cug5LcI4yEJHTTDlkywUPoR3P
+        umTCir9bTJjOXpGzDYjG6Q==
+X-Google-Smtp-Source: AA6agR7X7LgSHTrqR4pBUQ6YJvJARDJW7Vt5cNu2uVbOPXyWy9+oS3seWLEkqV6pKwrSwJ56OLaZrQ==
+X-Received: by 2002:a05:6870:a90f:b0:11e:949a:e3ef with SMTP id eq15-20020a056870a90f00b0011e949ae3efmr3248791oab.106.1662149034595;
+        Fri, 02 Sep 2022 13:03:54 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b31-20020a4a98e2000000b0044df311eee1sm901525ooj.33.2022.09.02.12.59.36
+        by smtp.gmail.com with ESMTPSA id s12-20020a056870ea8c00b001226d2100f2sm1537319oap.33.2022.09.02.13.03.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 12:59:36 -0700 (PDT)
-Received: (nullmailer pid 318646 invoked by uid 1000);
-        Fri, 02 Sep 2022 19:59:35 -0000
-Date:   Fri, 2 Sep 2022 14:59:35 -0500
+        Fri, 02 Sep 2022 13:03:54 -0700 (PDT)
+Received: (nullmailer pid 324903 invoked by uid 1000);
+        Fri, 02 Sep 2022 20:03:53 -0000
+Date:   Fri, 2 Sep 2022 15:03:53 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Eliav Farber <farbere@amazon.com>
 Cc:     jdelvare@suse.com, linux@roeck-us.net, p.zabel@pengutronix.de,
@@ -49,65 +49,99 @@ Cc:     jdelvare@suse.com, linux@roeck-us.net, p.zabel@pengutronix.de,
         shellykz@amazon.com, shorer@amazon.com, amitlavi@amazon.com,
         almogbs@amazon.com, dkl@amazon.com, rahul.tanwar@linux.intel.com,
         andriy.shevchenko@intel.com
-Subject: Re: [PATCH v3 14/19] dt-bindings: hwmon: (mr75203) add
- "moortec,ts-series" property
-Message-ID: <20220902195935.GA316069-robh@kernel.org>
+Subject: Re: [PATCH v3 16/19] dt-bindings: hwmon: (mr75203) add coefficient
+ properties for the thermal equation
+Message-ID: <20220902200353.GA318894-robh@kernel.org>
 References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-15-farbere@amazon.com>
+ <20220830192212.28570-17-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830192212.28570-15-farbere@amazon.com>
+In-Reply-To: <20220830192212.28570-17-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 07:22:07PM +0000, Eliav Farber wrote:
-> Add optional "moortec,ts-series" property to define the temperature
-> equation and coefficients that shall be used to convert the digital
-> output to value in milli-Celsius.
-> Supported series: 5 (default) and 6.
+On Tue, Aug 30, 2022 at 07:22:09PM +0000, Eliav Farber wrote:
+> Add optional temperature coefficient properties:
+>  *) moortec,ts-coeff-g
+>  *) moortec,ts-coeff-h
+>  *) moortec,ts-coeff-cal5
+>  *) moortec,ts-coeff-j
+> If defined they shall be used instead of defaults.
 > 
-> Series 5:
->   T = G + H * (n / cal5 - 0.5) + J * F
-> Where: G = 60, H = 200, cal5 = 4094, J = -0.1, F = frequency clock in MHz
-> 
-> Series 6:
->    T = G + H * (n / cal5 - 0.5)
-> Where: G = 57.4, H = 249.4, cal5 = 4096
+> The coefficients were added to device tree on top of the series property
+> (which can be used to select between series 5 and series 6), because
+> coefficients can vary between product and product, and code defaults might
+> not be accurate enough.
 > 
 > Signed-off-by: Eliav Farber <farbere@amazon.com>
 > ---
 > V3 -> V2:
-> - New patch to introduce "moortec,ts-series" property.
+> - Add "moortec" prefix to property name.
 > 
->  .../devicetree/bindings/hwmon/moortec,mr75203.yaml     | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  .../bindings/hwmon/moortec,mr75203.yaml       | 33 +++++++++++++++++++
+>  1 file changed, 33 insertions(+)
 > 
 > diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> index 4c983d8f8fe7..ec2dbe7da9c2 100644
+> index ec2dbe7da9c2..a92da6064285 100644
 > --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
 > +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> @@ -64,6 +64,16 @@ properties:
->      default: 1
->      $ref: /schemas/types.yaml#definitions/uint8-array
+> @@ -74,6 +74,37 @@ properties:
+>      default: 5
+>      $ref: /schemas/types.yaml#definitions/uint32
 >  
-> +  moortec,ts-series:
+> +  moortec,ts-coeff-g:
 > +    description:
-> +      moortec,ts-series defines the temperature equation and coefficients that
-> +      shall be used to convert the digital output to value in milli-Celsius.
-> +      Supported series are 5 and 6.
+> +      G coefficient for temperature equation.
+> +      Value should be multiplied by factor 1000.
 
-No need to state constraints in free-form text descriptions.
+If you just multiply the values here, you can specify 'multipleOf: 1000'
 
-> +    minimum: 5
-> +    maximum: 6
-> +    default: 5
-> +    $ref: /schemas/types.yaml#definitions/uint32
+Either way, some constraints would be nice. Or is 0 - 2^32 valid?
+
+
+> +      Default for series 5 = 60000
+> +      Default for series 6 = 57400
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  moortec,ts-coeff-h:
+> +    description:
+> +      H coefficient for temperature equation.
+> +      Value should be multiplied by factor 1000.
+> +      Default for series 5 = 200000
+> +      Default for series 6 = 249400
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  moortec,ts-coeff-cal5:
+> +    description:
+> +      cal5 coefficient for temperature equation (can't be 0).
+
+minimum: 1
+
+> +      Default for series 5 = 4094
+> +      Default for series 6 = 4096
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  moortec,ts-coeff-j:
+> +    description:
+> +      J coefficient for temperature equation.
+> +      Value should be multiplied by factor 1000.
+> +      Default for series 5 = -100
+> +      Default for series 6 = 0
+> +    $ref: /schemas/types.yaml#/definitions/int32
 > +
 >  required:
 >    - compatible
 >    - reg
+> @@ -97,5 +128,7 @@ examples:
+>          resets = <&rcu0 0x40 7>;
+>          moortec,vm-active-channels = <0x10 0x05>;
+>          moortec,vm-pre-scaler = <5 6>;
+> +        moortec,ts-coeff-g = <61400>;
+> +        moortec,ts-coeff-h = <253700>;
+>          #thermal-sensor-cells = <1>;
+>      };
 > -- 
 > 2.37.1
 > 
