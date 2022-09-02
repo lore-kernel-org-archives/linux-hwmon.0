@@ -2,153 +2,89 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CC85ECAAD5
-	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Sep 2022 14:26:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F13DBECAAD5
+	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Sep 2022 14:52:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235019AbiIBO0d (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 2 Sep 2022 10:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S237059AbiIBOwP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 2 Sep 2022 10:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237121AbiIBO0R (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Sep 2022 10:26:17 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703A75F120;
-        Fri,  2 Sep 2022 06:53:33 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id o4so2096023pjp.4;
-        Fri, 02 Sep 2022 06:53:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=5RLBa13ipEWAkpiaQtXZ6Miu9XQu43K14Fb1Ip6In04=;
-        b=pwyCU8O4/acAUKXQY58Ih4qrZpW+ruGqollsRjkVqVbbki6npX0Hj4Fivb9hqesjBu
-         RPfVWl/dS3xRputH6HAiycosYH+CK+V4VsX3+5JwEllkwWwn5zF25Vh9EM52xaoKac6Y
-         yQrfxQqXQwAlsa+QULESlsOnPU0Vzj5Ln5eneb+zX+J1B9fd68JYG5Ma6J5yQkDVQzLu
-         9YB0JaKTtLAiRjhNpVGb1XxRyavOhVp8qm3VkyrQJMZFzYVM3pMsQVTvxtoq2tLRJ2cU
-         +jyK17z/DHNGnGRStH5weRACodYARykR43ppwEbNs+TxhWoIE/HSNkGOwoalqOGR4V1k
-         DZSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=5RLBa13ipEWAkpiaQtXZ6Miu9XQu43K14Fb1Ip6In04=;
-        b=lwD5BhNyNhlyf3sxoBYbT29jaSGgKRTYgP5O1fLOxadNxyQ9d3GAduB2mJ8ZrwyPf2
-         ndrL5grU+G4BcoNyIRmWIvkiJ2RhAaeamtWILlbVDN3FckQg0MNN0QJKr+8lprzgDR+Y
-         qeDTyorw6fR7sqVLSrrPUH3Yt35FxF5xopUcZBGgtP+mLDmNuSTG8cGaqaJ6nOCxWrBq
-         MfLdGs5APzXhRmJy4M5+ArtUC3tQakHpbNDDPlUdKcNi+3InPLFtYNGfR0KRZCjEZiva
-         T+K8dfaWWxSDrFlUZIgQErtSR9IGsuzvu1z8JDP/PrKAxRTl94snJgYdVlQ1s2grvK9T
-         SkBw==
-X-Gm-Message-State: ACgBeo3PRziD8wmIQ22uug4zMYmgf+0vWv7oVSv5Qq2q2VyQTSXkG9WO
-        qQS7g2TzZb+wmUK1kLfKOBk=
-X-Google-Smtp-Source: AA6agR4BRMVL3/Y1sJ5NnmmVdAulRFNJV3hU3ss/jlsea4zTWR965R6XYNuG6X53l1Wqdx+rIapQ1g==
-X-Received: by 2002:a17:90b:3511:b0:1f7:3c52:4b98 with SMTP id ls17-20020a17090b351100b001f73c524b98mr4855463pjb.17.1662126811439;
-        Fri, 02 Sep 2022 06:53:31 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e18-20020a656892000000b0041d6cda2d60sm1443828pgt.66.2022.09.02.06.53.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 06:53:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8f74ce03-c5b6-f81f-bac5-42cde4e318d8@roeck-us.net>
-Date:   Fri, 2 Sep 2022 06:53:27 -0700
+        with ESMTP id S236981AbiIBOvx (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Sep 2022 10:51:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE6B260;
+        Fri,  2 Sep 2022 07:15:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662128109; x=1693664109;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c6y+jVROuQJauil5q7w8LAFf1FLBa2IkXRbAj2IPLiE=;
+  b=c9KAZNsf/IbNGUQxTcwnA6fwrdxzdR9wgA63FwTRTFFF+v7FLaTDVXTk
+   GRPBuwx2DSGR8inX+S3XnIlXg7n4lSaUGS5qljTzBeEzSaxDNlHtJnl1S
+   Q4zYOFwe6bkGG47gezp+tfkcIrQMeYF7Ct/idIJRyjbR1uWj9Hip7jZ//
+   XtIaT2J3rMrQI+a/PVgSeos8wcKQU/S8Ll3jU6JJpfTJyduVgpCIs6W8x
+   +2W7tqUplYrsihU3NPMPaqLoycGqIl9/H3OEUtlJFdvFpvHd6jVDUFSXM
+   G9Gc9BlmAdrGMJDdft23LpFSUCV5UgIL/8p2C7sbgxak129mqGvNq3qT1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="294727926"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="294727926"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:15:08 -0700
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="755273094"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:15:04 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oU7Rl-007Q5R-1P;
+        Fri, 02 Sep 2022 17:15:01 +0300
+Date:   Fri, 2 Sep 2022 17:15:01 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     "Farber, Eliav" <farbere@amazon.com>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
+        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
+        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
+        amitlavi@amazon.com, almogbs@amazon.com, dkl@amazon.com
+Subject: Re: [PATCH v3 02/19] hwmon: (mr75203) fix VM sensor allocation when
+ "intel, vm-map" not defined
+Message-ID: <YxIP5aZv16WFPC4P@smile.fi.intel.com>
+References: <20220830192212.28570-1-farbere@amazon.com>
+ <20220830192212.28570-3-farbere@amazon.com>
+ <Yw8sHt0WLsEpL4bY@smile.fi.intel.com>
+ <30729f4c-895f-235a-3342-93669160201c@amazon.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/2] platform/x86: toshiba_acpi: Add fan RPM reading
- (hwmon interface)
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Arvid Norlander <lkml@vorpal.se>,
-        platform-driver-x86@vger.kernel.org
-Cc:     Azael Avalos <coproscefalo@gmail.com>, linux-hwmon@vger.kernel.org
-References: <20220901215819.1608723-1-lkml@vorpal.se>
- <20220901215819.1608723-3-lkml@vorpal.se>
- <0e31840d-aaf3-d2fb-f490-848e30f626a8@roeck-us.net>
- <891c2cd5-cacc-f19d-0334-0186d37b9bd2@redhat.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <891c2cd5-cacc-f19d-0334-0186d37b9bd2@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30729f4c-895f-235a-3342-93669160201c@amazon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/2/22 01:29, Hans de Goede wrote:
-> Hi Guenter, Arvid,
-> 
-> On 9/2/22 00:27, Guenter Roeck wrote:
->> On 9/1/22 14:58, Arvid Norlander wrote:
->>> This expands on the previous commit, exporting the fan RPM via hwmon.
->>>
->>> This will look something like the following when using the "sensors"
->>> command from lm_sensors:
->>>
->>> toshiba_acpi_sensors-acpi-0
->>> Adapter: ACPI interface
->>> fan1:           0 RPM
->>>
->>> Signed-off-by: Arvid Norlander <lkml@vorpal.se>
->>> ---
->>>    drivers/platform/x86/Kconfig        |  1 +
->>>    drivers/platform/x86/toshiba_acpi.c | 72 +++++++++++++++++++++++++++++
->>>    2 files changed, 73 insertions(+)
->>>
->>> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
->>> index f2f98e942cf2..4d0d2676939a 100644
->>> --- a/drivers/platform/x86/Kconfig
->>> +++ b/drivers/platform/x86/Kconfig
->>> @@ -797,6 +797,7 @@ config ACPI_TOSHIBA
->>>        depends on INPUT
->>>        depends on SERIO_I8042 || SERIO_I8042 = n
->>>        depends on ACPI_VIDEO || ACPI_VIDEO = n
->>> +    depends on HWMON || HWMON = n
->>>        depends on RFKILL || RFKILL = n
->>>        depends on IIO
->>>        select INPUT_SPARSEKMAP
->>> diff --git a/drivers/platform/x86/toshiba_acpi.c b/drivers/platform/x86/toshiba_acpi.c
->>> index 02e3522f4eeb..a976dfb97a5e 100644
->>> --- a/drivers/platform/x86/toshiba_acpi.c
->>> +++ b/drivers/platform/x86/toshiba_acpi.c
->>> @@ -46,6 +46,10 @@
->>>    #include <linux/toshiba.h>
->>>    #include <acpi/video.h>
->>>    +#ifdef CONFIG_HWMON
->>> +#include <linux/hwmon.h>
->>> +#endif
->>
->> ifdef not needed here.
-> 
-> Ack.
-> 
->>
->>> +
->>>    MODULE_AUTHOR("John Belmonte");
->>>    MODULE_DESCRIPTION("Toshiba Laptop ACPI Extras Driver");
->>>    MODULE_LICENSE("GPL");
->>> @@ -171,6 +175,9 @@ struct toshiba_acpi_dev {
->>>        struct miscdevice miscdev;
->>>        struct rfkill *wwan_rfk;
->>>        struct iio_dev *indio_dev;
->>> +#ifdef CONFIG_HWMON
->>> +    struct device *hwmon_device;
->>> +#endif
->>>          int force_fan;
->>>        int last_key_event;
->>> @@ -2941,6 +2948,54 @@ static int toshiba_acpi_setup_backlight(struct toshiba_acpi_dev *dev)
->>>        return 0;
->>>    }
->>>    +/* HWMON support for fan */
->>> +#ifdef CONFIG_HWMON
->>
->> This should be #if IS_REACHABLE(CONFIG_HWMON)
-> 
-> Actually that should be IS_ENABLED since you suggested that
-> Arvid should use:
-> 
-> 	depends on HWMON || HWMON = n
-> 
-Yes, you are absolutely correct.
+On Fri, Sep 02, 2022 at 03:08:41PM +0300, Farber, Eliav wrote:
+> On 8/31/2022 12:38 PM, Andy Shevchenko wrote:
+> > On Tue, Aug 30, 2022 at 07:21:55PM +0000, Eliav Farber wrote:
+> > > Bug fix - in case "intel,vm-map" is missing in device-tree ,'num' is set
+> > > to 0, and no voltage channel infos are allocated.
+> > 
+> > Care to provide a Fixes tag for all fixes in your series. Also don't
+> > forget to
+> > start series with fixes followed by cleanups and new features..
+> For v4 I provided a Fixes tag where it was relevant.
 
-Thanks,
-Guenter
+Thanks!
+
+> I also changed the order of some patches so that all fixes will be first.
+
+Note, fixes should prepend the other patches in the series.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
