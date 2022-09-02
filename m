@@ -2,36 +2,36 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E050C001B5
-	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Sep 2022 17:40:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74201C6FA83
+	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Sep 2022 17:40:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236639AbiIBRke (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 2 Sep 2022 13:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
+        id S235565AbiIBRkg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 2 Sep 2022 13:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235565AbiIBRkd (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Sep 2022 13:40:33 -0400
-Received: from vorpal.se (vorpal.se [IPv6:2a01:7e00::f03c:91ff:fe73:398e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6377C6AA3B;
-        Fri,  2 Sep 2022 10:40:31 -0700 (PDT)
-Received: by vorpal.se (Postfix) with ESMTPSA id 17252147F2;
-        Fri,  2 Sep 2022 17:40:30 +0000 (UTC)
+        with ESMTP id S235637AbiIBRkf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Sep 2022 13:40:35 -0400
+Received: from vorpal.se (vorpal.se [151.236.221.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEF980F4C;
+        Fri,  2 Sep 2022 10:40:34 -0700 (PDT)
+Received: by vorpal.se (Postfix) with ESMTPSA id BD0A6142D4;
+        Fri,  2 Sep 2022 17:40:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=vorpal.se; s=2019;
-        t=1662140430; bh=FBFk8TloyLt1sSi1NThDrEC2N9fG0pVwH5cKoeUGlm8=;
+        t=1662140433; bh=WIvzaANfqaO7ctXv8lU3dR7YDSJP908fumkBs1xjDO4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=df1gPgxVfXW348gJKDLCaevxuHfIARKaiVSSzp+3MyBMjwizI+bEvaAaxHWPWWfkb
-         0uknwD+TdT1mvqMWZt6U7tlvUhinoqF0X7mA9zET2V96Mzex8PgmUDr17Y5dVHmct4
-         PRMcL2EtcQs+Wz1HqI6gRE+FJlQkxm51+cXOt3k4EKgrqeyLf0quZp79P3mMwUB4lO
-         3gGo4IBkh4C2FbYuvHlo1B/6adxm1dYBygx1IafA5QbcXit03JAjkH5rIdigEJ7f5z
-         1DhVfPd/BDhsh/aj8KjnKC51Y9VpRrlsAqrf+MGl8E6IbsE4LjpVeOSwXEECyxYRnb
-         AGr3xt9OrmIiw==
+        b=NF0DD575SgY766jA9NwUtGvplOpa9uww73nMmhhwp/idnR8+mpj9tBnkhhKjRhHYb
+         dDUHHDeG6G9xHzp+YGa6fEOhXHaqjBXBKblHftv5K60aSu5c6uv4IXx/AypizHMfAi
+         plqANF8sfQG+b7RT7d1cGXnc5fHkcY9b3Maswz/5B/i43hNthHVGFaEOIxKjLZ7tdG
+         6/hYwQrI0wV6ANWyhsx37tW6KEcGYdhxa+n7iL+cQS9CRfcj0WVFfxdL9pmZuI0yUi
+         K6IenyPbJxqRc6ZuKekbDuuDcltQOOAaSUiIR7DlIjbU5sNrD8C+zOsUtMzIxN+KyX
+         A56m03x5kIJfQ==
 From:   Arvid Norlander <lkml@vorpal.se>
 To:     platform-driver-x86@vger.kernel.org
 Cc:     Azael Avalos <coproscefalo@gmail.com>, linux-hwmon@vger.kernel.org,
         Arvid Norlander <lkml@vorpal.se>
-Subject: [PATCH 1/2] platform/x86: toshiba_acpi: Add fan RPM reading (internals)
-Date:   Fri,  2 Sep 2022 19:40:17 +0200
-Message-Id: <20220902174018.1720029-2-lkml@vorpal.se>
+Subject: [PATCH v3 2/2] platform/x86: toshiba_acpi: Add fan RPM reading (hwmon interface)
+Date:   Fri,  2 Sep 2022 19:40:18 +0200
+Message-Id: <20220902174018.1720029-3-lkml@vorpal.se>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220902174018.1720029-1-lkml@vorpal.se>
 References: <20220902174018.1720029-1-lkml@vorpal.se>
@@ -41,86 +41,142 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This add the internal feature detection and reading function for fan RPM.
+This expands on the previous commit, exporting the fan RPM via hwmon.
 
-The approach is based on tracing ACPI calls using AMLI (a tracer/debugger
-built into ACPI.sys) while using the Windows cooling self-test software.
+This will look something like the following when using the "sensors"
+command from lm_sensors:
 
-The call used is {HCI_GET, 0x45, 0, 1, 0, 0} which returns:
-{0x0, 0x45, fan_rpm, probably_max_rpm, 0x0, 0x0}
-
-What is probably the max RPM is not currently used.
+toshiba_acpi_sensors-acpi-0
+Adapter: ACPI interface
+fan1:           0 RPM
 
 Signed-off-by: Arvid Norlander <lkml@vorpal.se>
 ---
- drivers/platform/x86/toshiba_acpi.c | 30 +++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ drivers/platform/x86/Kconfig        |  1 +
+ drivers/platform/x86/toshiba_acpi.c | 70 +++++++++++++++++++++++++++++
+ 2 files changed, 71 insertions(+)
 
+diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+index f2f98e942cf2..4d0d2676939a 100644
+--- a/drivers/platform/x86/Kconfig
++++ b/drivers/platform/x86/Kconfig
+@@ -797,6 +797,7 @@ config ACPI_TOSHIBA
+ 	depends on INPUT
+ 	depends on SERIO_I8042 || SERIO_I8042 = n
+ 	depends on ACPI_VIDEO || ACPI_VIDEO = n
++	depends on HWMON || HWMON = n
+ 	depends on RFKILL || RFKILL = n
+ 	depends on IIO
+ 	select INPUT_SPARSEKMAP
 diff --git a/drivers/platform/x86/toshiba_acpi.c b/drivers/platform/x86/toshiba_acpi.c
-index 0fc9e8b8827b..02e3522f4eeb 100644
+index 02e3522f4eeb..0949b1bcab83 100644
 --- a/drivers/platform/x86/toshiba_acpi.c
 +++ b/drivers/platform/x86/toshiba_acpi.c
-@@ -106,6 +106,7 @@ MODULE_LICENSE("GPL");
- #define HCI_VIDEO_OUT			0x001c
- #define HCI_HOTKEY_EVENT		0x001e
- #define HCI_LCD_BRIGHTNESS		0x002a
-+#define HCI_FAN_RPM			0x0045
- #define HCI_WIRELESS			0x0056
- #define HCI_ACCELEROMETER		0x006d
- #define HCI_COOLING_METHOD		0x007f
-@@ -185,6 +186,7 @@ struct toshiba_acpi_dev {
- 	unsigned int illumination_supported:1;
- 	unsigned int video_supported:1;
- 	unsigned int fan_supported:1;
-+	unsigned int fan_rpm_supported:1;
- 	unsigned int system_event_supported:1;
- 	unsigned int ntfy_supported:1;
- 	unsigned int info_supported:1;
-@@ -1616,6 +1618,29 @@ static const struct proc_ops fan_proc_ops = {
- 	.proc_write	= fan_proc_write,
- };
+@@ -42,10 +42,12 @@
+ #include <linux/uaccess.h>
+ #include <linux/miscdevice.h>
+ #include <linux/rfkill.h>
++#include <linux/hwmon.h>
+ #include <linux/iio/iio.h>
+ #include <linux/toshiba.h>
+ #include <acpi/video.h>
  
-+/* Fan RPM */
-+static int get_fan_rpm(struct toshiba_acpi_dev *dev, u32 *rpm)
++
+ MODULE_AUTHOR("John Belmonte");
+ MODULE_DESCRIPTION("Toshiba Laptop ACPI Extras Driver");
+ MODULE_LICENSE("GPL");
+@@ -171,6 +173,9 @@ struct toshiba_acpi_dev {
+ 	struct miscdevice miscdev;
+ 	struct rfkill *wwan_rfk;
+ 	struct iio_dev *indio_dev;
++#if IS_ENABLED(CONFIG_HWMON)
++	struct device *hwmon_device;
++#endif
+ 
+ 	int force_fan;
+ 	int last_key_event;
+@@ -2941,6 +2946,54 @@ static int toshiba_acpi_setup_backlight(struct toshiba_acpi_dev *dev)
+ 	return 0;
+ }
+ 
++/* HWMON support for fan */
++#if IS_ENABLED(CONFIG_HWMON)
++umode_t toshiba_acpi_hwmon_is_visible(const void *drvdata,
++				      enum hwmon_sensor_types type,
++				      u32 attr, int channel)
 +{
-+	u32 in[TCI_WORDS] = { HCI_GET, HCI_FAN_RPM, 0, 1, 0, 0 };
-+	u32 out[TCI_WORDS];
-+	acpi_status status = tci_raw(dev, in, out);
-+
-+	if (ACPI_FAILURE(status)) {
-+		pr_err("ACPI call to get Fan speed failed\n");
-+		return -EIO;
-+	}
-+
-+	if (out[0] == TOS_NOT_SUPPORTED)
-+		return -ENODEV;
-+
-+	if (out[0] == TOS_SUCCESS) {
-+		*rpm = out[2];
-+		return 0;
-+	}
-+
-+	return -EIO;
++	return 0444;
 +}
 +
- static int keys_proc_show(struct seq_file *m, void *v)
++int toshiba_acpi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
++			    u32 attr, int channel, long *val)
++{
++	/*
++	 * There is only a single channel and single attribute (for the
++	 * fan) at this point.
++	 * This can be replaced with more advanced logic in the future,
++	 * should the need arise.
++	 */
++	if (type == hwmon_fan && channel == 0 && attr == hwmon_fan_input) {
++		u32 value;
++		int ret;
++
++		ret = get_fan_rpm(toshiba_acpi, &value);
++		if (ret)
++			return ret;
++
++		*val = value;
++		return 0;
++	}
++	return -EOPNOTSUPP;
++}
++
++static const struct hwmon_channel_info *toshiba_acpi_hwmon_info[] = {
++	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
++	NULL
++};
++
++static const struct hwmon_ops toshiba_acpi_hwmon_ops = {
++	.is_visible = toshiba_acpi_hwmon_is_visible,
++	.read = toshiba_acpi_hwmon_read,
++};
++
++static const struct hwmon_chip_info toshiba_acpi_hwmon_chip_info = {
++	.ops = &toshiba_acpi_hwmon_ops,
++	.info = toshiba_acpi_hwmon_info,
++};
++#endif
++
+ static void print_supported_features(struct toshiba_acpi_dev *dev)
  {
- 	struct toshiba_acpi_dev *dev = m->private;
-@@ -2928,6 +2953,8 @@ static void print_supported_features(struct toshiba_acpi_dev *dev)
- 		pr_cont(" video-out");
- 	if (dev->fan_supported)
- 		pr_cont(" fan");
-+	if (dev->fan_rpm_supported)
-+		pr_cont(" fan-rpm");
- 	if (dev->tr_backlight_supported)
- 		pr_cont(" transflective-backlight");
- 	if (dev->illumination_supported)
-@@ -3157,6 +3184,9 @@ static int toshiba_acpi_add(struct acpi_device *acpi_dev)
- 	ret = get_fan_status(dev, &dummy);
- 	dev->fan_supported = !ret;
+ 	pr_info("Supported laptop features:");
+@@ -2995,6 +3048,11 @@ static int toshiba_acpi_remove(struct acpi_device *acpi_dev)
  
-+	ret = get_fan_rpm(dev, &dummy);
-+	dev->fan_rpm_supported = !ret;
+ 	remove_toshiba_proc_entries(dev);
+ 
++#if IS_ENABLED(CONFIG_HWMON)
++	if (dev->hwmon_device)
++		hwmon_device_unregister(dev->hwmon_device);
++#endif
++
+ 	if (dev->accelerometer_supported && dev->indio_dev) {
+ 		iio_device_unregister(dev->indio_dev);
+ 		iio_device_free(dev->indio_dev);
+@@ -3187,6 +3245,18 @@ static int toshiba_acpi_add(struct acpi_device *acpi_dev)
+ 	ret = get_fan_rpm(dev, &dummy);
+ 	dev->fan_rpm_supported = !ret;
+ 
++#if IS_ENABLED(CONFIG_HWMON)
++	if (dev->fan_rpm_supported) {
++		dev->hwmon_device = hwmon_device_register_with_info(
++			&dev->acpi_dev->dev, "toshiba_acpi_sensors", NULL,
++			&toshiba_acpi_hwmon_chip_info, NULL);
++		if (IS_ERR(dev->hwmon_device)) {
++			dev->hwmon_device = NULL;
++			pr_warn("unable to register hwmon device, skipping\n");
++		}
++	}
++#endif
 +
  	toshiba_wwan_available(dev);
  	if (dev->wwan_supported)
