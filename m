@@ -2,43 +2,43 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2335C6FA82
-	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Sep 2022 19:51:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43810C6FA82
+	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Sep 2022 19:57:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbiIBTvU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 2 Sep 2022 15:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
+        id S229712AbiIBT5l (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 2 Sep 2022 15:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiIBTvR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Sep 2022 15:51:17 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09064AB180;
-        Fri,  2 Sep 2022 12:51:16 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1225219ee46so7363859fac.2;
-        Fri, 02 Sep 2022 12:51:16 -0700 (PDT)
+        with ESMTP id S229538AbiIBT5k (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Sep 2022 15:57:40 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD9CD346B;
+        Fri,  2 Sep 2022 12:57:39 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-12243fcaa67so7307047fac.8;
+        Fri, 02 Sep 2022 12:57:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Z/1e21K0fic8vcdpiAOPusKQ6uAC44z45F500a/5SUA=;
-        b=5PgxeI5J4mw5J27oUr9pFffuMpB7QqYzM835D9GLtNYrWO5DBZz595xzOC3YgzkEcj
-         jJtN6XmPq9M0LxBiuBEVyqZmy+CwmN9+lN7bf2uLTbpUA9Evg53C+43HoDqqF4AGCPnC
-         miM9680cXMwAgD/geZrIFCcoaKaNiodabKTqlcKeDpNT/nenwoCDXaNC6pWgsLdv0Jtu
-         BleVK0T46tTBrMz/py7wGZLki5xolSLvQ6ZrOLak3Ll5NTuXSMk6uDWPC4aL4+8lXYRx
-         Y4zvcX0sBFdR20g3zxuwX/SqWybm7Z2LZNIGVBsbUT4AATn14+jbGsv0Oq3Sk6fZHacO
-         ynEA==
-X-Gm-Message-State: ACgBeo1JVdCKGWhD7Ok+TloxRIJhkKsFD7DQrXvSo9iTpahQ5KfoljYX
-        v2UaFN82pTu1spuWjone0Q==
-X-Google-Smtp-Source: AA6agR6DTTGeiiUnLCzaaZP9BSI8eCO9U1ifoI27QIQY+ErlyxK+PZR9YkTYlxALfL3CcXnCUKs6HA==
-X-Received: by 2002:a05:6870:45a9:b0:10a:9ebc:63ab with SMTP id y41-20020a05687045a900b0010a9ebc63abmr2983240oao.209.1662148275348;
-        Fri, 02 Sep 2022 12:51:15 -0700 (PDT)
+        bh=6lgPBkWCVtHB/nw/Rli0i6tqziEvTio+eJ1CLyqJH70=;
+        b=D1k2qeGWUFlLTUmGRf4DmP42dhNIHk9psDBn8DQ+FTMGW0nHFIy8ReBCgMokvTKf3L
+         hVV9iOzEILbi0ATeJ9trodtn76XuUp9Bnj3TjRNZKVfRvlgT5j+w8NrpLpSKPun/PGhQ
+         0LXZvkSi6nFSuUte7uFyyrBxKlqxW9jKDopM2uDA/HHLkltn8JMsMSCPxPjvqqo5vubD
+         7IbYonUafTD5P/UxCelYrmYTqbq4Gag3A6/4UXqH6YgOno9vd24DqP3vOsmWcfse3RwW
+         ReDTSRyCP3VMvq4D3k2bgenI4RS2UZL1h/MieTVUlYrYmsJ1abI031SlhK8ZyW3xZu7o
+         6vLg==
+X-Gm-Message-State: ACgBeo0Wlly2t1GKmfZoCgFmrGZDsdn41bMEvrUELMmbcSv+UFCNc8cA
+        P3K6hYYVe043pg16dojWDQ==
+X-Google-Smtp-Source: AA6agR5met1SMUF1qsJ76dJU52AGcgRifL31LB03aIjN1U6GtnZh9mLsuvophhLuReeHkK/rHN+2+w==
+X-Received: by 2002:a05:6808:1242:b0:345:7e6b:961b with SMTP id o2-20020a056808124200b003457e6b961bmr2594131oiv.290.1662148659156;
+        Fri, 02 Sep 2022 12:57:39 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id cz20-20020a056870649400b0010c0d04eb00sm1626681oab.2.2022.09.02.12.51.14
+        by smtp.gmail.com with ESMTPSA id d8-20020a05680805c800b00344e3751fc4sm1304346oij.36.2022.09.02.12.57.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 12:51:15 -0700 (PDT)
-Received: (nullmailer pid 306663 invoked by uid 1000);
-        Fri, 02 Sep 2022 19:51:14 -0000
-Date:   Fri, 2 Sep 2022 14:51:14 -0500
+        Fri, 02 Sep 2022 12:57:38 -0700 (PDT)
+Received: (nullmailer pid 315919 invoked by uid 1000);
+        Fri, 02 Sep 2022 19:57:37 -0000
+Date:   Fri, 2 Sep 2022 14:57:37 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Eliav Farber <farbere@amazon.com>
 Cc:     jdelvare@suse.com, linux@roeck-us.net, p.zabel@pengutronix.de,
@@ -49,49 +49,82 @@ Cc:     jdelvare@suse.com, linux@roeck-us.net, p.zabel@pengutronix.de,
         shellykz@amazon.com, shorer@amazon.com, amitlavi@amazon.com,
         almogbs@amazon.com, dkl@amazon.com, rahul.tanwar@linux.intel.com,
         andriy.shevchenko@intel.com
-Subject: Re: [PATCH v3 04/19] dt-bindings: hwmon: (mr75203) change "reset"
- property to be optional
-Message-ID: <20220902195114.GA305400-robh@kernel.org>
+Subject: Re: [PATCH v3 10/19] dt-bindings: hwmon: (mr75203) add
+ "moortec,vm-pre-scaler" property
+Message-ID: <20220902195737.GA306891-robh@kernel.org>
 References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-5-farbere@amazon.com>
+ <20220830192212.28570-11-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830192212.28570-5-farbere@amazon.com>
+In-Reply-To: <20220830192212.28570-11-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 07:21:57PM +0000, Eliav Farber wrote:
-> Change "reset" property to be optional instead of required, for SOCs that
-
-'resets'
-
-And subject too.
-
-> don't support a reset controller.
+On Tue, Aug 30, 2022 at 07:22:03PM +0000, Eliav Farber wrote:
+> Add support for mr76006 pre-scaler which provides divide-by-2 scaling of
+> input voltage, which can then be presented for VM for measurement within
+> its range (the VM input range is limited to -0.1V to 1V).
+> 
+> The new "moortec,vm-pre-scaler" property lists the channels that use a
+> pre-scaler.
+> 
+> The driver will use this list to multiply the voltage result by 2, to
+> present to the user the actual voltage input source.
 > 
 > Signed-off-by: Eliav Farber <farbere@amazon.com>
 > ---
-> V3 -> v2:
-> - Change "reset" property to be optional instead of adding new
->   "reset-control-skip" property.
+> V3 -> V2:
+> - Add "moortec" prefix to property name.
+> - Change property format to be a single u8 array.
+> - Fix typo: scalar --> scaler.
 > 
->  Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 1 -
->  1 file changed, 1 deletion(-)
+>  .../devicetree/bindings/hwmon/moortec,mr75203.yaml    | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
 > diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> index 6abde48b746e..2ec4b9da4b92 100644
+> index 69cc6caceb2c..4c983d8f8fe7 100644
 > --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
 > +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> @@ -49,7 +49,6 @@ required:
->    - reg
->    - reg-names
->    - clocks
-> -  - resets
->    - "#thermal-sensor-cells"
+> @@ -54,6 +54,16 @@ properties:
+>      default: 16
+>      $ref: /schemas/types.yaml#definitions/uint8-array
 >  
->  additionalProperties: false
+> +  moortec,vm-pre-scaler:
+> +    description:
+> +      moortec,vm-pre-scaler property is an array of channels that use a mr76006
+> +      pre-scaler to divides the input source by 2.
+
+to divide the
+
+You don't need the property name in the description. The entries are the 
+pre-scaler values for each channel? The array index is the channel? If 
+so, then 'an array of pre-scaler values for each channel ...'.
+
+> +      The pre-scaler is used for input sources that exceed the VM input range.
+> +      The driver uses this information to present to the user the actual value
+> +      of the voltage source.
+> +    default: 1
+
+It's an array, so a scalar default doesn't make sense.
+
+> +    $ref: /schemas/types.yaml#definitions/uint8-array
+
+Constraints? I assume there's a finite number of channels to set the 
+array size bounds for example.
+
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -76,5 +86,6 @@ examples:
+>          clocks = <&osc0>;
+>          resets = <&rcu0 0x40 7>;
+>          moortec,vm-active-channels = <0x10 0x05>;
+> +        moortec,vm-pre-scaler = <5 6>;
+>          #thermal-sensor-cells = <1>;
+>      };
 > -- 
 > 2.37.1
 > 
