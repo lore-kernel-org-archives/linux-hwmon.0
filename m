@@ -2,98 +2,82 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94B4DECAAD5
-	for <linux-hwmon@archiver.kernel.org>; Sat,  3 Sep 2022 22:00:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D639FECAAD5
+	for <linux-hwmon@archiver.kernel.org>; Sat,  3 Sep 2022 22:37:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbiICWAK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 3 Sep 2022 18:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S229648AbiICWhm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 3 Sep 2022 18:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbiICWAJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 3 Sep 2022 18:00:09 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3F739BAA
-        for <linux-hwmon@vger.kernel.org>; Sat,  3 Sep 2022 15:00:08 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id 145so5266668pfw.4
-        for <linux-hwmon@vger.kernel.org>; Sat, 03 Sep 2022 15:00:08 -0700 (PDT)
+        with ESMTP id S229525AbiICWhm (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 3 Sep 2022 18:37:42 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB444DB52
+        for <linux-hwmon@vger.kernel.org>; Sat,  3 Sep 2022 15:37:41 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id n202so4405984iod.6
+        for <linux-hwmon@vger.kernel.org>; Sat, 03 Sep 2022 15:37:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=Gm6usRBuViQMTZdHvwpmD6F0l3o1GEDbVd0wQwkYZq4=;
-        b=DpZKsXVxh3/ck373aUGzS6k6rPWwRKMcx6cji7XOAi4kZ6wcAS83ajA3pf59MFEJkp
-         lSs82WvqvpUYvcwZdUpV9QxyP43bvY/qeQfYaVN7fNWfJovhwPvkdGplxrrhnD2iKUze
-         EEj4gJCa7iUG2N1WUJ6Cv9QlKfEoGvYDBVxFfPxH46ZpcsA8qHHJUZ76sN7kDhUlFBD9
-         OAq/QogOkEkG6bmVjJ+lmi4GEUzP5fhF114QEFZGvQ2WU57oqx7Ff2w6qxIXou3J+Vxp
-         Jv1SWHXmsyhRrOeqdkPACSKN6Hsre7M/kUvd0ou0LsH73+LY4gkadnAozN1YUb62+YsZ
-         bqOQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=VG4WdCRTKsnUl8DU++AAwbVOVF3DpGRyvXwvrmGK6oA=;
+        b=pQeJQuP2nXfb0+sReafFsUZaOcsbp+inidtF93HkRXkV2hDDIRDL+jcyE6mSJJORbH
+         TwK68BzQAdPTsKl/0k9+sOG3Vu/tHUzxCCHpSJyxmQLDC5ldZtGpqLVJ9cRp3Fc+Syt0
+         +0NW/QPecJ0e6fOsrog2K/ozECF+1WLc+nCewjFMT4wgwNbHX3WWwd9PbXRC3pkLx1z8
+         wVPKGnvpR064v62Q6oOsN2qlksoABCuSdfyVJdVe2waeAlDGCk1NhY7ZSfZUaUJUrPRL
+         vrpibt3U/JyMhzSHm0dHvCA8rXyo3ajymwq+xy2dA7CQu1F/OUGfjuC50LBBZkqt3lxS
+         yIpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=Gm6usRBuViQMTZdHvwpmD6F0l3o1GEDbVd0wQwkYZq4=;
-        b=Xor50awveHm/zMPOjoBNU7r8Jps+QCZZ/fbgU+LaQyG7HQx+6KzgctKEd8MGkAMlBM
-         ylXC8E1HVkKulywQ/yitfNM+zRiG8Uky8E/tR45iR4j6UUwne9d82yeY2dcCIHcvo3Sa
-         LSsiEmrezwYNrmakONGKRx08x0M9E359r+/VCxBsiWS9FU6spIk8DMZlNWetPh4XWdlI
-         JJ1s74xCN+R8hZOPV1Y9JC9+5t1CabexZBcMf3XgZ/FL8CgMaVPszwCZB0lliMYP7DWP
-         Nv9F3HO/aMkFNZGZWSusGjndOXEHt9otgxxEbsMTQ4dXKHDd0/gdTM4CAvTw+YlBXsfA
-         ptTA==
-X-Gm-Message-State: ACgBeo1mD5AI4qiVxIeUT96rdtsqir61shjnmZ5A3LMlEkt9+nObWdYd
-        VY7XA++tCtM4m5c0/wTld+JozY1IKo0m8Q==
-X-Google-Smtp-Source: AA6agR7y3zdpqy5HjA/yYykeVMbx4JbrwG2lpfDnt4TDVGHWoESf0N13hrFCQQBi3PFLn/vdkmutnA==
-X-Received: by 2002:a63:465e:0:b0:430:326c:7e6e with SMTP id v30-20020a63465e000000b00430326c7e6emr15500494pgk.84.1662242407445;
-        Sat, 03 Sep 2022 15:00:07 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x6-20020aa79a46000000b0052d432b4cc0sm4435733pfj.33.2022.09.03.15.00.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Sep 2022 15:00:06 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ac202c2e-3add-2470-3fa6-85783c1494a0@roeck-us.net>
-Date:   Sat, 3 Sep 2022 15:00:04 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=VG4WdCRTKsnUl8DU++AAwbVOVF3DpGRyvXwvrmGK6oA=;
+        b=4BtClmkSMsPJf5e+/Sr0CkYhjxQMy2b2pCik8pHYAW9yPw9T8BsryTIMN/ye23GrgO
+         R7vI3ISokK1j2UH/3X8Hw5chaPPu9d2g1dJQhGw1pS9sNPk7Ht6grF3xpNNWe+bi60kJ
+         aSsdTTya1vXwMGO2U51yzbPcQQ5mv9gecCDP7N6x4/TE7QLiJUjo1JqVvJcGrmizohe7
+         3Bc/jnNXeMIFDBo/Xm2QzTYYReilog9HpwQP/tIsLmCpy4u3bjNePCL3KvQjo7QJgv5+
+         H1/DAzS8kcxtf2+do+HbBfVE0sewAXza0sB2j66lgpEUWZMIZC0W1IvrjQjZgdWbd/El
+         bMsw==
+X-Gm-Message-State: ACgBeo2aTpdpdu764HaaG6zF2TA1WW9AgGu213zhIvXXt/K8fQ7oy1T/
+        bgkh8vPPJ2L9d5p0X/hWhykVBtValqTjeqsjjV3jYF7WQyt1JA==
+X-Google-Smtp-Source: AA6agR6SnB6cO1ifmtXXYnCDdd9ICvZ3HAoKwlUo3SzdXMb+RTmlbN2PKYQIJxHMHHm/nyWwVeB/P52/M+h1JFprFnY=
+X-Received: by 2002:a05:6638:1396:b0:350:1059:29bb with SMTP id
+ w22-20020a056638139600b00350105929bbmr3292827jad.67.1662244660593; Sat, 03
+ Sep 2022 15:37:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: Issue in asus_ec_sensors in Fedora installations and other
- distributions
-Content-Language: en-US
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+References: <6026b5e2-a8f5-1058-6112-f191bde333a6@my.mail.de>
+ <47e41e8f-f6b2-4bc7-de3f-0c811ee6fdf7@my.mail.de> <62fb8a16-bebd-5de7-0b4f-eed4d2593587@roeck-us.net>
+ <CAB95QATHd1sJwbYOPeb28j9vZAfZAu-Xa+pXWUhbMTVifKz93A@mail.gmail.com>
+ <5e42685d-ae82-d74d-4883-d8a9e9fcb243@roeck-us.net> <CAB95QAQ9EXX3uZhiZyxr=aAwiSR6j6i1GstFg9iX4eF06b5GUQ@mail.gmail.com>
+ <ac202c2e-3add-2470-3fa6-85783c1494a0@roeck-us.net>
+In-Reply-To: <ac202c2e-3add-2470-3fa6-85783c1494a0@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Sun, 4 Sep 2022 00:37:29 +0200
+Message-ID: <CAB95QAT=x8V7yg70azPnnD=Hv70goQbA6S8fOVjRpsvKfcK8Ww@mail.gmail.com>
+Subject: Re: Issue in asus_ec_sensors in Fedora installations and other distributions
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Christopher Klooz <py0xc3@my.mail.de>, linux-hwmon@vger.kernel.org,
         regressions@lists.linux.dev
-References: <6026b5e2-a8f5-1058-6112-f191bde333a6@my.mail.de>
- <47e41e8f-f6b2-4bc7-de3f-0c811ee6fdf7@my.mail.de>
- <62fb8a16-bebd-5de7-0b4f-eed4d2593587@roeck-us.net>
- <CAB95QATHd1sJwbYOPeb28j9vZAfZAu-Xa+pXWUhbMTVifKz93A@mail.gmail.com>
- <5e42685d-ae82-d74d-4883-d8a9e9fcb243@roeck-us.net>
- <CAB95QAQ9EXX3uZhiZyxr=aAwiSR6j6i1GstFg9iX4eF06b5GUQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAB95QAQ9EXX3uZhiZyxr=aAwiSR6j6i1GstFg9iX4eF06b5GUQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/3/22 12:40, Eugene Shalygin wrote:
->> I don't understand why that works either. Maybe it interferes with other
->> PNP0C09 devices and/or the code in drivers/acpi/ec.c.
-> 
-> Turns out the patch breaks sensors on a system where it should provide
-> output. The module gets loaded but provides no output (which should
-> mean the probe code is not executed). I will try to investigate
-> tomorrow.
-> 
->> Couple of comments:
->>
->> - You'll need to drop __init.
->> - No need or reason to rename asus_ec_sensors_platform_driver
->>     to asus_ec_sensors_platform_driver_probe.
-> That's in order to not drop __init.
-> 
+On Sun, 4 Sept 2022 at 00:00, Guenter Roeck <linux@roeck-us.net> wrote:
+> What does the name of the struct platform_driver data structure
+> have to do with __init ?
 
-What does the name of the struct platform_driver data structure
-have to do with __init ?
+That's what the modpost warning message suggests:
+WARNING: modpost:
+/home/eugene/develop/asus-ec-sensors/asus-ec-sensors.o(.data+0x60):
+Section mismatch in reference from the variable
+asus_ec_sensors_platform_driver to the function
+.init.text:asus_ec_probe()
+The variable asus_ec_sensors_platform_driver references
+the function __init asus_ec_probe()
+If the reference is valid then annotate the
+variable with __init* or __refdata (see linux/init.h) or name the variable:
+*_template, *_timer, *_sht, *_ops, *_probe, *_probe_one, *_console
 
-Thanks,
-Guenter
+Regards,
+Eugene
