@@ -2,147 +2,106 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D0E4ECAAD5
-	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Sep 2022 20:03:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 257E2C38145
+	for <linux-hwmon@archiver.kernel.org>; Sat,  3 Sep 2022 02:01:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiIBUD5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 2 Sep 2022 16:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
+        id S230102AbiICCBs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 2 Sep 2022 22:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiIBUD4 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Sep 2022 16:03:56 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB7FB9434;
-        Fri,  2 Sep 2022 13:03:55 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-11edd61a9edso7392918fac.5;
-        Fri, 02 Sep 2022 13:03:55 -0700 (PDT)
+        with ESMTP id S229586AbiICCBr (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Sep 2022 22:01:47 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBC3C8754;
+        Fri,  2 Sep 2022 19:01:45 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 78so3369972pgb.13;
+        Fri, 02 Sep 2022 19:01:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=SL2OYo4Y0nRVWNk4wkdLxh4PM2k6Tf5TlXKaNlHd0hA=;
+        b=EwhJrKWE+kHpLXR1dPyFa+YBsZWDzfcBpZ4fc07lumM2ZyvdkbrcaMJubiK3mQr6jo
+         zZJ3VO8bOK35Tehyb6/qURRWrXusqMM/91y5q0HoCxx8iyYMi7dLCjO6dyYtJJLDHDnI
+         eG4bYBPMNfsvk4cCdxtkVg6u2aMp3n0YN676QCUEPm2w0KmOa+cU7CflbeRHP1ZBDWMY
+         3lZEJ53k1nH8zldOqykdo+5ZRhzC+qzxEV3Em/JSCkF8gco+sSOxblBsVVouz2kIKve3
+         QBjKgl9E1KzHpj0Z1gLrSyEWgGV2UuMLQFzCuP5m9TSXH9eG+8NtYgMwzD2Z8GOP8AOO
+         YLNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=C9aW5y522OX/8JtSB5bbTEMWELASaLGWe8KFzDOic70=;
-        b=ePNjTgPcRC77mtehZ51e/DIyp7snYPjvKToDI3GkT4YFy3n7AQPi3idZEJJcraEFWR
-         SvzRlHiFkXzH+vyIouIkK0JGpwRzWl/J/taeHiouCgc5YE8hDsDVXWm0eIFufhgs4O9a
-         PbpwBO4Nc8Xg+WL7tUFEY0dOqzGUN7B7AQntaryAIL/ak6Z7erk1inUwplrBl2JIiBzr
-         pyJ4TDqgdEl1D9chxTLXeGEE+pBCupmz0hLa8wSVxhLJB4Yiowh3UDRwYp9CCAGMXgJs
-         EFZyNa/kUXCAgfds4b+2/n50HMtVL0qXBoeae3WALE0V75hly4K1lhBCTESq7iPWMmnf
-         Zgzg==
-X-Gm-Message-State: ACgBeo02lKmRWWgOH61Lb3nDKS3RZj1cug5LcI4yEJHTTDlkywUPoR3P
-        umTCir9bTJjOXpGzDYjG6Q==
-X-Google-Smtp-Source: AA6agR7X7LgSHTrqR4pBUQ6YJvJARDJW7Vt5cNu2uVbOPXyWy9+oS3seWLEkqV6pKwrSwJ56OLaZrQ==
-X-Received: by 2002:a05:6870:a90f:b0:11e:949a:e3ef with SMTP id eq15-20020a056870a90f00b0011e949ae3efmr3248791oab.106.1662149034595;
-        Fri, 02 Sep 2022 13:03:54 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s12-20020a056870ea8c00b001226d2100f2sm1537319oap.33.2022.09.02.13.03.53
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=SL2OYo4Y0nRVWNk4wkdLxh4PM2k6Tf5TlXKaNlHd0hA=;
+        b=IZsv96AV2AU0vy2Jp9PWtg6VNvO/iyDVYdUMvIDORH/8+mdigB3gFUFdQqdhIVDTBk
+         CAlFYruBWSCIMdytujFPaqVc/kjaQBj3kuCJDLZzrfq3Hn/u39Tfk3vrTxP8GHlahzs/
+         SafLHHpqcoIVJ4b8HrJLycyOK1fhA/lscW4X9LPl0PFOVMGadBMS8HV/Rk5+3W8fuiD1
+         b6zCXo389mgS3CyPUbRkM+UtwYltpjO3ZglIprMrWhKdfdKPEEIKAsZh9EYSyqh53sTi
+         n7LR22k0rayiuCIp4p11QeyO9ofeco7RygIw86cvxr6X3INnCvB9hK0OEn+I3MA7PJgj
+         hm0g==
+X-Gm-Message-State: ACgBeo3uuAWx3e4AzBHzGHqqOAP91vB9zMs6/5rJtl0aMNNiJS+kQHrs
+        5xpq2yapEBqvJNl9gqr/eRJLYyRtyJ0beg==
+X-Google-Smtp-Source: AA6agR7DuGXQ7p0PuJkDvlZ/I4w7fr3C12eiSRwvIWADF99iU9LYtaTUC6XrgFbgs58xCAX0zy2GrQ==
+X-Received: by 2002:a63:484a:0:b0:42b:2e71:6665 with SMTP id x10-20020a63484a000000b0042b2e716665mr32759033pgk.407.1662170505239;
+        Fri, 02 Sep 2022 19:01:45 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n19-20020a170903405300b00172b5d1e054sm2305628pla.17.2022.09.02.19.01.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 13:03:54 -0700 (PDT)
-Received: (nullmailer pid 324903 invoked by uid 1000);
-        Fri, 02 Sep 2022 20:03:53 -0000
-Date:   Fri, 2 Sep 2022 15:03:53 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, p.zabel@pengutronix.de,
-        rtanwar@maxlinear.com, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        talel@amazon.com, hhhawa@amazon.com, jonnyc@amazon.com,
-        hanochu@amazon.com, ronenk@amazon.com, itamark@amazon.com,
-        shellykz@amazon.com, shorer@amazon.com, amitlavi@amazon.com,
-        almogbs@amazon.com, dkl@amazon.com, rahul.tanwar@linux.intel.com,
-        andriy.shevchenko@intel.com
-Subject: Re: [PATCH v3 16/19] dt-bindings: hwmon: (mr75203) add coefficient
- properties for the thermal equation
-Message-ID: <20220902200353.GA318894-robh@kernel.org>
-References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-17-farbere@amazon.com>
+        Fri, 02 Sep 2022 19:01:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v6.0-rc4
+Date:   Fri,  2 Sep 2022 19:01:42 -0700
+Message-Id: <20220903020142.852288-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.36.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830192212.28570-17-farbere@amazon.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 07:22:09PM +0000, Eliav Farber wrote:
-> Add optional temperature coefficient properties:
->  *) moortec,ts-coeff-g
->  *) moortec,ts-coeff-h
->  *) moortec,ts-coeff-cal5
->  *) moortec,ts-coeff-j
-> If defined they shall be used instead of defaults.
-> 
-> The coefficients were added to device tree on top of the series property
-> (which can be used to select between series 5 and series 6), because
-> coefficients can vary between product and product, and code defaults might
-> not be accurate enough.
-> 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
-> V3 -> V2:
-> - Add "moortec" prefix to property name.
-> 
->  .../bindings/hwmon/moortec,mr75203.yaml       | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> index ec2dbe7da9c2..a92da6064285 100644
-> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> @@ -74,6 +74,37 @@ properties:
->      default: 5
->      $ref: /schemas/types.yaml#definitions/uint32
->  
-> +  moortec,ts-coeff-g:
-> +    description:
-> +      G coefficient for temperature equation.
-> +      Value should be multiplied by factor 1000.
+Hi Linus,
 
-If you just multiply the values here, you can specify 'multipleOf: 1000'
+Please pull hwmon fixes for Linux v6.0-rc4 from signed tag:
 
-Either way, some constraints would be nice. Or is 0 - 2^32 valid?
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.0-rc4
 
+Thanks,
+Guenter
+------
 
-> +      Default for series 5 = 60000
-> +      Default for series 6 = 57400
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  moortec,ts-coeff-h:
-> +    description:
-> +      H coefficient for temperature equation.
-> +      Value should be multiplied by factor 1000.
-> +      Default for series 5 = 200000
-> +      Default for series 6 = 249400
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  moortec,ts-coeff-cal5:
-> +    description:
-> +      cal5 coefficient for temperature equation (can't be 0).
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-minimum: 1
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-> +      Default for series 5 = 4094
-> +      Default for series 6 = 4096
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  moortec,ts-coeff-j:
-> +    description:
-> +      J coefficient for temperature equation.
-> +      Value should be multiplied by factor 1000.
-> +      Default for series 5 = -100
-> +      Default for series 6 = 0
-> +    $ref: /schemas/types.yaml#/definitions/int32
-> +
->  required:
->    - compatible
->    - reg
-> @@ -97,5 +128,7 @@ examples:
->          resets = <&rcu0 0x40 7>;
->          moortec,vm-active-channels = <0x10 0x05>;
->          moortec,vm-pre-scaler = <5 6>;
-> +        moortec,ts-coeff-g = <61400>;
-> +        moortec,ts-coeff-h = <253700>;
->          #thermal-sensor-cells = <1>;
->      };
-> -- 
-> 2.37.1
-> 
-> 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.0-rc4
+
+for you to fetch changes up to f233d2be38dbbb22299192292983037f01ab363c:
+
+  hwmon: (gpio-fan) Fix array out of bounds access (2022-08-29 21:23:23 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v6.0-rc4
+
+- Fix out of bounds access in gpio-fan driver
+
+- Fix VOUT margin caching in PMBus core
+
+- Avoid error message after -EPROBE_DEFER from devm_regulator_register()
+
+----------------------------------------------------------------
+Armin Wolf (1):
+      hwmon: (gpio-fan) Fix array out of bounds access
+
+Christophe JAILLET (1):
+      hwmon: (pmbus) Use dev_err_probe() to filter -EPROBE_DEFER error messages
+
+Vincent Whitchurch (1):
+      hwmon: (pmbus) Fix vout margin caching
+
+ drivers/hwmon/gpio-fan.c         |  3 +++
+ drivers/hwmon/pmbus/pmbus_core.c | 19 ++++++++++++-------
+ 2 files changed, 15 insertions(+), 7 deletions(-)
