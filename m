@@ -2,67 +2,118 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9292BC38145
-	for <linux-hwmon@archiver.kernel.org>; Sat,  3 Sep 2022 17:37:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48B82ECAAD4
+	for <linux-hwmon@archiver.kernel.org>; Sat,  3 Sep 2022 19:12:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbiICRhK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 3 Sep 2022 13:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48916 "EHLO
+        id S233125AbiICTMl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 3 Sep 2022 15:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbiICRhI (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 3 Sep 2022 13:37:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCE652E79;
-        Sat,  3 Sep 2022 10:37:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D72660BA6;
-        Sat,  3 Sep 2022 17:37:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D609DC433D6;
-        Sat,  3 Sep 2022 17:37:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662226626;
-        bh=D6/Bv4oN1b8ebqE6mtie8cFD421rJnSwGSwI/H+JjZk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=nE3wnRitnhWcl8td1O8kZDGc+mRMYIPXIuDJKt/KXcT/rZ/BIkvUy7r3WkIes2HNa
-         sqxIUpOGiZK88HqdKSjjiqwqjJXAdxEFsMmfZtYTsdOE9blfo8kZst5dFMPw2i0UO0
-         HA6sp1a7E3cfb5jJQOa5DIghiB1ZkQYgvIw01r5Y5T4L5Qkt0McD9WFpmiqpi98vDe
-         eiLnfERlhbZboOgkmFoaOWWM6Hv2R2pOuhOEy2D1aQMf1arE2qlZhA7vpiTsfRRF0u
-         v/7fwq7MH+yqerPPszcdD6/PLJwtlosVEJJUnGEa9n0Z8iBV9o++DaziJC5Q34wo1p
-         Q1rKxEmnBzQJQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C39D0E924D9;
-        Sat,  3 Sep 2022 17:37:06 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon fixes for v6.0-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220903020142.852288-1-linux@roeck-us.net>
-References: <20220903020142.852288-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220903020142.852288-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.0-rc4
-X-PR-Tracked-Commit-Id: f233d2be38dbbb22299192292983037f01ab363c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 777464261d12f4b011fff68de36a4a1075691cd9
-Message-Id: <166222662679.30432.5127708521397179171.pr-tracker-bot@kernel.org>
-Date:   Sat, 03 Sep 2022 17:37:06 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        with ESMTP id S229698AbiICTMj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 3 Sep 2022 15:12:39 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34B15A15B;
+        Sat,  3 Sep 2022 12:12:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1662232359; x=1693768359;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=uOyTre85yQlaDYxtAo4E2Bj7GJMoTnZvSMixbf7TAhM=;
+  b=sKWsztVU0DymbqizyfALc/6uAVAExuBe06zjMPlLw2ixNwmhcjav/HDL
+   pYhMM2DVEBfrbgpeQUaRpWCAmRXeb1x2lS815reFE9Sl7tyM4jYg5Tcqo
+   i1kk7KMdnWkC1U18Hv/FhYlH/D9CLzjSmr2G9wfPYjVsPkrNvRr8oseGK
+   A=;
+X-IronPort-AV: E=Sophos;i="5.93,287,1654560000"; 
+   d="scan'208";a="223181348"
+Subject: Re: [PATCH v3 14/19] dt-bindings: hwmon: (mr75203) add "moortec,
+ ts-series" property
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-7d84505d.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 19:12:22 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-7d84505d.us-west-2.amazon.com (Postfix) with ESMTPS id C6998100361;
+        Sat,  3 Sep 2022 19:12:20 +0000 (UTC)
+Received: from EX19D013UWB003.ant.amazon.com (10.13.138.111) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Sat, 3 Sep 2022 19:12:20 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX19D013UWB003.ant.amazon.com (10.13.138.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Sat, 3 Sep 2022 19:12:20 +0000
+Received: from [192.168.97.127] (10.85.143.175) by mail-relay.amazon.com
+ (10.43.160.118) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Sat, 3 Sep 2022 19:12:14 +0000
+Message-ID: <58d05274-b460-638e-d363-930de897283a@amazon.com>
+Date:   Sat, 3 Sep 2022 22:12:13 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+To:     Rob Herring <robh@kernel.org>
+CC:     <jdelvare@suse.com>, <linux@roeck-us.net>,
+        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
+        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
+        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
+        <dkl@amazon.com>, <andriy.shevchenko@intel.com>,
+        "Farber, Eliav" <farbere@amazon.com>
+References: <20220830192212.28570-1-farbere@amazon.com>
+ <20220830192212.28570-15-farbere@amazon.com>
+ <20220902195935.GA316069-robh@kernel.org>
+Content-Language: en-US
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <20220902195935.GA316069-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Fri,  2 Sep 2022 19:01:42 -0700:
+On 9/2/2022 10:59 PM, Rob Herring wrote:
+> On Tue, Aug 30, 2022 at 07:22:07PM +0000, Eliav Farber wrote:
+>> Add optional "moortec,ts-series" property to define the temperature
+>> equation and coefficients that shall be used to convert the digital
+>> output to value in milli-Celsius.
+>> Supported series: 5 (default) and 6.
+>>
+>> Series 5:
+>>   T = G + H * (n / cal5 - 0.5) + J * F
+>> Where: G = 60, H = 200, cal5 = 4094, J = -0.1, F = frequency clock in 
+>> MHz
+>>
+>> Series 6:
+>>    T = G + H * (n / cal5 - 0.5)
+>> Where: G = 57.4, H = 249.4, cal5 = 4096
+>>
+>> Signed-off-by: Eliav Farber <farbere@amazon.com>
+>> ---
+>> V3 -> V2:
+>> - New patch to introduce "moortec,ts-series" property.
+>>
+>>  .../devicetree/bindings/hwmon/moortec,mr75203.yaml     | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>>
+>> diff --git 
+>> a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml 
+>> b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+>> index 4c983d8f8fe7..ec2dbe7da9c2 100644
+>> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+>> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+>> @@ -64,6 +64,16 @@ properties:
+>>      default: 1
+>>      $ref: /schemas/types.yaml#definitions/uint8-array
+>>
+>> +  moortec,ts-series:
+>> +    description:
+>> +      moortec,ts-series defines the temperature equation and 
+>> coefficients that
+>> +      shall be used to convert the digital output to value in 
+>> milli-Celsius.
+>> +      Supported series are 5 and 6.
+>
+> No need to state constraints in free-form text descriptions.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.0-rc4
+Fixed in v4.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/777464261d12f4b011fff68de36a4a1075691cd9
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
