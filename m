@@ -2,723 +2,132 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 413E3ECAAD3
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Sep 2022 16:06:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A415C6FA82
+	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Sep 2022 16:08:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233865AbiIDQGy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 4 Sep 2022 12:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
+        id S234406AbiIDQIx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 4 Sep 2022 12:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiIDQGx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 4 Sep 2022 12:06:53 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DD137FA7
-        for <linux-hwmon@vger.kernel.org>; Sun,  4 Sep 2022 09:06:52 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id 197so966363pfy.6
-        for <linux-hwmon@vger.kernel.org>; Sun, 04 Sep 2022 09:06:52 -0700 (PDT)
+        with ESMTP id S230015AbiIDQIx (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 4 Sep 2022 12:08:53 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DED37FA7
+        for <linux-hwmon@vger.kernel.org>; Sun,  4 Sep 2022 09:08:51 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id q3so6323341pjg.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 04 Sep 2022 09:08:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=AzDZHjF+vEF0q6FXBQoMS4zAayT9XPo64e5eGOlglLM=;
-        b=TXeymylP21AGF493EVi4NFiMOKB6uUQtlJ6L0qdTjl3ievkIvcc0zXN6OSKJVjlNkz
-         hw09cP7QzYNQW+WMu2ycSej43vGhNAnGcPz02zYp8SeAD15yBwJd45IHeN789i5rUqYA
-         RqlXrTgj71DMYDWkhq8/I9tBGmTEgG7mY0wmxhGXQ2cswP8IcajzSFTwmD5Z7jufQ+lv
-         E8KT6O5vLf71RMBD21GyW2xEF2vdEgWJW8tmq56lRSpV/+cjQNKHZ3dj/6AqcI5ppElW
-         wHc165qUNkJu7t8k09gnde3JBuhHbM3Ii1KfRbGYHZFdSkUE1QzLTOe6NreouChMzkfF
-         yArA==
+        bh=82i9BCLrYZf1B3Q3PzUf+U6wO5wNlI1ZwM9MmaGLes8=;
+        b=TKy8hZg9m7JoiiIzaGRRaSkbJ+HPiGIQK5uivTKF63CX/nDQEyeK4ML3WJYCLeB+Rs
+         mT++yZvtAlXaE7ZG0qSLYLX99vHYO+jHw/f6zJ4Z6XrNt1yYTZjBGi6TexsIMV/TT6Hj
+         /0KEMnCG918Pd8L1NS7BZG21Us5ZdyBv2DWh1GLIpzTEQorsUsCsTLWAAsMExL/GGWLr
+         kWmmimNZbk4VHu/PRb/KbqtUW1NUbLReJIkJ0PsWBxx9S4Ywnks2quZNx1YsQtqbJLcB
+         9e0ShYNkeD/EuTLNmGWpRavkHyRn28lOY31xLQ/nfCa7LzeZvfa5weIY+iH2auAY4l2I
+         4YlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=AzDZHjF+vEF0q6FXBQoMS4zAayT9XPo64e5eGOlglLM=;
-        b=4GauZLhoS3eyop3xMOVD6ioWAPg8C4x4WD0P1G3X3ausIkizCdfmFI5tZ24p6UNNBj
-         +61H2AOH5EPVuf5HURTSTFYQrjQVFjZQWA1IqJeJDPDWMheJtXK8yCfZbi7OMA4Zz+ag
-         6/YMJF6pfpeCrEEttt8bQ92hWsoLr+bsjhs8wvCEY27VnPP4O7YR/YhTtQdG7PHTX+7s
-         DVBtgfBCYrtQulGhMM3dLt6aLtOnBaKPtPsN4z/yyeJ8nTZ6c2eRmecAKY0z52tA32mX
-         Sr2Ox61M/x6c6zYpSKlRPkhKVnnlxJIBHeBB7igCRHVEKawPK7NBe0lzSHtKusa286v7
-         sMSQ==
-X-Gm-Message-State: ACgBeo0LrFUtNoT7o20GFUH69tzXGINMRgerWMim7WC+8MbKQOYNuW1O
-        CqlOLsNnhRAmuZqB3y0//SOX5jMDfSK4XA==
-X-Google-Smtp-Source: AA6agR4Z7A0UJQl1XflubG+9PkylP4ew8uo+BaqvY6aQp4/Bdut7NvxD6bJDYz0qjbrDeUG2VUfDfg==
-X-Received: by 2002:a05:6a00:13aa:b0:53b:8ae4:a18b with SMTP id t42-20020a056a0013aa00b0053b8ae4a18bmr6747012pfg.5.1662307611474;
-        Sun, 04 Sep 2022 09:06:51 -0700 (PDT)
+        bh=82i9BCLrYZf1B3Q3PzUf+U6wO5wNlI1ZwM9MmaGLes8=;
+        b=qHbrIMfgBFrd8RICVog2zKrfNZgi2CC2VDa2zm7o7lcm2a54TjJZYbw8H/ltg8ws+U
+         1PVWjc4b2zw0YgDuGq+B8iR07AWslvCBTGp8rvneiY0bJydf1mYF6cSy+XNBsR+2iSJA
+         Xl1XAIaBo8o/N9cVWJ8KtSUYILqsciz7huqhuKzerbPN+rRMBk/5p3125UbMta+JPdB/
+         5WS3sxwTBe6F4V1Etw3Jh2r5EDqGHdBQT9yfzealU/AYmZuo24uU/dj8wpdaDT6UsO4U
+         IlB0IJNHtywJnW0EeGyT9Z0xDzCZzpCV3VUGIbI9uaRLw+EufLtayKcvAcFGEy6/iswJ
+         1FGg==
+X-Gm-Message-State: ACgBeo1KyM1QScKzYm/zHoG6euWtMVpt5H+B+3j4eLwPnjMUgh4rRzBN
+        VFjzzJsmIcdy43L7JAlo1R8=
+X-Google-Smtp-Source: AA6agR67zkZEqhM1XI/tlU2WzZFsnQGYe/ftN8UMbm+Da4U8zy+EcmYa9kmUqD8REgRIVe19tj7k4A==
+X-Received: by 2002:a17:90b:254a:b0:200:53f:891d with SMTP id nw10-20020a17090b254a00b00200053f891dmr10871162pjb.168.1662307731238;
+        Sun, 04 Sep 2022 09:08:51 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p1-20020a17090a348100b001faa4a6691asm8640722pjb.30.2022.09.04.09.06.49
+        by smtp.gmail.com with ESMTPSA id h10-20020a17090acf0a00b0020061f4c907sm377823pju.7.2022.09.04.09.08.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 09:06:50 -0700 (PDT)
+        Sun, 04 Sep 2022 09:08:50 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 4 Sep 2022 09:06:49 -0700
+Date:   Sun, 4 Sep 2022 09:08:49 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-Subject: Re: [PATCH v5 1/4] drivers: hwmon: Add max31760 fan speed controller
- driver
-Message-ID: <20220904160649.GA3007261@roeck-us.net>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v5 3/4] dt-bindings: hwmon: Add bindings for max31760
+Message-ID: <20220904160849.GA3007349@roeck-us.net>
 References: <20220901125906.929-1-Ibrahim.Tilki@analog.com>
- <20220901125906.929-2-Ibrahim.Tilki@analog.com>
+ <20220901125906.929-4-Ibrahim.Tilki@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220901125906.929-2-Ibrahim.Tilki@analog.com>
+In-Reply-To: <20220901125906.929-4-Ibrahim.Tilki@analog.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 03:59:03PM +0300, Ibrahim Tilki wrote:
-> MAX31760 is a precision fan speed controller with nonvolatile lookup table.
-> Device has one internal and one external temperature sensor support.
-> Controls two fans and measures their speeds. Generates hardware alerts when
-> programmable max and critical temperatures are exceeded.
+On Thu, Sep 01, 2022 at 03:59:05PM +0300, Ibrahim Tilki wrote:
+> Adding bindings for Analog Devices MAX31760 Fan-Speed Controller
 > 
 > Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-> Reviewed-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
 
-For my reference:
+This patch wil need to be reviewed by a DT maintainer. Please use
+scripts/get_maintainer.pl to determine who needs to be copied.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Thanks,
+Guenter
 
 > ---
->  drivers/hwmon/Kconfig    |  12 +
->  drivers/hwmon/Makefile   |   1 +
->  drivers/hwmon/max31760.c | 594 +++++++++++++++++++++++++++++++++++++++
->  3 files changed, 607 insertions(+)
->  create mode 100644 drivers/hwmon/max31760.c
+>  .../bindings/hwmon/adi,max31760.yaml          | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
 > 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index e70d9614b..46ae3c4c4 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1066,6 +1066,18 @@ config SENSORS_MAX31730
->  	  This driver can also be built as a module. If so, the module
->  	  will be called max31730.
->  
-> +config SENSORS_MAX31760
-> +	tristate "MAX31760 fan speed controller"
-> +	depends on I2C
-> +	select REGMAP_I2C
-> +	help
-> +	  Support for the Analog Devices MAX31760 Precision Fan-Speed
-> +	  Controller. MAX31760 integrates temperature sensing along with
-> +	  precision PWM fan control.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called max31760.
-> +
->  config SENSORS_MAX6620
->  	tristate "Maxim MAX6620 fan controller"
->  	depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 007e829d1..1c0fa4dd8 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -140,6 +140,7 @@ obj-$(CONFIG_SENSORS_MAX1668)	+= max1668.o
->  obj-$(CONFIG_SENSORS_MAX197)	+= max197.o
->  obj-$(CONFIG_SENSORS_MAX31722)	+= max31722.o
->  obj-$(CONFIG_SENSORS_MAX31730)	+= max31730.o
-> +obj-$(CONFIG_SENSORS_MAX31760)  += max31760.o
->  obj-$(CONFIG_SENSORS_MAX6620)	+= max6620.o
->  obj-$(CONFIG_SENSORS_MAX6621)	+= max6621.o
->  obj-$(CONFIG_SENSORS_MAX6639)	+= max6639.o
-> diff --git a/drivers/hwmon/max31760.c b/drivers/hwmon/max31760.c
+> diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31760.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
 > new file mode 100644
-> index 000000000..7ff542011
+> index 000000000..003ec1317
 > --- /dev/null
-> +++ b/drivers/hwmon/max31760.c
-> @@ -0,0 +1,594 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/bits.h>
-> +#include <linux/err.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-> +#include <linux/i2c.h>
-> +#include <linux/regmap.h>
-> +#include <linux/util_macros.h>
-> +
-> +#define REG_CR1		0x00
-> +#define CR1_HYST	BIT(5)
-> +#define CR1_DRV		GENMASK(4, 3)
-> +#define CR1_TEMP_SRC	GENMASK(1, 0)
-> +#define REG_CR2		0x01
-> +#define CR2_STBY	BIT(7)
-> +#define CR2_ALERTS	BIT(6)
-> +#define CR2_DFC		BIT(0)
-> +#define REG_CR3		0x02
-> +#define REG_PWMR	0x50
-> +#define REG_PWMV	0x51
-> +#define REG_STATUS	0x5A
-> +#define STATUS_ALARM_CRIT(ch)	BIT(2 + 2 * (ch))
-> +#define STATUS_ALARM_MAX(ch)	BIT(3 + 2 * (ch))
-> +#define STATUS_RDFA		BIT(6)
-> +
-> +#define REG_TACH(ch)		(0x52 + (ch) * 2)
-> +#define REG_TEMP_INPUT(ch)	(0x56 + (ch) * 2)
-> +#define REG_TEMP_MAX(ch)	(0x06 + (ch) * 2)
-> +#define REG_TEMP_CRIT(ch)	(0x0A + (ch) * 2)
-> +
-> +#define TEMP11_FROM_REG(reg)	((reg) / 32 * 125)
-> +#define TEMP11_TO_REG(val)	(DIV_ROUND_CLOSEST(clamp_val((val), -128000, \
-> +							     127875), 125) * 32)
-> +
-> +#define LUT_SIZE	48
-> +
-> +#define REG_LUT(index)		(0x20 + (index))
-> +
-> +struct max31760_state {
-> +	struct regmap *regmap;
-> +
-> +	struct lut_attribute {
-> +		char name[24];
-> +		struct sensor_device_attribute sda;
-> +	} lut[LUT_SIZE];
-> +
-> +	struct attribute *attrs[LUT_SIZE + 2];
-> +	struct attribute_group group;
-> +	const struct attribute_group *groups[2];
-> +};
-> +
-> +static bool max31760_volatile_reg(struct device *dev, unsigned int reg)
-> +{
-> +	return reg > 0x50;
-> +}
-> +
-> +static const struct regmap_config regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.max_register = 0x5B,
-> +	.cache_type = REGCACHE_RBTREE,
-> +	.volatile_reg = max31760_volatile_reg,
-> +};
-> +
-> +static const int max31760_pwm_freq[] = {33, 150, 1500, 25000};
-> +
-> +static int tach_to_rpm(u16 tach)
-> +{
-> +	if (tach == 0)
-> +		tach = 1;
-> +
-> +	return 60 * 100000 / tach / 2;
-> +}
-> +
-> +static int max31760_read(struct device *dev, enum hwmon_sensor_types type,
-> +			 u32 attr, int channel, long *val)
-> +{
-> +	struct max31760_state *state = dev_get_drvdata(dev);
-> +	unsigned int regval;
-> +	unsigned int reg_temp;
-> +	s16 temp;
-> +	u8 reg[2];
-> +	int ret;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_fault:
-> +			ret = regmap_read(state->regmap, REG_STATUS, &regval);
-> +			if (ret)
-> +				return ret;
-> +
-> +			*val = FIELD_GET(STATUS_RDFA, regval);
-> +
-> +			return 0;
-> +		case hwmon_temp_max_alarm:
-> +			ret = regmap_read(state->regmap, REG_STATUS, &regval);
-> +			if (ret)
-> +				return ret;
-> +
-> +			if (channel)
-> +				*val = FIELD_GET(STATUS_ALARM_MAX(1), regval);
-> +			else
-> +				*val = FIELD_GET(STATUS_ALARM_MAX(0), regval);
-> +
-> +			return 0;
-> +		case hwmon_temp_crit_alarm:
-> +			ret = regmap_read(state->regmap, REG_STATUS, &regval);
-> +			if (ret)
-> +				return ret;
-> +
-> +			if (channel)
-> +				*val = FIELD_GET(STATUS_ALARM_CRIT(1), regval);
-> +			else
-> +				*val = FIELD_GET(STATUS_ALARM_CRIT(0), regval);
-> +
-> +			return 0;
-> +		case hwmon_temp_input:
-> +			reg_temp = REG_TEMP_INPUT(channel);
-> +			break;
-> +		case hwmon_temp_max:
-> +			reg_temp = REG_TEMP_MAX(channel);
-> +			break;
-> +		case hwmon_temp_crit:
-> +			reg_temp = REG_TEMP_CRIT(channel);
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +		ret = regmap_bulk_read(state->regmap, reg_temp, reg, 2);
-> +		if (ret)
-> +			return ret;
-> +
-> +		temp = (reg[0] << 8) | reg[1];
-> +
-> +		*val = TEMP11_FROM_REG(temp);
-> +
-> +		return 0;
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_input:
-> +			ret = regmap_bulk_read(state->regmap, REG_TACH(channel), reg, 2);
-> +			if (ret)
-> +				return ret;
-> +
-> +			*val = tach_to_rpm(reg[0] * 256 + reg[1]);
-> +
-> +			return 0;
-> +		case hwmon_fan_fault:
-> +			ret = regmap_read(state->regmap, REG_STATUS, &regval);
-> +			if (ret)
-> +				return ret;
-> +
-> +			if (channel)
-> +				*val = FIELD_GET(BIT(1), regval);
-> +			else
-> +				*val = FIELD_GET(BIT(0), regval);
-> +
-> +			return 0;
-> +		case hwmon_fan_enable:
-> +			ret = regmap_read(state->regmap, REG_CR3, &regval);
-> +			if (ret)
-> +				return ret;
-> +
-> +			if (channel)
-> +				*val = FIELD_GET(BIT(1), regval);
-> +			else
-> +				*val = FIELD_GET(BIT(0), regval);
-> +
-> +			return 0;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	case hwmon_pwm:
-> +		switch (attr) {
-> +		case hwmon_pwm_input:
-> +			ret = regmap_read(state->regmap, REG_PWMV, &regval);
-> +			if (ret)
-> +				return ret;
-> +
-> +			*val = regval;
-> +
-> +			return 0;
-> +		case hwmon_pwm_freq:
-> +			ret = regmap_read(state->regmap, REG_CR1, &regval);
-> +			if (ret)
-> +				return ret;
-> +
-> +			regval = FIELD_GET(CR1_DRV, regval);
-> +			if (regval >= ARRAY_SIZE(max31760_pwm_freq))
-> +				return -EINVAL;
-> +
-> +			*val = max31760_pwm_freq[regval];
-> +
-> +			return 0;
-> +		case hwmon_pwm_enable:
-> +			ret = regmap_read(state->regmap, REG_CR2, &regval);
-> +			if (ret)
-> +				return ret;
-> +
-> +			*val = 2 - FIELD_GET(CR2_DFC, regval);
-> +
-> +			return 0;
-> +		case hwmon_pwm_auto_channels_temp:
-> +			ret = regmap_read(state->regmap, REG_CR1, &regval);
-> +			if (ret)
-> +				return ret;
-> +
-> +			switch (FIELD_GET(CR1_TEMP_SRC, regval)) {
-> +			case 0:
-> +				*val = 2;
-> +				break;
-> +			case 1:
-> +				*val = 1;
-> +				break;
-> +			case 2:
-> +			case 3:
-> +				*val = 3;
-> +				break;
-> +			default:
-> +				return -EINVAL;
-> +			}
-> +
-> +			return 0;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int max31760_write(struct device *dev, enum hwmon_sensor_types type,
-> +			  u32 attr, int channel, long val)
-> +{
-> +	struct max31760_state *state = dev_get_drvdata(dev);
-> +	unsigned int pwm_index;
-> +	unsigned int reg_temp;
-> +	int temp;
-> +	u8 reg_val[2];
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_max:
-> +			reg_temp = REG_TEMP_MAX(channel);
-> +			break;
-> +		case hwmon_temp_crit:
-> +			reg_temp = REG_TEMP_CRIT(channel);
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +		temp = TEMP11_TO_REG(val);
-> +		reg_val[0] = temp >> 8;
-> +		reg_val[1] = temp & 0xFF;
-> +
-> +		return regmap_bulk_write(state->regmap, reg_temp, reg_val, 2);
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_enable:
-> +			if (val == 0)
-> +				return regmap_clear_bits(state->regmap, REG_CR3, BIT(channel));
-> +
-> +			if (val == 1)
-> +				return regmap_set_bits(state->regmap, REG_CR3, BIT(channel));
-> +
-> +			return -EOPNOTSUPP;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	case hwmon_pwm:
-> +		switch (attr) {
-> +		case hwmon_pwm_input:
-> +			if (val < 0 || val > 255)
-> +				return -EINVAL;
-> +
-> +			return regmap_write(state->regmap, REG_PWMR, val);
-> +		case hwmon_pwm_enable:
-> +			if (val == 1)
-> +				return regmap_set_bits(state->regmap, REG_CR2, CR2_DFC);
-> +
-> +			if (val == 2)
-> +				return regmap_clear_bits(state->regmap, REG_CR2, CR2_DFC);
-> +
-> +			return -EOPNOTSUPP;
-> +		case hwmon_pwm_freq:
-> +			pwm_index = find_closest(val, max31760_pwm_freq,
-> +						 ARRAY_SIZE(max31760_pwm_freq));
-> +
-> +			return regmap_update_bits(state->regmap,
-> +						  REG_CR1, CR1_DRV,
-> +						  FIELD_PREP(CR1_DRV, pwm_index));
-> +		case hwmon_pwm_auto_channels_temp:
-> +			switch (val) {
-> +			case 1:
-> +				break;
-> +			case 2:
-> +				val = 0;
-> +				break;
-> +			case 3:
-> +				val = 2;
-> +				break;
-> +			default:
-> +				return -EINVAL;
-> +			}
-> +
-> +			return regmap_update_bits(state->regmap, REG_CR1, CR1_TEMP_SRC, val);
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static const struct hwmon_channel_info *max31760_info[] = {
-> +	HWMON_CHANNEL_INFO(chip,
-> +			   HWMON_C_REGISTER_TZ),
-> +	HWMON_CHANNEL_INFO(fan,
-> +			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_ENABLE),
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT | HWMON_T_FAULT |
-> +			   HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM | HWMON_T_LABEL),
-> +	HWMON_CHANNEL_INFO(pwm,
-> +			   HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_INPUT |
-> +			   HWMON_PWM_AUTO_CHANNELS_TEMP),
-> +	NULL
-> +};
-> +
-> +static umode_t max31760_is_visible(const void *data,
-> +				   enum hwmon_sensor_types type,
-> +				   u32 attr, int channel)
-> +{
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_input:
-> +		case hwmon_temp_max_alarm:
-> +		case hwmon_temp_crit_alarm:
-> +		case hwmon_temp_fault:
-> +		case hwmon_temp_label:
-> +			return 0444;
-> +		case hwmon_temp_max:
-> +		case hwmon_temp_crit:
-> +			return 0644;
-> +		default:
-> +			return 0;
-> +		}
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_input:
-> +		case hwmon_fan_fault:
-> +			return 0444;
-> +		case hwmon_fan_enable:
-> +			return 0644;
-> +		default:
-> +			return 0;
-> +		}
-> +	case hwmon_pwm:
-> +		switch (attr) {
-> +		case hwmon_pwm_enable:
-> +		case hwmon_pwm_input:
-> +		case hwmon_pwm_freq:
-> +		case hwmon_pwm_auto_channels_temp:
-> +			return 0644;
-> +		default:
-> +			return 0;
-> +		}
-> +	default:
-> +		return 0;
-> +	}
-> +}
-> +
-> +int max31760_read_string(struct device *dev, enum hwmon_sensor_types type,
-> +			 u32 attr, int channel, const char **str)
-> +{
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		if (attr != hwmon_temp_label)
-> +			return -EOPNOTSUPP;
-> +
-> +		*str = channel ? "local" : "remote";
-> +
-> +		return 0;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static const struct hwmon_ops max31760_hwmon_ops = {
-> +	.is_visible = max31760_is_visible,
-> +	.read = max31760_read,
-> +	.write = max31760_write,
-> +	.read_string = max31760_read_string
-> +};
-> +
-> +static const struct hwmon_chip_info max31760_chip_info = {
-> +	.ops = &max31760_hwmon_ops,
-> +	.info = max31760_info,
-> +};
-> +
-> +static ssize_t lut_show(struct device *dev,
-> +			struct device_attribute *devattr, char *buf)
-> +{
-> +	struct sensor_device_attribute *sda = to_sensor_dev_attr(devattr);
-> +	struct max31760_state *state = dev_get_drvdata(dev);
-> +	int ret;
-> +	unsigned int regval;
-> +
-> +	ret = regmap_read(state->regmap, REG_LUT(sda->index), &regval);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sysfs_emit(buf, "%d\n", regval);
-> +}
-> +
-> +static ssize_t lut_store(struct device *dev,
-> +			 struct device_attribute *devattr,
-> +			 const char *buf, size_t count)
-> +{
-> +	struct sensor_device_attribute *sda = to_sensor_dev_attr(devattr);
-> +	struct max31760_state *state = dev_get_drvdata(dev);
-> +	int ret;
-> +	u8 pwm;
-> +
-> +	ret = kstrtou8(buf, 10, &pwm);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_write(state->regmap, REG_LUT(sda->index), pwm);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return count;
-> +}
-> +
-> +static ssize_t pwm1_auto_point_temp_hyst_show(struct device *dev,
-> +					      struct device_attribute *attr,
-> +					      char *buf)
-> +{
-> +	struct max31760_state *state = dev_get_drvdata(dev);
-> +	unsigned int regval;
-> +	int ret;
-> +
-> +	ret = regmap_read(state->regmap, REG_CR1, &regval);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sysfs_emit(buf, "%d\n", (1 + (int)FIELD_GET(CR1_HYST, regval)) * 2000);
-> +}
-> +
-> +static ssize_t pwm1_auto_point_temp_hyst_store(struct device *dev,
-> +					       struct device_attribute *attr,
-> +					       const char *buf,
-> +					       size_t count)
-> +{
-> +	struct max31760_state *state = dev_get_drvdata(dev);
-> +	unsigned int hyst;
-> +	int ret;
-> +
-> +	ret = kstrtou32(buf, 10, &hyst);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (hyst < 3000)
-> +		ret = regmap_clear_bits(state->regmap, REG_CR1, CR1_HYST);
-> +	else
-> +		ret = regmap_set_bits(state->regmap, REG_CR1, CR1_HYST);
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	return count;
-> +}
-> +
-> +static DEVICE_ATTR_RW(pwm1_auto_point_temp_hyst);
-> +
-> +static void max31760_create_lut_nodes(struct max31760_state *state)
-> +{
-> +	int i;
-> +	struct sensor_device_attribute *sda;
-> +	struct lut_attribute *lut;
-> +
-> +	for (i = 0; i < LUT_SIZE; ++i) {
-> +		lut = &state->lut[i];
-> +		sda = &lut->sda;
-> +
-> +		snprintf(lut->name, sizeof(lut->name),
-> +			 "pwm1_auto_point%d_pwm", i + 1);
-> +
-> +		sda->dev_attr.attr.mode = 0644;
-> +		sda->index = i;
-> +		sda->dev_attr.show = lut_show;
-> +		sda->dev_attr.store = lut_store;
-> +		sda->dev_attr.attr.name = lut->name;
-> +
-> +		sysfs_attr_init(&sda->dev_attr.attr);
-> +
-> +		state->attrs[i] = &sda->dev_attr.attr;
-> +	}
-> +
-> +	state->attrs[i] = &dev_attr_pwm1_auto_point_temp_hyst.attr;
-> +
-> +	state->group.attrs = state->attrs;
-> +	state->groups[0] = &state->group;
-> +}
-> +
-> +static int max31760_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct max31760_state *state;
-> +	struct device *hwmon_dev;
-> +	int ret;
-> +
-> +	state = devm_kzalloc(dev, sizeof(struct max31760_state), GFP_KERNEL);
-> +	if (!state)
-> +		return -ENOMEM;
-> +
-> +	state->regmap = devm_regmap_init_i2c(client, &regmap_config);
-> +	if (IS_ERR(state->regmap))
-> +		return dev_err_probe(dev,
-> +				     PTR_ERR(state->regmap),
-> +				     "regmap initialization failed\n");
-> +
-> +	dev_set_drvdata(dev, state);
-> +
-> +	/* Set alert output to comparator mode */
-> +	ret = regmap_set_bits(state->regmap, REG_CR2, CR2_ALERTS);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "cannot write register\n");
-> +
-> +	max31760_create_lut_nodes(state);
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
-> +							 state,
-> +							 &max31760_chip_info,
-> +							 state->groups);
-> +
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
-> +}
-> +
-> +static const struct of_device_id max31760_of_match[] = {
-> +	{.compatible = "adi,max31760"},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, max31760_of_match);
-> +
-> +static const struct i2c_device_id max31760_id[] = {
-> +	{"max31760"},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, max31760_id);
-> +
-> +static int __maybe_unused max31760_suspend(struct device *dev)
-> +{
-> +	struct max31760_state *state = dev_get_drvdata(dev);
-> +
-> +	return regmap_set_bits(state->regmap, REG_CR2, CR2_STBY);
-> +}
-> +
-> +static int __maybe_unused max31760_resume(struct device *dev)
-> +{
-> +	struct max31760_state *state = dev_get_drvdata(dev);
-> +
-> +	return regmap_clear_bits(state->regmap, REG_CR2, CR2_STBY);
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(max31760_pm_ops, max31760_suspend, max31760_resume);
-> +
-> +static struct i2c_driver max31760_driver = {
-> +	.class		= I2C_CLASS_HWMON,
-> +	.driver = {
-> +		.name	= "max31760",
-> +		.of_match_table = of_match_ptr(max31760_of_match),
-> +		.pm = pm_ptr(&max31760_pm_ops)
-> +	},
-> +	.probe_new	= max31760_probe,
-> +	.id_table	= max31760_id
-> +};
-> +module_i2c_driver(max31760_driver);
-> +
-> +MODULE_AUTHOR("Ibrahim Tilki <Ibrahim.Tilki@analog.com>");
-> +MODULE_DESCRIPTION("Analog Devices MAX31760 Fan Speed Controller");
-> +MODULE_SOFTDEP("pre: regmap_i2c");
-> +MODULE_VERSION("1.0");
-> +MODULE_LICENSE("GPL");
+> +++ b/Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
+> @@ -0,0 +1,44 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/adi,max31760.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices MAX31760 Fan-Speed Controller
+> +
+> +maintainers:
+> +  - Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> +
+> +description: |
+> +  Analog Devices MAX31760 Fan-Speed Controller
+> +  https://datasheets.maximintegrated.com/en/ds/MAX31760.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,max31760
+> +
+> +  reg:
+> +    description: |
+> +      I2C address of slave device.
+> +    items:
+> +      minimum: 0x50
+> +      maximum: 0x57
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c0 {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        max31760@50 {
+> +                reg = <0x50>;
+> +                compatible = "adi,max31760";
+> +        };
+> +    };
