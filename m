@@ -2,104 +2,159 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61243ECAAD3
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Sep 2022 14:10:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90D6DC6FA82
+	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Sep 2022 16:06:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiIDOK0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 4 Sep 2022 10:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
+        id S229596AbiIDQGj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 4 Sep 2022 12:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233765AbiIDOKZ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 4 Sep 2022 10:10:25 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED382652
-        for <linux-hwmon@vger.kernel.org>; Sun,  4 Sep 2022 07:10:24 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id o4so6171901pjp.4
-        for <linux-hwmon@vger.kernel.org>; Sun, 04 Sep 2022 07:10:24 -0700 (PDT)
+        with ESMTP id S229951AbiIDQGi (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 4 Sep 2022 12:06:38 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F352137FA7
+        for <linux-hwmon@vger.kernel.org>; Sun,  4 Sep 2022 09:06:36 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id l3so6340651plb.10
+        for <linux-hwmon@vger.kernel.org>; Sun, 04 Sep 2022 09:06:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=/gHBjKku3P8caFwwAMIPXhFBShRIJ0U2g3RpNf94/7k=;
-        b=AtnwMSPJEBsTMyufxEdrGKx3rLIdydFUmWAvlx3hwGObbrSrjLVZML0ZwrxeJ7q+Ep
-         aQWTZJMz3QEA3WqogN0ZKLDcyfIQ+v449NUDIz1mA4zKgw4wT7Cswndcht6rkDa4zZj1
-         /DuThg/6ygVFJT1ifiV2nGa4fnarJ33IaEAPSpLdfcSQ9RAFJF1Z4AggBVZF+/9T4CXZ
-         wh7/IDegTIJH+zicW2FKW3zoMypvsO19/oOxtXx/TXAUiZZtb1W1NLkIZNfue6AN+G+3
-         1g61KFvRxgnMpXWVP19Ku6W/ET088Ea0aWCKjxU1LKAcRdnUBsZY8bhIdJxz4LvINc+s
-         TCNw==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date;
+        bh=+tZ5kj1bT378GrX4zmhE+OHgIyEk7W8qH7M5x7H+9Ls=;
+        b=g6FnLR5fXHqURx//PyQ3AAlwZMfybbE06hVlTXj6Bwhp1Z6/tJbNNRyAQO3yN+e/0i
+         m4GZCHnRe4qUdHPVMc/NQWFStoRmWNVvkSluB+tCp3dhIVLBXfX1VZ+NUuwCljGz7A5O
+         QXae1Y/IzHA2F6LVWmFoUIsW8EKRTo9Q9tz28slu7WUMtp/qC6WnyudEuy1EQ//MwnvT
+         fisAdBhxKtM7I8JwmHptAJatlzaLIoKGahxxPt75F0hMwZaRQPhDnvr02E2HfX3q//Cs
+         5YNpDBgfB1iAaXjT+Wess0a4MThc/BB12rHAjHqoLEy+sgZrmQJTFVZjFrvTkqDe8qdp
+         V6dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=/gHBjKku3P8caFwwAMIPXhFBShRIJ0U2g3RpNf94/7k=;
-        b=D2jV/WbuuWR64v3Kqcn3qIl/+qo8Kz68j/FJnOTeMownhTshxIFiXpgxGfmwk/oy3x
-         G/EcF2SanPGZJwZZLU5unA00LGHdYDL+oMFKlkNPtCzlJ7o6xaX6O+73u+ZCcABBX177
-         jNznCd5iIY7Gfy+4Z7VJ/wMQDdIMFi4wwoUDzwdwLUknCpgXdDt1UeJZv+0bUSpB1xng
-         /SAD6vGEdIh9nnIbl1myXVS39GVRABX4sn8DzmqP0N9CDaMjobdn6pckQr9aCg5p+5hz
-         hTMUutj3w5nu2IFbO6mZ5OqLTHXSaTwUx2Pn5kvX/P+stc6wSqYaxKivdNcAI7M4weYW
-         bUDw==
-X-Gm-Message-State: ACgBeo0lHhni1MMh32nxbxlrUGik+X61O2o61OQcFk4vndxFiBUcnnMm
-        XabGtwVTInYfYc/+2xkacdkiiqGDbTV8Rw==
-X-Google-Smtp-Source: AA6agR4nf0ceOu4X8RBjT9NyoIEGErZP8cxSRcAHLRHP2S1fbAjprO/zObcGiJdMFs6ZKhutHZWYrQ==
-X-Received: by 2002:a17:90a:c789:b0:1fa:6bc0:77f6 with SMTP id gn9-20020a17090ac78900b001fa6bc077f6mr15254214pjb.1.1662300623804;
-        Sun, 04 Sep 2022 07:10:23 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k14-20020aa79d0e000000b0052d2b55be32sm5872495pfp.171.2022.09.04.07.10.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Sep 2022 07:10:17 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=+tZ5kj1bT378GrX4zmhE+OHgIyEk7W8qH7M5x7H+9Ls=;
+        b=EKRZyRjgg0sdbTr+mtUSq3i/YoStJhLTKSirZSJO4gT5Rton6jZF0dOQohakGyCgrm
+         3IVOVaIurSA1ay4B9TlnebxOlrI7cfYJtbBG8pAxyHjQJ7eSLOms4LTQweQKAvMnVSCn
+         wJRQDTOi2iu5yocr58nEG2M+mIqLe4sVnEcqdg1Xv3crlp7S8UFb9GrvT/0ZjPCZr+ye
+         wg7z/AvzQh62Mz4lStHh7O3miVCNW/14GAkJ797lbqM2sOB8tt1r4XkmPa+VEZzk/qHE
+         rPWuj5OuEc8EtYGSzQeQ7WBmb223a9BYtiEm7NmGkd/acQ7Ad1s/LPO/MLuYKuXXIupl
+         r8KA==
+X-Gm-Message-State: ACgBeo2r/0gLYxInM1pqtu/qg6g6Kyzx4gj4nKPkCBSFyGxqSkicfRy9
+        ChugPMGI1a7GGan5H6IGX3I=
+X-Google-Smtp-Source: AA6agR69hiNbuUfdcuTbe3vPubgQaRvPcMSN9QZD8c1uWsp/aigrWYWWEuxTnSnUJ4n28uZGhakOTg==
+X-Received: by 2002:a17:902:c209:b0:175:1a78:a170 with SMTP id 9-20020a170902c20900b001751a78a170mr27567191pll.45.1662307596237;
+        Sun, 04 Sep 2022 09:06:36 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b4-20020a170903228400b00175168a79d6sm5555440plh.286.2022.09.04.09.06.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Sep 2022 09:06:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1d234266-af01-5d8e-408f-ca58b53d870e@roeck-us.net>
-Date:   Sun, 4 Sep 2022 07:10:10 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: Issue in asus_ec_sensors in Fedora installations and other
- distributions
-Content-Language: en-US
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Christopher Klooz <py0xc3@my.mail.de>, linux-hwmon@vger.kernel.org,
-        regressions@lists.linux.dev
-References: <6026b5e2-a8f5-1058-6112-f191bde333a6@my.mail.de>
- <47e41e8f-f6b2-4bc7-de3f-0c811ee6fdf7@my.mail.de>
- <62fb8a16-bebd-5de7-0b4f-eed4d2593587@roeck-us.net>
- <CAB95QATHd1sJwbYOPeb28j9vZAfZAu-Xa+pXWUhbMTVifKz93A@mail.gmail.com>
- <5e42685d-ae82-d74d-4883-d8a9e9fcb243@roeck-us.net>
- <CAB95QAQ9EXX3uZhiZyxr=aAwiSR6j6i1GstFg9iX4eF06b5GUQ@mail.gmail.com>
- <ac202c2e-3add-2470-3fa6-85783c1494a0@roeck-us.net>
- <CAB95QAT=x8V7yg70azPnnD=Hv70goQbA6S8fOVjRpsvKfcK8Ww@mail.gmail.com>
- <2f14746c-8051-b711-cd28-7ca521d21c4d@roeck-us.net>
- <CAB95QARMOq0ie0SmhRx73L=mptTaa-eEHfNjGRH5CXvVFh-RLw@mail.gmail.com>
+Date:   Sun, 4 Sep 2022 09:06:32 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAB95QARMOq0ie0SmhRx73L=mptTaa-eEHfNjGRH5CXvVFh-RLw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v5 2/4] docs: hwmon: add max31760 documentation
+Message-ID: <20220904160632.GA3007049@roeck-us.net>
+References: <20220901125906.929-1-Ibrahim.Tilki@analog.com>
+ <20220901125906.929-3-Ibrahim.Tilki@analog.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220901125906.929-3-Ibrahim.Tilki@analog.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/4/22 06:19, Eugene Shalygin wrote:
-> On Sun, 4 Sept 2022 at 01:47, Guenter Roeck <linux@roeck-us.net> wrote:
+On Thu, Sep 01, 2022 at 03:59:04PM +0300, Ibrahim Tilki wrote:
+> Adding documentation for max31760 fan speed controller
 > 
->> A driver with a probe function can be unloaded and reloaded manually.
->> I don't see how you can do that if the functions are marked __init
->> and the driver is built into the kernel.
-> 
-> Did that and a user tested those changes. Unfortunately, the ACPI EC
-> is still inoperational if a module uses the ACPI id of the EC device
-> and its probe function returns an error. Looks like I have to change
-> MODULE_DEVICE_TABLE completely.
-> 
+> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> ---
+>  Documentation/hwmon/max31760.rst | 67 ++++++++++++++++++++++++++++++++
 
-If you insist on the __probe name hack, please add a note to the code
-explaining why that name is necessary. There is only one single driver
-besides this using that trick (I'd call it hack), hardly anyone will
-know about it, and thus it needs to be explained in the driver to
-prevent that the structure is renamed.
+The file also needs to be added to index.rst.
 
-Having said that, how did you de-instantiate the device when it was
-built into the kernel ?
+>  1 file changed, 67 insertions(+)
+>  create mode 100644 Documentation/hwmon/max31760.rst
+> 
+> diff --git a/Documentation/hwmon/max31760.rst b/Documentation/hwmon/max31760.rst
+> new file mode 100644
+> index 000000000..fd67c1318
+> --- /dev/null
+> +++ b/Documentation/hwmon/max31760.rst
+> @@ -0,0 +1,67 @@
+> +.. SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +Kernel driver max31760
+> +======================
+> +
+> +Supported chips:
+> +  * Analog Devices MAX31760
+> +
+> +    Prefix: 'max31760'
+> +
+> +    Addresses scanned: none
+> +
+> +    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX31760.pdf
+> +
+> +
+> +Author: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> +
+> +Description
+> +-----------
+> +
+> +MAX31760 is a precision fan speed controller with nonvolatile lookup table.
+> +Device has one internal and one external temperature sensor support.
+> +Controls two fans and measures their speeds.
+> +Generates hardware alerts when programmable max and critical temperatures are exceeded.
+> +Supports direct and temperature based automatic fan control.
+> +
+
+Please use full sentences.
 
 Thanks,
 Guenter
+
+> +Temperature measurement range: from -55°C to 125°C
+> +
+> +Temperature Resolution: 11 Bits, ±0.125°C
+> +
+> +Please refer how to instantiate this driver: Documentation/i2c/instantiating-devices.rst
+> +
+> +Lookup table for auto fan control
+> +---------------------------------
+> +
+> +========= =================================
+> +LUT Index Name
+> +========= =================================
+> +1         PWM value for T < +18°C
+> +2         PWM value for +18°C ≤ T < +20°C
+> +3         PWM value for +20°C ≤ T < +22°C
+> +...       ...
+> +47        PWM value for +108°C ≤ T < +110°C
+> +48        PWM value for T ≥ +110°C
+> +========= =================================
+> +
+> +Sysfs entries
+> +-------------
+> +
+> +=============================== =================================================================================
+> +fan[1-2]_input                  Fan speed (in RPM)
+> +fan[1-2]_enable                 Enable fan readings and fan fault alarms
+> +fan[1-2]_fault                  Fan fault status
+> +temp[1-2]_label                 "Remote" and "Local" temperature channel labels
+> +temp[1-2]_input                 Temperature sensor readings (in millidegrees Celsius)
+> +temp1_fault                     Remote temperature sensor fault status
+> +temp[1-2]_max                   Temperature max value. Asserts "ALERT" pin when exceeded
+> +temp[1-2]_max_alarm             Temperature max alarm status
+> +temp[1-2]_crit                  Temperature critical value. Asserts "SHDN" pin when exceeded
+> +temp[1-2]_crit_alarm            Temperature critical alarm status
+> +pwm1                            PWM value for direct fan control
+> +pwm1_enable                     1: direct fan control, 2: temperature based auto fan control
+> +pwm1_freq                       PWM frequency in hertz
+> +pwm1_auto_channels_temp         Temperature source for auto fan control. 1: temp1, 2: temp2, 3: max(temp1, temp2)
+> +pwm1_auto_point[1-48]_pwm       PWM value for LUT point
+> +pwm1_auto_point_temp_hyst       Temperature hysteresis for auto fan control. Can be either 2000mC or 4000mC
+> +=============================== =================================================================================
