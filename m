@@ -2,102 +2,78 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62DDFECAAD4
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Sep 2022 09:33:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3BE0ECAAD4
+	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Sep 2022 13:19:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiIDJd3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 4 Sep 2022 05:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
+        id S233715AbiIDNTq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 4 Sep 2022 09:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiIDJd1 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 4 Sep 2022 05:33:27 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0CD3FA38
-        for <linux-hwmon@vger.kernel.org>; Sun,  4 Sep 2022 02:33:26 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oUm0L-0008Nv-3P; Sun, 04 Sep 2022 11:33:25 +0200
-Message-ID: <413fa1b3-4243-aee6-da65-d7a0d0aaa6c5@leemhuis.info>
-Date:   Sun, 4 Sep 2022 11:33:24 +0200
+        with ESMTP id S233655AbiIDNTp (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 4 Sep 2022 09:19:45 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB3F9FEA
+        for <linux-hwmon@vger.kernel.org>; Sun,  4 Sep 2022 06:19:44 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id d68so5107389iof.11
+        for <linux-hwmon@vger.kernel.org>; Sun, 04 Sep 2022 06:19:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=1Z50Lfymh1PlbkiwBA/PwOqZtMKxrfRNBW2U0b3NRB4=;
+        b=jPYqbT91EXpvabefP4wXgkLu3BSFHcinWtR5ZSBMeJ1h5sYsm/CIVkfMjQ6moOCWzL
+         n3W1FmutnnvXKfJEFZ2a9tHZ7ri1mDBsq9O6qFcVnaBbCSqTyR/sZRoE5pcAhwtwcieX
+         EzxP1ENUNEvj5eCze+GJfFc36tPFHYpkI4g6snbSsB/zpjqLVIDkg60S6Dk3iCmK1XR/
+         Gz5Hj0JRgW70Wi797RnHdb2AkCJ0mYGaikSaH6xD/+0Ijp7RiuQaEXq/hFnWKYbmiw0E
+         OXLE9jOK8lVqUtCfryuEo1YEPLXLepYivS7axZ7YvDbiWgEMSo7gbF2H2eRld5tW+rYS
+         mAZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=1Z50Lfymh1PlbkiwBA/PwOqZtMKxrfRNBW2U0b3NRB4=;
+        b=iZAxaQW9v0vjxOd5uQowPhGRmGeMN6Q6YAzXD6g+w74CrMiotAi8Q2pn7BfmHTHhFN
+         B4Kr+HoRaaMV9MMVksrKg3omQeK76SUnqLxQb9sQqpO3opd2JQbglMXbcq9pCyLLI0IJ
+         Mf4qq+m8CEK6I6FftiY5JSBCGkmiTynLGkUoBpUmEut0qsrQFPj9QuodjL/guZwPOkCt
+         JohrAJj15+OxkDNfC3ttzNieH/DAJdxq14i9jEbK3BUD83g1s24w+esGyY2lPpQfVtcx
+         xZTfZN1ECwqpJ5ccRCoWMx/JdQeIpQLwGR5+323eWVh/7UzlVkVg4RNeyqH9hkT6SdoX
+         3NfQ==
+X-Gm-Message-State: ACgBeo2B78P76NUzivvsIad/hkUjIhg8IUGtX6LK8/bO+2CUUNuKWf+f
+        2d8GBiG5LF/lAG3k9Rty4W3lNmzj4OSjAigrrgg6GJRXiJY=
+X-Google-Smtp-Source: AA6agR67SqrtMJ8xv+Xs/AipmBBhh9/S/k/SoCqE0wZRKHE2hVw1FMxFUiXPGDEtsdp4x0q6lt9ZM83xzroLgVzBDig=
+X-Received: by 2002:a6b:b716:0:b0:68b:b14e:6220 with SMTP id
+ h22-20020a6bb716000000b0068bb14e6220mr13049361iof.133.1662297583436; Sun, 04
+ Sep 2022 06:19:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Content-Language: en-US, de-DE
-To:     regressions@lists.linux.dev
-Cc:     linux-hwmon@vger.kernel.org
 References: <6026b5e2-a8f5-1058-6112-f191bde333a6@my.mail.de>
- <47e41e8f-f6b2-4bc7-de3f-0c811ee6fdf7@my.mail.de>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: Issue in asus_ec_sensors in Fedora installations and other
- distributions #forregzbot
-In-Reply-To: <47e41e8f-f6b2-4bc7-de3f-0c811ee6fdf7@my.mail.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1662284006;76e20a27;
-X-HE-SMSGID: 1oUm0L-0008Nv-3P
+ <47e41e8f-f6b2-4bc7-de3f-0c811ee6fdf7@my.mail.de> <62fb8a16-bebd-5de7-0b4f-eed4d2593587@roeck-us.net>
+ <CAB95QATHd1sJwbYOPeb28j9vZAfZAu-Xa+pXWUhbMTVifKz93A@mail.gmail.com>
+ <5e42685d-ae82-d74d-4883-d8a9e9fcb243@roeck-us.net> <CAB95QAQ9EXX3uZhiZyxr=aAwiSR6j6i1GstFg9iX4eF06b5GUQ@mail.gmail.com>
+ <ac202c2e-3add-2470-3fa6-85783c1494a0@roeck-us.net> <CAB95QAT=x8V7yg70azPnnD=Hv70goQbA6S8fOVjRpsvKfcK8Ww@mail.gmail.com>
+ <2f14746c-8051-b711-cd28-7ca521d21c4d@roeck-us.net>
+In-Reply-To: <2f14746c-8051-b711-cd28-7ca521d21c4d@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Sun, 4 Sep 2022 15:19:32 +0200
+Message-ID: <CAB95QARMOq0ie0SmhRx73L=mptTaa-eEHfNjGRH5CXvVFh-RLw@mail.gmail.com>
+Subject: Re: Issue in asus_ec_sensors in Fedora installations and other distributions
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Christopher Klooz <py0xc3@my.mail.de>, linux-hwmon@vger.kernel.org,
+        regressions@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-TWIMC: this mail is primarily send for documentation purposes and for
-regzbot, my Linux kernel regression tracking bot. These mails usually
-contain '#forregzbot' in the subject, to make them easy to spot and filter.
+On Sun, 4 Sept 2022 at 01:47, Guenter Roeck <linux@roeck-us.net> wrote:
 
-[TLDR: I'm adding this regression report to the list of tracked
-regressions; all text from me you find below is based on a few templates
-paragraphs you might have encountered already already in similar form.]
+> A driver with a probe function can be unloaded and reloaded manually.
+> I don't see how you can do that if the functions are marked __init
+> and the driver is built into the kernel.
 
-Hi, this is your Linux kernel regression tracker.
+Did that and a user tested those changes. Unfortunately, the ACPI EC
+is still inoperational if a module uses the ACPI id of the EC device
+and its probe function returns an error. Looks like I have to change
+MODULE_DEVICE_TABLE completely.
 
-On 03.09.22 13:00, Christopher Klooz wrote:
-> Hi Eugene,
-> 
-> Currently, we have user reports of at least 4 Fedora installations that
-> have issues with asus_ec_sensors since 5.19.4. They remain in 5.19.6.
-> 
-> All issues can be solved by blacklisting asus_ec_sensors.
-> 
-> https://bugzilla.redhat.com/show_bug.cgi?id=2121844
-> 
-> The bugzilla report contains kernel logs of two machines, one with
-> nvidia-driver and one without a tainted kernel.
-> 
-> The report and the contained ask.fedora link contain some elaborations
-> of how the issue manifests at the users' machines. The major issue is a
-> wrong output of battery power percentage (in one case it gets stuck, in
-> the other cases is becomes erratic). Also, in one case it has effects on
-> suspending (see the report).
-> 
-> On the Internet, there are already reports from other Linux
-> distributions noting the issue and the same solution (blacklisting).
-> 
-> Thanks for maintaining & regards,
-
-Thanks for the report. To be sure below issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-tracking bot:
-
-#regzbot introduced 5cd29012028d ^
-https://bugzilla.redhat.com/show_bug.cgi?id=2121844
-#regzbot title asus_ec_sensors: causes misbehaviour; likely dup of
-https://bugzilla.kernel.org/show_bug.cgi?id=216412
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply -- ideally with also
-telling regzbot about it, as explained here:
-https://linux-regtracking.leemhuis.info/tracked-regression/
-
-Reminder for developers: When fixing the issue, add 'Link:' tags
-pointing to the report (the mail this one replies to), as explained for
-in the Linux kernel's documentation; above webpage explains why this is
-important for tracked regressions.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+Regards,
+Eugene
