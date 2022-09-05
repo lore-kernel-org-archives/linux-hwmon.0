@@ -2,116 +2,130 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1087BC54EE9
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Sep 2022 14:28:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B68CFECAAD5
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Sep 2022 20:31:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238039AbiIEO2X (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Sep 2022 10:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
+        id S231706AbiIEUbN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Sep 2022 16:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237704AbiIEO2U (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Sep 2022 10:28:20 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216FB42ADD;
-        Mon,  5 Sep 2022 07:28:20 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id q39-20020a056830442700b0063889adc0ddso6273808otv.1;
-        Mon, 05 Sep 2022 07:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=/HmuyMJMLt8ALaWgV3Gf78kLSUZRzuNCL0jDYFaGvBo=;
-        b=ga5TC7MQO3uI2t0sE1+ujHbv5Vk7ozxdWe0fsiXPTTcakqXwnGY36QTHbs6X+No7OG
-         E6d7ZzYBsNTGC1Di2tovmccNK+gVtlSEHzKGJV8eoDMO+SnQ0AO+jN/iZFPGdlGb9XSN
-         Xq7ySiz14XtkBWz13kTUDVv1ZMZ8ryQmcui+3u0RVImDGHF6qujV7ujR/AvHNBccIJAS
-         uVgS5G3N6/9wPaNLjp8/ko75prkSm7NoD6B8NTvYVvdty+nXshXTSP+MozZk2wouAOt7
-         dMeeOIUWXVxRiMQWo+1hYUh3NgDSenuYM/0YLkvRWXQ0O9W5koqBx+Uyt5sonzkvVHit
-         curA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=/HmuyMJMLt8ALaWgV3Gf78kLSUZRzuNCL0jDYFaGvBo=;
-        b=7hGo5zKLOFT6i8Zi3uVGAcWZbOZhOBgPBkMLRMrtf/hbg9At6W75QMI3Kq6nv/t/+O
-         EDh9UyoZjCGetYIywV/ecprs8H7gwfSWOkbo6K+NGGv9HpM2deZLYAhHGHfsV8jKFap8
-         b1Hijc0ZbPOJ3SoIDRnPukw4wHF+2XBHKmI5LYIUSYQ8GCE9cAd+3OL+qf9O22hiyt5s
-         h1xHnU2gPaxhhXZFCFLboQzJyLElZyjFCfw+MlNlQjd78f2YawbeJQbOj+YBXorr7NiL
-         /xpeYIgJgS+akq4IBIAnaWamRnu5c6eYi6vpaomwLBYdyNKM9Q+2oT2WaHrRDGIvG6pB
-         QkLg==
-X-Gm-Message-State: ACgBeo2Yc9qaM5MUwoRxls8WH96S7plMuzMZWP3bjbGmhsujfZwwEo30
-        h+g0C9I/WZJ1juWMWx5GrOo=
-X-Google-Smtp-Source: AA6agR49PxFevx6nxud0x7z08SpxLv2Ocrby9FJ/C4R11kbipooER0pHaoy4J0zdEscbU2RxKxs1vw==
-X-Received: by 2002:a9d:6254:0:b0:639:746f:1383 with SMTP id i20-20020a9d6254000000b00639746f1383mr18617907otk.167.1662388099428;
-        Mon, 05 Sep 2022 07:28:19 -0700 (PDT)
-Received: from nuclearis3.lan (c-98-197-58-203.hsd1.tx.comcast.net. [98.197.58.203])
-        by smtp.gmail.com with ESMTPSA id n17-20020a056870241100b0011f00b027bdsm2052857oap.45.2022.09.05.07.28.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 07:28:19 -0700 (PDT)
-From:   Alexandru Gagniuc <mr.nuke.me@gmail.com>
-To:     linux@roeck-us.net, linux-hwmon@vger.kernel.org
-Cc:     robert.marko@sartura.hr, luka.perkov@sartura.hr, jdelvare@suse.com,
-        dev@aboehler.at, linux-kernel@vger.kernel.org,
-        Alexandru Gagniuc <mr.nuke.me@gmail.com>
-Subject: [PATCH 3/3] hwmon: (tps23861) create unique debugfs directory per device
-Date:   Mon,  5 Sep 2022 09:28:06 -0500
-Message-Id: <20220905142806.110598-3-mr.nuke.me@gmail.com>
-X-Mailer: git-send-email 2.34.3
-In-Reply-To: <20220905142806.110598-1-mr.nuke.me@gmail.com>
-References: <20220905142806.110598-1-mr.nuke.me@gmail.com>
+        with ESMTP id S232477AbiIEUa5 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Sep 2022 16:30:57 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F954BB8;
+        Mon,  5 Sep 2022 13:30:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662409855; x=1693945855;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rm1ex5gUDtu5627ACnqDS0Zd1JuwOajS+QeL6Xswg5A=;
+  b=i5VfDOC/GrZw8aG7cF9R/8b5+STy86Khrydi+ZXq42sNLo0Rte0kkrE1
+   C83gCKueHpalNI85K5IqKa0Y5PnzxVyj+QC/SwTHzS19CrfEJAmgB0zCq
+   dj0xkNAitWdsiBz+OPO0CuibwBHRIwraRTlwR7p0r/RAqmdWI4qp+tIcO
+   fG50b9UAjcy3Y8CL4zjOi6fzNtp7fIYF0zxwVTUUC+bQrzPwO4VGMHGai
+   HW/ZdhpopOLLZqnW0cmkowZFjrEgbBDjuYMteOrrfmwLhBW+fIksxUcAl
+   5witWQ9mHJmwUggkcHSyIDW3sfGvNwfKoD/RPCH4QIYvSv44WHLuCrXG6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="276845545"
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="276845545"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 13:30:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="682160454"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Sep 2022 13:30:52 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oVIk8-0004WD-03;
+        Mon, 05 Sep 2022 20:30:52 +0000
+Date:   Tue, 6 Sep 2022 04:30:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Aleksa Savic <savicaleksa83@gmail.com>, linux-hwmon@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for
+ Aquacomputer High Flow Next
+Message-ID: <202209060417.oElADHt3-lkp@intel.com>
+References: <20220905142521.6674-1-savicaleksa83@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905142521.6674-1-savicaleksa83@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On systems with more than one tps23861, creating the debugfs directory
-for additional devices fails with
+Hi Aleksa,
 
-    debugfs: Directory 'tps23861' with parent '/' already present!
+I love your patch! Yet something to improve:
 
-To resolve this, include the hwmon device name in the directory name.
-Since the name is unique, this guarantees that the debugfs directory
-is unique.
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on next-20220901]
+[cannot apply to linus/master v6.0-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Alexandru Gagniuc <mr.nuke.me@gmail.com>
----
- drivers/hwmon/tps23861.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Aleksa-Savic/hwmon-aquacomputer_d5next-Add-support-for-Aquacomputer-High-Flow-Next/20220905-222744
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: arc-randconfig-r043-20220905 (https://download.01.org/0day-ci/archive/20220906/202209060417.oElADHt3-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0a43ba8acd8bcd54afd03ea6149d54fc99fe284c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Aleksa-Savic/hwmon-aquacomputer_d5next-Add-support-for-Aquacomputer-High-Flow-Next/20220905-222744
+        git checkout 0a43ba8acd8bcd54afd03ea6149d54fc99fe284c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/hwmon/
 
-diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
-index 0dbd12060b50..3e9df72702c0 100644
---- a/drivers/hwmon/tps23861.c
-+++ b/drivers/hwmon/tps23861.c
-@@ -503,9 +503,17 @@ static int tps23861_port_status_show(struct seq_file *s, void *data)
- 
- DEFINE_SHOW_ATTRIBUTE(tps23861_port_status);
- 
--static void tps23861_init_debugfs(struct tps23861_data *data)
-+static void tps23861_init_debugfs(struct tps23861_data *data,
-+				  struct device *hwmon_dev)
- {
--	data->debugfs_dir = debugfs_create_dir(data->client->name, NULL);
-+	const char *debugfs_name;
-+
-+	debugfs_name = devm_kasprintf(&data->client->dev, GFP_KERNEL, "%s-%s",
-+				      data->client->name, dev_name(hwmon_dev));
-+	if (!debugfs_name)
-+		return;
-+
-+	data->debugfs_dir = debugfs_create_dir(debugfs_name, NULL);
- 
- 	debugfs_create_file("port_status",
- 			    0400,
-@@ -554,7 +562,7 @@ static int tps23861_probe(struct i2c_client *client)
- 	if (IS_ERR(hwmon_dev))
- 		return PTR_ERR(hwmon_dev);
- 
--	tps23861_init_debugfs(data);
-+	tps23861_init_debugfs(data, hwmon_dev);
- 
- 	return 0;
- }
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/aquacomputer_d5next.c:38:10: error: 'highflownext' undeclared here (not in a function)
+      38 |         [highflownext] = "highflownext"
+         |          ^~~~~~~~~~~~
+>> drivers/hwmon/aquacomputer_d5next.c:38:10: error: array index in initializer not of integer type
+   drivers/hwmon/aquacomputer_d5next.c:38:10: note: (near initialization for 'aqc_device_names')
+   drivers/hwmon/aquacomputer_d5next.c: In function 'aqc_probe':
+>> drivers/hwmon/aquacomputer_d5next.c:924:14: error: 'USB_PRODUCT_ID_HIGHFLOWNEXT' undeclared (first use in this function); did you mean 'USB_PRODUCT_ID_D5NEXT'?
+     924 |         case USB_PRODUCT_ID_HIGHFLOWNEXT:
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |              USB_PRODUCT_ID_D5NEXT
+   drivers/hwmon/aquacomputer_d5next.c:924:14: note: each undeclared identifier is reported only once for each function it appears in
+   In file included from drivers/hwmon/aquacomputer_d5next.c:15:
+   drivers/hwmon/aquacomputer_d5next.c: At top level:
+>> drivers/hwmon/aquacomputer_d5next.c:993:54: error: 'USB_PRODUCT_ID_HIGHFLOWNEXT' undeclared here (not in a function); did you mean 'USB_PRODUCT_ID_D5NEXT'?
+     993 |         { HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_HIGHFLOWNEXT) },
+         |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/hid.h:713:54: note: in definition of macro 'HID_USB_DEVICE'
+     713 |         .bus = BUS_USB, .vendor = (ven), .product = (prod)
+         |                                                      ^~~~
+
+
+vim +/highflownext +38 drivers/hwmon/aquacomputer_d5next.c
+
+    31	
+    32	static const char *const aqc_device_names[] = {
+    33		[d5next] = "d5next",
+    34		[farbwerk] = "farbwerk",
+    35		[farbwerk360] = "farbwerk360",
+    36		[octo] = "octo",
+    37		[quadro] = "quadro",
+  > 38		[highflownext] = "highflownext"
+    39	};
+    40	
+
 -- 
-2.34.3
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
