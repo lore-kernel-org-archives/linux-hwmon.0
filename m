@@ -2,165 +2,291 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F21DECAAD5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Sep 2022 10:47:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56622ECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Sep 2022 14:26:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237015AbiIEKrQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Sep 2022 06:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52734 "EHLO
+        id S237758AbiIEO0B (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Sep 2022 10:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237475AbiIEKrO (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Sep 2022 06:47:14 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3010E4AD49
-        for <linux-hwmon@vger.kernel.org>; Mon,  5 Sep 2022 03:47:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662374833; x=1693910833;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lmWilmeMEg7ddBJe8UJ3HxLhdp1AfiA+BimhyrilclI=;
-  b=TIESCovoAvXiEbOy30fFpBUflCO0G99g9li4iBMH4oeAg3gTZ1UNfhlq
-   E0GWKjZWvnEZnFvaxE17kKQd1fcaN9wuDmb9ZQ2cKb+LvBWBPC859PaNL
-   r7yeZLXBkiMKjRRvFzYaweMYK2XjqDWMr9/Anp5BHXMp8vJGqSRnRqC9I
-   I9IUaCpj4vNXD4ePneLHV6PBGs+Y0PnJl0PKmpT6d1Xg3kIKsQnZBOFKD
-   Y6H2RzT3e4oI4/AmAhTZQDMvJx23X9AQVgQlfOse3VaFyBw7ak9+niqE9
-   QyCbU8IxVqtnBxA7wtvRJnFbALQrS2pgO4XKW4NxLfa6ipcbTMyDUiDdv
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="297674357"
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="297674357"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 03:47:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="942066791"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Sep 2022 03:47:11 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oV9dG-00043V-1Y;
-        Mon, 05 Sep 2022 10:47:10 +0000
-Date:   Mon, 05 Sep 2022 18:46:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- cec18aa4b63aece81b9956c9abb019a173647447
-Message-ID: <6315d39d.iWLx0QC87JWV6bEV%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S237884AbiIEOZ7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Sep 2022 10:25:59 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DCF42AE5;
+        Mon,  5 Sep 2022 07:25:57 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id y3so17504153ejc.1;
+        Mon, 05 Sep 2022 07:25:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=UfRHBRZ9xqITbW1zBp8kJA3t/bk2cuuGqYXQgZb7GIY=;
+        b=LMf74VUe6z53994mSaVPIbYPhv1rYZsAV5X6IXoaOE+nTKaMKY+OM7rEpRw3IsEEn5
+         FiBE4CVYOfJL+9/y4WPoZQn82y3tYcvdQe4FkfiIYlJAn8/ck3Ee8UXuL/m7L4Owt/23
+         f030ZmmoUfjLJ4V7zBjARekjTzB7kzSMvTDLuQ7dA0JOT89irsuEQ3zid+8TDDq8xMqB
+         Vq8Xm0/lfUVEX/rbxgs+cUg/mOyjwU9vdS+ZNDlcvG2+ES+5p1LcD8sfkJd7m0jpXrSd
+         MjGw7+MInVl6CTdIT653UBCqp9N2IzJHUr3aeDVTA+lBmEmoRRtvYK7dL95mL9fmHI5Q
+         Nu/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=UfRHBRZ9xqITbW1zBp8kJA3t/bk2cuuGqYXQgZb7GIY=;
+        b=I0QyHJnQfgcteNAHP6kSMyHr3mf8PQRj1wAGUKqjTjJOw+Kh3//YGF8vBZUN2Df8Kv
+         tmfGD0KyuvGowzznggl0u56+HIH5W9m8fX35BQ3mzt+9uNaINvLyZYeVECpIfxiWrvw8
+         G05GxnWJ1q88W1Qj1Ete58pLa5f15p650WNhrfmwcIOzI9r01NJOWP75oKV7LtIQggjs
+         M5cHPdi4cxeVzmlI1h1i9foZWE7TEDN+SPyluuMvgUe/oUSmnqc966RG3FcZfNB3c1h7
+         7Clcoq23MkqJkR65DwVDK8jS3dLmV9QV3bF71gcOTamfGqZR1alVvwo76CY+jliVHtz1
+         /kCg==
+X-Gm-Message-State: ACgBeo2Cs8TM0EnW6okNNZBCzuw9yN43egyRCuD7LYZSfZ1dAX8JVsAK
+        Fc2ds6/ugLO9jfjyUyrLFw+EYxlLW+g=
+X-Google-Smtp-Source: AA6agR7ET5WWI6MUz8j2y3SltSYP3KL6v8eH7Xv6XObxif3Ld2Ts10mJUtfLIC9YdJoqkpLYC8HLpA==
+X-Received: by 2002:a17:907:720b:b0:731:6e49:dc93 with SMTP id dr11-20020a170907720b00b007316e49dc93mr36740115ejc.421.1662387955237;
+        Mon, 05 Sep 2022 07:25:55 -0700 (PDT)
+Received: from fedora.. ([87.116.166.59])
+        by smtp.gmail.com with ESMTPSA id cz19-20020a0564021cb300b0044780b6debasm6616214edb.32.2022.09.05.07.25.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 07:25:54 -0700 (PDT)
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (aquacomputer_d5next) Add support for Aquacomputer High Flow Next
+Date:   Mon,  5 Sep 2022 16:25:21 +0200
+Message-Id: <20220905142521.6674-1-savicaleksa83@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: cec18aa4b63aece81b9956c9abb019a173647447  hwmon: (emc2305) Remove unused including <linux/version.h>
+Extend aquacomputer_d5next driver to expose various hardware
+sensors of the Aquacomputer High Flow Next flow sensor, which
+communicates through a proprietary USB HID protocol.
 
-elapsed time: 722m
+The High Flow Next exposes +5V voltages, water quality, conductivity
+and flow readings. A temperature sensor can be connected to it, in
+which case it provides its reading and an estimation of the
+dissipated/absorbed power in the liquid cooling loop.
 
-configs tested: 90
-configs skipped: 3
+Additionally, serial number and firmware version are exposed through
+debugfs.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Registry offsets were discovered and tested by users on Github [1] [2].
 
-gcc tested configs:
-arm                                 defconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-i386                 randconfig-a003-20220905
-x86_64                         rhel-8.3-kunit
-i386                 randconfig-a004-20220905
-arm                              allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64               randconfig-a003-20220905
-x86_64                           rhel-8.3-syz
-x86_64               randconfig-a002-20220905
-i386                 randconfig-a001-20220905
-arc                  randconfig-r043-20220905
-arm64                            allyesconfig
-x86_64                              defconfig
-arc                  randconfig-r043-20220904
-x86_64               randconfig-a004-20220905
-m68k                             allyesconfig
-s390                 randconfig-r044-20220904
-i386                 randconfig-a002-20220905
-x86_64               randconfig-a005-20220905
-x86_64                           allyesconfig
-i386                 randconfig-a005-20220905
-x86_64               randconfig-a001-20220905
-m68k                             allmodconfig
-i386                 randconfig-a006-20220905
-x86_64               randconfig-a006-20220905
-arc                              allyesconfig
-x86_64                               rhel-8.3
-alpha                            allyesconfig
-sh                         microdev_defconfig
-riscv                randconfig-r042-20220904
-openrisc                       virt_defconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-sh                          sdk7786_defconfig
-powerpc                      makalu_defconfig
-powerpc                           allnoconfig
-ia64                             allmodconfig
-sh                               allmodconfig
-arc                               allnoconfig
-alpha                             allnoconfig
-csky                              allnoconfig
-riscv                             allnoconfig
-i386                                defconfig
-i386                             alldefconfig
-ia64                          tiger_defconfig
-sh                         apsh4a3a_defconfig
-i386                             allyesconfig
-arm                         nhk8815_defconfig
-sh                ecovec24-romimage_defconfig
-arm                            mps2_defconfig
-arc                              alldefconfig
-openrisc                    or1ksim_defconfig
-sh                           se7780_defconfig
-sh                           se7343_defconfig
-powerpc                      mgcoge_defconfig
-arm                         axm55xx_defconfig
-arm                       imx_v6_v7_defconfig
-i386                 randconfig-c001-20220905
-m68k                         apollo_defconfig
-powerpc                        warp_defconfig
-riscv                    nommu_k210_defconfig
+[1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/issues/8
+[2] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/34
 
-clang tested configs:
-i386                 randconfig-a013-20220905
-i386                 randconfig-a012-20220905
-i386                 randconfig-a011-20220905
-hexagon              randconfig-r045-20220905
-i386                 randconfig-a014-20220905
-hexagon              randconfig-r045-20220904
-i386                 randconfig-a015-20220905
-mips                       rbtx49xx_defconfig
-i386                 randconfig-a016-20220905
-riscv                randconfig-r042-20220905
-hexagon              randconfig-r041-20220904
-hexagon              randconfig-r041-20220905
-s390                 randconfig-r044-20220905
-hexagon                             defconfig
-x86_64               randconfig-a012-20220905
-x86_64               randconfig-a016-20220905
-x86_64               randconfig-a015-20220905
-x86_64               randconfig-a014-20220905
-x86_64               randconfig-a013-20220905
-x86_64               randconfig-a011-20220905
-mips                           ip27_defconfig
-arm                         lpc32xx_defconfig
-arm                       spear13xx_defconfig
-mips                malta_qemu_32r6_defconfig
-powerpc                     ksi8560_defconfig
+Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+---
+ Documentation/hwmon/aquacomputer_d5next.rst |  4 +
+ drivers/hwmon/Kconfig                       |  6 +-
+ drivers/hwmon/aquacomputer_d5next.c         | 88 ++++++++++++++++++++-
+ 3 files changed, 93 insertions(+), 5 deletions(-)
 
+diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
+index b63a78d47624..3d044b1a9aed 100644
+--- a/Documentation/hwmon/aquacomputer_d5next.rst
++++ b/Documentation/hwmon/aquacomputer_d5next.rst
+@@ -43,6 +43,10 @@ voltage and current.
+ The Farbwerk and Farbwerk 360 expose four temperature sensors. Additionally,
+ sixteen virtual temperature sensors of the Farbwerk 360 are exposed.
+ 
++The High Flow Next exposes +5V voltages, water quality, conductivity and flow readings.
++A temperature sensor can be connected to it, in which case it provides its reading
++and an estimation of the dissipated/absorbed power in the liquid cooling loop.
++
+ Depending on the device, not all sysfs and debugfs entries will be available.
+ Writing to virtual temperature sensors is not currently supported.
+ 
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index d32f1705915c..f604f599a341 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -257,14 +257,14 @@ config SENSORS_AHT10
+ 	  will be called aht10.
+ 
+ config SENSORS_AQUACOMPUTER_D5NEXT
+-	tristate "Aquacomputer D5 Next, Octo, Quadro, Farbwerk, and Farbwerk 360"
++	tristate "Aquacomputer D5 Next, Octo, Quadro, Farbwerk, Farbwerk 360, High Flow Next"
+ 	depends on USB_HID
+ 	select CRC16
+ 	help
+ 	  If you say yes here you get support for sensors and fans of
+ 	  the Aquacomputer D5 Next watercooling pump, Octo and Quadro fan
+-	  controllers, Farbwerk and Farbwerk 360 RGB controllers, where
+-	  available.
++	  controllers, Farbwerk and Farbwerk 360 RGB controllers, High Flow
++	  Next sensor, where available.
+ 
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called aquacomputer_d5next.
+diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+index b2b0c4fdfa84..a715142a3d0c 100644
+--- a/drivers/hwmon/aquacomputer_d5next.c
++++ b/drivers/hwmon/aquacomputer_d5next.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0+
+ /*
+  * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk, Farbwerk 360, Octo,
+- * Quadro)
++ * Quadro, High Flow Next)
+  *
+  * Aquacomputer devices send HID reports (with ID 0x01) every second to report
+  * sensor values.
+@@ -34,7 +34,8 @@ static const char *const aqc_device_names[] = {
+ 	[farbwerk] = "farbwerk",
+ 	[farbwerk360] = "farbwerk360",
+ 	[octo] = "octo",
+-	[quadro] = "quadro"
++	[quadro] = "quadro",
++	[highflownext] = "highflownext"
+ };
+ 
+ #define DRIVER_NAME			"aquacomputer_d5next"
+@@ -120,6 +121,16 @@ static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
+ /* Fan speed registers in Quadro control report (from 0-100%) */
+ static u16 quadro_ctrl_fan_offsets[] = { 0x36, 0x8b, 0xe0, 0x135 };
+ 
++/* Register offsets for the High Flow Next */
++#define HIGHFLOWNEXT_NUM_SENSORS	2
++#define HIGHFLOWNEXT_SENSOR_START	85
++#define HIGHFLOWNEXT_FLOW		81
++#define HIGHFLOWNEXT_WATER_QUALITY	89
++#define HIGHFLOWNEXT_POWER		91
++#define HIGHFLOWNEXT_CONDUCTIVITY	95
++#define HIGHFLOWNEXT_5V_VOLTAGE		97
++#define HIGHFLOWNEXT_5V_VOLTAGE_USB	99
++
+ /* Labels for D5 Next */
+ static const char *const label_d5next_temp[] = {
+ 	"Coolant temp"
+@@ -228,6 +239,27 @@ static const char *const label_quadro_speeds[] = {
+ 	"Flow speed [dL/h]"
+ };
+ 
++/* Labels for High Flow Next */
++static const char *const label_highflownext_temp_sensors[] = {
++	"Coolant temp",
++	"External sensor"
++};
++
++static const char *const label_highflownext_fan_speed[] = {
++	"Flow [dL/h]",
++	"Water quality [%]",
++	"Conductivity [nS/cm]",
++};
++
++static const char *const label_highflownext_power[] = {
++	"Dissipated power",
++};
++
++static const char *const label_highflownext_voltage[] = {
++	"+5V voltage",
++	"+5V USB voltage"
++};
++
+ struct aqc_data {
+ 	struct hid_device *hdev;
+ 	struct device *hwmon_dev;
+@@ -390,6 +422,11 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+ 		break;
+ 	case hwmon_fan:
+ 		switch (priv->kind) {
++		case highflownext:
++			/* Special case to support flow sensor, water quality and conductivity */
++			if (channel < 3)
++				return 0444;
++			break;
+ 		case quadro:
+ 			/* Special case to support flow sensor */
+ 			if (channel < priv->num_fans + 1)
+@@ -402,6 +439,18 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+ 		}
+ 		break;
+ 	case hwmon_power:
++		switch (priv->kind) {
++		case highflownext:
++			/* Special case to support one power sensor */
++			if (channel == 0)
++				return 0444;
++			break;
++		default:
++			if (channel < priv->num_fans)
++				return 0444;
++			break;
++		}
++		break;
+ 	case hwmon_curr:
+ 		if (channel < priv->num_fans)
+ 			return 0444;
+@@ -413,6 +462,11 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+ 			if (channel < priv->num_fans + 2)
+ 				return 0444;
+ 			break;
++		case highflownext:
++			/* Special case to support two voltage sensors */
++			if (channel < 2)
++				return 0444;
++			break;
+ 		default:
+ 			if (channel < priv->num_fans)
+ 				return 0444;
+@@ -679,6 +733,22 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
+ 	case quadro:
+ 		priv->speed_input[4] = get_unaligned_be16(data + priv->flow_sensor_offset);
+ 		break;
++	case highflownext:
++		/* If external temp sensor is not connected, its power reading is also N/A */
++		if (priv->temp_input[1] == -ENODATA)
++			priv->power_input[0] = -ENODATA;
++		else
++			priv->power_input[0] =
++			    get_unaligned_be16(data + HIGHFLOWNEXT_POWER) * 1000000;
++
++		priv->voltage_input[0] = get_unaligned_be16(data + HIGHFLOWNEXT_5V_VOLTAGE) * 10;
++		priv->voltage_input[1] =
++		    get_unaligned_be16(data + HIGHFLOWNEXT_5V_VOLTAGE_USB) * 10;
++
++		priv->speed_input[0] = get_unaligned_be16(data + HIGHFLOWNEXT_FLOW);
++		priv->speed_input[1] = get_unaligned_be16(data + HIGHFLOWNEXT_WATER_QUALITY);
++		priv->speed_input[2] = get_unaligned_be16(data + HIGHFLOWNEXT_CONDUCTIVITY);
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -851,6 +921,19 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 		priv->voltage_label = label_fan_voltage;
+ 		priv->current_label = label_fan_current;
+ 		break;
++	case USB_PRODUCT_ID_HIGHFLOWNEXT:
++		priv->kind = highflownext;
++
++		priv->num_fans = 0;
++		priv->num_temp_sensors = HIGHFLOWNEXT_NUM_SENSORS;
++		priv->temp_sensor_start_offset = HIGHFLOWNEXT_SENSOR_START;
++		priv->power_cycle_count_offset = QUADRO_POWER_CYCLES;
++
++		priv->temp_label = label_highflownext_temp_sensors;
++		priv->speed_label = label_highflownext_fan_speed;
++		priv->power_label = label_highflownext_power;
++		priv->voltage_label = label_highflownext_voltage;
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -907,6 +990,7 @@ static const struct hid_device_id aqc_table[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_FARBWERK360) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_OCTO) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_QUADRO) },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_HIGHFLOWNEXT) },
+ 	{ }
+ };
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.2
+
