@@ -2,74 +2,116 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2094ECAAD5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Sep 2022 20:39:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90898ECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Sep 2022 22:10:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiIEUjZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Sep 2022 16:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
+        id S231392AbiIEWKl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Sep 2022 18:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiIEUjX (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Sep 2022 16:39:23 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAC323B;
-        Mon,  5 Sep 2022 13:39:21 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id fc24so10085380ejc.3;
-        Mon, 05 Sep 2022 13:39:21 -0700 (PDT)
+        with ESMTP id S229733AbiIEWKk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Sep 2022 18:10:40 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5268AB1D6;
+        Mon,  5 Sep 2022 15:10:39 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id t11-20020a17090a510b00b001fac77e9d1fso13137071pjh.5;
+        Mon, 05 Sep 2022 15:10:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=MFYTMpDTuOqljCy0e6WVr1YZFoccpOOvT2y1YFxKyWs=;
-        b=JxF4UW1wBmnNM38jvepvINNoQ0rpkMfc37OYHDYY08tZwLXpEHflBXL/jzJVXKvbBK
-         Polw+B/6gXe4npk4AC9ZFbR7jozqhAw+fDCnGwX6oaZJwLmkh/OYes7QvBr2FEo07qML
-         vnljmWVF+OEx/RZC1Z+X5Uv05fmX2MEoBknBMXsKPMcaiZJncoguLUSZP+71wcEREbov
-         wnQXiABhwaJCNJvJrKmV+nn8X7oitFmS/WAnYLx/nZwihJJJXPrufTBZjOsyHj6fcbFq
-         iBrwA2SYoMNLlVBKNQR2+rRzs0mUachfgbSbsrMDxMogdLs5kb2hCrXQEhYEIR+yzDqv
-         qaTg==
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=rHbwa+ETbtYUANsBTVWNjZWG0BkqdCsIfqhd9acGOgw=;
+        b=cjh6syUgRz97EiiPXr+qHE4yf0c4EUKusy+vZkNeNgcob8hqHjA2CgfDkQJLaY1ehV
+         pMwZCzMIiOAb18oWKGqRb5/rn10dnUFtsryv3qsaAAbM8QIRsH1SNT5w+Xtj27YT0VsA
+         XCjQRsiBbDne5BujCK1CmHSnIaLxTK3jaB/qI9oCA9Zdb3Kz25zZP0ZtrZDo/BSZGniV
+         RJAJqmfujcOhascsSK/d1yKixsbvyd1Nd0dfJouT7IrQZboeNiykpKaMDnicZnAii4vP
+         gF/BhFb+CPXW3ya2Ck55BwpNEPX3dvy0YtP24NGJJhau/a1agNxd7ySW1lbeKlnJTQ1Q
+         yxAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=MFYTMpDTuOqljCy0e6WVr1YZFoccpOOvT2y1YFxKyWs=;
-        b=zhDamXIdshF1zmy2lkyz+6XskWH3tukSDTYbX5L088H86rrR7e34Ov1J6Igolhtv/1
-         wGdIoiTHQNP4vgURH/4x0haeQHCptfk8NlgYU4fGXd3B+padjyjXstlF588YXjRJmluf
-         WaLUnlV+r8vH4eZWAJwwNRJGamZ3fxI2YCeecxIFH00/bd0wCOrSh+xPocpvwryI3ZkF
-         ghAobwf1P8mY1Ct13faP0GoSaItF8gaianQACAshNEE7L/quR58w7w79UVcBzA2ck7wB
-         NYv4AlUFhegzfVA6rsKPLWgXsVtf1OJjVY4yrG+56eYhtm1VoYHut0z61u7Gub6Itbow
-         E2vA==
-X-Gm-Message-State: ACgBeo3PnqiGjthxn6EpO1BxKaoIpwPvRWP2P6zhSyy+JDDb00jotlNs
-        WU02UmWVEeq1/Yi7lnEpp3U=
-X-Google-Smtp-Source: AA6agR75LNkUBRDmOxtSpbt8wQ54+ZxQFFnPOF+GJVV1o9koQZl6v+6mFXEdX7w9E6y9koLEJDaVUA==
-X-Received: by 2002:a17:906:fe49:b0:73d:70c5:1a52 with SMTP id wz9-20020a170906fe4900b0073d70c51a52mr38477701ejb.469.1662410359724;
-        Mon, 05 Sep 2022 13:39:19 -0700 (PDT)
-Received: from fedora ([87.116.166.59])
-        by smtp.gmail.com with ESMTPSA id l9-20020a1709060cc900b0073ce4abf093sm5468099ejh.214.2022.09.05.13.39.18
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=rHbwa+ETbtYUANsBTVWNjZWG0BkqdCsIfqhd9acGOgw=;
+        b=yUnKs1F50HIbWUN+OID+fVsTuJq2a+37FK9VzDp/oNq+rrfILNTSFrvQOqhKWEPelu
+         NucsmODhpBLYgBlgFNFNxLpUMv0hrj17bn6P6t5vMvP+ekM+LaoNozKTfRzYKvENgDYO
+         fwf14S6NA7x6gm9AyWBeLXsQ061gyALO0kLrZAspnQz/fVn9ad3nOjbx+Z5aDsAnsz6Y
+         iqlEBol/6YLp/z34xFjaGBFWYOl2PkgYZDtdtXwbVfL9+xOZbf3uKnHB8q7eKR+ZZGHh
+         0qm22t02mbmIV0c7sI4Efp+jGNBbaYQcOTiT4ws1qCKwsUTM/7IVJ1En5oIBDEnCck8S
+         YTBw==
+X-Gm-Message-State: ACgBeo2jWsOKQKEBa17W1N4sWqrbynZvWwCqishxY86iDS31lfS/3lAJ
+        Pf5BgCKBUD7wIxEId7Seo2o=
+X-Google-Smtp-Source: AA6agR5TpH1oRv3WHQn+TNNZ1cubaRlmz2AFvfZRkStlyJDL5bREK8hZM3eSs3Fb38I8cnVOE53zsw==
+X-Received: by 2002:a17:903:189:b0:176:861a:d4d1 with SMTP id z9-20020a170903018900b00176861ad4d1mr12779641plg.154.1662415838849;
+        Mon, 05 Sep 2022 15:10:38 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x16-20020aa79410000000b0053e19468443sm242628pfo.37.2022.09.05.15.10.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 13:39:19 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 22:39:17 +0200
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     linux-hwmon@vger.kernel.org, kbuild-all@lists.01.org,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Mon, 05 Sep 2022 15:10:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 5 Sep 2022 15:10:37 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alexandru Gagniuc <mr.nuke.me@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, robert.marko@sartura.hr,
+        luka.perkov@sartura.hr, jdelvare@suse.com, dev@aboehler.at,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for
- Aquacomputer High Flow Next
-Message-ID: <YxZedWsvE82mzIXB@fedora>
-References: <20220905142521.6674-1-savicaleksa83@gmail.com>
- <202209060417.oElADHt3-lkp@intel.com>
+Subject: Re: [PATCH 1/3] hwmon: (tps23861) fix byte order in resistance
+ register
+Message-ID: <20220905221037.GA3694440@roeck-us.net>
+References: <20220905142806.110598-1-mr.nuke.me@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202209060417.oElADHt3-lkp@intel.com>
+In-Reply-To: <20220905142806.110598-1-mr.nuke.me@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Woops, looks like I sent a botched patch. Sorry for the noise,
-will send a v2.
+On Mon, Sep 05, 2022 at 09:28:04AM -0500, Alexandru Gagniuc wrote:
+> The tps23861 registers are little-endian, and regmap_read_bulk() does
+> not do byte order conversion. On BE machines, the bytes were swapped,
+> and the interpretation of the resistance value was incorrect.
+> 
+> To make it work on both big and little-endian machines, use
+> le16_to_cpu() to convert the resitance register to host byte order.
+> 
+> Signed-off-by: Alexandru Gagniuc <mr.nuke.me@gmail.com>
+
+Applied.
 
 Thanks,
-Aleksa
+Guenter
+
+> ---
+>  drivers/hwmon/tps23861.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
+> index 42762e87b014..f7c59ff7ae8e 100644
+> --- a/drivers/hwmon/tps23861.c
+> +++ b/drivers/hwmon/tps23861.c
+> @@ -493,18 +493,20 @@ static char *tps23861_port_poe_plus_status(struct tps23861_data *data, int port)
+>  
+>  static int tps23861_port_resistance(struct tps23861_data *data, int port)
+>  {
+> -	u16 regval;
+> +	unsigned int raw_val;
+> +	__le16 regval;
+>  
+>  	regmap_bulk_read(data->regmap,
+>  			 PORT_1_RESISTANCE_LSB + PORT_N_RESISTANCE_LSB_OFFSET * (port - 1),
+>  			 &regval,
+>  			 2);
+>  
+> -	switch (FIELD_GET(PORT_RESISTANCE_RSN_MASK, regval)) {
+> +	raw_val = le16_to_cpu(regval);
+> +	switch (FIELD_GET(PORT_RESISTANCE_RSN_MASK, raw_val)) {
+>  	case PORT_RESISTANCE_RSN_OTHER:
+> -		return (FIELD_GET(PORT_RESISTANCE_MASK, regval) * RESISTANCE_LSB) / 10000;
+> +		return (FIELD_GET(PORT_RESISTANCE_MASK, raw_val) * RESISTANCE_LSB) / 10000;
+>  	case PORT_RESISTANCE_RSN_LOW:
+> -		return (FIELD_GET(PORT_RESISTANCE_MASK, regval) * RESISTANCE_LSB_LOW) / 10000;
+> +		return (FIELD_GET(PORT_RESISTANCE_MASK, raw_val) * RESISTANCE_LSB_LOW) / 10000;
+>  	case PORT_RESISTANCE_RSN_SHORT:
+>  	case PORT_RESISTANCE_RSN_OPEN:
+>  	default:
