@@ -2,111 +2,236 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92BADECAAA1
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 15:52:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00B43C38145
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 17:05:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237420AbiIFPwi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Sep 2022 11:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
+        id S239405AbiIFRF4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Sep 2022 13:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234543AbiIFPvy (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 11:51:54 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F377C1DA;
-        Tue,  6 Sep 2022 08:08:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662476928; x=1694012928;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=itE7kZ47RvKv7aOih+1Wnx/AC33Uqv9KiENi43eLSX8=;
-  b=cj82i0/BazHZcTncG3KsbfdsHF/IN0ujWu4ZyBcNqE3T2QTuKsSqAVNy
-   r2O65IDkqkd2OJ5tz+feVMREnvmk7c8UD2YZmc4CvCFMkjfbGw4rdz3Dv
-   Ei5ZileHqArv4zfsENoRGE0cQlbLsJyowd5IzMHlE2BFN5zThieOos76M
-   F0Ht6w5q/n2kxbpZwH6ImjSJEg82MeSSXTSdeGE2O1d8sJ7rnzWv12ZYg
-   PYbVRu9PfmE9WrzTyTAF094L+nBBe0tS4Ef8gWqSkr22T0IvSq070i7cn
-   CL4xqH8eFUh9RkXM71Un9X7ekhvPKa04sGZ+JYc9JassoHyrru7IvrQp6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="283594159"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="283594159"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 07:01:21 -0700
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="614102740"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 07:01:18 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oVZ8d-00995i-2a;
-        Tue, 06 Sep 2022 17:01:15 +0300
-Date:   Tue, 6 Sep 2022 17:01:15 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     "Farber, Eliav" <farbere@amazon.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
-Subject: Re: [PATCH v4 05/21] hwmon: (mr75203) fix voltage equation for
- negative source input
-Message-ID: <YxdSqw6STdkbDESV@smile.fi.intel.com>
+        with ESMTP id S232675AbiIFRFc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 13:05:32 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F431DF7F;
+        Tue,  6 Sep 2022 09:52:32 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id x19so11990874pfr.1;
+        Tue, 06 Sep 2022 09:52:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=ClsUxNWUlr9YbZdE+mBsdmX6Ii6dUBfM2rBrEWed8FM=;
+        b=ZD657V+czK2A/LT1vcZmFRCURy17vlQAFGimz4Jd5d/IPRsSAMXR07XLUZXZme8gIq
+         x8x555YqBk4OCpHs6IQj7S179VJTHqGdegJGcaRE5r+ek2tYWjbdydM9q1OBwvfzCI4n
+         bSZJOjvQZP+pBItAudmKakhqdhhPPYPgcbrwOT976LYefXLkXzXokgEek4uTaHZ1S9PR
+         xFkrbnTcWPICMZTZl5e4YXNHbBGyDZBOgyZW9I+XErl1IJhSfyMf6ngWZsgP47k88O/L
+         x+SNt+lr+F9iQRTTMfGbnZLgUzoIm73JH4KM8Mvxj9djD+GXsblryciSK75z/F029/HE
+         gCxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=ClsUxNWUlr9YbZdE+mBsdmX6Ii6dUBfM2rBrEWed8FM=;
+        b=NNPNmYs021vuxXRWYRxgDcsaszqCsac3ypodux18rPHb5xbbhkqL1B957BkP8vGsHt
+         rcxV6JlQy2a6p8bmB4jeCJseIcoKLOE8ft6Krlr3iBWwGaVw7yiM9fP5CbpjtaFA+BlO
+         HRQna2ZaysAugiMblwxYolENEKldO3oOgLwv4JAAl77FULd+2XcfYUyC1/U8d9lapYfn
+         oXJIY4HWK22KJCrkI4aNx0LiU9CrNN9npgsCGhrSuJnnwnRASZHIfwRVazcSiN/5e5e2
+         71b9TTQ8p/yKKvRlXb95XxBnQQGGjoES0iqb77gfgek8eUNRT6xtw+AXii46+lU5ld0V
+         HL5g==
+X-Gm-Message-State: ACgBeo1oPAZppJNs5F+8iXNoy2ipM984owZuK6p35soHZ2icuY39/9e0
+        5tUO6WwC71sde7KimJkkuUQ=
+X-Google-Smtp-Source: AA6agR7slyrhF09ZZ0GyrgwjiB2Ccf7IGqljYtzz29C9BmNLvx4Eqxw4/ky7biMQJ1KKhfmPq4ftGw==
+X-Received: by 2002:a05:6a00:14c7:b0:52e:efb7:bd05 with SMTP id w7-20020a056a0014c700b0052eefb7bd05mr54838752pfu.24.1662483151937;
+        Tue, 06 Sep 2022 09:52:31 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bi10-20020a170902bf0a00b00174e5fe9ce1sm1906391plb.159.2022.09.06.09.52.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 09:52:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 6 Sep 2022 09:52:29 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
+        rtanwar@maxlinear.com, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hhhawa@amazon.com, jonnyc@amazon.com, andriy.shevchenko@intel.com
+Subject: Re: [PATCH v4 01/21] hwmon: (mr75203) fix coding style space errors
+Message-ID: <20220906165229.GA594012@roeck-us.net>
 References: <20220906083356.21067-1-farbere@amazon.com>
- <20220906083356.21067-6-farbere@amazon.com>
- <Yxc3GeFc5gDKrYyP@smile.fi.intel.com>
- <29fa5c01-aad0-04ff-e1a9-1510858eff7e@amazon.com>
+ <20220906083356.21067-2-farbere@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <29fa5c01-aad0-04ff-e1a9-1510858eff7e@amazon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20220906083356.21067-2-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 04:27:13PM +0300, Farber, Eliav wrote:
-> On 9/6/2022 3:03 PM, Andy Shevchenko wrote:
-> > On Tue, Sep 06, 2022 at 08:33:40AM +0000, Eliav Farber wrote:
-
-...
-
-> > > -             *val = (PVT_N_CONST * n - PVT_R_CONST) >> PVT_CONV_BITS;
-> > > +             *val = (PVT_N_CONST * (long)n - PVT_R_CONST) / (1 <<
-> > > PVT_CONV_BITS);
-> > 
-> > Wondering if we can use BIT(PVT_CONV_BITS) for two (quite unlikely to
-> > happen,
-> > I hope) purposes:
-> > 
-> > 1) Somebody copies such code where PVT_CONV_BITS analogue can be 31,
-> >   which is according to C standard is UB (undefined behaviour).
-> > 
-> > 2) It makes shorter the line and also drops the pattern where some
-> >   dumb robot may propose a patch to basically revert the division
-> >   change.
-> I originally tried to use BIT(PVT_CONV_BITS) but it gave a different
-> result.
-> e.g.
-> If n = 2720
-> *val = (PVT_N_CONST * (long)n - PVT_R_CONST) / (1 << PVT_CONV_BITS) = 0
-> *val = (PVT_N_CONST * (long)n - PVT_R_CONST) / BIT(PVT_CONV_BITS) =
-> 18014398509481983
+On Tue, Sep 06, 2022 at 08:33:36AM +0000, Eliav Farber wrote:
+> Fix: "ERROR: space required before the open parenthesis '('"
 > 
-> I can try fitting it in one line, either by adding a define for
-> (1 << PVT_CONV_BITS) or exceeding 80 characters, but keep in mind that
-> in a later patch (#15) it gets even longer (and I must use more than
-> one line) since it is multiplied by a pre-scaler factor.
+> Fixes: 9d823351a337 ("hwmon: Add hardware monitoring driver for Moortec MR75203 PVT controller")
 
-Don't get me wrong, it's not about style, it's about preventing
-followup "fixes" of this. All the problems here due to (hidden)
-unsigned type(s).
+Coding style "fixes" do not fix the code. I consider using the Fixes: tag
+for those to close to an abuse of that tag (and it would be great if that
+was spelled out somewhere). As it is, I can not with good conscience apply
+this patch to the mainline kernel (especially not for -rc5), meaning the
+entire series will have to wait for the next release window unless there
+are no conflicts.
 
-What you can do is to add a good comment on top of that line
-explaining why division instead of right shift and why BIT()
-may not be used (because it's unsigned).
+Guenter
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> ---
+>  drivers/hwmon/mr75203.c | 40 ++++++++++++++++++++--------------------
+>  1 file changed, 20 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+> index 046523d47c29..8adfbb15453f 100644
+> --- a/drivers/hwmon/mr75203.c
+> +++ b/drivers/hwmon/mr75203.c
+> @@ -155,7 +155,7 @@ static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
+>  			return ret;
+>  
+>  		ret = regmap_read(t_map, SDIF_DATA(channel), &nbs);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		nbs &= SAMPLE_DATA_MSK;
+> @@ -197,7 +197,7 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+>  			return ret;
+>  
+>  		ret = regmap_read(v_map, VM_SDIF_DATA(vm_idx), &n);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		n &= SAMPLE_DATA_MSK;
+> @@ -291,19 +291,19 @@ static int pvt_init(struct pvt_device *pvt)
+>  
+>  	if (t_num) {
+>  		ret = regmap_write(t_map, SDIF_SMPL_CTRL, 0x0);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(t_map, SDIF_HALT, 0x0);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(t_map, CLK_SYNTH, clk_synth);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(t_map, SDIF_DISABLE, 0x0);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
+> @@ -316,7 +316,7 @@ static int pvt_init(struct pvt_device *pvt)
+>  		val = CFG0_MODE_2 | CFG0_PARALLEL_OUT | CFG0_12_BIT |
+>  		      IP_CFG << SDIF_ADDR_SFT | SDIF_WRN_W | SDIF_PROG;
+>  		ret = regmap_write(t_map, SDIF_W, val);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
+> @@ -329,7 +329,7 @@ static int pvt_init(struct pvt_device *pvt)
+>  		val = POWER_DELAY_CYCLE_256 | IP_TMR << SDIF_ADDR_SFT |
+>  			      SDIF_WRN_W | SDIF_PROG;
+>  		ret = regmap_write(t_map, SDIF_W, val);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
+> @@ -343,39 +343,39 @@ static int pvt_init(struct pvt_device *pvt)
+>  		      IP_CTRL << SDIF_ADDR_SFT |
+>  		      SDIF_WRN_W | SDIF_PROG;
+>  		ret = regmap_write(t_map, SDIF_W, val);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  	}
+>  
+>  	if (p_num) {
+>  		ret = regmap_write(p_map, SDIF_HALT, 0x0);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(p_map, SDIF_DISABLE, BIT(p_num) - 1);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(p_map, CLK_SYNTH, clk_synth);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  	}
+>  
+>  	if (v_num) {
+>  		ret = regmap_write(v_map, SDIF_SMPL_CTRL, 0x0);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(v_map, SDIF_HALT, 0x0);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(v_map, CLK_SYNTH, clk_synth);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(v_map, SDIF_DISABLE, 0x0);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
+> @@ -389,7 +389,7 @@ static int pvt_init(struct pvt_device *pvt)
+>  		      CFG1_14_BIT | IP_CFG << SDIF_ADDR_SFT |
+>  		      SDIF_WRN_W | SDIF_PROG;
+>  		ret = regmap_write(v_map, SDIF_W, val);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
+> @@ -402,7 +402,7 @@ static int pvt_init(struct pvt_device *pvt)
+>  		val = POWER_DELAY_CYCLE_64 | IP_TMR << SDIF_ADDR_SFT |
+>  		      SDIF_WRN_W | SDIF_PROG;
+>  		ret = regmap_write(v_map, SDIF_W, val);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
+> @@ -416,7 +416,7 @@ static int pvt_init(struct pvt_device *pvt)
+>  		      IP_CTRL << SDIF_ADDR_SFT |
+>  		      SDIF_WRN_W | SDIF_PROG;
+>  		ret = regmap_write(v_map, SDIF_W, val);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  	}
+>  
+> @@ -535,7 +535,7 @@ static int mr75203_probe(struct platform_device *pdev)
+>  		return dev_err_probe(dev, ret, "cannot deassert reset control\n");
+>  
+>  	ret = regmap_read(pvt->c_map, PVT_IP_CONFIG, &val);
+> -	if(ret < 0)
+> +	if (ret < 0)
+>  		return ret;
+>  
+>  	ts_num = (val & TS_NUM_MSK) >> TS_NUM_SFT;
