@@ -2,98 +2,157 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FB1BECAAA1
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 14:57:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57E07ECAAD5
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 15:16:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238843AbiIFO50 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Sep 2022 10:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
+        id S233878AbiIFPQQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Sep 2022 11:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238907AbiIFO4v (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 10:56:51 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41E5A6C7F;
-        Tue,  6 Sep 2022 07:12:36 -0700 (PDT)
+        with ESMTP id S233914AbiIFPPt (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 11:15:49 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71B74DB6C;
+        Tue,  6 Sep 2022 07:29:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662473557; x=1694009557;
+  t=1662474546; x=1694010546;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=wFM4+ipDAARS/vDb2JTydobm8ytemLFf7Wn8G0k0SmU=;
-  b=Li0A6WGq4wK3aeq6/zO0KStWldRG58pIpm770cUR5kg1RsGHoBUXC2s8
-   Vpzt6e4aGQYxMPjF0gfck4DqqD2D/BjIEPQigLiTWm7CDeDOQo5KGz2sr
-   ok2IFxtHw+XENSCp1+LazlggqHe0qk7yTwApTTyNiAbO7+LL47xWan2lc
-   AAj1DU4blE4317LqCBZ5OZ+9RtOwt0Y36DZR0wKW+FSGgOpv+JNsu4FQL
-   uICDiswF9N4kFvLN9faMtgXfVQPrg4qFXiS9LHc3CzIGvZcg2pKPvYlFj
-   nLRwWVeVRpoe2mAalrOzakJC1VNkfW1GxXlkRTOzf8nBmwCeaSBOilpC/
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="382898766"
+  bh=ybgSo2BkoIeNrG9pnEwHuQd0zdtCaKmVHLLWorPRU10=;
+  b=fWWJtozf+jgh+pAEhkuFZw0bj1pHoIa70kXfVAOpA4fstDTl+7TVGPXB
+   0jqRZrP91dwqaKikkAan1wDsoPZx2O9TFH7d5yHHd85PXc3d1Q7WL+KVc
+   ihKELM9zLhwjYVjrXS/R7hqvRPIp456ZzamocEm5M0kaB4yt4e6bE0jHN
+   pJAHfPEIxkCrZ3cLMHDbalwTu18EljJaLQNll1y+vzYhqp3GzceimE/P4
+   svSjhva5LsN59nN5fbcc6Ts13PHjoV/aJlYyjOXbls/IUmHik0VNf/fUV
+   x4b5uX8r1rFOqK7/QCDN5LBYRSPH2jgPzaSA/dCVHrfTunGxs+/G6aKpj
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="276344870"
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="382898766"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 07:10:59 -0700
+   d="scan'208";a="276344870"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 07:26:27 -0700
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="682410019"
+   d="scan'208";a="756383261"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 07:10:53 -0700
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 07:26:24 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oVZHu-0099IH-35;
-        Tue, 06 Sep 2022 17:10:50 +0300
-Date:   Tue, 6 Sep 2022 17:10:50 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oVZWv-0099cw-3D;
+        Tue, 06 Sep 2022 17:26:22 +0300
+Date:   Tue, 6 Sep 2022 17:26:21 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Eliav Farber <farbere@amazon.com>
 Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
         p.zabel@pengutronix.de, rtanwar@maxlinear.com,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
-Subject: Re: [PATCH v4 06/21] hwmon: (mr75203) fix multi-channel voltage
- reading
-Message-ID: <YxdU6hiwblhT2I5u@smile.fi.intel.com>
+Subject: Re: [PATCH v4 00/21] Variety of fixes and new features for mr75203
+ driver
+Message-ID: <YxdYjWYCR7YCodTX@smile.fi.intel.com>
 References: <20220906083356.21067-1-farbere@amazon.com>
- <20220906083356.21067-7-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220906083356.21067-7-farbere@amazon.com>
+In-Reply-To: <20220906083356.21067-1-farbere@amazon.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 08:33:41AM +0000, Eliav Farber wrote:
-> Fix voltage allocation and reading to support all channels in all VMs.
-> Prior to this change allocation and reading were done only for the first
-> channel in each VM.
-> This change counts the total number of channels for allocation, and takes
-> into account the channel offset when reading the sample data register.
+On Tue, Sep 06, 2022 at 08:33:35AM +0000, Eliav Farber wrote:
+> List of fixes:
+>  - Fix "intel,vm-map" property to be optional.
+>  - Fix VM sensor allocation when "intel,vm-map" not defined.
+>  - Fix multi-channel voltage reading.
+>  - Fix voltage equation for negative source input.
+>  - Modify the temperature equation according to series 5 datasheet.
+>  - Fix coding style issue.
+> 
+> List of new features:
+>  - Modify "reset" property to be optional.
+>  - Add optional "moortec,vm-active-channels" property to define the number
+>    of active channels per VM.
+>  - Add support for mr76006 pre-scaler to multiply the voltage result by 2.
+>  - Add support for series 6 temperature equation.
+>  - Add coefficient properties to fine tune the temperature equation.
+>  - Add debugfs to read and write temperature coefficients
 
-...
+For all code patches (means no DT ones)
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> +		total_ch = ch_num * vm_num;
-> +		in_config = devm_kcalloc(dev, total_ch + 1,
->  					 sizeof(*in_config), GFP_KERNEL);
-
-Strictly speaking this should be `size_add(size_mul(...) ...)` construction
-from overflow.h.
-
-		total_ch = size_mul(ch_num, vm_num);
-		in_config = devm_kcalloc(dev, size_add(total_ch, 1),
-					 sizeof(*in_config), GFP_KERNEL);
-
-Alternatively before doing all these, add a check
-
-		if (array3_size(ch_num, vm_num, sizeof(*in_config)) < SIZE_MAX - sizeof(*in_config))
-			return -EOVERFLOW;
-
-But this is a bit monstrous. Seems like the above looks and feels better.
-
-Also for backporting purposes perhaps it's fine to do without using those macro
-helpers.
-
->  		if (!in_config)
->  			return -ENOMEM;
-
+> ---------
+> 
+> Changes between v3 and v4:
+> *) Provide a Fixes tag for all fixes in the series.
+> *) Start series with fixes.
+> *) New patch to add description in moortec,mr75203.yaml.
+> *) New patch to add moortec to vendor-prefixes.
+> *) Fix moortec,mr75203.yaml checker errors.
+> *) Remove validation of device-tree parameters.
+> *) Fix per patch specific comments (detailed in each patch).
+> 
+> Changes between v2 and v3:
+> *) Add "moortec" prefix to all new device-tree properties.
+> *) Change order of patches.
+> *) Add explanations to better understand the changes.
+> *) Change "reset" property to be optional and remove the
+>   "reset-control-skip" property.
+> *) Split the patch for "fix multi-channel voltage reading" to two
+>    patches.
+> *) Change pre-scaler property format and fix typo (scalar --> scaler).
+> *) Fix voltage equation to support negative values instead of limiting
+>    value to zero.
+> *) Temperature equation - protect from overflow and add clamping.
+> *) Add new "moortec,ts-series" property to select between temperature
+>    equation of series 5 or series 6.
+> 
+> Changes between v1 and v2:
+>  *) Fix compilation error for patch 08/16:
+>     "warning: ISO C90 forbids variable length array"
+> 
+> ---------
+> 
+> Eliav Farber (21):
+>   hwmon: (mr75203) fix coding style space errors
+>   dt-bindings: hwmon: (mr75203) fix "intel,vm-map" property to be
+>     optional
+>   hwmon: (mr75203) fix VM sensor allocation when "intel,vm-map" not
+>     defined
+>   hwmon: (mr75203) update pvt->v_num and vm_num to the actual number of
+>     used sensors
+>   hwmon: (mr75203) fix voltage equation for negative source input
+>   hwmon: (mr75203) fix multi-channel voltage reading
+>   hwmon: (mr75203) enable polling for all VM channels
+>   dt-bindings: hwmon: (mr75203) add description for Moortec's PVT
+>     controller
+>   dt-bindings: hwmon: (mr75203) change "resets" property to be optional
+>   hwmon: (mr75203) skip reset-control deassert for SOCs that don't
+>     support it
+>   dt-bindings: vendor-prefixes: add vendor prefix for Moortec
+>   dt-bindings: hwmon: (mr75203) add "moortec,vm-active-channels"
+>     property
+>   hwmon: (mr75203) add VM active channel support
+>   dt-bindings: hwmon: (mr75203) add "moortec,vm-pre-scaler-x2" property
+>   hwmon: (mr75203) add VM pre-scaler x2 support
+>   hwmon: (mr75203) modify the temperature equation according to series 5
+>     datasheet
+>   dt-bindings: hwmon: (mr75203) add "moortec,ts-series" property
+>   hwmon: (mr75203) add support for series 6 temperature equation
+>   dt-bindings: hwmon: (mr75203) add coefficient properties for the
+>     thermal equation
+>   hwmon: (mr75203) parse temperature coefficients from device-tree
+>   hwmon: (mr75203) add debugfs to read and write temperature
+>     coefficients
+> 
+>  .../bindings/hwmon/moortec,mr75203.yaml       |  97 ++++-
+>  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+>  drivers/hwmon/mr75203.c                       | 387 +++++++++++++++---
+>  3 files changed, 421 insertions(+), 65 deletions(-)
+> 
+> -- 
+> 2.37.1
+> 
 
 -- 
 With Best Regards,
