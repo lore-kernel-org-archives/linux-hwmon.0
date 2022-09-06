@@ -2,47 +2,47 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2237C6FA83
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 08:34:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FE6EC6FA8C
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 08:34:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234130AbiIFIex (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Sep 2022 04:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
+        id S238739AbiIFIey (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Sep 2022 04:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238870AbiIFIer (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 04:34:47 -0400
+        with ESMTP id S234243AbiIFIeu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 04:34:50 -0400
 Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6759E19C22;
-        Tue,  6 Sep 2022 01:34:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562A722B10;
+        Tue,  6 Sep 2022 01:34:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1662453286; x=1693989286;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3//tdfVNFU6XbabXXpbZNLh74O6SviUmuZml9vQSrNo=;
-  b=hVGxshil0yXYUvP8dp5ZfmFn6eC6tRV1qWch9Ip37TsjdDEJV40L9lXB
-   UorPcpGE7CEYgG1iXHXBMBi5AKGdJ55AEA3pYIGI7UQTN8wOfsXYL/7QB
-   QzoZ2O+u9QDgzAHZOYQekCkLGYyq7oH0DRdH7O35rmkzy5qs2jUyquKkf
-   E=;
+  t=1662453288; x=1693989288;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=oYZ9Wq3jM0aGkWOvYWKmVLjFLtLor/Gjf3AcMqCNWmU=;
+  b=VaYfNaSW+iTQZ1muZmtHyTxKPvNyJdUTJkdoiE0PuNgnGtABhRJZq55j
+   pi6g17SZKzxm0p7ye85cz1UraaMjQJs83+NiuZ+J3kp0xeapgniD69OIW
+   OPnndjXW0d+lGiASm2vTU1gXtNI5gwkZ/f4iBXQHC9qLWBK7XgVHbX3Oj
+   o=;
 X-IronPort-AV: E=Sophos;i="5.93,293,1654560000"; 
-   d="scan'208";a="241387496"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-4ba5c7da.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 08:34:37 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1a-4ba5c7da.us-east-1.amazon.com (Postfix) with ESMTPS id 574D3E05AF;
-        Tue,  6 Sep 2022 08:34:35 +0000 (UTC)
-Received: from EX19D013UWA002.ant.amazon.com (10.13.138.210) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 6 Sep 2022 08:33:59 +0000
+   d="scan'208";a="241387515"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-b48bc93b.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 08:34:40 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-b48bc93b.us-east-1.amazon.com (Postfix) with ESMTPS id 88852C022E;
+        Tue,  6 Sep 2022 08:34:38 +0000 (UTC)
+Received: from EX19D013UWA001.ant.amazon.com (10.13.138.253) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 6 Sep 2022 08:34:00 +0000
 Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX19D013UWA002.ant.amazon.com (10.13.138.210) with Microsoft SMTP Server
+ EX19D013UWA001.ant.amazon.com (10.13.138.253) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Tue, 6 Sep 2022 08:33:58 +0000
+ Tue, 6 Sep 2022 08:33:59 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
  (172.19.116.181) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Tue, 6 Sep 2022 08:33:57 +0000
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 6 Sep 2022 08:33:59 +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id C3F5D4D8E; Tue,  6 Sep 2022 08:33:56 +0000 (UTC)
+        id D26DC4D79; Tue,  6 Sep 2022 08:33:56 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
@@ -50,10 +50,12 @@ To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <farbere@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>,
         <andriy.shevchenko@intel.com>
-Subject: [PATCH v4 00/21] Variety of fixes and new features for mr75203 driver
-Date:   Tue, 6 Sep 2022 08:33:35 +0000
-Message-ID: <20220906083356.21067-1-farbere@amazon.com>
+Subject: [PATCH v4 03/21] hwmon: (mr75203) fix VM sensor allocation when "intel,vm-map" not defined
+Date:   Tue, 6 Sep 2022 08:33:38 +0000
+Message-ID: <20220906083356.21067-4-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220906083356.21067-1-farbere@amazon.com>
+References: <20220906083356.21067-1-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -61,92 +63,64 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-List of fixes:
- - Fix "intel,vm-map" property to be optional.
- - Fix VM sensor allocation when "intel,vm-map" not defined.
- - Fix multi-channel voltage reading.
- - Fix voltage equation for negative source input.
- - Modify the temperature equation according to series 5 datasheet.
- - Fix coding style issue.
+Bug - in case "intel,vm-map" is missing in device-tree ,'num' is set
+to 0, and no voltage channel infos are allocated.
 
-List of new features:
- - Modify "reset" property to be optional.
- - Add optional "moortec,vm-active-channels" property to define the number
-   of active channels per VM.
- - Add support for mr76006 pre-scaler to multiply the voltage result by 2.
- - Add support for series 6 temperature equation.
- - Add coefficient properties to fine tune the temperature equation.
- - Add debugfs to read and write temperature coefficients
+The reason num is set to 0 when "intel,vm-map" is missing is to set the
+entire pvt->vm_idx[] with incremental channel numbers, but it didn't
+take into consideration that same num is used later in devm_kcalloc().
 
----------
+If "intel,vm-map" does exist there is no need to set the unspecified
+channels with incremental numbers, because the unspecified channels
+can't be accessed in pvt_read_in() which is the only other place besides
+the probe functions that uses pvt->vm_idx[].
 
-Changes between v3 and v4:
-*) Provide a Fixes tag for all fixes in the series.
-*) Start series with fixes.
-*) New patch to add description in moortec,mr75203.yaml.
-*) New patch to add moortec to vendor-prefixes.
-*) Fix moortec,mr75203.yaml checker errors.
-*) Remove validation of device-tree parameters.
-*) Fix per patch specific comments (detailed in each patch).
+This change fixes the bug by moving the incremental channel numbers
+setting to be done only if "intel,vm-map" property is defined (starting
+loop from 0), and removing 'num = 0'.
 
-Changes between v2 and v3:
-*) Add "moortec" prefix to all new device-tree properties.
-*) Change order of patches.
-*) Add explanations to better understand the changes.
-*) Change "reset" property to be optional and remove the
-  "reset-control-skip" property.
-*) Split the patch for "fix multi-channel voltage reading" to two
-   patches.
-*) Change pre-scaler property format and fix typo (scalar --> scaler).
-*) Fix voltage equation to support negative values instead of limiting
-   value to zero.
-*) Temperature equation - protect from overflow and add clamping.
-*) Add new "moortec,ts-series" property to select between temperature
-   equation of series 5 or series 6.
+Fixes: 9d823351a337 ("hwmon: Add hardware monitoring driver for Moortec MR75203 PVT controller")
+Signed-off-by: Eliav Farber <farbere@amazon.com>
+---
+V4 -> v3:
+- Simplify the fix by not removing the local num variable (it is removed as
+  part of a later commit).
 
-Changes between v1 and v2:
- *) Fix compilation error for patch 08/16:
-    "warning: ISO C90 forbids variable length array"
+ drivers/hwmon/mr75203.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
----------
-
-Eliav Farber (21):
-  hwmon: (mr75203) fix coding style space errors
-  dt-bindings: hwmon: (mr75203) fix "intel,vm-map" property to be
-    optional
-  hwmon: (mr75203) fix VM sensor allocation when "intel,vm-map" not
-    defined
-  hwmon: (mr75203) update pvt->v_num and vm_num to the actual number of
-    used sensors
-  hwmon: (mr75203) fix voltage equation for negative source input
-  hwmon: (mr75203) fix multi-channel voltage reading
-  hwmon: (mr75203) enable polling for all VM channels
-  dt-bindings: hwmon: (mr75203) add description for Moortec's PVT
-    controller
-  dt-bindings: hwmon: (mr75203) change "resets" property to be optional
-  hwmon: (mr75203) skip reset-control deassert for SOCs that don't
-    support it
-  dt-bindings: vendor-prefixes: add vendor prefix for Moortec
-  dt-bindings: hwmon: (mr75203) add "moortec,vm-active-channels"
-    property
-  hwmon: (mr75203) add VM active channel support
-  dt-bindings: hwmon: (mr75203) add "moortec,vm-pre-scaler-x2" property
-  hwmon: (mr75203) add VM pre-scaler x2 support
-  hwmon: (mr75203) modify the temperature equation according to series 5
-    datasheet
-  dt-bindings: hwmon: (mr75203) add "moortec,ts-series" property
-  hwmon: (mr75203) add support for series 6 temperature equation
-  dt-bindings: hwmon: (mr75203) add coefficient properties for the
-    thermal equation
-  hwmon: (mr75203) parse temperature coefficients from device-tree
-  hwmon: (mr75203) add debugfs to read and write temperature
-    coefficients
-
- .../bindings/hwmon/moortec,mr75203.yaml       |  97 ++++-
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- drivers/hwmon/mr75203.c                       | 387 +++++++++++++++---
- 3 files changed, 421 insertions(+), 65 deletions(-)
-
+diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+index 8adfbb15453f..0ead576694a1 100644
+--- a/drivers/hwmon/mr75203.c
++++ b/drivers/hwmon/mr75203.c
+@@ -594,7 +594,12 @@ static int mr75203_probe(struct platform_device *pdev)
+ 		ret = device_property_read_u8_array(dev, "intel,vm-map",
+ 						    pvt->vm_idx, vm_num);
+ 		if (ret) {
+-			num = 0;
++			/*
++			 * Incase intel,vm-map property is not defined, we
++			 * assume incremental channel numbers.
++			 */
++			for (i = 0; i < vm_num; i++)
++				pvt->vm_idx[i] = i;
+ 		} else {
+ 			for (i = 0; i < vm_num; i++)
+ 				if (pvt->vm_idx[i] >= vm_num ||
+@@ -604,13 +609,6 @@ static int mr75203_probe(struct platform_device *pdev)
+ 				}
+ 		}
+ 
+-		/*
+-		 * Incase intel,vm-map property is not defined, we assume
+-		 * incremental channel numbers.
+-		 */
+-		for (i = num; i < vm_num; i++)
+-			pvt->vm_idx[i] = i;
+-
+ 		in_config = devm_kcalloc(dev, num + 1,
+ 					 sizeof(*in_config), GFP_KERNEL);
+ 		if (!in_config)
 -- 
 2.37.1
 
