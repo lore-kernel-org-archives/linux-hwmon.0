@@ -2,47 +2,47 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75FA2C6FA83
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 08:39:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A395EC54EE9
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 08:40:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239259AbiIFIji (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Sep 2022 04:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
+        id S239429AbiIFIkK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Sep 2022 04:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239618AbiIFIjO (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 04:39:14 -0400
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1167379A7B;
-        Tue,  6 Sep 2022 01:37:19 -0700 (PDT)
+        with ESMTP id S239655AbiIFIjT (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 04:39:19 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149E279EEB;
+        Tue,  6 Sep 2022 01:37:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1662453440; x=1693989440;
+  t=1662453448; x=1693989448;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=V4aH9xyy2/XLqee5tkK0CY6/3gjCyrih6JiYbJmNTYo=;
-  b=LtTcMDKRywkFJbcr3SVT2iWtbb2XkXNCSlg3zLcwNipywhjlemzDZrKf
-   fEE1IEIRhQ66/3afe2mFIUHz9fLQvZs7IhSmod5Fe5T+NzKMmyiZxpNWi
-   E7Yi57LMNhbrX00pUj/8fSL4769BLH7mB8k5nmy4gvCxqLcrEHDYJLc9t
-   E=;
+  bh=WYAxidW5DMSg6wyDs6NW6VjRmOI1Fc+ZAedvRJD+oFc=;
+  b=r2WipW66Td4xumifGRd3SR/1+uDriVwMfSjmog9RxD3La26++tN3+nxs
+   5eO+N5LSIpEWdrR/oAFIHAmgqBjPk/nCIfgw5vQ5kLfx7CwX5CDvz7A59
+   EiIwQjir2g6rarM8WRalDQ9lNbcReiq0SIRtmqHjIqfhMQPeubrp0jZis
+   c=;
 X-IronPort-AV: E=Sophos;i="5.93,293,1654560000"; 
-   d="scan'208";a="127049967"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-8bf71a74.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 08:34:00 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-8bf71a74.us-east-1.amazon.com (Postfix) with ESMTPS id E7374C0A24;
-        Tue,  6 Sep 2022 08:33:58 +0000 (UTC)
-Received: from EX19D013UWB003.ant.amazon.com (10.13.138.111) by
+   d="scan'208";a="127144287"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-1c3c2014.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 08:34:42 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1d-1c3c2014.us-east-1.amazon.com (Postfix) with ESMTPS id AE2893C005D;
+        Tue,  6 Sep 2022 08:34:38 +0000 (UTC)
+Received: from EX19D013UWB002.ant.amazon.com (10.13.138.21) by
  EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 6 Sep 2022 08:33:58 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX19D013UWB003.ant.amazon.com (10.13.138.111) with Microsoft SMTP Server
+ id 15.0.1497.38; Tue, 6 Sep 2022 08:34:00 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
+ EX19D013UWB002.ant.amazon.com (10.13.138.21) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Tue, 6 Sep 2022 08:33:58 +0000
+ Tue, 6 Sep 2022 08:34:00 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Tue, 6 Sep 2022 08:33:58 +0000
+ (172.19.116.181) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 6 Sep 2022 08:33:59 +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id C694B4D86; Tue,  6 Sep 2022 08:33:56 +0000 (UTC)
+        id CBB7A4D80; Tue,  6 Sep 2022 08:33:57 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
@@ -50,9 +50,9 @@ To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <farbere@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>,
         <andriy.shevchenko@intel.com>
-Subject: [PATCH v4 02/21] dt-bindings: hwmon: (mr75203) fix "intel,vm-map" property to be optional
-Date:   Tue, 6 Sep 2022 08:33:37 +0000
-Message-ID: <20220906083356.21067-3-farbere@amazon.com>
+Subject: [PATCH v4 17/21] dt-bindings: hwmon: (mr75203) add "moortec,ts-series" property
+Date:   Tue, 6 Sep 2022 08:33:52 +0000
+Message-ID: <20220906083356.21067-18-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220906083356.21067-1-farbere@amazon.com>
 References: <20220906083356.21067-1-farbere@amazon.com>
@@ -63,36 +63,50 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Change "intel,vm-map" property to be optional instead of required.
+Add optional "moortec,ts-series" property to define the temperature
+equation and coefficients that shall be used to convert the digital
+output to value in milli-Celsius.
+Supported series: 5 (default) and 6.
 
-The driver implementation indicates it is not mandatory to have
-"intel,vm-map" in the device tree:
- - probe doesn't fail in case it is absent.
- - explicit comment in code - "Incase intel,vm-map property is not
-   defined, we assume incremental channel numbers".
+Series 5:
+  T = G + H * (n / cal5 - 0.5) + J * F
+Where: G = 60, H = 200, cal5 = 4094, J = -0.1, F = frequency clock in MHz
 
-Fixes: 748022ef093f ("hwmon: Add DT bindings schema for PVT controller")
+Series 6:
+   T = G + H * (n / cal5 - 0.5)
+Where: G = 57.4, H = 249.4, cal5 = 4096
+
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
-V3 -> V2:
-- Change this patch to be first in the series.
-- Add explanation why "intel,vm-map" is not required.
+V4 -> V3:
+- Remove constraints in free-form text descriptions.
 
- Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 1 -
- 1 file changed, 1 deletion(-)
+V3 -> V2:
+- New patch to introduce "moortec,ts-series" property.
+
+ .../devicetree/bindings/hwmon/moortec,mr75203.yaml       | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-index b79f069a04c2..8ea97e774364 100644
+index de92a21d5552..28656e9d9059 100644
 --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
 +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-@@ -48,7 +48,6 @@ required:
+@@ -91,6 +91,15 @@ properties:
+       Each channel should not appear more than once.
+     $ref: /schemas/types.yaml#/definitions/uint8-array
+ 
++  moortec,ts-series:
++    description:
++      Definition of the temperature equation and coefficients that shall be
++      used to convert the digital output to value in milli-Celsius.
++    minimum: 5
++    maximum: 6
++    default: 5
++    $ref: /schemas/types.yaml#/definitions/uint32
++
+ required:
    - compatible
    - reg
-   - reg-names
--  - intel,vm-map
-   - clocks
-   - resets
-   - "#thermal-sensor-cells"
 -- 
 2.37.1
 
