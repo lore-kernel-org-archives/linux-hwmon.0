@@ -2,157 +2,108 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57E07ECAAD5
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 15:16:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92BADECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 15:52:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233878AbiIFPQQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Sep 2022 11:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
+        id S237420AbiIFPwi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Sep 2022 11:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbiIFPPt (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 11:15:49 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71B74DB6C;
-        Tue,  6 Sep 2022 07:29:05 -0700 (PDT)
+        with ESMTP id S234543AbiIFPvy (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 11:51:54 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F377C1DA;
+        Tue,  6 Sep 2022 08:08:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662474546; x=1694010546;
+  t=1662476928; x=1694012928;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ybgSo2BkoIeNrG9pnEwHuQd0zdtCaKmVHLLWorPRU10=;
-  b=fWWJtozf+jgh+pAEhkuFZw0bj1pHoIa70kXfVAOpA4fstDTl+7TVGPXB
-   0jqRZrP91dwqaKikkAan1wDsoPZx2O9TFH7d5yHHd85PXc3d1Q7WL+KVc
-   ihKELM9zLhwjYVjrXS/R7hqvRPIp456ZzamocEm5M0kaB4yt4e6bE0jHN
-   pJAHfPEIxkCrZ3cLMHDbalwTu18EljJaLQNll1y+vzYhqp3GzceimE/P4
-   svSjhva5LsN59nN5fbcc6Ts13PHjoV/aJlYyjOXbls/IUmHik0VNf/fUV
-   x4b5uX8r1rFOqK7/QCDN5LBYRSPH2jgPzaSA/dCVHrfTunGxs+/G6aKpj
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=itE7kZ47RvKv7aOih+1Wnx/AC33Uqv9KiENi43eLSX8=;
+  b=cj82i0/BazHZcTncG3KsbfdsHF/IN0ujWu4ZyBcNqE3T2QTuKsSqAVNy
+   r2O65IDkqkd2OJ5tz+feVMREnvmk7c8UD2YZmc4CvCFMkjfbGw4rdz3Dv
+   Ei5ZileHqArv4zfsENoRGE0cQlbLsJyowd5IzMHlE2BFN5zThieOos76M
+   F0Ht6w5q/n2kxbpZwH6ImjSJEg82MeSSXTSdeGE2O1d8sJ7rnzWv12ZYg
+   PYbVRu9PfmE9WrzTyTAF094L+nBBe0tS4Ef8gWqSkr22T0IvSq070i7cn
+   CL4xqH8eFUh9RkXM71Un9X7ekhvPKa04sGZ+JYc9JassoHyrru7IvrQp6
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="276344870"
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="283594159"
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="276344870"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 07:26:27 -0700
+   d="scan'208";a="283594159"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 07:01:21 -0700
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="756383261"
+   d="scan'208";a="614102740"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 07:26:24 -0700
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 07:01:18 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oVZWv-0099cw-3D;
-        Tue, 06 Sep 2022 17:26:22 +0300
-Date:   Tue, 6 Sep 2022 17:26:21 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Eliav Farber <farbere@amazon.com>
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oVZ8d-00995i-2a;
+        Tue, 06 Sep 2022 17:01:15 +0300
+Date:   Tue, 6 Sep 2022 17:01:15 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     "Farber, Eliav" <farbere@amazon.com>
 Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
         p.zabel@pengutronix.de, rtanwar@maxlinear.com,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
-Subject: Re: [PATCH v4 00/21] Variety of fixes and new features for mr75203
- driver
-Message-ID: <YxdYjWYCR7YCodTX@smile.fi.intel.com>
+Subject: Re: [PATCH v4 05/21] hwmon: (mr75203) fix voltage equation for
+ negative source input
+Message-ID: <YxdSqw6STdkbDESV@smile.fi.intel.com>
 References: <20220906083356.21067-1-farbere@amazon.com>
+ <20220906083356.21067-6-farbere@amazon.com>
+ <Yxc3GeFc5gDKrYyP@smile.fi.intel.com>
+ <29fa5c01-aad0-04ff-e1a9-1510858eff7e@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220906083356.21067-1-farbere@amazon.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <29fa5c01-aad0-04ff-e1a9-1510858eff7e@amazon.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 08:33:35AM +0000, Eliav Farber wrote:
-> List of fixes:
->  - Fix "intel,vm-map" property to be optional.
->  - Fix VM sensor allocation when "intel,vm-map" not defined.
->  - Fix multi-channel voltage reading.
->  - Fix voltage equation for negative source input.
->  - Modify the temperature equation according to series 5 datasheet.
->  - Fix coding style issue.
-> 
-> List of new features:
->  - Modify "reset" property to be optional.
->  - Add optional "moortec,vm-active-channels" property to define the number
->    of active channels per VM.
->  - Add support for mr76006 pre-scaler to multiply the voltage result by 2.
->  - Add support for series 6 temperature equation.
->  - Add coefficient properties to fine tune the temperature equation.
->  - Add debugfs to read and write temperature coefficients
+On Tue, Sep 06, 2022 at 04:27:13PM +0300, Farber, Eliav wrote:
+> On 9/6/2022 3:03 PM, Andy Shevchenko wrote:
+> > On Tue, Sep 06, 2022 at 08:33:40AM +0000, Eliav Farber wrote:
 
-For all code patches (means no DT ones)
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+...
 
-> ---------
+> > > -             *val = (PVT_N_CONST * n - PVT_R_CONST) >> PVT_CONV_BITS;
+> > > +             *val = (PVT_N_CONST * (long)n - PVT_R_CONST) / (1 <<
+> > > PVT_CONV_BITS);
+> > 
+> > Wondering if we can use BIT(PVT_CONV_BITS) for two (quite unlikely to
+> > happen,
+> > I hope) purposes:
+> > 
+> > 1) Somebody copies such code where PVT_CONV_BITS analogue can be 31,
+> >   which is according to C standard is UB (undefined behaviour).
+> > 
+> > 2) It makes shorter the line and also drops the pattern where some
+> >   dumb robot may propose a patch to basically revert the division
+> >   change.
+> I originally tried to use BIT(PVT_CONV_BITS) but it gave a different
+> result.
+> e.g.
+> If n = 2720
+> *val = (PVT_N_CONST * (long)n - PVT_R_CONST) / (1 << PVT_CONV_BITS) = 0
+> *val = (PVT_N_CONST * (long)n - PVT_R_CONST) / BIT(PVT_CONV_BITS) =
+> 18014398509481983
 > 
-> Changes between v3 and v4:
-> *) Provide a Fixes tag for all fixes in the series.
-> *) Start series with fixes.
-> *) New patch to add description in moortec,mr75203.yaml.
-> *) New patch to add moortec to vendor-prefixes.
-> *) Fix moortec,mr75203.yaml checker errors.
-> *) Remove validation of device-tree parameters.
-> *) Fix per patch specific comments (detailed in each patch).
-> 
-> Changes between v2 and v3:
-> *) Add "moortec" prefix to all new device-tree properties.
-> *) Change order of patches.
-> *) Add explanations to better understand the changes.
-> *) Change "reset" property to be optional and remove the
->   "reset-control-skip" property.
-> *) Split the patch for "fix multi-channel voltage reading" to two
->    patches.
-> *) Change pre-scaler property format and fix typo (scalar --> scaler).
-> *) Fix voltage equation to support negative values instead of limiting
->    value to zero.
-> *) Temperature equation - protect from overflow and add clamping.
-> *) Add new "moortec,ts-series" property to select between temperature
->    equation of series 5 or series 6.
-> 
-> Changes between v1 and v2:
->  *) Fix compilation error for patch 08/16:
->     "warning: ISO C90 forbids variable length array"
-> 
-> ---------
-> 
-> Eliav Farber (21):
->   hwmon: (mr75203) fix coding style space errors
->   dt-bindings: hwmon: (mr75203) fix "intel,vm-map" property to be
->     optional
->   hwmon: (mr75203) fix VM sensor allocation when "intel,vm-map" not
->     defined
->   hwmon: (mr75203) update pvt->v_num and vm_num to the actual number of
->     used sensors
->   hwmon: (mr75203) fix voltage equation for negative source input
->   hwmon: (mr75203) fix multi-channel voltage reading
->   hwmon: (mr75203) enable polling for all VM channels
->   dt-bindings: hwmon: (mr75203) add description for Moortec's PVT
->     controller
->   dt-bindings: hwmon: (mr75203) change "resets" property to be optional
->   hwmon: (mr75203) skip reset-control deassert for SOCs that don't
->     support it
->   dt-bindings: vendor-prefixes: add vendor prefix for Moortec
->   dt-bindings: hwmon: (mr75203) add "moortec,vm-active-channels"
->     property
->   hwmon: (mr75203) add VM active channel support
->   dt-bindings: hwmon: (mr75203) add "moortec,vm-pre-scaler-x2" property
->   hwmon: (mr75203) add VM pre-scaler x2 support
->   hwmon: (mr75203) modify the temperature equation according to series 5
->     datasheet
->   dt-bindings: hwmon: (mr75203) add "moortec,ts-series" property
->   hwmon: (mr75203) add support for series 6 temperature equation
->   dt-bindings: hwmon: (mr75203) add coefficient properties for the
->     thermal equation
->   hwmon: (mr75203) parse temperature coefficients from device-tree
->   hwmon: (mr75203) add debugfs to read and write temperature
->     coefficients
-> 
->  .../bindings/hwmon/moortec,mr75203.yaml       |  97 ++++-
->  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
->  drivers/hwmon/mr75203.c                       | 387 +++++++++++++++---
->  3 files changed, 421 insertions(+), 65 deletions(-)
-> 
-> -- 
-> 2.37.1
-> 
+> I can try fitting it in one line, either by adding a define for
+> (1 << PVT_CONV_BITS) or exceeding 80 characters, but keep in mind that
+> in a later patch (#15) it gets even longer (and I must use more than
+> one line) since it is multiplied by a pre-scaler factor.
+
+Don't get me wrong, it's not about style, it's about preventing
+followup "fixes" of this. All the problems here due to (hidden)
+unsigned type(s).
+
+What you can do is to add a good comment on top of that line
+explaining why division instead of right shift and why BIT()
+may not be used (because it's unsigned).
 
 -- 
 With Best Regards,
