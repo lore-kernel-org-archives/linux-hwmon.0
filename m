@@ -2,236 +2,107 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00B43C38145
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 17:05:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0CB8C38145
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 17:07:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239405AbiIFRF4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Sep 2022 13:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
+        id S238555AbiIFRHC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Sep 2022 13:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232675AbiIFRFc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 13:05:32 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F431DF7F;
-        Tue,  6 Sep 2022 09:52:32 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id x19so11990874pfr.1;
-        Tue, 06 Sep 2022 09:52:32 -0700 (PDT)
+        with ESMTP id S233681AbiIFRGr (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 13:06:47 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2E36398;
+        Tue,  6 Sep 2022 09:54:02 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id c24so11140990pgg.11;
+        Tue, 06 Sep 2022 09:54:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=ClsUxNWUlr9YbZdE+mBsdmX6Ii6dUBfM2rBrEWed8FM=;
-        b=ZD657V+czK2A/LT1vcZmFRCURy17vlQAFGimz4Jd5d/IPRsSAMXR07XLUZXZme8gIq
-         x8x555YqBk4OCpHs6IQj7S179VJTHqGdegJGcaRE5r+ek2tYWjbdydM9q1OBwvfzCI4n
-         bSZJOjvQZP+pBItAudmKakhqdhhPPYPgcbrwOT976LYefXLkXzXokgEek4uTaHZ1S9PR
-         xFkrbnTcWPICMZTZl5e4YXNHbBGyDZBOgyZW9I+XErl1IJhSfyMf6ngWZsgP47k88O/L
-         x+SNt+lr+F9iQRTTMfGbnZLgUzoIm73JH4KM8Mvxj9djD+GXsblryciSK75z/F029/HE
-         gCxQ==
+        bh=zQI+DdLFCUikiV3t8V8tFwBfwRVF+ZZxI2qA2tELRBo=;
+        b=eGQRctC9tfBhIZgDcOX7N5Qu5AXcjH955F6q8rujOsAHkxvCmrsrOue7d3Kh/PjRoo
+         fICVhL3TN6qp6HiRPs0WiwU8ibFFaKNuQX/qq+9XBjQODg8Apda7ytY4UH7iprmlfCCI
+         8fXnjwfghk92pZ4o/lZQW8sVapH+NdoLhMyAkhhd5nPI+vbIpq5FKi7RYIW5nxImmHSn
+         ad8wmJAPfLmsJJFlfilbXLYUJqdnORtv9tZw4UjrM0IE+QbUWbvOvwgXYcll0PL9OonI
+         8aYph2R0nAPla00jxGLwGIkRRCkZroB49/sO6/0asFPSWdH2v+57JtTMuAs+1pJdmTvF
+         myJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=ClsUxNWUlr9YbZdE+mBsdmX6Ii6dUBfM2rBrEWed8FM=;
-        b=NNPNmYs021vuxXRWYRxgDcsaszqCsac3ypodux18rPHb5xbbhkqL1B957BkP8vGsHt
-         rcxV6JlQy2a6p8bmB4jeCJseIcoKLOE8ft6Krlr3iBWwGaVw7yiM9fP5CbpjtaFA+BlO
-         HRQna2ZaysAugiMblwxYolENEKldO3oOgLwv4JAAl77FULd+2XcfYUyC1/U8d9lapYfn
-         oXJIY4HWK22KJCrkI4aNx0LiU9CrNN9npgsCGhrSuJnnwnRASZHIfwRVazcSiN/5e5e2
-         71b9TTQ8p/yKKvRlXb95XxBnQQGGjoES0iqb77gfgek8eUNRT6xtw+AXii46+lU5ld0V
-         HL5g==
-X-Gm-Message-State: ACgBeo1oPAZppJNs5F+8iXNoy2ipM984owZuK6p35soHZ2icuY39/9e0
-        5tUO6WwC71sde7KimJkkuUQ=
-X-Google-Smtp-Source: AA6agR7slyrhF09ZZ0GyrgwjiB2Ccf7IGqljYtzz29C9BmNLvx4Eqxw4/ky7biMQJ1KKhfmPq4ftGw==
-X-Received: by 2002:a05:6a00:14c7:b0:52e:efb7:bd05 with SMTP id w7-20020a056a0014c700b0052eefb7bd05mr54838752pfu.24.1662483151937;
-        Tue, 06 Sep 2022 09:52:31 -0700 (PDT)
+        bh=zQI+DdLFCUikiV3t8V8tFwBfwRVF+ZZxI2qA2tELRBo=;
+        b=Zeg71Fy5L1FGaN0A5CH3QoCW4rSa/ShxZbE8efPdoW+z+cguYVJbOcoiu++6G3icJR
+         tE6KBD34mhIfkf2SM7/iYnN9bWWrANmhZ2INVGmNmWt4a177qnS1g4AuV/MkoBQwuyXy
+         Xdjphmg+6FalCY2wOsT7qUdHnYf0CWZlGa6Xd5r1gbFxufrV9IRAhO6JHINYmjwlpUI4
+         N5GvWFkYZkktaeHIcNrQiOq+tE/YvJNY7z1uXY+/SZ5EDqdZtBQJNGkQYyrUuuLh6ojU
+         LB0yRE1W08Z9eTzsTRaZyQGKxdm7C7NsujPvuhUOvC8ycvYS/O2g2CHNY47ajVLSyvWk
+         9OxQ==
+X-Gm-Message-State: ACgBeo0JgK8aO2NdW4u8u8TnR2FukmdylLqnOXaeRkoV+2USFk1/fNIw
+        MNyOyuDF5l9BFsdYwZ7WKDE=
+X-Google-Smtp-Source: AA6agR40KVFSonXPgm7B1M39fQ5MInhXgP1GfPy9N18rTZ8vE5vC3bNIPirphDfpRKdk2qanPExaCg==
+X-Received: by 2002:a65:5b0d:0:b0:434:a7d2:9771 with SMTP id y13-20020a655b0d000000b00434a7d29771mr3705934pgq.356.1662483241177;
+        Tue, 06 Sep 2022 09:54:01 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bi10-20020a170902bf0a00b00174e5fe9ce1sm1906391plb.159.2022.09.06.09.52.30
+        by smtp.gmail.com with ESMTPSA id d16-20020a170902ced000b001753654d9c5sm10274183plg.95.2022.09.06.09.54.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 09:52:31 -0700 (PDT)
+        Tue, 06 Sep 2022 09:54:00 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 6 Sep 2022 09:52:29 -0700
+Date:   Tue, 6 Sep 2022 09:53:59 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Eliav Farber <farbere@amazon.com>
 Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
         rtanwar@maxlinear.com, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         hhhawa@amazon.com, jonnyc@amazon.com, andriy.shevchenko@intel.com
-Subject: Re: [PATCH v4 01/21] hwmon: (mr75203) fix coding style space errors
-Message-ID: <20220906165229.GA594012@roeck-us.net>
+Subject: Re: [PATCH v4 02/21] dt-bindings: hwmon: (mr75203) fix
+ "intel,vm-map" property to be optional
+Message-ID: <20220906165359.GA817639@roeck-us.net>
 References: <20220906083356.21067-1-farbere@amazon.com>
- <20220906083356.21067-2-farbere@amazon.com>
+ <20220906083356.21067-3-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220906083356.21067-2-farbere@amazon.com>
+In-Reply-To: <20220906083356.21067-3-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 08:33:36AM +0000, Eliav Farber wrote:
-> Fix: "ERROR: space required before the open parenthesis '('"
+On Tue, Sep 06, 2022 at 08:33:37AM +0000, Eliav Farber wrote:
+> Change "intel,vm-map" property to be optional instead of required.
 > 
-> Fixes: 9d823351a337 ("hwmon: Add hardware monitoring driver for Moortec MR75203 PVT controller")
+> The driver implementation indicates it is not mandatory to have
+> "intel,vm-map" in the device tree:
+>  - probe doesn't fail in case it is absent.
+>  - explicit comment in code - "Incase intel,vm-map property is not
+>    defined, we assume incremental channel numbers".
+> 
+> Fixes: 748022ef093f ("hwmon: Add DT bindings schema for PVT controller")
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> ---
+> V3 -> V2:
+> - Change this patch to be first in the series.
+> - Add explanation why "intel,vm-map" is not required.
+> 
 
-Coding style "fixes" do not fix the code. I consider using the Fixes: tag
-for those to close to an abuse of that tag (and it would be great if that
-was spelled out somewhere). As it is, I can not with good conscience apply
-this patch to the mainline kernel (especially not for -rc5), meaning the
-entire series will have to wait for the next release window unless there
-are no conflicts.
+I don't see how this change warrants dropping Rob's Acked-by tag.
+Am I missing something ?
 
 Guenter
 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
->  drivers/hwmon/mr75203.c | 40 ++++++++++++++++++++--------------------
->  1 file changed, 20 insertions(+), 20 deletions(-)
+>  Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-> index 046523d47c29..8adfbb15453f 100644
-> --- a/drivers/hwmon/mr75203.c
-> +++ b/drivers/hwmon/mr75203.c
-> @@ -155,7 +155,7 @@ static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
->  			return ret;
->  
->  		ret = regmap_read(t_map, SDIF_DATA(channel), &nbs);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		nbs &= SAMPLE_DATA_MSK;
-> @@ -197,7 +197,7 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
->  			return ret;
->  
->  		ret = regmap_read(v_map, VM_SDIF_DATA(vm_idx), &n);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		n &= SAMPLE_DATA_MSK;
-> @@ -291,19 +291,19 @@ static int pvt_init(struct pvt_device *pvt)
->  
->  	if (t_num) {
->  		ret = regmap_write(t_map, SDIF_SMPL_CTRL, 0x0);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		ret = regmap_write(t_map, SDIF_HALT, 0x0);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		ret = regmap_write(t_map, CLK_SYNTH, clk_synth);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		ret = regmap_write(t_map, SDIF_DISABLE, 0x0);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
-> @@ -316,7 +316,7 @@ static int pvt_init(struct pvt_device *pvt)
->  		val = CFG0_MODE_2 | CFG0_PARALLEL_OUT | CFG0_12_BIT |
->  		      IP_CFG << SDIF_ADDR_SFT | SDIF_WRN_W | SDIF_PROG;
->  		ret = regmap_write(t_map, SDIF_W, val);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
-> @@ -329,7 +329,7 @@ static int pvt_init(struct pvt_device *pvt)
->  		val = POWER_DELAY_CYCLE_256 | IP_TMR << SDIF_ADDR_SFT |
->  			      SDIF_WRN_W | SDIF_PROG;
->  		ret = regmap_write(t_map, SDIF_W, val);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
-> @@ -343,39 +343,39 @@ static int pvt_init(struct pvt_device *pvt)
->  		      IP_CTRL << SDIF_ADDR_SFT |
->  		      SDIF_WRN_W | SDIF_PROG;
->  		ret = regmap_write(t_map, SDIF_W, val);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  	}
->  
->  	if (p_num) {
->  		ret = regmap_write(p_map, SDIF_HALT, 0x0);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		ret = regmap_write(p_map, SDIF_DISABLE, BIT(p_num) - 1);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		ret = regmap_write(p_map, CLK_SYNTH, clk_synth);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  	}
->  
->  	if (v_num) {
->  		ret = regmap_write(v_map, SDIF_SMPL_CTRL, 0x0);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		ret = regmap_write(v_map, SDIF_HALT, 0x0);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		ret = regmap_write(v_map, CLK_SYNTH, clk_synth);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		ret = regmap_write(v_map, SDIF_DISABLE, 0x0);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
-> @@ -389,7 +389,7 @@ static int pvt_init(struct pvt_device *pvt)
->  		      CFG1_14_BIT | IP_CFG << SDIF_ADDR_SFT |
->  		      SDIF_WRN_W | SDIF_PROG;
->  		ret = regmap_write(v_map, SDIF_W, val);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
-> @@ -402,7 +402,7 @@ static int pvt_init(struct pvt_device *pvt)
->  		val = POWER_DELAY_CYCLE_64 | IP_TMR << SDIF_ADDR_SFT |
->  		      SDIF_WRN_W | SDIF_PROG;
->  		ret = regmap_write(v_map, SDIF_W, val);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  
->  		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
-> @@ -416,7 +416,7 @@ static int pvt_init(struct pvt_device *pvt)
->  		      IP_CTRL << SDIF_ADDR_SFT |
->  		      SDIF_WRN_W | SDIF_PROG;
->  		ret = regmap_write(v_map, SDIF_W, val);
-> -		if(ret < 0)
-> +		if (ret < 0)
->  			return ret;
->  	}
->  
-> @@ -535,7 +535,7 @@ static int mr75203_probe(struct platform_device *pdev)
->  		return dev_err_probe(dev, ret, "cannot deassert reset control\n");
->  
->  	ret = regmap_read(pvt->c_map, PVT_IP_CONFIG, &val);
-> -	if(ret < 0)
-> +	if (ret < 0)
->  		return ret;
->  
->  	ts_num = (val & TS_NUM_MSK) >> TS_NUM_SFT;
+> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> index b79f069a04c2..8ea97e774364 100644
+> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> @@ -48,7 +48,6 @@ required:
+>    - compatible
+>    - reg
+>    - reg-names
+> -  - intel,vm-map
+>    - clocks
+>    - resets
+>    - "#thermal-sensor-cells"
