@@ -2,107 +2,119 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0CB8C38145
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 17:07:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DAFCC38145
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 17:20:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238555AbiIFRHC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Sep 2022 13:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
+        id S238453AbiIFRUk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Sep 2022 13:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233681AbiIFRGr (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 13:06:47 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2E36398;
-        Tue,  6 Sep 2022 09:54:02 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id c24so11140990pgg.11;
-        Tue, 06 Sep 2022 09:54:02 -0700 (PDT)
+        with ESMTP id S239117AbiIFRUP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 13:20:15 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B492B80F46;
+        Tue,  6 Sep 2022 10:08:53 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id bh13so11214662pgb.4;
+        Tue, 06 Sep 2022 10:08:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=zQI+DdLFCUikiV3t8V8tFwBfwRVF+ZZxI2qA2tELRBo=;
-        b=eGQRctC9tfBhIZgDcOX7N5Qu5AXcjH955F6q8rujOsAHkxvCmrsrOue7d3Kh/PjRoo
-         fICVhL3TN6qp6HiRPs0WiwU8ibFFaKNuQX/qq+9XBjQODg8Apda7ytY4UH7iprmlfCCI
-         8fXnjwfghk92pZ4o/lZQW8sVapH+NdoLhMyAkhhd5nPI+vbIpq5FKi7RYIW5nxImmHSn
-         ad8wmJAPfLmsJJFlfilbXLYUJqdnORtv9tZw4UjrM0IE+QbUWbvOvwgXYcll0PL9OonI
-         8aYph2R0nAPla00jxGLwGIkRRCkZroB49/sO6/0asFPSWdH2v+57JtTMuAs+1pJdmTvF
-         myJw==
+        bh=jpBqPqc/lFpM1zTXIIfM2j2me7eqE2ehqTemnrYiK5w=;
+        b=QGXiQIxSQsEpcNPUUPnW5yJPk5GOM5XzDyrQb4RwgQ1zmFeoYRjlmRc1Jg8ZwfqHhk
+         qLXeaWcP8yYpuSzBKHVMwApLlqmP74OygkSCswPzoSGMTs9qpccGGq7cpThsNaCP6ZKv
+         6WvB3LO6Ei3hMasSc4kfFMgzU1hEMynEsnxhT1ADlxAc0AMySVp1hU+TdrKgEQpPFrdO
+         1JWaj5tsO5Sa33XtGH3g/I8yBQXqeBYNk293+FgrmXBbVeoan93Apj9oROO06YcOinPT
+         YgprEWmtrpc177YnbNitYee0LKAf20BFUXj4LwdBKv2eL7C+o0vOHmYzHQFahbu2QJaW
+         aNZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=zQI+DdLFCUikiV3t8V8tFwBfwRVF+ZZxI2qA2tELRBo=;
-        b=Zeg71Fy5L1FGaN0A5CH3QoCW4rSa/ShxZbE8efPdoW+z+cguYVJbOcoiu++6G3icJR
-         tE6KBD34mhIfkf2SM7/iYnN9bWWrANmhZ2INVGmNmWt4a177qnS1g4AuV/MkoBQwuyXy
-         Xdjphmg+6FalCY2wOsT7qUdHnYf0CWZlGa6Xd5r1gbFxufrV9IRAhO6JHINYmjwlpUI4
-         N5GvWFkYZkktaeHIcNrQiOq+tE/YvJNY7z1uXY+/SZ5EDqdZtBQJNGkQYyrUuuLh6ojU
-         LB0yRE1W08Z9eTzsTRaZyQGKxdm7C7NsujPvuhUOvC8ycvYS/O2g2CHNY47ajVLSyvWk
-         9OxQ==
-X-Gm-Message-State: ACgBeo0JgK8aO2NdW4u8u8TnR2FukmdylLqnOXaeRkoV+2USFk1/fNIw
-        MNyOyuDF5l9BFsdYwZ7WKDE=
-X-Google-Smtp-Source: AA6agR40KVFSonXPgm7B1M39fQ5MInhXgP1GfPy9N18rTZ8vE5vC3bNIPirphDfpRKdk2qanPExaCg==
-X-Received: by 2002:a65:5b0d:0:b0:434:a7d2:9771 with SMTP id y13-20020a655b0d000000b00434a7d29771mr3705934pgq.356.1662483241177;
-        Tue, 06 Sep 2022 09:54:01 -0700 (PDT)
+        bh=jpBqPqc/lFpM1zTXIIfM2j2me7eqE2ehqTemnrYiK5w=;
+        b=HvBZx+OlpZfMU/5Yp0JEVrF6dy+TG+LyCDI1EU6Hx6X8GGJDy0yvqT29bHmCZ8543/
+         CluZXgp2v4ENT9kdZK6PY0cwL1Ow/M4fEfJtlMsPMdHTedQrF+qm3RMwFqVBa8cicU8M
+         enN4+f2T1MKYHydVgwaVz2nm2p1QZy1hRTfFOxCb50Gb7fq/rAd0kzwFKe0NQoakoz/x
+         Q6SE6phdc1f8vMypAJxsgvLCcaOMzuo2sd5Qe+YMayB3ABaJJTsXGJ6cn9htQoWSTYUF
+         OzLrFtuEJSGkypLOvV0cwAIqvl4AnmbvQwUy9i4Ahu+5XiWZVJQ2EkXMhZr5Cf5T3Jix
+         rlKg==
+X-Gm-Message-State: ACgBeo1busVUGTZOGD9S/XkaCWa0aBSZUZslHhtKMWHYkTuDI9lmnHd1
+        /HgyKB+KPS9N9mbEuBKilq4=
+X-Google-Smtp-Source: AA6agR6djT+Gr6oxqaWgaxkmVn4FURMY7NmIiyN4yolJ0TcFK5fVrSnKtj8nJiQ3g749xyanhP/EUw==
+X-Received: by 2002:a05:6a00:1a14:b0:52d:3e35:5b38 with SMTP id g20-20020a056a001a1400b0052d3e355b38mr56351303pfv.11.1662484132748;
+        Tue, 06 Sep 2022 10:08:52 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d16-20020a170902ced000b001753654d9c5sm10274183plg.95.2022.09.06.09.54.00
+        by smtp.gmail.com with ESMTPSA id u2-20020a170902714200b0016db7f49cc2sm10069358plm.115.2022.09.06.10.08.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 09:54:00 -0700 (PDT)
+        Tue, 06 Sep 2022 10:08:52 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 6 Sep 2022 09:53:59 -0700
+Date:   Tue, 6 Sep 2022 10:08:51 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Eliav Farber <farbere@amazon.com>
 Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
         rtanwar@maxlinear.com, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         hhhawa@amazon.com, jonnyc@amazon.com, andriy.shevchenko@intel.com
-Subject: Re: [PATCH v4 02/21] dt-bindings: hwmon: (mr75203) fix
- "intel,vm-map" property to be optional
-Message-ID: <20220906165359.GA817639@roeck-us.net>
+Subject: Re: [PATCH v4 12/21] dt-bindings: hwmon: (mr75203) add
+ "moortec,vm-active-channels" property
+Message-ID: <20220906170851.GA900242@roeck-us.net>
 References: <20220906083356.21067-1-farbere@amazon.com>
- <20220906083356.21067-3-farbere@amazon.com>
+ <20220906083356.21067-13-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220906083356.21067-3-farbere@amazon.com>
+In-Reply-To: <20220906083356.21067-13-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 08:33:37AM +0000, Eliav Farber wrote:
-> Change "intel,vm-map" property to be optional instead of required.
+On Tue, Sep 06, 2022 at 08:33:47AM +0000, Eliav Farber wrote:
+> Add optional "moortec,vm-active-channels" property to define the number
+> of active channels per VM.
 > 
-> The driver implementation indicates it is not mandatory to have
-> "intel,vm-map" in the device tree:
->  - probe doesn't fail in case it is absent.
->  - explicit comment in code - "Incase intel,vm-map property is not
->    defined, we assume incremental channel numbers".
+> This shall be useful to avoid exposing sysfs for reading inputs that are
+> not connected to any voltage source.
 > 
-> Fixes: 748022ef093f ("hwmon: Add DT bindings schema for PVT controller")
 > Signed-off-by: Eliav Farber <farbere@amazon.com>
 > ---
-> V3 -> V2:
-> - Change this patch to be first in the series.
-> - Add explanation why "intel,vm-map" is not required.
+> V4 -> V3:
+> - Fix DT checker errors.
 > 
-
-I don't see how this change warrants dropping Rob's Acked-by tag.
-Am I missing something ?
-
-Guenter
-
->  Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 1 -
->  1 file changed, 1 deletion(-)
+> V3 -> V2:
+> - Add "moortec" prefix to property name.
+> - Add explanation why this change is needed.
+> 
+>  .../devicetree/bindings/hwmon/moortec,mr75203.yaml     | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
 > diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> index b79f069a04c2..8ea97e774364 100644
+> index 9454576ebb73..2aa4c3618596 100644
 > --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
 > +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> @@ -48,7 +48,6 @@ required:
+> @@ -70,6 +70,15 @@ properties:
+>    "#thermal-sensor-cells":
+>      const: 1
+>  
+> +  moortec,vm-active-channels:
+> +    description:
+> +      Defines the number of channels per VM that are actually used and are
+> +      connected to some input source.
+> +      Maximum number of items - number of VMs.
+> +      Maximum value of each item - number of channels.
+> +      Minimum value of each item - 0 (which means entire VM sensor is nou used).
+
+s/nou/not/
+
+> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+> +
+>  required:
 >    - compatible
 >    - reg
->    - reg-names
-> -  - intel,vm-map
->    - clocks
->    - resets
->    - "#thermal-sensor-cells"
+> @@ -91,5 +100,6 @@ examples:
+>          intel,vm-map = [03 01 04 ff ff];
+>          clocks = <&osc0>;
+>          resets = <&rcu0 0x40 7>;
+> +        moortec,vm-active-channels = /bits/ 8 <0x10 0x05>;
+>          #thermal-sensor-cells = <1>;
+>      };
