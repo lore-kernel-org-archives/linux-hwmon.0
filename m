@@ -2,122 +2,174 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 870A4ECAAD3
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Sep 2022 22:30:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF975ECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 08:34:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbiIEWa5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Sep 2022 18:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54804 "EHLO
+        id S233951AbiIFIe0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Sep 2022 04:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiIEWa4 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Sep 2022 18:30:56 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE77B5721D;
-        Mon,  5 Sep 2022 15:30:54 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id t3so4472756ply.2;
-        Mon, 05 Sep 2022 15:30:54 -0700 (PDT)
+        with ESMTP id S234243AbiIFIeV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 04:34:21 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBA117AB5;
+        Tue,  6 Sep 2022 01:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=GwpPK52gty2lVuCMSTyocNI8/6nYJEtP0WerI0I4//E=;
-        b=brL28v89EROz4vRPsSnUFxP1NmTWbxhtQpkAXXNMAp8zCy5054+KMW1Omw+GUDg3Nr
-         f3RHtqrFUIj3JBJpnvyiAGuXiDRE81rdxUlwM7LWh43R96NpfNroucIPNUtHdcvnOCWW
-         BvDxxHnM3npq1G8K33jc/X4yfAGUPMvjOoya173UzBuUERrRN3+waNKzOTJU/FsKqT2M
-         o53WtRn1yhcKuInNIATDwq+Mxlcw8YsFgjjir3hgdPZiCxuctCkPa350an5S0r9vxt6M
-         nRKpesONRFxiEWwM1lMtSsYuWToeDsKWqVGfyHO7IQeUGjwIWLQelrwzWvm++/8nFAp6
-         wHFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=GwpPK52gty2lVuCMSTyocNI8/6nYJEtP0WerI0I4//E=;
-        b=wGJNE8ToZKTUn0Ubz9KWJ/N2BcHTnm294fT3Ntv3cB75ws8mBYnOm76vIK2GvUn+Kc
-         TQVivRid835SJr7HrgiKi62ox1TKtGU4bF+pZ1lpjhr8bDiWyKMRv+z/uMa6nJ2ShNho
-         97y335ISpD5OX36X45NdhhkOze50tHzZ4LqoiToHJGlIhixxcQBeDrq5zkUYz2URx/bv
-         UrJEctGBJAcyeMGoW+7vrhWoYQkrGtxj8f374fQ5BFI7pgVCMnMxCWlvxMI7DrVWBDkD
-         /pGp/Kn1By7tzURFh17i8qBSraudzSaueZaz37/S1RwbKmQ99F7KeErrJyVIuT0zQpH9
-         erMg==
-X-Gm-Message-State: ACgBeo05e6Sv+6+vdPcdFoiqlZ/JFd3vBGpQBkrYxsl36twLFDIbHXK7
-        tphJlDzEREMpXHt9Q5/ivdY=
-X-Google-Smtp-Source: AA6agR5/iIyEE5nrF+ndc+fBQLPTZjzK2u4MfRNifsftgyeDIg0735ABwSirpODG9xEu2Nzs7/XCXw==
-X-Received: by 2002:a17:902:7fc2:b0:16e:f2f5:3764 with SMTP id t2-20020a1709027fc200b0016ef2f53764mr51381640plb.122.1662417054408;
-        Mon, 05 Sep 2022 15:30:54 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u10-20020a62d44a000000b0053653c6b9f9sm8333944pfl.204.2022.09.05.15.30.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 15:30:53 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 5 Sep 2022 15:30:52 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alexandru Gagniuc <mr.nuke.me@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, robert.marko@sartura.hr,
-        luka.perkov@sartura.hr, jdelvare@suse.com, dev@aboehler.at,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: (tps23861) create unique debugfs directory
- per device
-Message-ID: <20220905223052.GA3695291@roeck-us.net>
-References: <20220905142806.110598-1-mr.nuke.me@gmail.com>
- <20220905142806.110598-3-mr.nuke.me@gmail.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1662453261; x=1693989261;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=x+33rYav/AsPibYhxCbc0w3qFQuDbRm8ElL2qDQwvlI=;
+  b=JRjx7eVhyM3vV7KjqGXDq/cPmPcHQm6H/gnnZPdYcwyl/Gk2fkVmGzs1
+   +dpCnfBWh/WQbebn6/k3kc79daJaeZoX9qrU+F+IS+uFwEGHy+HKe2Go2
+   oulUkTzsSUzezJnWyhsZAXYdYwMoNuL/ve5owUzK9jKLqmYOC5nFuea0o
+   U=;
+X-IronPort-AV: E=Sophos;i="5.93,293,1654560000"; 
+   d="scan'208";a="223661265"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-b48bc93b.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 08:34:03 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-b48bc93b.us-east-1.amazon.com (Postfix) with ESMTPS id 304F3C022E;
+        Tue,  6 Sep 2022 08:33:58 +0000 (UTC)
+Received: from EX19D013UWB004.ant.amazon.com (10.13.138.62) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 6 Sep 2022 08:33:58 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX19D013UWB004.ant.amazon.com (10.13.138.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.12; Tue, 6 Sep 2022 08:33:58 +0000
+Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
+ (172.19.116.181) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 6 Sep 2022 08:33:58 +0000
+Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
+        id C74184D70; Tue,  6 Sep 2022 08:33:57 +0000 (UTC)
+From:   Eliav Farber <farbere@amazon.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <farbere@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>,
+        <andriy.shevchenko@intel.com>
+Subject: [PATCH v4 16/21] hwmon: (mr75203) modify the temperature equation according to series 5 datasheet
+Date:   Tue, 6 Sep 2022 08:33:51 +0000
+Message-ID: <20220906083356.21067-17-farbere@amazon.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220906083356.21067-1-farbere@amazon.com>
+References: <20220906083356.21067-1-farbere@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220905142806.110598-3-mr.nuke.me@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 09:28:06AM -0500, Alexandru Gagniuc wrote:
-> On systems with more than one tps23861, creating the debugfs directory
-> for additional devices fails with
-> 
->     debugfs: Directory 'tps23861' with parent '/' already present!
-> 
-> To resolve this, include the hwmon device name in the directory name.
-> Since the name is unique, this guarantees that the debugfs directory
-> is unique.
-> 
-> Signed-off-by: Alexandru Gagniuc <mr.nuke.me@gmail.com>
+Modify the equation and coefficients used to convert the digital output
+to temperature according to series 5 of the Moortec Embedded Temperature
+Sensor (METS) datasheet:
+T = G + H * (n / cal5 - 0.5) + J * F
 
-For my reference:
+Where:
+*) G = 60, H = 200, cal5 = 4094, J = -0.1.
+*) F = frequency clock in MHz.
+*) n is the digital output.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+In code, the G, H and J coefficients are multiplied by a factor of 1000
+to get the temperature in milli-Celsius.
+Final result is clamped in case it exceeds min/max thresholds.
 
-> ---
->  drivers/hwmon/tps23861.c | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
-> index 0dbd12060b50..3e9df72702c0 100644
-> --- a/drivers/hwmon/tps23861.c
-> +++ b/drivers/hwmon/tps23861.c
-> @@ -503,9 +503,17 @@ static int tps23861_port_status_show(struct seq_file *s, void *data)
->  
->  DEFINE_SHOW_ATTRIBUTE(tps23861_port_status);
->  
-> -static void tps23861_init_debugfs(struct tps23861_data *data)
-> +static void tps23861_init_debugfs(struct tps23861_data *data,
-> +				  struct device *hwmon_dev)
->  {
-> -	data->debugfs_dir = debugfs_create_dir(data->client->name, NULL);
-> +	const char *debugfs_name;
-> +
-> +	debugfs_name = devm_kasprintf(&data->client->dev, GFP_KERNEL, "%s-%s",
-> +				      data->client->name, dev_name(hwmon_dev));
-> +	if (!debugfs_name)
-> +		return;
-> +
-> +	data->debugfs_dir = debugfs_create_dir(debugfs_name, NULL);
->  
->  	debugfs_create_file("port_status",
->  			    0400,
-> @@ -554,7 +562,7 @@ static int tps23861_probe(struct i2c_client *client)
->  	if (IS_ERR(hwmon_dev))
->  		return PTR_ERR(hwmon_dev);
->  
-> -	tps23861_init_debugfs(data);
-> +	tps23861_init_debugfs(data, hwmon_dev);
->  
->  	return 0;
->  }
+Change is done since it is unclear where the current equation and
+coefficients came from.
+
+Signed-off-by: Eliav Farber <farbere@amazon.com>
+---
+V4 -> V3:
+- Change 'not clear' to 'unclear' in commit message.
+- Add _mC prefix to temperature mix/max defines.
+- Add SERIES5 to coefficient defines.
+
+V3 -> V2:
+- Protect from overflow.
+- Add temperature clamping.
+- Add better documentation.
+
+ drivers/hwmon/mr75203.c | 33 +++++++++++++++++++++++++--------
+ 1 file changed, 25 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+index 66f151082c11..f98fb0f3d2fd 100644
+--- a/drivers/hwmon/mr75203.c
++++ b/drivers/hwmon/mr75203.c
+@@ -102,13 +102,19 @@
+ 
+ #define PVT_POLL_DELAY_US	20
+ #define PVT_POLL_TIMEOUT_US	20000
+-#define PVT_H_CONST		100000
+-#define PVT_CAL5_CONST		2047
+-#define PVT_G_CONST		40000
+ #define PVT_CONV_BITS		10
+ #define PVT_N_CONST		90
+ #define PVT_R_CONST		245805
+ 
++#define PVT_TEMP_MIN_mC		-40000
++#define PVT_TEMP_MAX_mC		125000
++
++/* Temperature coefficients for series 5 */
++#define PVT_SERIES5_H_CONST	200000
++#define PVT_SERIES5_G_CONST	60000
++#define PVT_SERIES5_J_CONST	-100
++#define PVT_SERIES5_CAL5_CONST	4094
++
+ #define PRE_SCALER_X1	1
+ #define PRE_SCALER_X2	2
+ 
+@@ -174,13 +180,26 @@ static umode_t pvt_is_visible(const void *data, enum hwmon_sensor_types type,
+ 	return 0;
+ }
+ 
++static long pvt_calc_temp(struct pvt_device *pvt, u32 nbs)
++{
++	/*
++	 * Convert the register value to degrees centigrade temperature:
++	 * T = G + H * (n / cal5 - 0.5) + J * F
++	 */
++	s64 tmp = PVT_SERIES5_G_CONST +
++		PVT_SERIES5_H_CONST * (s64)nbs / PVT_SERIES5_CAL5_CONST -
++		PVT_SERIES5_H_CONST / 2 +
++		PVT_SERIES5_J_CONST * (s64)pvt->ip_freq / HZ_PER_MHZ;
++
++	return clamp_val(tmp, PVT_TEMP_MIN_mC, PVT_TEMP_MAX_mC);
++}
++
+ static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
+ {
+ 	struct pvt_device *pvt = dev_get_drvdata(dev);
+ 	struct regmap *t_map = pvt->t_map;
+ 	u32 stat, nbs;
+ 	int ret;
+-	u64 tmp;
+ 
+ 	switch (attr) {
+ 	case hwmon_temp_input:
+@@ -201,9 +220,7 @@ static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
+ 		 * Convert the register value to
+ 		 * degrees centigrade temperature
+ 		 */
+-		tmp = nbs * PVT_H_CONST;
+-		do_div(tmp, PVT_CAL5_CONST);
+-		*val = tmp - PVT_G_CONST - pvt->ip_freq;
++		*val = pvt_calc_temp(pvt, nbs);
+ 
+ 		return 0;
+ 	default:
+@@ -327,7 +344,7 @@ static int pvt_init(struct pvt_device *pvt)
+ 		    (key >> 1) << CLK_SYNTH_HI_SFT |
+ 		    (key >> 1) << CLK_SYNTH_HOLD_SFT | CLK_SYNTH_EN;
+ 
+-	pvt->ip_freq = sys_freq * 100 / (key + 2);
++	pvt->ip_freq = clk_get_rate(pvt->clk) / (key + 2);
+ 
+ 	if (t_num) {
+ 		ret = regmap_write(t_map, SDIF_SMPL_CTRL, 0x0);
+-- 
+2.37.1
+
