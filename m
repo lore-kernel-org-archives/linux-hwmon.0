@@ -2,115 +2,163 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCEFEC6FA8B
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 08:41:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BA6BECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 09:28:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234055AbiIFIl1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Sep 2022 04:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
+        id S233959AbiIFJ2C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Sep 2022 05:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233803AbiIFIky (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 04:40:54 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D2F7A532;
-        Tue,  6 Sep 2022 01:37:45 -0700 (PDT)
+        with ESMTP id S233743AbiIFJ1z (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 05:27:55 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0BA13CED
+        for <linux-hwmon@vger.kernel.org>; Tue,  6 Sep 2022 02:27:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1662453466; x=1693989466;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RTIQugJMBx86KeCOkkBfTbxPV094MtRi64y0zr8uTrg=;
-  b=KKhzi/w/YXLB+mMgfH+dCVyenK/tx7WKLgG1UJIyObpw7l0wQXYdV+cp
-   BVAGHWqVjsTnTp7+1BK3h0X0xgMDtXB3CxNgxaGxtdU1ssUqoce9ArapN
-   mQTOBv90ivhgJE6S3ZMSeCXis2M1vOdl8xzY6QZQCl4AdVMpPJ/68OZoh
-   E=;
-X-IronPort-AV: E=Sophos;i="5.93,293,1654560000"; 
-   d="scan'208";a="127144277"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-1c3c2014.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 08:34:40 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1d-1c3c2014.us-east-1.amazon.com (Postfix) with ESMTPS id 940D7C0FF0;
-        Tue,  6 Sep 2022 08:34:36 +0000 (UTC)
-Received: from EX19D013UWB003.ant.amazon.com (10.13.138.111) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 6 Sep 2022 08:33:59 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX19D013UWB003.ant.amazon.com (10.13.138.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Tue, 6 Sep 2022 08:33:59 +0000
-Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Tue, 6 Sep 2022 08:33:59 +0000
-Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id C9A8E4D77; Tue,  6 Sep 2022 08:33:56 +0000 (UTC)
-From:   Eliav Farber <farbere@amazon.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <farbere@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>,
-        <andriy.shevchenko@intel.com>
-Subject: [PATCH v4 05/21] hwmon: (mr75203) fix voltage equation for negative source input
-Date:   Tue, 6 Sep 2022 08:33:40 +0000
-Message-ID: <20220906083356.21067-6-farbere@amazon.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220906083356.21067-1-farbere@amazon.com>
-References: <20220906083356.21067-1-farbere@amazon.com>
+  d=axis.com; q=dns/txt; s=axis-central1; t=1662456469;
+  x=1693992469;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HY/OTQFizoojN9STKhnghIxI4IHvUXWP3RNVN5eha+Y=;
+  b=P9eWycyZTgJEIM9OV8FCOUw3p2Vdd+UAhngP1ysXcIgfZB4vVcHM33+O
+   eaVePLdQHgnrhwry02bpluqSG0h8ewaUKkrrYPYN7xE4Y6noWY/U+BRER
+   nvipbsaRY+yfIbNvMlZJkwdp8ZAheClANRujB2/z7usMAS+Tcgws3cSN/
+   0JHL1x4IY8EOwo727Hz6IBG0LITFwzKKcWOY158euHQHhaHUrFrhglpxE
+   hHkbQOdb1TmULenUM77K2jmiALhqbUSW//nXiyJLcFl2lorIbX5SCWVY9
+   HaIszkNKN4XfU19N+HK+F+BKl12rJNeIRl9CJ9Vyd4Ph1xJDNZ848O0jy
+   Q==;
+From:   =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+CC:     <linux-hwmon@vger.kernel.org>, <kernel@axis.com>,
+        =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
+Subject: [PATCH] hwmon: (pmbus) Add debugfs output voltage related commands
+Date:   Tue, 6 Sep 2022 11:27:43 +0200
+Message-ID: <20220906092743.1327269-1-marten.lindahl@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-According to Moortec Embedded Voltage Monitor (MEVM) series 3 data
-sheet, the minimum input signal is -100mv and maximum input signal
-is +1000mv.
+Export vout_command, vout_margin_high, and vout_margin_low through
+debugfs. This is useful in order to manually configure the output
+voltage on a channel.
 
-The equation used to convert the digital word to voltage uses mixed
-types (*val signed and n unsigned), and on 64 bit machines also has
-different size, since sizeof(u32) = 4 and sizeof(long) = 8.
-
-So when measuring a negative input, n will be small enough, such that
-PVT_N_CONST * n < PVT_R_CONST, and the result of
-(PVT_N_CONST * n - PVT_R_CONST) will overflow to a very big positive
-32 bit number. Then when storing the result in *val it will be the same
-value just in 64 bit (instead of it representing a negative number which
-will what happen when sizeof(long) = 4).
-
-When -1023 <= (PVT_N_CONST * n - PVT_R_CONST) <= -1
-dividing the number by 1024 should result of in 0, but because ">> 10"
-is used it results in -1 (0xf...fffff).
-
-This change fixes the sign problem and supports negative values by
-casting n to long and replacing the shift right with div operation.
-
-Fixes: 9d823351a337 ("hwmon: Add hardware monitoring driver for Moortec MR75203 PVT controller")
-Signed-off-by: Eliav Farber <farbere@amazon.com>
+Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
 ---
-V4 -> V3:
-- Remove unrelated change (add of empty line).
+ drivers/hwmon/pmbus/pmbus_core.c | 80 +++++++++++++++++++++++++++++++-
+ 1 file changed, 78 insertions(+), 2 deletions(-)
 
-V3 -> V2:
-- Fix equation to support negative values instead of limiting value to
-  zero.
-
- drivers/hwmon/mr75203.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-index a209f5d95f4b..78dc471e843c 100644
---- a/drivers/hwmon/mr75203.c
-+++ b/drivers/hwmon/mr75203.c
-@@ -202,7 +202,7 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 81d3f91dd204..25da2ff2d09f 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -3050,6 +3050,41 @@ static int pmbus_debugfs_get(void *data, u64 *val)
+ DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops, pmbus_debugfs_get, NULL,
+ 			 "0x%02llx\n");
  
- 		n &= SAMPLE_DATA_MSK;
- 		/* Convert the N bitstream count into voltage */
--		*val = (PVT_N_CONST * n - PVT_R_CONST) >> PVT_CONV_BITS;
-+		*val = (PVT_N_CONST * (long)n - PVT_R_CONST) / (1 << PVT_CONV_BITS);
++static int pmbus_debugfs_get_word(void *data, u64 *val)
++{
++	struct pmbus_debugfs_entry *entry = data;
++	struct pmbus_sensor s = {
++		.page = entry->page,
++		.class = PSC_VOLTAGE_OUT,
++		.convert = true,
++		.data = -1,
++	};
++
++	s.data = _pmbus_read_word_data(entry->client, entry->page, 0xff, entry->reg);
++	if (s.data < 0)
++		return s.data;
++	*val = pmbus_reg2data(i2c_get_clientdata(entry->client), &s);
++
++	return 0;
++}
++
++static int pmbus_debugfs_set_word(void *data, u64 val)
++{
++	struct pmbus_debugfs_entry *entry = data;
++	struct pmbus_sensor s = {
++		.page = entry->page,
++		.class = PSC_VOLTAGE_OUT,
++		.convert = true,
++		.data = -1,
++	};
++	val = pmbus_data2reg(i2c_get_clientdata(entry->client), &s, val);
++
++	return _pmbus_write_word_data(entry->client, entry->page, entry->reg,
++				      (u16)val);
++}
++DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_rw_word, pmbus_debugfs_get_word,
++			 pmbus_debugfs_set_word, "%llu\n");
++
+ static int pmbus_debugfs_get_status(void *data, u64 *val)
+ {
+ 	int rc;
+@@ -3126,10 +3161,10 @@ static int pmbus_init_debugfs(struct i2c_client *client,
+ 	/*
+ 	 * Allocate the max possible entries we need.
+ 	 * 6 entries device-specific
+-	 * 10 entries page-specific
++	 * 13 entries page-specific
+ 	 */
+ 	entries = devm_kcalloc(data->dev,
+-			       6 + data->info->pages * 10, sizeof(*entries),
++			       6 + data->info->pages * 13, sizeof(*entries),
+ 			       GFP_KERNEL);
+ 	if (!entries)
+ 		return -ENOMEM;
+@@ -3299,6 +3334,47 @@ static int pmbus_init_debugfs(struct i2c_client *client,
+ 					    &entries[idx++],
+ 					    &pmbus_debugfs_ops);
+ 		}
++
++		/*
++		 * VOUT_COMMAND - Nominal DC/DC output voltage setpoint.
++		 */
++		if (data->info->func[i] & PMBUS_HAVE_VOUT) {
++			entries[idx].client = client;
++			entries[idx].page = i;
++			entries[idx].reg = PMBUS_VOUT_COMMAND;
++			scnprintf(name, PMBUS_NAME_SIZE, "vout%d_command", i);
++			debugfs_create_file(name, 0644, data->debugfs,
++					    &entries[idx++],
++					    &pmbus_debugfs_ops_rw_word);
++		}
++
++		/*
++		 * VOUT_MARGIN_HIGH - Margin high DC/DC converter output.
++		 */
++		if (data->info->func[i] & PMBUS_HAVE_VOUT) {
++			entries[idx].client = client;
++			entries[idx].page = i;
++			entries[idx].reg = PMBUS_VOUT_MARGIN_HIGH;
++			scnprintf(name, PMBUS_NAME_SIZE,
++				  "vout%d_margin_high", i);
++			debugfs_create_file(name, 0644, data->debugfs,
++					    &entries[idx++],
++					    &pmbus_debugfs_ops_rw_word);
++		}
++
++		/*
++		 * VOUT_MARGIN_LOW - Margin low DC/DC converter output.
++		 */
++		if (data->info->func[i] & PMBUS_HAVE_VOUT) {
++			entries[idx].client = client;
++			entries[idx].page = i;
++			entries[idx].reg = PMBUS_VOUT_MARGIN_LOW;
++			scnprintf(name, PMBUS_NAME_SIZE,
++				  "vout%d_margin_low", i);
++			debugfs_create_file(name, 0644, data->debugfs,
++					    &entries[idx++],
++					    &pmbus_debugfs_ops_rw_word);
++		}
+ 	}
  
- 		return 0;
- 	default:
+ 	return devm_add_action_or_reset(data->dev,
 -- 
-2.37.1
+2.30.2
 
