@@ -2,47 +2,45 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B323AECAAA1
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 08:35:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CF83ECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 08:35:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238569AbiIFIe7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Sep 2022 04:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
+        id S239133AbiIFIfB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Sep 2022 04:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234121AbiIFIev (ORCPT
+        with ESMTP id S238553AbiIFIev (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 04:34:51 -0400
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8B52EF01;
-        Tue,  6 Sep 2022 01:34:49 -0700 (PDT)
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28192356DC;
+        Tue,  6 Sep 2022 01:34:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1662453291; x=1693989291;
+  t=1662453290; x=1693989290;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=oyi6EGS0RoM4Eyx6YSslJOyRtutK7naD8OnMXFnZelk=;
-  b=tAILHJisJwlYQukAC8klmFgFKHYGso4KOFPgwkmJKuwMwB0eA1Amkk/g
-   HIRCfqbq0w014tkopHZeA+AJ+UpgmeR7brVkEUdzOGDqbpuUp3uww3pxe
-   9LhGjmxxGbDgITs/lqC1jPlL/dYmF5Y8Mctgc7Ff/Y6fSexVeg1aQbczC
-   E=;
-X-IronPort-AV: E=Sophos;i="5.93,293,1654560000"; 
-   d="scan'208";a="237979512"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-41c1ef8b.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 08:34:41 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-41c1ef8b.us-east-1.amazon.com (Postfix) with ESMTPS id 37B041609B4;
-        Tue,  6 Sep 2022 08:34:37 +0000 (UTC)
-Received: from EX19D013UWB004.ant.amazon.com (10.13.138.62) by
+  bh=Ov9+xe+S3g3vEVFOZU63DXVf9WabXZIfj3osYnfDF8M=;
+  b=PGTenc6AuIThj3RebUMk8jtgCs9mADnyT37TPqqetmZUIj/AgwbkS+NI
+   ujHmOfx5n2pNS5Ln+AOQikizVHygyRy0a/CF+E9YQyOu7l4n36EwMvyiZ
+   Q64HcHvBQOIXR3Q3WXLJF5isdeFYFaC+sksLsvn+eR3WS1fs4xT916+GF
+   c=;
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-4ba5c7da.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 08:34:38 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-4ba5c7da.us-east-1.amazon.com (Postfix) with ESMTPS id 315F5E0145;
+        Tue,  6 Sep 2022 08:34:38 +0000 (UTC)
+Received: from EX19D013UWA002.ant.amazon.com (10.13.138.210) by
  EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 6 Sep 2022 08:33:59 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX19D013UWB004.ant.amazon.com (10.13.138.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.12; Tue, 6 Sep 2022 08:33:59 +0000
+ id 15.0.1497.38; Tue, 6 Sep 2022 08:34:00 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX19D013UWA002.ant.amazon.com (10.13.138.210) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Tue, 6 Sep 2022 08:33:59 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Tue, 6 Sep 2022 08:33:58 +0000
+ (172.19.116.181) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 6 Sep 2022 08:33:59 +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id C8C5E4D78; Tue,  6 Sep 2022 08:33:56 +0000 (UTC)
+        id D0F094D8A; Tue,  6 Sep 2022 08:33:57 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
@@ -50,146 +48,161 @@ To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <farbere@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>,
         <andriy.shevchenko@intel.com>
-Subject: [PATCH v4 06/21] hwmon: (mr75203) fix multi-channel voltage reading
-Date:   Tue, 6 Sep 2022 08:33:41 +0000
-Message-ID: <20220906083356.21067-7-farbere@amazon.com>
+Subject: [PATCH v4 18/21] hwmon: (mr75203) add support for series 6 temperature equation
+Date:   Tue, 6 Sep 2022 08:33:53 +0000
+Message-ID: <20220906083356.21067-19-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220906083356.21067-1-farbere@amazon.com>
 References: <20220906083356.21067-1-farbere@amazon.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Fix voltage allocation and reading to support all channels in all VMs.
-Prior to this change allocation and reading were done only for the first
-channel in each VM.
-This change counts the total number of channels for allocation, and takes
-into account the channel offset when reading the sample data register.
+The current equation used in code is aligned to series 5:
+T = G + H * (n / cal5 - 0.5) + J * F
+Where:
+G = 60, H = 200, cal5 = 4094, J = -0.1, F = frequency clock in MHz
 
-Fixes: 9d823351a337 ("hwmon: Add hardware monitoring driver for Moortec MR75203 PVT controller")
+Series 6 has a slightly different equation:
+T = G + H * (n / cal5 - 0.5)
+and a different set of coefficients:
+G = 57.4, H = 249.4, cal5 = 4096
+
+This change supports equation and coefficients for both series.
+(for series 6, J is set to 0).
+
+The series is determined according to “moortec,ts-series” property in
+the device tree.
+If absent, series 5 is assumed to be the default.
+
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
 V4 -> V3:
-- Keep lines sorted according to length.
+- Replace of_property_read_u32() with device_property_read_u32().
+- Use switch-case instead of if-else.
 
 V3 -> V2:
-- Remove configuration of ip-polling register to a separate commit.
-- Explain the fix.
+- New patch to support temperature sensor series 6 instead of having to
+  set all 4 coefficients.
 
- drivers/hwmon/mr75203.c | 29 +++++++++++++++++------------
- 1 file changed, 17 insertions(+), 12 deletions(-)
+ drivers/hwmon/mr75203.c | 66 ++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 62 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-index 78dc471e843c..69f38c05b02d 100644
+index f98fb0f3d2fd..ba5abd4065b3 100644
 --- a/drivers/hwmon/mr75203.c
 +++ b/drivers/hwmon/mr75203.c
-@@ -68,8 +68,9 @@
+@@ -115,6 +115,15 @@
+ #define PVT_SERIES5_J_CONST	-100
+ #define PVT_SERIES5_CAL5_CONST	4094
  
- /* VM Individual Macro Register */
- #define VM_COM_REG_SIZE	0x200
--#define VM_SDIF_DONE(n)	(VM_COM_REG_SIZE + 0x34 + 0x200 * (n))
--#define VM_SDIF_DATA(n)	(VM_COM_REG_SIZE + 0x40 + 0x200 * (n))
-+#define VM_SDIF_DONE(vm)	(VM_COM_REG_SIZE + 0x34 + 0x200 * (vm))
-+#define VM_SDIF_DATA(vm, ch)	\
-+	(VM_COM_REG_SIZE + 0x40 + 0x200 * (vm) + 0x4 * (ch))
++/* Temperature coefficients for series 6 */
++#define PVT_SERIES6_H_CONST	249400
++#define PVT_SERIES6_G_CONST	57400
++#define PVT_SERIES6_J_CONST	0
++#define PVT_SERIES6_CAL5_CONST	4096
++
++#define TEMPERATURE_SENSOR_SERIES_5	5
++#define TEMPERATURE_SENSOR_SERIES_6	6
++
+ #define PRE_SCALER_X1	1
+ #define PRE_SCALER_X2	2
  
- /* SDA Slave Register */
- #define IP_CTRL			0x00
-@@ -115,6 +116,7 @@ struct pvt_device {
+@@ -147,6 +156,13 @@ struct voltage_channels {
+ 	u8 max;
+ };
+ 
++struct temp_coeff {
++	u32 h;
++	u32 g;
++	u32 cal5;
++	s32 j;
++};
++
+ struct pvt_device {
+ 	struct regmap		*c_map;
+ 	struct regmap		*t_map;
+@@ -156,6 +172,7 @@ struct pvt_device {
+ 	struct reset_control	*rst;
+ 	struct voltage_device	*vd;
+ 	struct voltage_channels	vm_channels;
++	struct temp_coeff	ts_coeff;
  	u32			t_num;
  	u32			p_num;
  	u32			v_num;
-+	u32			c_num;
- 	u32			ip_freq;
- 	u8			*vm_idx;
- };
-@@ -178,14 +180,15 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
- {
- 	struct pvt_device *pvt = dev_get_drvdata(dev);
- 	struct regmap *v_map = pvt->v_map;
-+	u8 vm_idx, ch_idx;
- 	u32 n, stat;
--	u8 vm_idx;
- 	int ret;
+@@ -186,10 +203,12 @@ static long pvt_calc_temp(struct pvt_device *pvt, u32 nbs)
+ 	 * Convert the register value to degrees centigrade temperature:
+ 	 * T = G + H * (n / cal5 - 0.5) + J * F
+ 	 */
+-	s64 tmp = PVT_SERIES5_G_CONST +
+-		PVT_SERIES5_H_CONST * (s64)nbs / PVT_SERIES5_CAL5_CONST -
+-		PVT_SERIES5_H_CONST / 2 +
+-		PVT_SERIES5_J_CONST * (s64)pvt->ip_freq / HZ_PER_MHZ;
++	struct temp_coeff *ts_coeff = &pvt->ts_coeff;
++
++	s64 tmp = ts_coeff->g +
++		ts_coeff->h * (s64)nbs / ts_coeff->cal5 -
++		ts_coeff->h / 2 +
++		ts_coeff->j * (s64)pvt->ip_freq / HZ_PER_MHZ;
  
--	if (channel >= pvt->v_num)
-+	if (channel >= pvt->v_num * pvt->c_num)
- 		return -EINVAL;
+ 	return clamp_val(tmp, PVT_TEMP_MIN_mC, PVT_TEMP_MAX_mC);
+ }
+@@ -658,6 +677,41 @@ static int pvt_get_pre_scaler(struct device *dev, struct pvt_device *pvt)
+ 	return ret;
+ }
  
--	vm_idx = pvt->vm_idx[channel];
-+	vm_idx = pvt->vm_idx[channel / pvt->c_num];
-+	ch_idx = channel % pvt->c_num;
- 
- 	switch (attr) {
- 	case hwmon_in_input:
-@@ -196,7 +199,7 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
- 		if (ret)
- 			return ret;
- 
--		ret = regmap_read(v_map, VM_SDIF_DATA(vm_idx), &n);
-+		ret = regmap_read(v_map, VM_SDIF_DATA(vm_idx, ch_idx), &n);
- 		if (ret < 0)
- 			return ret;
- 
-@@ -499,8 +502,8 @@ static int pvt_reset_control_deassert(struct device *dev, struct pvt_device *pvt
- 
++static int pvt_set_temp_coeff(struct device *dev, struct pvt_device *pvt)
++{
++	struct temp_coeff *ts_coeff = &pvt->ts_coeff;
++	u32 series;
++	int ret;
++
++	/* Incase ts-series property is not defined, use default 5. */
++	ret = device_property_read_u32(dev, "moortec,ts-series", &series);
++	if (ret)
++		series = TEMPERATURE_SENSOR_SERIES_5;
++
++	switch (series) {
++	case TEMPERATURE_SENSOR_SERIES_5:
++		ts_coeff->h = PVT_SERIES5_H_CONST;
++		ts_coeff->g = PVT_SERIES5_G_CONST;
++		ts_coeff->j = PVT_SERIES5_J_CONST;
++		ts_coeff->cal5 = PVT_SERIES5_CAL5_CONST;
++		break;
++	case TEMPERATURE_SENSOR_SERIES_6:
++		ts_coeff->h = PVT_SERIES6_H_CONST;
++		ts_coeff->g = PVT_SERIES6_G_CONST;
++		ts_coeff->j = PVT_SERIES6_J_CONST;
++		ts_coeff->cal5 = PVT_SERIES6_CAL5_CONST;
++		break;
++	default:
++		dev_err(dev, "invalid temperature sensor series (%u)\n",
++			series);
++		return -EINVAL;
++	}
++
++	dev_dbg(dev, "temperature sensor series = %u\n", series);
++
++	return 0;
++}
++
  static int mr75203_probe(struct platform_device *pdev)
  {
-+	u32 ts_num, vm_num, pd_num, ch_num, val, index, i;
- 	const struct hwmon_channel_info **pvt_info;
--	u32 ts_num, vm_num, pd_num, val, index, i;
- 	struct device *dev = &pdev->dev;
- 	u32 *temp_config, *in_config;
- 	struct device *hwmon_dev;
-@@ -541,9 +544,11 @@ static int mr75203_probe(struct platform_device *pdev)
- 	ts_num = (val & TS_NUM_MSK) >> TS_NUM_SFT;
- 	pd_num = (val & PD_NUM_MSK) >> PD_NUM_SFT;
- 	vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
-+	ch_num = (val & CH_NUM_MSK) >> CH_NUM_SFT;
- 	pvt->t_num = ts_num;
- 	pvt->p_num = pd_num;
- 	pvt->v_num = vm_num;
-+	pvt->c_num = ch_num;
- 	val = 0;
- 	if (ts_num)
- 		val++;
-@@ -580,7 +585,7 @@ static int mr75203_probe(struct platform_device *pdev)
- 	}
- 
- 	if (vm_num) {
--		u32 num = vm_num;
-+		u32 total_ch;
- 
- 		ret = pvt_get_regmap(pdev, "vm", pvt);
+ 	u32 ts_num, vm_num, pd_num, ch_num, val, index, i;
+@@ -728,6 +782,10 @@ static int mr75203_probe(struct platform_device *pdev)
  		if (ret)
-@@ -604,20 +609,20 @@ static int mr75203_probe(struct platform_device *pdev)
- 			for (i = 0; i < vm_num; i++)
- 				if (pvt->vm_idx[i] >= vm_num ||
- 				    pvt->vm_idx[i] == 0xff) {
--					num = i;
- 					pvt->v_num = i;
- 					vm_num = i;
- 					break;
- 				}
- 		}
+ 			return ret;
  
--		in_config = devm_kcalloc(dev, num + 1,
-+		total_ch = ch_num * vm_num;
-+		in_config = devm_kcalloc(dev, total_ch + 1,
- 					 sizeof(*in_config), GFP_KERNEL);
- 		if (!in_config)
- 			return -ENOMEM;
- 
--		memset32(in_config, HWMON_I_INPUT, num);
--		in_config[num] = 0;
-+		memset32(in_config, HWMON_I_INPUT, total_ch);
-+		in_config[total_ch] = 0;
- 		pvt_in.config = in_config;
- 
- 		pvt_info[index++] = &pvt_in;
++		ret = pvt_set_temp_coeff(dev, pvt);
++		if (ret)
++			return ret;
++
+ 		temp_config = devm_kcalloc(dev, ts_num + 1,
+ 					   sizeof(*temp_config), GFP_KERNEL);
+ 		if (!temp_config)
 -- 
 2.37.1
 
