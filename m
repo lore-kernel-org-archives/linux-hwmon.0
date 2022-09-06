@@ -2,146 +2,107 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6762CECAAA1
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 11:12:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92C65ECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Sep 2022 12:03:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233631AbiIFLM0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Sep 2022 07:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
+        id S235897AbiIFMDq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Sep 2022 08:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234375AbiIFLMX (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 07:12:23 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303AB792EC;
-        Tue,  6 Sep 2022 04:12:22 -0700 (PDT)
+        with ESMTP id S234504AbiIFMDo (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2022 08:03:44 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0ADA78231;
+        Tue,  6 Sep 2022 05:03:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662462742; x=1693998742;
+  t=1662465823; x=1694001823;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Bp/QZXCFTZwQSDShcDQGV6IwRcbjBetyV2jm9TRX0io=;
-  b=VoehulZuL8OokP2qgK6MT6s+3qUcC1ODTaa+VvMjtODkGTb3A9WVmBr9
-   1LJXEdGSvxmQutmE5HwnHpZwqK9L19ZqNaQQVeM1bay0tNkz14LQvjSx0
-   Uu0o/8xlnoVxmosZxAmsALjFmO6qFT40ES/XGBAuTnrvQf+ZbdyhdLmic
-   Z6lLiw3qgMEOE4/VkPAOfzYGel3qD2y/H7hyGXl+3iNt12KTz9Q2SUKsm
-   cCqv2PNFMVAWVB92ZYaI0MhOTPxmdcR+YZ59sGKLag2eGV080SMDKLISr
-   oBxVtZUhgHRoGLRZv85rCfsqj57f7xc+VewRHNd/hntKaFKy3blvQ3FlQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="382860796"
+  bh=4+M54oJEAmpUgzwqHAgtKWrqpFIukcuuWaBTNO+cn0c=;
+  b=KbCteuXW16N9QSI15kJ6T9BieiuPN8zltuqJSlMGSZ0etEBb2ocDCtbO
+   OgwwQ6GxaTL2qxNaGByoqTIGaMO67arw6c/l8xkfsA2jlTiRhmQQGr0nr
+   qzSww8GDPkfisqMqgeh2rfzqYCz6SwLZ6QOY5r2h+0sL6AVSbsSPPprVL
+   FRuQR18uwl7XuFp8B2Z2apOBwevHAvyFJ21kkNlzFSogZZlpTbkwAVZYq
+   fjZXcrzVHKelImoXV/6gauzvhyb4wV567fMa1YTGiz8NdHVNssT5E9DwV
+   IrCOREe5L0UAIdGgQoC0tKQdL0/wPjY0b+LZhLB2Onj4Q6ALG9oNnRgzx
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="297887264"
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="382860796"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 04:12:21 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="297887264"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:03:43 -0700
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="756332691"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Sep 2022 04:12:19 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVWV9-00052h-0S;
-        Tue, 06 Sep 2022 11:12:19 +0000
-Date:   Tue, 6 Sep 2022 19:11:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Aleksa Savic <savicaleksa83@gmail.com>, linux-hwmon@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Aleksa Savic <savicaleksa83@gmail.com>,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for
- Aquacomputer High Flow Next
-Message-ID: <202209061853.1eqL4nKA-lkp@intel.com>
-References: <20220905142521.6674-1-savicaleksa83@gmail.com>
+   d="scan'208";a="614072065"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:03:40 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oVXIn-0096P7-15;
+        Tue, 06 Sep 2022 15:03:37 +0300
+Date:   Tue, 6 Sep 2022 15:03:37 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
+Subject: Re: [PATCH v4 05/21] hwmon: (mr75203) fix voltage equation for
+ negative source input
+Message-ID: <Yxc3GeFc5gDKrYyP@smile.fi.intel.com>
+References: <20220906083356.21067-1-farbere@amazon.com>
+ <20220906083356.21067-6-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220905142521.6674-1-savicaleksa83@gmail.com>
+In-Reply-To: <20220906083356.21067-6-farbere@amazon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Aleksa,
+On Tue, Sep 06, 2022 at 08:33:40AM +0000, Eliav Farber wrote:
+> According to Moortec Embedded Voltage Monitor (MEVM) series 3 data
+> sheet, the minimum input signal is -100mv and maximum input signal
+> is +1000mv.
+> 
+> The equation used to convert the digital word to voltage uses mixed
+> types (*val signed and n unsigned), and on 64 bit machines also has
+> different size, since sizeof(u32) = 4 and sizeof(long) = 8.
+> 
+> So when measuring a negative input, n will be small enough, such that
+> PVT_N_CONST * n < PVT_R_CONST, and the result of
+> (PVT_N_CONST * n - PVT_R_CONST) will overflow to a very big positive
+> 32 bit number. Then when storing the result in *val it will be the same
+> value just in 64 bit (instead of it representing a negative number which
+> will what happen when sizeof(long) = 4).
+> 
+> When -1023 <= (PVT_N_CONST * n - PVT_R_CONST) <= -1
+> dividing the number by 1024 should result of in 0, but because ">> 10"
+> is used it results in -1 (0xf...fffff).
+> 
+> This change fixes the sign problem and supports negative values by
+> casting n to long and replacing the shift right with div operation.
 
-I love your patch! Yet something to improve:
+This is really downside of C...
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on next-20220901]
-[cannot apply to linus/master v6.0-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aleksa-Savic/hwmon-aquacomputer_d5next-Add-support-for-Aquacomputer-High-Flow-Next/20220905-222744
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220906/202209061853.1eqL4nKA-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0a43ba8acd8bcd54afd03ea6149d54fc99fe284c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Aleksa-Savic/hwmon-aquacomputer_d5next-Add-support-for-Aquacomputer-High-Flow-Next/20220905-222744
-        git checkout 0a43ba8acd8bcd54afd03ea6149d54fc99fe284c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/ drivers/hwmon/
+> -		*val = (PVT_N_CONST * n - PVT_R_CONST) >> PVT_CONV_BITS;
+> +		*val = (PVT_N_CONST * (long)n - PVT_R_CONST) / (1 << PVT_CONV_BITS);
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Wondering if we can use BIT(PVT_CONV_BITS) for two (quite unlikely to happen,
+I hope) purposes:
 
-All errors (new ones prefixed by >>):
+1) Somebody copies such code where PVT_CONV_BITS analogue can be 31,
+   which is according to C standard is UB (undefined behaviour).
 
->> drivers/hwmon/aquacomputer_d5next.c:38:3: error: use of undeclared identifier 'highflownext'
-           [highflownext] = "highflownext"
-            ^
-   drivers/hwmon/aquacomputer_d5next.c:425:8: error: use of undeclared identifier 'highflownext'
-                   case highflownext:
-                        ^
-   drivers/hwmon/aquacomputer_d5next.c:443:8: error: use of undeclared identifier 'highflownext'
-                   case highflownext:
-                        ^
-   drivers/hwmon/aquacomputer_d5next.c:465:8: error: use of undeclared identifier 'highflownext'
-                   case highflownext:
-                        ^
-   drivers/hwmon/aquacomputer_d5next.c:736:7: error: use of undeclared identifier 'highflownext'
-           case highflownext:
-                ^
->> drivers/hwmon/aquacomputer_d5next.c:924:7: error: use of undeclared identifier 'USB_PRODUCT_ID_HIGHFLOWNEXT'
-           case USB_PRODUCT_ID_HIGHFLOWNEXT:
-                ^
-   drivers/hwmon/aquacomputer_d5next.c:925:16: error: use of undeclared identifier 'highflownext'
-                   priv->kind = highflownext;
-                                ^
-   drivers/hwmon/aquacomputer_d5next.c:993:47: error: use of undeclared identifier 'USB_PRODUCT_ID_HIGHFLOWNEXT'
-           { HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_HIGHFLOWNEXT) },
-                                                        ^
->> drivers/hwmon/aquacomputer_d5next.c:997:1: error: definition of variable with array type needs an explicit size or an initializer
-   MODULE_DEVICE_TABLE(hid, aqc_table);
-   ^
-   include/linux/module.h:244:21: note: expanded from macro 'MODULE_DEVICE_TABLE'
-   extern typeof(name) __mod_##type##__##name##_device_table               \
-                       ^
-   <scratch space>:196:1: note: expanded from here
-   __mod_hid__aqc_table_device_table
-   ^
-   9 errors generated.
-
-
-vim +/highflownext +38 drivers/hwmon/aquacomputer_d5next.c
-
-    31	
-    32	static const char *const aqc_device_names[] = {
-    33		[d5next] = "d5next",
-    34		[farbwerk] = "farbwerk",
-    35		[farbwerk360] = "farbwerk360",
-    36		[octo] = "octo",
-    37		[quadro] = "quadro",
-  > 38		[highflownext] = "highflownext"
-    39	};
-    40	
+2) It makes shorter the line and also drops the pattern where some
+   dumb robot may propose a patch to basically revert the division
+   change.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+With Best Regards,
+Andy Shevchenko
+
+
