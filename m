@@ -2,110 +2,107 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9D8BC54EE9
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Sep 2022 15:57:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 898FFC38145
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Sep 2022 16:01:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiIGP5p (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 7 Sep 2022 11:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S230330AbiIGQBo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 7 Sep 2022 12:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiIGP5o (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Sep 2022 11:57:44 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBB79083E;
-        Wed,  7 Sep 2022 08:57:43 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id y127so15089369pfy.5;
-        Wed, 07 Sep 2022 08:57:43 -0700 (PDT)
+        with ESMTP id S230244AbiIGQAr (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Sep 2022 12:00:47 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C591098A6D;
+        Wed,  7 Sep 2022 09:00:10 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id m3so4398917pjo.1;
+        Wed, 07 Sep 2022 09:00:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date;
-        bh=90Xvi+56Sm4mGXm2omfvc9YC5HDL8H5MTroWt/Dz1Q4=;
-        b=kRaQxDAlVRQJLv4uZSVrt050gH5Yh6HqW6UFtuPzFeB1j6tKplnQn1hRKm759uHCgD
-         tYvI+qxcD2DeI19BcJ+a9Cnp18AKCDUGScaa9daO1DhsunKxfVDD7d7AHwSC5m/9NSm+
-         JKpRW3SHoD9RNVnWS0gHi7zjxoC0X7Qm29/sr1yPjVRTyHUIpRNoT1KPtmMOAdpCIhVw
-         qJgFHu6KMsvh0WBRgvhGZWf5kNtMF/JStY0S0DxzjY1FHnK6R+KTSNvbiAseEwraEdtp
-         60Jr0dlVaMGCm2ttc9DUQ7/XrLWh51NwyNqy+235P8+fo5LuwEzWo2tIviUXmRywXrTJ
-         ak3g==
+        bh=R2aYA3nGCz9EA7+1cg3dqptus0IcFIXTQNzZ+9Ertlw=;
+        b=A0Ph3CtK+AKbnVr46VJVTi+2MJE30nUI6K5sJZVD42j3lrmauNuYhZ58r30MMdkIzj
+         5LtpAN8dMsS/qwW2AWvLMW69TSojVVZWhrIr57Bglp/Ur+YFgGdXAa2b07KNle9G0iIv
+         pHAVgF41sAew3lU8t4YBiXGTJGZXW1+9yHsgkD6k/1LJ17WgrUMBcsz+MHQa4XiXsw7B
+         J/7xm0LQJci7zUGEOGku2eqGGQWLW0pDZdsMoefaoNG2fQGmQFvjwkTXY05Yu42iJguV
+         1QXKYI3m6dJ3Xhq/LK8jo5YBml1urHrCTIogf2TQUgOLj30PQKWGlycNScccIy/5hZxP
+         eKOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=90Xvi+56Sm4mGXm2omfvc9YC5HDL8H5MTroWt/Dz1Q4=;
-        b=fkRT8XVMChYt8dafpn5No6q48nRXSxwRYTQMYv6qV+MhQo+COck2rcIVeAVfxVlIfr
-         RLktBmb+4osp6oxfsVMtxrWsmKCa130NwzN6tnQhqz7k+eTqXCruKhSzvpDQ3Ti8cJHF
-         dj81KNb3QlPHC3G4MTyFNrjRaAus4sgId4zIu7x4/lIM26LiIJuBvYX1JOJRc1ygR2LZ
-         8cbIn5+4i7he/U5qITOffTzIAF3QHW7aRvV3cMb40yQ2dJtghaquKjpJ0lG1iQRWDZeS
-         sDT6ZUtiiHaXqcCU+6SR5xA3zNrF1PKHK4xaWR9yWAWzdZERx6TTOMAhtqmph1vn/OsA
-         6Q3Q==
-X-Gm-Message-State: ACgBeo03K4K/PXMT9IOxxHsx0iQCXmfdmCKaORmy9RUHE/UA+Z3P5aDN
-        UZUnwof3Nzg0d1AQjDdueIk=
-X-Google-Smtp-Source: AA6agR7w5Teen2BpgoN8X7BqcmGW7FR4uGbE9nE8EOLp9A3YU4AedbqZE6P7U3fToeDRBrzR9gDF1g==
-X-Received: by 2002:a63:b54:0:b0:430:87bb:d1c3 with SMTP id a20-20020a630b54000000b0043087bbd1c3mr4106069pgl.294.1662566262988;
-        Wed, 07 Sep 2022 08:57:42 -0700 (PDT)
+        bh=R2aYA3nGCz9EA7+1cg3dqptus0IcFIXTQNzZ+9Ertlw=;
+        b=cQH3RC5y9CGq1H+fRctCQn26AL8ddRWjJUtF6Nw83+5cvbaHU/peYOgVcnicaNgEXK
+         5qqPSaU+0mQVx3XPmR1D70cOHRVKU3aNIVyjKBB3+OT5qEPd/h+9wxW6ux5KudS1+XRB
+         Ja1e/NkyVCKcLW+6p/lUX7qdnu4Mzpw3odDrP1Ho0wQcOvWOqBqEgthNHs8i5jxXgD77
+         /iAMVwabQUooQ5ZoYMJZWdD2lcef+K/XAho+OAUH5Ja+cKFj323BY3l+6q9sAYdcsgZ4
+         lJv7HaL2aUA6sGp5WIIpv0DKJpzfpsAVpjd9jmlMLnnHRFw++ieugNOMVdM4lloRyWtE
+         A5IA==
+X-Gm-Message-State: ACgBeo2MWwhlqBGcV6wnp2uhL6PszCu7vONlWneayIDZTxuU746UmxJe
+        MoZT83Nmp46PZHNXrf/OGVY=
+X-Google-Smtp-Source: AA6agR4OBht6eg8IitoDsRgFpboXcA4R5BTYMEzgSwBQhYw4kaM/4fVldaLwu7Q/IbtVj47X3NvbUw==
+X-Received: by 2002:a17:903:40c9:b0:176:e58c:f082 with SMTP id t9-20020a17090340c900b00176e58cf082mr4567450pld.60.1662566409286;
+        Wed, 07 Sep 2022 09:00:09 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f7-20020a635547000000b0042b117e8bf8sm10799737pgm.23.2022.09.07.08.57.41
+        by smtp.gmail.com with ESMTPSA id q14-20020a17090311ce00b001743c51123esm12630838plh.72.2022.09.07.09.00.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 08:57:42 -0700 (PDT)
+        Wed, 07 Sep 2022 09:00:07 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4e2750a0-3ad5-f3d9-1d23-82d89f592476@roeck-us.net>
-Date:   Wed, 7 Sep 2022 08:57:40 -0700
+Message-ID: <5b2f5918-b26b-f7d3-7764-7832be139a92@roeck-us.net>
+Date:   Wed, 7 Sep 2022 09:00:05 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v4 01/21] hwmon: (mr75203) fix coding style space errors
+Subject: Re: [PATCH v4 02/21] dt-bindings: hwmon: (mr75203) fix "intel,
+ vm-map" property to be optional
 Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        "Farber, Eliav" <farbere@amazon.com>
+To:     "Farber, Eliav" <farbere@amazon.com>
 Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
         rtanwar@maxlinear.com, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hhhawa@amazon.com, jonnyc@amazon.com
+        hhhawa@amazon.com, jonnyc@amazon.com, andriy.shevchenko@intel.com
 References: <20220906083356.21067-1-farbere@amazon.com>
- <20220906083356.21067-2-farbere@amazon.com>
- <20220906165229.GA594012@roeck-us.net>
- <9323b609-cb9d-8b3d-2894-65296487cdb1@amazon.com>
- <Yxit2fq1kwzIN9x0@smile.fi.intel.com>
+ <20220906083356.21067-3-farbere@amazon.com>
+ <20220906165359.GA817639@roeck-us.net>
+ <f638f9bc-b757-c352-7be0-4f9ab6607378@amazon.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <Yxit2fq1kwzIN9x0@smile.fi.intel.com>
+In-Reply-To: <f638f9bc-b757-c352-7be0-4f9ab6607378@amazon.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/7/22 07:42, Andy Shevchenko wrote:
-> On Wed, Sep 07, 2022 at 09:50:00AM +0300, Farber, Eliav wrote:
->> On 9/6/2022 7:52 PM, Guenter Roeck wrote:
->>> On Tue, Sep 06, 2022 at 08:33:36AM +0000, Eliav Farber wrote:
->>>> Fix: "ERROR: space required before the open parenthesis '('"
->>>>
->>>> Fixes: 9d823351a337 ("hwmon: Add hardware monitoring driver for
->>>> Moortec MR75203 PVT controller")
+On 9/6/22 23:28, Farber, Eliav wrote:
+> On 9/6/2022 7:53 PM, Guenter Roeck wrote:
+>> On Tue, Sep 06, 2022 at 08:33:37AM +0000, Eliav Farber wrote:
+>>> Change "intel,vm-map" property to be optional instead of required.
 >>>
->>> Coding style "fixes" do not fix the code. I consider using the Fixes: tag
->>> for those to close to an abuse of that tag (and it would be great if that
->>> was spelled out somewhere). As it is, I can not with good conscience
->>> apply
->>> this patch to the mainline kernel (especially not for -rc5), meaning the
->>> entire series will have to wait for the next release window unless there
->>> are no conflicts.
->> Because as you mentioned  it is not a functional fix in the code I’ll
->> remove the Fixes tag in v5.
->> I checked older kernel versions and patch applies without conflicts.
->> That’s also why I moved it to be first in the series, so it will be
->> before any of my other changes that night cause merge problems for
->> other branches.
+>>> The driver implementation indicates it is not mandatory to have
+>>> "intel,vm-map" in the device tree:
+>>>  - probe doesn't fail in case it is absent.
+>>>  - explicit comment in code - "Incase intel,vm-map property is not
+>>>    defined, we assume incremental channel numbers".
+>>>
+>>> Fixes: 748022ef093f ("hwmon: Add DT bindings schema for PVT controller")
+>>> Signed-off-by: Eliav Farber <farbere@amazon.com>
+>>> ---
+>>> V3 -> V2:
+>>> - Change this patch to be first in the series.
+>>> - Add explanation why "intel,vm-map" is not required.
+>>>
+>>
+>> I don't see how this change warrants dropping Rob's Acked-by tag.
+>> Am I missing something ? 
 > 
-> If it's not a fix, it should go _after_ real fixes.
-> And by nature this kind of patch is usually at the end of the series.
+> My apology. I wasn’t aware I had to keep the Acked-by tag.
+> I'll add it in v5.
 > 
 
-I don't care where it is, really, as long as it is after the real fixes.
-And obviously I would not want to see a patch fixing something introduced
-in a previous patch of the same series.
+"have" is such a strong word. Just keep in mind that unnecessarily
+dropping tags tends to result in irritated reviewers.
 
 Thanks,
 Guenter
