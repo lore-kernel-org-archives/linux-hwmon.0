@@ -2,107 +2,73 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 898FFC38145
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Sep 2022 16:01:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13608C54EE9
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Sep 2022 16:24:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbiIGQBo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 7 Sep 2022 12:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
+        id S229459AbiIGQYk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 7 Sep 2022 12:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiIGQAr (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Sep 2022 12:00:47 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C591098A6D;
-        Wed,  7 Sep 2022 09:00:10 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id m3so4398917pjo.1;
-        Wed, 07 Sep 2022 09:00:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=R2aYA3nGCz9EA7+1cg3dqptus0IcFIXTQNzZ+9Ertlw=;
-        b=A0Ph3CtK+AKbnVr46VJVTi+2MJE30nUI6K5sJZVD42j3lrmauNuYhZ58r30MMdkIzj
-         5LtpAN8dMsS/qwW2AWvLMW69TSojVVZWhrIr57Bglp/Ur+YFgGdXAa2b07KNle9G0iIv
-         pHAVgF41sAew3lU8t4YBiXGTJGZXW1+9yHsgkD6k/1LJ17WgrUMBcsz+MHQa4XiXsw7B
-         J/7xm0LQJci7zUGEOGku2eqGGQWLW0pDZdsMoefaoNG2fQGmQFvjwkTXY05Yu42iJguV
-         1QXKYI3m6dJ3Xhq/LK8jo5YBml1urHrCTIogf2TQUgOLj30PQKWGlycNScccIy/5hZxP
-         eKOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=R2aYA3nGCz9EA7+1cg3dqptus0IcFIXTQNzZ+9Ertlw=;
-        b=cQH3RC5y9CGq1H+fRctCQn26AL8ddRWjJUtF6Nw83+5cvbaHU/peYOgVcnicaNgEXK
-         5qqPSaU+0mQVx3XPmR1D70cOHRVKU3aNIVyjKBB3+OT5qEPd/h+9wxW6ux5KudS1+XRB
-         Ja1e/NkyVCKcLW+6p/lUX7qdnu4Mzpw3odDrP1Ho0wQcOvWOqBqEgthNHs8i5jxXgD77
-         /iAMVwabQUooQ5ZoYMJZWdD2lcef+K/XAho+OAUH5Ja+cKFj323BY3l+6q9sAYdcsgZ4
-         lJv7HaL2aUA6sGp5WIIpv0DKJpzfpsAVpjd9jmlMLnnHRFw++ieugNOMVdM4lloRyWtE
-         A5IA==
-X-Gm-Message-State: ACgBeo2MWwhlqBGcV6wnp2uhL6PszCu7vONlWneayIDZTxuU746UmxJe
-        MoZT83Nmp46PZHNXrf/OGVY=
-X-Google-Smtp-Source: AA6agR4OBht6eg8IitoDsRgFpboXcA4R5BTYMEzgSwBQhYw4kaM/4fVldaLwu7Q/IbtVj47X3NvbUw==
-X-Received: by 2002:a17:903:40c9:b0:176:e58c:f082 with SMTP id t9-20020a17090340c900b00176e58cf082mr4567450pld.60.1662566409286;
-        Wed, 07 Sep 2022 09:00:09 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q14-20020a17090311ce00b001743c51123esm12630838plh.72.2022.09.07.09.00.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 09:00:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5b2f5918-b26b-f7d3-7764-7832be139a92@roeck-us.net>
-Date:   Wed, 7 Sep 2022 09:00:05 -0700
+        with ESMTP id S229561AbiIGQYg (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Sep 2022 12:24:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6A225FB
+        for <linux-hwmon@vger.kernel.org>; Wed,  7 Sep 2022 09:24:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADAC2B81E13
+        for <linux-hwmon@vger.kernel.org>; Wed,  7 Sep 2022 16:24:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E4E2C433D6
+        for <linux-hwmon@vger.kernel.org>; Wed,  7 Sep 2022 16:24:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662567872;
+        bh=vTVr854EXqXkSJvlNt6mCZYemdk/OMs+8qHWQd8YaXE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Zj6ovJ5tU3836sNa+QH81StMjSkgtwKN/nkkXaXwFUwuKETtr04LT/IzHukXhxplO
+         5ERWUB9F5pD+xwTRhF2KIaO93ka6/OKajzhQ5bzNa8yWf/Ky+Q6PcIC46QCzSHNDkA
+         fgLsJW9n6V0/ReAA9HnfGeBTBUdOdUfq/U6oX9OZHcWs0Jn+P88D6oM+oH4TgparRq
+         eBNPFy8STF8Z3VrZ94o05IYPaaHf39KUrcP9Wp/yt4Cxlxf1BGmCgRWFfAX7epIMO5
+         9cojRABIFegUBEDuGmRpi3j9XrjshRkFX0Isk0+tGaBVKSBaoSfi0+T7ehsNh8XG2m
+         zk+6i4pkBS19A==
+Received: by mail-vs1-f50.google.com with SMTP id m65so5124629vsc.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 07 Sep 2022 09:24:32 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1oyQ9z+tFbVCagKpbKKI4xHytZYtLg51dW5eds4AkiK9/dAJ0p
+        5LaL5bXtc2w/7j07KzBiTOAb+l+/wumzrWZTcg==
+X-Google-Smtp-Source: AA6agR5/3nRcy8b+Ti7a+5jHWh/7a6mbuElkdt0WOKh8FxuFLGmp3Mp4HjDVzOIxrehQ/bznpe7B2pi3MEWd+FLuEks=
+X-Received: by 2002:a05:6102:3353:b0:38c:9170:a96b with SMTP id
+ j19-20020a056102335300b0038c9170a96bmr1596815vse.26.1662567871171; Wed, 07
+ Sep 2022 09:24:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 02/21] dt-bindings: hwmon: (mr75203) fix "intel,
- vm-map" property to be optional
-Content-Language: en-US
-To:     "Farber, Eliav" <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
-        rtanwar@maxlinear.com, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hhhawa@amazon.com, jonnyc@amazon.com, andriy.shevchenko@intel.com
-References: <20220906083356.21067-1-farbere@amazon.com>
- <20220906083356.21067-3-farbere@amazon.com>
- <20220906165359.GA817639@roeck-us.net>
- <f638f9bc-b757-c352-7be0-4f9ab6607378@amazon.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <f638f9bc-b757-c352-7be0-4f9ab6607378@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220907101908.184819-1-Ibrahim.Tilki@analog.com> <20220907101908.184819-4-Ibrahim.Tilki@analog.com>
+In-Reply-To: <20220907101908.184819-4-Ibrahim.Tilki@analog.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 7 Sep 2022 11:24:20 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+5z_XO8D7m+AMPhKeWaKGVxfOdQmJy7AnTHz3HJqioMg@mail.gmail.com>
+Message-ID: <CAL_Jsq+5z_XO8D7m+AMPhKeWaKGVxfOdQmJy7AnTHz3HJqioMg@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] dt-bindings: hwmon: Add bindings for max31760
+To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/6/22 23:28, Farber, Eliav wrote:
-> On 9/6/2022 7:53 PM, Guenter Roeck wrote:
->> On Tue, Sep 06, 2022 at 08:33:37AM +0000, Eliav Farber wrote:
->>> Change "intel,vm-map" property to be optional instead of required.
->>>
->>> The driver implementation indicates it is not mandatory to have
->>> "intel,vm-map" in the device tree:
->>>  - probe doesn't fail in case it is absent.
->>>  - explicit comment in code - "Incase intel,vm-map property is not
->>>    defined, we assume incremental channel numbers".
->>>
->>> Fixes: 748022ef093f ("hwmon: Add DT bindings schema for PVT controller")
->>> Signed-off-by: Eliav Farber <farbere@amazon.com>
->>> ---
->>> V3 -> V2:
->>> - Change this patch to be first in the series.
->>> - Add explanation why "intel,vm-map" is not required.
->>>
->>
->> I don't see how this change warrants dropping Rob's Acked-by tag.
->> Am I missing something ? 
-> 
-> My apology. I wasn’t aware I had to keep the Acked-by tag.
-> I'll add it in v5.
-> 
+On Wed, Sep 7, 2022 at 5:20 AM Ibrahim Tilki <Ibrahim.Tilki@analog.com> wrote:
+>
+> Adding bindings for Analog Devices MAX31760 Fan-Speed Controller
+>
+> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> ---
+>  .../bindings/hwmon/adi,max31760.yaml          | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
 
-"have" is such a strong word. Just keep in mind that unnecessarily
-dropping tags tends to result in irritated reviewers.
+Please use get_maintainers.pl and send patches to the correct lists so
+that automated checks run and it's in my review queue. You have to
+resend for all that to happen.
 
-Thanks,
-Guenter
+Rob
