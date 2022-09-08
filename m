@@ -2,126 +2,74 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25086C54EE9
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Sep 2022 21:09:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 915FCC6FA82
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Sep 2022 22:40:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiIHVJi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Sep 2022 17:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
+        id S229480AbiIHWkP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Sep 2022 18:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiIHVJg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Sep 2022 17:09:36 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6C51707E;
-        Thu,  8 Sep 2022 14:09:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662671373; x=1694207373;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GG9iFC999jJiJW+I9TQ5u9rTvIxMVvGTTubzM/8yuMs=;
-  b=HXryZo/07NAliri6QIcWT2xVqrx+5/+A2vmxFNSlTkQMIXt5qtdpmjFU
-   b4mzL+YC07bgbHVk+xX5V1h4fYi1DphN7LGXYBP3DFqUwmDQwKSkKVb5v
-   YNG/0K479ihyaNjI4wtR3Jqm++1UxxtD6wd9fflsn1CeUeRmQRKmWkgKW
-   1KTnVCoPagTQmuRPe1hqpgXGGr+53q6OchKDorKZRpSSI+tj8lJ+A5l8V
-   xhvotiCiqAigl9ePWNqo5G2Q1scckNCSh0EWG85feUHPAMl671HN5oYHU
-   eQKg+mqAAfrXJZSeIu0TeCj9XDNaiXNRM2kBfZ9XoSnXx0EyCbtsh75EM
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="298128691"
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="298128691"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 14:09:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="943519178"
-Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Sep 2022 14:09:30 -0700
-Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oWOmA-0000KD-02;
-        Thu, 08 Sep 2022 21:09:30 +0000
-Date:   Fri, 9 Sep 2022 05:08:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, jdelvare@suse.com,
-        linux@roeck-us.net
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-Subject: Re: [PATCH RESEND v6 1/4] drivers: hwmon: Add max31760 fan speed
- controller driver
-Message-ID: <202209090420.yiz6T9uI-lkp@intel.com>
-References: <20220908082358.186268-2-Ibrahim.Tilki@analog.com>
+        with ESMTP id S229491AbiIHWkO (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Sep 2022 18:40:14 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7A782D2D;
+        Thu,  8 Sep 2022 15:40:12 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-127dca21a7dso21028707fac.12;
+        Thu, 08 Sep 2022 15:40:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Q/93ntx0X7AK2yC4ktW4fNpwToT6s2GUldlVNQU7dGE=;
+        b=XyJOfzNhOs6RVo5qnWAlaUiXXzm4tg6pN/WAGGe+7fJV1oar/NjA9VlE5D5iow4TEA
+         qy2Opsflwok5bGixiSa17GTIWG2hPRsTvkSuf2FIkFqFHF6DVyHcP5svX5CKpwxgA0YK
+         noeL67Xh+P1El5lvS1NIeLmm2K0bX6RTdG1k0dtLp2qIbULAgeopXrt9CpE/NBuG8OKu
+         v7r2uwItvB49WgMSyxSE5GdBz4eWwaK3GT48DjXrP1lIJ01ilqxVT4HRyHQMU9oB9ZXG
+         Kt3fOqWI02t/q7D4IaUDaq2vX0ZDk0Zy8TcycBAKfYXOgNc0QjDvcMgWphW7Abuwhgl5
+         2iOQ==
+X-Gm-Message-State: ACgBeo0/azQWKJdU6UlA8+7suEXUq/QXxqIC3HrQ2SIlWoZEnHPc+y65
+        9e4ke04e9PA0HTaRRwZqKg==
+X-Google-Smtp-Source: AA6agR6Nx8mduApFnaQ6tdsjWr/59CX5qJEV3IsS9vGsz7CiJCX+tAzHbZs2RmAjjVZjE35Uhz3UWQ==
+X-Received: by 2002:a05:6870:d391:b0:11d:ca1b:dc49 with SMTP id k17-20020a056870d39100b0011dca1bdc49mr3072922oag.125.1662676811554;
+        Thu, 08 Sep 2022 15:40:11 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e37-20020a9d2aa8000000b00638cea5947esm172643otb.25.2022.09.08.15.40.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 15:40:11 -0700 (PDT)
+Received: (nullmailer pid 3472381 invoked by uid 1000);
+        Thu, 08 Sep 2022 22:40:10 -0000
+Date:   Thu, 8 Sep 2022 17:40:10 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     linux-hwmon@vger.kernel.org, rtanwar@maxlinear.com,
+        andriy.shevchenko@intel.com, robh+dt@kernel.org, jdelvare@suse.com,
+        linux-kernel@vger.kernel.org, jonnyc@amazon.com,
+        p.zabel@pengutronix.de, devicetree@vger.kernel.org,
+        linux@roeck-us.net, hhhawa@amazon.com
+Subject: Re: [PATCH v4 08/21] dt-bindings: hwmon: (mr75203) add description
+ for Moortec's PVT controller
+Message-ID: <20220908224010.GA3472324-robh@kernel.org>
+References: <20220906083356.21067-1-farbere@amazon.com>
+ <20220906083356.21067-9-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220908082358.186268-2-Ibrahim.Tilki@analog.com>
+In-Reply-To: <20220906083356.21067-9-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Ibrahim,
+On Tue, 06 Sep 2022 08:33:43 +0000, Eliav Farber wrote:
+> This changes adds a detailed description for the mr75203 controller and
+> for some of the analog IPs controlled by it.
+> 
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> ---
+> V4 -> V3:
+> - New patch to add description.
+> 
+>  .../bindings/hwmon/moortec,mr75203.yaml       | 26 +++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.0-rc4 next-20220908]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ibrahim-Tilki/hwmon-Add-max31760-fan-speed-controller/20220908-162723
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20220909/202209090420.yiz6T9uI-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a7a9956fb85372f1d08a355df3af7d64c927a987
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ibrahim-Tilki/hwmon-Add-max31760-fan-speed-controller/20220908-162723
-        git checkout a7a9956fb85372f1d08a355df3af7d64c927a987
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hwmon/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/max31760.c:382:5: warning: no previous prototype for function 'max31760_read_string' [-Wmissing-prototypes]
-   int max31760_read_string(struct device *dev, enum hwmon_sensor_types type,
-       ^
-   drivers/hwmon/max31760.c:382:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int max31760_read_string(struct device *dev, enum hwmon_sensor_types type,
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/max31760_read_string +382 drivers/hwmon/max31760.c
-
-   381	
- > 382	int max31760_read_string(struct device *dev, enum hwmon_sensor_types type,
-   383				 u32 attr, int channel, const char **str)
-   384	{
-   385		switch (type) {
-   386		case hwmon_temp:
-   387			if (attr != hwmon_temp_label)
-   388				return -EOPNOTSUPP;
-   389	
-   390			*str = channel ? "local" : "remote";
-   391	
-   392			return 0;
-   393		default:
-   394			return -EOPNOTSUPP;
-   395		}
-   396	}
-   397	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Acked-by: Rob Herring <robh@kernel.org>
