@@ -2,56 +2,57 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6815CC6FA8D
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Sep 2022 15:25:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6031BC54EE9
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Sep 2022 15:25:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbiIHPZU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Sep 2022 11:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
+        id S230467AbiIHPZV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Sep 2022 11:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiIHPZP (ORCPT
+        with ESMTP id S230448AbiIHPZP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Sep 2022 11:25:15 -0400
 Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396FC80B70;
-        Thu,  8 Sep 2022 08:25:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A5A754B0;
+        Thu,  8 Sep 2022 08:25:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
   t=1662650715; x=1694186715;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=j9nLXsVxOy0JGDU7T6OUbxf37zFCWFjVBH7FijS2nao=;
-  b=vd55KUJ5RKYkBCWgmKzZ3kigSx0EDquhN2F/GAilXX2ZmCWY/9BHXDez
-   88jrgyCILA+stQUHGzmHBZmYuQ5MW/oXQIswdd2bel7JjxCHPO1EjLAcR
-   X4KEy0CHOAcyKTlu+bT0G3QWuVeyUlz+FMaIFwUYW7sizqq7wRs68qvXL
-   0=;
+  bh=KYBf+XKUjljoazBK6UbBp7hOJ0g9rr/6ZCpKDZo7LEY=;
+  b=taKzir1UJHktuZTLPpn+LEZVpqDQ6g6+DcOIWmMoGhSyOnFx6hq4mPYk
+   OvHFNdsuI7rNZpdPg4qUFmZXMvjB78vtW8sSX9eR6vhJj7NAV3HuSgnBF
+   a9e9dlLzCFDQakgnWCwypyl6McmCqmh8LOAchULjXRUBT0/SI1rZb8hUw
+   A=;
 X-IronPort-AV: E=Sophos;i="5.93,300,1654560000"; 
-   d="scan'208";a="242452851"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-0bfdb89e.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 15:25:12 +0000
+   d="scan'208";a="242452862"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-87b71607.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 15:25:13 +0000
 Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-0bfdb89e.us-east-1.amazon.com (Postfix) with ESMTPS id 4B220E008A;
+        by email-inbound-relay-iad-1a-87b71607.us-east-1.amazon.com (Postfix) with ESMTPS id 1417B14101C;
         Thu,  8 Sep 2022 15:25:09 +0000 (UTC)
-Received: from EX19D013UWB004.ant.amazon.com (10.13.138.62) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 8 Sep 2022 15:24:52 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX19D013UWB004.ant.amazon.com (10.13.138.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.12; Thu, 8 Sep 2022 15:24:52 +0000
+Received: from EX19D013UWA004.ant.amazon.com (10.13.138.207) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Thu, 8 Sep 2022 15:24:53 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
+ EX19D013UWA004.ant.amazon.com (10.13.138.207) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Thu, 8 Sep 2022 15:24:53 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ (172.19.116.181) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
  Server id 15.0.1497.38 via Frontend Transport; Thu, 8 Sep 2022 15:24:52 +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 8294F4CAF; Thu,  8 Sep 2022 15:24:49 +0000 (UTC)
+        id 834B04CE0; Thu,  8 Sep 2022 15:24:49 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
         <andriy.shevchenko@intel.com>, <linux-hwmon@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <farbere@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>
-Subject: [PATCH v5 07/21] dt-bindings: hwmon: (mr75203) add description for Moortec's PVT controller
-Date:   Thu, 8 Sep 2022 15:24:35 +0000
-Message-ID: <20220908152449.35457-8-farbere@amazon.com>
+CC:     <farbere@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v5 03/21] hwmon: (mr75203) update pvt->v_num and vm_num to the actual number of used sensors
+Date:   Thu, 8 Sep 2022 15:24:31 +0000
+Message-ID: <20220908152449.35457-4-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220908152449.35457-1-farbere@amazon.com>
 References: <20220908152449.35457-1-farbere@amazon.com>
@@ -62,54 +63,35 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This changes adds a detailed description for the mr75203 controller and
-for some of the analog IPs controlled by it.
+This issue is relevant when "intel,vm-map" is set in device-tree, and
+defines a lower number of VMs than actually supported.
 
+This change is needed for all places that use pvt->v_num or vm_num
+later on in the code.
+
+Fixes: 9d823351a337 ("hwmon: Add hardware monitoring driver for Moortec MR75203 PVT controller")
 Signed-off-by: Eliav Farber <farbere@amazon.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
-V4 -> V3:
-- New patch to add description.
+V4 -> v3:
+- Update also vm_num to actual number of VMs.
 
- .../bindings/hwmon/moortec,mr75203.yaml       | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ drivers/hwmon/mr75203.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-index 8ea97e774364..5e41aed5891a 100644
---- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-@@ -9,6 +9,32 @@ title: Moortec Semiconductor MR75203 PVT Controller bindings
- maintainers:
-   - Rahul Tanwar <rtanwar@maxlinear.com>
- 
-+description: |
-+  A Moortec PVT (Process, Voltage, Temperature) monitoring logic design can
-+  include many different units.
-+  Such a design will usually consists of several Moortec's embedded analog IPs,
-+  and a single Moortec controller (mr75203) to configure and control the IPs.
-+
-+  Some of the Moortec's analog hard IPs that can be used in a design:
-+  *) Temperature Sensor (TS) - used to monitor core temperature (e.g. mr74137).
-+  *) Voltage Monitor (VM) - used to monitor voltage levels (e.g. mr74138).
-+  *) Process Detector (PD) - used to assess silicon speed (e.g. mr74139).
-+  *) Delay Chain - ring oscillator connected to the PD, used to measure IO
-+     based transistors (e.g. mr76008 ring oscillator at 1.1V, mr76007 ring
-+     oscillator at 1.8V).
-+  *) Pre Scaler - provides divide-by-X scaling of input voltage, which can then
-+     be presented for VM for measurement within its range (e.g. mr76006 -
-+     divide by 2 pre-scaler).
-+
-+  TS, VM & PD also include a digital interface, which consists of configuration
-+  inputs and measurement outputs.
-+
-+  Some of the units have number of series, each series can have slightly
-+  different characteristics.
-+
-+  The mr75203 binding describes configuration for the controller unit, but also
-+  for some of the analog IPs.
-+
- properties:
-   compatible:
-     const: moortec,mr75203
+diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+index 81ccb4c6fa5c..62df0c9498f3 100644
+--- a/drivers/hwmon/mr75203.c
++++ b/drivers/hwmon/mr75203.c
+@@ -605,6 +605,8 @@ static int mr75203_probe(struct platform_device *pdev)
+ 				if (pvt->vm_idx[i] >= vm_num ||
+ 				    pvt->vm_idx[i] == 0xff) {
+ 					num = i;
++					pvt->v_num = i;
++					vm_num = i;
+ 					break;
+ 				}
+ 		}
 -- 
 2.37.1
 
