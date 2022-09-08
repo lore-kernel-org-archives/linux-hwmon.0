@@ -2,56 +2,56 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39A0DC54EE9
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Sep 2022 15:42:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53C7EC38145
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Sep 2022 15:42:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiIHPmT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Sep 2022 11:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
+        id S229934AbiIHPmW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Sep 2022 11:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIHPmS (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Sep 2022 11:42:18 -0400
+        with ESMTP id S229480AbiIHPmV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Sep 2022 11:42:21 -0400
 Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3E996FD6;
-        Thu,  8 Sep 2022 08:42:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB3896FD6;
+        Thu,  8 Sep 2022 08:42:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1662651739; x=1694187739;
+  t=1662651741; x=1694187741;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=q8Iynp95KpaU7SmgCP1oIvGfO+Da+UEwSVKNj91haTY=;
-  b=U4mhtXayix/21RTVxp1Nk8JOjy7K30Gi6BsQAvpVJp7fp85fYGDBnNF5
-   gKyQoD6nzgIC6DJcFjqKB0jha2zTgAyfLNVhZXzIr9WsJoDrkXAO8FaEq
-   zt4TLGbqvq5SlGs7Mkm+EM4ClyPydI4l8VTwQmBvdAtyboNthU4J00NKe
-   g=;
+  bh=VJrsP7eBiwsZa3h633BnaRorI22wsccpINaTQxBud9U=;
+  b=kHRvfq1ABBQJ++2K0WkJDRaJa4J+vwUkgqFzATlMJvPs/YJS0wyZD7XQ
+   +b5Bn8sjv8uHrIeLNRkAWNdYPDEwfr/3cy+vO/ZMOWekwhygij7u62GXe
+   yA2+EH3cOJTpcIlej7sPVeKL6qzUpqLTt77VLnH4mHfN0jgkcWJcT2SX1
+   U=;
 X-IronPort-AV: E=Sophos;i="5.93,300,1654560000"; 
-   d="scan'208";a="128112022"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-8be8ed69.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 15:24:53 +0000
+   d="scan'208";a="128112171"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-90d70b14.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 15:25:12 +0000
 Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-8be8ed69.us-east-1.amazon.com (Postfix) with ESMTPS id 161CBC0875;
-        Thu,  8 Sep 2022 15:24:52 +0000 (UTC)
-Received: from EX19D013UWB004.ant.amazon.com (10.13.138.62) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 8 Sep 2022 15:24:51 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX19D013UWB004.ant.amazon.com (10.13.138.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.12; Thu, 8 Sep 2022 15:24:51 +0000
+        by email-inbound-relay-iad-1e-90d70b14.us-east-1.amazon.com (Postfix) with ESMTPS id 9AAE1C0974;
+        Thu,  8 Sep 2022 15:25:09 +0000 (UTC)
+Received: from EX19D013UWB002.ant.amazon.com (10.13.138.21) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Thu, 8 Sep 2022 15:24:52 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX19D013UWB002.ant.amazon.com (10.13.138.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Thu, 8 Sep 2022 15:24:52 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Thu, 8 Sep 2022 15:24:50 +0000
+ (172.19.116.181) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Thu, 8 Sep 2022 15:24:52 +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 7835C4BC0; Thu,  8 Sep 2022 15:24:49 +0000 (UTC)
+        id 86F504D85; Thu,  8 Sep 2022 15:24:49 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
         <andriy.shevchenko@intel.com>, <linux-hwmon@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     <farbere@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>
-Subject: [PATCH v5 08/21] dt-bindings: hwmon: (mr75203) change "resets" property to be optional
-Date:   Thu, 8 Sep 2022 15:24:36 +0000
-Message-ID: <20220908152449.35457-9-farbere@amazon.com>
+Subject: [PATCH v5 18/21] dt-bindings: hwmon: (mr75203) add coefficient properties for the thermal equation
+Date:   Thu, 8 Sep 2022 15:24:46 +0000
+Message-ID: <20220908152449.35457-19-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220908152449.35457-1-farbere@amazon.com>
 References: <20220908152449.35457-1-farbere@amazon.com>
@@ -62,33 +62,84 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Change "resets" property to be optional instead of required, for SOCs
-that don't support a reset controller.
+Add optional temperature coefficient properties:
+ *) moortec,ts-coeff-g
+ *) moortec,ts-coeff-h
+ *) moortec,ts-coeff-cal5
+ *) moortec,ts-coeff-j
+If defined they shall be used instead of defaults.
+
+The coefficients were added to device tree on top of the series property
+(which can be used to select between series 5 and series 6), because
+coefficients can vary between product and product, and code defaults might
+not be accurate enough.
 
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
 V4 -> V3:
-- Fix "reset" to "resets".
+- Add 'multipleOf: 1000' instead of plain text.
+- Add minimum/maximum for some of the new properties.
 
-V3 -> v2:
-- Change "reset" property to be optional instead of adding new
-  "reset-control-skip" property.
+V3 -> V2:
+- Add "moortec" prefix to property name.
 
- Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 1 -
- 1 file changed, 1 deletion(-)
+ .../bindings/hwmon/moortec,mr75203.yaml       | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-index 5e41aed5891a..9454576ebb73 100644
+index df849517464e..d0d549749208 100644
 --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
 +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-@@ -75,7 +75,6 @@ required:
-   - reg
-   - reg-names
-   - clocks
--  - resets
-   - "#thermal-sensor-cells"
+@@ -100,6 +100,41 @@ properties:
+     default: 5
+     $ref: /schemas/types.yaml#/definitions/uint32
  
- additionalProperties: false
++  moortec,ts-coeff-g:
++    description:
++      G coefficient for temperature equation.
++      Default for series 5 = 60000
++      Default for series 6 = 57400
++    multipleOf: 1000
++    minimum: 1000
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++  moortec,ts-coeff-h:
++    description:
++      H coefficient for temperature equation.
++      Default for series 5 = 200000
++      Default for series 6 = 249400
++    multipleOf: 1000
++    minimum: 1000
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++  moortec,ts-coeff-cal5:
++    description:
++      cal5 coefficient for temperature equation.
++      Default for series 5 = 4094
++      Default for series 6 = 4096
++    minimum: 1
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++  moortec,ts-coeff-j:
++    description:
++      J coefficient for temperature equation.
++      Default for series 5 = -100
++      Default for series 6 = 0
++    multipleOf: 1000
++    maximum: 0
++    $ref: /schemas/types.yaml#/definitions/int32
++
+ required:
+   - compatible
+   - reg
+@@ -123,5 +158,7 @@ examples:
+         resets = <&rcu0 0x40 7>;
+         moortec,vm-active-channels = /bits/ 8 <0x10 0x05>;
+         moortec,vm-pre-scaler-x2 = /bits/ 8 <5 6 20>;
++        moortec,ts-coeff-g = <61400>;
++        moortec,ts-coeff-h = <253700>;
+         #thermal-sensor-cells = <1>;
+     };
 -- 
 2.37.1
 
