@@ -2,78 +2,100 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58E11C54EE9
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Sep 2022 22:40:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1385C6FA82
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Sep 2022 23:01:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiIHWkd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Sep 2022 18:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
+        id S229988AbiIHXBr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Sep 2022 19:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiIHWka (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Sep 2022 18:40:30 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA265D0224;
-        Thu,  8 Sep 2022 15:40:27 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-127ba06d03fso24757351fac.3;
-        Thu, 08 Sep 2022 15:40:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=UqRtNdBjaZuYngMpGzHkxPlD2Z2tvghx3hs0PUOk8Ro=;
-        b=kM+G+O1EbRPy3eGlx6q6ci3mlaBm7FHInWrKpsO6GSUmZI4fmuasTliGuoyIA4rjv0
-         7t8Mzn1fHmN00qvW29oGnvTijFq6OeMPjW1YAvda9cf/iGJOrRnvz/MHwyYnecOLd6sr
-         ezeUtohld9xhIAvmeMDvhGZMLAFWiNxozGnRRzBOh88POhymyYUr6gNMLzTjC5dhA/BA
-         PoyTTlfieoPXmel6/5gxbns0LYCDhLfi7xVMFexvYcHYd1sbPk8bwwAXv7ytHPYHMkdr
-         /3jWT5NDoiVOG1AEt5Z6g65CGL2ih+D2P4jOhW/X/r5APITakqz6tCaAzy6OSSrf2raC
-         uQ/A==
-X-Gm-Message-State: ACgBeo1lAdZrfM+5n7hBagvzQFX0VY9OTIV7e9vbiJL8EXwk2N6oEmzW
-        OIcfg5ZDuLzZZ+yHDyxC5w==
-X-Google-Smtp-Source: AA6agR4kPuvSIo/PK+ej3hWozKVvbOSKuzx2XBHYHML7hitYH8ivSF0WAozOM4f3BvqePVMjOUQIOw==
-X-Received: by 2002:a05:6808:21a6:b0:344:beb5:1fb1 with SMTP id be38-20020a05680821a600b00344beb51fb1mr2446228oib.175.1662676826989;
-        Thu, 08 Sep 2022 15:40:26 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id cm16-20020a056870b61000b0011eeff77d1bsm258281oab.10.2022.09.08.15.40.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 15:40:26 -0700 (PDT)
-Received: (nullmailer pid 3472851 invoked by uid 1000);
-        Thu, 08 Sep 2022 22:40:25 -0000
-Date:   Thu, 8 Sep 2022 17:40:25 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, rtanwar@maxlinear.com,
-        devicetree@vger.kernel.org, jonnyc@amazon.com,
-        andriy.shevchenko@intel.com, linux@roeck-us.net,
-        linux-hwmon@vger.kernel.org, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org, hhhawa@amazon.com
-Subject: Re: [PATCH v4 09/21] dt-bindings: hwmon: (mr75203) change "resets"
- property to be optional
-Message-ID: <20220908224025.GA3472774-robh@kernel.org>
-References: <20220906083356.21067-1-farbere@amazon.com>
- <20220906083356.21067-10-farbere@amazon.com>
+        with ESMTP id S229808AbiIHXBi (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Sep 2022 19:01:38 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5383882D07;
+        Thu,  8 Sep 2022 16:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662678097; x=1694214097;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MFXBmJ7gfF/wkmTJSQPdplrbzWvYqllVCnJDUiWo50A=;
+  b=Otikuo+C4RZKqivczncfvulWtRcKZNgd5gy3agj9Yi2pjA+1uWgwJZnP
+   svWKQx6tTgTNsX42KgkZjFhmJh9ryU1hSpoxtViyfDh2fJ0NklPOQCT24
+   SkYO23/L0NnTPAaLL331SGBU9w79K1T377yx5uNpg4xD8yKKOOMBekGQ4
+   H+H5NoMW5TvDb8Tx+nuTgTpMNO3GjZyrBjdOagQnGL+ZNsdJy99N82GQF
+   KFxGFlubxV1TGBPdbvb+KYDMbxCf5qnCPguWPA2iPV06X5F5bKtZvszdn
+   xySiCmu3IRVu8zDmgdVO0FsGnGbM2GOjmrvF+wBEvj1+SWuIbiZ799ddS
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="383638507"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="383638507"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 16:01:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="683419761"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 08 Sep 2022 16:01:34 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWQWb-0000PZ-2y;
+        Thu, 08 Sep 2022 23:01:33 +0000
+Date:   Fri, 9 Sep 2022 07:00:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Duke Du <dukedu83@gmail.com>, jdelvare@suse.com,
+        linux@roeck-us.net, corbet@lwn.net, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, fran.hsu@quantatw.com,
+        george.hung@quantatw.com, charles.hsu@quantatw.com,
+        duke.du@quantatw.com
+Subject: Re: [PATCH v4] hwmon: Add driver for the TEXAS TPS546D24 Buck
+ Converter.
+Message-ID: <202209090609.0lCP8G6F-lkp@intel.com>
+References: <1662617599-15270-1-git-send-email-Duke.Du@quantatw.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220906083356.21067-10-farbere@amazon.com>
+In-Reply-To: <1662617599-15270-1-git-send-email-Duke.Du@quantatw.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 06 Sep 2022 08:33:44 +0000, Eliav Farber wrote:
-> Change "resets" property to be optional instead of required, for SOCs
-> that don't support a reset controller.
-> 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
-> V4 -> V3:
-> - Fix "reset" to "resets".
-> 
-> V3 -> v2:
-> - Change "reset" property to be optional instead of adding new
->   "reset-control-skip" property.
-> 
->  Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 1 -
->  1 file changed, 1 deletion(-)
-> 
+Hi Duke,
 
-Acked-by: Rob Herring <robh@kernel.org>
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.0-rc4 next-20220908]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Duke-Du/hwmon-Add-driver-for-the-TEXAS-TPS546D24-Buck-Converter/20220908-141642
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/92b26ac053d4e2673c22de7d93e91b8efbb3d1bb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Duke-Du/hwmon-Add-driver-for-the-TEXAS-TPS546D24-Buck-Converter/20220908-141642
+        git checkout 92b26ac053d4e2673c22de7d93e91b8efbb3d1bb
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> Documentation/hwmon/tps546d24.rst:4: WARNING: Title underline too short.
+
+vim +4 Documentation/hwmon/tps546d24.rst
+
+     2	
+     3	Kernel driver tps546d24
+   > 4	======================
+     5	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
