@@ -2,109 +2,74 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7970C6FA82
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 15:04:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCA8AECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 15:54:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbiIIPE1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Sep 2022 11:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
+        id S229502AbiIIPy4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Sep 2022 11:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbiIIPEV (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2022 11:04:21 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7881B13A079;
-        Fri,  9 Sep 2022 08:04:20 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id m3so1791985pjo.1;
-        Fri, 09 Sep 2022 08:04:20 -0700 (PDT)
+        with ESMTP id S230302AbiIIPy4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2022 11:54:56 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1745F3D5A3;
+        Fri,  9 Sep 2022 08:54:53 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id j26so1687983wms.0;
+        Fri, 09 Sep 2022 08:54:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=hL2cx70YG7RrNd5UJ8t17Ow01zpeAQX1aXJ6HHL43VU=;
-        b=MVTXFFiN01myXOcvZRWQOavuunxR1LDgIMoIoTgtq8MhcbPSmRb1WnVe/JoFoOPszO
-         +fwLp3vbRKlWd4Fp6I5V/5pF9OAQ5GFVQh90xkwumUkcXLg1S5hwZr89Z8jEf6E0AaH3
-         /73V+AK6AcIcR2cgRWXKiIHvogWet4PRgWC5HuI/4d5eyaJX75Svp2F0CZEQLnhK6bHr
-         J4Z1mHRnRfSAc20wOtSdjwGCrNtbn/+MqqS+RqZR0us9YAaeMiHWliAGkvI6Rtk3mkYd
-         p/RzPRYprscRh5XtN5Ys2Egx49GuTS62ApxWBWXoAzgWC0tDc0JdrgndedtYHiajB3Op
-         nfZA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=uyMjfznNOpNPxWagrUNcrwqKII8tmK8TKoBawS5U084=;
+        b=jmc6McaEP1oCCq61s4ws5JNmsyICorcvr8GDT+FYEJQz9xWPrGgjIgCRbHqLh/tIQt
+         /o2u4+QcH2xeoSHVQW6a1ewtkHv1b6CHOjifYlfNeCARp8W0g7URUHC9obgvqXYfdeC4
+         lo6hNV87bOiiGu25Hy5Jp4YFw/p1KX/WntFZxapzDToslPYBpS9ayLQv66zMY9T8ZUw0
+         3NtPhXJNN2Kop8ayjb+e7WT1iBXFMglwWHLuAkBMOsyutbwLZPcE2o0GtMitYmJAgamU
+         e80OcITxpO5NcnV3KWMITy8kIqt+3OMtDUy8K0aDT1tTTH47NoUPyyv0IyAeOf1Tapnv
+         LFPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=hL2cx70YG7RrNd5UJ8t17Ow01zpeAQX1aXJ6HHL43VU=;
-        b=Rj4TdniAO5igEvzal3c6n6cQl2fdOMMCLZ5dEHYWCsBI0xogkRwDNJsEyT/CVrgHt0
-         +gTNlUgkVgvuOiifJ8uq17gG9LKhfTDroITETYJ8azKo5G1DOLGNlydcermj4D94o2D/
-         NCgnsnOEjFkgCla1frxSfnH5NSIX0eDO4tYcUjC+HaPv/bgndHAv0KOryfp4CdF2WHJS
-         8PrirB2sWY1GLmy/Ie+3jCiBmNtXgjTxBGCDz71ZUyuLRPnAXz0b0yocgyyyIn+gD7Wg
-         5eNmny7q1bvP9Eg1PqPyC5RfupHiPaC1vGkp7KPB1rMbSSUnjR/IhDNp8/zzro1ZLVSi
-         aZLA==
-X-Gm-Message-State: ACgBeo2BxSPE14JCKWOjyqNH+iwXJkEe0j6X3jZm8cUligsYDyyNvL5R
-        tpMW2L/t/R8kEJyb6G2LPAg=
-X-Google-Smtp-Source: AA6agR50U/n1AVhoAp7HplEc5VUgXT2sSAw3o2gbK2pzDWAaC/1vFPh0ZEqNEeMbzvp1JarBYH7Fgg==
-X-Received: by 2002:a17:90a:e60d:b0:201:6b28:5406 with SMTP id j13-20020a17090ae60d00b002016b285406mr9917776pjy.228.1662735859939;
-        Fri, 09 Sep 2022 08:04:19 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x8-20020a170902ec8800b00172dd10f64fsm553052plg.263.2022.09.09.08.04.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 08:04:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ba55b70f-b1b1-c31a-e1ef-a079f0f02782@roeck-us.net>
-Date:   Fri, 9 Sep 2022 08:04:17 -0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=uyMjfznNOpNPxWagrUNcrwqKII8tmK8TKoBawS5U084=;
+        b=k/AgIDwVPtqR+XGpD5S87S4AVH5hXgNmvpiWXI4tivLnk//722CBu1X/6/z7Nsgtdi
+         gpjap3wPk9OWS3VFIgO6pbNvWtiWhnDrp3hVSJpelYigONuLCbsQQvIFuFPhYE9XCU58
+         e+W9wyictcIKIjUQeQe9OOMxqOXyAS9+ClZPN6uCXg9VniYLPuf/3NLXIYg6RUVkUXFF
+         SoIcVz33WiGuF2UVpupO2fCFSVqARci3DCX7JoGlnQhk0HQPf5HtsnM1YDwiJgBXbRvU
+         /DhIIO69plbmlzWLiIELdm4Hsb1b83QDX5VfSZeLPRsYUtLgX4mWPWh45Bytup90cS8u
+         9jow==
+X-Gm-Message-State: ACgBeo3u9mAB3q1efTiBljyk3LLB+QBlLw1sAvGt5QjMNU0EJYmoTCbN
+        7fOuPesOaU+dbzvE8ujA23bFJ9ptnIG/fw==
+X-Google-Smtp-Source: AA6agR6DzmYyVQN8CRqgSAPIXNCX+vblUXfMDedZ5Mswl45An9UPSrvplR8AlTDyrMOzOgOQfPVjuQ==
+X-Received: by 2002:a05:600c:a4d:b0:3a6:6dd3:1857 with SMTP id c13-20020a05600c0a4d00b003a66dd31857mr6101353wmq.110.1662738891825;
+        Fri, 09 Sep 2022 08:54:51 -0700 (PDT)
+Received: from caracal.museclub.art (p200300cf9f3f2f002177673bc12404e5.dip0.t-ipconnect.de. [2003:cf:9f3f:2f00:2177:673b:c124:4e5])
+        by smtp.googlemail.com with ESMTPSA id i13-20020a05600c354d00b003a5c1e916c8sm173652wmq.1.2022.09.09.08.54.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 08:54:51 -0700 (PDT)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+To:     eugene.shalygin@gmail.com
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/1] hwmon: (asus-ec-sensors) autoload module via DMI data
+Date:   Fri,  9 Sep 2022 17:54:45 +0200
+Message-Id: <20220909155446.122937-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 3/4] dt-bindings: hwmon: Add bindings for max31760
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220909133718.388213-1-Ibrahim.Tilki@analog.com>
- <20220909133718.388213-4-Ibrahim.Tilki@analog.com>
- <9d5e8a41-8e0a-c67a-1b68-f743b4680510@linaro.org>
- <339d3857-2deb-b5d9-332d-cc65cc90ca19@roeck-us.net>
- <96766080-dee3-1c06-031e-331a8702cf37@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <96766080-dee3-1c06-031e-331a8702cf37@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/9/22 07:56, Krzysztof Kozlowski wrote:
-> On 09/09/2022 16:52, Guenter Roeck wrote:
->> Hi Krzysztof,
->>
->> On 9/9/22 07:49, Krzysztof Kozlowski wrote:
->>> On 09/09/2022 15:37, Ibrahim Tilki wrote:
->>>> Adding bindings for Analog Devices MAX31760 Fan-Speed Controller
->>>>
->>>> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
->>>> ---
->>>
->>>
->>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>
->>> Please wait with applying for Rob's bot to check it.
->>>
->>
->> I don't think I see those results unless there is a failure.
-> 
-> That's correct.
-> 
->> Is there a link where I can look up the results ?
-> 
-> It will pop-up on Patchwork:
-> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20220909133718.388213-4-Ibrahim.Tilki@analog.com/
-> 
-> Like for example here:
-> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20220908184925.2714098-3-sireeshkodali1@gmail.com/
-> 
-Thanks!
+Changes in v2: remove the clenaup_device function
 
-Guenter
+Eugene Shalygin (1):
+  hwmon: (asus-ec-sensors) autoload module via DMI data
+
+ drivers/hwmon/asus-ec-sensors.c | 413 ++++++++++++++++++--------------
+ 1 file changed, 227 insertions(+), 186 deletions(-)
+
+-- 
+2.37.3
 
