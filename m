@@ -2,96 +2,80 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F827ECAAA1
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 07:17:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E991ECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 08:15:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbiIIHRs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Sep 2022 03:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
+        id S230450AbiIIIPc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Sep 2022 04:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbiIIHRd (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2022 03:17:33 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282B5B69E4;
-        Fri,  9 Sep 2022 00:17:23 -0700 (PDT)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2894noV3031368;
-        Fri, 9 Sep 2022 03:17:05 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3jf8yc1jcg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Sep 2022 03:17:05 -0400
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2897H4le060283
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 9 Sep 2022 03:17:04 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Fri, 9 Sep 2022
- 03:17:03 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Fri, 9 Sep 2022 03:17:03 -0400
-Received: from ibrahim-vm.ad.analog.com ([10.158.19.28])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2897GXRk028680;
-        Fri, 9 Sep 2022 03:16:53 -0400
-From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>
-CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        <linux-hwmon@vger.kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v7 4/4] MAINTAINERS: Add maintainer for hwmon/max31760
-Date:   Fri, 9 Sep 2022 10:16:18 +0300
-Message-ID: <20220909071618.231246-5-Ibrahim.Tilki@analog.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220909071618.231246-1-Ibrahim.Tilki@analog.com>
-References: <20220909071618.231246-1-Ibrahim.Tilki@analog.com>
+        with ESMTP id S231493AbiIIIP2 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2022 04:15:28 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E94280346
+        for <linux-hwmon@vger.kernel.org>; Fri,  9 Sep 2022 01:15:26 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id bt10so1450754lfb.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 09 Sep 2022 01:15:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=G9dF6A4OKGqKPWBJ/rsRlHvwJYl0XtUPK+SRDQT8YPc=;
+        b=LF17xs37jw3OQrFl05WuIzpxwcuS4Yf3J7JQfuPYJV2DVTh/thJ3UMao+7qmXL4qyr
+         3jZPxosS/lqwUykQdDSZBlWmyW0PYQVI571dwZ3GXRFmhPxo2G/fCLKnSlXjBuXvLrU5
+         WES2FH+Jhn/hprX5Ruxs1tYdcxiLbcyBAXMzQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=G9dF6A4OKGqKPWBJ/rsRlHvwJYl0XtUPK+SRDQT8YPc=;
+        b=ESzpwLvI5VYAh5oWQiwSJB4BNgy9blEPwdwVXFYomlqzMbvRmZDK0pA0Jo5dc3YDqZ
+         W038BosLB60Fh7frUB+pGlMI92pOziCO3jBaydbnBwPhhmpYzlwqvsRpF65/Z9ndnIqp
+         aOsoHo7dwPCEjgA9Ee1jyrVowLyc1VhDw+Y2zg4848ktx6RMDJUYckfShHCIi261Z55P
+         T4ne8CQqddjgD08R1TLnzGjuNN/1eoFiqWGH/qZ6TuiENLm7pX4jsSp0u7YxRG/Pd7+J
+         58IKhKbUB5NNqaNT04ra764SHDKdBIp5owkxWkToC93BJ1SucLa6eifTUX/LmnYQ88EJ
+         mSJQ==
+X-Gm-Message-State: ACgBeo2HJH236CX/x3clLNp9XZ6aSgELE7zpanCa9QYevE5lY703SzF6
+        lu+WNhEthl6YYe3xOIQVPsM+Bw==
+X-Google-Smtp-Source: AA6agR78Go+tnxdAfSDFi/lV2IDV0LZRhTJAeNsURPRHLWJ8IT6wFwVvPB3ulOqU8ARXBHAiPLZC0w==
+X-Received: by 2002:a05:6512:3501:b0:496:d15:e614 with SMTP id h1-20020a056512350100b004960d15e614mr4343150lfs.194.1662711324507;
+        Fri, 09 Sep 2022 01:15:24 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id x12-20020a19f60c000000b004946e72711bsm183381lfe.76.2022.09.09.01.15.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 01:15:23 -0700 (PDT)
+Message-ID: <174dd607-25b6-26c0-e6e7-1634c5b01dbc@rasmusvillemoes.dk>
+Date:   Fri, 9 Sep 2022 10:15:22 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: F2wQdz9nagJMnI0irBQgUR4WhJtK8PzJ
-X-Proofpoint-ORIG-GUID: F2wQdz9nagJMnI0irBQgUR4WhJtK8PzJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-09_03,2022-09-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- impostorscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=698
- lowpriorityscore=0 mlxscore=0 bulkscore=0 spamscore=0 suspectscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209090024
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/6] rtc: isl12022: cleanups and hwmon support
+Content-Language: en-US
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add maintainer for hwmon/max31760 driver
+On 30/08/2022 12.01, Rasmus Villemoes wrote:
+> This series does a few cleanups of the isl12022 driver,
+> 
+> - removes use of deprecated function
+> - removes some  redundant code
+> - switches to regmap API instead of private helpers
+> 
+> and finally hooks up the temperatur sensor to hwmon.
 
-Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ping. Any comments before I respin 6/6 to address Guenter's request?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d30f26e07..76c7d6606 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1334,6 +1334,15 @@ F:	drivers/iio/amplifiers/hmc425a.c
- F:	drivers/staging/iio/*/ad*
- X:	drivers/iio/*/adjd*
- 
-+ANALOG DEVICES INC MAX31760 DRIVER
-+M:	Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-+S:	Maintained
-+W:	http://wiki.analog.com/
-+W:	https://ez.analog.com/linux-software-drivers
-+F:	Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
-+F:	Documentation/hwmon/max31760.rst
-+F:	drivers/hwmon/max31760.c
-+
- ANALOGBITS PLL LIBRARIES
- M:	Paul Walmsley <paul.walmsley@sifive.com>
- S:	Supported
--- 
-2.36.1
-
+Rasmus
