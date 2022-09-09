@@ -2,133 +2,125 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFC10ECAAD3
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 13:48:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79ED3ECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 14:43:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbiIINsH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Sep 2022 09:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52530 "EHLO
+        id S231968AbiIIOna (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Sep 2022 10:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbiIINrv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2022 09:47:51 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D9413FA6F
-        for <linux-hwmon@vger.kernel.org>; Fri,  9 Sep 2022 06:47:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662731254; x=1694267254;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=40R44W3EMWDBfVpNLqLkiB/uXD2m7rqsGJSZtwY0uFc=;
-  b=T7rlc2s6YBtB4bg28y9z/ZHbDFStjlS5NY2K0u9eMkZzKOxCOdm2+KFV
-   zO3SZQ6H+ogEw+xUDnvQ5RynKwBcObv5uwTUX8oKq/v+I9fazOTPVlMlL
-   16jofWgevRBuvHOY9o0Zn2oIIZ95kq9C/vHlG8S3SmaKXbjeDJ090sjWI
-   016B23E93wZwyspl6rE/ydiNccdILSD/1jUl9/q55dAufftAITmgBhqSq
-   7pOsjYi0DZSX9mIZG7QzVZ4Rn0AsUTlPw4asxVv+GJXAsSKzcFHIU4qmX
-   yw79N9AJzHW1gShvU+s8plTpU9KGd5U+j8gABBt3haUoNOaEirn/W39og
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="295057334"
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="295057334"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 06:46:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="648442854"
-Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 09 Sep 2022 06:46:26 -0700
-Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oWeKv-0001Ff-1w;
-        Fri, 09 Sep 2022 13:46:25 +0000
-Date:   Fri, 09 Sep 2022 21:45:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 32505e87ea13e10bdc890ee811ddf1b98bd75269
-Message-ID: <631b4376.WGfmEiQ5EtSt4wGG%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S230434AbiIIOn3 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2022 10:43:29 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFE5110AA3;
+        Fri,  9 Sep 2022 07:43:28 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id l10so1981906plb.10;
+        Fri, 09 Sep 2022 07:43:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=itwUGd1Te1mSjRZ83ukeLvlZZen/Z6jAc3c4dT7PUuM=;
+        b=eiTxh5Z/TuXFJclg3CW7GlqMhzXIzs40Q5nb6sMkkchg5kEMtgl8V7NcCc+V/AFFy1
+         iNwpBGFlbAHewEmKfdCbgqalyRW5fGfDW8hdPgjZipthynyfGbvPewpGLZt39j/9tcuh
+         PEwkyJplF4dwjTWipSWEXhMr/9QW5/PwT9Zqli4rEEaDMIpIZ3fKdGTHa0UJDDDXXB2A
+         yfYWlekEa3993lE4w/YiRo8nOCMMwAjLPfLnLcCJtiO4m1dc/wZp8IxKsdhni9B0qsz4
+         Ri/Jju+RPq1wjL/pJjr+XKhvUKvHx/Nqr/k+MB+hTWeYOJEWW8MjMvrYG5VrgV36SUsV
+         lsFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=itwUGd1Te1mSjRZ83ukeLvlZZen/Z6jAc3c4dT7PUuM=;
+        b=Fb7rTz4Q0WZfS7S96mZ52gRNvzpwSB6I52CLqHXoFvjnLinISOyimR7rNusOza7c58
+         nBRKZN56d5KKeNxE8WN13glsxqD658JuiZFDmqjOchk9TB9Te4hVBQAcN/2Hm9zwivX4
+         04Sda8dBBHa5UKPwmdtZaTCwCQCEnL2AdPI+qwsLysEJqdt9dL2XGDQZPHi4qHElZoXR
+         oh0j70Czoq4MLczJ/ickn6OsEjf5hGFmtnnP7r3brcTKuqpeXOl5Is8Wg1sSgZzV89Vo
+         JIS3Hc9bPCzKqhCgL07he/BuPTE1z/DJLiyJxEZRR5J4PT41ivzaduF+T9ljflIMfP/1
+         Ud3Q==
+X-Gm-Message-State: ACgBeo0+7Nb+4ichD+h5XV2ou+bv/jCkHzjXe+x8lkp1Ty9qbD4gDn4I
+        BkaZlW0QJOMsMHPgHeNoGJU=
+X-Google-Smtp-Source: AA6agR5/Uh8A5sMDltA5OxD66RX3Nj35zygvhPbwQ0qODJgYHrZHZvjluWlMY0tp0uCHbPulGQz+HQ==
+X-Received: by 2002:a17:902:6b42:b0:174:4308:ce52 with SMTP id g2-20020a1709026b4200b001744308ce52mr14023716plt.81.1662734607666;
+        Fri, 09 Sep 2022 07:43:27 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u16-20020a17090a0c5000b00200b2894648sm489793pje.52.2022.09.09.07.43.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 07:43:26 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 9 Sep 2022 07:43:24 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) autoload module via DMI data
+Message-ID: <20220909144324.GA2951669@roeck-us.net>
+References: <20220909113820.92360-1-eugene.shalygin@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20220909113820.92360-1-eugene.shalygin@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 32505e87ea13e10bdc890ee811ddf1b98bd75269  hwmon: (aquacomputer_d5next) Add support for Aquacomputer High Flow Next
+On Fri, Sep 09, 2022 at 01:38:20PM +0200, Eugene Shalygin wrote:
+> Replace autoloading data based on the ACPI EC device with the DMI
+> records for motherboards models. The ACPI method created a bug that when
+> this driver returns error from the probe function because of the
+> unsupported motherboard model, the ACPI subsystem concludes
+> that the EC device does not work properly.
+> 
+> Fixes: 5cd29012028d
+> Bug: https://bugzilla.kernel.org/show_bug.cgi?id=216412
+> Bug: https://bugzilla.redhat.com/show_bug.cgi?id=2121844
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> ---
+>  drivers/hwmon/asus-ec-sensors.c | 413 ++++++++++++++++++--------------
+>  1 file changed, 227 insertions(+), 186 deletions(-)
+> 
+> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+> index 61a4684fc020..206265ea8122 100644
+> --- a/drivers/hwmon/asus-ec-sensors.c
+> +++ b/drivers/hwmon/asus-ec-sensors.c
 
-elapsed time: 1107m
+[ ... ]
 
-configs tested: 58
-configs skipped: 2
+> +
+> +static void cleanup_device(void)
+> +{
+> +	platform_device_unregister(asus_ec_sensors_platform_device);
+> +	platform_driver_unregister(&asus_ec_sensors_platform_driver);
+> +}
+> +
+> +static int __init asus_ec_init(void)
+> +{
+> +	asus_ec_sensors_platform_device =
+> +		platform_create_bundle(&asus_ec_sensors_platform_driver,
+> +				       asus_ec_probe, NULL, 0, NULL, 0);
+> +
+> +	if (IS_ERR(asus_ec_sensors_platform_device))
+> +		return PTR_ERR(asus_ec_sensors_platform_device);
+> +
+> +	return 0;
+> +}
+> +
+> +static void __exit asus_ec_exit(void)
+> +{
+> +	cleanup_device();
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I don't see the point of that extra function. Please drop and call
+platform_device_unregister() as well as platform_driver_unregister()
+directly.
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-m68k                             allmodconfig
-arc                              allyesconfig
-powerpc                          allmodconfig
-alpha                            allyesconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-i386                          randconfig-a001
-sh                               allmodconfig
-x86_64                        randconfig-a004
-i386                          randconfig-a003
-m68k                             allyesconfig
-x86_64                        randconfig-a015
-x86_64                        randconfig-a002
-i386                          randconfig-a005
-i386                                defconfig
-x86_64                         rhel-8.3-kunit
-x86_64                        randconfig-a013
-x86_64                           rhel-8.3-kvm
-x86_64                        randconfig-a006
-x86_64                    rhel-8.3-kselftests
-x86_64                        randconfig-a011
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
-arm                                 defconfig
-s390                 randconfig-r044-20220908
-arc                  randconfig-r043-20220908
-riscv                randconfig-r042-20220908
-arc                  randconfig-r043-20220907
-i386                             allyesconfig
-i386                          randconfig-a014
-arm64                            allyesconfig
-arm                              allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a016
-ia64                             allmodconfig
-
-clang tested configs:
-i386                          randconfig-a002
-x86_64                        randconfig-a005
-x86_64                        randconfig-a014
-x86_64                        randconfig-a001
-i386                          randconfig-a006
-x86_64                        randconfig-a003
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-s390                 randconfig-r044-20220907
-hexagon              randconfig-r041-20220907
-hexagon              randconfig-r041-20220908
-riscv                randconfig-r042-20220907
-hexagon              randconfig-r045-20220908
-hexagon              randconfig-r045-20220907
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +}
+> +
+> +module_init(asus_ec_init);
+> +module_exit(asus_ec_exit);
+>  
+>  module_param_named(mutex_path, mutex_path_override, charp, 0);
+>  MODULE_PARM_DESC(mutex_path,
+> -- 
+> 2.37.3
+> 
