@@ -2,167 +2,569 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D045ECAAD3
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 08:48:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43E34ECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 11:39:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbiIIIsM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Sep 2022 04:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42910 "EHLO
+        id S231423AbiIILjO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Sep 2022 07:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231642AbiIIIsC (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2022 04:48:02 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CE312C480
-        for <linux-hwmon@vger.kernel.org>; Fri,  9 Sep 2022 01:48:01 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id y18so983621ljh.12
-        for <linux-hwmon@vger.kernel.org>; Fri, 09 Sep 2022 01:48:01 -0700 (PDT)
+        with ESMTP id S231415AbiIILin (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2022 07:38:43 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507A014051D;
+        Fri,  9 Sep 2022 04:38:31 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id m1so2059237edb.7;
+        Fri, 09 Sep 2022 04:38:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=rx+Xj6kNsjTGjbwHEWq+tn+y0SwxN5dk8VZnA0vE+cI=;
-        b=mUxhLvLZRdGyYmtuFWlZcNusjoJOhVWVZ1+Bciu2ZmksTLSSjbBOFKEd+oDoZIwibI
-         /2D+zYHfnBky85VAH3kOBX4YRlf0iD36nRB68rtWIWZJbICvwlJLa8kvr+9y/FQf+nQF
-         VfdTlzciU964hWB7seOxgrpvOtUHQTBITo32KaPkRNqCWnT4VYfz/IMZpSC0/VisI6Jt
-         j4orSO0blDZ0nOfNJ6uB3ouqhW+r9+KaK22MSaBt5hEkEV3VxOfXeLHqMJhvpzbouRrG
-         rV6RV/oVpZ4FP/zwUWqQrHMahs8EkI4wYbZycLHWJkg91XTX4rq/6zoLGASGRA7lJqMk
-         YXZg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=CIy/SfUDRIaKPAApTrbsRbtCFddr/ngKopfBIn5YtEk=;
+        b=KPFyYn2cBAJRSCydhR59/hnKuFEoRz/MCERw022Cp5pdOOxE6SgATcgQlPOAI2zHCu
+         Qa060qkJWOrsXRswfRyQks7Jv8ipuZhnVArhXovemhQvq46exynlTg1ALoUeaHreoOs0
+         oTMF/W4i5/I6oErn4E9xErdSM0IQQe4TJCo2w8UZAcNg2b/Y0WPg6AW+41lXp2polwIW
+         ExtS8UCcJ5PbZgJ+aUHiMn5dqBK3pgABehX5LhxVcdWbexUsE3kQtWVkEQWOktKonhkk
+         KXSvA4S5EGp6lTd7X8Qhqk+5lpsuZuh5OGcs3pUlHYS4/ymssL/P4N5aKVW2ChdR7D2g
+         CRXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=rx+Xj6kNsjTGjbwHEWq+tn+y0SwxN5dk8VZnA0vE+cI=;
-        b=FIc8NmbBH7BVtA5XcK7ikO5cSJWDC96h44qZUYhTU2OhxzknLKsbR+oh/Rc14Z3x4k
-         ZfGQiUIXLgIprVnlr8dPBbYSB+HhbdLI9V/qQJ6tv8w7wJPNDAqUAFQ32OYHw6ol6Syl
-         Lud2APclzaNFOUcEICPUZGc5JM22OA9MIJU1gxkLSgDWlWqgSK24TbEk3dZbnG0lxwLm
-         Qg0yu8JMFMEV9QFB7ddj4Ky1EHjWFOtCIudfy2KXgaGyEYox7bx7maCT3XfcrvJCZIHg
-         EyEaz33Wgh8zMEHhneye2N0GDHm22j9/mFzS5tpa3fmYqStie0F4OE5jczoRIPGL+aFq
-         8HCg==
-X-Gm-Message-State: ACgBeo1AaC6GQ/CxwkYpj0uWgj3P4ctBUknT11cK3pe96C13pzDJZN9D
-        zko9G6gNjiVEM3WVn/kLBTsvow==
-X-Google-Smtp-Source: AA6agR4mhgGay9aeTtnG76J2zyjgEOBTNQKaE1Dy8goFKCEU5a4adsTngqcNgiKWYNeNPABlPyJgfg==
-X-Received: by 2002:a2e:bf01:0:b0:25f:df1a:f39d with SMTP id c1-20020a2ebf01000000b0025fdf1af39dmr3901873ljr.365.1662713278501;
-        Fri, 09 Sep 2022 01:47:58 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v8-20020a056512348800b0049707888a61sm177188lfr.293.2022.09.09.01.47.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 01:47:58 -0700 (PDT)
-Message-ID: <8999ed83-4c91-a3d5-3821-d89e3ef11add@linaro.org>
-Date:   Fri, 9 Sep 2022 10:47:56 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=CIy/SfUDRIaKPAApTrbsRbtCFddr/ngKopfBIn5YtEk=;
+        b=NgfZAXb6r27OSMtEpdscf3ZBuqrOM2P3a+LNE2DZ/bG5CnDwZcRlWtYletzozQvFmJ
+         3HBydRQbY9Ka8V5t5qpCJ95WLlTCgqzeRviSweKM/KGsxOMafnZaEF+20ivGsCkdS+1K
+         P5SvIjWbdKfVSN/7zET3SL4RGH1sv49FCdh5NmQPTfQsihRhkiLpZ6fU4G8QXVikAO3+
+         S8WTaiq5SLyKmnqJ+t2AwR55hgeRwbh4qIjXnd+ZTMZWrdhxjTzQ3z99QOGm4m0XjzHW
+         1Bzut9dMrec+kjwdTkDr/mUjJ7YEsZzzhxs35ouRtvIe3qVwZtNO1ComPImG/0m/5pNy
+         8xPQ==
+X-Gm-Message-State: ACgBeo05wfOv7gRpMKjYG47VdbY2F2pEvGJtEfiWUxh0KPE+qIoCiThK
+        x9Dr9W1pgvrXkwy1pcca4zU=
+X-Google-Smtp-Source: AA6agR5di2zDTkZqR80fdUf7SU0vrlz7psq2BMuOKYJEc96UoLKxT98QBr96gvF1F2HOM0EEbEN1QA==
+X-Received: by 2002:a05:6402:4449:b0:445:cdb6:2de9 with SMTP id o9-20020a056402444900b00445cdb62de9mr11049338edb.59.1662723508670;
+        Fri, 09 Sep 2022 04:38:28 -0700 (PDT)
+Received: from caracal.museclub.art (p200300cf9f3f2f002177673bc12404e5.dip0.t-ipconnect.de. [2003:cf:9f3f:2f00:2177:673b:c124:4e5])
+        by smtp.googlemail.com with ESMTPSA id j10-20020a17090623ea00b007789e7b47besm179632ejg.25.2022.09.09.04.38.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 04:38:28 -0700 (PDT)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+To:     eugene.shalygin@gmail.com
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (asus-ec-sensors) autoload module via DMI data
+Date:   Fri,  9 Sep 2022 13:38:20 +0200
+Message-Id: <20220909113820.92360-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v7 1/4] drivers: hwmon: Add max31760 fan speed controller
- driver
-Content-Language: en-US
-To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, jdelvare@suse.com,
-        linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-References: <20220909071618.231246-1-Ibrahim.Tilki@analog.com>
- <20220909071618.231246-2-Ibrahim.Tilki@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220909071618.231246-2-Ibrahim.Tilki@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 09/09/2022 09:16, Ibrahim Tilki wrote:
-> MAX31760 is a precision fan speed controller with nonvolatile lookup table.
-> Device has one internal and one external temperature sensor support.
-> Controls two fans and measures their speeds. Generates hardware alerts when
-> programmable max and critical temperatures are exceeded.
-> 
-> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-> Reviewed-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
+Replace autoloading data based on the ACPI EC device with the DMI
+records for motherboards models. The ACPI method created a bug that when
+this driver returns error from the probe function because of the
+unsupported motherboard model, the ACPI subsystem concludes
+that the EC device does not work properly.
 
+Fixes: 5cd29012028d
+Bug: https://bugzilla.kernel.org/show_bug.cgi?id=216412
+Bug: https://bugzilla.redhat.com/show_bug.cgi?id=2121844
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+---
+ drivers/hwmon/asus-ec-sensors.c | 413 ++++++++++++++++++--------------
+ 1 file changed, 227 insertions(+), 186 deletions(-)
 
-> +
-> +static int max31760_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct max31760_state *state;
-> +	struct device *hwmon_dev;
-> +	int ret;
-> +
-> +	state = devm_kzalloc(dev, sizeof(struct max31760_state), GFP_KERNEL);
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 61a4684fc020..206265ea8122 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -266,9 +266,7 @@ static const struct ec_sensor_info sensors_family_intel_600[] = {
+ #define SENSOR_SET_WATER_BLOCK                                                 \
+ 	(SENSOR_TEMP_WATER_BLOCK_IN | SENSOR_TEMP_WATER_BLOCK_OUT)
+ 
+-
+ struct ec_board_info {
+-	const char *board_names[MAX_IDENTICAL_BOARD_VARIATIONS];
+ 	unsigned long sensors;
+ 	/*
+ 	 * Defines which mutex to use for guarding access to the state and the
+@@ -281,152 +279,194 @@ struct ec_board_info {
+ 	enum board_family family;
+ };
+ 
+-static const struct ec_board_info board_info[] = {
+-	{
+-		.board_names = {"PRIME X470-PRO"},
+-		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+-			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
+-			SENSOR_FAN_CPU_OPT |
+-			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
+-		.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
+-		.family = family_amd_400_series,
+-	},
+-	{
+-		.board_names = {"PRIME X570-PRO"},
+-		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
+-			SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET,
+-		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+-		.family = family_amd_500_series,
+-	},
+-	{
+-		.board_names = {"ProArt X570-CREATOR WIFI"},
+-		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
+-			SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CPU_OPT |
+-			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
+-	},
+-	{
+-		.board_names = {"Pro WS X570-ACE"},
+-		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
+-			SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET |
+-			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
+-		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+-		.family = family_amd_500_series,
+-	},
+-	{
+-		.board_names = {"ROG CROSSHAIR VIII DARK HERO"},
+-		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+-			SENSOR_TEMP_T_SENSOR |
+-			SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
+-			SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW |
+-			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
+-		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+-		.family = family_amd_500_series,
+-	},
+-	{
+-		.board_names = {
+-			"ROG CROSSHAIR VIII FORMULA",
+-			"ROG CROSSHAIR VIII HERO",
+-			"ROG CROSSHAIR VIII HERO (WI-FI)",
+-		},
+-		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+-			SENSOR_TEMP_T_SENSOR |
+-			SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
+-			SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
+-			SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU |
+-			SENSOR_IN_CPU_CORE,
+-		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+-		.family = family_amd_500_series,
+-	},
+-	{
+-		.board_names = {
+-			"ROG MAXIMUS XI HERO",
+-			"ROG MAXIMUS XI HERO (WI-FI)",
+-		},
+-		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+-			SENSOR_TEMP_T_SENSOR |
+-			SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
+-			SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW,
+-		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+-		.family = family_intel_300_series,
+-	},
+-	{
+-		.board_names = {"ROG CROSSHAIR VIII IMPACT"},
+-		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+-			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
+-			SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
+-			SENSOR_IN_CPU_CORE,
+-		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+-		.family = family_amd_500_series,
+-	},
+-	{
+-		.board_names = {"ROG STRIX B550-E GAMING"},
+-		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+-			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
+-			SENSOR_FAN_CPU_OPT,
+-		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+-		.family = family_amd_500_series,
+-	},
+-	{
+-		.board_names = {"ROG STRIX B550-I GAMING"},
+-		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+-			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
+-			SENSOR_FAN_VRM_HS | SENSOR_CURR_CPU |
+-			SENSOR_IN_CPU_CORE,
+-		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+-		.family = family_amd_500_series,
+-	},
+-	{
+-		.board_names = {"ROG STRIX X570-E GAMING"},
+-		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+-			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
+-			SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
+-			SENSOR_IN_CPU_CORE,
+-		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+-		.family = family_amd_500_series,
+-	},
+-	{
+-		.board_names = {"ROG STRIX X570-E GAMING WIFI II"},
+-		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+-			SENSOR_TEMP_T_SENSOR | SENSOR_CURR_CPU |
+-			SENSOR_IN_CPU_CORE,
+-		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+-		.family = family_amd_500_series,
+-	},
+-	{
+-		.board_names = {"ROG STRIX X570-F GAMING"},
+-		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+-			SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET,
+-		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+-		.family = family_amd_500_series,
+-	},
+-	{
+-		.board_names = {"ROG STRIX X570-I GAMING"},
+-		.sensors = SENSOR_TEMP_CHIPSET | SENSOR_TEMP_VRM |
+-			SENSOR_TEMP_T_SENSOR |
+-			SENSOR_FAN_VRM_HS | SENSOR_FAN_CHIPSET |
+-			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
+-		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+-		.family = family_amd_500_series,
+-	},
+-	{
+-		.board_names = {"ROG STRIX Z690-A GAMING WIFI D4"},
+-		.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM,
+-		.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
+-		.family = family_intel_600_series,
+-	},
+-	{
+-		.board_names = {"ROG ZENITH II EXTREME"},
+-		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
+-			SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
+-			SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET | SENSOR_FAN_VRM_HS |
+-			SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE |
+-			SENSOR_SET_WATER_BLOCK |
+-			SENSOR_TEMP_T_SENSOR_2 | SENSOR_TEMP_SENSOR_EXTRA_1 |
+-			SENSOR_TEMP_SENSOR_EXTRA_2 | SENSOR_TEMP_SENSOR_EXTRA_3,
+-		.mutex_path = ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0,
+-		.family = family_amd_500_series,
+-	},
+-	{}
++static const struct ec_board_info board_info_prime_x470_pro = {
++	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
++		SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
++		SENSOR_FAN_CPU_OPT |
++		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
++	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
++	.family = family_amd_400_series,
++};
++
++static const struct ec_board_info board_info_prime_x570_pro = {
++	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
++		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++	.family = family_amd_500_series,
++};
++
++static const struct ec_board_info board_info_pro_art_x570_creator_wifi = {
++	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
++		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CPU_OPT |
++		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
++	.family = family_amd_500_series,
++};
++
++static const struct ec_board_info board_info_pro_ws_x570_ace = {
++	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
++		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET |
++		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++	.family = family_amd_500_series,
++};
++
++static const struct ec_board_info board_info_crosshair_viii_dark_hero = {
++	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
++		SENSOR_TEMP_T_SENSOR |
++		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
++		SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW |
++		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++	.family = family_amd_500_series,
++};
++
++static const struct ec_board_info board_info_crosshair_viii_hero = {
++	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
++		SENSOR_TEMP_T_SENSOR |
++		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
++		SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
++		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU |
++		SENSOR_IN_CPU_CORE,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++	.family = family_amd_500_series,
++};
++
++static const struct ec_board_info board_info_maximus_xi_hero = {
++	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
++		SENSOR_TEMP_T_SENSOR |
++		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
++		SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++	.family = family_intel_300_series,
++};
++
++static const struct ec_board_info board_info_crosshair_viii_impact = {
++	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
++		SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
++		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
++		SENSOR_IN_CPU_CORE,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++	.family = family_amd_500_series,
++};
++
++static const struct ec_board_info board_info_strix_b550_e_gaming = {
++	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
++		SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
++		SENSOR_FAN_CPU_OPT,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++	.family = family_amd_500_series,
++};
++
++static const struct ec_board_info board_info_strix_b550_i_gaming = {
++	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
++		SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
++		SENSOR_FAN_VRM_HS | SENSOR_CURR_CPU |
++		SENSOR_IN_CPU_CORE,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++	.family = family_amd_500_series,
++};
++
++static const struct ec_board_info board_info_strix_x570_e_gaming = {
++	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
++		SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
++		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
++		SENSOR_IN_CPU_CORE,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++	.family = family_amd_500_series,
++};
++
++static const struct ec_board_info board_info_strix_x570_e_gaming_wifi_ii = {
++	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
++		SENSOR_TEMP_T_SENSOR | SENSOR_CURR_CPU |
++		SENSOR_IN_CPU_CORE,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++	.family = family_amd_500_series,
++};
++
++static const struct ec_board_info board_info_strix_x570_f_gaming = {
++	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
++		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++	.family = family_amd_500_series,
++};
++
++static const struct ec_board_info board_info_strix_x570_i_gaming = {
++	.sensors = SENSOR_TEMP_CHIPSET | SENSOR_TEMP_VRM |
++		SENSOR_TEMP_T_SENSOR |
++		SENSOR_FAN_VRM_HS | SENSOR_FAN_CHIPSET |
++		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++	.family = family_amd_500_series,
++};
++
++static const struct ec_board_info board_info_strix_z690_a_gaming_wifi_d4 = {
++	.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
++	.family = family_intel_600_series,
++};
++
++static const struct ec_board_info board_info_zenith_ii_extreme = {
++	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
++		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
++		SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET | SENSOR_FAN_VRM_HS |
++		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE |
++		SENSOR_SET_WATER_BLOCK |
++		SENSOR_TEMP_T_SENSOR_2 | SENSOR_TEMP_SENSOR_EXTRA_1 |
++		SENSOR_TEMP_SENSOR_EXTRA_2 | SENSOR_TEMP_SENSOR_EXTRA_3,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0,
++	.family = family_amd_500_series,
++};
++
++#define DMI_EXACT_MATCH_ASUS_BOARD_NAME(name, board_info)                      \
++	{                                                                      \
++		.matches = {                                                   \
++			DMI_EXACT_MATCH(DMI_BOARD_VENDOR,                      \
++					"ASUSTeK COMPUTER INC."),              \
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, name),                 \
++		},                                                             \
++		.driver_data = (void *)board_info,                              \
++	}
++
++static const struct dmi_system_id dmi_table[] = {
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X470-PRO",
++					&board_info_prime_x470_pro),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X570-PRO",
++					&board_info_prime_x570_pro),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt X570-CREATOR WIFI",
++					&board_info_pro_art_x570_creator_wifi),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS X570-ACE",
++					&board_info_pro_ws_x570_ace),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII DARK HERO",
++					&board_info_crosshair_viii_dark_hero),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII FORMULA",
++					&board_info_crosshair_viii_hero),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII HERO",
++					&board_info_crosshair_viii_hero),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII HERO (WI-FI)",
++					&board_info_crosshair_viii_hero),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS XI HERO",
++					&board_info_maximus_xi_hero),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS XI HERO (WI-FI)",
++					&board_info_maximus_xi_hero),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII IMPACT",
++					&board_info_crosshair_viii_impact),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-E GAMING",
++					&board_info_strix_b550_e_gaming),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-I GAMING",
++					&board_info_strix_b550_i_gaming),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X570-E GAMING",
++					&board_info_strix_x570_e_gaming),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X570-E GAMING WIFI II",
++					&board_info_strix_x570_e_gaming_wifi_ii),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X570-F GAMING",
++					&board_info_strix_x570_f_gaming),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X570-I GAMING",
++					&board_info_strix_x570_i_gaming),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z690-A GAMING WIFI D4",
++					&board_info_strix_z690_a_gaming_wifi_d4),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME",
++					&board_info_zenith_ii_extreme),
++	{},
+ };
+ 
+ struct ec_sensor {
+@@ -537,12 +577,12 @@ static int find_ec_sensor_index(const struct ec_sensors_data *ec,
+ 	return -ENOENT;
+ }
+ 
+-static int __init bank_compare(const void *a, const void *b)
++static int bank_compare(const void *a, const void *b)
+ {
+ 	return *((const s8 *)a) - *((const s8 *)b);
+ }
+ 
+-static void __init setup_sensor_data(struct ec_sensors_data *ec)
++static void setup_sensor_data(struct ec_sensors_data *ec)
+ {
+ 	struct ec_sensor *s = ec->sensors;
+ 	bool bank_found;
+@@ -574,7 +614,7 @@ static void __init setup_sensor_data(struct ec_sensors_data *ec)
+ 	sort(ec->banks, ec->nr_banks, 1, bank_compare, NULL);
+ }
+ 
+-static void __init fill_ec_registers(struct ec_sensors_data *ec)
++static void fill_ec_registers(struct ec_sensors_data *ec)
+ {
+ 	const struct ec_sensor_info *si;
+ 	unsigned int i, j, register_idx = 0;
+@@ -589,7 +629,7 @@ static void __init fill_ec_registers(struct ec_sensors_data *ec)
+ 	}
+ }
+ 
+-static int __init setup_lock_data(struct device *dev)
++static int setup_lock_data(struct device *dev)
+ {
+ 	const char *mutex_path;
+ 	int status;
+@@ -812,7 +852,7 @@ static umode_t asus_ec_hwmon_is_visible(const void *drvdata,
+ 	return find_ec_sensor_index(state, type, channel) >= 0 ? S_IRUGO : 0;
+ }
+ 
+-static int __init
++static int
+ asus_ec_hwmon_add_chan_info(struct hwmon_channel_info *asus_ec_hwmon_chan,
+ 			     struct device *dev, int num,
+ 			     enum hwmon_sensor_types type, u32 config)
+@@ -841,27 +881,15 @@ static struct hwmon_chip_info asus_ec_chip_info = {
+ 	.ops = &asus_ec_hwmon_ops,
+ };
+ 
+-static const struct ec_board_info * __init get_board_info(void)
++static const struct ec_board_info *get_board_info(void)
+ {
+-	const char *dmi_board_vendor = dmi_get_system_info(DMI_BOARD_VENDOR);
+-	const char *dmi_board_name = dmi_get_system_info(DMI_BOARD_NAME);
+-	const struct ec_board_info *board;
+-
+-	if (!dmi_board_vendor || !dmi_board_name ||
+-	    strcasecmp(dmi_board_vendor, "ASUSTeK COMPUTER INC."))
+-		return NULL;
+-
+-	for (board = board_info; board->sensors; board++) {
+-		if (match_string(board->board_names,
+-				 MAX_IDENTICAL_BOARD_VARIATIONS,
+-				 dmi_board_name) >= 0)
+-			return board;
+-	}
++	const struct dmi_system_id *dmi_entry;
+ 
+-	return NULL;
++	dmi_entry = dmi_first_match(dmi_table);
++	return dmi_entry ? dmi_entry->driver_data : NULL;
+ }
+ 
+-static int __init asus_ec_probe(struct platform_device *pdev)
++static int asus_ec_probe(struct platform_device *pdev)
+ {
+ 	const struct hwmon_channel_info **ptr_asus_ec_ci;
+ 	int nr_count[hwmon_max] = { 0 }, nr_types = 0;
+@@ -970,29 +998,42 @@ static int __init asus_ec_probe(struct platform_device *pdev)
+ 	return PTR_ERR_OR_ZERO(hwdev);
+ }
+ 
+-
+-static const struct acpi_device_id acpi_ec_ids[] = {
+-	/* Embedded Controller Device */
+-	{ "PNP0C09", 0 },
+-	{}
+-};
++MODULE_DEVICE_TABLE(dmi, dmi_table);
+ 
+ static struct platform_driver asus_ec_sensors_platform_driver = {
+ 	.driver = {
+ 		.name	= "asus-ec-sensors",
+-		.acpi_match_table = acpi_ec_ids,
+ 	},
++	.probe = asus_ec_probe,
+ };
+ 
+-MODULE_DEVICE_TABLE(acpi, acpi_ec_ids);
+-/*
+- * we use module_platform_driver_probe() rather than module_platform_driver()
+- * because the probe function (and its dependants) are marked with __init, which
+- * means we can't put it into the .probe member of the platform_driver struct
+- * above, and we can't mark the asus_ec_sensors_platform_driver object as __init
+- * because the object is referenced from the module exit code.
+- */
+-module_platform_driver_probe(asus_ec_sensors_platform_driver, asus_ec_probe);
++static struct platform_device *asus_ec_sensors_platform_device;
++
++static void cleanup_device(void)
++{
++	platform_device_unregister(asus_ec_sensors_platform_device);
++	platform_driver_unregister(&asus_ec_sensors_platform_driver);
++}
++
++static int __init asus_ec_init(void)
++{
++	asus_ec_sensors_platform_device =
++		platform_create_bundle(&asus_ec_sensors_platform_driver,
++				       asus_ec_probe, NULL, 0, NULL, 0);
++
++	if (IS_ERR(asus_ec_sensors_platform_device))
++		return PTR_ERR(asus_ec_sensors_platform_device);
++
++	return 0;
++}
++
++static void __exit asus_ec_exit(void)
++{
++	cleanup_device();
++}
++
++module_init(asus_ec_init);
++module_exit(asus_ec_exit);
+ 
+ module_param_named(mutex_path, mutex_path_override, charp, 0);
+ MODULE_PARM_DESC(mutex_path,
+-- 
+2.37.3
 
-sizeof(*)
-
-run checkpatch on your code
-
-> +	if (!state)
-> +		return -ENOMEM;
-> +
-> +	state->regmap = devm_regmap_init_i2c(client, &regmap_config);
-> +	if (IS_ERR(state->regmap))
-> +		return dev_err_probe(dev,
-> +				     PTR_ERR(state->regmap),
-> +				     "regmap initialization failed\n");
-> +
-> +	dev_set_drvdata(dev, state);
-> +
-> +	/* Set alert output to comparator mode */
-> +	ret = regmap_set_bits(state->regmap, REG_CR2, CR2_ALERTS);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "cannot write register\n");
-> +
-> +	max31760_create_lut_nodes(state);
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
-> +							 state,
-> +							 &max31760_chip_info,
-> +							 state->groups);
-> +
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
-> +}
-> +
-> +static const struct of_device_id max31760_of_match[] = {
-> +	{.compatible = "adi,max31760"},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, max31760_of_match);
-> +
-> +static const struct i2c_device_id max31760_id[] = {
-> +	{"max31760"},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, max31760_id);
-> +
-> +static int __maybe_unused max31760_suspend(struct device *dev)
-> +{
-> +	struct max31760_state *state = dev_get_drvdata(dev);
-> +
-> +	return regmap_set_bits(state->regmap, REG_CR2, CR2_STBY);
-> +}
-> +
-> +static int __maybe_unused max31760_resume(struct device *dev)
-> +{
-> +	struct max31760_state *state = dev_get_drvdata(dev);
-> +
-> +	return regmap_clear_bits(state->regmap, REG_CR2, CR2_STBY);
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(max31760_pm_ops, max31760_suspend, max31760_resume);
-
-DEFINE_SIMPLE_DEV_PM_OPS and drop maybe_unused.
-
-
-> +
-> +static struct i2c_driver max31760_driver = {
-> +	.class		= I2C_CLASS_HWMON,
-> +	.driver = {
-> +		.name	= "max31760",
-> +		.of_match_table = of_match_ptr(max31760_of_match),
-
-of_match_ptr goes with maybe_unuses. You should see compile test warnings...
-
-
-Best regards,
-Krzysztof
