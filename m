@@ -2,118 +2,119 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C21BC54EE9
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 02:18:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A32BECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 07:17:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbiIICSu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Sep 2022 22:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
+        id S231263AbiIIHRL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Sep 2022 03:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiIICSs (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Sep 2022 22:18:48 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216C8D418E;
-        Thu,  8 Sep 2022 19:18:47 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id f24so502593plr.1;
-        Thu, 08 Sep 2022 19:18:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=0EaT3oPCBDU5Z7kWWvo6cn5ct86HBA+ojESaUDUfzao=;
-        b=PfFNrlZDEZxep2/Ixh3gWYW/hDC4f4kRILLVZY+MPvDOhnfAps+oC0mAoC4zy9I8u0
-         FlDs05Uhk/m9ppERIgElnZ2mq75y2tp7C8Q7exQPr0j2PNDoxi2/uhXfJpTkwD5p1HA3
-         MFGjfDxHKb/A2lDT7VFDXAaok18PgO4VLuwDgYAqUD/zdDsLRB/TDfhkVRS2eesg5Tqg
-         Td9ZWCCMhaSJ9gTmzcKcaGgZ80FdAxfTT1F+zAPiCSYMenQHl/cPsMTaiJOZWjb/jic6
-         6TLD2EEsBgvG3tm6/qudvhyp1a2nrmRsG2QRXRA/tsGFOqT+UtXy7w8XLDnG9AgVaSrM
-         P+gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=0EaT3oPCBDU5Z7kWWvo6cn5ct86HBA+ojESaUDUfzao=;
-        b=G8uXhDovPTNYm98roWTmMwMC7dYUsXTE2ILbbhyeG6q8ihvkVWsvJD5WRQg5S92mjT
-         XEpRmSrqOUL3fBGlKUHPpph2vj5hw2voq00OF3gGq/z/2B3uFcku4lIYmIqELaeVlue/
-         FiSU/gk255+OaCshdFEnYWTh4HXAB5OHC2nr3qid3F2OS2dGrWkEPSxM13dJLMxRHIVu
-         i8303QC8XOs4cXHMhf3haLeE2FKL9TwjdecygwZxQkUjEqzBm3hC6jOlN6lUrHcslpGf
-         jv4IEt1AwB2Ya9Pv0FPEU7ApzD+JFKek6eZdI0QZjYRWfL2H7FrWaGGMXII9c5KdPNLe
-         Gu2A==
-X-Gm-Message-State: ACgBeo17exXrcQ71mPIMiPgQd/xaW9y9y3tt6Wit60+1hG9BuSWMhND2
-        odaKnTfCvsB0UAss1FH0wbJwj1cGgyEWzw==
-X-Google-Smtp-Source: AA6agR5EbuJ/5g3En53qApXKot3Jz4yn2Jk+lVAgn21GxoeTzUgkpl/uNAL1HKQEf7Z5lESUOlQLzg==
-X-Received: by 2002:a17:90b:3d04:b0:200:9d93:f6f with SMTP id pt4-20020a17090b3d0400b002009d930f6fmr7022135pjb.185.1662689926685;
-        Thu, 08 Sep 2022 19:18:46 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y81-20020a626454000000b0053ee5c7b9fbsm325160pfb.99.2022.09.08.19.18.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 19:18:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 8 Sep 2022 19:18:45 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
-        rtanwar@maxlinear.com, andriy.shevchenko@intel.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v5 09/21] hwmon: (mr75203) skip reset-control deassert
- for SOCs that don't support it
-Message-ID: <20220909021845.GA4179532@roeck-us.net>
-References: <20220908152449.35457-1-farbere@amazon.com>
- <20220908152449.35457-10-farbere@amazon.com>
+        with ESMTP id S229973AbiIIHRK (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2022 03:17:10 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2048BBCCE1;
+        Fri,  9 Sep 2022 00:17:08 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28940pps031612;
+        Fri, 9 Sep 2022 03:16:50 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3jf8yc1jae-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 03:16:50 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 2897GnpU055607
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 9 Sep 2022 03:16:49 -0400
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Fri, 9 Sep 2022 03:16:48 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Fri, 9 Sep 2022 03:16:48 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Fri, 9 Sep 2022 03:16:48 -0400
+Received: from ibrahim-vm.ad.analog.com ([10.158.19.28])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2897GXRg028680;
+        Fri, 9 Sep 2022 03:16:36 -0400
+From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>
+CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        <linux-hwmon@vger.kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v7 0/4] hwmon: Add max31760 fan speed controller
+Date:   Fri, 9 Sep 2022 10:16:14 +0300
+Message-ID: <20220909071618.231246-1-Ibrahim.Tilki@analog.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908152449.35457-10-farbere@amazon.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: UO5DOrrCle8szCn47LjXT6SPj1gJWkPm
+X-Proofpoint-ORIG-GUID: UO5DOrrCle8szCn47LjXT6SPj1gJWkPm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-09_03,2022-09-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ impostorscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=979
+ lowpriorityscore=0 mlxscore=0 bulkscore=0 spamscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209090024
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 03:24:37PM +0000, Eliav Farber wrote:
-> Don't fail the probe function and don't deassert the reset controller if
-> a "reset" property doesn't exist in the device tree.
-> 
-> Change is done for SOCs that don't support a reset controller.
-> 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+changes in v7:
+  - make max31760_read_string static
 
-Applied to hwmon-next.
+changes in v6:
+  - update description of hwmon documentation
+  - add hwmon documentation to index.rst
 
-Thanks,
-Guenter
+changes in v5:
+  - add dt-bindings documentation
+  - add maintainer
 
-> ---
-> V3 -> v2:
-> - Change "reset" property to be optional instead of skipping it.
-> 
->  drivers/hwmon/mr75203.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-> index 41e3d3b54baf..19ec9fb91202 100644
-> --- a/drivers/hwmon/mr75203.c
-> +++ b/drivers/hwmon/mr75203.c
-> @@ -551,14 +551,17 @@ static int mr75203_probe(struct platform_device *pdev)
->  		return ret;
->  	}
->  
-> -	pvt->rst = devm_reset_control_get_exclusive(dev, NULL);
-> +	pvt->rst = devm_reset_control_get_optional_exclusive(dev, NULL);
->  	if (IS_ERR(pvt->rst))
->  		return dev_err_probe(dev, PTR_ERR(pvt->rst),
->  				     "failed to get reset control\n");
->  
-> -	ret = pvt_reset_control_deassert(dev, pvt);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "cannot deassert reset control\n");
-> +	if (pvt->rst) {
-> +		ret = pvt_reset_control_deassert(dev, pvt);
-> +		if (ret)
-> +			return dev_err_probe(dev, ret,
-> +					     "cannot deassert reset control\n");
-> +	}
->  
->  	ret = regmap_read(pvt->c_map, PVT_IP_CONFIG, &val);
->  	if(ret < 0)
+changes in v4:
+  - use sysfs_emit instead of sprintf
+  - use kstrtou8 for pwm
+  - use closest match for pwm1_auto_point_temp_hyst
+
+changes in v3:
+  - add regmap cache
+  - remove pwm1_auto_point[1-48]_{temp,temp_hyst} attributes
+  - add pwm1_auto_point_temp_hyst attribute
+
+changes in v2:
+  - remove pulse_per_rev variable in tach_to_rpm
+  - remove temperature max_hyst and crit_hyst
+  - strict value checking for fan_enable and pwm_enable
+  - do not clamp pwm value for Look-up table
+  - add sysfs_attr_init call
+  - add documentation
+
+
+Ibrahim Tilki (4):
+  drivers: hwmon: Add max31760 fan speed controller driver
+  docs: hwmon: add max31760 documentation
+  dt-bindings: hwmon: Add bindings for max31760
+  MAINTAINERS: Add maintainer for hwmon/max31760
+
+ .../bindings/hwmon/adi,max31760.yaml          |  44 ++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/max31760.rst              |  77 +++
+ MAINTAINERS                                   |   9 +
+ drivers/hwmon/Kconfig                         |  12 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/max31760.c                      | 595 ++++++++++++++++++
+ 7 files changed, 739 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
+ create mode 100644 Documentation/hwmon/max31760.rst
+ create mode 100644 drivers/hwmon/max31760.c
+
+-- 
+2.36.1
+
