@@ -2,100 +2,133 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD4E5C6FA82
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 13:38:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFC10ECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 13:48:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbiIINig (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Sep 2022 09:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
+        id S231646AbiIINsH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Sep 2022 09:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiIINi2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2022 09:38:28 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C078139AE6;
-        Fri,  9 Sep 2022 06:38:20 -0700 (PDT)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 289C5AT0002225;
-        Fri, 9 Sep 2022 09:38:02 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3jfu4m4avs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Sep 2022 09:38:02 -0400
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 289Dc0at042517
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 9 Sep 2022 09:38:00 -0400
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Fri, 9 Sep 2022 09:38:00 -0400
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Fri, 9 Sep 2022 09:37:59 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Fri, 9 Sep 2022 09:37:59 -0400
-Received: from ibrahim-vm.ad.analog.com ([10.158.19.28])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 289DbUun018872;
-        Fri, 9 Sep 2022 09:37:51 -0400
-From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>
-CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        <linux-hwmon@vger.kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v8 4/4] MAINTAINERS: Add maintainer for hwmon/max31760
-Date:   Fri, 9 Sep 2022 16:37:18 +0300
-Message-ID: <20220909133718.388213-5-Ibrahim.Tilki@analog.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220909133718.388213-1-Ibrahim.Tilki@analog.com>
-References: <20220909133718.388213-1-Ibrahim.Tilki@analog.com>
+        with ESMTP id S231814AbiIINrv (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2022 09:47:51 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D9413FA6F
+        for <linux-hwmon@vger.kernel.org>; Fri,  9 Sep 2022 06:47:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662731254; x=1694267254;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=40R44W3EMWDBfVpNLqLkiB/uXD2m7rqsGJSZtwY0uFc=;
+  b=T7rlc2s6YBtB4bg28y9z/ZHbDFStjlS5NY2K0u9eMkZzKOxCOdm2+KFV
+   zO3SZQ6H+ogEw+xUDnvQ5RynKwBcObv5uwTUX8oKq/v+I9fazOTPVlMlL
+   16jofWgevRBuvHOY9o0Zn2oIIZ95kq9C/vHlG8S3SmaKXbjeDJ090sjWI
+   016B23E93wZwyspl6rE/ydiNccdILSD/1jUl9/q55dAufftAITmgBhqSq
+   7pOsjYi0DZSX9mIZG7QzVZ4Rn0AsUTlPw4asxVv+GJXAsSKzcFHIU4qmX
+   yw79N9AJzHW1gShvU+s8plTpU9KGd5U+j8gABBt3haUoNOaEirn/W39og
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="295057334"
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="295057334"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 06:46:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="648442854"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 09 Sep 2022 06:46:26 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWeKv-0001Ff-1w;
+        Fri, 09 Sep 2022 13:46:25 +0000
+Date:   Fri, 09 Sep 2022 21:45:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 32505e87ea13e10bdc890ee811ddf1b98bd75269
+Message-ID: <631b4376.WGfmEiQ5EtSt4wGG%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: OqF5oOYmBFMf20jVWjMMB3nq1eJOVHaa
-X-Proofpoint-GUID: OqF5oOYmBFMf20jVWjMMB3nq1eJOVHaa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-09_08,2022-09-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- adultscore=0 priorityscore=1501 suspectscore=0 phishscore=0 malwarescore=0
- impostorscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 mlxlogscore=698
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209090047
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add maintainer for hwmon/max31760 driver
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 32505e87ea13e10bdc890ee811ddf1b98bd75269  hwmon: (aquacomputer_d5next) Add support for Aquacomputer High Flow Next
 
-Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+elapsed time: 1107m
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f1390b827..78ab41c92 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1334,6 +1334,15 @@ F:	drivers/iio/amplifiers/hmc425a.c
- F:	drivers/staging/iio/*/ad*
- X:	drivers/iio/*/adjd*
- 
-+ANALOG DEVICES INC MAX31760 DRIVER
-+M:	Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-+S:	Maintained
-+W:	http://wiki.analog.com/
-+W:	https://ez.analog.com/linux-software-drivers
-+F:	Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
-+F:	Documentation/hwmon/max31760.rst
-+F:	drivers/hwmon/max31760.c
-+
- ANALOGBITS PLL LIBRARIES
- M:	Paul Walmsley <paul.walmsley@sifive.com>
- S:	Supported
+configs tested: 58
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+m68k                             allmodconfig
+arc                              allyesconfig
+powerpc                          allmodconfig
+alpha                            allyesconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+i386                          randconfig-a001
+sh                               allmodconfig
+x86_64                        randconfig-a004
+i386                          randconfig-a003
+m68k                             allyesconfig
+x86_64                        randconfig-a015
+x86_64                        randconfig-a002
+i386                          randconfig-a005
+i386                                defconfig
+x86_64                         rhel-8.3-kunit
+x86_64                        randconfig-a013
+x86_64                           rhel-8.3-kvm
+x86_64                        randconfig-a006
+x86_64                    rhel-8.3-kselftests
+x86_64                        randconfig-a011
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+arm                                 defconfig
+s390                 randconfig-r044-20220908
+arc                  randconfig-r043-20220908
+riscv                randconfig-r042-20220908
+arc                  randconfig-r043-20220907
+i386                             allyesconfig
+i386                          randconfig-a014
+arm64                            allyesconfig
+arm                              allyesconfig
+i386                          randconfig-a012
+i386                          randconfig-a016
+ia64                             allmodconfig
+
+clang tested configs:
+i386                          randconfig-a002
+x86_64                        randconfig-a005
+x86_64                        randconfig-a014
+x86_64                        randconfig-a001
+i386                          randconfig-a006
+x86_64                        randconfig-a003
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+s390                 randconfig-r044-20220907
+hexagon              randconfig-r041-20220907
+hexagon              randconfig-r041-20220908
+riscv                randconfig-r042-20220907
+hexagon              randconfig-r045-20220908
+hexagon              randconfig-r045-20220907
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+
 -- 
-2.36.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
