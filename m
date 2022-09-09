@@ -2,212 +2,126 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0E65ECAAD3
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 13:18:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1078AC6FA82
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 13:38:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiIINS2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Sep 2022 09:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
+        id S229622AbiIINiK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Sep 2022 09:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbiIINS1 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2022 09:18:27 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B06AB1A4
-        for <linux-hwmon@vger.kernel.org>; Fri,  9 Sep 2022 06:18:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662729506; x=1694265506;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1FgZnCglKQIMlqYB26IamcAnsZFNI+MXt0B8BhamrB0=;
-  b=VQeaGIjPTFHtTvynfVxgQGqwaVUpa/AC6LYwmWJjBVzGvhjCMmbxvSgA
-   xfLpvz0DwTNvgWkBBdEnuYAnjrXE6fme3m3cfeO0a+V7h/NmxG+Cb3Iwr
-   vHtRyFrMS2Nub/TkGQznH0Hn3a7YpplCf/lo6VxXMYxPZv7+9E/RYmWT3
-   WwHgljl1u3MDvuDaXNaTatCdhdtV5PpdK+7IgucZ5VQy6pTC+Sf+BwHpy
-   aNYDz4pn03+SiTLUn3Z1vu483qmwAh6Qsl9nh2TX8JiV54UdUT+DQy6Wg
-   EKeWWOag64RFKYrS4cMP5LnMxXEL4IR8iW/AX/+ErOzK7MXe2ZMHTimf7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="361426186"
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="361426186"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 06:18:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="943773246"
-Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 09 Sep 2022 06:18:25 -0700
-Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oWdto-0001Cs-1e;
-        Fri, 09 Sep 2022 13:18:24 +0000
-Date:   Fri, 09 Sep 2022 21:17:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- e43212e0f55dc2d6b15d6c174cc0a64b25fab5e7
-Message-ID: <631b3cef.Qk+1Zd7/z6CFHcvv%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229598AbiIINiJ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2022 09:38:09 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222C512B294;
+        Fri,  9 Sep 2022 06:38:08 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 289DAOwH030782;
+        Fri, 9 Sep 2022 09:37:50 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3jf8yc3ppk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 09:37:49 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 289DbmFU042441
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 9 Sep 2022 09:37:48 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Fri, 9 Sep 2022 09:37:47 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Fri, 9 Sep 2022 09:37:47 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Fri, 9 Sep 2022 09:37:47 -0400
+Received: from ibrahim-vm.ad.analog.com ([10.158.19.28])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 289DbUuj018872;
+        Fri, 9 Sep 2022 09:37:33 -0400
+From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>
+CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        <linux-hwmon@vger.kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v8 0/4] hwmon: Add max31760 fan speed controller
+Date:   Fri, 9 Sep 2022 16:37:14 +0300
+Message-ID: <20220909133718.388213-1-Ibrahim.Tilki@analog.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: 2qJPxa8D7yW71o9WLeWB5S7bfn2LySoI
+X-Proofpoint-ORIG-GUID: 2qJPxa8D7yW71o9WLeWB5S7bfn2LySoI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-09_08,2022-09-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ impostorscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=899
+ lowpriorityscore=0 mlxscore=0 bulkscore=0 spamscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209090047
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: e43212e0f55dc2d6b15d6c174cc0a64b25fab5e7  hwmon: (mr75203) enable polling for all VM channels
+changes in v8:
+  - use sizeof(*)
+  - use DEFINE_SIMPLE_DEV_PM_OPS
+  - remove __maybe_unused
+  - remove of_match_ptr
+  - dt-bindings: style fixes
 
-elapsed time: 1079m
+changes in v7:
+  - make max31760_read_string static
 
-configs tested: 137
-configs skipped: 3
+changes in v6:
+  - update description of hwmon documentation
+  - add hwmon documentation to index.rst
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+changes in v5:
+  - add dt-bindings documentation
+  - add maintainer
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-sh                               allmodconfig
-x86_64                              defconfig
-arc                              allyesconfig
-x86_64                           allyesconfig
-alpha                            allyesconfig
-x86_64                               rhel-8.3
-m68k                             allmodconfig
-m68k                             allyesconfig
-i386                                defconfig
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-riscv                randconfig-r042-20220908
-arc                  randconfig-r043-20220908
-s390                 randconfig-r044-20220908
-i386                             allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-sh                             shx3_defconfig
-xtensa                              defconfig
-mips                    maltaup_xpa_defconfig
-mips                  maltasmvp_eva_defconfig
-sh                        edosk7705_defconfig
-powerpc                      ppc40x_defconfig
-mips                      loongson3_defconfig
-sh                         apsh4a3a_defconfig
-parisc                           alldefconfig
-sh                            migor_defconfig
-openrisc                            defconfig
-arm                             pxa_defconfig
-arc                              alldefconfig
-arm                           u8500_defconfig
-i386                          randconfig-c001
-arc                    vdk_hs38_smp_defconfig
-sh                         microdev_defconfig
-mips                           xway_defconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-sh                     magicpanelr2_defconfig
-sparc64                          alldefconfig
-arm                         nhk8815_defconfig
-m68k                          multi_defconfig
-nios2                            allyesconfig
-sh                             espt_defconfig
-mips                     decstation_defconfig
-powerpc                     stx_gp3_defconfig
-sh                          sdk7780_defconfig
-arm                      footbridge_defconfig
-arm                        realview_defconfig
-m68k                       m5275evb_defconfig
-parisc                           allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-m68k                          atari_defconfig
-m68k                       m5475evb_defconfig
-powerpc                 mpc834x_itx_defconfig
-powerpc                     tqm8548_defconfig
-arc                  randconfig-r043-20220907
-mips                            ar7_defconfig
-mips                         rt305x_defconfig
-arc                      axs103_smp_defconfig
-openrisc                    or1ksim_defconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-i386                             alldefconfig
-arm                        mini2440_defconfig
-sh                            shmin_defconfig
-powerpc                        cell_defconfig
-mips                 decstation_r4k_defconfig
-sparc                               defconfig
-xtensa                           allyesconfig
-csky                                defconfig
-sparc                            allyesconfig
-x86_64                                  kexec
-ia64                             allmodconfig
+changes in v4:
+  - use sysfs_emit instead of sprintf
+  - use kstrtou8 for pwm
+  - use closest match for pwm1_auto_point_temp_hyst
 
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-k001
-powerpc                        fsp2_defconfig
-powerpc                 mpc8272_ads_defconfig
-mips                        qi_lb60_defconfig
-arm                          pcm027_defconfig
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-riscv                randconfig-r042-20220907
-hexagon              randconfig-r041-20220907
-hexagon              randconfig-r045-20220907
-s390                 randconfig-r044-20220907
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-mips                           mtx1_defconfig
-mips                          ath79_defconfig
-powerpc                     ppa8548_defconfig
-mips                           ip22_defconfig
-riscv                randconfig-r042-20220909
-hexagon              randconfig-r041-20220909
-hexagon              randconfig-r041-20220908
-hexagon              randconfig-r045-20220909
-hexagon              randconfig-r045-20220908
-s390                 randconfig-r044-20220909
-arm                       spear13xx_defconfig
-powerpc                 mpc832x_rdb_defconfig
-arm                         palmz72_defconfig
+changes in v3:
+  - add regmap cache
+  - remove pwm1_auto_point[1-48]_{temp,temp_hyst} attributes
+  - add pwm1_auto_point_temp_hyst attribute
+
+changes in v2:
+  - remove pulse_per_rev variable in tach_to_rpm
+  - remove temperature max_hyst and crit_hyst
+  - strict value checking for fan_enable and pwm_enable
+  - do not clamp pwm value for Look-up table
+  - add sysfs_attr_init call
+  - add documentation
+
+
+Ibrahim Tilki (4):
+  drivers: hwmon: Add max31760 fan speed controller driver
+  docs: hwmon: add max31760 documentation
+  dt-bindings: hwmon: Add bindings for max31760
+  MAINTAINERS: Add maintainer for hwmon/max31760
+
+ .../bindings/hwmon/adi,max31760.yaml          |  44 ++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/max31760.rst              |  77 +++
+ MAINTAINERS                                   |   9 +
+ drivers/hwmon/Kconfig                         |  12 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/max31760.c                      | 596 ++++++++++++++++++
+ 7 files changed, 740 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
+ create mode 100644 Documentation/hwmon/max31760.rst
+ create mode 100644 drivers/hwmon/max31760.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+
