@@ -2,112 +2,101 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35994ECAAA1
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 16:42:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26AEDECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Sep 2022 16:47:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbiIIQm3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Sep 2022 12:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
+        id S231808AbiIIQr1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Sep 2022 12:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiIIQm2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2022 12:42:28 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB1B1440AE
-        for <linux-hwmon@vger.kernel.org>; Fri,  9 Sep 2022 09:42:26 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id k10so3672689lfm.4
-        for <linux-hwmon@vger.kernel.org>; Fri, 09 Sep 2022 09:42:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=AhS1mhLSPdTYHS3sCWcsfuKlT4/D61hxxGGDcI1RHwY=;
-        b=EzoTQ92kcupNMBHuKMSK11U3VhWVT+KmYj4JSactNf2qPFZflLB3+nwBMbwTFd6t+U
-         XWjuUU1tZ40oZH6WMD/GwnB5K6T57FqOIe12D9Q1q1+KdtMIXj9o8bPMZJFQBpZxYEGD
-         /V7MTqAceSh9bl8AjdQcBGFdvZHK330DO6ABeSt+sOgpEVekUlethgy4Y4xmW0FYGZIa
-         aou1wwq/77UDnSf/aDPNiUfc8TpewzRatwx1OxV/tNg0g1MaNMO7brIgghAzS8jHAC/p
-         IZVNClOB3clDLICjW6a4atiYeEPbF3OUS+kHSZn99yeAyrunJ0tqFdGjHkVlu3XEPum5
-         Zsfg==
+        with ESMTP id S231295AbiIIQrX (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2022 12:47:23 -0400
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62DE6145FF5;
+        Fri,  9 Sep 2022 09:47:12 -0700 (PDT)
+Received: by mail-ot1-f51.google.com with SMTP id l7-20020a056830154700b0065563d564dfso1394726otp.0;
+        Fri, 09 Sep 2022 09:47:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=AhS1mhLSPdTYHS3sCWcsfuKlT4/D61hxxGGDcI1RHwY=;
-        b=6HrE316YRgbpjqZ9iad+YtsYSToXiTe0nISCkoSSp5xWEAYjDDM/0k3my2M7IstHrY
-         dfrVKEApczSw6lbjm7gD2QAp6sYrXw3Ls5l6QaWX1ZyOvbNWIoV2jPkQv3UPrQgi0n3P
-         pYt0EJV10lpEsPaf3FLb4IfkDjaE28gyVPomfrrV+4niAoRRufkxqYCcUgR1rXyxDQkR
-         cg1hxDgHtgJJnaDnZxoObHCdNvavLR1aQjfQ9T9OHlCBR6ddfilubNdafCrvpaPOmnt2
-         xLbNihUW9GHTKF+/ESQrRssS5OXYvM0WlDFXXr1ikqWvLhw/i5Ry1GWpOOJIJWk/61zq
-         TA7w==
-X-Gm-Message-State: ACgBeo2lSDTxn6K+DAsfcpM/Bp2IVW0xCkePFXXC6XSX4VOfQI4fz1LX
-        Ivz5FoNBdJV+OKy0f9LwKadA/A==
-X-Google-Smtp-Source: AA6agR62MO5VH+iTJ0jkLL7/fd5B2DVPyCGmMoEV8SdYJxJ4BdyZeXPp/Bur+wIj3bL9jXGhlUjc7Q==
-X-Received: by 2002:a05:6512:c1:b0:497:a63d:563a with SMTP id c1-20020a05651200c100b00497a63d563amr4617909lfp.366.1662741745342;
-        Fri, 09 Sep 2022 09:42:25 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id bi24-20020a05651c231800b00261c6c80b38sm140789ljb.75.2022.09.09.09.42.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 09:42:24 -0700 (PDT)
-Message-ID: <1f2738ce-9901-35c9-eed8-52c02bfc65d3@linaro.org>
-Date:   Fri, 9 Sep 2022 18:42:23 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Z3Bk8gw//Jqs0Nz+1Df9SNsgz3sVODj2lJ7DrNb/rcw=;
+        b=5pGbJVBE8gRWuMmEtsNZaNvVR2BWPecLuV6Ly9Hxa4bzddKT6G1qwfPTYTFhWJsAXG
+         RwuBg4icbMd3QXHBRFUpTfx6b8YfCFspwkL4jfvtvpGVBpMCtLu+2EUHf4FtcrsrVgXI
+         PjabJWy2CUpz1g3Ny/mHfG1MAmzCfHe+B87jR6MPOJUlp9eGP7A9neeMT4HKmWvQ4bZO
+         WFxQXiNjIChKR147PhiTZud/bUsDi8l5nNeQJ75ZUhkKcY//oLMsH9gImhD9kEo1uUNE
+         MQJ2QubnJnRkfH5Ou0Mx2eAYpa3ZT9IEPpRWAz83NsSnh+gBSaAazWPeCrUpy8iiIsHe
+         IN4w==
+X-Gm-Message-State: ACgBeo0AMwEWkbgcSq5NFRoCL5V/EQY39GFuaApJqjmk/fHdR3hVjhIw
+        mFbaB9CWUi8eZRZpmY3LWA==
+X-Google-Smtp-Source: AA6agR4E0MTyy++dKWEmauODIGuopUtC+EC56O+epKPx3hJsvFGl4In3n6Mp/CwHpG0SDrmCUgiIEw==
+X-Received: by 2002:a05:6830:33cd:b0:654:fc7e:f4ee with SMTP id q13-20020a05683033cd00b00654fc7ef4eemr1643807ott.171.1662742031605;
+        Fri, 09 Sep 2022 09:47:11 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z36-20020a056870d6a400b0012b2b0b6281sm442358oap.9.2022.09.09.09.47.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 09:47:11 -0700 (PDT)
+Received: (nullmailer pid 1600337 invoked by uid 1000);
+        Fri, 09 Sep 2022 16:47:10 -0000
+Date:   Fri, 9 Sep 2022 11:47:10 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
 Subject: Re: [PATCH v8 3/4] dt-bindings: hwmon: Add bindings for max31760
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Message-ID: <20220909164710.GA1537271-robh@kernel.org>
 References: <20220909133718.388213-1-Ibrahim.Tilki@analog.com>
  <20220909133718.388213-4-Ibrahim.Tilki@analog.com>
- <9d5e8a41-8e0a-c67a-1b68-f743b4680510@linaro.org>
- <339d3857-2deb-b5d9-332d-cc65cc90ca19@roeck-us.net>
- <96766080-dee3-1c06-031e-331a8702cf37@linaro.org>
- <ba55b70f-b1b1-c31a-e1ef-a079f0f02782@roeck-us.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ba55b70f-b1b1-c31a-e1ef-a079f0f02782@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <1662740789.477872.1507147.nullmailer@robh.at.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1662740789.477872.1507147.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 09/09/2022 17:04, Guenter Roeck wrote:
-> On 9/9/22 07:56, Krzysztof Kozlowski wrote:
->> On 09/09/2022 16:52, Guenter Roeck wrote:
->>> Hi Krzysztof,
->>>
->>> On 9/9/22 07:49, Krzysztof Kozlowski wrote:
->>>> On 09/09/2022 15:37, Ibrahim Tilki wrote:
->>>>> Adding bindings for Analog Devices MAX31760 Fan-Speed Controller
->>>>>
->>>>> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
->>>>> ---
->>>>
->>>>
->>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>>
->>>> Please wait with applying for Rob's bot to check it.
->>>>
->>>
->>> I don't think I see those results unless there is a failure.
->>
->> That's correct.
->>
->>> Is there a link where I can look up the results ?
->>
->> It will pop-up on Patchwork:
->> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20220909133718.388213-4-Ibrahim.Tilki@analog.com/
+On Fri, Sep 09, 2022 at 11:26:29AM -0500, Rob Herring wrote:
+> On Fri, 09 Sep 2022 16:37:17 +0300, Ibrahim Tilki wrote:
+> > Adding bindings for Analog Devices MAX31760 Fan-Speed Controller
+> > 
+> > Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> > ---
+> >  .../bindings/hwmon/adi,max31760.yaml          | 44 +++++++++++++++++++
+> >  1 file changed, 44 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
+> > 
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> ./Documentation/devicetree/bindings/hwmon/adi,max31760.yaml: error checking schema file
 
-And there is a failure - the bindings were not tested before sending. :(
+Not sure why the error is useless ATM. I'm checking that.
 
-The error is visible when testing locally, although syntax in general
-looks fine.
+The problem is that 'reg' is a matrix and you need to either fully 
+define it or use the simplified form for a single cell:
 
-Un-reviewed.
+reg:
+  minimum: 0x50
+  maximum: 0x57
 
-Best regards,
-Krzysztof
+The full, expanded form is:
+
+reg:
+  items:
+    - items:
+        - minimum: 0x50
+          maximum: 0x57
+
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/adi,max31760.yaml: ignoring, error in schema: properties: reg
+
+> Documentation/devicetree/bindings/hwmon/adi,max31760.example.dtb:0:0: /example-0/i2c/fan-controller@50: failed to match any schema with compatible: ['adi,max31760']
+
+This will go away when the schema passes checks.
+
+Rob
