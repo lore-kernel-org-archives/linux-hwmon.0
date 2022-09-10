@@ -2,101 +2,68 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC897C6FA82
-	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Sep 2022 17:21:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21E38C6FA82
+	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Sep 2022 17:38:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiIJRVT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 10 Sep 2022 13:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
+        id S229549AbiIJRiz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 10 Sep 2022 13:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiIJRVM (ORCPT
+        with ESMTP id S229609AbiIJRix (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 10 Sep 2022 13:21:12 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761143FA2C;
-        Sat, 10 Sep 2022 10:20:59 -0700 (PDT)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28AEkFqS024557;
-        Sat, 10 Sep 2022 13:20:41 -0400
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3jgqg5a0me-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 10 Sep 2022 13:20:41 -0400
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 28AHKe3W056522
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 10 Sep 2022 13:20:40 -0400
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Sat, 10 Sep 2022 13:20:39 -0400
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Sat, 10 Sep 2022 13:20:32 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Sat, 10 Sep 2022 13:20:32 -0400
-Received: from ibrahim-vm.scloud.analog.com ([10.158.19.28])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 28AHJwcJ025933;
-        Sat, 10 Sep 2022 13:20:24 -0400
-From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>
-CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        <linux-hwmon@vger.kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v9 4/4] MAINTAINERS: Add maintainer for hwmon/max31760
-Date:   Sat, 10 Sep 2022 20:19:45 +0300
-Message-ID: <20220910171945.48088-5-Ibrahim.Tilki@analog.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220910171945.48088-1-Ibrahim.Tilki@analog.com>
-References: <20220910171945.48088-1-Ibrahim.Tilki@analog.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: QGhHyAxNJvw4puZigJI9DQjsAbXOT9nf
-X-Proofpoint-ORIG-GUID: QGhHyAxNJvw4puZigJI9DQjsAbXOT9nf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-10_08,2022-09-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- malwarescore=0 mlxlogscore=697 clxscore=1015 priorityscore=1501
- lowpriorityscore=0 adultscore=0 suspectscore=0 impostorscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209100063
+        Sat, 10 Sep 2022 13:38:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E107491EF;
+        Sat, 10 Sep 2022 10:38:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E88C60C88;
+        Sat, 10 Sep 2022 17:38:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 691BFC433D7;
+        Sat, 10 Sep 2022 17:38:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662831532;
+        bh=yLqF8KF66P7mglxm0ydPdltwIbrN+hgyBaZahaQ6Zs0=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=cA541T+/hNwClWSjLLrzFQDQDQWidO7ccAc2ClGQUUTTkcHEs0F9CceZkn3NP4YT6
+         zpZVDPV33MDmkYELbgvJycMLsQgjKqRGifgTFwR2Db/3yBJ9CMQXEoWq9edAHKTg02
+         vwRhYoAXfWoRlT7PDtySKbF0wozzn08iR2Kaiz27ALszHTBzfjEjfjNWEvcnJz5Nv7
+         yXk9n0EpaTHLX4r8Sf7HdNVReRSQpslkkBRHw5JSEc/ogEDT0lc9AheRVtaetkxi/+
+         goSpNs/S/Dr9KsgvbR5D0Ud6MKVV4Z2IdYfqoyi4kt5a1crVgSwCyfVziC9+P0c+zL
+         KpDCKA/XRYLsw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 534AEC73FF0;
+        Sat, 10 Sep 2022 17:38:52 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon fixes for v6.0-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220910142942.1152413-1-linux@roeck-us.net>
+References: <20220910142942.1152413-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220910142942.1152413-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.0-rc5
+X-PR-Tracked-Commit-Id: 88700d1396bae72d9a4c23a48bbd98c1c2f53f3d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 445e0bc7594a81d0e51d74c21a675c77369de4eb
+Message-Id: <166283153233.31692.635662600575237387.pr-tracker-bot@kernel.org>
+Date:   Sat, 10 Sep 2022 17:38:52 +0000
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add maintainer for hwmon/max31760 driver
+The pull request you sent on Sat, 10 Sep 2022 07:29:42 -0700:
 
-Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.0-rc5
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f1390b827..78ab41c92 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1334,6 +1334,15 @@ F:	drivers/iio/amplifiers/hmc425a.c
- F:	drivers/staging/iio/*/ad*
- X:	drivers/iio/*/adjd*
- 
-+ANALOG DEVICES INC MAX31760 DRIVER
-+M:	Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-+S:	Maintained
-+W:	http://wiki.analog.com/
-+W:	https://ez.analog.com/linux-software-drivers
-+F:	Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
-+F:	Documentation/hwmon/max31760.rst
-+F:	drivers/hwmon/max31760.c
-+
- ANALOGBITS PLL LIBRARIES
- M:	Paul Walmsley <paul.walmsley@sifive.com>
- S:	Supported
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/445e0bc7594a81d0e51d74c21a675c77369de4eb
+
+Thank you!
+
 -- 
-2.36.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
