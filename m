@@ -2,114 +2,115 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBD9FC6FA82
-	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Sep 2022 08:11:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6F23ECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Sep 2022 14:29:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiIJIK6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 10 Sep 2022 04:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
+        id S229593AbiIJO3r (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 10 Sep 2022 10:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiIJIK6 (ORCPT
+        with ESMTP id S229464AbiIJO3q (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 10 Sep 2022 04:10:58 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A162F82D3D
-        for <linux-hwmon@vger.kernel.org>; Sat, 10 Sep 2022 01:10:56 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id x10so4645956ljq.4
-        for <linux-hwmon@vger.kernel.org>; Sat, 10 Sep 2022 01:10:56 -0700 (PDT)
+        Sat, 10 Sep 2022 10:29:46 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4FA14D11;
+        Sat, 10 Sep 2022 07:29:45 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id q9so4158258pgq.6;
+        Sat, 10 Sep 2022 07:29:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=txFmNqivSGonl1t91BWxPpRyV6wFFoxPfmlb622zlU4=;
-        b=A5TM8+1WniIN3PtwC3BZhC1jY1dASPxIPewi0arGlquPn/062oVa4wvFnMaDdQ66xH
-         lLilxwCx+Oczx5jWgRyQAg2ip6OazqkWh4V1XGR+5gIyckfUpA9X8SqJjFyZ9pnRxktj
-         2+zY2Wbhp317Cx2fosdt/tCEvQLJwCf3HpMROaX2tqvwQuaQZnNiWg3z/MJEsvvxSkeE
-         DvFlwqgD3HwX/BAKIc4wnOuWTCDa/EAWxAAGuwbzVd41uc7TfsfZhmE6x6K+Fxk299rC
-         NcqRotinLeaE2WIaVpi4zQ1ropa7GfNiFpkLdd1oK6uzUNnuzaig1dB0hts3oEkvc+Pf
-         LL6A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=OytxOtWCSeSs4T/BX4uXUFFrqjuTvmWI55mJDpvgYCE=;
+        b=a2a7ZHdghgMqf173OCs2hKXOmDlQmbUCUKrjSYgZwehuvzrjUB++Qg05gcNJM3DQ1s
+         xE6BgASrFsholZnWLugYpTFmRiVukmxCSE/i2pg/SaDsWoYwleTCDSq/+EVs/41ffh1g
+         NxtG6k2psjYuL3XJgd0SzdLwWInmR78oYjeHEKXdA/vlKmSrhXL4E+qc7QTfnsYGRG3R
+         BNN1oCB3DJWLJi067ut33Og5yeW/tAzGMSR196Ka/VlQJIcVEwhmZW7hccjlickjyEUH
+         /HCv6t1kj9gOwOENDBBPd9ltMf5WF6awG28lOK+s0uNxCkwBThWsyru1+vUYVYEFLaHP
+         XW/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=txFmNqivSGonl1t91BWxPpRyV6wFFoxPfmlb622zlU4=;
-        b=daAA9BCOqejh7R734SqCks1TV7XXxAzh9PgzyXPAQ/OVPEldBkFdo3e/fQ/85Sob5o
-         7G4iLHgaLDhoRS8Cb4y3FqzpU93SIge6fGylmwjVHFjjde3xD3EVRvJX1Kyjg2q5vmGZ
-         gGHIvZAHGa5nrfMuvrLayO9aCZYSvtkW3iezhj1baPae/DfkLHyEhYYN5ZUWCnwwCFiw
-         PdDXSpHvmntQpXlDK7NTbb4ogSAvEwJVzMc4LMlsRxRQAlxveeILz5ke9Ye7oyp0GQSw
-         cEjNYmstjFB00T8aToT/cwOTVjcamb1p7frs3hOPOEvyDIpF86syVoz7BVA4pvqcxXp7
-         6WHQ==
-X-Gm-Message-State: ACgBeo0kZE5HwJ4VhfHOy1IiWWEVAUWZ+e2iqtCk9gv/ajSFkA1R7qw8
-        e0OdB8wPVpHvAIuQ58pt2vOUvxhcS1fI5g==
-X-Google-Smtp-Source: AA6agR7789VL7NQdhtwL2QwBsV2k2YfdkUDrGL8k0PU+vC77/8Ct9Y0/++AmZJIlkccmwRb2Sq7irw==
-X-Received: by 2002:a2e:8541:0:b0:261:b44b:1a8b with SMTP id u1-20020a2e8541000000b00261b44b1a8bmr5409456ljj.46.1662797454999;
-        Sat, 10 Sep 2022 01:10:54 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id s16-20020a05651c201000b00267232d0652sm259553ljo.46.2022.09.10.01.10.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Sep 2022 01:10:54 -0700 (PDT)
-Message-ID: <bd23014f-eb9b-31a5-f777-c1b15f65fd89@linaro.org>
-Date:   Sat, 10 Sep 2022 10:10:53 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=OytxOtWCSeSs4T/BX4uXUFFrqjuTvmWI55mJDpvgYCE=;
+        b=QNCpw2N9wfqDKjwFtBwsUsiP5hcpcqmcpzI6dF5wfGyHbta9yae2NMZwrFNxy9ADgN
+         qrX6alvduplc1x/EFt1xsrnhgjpu7fyCi7aseWoqYI2sifqMpEuRlYDLO24gftuLC7cz
+         669PTLX4+5IpRYerQKRtNeXEfGHh9nFKRa7xJ2yWF290icebNgC962guqJn+0xPZtSSy
+         lJe0GyDhGsNSuAvduoMefTZmkWS7Rs97ZogdrKrXkwTAY1WGfq2ReYNcr2H/R1fCn/dK
+         18Dl2+gf8r0wFPouWw1iYLi2ZUf1mitKpdRLJvSIEpZRKxDc1jF0QsaFfEGepNT0taJO
+         +tqw==
+X-Gm-Message-State: ACgBeo1aziR1C9gzpZyJzMi9oxTF49xmnTQVyNbh7LAd2l3mVetbqzII
+        aY1imswopPeKbFgEfYP49HJAuXc9w205nA==
+X-Google-Smtp-Source: AA6agR6Ef+KduPRW0JcdkI29+K3hdvHtHgCNQjfAO+6cnd6gufw92qIAz6mapPq5ss9gBsGqltV2RQ==
+X-Received: by 2002:a05:6a00:d4b:b0:53f:4690:d31 with SMTP id n11-20020a056a000d4b00b0053f46900d31mr14287879pfv.73.1662820184836;
+        Sat, 10 Sep 2022 07:29:44 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u15-20020a170902714f00b00174f61a7d09sm2298979plm.247.2022.09.10.07.29.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Sep 2022 07:29:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v6.0-rc5
+Date:   Sat, 10 Sep 2022 07:29:42 -0700
+Message-Id: <20220910142942.1152413-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.36.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v8 3/4] dt-bindings: hwmon: Add bindings for max31760
-Content-Language: en-US
-To:     "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20220909133718.388213-1-Ibrahim.Tilki@analog.com>
- <20220909133718.388213-4-Ibrahim.Tilki@analog.com>
- <1662740789.477872.1507147.nullmailer@robh.at.kernel.org>
- <20220909164710.GA1537271-robh@kernel.org>
- <DM8PR03MB624727E043782EC34DBBE6B196439@DM8PR03MB6247.namprd03.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DM8PR03MB624727E043782EC34DBBE6B196439@DM8PR03MB6247.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 09/09/2022 19:48, Tilki, Ibrahim wrote:
-ded form is:
->>
->> reg:
->>   items:
->>     - items:
->>         - minimum: 0x50
->>           maximum: 0x57
->>
-> 
-> Actually it passes the check when I remove maxItems property:
-> 
->   reg:
->     description: I2C address of slave device.
->     items:
->       minimum: 0x50
->       maximum: 0x57
-> 
-> I cannot find a way to specify both maxItems and min-max limits.
-> Which one should I drop? Line below is from the output of dt_bindigs_check:
-> 
-> hint: "maxItems" is not needed with an "items" list
+Hi Linus,
 
-Use Rob's first syntax:
+Please pull hwmon fixes for Linux v6.0-rc5 from signed tag:
 
-reg:
-  minimum: 0x50
-  maximum: 0x57
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.0-rc5
 
-(this will expect only one item)
+Thanks,
+Guenter
+------
 
+The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
 
-Best regards,
-Krzysztof
+  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.0-rc5
+
+for you to fetch changes up to 88700d1396bae72d9a4c23a48bbd98c1c2f53f3d:
+
+  hwmon: (asus-ec-sensors) autoload module via DMI data (2022-09-09 10:45:08 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v6.0-rc5
+
+- Fix severe regression in asus-ec-sensors driver which resulted
+  in EC driver failures.
+
+- Fix various bugs in mr75203 driver
+
+- Fix byte order bug in tps23861 driver
+
+----------------------------------------------------------------
+Alexandru Gagniuc (1):
+      hwmon: (tps23861) fix byte order in resistance register
+
+Eliav Farber (6):
+      dt-bindings: hwmon: (mr75203) fix "intel,vm-map" property to be optional
+      hwmon: (mr75203) fix VM sensor allocation when "intel,vm-map" not defined
+      hwmon: (mr75203) update pvt->v_num and vm_num to the actual number of used sensors
+      hwmon: (mr75203) fix voltage equation for negative source input
+      hwmon: (mr75203) fix multi-channel voltage reading
+      hwmon: (mr75203) enable polling for all VM channels
+
+Eugene Shalygin (1):
+      hwmon: (asus-ec-sensors) autoload module via DMI data
+
+ .../devicetree/bindings/hwmon/moortec,mr75203.yaml |   1 -
+ drivers/hwmon/asus-ec-sensors.c                    | 408 +++++++++++----------
+ drivers/hwmon/mr75203.c                            |  72 ++--
+ drivers/hwmon/tps23861.c                           |  10 +-
+ 4 files changed, 278 insertions(+), 213 deletions(-)
