@@ -2,48 +2,48 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D03DFC6FA89
-	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Sep 2022 21:16:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AD1EC6FA89
+	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Sep 2022 21:21:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbiIJVQh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 10 Sep 2022 17:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
+        id S230312AbiIJVVN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 10 Sep 2022 17:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiIJVQf (ORCPT
+        with ESMTP id S230221AbiIJVUM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 10 Sep 2022 17:16:35 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A2A4BA55;
-        Sat, 10 Sep 2022 14:16:34 -0700 (PDT)
+        Sat, 10 Sep 2022 17:20:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C574F66C;
+        Sat, 10 Sep 2022 14:18:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1F845CE0ADC;
-        Sat, 10 Sep 2022 21:16:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74A3AC43470;
-        Sat, 10 Sep 2022 21:16:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEE9E60EB6;
+        Sat, 10 Sep 2022 21:17:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F295C43142;
+        Sat, 10 Sep 2022 21:17:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662844591;
-        bh=TEg6ARWhMYcT0ex9y+chGkYhGquiKD2maBKxPOGkBGs=;
+        s=k20201202; t=1662844679;
+        bh=vmKrB7uWruve/xUlBF9Cg4D2v9bGJBJGykfyeN0wSKA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W3y0GPoyaaFDfBbsKWtSL5fKOow4r52YQHZIRA1K3Odsru+WGWyPeKieTdJIuTRec
-         NALKRysa5Hl+hDp7rYz437kSii73WmXBM6dIatP+Lsp/VUlCUVjD1fS0ZClUA2LX0N
-         l9IO8GxmCQ2sHeLHDbMVK78OUf0Tq0qo/T3W6lUbf0W5DzaSDfna50wfDLV7K1P8ug
-         fmC3l8e9kDyl10q+p2tTTBm5NEABZO5PJvtsSYWUuPF0DPyMPBlVrJUl3ANB/RSWeU
-         MtqauNjMKWw+wNxh+D6Ty8VCcx+45qNJnreZkuWmWenOGY9zLupFa4f+47KAbpTGTA
-         U0rVf5V6J9Edg==
+        b=IHn2ALugHJzaQQUWMVLERmDRhey91UF33hFkheQQ5sNxSW/Dmt5yK8pBrs1PBoMIu
+         JlomFxYYs2Yeqi7IRLoIZLD3tYvlyTMfrZ9j4e/6VXLsNyyfJ1GubH3mnTHIluqJou
+         R0N5g9CnGEAmT/ZiD/fIH53OZheTCCVAslu9maaBhjOt3+5zaW8SmbNVboBAwOKzOB
+         hXQbiG8lUfe7hHpP5Dh7kJ7aOC9uKJ/ierhU4KzQAxgxJHnbXDfTMaz/J3llBlaRAF
+         DgPX8pKg+6Jo4W1zbxYTDDqsN1eaA57tUo05C+Ryo9Ym8fkEeZv1jMVVHo2tI2QhdN
+         AcpnYrqwd6qIw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 05/38] hwmon: (pmbus) Use dev_err_probe() to filter -EPROBE_DEFER error messages
-Date:   Sat, 10 Sep 2022 17:15:50 -0400
-Message-Id: <20220910211623.69825-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 04/21] hwmon: (pmbus) Use dev_err_probe() to filter -EPROBE_DEFER error messages
+Date:   Sat, 10 Sep 2022 17:17:35 -0400
+Message-Id: <20220910211752.70291-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220910211623.69825-1-sashal@kernel.org>
-References: <20220910211623.69825-1-sashal@kernel.org>
+In-Reply-To: <20220910211752.70291-1-sashal@kernel.org>
+References: <20220910211752.70291-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -70,10 +70,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 02912022853d8..e81609bf47021 100644
+index 63b616ce3a6e9..6d5b228032cad 100644
 --- a/drivers/hwmon/pmbus/pmbus_core.c
 +++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2730,11 +2730,10 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+@@ -2463,11 +2463,10 @@ static int pmbus_regulator_register(struct pmbus_data *data)
  
  		rdev = devm_regulator_register(dev, &info->reg_desc[i],
  					       &config);
