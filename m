@@ -2,115 +2,127 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6F23ECAAD3
-	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Sep 2022 14:29:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EAC20C6FA8A
+	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Sep 2022 17:20:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiIJO3r (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 10 Sep 2022 10:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
+        id S229535AbiIJRUr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 10 Sep 2022 13:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiIJO3q (ORCPT
+        with ESMTP id S229540AbiIJRUq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 10 Sep 2022 10:29:46 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4FA14D11;
-        Sat, 10 Sep 2022 07:29:45 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id q9so4158258pgq.6;
-        Sat, 10 Sep 2022 07:29:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date;
-        bh=OytxOtWCSeSs4T/BX4uXUFFrqjuTvmWI55mJDpvgYCE=;
-        b=a2a7ZHdghgMqf173OCs2hKXOmDlQmbUCUKrjSYgZwehuvzrjUB++Qg05gcNJM3DQ1s
-         xE6BgASrFsholZnWLugYpTFmRiVukmxCSE/i2pg/SaDsWoYwleTCDSq/+EVs/41ffh1g
-         NxtG6k2psjYuL3XJgd0SzdLwWInmR78oYjeHEKXdA/vlKmSrhXL4E+qc7QTfnsYGRG3R
-         BNN1oCB3DJWLJi067ut33Og5yeW/tAzGMSR196Ka/VlQJIcVEwhmZW7hccjlickjyEUH
-         /HCv6t1kj9gOwOENDBBPd9ltMf5WF6awG28lOK+s0uNxCkwBThWsyru1+vUYVYEFLaHP
-         XW/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=OytxOtWCSeSs4T/BX4uXUFFrqjuTvmWI55mJDpvgYCE=;
-        b=QNCpw2N9wfqDKjwFtBwsUsiP5hcpcqmcpzI6dF5wfGyHbta9yae2NMZwrFNxy9ADgN
-         qrX6alvduplc1x/EFt1xsrnhgjpu7fyCi7aseWoqYI2sifqMpEuRlYDLO24gftuLC7cz
-         669PTLX4+5IpRYerQKRtNeXEfGHh9nFKRa7xJ2yWF290icebNgC962guqJn+0xPZtSSy
-         lJe0GyDhGsNSuAvduoMefTZmkWS7Rs97ZogdrKrXkwTAY1WGfq2ReYNcr2H/R1fCn/dK
-         18Dl2+gf8r0wFPouWw1iYLi2ZUf1mitKpdRLJvSIEpZRKxDc1jF0QsaFfEGepNT0taJO
-         +tqw==
-X-Gm-Message-State: ACgBeo1aziR1C9gzpZyJzMi9oxTF49xmnTQVyNbh7LAd2l3mVetbqzII
-        aY1imswopPeKbFgEfYP49HJAuXc9w205nA==
-X-Google-Smtp-Source: AA6agR6Ef+KduPRW0JcdkI29+K3hdvHtHgCNQjfAO+6cnd6gufw92qIAz6mapPq5ss9gBsGqltV2RQ==
-X-Received: by 2002:a05:6a00:d4b:b0:53f:4690:d31 with SMTP id n11-20020a056a000d4b00b0053f46900d31mr14287879pfv.73.1662820184836;
-        Sat, 10 Sep 2022 07:29:44 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u15-20020a170902714f00b00174f61a7d09sm2298979plm.247.2022.09.10.07.29.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Sep 2022 07:29:43 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v6.0-rc5
-Date:   Sat, 10 Sep 2022 07:29:42 -0700
-Message-Id: <20220910142942.1152413-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.36.2
+        Sat, 10 Sep 2022 13:20:46 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46BD36DF8;
+        Sat, 10 Sep 2022 10:20:45 -0700 (PDT)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28AC1mZr019483;
+        Sat, 10 Sep 2022 13:20:23 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3jgme5ar96-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 10 Sep 2022 13:20:22 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 28AHKL9Z056501
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sat, 10 Sep 2022 13:20:21 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Sat, 10 Sep
+ 2022 13:20:20 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Sat, 10 Sep 2022 13:20:20 -0400
+Received: from ibrahim-vm.scloud.analog.com ([10.158.19.28])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 28AHJwcF025933;
+        Sat, 10 Sep 2022 13:20:03 -0400
+From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>
+CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        <linux-hwmon@vger.kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v9 0/4] hwmon: Add max31760 fan speed controller
+Date:   Sat, 10 Sep 2022 20:19:41 +0300
+Message-ID: <20220910171945.48088-1-Ibrahim.Tilki@analog.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: FHfP-4lNCyiB7swOgA1vJLDRmr6ymAKH
+X-Proofpoint-ORIG-GUID: FHfP-4lNCyiB7swOgA1vJLDRmr6ymAKH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-10_08,2022-09-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=961 phishscore=0
+ bulkscore=0 clxscore=1015 impostorscore=0 priorityscore=1501
+ suspectscore=0 mlxscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209100063
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+changes in v9:
+  - return -EINVAL when writing fan_enable and pwm_enable
+  - fix dt-bindings errors
 
-Please pull hwmon fixes for Linux v6.0-rc5 from signed tag:
+changes in v8:
+  - use sizeof(*)
+  - use DEFINE_SIMPLE_DEV_PM_OPS
+  - remove __maybe_unused
+  - remove of_match_ptr
+  - dt-bindings: style fixes
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.0-rc5
+changes in v7:
+  - make max31760_read_string static
 
-Thanks,
-Guenter
-------
+changes in v6:
+  - update description of hwmon documentation
+  - add hwmon documentation to index.rst
 
-The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
+changes in v5:
+  - add dt-bindings documentation
+  - add maintainer
 
-  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
+changes in v4:
+  - use sysfs_emit instead of sprintf
+  - use kstrtou8 for pwm
+  - use closest match for pwm1_auto_point_temp_hyst
 
-are available in the Git repository at:
+changes in v3:
+  - add regmap cache
+  - remove pwm1_auto_point[1-48]_{temp,temp_hyst} attributes
+  - add pwm1_auto_point_temp_hyst attribute
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.0-rc5
+changes in v2:
+  - remove pulse_per_rev variable in tach_to_rpm
+  - remove temperature max_hyst and crit_hyst
+  - strict value checking for fan_enable and pwm_enable
+  - do not clamp pwm value for Look-up table
+  - add sysfs_attr_init call
+  - add documentation
 
-for you to fetch changes up to 88700d1396bae72d9a4c23a48bbd98c1c2f53f3d:
 
-  hwmon: (asus-ec-sensors) autoload module via DMI data (2022-09-09 10:45:08 -0700)
+Ibrahim Tilki (4):
+  drivers: hwmon: Add max31760 fan speed controller driver
+  docs: hwmon: add max31760 documentation
+  dt-bindings: hwmon: Add bindings for max31760
+  MAINTAINERS: Add maintainer for hwmon/max31760
 
-----------------------------------------------------------------
-hwmon fixes for v6.0-rc5
+ .../bindings/hwmon/adi,max31760.yaml          |  42 ++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/max31760.rst              |  77 +++
+ MAINTAINERS                                   |   9 +
+ drivers/hwmon/Kconfig                         |  12 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/max31760.c                      | 596 ++++++++++++++++++
+ 7 files changed, 738 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
+ create mode 100644 Documentation/hwmon/max31760.rst
+ create mode 100644 drivers/hwmon/max31760.c
 
-- Fix severe regression in asus-ec-sensors driver which resulted
-  in EC driver failures.
+-- 
+2.36.1
 
-- Fix various bugs in mr75203 driver
-
-- Fix byte order bug in tps23861 driver
-
-----------------------------------------------------------------
-Alexandru Gagniuc (1):
-      hwmon: (tps23861) fix byte order in resistance register
-
-Eliav Farber (6):
-      dt-bindings: hwmon: (mr75203) fix "intel,vm-map" property to be optional
-      hwmon: (mr75203) fix VM sensor allocation when "intel,vm-map" not defined
-      hwmon: (mr75203) update pvt->v_num and vm_num to the actual number of used sensors
-      hwmon: (mr75203) fix voltage equation for negative source input
-      hwmon: (mr75203) fix multi-channel voltage reading
-      hwmon: (mr75203) enable polling for all VM channels
-
-Eugene Shalygin (1):
-      hwmon: (asus-ec-sensors) autoload module via DMI data
-
- .../devicetree/bindings/hwmon/moortec,mr75203.yaml |   1 -
- drivers/hwmon/asus-ec-sensors.c                    | 408 +++++++++++----------
- drivers/hwmon/mr75203.c                            |  72 ++--
- drivers/hwmon/tps23861.c                           |  10 +-
- 4 files changed, 278 insertions(+), 213 deletions(-)
