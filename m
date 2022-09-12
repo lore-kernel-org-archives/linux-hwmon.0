@@ -2,282 +2,319 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81B52ECAAA1
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Sep 2022 03:03:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A8BBC6FA83
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Sep 2022 14:09:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbiILDDS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 11 Sep 2022 23:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
+        id S230000AbiILOJo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 12 Sep 2022 10:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiILDDP (ORCPT
+        with ESMTP id S229498AbiILOJl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 11 Sep 2022 23:03:15 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3670819036;
-        Sun, 11 Sep 2022 20:03:14 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id h188so6981927pgc.12;
-        Sun, 11 Sep 2022 20:03:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=LANjxLMsCfO0PjftxWxuIMkHSaFPDbXCyTX3pauOUF0=;
-        b=oFCtH/DD8IYjBzkvDOj/b9iRGcz4/nZ1IaU8VIDsfynqFLkZMdhAOwBas0s9dIvpKi
-         H0+azCx3hS5RlRr7M4vT0k/n3X7QJn+b51ALb3c9Np928wc+LcNVNSMVXqkRzOHdLJkN
-         AS+IwF4WeFNlmnyPX+JE0tYUTY6I9HphM3aJN/raFYTnrohUMky7RV18ykoJIdTqbQru
-         F0YPzgaefpweBJFs0tWhg3GippAgmYw/oabqC/83Y6WJe2RisaO+gTDNZyjYn1JJEM8v
-         cL9zaMxmpYva/nn8s9Twryr1fh3k2MM9ysLT76iz0Lu/7llHXapLbEZ4S+hHQeTUox16
-         hK6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=LANjxLMsCfO0PjftxWxuIMkHSaFPDbXCyTX3pauOUF0=;
-        b=5YxAq2Y/Cn12Cr380hwociWu9v9HAatpBFzkI+vZVOsUYfZc/u8p08H7OJd+rqpYDW
-         tNdrXMuLs7xZtK/UYzfza0EOnekBeAtfGlI/q6NwdCsOjpNypK9lUTfTxTCaGtSG9CWI
-         rmk1wEBsJjOLHRFwFfYAjm57sIKcRvXpocUILU0s3FSliiLb+bPxvCMfOQ+6YvxWD0kS
-         jEOfP2tY2D0oUlM95M6Sjz1G079FuGKiQNEILEJT6AqJP6cF/HkhuYvZBTgSJnhDbF8D
-         7Z5n9cO+sr7KNzGHpIjimN6iXidA7VY5BxHLXz1DT30V2cctwu9PMUbGCeKyqwmztRwD
-         D4mQ==
-X-Gm-Message-State: ACgBeo1wnEn7Y04/neiY+AB3TtZz8XsqO0zudTuNZVZ5okQCwt0U13Ue
-        tMdOxPKamxoUi4p9IbE1pEnWdek/wJlsQw==
-X-Google-Smtp-Source: AA6agR7qzs6MT4hdx62Bg+yIfJMlzrxkfCLbJ4hM1nQkjIq63ZYBKMg1/UdUOtFdfUryaNPnabFz7w==
-X-Received: by 2002:a63:4e08:0:b0:438:9514:48b3 with SMTP id c8-20020a634e08000000b00438951448b3mr10823184pgb.439.1662951793565;
-        Sun, 11 Sep 2022 20:03:13 -0700 (PDT)
-Received: from dusj-System-Product-Name.dhcpserver.bu9bmc.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id q18-20020a17090311d200b00172d78876c7sm4627958plh.74.2022.09.11.20.03.10
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 11 Sep 2022 20:03:13 -0700 (PDT)
-From:   Duke Du <dukedu83@gmail.com>
-X-Google-Original-From: Duke Du <Duke.Du@quantatw.com>
-To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     fran.hsu@quantatw.com, george.hung@quantatw.com,
-        charles.hsu@quantatw.com, duke.du@quantatw.com
-Subject: [PATCH v5] hwmon: Add driver for the TEXAS TPS546D24 Buck Converter.
-Date:   Mon, 12 Sep 2022 11:01:08 +0800
-Message-Id: <1662951668-9849-1-git-send-email-Duke.Du@quantatw.com>
-X-Mailer: git-send-email 2.7.4
+        Mon, 12 Sep 2022 10:09:41 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1652938B6
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Sep 2022 07:09:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662991780; x=1694527780;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=D7uaSVSjB6Qr42GaN7+blvMdlLdIFOp/rpPtPR78gJ4=;
+  b=JDMQjN4gu2M0Hhsezl2+JxOR7FO0x1Xq8UKmp9UWGEsviHGCWIDGmZG5
+   amHj7SY2XCbSGoJRjYf5Q1PIUiAON+EQa7vOWSc6fj96Sv8eL39ltZuru
+   M/blmNP1yIlg0SLE0iaCIjCgNPeh+xExJYEC1QgVNB7DpMPyLPqNhY4M+
+   2lqMR6uthu1s3sm9kwB/TutXK9Hm+op+Qh3NfyV5k6acgn5YSsQdd7eTk
+   qpttBra75nLMnCeeF9C3EOXJI4MtUQbRk/xM4ZkWZ1ctH3Fsqaubup5kY
+   fOkNHGbGT9348DV4SYZHCi40VO79kUohMTC1uEjDSvJCmRyE/cpqmlwwV
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="295459644"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="295459644"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 07:09:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="678105918"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Sep 2022 07:09:30 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 12 Sep 2022 07:09:30 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 12 Sep 2022 07:09:30 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Mon, 12 Sep 2022 07:09:30 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.49) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Mon, 12 Sep 2022 07:09:30 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H1oAtuJL0UuxJk9NCDGMtBUY97ZDAvAdoBnv2IDPqHwASHmAfxd9GyHM5qUxLeFLBu6VTkLLgJT+nUc/cC8zue+Zi2671JSOXRlEnLQuY26CVRuBxxhbEoVNUHy0UdWHu7C9i2+wC0YLwt4jda7f+oGQGQxPjhLukovJskBWe78NPLuvyWMUHy0AnRdqnvZEtaf2QZBHIR+/ZwAq47SktlI5TPm/HeADFcvm9ZYM9A7kG1Gr//IdDoq9eSmjZruiuYzDoN44U+GWfijM5P15JF5pzPhnQAi2BW4BIQi1/6UDbLdJ8bfrnbSPTBJUx2+TBR1H57bvXgV/IVx7MsFpzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Zgx4dfgSCkeev24wNJRnYpqbw0CXbhU8MmLLGKbh9dY=;
+ b=flKL5GJvF/XMHpCAqL7k94qYC/tM0KNOvrxDwg+xtTgmnmvNyDV21M+GQsOB2CIzs4rQ0OiRpv2+1yYbvSwaHTjBRrBVwfCHBeMH9E9WpkR276XWJYP1NxulxzPA7A41WcoOk7gSA5iClE8r7JgBzIFaIMd0AEIgdcCfG3dx7/eKRl/tu909ZhTLHAPLIh1YJ8UtLpfwRWGvzEat+HBedjf8ZYBJNwSxW39Ln/i/Jw3YW6k0HcnqMYKY8fe5MczBD5NQkCRbTLhko6nuan3IHN2dQSzAJu8PfKjeCIUk20aoEU3dMxdtcl7xdTaSDzhRSCxJYMKs1BXxpXM1nSNBxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CY5PR11MB6211.namprd11.prod.outlook.com (2603:10b6:930:25::6)
+ by BL3PR11MB6410.namprd11.prod.outlook.com (2603:10b6:208:3b9::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Mon, 12 Sep
+ 2022 14:09:28 +0000
+Received: from CY5PR11MB6211.namprd11.prod.outlook.com
+ ([fe80::68f3:bb88:47f6:ef80]) by CY5PR11MB6211.namprd11.prod.outlook.com
+ ([fe80::68f3:bb88:47f6:ef80%7]) with mapi id 15.20.5612.019; Mon, 12 Sep 2022
+ 14:09:28 +0000
+From:   "Gupta, Anshuman" <anshuman.gupta@intel.com>
+To:     "Nilawar, Badal" <badal.nilawar@intel.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
+CC:     "Dixit, Ashutosh" <ashutosh.dixit@intel.com>,
+        "Tauro, Riana" <riana.tauro@intel.com>,
+        "Ewins, Jon" <jon.ewins@intel.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: RE: [PATCH 2/7] drm/i915/hwmon: Add HWMON current voltage support
+Thread-Topic: [PATCH 2/7] drm/i915/hwmon: Add HWMON current voltage support
+Thread-Index: AQHYuIVOgQip7iJi3k+BrB7UUlRG7K3b8NsA
+Date:   Mon, 12 Sep 2022 14:09:28 +0000
+Message-ID: <CY5PR11MB62112A756C0464129B94C5BE95449@CY5PR11MB6211.namprd11.prod.outlook.com>
+References: <20220825132118.784407-1-badal.nilawar@intel.com>
+ <20220825132118.784407-3-badal.nilawar@intel.com>
+In-Reply-To: <20220825132118.784407-3-badal.nilawar@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.6.500.17
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY5PR11MB6211:EE_|BL3PR11MB6410:EE_
+x-ms-office365-filtering-correlation-id: b0d3316b-490b-4328-68b8-08da94c867d5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8b3erc8MSnwaJvQ+oXi7bZS8KbuLY1eY/lJKxIQvrQWevKuAZysGro9y85R6vVvi7xcLTemZdQy/bO/V0iJxgPESIa3PYafBxO1FCaVIZsx4nf3K6WkKQf1IqoS2hVxcG7KUSXlHMToKY+rjfnCvwcW78Ee6RugYLRnv5jHj2CVYmhIU2Ottw+I8rlEIe8vLbXuY6b+fzxETeCFvV//8ALdQZ2DcYcjQHAhOoydCZ5V8LWMQnzneY4dnBhydEpY1erWvg2cw0KwVIO9EMhLBc08Pbo3ytgmeWOvXD+Tddd4QVHpyWUV/yjBlQrP5C9SbULk6HnPheUrcREiPNGOMy/H9tx1yv4p8RTc0YIOVvhmJ//uQxoWSVA7pRRACr6FRCv/JqLGraWZ4UnLnw4VuE1vl/MTODHyGqHEQFXAXJ4CEbYS8LqyBX2gBinWTqmHXXQXEjSSxvpeZwx8hChrYCKc4mVNH4rjl1yFOPz1falG7bg0HTayev6iM3soNHV3jz+JR9nLR+oTWSzO72s/l2QVpO9PBbu6Qe//ibaE17C2KQzvfrUQY6HZovj3OSIj/AfNb5K/q5JTQj9fzu8lv8hqOhGIU4jF+MTF3L7GXZFFV9R1v0j1WkkWPj9h+gR7+9o+uuzddDrgvc+phTjmbm/3xo9bBGedP/LeuGdSmlzPFFekm+V8yoV/aHaP0yNvtrNgcddnYT2BouyYpIbV3e5FSH6AduqxD5ACQk03ZuaBcP9AWx1akFqQqF6SE+FL38ybo1N0s944LBmE/q6k+Dw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6211.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(39860400002)(136003)(346002)(366004)(396003)(9686003)(26005)(82960400001)(38100700002)(66556008)(38070700005)(66446008)(5660300002)(66946007)(76116006)(86362001)(4326008)(8676002)(66476007)(64756008)(110136005)(52536014)(6506007)(54906003)(316002)(71200400001)(7696005)(8936002)(186003)(2906002)(55016003)(33656002)(478600001)(53546011)(55236004)(83380400001)(41300700001)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?oJDoHL0qEkq0KDCz3h7elLPiJGrZIYH00/RNW6iPbYXqx91E+q0mi6Fh1QUk?=
+ =?us-ascii?Q?IH03jFM4XGiaiJ3sqnA+n9m5AEjtgBmT5kc7b7n0+hAz5xmxe7pGrR7dlHWM?=
+ =?us-ascii?Q?SmevZ5O25Qq1uUCuZK4hjRV6Z965FqraHpm8i18CeNrRI6VVu9MEDLGOnY2I?=
+ =?us-ascii?Q?0Oom8W0vlG0segRks2XtmJzhGqKNFHm/9A3ClFop9OhMVFOa7tSSSUisMYg6?=
+ =?us-ascii?Q?WCboRUnB0YWKwe3TXe4IXw6LbH75+t+g+Y8tQcbaBXGxgHfyK0Yo/TcbXujW?=
+ =?us-ascii?Q?HpA69MxGnXY0Ufy5/dYvxBq+SRKrAcH0Xr6bUDQtlcCjRWMA7iisPSejGzYG?=
+ =?us-ascii?Q?5Q7I+67Yhxhakh8kgNrdxhhYDUpHZU/kb5Icro7ygtfpTK8KNvbwRgPQroGg?=
+ =?us-ascii?Q?yEo4DuXUPJuw1hIByzmwx35fpLk/czusIO+q5ru89+Bvce2GR9z/iVpY1/4V?=
+ =?us-ascii?Q?hHIctJLWXgEhog6yzK44tjtoLVT/77XvqzOK2MbVj+RVuTnDC0tY1YzXNmXA?=
+ =?us-ascii?Q?5xLbxFSpAIrKUbPqh6MnVteuJ1pgnyegbSv/gPmq6mbwhazY1oi3KJ2k7Uor?=
+ =?us-ascii?Q?PqrPNKn81QNduqxKBx8QVnb0FTs/zTfg4/Ym6WsKq4WpT0izCpV0fzXyn09F?=
+ =?us-ascii?Q?3bjdZmA3NpJidi2bm6lBNFFNcc1qUrynSQ1YR1my0f+mZyjvR+jGqERNv8dn?=
+ =?us-ascii?Q?YA8ylRulGjccvNIQKzZH49hjATjWUZZn58c0kL5/qHVPg8+VXK1wAI49NXcX?=
+ =?us-ascii?Q?2GiCRkWzh+rVzoHnYA6/5XK42KX/mtYDq5eUr9HEKbOmaO1n8+6qFXnpT3qz?=
+ =?us-ascii?Q?++PpzABDq48J4CTBskbLvLmBlFmKKWqt8nmW2e7DQwYXEb+23NKUeXtLQfwJ?=
+ =?us-ascii?Q?LMpEtBPSvuiP5TRW3a9kmGRV4JY5O/jjDcNIQCVh0eTO8cXeo4/m+wq1G3vS?=
+ =?us-ascii?Q?lI8qrm94/oaZQJkPBt1azSuJj2HpTbR4aItA5ojU0SgPHN6R1KgNBzN1fsWh?=
+ =?us-ascii?Q?kbrKv5GJ/oZBHAp2u34eZ7Lke9vTSPGHbUTBfawLvLqlbwJNhkqgIirrfDzO?=
+ =?us-ascii?Q?xj4dyfTm3q1OePpQKIurqrYUqm/O9M8UpQq6HuhmfElHsr5QsBvbFg91f+vC?=
+ =?us-ascii?Q?gIchnweX55ev4zsuFmhccrdkN6CK5DJ68VE6qfokeycpysC/ZDREQ0fCegXq?=
+ =?us-ascii?Q?WqbLfwN20tvIshtPp7dLzCqHWv7WYO80TVeOAhkINW5rdrPg61UTeMYrrUXy?=
+ =?us-ascii?Q?YarV8OZi2/XibZZZ4920Ktk/E+zfKtODUMRdOUZ+0G9r5jyE0uIqofQBCeNJ?=
+ =?us-ascii?Q?MFQIABX6WOEvlghtdYx18JMS8poOmXA6bHe3dwqsi68oJehg9JUxt6KooER4?=
+ =?us-ascii?Q?Wz3quJEbzXspDg2Ut0CuZ8PZ0tg96b3CUYtApleUTNaBRo+i7aCIQURDvWOE?=
+ =?us-ascii?Q?l7cRqzQi4ryTA/6gtKP/siXwUQLHcZOIk7MeX5whiabK/cwNWphrBV+UvJD5?=
+ =?us-ascii?Q?igaqE55GyPvMIsXnLb17n4UpCjzumY19gnLnwiniHReHA4mAIW4keFBHVla8?=
+ =?us-ascii?Q?2f1Gn8SWTRh0NXubayJizivcrQu+3mZmwShXb6GF?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6211.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b0d3316b-490b-4328-68b8-08da94c867d5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Sep 2022 14:09:28.2443
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: VG07Y2U3OLf6vMEFECPeMjeTxPVBiBAFlv1cn35tSczbL0NacxFc5ZIdVzlHvkWIbc7pFTFsNwUFbCtw1Rh5FE6uAV6lXx1zfySS/3Mz+tM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR11MB6410
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Duke Du <dukedu83@gmail.com>
 
-Add the pmbus driver for TEXAS tps546d24 Buck Converter.
-The vout mode of tps546d24 supported relative data format,
-which is not supported by the PMBus core.
 
-Signed-off-by: Duke Du <dukedu83@gmail.com>
----
-Change in v1:
-    Initial patchset.
-Change in v2:
-    Correct the tps546d24.rst format.
-Change in v3:
-    1. Modify the patch description.
-    2. Put the change log between the dashes and diffstat.
-Change in v4:
-    1. Modify the patch description.
-    2. Clear the bit 7 of PMBUS_VOUT_MODE to change the mode from relative
-       to absolute.
-    3. Add the vendor prefix.
-Change in v5:
-    1. Update the patch description.
-    2. Extend the title underline at tps546d24.rst line 4.
-    3. Add error handler and cover the edge case.
----
----
- Documentation/hwmon/index.rst     |  1 +
- Documentation/hwmon/tps546d24.rst | 35 +++++++++++++++++++
- MAINTAINERS                       |  7 ++++
- drivers/hwmon/pmbus/Kconfig       |  9 +++++
- drivers/hwmon/pmbus/Makefile      |  1 +
- drivers/hwmon/pmbus/tps546d24.c   | 71 +++++++++++++++++++++++++++++++++++++++
- 6 files changed, 124 insertions(+)
- create mode 100644 Documentation/hwmon/tps546d24.rst
- create mode 100644 drivers/hwmon/pmbus/tps546d24.c
-
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index f7113b0..d3eede4 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -205,6 +205,7 @@ Hardware Monitoring Kernel Drivers
-    tps23861
-    tps40422
-    tps53679
-+   tps546d24
-    twl4030-madc-hwmon
-    ucd9000
-    ucd9200
-diff --git a/Documentation/hwmon/tps546d24.rst b/Documentation/hwmon/tps546d24.rst
-new file mode 100644
-index 0000000..97adb8a
---- /dev/null
-+++ b/Documentation/hwmon/tps546d24.rst
-@@ -0,0 +1,35 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+
-+Kernel driver tps546d24
-+=======================
-+
-+Supported chips:
-+
-+  * TI TPS546D24
-+
-+    Prefix: 'tps546d24'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://www.ti.com/lit/gpn/tps546d24
-+
-+Author: Duke Du <dukedu83@gmail.com>
-+
-+
-+Description
-+-----------
-+
-+The TPS546D24A is a highly integrated, non-isolated DC/DC converter capable
-+of high frequency operation and 40-A current output from a 7-mm x 5-mm
-+package.
-+
-+Two, three, and four TPS546D24A devices can be interconnected
-+to provide up to 160 A on a single output. The device has an option to
-+overdrive the internal 5-V LDO with an external 5-V supply via the VDD5
-+pin to improve efficiency and reduce power dissipation of the converter.
-+
-+
-+Platform data support
-+---------------------
-+
-+The driver supports standard PMBus driver platform data.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8a5012b..fa2d4fb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20583,6 +20583,13 @@ Q:	https://patchwork.kernel.org/project/linux-integrity/list/
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
- F:	drivers/char/tpm/
- 
-+TPS546D24 DRIVER
-+M:	Duke Du <dukedu83@gmail.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/tps546d24.rst
-+F:	drivers/hwmon/pmbus/tps546d24.c
-+
- TRACING
- M:	Steven Rostedt <rostedt@goodmis.org>
- M:	Ingo Molnar <mingo@redhat.com>
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 951e4a9..89668af 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -397,6 +397,15 @@ config SENSORS_TPS53679
- 	  This driver can also be built as a module. If so, the module will
- 	  be called tps53679.
- 
-+config SENSORS_TPS546D24
-+	tristate "TPS546D24"
-+	help
-+	  If you say yes here you get hardware monitoring support for TEXAS
-+	  TPS546D24.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called tps546d24
-+
- config SENSORS_UCD9000
- 	tristate "TI UCD90120, UCD90124, UCD90160, UCD90320, UCD9090, UCD90910"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index e2fe86f..0002dbe 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -41,6 +41,7 @@ obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
- obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
- obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
- obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
-+obj-$(CONFIG_SENSORS_TPS546D24)	+= tps546d24.o
- obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
- obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
- obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
-diff --git a/drivers/hwmon/pmbus/tps546d24.c b/drivers/hwmon/pmbus/tps546d24.c
-new file mode 100644
-index 0000000..ef2b0be
---- /dev/null
-+++ b/drivers/hwmon/pmbus/tps546d24.c
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Hardware monitoring driver for TEXAS TPS546D24 buck converter
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/pmbus.h>
-+#include "pmbus.h"
-+
-+static struct pmbus_driver_info tps546d24_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_VOLTAGE_OUT] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN
-+			| PMBUS_HAVE_IOUT | PMBUS_HAVE_VOUT
-+			| PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT
-+			| PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-+};
-+
-+static int tps546d24_probe(struct i2c_client *client)
-+{
-+	int reg;
-+
-+	reg = i2c_smbus_read_byte_data(client, PMBUS_VOUT_MODE);
-+	if (reg < 0)
-+		return reg;
-+
-+	if (reg & 0x80) {
-+		int err;
-+
-+		err = i2c_smbus_write_byte_data(client, PMBUS_VOUT_MODE, reg & 0x7f);
-+		if (err < 0)
-+			return err;
-+	}
-+	return pmbus_do_probe(client, &tps546d24_info);
-+}
-+
-+static const struct i2c_device_id tps546d24_id[] = {
-+	{"tps546d24", 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, tps546d24_id);
-+
-+static const struct of_device_id tps546d24_of_match[] = {
-+	{.compatible = "ti,tps546d24"},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, tps546d24_of_match);
-+
-+/* This is the driver that will be inserted */
-+static struct i2c_driver tps546d24_driver = {
-+	.driver = {
-+		   .name = "tps546d24",
-+		   .of_match_table = of_match_ptr(tps546d24_of_match),
-+	   },
-+	.probe_new = tps546d24_probe,
-+	.id_table = tps546d24_id,
-+};
-+
-+module_i2c_driver(tps546d24_driver);
-+
-+MODULE_AUTHOR("Duke Du <dukedu83@gmail.com>");
-+MODULE_DESCRIPTION("PMBus driver for TI tps546d24");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(PMBUS);
--- 
-2.7.4
+> -----Original Message-----
+> From: Nilawar, Badal <badal.nilawar@intel.com>
+> Sent: Thursday, August 25, 2022 6:51 PM
+> To: intel-gfx@lists.freedesktop.org
+> Cc: Dixit, Ashutosh <ashutosh.dixit@intel.com>; Tauro, Riana
+> <riana.tauro@intel.com>; Gupta, Anshuman <anshuman.gupta@intel.com>;
+> Ewins, Jon <jon.ewins@intel.com>; linux-hwmon@vger.kernel.org
+> Subject: [PATCH 2/7] drm/i915/hwmon: Add HWMON current voltage support
+>=20
+> From: Riana Tauro <riana.tauro@intel.com>
+>=20
+> Use i915 HWMON subsystem to display current input voltage.
+>=20
+> v2:
+>   - Updated date and kernel version in feature description
+>   - Fixed review comments (Ashutosh)
+> v3: Use macro HWMON_CHANNEL_INFO to define hwmon channel (Guenter)
+> v4:
+>   - Fixed review comments (Ashutosh)
+>   - Use hwm_ prefix for static functions (Ashutosh)
+>=20
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Anshuman Gupta <anshuman.gupta@intel.com>
+> Signed-off-by: Riana Tauro <riana.tauro@intel.com>
+> Signed-off-by: Badal Nilawar <badal.nilawar@intel.com>
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  .../ABI/testing/sysfs-driver-intel-i915-hwmon |  7 +++
+>  drivers/gpu/drm/i915/gt/intel_gt_regs.h       |  3 ++
+>  drivers/gpu/drm/i915/i915_hwmon.c             | 47 +++++++++++++++++++
+>  3 files changed, 57 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-driver-intel-i915-hwm=
+on
+>=20
+> diff --git a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+> b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+> new file mode 100644
+> index 000000000000..24c4b7477d51
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+> @@ -0,0 +1,7 @@
+> +What:		/sys/devices/.../hwmon/hwmon<i>/in0_input
+> +Date:		June 2022
+> +KernelVersion:	5.19
+> +Contact:	dri-devel@lists.freedesktop.org
+> +Description:	RO. Current Voltage in millivolt.
+> +
+> +		Only supported for particular Intel i915 graphics platforms.
+> diff --git a/drivers/gpu/drm/i915/gt/intel_gt_regs.h
+> b/drivers/gpu/drm/i915/gt/intel_gt_regs.h
+> index 94f9ddcfb3a5..5d4fbda4d326 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_gt_regs.h
+> +++ b/drivers/gpu/drm/i915/gt/intel_gt_regs.h
+> @@ -1508,6 +1508,9 @@
+>  #define VLV_RENDER_C0_COUNT			_MMIO(0x138118)
+>  #define VLV_MEDIA_C0_COUNT			_MMIO(0x13811c)
+>=20
+> +#define GEN12_RPSTAT1				_MMIO(0x1381b4)
+> +#define   GEN12_VOLTAGE_MASK			REG_GENMASK(10, 0)
+> +
+>  #define GEN11_GT_INTR_DW(x)			_MMIO(0x190018 +
+> ((x) * 4))
+>  #define   GEN11_CSME				(31)
+>  #define   GEN11_GUNIT				(28)
+> diff --git a/drivers/gpu/drm/i915/i915_hwmon.c
+> b/drivers/gpu/drm/i915/i915_hwmon.c
+> index 103dd543a214..2192d0fd4c66 100644
+> --- a/drivers/gpu/drm/i915/i915_hwmon.c
+> +++ b/drivers/gpu/drm/i915/i915_hwmon.c
+> @@ -11,8 +11,10 @@
+>  #include "i915_hwmon.h"
+>  #include "i915_reg.h"
+>  #include "intel_mchbar_regs.h"
+> +#include "gt/intel_gt_regs.h"
+>=20
+>  struct hwm_reg {
+> +	i915_reg_t gt_perf_status;
+>  };
+>=20
+>  struct hwm_drvdata {
+> @@ -29,14 +31,49 @@ struct i915_hwmon {
+>  };
+>=20
+>  static const struct hwmon_channel_info *hwm_info[] =3D {
+> +	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
+>  	NULL
+>  };
+>=20
+> +static umode_t
+> +hwm_in_is_visible(const struct hwm_drvdata *ddat, u32 attr) {
+> +	switch (attr) {
+> +	case hwmon_in_input:
+> +		return i915_mmio_reg_valid(ddat->hwmon->rg.gt_perf_status)
+> ? 0444 : 0;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static int
+> +hwm_in_read(struct hwm_drvdata *ddat, u32 attr, long *val) {
+> +	struct i915_hwmon *hwmon =3D ddat->hwmon;
+> +	intel_wakeref_t wakeref;
+> +	u32 reg_value;
+> +
+> +	switch (attr) {
+> +	case hwmon_in_input:
+Other attributes in this series take hwmon->lock before accessing i915 regi=
+sters ,
+So do we need lock here as well ?
+Thanks,
+Anshuman Gupta.=20
+> +		with_intel_runtime_pm(ddat->uncore->rpm, wakeref)
+> +			reg_value =3D intel_uncore_read(ddat->uncore, hwmon-
+> >rg.gt_perf_status);
+> +		/* In units of 2.5 millivolt */
+> +		*val =3D
+> DIV_ROUND_CLOSEST(REG_FIELD_GET(GEN12_VOLTAGE_MASK, reg_value) *
+> 25, 10);
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+>  static umode_t
+>  hwm_is_visible(const void *drvdata, enum hwmon_sensor_types type,
+>  	       u32 attr, int channel)
+>  {
+> +	struct hwm_drvdata *ddat =3D (struct hwm_drvdata *)drvdata;
+> +
+>  	switch (type) {
+> +	case hwmon_in:
+> +		return hwm_in_is_visible(ddat, attr);
+>  	default:
+>  		return 0;
+>  	}
+> @@ -46,7 +83,11 @@ static int
+>  hwm_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>  	 int channel, long *val)
+>  {
+> +	struct hwm_drvdata *ddat =3D dev_get_drvdata(dev);
+> +
+>  	switch (type) {
+> +	case hwmon_in:
+> +		return hwm_in_read(ddat, attr, val);
+>  	default:
+>  		return -EOPNOTSUPP;
+>  	}
+> @@ -76,6 +117,12 @@ static const struct hwmon_chip_info hwm_chip_info =3D=
+ {
+> static void  hwm_get_preregistration_info(struct drm_i915_private *i915) =
+ {
+> +	struct i915_hwmon *hwmon =3D i915->hwmon;
+> +
+> +	if (IS_DG1(i915) || IS_DG2(i915))
+> +		hwmon->rg.gt_perf_status =3D GEN12_RPSTAT1;
+> +	else
+> +		hwmon->rg.gt_perf_status =3D INVALID_MMIO_REG;
+>  }
+>=20
+>  void i915_hwmon_register(struct drm_i915_private *i915)
+> --
+> 2.25.1
 
