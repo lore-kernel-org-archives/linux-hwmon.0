@@ -2,134 +2,208 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C16CCC6FA82
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Sep 2022 06:23:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D3DEC54EE9
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Sep 2022 08:12:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiIMGXz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 13 Sep 2022 02:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
+        id S231347AbiIMIMf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 13 Sep 2022 04:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiIMGXy (ORCPT
+        with ESMTP id S231236AbiIMIMd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Sep 2022 02:23:54 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE22765B3
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Sep 2022 23:23:50 -0700 (PDT)
+        Tue, 13 Sep 2022 04:12:33 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979DD5A83F
+        for <linux-hwmon@vger.kernel.org>; Tue, 13 Sep 2022 01:12:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663050230; x=1694586230;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=w5L/hJuiataJngEL7zUre8TYpDVI+5aLgUax5GZmal8=;
-  b=l3al/S8nDpof/v4Ts+gjP0sGydg4Bm0tvt7ryG7xb6w8ZWwvanfV7HHK
-   tAatrCr/Aw8CfCF9EeLjvdOR73boRAbPAYszNn1zHDRZZF1ix7Q+xfDg6
-   HKBq4Gg8gMFa7SspGPb0/mkQGBaL9Svgx4eaB86CHe/VNr/uPlJ7PouT+
-   gVg/PwM09JMujPBrL6MSXv2jop6btnwG4Ta7kjCbcAM8eflaFUcaT7QxE
-   59+ZhkOLOcPGrETb3gw/RtzCEr/D0lC1Tz9q569r1kRJlEUexi1a4Qj65
-   EHEdDt58AYG18y2Ekf53QHGPj3VPYaa+z7DH5vCtVBdwNYL0EFJ5c84oA
+  t=1663056752; x=1694592752;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ORRJ5nwNPVvxTyCWE1fKS52oVSxTLz02kx/JZQ1Yq48=;
+  b=bznLIw+eGyK4NSY455KohlxUXRI61MfgtZyuEMh27D26dlrP5Ive8IBP
+   FGYVhkBoIMsq4VFWmZ9EXx1Mj4qflvF++U35CVMg4vRFPGLNYDbNayWSK
+   17OPfdMcS2H91CdCPv6xnjPe/C83xS39myIev2A5pPsWhkqwB/CBNe8fa
+   9B4f1YDoxKHvgJy2qxrMW957MtBqpQid67wnxHJNjmLGjiwMP9C0yQyhc
+   ZYerbA1GcdfHeSM9f4BRqSIZFovwWO4EzYtmX8ENjpyNL9/lJl3nN8UdZ
+   dEkMjdT/SkGani0s7UCf1cg0WFqqeC6izzD7fdm+Pg1dpykFt+CdHDN+B
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="324292767"
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="278469824"
 X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="324292767"
+   d="scan'208";a="278469824"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 23:23:50 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 01:12:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="720045000"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 12 Sep 2022 23:23:49 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oXzKm-0003J1-28;
-        Tue, 13 Sep 2022 06:23:48 +0000
-Date:   Tue, 13 Sep 2022 14:23:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- e8a253862802688458e637fb44812116464df829
-Message-ID: <632021db.8JHkr/zr0B7zx4CV%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="720081637"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga002.fm.intel.com with ESMTP; 13 Sep 2022 01:12:32 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 13 Sep 2022 01:12:31 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 13 Sep 2022 01:12:31 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.109)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 13 Sep 2022 01:12:25 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NNotmecxNWojOeYtvBaMJ1TFG/e6crL/vUQEBWwVwtDGqS8+Z+9MhT2OYAhaVmDM0ox7H+PTrw3lhcDrCH9Yz6uZz1rIj8psp78Q2lZocKopRDb5jYC8TZllB6P33Za82HogHx/hlqLTLUtVnhQH0fEC3TTCP0Qh3yBJdJq/fTaqCuqJ0eOTrvwOKFEGmboVwycuhFOl9NzZUKy958ZhlyMnZRzg37jou5jDHg4UvJZCKzETEINiRmIrHxGugs0VwcDIDheNYCcfzKjADy86KH9Sx+vp3jiMl8acv8OZkiHeT4M3pCRsEvw5uVKZQMEDzhwH4Wof9d47k042+DQltw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b05kWevbDZQj2/cpjcedzgYWANTx678J5grSLjIxdWE=;
+ b=UipqOAokmah8dvHBpFhjRq9YC45kLIJH+zk7orDZCo1yBV2zK17+Agot3OZjUXcp5kp8E10eSP+jCQk5xtue1dmbJddKJFtEvgXX02xpGG5K7h7NH1cozhOEBLY4DyjJi4GB3ioGkO1qpEO3zLyE46x8F33zg4OtWe4m9oDzlbhOT0bZYZ/LnyC1NFvPVIPOAQxGoZB+aj0Ico/BVDRD/ZKlupWMAQPP8oRJUWKrE1sOz2vtw2utdqq8vL4RkHY8aFuhdlfFu7gac12tyNHlQXaSSNAriqefYsfI4YeaesjtBCwnjtSV2s5BshmhHuj6YgfH+UtVPCk02K9g3lREZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CY5PR11MB6211.namprd11.prod.outlook.com (2603:10b6:930:25::6)
+ by DM4PR11MB5995.namprd11.prod.outlook.com (2603:10b6:8:5e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.19; Tue, 13 Sep
+ 2022 08:11:58 +0000
+Received: from CY5PR11MB6211.namprd11.prod.outlook.com
+ ([fe80::5878:882a:3946:74ed]) by CY5PR11MB6211.namprd11.prod.outlook.com
+ ([fe80::5878:882a:3946:74ed%7]) with mapi id 15.20.5612.022; Tue, 13 Sep 2022
+ 08:11:58 +0000
+From:   "Gupta, Anshuman" <anshuman.gupta@intel.com>
+To:     "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
+CC:     "Nilawar, Badal" <badal.nilawar@intel.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "Tauro, Riana" <riana.tauro@intel.com>,
+        "Ewins, Jon" <jon.ewins@intel.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: RE: [PATCH 2/7] drm/i915/hwmon: Add HWMON current voltage support
+Thread-Topic: [PATCH 2/7] drm/i915/hwmon: Add HWMON current voltage support
+Thread-Index: AQHYuIVOgQip7iJi3k+BrB7UUlRG7K3b8NsAgAAqGwCAAQGTQA==
+Date:   Tue, 13 Sep 2022 08:11:57 +0000
+Message-ID: <CY5PR11MB62114DF624728E35804635D495479@CY5PR11MB6211.namprd11.prod.outlook.com>
+References: <20220825132118.784407-1-badal.nilawar@intel.com>
+        <20220825132118.784407-3-badal.nilawar@intel.com>
+        <CY5PR11MB62112A756C0464129B94C5BE95449@CY5PR11MB6211.namprd11.prod.outlook.com>
+ <87edwg5z1b.wl-ashutosh.dixit@intel.com>
+In-Reply-To: <87edwg5z1b.wl-ashutosh.dixit@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.6.500.17
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY5PR11MB6211:EE_|DM4PR11MB5995:EE_
+x-ms-office365-filtering-correlation-id: eea67898-9b38-42ce-f794-08da955fa0d0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jJdijEjOhWfmVErDdoYTWKA+OGXl7xmZKLnDHnV3jWQXYgVA7b1SoShsQfoFeDjfsxoTW9tLSv5/OqbZNZGUc3FIVTIj5UAW1ISpH4aX7XR/9huX54sERztZLcnlx5P21K7kFVESKnSf4T0Nh+JI396bWC+dfBOTlfrEMj5uQu8Gwut6WOlwsFjaDxKi0AJnnW9/MHMUVT9WQAVvHA47p+WMAuybgmitfrGd3VhDawMpq5is0Dpt+EcRa6cmdT88B263C01/OTxOdHt5vPwzZuGPfOvfdZ95sa0Bc0Mek69j9KcYSxpT60U2CK/HzFSSD7o6/EU2aiTStecCYNafWNt8VmMWxAi3DLdOUupvmcdJ5nBoSK1EIvsGfoTKXo70pcQ2UJzxWOXPG55pwDdgb3JB3Mvi84qIsouw9FAhJvNeAPZzOKA0sVLmhelSnOgl8lrbCTU9zNgEJJjNTiCJOk2MmMCL3+tRCD6tBA6JMTKcBFK/IgfQRQbZIuPNrP1VWZfh4Gf2nP+6CmUD6I/0SHqF4StNUv5UzQeiK4FAS+1fCU0deN8rywwnnfwotR0pUXQgnvJIyY+FB8+rsDsby6MUn+KX+diBrn1O1+t/qFfoq6lE2Ar2/TTCdFnWg3u9eYTTxcelctWJXZpgijhNg5PVJFnuM+nF5fMtu8Qy26eBYF6ny35cXkriarfJqD5axkOZxr+vea1ekaG/IkPvFzKxF6B0urSU0VYQ/qkE450YsEfiBAz8d5naVDDGP10o4G5sz+hLs0lnSpJ40GAM3g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6211.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(366004)(39860400002)(346002)(376002)(451199015)(83380400001)(6506007)(53546011)(33656002)(7696005)(66946007)(86362001)(478600001)(4326008)(6636002)(76116006)(55016003)(2906002)(8676002)(71200400001)(41300700001)(9686003)(66476007)(38100700002)(186003)(26005)(52536014)(66446008)(316002)(5660300002)(55236004)(82960400001)(38070700005)(54906003)(8936002)(66556008)(6862004)(64756008)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0tkdGD+co/4FxK/0cShqOqTTN60ejkBcEc3iJVkwcp8gA0uRlQg5TSvpqw3b?=
+ =?us-ascii?Q?I6KwipCgd1bxutoirFjhKuL5cBaa68ORkKttNSbi+/GG9Vwdo4507Mqp6Zs4?=
+ =?us-ascii?Q?TJlo4T8N4mhzjxoQoPboJHkYbFjaHzp6UmICvKhj9zTTavC2MZPep7tm8G4+?=
+ =?us-ascii?Q?9v9Dp3nOVzLw8wQxiOiyD72k2TgSgx7jdodNN1DG85E9sZfKpIEA64dpiAO4?=
+ =?us-ascii?Q?YMOtXdOsu2cXXuo9l0urTRKyj+HlUQVlKAgah8hBp9srwndcmMUrpfcQGsku?=
+ =?us-ascii?Q?U5Jaz4gvwkOKnr6biucH3+ZzoGZIYIKS63pxRBaZrQmoZvfwPKFskScpKPnS?=
+ =?us-ascii?Q?NH20rrozX7F1t0jaBHnGOdMnXFEV7xzfJaWZAyZnYar/Lo1mku5ZrmWcbPnu?=
+ =?us-ascii?Q?S2793x8bUTe+OLRW7uKM8vzLYwFbRxdmreTXqN5Lh5IFBdiXhI9kWgn85spV?=
+ =?us-ascii?Q?KexPp8n4G0duOS9Quf/V5YXzFmF00aQjzbJOOJ4NVmPQ7CZvmjxaw4ZpH3Ef?=
+ =?us-ascii?Q?AUMrFhd1rgcH++lWnylf5XsNsunk0+YcWxm8Yw5SGmEPYEBbYkUd+b1G6B2h?=
+ =?us-ascii?Q?hLQonHkQ2V6EGFsC8zwLN/MmjQNGddZRuT2tokUEfLnKzUijseBXxkfbAm+Y?=
+ =?us-ascii?Q?/HAkkFwNMKDgWaqsBDmBE9hpFMSArib88ksTwnWgYGHcP9wbGSTISdTNmkP9?=
+ =?us-ascii?Q?rS5hWhFrGM4GQuPEdxLVal1fTj/sGED8MLtuqKPFGpUmqgza9w3Jhj1Ztesf?=
+ =?us-ascii?Q?l6X25+x26gYxCiGZyQsN7ZARUSg2/A6lRR3OnMhsotPLI4VvkulL4SzvfB50?=
+ =?us-ascii?Q?sx27EFE4mstgZEMcxl6TJgOFildMtG8xgdcdlQTlRWf1Vj08VCKQn3PCan2M?=
+ =?us-ascii?Q?lj7S5bh1VmZXDhfM2QeCieWLyMNe/5okD7USOcsWzxjqV/pf3P+v3JMQiAgj?=
+ =?us-ascii?Q?VOJ1W0/ANm86cJqDqMi9P4b7SPERXmi77xPigdSPOHVC2WbqmbpTNsCtgeWm?=
+ =?us-ascii?Q?psZcDfDFfX90DchPvKvxEYq/HmMW8RyycRVOs0IpO69RdiGc/6vTXyvj4/u/?=
+ =?us-ascii?Q?yhVqtSR7nGuegV2OXA+qrfMsXVqol/QDM7BmcUEcdduRgJZTzzR4Rtx13eD5?=
+ =?us-ascii?Q?wm2MrrapZ2kYKLmuq8ZJ9DiuERhoVVeIpAyKqJS37LSlF7VnvyPjoeTmkkWr?=
+ =?us-ascii?Q?wRnVgUEuajz00TTH9axOQLTJbr8YRkkDV/8Q8LUcuM2feOMUswi+5SsSUvXW?=
+ =?us-ascii?Q?0Onh7wHJYlPim/yL3LD499W1j/vauUtoiBjo7aAc9oZVSztY1AYlPSs1zFY8?=
+ =?us-ascii?Q?PlknidGvBUowojn+u0DhKbXqc8yckweR9p96joxiPafQ7wBjWCqZKDsa5FEh?=
+ =?us-ascii?Q?ZBhGdhVBfqcxevUjhRM+NdtwYaOBTanxRhigZwdeCtsMZJIN5FH5noYkjZJx?=
+ =?us-ascii?Q?WRUiGOIeAohT9s72/mAmccYq7qKUnyVNlqfj/Z0OQltZxdYy8lWF+QVWcCWO?=
+ =?us-ascii?Q?BFoiuhx28gtTPacebFdQIJ2P/nZA5z98bMe30GfnZtRnlf3GrFqtKX0uJoml?=
+ =?us-ascii?Q?o8eonA95+OW30rGUY6rnrq68Jr9uBupt8AOiJg8y?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6211.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eea67898-9b38-42ce-f794-08da955fa0d0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2022 08:11:57.4765
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: W1nyPe3US6bRf9jlNKndpEI6M5KR7en6QGFfDNuK6XZr/KnM9iJZeXRTRRpyYp/lFjxLvC+gJwIy8XVai+/DrppgihtspV3J+XpA95XW5tA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5995
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: e8a253862802688458e637fb44812116464df829  hwmon: (mr75203) skip reset-control deassert for SOCs that don't support it
 
-elapsed time: 725m
 
-configs tested: 58
-configs skipped: 2
+> -----Original Message-----
+> From: Dixit, Ashutosh <ashutosh.dixit@intel.com>
+> Sent: Monday, September 12, 2022 10:08 PM
+> To: Gupta, Anshuman <anshuman.gupta@intel.com>
+> Cc: Nilawar, Badal <badal.nilawar@intel.com>; intel-gfx@lists.freedesktop=
+.org;
+> Tauro, Riana <riana.tauro@intel.com>; Ewins, Jon <jon.ewins@intel.com>;
+> linux-hwmon@vger.kernel.org
+> Subject: Re: [PATCH 2/7] drm/i915/hwmon: Add HWMON current voltage
+> support
+>=20
+> On Mon, 12 Sep 2022 07:09:28 -0700, Gupta, Anshuman wrote:
+> >
+> > > +static int
+> > > +hwm_in_read(struct hwm_drvdata *ddat, u32 attr, long *val) {
+> > > +	struct i915_hwmon *hwmon =3D ddat->hwmon;
+> > > +	intel_wakeref_t wakeref;
+> > > +	u32 reg_value;
+> > > +
+> > > +	switch (attr) {
+> > > +	case hwmon_in_input:
+> >
+> > Other attributes in this series take hwmon->lock before accessing i915
+> > registers , So do we need lock here as well ?
+>=20
+> The lock is being taken only for RMW and for making sure energy counter
+> updates happen atomically. We are not taking the lock for just reads so I=
+MO no
+> lock is needed here.
+If that is the case, then why it needs to grab a lock for rmw on different
+Register ? Like in patch  3 of this series grabs hwmon->howmon_lock for rmw=
+  on=20
+two different register pkg_power_sku_unit and pkg_rapl_limit. One register =
+rmw=20
+should be independent of other register here ?
+Thanks,
+Anshuman Gupta
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-i386                                defconfig
-sh                               allmodconfig
-i386                 randconfig-a001-20220912
-i386                 randconfig-a002-20220912
-x86_64                              defconfig
-x86_64                           rhel-8.3-kvm
-i386                             allyesconfig
-x86_64                          rhel-8.3-func
-i386                 randconfig-a004-20220912
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-i386                 randconfig-a003-20220912
-x86_64                    rhel-8.3-kselftests
-i386                 randconfig-a006-20220912
-x86_64                           allyesconfig
-i386                 randconfig-a005-20220912
-x86_64                           rhel-8.3-syz
-x86_64               randconfig-a001-20220912
-x86_64               randconfig-a004-20220912
-x86_64               randconfig-a002-20220912
-arm                                 defconfig
-riscv                randconfig-r042-20220911
-x86_64               randconfig-a005-20220912
-arc                  randconfig-r043-20220912
-x86_64               randconfig-a003-20220912
-x86_64               randconfig-a006-20220912
-arc                  randconfig-r043-20220911
-s390                 randconfig-r044-20220911
-ia64                             allmodconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-
-clang tested configs:
-riscv                randconfig-r042-20220912
-hexagon              randconfig-r041-20220912
-hexagon              randconfig-r045-20220911
-hexagon              randconfig-r041-20220911
-hexagon              randconfig-r045-20220912
-s390                 randconfig-r044-20220912
-i386                 randconfig-a013-20220912
-i386                 randconfig-a011-20220912
-i386                 randconfig-a014-20220912
-i386                 randconfig-a015-20220912
-i386                 randconfig-a012-20220912
-i386                 randconfig-a016-20220912
-x86_64               randconfig-a014-20220912
-x86_64               randconfig-a011-20220912
-x86_64               randconfig-a012-20220912
-x86_64               randconfig-a015-20220912
-x86_64               randconfig-a016-20220912
-x86_64               randconfig-a013-20220912
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>=20
+> > > +		with_intel_runtime_pm(ddat->uncore->rpm, wakeref)
+> > > +			reg_value =3D intel_uncore_read(ddat->uncore, hwmon-
+> > > >rg.gt_perf_status);
+> > > +		/* In units of 2.5 millivolt */
+> > > +		*val =3D
+> > > DIV_ROUND_CLOSEST(REG_FIELD_GET(GEN12_VOLTAGE_MASK, reg_value)
+> * 25,
+> > > 10);
+> > > +		return 0;
+> > > +	default:
+> > > +		return -EOPNOTSUPP;
+> > > +	}
+> > > +}
+>=20
+> Thanks.
+> --
+> Ashutosh
