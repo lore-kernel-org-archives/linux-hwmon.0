@@ -2,88 +2,149 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81B99C6FA82
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Sep 2022 11:58:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E525DC54EE9
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Sep 2022 13:06:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231963AbiIML6X (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 13 Sep 2022 07:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
+        id S231846AbiIMNGl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 13 Sep 2022 09:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231933AbiIML6W (ORCPT
+        with ESMTP id S231823AbiIMNGk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Sep 2022 07:58:22 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285875EDE8;
-        Tue, 13 Sep 2022 04:58:21 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1280590722dso31456791fac.1;
-        Tue, 13 Sep 2022 04:58:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=LYSkHBCtBl6zbH23uUCPqPzkNWE3krDu7GZU/Ogtukg=;
-        b=638UqidbXp6mlgdAnabN3U5Ci6ckGrqnu+vYovId+zhVobhx537lJV766/Z02NkzCA
-         P2jJ+mYBfjMbnjqS9OPZNKuZbQdtxyx/SSdTmmLOr1MVM1rOL3bE04PL4QQpWcqsWHEq
-         wtKDTJsniHi6551wqkUh8Ha7i0Aw1QJrUlj+brgnulueDzhpvc7qfh6ve/7pq6EBc2hQ
-         xcVLI8PVAtZqat2R6a+6Q1LeAbF4YUsYZnx5Er6y/PgP4BpySTCdc+NcnnjPnMxj63rx
-         4FP8/JHOgT+/m1Qo9uksDYk9sbXD+VEq+DSY67SIGLmoDJx3u+w3MtHfR/8xnMuGgenk
-         7KCg==
-X-Gm-Message-State: ACgBeo2M6sdKPa0OnLok1rrC3zAZ44/mU2ecCBGcOzlXgdDD2HZftfUo
-        4eFq4tXNRXisnDCAKmnc9Q==
-X-Google-Smtp-Source: AA6agR4ez4++YFNhv9E7XpmcJu8qnOuUKGvOJhMaGnz0HPD1JZ1/RBEZD4uHDwHaLV3B/+iU07ym9w==
-X-Received: by 2002:a05:6870:2419:b0:127:b762:9d1e with SMTP id n25-20020a056870241900b00127b7629d1emr1599758oap.12.1663070300439;
-        Tue, 13 Sep 2022 04:58:20 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b11-20020a056870d1cb00b001276cea2320sm6895753oac.58.2022.09.13.04.58.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 04:58:19 -0700 (PDT)
-Received: (nullmailer pid 3388186 invoked by uid 1000);
-        Tue, 13 Sep 2022 11:58:19 -0000
-Date:   Tue, 13 Sep 2022 06:58:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     hhhawa@amazon.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        andriy.shevchenko@intel.com, jonnyc@amazon.com,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        jdelvare@suse.com, rtanwar@maxlinear.com
-Subject: Re: [PATCH v5 18/21] dt-bindings: hwmon: (mr75203) add coefficient
- properties for the thermal equation
-Message-ID: <20220913115819.GA3388125-robh@kernel.org>
-References: <20220908152449.35457-1-farbere@amazon.com>
- <20220908152449.35457-19-farbere@amazon.com>
+        Tue, 13 Sep 2022 09:06:40 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35791FCCD;
+        Tue, 13 Sep 2022 06:06:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1663074400; x=1694610400;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=BykdxPFWKamfb0oV6qvLgKDHPSq/P2Bpyfv/MiGBYsM=;
+  b=mcxfcp1Uw0ty3x3tFhBqudcV4jDP7FvvU3YH6LJT+oSjO1MOQ9Iu1Dim
+   D+6dJNwVUJoc2l07vPJ0DNhAngOJ4yHajmKIFZRVWDmI9hq1okdJpRGtW
+   RDSTcu316hBAy9HcJqH1BdDQpa/S0bMEuoJ61m3kgqk/DVZo1Zf+aDWz/
+   4=;
+Subject: Re: [PATCH v5 20/21] hwmon: (mr75203) add debugfs to read and write
+ temperature coefficients
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-8be8ed69.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 13:06:28 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1e-8be8ed69.us-east-1.amazon.com (Postfix) with ESMTPS id 72C3AC085A;
+        Tue, 13 Sep 2022 13:06:25 +0000 (UTC)
+Received: from EX19D013UWA002.ant.amazon.com (10.13.138.210) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 13 Sep 2022 13:06:24 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX19D013UWA002.ant.amazon.com (10.13.138.210) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Tue, 13 Sep 2022 13:06:24 +0000
+Received: from [192.168.151.102] (10.85.143.178) by mail-relay.amazon.com
+ (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Tue, 13 Sep 2022 13:06:21 +0000
+Message-ID: <581a4a0b-8e0e-b7a2-f873-77ed74b54e96@amazon.com>
+Date:   Tue, 13 Sep 2022 16:06:20 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908152449.35457-19-farbere@amazon.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+CC:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <hhhawa@amazon.com>,
+        <jonnyc@amazon.com>, "Farber, Eliav" <farbere@amazon.com>
+References: <20220908152449.35457-1-farbere@amazon.com>
+ <20220908152449.35457-21-farbere@amazon.com>
+ <YxowTBIODMLjf1Ek@smile.fi.intel.com>
+Content-Language: en-US
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <YxowTBIODMLjf1Ek@smile.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 08 Sep 2022 15:24:46 +0000, Eliav Farber wrote:
-> Add optional temperature coefficient properties:
->  *) moortec,ts-coeff-g
->  *) moortec,ts-coeff-h
->  *) moortec,ts-coeff-cal5
->  *) moortec,ts-coeff-j
-> If defined they shall be used instead of defaults.
-> 
-> The coefficients were added to device tree on top of the series property
-> (which can be used to select between series 5 and series 6), because
-> coefficients can vary between product and product, and code defaults might
-> not be accurate enough.
-> 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
-> V4 -> V3:
-> - Add 'multipleOf: 1000' instead of plain text.
-> - Add minimum/maximum for some of the new properties.
-> 
-> V3 -> V2:
-> - Add "moortec" prefix to property name.
-> 
->  .../bindings/hwmon/moortec,mr75203.yaml       | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
+On 9/8/2022 9:11 PM, Andy Shevchenko wrote:
+> On Thu, Sep 08, 2022 at 03:24:48PM +0000, Eliav Farber wrote:
+>> This change adds debugfs to read and write temperature sensor 
+>> coefficients
+>> - g, h, j and cal5.
+>>
+>> The coefficients can vary between product and product, so it can be very
+>> useful to be able to modify them on the fly during the calibration
+>> process.
+>>
+>> e.g.:
+>>
+>> cat /sys/kernel/debug/940f23d0000.pvt/ts_coeff_cal5
+>> 4096
+>>
+>> echo 83000 > sys/kernel/debug/940f23d0000.pvt/ts_coeff_g
+>
+> ...
+>
+>> - Return j coefficient to use debugfs_create_file() instead of
+>>   debugfs_create_u32() because j is signed.
+>
+> You can use
+>
+> DEFINE_DEBUGFS_ATTRIBUTE(ts_coeff_j, ts_coeff_j_get, ts_coeff_j_set, 
+> "%lld\n");
+>
+> which still makes code compact. 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+
+I tried your suggestion to use DEFINE_DEBUGFS_ATTRIBUTE but I can't set
+j to be a negative value:
+
+root@alpine:~# cat /sys/kernel/debug/940f23d0000.pvt/ts_coeff_j
+0
+root@alpine:~# echo 100 > /sys/kernel/debug/940f23d0000.pvt/ts_coeff_j
+root@alpine:~# cat /sys/kernel/debug/940f23d0000.pvt/ts_coeff_j
+100
+root@alpine:~# echo -100 > /sys/kernel/debug/940f23d0000.pvt/ts_coeff_j
+sh: write error: Invalid argument
+
+This is the code I added:
+
+static int ts_coeff_j_set(void *data, u64 val)
+{
+     struct pvt_device *pvt = data;
+
+     pvt->ts_coeff.j = val;
+     return 0;
+}
+
+static int ts_coeff_j_get(void *data, u64 *val)
+{
+     struct pvt_device *pvt = data;
+
+     *val = pvt->ts_coeff.j;
+     return 0;
+}
+
+DEFINE_DEBUGFS_ATTRIBUTE(ts_coeff_j_fops, ts_coeff_j_get,
+              ts_coeff_j_set, "%lld\n");
+
+static void devm_pvt_ts_dbgfs_remove(void *data)
+{
+     struct pvt_device *pvt = (struct pvt_device *)data;
+
+     debugfs_remove_recursive(pvt->dbgfs_dir);
+     pvt->dbgfs_dir = NULL;
+}
+
+static int pvt_ts_dbgfs_create(struct pvt_device *pvt, struct device *dev)
+{
+     ...
+     debugfs_create_file("ts_coeff_j", 0644, pvt->dbgfs_dir, pvt,
+                 &ts_coeff_j_fops);
+     ...
+
+I'm using kernel 5.10.112.
+Can you please see if I'm did anything wrong?
+
+--
+Thanks, Eliav
+
