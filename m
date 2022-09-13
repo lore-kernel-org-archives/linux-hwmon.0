@@ -2,88 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4296FC6FA82
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Sep 2022 11:50:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71F6EC6FA82
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Sep 2022 11:57:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbiIMLud (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 13 Sep 2022 07:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44390 "EHLO
+        id S231656AbiIML5P (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 13 Sep 2022 07:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiIMLub (ORCPT
+        with ESMTP id S231335AbiIML5O (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Sep 2022 07:50:31 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845B8AE71;
-        Tue, 13 Sep 2022 04:50:30 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1274ec87ad5so31435291fac.0;
-        Tue, 13 Sep 2022 04:50:30 -0700 (PDT)
+        Tue, 13 Sep 2022 07:57:14 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07185E57C;
+        Tue, 13 Sep 2022 04:57:13 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-127ba06d03fso31424825fac.3;
+        Tue, 13 Sep 2022 04:57:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=RcNQKqDpWZMHBl7FH++fUVwcpF5gBAwTAU2VtaJ7zk8=;
-        b=QJFBliYmUkwCH5zXl81puN4P05lgDQq8s3NM5DFZVfjiAa4MeiobqSeT6RIZ21mYex
-         2dMV4DWDML/6V05XdvaMbJ8hvS/bZSo05iIrQ8GXGFgCftPk/3AW9uEdA7sJRR9sJkGm
-         d9F/cloq6c/drzpQmHruqJq2tG0yZ+jXbXwqyn2KXxEP2J54vsoTZhMoJwTQYBTOZH9h
-         aaJWYAy0qYK0XYlxiScOKN8GD6wArivkejzouz179zVJWZezX38iF90j9Noax1hbMMBj
-         zmsRchsiIfEnZbOGtnWRafDKcP+XdQUDm+tQcAahpdYIm+6Rll7IatEhhOxiEZnXH3xD
-         F9wg==
-X-Gm-Message-State: ACgBeo3dZzaFf885U7hi17jbcs461QyYyGSPS2UpxZKO1dKLFaSxowrR
-        oUrbz1RgqIGyhpK21UPvyg==
-X-Google-Smtp-Source: AA6agR5zbDzHhyyW8Ff1pQzgfFa2xGYLn9YbuydKW6sTC1re97ECIjGyY2S+XSe0oTgnBt0uMcVajA==
-X-Received: by 2002:a05:6808:130e:b0:345:5de2:1095 with SMTP id y14-20020a056808130e00b003455de21095mr1258365oiv.130.1663069829764;
-        Tue, 13 Sep 2022 04:50:29 -0700 (PDT)
+        bh=vgIdRtooHkTzSKG3+m+u2h/yJ3hfDpcaNPXz25KQG8o=;
+        b=nsY85xfrruHuctRwEIjANG28aPSc2Vl8ln1CiuaSTUQ1e4lD43PwulET3ZVg/HJF66
+         IE6IXL0UcWpHUX2UQYc6N3fsxIdUv82tRP2sDpOqCrF+sQ50yb26aQvW20paPPrlYfgU
+         Ah4NhQVOXUpvbRUnmw56AgN5EN3+GHm3iOBTUbJ3SnaW9lRKgy7vW2bBt7sVumN4dPxB
+         Ge41g0TObpmPA50E+bOa9Pxn4BfJfgLXL0Vy35Vg6BNkzCUjKYtaSEa7hlqzscD8/9Yt
+         QYBEMfxiausRuBSHdU1EmTe9uLZoCnx2WAiyFmAGffOK/afqxwRWlEpjBg4DhAS2HvhO
+         L3nA==
+X-Gm-Message-State: ACgBeo2KvRJkRS2/OVzRMMicXzdhDjXed0iIFh2v7Oo6tG6DItB8kyTE
+        fJepLDt6bUyn+9z3knsZIA==
+X-Google-Smtp-Source: AA6agR7GFEoJJngcu3f/bC4hMJCCtnMxSTKcP0CunsM+ZjfkA0LfvR2yPpPDa9cNWGgTS5J7/p4tFg==
+X-Received: by 2002:a05:6808:1208:b0:349:a2cd:ac42 with SMTP id a8-20020a056808120800b00349a2cdac42mr1297763oil.155.1663070233123;
+        Tue, 13 Sep 2022 04:57:13 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j83-20020acab956000000b00334c2e81dfbsm5126821oif.0.2022.09.13.04.50.28
+        by smtp.gmail.com with ESMTPSA id s14-20020a056830124e00b00655fd5b878fsm1741547otp.74.2022.09.13.04.57.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 04:50:29 -0700 (PDT)
-Received: (nullmailer pid 3377303 invoked by uid 1000);
-        Tue, 13 Sep 2022 11:50:28 -0000
-Date:   Tue, 13 Sep 2022 06:50:28 -0500
+        Tue, 13 Sep 2022 04:57:12 -0700 (PDT)
+Received: (nullmailer pid 3386454 invoked by uid 1000);
+        Tue, 13 Sep 2022 11:57:12 -0000
+Date:   Tue, 13 Sep 2022 06:57:12 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Eliav Farber <farbere@amazon.com>
-Cc:     linux-hwmon@vger.kernel.org, rtanwar@maxlinear.com,
-        jonnyc@amazon.com, robh+dt@kernel.org, jdelvare@suse.com,
-        devicetree@vger.kernel.org, linux@roeck-us.net,
-        p.zabel@pengutronix.de, hhhawa@amazon.com,
-        andriy.shevchenko@intel.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 13/21] dt-bindings: hwmon: (mr75203) add
- "moortec,vm-pre-scaler-x2" property
-Message-ID: <20220913115028.GA3377242-robh@kernel.org>
+Cc:     robh+dt@kernel.org, rtanwar@maxlinear.com, p.zabel@pengutronix.de,
+        hhhawa@amazon.com, linux@roeck-us.net, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        jonnyc@amazon.com, linux-kernel@vger.kernel.org,
+        andriy.shevchenko@intel.com
+Subject: Re: [PATCH v5 16/21] dt-bindings: hwmon: (mr75203) add
+ "moortec,ts-series" property
+Message-ID: <20220913115712.GA3386400-robh@kernel.org>
 References: <20220908152449.35457-1-farbere@amazon.com>
- <20220908152449.35457-14-farbere@amazon.com>
+ <20220908152449.35457-17-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220908152449.35457-14-farbere@amazon.com>
+In-Reply-To: <20220908152449.35457-17-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 08 Sep 2022 15:24:41 +0000, Eliav Farber wrote:
-> Add support for mr76006 pre-scaler which provides divide-by-2 scaling of
-> the input voltage, so that it can be  presented to the VM for measurement
-> within its range (the VM input range is limited to -0.1V to 1V).
+On Thu, 08 Sep 2022 15:24:44 +0000, Eliav Farber wrote:
+> Add optional "moortec,ts-series" property to define the temperature
+> equation and coefficients that shall be used to convert the digital
+> output to value in milli-Celsius.
+> Supported series: 5 (default) and 6.
 > 
-> The new "moortec,vm-pre-scaler-x2" property lists the channels that use
-> the mr76006 pre-scaler.
+> Series 5:
+>   T = G + H * (n / cal5 - 0.5) + J * F
+> Where: G = 60, H = 200, cal5 = 4094, J = -0.1, F = frequency clock in MHz
 > 
-> The driver will use this list to multiply the voltage result by 2, to
-> present to the user with the actual voltage input source.
+> Series 6:
+>    T = G + H * (n / cal5 - 0.5)
+> Where: G = 57.4, H = 249.4, cal5 = 4096
 > 
 > Signed-off-by: Eliav Farber <farbere@amazon.com>
 > ---
 > V4 -> V3:
-> - Rename "moortec,vm-pre-scaler" to "moortec,vm-pre-scaler-x2".
-> - Added mximum number if items in description.
+> - Remove constraints in free-form text descriptions.
 > 
 > V3 -> V2:
-> - Add "moortec" prefix to property name.
-> - Change property format to be a single u8 array.
-> - Fix typo: scalar --> scaler.
+> - New patch to introduce "moortec,ts-series" property.
 > 
->  .../devicetree/bindings/hwmon/moortec,mr75203.yaml  | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+>  .../devicetree/bindings/hwmon/moortec,mr75203.yaml       | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
