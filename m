@@ -2,126 +2,109 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19D94ECAAD8
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Sep 2022 09:36:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBF68ECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Sep 2022 10:24:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbiINJgM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Sep 2022 05:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42608 "EHLO
+        id S229801AbiINKYy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Sep 2022 06:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbiINJf3 (ORCPT
+        with ESMTP id S229936AbiINKYh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:35:29 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF7122283;
-        Wed, 14 Sep 2022 02:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663147973; x=1694683973;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=3COSI+5DkvURhmR3kwSxTX5q54q4f1aW8pTt8mxl1hY=;
-  b=QbpF0XiVEpGt6wM31Gn6pf+mThe2GKABohY1BC8j0S+9MCgulV3uTGeb
-   fNN75dMaFSMS+NIVCT2RyQaZIYlNYDHwJiamW5H4XjLsGAx+wDSLzjA5S
-   yNS37dIIGE92d4auLSd7lURdcZlIc8Dd3p3fb2pyKvoYebc2KPUh1mrA0
-   A+FAl/tl8C/2e4vvOrp0qiCyrvi4uYs62YOZD8EeTyBjMdWK9pqSVQK7u
-   1JgO9GG+DgLNmSAoWfb1qxEGH0cT94Khkjqj5and9auhwu5s1BjW2jNjl
-   soRNhTkOXlytZaTZHCwSFMH2rDkdxv+SwaxO2w+JU2a7AZJs8oCccM7HZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="384676471"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="384676471"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 02:32:53 -0700
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="720521087"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 02:32:50 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oYOlD-0028WF-2H;
-        Wed, 14 Sep 2022 12:32:47 +0300
-Date:   Wed, 14 Sep 2022 12:32:47 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     "Farber, Eliav" <farbere@amazon.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
-Subject: Re: [PATCH v5 20/21] hwmon: (mr75203) add debugfs to read and write
- temperature coefficients
-Message-ID: <YyGfvzlCu9qgtgA0@smile.fi.intel.com>
-References: <20220908152449.35457-1-farbere@amazon.com>
- <20220908152449.35457-21-farbere@amazon.com>
- <YxowTBIODMLjf1Ek@smile.fi.intel.com>
- <581a4a0b-8e0e-b7a2-f873-77ed74b54e96@amazon.com>
- <3b121ab4-dd64-68b3-ee89-8571b5d3651e@amazon.com>
- <YyC3hsNhbQGIlReU@smile.fi.intel.com>
- <bdb73546-f309-60dd-3c40-d749654228fe@amazon.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bdb73546-f309-60dd-3c40-d749654228fe@amazon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        Wed, 14 Sep 2022 06:24:37 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2201A3B8;
+        Wed, 14 Sep 2022 03:24:34 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 158B75C012E;
+        Wed, 14 Sep 2022 06:24:32 -0400 (EDT)
+Received: from imap41 ([10.202.2.91])
+  by compute4.internal (MEProxy); Wed, 14 Sep 2022 06:24:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=traverse.com.au;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1663151072; x=1663237472; bh=4G
+        22fVvk8WenHj+MqQ5LUF2d/Do37iHoErDy2LmjSsI=; b=WoXoLduZdD0A/zwR2u
+        F46C3h7JVMPJNFXf7tyKpug5kWyz8WwHCuy1S9+AAQISvWBuGV6oIf4mnonUNnSJ
+        RK71YHXZ5RC6vMoEOk8OraLcQn9KODZ+61uVg+haHZYzsNRVHWXfcN+3NfL5KNrb
+        29kCiA1vNH+n1ChV86KToIfj7vFFImX2oyeWmTpZ/Eu/1Cl+qOISo/uqcNV3AFDy
+        wZg6ChwVRc6rp+wYwGAuSGMIxLpiZAG82acbER4k9RsNv2//o0j2rbA+JsT6KwoU
+        SuO+V9Zg7TWoZe/NA2zWk/+Ra1C7wAAkeGqacQ/00m1qE8JcyAATlMfPcm+vvBKr
+        JsFw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663151072; x=1663237472; bh=4G22fVvk8WenHj+MqQ5LUF2d/Do3
+        7iHoErDy2LmjSsI=; b=uX4R/6iTXxay5Hge23f5YU/fR9kYxTndXlKGC4xHhUOh
+        BELyAlklBKr0mTi7nBDpbJydLAn8ccuSBhozuaw1mcKXlFgeNbiD6lvV9I4VrvQ9
+        abtaDXajji36BoPrMg5C1FW9k+aTgoKuvYE6ziwN4xvqJ66VU6iDWOo3GVcX8s6G
+        6454HfSLZmZDUfvL0DU8nzDRbenGsle9h7if+bbn9SMlrhuna0kWY3fqHqfBN7Hr
+        tGkJDrfqMf50ob/5kiTmoljtafjiVhl3vDmDStc73edCwvZvDtlpeAV/c0izckZU
+        Y8u9wErp333iTByZXgQ3s/Pe9wYuVAETtFClAvdcCw==
+X-ME-Sender: <xms:36shY4P6iPXQtg_Nb3__sIq61wZoYeAxeGVB94KlHNGlZW95BGTetw>
+    <xme:36shY-93Hm_KYMHirHZtBz8L-RNd_wkyg9i5wwpt3U6tLhCsBCkCv0fpHyzlNzVF3
+    G3gOiQfZP57PIpfnBk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduiedgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvvefutgesth
+    dtredtreertdenucfhrhhomhepfdforghthhgvficuofgtuehrihguvgdfuceomhgrthht
+    sehtrhgrvhgvrhhsvgdrtghomhdrrghuqeenucggtffrrghtthgvrhhnpeejtdejffelke
+    ekueekueegteevjeeljeekkeffieeiudeiffeltedvkeelkeevgeenucevlhhushhtvghr
+    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrghtthesthhrrghvvghrsh
+    gvrdgtohhmrdgruh
+X-ME-Proxy: <xmx:36shY_Qibnk0yfGHdkLQH6cB8LHg5fBADG1jaUO_mPQf98wdXf3dFg>
+    <xmx:36shYwuGH73gXmWgfqjy5JiZmbtT4oeXuRneoz-U2xuqFWqxJlwIwg>
+    <xmx:36shYwe5QTEZMmnMvqUjD0i-QWud3nJA7wQwYXYnlh_vLVmK7vqyNQ>
+    <xmx:4KshY4kqedC-PjAvgUIgtlgpmW6X8cYUGv3-FeH9GET4eHOBwYoPEg>
+Feedback-ID: i426947f3:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C85B9234007E; Wed, 14 Sep 2022 06:24:31 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-934-g6274855a4c-fm-20220913.002-g6274855a
+Mime-Version: 1.0
+Message-Id: <7c1c705f-65b4-47d3-afae-68e70b85ab3b@www.fastmail.com>
+In-Reply-To: <20220914101207.GA938301@roeck-us.net>
+References: <20220914053030.8929-1-matt@traverse.com.au>
+ <20220914101207.GA938301@roeck-us.net>
+Date:   Wed, 14 Sep 2022 20:24:12 +1000
+From:   "Mathew McBride" <matt@traverse.com.au>
+To:     "Guenter Roeck" <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] hwmon: add Microchip EMC230X fan controller driver
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 07:26:36AM +0300, Farber, Eliav wrote:
-> On 9/13/2022 8:01 PM, Andy Shevchenko wrote:
-> > On Tue, Sep 13, 2022 at 05:40:16PM +0300, Farber, Eliav wrote:
-> > > On 9/13/2022 4:06 PM, Farber, Eliav wrote:
-
-...
-
-> > > It seems like debugfs_attr_write() calls simple_attr_write() and it uses
-> > > kstrtoull(), which is why it fails when setting a negative value.
-> > > This is the same also in v6.0-rc5.
-> > > 
-> > > debugfs_attr_read() on the other hand does show the correct value also
-> > > when j is negative.
+On Wed, Sep 14, 2022, at 8:12 PM, Guenter Roeck wrote:
+> On Wed, Sep 14, 2022 at 05:30:27AM +0000, Mathew McBride wrote:
+> > The Microchip EMC230X (formerly made by SMSC) family of fan controllers
+> > provide PWM control for up to 5 fans (in the EMC2305). The EMC230X is
+> > capable of maintaining (closed-loop) a target RPM speed through PWM.
 > > 
-> > Which puzzles me since there is a few drivers that use %lld.
-> > Yeah, changing it to
+> > This driver has been tested with the EMC2301 (on our Traverse Ten64
+> > appliance) and with the EMC2305 demo board (ADM00879).
 > > 
-> >        ret = sscanf(attr->set_buf, attr->fmt, &val);
-> >        if (ret != 1)
-> >                ret = -EINVAL;
+> > The driver is by no means complete, for example, further work would
+> > be required to support the different PWM output frequencies for
+> > voltage-based fan speed control. (So far this driver has only been
+> > tested with direct PWM capable fans, like the 4 pin fans found
+> > in recent PCs)
 > > 
-> > probably can fix that. Dunno if debugfs maintainer is okay with this.
-> > 
-> > P.S. This needs revisiting all format strings to see if there are no
-> > additional
-> > characters, otherwise that needs to be addressed first, if feasible.
+> > The emc230x driver also has thermal subsystem integration which allows
+> > the emc230x-controlled fan(s) to be used as cooling devices.
 > 
-> I was thinking of making such a correction:
-> 
-> -       ret = kstrtoull(attr->set_buf, 0, &val);
-> +       if (attr->set_buf[0] == '-')
-> +               ret = kstrtoll(attr->set_buf, 0, &val);
-> +       else
-> +               ret = kstrtoull(attr->set_buf, 0, &val);
-> 
-> and when I tested the change it worked, but then I noticed this commit:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/fs/libfs.c?h=v6.0-rc5&id=488dac0c9237647e9b8f788b6a342595bfa40bda
-> 
-> According to this, it previously used simple_strtoll() which supports
-> negative values, but was changed to use kstrtoull() to deliberately
-> return '-EINVAL' if it gets a negative value.
-> 
-> So I’m not sure debugfs maintainers will be okay with a fix that
-> basically reverts the commit I mentioned.
-> Hence, what do you suggest to do with my commit?
-> Is it ok to leave it as it is today?
+> I just accepted a driver or emc2301/2/3/5. Please submit improvements
+> on top of that driver if needed; we won't have competing drivers
+> for the same chip in the kernel, and replacing a just accepted driver
+> smply does not make any sense.
 
-Meanwhile asking is not a problem, at least we will know for sure.
-And yes, leave it as is, but point to the thread where you asking
-the clarification.
+My apologies, I was unaware of the separate effort! 
+Mine has been out of tree for a long time and I finally had time to work on it recently.
 
--- 
-With Best Regards,
-Andy Shevchenko
+There are several changes I can see that need to be made to the accepted one to work for our usecase.
 
-
+> Guenter
+> 
