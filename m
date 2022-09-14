@@ -2,120 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E21EDC6FA89
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Sep 2022 04:27:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1E07ECAAD8
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Sep 2022 05:31:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbiINE1G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Sep 2022 00:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46722 "EHLO
+        id S229914AbiINFb0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Sep 2022 01:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiINE1F (ORCPT
+        with ESMTP id S229919AbiINFbV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Sep 2022 00:27:05 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F6748E99;
-        Tue, 13 Sep 2022 21:27:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1663129624; x=1694665624;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=R2PH0fTVkuZ36bSfVulz65uK785hLVcgLYUgevvR8/g=;
-  b=jVXGsKdTeaKQ+yzTL4XKqCT3YIyFSksmTGjmJ+Gc6bnsdAmHUoK9J069
-   38pANd1mIf3prYZ1dwwUMLzAZrrtt+wOg0z1/cYFnZpRu2OM9wdsGEFUt
-   QiWDPDqTX2y2qtFj3L8G5opmH9qdoRaYwn8HtB78KBEba3SWWGZEqAfJO
-   k=;
-X-IronPort-AV: E=Sophos;i="5.93,313,1654560000"; 
-   d="scan'208";a="259225995"
-Subject: Re: [PATCH v5 20/21] hwmon: (mr75203) add debugfs to read and write
- temperature coefficients
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-35b1f9a2.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 04:26:48 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1d-35b1f9a2.us-east-1.amazon.com (Postfix) with ESMTPS id 11E6C2015D4;
-        Wed, 14 Sep 2022 04:26:44 +0000 (UTC)
-Received: from EX19D013UWA003.ant.amazon.com (10.13.138.202) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Wed, 14 Sep 2022 04:26:40 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX19D013UWA003.ant.amazon.com (10.13.138.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Wed, 14 Sep 2022 04:26:40 +0000
-Received: from [192.168.159.232] (10.85.143.178) by mail-relay.amazon.com
- (10.43.62.224) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Wed, 14 Sep 2022 04:26:37 +0000
-Message-ID: <bdb73546-f309-60dd-3c40-d749654228fe@amazon.com>
-Date:   Wed, 14 Sep 2022 07:26:36 +0300
+        Wed, 14 Sep 2022 01:31:21 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017686C745;
+        Tue, 13 Sep 2022 22:31:05 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2105F5C0067;
+        Wed, 14 Sep 2022 01:31:02 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 14 Sep 2022 01:31:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=traverse.com.au;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663133462; x=1663219862; bh=mT8Oy9Arlp
+        TGJR2YdOtkz3D8RzCOFiwRQCLe8Tog5gU=; b=q4fUvYElSSymRhlYxHC973G/E8
+        IZRRGwkUTKR/lXBdg3ZW92+XZuoGlBCd/cD/HKKA9X0CB85MvoGbYd7UySG/3rDM
+        r5CFuc+pzdwJQkeQSDH1WkGOQGsiWj5PErzDoPugWbwS7THDYtT14U+ee2ldNiwi
+        6e880f7QBvTEIafMHEUXZDL9bBdXJdPdFNEPDbWwbFy/YIFxcYLqwygWvEuWxexN
+        QkclBNbPzLBgVBefoENPFa0lOYEaUnDZJmsBCqX6Z8DDPbNeT8tw8gL80vOeDUM2
+        LfBIurqBRVnSJfaZsWOItu3V5LSXOJPqp2MS+m9OOv7vidUhmUszA7H9VB2A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1663133462; x=1663219862; bh=mT8Oy9ArlpTGJR2YdOtkz3D8RzCOFiwRQCL
+        e8Tog5gU=; b=vEB0w/FZ7dkHW3p87IheGNgqZWDVtAfMWHXGqYZ+CTCORtA541D
+        IU2HkxaqYNfZ8oZ85N843/QnKh4G2NUchTCxOb8ayeou4oocTLia50oEkRJReb55
+        LjXwIN33cGXcyabCxCU+KFeiySVSyUjJOCX1xRk+XV+EvUB9eAf95/EKKJq7CZKu
+        eXxD0eLtjdMYoC9o4LSGNv2blx0Yo+lUM+ff0d3uSELbCSzBpYMlAXsHxCQXaVJE
+        ANJ5xF4ODMlShP1Gvs8EhLNIf8A5/eZewj2N5psw8TCOV3isA2GjJ+c+a3aKeZnc
+        YmaT2tvx1mmcmvMX5H4XwSbLg+Yh0uftikA==
+X-ME-Sender: <xms:FWchY26rusUm6xQt7jLh2r6zFhzgRcih1lcSvd6e-fCXjuQ9xjSfhA>
+    <xme:FWchY_7t3ZuQS8aPLPHIk5KRQw8g07JQsnXPk0twh0Ir3cF36w9z_WvgIzRYeAjaK
+    Ja5Z2kr3NIYwIxvpIo>
+X-ME-Received: <xmr:FWchY1fh2GLxBR39DMIwrg2XvUkHNaaViF6NY1ECXTRUkdMTbYtiFSdSkMs62xRNrVy--xM2Iaa7kU0BjW_TaylLDUP2I_e6mQpmOZ5GPRI_MePRPPf8Tn5wNOHxt2s>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduhedgleeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeforghthhgvficuofgtuehrihguvgcuoehmrghtthesthhrrghv
+    vghrshgvrdgtohhmrdgruheqnecuggftrfgrthhtvghrnhepgfekteegudffgfdtvedvje
+    ejffdtgffhteefgfeuhefhleejfffgfeeuueejleffnecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrthhtsehtrhgrvhgvrhhsvgdrtghomh
+    drrghu
+X-ME-Proxy: <xmx:FWchYzKI42PcGOmZuoQ84rZDIet4VUwtf80ML6sIAfia3lS93m3N9w>
+    <xmx:FWchY6KtmRqArsuDkNp49IzVF-Knm6OOnEJzP-xJTswo89Sf6jMLww>
+    <xmx:FWchY0wWrXPOE8XXmHkkxEx0M93JTmQa3FkUp7JqbtQ6UsG3k4z8sw>
+    <xmx:FmchY5_N7r2f-K_RIdbwDlerDedM-sUJrJRIbRu2cs0g20leW0MaQw>
+Feedback-ID: i426947f3:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 14 Sep 2022 01:30:58 -0400 (EDT)
+From:   Mathew McBride <matt@traverse.com.au>
+To:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        leoyang.li@nxp.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Mathew McBride <matt@traverse.com.au>
+Subject: [PATCH 0/3] hwmon: add Microchip EMC230X fan controller driver
+Date:   Wed, 14 Sep 2022 05:30:27 +0000
+Message-Id: <20220914053030.8929-1-matt@traverse.com.au>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-CC:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <hhhawa@amazon.com>,
-        <jonnyc@amazon.com>, "Farber, Eliav" <farbere@amazon.com>
-References: <20220908152449.35457-1-farbere@amazon.com>
- <20220908152449.35457-21-farbere@amazon.com>
- <YxowTBIODMLjf1Ek@smile.fi.intel.com>
- <581a4a0b-8e0e-b7a2-f873-77ed74b54e96@amazon.com>
- <3b121ab4-dd64-68b3-ee89-8571b5d3651e@amazon.com>
- <YyC3hsNhbQGIlReU@smile.fi.intel.com>
-Content-Language: en-US
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <YyC3hsNhbQGIlReU@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/13/2022 8:01 PM, Andy Shevchenko wrote:
-> On Tue, Sep 13, 2022 at 05:40:16PM +0300, Farber, Eliav wrote:
->> On 9/13/2022 4:06 PM, Farber, Eliav wrote:
->
-> ...
->
->> It seems like debugfs_attr_write() calls simple_attr_write() and it uses
->> kstrtoull(), which is why it fails when setting a negative value.
->> This is the same also in v6.0-rc5.
->>
->> debugfs_attr_read() on the other hand does show the correct value also
->> when j is negative.
->
-> Which puzzles me since there is a few drivers that use %lld.
-> Yeah, changing it to
->
->        ret = sscanf(attr->set_buf, attr->fmt, &val);
->        if (ret != 1)
->                ret = -EINVAL;
->
-> probably can fix that. Dunno if debugfs maintainer is okay with this.
->
-> P.S. This needs revisiting all format strings to see if there are no 
-> additional
-> characters, otherwise that needs to be addressed first, if feasible.
+The Microchip EMC230X (formerly made by SMSC) family of fan controllers
+provide PWM control for up to 5 fans (in the EMC2305). The EMC230X is
+capable of maintaining (closed-loop) a target RPM speed through PWM.
 
-I was thinking of making such a correction:
+This driver has been tested with the EMC2301 (on our Traverse Ten64
+appliance) and with the EMC2305 demo board (ADM00879).
 
--       ret = kstrtoull(attr->set_buf, 0, &val);
-+       if (attr->set_buf[0] == '-')
-+               ret = kstrtoll(attr->set_buf, 0, &val);
-+       else
-+               ret = kstrtoull(attr->set_buf, 0, &val);
+The driver is by no means complete, for example, further work would
+be required to support the different PWM output frequencies for
+voltage-based fan speed control. (So far this driver has only been
+tested with direct PWM capable fans, like the 4 pin fans found
+in recent PCs)
 
-and when I tested the change it worked, but then I noticed this commit:
+The emc230x driver also has thermal subsystem integration which allows
+the emc230x-controlled fan(s) to be used as cooling devices.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/fs/libfs.c?h=v6.0-rc5&id=488dac0c9237647e9b8f788b6a342595bfa40bda
+Mathew McBride (3):
+  hwmon: (emc230x) add Microchip (SMSC) EMC230X fan controller support
+  dt-bindings: add binding for Microchip EMC230X fan controller family
+  arm64: dts: ten64: add configuration for fan controller
 
-According to this, it previously used simple_strtoll() which supports
-negative values, but was changed to use kstrtoull() to deliberately
-return '-EINVAL' if it gets a negative value.
+ .../bindings/hwmon/microchip,emc2301.yaml     |  83 +++
+ MAINTAINERS                                   |   7 +
+ .../boot/dts/freescale/fsl-ls1088a-ten64.dts  |  43 ++
+ drivers/hwmon/Kconfig                         |  13 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/emc230x.c                       | 587 ++++++++++++++++++
+ 6 files changed, 734 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,emc2301.yaml
+ create mode 100644 drivers/hwmon/emc230x.c
 
-So I’m not sure debugfs maintainers will be okay with a fix that
-basically reverts the commit I mentioned.
-Hence, what do you suggest to do with my commit?
-Is it ok to leave it as it is today?
+-- 
+2.30.1
 
---
-Thanks, Eliav
