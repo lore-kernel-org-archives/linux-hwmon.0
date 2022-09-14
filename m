@@ -2,159 +2,126 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5CBCC6FA89
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Sep 2022 05:31:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19D94ECAAD8
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Sep 2022 09:36:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiINFbh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Sep 2022 01:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        id S231410AbiINJgM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Sep 2022 05:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbiINFbX (ORCPT
+        with ESMTP id S230453AbiINJf3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Sep 2022 01:31:23 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F7F6FA05;
-        Tue, 13 Sep 2022 22:31:13 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 953565C006A;
-        Wed, 14 Sep 2022 01:31:12 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 14 Sep 2022 01:31:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=traverse.com.au;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1663133472; x=
-        1663219872; bh=APxc/mSmgwWOZvUwfXzsxNO8MT7v2MA9SqTEW8ZVVuI=; b=d
-        Yx67sL465KSfwtsLGjd+N3XPhUi8e053DdlMuQao5aUkdhFikxdnVUj2+lTNGkfC
-        suLNSMG4SxQz1p+dSfrrh9mF3GNEMRg1gnth1YRw4ERJ+5q21hQ+Y5c076hNM8an
-        /9e5DAesU3HnJ197S4NDnGsE06ZxY/GCOYkJ1yxexReZBOFOUcvTLk66N3nOuVl/
-        mv7N9om2OBJpOhFJMM59sU8KeozCY/IDSGfatzMgytxcoAS6tC5LpUqScUFAeQrQ
-        ZhW9e7VgN7/man79/DxAIoMLxMLvwPDMCMjwQ5CtcMtHiL63hnHjafl3cNur7U4X
-        yvWkk3RwMjav7ecPjq4Yw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1663133472; x=1663219872; bh=APxc/mSmgwWOZ
-        vUwfXzsxNO8MT7v2MA9SqTEW8ZVVuI=; b=eC8TLuaym//VGKA7JMfz/yPn9Gk9F
-        +Lxw1ImHQB8AqcWdEHbso/vJT1TsoksScuPxXVJymdpTGI+aadfUvswrRjAWo8lT
-        AVBPEMqBof7W4q52Eou5bDtndWHN80Ic2X9d2Pfk8b24qB3ywaE+nvuPR2lwZRPr
-        yegZb/tp1k6rk7yY0GUri5Ko6rddGXwX4ZJXnkZ80VsFf7ujX75GHWp4DX9r40jx
-        y8lWN7rj+5Ih4Z69QKke2AEQt4tsZtpO0VkA4e6ypF3rxqbxyIYVXHatDyDWascq
-        ILZluQBaaJp2VI4l72X1P1BB0dtRhIyhYgnda/62kHqSClQ/3RpXuPMnA==
-X-ME-Sender: <xms:IGchY0TCAFc6WYn2v5edC8fblOUNZDau8_r2K3TmnwX_Nvgs8xebRA>
-    <xme:IGchYxzrgRD7y8sddyQCcGoewQ5ciHccvX9pJy2BSGEyg8RMLTACijlRp5ImOPwMM
-    MGyHbJKG8Hbb37bXFo>
-X-ME-Received: <xmr:IGchYx2bvL0VcXUJUEraF262PongCmQD8pZfYcbp9AYcn8p7s35c1UYlVNkHxwMbKXJqaIli3Z-JBa6HcrhlNYlKH_lnmkqRay6lovfoNXp2U5XMbKMzppv7Bah2NEI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduhedgleeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpeforghthhgvficuofgtuehrihguvgcuoehmrghtthesthhr
-    rghvvghrshgvrdgtohhmrdgruheqnecuggftrfgrthhtvghrnhephfffueehtedukeevje
-    dvieevffehjeeiteehhfefkeehgeffleefleejudekgfevnecuffhomhgrihhnpehtrhgr
-    vhgvrhhsvgdrtghomhdrrghunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepmhgrthhtsehtrhgrvhgvrhhsvgdrtghomhdrrghu
-X-ME-Proxy: <xmx:IGchY4CFSaY1FH1So4XWsLQKT0-A_OQzwpTEomr2pe5hd01-ZLeOjQ>
-    <xmx:IGchY9ibgimoE-bzfQYxsXIZLtEoEd8JVAcl6IlysvehEBOTDy-Agg>
-    <xmx:IGchY0oHp4C9lDxv5EYlVlm60FTQEugrqwUV8kXOwm4MxeF6EKDm8Q>
-    <xmx:IGchY-WE7AbEtYaNHluRlqJXND1sJaCCvi5b3RA1t8EVM_4L7fYYsg>
-Feedback-ID: i426947f3:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 14 Sep 2022 01:31:09 -0400 (EDT)
-From:   Mathew McBride <matt@traverse.com.au>
-To:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        jdelvare@suse.com, linux@roeck-us.net,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        leoyang.li@nxp.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Mathew McBride <matt@traverse.com.au>
-Subject: [PATCH 3/3] arm64: dts: ten64: add configuration for fan controller
-Date:   Wed, 14 Sep 2022 05:30:30 +0000
-Message-Id: <20220914053030.8929-4-matt@traverse.com.au>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20220914053030.8929-1-matt@traverse.com.au>
-References: <20220914053030.8929-1-matt@traverse.com.au>
+        Wed, 14 Sep 2022 05:35:29 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF7122283;
+        Wed, 14 Sep 2022 02:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663147973; x=1694683973;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=3COSI+5DkvURhmR3kwSxTX5q54q4f1aW8pTt8mxl1hY=;
+  b=QbpF0XiVEpGt6wM31Gn6pf+mThe2GKABohY1BC8j0S+9MCgulV3uTGeb
+   fNN75dMaFSMS+NIVCT2RyQaZIYlNYDHwJiamW5H4XjLsGAx+wDSLzjA5S
+   yNS37dIIGE92d4auLSd7lURdcZlIc8Dd3p3fb2pyKvoYebc2KPUh1mrA0
+   A+FAl/tl8C/2e4vvOrp0qiCyrvi4uYs62YOZD8EeTyBjMdWK9pqSVQK7u
+   1JgO9GG+DgLNmSAoWfb1qxEGH0cT94Khkjqj5and9auhwu5s1BjW2jNjl
+   soRNhTkOXlytZaTZHCwSFMH2rDkdxv+SwaxO2w+JU2a7AZJs8oCccM7HZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="384676471"
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="384676471"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 02:32:53 -0700
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="720521087"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 02:32:50 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oYOlD-0028WF-2H;
+        Wed, 14 Sep 2022 12:32:47 +0300
+Date:   Wed, 14 Sep 2022 12:32:47 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     "Farber, Eliav" <farbere@amazon.com>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
+Subject: Re: [PATCH v5 20/21] hwmon: (mr75203) add debugfs to read and write
+ temperature coefficients
+Message-ID: <YyGfvzlCu9qgtgA0@smile.fi.intel.com>
+References: <20220908152449.35457-1-farbere@amazon.com>
+ <20220908152449.35457-21-farbere@amazon.com>
+ <YxowTBIODMLjf1Ek@smile.fi.intel.com>
+ <581a4a0b-8e0e-b7a2-f873-77ed74b54e96@amazon.com>
+ <3b121ab4-dd64-68b3-ee89-8571b5d3651e@amazon.com>
+ <YyC3hsNhbQGIlReU@smile.fi.intel.com>
+ <bdb73546-f309-60dd-3c40-d749654228fe@amazon.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <bdb73546-f309-60dd-3c40-d749654228fe@amazon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The Ten64 desktop appliance has a Noctua NF-A4x20 PWM fan,
-controlled by a Microchip EMC2301 PWM fan controller.
+On Wed, Sep 14, 2022 at 07:26:36AM +0300, Farber, Eliav wrote:
+> On 9/13/2022 8:01 PM, Andy Shevchenko wrote:
+> > On Tue, Sep 13, 2022 at 05:40:16PM +0300, Farber, Eliav wrote:
+> > > On 9/13/2022 4:06 PM, Farber, Eliav wrote:
 
-This binding allows the fan speed to be slowed to a
-quieter level when the system is not busy.
+...
 
-Reference: https://ten64doc.traverse.com.au/hardware/fan-control/
+> > > It seems like debugfs_attr_write() calls simple_attr_write() and it uses
+> > > kstrtoull(), which is why it fails when setting a negative value.
+> > > This is the same also in v6.0-rc5.
+> > > 
+> > > debugfs_attr_read() on the other hand does show the correct value also
+> > > when j is negative.
+> > 
+> > Which puzzles me since there is a few drivers that use %lld.
+> > Yeah, changing it to
+> > 
+> >        ret = sscanf(attr->set_buf, attr->fmt, &val);
+> >        if (ret != 1)
+> >                ret = -EINVAL;
+> > 
+> > probably can fix that. Dunno if debugfs maintainer is okay with this.
+> > 
+> > P.S. This needs revisiting all format strings to see if there are no
+> > additional
+> > characters, otherwise that needs to be addressed first, if feasible.
+> 
+> I was thinking of making such a correction:
+> 
+> -       ret = kstrtoull(attr->set_buf, 0, &val);
+> +       if (attr->set_buf[0] == '-')
+> +               ret = kstrtoll(attr->set_buf, 0, &val);
+> +       else
+> +               ret = kstrtoull(attr->set_buf, 0, &val);
+> 
+> and when I tested the change it worked, but then I noticed this commit:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/fs/libfs.c?h=v6.0-rc5&id=488dac0c9237647e9b8f788b6a342595bfa40bda
+> 
+> According to this, it previously used simple_strtoll() which supports
+> negative values, but was changed to use kstrtoull() to deliberately
+> return '-EINVAL' if it gets a negative value.
+> 
+> So I’m not sure debugfs maintainers will be okay with a fix that
+> basically reverts the commit I mentioned.
+> Hence, what do you suggest to do with my commit?
+> Is it ok to leave it as it is today?
 
-Signed-off-by: Mathew McBride <matt@traverse.com.au>
----
- .../boot/dts/freescale/fsl-ls1088a-ten64.dts  | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
+Meanwhile asking is not a problem, at least we will know for sure.
+And yes, leave it as is, but point to the thread where you asking
+the clarification.
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1088a-ten64.dts b/arch/arm64/boot/dts/freescale/fsl-ls1088a-ten64.dts
-index ef6c8967533e..fd8261c9a186 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1088a-ten64.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1088a-ten64.dts
-@@ -87,6 +87,35 @@ sfp_xg1: dpmac1-sfp {
- 		los-gpios = <&sfpgpio 7 GPIO_ACTIVE_HIGH>;
- 		maximum-power-milliwatt = <2000>;
- 	};
-+
-+	thermal-zones {
-+		soc {
-+			trips {
-+				fanmid0: fanmid0 {
-+					temperature = <60000>;
-+					hysteresis = <2000>;
-+					type = "active";
-+				};
-+
-+				fanmax0: fanmax0 {
-+					temperature = <70000>;
-+					hysteresis = <2000>;
-+					type = "active";
-+				};
-+			};
-+
-+			cooling-maps {
-+				map2 {
-+					trip = <&fanmid0>;
-+					cooling-device = <&case_fan 0 6>;
-+				};
-+				map3 {
-+					trip = <&fanmax0>;
-+					cooling-device = <&case_fan 7 THERMAL_NO_LIMIT>;
-+				};
-+			};
-+		};
-+	};
- };
- 
- /* XG1 - Upper SFP */
-@@ -231,6 +260,20 @@ at97sc: tpm@29 {
- 		compatible = "atmel,at97sc3204t";
- 		reg = <0x29>;
- 	};
-+
-+	fanctrl: emc2301@2f {
-+		reg = <0x2f>;
-+		compatible = "microchip,emc2301";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		case_fan: fan@0 {
-+			reg = <0>;
-+			min-rpm = /bits/ 16 <3000>;
-+			max-rpm = /bits/ 16 <5500>;
-+			#cooling-cells = <2>;
-+		};
-+	};
- };
- 
- &i2c2 {
 -- 
-2.30.1
+With Best Regards,
+Andy Shevchenko
+
 
