@@ -2,253 +2,186 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34DBAC6FA82
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Sep 2022 15:10:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3C81C6FA8A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Sep 2022 15:12:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiINPKh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Sep 2022 11:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
+        id S230213AbiINPM5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Sep 2022 11:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiINPK0 (ORCPT
+        with ESMTP id S230229AbiINPMs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Sep 2022 11:10:26 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9883D5BB;
-        Wed, 14 Sep 2022 08:10:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1663168224; x=1694704224;
-  h=subject:from:to:cc:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=k0crXHCpRY7Ny0S26Bsc+YpoBbnEdJxoEgcWSdYzwLU=;
-  b=emRBALQ90WU5TuH4amu8VCi//lY4XajUdQK5Ach/koiD34i4KMi6OAZy
-   c7iWhDOc1vD/X9RF7OARiMis96n5CMddBi4xrE0i9fuE2RVQC8FCN6cNV
-   5U0btwYghW3qpnmbz7TrMjpY8LFFWjtqI+ckAe4uITOBNWnYQ7aoHvbJd
-   pAAR4aTLV9Lm6FsPsQNkGp6NaSXxHVti8IkcDgqUi4wq7tAL6P0GCypGU
-   afO8W6U9yjmxKJeq4n7LeyJKwx+GFAkHOiobY/Ch/bQcFsqYZa/AuDpgN
-   98shCGQm5bWibohSMhdVSUWdd05VJ/TWBxZxPnx+fLXyFoSLB4qn5++mc
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,315,1654552800"; 
-   d="scan'208";a="26180840"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 14 Sep 2022 17:10:22 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 14 Sep 2022 17:10:22 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 14 Sep 2022 17:10:22 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1663168222; x=1694704222;
-  h=from:to:cc:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding:subject;
-  bh=k0crXHCpRY7Ny0S26Bsc+YpoBbnEdJxoEgcWSdYzwLU=;
-  b=lPIY1o6T5AaKQaRsNV/HL09SXduaVLnkV/ykPHuQic0COhN56dTwXHSf
-   cqUCL7G8oLRMTFYe6NQd42CwqPcB/KLPEOc8RVuOZeLygycUVVnUEJLZ0
-   56U8ibhweyyOTuZ8OUUcP3twqya0v8lzYj2S+U8cqCsOXDN2KoCAY+0Uw
-   Fwm82hnAYrzyB9MGoFBTVVHjBPK2dXmNZdYsIyOvErfCw608MO2XxA6rF
-   mm4q0aV8u01RAc6VEYSMQsKSpZanWHY8Z/6HaMwIR92k4jsD7XZbexCCu
-   CtaRFmXrsqSZPTRx6GfuQ15cGDisfTL2Fr5/9tsQrsN8DhChs36KSw9VK
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,315,1654552800"; 
-   d="scan'208";a="26180839"
-Subject: Re: Re: [PATCH v4 3/6] hwmon: pwm-fan: Add dedicated power switch function
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 14 Sep 2022 17:10:22 +0200
-Received: from steina-w.localnet (unknown [10.123.49.11])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id B0855280056;
-        Wed, 14 Sep 2022 17:10:21 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Markus Niebel <Markus.Niebel@ew.tq-group.com>
-Date:   Wed, 14 Sep 2022 17:10:19 +0200
-Message-ID: <15897013.uLZWGnKmhe@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20220830135013.GA229925@roeck-us.net>
-References: <20220523110513.407516-1-alexander.stein@ew.tq-group.com> <20220523110513.407516-4-alexander.stein@ew.tq-group.com> <20220830135013.GA229925@roeck-us.net>
+        Wed, 14 Sep 2022 11:12:48 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABBD80E9B;
+        Wed, 14 Sep 2022 08:12:33 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2BD6940009;
+        Wed, 14 Sep 2022 15:12:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1663168351;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eI5agrplPJnc1LUjt8uZzFc76jZalpws6ww1szcbEto=;
+        b=U2WRUD7epWbmeLOCfR8L8eNxdb6IIne0kMwr4bzjoG65yQXmOYztXWku/XyjqbH6Kvv5rn
+        RX6znfnzYEXosWTvJxr45wYNilXcUFd21tkC7IrhPkOuAZR2JydB2EeSnCnCFjkPcS2Hau
+        dgwK7iY4aquon95jwbT8EOnC1yfcWKqbZyMFpE280JpWAJ04MMQAC2LTDvU+KL0aieVdkf
+        uN8NxKMBq+fGLR2in7POCYbUgC90rjEIjDOLGetfz7t54VvaifyaBuq2Ino+TjMrK1P/hI
+        u9aatdqWRF/KLrkCVbRDGHzfKIrTPqfNGwn9zz0uDzcjUATPnNUqXDs9KZwKZw==
+Date:   Wed, 14 Sep 2022 17:12:30 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 6/6] rtc: isl12022: add support for temperature sensor
+Message-ID: <YyHvXh1Zhy/wsHsD@mail.local>
+References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
+ <20220830100152.698506-7-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830100152.698506-7-linux@rasmusvillemoes.dk>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello Guenter,
-
-thanks for your review.
-
-Am Dienstag, 30. August 2022, 15:50:13 CEST schrieb Guenter Roeck:
-> On Mon, May 23, 2022 at 01:05:10PM +0200, Alexander Stein wrote:
-> > This handles enabling/disabling the regulator in a single function, while
-> > keeping the enables/disabled balanced. This is a preparation when
-> > regulator is switched from different code paths.
-> > 
-> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > ---
-> > 
-> >  drivers/hwmon/pwm-fan.c | 52 +++++++++++++++++++++++++++++------------
-> >  1 file changed, 37 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> > index 96b10d422828..04af24268963 100644
-> > --- a/drivers/hwmon/pwm-fan.c
-> > +++ b/drivers/hwmon/pwm-fan.c
-> > @@ -35,6 +35,7 @@ struct pwm_fan_ctx {
-> > 
-> >  	struct pwm_device *pwm;
-> >  	struct pwm_state pwm_state;
-> >  	struct regulator *reg_en;
-> > 
-> > +	bool regulator_enabled;
-> > 
-> >  	bool enabled;
-> >  	
-> >  	int tach_count;
-> > 
-> > @@ -85,6 +86,29 @@ static void sample_timer(struct timer_list *t)
-> > 
-> >  	mod_timer(&ctx->rpm_timer, jiffies + HZ);
-> >  
-> >  }
-> > 
-> > +static int pwm_fan_switch_power(struct pwm_fan_ctx *ctx, bool on)
-> > +{
-> > +	int ret = 0;
-> > +
-> > +	if (!ctx->reg_en)
-> > +		return ret;
-> > +
-> > +	if (ctx->regulator_enabled && on) {
-> > +		ret = 0;
+On 30/08/2022 12:01:52+0200, Rasmus Villemoes wrote:
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> ---
+>  drivers/rtc/rtc-isl12022.c | 81 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 81 insertions(+)
 > 
-> ret is already 0 here.
+> diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
+> index b295ec92ee17..1bd72f436318 100644
+> --- a/drivers/rtc/rtc-isl12022.c
+> +++ b/drivers/rtc/rtc-isl12022.c
+> @@ -17,6 +17,8 @@
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+>  #include <linux/regmap.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+
+You should keep that list ordered
+
+>  
+>  /* ISL register offsets */
+>  #define ISL12022_REG_SC		0x00
+> @@ -30,6 +32,9 @@
+>  #define ISL12022_REG_SR		0x07
+>  #define ISL12022_REG_INT	0x08
+>  
+> +#define ISL12022_REG_BETA	0x0d
+> +#define ISL12022_REG_TEMP_L	0x28
+> +
+>  /* ISL register bits */
+>  #define ISL12022_HR_MIL		(1 << 7)	/* military or 24 hour time */
+>  
+> @@ -38,6 +43,7 @@
+>  
+>  #define ISL12022_INT_WRTC	(1 << 6)
+>  
+> +#define ISL12022_BETA_TSE	(1 << 7)
+>  
+>  static struct i2c_driver isl12022_driver;
+>  
+> @@ -48,6 +54,79 @@ struct isl12022 {
+>  	bool write_enabled;	/* true if write enable is set */
+>  };
+>  
+> +/*
+> + * A user-initiated temperature conversion is not started by this function,
+> + * so the temperature is updated once every ~60 seconds.
+> + */
+> +static int isl12022_hwmon_read_temp(struct device *dev, s32 *mC)
+> +{
+> +	struct isl12022 *isl12022 = dev_get_drvdata(dev);
+> +	struct regmap *regmap = isl12022->regmap;
+> +	u8 temp_buf[2];
+> +	s32 temp;
+> +	int ret;
+> +
+> +	ret = regmap_bulk_read(regmap, ISL12022_REG_TEMP_L,
+> +			       temp_buf, sizeof(temp_buf));
+> +	if (ret)
+> +		return ret;
+> +	/*
+> +	 * Temperature is represented as a 10-bit number, unit half-Kelvins.
+> +	 */
+> +	temp = (temp_buf[1] << 8) | temp_buf[0];
+> +	temp *= 500;
+> +	temp -= 273000;
+> +
+> +	*mC = temp;
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t
+> +isl12022_hwmon_show_temp(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +	int ret;
+> +	s32 temp;
+> +
+> +	ret = isl12022_hwmon_read_temp(dev, &temp);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return sprintf(buf, "%d\n", temp);
+> +}
+> +static SENSOR_DEVICE_ATTR(temp1_input, 0444, isl12022_hwmon_show_temp,
+> +			  NULL, 0);
+> +
+> +static struct attribute *isl12022_hwmon_attrs[] = {
+> +	&sensor_dev_attr_temp1_input.dev_attr.attr,
+> +	NULL,
+> +};
+> +ATTRIBUTE_GROUPS(isl12022_hwmon);
+> +
+> +static void isl12022_hwmon_register(struct device *dev)
+> +{
+> +	struct isl12022 *isl12022;
+> +	struct device *hwmon;
+> +	int ret;
+> +
+> +	if (!IS_REACHABLE(CONFIG_HWMON))
+> +		return;
+> +
+> +	isl12022 = dev_get_drvdata(dev);
+> +
+> +	ret = regmap_update_bits(isl12022->regmap, ISL12022_REG_BETA,
+> +				 ISL12022_BETA_TSE, ISL12022_BETA_TSE);
+> +	if (ret) {
+> +		dev_warn(dev, "unable to enable temperature sensor\n");
+> +		return;
+> +	}
+> +
+> +	hwmon = devm_hwmon_device_register_with_groups(dev, "isl12022", isl12022,
+> +						       isl12022_hwmon_groups);
+> +	if (IS_ERR(hwmon))
+> +		dev_warn(dev, "unable to register hwmon device: %pe\n", hwmon);
+> +}
+> +
+>  /*
+>   * In the routines that deal directly with the isl12022 hardware, we use
+>   * rtc_time -- month 0-11, hour 0-23, yr = calendar year-epoch.
+> @@ -179,6 +258,8 @@ static int isl12022_probe(struct i2c_client *client)
+>  		return PTR_ERR(isl12022->regmap);
+>  	}
+>  
+> +	isl12022_hwmon_register(&client->dev);
+> +
+>  	isl12022->rtc = devm_rtc_allocate_device(&client->dev);
+>  	if (IS_ERR(isl12022->rtc))
+>  		return PTR_ERR(isl12022->rtc);
+> -- 
+> 2.37.2
 > 
-> > +	} else if (!ctx->regulator_enabled && on) {
-> > +		ret = regulator_enable(ctx->reg_en);
-> > +		if (ret == 0)
-> > +			ctx->regulator_enabled = true;
-> > +	} else if (ctx->regulator_enabled && !on) {
-> > +		ret = regulator_disable(ctx->reg_en);
-> > +		if (ret == 0)
-> > +			ctx->regulator_enabled = false;
-> > +	} else if (!ctx->regulator_enabled && !on) {
-> > +		ret = 0;
-> 
-> ret is already 0 here.
 
-Ok, I'll remove both branches, setting ret to 0 again. I just wanted to keep 
-the branches for all possibilities, but no heard feelings here.
-
-> > +	}
-> > +	return ret;
-> > +}
-> > +
-> > 
-> >  static int pwm_fan_power_on(struct pwm_fan_ctx *ctx)
-> >  {
-> >  
-> >  	struct pwm_state *state = &ctx->pwm_state;
-> > 
-> > @@ -316,7 +340,9 @@ static int pwm_fan_of_get_cooling_data(struct device
-> > *dev,> 
-> >  static void pwm_fan_regulator_disable(void *data)
-> >  {
-> > 
-> > -	regulator_disable(data);
-> > +	struct pwm_fan_ctx *ctx = data;
-> > +
-> > +	pwm_fan_switch_power(ctx, false);
-> 
-> You can directly pass 'data' as argument here; there is no need
-> for the extra variable.
-
-Nice, thanks. Will do so.
-
-Best regards,
-Alexander
-
-> >  }
-> >  
-> >  static void pwm_fan_pwm_disable(void *__ctx)
-> > 
-> > @@ -360,13 +386,13 @@ static int pwm_fan_probe(struct platform_device
-> > *pdev)> 
-> >  		ctx->reg_en = NULL;
-> >  	
-> >  	} else {
-> > 
-> > -		ret = regulator_enable(ctx->reg_en);
-> > +		ret = pwm_fan_switch_power(ctx, true);
-> > 
-> >  		if (ret) {
-> >  		
-> >  			dev_err(dev, "Failed to enable fan supply: 
-%d\n", ret);
-> >  			return ret;
-> >  		
-> >  		}
-> >  		ret = devm_add_action_or_reset(dev, 
-pwm_fan_regulator_disable,
-> > 
-> > -					       ctx->reg_en);
-> > +					       ctx);
-> > 
-> >  		if (ret)
-> >  		
-> >  			return ret;
-> >  	
-> >  	}
-> > 
-> > @@ -512,12 +538,10 @@ static int pwm_fan_disable(struct device *dev)
-> > 
-> >  			return ret;
-> >  	
-> >  	}
-> > 
-> > -	if (ctx->reg_en) {
-> > -		ret = regulator_disable(ctx->reg_en);
-> > -		if (ret) {
-> > -			dev_err(dev, "Failed to disable fan supply: 
-%d\n", ret);
-> > -			return ret;
-> > -		}
-> > +	ret = pwm_fan_switch_power(ctx, false);
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to disable fan supply: %d\n", ret);
-> > +		return ret;
-> > 
-> >  	}
-> >  	
-> >  	return 0;
-> > 
-> > @@ -539,12 +563,10 @@ static int pwm_fan_resume(struct device *dev)
-> > 
-> >  	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-> >  	int ret;
-> > 
-> > -	if (ctx->reg_en) {
-> > -		ret = regulator_enable(ctx->reg_en);
-> > -		if (ret) {
-> > -			dev_err(dev, "Failed to enable fan supply: 
-%d\n", ret);
-> > -			return ret;
-> > -		}
-> > +	ret = pwm_fan_switch_power(ctx, true);
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to enable fan supply: %d\n", ret);
-> > +		return ret;
-> > 
-> >  	}
-> >  	
-> >  	if (ctx->pwm_value == 0)
-
-
-
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
