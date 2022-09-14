@@ -2,95 +2,149 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64CFAECAAD8
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Sep 2022 11:45:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20DE6C6FA8A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Sep 2022 14:04:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiINLpa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Sep 2022 07:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
+        id S230024AbiINOET (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Sep 2022 10:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiINLp3 (ORCPT
+        with ESMTP id S229896AbiINOD4 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Sep 2022 07:45:29 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4007A534;
-        Wed, 14 Sep 2022 04:45:28 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id go34so34078610ejc.2;
-        Wed, 14 Sep 2022 04:45:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=tqexaluLS/Hq5ZzwKd1WjDvLB5oW63lsXWxKitTfWEY=;
-        b=e4xd2M66zszVNq8YmhKpHY8ZIdggWgLbfc5+RKNcLpBcqRne9wONjDgqGeAXIV4tvi
-         UcYIdX+gXb9er5DNXEOJ4cNwHjclfky5UUeY6t0b4JTaCZe30RN5/kDpi+57vi+IaxJF
-         wF+4V8rA0UTeIiAKWDAz9/y2ZijXZMj2JmHgI6MB2Hn7aEFJPS3Jf6lsFtY5CnR7rGAy
-         iKQ6FmtO6uluYaf1GyjRHwl+iS848EdYUkd341FMJZ6npE8esUsZ2hrQcvjfkL1zP6kr
-         +icr5zLRrJkTl/RPKod+s60uj0LyXuYKP+K5YOa1u3EKnN8tGBZ9bkJdfgKeWB5YiLdQ
-         ajJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=tqexaluLS/Hq5ZzwKd1WjDvLB5oW63lsXWxKitTfWEY=;
-        b=m81ZsXwANB8ebdA1UEZB1nqyE182biKH68WqvQhs1CR0Y4jXTeU3eZDix6YaMJzp+9
-         +D6N+QJgDf5THV6wTCvN618G3We9QcfxjoLKyUZnfmMyPthJYpw1RlkeQCIpIAKZ9STt
-         YHSO4TXwMFG23XoAnRZkXpGtjczjXw3BonD8uZHHfPM7WXR/EcOZAJyEyt2DeqfYhAgG
-         TQdhwyhVCACE9a1RffE/oP6x2OsKJ+8VAFZD5pntO6Comr+OAZmuqonD0+ms7zJ4YZce
-         YgLAXYX+yBsduYxnnYUMz6/2vAm8wiMW59TwTIYW340szuNihc8A9dVm/X67S1ojZ/Va
-         XY+Q==
-X-Gm-Message-State: ACgBeo00JZd7GqYNoVrEfadGn6QPzRvgJC7EW79kNzre2BXDGDL3K8KG
-        gRa9CehTVQqnH2jXlzX/hLEde4o7Ntk=
-X-Google-Smtp-Source: AA6agR5bobO1qpWSI/lhhlat3aOU3UPrDzSqMRRKib3ZWhPiGHcXh0AhJnqqCmKgV0G+xc/xY7GlmA==
-X-Received: by 2002:a17:906:fe09:b0:77a:52b3:da5d with SMTP id wy9-20020a170906fe0900b0077a52b3da5dmr16260621ejb.57.1663155926452;
-        Wed, 14 Sep 2022 04:45:26 -0700 (PDT)
-Received: from fedora.localdomain ([87.116.166.59])
-        by smtp.gmail.com with ESMTPSA id d12-20020aa7d5cc000000b0044e937ddcabsm9593026eds.77.2022.09.14.04.45.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 04:45:26 -0700 (PDT)
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (aquacomputer_d5next) Fix Quadro fan speed offsets
-Date:   Wed, 14 Sep 2022 13:43:27 +0200
-Message-Id: <20220914114327.6941-1-savicaleksa83@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 14 Sep 2022 10:03:56 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9077A75B;
+        Wed, 14 Sep 2022 07:03:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663164197; x=1694700197;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=EOVc9ziEqaOHEF8KtxeBZDVcCAHtgf66ha0JPUoEHMI=;
+  b=c0dPIsIPuw25dS0g6hC+GY/1L8XFdSHZHUhoU/vRAPzpIKfDR4YGwXSk
+   eAbTE1+ksH9EMLHHKBx9ApGvmscAw/EnghA0PvSO1MAErjP8csEdTOimL
+   P7DQAd0Pf8utdFgRKumhsBjDp2lX0ysdkDleJl9+FdR9VTwSskJrSCvID
+   L2VNa01seMB9MPMEhgFBBxteBlC65CRRKeX4orzyP9J+IFPcbMgJVMSSz
+   W0OT77ko1bLkdt3F8zqL/HRHImOdhIrYhnD9LAQWU2U1no+Gp9YqjrfHs
+   UsZjW4xB5IEPDte0xKwrKO6/wRN4txHlN+BwFknm3N+Fkx3OjMkvsqKa3
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="360175769"
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="360175769"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 07:03:15 -0700
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="759228271"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 07:03:12 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oYSyr-002Ev7-1X;
+        Wed, 14 Sep 2022 17:03:09 +0300
+Date:   Wed, 14 Sep 2022 17:03:09 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     "Farber, Eliav" <farbere@amazon.com>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
+Subject: Re: [PATCH v5 20/21] hwmon: (mr75203) add debugfs to read and write
+ temperature coefficients
+Message-ID: <YyHfHSIz9F+1SGnX@smile.fi.intel.com>
+References: <20220908152449.35457-1-farbere@amazon.com>
+ <20220908152449.35457-21-farbere@amazon.com>
+ <YxowTBIODMLjf1Ek@smile.fi.intel.com>
+ <581a4a0b-8e0e-b7a2-f873-77ed74b54e96@amazon.com>
+ <3b121ab4-dd64-68b3-ee89-8571b5d3651e@amazon.com>
+ <YyC3hsNhbQGIlReU@smile.fi.intel.com>
+ <bdb73546-f309-60dd-3c40-d749654228fe@amazon.com>
+ <YyGfvzlCu9qgtgA0@smile.fi.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <YyGfvzlCu9qgtgA0@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The offsets for setting speeds of fans connected to Quadro are off by one.
-Set them to their correct values.
+On Wed, Sep 14, 2022 at 12:32:47PM +0300, Andy Shevchenko wrote:
+> On Wed, Sep 14, 2022 at 07:26:36AM +0300, Farber, Eliav wrote:
+> > On 9/13/2022 8:01 PM, Andy Shevchenko wrote:
+> > > On Tue, Sep 13, 2022 at 05:40:16PM +0300, Farber, Eliav wrote:
+> > > > On 9/13/2022 4:06 PM, Farber, Eliav wrote:
 
-The offsets as shown point to registers for setting the fan control mode,
-which will be explored in future patches, but slipped in here. When
-setting fan speeds, the resulting values were overlapping, which made the
-fans still run in my initial testing.
+...
 
-Fixes: cdbe34da01e3 ("hwmon: (aquacomputer_d5next) Add support for Aquacomputer Quadro fan controller")
-Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
----
- drivers/hwmon/aquacomputer_d5next.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > It seems like debugfs_attr_write() calls simple_attr_write() and it uses
+> > > > kstrtoull(), which is why it fails when setting a negative value.
+> > > > This is the same also in v6.0-rc5.
+> > > > 
+> > > > debugfs_attr_read() on the other hand does show the correct value also
+> > > > when j is negative.
+> > > 
+> > > Which puzzles me since there is a few drivers that use %lld.
+> > > Yeah, changing it to
+> > > 
+> > >        ret = sscanf(attr->set_buf, attr->fmt, &val);
+> > >        if (ret != 1)
+> > >                ret = -EINVAL;
+> > > 
+> > > probably can fix that. Dunno if debugfs maintainer is okay with this.
+> > > 
+> > > P.S. This needs revisiting all format strings to see if there are no
+> > > additional
+> > > characters, otherwise that needs to be addressed first, if feasible.
+> > 
+> > I was thinking of making such a correction:
+> > 
+> > -       ret = kstrtoull(attr->set_buf, 0, &val);
+> > +       if (attr->set_buf[0] == '-')
+> > +               ret = kstrtoll(attr->set_buf, 0, &val);
+> > +       else
+> > +               ret = kstrtoull(attr->set_buf, 0, &val);
+> > 
+> > and when I tested the change it worked, but then I noticed this commit:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/fs/libfs.c?h=v6.0-rc5&id=488dac0c9237647e9b8f788b6a342595bfa40bda
+> > 
+> > According to this, it previously used simple_strtoll() which supports
+> > negative values, but was changed to use kstrtoull() to deliberately
+> > return '-EINVAL' if it gets a negative value.
+> > 
+> > So I’m not sure debugfs maintainers will be okay with a fix that
+> > basically reverts the commit I mentioned.
+> > Hence, what do you suggest to do with my commit?
+> > Is it ok to leave it as it is today?
+> 
+> Meanwhile asking is not a problem, at least we will know for sure.
+> And yes, leave it as is, but point to the thread where you asking
+> the clarification.
 
-diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-index 3ea25edfc7a5..c51a2678f0eb 100644
---- a/drivers/hwmon/aquacomputer_d5next.c
-+++ b/drivers/hwmon/aquacomputer_d5next.c
-@@ -120,7 +120,7 @@ static u16 octo_ctrl_fan_offsets[] = { 0x5B, 0xB0, 0x105, 0x15A, 0x1AF, 0x204, 0
- static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
- 
- /* Fan speed registers in Quadro control report (from 0-100%) */
--static u16 quadro_ctrl_fan_offsets[] = { 0x36, 0x8b, 0xe0, 0x135 };
-+static u16 quadro_ctrl_fan_offsets[] = { 0x37, 0x8c, 0xe1, 0x136 };
- 
- /* Register offsets for the High Flow Next */
- #define HIGHFLOWNEXT_NUM_SENSORS	2
+For the record:
+
+$ git grep -n -A1 -w DEFINE_DEBUGFS_ATTRIBUTE | grep ');' | sed 's,.*\(".*%.*"\).*,\1,' | sort | uniq -c
+  1 "%08llx\n"
+  5 "0x%016llx\n"
+  5 "0x%02llx\n"
+  5 "0x%04llx\n"
+ 13 "0x%08llx\n"
+  1 "0x%4.4llx\n"
+  3 "0x%.4llx\n"
+  4 "0x%llx\n"
+  1 "%1lld\n"
+ 40 "%lld\n"
+  2 "%lli\n"
+129 "%llu\n"
+  1 "%#llx\n"
+  2 "%llx\n"
+
+means that sscanf() should work and fix the issue. You may even propose a patch
+as a starter for a discussion.
+
 -- 
-2.30.2
+With Best Regards,
+Andy Shevchenko
+
 
