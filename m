@@ -2,107 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 956C8ECAAD3
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Sep 2022 10:48:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64CFAECAAD8
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Sep 2022 11:45:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiINKsZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Sep 2022 06:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33696 "EHLO
+        id S229695AbiINLpa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Sep 2022 07:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiINKsR (ORCPT
+        with ESMTP id S229588AbiINLp3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:48:17 -0400
-X-Greylist: delayed 1213 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Sep 2022 03:48:16 PDT
-Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.144.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787F060515
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Sep 2022 03:48:16 -0700 (PDT)
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway31.websitewelcome.com (Postfix) with ESMTP id 747331FD89
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Sep 2022 05:28:03 -0500 (CDT)
-Received: from 162-215-252-169.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id YPcgonbUVSQZkYPchoGOsb; Wed, 14 Sep 2022 05:28:03 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=A2S4dR+8Kp5iQy6Y9kU/xD3NENSfCkstOu7cRUZu+Ys=; b=PS0VAPJNVqZNTFvYxXvFJIS3QY
-        7/cJDI8UazRqwAfC+18XE5/i31amGxFvmoTSNsn9AzxHHFduvdQh4mo1p8BEKaCyYGYFc1YkP4fnk
-        7ZTRx3lOdbe8g7cg87VAwEL4qW0EZILnDQbTG2E0UbyoOCwCWxiOBbMZFqwBsH4VuCCOfp7k6MCRn
-        vW+V+HYID8EJDfSUC2Z0x0bvra1geD/lF43NJQ9tBRl8AaO6ffoO/ZZrkHM8TouMhLt/1Qo4qY3yG
-        eddWY8vXKNqofYuiyiAARgwmA8QAoOq4bCbKcH96C3XvF5hIimClDNPpDxp6QyOprUpZTrJKVSnIF
-        Wm/Fggig==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:42516 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <linux@roeck-us.net>)
-        id 1oYPcg-0045qb-Ed;
-        Wed, 14 Sep 2022 10:28:02 +0000
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
+        Wed, 14 Sep 2022 07:45:29 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4007A534;
+        Wed, 14 Sep 2022 04:45:28 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id go34so34078610ejc.2;
+        Wed, 14 Sep 2022 04:45:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=tqexaluLS/Hq5ZzwKd1WjDvLB5oW63lsXWxKitTfWEY=;
+        b=e4xd2M66zszVNq8YmhKpHY8ZIdggWgLbfc5+RKNcLpBcqRne9wONjDgqGeAXIV4tvi
+         UcYIdX+gXb9er5DNXEOJ4cNwHjclfky5UUeY6t0b4JTaCZe30RN5/kDpi+57vi+IaxJF
+         wF+4V8rA0UTeIiAKWDAz9/y2ZijXZMj2JmHgI6MB2Hn7aEFJPS3Jf6lsFtY5CnR7rGAy
+         iKQ6FmtO6uluYaf1GyjRHwl+iS848EdYUkd341FMJZ6npE8esUsZ2hrQcvjfkL1zP6kr
+         +icr5zLRrJkTl/RPKod+s60uj0LyXuYKP+K5YOa1u3EKnN8tGBZ9bkJdfgKeWB5YiLdQ
+         ajJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=tqexaluLS/Hq5ZzwKd1WjDvLB5oW63lsXWxKitTfWEY=;
+        b=m81ZsXwANB8ebdA1UEZB1nqyE182biKH68WqvQhs1CR0Y4jXTeU3eZDix6YaMJzp+9
+         +D6N+QJgDf5THV6wTCvN618G3We9QcfxjoLKyUZnfmMyPthJYpw1RlkeQCIpIAKZ9STt
+         YHSO4TXwMFG23XoAnRZkXpGtjczjXw3BonD8uZHHfPM7WXR/EcOZAJyEyt2DeqfYhAgG
+         TQdhwyhVCACE9a1RffE/oP6x2OsKJ+8VAFZD5pntO6Comr+OAZmuqonD0+ms7zJ4YZce
+         YgLAXYX+yBsduYxnnYUMz6/2vAm8wiMW59TwTIYW340szuNihc8A9dVm/X67S1ojZ/Va
+         XY+Q==
+X-Gm-Message-State: ACgBeo00JZd7GqYNoVrEfadGn6QPzRvgJC7EW79kNzre2BXDGDL3K8KG
+        gRa9CehTVQqnH2jXlzX/hLEde4o7Ntk=
+X-Google-Smtp-Source: AA6agR5bobO1qpWSI/lhhlat3aOU3UPrDzSqMRRKib3ZWhPiGHcXh0AhJnqqCmKgV0G+xc/xY7GlmA==
+X-Received: by 2002:a17:906:fe09:b0:77a:52b3:da5d with SMTP id wy9-20020a170906fe0900b0077a52b3da5dmr16260621ejb.57.1663155926452;
+        Wed, 14 Sep 2022 04:45:26 -0700 (PDT)
+Received: from fedora.localdomain ([87.116.166.59])
+        by smtp.gmail.com with ESMTPSA id d12-20020aa7d5cc000000b0044e937ddcabsm9593026eds.77.2022.09.14.04.45.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 04:45:26 -0700 (PDT)
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Michael Shych <michaelsh@nvidia.com>
-Subject: [PATCH] hwmon: (emc2305) Remove unnecessary range check
-Date:   Wed, 14 Sep 2022 03:27:55 -0700
-Message-Id: <20220914102755.1874266-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.36.2
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (aquacomputer_d5next) Fix Quadro fan speed offsets
+Date:   Wed, 14 Sep 2022 13:43:27 +0200
+Message-Id: <20220914114327.6941-1-savicaleksa83@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1oYPcg-0045qb-Ed
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:42516
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 21
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Static analyzers report:
+The offsets for setting speeds of fans connected to Quadro are off by one.
+Set them to their correct values.
 
-drivers/hwmon/emc2305.c:194 emc2305_set_cur_state()
-	warn: impossible condition '(val > 255) => (0-255 > 255)'
+The offsets as shown point to registers for setting the fan control mode,
+which will be explored in future patches, but slipped in here. When
+setting fan speeds, the resulting values were overlapping, which made the
+fans still run in my initial testing.
 
-'val' is u8 and thus can never be larger than 255. In theory
-the operation calculating 'val' could result in a value larger
-than 255, but this won't happen because its parameter has already
-been range checked and it is guaranteed that the result never exceeds
-255. Remove the unnecessary value check.
-
-Cc: Michael Shych <michaelsh@nvidia.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: cdbe34da01e3 ("hwmon: (aquacomputer_d5next) Add support for Aquacomputer Quadro fan controller")
+Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 ---
- drivers/hwmon/emc2305.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/hwmon/aquacomputer_d5next.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
-index ee5ed24feab5..bb32172e07e3 100644
---- a/drivers/hwmon/emc2305.c
-+++ b/drivers/hwmon/emc2305.c
-@@ -191,8 +191,6 @@ static int emc2305_set_cur_state(struct thermal_cooling_device *cdev, unsigned l
- 	state = max_t(unsigned long, state, data->cdev_data[cdev_idx].last_hwmon_state);
+diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+index 3ea25edfc7a5..c51a2678f0eb 100644
+--- a/drivers/hwmon/aquacomputer_d5next.c
++++ b/drivers/hwmon/aquacomputer_d5next.c
+@@ -120,7 +120,7 @@ static u16 octo_ctrl_fan_offsets[] = { 0x5B, 0xB0, 0x105, 0x15A, 0x1AF, 0x204, 0
+ static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
  
- 	val = EMC2305_PWM_STATE2DUTY(state, data->max_state, EMC2305_FAN_MAX);
--	if (val > EMC2305_FAN_MAX)
--		return -EINVAL;
+ /* Fan speed registers in Quadro control report (from 0-100%) */
+-static u16 quadro_ctrl_fan_offsets[] = { 0x36, 0x8b, 0xe0, 0x135 };
++static u16 quadro_ctrl_fan_offsets[] = { 0x37, 0x8c, 0xe1, 0x136 };
  
- 	data->cdev_data[cdev_idx].cur_state = state;
- 	if (data->pwm_separate) {
+ /* Register offsets for the High Flow Next */
+ #define HIGHFLOWNEXT_NUM_SENSORS	2
 -- 
-2.36.2
+2.30.2
 
