@@ -2,71 +2,121 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 558FFC6FA82
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Sep 2022 15:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B39FC6FA82
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Sep 2022 15:31:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiINPRS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Sep 2022 11:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
+        id S229724AbiINPbs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Sep 2022 11:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbiINPRH (ORCPT
+        with ESMTP id S229546AbiINPbr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Sep 2022 11:17:07 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E346D80B77;
-        Wed, 14 Sep 2022 08:16:59 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 46383100006;
-        Wed, 14 Sep 2022 15:16:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663168615;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M5IGgcU2WIxFb3FzPqZ14HIF1sUe8Tr38VMHu2F1u/0=;
-        b=HuIYUNpe73gEMmWVDFN5DGe0Eyb3dJJ/h8+zBulz6r9LPxvJ6tWZBUbY75vrLFaCixpAX9
-        1kOP4VEgiYVXVB63fvBuYWfhJtzeRmVj1f906hEbavEUAR/voeefpOPaGm5KvhF9+EXngj
-        8tk3l/KE36LayXgS9t2pqWOwHxOZxcqFrKQkMtSlxjbX1g7OlixolTkPqbR6dLZH0Wyrfj
-        gfd87NxBUfChXhtMi0DNZQQi2CdB61mrHijoBY5BpTZ2uoQUMykGWDAOVxQiWfpNmKCTHF
-        GGy0PCMaF+vmdgTFu9L8/0Bg08VhwKdAZ3/SB7lbelcNGIvby1KqIewulHXe/Q==
-Date:   Wed, 14 Sep 2022 17:16:53 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 0/6] rtc: isl12022: cleanups and hwmon support
-Message-ID: <YyHwZbAiycgnQQFO@mail.local>
-References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
- <174dd607-25b6-26c0-e6e7-1634c5b01dbc@rasmusvillemoes.dk>
+        Wed, 14 Sep 2022 11:31:47 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B619C4455F;
+        Wed, 14 Sep 2022 08:31:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1663169506; x=1694705506;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Tc8r3viZ1THhht9uyUek4ZAite/GHEyNkUji3BY65Oc=;
+  b=MZsqRlGwRLAyfQDSewGd/wRmpZ/arQPDcUlu2LATUyopWDi0535TH3qC
+   /A2LImcBR2TRx3QThpMl2gVEfAi1wDOOSECAdAM+RTzVrihbVYKcU0zvb
+   cAT082AvgURQ+h+oDEjOc4XbkpaxLXFMKyPzibL+t97xICXzJp9yGs/kw
+   +yTchCVOq5qNcjC1VAgZ/6lM0sBtgleQT111+RY5W0CqXa+uaDHSm+D5+
+   CFFhw1oKBxmPV8r2oSjTTR4VhzLe4JasCEaJDY83bfaSKuIhHH5BSOEPe
+   v90CslkkhGvVT+Cv5Nosu6v3C/o9Oz8FrxoUe2+sSljPiOYEigUljV0N8
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,315,1654552800"; 
+   d="scan'208";a="26181296"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 14 Sep 2022 17:31:44 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 14 Sep 2022 17:31:44 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 14 Sep 2022 17:31:44 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1663169504; x=1694705504;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Tc8r3viZ1THhht9uyUek4ZAite/GHEyNkUji3BY65Oc=;
+  b=BohBRBJtClMjPxH3V+5nDbNMBNlmCcAFnJroPUwUzL6lD+DVTyfpJzOy
+   QlHjwQdIyqjuR9ptRhHJe/TU9Nsbt6I3e0Ph7BUQTOkKZGTW3mfWGRUMu
+   n06SjHu1Ar9AZgm3yxNogpqi17tm8Hjzm+05JUzaOXZZihJAok/K7Vy/i
+   3iAefo/fkZluuT3GaysZr3d7+uIhH4ukTt7D+7q9YkNWwQaCDsJ0Kv3tk
+   N1BgUFWmpXmz5bZmIrZSD8QpsguzYCqMv7+YDdONCwAppw+Dit7yN96lk
+   ryfEGCOQV3oFTbAiVUl61B50eEq/8wLzssoIQJXiLgkNgpRvdyB98i0lu
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,315,1654552800"; 
+   d="scan'208";a="26181295"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 14 Sep 2022 17:31:44 +0200
+Received: from steina-w.tq-net.de (unknown [10.123.49.11])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id CA30C280056;
+        Wed, 14 Sep 2022 17:31:43 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Markus Niebel <Markus.Niebel@ew.tq-group.com>
+Subject: [PATCH v5 0/5] hwmon: pwm-fan: switch regulator dynamically
+Date:   Wed, 14 Sep 2022 17:31:32 +0200
+Message-Id: <20220914153137.613982-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <174dd607-25b6-26c0-e6e7-1634c5b01dbc@rasmusvillemoes.dk>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 09/09/2022 10:15:22+0200, Rasmus Villemoes wrote:
-> On 30/08/2022 12.01, Rasmus Villemoes wrote:
-> > This series does a few cleanups of the isl12022 driver,
-> > 
-> > - removes use of deprecated function
-> > - removes some  redundant code
-> > - switches to regmap API instead of private helpers
-> > 
-> > and finally hooks up the temperatur sensor to hwmon.
-> 
-> ping. Any comments before I respin 6/6 to address Guenter's request?
-> 
+Hello everyone,
 
-This series is missing one patch setting the datetime range supported by
-the RTC which I guess is 2000 to 2099.
+this is the next version for supporting switching off the pwm-fan regulator.
+Review points from Guenter are included.
 
-> Rasmus
+Changes in v5:
+* Added Guenter's R-b to Patch 1 & 4
+* Removed useless goto (Patch 2)
+* Added error checking when switching off PWM (Patch 2)
+* Removed useless branches when switching power (Patch 3)
+* Removed useless (temporary) variable (Patch 3)
+* Updated Patch 5 to changes of previous patches
+* Dropped Patch 6 completly for lack of benefit
+
+Changes in v4:
+* Reordered commits so current behavior is the default all the time
+* Fixed pwm state bug in Patch 1, this affects the patch context in Patch 2
+* Refactor even more code in Patch 3 & 4 for smaller further patches
+* Squashed the dynamic regulator switch patch and the sysfs attribute patch
+  into one, keeping default behavior.
+  Overhaul the patch to support different modes altogether
+* Fixed bugs in module removal in pwm1_enable=1
+* Moved internal PWM state removal to the end to keep the patch smaller
+
+Best regards,
+Alexander
+
+Alexander Stein (5):
+  hwmon: pwm-fan: Refactor fan power on/off
+  hwmon: pwm-fan: Simplify enable/disable check
+  hwmon: pwm-fan: Add dedicated power switch function
+  hwmon: pwm-fan: split __set_pwm into locked/unlocked functions
+  hwmon: pwm-fan: Switch regulator dynamically
+
+ Documentation/hwmon/pwm-fan.rst |  12 ++
+ drivers/hwmon/pwm-fan.c         | 312 +++++++++++++++++++++++---------
+ 2 files changed, 241 insertions(+), 83 deletions(-)
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
+
