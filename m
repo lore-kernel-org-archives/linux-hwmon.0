@@ -2,111 +2,126 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91103ECAAD3
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Sep 2022 12:25:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32523ECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Sep 2022 12:41:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbiIOMZo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 15 Sep 2022 08:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
+        id S229815AbiIOMlr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 15 Sep 2022 08:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiIOMZn (ORCPT
+        with ESMTP id S229780AbiIOMlq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Sep 2022 08:25:43 -0400
-Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.51.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3903B65836
-        for <linux-hwmon@vger.kernel.org>; Thu, 15 Sep 2022 05:25:42 -0700 (PDT)
-Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id AC447A052F
-        for <linux-hwmon@vger.kernel.org>; Thu, 15 Sep 2022 07:25:41 -0500 (CDT)
-Received: from 162-215-252-169.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id Ynw5o2GJsMdPuYnw5oR9mh; Thu, 15 Sep 2022 07:25:41 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=a/IJK6SMLChfmxSeE6cT43Vu89G3qJJfLypYnEY3NZY=; b=3edQTINZXCHYt13HZLLRzudEWV
-        qzAV2GQM8d3VObljWq9Hjc2kPY7gMGBEeVAasxIn1JmUIvMq2UIdydghZ4LVgoic+Inq/HDcblm4g
-        Ae6fSoNKuydt+SNS9zmrvdoH5Opog/ibsU8J522k8c2FAeklibfhhaoypLR3zTF5BD2p6eon3sst/
-        w4DCKSf/8HJk4KxkfoaT+uTLrnwbNXIJE19N2JyIpHRG9jPMj77zvmOJHlrfeYyHnol+bGA5rySUB
-        PsjCb/4bDuzRRjbJBAtSpsVRblZDlqpqFCMwOXFLuBL4OJdOZjFbFHVK+FnvJ/yYV3EpTe9xVb/qJ
-        8JOWSHfg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:53160 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <linux@roeck-us.net>)
-        id 1oYnw4-001LpW-Px;
-        Thu, 15 Sep 2022 12:25:40 +0000
-Date:   Thu, 15 Sep 2022 05:25:36 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Liang He <windhl@126.com>
-Cc:     tharvey@gateworks.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, chenmengda2009@163.com
-Subject: Re: [PATCH v2] hwmon: (gsc-hwmon) Call of_node_get() before
- of_find_xxx API
-Message-ID: <20220915122536.GA3190145@roeck-us.net>
-References: <20220915090627.4007728-1-windhl@126.com>
+        Thu, 15 Sep 2022 08:41:46 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43816BE8;
+        Thu, 15 Sep 2022 05:41:45 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id bj12so41771271ejb.13;
+        Thu, 15 Sep 2022 05:41:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=tzmtfB02Kll9bwoDnqvoio0j7mPs1ux70CIafG7WcfU=;
+        b=atzRGS0IEVvnd6WXWC1rlccaFpBQ2yFXqBqZ0xtSuNwYZbyh6YLVXuYzo5VlCf3iMP
+         BXWfOqj/F/1zmWoyB2Ve1b4rG8wV4V0nXNPRF2ttYQZHs5S+vgVt5aY8tk9kzZEKkCGp
+         99SPE2OCnrsp7ChpLRX6eFj/7iiUngJWcWymqH8Vf3Qh5/8epbpknxNhTWsZD+pPH0kl
+         8q57dvY2+qmbkMehptiFXjeo8CWidirKYdwZ1kovxRZGLbsHsxjaOqqcaSrGOvJCGK+R
+         RYD31Gyww66Ch62fGeb1WerCHHiTxFWaTjfIwREbvvYEBrsMvYShWfKyvxogNPSQVbAY
+         U1LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=tzmtfB02Kll9bwoDnqvoio0j7mPs1ux70CIafG7WcfU=;
+        b=EpH8uQyQN5mFFxV3qACj/16IvD18Q/SDl0XbLhwwDUm/qcxszHX985oAGWqtLCGava
+         VXOLU8lXvxqFg70DLabKcpG8YHZ2XgTvMsvwATJDZKsXK1AUm+uNO3D/PjKJwYNtCJgH
+         3To0GreZT5yI+xEQe7BJpiNerhMSapEiqrLJFD/1weuiloPs12k1B8m5dCuaYBrAkacL
+         Ci3SaWA2uZ2Tvsk0TSPu7LAqWdVGfr2T6eoirayqVGRIBZO2JJeZGneGE9oN91nMhX8w
+         s03iixLhiXqPhyBBwZj7KmJBYQZl1ZAKtFJ2HMpnQv9PFI7mqZEz1+V5DYmSgE0C61IM
+         Ijag==
+X-Gm-Message-State: ACgBeo3txzsJrCfP+aP6f1zM7QWvphCjRbFAVBz1exKMJKTTMnAJgWbt
+        3sBWTfhy3rCB2m/zGXg88GI=
+X-Google-Smtp-Source: AA6agR6OETBFpaXizZkBzwGuLb/nSX3ng6zwpvWStvpMjub1lzTuDLEeGZHPr04IhJAIRKoFkOF22g==
+X-Received: by 2002:a17:906:8c7:b0:730:c1a9:e187 with SMTP id o7-20020a17090608c700b00730c1a9e187mr29400332eje.55.1663245703722;
+        Thu, 15 Sep 2022 05:41:43 -0700 (PDT)
+Received: from localhost.localdomain (host-95-251-45-225.retail.telecomitalia.it. [95.251.45.225])
+        by smtp.gmail.com with ESMTPSA id b18-20020a1709063cb200b007778c9b7629sm9056305ejh.34.2022.09.15.05.41.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 05:41:42 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Gurucharan <gurucharanx.g@intel.com>
+Subject: [RESEND PATCH] ixgbe: Don't call kmap() on page allocated with GFP_ATOMIC
+Date:   Thu, 15 Sep 2022 14:40:12 +0200
+Message-Id: <20220915124012.28811-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220915090627.4007728-1-windhl@126.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1oYnw4-001LpW-Px
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:53160
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 2
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 05:06:27PM +0800, Liang He wrote:
-> In gsc_hwmon_get_devtree_pdata(), we should call of_node_get() before
-> the of_find_compatible_node() which will automatically call
-> of_node_put() for the 'from' argument.
-> 
-> Fixes: 3bce5377ef66 ("hwmon: Add Gateworks System Controller support")
-> Co-developed-by: Mengda Chen <chenmengda2009@163.com>
-> Signed-off-by: Mengda Chen <chenmengda2009@163.com>
-> Signed-off-by: Liang He <windhl@126.com>
+Pages allocated with GFP_ATOMIC cannot come from Highmem. This is why
+there is no need to call kmap() on them.
 
-Sigh. The first signer is supposed to be the author.
+Therefore, don't call kmap() on rx_buffer->page() and instead use a
+plain page_address() to get the kernel address.
 
-Guenter
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Suggested-by: Alexander Duyck <alexander.duyck@gmail.com>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Reviewed-by: Alexander Duyck <alexander.duyck@gmail.com>
+Tested-by: Gurucharan <gurucharanx.g@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
 
-> ---
-> 
->  v2: use proper tags advised by Guenter and based on Kernel Doc
-> 
->  drivers/hwmon/gsc-hwmon.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/hwmon/gsc-hwmon.c b/drivers/hwmon/gsc-hwmon.c
-> index d64be48f1ef6..b60ec95b5edb 100644
-> --- a/drivers/hwmon/gsc-hwmon.c
-> +++ b/drivers/hwmon/gsc-hwmon.c
-> @@ -267,6 +267,7 @@ gsc_hwmon_get_devtree_pdata(struct device *dev)
->  	pdata->nchannels = nchannels;
->  
->  	/* fan controller base address */
-> +	of_node_get(dev->parent->of_node);
->  	fan = of_find_compatible_node(dev->parent->of_node, NULL, "gw,gsc-fan");
->  	if (fan && of_property_read_u32(fan, "reg", &pdata->fan_base)) {
->  		of_node_put(fan);
-> -- 
-> 2.25.1
-> 
+I send again this patch because it was submitted more than two months ago,
+Monday 4th July 2022, but for one or more (good?) reasons it has not yet
+reached Linus' tree. In the meantime I am also forwarding two "Reviewed-by"
+and one "Tested-by" tags (thanks a lot to Ira, Alexander, Gurucharan).
+Obviously I have not made any changes to the code.
+
+ drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
+index 04f453eabef6..cb5c707538a5 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
+@@ -1964,15 +1964,13 @@ static bool ixgbe_check_lbtest_frame(struct ixgbe_rx_buffer *rx_buffer,
+ 
+ 	frame_size >>= 1;
+ 
+-	data = kmap(rx_buffer->page) + rx_buffer->page_offset;
++	data = page_address(rx_buffer->page) + rx_buffer->page_offset;
+ 
+ 	if (data[3] != 0xFF ||
+ 	    data[frame_size + 10] != 0xBE ||
+ 	    data[frame_size + 12] != 0xAF)
+ 		match = false;
+ 
+-	kunmap(rx_buffer->page);
+-
+ 	return match;
+ }
+ 
+-- 
+2.37.2
+
