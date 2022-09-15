@@ -2,126 +2,85 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32523ECAAD3
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Sep 2022 12:41:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2B85ECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Sep 2022 13:10:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiIOMlr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 15 Sep 2022 08:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36430 "EHLO
+        id S229906AbiIONKf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 15 Sep 2022 09:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiIOMlq (ORCPT
+        with ESMTP id S229885AbiIONKa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Sep 2022 08:41:46 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43816BE8;
-        Thu, 15 Sep 2022 05:41:45 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id bj12so41771271ejb.13;
-        Thu, 15 Sep 2022 05:41:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=tzmtfB02Kll9bwoDnqvoio0j7mPs1ux70CIafG7WcfU=;
-        b=atzRGS0IEVvnd6WXWC1rlccaFpBQ2yFXqBqZ0xtSuNwYZbyh6YLVXuYzo5VlCf3iMP
-         BXWfOqj/F/1zmWoyB2Ve1b4rG8wV4V0nXNPRF2ttYQZHs5S+vgVt5aY8tk9kzZEKkCGp
-         99SPE2OCnrsp7ChpLRX6eFj/7iiUngJWcWymqH8Vf3Qh5/8epbpknxNhTWsZD+pPH0kl
-         8q57dvY2+qmbkMehptiFXjeo8CWidirKYdwZ1kovxRZGLbsHsxjaOqqcaSrGOvJCGK+R
-         RYD31Gyww66Ch62fGeb1WerCHHiTxFWaTjfIwREbvvYEBrsMvYShWfKyvxogNPSQVbAY
-         U1LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=tzmtfB02Kll9bwoDnqvoio0j7mPs1ux70CIafG7WcfU=;
-        b=EpH8uQyQN5mFFxV3qACj/16IvD18Q/SDl0XbLhwwDUm/qcxszHX985oAGWqtLCGava
-         VXOLU8lXvxqFg70DLabKcpG8YHZ2XgTvMsvwATJDZKsXK1AUm+uNO3D/PjKJwYNtCJgH
-         3To0GreZT5yI+xEQe7BJpiNerhMSapEiqrLJFD/1weuiloPs12k1B8m5dCuaYBrAkacL
-         Ci3SaWA2uZ2Tvsk0TSPu7LAqWdVGfr2T6eoirayqVGRIBZO2JJeZGneGE9oN91nMhX8w
-         s03iixLhiXqPhyBBwZj7KmJBYQZl1ZAKtFJ2HMpnQv9PFI7mqZEz1+V5DYmSgE0C61IM
-         Ijag==
-X-Gm-Message-State: ACgBeo3txzsJrCfP+aP6f1zM7QWvphCjRbFAVBz1exKMJKTTMnAJgWbt
-        3sBWTfhy3rCB2m/zGXg88GI=
-X-Google-Smtp-Source: AA6agR6OETBFpaXizZkBzwGuLb/nSX3ng6zwpvWStvpMjub1lzTuDLEeGZHPr04IhJAIRKoFkOF22g==
-X-Received: by 2002:a17:906:8c7:b0:730:c1a9:e187 with SMTP id o7-20020a17090608c700b00730c1a9e187mr29400332eje.55.1663245703722;
-        Thu, 15 Sep 2022 05:41:43 -0700 (PDT)
-Received: from localhost.localdomain (host-95-251-45-225.retail.telecomitalia.it. [95.251.45.225])
-        by smtp.gmail.com with ESMTPSA id b18-20020a1709063cb200b007778c9b7629sm9056305ejh.34.2022.09.15.05.41.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 05:41:42 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: [RESEND PATCH] ixgbe: Don't call kmap() on page allocated with GFP_ATOMIC
-Date:   Thu, 15 Sep 2022 14:40:12 +0200
-Message-Id: <20220915124012.28811-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Thu, 15 Sep 2022 09:10:30 -0400
+Received: from m1524.mail.126.com (m1524.mail.126.com [220.181.15.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E18D32A9C
+        for <linux-hwmon@vger.kernel.org>; Thu, 15 Sep 2022 06:10:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=ABbwc
+        +o7qgY8b9WnSMF6mbvYxSNeHw9wpR5sKXilwds=; b=cBNqv9y28ziC9U4GaUKL/
+        YH3JDuszCo6w+jepAQIBQCyhfw6O9kpPwGcMSWkzCn9vGIyLbIdQxvhdee66pXdT
+        fw6edU2FdRW08YVmwBSHu4AYj96tG1NSsFbCQZrfC3jQLhG9GN3pdHWe9YuzTJMw
+        w5ri7gf6By7AIua3JArgV8=
+Received: from windhl$126.com ( [8.219.73.50, 14.29.82.34] ) by
+ ajax-webmail-wmsvr24 (Coremail) ; Thu, 15 Sep 2022 21:10:00 +0800 (CST)
+X-Originating-IP: [8.219.73.50, 14.29.82.34]
+Date:   Thu, 15 Sep 2022 21:10:00 +0800 (CST)
+From:   "Liang He" <windhl@126.com>
+To:     "Guenter Roeck" <linux@roeck-us.net>
+Cc:     tharvey@gateworks.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, chenmengda2009@163.com
+Subject: Re:Re: [PATCH v2] hwmon: (gsc-hwmon) Call of_node_get() before
+ of_find_xxx API
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 126com
+In-Reply-To: <20220915122536.GA3190145@roeck-us.net>
+References: <20220915090627.4007728-1-windhl@126.com>
+ <20220915122536.GA3190145@roeck-us.net>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-ID: <34c8065f.783c.18341453f34.Coremail.windhl@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: GMqowAAnLycpJCNjZWl2AA--.38328W
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizgp9F18RP1V6JgABsX
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Pages allocated with GFP_ATOMIC cannot come from Highmem. This is why
-there is no need to call kmap() on them.
-
-Therefore, don't call kmap() on rx_buffer->page() and instead use a
-plain page_address() to get the kernel address.
-
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Suggested-by: Alexander Duyck <alexander.duyck@gmail.com>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Reviewed-by: Alexander Duyck <alexander.duyck@gmail.com>
-Tested-by: Gurucharan <gurucharanx.g@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
-
-I send again this patch because it was submitted more than two months ago,
-Monday 4th July 2022, but for one or more (good?) reasons it has not yet
-reached Linus' tree. In the meantime I am also forwarding two "Reviewed-by"
-and one "Tested-by" tags (thanks a lot to Ira, Alexander, Gurucharan).
-Obviously I have not made any changes to the code.
-
- drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
-index 04f453eabef6..cb5c707538a5 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
-@@ -1964,15 +1964,13 @@ static bool ixgbe_check_lbtest_frame(struct ixgbe_rx_buffer *rx_buffer,
- 
- 	frame_size >>= 1;
- 
--	data = kmap(rx_buffer->page) + rx_buffer->page_offset;
-+	data = page_address(rx_buffer->page) + rx_buffer->page_offset;
- 
- 	if (data[3] != 0xFF ||
- 	    data[frame_size + 10] != 0xBE ||
- 	    data[frame_size + 12] != 0xAF)
- 		match = false;
- 
--	kunmap(rx_buffer->page);
--
- 	return match;
- }
- 
--- 
-2.37.2
-
+CgpBdCAyMDIyLTA5LTE1IDIwOjI1OjM2LCAiR3VlbnRlciBSb2VjayIgPGxpbnV4QHJvZWNrLXVz
+Lm5ldD4gd3JvdGU6Cj5PbiBUaHUsIFNlcCAxNSwgMjAyMiBhdCAwNTowNjoyN1BNICswODAwLCBM
+aWFuZyBIZSB3cm90ZToKPj4gSW4gZ3NjX2h3bW9uX2dldF9kZXZ0cmVlX3BkYXRhKCksIHdlIHNo
+b3VsZCBjYWxsIG9mX25vZGVfZ2V0KCkgYmVmb3JlCj4+IHRoZSBvZl9maW5kX2NvbXBhdGlibGVf
+bm9kZSgpIHdoaWNoIHdpbGwgYXV0b21hdGljYWxseSBjYWxsCj4+IG9mX25vZGVfcHV0KCkgZm9y
+IHRoZSAnZnJvbScgYXJndW1lbnQuCj4+IAo+PiBGaXhlczogM2JjZTUzNzdlZjY2ICgiaHdtb246
+IEFkZCBHYXRld29ya3MgU3lzdGVtIENvbnRyb2xsZXIgc3VwcG9ydCIpCj4+IENvLWRldmVsb3Bl
+ZC1ieTogTWVuZ2RhIENoZW4gPGNoZW5tZW5nZGEyMDA5QDE2My5jb20+Cj4+IFNpZ25lZC1vZmYt
+Ynk6IE1lbmdkYSBDaGVuIDxjaGVubWVuZ2RhMjAwOUAxNjMuY29tPgo+PiBTaWduZWQtb2ZmLWJ5
+OiBMaWFuZyBIZSA8d2luZGhsQDEyNi5jb20+Cj4KPlNpZ2guIFRoZSBmaXJzdCBzaWduZXIgaXMg
+c3VwcG9zZWQgdG8gYmUgdGhlIGF1dGhvci4KPgo+R3VlbnRlcgoKSGksIEd1ZW50ZXIKCkkgc2Vh
+cmNoIHRoZSBjb21taXQgaGlzdG9yeSBhbmQgZm91bmQgc2V2ZXJhbCByZWNlbnQgYnV0IGRpZmZl
+cmVudCBjb21taXRzIAoKVGhpcyBvbmUgaXMgc2FtZSB3aXRoIG1pbmU6IENvLWRldmVsb3BlZC1i
+eTogQSAmIFNPQiBGaXJzdCAmIFNPQiBBdXRob3IsICBmb2xsb3dpbmcgdGhlIGtlcm5lbCBkb2Mg
+Cmh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRz
+L2xpbnV4LmdpdC9jb21taXQvP2g9djYuMC1yYzUmaWQ9N2U5N2NmZWQ5OTI5ZWFhYmM0MTgyOWMz
+OTVlYjBkMTM1MGZjY2I5ZAoKQnV0LCB0aGlzIG9uZSBpcyBjb25zaXN0ZW50IHdpdGggeW91ciBh
+ZHZpc2U6IFNPQiBBdXRob3IgJiBDby1kZXZlbG9wZWQtYnk6IEEgJiBTT0IgQQooaHR0cHM6Ly9n
+aXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdG9ydmFsZHMvbGludXguZ2l0
+L2NvbW1pdC8/aD12Ni4wLXJjNSZpZD1lZjY5YWEzYTk4NmVmOTRmMDFjZThiNWI2MTlmNTUwZGI1
+NDQzMmZlCgpTbyBwbGVhc2UgdGVsbCBtZSB3aGF0IEkgc2hvdWxkIGZvbGxvdz8KClRoYW5rcyB2
+ZXJ5IG11Y2guCgpMaWFuZwoKCgoKCgo+Cj4+IC0tLQo+PiAKPj4gIHYyOiB1c2UgcHJvcGVyIHRh
+Z3MgYWR2aXNlZCBieSBHdWVudGVyIGFuZCBiYXNlZCBvbiBLZXJuZWwgRG9jCj4+IAo+PiAgZHJp
+dmVycy9od21vbi9nc2MtaHdtb24uYyB8IDEgKwo+PiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0
+aW9uKCspCj4+IAo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9nc2MtaHdtb24uYyBiL2Ry
+aXZlcnMvaHdtb24vZ3NjLWh3bW9uLmMKPj4gaW5kZXggZDY0YmU0OGYxZWY2Li5iNjBlYzk1YjVl
+ZGIgMTAwNjQ0Cj4+IC0tLSBhL2RyaXZlcnMvaHdtb24vZ3NjLWh3bW9uLmMKPj4gKysrIGIvZHJp
+dmVycy9od21vbi9nc2MtaHdtb24uYwo+PiBAQCAtMjY3LDYgKzI2Nyw3IEBAIGdzY19od21vbl9n
+ZXRfZGV2dHJlZV9wZGF0YShzdHJ1Y3QgZGV2aWNlICpkZXYpCj4+ICAJcGRhdGEtPm5jaGFubmVs
+cyA9IG5jaGFubmVsczsKPj4gIAo+PiAgCS8qIGZhbiBjb250cm9sbGVyIGJhc2UgYWRkcmVzcyAq
+Lwo+PiArCW9mX25vZGVfZ2V0KGRldi0+cGFyZW50LT5vZl9ub2RlKTsKPj4gIAlmYW4gPSBvZl9m
+aW5kX2NvbXBhdGlibGVfbm9kZShkZXYtPnBhcmVudC0+b2Zfbm9kZSwgTlVMTCwgImd3LGdzYy1m
+YW4iKTsKPj4gIAlpZiAoZmFuICYmIG9mX3Byb3BlcnR5X3JlYWRfdTMyKGZhbiwgInJlZyIsICZw
+ZGF0YS0+ZmFuX2Jhc2UpKSB7Cj4+ICAJCW9mX25vZGVfcHV0KGZhbik7Cj4+IC0tIAo+PiAyLjI1
+LjEKPj4gCg==
