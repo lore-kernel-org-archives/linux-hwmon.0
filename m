@@ -2,92 +2,89 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20274C6FA8B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Sep 2022 11:09:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D869ECAAD8
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Sep 2022 12:09:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbiIPLJt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 16 Sep 2022 07:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
+        id S229959AbiIPMJp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 16 Sep 2022 08:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231736AbiIPLJ1 (ORCPT
+        with ESMTP id S230438AbiIPMJo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 16 Sep 2022 07:09:27 -0400
-X-Greylist: delayed 1270 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 16 Sep 2022 04:03:25 PDT
-Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.4.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8208A3895
-        for <linux-hwmon@vger.kernel.org>; Fri, 16 Sep 2022 04:03:25 -0700 (PDT)
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id 21189400C4377
-        for <linux-hwmon@vger.kernel.org>; Fri, 16 Sep 2022 05:42:07 -0500 (CDT)
-Received: from 162-215-252-169.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id Z8nOoBAz7QLX5Z8nOo2K86; Fri, 16 Sep 2022 05:42:07 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=cdkVS+B4fyYiAriQrnqRsI7YRvJGQgIVmLVg3RoDh0s=; b=CFngebensG4FV/kl5v6dB66LFp
-        9+/k1i/zQKTMC1DzDdsjD+fbO1dX2DDOVZgGJXrdqf8q1jPJwvWf3NosUgMfkEs/9zbbmQu5sNySn
-        HwCA9ilI/2HShFnUZwR0MLSJ85jhd9WhxuIhBzSVm9Na+sbtgXccAP2e89V7Wl3ygRN/7OpeFLYkX
-        Ays0zR/NERo/zpK/3bdY242JCYzJjKT4WPrNToMJAHGJ9Oy64przNoUb4j5Z5Qqmytn7ssqWGY8uo
-        cjb4O2qZvTkPBJujM/xiUQdsLvnbpjs9lGZKhm4Jt1DhBWQxlhwv4MTeGEE75bxNhm8mWOYixAQ4d
-        Ra1vTgXg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:36880 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <linux@roeck-us.net>)
-        id 1oZ8nO-000m9S-4S;
-        Fri, 16 Sep 2022 10:42:06 +0000
-Date:   Fri, 16 Sep 2022 03:42:01 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Liang He <windhl@126.com>
-Cc:     tharvey@gateworks.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, chenmengda2009@163.com
-Subject: Re: Re: Re: [PATCH v2] hwmon: (gsc-hwmon) Call of_node_get() before
- of_find_xxx API
-Message-ID: <20220916104201.GA4060280@roeck-us.net>
-References: <20220915090627.4007728-1-windhl@126.com>
- <20220915122536.GA3190145@roeck-us.net>
- <34c8065f.783c.18341453f34.Coremail.windhl@126.com>
- <20220915164346.GA2994323@roeck-us.net>
- <4173bc92.fe1.18343edbfc7.Coremail.windhl@126.com>
+        Fri, 16 Sep 2022 08:09:44 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617DE1704D
+        for <linux-hwmon@vger.kernel.org>; Fri, 16 Sep 2022 05:09:40 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id y17so43939011ejo.6
+        for <linux-hwmon@vger.kernel.org>; Fri, 16 Sep 2022 05:09:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=odQlfFAggBoep0bulEhsQiWvf71yxfezg5yPb2FCPJE=;
+        b=DdF20jXfX3RHny4PKdPH07To/UOXczoytVNCt5KtBkNTTiUFXThhjo3SS46w3f5Mq4
+         KL+io10y+YRDU94+wtU2ZxQnXOzQ62ud6qAEK0Jt9Rnmti9DYJGdBt2hf7Crp2mHzLdl
+         eIn3IPAk3ZV8c/uB+yg0HDcSb0V42TPEfPEfguHa0rw509aivIiwlCpDaKPJ1J9TTxSg
+         EA5/+YfHku5DCHCP0PI5sOmpmoJ6zuUr4z1paaldAhm8yx37QHNGAMKpGy25aPMjMoyX
+         ckl1JW+I5P1Bfr0J7EvPkDP9cB0cl7HpOMxbLppagpPKhjerWQvA3V7fa0DbpHj3HVr/
+         /bzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=odQlfFAggBoep0bulEhsQiWvf71yxfezg5yPb2FCPJE=;
+        b=fvCg7VF0K9FdcEt/Ouhf2Iu3eBcNytiAQGYhyfXlOjfD4xSaEqKyIBcdnJzKYxeIF/
+         etAQqAGrfHy9/4Vc5BbjJHmHiLvmbJretDf+SZkqh6DUsJ09VD+nNHXDu0/TgpOg2lKZ
+         1zmZ+OBqi5gjK6uM9UyGsS0QaGGGGSroHCmkDUW2yOmdYHxjeK5jLaN4drfh4nsDqWzs
+         Av770yumt54DU6YIW5H8gUe50CJHb03L7HljQTXjeWfAWUDJiF/0/EDAsiRiXBjPR3VJ
+         rf4W4UzAltX0Ed5GSWQvP/VXnKHX7qqFR0N05OeyLnlg+xqyH70zbmNVA+nfCw5fl+PK
+         sTXQ==
+X-Gm-Message-State: ACrzQf1gkMXllNQbekCj6uxyh7PEsO6mhHHqWcZmYKVkgeL2u6hwO8o3
+        YBu6WEj7sQ6GzPuLAp3H78o=
+X-Google-Smtp-Source: AMsMyM7HoCgpsovcuex1n/Zf/gq9x/QGD+G0XV+PHdh+YEuwGenD2Jg5KWnLhp3guOi7jrpi1Pqa9w==
+X-Received: by 2002:a17:907:70a:b0:750:bf91:caa3 with SMTP id xb10-20020a170907070a00b00750bf91caa3mr3399319ejb.711.1663330179239;
+        Fri, 16 Sep 2022 05:09:39 -0700 (PDT)
+Received: from morpheus.home.roving-it.com (3.e.2.0.0.0.0.0.0.0.0.0.0.0.0.0.1.8.6.2.1.1.b.f.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:fb11:2681::2e3])
+        by smtp.googlemail.com with ESMTPSA id 9-20020a170906310900b00779cde476e4sm10305590ejx.62.2022.09.16.05.09.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 05:09:38 -0700 (PDT)
+From:   Peter Robinson <pbrobinson@gmail.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org,
+        Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+Cc:     Peter Robinson <pbrobinson@gmail.com>
+Subject: [PATCH] hwmon: (aspeed-pwm-tacho): Add dependency on ARCH_ASPEED
+Date:   Fri, 16 Sep 2022 13:09:36 +0100
+Message-Id: <20220916120936.372591-1-pbrobinson@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4173bc92.fe1.18343edbfc7.Coremail.windhl@126.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1oZ8nO-000m9S-4S
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:36880
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 2
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 09:33:18AM +0800, Liang He wrote:
-> 
-> Thanks for your advice, so following tag order is acceptable?
-> 
-> Fixes: 3bce5377ef66 ("hwmon: Add Gateworks System Controller support")
-> Signed-off-by: Liang He <windhl@126.com>
-> Co-developed-by: Mengda Chen <chenmengda2009@163.com>
-> Signed-off-by: Mengda Chen <chenmengda2009@163.com>
-> 
-Yes, if the author is Liang He and I get the e-mail from Mengda Chen.
+The SENSORS_ASPEED is part of the Aspeed silicon so it makes
+sense to depend on ARCH_ASPEED and for compile testing.
 
-Guenter
+Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
+---
+ drivers/hwmon/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index e70d9614bec2..006af099955f 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -393,6 +393,7 @@ config SENSORS_ASB100
+ 
+ config SENSORS_ASPEED
+ 	tristate "ASPEED AST2400/AST2500 PWM and Fan tach driver"
++	depends on ARCH_ASPEED || COMPILE_TEST
+ 	depends on THERMAL || THERMAL=n
+ 	select REGMAP
+ 	help
+-- 
+2.37.3
+
