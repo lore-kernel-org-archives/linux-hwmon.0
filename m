@@ -2,280 +2,168 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 251DAC6FA82
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Sep 2022 21:12:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45D31ECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Sep 2022 00:46:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiIOVMw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 15 Sep 2022 17:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
+        id S229497AbiIPAqm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 15 Sep 2022 20:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiIOVMu (ORCPT
+        with ESMTP id S229487AbiIPAql (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Sep 2022 17:12:50 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149357B7A0;
-        Thu, 15 Sep 2022 14:12:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663276369; x=1694812369;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Kvh2AgwaqrMB4C+nQ1e/wLqAn9QuX+E5zGP034cyICY=;
-  b=i9hHR3KQjCB0/GU0zgH44DCcg6XvUA4zTnJv2d94wnagVWdKyKSDzm0K
-   5hXKH6A+2ee8oLMQEaJ1lIeRxrtEFd77NrV2YbtWwCtJUK3LSZWWYrEGs
-   o2Uk21OFrqEXURs2AP41BIaBJZKC81wkcZ42rHrLo6VuiXN16ZN4cLLsy
-   xJSUcwjvC+V8hEmChj2omOgt85LPf3qJTE7srLOk9sO/iYxp2kcJi4fmx
-   /xzt97NBuToKeIVc0ZlhgfutuEwtfIgCQMUjAgHhG2fRVYq8kse44oTTH
-   NGPqenblBkc4QXBYXuAqyxEikG64xISyKpR+a8auePhsyoQdkQQZRasC6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="298832762"
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="298832762"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 14:12:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="706515815"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Sep 2022 14:12:46 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYwA9-000115-1c;
-        Thu, 15 Sep 2022 21:12:45 +0000
-Date:   Fri, 16 Sep 2022 05:11:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-scsi@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-parisc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- 6ce5d01e7011b32600656bf90a626b1e51fb192a
-Message-ID: <63239512.gzJmoh0vIZ1pxX6C%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 15 Sep 2022 20:46:41 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E427857D3;
+        Thu, 15 Sep 2022 17:46:39 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id E565F5C017D;
+        Thu, 15 Sep 2022 20:46:35 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 15 Sep 2022 20:46:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1663289195; x=1663375595; bh=rAkof9cLu14wZYnqIpfOS4n0J
+        VHqZxl+jYCd09cLVKY=; b=X47oEd+kRy1T93c3u71EhvDRT62E+nXn2dWnITtr4
+        cuwTtCSCl8KDHRDqo0Ee3tvfQIo9RJBRSLWoRal1BP0w6f0bUft/CoLjt+ku1xyW
+        RT3BEzyX9dEjbm5tqyTePkB/C+hIsfjJ1sbjzEHZuS4uIwOU8Jy6iQGHTWfZy/oL
+        SHJSeIGT7+jrXnuEoo5hA2JOaWVxRDYJGotYKzI8IPg3L5S+SDqbZG0XJT0k0CRN
+        v28ueZUrWm1BDTN6ZFaemBIrJAv7+5IFvNlozbW8RKGg1Tp6qsJSLpYKKWnc55s6
+        IvOHwd3k7dCiPNJ90omK8jrTe7csVz1Z7JSfS5s2bCdwA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1663289195; x=1663375595; bh=rAkof9cLu14wZYnqIpfOS4n0JVHqZxl+jYC
+        d09cLVKY=; b=s5r/DnE58+V/FA+vJPkSoBP+ekYsWfHz0p8B5zBEelIKPbIfC/4
+        BYL+PAngH1pwdTiQfo9HgFJaeZJVq6WKNT/lFon1hw8bOuNPtKFpKtCTJ7q5n1+z
+        OAN4rH3RaLCoQN9YTPNMR8M6IuOD9ODJwyhyTrOxbMPOW2X8lEKSbkcaxP8yJM6V
+        44Nu2vzesit8AHbnxvDYUq4lNxsxT+Y1egg+5R7ctkdWATe7l2cTe5u0iVHpKEV/
+        wEZcStl997WNSI+bqHMiHPNAd2bAGVRK/twIJgfZj13bmhNA3nsBCQp+bYuM0SGA
+        ddEiwM0GigZUu5/PgOBQ8eR2zQrzyk+MFOg==
+X-ME-Sender: <xms:a8cjY9zSAPf4piQfz61oPxvOtDtUW6jggpbzGYc1eFLIhW6q7InnPw>
+    <xme:a8cjY9SLkVuZdOzcm6l5jFoTllQ3Tx3mFjYE-ZM2KbMUyowP9OPFtXPWrxgBQHX3n
+    3mJsSKKkYCCfREUR4s>
+X-ME-Received: <xmr:a8cjY3VZaXdo2ECubPKsjSIXWhdLmoJ-F8Qb6ozc7ptXiggDmSdzcZ4AEIhL>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduledgfeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehljhho
+    nhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfdujedthfduudekffefkeeiffdttd
+    dvhfegudduueffuefhfefggeefteevvdegnecuvehluhhsthgvrhfuihiivgeptdenucfr
+    rghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:a8cjY_ig-bApxXRDRSe0HzSOLe3pTdJrg_qlbVuqrcfiiymuDovoRw>
+    <xmx:a8cjY_AdzFHnOwbceWH-6rCfH6W-7zbQitbVRM8QsaSeIfpE00almA>
+    <xmx:a8cjY4L79HAueiZ1tj7VzseDDoK-tL1vTAFrCgo0rEJTK0zzmduggA>
+    <xmx:a8cjYxCzhTHJeWTzykE5Ex_mzOJ-72zPhKSevgUtu_Ogvpe4-8qCXA>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 15 Sep 2022 20:46:30 -0400 (EDT)
+From:   "Luke D. Jones" <luke@ljones.dev>
+To:     hdegoede@redhat.com
+Cc:     markgross@kernel.org, corentin.chary@gmail.com, linux@roeck-us.net,
+        jdelvare@suse.com, acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, "Luke D. Jones" <luke@ljones.dev>
+Subject: [PATCH] asus-wmi: Expand support of GPU fan to read RPM and label
+Date:   Fri, 16 Sep 2022 12:46:23 +1200
+Message-Id: <20220916004623.10992-1-luke@ljones.dev>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 6ce5d01e7011b32600656bf90a626b1e51fb192a  Add linux-next specific files for 20220915
+The previously added patch to add support for pwm change for TUF laptops
+also is usuable for more than TUF. The same method `0x00110014` is
+used to read the fan RPM.
 
-Error/Warning reports:
+Add two extra attributes for reading fan2 plus fan2 label.
 
-https://lore.kernel.org/linux-mm/202209150141.WgbAKqmX-lkp@intel.com
-https://lore.kernel.org/linux-mm/202209150959.hEWCNjXH-lkp@intel.com
-https://lore.kernel.org/llvm/202209141913.Nxzv3hwM-lkp@intel.com
+Signed-off-by: Luke D. Jones <luke@ljones.dev>
+---
+ drivers/platform/x86/asus-wmi.c | 36 +++++++++++++++++++++++++++++++--
+ 1 file changed, 34 insertions(+), 2 deletions(-)
 
-Error/Warning: (recently discovered and may have been fixed)
-
-ERROR: modpost: "devm_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
-ERROR: modpost: "devm_memremap" [drivers/misc/open-dice.ko] undefined!
-ERROR: modpost: "devm_memunmap" [drivers/misc/open-dice.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/char/xillybus/xillybus_of.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/clk/xilinx/clk-xlnx-clock-wizard.ko] undefined!
-ERROR: modpost: "ioremap" [drivers/net/ethernet/8390/pcnet_cs.ko] undefined!
-ERROR: modpost: "ioremap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-ERROR: modpost: "iounmap" [drivers/net/ethernet/8390/pcnet_cs.ko] undefined!
-ERROR: modpost: "iounmap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-arch/parisc/lib/iomap.c:363:5: warning: no previous prototype for 'ioread64_lo_hi' [-Wmissing-prototypes]
-arch/parisc/lib/iomap.c:373:5: warning: no previous prototype for 'ioread64_hi_lo' [-Wmissing-prototypes]
-arch/parisc/lib/iomap.c:448:6: warning: no previous prototype for 'iowrite64_lo_hi' [-Wmissing-prototypes]
-arch/parisc/lib/iomap.c:454:6: warning: no previous prototype for 'iowrite64_hi_lo' [-Wmissing-prototypes]
-drivers/gpu/drm/drm_atomic_helper.c:802: warning: expecting prototype for drm_atomic_helper_check_wb_connector_state(). Prototype was for drm_atomic_helper_check_wb_encoder_state() instead
-drivers/hwmon/emc2305.c:194 emc2305_set_cur_state() warn: impossible condition '(val > 255) => (0-255 > 255)'
-drivers/scsi/qla2xxx/qla_os.c:2854:23: warning: assignment to 'struct trace_array *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-drivers/scsi/qla2xxx/qla_os.c:2854:25: error: implicit declaration of function 'trace_array_get_by_name'; did you mean 'trace_array_set_clr_event'? [-Werror=implicit-function-declaration]
-drivers/scsi/qla2xxx/qla_os.c:2869:9: error: implicit declaration of function 'trace_array_put' [-Werror=implicit-function-declaration]
-make[4]: *** No rule to make target 'drivers/crypto/aspeed/aspeed_crypto.o', needed by 'drivers/crypto/aspeed/built-in.a'.
-
-Unverified Error/Warning (likely false positive, please contact us if interested):
-
-ERROR: modpost: "__tsan_memcpy" [arch/arm64/crypto/sha512-arm64.ko] undefined!
-ERROR: modpost: "__tsan_memcpy" [arch/arm64/crypto/sha512-ce.ko] undefined!
-ERROR: modpost: "__tsan_memcpy" [fs/binfmt_misc.ko] undefined!
-ERROR: modpost: "__tsan_memcpy" [kernel/kcsan/kcsan_test.ko] undefined!
-ERROR: modpost: "__tsan_memcpy" [mm/zsmalloc.ko] undefined!
-ERROR: modpost: "__tsan_memset" [arch/arm64/crypto/sha512-arm64.ko] undefined!
-ERROR: modpost: "__tsan_memset" [arch/arm64/crypto/sha512-ce.ko] undefined!
-ERROR: modpost: "__tsan_memset" [fs/binfmt_misc.ko] undefined!
-ERROR: modpost: "__tsan_memset" [kernel/scftorture.ko] undefined!
-ERROR: modpost: "__tsan_memset" [mm/zsmalloc.ko] undefined!
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|   |-- drivers-scsi-qla2xxx-qla_os.c:error:implicit-declaration-of-function-trace_array_get_by_name
-|   |-- drivers-scsi-qla2xxx-qla_os.c:error:implicit-declaration-of-function-trace_array_put
-|   `-- drivers-scsi-qla2xxx-qla_os.c:warning:assignment-to-struct-trace_array-from-int-makes-pointer-from-integer-without-a-cast
-|-- alpha-randconfig-r013-20220914
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- arc-allyesconfig
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- arc-randconfig-r043-20220914
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- arm-allyesconfig
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- arm-defconfig
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- arm-randconfig-r016-20220914
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- arm64-allyesconfig
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- i386-allyesconfig
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- i386-defconfig
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- i386-randconfig-a003
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- i386-randconfig-a012
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- i386-randconfig-a014
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- i386-randconfig-a016
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- ia64-allmodconfig
-|   |-- drivers-scsi-qla2xxx-qla_os.c:error:implicit-declaration-of-function-trace_array_get_by_name
-|   |-- drivers-scsi-qla2xxx-qla_os.c:error:implicit-declaration-of-function-trace_array_put
-|   `-- drivers-scsi-qla2xxx-qla_os.c:warning:assignment-to-struct-trace_array-from-int-makes-pointer-from-integer-without-a-cast
-|-- loongarch-buildonly-randconfig-r005-20220914
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- m68k-allmodconfig
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- m68k-allyesconfig
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- m68k-randconfig-c042-20220915
-|   `-- make:No-rule-to-make-target-drivers-crypto-aspeed-aspeed_crypto.o-needed-by-drivers-crypto-aspeed-built-in.a-.
-|-- m68k-randconfig-r026-20220914
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- microblaze-randconfig-m031-20220915
-|   |-- drivers-gpu-drm-display-drm_dp_helper.c-drm_dp_phy_name()-warn:unsigned-dp_phy-is-never-less-than-zero.
-|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|   `-- drivers-hwmon-emc2305.c-emc2305_set_cur_state()-warn:impossible-condition-(val-)-(-)
-|-- microblaze-randconfig-r006-20220914
-clang_recent_errors
-|-- arm64-randconfig-r006-20220915
-|   |-- ERROR:__tsan_memcpy-arch-arm64-crypto-sha512-arm64.ko-undefined
-|   |-- ERROR:__tsan_memcpy-arch-arm64-crypto-sha512-ce.ko-undefined
-|   |-- ERROR:__tsan_memcpy-fs-binfmt_misc.ko-undefined
-|   |-- ERROR:__tsan_memcpy-kernel-kcsan-kcsan_test.ko-undefined
-|   |-- ERROR:__tsan_memcpy-mm-zsmalloc.ko-undefined
-|   |-- ERROR:__tsan_memset-arch-arm64-crypto-sha512-arm64.ko-undefined
-|   |-- ERROR:__tsan_memset-arch-arm64-crypto-sha512-ce.ko-undefined
-|   |-- ERROR:__tsan_memset-fs-binfmt_misc.ko-undefined
-|   |-- ERROR:__tsan_memset-kernel-scftorture.ko-undefined
-|   `-- ERROR:__tsan_memset-mm-zsmalloc.ko-undefined
-|-- arm64-randconfig-r023-20220914
-|   `-- arch-arm64-kernel-alternative.c:warning:no-previous-prototype-for-function-apply_alternatives_vdso
-|-- i386-randconfig-a002
-|   |-- ERROR:___ratelimit-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:__per_cpu_offset-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:__phys_addr-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:__ubsan_handle_out_of_bounds-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:__warn_printk-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:_printk-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:cpu_number-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:kvm_find_user_return_msr-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:kvm_spurious_fault-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:smp_call_function_single-arch-x86-kvm-kvm-intel.ko-undefined
-|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
-|-- i386-randconfig-a015
-|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
-|-- powerpc-mpc832x_mds_defconfig
-|   |-- arch-powerpc-math-emu-fcmpu.c:error:variable-A_c-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- arch-powerpc-math-emu-fcmpu.c:error:variable-B_c-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- arch-powerpc-math-emu-fcmpu.c:error:variable-_fex-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- arch-powerpc-math-emu-fctiw.c:error:variable-_fex-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- arch-powerpc-math-emu-fctiwz.c:error:variable-_fex-set-but-not-used-Werror-Wunused-but-set-variable
-|   `-- arch-powerpc-math-emu-fsel.c:error:variable-_fex-set-but-not-used-Werror-Wunused-but-set-variable
-|-- powerpc-tqm8560_defconfig
-|   |-- arch-powerpc-math-emu-fcmpu.c:error:variable-A_c-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- arch-powerpc-math-emu-fcmpu.c:error:variable-B_c-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- arch-powerpc-math-emu-fcmpu.c:error:variable-_fex-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- arch-powerpc-math-emu-fctiw.c:error:variable-_fex-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- arch-powerpc-math-emu-fctiwz.c:error:variable-_fex-set-but-not-used-Werror-Wunused-but-set-variable
-|   `-- arch-powerpc-math-emu-fsel.c:error:variable-_fex-set-but-not-used-Werror-Wunused-but-set-variable
-|-- riscv-randconfig-r042-20220914
-|   |-- arch-riscv-errata-thead-errata.c:error:use-of-undeclared-identifier-riscv_cbom_block_size
-|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
-|-- s390-buildonly-randconfig-r002-20220914
-|   |-- arch-s390-mm-maccess.c:warning:no-previous-prototype-for-function-memcpy_real
-|   |-- arch-s390-mm-maccess.c:warning:no-previous-prototype-for-function-memcpy_real_init
-|   `-- arch-s390-mm-maccess.c:warning:no-previous-prototype-for-function-memcpy_real_iter
-|-- s390-randconfig-r012-20220914
-|   |-- arch-s390-mm-maccess.c:warning:no-previous-prototype-for-function-memcpy_real
-
-elapsed time: 728m
-
-configs tested: 56
-configs skipped: 3
-
-gcc tested configs:
-arc                                 defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-alpha                               defconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-m68k                             allmodconfig
-s390                                defconfig
-arc                  randconfig-r043-20220914
-arc                              allyesconfig
-powerpc                           allnoconfig
-s390                             allmodconfig
-alpha                            allyesconfig
-i386                                defconfig
-x86_64                    rhel-8.3-kselftests
-i386                          randconfig-a001
-i386                          randconfig-a014
-m68k                             allyesconfig
-x86_64                          rhel-8.3-func
-i386                          randconfig-a003
-i386                          randconfig-a012
-x86_64                              defconfig
-arm                                 defconfig
-i386                          randconfig-a016
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-s390                             allyesconfig
-x86_64                           rhel-8.3-syz
-i386                          randconfig-a005
-arm                              allyesconfig
-arc                               allnoconfig
-alpha                             allnoconfig
-riscv                             allnoconfig
-csky                              allnoconfig
-x86_64                               rhel-8.3
-sh                               allmodconfig
-x86_64                           allyesconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-arm64                            allyesconfig
-i386                             allyesconfig
-ia64                             allmodconfig
-
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-riscv                randconfig-r042-20220914
-hexagon              randconfig-r045-20220914
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-i386                          randconfig-a002
-hexagon              randconfig-r041-20220914
-i386                          randconfig-a004
-i386                          randconfig-a006
-s390                 randconfig-r044-20220914
-
+diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+index ae46af731de9..7fe6ce25da0a 100644
+--- a/drivers/platform/x86/asus-wmi.c
++++ b/drivers/platform/x86/asus-wmi.c
+@@ -72,6 +72,7 @@ module_param(fnlock_default, bool, 0444);
+ 
+ #define ASUS_WMI_FNLOCK_BIOS_DISABLED	BIT(0)
+ 
++#define ASUS_GPU_FAN_DESC		"gpu_fan"
+ #define ASUS_FAN_DESC			"cpu_fan"
+ #define ASUS_FAN_MFUN			0x13
+ #define ASUS_FAN_SFUN_READ		0x06
+@@ -2078,6 +2079,30 @@ static ssize_t asus_hwmon_temp1(struct device *dev,
+ }
+ 
+ /* GPU fan on modern ROG laptops */
++static ssize_t fan2_input_show(struct device *dev,
++					struct device_attribute *attr,
++					char *buf)
++{
++	struct asus_wmi *asus = dev_get_drvdata(dev);
++	int value;
++	int ret;
++
++	ret = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_GPU_FAN_CTRL, &value);
++	if (ret < 0)
++		return ret;
++
++	value &= 0xffff;
++
++	return sysfs_emit(buf, "%d\n", value < 0 ? -1 : value * 100);
++}
++
++static ssize_t fan2_label_show(struct device *dev,
++					  struct device_attribute *attr,
++					  char *buf)
++{
++	return sprintf(buf, "%s\n", ASUS_GPU_FAN_DESC);
++}
++
+ static ssize_t pwm2_enable_show(struct device *dev,
+ 				struct device_attribute *attr,
+ 				char *buf)
+@@ -2127,9 +2152,12 @@ static ssize_t pwm2_enable_store(struct device *dev,
+ /* Fan1 */
+ static DEVICE_ATTR_RW(pwm1);
+ static DEVICE_ATTR_RW(pwm1_enable);
+-static DEVICE_ATTR_RW(pwm2_enable);
+ static DEVICE_ATTR_RO(fan1_input);
+ static DEVICE_ATTR_RO(fan1_label);
++/* Fan2 - GPU fan */
++static DEVICE_ATTR_RW(pwm2_enable);
++static DEVICE_ATTR_RO(fan2_input);
++static DEVICE_ATTR_RO(fan2_label);
+ 
+ /* Temperature */
+ static DEVICE_ATTR(temp1_input, S_IRUGO, asus_hwmon_temp1, NULL);
+@@ -2140,6 +2168,8 @@ static struct attribute *hwmon_attributes[] = {
+ 	&dev_attr_pwm2_enable.attr,
+ 	&dev_attr_fan1_input.attr,
+ 	&dev_attr_fan1_label.attr,
++	&dev_attr_fan2_input.attr,
++	&dev_attr_fan2_label.attr,
+ 
+ 	&dev_attr_temp1_input.attr,
+ 	NULL
+@@ -2160,7 +2190,9 @@ static umode_t asus_hwmon_sysfs_is_visible(struct kobject *kobj,
+ 	    || attr == &dev_attr_pwm1_enable.attr) {
+ 		if (asus->fan_type == FAN_TYPE_NONE)
+ 			return 0;
+-	} else if (attr == &dev_attr_pwm2_enable.attr) {
++	} else if (attr == &dev_attr_fan2_input.attr
++	    || attr == &dev_attr_fan2_label.attr
++	    || attr == &dev_attr_pwm2_enable.attr) {
+ 		if (asus->gpu_fan_type == FAN_TYPE_NONE)
+ 			return 0;
+ 	} else if (attr == &dev_attr_temp1_input.attr) {
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.3
+
