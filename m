@@ -2,240 +2,197 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E95DC54EE9
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Sep 2022 12:13:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACA3AC6FA8B
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Sep 2022 12:18:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbiISMNy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 19 Sep 2022 08:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
+        id S229686AbiISMSs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 19 Sep 2022 08:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiISMNr (ORCPT
+        with ESMTP id S229571AbiISMSp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 19 Sep 2022 08:13:47 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646906336
-        for <linux-hwmon@vger.kernel.org>; Mon, 19 Sep 2022 05:13:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663589626; x=1695125626;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Xt8XF1dMI5115YK4mUbOooRLftcwD+HZ4YeOdcS9XQ4=;
-  b=h9TbwBA8stM5sCyoDKXR4cWKckMjRHTQvrUk0WVUiXgtyNmd8sZaw4ea
-   lW4eOGGJ9IU1Q1kapDArxYytS+7Ar+4x/0JdA5fXIc8mOTc4cUCt7Qs9K
-   0Zq0C4Imun2v7yTg2MpOHYOHI8/Sukxu7DccmFNj5i6Ndbn0qjfsHfISq
-   VfnKTcGtnNEBq/sDD0x6mTPxS6d2DRHMa5AbRtCGAIQGmcbtOQ7IMOf4t
-   w1vWmYVEdq9Ev3RmqFFCXfRIf2jl28UsBKcW+pF19OP9Pxj15UIE2nb6V
-   XT6IFFhQ/h/49qDNRNMnMH3+7WffCU3LrhVCCEQj4mk28J5x/i3nT0vst
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="299374556"
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="299374556"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 05:13:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="596065760"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga006.jf.intel.com with ESMTP; 19 Sep 2022 05:13:45 -0700
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 19 Sep 2022 05:13:45 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 19 Sep 2022 05:13:45 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.175)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 19 Sep 2022 05:13:45 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CkQlTfyGO8Ix5WTK9MBKO0sXwLXFqE4ale1pXkYosFpgSYYT5UrDUMjL2BMAD6Rr89ydfRXWCiPYx1xN3BWBIEoWAG6tqmOXBde/9HNG2SvmCKH4x8aWuOSyVLGcEUbEwkHsmdEeQA+7POwPsvNr/8Cd7hpRM3z8eowDfLlBhCt+yH8/aE8xw7v0Gf6CYTJr2eQkwCWBHy7nZCdaehY9EGE44KnOLRRmJ8jjc6LYCojKPJ5ZAqe9sLdWxUg7CB/RSF+2FTj1cKtqYL3xk8TCfEm5INoe4mGvvJNN8lp7wR4czksV3u7O1mtObG+FV5J4YFhg5wHBmwplz5khUIAwRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5wi+gzQlvclf73UG7QEGex6leYhKhQ2YCWF+jSWIh+c=;
- b=T4+5yub96roTwKtHDP58ylIMug/g+wEv/1iJ2Rg5JKmkW+DFHOFqq3mQIky9x5G9fopKRJO/tKMVnp53HSqf5Fr9SS9xER3ffy+FxxxUsLPbRtwGm6cVNi+pzIPC6uGoxU5TMfr9JYkJqBoAxBgxvvopKswfBA3t2RUIHpLQDdKMi4r3S1FsquTPGvuEX+WhmAVVCWqnZV0Tgl+ymxYzimx785KLbnV9+Ikd/7pOsmDrjMd3G7l0FsqEwS9Yxj87is34sXwoYkSzgHRO/yN0iEJrH3nmzvOl6MIsPWF9TaX2S26KZSYCAf6kE1peqdXpochgaGtvXknMbinvGbDkqw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BN9PR11MB5530.namprd11.prod.outlook.com (2603:10b6:408:103::8)
- by CO1PR11MB5124.namprd11.prod.outlook.com (2603:10b6:303:92::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Mon, 19 Sep
- 2022 12:13:43 +0000
-Received: from BN9PR11MB5530.namprd11.prod.outlook.com
- ([fe80::b8f7:e789:58d6:f0ee]) by BN9PR11MB5530.namprd11.prod.outlook.com
- ([fe80::b8f7:e789:58d6:f0ee%8]) with mapi id 15.20.5632.021; Mon, 19 Sep 2022
- 12:13:43 +0000
-Message-ID: <d965891e-2b6b-8cad-606e-cf1d8232e39f@intel.com>
-Date:   Mon, 19 Sep 2022 17:43:34 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 0/7] drm/i915: Add HWMON support
-Content-Language: en-US
-To:     "Gupta, Anshuman" <anshuman.gupta@intel.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
-CC:     "Dixit, Ashutosh" <ashutosh.dixit@intel.com>,
-        "Tauro, Riana" <riana.tauro@intel.com>,
-        "Ewins, Jon" <jon.ewins@intel.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-References: <20220916150054.807590-1-badal.nilawar@intel.com>
- <CY5PR11MB62110C704EA65EA5A764FCE7954D9@CY5PR11MB6211.namprd11.prod.outlook.com>
-From:   "Nilawar, Badal" <badal.nilawar@intel.com>
-In-Reply-To: <CY5PR11MB62110C704EA65EA5A764FCE7954D9@CY5PR11MB6211.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN0PR01CA0036.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:4e::11) To BN9PR11MB5530.namprd11.prod.outlook.com
- (2603:10b6:408:103::8)
+        Mon, 19 Sep 2022 08:18:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81D9E007
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Sep 2022 05:18:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663589923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G0DSvgpZ4h6uehJTMxHzzvXh1HsmXnvIzwbdbIVtcjw=;
+        b=YgTmPC/MRpFf/C2sF/W8IVT97kUt4lwMpWq9Fule9LPbv6QeCb1c0b1N41j4dnxm5shpo3
+        Tu35oR+w7pa8KFUx/HtQWnUIh/d2LvASpxoU4AFe99fM4Oles9hu1VcXAJIBt0H2sS2Sef
+        wPPZm4KHauQCOTgQoMJGL91eMDoj20Y=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-85-2P_fwfZjO0y_tzurjoeMEA-1; Mon, 19 Sep 2022 08:18:40 -0400
+X-MC-Unique: 2P_fwfZjO0y_tzurjoeMEA-1
+Received: by mail-ed1-f70.google.com with SMTP id f10-20020a0564021e8a00b00451be6582d5so16257384edf.15
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Sep 2022 05:18:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=G0DSvgpZ4h6uehJTMxHzzvXh1HsmXnvIzwbdbIVtcjw=;
+        b=Sydo57V2J8AEL916e4mUdeOUf6Mb7ZO5oCN2y28Lw2kDfvvd0rxbk6dgYfaNkg62zj
+         mAQvzzB3Nsm9i7+G57evTp+urhruml8JMoVWbRRv3FTrzD83sOG2mah4bQpItk9wAHzu
+         ypVsOVhwmWxSjF5mh4qQa9o1DnpZYmuqFFL66BkYXrr9wZlLLuUAV0v48Uh10H2oaE1u
+         lGVNQ9nJSSbBgr/Jnv6Ld/obZHzn/LJzWApRQeg8yURHSdyNAwO1XY9wd8Uw0ChDLOA5
+         Lki15kiiTCoFCrb29WbYZCyaSCX+luyjNZIAL92z1IhgRiqAVbwawM8gtKP00yxzHLnj
+         71OQ==
+X-Gm-Message-State: ACrzQf3QGgGHnotvEF/kmOtAriB8GXhLX0TUu6dDE/LEhKQWMplk1puJ
+        qhLrrXWKA55hkvQI6kcuRMRZMtfXV/oSuMB3mkNBLyr9S8PzxInx1JzYAOlnIiAecJfIqT5TH+G
+        jhov2A0qMD77sfziKmANFeHg=
+X-Received: by 2002:a17:906:ef90:b0:77f:8f0d:e925 with SMTP id ze16-20020a170906ef9000b0077f8f0de925mr12304837ejb.622.1663589918974;
+        Mon, 19 Sep 2022 05:18:38 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4Vah5wh+rQnfBOmtQuW378vREh4+2MDpEX/5SEMBLmSfhDdy44YDwGEz5SJhjSkq8AL/3OJA==
+X-Received: by 2002:a17:906:ef90:b0:77f:8f0d:e925 with SMTP id ze16-20020a170906ef9000b0077f8f0de925mr12304825ejb.622.1663589918787;
+        Mon, 19 Sep 2022 05:18:38 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id ee52-20020a056402293400b00453995b4c20sm6447617edb.73.2022.09.19.05.18.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 05:18:38 -0700 (PDT)
+Message-ID: <4d55be61-e797-9eec-bf7e-ed675947b04d@redhat.com>
+Date:   Mon, 19 Sep 2022 13:18:37 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN9PR11MB5530:EE_|CO1PR11MB5124:EE_
-X-MS-Office365-Filtering-Correlation-Id: b4e0e1ae-4c53-46cc-2222-08da9a386520
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RKlbiltNKDOTyoNL+9kNqgEZaAw5N3pNaflzpStFXqrKKzcJpJTrSzpbBv24vunhZ9FgK/TlKtfnIaFwG0jfGQk3e7wbwj/+h5QCbO2DHcVXAol8C6n2pP6uMnIjEiHsMLXqiBiri+auID1IHcM7c0/Qq4JNRQs5lt5/u4o/eJi7tnv5MzGR31mm/W+drLkHUCVFi50wjrtYue6O/5vmg6DOZ2ryyWfGXclTotYn/7BYZRXFMEvYnLq8oJ5ECNEYgXvXkkGGhyMeWHs8kHFt0Lb5rx7BMStdccPN90DRj3bUkeEkuu59e8apsRchDpDVhaxYfXf+dDfGNqBKFau7Ilmj08shq4l2eTKIrfmknOvdCdI6RPQT7yRQ99kYrXCl2CRCJLnh1ROPWaXnUidm1I+84P3pyG8EtKqN9d5WDN93PONbGbCwdkGapPlddDcM9nfstDd7ZhW1FiyVv5y+kw2es24zNbOWQxCXlhtaKY2aT+zIpIE3F7TUrvXdWCt/tXMqfw1XYbPB8XCgv+xIaXL5aWldslam4ILfbOC/z9pLTNW+rYX76664HSUWIXtBOtBkfVqltMncxPtHVV9LpJw2VUk5bXCDS36ptb+cBkghd1P1MdDv/U/uHFXnx5rk7MVkGErkutEeG96dFH6APBs3pHdVKYP+ICbQ4hFgQZoy5LvsfPQjd6SGKqqeSkqGAb7PuZ5C+Q0Bae5zjC7DAM/8uSTx/3V2t7dRoP3+IRH1q+fCMJd3/jGkha5HnzBbNMW3U+n69grsd/Fx65eUWSX+eB7R8jhauD5wxDam3yM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5530.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(136003)(396003)(39860400002)(376002)(451199015)(26005)(6512007)(41300700001)(6506007)(53546011)(36756003)(6666004)(186003)(8936002)(82960400001)(8676002)(4326008)(83380400001)(31696002)(54906003)(110136005)(316002)(86362001)(38100700002)(2616005)(66476007)(66556008)(66946007)(6486002)(478600001)(31686004)(2906002)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aVZYOGdCeTl2eUhVRUdwTTE5WGR0MUUyditrWnMyQ1dtYy9SdU84eUYxNk9u?=
- =?utf-8?B?aGJZK05FM1QxZVBuZ0lNTzEzdFBjeWpOaFNGYkpnQStVVElCRUlvWFBkd1Mw?=
- =?utf-8?B?bkJpcS9BY3FYK1pQaHhKQjNEWWloMlJIZzBDajBWQzNVNGJNbXJtOTlJSU9E?=
- =?utf-8?B?L1hIRWhBdFp4MXdUQW1iMnZWMXNSbTQzNkgyMGFRZTVXS3VwaDlFY21RcWV6?=
- =?utf-8?B?c05rVEFZSDhMWVo1WEVmdlhhbWo1UGUvUU1oM3dYY0VXN2Mwc0lVWmlSTUxH?=
- =?utf-8?B?NElUSmRwLzlXdVFjZ2hycjJWUytQbXJDMzdhSFFoaDBqMHVIdTgzRk91SEMz?=
- =?utf-8?B?OTcrRVByRzBhWmw4eUZRWk1Mbm5xRk54YjV3L3Y5ZVlYaW1yS1VJZEVKUUpT?=
- =?utf-8?B?cmtqZGsyWmlIUE01bkNBT3NUMEpsSm9ZNHBFWWJybzkxRFY3ejFPbTFkK1RJ?=
- =?utf-8?B?TjdzTXZkWE9OOFdtRk8zRVcwRjBLSnRoQzgvcGpIMUJ3Q1BVQXZZT0RFUytD?=
- =?utf-8?B?cWF0Y3dVQjRDQlE1SnFNc2pLTXE4MW1RQUhxTC9ydmRDcElNeHROQnhzN0xJ?=
- =?utf-8?B?ZFhnODBXRnVLQWttN3dhZUJqUkpQeWs4NHM4L3FIZ2R1aTc0UjFmbFlSa2wz?=
- =?utf-8?B?Q3ZNdWVwK0RhNHFKTzNKUzI0aHNKMkhObTNPUHBDOXptVkNTVllUS0FndEtV?=
- =?utf-8?B?TjFaQVFPRXZselljM09aaFczejlTK0kzS0VLK3pWbk5uaERCNEZiL0FzOWsw?=
- =?utf-8?B?alM5V0lNcUZ2OXNMS2NZZ3o5WHNSQ25ydEhLaGxhMFUyTEtnRlpFTHcweldR?=
- =?utf-8?B?dDhFVjAzQTB4VnBhWTlPRHJaWlJ6QUdQZ0pFdTJ3VUVnSzl4VEQreWRma1lK?=
- =?utf-8?B?MGRTUTJBN2ZYM3Z4RXUzaFJYYWxmZE1rSmdHb1hKcStHZ2oxTFBEN2FKd05T?=
- =?utf-8?B?UTlOc1k2cldWcGpRNU5JbThEZTFoTnhJN3lGaG9xUHBybUk1LytWTEVCa21x?=
- =?utf-8?B?cE9EbjNPc2Y5Z1Q4UFRVOEpYRTFUNXpzOG9XNTZ6akZIQnFLb2FEendLckln?=
- =?utf-8?B?cURtRkNuQzlWUDA5UzJXWWhYNDdidEoyTm5mMUlFNEJ2M0FOd2VSUUNhVHE5?=
- =?utf-8?B?bGlhRTZmaC9iTUgrVVNYaUw4V3dZbnI4ZGEwZGhzR3ZQZ1MzczZicXBqS3Rv?=
- =?utf-8?B?UU9OZVpkUzg4VjFlZm9TYmFGa0lPNTV0R05mZGdpcUUvdUVYWFJQQnZ5WXdv?=
- =?utf-8?B?b1B2TmZsZGU2T21sSWF1Y0NoUFZZeGlQOEZpQ3hMeTJWM2RmaDFKSEJpM2dm?=
- =?utf-8?B?MmtXZmlhZjlPZFoweDZnSVQ2eGE5Sk9WWnJnWmE4SUdJMWNiSDFwT1RxSC9J?=
- =?utf-8?B?d1Nlb3dISDhxUHJwM1pneE5rbnlVMWZQQ2psaklpdFVNVVdQMHNIUmVtVjBw?=
- =?utf-8?B?R3MrdHFYS0k3ZU93K0J6NzlpcVd4SjJiS3c3NWZ6NG9BcUpiYW5Kb2VNTVV0?=
- =?utf-8?B?Z3VhMFhYTHkrT3N1ZThmYjlyNWlzbEVmQ1JrV3RlUFIvY281aXY5WnJ3Z2to?=
- =?utf-8?B?bFk3RjQ3cDVqS21OM2VUZWNROWQ3N2l1Y3EzeXJnZ2pVMndHR3RoRGltWm9C?=
- =?utf-8?B?ZFArdmdBWVB5OUo3RWNzcmJIcnV0bHJSS1R1MU01VWorMnRPS3lsWDZaa3hM?=
- =?utf-8?B?OExxeFkxVGJLTXNHeWw1RElsc0dmWDJVcDhtK1ZDVU50UUdtQk9DNzFmYnhp?=
- =?utf-8?B?WkJVL0p6Y0JPRWxNclNoZkRzUW51RU9WVmZmNGNMcHg3OEpVeUR3eURzSWV1?=
- =?utf-8?B?Z3oyajI2bk90VWRYSm91MXNjN0g3VmdDT1FBaEQzdXBPeUFvSXczK1V4TGh6?=
- =?utf-8?B?NlpKdXN4R0g1QmFackRENjhJZ0ViMnZQeUF2eUtndmltbmc1ZkFMS2pFb3Er?=
- =?utf-8?B?THhSemJPMWRpWHJpeHVnR3pEVDltSFQ5SVF2WEJLTmgxVXJUZ1RLa2g4Zm4z?=
- =?utf-8?B?dkNtUk5zSUJGNFF2T01PTjloblZwUjFPOXJSVGxkM1hlNHpSRGZSaHo3ZU1C?=
- =?utf-8?B?TWlkWG5DS3lENnBuTm5IMitTMFlBcU9xYnhVUDREZjhyUGN3UlBLRWpoQUhj?=
- =?utf-8?B?RzMwRmJIaUk2KzhSaDdiUTJLZTdOZWVrYnMzR0k0em1XSStOcHZKYm5xTVlI?=
- =?utf-8?B?T3c9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b4e0e1ae-4c53-46cc-2222-08da9a386520
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5530.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2022 12:13:43.5547
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fO8BlAoT6jHQasdukLXGEsdsW7Djx6FjWIgYtmnbnNv7V+bwE4LsDx6YWdZtd8qOiaiKiRROK6ZtgEIg4tSBNQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5124
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] asus-wmi: Expand support of GPU fan to read RPM and label
+Content-Language: en-US
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     markgross@kernel.org, corentin.chary@gmail.com, linux@roeck-us.net,
+        jdelvare@suse.com, acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+References: <20220916004623.10992-1-luke@ljones.dev>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220916004623.10992-1-luke@ljones.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hi Luke,
 
+On 9/16/22 01:46, Luke D. Jones wrote:
+> The previously added patch to add support for pwm change for TUF laptops
+> also is usuable for more than TUF. The same method `0x00110014` is
+> used to read the fan RPM.
+> 
+> Add two extra attributes for reading fan2 plus fan2 label.
+> 
+> Signed-off-by: Luke D. Jones <luke@ljones.dev>
+> ---
+>  drivers/platform/x86/asus-wmi.c | 36 +++++++++++++++++++++++++++++++--
+>  1 file changed, 34 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+> index ae46af731de9..7fe6ce25da0a 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -72,6 +72,7 @@ module_param(fnlock_default, bool, 0444);
+>  
+>  #define ASUS_WMI_FNLOCK_BIOS_DISABLED	BIT(0)
+>  
+> +#define ASUS_GPU_FAN_DESC		"gpu_fan"
+>  #define ASUS_FAN_DESC			"cpu_fan"
+>  #define ASUS_FAN_MFUN			0x13
+>  #define ASUS_FAN_SFUN_READ		0x06
+> @@ -2078,6 +2079,30 @@ static ssize_t asus_hwmon_temp1(struct device *dev,
+>  }
+>  
+>  /* GPU fan on modern ROG laptops */
+> +static ssize_t fan2_input_show(struct device *dev,
+> +					struct device_attribute *attr,
+> +					char *buf)
+> +{
+> +	struct asus_wmi *asus = dev_get_drvdata(dev);
+> +	int value;
+> +	int ret;
+> +
+> +	ret = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_GPU_FAN_CTRL, &value);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	value &= 0xffff;
+> +
+> +	return sysfs_emit(buf, "%d\n", value < 0 ? -1 : value * 100);
 
-On 19-09-2022 15:45, Gupta, Anshuman wrote:
-> 
-> 
->> -----Original Message-----
->> From: Nilawar, Badal <badal.nilawar@intel.com>
->> Sent: Friday, September 16, 2022 8:31 PM
->> To: intel-gfx@lists.freedesktop.org
->> Cc: Dixit, Ashutosh <ashutosh.dixit@intel.com>; Tauro, Riana
->> <riana.tauro@intel.com>; Gupta, Anshuman <anshuman.gupta@intel.com>;
->> Ewins, Jon <jon.ewins@intel.com>; linux-hwmon@vger.kernel.org; dri-
->> devel@lists.freedesktop.org
->> Subject: [PATCH 0/7] drm/i915: Add HWMON support
->>
->> This series adds the HWMON support for DGFX
->>
->> Test-with: 20220914140721.3500129-1-riana.tauro@intel.com
-> CI-BAT is failing with this series,
-> Could you please check the failures, whether related to this series ?
-Thanks for pointing out. I checked the failures, those are not related 
-to this series. I responded to "✗ Fi.CI.BAT: failure" thread
+As already mentioned since you & with 0xffff above the sign bit can never be
+set, so the value is never less then < 0, so I have simplified this to:
+
+	return sysfs_emit(buf, "%d\n", value * 100);
+
+while merging.
+
+> +}
+> +
+> +static ssize_t fan2_label_show(struct device *dev,
+> +					  struct device_attribute *attr,
+> +					  char *buf)
+> +{
+> +	return sprintf(buf, "%s\n", ASUS_GPU_FAN_DESC);
+> +}
+
+And here I have done s/sprintf/sysfs_emit/ with those changes
+I've applied this patch to my review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
 
 Regards,
-Badal Nilawar
-> 
-> Thanks,
-> Anshuman Gupta.
->>
->> v2:
->>    - Reorganized series. Created first patch as infrastructure patch
->>      followed by feature patches. (Ashutosh)
->>    - Fixed review comments (Jani)
->>    - Fixed review comments (Ashutosh)
->>
->> v3:
->>    - Fixed review comments from Guenter
->>    - Exposed energy inferface as standard hwmon interface (Ashutosh)
->>    - For power interface added entries for critical power and maintained
->>      standard interface for all the entries except
->>      power1_max_interval
->>    - Extended support for XEHPSDV (Ashutosh)
->>
->> v4:
->>    - Fixed review comment from Guenter
->>    - Cleaned up unused code
->>
->> v5:
->>    - Fixed review comments (Jani)
->>
->> v6:
->>    - Fixed review comments (Ashutosh)
->>    - Updated date and kernel version in documentation
->>
->> Ashutosh Dixit (2):
->>    drm/i915/hwmon: Expose card reactive critical power
->>    drm/i915/hwmon: Expose power1_max_interval
->>
->> Dale B Stimson (4):
->>    drm/i915/hwmon: Add HWMON infrastructure
->>    drm/i915/hwmon: Power PL1 limit and TDP setting
->>    drm/i915/hwmon: Show device level energy usage
->>    drm/i915/hwmon: Extend power/energy for XEHPSDV
->>
->> Riana Tauro (1):
->>    drm/i915/hwmon: Add HWMON current voltage support
->>
->>   .../ABI/testing/sysfs-driver-intel-i915-hwmon |  75 ++
->>   drivers/gpu/drm/i915/Makefile                 |   3 +
->>   drivers/gpu/drm/i915/gt/intel_gt_regs.h       |   8 +
->>   drivers/gpu/drm/i915/i915_driver.c            |   5 +
->>   drivers/gpu/drm/i915/i915_drv.h               |   2 +
->>   drivers/gpu/drm/i915/i915_hwmon.c             | 761 ++++++++++++++++++
->>   drivers/gpu/drm/i915/i915_hwmon.h             |  21 +
->>   drivers/gpu/drm/i915/i915_reg.h               |  14 +
->>   drivers/gpu/drm/i915/intel_mchbar_regs.h      |  12 +
->>   9 files changed, 901 insertions(+)
->>   create mode 100644 Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
->>   create mode 100644 drivers/gpu/drm/i915/i915_hwmon.c  create mode
->> 100644 drivers/gpu/drm/i915/i915_hwmon.h
->>
->> --
->> 2.25.1
-> 
+
+Hans
+
+
+
+> +
+>  static ssize_t pwm2_enable_show(struct device *dev,
+>  				struct device_attribute *attr,
+>  				char *buf)
+> @@ -2127,9 +2152,12 @@ static ssize_t pwm2_enable_store(struct device *dev,
+>  /* Fan1 */
+>  static DEVICE_ATTR_RW(pwm1);
+>  static DEVICE_ATTR_RW(pwm1_enable);
+> -static DEVICE_ATTR_RW(pwm2_enable);
+>  static DEVICE_ATTR_RO(fan1_input);
+>  static DEVICE_ATTR_RO(fan1_label);
+> +/* Fan2 - GPU fan */
+> +static DEVICE_ATTR_RW(pwm2_enable);
+> +static DEVICE_ATTR_RO(fan2_input);
+> +static DEVICE_ATTR_RO(fan2_label);
+>  
+>  /* Temperature */
+>  static DEVICE_ATTR(temp1_input, S_IRUGO, asus_hwmon_temp1, NULL);
+> @@ -2140,6 +2168,8 @@ static struct attribute *hwmon_attributes[] = {
+>  	&dev_attr_pwm2_enable.attr,
+>  	&dev_attr_fan1_input.attr,
+>  	&dev_attr_fan1_label.attr,
+> +	&dev_attr_fan2_input.attr,
+> +	&dev_attr_fan2_label.attr,
+>  
+>  	&dev_attr_temp1_input.attr,
+>  	NULL
+> @@ -2160,7 +2190,9 @@ static umode_t asus_hwmon_sysfs_is_visible(struct kobject *kobj,
+>  	    || attr == &dev_attr_pwm1_enable.attr) {
+>  		if (asus->fan_type == FAN_TYPE_NONE)
+>  			return 0;
+> -	} else if (attr == &dev_attr_pwm2_enable.attr) {
+> +	} else if (attr == &dev_attr_fan2_input.attr
+> +	    || attr == &dev_attr_fan2_label.attr
+> +	    || attr == &dev_attr_pwm2_enable.attr) {
+>  		if (asus->gpu_fan_type == FAN_TYPE_NONE)
+>  			return 0;
+>  	} else if (attr == &dev_attr_temp1_input.attr) {
+
