@@ -2,89 +2,94 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02C85C54EE9
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Sep 2022 13:01:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F4BEECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Sep 2022 13:10:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbiISNBn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 19 Sep 2022 09:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
+        id S229888AbiISNKr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 19 Sep 2022 09:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbiISNBc (ORCPT
+        with ESMTP id S229975AbiISNKo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:01:32 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1D52A71D;
-        Mon, 19 Sep 2022 06:01:31 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id q9-20020a17090a178900b0020265d92ae3so7055666pja.5;
-        Mon, 19 Sep 2022 06:01:31 -0700 (PDT)
+        Mon, 19 Sep 2022 09:10:44 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E7D248D8;
+        Mon, 19 Sep 2022 06:10:39 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id bu5-20020a17090aee4500b00202e9ca2182so6713063pjb.0;
+        Mon, 19 Sep 2022 06:10:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=YTtCUq1JvQDVmHZewtiGcwtU+Cnugfd0XFUBlZ4h+dM=;
-        b=nTtnG4kLwdJgN5nnx71NP33ZtXfNGaMH5Sf36jxpkdceNHJSFxdq81xO/tRYuG4LGJ
-         mb/8aVmnuYuvp/u/YLCCMllXaPrjYC/vPOD6Ty0cVxK3aSZEJqh46cTrr1Zp/Kpth4ad
-         JIkeAk5W+PUAQG7rc1kuHU1cgy/LqBL7IAkql3oskMOgbU8VOT/03m4Sge2Fde+Waxfr
-         BVDnxAPaItKIamVo0pBOdFAqGyStRDPsfaiH7mrLgZqXJwJlpmxl8Eakc221h6oI/tMg
-         TB+vgXgf7qtAoaz4SNnkvuZa7Fmbq/lLIPdUECe9e7rfCCqBFJeVs5ib5TE6cWMMsKQa
-         VNog==
+        bh=CwECRUDfj5ek1SuiILc7MXkXrhecQHuVfh9a0bFcrao=;
+        b=KFethV8Zdr8meLX3IgwQFIWUoGDk5IHfcOHzYlJ3X20gm8OYwvW6ru2j/cpzDoknRq
+         TtD/oS3ndl4GqZbN/eWIw9ac2vffGAvaeJEB05aDdka/61Se6IRjQX4PlsdNxxab0VRC
+         txzyEGBnzN4OZOy3lwGmidqz2hGMSnDxtoljBGAL26YRmr99HCm8FW6SDkXzzkvW809t
+         OHbFFTO91sWF5AwpfnSpuS/3TKYx4JONVMbKaVfQmCbj3pXC11mTENfo06xKUTfkzQDI
+         RnFrfpTI7WGNOU5/so1pYB90dI6OQYtWzybkvoRXBCnQyCj8rUzyCouqBj9wx8bBL7wZ
+         hXSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=YTtCUq1JvQDVmHZewtiGcwtU+Cnugfd0XFUBlZ4h+dM=;
-        b=obTdtd/gxQh6tFJUtBs+PAogTTptM5NTm2LEcVX+K8goeWjMEtkC/DxhU8h0lIqA39
-         GtYDOqv/pzPDb7Zxl0/glsRbg5Wy0DtadXDspCMqfj/Hc2SQvki0/fy7BCGLCdcCLV5a
-         6z05OF5boALp9HlgVYQ0OZhO0MjCgrOT1ixkjqHpQ7i32pASUCUEDiC3C7XW454pyoP2
-         wGa+Bhh0VrE5Q91rrF9TlVKUuqdwmkFOcdgcNArjKkDR4iN4Q0oDVnhz+XL1tcJC4NhQ
-         +HmXCSOoal0ip7KGFXO/537wLyYLHQ6FUwVOHOk2KmOU0KtYh84oJKAuQOmV+kjd6xgY
-         5wQw==
-X-Gm-Message-State: ACrzQf1XQwUY5wNQSTXonp22FOsVbaViOSPmYr/i5XOOkd+EJ9SnkYjj
-        HNxfb9PDGp8qmIbdHYA9hCo=
-X-Google-Smtp-Source: AMsMyM6nlxWWPziGhWkhJYvA5lPF1xeTcrH8pY9f5FQmbbBwkyn9eNkd0jpT2MoLfpZ2dSaTVa/opg==
-X-Received: by 2002:a17:902:f710:b0:178:a692:b1f7 with SMTP id h16-20020a170902f71000b00178a692b1f7mr2038867plo.112.1663592490659;
-        Mon, 19 Sep 2022 06:01:30 -0700 (PDT)
+        bh=CwECRUDfj5ek1SuiILc7MXkXrhecQHuVfh9a0bFcrao=;
+        b=nMdwX2+EALMz+ixC84JtxCe4tS9dCMX85DkhegkFTcQZ4lCyYswE2LiNbaH2tO/VC8
+         d3LiwBxwa2CLku8D1naJE6m40c4jPGX2cVQKqZmXj/uG1tLJ7i5V8e9i3W2FP6djT3fL
+         1WOZPbNDeRZ34mCB9BsNDd4cUMqctEQ7YJ+7yqhTAjWkGHapskJ3TOuxQJoMwprIcP5Z
+         haQ4AyT8PPACzpG5xgfIP0R/JcCosmmWF6a7TEDND9S18UVe4cEbfCML+Omz3Wh7pGGW
+         UWrVLGVxl1d8tHjZCMS2pPObiQI1zPepL25DagpoDAusewEXESfWyYzMdsYHiHus9kUU
+         6mNw==
+X-Gm-Message-State: ACrzQf1C/XHtoCskGPwq1Cmo5NJ4Jrdqyg1uI0OPVrS8jqAt1w+bUPSp
+        t7vPigz6aDuRVv0C/4fRObM=
+X-Google-Smtp-Source: AMsMyM4wVUFKy4PABfMzfDPBeZKXNbT2BDAqMgo+PmmXaAMU9oQmGxG0hstJrH/cCZZ9V+eW6fXhxw==
+X-Received: by 2002:a17:902:bd85:b0:178:8e76:c77e with SMTP id q5-20020a170902bd8500b001788e76c77emr11339646pls.38.1663593038578;
+        Mon, 19 Sep 2022 06:10:38 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a8-20020a1709027e4800b00176cdd7e4c6sm20613367pln.50.2022.09.19.06.01.29
+        by smtp.gmail.com with ESMTPSA id s11-20020aa78bcb000000b0053e483de200sm20210510pfd.73.2022.09.19.06.10.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 06:01:30 -0700 (PDT)
+        Mon, 19 Sep 2022 06:10:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 19 Sep 2022 06:01:29 -0700
+Date:   Mon, 19 Sep 2022 06:10:36 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Eliav Farber <farbere@amazon.com>
 Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
         rtanwar@maxlinear.com, andriy.shevchenko@intel.com,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
-Subject: Re: [PATCH v5 13/21] dt-bindings: hwmon: (mr75203) add
- "moortec,vm-pre-scaler-x2" property
-Message-ID: <20220919130129.GA3544643@roeck-us.net>
+        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v5 14/21] hwmon: (mr75203) add VM pre-scaler x2 support
+Message-ID: <20220919131036.GA3545566@roeck-us.net>
 References: <20220908152449.35457-1-farbere@amazon.com>
- <20220908152449.35457-14-farbere@amazon.com>
+ <20220908152449.35457-15-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220908152449.35457-14-farbere@amazon.com>
+In-Reply-To: <20220908152449.35457-15-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 03:24:41PM +0000, Eliav Farber wrote:
-> Add support for mr76006 pre-scaler which provides divide-by-2 scaling of
-> the input voltage, so that it can be  presented to the VM for measurement
-> within its range (the VM input range is limited to -0.1V to 1V).
+On Thu, Sep 08, 2022 at 03:24:42PM +0000, Eliav Farber wrote:
+> Add support for mr76006 pre-scaler which provides divide-by-2 scaling
+> of the input voltage, so that it can be  presented to the VM for
+> measurement within its range (the VM input range is limited from -0.1V
+> to 1V).
 > 
-> The new "moortec,vm-pre-scaler-x2" property lists the channels that use
-> the mr76006 pre-scaler.
+> The driver reads from the device-tree all the channels that use the
+> mr76006 pre-scaler and multiplies the voltage result by a factor of 2,
+> to represent to the user with the actual voltage input source.
 > 
-> The driver will use this list to multiply the voltage result by 2, to
-> present to the user with the actual voltage input source.
+> Channels that are not in the device-tree are multiplied by a factor
+> of 1.
 > 
 > Signed-off-by: Eliav Farber <farbere@amazon.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Applied to hwmon-next.
+Applied, after resolving a minor conflict against commit d59eacaac953
+("hwmon/drivers/mr75203: use HZ macros") from September 2021.
+In the future, please base your patch series on the latest upstream
+kernel version.
 
 Thanks,
 Guenter
