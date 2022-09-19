@@ -2,97 +2,78 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8665ECAAD3
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Sep 2022 13:11:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68F5EECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Sep 2022 13:13:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiISNLh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 19 Sep 2022 09:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
+        id S229975AbiISNNI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 19 Sep 2022 09:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiISNLh (ORCPT
+        with ESMTP id S229737AbiISNNH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:11:37 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B896315FE4;
-        Mon, 19 Sep 2022 06:11:31 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id h188so26701674pgc.12;
-        Mon, 19 Sep 2022 06:11:31 -0700 (PDT)
+        Mon, 19 Sep 2022 09:13:07 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89C818B07
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Sep 2022 06:13:06 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so6040041pjh.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Sep 2022 06:13:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=oYdAyRVCB8IiQtsMexPF/KZiyEIejrHZQnzChkAD9Xk=;
-        b=fL4889UXtvXQUkR8X8LJNh0I/r8tO2TzBZP86JK7zXbg/xPaTq2vJugwGeQ4x/bzka
-         /qjXCUH2Ry+uZo6xNbkL/PWYJos2jcxJPKz9A8fNtu1eby7H1jTky4m41dpFwkuTyK6i
-         1pQeEiWWX7SnewNCGBUd7iBPjkjaBB82VmDUV6WZCeIJyaLO9r+xADJuLVWgDPltyrP7
-         /O3BYQEVYccCvPeG7HjBnEMxd9Fzu5KH3YtqzQyxRkutSsgy3u0U87RYQiXlvOYl/B8D
-         a+frBgKgtvaj1R6Q2PMMZMks/3a436daSdzx8FSukifrOAaJAfH6padeQKEcRhDOuJhX
-         VTnw==
+        bh=0SWMd1/dw8viGWJFir8vLYI252YhXo7+413gv8lkrKM=;
+        b=jMG8Rgx8ILPtFbAjdCC4Oe0jdG8QNs3SVz0BOWN+HAc9kuR5OgpDh0ltIcULvcKhLu
+         w4l9YzHCmEeKMToMayC2GPlTy2by5Lhq+5Rvj30ROI2IQV4tO0767bceYwZcV5Aq4WaZ
+         Y4O8qSnweUBXAqrq1/CVjLfsjoHJJNstfTQ9sPJ5/cUMlQ1toH743LwszvLC4X/oLA3T
+         2Mv+4flaRZYOgxQPetntXpf7kmTvLA9cRr2Zj/pANw0SGna44AwiXrmOAuptz1onbSJ5
+         R6DNI3+DTFI7iZ8ZyE4Hb9brVJDZ1OfWvFCEowHFgHd5TeTkoTwC+VzhDQSvRPmpOO3J
+         Dlrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=oYdAyRVCB8IiQtsMexPF/KZiyEIejrHZQnzChkAD9Xk=;
-        b=lo1mcDfZbvObywvOg8Nj5Gg30Qn9mw7bN9RnCNmzH0szFd2b49qJ+4Dx9BC6B+orN8
-         KKtxRXP6FCZaARHjpwA1G8dPQl2icdvSWmjnrs+jaSenjhrlY67uXiYWY2xzdxSF/dFa
-         dr9G+zcZgBomcJ6DjGBemQDhoFTHkkkgER+SusGxdxghKaMhiy0QweajTcRLD02C5Mtb
-         2I953saxDr9zwVopKHQzOKyzxaOH1t0SXAwVjvEP1LNpmqiIEBVqZNm0q/wKgX85C9Rz
-         H8bvvanDhMjWdT+pm3OPkYSRDhoGwkZm4CRYBXgQht3OFiwal6mHBGYx5iC8p/hfv+4a
-         9C0g==
-X-Gm-Message-State: ACrzQf06CrFw66EZy1Bw8H1at4+RLGp5MsXK/UXUzsyLImpQRU5MJtD8
-        rQlMkiX5ttKdArk3YC94fMo=
-X-Google-Smtp-Source: AMsMyM4IqfVf1cdtB4Fk70f44o+IkdRtFuz3fCPZjAvkcbMP60kYfg+PoLj+Q16Gw9abKGjMHt+TwQ==
-X-Received: by 2002:a05:6a00:22cf:b0:545:90f3:8b96 with SMTP id f15-20020a056a0022cf00b0054590f38b96mr18678836pfj.58.1663593091289;
-        Mon, 19 Sep 2022 06:11:31 -0700 (PDT)
+        bh=0SWMd1/dw8viGWJFir8vLYI252YhXo7+413gv8lkrKM=;
+        b=zuC/o3YBvx+4QS8zwwFDr9SPvpZKwq0R/gJ5s96z0VFQCKwGIlkqmuio7AMIVvUbJR
+         8Xlj49/58D8cTXcKcP/RZR/kd6dEbI2KeVbZXxWv00JqcWm/PgPvViNI+Bf4pKaY6RZd
+         K9IoHJYbY6BLmUVd12aYuCruMckLEHDqxhMuUig3WJijk3lS5r4aTlQEEIbnt3rWAEVa
+         KhDs5Lzd5KFZ3JGfiVX5MWZQR0qGy8oenEfZvqcMQLrUuqTq8bi5rn0dL0LlW4KjPZTO
+         mqDJZlRrXpsBPJTXpBoiogvcaLRjHFXMaDVbYg+bbENoxR+iNu8kTcaScvPIUaOHEsLE
+         Smvw==
+X-Gm-Message-State: ACrzQf2K3U7X7f42GbTowaAfZVpb85wdUsPtX+OkxdS76sRlh3lz3rTV
+        +EFt9dnBx5RlV4oavBaGoPY=
+X-Google-Smtp-Source: AMsMyM5KLPsJwaIa/7tRyTleFbZdQl88/wKqOzR2JZQawM2ZKcrErncGQOcA/vlHqwiyYs+Qzw5CDw==
+X-Received: by 2002:a17:902:e550:b0:177:f115:1646 with SMTP id n16-20020a170902e55000b00177f1151646mr13183688plf.112.1663593186365;
+        Mon, 19 Sep 2022 06:13:06 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i7-20020a17090332c700b00177e263303dsm19688881plr.183.2022.09.19.06.11.30
+        by smtp.gmail.com with ESMTPSA id e2-20020a170902784200b001754cfb5e21sm20625912pln.96.2022.09.19.06.13.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 06:11:30 -0700 (PDT)
+        Mon, 19 Sep 2022 06:13:05 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 19 Sep 2022 06:11:29 -0700
+Date:   Mon, 19 Sep 2022 06:13:05 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
-        rtanwar@maxlinear.com, andriy.shevchenko@intel.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v5 15/21] hwmon: (mr75203) modify the temperature
- equation according to series 5 datasheet
-Message-ID: <20220919131129.GA3545737@roeck-us.net>
-References: <20220908152449.35457-1-farbere@amazon.com>
- <20220908152449.35457-16-farbere@amazon.com>
+To:     Peter Robinson <pbrobinson@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+Subject: Re: [PATCH] hwmon: (aspeed-pwm-tacho): Add dependency on ARCH_ASPEED
+Message-ID: <20220919131305.GA3545921@roeck-us.net>
+References: <20220916120936.372591-1-pbrobinson@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220908152449.35457-16-farbere@amazon.com>
+In-Reply-To: <20220916120936.372591-1-pbrobinson@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 03:24:43PM +0000, Eliav Farber wrote:
-> Modify the equation and coefficients used to convert the digital output
-> to temperature according to series 5 of the Moortec Embedded Temperature
-> Sensor (METS) datasheet:
-> T = G + H * (n / cal5 - 0.5) + J * F
+On Fri, Sep 16, 2022 at 01:09:36PM +0100, Peter Robinson wrote:
+> The SENSORS_ASPEED is part of the Aspeed silicon so it makes
+> sense to depend on ARCH_ASPEED and for compile testing.
 > 
-> Where:
-> *) G = 60, H = 200, cal5 = 4094, J = -0.1.
-> *) F = frequency clock in MHz.
-> *) n is the digital output.
-> 
-> In code, the G, H and J coefficients are multiplied by a factor of 1000
-> to get the temperature in milli-Celsius.
-> Final result is clamped in case it exceeds min/max thresholds.
-> 
-> Change is done since it is unclear where the current equation and
-> coefficients came from.
-> 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
 
-Applied to hwmon-next.
+Applied.
 
 Thanks,
 Guenter
