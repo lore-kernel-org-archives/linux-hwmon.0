@@ -2,87 +2,87 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ED97ECAAD3
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Sep 2022 13:00:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02C85C54EE9
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Sep 2022 13:01:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiISNAr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 19 Sep 2022 09:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
+        id S230325AbiISNBn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 19 Sep 2022 09:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbiISNAp (ORCPT
+        with ESMTP id S230331AbiISNBc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:00:45 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C591F2E9;
-        Mon, 19 Sep 2022 06:00:44 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso5993352pjd.4;
-        Mon, 19 Sep 2022 06:00:44 -0700 (PDT)
+        Mon, 19 Sep 2022 09:01:32 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1D52A71D;
+        Mon, 19 Sep 2022 06:01:31 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id q9-20020a17090a178900b0020265d92ae3so7055666pja.5;
+        Mon, 19 Sep 2022 06:01:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=NfuchXeNrOKh8kdwfHXDqWJgnyXZRxJ0XHbLAPBkfk0=;
-        b=Q+ipgYkq2IQMa4g6oDXeJ//TY9hNJB1iyqW4sEXpLjjzkZZN7Mt0UFXIZWKVaGycd0
-         i88So5zwO/TAYU01561qACkiy+w4bdI1Yvi4dOTI+7tONTIq9LPQY/+DSRj7s4Zd9/Pl
-         e73FVPZN1GY6ypROrMW/5H7GxifBoTxkPN+gco5e0R7nno3FTJJef7Gy/AVhHTUbhNl7
-         tj3DKqxuCvE4QbFh/ufU1DPliz53aZmW4fGObcWUQblAIRbKgKAnUb87xZG/gDjyboD/
-         PFO76FFQq+CMF5wShxvE70WZpDsgvRaZqMpLxolOwBuGt3BIJ7RphxRr2ketjYQdyTGN
-         6T1w==
+        bh=YTtCUq1JvQDVmHZewtiGcwtU+Cnugfd0XFUBlZ4h+dM=;
+        b=nTtnG4kLwdJgN5nnx71NP33ZtXfNGaMH5Sf36jxpkdceNHJSFxdq81xO/tRYuG4LGJ
+         mb/8aVmnuYuvp/u/YLCCMllXaPrjYC/vPOD6Ty0cVxK3aSZEJqh46cTrr1Zp/Kpth4ad
+         JIkeAk5W+PUAQG7rc1kuHU1cgy/LqBL7IAkql3oskMOgbU8VOT/03m4Sge2Fde+Waxfr
+         BVDnxAPaItKIamVo0pBOdFAqGyStRDPsfaiH7mrLgZqXJwJlpmxl8Eakc221h6oI/tMg
+         TB+vgXgf7qtAoaz4SNnkvuZa7Fmbq/lLIPdUECe9e7rfCCqBFJeVs5ib5TE6cWMMsKQa
+         VNog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=NfuchXeNrOKh8kdwfHXDqWJgnyXZRxJ0XHbLAPBkfk0=;
-        b=y0ujy0N5gVGKJ6T7Muy0SB/JOq4NDAycC2aNATLTu6EszK3PyBl2RFUZ721KKZReaB
-         QSgAxu20Jb0919W81rQuiw8KQugNm6SltZCX81f09oG0Pk73LM1QRW1kuMriHqoWTdvy
-         qUybipZkYd8ZcT2r3EVdqqAMNVx5F29yyCEjxjf6p1N0GtAeixjw7jPI6az626UiLGWq
-         c03flFC1wMLNHNh+lroJ2SFsoqF/NUsLr0vccVXifpSKGJXp0sDeGc09+6gqmAjVzQX8
-         ItKDHpeErbd10yFhutFGleox0Mc4Sj0NwyHtCCviu/fPFeezvyns/3OSdZenzpn0914V
-         PxDQ==
-X-Gm-Message-State: ACrzQf0bG+SZcq3XZ2/fvei6PP1nbFoajb1fJD5cK+BzWE097AovASzD
-        ri5ZI/f4aFW+PeifrzHYJgg=
-X-Google-Smtp-Source: AMsMyM4ln1JJOEZzXkFfCUhBosgmEqRr3Fb2Bqp/Z/J41m28LmFFeETWCjAMD03AMjSnTxyX+Y9aVw==
-X-Received: by 2002:a17:902:7294:b0:178:a2be:ac18 with SMTP id d20-20020a170902729400b00178a2beac18mr3908219pll.93.1663592443832;
-        Mon, 19 Sep 2022 06:00:43 -0700 (PDT)
+        bh=YTtCUq1JvQDVmHZewtiGcwtU+Cnugfd0XFUBlZ4h+dM=;
+        b=obTdtd/gxQh6tFJUtBs+PAogTTptM5NTm2LEcVX+K8goeWjMEtkC/DxhU8h0lIqA39
+         GtYDOqv/pzPDb7Zxl0/glsRbg5Wy0DtadXDspCMqfj/Hc2SQvki0/fy7BCGLCdcCLV5a
+         6z05OF5boALp9HlgVYQ0OZhO0MjCgrOT1ixkjqHpQ7i32pASUCUEDiC3C7XW454pyoP2
+         wGa+Bhh0VrE5Q91rrF9TlVKUuqdwmkFOcdgcNArjKkDR4iN4Q0oDVnhz+XL1tcJC4NhQ
+         +HmXCSOoal0ip7KGFXO/537wLyYLHQ6FUwVOHOk2KmOU0KtYh84oJKAuQOmV+kjd6xgY
+         5wQw==
+X-Gm-Message-State: ACrzQf1XQwUY5wNQSTXonp22FOsVbaViOSPmYr/i5XOOkd+EJ9SnkYjj
+        HNxfb9PDGp8qmIbdHYA9hCo=
+X-Google-Smtp-Source: AMsMyM6nlxWWPziGhWkhJYvA5lPF1xeTcrH8pY9f5FQmbbBwkyn9eNkd0jpT2MoLfpZ2dSaTVa/opg==
+X-Received: by 2002:a17:902:f710:b0:178:a692:b1f7 with SMTP id h16-20020a170902f71000b00178a692b1f7mr2038867plo.112.1663592490659;
+        Mon, 19 Sep 2022 06:01:30 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i15-20020a170902cf0f00b00176b5035045sm20488345plg.202.2022.09.19.06.00.42
+        by smtp.gmail.com with ESMTPSA id a8-20020a1709027e4800b00176cdd7e4c6sm20613367pln.50.2022.09.19.06.01.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 06:00:43 -0700 (PDT)
+        Mon, 19 Sep 2022 06:01:30 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 19 Sep 2022 06:00:42 -0700
+Date:   Mon, 19 Sep 2022 06:01:29 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Eliav Farber <farbere@amazon.com>
 Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
         rtanwar@maxlinear.com, andriy.shevchenko@intel.com,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v5 12/21] hwmon: (mr75203) add VM active channel support
-Message-ID: <20220919130042.GA3544513@roeck-us.net>
+        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
+Subject: Re: [PATCH v5 13/21] dt-bindings: hwmon: (mr75203) add
+ "moortec,vm-pre-scaler-x2" property
+Message-ID: <20220919130129.GA3544643@roeck-us.net>
 References: <20220908152449.35457-1-farbere@amazon.com>
- <20220908152449.35457-13-farbere@amazon.com>
+ <20220908152449.35457-14-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220908152449.35457-13-farbere@amazon.com>
+In-Reply-To: <20220908152449.35457-14-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 03:24:40PM +0000, Eliav Farber wrote:
-> Add active channel support per voltage monitor.
-> The number of active channels is read from the device-tree.
-> When absent in device-tree, all channels are assumed to be used.
+On Thu, Sep 08, 2022 at 03:24:41PM +0000, Eliav Farber wrote:
+> Add support for mr76006 pre-scaler which provides divide-by-2 scaling of
+> the input voltage, so that it can be  presented to the VM for measurement
+> within its range (the VM input range is limited to -0.1V to 1V).
 > 
-> This shall be useful to expose sysfs only for inputs that are connected
-> to a voltage source.
+> The new "moortec,vm-pre-scaler-x2" property lists the channels that use
+> the mr76006 pre-scaler.
 > 
-> Setting number of active channels to 0, means that entire VM sensor is
-> not used.
+> The driver will use this list to multiply the voltage result by 2, to
+> present to the user with the actual voltage input source.
 > 
 > Signed-off-by: Eliav Farber <farbere@amazon.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
 Applied to hwmon-next.
 
