@@ -2,75 +2,85 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CAE2C54EE9
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Sep 2022 12:56:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B39C8ECAAD3
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Sep 2022 12:59:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiISM4y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 19 Sep 2022 08:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
+        id S230062AbiISM7E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 19 Sep 2022 08:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiISM4x (ORCPT
+        with ESMTP id S229529AbiISM7D (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 19 Sep 2022 08:56:53 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A84EA44F
-        for <linux-hwmon@vger.kernel.org>; Mon, 19 Sep 2022 05:56:51 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id fs14so27738319pjb.5
-        for <linux-hwmon@vger.kernel.org>; Mon, 19 Sep 2022 05:56:51 -0700 (PDT)
+        Mon, 19 Sep 2022 08:59:03 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE75A44F;
+        Mon, 19 Sep 2022 05:59:02 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id o99-20020a17090a0a6c00b002039c4fce53so1598669pjo.2;
+        Mon, 19 Sep 2022 05:59:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=LhJBAn139IJJNh4xGwOrhfs8O+s0trDrnQCrmIjY4oA=;
-        b=CS/l/RnWY5JPgG9hNnCHPsyztAD7B3zN1Our5MPYL5mEH0DyKnqIPQOBxEa4vq2SgL
-         mg8pH7D5kJC8Q2t0QqLLaWZJP2y9P/1jzj0/lOIYIz7Ceutg0rPG7o/iGIQqE/toF/PV
-         vof0bNi33MdpAE8CYzSIC1q6VfCeI9D7DU+jWYQDUhmnk/DyjLXk5ot8eNEDqDVYTAuP
-         MapwXhXQQF28qY3keqbYxoeFJGrhfYvixbirbPhrj9cY0KrLrM/sg3DWZSbUBEKBvWyu
-         km2Th6YTKPk7Kk7WLdUiqFFBIT3hGOrMm0mYOqPtN2+/Hx+Nmo4qNaMZQrnUY6VObc7B
-         s3DA==
+        bh=HxFzGiArRHheZlFQ/c+wm0kThIzmb2OPcQ9ELiQbIvE=;
+        b=INqflAo20cva3R51TCFuCbxi17656nWLVFEjts0w4PQ+Boo9Wp0HfkRuCVDXVIoLW2
+         AcT1NlRqLxfjrYJy/v8m28khVp2HGi/3cxow5dYyc6zBVLXl2tv8uC+2boAzr21LlRhO
+         HTuc2xsoIVLWW/uPU7rGq2BX4MmbhW/+9tofXJbEBakErHE0Drin10C4H4TtncF+ZB66
+         FpwzNohf/3XKB+ZueRtaIG8u4oWRU1lhumUs/dA3OEcz2buqynVlmpanYXCwpl8Rb0CN
+         z9Ifptqc58V2UsYXKN8DjjTKbhrXKoGJ10rvAXHZS3LIpOSffX1inVJK9FIXhaQ2x84D
+         jZqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=LhJBAn139IJJNh4xGwOrhfs8O+s0trDrnQCrmIjY4oA=;
-        b=iK2PiEuDtc1MoFuR1HaMIt0OgnOWNKCmaPes21WLclae36NFLCBGziyGHEpRJzDmZc
-         gyN1jTZfGyyBxoo/EHXq81Lc5ZBBNklQY0LscVtshCl25kZ8A1rtYjJYebaDZLKFiK8o
-         bFdkn1CU4LLh1knIvckoFzSFo0HYM0FOQMSowQARfREl1ILL5rGnp+p8Is9par5JiU9H
-         AgQ7Iw3njU6CTJhQ+gcrvaik9LBckuCHIvHU00y4xGQRtZaj5DAesWKKBlIPsW610dFn
-         QXS6VW22BeGwAo3q+ED0zmtB96oHQhqPnJdrThbRGHpYKADK1oiWn757kg/buj6erCK1
-         eMbg==
-X-Gm-Message-State: ACrzQf2aNOKdEqzbQbbFgGKGp33U5ccLQUp4JmEo2NmEstF95wDoOJNt
-        HIlgUmt10C6ozQvLA1J5WjINprB5+6JmYA==
-X-Google-Smtp-Source: AMsMyM4DlIJXkfAq+vunqkNvNJAVy26X87HN7dmmxOo5Kjd/nfBrjTRp534BHfE37O2nhB7aRdqbfw==
-X-Received: by 2002:a17:90a:be10:b0:202:cdf2:56a1 with SMTP id a16-20020a17090abe1000b00202cdf256a1mr30187621pjs.41.1663592210973;
-        Mon, 19 Sep 2022 05:56:50 -0700 (PDT)
+        bh=HxFzGiArRHheZlFQ/c+wm0kThIzmb2OPcQ9ELiQbIvE=;
+        b=dqbijjqN01mpg72Fa9rtMllEQfkO/xfEgyDAtm4/X4T8IjfVhJuXzm4j2CFVexMWH9
+         f3tQyFZSwYX8f0HVrz/wh+tnhDPzhsPla1Dl6Vfyk5Z6qEjsvVClxfsHyEyZ3iTycaUS
+         FT37QMNNerGECBGJpAJv/7/8ysT4rgqjz7nNIffznljd/vRSsE5ldwiM3rDWaOECHs3v
+         7YDoYUcFAphcAw+IfkhA+fFZNUJniRH4aK6T4pFMfEc1wbpFrNMGkVcoK40rdeg6QXNi
+         P/bSxeNTZARiWLhLC7Is9/CZcTOnk/L+h6jLF/Mv2LEokVmUUGEKo70XfIAS/d8wYNZv
+         Anyg==
+X-Gm-Message-State: ACrzQf0/TGX2Peb0uJ1DpDNsYkrjLUQ1TYmqWeeM2cGSrmB5AbO2SrUS
+        N9/7695tdgGl3KcoeV//tajc9vWa00y8wA==
+X-Google-Smtp-Source: AMsMyM6J42vZz/TicI+QGfpUlGyTUBNh2h1DK4ga7i1wj+Moq12BZSDjGWG9i3vIk3iR+xp2WknSgg==
+X-Received: by 2002:a17:902:ec90:b0:178:a0eb:bc7c with SMTP id x16-20020a170902ec9000b00178a0ebbc7cmr4565505plg.78.1663592341692;
+        Mon, 19 Sep 2022 05:59:01 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c26-20020a631c5a000000b0042a713dd68csm18616458pgm.53.2022.09.19.05.56.50
+        by smtp.gmail.com with ESMTPSA id y10-20020a62640a000000b0053e6bda08e0sm20227763pfb.219.2022.09.19.05.59.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 05:56:50 -0700 (PDT)
+        Mon, 19 Sep 2022 05:59:01 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 19 Sep 2022 05:56:49 -0700
+Date:   Mon, 19 Sep 2022 05:59:00 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Aleksandr Mezin <mezin.alexander@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH] hwmon: (nzxt-smart2) add another USB ID
-Message-ID: <20220919125649.GA3544112@roeck-us.net>
-References: <20220918115506.61870-1-mezin.alexander@gmail.com>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
+        rtanwar@maxlinear.com, andriy.shevchenko@intel.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
+Subject: Re: [PATCH v5 10/21] dt-bindings: vendor-prefixes: add vendor prefix
+ for Moortec
+Message-ID: <20220919125900.GA3544266@roeck-us.net>
+References: <20220908152449.35457-1-farbere@amazon.com>
+ <20220908152449.35457-11-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220918115506.61870-1-mezin.alexander@gmail.com>
+In-Reply-To: <20220908152449.35457-11-farbere@amazon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Sep 18, 2022 at 05:55:06PM +0600, Aleksandr Mezin wrote:
-> No known differences from already supported devices.
+On Thu, Sep 08, 2022 at 03:24:38PM +0000, Eliav Farber wrote:
+> Add device-tree vendor prefix for Moortec Semiconductor Ltd.
+> Website: https://moortec.com/
 > 
-> Signed-off-by: Aleksandr Mezin <mezin.alexander@gmail.com>
+> Moortec were acquired by Synopsys so link above leads to:
+> https://www.synopsys.com/solutions/silicon-lifecycle-management.html
+> 
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-Applied.
+Applied to hwmon-next.
 
 Thanks,
 Guenter
