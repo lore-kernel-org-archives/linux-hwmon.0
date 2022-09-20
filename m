@@ -2,296 +2,137 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67713C54EE9
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Sep 2022 13:57:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC3C4ECAAD8
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Sep 2022 14:16:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbiITN47 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 20 Sep 2022 09:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
+        id S231727AbiITOQI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 20 Sep 2022 10:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiITN4n (ORCPT
+        with ESMTP id S231668AbiITOPi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:56:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0641211C11
-        for <linux-hwmon@vger.kernel.org>; Tue, 20 Sep 2022 06:56:41 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oadjr-0005fF-BN; Tue, 20 Sep 2022 15:56:39 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oadjr-001s8T-PG; Tue, 20 Sep 2022 15:56:38 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oadjp-002Erf-ET; Tue, 20 Sep 2022 15:56:37 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Roger Lucas <vt8231@hiddenengine.co.uk>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 2/2] hwmon: vt8231: Reorder symbols to get rid of a few forward declarations
-Date:   Tue, 20 Sep 2022 15:56:17 +0200
-Message-Id: <20220920135617.1046361-2-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220920135617.1046361-1-u.kleine-koenig@pengutronix.de>
-References: <20220920135617.1046361-1-u.kleine-koenig@pengutronix.de>
+        Tue, 20 Sep 2022 10:15:38 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF0462A8F;
+        Tue, 20 Sep 2022 07:13:12 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id u132so2864096pfc.6;
+        Tue, 20 Sep 2022 07:13:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date;
+        bh=dqRGDbrWd1xgyDLxgRtjtXZqfquXEM+oB3Al0IMjKrA=;
+        b=TMHA2hi58ob+XHXca4odB/qBviWLDfb0sxV1tVJOB2RZJcRud6bIn2OaYIF9g4/sry
+         uHQ1fSobXvnvBfE8oVF7HpRrLmK4BkI8nqAI7fAmL8kNStPqjCe3nlRuI+h1kVnnIUuI
+         ixvA6oN5E5eme10i5NiE663yYgg/rOnFRuFObt0yzmrX5TrXerp2MM34t+RmMiN6shyy
+         LV2sEZNAp+6AMtH0bKvK0+pFF7eXnLKkgdfCtY3rvGGS44Px1E2721BiekKGfitlNgK1
+         XhPT2GeT9fmHGHURiHc2rYuk6iCQKtimuVik9VUozjmGZEByma00buY/HaowE5oJ7BpF
+         OtKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=dqRGDbrWd1xgyDLxgRtjtXZqfquXEM+oB3Al0IMjKrA=;
+        b=KDmKEc8sPNCJCh5njW601Fnl+Rv+OqbtFIS3CrFvZjR0x9ab/z+q58Apt2pWY308OB
+         Y2Abb7O6qU6+MD3g+wVMsEVv+wHZDG5ODhtvFt++9TFw0f0ql3RWFLPI8IbJCAob/dqK
+         1Mf0VUezV+x80GZImZQVKrYFhZomoA4WUXc+H6uJwGUaQtmcmX2rkNJ6VcAmB+4Sj93R
+         eUtjvK97PY1bwnABqnuqMR1x2D1M6d1VA0zhn44DDYujtyz5Hp8FoM7E/tLVzsYFnpzY
+         Ke4s+FpnYpwmo7ShfmTYPMCGA9RH0kjWUtKwky1EtZg0xeokpJ1Mlaxl/aMsHFXoY6NT
+         FfPQ==
+X-Gm-Message-State: ACrzQf1FJlY0SIGbb5Ri5fcyR7eSke9Maj8v2dYPYoeCBRNJ0xR9VLtS
+        NxVWRDc4a5hypNUn5fcCByI=
+X-Google-Smtp-Source: AMsMyM70KEqEoHJ4mv7vPlCEVgsAHwRdImX7fkMfPNVbbE9/z9Aw0x11B7tAOc/h0NxnnbXpssLRfA==
+X-Received: by 2002:a05:6a00:16d6:b0:53b:3e58:1c6f with SMTP id l22-20020a056a0016d600b0053b3e581c6fmr23836509pfc.7.1663683192034;
+        Tue, 20 Sep 2022 07:13:12 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u185-20020a6279c2000000b0053651308a1csm1773081pfc.195.2022.09.20.07.13.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 07:13:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <46c3fdc6-05bb-f67d-f199-1d9f2f1c332a@roeck-us.net>
+Date:   Tue, 20 Sep 2022 07:13:08 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7198; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=wWDsUtM76UYOd0N1gERP9JXGZ8MA/oqe9jWzTSmDqXM=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjKcZ9O1wcElD9MC3Xy1EEGlQoA5f05jmxO6C7A+5g ETdkiB+JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYynGfQAKCRDB/BR4rcrsCcVDB/ 0REynv6pCjVIT51NWh6F2xXh6kfz/Vs9QHyegzTzwK2JRcXmbckrmj64ZljTs48bGqmkhGPVyzBHJt qeTuktAVdpXfcc3Fz2jqk41sMnSDU6tYjWmJEhhzw9mvuhtzC/WsKoOO8tQvZqfqA73nOcM4EFsRqC BnaRHQDDXZC7tcxo/w8DpBoXjpbwQKMl2aTDi0X46V0W93gGvh7entjEqDKG236bAgWF1u8oPv0LU3 fSt7C1incj65lg1wwqhNif/NAsrvBi6cIIlfyullJn9AsWseXUFqy9Iy8eNjwTRaVSKkIQvrM1zLIS 7n0ftN9CcaRFqTKR94ylqsmkl8P+9c
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v9 0/4] hwmon: Add max31760 fan speed controller
+Content-Language: en-US
+To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220910171945.48088-1-Ibrahim.Tilki@analog.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220910171945.48088-1-Ibrahim.Tilki@analog.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Declarations for static symbols are useless repetition unless there are
-cyclic dependencies.
+On 9/10/22 10:19, Ibrahim Tilki wrote:
+> changes in v9:
+>    - return -EINVAL when writing fan_enable and pwm_enable
+>    - fix dt-bindings errors
+> 
+> changes in v8:
+>    - use sizeof(*)
+>    - use DEFINE_SIMPLE_DEV_PM_OPS
+>    - remove __maybe_unused
+>    - remove of_match_ptr
+>    - dt-bindings: style fixes
+> 
+> changes in v7:
+>    - make max31760_read_string static
+> 
+> changes in v6:
+>    - update description of hwmon documentation
+>    - add hwmon documentation to index.rst
+> 
+> changes in v5:
+>    - add dt-bindings documentation
+>    - add maintainer
+> 
+> changes in v4:
+>    - use sysfs_emit instead of sprintf
+>    - use kstrtou8 for pwm
+>    - use closest match for pwm1_auto_point_temp_hyst
+> 
+> changes in v3:
+>    - add regmap cache
+>    - remove pwm1_auto_point[1-48]_{temp,temp_hyst} attributes
+>    - add pwm1_auto_point_temp_hyst attribute
+> 
+> changes in v2:
+>    - remove pulse_per_rev variable in tach_to_rpm
+>    - remove temperature max_hyst and crit_hyst
+>    - strict value checking for fan_enable and pwm_enable
+>    - do not clamp pwm value for Look-up table
+>    - add sysfs_attr_init call
+>    - add documentation
+> 
+> 
+> Ibrahim Tilki (4):
+>    drivers: hwmon: Add max31760 fan speed controller driver
+>    docs: hwmon: add max31760 documentation
+>    dt-bindings: hwmon: Add bindings for max31760
+>    MAINTAINERS: Add maintainer for hwmon/max31760
+> 
+>   .../bindings/hwmon/adi,max31760.yaml          |  42 ++
+>   Documentation/hwmon/index.rst                 |   1 +
+>   Documentation/hwmon/max31760.rst              |  77 +++
+>   MAINTAINERS                                   |   9 +
+>   drivers/hwmon/Kconfig                         |  12 +
+>   drivers/hwmon/Makefile                        |   1 +
+>   drivers/hwmon/max31760.c                      | 596 ++++++++++++++++++
+>   7 files changed, 738 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31760.yaml
+>   create mode 100644 Documentation/hwmon/max31760.rst
+>   create mode 100644 drivers/hwmon/max31760.c
+> 
 
-Reorder the functions and variables to get rid of 5 forward declarations.
+Series applied to hwmon-next.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/hwmon/vt8231.c | 188 ++++++++++++++++++++---------------------
- 1 file changed, 91 insertions(+), 97 deletions(-)
-
-diff --git a/drivers/hwmon/vt8231.c b/drivers/hwmon/vt8231.c
-index d84f7db74889..3b7f8922b0d5 100644
---- a/drivers/hwmon/vt8231.c
-+++ b/drivers/hwmon/vt8231.c
-@@ -164,10 +164,6 @@ struct vt8231_data {
- };
- 
- static struct pci_dev *s_bridge;
--static int vt8231_probe(struct platform_device *pdev);
--static int vt8231_remove(struct platform_device *pdev);
--static struct vt8231_data *vt8231_update_device(struct device *dev);
--static void vt8231_init_device(struct vt8231_data *data);
- 
- static inline int vt8231_read_value(struct vt8231_data *data, u8 reg)
- {
-@@ -180,6 +176,74 @@ static inline void vt8231_write_value(struct vt8231_data *data, u8 reg,
- 	outb_p(value, data->addr + reg);
- }
- 
-+static struct vt8231_data *vt8231_update_device(struct device *dev)
-+{
-+	struct vt8231_data *data = dev_get_drvdata(dev);
-+	int i;
-+	u16 low;
-+
-+	mutex_lock(&data->update_lock);
-+
-+	if (time_after(jiffies, data->last_updated + HZ + HZ / 2)
-+	    || !data->valid) {
-+		for (i = 0; i < 6; i++) {
-+			if (ISVOLT(i, data->uch_config)) {
-+				data->in[i] = vt8231_read_value(data,
-+						regvolt[i]);
-+				data->in_min[i] = vt8231_read_value(data,
-+						regvoltmin[i]);
-+				data->in_max[i] = vt8231_read_value(data,
-+						regvoltmax[i]);
-+			}
-+		}
-+		for (i = 0; i < 2; i++) {
-+			data->fan[i] = vt8231_read_value(data,
-+						VT8231_REG_FAN(i));
-+			data->fan_min[i] = vt8231_read_value(data,
-+						VT8231_REG_FAN_MIN(i));
-+		}
-+
-+		low = vt8231_read_value(data, VT8231_REG_TEMP_LOW01);
-+		low = (low >> 6) | ((low & 0x30) >> 2)
-+		    | (vt8231_read_value(data, VT8231_REG_TEMP_LOW25) << 4);
-+		for (i = 0; i < 6; i++) {
-+			if (ISTEMP(i, data->uch_config)) {
-+				data->temp[i] = (vt8231_read_value(data,
-+						       regtemp[i]) << 2)
-+						| ((low >> (2 * i)) & 0x03);
-+				data->temp_max[i] = vt8231_read_value(data,
-+						      regtempmax[i]);
-+				data->temp_min[i] = vt8231_read_value(data,
-+						      regtempmin[i]);
-+			}
-+		}
-+
-+		i = vt8231_read_value(data, VT8231_REG_FANDIV);
-+		data->fan_div[0] = (i >> 4) & 0x03;
-+		data->fan_div[1] = i >> 6;
-+		data->alarms = vt8231_read_value(data, VT8231_REG_ALARM1) |
-+			(vt8231_read_value(data, VT8231_REG_ALARM2) << 8);
-+
-+		/* Set alarm flags correctly */
-+		if (!data->fan[0] && data->fan_min[0])
-+			data->alarms |= 0x40;
-+		else if (data->fan[0] && !data->fan_min[0])
-+			data->alarms &= ~0x40;
-+
-+		if (!data->fan[1] && data->fan_min[1])
-+			data->alarms |= 0x80;
-+		else if (data->fan[1] && !data->fan_min[1])
-+			data->alarms &= ~0x80;
-+
-+		data->last_updated = jiffies;
-+		data->valid = true;
-+	}
-+
-+	mutex_unlock(&data->update_lock);
-+
-+	return data;
-+}
-+
- /* following are the sysfs callback functions */
- static ssize_t in_show(struct device *dev, struct device_attribute *attr,
- 		       char *buf)
-@@ -753,29 +817,11 @@ static const struct attribute_group vt8231_group = {
- 	.attrs = vt8231_attributes,
- };
- 
--static struct platform_driver vt8231_driver = {
--	.driver = {
--		.name	= DRIVER_NAME,
--	},
--	.probe	= vt8231_probe,
--	.remove	= vt8231_remove,
--};
--
--static const struct pci_device_id vt8231_pci_ids[] = {
--	{ PCI_DEVICE(PCI_VENDOR_ID_VIA, PCI_DEVICE_ID_VIA_8231_4) },
--	{ 0, }
--};
--
--MODULE_DEVICE_TABLE(pci, vt8231_pci_ids);
--
--static int vt8231_pci_probe(struct pci_dev *dev,
--				      const struct pci_device_id *id);
--
--static struct pci_driver vt8231_pci_driver = {
--	.name		= DRIVER_NAME,
--	.id_table	= vt8231_pci_ids,
--	.probe		= vt8231_pci_probe,
--};
-+static void vt8231_init_device(struct vt8231_data *data)
-+{
-+	vt8231_write_value(data, VT8231_REG_TEMP1_CONFIG, 0);
-+	vt8231_write_value(data, VT8231_REG_TEMP2_CONFIG, 0);
-+}
- 
- static int vt8231_probe(struct platform_device *pdev)
- {
-@@ -865,79 +911,21 @@ static int vt8231_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static void vt8231_init_device(struct vt8231_data *data)
--{
--	vt8231_write_value(data, VT8231_REG_TEMP1_CONFIG, 0);
--	vt8231_write_value(data, VT8231_REG_TEMP2_CONFIG, 0);
--}
--
--static struct vt8231_data *vt8231_update_device(struct device *dev)
--{
--	struct vt8231_data *data = dev_get_drvdata(dev);
--	int i;
--	u16 low;
--
--	mutex_lock(&data->update_lock);
--
--	if (time_after(jiffies, data->last_updated + HZ + HZ / 2)
--	    || !data->valid) {
--		for (i = 0; i < 6; i++) {
--			if (ISVOLT(i, data->uch_config)) {
--				data->in[i] = vt8231_read_value(data,
--						regvolt[i]);
--				data->in_min[i] = vt8231_read_value(data,
--						regvoltmin[i]);
--				data->in_max[i] = vt8231_read_value(data,
--						regvoltmax[i]);
--			}
--		}
--		for (i = 0; i < 2; i++) {
--			data->fan[i] = vt8231_read_value(data,
--						VT8231_REG_FAN(i));
--			data->fan_min[i] = vt8231_read_value(data,
--						VT8231_REG_FAN_MIN(i));
--		}
- 
--		low = vt8231_read_value(data, VT8231_REG_TEMP_LOW01);
--		low = (low >> 6) | ((low & 0x30) >> 2)
--		    | (vt8231_read_value(data, VT8231_REG_TEMP_LOW25) << 4);
--		for (i = 0; i < 6; i++) {
--			if (ISTEMP(i, data->uch_config)) {
--				data->temp[i] = (vt8231_read_value(data,
--						       regtemp[i]) << 2)
--						| ((low >> (2 * i)) & 0x03);
--				data->temp_max[i] = vt8231_read_value(data,
--						      regtempmax[i]);
--				data->temp_min[i] = vt8231_read_value(data,
--						      regtempmin[i]);
--			}
--		}
--
--		i = vt8231_read_value(data, VT8231_REG_FANDIV);
--		data->fan_div[0] = (i >> 4) & 0x03;
--		data->fan_div[1] = i >> 6;
--		data->alarms = vt8231_read_value(data, VT8231_REG_ALARM1) |
--			(vt8231_read_value(data, VT8231_REG_ALARM2) << 8);
--
--		/* Set alarm flags correctly */
--		if (!data->fan[0] && data->fan_min[0])
--			data->alarms |= 0x40;
--		else if (data->fan[0] && !data->fan_min[0])
--			data->alarms &= ~0x40;
--
--		if (!data->fan[1] && data->fan_min[1])
--			data->alarms |= 0x80;
--		else if (data->fan[1] && !data->fan_min[1])
--			data->alarms &= ~0x80;
--
--		data->last_updated = jiffies;
--		data->valid = true;
--	}
-+static struct platform_driver vt8231_driver = {
-+	.driver = {
-+		.name	= DRIVER_NAME,
-+	},
-+	.probe	= vt8231_probe,
-+	.remove	= vt8231_remove,
-+};
- 
--	mutex_unlock(&data->update_lock);
-+static const struct pci_device_id vt8231_pci_ids[] = {
-+	{ PCI_DEVICE(PCI_VENDOR_ID_VIA, PCI_DEVICE_ID_VIA_8231_4) },
-+	{ 0, }
-+};
- 
--	return data;
--}
-+MODULE_DEVICE_TABLE(pci, vt8231_pci_ids);
- 
- static int vt8231_device_add(unsigned short address)
- {
-@@ -1042,6 +1030,12 @@ static int vt8231_pci_probe(struct pci_dev *dev,
- 	return -ENODEV;
- }
- 
-+static struct pci_driver vt8231_pci_driver = {
-+	.name		= DRIVER_NAME,
-+	.id_table	= vt8231_pci_ids,
-+	.probe		= vt8231_pci_probe,
-+};
-+
- static int __init sm_vt8231_init(void)
- {
- 	return pci_register_driver(&vt8231_pci_driver);
--- 
-2.37.2
-
+Thanks,
+Guenter
