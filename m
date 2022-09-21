@@ -2,92 +2,97 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C85CC6FA82
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Sep 2022 20:22:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBE24C32771
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Sep 2022 22:28:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbiIUUWq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 21 Sep 2022 16:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
+        id S229641AbiIUW2F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 21 Sep 2022 18:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiIUUWn (ORCPT
+        with ESMTP id S229563AbiIUW2D (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Sep 2022 16:22:43 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA75A4064
-        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 13:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663791762; x=1695327762;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=77D+qEvHyb6GAcJWDMQL++e6FHJBKQfcF78uWtdFWlM=;
-  b=Zyv2ZrHLF4xre/g0wl1Ln+Xrh79WenuYwIFi4oKy0cYe9eCXY3WDZwJj
-   w9LMMeh0WfMc6K8BdeNuQdWhJ/kF+wT1iE+Y+UUPfbrHhbMpcs5aIagcE
-   enxD0eewqNfxoQ4DCiUB9M6pMoiLfSrf9QhxmAWqUuJ+p0Le+a40JMBCy
-   pKcYWbRqpYgVVTjkktvB3bhS7P4XQTK70OxighBnKMFxeGug8zKLi8Dv7
-   kf0TLwGZaOUCIQOE2rpi45kaN77fMxzY751NnhsvFfeJFmHFviNdVFL/f
-   1A1jF4oExulnIA+o8yexfvRe/0UMegqJtHvTFc85SlIromSQJQBjs4jqf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="300959460"
-X-IronPort-AV: E=Sophos;i="5.93,334,1654585200"; 
-   d="scan'208";a="300959460"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 13:22:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,334,1654585200"; 
-   d="scan'208";a="619505576"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 21 Sep 2022 13:22:40 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ob6Ex-0003vR-2p;
-        Wed, 21 Sep 2022 20:22:39 +0000
-Date:   Thu, 22 Sep 2022 04:22:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [groeck-staging:hwmon-next 36/55] ERROR: modpost: "__divdi3"
- [drivers/hwmon/mr75203.ko] undefined!
-Message-ID: <202209220427.ovoZDKKT-lkp@intel.com>
+        Wed, 21 Sep 2022 18:28:03 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0079AA8308
+        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 15:28:01 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id c198so7368518pfc.13
+        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 15:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=w8fMXphg5BaLYQfHSXzeIymQmLF+9cb3n83YbMLjXgY=;
+        b=dZxstFGVSyzb9IwNzlzn1g5kxZkKv2rxFkJON9O83SFgxkmd1PRIgVIxNqMD6ADgQ0
+         JgVDXGk1XOfIaGDjnA4L4Ye/u48IKi3LHcSedZyWwwSzt474FHp/eknYlz2JEj1j/wey
+         IqXCVruIh0+U6WQlKWTmBv0CprNf562MBm3qIPVH2M0RvKXu26NFxZviOt+1oEgThC78
+         KDrmEkFY1m4ZzPZ7UVb5uO5i7MYBIkptQbUejnlikD9u0ZXOnBwC8i2mRB/TBXeLB5w3
+         2vCEey9NV865XTT/KDRbA5nvLYFpmxU0IEZkOXi42wYqdTY6CFFjbd2/jyUGanvjPJT5
+         yLzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=w8fMXphg5BaLYQfHSXzeIymQmLF+9cb3n83YbMLjXgY=;
+        b=Hsr5NiLyn0BoPnIGZjRvSw48XHAiCSu0OjZD7xyfELakbsH+A9QkWCeN/tODHVeT1r
+         wy3QOxPRAGM36biVnVii2v8RtP1qyNudxd/sDu4lsQO4Yr/1Mpm65d4ivzAiOxtbJWN9
+         MSa236VOOALjVogj2Pc3LwHkBWzXeUjP86y+oFJPF5JZdwsEkaJ+/a4rts2wlKMWIxaz
+         Kg5d0IAycLwUGPlQXtOV+zD4S6pqDFqQ5csW3Mr3d+n9lgELq77xykedaT4B1mdomJ5w
+         5WRH24ae3h+iM5nUxHTeBQJ+q0VaJRCKBfnHYdrSkHQUE4PJ4XV4GNpOaTloz8Pv+AsO
+         NscA==
+X-Gm-Message-State: ACrzQf2632ZuzMM/79MUpGmmjrc9bJyrPTWXK/a5jSOJImA5+LNjtdxp
+        VbcYLaUcKYn/YTAtQVManqETEYKKY5grmg==
+X-Google-Smtp-Source: AMsMyM52ndpRbty4LkfKTyjkjz4PJh0ySjggwXMvWls/8jcb4C1a9uATX9DE5Q+xNx+uxN13y+zUUg==
+X-Received: by 2002:a63:cd03:0:b0:439:ae52:3fbd with SMTP id i3-20020a63cd03000000b00439ae523fbdmr337587pgg.393.1663799281108;
+        Wed, 21 Sep 2022 15:28:01 -0700 (PDT)
+Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
+        by smtp.googlemail.com with ESMTPSA id q17-20020a170902f35100b0016f1ef2cd44sm2424109ple.154.2022.09.21.15.27.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 15:28:00 -0700 (PDT)
+From:   Li Zhong <floridsleeves@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     linux@roeck-us.net, jdelvare@suse.com,
+        Li Zhong <floridsleeves@gmail.com>
+Subject: [PATCH v1] drivers: adt7470: check the return value of adt7470_read_temperatures
+Date:   Wed, 21 Sep 2022 15:27:48 -0700
+Message-Id: <20220921222748.1667190-1-floridsleeves@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Eliav,
+adt7470_read_temperatures() fails and returns error when operations on
+regmap fail. adt7470_update_thread() currently does not check for it and
+propagate the error.
 
-First bad commit (maybe != root cause):
+Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+---
+ drivers/hwmon/adt7470.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   103974b1117651a5884e2bc7832d7b02990e0232
-commit: 3b12ca798e022192fb451e9e5ef1bb147f21c413 [36/55] hwmon: (mr75203) add support for series 6 temperature equation
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220922/202209220427.ovoZDKKT-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=3b12ca798e022192fb451e9e5ef1bb147f21c413
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch --no-tags groeck-staging hwmon-next
-        git checkout 3b12ca798e022192fb451e9e5ef1bb147f21c413
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-Note: the groeck-staging/hwmon-next HEAD 103974b1117651a5884e2bc7832d7b02990e0232 builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
-ERROR: modpost: "__udivdi3" [drivers/hwmon/mr75203.ko] undefined!
->> ERROR: modpost: "__divdi3" [drivers/hwmon/mr75203.ko] undefined!
-
+diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
+index c67cd037a93f..0aadb2dc067f 100644
+--- a/drivers/hwmon/adt7470.c
++++ b/drivers/hwmon/adt7470.c
+@@ -289,12 +289,16 @@ static int adt7470_update_thread(void *p)
+ {
+ 	struct i2c_client *client = p;
+ 	struct adt7470_data *data = i2c_get_clientdata(client);
++	int err;
+ 
+ 	while (!kthread_should_stop()) {
+ 		mutex_lock(&data->lock);
+-		adt7470_read_temperatures(data);
++		err = adt7470_read_temperatures(data);
+ 		mutex_unlock(&data->lock);
+ 
++		if (err)
++			return err;
++
+ 		if (kthread_should_stop())
+ 			break;
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
