@@ -2,95 +2,63 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46A05C32771
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Sep 2022 07:58:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B7F1ECAAD8
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Sep 2022 08:05:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbiIUH6Z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 21 Sep 2022 03:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        id S229580AbiIUIFv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 21 Sep 2022 04:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbiIUH6X (ORCPT
+        with ESMTP id S229666AbiIUIFu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:58:23 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B6086724
-        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 00:58:20 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id w8so7801751lft.12
-        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 00:58:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=PDP2/L/CeOb11s92J9sGh9j2jKfKOL1Pm8pBFioQUZA=;
-        b=bOEl89RWD+8cPkCEFrFKsJqal6Abg3mPzUBvtmX6320WfiEEI11BmVEu6MqaJFcFt0
-         jzhQfTT+8AGNHKP4A3yVsiSxCexsmqFFnTlL3WB55R2g5VCQarZ2Uoq0aI4zPQufhp2p
-         +4aSLNXa0dSbfj0YAIr7gjV6hVQMtyRHgd2Ds=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=PDP2/L/CeOb11s92J9sGh9j2jKfKOL1Pm8pBFioQUZA=;
-        b=i+ryxx9vv5QXcOWMi5JlStmXhPzGI6zMo2BWQBd1DjKVf8j7fFlDP0172ChK1WyPnS
-         YO0oNXvPUmAC+5sYbdv9Gi90BL1pm+JaMbC22Hc9jbWTY8GxQsdAFYtwseoukfBVrdU5
-         ixDBGq7tkNh+DERC92Mk3XcbX4wQ41AdLA4jfVX8QDBiXUsVuUfOQJ96Qmh5zcx6JG5s
-         7gzU8sxIqPUVP2mR+q3POpsL2uU9N0m3MSx/0/fNZE86rLfe0I2a2VHhBZOmBOGgZD2e
-         xEbZq/J1kt2B17TiVVvgVAcHopJfoHUpa7+Ft2psFdD19ZinYAKvY9+mbxqyEm3sXagJ
-         s+qQ==
-X-Gm-Message-State: ACrzQf0OHncjB5YIibpco5OvbEzhW5fz1KfqejRo/uut3mfE01PCF8la
-        0ZVobaoJZo6d3oevmYEXAYgxFhYokX2zqjO4t4U=
-X-Google-Smtp-Source: AMsMyM5XVgtuygI6nckBf+/S99RDeOTH4d3t6+bMylPmbiWE/DcYNL7n9titjjt1bXCNf9+lUNKh6g==
-X-Received: by 2002:a05:6512:c21:b0:49b:d7ab:166f with SMTP id z33-20020a0565120c2100b0049bd7ab166fmr9305919lfu.418.1663747099244;
-        Wed, 21 Sep 2022 00:58:19 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id 9-20020ac25f09000000b00499f9ba6af0sm322365lfq.207.2022.09.21.00.58.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 00:58:18 -0700 (PDT)
-Message-ID: <5602da22-613e-1be9-42e8-c39b8d60f465@rasmusvillemoes.dk>
-Date:   Wed, 21 Sep 2022 09:58:16 +0200
+        Wed, 21 Sep 2022 04:05:50 -0400
+Received: from mail.fadrush.pl (mail.fadrush.pl [54.37.225.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08913760C3
+        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 01:05:50 -0700 (PDT)
+Received: by mail.fadrush.pl (Postfix, from userid 1002)
+        id C2BEA22BAF; Wed, 21 Sep 2022 08:05:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fadrush.pl; s=mail;
+        t=1663747548; bh=bD6j9gIFU6CLTaCGl0Ow9oeIxtirvTfMeNZSfLEZQ+I=;
+        h=Date:From:To:Subject:From;
+        b=TxLdRhiac4spvi61eQasd9M8ADmYdlfJ16oxA5Yd2DRaVJN4nx5A3ow3/k/Pvdz3n
+         LYzM4MV1/vrSdYcj0rb71DXk+67D9wS0m/wqINYJu7wc5woDxUD+Hryhvzv4Fx7Qat
+         ZFJe5LA3LlJEtIPNv2Q3oxda0OrAc617ZyRK92Lw0WmIEfv3jTQC1tDaxkwvvvgtaN
+         R5t7JfWxqTKiX/NilHqBdMTFhnRCZ6XxCMbkc7FBL2MyryaTmc6XxtMxxpxYJwNdOe
+         R6VtC/0R8/rCTxAHi1g021pINI1rcqkdBDuvHicjtNpq0rDQE/u1mnaMB+Ch1J3pdr
+         rWsjq+gbxYkAg==
+Received: by mail.fadrush.pl for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 08:05:44 GMT
+Message-ID: <20220921064500-0.1.1r.gsxf.0.u7wjeo7efp@fadrush.pl>
+Date:   Wed, 21 Sep 2022 08:05:44 GMT
+From:   "Jakub Olejniczak" <jakub.olejniczak@fadrush.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: =?UTF-8?Q?Zwi=C4=99kszenie_p=C5=82ynno=C5=9Bci_finansowej?=
+X-Mailer: mail.fadrush.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 6/6] rtc: isl12022: add support for temperature sensor
-Content-Language: en-US
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
- <20220830100152.698506-7-linux@rasmusvillemoes.dk>
- <YyHvXh1Zhy/wsHsD@mail.local>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <YyHvXh1Zhy/wsHsD@mail.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 14/09/2022 17.12, Alexandre Belloni wrote:
-> On 30/08/2022 12:01:52+0200, Rasmus Villemoes wrote:
->> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
->> ---
->>  drivers/rtc/rtc-isl12022.c | 81 ++++++++++++++++++++++++++++++++++++++
->>  1 file changed, 81 insertions(+)
->>
->> diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
->> index b295ec92ee17..1bd72f436318 100644
->> --- a/drivers/rtc/rtc-isl12022.c
->> +++ b/drivers/rtc/rtc-isl12022.c
->> @@ -17,6 +17,8 @@
->>  #include <linux/of.h>
->>  #include <linux/of_device.h>
->>  #include <linux/regmap.h>
->> +#include <linux/hwmon.h>
->> +#include <linux/hwmon-sysfs.h>
-> 
-> You should keep that list ordered
+Dzie=C5=84 dobry,
 
-While the three lines of context happen to be sorted, the list as a
-whole is not. I can of course include a patch sorting it.
+kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, poniewa=C5=BC chcia=C5=82bym za=
+proponowa=C4=87 wygodne rozwi=C4=85zanie, kt=C3=B3re umo=C5=BCliwi Pa=C5=84=
+stwa firmie stabilny rozw=C3=B3j.=20
 
-Rasmus
+Konkurencyjne otoczenie wymaga ci=C4=85g=C5=82ego ulepszania i poszerzeni=
+a oferty, co z kolei wi=C4=85=C5=BCe si=C4=99 z konieczno=C5=9Bci=C4=85 i=
+nwestowania. Brak odpowiedniego kapita=C5=82u powa=C5=BCnie ogranicza tem=
+po rozwoju firmy.
+
+Od wielu lat z powodzeniem pomagam firmom w uzyskaniu najlepszej formy fi=
+nansowania z banku oraz UE. Mam sta=C5=82ych Klient=C3=B3w, kt=C3=B3rzy n=
+adal ch=C4=99tnie korzystaj=C4=85 z moich us=C5=82ug, a tak=C5=BCe poleca=
+j=C4=85 je innym.
+
+Czy chcieliby Pa=C5=84stwo skorzysta=C4=87 z pomocy wykwalifikowanego i d=
+o=C5=9Bwiadczonego doradcy finansowego?
+
+
+Pozdrawiam
+Jakub Olejniczak
