@@ -2,101 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E8AFC6FA8E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Sep 2022 13:03:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E7E0C32771
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Sep 2022 14:02:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiIUNDp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 21 Sep 2022 09:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
+        id S229588AbiIUOCe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 21 Sep 2022 10:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiIUNDo (ORCPT
+        with ESMTP id S229525AbiIUOCd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:03:44 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFF68E4F3;
-        Wed, 21 Sep 2022 06:03:43 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-3450990b0aeso62795917b3.12;
-        Wed, 21 Sep 2022 06:03:43 -0700 (PDT)
+        Wed, 21 Sep 2022 10:02:33 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465F78993C;
+        Wed, 21 Sep 2022 07:02:32 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so5940895pjh.3;
+        Wed, 21 Sep 2022 07:02:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=UVpgbc6z6u7aULVGmamBgP30vjvIPcGwjxGcmyBqZIE=;
-        b=EufqYzy0j6caFNfzmW71qoXuO+ZPf4hqFc7ugrIBCxX+Ea0mR0sv2AZAgQ6sNzJOYV
-         bO0LeDoUL8u6pUC7J8ef7tbABcOnF8IPiAI7/V8t+WfoshvU2ASKnhBN0dECwb4rwNqP
-         r3s58sDMQQl5jy4xG5ch+J5EDYuc+4Nn53bCfkh7J/yQtQHbZ1VHGuP5KD6cHpaMZXQq
-         lOPvX7rZcToheosrP9Lo6kK6BoxUbUsMMmU7X8HLBRkXbE5bzKCoFSmzmmObhsSAXZy4
-         Kl2vLP5izcXfnb4fGFVkxqFTjiEGclQ9OkAbxl27E2ERmHS9AimLcYRZZKHA7y+dU5Q9
-         ngNA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date;
+        bh=TjMGlzRi9/9H0RzSJ0Wk0DHEdZrEgqy/4cen7DiALFs=;
+        b=Yrru6+VrnZ/wP8pnwqrXKsJKkW6kdD/tpUGsMJEl96p9dMyaRXP5KneH8C095U3VFp
+         xgWHy4+SOlte1Mu7JWRAqPPiqo8fm9TULHP3/KDiHj0zXpYCw19NjNJjP0c6oJDErGUD
+         P8MPQwoslH2qQPE+TOIiDCquWmQhsCvH+I3gfdpTjPHb5AQYB9K/EmBIUmpo/1RH/FwW
+         MnPwHn8uTQ7nRmC+wQgVoPVw/LMMHASUvfQWnHJZu6K1EdH9lz4Ai3iujY7zfOiqHAF/
+         kOx9Vfms1TLec8cGdwSSfjM+6hnMAp2FoksgUp/0iaXT25e2gll+JfFecBiVR4DVmlLo
+         Mr4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=UVpgbc6z6u7aULVGmamBgP30vjvIPcGwjxGcmyBqZIE=;
-        b=L9DeWzqOEkX6BX+7UOhZ2rPHLmB9AD326JXdgWAkB7dSlKGCZ6LKrCLMYhyyemvFwN
-         Ja+o4HL4xesPnabvyqY/XxeALDraSIKIGyVHW9xnZ0jozTp5FWkpsOuiKrfpSdrGKNFk
-         H6Cw/i5Y1Nm5loJ+CXqQi8GJva920/R2PsOpC4wd6RwOD/Wcer+31I+fQ/dIxWoUUzsB
-         0cNmx1Y+h7M5vkRYL3b+NXsgADjnafImzSlcKkblALSh2dQB15E68wijgTkWM7z23VZv
-         vgBskOp7qvAKIBe6hxAEwrRjIQeIHS5BL9+4lPo7aW4KpRdfY3HOwZhYqWrGBPBXx1vz
-         Yadw==
-X-Gm-Message-State: ACrzQf3sUd/kPamK8VQRHoID73MRATnpDrPws8Cap3FUYt1+jkKS0LJG
-        MEjRaQ7MX1N6IWmdP+FjpgM7lCCYGSRyplq/2c8O4y5QX/w=
-X-Google-Smtp-Source: AMsMyM7eToEExArj+xTESfDo7+jS4ZhKkeSGDV0gJgqdJpwjVMiiJfILhsT6atCukBTwnMk/WARrYk7HR4hrI3ij5fI=
-X-Received: by 2002:a81:1e97:0:b0:345:5eaa:ff99 with SMTP id
- e145-20020a811e97000000b003455eaaff99mr24756536ywe.194.1663765423042; Wed, 21
- Sep 2022 06:03:43 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=TjMGlzRi9/9H0RzSJ0Wk0DHEdZrEgqy/4cen7DiALFs=;
+        b=NCkw+KdAcjRaeOQDOoezzoFetxyYg5B6JCv606agrJaCgUxKE4M+c7OvucOagdmoWw
+         Qvg8Zo/Veiegr0SXHZTBbK5rjQss+C4D2ppTlopB8IDYwcDKFOOGxbLTikShNik/9sNe
+         5zqbIDfn8RwV1mzWtb2sELNrhwmbm86pBxAPTO4tIZoWYE5B2Zwz9Mh2I6ynOFNWngsB
+         SxYv3hWaWUh9aAGrCeIQ4kPD04+Gm/ke3MobjxVKfFrXcebQrOTFkx+WnMVLWPRqIFW4
+         ITPUXU01Fc5Y90AreHIj5ZfNU6kHZfe3AnxwlxnRn1XKCyVk2fjFixOayKgy+Uie3UHm
+         GKBA==
+X-Gm-Message-State: ACrzQf11Ap6RVTKQ2VeurYu6WNyNg4saToaxeZIRR2gx579m1wjwNmAi
+        YQYMNAyPOAhzuIvsunjKo4Fy/DMMGci0OQ==
+X-Google-Smtp-Source: AMsMyM73J4VT9C2uxUqDTrHQMocE0+BLNyq35dD0FtisGQcq02O3lz0Kgb7f/2XCtQ/1d7sQkREpjQ==
+X-Received: by 2002:a17:902:ceca:b0:177:fa1f:4abc with SMTP id d10-20020a170902ceca00b00177fa1f4abcmr4948576plg.99.1663768951780;
+        Wed, 21 Sep 2022 07:02:31 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c85-20020a621c58000000b0053653c6b9f9sm2114779pfc.204.2022.09.21.07.02.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 07:02:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <57f5b28d-3a21-3d1e-422d-d79eebefb8e5@roeck-us.net>
+Date:   Wed, 21 Sep 2022 07:02:27 -0700
 MIME-Version: 1.0
-References: <20220921121844.8059-1-farbere@amazon.com> <20220921121844.8059-3-farbere@amazon.com>
-In-Reply-To: <20220921121844.8059-3-farbere@amazon.com>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Wed, 21 Sep 2022 14:03:07 +0100
-Message-ID: <CADVatmMKKXbQ43KLqGt5EbsfBP3qiH8qdmWCQz+_UoabBq6dTg@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] hwmon: (mr75203) add support for series 6
- temperature equation
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        andriy.shevchenko@intel.com, hhhawa@amazon.com, jonnyc@amazon.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] hwmon: (mr75203) fix undefined reference to `__divdi3'
+Content-Language: en-US
+To:     Eliav Farber <farbere@amazon.com>, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andriy.shevchenko@intel.com, sudipm.mukherjee@gmail.com
+Cc:     hhhawa@amazon.com, jonnyc@amazon.com,
         kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20220921121723.6726-1-farbere@amazon.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220921121723.6726-1-farbere@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 1:19 PM Eliav Farber <farbere@amazon.com> wrote:
->
-> The current equation used in code is aligned to series 5:
-> T =3D G + H * (n / cal5 - 0.5) + J * F
-> Where:
-> G =3D 60, H =3D 200, cal5 =3D 4094, J =3D -0.1, F =3D frequency clock in =
-MHz
->
-> Series 6 has a slightly different equation:
-> T =3D G + H * (n / cal5 - 0.5)
-> and a different set of coefficients:
-> G =3D 57.4, H =3D 249.4, cal5 =3D 4096
->
-> This change supports equation and coefficients for both series.
-> (for series 6, J is set to 0).
->
-> The series is determined according to =E2=80=9Cmoortec,ts-series=E2=80=9D=
- property in
-> the device tree.
-> If absent, series 5 is assumed to be the default.
->
+On 9/21/22 05:17, Eliav Farber wrote:
+> Fix build error on 32-bit machines.
+> 
+> Fixes: 381a86c545f1 ("hwmon: (mr75203) modify the temperature equation according to series 5 datasheet")
 > Signed-off-by: Eliav Farber <farbere@amazon.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > Reported-by: kernel test robot <lkp@intel.com>
 
-Only build tested on top of next-20220921 after reverting v5 patches.
+Applied.
 
-Tested-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+> ---
+> I will also rework it into the original series (since it's not just a
+> trivial squash into one previous commit) and you can decide what to use
+> according to your preference.
+> 
 
---=20
-Regards
-Sudip
+I rather keep this patch separate.
+
+Thanks,
+Guenter
+
+>   drivers/hwmon/mr75203.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+> index 0fea443dc3e1..9c400cf790b5 100644
+> --- a/drivers/hwmon/mr75203.c
+> +++ b/drivers/hwmon/mr75203.c
+> @@ -266,9 +266,9 @@ static long pvt_calc_temp(struct pvt_device *pvt, u32 nbs)
+>   	struct temp_coeff *ts_coeff = &pvt->ts_coeff;
+>   
+>   	s64 tmp = ts_coeff->g +
+> -		ts_coeff->h * (s64)nbs / ts_coeff->cal5 -
+> +		div_s64(ts_coeff->h * (s64)nbs, ts_coeff->cal5) -
+>   		ts_coeff->h / 2 +
+> -		ts_coeff->j * (s64)pvt->ip_freq / HZ_PER_MHZ;
+> +		div_s64(ts_coeff->j * (s64)pvt->ip_freq, HZ_PER_MHZ);
+>   
+>   	return clamp_val(tmp, PVT_TEMP_MIN_mC, PVT_TEMP_MAX_mC);
+>   }
+
