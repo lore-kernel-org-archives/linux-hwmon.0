@@ -2,110 +2,84 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DEEDC32771
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Sep 2022 22:48:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4274EECAAD8
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Sep 2022 23:31:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiIUWsb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 21 Sep 2022 18:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
+        id S229657AbiIUXbX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 21 Sep 2022 19:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiIUWsa (ORCPT
+        with ESMTP id S229437AbiIUXbW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Sep 2022 18:48:30 -0400
+        Wed, 21 Sep 2022 19:31:22 -0400
 Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A739A4074
-        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 15:48:29 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id q35-20020a17090a752600b002038d8a68fbso348275pjk.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 15:48:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075CEA3D2F
+        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 16:31:21 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id go6so8059128pjb.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 16:31:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=ehUZqqFi7a7grijLCJZ2HlfNebaQ1QTKYkpsx9XMm2s=;
-        b=WC3E3UoWW9sHaZ07ppkZP/oCDubdzi2r/U17u8nyJ1Aj12KLNe1wn9pSjGnwG74MWJ
-         Kzg32yjLhneEkNC9tw5Fw1MC3E+2R8hPOHYXtgWEVJG05M7oXN3GORfhxe0ixqbFDUz2
-         zVu4YWgbv0Y8idgUyqkpy97j3TggkAWalvBnpqgtffmPAL9txyZohBMtEustRIuwd5KQ
-         wM0aYHRsobXu5PDuXmdXL4uXvvothLML+dKI1VdOBphfCsGIMAPThhSqUQiUyDWPORr4
-         LU1ScsKu5q6x6MLQSsCpdVq4GC5GUWXwluqJMSuH4Q8vTAwtCZJP4ecqso42pTChV40W
-         hWqw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=luiMGxsfgB3h36BHz6RaC81HTsy0Zd76rtNZImfgb1E=;
+        b=HHpoBm/N6imOJmZaoDOZKEMk87FHsy3zHq0PngPGhSNc4YspFzVVBv+tmofzOlaM0Y
+         uFojohtTZZqQR3XvpPvwaq4vl1HOD+YSA7rS5I9dQybDkUTxep6JsXmED3XEhrTtj0l/
+         FD87nlgplAl3//DavsRMux2ZI83Se2XI5ozHsYgpD+nAdnHuGD3CA/ijmTyyy/dmmRCW
+         RHVSwxaUMRTJiHYwue1iQ0Gat9LFib4el+75wge5+NtX68XS9Dq2AzoswlQbfgMqlHzo
+         +38m2V2PQICfs+vWDNabD7FYgg45fiOFaDor2VIGk2k9vhSp/900AQYuPclYEEqEwVNA
+         GNMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=ehUZqqFi7a7grijLCJZ2HlfNebaQ1QTKYkpsx9XMm2s=;
-        b=2ojVL7PLP+9OyUoeyVWzo44hAte5+FmunP5K5YV5ksOFPcblnT7qHhF2tkNXDaQC3Y
-         f/IRCkl6NCN8bQX6sex95f/yWv6U/VCSP8Z0IrPGmBKOfLS47NjtdoFsdDywnhcPdRPk
-         TDKb5/02tNXr/fS33DaP7NipTQpTWJcLKTFOcpWlX2xFEOhjeK2T1pOrEiP357KCaSIJ
-         NOfV1/Zy2PgAPgvFwME1/5jfIJijqxmJ4iQ9D1NB8G8Kya7LW+CvgN7RkZb1RE7A+ldT
-         jJ7cwXUl0SsVM3QxojyI1DHn/xUqRaroo4dZyyP56eL80C8r2qCXVh3QBRBwaVqb9kBm
-         56og==
-X-Gm-Message-State: ACrzQf2mWfacx//E5w9XoOUI78bAJBjBYHggedSn/0B/8OqdKFkopURX
-        FTVea7k35sy1Vl811On4NTI=
-X-Google-Smtp-Source: AMsMyM4Y8MoQT7BJ9wAp3YGTHnaqJGcumfqtfGkFgDlCPYHIHuzGTY6WJUdFEjs2f1fNej2yYoypkA==
-X-Received: by 2002:a17:90a:67c1:b0:202:e10a:4f14 with SMTP id g1-20020a17090a67c100b00202e10a4f14mr438821pjm.238.1663800508864;
-        Wed, 21 Sep 2022 15:48:28 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jb6-20020a170903258600b0017541ecdcfesm2504960plb.229.2022.09.21.15.48.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 15:48:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1dc868db-e756-230a-3515-1e025e1f3409@roeck-us.net>
-Date:   Wed, 21 Sep 2022 15:48:26 -0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=luiMGxsfgB3h36BHz6RaC81HTsy0Zd76rtNZImfgb1E=;
+        b=GITcm+YHmR6pxv7jhvgk5lm5CnbFk57NycsvAMK716zH8wgGysoPzFNE6sdy0Ur983
+         2Vk1jZdKOkuwFGugyJ0rgb+Uc0ugwywz3bNHKReLUz3B/vOZUXMuM9XhtS957Bc1SfEg
+         KkcyHyB+8TSUozARgdtAYP4DwBd6Ya+AQzE7KQqC1hnrJpe4sQfa1JsPfMiKWYc2guyv
+         UO/osutUX1O+QIihn68DmQ85XvV9u0G+hmwSwdMLkXDY3FshA1OOcmUu8yzfc+rXruML
+         LMbIKEnrvLT8b4YdvZqZ2GFbpapVp8YB+eRGtCubgnO/p0dfP2O2KKWK66ugmotu6kj3
+         k/Zg==
+X-Gm-Message-State: ACrzQf27vArEz810CI7UsOPJbV6kEP63ySAbXqkivTXIhv6L6YM52jT+
+        oJRMQTkmiQoxN7nNfFo+jIHu5mYrqNjOaA==
+X-Google-Smtp-Source: AMsMyM7ls7fP9EdiOMmVStoYBvSDe4LaeL/XvvoFFD/o0pnfqR/7IpvMlvNOQju1ILiYL+cRcFwKgQ==
+X-Received: by 2002:a17:90b:48ce:b0:202:61d0:323 with SMTP id li14-20020a17090b48ce00b0020261d00323mr583310pjb.157.1663803079963;
+        Wed, 21 Sep 2022 16:31:19 -0700 (PDT)
+Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
+        by smtp.googlemail.com with ESMTPSA id g8-20020a170902934800b00177f8f234cesm2508074plp.258.2022.09.21.16.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 16:31:19 -0700 (PDT)
+From:   Li Zhong <floridsleeves@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     linux@roeck-us.net, jdelvare@suse.com,
+        Li Zhong <floridsleeves@gmail.com>
+Subject: [BUG] drivers: adm9240: possible data race bug in adm9240_fan_read()
+Date:   Wed, 21 Sep 2022 16:31:09 -0700
+Message-Id: <20220921233109.1672345-1-floridsleeves@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1] drivers: adt7470: check the return value of
- adt7470_read_temperatures
-Content-Language: en-US
-To:     Li Zhong <floridsleeves@gmail.com>, linux-hwmon@vger.kernel.org
-Cc:     jdelvare@suse.com
-References: <20220921222748.1667190-1-floridsleeves@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220921222748.1667190-1-floridsleeves@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/21/22 15:27, Li Zhong wrote:
-> adt7470_read_temperatures() fails and returns error when operations on
-> regmap fail. adt7470_update_thread() currently does not check for it and
-> propagate the error.
-> 
-> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
-> ---
->   drivers/hwmon/adt7470.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
-> index c67cd037a93f..0aadb2dc067f 100644
-> --- a/drivers/hwmon/adt7470.c
-> +++ b/drivers/hwmon/adt7470.c
-> @@ -289,12 +289,16 @@ static int adt7470_update_thread(void *p)
->   {
->   	struct i2c_client *client = p;
->   	struct adt7470_data *data = i2c_get_clientdata(client);
-> +	int err;
->   
->   	while (!kthread_should_stop()) {
->   		mutex_lock(&data->lock);
-> -		adt7470_read_temperatures(data);
-> +		err = adt7470_read_temperatures(data);
->   		mutex_unlock(&data->lock);
->   
-> +		if (err)
-> +			return err;
-> +
->   		if (kthread_should_stop())
->   			break;
->   
-NACK.
+Hello,
 
-That is a kernel thread which should keep going even after an error.
-Aborting the thread after an error would be the absolute wrong thing
-to do.
+My static analysis tool reports a possible bug in the adm9240 driver in Linux
+v6.0:
 
-Guenter
+drivers/hwmon/adm9240.c:
+
+adm9240_read()
+    adm9240_fan_read() --> Line 509
+        adm9240_write_fan_div()
+
+adm9240_write_fan_div() says 'callers must hold
+data->update_lock'. However, it seems like the context does
+not hold the lock it requires. So it may cause data race when
+setting new fan div.
+
+I am not quite sure whether this is a real bug. Any feedback would be
+appreciated!
+
+Thanks,
+Li Zhong
