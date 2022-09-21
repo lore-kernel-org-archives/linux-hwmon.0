@@ -2,225 +2,81 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B210ECAAD8
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Sep 2022 12:44:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05112C32771
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Sep 2022 12:45:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbiIUMon (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 21 Sep 2022 08:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
+        id S230055AbiIUMpl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 21 Sep 2022 08:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbiIUMom (ORCPT
+        with ESMTP id S230062AbiIUMpj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Sep 2022 08:44:42 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0559D63BC
-        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 05:44:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663764281; x=1695300281;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=KDQfceECUxtTPfl3QcG6NVqjgCRsknHtfgrpkFpRc7Q=;
-  b=FBh3y2DpRzUDPlgJyW6xZ3Rn6qnGNcctPWQPgbK6Cn743bkVFVJlo6dg
-   BuNHGjZ6xqdRatGCM/q74XRDOgQFy1iZ+JD1AFDxVpAJBmo12neMGrTAn
-   qzfPtCj+npzB/B5345+C9EynqwTC01XSKNbxaqm+kx6mH/pUolTEtteXX
-   cAVUTjuZG9o75z+BvCCOSW2FVoCw5gM22l3bZ/7saedCsbOAodyBD6w+3
-   oi1f7iUj/OChkV69n9DtHjXER7bkqVk3GdISEZE1GG2ySX4JfnsL4z4WO
-   ybwc4vVEthlrAzBiu99IbZPd1ggndzpdITAz9vNWZFctFSn5oyvDsWNC/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="283038895"
-X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
-   d="scan'208";a="283038895"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 05:44:40 -0700
-X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
-   d="scan'208";a="864405711"
-Received: from ashyti-mobl2.igk.intel.com (HELO intel.com) ([172.28.180.68])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 05:44:38 -0700
-Date:   Wed, 21 Sep 2022 14:44:35 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Badal Nilawar <badal.nilawar@intel.com>
-Cc:     intel-gfx@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [PATCH 1/7] drm/i915/hwmon: Add HWMON infrastructure
-Message-ID: <YysHM8Ot1escBzEy@ashyti-mobl2.lan>
-References: <20220916150054.807590-1-badal.nilawar@intel.com>
- <20220916150054.807590-2-badal.nilawar@intel.com>
+        Wed, 21 Sep 2022 08:45:39 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FDD76452;
+        Wed, 21 Sep 2022 05:45:38 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id e187so7861357ybh.10;
+        Wed, 21 Sep 2022 05:45:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=lHyH82oi+18zzc2H4/taL6dXOs/EV5Ovi5bLXN+o4/Q=;
+        b=LpYnckvxq0oLd9YsMAlElTx3BLyKjDHd+zupUUSEyh9s6KQwYvEdIT/2ITntgipZrn
+         m8f6xRsu0w/vgpO9yltMKFo8K/W0MhiTgB9vjYHygg6Gxjhj+4FkYRO5rZ9MHZFGucEe
+         Jgjl8Qi/X17ZsQms3QCPdol8kick7aiMdEFmJ193/FixBQz2nMrdiZUhxMDv9tL9G8zr
+         1hrJQwwp4wL7Dz9gs1nEHhDjoP8MD8u2MUZtRI55yiYnu0EA7734uUuRUk2GvZQc004N
+         HjiaWXLec3A7MzuXMUV0O6+oPMMnwaNXAXllMwdYxXsymlIlG9kDR8eZ4R2rwGeSdZ+3
+         xdYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=lHyH82oi+18zzc2H4/taL6dXOs/EV5Ovi5bLXN+o4/Q=;
+        b=hrYoGG2Voiw5NyLYMuattm5vc686tkrufgnB+tHEIYug7B32uzVNsB1weWIKaJjDi8
+         OvoAr9YoHKdj8qA//bGMGYaypV8Fz2IdNEONFuv6oYLuAiO7GUb2+ZacQLInbyrugZDt
+         xgkwntz11iANd7fteX40iXS8O6oa9gPi2FQotasf079BESqV/hOTRkj19/ilwaew8oZF
+         wa+F+bd8z2BaNPNc4AEB6K69qHI+cznJK8u1ojhkKR0fxx2yR9JJvZkH/TMHB1dQpBOD
+         I4vZfrGF8nnj2V1/w6gmIAjd5zne7ykK+aQ+7N8hHRl+b6TI+UhjCEBkda9wo3qPDzIS
+         vQsw==
+X-Gm-Message-State: ACrzQf3qtkBgEN0Yn7syoHnowaDnnmKjYyCPRxVzCKfxDMTmHdzqdCHq
+        EMPy8Kjwk6Hc2Sp+MyJeviPiun8S9pDfyKuDKQk=
+X-Google-Smtp-Source: AMsMyM6wGCGRelUKH+KjWmpnZ92JZdEoUZ48fCF76U/kGdrGVxBjBaduDd7HhofRiTPJKFVtpwgw39ODU4VZU2zZ5jM=
+X-Received: by 2002:a5b:845:0:b0:683:6ed7:b3b6 with SMTP id
+ v5-20020a5b0845000000b006836ed7b3b6mr23955691ybq.183.1663764337379; Wed, 21
+ Sep 2022 05:45:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220916150054.807590-2-badal.nilawar@intel.com>
+References: <20220921121723.6726-1-farbere@amazon.com>
+In-Reply-To: <20220921121723.6726-1-farbere@amazon.com>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Wed, 21 Sep 2022 13:45:01 +0100
+Message-ID: <CADVatmOZ5bw8_+7bJUhOv0Fe7E7=7_UG4OxGO76RQWd2o4o2MQ@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (mr75203) fix undefined reference to `__divdi3'
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        andriy.shevchenko@intel.com, hhhawa@amazon.com, jonnyc@amazon.com,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Badal,
+On Wed, Sep 21, 2022 at 1:17 PM Eliav Farber <farbere@amazon.com> wrote:
+>
+> Fix build error on 32-bit machines.
+>
+> Fixes: 381a86c545f1 ("hwmon: (mr75203) modify the temperature equation according to series 5 datasheet")
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> Reported-by: kernel test robot <lkp@intel.com>
 
-> +struct hwm_reg {
-> +};
-> +
-> +struct hwm_drvdata {
-> +	struct i915_hwmon *hwmon;
-> +	struct intel_uncore *uncore;
-> +	struct device *hwmon_dev;
-> +	char name[12];
-> +};
-> +
-> +struct i915_hwmon {
-> +	struct hwm_drvdata ddat;
-> +	struct mutex hwmon_lock;		/* counter overflow logic and rmw */
-> +	struct hwm_reg rg;
-> +};
-> +
-> +static const struct hwmon_channel_info *hwm_info[] = {
-> +	NULL
-> +};
-> +
-> +static umode_t
-> +hwm_is_visible(const void *drvdata, enum hwmon_sensor_types type,
-> +	       u32 attr, int channel)
-> +{
-> +	switch (type) {
-> +	default:
-> +		return 0;
-> +	}
-> +}
-> +
-> +static int
-> +hwm_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +	 int channel, long *val)
-> +{
-> +	switch (type) {
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int
-> +hwm_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +	  int channel, long val)
-> +{
-> +	switch (type) {
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static const struct hwmon_ops hwm_ops = {
-> +	.is_visible = hwm_is_visible,
-> +	.read = hwm_read,
-> +	.write = hwm_write,
-> +};
-> +
-> +static const struct hwmon_chip_info hwm_chip_info = {
-> +	.ops = &hwm_ops,
-> +	.info = hwm_info,
-> +};
+Fixed the build of next-20220921 for me.
 
-what's the point for splitting so much? Can't you just send the
-hwmon driver all at once? With this patch you are not actually
-doing anything useful. In my opinion this should be squashed with
-the next ones.
+Tested-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 
-> +static void
-> +hwm_get_preregistration_info(struct drm_i915_private *i915)
-> +{
-> +}
-> +
-> +void i915_hwmon_register(struct drm_i915_private *i915)
-> +{
-> +	struct device *dev = i915->drm.dev;
-> +	struct i915_hwmon *hwmon;
-> +	struct device *hwmon_dev;
-> +	struct hwm_drvdata *ddat;
-> +
-> +	/* hwmon is available only for dGfx */
-> +	if (!IS_DGFX(i915))
-> +		return;
-> +
-> +	hwmon = kzalloc(sizeof(*hwmon), GFP_KERNEL);
 
-why don't we use devm_kzalloc?
-
-> +	if (!hwmon)
-> +		return;
-> +
-> +	i915->hwmon = hwmon;
-> +	mutex_init(&hwmon->hwmon_lock);
-> +	ddat = &hwmon->ddat;
-> +
-> +	ddat->hwmon = hwmon;
-> +	ddat->uncore = &i915->uncore;
-> +	snprintf(ddat->name, sizeof(ddat->name), "i915");
-> +
-> +	hwm_get_preregistration_info(i915);
-> +
-> +	/*  hwmon_dev points to device hwmon<i> */
-> +	hwmon_dev = hwmon_device_register_with_info(dev, ddat->name,
-> +						    ddat,
-> +						    &hwm_chip_info,
-> +						    NULL);
-> +	if (IS_ERR(hwmon_dev)) {
-> +		mutex_destroy(&hwmon->hwmon_lock);
-
-there is not such a big need to destroy the mutex. Destroying
-mutexes is more useful when you actually are creating/destroying
-and there is some debug need. I don't think that's the case.
-
-With the devm_kzalloc this would be just a return.
-
-Andi
-
-> +		i915->hwmon = NULL;
-> +		kfree(hwmon);
-> +		return;
-> +	}
-> +
-> +	ddat->hwmon_dev = hwmon_dev;
-> +}
-> +
-> +void i915_hwmon_unregister(struct drm_i915_private *i915)
-> +{
-> +	struct i915_hwmon *hwmon;
-> +	struct hwm_drvdata *ddat;
-> +
-> +	hwmon = fetch_and_zero(&i915->hwmon);
-> +	if (!hwmon)
-> +		return;
-> +
-> +	ddat = &hwmon->ddat;
-> +	if (ddat->hwmon_dev)
-> +		hwmon_device_unregister(ddat->hwmon_dev);
-> +
-> +	mutex_destroy(&hwmon->hwmon_lock);
-> +	kfree(hwmon);
-> +}
-> diff --git a/drivers/gpu/drm/i915/i915_hwmon.h b/drivers/gpu/drm/i915/i915_hwmon.h
-> new file mode 100644
-> index 000000000000..7ca9cf2c34c9
-> --- /dev/null
-> +++ b/drivers/gpu/drm/i915/i915_hwmon.h
-> @@ -0,0 +1,20 @@
-> +/* SPDX-License-Identifier: MIT */
-> +
-> +/*
-> + * Copyright © 2022 Intel Corporation
-> + */
-> +
-> +#ifndef __I915_HWMON_H__
-> +#define __I915_HWMON_H__
-> +
-> +struct drm_i915_private;
-> +
-> +#if IS_REACHABLE(CONFIG_HWMON)
-> +void i915_hwmon_register(struct drm_i915_private *i915);
-> +void i915_hwmon_unregister(struct drm_i915_private *i915);
-> +#else
-> +static inline void i915_hwmon_register(struct drm_i915_private *i915) { };
-> +static inline void i915_hwmon_unregister(struct drm_i915_private *i915) { };
-> +#endif
-> +
-> +#endif /* __I915_HWMON_H__ */
-> -- 
-> 2.25.1
+-- 
+Regards
+Sudip
