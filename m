@@ -2,97 +2,110 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBE24C32771
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Sep 2022 22:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DEEDC32771
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Sep 2022 22:48:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiIUW2F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 21 Sep 2022 18:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
+        id S229658AbiIUWsb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 21 Sep 2022 18:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiIUW2D (ORCPT
+        with ESMTP id S229590AbiIUWsa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Sep 2022 18:28:03 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0079AA8308
-        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 15:28:01 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id c198so7368518pfc.13
-        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 15:28:01 -0700 (PDT)
+        Wed, 21 Sep 2022 18:48:30 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A739A4074
+        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 15:48:29 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id q35-20020a17090a752600b002038d8a68fbso348275pjk.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 15:48:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=w8fMXphg5BaLYQfHSXzeIymQmLF+9cb3n83YbMLjXgY=;
-        b=dZxstFGVSyzb9IwNzlzn1g5kxZkKv2rxFkJON9O83SFgxkmd1PRIgVIxNqMD6ADgQ0
-         JgVDXGk1XOfIaGDjnA4L4Ye/u48IKi3LHcSedZyWwwSzt474FHp/eknYlz2JEj1j/wey
-         IqXCVruIh0+U6WQlKWTmBv0CprNf562MBm3qIPVH2M0RvKXu26NFxZviOt+1oEgThC78
-         KDrmEkFY1m4ZzPZ7UVb5uO5i7MYBIkptQbUejnlikD9u0ZXOnBwC8i2mRB/TBXeLB5w3
-         2vCEey9NV865XTT/KDRbA5nvLYFpmxU0IEZkOXi42wYqdTY6CFFjbd2/jyUGanvjPJT5
-         yLzQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date;
+        bh=ehUZqqFi7a7grijLCJZ2HlfNebaQ1QTKYkpsx9XMm2s=;
+        b=WC3E3UoWW9sHaZ07ppkZP/oCDubdzi2r/U17u8nyJ1Aj12KLNe1wn9pSjGnwG74MWJ
+         Kzg32yjLhneEkNC9tw5Fw1MC3E+2R8hPOHYXtgWEVJG05M7oXN3GORfhxe0ixqbFDUz2
+         zVu4YWgbv0Y8idgUyqkpy97j3TggkAWalvBnpqgtffmPAL9txyZohBMtEustRIuwd5KQ
+         wM0aYHRsobXu5PDuXmdXL4uXvvothLML+dKI1VdOBphfCsGIMAPThhSqUQiUyDWPORr4
+         LU1ScsKu5q6x6MLQSsCpdVq4GC5GUWXwluqJMSuH4Q8vTAwtCZJP4ecqso42pTChV40W
+         hWqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=w8fMXphg5BaLYQfHSXzeIymQmLF+9cb3n83YbMLjXgY=;
-        b=Hsr5NiLyn0BoPnIGZjRvSw48XHAiCSu0OjZD7xyfELakbsH+A9QkWCeN/tODHVeT1r
-         wy3QOxPRAGM36biVnVii2v8RtP1qyNudxd/sDu4lsQO4Yr/1Mpm65d4ivzAiOxtbJWN9
-         MSa236VOOALjVogj2Pc3LwHkBWzXeUjP86y+oFJPF5JZdwsEkaJ+/a4rts2wlKMWIxaz
-         Kg5d0IAycLwUGPlQXtOV+zD4S6pqDFqQ5csW3Mr3d+n9lgELq77xykedaT4B1mdomJ5w
-         5WRH24ae3h+iM5nUxHTeBQJ+q0VaJRCKBfnHYdrSkHQUE4PJ4XV4GNpOaTloz8Pv+AsO
-         NscA==
-X-Gm-Message-State: ACrzQf2632ZuzMM/79MUpGmmjrc9bJyrPTWXK/a5jSOJImA5+LNjtdxp
-        VbcYLaUcKYn/YTAtQVManqETEYKKY5grmg==
-X-Google-Smtp-Source: AMsMyM52ndpRbty4LkfKTyjkjz4PJh0ySjggwXMvWls/8jcb4C1a9uATX9DE5Q+xNx+uxN13y+zUUg==
-X-Received: by 2002:a63:cd03:0:b0:439:ae52:3fbd with SMTP id i3-20020a63cd03000000b00439ae523fbdmr337587pgg.393.1663799281108;
-        Wed, 21 Sep 2022 15:28:01 -0700 (PDT)
-Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id q17-20020a170902f35100b0016f1ef2cd44sm2424109ple.154.2022.09.21.15.27.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 15:28:00 -0700 (PDT)
-From:   Li Zhong <floridsleeves@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux@roeck-us.net, jdelvare@suse.com,
-        Li Zhong <floridsleeves@gmail.com>
-Subject: [PATCH v1] drivers: adt7470: check the return value of adt7470_read_temperatures
-Date:   Wed, 21 Sep 2022 15:27:48 -0700
-Message-Id: <20220921222748.1667190-1-floridsleeves@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=ehUZqqFi7a7grijLCJZ2HlfNebaQ1QTKYkpsx9XMm2s=;
+        b=2ojVL7PLP+9OyUoeyVWzo44hAte5+FmunP5K5YV5ksOFPcblnT7qHhF2tkNXDaQC3Y
+         f/IRCkl6NCN8bQX6sex95f/yWv6U/VCSP8Z0IrPGmBKOfLS47NjtdoFsdDywnhcPdRPk
+         TDKb5/02tNXr/fS33DaP7NipTQpTWJcLKTFOcpWlX2xFEOhjeK2T1pOrEiP357KCaSIJ
+         NOfV1/Zy2PgAPgvFwME1/5jfIJijqxmJ4iQ9D1NB8G8Kya7LW+CvgN7RkZb1RE7A+ldT
+         jJ7cwXUl0SsVM3QxojyI1DHn/xUqRaroo4dZyyP56eL80C8r2qCXVh3QBRBwaVqb9kBm
+         56og==
+X-Gm-Message-State: ACrzQf2mWfacx//E5w9XoOUI78bAJBjBYHggedSn/0B/8OqdKFkopURX
+        FTVea7k35sy1Vl811On4NTI=
+X-Google-Smtp-Source: AMsMyM4Y8MoQT7BJ9wAp3YGTHnaqJGcumfqtfGkFgDlCPYHIHuzGTY6WJUdFEjs2f1fNej2yYoypkA==
+X-Received: by 2002:a17:90a:67c1:b0:202:e10a:4f14 with SMTP id g1-20020a17090a67c100b00202e10a4f14mr438821pjm.238.1663800508864;
+        Wed, 21 Sep 2022 15:48:28 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id jb6-20020a170903258600b0017541ecdcfesm2504960plb.229.2022.09.21.15.48.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 15:48:27 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <1dc868db-e756-230a-3515-1e025e1f3409@roeck-us.net>
+Date:   Wed, 21 Sep 2022 15:48:26 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1] drivers: adt7470: check the return value of
+ adt7470_read_temperatures
+Content-Language: en-US
+To:     Li Zhong <floridsleeves@gmail.com>, linux-hwmon@vger.kernel.org
+Cc:     jdelvare@suse.com
+References: <20220921222748.1667190-1-floridsleeves@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220921222748.1667190-1-floridsleeves@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-adt7470_read_temperatures() fails and returns error when operations on
-regmap fail. adt7470_update_thread() currently does not check for it and
-propagate the error.
+On 9/21/22 15:27, Li Zhong wrote:
+> adt7470_read_temperatures() fails and returns error when operations on
+> regmap fail. adt7470_update_thread() currently does not check for it and
+> propagate the error.
+> 
+> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+> ---
+>   drivers/hwmon/adt7470.c | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
+> index c67cd037a93f..0aadb2dc067f 100644
+> --- a/drivers/hwmon/adt7470.c
+> +++ b/drivers/hwmon/adt7470.c
+> @@ -289,12 +289,16 @@ static int adt7470_update_thread(void *p)
+>   {
+>   	struct i2c_client *client = p;
+>   	struct adt7470_data *data = i2c_get_clientdata(client);
+> +	int err;
+>   
+>   	while (!kthread_should_stop()) {
+>   		mutex_lock(&data->lock);
+> -		adt7470_read_temperatures(data);
+> +		err = adt7470_read_temperatures(data);
+>   		mutex_unlock(&data->lock);
+>   
+> +		if (err)
+> +			return err;
+> +
+>   		if (kthread_should_stop())
+>   			break;
+>   
+NACK.
 
-Signed-off-by: Li Zhong <floridsleeves@gmail.com>
----
- drivers/hwmon/adt7470.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+That is a kernel thread which should keep going even after an error.
+Aborting the thread after an error would be the absolute wrong thing
+to do.
 
-diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
-index c67cd037a93f..0aadb2dc067f 100644
---- a/drivers/hwmon/adt7470.c
-+++ b/drivers/hwmon/adt7470.c
-@@ -289,12 +289,16 @@ static int adt7470_update_thread(void *p)
- {
- 	struct i2c_client *client = p;
- 	struct adt7470_data *data = i2c_get_clientdata(client);
-+	int err;
- 
- 	while (!kthread_should_stop()) {
- 		mutex_lock(&data->lock);
--		adt7470_read_temperatures(data);
-+		err = adt7470_read_temperatures(data);
- 		mutex_unlock(&data->lock);
- 
-+		if (err)
-+			return err;
-+
- 		if (kthread_should_stop())
- 			break;
- 
--- 
-2.25.1
-
+Guenter
