@@ -2,52 +2,51 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DB68C54EE9
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Sep 2022 00:02:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3343CC54EE9
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Sep 2022 00:02:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbiIUACS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 20 Sep 2022 20:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
+        id S230373AbiIUACx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 20 Sep 2022 20:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbiIUACR (ORCPT
+        with ESMTP id S229971AbiIUACw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Sep 2022 20:02:17 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C403F30F
-        for <linux-hwmon@vger.kernel.org>; Tue, 20 Sep 2022 17:02:17 -0700 (PDT)
+        Tue, 20 Sep 2022 20:02:52 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0413AB38
+        for <linux-hwmon@vger.kernel.org>; Tue, 20 Sep 2022 17:02:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663718537; x=1695254537;
+  t=1663718571; x=1695254571;
   h=date:message-id:from:to:cc:subject:in-reply-to:
    references:mime-version;
-  bh=/x/mG0a0N+FZzBEU5j2mlqaBLd5kIIkifeNjjuv5KGg=;
-  b=NcrfHNtPsFeMYciar7IC4UiWtC25vpKXvMMOzUtnL0iHTYTgwLo2fkVc
-   ijrnn3Gx+NzrozkLu9vPEvLUItzYMyRgMGSsQcG7NSbv7MUK9TsO5BiKb
-   2DewNab9xHFJ+6p7hmHba57MfJXgn59aXWnw9JcWbCfXjII4njWm/cit3
-   ZKTD2meKGkX5X4Py3eH60fKGxlTbwkkTlE+HhVnCSWSlirNdQ/MfRdWMY
-   HFXWZgMz7xSK2l+3ubKncYqNPt8Dotop0T4xR36Km5jatege9mafPj4iF
-   +VQUgn3pPgnqe7vSarfRsK/kNSUmoajy/fhdJdfttDSfqXcgbuDucBx26
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="286921148"
+  bh=EQRM8yaZsSfcAfaN72FQXsI7Vzv5YFS7DAb6JznRfoA=;
+  b=H6gUWhSACA1qt5uVTb5LRzWWJGoM54d3RT4995wTNRnbXNlBdnYOwaGV
+   BkO9T4Z83cImwGcccleK1gJhhWRM/IRi6jx8865R1zoeyo89jdTPeIGxg
+   KSuLA9kyKp4VrwS7Z2yGh5DQ6JgBjUlDtKNDJB991scWg/5t/dZ2/69Zq
+   wSxTpAR9jMxwtiVT6p6YrtAoUB6JzJyrTmxvIsACGwhVbxmOUkk6EKCNX
+   83eO1vlXcEmR30eCWxI8rm41cpx0WiNoZMcZ6YAA2L5+bHuR/5G1geboW
+   Zn48jvpKgLmyiTJT1AFwTCawjLCKK/NVfydUsCEdOY4QMrVXRJZuWFqyU
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="282896901"
 X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
-   d="scan'208";a="286921148"
+   d="scan'208";a="282896901"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 17:02:16 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 17:02:51 -0700
 X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
-   d="scan'208";a="619119979"
+   d="scan'208";a="619120134"
 Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.209.57.76])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 17:02:16 -0700
-Date:   Tue, 20 Sep 2022 17:02:15 -0700
-Message-ID: <87h711d27s.wl-ashutosh.dixit@intel.com>
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 17:02:51 -0700
+Date:   Tue, 20 Sep 2022 17:02:50 -0700
+Message-ID: <87fsgld26t.wl-ashutosh.dixit@intel.com>
 From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
-To:     Badal Nilawar <badal.nilawar@intel.com>
-Cc:     <intel-gfx@lists.freedesktop.org>, <riana.tauro@intel.com>,
-        <anshuman.gupta@intel.com>, <jon.ewins@intel.com>,
-        <linux-hwmon@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
-Subject: Re: [PATCH 3/7] drm/i915/hwmon: Power PL1 limit and TDP setting
-In-Reply-To: <20220916150054.807590-4-badal.nilawar@intel.com>
-References: <20220916150054.807590-1-badal.nilawar@intel.com>
-        <20220916150054.807590-4-badal.nilawar@intel.com>
+To:     "Nilawar, Badal" <badal.nilawar@intel.com>
+Cc:     intel-gfx@lists.freedesktop.org, riana.tauro@intel.com,
+        anshuman.gupta@intel.com, jon.ewins@intel.com,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 2/7] drm/i915/hwmon: Add HWMON current voltage support
+In-Reply-To: <9760a03d-a83e-7e27-e4da-faff02c6f11a@intel.com>
+References: <20220825132118.784407-1-badal.nilawar@intel.com>   <20220825132118.784407-3-badal.nilawar@intel.com>       <87o7w3yn28.wl-ashutosh.dixit@intel.com>        <9760a03d-a83e-7e27-e4da-faff02c6f11a@intel.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
  Emacs/28.1 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -57,25 +56,33 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 16 Sep 2022 08:00:50 -0700, Badal Nilawar wrote:
+On Thu, 15 Sep 2022 07:40:37 -0700, Nilawar, Badal wrote:
 >
-> diff --git a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
-> index e2974f928e58..bc061238e35c 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
-> +++ b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
-> @@ -5,3 +5,23 @@ Contact:	dri-devel@lists.freedesktop.org
->  Description:	RO. Current Voltage in millivolt.
+> On 29-08-2022 23:00, Dixit, Ashutosh wrote:
+> > On Thu, 25 Aug 2022 06:21:13 -0700, Badal Nilawar wrote:
+> >>
+> >> +static int
+> >> +hwm_in_read(struct hwm_drvdata *ddat, u32 attr, long *val)
+> >> +{
+> >> +	struct i915_hwmon *hwmon = ddat->hwmon;
+> >> +	intel_wakeref_t wakeref;
+> >> +	u32 reg_value;
+> >> +
+> >> +	switch (attr) {
+> >> +	case hwmon_in_input:
+> >> +		with_intel_runtime_pm(ddat->uncore->rpm, wakeref)
+> >> +			reg_value = intel_uncore_read(ddat->uncore, hwmon->rg.gt_perf_status);
+> >> +		/* In units of 2.5 millivolt */
+> >> +		*val = DIV_ROUND_CLOSEST(REG_FIELD_GET(GEN12_VOLTAGE_MASK, reg_value) * 25, 10);
 >
->		Only supported for particular Intel i915 graphics platforms.
-> +
-> +What:		/sys/devices/.../hwmon/hwmon<i>/power1_max
-> +Date:		September 2022
-> +KernelVersion:	6
+> And use above scale factors here.
+> *val = DIV_ROUND_CLOSEST(REG_FIELD_GET(GEN12_VOLTAGE_MASK, reg_value) *
+> SF_VOLTAGE_MUL, SF_VOLTAGE_DIV);
+> Regards,
+> Badal
+> >
+> > Let's complete this comment to so that it is clear what's happening:
+> >
+> >		/* HW register value is in units of 2.5 millivolt */
 
-Maybe we should ask someone but even if we merge this today to drm-tip this
-will appear in kernel.org Linus' version only in 6.2. So I think we should
-set this as 6.2 on all patches.
-
-Except for this, thanks for making the changes, this is:
-
-Reviewed-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
+This was missed in the latest rev so if we could remember to add this that would be great.
