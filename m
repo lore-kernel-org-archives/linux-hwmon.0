@@ -2,134 +2,97 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C5ABECAAD8
-	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Sep 2022 02:45:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FADBECAAD8
+	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Sep 2022 03:22:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiIVCpA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 21 Sep 2022 22:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
+        id S231358AbiIVDWC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 21 Sep 2022 23:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiIVCo6 (ORCPT
+        with ESMTP id S231284AbiIVDVf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Sep 2022 22:44:58 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB4B4A138
-        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 19:44:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663814698; x=1695350698;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UeQT/YHKuL4TPVewAPT/3GM9xPwsDZNRif2ccJl0NeI=;
-  b=CONFmLiCcTcdSt/zOtnNZe98S8LcfSBYfIeF9JlmxHOj/+Ba5+vf05HM
-   dn6UWujk0r9HjcXord5aWE786AjdPJTJfD8O88mYIm2+fLll1FiheK5jD
-   YouLFCRrMQkh5pLTX5kAFx27g2qzqip84zGyD8PfagNsB+81ph73R7HyB
-   T8lXrCa3g293ygGPba7JD3OXQtQrm56JQ8tNjF7om+EAJk5ChxLhvMCeG
-   OYA8SMPQgs4OjHe5hP6Ou1zw3D0FZPNUDN6NBpga8iTH5/sbAqb06XY6x
-   jBPZYZNVaLUcCH0tPg2jNvz5eUVzwSfiAjNiJXZNvbK+Ai0LwSrL7YF+6
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="280549858"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="280549858"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 19:44:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="723472681"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Sep 2022 19:44:56 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1obCCu-0004Dc-13;
-        Thu, 22 Sep 2022 02:44:56 +0000
-Date:   Thu, 22 Sep 2022 10:44:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 103974b1117651a5884e2bc7832d7b02990e0232
-Message-ID: <632bcbf1.pI3OutwNWwDfvEvl%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 21 Sep 2022 23:21:35 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D11AB2CEC
+        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 20:16:22 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id q9-20020a17090a178900b0020265d92ae3so813245pja.5
+        for <linux-hwmon@vger.kernel.org>; Wed, 21 Sep 2022 20:16:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date;
+        bh=FqjVYVOELwD6B0d6rfYMa2vVb2jr2GokelYZSbJInak=;
+        b=MDu90ijwmMqNNu9EGKXfbfLZ9OeyNBMmOos4QpBe2n0aHnBGhDn9RsWgz7L4tpGDny
+         D0wxK5JI9cy/3q7A8Wvg9kldwNEiGl/cmdFlt/82yzDdbHlrFmrRk3YWeoaG076blmm/
+         Ys1tf+7gW3S/UCuc0oSa1ddo+RHhLmquvk4cKiPgCVdc2+V45ZNvauzLGOvSJGJCu7gc
+         cesWMM0NM5IMf8Ut6vYFitydyb4mvJGrD994SUnt4ayGROrBOVEIStvJ2BljSLMP3T9y
+         +3cNFJY27eLgv524MtApCldWhHIkSvRpORGE6OSRDpqoVJ4JbD2E0z/5dmNj4oD6bQXg
+         FhZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=FqjVYVOELwD6B0d6rfYMa2vVb2jr2GokelYZSbJInak=;
+        b=kusEN6wAndsZbzGYMjbIxHrA0A/5GaSn4WlzCrg4oFRgDpHM9F9w9mZ2nzz1CBtPSh
+         FhiKrK06cT1KZ/LZ9GcEaT9CSEb6zdhkL/leJVC44k8CxgIU5XQnfwbXhY9MhF+y5l6B
+         /zBG8KKv/WXN+9UbukfpIgLnmGVPv45b8Lh46IZcXqjEm/0UXsdBNBFHHbP/fnFiaNv+
+         D4sRGxuf3amCEewoVNjs6e1F+nOQjPr0NNvKsUzcRTkgzLaYUvKpJbAVFyhS+2oJ4738
+         PRT6VT3UHHigTIf0SJ8T8jQOACn3s9hgY4wDjtAcBoMmZCFNZgmuLss7mgKED9HF4y9s
+         4TFQ==
+X-Gm-Message-State: ACrzQf0r1gEJCTjiOYGOLCOH2oZByCW6FuGsf9rtXAo8AFg3JW50q/Zd
+        7AugRCfD+rPDOcWrIcA18qk=
+X-Google-Smtp-Source: AMsMyM6xfhJE6wjxBYLMwoOS6v3abhELt0rVsfu+agFY1ZJs1kMPCPynM1hxxiW1ff/531I1TnQ0fw==
+X-Received: by 2002:a17:902:dac8:b0:178:401c:f699 with SMTP id q8-20020a170902dac800b00178401cf699mr1186128plx.19.1663816581531;
+        Wed, 21 Sep 2022 20:16:21 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m2-20020a17090a730200b002032bda9a5dsm2621593pjk.41.2022.09.21.20.16.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 20:16:20 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <99ea1416-46dc-9712-271a-9e3daaa43e05@roeck-us.net>
+Date:   Wed, 21 Sep 2022 20:16:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Li Zhong <floridsleeves@gmail.com>, linux-hwmon@vger.kernel.org
+Cc:     jdelvare@suse.com
+References: <20220921233109.1672345-1-floridsleeves@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [BUG] drivers: adm9240: possible data race bug in
+ adm9240_fan_read()
+In-Reply-To: <20220921233109.1672345-1-floridsleeves@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 103974b1117651a5884e2bc7832d7b02990e0232  hwmon: (mr75203) fix undefined reference to `__divdi3'
+On 9/21/22 16:31, Li Zhong wrote:
+> Hello,
+> 
+> My static analysis tool reports a possible bug in the adm9240 driver in Linux
+> v6.0:
+> 
+> drivers/hwmon/adm9240.c:
+> 
+> adm9240_read()
+>      adm9240_fan_read() --> Line 509
+>          adm9240_write_fan_div()
+> 
+> adm9240_write_fan_div() says 'callers must hold
+> data->update_lock'. However, it seems like the context does
+> not hold the lock it requires. So it may cause data race when
+> setting new fan div.
+> 
+> I am not quite sure whether this is a real bug. Any feedback would be
+> appreciated!
+> 
 
-elapsed time: 723m
+You are correct, the code in adm9240_fan_read() should acquire
+the mutex before calling adm9240_write_fan_div() and while
+manipulating data->fan_div[channel].
 
-configs tested: 58
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                           x86_64_defconfig
-um                             i386_defconfig
-arc                  randconfig-r043-20220921
-riscv                randconfig-r042-20220921
-x86_64                        randconfig-a013
-arc                                 defconfig
-s390                 randconfig-r044-20220921
-x86_64                        randconfig-a011
-s390                             allmodconfig
-x86_64                        randconfig-a015
-alpha                               defconfig
-i386                                defconfig
-i386                          randconfig-a001
-s390                                defconfig
-i386                          randconfig-a003
-powerpc                           allnoconfig
-mips                             allyesconfig
-s390                             allyesconfig
-i386                          randconfig-a005
-m68k                             allyesconfig
-sh                               allmodconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a002
-alpha                            allyesconfig
-m68k                             allmodconfig
-x86_64                        randconfig-a004
-arc                              allyesconfig
-x86_64                        randconfig-a006
-i386                          randconfig-a014
-x86_64                              defconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-i386                          randconfig-a012
-x86_64                           rhel-8.3-kvm
-i386                          randconfig-a016
-i386                             allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-arm                                 defconfig
-ia64                             allmodconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20220921
-hexagon              randconfig-r045-20220921
-x86_64                        randconfig-a014
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a013
-x86_64                        randconfig-a005
-i386                          randconfig-a011
-i386                          randconfig-a015
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Guenter
