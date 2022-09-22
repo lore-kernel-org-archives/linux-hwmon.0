@@ -2,59 +2,59 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F3BFC54EE9
-	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Sep 2022 23:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88FC1C6FA8B
+	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Sep 2022 23:44:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiIVXfq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 22 Sep 2022 19:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
+        id S229459AbiIVXoQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 22 Sep 2022 19:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiIVXfp (ORCPT
+        with ESMTP id S229691AbiIVXoN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Sep 2022 19:35:45 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A556C98C94
-        for <linux-hwmon@vger.kernel.org>; Thu, 22 Sep 2022 16:35:43 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id v4so10653627pgi.10
-        for <linux-hwmon@vger.kernel.org>; Thu, 22 Sep 2022 16:35:43 -0700 (PDT)
+        Thu, 22 Sep 2022 19:44:13 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5F3F9606
+        for <linux-hwmon@vger.kernel.org>; Thu, 22 Sep 2022 16:44:13 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id s206so10718465pgs.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 22 Sep 2022 16:44:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=VeVuH5DZxcKt2sIekJQXHdp/dtUbqaS6ofUWeCmaoxI=;
-        b=p+UacrO+Vzhuh+7HkNF+caU18ruUV6cmxneF568mDiFFH7T+3usZ7qfRbPNROe9gc+
-         MhOWORKaH+0A5VzQe3GU3sEDChTH9pKU0QtuyrD2UX3dNMHwpvjXw5CER2YosxljvnSq
-         Jwd9KVi3U4nQJ80KbEqSVjudhgoWjd+v2rz1AOEoE3xLrL672p08aqXCoyR3vxNRnG5x
-         QH/tknXK5aNEMK1IJRzjjFEwtsDsA16KcDw8LnmjEDuAZM5ZHiu9uWpCZ9P2C3F8yGa0
-         oKHLDyEiTPYu8komoTnpfM2RoNj5dVSMR4f0TFO6uIhjg/A48WdeHSJ9dK0V2g3HK0qe
-         MVsQ==
+        bh=zzAQ7miQ9heBZcb18zCMwhTPHTm75W4BR2SXwyh15cg=;
+        b=iPfEguRTxwphzIQU+T1Br5r5h9BGMzOxf5Nlpqg5lgSEJVugZt0eltVErfy4it1t2d
+         t52HJz3rfYH/r+cy/uqUjSv4xnvV93gYIKDzAi8135Fe7Rvc0s0zrn+M+Cwa8xf1g05S
+         G/YiF0c3QtQeFCxX/oMBT7YPluPipvK7kMbDDlrwn0eC0wgPr0EPxBJvcXWNBTEtyz/M
+         YFnRQ8q4KYufLA+vsMQ3hUhZ47RdjGefnwCy6+N11GKR+X6z40NI8l8nGYMWJvla+NPG
+         q98nPQwPWBJ34/6wXESFXd0VLKpkKxgfB43mmvxO9Y8HnwlfM1UXSP5Jh7C/GCM9pqjB
+         i9uQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=VeVuH5DZxcKt2sIekJQXHdp/dtUbqaS6ofUWeCmaoxI=;
-        b=KayQ8pb7bskTPj+FE8R6OJayckKwKsjl/YFmuWB07hIAl6GIf4V7DT/wSpixg4CLAt
-         BzmYjxHkBtfN1/uBbhrxcTueNs5f8OSdQYSA3eCm7zyjdiZwevDHf23NOcsVXfHNkomd
-         GWg15+QGRFZ9xuQ+ApplJmqG3junyiYUJf4tweIuSs6aSNs+RlhKgj0lgy0zU8BMSYI1
-         Ci38L+Bi2AdC4JaBzSHoSVB5MNNC2VNX0on1O2cQ6cqFA4JQQATT+HPnXUYMIqMHVEm5
-         2F3yzMQH6fQEhVvN2ELX1X8prxcrQEoQVUnknYJFfRCIMU1Xumj3/9kO17odEB12khgi
-         8v4Q==
-X-Gm-Message-State: ACrzQf2uhwlpozxAbmyZla+zmKab2QgLZ8TknDllCNVWvxs8OrxJsSZa
-        YOqlPhIxJk1p0X6ch8CsFHG/334PiD08IA==
-X-Google-Smtp-Source: AMsMyM57smtuPjsIz58VhuCHypqlhyxizeBSsTVEy3/JWezup/iNHPvqQjrlUNQIICj8cnf/xwwBmQ==
-X-Received: by 2002:a63:5d4e:0:b0:41d:2966:74e7 with SMTP id o14-20020a635d4e000000b0041d296674e7mr5034753pgm.526.1663889743174;
-        Thu, 22 Sep 2022 16:35:43 -0700 (PDT)
+        bh=zzAQ7miQ9heBZcb18zCMwhTPHTm75W4BR2SXwyh15cg=;
+        b=kgXqgzb68COtTD+s92HT0cF1n+3bZJrCruUBbAToZieuZ05C/0NjdbftxYJG/+3D47
+         RD+BHd4CiQbKr1PCjtia2Ur1t4cdQU3NXDAbLiLA4V6cGmIYkrPT7zDjI9SGgqEDIklw
+         vxchsaPsFZkcnrxmgqBzdbpYCYK4+KTLsXEAyGFaxyPEpFpi+3w07FZHw9C2YDEzVJ/G
+         9DtK9DTgjgkDpSEUrQw5bqEcblOCS3z5zp5th8HVPS3zhHWFjlC9EAtHA16ieC40at1L
+         dnlD1Uk9wTcPf506XY4yt/7bkXiqjKtrhb3NwZyfCRbcpp8xROovtx1kGpsRPP16u0d9
+         ehgg==
+X-Gm-Message-State: ACrzQf3Lct/laEP/srPS6/nFka73XxZQKPENDMkIwtBEUwuQEOHSPJAR
+        vhAWeiE8ekuRctxKNlkPIhoMRr/uu/LwvQ==
+X-Google-Smtp-Source: AMsMyM5yaCCDNGlPu89O7tRScdbjmxt6WCwCtnegS3ll8cTb7W71Sxs1+gHpI+qbE3L/vGj+Srqy/A==
+X-Received: by 2002:a63:5a46:0:b0:434:e36b:438f with SMTP id k6-20020a635a46000000b00434e36b438fmr5124176pgm.351.1663890252385;
+        Thu, 22 Sep 2022 16:44:12 -0700 (PDT)
 Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id rv3-20020a17090b2c0300b00203ab277966sm357992pjb.7.2022.09.22.16.35.41
+        by smtp.googlemail.com with ESMTPSA id o18-20020a17090aeb9200b001fb47692333sm342641pjy.23.2022.09.22.16.44.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 16:35:42 -0700 (PDT)
+        Thu, 22 Sep 2022 16:44:11 -0700 (PDT)
 From:   Li Zhong <floridsleeves@gmail.com>
 To:     linux-hwmon@vger.kernel.org
 Cc:     linux@roeck-us.net, jdelvare@suse.com,
         Li Zhong <floridsleeves@gmail.com>
-Subject: [PATCH v1] drivers/hwmon/adm9240: fix data race in adm9240_fan_read
-Date:   Thu, 22 Sep 2022 16:33:56 -0700
-Message-Id: <20220922233356.1712262-1-floridsleeves@gmail.com>
+Subject: [PATCH v2] drivers/hwmon/adm9240: fix data race in adm9240_fan_read
+Date:   Thu, 22 Sep 2022 16:43:48 -0700
+Message-Id: <20220922234348.1714344-1-floridsleeves@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -73,24 +73,35 @@ updated by other threads.
 
 Signed-off-by: Li Zhong <floridsleeves@gmail.com>
 ---
- drivers/hwmon/adm9240.c | 2 ++
- 1 file changed, 2 insertions(+)
+v2: add mutex_unlock() in error handling
+
+ drivers/hwmon/adm9240.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/adm9240.c b/drivers/hwmon/adm9240.c
-index 483cd757abd3..d93ae3147994 100644
+index 483cd757abd3..d58999e186dc 100644
 --- a/drivers/hwmon/adm9240.c
 +++ b/drivers/hwmon/adm9240.c
-@@ -501,6 +501,7 @@ static int adm9240_fan_read(struct device *dev, u32 attr, int channel, long *val
+@@ -501,16 +501,22 @@ static int adm9240_fan_read(struct device *dev, u32 attr, int channel, long *val
  
  	switch (attr) {
  	case hwmon_fan_input:
 +		mutex_lock(&data->update_lock);
  		err = regmap_read(data->regmap, ADM9240_REG_FAN(channel), &regval);
- 		if (err < 0)
+-		if (err < 0)
++		if (err < 0) {
++			mutex_unlock(&data->update_lock);
  			return err;
-@@ -511,6 +512,7 @@ static int adm9240_fan_read(struct device *dev, u32 attr, int channel, long *val
- 			if (err)
++		}
+ 		if (regval == 255 && data->fan_div[channel] < 3) {
+ 			/* adjust fan clock divider on overflow */
+ 			err = adm9240_write_fan_div(data, channel,
+ 						    ++data->fan_div[channel]);
+-			if (err)
++			if (err) {
++				mutex_unlock(&data->update_lock);
  				return err;
++			}
  		}
 +		mutex_unlock(&data->update_lock);
  		*val = FAN_FROM_REG(regval, BIT(data->fan_div[channel]));
