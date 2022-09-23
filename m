@@ -2,43 +2,43 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76066C54EE9
-	for <linux-hwmon@archiver.kernel.org>; Fri, 23 Sep 2022 02:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFF6DC6FA8B
+	for <linux-hwmon@archiver.kernel.org>; Fri, 23 Sep 2022 04:23:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbiIWCwU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 22 Sep 2022 22:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
+        id S229677AbiIWEXt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 23 Sep 2022 00:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbiIWCwP (ORCPT
+        with ESMTP id S229810AbiIWEXs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Sep 2022 22:52:15 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF2F11ADDB
-        for <linux-hwmon@vger.kernel.org>; Thu, 22 Sep 2022 19:52:12 -0700 (PDT)
+        Fri, 23 Sep 2022 00:23:48 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB81611D631
+        for <linux-hwmon@vger.kernel.org>; Thu, 22 Sep 2022 21:23:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663901532; x=1695437532;
+  t=1663907027; x=1695443027;
   h=date:message-id:from:to:cc:subject:in-reply-to:
    references:mime-version;
-  bh=iVTwNVMYnmTJJA8DlLfowEqlHu9nUC6NsQVfy0PMJt8=;
-  b=Xkrux7D8yhzn5E+wztyHS5WTU7tSFbQ4QQedxVPBjOqpEm8OtZbMh7yU
-   WmtahQe7T3dPqLI9rdawSA0jSURUgO97y2Ib6OD4mwO/T1t1O0ZwMpGMw
-   v4Cbs+6DhgXTSu4AESVIbfWM3daY3VqwfvAog2f6+NIm+Qb62lDaJaQN/
-   NfwHpkgIm7DL+/MvPo1yPXSxmRoLaJgpG6Jjyb98utmfKMnNiYo6LjSQA
-   7P0ErkgqrwR9U4Ek4CwltFvoQSRWpyY9p+HKoaQvhTACDELUKh8+J+JbV
-   U3gnHuAgMnaH0s+DFxJ0zhYhuLMELpkQhgkbA+P+abX2cIy+VEiWXq3E7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="300478666"
+  bh=XeWyplBfU7ooubbg+lB1SZLGAb8Q4lLNFEaq3LMcn84=;
+  b=E5Eb7AAkOiyb1SDQhbm4ltOEQu8rw2VXxU7jIWytjiC3gf5AyKvFrWtm
+   0+pGr0H6VWRzYFuNR3YD0oKysAi+B2g0tuhKkcTcwmymemegcjXaAv7G/
+   qe0JLdW0qZ3rjpMFWobb3JfkpqCpc24LAuSRnzh5xoL7biqYosioguk2y
+   isUsJxjL0RyE6ML8J1S2rZpfHGwPCyPkzyLsR6hk9VT7rXdcPUUHsfVHR
+   ydFoRZYrlqmVJUOA4N7LizDKlPPdqaHHI8plbyG10Gm7zYakcPOyOLIOh
+   PlPjDXFDLk86LSZNaLzu/2acoeQBxp2YC0F/EDYJR1GJ8AcGtxKZDigkK
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="326834847"
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="300478666"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 19:52:12 -0700
+   d="scan'208";a="326834847"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 21:23:38 -0700
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="762456323"
-Received: from cyang81-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.209.57.84])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 19:52:11 -0700
-Date:   Thu, 22 Sep 2022 19:51:45 -0700
-Message-ID: <878rman6pq.wl-ashutosh.dixit@intel.com>
+   d="scan'208";a="615484247"
+Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.209.57.84])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 21:23:38 -0700
+Date:   Thu, 22 Sep 2022 21:23:38 -0700
+Message-ID: <877d1un2gl.wl-ashutosh.dixit@intel.com>
 From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
 To:     "Gupta, Anshuman" <anshuman.gupta@intel.com>
 Cc:     Badal Nilawar <badal.nilawar@intel.com>,
@@ -46,8 +46,11 @@ Cc:     Badal Nilawar <badal.nilawar@intel.com>,
         jon.ewins@intel.com, linux-hwmon@vger.kernel.org,
         dri-devel@lists.freedesktop.org
 Subject: Re: [PATCH 6/7] drm/i915/hwmon: Expose power1_max_interval
-In-Reply-To: <c9a6af40-2f76-e8a1-8b7b-812fa5dd5fff@intel.com>
-References: <20220916150054.807590-1-badal.nilawar@intel.com>   <20220916150054.807590-7-badal.nilawar@intel.com>       <c9a6af40-2f76-e8a1-8b7b-812fa5dd5fff@intel.com>
+In-Reply-To: <878rman6pq.wl-ashutosh.dixit@intel.com>
+References: <20220916150054.807590-1-badal.nilawar@intel.com>
+        <20220916150054.807590-7-badal.nilawar@intel.com>
+        <c9a6af40-2f76-e8a1-8b7b-812fa5dd5fff@intel.com>
+        <878rman6pq.wl-ashutosh.dixit@intel.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
  Emacs/28.1 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -57,84 +60,101 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 22 Sep 2022 00:13:00 -0700, Gupta, Anshuman wrote:
+On Thu, 22 Sep 2022 19:51:45 -0700, Dixit, Ashutosh wrote:
 >
-
-Hi Anshuman,
-
-> > +static ssize_t
-> > +hwm_power1_max_interval_store(struct device *dev,
-> > +			      struct device_attribute *attr,
-> > +			      const char *buf, size_t count)
-> > +{
-> > +	struct hwm_drvdata *ddat = dev_get_drvdata(dev);
-> > +	struct i915_hwmon *hwmon = ddat->hwmon;
-> > +	long val, max_win, ret;
-> > +	u32 x, y, rxy, x_w = 2; /* 2 bits */
-> > +	u64 tau4, r;
-> > +
-> > +#define PKG_MAX_WIN_DEFAULT 0x12ull
-> > +
-> > +	ret = kstrtoul(buf, 0, &val);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/*
-> > +	 * val must be < max in hwmon interface units. The steps below are
-> > +	 * explained in i915_power1_max_interval_show()
-> > +	 */
-> > +	r = FIELD_PREP(PKG_MAX_WIN, PKG_MAX_WIN_DEFAULT);
+> On Thu, 22 Sep 2022 00:13:00 -0700, Gupta, Anshuman wrote:
+> >
 >
-> AFAIU we need to read r from PACKAGE_POWER_SKU reg untill unless it has
-> some known issue?
+> Hi Anshuman,
+>
+> > > +static ssize_t
+> > > +hwm_power1_max_interval_store(struct device *dev,
+> > > +			      struct device_attribute *attr,
+> > > +			      const char *buf, size_t count)
+> > > +{
+> > > +	struct hwm_drvdata *ddat = dev_get_drvdata(dev);
+> > > +	struct i915_hwmon *hwmon = ddat->hwmon;
+> > > +	long val, max_win, ret;
+> > > +	u32 x, y, rxy, x_w = 2; /* 2 bits */
+> > > +	u64 tau4, r;
+> > > +
+> > > +#define PKG_MAX_WIN_DEFAULT 0x12ull
+> > > +
+> > > +	ret = kstrtoul(buf, 0, &val);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	/*
+> > > +	 * val must be < max in hwmon interface units. The steps below are
+> > > +	 * explained in i915_power1_max_interval_show()
+> > > +	 */
+> > > +	r = FIELD_PREP(PKG_MAX_WIN, PKG_MAX_WIN_DEFAULT);
+> >
+> > AFAIU we need to read r from PACKAGE_POWER_SKU reg untill unless it has
+> > some known issue?
+>
+> The platform on which I tried had an incorrect value (that is why I didn't
+> read it from PACKAGE_POWER_SKU) but let me investigate it some more for
+> other platforms and get back.
 
-The platform on which I tried had an incorrect value (that is why I didn't
-read it from PACKAGE_POWER_SKU) but let me investigate it some more for
-other platforms and get back.
+I checked, the value is correct on DG1/DG2 which have a valid
+PACKAGE_POWER_SKU (XEHPSDV does not have a valid
+PACKAGE_POWER_SKU). Therefore the one line above should be replaced with
+the code below:
 
-> > +	x = REG_FIELD_GET(PKG_MAX_WIN_X, r);
-> > +	y = REG_FIELD_GET(PKG_MAX_WIN_Y, r);
-> > +	tau4 = ((1 << x_w) | x) << y;
-> > +	max_win = mul_u64_u32_shr(tau4, SF_TIME, hwmon->scl_shift_time + x_w);
-> > +
-> > +	if (val > max_win)
-> > +		return -EINVAL;
-> > +
-> > +	/* val in hw units */
-> > +	val = DIV_ROUND_CLOSEST_ULL((u64)val << hwmon->scl_shift_time, SF_TIME);
-> > +	/* Convert to 1.x * power(2,y) */
-> > +	if (!val)
-> > +		return -EINVAL;
-> > +	y = ilog2(val);
-> > +	/* x = (val - (1 << y)) >> (y - 2); */
-> > +	x = (val - (1ul << y)) << x_w >> y;
-> > +
-> > +	rxy = REG_FIELD_PREP(PKG_PWR_LIM_1_TIME_X, x) | REG_FIELD_PREP(PKG_PWR_LIM_1_TIME_Y, y);
-> > +
-> > +	hwm_locked_with_pm_intel_uncore_rmw(ddat, hwmon->rg.pkg_rapl_limit,
-> > +					    PKG_PWR_LIM_1_TIME, rxy);
-> > +	return count;
-> > +}
-> > +
-> /snip
-> >	if (IS_ERR(hwmon_dev)) {
-> >		mutex_destroy(&hwmon->hwmon_lock);
-> >		i915->hwmon = NULL;
-> > diff --git a/drivers/gpu/drm/i915/i915_reg.h b/drivers/gpu/drm/i915/i915_reg.h
-> > index 956e5298ef1e..68e7cc85dc53 100644
-> > --- a/drivers/gpu/drm/i915/i915_reg.h
-> > +++ b/drivers/gpu/drm/i915/i915_reg.h
-> > @@ -1811,6 +1811,9 @@
-> >    * *_PACKAGE_POWER_SKU - SKU power and timing parameters.
-> >    */
-> >   #define   PKG_PKG_TDP			GENMASK_ULL(14, 0)
-> > +#define   PKG_MAX_WIN			GENMASK_ULL(54, 48)
-> > +#define     PKG_MAX_WIN_X		GENMASK_ULL(54, 53)
-> > +#define     PKG_MAX_WIN_Y		GENMASK_ULL(52, 48)
-> These GENMASK fields needs a reg definition.
+	if (i915_mmio_reg_valid(hwmon->rg.pkg_power_sku))
+		with_intel_runtime_pm(ddat->uncore->rpm, wakeref)
+			r = intel_uncore_read64(ddat->uncore, hwmon->rg.pkg_power_sku);
+	else
+		r = FIELD_PREP(PKG_MAX_WIN, PKG_MAX_WIN_DEFAULT);
 
-Yes this is the same _PACKAGE_POWER_SKU register so should get fixed when
-we add it in Patch 3.
+> > > +	x = REG_FIELD_GET(PKG_MAX_WIN_X, r);
+> > > +	y = REG_FIELD_GET(PKG_MAX_WIN_Y, r);
+> > > +	tau4 = ((1 << x_w) | x) << y;
+> > > +	max_win = mul_u64_u32_shr(tau4, SF_TIME, hwmon->scl_shift_time + x_w);
+> > > +
+> > > +	if (val > max_win)
+> > > +		return -EINVAL;
+> > > +
+> > > +	/* val in hw units */
+> > > +	val = DIV_ROUND_CLOSEST_ULL((u64)val << hwmon->scl_shift_time, SF_TIME);
+> > > +	/* Convert to 1.x * power(2,y) */
+> > > +	if (!val)
+> > > +		return -EINVAL;
+> > > +	y = ilog2(val);
+> > > +	/* x = (val - (1 << y)) >> (y - 2); */
+> > > +	x = (val - (1ul << y)) << x_w >> y;
+> > > +
+> > > +	rxy = REG_FIELD_PREP(PKG_PWR_LIM_1_TIME_X, x) | REG_FIELD_PREP(PKG_PWR_LIM_1_TIME_Y, y);
+> > > +
+> > > +	hwm_locked_with_pm_intel_uncore_rmw(ddat, hwmon->rg.pkg_rapl_limit,
+> > > +					    PKG_PWR_LIM_1_TIME, rxy);
+> > > +	return count;
+> > > +}
+> > > +
+> > /snip
+> > >	if (IS_ERR(hwmon_dev)) {
+> > >		mutex_destroy(&hwmon->hwmon_lock);
+> > >		i915->hwmon = NULL;
+> > > diff --git a/drivers/gpu/drm/i915/i915_reg.h b/drivers/gpu/drm/i915/i915_reg.h
+> > > index 956e5298ef1e..68e7cc85dc53 100644
+> > > --- a/drivers/gpu/drm/i915/i915_reg.h
+> > > +++ b/drivers/gpu/drm/i915/i915_reg.h
+> > > @@ -1811,6 +1811,9 @@
+> > >    * *_PACKAGE_POWER_SKU - SKU power and timing parameters.
+> > >    */
+> > >   #define   PKG_PKG_TDP			GENMASK_ULL(14, 0)
+> > > +#define   PKG_MAX_WIN			GENMASK_ULL(54, 48)
+> > > +#define     PKG_MAX_WIN_X		GENMASK_ULL(54, 53)
+> > > +#define     PKG_MAX_WIN_Y		GENMASK_ULL(52, 48)
+> > These GENMASK fields needs a reg definition.
+>
+> Yes this is the same _PACKAGE_POWER_SKU register so should get fixed when
+> we add it in Patch 3.
+
+Looks like PCU_PACKAGE_POWER_SKU for DG1/DG2 will need to be declared in
+intel_mchbar_regs.h so these fields will need to also move there (in
+Patch 3).
 
 Thanks.
 --
