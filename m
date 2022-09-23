@@ -2,137 +2,105 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42B74C6FA8B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 23 Sep 2022 13:15:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89129ECAAD8
+	for <linux-hwmon@archiver.kernel.org>; Fri, 23 Sep 2022 13:51:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbiIWNP5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 23 Sep 2022 09:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
+        id S230217AbiIWNvd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 23 Sep 2022 09:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbiIWNP4 (ORCPT
+        with ESMTP id S230328AbiIWNvc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 23 Sep 2022 09:15:56 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F9713A94D
-        for <linux-hwmon@vger.kernel.org>; Fri, 23 Sep 2022 06:15:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663938954; x=1695474954;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oyvBFUZgA+pbIOU7IZ3DeIY3BV+OwGxON7IgfcX9b4Q=;
-  b=I+W/PlBoDhYb2KseUrYsPq9MJsTCKUNOmvUvsrCFL1UEy6Q4FUr4df9d
-   Pj3TuChVV/C9vQtR1zWvVwVa14nhBm6Ix0p6Dx288WdOeeOxCImq8zF6u
-   pcC4UlOTQcIjDgaPIEi925/tsdOwzFklrgtxM1m/HPvlH2mf9yy2bAFHN
-   +CCQvEbKHj8K5uTz8yyIyVItMLdZuEiGIemuCqrvlyapxcanbt1B7cGxw
-   Q3SukJpZneASAKWxj3YQY/QwV0/2Ttbc4OJ/1hKl5uhAVvg+nWfLkRYRq
-   x1eH570kNw+hdULx+0V0lZcxhcYnq4CTTfXp7cYwPwgKr8+NSzxw1IXmP
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="280310965"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="280310965"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 06:15:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="597863733"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 23 Sep 2022 06:15:52 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1obiX2-0005gc-0d;
-        Fri, 23 Sep 2022 13:15:52 +0000
-Date:   Fri, 23 Sep 2022 21:15:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 7fe8edd2423375069bd36a079fdb9dc7a1a21452
-Message-ID: <632db176.sS35aXqTvky9xwMS%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 23 Sep 2022 09:51:32 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5DD127574;
+        Fri, 23 Sep 2022 06:51:31 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id u69so317723pgd.2;
+        Fri, 23 Sep 2022 06:51:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date;
+        bh=vQ7OXxgt3UHb9qns2oREalFT54VGNY8TnAzMaOLw5z0=;
+        b=ViQdxJI8Jnzvtb8tZHcp7/WLK2JxnpPajBdwHraR4DjPdGbIRpxfNpk5CCMiljJRoi
+         dvCe4TGC+NKoF+bDuk7ynMT/sAKuHotUgTlBLfWRWChAUyaTbpQZhNxUqWNRr3HFT3ZK
+         Q/7r0QGtZpPd+OLM1CVjy217ZAiFPrsM1AOSUWrC3VNfoC7mUO0YFdj3O6TLOsfUTpGo
+         TEdCxOBz/9H13Z6K2cW6eA7XHiOtQYf7DO8qqcwV4mWBmCGzmkDlDp0tsX1OHotdPg0h
+         CFKVzqJpN1+WZyuMaTkO4ZAUJzdRo71fr4JKPxLeK8Zn8pPrAdmVkMsvd98/tazy8zmZ
+         B18w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=vQ7OXxgt3UHb9qns2oREalFT54VGNY8TnAzMaOLw5z0=;
+        b=o3ZO0eSXdumT7mWkeJvGnqg9gifcp6Tv8WcrND0syzopgvCAD9QWb21whz/0+K+Bwe
+         uwRAP05FAkrJcseHhRr3fyvjpW+xLxj0uRXsC0527NrrsZJLZ9B/OH8jQW4CNAK5sfNN
+         K+VcRbM16WGWdyg5HF3EeGwWpSkbpCbInenWNfgehBqD/Abre9RaUrVLg4OFoQHuIAuk
+         kY6yf4RtvHJaoI10quoVetADfO9DWMGxOJYNlqOEeqonFBCl/6pFStCAshGu6+PUgEd7
+         dJwe7NQqvOKDnjA0zaGotb7DK1X3TWmnc5+A4B3v75RTEBYTYerKMwctWGrzV8J8Tyve
+         hZXQ==
+X-Gm-Message-State: ACrzQf23gPM++IAtscx9lrdfCarbYs+ogqc1aL07K0txfIZsmUJ009gk
+        4T3ALkl0VLG3tQFlYlK6T/DevURSavGH6w==
+X-Google-Smtp-Source: AMsMyM6A9EF9xffEXk+S/8BHhmmPiZtxIh9rRWv9NDT3Oqo5tfjnCx0xM0RroT2qDR/ppMjXM8PnQA==
+X-Received: by 2002:a63:f050:0:b0:439:db24:8b07 with SMTP id s16-20020a63f050000000b00439db248b07mr7451289pgj.60.1663941090818;
+        Fri, 23 Sep 2022 06:51:30 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ix12-20020a170902f80c00b0016b81679c1fsm5993698plb.216.2022.09.23.06.51.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 06:51:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <56cc6788-d54b-2f2f-32b2-a318adabf97a@roeck-us.net>
+Date:   Fri, 23 Sep 2022 06:51:28 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 9/9] rtc: isl12022: add support for temperature sensor
+Content-Language: en-US
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
+ <20220921114624.3250848-1-linux@rasmusvillemoes.dk>
+ <20220921114624.3250848-10-linux@rasmusvillemoes.dk>
+ <8cb2bac1-3a03-09a1-c071-96ca4a95fa44@roeck-us.net>
+ <62a262a1-b945-ad4f-fdb8-d05fcba882d3@rasmusvillemoes.dk>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <62a262a1-b945-ad4f-fdb8-d05fcba882d3@rasmusvillemoes.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 7fe8edd2423375069bd36a079fdb9dc7a1a21452  hwmon: Make use of devm_clk_get_enabled()
+On 9/23/22 01:40, Rasmus Villemoes wrote:
+> On 21/09/2022 16.13, Guenter Roeck wrote:
+>> On 9/21/22 04:46, Rasmus Villemoes wrote:
+> 
+>>> +static int isl12022_hwmon_read(struct device *dev,
+>>> +                   enum hwmon_sensor_types type,
+>>> +                   u32 attr, int channel, long *val)
+>>> +{
+>>> +    if (type == hwmon_chip && attr == hwmon_chip_update_interval) {
+>>> +        *val = 60000;
+>>> +        return 0;
+>>> +    }
+>>
+>> It is not the purpose of the update_interval attribute to inform the
+>> user what the update interval of this chip happens to be. The purpose
+>> of the attribute is to inform the chip what update interval it should use.
+> 
+> Well, I think it's a completely natural thing to expose a fixed and
+> known update_interval as a 0444 property, and it might even be useful to
+> userspace to know that there's no point reading the sensor any more
+> often than that. And I didn't come up with this by myself, there's
+> already at least a couple of instances of a 0444 update_interval.
+> 
 
-elapsed time: 723m
+That doesn't make it better. It is still an abuse of the ABI.
 
-configs tested: 61
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                  randconfig-r043-20220922
-arc                                 defconfig
-alpha                               defconfig
-s390                             allmodconfig
-s390                                defconfig
-s390                             allyesconfig
-x86_64                              defconfig
-arc                              allyesconfig
-x86_64                               rhel-8.3
-alpha                            allyesconfig
-i386                                defconfig
-mips                             allyesconfig
-arm                                 defconfig
-x86_64                           allyesconfig
-i386                          randconfig-a001
-x86_64                        randconfig-a013
-m68k                             allyesconfig
-x86_64                        randconfig-a011
-x86_64                        randconfig-a004
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-m68k                             allmodconfig
-i386                          randconfig-a003
-sh                               allmodconfig
-x86_64                        randconfig-a002
-i386                          randconfig-a005
-x86_64                        randconfig-a015
-ia64                             allmodconfig
-i386                          randconfig-a014
-x86_64                        randconfig-a006
-arm64                            allyesconfig
-i386                          randconfig-a012
-arm                              allyesconfig
-i386                          randconfig-a016
-i386                             allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-arm                        mini2440_defconfig
-powerpc                 mpc8540_ads_defconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20220922
-riscv                randconfig-r042-20220922
-hexagon              randconfig-r045-20220922
-s390                 randconfig-r044-20220922
-x86_64                        randconfig-a012
-i386                          randconfig-a002
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-i386                          randconfig-a013
-i386                          randconfig-a006
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a004
-x86_64                        randconfig-a003
-i386                          randconfig-a015
-arm                          moxart_defconfig
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Guenter
