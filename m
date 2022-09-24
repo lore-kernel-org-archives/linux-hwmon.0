@@ -2,53 +2,53 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5AB5C07E9D
-	for <linux-hwmon@archiver.kernel.org>; Sat, 24 Sep 2022 03:55:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74ECBC07E9D
+	for <linux-hwmon@archiver.kernel.org>; Sat, 24 Sep 2022 03:58:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233252AbiIXDzs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 23 Sep 2022 23:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
+        id S233212AbiIXD6p (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 23 Sep 2022 23:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231864AbiIXDzr (ORCPT
+        with ESMTP id S233053AbiIXD6n (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 23 Sep 2022 23:55:47 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA85792EE
-        for <linux-hwmon@vger.kernel.org>; Fri, 23 Sep 2022 20:55:46 -0700 (PDT)
+        Fri, 23 Sep 2022 23:58:43 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FA4EDD34
+        for <linux-hwmon@vger.kernel.org>; Fri, 23 Sep 2022 20:58:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663991746; x=1695527746;
+  t=1663991922; x=1695527922;
   h=date:message-id:from:to:cc:subject:in-reply-to:
    references:mime-version;
-  bh=6dw4EjpHu+bOuMX1WjR4s8LtLtWOoNw5kX1l7dXkNPg=;
-  b=gSX7Kq15BOy/6t4S8TVrHroMY9f4cRqzU85YMSUtEmNWfiyJ1GHxe0Rw
-   lo26GblBdzP/Dc9f1MfCEjAbUPmO7ee7syc18NRtoCy15MSP6Q3CZb+Xu
-   C1iuiNUXQGCVPUUisbG5tgkoGmTYDEiwcv3SyFQ7bBwOpl7mJvKYLyrsZ
-   ykxzmDtTnYMAh4hazZHltRn1F2R2TetNfPXA/QBz52AGSz7wN2nLgFMVo
-   a5q9JCUFFzAt+SZoBLUfHK5t9j07MxJqlJwDqJ/yIH9FPMswYMD4HoUDr
-   RcW8CYSlYaZTnTuWDiBAdS9FmUKayfpkUWwRmSh5vgnJJR9YnFoSOXXeC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="327075498"
+  bh=61PzOGJY1pggSlQOywIUKZGPTSgOdKoMbwRs82UQh6s=;
+  b=ginVQ+xlPjp97jMqnLpBlcbDHzyp06MkWjm0hvQbJXDtRA+Jd8n2jwK8
+   GJnCeeEbskA/Fh+BUUw69vWMMH8ZkIvdYRErT6JP8OZVHgPGinJact9D3
+   G0bwCnlidMWNjWppWP4tLE7GOiOq8qDwk6Zpljl8gjWABXl+qtjCJFeLw
+   CJEVHBJ7BEZpfgtwata7w5Y5oeAavbgFmEqWCBtOxyfW6T5zzXqvg09PX
+   0Y/qbayI9pggY3E/SCpgs0vJDx+p3jBQ5MrVGFohlcWTk9n56RXtxnQlf
+   8edBUuucwep9Hki9phOJ2grbAVW8obfxAEeAX1Wh/Yod0CKf7nLcQzQsk
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="283852324"
 X-IronPort-AV: E=Sophos;i="5.93,341,1654585200"; 
-   d="scan'208";a="327075498"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 20:55:45 -0700
+   d="scan'208";a="283852324"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 20:58:41 -0700
 X-IronPort-AV: E=Sophos;i="5.93,341,1654585200"; 
-   d="scan'208";a="598105446"
+   d="scan'208";a="949255411"
 Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.252.138.221])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 20:55:45 -0700
-Date:   Fri, 23 Sep 2022 20:55:44 -0700
-Message-ID: <87pmfl8lz3.wl-ashutosh.dixit@intel.com>
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 20:58:40 -0700
+Date:   Fri, 23 Sep 2022 20:58:40 -0700
+Message-ID: <87o7v58lu7.wl-ashutosh.dixit@intel.com>
 From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
 To:     Badal Nilawar <badal.nilawar@intel.com>
 Cc:     <intel-gfx@lists.freedesktop.org>, <riana.tauro@intel.com>,
         <anshuman.gupta@intel.com>, <jon.ewins@intel.com>,
         <linux-hwmon@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
         <andi.shyti@intel.com>, <tvrtko.ursulin@intel.com>
-Subject: Re: [PATCH 4/7] drm/i915/hwmon: Show device level energy usage
-In-Reply-To: <20220923195643.2376927-5-badal.nilawar@intel.com>
+Subject: Re: [PATCH 6/7] drm/i915/hwmon: Expose power1_max_interval
+In-Reply-To: <20220923195643.2376927-7-badal.nilawar@intel.com>
 References: <20220923195643.2376927-1-badal.nilawar@intel.com>
-        <20220923195643.2376927-5-badal.nilawar@intel.com>
+        <20220923195643.2376927-7-badal.nilawar@intel.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
  Emacs/28.1 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -58,17 +58,18 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 23 Sep 2022 12:56:40 -0700, Badal Nilawar wrote:
+On Fri, 23 Sep 2022 12:56:42 -0700, Badal Nilawar wrote:
 >
-> diff --git a/drivers/gpu/drm/i915/i915_hwmon.h b/drivers/gpu/drm/i915/i915_hwmon.h
-> index 7ca9cf2c34c9..4e5b6c149f3a 100644
-> --- a/drivers/gpu/drm/i915/i915_hwmon.h
-> +++ b/drivers/gpu/drm/i915/i915_hwmon.h
-> @@ -17,4 +17,5 @@ static inline void i915_hwmon_register(struct drm_i915_private *i915) { };
->  static inline void i915_hwmon_unregister(struct drm_i915_private *i915) { };
->  #endif
+> From: Ashutosh Dixit <ashutosh.dixit@intel.com>
 >
-> +int i915_hwmon_energy_status_get(struct drm_i915_private *i915, long *energy);
+> Expose power1_max_interval, that is the tau corresponding to PL1.
 
-We deleted this function definition, this is just leftover so please delete
-this too.
+I think let's change the above sentence to: "Expose power1_max_interval,
+that is the tau corresponding to PL1, as a custom hwmon attribute".
+
+This is the only custom attribute we are exposing so better to mention this
+in the commit message I think.
+
+Thanks.
+--
+Ashutosh
