@@ -2,84 +2,110 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 345DDC07E9D
-	for <linux-hwmon@archiver.kernel.org>; Fri, 23 Sep 2022 21:37:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5929DC04A95
+	for <linux-hwmon@archiver.kernel.org>; Sat, 24 Sep 2022 00:18:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232004AbiIWVhH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 23 Sep 2022 17:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
+        id S232959AbiIXASG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 23 Sep 2022 20:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiIWVhG (ORCPT
+        with ESMTP id S233009AbiIXASG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 23 Sep 2022 17:37:06 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4A813F2AC
-        for <linux-hwmon@vger.kernel.org>; Fri, 23 Sep 2022 14:37:05 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id go6so1207179pjb.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 23 Sep 2022 14:37:05 -0700 (PDT)
+        Fri, 23 Sep 2022 20:18:06 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D6812416A
+        for <linux-hwmon@vger.kernel.org>; Fri, 23 Sep 2022 17:18:05 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 129so202108pgc.5
+        for <linux-hwmon@vger.kernel.org>; Fri, 23 Sep 2022 17:18:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date;
-        bh=SV2A25WX79kur/BCPZWbENnaLUg4r98e5gh35xPUVI4=;
-        b=knLbNyQgh8YhmvZMSZgEqG8pomBJw77FQdIG0687JTzHacTeGou+FD9YV6SbxZOcff
-         sRwG6viavN9pSXeg7tJHChrN62UdWfkLCm2qo/5UIM4mL162/QntwWjU4HYmIWDM00Kd
-         19uI08ig5e4us2VFf5uuYOJ6d+JRGMrGccbIUCw7RqSRJIg2GWdhcev+nHfyAAuYBHLt
-         vDHu2Cl+LU3VP1qIbIK1kMW3xabWW0DLd5TbfZYUYveIena1eDW2H5/wO/Qqy2DW5TQl
-         h+7SbWK6IjktjA99a2HeJctL2r20VS6R7WZ2nRZXbL+hN54cgiQFVTUYEzSbQyxV1znX
-         Ge4A==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=dNmY41FSeHwLWx9pzDWHLuLrAuxRIW3iZmu5xCh/RKE=;
+        b=M5fw44HT7EXQ6hQak8g8VtBkG8YsUs3vlUmg6tfmCp3NzRmMpndGWZNQHglrzEtWBO
+         ccwku72LwSzGkm7MwcnFY5BFelvGHl/P03Bamkum5b6ac5dng7GLHe8MVPCdgBt2xMa4
+         iYF/uiGXio4zU4bGbE/KfptX4pYmcKqAi+j0qHjcH29+UrsiuGl+KxBRqyiykkhmjWTk
+         clCXWOc0RGPIEwvDk/F0sg4N8M04ysiSLV3m0NROFfedc2o1moktJaKGToln+Aej4Dka
+         ozRdsFEURehWq6FmMgAKCzMCpAziHjzDt8ut0kJHhMEn/r4plbzDSZ3MCAVcp6Sx3m8A
+         f15w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=SV2A25WX79kur/BCPZWbENnaLUg4r98e5gh35xPUVI4=;
-        b=eoVBUYU2CIfcfCa906+GbhwQRRoKh88wWMSSOD8iLzUojU7aNdcMEyXE+ck3Pl52/S
-         G8tWGi0Ec06y80uB2PhRUKKnj/LPcgLvY/RmnRhYyfADuLARDKtVXrNyxEfnaBeym+xW
-         SlzSvQL68y/YPOnYo5K/+Md1zqms6sekbrPB0IKD+6H9sHCEOnEPhI+6rzfE45KgE1b3
-         MIqlDGeqOrInw/JdlADuZxTVK1D+kHaryHGceOtoYmDPh3vXylNY2bslpxlf9NdNap+A
-         R6vD/LBve4+/sa61rsGXski9ocvCsJfqi8RC+alFCTLd8VD0bjiijKmRLfBMchjgTovX
-         8Umg==
-X-Gm-Message-State: ACrzQf3cN9gYHgpYbSW5omQduxWeTkH7MfazPymAq92+XGnCjzmCH/KV
-        hGYUXbA5vOzDlm+PNKPO3q3hG82jzEfPxg==
-X-Google-Smtp-Source: AMsMyM6Z1QobqPSAZ5AtigHTYmHuIfxjkx2Ss5O5j02n8C/c8w9m+G9vgsR089eRUtC7AmkhM0xCsA==
-X-Received: by 2002:a17:90a:8688:b0:202:91d7:6a53 with SMTP id p8-20020a17090a868800b0020291d76a53mr23521365pjn.153.1663969024803;
-        Fri, 23 Sep 2022 14:37:04 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g189-20020a6252c6000000b0053e47dcfa32sm6843593pfb.155.2022.09.23.14.37.03
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=dNmY41FSeHwLWx9pzDWHLuLrAuxRIW3iZmu5xCh/RKE=;
+        b=k+zP1HmhVZrRsYBfGr//aBrXU3c2OsHkk8je8HNuCqPza5q/sIuekTQEgxmwObGh9g
+         2q8lv3cjKs//Yd7r1F6oQetkHWkL6tDNtjh83BiYX2wpmpIedvhJQ84WO+paxPxtHA8a
+         cTaYrThb5GccJhDMF81tQZzp3568ipw703sw8AD5rByqVuhrgWPGv9Qgp2Y8SLIpz5I0
+         /2cWWf08XbB3t+Rw4RhURixJHt/GvJrOTsORdFGb+lhzeUDhTlTsPp5SM/IewjQ/ia2P
+         Dl01nzUjbfA6PRS6IKbRoIqH875610FMFuhclk5NYew+qFbMd/+QUVUm5Pnwwm2LkEdB
+         IQFg==
+X-Gm-Message-State: ACrzQf2jzAInF5FyT0Mg6G/w3h6CrSEg7PzjAx8017aohfwRAnmzjBiv
+        Fz9C54gLVEaddXWgBsxSP04xuJBx/70=
+X-Google-Smtp-Source: AMsMyM6ZE/1iZTbaKo+4KuZR9/e2eBSnl8ba+77GnJHjefS1YZ3OPLIwEiKpugG3zsvsbA/UjbtdVg==
+X-Received: by 2002:a63:7984:0:b0:439:57e4:97a2 with SMTP id u126-20020a637984000000b0043957e497a2mr9970210pgc.191.1663978684211;
+        Fri, 23 Sep 2022 17:18:04 -0700 (PDT)
+Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
+        by smtp.googlemail.com with ESMTPSA id om12-20020a17090b3a8c00b0020263b7177csm11495864pjb.3.2022.09.23.17.18.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 14:37:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 23 Sep 2022 14:37:02 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Jean Delvare <jdelvare@suse.com>, kernel@pengutronix.de,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: sis5595: Reorder symbols to get rid of a few
- forward declarations
-Message-ID: <20220923213702.GA821254@roeck-us.net>
-References: <20220922074900.2763331-1-u.kleine-koenig@pengutronix.de>
- <20220922074900.2763331-2-u.kleine-koenig@pengutronix.de>
+        Fri, 23 Sep 2022 17:18:03 -0700 (PDT)
+From:   Li Zhong <floridsleeves@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     linux@roeck-us.net, jdelvare@suse.com,
+        Li Zhong <floridsleeves@gmail.com>
+Subject: [PATCH v3] drivers/hwmon/adm9240: fix data race in adm9240_fan_read
+Date:   Fri, 23 Sep 2022 17:17:51 -0700
+Message-Id: <20220924001751.1726369-1-floridsleeves@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220922074900.2763331-2-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 09:49:00AM +0200, Uwe Kleine-König wrote:
-> Declarations for static symbols are useless repetition unless there are
-> cyclic dependencies.
-> 
-> Reorder the functions and variables to get rid of 6 forward declarations.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+In
+adm9240_read()
+  adm9240_fan_read()
+    adm9240_write_fan_div(),
 
-Applied to hwmon-next.
+it assumes that the caller of adm9240_write_fan_div() must hold
+data->update_lock. Otherwise, it may cause data races when data is
+updated by other threads.
 
-Thanks,
-Guenter
+Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+---
+ drivers/hwmon/adm9240.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/adm9240.c b/drivers/hwmon/adm9240.c
+index 483cd757abd3..40e3558d3709 100644
+--- a/drivers/hwmon/adm9240.c
++++ b/drivers/hwmon/adm9240.c
+@@ -501,17 +501,23 @@ static int adm9240_fan_read(struct device *dev, u32 attr, int channel, long *val
+ 
+ 	switch (attr) {
+ 	case hwmon_fan_input:
++		mutex_lock(&data->update_lock);
+ 		err = regmap_read(data->regmap, ADM9240_REG_FAN(channel), &regval);
+-		if (err < 0)
++		if (err < 0) {
++			mutex_unlock(&data->update_lock);
+ 			return err;
++		}
+ 		if (regval == 255 && data->fan_div[channel] < 3) {
+ 			/* adjust fan clock divider on overflow */
+ 			err = adm9240_write_fan_div(data, channel,
+ 						    ++data->fan_div[channel]);
+-			if (err)
++			if (err) {
++				mutex_unlock(&data->update_lock);
+ 				return err;
++			}
+ 		}
+ 		*val = FAN_FROM_REG(regval, BIT(data->fan_div[channel]));
++		mutex_unlock(&data->update_lock);
+ 		break;
+ 	case hwmon_fan_div:
+ 		*val = BIT(data->fan_div[channel]);
+-- 
+2.25.1
+
