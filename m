@@ -2,134 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28696C07E9D
-	for <linux-hwmon@archiver.kernel.org>; Sat, 24 Sep 2022 13:57:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A80D7C32771
+	for <linux-hwmon@archiver.kernel.org>; Sat, 24 Sep 2022 14:31:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiIXN54 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 24 Sep 2022 09:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
+        id S232263AbiIXObs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 24 Sep 2022 10:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiIXN5z (ORCPT
+        with ESMTP id S231670AbiIXObs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 24 Sep 2022 09:57:55 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E6CE5109
-        for <linux-hwmon@vger.kernel.org>; Sat, 24 Sep 2022 06:57:54 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oc5fD-0005Gm-6u; Sat, 24 Sep 2022 15:57:51 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oc5fC-002eww-9Z; Sat, 24 Sep 2022 15:57:48 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oc5fA-003E0y-7s; Sat, 24 Sep 2022 15:57:48 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 1/2] hwmon: via686a: Introduce a #define for the driver name and use it
-Date:   Sat, 24 Sep 2022 15:57:37 +0200
-Message-Id: <20220924135738.234051-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.37.2
+        Sat, 24 Sep 2022 10:31:48 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB5179A43
+        for <linux-hwmon@vger.kernel.org>; Sat, 24 Sep 2022 07:31:47 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id e67so2742567pgc.12
+        for <linux-hwmon@vger.kernel.org>; Sat, 24 Sep 2022 07:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=L8cbEwb1bmDpU79MDBUVY8wmONOIMGAej8DlYWBrBGA=;
+        b=h7DfshjJ7avX4ucU20ssI4xQjdXytJrbqo7wtgXDB6kMcB4rAmibvbK9RaJ0w48zQ+
+         nwTtrTkijqOZ8qsOlGj/xhEDLFLwXbzrvLVV9FiUSDAR5wjGUAATdnkpzYBEqB1WLU62
+         o5VBf+yoPcMTTqCLmJsqr9BT6h3681Z60TWb25r9chk/w4+Ipl6NqWHOU+QXXzgNd13Z
+         qThLh5PJgG4px4z7HjQl0r4XocS6ng2TjYdo93SZ93f0S4gSQXe23RFHTCPtlaGcNpkv
+         LlhWdzvcFMmUvv1vO44vtxdnznnKg8XEcR9cP261NHhiy/eC7kzPuuJSMb5dQsqYifg/
+         hyiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=L8cbEwb1bmDpU79MDBUVY8wmONOIMGAej8DlYWBrBGA=;
+        b=33ZVvuk5l5CMBzVhgZ0Ua82yVX2uRPDzollnSVvqinpXfq4qa0p9BIVtIZLj+k0120
+         u6ZpDw0Dc/Dpi1wtkoHHtSfzdEtNy8b7Q9Bafpk0OOed0yJG1LkEvTF47FmRnmz63pYq
+         X36OOHCGRb8BDowrfkjwmQDSjIImmG0mbl2+UhxdZOSqEBBsHQVPVKN4XYG0cdrIlal+
+         MRhR5+5MWgImMOxIzOQgHDHzqlk0QBcIriue1Fg9SNxTIWTgunutzfky6mwJR0L4Upru
+         0x1uOe0cfNXQ/ueqJ7w2Z3vpi1r1QRnEYuM0cQIaeR6/PliXGvmxZtfxd30UACFu07s7
+         Satw==
+X-Gm-Message-State: ACrzQf15X+cj26igWrxIHvVfJRBNFMXcKk3JpEZLasFXt3+DD3rgaV4h
+        e0xLw+t4Rk5me+sGKVg/FpU=
+X-Google-Smtp-Source: AMsMyM6Rq//pF/sKPJdf0QKl7kbb+2YULvtlMUHM5Bt5Ypk8tTiKiGNl6frbZe5seZCTqTj7OMi/4w==
+X-Received: by 2002:a05:6a00:1412:b0:557:d887:2025 with SMTP id l18-20020a056a00141200b00557d8872025mr984174pfu.39.1664029906715;
+        Sat, 24 Sep 2022 07:31:46 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f1-20020a170902684100b001641b2d61d4sm8026374pln.30.2022.09.24.07.31.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Sep 2022 07:31:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 24 Sep 2022 07:31:44 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org, davidm@egauge.net,
+        navin@linumiz.com, keescook@chromium.org
+Subject: Re: [PATCH] hwmon: (sht4x) do not overflow clamping operation on
+ 32-bit platforms
+Message-ID: <20220924143144.GA2299435@roeck-us.net>
+References: <20220924101151.4168414-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2805; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=uEeNRH9eGOL9BGbHebRmN53ewT6Gw3IExbA4QknW0Rs=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjLwzLRpnY111d8+9SJJN25oO2S8ZjQPshFpijwiBX JciZ9SGJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYy8MywAKCRDB/BR4rcrsCdhuCA CPvZcoYfg1E8QLN7xfU9isVjcnt+YjX18OBOvQH3Q06o0AenHGTqfibWewqa3NEP9ls60JEOYK+F1F mRS5+zo0v6FzUf/enA1fthk+1mCTqGXcWpcZMr72ed5JPoGJkV1vPyp0twL+TucSOlWvzlRUKLNdV5 IZHKBvZsEsIVZmdBcVqXGZgXec2yLurqilPr3GpsUgAGLCI1wJrIJwUCiffZyR5Z/Wic2WwOEwMxVc 65w9bn41u+9OZC0k5aPSqEnx5up4Ex14L1CWwcIrfQZWlXnQaYt/BeeCwFki/Bv65OzXiebNPJc6ur ecyQbjLZvnNJwTI+q/CvLCr4Jr00j7
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220924101151.4168414-1-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Make use of the cpp symbol DRIVER_NAME to set the driver's name and use
-it instead of all explicit usages of the same string. Also make use of
-it instead of sis5595_driver.driver.name which breaks a cyclic dependency
-between sis5595_probe() and sis5595_driver that in the next commit allows
-to drop some forward declarations. For an amd64 allyesconfig this even
-reduces the size of the driver by 3 bytes.
+On Sat, Sep 24, 2022 at 12:11:51PM +0200, Jason A. Donenfeld wrote:
+> On 32-bit platforms, long is 32 bits, so (long)UINT_MAX is less than
+> (long)SHT4X_MIN_POLL_INTERVAL, which means the clamping operation is
+> bogus. Fix this by clamping at INT_MAX, so that the upperbound is the
+> same on all platforms.
+> 
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/hwmon/via686a.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+Applied.
 
-diff --git a/drivers/hwmon/via686a.c b/drivers/hwmon/via686a.c
-index 55634110c2f9..b17121881235 100644
---- a/drivers/hwmon/via686a.c
-+++ b/drivers/hwmon/via686a.c
-@@ -34,6 +34,8 @@
- #include <linux/acpi.h>
- #include <linux/io.h>
- 
-+#define DRIVER_NAME "via686a"
-+
- /*
-  * If force_addr is set to anything different from 0, we forcibly enable
-  * the device at the given address.
-@@ -656,7 +658,7 @@ static const struct attribute_group via686a_group = {
- 
- static struct platform_driver via686a_driver = {
- 	.driver = {
--		.name	= "via686a",
-+		.name	= DRIVER_NAME,
- 	},
- 	.probe		= via686a_probe,
- 	.remove		= via686a_remove,
-@@ -672,7 +674,7 @@ static int via686a_probe(struct platform_device *pdev)
- 	/* Reserve the ISA region */
- 	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
- 	if (!devm_request_region(&pdev->dev, res->start, VIA686A_EXTENT,
--				 via686a_driver.driver.name)) {
-+				 DRIVER_NAME)) {
- 		dev_err(&pdev->dev, "Region 0x%lx-0x%lx already in use!\n",
- 			(unsigned long)res->start, (unsigned long)res->end);
- 		return -ENODEV;
-@@ -685,7 +687,7 @@ static int via686a_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, data);
- 	data->addr = res->start;
--	data->name = "via686a";
-+	data->name = DRIVER_NAME;
- 	mutex_init(&data->update_lock);
- 
- 	/* Initialize the VIA686A chip */
-@@ -819,7 +821,7 @@ static int via686a_device_add(unsigned short address)
- 	struct resource res = {
- 		.start	= address,
- 		.end	= address + VIA686A_EXTENT - 1,
--		.name	= "via686a",
-+		.name	= DRIVER_NAME,
- 		.flags	= IORESOURCE_IO,
- 	};
- 	int err;
-@@ -828,7 +830,7 @@ static int via686a_device_add(unsigned short address)
- 	if (err)
- 		goto exit;
- 
--	pdev = platform_device_alloc("via686a", address);
-+	pdev = platform_device_alloc(DRIVER_NAME, address);
- 	if (!pdev) {
- 		err = -ENOMEM;
- 		pr_err("Device allocation failed\n");
-@@ -918,7 +920,7 @@ static int via686a_pci_probe(struct pci_dev *dev,
- }
- 
- static struct pci_driver via686a_pci_driver = {
--	.name		= "via686a",
-+	.name		= DRIVER_NAME,
- 	.id_table	= via686a_pci_ids,
- 	.probe		= via686a_pci_probe,
- };
+Thanks,
+Guenter
 
-base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
--- 
-2.37.2
-
+> ---
+>  drivers/hwmon/sht4x.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
+> index c19df3ade48e..13ac2d8f22c7 100644
+> --- a/drivers/hwmon/sht4x.c
+> +++ b/drivers/hwmon/sht4x.c
+> @@ -129,7 +129,7 @@ static int sht4x_read_values(struct sht4x_data *data)
+>  
+>  static ssize_t sht4x_interval_write(struct sht4x_data *data, long val)
+>  {
+> -	data->update_interval = clamp_val(val, SHT4X_MIN_POLL_INTERVAL, UINT_MAX);
+> +	data->update_interval = clamp_val(val, SHT4X_MIN_POLL_INTERVAL, INT_MAX);
+>  
+>  	return 0;
+>  }
