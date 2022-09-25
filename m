@@ -2,151 +2,138 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDF90C54EE9
-	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Sep 2022 18:06:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DE76C04A95
+	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Sep 2022 18:50:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbiIYSGh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 25 Sep 2022 14:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
+        id S229567AbiIYSuA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 25 Sep 2022 14:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbiIYSGg (ORCPT
+        with ESMTP id S230379AbiIYSt6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 25 Sep 2022 14:06:36 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B698B252B0;
-        Sun, 25 Sep 2022 11:06:34 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id fv3so4448008pjb.0;
-        Sun, 25 Sep 2022 11:06:34 -0700 (PDT)
+        Sun, 25 Sep 2022 14:49:58 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3971A3B2
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 11:49:57 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id s90-20020a17090a2f6300b00203a685a1aaso4864901pjd.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 11:49:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=5Xcc3MJJCcZWTzK1jPZ9K1qMqtCQR5hPQZvH2+q5UX4=;
-        b=X2MvfRndaV0RauigstwDwhfOZXbV6gZ3DJvvRugSLt3mrHfuNQ/OX7YRWPBesfyWzU
-         Pnj2+4NG1skf56jresn6Jv/eI/FHxnBRTkyG3LmmIl6dQNq+yn7mzARAg1qxJV0j2Asg
-         OTa8w+2S9SLMmFRNlxDVe/7y0+Gl/pp7K8w/fiw3Y2lVFMi6crhMypZIrmWQuUSnb3Gy
-         Q77i0FBU0fFR2ANPQKqR8rdvUXb4OQ4lHrAHtxcgRyPP2jKicwO7G7d9diiYNCdvAqjm
-         6TtMawJGgJkaIr+BEA1c1Tc8MpiIQ3yVLh6zQBVLbHzi5eKj6xPNBp+KCfx4rtfxONjk
-         4yhQ==
+        bh=EOidtejSwQQXBCOxPPbEYodcTu43Rvf/K8YTaw3HRYc=;
+        b=N97+9+z6yrfcRPJTGkrUhe0+230Fx5izS5xyayX6YaJXGK/ZOvlFAg5BjoAJ3TavKz
+         2LjFVPPu4acu0UlUeka7xWgP27y43PgvGuktoQKdzG+0YcD8UQgZz7f5GcTuos6nnAtC
+         +qxvOIo29m73nWBJbbTaSvyIFiX+vG9vGNpiCUTPAFvMs+RscZil7/aLcqF0mkx4iwYW
+         XaO3+1YnWN+h0TLkX/icDlHloJAZnBfgXfimbsFWZexN/s3/Efnp5K98MnV5QT5gvBbY
+         fDXK4orkyXvFazPtqpkLbrx4EpdpZyJ9nwqWtA4bz7tl/CeFCHHt3u3l0xQIPa35cw2A
+         Bfog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=5Xcc3MJJCcZWTzK1jPZ9K1qMqtCQR5hPQZvH2+q5UX4=;
-        b=AGWS6PZR/Xlvujo8T/3e3QI5G8BOD0RMsbtc4d+LZY9qLSpfxUOmzum5esRvniuWkX
-         9+pCKuBWHFXRxYZ3zaMrx5d8QlCJxrMLRuHeTXZUwk2pmel/XKRoFEJORgwv/OCkNINE
-         4zmDdTwH4WQ8Oa13fXpQEHMUdbiX5c6xQi2LCxY0lozzPcXTX4eO/MGIUWM6b0LNR2NB
-         d4axpaXJHx9xUj7ENk/niPgmZDeX+CW9kLOh9UWsDOuiWg16zb9guLtbXf57kO6E9WZ7
-         USEHmRu9lRsSXT1qcPMAd/a4oeuBlrXXAO75tADMuwa56LK/VpDduTltv3yOcAjLmxsC
-         jbZg==
-X-Gm-Message-State: ACrzQf1oLtUTkElr07WiT/ndQ+IkHz09HwqcwoaIVVFR6cWS/L+IlCYy
-        3HdZNSK90n62l250bKsY27kxRb2fFSeY8Q==
-X-Google-Smtp-Source: AMsMyM6+xq7GdV5F+gAFVO4xOB9L7aiWhqgzWItIKLtcodE6L/JSsSF5y0v7Io5dfYp7flrKZKOsTg==
-X-Received: by 2002:a17:90b:3b81:b0:202:597a:c71d with SMTP id pc1-20020a17090b3b8100b00202597ac71dmr32052900pjb.105.1664129194154;
-        Sun, 25 Sep 2022 11:06:34 -0700 (PDT)
+        bh=EOidtejSwQQXBCOxPPbEYodcTu43Rvf/K8YTaw3HRYc=;
+        b=eQLPMApmy6O/JVR8h/jlS4OAU8yt1DERWgdJ0m1FJ5IunzKnFWH4BcwGL3t2XVmIIl
+         KKj1lRdTHtggMO9/XWM0k82xcQxZ08GYtqwndwfjI3Ahca5i4vgHKNCltZS3/PuVrVPV
+         8QacRcktyP2kzPyFHz4T1evkc5WOPKHw+d4OGk4M+AsNtuGF3POLxh/NJWb2DAExI6cC
+         XYhtzf8sirhKPgplN9bIYtv4DlKLDkvgh4lz7N2ZIgrWZ0OGysA7+oxs7l3iygxTcAor
+         B/O/Sdbyq8mla9WyvQSM1A6kHcKyYaOUGCyZ2+b2sZDjBaR7Hfop5hWHxawMjb1vrTlD
+         cWfQ==
+X-Gm-Message-State: ACrzQf2ZD3e/DzAPWwfQCIdBPd2GdFI7IJPIaqRGGI6CnVtUFpwyaec+
+        lqt16MA1Vm1rV3fXJDlyTjc=
+X-Google-Smtp-Source: AMsMyM6KfOpMVK1K8jWbxiWMpNYHq94OS0DQcS/1F5nso3AMIaYnvC33v4A9CQptbrR2TcLeuBNxNw==
+X-Received: by 2002:a17:90b:1642:b0:203:1630:c54d with SMTP id il2-20020a17090b164200b002031630c54dmr31874884pjb.122.1664131797030;
+        Sun, 25 Sep 2022 11:49:57 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o1-20020a17090ad20100b00203c0a1d56bsm4992243pju.35.2022.09.25.11.06.33
+        by smtp.gmail.com with ESMTPSA id 143-20020a621695000000b0052d2b55be32sm10544573pfw.171.2022.09.25.11.49.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 11:06:33 -0700 (PDT)
+        Sun, 25 Sep 2022 11:49:55 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 25 Sep 2022 11:06:32 -0700
+Date:   Sun, 25 Sep 2022 11:49:54 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     joel@jms.id.au, jdelvare@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsi@lists.ozlabs.org
-Subject: Re: [PATCH v2 3/3] hwmon: (occ) Check for device property for
- setting OCC active during probe
-Message-ID: <20220925180632.GA1766526@roeck-us.net>
-References: <20220809200701.218059-1-eajames@linux.ibm.com>
- <20220809200701.218059-4-eajames@linux.ibm.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Roland Stigge <stigge@antcom.de>,
+        =?utf-8?B?Wm9sdMOhbiBLxZF2w6Fnw7M=?= <dirty.ice.hu@gmail.com>,
+        Ninad Malwade <nmalwade@nvidia.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH 05/18] hwmon: (gpio-fan) Switch to
+ DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()
+Message-ID: <20220925184954.GA2856297@roeck-us.net>
+References: <20220925172759.3573439-1-jic23@kernel.org>
+ <20220925172759.3573439-6-jic23@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220809200701.218059-4-eajames@linux.ibm.com>
+In-Reply-To: <20220925172759.3573439-6-jic23@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 03:07:01PM -0500, Eddie James wrote:
-> A previous commit changed the existing behavior of the driver to skip
-> attempting to communicate with the OCC during probe. Return to the
-> previous default behavior of automatically communicating with the OCC
-> and make it optional with a new device-tree property.
+On Sun, Sep 25, 2022 at 06:27:46PM +0100, Jonathan Cameron wrote:
+> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> These newer PM macros allow the compiler to see what code it can remove
+> if !CONFIG_PM_SLEEP. This allows the removal of messy #ifdef barriers whilst
+> achieving the same result.
+> 
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
 
-Assuming this patch is applied as part of the series outside
-the hwmon subsystem.
+This patch resulted in build errors.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Building m68k:allmodconfig ... failed
+--------------
+Error log:
+drivers/hwmon/gpio-fan.c: In function 'gpio_fan_suspend':
+drivers/hwmon/gpio-fan.c:565:27: error: 'struct gpio_fan_data' has no member named 'resume_speed'
+
+There was an #ifdef CONFIG_PM_SLEEP in struct gpio_fan_data which had
+to be dropped. I took care of that.
 
 Guenter
 
 > ---
->  drivers/hwmon/occ/common.c | 11 ++++++++++-
->  drivers/hwmon/occ/p9_sbe.c |  9 +++++++++
->  2 files changed, 19 insertions(+), 1 deletion(-)
+>  drivers/hwmon/gpio-fan.c | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-> index 45407b12db4b..dd690f700d49 100644
-> --- a/drivers/hwmon/occ/common.c
-> +++ b/drivers/hwmon/occ/common.c
-> @@ -10,6 +10,7 @@
->  #include <linux/math64.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
-> +#include <linux/property.h>
->  #include <linux/sysfs.h>
->  #include <asm/unaligned.h>
->  
-> @@ -1216,8 +1217,16 @@ int occ_setup(struct occ *occ)
->  	occ->groups[0] = &occ->group;
->  
->  	rc = occ_setup_sysfs(occ);
-> -	if (rc)
-> +	if (rc) {
->  		dev_err(occ->bus_dev, "failed to setup sysfs: %d\n", rc);
-> +		return rc;
-> +	}
-> +
-> +	if (!device_property_read_bool(occ->bus_dev, "ibm,no-poll-on-init")) {
-> +		rc = occ_active(occ, true);
-> +		if (rc)
-> +			occ_shutdown_sysfs(occ);
-> +	}
->  
->  	return rc;
+> diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
+> index fbf3f5a4ecb6..b05aedd20b4f 100644
+> --- a/drivers/hwmon/gpio-fan.c
+> +++ b/drivers/hwmon/gpio-fan.c
+> @@ -557,7 +557,6 @@ static void gpio_fan_shutdown(struct platform_device *pdev)
+>  		set_fan_speed(fan_data, 0);
 >  }
-> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-> index 4a1fe4ee8e2c..3adcf8d0b4a6 100644
-> --- a/drivers/hwmon/occ/p9_sbe.c
-> +++ b/drivers/hwmon/occ/p9_sbe.c
-> @@ -7,6 +7,7 @@
->  #include <linux/fsi-occ.h>
->  #include <linux/mm.h>
->  #include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
->  #include <linux/mutex.h>
->  #include <linux/platform_device.h>
->  #include <linux/string.h>
-> @@ -179,9 +180,17 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  static int gpio_fan_suspend(struct device *dev)
+>  {
+>  	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
+> @@ -580,18 +579,14 @@ static int gpio_fan_resume(struct device *dev)
 >  	return 0;
 >  }
 >  
-> +static const struct of_device_id p9_sbe_occ_of_match[] = {
-> +	{ .compatible = "ibm,p9-occ-hwmon" },
-> +	{ .compatible = "ibm,p10-occ-hwmon" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, p9_sbe_occ_of_match);
-> +
->  static struct platform_driver p9_sbe_occ_driver = {
->  	.driver = {
->  		.name = "occ-hwmon",
-> +		.of_match_table = p9_sbe_occ_of_match,
+> -static SIMPLE_DEV_PM_OPS(gpio_fan_pm, gpio_fan_suspend, gpio_fan_resume);
+> -#define GPIO_FAN_PM	(&gpio_fan_pm)
+> -#else
+> -#define GPIO_FAN_PM	NULL
+> -#endif
+> +static DEFINE_SIMPLE_DEV_PM_OPS(gpio_fan_pm, gpio_fan_suspend, gpio_fan_resume);
+>  
+>  static struct platform_driver gpio_fan_driver = {
+>  	.probe		= gpio_fan_probe,
+>  	.shutdown	= gpio_fan_shutdown,
+>  	.driver	= {
+>  		.name	= "gpio-fan",
+> -		.pm	= GPIO_FAN_PM,
+> +		.pm	= pm_sleep_ptr(&gpio_fan_pm),
+>  		.of_match_table = of_match_ptr(of_gpio_fan_match),
 >  	},
->  	.probe	= p9_sbe_occ_probe,
->  	.remove = p9_sbe_occ_remove,
+>  };
