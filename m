@@ -2,138 +2,105 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DE76C04A95
-	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Sep 2022 18:50:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1113C04A95
+	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Sep 2022 19:18:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiIYSuA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 25 Sep 2022 14:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
+        id S230385AbiIYTSV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 25 Sep 2022 15:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbiIYSt6 (ORCPT
+        with ESMTP id S229567AbiIYTSU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 25 Sep 2022 14:49:58 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3971A3B2
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 11:49:57 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id s90-20020a17090a2f6300b00203a685a1aaso4864901pjd.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 11:49:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=EOidtejSwQQXBCOxPPbEYodcTu43Rvf/K8YTaw3HRYc=;
-        b=N97+9+z6yrfcRPJTGkrUhe0+230Fx5izS5xyayX6YaJXGK/ZOvlFAg5BjoAJ3TavKz
-         2LjFVPPu4acu0UlUeka7xWgP27y43PgvGuktoQKdzG+0YcD8UQgZz7f5GcTuos6nnAtC
-         +qxvOIo29m73nWBJbbTaSvyIFiX+vG9vGNpiCUTPAFvMs+RscZil7/aLcqF0mkx4iwYW
-         XaO3+1YnWN+h0TLkX/icDlHloJAZnBfgXfimbsFWZexN/s3/Efnp5K98MnV5QT5gvBbY
-         fDXK4orkyXvFazPtqpkLbrx4EpdpZyJ9nwqWtA4bz7tl/CeFCHHt3u3l0xQIPa35cw2A
-         Bfog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=EOidtejSwQQXBCOxPPbEYodcTu43Rvf/K8YTaw3HRYc=;
-        b=eQLPMApmy6O/JVR8h/jlS4OAU8yt1DERWgdJ0m1FJ5IunzKnFWH4BcwGL3t2XVmIIl
-         KKj1lRdTHtggMO9/XWM0k82xcQxZ08GYtqwndwfjI3Ahca5i4vgHKNCltZS3/PuVrVPV
-         8QacRcktyP2kzPyFHz4T1evkc5WOPKHw+d4OGk4M+AsNtuGF3POLxh/NJWb2DAExI6cC
-         XYhtzf8sirhKPgplN9bIYtv4DlKLDkvgh4lz7N2ZIgrWZ0OGysA7+oxs7l3iygxTcAor
-         B/O/Sdbyq8mla9WyvQSM1A6kHcKyYaOUGCyZ2+b2sZDjBaR7Hfop5hWHxawMjb1vrTlD
-         cWfQ==
-X-Gm-Message-State: ACrzQf2ZD3e/DzAPWwfQCIdBPd2GdFI7IJPIaqRGGI6CnVtUFpwyaec+
-        lqt16MA1Vm1rV3fXJDlyTjc=
-X-Google-Smtp-Source: AMsMyM6KfOpMVK1K8jWbxiWMpNYHq94OS0DQcS/1F5nso3AMIaYnvC33v4A9CQptbrR2TcLeuBNxNw==
-X-Received: by 2002:a17:90b:1642:b0:203:1630:c54d with SMTP id il2-20020a17090b164200b002031630c54dmr31874884pjb.122.1664131797030;
-        Sun, 25 Sep 2022 11:49:57 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 143-20020a621695000000b0052d2b55be32sm10544573pfw.171.2022.09.25.11.49.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 11:49:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 25 Sep 2022 11:49:54 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Roland Stigge <stigge@antcom.de>,
-        =?utf-8?B?Wm9sdMOhbiBLxZF2w6Fnw7M=?= <dirty.ice.hu@gmail.com>,
-        Ninad Malwade <nmalwade@nvidia.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH 05/18] hwmon: (gpio-fan) Switch to
- DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()
-Message-ID: <20220925184954.GA2856297@roeck-us.net>
-References: <20220925172759.3573439-1-jic23@kernel.org>
- <20220925172759.3573439-6-jic23@kernel.org>
+        Sun, 25 Sep 2022 15:18:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD3D2F38E
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 12:18:19 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ocX8r-0003nq-0w; Sun, 25 Sep 2022 21:18:17 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ocX8r-002tTq-7F; Sun, 25 Sep 2022 21:18:15 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ocX8p-003U76-0R; Sun, 25 Sep 2022 21:18:15 +0200
+Date:   Sun, 25 Sep 2022 21:18:10 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] hwmon: f71882fg: Reorder symbols to get rid of a few
+ forward declarations
+Message-ID: <20220925191810.gnlkg53jifxk2glq@pengutronix.de>
+References: <20220925142631.GA1751571@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hxlbgl3lz5eycldx"
 Content-Disposition: inline
-In-Reply-To: <20220925172759.3573439-6-jic23@kernel.org>
+In-Reply-To: <20220925142631.GA1751571@roeck-us.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 06:27:46PM +0100, Jonathan Cameron wrote:
-> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> These newer PM macros allow the compiler to see what code it can remove
-> if !CONFIG_PM_SLEEP. This allows the removal of messy #ifdef barriers whilst
-> achieving the same result.
-> 
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
 
-This patch resulted in build errors.
+--hxlbgl3lz5eycldx
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Building m68k:allmodconfig ... failed
---------------
-Error log:
-drivers/hwmon/gpio-fan.c: In function 'gpio_fan_suspend':
-drivers/hwmon/gpio-fan.c:565:27: error: 'struct gpio_fan_data' has no member named 'resume_speed'
+On Sun, Sep 25, 2022 at 07:26:31AM -0700, Guenter Roeck wrote:
+> On Sat, Sep 24, 2022 at 11:28:52PM +0200, Uwe Kleine-K=F6nig wrote:
+> > Declarations for static symbols are useless code repetition (unless
+> > there are cyclic dependencies).
+> >=20
+> > Reorder some functions and variables which allows to get rid of 42
+> > forward declarations.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> Applied to hwmon-next.
 
-There was an #ifdef CONFIG_PM_SLEEP in struct gpio_fan_data which had
-to be dropped. I took care of that.
+Thanks for your prompt action on my patches, very appreciated!
 
-Guenter
+Let me just note two things:
 
-> ---
->  drivers/hwmon/gpio-fan.c | 9 ++-------
->  1 file changed, 2 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-> index fbf3f5a4ecb6..b05aedd20b4f 100644
-> --- a/drivers/hwmon/gpio-fan.c
-> +++ b/drivers/hwmon/gpio-fan.c
-> @@ -557,7 +557,6 @@ static void gpio_fan_shutdown(struct platform_device *pdev)
->  		set_fan_speed(fan_data, 0);
->  }
->  
-> -#ifdef CONFIG_PM_SLEEP
->  static int gpio_fan_suspend(struct device *dev)
->  {
->  	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
-> @@ -580,18 +579,14 @@ static int gpio_fan_resume(struct device *dev)
->  	return 0;
->  }
->  
-> -static SIMPLE_DEV_PM_OPS(gpio_fan_pm, gpio_fan_suspend, gpio_fan_resume);
-> -#define GPIO_FAN_PM	(&gpio_fan_pm)
-> -#else
-> -#define GPIO_FAN_PM	NULL
-> -#endif
-> +static DEFINE_SIMPLE_DEV_PM_OPS(gpio_fan_pm, gpio_fan_suspend, gpio_fan_resume);
->  
->  static struct platform_driver gpio_fan_driver = {
->  	.probe		= gpio_fan_probe,
->  	.shutdown	= gpio_fan_shutdown,
->  	.driver	= {
->  		.name	= "gpio-fan",
-> -		.pm	= GPIO_FAN_PM,
-> +		.pm	= pm_sleep_ptr(&gpio_fan_pm),
->  		.of_match_table = of_match_ptr(of_gpio_fan_match),
->  	},
->  };
+a) vger refused to accept this mail with "Message too long (>100000
+chars)", so I guess it won't appear in the archives
+
+b) Your reply didn't have a "In-Reply-To:" header, so the threading is
+broken. Because of a) you cannot see this in the archives, but it
+happend already before, but not on all the mail I got from you. An
+earlier instance is
+
+	https://lore.kernel.org/linux-hwmon/20220923002301.GA1159397@roeck-us.net
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--hxlbgl3lz5eycldx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMwqW0ACgkQwfwUeK3K
+7AkIxAf8DZS5afUOp5zgk1DYmbnquCf3OB7m24VMt+XqAwoTWzkGMruWBnqj1y7k
++cpqO5eKaB5O23Joi1PqQ5trJOb3TE+faT9umODF9lSDc8uDaiEtuOSTPoar6LQB
+En2JnSzZlyze0q+mmpAqPt1perY8/qWPCRZSzscueGaNmRdhxzYu8PRgAxh/yzl/
+sKYCPK7dSDGehmJU35q9ieF4e3MZU2oJaWy9lj1HQRgTyLBe050DorHPkTGbY2Nk
+joqkiuPlIUxcmyLr+f5tXgGEudVoH9bbXpJd6DKvTjbp4k/Piu+rzmlmDn32emeC
+Ngogyawtv+BeAvMawaIoUvCIuRlrrg==
+=VCGs
+-----END PGP SIGNATURE-----
+
+--hxlbgl3lz5eycldx--
