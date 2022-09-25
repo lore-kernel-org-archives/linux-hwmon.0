@@ -2,36 +2,36 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44F15C54EE9
-	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Sep 2022 17:30:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10C48C04A95
+	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Sep 2022 17:30:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbiIYRaN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 25 Sep 2022 13:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
+        id S232680AbiIYRaO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 25 Sep 2022 13:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233185AbiIYRaC (ORCPT
+        with ESMTP id S233167AbiIYRaF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 25 Sep 2022 13:30:02 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8055F5B2
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 10:30:00 -0700 (PDT)
+        Sun, 25 Sep 2022 13:30:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1D8178A9
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 10:30:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 06D82CE0E3E
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 17:29:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24E86C433D6;
-        Sun, 25 Sep 2022 17:29:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8BB4AB80682
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 17:30:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C2BC433C1;
+        Sun, 25 Sep 2022 17:29:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664126997;
-        bh=pt622bbiC9ahFfPJ5C6A9+86qKoF9GtjvEZiIJsjCeU=;
+        s=k20201202; t=1664127001;
+        bh=pkSIsmB94NCXe1l9JmhDKpuUYsLhipQdkUdQTiBi9c8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=INBr3AEvPb1k7y7ueDPWfTVdnQ9wwK+LTQU27P2z3aoYjQrfsHgWXbIIIms7HCs4I
-         y+a122OVisk0da1RsTMWZqr31OxOTtgmCRC4Emn3v5/BVMdzKFksZtXDF8xc6MKrV1
-         X44p9kZeUcMT4vdoQqBHuDl2C2K6SK2j0UosLrdBhSXm6mOCPuJsUknbhmjAZxh42U
-         2aGwH9tXi5DLYsqz87PAgQiIgpB6UCVpGLF22xS9JONtEl2nqbtLYVi18/d/Ve8JcE
-         bBzAIBaP3wtBn45QiZH5F3GseB6uyvIkI7wX5/ZeHsmbgcXbI+mZ9kxdFSvZwXvDuC
-         lnetfxTC0GkLg==
+        b=e9kQEU7ayZOl6aP09emB+05jmxunC5q/3O0ySaLIkQztEjsiW8AZ4qHuDhl6R/6PV
+         edCJHyC40elbhd60QNAhOYvpqEvx91BOcqIfe7KLhmw+Wll59xwMSgFUZRlc47W9DJ
+         K38jiQFebjo3iF2QMJrK82Z042FOgg+Hb/y/wGa/w/aUp/CJwG5UMqxjtxejbk9YBZ
+         D45vsJTzIgUBt1zwmE/J9KGs2OK/M6pdU6n1F2qV64IusA0hA4Gt5o9+EzGGO3NSy4
+         hUcw8+tczBpFbFIKYqhhe48pEGNp5hno5hCjYKlEQGl4sbg2Kya7EGGpIW24baMgW8
+         uo2/IqThqFK+g==
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
@@ -45,13 +45,14 @@ Cc:     Paul Cercueil <paul@crapouillou.net>,
         =?UTF-8?q?Zolt=C3=A1n=20K=C5=91v=C3=A1g=C3=B3?= 
         <dirty.ice.hu@gmail.com>, Ninad Malwade <nmalwade@nvidia.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 07/18] hwmon: (lm90) Switch to DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()
-Date:   Sun, 25 Sep 2022 18:27:48 +0100
-Message-Id: <20220925172759.3573439-8-jic23@kernel.org>
+Subject: [PATCH 08/18] hwmon: (ltc2947) Switch to EXPORT_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()
+Date:   Sun, 25 Sep 2022 18:27:49 +0100
+Message-Id: <20220925172759.3573439-9-jic23@kernel.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220925172759.3573439-1-jic23@kernel.org>
 References: <20220925172759.3573439-1-jic23@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
@@ -61,53 +62,75 @@ From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
 These newer PM macros allow the compiler to see what code it can remove
 if !CONFIG_PM_SLEEP. This allows the removal of __maybe_unused markings
-whilst achieving the same result.
+whilst achieving the same result. In this case it also lets the
+structure itself be removed.
 
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Nuno Sá <nuno.sa@analog.com>
 ---
- drivers/hwmon/lm90.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/hwmon/ltc2947-core.c | 7 +++----
+ drivers/hwmon/ltc2947-i2c.c  | 2 +-
+ drivers/hwmon/ltc2947-spi.c  | 2 +-
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index c151c0bf43f2..db595f7d01f8 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -2956,7 +2956,7 @@ static void lm90_alert(struct i2c_client *client, enum i2c_alert_protocol type,
- 	}
+diff --git a/drivers/hwmon/ltc2947-core.c b/drivers/hwmon/ltc2947-core.c
+index 626f5bf2c9c7..7404e974762f 100644
+--- a/drivers/hwmon/ltc2947-core.c
++++ b/drivers/hwmon/ltc2947-core.c
+@@ -1120,7 +1120,7 @@ int ltc2947_core_probe(struct regmap *map, const char *name)
  }
+ EXPORT_SYMBOL_GPL(ltc2947_core_probe);
  
--static int __maybe_unused lm90_suspend(struct device *dev)
-+static int lm90_suspend(struct device *dev)
+-static int __maybe_unused ltc2947_resume(struct device *dev)
++static int ltc2947_resume(struct device *dev)
  {
- 	struct lm90_data *data = dev_get_drvdata(dev);
- 	struct i2c_client *client = data->client;
-@@ -2967,7 +2967,7 @@ static int __maybe_unused lm90_suspend(struct device *dev)
- 	return 0;
+ 	struct ltc2947_data *st = dev_get_drvdata(dev);
+ 	u32 ctrl = 0;
+@@ -1149,7 +1149,7 @@ static int __maybe_unused ltc2947_resume(struct device *dev)
+ 				  LTC2947_CONT_MODE_MASK, LTC2947_CONT_MODE(1));
  }
  
--static int __maybe_unused lm90_resume(struct device *dev)
-+static int lm90_resume(struct device *dev)
+-static int __maybe_unused ltc2947_suspend(struct device *dev)
++static int ltc2947_suspend(struct device *dev)
  {
- 	struct lm90_data *data = dev_get_drvdata(dev);
- 	struct i2c_client *client = data->client;
-@@ -2978,14 +2978,14 @@ static int __maybe_unused lm90_resume(struct device *dev)
- 	return 0;
+ 	struct ltc2947_data *st = dev_get_drvdata(dev);
+ 
+@@ -1157,8 +1157,7 @@ static int __maybe_unused ltc2947_suspend(struct device *dev)
+ 				  LTC2947_SHUTDOWN_MASK, 1);
  }
  
--static SIMPLE_DEV_PM_OPS(lm90_pm_ops, lm90_suspend, lm90_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(lm90_pm_ops, lm90_suspend, lm90_resume);
+-SIMPLE_DEV_PM_OPS(ltc2947_pm_ops, ltc2947_suspend, ltc2947_resume);
+-EXPORT_SYMBOL_GPL(ltc2947_pm_ops);
++EXPORT_SIMPLE_DEV_PM_OPS(ltc2947_pm_ops, ltc2947_suspend, ltc2947_resume);
  
- static struct i2c_driver lm90_driver = {
- 	.class		= I2C_CLASS_HWMON,
+ const struct of_device_id ltc2947_of_match[] = {
+ 	{ .compatible = "adi,ltc2947" },
+diff --git a/drivers/hwmon/ltc2947-i2c.c b/drivers/hwmon/ltc2947-i2c.c
+index ad0dfd3efbf8..96852bc8a964 100644
+--- a/drivers/hwmon/ltc2947-i2c.c
++++ b/drivers/hwmon/ltc2947-i2c.c
+@@ -36,7 +36,7 @@ static struct i2c_driver ltc2947_driver = {
  	.driver = {
- 		.name	= "lm90",
- 		.of_match_table = of_match_ptr(lm90_of_match),
--		.pm	= &lm90_pm_ops,
-+		.pm	= pm_sleep_ptr(&lm90_pm_ops),
+ 		.name = "ltc2947",
+ 		.of_match_table = ltc2947_of_match,
+-		.pm = &ltc2947_pm_ops,
++		.pm = pm_sleep_ptr(&ltc2947_pm_ops),
  	},
- 	.probe_new	= lm90_probe,
- 	.alert		= lm90_alert,
+ 	.probe_new = ltc2947_probe,
+ 	.id_table = ltc2947_id,
+diff --git a/drivers/hwmon/ltc2947-spi.c b/drivers/hwmon/ltc2947-spi.c
+index c24ca569db1b..a33be110098c 100644
+--- a/drivers/hwmon/ltc2947-spi.c
++++ b/drivers/hwmon/ltc2947-spi.c
+@@ -38,7 +38,7 @@ static struct spi_driver ltc2947_driver = {
+ 	.driver = {
+ 		.name = "ltc2947",
+ 		.of_match_table = ltc2947_of_match,
+-		.pm = &ltc2947_pm_ops,
++		.pm = pm_sleep_ptr(&ltc2947_pm_ops),
+ 	},
+ 	.probe = ltc2947_probe,
+ 	.id_table = ltc2947_id,
 -- 
 2.37.2
 
