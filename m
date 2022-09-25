@@ -2,36 +2,36 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92823C54EE9
-	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Sep 2022 17:29:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1764AC54EE9
+	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Sep 2022 17:30:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbiIYR3t (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 25 Sep 2022 13:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49048 "EHLO
+        id S233222AbiIYRaC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 25 Sep 2022 13:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233094AbiIYR3r (ORCPT
+        with ESMTP id S232963AbiIYR35 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 25 Sep 2022 13:29:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADA9DF5A
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 10:29:46 -0700 (PDT)
+        Sun, 25 Sep 2022 13:29:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FD517587
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 10:29:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17C89614F3
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 17:29:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 296C9C433D6;
-        Sun, 25 Sep 2022 17:29:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0423DB80DE2
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 17:29:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EEEDC433C1;
+        Sun, 25 Sep 2022 17:29:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664126985;
-        bh=lOY5B9NQqMbtLf1sBXQgbZXnB1gCWESMzarj6dO+VNM=;
+        s=k20201202; t=1664126989;
+        bh=4R0AFM/i//wKykpTJIPJ6rvdy9ZhhhqxgjeMhrj6IAA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HV6Mxn/A7EdW2IXyUN5VS/tPWweiicEkaKTluYQL/CuEYrjeyvWZtI5bPT6EX4b5Q
-         ALMOZVsDCiDq8Zxpf2r+sGvJU5Gt3GsQ7mdH7Apf6n0sHQJqpQHZyAWYp4gfqGKX5t
-         9OO9n0gfTZMKUD9ZkJPz7HFGv49mbw2xMRQRcLt+MtiKPLH6cE3AWdy/4y4plWwpNX
-         UdTLMbzKat2YJ3ZO+RAduUvD6MF0WELc951tqeXIyvfw3tsLgfcRMK1J1VPDehdpwp
-         xLypew6XOkXlS+GziYkOfToKxG0r1WUav/C0moZFkmtTAWtK//VbQ3vKafOdT//aYy
-         60gT1hMZyo2Kw==
+        b=enm5EPH2ME8nUFaQAePqO7vJDXHtcsuUZdsUuvTLQgwEMTglmcqjgW26/AuyszxHL
+         JerxJ9EI6Uspcr5tcmSs4UIHedHx/iEnLEefyfseojx3HZY5wZbl97EChnW2/MfHt5
+         UO5jq7zoL6DSgF8MWv6BjM63TFoxtk244aCTZ3FtWWgYZ//eyRSvDvKtjnQ0gnV/MW
+         YQgK5spFSslPcha59B63QXFQqGpvhARLi/yyBqSj85OukeqiVNsbF9Tp8o3FKHFmhY
+         un5rWvMQlH31KBuj0zMYH/VqxJGOb1OGBnCDUmWXbfdnrwyizOsE5BLGXesZv5FL5D
+         72g7ka5bmFg0w==
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
@@ -45,9 +45,9 @@ Cc:     Paul Cercueil <paul@crapouillou.net>,
         =?UTF-8?q?Zolt=C3=A1n=20K=C5=91v=C3=A1g=C3=B3?= 
         <dirty.ice.hu@gmail.com>, Ninad Malwade <nmalwade@nvidia.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 04/18] hwmon: (adt7x10) Switch to EXPORT_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()
-Date:   Sun, 25 Sep 2022 18:27:45 +0100
-Message-Id: <20220925172759.3573439-5-jic23@kernel.org>
+Subject: [PATCH 05/18] hwmon: (gpio-fan) Switch to DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()
+Date:   Sun, 25 Sep 2022 18:27:46 +0100
+Message-Id: <20220925172759.3573439-6-jic23@kernel.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220925172759.3573439-1-jic23@kernel.org>
 References: <20220925172759.3573439-1-jic23@kernel.org>
@@ -64,81 +64,44 @@ if !CONFIG_PM_SLEEP. This allows the removal of messy #ifdef barriers whilst
 achieving the same result.
 
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Lars-Peter Clausen <lars@metafoo.de>
+Cc: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/hwmon/adt7310.c | 2 +-
- drivers/hwmon/adt7410.c | 2 +-
- drivers/hwmon/adt7x10.c | 7 +------
- drivers/hwmon/adt7x10.h | 5 -----
- 4 files changed, 3 insertions(+), 13 deletions(-)
+ drivers/hwmon/gpio-fan.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/hwmon/adt7310.c b/drivers/hwmon/adt7310.c
-index 1efc0bdcceab..067865f4887a 100644
---- a/drivers/hwmon/adt7310.c
-+++ b/drivers/hwmon/adt7310.c
-@@ -152,7 +152,7 @@ MODULE_DEVICE_TABLE(spi, adt7310_id);
- static struct spi_driver adt7310_driver = {
- 	.driver = {
- 		.name	= "adt7310",
--		.pm	= ADT7X10_DEV_PM_OPS,
-+		.pm	= pm_sleep_ptr(&adt7x10_dev_pm_ops),
- 	},
- 	.probe		= adt7310_spi_probe,
- 	.id_table	= adt7310_id,
-diff --git a/drivers/hwmon/adt7410.c b/drivers/hwmon/adt7410.c
-index aede5baca7b9..0cebf6777239 100644
---- a/drivers/hwmon/adt7410.c
-+++ b/drivers/hwmon/adt7410.c
-@@ -98,7 +98,7 @@ static struct i2c_driver adt7410_driver = {
- 	.class		= I2C_CLASS_HWMON,
- 	.driver = {
- 		.name	= "adt7410",
--		.pm	= ADT7X10_DEV_PM_OPS,
-+		.pm	= pm_sleep_ptr(&adt7x10_dev_pm_ops),
- 	},
- 	.probe_new	= adt7410_i2c_probe,
- 	.id_table	= adt7410_ids,
-diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
-index ce54bffab2ec..da67734edafd 100644
---- a/drivers/hwmon/adt7x10.c
-+++ b/drivers/hwmon/adt7x10.c
-@@ -397,8 +397,6 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
+index fbf3f5a4ecb6..b05aedd20b4f 100644
+--- a/drivers/hwmon/gpio-fan.c
++++ b/drivers/hwmon/gpio-fan.c
+@@ -557,7 +557,6 @@ static void gpio_fan_shutdown(struct platform_device *pdev)
+ 		set_fan_speed(fan_data, 0);
  }
- EXPORT_SYMBOL_GPL(adt7x10_probe);
  
 -#ifdef CONFIG_PM_SLEEP
--
- static int adt7x10_suspend(struct device *dev)
+ static int gpio_fan_suspend(struct device *dev)
  {
- 	struct adt7x10_data *data = dev_get_drvdata(dev);
-@@ -414,10 +412,7 @@ static int adt7x10_resume(struct device *dev)
- 	return regmap_write(data->regmap, ADT7X10_CONFIG, data->config);
+ 	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
+@@ -580,18 +579,14 @@ static int gpio_fan_resume(struct device *dev)
+ 	return 0;
  }
  
--SIMPLE_DEV_PM_OPS(adt7x10_dev_pm_ops, adt7x10_suspend, adt7x10_resume);
--EXPORT_SYMBOL_GPL(adt7x10_dev_pm_ops);
--
--#endif /* CONFIG_PM_SLEEP */
-+EXPORT_SIMPLE_DEV_PM_OPS(adt7x10_dev_pm_ops, adt7x10_suspend, adt7x10_resume);
- 
- MODULE_AUTHOR("Hartmut Knaack");
- MODULE_DESCRIPTION("ADT7410/ADT7420, ADT7310/ADT7320 common code");
-diff --git a/drivers/hwmon/adt7x10.h b/drivers/hwmon/adt7x10.h
-index ba22c32c8355..46caf3e21978 100644
---- a/drivers/hwmon/adt7x10.h
-+++ b/drivers/hwmon/adt7x10.h
-@@ -20,11 +20,6 @@ struct device;
- int adt7x10_probe(struct device *dev, const char *name, int irq,
- 		  struct regmap *regmap);
- 
--#ifdef CONFIG_PM_SLEEP
- extern const struct dev_pm_ops adt7x10_dev_pm_ops;
--#define ADT7X10_DEV_PM_OPS (&adt7x10_dev_pm_ops)
+-static SIMPLE_DEV_PM_OPS(gpio_fan_pm, gpio_fan_suspend, gpio_fan_resume);
+-#define GPIO_FAN_PM	(&gpio_fan_pm)
 -#else
--#define ADT7X10_DEV_PM_OPS NULL
+-#define GPIO_FAN_PM	NULL
 -#endif
++static DEFINE_SIMPLE_DEV_PM_OPS(gpio_fan_pm, gpio_fan_suspend, gpio_fan_resume);
  
- #endif
+ static struct platform_driver gpio_fan_driver = {
+ 	.probe		= gpio_fan_probe,
+ 	.shutdown	= gpio_fan_shutdown,
+ 	.driver	= {
+ 		.name	= "gpio-fan",
+-		.pm	= GPIO_FAN_PM,
++		.pm	= pm_sleep_ptr(&gpio_fan_pm),
+ 		.of_match_table = of_match_ptr(of_gpio_fan_match),
+ 	},
+ };
 -- 
 2.37.2
 
