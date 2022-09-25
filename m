@@ -2,36 +2,36 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5DDCC04A95
-	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Sep 2022 17:30:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02825C54EE9
+	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Sep 2022 17:30:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbiIYRac (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 25 Sep 2022 13:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S232142AbiIYRag (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 25 Sep 2022 13:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbiIYRa3 (ORCPT
+        with ESMTP id S230465AbiIYRaf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 25 Sep 2022 13:30:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160182C108
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 10:30:29 -0700 (PDT)
+        Sun, 25 Sep 2022 13:30:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D026FAC8
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 10:30:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A64EF60B60
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 17:30:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E4AC433D6;
-        Sun, 25 Sep 2022 17:30:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2BBDCB80781
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 17:30:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8804BC433D7;
+        Sun, 25 Sep 2022 17:30:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664127028;
-        bh=GgEN4+iiUbdZYI8aRA+ZzKku9A5SKs7sBVH80uhu37k=;
+        s=k20201202; t=1664127031;
+        bh=SU2SxwDcc9OV58DOiDFiwRjWQAilQbpi/QvLz9VnqLI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uoB2vObZgcHLjyEP/Rb2nplb7NKp/2sHcUjMixav7ZrVTdmkToNl6yrbxn63Pk6TD
-         C9rtO+TkF26WgpDWMBiNnni3v8/zM2qfuNDGaXxxyofjlLl0ECI5smHTD0Of32Eeem
-         c0kLlNp2pKRKOXUTh+xA3Fni5AHjiHofQlCGipL+N3sCbLAWCqJD0tnpEgv11KSAXy
-         /ZtKw6TJLgUTAATlbL89H5wL9z12LausBaEVZzZ1WGvJZkhm1QvANxAJCRHfSJwtLw
-         VhfOnKriFF+U6SS22aUTAfcGXv0ZBRzXfJoilXtOhZY3FDAtpEHUujGxEHqPRCOZmi
-         f7Y6YQBxJUUPQ==
+        b=I1A4VhrRIsmN9twEP3G8EVynvqauzG2WPpKEDMYCamftBJ8MuP8n07QDC/NBMQRe3
+         9rgQ/ST0VEIs3p8AZTguVlSfOw8CSUlyWlZHK+8d3IZtVXyCM/WHm8dWLoTHDoGaJx
+         JT/B9sll1fEYU5sA5Zs9H9EdahXf20IFuKNgjgfYvlvDro2OqYxYE2k3G1x8vrOjJJ
+         RxGyNtTvGUq5cV0Jfc7UuCiOW63AEKb2vWQqZICx9RVaEqtxwO0M29OrOylGtYhWqM
+         h99evTJamWxK+jd4upf5s4TNyUiD1vpRnpO+eYeNs1qOoq75RqVTXTvklphOdAX3ee
+         11i6CwIoM+xog==
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
@@ -45,9 +45,9 @@ Cc:     Paul Cercueil <paul@crapouillou.net>,
         =?UTF-8?q?Zolt=C3=A1n=20K=C5=91v=C3=A1g=C3=B3?= 
         <dirty.ice.hu@gmail.com>, Ninad Malwade <nmalwade@nvidia.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 15/18] hwmon: (tmp103) Switch to DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()
-Date:   Sun, 25 Sep 2022 18:27:56 +0100
-Message-Id: <20220925172759.3573439-16-jic23@kernel.org>
+Subject: [PATCH 16/18] hwmon: (tmp108) Switch to DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()
+Date:   Sun, 25 Sep 2022 18:27:57 +0100
+Message-Id: <20220925172759.3573439-17-jic23@kernel.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220925172759.3573439-1-jic23@kernel.org>
 References: <20220925172759.3573439-1-jic23@kernel.org>
@@ -65,49 +65,49 @@ whilst achieving the same result.
 
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- drivers/hwmon/tmp103.c | 8 ++++----
+ drivers/hwmon/tmp108.c | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/tmp103.c b/drivers/hwmon/tmp103.c
-index 5cab4436aa77..56d5cbf36a45 100644
---- a/drivers/hwmon/tmp103.c
-+++ b/drivers/hwmon/tmp103.c
-@@ -178,7 +178,7 @@ static int tmp103_probe(struct i2c_client *client)
+diff --git a/drivers/hwmon/tmp108.c b/drivers/hwmon/tmp108.c
+index 5435664c3f6e..acb4ba750b09 100644
+--- a/drivers/hwmon/tmp108.c
++++ b/drivers/hwmon/tmp108.c
+@@ -390,7 +390,7 @@ static int tmp108_probe(struct i2c_client *client)
  	return PTR_ERR_OR_ZERO(hwmon_dev);
  }
  
--static int __maybe_unused tmp103_suspend(struct device *dev)
-+static int tmp103_suspend(struct device *dev)
+-static int __maybe_unused tmp108_suspend(struct device *dev)
++static int tmp108_suspend(struct device *dev)
  {
- 	struct regmap *regmap = dev_get_drvdata(dev);
+ 	struct tmp108 *tmp108 = dev_get_drvdata(dev);
  
-@@ -186,7 +186,7 @@ static int __maybe_unused tmp103_suspend(struct device *dev)
- 				  TMP103_CONF_SD_MASK, 0);
+@@ -398,7 +398,7 @@ static int __maybe_unused tmp108_suspend(struct device *dev)
+ 				  TMP108_CONF_MODE_MASK, TMP108_MODE_SHUTDOWN);
  }
  
--static int __maybe_unused tmp103_resume(struct device *dev)
-+static int tmp103_resume(struct device *dev)
+-static int __maybe_unused tmp108_resume(struct device *dev)
++static int tmp108_resume(struct device *dev)
  {
- 	struct regmap *regmap = dev_get_drvdata(dev);
- 
-@@ -194,7 +194,7 @@ static int __maybe_unused tmp103_resume(struct device *dev)
- 				  TMP103_CONF_SD_MASK, TMP103_CONF_SD);
+ 	struct tmp108 *tmp108 = dev_get_drvdata(dev);
+ 	int err;
+@@ -410,7 +410,7 @@ static int __maybe_unused tmp108_resume(struct device *dev)
+ 	return err;
  }
  
--static SIMPLE_DEV_PM_OPS(tmp103_dev_pm_ops, tmp103_suspend, tmp103_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(tmp103_dev_pm_ops, tmp103_suspend, tmp103_resume);
+-static SIMPLE_DEV_PM_OPS(tmp108_dev_pm_ops, tmp108_suspend, tmp108_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(tmp108_dev_pm_ops, tmp108_suspend, tmp108_resume);
  
- static const struct i2c_device_id tmp103_id[] = {
- 	{ "tmp103", 0 },
-@@ -212,7 +212,7 @@ static struct i2c_driver tmp103_driver = {
+ static const struct i2c_device_id tmp108_i2c_ids[] = {
+ 	{ "tmp108", 0 },
+@@ -429,7 +429,7 @@ MODULE_DEVICE_TABLE(of, tmp108_of_ids);
+ static struct i2c_driver tmp108_driver = {
  	.driver = {
- 		.name	= "tmp103",
- 		.of_match_table = of_match_ptr(tmp103_of_match),
--		.pm	= &tmp103_dev_pm_ops,
-+		.pm	= pm_sleep_ptr(&tmp103_dev_pm_ops),
+ 		.name	= DRIVER_NAME,
+-		.pm	= &tmp108_dev_pm_ops,
++		.pm	= pm_sleep_ptr(&tmp108_dev_pm_ops),
+ 		.of_match_table = of_match_ptr(tmp108_of_ids),
  	},
- 	.probe_new	= tmp103_probe,
- 	.id_table	= tmp103_id,
+ 	.probe_new	= tmp108_probe,
 -- 
 2.37.2
 
