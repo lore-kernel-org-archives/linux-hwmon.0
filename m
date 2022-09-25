@@ -2,36 +2,36 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44AB5C04A95
-	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Sep 2022 17:30:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36771C6FA82
+	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Sep 2022 17:30:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiIYRam (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S230465AbiIYRam (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Sun, 25 Sep 2022 13:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbiIYRaj (ORCPT
+        with ESMTP id S229561AbiIYRal (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 25 Sep 2022 13:30:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AF2FAC8
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 10:30:38 -0700 (PDT)
+        Sun, 25 Sep 2022 13:30:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A880D25C74
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 10:30:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0DC9CB80781
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 17:30:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54C71C433D6;
-        Sun, 25 Sep 2022 17:30:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43A7F60B60
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 17:30:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39DE9C43470;
+        Sun, 25 Sep 2022 17:30:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664127035;
-        bh=2kjoerhpXfg+NexEYY87iubJXRqM4+FWfSG0glVHnLo=;
+        s=k20201202; t=1664127039;
+        bh=h7qKZT0gGt2oPhVaiwbxaSbl60WJQy6McOhI6760anM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M14BOskZzd33iscKMlhMD7tj0OGl7IytV8KjK4aDxjZpHCHWi9ga3e52fm4lwz2V9
-         ls0NUhKYp1B0Zr0YA9uM30meZh9pB8oPE2u2D+1fBC0iVyBtFKHWQTaUud0Belxrj4
-         hEKE71UrW91ItP070P+hmnAS3Mb/bcFalAQfT1LZDQDZlYJzDKVpre1iQ2ZR6pTQmp
-         a7AuDZFL2VTg3UNGfE0tk/bHGimh8jT0bfvhxpxSj7+gYHTdHAlfO5LScDPemiz+X1
-         w8GMDp6MorJzm84b88sGWK8DKdg8nWPNgyadUsiGuarbK6yeEnmH2ut4NA7q+nk2ST
-         bb4fqW81y+Giw==
+        b=Z2+I9XDrGH6MBN9jNRHYF9kMHDaSl2qKQ4DswJYjIFoEychpMpDvm/7ezAfcEZA8m
+         T6Fh0B9l/xcWxqzs6qw3rOEfcMib0/VPownJupY9Ado+NW1dxYHmHgRPRkG/oNeNPP
+         naX9jqlUnnmdtsSfdB6fTMG1ptfoJoTVyRKJWTkM4ss1/UhYqKmLVXAAnuSi5PT65F
+         DWszYTHqJS5F/096S3SM8SrBh8c8RXN/qwO3iuBrd8HPQT2lwpY41/QgHVH+65PJit
+         TC+uipbD+t/4dxR1kDAK6PW/gNI2OxwW4VQT2YoSQw0zjvy1txkKH4o8OxASE/9qDu
+         bUlxpe0hJ+QFw==
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
@@ -45,9 +45,9 @@ Cc:     Paul Cercueil <paul@crapouillou.net>,
         =?UTF-8?q?Zolt=C3=A1n=20K=C5=91v=C3=A1g=C3=B3?= 
         <dirty.ice.hu@gmail.com>, Ninad Malwade <nmalwade@nvidia.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 17/18] hwmon: (w83627ehf) Switch to DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()
-Date:   Sun, 25 Sep 2022 18:27:58 +0100
-Message-Id: <20220925172759.3573439-18-jic23@kernel.org>
+Subject: [PATCH 18/18] hwmon: (ina3221) Use DEFINE_RUNTIME_DEV_PM_OPS() and pm_ptr()
+Date:   Sun, 25 Sep 2022 18:27:59 +0100
+Message-Id: <20220925172759.3573439-19-jic23@kernel.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220925172759.3573439-1-jic23@kernel.org>
 References: <20220925172759.3573439-1-jic23@kernel.org>
@@ -59,52 +59,61 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-These newer PM macros allow the compiler to see what code it can remove
-if !CONFIG_PM_SLEEP. This allows the removal of __maybe_unused markings
-whilst achieving the same result.
+These new macros allow the compiler to see all the functions even if
+!CONFIG_PM* and remove the structures and functions if unused.
+This removes the need for __maybe_unused markings.
 
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Ninad Malwade <nmalwade@nvidia.com>
 ---
- drivers/hwmon/w83627ehf.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/hwmon/ina3221.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
-index af89b32a93a5..939d4c35e713 100644
---- a/drivers/hwmon/w83627ehf.c
-+++ b/drivers/hwmon/w83627ehf.c
-@@ -1944,7 +1944,7 @@ static int __init w83627ehf_probe(struct platform_device *pdev)
- 	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
- 
--static int __maybe_unused w83627ehf_suspend(struct device *dev)
-+static int w83627ehf_suspend(struct device *dev)
- {
- 	struct w83627ehf_data *data = w83627ehf_update_device(dev);
- 
-@@ -1955,7 +1955,7 @@ static int __maybe_unused w83627ehf_suspend(struct device *dev)
+diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+index 58d3828e2ec0..8ef2631fc312 100644
+--- a/drivers/hwmon/ina3221.c
++++ b/drivers/hwmon/ina3221.c
+@@ -930,7 +930,7 @@ static int ina3221_remove(struct i2c_client *client)
  	return 0;
  }
  
--static int __maybe_unused w83627ehf_resume(struct device *dev)
-+static int w83627ehf_resume(struct device *dev)
+-static int __maybe_unused ina3221_suspend(struct device *dev)
++static int ina3221_suspend(struct device *dev)
  {
- 	struct w83627ehf_data *data = dev_get_drvdata(dev);
- 	int i;
-@@ -2010,12 +2010,12 @@ static int __maybe_unused w83627ehf_resume(struct device *dev)
+ 	struct ina3221_data *ina = dev_get_drvdata(dev);
+ 	int ret;
+@@ -953,7 +953,7 @@ static int __maybe_unused ina3221_suspend(struct device *dev)
  	return 0;
  }
  
--static SIMPLE_DEV_PM_OPS(w83627ehf_dev_pm_ops, w83627ehf_suspend, w83627ehf_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(w83627ehf_dev_pm_ops, w83627ehf_suspend, w83627ehf_resume);
+-static int __maybe_unused ina3221_resume(struct device *dev)
++static int ina3221_resume(struct device *dev)
+ {
+ 	struct ina3221_data *ina = dev_get_drvdata(dev);
+ 	int ret;
+@@ -996,11 +996,8 @@ static int __maybe_unused ina3221_resume(struct device *dev)
+ 	return 0;
+ }
  
- static struct platform_driver w83627ehf_driver = {
+-static const struct dev_pm_ops ina3221_pm = {
+-	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
+-				pm_runtime_force_resume)
+-	SET_RUNTIME_PM_OPS(ina3221_suspend, ina3221_resume, NULL)
+-};
++static DEFINE_RUNTIME_DEV_PM_OPS(ina3221_pm, ina3221_suspend, ina3221_resume,
++				 NULL);
+ 
+ static const struct of_device_id ina3221_of_match_table[] = {
+ 	{ .compatible = "ti,ina3221", },
+@@ -1020,7 +1017,7 @@ static struct i2c_driver ina3221_i2c_driver = {
  	.driver = {
- 		.name	= DRVNAME,
--		.pm	= &w83627ehf_dev_pm_ops,
-+		.pm	= pm_sleep_ptr(&w83627ehf_dev_pm_ops),
+ 		.name = INA3221_DRIVER_NAME,
+ 		.of_match_table = ina3221_of_match_table,
+-		.pm = &ina3221_pm,
++		.pm = pm_ptr(&ina3221_pm),
  	},
+ 	.id_table = ina3221_ids,
  };
- 
 -- 
 2.37.2
 
