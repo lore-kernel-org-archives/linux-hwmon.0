@@ -2,36 +2,36 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F8C3C04A95
-	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Sep 2022 17:30:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5DDCC04A95
+	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Sep 2022 17:30:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbiIYRa1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 25 Sep 2022 13:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
+        id S231258AbiIYRac (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 25 Sep 2022 13:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232770AbiIYRa0 (ORCPT
+        with ESMTP id S232142AbiIYRa3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 25 Sep 2022 13:30:26 -0400
+        Sun, 25 Sep 2022 13:30:29 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FD528712
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 10:30:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160182C108
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 10:30:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 921F0614F3
-        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 17:30:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A41C6C433C1;
-        Sun, 25 Sep 2022 17:30:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A64EF60B60
+        for <linux-hwmon@vger.kernel.org>; Sun, 25 Sep 2022 17:30:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E4AC433D6;
+        Sun, 25 Sep 2022 17:30:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664127024;
-        bh=xQO5Ol4D2yOlu2yUhafnHBfqvXcDNSfSPwc3AeZZOy8=;
+        s=k20201202; t=1664127028;
+        bh=GgEN4+iiUbdZYI8aRA+ZzKku9A5SKs7sBVH80uhu37k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qavarunn2eJlWeKhzidAr07bejW6rz5Mg4tYiOzzr1s3oXEiG4ps/TCUjGID+t51x
-         iOOYvb2hI16U1mw5OR/WbCvW2haqQ6VA8Bx6W4M6SUgCtefr9FOyCAUZuMJC+AZVdz
-         rPzDA03HE3qAvF+YNp+JRS4daFyKaYH0PcEge1IqbzXZjCKm3Cmx0t/p0/Y3Q3n/zN
-         D+zR9IGlB8zciafYkh2/9qc9uOeWoOG3Krdo/B4QkgImChVpAOS9yTBmmdkK57yiSJ
-         zdDAG0AJgcmzmW4tArsQnNg1JCAj2C7b0ZMINU7FNSbcjIr6rYaX9338Qe5oFWDUQT
-         diSxKWQ67pKPQ==
+        b=uoB2vObZgcHLjyEP/Rb2nplb7NKp/2sHcUjMixav7ZrVTdmkToNl6yrbxn63Pk6TD
+         C9rtO+TkF26WgpDWMBiNnni3v8/zM2qfuNDGaXxxyofjlLl0ECI5smHTD0Of32Eeem
+         c0kLlNp2pKRKOXUTh+xA3Fni5AHjiHofQlCGipL+N3sCbLAWCqJD0tnpEgv11KSAXy
+         /ZtKw6TJLgUTAATlbL89H5wL9z12LausBaEVZzZ1WGvJZkhm1QvANxAJCRHfSJwtLw
+         VhfOnKriFF+U6SS22aUTAfcGXv0ZBRzXfJoilXtOhZY3FDAtpEHUujGxEHqPRCOZmi
+         f7Y6YQBxJUUPQ==
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
@@ -45,9 +45,9 @@ Cc:     Paul Cercueil <paul@crapouillou.net>,
         =?UTF-8?q?Zolt=C3=A1n=20K=C5=91v=C3=A1g=C3=B3?= 
         <dirty.ice.hu@gmail.com>, Ninad Malwade <nmalwade@nvidia.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 14/18] hwmon: (tmp102) Switch to DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()
-Date:   Sun, 25 Sep 2022 18:27:55 +0100
-Message-Id: <20220925172759.3573439-15-jic23@kernel.org>
+Subject: [PATCH 15/18] hwmon: (tmp103) Switch to DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()
+Date:   Sun, 25 Sep 2022 18:27:56 +0100
+Message-Id: <20220925172759.3573439-16-jic23@kernel.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220925172759.3573439-1-jic23@kernel.org>
 References: <20220925172759.3573439-1-jic23@kernel.org>
@@ -60,46 +60,54 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
 These newer PM macros allow the compiler to see what code it can remove
-if !CONFIG_PM_SLEEP. This allows the removal of #ifdef guards whilst
-achieving the same result.
+if !CONFIG_PM_SLEEP. This allows the removal of __maybe_unused markings
+whilst achieving the same result.
 
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- drivers/hwmon/tmp102.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/hwmon/tmp103.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/tmp102.c b/drivers/hwmon/tmp102.c
-index e867a0c2e539..2bf496a62206 100644
---- a/drivers/hwmon/tmp102.c
-+++ b/drivers/hwmon/tmp102.c
-@@ -260,7 +260,6 @@ static int tmp102_probe(struct i2c_client *client)
- 	return 0;
+diff --git a/drivers/hwmon/tmp103.c b/drivers/hwmon/tmp103.c
+index 5cab4436aa77..56d5cbf36a45 100644
+--- a/drivers/hwmon/tmp103.c
++++ b/drivers/hwmon/tmp103.c
+@@ -178,7 +178,7 @@ static int tmp103_probe(struct i2c_client *client)
+ 	return PTR_ERR_OR_ZERO(hwmon_dev);
  }
  
--#ifdef CONFIG_PM_SLEEP
- static int tmp102_suspend(struct device *dev)
+-static int __maybe_unused tmp103_suspend(struct device *dev)
++static int tmp103_suspend(struct device *dev)
  {
- 	struct i2c_client *client = to_i2c_client(dev);
-@@ -283,9 +282,8 @@ static int tmp102_resume(struct device *dev)
+ 	struct regmap *regmap = dev_get_drvdata(dev);
  
- 	return err;
+@@ -186,7 +186,7 @@ static int __maybe_unused tmp103_suspend(struct device *dev)
+ 				  TMP103_CONF_SD_MASK, 0);
  }
--#endif /* CONFIG_PM */
  
--static SIMPLE_DEV_PM_OPS(tmp102_dev_pm_ops, tmp102_suspend, tmp102_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(tmp102_dev_pm_ops, tmp102_suspend, tmp102_resume);
+-static int __maybe_unused tmp103_resume(struct device *dev)
++static int tmp103_resume(struct device *dev)
+ {
+ 	struct regmap *regmap = dev_get_drvdata(dev);
  
- static const struct i2c_device_id tmp102_id[] = {
- 	{ "tmp102", 0 },
-@@ -302,7 +300,7 @@ MODULE_DEVICE_TABLE(of, tmp102_of_match);
- static struct i2c_driver tmp102_driver = {
- 	.driver.name	= DRIVER_NAME,
- 	.driver.of_match_table = of_match_ptr(tmp102_of_match),
--	.driver.pm	= &tmp102_dev_pm_ops,
-+	.driver.pm	= pm_sleep_ptr(&tmp102_dev_pm_ops),
- 	.probe_new	= tmp102_probe,
- 	.id_table	= tmp102_id,
- };
+@@ -194,7 +194,7 @@ static int __maybe_unused tmp103_resume(struct device *dev)
+ 				  TMP103_CONF_SD_MASK, TMP103_CONF_SD);
+ }
+ 
+-static SIMPLE_DEV_PM_OPS(tmp103_dev_pm_ops, tmp103_suspend, tmp103_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(tmp103_dev_pm_ops, tmp103_suspend, tmp103_resume);
+ 
+ static const struct i2c_device_id tmp103_id[] = {
+ 	{ "tmp103", 0 },
+@@ -212,7 +212,7 @@ static struct i2c_driver tmp103_driver = {
+ 	.driver = {
+ 		.name	= "tmp103",
+ 		.of_match_table = of_match_ptr(tmp103_of_match),
+-		.pm	= &tmp103_dev_pm_ops,
++		.pm	= pm_sleep_ptr(&tmp103_dev_pm_ops),
+ 	},
+ 	.probe_new	= tmp103_probe,
+ 	.id_table	= tmp103_id,
 -- 
 2.37.2
 
