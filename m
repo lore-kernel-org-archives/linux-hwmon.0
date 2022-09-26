@@ -2,132 +2,199 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF3B5C07E9D
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Sep 2022 08:32:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E5EBC32771
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Sep 2022 08:51:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233731AbiIZIcj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 26 Sep 2022 04:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        id S233775AbiIZIvo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 26 Sep 2022 04:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234350AbiIZIci (ORCPT
+        with ESMTP id S233764AbiIZIvo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:32:38 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB003AB0E
-        for <linux-hwmon@vger.kernel.org>; Mon, 26 Sep 2022 01:32:37 -0700 (PDT)
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MbbZN4HFkz687Dc;
-        Mon, 26 Sep 2022 16:31:24 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 10:32:35 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 26 Sep
- 2022 09:32:35 +0100
-Date:   Mon, 26 Sep 2022 09:32:33 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+        Mon, 26 Sep 2022 04:51:44 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FC127B2B
+        for <linux-hwmon@vger.kernel.org>; Mon, 26 Sep 2022 01:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664182302; x=1695718302;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XhL4Fr3bEcLW9SG6BvpMXwZk6a+zFE3nB4XBI8VKshs=;
+  b=d3vYdrRGk06FGJrqSpGa1Bj1foiPVKvPEjmZGlxyYejmbcFZlAcr1nuV
+   VKcnMfSQnYNgT+bfM2IPTN0YpESwL4Do1fHICeHzB2roAPmW5skfMZbYH
+   65dsYinWWrmc6lCw84WbbaW5eORNAnyUurPcAkD6Nnz7lglI4DMpENEpq
+   pp3lLy5mXlyzzNFPr3ePUQ9gXCAMc/hLSfIk7LmV4MhoLP1DuXg6GqicG
+   rWxWndIjqFbu4s5Q/c4ZkB3eFfv3rISCx5VsKTbV5lT3zq/azgb/bctFK
+   gQ9S2IJJZJplB87wQk9hkL8qCmG2rcBZytwCjwjf82hRpqo9zpt+BGFzQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="301877229"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="301877229"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 01:51:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="949772439"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="949772439"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Sep 2022 01:51:40 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ocjpz-0008qy-11;
+        Mon, 26 Sep 2022 08:51:39 +0000
+Date:   Mon, 26 Sep 2022 16:51:19 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Jonathan Cameron <jic23@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        <linux-hwmon@vger.kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        "Hans de Goede" <hdegoede@redhat.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        Nuno =?UTF-8?Q?S=C3=A1?= <nuno.sa@analog.com>,
-        Roland Stigge <stigge@antcom.de>,
-        =?UTF-8?Q?Zolt?= =?UTF-8?Q?=C3=A1n_K=C5=91v=C3=A1g=C3=B3?= 
-        <dirty.ice.hu@gmail.com>, "Ninad Malwade" <nmalwade@nvidia.com>
-Subject: Re: [PATCH 05/18] hwmon: (gpio-fan) Switch to
- DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()
-Message-ID: <20220926093233.00005c4d@huawei.com>
-In-Reply-To: <20220925184954.GA2856297@roeck-us.net>
-References: <20220925172759.3573439-1-jic23@kernel.org>
-        <20220925172759.3573439-6-jic23@kernel.org>
-        <20220925184954.GA2856297@roeck-us.net>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
+ 56ea4d9659aa97ec37ce4788de99a4e831d36707
+Message-ID: <63316807.MB2IUEf7X7GR2Xf6%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, 25 Sep 2022 11:49:54 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: 56ea4d9659aa97ec37ce4788de99a4e831d36707  watchdog: sp5100_tco: Add "action" module parameter
 
-> On Sun, Sep 25, 2022 at 06:27:46PM +0100, Jonathan Cameron wrote:
-> > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > 
-> > These newer PM macros allow the compiler to see what code it can remove
-> > if !CONFIG_PM_SLEEP. This allows the removal of messy #ifdef barriers whilst
-> > achieving the same result.
-> > 
-> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Cc: Linus Walleij <linus.walleij@linaro.org>  
-> 
-> This patch resulted in build errors.
-> 
-> Building m68k:allmodconfig ... failed
-> --------------
-> Error log:
-> drivers/hwmon/gpio-fan.c: In function 'gpio_fan_suspend':
-> drivers/hwmon/gpio-fan.c:565:27: error: 'struct gpio_fan_data' has no member named 'resume_speed'
-> 
-> There was an #ifdef CONFIG_PM_SLEEP in struct gpio_fan_data which had
-> to be dropped. I took care of that.
+elapsed time: 722m
 
-Thanks!  I clearly missed some tests I should have done.
-Sorry about that.
+configs tested: 122
+configs skipped: 3
 
-Jonathan
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+arc                                 defconfig
+um                             i386_defconfig
+alpha                               defconfig
+i386                                defconfig
+i386                          randconfig-a014
+i386                          randconfig-a012
+um                           x86_64_defconfig
+i386                          randconfig-a016
+x86_64               randconfig-a002-20220926
+x86_64                              defconfig
+x86_64               randconfig-a001-20220926
+x86_64               randconfig-a003-20220926
+x86_64               randconfig-a004-20220926
+x86_64               randconfig-a006-20220926
+x86_64               randconfig-a005-20220926
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+i386                 randconfig-a001-20220926
+arm                                 defconfig
+x86_64                               rhel-8.3
+s390                                defconfig
+i386                             allyesconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20220926
+s390                             allmodconfig
+i386                 randconfig-a003-20220926
+i386                 randconfig-a004-20220926
+i386                 randconfig-a005-20220926
+i386                 randconfig-a006-20220926
+x86_64                           allyesconfig
+i386                          randconfig-c001
+ia64                             allmodconfig
+powerpc                      ppc40x_defconfig
+sh                ecovec24-romimage_defconfig
+powerpc                      chrp32_defconfig
+sh                          rsk7203_defconfig
+arm                        oxnas_v6_defconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+arc                  randconfig-r043-20220925
+powerpc                          allmodconfig
+alpha                            allyesconfig
+sh                               allmodconfig
+s390                             allyesconfig
+mips                             allyesconfig
+arc                              allyesconfig
+riscv                randconfig-r042-20220925
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                  randconfig-r043-20220926
+s390                 randconfig-r044-20220925
+powerpc                      makalu_defconfig
+m68k                          sun3x_defconfig
+riscv                    nommu_k210_defconfig
+mips                     loongson1b_defconfig
+arm                           sama5_defconfig
+m68k                       bvme6000_defconfig
+arm                          badge4_defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+nios2                            allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220925
+loongarch                           defconfig
+loongarch                         allnoconfig
+loongarch                        allmodconfig
+sparc                       sparc64_defconfig
+openrisc                         alldefconfig
+m68k                         amcore_defconfig
+sparc64                             defconfig
+microblaze                      mmu_defconfig
+sh                           se7705_defconfig
+arm                     eseries_pxa_defconfig
+ia64                        generic_defconfig
+arm                           h3600_defconfig
+xtensa                          iss_defconfig
+nios2                            alldefconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+sparc                               defconfig
+xtensa                           allyesconfig
+csky                                defconfig
+sparc                            allyesconfig
+x86_64                                  kexec
+arm64                               defconfig
+ia64                             allyesconfig
+arm                              allmodconfig
+m68k                                defconfig
+ia64                                defconfig
+mips                             allmodconfig
 
-> 
-> Guenter
-> 
-> > ---
-> >  drivers/hwmon/gpio-fan.c | 9 ++-------
-> >  1 file changed, 2 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-> > index fbf3f5a4ecb6..b05aedd20b4f 100644
-> > --- a/drivers/hwmon/gpio-fan.c
-> > +++ b/drivers/hwmon/gpio-fan.c
-> > @@ -557,7 +557,6 @@ static void gpio_fan_shutdown(struct platform_device *pdev)
-> >  		set_fan_speed(fan_data, 0);
-> >  }
-> >  
-> > -#ifdef CONFIG_PM_SLEEP
-> >  static int gpio_fan_suspend(struct device *dev)
-> >  {
-> >  	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
-> > @@ -580,18 +579,14 @@ static int gpio_fan_resume(struct device *dev)
-> >  	return 0;
-> >  }
-> >  
-> > -static SIMPLE_DEV_PM_OPS(gpio_fan_pm, gpio_fan_suspend, gpio_fan_resume);
-> > -#define GPIO_FAN_PM	(&gpio_fan_pm)
-> > -#else
-> > -#define GPIO_FAN_PM	NULL
-> > -#endif
-> > +static DEFINE_SIMPLE_DEV_PM_OPS(gpio_fan_pm, gpio_fan_suspend, gpio_fan_resume);
-> >  
-> >  static struct platform_driver gpio_fan_driver = {
-> >  	.probe		= gpio_fan_probe,
-> >  	.shutdown	= gpio_fan_shutdown,
-> >  	.driver	= {
-> >  		.name	= "gpio-fan",
-> > -		.pm	= GPIO_FAN_PM,
-> > +		.pm	= pm_sleep_ptr(&gpio_fan_pm),
-> >  		.of_match_table = of_match_ptr(of_gpio_fan_match),
-> >  	},
-> >  };  
+clang tested configs:
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64               randconfig-a012-20220926
+x86_64               randconfig-a013-20220926
+x86_64               randconfig-a011-20220926
+x86_64               randconfig-a016-20220926
+hexagon              randconfig-r045-20220925
+x86_64               randconfig-a014-20220926
+x86_64                        randconfig-k001
+x86_64               randconfig-a015-20220926
+hexagon              randconfig-r041-20220926
+hexagon              randconfig-r045-20220926
+hexagon              randconfig-r041-20220925
+riscv                randconfig-r042-20220926
+arm                       netwinder_defconfig
+mips                     cu1000-neo_defconfig
+s390                 randconfig-r044-20220926
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
