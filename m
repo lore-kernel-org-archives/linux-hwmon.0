@@ -2,127 +2,132 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B322EC07E9D
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Sep 2022 07:04:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF3B5C07E9D
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Sep 2022 08:32:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233279AbiIZHEV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 26 Sep 2022 03:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
+        id S233731AbiIZIcj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 26 Sep 2022 04:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233274AbiIZHEV (ORCPT
+        with ESMTP id S234350AbiIZIci (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:04:21 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47772494A
-        for <linux-hwmon@vger.kernel.org>; Mon, 26 Sep 2022 00:04:19 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oci9e-0006rg-5x; Mon, 26 Sep 2022 09:03:50 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oci9e-002zCO-7k; Mon, 26 Sep 2022 09:03:48 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oci9c-003a8G-5J; Mon, 26 Sep 2022 09:03:48 +0200
-Date:   Mon, 26 Sep 2022 09:03:46 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+        Mon, 26 Sep 2022 04:32:38 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB003AB0E
+        for <linux-hwmon@vger.kernel.org>; Mon, 26 Sep 2022 01:32:37 -0700 (PDT)
+Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MbbZN4HFkz687Dc;
+        Mon, 26 Sep 2022 16:31:24 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 26 Sep 2022 10:32:35 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 26 Sep
+ 2022 09:32:35 +0100
+Date:   Mon, 26 Sep 2022 09:32:33 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        kernel@pengutronix.de
-Subject: Re: [PATCH] hwmon: f71882fg: Reorder symbols to get rid of a few
- forward declarations
-Message-ID: <20220926070346.u665ljwqpoycpl5w@pengutronix.de>
-References: <20220925142631.GA1751571@roeck-us.net>
- <20220925191810.gnlkg53jifxk2glq@pengutronix.de>
- <02b28838-846d-e3cd-ce3b-25fc2a9d5881@roeck-us.net>
+CC:     Jonathan Cameron <jic23@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        <linux-hwmon@vger.kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        "Hans de Goede" <hdegoede@redhat.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        Nuno =?UTF-8?Q?S=C3=A1?= <nuno.sa@analog.com>,
+        Roland Stigge <stigge@antcom.de>,
+        =?UTF-8?Q?Zolt?= =?UTF-8?Q?=C3=A1n_K=C5=91v=C3=A1g=C3=B3?= 
+        <dirty.ice.hu@gmail.com>, "Ninad Malwade" <nmalwade@nvidia.com>
+Subject: Re: [PATCH 05/18] hwmon: (gpio-fan) Switch to
+ DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr()
+Message-ID: <20220926093233.00005c4d@huawei.com>
+In-Reply-To: <20220925184954.GA2856297@roeck-us.net>
+References: <20220925172759.3573439-1-jic23@kernel.org>
+        <20220925172759.3573439-6-jic23@kernel.org>
+        <20220925184954.GA2856297@roeck-us.net>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nam4jqoffqsgqcet"
-Content-Disposition: inline
-In-Reply-To: <02b28838-846d-e3cd-ce3b-25fc2a9d5881@roeck-us.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Sun, 25 Sep 2022 11:49:54 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
---nam4jqoffqsgqcet
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Sun, Sep 25, 2022 at 06:27:46PM +0100, Jonathan Cameron wrote:
+> > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > 
+> > These newer PM macros allow the compiler to see what code it can remove
+> > if !CONFIG_PM_SLEEP. This allows the removal of messy #ifdef barriers whilst
+> > achieving the same result.
+> > 
+> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Cc: Linus Walleij <linus.walleij@linaro.org>  
+> 
+> This patch resulted in build errors.
+> 
+> Building m68k:allmodconfig ... failed
+> --------------
+> Error log:
+> drivers/hwmon/gpio-fan.c: In function 'gpio_fan_suspend':
+> drivers/hwmon/gpio-fan.c:565:27: error: 'struct gpio_fan_data' has no member named 'resume_speed'
+> 
+> There was an #ifdef CONFIG_PM_SLEEP in struct gpio_fan_data which had
+> to be dropped. I took care of that.
 
-Hello Guenter,
+Thanks!  I clearly missed some tests I should have done.
+Sorry about that.
 
-On Sun, Sep 25, 2022 at 12:50:55PM -0700, Guenter Roeck wrote:
-> On 9/25/22 12:18, Uwe Kleine-K=F6nig wrote:
-> > On Sun, Sep 25, 2022 at 07:26:31AM -0700, Guenter Roeck wrote:
-> > > On Sat, Sep 24, 2022 at 11:28:52PM +0200, Uwe Kleine-K=F6nig wrote:
-> > > > Declarations for static symbols are useless code repetition (unless
-> > > > there are cyclic dependencies).
-> > > >=20
-> > > > Reorder some functions and variables which allows to get rid of 42
-> > > > forward declarations.
-> > > >=20
-> > > > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > >=20
-> > > Applied to hwmon-next.
-> >=20
-> > Thanks for your prompt action on my patches, very appreciated!
-> >=20
-> > Let me just note two things:
-> >=20
-> > a) vger refused to accept this mail with "Message too long (>100000
-> > chars)", so I guess it won't appear in the archives
->=20
-> I guess that explains why I don't see all patches in patchwork.
+Jonathan
 
-The f71882fg was the first one of my patches that vger refused. I didn't
-check, but vger at least didn't tell me about my other patches that it
-refused any of them.
 
-> > b) Your reply didn't have a "In-Reply-To:" header, so the threading is
-> > broken. Because of a) you cannot see this in the archives, but it
-> > happend already before, but not on all the mail I got from you. An
-> > earlier instance is
-> >=20
-> > 	https://lore.kernel.org/linux-hwmon/20220923002301.GA1159397@roeck-us.=
-net
-> >=20
->=20
-> Some of the e-mails I reply from mutt, others from Thunderbird. I suspect
-> that one of them doesn't add the "In-Reply-To:" header. This one is from
-> Thunderbird. I'll send another one without Cc: from mutt. Please let me k=
-now
-> which one is missing the header.
+> 
+> Guenter
+> 
+> > ---
+> >  drivers/hwmon/gpio-fan.c | 9 ++-------
+> >  1 file changed, 2 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
+> > index fbf3f5a4ecb6..b05aedd20b4f 100644
+> > --- a/drivers/hwmon/gpio-fan.c
+> > +++ b/drivers/hwmon/gpio-fan.c
+> > @@ -557,7 +557,6 @@ static void gpio_fan_shutdown(struct platform_device *pdev)
+> >  		set_fan_speed(fan_data, 0);
+> >  }
+> >  
+> > -#ifdef CONFIG_PM_SLEEP
+> >  static int gpio_fan_suspend(struct device *dev)
+> >  {
+> >  	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
+> > @@ -580,18 +579,14 @@ static int gpio_fan_resume(struct device *dev)
+> >  	return 0;
+> >  }
+> >  
+> > -static SIMPLE_DEV_PM_OPS(gpio_fan_pm, gpio_fan_suspend, gpio_fan_resume);
+> > -#define GPIO_FAN_PM	(&gpio_fan_pm)
+> > -#else
+> > -#define GPIO_FAN_PM	NULL
+> > -#endif
+> > +static DEFINE_SIMPLE_DEV_PM_OPS(gpio_fan_pm, gpio_fan_suspend, gpio_fan_resume);
+> >  
+> >  static struct platform_driver gpio_fan_driver = {
+> >  	.probe		= gpio_fan_probe,
+> >  	.shutdown	= gpio_fan_shutdown,
+> >  	.driver	= {
+> >  		.name	= "gpio-fan",
+> > -		.pm	= GPIO_FAN_PM,
+> > +		.pm	= pm_sleep_ptr(&gpio_fan_pm),
+> >  		.of_match_table = of_match_ptr(of_gpio_fan_match),
+> >  	},
+> >  };  
 
-Both of these mails have the In-Reply-To header.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---nam4jqoffqsgqcet
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMxTs8ACgkQwfwUeK3K
-7An2Vwf8DYNeWnIIuzmaJzvdXC+WF1VT0RFfjG5F+UyBjIQRKxVwcr08v2rCfQiz
-A7hECwZ0fH6FDG1RJwaUbiqrDgSJbWihn/2MrdPAVgKqWRuWnwvK2lA9GylurtLd
-84gSz4g11mmBJNdPolTxJHZrvLqGKZe9UhCCidmskv+YRwbMg6acN1NuteKJNfu1
-Nk1vvVq69gMmrNXce8sBnAgKnRUf8Pmwhj9I4v5cpNzRQFTPGAlE9L6JwMcAsaZq
-JLyovmavtgBu+F0KhiwJkeUZ3Hbo5fW2JT23K/UTkEe4yq5ijhWIgBwsmag3+Rwu
-oR11ySvSEBruFJ2A6+NSgvWWDCF5Uw==
-=68A5
------END PGP SIGNATURE-----
-
---nam4jqoffqsgqcet--
