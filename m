@@ -2,140 +2,116 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50E98C32771
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Sep 2022 10:07:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25854C6FA83
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Sep 2022 15:02:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234889AbiIZKHj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 26 Sep 2022 06:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
+        id S233208AbiIZPCp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 26 Sep 2022 11:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235013AbiIZKHB (ORCPT
+        with ESMTP id S235392AbiIZPCL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:07:01 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C63246D88
-        for <linux-hwmon@vger.kernel.org>; Mon, 26 Sep 2022 03:06:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664186802; x=1695722802;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mvEgjJSP/eg+MRF2k9T4ETKHmTDUYbz8e5pm5TQNa+E=;
-  b=Tw+XtmLZj55VlTMznh0g1WS4uVULREKUvyM7juujz53CuZwexYqi+Z6U
-   qg2Adg/jul6HoGNHnnT+t8MvnI0vfhYJbLk0wrfyL0GE3LPgRQOGG6Vl7
-   3InfzBQbw3ObH0J7JUXybLWYgX2kW7DAG22jLbm+RoBf9Vp/S9a/xn01S
-   lPuTu6ps23XUug9pCsjvkyKsArI82rzYmhVuPiE+g1ticdsDO50ZeyIny
-   +xV0O2C5vNPmzjFZFU1/0VYsltLvL0E5HaIn1M/IxElgkT5ys66Tn18Lv
-   i2hWtzVZSTNIAUN94FOzDzMFp28uwAkruus/CT3qRb+brgqtVDoD3F8QF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="365021891"
-X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
-   d="scan'208";a="365021891"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 03:06:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="651767986"
-X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
-   d="scan'208";a="651767986"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 26 Sep 2022 03:06:42 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ocl0b-0008tO-13;
-        Mon, 26 Sep 2022 10:06:41 +0000
-Date:   Mon, 26 Sep 2022 18:05:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 2d5604c822e91c3eebaa0f9d0691acb954071ef1
-Message-ID: <63317979.Voy5xs5lzVUyr8p0%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 26 Sep 2022 11:02:11 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B69C9FD9
+        for <linux-hwmon@vger.kernel.org>; Mon, 26 Sep 2022 06:33:21 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so6814855pjk.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 26 Sep 2022 06:33:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date;
+        bh=0tueKURqqmltUxLK2nUeRD5lUcLY7m2p1mvBLH6GWHI=;
+        b=G6u/mvJjjJBgA2rleWdVrSAWSOEoHvS97rpzutkNAtUbE1LEeOZHTeikoVRkZV+ikV
+         wG2OvitV/235BqhyDqPhTRbLW4+CSKR2Bb9BK0C3qaGF4RmiUvPQDZO2BEwXJhjPpkmF
+         nQJdeBM7q37DEkG3Jk26zKxJ+k6RnuCOEbsKT6ts8V0zXlf6GZUHCUSXDcJCwwfNVSth
+         P4gTiLIvpDHv2MODjDlOnJnzZUhM3Z2yznVAtItoOHmF7brnFA7aB3EFsvsdkySb4FIC
+         Qhh9vTHkNr86kqtLGo8ubvO+d3bL7Qili4ctYXObgJJZCnaESXSgVA8Yom4XQ1PnmtQB
+         aHeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=0tueKURqqmltUxLK2nUeRD5lUcLY7m2p1mvBLH6GWHI=;
+        b=djz9xWb6D+t1xBGmsbHJhKxPtFi/uYqKI1Qrm8bm4Ic6hQYELCxaEiHsXygvPv+Mrm
+         uV46sKG63+BRaG1o7GZhqwFYTPxohbKSI5CkaIoN1Ow6rpobw1xrx4uzTWhqeewrVoSi
+         buk7ptlvIe/9P2eLWhxPx47NvRGwWANWY16zI4FiAk8pz5aScXEyaZJPesI2m2q9xt54
+         t/IOzMFuc5eChUx2jgvWfjBJyaNLYsdVeMJVVeru2GaHCiK6u5+bo40mB9hyo/lRqc33
+         41sTReshO8DtgW4LDBLwLIb7g8xNn3xwt8FFwx9tQNIC2lYIFg03/PDMZZx0ceHp8AZ3
+         2iRA==
+X-Gm-Message-State: ACrzQf0yE+TgDk4C/OT+gQbXiaBRem903UkrWUQnh4q6wBzHxsKCSsmG
+        gMSzyJZAS7rcMWqHaA3i8ls=
+X-Google-Smtp-Source: AMsMyM6udgclxkT3qg1Pz3gqv47uv1PH1c65BVX8CtJh0lzESND33qBTNdtybp/2rDYbJuCYacZ0oQ==
+X-Received: by 2002:a17:90a:4688:b0:1ef:a94:7048 with SMTP id z8-20020a17090a468800b001ef0a947048mr24802299pjf.244.1664199200554;
+        Mon, 26 Sep 2022 06:33:20 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w19-20020aa79553000000b00540fee4a680sm12126144pfq.41.2022.09.26.06.33.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 06:33:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <df162cce-17b1-3d9e-6712-37c08b0bb3eb@roeck-us.net>
+Date:   Mon, 26 Sep 2022 06:33:17 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] hwmon: f71882fg: Reorder symbols to get rid of a few
+ forward declarations
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        kernel@pengutronix.de
+References: <20220925142631.GA1751571@roeck-us.net>
+ <20220925191810.gnlkg53jifxk2glq@pengutronix.de>
+ <02b28838-846d-e3cd-ce3b-25fc2a9d5881@roeck-us.net>
+ <20220926070346.u665ljwqpoycpl5w@pengutronix.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220926070346.u665ljwqpoycpl5w@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 2d5604c822e91c3eebaa0f9d0691acb954071ef1  hwmon: (ina3221) Use DEFINE_RUNTIME_DEV_PM_OPS() and pm_ptr()
+On 9/26/22 00:03, Uwe Kleine-König wrote:
+> Hello Guenter,
+> 
+> On Sun, Sep 25, 2022 at 12:50:55PM -0700, Guenter Roeck wrote:
+>> On 9/25/22 12:18, Uwe Kleine-König wrote:
+>>> On Sun, Sep 25, 2022 at 07:26:31AM -0700, Guenter Roeck wrote:
+>>>> On Sat, Sep 24, 2022 at 11:28:52PM +0200, Uwe Kleine-König wrote:
+>>>>> Declarations for static symbols are useless code repetition (unless
+>>>>> there are cyclic dependencies).
+>>>>>
+>>>>> Reorder some functions and variables which allows to get rid of 42
+>>>>> forward declarations.
+>>>>>
+>>>>> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+>>>>
+>>>> Applied to hwmon-next.
+>>>
+>>> Thanks for your prompt action on my patches, very appreciated!
+>>>
+>>> Let me just note two things:
+>>>
+>>> a) vger refused to accept this mail with "Message too long (>100000
+>>> chars)", so I guess it won't appear in the archives
+>>
+>> I guess that explains why I don't see all patches in patchwork.
+> 
+> The f71882fg was the first one of my patches that vger refused. I didn't
+> check, but vger at least didn't tell me about my other patches that it
+> refused any of them.
+> 
 
-elapsed time: 724m
+Not of yours, but it happens once in a while that I don't see a patch there.
+Though thinking about it they are not typically that large.
 
-configs tested: 63
-configs skipped: 2
+> 
+> Both of these mails have the In-Reply-To header.
+> 
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Odd. No idea what causes it to get lost.
 
-gcc tested configs:
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64               randconfig-a002-20220926
-x86_64               randconfig-a004-20220926
-x86_64                              defconfig
-x86_64               randconfig-a001-20220926
-x86_64               randconfig-a003-20220926
-x86_64               randconfig-a005-20220926
-arc                  randconfig-r043-20220925
-x86_64               randconfig-a006-20220926
-x86_64                               rhel-8.3
-riscv                randconfig-r042-20220925
-x86_64                          rhel-8.3-func
-i386                 randconfig-a001-20220926
-arc                              allyesconfig
-i386                 randconfig-a004-20220926
-arc                                 defconfig
-i386                 randconfig-a005-20220926
-x86_64                        randconfig-a015
-alpha                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-powerpc                           allnoconfig
-x86_64                           rhel-8.3-syz
-x86_64                        randconfig-a013
-x86_64                         rhel-8.3-kunit
-arc                  randconfig-r043-20220926
-powerpc                          allmodconfig
-m68k                             allmodconfig
-i386                 randconfig-a006-20220926
-i386                 randconfig-a002-20220926
-mips                             allyesconfig
-s390                 randconfig-r044-20220925
-x86_64                           rhel-8.3-kvm
-i386                 randconfig-a003-20220926
-s390                             allmodconfig
-x86_64                        randconfig-a011
-arm                                 defconfig
-m68k                             allyesconfig
-alpha                               defconfig
-s390                             allyesconfig
-s390                                defconfig
-x86_64                           allyesconfig
-arm                              allyesconfig
-i386                                defconfig
-sh                               allmodconfig
-arm64                            allyesconfig
-i386                             allyesconfig
-ia64                             allmodconfig
-
-clang tested configs:
-hexagon              randconfig-r045-20220925
-hexagon              randconfig-r041-20220926
-hexagon              randconfig-r045-20220926
-hexagon              randconfig-r041-20220925
-riscv                randconfig-r042-20220926
-i386                 randconfig-a011-20220926
-x86_64                        randconfig-a016
-s390                 randconfig-r044-20220926
-x86_64                        randconfig-a012
-i386                 randconfig-a014-20220926
-x86_64                        randconfig-a014
-i386                 randconfig-a013-20220926
-i386                 randconfig-a016-20220926
-i386                 randconfig-a012-20220926
-i386                 randconfig-a015-20220926
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Guenter
