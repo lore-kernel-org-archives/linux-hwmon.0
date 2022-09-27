@@ -2,148 +2,140 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E914EC54EE9
-	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Sep 2022 07:36:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3C32C07E9D
+	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Sep 2022 09:53:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiI0HgZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 27 Sep 2022 03:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
+        id S231161AbiI0Jxg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 27 Sep 2022 05:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiI0HgI (ORCPT
+        with ESMTP id S230237AbiI0Jxf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 27 Sep 2022 03:36:08 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F19056BB6;
-        Tue, 27 Sep 2022 00:36:02 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id t14so13596855wrx.8;
-        Tue, 27 Sep 2022 00:36:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=sKmAJ34A8WrJ1xqDlpDO/oGZEw5aFDM7BTPRJDupDv4=;
-        b=drIvcpwx2WFkpTuxWzA8EBs6k5UJc7GPvMiTQghl4kmiz453uJATgLRQe7qC0kdJZi
-         3Ls0dcWehPE9QD3e7x84wd/GNpd7MbCm5DOIfY7umj0A9kL3mzX/Bvca0UPUgxK2txrZ
-         5emCH1jng6L4mOEp7zyGltQ9VnwhfQ1zu8jII=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=sKmAJ34A8WrJ1xqDlpDO/oGZEw5aFDM7BTPRJDupDv4=;
-        b=yneWpBQFoJWrj1id2SzRvuYXE/WwnJiRV8R+7ArD4hYP09vGBlCZCQtUTrucU9wut3
-         zstYIev1tlBymErfHR0i9XwSpLigoCbTUXz8mG1m3x2tt7CfaUbg1GHsQVX0zLX6OGXM
-         9+BbWMtLAYnM5wdm6Lu1Dj1fUgZL8JGpRkcc7dAp7snWRsrR3Ah3ja3Tt51UIWTn69Bt
-         6PWVwkh5e1phoaBXq8HtUOuTrasEwBb4Qbnzpw4xwrkExyp/u78anpUBNtAcCHZwFPTW
-         7ot0JhvQwMuRR7VrcyaPtIdRkuIAGIJQ6FyaPOf6VZK1KZYnLgqJvJiKkGpezNLsZZb1
-         e1rg==
-X-Gm-Message-State: ACrzQf2+FeMXFonXjw0eQS5ntvcCXFmBxh+EeD6ebCNwYyapSg3tytAl
-        KRuciTF7yDvgenOr7Thn57U89dpXHpdBCvumhQ8=
-X-Google-Smtp-Source: AMsMyM4/JM+SnNVu6LYuec5gzT2SfX+XzA9grPlTz91or2/hfHTpXCihTm0uJTpB47xzG9i1TEHpi9UxpQkUmk5BPjQ=
-X-Received: by 2002:a5d:4688:0:b0:22a:f718:7f36 with SMTP id
- u8-20020a5d4688000000b0022af7187f36mr15515102wrq.315.1664264160648; Tue, 27
- Sep 2022 00:36:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220809200701.218059-1-eajames@linux.ibm.com>
- <20220809200701.218059-4-eajames@linux.ibm.com> <20220925180632.GA1766526@roeck-us.net>
-In-Reply-To: <20220925180632.GA1766526@roeck-us.net>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Tue, 27 Sep 2022 07:35:49 +0000
-Message-ID: <CACPK8XdkH4BZH9UCd085n=bX0EU5=2BemRfOU-zGsK2W4_SNHQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] hwmon: (occ) Check for device property for setting
- OCC active during probe
+        Tue, 27 Sep 2022 05:53:35 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECDC8A1ED
+        for <linux-hwmon@vger.kernel.org>; Tue, 27 Sep 2022 02:53:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664272414; x=1695808414;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5NjVvgXgxEj8kanQJzd3mo6dCi9BVaBgvVEOzpyIqyM=;
+  b=S7P1/PpzhgKMWmEiAeDt+MQOTTMnYcfGE77i+gNz56tybTA//yTWpHPP
+   qZB8sStxahpjla//IHtx/orWQo7RK0MC5eZnMWP7VeBPmhxLSQ1fybLqL
+   d8ZXlNkKXHO7TOj9nNWk27+6+lHkbJdrefvNkanCMFaCzO82kNz1zGNl7
+   JTyI5D/NO3vIRROrsBhCx+EzDMd8Em3jeTzZoPOzcgezb9Lo0LHslmiH/
+   99jOCNNGB7NK/APMMkPOO+EoEjE+LtxiuwkQOqqhzBranHQCBenrQ7874
+   pGDULMnixts8biyKagt33GdXVLrNizMp0fET0QfaCP02kXEN1swUxvgGm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="302185188"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="302185188"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 02:53:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="623699684"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="623699684"
+Received: from lkp-server02.sh.intel.com (HELO dfa2c9fcd321) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 27 Sep 2022 02:53:33 -0700
+Received: from kbuild by dfa2c9fcd321 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1od7HQ-0000t0-1p;
+        Tue, 27 Sep 2022 09:53:32 +0000
+Date:   Tue, 27 Sep 2022 17:53:09 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Eddie James <eajames@linux.ibm.com>, jdelvare@suse.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsi@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
+ ff6088c3ee1dd34bbd80b471dc18c9b5c0ea9c60
+Message-ID: <6332c805.YhX33tBcScGFlAvZ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, 25 Sept 2022 at 18:06, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Tue, Aug 09, 2022 at 03:07:01PM -0500, Eddie James wrote:
-> > A previous commit changed the existing behavior of the driver to skip
-> > attempting to communicate with the OCC during probe. Return to the
-> > previous default behavior of automatically communicating with the OCC
-> > and make it optional with a new device-tree property.
-> >
-> > Signed-off-by: Eddie James <eajames@linux.ibm.com>
->
-> Assuming this patch is applied as part of the series outside
-> the hwmon subsystem.
->
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: ff6088c3ee1dd34bbd80b471dc18c9b5c0ea9c60  dt-bindings: watchdog: migrate mt7621 text bindings to YAML
 
-Thanks Guenter. I have applied it to the FSI tree.
+elapsed time: 720m
 
+configs tested: 63
+configs skipped: 2
 
->
-> Guenter
->
-> > ---
-> >  drivers/hwmon/occ/common.c | 11 ++++++++++-
-> >  drivers/hwmon/occ/p9_sbe.c |  9 +++++++++
-> >  2 files changed, 19 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-> > index 45407b12db4b..dd690f700d49 100644
-> > --- a/drivers/hwmon/occ/common.c
-> > +++ b/drivers/hwmon/occ/common.c
-> > @@ -10,6 +10,7 @@
-> >  #include <linux/math64.h>
-> >  #include <linux/module.h>
-> >  #include <linux/mutex.h>
-> > +#include <linux/property.h>
-> >  #include <linux/sysfs.h>
-> >  #include <asm/unaligned.h>
-> >
-> > @@ -1216,8 +1217,16 @@ int occ_setup(struct occ *occ)
-> >       occ->groups[0] = &occ->group;
-> >
-> >       rc = occ_setup_sysfs(occ);
-> > -     if (rc)
-> > +     if (rc) {
-> >               dev_err(occ->bus_dev, "failed to setup sysfs: %d\n", rc);
-> > +             return rc;
-> > +     }
-> > +
-> > +     if (!device_property_read_bool(occ->bus_dev, "ibm,no-poll-on-init")) {
-> > +             rc = occ_active(occ, true);
-> > +             if (rc)
-> > +                     occ_shutdown_sysfs(occ);
-> > +     }
-> >
-> >       return rc;
-> >  }
-> > diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-> > index 4a1fe4ee8e2c..3adcf8d0b4a6 100644
-> > --- a/drivers/hwmon/occ/p9_sbe.c
-> > +++ b/drivers/hwmon/occ/p9_sbe.c
-> > @@ -7,6 +7,7 @@
-> >  #include <linux/fsi-occ.h>
-> >  #include <linux/mm.h>
-> >  #include <linux/module.h>
-> > +#include <linux/mod_devicetable.h>
-> >  #include <linux/mutex.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/string.h>
-> > @@ -179,9 +180,17 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
-> >       return 0;
-> >  }
-> >
-> > +static const struct of_device_id p9_sbe_occ_of_match[] = {
-> > +     { .compatible = "ibm,p9-occ-hwmon" },
-> > +     { .compatible = "ibm,p10-occ-hwmon" },
-> > +     {}
-> > +};
-> > +MODULE_DEVICE_TABLE(of, p9_sbe_occ_of_match);
-> > +
-> >  static struct platform_driver p9_sbe_occ_driver = {
-> >       .driver = {
-> >               .name = "occ-hwmon",
-> > +             .of_match_table = p9_sbe_occ_of_match,
-> >       },
-> >       .probe  = p9_sbe_occ_probe,
-> >       .remove = p9_sbe_occ_remove,
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+x86_64                              defconfig
+alpha                               defconfig
+x86_64                               rhel-8.3
+s390                             allmodconfig
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+s390                                defconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           allyesconfig
+x86_64                           rhel-8.3-kvm
+powerpc                           allnoconfig
+i386                                defconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+s390                             allyesconfig
+m68k                             allyesconfig
+arm                                 defconfig
+sh                               allmodconfig
+mips                             allyesconfig
+i386                 randconfig-a001-20220926
+powerpc                          allmodconfig
+i386                 randconfig-a002-20220926
+i386                 randconfig-a003-20220926
+i386                 randconfig-a004-20220926
+i386                 randconfig-a006-20220926
+i386                 randconfig-a005-20220926
+i386                             allyesconfig
+x86_64               randconfig-a002-20220926
+arm                              allyesconfig
+x86_64               randconfig-a005-20220926
+arm64                            allyesconfig
+x86_64               randconfig-a004-20220926
+x86_64               randconfig-a001-20220926
+x86_64               randconfig-a003-20220926
+x86_64               randconfig-a006-20220926
+arc                  randconfig-r043-20220925
+riscv                randconfig-r042-20220925
+arc                  randconfig-r043-20220926
+s390                 randconfig-r044-20220925
+ia64                             allmodconfig
+
+clang tested configs:
+i386                 randconfig-a011-20220926
+i386                 randconfig-a015-20220926
+i386                 randconfig-a014-20220926
+i386                 randconfig-a013-20220926
+i386                 randconfig-a012-20220926
+i386                 randconfig-a016-20220926
+x86_64               randconfig-a012-20220926
+x86_64               randconfig-a013-20220926
+x86_64               randconfig-a011-20220926
+hexagon              randconfig-r045-20220925
+hexagon              randconfig-r041-20220926
+hexagon              randconfig-r045-20220926
+hexagon              randconfig-r041-20220925
+riscv                randconfig-r042-20220926
+s390                 randconfig-r044-20220926
+x86_64               randconfig-a016-20220926
+x86_64               randconfig-a015-20220926
+x86_64               randconfig-a014-20220926
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
