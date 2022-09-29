@@ -2,109 +2,91 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3293CC32771
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Sep 2022 21:31:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7EBCC04A95
+	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Sep 2022 06:51:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233676AbiI1Vbp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 28 Sep 2022 17:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
+        id S234948AbiI2Gv6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 29 Sep 2022 02:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233601AbiI1Vbo (ORCPT
+        with ESMTP id S234890AbiI2Gvy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Sep 2022 17:31:44 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B42760FE;
-        Wed, 28 Sep 2022 14:31:41 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id k3-20020a05600c1c8300b003b4fa1a85f8so1688649wms.3;
-        Wed, 28 Sep 2022 14:31:41 -0700 (PDT)
+        Thu, 29 Sep 2022 02:51:54 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F317B107DCA
+        for <linux-hwmon@vger.kernel.org>; Wed, 28 Sep 2022 23:51:52 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id o2so818742lfc.10
+        for <linux-hwmon@vger.kernel.org>; Wed, 28 Sep 2022 23:51:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=kHtcM/ZhNIQfonSbRMlI/alAAHn24v5beci83RsPETQ=;
-        b=QcPgl9ROwUeqG6rw+McsRw+ZhRgG365ZnH4zH77hwFmLx7OXhRi2n0lCo1y2KUvo99
-         1RDlXGyiTTiei5sZYSByiYiNVgKwCiLA2oGzoZZGVUOTsIV+tdhJTjIopATrZdPUScv6
-         vTKhiPK9zzzeBKZds27pPLluyiugXqWNHBNxMBlt40c6brWNOytiw0MqbwEPnYpbjBLX
-         H2SrRN2SabMXgmokbp9OuQurISROaC9JU0MnJEeJ0vcXKLMB8WArmkcM7Gd8uIJRJFbz
-         JWVmKg1lsYzz/8qzXRWXcZ90/Ukj6uTFXve9qiW0QDAIQaAchtsflLGLc4q+aMFmH3YG
-         sejQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Fco6NMVSVhjPLhPkls0dH/RXUx15xfAB9MdMBpMfFz4=;
+        b=POUBwZmv07BX7QqfQ1b1U+mZxtX68uKAHirMssVC/JYRXNJUATpWFHYLCG8k3+1JEX
+         qcfIyeH+8M6phsYlI1NCFU3oPrcZZLYVC9ISDHurdu0eFoin1UzJlcjtu+IeO2o9aph4
+         z/MWhOMfSzYTe/7Wb9AgeU7J2g0cy0QPVYVa7Kl5jhgijfHHCKXOgNu/Z3FIJWiLgxZj
+         f+tjDVEm39qk3aM4Liza0cA9TKQpEje8Tv84UaESnSZzo/V0JkMHu5G9HYQ3Z5geXKiI
+         yzUph5zhCu+kBSRiTMDWi5kIsLrI04K3tmOy1mspZH9rgYV6wrhwi5iEMD54nErGn/CC
+         h9QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=kHtcM/ZhNIQfonSbRMlI/alAAHn24v5beci83RsPETQ=;
-        b=UdKla1kT0B4zKY/aD2yttXv6+iJh3CxZdzfGHd12CJSSRtxwAD8+CRwF53DIKDuF8Q
-         52K7eoDGrslp5cTjWJkfGM95Qww0PVXaIBuJNv6OcnVEGcjKT0TD//pljKSLf7ZkbXWX
-         DUAsDXqY88YRzpcnH/ZtAzHFoqfF9lwCR7q4Zm/XQ7/dUPWqwq8yaBfr/itSg/ceS+DD
-         4vVTBNvXSOH+gXTGc7LjNinF/q0sG6M2XXZMnbfc7y7ZcSHcTtlUEuvZ4TapFNRQBLgm
-         eMuNWTBO6q8u2Ru1UQ3Fo2mnVuvTMYN95sRc8Ut5mc8vLHcKNh4mOhAEvSgXqQnnrsmM
-         ZCMg==
-X-Gm-Message-State: ACrzQf0/RSre0JCi7HHHN77pq4iq4BQ0DheDfRR1ZffA5VEaSoBXfMyj
-        Ss5bLfHf0DpPvBNYaCMi+1I=
-X-Google-Smtp-Source: AMsMyM7aOjoYbO4hfmIPy5nzW+hPDOHiP9ssPu0Tsdkl4upfL/5kCoMwt7VCP+e4McZiUqr1nWMk2w==
-X-Received: by 2002:a05:600c:211a:b0:3b4:75ee:c63e with SMTP id u26-20020a05600c211a00b003b475eec63emr8581535wml.44.1664400700333;
-        Wed, 28 Sep 2022 14:31:40 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id d15-20020adffd8f000000b00228a6ce17b4sm5082891wrr.37.2022.09.28.14.31.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 14:31:39 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Jean Delvare <jdelvare@suse.com>,
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Fco6NMVSVhjPLhPkls0dH/RXUx15xfAB9MdMBpMfFz4=;
+        b=fSIqOD0w9yVpXrMAxSRe4mzsZ8W8hdX+bFaHov6x1TrFOfdZnDLYFA/4+31dwSpj98
+         fNbjhJLjf5KdDOLAdzb/CxkLWNg5B6pV4864l7VpWiPGwb2dyjlKbk/8fbcOU++sUG8b
+         5YzyYszLSnaT1y9diTk4PJoJdColUhd8Veil/M/jY44Y2axDMt6dmtBobuxtyO9m0PVU
+         PxegkiBya9DiQojMrNssjt0f0g/kvwlHxyQ69cozI4Ieg/+ttUymjyhCyyZIL65yKhol
+         r2quqiz+8ydlhM2faFv5QWfNbq4Y543qh2RubXrZz5CH7mb+kE6XRZf0tympQWJlZhfu
+         SY3A==
+X-Gm-Message-State: ACrzQf2NGFW/U2AJrQ7d0H+FChHA67rrnFQTuWa9XM+kNmW0oTON6ekw
+        wuTib+3hx+hcDEkaj8s7IzhAoj6O300lTw==
+X-Google-Smtp-Source: AMsMyM7bkcsMr1PEiTGX4Bxt999WsCoUi4nb4/gpk043vx+H3mhmVUqZcxTAZg2mFgIIszFqb3HbLw==
+X-Received: by 2002:ac2:5a49:0:b0:49f:f620:b81b with SMTP id r9-20020ac25a49000000b0049ff620b81bmr696226lfn.307.1664434311372;
+        Wed, 28 Sep 2022 23:51:51 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id i19-20020a2ea233000000b0026c549bdd2fsm625724ljm.129.2022.09.28.23.51.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 23:51:50 -0700 (PDT)
+Message-ID: <83f9c460-3009-f123-0b82-1d0bd23b7c12@linaro.org>
+Date:   Thu, 29 Sep 2022 08:51:49 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] devicetree: hwmon: shtc1: Clean up spelling mistakes and
+ grammar
+Content-Language: en-US
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Christopher Ruehl <chris.ruehl@gtsys.com.hk>,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] devicetree: hwmon: shtc1: Clean up spelling mistakes and grammar
-Date:   Wed, 28 Sep 2022 22:31:39 +0100
-Message-Id: <20220928213139.63819-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20220928213139.63819-1-colin.i.king@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220928213139.63819-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The yaml text contains some minor spelling mistakes and grammar issues,
-clean these up.
+On 28/09/2022 23:31, Colin Ian King wrote:
+> The yaml text contains some minor spelling mistakes and grammar issues,
+> clean these up.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- .../devicetree/bindings/hwmon/sensirion,shtc1.yaml        | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Subject prefix: dt-bindings: hwmon: sensirion,shtc1:
 
-diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
-index 7d49478d9668..159238efa9ed 100644
---- a/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
-@@ -10,7 +10,7 @@ maintainers:
-   - Christopher Ruehl chris.ruehl@gtsys.com.hk
- 
- description: |
--  The SHTC1, SHTW1 and SHTC3 are digital humidity and temperature sensor
-+  The SHTC1, SHTW1 and SHTC3 are digital humidity and temperature sensors
-   designed especially for battery-driven high-volume consumer electronics
-   applications.
-   For further information refere to Documentation/hwmon/shtc1.rst
-@@ -31,13 +31,13 @@ properties:
-   sensirion,blocking-io:
-     $ref: /schemas/types.yaml#/definitions/flag
-     description:
--      If set, the driver hold the i2c bus until measurement is finished.
-+      If set, the driver holds the i2c bus until the measurement is finished.
- 
-   sensirion,low-precision:
-     $ref: /schemas/types.yaml#/definitions/flag
-     description:
--      If set, the sensor aquire data with low precision (not recommended).
--      The driver aquire data with high precision by default.
-+      If set, the sensor acquires data with low precision (not recommended).
-+      The driver acquires data with high precision by default.
- 
- required:
-   - compatible
--- 
-2.37.1
+With the subject fixes:
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
