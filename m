@@ -2,95 +2,109 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D10FC4332F
-	for <linux-hwmon@archiver.kernel.org>; Sat,  1 Oct 2022 12:59:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FFB3C433FE
+	for <linux-hwmon@archiver.kernel.org>; Sun,  2 Oct 2022 15:01:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiJAM7n (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 1 Oct 2022 08:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37160 "EHLO
+        id S229763AbiJBPBv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 2 Oct 2022 11:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJAM7m (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 1 Oct 2022 08:59:42 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FDF3AA;
-        Sat,  1 Oct 2022 05:59:35 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id x29so1090125pfp.7;
-        Sat, 01 Oct 2022 05:59:35 -0700 (PDT)
+        with ESMTP id S229699AbiJBPBu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 2 Oct 2022 11:01:50 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C322B638
+        for <linux-hwmon@vger.kernel.org>; Sun,  2 Oct 2022 08:01:49 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id gf8so5415363pjb.5
+        for <linux-hwmon@vger.kernel.org>; Sun, 02 Oct 2022 08:01:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=ffay6QHcfOr0P9N0Cih4/08+TLFhGiExUiJv4lMY7xo=;
-        b=pswYYyvOfQfCLRGo1CxUFW2BDZ1clbZ8LgZsrV48O6SJfG7Glp8yoch/EH6mthFqEb
-         5bXNf8kvls1aCI5A7C9vF6UsqnoxJmmCc7m9Vj1Wo8lMVzRrtNd7s8/TYkZAnYhY51Fq
-         6Zd0qgJ52CRCd3rQ/5m8GyBPKh3XDvPK4bCmI8Zxe+WHLX48au0yKLiEHSfSSLvinG4J
-         xnph3dw3bK5x6reLq0TqGflG/iiGxktowWMVxKcjIQggvsLKiz0XO1xOJZIXAggYi3eu
-         7pDUEF0QRgRWaOIf/3xtbbgk6UGfEsWG6nnGxp8gw1+DnoKtyAVe66RjCpyfqNn7sIYk
-         KWig==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=GyQ0gT3wrNoHntYDNZL9obMAwGH/4+OIJjhw06gQ+Yc=;
+        b=bXv2Gf+Iy2Iv/iZA90cCMCTAcoqC45ZVLuoxSnlBLjfEImtIyGQe0FnBPsN6YU2AHX
+         iy1T6EO3nnV9Q2sdg+k98Zkh9O8ayre1PggRN1765ttg5C5guQYW/MfLImG6T7k2/7GV
+         YdLext8cW0lxDwGEe/anEASy9thJEvWueOQX7Jy+FA18/mYOBrF7+ZYMjpJP5R2k2wuv
+         oe4duvCR3/BdtO3B9wqWRG1p/svyFqxs9gy80oKbUs8QRLlNIcsATLQbIDsO4Vp8CEHa
+         sc0jQG1Oxmzsp45WIGCK3MhiEzdfFjCTeEppuF5Q7BTo71VTc2zeh9Hk2aXTVpKJZfZp
+         e8Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ffay6QHcfOr0P9N0Cih4/08+TLFhGiExUiJv4lMY7xo=;
-        b=w4nSt9zvhoKIovifQpLMCjpTBZIx4zZnw9NMsYLfGgnKSeQ6F1JYv+aojtMz9AFJFw
-         VIfYYWoJgOz0DCkRkWwPHgVLF94kvQswlq22KSiy/q+hlNntzVH7V0ivMzsSo6hBY9xr
-         qQ09BrKVC3Ba8CjfiSFpfWuHTaY/QlVOvPirooFxDNd+vP7tCIY4KY+fR5S0rHod4XtZ
-         7KO0nE8lnYPkbpu8GrY++NJALUl/tyrRYQceBwioQaIoZOH++r7aJ1uI7biQ4Mu4Gu03
-         5HueH4IKxOSsFWXfMR82f4iNnaWg1UEW2MC7NgzwDvDbgI/tw77g+79L49mLAH5aO4z5
-         5ahg==
-X-Gm-Message-State: ACrzQf3b/G5PPN+nYbRZHr4d1y6fpeaaOIYb6oKzA2Lj5lG0Ed8/GryZ
-        M9r9szckNkstHkX5led4EMA=
-X-Google-Smtp-Source: AMsMyM4peM46phw8DbztZr2o0snwG1Jyq78PMMuOiEZT+gfDnHjnAaYWjBGLimya9RfG8Pl0OktW3A==
-X-Received: by 2002:a05:6a00:e1b:b0:537:7c74:c405 with SMTP id bq27-20020a056a000e1b00b005377c74c405mr13791536pfb.43.1664629174686;
-        Sat, 01 Oct 2022 05:59:34 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-9.three.co.id. [180.214.232.9])
-        by smtp.gmail.com with ESMTPSA id y25-20020aa78f39000000b0053e7d3b8d6dsm3700511pfr.1.2022.10.01.05.59.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Oct 2022 05:59:34 -0700 (PDT)
-Message-ID: <594c4afe-17f7-8670-d5ba-ebdeca6a4b47@gmail.com>
-Date:   Sat, 1 Oct 2022 19:59:28 +0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=GyQ0gT3wrNoHntYDNZL9obMAwGH/4+OIJjhw06gQ+Yc=;
+        b=cgbzK+YBYn3/i9qwmQwzS7WEXQyubbtvBDfpThpWq3WBZpImRrf3RSlmgP1Lir9nb9
+         HrX7Lam7XjlaWx2mdIXdvzvQ1uYAcGsA2J2rnoSTE3qgtgt4/vRyKA6csQxL9bTTbZHq
+         qWWqdNUdkTrVsUKxkySh1wt/q99HpauGlwvQjVab5Q0YKkrxbDmxmieZLX/2Aqjbla/k
+         vEyMVptPvI+PFEc2gbFqxqlTiF58k9te8tSz675jYtQVFpQqsuzIhX9T76BOiuq5s/t/
+         mtklozrt9RSN7oLASrCFP/sXuaWscjJz4esWbd8fskTTdT4WaVw61lb65jytFnrh778S
+         hK8A==
+X-Gm-Message-State: ACrzQf36ccV/xeiL2PIMt/TWhF1itEg1Ddy4xXV5hkiKMLiwG/w2qYwJ
+        mSuKv17ulrN080UmPiAg9oQ=
+X-Google-Smtp-Source: AMsMyM55HCRZWJFA5hsOtM+3Mv+5r+PIcP/t7z8MdWsQpvvdprYqq0g0+Fv1YLXPpBsa9io+JA0BmA==
+X-Received: by 2002:a17:90b:4a91:b0:202:59ed:94d5 with SMTP id lp17-20020a17090b4a9100b0020259ed94d5mr7636071pjb.213.1664722908539;
+        Sun, 02 Oct 2022 08:01:48 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f5-20020aa79685000000b0053e22c7f135sm5675457pfk.141.2022.10.02.08.01.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Oct 2022 08:01:47 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 2 Oct 2022 08:01:45 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Zeng Heng <zengheng4@huawei.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org, liwei391@huawei.com
+Subject: Re: [PATCH -next] hwmon: (nct6683) remove unused variable in
+ nct6683_create_attr_group
+Message-ID: <20221002150145.GA2895775@roeck-us.net>
+References: <20220927114352.2498079-1-zengheng4@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v9 1/9] hwmon: smpro: Add Ampere's Altra smpro-hwmon
- driver
-Content-Language: en-US
-To:     Quan Nguyen <quan@os.amperecomputing.com>, macro@orcam.me.uk,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thu Nguyen <thu@os.amperecomputing.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Open Source Submission <patches@amperecomputing.com>
-Cc:     Phong Vo <phong@os.amperecomputing.com>,
-        thang@os.amperecomputing.com
-References: <20220929094321.770125-1-quan@os.amperecomputing.com>
- <20220929094321.770125-2-quan@os.amperecomputing.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220929094321.770125-2-quan@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927114352.2498079-1-zengheng4@huawei.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/29/22 16:43, Quan Nguyen wrote:
-> This commit adds support for Ampere SMpro hwmon driver. This driver
-> supports accessing various CPU sensors provided by the SMpro co-processor
-> including temperature, power, voltages, and current.
+On Tue, Sep 27, 2022 at 07:43:52PM +0800, Zeng Heng wrote:
+> When enable 'unused-but-set-variable' compile
+> warning option, it would raise warning as below:
 > 
+> drivers/hwmon/nct6683.c:415:9:
+> warning: variable 'j' set but not used [-Wunused-but-set-variable]
+> 
+> Variable 'j' in nct6683_create_attr_group is unused,
+> so remove it and simplify the 'for' loop.
+> 
+> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
 
-s/This commit adds/Add/
+Applied.
 
--- 
-An old man doll... just what I always wanted! - Clara
+Thanks,
+Guenter
+
+> ---
+>  drivers/hwmon/nct6683.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+> index 6a9f420e7d32..a872f783e9cc 100644
+> --- a/drivers/hwmon/nct6683.c
+> +++ b/drivers/hwmon/nct6683.c
+> @@ -412,7 +412,7 @@ nct6683_create_attr_group(struct device *dev,
+>  	struct sensor_device_attr_u *su;
+>  	struct attribute_group *group;
+>  	struct attribute **attrs;
+> -	int i, j, count;
+> +	int i, count;
+>  
+>  	if (repeat <= 0)
+>  		return ERR_PTR(-EINVAL);
+> @@ -443,7 +443,7 @@ nct6683_create_attr_group(struct device *dev,
+>  
+>  	for (i = 0; i < repeat; i++) {
+>  		t = tg->templates;
+> -		for (j = 0; *t != NULL; j++) {
+> +		while (*t) {
+>  			snprintf(su->name, sizeof(su->name),
+>  				 (*t)->dev_attr.attr.name, tg->base + i);
+>  			if ((*t)->s2) {
