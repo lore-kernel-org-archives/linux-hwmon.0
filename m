@@ -2,155 +2,117 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D827BC433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Oct 2022 05:28:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 927F2C433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Oct 2022 08:40:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiJCF2J (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 3 Oct 2022 01:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58892 "EHLO
+        id S229515AbiJCIkJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 3 Oct 2022 04:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiJCF2J (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 Oct 2022 01:28:09 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EBF22ED4A
-        for <linux-hwmon@vger.kernel.org>; Sun,  2 Oct 2022 22:28:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664774888; x=1696310888;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=wy9dUyQIKw4/MmbWCu3fCUBToGp0IqPdf43m2P5+By0=;
-  b=avoaBhAt2wo2WhK2+W10UbFHAzWa+mxgtkEjBeyWDV3f1TKppueeZdax
-   s30y7odGqAj+nYyo7bZw1/OXSUhunzahfKYJL3MTd5ENcnlkEtjHf7OPF
-   u5ZxLvIhRKCcP13NZK9rGiVMDNad751wGmW/UlqO/c5GE6+wcRIXn9uad
-   ovQfQLqr2ODG5VQGwg+g37e4JYcQAb9LhSv2iFRstJhlcUC4ZCCOo7fx3
-   G05gwgn9pJtcKrbt7tlirxqbrbahTwWtdGQ72bt79pjdHQPBFIam8w3hQ
-   bDuk7qVfPjORqHP4sUudQOWkdjm7VKr+EFRPnYK6RBVXyUZlGRD13t/oy
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="388840801"
-X-IronPort-AV: E=Sophos;i="5.93,364,1654585200"; 
-   d="scan'208";a="388840801"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2022 22:28:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="691930278"
-X-IronPort-AV: E=Sophos;i="5.93,364,1654585200"; 
-   d="scan'208";a="691930278"
-Received: from lkp-server01.sh.intel.com (HELO 14cc182da2d0) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 02 Oct 2022 22:28:06 -0700
-Received: from kbuild by 14cc182da2d0 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ofDzq-0004LV-0Q;
-        Mon, 03 Oct 2022 05:28:06 +0000
-Date:   Mon, 03 Oct 2022 13:27:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
- adf30241dae9df4ed23ae99ea1a22a3c8b25aa1f
-Message-ID: <633a72c2.iQtgMxri5nn1yCZC%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S231738AbiJCIjW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 Oct 2022 04:39:22 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD3E4D155
+        for <linux-hwmon@vger.kernel.org>; Mon,  3 Oct 2022 01:14:13 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id bu25so15463438lfb.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 03 Oct 2022 01:14:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protocubo.io; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=tS2WhQfDTQ5XRI83dZZXEjLfz+Bdzbu6tgG4oPFfDXY=;
+        b=jyNfGU+c4IyLm9QAFKv3OU1MJPCyo4I3vRtTlIOMRwlvx5mS3CF+e2Vf/H5xsWEZGW
+         dY0d14uf8BVR3Fkk9TgVcRy/hJKJjHarzJq2DP09BLPpcOkZo1cpy1hvhpYXzI0HJgeQ
+         4+fRqdg6E/IeBDi4fVlwfxdEkDyxkFhKn5Rc+KnMg2V75Js1rc02Ej8ZOlyiHFLgDk4y
+         JuxLuODXz2n6I1RK9LzGMpHeawVjw5XBFBfHKxfBvmwThixTbcoKpNv7Ffnwfm4OM2df
+         CJ3nKVD3ayhp1pfBkdjOcRBJkYgSe7fuEWWcdfxTj3D1MBHkb/rwDugh34hfpN0yl0li
+         ppqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=tS2WhQfDTQ5XRI83dZZXEjLfz+Bdzbu6tgG4oPFfDXY=;
+        b=KPsQHhwEnQAUn6tA5Pzz7Mhwl7amZNxn0baDi+l9+m6VYIc5X2vDze36BRFh//5CY5
+         nnNGRM2A3RHj40TvbONLm/HJx59zC8WSETaezkMWeSreYcWFfh369aBwvsypTYvTEkJQ
+         nydpLqLdTyvEIGCvU9OstgbqW5nbPHidLoNZ9hUBxp3DGpacbWVZu1FcrmgbP7ghn1B/
+         Yamkm5zSzTnmzjtq+obq5sKZJ6JNX1qbtiRNcSK30dIprbENDu6j9uW3F1BfZ/3aIjO0
+         dx1vHBdDoCYii4fybMsHhCR0tsaWHM7WWJo6tAuU8hZExBIOVYbHEPoMs47pRS2ChGub
+         e9Rw==
+X-Gm-Message-State: ACrzQf1fIr1LRWWOIO+7O2ud0W+JrhAeaQ8oNMVHMr2c/EJ0JQ//RjA7
+        z7c70d3eLK1+sZ9+ri6MrtHRbkAtydEMJXOV2Ghu7Q==
+X-Google-Smtp-Source: AMsMyM5aNnON8tY8jJc9Xq/aAamvtgglftZh4nNm54jS+VeuXs9Tv9dTN6Xx0dCiXtfpB+XJAWYYxqIqzw/tHoIxAeo=
+X-Received: by 2002:a19:7003:0:b0:4a2:40b9:dea8 with SMTP id
+ h3-20020a197003000000b004a240b9dea8mr907848lfc.688.1664784843457; Mon, 03 Oct
+ 2022 01:14:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <YznOUQ7Pijedu0NW@monster.localdomain>
+In-Reply-To: <YznOUQ7Pijedu0NW@monster.localdomain>
+From:   Jonas Malaco <jonas@protocubo.io>
+Date:   Mon, 3 Oct 2022 05:13:27 -0300
+Message-ID: <CANS_-EOai0-4=oDvNgHCUjhnNz_AmAtKx_sOPxF9Z88TsJv7FA@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: corsair-psu: add USB id of new revision of the
+ HX1000i psu
+To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-branch HEAD: adf30241dae9df4ed23ae99ea1a22a3c8b25aa1f  watchdog: twl4030_wdt: add missing mod_devicetable.h include
+On Sun, Oct 2, 2022 at 2:46 PM Wilken Gottwalt
+<wilken.gottwalt@posteo.net> wrote:
+>
+> Also updates the documentation accordingly.
+>
+> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+> ---
+>  Documentation/hwmon/corsair-psu.rst | 2 +-
+>  drivers/hwmon/corsair-psu.c         | 3 ++-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
+> index c3a76305c587..3c1b164eb3c0 100644
+> --- a/Documentation/hwmon/corsair-psu.rst
+> +++ b/Documentation/hwmon/corsair-psu.rst
+> @@ -15,7 +15,7 @@ Supported devices:
+>
+>    Corsair HX850i
+>
+> -  Corsair HX1000i
+> +  Corsair HX1000i (revision 1 and 2)
+>
+>    Corsair HX1200i
+>
+> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> index c99e4c6afc2d..345d883ab044 100644
+> --- a/drivers/hwmon/corsair-psu.c
+> +++ b/drivers/hwmon/corsair-psu.c
+> @@ -813,13 +813,14 @@ static const struct hid_device_id corsairpsu_idtable[] = {
+>         { HID_USB_DEVICE(0x1b1c, 0x1c04) }, /* Corsair HX650i */
+>         { HID_USB_DEVICE(0x1b1c, 0x1c05) }, /* Corsair HX750i */
+>         { HID_USB_DEVICE(0x1b1c, 0x1c06) }, /* Corsair HX850i */
+> -       { HID_USB_DEVICE(0x1b1c, 0x1c07) }, /* Corsair HX1000i */
+> +       { HID_USB_DEVICE(0x1b1c, 0x1c07) }, /* Corsair HX1000i revision 1 */
+>         { HID_USB_DEVICE(0x1b1c, 0x1c08) }, /* Corsair HX1200i */
+>         { HID_USB_DEVICE(0x1b1c, 0x1c09) }, /* Corsair RM550i */
+>         { HID_USB_DEVICE(0x1b1c, 0x1c0a) }, /* Corsair RM650i */
+>         { HID_USB_DEVICE(0x1b1c, 0x1c0b) }, /* Corsair RM750i */
+>         { HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
+>         { HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
+> +       { HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsaur HX1000i revision 2 */
 
-elapsed time: 725m
+Wilken,
 
-configs tested: 79
-configs skipped: 2
+A small typo has creeped in: s/Corsaur/Corsair/.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+P.S. Sorry if this reply arrives somewhat mangled, I'm away from my
+regular setup.
 
-gcc tested configs:
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-i386                 randconfig-a014-20221003
-i386                 randconfig-a011-20221003
-i386                 randconfig-a012-20221003
-i386                 randconfig-a013-20221003
-i386                 randconfig-a015-20221003
-i386                 randconfig-a016-20221003
-x86_64               randconfig-a011-20221003
-x86_64               randconfig-a014-20221003
-x86_64               randconfig-a012-20221003
-riscv                randconfig-r042-20221003
-x86_64                           rhel-8.3-syz
-x86_64               randconfig-a013-20221003
-i386                                defconfig
-arc                  randconfig-r043-20221003
-x86_64                         rhel-8.3-kunit
-x86_64               randconfig-a015-20221003
-x86_64               randconfig-a016-20221003
-arc                  randconfig-r043-20221002
-x86_64                           rhel-8.3-kvm
-s390                 randconfig-r044-20221003
-powerpc                          allmodconfig
-mips                             allyesconfig
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arc                                 defconfig
-powerpc                           allnoconfig
-s390                             allmodconfig
-i386                             allyesconfig
-sh                               allmodconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-ia64                             allmodconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-arm                           u8500_defconfig
-sh                           se7751_defconfig
-powerpc                mpc7448_hpc2_defconfig
-powerpc                    amigaone_defconfig
-sparc                       sparc32_defconfig
-m68k                        m5272c3_defconfig
-arm                         axm55xx_defconfig
-ia64                             alldefconfig
-powerpc                     sequoia_defconfig
-ia64                                defconfig
-openrisc                  or1klitex_defconfig
-arm                         at91_dt_defconfig
-
-clang tested configs:
-i386                 randconfig-a003-20221003
-i386                 randconfig-a002-20221003
-i386                 randconfig-a001-20221003
-i386                 randconfig-a004-20221003
-i386                 randconfig-a005-20221003
-i386                 randconfig-a006-20221003
-hexagon              randconfig-r041-20221003
-riscv                randconfig-r042-20221002
-hexagon              randconfig-r041-20221002
-hexagon              randconfig-r045-20221002
-hexagon              randconfig-r045-20221003
-s390                 randconfig-r044-20221002
-x86_64               randconfig-a003-20221003
-x86_64               randconfig-a002-20221003
-x86_64               randconfig-a001-20221003
-x86_64               randconfig-a004-20221003
-x86_64               randconfig-a005-20221003
-x86_64               randconfig-a006-20221003
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>         { },
+>  };
+>  MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
+> --
+> 2.37.3
+>
