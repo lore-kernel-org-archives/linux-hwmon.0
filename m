@@ -2,83 +2,108 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27D81C433F5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Oct 2022 21:40:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94DD5C433F5
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Oct 2022 16:26:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiJCVkb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 3 Oct 2022 17:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
+        id S229666AbiJDQ0b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 4 Oct 2022 12:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiJCVka (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 Oct 2022 17:40:30 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D3914033
-        for <linux-hwmon@vger.kernel.org>; Mon,  3 Oct 2022 14:40:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664833229; x=1696369229;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lruElgHMC8LZXpqnpQb5NpXNJP5vB9bXAVMMtoZ+X1Y=;
-  b=bp59r1sb84BKO7pqBMzfwuw0adWJ6H06mHKcb+krhjWEprcx+YOiQOag
-   7CwLN4YuQDgq0te9IgK1Xup7xvzyiI+Rlzy2lO04p9fHQl5SLDqnzVC3R
-   oYQBgIktrAcd3RPjorIWOdP0WQurRMwsyJj5SS+2f8mpVvhIYtCCdQBNh
-   9UXvm4PaazyJ619yIOeL1p6PEzPHbfa4UhU8SYQ03Uju2rNn73oMjsVPD
-   KiZ+wXvu5jTwXwf97CrA9T0wjSZabAsf83DLopRAybwXSHtJea8Egy8iM
-   Lb2tQsp4p40nX8hHbN7Fh57PlIozG/DQSSVaJozjNmGpg0V7Rho6K3xVs
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="389056737"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="389056737"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 14:40:29 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="618895118"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="618895118"
-Received: from kbalinsk-mobl1.ger.corp.intel.com (HELO intel.com) ([10.213.7.91])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 14:40:27 -0700
-Date:   Mon, 3 Oct 2022 23:40:24 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Badal Nilawar <badal.nilawar@intel.com>
-Cc:     intel-gfx@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [PATCH 7/7] drm/i915/hwmon: Extend power/energy for
- XEHPSDV
-Message-ID: <YztWyHxlVH2hrw6F@ashyti-mobl2.lan>
-References: <20220927055020.3499420-1-badal.nilawar@intel.com>
- <20220927055020.3499420-8-badal.nilawar@intel.com>
+        with ESMTP id S230030AbiJDQ0K (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Oct 2022 12:26:10 -0400
+Received: from p3nlsmtpcp01-01.prod.phx3.secureserver.net (p3nlsmtpcp01-01.prod.phx3.secureserver.net [184.168.200.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51F11EC4F
+        for <linux-hwmon@vger.kernel.org>; Tue,  4 Oct 2022 09:26:02 -0700 (PDT)
+Received: from p3plcpnl1062.prod.phx3.secureserver.net ([10.199.64.97])
+        by : HOSTING RELAY : with ESMTP
+        id fkj6ojxUFYH5ofkj6oAWgL; Tue, 04 Oct 2022 09:25:00 -0700
+X-CMAE-Analysis: v=2.4 cv=aOc1FZxm c=1 sm=1 tr=0 ts=633c5e5d
+ a=5p2kn+TdgGlJEV5v7/uc8g==:117 a=E/CgoFk0eU8AT+0vghrO8A==:17
+ a=9+rZDBEiDlHhcck0kWbJtElFXBc=:19 a=gQX1269ULFhLm4Thdby34LUHVW0=:19
+ a=IkcTkHD0fZMA:10 a=MKtGQD3n3ToA:10 a=1oJP67jkp3AA:10 a=Qawa6l4ZSaYA:10
+ a=sCYMkZJ_nKMA:10 a=7YVYimkLkubkvvIPbcMA:9 a=QEXdDO2ut3YA:10
+ a=ZXOyfd87I8AR-G90gsrY:22
+X-SECURESERVER-ACCT: ahmad@khalifa.ws
+Received: from [81.147.178.132] (port=46176 helo=[192.168.1.118])
+        by p3plcpnl1062.prod.phx3.secureserver.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <ahmad@khalifa.ws>)
+        id 1ofkj6-00B8YR-D0; Tue, 04 Oct 2022 09:25:00 -0700
+Message-ID: <eeacbfb8-1e28-072d-2428-931e3270ddb8@khalifa.ws>
+Date:   Tue, 4 Oct 2022 17:24:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927055020.3499420-8-badal.nilawar@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 1/2] it87: Add param to ignore ACPI resource conflicts
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <20221002174259.14609-1-ahmad@khalifa.ws>
+ <20221002174259.14609-2-ahmad@khalifa.ws>
+ <20221003181002.GC1023056@roeck-us.net>
+ <b493e629-c6a5-e705-6574-060550f5c977@khalifa.ws>
+ <3d2815ae-00f5-5333-9ce0-8f6d5f1e5887@roeck-us.net>
+From:   Ahmad Khalifa <ahmad@khalifa.ws>
+In-Reply-To: <3d2815ae-00f5-5333-9ce0-8f6d5f1e5887@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - p3plcpnl1062.prod.phx3.secureserver.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - khalifa.ws
+X-Get-Message-Sender-Via: p3plcpnl1062.prod.phx3.secureserver.net: authenticated_id: ahmad@khalifa.ws
+X-Authenticated-Sender: p3plcpnl1062.prod.phx3.secureserver.net: ahmad@khalifa.ws
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-CMAE-Envelope: MS4xfGxdawDqQx78Z/D5yQCQYQP/BVEU8vhzb4jjCnBV1Jy2/FhNd6WnfaHeaoc0B/tJLyBoFA1ds6/+tvtgu94Q2ROFr6gfD4MWiNu6jokVwbdGkdxzKO1R
+ 6GM9T4VnV5V7GbMc8tj/9+ez0AYugHfsmd+vlSFqrn8MlOT4VV33aghCL0GF32da3VO8ZGyuwn8CUhjA7dzpa8oAknRHz3uRr6VQwUf8gqvz0UcCNDRCFkfu
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 11:20:20AM +0530, Badal Nilawar wrote:
-> From: Dale B Stimson <dale.b.stimson@intel.com>
+On 03/10/2022 21:50, Guenter Roeck wrote:
+> On 10/3/22 13:30, Ahmad Khalifa wrote:
+>> On 03/10/2022 19:10, Guenter Roeck wrote:
+>>> On Sun, Oct 02, 2022 at 06:43:00PM +0100, Ahmad Khalifa wrote:
+> They are unrelated, period. You only consider systems where a resource
+> conflict exists. Also, you could (try to) use acpi_enforce_resources=lax
+> instead.
 > 
-> Extend hwmon power/energy for XEHPSDV especially per gt level energy
-> usage.
+> Everything else is just a coincidence that applies to _your_ system.
 > 
-> v2: Update to latest HWMON spec (Ashutosh)
-> v3: Fix review comments (Ashutosh)
-> v4: Fix review comments (Anshuman)
-> v5: s/hwmon_device_register_with_info/
->     devm_hwmon_device_register_with_info/ (Ashutosh)
+[...]
+> That isn't the point here. The problem is not with the patches, it is with
+> the rationale for the patches.
 > 
-> Signed-off-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
-> Signed-off-by: Dale B Stimson <dale.b.stimson@intel.com>
-> Signed-off-by: Badal Nilawar <badal.nilawar@intel.com>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> Reviewed-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
-> Reviewed-by: Anshuman Gupta <anshuman.gupta@intel.com>
+Fair point.
 
-This last patch is making me thing that the hwmon should have
-been under gt rather than under i915. We leave it to a later
-refactoring.
+The force_id change is warranted on its own, even without the 
+ignore_resource_conflict because:
+  - Chipsets will reply with all 1s if no LPC peripheral is connected
+    Useful for lots of systems with a single device
+  - IT87 will reply with all 1s if you don't enter config space correctly
+    Useful for those who override with a known id, but the device is
+    quite different
+  - The driver supports 2 sio devices, but the use of force_id is
+    mostly a single-device use case. It doesn't support forcing two
+    different devices, so it's safe to assume a non-existent device
+    is not expected for those users.
 
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+My systems run mostly tainted Kernels and I can even grab the temps with 
+a shell script, so I'm not worried about my systems, but they're the
+only ones I can test with :)
 
-Thanks,
-Andi
+The kernel parameter is an option that works, but it's a bit more
+technical for general users to update their bootloader and change
+modprobe config at the same time. This whole patch is about making
+the it87 more usable with less compile/install work.
+
+
+I can prep v3 with both changes if that's still a good approach.
+
+
+-- 
+Regards,
+Ahmad
