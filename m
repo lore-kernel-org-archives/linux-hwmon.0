@@ -2,42 +2,43 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95E1AC433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Oct 2022 21:02:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5AD1C433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Oct 2022 21:03:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiJDVCx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 4 Oct 2022 17:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53686 "EHLO
+        id S229514AbiJDVDO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 4 Oct 2022 17:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiJDVCx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Oct 2022 17:02:53 -0400
+        with ESMTP id S229513AbiJDVDN (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Oct 2022 17:03:13 -0400
 Received: from p3nlsmtpcp01-02.prod.phx3.secureserver.net (p3nlsmtpcp01-02.prod.phx3.secureserver.net [184.168.200.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940B765270
-        for <linux-hwmon@vger.kernel.org>; Tue,  4 Oct 2022 14:02:51 -0700 (PDT)
-Received: from p3plcpnl1062.prod.phx3.secureserver.net ([10.199.64.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA26465839
+        for <linux-hwmon@vger.kernel.org>; Tue,  4 Oct 2022 14:03:12 -0700 (PDT)
+Received: from p3plcpnl1062.prod.phx3.secureserver.net ([10.199.64.96])
         by : HOSTING RELAY : with ESMTP
-        id fp2xoBjOPsM8efp2xoWENh; Tue, 04 Oct 2022 14:01:47 -0700
-X-CMAE-Analysis: v=2.4 cv=L73Y/8f8 c=1 sm=1 tr=0 ts=633c9f3b
- a=5p2kn+TdgGlJEV5v7/uc8g==:117 a=E/CgoFk0eU8AT+0vghrO8A==:17
+        id fp3LoBjX9sM8efp3LoWEVE; Tue, 04 Oct 2022 14:02:11 -0700
+X-CMAE-Analysis: v=2.4 cv=L73Y/8f8 c=1 sm=1 tr=0 ts=633c9f53
+ a=2X41b4ieGfoJAKBLAMfEgQ==:117 a=E/CgoFk0eU8AT+0vghrO8A==:17
  a=9+rZDBEiDlHhcck0kWbJtElFXBc=:19 a=gQX1269ULFhLm4Thdby34LUHVW0=:19
  a=MKtGQD3n3ToA:10 a=1oJP67jkp3AA:10 a=Qawa6l4ZSaYA:10 a=sCYMkZJ_nKMA:10
- a=VwQbUJbxAAAA:8 a=_jlGtV7tAAAA:8 a=iihcBN-LAAAA:8 a=KT2vLV3kuGowUw7RsL4A:9
- a=ZXOyfd87I8AR-G90gsrY:22 a=AjGcO6oz07-iQ99wixmX:22 a=nlm17XC03S6CtCLSeiRr:22
+ a=iihcBN-LAAAA:8 a=8S-GXJxo2x9UrRvwQHwA:9 a=ZXOyfd87I8AR-G90gsrY:22
  a=HcALgBdeMRM4wejQDfUI:22
 X-SECURESERVER-ACCT: ahmad@khalifa.ws
 Received: from [81.147.178.132] (port=39992 helo=orangina.lan)
         by p3plcpnl1062.prod.phx3.secureserver.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.94.2)
         (envelope-from <ahmad@khalifa.ws>)
-        id 1ofp2w-00Gpon-Sl; Tue, 04 Oct 2022 14:01:47 -0700
+        id 1ofp3F-00Gpon-TQ; Tue, 04 Oct 2022 14:02:06 -0700
 From:   Ahmad Khalifa <ahmad@khalifa.ws>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
 Cc:     Ahmad Khalifa <ahmad@khalifa.ws>
-Subject: [PATCH v3 0/2] hwmon: (it87) Add param to ignore ACPI resource
-Date:   Tue,  4 Oct 2022 22:00:59 +0100
-Message-Id: <20221004210100.540120-1-ahmad@khalifa.ws>
+Subject: [PATCH v3 1/2] hwmon: (it87) Add param to ignore ACPI resource conflicts
+Date:   Tue,  4 Oct 2022 22:01:01 +0100
+Message-Id: <20221004210100.540120-2-ahmad@khalifa.ws>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221004210100.540120-1-ahmad@khalifa.ws>
+References: <20221004210100.540120-1-ahmad@khalifa.ws>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -50,55 +51,51 @@ X-Authenticated-Sender: p3plcpnl1062.prod.phx3.secureserver.net: ahmad@khalifa.w
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-CMAE-Envelope: MS4xfC5wB96ycewWYYcwBrRAec4F61B79+cCpgQF9ZC5a8aMgqVsDZFvgavNe+vG4OS20cg5ooKUhNTdbqR6nU8gl++/o1TLm1+dDkfeeBG+PrRwtuxwUYmT
- Y4aIjQnTix06XxZMvNLcfFvrXISoPzWETXqmhsJVEWLxyX/gOBDw6MKF26+kZ5CQvWEtR0npdClst3txzVe7NPi7AkbYJwBmxo/jNDXjeFodxlYAu6CY2yrD
+X-CMAE-Envelope: MS4xfJBBY7Yb4L0NJB/6bHod4GPy8sjKAOuIjqMIEC3sHuNg3/K3kFWOKppxhlpUV9q1n5TabTgYXjj79zIsVBZfnnOorYg3BbL/pp7wxcKebldr8lAC/oCL
+ 6eQeqvjJmlOeYEHFE6AlC+zYd2rudRbvAkREb44M7hCcJyrYmujSl75D4tgbloMCx3pruG9ymq7AxxjRoQKN9fFjhSu9WhkH3zjwRtsjgjN16926pGiIMpqy
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Add parameter to ignore ACPI resource conflicts as an alternate to using
+'acpi_enforce_resources=lax'.
 
-Changes in this patch set:
+Some BIOSes reserve resources and don't use them and the system wide
+parameter may result in failures to certain drivers.
 
-* Add parameter to ignore ACPI resource conflicts as an alternate to
-  using 'acpi_enforce_resources=lax'.
-  Some BIOSes reserve resources and don't use them and the system wide
-  parameter may result in failures to certain drivers.
+Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
+---
+ drivers/hwmon/it87.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-* Check there is a chip before using force_id parameter as there
-  is no value in registering a non-existent chip
-
-
-Code is inspired by the original it87 patchset dating back to 2017
-(around 5 years and 2 weeks since the date of the original
-ignore_resource_conflict param)
-
-Tested with it8688 on Gigabyte board with id as it8628 and compared
-against the out of tree module running the it8688 values (which in turn
-is blindly based off of the it8686 values) and the results are the same
-for the enabled sensors (i.e. not all 6 fans/temps/in are valid)
-
-
-v2: updates with comments: [2]
-* Add missing patch description, not just cover letter
-* split change for the force_id check into separate commit
-
-v3: v2 thread -> [3]
-* Fix formatting and switch to 0 for permissions
-* Patch descriptions and subject
-
-[1]: https://lore.kernel.org/linux-hwmon/6c8b5fbd514df708af84630544eca6ee12766bbd.camel@crawford.emu.id.au/
-[2]: https://lore.kernel.org/linux-hwmon/20221002151148.GA2896730@roeck-us.net/T/#u
-[3]: https://lore.kernel.org/linux-hwmon/20221002174259.14609-1-ahmad@khalifa.ws/
-
-Ahmad Khalifa (2):
-  hwmon: (it87) Add param to ignore ACPI resource conflicts
-  hwmon: (it87) Check for a valid chip before using force_id
-
- drivers/hwmon/it87.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
-
-
-base-commit: c3e0e1e23c70455916ff3472072437b3605c6cfe
+diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+index 0e543dbe0a6b..c4f5500dcf3c 100644
+--- a/drivers/hwmon/it87.c
++++ b/drivers/hwmon/it87.c
+@@ -69,6 +69,10 @@ static unsigned short force_id;
+ module_param(force_id, ushort, 0);
+ MODULE_PARM_DESC(force_id, "Override the detected device ID");
+ 
++static bool ignore_resource_conflict;
++module_param(ignore_resource_conflict, bool, 0);
++MODULE_PARM_DESC(ignore_resource_conflict, "Ignore ACPI resource conflict");
++
+ static struct platform_device *it87_pdev[2];
+ 
+ #define	REG_2E	0x2e	/* The register to read/write */
+@@ -3261,8 +3265,10 @@ static int __init it87_device_add(int index, unsigned short address,
+ 	int err;
+ 
+ 	err = acpi_check_resource_conflict(&res);
+-	if (err)
+-		return err;
++	if (err) {
++		if (!ignore_resource_conflict)
++			return err;
++	}
+ 
+ 	pdev = platform_device_alloc(DRVNAME, address);
+ 	if (!pdev)
 -- 
 2.30.2
 
