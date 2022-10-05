@@ -2,75 +2,78 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28E56C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Oct 2022 18:31:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95745C433FE
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Oct 2022 18:32:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiJESbV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Oct 2022 14:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
+        id S229379AbiJEScH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 5 Oct 2022 14:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbiJESbU (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Oct 2022 14:31:20 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91AB7D1E3;
-        Wed,  5 Oct 2022 11:31:19 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id o9-20020a17090a0a0900b0020ad4e758b3so2563172pjo.4;
-        Wed, 05 Oct 2022 11:31:19 -0700 (PDT)
+        with ESMTP id S229644AbiJEScG (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Oct 2022 14:32:06 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD3E422C6
+        for <linux-hwmon@vger.kernel.org>; Wed,  5 Oct 2022 11:32:05 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id b2so11217912plc.7
+        for <linux-hwmon@vger.kernel.org>; Wed, 05 Oct 2022 11:32:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=lncrKYF3dhxHA2yeuvS54Ddh1xazf36FsZjmkMxlg6w=;
-        b=bTTkW0QLjG4FZ6yAyAIASgkGRVrVz/uorbNdxH5GR7Se2mxXDRsHmPul2YVI5CXIzP
-         Wy1cB0KQ0ZSOXZyCHcUq1Y6dwoTB1E0e5P4JtW6W5w95W8vrtPASR2xuNewhKQ2Gv+nA
-         GvPFAK9cmK+0nXavBx3B5qVAU/FTQyypYKoih1od4CpelmKhcxF+OqpLU1Gt64gKJI+s
-         OlwPwko3/XxBBSQTs4nEWammEGWmJ52sOKkWFM1x35mS4vgSgLSwtpwMzEjsD+fSdpGR
-         Rb/lxMReYfeTHyPsG8AD7gy62pNZxAbErIi+bVzilUd7PR6Ytyzm1CYid+arYaULqdMB
-         TfEQ==
+        bh=JQ8qAyXQbluE5P7625sXp1QAWEcQAT+hb0Z6n+vKKDs=;
+        b=oe7wFl/J32/s/yDZaRrdSmgBDC3+CsjB3aofvwB/m07qD2cDGcXvtcookwi2m38x8v
+         wRwSLkcEOQzJ53MlEQ0ZdzPaWxYtC3pisA7HMQQch2oR5NTwWeSDrivxTd+iZsnsjw5u
+         o24f9zp+9M0bAYfVqytIOf5dWOz+JpWWrqX1Odf2XIDnqxLs4xJ26QcvAzICiMmYcL9x
+         kh5nnHq66jdWQDk+SFcO2E8j180ZpoHB70p1d0UBYieijM67yb7Gh1lJ1EdVp2pOAduM
+         qUnYuh0vtFnKNJ0uhmg75Rd/7dYZVWrMrWy3juvaSjOKBJvKMfvenXLtDL4UP+L4hgxu
+         2oOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=lncrKYF3dhxHA2yeuvS54Ddh1xazf36FsZjmkMxlg6w=;
-        b=OmqagrAjF7GW8fxhUaTeMCCh/1EM5Y4hT6uXbx4fdpOtn46+ey8Coe/EVt0P9/s/Fu
-         wVXUYuGSLnX50rtNe7YAIepNkpOJ+g0hPtBzqA/ENt7J3aIVLAZrt6xcpwY8yzCqkTlF
-         rDp5LevdDWjdg7qavNooiTTYEi+FPmlp2W1cyjwqavvCKzMFm+AET5jBdKO/sSnDLzVZ
-         3ieePcms9yBohjRfYx3YGS0xQgqCcWnhCh2ZfaeXbzwMW4nQrrDSNhs4+wJN3pZrfnyR
-         URIzjma8B8Wsd1h42SRr0WyLzXDWTWJBOtngkYsgxSV5SvKMD8QrhPVIAJAPGcC3KhBr
-         3+eQ==
-X-Gm-Message-State: ACrzQf1/fjVmjZ/2BNFXRFjMDJaYgx4RXZ1t9judHJF5Rb9s24fyv3sj
-        IQhvY4PrkdYFKo94JyySE9c=
-X-Google-Smtp-Source: AMsMyM6WkxKa3ApjrVvd47ddYhDKX3KPYfV6GCvohPT+LmKBuWgfvnAiG0io+O5JvRvTyVpQ+rWmCw==
-X-Received: by 2002:a17:90a:9408:b0:20a:6d13:2b1d with SMTP id r8-20020a17090a940800b0020a6d132b1dmr6505892pjo.0.1664994678960;
-        Wed, 05 Oct 2022 11:31:18 -0700 (PDT)
+        bh=JQ8qAyXQbluE5P7625sXp1QAWEcQAT+hb0Z6n+vKKDs=;
+        b=BOxJ1r+ZLr5T2gcydrAw/tWBIkiQVbC8pnBIabfUv8hqosDvGzWet03BF9xidnq+rt
+         3bBfalEUX5LVOxtbutsYaVOoJ/tlbZMYUXYQcwoDVMvcTZbATy22U6Wi4NPdq9Le6Z+q
+         l0wl+TDFKJyEf4Gy3JDSZtCF+926vnJCJO7hzzfmxNfn1aLce0vcHIvFcl+nLoj3pn6D
+         J+rkxjo/5wY1P5ujMTdbnxs9NG/otBgwiVu9IC4dnNY12v/W5Oz9OeF5NtRRYCr3v2lj
+         8IPcDLWihv8Cgtcx2yh6fa+G3qdjsJsiOtfebIK90yoXcGmB+iuFxFzV2mH0iALGfiSq
+         UC/Q==
+X-Gm-Message-State: ACrzQf0gyfqcHN9ZNHuRwE4ZTjXP45mIaYyCBuv7KDtEsZX6WrI3Moi4
+        hHv5uGBHrkvJD+lTCvgfSqk=
+X-Google-Smtp-Source: AMsMyM5bMVz06SDaDL1RIstlGycrv4hTTtpLr3wuuQgDECZkBhifvJ5GisuNQ0FQb5457flz5DrV8A==
+X-Received: by 2002:a17:902:8643:b0:17a:3e74:d2a6 with SMTP id y3-20020a170902864300b0017a3e74d2a6mr825291plt.120.1664994725092;
+        Wed, 05 Oct 2022 11:32:05 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y16-20020a17090264d000b001786b712bf7sm10700207pli.151.2022.10.05.11.31.17
+        by smtp.gmail.com with ESMTPSA id f201-20020a6238d2000000b0052e987c64efsm8965743pfa.174.2022.10.05.11.32.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 11:31:17 -0700 (PDT)
+        Wed, 05 Oct 2022 11:32:04 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 5 Oct 2022 11:31:16 -0700
+Date:   Wed, 5 Oct 2022 11:32:03 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (fschmd) Make const arrays static const
-Message-ID: <20221005183116.GA2734583@roeck-us.net>
-References: <20221005152752.318493-1-colin.i.king@gmail.com>
+To:     Ahmad Khalifa <ahmad@khalifa.ws>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] hwmon: (it87) Add param to ignore ACPI resource
+ conflicts
+Message-ID: <20221005183203.GA2747052@roeck-us.net>
+References: <20221004210100.540120-1-ahmad@khalifa.ws>
+ <20221004210100.540120-2-ahmad@khalifa.ws>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221005152752.318493-1-colin.i.king@gmail.com>
+In-Reply-To: <20221004210100.540120-2-ahmad@khalifa.ws>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 04:27:52PM +0100, Colin Ian King wrote:
-> Don't populate the read-only const arrays names and watchdog_minors
-> on the stack but instead make them static const. Also makes the
-> object code a little smaller.
+On Tue, Oct 04, 2022 at 10:01:01PM +0100, Ahmad Khalifa wrote:
+> Add parameter to ignore ACPI resource conflicts as an alternate to using
+> 'acpi_enforce_resources=lax'.
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Some BIOSes reserve resources and don't use them and the system wide
+> parameter may result in failures to certain drivers.
+> 
+> Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
 
 Applied to hwmon-next.
 
@@ -78,22 +81,34 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/fschmd.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/hwmon/it87.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/hwmon/fschmd.c b/drivers/hwmon/fschmd.c
-> index 0a77d6161928..e1f426e86f36 100644
-> --- a/drivers/hwmon/fschmd.c
-> +++ b/drivers/hwmon/fschmd.c
-> @@ -1083,9 +1083,9 @@ static int fschmd_detect(struct i2c_client *client,
->  static int fschmd_probe(struct i2c_client *client)
->  {
->  	struct fschmd_data *data;
-> -	const char * const names[7] = { "Poseidon", "Hermes", "Scylla",
-> +	static const char * const names[7] = { "Poseidon", "Hermes", "Scylla",
->  				"Heracles", "Heimdall", "Hades", "Syleus" };
-> -	const int watchdog_minors[] = { WATCHDOG_MINOR, 212, 213, 214, 215 };
-> +	static const int watchdog_minors[] = { WATCHDOG_MINOR, 212, 213, 214, 215 };
->  	int i, err;
->  	enum chips kind = i2c_match_id(fschmd_id, client)->driver_data;
+> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+> index 0e543dbe0a6b..c4f5500dcf3c 100644
+> --- a/drivers/hwmon/it87.c
+> +++ b/drivers/hwmon/it87.c
+> @@ -69,6 +69,10 @@ static unsigned short force_id;
+>  module_param(force_id, ushort, 0);
+>  MODULE_PARM_DESC(force_id, "Override the detected device ID");
 >  
+> +static bool ignore_resource_conflict;
+> +module_param(ignore_resource_conflict, bool, 0);
+> +MODULE_PARM_DESC(ignore_resource_conflict, "Ignore ACPI resource conflict");
+> +
+>  static struct platform_device *it87_pdev[2];
+>  
+>  #define	REG_2E	0x2e	/* The register to read/write */
+> @@ -3261,8 +3265,10 @@ static int __init it87_device_add(int index, unsigned short address,
+>  	int err;
+>  
+>  	err = acpi_check_resource_conflict(&res);
+> -	if (err)
+> -		return err;
+> +	if (err) {
+> +		if (!ignore_resource_conflict)
+> +			return err;
+> +	}
+>  
+>  	pdev = platform_device_alloc(DRVNAME, address);
+>  	if (!pdev)
