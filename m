@@ -2,91 +2,229 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED124C433FE
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Oct 2022 15:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6ADAC433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Oct 2022 15:45:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiJEP2D (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Oct 2022 11:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38388 "EHLO
+        id S230045AbiJEPps (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 5 Oct 2022 11:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiJEP15 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Oct 2022 11:27:57 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985871B9DB;
-        Wed,  5 Oct 2022 08:27:55 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id o20-20020a05600c4fd400b003b4a516c479so1237640wmq.1;
-        Wed, 05 Oct 2022 08:27:55 -0700 (PDT)
+        with ESMTP id S229588AbiJEPps (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Oct 2022 11:45:48 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE8E78BE3;
+        Wed,  5 Oct 2022 08:45:46 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id s206so15578827pgs.3;
+        Wed, 05 Oct 2022 08:45:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=C7yvq5LaxDRVj3NEoiYSWWej3JSDSWFXj9nJXuRBqoc=;
-        b=YZ798TqbwpLOO6C28mdHIbZElgraed18HA55DIqLKNEFshX3QhR2+OVzWCC9eCMmXM
-         6XxKwfWCwo3XNO+I2K1xbigOL8lvDMCT7elaubtjjBINqjlPheG6ZXUMvwQtwOQJ8SXY
-         ekOfNhRCpnVpRrx5wdEzz2qpXVx/DAXu3sZ6d0d6+2PI7K+QLLapeHUFNe4iDhO2lWct
-         A55+e879ushKEX6lbrQycLk2FVYUVVvDthZN1ndBzTgFIt1Gf+gcgxscFaTBUys9KQ/S
-         wf6EtDRxY6lfzKr5gNH1NuGTUHyN2sWjE9xeFavwT0BMkkEU3EEZDBgwq2jHm3nV5YZr
-         tGwA==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date;
+        bh=4ocK21qCE+ifPjNwPNOiAwnsHm5lGw5iKFsiqu1JLn8=;
+        b=Rj5uwLDtTU7pO5v33Wy4z5iQ9J2OFhmRl1p2mlvHdkAxAsJNzr9y+yErv0K7J6VCcE
+         eXwHocTpFFmy76Id9BSrnjDI35G3oUSAXPx4f8cvfCkVxRDUdN9JRmv1xd6yokLTLhfO
+         w9AzHVwSFojT/Rm12GlRAHF1ZvHUDTTWjy2KQIRN3MYWFGZ81Pvjt1+O7lS0qBMO9TAy
+         J/1rS1YSmdb5pn7hhRslX2Y2pg1l2CwMhK1JQFE4Bg+JCIaXVfuYe4ERr98rvjGK9VKB
+         PebLO9MW0TC0nUhjYEpXHytsb7u60HXHb6lAdmSbwDO4AireNvUHErSzypyUQBQOTJVS
+         eAtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=C7yvq5LaxDRVj3NEoiYSWWej3JSDSWFXj9nJXuRBqoc=;
-        b=M4zaacqyA+lgxPGFwLPSfZx9U9rRCUtooGGhY6l2kiy3KL7sXrQ70u8QkgHtpLwETI
-         uU0di21tF5MGi9brEEDtf1IRhBovsr90GN0Heva1M/HVBPsn5mDwUmuGG5JMRYMSc1HO
-         QspyGipZp2Z2zAy5PbMVOEn3iMxUkIcZn20iXfjC/Zqgw9j71xWTZmQrO7cq+rRQuYgP
-         Rjm0ux+uV3QPlN/mIXUQEXwaFjrWCv+KNF9lwd7Npa5vE3h2dRxcCJRKRrSSzj10hEZt
-         BshYE9kECMebv+3hgOevMb1nOgocZOUqJ9aEnth6bju39egw2v7qVoLjasPoaWorAntK
-         sunA==
-X-Gm-Message-State: ACrzQf21CDgyDWuiAZsfN+64JcGjEPbK2ieKec5C6+i6wqncwkrj6ze0
-        o/MXaAFzE/RBPu9Z2Cp1+TQ=
-X-Google-Smtp-Source: AMsMyM6xK2SSnjDn/YKWGJKsL61fVXSPWob9GQtiMk/14t8FGXGByZN41Og7RAceclSnHyt9997YYg==
-X-Received: by 2002:a05:600c:1f15:b0:3b4:8600:fd7e with SMTP id bd21-20020a05600c1f1500b003b48600fd7emr3867225wmb.40.1664983674091;
-        Wed, 05 Oct 2022 08:27:54 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id r6-20020a5d4986000000b0022ccae2fa62sm3369480wrq.22.2022.10.05.08.27.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 08:27:53 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (fschmd) Make const arrays static const
-Date:   Wed,  5 Oct 2022 16:27:52 +0100
-Message-Id: <20221005152752.318493-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=4ocK21qCE+ifPjNwPNOiAwnsHm5lGw5iKFsiqu1JLn8=;
+        b=jQ8YQNF+XiNnrX4+94gJ8IUxu8p2XraIKYFJTiZ8AmJkTVOFzSqZ+rwdTRQfgoUtee
+         LRv+9/dtsa5FKNb7DYdLiYYITC4gI5wl4wKGG0HVkDCoa7e7fNU9xTaeWZEnAIrZgr6e
+         U2UvtN+A/GUlLNFqxUN1lLmaoGQKALzi8jgamAJh/1U5D+1+KFWZbXTl2dD9OVAeAE/S
+         jEZhA5Nx7uUCiicjo6k+mPqN6PwbXBujCcippprNVA4XjREMpDQ5y8o+7HG3lEAKMKHv
+         srGhbR0IJ2Csyp8HqkteBFE33tx7WmpHf6HEFkKXtH4UrsOvXtSvP/gkplPsJ5DjtS2m
+         VgYw==
+X-Gm-Message-State: ACrzQf2UB18HZdBgR1vyFN+AUHiDvrDNDR1zSE11498OaEZLfeY3HtcO
+        iGWt3fyT/Jy0sPpk9XflJvY=
+X-Google-Smtp-Source: AMsMyM7W8Te7qSDT7fHm1KWxUdnPzpYZPEKY6+L5cGx9bM1aHOLKCoiSaRUol9IK6VNNxZgqDCgvEQ==
+X-Received: by 2002:a63:c14:0:b0:456:d887:c83 with SMTP id b20-20020a630c14000000b00456d8870c83mr383920pgl.53.1664984746289;
+        Wed, 05 Oct 2022 08:45:46 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h7-20020a631207000000b0041cd2417c66sm9938151pgl.18.2022.10.05.08.45.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Oct 2022 08:45:44 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <55a3f673-c204-f2b1-22bc-bf311a505adf@roeck-us.net>
+Date:   Wed, 5 Oct 2022 08:45:42 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Roland Stigge <stigge@antcom.de>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+References: <20220922050718.1079651-1-Naresh.Solanki@9elements.com>
+ <20220922050718.1079651-2-Naresh.Solanki@9elements.com>
+ <20220929193251.GA2606428-robh@kernel.org>
+ <CABqG17hf7QhJuHO60V=ue8ev7cSnikr0nntkLAQkqnfyPc31xQ@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add binding for max6639
+In-Reply-To: <CABqG17hf7QhJuHO60V=ue8ev7cSnikr0nntkLAQkqnfyPc31xQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Don't populate the read-only const arrays names and watchdog_minors
-on the stack but instead make them static const. Also makes the
-object code a little smaller.
+On 10/5/22 06:16, Naresh Solanki wrote:
+> Hi Rob,
+> 
+> I can add common fan bindings.
+> Below are the properties that I can think of:
+> max-rpm, pulse-per-revolution
+> Let me know what you think.
+> 
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/hwmon/fschmd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+For max6650, we have:
 
-diff --git a/drivers/hwmon/fschmd.c b/drivers/hwmon/fschmd.c
-index 0a77d6161928..e1f426e86f36 100644
---- a/drivers/hwmon/fschmd.c
-+++ b/drivers/hwmon/fschmd.c
-@@ -1083,9 +1083,9 @@ static int fschmd_detect(struct i2c_client *client,
- static int fschmd_probe(struct i2c_client *client)
- {
- 	struct fschmd_data *data;
--	const char * const names[7] = { "Poseidon", "Hermes", "Scylla",
-+	static const char * const names[7] = { "Poseidon", "Hermes", "Scylla",
- 				"Heracles", "Heimdall", "Hades", "Syleus" };
--	const int watchdog_minors[] = { WATCHDOG_MINOR, 212, 213, 214, 215 };
-+	static const int watchdog_minors[] = { WATCHDOG_MINOR, 212, 213, 214, 215 };
- 	int i, err;
- 	enum chips kind = i2c_match_id(fschmd_id, client)->driver_data;
- 
--- 
-2.37.3
+     maxim,fan-microvolt = <12000000>;
+     maxim,fan-prescale = <4>;
+     maxim,fan-target-rpm = <1200>;
+
+The voltage can be handled with a regulator, so that won't be necessary.
+Prescale (fan divider) values and target rpm seem relevant, though.
+The sysfs ABI also permits a minimum rpm which also seems relevant
+(lower speeds would indicate fan failures).
+
+Then there are pwm specific parameters for pwm controlled fans.
+     pwm polarity
+     pwm frequency
+     pwm mode (direct current or pulse-width modulation)
+
+Guenter
+
+> Regards,
+> Naresh Solanki
+> 
+> 
+> 
+> On Fri, 30 Sept 2022 at 01:02, Rob Herring <robh@kernel.org> wrote:
+>>
+>> On Thu, Sep 22, 2022 at 07:07:17AM +0200, Naresh Solanki wrote:
+>>> From: Marcello Sylvester Bauer <sylv@sylv.io>
+>>>
+>>> Add Devicetree binding documentation for Maxim MAX6639 temperature
+>>> monitor with PWM fan-speed controller.
+>>>
+>>> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+>>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>>> ---
+>>>   .../bindings/hwmon/maxim,max6639.yaml         | 112 ++++++++++++++++++
+>>>   1 file changed, 112 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>> new file mode 100644
+>>> index 000000000000..c845fb989af2
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>> @@ -0,0 +1,112 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +
+>>> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Maxim max6639
+>>> +
+>>> +maintainers:
+>>> +  - Roland Stigge <stigge@antcom.de>
+>>> +
+>>> +description: |
+>>> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
+>>> +  fan-speed controller.  It monitors its own temperature and one external
+>>> +  diode-connected transistor or the temperatures of two external diode-connected
+>>> +  transistors, typically available in CPUs, FPGAs, or GPUs.
+>>> +
+>>> +  Datasheets:
+>>> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - maxim,max6639
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  '#address-cells':
+>>> +    const: 1
+>>> +
+>>> +  '#size-cells':
+>>> +    const: 0
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - "fan@0"
+>>> +  - "fan@1"
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +patternProperties:
+>>> +  "^fan@[0-1]$":
+>>> +    type: object
+>>> +    description: |
+>>> +      Represents the two fans and their specific configuration.
+>>> +
+>>> +    properties:
+>>> +      reg:
+>>> +        description: |
+>>> +          The fan number.
+>>
+>> Addresses are a property of the parent (the fan controller), not the
+>> fan.
+>>
+>>> +        items:
+>>> +          minimum: 0
+>>> +          maximum: 1
+>>> +
+>>> +      pwm-polarity:
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>>> +        enum: [0, 1]
+>>> +        default: 1
+>>> +        description:
+>>> +          PWM output is low at 100% duty cycle when this bit is set to zero. PWM
+>>> +          output is high at 100% duty cycle when this bit is set to 1.
+>>
+>> IIRC, the PWM binding provides for this. The parent should probably be a
+>> PWM provider.
+>>
+>>> +
+>>> +      pulses-per-revolution:
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>>> +        enum: [1, 2, 3, 4]
+>>> +        default: 2
+>>> +        description:
+>>> +          Value specifying the number of pulses per revolution of the controlled
+>>> +          FAN.
+>>> +
+>>> +      maxim,rpm-range:
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>>> +        enum: [2000, 4000, 8000, 16000]
+>>> +        default: 4000
+>>> +        description:
+>>> +          Scales the tachometer counter by setting the maximum (full-scale) value
+>>> +          of the RPM range for max6639.
+>>
+>> Is this a property of the fan? How is this maxim specific?
+>>
+>>
+>> The bigger issue here is we need a common fan binding. I'm not inclined
+>> to accept any more fan controller bindings with fan properties until we
+>> do.
+>>
+>> Rob
 
