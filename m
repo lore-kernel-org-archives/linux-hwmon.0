@@ -2,101 +2,175 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CA81C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Oct 2022 18:32:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E7F2C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Oct 2022 18:42:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiJEScm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Oct 2022 14:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
+        id S232334AbiJESmj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 5 Oct 2022 14:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiJEScm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Oct 2022 14:32:42 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F5F220D6
-        for <linux-hwmon@vger.kernel.org>; Wed,  5 Oct 2022 11:32:41 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso3437541pjq.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 05 Oct 2022 11:32:41 -0700 (PDT)
+        with ESMTP id S232240AbiJESmI (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Oct 2022 14:42:08 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697AB80EAF;
+        Wed,  5 Oct 2022 11:40:29 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 195so57375pga.1;
+        Wed, 05 Oct 2022 11:40:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=c2dJjhcCC83ULCwTKGKArE1qWIwpnkvRNJY1T2Qxpp0=;
-        b=COXbt5NbIVAPERP4Ubn37I798qdWcQmBXWxqFWprlFx0ssEQAPt/RVWQooShQZSMs5
-         o656ICB2aD2TlthT+FwLJDFW3gj2ymsm8EortLBDdabeJ1dD7pj88Wy9D3tuZ7sl2GLd
-         7V3073Db4WZRR2WDPM5JuhVNRTnd5Ih3hjt/hz9rxdHQ/k0/p/D+RSyzHsDLsKcCuVh1
-         dY6IyumLKeczLqFWEQHPCalxk3yV85gPJI3h3ZtdGMzhMvt3XcxaCb6qColmWlfPmoGt
-         pE0V+vzv00iIkCUPAcbl01obj/YRRrrcFDh9nUpxp86MiQONXChM9n0FeWN6+tem1k6V
-         GD7A==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date;
+        bh=+wOa8fJ0J/EJOCC9EWTKbrq74/PynTNYVHwSLWX6IDs=;
+        b=pQqj0M8f9GQ9ylMie1+H1jtmAY/vbBHMYnkIQQM7ZlHGs8wByUrGiCR4KFZfF0+bBt
+         5gQMqppDMKh9vIknP8W8WEaZcMrPQ+3EUrCZQ+cgrDNgefoJcR0SPiSqKBgQvUOHmbaZ
+         XfiT++rDhg0t0+JYKnt9oXkKxaUFn+oD0I7rO3ZYgJnaDTHVxQq2AZB+0DzEpl9S2PiF
+         try73ZmlltM8/f9gKP3uegyTO8/H9J7zGYICWP9HdpH9eoa6JGwWCv4yibgDJXlmyh7w
+         hOntCU167p/OwUTEq5lRsPYhnfD7MExucDwYC8a+5OWLO/9Z2Fq6xEbv9hi69x/UpH+W
+         IGdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=c2dJjhcCC83ULCwTKGKArE1qWIwpnkvRNJY1T2Qxpp0=;
-        b=joOpXsEO7OOE0afXrSQgCnI1//3oHxPjZ3xZRE0HEVoeYWzuWJwCdq4TYGVyFqjL+T
-         8E24WqUXTSN33tUwHQYzLo74v4NWiWDK1GX8fSaMbxqfEKPdresKVy0qnYHy+suYeV1R
-         SfAunp4GMoFWUSWEMxAmcgFGyBOakwJPp0/BCs/hrRS0E+EQiEtsVXeJkhiWNcuPelJx
-         zRQR2GwiJ92KGmqLHgrsmsYZkd3uDSIL1AP68IgQDl/Mp1MT0d0LcPujCWhxwHxak/2K
-         xEQ45hgfsR8hBGF6DTHi4jnfc5l288gEQq8Gxy+QeftH+TDdomvga3rrn47NMxbjm2up
-         DriQ==
-X-Gm-Message-State: ACrzQf1OKJCz43iS9xQ0/uu8qapAJh12u9C5XfxC88DPKeUKpYYphrjb
-        TaSGyio2pd68mDyz9chQVaTQ1HJRJdrYhg==
-X-Google-Smtp-Source: AMsMyM63UoPdV3tYm+6lfMjmWSc/WGfZIesR21wU9/wwvvwg8Rkz45hsbg3MvD1Jy8CE5ou1c2rQkw==
-X-Received: by 2002:a17:90a:8b93:b0:20a:bd84:5182 with SMTP id z19-20020a17090a8b9300b0020abd845182mr6584382pjn.161.1664994760747;
-        Wed, 05 Oct 2022 11:32:40 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2-20020a655ac2000000b0043ba3d6ea3fsm46723pgt.54.2022.10.05.11.32.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 11:32:39 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=+wOa8fJ0J/EJOCC9EWTKbrq74/PynTNYVHwSLWX6IDs=;
+        b=3iRAdHsEPAi9X4LorshPN7whuInbEq6rH2B2bv+pU5ElXyfHBj0P/ta52N10kd13PP
+         KQZGVIJyVg5MlRRBTSld0RUR8UrK6jFr54eLgh7oRy5f6gBtpNPuoa6ibJtF5jmCUvUw
+         wgQCT8b9TufJ2OdROxy9AWIfzpblX66mzVxo1auznkaPt5TGl4lZisbrkOENpM8zZGYK
+         onGkbiFvvB6dsuYmAzP78EjQx8UbAG3sSB+S04myxThIJSg9IIhBgi1y0S17NZmDEp4S
+         Cr4+4a+baDtE4QZNgOfPH0NITWYGcdxAxmsjFwFxHKSIZ0GPHdZc/GM3Kr3/UPuPT+CE
+         Y7oQ==
+X-Gm-Message-State: ACrzQf2szSEeUlLX0v8monW6f1C1EOdHfIONG0jfh7P6+k0l4tJz2GF8
+        m+Ro3Bvq9Nj2jXb5dZ6qGWNsiEWfx7Nozw==
+X-Google-Smtp-Source: AMsMyM7jNoRpxYV4CeID6uC0kE4jBaOPm/DNUCAMUA5mGQ5OR+0IYMpQV1bgQYkIgVeU9XovOJSz/g==
+X-Received: by 2002:a62:ea0d:0:b0:55f:8624:4d8b with SMTP id t13-20020a62ea0d000000b0055f86244d8bmr797379pfh.74.1664995227912;
+        Wed, 05 Oct 2022 11:40:27 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l11-20020a17090a384b00b0020a8f44e52csm1429327pjf.38.2022.10.05.11.40.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Oct 2022 11:40:27 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 5 Oct 2022 11:32:38 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ahmad Khalifa <ahmad@khalifa.ws>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] hwmon: (it87) Check for a valid chip before using
- force_id
-Message-ID: <20221005183238.GA2760812@roeck-us.net>
-References: <20221004210100.540120-1-ahmad@khalifa.ws>
- <20221004210100.540120-3-ahmad@khalifa.ws>
+Message-ID: <a55d973b-4504-a104-a889-f9b7e264c1e9@roeck-us.net>
+Date:   Wed, 5 Oct 2022 11:40:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221004210100.540120-3-ahmad@khalifa.ws>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Roland Stigge <stigge@antcom.de>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+References: <20220922050718.1079651-1-Naresh.Solanki@9elements.com>
+ <20220922050718.1079651-2-Naresh.Solanki@9elements.com>
+ <3003378d-4283-6c05-50bf-29178c97ef8e@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add binding for max6639
+In-Reply-To: <3003378d-4283-6c05-50bf-29178c97ef8e@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 10:01:03PM +0100, Ahmad Khalifa wrote:
-> Check there is a chip before using force_id parameter as there
-> is no value in registering a non-existent chip
+On 9/21/22 23:34, Krzysztof Kozlowski wrote:
+> On 22/09/2022 07:07, Naresh Solanki wrote:
+>> From: Marcello Sylvester Bauer <sylv@sylv.io>
+>>
+>> Add Devicetree binding documentation for Maxim MAX6639 temperature
+>> monitor with PWM fan-speed controller.
+>>
+>> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>> ---
+>>   .../bindings/hwmon/maxim,max6639.yaml         | 112 ++++++++++++++++++
+>>   1 file changed, 112 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>> new file mode 100644
+>> index 000000000000..c845fb989af2
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>> @@ -0,0 +1,112 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +
+>> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Maxim max6639
+>> +
+>> +maintainers:
+>> +  - Roland Stigge <stigge@antcom.de>
 > 
-> Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
+> Ack from Roland is needed here.
+> 
+>> +
+>> +description: |
+>> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
+>> +  fan-speed controller.  It monitors its own temperature and one external
+>> +  diode-connected transistor or the temperatures of two external diode-connected
+>> +  transistors, typically available in CPUs, FPGAs, or GPUs.
+>> +
+>> +  Datasheets:
+>> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - maxim,max6639
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  '#address-cells':
+>> +    const: 1
+>> +
+>> +  '#size-cells':
+>> +    const: 0
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - "fan@0"
+>> +  - "fan@1"
+>> +
+>> +additionalProperties: false
+>> +
+>> +patternProperties:
+> 
+> This goes after properties.
+> 
+>> +  "^fan@[0-1]$":
+>> +    type: object
+>> +    description: |
+>> +      Represents the two fans and their specific configuration.
+>> +
+>> +    properties:
+>> +      reg:
+>> +        description: |
+>> +          The fan number.
+>> +        items:
+> 
+> Skip items.
+> 
+>> +          minimum: 0
+>> +          maximum: 1
+>> +
+>> +      pwm-polarity:
+> 
+> Why is this property of fan, not of PWM source?
+> 
 
-Applied to hwmon-next.
+The chip provides pwm output to the fan. That typical for fan
+controller chips. Typically they also have options to configure
+the pwm frequency and either pwm or DC output (max6639 does not
+have the latter option).
 
-Thanks,
 Guenter
-
-> ---
->  drivers/hwmon/it87.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-> index c4f5500dcf3c..bb9870c79ffe 100644
-> --- a/drivers/hwmon/it87.c
-> +++ b/drivers/hwmon/it87.c
-> @@ -2401,7 +2401,13 @@ static int __init it87_find(int sioaddr, unsigned short *address,
->  		return err;
->  
->  	err = -ENODEV;
-> -	chip_type = force_id ? force_id : superio_inw(sioaddr, DEVID);
-> +	chip_type = superio_inw(sioaddr, DEVID);
-> +	/* check first for a valid chip before forcing chip id */
-> +	if (chip_type == 0xffff)
-> +		goto exit;
-> +
-> +	if (force_id)
-> +		chip_type = force_id;
->  
->  	switch (chip_type) {
->  	case IT8705F_DEVID:
