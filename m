@@ -2,93 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 061E3C433FE
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Oct 2022 18:22:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28E56C433F5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Oct 2022 18:31:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiJESWU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Oct 2022 14:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
+        id S229661AbiJESbV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 5 Oct 2022 14:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiJESWS (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Oct 2022 14:22:18 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D133F1D0DB;
-        Wed,  5 Oct 2022 11:22:17 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d24so16086175pls.4;
-        Wed, 05 Oct 2022 11:22:17 -0700 (PDT)
+        with ESMTP id S229983AbiJESbU (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Oct 2022 14:31:20 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91AB7D1E3;
+        Wed,  5 Oct 2022 11:31:19 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id o9-20020a17090a0a0900b0020ad4e758b3so2563172pjo.4;
+        Wed, 05 Oct 2022 11:31:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=ew1KzaMZB2UQ5VucTvfss7Xr/U7zQI7sIMbCwguxP34=;
-        b=JMNKBLKoL9+FHH/alpZW0Hn0gW7sQBArMd7BWn8bJFiK72mZ94mMf6v16joMgfr3Vq
-         H2Sh3uq9+tTK+AHe2KSrMzu6FrMv4BxtPQ3AbMiXv573rKRdcmc9DReJePEHa+PNVlCx
-         Jn4AYl7rot5NtJ8gK/SHY0pzEftHyddFZa36NnbAa/82KGo/6fz6ppaMF1mHHzyEmoP4
-         oG5KuoPnLComhCMrUQm83FCXq1UvPU0eVFZEe7shvD59TXedsVeurGlrWMCc3F8MZmx6
-         BuB5T+qBOH5awmXHKc7pS0GCZQ/1jlpJ3sncx9FelWz8aIAE1wufJ0sMXN7D0LucQsIW
-         DCbw==
+        bh=lncrKYF3dhxHA2yeuvS54Ddh1xazf36FsZjmkMxlg6w=;
+        b=bTTkW0QLjG4FZ6yAyAIASgkGRVrVz/uorbNdxH5GR7Se2mxXDRsHmPul2YVI5CXIzP
+         Wy1cB0KQ0ZSOXZyCHcUq1Y6dwoTB1E0e5P4JtW6W5w95W8vrtPASR2xuNewhKQ2Gv+nA
+         GvPFAK9cmK+0nXavBx3B5qVAU/FTQyypYKoih1od4CpelmKhcxF+OqpLU1Gt64gKJI+s
+         OlwPwko3/XxBBSQTs4nEWammEGWmJ52sOKkWFM1x35mS4vgSgLSwtpwMzEjsD+fSdpGR
+         Rb/lxMReYfeTHyPsG8AD7gy62pNZxAbErIi+bVzilUd7PR6Ytyzm1CYid+arYaULqdMB
+         TfEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=ew1KzaMZB2UQ5VucTvfss7Xr/U7zQI7sIMbCwguxP34=;
-        b=jIqHyHlcc3vbL82jTeOnDHP0KqbDuHYobP9xsw8ZJIgFFQP6v8S6fvVb8a2wQDYfgu
-         heVclvKHJdFUPMtIm+9+lVBFKCcqvPGTpg+62CcrBy5tyIzZIKd9YtZNcJGQ0rPiUWrN
-         46j6T2R0GwfHai4fQ/3+Ng0q98LF6B2J5miZNmEj1huvV9bZCp+Llaws4/+Uhl678zp+
-         8BhdojfCBjP5/3WF+7tIsIJrwcc96Ds4LmGlp+JFBl4wsSHZbB3lQThxEJIO+SgC3xzO
-         iWiKcXi8uXjccmfVZuoyUsa0kTJ0p5zUUzefwYpBukrCs0QKI+7sG/52XauOV6ysrlC8
-         EjcQ==
-X-Gm-Message-State: ACrzQf0XH/5X6D2YEIS7LI6DguSy5awn3RX3ca2+E1TLDc9b5q2F0fTT
-        JkMj7ghAnJGWaVeLCiRSNc4=
-X-Google-Smtp-Source: AMsMyM7/H7xXF23O4LlfdFiUbevSnzBIi4oBC0c6gbSnE+eX4uX3QUh6kKxXuvvYtBHQHCFEbboqTQ==
-X-Received: by 2002:a17:90b:3a88:b0:209:f35d:ad53 with SMTP id om8-20020a17090b3a8800b00209f35dad53mr6419802pjb.102.1664994137363;
-        Wed, 05 Oct 2022 11:22:17 -0700 (PDT)
+        bh=lncrKYF3dhxHA2yeuvS54Ddh1xazf36FsZjmkMxlg6w=;
+        b=OmqagrAjF7GW8fxhUaTeMCCh/1EM5Y4hT6uXbx4fdpOtn46+ey8Coe/EVt0P9/s/Fu
+         wVXUYuGSLnX50rtNe7YAIepNkpOJ+g0hPtBzqA/ENt7J3aIVLAZrt6xcpwY8yzCqkTlF
+         rDp5LevdDWjdg7qavNooiTTYEi+FPmlp2W1cyjwqavvCKzMFm+AET5jBdKO/sSnDLzVZ
+         3ieePcms9yBohjRfYx3YGS0xQgqCcWnhCh2ZfaeXbzwMW4nQrrDSNhs4+wJN3pZrfnyR
+         URIzjma8B8Wsd1h42SRr0WyLzXDWTWJBOtngkYsgxSV5SvKMD8QrhPVIAJAPGcC3KhBr
+         3+eQ==
+X-Gm-Message-State: ACrzQf1/fjVmjZ/2BNFXRFjMDJaYgx4RXZ1t9judHJF5Rb9s24fyv3sj
+        IQhvY4PrkdYFKo94JyySE9c=
+X-Google-Smtp-Source: AMsMyM6WkxKa3ApjrVvd47ddYhDKX3KPYfV6GCvohPT+LmKBuWgfvnAiG0io+O5JvRvTyVpQ+rWmCw==
+X-Received: by 2002:a17:90a:9408:b0:20a:6d13:2b1d with SMTP id r8-20020a17090a940800b0020a6d132b1dmr6505892pjo.0.1664994678960;
+        Wed, 05 Oct 2022 11:31:18 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r38-20020a635166000000b0043c22e926f8sm25510pgl.84.2022.10.05.11.22.15
+        by smtp.gmail.com with ESMTPSA id y16-20020a17090264d000b001786b712bf7sm10700207pli.151.2022.10.05.11.31.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 11:22:16 -0700 (PDT)
+        Wed, 05 Oct 2022 11:31:17 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 5 Oct 2022 11:22:15 -0700
+Date:   Wed, 5 Oct 2022 11:31:16 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: corsair-psu: fix typo in USB id description
-Message-ID: <20221005182215.GA2626047@roeck-us.net>
-References: <Yzql13NOvQLlrye1@monster.localdomain>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (fschmd) Make const arrays static const
+Message-ID: <20221005183116.GA2734583@roeck-us.net>
+References: <20221005152752.318493-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yzql13NOvQLlrye1@monster.localdomain>
+In-Reply-To: <20221005152752.318493-1-colin.i.king@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 09:05:27AM +0000, Wilken Gottwalt wrote:
-> Fixes: 0cf46a653bda ("hwmon: (corsair-psu) add USB id of new revision of the HX1000i psu")
-> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+On Wed, Oct 05, 2022 at 04:27:52PM +0100, Colin Ian King wrote:
+> Don't populate the read-only const arrays names and watchdog_minors
+> on the stack but instead make them static const. Also makes the
+> object code a little smaller.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Applied. In the future, please add some description (subject is
-insufficient).
+Applied to hwmon-next.
 
 Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/corsair-psu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/hwmon/fschmd.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> index 345d883ab044..c1c27e475f6d 100644
-> --- a/drivers/hwmon/corsair-psu.c
-> +++ b/drivers/hwmon/corsair-psu.c
-> @@ -820,7 +820,7 @@ static const struct hid_device_id corsairpsu_idtable[] = {
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c0b) }, /* Corsair RM750i */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
-> -	{ HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsaur HX1000i revision 2 */
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsair HX1000i revision 2 */
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
+> diff --git a/drivers/hwmon/fschmd.c b/drivers/hwmon/fschmd.c
+> index 0a77d6161928..e1f426e86f36 100644
+> --- a/drivers/hwmon/fschmd.c
+> +++ b/drivers/hwmon/fschmd.c
+> @@ -1083,9 +1083,9 @@ static int fschmd_detect(struct i2c_client *client,
+>  static int fschmd_probe(struct i2c_client *client)
+>  {
+>  	struct fschmd_data *data;
+> -	const char * const names[7] = { "Poseidon", "Hermes", "Scylla",
+> +	static const char * const names[7] = { "Poseidon", "Hermes", "Scylla",
+>  				"Heracles", "Heimdall", "Hades", "Syleus" };
+> -	const int watchdog_minors[] = { WATCHDOG_MINOR, 212, 213, 214, 215 };
+> +	static const int watchdog_minors[] = { WATCHDOG_MINOR, 212, 213, 214, 215 };
+>  	int i, err;
+>  	enum chips kind = i2c_match_id(fschmd_id, client)->driver_data;
+>  
