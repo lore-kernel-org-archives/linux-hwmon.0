@@ -2,93 +2,225 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55491C433F5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Oct 2022 22:44:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05BDFC433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Oct 2022 06:30:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbiJEWoF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Oct 2022 18:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
+        id S229796AbiJFGa5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Oct 2022 02:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiJEWoE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Oct 2022 18:44:04 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B314684E65
-        for <linux-hwmon@vger.kernel.org>; Wed,  5 Oct 2022 15:44:03 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id 67so326066pfz.12
-        for <linux-hwmon@vger.kernel.org>; Wed, 05 Oct 2022 15:44:03 -0700 (PDT)
+        with ESMTP id S229980AbiJFGa4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Oct 2022 02:30:56 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A416645F4E
+        for <linux-hwmon@vger.kernel.org>; Wed,  5 Oct 2022 23:30:54 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id qw20so1691498ejc.8
+        for <linux-hwmon@vger.kernel.org>; Wed, 05 Oct 2022 23:30:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IJCzW6uCxDTrRhnpREfkfCpOvWhfBdbWkQ52xCFzMfw=;
-        b=Gg3TD/MUqRDoXDJt77DBJRRzHGOs0GTrq1odLMjHZ+J35AsqMPU9CHRYcb8mQu0s7J
-         N7ycDnXeRTXMvbATpH6E42GW0+nXCLiyV9Sop+JjJNoqBD6qooCZSOsEDpUwn55sGKiL
-         cY+RfU9zTAI6ivz2SCTzFlnLmEuSQgwD4lFCrptNo2lAP3ergUCYNp3tOaIjFrWjZPRb
-         qhITLOS2iNNzNY8KLMB3k8Zi6u4mJ4ssCakY0K007ZC39E2RKEb8hGhoqVrarbWoDiLI
-         CjK6dyfPsUP23f/QtIrkNAY25ddDydNxyYn+ByFKHt7+J1A49bClg/9MoGgAGDpuTE9t
-         gESg==
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=E5zgckpqsR7kGRebj1WoqapOqCyfPYoLK+0nxo0YmRg=;
+        b=IzdH9hbuhhKVVv/TqcfThDmJToOdCgKHWrCq5xzHeuHiIVrhrNBxWUE3r7XoCcfP6C
+         Tg7DI/aRtBPtd381HQ0NrGuDhm16brD5p+2WKyGGPoTpzk3Iiynnu05VM1jVeQp8JsAa
+         tTMxh6HTCCC+dn11a2zzjkuRhvul/kFstfHAgrzcGCqTzdB5dftaalmr3qw03+jHMUuB
+         Ek+V9yw9vHH2YeBF1aA79blOJT4tDoUnUMumL7j46TWZXvr7LyTkWaTgjYB9k1UqIQyy
+         eHEpcVskNYQxEbaDvA+A+yNu8WpW2j8g6YZqK3nn9Ke5Jdbc9f9r8eIQ58+R8INDkWDm
+         3bGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IJCzW6uCxDTrRhnpREfkfCpOvWhfBdbWkQ52xCFzMfw=;
-        b=WrzcQFQVHzkR6p7wrRq8AblRPHZwviyRW2hsU3YpmBHbta5AtHpaWSUWV3JeH1c5fe
-         1zx85z3U5MBqIBInqyyMvg2PWzEKR4BRy/6QkEARLsesPuu7ooLjyVwtQ78ZerGQgwkG
-         RxDe/J6twAjje3a/8CIbhLKe1Hbzc70IFjitYOw/CpK1kfAtjCMA2jiRaIlwnr8ZyOwm
-         xMSSC7jjyQbTdIR+T7TvTIYZQMuJmz3rdxeD2oV5DsJi+TxjdGzP0PI/3i0aJ0gwwc9O
-         3yVK9cCltKClSWP/78wQMyORqu/JS2vR53rQ9ch7aBWa/Vvblxk//6cWdDxTDhq0ADLg
-         wj8w==
-X-Gm-Message-State: ACrzQf3KIFEjSY8RyoUyHcefgAnB+8kSGEOfAfkDH3kUd64oaJRr5QgA
-        AsRSIm5MBtLzwDPIWv4XV3zWkg/lkR5NXg==
-X-Google-Smtp-Source: AMsMyM4CQGVxXg7xGAGa/GepM1NQZkEWTapCpu45n979/z+485Ay5fF22PtDlwvxtSp7rxrHEMAD4Q==
-X-Received: by 2002:a05:6a00:124e:b0:561:b241:f47f with SMTP id u14-20020a056a00124e00b00561b241f47fmr2020527pfi.72.1665009843252;
-        Wed, 05 Oct 2022 15:44:03 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r10-20020a17090a1bca00b0020a848f29a1sm1574268pjr.57.2022.10.05.15.44.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Oct 2022 15:44:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5cdba0a5-9eee-7896-85c9-d89b0671f6dd@roeck-us.net>
-Date:   Wed, 5 Oct 2022 15:44:00 -0700
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=E5zgckpqsR7kGRebj1WoqapOqCyfPYoLK+0nxo0YmRg=;
+        b=FF5x1NIhjonErXjNeYuGz9twCyoOczbw+Bjbnsdyk048o4TLy3ZKETGHA15SX7DxS2
+         VATpJAYVMP0yVQ2ULB95aL2g+Q9dnAngU62G/v+/YXjigyuEjLVE+QNu+QPuX6s5aWyt
+         FvbMrZvp9Rc31unBjSJM2OaLjukNCfLXm2BEQZVDjAFLJgCXzX9BU0N11jIHCeEfuy+b
+         9WEHZcHNwp73GJBq9o/BUjKjbUNI0YUrPQuNJ+5yEM1PnvDMbgcr5Jh/U0/n5V2Jc+JA
+         wCpfWcP/Vmgd19ystqn6bmruHsgj5XeDRxawxWbpU0fPMvrhNJjFFsEZN4jsUIedZEkT
+         Fa9Q==
+X-Gm-Message-State: ACrzQf1pFaivESJx18Zv+yU9945K0qvOHszoC3LxOXFD2ZqfviAcPRQP
+        JIzW8SQtXsWRu4nY9Jot3JHIhzZGAEH1ZBf40U88OQ==
+X-Google-Smtp-Source: AMsMyM4kgiY7kYzss5XNWBII5NQwLZc9xH4OQDmzGOuyTS+Wtd+QLTUBJEIMjHJRtjlR4xF00eyN+luoNu/FquSYzJ4=
+X-Received: by 2002:a17:906:db03:b0:741:337e:3600 with SMTP id
+ xj3-20020a170906db0300b00741337e3600mr2700263ejb.343.1665037853179; Wed, 05
+ Oct 2022 23:30:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Nick Neumann <nick@pcpartpicker.com>, linux-hwmon@vger.kernel.org
-References: <CADqNVTr55B6cCmRhm9dbwUrDzKK8Gsa2cPr34f3Wkdsrzs77XQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: Trying to understand hwmon drivers - where is code that reads
- hwmon_chip_attributes?
-In-Reply-To: <CADqNVTr55B6cCmRhm9dbwUrDzKK8Gsa2cPr34f3Wkdsrzs77XQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220922050718.1079651-1-Naresh.Solanki@9elements.com>
+ <20220922050718.1079651-2-Naresh.Solanki@9elements.com> <3003378d-4283-6c05-50bf-29178c97ef8e@linaro.org>
+ <a55d973b-4504-a104-a889-f9b7e264c1e9@roeck-us.net>
+In-Reply-To: <a55d973b-4504-a104-a889-f9b7e264c1e9@roeck-us.net>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Thu, 6 Oct 2022 12:00:42 +0530
+Message-ID: <CABqG17hprsbHkDnvuXkQaaJdbuNgkuZD_G8L7M9HX=w5bYo8rQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add binding for max6639
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Roland Stigge <stigge@antcom.de>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/5/22 14:55, Nick Neumann wrote:
-> Apologies for the newbie question. I'm trying to follow the hwmon code
-> and see how hwmon_chip_attributes are read and used. (Namely, I'm
-> interested in hwmon_chip_update_interval, and what the default update
-> interval is if no interval is specified.)
-> 
-> I can find lots of different drivers that provide
-> hwmon_chip_update_interval, but I'm looking for the code that actually
-> uses its value, if that makes sense. I've been slowly trying to follow
-> it through and am guessing it may be in the general device driver
-> infrastructure, but haven't yet been able to follow it to the code
-> that actually uses hwmon_chip_update_interval or the other chip
-> attributes.
-> 
-> Any pointers to code or docs that would help? Thanks!
+Thanks Guenter, to summarize below properties that can be configured
+based on input from
+fan datasheet:
+pwm controlled fan:
+1.  max-rpm : Defines maximum rpm the fan supports
+2.  tach-pulse/pulse-per-revolution( also referred as prescale) :
+Determines the number of
+ pulses received from the sensor/tach pin of fan per revolution.
+3.  rpm-init (also ref. as fan-target-rpm): Determines the fan rpm
+driver needs to configure
+during probe.
+4. pwm-input-polarity(normal or inverse) : Specifies fan pwm input
+polarity as specified in
+ fan datasheet. a fan controller driver can use this data to configure
+pwm output polarity
+accordingly during driver probe.
 
-I am not sure I understand your question. Every driver supporting
-hwmon_chip_update_interval (that is, the "update_interval" sysfs attribute)
-will also use it, typically to set some chip configuration option.
+For a DC output controlled fan, voltage across fan is controlled to control=
+ rpm.
+Below is what I can think of:
+5. voltage-range : Specifies valid voltage range for rpm control
+example for 3V to 5V range:
+     voltage-range=3D<3000 5000>;
 
-There is no generic default value for this attribute. The default value,
-if the attribute is supported, is chip specific.
+Above mentioned properties are within the scope of fan.
+Fan controllers like max6639/max6650 etc can have additional
+properties specific to the
+feather supported by the chip.
 
-Guenter
+Let me know if I can go ahead with this.
+
+Thanks,
+Naresh Solanki
+
+Regards,
+Naresh Solanki
+
+
+
+9elements GmbH, Kortumstra=C3=9Fe 19-21, 44787 Bochum, Germany
+Email:  naresh.solanki@9elements.com
+Mobile:  +91 9538631477
+
+Sitz der Gesellschaft: Bochum
+Handelsregister: Amtsgericht Bochum, HRB 17519
+Gesch=C3=A4ftsf=C3=BChrung: Sebastian Deutsch, Eray Basar
+
+Datenschutzhinweise nach Art. 13 DSGVO
+
+
+On Thu, 6 Oct 2022 at 00:10, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 9/21/22 23:34, Krzysztof Kozlowski wrote:
+> > On 22/09/2022 07:07, Naresh Solanki wrote:
+> >> From: Marcello Sylvester Bauer <sylv@sylv.io>
+> >>
+> >> Add Devicetree binding documentation for Maxim MAX6639 temperature
+> >> monitor with PWM fan-speed controller.
+> >>
+> >> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> >> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> >> ---
+> >>   .../bindings/hwmon/maxim,max6639.yaml         | 112 ++++++++++++++++=
+++
+> >>   1 file changed, 112 insertions(+)
+> >>   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max=
+6639.yaml
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yam=
+l b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> >> new file mode 100644
+> >> index 000000000000..c845fb989af2
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> >> @@ -0,0 +1,112 @@
+> >> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> >> +%YAML 1.2
+> >> +---
+> >> +
+> >> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >> +
+> >> +title: Maxim max6639
+> >> +
+> >> +maintainers:
+> >> +  - Roland Stigge <stigge@antcom.de>
+> >
+> > Ack from Roland is needed here.
+> >
+> >> +
+> >> +description: |
+> >> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic=
+, PWM
+> >> +  fan-speed controller.  It monitors its own temperature and one exte=
+rnal
+> >> +  diode-connected transistor or the temperatures of two external diod=
+e-connected
+> >> +  transistors, typically available in CPUs, FPGAs, or GPUs.
+> >> +
+> >> +  Datasheets:
+> >> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    enum:
+> >> +      - maxim,max6639
+> >> +
+> >> +  reg:
+> >> +    maxItems: 1
+> >> +
+> >> +  '#address-cells':
+> >> +    const: 1
+> >> +
+> >> +  '#size-cells':
+> >> +    const: 0
+> >> +
+> >> +required:
+> >> +  - compatible
+> >> +  - reg
+> >> +  - "fan@0"
+> >> +  - "fan@1"
+> >> +
+> >> +additionalProperties: false
+> >> +
+> >> +patternProperties:
+> >
+> > This goes after properties.
+> >
+> >> +  "^fan@[0-1]$":
+> >> +    type: object
+> >> +    description: |
+> >> +      Represents the two fans and their specific configuration.
+> >> +
+> >> +    properties:
+> >> +      reg:
+> >> +        description: |
+> >> +          The fan number.
+> >> +        items:
+> >
+> > Skip items.
+> >
+> >> +          minimum: 0
+> >> +          maximum: 1
+> >> +
+> >> +      pwm-polarity:
+> >
+> > Why is this property of fan, not of PWM source?
+> >
+>
+> The chip provides pwm output to the fan. That typical for fan
+> controller chips. Typically they also have options to configure
+> the pwm frequency and either pwm or DC output (max6639 does not
+> have the latter option).
+>
+> Guenter
