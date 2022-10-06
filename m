@@ -2,150 +2,272 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CF6AC433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Oct 2022 07:49:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97AA2C433F5
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Oct 2022 14:22:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiJFHtf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 Oct 2022 03:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
+        id S229987AbiJFOWL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Oct 2022 10:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiJFHs3 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Oct 2022 03:48:29 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2109.outbound.protection.outlook.com [40.107.94.109])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EE89080B;
-        Thu,  6 Oct 2022 00:48:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S+10ZXUll4SjG9fDrHbsWT1bdCl+jyCjT3Te20youuzAr1xuXH7t/cZkVsUatT0dqZ7I+rverfXwjtiNaOlLcbxksSo1Q33wuLNu+1lQm6ae5Lzg2+wJ8EniEXnYvHBXN6hTZD7basn/mLggq7+d8OGN6s1erRbwAwgZxPvDu57+IfUYvuu9SIm7M2kWQkM18Gh4thPcSr3j4hgpt+FXr3vISrAd8NPU6T19FhjEFoxd6i4bgjURwhjIEW7KpUYX6jgmS/+q2nQMeIbokcN5N6Xkefj5c1HELB4oHXqhhvRvPDccjleRsPPccA9c0/AYuB8R6UydhNwl3z9jfWcL1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5DQFJF337pgpSJluhEWzNyLHDgStlyO3EmJtGJvKVRw=;
- b=HBESnR1diNEiVeSZnjjSyGseCSwWV5jYGDZkFNOSKTMcztzRmStYTfBEyLTOn0YrXOvK/tzKFRxxxPjrOe689c22WxLx7sG+vVXZvC3PkBnV+h7+egZwNbVBoukzaro7eROq1fE9kdmymHeAJkxAi/qzMSiIQQ0+DtFf/WifKx0qUrtAgxd/XAveJVC1b+r3+xYgA+A5qa6Jk+nIWVqMXlfqttw7+iTSwZdAXjhcS7q/oFjaxhRapEJ2ObFlh38DQWmW0SgSPa8kY8S86QyMuKYJK+gd1BKJlsS6n2JTP2E9W2dTGS4yD30sHGEqc6iUeIIbU482IQxEF3fF/NSz/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+        with ESMTP id S229755AbiJFOWK (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Oct 2022 10:22:10 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA5C1901B;
+        Thu,  6 Oct 2022 07:22:08 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id h13so749065pfr.7;
+        Thu, 06 Oct 2022 07:22:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5DQFJF337pgpSJluhEWzNyLHDgStlyO3EmJtGJvKVRw=;
- b=ank3adlqPzyDNEHsR1WENjmajKaq/ns/xlncx9vSd1w6atFYgGUEI/eCymISoRdt27R6PU7K+utxWMhFq92EjWObCo0sBtnBVTOw5K4k/cGt9ZkzkLj+5lgkFanCjq/6XVuKyt2C68fJww4oGzsR4ez+orCKS7JfcAAQMvQiNcs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
- BY5PR01MB5796.prod.exchangelabs.com (2603:10b6:a03:1be::33) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5654.20; Thu, 6 Oct 2022 07:48:07 +0000
-Received: from SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::7d50:e907:8e2e:1ff0]) by SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::7d50:e907:8e2e:1ff0%3]) with mapi id 15.20.5676.032; Thu, 6 Oct 2022
- 07:48:07 +0000
-Message-ID: <c4b4875d-99d6-fbc8-1b5a-26d090b5bad1@os.amperecomputing.com>
-Date:   Thu, 6 Oct 2022 14:47:55 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.0
-Subject: Re: [PATCH v9 1/9] hwmon: smpro: Add Ampere's Altra smpro-hwmon
- driver
-Content-Language: en-CA
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, macro@orcam.me.uk,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thu Nguyen <thu@os.amperecomputing.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Open Source Submission <patches@amperecomputing.com>
-Cc:     Phong Vo <phong@os.amperecomputing.com>,
-        thang@os.amperecomputing.com
-References: <20220929094321.770125-1-quan@os.amperecomputing.com>
- <20220929094321.770125-2-quan@os.amperecomputing.com>
- <594c4afe-17f7-8670-d5ba-ebdeca6a4b47@gmail.com>
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-In-Reply-To: <594c4afe-17f7-8670-d5ba-ebdeca6a4b47@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SGBP274CA0010.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::22)
- To SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24)
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OmueKib6Yvg9lEscOYsyc+BDqrMCWCE9HfmE95cBqF0=;
+        b=CNF6Je3Dm62b/vJZmXcZ0fo7cZ53FsYSy8NK2G3y/3w/8mEvivBcACubUbrfONjxDo
+         fTwi+Nm5WKPvFoh6E4yLUsfsYy0YxU7cmFvLfO7MBPGaTZc3dayy4nQh+o7huPdMS9zD
+         atuSlLVqGZa/r+57SVCR4Kcuh5CwrB0OwsH9hu38iMiN9JaiUeZLLZ2hwXKeKNSo41Ky
+         r1CLaHeWdur1nZUKhOqh3cmi5p7flUdCF01CzIKuF2sK4kf0cfOc3nsVcI8UAX7qe1e9
+         ZeNRxhcYRta/M/QTuXFqN6o2JJGn/vw9WgP6UJYDcgeuexppd6Z/mos+Syf9tnEQC/Po
+         CgJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OmueKib6Yvg9lEscOYsyc+BDqrMCWCE9HfmE95cBqF0=;
+        b=lgWuHgAgiK36lKiKF5ZlpXXzC5ajWdHZ92MbmOJMNPcKt6sPCvEmvrYFIhdKp4igKH
+         TgTxFnY1VEV+MCTFhYZ4+Vn323+Q+dMMo71/O+ECvCSkZwqdfoamn474tRZiV2/DOklV
+         0IyotyMfeJoUL5UdEb+GHjUeblwYOoIc0QEJTtE1vplb06ATYUVHNIQwGiCaAYgN/SJC
+         ghL5qvVju8imcCP4Y6G6pKiOBHmQB1NlW8YGc+wTqMg6QFruMXrRMdjatMwygh9vYQo2
+         jem8/3d5NlYPIwE6OkTpAMBlkGWT0Qi1cr9GBlvicgxnjbOJppbI9/YeqDW4/Lk9K7IB
+         eF+g==
+X-Gm-Message-State: ACrzQf1+sPhLY4fw/tDqdXY1DwxUe+egPg7JKm074kXO7E0YGU7H0T5A
+        RArC81WdUrX2eY6MLFaehJQ=
+X-Google-Smtp-Source: AMsMyM5INbjubqAiKSF1MSGZWQd/cFN/3HvLmHUcKtmIuzRBlgDU/IpNPwZ8xHGSP7xbzTcCvO/1hg==
+X-Received: by 2002:a63:f349:0:b0:43a:b82b:1173 with SMTP id t9-20020a63f349000000b0043ab82b1173mr148057pgj.534.1665066127524;
+        Thu, 06 Oct 2022 07:22:07 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a24-20020a656418000000b00451bcda6e86sm1882565pgv.19.2022.10.06.07.22.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 07:22:06 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <9cdb6849-9dbb-7b5d-7710-55846284fc43@roeck-us.net>
+Date:   Thu, 6 Oct 2022 07:22:04 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR01MB7282:EE_|BY5PR01MB5796:EE_
-X-MS-Office365-Filtering-Correlation-Id: a3f45a64-0727-48cc-19f5-08daa76f1b3e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: z/7JGEEfm5E7NcDDLXwcjc1yD95HSY2Qxhex6DrWgRD06dS+jHEJ6odiDTJWzj/YkDaL7xzQpAhq8lp+pmCfq2Omu/R9OQ4LuSbA/vhfYERCXewZNTGFww4wJ1dvTwLjUkkJUYvK7d1v5a/f0MdzYYq+MykVLBnvYPkDYt5tIvi+2RG2Z+xcpG5uW4BOj/c1c6MNJEXF83gkn0KQhu+3GTkG1GJJmtotYNqLaUSTX8COVAqRtrZWs/lRvBTdY3fjQHbKumY1aoL6cEGbEFq05p6bwuHH/z7uCvDDY33LmqL31EcugsBYjESJIszhCqGvI+6I3hK2il/++F0/mfoV93ZiZzZWDcxBkA5c2REsYL/3a2rN7D5fxubDbu3wOAYQ6xs7hFFroJALYThf5cejDoH24RvgHfDnMdy+uUZMCS1h3JeMzH0vNNzyOMc4An+Bfd+PJnVGL4JaC9U8AcEpz+lr05NmtRHVhuVrnjMMRHBlI3Xb6i+MnsDgw1z+a3lhczw8dFTHyxOYEagb7Wf23hF5p/RHer49iuQSeWiBIOhzCOL37GXZ+KzUUy+NQGS5IGtpgKfeUJyf8dkYRvQOyeKSnhaZlmtvL8SPBdCxiQYkW0W+q8onMdfFlwDbEFQEYBVW4ZnUiPs8lpwCvTMnmhpUbEPgwI0mUCJA4JPahfPhufiIvU1c2CGVykDMORR8k+AQZLsnnduzUh4P/g/OCndcBV3kH3bGtN0sq9touXzw7Zryh8jFYzsirRDJWBdBuko7/kj8Pk+xunglk/EnSBIkS8GpcQGhXJYdB7TZR1NV6TVi8+vGVCS4JXFirR+G
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(396003)(39850400004)(376002)(366004)(451199015)(38350700002)(31686004)(186003)(478600001)(38100700002)(6486002)(31696002)(921005)(7416002)(4744005)(83380400001)(66556008)(41300700001)(316002)(110136005)(66476007)(2616005)(8676002)(6666004)(107886003)(86362001)(6512007)(8936002)(26005)(5660300002)(53546011)(66946007)(52116002)(4326008)(6506007)(2906002)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MTNudEliSDRtUU05RlVCM1g4bzlaM2tESHgwVjFOWTI1Z2hLRDNKSE1aWE5x?=
- =?utf-8?B?SnJ4RzVBZ1MrOThBZyszWDJwakFqcmd4WW1NZkYvbGlRQ1JZMHBVWWJLeTM3?=
- =?utf-8?B?WEE5OXN0WkdScmtRUGh5UktaaGtRYS92cGU0UnFONlBtcU5GaWFkZGxRbE5n?=
- =?utf-8?B?TEFJL0NSQ1FPOFU3SmdEZTBiVWFFZUR3Y3Iwb2ptbURkY0V5b2tZVXpidzZp?=
- =?utf-8?B?RTN1Z1B0aFA2bjZQeW5CTnhLdjlka2FMWHhsaEVIQ0MrelBOR0pzR3N5OHdk?=
- =?utf-8?B?MTk3bDFhMlRUTkpXWWJWQTZCSHQzcDZrY3hPYkg3NzdhYTZxK1kyUWVOSkpt?=
- =?utf-8?B?YTZROGkvZWVCRnZYb3I1bTNZdmd6Vk9idmkwOXFWY1BESnhTWlhpdHl2UEJH?=
- =?utf-8?B?bVltNG5UMytEN2ExQ2JWZ3BvdFd0TTh1QTdQQlU3MTlIeTZOdTRBRkVuTVdt?=
- =?utf-8?B?a1FwMHVFcUFhVW1GKzJPais0RG1vQUtOTFlYa2krL0tNUTJNTms4dGRLUkRh?=
- =?utf-8?B?emJsZ0dPM09KV2xTQ1pWaDZDMG45R0YrTU4xcWVDNHUxT0RhQUJHWTkvZEdU?=
- =?utf-8?B?NTdnTVhCYmFjVG1BSDdJa2FLaW1OVFZEdnhoRFI1Qk5Wc3lQL3ZWWWYwRTlT?=
- =?utf-8?B?Wm45Rnh2QkRJakk1R0lCSkZyWElCaFpjK1dhcEM2azlYQjBZU052dXJNQ1pX?=
- =?utf-8?B?U0crL1E5ak9wTmNLMlMyZk8zaWc5NGtLN3g4emRxQkdCUThHbUNSRk54ckph?=
- =?utf-8?B?Yk4wYXFMOEl6aTc1YVMxMk5oSWRqeVRWVDB0UmJvdnJWUDgyRldac1I4NFNH?=
- =?utf-8?B?VFExSXNSZURrMVppTVUvVU10N2kxcXMxb2RyQ1pnLzJTM2pLanJ6eTAzLzN2?=
- =?utf-8?B?dEhEa20remdaR2h4RzM2Y2RSSVlnd2dveXA1SjZNZ0lWT28zdm9GanJOMzli?=
- =?utf-8?B?VEU1Zlh3V3MrMmcrdXJiRjNpeWZkRmxINGhaZmZvY0QyWnIwVngzRW5WbXpX?=
- =?utf-8?B?dnhRKzh6RHFSRHF4am5qU3d4dGJEZHR2dVorRStBcXZjR0hCaGlKWUJ5TnI1?=
- =?utf-8?B?SkhzenBBMlpwT09mYm5oV0p5dTd6TE15ZTBITE9NRXUzTjlKVlpMR1JkVWR2?=
- =?utf-8?B?ZWJzQ01oZUR1NklFcndhN3laY0ZRcFN0b0cySzR0REVQWHM3bUw4OHl1a3ZT?=
- =?utf-8?B?Ny9pKytJYlYyR1BkbEFSQjk3OVRRcGRucTVkZDZPd3ZoeUExUWtPL2FBVWNJ?=
- =?utf-8?B?SWVEelBERUtnYlFEdmVxWU5MRE11dGdqSEREeUg0RzJJNVBmaEd6NzRvMXc3?=
- =?utf-8?B?L0plSmhPTmJvV1dSYkNJWXdHMmhZTmh6OFlnK0JhYXovSkx3WmhHcjRRdnlB?=
- =?utf-8?B?dGRJREFWdlBqaE5IUGgwUHQ5c0ZZV2NMZTduMzR3ak52d2VnYWJMM1IyWjRP?=
- =?utf-8?B?MDQyclBsb1ZnUWh6MThNNEZTN1dIL1N2L1RVZk1QWWdWd0huWG40MHdkYUlx?=
- =?utf-8?B?M2VXSGxnSkc1TEdvdjZ5WTg5aXdsVTlIV3RSbHQ4SmZucE9PVno1L1lqVnJI?=
- =?utf-8?B?WGlaekIvaUZpMmk1MW01K05kdW9GL3ROUmhWVzUzTE01S1NLREsxeE1SYVV0?=
- =?utf-8?B?MUtXN3paaWhUbVJEdi9GcVRtUU84dE5tOE8wOWJPKzVYWkQwczVKZ0RGeDZj?=
- =?utf-8?B?TU9ydHh5UWNwSE1LTzdGNDRKekR4Zm1oWUh5ODNWWkFheFdUdGc1L2Nzd3di?=
- =?utf-8?B?NmJOa3FZRS9mMU10U2U0VEVEakEyTXBNRHF3TFVjZkdjeWhCVWg3YWVJQnhD?=
- =?utf-8?B?emFLVG9SNGpKRVZLOHJvbkFIMjc1cTR0SGptMXp0ejQ3UFlPY3BoSTkxYThH?=
- =?utf-8?B?cFhhRk5ORkJPN1lIT0JsTWtrTmlLdkJVSGx4TGYzdFRUcXhIZ3kvWnpUYnIy?=
- =?utf-8?B?ZHFxblpZUWQ2clNHYXc2QzRRR2ZWb0hacm9JcWdzNHRDOTVPTmdjQ2F6Mkcv?=
- =?utf-8?B?MkhsdkNLZ04xb05tVjlyL3haRmx5V0lneUViL0o1bmR4Z2ZJTEhGTVY3UlQ3?=
- =?utf-8?B?anRxYkZCcHpmYkJNdjJWb09FUDQ2cWxJbXdRbmt1RUJQVnREV1BTN2lEMGpz?=
- =?utf-8?B?bjBxOXFMeHZYMS9PbGRva3pGUC9aZmRQL2h5Tk9qbVpiZy9RSW8rNzNER3A1?=
- =?utf-8?Q?v3fpzlkxcqKzU50szOLlexE=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3f45a64-0727-48cc-19f5-08daa76f1b3e
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 07:48:07.0214
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: l3nmv18q+KB/kSN4VbF45i4Tkoq7zrjhaOqSEkoOAO7gZOYXNisPrA+iVGaDciVlZOCPu4+hvn3m0h7LgEyYcriNVRYiJTtPEkzOPPqq1fU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR01MB5796
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Roland Stigge <stigge@antcom.de>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+References: <20220922050718.1079651-1-Naresh.Solanki@9elements.com>
+ <20220922050718.1079651-2-Naresh.Solanki@9elements.com>
+ <3003378d-4283-6c05-50bf-29178c97ef8e@linaro.org>
+ <a55d973b-4504-a104-a889-f9b7e264c1e9@roeck-us.net>
+ <CABqG17hprsbHkDnvuXkQaaJdbuNgkuZD_G8L7M9HX=w5bYo8rQ@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add binding for max6639
+In-Reply-To: <CABqG17hprsbHkDnvuXkQaaJdbuNgkuZD_G8L7M9HX=w5bYo8rQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On 10/5/22 23:30, Naresh Solanki wrote:
+> Thanks Guenter, to summarize below properties that can be configured
+> based on input from
+> fan datasheet:
+> pwm controlled fan:
+> 1.  max-rpm : Defines maximum rpm the fan supports
+> 2.  tach-pulse/pulse-per-revolution( also referred as prescale) :
+> Determines the number of
+>   pulses received from the sensor/tach pin of fan per revolution.
 
+There are two different parameters: pulse-per-revolution is the number
+of pulses per revolution from the fan. Then there is a chip internal
+divider, used to ensure that the chip fan counter does not exceed
+its limits. Both are needed and orthogonal.
 
-On 01/10/2022 19:59, Bagas Sanjaya wrote:
-> On 9/29/22 16:43, Quan Nguyen wrote:
->> This commit adds support for Ampere SMpro hwmon driver. This driver
->> supports accessing various CPU sensors provided by the SMpro co-processor
->> including temperature, power, voltages, and current.
+ From the max6650 description:
+
+- maxim,fan-prescale  : Pre-scaling value, as per datasheet [1]. Lower values
+                         allow more fine-grained control of slower fans.
+                         Valid: 1, 2, 4, 8, 16.
+
+This has nothing to do with pulse-per-revolution (there are no fans
+with 16 pulses per revolution). The range for pulse-per-revolution
+is typically 1..4.
+
+Also see /sys/class/hwmon/hwmonX/fanY_pulses and /sys/class/hwmon/hwmonX/fanY_div
+in Documentation/ABI/testing/sysfs-class-hwmon                                                                                                                                                            <216,37>-46 24%.
+
+> 3.  rpm-init (also ref. as fan-target-rpm): Determines the fan rpm
+> driver needs to configure
+> during probe.
+
+This has nothing to do with an "init" value. It is the fan target rpm.
+Also see /sys/class/hwmon/hwmonX/fanY_target.
+
+> 4. pwm-input-polarity(normal or inverse) : Specifies fan pwm input
+> polarity as specified in
+>   fan datasheet. a fan controller driver can use this data to configure
+> pwm output polarity
+
+This has nothing to do with fan requirements. It is the output polarity
+from the chip, period. There can be an inverter between pwm output and the
+fan input, which is the most likely reason why the output has to be inverted.
+
+> accordingly during driver probe.
+> 
+> For a DC output controlled fan, voltage across fan is controlled to control rpm.
+> Below is what I can think of:
+> 5. voltage-range : Specifies valid voltage range for rpm control
+> example for 3V to 5V range:
+>       voltage-range=<3000 5000>;
+
+I never heard about that option. Usually fan controllers convert the provided
+or calculated pwm value into a voltage if DC mode is configured. What may be
+needed is the fan supply voltage, which can be provided by a regulator.
+
+What is also needed is a means to switch the fan controller between
+DC mode and PWM mode (matching /sys/class/hwmon/hwmonX/pwmY_mode).
+
+I would also expect the ability to set the pwm frequency (matching
+/sys/class/hwmon/hwmonX/pwmY_freq).
+
+Thanks,
+Guenter
+
+> 
+> Above mentioned properties are within the scope of fan.
+> Fan controllers like max6639/max6650 etc can have additional
+> properties specific to the
+> feather supported by the chip.
+> 
+> Let me know if I can go ahead with this.
+> 
+> Thanks,
+> Naresh Solanki
+> 
+> Regards,
+> Naresh Solanki
+> 
+> 
+> 
+> 9elements GmbH, Kortumstraße 19-21, 44787 Bochum, Germany
+> Email:  naresh.solanki@9elements.com
+> Mobile:  +91 9538631477
+> 
+> Sitz der Gesellschaft: Bochum
+> Handelsregister: Amtsgericht Bochum, HRB 17519
+> Geschäftsführung: Sebastian Deutsch, Eray Basar
+> 
+> Datenschutzhinweise nach Art. 13 DSGVO
+> 
+> 
+> On Thu, 6 Oct 2022 at 00:10, Guenter Roeck <linux@roeck-us.net> wrote:
 >>
-> 
-> s/This commit adds/Add/
-> 
+>> On 9/21/22 23:34, Krzysztof Kozlowski wrote:
+>>> On 22/09/2022 07:07, Naresh Solanki wrote:
+>>>> From: Marcello Sylvester Bauer <sylv@sylv.io>
+>>>>
+>>>> Add Devicetree binding documentation for Maxim MAX6639 temperature
+>>>> monitor with PWM fan-speed controller.
+>>>>
+>>>> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+>>>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>>>> ---
+>>>>    .../bindings/hwmon/maxim,max6639.yaml         | 112 ++++++++++++++++++
+>>>>    1 file changed, 112 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..c845fb989af2
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>>> @@ -0,0 +1,112 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +
+>>>> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Maxim max6639
+>>>> +
+>>>> +maintainers:
+>>>> +  - Roland Stigge <stigge@antcom.de>
+>>>
+>>> Ack from Roland is needed here.
+>>>
+>>>> +
+>>>> +description: |
+>>>> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
+>>>> +  fan-speed controller.  It monitors its own temperature and one external
+>>>> +  diode-connected transistor or the temperatures of two external diode-connected
+>>>> +  transistors, typically available in CPUs, FPGAs, or GPUs.
+>>>> +
+>>>> +  Datasheets:
+>>>> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    enum:
+>>>> +      - maxim,max6639
+>>>> +
+>>>> +  reg:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  '#address-cells':
+>>>> +    const: 1
+>>>> +
+>>>> +  '#size-cells':
+>>>> +    const: 0
+>>>> +
+>>>> +required:
+>>>> +  - compatible
+>>>> +  - reg
+>>>> +  - "fan@0"
+>>>> +  - "fan@1"
+>>>> +
+>>>> +additionalProperties: false
+>>>> +
+>>>> +patternProperties:
+>>>
+>>> This goes after properties.
+>>>
+>>>> +  "^fan@[0-1]$":
+>>>> +    type: object
+>>>> +    description: |
+>>>> +      Represents the two fans and their specific configuration.
+>>>> +
+>>>> +    properties:
+>>>> +      reg:
+>>>> +        description: |
+>>>> +          The fan number.
+>>>> +        items:
+>>>
+>>> Skip items.
+>>>
+>>>> +          minimum: 0
+>>>> +          maximum: 1
+>>>> +
+>>>> +      pwm-polarity:
+>>>
+>>> Why is this property of fan, not of PWM source?
+>>>
+>>
+>> The chip provides pwm output to the fan. That typical for fan
+>> controller chips. Typically they also have options to configure
+>> the pwm frequency and either pwm or DC output (max6639 does not
+>> have the latter option).
+>>
+>> Guenter
 
-Thanks Bagas and will fix in next version.
-- Quan
