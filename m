@@ -2,128 +2,85 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8986FC433FE
-	for <linux-hwmon@archiver.kernel.org>; Sun,  9 Oct 2022 12:05:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B443C433F5
+	for <linux-hwmon@archiver.kernel.org>; Sun,  9 Oct 2022 22:20:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiJIMFN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 9 Oct 2022 08:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
+        id S231421AbiJIWUB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 9 Oct 2022 18:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiJIMFM (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 9 Oct 2022 08:05:12 -0400
+        with ESMTP id S231804AbiJIWTY (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 9 Oct 2022 18:19:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B9F2228A;
-        Sun,  9 Oct 2022 05:05:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AFF386B2;
+        Sun,  9 Oct 2022 15:16:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1F2760BC2;
-        Sun,  9 Oct 2022 12:05:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F078BC433D6;
-        Sun,  9 Oct 2022 12:05:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7438060CEF;
+        Sun,  9 Oct 2022 22:13:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23891C43470;
+        Sun,  9 Oct 2022 22:13:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665317109;
-        bh=sa1sssn/6Unn/pQ50a8PSKlsizjsCiE1zUUQARnh83Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HYhivCEFFjHIN0oe9Zt1MRLwptLjNnmj2ZKeQJ7oWeW8YZy1ckr+NcdQrs+v6RA/W
-         g5xaVgyQyaTSviqrZN2kGwSwmO1LLk0cDhOXe+14G/rl1/KL6mY2mwL8wq4QKwNrUA
-         N3v0i6kSzZPSLozgVi1Kg1wZqQFO44TVtacLCUkYBa63AjnFHrxiblbUYS40Wc6GOf
-         E4HQbW82GatKYWScuFUtDwiMA6W/UHZ4EYoN3MRpIF8oIiVVKbsYBoWErMar1DKIWe
-         MpnNh4i/kufN4D/WtenE+nvAMzz6rtiUt3OvcA6VDpKzaOQYdLGmBX86yaWf1YaGbQ
-         Zo0bAZBgL49iw==
-Received: by pali.im (Postfix)
-        id 26F917C1; Sun,  9 Oct 2022 14:05:06 +0200 (CEST)
-Date:   Sun, 9 Oct 2022 14:05:06 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Josef Schlehofer <josef.schlehofer@nic.cz>
-Subject: Re: [PATCH] powerpc: dts: turris1x.dts: Add channel labels for
- temperature sensor
-Message-ID: <20221009120506.itwa4n25nljn2tll@pali>
-References: <20220930123901.10251-1-pali@kernel.org>
- <20220930124618.kyaansrl7ls5kn3i@pali>
+        s=k20201202; t=1665353590;
+        bh=tGduk6NkYZkVJ9uF+cMq9hjrPTghwEt6RVgQ/f8m48Q=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XD5e7jk33bXizCI1D0oPg5rZU4XYGziYUVyaCwDy3VfT+Sdl7WZ2l4oXP8f4fbMGp
+         v/Ug2oP75G7Xoa5wBRwMxRNPXo3d9th9w0xjSzWgn5WFHvqPmGqa1T7ZW/qqb8+wT1
+         PQFS9ZMlFKqe+lH1tQbyHymHYer/XfrR2D6imMXiv4svjZn81RjQZYQcHqQomhn5nV
+         olPfMwdJDQUL2x9UjkGE8fyG5h7Hd1Ly0svo2IbDjoISXwmkK/sNkEg5hjRhF2s8qb
+         QZAZMdkwdse1/kBIcMFWWZr8LtLaTyFe4mXv/4VRwq8zMLDP/IeUxWq8fAtr269Hpc
+         PhsAhrJnDc/ow==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.0 67/77] hwmon: (sht4x) do not overflow clamping operation on 32-bit platforms
+Date:   Sun,  9 Oct 2022 18:07:44 -0400
+Message-Id: <20221009220754.1214186-67-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221009220754.1214186-1-sashal@kernel.org>
+References: <20221009220754.1214186-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220930124618.kyaansrl7ls5kn3i@pali>
-User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Friday 30 September 2022 14:46:18 Pali Rohár wrote:
-> + CC hwmon ML
-> 
-> On Friday 30 September 2022 14:39:01 Pali Rohár wrote:
-> > Channel 0 of SA56004ED chip refers to internal SA56004ED chip sensor (chip
-> > itself is located on the board) and channel 1 of SA56004ED chip refers to
-> > external sensor which is connected to temperature diode of the P2020 CPU.
-> > 
-> > Fixes: 54c15ec3b738 ("powerpc: dts: Add DTS file for CZ.NIC Turris 1.x routers")
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > ---
-> > With this change userspace 'sensors' applications prints labels:
-> > 
-> >     $ sensors
-> >     sa56004-i2c-0-4c
-> >     Adapter: MPC adapter (i2c@3000)
-> >     board:        +34.2°C  (low  =  +0.0°C, high = +70.0°C)
-> >                            (crit = +85.0°C, hyst = +75.0°C)
-> >     cpu:          +58.9°C  (low  =  +0.0°C, high = +70.0°C)
-> >                            (crit = +85.0°C, hyst = +75.0°C)
-> > 
-> > And without this change it prints just generic tempX names:
-> > 
-> >     $ sensors
-> >     sa56004-i2c-0-4c
-> >     Adapter: MPC adapter (i2c@3000)
-> >     temp1:        +43.0°C  (low  =  +0.0°C, high = +70.0°C)
-> >                            (crit = +85.0°C, hyst = +75.0°C)
-> >     temp2:        +63.4°C  (low  =  +0.0°C, high = +70.0°C)
-> >                            (crit = +85.0°C, hyst = +75.0°C)
-> > ---
-> >  arch/powerpc/boot/dts/turris1x.dts | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> > 
-> > diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
-> > index 4033c554b06a..5b5278c32e43 100644
-> > --- a/arch/powerpc/boot/dts/turris1x.dts
-> > +++ b/arch/powerpc/boot/dts/turris1x.dts
-> > @@ -69,6 +69,20 @@
-> >  				interrupt-parent = <&gpio>;
-> >  				interrupts = <12 IRQ_TYPE_LEVEL_LOW>, /* GPIO12 - ALERT pin */
-> >  					     <13 IRQ_TYPE_LEVEL_LOW>; /* GPIO13 - CRIT pin */
-> > +				#address-cells = <1>;
-> > +				#size-cells = <0>;
-> > +
-> > +				/* Local temperature sensor (SA56004ED internal) */
-> > +				channel@0 {
-> > +					reg = <0>;
-> > +					label = "board";
-> > +				};
-> > +
-> > +				/* Remote temperature sensor (D+/D- connected to P2020 CPU Temperature Diode) */
-> > +				channel@1 {
-> > +					reg = <1>;
-> > +					label = "cpu";
-> > +				};
-> 
-> I'm not sure if you want UPPERCASE, lowercase, PascalCase, kebab-case
-> or snake_case format of labels. Or if you want also "temp" or
-> "temperature" keyword in the label. So please adjust label to the
-> preferred one, if proposed format is not the correct.
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-Ok, if nobody complains then please take this patch as is.
+[ Upstream commit f9c0cf8f26de367c58e48b02b1cdb9c377626e6f ]
 
-> >  			};
-> >  
-> >  			/* DDR3 SPD/EEPROM */
-> > -- 
-> > 2.20.1
-> > 
+On 32-bit platforms, long is 32 bits, so (long)UINT_MAX is less than
+(long)SHT4X_MIN_POLL_INTERVAL, which means the clamping operation is
+bogus. Fix this by clamping at INT_MAX, so that the upperbound is the
+same on all platforms.
+
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Link: https://lore.kernel.org/r/20220924101151.4168414-1-Jason@zx2c4.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/sht4x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
+index c19df3ade48e..13ac2d8f22c7 100644
+--- a/drivers/hwmon/sht4x.c
++++ b/drivers/hwmon/sht4x.c
+@@ -129,7 +129,7 @@ static int sht4x_read_values(struct sht4x_data *data)
+ 
+ static ssize_t sht4x_interval_write(struct sht4x_data *data, long val)
+ {
+-	data->update_interval = clamp_val(val, SHT4X_MIN_POLL_INTERVAL, UINT_MAX);
++	data->update_interval = clamp_val(val, SHT4X_MIN_POLL_INTERVAL, INT_MAX);
+ 
+ 	return 0;
+ }
+-- 
+2.35.1
+
