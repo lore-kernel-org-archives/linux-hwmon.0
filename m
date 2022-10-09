@@ -2,47 +2,47 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B443C433F5
-	for <linux-hwmon@archiver.kernel.org>; Sun,  9 Oct 2022 22:20:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14ED6C4321E
+	for <linux-hwmon@archiver.kernel.org>; Sun,  9 Oct 2022 22:31:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbiJIWUB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 9 Oct 2022 18:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44610 "EHLO
+        id S232099AbiJIWbG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 9 Oct 2022 18:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231804AbiJIWTY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 9 Oct 2022 18:19:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AFF386B2;
-        Sun,  9 Oct 2022 15:16:37 -0700 (PDT)
+        with ESMTP id S232364AbiJIW3S (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 9 Oct 2022 18:29:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10212BE27;
+        Sun,  9 Oct 2022 15:19:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7438060CEF;
-        Sun,  9 Oct 2022 22:13:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23891C43470;
-        Sun,  9 Oct 2022 22:13:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28A0460CF1;
+        Sun,  9 Oct 2022 22:18:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7168C433D6;
+        Sun,  9 Oct 2022 22:18:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665353590;
+        s=k20201202; t=1665353910;
         bh=tGduk6NkYZkVJ9uF+cMq9hjrPTghwEt6RVgQ/f8m48Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XD5e7jk33bXizCI1D0oPg5rZU4XYGziYUVyaCwDy3VfT+Sdl7WZ2l4oXP8f4fbMGp
-         v/Ug2oP75G7Xoa5wBRwMxRNPXo3d9th9w0xjSzWgn5WFHvqPmGqa1T7ZW/qqb8+wT1
-         PQFS9ZMlFKqe+lH1tQbyHymHYer/XfrR2D6imMXiv4svjZn81RjQZYQcHqQomhn5nV
-         olPfMwdJDQUL2x9UjkGE8fyG5h7Hd1Ly0svo2IbDjoISXwmkK/sNkEg5hjRhF2s8qb
-         QZAZMdkwdse1/kBIcMFWWZr8LtLaTyFe4mXv/4VRwq8zMLDP/IeUxWq8fAtr269Hpc
-         PhsAhrJnDc/ow==
+        b=Xx/rTYfXKO2UaCbYesyvIgDyT0qnlEd4KN/bDOXEwv0x1YkQzCeluaET/iQby05ZI
+         5NB2I0IUcheIIs2GTZcBtdQayDKbArAqaqxLMPkvBwfNjHVwbQDFu+zsqWDKKiKudx
+         70qwpT3jjJtmNi4EKC+F+WYaCjsb20XSVlMf8tFEOwPVWFFei8w2Hih2I3zUNMkdfl
+         Tn7MBzN3sZUms3N3A/Yv1HnZKS1g2LMBw8KFiums2KG+ivNRvwN2NaQRsmHz22B8tc
+         ucsOkx35sEXCsAuXNiA/9myeruYSC2wE3nTEH1ooqo+iJTONUVeoKXfL8ms28Vctgk
+         CUC7C+SkI4TKw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 67/77] hwmon: (sht4x) do not overflow clamping operation on 32-bit platforms
-Date:   Sun,  9 Oct 2022 18:07:44 -0400
-Message-Id: <20221009220754.1214186-67-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.19 63/73] hwmon: (sht4x) do not overflow clamping operation on 32-bit platforms
+Date:   Sun,  9 Oct 2022 18:14:41 -0400
+Message-Id: <20221009221453.1216158-63-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221009220754.1214186-1-sashal@kernel.org>
-References: <20221009220754.1214186-1-sashal@kernel.org>
+In-Reply-To: <20221009221453.1216158-1-sashal@kernel.org>
+References: <20221009221453.1216158-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
