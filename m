@@ -2,115 +2,232 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E29FCC433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Oct 2022 19:37:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 400C0C433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Oct 2022 19:47:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiJKThs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Oct 2022 15:37:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
+        id S229459AbiJKTr0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Oct 2022 15:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJKThq (ORCPT
+        with ESMTP id S229653AbiJKTrY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Oct 2022 15:37:46 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF70B814DC;
-        Tue, 11 Oct 2022 12:37:44 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1324e7a1284so17144737fac.10;
-        Tue, 11 Oct 2022 12:37:44 -0700 (PDT)
+        Tue, 11 Oct 2022 15:47:24 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53CD855B9
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Oct 2022 12:47:18 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id bj12so33622617ejb.13
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Oct 2022 12:47:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SZc6YAet+7QEfjXBOIDZ+tWznKgzcO1Ajj5p9dp+Zjg=;
+        b=Kil03nu7trwLJrrgQ166hvwg7HgVGGgGF5T9Kkl37/McGJLHyMJ6sursBMyO2QrgwK
+         mLGxajAb8akzoIMUShD72CREarjKECm4mOLvwjBdjVPNA8ANwlTrPskfAb1t2+vkdJ7I
+         ImaxIfuu/6smc/0gV/zYDJA1eSluZY0ufWzldhrBPB/1xnANbVaOfTuwA1VU7zsTxiuW
+         jqXMFi4v8Wh7JBcA/B9/nJ6Yk5+2e6n816H3luE4oyKSoCmTwc2uK3t9x9aC+Mjb1Kmp
+         ihJAVxZCwU6O3NYImj1msheyeunCPegBjjZnaXdTkA+EeFm9QwaXZUIH8RXw7sD9iZz4
+         rMtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LlAJGnPyj1A3ETlIge5PWjY1J90VuYIAynT20wsgRJk=;
-        b=pcpw/vOsTH5GkdgZuRDM6+GyK+J66I8JDc6r+tQ1DcfkbWzR+0yYgikiFyy+EBD/Wp
-         UGEzTcB673Ai+c2h01OBYNS+9F/lqjU6ptg63V6dD38Al1HgDMBapXuSlHaV4OKI5p4f
-         lMeyI5E42si/0/+wQDtb1emI4dE0MWKoDEuQ2CRw1pSFq/EOzMXl0ps9GOeqLDDDT027
-         n5CrieQsAoOw9/WbQz5KMDGXXx12fp6t0BClW4ec1hGPX6jumopWMOH7fKaHEvztAyBv
-         0p1JVc6LY5Lxb5uE9+WrdFjXMeekutSd+N5war0UJx0wdT5ic20+hylCOk/J7qSnEjw9
-         IPMw==
-X-Gm-Message-State: ACrzQf1IUhSbbdNoew2sMwTwJXMC4w0lydJCBpt1uyAUxn+XK2akF4hs
-        J/74IPKoKjh7D+WclBOxdw==
-X-Google-Smtp-Source: AMsMyM6qZ38xr6P0L8rkral0zexw7X1cJxjsH2N2lJhpfnjAWU2WmnxXYq66uI7K319YPMbgmtdpVQ==
-X-Received: by 2002:a05:6870:d61e:b0:132:bc09:4b8c with SMTP id a30-20020a056870d61e00b00132bc094b8cmr477444oaq.32.1665517063906;
-        Tue, 11 Oct 2022 12:37:43 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g9-20020a056870d20900b0011bde9f5745sm247619oac.23.2022.10.11.12.37.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 12:37:43 -0700 (PDT)
-Received: (nullmailer pid 4172857 invoked by uid 1000);
-        Tue, 11 Oct 2022 19:37:44 -0000
-Date:   Tue, 11 Oct 2022 14:37:44 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Naresh Solanki <naresh.solanki@9elements.com>,
-        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SZc6YAet+7QEfjXBOIDZ+tWznKgzcO1Ajj5p9dp+Zjg=;
+        b=Zt/G7sSCVtldIa/cUo9F6fLGClcC/BjU7XPNs78l+Aow9zHhgU6zMyvMa9mNWfnm1A
+         sM2gXccZ+VhRpABYNpQAMWw7Jp/GIIU8JdkgeMQaU4K9mVHEK12S0v7xcnkIEqyKcN5I
+         C4JZdgebWmE6H62Uzw/Ar/9eoEihtZqeL8qbWPOoD5uyACPaD1VCgLzGAoPwhZZuGStq
+         35vS+EY8uWDapGB7qSVH1+QWNreS2H1qpM6knL8za2erEUWx7XhEX9uDoNEldqXMwdAh
+         kza+fUqcbqCrdrGiw0qrurCgSsciMASaULR0VlqjDEfMuXtwRtxe6Ovwrzh2pycZc57V
+         AxfA==
+X-Gm-Message-State: ACrzQf26zBuTkFMJawEpUYK8xwyKzZZWYa0jXczsQTWCFfEvVmZS7r2W
+        6BgUmnUVB48ecAH8dXugm9P6LsjKVaTfhG2pNJB+CQ==
+X-Google-Smtp-Source: AMsMyM6a6WJKZGcu8dQgWz9fRfQEeXweJ9kuQ6VEvpXvJAi8SRSicVSkEnQwBzn3b5BRpdDOubA1uDcuZyhhLAoW8d0=
+X-Received: by 2002:a17:906:ef8c:b0:78d:4a00:7c7b with SMTP id
+ ze12-20020a170906ef8c00b0078d4a007c7bmr20385805ejb.187.1665517637383; Tue, 11
+ Oct 2022 12:47:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221011104739.53262-1-Naresh.Solanki@9elements.com>
+ <20221011104739.53262-2-Naresh.Solanki@9elements.com> <CAL_JsqLmzcM2m6iU_hvy8=a1QP=Xm9HU0U=R_GkO4UxW+Fn=fQ@mail.gmail.com>
+In-Reply-To: <CAL_JsqLmzcM2m6iU_hvy8=a1QP=Xm9HU0U=R_GkO4UxW+Fn=fQ@mail.gmail.com>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Wed, 12 Oct 2022 01:17:06 +0530
+Message-ID: <CABqG17i7=htO9pBf_62zzXTNuJgH_jCmzKXETEC9Oi5SJ9mm2Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
-Message-ID: <20221011193744.GA4051000-robh@kernel.org>
-References: <20221011104739.53262-1-Naresh.Solanki@9elements.com>
- <20221011104739.53262-2-Naresh.Solanki@9elements.com>
- <d2c83c4f-653c-438e-a91a-d17b846dec5b@roeck-us.net>
- <CABqG17hBJBU2rZSq4qy6Fn=pDH9ezwL=Fjh5vhj_G0cge-07mQ@mail.gmail.com>
- <8d2e905b-8669-b7ec-c7c0-1b0d78fded92@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d2e905b-8669-b7ec-c7c0-1b0d78fded92@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 09:46:08AM -0700, Guenter Roeck wrote:
-> On 10/11/22 09:12, Naresh Solanki wrote:
-> > Hi Guenter,
-> > 
-> > fan-common is intended for fan properties. i.e., those derived from
-> > fan datasheets.
-> > For min-rpm, some fans have minimum non zero rpm like 1900rpm below which
-> > the fan cannot run.
-> > 
-> 
-> I would argue the properties are for fan controllers, not for fans.
-> Fans don't have or depend on specific pwm frequencies. Fan controllers
-> do.
+Hi Rob, Guenter, Krzysztof,
 
-Presumably fan controllers can produce a range of frequencies. If they 
-need a specific frequency, then why are they programmable? Something 
-outside the fan controller must have the constraint.
+I want to align with the implementation for the fan dt schema.
 
-> Fans don't have a configurable pwm polarity. Fan controllers do,
-> to match the hardware on a board.
+Current implementation is intending to use fan-common.yaml only for the purpose
+of defining fan property as I felt this is the best way. This is how
+other drivers have approached(eg: leds)
 
-We don't model an inverter, so it's got to go somewhere.
+With this fan-controller driver will configure the chip  based on fan
+characteristics accordingly.
+target-rpm/default-rpm is included in it to enable driver configure
+fan controllers during driver
+probe.
 
-> Fans don't have or rely on
-> a target rpm. That is a system property, configured into the
-> fan controller. And so on.
+Fan datasheets do specify the pwm frequency used to evaluate its
+characteristic. That is the reason I've
+included pwm-frequency here which fan-controller drivers can use &
+initialize pwm frequency accordingly.
 
-Yes, but it is per fan. per fan properties/settings should go in the fan 
-node IMO.
+I'm ok with other approaches so do provide your perspective.
 
-> If this is for fans, we'll need another set of properties for
-> fan controllers. The driver for max6639, being a fan controller,
-> would need to implement those properties.
-> 
-> Also, as implemented in the MAX6639, max-rpm is the fan's
-> rpm range, not the actual rpm. Your implementation is just
-> confusing, including the example in the bindings. Valid values
-> should be what the chip accepts, not some random value.
+Regards,
+Naresh Solanki
 
-A fan would have some design maximum RPM depending on its mechanical 
-design and lifetime requirements. A controller would have some maximum 
-in terms of electrical pulse frequency or register bit sizes (depending 
-how RPM or pulse counts are exposed to s/w. That should all be implied 
-from the controller part and not in DT. It's the mechanical limits of 
-the fan we should be defining here.
-
-> Really, I don't understand where you are going with this.
-
-Certainly it needs more thought for different cases.
-
-Rob
+On Wed, 12 Oct 2022 at 00:35, Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Tue, Oct 11, 2022 at 5:47 AM Naresh Solanki
+> <naresh.solanki@9elements.com> wrote:
+> >
+> > Add common fan properties bindings to a schema.
+> >
+> > Bindings for fan controllers can reference the common schema for the
+> > fan
+> >
+> > child nodes:
+> >
+> >   patternProperties:
+> >     "^fan@[0-2]":
+> >       type: object
+> >       allOf:
+>
+> Don't allOf here.
+>
+> >         - $ref: fan-common.yaml#
+> >
+> > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > ---
+> >  .../devicetree/bindings/hwmon/fan-common.yaml | 80 +++++++++++++++++++
+> >  1 file changed, 80 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> > new file mode 100644
+> > index 000000000000..abc8375da646
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> > @@ -0,0 +1,80 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only
+>
+> Dual license with BSD-2-Clause.
+>
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Common fan properties
+> > +
+> > +maintainers:
+> > +  - Naresh Solanki <naresh.solanki@9elements.com>
+> > +
+> > +properties:
+> > +  max-rpm:
+> > +    description:
+> > +      Max RPM supported by fan
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +
+> > +  pulse-per-revolution:
+>
+> The already in use property is 'pulses-per-revolution'.
+>
+> > +    description:
+> > +      The number of pulse from fan sensor per revolution.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+>
+> I assume there's a known set of values various fans have?
+>
+> > +
+> > +  target-rpm:
+> > +    description:
+> > +      Target RPM the fan should be configured during driver probe.
+>
+> Which driver? I think 'default-rpm' would be a better name.
+>
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +
+> > +  pwm-frequency:
+> > +    description:
+> > +      PWM frequency for fan.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +
+> > +  pwm-polarity-inverse:
+> > +    description:
+> > +      PWM polarity for fan.
+> > +    type: boolean
+>
+> Both of these properties are handled by the PWM binding already. I
+> think this should use it even though the PWMs are just connected to
+> the child nodes. There's always the possibility that someone hooks up
+> a fan controller PWM to something else besides a fan.
+>
+> > +
+> > +  label:
+> > +    description:
+> > +      Optional fan label
+> > +    $ref: /schemas/types.yaml#/definitions/string
+>
+> Doesn't a fan need power? 'fan-supply' is already in use, so that could be used.
+>
+> > +
+> > +additionalProperties: true
+> > +
+> > +examples:
+> > +  - |
+>
+> Drop the example here as you have it in the max6639 schema.
+>
+> > +
+> > +
+> > +    i2c {
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        fan-controller@30 {
+> > +            compatible = "maxim,max6639";
+> > +            reg = <0x30>;
+> > +            #address-cells = <1>;
+> > +            #size-cells = <0>;
+> > +
+> > +            fan@0 {
+> > +                reg = <0>;
+> > +                label = "CPU0_Fan";
+> > +                max-rpm = <32000>;
+> > +                pulse-per-revolution = <2>;
+> > +                target-rpm = <2000>;
+> > +                pwm-frequency = <25000>;
+> > +            };
+> > +
+> > +            fan@1 {
+> > +                reg = <1>;
+> > +                label = "PCIe0_Fan";
+> > +                max-rpm = <32000>;
+> > +                pulse-per-revolution = <2>;
+> > +                target-rpm = <2000>;
+> > +                pwm-frequency = <25000>;
+> > +            };
+> > +
+> > +        };
+> > +    };
+> > +
+> > +...
+> >
+> > base-commit: 0cf46a653bdae56683fece68dc50340f7520e6c4
+> > --
+> > 2.37.3
+> >
