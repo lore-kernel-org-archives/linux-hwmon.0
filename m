@@ -2,80 +2,76 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDCC6C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Oct 2022 01:52:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08B7CC433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Oct 2022 01:52:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiJKBwN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 10 Oct 2022 21:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
+        id S229641AbiJKBwO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 10 Oct 2022 21:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiJKBwN (ORCPT
+        with ESMTP id S229623AbiJKBwO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 Oct 2022 21:52:13 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522EB30564;
-        Mon, 10 Oct 2022 18:52:12 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-132fb4fd495so14326650fac.12;
-        Mon, 10 Oct 2022 18:52:12 -0700 (PDT)
+        Mon, 10 Oct 2022 21:52:14 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352687A75B;
+        Mon, 10 Oct 2022 18:52:13 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-132af5e5543so14340299fac.8;
+        Mon, 10 Oct 2022 18:52:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r7j7UNwVzR+wCkPX8CqmHB9AO91wcR2v4GG/919pc7w=;
-        b=me65RaZYQwyQ+fyjTcfLY7Xxd9sea3iehiOr9QJta+xpzgPoPXzqiVyaNgiNlB2uP1
-         vkqgHa08qzsnNo3nzeIL2VPs3AtI7oAJ+QjCeh76RV8EndsIZXi1WikSqYQBQMv2TP9b
-         HdvCoLHhHtHs24gCU/AP1B1kzN5a4zl25kUZ9RPS0juKYvZiYfp7IQaPUmSYhBGdsV6i
-         ennbHN4EWGnkBQAFO4NUP+or+G1Ii9GozAUrtEFdUxqyg285ZG81OTRy8mTgZf4Zh6Io
-         OwVBUzQTYJFwbTovXCXA9YldotTjPshAixfNiw/24EOFQwA0aC2jgR/4F31FjRSsGSBR
-         4WPA==
-X-Gm-Message-State: ACrzQf3CKewAfpe4+9yq05c5mtv2oA8gVIdL329j+Un0e/nEieL0V8ou
-        ymOmSjBAfZmhgtvjxKKqiw==
-X-Google-Smtp-Source: AMsMyM5lb/Csad8MM6YtoD+EDz3MSi48/SR9ljKeS9lLQsE303QL2X/yqvmjogRia+SaxxrcBSEf+g==
-X-Received: by 2002:a05:6870:2052:b0:132:7b2:2fe6 with SMTP id l18-20020a056870205200b0013207b22fe6mr11864394oad.98.1665453131143;
-        Mon, 10 Oct 2022 18:52:11 -0700 (PDT)
+        bh=Gq410igO39M0BJxeIyPF6hfpJsIwNwEM8SdNrsIFsmk=;
+        b=2SqVRZTxaIpvcaZOOSnFxw+TrMM+vMp/jX2EOFS1k2ANvlWgd8qxhdEgVXN7Map1w2
+         ZKmlCQ23FONYdYc/lykM8ZhIpe6gNzOTQ7KA00u1+L7Fcnm644vvu8QLwFeB8AzQswCV
+         meIc6P3utjWJF4Nvqud3zjHxKn6iZoAMZXIyujxp/di7uql/0mKsvUpxaOmHAZ85gAdd
+         CMsnYBR6X02gWVCZRGissdkEaOY9zWSXP7f6fiJLV/N9sSh4JLnroYNDIYKmkJfg1Yts
+         7KDqyXQXb5ck+CbQ7hVqBhpq6P4Gfob0NTFN5qZPRexwbU9A9uq0+mkW9nHseqJsLh4A
+         v48Q==
+X-Gm-Message-State: ACrzQf02a2AprC9axRQaDitFRLy2H9KODvN0taB2VQ3Kzziu+XwICPrl
+        kU6EYCmIuBqgMiPYrIjB6g==
+X-Google-Smtp-Source: AMsMyM4fRMe2BihsOa+5T3mi/tfE98R09b32rSZsgQe6r+HdvrMdQVa+aFGGh5w8lnw8hT+j7zFptQ==
+X-Received: by 2002:a05:6870:1716:b0:135:7980:9b73 with SMTP id h22-20020a056870171600b0013579809b73mr10359763oae.99.1665453132378;
+        Mon, 10 Oct 2022 18:52:12 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q125-20020aca4383000000b00353f41440dasm4921298oia.56.2022.10.10.18.52.10
+        by smtp.gmail.com with ESMTPSA id z6-20020aca6706000000b00353fe4fb4casm4934301oix.48.2022.10.10.18.52.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 18:52:10 -0700 (PDT)
-Received: (nullmailer pid 1703333 invoked by uid 1000);
+        Mon, 10 Oct 2022 18:52:11 -0700 (PDT)
+Received: (nullmailer pid 1703336 invoked by uid 1000);
         Tue, 11 Oct 2022 01:52:12 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org,
+        Marcello Sylvester Bauer <sylv@sylv.io>,
+        linux-hwmon@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Roland Stigge <stigge@antcom.de>,
         Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20221010203046.3673663-2-Naresh.Solanki@9elements.com>
-References: <20221010203046.3673663-1-Naresh.Solanki@9elements.com> <20221010203046.3673663-2-Naresh.Solanki@9elements.com>
-Message-Id: <166545307481.1702115.16827034654525066056.robh@kernel.org>
-Subject: Re: [PATCH 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
+        Rob Herring <robh+dt@kernel.org>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Jean Delvare <jdelvare@suse.com>
+In-Reply-To: <20221010203046.3673663-3-Naresh.Solanki@9elements.com>
+References: <20221010203046.3673663-1-Naresh.Solanki@9elements.com> <20221010203046.3673663-3-Naresh.Solanki@9elements.com>
+Message-Id: <166545307592.1702161.8054686650835218810.robh@kernel.org>
+Subject: Re: [PATCH 2/3] dt-bindings: hwmon: Add binding for max6639
 Date:   Mon, 10 Oct 2022 20:52:12 -0500
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 10 Oct 2022 22:30:44 +0200, Naresh Solanki wrote:
-> Add common fan properties bindings to a schema.
+On Mon, 10 Oct 2022 22:30:45 +0200, Naresh Solanki wrote:
+> From: Marcello Sylvester Bauer <sylv@sylv.io>
 > 
-> Bindings for fan controllers can reference the common schema for the
-> fan
+> Add Devicetree binding documentation for Maxim MAX6639 temperature
+> monitor with PWM fan-speed controller.
 > 
-> child nodes:
-> 
->   patternProperties:
->     "^fan@[0-2]":
->       type: object
->       allOf:
->         - $ref: fan-common.yaml#
-> 
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
 > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 > ---
->  .../devicetree/bindings/hwmon/fan-common.yaml | 77 +++++++++++++++++++
->  1 file changed, 77 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+>  .../bindings/hwmon/maxim,max6639.yaml         | 116 ++++++++++++++++++
+>  1 file changed, 116 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -84,10 +80,11 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/fan-common.yaml: 'maintainers' is a required property
-	hint: Metaschema for devicetree binding documentation
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-Documentation/devicetree/bindings/hwmon/fan-common.example.dtb:0:0: /example-0/i2c/fan-controller@30: failed to match any schema with compatible: ['maxim,max6639']
+./Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/hwmon/fan-common.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/maxim,max6639.example.dtb: max6639@10: fan@0: False schema does not allow {'reg': [[0]], 'pulses-per-revolution': [[2]], 'max-rpm': [[4000]], 'pwm-frequency': [[25000]]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/maxim,max6639.example.dtb: max6639@10: fan@1: False schema does not allow {'reg': [[1]], 'pulses-per-revolution': [[2]], 'max-rpm': [[32000]], 'pwm-frequency': [[25000]]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
 
 doc reference errors (make refcheckdocs):
 
