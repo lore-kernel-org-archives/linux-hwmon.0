@@ -2,278 +2,177 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78E27C433F5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Oct 2022 15:21:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A07E6C4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Oct 2022 16:12:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbiJKPVi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Oct 2022 11:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
+        id S229975AbiJKQMP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Oct 2022 12:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbiJKPVR (ORCPT
+        with ESMTP id S229547AbiJKQMO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Oct 2022 11:21:17 -0400
-X-Greylist: delayed 1303 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Oct 2022 08:12:36 PDT
-Received: from 6.mo560.mail-out.ovh.net (6.mo560.mail-out.ovh.net [87.98.165.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B56B2DAD
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Oct 2022 08:12:35 -0700 (PDT)
-Received: from player755.ha.ovh.net (unknown [10.111.172.184])
-        by mo560.mail-out.ovh.net (Postfix) with ESMTP id E08BD237BD
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Oct 2022 14:33:40 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player755.ha.ovh.net (Postfix) with ESMTPSA id 0488D2FA536CD;
-        Tue, 11 Oct 2022 14:33:35 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-110S004cf6abaae-65cc-4a2d-b9a2-0791702198c8,
-                    1484D649C3824875A5D1A4DE507C75CAB639AB48) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-From:   Stephen Kitt <steve@sk2.org>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Stephen Kitt <steve@sk2.org>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers/hwmon: use simple i2c probe
-Date:   Tue, 11 Oct 2022 16:33:08 +0200
-Message-Id: <20221011143309.3141267-1-steve@sk2.org>
-X-Mailer: git-send-email 2.30.2
+        Tue, 11 Oct 2022 12:12:14 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8615A5AC6F
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Oct 2022 09:12:13 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id y14so15354162ejd.9
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Oct 2022 09:12:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PnLUoFaU3blZOlls16zN1BYDLl6R08N8OQkYfhpp1PQ=;
+        b=C0S97wP61qMnHd5sJB8dTaMCofVkvWwpNFKzyBLfHfHg69DtfnQKBUje86/cdY7ndH
+         QJyVaozB2wOLzNa6bNcYv75uDXRT+qKu/n21yhSRgVEjyVsNVA8rhq/4MI+foJOIfp20
+         G+GgnnRGahMDmiXIwMT6kMrQI1oXZAyoKa+lpr8xhuVdVEaOpnvQuFkrleWctaliD3LB
+         NfEEDoInfqmEHnaAWV5GKhaUgG/27daamnXauCiGMf7gmteWQddeRkEDJ2MDdAxgTsRS
+         9GwDGScv9aoLFq0E42LVTakeoiuLbO9bdi4EPtN1bMm9pmCt0gHNe6+f/D/FFAYGYZyz
+         4bXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PnLUoFaU3blZOlls16zN1BYDLl6R08N8OQkYfhpp1PQ=;
+        b=AB7wCnqH8wST8uv5DMFsHkdHNkYOm1QY/kwUMdatVgpn33R5ayZKCqPEBbLE9Vfj8e
+         TGV2Xb8XISX0/laIXAc0ejYmtvUHYomZMTUyyP0axBWX+2SyP/2YCVav+jkjrGM/mQq0
+         vsQOfiDZCY8sm+k/O/nS9LVs9d4YoE3dxoKap+sOiyOMaipMSwgzUPxnwBEWYWkAuj5e
+         qjJ6RK4KiYA/ZfpI+c75u22wtrnvFy7ON3Dj4dud6kJyczQYp8mrBMjONNXVwSueukL7
+         Pr1580sbzLSeb3bVcocPmtsgL6pZ3zFvg4IvZyV3bQW++IbTYAQl6LiTHyeJGeba8m4K
+         dk0A==
+X-Gm-Message-State: ACrzQf0vqdhDiz6ty+M+N/CK/v7MObv3jEjrrovVa4AJUsKe6iF8vyh/
+        8PDfob/ZNHAFOwzkJEb55Zy+XzlxfYK5MS2fPOx4Wg==
+X-Google-Smtp-Source: AMsMyM4z1eWSzZfxemacavXkYNnL4SVMx+5pP//9GryCIP9fr9/JFumBzMpiwxabLn0BH0YEyTwSbbBltx3ZQVlCMNY=
+X-Received: by 2002:a17:907:a068:b0:78d:cbcf:f7bc with SMTP id
+ ia8-20020a170907a06800b0078dcbcff7bcmr5857263ejc.519.1665504732114; Tue, 11
+ Oct 2022 09:12:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 9134425945843074779
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejiedgjeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepleegteeujeffjeefjeevhfdtudefjefgteelgedtudekleeiledvvdetudevjedtnecukfhppeduvdejrddtrddtrddupdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehsthgvvhgvsehskhdvrdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhhfihmohhnsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehiedtpdhmohguvgepshhmthhpohhuth
+References: <20221011104739.53262-1-Naresh.Solanki@9elements.com>
+ <20221011104739.53262-2-Naresh.Solanki@9elements.com> <d2c83c4f-653c-438e-a91a-d17b846dec5b@roeck-us.net>
+In-Reply-To: <d2c83c4f-653c-438e-a91a-d17b846dec5b@roeck-us.net>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Tue, 11 Oct 2022 21:42:01 +0530
+Message-ID: <CABqG17hBJBU2rZSq4qy6Fn=pDH9ezwL=Fjh5vhj_G0cge-07mQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-All these drivers have an i2c probe function which doesn't use the
-"struct i2c_device_id *id" parameter, so they can trivially be
-converted to the "probe_new" style of probe with a single argument.
+Hi Guenter,
 
-This is part of an ongoing transition to single-argument i2c probe
-functions. Old-style probe functions involve a call to i2c_match_id:
-in drivers/i2c/i2c-core-base.c,
+fan-common is intended for fan properties. i.e., those derived from
+fan datasheets.
+For min-rpm, some fans have minimum non zero rpm like 1900rpm below which
+the fan cannot run.
 
-         /*
-          * When there are no more users of probe(),
-          * rename probe_new to probe.
-          */
-         if (driver->probe_new)
-                 status = driver->probe_new(client);
-         else if (driver->probe)
-                 status = driver->probe(client,
-                                        i2c_match_id(driver->id_table, client));
-         else
-                 status = -EINVAL;
+But not sure what the best approach is but for chip specific setting
+it should be in
+chip specific DT schema. Suggestion?
 
-Drivers which don't need the second parameter can be declared using
-probe_new instead, avoiding the call to i2c_match_id. Drivers which do
-can still be converted to probe_new-style, calling i2c_match_id
-themselves (as is done currently for of_match_id).
+Regards,
+Naresh Solanki
 
-This change was done using the following Coccinelle script, and fixed
-up for whitespace changes:
 
-@ rule1 @
-identifier fn;
-identifier client, id;
-@@
 
-- static int fn(struct i2c_client *client, const struct i2c_device_id *id)
-+ static int fn(struct i2c_client *client)
-{
-...when != id
-}
+9elements GmbH, Kortumstra=C3=9Fe 19-21, 44787 Bochum, Germany
+Email:  naresh.solanki@9elements.com
+Mobile:  +91 9538631477
 
-@ rule2 depends on rule1 @
-identifier rule1.fn;
-identifier driver;
-@@
+Sitz der Gesellschaft: Bochum
+Handelsregister: Amtsgericht Bochum, HRB 17519
+Gesch=C3=A4ftsf=C3=BChrung: Sebastian Deutsch, Eray Basar
 
-struct i2c_driver driver = {
--       .probe
-+       .probe_new
-                =
-(
-                   fn
-|
--                  &fn
-+                  fn
-)
-                ,
-};
+Datenschutzhinweise nach Art. 13 DSGVO
 
-Signed-off-by: Stephen Kitt <steve@sk2.org>
----
- drivers/hwmon/aht10.c      | 5 ++---
- drivers/hwmon/emc2305.c    | 4 ++--
- drivers/hwmon/ltc2992.c    | 4 ++--
- drivers/hwmon/max127.c     | 5 ++---
- drivers/hwmon/sbrmi.c      | 5 ++---
- drivers/hwmon/sbtsi_temp.c | 5 ++---
- drivers/hwmon/sht4x.c      | 5 ++---
- 7 files changed, 14 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/hwmon/aht10.c b/drivers/hwmon/aht10.c
-index 2d9770cb4401..d76f3441ecf1 100644
---- a/drivers/hwmon/aht10.c
-+++ b/drivers/hwmon/aht10.c
-@@ -289,8 +289,7 @@ static const struct hwmon_chip_info aht10_chip_info = {
- 	.info = aht10_info,
- };
- 
--static int aht10_probe(struct i2c_client *client,
--		       const struct i2c_device_id *aht10_id)
-+static int aht10_probe(struct i2c_client *client)
- {
- 	struct device *device = &client->dev;
- 	struct device *hwmon_dev;
-@@ -336,7 +335,7 @@ static struct i2c_driver aht10_driver = {
- 	.driver = {
- 		.name = "aht10",
- 	},
--	.probe      = aht10_probe,
-+	.probe_new  = aht10_probe,
- 	.id_table   = aht10_id,
- };
- 
-diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
-index aa1f25add0b6..f222fcf3b6aa 100644
---- a/drivers/hwmon/emc2305.c
-+++ b/drivers/hwmon/emc2305.c
-@@ -518,7 +518,7 @@ static int emc2305_identify(struct device *dev)
- 	return 0;
- }
- 
--static int emc2305_probe(struct i2c_client *client, const struct i2c_device_id *id)
-+static int emc2305_probe(struct i2c_client *client)
- {
- 	struct i2c_adapter *adapter = client->adapter;
- 	struct device *dev = &client->dev;
-@@ -607,7 +607,7 @@ static struct i2c_driver emc2305_driver = {
- 	.driver = {
- 		.name = "emc2305",
- 	},
--	.probe    = emc2305_probe,
-+	.probe_new = emc2305_probe,
- 	.remove	  = emc2305_remove,
- 	.id_table = emc2305_ids,
- 	.address_list = emc2305_normal_i2c,
-diff --git a/drivers/hwmon/ltc2992.c b/drivers/hwmon/ltc2992.c
-index 72489d5d7eaf..88514152d930 100644
---- a/drivers/hwmon/ltc2992.c
-+++ b/drivers/hwmon/ltc2992.c
-@@ -881,7 +881,7 @@ static int ltc2992_parse_dt(struct ltc2992_state *st)
- 	return 0;
- }
- 
--static int ltc2992_i2c_probe(struct i2c_client *client, const struct i2c_device_id *id)
-+static int ltc2992_i2c_probe(struct i2c_client *client)
- {
- 	struct device *hwmon_dev;
- 	struct ltc2992_state *st;
-@@ -927,7 +927,7 @@ static struct i2c_driver ltc2992_i2c_driver = {
- 		.name = "ltc2992",
- 		.of_match_table = ltc2992_of_match,
- 	},
--	.probe    = ltc2992_i2c_probe,
-+	.probe_new = ltc2992_i2c_probe,
- 	.id_table = ltc2992_i2c_id,
- };
- 
-diff --git a/drivers/hwmon/max127.c b/drivers/hwmon/max127.c
-index 402ffdc2f425..0e21e7e6bbd2 100644
---- a/drivers/hwmon/max127.c
-+++ b/drivers/hwmon/max127.c
-@@ -303,8 +303,7 @@ static const struct hwmon_chip_info max127_chip_info = {
- 	.info = max127_info,
- };
- 
--static int max127_probe(struct i2c_client *client,
--			const struct i2c_device_id *id)
-+static int max127_probe(struct i2c_client *client)
- {
- 	int i;
- 	struct device *hwmon_dev;
-@@ -340,7 +339,7 @@ static struct i2c_driver max127_driver = {
- 	.driver = {
- 		.name	= "max127",
- 	},
--	.probe		= max127_probe,
-+	.probe_new	= max127_probe,
- 	.id_table	= max127_id,
- };
- 
-diff --git a/drivers/hwmon/sbrmi.c b/drivers/hwmon/sbrmi.c
-index 7bf0c3fba75f..8ea5a4d3219f 100644
---- a/drivers/hwmon/sbrmi.c
-+++ b/drivers/hwmon/sbrmi.c
-@@ -297,8 +297,7 @@ static int sbrmi_get_max_pwr_limit(struct sbrmi_data *data)
- 	return ret;
- }
- 
--static int sbrmi_probe(struct i2c_client *client,
--		       const struct i2c_device_id *id)
-+static int sbrmi_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
- 	struct device *hwmon_dev;
-@@ -348,7 +347,7 @@ static struct i2c_driver sbrmi_driver = {
- 		.name = "sbrmi",
- 		.of_match_table = of_match_ptr(sbrmi_of_match),
- 	},
--	.probe = sbrmi_probe,
-+	.probe_new = sbrmi_probe,
- 	.id_table = sbrmi_id,
- };
- 
-diff --git a/drivers/hwmon/sbtsi_temp.c b/drivers/hwmon/sbtsi_temp.c
-index e35357c48b8e..4c37de846f93 100644
---- a/drivers/hwmon/sbtsi_temp.c
-+++ b/drivers/hwmon/sbtsi_temp.c
-@@ -199,8 +199,7 @@ static const struct hwmon_chip_info sbtsi_chip_info = {
- 	.info = sbtsi_info,
- };
- 
--static int sbtsi_probe(struct i2c_client *client,
--		       const struct i2c_device_id *id)
-+static int sbtsi_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
- 	struct device *hwmon_dev;
-@@ -239,7 +238,7 @@ static struct i2c_driver sbtsi_driver = {
- 		.name = "sbtsi",
- 		.of_match_table = of_match_ptr(sbtsi_of_match),
- 	},
--	.probe = sbtsi_probe,
-+	.probe_new = sbtsi_probe,
- 	.id_table = sbtsi_id,
- };
- 
-diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
-index 13ac2d8f22c7..13e042927bf8 100644
---- a/drivers/hwmon/sht4x.c
-+++ b/drivers/hwmon/sht4x.c
-@@ -232,8 +232,7 @@ static const struct hwmon_chip_info sht4x_chip_info = {
- 	.info = sht4x_info,
- };
- 
--static int sht4x_probe(struct i2c_client *client,
--		       const struct i2c_device_id *sht4x_id)
-+static int sht4x_probe(struct i2c_client *client)
- {
- 	struct device *device = &client->dev;
- 	struct device *hwmon_dev;
-@@ -292,7 +291,7 @@ static struct i2c_driver sht4x_driver = {
- 		.name = "sht4x",
- 		.of_match_table = sht4x_of_match,
- 	},
--	.probe		= sht4x_probe,
-+	.probe_new	= sht4x_probe,
- 	.id_table	= sht4x_id,
- };
- 
-
-base-commit: 833477fce7a14d43ae4c07f8ddc32fa5119471a2
--- 
-2.30.2
-
+On Tue, 11 Oct 2022 at 20:30, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 10/11/22 03:47, Naresh Solanki wrote:
+> > Add common fan properties bindings to a schema.
+> >
+> > Bindings for fan controllers can reference the common schema for the
+> > fan
+> >
+> > child nodes:
+> >
+> >    patternProperties:
+> >      "^fan@[0-2]":
+> >        type: object
+> >        allOf:
+> >          - $ref: fan-common.yaml#
+> >
+> > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > ---
+> >   .../devicetree/bindings/hwmon/fan-common.yaml | 80 ++++++++++++++++++=
++
+> >   1 file changed, 80 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common=
+.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/=
+Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> > new file mode 100644
+> > index 000000000000..abc8375da646
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> > @@ -0,0 +1,80 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Common fan properties
+> > +
+> > +maintainers:
+> > +  - Naresh Solanki <naresh.solanki@9elements.com>
+> > +
+> > +properties:
+> > +  max-rpm:
+> > +    description:
+> > +      Max RPM supported by fan
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +
+> > +  pulse-per-revolution:
+> > +    description:
+> > +      The number of pulse from fan sensor per revolution.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +
+> > +  target-rpm:
+> > +    description:
+> > +      Target RPM the fan should be configured during driver probe.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +
+> > +  pwm-frequency:
+> > +    description:
+> > +      PWM frequency for fan.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +
+> > +  pwm-polarity-inverse:
+> > +    description:
+> > +      PWM polarity for fan.
+> > +    type: boolean
+> > +
+> > +  label:
+> > +    description:
+> > +      Optional fan label
+> > +    $ref: /schemas/types.yaml#/definitions/string
+> > +
+>
+> Same question as before:
+>
+> How are additional common bindings, such as min-rpm or fan-divider
+> (also sometimes called fan-prescale) supposed to be handled ?
+> As additions to this schema, or individually in each driver needing/
+> using them ?
+>
+> Thanks,
+> Guenter
