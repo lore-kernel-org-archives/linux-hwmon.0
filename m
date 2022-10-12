@@ -2,131 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60BC7C4332F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Oct 2022 01:35:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABF44C433FE
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Oct 2022 20:59:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229594AbiJLBfT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Oct 2022 21:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
+        id S229972AbiJLU7R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Oct 2022 16:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiJLBfS (ORCPT
+        with ESMTP id S230044AbiJLU6y (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Oct 2022 21:35:18 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD03F5AC52;
-        Tue, 11 Oct 2022 18:35:16 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id e129so14264921pgc.9;
-        Tue, 11 Oct 2022 18:35:16 -0700 (PDT)
+        Wed, 12 Oct 2022 16:58:54 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87631162F9
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Oct 2022 13:58:08 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id bp11so15195827wrb.9
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Oct 2022 13:58:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Iv50hxDOHDOsgzOAMRq0QBK53acG/P2BUJFVAKGAT4o=;
-        b=RNhHYy1UfHXMhd5n5YAnce/Zp70WW6q9uoBYfQrhK1zu9MvI4ebhewW12jIx0SNz9R
-         +M/xG/u16A0yXJSmO++vuRMShouqpRwgJOjTcOggxIcoRgP8wpibOSPkZYuAw1Y0s91C
-         rMatDckiihko0xHYquALUnmLv0//XTalaueU/gKb1Ggv1gxUVgeN1yscEVyKD8BI/WR+
-         RKi/tKIcrtKwSPejHtInDDJyDW+7knAAdIwF6a5ynYuwL/lcwjChvqLMRHpqhWUHSRMR
-         6AQtJuBLhwQZliEoD1oZ3dR/SjzpEB9pGmXrztHEezssfs3UOIUxxSJ/TLRNjq3CCbHj
-         rYEQ==
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yChYi7VY+m+DrvJmTQkA623G7MkHEI7cjTtlZ46QtfY=;
+        b=CkCgF7grnn+w8+bJItdlr661kAayCwQrlS+1aeGHuq8gYnnRJPF4HieHCXLTwkIxAe
+         za1clmxoMWwnduh/3idXfTUGqPEKVqrvRPogJr3n5XAOOTxoYvFHMVhtrW9QH264fgeq
+         uhrvppR1B0RREFnNav8Cwi3MIF9xutHLImxep1Xhfa8nj/XnrDC/h9k0OLGdSxNHqD3I
+         SeTC8e4jOD25SbWO1gCS1HFk484iXCtsa3pus56MLJa/9cywbu6Eg2SAt4+6OxnzwUWb
+         Bvsnhj2WgOE74hJH0Lu/GG/LhJr7Fp4cGSemlgZJhOOMJJRe1h2jn2CQHEVjfyFiGdHC
+         wG8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Iv50hxDOHDOsgzOAMRq0QBK53acG/P2BUJFVAKGAT4o=;
-        b=2oBJmjWY5crixx91qgfimIR5g3ef6FEhTD7nT8Qyfc7aJ7xb9k7nSj/eLFOHcek/5p
-         /WrNV5s09EPGMDk6XJHi2ZZM1vbqyCEoMHMXJnI1w/KplXf3cn0roXFSwP3g1o09eNRD
-         VyNc4t7DDSIhmUEDFPWTHtqL7TkRwAmzDUj1iJThTTyCElj6s2xzyjfZocjh/kIHzRr8
-         KBgJ3a4uQE+5MPEycwVcqAjIoJ2l9QcItMmodTq2oe0KF3+7kVrj8WBiJG6xfMseVz3g
-         38F9gEMxj7m7CG9q3reyikpAU+amETUaKB6bziep/Pupe/XAmEx6hrd6hYHPxb8KflvH
-         xMmg==
-X-Gm-Message-State: ACrzQf0VnD0BI16Uy+GfydldzjcNcMF/PP3p3ecSe7SulPAmsNR0a5qC
-        0fVoId0ADEfQrUqUZf9tozo=
-X-Google-Smtp-Source: AMsMyM5oBIu8PXuIxBRmKnnpErAVdRzStgCkrL1aBvmTfHnz+x+lClsxCe5ZnkYRl0jp9GK59mOp6Q==
-X-Received: by 2002:a05:6a00:1781:b0:561:7f7f:dc38 with SMTP id s1-20020a056a00178100b005617f7fdc38mr28362340pfg.42.1665538516114;
-        Tue, 11 Oct 2022 18:35:16 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w10-20020a62820a000000b0052dfe83e19csm9986097pfd.16.2022.10.11.18.35.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 18:35:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <085e90e5-d21e-9068-a2e1-6f7e07fa64df@roeck-us.net>
-Date:   Tue, 11 Oct 2022 18:35:13 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     karthik gengan <gengankarthik@gmail.com>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yChYi7VY+m+DrvJmTQkA623G7MkHEI7cjTtlZ46QtfY=;
+        b=rbqZIuzlG9yEWoXseEjnq60AQ3yqdmRcM4ir5x76uJ7PIOA8ZEBVKawdS5P7oIQRRe
+         FXyuLn05jF5rWcswyiPbVgBomzBgVd6OsKkMnD2pd6n+fjo2yIYj1OaZkBZS0XjzngnO
+         ZUPem458bT558B2PCrzIvCFcMOCTgw0jHhzvQic8zyc5Cy8QlKeZVXv2/TdJGJNjwR8d
+         UhPSr38eak7p4v6wXoUlHsk7YIJRfljJatLq0J2kretCYswwoMq6uY8+4d5EA40n7IFp
+         gLIRtoEJoji9scywCOdRAhV/1HCr6++Xb4rFHTB+/bNogPp5sESjP2+SLjj6746WBEax
+         rbyg==
+X-Gm-Message-State: ACrzQf1enUS6W01kk/DqLgQ/fWqAf5iRLk46r77cxhbEgOBb3KrsGKno
+        gjtUwD03r1FiVcV02+dbQaII/g==
+X-Google-Smtp-Source: AMsMyM422fyj+uXPgmFq4xnogUGAlOP6esCzEZx+cp5eLgZoihGh9AQb+BkS3fDKY5tdNEUx8mNdGw==
+X-Received: by 2002:a5d:46d0:0:b0:22c:de2a:23e with SMTP id g16-20020a5d46d0000000b0022cde2a023emr19942738wrs.12.1665608260619;
+        Wed, 12 Oct 2022 13:57:40 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id i7-20020a05600c354700b003c6cd82596esm3165443wmq.43.2022.10.12.13.57.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 13:57:40 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CAAboHLVgQKzNVU6XDWGZmnxGK0DGvtgyzMsY9V+UiOJVq1JyTg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] [v1 1/1]hwmon:(pmbus) Validate the data for chip
- supporting vout_mode (PMBUS_HAVE_VOUT) in the linear config.
-In-Reply-To: <CAAboHLVgQKzNVU6XDWGZmnxGK0DGvtgyzMsY9V+UiOJVq1JyTg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>
+Subject: [PATCH v3 0/3] Add devicetree support for max6639
+Date:   Wed, 12 Oct 2022 22:57:33 +0200
+Message-Id: <20221012205736.1231514-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/11/22 16:59, karthik gengan wrote:
-> Linear mode config calculation is based on the exponent value
-> derived from vout_mode. So vout_mode value should be valid
-> for PMBUS_VOUT_MODE command-supported chips.
-> 
+These patches adds devicetree support for MAX6639.
 
-We can not do this. The operational word is "should". See comment
-below "Not all chips support the VOUT_MODE command". It is what it is.
-We can not just refuse to support such chips because they don't
-support what we expect them to support.
+Changes V3:
+- correct fan dt property name
+- remove unrelevent changes
+Changes V2:
+- Fix dt schema error.
+Changes:
+- Add fan-common dt schema.
+- add dt-binding support for max6639
+- add max6639 specific property
 
-Sure, those chips will (likely) report wrong values since the
-exponent will default to 0. That can be adjusted in user space,
-or whoever finds such a chip can provide a back-end driver
-with the appropriate values configured (for example by providing
-a dummy VOUT_MODE command response). That is better than just
-rejecting the chip entirely.
+Marcello Sylvester Bauer (1):
+  dt-bindings: hwmon: Add binding for max6639
 
- From a practical perspective, if you know about an affected chip
-one that would refuse to instantiate after your patch is applied,
-I would suggest to submit (or improve) a back-end driver with
-an explanation instead.
+Naresh Solanki (2):
+  dt-bindings: hwmon: fan: Add fan binding to schema
+  hwmon: (max6639) Change from pdata to dt configuration
 
-Thanks,
-Guenter
+ .../devicetree/bindings/hwmon/fan-common.yaml |  48 ++++
+ .../bindings/hwmon/maxim,max6639.yaml         |  86 ++++++++
+ drivers/hwmon/max6639.c                       | 206 +++++++++++++-----
+ 3 files changed, 286 insertions(+), 54 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+ create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
 
-> Signed-off-by: karthik.gengan <gengankarthik@gmail.com <mailto:gengankarthik@gmail.com>>
-> ---
->   drivers/hwmon/pmbus/pmbus_core.c | 10 +++++++++-
->   1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 7ec04934747e..5f80c3b8f245 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2507,9 +2507,17 @@ static int pmbus_identify_common(struct i2c_client *client,
->   {
->      int vout_mode = -1;
-> 
-> -   if (pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE))
-> +   if (pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE)) {
->          vout_mode = _pmbus_read_byte_data(client, page,
->                            PMBUS_VOUT_MODE);
-> +       /*
-> +        * If the client page supports PMBUS_VOUT_MODE,
-> +        * then the output of the VOUT_MODE command should
-> +        * be a valid value for linear mode calculation.
-> +        */
-> +       if ((data->info->format[PSC_VOLTAGE_OUT] == linear) && (vout_mode < 0))
-> +           return -ENODEV;
-> +   }
->      if (vout_mode >= 0 && vout_mode != 0xff) {
->          /*
->           * Not all chips support the VOUT_MODE command,
-> --
-> 2.25.1
-> 
 
+base-commit: 0cf46a653bdae56683fece68dc50340f7520e6c4
+-- 
+2.37.3
 
