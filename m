@@ -2,156 +2,122 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4B4BC433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 03:42:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1716C43219
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 04:35:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbiJMDmZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Oct 2022 23:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
+        id S229517AbiJMEft (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Oct 2022 00:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJMDmX (ORCPT
+        with ESMTP id S229471AbiJMEfe (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Oct 2022 23:42:23 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C7510327C;
-        Wed, 12 Oct 2022 20:42:22 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 63so674669ybq.4;
-        Wed, 12 Oct 2022 20:42:22 -0700 (PDT)
+        Thu, 13 Oct 2022 00:35:34 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03B0D38FF;
+        Wed, 12 Oct 2022 21:35:27 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id h13so908138pfr.7;
+        Wed, 12 Oct 2022 21:35:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kUREQjpPEdgvuhuExp0E4HTAn8hHXIucVYJF+DvY/28=;
-        b=eQOynbmSukIacmiuHcsQ8uQsjRJUucO7eWLcfNxjTgfxBoqOGZ85uZbkE3sJfVyU5w
-         5zh6itPOSB4Kus8MC49yM/7q5oI4NoPKi1tviRI4a6QxIlVlSNWUea9wn8g6aaKg+97R
-         ZnSBSmq3d2/KtzT4i/rAMuqeZCUCpGd3GXpLgBYlvEOavW15FjqtYe4a4zhHQ+7+C7UJ
-         ug3Co1RWOfUq1fSC71Of/yBtIGxp5ogIZv88bgkQ19BdU3juEMYq+Icu+BtDiChp1orU
-         v302gJ0DMt6NeQ9a9cHE+TSlUofac0Yowx2vYJJntXSrf5HOkFgM7QyxRjzf9fiV9dVS
-         lRtQ==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P+t/wRO7cDS+JStmRGsK3eGMJ7JaSW3Y+vh0orEs5wo=;
+        b=NbUixCsympOyyxmgxJtLOMjMaEDxuMw/tv4quYnj4+R8R5fFBDfdh49sKZX5a0E6yn
+         ThsjXhf2MxE7YQyhKqGr6s1wAQiR/GnN3SYIiRd7/HX3rPAiIW3/GXVhso97PnDTWbN7
+         FD9lUwelyDWMaRq2ky4g2YyI+YRrNfqPgn3ZpiQ3sZLp0zcqhSYPpYzvSqfiqFQC7Zht
+         ZbHMRipeAhd/8zPU6ltEioRT5Yy31nGxnD6kMbWNhz1wpdtqbkzdrsGNr/I8mqbY5wEE
+         Mpu60rqensiGRsbLvH5xuwXQOdoW18+jHucaK11VZ/hTKYBFwsMuEBuSNswRKmTqsljx
+         rKAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kUREQjpPEdgvuhuExp0E4HTAn8hHXIucVYJF+DvY/28=;
-        b=fCIfcpEKbrj1XI/BW3lI/xXXU4OmZfJy7MaPH6uk8KI68WpBdXgH6OZ90GFOAY146O
-         9gmMU1h9p92XEshUEPHPynlPEhmuoQ398ILHuP374x9CYQDodKzAj+7z3XKyyTFIQ9gX
-         MkkrnHudvBaoEP4EePJaFYhmXV8P9NnXe4G0pMBSYIy6LFBhsj5dM0SlXY38DFHNG2+Q
-         JV6enRKtUP37DDaWRO2C66W10hGnmV27F9r9LNv02p6DTLu85S7n2DIYhEeR81Ix2ZJi
-         d/x75RxR7Db5LkocMzuIC9hHvBS3h89R9aKVGCAnPea529ltQ1zRxsFNTxI/RDE/cMm4
-         yzIA==
-X-Gm-Message-State: ACrzQf0ajTxQKK4K77youABtrCgGyXH9nQts4eGiiNwu8CzoTl/gsxb/
-        FGUuWaSezxn8Mvrj1kEvTzZ4Q0xceRH9eMXIIo0tPaUJdmOP0Si6bfM=
-X-Google-Smtp-Source: AMsMyM7L7EnGLuoSGlaJtuZDv16rftyUMFwJrojwzpDqiToyn1fFFzBB0zTfOsbrWGhKQKUZSHwcnMBN1AEto2QW4B4=
-X-Received: by 2002:a25:6611:0:b0:6bd:2d:6992 with SMTP id a17-20020a256611000000b006bd002d6992mr31663237ybc.173.1665632542212;
- Wed, 12 Oct 2022 20:42:22 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P+t/wRO7cDS+JStmRGsK3eGMJ7JaSW3Y+vh0orEs5wo=;
+        b=Sm357DEonMHzvehiBkt8fKwS54d58ok2d6jnjUv8IjfskpUn1dqnyv0bNtBNYQtfQO
+         s3V2szNJVdsDjK0Nf+kiPBjdYVOzEvFucsXGIz92RvhG1+LsPBS9cfzBGdtGHwU/k4o5
+         0GriSUaefCS2s2O5GCv3HdON7QA23P9HfvVCuyE8uQ7eSWly4K+kEWFV4RfJtGKnEcwO
+         mojI1iT3MjxyHplrGSZRQwrAPagj4iBtANmLcxnXCwaHFwQ+h8wbOzjmL+bHjWivGpyz
+         M6su8raz7L4xvqVHV1P1Ac6QwLZxlyY3KhUu6eU23MzjLTMnd5MmXVIlEu8B0S5OagyW
+         ge5w==
+X-Gm-Message-State: ACrzQf3xgQa60sPOkH+fYo3F1BiMjqNC03ybtTwNqLQ20M14GCf+4YKP
+        YMRJ2j2iZn+lft+qJm7RTvk=
+X-Google-Smtp-Source: AMsMyM7e9Uu3ZmV2fHhuIulvRHyJNR2d25sYlKpkRXZWFMBbM8IFY6zxNvhyHSo+OtgHXagNhwW6wg==
+X-Received: by 2002:a62:164d:0:b0:562:bc4e:253 with SMTP id 74-20020a62164d000000b00562bc4e0253mr31393932pfw.26.1665635727277;
+        Wed, 12 Oct 2022 21:35:27 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a19-20020aa795b3000000b0056246403534sm751299pfk.88.2022.10.12.21.35.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 21:35:26 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <22ea65b3-5832-c340-195d-058cf3c34f8d@roeck-us.net>
+Date:   Wed, 12 Oct 2022 21:35:25 -0700
 MIME-Version: 1.0
-References: <CAAboHLVgQKzNVU6XDWGZmnxGK0DGvtgyzMsY9V+UiOJVq1JyTg@mail.gmail.com>
- <085e90e5-d21e-9068-a2e1-6f7e07fa64df@roeck-us.net>
-In-Reply-To: <085e90e5-d21e-9068-a2e1-6f7e07fa64df@roeck-us.net>
-From:   karthik gengan <gengankarthik@gmail.com>
-Date:   Thu, 13 Oct 2022 09:12:09 +0530
-Message-ID: <CAAboHLU8a9vztdM2b8+Y2ZUAs0+fD4HgwV2X_ASRa=SnWJXTwQ@mail.gmail.com>
-Subject: Re: [PATCH] [v1 1/1]hwmon:(pmbus) Validate the data for chip
- supporting vout_mode (PMBUS_HAVE_VOUT) in the linear config.
-To:     Guenter Roeck <linux@roeck-us.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     karthik gengan <gengankarthik@gmail.com>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+References: <CAAboHLVgQKzNVU6XDWGZmnxGK0DGvtgyzMsY9V+UiOJVq1JyTg@mail.gmail.com>
+ <085e90e5-d21e-9068-a2e1-6f7e07fa64df@roeck-us.net>
+ <CAAboHLU8a9vztdM2b8+Y2ZUAs0+fD4HgwV2X_ASRa=SnWJXTwQ@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] [v1 1/1]hwmon:(pmbus) Validate the data for chip
+ supporting vout_mode (PMBUS_HAVE_VOUT) in the linear config.
+In-Reply-To: <CAAboHLU8a9vztdM2b8+Y2ZUAs0+fD4HgwV2X_ASRa=SnWJXTwQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+On 10/12/22 20:42, karthik gengan wrote:
+> Hi Guenter,
+> 
+> Thanks for your response but I need some more valuable suggestions...
+> 
+>          In the pmbus_data structure, we are updating the vout_out mode
+> value based on the config ( linear, vid .direct) and this structure is declared
+> in pmbus_core.c .so the low-level driver could not able to access this
+> structure.
+> 
+> Guidance required,
+>       1. Move the pumbus_data structure declaration to pmbus.h, so that low-level
+>            the driver can check and update the vout_mode if the value
+> is not proper.   (or)
+>       2.  if the vout_mode attribute value is exposed in the sysfs, the
+> user-level application
+>            can modify the value. ( if the value is not proper).
+>                                 (or)
+>        3. if an ioctl call is exposed for the vout_mode then the
+> user-level application can
+>             able to update the value. ( if the value is not proper).
+> 
+> (or)  guide me to a better approach to handle this issue.
+> 
 
-Thanks for your response but I need some more valuable suggestions...
+Have a look at drivers/hwmon/pmbus/stpddc60.c. That chip reports a wrong
+value for PMBUS_VOUT_MODE, and the driver provides the expected value
+to the PMBus core. Taking that as example, the simple solution is to have
+the chip driver report the expected value. There is no need to get
+userspace involved. Actually, involving userspace would be completely wrong.
 
-        In the pmbus_data structure, we are updating the vout_out mode
-value based on the config ( linear, vid .direct) and this structure is declared
-in pmbus_core.c .so the low-level driver could not able to access this
-structure.
+> For reference,
+>            UCD90xx vendor claims that vout_mode value should be present
+> if the chip
+> supports PMBUS_VOUT_MODE command. Hence the patch validated the vout_mode
+> value for PMBUS_VOUT_MODE supported chip.
+> 
 
-Guidance required,
-     1. Move the pumbus_data structure declaration to pmbus.h, so that low-level
-          the driver can check and update the vout_mode if the value
-is not proper.   (or)
-     2.  if the vout_mode attribute value is exposed in the sysfs, the
-user-level application
-          can modify the value. ( if the value is not proper).
-                               (or)
-      3. if an ioctl call is exposed for the vout_mode then the
-user-level application can
-           able to update the value. ( if the value is not proper).
+Not sure if I understand, but if any of the chips supported by the ucd9009
+driver does not support the VOUT_MODE command or reports a wrong value,
+just extend ucd9000_read_byte_data() to report whatever value the command
+should return.
 
-(or)  guide me to a better approach to handle this issue.
+That would need some confirmation, though - I don't recall any such problem,
+and  UCD90xxx Sequencer and System Health Controller PMBUS Command Reference
+(SLVU352) clearly states that the command is supported.
 
-For reference,
-          UCD90xx vendor claims that vout_mode value should be present
-if the chip
-supports PMBUS_VOUT_MODE command. Hence the patch validated the vout_mode
-value for PMBUS_VOUT_MODE supported chip.
-
-Thanks & Regards,
-Karthik.G
-
-On Wed, Oct 12, 2022 at 7:05 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 10/11/22 16:59, karthik gengan wrote:
-> > Linear mode config calculation is based on the exponent value
-> > derived from vout_mode. So vout_mode value should be valid
-> > for PMBUS_VOUT_MODE command-supported chips.
-> >
->
-> We can not do this. The operational word is "should". See comment
-> below "Not all chips support the VOUT_MODE command". It is what it is.
-> We can not just refuse to support such chips because they don't
-> support what we expect them to support.
->
-> Sure, those chips will (likely) report wrong values since the
-> exponent will default to 0. That can be adjusted in user space,
-> or whoever finds such a chip can provide a back-end driver
-> with the appropriate values configured (for example by providing
-> a dummy VOUT_MODE command response). That is better than just
-> rejecting the chip entirely.
->
->  From a practical perspective, if you know about an affected chip
-> one that would refuse to instantiate after your patch is applied,
-> I would suggest to submit (or improve) a back-end driver with
-> an explanation instead.
->
-> Thanks,
-> Guenter
->
-> > Signed-off-by: karthik.gengan <gengankarthik@gmail.com <mailto:gengankarthik@gmail.com>>
-> > ---
-> >   drivers/hwmon/pmbus/pmbus_core.c | 10 +++++++++-
-> >   1 file changed, 9 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> > index 7ec04934747e..5f80c3b8f245 100644
-> > --- a/drivers/hwmon/pmbus/pmbus_core.c
-> > +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> > @@ -2507,9 +2507,17 @@ static int pmbus_identify_common(struct i2c_client *client,
-> >   {
-> >      int vout_mode = -1;
-> >
-> > -   if (pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE))
-> > +   if (pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE)) {
-> >          vout_mode = _pmbus_read_byte_data(client, page,
-> >                            PMBUS_VOUT_MODE);
-> > +       /*
-> > +        * If the client page supports PMBUS_VOUT_MODE,
-> > +        * then the output of the VOUT_MODE command should
-> > +        * be a valid value for linear mode calculation.
-> > +        */
-> > +       if ((data->info->format[PSC_VOLTAGE_OUT] == linear) && (vout_mode < 0))
-> > +           return -ENODEV;
-> > +   }
-> >      if (vout_mode >= 0 && vout_mode != 0xff) {
-> >          /*
-> >           * Not all chips support the VOUT_MODE command,
-> > --
-> > 2.25.1
-> >
->
->
+Guenter
