@@ -2,123 +2,86 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BBE1C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 21:07:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D9C2C43217
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 21:31:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiJMVHQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 13 Oct 2022 17:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
+        id S229526AbiJMVbM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Oct 2022 17:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiJMVHQ (ORCPT
+        with ESMTP id S229537AbiJMVbL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 13 Oct 2022 17:07:16 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F33183DB8;
-        Thu, 13 Oct 2022 14:07:15 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id fy4so6565008ejc.5;
-        Thu, 13 Oct 2022 14:07:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IZ5njUsMjpaWj9YOz1Vm++un7O5+eC1XTxzvAZerpow=;
-        b=faWAR8yx9y/ximCfiagbNCy/0PAKrBsY8wEvnxUxd7VFrwze8WrW/LXuOEsD1B1MgC
-         bmzapz1zdHF1jE76T+mA54DNMXKki/cswG3sXkx6RAEOiC9LYHXvBWUkBqkVC/OutC6w
-         TBoPedYKZEP4+ld5ZJzts0nQv+3AjeM1WBzF9oIZsaGYMjz2koC525mlMh4cImsSStp6
-         XSWzJkXeoFofq4dZ0tkjtoHD4Jl4nliDAg9B+Vd6RKf38AjPS//hn7h+QcZjjgk0xM+g
-         X3Q+S3ElOX8GsPkSJbBAoFNFKK+vjKbNMwCVHL9RQlOConV4BRjaHXXF9yIEoDbdhF1L
-         19Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IZ5njUsMjpaWj9YOz1Vm++un7O5+eC1XTxzvAZerpow=;
-        b=JrAgMraWu9PHel5PSEmuAjHc+NRsWwuD5UjI2njwqbWzvA1+e+qRablmULnEt+5Ehp
-         HVGYkMUYyOW1hDjuHGuAQjSQJkPbF1QiLhlrogPEL8xKnrQExHCQiDRtO1DN+OBi2BXt
-         qDsbCCFE5ZNBxqFZq54bz9kna9uqR42Z2fmurVJXB620vharTvZtAS2FVXUGPHIuhcfm
-         93hDFB+BoMfZ6G8MwfkRUbHSm6zc1hpn2gKKiorhmkqWzbtepSYpQ1vBzMYgM821anga
-         empHjWbIPb67nKnpc6DatZaZybQsGlwQQpQ8vgBhA+9JXm+rsnFdGFSpoSY+TZf9pCIk
-         ZXqw==
-X-Gm-Message-State: ACrzQf0sAnlrVlRbJntAcXjAF0s/AnFkWJQzhhqYZVhgJuFDmXtQnrL6
-        INeu+/dGUimt90HmsPEbeoA=
-X-Google-Smtp-Source: AMsMyM4cU3vLsTSiWCSsbEcY7UV+UJBrC5a07f1dY57EL9s1EUxZ5n3i98uvEdXbgJXpbA6zfUHWAw==
-X-Received: by 2002:a17:907:980e:b0:78d:b6d5:661e with SMTP id ji14-20020a170907980e00b0078db6d5661emr1253849ejc.46.1665695233566;
-        Thu, 13 Oct 2022 14:07:13 -0700 (PDT)
-Received: from localhost.localdomain (host-95-250-231-122.retail.telecomitalia.it. [95.250.231.122])
-        by smtp.gmail.com with ESMTPSA id v25-20020a17090651d900b0078da24ea9c7sm443973ejk.17.2022.10.13.14.07.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 14:07:12 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Christian Brauner <brauner@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
+        Thu, 13 Oct 2022 17:31:11 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75763155D83;
+        Thu, 13 Oct 2022 14:31:09 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1C8E0240002;
+        Thu, 13 Oct 2022 21:31:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1665696667;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jz1vmgauCNwQwVv3M/5PRCJ07YuyA62yMSzMceprsfg=;
+        b=CHd9JeaH9Q/7k3cFZkuZHI/QHmSxrkhdWsPcxNdxiH5wRcRrF/3+gM6NsseJ6J37qKFBSL
+        CM/49urpoAfYuRfaPs3uAYbRfaGiS/Y+/tmurgVSNn+cvrnFNG6ADj5VHSjASXkfqBPwr/
+        jpstuJwJ6hgziqQ4UUkk5oXOgjnE0NTZsc/LiYQnBOaMfFo0w63nQJ1pTD0hP16gvduHbO
+        rrFLsviFE2J3wMJvapSGb8PblZp91F9hkFgpYNjaXEYiOLqkuu2wRim04TWWT55buTJGSD
+        7a51tzu9E41N8IHYQWEcHj0h+W6MmfF1rb3v0snWpXUVjnQb6WQl41lQlh2EQw==
+Date:   Thu, 13 Oct 2022 23:31:06 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-rtc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Kees Cook <keescook@chromium.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-hwmon@vger.kernel.org, linux-hardening@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] drm/radeon: Replace kmap() with kmap_local_page()
-Date:   Thu, 13 Oct 2022 23:07:14 +0200
-Message-Id: <20221013210714.16320-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/9] rtc: isl12022: cleanups and hwmon support
+Message-ID: <166569636074.1226796.14248068876405848319.b4-ty@bootlin.com>
+References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
+ <20220921114624.3250848-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220921114624.3250848-1-linux@rasmusvillemoes.dk>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The use of kmap() is being deprecated in favor of kmap_local_page().
+On Wed, 21 Sep 2022 13:46:15 +0200, Rasmus Villemoes wrote:
+> This series does a few cleanups of the isl12022 driver,
+> 
+> - removes use of deprecated function
+> - removes some redundant code
+> - switches to regmap API instead of private helpers
+> 
+> It also provides range_min, range_max values and finally hooks up the
+> temperatur sensor to hwmon.
+> 
+> [...]
 
-There are two main problems with kmap(): (1) It comes with an overhead as
-the mapping space is restricted and protected by a global lock for
-synchronization and (2) it also requires global TLB invalidation when the
-kmap’s pool wraps and it might block when the mapping space is fully
-utilized until a slot becomes available.
+Applied, thanks!
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
-It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-the tasks can be preempted and, when they are scheduled to run again, the
-kernel virtual addresses are restored and still valid.
+[1/9] rtc: isl12022: stop using deprecated devm_rtc_device_register()
+      commit: a35a2ad2b88a66732ac442ad5f86dc49af51673f
+[2/9] rtc: isl12022: specify range_min and range_max
+      commit: ca03b7a2c0b098321365f69538823d1bcc860552
+[3/9] rtc: isl12022: drop a dev_info()
+      commit: 43a96b9cf67770d4bb46267e1554d3d8b4cf78ac
+[4/9] rtc: isl12022: simplify some expressions
+      commit: ca35887186b7c53f26c42aee1285ba213adb4365
+[5/9] rtc: isl12022: use %ptR
+      commit: 7093b8a471f48d49891da2108f44fd64742408cb
+[6/9] rtc: isl12022: use dev_set_drvdata() instead of i2c_set_clientdata()
+      commit: 31b108acc50cddf3d16472ead45c4cd0d1337289
+[7/9] rtc: isl12022: drop redundant write to HR register
+      commit: 0a2abbfd8586d396a8581ebf9b96fd5746f08b14
+[8/9] rtc: isl12022: switch to using regmap API
+      commit: b1a1baa657c738e8bb0107ce304f5e78b9847f37
 
-Therefore, replace kmap() with kmap_local_page() in radeon_ttm_gtt_read().
+Best regards,
 
-Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- drivers/gpu/drm/radeon/radeon_ttm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/radeon/radeon_ttm.c b/drivers/gpu/drm/radeon/radeon_ttm.c
-index d33fec488713..bdb4c0e0736b 100644
---- a/drivers/gpu/drm/radeon/radeon_ttm.c
-+++ b/drivers/gpu/drm/radeon/radeon_ttm.c
-@@ -869,11 +869,11 @@ static ssize_t radeon_ttm_gtt_read(struct file *f, char __user *buf,
- 
- 		page = rdev->gart.pages[p];
- 		if (page) {
--			ptr = kmap(page);
-+			ptr = kmap_local_page(page);
- 			ptr += off;
- 
- 			r = copy_to_user(buf, ptr, cur_size);
--			kunmap(rdev->gart.pages[p]);
-+			kunmap_local(ptr);
- 		} else
- 			r = clear_user(buf, cur_size);
- 
 -- 
-2.37.3
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
