@@ -2,98 +2,156 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8BCDC433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 01:50:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4B4BC433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 03:42:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiJMBuS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Oct 2022 21:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
+        id S229475AbiJMDmZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Oct 2022 23:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiJMBuQ (ORCPT
+        with ESMTP id S229459AbiJMDmX (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Oct 2022 21:50:16 -0400
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADA183F0E;
-        Wed, 12 Oct 2022 18:50:11 -0700 (PDT)
-Received: by mail-oo1-f54.google.com with SMTP id c17-20020a4aa4d1000000b0047653e7c5f3so423079oom.1;
-        Wed, 12 Oct 2022 18:50:11 -0700 (PDT)
+        Wed, 12 Oct 2022 23:42:23 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C7510327C;
+        Wed, 12 Oct 2022 20:42:22 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 63so674669ybq.4;
+        Wed, 12 Oct 2022 20:42:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kUREQjpPEdgvuhuExp0E4HTAn8hHXIucVYJF+DvY/28=;
+        b=eQOynbmSukIacmiuHcsQ8uQsjRJUucO7eWLcfNxjTgfxBoqOGZ85uZbkE3sJfVyU5w
+         5zh6itPOSB4Kus8MC49yM/7q5oI4NoPKi1tviRI4a6QxIlVlSNWUea9wn8g6aaKg+97R
+         ZnSBSmq3d2/KtzT4i/rAMuqeZCUCpGd3GXpLgBYlvEOavW15FjqtYe4a4zhHQ+7+C7UJ
+         ug3Co1RWOfUq1fSC71Of/yBtIGxp5ogIZv88bgkQ19BdU3juEMYq+Icu+BtDiChp1orU
+         v302gJ0DMt6NeQ9a9cHE+TSlUofac0Yowx2vYJJntXSrf5HOkFgM7QyxRjzf9fiV9dVS
+         lRtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=frhcxqlr4xu4fAiP6OzjXHuMjjt3FaUtEdB7oOk4NPs=;
-        b=UXLgTJPeCfT2qPYLr0U7so1M0C19I0oe/GgwCOAawq5HyQlSYy0d+rgCRspqzaq9Mx
-         XlvZmMA1773W0q0m6LrJl0r6zMndBAsnBEc1sSPsX3kfAi0mSGx6LOnj9/4umrkKsPEB
-         KSokN9CTOwuoxo3m47biXFtesVjOsZIfrjuoUabIzEdMJqf0lBzBLa8Pg8pMhgxezrel
-         wrDZJRSW7//z8GHEt1d1wrP5WWT85basQN9m/g47Oc4y+8HaI39bV7B9Ijul0PzsdNlU
-         w3GBTQQ4Quo/vRUIylmxn1bhfx2ZbEwb7E7io9JrzZQXh4/AGUwgiNIsAYIflzEfRxut
-         gygw==
-X-Gm-Message-State: ACrzQf2CF+Lvg9U6dr74zsqbwK8wH6nRC1oEv9dQwr1/AAXPQjGNLI5+
-        mNe4Qhe3nTQd3Nu8SfNsRixnhQrK8w==
-X-Google-Smtp-Source: AMsMyM6UHpju3T23qh158uoMzBGLcPrhVhvbAsXzclJ7MZlEpabglzXuQGFcewlgp7OQi6ZppirEjg==
-X-Received: by 2002:a4a:b806:0:b0:480:9f83:5783 with SMTP id g6-20020a4ab806000000b004809f835783mr194113oop.55.1665625809403;
-        Wed, 12 Oct 2022 18:50:09 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o77-20020a4a2c50000000b00425678b9c4bsm1629278ooo.0.2022.10.12.18.50.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 18:50:09 -0700 (PDT)
-Received: (nullmailer pid 3091989 invoked by uid 1000);
-        Thu, 13 Oct 2022 01:50:10 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Naresh Solanki <Naresh.Solanki@9elements.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Roland Stigge <stigge@antcom.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        devicetree@vger.kernel.org
-In-Reply-To: <20221012205736.1231514-3-Naresh.Solanki@9elements.com>
-References: <20221012205736.1231514-1-Naresh.Solanki@9elements.com> <20221012205736.1231514-3-Naresh.Solanki@9elements.com>
-Message-Id: <166562578885.3091453.640872394649622876.robh@kernel.org>
-Subject: Re: [PATCH v3 2/3] dt-bindings: hwmon: Add binding for max6639
-Date:   Wed, 12 Oct 2022 20:50:10 -0500
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kUREQjpPEdgvuhuExp0E4HTAn8hHXIucVYJF+DvY/28=;
+        b=fCIfcpEKbrj1XI/BW3lI/xXXU4OmZfJy7MaPH6uk8KI68WpBdXgH6OZ90GFOAY146O
+         9gmMU1h9p92XEshUEPHPynlPEhmuoQ398ILHuP374x9CYQDodKzAj+7z3XKyyTFIQ9gX
+         MkkrnHudvBaoEP4EePJaFYhmXV8P9NnXe4G0pMBSYIy6LFBhsj5dM0SlXY38DFHNG2+Q
+         JV6enRKtUP37DDaWRO2C66W10hGnmV27F9r9LNv02p6DTLu85S7n2DIYhEeR81Ix2ZJi
+         d/x75RxR7Db5LkocMzuIC9hHvBS3h89R9aKVGCAnPea529ltQ1zRxsFNTxI/RDE/cMm4
+         yzIA==
+X-Gm-Message-State: ACrzQf0ajTxQKK4K77youABtrCgGyXH9nQts4eGiiNwu8CzoTl/gsxb/
+        FGUuWaSezxn8Mvrj1kEvTzZ4Q0xceRH9eMXIIo0tPaUJdmOP0Si6bfM=
+X-Google-Smtp-Source: AMsMyM7L7EnGLuoSGlaJtuZDv16rftyUMFwJrojwzpDqiToyn1fFFzBB0zTfOsbrWGhKQKUZSHwcnMBN1AEto2QW4B4=
+X-Received: by 2002:a25:6611:0:b0:6bd:2d:6992 with SMTP id a17-20020a256611000000b006bd002d6992mr31663237ybc.173.1665632542212;
+ Wed, 12 Oct 2022 20:42:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAAboHLVgQKzNVU6XDWGZmnxGK0DGvtgyzMsY9V+UiOJVq1JyTg@mail.gmail.com>
+ <085e90e5-d21e-9068-a2e1-6f7e07fa64df@roeck-us.net>
+In-Reply-To: <085e90e5-d21e-9068-a2e1-6f7e07fa64df@roeck-us.net>
+From:   karthik gengan <gengankarthik@gmail.com>
+Date:   Thu, 13 Oct 2022 09:12:09 +0530
+Message-ID: <CAAboHLU8a9vztdM2b8+Y2ZUAs0+fD4HgwV2X_ASRa=SnWJXTwQ@mail.gmail.com>
+Subject: Re: [PATCH] [v1 1/1]hwmon:(pmbus) Validate the data for chip
+ supporting vout_mode (PMBUS_HAVE_VOUT) in the linear config.
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 12 Oct 2022 22:57:35 +0200, Naresh Solanki wrote:
-> From: Marcello Sylvester Bauer <sylv@sylv.io>
-> 
-> Add Devicetree binding documentation for Maxim MAX6639 temperature
-> monitor with PWM fan-speed controller.
-> 
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
->  .../bindings/hwmon/maxim,max6639.yaml         | 86 +++++++++++++++++++
->  1 file changed, 86 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-> 
+Hi Guenter,
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Thanks for your response but I need some more valuable suggestions...
 
-yamllint warnings/errors:
+        In the pmbus_data structure, we are updating the vout_out mode
+value based on the config ( linear, vid .direct) and this structure is declared
+in pmbus_core.c .so the low-level driver could not able to access this
+structure.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/hwmon/maxim,max6639.example.dts:22.29-39.13: Warning (i2c_bus_reg): /example-0/i2c/fan-controller@2e: I2C bus unit address format error, expected "10"
+Guidance required,
+     1. Move the pumbus_data structure declaration to pmbus.h, so that low-level
+          the driver can check and update the vout_mode if the value
+is not proper.   (or)
+     2.  if the vout_mode attribute value is exposed in the sysfs, the
+user-level application
+          can modify the value. ( if the value is not proper).
+                               (or)
+      3. if an ioctl call is exposed for the vout_mode then the
+user-level application can
+           able to update the value. ( if the value is not proper).
 
-doc reference errors (make refcheckdocs):
+(or)  guide me to a better approach to handle this issue.
 
-See https://patchwork.ozlabs.org/patch/
+For reference,
+          UCD90xx vendor claims that vout_mode value should be present
+if the chip
+supports PMBUS_VOUT_MODE command. Hence the patch validated the vout_mode
+value for PMBUS_VOUT_MODE supported chip.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+Thanks & Regards,
+Karthik.G
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+On Wed, Oct 12, 2022 at 7:05 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 10/11/22 16:59, karthik gengan wrote:
+> > Linear mode config calculation is based on the exponent value
+> > derived from vout_mode. So vout_mode value should be valid
+> > for PMBUS_VOUT_MODE command-supported chips.
+> >
+>
+> We can not do this. The operational word is "should". See comment
+> below "Not all chips support the VOUT_MODE command". It is what it is.
+> We can not just refuse to support such chips because they don't
+> support what we expect them to support.
+>
+> Sure, those chips will (likely) report wrong values since the
+> exponent will default to 0. That can be adjusted in user space,
+> or whoever finds such a chip can provide a back-end driver
+> with the appropriate values configured (for example by providing
+> a dummy VOUT_MODE command response). That is better than just
+> rejecting the chip entirely.
+>
+>  From a practical perspective, if you know about an affected chip
+> one that would refuse to instantiate after your patch is applied,
+> I would suggest to submit (or improve) a back-end driver with
+> an explanation instead.
+>
+> Thanks,
+> Guenter
+>
+> > Signed-off-by: karthik.gengan <gengankarthik@gmail.com <mailto:gengankarthik@gmail.com>>
+> > ---
+> >   drivers/hwmon/pmbus/pmbus_core.c | 10 +++++++++-
+> >   1 file changed, 9 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> > index 7ec04934747e..5f80c3b8f245 100644
+> > --- a/drivers/hwmon/pmbus/pmbus_core.c
+> > +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> > @@ -2507,9 +2507,17 @@ static int pmbus_identify_common(struct i2c_client *client,
+> >   {
+> >      int vout_mode = -1;
+> >
+> > -   if (pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE))
+> > +   if (pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE)) {
+> >          vout_mode = _pmbus_read_byte_data(client, page,
+> >                            PMBUS_VOUT_MODE);
+> > +       /*
+> > +        * If the client page supports PMBUS_VOUT_MODE,
+> > +        * then the output of the VOUT_MODE command should
+> > +        * be a valid value for linear mode calculation.
+> > +        */
+> > +       if ((data->info->format[PSC_VOLTAGE_OUT] == linear) && (vout_mode < 0))
+> > +           return -ENODEV;
+> > +   }
+> >      if (vout_mode >= 0 && vout_mode != 0xff) {
+> >          /*
+> >           * Not all chips support the VOUT_MODE command,
+> > --
+> > 2.25.1
+> >
+>
+>
