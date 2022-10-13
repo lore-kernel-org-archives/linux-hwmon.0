@@ -2,53 +2,53 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B03B6C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 15:52:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F7E7C433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 15:53:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiJMPwZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 13 Oct 2022 11:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
+        id S229831AbiJMPxX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Oct 2022 11:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJMPwY (ORCPT
+        with ESMTP id S229821AbiJMPxW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:52:24 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106EA37F8F
-        for <linux-hwmon@vger.kernel.org>; Thu, 13 Oct 2022 08:52:24 -0700 (PDT)
+        Thu, 13 Oct 2022 11:53:22 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B41100BD5
+        for <linux-hwmon@vger.kernel.org>; Thu, 13 Oct 2022 08:53:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665676344; x=1697212344;
+  t=1665676401; x=1697212401;
   h=date:message-id:from:to:cc:subject:in-reply-to:
    references:mime-version;
-  bh=HUVBrhgEd1o22OfnnlvDO7MN3MFCs68ewOvy1DJ24/I=;
-  b=PVCWv/LLwjGI44K+nZXpT7k6RH/rsqS3mgM6m5Bl/FTskAfMDavIC9F3
-   s+f+72utDzdjQ7kQr4/aNnfZhCPZ5iC14qwhJqL9xQRg4mYlvfSzpx8vb
-   NqJeJD0dp2wIEZ+OxVJBrVB/JcXRCj2g20WVk8CFumSum0NjSQs4a3oth
-   NR7WsL4oloxv1L/2IGQ9qt5Z6StPV3AQLXdYrU81VWkvb+dq9yK5fiFL7
-   j8P4QkxdvSCfFuiNC7uajil/n/iJv3EamwQiBMic1RsVU1nDTnCZstI8k
-   xNLWiVZg0kjcBZuO9nWXeYa/UKfqMWwjiUba+Zsx4AIviyYmWQ9Mfyt2U
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="367132199"
+  bh=1FaekfIfmCYS51XaYw2eEPToJK6znIRfinHhGeoGJfM=;
+  b=BzNiqHCwxqwXvXqIiSFRFLGt4PlOR23xf8tvL+CTRRiBMT41khhjpcTk
+   gu+7q/3SUU5dTvlAcHU3cit+hGu3nYb5RzgvL0PmBZyC0M+cK/Dm5dDe+
+   55Z/8efrl8bi4DVYiEZ235xtCyCXFxeeOuHSKul9aTPes2T3nmwTo8TES
+   qK+8Y/+uLfQQHBK9CqTtNNy97JnaiP6+dPye3vJ55PDQanKs+KwVVFRp6
+   dD6MPpZgr9u0faTVo5AwoFGSY5DcJE89f+cs092gyKj/722Zo58MR2wx3
+   6rE3XPdyCdsgZdeI87zr82NEUh7ObhQmLrMMZ7udcl7ACtVrVAMteTUyD
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="306190020"
 X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="367132199"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 08:52:23 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="622209985"
+   d="scan'208";a="306190020"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 08:53:20 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="716392596"
 X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="622209985"
-Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.212.216.120])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 08:52:23 -0700
-Date:   Thu, 13 Oct 2022 08:52:23 -0700
-Message-ID: <87fsfrsoug.wl-ashutosh.dixit@intel.com>
+   d="scan'208";a="716392596"
+Received: from sudhars1-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.212.216.120])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 08:53:20 -0700
+Date:   Thu, 13 Oct 2022 08:53:19 -0700
+Message-ID: <87edvbsosw.wl-ashutosh.dixit@intel.com>
 From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
-To:     Andi Shyti <andi.shyti@linux.intel.com>
+To:     "Gupta, Anshuman" <anshuman.gupta@intel.com>
 Cc:     Badal Nilawar <badal.nilawar@intel.com>,
-        linux-hwmon@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        Riana Tauro <riana.tauro@intel.com>
-Subject: Re: [Intel-gfx] [PATCH 2/7] drm/i915/hwmon: Add HWMON current voltage support
-In-Reply-To: <YztMZc7wWCDuRhUi@ashyti-mobl2.lan>
-References: <20220927055020.3499420-1-badal.nilawar@intel.com>  <20220927055020.3499420-3-badal.nilawar@intel.com>      <YztMZc7wWCDuRhUi@ashyti-mobl2.lan>
+        intel-gfx@lists.freedesktop.org, riana.tauro@intel.com,
+        jon.ewins@intel.com, linux-hwmon@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 4/7] drm/i915/hwmon: Show device level energy usage
+In-Reply-To: <4062cc45-1b29-eb7b-3858-55f3d6ce17b5@intel.com>
+References: <20220916150054.807590-1-badal.nilawar@intel.com>   <20220916150054.807590-5-badal.nilawar@intel.com>       <4062cc45-1b29-eb7b-3858-55f3d6ce17b5@intel.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
  Emacs/28.1 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -58,46 +58,22 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 03 Oct 2022 13:56:05 -0700, Andi Shyti wrote:
-
-Hi Andi,
-
-Badal is out for a bit so I am posting this version of the patches.
-
+On Wed, 21 Sep 2022 05:02:48 -0700, Gupta, Anshuman wrote:
 >
-> Hi Badal,
->
-> [...]
->
-> >  static void
-> >  hwm_get_preregistration_info(struct drm_i915_private *i915)
-> >  {
-> > +	struct i915_hwmon *hwmon = i915->hwmon;
-> > +
-> > +	if (IS_DG1(i915) || IS_DG2(i915))
->
-> why not GRAPHICS_VER(i915) >= 12 here?
+> > diff --git a/drivers/gpu/drm/i915/intel_mchbar_regs.h b/drivers/gpu/drm/i915/intel_mchbar_regs.h
+> > index b74df11977c6..1014d0b7cc16 100644
+> > --- a/drivers/gpu/drm/i915/intel_mchbar_regs.h
+> > +++ b/drivers/gpu/drm/i915/intel_mchbar_regs.h
+> > @@ -191,7 +191,9 @@
+> >     #define PCU_PACKAGE_POWER_SKU_UNIT
+> > _MMIO(MCHBAR_MIRROR_BASE_SNB + 0x5938)
+> >   #define   PKG_PWR_UNIT				REG_GENMASK(3, 0)
+> > +#define   PKG_ENERGY_UNIT                      REG_GENMASK(12, 8)
+> Please use tab here instead of space to line up with above macros.
 
-Thanks for catching this, because GEN12_RPSTAT1 is indeed available for all
-Gen12+. It was done this way because the voltage bits of GEN12_RPSTAT1 are
-only available for DG1/DG2. Anyway in v9 I have changed this to just:
+Fixed in v9.
 
-	/* Available for all Gen12+/dGfx */
-	hwmon->rg.gt_perf_status = GEN12_RPSTAT1;
-
-That is because hwmon is only availbable for dGfx (there's a check in Patch
-1). Also, because of this change the 'IS_DG1(i915) || IS_DG2(i915)' check
-has been moved to hwm_in_is_visible.
+> With that,
+> Reviewed-by: Anshuman Gupta <anshuman.gupta@intel.com>
 
 Thanks.
---
-Ashutosh
-
-> > +		hwmon->rg.gt_perf_status = GEN12_RPSTAT1;
-> > +	else
-> > +		hwmon->rg.gt_perf_status = INVALID_MMIO_REG;
-> >  }
-> >
-> >  void i915_hwmon_register(struct drm_i915_private *i915)
-> > --
-> > 2.25.1
