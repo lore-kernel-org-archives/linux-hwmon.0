@@ -2,73 +2,123 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCFF5C433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 15:56:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BBE1C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 21:07:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiJMP4a (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 13 Oct 2022 11:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
+        id S229711AbiJMVHQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Oct 2022 17:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiJMP41 (ORCPT
+        with ESMTP id S229550AbiJMVHQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:56:27 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4BDDAC79;
-        Thu, 13 Oct 2022 08:56:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665676586; x=1697212586;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dI+DILzBBZUT1i/UtFpVToNvMMaVGySdc/KLfAolyQA=;
-  b=QVEYeyhSFBPZUskVZRcrU5R5D5ngH5v8KEmW+G+s2ZsfaQ/hQzOjNikg
-   91DOdhhX99kujp4qi5hc/OD0aYpjE6Efu91zuhjVz7xyFormuhqp8mJw/
-   Lv7w9/zyo7s5fpWnjUWhfGTRlSrW0YXzFzhqzJPfoCYEWDFSHUW+WBaKF
-   SyrbTJ85hlriaacdX4GRTkkfLNWH6GoPDsUZj5uGyDB+S5Sfdr2vj8UO+
-   HdklnatB1lF5wnbwAdesaZo9BFSuni6nYNndjaNiJQSFqLitoOZOaiJlO
-   ghFqbxe9uuUl/Z40kbGuzs/NS/2gqD1ZJsbawNGxycrrFmCMSBWjABGLm
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="302732006"
-X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="302732006"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 08:56:25 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="802292494"
-X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="802292494"
-Received: from mkucejko-mobl.ger.corp.intel.com (HELO [10.213.24.166]) ([10.213.24.166])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 08:56:15 -0700
-Message-ID: <668e5126-f344-c30b-a743-877b1783cec7@intel.com>
-Date:   Thu, 13 Oct 2022 08:56:10 -0700
+        Thu, 13 Oct 2022 17:07:16 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F33183DB8;
+        Thu, 13 Oct 2022 14:07:15 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id fy4so6565008ejc.5;
+        Thu, 13 Oct 2022 14:07:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IZ5njUsMjpaWj9YOz1Vm++un7O5+eC1XTxzvAZerpow=;
+        b=faWAR8yx9y/ximCfiagbNCy/0PAKrBsY8wEvnxUxd7VFrwze8WrW/LXuOEsD1B1MgC
+         bmzapz1zdHF1jE76T+mA54DNMXKki/cswG3sXkx6RAEOiC9LYHXvBWUkBqkVC/OutC6w
+         TBoPedYKZEP4+ld5ZJzts0nQv+3AjeM1WBzF9oIZsaGYMjz2koC525mlMh4cImsSStp6
+         XSWzJkXeoFofq4dZ0tkjtoHD4Jl4nliDAg9B+Vd6RKf38AjPS//hn7h+QcZjjgk0xM+g
+         X3Q+S3ElOX8GsPkSJbBAoFNFKK+vjKbNMwCVHL9RQlOConV4BRjaHXXF9yIEoDbdhF1L
+         19Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IZ5njUsMjpaWj9YOz1Vm++un7O5+eC1XTxzvAZerpow=;
+        b=JrAgMraWu9PHel5PSEmuAjHc+NRsWwuD5UjI2njwqbWzvA1+e+qRablmULnEt+5Ehp
+         HVGYkMUYyOW1hDjuHGuAQjSQJkPbF1QiLhlrogPEL8xKnrQExHCQiDRtO1DN+OBi2BXt
+         qDsbCCFE5ZNBxqFZq54bz9kna9uqR42Z2fmurVJXB620vharTvZtAS2FVXUGPHIuhcfm
+         93hDFB+BoMfZ6G8MwfkRUbHSm6zc1hpn2gKKiorhmkqWzbtepSYpQ1vBzMYgM821anga
+         empHjWbIPb67nKnpc6DatZaZybQsGlwQQpQ8vgBhA+9JXm+rsnFdGFSpoSY+TZf9pCIk
+         ZXqw==
+X-Gm-Message-State: ACrzQf0sAnlrVlRbJntAcXjAF0s/AnFkWJQzhhqYZVhgJuFDmXtQnrL6
+        INeu+/dGUimt90HmsPEbeoA=
+X-Google-Smtp-Source: AMsMyM4cU3vLsTSiWCSsbEcY7UV+UJBrC5a07f1dY57EL9s1EUxZ5n3i98uvEdXbgJXpbA6zfUHWAw==
+X-Received: by 2002:a17:907:980e:b0:78d:b6d5:661e with SMTP id ji14-20020a170907980e00b0078db6d5661emr1253849ejc.46.1665695233566;
+        Thu, 13 Oct 2022 14:07:13 -0700 (PDT)
+Received: from localhost.localdomain (host-95-250-231-122.retail.telecomitalia.it. [95.250.231.122])
+        by smtp.gmail.com with ESMTPSA id v25-20020a17090651d900b0078da24ea9c7sm443973ejk.17.2022.10.13.14.07.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 14:07:12 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Christian Brauner <brauner@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kees Cook <keescook@chromium.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-hwmon@vger.kernel.org, linux-hardening@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] drm/radeon: Replace kmap() with kmap_local_page()
+Date:   Thu, 13 Oct 2022 23:07:14 +0200
+Message-Id: <20221013210714.16320-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V3 0/8] x86/topology: Improve CPUID.1F handling
-Content-Language: en-US
-To:     Len Brown <lenb@kernel.org>, Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-hwmon@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        peterz@infradead.org, corbet@lwn.net, fenghua.yu@intel.com,
-        jdelvare@suse.com, linux@roeck-us.net, len.brown@intel.com
-References: <20220922133800.12918-1-rui.zhang@intel.com>
- <5af2d8bb-8591-78f6-8102-6f7d0df33d98@intel.com>
- <9a1ae0b5d7a5ee3c870195e942d58bdd9b3b71db.camel@intel.com>
- <CAJvTdKkYTQzY1UsH_o2QdN1bS4gVfT87bEwMvgUXYwd+VFD+=w@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CAJvTdKkYTQzY1UsH_o2QdN1bS4gVfT87bEwMvgUXYwd+VFD+=w@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/13/22 03:58, Len Brown wrote:
-> This series of BUG FIXES needs to be marked for -stable.
+The use of kmap() is being deprecated in favor of kmap_local_page().
 
-Hi Len,
+There are two main problems with kmap(): (1) It comes with an overhead as
+the mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
 
-That would have been great feedback to include with your review when
-your provided your acks.  It's also not clear where the bug fixes stop
-and the "related fixes" begin.  Is the entire series bug fixes that need
-to be marked for -stable?
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again, the
+kernel virtual addresses are restored and still valid.
+
+Therefore, replace kmap() with kmap_local_page() in radeon_ttm_gtt_read().
+
+Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ drivers/gpu/drm/radeon/radeon_ttm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/radeon/radeon_ttm.c b/drivers/gpu/drm/radeon/radeon_ttm.c
+index d33fec488713..bdb4c0e0736b 100644
+--- a/drivers/gpu/drm/radeon/radeon_ttm.c
++++ b/drivers/gpu/drm/radeon/radeon_ttm.c
+@@ -869,11 +869,11 @@ static ssize_t radeon_ttm_gtt_read(struct file *f, char __user *buf,
+ 
+ 		page = rdev->gart.pages[p];
+ 		if (page) {
+-			ptr = kmap(page);
++			ptr = kmap_local_page(page);
+ 			ptr += off;
+ 
+ 			r = copy_to_user(buf, ptr, cur_size);
+-			kunmap(rdev->gart.pages[p]);
++			kunmap_local(ptr);
+ 		} else
+ 			r = clear_user(buf, cur_size);
+ 
+-- 
+2.37.3
+
