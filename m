@@ -2,122 +2,63 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1716C43219
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 04:35:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5A66C433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 08:11:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiJMEft (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 13 Oct 2022 00:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
+        id S229550AbiJMILQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Oct 2022 04:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiJMEfe (ORCPT
+        with ESMTP id S229552AbiJMILO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 13 Oct 2022 00:35:34 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03B0D38FF;
-        Wed, 12 Oct 2022 21:35:27 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id h13so908138pfr.7;
-        Wed, 12 Oct 2022 21:35:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P+t/wRO7cDS+JStmRGsK3eGMJ7JaSW3Y+vh0orEs5wo=;
-        b=NbUixCsympOyyxmgxJtLOMjMaEDxuMw/tv4quYnj4+R8R5fFBDfdh49sKZX5a0E6yn
-         ThsjXhf2MxE7YQyhKqGr6s1wAQiR/GnN3SYIiRd7/HX3rPAiIW3/GXVhso97PnDTWbN7
-         FD9lUwelyDWMaRq2ky4g2YyI+YRrNfqPgn3ZpiQ3sZLp0zcqhSYPpYzvSqfiqFQC7Zht
-         ZbHMRipeAhd/8zPU6ltEioRT5Yy31nGxnD6kMbWNhz1wpdtqbkzdrsGNr/I8mqbY5wEE
-         Mpu60rqensiGRsbLvH5xuwXQOdoW18+jHucaK11VZ/hTKYBFwsMuEBuSNswRKmTqsljx
-         rKAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P+t/wRO7cDS+JStmRGsK3eGMJ7JaSW3Y+vh0orEs5wo=;
-        b=Sm357DEonMHzvehiBkt8fKwS54d58ok2d6jnjUv8IjfskpUn1dqnyv0bNtBNYQtfQO
-         s3V2szNJVdsDjK0Nf+kiPBjdYVOzEvFucsXGIz92RvhG1+LsPBS9cfzBGdtGHwU/k4o5
-         0GriSUaefCS2s2O5GCv3HdON7QA23P9HfvVCuyE8uQ7eSWly4K+kEWFV4RfJtGKnEcwO
-         mojI1iT3MjxyHplrGSZRQwrAPagj4iBtANmLcxnXCwaHFwQ+h8wbOzjmL+bHjWivGpyz
-         M6su8raz7L4xvqVHV1P1Ac6QwLZxlyY3KhUu6eU23MzjLTMnd5MmXVIlEu8B0S5OagyW
-         ge5w==
-X-Gm-Message-State: ACrzQf3xgQa60sPOkH+fYo3F1BiMjqNC03ybtTwNqLQ20M14GCf+4YKP
-        YMRJ2j2iZn+lft+qJm7RTvk=
-X-Google-Smtp-Source: AMsMyM7e9Uu3ZmV2fHhuIulvRHyJNR2d25sYlKpkRXZWFMBbM8IFY6zxNvhyHSo+OtgHXagNhwW6wg==
-X-Received: by 2002:a62:164d:0:b0:562:bc4e:253 with SMTP id 74-20020a62164d000000b00562bc4e0253mr31393932pfw.26.1665635727277;
-        Wed, 12 Oct 2022 21:35:27 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a19-20020aa795b3000000b0056246403534sm751299pfk.88.2022.10.12.21.35.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 21:35:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <22ea65b3-5832-c340-195d-058cf3c34f8d@roeck-us.net>
-Date:   Wed, 12 Oct 2022 21:35:25 -0700
+        Thu, 13 Oct 2022 04:11:14 -0400
+Received: from mail.fadrush.pl (mail.fadrush.pl [54.37.225.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18A4D2CD7
+        for <linux-hwmon@vger.kernel.org>; Thu, 13 Oct 2022 01:11:13 -0700 (PDT)
+Received: by mail.fadrush.pl (Postfix, from userid 1002)
+        id C2BCB23AF1; Thu, 13 Oct 2022 08:11:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fadrush.pl; s=mail;
+        t=1665648672; bh=bD6j9gIFU6CLTaCGl0Ow9oeIxtirvTfMeNZSfLEZQ+I=;
+        h=Date:From:To:Subject:From;
+        b=c4jqnyUXn0lpzvihajI6ZItilztu3LI+ZqydwK+ouUZ7Q13F04NFdIPdzVv2FX0Qz
+         QlAcU2WqOTGG9qTcHKdQC8bFiYMBt+T1h5dRPKhZ6fnljzyV4T2VeVJTVSwsHBTXaR
+         7obYI80cwyJtZSutAHL/htX7fdLN1e0lYLehS1Z7Dcnux1X4r6kL0evEbqyncJZmuK
+         VASRsHDX99/cgTyUWtlki7ez2/w2Ei500y3H504yu7PhgXioxgELWA+m4bFWi03m14
+         dd/pf0rFXJwMa2+fbNoBuOn2RfUWyfvZFpzPs+eyGahk5aoLjfsBjOoQU+CoTQcOdk
+         f8cuwXSBR9KNA==
+Received: by mail.fadrush.pl for <linux-hwmon@vger.kernel.org>; Thu, 13 Oct 2022 08:11:04 GMT
+Message-ID: <20221013064500-0.1.27.lxcx.0.fmffdpjlmu@fadrush.pl>
+Date:   Thu, 13 Oct 2022 08:11:04 GMT
+From:   "Jakub Olejniczak" <jakub.olejniczak@fadrush.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: =?UTF-8?Q?Zwi=C4=99kszenie_p=C5=82ynno=C5=9Bci_finansowej?=
+X-Mailer: mail.fadrush.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     karthik gengan <gengankarthik@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <CAAboHLVgQKzNVU6XDWGZmnxGK0DGvtgyzMsY9V+UiOJVq1JyTg@mail.gmail.com>
- <085e90e5-d21e-9068-a2e1-6f7e07fa64df@roeck-us.net>
- <CAAboHLU8a9vztdM2b8+Y2ZUAs0+fD4HgwV2X_ASRa=SnWJXTwQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] [v1 1/1]hwmon:(pmbus) Validate the data for chip
- supporting vout_mode (PMBUS_HAVE_VOUT) in the linear config.
-In-Reply-To: <CAAboHLU8a9vztdM2b8+Y2ZUAs0+fD4HgwV2X_ASRa=SnWJXTwQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/12/22 20:42, karthik gengan wrote:
-> Hi Guenter,
-> 
-> Thanks for your response but I need some more valuable suggestions...
-> 
->          In the pmbus_data structure, we are updating the vout_out mode
-> value based on the config ( linear, vid .direct) and this structure is declared
-> in pmbus_core.c .so the low-level driver could not able to access this
-> structure.
-> 
-> Guidance required,
->       1. Move the pumbus_data structure declaration to pmbus.h, so that low-level
->            the driver can check and update the vout_mode if the value
-> is not proper.   (or)
->       2.  if the vout_mode attribute value is exposed in the sysfs, the
-> user-level application
->            can modify the value. ( if the value is not proper).
->                                 (or)
->        3. if an ioctl call is exposed for the vout_mode then the
-> user-level application can
->             able to update the value. ( if the value is not proper).
-> 
-> (or)  guide me to a better approach to handle this issue.
-> 
+Dzie=C5=84 dobry,
 
-Have a look at drivers/hwmon/pmbus/stpddc60.c. That chip reports a wrong
-value for PMBUS_VOUT_MODE, and the driver provides the expected value
-to the PMBus core. Taking that as example, the simple solution is to have
-the chip driver report the expected value. There is no need to get
-userspace involved. Actually, involving userspace would be completely wrong.
+kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, poniewa=C5=BC chcia=C5=82bym za=
+proponowa=C4=87 wygodne rozwi=C4=85zanie, kt=C3=B3re umo=C5=BCliwi Pa=C5=84=
+stwa firmie stabilny rozw=C3=B3j.=20
 
-> For reference,
->            UCD90xx vendor claims that vout_mode value should be present
-> if the chip
-> supports PMBUS_VOUT_MODE command. Hence the patch validated the vout_mode
-> value for PMBUS_VOUT_MODE supported chip.
-> 
+Konkurencyjne otoczenie wymaga ci=C4=85g=C5=82ego ulepszania i poszerzeni=
+a oferty, co z kolei wi=C4=85=C5=BCe si=C4=99 z konieczno=C5=9Bci=C4=85 i=
+nwestowania. Brak odpowiedniego kapita=C5=82u powa=C5=BCnie ogranicza tem=
+po rozwoju firmy.
 
-Not sure if I understand, but if any of the chips supported by the ucd9009
-driver does not support the VOUT_MODE command or reports a wrong value,
-just extend ucd9000_read_byte_data() to report whatever value the command
-should return.
+Od wielu lat z powodzeniem pomagam firmom w uzyskaniu najlepszej formy fi=
+nansowania z banku oraz UE. Mam sta=C5=82ych Klient=C3=B3w, kt=C3=B3rzy n=
+adal ch=C4=99tnie korzystaj=C4=85 z moich us=C5=82ug, a tak=C5=BCe poleca=
+j=C4=85 je innym.
 
-That would need some confirmation, though - I don't recall any such problem,
-and  UCD90xxx Sequencer and System Health Controller PMBUS Command Reference
-(SLVU352) clearly states that the command is supported.
+Czy chcieliby Pa=C5=84stwo skorzysta=C4=87 z pomocy wykwalifikowanego i d=
+o=C5=9Bwiadczonego doradcy finansowego?
 
-Guenter
+
+Pozdrawiam
+Jakub Olejniczak
