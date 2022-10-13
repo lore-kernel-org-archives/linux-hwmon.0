@@ -2,53 +2,56 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F7E7C433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 15:53:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5C42C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 15:54:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbiJMPxX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 13 Oct 2022 11:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
+        id S229876AbiJMPyX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Oct 2022 11:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiJMPxW (ORCPT
+        with ESMTP id S229559AbiJMPyU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:53:22 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B41100BD5
-        for <linux-hwmon@vger.kernel.org>; Thu, 13 Oct 2022 08:53:21 -0700 (PDT)
+        Thu, 13 Oct 2022 11:54:20 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20B9100BD5
+        for <linux-hwmon@vger.kernel.org>; Thu, 13 Oct 2022 08:54:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665676401; x=1697212401;
+  t=1665676459; x=1697212459;
   h=date:message-id:from:to:cc:subject:in-reply-to:
    references:mime-version;
-  bh=1FaekfIfmCYS51XaYw2eEPToJK6znIRfinHhGeoGJfM=;
-  b=BzNiqHCwxqwXvXqIiSFRFLGt4PlOR23xf8tvL+CTRRiBMT41khhjpcTk
-   gu+7q/3SUU5dTvlAcHU3cit+hGu3nYb5RzgvL0PmBZyC0M+cK/Dm5dDe+
-   55Z/8efrl8bi4DVYiEZ235xtCyCXFxeeOuHSKul9aTPes2T3nmwTo8TES
-   qK+8Y/+uLfQQHBK9CqTtNNy97JnaiP6+dPye3vJ55PDQanKs+KwVVFRp6
-   dD6MPpZgr9u0faTVo5AwoFGSY5DcJE89f+cs092gyKj/722Zo58MR2wx3
-   6rE3XPdyCdsgZdeI87zr82NEUh7ObhQmLrMMZ7udcl7ACtVrVAMteTUyD
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="306190020"
+  bh=YeSfn7nIC0sOEZ9+1/uJh1GJEZWR1dKDgYzX2UYq9nU=;
+  b=gX1OKDmtC/1HEVa04Sjn/ORpkZYQYOZ4Qqq8apZlYdAGmLCRV0CJaOGc
+   QYtvgxvwz58h/JbY9dk+73iUYEzz2uD/CGjt7TWEPbRJQurlGyRA3/cFC
+   btlRufqoUjhDgD0Si7CcMfW4dxZn5ZiL7CmgG6+RmSt00YDWblh2U+42f
+   3+hSPE2x3+iOhadVH1JoTf+CsS1nqitwUP9IvacQ02W55epBFRDyeT50r
+   2W4Ud0yaUHc53gD8chJ4TbGg4sH/K/jguz1OPyaQ8yufy789J0k8nl+V7
+   y3OQrCpUdT84kDJGcinaq45tzEukuLf24qmlwSuIZtihZCzrVkspsG4RI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="292457258"
 X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="306190020"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 08:53:20 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="716392596"
+   d="scan'208";a="292457258"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 08:54:19 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="622210656"
 X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="716392596"
-Received: from sudhars1-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.212.216.120])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 08:53:20 -0700
-Date:   Thu, 13 Oct 2022 08:53:19 -0700
-Message-ID: <87edvbsosw.wl-ashutosh.dixit@intel.com>
+   d="scan'208";a="622210656"
+Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.212.216.120])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 08:54:18 -0700
+Date:   Thu, 13 Oct 2022 08:54:17 -0700
+Message-ID: <87bkqfsora.wl-ashutosh.dixit@intel.com>
 From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
-To:     "Gupta, Anshuman" <anshuman.gupta@intel.com>
+To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
 Cc:     Badal Nilawar <badal.nilawar@intel.com>,
-        intel-gfx@lists.freedesktop.org, riana.tauro@intel.com,
-        jon.ewins@intel.com, linux-hwmon@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
+        intel-gfx@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+        andi.shyti@intel.com, tvrtko.ursulin@intel.com,
+        anshuman.gupta@intel.com, dri-devel@lists.freedesktop.org,
+        jon.ewins@intel.com, riana.tauro@intel.com,
+        Jani Nikula <jani.nikula@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
 Subject: Re: [PATCH 4/7] drm/i915/hwmon: Show device level energy usage
-In-Reply-To: <4062cc45-1b29-eb7b-3858-55f3d6ce17b5@intel.com>
-References: <20220916150054.807590-1-badal.nilawar@intel.com>   <20220916150054.807590-5-badal.nilawar@intel.com>       <4062cc45-1b29-eb7b-3858-55f3d6ce17b5@intel.com>
+In-Reply-To: <YzcezNGdRJnyXS3N@intel.com>
+References: <20220927055020.3499420-1-badal.nilawar@intel.com>  <20220927055020.3499420-5-badal.nilawar@intel.com>      <YzcezNGdRJnyXS3N@intel.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
  Emacs/28.1 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -58,22 +61,59 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 21 Sep 2022 05:02:48 -0700, Gupta, Anshuman wrote:
+On Fri, 30 Sep 2022 09:52:28 -0700, Rodrigo Vivi wrote:
 >
-> > diff --git a/drivers/gpu/drm/i915/intel_mchbar_regs.h b/drivers/gpu/drm/i915/intel_mchbar_regs.h
-> > index b74df11977c6..1014d0b7cc16 100644
-> > --- a/drivers/gpu/drm/i915/intel_mchbar_regs.h
-> > +++ b/drivers/gpu/drm/i915/intel_mchbar_regs.h
-> > @@ -191,7 +191,9 @@
-> >     #define PCU_PACKAGE_POWER_SKU_UNIT
-> > _MMIO(MCHBAR_MIRROR_BASE_SNB + 0x5938)
-> >   #define   PKG_PWR_UNIT				REG_GENMASK(3, 0)
-> > +#define   PKG_ENERGY_UNIT                      REG_GENMASK(12, 8)
-> Please use tab here instead of space to line up with above macros.
 
-Fixed in v9.
+Hi Rodrigo,
 
-> With that,
-> Reviewed-by: Anshuman Gupta <anshuman.gupta@intel.com>
+> On Tue, Sep 27, 2022 at 11:20:17AM +0530, Badal Nilawar wrote:
+> > From: Dale B Stimson <dale.b.stimson@intel.com>
+> >
+> > Use i915 HWMON to display device level energy input.
+> >
+> > v2: Updated the date and kernel version in feature description
+> > v3:
+> >   - Cleaned up hwm_energy function and removed unused function
+> >     i915_hwmon_energy_status_get (Ashutosh)
+> > v4: KernelVersion: 6.2, Date: February 2023 in doc (Tvrtko)
+> >
+> > Signed-off-by: Dale B Stimson <dale.b.stimson@intel.com>
+> > Signed-off-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
+> > Signed-off-by: Riana Tauro <riana.tauro@intel.com>
+> > Signed-off-by: Badal Nilawar <badal.nilawar@intel.com>
+> > Acked-by: Guenter Roeck <linux@roeck-us.net>
+> > Reviewed-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
+> > Reviewed-by: Anshuman Gupta <anshuman.gupta@intel.com>
+> > ---
+> >  .../ABI/testing/sysfs-driver-intel-i915-hwmon |   8 ++
+> >  drivers/gpu/drm/i915/i915_hwmon.c             | 107 +++++++++++++++++-
+> >  drivers/gpu/drm/i915/intel_mchbar_regs.h      |   2 +
+> >  3 files changed, 115 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+> > index 16e697b1db3d..7525db243d74 100644
+> > --- a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+> > +++ b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+> > @@ -25,3 +25,11 @@ Contact:	dri-devel@lists.freedesktop.org
+> >  Description:	RO. Card default power limit (default TDP setting).
+> >
+> >		Only supported for particular Intel i915 graphics platforms.
+> > +
+> > +What:		/sys/devices/.../hwmon/hwmon<i>/energy1_input
+> > +Date:		February 2023
+> > +KernelVersion:	6.2
+> > +Contact:	dri-devel@lists.freedesktop.org
+>
+> I'm sorry for being late on the review here, and I know that others
+> already looked at the date and other details here in this doc.
+> So I'm curious why we have decided for the dri-devel mailing list
+> and not for the intel-gfx since intel-gfx is the only one we have
+> listed for i915 dir in the MAINTAINERS file:
+> L:      intel-gfx@lists.freedesktop.org
+
+I have changed the contact to intel-gfx@lists.freedesktop.org in v9 for all
+patches.
 
 Thanks.
+--
+Ashutosh
