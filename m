@@ -2,118 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D93FBC433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 00:40:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8BCDC433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 01:50:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbiJMAkJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Oct 2022 20:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
+        id S229766AbiJMBuS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Oct 2022 21:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232191AbiJMAiG (ORCPT
+        with ESMTP id S229451AbiJMBuQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Oct 2022 20:38:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9318EFBCFE;
-        Wed, 12 Oct 2022 17:32:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE8A7B81CCD;
-        Thu, 13 Oct 2022 00:21:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B10C4347C;
-        Thu, 13 Oct 2022 00:21:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665620465;
-        bh=Nu/8SgC7SIH9saHjokos5h2G6lpvcu/bw7NjIhvY4m0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KPnvjGFwqRXClSYz5Jnyw07lAqkKaSgvtgXghyNPW+7YYHkUl1mgSWQLpJnX4oEo3
-         eRjduuIMDaFcVVrx9Rwd7Y9Zr3roJ/2JAFU1x/y1xjcMRe/1HKBB7a9dI6cIB1h/ea
-         HBu9KriXVHCBQZyfzxspPJ4ZXAzJEZ1czNxOvWQsFYGXRUJE5lHirHkL2GQmicfipB
-         IIblY6w8lAFpR9Z8B7iq0AWInV6mdHeg0kEmjB3hfLIlrO+jjLV+v2+pYsw7J5n6wD
-         IVqCOPpI0egIwaDxl0YyDb9k7ZUxRG30WsSO6n5aG9O1RDX+pC03DGP9Vz+gCqSuMZ
-         /H3YTFD+Cva5w==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Eddie James <eajames@linux.ibm.com>,
+        Wed, 12 Oct 2022 21:50:16 -0400
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADA183F0E;
+        Wed, 12 Oct 2022 18:50:11 -0700 (PDT)
+Received: by mail-oo1-f54.google.com with SMTP id c17-20020a4aa4d1000000b0047653e7c5f3so423079oom.1;
+        Wed, 12 Oct 2022 18:50:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=frhcxqlr4xu4fAiP6OzjXHuMjjt3FaUtEdB7oOk4NPs=;
+        b=UXLgTJPeCfT2qPYLr0U7so1M0C19I0oe/GgwCOAawq5HyQlSYy0d+rgCRspqzaq9Mx
+         XlvZmMA1773W0q0m6LrJl0r6zMndBAsnBEc1sSPsX3kfAi0mSGx6LOnj9/4umrkKsPEB
+         KSokN9CTOwuoxo3m47biXFtesVjOsZIfrjuoUabIzEdMJqf0lBzBLa8Pg8pMhgxezrel
+         wrDZJRSW7//z8GHEt1d1wrP5WWT85basQN9m/g47Oc4y+8HaI39bV7B9Ijul0PzsdNlU
+         w3GBTQQ4Quo/vRUIylmxn1bhfx2ZbEwb7E7io9JrzZQXh4/AGUwgiNIsAYIflzEfRxut
+         gygw==
+X-Gm-Message-State: ACrzQf2CF+Lvg9U6dr74zsqbwK8wH6nRC1oEv9dQwr1/AAXPQjGNLI5+
+        mNe4Qhe3nTQd3Nu8SfNsRixnhQrK8w==
+X-Google-Smtp-Source: AMsMyM6UHpju3T23qh158uoMzBGLcPrhVhvbAsXzclJ7MZlEpabglzXuQGFcewlgp7OQi6ZppirEjg==
+X-Received: by 2002:a4a:b806:0:b0:480:9f83:5783 with SMTP id g6-20020a4ab806000000b004809f835783mr194113oop.55.1665625809403;
+        Wed, 12 Oct 2022 18:50:09 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o77-20020a4a2c50000000b00425678b9c4bsm1629278ooo.0.2022.10.12.18.50.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 18:50:09 -0700 (PDT)
+Received: (nullmailer pid 3091989 invoked by uid 1000);
+        Thu, 13 Oct 2022 01:50:10 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     Naresh Solanki <Naresh.Solanki@9elements.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Joel Stanley <joel@jms.id.au>, Sasha Levin <sashal@kernel.org>,
-        jdelvare@suse.com, penberg@kernel.org,
-        william.xuanziyang@huawei.com, willy@infradead.org,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 57/63] hwmon (occ): Retry for checksum failure
-Date:   Wed, 12 Oct 2022 20:18:31 -0400
-Message-Id: <20221013001842.1893243-57-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221013001842.1893243-1-sashal@kernel.org>
-References: <20221013001842.1893243-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Roland Stigge <stigge@antcom.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Marcello Sylvester Bauer <sylv@sylv.io>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        devicetree@vger.kernel.org
+In-Reply-To: <20221012205736.1231514-3-Naresh.Solanki@9elements.com>
+References: <20221012205736.1231514-1-Naresh.Solanki@9elements.com> <20221012205736.1231514-3-Naresh.Solanki@9elements.com>
+Message-Id: <166562578885.3091453.640872394649622876.robh@kernel.org>
+Subject: Re: [PATCH v3 2/3] dt-bindings: hwmon: Add binding for max6639
+Date:   Wed, 12 Oct 2022 20:50:10 -0500
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Eddie James <eajames@linux.ibm.com>
+On Wed, 12 Oct 2022 22:57:35 +0200, Naresh Solanki wrote:
+> From: Marcello Sylvester Bauer <sylv@sylv.io>
+> 
+> Add Devicetree binding documentation for Maxim MAX6639 temperature
+> monitor with PWM fan-speed controller.
+> 
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
+>  .../bindings/hwmon/maxim,max6639.yaml         | 86 +++++++++++++++++++
+>  1 file changed, 86 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> 
 
-[ Upstream commit dbed963ed62c4c2b8870a02c8b7dcb0c2af3ee0b ]
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Due to the OCC communication design with a shared SRAM area,
-checkum errors are expected due to corrupted buffer from OCC
-communications with other system components. Therefore, retry
-the command twice in the event of a checksum failure.
+yamllint warnings/errors:
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20220426154956.27205-3-eajames@linux.ibm.com
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/hwmon/occ/p9_sbe.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/hwmon/maxim,max6639.example.dts:22.29-39.13: Warning (i2c_bus_reg): /example-0/i2c/fan-controller@2e: I2C bus unit address format error, expected "10"
 
-diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-index a91937e28e12..775147f31cb1 100644
---- a/drivers/hwmon/occ/p9_sbe.c
-+++ b/drivers/hwmon/occ/p9_sbe.c
-@@ -14,6 +14,8 @@
- 
- #include "common.h"
- 
-+#define OCC_CHECKSUM_RETRIES	3
-+
- struct p9_sbe_occ {
- 	struct occ occ;
- 	bool sbe_error;
-@@ -81,18 +83,23 @@ static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
- static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len,
- 			       void *resp, size_t resp_len)
- {
-+	size_t original_resp_len = resp_len;
- 	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
--	int rc;
-+	int rc, i;
- 
--	rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
--	if (rc < 0) {
-+	for (i = 0; i < OCC_CHECKSUM_RETRIES; ++i) {
-+		rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
-+		if (rc >= 0)
-+			break;
- 		if (resp_len) {
- 			if (p9_sbe_occ_save_ffdc(ctx, resp, resp_len))
- 				sysfs_notify(&occ->bus_dev->kobj, NULL,
- 					     bin_attr_ffdc.attr.name);
-+			return rc;
- 		}
--
--		return rc;
-+		if (rc != -EBADE)
-+			return rc;
-+		resp_len = original_resp_len;
- 	}
- 
- 	switch (((struct occ_response *)resp)->return_status) {
--- 
-2.35.1
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
