@@ -2,150 +2,108 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0977FC433FE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Oct 2022 13:26:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA14DC4332F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Oct 2022 16:50:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiJNN0y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 14 Oct 2022 09:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S230119AbiJNQuU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 14 Oct 2022 12:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiJNN0x (ORCPT
+        with ESMTP id S229988AbiJNQuN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Oct 2022 09:26:53 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F491B76F6;
-        Fri, 14 Oct 2022 06:26:51 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id k9so4301642pll.11;
-        Fri, 14 Oct 2022 06:26:51 -0700 (PDT)
+        Fri, 14 Oct 2022 12:50:13 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCD936097;
+        Fri, 14 Oct 2022 09:50:08 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so8402387pjq.3;
+        Fri, 14 Oct 2022 09:50:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=B85YzJa+gzD30iQI+jRM1asD652V/dJZGGt/+VYQU/o=;
-        b=T0We9qEM1OuX233DTgvvqc5j/ONlheakLJyA/6o8ap4qO839PjW2okMknbno5w2Dwa
-         YjiQevt7ClKSXV9S+51PC1WHOOAvUYLcyAbBRWEPTBbgWq60jZjAvX7R58Li/flyoMSk
-         txq/eSU/kcFeHxJtcheasqPYrAh6YSLenZU41BsBGhEaP3lXPLyfkE2xZTqiXpx5oUwS
-         7BCq6DY6TIj1bgrFgxL8xg+kpiYml2TKnbz0TngAMXwYndTckSD58rejcWoMR/Eoeuvi
-         3JKAQ/6acDfqEb4f9zZIBKjZ0S/Bw5zz/fOWRdyzZ74p6I0OeYYePqL5fWLgL7yLB7m4
-         A3gw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UkMsvdLbBeZZxwn3yy2WbY/9rIDQ+8vzAzzyaobi6r0=;
+        b=e/yFi6KoJg3I6g+3aCX1L13tFLk8xN1MaLDGjbvGvDV9NzmLEfo5Y8DS+xrzlQEPph
+         tt/bI3cJ799bfNiOBC3/9plGkHl3w5n5Nl6DdZEPs8YRtS6XO7sBdItiwvk3VA/M4J0a
+         qXoRsCZ2EPkHwMM53B/6NPI6vRaDF4vEldxsDlgevrLz5mAlSXiF9XNM1NJHkc/kB3MG
+         jjG12+SxzSgZVU+owkdizHWafdQkbwcn7b9bU69EYs5/pkSyZNGxtCaPwOV+WrCxQpt4
+         CEfnXplHtM/TcfB7ASjd03BW2BmCVpAzfamdTOBAQFJ7HH7kILATDbMg3tkNwmdf9PDO
+         rx+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B85YzJa+gzD30iQI+jRM1asD652V/dJZGGt/+VYQU/o=;
-        b=E+b20xoahOs5awk2c0vqk9JxH63K/Hi69pNK6NnIoHUtlSYVs5VaDGlo1GooMQaLMZ
-         PYyGVzpjNKLrOgXJflHBmN8iRHFhS+I6B7YpaivQYB71M7eDgX6Jgqqncmiv6D9fl8Cv
-         rjkiykHJsC7Pjfw5LcoLvSGi5iSvsY/5xDfxKCqM9kIZE6SjH1COwXmdnMOaLh76BucB
-         q3XqBF9EAA8aXZJQSkbAdiZch6rQ1xR1SWwJjWnLNQZkwis0vr61AUkAveiCg9VE7VOi
-         ZdEMaL76O8fJiD+w4sipJ+R8wtgbFpZK0G1BwYRLymyxW/FuzfY6JYyZxqvhI2+jWDAG
-         DSzg==
-X-Gm-Message-State: ACrzQf3PYCudCoDKPJbUPOQqx9SI7ntLGfTk1nTVIqe+JGCYtunqE9AQ
-        Sk+7CLtANJBUv1Dy0belez4=
-X-Google-Smtp-Source: AMsMyM6um/5Z+wwjpyTvGnSTOSvAQomH0AZ2k5Nn7qx5rK5ZHPNVYBEYZ5yQFLl99M3+3IdsXL3TgA==
-X-Received: by 2002:a17:90a:fa85:b0:20a:ddd3:d431 with SMTP id cu5-20020a17090afa8500b0020addd3d431mr17532500pjb.210.1665754011237;
-        Fri, 14 Oct 2022 06:26:51 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b12-20020aa78ecc000000b005627470944dsm1679224pfr.189.2022.10.14.06.26.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 06:26:49 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UkMsvdLbBeZZxwn3yy2WbY/9rIDQ+8vzAzzyaobi6r0=;
+        b=sSo6+vJzbo+LZ/5sRS90JNzJuX9sYKnRfsRChLFQ0AOnBNUbDEO2zB3NPxlsqYuls3
+         bYhjCCi5H4WkaK3UpG2lCq748eTws8dYa3ktHHPGlVTGZalDLExEL+IUHsgaHjCX6v/E
+         hawwTajBESoRrdTbiJcMM+CAUBuhMuW7PH/ziQRmpAhAgGfPzC/n6sdEvGNXW6FcehaT
+         x/xRbxa4+p5+B3a7ggvwpe7mYoWIAI2RsWVBWLczbPwIhBI70RfsQSyllLNxPbNI/Kbj
+         f0a9kle6N699PlKHY25k6cZkT30eprPqHU/wEqPXUGaZ7IVXy8cbXV3ahF0d76hUQ4zI
+         PDnQ==
+X-Gm-Message-State: ACrzQf2CttZKarjO6mKf+60zdvIzqnudK/Yt3srab1loRTPWXDQb6jsc
+        peX9+8Le/TJfRrL2JqUDa0E=
+X-Google-Smtp-Source: AMsMyM6+3hGyBVVJgqRpA70C+EAQ4HDMDpyknsRATrg9MgyWgx/BN3rh/VZwr75LuQq2VkEuXCNGLg==
+X-Received: by 2002:a17:90b:2247:b0:20d:a2be:95ae with SMTP id hk7-20020a17090b224700b0020da2be95aemr12041409pjb.244.1665766208022;
+        Fri, 14 Oct 2022 09:50:08 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v6-20020a632f06000000b0046497308480sm1684127pgv.77.2022.10.14.09.50.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 09:50:07 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c16b8b0c-3935-4d52-eb7f-809d571142b5@roeck-us.net>
-Date:   Fri, 14 Oct 2022 06:26:48 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH V4 1/4] hwmon/coretemp: Rename indx to index
-To:     Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-hwmon@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
-        jdelvare@suse.com, len.brown@intel.com
-References: <20221014090147.1836-1-rui.zhang@intel.com>
- <20221014090147.1836-2-rui.zhang@intel.com>
-Content-Language: en-US
+Date:   Fri, 14 Oct 2022 09:50:06 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20221014090147.1836-2-rui.zhang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: corsair-psu: add USB id of the new HX1500i psu
+Message-ID: <20221014165006.GA201666@roeck-us.net>
+References: <Y0FghqQCHG/cX5Jz@monster.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0FghqQCHG/cX5Jz@monster.localdomain>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/14/22 02:01, Zhang Rui wrote:
-> Use variable name 'index' instead of 'indx' for the index in the
-> core_data[] array.
+On Sat, Oct 08, 2022 at 11:35:34AM +0000, Wilken Gottwalt wrote:
+> Also updates the documentation accordingly.
 > 
-> No functional change expected.
-> 
-> Cc: stable@vger.kernel.org
-> Suggested-by: Ingo Molnar <mingo@kernel.org>
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Applied to hwmon-next.
+
+Thanks,
+Guenter
 
 > ---
->   drivers/hwmon/coretemp.c | 18 +++++++++---------
->   1 file changed, 9 insertions(+), 9 deletions(-)
+>  Documentation/hwmon/corsair-psu.rst | 2 ++
+>  drivers/hwmon/corsair-psu.c         | 1 +
+>  2 files changed, 3 insertions(+)
 > 
-> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> index ccf0af5b988a..bfdcfe8ccb34 100644
-> --- a/drivers/hwmon/coretemp.c
-> +++ b/drivers/hwmon/coretemp.c
-> @@ -515,15 +515,15 @@ coretemp_add_core(struct platform_device *pdev, unsigned int cpu, int pkg_flag)
->   		dev_err(&pdev->dev, "Adding Core %u failed\n", cpu);
->   }
->   
-> -static void coretemp_remove_core(struct platform_data *pdata, int indx)
-> +static void coretemp_remove_core(struct platform_data *pdata, int index)
->   {
-> -	struct temp_data *tdata = pdata->core_data[indx];
-> +	struct temp_data *tdata = pdata->core_data[index];
->   
->   	/* Remove the sysfs attributes */
->   	sysfs_remove_group(&pdata->hwmon_dev->kobj, &tdata->attr_group);
->   
-> -	kfree(pdata->core_data[indx]);
-> -	pdata->core_data[indx] = NULL;
-> +	kfree(pdata->core_data[index]);
-> +	pdata->core_data[index] = NULL;
->   }
->   
->   static int coretemp_probe(struct platform_device *pdev)
-> @@ -647,7 +647,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
->   	struct platform_device *pdev = coretemp_get_pdev(cpu);
->   	struct platform_data *pd;
->   	struct temp_data *tdata;
-> -	int indx, target;
-> +	int index, target;
->   
->   	/*
->   	 * Don't execute this on suspend as the device remove locks
-> @@ -661,12 +661,12 @@ static int coretemp_cpu_offline(unsigned int cpu)
->   		return 0;
->   
->   	/* The core id is too big, just return */
-> -	indx = TO_ATTR_NO(cpu);
-> -	if (indx > MAX_CORE_DATA - 1)
-> +	index = TO_ATTR_NO(cpu);
-> +	if (index > MAX_CORE_DATA - 1)
->   		return 0;
->   
->   	pd = platform_get_drvdata(pdev);
-> -	tdata = pd->core_data[indx];
-> +	tdata = pd->core_data[index];
->   
->   	cpumask_clear_cpu(cpu, &pd->cpumask);
->   
-> @@ -677,7 +677,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
->   	 */
->   	target = cpumask_any_and(&pd->cpumask, topology_sibling_cpumask(cpu));
->   	if (target >= nr_cpu_ids) {
-> -		coretemp_remove_core(pd, indx);
-> +		coretemp_remove_core(pd, index);
->   	} else if (tdata && tdata->cpu == cpu) {
->   		mutex_lock(&tdata->update_lock);
->   		tdata->cpu = target;
-
+> diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
+> index 3c1b164eb3c0..6a03edb551a8 100644
+> --- a/Documentation/hwmon/corsair-psu.rst
+> +++ b/Documentation/hwmon/corsair-psu.rst
+> @@ -19,6 +19,8 @@ Supported devices:
+>  
+>    Corsair HX1200i
+>  
+> +  Corsair HX1500i
+> +
+>    Corsair RM550i
+>  
+>    Corsair RM650i
+> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> index c1c27e475f6d..2210aa62e3d0 100644
+> --- a/drivers/hwmon/corsair-psu.c
+> +++ b/drivers/hwmon/corsair-psu.c
+> @@ -821,6 +821,7 @@ static const struct hid_device_id corsairpsu_idtable[] = {
+>  	{ HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
+>  	{ HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
+>  	{ HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsair HX1000i revision 2 */
+> +	{ HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i */
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
