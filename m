@@ -2,82 +2,80 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE2DEC433FE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Oct 2022 16:52:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0E5CC4332F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Oct 2022 17:12:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiJNQww (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 14 Oct 2022 12:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51064 "EHLO
+        id S230043AbiJNRMv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 14 Oct 2022 13:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbiJNQww (ORCPT
+        with ESMTP id S229866AbiJNRMu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:52:52 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5051C69CE;
-        Fri, 14 Oct 2022 09:52:50 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id h13so5424107pfr.7;
-        Fri, 14 Oct 2022 09:52:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cx94pH/Te+Ooan9iwnGcSQEFKwEqsCyMjZbllG69d8o=;
-        b=VGqTR76opp8m2P+fhRS9m4GiuRxLn2tE3mdIQVwSiBvw9Z/hmLnetV59TcuWYqmzgg
-         PvWVm9b8iyXYOr49RIs1LS4r1zKBxgG41qxZveyQmpHm/5rgtYVBiPpcHM2scIBuz7HQ
-         DmBHsl9KEwabdzWGxITdy+8MjfBSIN3fKF07xBaryzkSQzC47kukKTll+PLMlDs99oCu
-         TYo5wZHrA9Jd7qFdq190iMqrfcRG0//CahSQ4TYRfxGNjtF2lD2fSh/1QOLBJVFOc/K2
-         ZYC//yoNPe4E8M/llnVbMHR9uBD+g1nHUvYf5TuK4fth7B3ruQ8X+oXRLO9eiXmh3wU4
-         ZaGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cx94pH/Te+Ooan9iwnGcSQEFKwEqsCyMjZbllG69d8o=;
-        b=fWBxzUQfYLTa0B3E80ECHT43ZwIDHrt6QDMdwuSRB8LCvx2YQ8jMwGEIZzUkmzueas
-         NhLWPeVw/nwi7DrANG5Dh3InPmBhUi2rm7Ja6CzvJUvRi9/fKyUGbTjS4gfzOspYyNMj
-         feL0r0cz0UUHkLlVnJ3IjD/9/B11PhIeuEeAN/msBiHRaPhiC048cpXNYGh8/LeMIh7E
-         slkUiZGLjJBFwkajf43fVXwoRFJn/AHQffq98jI5nqe1p+FfqjfRbHxjDUGKwecAIcsG
-         DMY9L9SHcX3eS76ywVn8W1NHa2TPJUrtqkWyZtPd8qBeEcv/ZEEVdSJxQSWTSDub5N1s
-         2jIg==
-X-Gm-Message-State: ACrzQf2TwOvftQElVW/WuaEsWc76TaEY8UbK2xCoY/cVM7Ok2mGbAr6q
-        gU1NuDR5kko/tvC63DIFacI=
-X-Google-Smtp-Source: AMsMyM68AgsRaYoK3ai6hspVpOpJfxq2UWvuy2GSNI2JmEIm2hdZgspV0xFV0qQJq46eSaYLSwmVFQ==
-X-Received: by 2002:a63:243:0:b0:43c:75c:d92a with SMTP id 64-20020a630243000000b0043c075cd92amr5301387pgc.497.1665766369762;
-        Fri, 14 Oct 2022 09:52:49 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y126-20020a626484000000b0056232682a7esm1958951pfb.2.2022.10.14.09.52.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 09:52:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 14 Oct 2022 09:52:48 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers/hwmon: use simple i2c probe
-Message-ID: <20221014165248.GA258761@roeck-us.net>
-References: <20221011143309.3141267-1-steve@sk2.org>
+        Fri, 14 Oct 2022 13:12:50 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E45259727;
+        Fri, 14 Oct 2022 10:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665767569; x=1697303569;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=blL2GC3Mi5CfVsUI46WjXtXVD+aHyOwcn1x6p0aKgGg=;
+  b=GnA0hhSWd2N1ROwZfTtFnMJEn25F3emtxEoAyQoFBICFxeimVZHlutQ7
+   6psVrHC0Kw6SS74NvfuHB3XuTGi3xntglAJqjeb1X6KqnYhW/M81YxUED
+   nYDkcJXT5HLU3pKiNf1W6lTqep1Am+vifovk6W0aTWT39fST3a3L8zbkL
+   aSv/vWaptLqmcmt5q0tsfWAn+HnDY2tAEjaBUC3I0ssZ5WOfZh/BAZ/a0
+   QCktCAM8CslE4RFO5ClkmGumrQq9foPAjtQnB0kELIwrnNtUuWwgts5Qo
+   Gdt6UKhJUnLFx02aJgra9fhJD+Vp5MSGM+CYSZNXglkQkuWf5MYZ41SDg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="369623263"
+X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
+   d="scan'208";a="369623263"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 10:12:48 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="716823179"
+X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
+   d="scan'208";a="716823179"
+Received: from atabbass-mobl.amr.corp.intel.com (HELO [10.212.48.152]) ([10.212.48.152])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 10:12:45 -0700
+Message-ID: <ad558e83-3e42-aefd-754d-e71f49dda206@intel.com>
+Date:   Fri, 14 Oct 2022 10:12:44 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221011143309.3141267-1-steve@sk2.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V4 1/4] hwmon/coretemp: Rename indx to index
+Content-Language: en-US
+To:     Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-hwmon@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
+        jdelvare@suse.com, linux@roeck-us.net, len.brown@intel.com
+References: <20221014090147.1836-1-rui.zhang@intel.com>
+ <20221014090147.1836-2-rui.zhang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20221014090147.1836-2-rui.zhang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 04:33:08PM +0200, Stephen Kitt wrote:
-> All these drivers have an i2c probe function which doesn't use the
-> "struct i2c_device_id *id" parameter, so they can trivially be
-> converted to the "probe_new" style of probe with a single argument.
+On 10/14/22 02:01, Zhang Rui wrote:
+> Use variable name 'index' instead of 'indx' for the index in the
+> core_data[] array.
 > 
-> This is part of an ongoing transition to single-argument i2c probe
-> functions. Old-style probe functions involve a call to i2c_match_id:
-> in drivers/i2c/i2c-core-base.c,
+> No functional change expected.
 > 
+> Cc: stable@vger.kernel.org
+> Suggested-by: Ingo Molnar <mingo@kernel.org>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 
-Applied to hwmon-next.
+Hi,
 
-Thanks,
-Guenter
+Thanks for paring this series down.
+
+I think I'm also going to pull this patch out of the series before I
+apply it and just rework 2/4 to apply cleanly without it.  I just can't
+put this in our "urgent" fixes pile and keep the stable@ tag on such a
+trivial rename and keep a straight face.
+
