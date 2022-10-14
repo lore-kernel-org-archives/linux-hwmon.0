@@ -2,108 +2,107 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA14DC4332F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Oct 2022 16:50:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90E58C4332F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Oct 2022 16:51:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiJNQuU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 14 Oct 2022 12:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
+        id S229540AbiJNQvf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 14 Oct 2022 12:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiJNQuN (ORCPT
+        with ESMTP id S229818AbiJNQvb (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:50:13 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCD936097;
-        Fri, 14 Oct 2022 09:50:08 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so8402387pjq.3;
-        Fri, 14 Oct 2022 09:50:08 -0700 (PDT)
+        Fri, 14 Oct 2022 12:51:31 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7472C105;
+        Fri, 14 Oct 2022 09:51:30 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d10so5424775pfh.6;
+        Fri, 14 Oct 2022 09:51:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UkMsvdLbBeZZxwn3yy2WbY/9rIDQ+8vzAzzyaobi6r0=;
-        b=e/yFi6KoJg3I6g+3aCX1L13tFLk8xN1MaLDGjbvGvDV9NzmLEfo5Y8DS+xrzlQEPph
-         tt/bI3cJ799bfNiOBC3/9plGkHl3w5n5Nl6DdZEPs8YRtS6XO7sBdItiwvk3VA/M4J0a
-         qXoRsCZ2EPkHwMM53B/6NPI6vRaDF4vEldxsDlgevrLz5mAlSXiF9XNM1NJHkc/kB3MG
-         jjG12+SxzSgZVU+owkdizHWafdQkbwcn7b9bU69EYs5/pkSyZNGxtCaPwOV+WrCxQpt4
-         CEfnXplHtM/TcfB7ASjd03BW2BmCVpAzfamdTOBAQFJ7HH7kILATDbMg3tkNwmdf9PDO
-         rx+w==
+        bh=OFvfv0UWGbNZojkW4m37OPvbrZXUyDcmNX8dFdGXeQ4=;
+        b=AneMt3bR6CjNYR/zB9Mj07/kpGHrjCtjy4Z0Mzo+0SykdqHY6TZ+/KyBQdvrYyancl
+         lIxYA5lbWLJ7uWT5SUF7VTqfYWr850pw3WStP3yrvMWDHLLzb/Fbgf74Zqb13EaTnjj7
+         OnzvE4Dru0sSp8p0lKeqm4l1SkDzd0NcMGakAO6ccghmS+1MxJwou/w+pMxeaBrNV3MJ
+         Gqtca4QVVqnkH7ae/qIArdoGNWKhALO1cVnAkfx7EnyQ+PH49wRmNM7/s+DO3rRFQMkD
+         y+/7Xvo5F4r+XB9A0WpT0mL9NEDTFZf3VRzlRnp8jM+bor9SyEngR1oly0tYVnkdhSJY
+         V4Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UkMsvdLbBeZZxwn3yy2WbY/9rIDQ+8vzAzzyaobi6r0=;
-        b=sSo6+vJzbo+LZ/5sRS90JNzJuX9sYKnRfsRChLFQ0AOnBNUbDEO2zB3NPxlsqYuls3
-         bYhjCCi5H4WkaK3UpG2lCq748eTws8dYa3ktHHPGlVTGZalDLExEL+IUHsgaHjCX6v/E
-         hawwTajBESoRrdTbiJcMM+CAUBuhMuW7PH/ziQRmpAhAgGfPzC/n6sdEvGNXW6FcehaT
-         x/xRbxa4+p5+B3a7ggvwpe7mYoWIAI2RsWVBWLczbPwIhBI70RfsQSyllLNxPbNI/Kbj
-         f0a9kle6N699PlKHY25k6cZkT30eprPqHU/wEqPXUGaZ7IVXy8cbXV3ahF0d76hUQ4zI
-         PDnQ==
-X-Gm-Message-State: ACrzQf2CttZKarjO6mKf+60zdvIzqnudK/Yt3srab1loRTPWXDQb6jsc
-        peX9+8Le/TJfRrL2JqUDa0E=
-X-Google-Smtp-Source: AMsMyM6+3hGyBVVJgqRpA70C+EAQ4HDMDpyknsRATrg9MgyWgx/BN3rh/VZwr75LuQq2VkEuXCNGLg==
-X-Received: by 2002:a17:90b:2247:b0:20d:a2be:95ae with SMTP id hk7-20020a17090b224700b0020da2be95aemr12041409pjb.244.1665766208022;
-        Fri, 14 Oct 2022 09:50:08 -0700 (PDT)
+        bh=OFvfv0UWGbNZojkW4m37OPvbrZXUyDcmNX8dFdGXeQ4=;
+        b=wIIhgyVvJmyBLWENl3LeTfEnEHgZSR45NvLlRDViuPr2zXM7v+HLX5Ymoq3I5dJxwb
+         Cdq5gtF1gbSqK/3LRa/mRmfLza81ycKLoUTtfJDNXA53JSiFfV9eWjhRWjxbJemE++PV
+         z5lIXOvkiKOWCBwzIOclR7pT3iyLXiVdTlTNQjJVvXL1znUjraDchzV3T+jKfsyzndrb
+         6dnnG/na6UgbPpu/TImeBDNGFoCzJ/7IVw78bcno8aL2xoqDa1gwxd/TmxDxE+61e4vH
+         KOwefN6Emw5EgZbWzWR6QBG1qzTUQHY9r5K7ZxBAMxd7mtlZBN95Bsch7AR/hdqFKHkj
+         s3NQ==
+X-Gm-Message-State: ACrzQf04z8tbxabCjXG/HZkpeub7syA8mT60lc9fESTIc2X6EFkJNPBR
+        jpM/K75oQ+Wo0ZCbrH4y50M=
+X-Google-Smtp-Source: AMsMyM7yHa4syirxMh3BWZQ21Yb3JW9li8TD621PykanyzIBE+c2aQJhVkzKck+YRGLE4VW9G0f0Ug==
+X-Received: by 2002:a05:6a00:3406:b0:55c:e661:6d31 with SMTP id cn6-20020a056a00340600b0055ce6616d31mr6402510pfb.42.1665766290074;
+        Fri, 14 Oct 2022 09:51:30 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v6-20020a632f06000000b0046497308480sm1684127pgv.77.2022.10.14.09.50.07
+        by smtp.gmail.com with ESMTPSA id j8-20020a170902da8800b0017305e99f00sm1947154plx.107.2022.10.14.09.51.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 09:50:07 -0700 (PDT)
+        Fri, 14 Oct 2022 09:51:29 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 14 Oct 2022 09:50:06 -0700
+Date:   Fri, 14 Oct 2022 09:51:29 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: corsair-psu: add USB id of the new HX1500i psu
-Message-ID: <20221014165006.GA201666@roeck-us.net>
-References: <Y0FghqQCHG/cX5Jz@monster.localdomain>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (pwm-fan) Explicitly switch off fan power when
+ setting pwm1_enable to 0
+Message-ID: <20221014165129.GA234611@roeck-us.net>
+References: <20221013135951.4902-1-matthias.schiffer@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y0FghqQCHG/cX5Jz@monster.localdomain>
+In-Reply-To: <20221013135951.4902-1-matthias.schiffer@ew.tq-group.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Oct 08, 2022 at 11:35:34AM +0000, Wilken Gottwalt wrote:
-> Also updates the documentation accordingly.
+On Thu, Oct 13, 2022 at 03:59:51PM +0200, Matthias Schiffer wrote:
+> When pwm1_enable is changed from 1 to 0 while pwm1 == 0, the regulator
+> is not switched off as expected. The reason is that when the fan is
+> already off, ctx->enabled is false, so pwm_fan_power_off() will be a
+> no-op.
 > 
-> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+> Handle this case explicitly in pwm_fan_update_enable() by calling
+> pwm_fan_switch_power() directly.
+> 
+> Fixes: b99152d4f04b ("hwmon: (pwm-fan) Switch regulator dynamically")
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 
-Applied to hwmon-next.
+Applied.
 
 Thanks,
 Guenter
 
 > ---
->  Documentation/hwmon/corsair-psu.rst | 2 ++
->  drivers/hwmon/corsair-psu.c         | 1 +
->  2 files changed, 3 insertions(+)
+>  drivers/hwmon/pwm-fan.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
-> index 3c1b164eb3c0..6a03edb551a8 100644
-> --- a/Documentation/hwmon/corsair-psu.rst
-> +++ b/Documentation/hwmon/corsair-psu.rst
-> @@ -19,6 +19,8 @@ Supported devices:
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index dc3d9a22d917..83a347ca35da 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
+> @@ -257,7 +257,10 @@ static int pwm_fan_update_enable(struct pwm_fan_ctx *ctx, long val)
 >  
->    Corsair HX1200i
->  
-> +  Corsair HX1500i
-> +
->    Corsair RM550i
->  
->    Corsair RM650i
-> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> index c1c27e475f6d..2210aa62e3d0 100644
-> --- a/drivers/hwmon/corsair-psu.c
-> +++ b/drivers/hwmon/corsair-psu.c
-> @@ -821,6 +821,7 @@ static const struct hid_device_id corsairpsu_idtable[] = {
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsair HX1000i revision 2 */
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i */
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
+>  	if (val == 0) {
+>  		/* Disable pwm-fan unconditionally */
+> -		ret = __set_pwm(ctx, 0);
+> +		if (ctx->enabled)
+> +			ret = __set_pwm(ctx, 0);
+> +		else
+> +			ret = pwm_fan_switch_power(ctx, false);
+>  		if (ret)
+>  			ctx->enable_mode = old_val;
+>  		pwm_fan_update_state(ctx, 0);
