@@ -2,94 +2,150 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DB2CC4332F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Oct 2022 09:01:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0977FC433FE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Oct 2022 13:26:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiJNJBz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 14 Oct 2022 05:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50568 "EHLO
+        id S229582AbiJNN0y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 14 Oct 2022 09:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiJNJBy (ORCPT
+        with ESMTP id S229534AbiJNN0x (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Oct 2022 05:01:54 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C194170DC9;
-        Fri, 14 Oct 2022 02:01:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665738110; x=1697274110;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PyLfj9vufEmvAjD1zEhcRmlredi/7EfQLLd8DYWF1+s=;
-  b=K1+Pl3DWqnJhbieSihoi3cCa3PO2f/y5wW/fshUv9Eme81RIl2avL38Y
-   d+cSW67u/V0SgSjdW0FnoxIo2Dcu83/U/Br9wNbRe6oQTdAmENYd9YjVB
-   /ImlsZSbOgNbcdWjQM5oyHWzOEcZK8GYeUpsZb8cm0AazeI7xGqmMBLuH
-   0o0lOsZ0sEyAfsydaHr/CTOUVjhnusSXcmPA4dyMLvot0gVQGB8676S5p
-   L5EeOgxkFqSXox+5ezOSUBqJSb2HLUXjZEYmegOYlCTfcPdOO+uLUuuFh
-   c6inKmYpMT1tnrmYbtZdsI5/RnrTn0BoyFYEM/MMf5S9o3/2dZN38x80Y
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="369515341"
-X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="369515341"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 02:01:49 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="690470445"
-X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="690470445"
-Received: from keweilu-mobl.ccr.corp.intel.com ([10.254.208.43])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 02:01:45 -0700
-Message-ID: <1ca9f3e8e52ccbca151f00d0514fae9262791f55.camel@intel.com>
-Subject: Re: [PATCH V3 0/8] x86/topology: Improve CPUID.1F handling
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@intel.com>
-Cc:     Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-hwmon@vger.kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, corbet@lwn.net, fenghua.yu@intel.com,
-        jdelvare@suse.com, linux@roeck-us.net, len.brown@intel.com
-Date:   Fri, 14 Oct 2022 17:01:42 +0800
-In-Reply-To: <Y0ka/UKSEb36BPxt@hirez.programming.kicks-ass.net>
-References: <20220922133800.12918-1-rui.zhang@intel.com>
-         <5af2d8bb-8591-78f6-8102-6f7d0df33d98@intel.com>
-         <9a1ae0b5d7a5ee3c870195e942d58bdd9b3b71db.camel@intel.com>
-         <CAJvTdKkYTQzY1UsH_o2QdN1bS4gVfT87bEwMvgUXYwd+VFD+=w@mail.gmail.com>
-         <668e5126-f344-c30b-a743-877b1783cec7@intel.com>
-         <0307a5881c875e0b104051792b0f5e7f0ff973c1.camel@intel.com>
-         <147a619e-e595-90c5-7a2a-ffbc2d20be7c@intel.com>
-         <Y0ka/UKSEb36BPxt@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Fri, 14 Oct 2022 09:26:53 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F491B76F6;
+        Fri, 14 Oct 2022 06:26:51 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id k9so4301642pll.11;
+        Fri, 14 Oct 2022 06:26:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=B85YzJa+gzD30iQI+jRM1asD652V/dJZGGt/+VYQU/o=;
+        b=T0We9qEM1OuX233DTgvvqc5j/ONlheakLJyA/6o8ap4qO839PjW2okMknbno5w2Dwa
+         YjiQevt7ClKSXV9S+51PC1WHOOAvUYLcyAbBRWEPTBbgWq60jZjAvX7R58Li/flyoMSk
+         txq/eSU/kcFeHxJtcheasqPYrAh6YSLenZU41BsBGhEaP3lXPLyfkE2xZTqiXpx5oUwS
+         7BCq6DY6TIj1bgrFgxL8xg+kpiYml2TKnbz0TngAMXwYndTckSD58rejcWoMR/Eoeuvi
+         3JKAQ/6acDfqEb4f9zZIBKjZ0S/Bw5zz/fOWRdyzZ74p6I0OeYYePqL5fWLgL7yLB7m4
+         A3gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B85YzJa+gzD30iQI+jRM1asD652V/dJZGGt/+VYQU/o=;
+        b=E+b20xoahOs5awk2c0vqk9JxH63K/Hi69pNK6NnIoHUtlSYVs5VaDGlo1GooMQaLMZ
+         PYyGVzpjNKLrOgXJflHBmN8iRHFhS+I6B7YpaivQYB71M7eDgX6Jgqqncmiv6D9fl8Cv
+         rjkiykHJsC7Pjfw5LcoLvSGi5iSvsY/5xDfxKCqM9kIZE6SjH1COwXmdnMOaLh76BucB
+         q3XqBF9EAA8aXZJQSkbAdiZch6rQ1xR1SWwJjWnLNQZkwis0vr61AUkAveiCg9VE7VOi
+         ZdEMaL76O8fJiD+w4sipJ+R8wtgbFpZK0G1BwYRLymyxW/FuzfY6JYyZxqvhI2+jWDAG
+         DSzg==
+X-Gm-Message-State: ACrzQf3PYCudCoDKPJbUPOQqx9SI7ntLGfTk1nTVIqe+JGCYtunqE9AQ
+        Sk+7CLtANJBUv1Dy0belez4=
+X-Google-Smtp-Source: AMsMyM6um/5Z+wwjpyTvGnSTOSvAQomH0AZ2k5Nn7qx5rK5ZHPNVYBEYZ5yQFLl99M3+3IdsXL3TgA==
+X-Received: by 2002:a17:90a:fa85:b0:20a:ddd3:d431 with SMTP id cu5-20020a17090afa8500b0020addd3d431mr17532500pjb.210.1665754011237;
+        Fri, 14 Oct 2022 06:26:51 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b12-20020aa78ecc000000b005627470944dsm1679224pfr.189.2022.10.14.06.26.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 06:26:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c16b8b0c-3935-4d52-eb7f-809d571142b5@roeck-us.net>
+Date:   Fri, 14 Oct 2022 06:26:48 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V4 1/4] hwmon/coretemp: Rename indx to index
+To:     Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-hwmon@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
+        jdelvare@suse.com, len.brown@intel.com
+References: <20221014090147.1836-1-rui.zhang@intel.com>
+ <20221014090147.1836-2-rui.zhang@intel.com>
+Content-Language: en-US
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221014090147.1836-2-rui.zhang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 2022-10-14 at 10:17 +0200, Peter Zijlstra wrote:
-> On Thu, Oct 13, 2022 at 08:19:03PM -0700, Dave Hansen wrote:
-> > On 10/13/22 19:06, Zhang Rui wrote:
-> > > Patch 4/8 ~ 5/8 are real fixes and they depends on patch 2/8 and
-> > > 3/8 to
-> > > avoid possible regressions. So patch 2/8 ~ 5/8 should be stable
-> > > material.
-> > > 
-> > > patch 6/8 is also a bugfix, but we have not observed any
-> > > functionality
-> > > issues so far.
-> > 
-> > If you want to make this really easy on me, you could take the
-> > changelog
-> > and comment revisions that I made in that testing branch that I
-> > shared,
-> > integrate them, and send it out again, and *only* include the
-> > bugfixes.
+On 10/14/22 02:01, Zhang Rui wrote:
+> Use variable name 'index' instead of 'indx' for the index in the
+> core_data[] array.
 > 
-> It's really simple; if it don't have a Fixes tag, it ain't a fix :-)
+> No functional change expected.
+> 
+> Cc: stable@vger.kernel.org
+> Suggested-by: Ingo Molnar <mingo@kernel.org>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 
-Thanks for pointing this out.
-Patches updated with Fixes tag in V4 series.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-thanks,
-rui
+> ---
+>   drivers/hwmon/coretemp.c | 18 +++++++++---------
+>   1 file changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+> index ccf0af5b988a..bfdcfe8ccb34 100644
+> --- a/drivers/hwmon/coretemp.c
+> +++ b/drivers/hwmon/coretemp.c
+> @@ -515,15 +515,15 @@ coretemp_add_core(struct platform_device *pdev, unsigned int cpu, int pkg_flag)
+>   		dev_err(&pdev->dev, "Adding Core %u failed\n", cpu);
+>   }
+>   
+> -static void coretemp_remove_core(struct platform_data *pdata, int indx)
+> +static void coretemp_remove_core(struct platform_data *pdata, int index)
+>   {
+> -	struct temp_data *tdata = pdata->core_data[indx];
+> +	struct temp_data *tdata = pdata->core_data[index];
+>   
+>   	/* Remove the sysfs attributes */
+>   	sysfs_remove_group(&pdata->hwmon_dev->kobj, &tdata->attr_group);
+>   
+> -	kfree(pdata->core_data[indx]);
+> -	pdata->core_data[indx] = NULL;
+> +	kfree(pdata->core_data[index]);
+> +	pdata->core_data[index] = NULL;
+>   }
+>   
+>   static int coretemp_probe(struct platform_device *pdev)
+> @@ -647,7 +647,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
+>   	struct platform_device *pdev = coretemp_get_pdev(cpu);
+>   	struct platform_data *pd;
+>   	struct temp_data *tdata;
+> -	int indx, target;
+> +	int index, target;
+>   
+>   	/*
+>   	 * Don't execute this on suspend as the device remove locks
+> @@ -661,12 +661,12 @@ static int coretemp_cpu_offline(unsigned int cpu)
+>   		return 0;
+>   
+>   	/* The core id is too big, just return */
+> -	indx = TO_ATTR_NO(cpu);
+> -	if (indx > MAX_CORE_DATA - 1)
+> +	index = TO_ATTR_NO(cpu);
+> +	if (index > MAX_CORE_DATA - 1)
+>   		return 0;
+>   
+>   	pd = platform_get_drvdata(pdev);
+> -	tdata = pd->core_data[indx];
+> +	tdata = pd->core_data[index];
+>   
+>   	cpumask_clear_cpu(cpu, &pd->cpumask);
+>   
+> @@ -677,7 +677,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
+>   	 */
+>   	target = cpumask_any_and(&pd->cpumask, topology_sibling_cpumask(cpu));
+>   	if (target >= nr_cpu_ids) {
+> -		coretemp_remove_core(pd, indx);
+> +		coretemp_remove_core(pd, index);
+>   	} else if (tdata && tdata->cpu == cpu) {
+>   		mutex_lock(&tdata->update_lock);
+>   		tdata->cpu = target;
 
