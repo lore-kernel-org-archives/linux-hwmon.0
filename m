@@ -2,86 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D9C2C43217
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Oct 2022 21:31:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADBABC4332F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Oct 2022 02:06:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiJMVbM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 13 Oct 2022 17:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
+        id S229762AbiJNCGN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Oct 2022 22:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiJMVbL (ORCPT
+        with ESMTP id S229776AbiJNCGM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 13 Oct 2022 17:31:11 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75763155D83;
-        Thu, 13 Oct 2022 14:31:09 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1C8E0240002;
-        Thu, 13 Oct 2022 21:31:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1665696667;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jz1vmgauCNwQwVv3M/5PRCJ07YuyA62yMSzMceprsfg=;
-        b=CHd9JeaH9Q/7k3cFZkuZHI/QHmSxrkhdWsPcxNdxiH5wRcRrF/3+gM6NsseJ6J37qKFBSL
-        CM/49urpoAfYuRfaPs3uAYbRfaGiS/Y+/tmurgVSNn+cvrnFNG6ADj5VHSjASXkfqBPwr/
-        jpstuJwJ6hgziqQ4UUkk5oXOgjnE0NTZsc/LiYQnBOaMfFo0w63nQJ1pTD0hP16gvduHbO
-        rrFLsviFE2J3wMJvapSGb8PblZp91F9hkFgpYNjaXEYiOLqkuu2wRim04TWWT55buTJGSD
-        7a51tzu9E41N8IHYQWEcHj0h+W6MmfF1rb3v0snWpXUVjnQb6WQl41lQlh2EQw==
-Date:   Thu, 13 Oct 2022 23:31:06 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-rtc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/9] rtc: isl12022: cleanups and hwmon support
-Message-ID: <166569636074.1226796.14248068876405848319.b4-ty@bootlin.com>
-References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
- <20220921114624.3250848-1-linux@rasmusvillemoes.dk>
+        Thu, 13 Oct 2022 22:06:12 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0488218D808;
+        Thu, 13 Oct 2022 19:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665713170; x=1697249170;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=cjsA7tOGWV+2g8lrU2CSnPRwpnh8ov+jdIT4b7dHTw4=;
+  b=OMoHmmHc7RktOW7IUWtVWKnoU0pg7V5W9bxCc+MmtkWx4nl8+vfrpPrA
+   fvBSzjgarZeif9sBZYM2YoqsHmIM3fMYkUhu0VubATrwTq4CIpIK8cgoT
+   Wi7FqywDHwDx+4nG7lDzKUwhYrYjoWrUYEzS6+gnd0dnqTzcsYCA+W2Do
+   ZvqYVIUH2028n0lXSC6Jg2bTqnsblw14IPUwMju5NOpN/2aeudo4cWwP8
+   WC8H9q/ZoU7Mt6Tb1Jupl9sqXa24YU8zJyk+VbgoTe2tbNh4W7TmQ8QJ6
+   1nbuhqeBfCezKU4ibRAb5xAHcvSPhyPC7xdzK9gPurrJXbjBUnIZ7Domv
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="303999273"
+X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
+   d="scan'208";a="303999273"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 19:06:09 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="627404902"
+X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
+   d="scan'208";a="627404902"
+Received: from keweilu-mobl.ccr.corp.intel.com ([10.254.208.43])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 19:06:05 -0700
+Message-ID: <0307a5881c875e0b104051792b0f5e7f0ff973c1.camel@intel.com>
+Subject: Re: [PATCH V3 0/8] x86/topology: Improve CPUID.1F handling
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, Len Brown <lenb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hwmon@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        peterz@infradead.org, corbet@lwn.net, fenghua.yu@intel.com,
+        jdelvare@suse.com, linux@roeck-us.net, len.brown@intel.com
+Date:   Fri, 14 Oct 2022 10:06:02 +0800
+In-Reply-To: <668e5126-f344-c30b-a743-877b1783cec7@intel.com>
+References: <20220922133800.12918-1-rui.zhang@intel.com>
+         <5af2d8bb-8591-78f6-8102-6f7d0df33d98@intel.com>
+         <9a1ae0b5d7a5ee3c870195e942d58bdd9b3b71db.camel@intel.com>
+         <CAJvTdKkYTQzY1UsH_o2QdN1bS4gVfT87bEwMvgUXYwd+VFD+=w@mail.gmail.com>
+         <668e5126-f344-c30b-a743-877b1783cec7@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220921114624.3250848-1-linux@rasmusvillemoes.dk>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 21 Sep 2022 13:46:15 +0200, Rasmus Villemoes wrote:
-> This series does a few cleanups of the isl12022 driver,
+Hi, Dave,
+
+On Thu, 2022-10-13 at 08:56 -0700, Dave Hansen wrote:
+> On 10/13/22 03:58, Len Brown wrote:
+> > This series of BUG FIXES needs to be marked for -stable.
 > 
-> - removes use of deprecated function
-> - removes some redundant code
-> - switches to regmap API instead of private helpers
+> Hi Len,
 > 
-> It also provides range_min, range_max values and finally hooks up the
-> temperatur sensor to hwmon.
-> 
-> [...]
+> That would have been great feedback to include with your review when
+> your provided your acks.  It's also not clear where the bug fixes
+> stop
+> and the "related fixes" begin.  Is the entire series bug fixes that
+> need
+> to be marked for -stable?
 
-Applied, thanks!
+Patch 4/8 ~ 5/8 are real fixes and they depends on patch 2/8 and 3/8 to
+avoid possible regressions. So patch 2/8 ~ 5/8 should be stable
+material.
 
-[1/9] rtc: isl12022: stop using deprecated devm_rtc_device_register()
-      commit: a35a2ad2b88a66732ac442ad5f86dc49af51673f
-[2/9] rtc: isl12022: specify range_min and range_max
-      commit: ca03b7a2c0b098321365f69538823d1bcc860552
-[3/9] rtc: isl12022: drop a dev_info()
-      commit: 43a96b9cf67770d4bb46267e1554d3d8b4cf78ac
-[4/9] rtc: isl12022: simplify some expressions
-      commit: ca35887186b7c53f26c42aee1285ba213adb4365
-[5/9] rtc: isl12022: use %ptR
-      commit: 7093b8a471f48d49891da2108f44fd64742408cb
-[6/9] rtc: isl12022: use dev_set_drvdata() instead of i2c_set_clientdata()
-      commit: 31b108acc50cddf3d16472ead45c4cd0d1337289
-[7/9] rtc: isl12022: drop redundant write to HR register
-      commit: 0a2abbfd8586d396a8581ebf9b96fd5746f08b14
-[8/9] rtc: isl12022: switch to using regmap API
-      commit: b1a1baa657c738e8bb0107ce304f5e78b9847f37
+patch 6/8 is also a bugfix, but we have not observed any functionality
+issues so far.
 
-Best regards,
+thanks,
+rui
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
