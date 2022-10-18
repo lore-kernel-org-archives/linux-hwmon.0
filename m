@@ -2,54 +2,54 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97988C433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Oct 2022 22:20:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61B60C4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Oct 2022 03:42:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiJQWUx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 17 Oct 2022 18:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
+        id S231416AbiJRDma (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 Oct 2022 23:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiJQWUu (ORCPT
+        with ESMTP id S230318AbiJRDmF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 Oct 2022 18:20:50 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338BB7757F
-        for <linux-hwmon@vger.kernel.org>; Mon, 17 Oct 2022 15:20:48 -0700 (PDT)
+        Mon, 17 Oct 2022 23:42:05 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277DA1057A
+        for <linux-hwmon@vger.kernel.org>; Mon, 17 Oct 2022 20:38:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666045248; x=1697581248;
+  t=1666064298; x=1697600298;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=dQMVg1VJ0aIUaP8KAJzr3FFhBGD0ZPGA8gQA9A5mj3A=;
-  b=C9FChUp7M/qM/6nMphNeu34Ye5axyUP6defLFkiE3puoolj06wfl2G+w
-   75DUt9OqAMd1aK9ORrUQm/bY0ClfcrsKdINXOGz3GLha9x/gIFK+20UJG
-   C2TqcKqtTY/dNmCD2RoDBcfetDT5IRieGvZyw474WMmJU4gSb2RXgV/ct
-   i+jXTxj9BKZC/GB+St74H46h6dmlr/gI/fky0htajnXIGSH1OIIGsdcqr
-   jMc67TVZmkNdqA2KzmSJQ77syL5wDHghjqWaR0BiTG2xVnC/5Dl0DgXV0
-   PD3L8OYI05afHTwz5WuSumYCPZ/e0wmkJ2//BonEVJVJIUeg7PW/IFe7Q
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="286324603"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="286324603"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 15:20:47 -0700
+  bh=LcqYqJw9+D3dOmVT6hsz+W8kTBmT97iPb7vUseyz7y0=;
+  b=XIj/fakQa2FzWGO7QAMSIhCoXHxNaNy9ncug4UmtP5qT2Hd/CKu84dlF
+   TSEBywWFnYBC69LpT7/qig9Wi+E+tMPM0oH0ddhQl+/Tlse48I34yInBc
+   xrTRKIsoYiDQF+2qmBUtpc47L9byG/zHR38XAv0SvHt1Q+XX0nVusTRvF
+   e/S3v66NWi+JPTKqevLiiQcqdqvrADDbtHagjfnCclKrd6UIIseFP+Ecn
+   zupQ9AkACSoojJUjVtFL8K1Ic0VuByk0x37eeVBRyHBRA+SiNHIA3Lc99
+   Cqjqe5Od4Oc4n+9uuK/Ws5L+aApu4pMDsRZMxzR2pckjZqbXHaL8aLvCi
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="305970448"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="305970448"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 20:38:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="579535115"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="579535115"
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="957592604"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="957592604"
 Received: from lkp-server01.sh.intel.com (HELO 8381f64adc98) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 17 Oct 2022 15:20:45 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 17 Oct 2022 20:38:14 -0700
 Received: from kbuild by 8381f64adc98 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1okYTV-0000x8-0S;
-        Mon, 17 Oct 2022 22:20:45 +0000
-Date:   Tue, 18 Oct 2022 06:20:05 +0800
+        id 1okdQj-0001FU-3A;
+        Tue, 18 Oct 2022 03:38:13 +0000
+Date:   Tue, 18 Oct 2022 11:37:52 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- 3008d20f5445ee6f214e3b2d42114c8c923d9625
-Message-ID: <634dd515.1V8xXWX5IC5hChWV%lkp@intel.com>
+Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
+ 7208127c690c7575460b70128a06d5dc7eb555bf
+Message-ID: <634e1f90.lzII7NUBe4eY1wXM%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -58,12 +58,12 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: 3008d20f5445ee6f214e3b2d42114c8c923d9625  hwmon: (pwm-fan) Explicitly switch off fan power when setting pwm1_enable to 0
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: 7208127c690c7575460b70128a06d5dc7eb555bf  watchdog: sp805_wdt: fix spelling typo in comment
 
-elapsed time: 1157m
+elapsed time: 1474m
 
-configs tested: 176
+configs tested: 199
 configs skipped: 6
 
 The following configs have been built successfully.
@@ -134,22 +134,22 @@ powerpc                  iss476-smp_defconfig
 sh                   rts7751r2dplus_defconfig
 m68k                        mvme16x_defconfig
 arm                        spear6xx_defconfig
-i386                 randconfig-c001-20221017
 sparc                             allnoconfig
 sh                          r7785rp_defconfig
 s390                          debug_defconfig
 openrisc                 simple_smp_defconfig
 ia64                                defconfig
+i386                 randconfig-c001-20221017
 i386                             alldefconfig
 xtensa                  audio_kc705_defconfig
 microblaze                          defconfig
 arm                          pxa910_defconfig
 arc                      axs103_smp_defconfig
 m68k                            mac_defconfig
-m68k                             allmodconfig
 i386                          debian-10.3-kvm
 i386                        debian-10.3-kunit
 i386                         debian-10.3-func
+m68k                             allmodconfig
 sh                        edosk7760_defconfig
 xtensa                  cadence_csp_defconfig
 powerpc                 canyonlands_defconfig
@@ -190,24 +190,45 @@ loongarch                           defconfig
 sh                             sh03_defconfig
 ia64                            zx1_defconfig
 arc                     nsimosci_hs_defconfig
-powerpc                      arches_defconfig
-arm                          iop32x_defconfig
-openrisc                  or1klitex_defconfig
 powerpc                        warp_defconfig
 sh                          polaris_defconfig
 m68k                          hp300_defconfig
 sh                          rsk7203_defconfig
 arm                             ezx_defconfig
+sh                              ul2_defconfig
+powerpc                  storcenter_defconfig
 arm                            lart_defconfig
 sh                             shx3_defconfig
 parisc                generic-64bit_defconfig
-sh                              ul2_defconfig
-powerpc                  storcenter_defconfig
 arm                        cerfcube_defconfig
 m68k                            q40_defconfig
 arc                           tb10x_defconfig
 i386                 randconfig-a002-20221017
+loongarch                        allmodconfig
+x86_64               randconfig-a003-20221017
+powerpc                         wii_defconfig
+arm                        realview_defconfig
+arc                        vdk_hs38_defconfig
+powerpc                      chrp32_defconfig
+powerpc                      arches_defconfig
+arm                          iop32x_defconfig
+openrisc                  or1klitex_defconfig
+m68k                       m5208evb_defconfig
+mips                     decstation_defconfig
+mips                        bcm47xx_defconfig
+arc                     haps_hs_smp_defconfig
+sh                           se7705_defconfig
+x86_64               randconfig-c001-20221017
+arm                  randconfig-c002-20221017
+arm                           h3600_defconfig
+powerpc                     taishan_defconfig
+m68k                       bvme6000_defconfig
+mips                             allmodconfig
 ia64                             allmodconfig
+sparc                       sparc32_defconfig
+sparc                       sparc64_defconfig
+arm                       aspeed_g5_defconfig
+arm64                            alldefconfig
 
 clang tested configs:
 s390                 randconfig-r044-20221017
@@ -251,6 +272,9 @@ arm                  randconfig-c002-20221018
 riscv                randconfig-c006-20221018
 powerpc              randconfig-c003-20221018
 arm                        mvebu_v5_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
 
 -- 
 0-DAY CI Kernel Test Service
