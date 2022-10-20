@@ -2,179 +2,154 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63BFEC433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Oct 2022 20:04:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FD1FC433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Oct 2022 21:01:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiJTUEe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 Oct 2022 16:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
+        id S229683AbiJTVB4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 Oct 2022 17:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiJTUE3 (ORCPT
+        with ESMTP id S229585AbiJTVBt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 Oct 2022 16:04:29 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6A0BF4A
-        for <linux-hwmon@vger.kernel.org>; Thu, 20 Oct 2022 13:04:26 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id e18so1211422edj.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 20 Oct 2022 13:04:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2SvrUrMjp0M2a318iN9ulg5rBArlaCJFsr2ZiNPFZoo=;
-        b=LxXmCfI9sn1X+tpLKiKmyIivUb7Nz85K5DrBEPKvQ9v8nNLwNnIcyoLYWbnh8A3W2Z
-         tB4N/3njFUN+dLF8tKbxgEu4lU1wv4nZ3Mh9MBrmufSDiyX1qphj0/0KJP2JG+Jptfgm
-         h3cm97hPqa83I5y70IzcLaQxffOOrGbnehoxXPAdQLrZNep0hAw6vJ9MDQpLBtz9kciL
-         cKUzMIsPLsUSR5ZLjDWuXZWMLluj1BiuPheu2Ymj6gX56BnSBufD3893JJqkDW8hRzb4
-         Ifp6vvH9Rc85LgfX68WhdtAbOxtgx0Um3JU2Gpkt4uabGuOSd7B4dPKKCUe+gy8lWrEr
-         asoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2SvrUrMjp0M2a318iN9ulg5rBArlaCJFsr2ZiNPFZoo=;
-        b=deR8bZTMhnkpXH+ZJYMUaVvdJdJvoWgt3DtvKyk7IaeKvM8RlZVUzROKeciWhg58uw
-         H73E+x/tT6FmVzg+q29FTlrdyJFhlTQcClXqRnk7Uxgf2LHzcilPeZaISvIpzFtLvzZ9
-         UXVzhqlu7rLT2nIsdtfO//fUGIh0bVKwj1bAnTIu6IyEXtOC1eAFC8Dbk3m7z4zvdGLG
-         B/ypPgwQYLQJf+DbZ4/P17M4sH4rLms98Km3EjTPVvFzGWTjHgZE9GWdUcMY/iBskyoa
-         kw6lfUYlyt7+hwEJ+VgDze1KNnW7CijhIj+K4T/GFaMJJoopMNr198KgQlBKObyEy0pr
-         oo2w==
-X-Gm-Message-State: ACrzQf1FMopoSANk+YyOJWXeQvCOoKTuoeOZVBKksI4lACQGSvw+Y2ZF
-        ZJxIAj+99EsDXWP53kuiSuW0Phbvjdo=
-X-Google-Smtp-Source: AMsMyM5JJACsw8aEfGm2EdfH0ufVrFYx7/lEpYI9nkuNU4vuqVxUWeNybAIy/XJFirmzeLRVfB7cnA==
-X-Received: by 2002:aa7:d651:0:b0:459:d1c:394e with SMTP id v17-20020aa7d651000000b004590d1c394emr14103280edr.10.1666296265134;
-        Thu, 20 Oct 2022 13:04:25 -0700 (PDT)
-Received: from localhost ([46.211.75.76])
-        by smtp.gmail.com with ESMTPSA id b18-20020a1709063cb200b0073dc4385d3bsm10695498ejh.105.2022.10.20.13.04.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 13:04:24 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 23:04:19 +0300
-From:   Denis Pauk <pauk.denis@gmail.com>
-To:     Ahmad Khalifa <ahmad@khalifa.ws>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Zev Weiss <zev@bewilderbeest.net>
-Subject: Re: [RFC] hwmon: (nct6775) Add NCT6799 support through ACPI layer
-Message-ID: <20221020230419.6d80feb2@gmail.com>
-In-Reply-To: <efce6e7f-b83c-eb4c-f410-662af2cb5f88@khalifa.ws>
-References: <20221018173428.71080-1-ahmad@khalifa.ws>
-        <20221019170627.GA2328901@roeck-us.net>
-        <efce6e7f-b83c-eb4c-f410-662af2cb5f88@khalifa.ws>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; aarch64-unknown-linux-gnu)
+        Thu, 20 Oct 2022 17:01:49 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1991D5869;
+        Thu, 20 Oct 2022 14:01:47 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D8A8F40005;
+        Thu, 20 Oct 2022 21:01:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1666299705;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hAioOkHX/l8yWrqfHFpnxAMqognQ7v1zu2QhYwdycTY=;
+        b=GZtmZZyeDRBTXDZzIyF/JrX7Ymr6OpHhR6IPaCDUCTxIkdhtjsfUeRMNZGKOzBgUOFwA39
+        8YfocEkDVJuJuewB+ysBKXpRwNt/zI3yklXUqVJVK0rC3L31NGOtRyKwgyjP0wf/NANnFE
+        SMbLGCLM2aAX9tjCwIIM7+pwNUoG4qUzxpnPS/TbNBaR6mxr4UmngIOghQDxZpsf24B9Ui
+        Y30jPqLN708R6Vn21vt5wGkVLAHpDpgDTGwdpswy61L4aPkiheEMhauZeu/E1eDRkomYYM
+        UReZ5BDtLsEhZQGXUza7E4Dt1ibVA/wwcdsis0nEdieKa/uMWQJC8D6nMQR7ow==
+Date:   Thu, 20 Oct 2022 23:01:44 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+Cc:     a.zummo@towertech.it, jdelvare@suse.com, linux@roeck-us.net,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+Subject: Re: [PATCH 1/2] drivers: rtc: add max313xx series rtc driver
+Message-ID: <Y1G3OA068WKbz3ED@mail.local>
+References: <20221019133910.282-1-Ibrahim.Tilki@analog.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019133910.282-1-Ibrahim.Tilki@analog.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 20 Oct 2022 18:08:00 +0100
-Ahmad Khalifa <ahmad@khalifa.ws> wrote:
+Hello,
 
-> On 19/10/2022 22:04, Denis Pauk wrote:
-> > Hi Ahmad,
-> > 
-> > Thank you for your patch.
-> > 
-> > I will add mention of you patch in
-> > https://bugzilla.kernel.org/show_bug.cgi?id=204807 also.  
-> 
-> That's an interesting bug. It has loads of ACPI tables in there, which 
-> could be very useful.
-> 
-> The acpi patch is still a proof of concept and will show wrong values, I 
-> know the voltages and temperatures are mixed up or could even be pulling 
-> rubbish data that looks like a temperature.
-> 
-> I just wanted comments on where to go, thanks for the below.
-> There is definitely lots to fix up first.
-> 
-> 
+On 19/10/2022 16:39:09+0300, Ibrahim Tilki wrote:
+> +static int max313xx_set_time(struct device *dev, struct rtc_time *t)
+> +{
+> +	struct max313xx *rtc = dev_get_drvdata(dev);
+> +	u8 regs[7];
+> +	int ret;
+> +
+> +	if (t->tm_year < 100 || t->tm_year >= 300)
+> +		return -EINVAL;
 
-You also can use https://github.com/asus-wmi-boards-sensors/asus-board-dsdt, I
-have collected DSDT from bugs and asus support site. I suppose
-that all ASUS X670 bioses will have same dsdt definitions.
+This is unnecessary
 
-Some of dumps contains register definition like in P8H67-ASUS:
+> +
+> +	regs[0] = bin2bcd(t->tm_sec);
+> +	regs[1] = bin2bcd(t->tm_min);
+> +	regs[2] = bin2bcd(t->tm_hour);
+> +	regs[3] = bin2bcd(t->tm_wday + 1);
+> +	regs[4] = bin2bcd(t->tm_mday);
+> +	regs[5] = bin2bcd(t->tm_mon + 1);
+> +
+> +	if (t->tm_year >= 200) {
+> +		regs[5] |= FIELD_PREP(MAX313XX_MONTH_CENTURY, 1);
+> +		regs[6] = bin2bcd(t->tm_year - 200);
+> +	} else {
+> +		regs[6] = bin2bcd(t->tm_year - 100);
+> +	}
 
-```
-IndexField (HIDX, HDAT, ByteAcc, NoLock, Preserve)
-{
-	Offset (0x04), 
-	CHNM,   1, 
-....
-	VCOR,   8, 
-	V12V,   8, 
-	Offset (0x23), 
-	V33V,   8, 
-	V50V,   8, 
-....
-}
+regs[6] = bin2bcd(t->tm_year % 100); would be simpler
 
-```
+> +static int max313xx_set_alarm(struct device *dev, struct rtc_wkalrm *t)
+> +{
+> +	struct max313xx *rtc = dev_get_drvdata(dev);
+> +	struct rtc_time time;
+> +	unsigned int reg;
+> +	u8 regs[6];
+> +	int ret;
+> +
+> +	regs[0] = bin2bcd(t->time.tm_sec);
+> +	regs[1] = bin2bcd(t->time.tm_min);
+> +	regs[2] = bin2bcd(t->time.tm_hour);
+> +	regs[3] = bin2bcd(t->time.tm_mday);
+> +	regs[4] = bin2bcd(t->time.tm_mon + 1);
+> +
+> +	if (t->time.tm_year >= 200) {
+> +		/*
+> +		 * Century bit is shared between time and alarm registers so
+> +		 * make sure that new alarm and RTC time is in the same century.
+> +		 */
+> +		ret = max313xx_read_time(dev, &time);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (time.tm_year < 200)
+> +			return -EINVAL;
+> +
 
-On Tue, Oct 18, 2022 at 06:34:29PM +0100, Ahmad Khalifa wrote:
-> New Asus X670 board firmware doesn't expose the WMI GUID used for the
-> SIO/HWM methods. The driver's GUID isn't in the ACPI tables and the
-> GUIDs that do exist do not expose the RSIO/WSIO and RHWM/WHWM methods
-> (which do exist with same IDs).
-> 
+This doesn't feel right and it seems you are losing a whole range of
+alarm years. The correct thing to do is to check whether the alarm is in
+the same 100 years range.
 
-Have you caught differences in DSDT definition that broke WMI call? 
-I see similar definition of WMI methods in X570 and X670 dsdt and by first look
-everything should be good. 
 
-Like:
-X670
-```
-....
-Name (_HID, EisaId ("PNP0C14") /* Windows Management Instrumentation Device */)
- // _HID: Hardware ID
-Name (_UID, "AsusMbSwInterface")  // _UID: Unique ID
-Name (_WDG, Buffer (0x3C)
-{
-	/* 0000 */  0xD0, 0x5E, 0x84, 0x97, 0x6D, 0x4E, 0xDE, 0x11,  // .^..mN..
-	/* 0008 */  0x8A, 0x39, 0x08, 0x00, 0x20, 0x0C, 0x9A, 0x66,  // .9.. ..f
-	/* 0010 */  0x42, 0x43, 0x01, 0x02, 0x72, 0x0F, 0xBC, 0xAB,  // BC..r...
-	/* 0018 */  0xA1, 0x8E, 0xD1, 0x11, 0x00, 0xA0, 0xC9, 0x06,  // ........
-	/* 0020 */  0x29, 0x10, 0x00, 0x00, 0xD2, 0x00, 0x01, 0x08,  // ).......
-	/* 0028 */  0x21, 0x12, 0x90, 0x05, 0x66, 0xD5, 0xD1, 0x11,  // !...f...
-	/* 0030 */  0xB2, 0xF0, 0x00, 0xA0, 0xC9, 0x06, 0x29, 0x10,  // ......).
-	/* 0038 */  0x4D, 0x4F, 0x01, 0x00                           // MO..
-})
-.....
-Method (WMBD, 3, Serialized)
-{
-	Local0 = One
-	Switch (Arg1)
-	{
-....
-		Case (0x5253494F) +
-		{
-			Return (RSIO (Arg2))
-		}
-		Case (0x5753494F) +
-		{
-			Return (WSIO (Arg2))
-		}
-		Case (0x5248574D) +
-		{
-			Return (RHWM (Arg2))
-		}
-		Case (0x5748574D) +
-		{
-			Return (WHWM (Arg2))
-		}
-......
-		Default
-		{
-			Return (Zero)
-		}
+> +	/* Convert to 24Hr */
+> +	hour = bcd2bin(reg[MAX313XX_REG_HOUR] & 0x1f);
+> +	if (hour == 12)
+> +		hour = 0;
 
-	}
+I'm not sure this is worth it, you should probably instead support
+reading both formats and setting only 24h
+> +
+> +	if (FIELD_GET(MAX313XX_HRS_F_AM_PM, reg[MAX313XX_REG_HOUR]))
+> +		hour += 12;
+> +
+> +	reg[MAX313XX_REG_HOUR] = bin2bcd(hour);
+> +	/*
+> +	 * If minute is 59, write all registers in case hour register
+> +	 * gets updated during read-write cycle
+> +	 */
+> +	if (reg[MAX313XX_REG_MINUTE] == 0x59)
+> +		return regmap_bulk_write(rtc->regmap, rtc->chip->sec_reg, reg, 7);
+> +
+> +	return regmap_write(rtc->regmap, rtc->chip->sec_reg + MAX313XX_REG_HOUR,
+> +			    reg[MAX313XX_REG_HOUR]);
 
-	Return (Local0)
-}
-```
+You should probably reuse .set_time here
+
+> +/* Some devices require initialization */
+> +static int max313xx_init(struct max313xx *rtc)
+> +{
+> +	switch (rtc->id) {
+> +	case ID_MAX31341:
+> +	case ID_MAX31342:
+> +		return regmap_update_bits(rtc->regmap, MAX3134X_CFG_REG,
+> +					  MAX3134X_CFG_INIT_MASK,
+> +					  MAX3134X_CFG_INIT_VALUE);
+
+The comment is not really useful and now I'm intrigued and want to know
+what this does!
+
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
