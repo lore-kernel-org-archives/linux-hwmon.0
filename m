@@ -2,123 +2,81 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44F24C433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Oct 2022 22:04:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA450C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Oct 2022 22:07:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiJTWEz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 Oct 2022 18:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
+        id S229948AbiJTWHG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 Oct 2022 18:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiJTWEy (ORCPT
+        with ESMTP id S230029AbiJTWHF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:04:54 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F9E4623E;
-        Thu, 20 Oct 2022 15:04:49 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id n130so1205145oia.6;
-        Thu, 20 Oct 2022 15:04:49 -0700 (PDT)
+        Thu, 20 Oct 2022 18:07:05 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DDB1D463F;
+        Thu, 20 Oct 2022 15:07:04 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-12c8312131fso1306050fac.4;
+        Thu, 20 Oct 2022 15:07:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3FmWumkd2mTA+JcsRUqk/cvhoYj5gExBmm8jji6MIkQ=;
-        b=piaWcQNOk51c7fPLJYjuVO2bxZXIN8dhDDYLjbj0MrUvNKFof1rBgysYCDB4jngY0o
-         JjFPM3hgjEPLJOLqSZGWVuUAn69pD2ZDI4W5IGNTvzOL/GtgRcZJsjRebbq+KbhD8P7A
-         +TZvuJXtph1ETaWnmGNRg5INAfinaJLclD3oRQg7uYHF7PD/RA6xB0Q83jB3f1zTUVki
-         UhyeFkzBaTlEPSp5AuK6z3iYiP+f5B8NtipM3mcptFWNuSQeCW+15PL1AGs29sCJYZnt
-         R/T3iK5SY46HWzRKfAZ62HVUi03KrJioNr3sJXOT7y1c/V25yGx5W8cLtFpWxA4m0cOG
-         JYlg==
+        bh=c8y8/n+CIlPDe676Sc/xoar5vSLVQg7pNUfs29f+wZg=;
+        b=AVGIdyv2AqPbzPgbkhXWjliy9TWo1+CaB25NF1DMU8UgHFhsSOCdIliiN40jtR1AaH
+         oFbv3VvIlbGTlz/fi5OZx03S8BVXFT04/1m/9e72/ccdmV3DxRZeAW0CAsBDSvJBzfIX
+         hEzitq+qjBHsE2QrCza9Q6o9LErMxhl5sCSZ7M449QH04ScgA7hcKv2JGc9Y4Ti2UfLN
+         0WXZQ0XFh00yMObNcFimWX2GGhjk2aIO/xrspGYYBk6U8zQmiF/zZGgdIRsbLEzWLni7
+         xIQQHW2GNPShPUOeDL/2qyKmKf182hwd9KoGP4Nt8qvbKMe3u626svjHkvOZEZx3EDTt
+         zaqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3FmWumkd2mTA+JcsRUqk/cvhoYj5gExBmm8jji6MIkQ=;
-        b=pY2ep3QJgLLOusNz3VTcF9U6+5DPatz08SE321zPEHk8aYmAo+Nny2KG9XKnrfeRcg
-         bV+q4fCrvFMa23hIHYEfFF1l4lnCaDdlDPoWU7QcI7DzktWdOT7NGc24aqy7QkNSQeYJ
-         Psq/ozFG/lC25dQzQHG05pq9NJkfz0emeeyqXGqNfjydKJQD2XUqnsrJyiZKLaLirhrD
-         iAbHF3YJVaU/PGpLPzOw/RFT8nR75+v+2XxyqqH+Qc7crsiuDWSyGN2dW+/B3HzQCJLH
-         6rADCQpn3equnEwLgHzBdPmpBFo3te+KqUAn0uePK8VYnMWlwfVN/8e2xkFWehl33nT9
-         Huyw==
-X-Gm-Message-State: ACrzQf2JYwgWTg8dxp748/Z11+l21wiJ+Bp+wnC/QzUjDwnyoODVP2O/
-        nWXSk10gipxxr8ZM4Hhn99JMYvTa338=
-X-Google-Smtp-Source: AMsMyM6E+do58XqYz8h86d1ylL4mOaPTLhKzSr0FE31TyVbnQEdJm+IvhwjBJralEM6tG1WKV0eQmA==
-X-Received: by 2002:a05:6808:1248:b0:354:2c04:c35b with SMTP id o8-20020a056808124800b003542c04c35bmr21452189oiv.143.1666303488819;
-        Thu, 20 Oct 2022 15:04:48 -0700 (PDT)
+        bh=c8y8/n+CIlPDe676Sc/xoar5vSLVQg7pNUfs29f+wZg=;
+        b=EqFD+BLX/wmeS84qhqx/iDTo36mh2FT3EycB+gBaIc/XqK9kVFMgkI3vQn96ohByOp
+         RSPrwc5zzKfnyHoHpUtO+r6ggClr0SdiUh/Xst1c/ZopQlC9Annj443kDN5s+JuxIRGp
+         oeN2G6iKm7O0owgHdSo2iFznc2uw+twIYGXZqhqVl70l2VKHVpk9sjs2s4GC5AGgVEUB
+         vS6rVXLFCb1Il6olKyFsj5+m4s8XvghxRGPivrlTFSFDqnKwX2VS5onEJyoVekQkf28+
+         PN49wuUhOFd4PjF9opv3ETZzGRZZixdjohur2UI+oBTR8LfHFyYsGPm+N3lAWVdRGgm0
+         vj8w==
+X-Gm-Message-State: ACrzQf2iidYTCkwcaybgkWf5o33lFSSm+awqZR2FPT2BxfU0U+8LiqPd
+        P/zqzWtDZXp/0pTlhHrNj60EbgOMbrM=
+X-Google-Smtp-Source: AMsMyM4iN2P9yFLWr8RwwZtwLC10ZNOh8C2fpXHGvPRW42Is6KaU7mmW3HR9KihukguBHm5kX4bCag==
+X-Received: by 2002:a05:6871:88a:b0:132:40e6:280 with SMTP id r10-20020a056871088a00b0013240e60280mr26667291oaq.202.1666303623655;
+        Thu, 20 Oct 2022 15:07:03 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id db10-20020a0568306b0a00b00661a80d555fsm401770otb.40.2022.10.20.15.04.48
+        by smtp.gmail.com with ESMTPSA id y3-20020a056870418300b0011f400edb17sm9520754oac.4.2022.10.20.15.07.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 15:04:48 -0700 (PDT)
+        Thu, 20 Oct 2022 15:07:02 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 20 Oct 2022 15:04:47 -0700
+Date:   Thu, 20 Oct 2022 15:07:01 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 2/4] hwmon: (jc42) Convert to regmap's built-in
- caching
-Message-ID: <20221020220447.GE4035307@roeck-us.net>
+Subject: Re: [RFC PATCH v2 1/4] hwmon: (jc42) Convert register access to use
+ an I2C regmap
+Message-ID: <20221020220701.GF4035307@roeck-us.net>
 References: <20221020210320.1624617-1-martin.blumenstingl@googlemail.com>
- <20221020210320.1624617-3-martin.blumenstingl@googlemail.com>
+ <20221020210320.1624617-2-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221020210320.1624617-3-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20221020210320.1624617-2-martin.blumenstingl@googlemail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 11:03:18PM +0200, Martin Blumenstingl wrote:
-> Move over to regmap's built-in caching instead of adding a custom
-> caching implementation. This works for JC42_REG_TEMP_UPPER,
-> JC42_REG_TEMP_LOWER and JC42_REG_TEMP_CRITICAL as these values never
-> change except when explicitly written. For JC42_REG_TEMP a cache
-> variable is still kept as regmap cannot cache this register (because
-> it's volatile, meaning it can change at any time).
+On Thu, Oct 20, 2022 at 11:03:17PM +0200, Martin Blumenstingl wrote:
+> Switch the jc42 driver to use an I2C regmap to access the registers.
+> This is done in preparation for improving the caching of registers and
+> to restore the cached limits during system resume.
 > 
 
-Just drop that one as well, together with jc42_update_device(),
-and read the temperature directly where needed. In practice
-caching of 'hot' registers isn't really worth the trouble.
+I would suggest to combine patch 1 and 2 and drop local caching entirely
+in a single patch.
 
 Thanks,
 Guenter
-
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
->  drivers/hwmon/jc42.c | 97 ++++++++++++++++++++++++--------------------
->  1 file changed, 54 insertions(+), 43 deletions(-)
-> 
-> diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
-> index 329a80264556..3f524ab5451c 100644
-> --- a/drivers/hwmon/jc42.c
-> +++ b/drivers/hwmon/jc42.c
-> @@ -200,21 +200,6 @@ static struct jc42_chips jc42_chips[] = {
->  	{ STM_MANID, STTS3000_DEVID, STTS3000_DEVID_MASK },
->  };
->  
-> -enum temp_index {
-> -	t_input = 0,
-> -	t_crit,
-> -	t_min,
-> -	t_max,
-> -	t_num_temp
-> -};
-> -
-> -static const u8 temp_regs[t_num_temp] = {
-> -	[t_input] = JC42_REG_TEMP,
-> -	[t_crit] = JC42_REG_TEMP_CRITICAL,
-> -	[t_min] = JC42_REG_TEMP_LOWER,
-> -	[t_max] = JC42_REG_TEMP_UPPER,
-> -};
-> -
->  /* Each client has this additional data */
->  struct jc42_data {
->  	struct regmap	*regmap;
-> @@ -224,7 +209,7 @@ struct jc42_data {
->  	unsigned long	last_updated;	/* In jiffies */
->  	u16		orig_config;	/* original configuration */
->  	u16		config;		/* current configuration */
-> -	u16		temp[t_num_temp];/* Temperatures */
-> +	u16		temp;		/* Cached temperature register value */
