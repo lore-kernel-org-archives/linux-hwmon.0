@@ -2,120 +2,179 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB71FC433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Oct 2022 18:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63BFEC433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Oct 2022 20:04:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiJTS5k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 Oct 2022 14:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45734 "EHLO
+        id S229905AbiJTUEe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 Oct 2022 16:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiJTS5h (ORCPT
+        with ESMTP id S229849AbiJTUE3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:57:37 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E7D16A4DB;
-        Thu, 20 Oct 2022 11:57:34 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1364357a691so696687fac.7;
-        Thu, 20 Oct 2022 11:57:34 -0700 (PDT)
+        Thu, 20 Oct 2022 16:04:29 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6A0BF4A
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Oct 2022 13:04:26 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id e18so1211422edj.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Oct 2022 13:04:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1mcRseKjTDv1dnCkTp74lsoW6tE2eVMgrAQoJL5kJyc=;
-        b=iG5AeI0/6LPqVn/bxFYgGKQkry7Ay9XE/eaONqFI/mo9j/HJzjIgsqQWjrVzX1KPY5
-         nhQEIA/n+LseZ/34DnuQUZ2jNxlStZec6mw4ErMnB/ogzF2OOGNdnfsMVdlbc+UbI4/v
-         a1T/DzEAyyD5zPkokF6Dl8HPYckT8JGnDakXqUrezAt7fO75IFdhcBQ0dahfJRfZW2+T
-         mB4sI67g5K5uPgo/3yo6f0AW0hjXCy4SE1PtQzsWblE4HdvLqQqlwZqz2TtBsVvj1Drm
-         Pghy1wllNqcwN22+e/Q6lPVYa91kFmS8qKyQY1Rt/pNKyK4vLyEbcSKqq60DWSxi1LVx
-         Wvzw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2SvrUrMjp0M2a318iN9ulg5rBArlaCJFsr2ZiNPFZoo=;
+        b=LxXmCfI9sn1X+tpLKiKmyIivUb7Nz85K5DrBEPKvQ9v8nNLwNnIcyoLYWbnh8A3W2Z
+         tB4N/3njFUN+dLF8tKbxgEu4lU1wv4nZ3Mh9MBrmufSDiyX1qphj0/0KJP2JG+Jptfgm
+         h3cm97hPqa83I5y70IzcLaQxffOOrGbnehoxXPAdQLrZNep0hAw6vJ9MDQpLBtz9kciL
+         cKUzMIsPLsUSR5ZLjDWuXZWMLluj1BiuPheu2Ymj6gX56BnSBufD3893JJqkDW8hRzb4
+         Ifp6vvH9Rc85LgfX68WhdtAbOxtgx0Um3JU2Gpkt4uabGuOSd7B4dPKKCUe+gy8lWrEr
+         asoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1mcRseKjTDv1dnCkTp74lsoW6tE2eVMgrAQoJL5kJyc=;
-        b=N1/AkeV9CysaMGBnJPbYAq4+Z0u1jTeOk51AHkPr9WEKh8TwWkbiUah1t3stTbvJ/f
-         8m8HAA5hL9qz/el5Yjf1/Q7vENpMjiNEsIWyjtAJNVrZuzNCfYNpcN9aB0NbbzPfyhI5
-         R0rIwyQRwJP0ZuXlv0AdKOv0c6WMhL1NgcaOlcAFYzllMA1+lgNZRJvFtpM6yMjRB900
-         s1w9fkFvs0ZbEID2Rw1GPCXR6n0RyaFsKmAiQtwT9jP/syJsno1WODYXk1zvGdfU+ZY6
-         k2efCu1aFQJwdpoBN/r5Tn31HykaQdiR6MfPGLjJjchaVh753vO8IqzmIv5xDWIV7WF5
-         o7eA==
-X-Gm-Message-State: ACrzQf1FxnTqzRaHWA80aNrvaSH+xDvp4LQuhCgx0xP7V5wPwzrILrsu
-        KwAkGAYdQWnDex3XhO3p7oE=
-X-Google-Smtp-Source: AMsMyM5H583fHPrarJCAQlhw2RpOm6I+O7B5AbrTGYZYamUDFMvjnn4q0fz+fOy7Qin0SLVMP9j01A==
-X-Received: by 2002:a05:6870:b68d:b0:12d:484a:2643 with SMTP id cy13-20020a056870b68d00b0012d484a2643mr26753310oab.105.1666292253132;
-        Thu, 20 Oct 2022 11:57:33 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c8-20020a9d4808000000b00661ac688285sm269710otf.0.2022.10.20.11.57.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 11:57:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ba17a8b0-bd35-d172-fced-222ffa771ace@roeck-us.net>
-Date:   Thu, 20 Oct 2022 11:57:28 -0700
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2SvrUrMjp0M2a318iN9ulg5rBArlaCJFsr2ZiNPFZoo=;
+        b=deR8bZTMhnkpXH+ZJYMUaVvdJdJvoWgt3DtvKyk7IaeKvM8RlZVUzROKeciWhg58uw
+         H73E+x/tT6FmVzg+q29FTlrdyJFhlTQcClXqRnk7Uxgf2LHzcilPeZaISvIpzFtLvzZ9
+         UXVzhqlu7rLT2nIsdtfO//fUGIh0bVKwj1bAnTIu6IyEXtOC1eAFC8Dbk3m7z4zvdGLG
+         B/ypPgwQYLQJf+DbZ4/P17M4sH4rLms98Km3EjTPVvFzGWTjHgZE9GWdUcMY/iBskyoa
+         kw6lfUYlyt7+hwEJ+VgDze1KNnW7CijhIj+K4T/GFaMJJoopMNr198KgQlBKObyEy0pr
+         oo2w==
+X-Gm-Message-State: ACrzQf1FMopoSANk+YyOJWXeQvCOoKTuoeOZVBKksI4lACQGSvw+Y2ZF
+        ZJxIAj+99EsDXWP53kuiSuW0Phbvjdo=
+X-Google-Smtp-Source: AMsMyM5JJACsw8aEfGm2EdfH0ufVrFYx7/lEpYI9nkuNU4vuqVxUWeNybAIy/XJFirmzeLRVfB7cnA==
+X-Received: by 2002:aa7:d651:0:b0:459:d1c:394e with SMTP id v17-20020aa7d651000000b004590d1c394emr14103280edr.10.1666296265134;
+        Thu, 20 Oct 2022 13:04:25 -0700 (PDT)
+Received: from localhost ([46.211.75.76])
+        by smtp.gmail.com with ESMTPSA id b18-20020a1709063cb200b0073dc4385d3bsm10695498ejh.105.2022.10.20.13.04.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 13:04:24 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 23:04:19 +0300
+From:   Denis Pauk <pauk.denis@gmail.com>
+To:     Ahmad Khalifa <ahmad@khalifa.ws>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Zev Weiss <zev@bewilderbeest.net>
+Subject: Re: [RFC] hwmon: (nct6775) Add NCT6799 support through ACPI layer
+Message-ID: <20221020230419.6d80feb2@gmail.com>
+In-Reply-To: <efce6e7f-b83c-eb4c-f410-662af2cb5f88@khalifa.ws>
+References: <20221018173428.71080-1-ahmad@khalifa.ws>
+        <20221019170627.GA2328901@roeck-us.net>
+        <efce6e7f-b83c-eb4c-f410-662af2cb5f88@khalifa.ws>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
-References: <20221019133910.282-1-Ibrahim.Tilki@analog.com>
- <409d7e93-f911-11b6-ed54-8ae8c94a8af0@roeck-us.net>
- <DM8PR03MB624786DEF5E135986ECB7B1F962A9@DM8PR03MB6247.namprd03.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 1/2] drivers: rtc: add max313xx series rtc driver
-In-Reply-To: <DM8PR03MB624786DEF5E135986ECB7B1F962A9@DM8PR03MB6247.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/20/22 07:47, Tilki, Ibrahim wrote:
-> ...
+On Thu, 20 Oct 2022 18:08:00 +0100
+Ahmad Khalifa <ahmad@khalifa.ws> wrote:
+
+> On 19/10/2022 22:04, Denis Pauk wrote:
+> > Hi Ahmad,
+> > 
+> > Thank you for your patch.
+> > 
+> > I will add mention of you patch in
+> > https://bugzilla.kernel.org/show_bug.cgi?id=204807 also.  
 > 
->>> +
->>> +static int max313xx_wdt_ping(struct watchdog_device *wdd)
->>> +{
->>> +	int ret;
->>> +
->>> +	ret = max313xx_wdt_stop(wdd);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	return max313xx_wdt_start(wdd);
->>
->> Having to stop a watchdog just to ping it is unusual. Is this really
->> necessary ?
->>
+> That's an interesting bug. It has loads of ACPI tables in there, which 
+> could be very useful.
 > 
-> Unfortunately RTCs do not have any other way of resetting timer counter
-> other than restarting the timer.
+> The acpi patch is still a proof of concept and will show wrong values, I 
+> know the voltages and temperatures are mixed up or could even be pulling 
+> rubbish data that looks like a temperature.
+> 
+> I just wanted comments on where to go, thanks for the below.
+> There is definitely lots to fix up first.
+> 
 > 
 
-That is a bit too generic. I sampled a couple of rtc drivers implementing
-watchdog support, and they all support pinging the watchdog without
-stopping it (or, in other words, they have explicit watchdog support).
+You also can use https://github.com/asus-wmi-boards-sensors/asus-board-dsdt, I
+have collected DSDT from bugs and asus support site. I suppose
+that all ASUS X670 bioses will have same dsdt definitions.
 
-Looking at one of the chip datasheets, I would argue that the timers
-on that chip series are not really suitable (nor intended) to support
-watchdog functionality. They are real time alarm timers. They don't
-generate an alarm N seconds in the future, but at specific times/dates.
-That means that updating the time would interfere with watchdog functionality.
-That is way too fragile to be usable as watchdog timer.
+Some of dumps contains register definition like in P8H67-ASUS:
 
-I would suggest to drop watchdog support from this driver.
+```
+IndexField (HIDX, HDAT, ByteAcc, NoLock, Preserve)
+{
+	Offset (0x04), 
+	CHNM,   1, 
+....
+	VCOR,   8, 
+	V12V,   8, 
+	Offset (0x23), 
+	V33V,   8, 
+	V50V,   8, 
+....
+}
 
-Thanks,
-Guenter
+```
 
+On Tue, Oct 18, 2022 at 06:34:29PM +0100, Ahmad Khalifa wrote:
+> New Asus X670 board firmware doesn't expose the WMI GUID used for the
+> SIO/HWM methods. The driver's GUID isn't in the ACPI tables and the
+> GUIDs that do exist do not expose the RSIO/WSIO and RHWM/WHWM methods
+> (which do exist with same IDs).
+> 
+
+Have you caught differences in DSDT definition that broke WMI call? 
+I see similar definition of WMI methods in X570 and X670 dsdt and by first look
+everything should be good. 
+
+Like:
+X670
+```
+....
+Name (_HID, EisaId ("PNP0C14") /* Windows Management Instrumentation Device */)
+ // _HID: Hardware ID
+Name (_UID, "AsusMbSwInterface")  // _UID: Unique ID
+Name (_WDG, Buffer (0x3C)
+{
+	/* 0000 */  0xD0, 0x5E, 0x84, 0x97, 0x6D, 0x4E, 0xDE, 0x11,  // .^..mN..
+	/* 0008 */  0x8A, 0x39, 0x08, 0x00, 0x20, 0x0C, 0x9A, 0x66,  // .9.. ..f
+	/* 0010 */  0x42, 0x43, 0x01, 0x02, 0x72, 0x0F, 0xBC, 0xAB,  // BC..r...
+	/* 0018 */  0xA1, 0x8E, 0xD1, 0x11, 0x00, 0xA0, 0xC9, 0x06,  // ........
+	/* 0020 */  0x29, 0x10, 0x00, 0x00, 0xD2, 0x00, 0x01, 0x08,  // ).......
+	/* 0028 */  0x21, 0x12, 0x90, 0x05, 0x66, 0xD5, 0xD1, 0x11,  // !...f...
+	/* 0030 */  0xB2, 0xF0, 0x00, 0xA0, 0xC9, 0x06, 0x29, 0x10,  // ......).
+	/* 0038 */  0x4D, 0x4F, 0x01, 0x00                           // MO..
+})
+.....
+Method (WMBD, 3, Serialized)
+{
+	Local0 = One
+	Switch (Arg1)
+	{
+....
+		Case (0x5253494F) +
+		{
+			Return (RSIO (Arg2))
+		}
+		Case (0x5753494F) +
+		{
+			Return (WSIO (Arg2))
+		}
+		Case (0x5248574D) +
+		{
+			Return (RHWM (Arg2))
+		}
+		Case (0x5748574D) +
+		{
+			Return (WHWM (Arg2))
+		}
+......
+		Default
+		{
+			Return (Zero)
+		}
+
+	}
+
+	Return (Local0)
+}
+```
