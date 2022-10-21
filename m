@@ -2,56 +2,56 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEC43FA373D
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Oct 2022 17:21:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E80AAFA373D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Oct 2022 17:23:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiJURV5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 Oct 2022 13:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        id S229959AbiJURXC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 Oct 2022 13:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbiJURVw (ORCPT
+        with ESMTP id S229891AbiJURWz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:21:52 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD4E24B31F;
-        Fri, 21 Oct 2022 10:21:35 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id u15so3967771oie.2;
-        Fri, 21 Oct 2022 10:21:35 -0700 (PDT)
+        Fri, 21 Oct 2022 13:22:55 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE971AD687;
+        Fri, 21 Oct 2022 10:22:54 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-136b5dd6655so4373817fac.3;
+        Fri, 21 Oct 2022 10:22:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=A6BqgqIxQ+q3oABy/KVS7FxTx0acwuSVWX67BzMj1gk=;
-        b=f0nVmiNw0x2GGqQ57S0MHq3NjFd8sUe5YLfcPOwspvxvypgP+cCpLhpNjPq6N6+CXP
-         +Q0C/RoViUG+lyDIum7B7rwHu9/lqryapUDDBwzENKf051uyNXPT1Eu9fIgFQ1VFbqZf
-         6XkDVmSa9qwO0qiTxQaAgB+yJfoRh3noPTlNLizvy6WRHLxedoEXqVuTmx9ic2Ccaegy
-         HI0Xci1CnQUW7bVAVDIttvYeUfCyCf1jH5un9YxdPJlISULB2whXDSj9SPZRlE5Yolgh
-         tBAxGNaVZir22XaGDM8po83dHjz7yWQrhde0v7cPOVIvfPX54xGmHI+f6cYmRTkphONF
-         KyXg==
+        bh=zlHj7n3i5o3yXLa4ETHRTpxvwrBu3YafH8lL3TZQo7c=;
+        b=mfKFX0fSUZxTyWGet7HLjN5KSNIIKvyVtQYoZsLLgdG68Yakqkgp2WJCOVzeO5GHCh
+         yANi9hjw5ikEB67N8ZxxJKlfSvDFlB1pwODfttxygGfSi0EpBEzaL4U+q9EnKkXB8zM4
+         Kpy3knTJtufMaIDXCnTxfQ5ityhf0XE//ULX0EfgX5moVheH0+IlYH7rFaVYlw7h1IZC
+         f3hvRzN3Is7mdZ6SjqQK+HqlYEc7b/vJJi/DHEaOZ5SLMYgzInSE2cZqQCd6vFovU8W+
+         GC/OSC40v6iY2wHSha8o+Px7g7bYjOTCm+V4YkcfWMW6rmsOzqVXzjwkL/eK9USq23tn
+         RQKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=A6BqgqIxQ+q3oABy/KVS7FxTx0acwuSVWX67BzMj1gk=;
-        b=fhNwr5u/bgmykOWLzC1ClZc3x/LsIaXI/huLdmvdksW2qQbZL+MSB3Y5y4qao4OXax
-         p/vjCKXVkE0BqoNMvZwlL3dRAiioVbCIp2xo5rIwYSOI6KWTXWNTV7OuQdimJW6io1PU
-         7yltb0EeFRzSCUbT7gzEPXw1/Vs0pmCgq0rwp3pq4MMXEPqa5t+u2IVAVQwMArBdIqOE
-         MM1LZlIsG1W4L/2KZ6+cfsuTSAf1uaAeL8WP3rqi1ZgchaHsZsA6zFtXxi/tqT64Mc0f
-         xYT6EYrmAQjyw7REomDJxYLMJ5K2nmkUYqj5bejUwHpbo8Jo+yGjRoO3hTSPnDo45IkJ
-         FTgA==
-X-Gm-Message-State: ACrzQf2dslSwytftp/6RZeq4xu0zOQxBIxOeeGgRbfJVVLBJ0ARpSHyz
-        /AgiWwx5BPijgkQAmfonVC4=
-X-Google-Smtp-Source: AMsMyM6MoqvyIyxliKOCqZiFkvP91AsjRQGjeNSwYlnxadYUwlrS7DJ88HFJP0uITquBRGXm8Nv8tQ==
-X-Received: by 2002:a05:6808:1994:b0:354:d97e:d4aa with SMTP id bj20-20020a056808199400b00354d97ed4aamr23292247oib.148.1666372894339;
-        Fri, 21 Oct 2022 10:21:34 -0700 (PDT)
+        bh=zlHj7n3i5o3yXLa4ETHRTpxvwrBu3YafH8lL3TZQo7c=;
+        b=yNI6KRowwxaQ0yJs/KYbnTOdXOBbqJlzcJFFQdx3AZ5iot5perE4goOSpIXE4gOSUD
+         nLAZAYby/l+Ih0l7rY1SS4hz604r3I81wWL/2gQpB2JvG6uOJLR3AiPGmdrSmcBJne4s
+         moWSDeiTEbDstLLeq/Ti3GUngrnvc8FARSi67pBewKWqEJI4btcR6iHU6fbHsAzFlJ5R
+         ufXdx92wOwvGmB76LUkDQ4NQ5KIZ3djJIg4Fa9Nxs0LP7a9id1mnTiwWEmNvenm9rx9Q
+         wE7OqAXTa+4lW1P+Wm3FTL1obDznW9rEwiUECpZ4wZxehl5ry7Z5rK1U6qqctUKUpu/B
+         yl8Q==
+X-Gm-Message-State: ACrzQf0qzyUs5+ucY6CtJyCkvyZ6G2ZiV3wetEL+2LjGcwVtCO8kh9o8
+        L5rOKM2JuEYrNTQ5FdmO0h0=
+X-Google-Smtp-Source: AMsMyM6Gt5PNxUQH7m5Kz7f+QJp+blLH3aodobQDZ0VnhqQZBBrggpcw5I5WICKa7m1ONsnecjhzHg==
+X-Received: by 2002:a05:6870:2427:b0:13b:1f89:ab27 with SMTP id n39-20020a056870242700b0013b1f89ab27mr3799543oap.20.1666372973425;
+        Fri, 21 Oct 2022 10:22:53 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e2-20020a05680809a200b00350a8b0637asm1305671oig.47.2022.10.21.10.21.33
+        by smtp.gmail.com with ESMTPSA id em40-20020a0568705ba800b001226d2100f2sm10482749oab.33.2022.10.21.10.22.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 10:21:33 -0700 (PDT)
+        Fri, 21 Oct 2022 10:22:52 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 21 Oct 2022 10:21:32 -0700
+Date:   Fri, 21 Oct 2022 10:22:51 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>
 Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
@@ -73,23 +73,25 @@ Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] hwmon: lm90: simplify using
+Subject: Re: [PATCH v4 4/4] hwmon: adm1177: simplify using
  devm_regulator_get_enable()
-Message-ID: <20221021172132.GA1890681@roeck-us.net>
+Message-ID: <20221021172251.GA1891003@roeck-us.net>
 References: <cover.1666357434.git.mazziesaccount@gmail.com>
- <a1fa4364cbb775de25478117dd22dda0742089e3.1666357434.git.mazziesaccount@gmail.com>
+ <7773541795f280db31dd981ffc21df8a630b794a.1666357434.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a1fa4364cbb775de25478117dd22dda0742089e3.1666357434.git.mazziesaccount@gmail.com>
+In-Reply-To: <7773541795f280db31dd981ffc21df8a630b794a.1666357434.git.mazziesaccount@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 04:18:43PM +0300, Matti Vaittinen wrote:
+On Fri, Oct 21, 2022 at 04:19:04PM +0300, Matti Vaittinen wrote:
 > Drop open-coded pattern: 'devm_regulator_get(), regulator_enable(),
 > add_action_or_reset(regulator_disable)' and use the
-> devm_regulator_get_enable().
+> devm_regulator_get_enable() and drop the pointer to the regulator.
+> This simplifies code and makes it less tempting to add manual control
+> for the regulator which is also controlled by devm.
 > 
 > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 > Acked-by: Guenter Roeck <linux@roeck-us.net>
