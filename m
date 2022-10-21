@@ -2,176 +2,120 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC08DC433FE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Oct 2022 15:30:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C50CDFA373D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Oct 2022 16:50:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiJUPak (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 Oct 2022 11:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
+        id S230106AbiJUQuX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 Oct 2022 12:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbiJUP3g (ORCPT
+        with ESMTP id S230185AbiJUQuU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Oct 2022 11:29:36 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62E99FCA
-        for <linux-hwmon@vger.kernel.org>; Fri, 21 Oct 2022 08:29:20 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id y10so2475833wma.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 21 Oct 2022 08:29:20 -0700 (PDT)
+        Fri, 21 Oct 2022 12:50:20 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F158D2475E3;
+        Fri, 21 Oct 2022 09:50:15 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id b12so8111915edd.6;
+        Fri, 21 Oct 2022 09:50:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=VjZxqVwknh6rTHyizGvNMyan0rBuejjdovMyQ+KXz6Q=;
-        b=PfPlpxaVD69iC/kMSPtqV9m9Du/JKNf7gFs5X95GrddDoi1ivdQq87vRJFCdd0tIfe
-         sVLYLMgrAJivtuNepJjbZ9Kv2Y7qDv1O9aNJkguzTr71vYgfiokWBGqfIrpQOlZ+rBXN
-         2j1SjU2b4QmBF4AYzpwJ2kPxQXtba+pevjuJFsjQMs/XUKcm82ZDo7Kf4hknClSlAhHW
-         c1ClsChKLy2T7AP/QqyslmZFoI7DHKpGl3loWynWDI7ViI7tpRsH4sjT7cgGJAJ7QDwz
-         YKqhaXvdcYV0zSEw28FabJn7IFk9Vy3cVWANB55q8PsvgF+tgLBN4WQSWET8xUuhb0kD
-         QGOg==
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cw+R9Xikusyj0v7XUpo66UBCqQebEKZZe8nkfd2rnP4=;
+        b=Ao635rcc4v6ANTEZfVUNii8aItSWgNLiZ9owf76yP2my6qCugJssh6e7ebj16THCMl
+         hpI+m5iIrKSzZFU1SvaisJzzIFwXKDV4/gHM3z+hvda+b4vSYpADy+RB9LsjSagoP3Fc
+         tsoC0zw9QpwPSiDoOF6IutJywJVIXQ082uZ4zqMGRElTzV3LW90wS04bdsh2+14iwdrS
+         /FaVxbeRU5ohz/wJdyR3g1doSpqqnJHX+DLkedaa6SRCJst2sGTih9SwZdikK1UKQQSg
+         qw8PHfkP8jK6oAxIbQe4KHsGAwjf3ZHD/+zU/QMKfuTIzLjYhi6ixaopvDZrPf9SADug
+         xfHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VjZxqVwknh6rTHyizGvNMyan0rBuejjdovMyQ+KXz6Q=;
-        b=T094I3E58iPrhNGrRgi2NuAAWb5DAF5JpTiSEp7/Qzo1J3DKDBzZDyTIxARvUz2mNa
-         Jnxr9q97vYM78aPxabryV+PMUyv7bb/LuQByseXEovYvIDGEoi6dcjgACWf59LpWuKVc
-         yRVC0+FNF9aoYbpDiovHobrgC83xKz8Srxhfyu2iR4KJCSHpAiRdNq/xhpAhz9yO23+C
-         PUuzfVfPs/id984H3oXdLOKO7tgGN9VUS6f54xdiwB4Wz2z+QAkkRlTYlqSplHxNbrXS
-         i/a42MombxswsYTh2q04D7EkxDNvlsO2sLC4ZQoo/7xmf3fMuy5uqGw6NFlVbd8Mms5q
-         U/uw==
-X-Gm-Message-State: ACrzQf2YCIyNgATEoGaDiFNIHJf/dIjXYG3HpRWa1V9uk9TZvpudCqhP
-        E7uKu9DYnTRWFzr4SScxJkltoA==
-X-Google-Smtp-Source: AMsMyM4hXGO9U8al2JzyTEC39tKZD6qIgNLNXyIQi+DLXxN292zU+X+E3Bq7kmxXYB+Xrq4wIyj8gg==
-X-Received: by 2002:a05:600c:1614:b0:3c6:ca05:3e02 with SMTP id m20-20020a05600c161400b003c6ca053e02mr35430814wmn.116.1666366158507;
-        Fri, 21 Oct 2022 08:29:18 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:8104:adb4:5d77:2050? ([2a01:e0a:982:cbb0:8104:adb4:5d77:2050])
-        by smtp.gmail.com with ESMTPSA id b21-20020a05600c4e1500b003a83ca67f73sm3060390wmq.3.2022.10.21.08.29.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Oct 2022 08:29:18 -0700 (PDT)
-Message-ID: <00d90039-c38a-ad8a-80a1-5a654a528756@linaro.org>
-Date:   Fri, 21 Oct 2022 17:29:16 +0200
+        bh=Cw+R9Xikusyj0v7XUpo66UBCqQebEKZZe8nkfd2rnP4=;
+        b=5aIxMiKjGFxJ5DPJOf+8EMuvCloof5nwvsMpCBx5kqww2QfeaFlw/AMjdycXJXi0hI
+         rpIslZX+FvPGeiYHUO9Lq5t9NwuMxSMZB5/sHvjP1L3/fiEId+BPyVioFnl/EKe95UzX
+         XYhX5IbiXZaHtX8nOJRE+hDoZZ8N66VQ0atWDznhXcr1N4rB1xnSu+xIh4VU3szWBYJ6
+         yYRIA75/HRbsX2sAd1xK7Vob+8zhTBWA9dYbfMA/XC/dTfjMA3Q2KjqBAo6UE+8awIa9
+         CB9qSXoJ+xdvl3KZ+3JbT8z+NjHKeD0N5c0fpcNjENUgo3Ow/F5qrNDlm7A2ed4uL5/h
+         W49w==
+X-Gm-Message-State: ACrzQf2WkMlP1ekIITEZf3NUkTNLZuHs8uvhI2y9GVX5ajQM7j4ypeLb
+        ojeqfer2lUZzNNhjG5kyfn8=
+X-Google-Smtp-Source: AMsMyM7zHDeLAO0XEuFmG4m/5KkaJuZHKCPLb5Pi2pHUCn9rPjFqWOK3wln6GDKxiGj8UdCBfeoHaw==
+X-Received: by 2002:a17:907:2719:b0:782:b261:e9eb with SMTP id w25-20020a170907271900b00782b261e9ebmr17186574ejk.104.1666371013803;
+        Fri, 21 Oct 2022 09:50:13 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a01-0c22-7b0b-4500-0000-0000-0000-0e63.c22.pool.telefonica.de. [2a01:c22:7b0b:4500::e63])
+        by smtp.googlemail.com with ESMTPSA id l23-20020aa7d957000000b0044ef2ac2650sm13725331eds.90.2022.10.21.09.50.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 09:50:13 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux@roeck-us.net, linux-hwmon@vger.kernel.org
+Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v3 0/2] hwmon: (jc42) regmap conversion and resume fix
+Date:   Fri, 21 Oct 2022 18:49:58 +0200
+Message-Id: <20221021165000.1865615-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v4 1/4] gpu: drm: meson: Use devm_regulator_*get_enable*()
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org
-References: <cover.1666357434.git.mazziesaccount@gmail.com>
- <c14058c4b7018556a78455ffef484a7ebe4d8ea2.1666357434.git.mazziesaccount@gmail.com>
- <Y1K0h4De8UsZJE7W@pendragon.ideasonboard.com>
-Organization: Linaro Developer Services
-In-Reply-To: <Y1K0h4De8UsZJE7W@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+Hello,
 
-On 21/10/2022 17:02, Laurent Pinchart wrote:
-> Hi Matti,
-> 
-> On Fri, Oct 21, 2022 at 04:18:01PM +0300, Matti Vaittinen wrote:
->> Simplify using the devm_regulator_get_enable_optional(). Also drop the
->> seemingly unused struct member 'hdmi_supply'.
->>
->> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->>
->> ---
->> v3 => v4:
->> - split meson part to own patch
->>
->> RFCv1 => v2:
->> - Change also sii902x to use devm_regulator_bulk_get_enable()
->>
->> Please note - this is only compile-tested due to the lack of HW. Careful
->> review and testing is _highly_ appreciated.
->> ---
->>   drivers/gpu/drm/meson/meson_dw_hdmi.c | 23 +++--------------------
->>   1 file changed, 3 insertions(+), 20 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/meson/meson_dw_hdmi.c b/drivers/gpu/drm/meson/meson_dw_hdmi.c
->> index 5cd2b2ebbbd3..7642f740272b 100644
->> --- a/drivers/gpu/drm/meson/meson_dw_hdmi.c
->> +++ b/drivers/gpu/drm/meson/meson_dw_hdmi.c
->> @@ -140,7 +140,6 @@ struct meson_dw_hdmi {
->>   	struct reset_control *hdmitx_apb;
->>   	struct reset_control *hdmitx_ctrl;
->>   	struct reset_control *hdmitx_phy;
->> -	struct regulator *hdmi_supply;
->>   	u32 irq_stat;
->>   	struct dw_hdmi *hdmi;
->>   	struct drm_bridge *bridge;
->> @@ -665,11 +664,6 @@ static void meson_dw_hdmi_init(struct meson_dw_hdmi *meson_dw_hdmi)
->>   
->>   }
->>   
->> -static void meson_disable_regulator(void *data)
->> -{
->> -	regulator_disable(data);
->> -}
->> -
->>   static void meson_disable_clk(void *data)
->>   {
->>   	clk_disable_unprepare(data);
->> @@ -723,20 +717,9 @@ static int meson_dw_hdmi_bind(struct device *dev, struct device *master,
->>   	meson_dw_hdmi->data = match;
->>   	dw_plat_data = &meson_dw_hdmi->dw_plat_data;
->>   
->> -	meson_dw_hdmi->hdmi_supply = devm_regulator_get_optional(dev, "hdmi");
->> -	if (IS_ERR(meson_dw_hdmi->hdmi_supply)) {
->> -		if (PTR_ERR(meson_dw_hdmi->hdmi_supply) == -EPROBE_DEFER)
->> -			return -EPROBE_DEFER;
->> -		meson_dw_hdmi->hdmi_supply = NULL;
->> -	} else {
->> -		ret = regulator_enable(meson_dw_hdmi->hdmi_supply);
->> -		if (ret)
->> -			return ret;
->> -		ret = devm_add_action_or_reset(dev, meson_disable_regulator,
->> -					       meson_dw_hdmi->hdmi_supply);
->> -		if (ret)
->> -			return ret;
->> -	}
->> +	ret = devm_regulator_get_enable_optional(dev, "hdmi");
->> +	if (ret != -ENODEV)
->> +		return ret;
-> 
-> As noted in the review of the series that introduced
-> devm_regulator_get_enable_optional(), the right thing to do is to
-> implement runtime PM in this driver to avoid wasting power.
+this is a follow-up to the comments I got from Guenter on v1 of my patch
+from [0] titled:
+  "hwmon: (jc42) Restore the min/max/critical temperatures on resume"
+There Guenter suggested: "The best solution would probably be to convert
+the driver to use regmap and let regmap handle the caching". That's the
+goal of this series - in addition to fixing the original resume issue
+(see patch #3 - which was the reason for v1 of this series).
 
-While I agree, it's not really the same level of effort as this patch
-should be functionally equivalent.
+Guenter suggested:
+> Make sure that the alarm bits are not dropped after reading the
+> temperature (running the 'sensors' command with alarms active should
+> do)
+I configured the limits to be below the case temperature on my system
+(as the jc42 sensor - a ST Microelectronics STTS2004 - is part of the
+DIMMs) and ran sensors three times in a row. The output is the same for
+all runs:
+  temp1:       +35.0°C  (low  =  +0.0°C)            ALARM (HIGH, CRIT)
+                        (high = +25.0°C, hyst = +25.0°C)
+                        (crit = +30.0°C, hyst = +30.0°C)
+My conclusion is that the alarm bit is not dropped after reading the
+temperature.
 
-> 
->>   
->>   	meson_dw_hdmi->hdmitx_apb = devm_reset_control_get_exclusive(dev,
->>   						"hdmitx_apb");
-> 
 
-Neil
+Changes sinc v2 at [1]:
+- squashed patches #1, #2 and #4 into the new patch #1 (without any
+  other changes to content in jc42.c)
+- patch #3 has no changes other than it's numbering (see previous
+  change)
+- dropped RFC prefix
+
+Changes since v1 at [0]:
+- marked as RFC
+- added patches for regmap (patch #1) and regcache (patch #2) conversion
+- patch #3 has been updated to use regcache for restoring the register
+  values during system resume (this was originally patch 1/1)
+- added another patch to remove caching of the temperature register
+
+
+[0] https://lore.kernel.org/linux-hwmon/20221019214108.220319-1-martin.blumenstingl@googlemail.com/
+[1] https://lore.kernel.org/linux-hwmon/20221020210320.1624617-1-martin.blumenstingl@googlemail.com/
+
+
+Martin Blumenstingl (2):
+  hwmon: (jc42) Convert register access and caching to regmap/regcache
+  hwmon: (jc42) Restore the min/max/critical temperatures on resume
+
+ drivers/hwmon/Kconfig |   1 +
+ drivers/hwmon/jc42.c  | 224 +++++++++++++++++++++++-------------------
+ 2 files changed, 125 insertions(+), 100 deletions(-)
+
+-- 
+2.38.1
+
