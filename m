@@ -2,320 +2,94 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D753C433FE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Oct 2022 17:49:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92B02C433FE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Oct 2022 17:51:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiJURtP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 Oct 2022 13:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
+        id S229484AbiJURvi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 Oct 2022 13:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbiJURtD (ORCPT
+        with ESMTP id S229999AbiJURvh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:49:03 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7A412D3E;
-        Fri, 21 Oct 2022 10:49:02 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id u21so8660454edi.9;
-        Fri, 21 Oct 2022 10:49:02 -0700 (PDT)
+        Fri, 21 Oct 2022 13:51:37 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D909E27A8B0;
+        Fri, 21 Oct 2022 10:51:34 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id g27so8667892edf.11;
+        Fri, 21 Oct 2022 10:51:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=y8DWF+UF8EVkd6v92FWoTJD5DkJphqAj6oypteWXvQ8=;
-        b=bgq1HW5smypWPkPeGG40imnhVGvYodzpi9FVkSeDN1ZJnB4gLGe0zQlLW3PCcKy8ws
-         Ql17nikI8SGYJL9YLMyHM0MwUL/bsHWO+qfkCer5aDQpBw410qrRPo9sqYcdWdMpCFxZ
-         d73hCFh9F1ExHiZJ/ucw5DdztEzm3Qqtl7FQ7KQWra3QP9cmagwBU3ltWdyKxNlYWXpf
-         JOnArhIgOqH6FYrOrIdFBD6odZveL1LAVlIHpaTvVmmCHZahXoJA8WjPTTQsq6pjWDC8
-         TVzdyR/0Mf5gu9Ptp3dd5Sv6C6SZmCZ7SXKuhXZ6YSUWwMt8HeVf6hUbcAHblBMojydI
-         FiQA==
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=M+qMJPAM206ZG6jYEK+iUaPybJ0KFz78NGtqUoA8D+U=;
+        b=bP9kOz8ej/KJdTJ/XSiLo3b4LP/0qf0w0sPT/cSQdU+OAb1hzczmv2/o33AQvhO0yU
+         aJLFxH6TEecQ96KazLJT5FO6rbjXJY8qszAcVZUaKvJ48ZX1+e7UDv9gx1xyAp7BDFvl
+         RIlTSZWzm6ENSodbKtjbENFw/Uraaopu/OqxssuXc+HLKBNncF/QezSzmhDgXSoQ+1LU
+         c57u2ucUtCGHhAOf2vnKU4udYy+DvuKsGXqXbCsXIkplCQoJkTd7iG5+Jxk1hoj4vW+j
+         RlO/tyYUVOHkC8YMk+D5PxdRt9xtecaMeTgLg5xN6G7O3WhQnMmS/gGqbDnU/gzQ604j
+         TD6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=y8DWF+UF8EVkd6v92FWoTJD5DkJphqAj6oypteWXvQ8=;
-        b=vFZq6IMTJSNGsKjHoFiKa+r7VsVvmOpsjnU9QOtpcXesaUwlJsD2SkTfDyMTINQri9
-         cSGtqLteXXXM5VmABuUVIivW4pB1CzwCOLs53FxKtCubG8U539B9QCQYl+TnF//DGXr7
-         kG7PAppoizIt5Ab9BH+zQfo4OnSdCjOhShhkIIt1iuca2jmHgPxTPlTOfC6ODI4/ihfo
-         5SlAIz/i/TBuWnZ1eTbgKIcJv2qAYingGPv22QiVqYJ1Bagk9fmd97Hidxw6qgaJ3Xg9
-         nzofVqlYuRX2VWRfZN9cGEcnYiPPGCdXbpiUxqXqt4a0ELBSoyWQP8p///CIXI8ojN74
-         rOng==
-X-Gm-Message-State: ACrzQf0t5hwxjsjLYWck+9aYMUq6i0Vu+1rpes/o0Ahy/Jrb3/8w5Bxo
-        IWC2kTQ0jpIPMUNI4QtNdflzV/KTBY8EcA==
-X-Google-Smtp-Source: AMsMyM5zMmpNj7aFia7CO9XmwKtDQ3kKJlxeK2NztpW2FsjSipSqf0xUheMp3fXBmBEWQgZHzg1azg==
-X-Received: by 2002:aa7:dd45:0:b0:458:7474:1fbe with SMTP id o5-20020aa7dd45000000b0045874741fbemr18742848edw.334.1666374540733;
-        Fri, 21 Oct 2022 10:49:00 -0700 (PDT)
-Received: from fedora.. ([87.116.164.153])
-        by smtp.gmail.com with ESMTPSA id gl22-20020a170906e0d600b0078d3f96d293sm11921148ejb.30.2022.10.21.10.48.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 10:49:00 -0700 (PDT)
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     leonard.anderweit@gmail.com,
-        Aleksa Savic <savicaleksa83@gmail.com>,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (aquacomputer_d5next) Add support for temperature sensor offsets
-Date:   Fri, 21 Oct 2022 19:48:34 +0200
-Message-Id: <20221021174834.736930-1-savicaleksa83@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        bh=M+qMJPAM206ZG6jYEK+iUaPybJ0KFz78NGtqUoA8D+U=;
+        b=RkB3VlUuADrVASJsOi3HseOmUjMYbck9J6LCcxFrxcAHWCNEKSr13UURNRsR4YgJq5
+         1T7npc0InvvBqRZnRBkIv/H9/RKPrexjF6BBmcpuQ8Nwmy/01zySQt/WjBdndNYce6MH
+         y6qoxQXpHG9XoqRCP+OJ643hIkdU8991bT/55cFH6DMMl3aARSDe2zRefdOL/YI/uQw0
+         gYZpMcFNNB5T1/HeVNrw/dVd82MFj75PkKy2e7cQUU+NIWVwByWYiHUMKGwUrCuXG0Nd
+         syD29SnUsDbnuKiWi3SBsB31nA8WQLVD/XEJMm7IUmxXAOXUA4xayPR89AZ4HqVJ3Ckq
+         ySpg==
+X-Gm-Message-State: ACrzQf2ZVjNVPrAzaS2PLt7dfO/LE6br4N2KleC+FMoLtufABCye7i0l
+        vT9rLU8sD+cGc2cLPVouNFUtV45jxYbsUXZJVyU=
+X-Google-Smtp-Source: AMsMyM6ktbMcrfCvZxkur7W3cDXLJp3CgHJCOYKaEc2Q0deyPHl+Dvz0KOoDB8gu7z1Mc5qRUjPN+aUMI0A+JEGFIsg=
+X-Received: by 2002:a05:6402:90e:b0:443:ec4b:2b03 with SMTP id
+ g14-20020a056402090e00b00443ec4b2b03mr18258335edz.71.1666374693053; Fri, 21
+ Oct 2022 10:51:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221021165000.1865615-1-martin.blumenstingl@googlemail.com>
+ <20221021165000.1865615-2-martin.blumenstingl@googlemail.com> <20221021171127.GB1888515@roeck-us.net>
+In-Reply-To: <20221021171127.GB1888515@roeck-us.net>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Fri, 21 Oct 2022 19:51:21 +0200
+Message-ID: <CAFBinCDRA-Xw_Y9PkL2vmCqW3A1vCWeRB2EDEJQgQ+qKMn9dYw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] hwmon: (jc42) Convert register access and caching
+ to regmap/regcache
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for reading and writing temperature sensor offsets
-on the Aquacomputer D5 Next, Farbwerk 360, Octo and Quadro,
-for which the needed offsets are known. Implemented by
-Leonard Anderweit [1].
+Hi Guenter,
 
-[1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/22
+On Fri, Oct 21, 2022 at 7:11 PM Guenter Roeck <linux@roeck-us.net> wrote:
+[...]
+> > @@ -368,17 +361,14 @@ static int jc42_write(struct device *dev, enum hwmon_sensor_types type,
+> >               }
+> >               data->config = (data->config & ~JC42_CFG_HYST_MASK) |
+> >                               (hyst << JC42_CFG_HYST_SHIFT);
+> > -             ret = i2c_smbus_write_word_swapped(data->client,
+> > -                                                JC42_REG_CONFIG,
+> > -                                                data->config);
+> > +             ret = regmap_write(data->regmap, JC42_REG_CONFIG,
+> > +                                data->config);
+> >               break;
+>
+> This code sequence still requires a mutex since another thread could modify
+> the upper limit (and/or the hysteresis) while the hysteresis is in the process
+> of being written. Worst case there could be a mismatch between the value in
+> data->config and the value actually written into the chip. Granted, that is
+> unlikely to happen, but the race still exists.
+Thanks for spotting this - this is indeed a potential issue.
+Do you also want me to add locking for the data->config access (read)
+in jc42_read()? Without a lock there in theory jc42_write() may have
+already updated data->config with a new value while hardware still has
+the old value. So in the end the read output may show a hysteresis
+which was not programmed to the registers at that time.
 
-Originally-from: Leonard Anderweit <leonard.anderweit@gmail.com>
-Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
----
- Documentation/hwmon/aquacomputer_d5next.rst |  1 +
- drivers/hwmon/aquacomputer_d5next.c         | 91 ++++++++++++++++++---
- 2 files changed, 79 insertions(+), 13 deletions(-)
 
-diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
-index e238533b5fe0..15226346434d 100644
---- a/Documentation/hwmon/aquacomputer_d5next.rst
-+++ b/Documentation/hwmon/aquacomputer_d5next.rst
-@@ -62,6 +62,7 @@ Sysfs entries
- 
- ================ ==============================================================
- temp[1-20]_input Physical/virtual temperature sensors (in millidegrees Celsius)
-+temp[1-4]_offset Temperature sensor correction offset (in millidegrees Celsius)
- fan[1-8]_input   Pump/fan speed (in RPM) / Flow speed (in dL/h)
- power[1-8]_input Pump/fan power (in micro Watts)
- in[0-7]_input    Pump/fan voltage (in milli Volts)
-diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-index c51a2678f0eb..862d6c284e83 100644
---- a/drivers/hwmon/aquacomputer_d5next.c
-+++ b/drivers/hwmon/aquacomputer_d5next.c
-@@ -80,6 +80,7 @@ static u8 secondary_ctrl_report[] = {
- #define D5NEXT_5V_VOLTAGE		0x39
- #define D5NEXT_12V_VOLTAGE		0x37
- #define D5NEXT_CTRL_REPORT_SIZE		0x329
-+#define D5NEXT_TEMP_CTRL_OFFSET		0x2D
- static u8 d5next_sensor_fan_offsets[] = { D5NEXT_PUMP_OFFSET, D5NEXT_FAN_OFFSET };
- 
- /* Pump and fan speed registers in D5 Next control report (from 0-100%) */
-@@ -94,6 +95,8 @@ static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };
- #define FARBWERK360_SENSOR_START		0x32
- #define FARBWERK360_NUM_VIRTUAL_SENSORS		16
- #define FARBWERK360_VIRTUAL_SENSORS_START	0x3a
-+#define FARBWERK360_CTRL_REPORT_SIZE		0x682
-+#define FARBWERK360_TEMP_CTRL_OFFSET		0x8
- 
- /* Register offsets for the Octo fan controller */
- #define OCTO_POWER_CYCLES		0x18
-@@ -103,6 +106,7 @@ static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };
- #define OCTO_NUM_VIRTUAL_SENSORS	16
- #define OCTO_VIRTUAL_SENSORS_START	0x45
- #define OCTO_CTRL_REPORT_SIZE		0x65F
-+#define OCTO_TEMP_CTRL_OFFSET		0xA
- static u8 octo_sensor_fan_offsets[] = { 0x7D, 0x8A, 0x97, 0xA4, 0xB1, 0xBE, 0xCB, 0xD8 };
- 
- /* Fan speed registers in Octo control report (from 0-100%) */
-@@ -117,6 +121,7 @@ static u16 octo_ctrl_fan_offsets[] = { 0x5B, 0xB0, 0x105, 0x15A, 0x1AF, 0x204, 0
- #define QUADRO_VIRTUAL_SENSORS_START	0x3c
- #define QUADRO_CTRL_REPORT_SIZE		0x3c1
- #define QUADRO_FLOW_SENSOR_OFFSET	0x6e
-+#define QUADRO_TEMP_CTRL_OFFSET		0xA
- static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
- 
- /* Fan speed registers in Quadro control report (from 0-100%) */
-@@ -282,6 +287,7 @@ struct aqc_data {
- 	int temp_sensor_start_offset;
- 	int num_virtual_temp_sensors;
- 	int virtual_temp_sensor_start_offset;
-+	u16 temp_ctrl_offset;
- 	u16 power_cycle_count_offset;
- 	u8 flow_sensor_offset;
- 
-@@ -365,8 +371,8 @@ static int aqc_send_ctrl_data(struct aqc_data *priv)
- 	return ret;
- }
- 
--/* Refreshes the control buffer and returns value at offset */
--static int aqc_get_ctrl_val(struct aqc_data *priv, int offset)
-+/* Refreshes the control buffer and stores value at offset in val */
-+static int aqc_get_ctrl_val(struct aqc_data *priv, int offset, long *val)
- {
- 	int ret;
- 
-@@ -376,7 +382,7 @@ static int aqc_get_ctrl_val(struct aqc_data *priv, int offset)
- 	if (ret < 0)
- 		goto unlock_and_return;
- 
--	ret = get_unaligned_be16(priv->buffer + offset);
-+	*val = (s16)get_unaligned_be16(priv->buffer + offset);
- 
- unlock_and_return:
- 	mutex_unlock(&priv->mutex);
-@@ -393,7 +399,7 @@ static int aqc_set_ctrl_val(struct aqc_data *priv, int offset, long val)
- 	if (ret < 0)
- 		goto unlock_and_return;
- 
--	put_unaligned_be16((u16)val, priv->buffer + offset);
-+	put_unaligned_be16((s16)val, priv->buffer + offset);
- 
- 	ret = aqc_send_ctrl_data(priv);
- 
-@@ -408,8 +414,28 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
- 
- 	switch (type) {
- 	case hwmon_temp:
-+		if (channel < priv->num_temp_sensors) {
-+			switch (attr) {
-+			case hwmon_temp_label:
-+			case hwmon_temp_input:
-+				return 0444;
-+			case hwmon_temp_offset:
-+				if (priv->temp_ctrl_offset != 0)
-+					return 0644;
-+				break;
-+			default:
-+				break;
-+			}
-+		}
-+
- 		if (channel < priv->num_temp_sensors + priv->num_virtual_temp_sensors)
--			return 0444;
-+			switch (attr) {
-+			case hwmon_temp_label:
-+			case hwmon_temp_input:
-+				return 0444;
-+			default:
-+				break;
-+			}
- 		break;
- 	case hwmon_pwm:
- 		if (priv->fan_ctrl_offsets && channel < priv->num_fans) {
-@@ -492,10 +518,26 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 
- 	switch (type) {
- 	case hwmon_temp:
--		if (priv->temp_input[channel] == -ENODATA)
--			return -ENODATA;
-+		switch (attr) {
-+		case hwmon_temp_input:
-+			if (priv->temp_input[channel] == -ENODATA)
-+				return -ENODATA;
-+
-+			*val = priv->temp_input[channel];
-+			break;
-+		case hwmon_temp_offset:
-+			ret =
-+			    aqc_get_ctrl_val(priv,
-+					     priv->temp_ctrl_offset +
-+					     channel * AQC_TEMP_SENSOR_SIZE, val);
-+			if (ret < 0)
-+				return ret;
- 
--		*val = priv->temp_input[channel];
-+			*val *= 10;
-+			break;
-+		default:
-+			break;
-+		}
- 		break;
- 	case hwmon_fan:
- 		*val = priv->speed_input[channel];
-@@ -505,7 +547,7 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 		break;
- 	case hwmon_pwm:
- 		if (priv->fan_ctrl_offsets) {
--			ret = aqc_get_ctrl_val(priv, priv->fan_ctrl_offsets[channel]);
-+			ret = aqc_get_ctrl_val(priv, priv->fan_ctrl_offsets[channel], val);
- 			if (ret < 0)
- 				return ret;
- 
-@@ -563,6 +605,22 @@ static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 	struct aqc_data *priv = dev_get_drvdata(dev);
- 
- 	switch (type) {
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_offset:
-+			/* Limit temp offset to +/- 15K as in the official software */
-+			val = clamp_val(val, -15000, 15000) / 10;
-+			ret =
-+			    aqc_set_ctrl_val(priv,
-+					     priv->temp_ctrl_offset +
-+					     channel * AQC_TEMP_SENSOR_SIZE, val);
-+			if (ret < 0)
-+				return ret;
-+			break;
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+		break;
- 	case hwmon_pwm:
- 		switch (attr) {
- 		case hwmon_pwm_input:
-@@ -597,10 +655,10 @@ static const struct hwmon_ops aqc_hwmon_ops = {
- 
- static const struct hwmon_channel_info *aqc_info[] = {
- 	HWMON_CHANNEL_INFO(temp,
--			   HWMON_T_INPUT | HWMON_T_LABEL,
--			   HWMON_T_INPUT | HWMON_T_LABEL,
--			   HWMON_T_INPUT | HWMON_T_LABEL,
--			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
-+			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
-+			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
-+			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
-@@ -853,6 +911,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		priv->virtual_temp_sensor_start_offset = D5NEXT_VIRTUAL_SENSORS_START;
- 		priv->power_cycle_count_offset = D5NEXT_POWER_CYCLES;
- 		priv->buffer_size = D5NEXT_CTRL_REPORT_SIZE;
-+		priv->temp_ctrl_offset = D5NEXT_TEMP_CTRL_OFFSET;
- 
- 		priv->temp_label = label_d5next_temp;
- 		priv->virtual_temp_label = label_virtual_temp_sensors;
-@@ -867,6 +926,8 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		priv->num_fans = 0;
- 		priv->num_temp_sensors = FARBWERK_NUM_SENSORS;
- 		priv->temp_sensor_start_offset = FARBWERK_SENSOR_START;
-+		priv->temp_ctrl_offset = 0;
-+
- 		priv->temp_label = label_temp_sensors;
- 		break;
- 	case USB_PRODUCT_ID_FARBWERK360:
-@@ -877,6 +938,8 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		priv->temp_sensor_start_offset = FARBWERK360_SENSOR_START;
- 		priv->num_virtual_temp_sensors = FARBWERK360_NUM_VIRTUAL_SENSORS;
- 		priv->virtual_temp_sensor_start_offset = FARBWERK360_VIRTUAL_SENSORS_START;
-+		priv->buffer_size = FARBWERK360_CTRL_REPORT_SIZE;
-+		priv->temp_ctrl_offset = FARBWERK360_TEMP_CTRL_OFFSET;
- 
- 		priv->temp_label = label_temp_sensors;
- 		priv->virtual_temp_label = label_virtual_temp_sensors;
-@@ -893,6 +956,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		priv->virtual_temp_sensor_start_offset = OCTO_VIRTUAL_SENSORS_START;
- 		priv->power_cycle_count_offset = OCTO_POWER_CYCLES;
- 		priv->buffer_size = OCTO_CTRL_REPORT_SIZE;
-+		priv->temp_ctrl_offset = OCTO_TEMP_CTRL_OFFSET;
- 
- 		priv->temp_label = label_temp_sensors;
- 		priv->virtual_temp_label = label_virtual_temp_sensors;
-@@ -914,6 +978,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		priv->power_cycle_count_offset = QUADRO_POWER_CYCLES;
- 		priv->buffer_size = QUADRO_CTRL_REPORT_SIZE;
- 		priv->flow_sensor_offset = QUADRO_FLOW_SENSOR_OFFSET;
-+		priv->temp_ctrl_offset = QUADRO_TEMP_CTRL_OFFSET;
- 
- 		priv->temp_label = label_temp_sensors;
- 		priv->virtual_temp_label = label_virtual_temp_sensors;
--- 
-2.37.3
-
+Best regards,
+Martin
