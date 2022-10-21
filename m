@@ -2,101 +2,152 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E80AAFA373D
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Oct 2022 17:23:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D85D7C433FE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Oct 2022 17:25:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiJURXC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 Oct 2022 13:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
+        id S230091AbiJURZa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 Oct 2022 13:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiJURWz (ORCPT
+        with ESMTP id S230449AbiJURZM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:22:55 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE971AD687;
-        Fri, 21 Oct 2022 10:22:54 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-136b5dd6655so4373817fac.3;
-        Fri, 21 Oct 2022 10:22:54 -0700 (PDT)
+        Fri, 21 Oct 2022 13:25:12 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4108766107;
+        Fri, 21 Oct 2022 10:25:10 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id w74so4025304oie.0;
+        Fri, 21 Oct 2022 10:25:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zlHj7n3i5o3yXLa4ETHRTpxvwrBu3YafH8lL3TZQo7c=;
-        b=mfKFX0fSUZxTyWGet7HLjN5KSNIIKvyVtQYoZsLLgdG68Yakqkgp2WJCOVzeO5GHCh
-         yANi9hjw5ikEB67N8ZxxJKlfSvDFlB1pwODfttxygGfSi0EpBEzaL4U+q9EnKkXB8zM4
-         Kpy3knTJtufMaIDXCnTxfQ5ityhf0XE//ULX0EfgX5moVheH0+IlYH7rFaVYlw7h1IZC
-         f3hvRzN3Is7mdZ6SjqQK+HqlYEc7b/vJJi/DHEaOZ5SLMYgzInSE2cZqQCd6vFovU8W+
-         GC/OSC40v6iY2wHSha8o+Px7g7bYjOTCm+V4YkcfWMW6rmsOzqVXzjwkL/eK9USq23tn
-         RQKQ==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uU2xV/0eJNzQnhtR+ImVQXD3AapgCQJA6TByFZapDUo=;
+        b=lQ1lkKZV3X7IjrcuDBeAvJjBIDTggOdehoSkKrYjC84OcnWtEo60VKFwYfpgGynfba
+         lsP9qvx0MxdDMgN2+4uHbUiqUaqxXVgIHvXh8MBofVZGDbeDp5wgEm+DliMdzPw/EhRu
+         +OgWw14elW7/1VS47okWwD36NP/HJ6of8sMWm4l8aJhnDmsB5l/6NBNkSSkiU5AghTAW
+         zq1Jp+BduX+9g09VDIFU6Wd08glxgyxwtiiGTOl5Gf/SV6H+NFHXu4X6vGDBx/HY1NeD
+         j+h4YFZy2vFrl2CP1e1gmFnD6TwvGVUkUKQhmTDUv0rG7Yx7VnrovKfQ9huuUCiKn39j
+         HIjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zlHj7n3i5o3yXLa4ETHRTpxvwrBu3YafH8lL3TZQo7c=;
-        b=yNI6KRowwxaQ0yJs/KYbnTOdXOBbqJlzcJFFQdx3AZ5iot5perE4goOSpIXE4gOSUD
-         nLAZAYby/l+Ih0l7rY1SS4hz604r3I81wWL/2gQpB2JvG6uOJLR3AiPGmdrSmcBJne4s
-         moWSDeiTEbDstLLeq/Ti3GUngrnvc8FARSi67pBewKWqEJI4btcR6iHU6fbHsAzFlJ5R
-         ufXdx92wOwvGmB76LUkDQ4NQ5KIZ3djJIg4Fa9Nxs0LP7a9id1mnTiwWEmNvenm9rx9Q
-         wE7OqAXTa+4lW1P+Wm3FTL1obDznW9rEwiUECpZ4wZxehl5ry7Z5rK1U6qqctUKUpu/B
-         yl8Q==
-X-Gm-Message-State: ACrzQf0qzyUs5+ucY6CtJyCkvyZ6G2ZiV3wetEL+2LjGcwVtCO8kh9o8
-        L5rOKM2JuEYrNTQ5FdmO0h0=
-X-Google-Smtp-Source: AMsMyM6Gt5PNxUQH7m5Kz7f+QJp+blLH3aodobQDZ0VnhqQZBBrggpcw5I5WICKa7m1ONsnecjhzHg==
-X-Received: by 2002:a05:6870:2427:b0:13b:1f89:ab27 with SMTP id n39-20020a056870242700b0013b1f89ab27mr3799543oap.20.1666372973425;
-        Fri, 21 Oct 2022 10:22:53 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uU2xV/0eJNzQnhtR+ImVQXD3AapgCQJA6TByFZapDUo=;
+        b=4nuU68ix6kdcrWB5UkR69Iai8zDfNRqiRn4mDQ1k2WISOtlNfGvZKrDMD9BL9yFmDg
+         RUD3v2jwvb+f9XTl84iW2Cn60xJPxiDKZJexlouuP9iAUFh3BAWV+VkVhHu5IDsj8qzo
+         nP6JbdHgZ8yWqkwtspTyTISTna4S+fP8fYkKIzlUgKCy9KbzIEcoRB9SpefPnTFPLMv8
+         BwyHTmG0r7IiR4yogVSxAwwBz1qCyQfW7Yy7GDLmgExt1QoXdGQYRcjHpk04Rp1EQcNz
+         7js8C7LqYo1fk4SGpPJqivF6ReMKRTV/cHruUFS9IYG3gQ/mhj61taCBbcbOQ8WZSUbQ
+         8ckw==
+X-Gm-Message-State: ACrzQf1SSKbm7h6+Tx57fs9S/1MoJKE+2WtBITzmTypZKDnSsByYg1pF
+        Xayfji1rB0mJ6sWoh26mUgU=
+X-Google-Smtp-Source: AMsMyM6wQJpnbrOCZ/2JAKj/VhhX654hpUvzaAlvauILg9u0oA0wGy+OA87Y7qbG9/1ugeNt3IMO8A==
+X-Received: by 2002:a54:4899:0:b0:354:add8:52ab with SMTP id r25-20020a544899000000b00354add852abmr11260314oic.229.1666373109465;
+        Fri, 21 Oct 2022 10:25:09 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id em40-20020a0568705ba800b001226d2100f2sm10482749oab.33.2022.10.21.10.22.52
+        by smtp.gmail.com with ESMTPSA id y206-20020acae1d7000000b00353ef11d6c9sm1318638oig.19.2022.10.21.10.25.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 10:22:52 -0700 (PDT)
+        Fri, 21 Oct 2022 10:25:09 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 21 Oct 2022 10:22:51 -0700
+Date:   Fri, 21 Oct 2022 10:25:08 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v4 4/4] hwmon: adm1177: simplify using
- devm_regulator_get_enable()
-Message-ID: <20221021172251.GA1891003@roeck-us.net>
-References: <cover.1666357434.git.mazziesaccount@gmail.com>
- <7773541795f280db31dd981ffc21df8a630b794a.1666357434.git.mazziesaccount@gmail.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] hwmon: (jc42) Restore the min/max/critical
+ temperatures on resume
+Message-ID: <20221021172508.GA1890395@roeck-us.net>
+References: <20221021165000.1865615-1-martin.blumenstingl@googlemail.com>
+ <20221021165000.1865615-3-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <7773541795f280db31dd981ffc21df8a630b794a.1666357434.git.mazziesaccount@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221021165000.1865615-3-martin.blumenstingl@googlemail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 04:19:04PM +0300, Matti Vaittinen wrote:
-> Drop open-coded pattern: 'devm_regulator_get(), regulator_enable(),
-> add_action_or_reset(regulator_disable)' and use the
-> devm_regulator_get_enable() and drop the pointer to the regulator.
-> This simplifies code and makes it less tempting to add manual control
-> for the regulator which is also controlled by devm.
+On Fri, Oct 21, 2022 at 06:50:00PM +0200, Martin Blumenstingl wrote:
+> The JC42 compatible thermal sensor on Kingston KSM32ES8/16ME DIMMs
+> (using Micron E-Die) is an ST Microelectronics STTS2004 (manufacturer
+> 0x104a, device 0x2201). It does not keep the previously programmed
+> minimum, maximum and critical temperatures after system suspend and
+> resume (which is a shutdown / startup cycle for the JC42 temperature
+> sensor). This results in an alarm on system resume because the hardware
+> default for these values is 0°C (so any environment temperature greater
+> than 0°C will trigger the alarm).
 > 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> Example before system suspend:
+>   jc42-i2c-0-1a
+>   Adapter: SMBus PIIX4 adapter port 0 at 0b00
+>   temp1:        +34.8°C  (low  =  +0.0°C)
+>                          (high = +85.0°C, hyst = +85.0°C)
+>                          (crit = +95.0°C, hyst = +95.0°C)
+> 
+> Example after system resume (without this change):
+>   jc42-i2c-0-1a
+>   Adapter: SMBus PIIX4 adapter port 0 at 0b00
+>   temp1:        +34.8°C  (low  =  +0.0°C)             ALARM (HIGH, CRIT)
+>                          (high =  +0.0°C, hyst =  +0.0°C)
+>                          (crit =  +0.0°C, hyst =  +0.0°C)
+> 
+> Apply the cached values from the JC42_REG_TEMP_UPPER,
+> JC42_REG_TEMP_LOWER, JC42_REG_TEMP_CRITICAL and JC42_REG_SMBUS (where
+> the SMBUS register is not related to this issue but a side-effect of
+> using regcache_sync() during system resume with the previously
+> cached/programmed values. This fixes the alarm due to the hardware
+> defaults of 0°C because the previously applied limits (set by userspace)
+> are re-applied on system resume.
+> 
+> Fixes: 175c490c9e7f ("hwmon: (jc42) Add support for STTS2004 and AT30TSE004")
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-Applied to hwmon-next.
+Nice use of regmap.
+
+For my reference:
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 Thanks,
 Guenter
+
+> ---
+>  drivers/hwmon/jc42.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
+> index 8d70960d5444..52a60eb0791b 100644
+> --- a/drivers/hwmon/jc42.c
+> +++ b/drivers/hwmon/jc42.c
+> @@ -565,6 +565,10 @@ static int jc42_suspend(struct device *dev)
+>  
+>  	data->config |= JC42_CFG_SHUTDOWN;
+>  	regmap_write(data->regmap, JC42_REG_CONFIG, data->config);
+> +
+> +	regcache_cache_only(data->regmap, true);
+> +	regcache_mark_dirty(data->regmap);
+> +
+>  	return 0;
+>  }
+>  
+> @@ -572,9 +576,13 @@ static int jc42_resume(struct device *dev)
+>  {
+>  	struct jc42_data *data = dev_get_drvdata(dev);
+>  
+> +	regcache_cache_only(data->regmap, false);
+> +
+>  	data->config &= ~JC42_CFG_SHUTDOWN;
+>  	regmap_write(data->regmap, JC42_REG_CONFIG, data->config);
+> -	return 0;
+> +
+> +	/* Restore cached register values to hardware */
+> +	return regcache_sync(data->regmap);
+>  }
+>  
+>  static const struct dev_pm_ops jc42_dev_pm_ops = {
+> -- 
+> 2.38.1
+> 
