@@ -2,111 +2,199 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14774C04A95
-	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Oct 2022 04:04:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B1CAC433FE
+	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Oct 2022 06:16:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbiJVEET (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 22 Oct 2022 00:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
+        id S229947AbiJVGQF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 22 Oct 2022 02:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiJVEER (ORCPT
+        with ESMTP id S229944AbiJVGQF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 22 Oct 2022 00:04:17 -0400
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE2027E2C9;
-        Fri, 21 Oct 2022 21:04:16 -0700 (PDT)
-Received: by mail-oo1-xc36.google.com with SMTP id j6-20020a4ab1c6000000b004809a59818cso713664ooo.0;
-        Fri, 21 Oct 2022 21:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yw0pw+RlOzwWJIc8TxHrrJQC0UxntH5q/xKxVjdlPQc=;
-        b=GAa3BQg/4cgVaEw0MW3idqWB7FdBlv1hlhPWABv7kqHuz6gpMAhdqrKBmgo8njIbvH
-         EGOrYQMz6jmOGqvsrPp83OgyShrvK4VuVWOeNiriJSEDtOXs5NEEOdk9qweYVIt5lkaw
-         6wpM1uF1UlHfdDA/nX6ecMiAt96jdsjeL/nN3EA9SlPC2xLAhMJC9L+SaKdIPZhMsT70
-         DCLCC+E4/DzT+KhmvOmcdomGYSubgA2V2J75JoameIGfMIioGlEHfYNCUl8lLpd9EqoX
-         FChja0E8+5DlANlaOJm0DQeOWNXscQNBPS4eRBjFhUzR88RYXcr2dnQweRWt9xv+EbIB
-         2sTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yw0pw+RlOzwWJIc8TxHrrJQC0UxntH5q/xKxVjdlPQc=;
-        b=UwE3jMx28z+mGBlp3fG618R1pcTUWqi27NUp5EPGozP8zHAMm6f4PeGvUQ7mlATIkE
-         heEcXg59HE8Ji8NbcS4kmOcGK4p5j9easCfJW4jkcikk+0qfbPyZyfNMZJUgNbwJBDmo
-         2XfOlpznByNVo831JKGklUIbq9mLgFl8v2wOXj5Lxfm0Tn+FejIQ36l0avUTpxQVyZgO
-         Ji28Y8NivdsSnKmlQKhsNO9/8tnBFIGQ+ycOw1vjdmSnJecIiDWaS3x/hy10QLOwS8Rc
-         0oR/QQcJB9G7jzqBsrKGHk0L2CrM5JU2pxyRWCz7WnGtV63tHj+z8uYUCG7KQJzrs4yO
-         XOjw==
-X-Gm-Message-State: ACrzQf2IEsgArxCz7g+NRkeYxiym4DBzQJ5qBRmcaAG2HTqXeMfIKjcL
-        TuhWZp9uKSG5ORWj2oIehL0=
-X-Google-Smtp-Source: AMsMyM6EPoNVcm+bwUh5FIXxfMZup0bf+mR4q5Kx88/R8kWASSsj0StZbuVB4n0lxbvxHxgup0AvVA==
-X-Received: by 2002:a4a:a387:0:b0:480:9a7a:4e99 with SMTP id s7-20020a4aa387000000b004809a7a4e99mr10342793ool.4.1666411456080;
-        Fri, 21 Oct 2022 21:04:16 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r22-20020a056870581600b001324315bb6asm11365614oap.29.2022.10.21.21.04.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Oct 2022 21:04:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7de80d4f-7c25-6b6b-ebb0-e9e1254dac53@roeck-us.net>
-Date:   Fri, 21 Oct 2022 21:04:14 -0700
+        Sat, 22 Oct 2022 02:16:05 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF88257602
+        for <linux-hwmon@vger.kernel.org>; Fri, 21 Oct 2022 23:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666419364; x=1697955364;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GiE7jDRnngmnch8Sp9NttX44hEUDhyllVQ8Abi4gxUk=;
+  b=RT6615e+QL7lGaID/P/wWuLxIuv93NOUmIbr68rfOUbFbibxba2AFMUJ
+   pX4yRaTZwAUHgegfGJmqsxfCN0R7uWsry2721Kfq1jwq5H4Am6zBsEVpw
+   50xvxj/o3jVCVrIKYT/HHw6ZOhDcNHeMlz67lOkNB9VuowjsyWRMwQyBD
+   7XsB0JhWOd+uqdO50Jcy7SZ5zfR2ruFd2jFHQMHh7WuGb99C6rTvIIOdl
+   sCNrpEyAedsnGaZDDQlrEK44bpHmWYxFHUwWRSb+2KXO6xVCBm2lkAKoI
+   yPF530LUoWcgTQ+o/U9s//ZmHMGDTGmY+vgaq49M2KK3E2amBIPRn2HOn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="287559274"
+X-IronPort-AV: E=Sophos;i="5.95,204,1661842800"; 
+   d="scan'208";a="287559274"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 23:16:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="699605158"
+X-IronPort-AV: E=Sophos;i="5.95,204,1661842800"; 
+   d="scan'208";a="699605158"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 21 Oct 2022 23:16:02 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1om7ne-0003Op-0L;
+        Sat, 22 Oct 2022 06:16:02 +0000
+Date:   Sat, 22 Oct 2022 14:15:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 0d1e30b94017cc9ddd3235560277c0fbf2f96b2e
+Message-ID: <63538a67.1MjURS9zDbZGgQMB%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 1/2] hwmon: (jc42) Convert register access and caching
- to regmap/regcache
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com,
-        linux-kernel@vger.kernel.org
-References: <20221021165000.1865615-1-martin.blumenstingl@googlemail.com>
- <20221021165000.1865615-2-martin.blumenstingl@googlemail.com>
- <20221021171127.GB1888515@roeck-us.net>
- <CAFBinCDRA-Xw_Y9PkL2vmCqW3A1vCWeRB2EDEJQgQ+qKMn9dYw@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAFBinCDRA-Xw_Y9PkL2vmCqW3A1vCWeRB2EDEJQgQ+qKMn9dYw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/21/22 10:51, Martin Blumenstingl wrote:
-> Hi Guenter,
-> 
-> On Fri, Oct 21, 2022 at 7:11 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> [...]
->>> @@ -368,17 +361,14 @@ static int jc42_write(struct device *dev, enum hwmon_sensor_types type,
->>>                }
->>>                data->config = (data->config & ~JC42_CFG_HYST_MASK) |
->>>                                (hyst << JC42_CFG_HYST_SHIFT);
->>> -             ret = i2c_smbus_write_word_swapped(data->client,
->>> -                                                JC42_REG_CONFIG,
->>> -                                                data->config);
->>> +             ret = regmap_write(data->regmap, JC42_REG_CONFIG,
->>> +                                data->config);
->>>                break;
->>
->> This code sequence still requires a mutex since another thread could modify
->> the upper limit (and/or the hysteresis) while the hysteresis is in the process
->> of being written. Worst case there could be a mismatch between the value in
->> data->config and the value actually written into the chip. Granted, that is
->> unlikely to happen, but the race still exists.
-> Thanks for spotting this - this is indeed a potential issue.
-> Do you also want me to add locking for the data->config access (read)
-> in jc42_read()? Without a lock there in theory jc42_write() may have
-> already updated data->config with a new value while hardware still has
-> the old value. So in the end the read output may show a hysteresis
-> which was not programmed to the registers at that time.
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 0d1e30b94017cc9ddd3235560277c0fbf2f96b2e  hwmon: (adm1177) simplify using devm_regulator_get_enable()
 
-Thanks for noticing. I had missed that one. Yes, please.
+elapsed time: 724m
 
-Thanks,
-Guenter
+configs tested: 122
+configs skipped: 3
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+alpha                               defconfig
+arc                                 defconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                          rhel-8.3-func
+i386                                defconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+x86_64                        randconfig-a004
+m68k                             allyesconfig
+x86_64                        randconfig-a002
+x86_64                               rhel-8.3
+x86_64                        randconfig-a006
+arc                  randconfig-r043-20221019
+x86_64                        randconfig-a013
+x86_64                           rhel-8.3-kvm
+x86_64                           allyesconfig
+arm                                 defconfig
+i386                          randconfig-a001
+x86_64                           rhel-8.3-syz
+s390                                defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+i386                             allyesconfig
+x86_64                        randconfig-a011
+i386                          randconfig-a003
+x86_64                         rhel-8.3-kunit
+i386                          randconfig-a005
+arc                  randconfig-r043-20221020
+x86_64                        randconfig-a015
+s390                 randconfig-r044-20221020
+riscv                randconfig-r042-20221020
+arm                              allyesconfig
+arc                           tb10x_defconfig
+sh                            titan_defconfig
+powerpc                     pq2fads_defconfig
+arm                         nhk8815_defconfig
+arm64                            allyesconfig
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+um                           x86_64_defconfig
+um                             i386_defconfig
+arc                  randconfig-r043-20221022
+s390                 randconfig-r044-20221022
+riscv                randconfig-r042-20221022
+ia64                          tiger_defconfig
+arm                        mvebu_v7_defconfig
+mips                    maltaup_xpa_defconfig
+arm                           u8500_defconfig
+csky                                defconfig
+parisc                generic-64bit_defconfig
+i386                          randconfig-c001
+m68k                            q40_defconfig
+sh                           se7721_defconfig
+m68k                        mvme147_defconfig
+nios2                            allyesconfig
+arc                              alldefconfig
+m68k                          atari_defconfig
+powerpc                     tqm8548_defconfig
+arm                          lpd270_defconfig
+sparc                       sparc32_defconfig
+sh                          sdk7786_defconfig
+parisc                           alldefconfig
+mips                      fuloong2e_defconfig
+arm                        multi_v7_defconfig
+powerpc                         ps3_defconfig
+m68k                           virt_defconfig
+sh                           se7722_defconfig
+arm                            zeus_defconfig
+sh                               alldefconfig
+loongarch                         allnoconfig
+arm                         lubbock_defconfig
+powerpc                      pcm030_defconfig
+parisc64                         alldefconfig
+arc                  randconfig-r043-20221018
+s390                 randconfig-r044-20221018
+riscv                randconfig-r042-20221018
+sh                         microdev_defconfig
+arm                            qcom_defconfig
+
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+riscv                randconfig-r042-20221019
+hexagon              randconfig-r041-20221020
+x86_64                        randconfig-a005
+x86_64                        randconfig-a014
+i386                          randconfig-a002
+x86_64                        randconfig-a016
+hexagon              randconfig-r045-20221020
+hexagon              randconfig-r045-20221019
+x86_64                        randconfig-a012
+i386                          randconfig-a004
+hexagon              randconfig-r041-20221019
+i386                          randconfig-a006
+s390                 randconfig-r044-20221019
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+powerpc                   microwatt_defconfig
+arm                         orion5x_defconfig
+powerpc                      obs600_defconfig
+i386                 randconfig-a013-20221017
+i386                 randconfig-a015-20221017
+i386                 randconfig-a016-20221017
+i386                 randconfig-a011-20221017
+i386                 randconfig-a014-20221017
+i386                 randconfig-a012-20221017
+arm                      pxa255-idp_defconfig
+mips                          ath79_defconfig
+powerpc                      acadia_defconfig
+arm                             mxs_defconfig
+arm                       netwinder_defconfig
+mips                        maltaup_defconfig
+powerpc                 mpc8560_ads_defconfig
+x86_64                        randconfig-k001
+mips                       rbtx49xx_defconfig
+arm                           spitz_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
