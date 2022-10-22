@@ -2,142 +2,111 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD93CC04A95
-	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Oct 2022 04:02:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14774C04A95
+	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Oct 2022 04:04:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbiJVECk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 22 Oct 2022 00:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
+        id S229767AbiJVEET (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 22 Oct 2022 00:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJVECk (ORCPT
+        with ESMTP id S229460AbiJVEER (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 22 Oct 2022 00:02:40 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2524B98A;
-        Fri, 21 Oct 2022 21:02:39 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1321a1e94b3so5965954fac.1;
-        Fri, 21 Oct 2022 21:02:39 -0700 (PDT)
+        Sat, 22 Oct 2022 00:04:17 -0400
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE2027E2C9;
+        Fri, 21 Oct 2022 21:04:16 -0700 (PDT)
+Received: by mail-oo1-xc36.google.com with SMTP id j6-20020a4ab1c6000000b004809a59818cso713664ooo.0;
+        Fri, 21 Oct 2022 21:04:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4xWdk81FEXsVhjbOXfb7yz/8N7pwijlgdzi/aQ2AJlA=;
-        b=VuL7NaxQeuWEIcG9inA2o8PdRCds/3H8UMU+7s8SVjDmPK1zaj+3wXQw75vhpuM2bR
-         kAKyS6MbyBHFEr81AEtmSGCLvg01aS7Sh0ORIEda7PmXwIbCgNsDju8oJiAi3iKrtTU5
-         pxtNm/fEgOWdkCN/ro6IF4QTC7eNbvJAMRWH8Wx07X4juazqPlObD4/O8IQiVB2bwyTe
-         iuYbwtp6TSmjwBImm1/bYUcFlh7k21oCqWICCs5XiCXbYrbulZY+DhU7e5a3/P3n9fV4
-         CJcgqSktpuCkIQXB9og/sOcrOoomd54EpZmpDFmjX58otNDur2EtwObgmzFSeoNkZbvR
-         4TRw==
+        bh=Yw0pw+RlOzwWJIc8TxHrrJQC0UxntH5q/xKxVjdlPQc=;
+        b=GAa3BQg/4cgVaEw0MW3idqWB7FdBlv1hlhPWABv7kqHuz6gpMAhdqrKBmgo8njIbvH
+         EGOrYQMz6jmOGqvsrPp83OgyShrvK4VuVWOeNiriJSEDtOXs5NEEOdk9qweYVIt5lkaw
+         6wpM1uF1UlHfdDA/nX6ecMiAt96jdsjeL/nN3EA9SlPC2xLAhMJC9L+SaKdIPZhMsT70
+         DCLCC+E4/DzT+KhmvOmcdomGYSubgA2V2J75JoameIGfMIioGlEHfYNCUl8lLpd9EqoX
+         FChja0E8+5DlANlaOJm0DQeOWNXscQNBPS4eRBjFhUzR88RYXcr2dnQweRWt9xv+EbIB
+         2sTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4xWdk81FEXsVhjbOXfb7yz/8N7pwijlgdzi/aQ2AJlA=;
-        b=KbprJhV+Kj3hoG21ocUAVrUbl1KhnU/q9w/Prp7nLhgM4X25JAfEOT2NBagNsDUxXJ
-         7snTI2r7RGfjHlTvyaKGOW0qgwdoRYhUFQ7aqm3gMDTHDL40fBCbrFLl4OsoSVDcvn6F
-         8+WYn42gVRYvjea95qneMvIs17sFqXUcdcIqE/jgef6vSsO63X4Pn2CytH1ASJs1JcQN
-         m1ssR9jsoiZCTdA3SGDxtaFNogI/iNDyZy3VwxBMXwa5y8rJIiBwk+3xCphvRS5YFoKq
-         v+lDhShmd8q4fFFiqSmSDXd8GhAI4JuPc0hy5igx/w7JvVe5WtwFJ/Y+oulkRqHoeq9c
-         W3WQ==
-X-Gm-Message-State: ACrzQf2kSQfZrwUZgGN0aSp9wWD8YDz4WRJAXtVCpo0Wl5tD5+FLA4Ax
-        4NV0pszeFSyrbJDaqnAkJu461SlGzWM=
-X-Google-Smtp-Source: AMsMyM4eUvHArFQu2nMlTdTF/jpl91Qt7+tsHWplzsPA2q0SYRXejIa8NVh5KC+vN4+z3byUpQLr1w==
-X-Received: by 2002:a05:6870:580c:b0:12a:f136:a8f5 with SMTP id r12-20020a056870580c00b0012af136a8f5mr31079144oap.269.1666411358624;
-        Fri, 21 Oct 2022 21:02:38 -0700 (PDT)
+        bh=Yw0pw+RlOzwWJIc8TxHrrJQC0UxntH5q/xKxVjdlPQc=;
+        b=UwE3jMx28z+mGBlp3fG618R1pcTUWqi27NUp5EPGozP8zHAMm6f4PeGvUQ7mlATIkE
+         heEcXg59HE8Ji8NbcS4kmOcGK4p5j9easCfJW4jkcikk+0qfbPyZyfNMZJUgNbwJBDmo
+         2XfOlpznByNVo831JKGklUIbq9mLgFl8v2wOXj5Lxfm0Tn+FejIQ36l0avUTpxQVyZgO
+         Ji28Y8NivdsSnKmlQKhsNO9/8tnBFIGQ+ycOw1vjdmSnJecIiDWaS3x/hy10QLOwS8Rc
+         0oR/QQcJB9G7jzqBsrKGHk0L2CrM5JU2pxyRWCz7WnGtV63tHj+z8uYUCG7KQJzrs4yO
+         XOjw==
+X-Gm-Message-State: ACrzQf2IEsgArxCz7g+NRkeYxiym4DBzQJ5qBRmcaAG2HTqXeMfIKjcL
+        TuhWZp9uKSG5ORWj2oIehL0=
+X-Google-Smtp-Source: AMsMyM6EPoNVcm+bwUh5FIXxfMZup0bf+mR4q5Kx88/R8kWASSsj0StZbuVB4n0lxbvxHxgup0AvVA==
+X-Received: by 2002:a4a:a387:0:b0:480:9a7a:4e99 with SMTP id s7-20020a4aa387000000b004809a7a4e99mr10342793ool.4.1666411456080;
+        Fri, 21 Oct 2022 21:04:16 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f17-20020a4ae611000000b00480b7efd5d9sm8420329oot.6.2022.10.21.21.02.37
+        by smtp.gmail.com with ESMTPSA id r22-20020a056870581600b001324315bb6asm11365614oap.29.2022.10.21.21.04.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Oct 2022 21:02:38 -0700 (PDT)
+        Fri, 21 Oct 2022 21:04:15 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3644e7cb-4a1e-b78b-5ac6-594590190a20@roeck-us.net>
-Date:   Fri, 21 Oct 2022 21:02:36 -0700
+Message-ID: <7de80d4f-7c25-6b6b-ebb0-e9e1254dac53@roeck-us.net>
+Date:   Fri, 21 Oct 2022 21:04:14 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH 08/21] hwmon: remove s3c driver
+Subject: Re: [PATCH v3 1/2] hwmon: (jc42) Convert register access and caching
+ to regmap/regcache
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org
-References: <20221021202254.4142411-1-arnd@kernel.org>
- <20221021203329.4143397-8-arnd@kernel.org>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+        linux-kernel@vger.kernel.org
+References: <20221021165000.1865615-1-martin.blumenstingl@googlemail.com>
+ <20221021165000.1865615-2-martin.blumenstingl@googlemail.com>
+ <20221021171127.GB1888515@roeck-us.net>
+ <CAFBinCDRA-Xw_Y9PkL2vmCqW3A1vCWeRB2EDEJQgQ+qKMn9dYw@mail.gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20221021203329.4143397-8-arnd@kernel.org>
+In-Reply-To: <CAFBinCDRA-Xw_Y9PkL2vmCqW3A1vCWeRB2EDEJQgQ+qKMn9dYw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/21/22 13:27, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 10/21/22 10:51, Martin Blumenstingl wrote:
+> Hi Guenter,
 > 
-> The s3c adc driver was removed along with the s3c24xx platform, so the
-> hwmon driver is orphaned and can be removed.
+> On Fri, Oct 21, 2022 at 7:11 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> [...]
+>>> @@ -368,17 +361,14 @@ static int jc42_write(struct device *dev, enum hwmon_sensor_types type,
+>>>                }
+>>>                data->config = (data->config & ~JC42_CFG_HYST_MASK) |
+>>>                                (hyst << JC42_CFG_HYST_SHIFT);
+>>> -             ret = i2c_smbus_write_word_swapped(data->client,
+>>> -                                                JC42_REG_CONFIG,
+>>> -                                                data->config);
+>>> +             ret = regmap_write(data->regmap, JC42_REG_CONFIG,
+>>> +                                data->config);
+>>>                break;
+>>
+>> This code sequence still requires a mutex since another thread could modify
+>> the upper limit (and/or the hysteresis) while the hysteresis is in the process
+>> of being written. Worst case there could be a mismatch between the value in
+>> data->config and the value actually written into the chip. Granted, that is
+>> unlikely to happen, but the race still exists.
+> Thanks for spotting this - this is indeed a potential issue.
+> Do you also want me to add locking for the data->config access (read)
+> in jc42_read()? Without a lock there in theory jc42_write() may have
+> already updated data->config with a new value while hardware still has
+> the old value. So in the end the read output may show a hysteresis
+> which was not programmed to the registers at that time.
 > 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Thanks for noticing. I had missed that one. Yes, please.
 
-I assume you plan to push the series together. If not, please let me know.
-
+Thanks,
 Guenter
 
-> ---
->   drivers/hwmon/Kconfig     |  17 --
->   drivers/hwmon/Makefile    |   1 -
->   drivers/hwmon/s3c-hwmon.c | 379 --------------------------------------
->   3 files changed, 397 deletions(-)
->   delete mode 100644 drivers/hwmon/s3c-hwmon.c
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 7ac3daaf59ce..c98a068b5be2 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1729,23 +1729,6 @@ config SENSORS_SHTC1
->   	  This driver can also be built as a module. If so, the module
->   	  will be called shtc1.
->   
-> -config SENSORS_S3C
-> -	tristate "Samsung built-in ADC"
-> -	depends on S3C_ADC
-> -	help
-> -	  If you say yes here you get support for the on-board ADCs of
-> -	  the Samsung S3C24XX, S3C64XX and other series of SoC
-> -
-> -	  This driver can also be built as a module. If so, the module
-> -	  will be called s3c-hwmon.
-> -
-> -config SENSORS_S3C_RAW
-> -	bool "Include raw channel attributes in sysfs"
-> -	depends on SENSORS_S3C
-> -	help
-> -	  Say Y here if you want to include raw copies of all the ADC
-> -	  channels in sysfs.
-> -
->   config SENSORS_SIS5595
->   	tristate "Silicon Integrated Systems Corp. SiS5595"
->   	depends on PCI
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 11d076cad8a2..b5a401ce3285 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -173,7 +173,6 @@ obj-$(CONFIG_SENSORS_PCF8591)	+= pcf8591.o
->   obj-$(CONFIG_SENSORS_POWR1220)  += powr1220.o
->   obj-$(CONFIG_SENSORS_PWM_FAN)	+= pwm-fan.o
->   obj-$(CONFIG_SENSORS_RASPBERRYPI_HWMON)	+= raspberrypi-hwmon.o
-> -obj-$(CONFIG_SENSORS_S3C)	+= s3c-hwmon.o
->   obj-$(CONFIG_SENSORS_SBTSI)	+= sbtsi_temp.o
->   obj-$(CONFIG_SENSORS_SBRMI)	+= sbrmi.o
->   obj-$(CONFIG_SENSORS_SCH56XX_COMMON)+= sch56xx-common.o
-> diff --git a/drivers/hwmon/s3c-hwmon.c b/drivers/hwmon/s3c-hwmon.c
-> deleted file mode 100644
-> index 70ae665db477..000000000000
 
