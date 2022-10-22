@@ -2,199 +2,103 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B1CAC433FE
-	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Oct 2022 06:16:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EAEBC433FE
+	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Oct 2022 10:27:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiJVGQF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 22 Oct 2022 02:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
+        id S230363AbiJVK1d (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 22 Oct 2022 06:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiJVGQF (ORCPT
+        with ESMTP id S229905AbiJVK1S (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 22 Oct 2022 02:16:05 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF88257602
-        for <linux-hwmon@vger.kernel.org>; Fri, 21 Oct 2022 23:16:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666419364; x=1697955364;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GiE7jDRnngmnch8Sp9NttX44hEUDhyllVQ8Abi4gxUk=;
-  b=RT6615e+QL7lGaID/P/wWuLxIuv93NOUmIbr68rfOUbFbibxba2AFMUJ
-   pX4yRaTZwAUHgegfGJmqsxfCN0R7uWsry2721Kfq1jwq5H4Am6zBsEVpw
-   50xvxj/o3jVCVrIKYT/HHw6ZOhDcNHeMlz67lOkNB9VuowjsyWRMwQyBD
-   7XsB0JhWOd+uqdO50Jcy7SZ5zfR2ruFd2jFHQMHh7WuGb99C6rTvIIOdl
-   sCNrpEyAedsnGaZDDQlrEK44bpHmWYxFHUwWRSb+2KXO6xVCBm2lkAKoI
-   yPF530LUoWcgTQ+o/U9s//ZmHMGDTGmY+vgaq49M2KK3E2amBIPRn2HOn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="287559274"
-X-IronPort-AV: E=Sophos;i="5.95,204,1661842800"; 
-   d="scan'208";a="287559274"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 23:16:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="699605158"
-X-IronPort-AV: E=Sophos;i="5.95,204,1661842800"; 
-   d="scan'208";a="699605158"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Oct 2022 23:16:02 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1om7ne-0003Op-0L;
-        Sat, 22 Oct 2022 06:16:02 +0000
-Date:   Sat, 22 Oct 2022 14:15:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 0d1e30b94017cc9ddd3235560277c0fbf2f96b2e
-Message-ID: <63538a67.1MjURS9zDbZGgQMB%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        Sat, 22 Oct 2022 06:27:18 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E04B95E7B;
+        Sat, 22 Oct 2022 02:42:33 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1E5045C00AC;
+        Sat, 22 Oct 2022 04:37:21 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Sat, 22 Oct 2022 04:37:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1666427841; x=1666514241; bh=mgwwibNaT3
+        9+srj0kSxQYqzYjr590nm91NQ/yE3P2VI=; b=BlDGDTNlJnJCBDoKT3UDmEXcje
+        3oWmZxA3QtASURMgetnwzRk/HVzhXXJT81PcEvD/rs0R5FFooMwg/8ino08gYwFo
+        yYfhb3Lv0w10TZdx6au/rM92a4h+4GSxKlBD38ewIg7zcKpUcQA0c8X1AgHTMY3v
+        H0pgILNR5liO9VKvdLh148Qlz9CihXrA6n347AegJs6kVhpen/0d41pX2pEimQLA
+        i7b6WzgCEyNKX+T6OAPxCVSHls1gbWsfodXCcDYjcfl57aJW0/Fjg/VY+C6cD8tB
+        4ZOmKJlVzPA9wcp0gLi21XuHFAPW3Ky9VpazzPQ7V2m+92D4NVFbXX3JmJjA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666427841; x=1666514241; bh=mgwwibNaT39+srj0kSxQYqzYjr59
+        0nm91NQ/yE3P2VI=; b=SE05WV5Py97h+F83QVMY0MmqmuueN5k9AcJXrepAbhzm
+        QwKLBuX/46fOXAqJuX21J9A9ahIywGxBM2BIsD7otYqbUMiSiut/94hZcwEY/8RI
+        Jdg61nF8R89MKblMeOaEnFNn7hWAHl9yXbLRK7GpdkdMIk+v04qszV/NVdOF+alu
+        uLuftvGjhYlfEq3JoAp4v9xURPqUox1ibGt9YXKZlninBGv2fknbm62r8MdEEXDu
+        1HVMBMangmjXjJJQpb99Rm6B0PeE5SSxfwhfSPEXvT7cC08BI3mimNo/0HkD/ukY
+        uWBvvlPODRMLh6H7Vpj8QeAGTbD5w/6JAwRGhAj7qQ==
+X-ME-Sender: <xms:wKtTY75D2DcAbdgrUGELNl-oQpJT05H2e3yrixPOWMyorJBOggNGfA>
+    <xme:wKtTYw6oD5OCKCoPZV4Skw39kP1pP0yHNbfOQfNyF9CHAa-dPpIcBk_ZBYB55XOHZ
+    xcEJHK1T0dCvTRembk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedttddgtdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:wKtTYyd677ZS6V5nDCIWyEXkC6e2RPl_S52bm1oYRQ7dJPYpd3QGIA>
+    <xmx:wKtTY8J4jb5TKSXNdLNH_0WO3C-LIhoy6yfmdoAgh_wjzrkABu0nww>
+    <xmx:wKtTY_J61geLH48-lwzxVXZpK-4i7tbIPDIpMQJ0PrHmQt8eaPX3cQ>
+    <xmx:watTY38U9nsfu-102bCxNQax6DBR2hTlITAZW2LXPxOdRdNZSLvJ-w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 83A8EB60086; Sat, 22 Oct 2022 04:37:20 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <a357e9f1-57ec-425a-9a55-9c6114be6487@app.fastmail.com>
+In-Reply-To: <3644e7cb-4a1e-b78b-5ac6-594590190a20@roeck-us.net>
+References: <20221021202254.4142411-1-arnd@kernel.org>
+ <20221021203329.4143397-8-arnd@kernel.org>
+ <3644e7cb-4a1e-b78b-5ac6-594590190a20@roeck-us.net>
+Date:   Sat, 22 Oct 2022 10:36:59 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Guenter Roeck" <linux@roeck-us.net>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Jean Delvare" <jdelvare@suse.com>
+Cc:     linux-kernel@vger.kernel.org, "Ben Dooks" <ben-linux@fluff.org>,
+        "Simtec Linux Team" <linux@simtec.co.uk>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 08/21] hwmon: remove s3c driver
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 0d1e30b94017cc9ddd3235560277c0fbf2f96b2e  hwmon: (adm1177) simplify using devm_regulator_get_enable()
+On Sat, Oct 22, 2022, at 06:02, Guenter Roeck wrote:
+> On 10/21/22 13:27, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> The s3c adc driver was removed along with the s3c24xx platform, so the
+>> hwmon driver is orphaned and can be removed.
+>> 
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
+>
+> I assume you plan to push the series together. If not, please let me know.
 
-elapsed time: 724m
+Yes. I plan to pick up all the patches from the series through the
+soc tree that have not been NaK'd or applied to subsystem maintainer
+trees.
 
-configs tested: 122
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-alpha                               defconfig
-arc                                 defconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-sh                               allmodconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                          rhel-8.3-func
-i386                                defconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-x86_64                        randconfig-a004
-m68k                             allyesconfig
-x86_64                        randconfig-a002
-x86_64                               rhel-8.3
-x86_64                        randconfig-a006
-arc                  randconfig-r043-20221019
-x86_64                        randconfig-a013
-x86_64                           rhel-8.3-kvm
-x86_64                           allyesconfig
-arm                                 defconfig
-i386                          randconfig-a001
-x86_64                           rhel-8.3-syz
-s390                                defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-i386                             allyesconfig
-x86_64                        randconfig-a011
-i386                          randconfig-a003
-x86_64                         rhel-8.3-kunit
-i386                          randconfig-a005
-arc                  randconfig-r043-20221020
-x86_64                        randconfig-a015
-s390                 randconfig-r044-20221020
-riscv                randconfig-r042-20221020
-arm                              allyesconfig
-arc                           tb10x_defconfig
-sh                            titan_defconfig
-powerpc                     pq2fads_defconfig
-arm                         nhk8815_defconfig
-arm64                            allyesconfig
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-um                           x86_64_defconfig
-um                             i386_defconfig
-arc                  randconfig-r043-20221022
-s390                 randconfig-r044-20221022
-riscv                randconfig-r042-20221022
-ia64                          tiger_defconfig
-arm                        mvebu_v7_defconfig
-mips                    maltaup_xpa_defconfig
-arm                           u8500_defconfig
-csky                                defconfig
-parisc                generic-64bit_defconfig
-i386                          randconfig-c001
-m68k                            q40_defconfig
-sh                           se7721_defconfig
-m68k                        mvme147_defconfig
-nios2                            allyesconfig
-arc                              alldefconfig
-m68k                          atari_defconfig
-powerpc                     tqm8548_defconfig
-arm                          lpd270_defconfig
-sparc                       sparc32_defconfig
-sh                          sdk7786_defconfig
-parisc                           alldefconfig
-mips                      fuloong2e_defconfig
-arm                        multi_v7_defconfig
-powerpc                         ps3_defconfig
-m68k                           virt_defconfig
-sh                           se7722_defconfig
-arm                            zeus_defconfig
-sh                               alldefconfig
-loongarch                         allnoconfig
-arm                         lubbock_defconfig
-powerpc                      pcm030_defconfig
-parisc64                         alldefconfig
-arc                  randconfig-r043-20221018
-s390                 randconfig-r044-20221018
-riscv                randconfig-r042-20221018
-sh                         microdev_defconfig
-arm                            qcom_defconfig
-
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-riscv                randconfig-r042-20221019
-hexagon              randconfig-r041-20221020
-x86_64                        randconfig-a005
-x86_64                        randconfig-a014
-i386                          randconfig-a002
-x86_64                        randconfig-a016
-hexagon              randconfig-r045-20221020
-hexagon              randconfig-r045-20221019
-x86_64                        randconfig-a012
-i386                          randconfig-a004
-hexagon              randconfig-r041-20221019
-i386                          randconfig-a006
-s390                 randconfig-r044-20221019
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-powerpc                   microwatt_defconfig
-arm                         orion5x_defconfig
-powerpc                      obs600_defconfig
-i386                 randconfig-a013-20221017
-i386                 randconfig-a015-20221017
-i386                 randconfig-a016-20221017
-i386                 randconfig-a011-20221017
-i386                 randconfig-a014-20221017
-i386                 randconfig-a012-20221017
-arm                      pxa255-idp_defconfig
-mips                          ath79_defconfig
-powerpc                      acadia_defconfig
-arm                             mxs_defconfig
-arm                       netwinder_defconfig
-mips                        maltaup_defconfig
-powerpc                 mpc8560_ads_defconfig
-x86_64                        randconfig-k001
-mips                       rbtx49xx_defconfig
-arm                           spitz_defconfig
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+     Arnd
