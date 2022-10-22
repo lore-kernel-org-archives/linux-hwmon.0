@@ -2,105 +2,110 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0315C433FE
-	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Oct 2022 14:03:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93BC4FA3746
+	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Oct 2022 15:19:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiJVODI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 22 Oct 2022 10:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S229631AbiJVPTG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 22 Oct 2022 11:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiJVODG (ORCPT
+        with ESMTP id S229515AbiJVPS7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 22 Oct 2022 10:03:06 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B5F1735A1;
-        Sat, 22 Oct 2022 07:03:05 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id f4-20020a9d0384000000b0066208c73094so3476545otf.0;
-        Sat, 22 Oct 2022 07:03:05 -0700 (PDT)
+        Sat, 22 Oct 2022 11:18:59 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A999413C1F2
+        for <linux-hwmon@vger.kernel.org>; Sat, 22 Oct 2022 08:18:55 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1324e7a1284so7065947fac.10
+        for <linux-hwmon@vger.kernel.org>; Sat, 22 Oct 2022 08:18:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=U9p+V/nJl92so9UrSEr1XwN0g/tS5oTIgIjGDQ5542c=;
-        b=h28uo+W4L8UHSSpcPOKpvlFIfn21fJ8RtVsoHEKJ6TFeQeeuXcLUxvXh4SloK727ea
-         6TfM5jnIuAiT7fccZ0+VR8LdUs8vMEXSycm7rj/hy9EBtlRex8jyPn7ICGb4otDxmSx3
-         J4Bp+sjqFs3m6HmBMRabgAa4j+abKVBv82mQOW/rAtMXBZq6DsDX2L/6nsa7ewqpdS14
-         BaH1DWYOR3AOl4qZR4E0FoYokUfr3SfNU+ftvBwMqe4197KdI514XHMKt9uzx9KKdtQt
-         Lg+aKv4ZY2F4WA7l0+ysU1XnNrLnpmYXQX3ysLVgsKht2HxWa+Yyt8v3lry5Tj5RKP42
-         Q7qw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gz0LxUsOUlJDcIAW5bPu+WDjpQGro2FyWxGKpu7r8bo=;
+        b=gWrs34NeTJPV2fQ1MVoQY+zpFojHR3D/A6fVxaEOoPyaG1lz86TK/RINtSik3ihs6m
+         epr6PhFlnoD33CCeTfWoNQCRee99kzlwRupaR937A3VU5HU4OTIvs/zluF82SMnywl6D
+         HdEJ7m7PbwxapFaNOFa9ppWW4y91iGtKkwoLpnocgDPBTYKE8ItremNKc8YrHhceRIZp
+         h3VMtehI1AqTwZwEWQcTgFOjDVRQQngjmAnbv2gz4Ef/Bbck+zcB6GCOTs8PKUKrqPeL
+         49sPdfcCEYUyqTEphtRdJczJc984b2NmTshEFvs/XiFALWDOPilFuaMHYm7NR6Fhz+qX
+         X9nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U9p+V/nJl92so9UrSEr1XwN0g/tS5oTIgIjGDQ5542c=;
-        b=7trqoIWNp5wEV2StvzADndPIE/3gI1e6ZQXNsEGgpqjbtsKWU9VwhK+d52n4oNT5IA
-         lD9Iq419jMLmbfNHJDRqeiFhRq1CU7H8jlhuaNyQlH8tzy8gFLOXToJ+HcfvBZ7kp0JN
-         G0VTnGDGUHP+dv9OcuptS+CxR5c60uidZqmJGDs1JO3267XY+ek0TBp3z8Xj2op2o7NT
-         3xzjRFNmo0W579jTnwnOOGBkEZqvEzv5mlcI5Y8uwWfMbnkiO9g3RwweHAIQgg+AqDwz
-         aGNhaLBVve3fSNjSX+z6rFpwhw8ApxP4HwE+Z0rq22ggcKwidk+0pon2HelsUpBGKpoc
-         iOeA==
-X-Gm-Message-State: ACrzQf1m3+ZpMR2/I60x0FDCCtONWqYtBlFqTh5AesRjHOyu3NhAAxkj
-        8oTHoCtVps/o5xLtazW1rilX99pBJ2A=
-X-Google-Smtp-Source: AMsMyM7PmJEdBp+qOZe0ITk8dF/kUxZ+scmLdt4c1mPp2wQ+gbet9Dee2tUAmrWBwAb6+HmbjuR7/g==
-X-Received: by 2002:a9d:e91:0:b0:661:c5f8:fed0 with SMTP id 17-20020a9d0e91000000b00661c5f8fed0mr12500132otj.161.1666447385219;
-        Sat, 22 Oct 2022 07:03:05 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r10-20020a4a964a000000b00435a59fba01sm9758281ooi.47.2022.10.22.07.03.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 07:03:04 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v6.1-rc2
-Date:   Sat, 22 Oct 2022 07:03:03 -0700
-Message-Id: <20221022140303.1523868-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.36.2
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gz0LxUsOUlJDcIAW5bPu+WDjpQGro2FyWxGKpu7r8bo=;
+        b=FjtMiZY0ftskcWHa+Ex6NXUsHWtkrwG42Ef3L4CVJbOtrQe1EBtXLopohHvYOTLEZt
+         kNMeZh6s4m3vv5XqFmsWM0VvoUfFjk3cipD8P4VxDvhm0ey04681kQ/MbGSybz8gYpPt
+         aAaOQYYJILLyAioxUbimlBIOlLn5BT9vI5nhQ7tIb2VlfqQC+okbkwnGX0JwcqNuq5EX
+         NAQLO9KHdSc/bhurkBlCKdbMj2Kqjz+fl1ZiTV/OPnyx7CLMUoXsxqxWSbLEzl5RT7lj
+         3B8cxMcUxJ2YThUwgGCVmzjfG8YQS8In6lGHJX7uonAE9ZMYobzjLOYcyzJfBsdnCMDD
+         0cwQ==
+X-Gm-Message-State: ACrzQf2hWlhwehK2g8oPJg35nEz6Qq9rVGBuhtnM5m0suE0rSn1sNWzx
+        atpTapIKLKSb/3bI6D+GZaLSSw==
+X-Google-Smtp-Source: AMsMyM4Ums0et6AQMZox+xdB7Wz2plUu78klbaMd0EOzV1OnnwGbhhl8/BymyNDqbBFL+Y+cBT/t0g==
+X-Received: by 2002:a05:6870:f288:b0:131:de71:3eb6 with SMTP id u8-20020a056870f28800b00131de713eb6mr31239483oap.63.1666451935002;
+        Sat, 22 Oct 2022 08:18:55 -0700 (PDT)
+Received: from [10.203.8.70] ([205.153.95.177])
+        by smtp.gmail.com with ESMTPSA id v5-20020a056870310500b00136c20b1c59sm11538284oaa.43.2022.10.22.08.18.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Oct 2022 08:18:54 -0700 (PDT)
+Message-ID: <e7ace68a-98e5-63c8-7dd7-a35d0eba1c6e@linaro.org>
+Date:   Sat, 22 Oct 2022 11:18:49 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 00/21] ARM: s3c: clean out obsolete platforms
+To:     Arnd Bergmann <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-pwm@vger.kernel.org
+References: <20221021202254.4142411-1-arnd@kernel.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221021202254.4142411-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+On 21/10/2022 16:22, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The s3c24xx platform was marked as deprecated a while ago,
+> and for the s3c64xx platform, we marked all except one legacy
+> board file as unused.
+> 
+> This series removes all of those, leaving only s3c64xx support
+> for DT based boots as well as the cragg6410 board file.
+> 
+> About half of the s3c specific drivers were only used on
+> the now removed machines, so these drivers can be retired
+> as well. I can either merge the driver removal patches through
+> the soc tree along with the board file patches, or subsystem
+> maintainers can pick them up into their own trees, whichever
+> they prefer.
 
-Please pull hwmon fixes for Linux v6.1-rc2 from signed tag:
+Just to be sure - do you expect me to ack the series, or rather as usual
+pick them up?
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.1-rc2
 
-Thanks,
-Guenter
-------
+Best regards,
+Krzysztof
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.1-rc2
-
-for you to fetch changes up to 5619c6609130bce910736a61724a5ee033a0822c:
-
-  hwmon: (corsair-psu) Add USB id of the new HX1500i psu (2022-10-22 06:59:12 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v6.1-rc2
-
-- corsair-psu: Fix typo in USB id description, and add USB ID for new PSU
-
-- pwm-fan: Fix fan power handling when disabling fan control
-
-----------------------------------------------------------------
-Matthias Schiffer (1):
-      hwmon: (pwm-fan) Explicitly switch off fan power when setting pwm1_enable to 0
-
-Wilken Gottwalt (2):
-      hwmon: (corsair-psu) fix typo in USB id description
-      hwmon: (corsair-psu) Add USB id of the new HX1500i psu
-
- Documentation/hwmon/corsair-psu.rst | 2 ++
- drivers/hwmon/corsair-psu.c         | 3 ++-
- drivers/hwmon/pwm-fan.c             | 5 ++++-
- 3 files changed, 8 insertions(+), 2 deletions(-)
