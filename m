@@ -2,178 +2,128 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4384BC433FE
-	for <linux-hwmon@archiver.kernel.org>; Sun, 23 Oct 2022 21:23:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91957C3A59D
+	for <linux-hwmon@archiver.kernel.org>; Sun, 23 Oct 2022 21:32:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiJWVXF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 23 Oct 2022 17:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
+        id S229520AbiJWVc1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 23 Oct 2022 17:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJWVXF (ORCPT
+        with ESMTP id S229519AbiJWVc0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 23 Oct 2022 17:23:05 -0400
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3257AF585;
-        Sun, 23 Oct 2022 14:23:04 -0700 (PDT)
-Received: by mail-oo1-xc32.google.com with SMTP id j6-20020a4ab1c6000000b004809a59818cso1189740ooo.0;
-        Sun, 23 Oct 2022 14:23:04 -0700 (PDT)
+        Sun, 23 Oct 2022 17:32:26 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672AB6686F;
+        Sun, 23 Oct 2022 14:32:25 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id i21so3745458edj.10;
+        Sun, 23 Oct 2022 14:32:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=YJo2eoSpd0840BYnEtetg+AiX2kA0GgYy7/eADFAhgc=;
-        b=XtzSyxWekFz4MnKQgq+88rWdcrb7O1160xWj5sgilKg3ViaeERF2evGfOFpld474rg
-         gn1kQfBkGh+Vy+AEGL7rpBRDfAipRbznA3td7pdLTwCad8aAptmJYUwOFI03yviiagNT
-         iSAeGMaEv96awqLdFSTySpDbAj9Mar9Vj7gNaZ+uR91HWNLu/ex4csux5h5b8xeCChiD
-         BTFRlkjXgXPs2dhFdGkDJmLvB7PgyIdA0TKi8bJgbXf/qDe8/sR5iee3pjppaNTPYeL3
-         S6WRSA/0K13/EZ/S8nJuaApANQJjVGuh5T1bIzTprjBAg378OhlKp6jCeb+CCm+tngYz
-         MkMg==
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MWNT4BOOGAWE7uVudEYwnTe3rpuhF6dOOchvfrQLy74=;
+        b=Q7kPkfdGXrGONHTdzye4zo66GjMfUh8yci08WliPZtByfTBpW7sb/X1xNd+JE4BrTH
+         5X8clDt87K6hLaAjlZN7mPDO/3jt5rkDYFYDXKkkrGhW5VCRJe9eU+FXFo6tpmGVbYEY
+         WlXCpE9srIVbQi8ccr3xnsRCC6a39CqLzInWf5Pldiu5t8Sbkh1rex+XqRnVY4sgSPT3
+         wIlNSZsWFqKouhvBses0/SJYCyAvx0nizFz56cWzn4dQEzroyQIfNnyq3lWGTkslXEcj
+         IiaF5bl21LD0CcW/XyUp0AAjnNj96pwKI3rjlvuwpGSpjIKM4my9Gt+sWK+lZIm/iCLY
+         B6fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YJo2eoSpd0840BYnEtetg+AiX2kA0GgYy7/eADFAhgc=;
-        b=zrsTcu40EQAUDTgWFOIwJpkheSchbUEqv9rwAhJWUugwFis0ENm4Dae//0+7cW0J3/
-         +OAgqA+45i+x2+AAYcDUYZaL1yAfhV3/RaV+W/CSQ6NWvmHHy1/iRYRmqD1PoYEm6GJL
-         DCCh0ki4K/TiiEJ5fpuy2FeuRR8iLZb1nB/0sdzK9RprCBr6Otzaa9gZBn9cf19QFz1A
-         +MSd/CaZtVS7P1OP/dwlL3YPM7QxIR/kGgyp0sRKKr+dsVTtH+S/lWr3OJC+DWSFOuYy
-         ZrtletAmA3Lhs9+7MOvhub6vltcUN28ISdb4fl+4c15gmjrWhdsO+kwXkJj9i7fFHTTq
-         mxDw==
-X-Gm-Message-State: ACrzQf3g09QIphsyNs10d9ejT4hmgOG9ClaseKSnWAMX4Ila9lu3VSxT
-        xK8DdjmNj6QJwDgPTlpphBl/ib2oZW8=
-X-Google-Smtp-Source: AMsMyM6JEe+XxWFLLlJkCBLnL9EQLxcNu2eThkj+/YQJ7v69SBs/Fdghu1cDYliuIRDrnYLFsGSmOg==
-X-Received: by 2002:a4a:e54e:0:b0:44a:fb57:7022 with SMTP id s14-20020a4ae54e000000b0044afb577022mr13483192oot.91.1666560183485;
-        Sun, 23 Oct 2022 14:23:03 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s16-20020a05683004d000b00661a33883b8sm3609848otd.71.2022.10.23.14.23.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Oct 2022 14:23:02 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8005acfe-da2d-8d38-0e87-a96c438eeab1@roeck-us.net>
-Date:   Sun, 23 Oct 2022 14:23:00 -0700
+        bh=MWNT4BOOGAWE7uVudEYwnTe3rpuhF6dOOchvfrQLy74=;
+        b=VoeXCVQxq3/+qHdq+TCYYLJlQzgDgteBnnc+sNiLEO3WZMia4FbfHKj79ltqstA1Z9
+         Wzn1lvJ8AxdaWuUM4JY72sOV8229EJl6MQqEX65iK5TQpbINc5D2T8ymTA9aJlVCniMf
+         YjCI4kuZaDkmBI+6hD/COcyyLwizm2FvUxXtgdhq3E0TneRZV+ApPFaki3ky5nwoXXpl
+         LwvNIvdtVRCR8M+JVdF+VUkhdFvh4/dXrTgckbDScV8Kk3Xd8Ks4jm06txV5KLmih5oG
+         4uP+om6Ye/Ml5UV/28KNY7x1xn2oSxcKSULpZMt4a6GRYLBguYSj9nmjtypboAAryqWc
+         YFgw==
+X-Gm-Message-State: ACrzQf0HXD7fqPV8xgcB5yOZRtNlZhrGpLOzkvN4Ih05HIN6uBULbZGx
+        P9AacEWJIE4fsvqSoVc4rTGCt7JmICE=
+X-Google-Smtp-Source: AMsMyM5k6bWCNbrI/K3ztKP63tQJCBnlYJzDFbYWC6hOuVJSlBTbwGotTrajIzBIGKzDgxLg4jiUjQ==
+X-Received: by 2002:a17:907:843:b0:73a:5b0e:8352 with SMTP id ww3-20020a170907084300b0073a5b0e8352mr25139110ejb.438.1666560743780;
+        Sun, 23 Oct 2022 14:32:23 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a01-0c23-c10a-8500-f22f-74ff-fe21-0725.c23.pool.telefonica.de. [2a01:c23:c10a:8500:f22f:74ff:fe21:725])
+        by smtp.googlemail.com with ESMTPSA id p22-20020a056402045600b0044e01e2533asm17287454edw.43.2022.10.23.14.32.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Oct 2022 14:32:23 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux@roeck-us.net, linux-hwmon@vger.kernel.org
+Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v4 0/2] hwmon: (jc42) regmap conversion and resume fix
+Date:   Sun, 23 Oct 2022 23:31:55 +0200
+Message-Id: <20221023213157.11078-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: (bug report) HWMON & Thermal interactions
-Content-Language: en-US
-To:     Cristian Marussi <cristian.marussi@arm.com>,
-        daniel.lezcano@linaro.org
-Cc:     sudeep.holla@arm.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <Y1WHnJ6h1RSOipV4@e120937-lin>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <Y1WHnJ6h1RSOipV4@e120937-lin>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/23/22 11:27, Cristian Marussi wrote:
-> Hi,
-> 
-> Starting with v6.1-rc1 the SCMI HWMON driver failed probing on my JUNO due
-> to the fact that no trip points were (ever !) defined in the DT; bisecting it
-> looks like that after:
-> 
-> https://lore.kernel.org/all/20220804224349.1926752-28-daniel.lezcano@linexp.org/
-> 
-> the presence of the mandatory trips node within thermal zones is now
-> enforced.
-> 
-> So, this is NOT what this bug report is about (I'll post soon patches for
-> the JUNO DT missing trips) BUT once this problem was solved in the DT,
-> another issue appeared:
-> 
-> [    1.921929] hwmon hwmon0: temp2_input not attached to any thermal zone
-> 
-> that despite having now a goodi/valid DT describing 2 sensors and 2 thermal zones
-> embedding that sensors, only the first one is found as belonging to one ThermZ.
-> (this happens ALSO with v6.0 once I added the trips...)
-> 
-> Digging deep into this, it turned out that inside the call chain
-> 
-> devm_hwmon_device_register_with_info
->    hwmon_device_register_with_info
->      __hwmon_device_register
-> 	hwmon_thermal_register_sensors(dev)
-> 		--> hwmon_thermal_add_sensor(dev, j)
-> 			--> devm_thermal_of_zone_register(dev, sensor_id, tdata, )
-> 
-> the HWMON channel index j is passed to the Thermal framework in order to
-> search and bind sensors with defined thermal zone, but this lead to the
-> assumption that sequential HWMON channel indexes corresponds one-to-one to the
-> underlying real sensor IDs that the ThermalFramework uses for matching
-> within the DT.
-> 
-> On a system like my SCMI-based DT where I have 2 temp-sensors bound to 2
-> thermal zones like:
-> 
-> thernal_zones {
-> 	pmic {
-> 		...
-> 		thermal-sensors = <&scmi_sensors0 0>;
-> 		...
-> 		trips {
-> 			...
-> 		}
-> 	soc {
-> 		...
-> 		thermal-sensors = <&scmi_sensors0 3>;
-> 		...
-> 		trips {
-> 			...
-> 		}
-> 	}
-> }
-> 
-> This works fine by chance for the pmic (j=0, sensor_id=0) BUT cannot work for
-> the soc where J=1 BUT the real sensor ID is 3.
-> 
-> Note that there can be a number of sensors, not all of them of a type handled
-> by HWMON, and enumerated by SCMI in different ways depending on the
-> platform.
-> 
-> I suppose this is not an SCMI-only related issue, but maybe in non-SCMI
-> context, where sensors are purely defined in the DT, the solution can be
-> more easily attained (i.e. renumber the sensors).
-> 
-> At first I tried to solve this inside scmi-hwmon.c BUT I could not find
-> a way to present to the HWMON subsystem the list of sensors preserving
-> the above index/sensor_id matching (not even with a hack like passing
-> down dummy sensors to the HWMON subsystem to fill the 'holes' in the
-> numbering)
-> 
-> My tentative solution, which works fine for me in my context, was to add
-> an optional HWMON hwops, so that the core hwmon can retrieve if needed the
-> real sensor ID if different from the channel index (using an optional hwops
-> instead of some static hwinfo var let me avoid to have to patch all the
-> existent hwmon drivers that happens to just work fine as of today...but
-> maybe it is not necessarily the proper final solution...)
-> 
-> i.e.
-> 
-> ----8<----
-> 
-> Author: Cristian Marussi <cristian.marussi@arm.com>
-> Date:   Fri Oct 21 17:24:04 2022 +0100
-> 
->      hwmon: Add new .get_sensor_id hwops
->      
->      Add a new optional helper which can be defined to allow an hwmon chip to
->      provide the logic to map hwmon indexes to the real underlying sensor IDs.
->      
+Hello,
 
-Maybe I am missing something, but ...
+this is a follow-up to the comments I got from Guenter on v1 of my patch
+from [0] titled:
+  "hwmon: (jc42) Restore the min/max/critical temperatures on resume"
+There Guenter suggested: "The best solution would probably be to convert
+the driver to use regmap and let regmap handle the caching". That's the
+goal of this series - in addition to fixing the original resume issue
+(see patch #3 - which was the reason for v1 of this series).
 
-The driver isn't supposed to know anything about thermal devices and
-thermal zones. If that no longer works, and drivers have to know about
-thermal zones and thermal zone device index values anyway, we might
-as well pull thermal device support from the hwmon core and implement
-it in drivers.
+Guenter suggested:
+> Make sure that the alarm bits are not dropped after reading the
+> temperature (running the 'sensors' command with alarms active should
+> do)
+I configured the limits to be below the case temperature on my system
+(as the jc42 sensor - a ST Microelectronics STTS2004 - is part of the
+DIMMs) and ran sensors three times in a row. The output is the same for
+all runs:
+  temp1:       +35.0°C  (low  =  +0.0°C)            ALARM (HIGH, CRIT)
+                        (high = +25.0°C, hyst = +25.0°C)
+                        (crit = +30.0°C, hyst = +30.0°C)
+My conclusion is that the alarm bit is not dropped after reading the
+temperature.
 
-Guenter
+
+Changes since v3 at [2]:
+- re-add the update_lock mutex as Guenter spotted that it's still
+  needed in jc42_write() - and later on we found out that jc42_read()
+  also requires it (previously it was part of the now removed
+  jc42_update_device()). This affects patch #1
+- added Guenter's Reviewed-by to patch #2 (thank you!)
+
+Changes since v2 at [1]:
+- squashed patches #1, #2 and #4 into the new patch #1 (without any
+  other changes to content in jc42.c)
+- patch #3 has no changes other than it's numbering (see previous
+  change)
+- dropped RFC prefix
+
+Changes since v1 at [0]:
+- marked as RFC
+- added patches for regmap (patch #1) and regcache (patch #2) conversion
+- patch #3 has been updated to use regcache for restoring the register
+  values during system resume (this was originally patch 1/1)
+- added another patch to remove caching of the temperature register
+
+
+[0] https://lore.kernel.org/linux-hwmon/20221019214108.220319-1-martin.blumenstingl@googlemail.com/
+[1] https://lore.kernel.org/linux-hwmon/20221020210320.1624617-1-martin.blumenstingl@googlemail.com/
+[2] https://lore.kernel.org/linux-hwmon/20221021165000.1865615-1-martin.blumenstingl@googlemail.com/
+
+
+Martin Blumenstingl (2):
+  hwmon: (jc42) Convert register access and caching to regmap/regcache
+  hwmon: (jc42) Restore the min/max/critical temperatures on resume
+
+ drivers/hwmon/Kconfig |   1 +
+ drivers/hwmon/jc42.c  | 243 ++++++++++++++++++++++++------------------
+ 2 files changed, 141 insertions(+), 103 deletions(-)
+
+-- 
+2.38.1
 
