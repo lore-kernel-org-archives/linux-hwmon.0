@@ -2,127 +2,107 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B685ECAAA1
-	for <linux-hwmon@archiver.kernel.org>; Sun, 23 Oct 2022 05:53:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4DCFECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Sun, 23 Oct 2022 13:16:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbiJWFx4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 23 Oct 2022 01:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
+        id S230503AbiJWNQS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 23 Oct 2022 09:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiJWFxz (ORCPT
+        with ESMTP id S231167AbiJWNQC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 23 Oct 2022 01:53:55 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAFF6A486
-        for <linux-hwmon@vger.kernel.org>; Sat, 22 Oct 2022 22:53:54 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id m16so20157259edc.4
-        for <linux-hwmon@vger.kernel.org>; Sat, 22 Oct 2022 22:53:54 -0700 (PDT)
+        Sun, 23 Oct 2022 09:16:02 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D0A27FFC;
+        Sun, 23 Oct 2022 06:15:40 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id m15so22134345edb.13;
+        Sun, 23 Oct 2022 06:15:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=My7nuE1BYCE2MBazvCjecOzY7KXfxj02Yl/o6hpzQHQ=;
-        b=C2nTtrIiTK16s3ooQ9vBQioJHuUXFAVzLkYsLXB1TkfTj3IC+bMNdpZSBOftL9Lm5D
-         zDdlLoNEOOLmMk4d8TAl58ZD91gWHTxX8yX32vExEn2zKagm44cdeVYnTgSEja0bjoTS
-         8FSidrhX809LGi/j28fP75kf5meUrcB3b4DlhQo5mpb+8TpeMNqKwzqj27shGbo/HRyY
-         RhnUcMtTi2cq25xqESYO6+6fOEo6oCjiUBwuMCnloF3fBTB4+r0TY90EzF0ZLzBJfKJH
-         +dl+2N8/SGVlb6YjQKD1ej9kseyqjSVZrRXgR6HdEUQH28qz8vLECdStbOuiMVHqzNkL
-         57tA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CHgwQM7J9w2p/Yomya8nmFZftLJ0S3USYJ+LjewRLkQ=;
+        b=AxsDpkehrbvam7YPhUxQrFsGZZd/02lptE1TxGzjninV+9EGxCM7acploa4jtgja/V
+         3VO/vZ8wz2mQrLHakDEzIf40L8RC/3lr1PG2htWaJjgqp5C5Nyl8912OYmFDFGHmQ4og
+         6+marLRjPenETnHJ1kTBhuAVP1ZKyK9ypzv+Pgj7wPIUz6/TMPCClIwIgJDTyYLqfmFp
+         W4wJR3QY4ZATt0vx5yYZmxM2iWCc/dfrNEnq4xgOo6Fdxc3KzX0wPReHOn0Z2et2GQSL
+         warnCHWHWLFjhjWyrdkI/B7fJjbnuamFljDz3uPZwPO+azIU8bHokdAoLGQ1xjSqW8Jj
+         FKHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=My7nuE1BYCE2MBazvCjecOzY7KXfxj02Yl/o6hpzQHQ=;
-        b=g0+yqdpjT5yfL1Ytb2GRaIsw2mBmDpJMO+ogGcGBq+E4eJNDXp/1HcFJCImO78RXKc
-         moUFsPU7HsfTsdxPkIs78vhpXutwYNcAc4ND9ZaMiREEwmgb5MbsJ8h9r7NfRBlLAEFL
-         FxA70m4+q3sefCRlHyi6HuXdRRTKc78nwZvNSGIaEvaezrgo771J6sJ6vi2DrhSchEP1
-         UZG9DTbVDA1ld0l9/F8nAGnfrgAH5GBr6JjoR/vJfW8XU5I608DdnXnhNFXnu7ShomCi
-         LCKciXK1lVzvzFV82S0whaKuZCCXg9eJkimJlCPYSuefuEDpxOSblSkypSCfM0vo2MB8
-         iLHQ==
-X-Gm-Message-State: ACrzQf0rmVTpvtlk1ZpksJ+QfZAa1R2eRH0z1LnjhJ9WyUGzN0RUWQHW
-        cSRJGYoCUq+EY2C17BeeC56hGsabxezcF3NMiDSWYA==
-X-Google-Smtp-Source: AMsMyM71Mirfx+iLpJmgp5w4ZBRQtkFF2/qgKz0rQTgI1pdyQfDr4yXrJKBxMUU67lb00LeaEE0GjI9LtttFDFxxGBg=
-X-Received: by 2002:a05:6402:90c:b0:457:b5ce:5f18 with SMTP id
- g12-20020a056402090c00b00457b5ce5f18mr25418729edz.309.1666504432720; Sat, 22
- Oct 2022 22:53:52 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CHgwQM7J9w2p/Yomya8nmFZftLJ0S3USYJ+LjewRLkQ=;
+        b=wy3DiC5Qk/hDjFaKviSBD8UWaRfmZhNUZDrrx8kYK/LNFMda0Y+zjrRgPBLJhMK8G9
+         Ah5J/do/f3XMPQreyASLiQ0hnPC/upzx+abWbPWw2g2CRYV0SGBEdy+WoGsqZElf71Ev
+         R5lSwdywhOevl3F3U5Q0HjlzmwZjrp0dVI6/ckkMAe/GKTpkiJY4S+rik918RTYLPteh
+         pc9LNKwGRWjGJ3LmT/P7MDXWVA3OQ+Se09z4IUz6qOt4trI83HlKNXpQedfNnro5wjkG
+         5Wszc+XCtU7aI2nMfquE3IoEDJA2Hy+yxKbVHrayO8JkZCYuhdPklvE7W1twoROO1K91
+         mp+w==
+X-Gm-Message-State: ACrzQf2dFPYMxt/cnGVqCLWMsBKg955HhYBK1xduoPjSa/BbUQUS67AL
+        /zPm51nsWGIEd/tmAUGahwv/Koy44OyznKe1
+X-Google-Smtp-Source: AMsMyM7H9g5HPTmoMnueWo24D9wlG3WYElx2Sc8Yqei5jSbbvktacAVALtu9/bsxindbGqghkrPWlQ==
+X-Received: by 2002:a17:906:d555:b0:78d:ce55:23af with SMTP id cr21-20020a170906d55500b0078dce5523afmr23051719ejc.524.1666530938667;
+        Sun, 23 Oct 2022 06:15:38 -0700 (PDT)
+Received: from [192.168.0.22] ([87.116.164.153])
+        by smtp.gmail.com with ESMTPSA id eg49-20020a05640228b100b0045fd8e22d9dsm5873430edb.40.2022.10.23.06.15.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Oct 2022 06:15:38 -0700 (PDT)
+Message-ID: <6ef88c2c-3435-8847-0f4f-53e81cd3af5d@gmail.com>
+Date:   Sun, 23 Oct 2022 15:15:36 +0200
 MIME-Version: 1.0
-References: <20221013094838.1529153-1-Naresh.Solanki@9elements.com>
-In-Reply-To: <20221013094838.1529153-1-Naresh.Solanki@9elements.com>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-Date:   Sun, 23 Oct 2022 11:23:42 +0530
-Message-ID: <CABqG17gYexJkzLou1HVP7n4CGyXq70oq68E+nCOwvf=OMFhqTA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] Add devicetree support for max6639
-To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for temperature
+ sensor offsets
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, leonard.anderweit@gmail.com,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221021174834.736930-1-savicaleksa83@gmail.com>
+ <20221022135720.GA739650@roeck-us.net>
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+In-Reply-To: <20221022135720.GA739650@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-In this latest patch series V4 , I've addressed the comments of V3.
-Since this is merely an upgrade of driver from platform driver to dt
-support, can we get this in.
+On 2022-10-22 15:57:20 GMT+02:00, Guenter Roeck wrote:
+> Please go up to 100 columns to avoid excessive line splits.
+
+Will fix this and other comments in v2.
+
+> Is it really necessary to re-read the control buffer repeatedly
+> to report this value ? I don't know how costly that is, but unlike
+> the pwm value I would not expect the number to change.
+
+Yes, aside from the driver userspace can also change settings on the
+device using hidraw and we'd end up with stale data. Reading it is
+very fast, it takes about 4ms in my testing.
+
+> Also, is this number indeed not included in the regular reports
+> sent from the controller ?
+
+Unfortunately, it's not. The sensor report only includes final (calculated)
+sensor readings.
+
+> The driver doesn't distinguish between offsets in the control buffer
+> (pwm, and now temperature sensor offset) and offsets in the report buffer,
+> making it a bit difficult to determine if those are the same or not.
+> Some explanation in the driver would be nice if someone finds the time
+> to provide one. If the control buffer offsets are in a different number
+> space, they should really be marked accordingly (for example with a
+> _CTRL in the define).
+
+I can see how it can be confusing. After this, I can send a patch to
+reorder the macros & initializations and add more comments regarding
+what is what.
 
 Thanks,
-Naresh
-
-Regards,
-Naresh Solanki
-
-
-
-9elements GmbH, Kortumstra=C3=9Fe 19-21, 44787 Bochum, Germany
-Email:  naresh.solanki@9elements.com
-Mobile:  +91 9538631477
-
-Sitz der Gesellschaft: Bochum
-Handelsregister: Amtsgericht Bochum, HRB 17519
-Gesch=C3=A4ftsf=C3=BChrung: Sebastian Deutsch, Eray Basar
-
-Datenschutzhinweise nach Art. 13 DSGVO
-
-
-On Thu, 13 Oct 2022 at 15:18, Naresh Solanki
-<naresh.solanki@9elements.com> wrote:
->
-> These patches adds devicetree support for MAX6639.
->
-> Changes V4:
-> - Fix dt error
-> - update comment
-> Changes V3:
-> - correct fan dt property name
-> - remove unrelevent changes
-> Changes V2:
-> - Fix dt schema error.
-> Changes:
-> - Add fan-common dt schema.
-> - add dt-binding support for max6639
-> - add max6639 specific property
->
-> Marcello Sylvester Bauer (1):
->   dt-bindings: hwmon: Add binding for max6639
->
-> Naresh Solanki (2):
->   dt-bindings: hwmon: fan: Add fan binding to schema
->   hwmon: (max6639) Change from pdata to dt configuration
->
->  .../devicetree/bindings/hwmon/fan-common.yaml |  48 ++++
->  .../bindings/hwmon/maxim,max6639.yaml         |  86 ++++++++
->  drivers/hwmon/max6639.c                       | 206 +++++++++++++-----
->  3 files changed, 287 insertions(+), 53 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.ya=
-ml
->  create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639=
-.yaml
->
->
-> base-commit: 0cf46a653bdae56683fece68dc50340f7520e6c4
-> --
-> 2.37.3
->
+Aleksa
