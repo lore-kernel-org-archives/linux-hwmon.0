@@ -2,68 +2,182 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6924EC04A95
-	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Oct 2022 23:09:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB58BC433FE
+	for <linux-hwmon@archiver.kernel.org>; Sun, 23 Oct 2022 03:19:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbiJVXJN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 22 Oct 2022 19:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60426 "EHLO
+        id S229756AbiJWDTL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 22 Oct 2022 23:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbiJVXJB (ORCPT
+        with ESMTP id S229882AbiJWDTI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 22 Oct 2022 19:09:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5F7D77F9;
-        Sat, 22 Oct 2022 16:09:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4FC260B5C;
-        Sat, 22 Oct 2022 23:09:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1EB93C43142;
-        Sat, 22 Oct 2022 23:09:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666480140;
-        bh=4hUCG+3wwZpbbBxe5oInMxhZrkVOFV39XZDZAEj9Gbs=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=jtzmsBR484NLt84b9Xw9xi+GNW/R2Q7EUYMQTxGIrXF9Irj0b/jbH+a0ZN52bF99s
-         gsBiosBsOBCpB0wRqPaOwvZUPuXqWviw9m4boUcYwVP+cZbGPu/YKbkiZQusv0BgGd
-         bQiJWgszUmg0T1ImimPXfPw5OHBZI87mevWWDdwEApOoXOpv/VdnVjMxqg82wHZ6rc
-         7ErA4gjvC5bCeUlc+5icr4TYj4ilm1jFs/mtGjbOhBfw03TfRyu3zxzGx8YwMEeAAB
-         jqhhPVHG5qXuJT3t1fjiN0rpXDUq++gwUZmU7LXSroXyKu7nSpjt6U2+D9npe20v0O
-         9U/du/DN5dwBA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 094F7C4166D;
-        Sat, 22 Oct 2022 23:09:00 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon fixes for v6.1-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221022140303.1523868-1-linux@roeck-us.net>
-References: <20221022140303.1523868-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221022140303.1523868-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.1-rc2
-X-PR-Tracked-Commit-Id: 5619c6609130bce910736a61724a5ee033a0822c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d47136c2801540e80f41ec7e063d8d592568ad76
-Message-Id: <166648014003.24083.1665962232735300969.pr-tracker-bot@kernel.org>
-Date:   Sat, 22 Oct 2022 23:09:00 +0000
+        Sat, 22 Oct 2022 23:19:08 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE786B8E6
+        for <linux-hwmon@vger.kernel.org>; Sat, 22 Oct 2022 20:19:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666495146; x=1698031146;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GbepCLHaIO1Qxcp1LFCiDTh/sz246K56IihhLe/xyhI=;
+  b=fq8RIYz6+8JqEtV1IBw3UcA+C4hjuPsVl5uHv4huPE70KZFzaqD64ERg
+   BFgAnm55uhkMlx+94dcU9AavS6vyhe/l9tICjGmA47kneUvg3Dyx4HW3u
+   PysjVvWdpf7xTCKLtAmcmKQCgS6ke7xa6zMlqvAZdAcvptuPNlIcodMwT
+   aPd5GXS3HG/REUv6gKQlcOfPF/hD7JxqrNnaqaC4+5++OsCSvxncqA2py
+   VvpJHB+SO0fj0Aqjbd1TC9BOcO3nxY6WesNMMDLBF6JMHomXJ1aut1USz
+   YTuL9WZ7htm2XzDoyGYWBFzvwYBuTHZK55PrhY0EthHjDgZAYG+FaTbQL
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="307221458"
+X-IronPort-AV: E=Sophos;i="5.95,206,1661842800"; 
+   d="scan'208";a="307221458"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2022 20:18:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="960052404"
+X-IronPort-AV: E=Sophos;i="5.95,206,1661842800"; 
+   d="scan'208";a="960052404"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 22 Oct 2022 20:18:58 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1omRVp-00045m-1w;
+        Sun, 23 Oct 2022 03:18:57 +0000
+Date:   Sun, 23 Oct 2022 11:18:50 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon] BUILD SUCCESS
+ 5619c6609130bce910736a61724a5ee033a0822c
+Message-ID: <6354b29a.6DHmqrTDqT35cbil%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Sat, 22 Oct 2022 07:03:03 -0700:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: 5619c6609130bce910736a61724a5ee033a0822c  hwmon: (corsair-psu) Add USB id of the new HX1500i psu
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.1-rc2
+elapsed time: 723m
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d47136c2801540e80f41ec7e063d8d592568ad76
+configs tested: 105
+configs skipped: 3
 
-Thank you!
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+i386                                defconfig
+um                           x86_64_defconfig
+i386                          randconfig-a001
+arc                                 defconfig
+x86_64                              defconfig
+s390                             allmodconfig
+alpha                               defconfig
+i386                          randconfig-a003
+x86_64                               rhel-8.3
+s390                                defconfig
+i386                          randconfig-a005
+arm                                 defconfig
+x86_64                        randconfig-a002
+arm                              allyesconfig
+x86_64                           allyesconfig
+x86_64                        randconfig-a013
+i386                          randconfig-a014
+x86_64                        randconfig-a004
+x86_64                        randconfig-a011
+arm64                            allyesconfig
+x86_64                        randconfig-a006
+i386                          randconfig-a012
+s390                             allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+i386                          randconfig-a016
+x86_64                        randconfig-a015
+powerpc                          allmodconfig
+i386                             allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+s390                 randconfig-r044-20221018
+sh                               allmodconfig
+s390                 randconfig-r044-20221022
+m68k                             allmodconfig
+x86_64                           rhel-8.3-syz
+arc                              allyesconfig
+x86_64                         rhel-8.3-kunit
+alpha                            allyesconfig
+arc                  randconfig-r043-20221020
+x86_64                           rhel-8.3-kvm
+arc                  randconfig-r043-20221022
+m68k                             allyesconfig
+s390                 randconfig-r044-20221020
+arc                  randconfig-r043-20221018
+riscv                randconfig-r042-20221020
+riscv                randconfig-r042-20221022
+riscv                randconfig-r042-20221018
+arc                        nsimosci_defconfig
+microblaze                          defconfig
+powerpc                 mpc834x_mds_defconfig
+arm                          lpd270_defconfig
+arm                        clps711x_defconfig
+mips                       bmips_be_defconfig
+arm                            mps2_defconfig
+arc                     nsimosci_hs_defconfig
+i386                          randconfig-c001
+m68k                         apollo_defconfig
+powerpc                  iss476-smp_defconfig
+sh                           se7619_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+sh                           se7206_defconfig
+sh                          r7780mp_defconfig
+sparc64                          alldefconfig
+m68k                             alldefconfig
+powerpc                 mpc8540_ads_defconfig
+powerpc                     tqm8555_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+powerpc                      makalu_defconfig
+sh                     sh7710voipgw_defconfig
+
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a004
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a013
+i386                          randconfig-a006
+i386                          randconfig-a011
+x86_64                        randconfig-a012
+i386                          randconfig-a015
+x86_64                        randconfig-a005
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r041-20221022
+hexagon              randconfig-r041-20221020
+hexagon              randconfig-r045-20221022
+hexagon              randconfig-r045-20221020
+hexagon              randconfig-r041-20221018
+hexagon              randconfig-r045-20221018
+x86_64                        randconfig-k001
+mips                        bcm63xx_defconfig
+mips                      bmips_stb_defconfig
+mips                      maltaaprp_defconfig
+powerpc                      walnut_defconfig
+arm                            mmp2_defconfig
+arm                      pxa255-idp_defconfig
+arm                         socfpga_defconfig
+arm                             mxs_defconfig
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+0-DAY CI Kernel Test Service
+https://01.org/lkp
