@@ -2,201 +2,64 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87742C67871
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Oct 2022 22:59:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DB0CC67871
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Oct 2022 23:31:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiJXW7X (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Oct 2022 18:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
+        id S230510AbiJXXbl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Oct 2022 19:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiJXW6w (ORCPT
+        with ESMTP id S231178AbiJXXbO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:58:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D0C63286B9;
-        Mon, 24 Oct 2022 14:20:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9513AD6E;
-        Mon, 24 Oct 2022 14:05:03 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8260E3F7B4;
-        Mon, 24 Oct 2022 14:04:56 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 22:04:46 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
+        Mon, 24 Oct 2022 19:31:14 -0400
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259787AC0E
+        for <linux-hwmon@vger.kernel.org>; Mon, 24 Oct 2022 14:52:14 -0700 (PDT)
+Received: from rico.lan (unknown [159.196.93.152])
+        by mail.codeconstruct.com.au (Postfix) with ESMTPSA id D37EA2001E;
+        Mon, 24 Oct 2022 20:51:07 +0800 (AWST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=codeconstruct.com.au; s=2022a; t=1666615869;
+        bh=S/YqY0MKbB+AnFECwyRbAC+AXdrjgo7/39FIRTIQRgw=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=mPOwbN7xYmW30Ov8Q9roP+WiTpDaTbxtKtCZamOwiRP/4sxnLqB18iFoIa1X3imLn
+         9PNEJIg5UqdNrZELcRsLFVShK3vENrPyoT0gwE6oCrWeB231y2fU3HYmZCpfojFIZP
+         QCW1Y8xxuNJ5ghrYzDWUvZ/vtQiy5szi4DsKFt8rc4O8annqN3VpFtcPY3FD8WO1f0
+         e53uyKO21k3fIkqrQyMYT7hgw8IHmB3rPhK+eKezI5zBwuO4jULv2DwqvoEvNeOY0G
+         LjYv/FQ9sC3GrtfAhQZEeadar3+L5VS3scn8rEZu182/ABamQGYqcn8hEanTVVsYzd
+         N5bvbOmittsQw==
+Message-ID: <525cad90e1e54c7dbf10822f4a755c27a808fc6f.camel@codeconstruct.com.au>
+Subject: Re: [PATCH] hwmon/occ: OCC sensors aren't arch-specific
+From:   Jeremy Kerr <jk@codeconstruct.com.au>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     daniel.lezcano@linaro.org, sudeep.holla@arm.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: (bug report) HWMON & Thermal interactions
-Message-ID: <Y1b97mhilWF8C99d@e120937-lin>
-References: <Y1WHnJ6h1RSOipV4@e120937-lin>
- <8005acfe-da2d-8d38-0e87-a96c438eeab1@roeck-us.net>
- <93e24737-29e4-6e03-7b47-cd730989047f@roeck-us.net>
- <Y1aJTxVdOS6BIVTV@e120937-lin>
- <24b7c1b4-c690-408b-7ebf-a4e4a4cf919e@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Joel Stanley <joel@jms.id.au>
+Date:   Mon, 24 Oct 2022 20:51:07 +0800
+In-Reply-To: <20221024113218.GA3800308@roeck-us.net>
+References: <20221024081527.3842565-1-jk@codeconstruct.com.au>
+         <20221024113218.GA3800308@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.0-2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <24b7c1b4-c690-408b-7ebf-a4e4a4cf919e@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 07:51:09AM -0700, Guenter Roeck wrote:
-> On 10/24/22 05:47, Cristian Marussi wrote:
-> > On Mon, Oct 24, 2022 at 04:56:43AM -0700, Guenter Roeck wrote:
-> > > On 10/23/22 14:23, Guenter Roeck wrote:
-> > > > On 10/23/22 11:27, Cristian Marussi wrote:
-> > > > > Hi,
-> > > > > 
-> > > > > Starting with v6.1-rc1 the SCMI HWMON driver failed probing on my JUNO due
-> > > > > to the fact that no trip points were (ever !) defined in the DT; bisecting it
-> > > > > looks like that after:
-> > > > > 
-> > > > > https://lore.kernel.org/all/20220804224349.1926752-28-daniel.lezcano@linexp.org/
-> > > > > 
-> > > > > the presence of the mandatory trips node within thermal zones is now
-> > > > > enforced.
-> > > > > 
-> > > > > So, this is NOT what this bug report is about (I'll post soon patches for
-> > > > > the JUNO DT missing trips) BUT once this problem was solved in the DT,
-> > > > > another issue appeared:
-> > > > > 
-> > > > > [    1.921929] hwmon hwmon0: temp2_input not attached to any thermal zone
-> > > > > 
-> > > > > that despite having now a goodi/valid DT describing 2 sensors and 2 thermal zones
-> > > > > embedding that sensors, only the first one is found as belonging to one ThermZ.
-> > > > > (this happens ALSO with v6.0 once I added the trips...)
-> > > > > 
-> > > > > Digging deep into this, it turned out that inside the call chain
-> > > > > 
-> > > > > devm_hwmon_device_register_with_info
-> > > > >     hwmon_device_register_with_info
-> > > > >       __hwmon_device_register
-> > > > >      hwmon_thermal_register_sensors(dev)
-> > > > >          --> hwmon_thermal_add_sensor(dev, j)
-> > > > >              --> devm_thermal_of_zone_register(dev, sensor_id, tdata, )
-> > > > > 
-> > > > > the HWMON channel index j is passed to the Thermal framework in order to
-> > > > > search and bind sensors with defined thermal zone, but this lead to the
-> > > > > assumption that sequential HWMON channel indexes corresponds one-to-one to the
-> > > > > underlying real sensor IDs that the ThermalFramework uses for matching
-> > > > > within the DT.
-> > > > > 
-> > > > > On a system like my SCMI-based DT where I have 2 temp-sensors bound to 2
-> > > > > thermal zones like:
-> > > > > 
-> > > > > thernal_zones {
-> > > > >      pmic {
-> > > > >          ...
-> > > > >          thermal-sensors = <&scmi_sensors0 0>;
-> > > > >          ...
-> > > > >          trips {
-> > > > >              ...
-> > > > >          }
-> > > > >      soc {
-> > > > >          ...
-> > > > >          thermal-sensors = <&scmi_sensors0 3>;
-> > > > >          ...
-> > > > >          trips {
-> > > > >              ...
-> > > > >          }
-> > > > >      }
-> > > > > }
-> > > > > 
-> > > > > This works fine by chance for the pmic (j=0, sensor_id=0) BUT cannot work for
-> > > > > the soc where J=1 BUT the real sensor ID is 3.
-> > > > > 
-> > > > > Note that there can be a number of sensors, not all of them of a type handled
-> > > > > by HWMON, and enumerated by SCMI in different ways depending on the
-> > > > > platform.
-> > > > > 
-> > > > > I suppose this is not an SCMI-only related issue, but maybe in non-SCMI
-> > > > > context, where sensors are purely defined in the DT, the solution can be
-> > > > > more easily attained (i.e. renumber the sensors).
-> > > > > 
-> > > > > At first I tried to solve this inside scmi-hwmon.c BUT I could not find
-> > > > > a way to present to the HWMON subsystem the list of sensors preserving
-> > > > > the above index/sensor_id matching (not even with a hack like passing
-> > > > > down dummy sensors to the HWMON subsystem to fill the 'holes' in the
-> > > > > numbering)
-> > > > > 
-> > > > > My tentative solution, which works fine for me in my context, was to add
-> > > > > an optional HWMON hwops, so that the core hwmon can retrieve if needed the
-> > > > > real sensor ID if different from the channel index (using an optional hwops
-> > > > > instead of some static hwinfo var let me avoid to have to patch all the
-> > > > > existent hwmon drivers that happens to just work fine as of today...but
-> > > > > maybe it is not necessarily the proper final solution...)
-> > > > > 
-> > > > > i.e.
-> > > > > 
-> > > > > ----8<----
-> > > > > 
-> > > > > Author: Cristian Marussi <cristian.marussi@arm.com>
-> > > > > Date:   Fri Oct 21 17:24:04 2022 +0100
-> > > > > 
-> > > > >       hwmon: Add new .get_sensor_id hwops
-> > > > >       Add a new optional helper which can be defined to allow an hwmon chip to
-> > > > >       provide the logic to map hwmon indexes to the real underlying sensor IDs.
-> > > > 
-> > > > Maybe I am missing something, but ...
-> > > > 
-> > > > The driver isn't supposed to know anything about thermal devices and
-> > > > thermal zones. If that no longer works, and drivers have to know about
-> > > > thermal zones and thermal zone device index values anyway, we might
-> > > > as well pull thermal device support from the hwmon core and implement
-> > > > it in drivers.
-> > > > 
-> > > 
-> > > No, wait: The question is really: Why does the scmi driver present the sensor
-> > > with index 3 to the hwmon subsystem as sensor with index 1 ?
-> > > 
-> > > If the sensor has index 3, and is presented to other entities as sensor
-> > > with index 3, it should be presented to the hwmon subsystem as sensor with
-> > > index 3, not with index 1. If sensors with index 1..2 do not exist,
-> > > the is_visible function should return 0 for those sensors.
-> > > 
-> > 
-> > My understanding was that the hwmon index is the index of the channel
-> > and hwmon_channel_info struct groups channels by type while the index is
-> > really used as a pointer in the hwmon_channel_info.config field, so in
-> > this case you're saying I should present 4 temp sensors placing a 'hole'
-> > at sensor 1,2 making is_visible return 0 for those channels ?
-> > 
-> > Basically keeping the channel indexes in sync with the real sensor ID by
-> > the means of some dummy sensor entries in the config field: this could result
-> > potentially in a lot of holes given in SCMI the sensor_id is 16 bits and
-> > I thought that was too hackish but I can try.
-> > 
-> 
-> The underlying idea with the hwmon -> thermal bridge is that index values
-> used by thermal and by the hwmon subsystem match and, yes, that there would
-> if necessary be holes in hwmon index values (normally this is not a 16-bit
-> number space). If that doesn't work for scmi, and if there could indeed be
-> something like
-> 
->         thermal-sensors = <&scmi_sensors0 12345>;
-> 
-> then I think the solution is indeed to not rely on the hwmon->thermal bridge
-> in the hwmon core for this driver.
+Hi Guenter,
 
-Even though implausible it could be possible to have an SCMI fw platform
-advertising such high sensor IDs.
+> Should the original patch be reverted instead, and should the revert
+> be backported ? In other words, is this a bug fix which needs to be
+> applied to v6.1, or is it needed for v6.2+ only ?
 
-> 
-> > In the meantime, I gave it a go at what you suggested early (if I got it
-> > right...) by removing from the scmi-hwmon driver the HWMON_C_REGISTER_TZ
-> > attribute and adding a few explicit calls to devm_thermal_of_zone_register() at
-> > the end of the probe to specifically register the needed temp sensors (and
-> > associated real sensor IDs) with the ThermalFramework without relying on the
-> > HWMON core for Thermal and it works fine indeed.
-> > 
-> 
-> Excellent.
-> 
+This isn't a regression, we're just enabling this driver on a new
+hardware implementation. No need to backport either.
 
-I'll follow this path.
+I don't think that warrants a revert, as having a separate change means
+we keep the rationale for both changes in the git history.
 
-Thanks for your help & feedback.
-Cristian
+Cheers,
 
+
+Jeremy
