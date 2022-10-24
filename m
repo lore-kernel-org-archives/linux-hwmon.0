@@ -2,117 +2,175 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAD8EFA3744
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Oct 2022 14:30:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30D09C38A2D
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Oct 2022 14:49:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235253AbiJXOae (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Oct 2022 10:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
+        id S232606AbiJXOt2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Oct 2022 10:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234904AbiJXO2v (ORCPT
+        with ESMTP id S232758AbiJXOtO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:28:51 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED92D73C2;
-        Mon, 24 Oct 2022 06:02:17 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-13b23e29e36so10999254fac.8;
-        Mon, 24 Oct 2022 06:02:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p+x9joGdXdBFLPPxN1p6d7/jrm+b1E7zu0ZikUl9XbM=;
-        b=kN4xIs/QEGJ+oT9qrn2OjPi/N6FcvGH6BvACP76blbVF103TXYi+7qEU5tINWQ+OJz
-         dApYzrcvxoO2ZIXOFTxb7h3JgOvX67e53Ux9I2wwMvKPIJrbpeDZZobSiNgXQhwqMaF/
-         R3ztR06WTPRqxKei/NzyOWyK9tZuNZ0Cm15uInIPmFb7tUxRSre+3lm52uo1EfezpHK9
-         o9VNCRaweqKifLKL/48NiILy3trNo3072uYGiXhEVisoQwGcZ30ghYt4hAv1vlMBiN/X
-         ltLvQXpHTYGfKkWtuOvorD19U4Zbzkwzp6qZaLG5THbYH133b9fRVRaPubb8xH2WHVbL
-         oPdg==
-X-Gm-Message-State: ACrzQf3i7XkzH7UpZj1xKGIMrADeoCGwSUDmJj0hXhqGuTa4oC2Svjr2
-        vms3XoPp+qtUCiVrBxssV68CXNLJaw==
-X-Google-Smtp-Source: AMsMyM4RB1x55W7tWXLqKMCfn9+yNGKoyP28eeDXqoWuK46CSg7FurAIxSSG6961lNUtLuCZU2W88g==
-X-Received: by 2002:a05:6870:e9a8:b0:133:223f:49a1 with SMTP id r40-20020a056870e9a800b00133223f49a1mr38235091oao.114.1666616434841;
-        Mon, 24 Oct 2022 06:00:34 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g20-20020a056870c15400b0012796e8033dsm2716705oad.57.2022.10.24.06.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 06:00:34 -0700 (PDT)
-Received: (nullmailer pid 1652638 invoked by uid 1000);
-        Mon, 24 Oct 2022 13:00:35 -0000
-Date:   Mon, 24 Oct 2022 08:00:35 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH 00/21] ARM: s3c: clean out obsolete platforms
-Message-ID: <20221024130035.GA1645003-robh@kernel.org>
-References: <20221021202254.4142411-1-arnd@kernel.org>
+        Mon, 24 Oct 2022 10:49:14 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D823A102DE6;
+        Mon, 24 Oct 2022 06:26:28 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EC62C1042;
+        Mon, 24 Oct 2022 05:47:28 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DC57A3F7B4;
+        Mon, 24 Oct 2022 05:47:21 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 13:47:11 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     daniel.lezcano@linaro.org, sudeep.holla@arm.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: (bug report) HWMON & Thermal interactions
+Message-ID: <Y1aJTxVdOS6BIVTV@e120937-lin>
+References: <Y1WHnJ6h1RSOipV4@e120937-lin>
+ <8005acfe-da2d-8d38-0e87-a96c438eeab1@roeck-us.net>
+ <93e24737-29e4-6e03-7b47-cd730989047f@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221021202254.4142411-1-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <93e24737-29e4-6e03-7b47-cd730989047f@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 10:22:28PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Mon, Oct 24, 2022 at 04:56:43AM -0700, Guenter Roeck wrote:
+> On 10/23/22 14:23, Guenter Roeck wrote:
+> > On 10/23/22 11:27, Cristian Marussi wrote:
+> > > Hi,
+> > > 
+> > > Starting with v6.1-rc1 the SCMI HWMON driver failed probing on my JUNO due
+> > > to the fact that no trip points were (ever !) defined in the DT; bisecting it
+> > > looks like that after:
+> > > 
+> > > https://lore.kernel.org/all/20220804224349.1926752-28-daniel.lezcano@linexp.org/
+> > > 
+> > > the presence of the mandatory trips node within thermal zones is now
+> > > enforced.
+> > > 
+> > > So, this is NOT what this bug report is about (I'll post soon patches for
+> > > the JUNO DT missing trips) BUT once this problem was solved in the DT,
+> > > another issue appeared:
+> > > 
+> > > [    1.921929] hwmon hwmon0: temp2_input not attached to any thermal zone
+> > > 
+> > > that despite having now a goodi/valid DT describing 2 sensors and 2 thermal zones
+> > > embedding that sensors, only the first one is found as belonging to one ThermZ.
+> > > (this happens ALSO with v6.0 once I added the trips...)
+> > > 
+> > > Digging deep into this, it turned out that inside the call chain
+> > > 
+> > > devm_hwmon_device_register_with_info
+> > >    hwmon_device_register_with_info
+> > >      __hwmon_device_register
+> > >     hwmon_thermal_register_sensors(dev)
+> > >         --> hwmon_thermal_add_sensor(dev, j)
+> > >             --> devm_thermal_of_zone_register(dev, sensor_id, tdata, )
+> > > 
+> > > the HWMON channel index j is passed to the Thermal framework in order to
+> > > search and bind sensors with defined thermal zone, but this lead to the
+> > > assumption that sequential HWMON channel indexes corresponds one-to-one to the
+> > > underlying real sensor IDs that the ThermalFramework uses for matching
+> > > within the DT.
+> > > 
+> > > On a system like my SCMI-based DT where I have 2 temp-sensors bound to 2
+> > > thermal zones like:
+> > > 
+> > > thernal_zones {
+> > >     pmic {
+> > >         ...
+> > >         thermal-sensors = <&scmi_sensors0 0>;
+> > >         ...
+> > >         trips {
+> > >             ...
+> > >         }
+> > >     soc {
+> > >         ...
+> > >         thermal-sensors = <&scmi_sensors0 3>;
+> > >         ...
+> > >         trips {
+> > >             ...
+> > >         }
+> > >     }
+> > > }
+> > > 
+> > > This works fine by chance for the pmic (j=0, sensor_id=0) BUT cannot work for
+> > > the soc where J=1 BUT the real sensor ID is 3.
+> > > 
+> > > Note that there can be a number of sensors, not all of them of a type handled
+> > > by HWMON, and enumerated by SCMI in different ways depending on the
+> > > platform.
+> > > 
+> > > I suppose this is not an SCMI-only related issue, but maybe in non-SCMI
+> > > context, where sensors are purely defined in the DT, the solution can be
+> > > more easily attained (i.e. renumber the sensors).
+> > > 
+> > > At first I tried to solve this inside scmi-hwmon.c BUT I could not find
+> > > a way to present to the HWMON subsystem the list of sensors preserving
+> > > the above index/sensor_id matching (not even with a hack like passing
+> > > down dummy sensors to the HWMON subsystem to fill the 'holes' in the
+> > > numbering)
+> > > 
+> > > My tentative solution, which works fine for me in my context, was to add
+> > > an optional HWMON hwops, so that the core hwmon can retrieve if needed the
+> > > real sensor ID if different from the channel index (using an optional hwops
+> > > instead of some static hwinfo var let me avoid to have to patch all the
+> > > existent hwmon drivers that happens to just work fine as of today...but
+> > > maybe it is not necessarily the proper final solution...)
+> > > 
+> > > i.e.
+> > > 
+> > > ----8<----
+> > > 
+> > > Author: Cristian Marussi <cristian.marussi@arm.com>
+> > > Date:   Fri Oct 21 17:24:04 2022 +0100
+> > > 
+> > >      hwmon: Add new .get_sensor_id hwops
+> > >      Add a new optional helper which can be defined to allow an hwmon chip to
+> > >      provide the logic to map hwmon indexes to the real underlying sensor IDs.
+> > 
+> > Maybe I am missing something, but ...
+> > 
+> > The driver isn't supposed to know anything about thermal devices and
+> > thermal zones. If that no longer works, and drivers have to know about
+> > thermal zones and thermal zone device index values anyway, we might
+> > as well pull thermal device support from the hwmon core and implement
+> > it in drivers.
+> > 
 > 
-> The s3c24xx platform was marked as deprecated a while ago,
-> and for the s3c64xx platform, we marked all except one legacy
-> board file as unused.
+> No, wait: The question is really: Why does the scmi driver present the sensor
+> with index 3 to the hwmon subsystem as sensor with index 1 ?
 > 
-> This series removes all of those, leaving only s3c64xx support
-> for DT based boots as well as the cragg6410 board file.
+> If the sensor has index 3, and is presented to other entities as sensor
+> with index 3, it should be presented to the hwmon subsystem as sensor with
+> index 3, not with index 1. If sensors with index 1..2 do not exist,
+> the is_visible function should return 0 for those sensors.
 > 
-> About half of the s3c specific drivers were only used on
-> the now removed machines, so these drivers can be retired
-> as well. I can either merge the driver removal patches through
-> the soc tree along with the board file patches, or subsystem
-> maintainers can pick them up into their own trees, whichever
-> they prefer.
 
-[...]
+My understanding was that the hwmon index is the index of the channel
+and hwmon_channel_info struct groups channels by type while the index is
+really used as a pointer in the hwmon_channel_info.config field, so in
+this case you're saying I should present 4 temp sensors placing a 'hole'
+at sensor 1,2 making is_visible return 0 for those channels ?
 
->  Documentation/arm/index.rst                   |    1 -
->  Documentation/arm/samsung-s3c24xx/cpufreq.rst |   77 -
->  .../arm/samsung-s3c24xx/eb2410itx.rst         |   59 -
->  Documentation/arm/samsung-s3c24xx/gpio.rst    |  172 --
->  Documentation/arm/samsung-s3c24xx/h1940.rst   |   41 -
->  Documentation/arm/samsung-s3c24xx/index.rst   |   20 -
->  Documentation/arm/samsung-s3c24xx/nand.rst    |   30 -
->  .../arm/samsung-s3c24xx/overview.rst          |  311 ---
->  Documentation/arm/samsung-s3c24xx/s3c2412.rst |  121 -
->  Documentation/arm/samsung-s3c24xx/s3c2413.rst |   22 -
->  .../arm/samsung-s3c24xx/smdk2440.rst          |   57 -
->  Documentation/arm/samsung-s3c24xx/suspend.rst |  137 --
->  .../arm/samsung-s3c24xx/usb-host.rst          |   91 -
->  Documentation/arm/samsung/overview.rst        |   13 -
+Basically keeping the channel indexes in sync with the real sensor ID by
+the means of some dummy sensor entries in the config field: this could result
+potentially in a lot of holes given in SCMI the sensor_id is 16 bits and
+I thought that was too hackish but I can try.
 
-What about?:
+In the meantime, I gave it a go at what you suggested early (if I got it
+right...) by removing from the scmi-hwmon driver the HWMON_C_REGISTER_TZ
+attribute and adding a few explicit calls to devm_thermal_of_zone_register() at
+the end of the probe to specifically register the needed temp sensors (and
+associated real sensor IDs) with the ThermalFramework without relying on the
+HWMON core for Thermal and it works fine indeed.
 
-Documentation/devicetree/bindings/clock/samsung,s3c2410-clock.txt
-Documentation/devicetree/bindings/interrupt-controller/samsung,s3c24xx-irq.txt
-Documentation/devicetree/bindings/mmc/samsung,s3cmci.txt
-Documentation/devicetree/bindings/mtd/samsung-s3c2410.txt
-Documentation/devicetree/bindings/usb/s3c2410-usb.txt
+Thanks,
+Cristian
 
-Rob
