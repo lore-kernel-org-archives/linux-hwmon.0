@@ -2,119 +2,137 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB3E2C38A2D
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Oct 2022 17:13:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD226FA373F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Oct 2022 17:45:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233616AbiJXRNu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Oct 2022 13:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
+        id S232671AbiJXRpt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Oct 2022 13:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234649AbiJXRNZ (ORCPT
+        with ESMTP id S232484AbiJXRpY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:13:25 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E072A422FA
-        for <linux-hwmon@vger.kernel.org>; Mon, 24 Oct 2022 08:49:03 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id fy4so6009659ejc.5
-        for <linux-hwmon@vger.kernel.org>; Mon, 24 Oct 2022 08:49:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k8cUhyF+iRbpVm7ZibvpxWN910TkG4qCMbi/DBVKQRg=;
-        b=QCCxpZW74bpelD0cNFpuKewanqSBjPB7XKJWDhBUTh84B2UhnfiEX7GS+upegiuLBN
-         GnCLEiGyh2+g1Kl3P0dDR8QNa8afxCSggYk5rMFobYArvjr6oqrzFOf9gS3aSWB4ZFda
-         Xp17BhKgvbvZPef2NqX9p2f5t6HDGFD00BTLbhbHBUEGa05KY6EZmP42uKlWCESxSQDU
-         2Kg9+7nk8CAJQD0XlnwOFeQBBR0e0NvmzklW0Yz6WsNRJ+5/iRgp2e+8v/YGH2Opus7Q
-         DrQdCkgbinCnYan3+pBpZfZw1E5RRsY1RLLRy1yybVUMPQ1b+5k/ni9Kr73H8v8XF5nd
-         2tYw==
+        Mon, 24 Oct 2022 13:45:24 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D3E1E0996;
+        Mon, 24 Oct 2022 09:21:05 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id g10so11328162oif.10;
+        Mon, 24 Oct 2022 09:21:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k8cUhyF+iRbpVm7ZibvpxWN910TkG4qCMbi/DBVKQRg=;
-        b=j9kElf/9EK7WORWGHZELE8PEytwHnK2rkjXOS6rQKFRIIWXoeHZaJyBYuiDDUurQOI
-         qV7KLq5zXLkV9atq3GANbEf0t+n1XVl9EJRjOa2Pd3jj/15J8uH8X3iMIG3R8MIWnjjD
-         2nj+jRzxk19HwoE+z6shPcOg/YWmnF+dSW6mzKeD6Ghel2Mqnj3jfZD4i1E8D05aVVJs
-         FaulXR606a9qjQf0eDYNPPB5W08LbOU0ExaC2uUMkQawHwKlqQl9bbwgR+jyuERFifG+
-         4vOJlZlhhnQs4IDyWvUelsH1n9pSr1l/eEPi91uWRtSVqiEktmj3fmC6KtYVW8tqYJG5
-         +RHQ==
-X-Gm-Message-State: ACrzQf3Jzl9WM6jsY4nfTqLFm1jObOTH/Kb5P7tFQeieE/bVAu0S17A6
-        326qJwpuN2FmxISZbVUQKo2Nq1JjcZivmYzRuhMTPw==
-X-Google-Smtp-Source: AMsMyM6eSCRZlQsr3x3MX2LJ8U7dR/Lcp1uuiIC6p0cWOh1wq3htWWGbxETJTk6iSILIXgvjOp4IhCLlxGinAjrVdY0=
-X-Received: by 2002:a17:907:5c2:b0:77e:def7:65d8 with SMTP id
- wg2-20020a17090705c200b0077edef765d8mr28634968ejb.487.1666626461004; Mon, 24
- Oct 2022 08:47:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1666357434.git.mazziesaccount@gmail.com>
- <1ed8351c2cb4911fcda21b97f7a7b089e955c301.1666357434.git.mazziesaccount@gmail.com>
- <d1ed9ab7-6d67-fd93-6a77-86ea029eedc5@gmail.com>
-In-Reply-To: <d1ed9ab7-6d67-fd93-6a77-86ea029eedc5@gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 24 Oct 2022 17:47:29 +0200
-Message-ID: <CAG3jFyvveGsO6VW1q8-aK1psabze5gAN=wCn16+Q4A_KH=WuvA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] gpu: drm: sii902x: Use devm_regulator_bulk_get_enable()
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xmB3s2OqT66rk7MgqqeQlYz/bdEkGy0qgYIJeA+CLy0=;
+        b=FnOFaJ798AxvaRulplcwTZJhJ0Buvqy54tQAH+JiCsqQCYisMfdawARe6FxTB/sXPz
+         pfM28WLF9zUc6Atl08zL9WaWAYNpvCu/hxRowDXVWqJbRaQzoSumXhqhUkHYw9qDje5f
+         D4e0RWdBqYCrzjaxw25HfH/NKBxAlqXX5szyJAq5tk+Vnnamr+MplNDrPeqr0x8zZxp5
+         FWT65b5ShPpOSFbcvubbVIWh/pRYGcdMxWVE3/RgrRxtXbgjZEO6Uu9l0BT5eBsup8VS
+         g4PNhnqPE8/yq/tmJrCZNew5m6AiETdeMuyoxTqMMWozqUwLWlgDFIBh79eYJ1C3EgAk
+         9t8w==
+X-Gm-Message-State: ACrzQf0hPbDOEYY86bPBwWeAJysCdzxScObtmk+8cMlI/0wZ7YMqVbls
+        IVYobjabJe467ZuzweFz8Vwr8l3SWw==
+X-Google-Smtp-Source: AMsMyM5GgVf+Fq2zW0aTr2tqUvK6jEfRogxjv/ZwsWgOlV1NxE7O2hFWOphibJoEQeTRkOA57/pCWg==
+X-Received: by 2002:aca:3083:0:b0:355:afb:cdb5 with SMTP id w125-20020aca3083000000b003550afbcdb5mr28020261oiw.110.1666628285473;
+        Mon, 24 Oct 2022 09:18:05 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c23-20020a056808105700b0035486165f4csm3334oih.37.2022.10.24.09.18.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 09:18:04 -0700 (PDT)
+Received: (nullmailer pid 1869834 invoked by uid 1000);
+        Mon, 24 Oct 2022 16:18:06 -0000
+Date:   Mon, 24 Oct 2022 11:18:06 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
+Message-ID: <20221024161806.GA1855651-robh@kernel.org>
+References: <20221013094838.1529153-1-Naresh.Solanki@9elements.com>
+ <20221013094838.1529153-2-Naresh.Solanki@9elements.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221013094838.1529153-2-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 21 Oct 2022 at 15:24, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
->
-> On 10/21/22 16:18, Matti Vaittinen wrote:
-> > Simplify using devm_regulator_bulk_get_enable()
-> >
-> > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> > Reviewed-by: Robert Foss <robert.foss@linaro.org>
->
-> Robert, I did slightly modify the return from probe when using the
-> dev_err_probe(). I still decided to keep your RBT - please let me know
-> if you disagree.
+On Thu, Oct 13, 2022 at 11:48:36AM +0200, Naresh Solanki wrote:
+> Add common fan properties bindings to a schema.
+> 
+> Bindings for fan controllers can reference the common schema for the
+> fan
+> 
+> child nodes:
+> 
+>   patternProperties:
+>     "^fan@[0-2]":
+>       type: object
+>       $ref: fan-common.yaml#
+> 
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
+>  .../devicetree/bindings/hwmon/fan-common.yaml | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> new file mode 100644
+> index 000000000000..224f5013c93f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> @@ -0,0 +1,48 @@
+> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Common fan properties
+> +
+> +maintainers:
+> +  - Naresh Solanki <naresh.solanki@9elements.com>
+> +
+> +properties:
+> +  max-rpm:
+> +    description:
+> +      Max RPM supported by fan.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  pulses-per-revolution:
+> +    description:
+> +      The number of pulse from fan sensor per revolution.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  default-rpm:
+> +    description:
+> +      Target RPM the fan should be configured during driver probe.
 
-Not a problem. In fact, feel free to upgrade it to an acked-by, to
-simplify merging this series.
+So if we unload and reload the driver module, it should go back to the 
+default? 
 
-Acked-by: Robert Foss <robert.foss@linaro.org>
+I think it is really, 'target RPM if not already configured' which could 
+be keep the setting from a register (e.g. what the bootloader set) or 
+perhaps you already have temperature information to use...
 
->
-> Eg, this:
-> > -     if (ret < 0) {
-> > -             dev_err_probe(dev, ret, "Failed to enable supplies");
-> > -             return ret;
-> > -     }
->
-> was converted to:
->  >      if (ret < 0)
-> > +             return dev_err_probe(dev, ret, "Failed to enable supplies");
->
-> Yours
->         -- Matti
->
-> --
-> Matti Vaittinen
-> Linux kernel developer at ROHM Semiconductors
-> Oulu Finland
->
-> ~~ When things go utterly wrong vim users can always type :help! ~~
->
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+
+> +  pwm-frequency:
+> +    description:
+> +      PWM frequency for fan in Hertz(Hz).
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  pwm-polarity-inverse:
+> +    description:
+> +      Inverse PWM polarity for fan.
+> +    type: boolean
+
+As I said before, the PWM binding handles these 2 settings. Use it. Yes, 
+it's a bit of an overkill when the child is the consumer of the parent. 
+Until some 'clever' h/w engineer decides to use one of the PWMs for 
+something else like a backlight.
+
+Rob
