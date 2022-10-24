@@ -2,224 +2,314 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F7B2ECAAA1
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Oct 2022 15:58:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 765EBFA3741
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Oct 2022 16:27:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbiJXP6f (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Oct 2022 11:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39990 "EHLO
+        id S233962AbiJXQ1B (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Oct 2022 12:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbiJXP5x (ORCPT
+        with ESMTP id S232355AbiJXQ0b (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Oct 2022 11:57:53 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B1812A35A;
-        Mon, 24 Oct 2022 07:52:59 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id j188so11075043oih.4;
-        Mon, 24 Oct 2022 07:52:59 -0700 (PDT)
+        Mon, 24 Oct 2022 12:26:31 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFBF3FED4;
+        Mon, 24 Oct 2022 08:13:09 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id b12so32316897edd.6;
+        Mon, 24 Oct 2022 08:13:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QGp3vy8SaD8VcezG8ydCZcPCdpgA7nYU+TlH07+fURI=;
-        b=oG6EFbpSdscf73YHAhbG6iqDAWJDkpTMJQtXR8Wae6hHa419KUpn2/mNyLxjk8mAMs
-         XkiQFCInJWWb5Ol2FIOAIbi+gozIp8lWy/gQbktjmkUNgohmD0nF8p2NrrmT5P4mKMoy
-         6EdxU2oacA70swgtqLSnIXk7wv79x0EYlGjx95uA2zLe+6Z9pUh8TcBM8SwFTljT6y52
-         d+r9hfKqjT+T5NSC6n/+bTRWNW9SWdX6Hfqz1i576VDH1/sCk1u4Z5mt4tF5PuOC0vku
-         8YOK3Lr+mWTJzP/7je+HP5K8wcRX24QdcVhTEv5Sgix9H4O0WzoehPfBZyLrBqfuTSuf
-         i7KQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XVIwiwHdQYve1RsKM3+xpHDgfR6/MEyqerk49LTO2rU=;
+        b=VFCzTH9AZFAIayeiJSbGhiW27l0eahy4ulx+qe4ZCLgmbOHfzaWIceLy1klv5Q7fb1
+         6PSsywNgcKqWuzRWw19Ppo4lAXF7jtwOz19bTo3HXsXMk3UuxtBP9eflr5V29WdJG0Lc
+         +Y84Svo+gGM7QMfa30YIlyTcWNLpVx+CA0wjDrUd5q2vzJD6fHJ2urkgUP85y0ZF6aKl
+         CoK2TwakeH74Dy9/6vMyax2HguhiS8gXyYmLnD/EJyToOYACZCrfJ87gtsafa21YZhiI
+         vJHX3ba+CxFuzne50oc1mM4Hz/0c9VbcV/Yi8bSlNIT8/oo6M5dO8hoJMVGsMDOwqKkq
+         hsKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QGp3vy8SaD8VcezG8ydCZcPCdpgA7nYU+TlH07+fURI=;
-        b=W2PD0XLkcLcmD8Mesgbc7fypQUD1pYwoJ1zPrEzlcWOz1oOGoxXpPwqo6Pqa5Xdr0I
-         fvGO3rDRWGT3kYcrbPbpbW6f6AuqUxdAc7Na2kdCyWRiDJ/nqPVCBvvArvbviqDpnSR0
-         nE9pSnknbl5iigbmAoVNxZvY+cyQhdqATT/llS9jnEdKyiO2TnLP769TdIqWg+naGwIs
-         XM/0musfoWHYKuKD8+7ByzwbbYt1G9ahzwiXi1mymTf6yeWrLWAB7KwSd+P1wYNKdO8E
-         ysDI6jO+D/YEVH6XonE6xPOBgQOI2kMKVjq7tfcj8dITYWmZsMGl91q4zf0jlDI9KNdR
-         5AnQ==
-X-Gm-Message-State: ACrzQf2dK/VeDv22ZtVnsyKC7vZDsjqU4b+Vn8Z/eqrK+Ju/05RZWdO/
-        tUn3bKHgGCnzdj2b0P3byG4+8HfTiTs=
-X-Google-Smtp-Source: AMsMyM7/V4HRDb8D0rYzffYVnXxIL+7NX9ZTNgzLTCdTGLrNKtiqd3EO/fxKCywSxXRP/WTo/96Tdg==
-X-Received: by 2002:a05:6808:124a:b0:351:9c1a:cab8 with SMTP id o10-20020a056808124a00b003519c1acab8mr30792452oiv.39.1666623071888;
-        Mon, 24 Oct 2022 07:51:11 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o10-20020a4aa80a000000b00476989d42ebsm68544oom.8.2022.10.24.07.51.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 07:51:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <24b7c1b4-c690-408b-7ebf-a4e4a4cf919e@roeck-us.net>
-Date:   Mon, 24 Oct 2022 07:51:09 -0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XVIwiwHdQYve1RsKM3+xpHDgfR6/MEyqerk49LTO2rU=;
+        b=MhhbBNKn+8e9JYbrbiZP/kMaZV0GeZv1EfupLJ2v93daG/dOfuFmatWpd5lYgO8lxj
+         Bp45h8p8f25cQrO0UG+OeggYIYdehB7fMz8eKXX9YNspuxajh+kIoN/RyHLTv2c6ZQMx
+         aWVjLX5oZNbEyDLDHRL6vlDthAVj5S4bhKivFANV6P7bDOXg3Q4lIPf/NXWHCCzyERbq
+         k3B5I4grUBCW3wlYuptVjx596Bn9/eMQvMqvQJ0qmPTjQz4QMWOMtcVq+Yt/vyMx0KM4
+         UmA3q0/hgfov1/NnOE1i4jq3IIAzmK7hxTApCm9b9eTUQy/b34trIwbxrosyNy7u2Ut/
+         Tbrw==
+X-Gm-Message-State: ACrzQf3JhJTXKyCPGT++lEYLkMHT4Dy3saUdlunNGw9h7+58AwPgkGy9
+        Tj78k1SWgavuPhxRo8rCXa+gXlRvkQiOehfF
+X-Google-Smtp-Source: AMsMyM5JBdj1+0i2Cg0f55rWGBTeiCdojCmdEoBX7Ue//Q0gd0IqvGxAntCeaMbaQvMAUbrs9sacKw==
+X-Received: by 2002:aa7:c6c8:0:b0:460:e19b:ec12 with SMTP id b8-20020aa7c6c8000000b00460e19bec12mr20720191eds.209.1666624250735;
+        Mon, 24 Oct 2022 08:10:50 -0700 (PDT)
+Received: from fedora.. ([87.116.164.153])
+        by smtp.gmail.com with ESMTPSA id fj20-20020a0564022b9400b004618f2127d2sm12437edb.57.2022.10.24.08.10.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 08:10:50 -0700 (PDT)
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     leonard.anderweit@gmail.com,
+        Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: (aquacomputer_d5next) Add support for temperature sensor offsets
+Date:   Mon, 24 Oct 2022 17:10:39 +0200
+Message-Id: <20221024151039.7222-1-savicaleksa83@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     daniel.lezcano@linaro.org, sudeep.holla@arm.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <Y1WHnJ6h1RSOipV4@e120937-lin>
- <8005acfe-da2d-8d38-0e87-a96c438eeab1@roeck-us.net>
- <93e24737-29e4-6e03-7b47-cd730989047f@roeck-us.net>
- <Y1aJTxVdOS6BIVTV@e120937-lin>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: (bug report) HWMON & Thermal interactions
-In-Reply-To: <Y1aJTxVdOS6BIVTV@e120937-lin>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/24/22 05:47, Cristian Marussi wrote:
-> On Mon, Oct 24, 2022 at 04:56:43AM -0700, Guenter Roeck wrote:
->> On 10/23/22 14:23, Guenter Roeck wrote:
->>> On 10/23/22 11:27, Cristian Marussi wrote:
->>>> Hi,
->>>>
->>>> Starting with v6.1-rc1 the SCMI HWMON driver failed probing on my JUNO due
->>>> to the fact that no trip points were (ever !) defined in the DT; bisecting it
->>>> looks like that after:
->>>>
->>>> https://lore.kernel.org/all/20220804224349.1926752-28-daniel.lezcano@linexp.org/
->>>>
->>>> the presence of the mandatory trips node within thermal zones is now
->>>> enforced.
->>>>
->>>> So, this is NOT what this bug report is about (I'll post soon patches for
->>>> the JUNO DT missing trips) BUT once this problem was solved in the DT,
->>>> another issue appeared:
->>>>
->>>> [    1.921929] hwmon hwmon0: temp2_input not attached to any thermal zone
->>>>
->>>> that despite having now a goodi/valid DT describing 2 sensors and 2 thermal zones
->>>> embedding that sensors, only the first one is found as belonging to one ThermZ.
->>>> (this happens ALSO with v6.0 once I added the trips...)
->>>>
->>>> Digging deep into this, it turned out that inside the call chain
->>>>
->>>> devm_hwmon_device_register_with_info
->>>>     hwmon_device_register_with_info
->>>>       __hwmon_device_register
->>>>      hwmon_thermal_register_sensors(dev)
->>>>          --> hwmon_thermal_add_sensor(dev, j)
->>>>              --> devm_thermal_of_zone_register(dev, sensor_id, tdata, )
->>>>
->>>> the HWMON channel index j is passed to the Thermal framework in order to
->>>> search and bind sensors with defined thermal zone, but this lead to the
->>>> assumption that sequential HWMON channel indexes corresponds one-to-one to the
->>>> underlying real sensor IDs that the ThermalFramework uses for matching
->>>> within the DT.
->>>>
->>>> On a system like my SCMI-based DT where I have 2 temp-sensors bound to 2
->>>> thermal zones like:
->>>>
->>>> thernal_zones {
->>>>      pmic {
->>>>          ...
->>>>          thermal-sensors = <&scmi_sensors0 0>;
->>>>          ...
->>>>          trips {
->>>>              ...
->>>>          }
->>>>      soc {
->>>>          ...
->>>>          thermal-sensors = <&scmi_sensors0 3>;
->>>>          ...
->>>>          trips {
->>>>              ...
->>>>          }
->>>>      }
->>>> }
->>>>
->>>> This works fine by chance for the pmic (j=0, sensor_id=0) BUT cannot work for
->>>> the soc where J=1 BUT the real sensor ID is 3.
->>>>
->>>> Note that there can be a number of sensors, not all of them of a type handled
->>>> by HWMON, and enumerated by SCMI in different ways depending on the
->>>> platform.
->>>>
->>>> I suppose this is not an SCMI-only related issue, but maybe in non-SCMI
->>>> context, where sensors are purely defined in the DT, the solution can be
->>>> more easily attained (i.e. renumber the sensors).
->>>>
->>>> At first I tried to solve this inside scmi-hwmon.c BUT I could not find
->>>> a way to present to the HWMON subsystem the list of sensors preserving
->>>> the above index/sensor_id matching (not even with a hack like passing
->>>> down dummy sensors to the HWMON subsystem to fill the 'holes' in the
->>>> numbering)
->>>>
->>>> My tentative solution, which works fine for me in my context, was to add
->>>> an optional HWMON hwops, so that the core hwmon can retrieve if needed the
->>>> real sensor ID if different from the channel index (using an optional hwops
->>>> instead of some static hwinfo var let me avoid to have to patch all the
->>>> existent hwmon drivers that happens to just work fine as of today...but
->>>> maybe it is not necessarily the proper final solution...)
->>>>
->>>> i.e.
->>>>
->>>> ----8<----
->>>>
->>>> Author: Cristian Marussi <cristian.marussi@arm.com>
->>>> Date:   Fri Oct 21 17:24:04 2022 +0100
->>>>
->>>>       hwmon: Add new .get_sensor_id hwops
->>>>       Add a new optional helper which can be defined to allow an hwmon chip to
->>>>       provide the logic to map hwmon indexes to the real underlying sensor IDs.
->>>
->>> Maybe I am missing something, but ...
->>>
->>> The driver isn't supposed to know anything about thermal devices and
->>> thermal zones. If that no longer works, and drivers have to know about
->>> thermal zones and thermal zone device index values anyway, we might
->>> as well pull thermal device support from the hwmon core and implement
->>> it in drivers.
->>>
->>
->> No, wait: The question is really: Why does the scmi driver present the sensor
->> with index 3 to the hwmon subsystem as sensor with index 1 ?
->>
->> If the sensor has index 3, and is presented to other entities as sensor
->> with index 3, it should be presented to the hwmon subsystem as sensor with
->> index 3, not with index 1. If sensors with index 1..2 do not exist,
->> the is_visible function should return 0 for those sensors.
->>
-> 
-> My understanding was that the hwmon index is the index of the channel
-> and hwmon_channel_info struct groups channels by type while the index is
-> really used as a pointer in the hwmon_channel_info.config field, so in
-> this case you're saying I should present 4 temp sensors placing a 'hole'
-> at sensor 1,2 making is_visible return 0 for those channels ?
-> 
-> Basically keeping the channel indexes in sync with the real sensor ID by
-> the means of some dummy sensor entries in the config field: this could result
-> potentially in a lot of holes given in SCMI the sensor_id is 16 bits and
-> I thought that was too hackish but I can try.
-> 
+Add support for reading and writing temperature sensor offsets
+on the Aquacomputer D5 Next, Farbwerk 360, Octo and Quadro,
+for which the needed offsets are known. Implemented by
+Leonard Anderweit [1].
 
-The underlying idea with the hwmon -> thermal bridge is that index values
-used by thermal and by the hwmon subsystem match and, yes, that there would
-if necessary be holes in hwmon index values (normally this is not a 16-bit
-number space). If that doesn't work for scmi, and if there could indeed be
-something like
+[1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/22
 
-         thermal-sensors = <&scmi_sensors0 12345>;
+Originally-from: Leonard Anderweit <leonard.anderweit@gmail.com>
+Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+---
+Changes in v2:
+- Removed unnecessary init to 0
+- Reformatted lines to avoid line splits
+---
+ Documentation/hwmon/aquacomputer_d5next.rst |  1 +
+ drivers/hwmon/aquacomputer_d5next.c         | 88 +++++++++++++++++----
+ 2 files changed, 75 insertions(+), 14 deletions(-)
 
-then I think the solution is indeed to not rely on the hwmon->thermal bridge
-in the hwmon core for this driver.
-
-> In the meantime, I gave it a go at what you suggested early (if I got it
-> right...) by removing from the scmi-hwmon driver the HWMON_C_REGISTER_TZ
-> attribute and adding a few explicit calls to devm_thermal_of_zone_register() at
-> the end of the probe to specifically register the needed temp sensors (and
-> associated real sensor IDs) with the ThermalFramework without relying on the
-> HWMON core for Thermal and it works fine indeed.
-> 
-
-Excellent.
-
-Thanks,
-Guenter
+diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
+index e238533b5fe0..15226346434d 100644
+--- a/Documentation/hwmon/aquacomputer_d5next.rst
++++ b/Documentation/hwmon/aquacomputer_d5next.rst
+@@ -62,6 +62,7 @@ Sysfs entries
+ 
+ ================ ==============================================================
+ temp[1-20]_input Physical/virtual temperature sensors (in millidegrees Celsius)
++temp[1-4]_offset Temperature sensor correction offset (in millidegrees Celsius)
+ fan[1-8]_input   Pump/fan speed (in RPM) / Flow speed (in dL/h)
+ power[1-8]_input Pump/fan power (in micro Watts)
+ in[0-7]_input    Pump/fan voltage (in milli Volts)
+diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+index c51a2678f0eb..608f57f59cf9 100644
+--- a/drivers/hwmon/aquacomputer_d5next.c
++++ b/drivers/hwmon/aquacomputer_d5next.c
+@@ -80,6 +80,7 @@ static u8 secondary_ctrl_report[] = {
+ #define D5NEXT_5V_VOLTAGE		0x39
+ #define D5NEXT_12V_VOLTAGE		0x37
+ #define D5NEXT_CTRL_REPORT_SIZE		0x329
++#define D5NEXT_TEMP_CTRL_OFFSET		0x2D
+ static u8 d5next_sensor_fan_offsets[] = { D5NEXT_PUMP_OFFSET, D5NEXT_FAN_OFFSET };
+ 
+ /* Pump and fan speed registers in D5 Next control report (from 0-100%) */
+@@ -94,6 +95,8 @@ static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };
+ #define FARBWERK360_SENSOR_START		0x32
+ #define FARBWERK360_NUM_VIRTUAL_SENSORS		16
+ #define FARBWERK360_VIRTUAL_SENSORS_START	0x3a
++#define FARBWERK360_CTRL_REPORT_SIZE		0x682
++#define FARBWERK360_TEMP_CTRL_OFFSET		0x8
+ 
+ /* Register offsets for the Octo fan controller */
+ #define OCTO_POWER_CYCLES		0x18
+@@ -103,6 +106,7 @@ static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };
+ #define OCTO_NUM_VIRTUAL_SENSORS	16
+ #define OCTO_VIRTUAL_SENSORS_START	0x45
+ #define OCTO_CTRL_REPORT_SIZE		0x65F
++#define OCTO_TEMP_CTRL_OFFSET		0xA
+ static u8 octo_sensor_fan_offsets[] = { 0x7D, 0x8A, 0x97, 0xA4, 0xB1, 0xBE, 0xCB, 0xD8 };
+ 
+ /* Fan speed registers in Octo control report (from 0-100%) */
+@@ -117,6 +121,7 @@ static u16 octo_ctrl_fan_offsets[] = { 0x5B, 0xB0, 0x105, 0x15A, 0x1AF, 0x204, 0
+ #define QUADRO_VIRTUAL_SENSORS_START	0x3c
+ #define QUADRO_CTRL_REPORT_SIZE		0x3c1
+ #define QUADRO_FLOW_SENSOR_OFFSET	0x6e
++#define QUADRO_TEMP_CTRL_OFFSET		0xA
+ static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
+ 
+ /* Fan speed registers in Quadro control report (from 0-100%) */
+@@ -282,6 +287,7 @@ struct aqc_data {
+ 	int temp_sensor_start_offset;
+ 	int num_virtual_temp_sensors;
+ 	int virtual_temp_sensor_start_offset;
++	u16 temp_ctrl_offset;
+ 	u16 power_cycle_count_offset;
+ 	u8 flow_sensor_offset;
+ 
+@@ -365,8 +371,8 @@ static int aqc_send_ctrl_data(struct aqc_data *priv)
+ 	return ret;
+ }
+ 
+-/* Refreshes the control buffer and returns value at offset */
+-static int aqc_get_ctrl_val(struct aqc_data *priv, int offset)
++/* Refreshes the control buffer and stores value at offset in val */
++static int aqc_get_ctrl_val(struct aqc_data *priv, int offset, long *val)
+ {
+ 	int ret;
+ 
+@@ -376,7 +382,7 @@ static int aqc_get_ctrl_val(struct aqc_data *priv, int offset)
+ 	if (ret < 0)
+ 		goto unlock_and_return;
+ 
+-	ret = get_unaligned_be16(priv->buffer + offset);
++	*val = (s16)get_unaligned_be16(priv->buffer + offset);
+ 
+ unlock_and_return:
+ 	mutex_unlock(&priv->mutex);
+@@ -393,7 +399,7 @@ static int aqc_set_ctrl_val(struct aqc_data *priv, int offset, long val)
+ 	if (ret < 0)
+ 		goto unlock_and_return;
+ 
+-	put_unaligned_be16((u16)val, priv->buffer + offset);
++	put_unaligned_be16((s16)val, priv->buffer + offset);
+ 
+ 	ret = aqc_send_ctrl_data(priv);
+ 
+@@ -408,8 +414,28 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+ 
+ 	switch (type) {
+ 	case hwmon_temp:
++		if (channel < priv->num_temp_sensors) {
++			switch (attr) {
++			case hwmon_temp_label:
++			case hwmon_temp_input:
++				return 0444;
++			case hwmon_temp_offset:
++				if (priv->temp_ctrl_offset != 0)
++					return 0644;
++				break;
++			default:
++				break;
++			}
++		}
++
+ 		if (channel < priv->num_temp_sensors + priv->num_virtual_temp_sensors)
+-			return 0444;
++			switch (attr) {
++			case hwmon_temp_label:
++			case hwmon_temp_input:
++				return 0444;
++			default:
++				break;
++			}
+ 		break;
+ 	case hwmon_pwm:
+ 		if (priv->fan_ctrl_offsets && channel < priv->num_fans) {
+@@ -492,10 +518,25 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 
+ 	switch (type) {
+ 	case hwmon_temp:
+-		if (priv->temp_input[channel] == -ENODATA)
+-			return -ENODATA;
++		switch (attr) {
++		case hwmon_temp_input:
++			if (priv->temp_input[channel] == -ENODATA)
++				return -ENODATA;
++
++			*val = priv->temp_input[channel];
++			break;
++		case hwmon_temp_offset:
++			ret =
++			    aqc_get_ctrl_val(priv, priv->temp_ctrl_offset +
++					     channel * AQC_TEMP_SENSOR_SIZE, val);
++			if (ret < 0)
++				return ret;
+ 
+-		*val = priv->temp_input[channel];
++			*val *= 10;
++			break;
++		default:
++			break;
++		}
+ 		break;
+ 	case hwmon_fan:
+ 		*val = priv->speed_input[channel];
+@@ -505,7 +546,7 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 		break;
+ 	case hwmon_pwm:
+ 		if (priv->fan_ctrl_offsets) {
+-			ret = aqc_get_ctrl_val(priv, priv->fan_ctrl_offsets[channel]);
++			ret = aqc_get_ctrl_val(priv, priv->fan_ctrl_offsets[channel], val);
+ 			if (ret < 0)
+ 				return ret;
+ 
+@@ -563,6 +604,21 @@ static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 	struct aqc_data *priv = dev_get_drvdata(dev);
+ 
+ 	switch (type) {
++	case hwmon_temp:
++		switch (attr) {
++		case hwmon_temp_offset:
++			/* Limit temp offset to +/- 15K as in the official software */
++			val = clamp_val(val, -15000, 15000) / 10;
++			ret =
++			    aqc_set_ctrl_val(priv, priv->temp_ctrl_offset +
++					     channel * AQC_TEMP_SENSOR_SIZE, val);
++			if (ret < 0)
++				return ret;
++			break;
++		default:
++			return -EOPNOTSUPP;
++		}
++		break;
+ 	case hwmon_pwm:
+ 		switch (attr) {
+ 		case hwmon_pwm_input:
+@@ -597,10 +653,10 @@ static const struct hwmon_ops aqc_hwmon_ops = {
+ 
+ static const struct hwmon_channel_info *aqc_info[] = {
+ 	HWMON_CHANNEL_INFO(temp,
+-			   HWMON_T_INPUT | HWMON_T_LABEL,
+-			   HWMON_T_INPUT | HWMON_T_LABEL,
+-			   HWMON_T_INPUT | HWMON_T_LABEL,
+-			   HWMON_T_INPUT | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
++			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
++			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
++			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
+ 			   HWMON_T_INPUT | HWMON_T_LABEL,
+ 			   HWMON_T_INPUT | HWMON_T_LABEL,
+ 			   HWMON_T_INPUT | HWMON_T_LABEL,
+@@ -853,6 +909,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 		priv->virtual_temp_sensor_start_offset = D5NEXT_VIRTUAL_SENSORS_START;
+ 		priv->power_cycle_count_offset = D5NEXT_POWER_CYCLES;
+ 		priv->buffer_size = D5NEXT_CTRL_REPORT_SIZE;
++		priv->temp_ctrl_offset = D5NEXT_TEMP_CTRL_OFFSET;
+ 
+ 		priv->temp_label = label_d5next_temp;
+ 		priv->virtual_temp_label = label_virtual_temp_sensors;
+@@ -877,7 +934,8 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 		priv->temp_sensor_start_offset = FARBWERK360_SENSOR_START;
+ 		priv->num_virtual_temp_sensors = FARBWERK360_NUM_VIRTUAL_SENSORS;
+ 		priv->virtual_temp_sensor_start_offset = FARBWERK360_VIRTUAL_SENSORS_START;
+-
++		priv->buffer_size = FARBWERK360_CTRL_REPORT_SIZE;
++		priv->temp_ctrl_offset = FARBWERK360_TEMP_CTRL_OFFSET;
+ 		priv->temp_label = label_temp_sensors;
+ 		priv->virtual_temp_label = label_virtual_temp_sensors;
+ 		break;
+@@ -893,6 +951,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 		priv->virtual_temp_sensor_start_offset = OCTO_VIRTUAL_SENSORS_START;
+ 		priv->power_cycle_count_offset = OCTO_POWER_CYCLES;
+ 		priv->buffer_size = OCTO_CTRL_REPORT_SIZE;
++		priv->temp_ctrl_offset = OCTO_TEMP_CTRL_OFFSET;
+ 
+ 		priv->temp_label = label_temp_sensors;
+ 		priv->virtual_temp_label = label_virtual_temp_sensors;
+@@ -914,6 +973,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 		priv->power_cycle_count_offset = QUADRO_POWER_CYCLES;
+ 		priv->buffer_size = QUADRO_CTRL_REPORT_SIZE;
+ 		priv->flow_sensor_offset = QUADRO_FLOW_SENSOR_OFFSET;
++		priv->temp_ctrl_offset = QUADRO_TEMP_CTRL_OFFSET;
+ 
+ 		priv->temp_label = label_temp_sensors;
+ 		priv->virtual_temp_label = label_virtual_temp_sensors;
+-- 
+2.37.3
 
