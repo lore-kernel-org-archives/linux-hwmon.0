@@ -2,196 +2,201 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8684BC67871
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Oct 2022 20:15:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87742C67871
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Oct 2022 22:59:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234084AbiJXUPl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Oct 2022 16:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S229732AbiJXW7X (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Oct 2022 18:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234249AbiJXUOT (ORCPT
+        with ESMTP id S231627AbiJXW6w (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:14:19 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9C0A3458;
-        Mon, 24 Oct 2022 11:32:38 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-12c8312131fso12850314fac.4;
-        Mon, 24 Oct 2022 11:32:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fvFflD4k0dWfCuYnPUW0ROCVRGYaVIG1roLKu8FKCdY=;
-        b=BV/EmlmhOfkGh96zgpr5heGMJHF9iIPFwBo3y5qUGgPUcFUPlpNyjL3LLhMOaBsos1
-         bl5959lTbyvNix2tbCWCSovXLVh820Alq2uWTazz64wOdvTFRMJhpoozaOKZ0YitKI7j
-         lYz8O3JfL4Z2o9uondujoJ45ddY3QWMpj5ibNl8XRB1neP+MII4/U6fOB0GGRsIuWOUT
-         DoW6b/oalr6I51oONiP6/e6yjYQQ1DsqCcuB5xGmFxNCrTO+VMEYDE0JcHJwejDRMKyL
-         edS/Vw6kvdAv5EdFYUyTeNtK2lAB08CNboy0L/VRM8b2mTC2ht/xlugyAGzW3+0YDnLW
-         zXeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fvFflD4k0dWfCuYnPUW0ROCVRGYaVIG1roLKu8FKCdY=;
-        b=0hSusIEscwYF96yoHNfcTek6lfL/bx9uNwmRR4N/Sy6TmnMlggUekXAK39KU980KJr
-         EG7JbtzimPJopyL5gQBI1HkivfUwl9B3ob0oBsA2Z0G17DHLhdw3AZ+jCo1p5tYrqLUj
-         EsqjvahsjGajKL9rdfiH5bbOPLpK9MMjWVbfDMmfZzS61YxKGJ9qJKNYvQTjfdQ1vSbT
-         /23Orp7A1PyALO+39Br+EOfsZ4AGC9ltW7YnOyiHeZTOituyekDbSRZEkbsJz+PecXh+
-         rqS+LJrSHLxC70BzpZrvaLIaNM6+4npc4wOqyBw7IHqwXo9h/dKIro7PBMD6HHgoma3z
-         NGXg==
-X-Gm-Message-State: ACrzQf3xfUJ9oLNFYVDjcNRhUCvqHQzs9sIs80DncO/oa5TbJtLj0M+y
-        9DqnP1fb+GfVc1KN+FqvY4E=
-X-Google-Smtp-Source: AMsMyM4phKWoFOpnP3ROaCGKVpMoWsQCIfEncptYfxkNNKjzjEJGGH39043aBXmgttZIQymNrwcBMg==
-X-Received: by 2002:a05:6870:ec90:b0:13b:b20a:ae81 with SMTP id eo16-20020a056870ec9000b0013bb20aae81mr3500501oab.77.1666636310880;
-        Mon, 24 Oct 2022 11:31:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z17-20020a05683008d100b006618b23df05sm88188otg.21.2022.10.24.11.31.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 11:31:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 24 Oct 2022 11:31:48 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Khandelwal, Rajat" <rajat.khandelwal@intel.com>
-Cc:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v5] iio: temperature: Add driver support for Maxim
- MAX30208
-Message-ID: <20221024183148.GA3170088@roeck-us.net>
-References: <20221024165658.181340-1-rajat.khandelwal@linux.intel.com>
- <20221024112829.GA2807876@roeck-us.net>
- <CO1PR11MB483509CDD93AFA3176C42080962E9@CO1PR11MB4835.namprd11.prod.outlook.com>
+        Mon, 24 Oct 2022 18:58:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D0C63286B9;
+        Mon, 24 Oct 2022 14:20:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9513AD6E;
+        Mon, 24 Oct 2022 14:05:03 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8260E3F7B4;
+        Mon, 24 Oct 2022 14:04:56 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 22:04:46 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     daniel.lezcano@linaro.org, sudeep.holla@arm.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: (bug report) HWMON & Thermal interactions
+Message-ID: <Y1b97mhilWF8C99d@e120937-lin>
+References: <Y1WHnJ6h1RSOipV4@e120937-lin>
+ <8005acfe-da2d-8d38-0e87-a96c438eeab1@roeck-us.net>
+ <93e24737-29e4-6e03-7b47-cd730989047f@roeck-us.net>
+ <Y1aJTxVdOS6BIVTV@e120937-lin>
+ <24b7c1b4-c690-408b-7ebf-a4e4a4cf919e@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CO1PR11MB483509CDD93AFA3176C42080962E9@CO1PR11MB4835.namprd11.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <24b7c1b4-c690-408b-7ebf-a4e4a4cf919e@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 05:11:17PM +0000, Khandelwal, Rajat wrote:
-> Hi Guenter,
-> Thanks for the acknowledgement.
+On Mon, Oct 24, 2022 at 07:51:09AM -0700, Guenter Roeck wrote:
+> On 10/24/22 05:47, Cristian Marussi wrote:
+> > On Mon, Oct 24, 2022 at 04:56:43AM -0700, Guenter Roeck wrote:
+> > > On 10/23/22 14:23, Guenter Roeck wrote:
+> > > > On 10/23/22 11:27, Cristian Marussi wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > Starting with v6.1-rc1 the SCMI HWMON driver failed probing on my JUNO due
+> > > > > to the fact that no trip points were (ever !) defined in the DT; bisecting it
+> > > > > looks like that after:
+> > > > > 
+> > > > > https://lore.kernel.org/all/20220804224349.1926752-28-daniel.lezcano@linexp.org/
+> > > > > 
+> > > > > the presence of the mandatory trips node within thermal zones is now
+> > > > > enforced.
+> > > > > 
+> > > > > So, this is NOT what this bug report is about (I'll post soon patches for
+> > > > > the JUNO DT missing trips) BUT once this problem was solved in the DT,
+> > > > > another issue appeared:
+> > > > > 
+> > > > > [    1.921929] hwmon hwmon0: temp2_input not attached to any thermal zone
+> > > > > 
+> > > > > that despite having now a goodi/valid DT describing 2 sensors and 2 thermal zones
+> > > > > embedding that sensors, only the first one is found as belonging to one ThermZ.
+> > > > > (this happens ALSO with v6.0 once I added the trips...)
+> > > > > 
+> > > > > Digging deep into this, it turned out that inside the call chain
+> > > > > 
+> > > > > devm_hwmon_device_register_with_info
+> > > > >     hwmon_device_register_with_info
+> > > > >       __hwmon_device_register
+> > > > >      hwmon_thermal_register_sensors(dev)
+> > > > >          --> hwmon_thermal_add_sensor(dev, j)
+> > > > >              --> devm_thermal_of_zone_register(dev, sensor_id, tdata, )
+> > > > > 
+> > > > > the HWMON channel index j is passed to the Thermal framework in order to
+> > > > > search and bind sensors with defined thermal zone, but this lead to the
+> > > > > assumption that sequential HWMON channel indexes corresponds one-to-one to the
+> > > > > underlying real sensor IDs that the ThermalFramework uses for matching
+> > > > > within the DT.
+> > > > > 
+> > > > > On a system like my SCMI-based DT where I have 2 temp-sensors bound to 2
+> > > > > thermal zones like:
+> > > > > 
+> > > > > thernal_zones {
+> > > > >      pmic {
+> > > > >          ...
+> > > > >          thermal-sensors = <&scmi_sensors0 0>;
+> > > > >          ...
+> > > > >          trips {
+> > > > >              ...
+> > > > >          }
+> > > > >      soc {
+> > > > >          ...
+> > > > >          thermal-sensors = <&scmi_sensors0 3>;
+> > > > >          ...
+> > > > >          trips {
+> > > > >              ...
+> > > > >          }
+> > > > >      }
+> > > > > }
+> > > > > 
+> > > > > This works fine by chance for the pmic (j=0, sensor_id=0) BUT cannot work for
+> > > > > the soc where J=1 BUT the real sensor ID is 3.
+> > > > > 
+> > > > > Note that there can be a number of sensors, not all of them of a type handled
+> > > > > by HWMON, and enumerated by SCMI in different ways depending on the
+> > > > > platform.
+> > > > > 
+> > > > > I suppose this is not an SCMI-only related issue, but maybe in non-SCMI
+> > > > > context, where sensors are purely defined in the DT, the solution can be
+> > > > > more easily attained (i.e. renumber the sensors).
+> > > > > 
+> > > > > At first I tried to solve this inside scmi-hwmon.c BUT I could not find
+> > > > > a way to present to the HWMON subsystem the list of sensors preserving
+> > > > > the above index/sensor_id matching (not even with a hack like passing
+> > > > > down dummy sensors to the HWMON subsystem to fill the 'holes' in the
+> > > > > numbering)
+> > > > > 
+> > > > > My tentative solution, which works fine for me in my context, was to add
+> > > > > an optional HWMON hwops, so that the core hwmon can retrieve if needed the
+> > > > > real sensor ID if different from the channel index (using an optional hwops
+> > > > > instead of some static hwinfo var let me avoid to have to patch all the
+> > > > > existent hwmon drivers that happens to just work fine as of today...but
+> > > > > maybe it is not necessarily the proper final solution...)
+> > > > > 
+> > > > > i.e.
+> > > > > 
+> > > > > ----8<----
+> > > > > 
+> > > > > Author: Cristian Marussi <cristian.marussi@arm.com>
+> > > > > Date:   Fri Oct 21 17:24:04 2022 +0100
+> > > > > 
+> > > > >       hwmon: Add new .get_sensor_id hwops
+> > > > >       Add a new optional helper which can be defined to allow an hwmon chip to
+> > > > >       provide the logic to map hwmon indexes to the real underlying sensor IDs.
+> > > > 
+> > > > Maybe I am missing something, but ...
+> > > > 
+> > > > The driver isn't supposed to know anything about thermal devices and
+> > > > thermal zones. If that no longer works, and drivers have to know about
+> > > > thermal zones and thermal zone device index values anyway, we might
+> > > > as well pull thermal device support from the hwmon core and implement
+> > > > it in drivers.
+> > > > 
+> > > 
+> > > No, wait: The question is really: Why does the scmi driver present the sensor
+> > > with index 3 to the hwmon subsystem as sensor with index 1 ?
+> > > 
+> > > If the sensor has index 3, and is presented to other entities as sensor
+> > > with index 3, it should be presented to the hwmon subsystem as sensor with
+> > > index 3, not with index 1. If sensors with index 1..2 do not exist,
+> > > the is_visible function should return 0 for those sensors.
+> > > 
+> > 
+> > My understanding was that the hwmon index is the index of the channel
+> > and hwmon_channel_info struct groups channels by type while the index is
+> > really used as a pointer in the hwmon_channel_info.config field, so in
+> > this case you're saying I should present 4 temp sensors placing a 'hole'
+> > at sensor 1,2 making is_visible return 0 for those channels ?
+> > 
+> > Basically keeping the channel indexes in sync with the real sensor ID by
+> > the means of some dummy sensor entries in the config field: this could result
+> > potentially in a lot of holes given in SCMI the sensor_id is 16 bits and
+> > I thought that was too hackish but I can try.
+> > 
 > 
-> >Agreed; the sensor doesn't seem to be very useful for traditional hardware
-> >monitoring. The driver better resides in IIO.
-> Cool! I didn't know the categorical reasoning behind this but since this is 
-> accepted in IIO, I don't have to do anything more. 
+> The underlying idea with the hwmon -> thermal bridge is that index values
+> used by thermal and by the hwmon subsystem match and, yes, that there would
+> if necessary be holes in hwmon index values (normally this is not a 16-bit
+> number space). If that doesn't work for scmi, and if there could indeed be
+> something like
+> 
+>         thermal-sensors = <&scmi_sensors0 12345>;
+> 
+> then I think the solution is indeed to not rely on the hwmon->thermal bridge
+> in the hwmon core for this driver.
 
-Huh. There is no "categorical" reasoning. Call it a gut feeling.
-I can not imagine anyone using this chip for hardware monitoring,
-and presumably you have an IIO use case or you would not have
-implemented an IIO driver.
+Even though implausible it could be possible to have an SCMI fw platform
+advertising such high sensor IDs.
 
 > 
-> >I don't understand why readings are discarded. Why trigger multiple
-> >readings just to discard all but the last one ? I thought iio would
-> >be expected to return all values.
-> Ok. The plan is to trigger temperature conversion on the GPIO input also.
-> The user can trigger as many times the temperature conversion he wants (I accept unnecessary),
-> which will keep the FIFO increasing (without reading converted values) but the driver should be
-> resilient to all the erroneous zones. Also, when the user does really make a syscall to read the
-> temperature, it definitely should be the last converted reading. 
-
-That is your use case. I don't know how IIO drivers are normally
-implemented, but I would expect a generic driver. In this case,
-I would expect userspace to decide what it wants to with the data
-and not let the kernel driver discard most of it.
-
+> > In the meantime, I gave it a go at what you suggested early (if I got it
+> > right...) by removing from the scmi-hwmon driver the HWMON_C_REGISTER_TZ
+> > attribute and adding a few explicit calls to devm_thermal_of_zone_register() at
+> > the end of the probe to specifically register the needed temp sensors (and
+> > associated real sensor IDs) with the ThermalFramework without relying on the
+> > HWMON core for Thermal and it works fine indeed.
+> > 
 > 
-> >This is really pointless. The register has only one bit to set.
-> >Just write that bit; reading the register before that is pointless.
-> I think the register also has some bits which are reserved. Hence, rather than to make a number
-> for specifically the value keeping those bits the same, I read whatever is there and only store the
-> required one. 
-> 
-I personally would not accept that kind of code, but that is just
-me.
-
-> >Also, the code assumes that one of the gpio input registers would be used
-> >to trigger temperature readings. Why trigger another one if this is indeed
-> >the case ? Triggering a temperature reading should only be necessary if
-> >there is no data in the fifo.
-> GPIO input triggering is yet not implemented as I would have to work on ACPI interrupts and I have
-> written the driver for now to get it included in Linux. 
-> There are 2 ways - via GPIO and making a syscall. I agree that temperature reading should be
-> necessary only when there is no data in FIFO but since we intend to keep GPIO as a trigger point,
-> user can keep triggering conversions and not reading them out. (As pointed above, driver should be
-> resilient to all erroneous zones).
-
-What does that have to do with interrupts ? Anything connected to the
-gpio pin would trigger a reading.
-
-> 
-> >The datasheet says that it can take up to 50 ms to report a result.
-> >10 retries with 50ms wait each time seems overkill.
-> That's correct. But, the response time can be up to 500 ms. Also, while debugging I had put timestamps
-> which when analyzed, indicated that time may go beyond 50 ms. 
+> Excellent.
 > 
 
-It seems to me that this would warrant an explanation in the driver.
-500ms seems hard to believe.
+I'll follow this path.
 
-> >And why use usleep_range() here
-> >but msleep() above ?
-> I am sorry about that. I have converted usleep_range into msleep (2 places). 
-> 
-> >This is wrong. It uses the overflow counter as data counter if it
-> >is != 0. The overflow counter counts the number of overflows, not
-> >the number of entries in the fifo.
-> So there is no such thing as 'overflow counter'. The point is if the overflow counter has
+Thanks for your help & feedback.
+Cristian
 
-Interesting statement. MAX30208_FIFO_OVF_CNTR very much
-sounds like overflow counter to me, and the datasheet
-suggests the same.
-
-> even one word, I use the data count equal to the overflow counter value. However, if it
-> has zero, then use the number of words in actual FIFO. 
-> This logic is just used to count how many values to pop to get the most recent reading.
-> 
-
-The code is
-
-+       ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_OVF_CNTR);
-+       if (ret < 0) {
-+               dev_err(&data->client->dev, "Error reading reg FIFO overflow counter\n");
-+               goto unlock;
-+       } else if (!ret) {
-+               ret = i2c_smbus_read_byte_data(data->client,
-+                                              MAX30208_FIFO_DATA_CNTR);
-+               if (ret < 0) {
-+                       dev_err(&data->client->dev, "Error reading reg FIFO data counter\n");
-+                       goto unlock;
-+               }
-+       }
-+
-+       data_count = ret;
-
-If reading MAX30208_FIFO_OVF_CNTR returns a value > 0, it is used as
-data_count. That does not seem correct. The data sheet says if
-MAX30208_FIFO_OVF_CNTR is != 0, data_count is 32. Maybe the datasheet
-is wrong all over the place, but at least in this case that seems
-very unlikely.
-
-> > data_count is declared as u8 and will never be < 0.
-> Data count can never be <0 as only first few bits of the 8 bits are used in the register. 
-> 
-	u8 data_count;
-...
-	data_count = i2c_smbus_read_byte_data(data->client,
-                                              MAX30208_FIFO_DATA_CNTR);
-        if (data_count < 0) {
-
-Really ? Static analyzers will have a field day with this code.
-
-Anyway, I don't really care much about this code, so I'll let
-Jonathan take it from here. I just wanted to share my observations.
-
-Thanks,
-Guenter
