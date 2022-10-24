@@ -2,475 +2,189 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0684C433FE
-	for <linux-hwmon@archiver.kernel.org>; Sun, 23 Oct 2022 21:32:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0621C38A2D
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Oct 2022 04:40:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiJWVc3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 23 Oct 2022 17:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47862 "EHLO
+        id S230064AbiJXEkx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Oct 2022 00:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiJWVc2 (ORCPT
+        with ESMTP id S230119AbiJXEkk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 23 Oct 2022 17:32:28 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D54666874;
-        Sun, 23 Oct 2022 14:32:26 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id e18so24819370edj.3;
-        Sun, 23 Oct 2022 14:32:26 -0700 (PDT)
+        Mon, 24 Oct 2022 00:40:40 -0400
+Received: from DEU01-FR2-obe.outbound.protection.outlook.com (mail-fr2deu01on2134.outbound.protection.outlook.com [40.107.135.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845264C018;
+        Sun, 23 Oct 2022 21:40:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SyUdFMwjcp9TYuo7cd5Vk85C4UtpkhPhKrmQ/ipdIpXisGrtHF50FmFawcP9Qy0s1pEfNqsT5GPjZ+weETm9ne2tYYNFz+y44qsASR59zXw7FUhC/oSo8ESusgaSPy62MoOn5eCatxatSSe+iwGixG9RPtfoPgcl4DbkorHcGCXD0zc1pa5ZYg0opWkWkKdI6zJv6UXlfIK4R9tWvNhlO86oh6VU3scb4Wub/hw6CgN7pkBUy5pkCEIwcQgT+iWjkY19zO39coM0b7PEreN1zE0aQZaBPd73Qz+sDsYifwdF29n3fB+DfrnCkljNB24MHGiiKvIkl1ll+4wcdWUPtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=t0PoV6jKiO3XJdvnSEjjiWYcPFGiRO5b7Pl0hdmSr1M=;
+ b=cBnIrYkp/SBWf+3MPFV54tAnsCucsYb4/ctNU/Ae5kDK3/+ztUoju7fhbQq1e7ddgeZerf97Xhjs5qgap4J/BLj/FWxlVm3blQCqKPHD2fH9NrawSHUKiEWLsbbnG+SeCTAdhbs2zCXJAKzN6WvfbX0Y6eyzdUN8u4e3elQ9wEQWGZrFZ9Ps/v0ga+BfS0UCte9eOCz/uCxOIR/b2Ez9lyk12hOEepUhpH/ILOTW/SIKfRDWPzNhKi89Ao8Uplu9eIUpMMZwJ4/tkG7Kg5+zbVKay1QuJp2J4sVW5h/M44LcmkGn5jDCubf8URpsV6vm4NbYpJdsPnBntVIWfjOQ9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
+ header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o/WWyardHDeunJw22FO+VGvjkWyXMQtTw3JR+S/2Av8=;
-        b=ENCT85RC4P/1cD6/b31zN30Cd2nQA8pOviebSGQPXlV3mGWvz+wkvaFpZmVg4anpD/
-         T10p3Z8trVQyrLMPX9aaAlsuSm59xPCo0aihevA9QSaPH21wdWpAeASrhWj6sHdUr3W9
-         lV0v93GH3Q0wpTisZTWk+mBfQG4AqApQ3v4F2hUKJhldfjSzkNcKDNvM5LxajU/VNE7y
-         2uSWBViWO23K6oc7zOAyJAaq9au+YWShkFQqrrGDdYP7BhUl5arhw80YEIzH1xWNoSwy
-         D8tq0NJpCAODuQEKSST8fgZdzXUAlCOLjREtBcTLD6+Du29wXD6jtFbghYW+mJcX9uv1
-         4r+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o/WWyardHDeunJw22FO+VGvjkWyXMQtTw3JR+S/2Av8=;
-        b=QFHRgd2mXjccZZn32J+yUgSsQm/MhYC+Fugv6URk1mq4kT+QqnIJAdR/x8kmgA8K+Y
-         vgZuWsY6mN/VZ3C9NKNg9uw5acOQ2xVqDseCe2kRcFoL9nLp+96pMHZ1LiyonSkHzcoj
-         dQaSdApJhFGKIccIZtgH4XDYTxg3vyOvRMsx3nLPUPLdpB1kA7pczPS0J7XEOE/GEkfM
-         X+siVm3IpEyo8RPuDDmKJ2giAnjyfFMiBWVmi8X2ixW/1oxnvyd2jhOVtWigIus4zeng
-         TtxOBCNk7b0DVM1VRMhIsEmthKA1CfRLC4xU0ppX2z0HRxpEg/hOevlTqCQSdOQWGfVc
-         Cu7Q==
-X-Gm-Message-State: ACrzQf1m+04ZXW/1HSgvqryOpCx/VNVMaXXvGxrsQco7DCp3l1gnj3Nu
-        bCIwnv/bmpm8DY2OkucjsfA=
-X-Google-Smtp-Source: AMsMyM7WpIjzAia6y2jC16/sUeBgvG3k1Tr9D8Co+XHy1ScXUjdB1LYaGwgSV8F7EEYBj8vMeBXwWg==
-X-Received: by 2002:aa7:d889:0:b0:460:62ef:2695 with SMTP id u9-20020aa7d889000000b0046062ef2695mr17987383edq.273.1666560744801;
-        Sun, 23 Oct 2022 14:32:24 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-2a01-0c23-c10a-8500-f22f-74ff-fe21-0725.c23.pool.telefonica.de. [2a01:c23:c10a:8500:f22f:74ff:fe21:725])
-        by smtp.googlemail.com with ESMTPSA id p22-20020a056402045600b0044e01e2533asm17287454edw.43.2022.10.23.14.32.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Oct 2022 14:32:24 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     linux@roeck-us.net, linux-hwmon@vger.kernel.org
-Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v4 1/2] hwmon: (jc42) Convert register access and caching to regmap/regcache
-Date:   Sun, 23 Oct 2022 23:31:56 +0200
-Message-Id: <20221023213157.11078-2-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221023213157.11078-1-martin.blumenstingl@googlemail.com>
-References: <20221023213157.11078-1-martin.blumenstingl@googlemail.com>
+ d=rohmsemiconductor.onmicrosoft.com;
+ s=selector2-rohmsemiconductor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=t0PoV6jKiO3XJdvnSEjjiWYcPFGiRO5b7Pl0hdmSr1M=;
+ b=uXTsagmk+6+7+SqUDETJkAa767xbTE6vZcadDGqr7dLkOtogcyzcywk2XHOPBo8pjS4OXQmNchF1sFoAm1ytuu2MKGDRJkfBdPekp8sYSCvuKBN4cXw+NQxPFLzDKxZreohwIWDGxm77CGuKBiSRKh3KvfVUHHctWqmkG17MazY=
+Received: from BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:59::10)
+ by FR0P281MB2848.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:4c::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Mon, 24 Oct
+ 2022 04:40:19 +0000
+Received: from BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::adc3:ee78:7f30:722]) by BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::adc3:ee78:7f30:722%4]) with mapi id 15.20.5746.023; Mon, 24 Oct 2022
+ 04:40:19 +0000
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+CC:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v4 1/4] gpu: drm: meson: Use devm_regulator_*get_enable*()
+Thread-Topic: [PATCH v4 1/4] gpu: drm: meson: Use
+ devm_regulator_*get_enable*()
+Thread-Index: AQHY5U+UZr58xfb6e0C1JLs5PfsDA64Y8amAgAAHegCABAGugA==
+Date:   Mon, 24 Oct 2022 04:40:19 +0000
+Message-ID: <a7b8c10a-9789-1b7d-da42-9f2138a675b1@fi.rohmeurope.com>
+References: <cover.1666357434.git.mazziesaccount@gmail.com>
+ <c14058c4b7018556a78455ffef484a7ebe4d8ea2.1666357434.git.mazziesaccount@gmail.com>
+ <Y1K0h4De8UsZJE7W@pendragon.ideasonboard.com>
+ <00d90039-c38a-ad8a-80a1-5a654a528756@linaro.org>
+In-Reply-To: <00d90039-c38a-ad8a-80a1-5a654a528756@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fi.rohmeurope.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BEZP281MB2454:EE_|FR0P281MB2848:EE_
+x-ms-office365-filtering-correlation-id: f320998d-7094-4dc7-0ad4-08dab579dae5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3sRZ0fgdSgqUWSswOEmH6o4P/sch/MCippgZvCyEzusYUugSZSnZgoGifIjfBBZfdayBhXPV1Kz2GlRQDIGXJI+LLlXmLyAp3ZbX1QuXar7ajavQlIdUsHLBk4WOpoHN2tGIhiM15socYY4CStl6ASbhwNGzrN0E07KPeytL6UrXrhjOyRHx3d4fOKW3e5hhg+hUmRJgsoPSjRBbhcjdS1zLkKdOYyrHPO4LETuuszjslttWA9zgG5hNY03xzKCdiHL8HSmieduLo9MW9DlrJPbo7eVQa4cP7PIjDWr4w1f73bleq3yiam2obXuBiu0IxoSgpW3LLwp1DKvz+mdwo7QuQkCHf4ferGmZrGsDEyDAcV4nsnVgo2pliCfKF/7RifpxhmxqSt1Q2/sk+DLI1kCVJmsGWCJaBK8op/3sZgvkODCRbpqe52qtApyfblKyEfO9KAbOE5gqdMhwIBB/+IejUdB/ziwVPcN3Nan/RL8B7ETvpXUVashLkYr3EH2q8zGnBZ/LCORmLxhFII8TQ570sx7l8+hb3WtNb/vSD6W6dWnX/aAD13cduvE6jUCisFqrkLGUm3ndoRpYKMdNe7ltMJaN7OSdbC0gB7rF3Nsq0lc44e9pLwl8zy+94F3XQ56TMvfgSc/KhRfRkhxa/PbYanApMvjX/YQYG+0yV38yikJxkKWASrgSPYJZHiXKxC6vkbyPuguCtzcuoapfLayjgLOBv/qGpKZXdxSGBrymeu9vbG+brYSVssS+d4bln5FKu2QpC6IHT70kF14LYd/nZMr6Y7jabItmNdM3d60UVE9v5++J3ZMijIMUq0iKpVBt596Vchb14FqelLvc+g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39830400003)(396003)(376002)(366004)(136003)(346002)(451199015)(6486002)(478600001)(86362001)(31696002)(83380400001)(71200400001)(31686004)(76116006)(64756008)(66446008)(66476007)(66556008)(53546011)(110136005)(8676002)(66946007)(91956017)(54906003)(4326008)(6506007)(8936002)(6512007)(41300700001)(7416002)(5660300002)(38100700002)(122000001)(2616005)(186003)(2906002)(316002)(38070700005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WHptdFNGMEwvS21lMEpDczNwSFU0Tm5XKzZHN1BrSVBBWXdMeGdCRzhlTVFU?=
+ =?utf-8?B?TWhTOTFDSFlVTitQSmpNWENrZ1J0TWVwRkc3ZHl0Q0x3YmdKcjE5b1UzNHNv?=
+ =?utf-8?B?WVBLcmRCcDQzR05NWUR2UmhhN3pUVzR6a3ZNdDVhYWJpMWk0OGNLMi9kZUJ3?=
+ =?utf-8?B?ZGp2Z01CdFBMQ1hpa0U0WmU0QUpRalh5d002UmVzZFVzNHlCcFB5NHVTRHFC?=
+ =?utf-8?B?MWJYUDN4MUFJQUZDdjNZS3NPQkFEY3VHWXFHNEs3TFRPSEZZNk5KalhaeFhu?=
+ =?utf-8?B?TGZwM1AydzdYaDdjb2twd2t4WTJkUStGUUlibEZrM1ZEdzE2d2J2ZEtIdWFq?=
+ =?utf-8?B?S3V2WXBsTTNsQ09oTngzTGg4QVFYbm0zQlRlZGRZUGRKaEFHdWRUaGxXbnNU?=
+ =?utf-8?B?bEo2ZVlXS25SaVlCUjhhV2IxWHEyMmNocTBCZitsSC9UdzBKSmMxL1ZJYnor?=
+ =?utf-8?B?bFdaM1dmbGk3M29MNm1PTlNub1lxOTF0NXgyVVhXbkcyZ2d6M3NSYmJodGZE?=
+ =?utf-8?B?M1Zrb0FEVmt3bnZ0a21qUG1NN1d1aXhPZXpWZTRHTjNNM1NxN2Z3TDJwSTRa?=
+ =?utf-8?B?eDhEODdHbGxFMjRtdzJhTHRSUll6TytoNGI2eGMxSzMwNFJsZ3ZYcEg1amxT?=
+ =?utf-8?B?WGRyZXpkNHVuTGpUTExOTXZ0bnpENmpEV2dnQXJWRDR6TzZwaTlCbks4WUlw?=
+ =?utf-8?B?aFdEVUxObE5BSkxiZ3paazJWd1N5RWtoTHlvUk4xVzlDbnRycytvd2JiQlZi?=
+ =?utf-8?B?TVkxbDFxU0dEa2JCWi9WVHN5dkRsakE2SEFYcjZRUkY3V2pSWHV1TnBNaWJM?=
+ =?utf-8?B?dzV6Qy83alU5ZHhEQmRROU9rcVpFWjkxbkVWK1hpZW8xOEJSeUNvNkM2ZlZN?=
+ =?utf-8?B?WWw3QnNMblZCcEd1akVOaXNBR2ZhV0p2VmVZeWppa0pHTzNFbVYvMnUwWXFN?=
+ =?utf-8?B?ZklKVUd5aHU4eENtZWdlK3ZYcmVuTkdBcjQ3TXJhanhKS1BKZXluK2lxd09Z?=
+ =?utf-8?B?Sm5BZDd4VitSQXdqK3FVTno5OFdBUUk3aTY1MHBZSFk1N3dZbHU4cEdNVXZO?=
+ =?utf-8?B?QWpCS1YzWjVzQmVIWFJLVmhiY2RmcjRUcnFKRWVyNHdjY3Q1K0RKVTdvSEZY?=
+ =?utf-8?B?TnZsRm9ldlBXeE85eEt1bU1NbGNlUUNmUTVWNUtEMnR6b05SR3FBaW13VEpK?=
+ =?utf-8?B?T2JrUGF6a2w5TUlJZEdpRVdMU2k2L0F5bnp1dWYwcTRkRURFSTVLNDNzV3lI?=
+ =?utf-8?B?Yjlremxqb01TZ1lXWDkvUmFmbzJGNE1KTnBVY0pabFNVRjQzUDhKOVc4WWhE?=
+ =?utf-8?B?MUY4OUlxd2pZTW5Xa3lRUms1NmRVdFBldXRkdGlqclFKYW1ZSGFnTkgwb0I1?=
+ =?utf-8?B?aUZYY3g3cmZnZHBxd01mOUcyc04zVnJTeWtlRnRSWHVxckhhNTR1ZXpxM2o4?=
+ =?utf-8?B?S3hqL0RRRlo0QTBTWkE1b0ZJYnJyZnRBL08yZjVnbHpsNVc2Vmpka2JTQXMv?=
+ =?utf-8?B?dzFGRVZxUkovSm43NU9CUW52enRtRmUxTGNjMDN1dzFJUThjdzNZRCt4Tm5L?=
+ =?utf-8?B?dUdheWZiekQxN21EOFdlQzFhcnYrUTMvNXJ5czRmdDlQQkQ2OFhia3JvSzBR?=
+ =?utf-8?B?RmNpNmxPRmNMYVQyR2lrS283QjZKZHNqS1NVallWR01lR282TUR2dkNKNmxs?=
+ =?utf-8?B?MTJNMlFyRmVEQ1p6OVJVRlJncG1wTHQwUzZOblB0bzArMGpzUGZMTlMyc2lq?=
+ =?utf-8?B?dWkzTVFhZzgrQm5YZ0ZwaXNrRmE3V3cyb21kaS9pNGs2UEk1UlVaZTZLOFJq?=
+ =?utf-8?B?MXZlNUEzaTlRc1h6aXRvNnJ2VVlTZGN2WUdkSE40dkxUTnNKTE5JeFBLdUY0?=
+ =?utf-8?B?M29ieVM3c084dFNKRzVxblM1NXhpZzNCMVZ4ZEJtdEJYbi9UWnIwYzNaVGY5?=
+ =?utf-8?B?S0pIa1hiTVF2Z2V1eUdtN1lrSEZaVHJnQU5meTIzNEtCallzYXBCeFFQM3kw?=
+ =?utf-8?B?SmJDTWtiVk9ueWFYN3ZTaTRGenVzU3lGYXB1R25TOWhpN1FOaUk0QVFSenM2?=
+ =?utf-8?B?Uk56enBmVVQyMXpPd1VlMlQvb0x5eEZ1OS9LbUVkVGluaHNMU2dCazcyMURP?=
+ =?utf-8?B?VzQ1a2FjclozTUY0cnZFWlVFV3FsSStDOVg2NEJkU1ZBaWZOTlNxSU1BZld4?=
+ =?utf-8?Q?rmmsUwRyH92YYrgQPBqhJIc=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F77AE48AE4F76A42AD1E12B494156B48@DEUP281.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: fi.rohmeurope.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: f320998d-7094-4dc7-0ad4-08dab579dae5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Oct 2022 04:40:19.3835
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b24d4f96-5b40-44b1-ac2e-2ed7fdbde1c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zsLZUprmMPEJo6HAt9BTKGY5YhYJrQy7tcvcGPlmDvDVeVKXLZ/eF44TplyIoxav7SaeghG3qJRuwLh4pcS1+akBOMrM/eJag/tRiVkGmCNhOBU8RkxSjnMscUJuDOri
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR0P281MB2848
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Switch the jc42 driver to use an I2C regmap to access the registers.
-Also move over to regmap's built-in caching instead of adding a
-custom caching implementation. This works for JC42_REG_TEMP_UPPER,
-JC42_REG_TEMP_LOWER and JC42_REG_TEMP_CRITICAL as these values never
-change except when explicitly written. The cache For JC42_REG_TEMP is
-dropped (regmap can't cache it because it's volatile, meaning it can
-change at any time) as well for simplicity and consistency with other
-drivers.
-
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
- drivers/hwmon/Kconfig |   1 +
- drivers/hwmon/jc42.c  | 233 ++++++++++++++++++++++++------------------
- 2 files changed, 132 insertions(+), 102 deletions(-)
-
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 7ac3daaf59ce..d3bccc8176c5 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -799,6 +799,7 @@ config SENSORS_IT87
- config SENSORS_JC42
- 	tristate "JEDEC JC42.4 compliant memory module temperature sensors"
- 	depends on I2C
-+	select REGMAP_I2C
- 	help
- 	  If you say yes here, you get support for JEDEC JC42.4 compliant
- 	  temperature sensors, which are used on many DDR3 memory modules for
-diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
-index 30888feaf589..355639d208d0 100644
---- a/drivers/hwmon/jc42.c
-+++ b/drivers/hwmon/jc42.c
-@@ -19,6 +19,7 @@
- #include <linux/err.h>
- #include <linux/mutex.h>
- #include <linux/of.h>
-+#include <linux/regmap.h>
- 
- /* Addresses to scan */
- static const unsigned short normal_i2c[] = {
-@@ -199,31 +200,14 @@ static struct jc42_chips jc42_chips[] = {
- 	{ STM_MANID, STTS3000_DEVID, STTS3000_DEVID_MASK },
- };
- 
--enum temp_index {
--	t_input = 0,
--	t_crit,
--	t_min,
--	t_max,
--	t_num_temp
--};
--
--static const u8 temp_regs[t_num_temp] = {
--	[t_input] = JC42_REG_TEMP,
--	[t_crit] = JC42_REG_TEMP_CRITICAL,
--	[t_min] = JC42_REG_TEMP_LOWER,
--	[t_max] = JC42_REG_TEMP_UPPER,
--};
--
- /* Each client has this additional data */
- struct jc42_data {
--	struct i2c_client *client;
- 	struct mutex	update_lock;	/* protect register access */
-+	struct regmap	*regmap;
- 	bool		extended;	/* true if extended range supported */
- 	bool		valid;
--	unsigned long	last_updated;	/* In jiffies */
- 	u16		orig_config;	/* original configuration */
- 	u16		config;		/* current configuration */
--	u16		temp[t_num_temp];/* Temperatures */
- };
- 
- #define JC42_TEMP_MIN_EXTENDED	(-40000)
-@@ -248,85 +232,102 @@ static int jc42_temp_from_reg(s16 reg)
- 	return reg * 125 / 2;
- }
- 
--static struct jc42_data *jc42_update_device(struct device *dev)
--{
--	struct jc42_data *data = dev_get_drvdata(dev);
--	struct i2c_client *client = data->client;
--	struct jc42_data *ret = data;
--	int i, val;
--
--	mutex_lock(&data->update_lock);
--
--	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
--		for (i = 0; i < t_num_temp; i++) {
--			val = i2c_smbus_read_word_swapped(client, temp_regs[i]);
--			if (val < 0) {
--				ret = ERR_PTR(val);
--				goto abort;
--			}
--			data->temp[i] = val;
--		}
--		data->last_updated = jiffies;
--		data->valid = true;
--	}
--abort:
--	mutex_unlock(&data->update_lock);
--	return ret;
--}
--
- static int jc42_read(struct device *dev, enum hwmon_sensor_types type,
- 		     u32 attr, int channel, long *val)
- {
--	struct jc42_data *data = jc42_update_device(dev);
--	int temp, hyst;
-+	struct jc42_data *data = dev_get_drvdata(dev);
-+	unsigned int regval;
-+	int ret, temp, hyst;
- 
--	if (IS_ERR(data))
--		return PTR_ERR(data);
-+	mutex_lock(&data->update_lock);
- 
- 	switch (attr) {
- 	case hwmon_temp_input:
--		*val = jc42_temp_from_reg(data->temp[t_input]);
--		return 0;
-+		ret = regmap_read(data->regmap, JC42_REG_TEMP, &regval);
-+		if (ret)
-+			break;
-+
-+		*val = jc42_temp_from_reg(regval);
-+		break;
- 	case hwmon_temp_min:
--		*val = jc42_temp_from_reg(data->temp[t_min]);
--		return 0;
-+		ret = regmap_read(data->regmap, JC42_REG_TEMP_LOWER, &regval);
-+		if (ret)
-+			break;
-+
-+		*val = jc42_temp_from_reg(regval);
-+		break;
- 	case hwmon_temp_max:
--		*val = jc42_temp_from_reg(data->temp[t_max]);
--		return 0;
-+		ret = regmap_read(data->regmap, JC42_REG_TEMP_UPPER, &regval);
-+		if (ret)
-+			break;
-+
-+		*val = jc42_temp_from_reg(regval);
-+		break;
- 	case hwmon_temp_crit:
--		*val = jc42_temp_from_reg(data->temp[t_crit]);
--		return 0;
-+		ret = regmap_read(data->regmap, JC42_REG_TEMP_CRITICAL,
-+				  &regval);
-+		if (ret)
-+			break;
-+
-+		*val = jc42_temp_from_reg(regval);
-+		break;
- 	case hwmon_temp_max_hyst:
--		temp = jc42_temp_from_reg(data->temp[t_max]);
-+		ret = regmap_read(data->regmap, JC42_REG_TEMP_UPPER, &regval);
-+		if (ret)
-+			break;
-+
-+		temp = jc42_temp_from_reg(regval);
- 		hyst = jc42_hysteresis[(data->config & JC42_CFG_HYST_MASK)
- 						>> JC42_CFG_HYST_SHIFT];
- 		*val = temp - hyst;
--		return 0;
-+		break;
- 	case hwmon_temp_crit_hyst:
--		temp = jc42_temp_from_reg(data->temp[t_crit]);
-+		ret = regmap_read(data->regmap, JC42_REG_TEMP_CRITICAL,
-+				  &regval);
-+		if (ret)
-+			break;
-+
-+		temp = jc42_temp_from_reg(regval);
- 		hyst = jc42_hysteresis[(data->config & JC42_CFG_HYST_MASK)
- 						>> JC42_CFG_HYST_SHIFT];
- 		*val = temp - hyst;
--		return 0;
-+		break;
- 	case hwmon_temp_min_alarm:
--		*val = (data->temp[t_input] >> JC42_ALARM_MIN_BIT) & 1;
--		return 0;
-+		ret = regmap_read(data->regmap, JC42_REG_TEMP, &regval);
-+		if (ret)
-+			break;
-+
-+		*val = (regval >> JC42_ALARM_MIN_BIT) & 1;
-+		break;
- 	case hwmon_temp_max_alarm:
--		*val = (data->temp[t_input] >> JC42_ALARM_MAX_BIT) & 1;
--		return 0;
-+		ret = regmap_read(data->regmap, JC42_REG_TEMP, &regval);
-+		if (ret)
-+			break;
-+
-+		*val = (regval >> JC42_ALARM_MAX_BIT) & 1;
-+		break;
- 	case hwmon_temp_crit_alarm:
--		*val = (data->temp[t_input] >> JC42_ALARM_CRIT_BIT) & 1;
--		return 0;
-+		ret = regmap_read(data->regmap, JC42_REG_TEMP, &regval);
-+		if (ret)
-+			break;
-+
-+		*val = (regval >> JC42_ALARM_CRIT_BIT) & 1;
-+		break;
- 	default:
--		return -EOPNOTSUPP;
-+		ret = -EOPNOTSUPP;
-+		break;
- 	}
-+
-+	mutex_unlock(&data->update_lock);
-+
-+	return ret;
- }
- 
- static int jc42_write(struct device *dev, enum hwmon_sensor_types type,
- 		      u32 attr, int channel, long val)
- {
- 	struct jc42_data *data = dev_get_drvdata(dev);
--	struct i2c_client *client = data->client;
-+	unsigned int regval;
- 	int diff, hyst;
- 	int ret;
- 
-@@ -334,21 +335,23 @@ static int jc42_write(struct device *dev, enum hwmon_sensor_types type,
- 
- 	switch (attr) {
- 	case hwmon_temp_min:
--		data->temp[t_min] = jc42_temp_to_reg(val, data->extended);
--		ret = i2c_smbus_write_word_swapped(client, temp_regs[t_min],
--						   data->temp[t_min]);
-+		ret = regmap_write(data->regmap, JC42_REG_TEMP_LOWER,
-+				   jc42_temp_to_reg(val, data->extended));
- 		break;
- 	case hwmon_temp_max:
--		data->temp[t_max] = jc42_temp_to_reg(val, data->extended);
--		ret = i2c_smbus_write_word_swapped(client, temp_regs[t_max],
--						   data->temp[t_max]);
-+		ret = regmap_write(data->regmap, JC42_REG_TEMP_UPPER,
-+				   jc42_temp_to_reg(val, data->extended));
- 		break;
- 	case hwmon_temp_crit:
--		data->temp[t_crit] = jc42_temp_to_reg(val, data->extended);
--		ret = i2c_smbus_write_word_swapped(client, temp_regs[t_crit],
--						   data->temp[t_crit]);
-+		ret = regmap_write(data->regmap, JC42_REG_TEMP_CRITICAL,
-+				   jc42_temp_to_reg(val, data->extended));
- 		break;
- 	case hwmon_temp_crit_hyst:
-+		ret = regmap_read(data->regmap, JC42_REG_TEMP_CRITICAL,
-+				  &regval);
-+		if (ret)
-+			return ret;
-+
- 		/*
- 		 * JC42.4 compliant chips only support four hysteresis values.
- 		 * Pick best choice and go from there.
-@@ -356,7 +359,7 @@ static int jc42_write(struct device *dev, enum hwmon_sensor_types type,
- 		val = clamp_val(val, (data->extended ? JC42_TEMP_MIN_EXTENDED
- 						     : JC42_TEMP_MIN) - 6000,
- 				JC42_TEMP_MAX);
--		diff = jc42_temp_from_reg(data->temp[t_crit]) - val;
-+		diff = jc42_temp_from_reg(regval) - val;
- 		hyst = 0;
- 		if (diff > 0) {
- 			if (diff < 2250)
-@@ -368,9 +371,8 @@ static int jc42_write(struct device *dev, enum hwmon_sensor_types type,
- 		}
- 		data->config = (data->config & ~JC42_CFG_HYST_MASK) |
- 				(hyst << JC42_CFG_HYST_SHIFT);
--		ret = i2c_smbus_write_word_swapped(data->client,
--						   JC42_REG_CONFIG,
--						   data->config);
-+		ret = regmap_write(data->regmap, JC42_REG_CONFIG,
-+				   data->config);
- 		break;
- 	default:
- 		ret = -EOPNOTSUPP;
-@@ -470,51 +472,80 @@ static const struct hwmon_chip_info jc42_chip_info = {
- 	.info = jc42_info,
- };
- 
-+static bool jc42_readable_reg(struct device *dev, unsigned int reg)
-+{
-+	return (reg >= JC42_REG_CAP && reg <= JC42_REG_DEVICEID) ||
-+		reg == JC42_REG_SMBUS;
-+}
-+
-+static bool jc42_writable_reg(struct device *dev, unsigned int reg)
-+{
-+	return (reg >= JC42_REG_CONFIG && reg <= JC42_REG_TEMP_CRITICAL) ||
-+		reg == JC42_REG_SMBUS;
-+}
-+
-+static bool jc42_volatile_reg(struct device *dev, unsigned int reg)
-+{
-+	return reg == JC42_REG_CONFIG || reg == JC42_REG_TEMP;
-+}
-+
-+static const struct regmap_config jc42_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 16,
-+	.val_format_endian = REGMAP_ENDIAN_BIG,
-+	.max_register = JC42_REG_SMBUS,
-+	.writeable_reg = jc42_writable_reg,
-+	.readable_reg = jc42_readable_reg,
-+	.volatile_reg = jc42_volatile_reg,
-+	.cache_type = REGCACHE_RBTREE,
-+};
-+
- static int jc42_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
- 	struct device *hwmon_dev;
-+	unsigned int config, cap;
- 	struct jc42_data *data;
--	int config, cap;
-+	int ret;
- 
- 	data = devm_kzalloc(dev, sizeof(struct jc42_data), GFP_KERNEL);
- 	if (!data)
- 		return -ENOMEM;
- 
--	data->client = client;
-+	data->regmap = devm_regmap_init_i2c(client, &jc42_regmap_config);
-+	if (IS_ERR(data->regmap))
-+		return PTR_ERR(data->regmap);
-+
- 	i2c_set_clientdata(client, data);
- 	mutex_init(&data->update_lock);
- 
--	cap = i2c_smbus_read_word_swapped(client, JC42_REG_CAP);
--	if (cap < 0)
--		return cap;
-+	ret = regmap_read(data->regmap, JC42_REG_CAP, &cap);
-+	if (ret)
-+		return ret;
- 
- 	data->extended = !!(cap & JC42_CAP_RANGE);
- 
- 	if (device_property_read_bool(dev, "smbus-timeout-disable")) {
--		int smbus;
--
- 		/*
- 		 * Not all chips support this register, but from a
- 		 * quick read of various datasheets no chip appears
- 		 * incompatible with the below attempt to disable
- 		 * the timeout. And the whole thing is opt-in...
- 		 */
--		smbus = i2c_smbus_read_word_swapped(client, JC42_REG_SMBUS);
--		if (smbus < 0)
--			return smbus;
--		i2c_smbus_write_word_swapped(client, JC42_REG_SMBUS,
--					     smbus | SMBUS_STMOUT);
-+		ret = regmap_set_bits(data->regmap, JC42_REG_SMBUS,
-+				      SMBUS_STMOUT);
-+		if (ret)
-+			return ret;
- 	}
- 
--	config = i2c_smbus_read_word_swapped(client, JC42_REG_CONFIG);
--	if (config < 0)
--		return config;
-+	ret = regmap_read(data->regmap, JC42_REG_CONFIG, &config);
-+	if (ret)
-+		return ret;
- 
- 	data->orig_config = config;
- 	if (config & JC42_CFG_SHUTDOWN) {
- 		config &= ~JC42_CFG_SHUTDOWN;
--		i2c_smbus_write_word_swapped(client, JC42_REG_CONFIG, config);
-+		regmap_write(data->regmap, JC42_REG_CONFIG, config);
- 	}
- 	data->config = config;
- 
-@@ -535,7 +566,7 @@ static void jc42_remove(struct i2c_client *client)
- 
- 		config = (data->orig_config & ~JC42_CFG_HYST_MASK)
- 		  | (data->config & JC42_CFG_HYST_MASK);
--		i2c_smbus_write_word_swapped(client, JC42_REG_CONFIG, config);
-+		regmap_write(data->regmap, JC42_REG_CONFIG, config);
- 	}
- }
- 
-@@ -546,8 +577,7 @@ static int jc42_suspend(struct device *dev)
- 	struct jc42_data *data = dev_get_drvdata(dev);
- 
- 	data->config |= JC42_CFG_SHUTDOWN;
--	i2c_smbus_write_word_swapped(data->client, JC42_REG_CONFIG,
--				     data->config);
-+	regmap_write(data->regmap, JC42_REG_CONFIG, data->config);
- 	return 0;
- }
- 
-@@ -556,8 +586,7 @@ static int jc42_resume(struct device *dev)
- 	struct jc42_data *data = dev_get_drvdata(dev);
- 
- 	data->config &= ~JC42_CFG_SHUTDOWN;
--	i2c_smbus_write_word_swapped(data->client, JC42_REG_CONFIG,
--				     data->config);
-+	regmap_write(data->regmap, JC42_REG_CONFIG, data->config);
- 	return 0;
- }
- 
--- 
-2.38.1
-
+T24gMTAvMjEvMjIgMTg6MjksIE5laWwgQXJtc3Ryb25nIHdyb3RlOg0KPiBIaSwNCj4gDQo+IE9u
+IDIxLzEwLzIwMjIgMTc6MDIsIExhdXJlbnQgUGluY2hhcnQgd3JvdGU6DQo+PiBIaSBNYXR0aSwN
+Cj4+DQo+PiBPbiBGcmksIE9jdCAyMSwgMjAyMiBhdCAwNDoxODowMVBNICswMzAwLCBNYXR0aSBW
+YWl0dGluZW4gd3JvdGU6DQo+Pj4gU2ltcGxpZnkgdXNpbmcgdGhlIGRldm1fcmVndWxhdG9yX2dl
+dF9lbmFibGVfb3B0aW9uYWwoKS4gQWxzbyBkcm9wIHRoZQ0KPj4+IHNlZW1pbmdseSB1bnVzZWQg
+c3RydWN0IG1lbWJlciAnaGRtaV9zdXBwbHknLg0KPj4+DQo+Pj4gU2lnbmVkLW9mZi1ieTogTWF0
+dGkgVmFpdHRpbmVuIDxtYXp6aWVzYWNjb3VudEBnbWFpbC5jb20+DQo+Pj4NCj4+PiAtLS0NCj4+
+PiB2MyA9PiB2NDoNCj4+PiAtIHNwbGl0IG1lc29uIHBhcnQgdG8gb3duIHBhdGNoDQo+Pj4NCj4+
+PiBSRkN2MSA9PiB2MjoNCj4+PiAtIENoYW5nZSBhbHNvIHNpaTkwMnggdG8gdXNlIGRldm1fcmVn
+dWxhdG9yX2J1bGtfZ2V0X2VuYWJsZSgpDQo+Pj4NCj4+PiBQbGVhc2Ugbm90ZSAtIHRoaXMgaXMg
+b25seSBjb21waWxlLXRlc3RlZCBkdWUgdG8gdGhlIGxhY2sgb2YgSFcuIENhcmVmdWwNCj4+PiBy
+ZXZpZXcgYW5kIHRlc3RpbmcgaXMgX2hpZ2hseV8gYXBwcmVjaWF0ZWQuDQo+Pj4gLS0tDQoNCi8v
+U25pcA0KDQo+Pg0KPj4gQXMgbm90ZWQgaW4gdGhlIHJldmlldyBvZiB0aGUgc2VyaWVzIHRoYXQg
+aW50cm9kdWNlZA0KPj4gZGV2bV9yZWd1bGF0b3JfZ2V0X2VuYWJsZV9vcHRpb25hbCgpLCB0aGUg
+cmlnaHQgdGhpbmcgdG8gZG8gaXMgdG8NCj4+IGltcGxlbWVudCBydW50aW1lIFBNIGluIHRoaXMg
+ZHJpdmVyIHRvIGF2b2lkIHdhc3RpbmcgcG93ZXIuDQo+IA0KPiBXaGlsZSBJIGFncmVlLCBpdCdz
+IG5vdCByZWFsbHkgdGhlIHNhbWUgbGV2ZWwgb2YgZWZmb3J0IGFzIHRoaXMgcGF0Y2gNCj4gc2hv
+dWxkIGJlIGZ1bmN0aW9uYWxseSBlcXVpdmFsZW50Lg0KPiANCg0KRXhhY3RseS4gQXMgSSB3cm90
+ZSwgSSBkbyBub3QgaGF2ZSB0aGUgSFcgdG8gdGVzdCB0aGlzIGNoYW5nZS4gVGhpcyANCmludGVu
+ZHMgdG8gYnJpbmcgbm8gZnVuY3Rpb25hbCBjaGFuZ2VzLiBJdCBpcyBqdXN0IGEgbWlub3IgDQpz
+aW1wbGlmaWNhdGlvbiB3aGlsZSBhbHNvIG1ha2luZyBpdCBoYXJkZXIgdG8gY3JlYXRlIGEgYnVn
+IHdpdGggdGhlIA0KcmVndWxhdG9yIGNvbnRyb2wuIChSZWdpc3RlcmluZyB0aGUgZGV2bV9hY3Rp
+b24gYW5kIGxlYXZpbmcgdGhlIGhhbmRsZSANCnRvIHRoZSByZWd1bGF0b3IgaXMgbW9yZSBmcmFn
+aWxlIHRoYW4gdXNpbmcgdGhpcyBuZXcgQVBJIHdoaWNoIGRvZXMgbm90IA0KZ2l2ZSB1c2VyIHRo
+ZSBoYW5kbGUpLg0KDQpJIGFtIGluIG5vIHdheSBhZ2FpbnN0IHNvbWVvbmUgZnVydGhlciBpbXBy
+b3ZpbmcgdGhlIGZ1bmN0aW9uYWxpdHkgaGVyZSANCihieSBhZGRpbmcgcnVudGltZSBQTSkgYnV0
+IHRoaXMgc29tZW9uZSBpcyBub3QgbWUuIFlldCwgSSBkb24ndCBzZWUgaG93IA0KdGhpcyBwYXRj
+aCBwcmV2ZW50cyBydW50aW1lIFBNIGJlaW5nIGltcGxlbWVudGVkPyBUaGUgZmlyc3QgdGhpbmcg
+dGhhdCANCm5lZWRzIHRvIGJlIGRvbmUgaXMgcmVtb3ZpbmcgdGhlIGRldm0tYWN0aW9uIGFzc3Vt
+aW5nIHNvbWVvbmUgZGlkIA0KaW1wbGVtZW50IHBvd2VyLXNhdmluZyBieSBkaXNhYmxpbmcgdGhl
+IHJlZ3VsYXRvcihzKSBhdCBydW50aW1lLiBBZnRlciANCnRoaXMgcGF0Y2ggaXMgYXBwbGllZCwg
+dGhlIGFjdGlvbiByZW1vdmFsIGlzIGF1dG9tYXRpY2FsbHkgYSBuZWNlc3NpdHkgDQppbiBvcmRl
+ciB0byBnZXQgdGhlIGhhbmRsZSBmb3IgcmVndWxhdG9yIGNvbnRyb2wuDQoNCkkga25vdyB0aGlz
+IGhlbHBlciBpcyBub3QgcHJlZmVycmVkIGJ5IGFsbCBidXQgaXQgaXMgc3RpbGwgc2FmZXIgdGhh
+biANCnRoZSBjdXJyZW50IGNvZGUgd2hpY2ggcmVnaXN0ZXJzIHRoZSBhY3Rpb24gd2hpbGUgYWxs
+b3dpbmcgdGhlIHJlZ3VsYXRvciANCmNvbnRyb2wuDQoNCllvdXJzDQoJLS0gTWF0dGkNCg0KLS0g
+DQpNYXR0aSBWYWl0dGluZW4NCkxpbnV4IGtlcm5lbCBkZXZlbG9wZXIgYXQgUk9ITSBTZW1pY29u
+ZHVjdG9ycw0KT3VsdSBGaW5sYW5kDQoNCn5+IFdoZW4gdGhpbmdzIGdvIHV0dGVybHkgd3Jvbmcg
+dmltIHVzZXJzIGNhbiBhbHdheXMgdHlwZSA6aGVscCEgfn4NCg0K
