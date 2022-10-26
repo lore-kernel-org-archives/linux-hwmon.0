@@ -2,112 +2,86 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B69D6C433FE
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Oct 2022 15:01:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 380E2C433FE
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Oct 2022 15:05:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233373AbiJZPBs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 Oct 2022 11:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43890 "EHLO
+        id S234456AbiJZPFK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 26 Oct 2022 11:05:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234428AbiJZPBo (ORCPT
+        with ESMTP id S234104AbiJZPFF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Oct 2022 11:01:44 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606BF7A526
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 Oct 2022 08:01:39 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso10059692otb.6
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 Oct 2022 08:01:39 -0700 (PDT)
+        Wed, 26 Oct 2022 11:05:05 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625E271BFC;
+        Wed, 26 Oct 2022 08:05:02 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-13bef14ea06so6596435fac.3;
+        Wed, 26 Oct 2022 08:05:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=s9P/1ySeEA3QZ/JZuz1CjtiZDuCR93d0OsTGlTiHMSw=;
-        b=FjuyrxiOS+vLVQS0/c1JcjFwG9f5XLBmV4PnixpZnzIqDK0YXDgLH8o3fHsiKG68WB
-         0fKbLkYYDTJytrZLrhTKCgtms6MKKjA9f0B8sbxygFem5N2sqkPkEJfxTeB+G5572rUC
-         IQ7dzoqAASCZ5w7hvz+DpFIVDc31L0gLxappYApJtWcFKvx/5PlTCn2Z0W9v5/4tt99H
-         UnZ625o/VEyzmRFuUweFhKv1RgvmWun7UxQeOzQjI2/An1WFmksHTFGpHnZtR1rRBTxS
-         8IY1ioB/Scv2tvJ4YLR6rN3P2Q6TTMxcA/IMTUudI8SAMVcumoC3g4qi2gD7RB6BfcDS
-         vvVg==
+        bh=MZ7K9c/DhvA3ULMMun0jLi/og1DertsN4XABD8/KyjY=;
+        b=EYk28o/biKU2YVqqaYQpWv1EveGWLGPZ87M0sCOrsphee60eFxn4SI3TY+rZW4nGqj
+         lCigbB0P9z1A1E0+/e+IGWIcvBSuvDJS1iyptl93MVHuda3AEOoQG4WMsbH285U4o9bR
+         VryT/UVC1eP7/pzFHkIwoWsDt6seiiEIPjZzySUcgGK6zmxnc1z0C6IWDzB0J5scBRWz
+         Usb7co73sSqu/19GPpN7vIqe+lOoj/IcdPgIG9LJk3a9lGh76GpN9MQrT/5ADt2wdWRy
+         7bWDwbmcaGmB24oa37dJ9N6pU9oqDV3hM2a8zTY4Ag//EbPfm5JFWMNh49omycESMnQn
+         aiKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=s9P/1ySeEA3QZ/JZuz1CjtiZDuCR93d0OsTGlTiHMSw=;
-        b=NNs5JSpdFsekhx4JejSPMwkF6dLmP6blNfyEL7sk3o11ZKcgWuhFNae3H89rBVSrOL
-         kI1eJBY+M8W1i9fzOUPGi3zulxj9frJFkZQl+wxtJ3b0WRkEzkzNHJmGoNOSRkwPtOnO
-         9ApidEQ21VGC606I/A/5eCjwlebIbeRR1o6v3NDUx2Vlauc3ywULTpqvo92djAXGVmSF
-         cJxf+1LQP1m6IN8yyt8Wy0DulIm6QV1O4mA/UaoqdWNECS9MRKtNDBYTM9qd/XVn9dH1
-         sVHNXa7k5zewNEp9grHXe+SHxsOv/MJ+uPxoWzu1znKJiBqU+SP95Resff4cKVZeC/lD
-         z0KQ==
-X-Gm-Message-State: ACrzQf2uF2vVSFEFdgElBaoVQuNDhRjXw5muuQt9gGBpF9yA7/CA8l9s
-        tcu8e9nhslG0MtCLjkjtLBc=
-X-Google-Smtp-Source: AMsMyM6IF1Ni/ZBHuBVlreLsKChJ53rWbjx6bCvORcL5Ohy7sm84ButUcD5ltC1nKJKdeJ39iQgqKQ==
-X-Received: by 2002:a05:6830:610b:b0:65b:eb36:6336 with SMTP id ca11-20020a056830610b00b0065beb366336mr21255363otb.131.1666796498592;
-        Wed, 26 Oct 2022 08:01:38 -0700 (PDT)
+        bh=MZ7K9c/DhvA3ULMMun0jLi/og1DertsN4XABD8/KyjY=;
+        b=gw6xn5yaKj6hKefx7V9RREIKQEFH5HDdpjjIVL62t0Co+YZKt3MyBmpRDxp+pH29cF
+         LRYpm7QL9fuziWuu72naPaDdw9XCYZfSNlrxXIDt3QVoGHNp75Zikk2bqVl1oZOiMC2Y
+         62kU7DJV2WEprI+7A6NrhyZwkQdYRnq9u9nn678gv9xTC7V9BnCDdMH1njbQMJIPDDSq
+         e2iyAlUW19atu1qDdatlakehCe3R25uVw0UYhMFhET+N7Bah11Xp1xxMrj58Z/cQgMPt
+         5Wt4PTG4dvuWSPnzrhrDwYQzQv+T+WRHRpIqLi6MdRpxnaEVGGkmM2mjs2PLhPfZJ9n2
+         VhIQ==
+X-Gm-Message-State: ACrzQf1pPuYhlA+dmOSMI8wf66SYpH+dVooW5+6qAshoWEqBf02rtxzX
+        ZUAgW/OYoECaa0EdHFabXvvOAaMLLWM=
+X-Google-Smtp-Source: AMsMyM7j+pvR/AINPyg0/WuDkBDZdG1TX/POVx/pzR6NDVfhn03EqbpG1ODcDrEDTVnVovhjTzYTDw==
+X-Received: by 2002:a05:6870:5388:b0:132:dbd1:219e with SMTP id h8-20020a056870538800b00132dbd1219emr2436570oan.87.1666796701714;
+        Wed, 26 Oct 2022 08:05:01 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u18-20020a056870305200b0013b911d5960sm3067911oau.49.2022.10.26.08.01.37
+        by smtp.gmail.com with ESMTPSA id b20-20020a05687061d400b0013b1301ce42sm949003oah.47.2022.10.26.08.05.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 08:01:38 -0700 (PDT)
+        Wed, 26 Oct 2022 08:05:01 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 26 Oct 2022 08:01:37 -0700
+Date:   Wed, 26 Oct 2022 08:05:00 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jeremy Kerr <jk@codeconstruct.com.au>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Eddie James <eajames@linux.ibm.com>,
-        Joel Stanley <joel@jms.id.au>
-Subject: Re: [PATCH] hwmon/occ: OCC sensors aren't arch-specific
-Message-ID: <20221026150137.GA2545794@roeck-us.net>
-References: <20221024081527.3842565-1-jk@codeconstruct.com.au>
+To:     Aleksa Savic <savicaleksa83@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, leonard.anderweit@gmail.com,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (aquacomputer_d5next) Add support for
+ temperature sensor offsets
+Message-ID: <20221026150500.GA2546211@roeck-us.net>
+References: <20221024151039.7222-1-savicaleksa83@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221024081527.3842565-1-jk@codeconstruct.com.au>
+In-Reply-To: <20221024151039.7222-1-savicaleksa83@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 04:15:27PM +0800, Jeremy Kerr wrote:
-> Commit c112d75840fb ("hwmon: OCC drivers are ARM-only") made the OCC
-> sensor drivers not selectable on powerpc64:
+On Mon, Oct 24, 2022 at 05:10:39PM +0200, Aleksa Savic wrote:
+> Add support for reading and writing temperature sensor offsets
+> on the Aquacomputer D5 Next, Farbwerk 360, Octo and Quadro,
+> for which the needed offsets are known. Implemented by
+> Leonard Anderweit [1].
 > 
->   These drivers are for a BMC inside PowerPC servers. The BMC runs on
->   ARM hardware, so only propose the drivers on this architecture, unless
->   build-testing.
+> [1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/22
 > 
-> ... but we now have a powerpc64 BMC (still for a powerpc64 host), so
-> drop the `depends on` that excludes building for this platform.
-> 
-> Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
-> Acked-by: Joel Stanley <joel@jms.id.au>
+> Originally-from: Leonard Anderweit <leonard.anderweit@gmail.com>
+> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 
 Applied to hwmon-next.
 
 Thanks,
 Guenter
-
-> ---
->  drivers/hwmon/occ/Kconfig | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/occ/Kconfig b/drivers/hwmon/occ/Kconfig
-> index 35a7070db827..348c21100a37 100644
-> --- a/drivers/hwmon/occ/Kconfig
-> +++ b/drivers/hwmon/occ/Kconfig
-> @@ -6,7 +6,6 @@
->  config SENSORS_OCC_P8_I2C
->  	tristate "POWER8 OCC through I2C"
->  	depends on I2C
-> -	depends on ARM || ARM64 || COMPILE_TEST
->  	select SENSORS_OCC
->  	help
->  	 This option enables support for monitoring sensors provided by the
-> @@ -21,7 +20,6 @@ config SENSORS_OCC_P8_I2C
->  config SENSORS_OCC_P9_SBE
->  	tristate "POWER9 OCC through SBE"
->  	depends on FSI_OCC
-> -	depends on ARM || ARM64 || COMPILE_TEST
->  	select SENSORS_OCC
->  	help
->  	 This option enables support for monitoring sensors provided by the
