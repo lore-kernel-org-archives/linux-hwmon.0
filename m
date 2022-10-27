@@ -2,187 +2,256 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73C17FA3740
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Oct 2022 14:52:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C256BFA3741
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Oct 2022 16:35:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234690AbiJ0Ow2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 27 Oct 2022 10:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
+        id S236083AbiJ0Qfl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Oct 2022 12:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235911AbiJ0Ow1 (ORCPT
+        with ESMTP id S236628AbiJ0Qfh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Oct 2022 10:52:27 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80079.outbound.protection.outlook.com [40.107.8.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD6FF614F
-        for <linux-hwmon@vger.kernel.org>; Thu, 27 Oct 2022 07:52:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ql6XrjBQZU7UjKpJQs9oMJZz1WzsBR6JRveLUrtEs3vDBsH2+BmXNYPONO9oDMxifNW2vX0lnFkkx1pzKMd1cHuMKkGw7D+RwweM7sgtLxNssuwRCCj/lZj90+0UhMG6vKzjurLjilM0iPE+IICbhyn6daaLXLzNH8ADJRgqZae2o3X7vgd5E6fH057fX7s/ey8v/iwTx6LadGgqdC17pwjBEXAhlkBMZzkX8s54txLndqezfechZjdVA0bC0nrX9cyxefp1S8rYYL36DPSn/YBrd8P8my7gp539HPnuc2wyXDTT0eMkOnGFDN9xMxqPO15muLgwszzd9oKDyolBuQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Flz3LivdB9qwAhsZe4Va4fveBJVSNHL6UmAoIjfAYPg=;
- b=WvHTlBKVyhlolKuCbD5zWskG/PKHxuql5uz7t+cBe0eUzHjtTJRDnL6yxarYxwtnlbHLrwPhDKIjhbojagzgRgqUjH8iAs2diNAFIykCa3yMQLCayN6yM5c+7ApcK+XgLvhkvnkeJBTezlkKdkop5OzthaPRG7ElUwBjzyMEhFwUUb+AeCkZVG2Yey7eULgraersLkfVpDj3ZSJUqPwwZ3uloMrOlENxHaCW3VZxuvihi2KX+fdUr58Xg5CWxlds00/k9hd+Ke0Xe7i5T1WybtPgMAlovkEw2KO8QvoVTAOpsB/5cqooOUU8Z/DPsxNqcqv7zvGjK5pPlQ4u1f9/Bg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 139.15.153.199) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=etas.com;
- dmarc=pass (p=reject sp=none pct=100) action=none header.from=etas.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=etas.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Flz3LivdB9qwAhsZe4Va4fveBJVSNHL6UmAoIjfAYPg=;
- b=PO3PB9I5lsPDkC9ccEqEkpz7SNYpRl4DH6TedkHbNAVth2ytf4V6+ibD6XiLv20NH9MyF3XXVXZEVImeBJQNwDPqVRrJ6tqN4y27mnPwLAVcPsObEg4A+rtw5Y9ZWTmBlGFh/eRYLGHSaC+hrRmYLJMthCeXsZ83MOTXA7NNVSw=
-Received: from AM6PR0502CA0052.eurprd05.prod.outlook.com
- (2603:10a6:20b:56::29) by PAVPR10MB7305.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:31c::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Thu, 27 Oct
- 2022 14:52:22 +0000
-Received: from AM7EUR03FT053.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:20b:56:cafe::dc) by AM6PR0502CA0052.outlook.office365.com
- (2603:10a6:20b:56::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.14 via Frontend
- Transport; Thu, 27 Oct 2022 14:52:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 139.15.153.199)
- smtp.mailfrom=etas.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=etas.com;
-Received-SPF: Pass (protection.outlook.com: domain of etas.com designates
- 139.15.153.199 as permitted sender) receiver=protection.outlook.com;
- client-ip=139.15.153.199; helo=eop.bosch-org.com; pr=C
-Received: from eop.bosch-org.com (139.15.153.199) by
- AM7EUR03FT053.mail.protection.outlook.com (100.127.140.202) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5746.16 via Frontend Transport; Thu, 27 Oct 2022 14:52:22 +0000
-Received: from FE-EXCAS2000.de.bosch.com (10.139.217.199) by eop.bosch-org.com
- (139.15.153.199) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2375.32; Thu, 27 Oct
- 2022 16:52:22 +0200
-Received: from getk-dev.de.bosch.com (10.139.217.196) by
- FE-EXCAS2000.de.bosch.com (10.139.217.199) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.32; Thu, 27 Oct 2022 16:52:22 +0200
-From:   Felix Nieuwenhuizen <Felix.Nieuwenhuizen@etas.com>
-To:     <linux-hwmon@vger.kernel.org>
-CC:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Felix Nieuwenhuizen <Felix.Nieuwenhuizen@etas.com>
-Subject: [PATCH v2] hwmon: (pmbus/ltc2978) add support for LTC7132
-Date:   Thu, 27 Oct 2022 16:51:35 +0200
-Message-ID: <20221027145135.31802-1-Felix.Nieuwenhuizen@etas.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <0221027133201.GA566451@roeck-us.net>
-References: <0221027133201.GA566451@roeck-us.net>
+        Thu, 27 Oct 2022 12:35:37 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16834E850;
+        Thu, 27 Oct 2022 09:35:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666888536; x=1698424536;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=g8JpxJ/7sThIg/BLIJ/mUFG37Ckprmp4RiCF2hAGE4k=;
+  b=XHmorDFR1vZfe3XVIZA8T0S2WMMT8l6dufUT4YXBpVQhZl311hPJja19
+   8yP0R4NrRBoY6tcH1qE+Q8sT1lckNDRvOy6/8wm3yOYFCLrYZn5mrH7Ni
+   edKt+aBJ7+kUK4h5mqHgGFBFAe2fMnQxDzZZKEydwEkAZ839MUOtO/Csj
+   prVki7swDaw5nd6aJlfvEkOawQIGh4hA/7KGjcaOzR6eFw8zFqeqv/SX2
+   gb3LarnbBshoxbFkA1yu/qYoVVSGB1br/kFbgGmBeo6FCt32umaAXGFAS
+   ybecVBA+eD2gRiqN9lkbl5lJqbT2Bk8wIT7jZBNSR5gLj9igoFD6hHwdG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="295683595"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="295683595"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 09:35:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="757761930"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="757761930"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 27 Oct 2022 09:35:16 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oo5qe-0008zP-0K;
+        Thu, 27 Oct 2022 16:35:16 +0000
+Date:   Fri, 28 Oct 2022 00:34:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     ntfs3@lists.linux.dev, netdev@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mediatek@lists.infradead.org,
+        linux-hwmon@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD SUCCESS WITH WARNING
+ ecc4eeb2208ab537a3f3744984cd7f30ac971db8
+Message-ID: <635ab32d.6UouMR1hjiK2K4CL%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.139.217.196]
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7EUR03FT053:EE_|PAVPR10MB7305:EE_
-X-MS-Office365-Filtering-Correlation-Id: a731f41f-3992-462c-9b7e-08dab82adada
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: i/7ZMqDo+7XWFvwDO1M8jEEFh1GNcuSLaMsd4QvhxFFNOAgbIAplKEJFraWW8Cq0QNa1oZAE4U3wlowxqUY/dGgdMNQGzniGq1UK0Dfiko2uy1ietmfFw85rMMy77E+mvlK2v30dhEOxheMQzr1QACUpAAqDiVav9HbVt8B6FHa4/QAQqHzKDftcSsdsIl8r3eaZB3ccqL455x+jbdVui4Tg2sPzkezGN3faRV63j0U3Lq/CH6D+ENT1JSUwazT7EIYnXMojlvel2/IH7I7oGkmeymCO0ILdKReReE10+6EHXX9vi+bD7XW1YS9Rz0YRCygTRImyYzyOI9Nd9VVOJnjgqzLGKwYninYZMTGwL2UYrOPWmfWd+HS7DanefRy1FyYmrB+86V1faP8D6Lgz+zLRFLDxo4+k3xO8nZs7qTbft2mgzIJwv7m2p3UwaNr9hPYmygWIXmoh3WC8Fs7Mrymh/aEq98PFWVn41mLTQKPRmph1v3gFo92TbEnTt6n2PfMnUQu1sy0eHV8VfnRl9Emvd+gB7GuKKuSz2472I6MN3iTeIFaZulPCknx3L6m/KSUSCypg0fMBUGcCNK2SCnjj1VtCk4x+8Eov3e+yYFCeaV/N6TrTY+/grPCe5f3vfJTL0wv13EFI4Fdqu7ZrJYg5Gki+N8FtI+HV760bvJb2GFDk2aTM14g8tmttutC0hz4NKpjWUz5YhrV7pQ392L+a/gvcgFcwjA8u68mSC2K9UfSNCYj/0KUyj5uv68CJ7Oo6xWAw5RRJonpCL0zK9WU15S9IUoteFRyKj2NpzTk=
-X-Forefront-Antispam-Report: CIP:139.15.153.199;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:eop.bosch-org.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(346002)(39860400002)(376002)(451199015)(36840700001)(46966006)(40470700004)(5660300002)(8936002)(86362001)(36860700001)(478600001)(82740400003)(82960400001)(47076005)(83380400001)(81166007)(82310400005)(356005)(2906002)(6916009)(36756003)(336012)(54906003)(186003)(1076003)(107886003)(316002)(6666004)(2616005)(8676002)(40460700003)(40480700001)(4326008)(16526019)(70206006)(70586007)(26005)(41300700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: etas.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 14:52:22.5462
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a731f41f-3992-462c-9b7e-08dab82adada
-X-MS-Exchange-CrossTenant-Id: 0ae51e19-07c8-4e4b-bb6d-648ee58410f4
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0ae51e19-07c8-4e4b-bb6d-648ee58410f4;Ip=[139.15.153.199];Helo=[eop.bosch-org.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM7EUR03FT053.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR10MB7305
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for LTC7132.
-The relevant registers in the LTC7132 are identical to the LTC7880.
-So it's just a matter of adding the chip id.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: ecc4eeb2208ab537a3f3744984cd7f30ac971db8  Add linux-next specific files for 20221027
 
-Signed-off-by: Felix Nieuwenhuizen <Felix.Nieuwenhuizen@etas.com>
----
- drivers/hwmon/pmbus/ltc2978.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+Warning reports:
 
-diff --git a/drivers/hwmon/pmbus/ltc2978.c b/drivers/hwmon/pmbus/ltc2978.c
-index 6d2592731ba3..79f480b4425d 100644
---- a/drivers/hwmon/pmbus/ltc2978.c
-+++ b/drivers/hwmon/pmbus/ltc2978.c
-@@ -23,7 +23,7 @@ enum chips {
- 	/* Managers */
- 	ltc2972, ltc2974, ltc2975, ltc2977, ltc2978, ltc2979, ltc2980,
- 	/* Controllers */
--	ltc3880, ltc3882, ltc3883, ltc3884, ltc3886, ltc3887, ltc3889, ltc7880,
-+	ltc3880, ltc3882, ltc3883, ltc3884, ltc3886, ltc3887, ltc3889, ltc7132, ltc7880,
- 	/* Modules */
- 	ltm2987, ltm4664, ltm4675, ltm4676, ltm4677, ltm4678, ltm4680, ltm4686,
- 	ltm4700,
-@@ -45,15 +45,14 @@ enum chips {
- #define LTC2974_MFR_IOUT_PEAK		0xd7
- #define LTC2974_MFR_IOUT_MIN		0xd8
- 
--/* LTC3880, LTC3882, LTC3883, LTC3887, LTM4675, and LTM4676 */
-+/* LTC3880, LTC3882, LTC3883, LTC3887, LTM4675, LTM4676, LTC7132 */
- #define LTC3880_MFR_IOUT_PEAK		0xd7
- #define LTC3880_MFR_CLEAR_PEAKS		0xe3
- #define LTC3880_MFR_TEMPERATURE2_PEAK	0xf4
- 
--/* LTC3883, LTC3884, LTC3886, LTC3889 and LTC7880 only */
-+/* LTC3883, LTC3884, LTC3886, LTC3889, LTC7132, LTC7880 */
- #define LTC3883_MFR_IIN_PEAK		0xe1
- 
--
- /* LTC2975 only */
- #define LTC2975_MFR_IIN_PEAK		0xc4
- #define LTC2975_MFR_IIN_MIN		0xc5
-@@ -79,10 +78,11 @@ enum chips {
- #define LTC3884_ID			0x4C00
- #define LTC3886_ID			0x4600
- #define LTC3887_ID			0x4700
--#define LTM2987_ID_A			0x8010	/* A/B for two die IDs */
--#define LTM2987_ID_B			0x8020
- #define LTC3889_ID			0x4900
-+#define LTC7132_ID			0x4CE0
- #define LTC7880_ID			0x49E0
-+#define LTM2987_ID_A			0x8010	/* A/B for two die IDs */
-+#define LTM2987_ID_B			0x8020
- #define LTM4664_ID			0x4120
- #define LTM4675_ID			0x47a0
- #define LTM4676_ID_REV1			0x4400
-@@ -547,6 +547,7 @@ static const struct i2c_device_id ltc2978_id[] = {
- 	{"ltc3886", ltc3886},
- 	{"ltc3887", ltc3887},
- 	{"ltc3889", ltc3889},
-+	{"ltc7132", ltc7132},
- 	{"ltc7880", ltc7880},
- 	{"ltm2987", ltm2987},
- 	{"ltm4664", ltm4664},
-@@ -651,6 +652,8 @@ static int ltc2978_get_id(struct i2c_client *client)
- 		return ltc3887;
- 	else if (chip_id == LTC3889_ID)
- 		return ltc3889;
-+	else if (chip_id == LTC7132_ID)
-+		return ltc7132;
- 	else if (chip_id == LTC7880_ID)
- 		return ltc7880;
- 	else if (chip_id == LTM2987_ID_A || chip_id == LTM2987_ID_B)
-@@ -831,6 +834,7 @@ static int ltc2978_probe(struct i2c_client *client)
- 	case ltc3884:
- 	case ltc3886:
- 	case ltc3889:
-+	case ltc7132:
- 	case ltc7880:
- 	case ltm4664:
- 	case ltm4678:
-@@ -902,6 +906,7 @@ static const struct of_device_id ltc2978_of_match[] = {
- 	{ .compatible = "lltc,ltc3886" },
- 	{ .compatible = "lltc,ltc3887" },
- 	{ .compatible = "lltc,ltc3889" },
-+	{ .compatible = "lltc,ltc7132" },
- 	{ .compatible = "lltc,ltc7880" },
- 	{ .compatible = "lltc,ltm2987" },
- 	{ .compatible = "lltc,ltm4664" },
+https://lore.kernel.org/linux-mm/202210090954.pTR6m6rj-lkp@intel.com
+https://lore.kernel.org/linux-mm/202210111318.mbUfyhps-lkp@intel.com
+https://lore.kernel.org/linux-mm/202210261404.b6UlzG7H-lkp@intel.com
+https://lore.kernel.org/llvm/202210060148.UXBijOcS-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202210270637.Q5Y7FiKJ-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202210271517.snUEnhD0-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202210272129.7rvjxsdk-lkp@intel.com
+
+Warning: (recently discovered and may have been fixed)
+
+arch/loongarch/kernel/traps.c:250 die() warn: variable dereferenced before check 'regs' (see line 244)
+drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:615: warning: expecting prototype for setup_subvp_dmub_command(). Prototype was for populate_subvp_cmd_pipe_info() instead
+drivers/hwmon/jc42.c:384 jc42_write() warn: inconsistent returns '&data->update_lock'.
+drivers/net/ethernet/freescale/fman/fman_memac.c:1209 memac_initialization() warn: passing zero to 'PTR_ERR'
+include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
+include/asm-generic/div64.h:234:32: warning: right shift count >= width of type [-Wshift-count-overflow]
+lib/zstd/compress/huf_compress.c:460 HUF_getIndex() warn: the 'RANK_POSITION_LOG_BUCKETS_BEGIN' macro might need parens
+
+Unverified Warning (likely false positive, please contact us if interested):
+
+lib/zstd/decompress/zstd_decompress_block.c:1009 ZSTD_execSequence() warn: inconsistent indenting
+lib/zstd/decompress/zstd_decompress_block.c:894 ZSTD_execSequenceEnd() warn: inconsistent indenting
+lib/zstd/decompress/zstd_decompress_block.c:942 ZSTD_execSequenceEndSplitLitBuffer() warn: inconsistent indenting
+lib/zstd/decompress/zstd_decompress_internal.h:206 ZSTD_DCtx_get_bmi2() warn: inconsistent indenting
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- arc-randconfig-m031-20221025
+|   `-- drivers-net-ethernet-freescale-fman-fman_memac.c-memac_initialization()-warn:passing-zero-to-PTR_ERR
+|-- arm-allmodconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dc_dmub_srv.c:warning:expecting-prototype-for-setup_subvp_dmub_command().-Prototype-was-for-populate_subvp_cmd_pipe_info()-instead
+|-- arm64-randconfig-s041-20221026
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-priv1-got-restricted-__le16-addressable-usertype-fc_len
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-tag-got-restricted-__le16-addressable-usertype-fc_tag
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-short-usertype-tag-got-restricted-__le16-addressable-usertype-fc_tag
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_len-got-unsigned-short-usertype
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_tag-got-unsigned-short-usertype
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-int-tag-got-restricted-__le16-usertype-fc_tag
+|   `-- fs-ext4-fast_commit.c:sparse:sparse:restricted-__le16-degrades-to-integer
+|-- i386-randconfig-m021
+|   |-- arch-x86-boot-compressed-..-..-..-..-lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequence()-warn:inconsistent-indenting
+|   |-- arch-x86-boot-compressed-..-..-..-..-lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequenceEnd()-warn:inconsistent-indenting
+|   |-- arch-x86-boot-compressed-..-..-..-..-lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequenceEndSplitLitBuffer()-warn:inconsistent-indenting
+|   |-- arch-x86-boot-compressed-..-..-..-..-lib-zstd-decompress-zstd_decompress_internal.h-ZSTD_DCtx_get_bmi2()-warn:inconsistent-indenting
+|   |-- lib-zstd-compress-huf_compress.c-HUF_getIndex()-warn:the-RANK_POSITION_LOG_BUCKETS_BEGIN-macro-might-need-parens
+|   |-- lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequence()-warn:inconsistent-indenting
+|   |-- lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequenceEnd()-warn:inconsistent-indenting
+|   |-- lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequenceEndSplitLitBuffer()-warn:inconsistent-indenting
+|   `-- lib-zstd-decompress-zstd_decompress_internal.h-ZSTD_DCtx_get_bmi2()-warn:inconsistent-indenting
+|-- ia64-randconfig-s052-20221026
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-priv1-got-restricted-__le16-addressable-usertype-fc_len
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-tag-got-restricted-__le16-addressable-usertype-fc_tag
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-short-usertype-tag-got-restricted-__le16-addressable-usertype-fc_tag
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_len-got-unsigned-short-usertype
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_tag-got-unsigned-short-usertype
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-int-tag-got-restricted-__le16-usertype-fc_tag
+|   `-- fs-ext4-fast_commit.c:sparse:sparse:restricted-__le16-degrades-to-integer
+|-- loongarch-randconfig-m041-20221026
+|   |-- arch-loongarch-kernel-traps.c-die()-warn:variable-dereferenced-before-check-regs-(see-line-)
+|   |-- drivers-hwmon-jc42.c-jc42_write()-warn:inconsistent-returns-data-update_lock-.
+|   |-- lib-zstd-compress-huf_compress.c-HUF_getIndex()-warn:the-RANK_POSITION_LOG_BUCKETS_BEGIN-macro-might-need-parens
+|   |-- lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequence()-warn:inconsistent-indenting
+|   |-- lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequenceEnd()-warn:inconsistent-indenting
+|   `-- lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequenceEndSplitLitBuffer()-warn:inconsistent-indenting
+|-- mips-randconfig-r013-20221027
+|   |-- include-asm-generic-div64.h:warning:comparison-of-distinct-pointer-types-lacks-a-cast
+|   `-- include-asm-generic-div64.h:warning:right-shift-count-width-of-type
+|-- nios2-randconfig-s042-20221026
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-priv1-got-restricted-__le16-addressable-usertype-fc_len
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-tag-got-restricted-__le16-addressable-usertype-fc_tag
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-short-usertype-tag-got-restricted-__le16-addressable-usertype-fc_tag
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_len-got-unsigned-short-usertype
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_tag-got-unsigned-short-usertype
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-int-tag-got-restricted-__le16-usertype-fc_tag
+|   |-- fs-ext4-fast_commit.c:sparse:sparse:restricted-__le16-degrades-to-integer
+|   |-- fs-ntfs3-index.c:sparse:sparse:restricted-__le32-degrades-to-integer
+|   |-- fs-ntfs3-namei.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-restricted-__le16-const-usertype-s1-got-unsigned-short
+clang_recent_errors
+|-- arm-buildonly-randconfig-r003-20221026
+|   |-- drivers-pinctrl-qcom-pinctrl-lpass-lpi.c:error:call-to-undeclared-function-FIELD_GET-ISO-C99-and-later-do-not-support-implicit-function-declarations
+|   |-- drivers-pinctrl-qcom-pinctrl-lpass-lpi.c:error:call-to-undeclared-function-u32_encode_bits-ISO-C99-and-later-do-not-support-implicit-function-declarations
+|   `-- drivers-pinctrl-qcom-pinctrl-lpass-lpi.c:error:call-to-undeclared-function-u32p_replace_bits-ISO-C99-and-later-do-not-support-implicit-function-declarations
+|-- hexagon-randconfig-r041-20221026
+|   `-- drivers-phy-mediatek-phy-mtk-tphy.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(unsigned-c
+`-- riscv-randconfig-r001-20221026
+    |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-get_symbol_pos:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_num_syms
+    |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-get_symbol_pos:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_offsets
+    |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-kallsyms_lookup_name:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_num_syms
+    |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-kallsyms_lookup_name:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_offsets
+    |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-kallsyms_lookup_name:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_relative_base
+    |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-kallsyms_on_each_symbol:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_num_syms
+    |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-kallsyms_on_each_symbol:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_offsets
+    `-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-kallsyms_on_each_symbol:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_relative_base
+
+elapsed time: 721m
+
+configs tested: 79
+configs skipped: 2
+
+gcc tested configs:
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+i386                                defconfig
+i386                          randconfig-a014
+i386                          randconfig-a001
+i386                          randconfig-a012
+i386                          randconfig-a003
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-syz
+i386                          randconfig-a016
+x86_64                           allyesconfig
+x86_64                        randconfig-a002
+powerpc                           allnoconfig
+i386                             allyesconfig
+arm                                 defconfig
+arc                                 defconfig
+arm                              allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                        randconfig-a006
+x86_64                        randconfig-a013
+x86_64                          rhel-8.3-func
+x86_64                        randconfig-a011
+i386                          randconfig-a005
+x86_64                        randconfig-a004
+x86_64                    rhel-8.3-kselftests
+powerpc                          allmodconfig
+x86_64                        randconfig-a015
+m68k                             allmodconfig
+x86_64                           rhel-8.3-kvm
+arm64                            allyesconfig
+sh                               allmodconfig
+arc                              allyesconfig
+alpha                               defconfig
+mips                             allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+riscv                randconfig-r042-20221026
+s390                                defconfig
+s390                             allmodconfig
+arc                  randconfig-r043-20221026
+s390                 randconfig-r044-20221026
+s390                             allyesconfig
+m68k                        m5272c3_defconfig
+sparc                             allnoconfig
+xtensa                    smp_lx200_defconfig
+i386                          randconfig-c001
+m68k                           sun3_defconfig
+powerpc                 canyonlands_defconfig
+m68k                       m5208evb_defconfig
+riscv                               defconfig
+sh                        dreamcast_defconfig
+microblaze                      mmu_defconfig
+m68k                         amcore_defconfig
+openrisc                  or1klitex_defconfig
+mips                         bigsur_defconfig
+sh                             shx3_defconfig
+arm                           h5000_defconfig
+alpha                            alldefconfig
+m68k                          hp300_defconfig
+
+clang tested configs:
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a002
+i386                          randconfig-a004
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+i386                          randconfig-a015
+x86_64                        randconfig-a003
+x86_64                        randconfig-a012
+i386                          randconfig-a006
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r045-20221026
+hexagon              randconfig-r041-20221026
+arm                        mvebu_v5_defconfig
+powerpc                     ppa8548_defconfig
+arm                  colibri_pxa270_defconfig
+powerpc               mpc834x_itxgp_defconfig
+arm                           spitz_defconfig
+
 -- 
-2.30.2
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
