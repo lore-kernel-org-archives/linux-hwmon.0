@@ -2,132 +2,111 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E10DFFA3740
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Oct 2022 22:25:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FFA6FA373D
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Oct 2022 23:18:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235082AbiJ0WZ0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 27 Oct 2022 18:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
+        id S234291AbiJ0XSl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Oct 2022 19:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234867AbiJ0WZY (ORCPT
+        with ESMTP id S233598AbiJ0XSk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Oct 2022 18:25:24 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C1A34984;
-        Thu, 27 Oct 2022 15:25:20 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id r83so4209374oih.2;
-        Thu, 27 Oct 2022 15:25:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5TrIIhVZx5BXAQ8nT8vfvPQ7H/iZjq+OzPVDs0LA4cw=;
-        b=MAv6HPgqfMygKs4BTr7A1U9j44lASKl92+O5gK6Jduhv540AVv0A6qWGSZQPhfBPUR
-         yU/pzd5FIYlVg+ivxD0wlld9CLV4KLhTMg4HjhEzlozgEROj6wD2/V10aAh4aXQcP35U
-         BafnDpsvMD09E4SRDLfNlxZnDUA98DW/atAWsyjouJMoTF39YF5qUxKgT2HKGmoPvNs7
-         10teZts3aMs9T5wV9egaMWF493y0DsYnvC5tFR1v2iYOOeaO9k/0DcpjDm87935i1Xkv
-         jkbuDvE3yWYSOVKjh/2ivDegzeWuZMFR0claopai1LeNUuf33rzsByUqaqwVleAFccHR
-         dszw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5TrIIhVZx5BXAQ8nT8vfvPQ7H/iZjq+OzPVDs0LA4cw=;
-        b=67RnaX2CaWlwzIeDGSJKrkbBaZ9LAeNh5MnQt4hjiay3A6R8x9K1pIHjqsG172JJTQ
-         E1/IR059gn24iK6LJ8oeP9pCnYBw45QlPVyvIZpH+QhzH73zCPsoyQ1Pt0dUQlaBF53i
-         ZtubniNe9kxMLQtrSULHZBreRpgXCXOx6CC1sYhBqulX0QBQw2ALARAdAqHdq5ErExa4
-         klQnoAyczgtYALkLHakOiiT+M91ggl69Bm91VAurFiOcVvuzzok5wl1OTiHgXZ6zY199
-         3iZLVN98LYwbqleLXXcauPmatdQCSGvFw0ToNmHHI6qQR0ThZ7SMvOVSE8fklbOe6qYu
-         MiUg==
-X-Gm-Message-State: ACrzQf27xuY+3br1SW/CbtkLPZw48ZonI5NJTCtykTgYgMkw9dj/BEun
-        tQZvb2gcTqMX2KYoBpLYsDTsh7u2u28=
-X-Google-Smtp-Source: AMsMyM4HyPKTVue/7qcHWPFRtfbuE/YEWKdjke4PrvWEFGKaDXaKoQo6j4ADz/XbbOo50/dADPB5vw==
-X-Received: by 2002:a05:6808:1495:b0:354:fff1:e0c7 with SMTP id e21-20020a056808149500b00354fff1e0c7mr6360344oiw.114.1666909519681;
-        Thu, 27 Oct 2022 15:25:19 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f6-20020a9d2c06000000b0063b24357269sm1009481otb.13.2022.10.27.15.25.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 15:25:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 27 Oct 2022 15:25:16 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        Thu, 27 Oct 2022 19:18:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67E5A0263;
+        Thu, 27 Oct 2022 16:18:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89186B8283C;
+        Thu, 27 Oct 2022 23:18:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9348BC433B5;
+        Thu, 27 Oct 2022 23:18:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666912717;
+        bh=PsF6KK3oiuiEmQj53gDFosnftgvkXoJMatC2imaZDfI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rwiu193D5bUhlJHvioCfiHfdV+sfIX6pOWww2EimCM8HhSdx2EZhbeMi4eHuR6aO+
+         pTsIqcKJv7W5LCTGk1n5HS1GQAUZDA+zurf620nxiBYG1mPtQwyEQnFjyzl730Juqi
+         wxQv4HbWzEDSYDr79dBLgNruwCaL1OG/G96iGQeb5tK3Gd9Njj6JNhZWT+6fr9YoMr
+         DRMZlab8tKxWy8CqICHzqj+iyDK86xYInfS+h9LiQNklfPloEmV9/m02SVGhsrDTQv
+         l0UYpN6xbbTqfSjrxeHanJ0Eb+V+fec05yXh0i5vacEOOj69S8XGX8QscIIlNWv/NE
+         uMyCBpXVhaLPg==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
         Tom Rix <trix@redhat.com>,
         Quan Nguyen <quan@os.amperecomputing.com>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH -next] hwmon: (smpro-hwmon) Add missing break in
- smpro_is_visible()
-Message-ID: <20221027222516.GB3123386@roeck-us.net>
-References: <20221027195238.1789586-1-nathan@kernel.org>
- <20221027210016.GA1938309@roeck-us.net>
- <Y1ryPDF4CD+6gIMY@dev-arch.thelio-3990X>
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH -next v2] hwmon: (smpro-hwmon) Improve switch statments in smpro_is_visible()
+Date:   Thu, 27 Oct 2022 16:16:12 -0700
+Message-Id: <20221027231611.3824800-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1ryPDF4CD+6gIMY@dev-arch.thelio-3990X>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 02:03:56PM -0700, Nathan Chancellor wrote:
-> On Thu, Oct 27, 2022 at 02:00:16PM -0700, Guenter Roeck wrote:
-> > On Thu, Oct 27, 2022 at 12:52:38PM -0700, Nathan Chancellor wrote:
-> > > Clang warns:
-> > > 
-> > >   drivers/hwmon/smpro-hwmon.c:378:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-> > >           default:
-> > >           ^
-> > >   drivers/hwmon/smpro-hwmon.c:378:2: note: insert 'break;' to avoid fall-through
-> > >           default:
-> > >           ^
-> > >           break;
-> > >   1 error generated.
-> > > 
-> > > Clang is a little more pedantic than GCC, which does not warn when
-> > > falling through to a case that is just break or return. Clang's version
-> > > is more in line with the kernel's own stance in deprecated.rst, which
-> > > states that all switch/case blocks must end in either break,
-> > > fallthrough, continue, goto, or return. Add the missing break to silence
-> > > the warning.
-> > > 
-> > > Fixes: a87456864cbb ("hwmon: Add Ampere's Altra smpro-hwmon driver")
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1751
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > ---
-> > >  drivers/hwmon/smpro-hwmon.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/drivers/hwmon/smpro-hwmon.c b/drivers/hwmon/smpro-hwmon.c
-> > > index ee54e21c2c12..667e88b6bae5 100644
-> > > --- a/drivers/hwmon/smpro-hwmon.c
-> > > +++ b/drivers/hwmon/smpro-hwmon.c
-> > > @@ -375,6 +375,7 @@ static umode_t smpro_is_visible(const void *data, enum hwmon_sensor_types type,
-> > >  				return 0;
-> > >  		break;
-> > >  		}
-> > > +		break;
-> > 
-> > The alignment of the break; statement above is also bad, and a default:
-> > for switch (attr) is missing.
-> 
-> Would you prefer those fixed in the same patch or a separate one?
-> 
+Clang warns:
 
-Same patch, please. The resulting code is ultimately the same.
+  drivers/hwmon/smpro-hwmon.c:378:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+          default:
+          ^
+  drivers/hwmon/smpro-hwmon.c:378:2: note: insert 'break;' to avoid fall-through
+          default:
+          ^
+          break;
+  1 error generated.
 
-Thanks,
-Guenter
+Clang is a little more pedantic than GCC, which does not warn when
+falling through to a case that is just break or return. Clang's version
+is more in line with the kernel's own stance in deprecated.rst, which
+states that all switch/case blocks must end in either break,
+fallthrough, continue, goto, or return.
 
-> > >  	default:
-> > >  		break;
-> > >  	}
-> > > 
-> > > base-commit: 0ffb687b6508c36a17b99bdaf014b38532404182
-> > > -- 
-> > > 2.38.1
-> > > 
+Add the missing break to silence the warning. Additionally, adjust the
+indentation of a break and add a default case to the inner switch
+statement.
+
+Fixes: a87456864cbb ("hwmon: Add Ampere's Altra smpro-hwmon driver")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1751
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+
+v2:
+
+    * Add missing default case to inner switch statement (Guenter)
+    * Fix indentation of break in inner switch statement (Guenter)
+    * Reword commit message to include these changes
+
+v1: https://lore.kernel.org/20221027195238.1789586-1-nathan@kernel.org/
+
+ drivers/hwmon/smpro-hwmon.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/smpro-hwmon.c b/drivers/hwmon/smpro-hwmon.c
+index ee54e21c2c12..a76c49dd8438 100644
+--- a/drivers/hwmon/smpro-hwmon.c
++++ b/drivers/hwmon/smpro-hwmon.c
+@@ -373,8 +373,11 @@ static umode_t smpro_is_visible(const void *data, enum hwmon_sensor_types type,
+ 			ret = regmap_read(hwmon->regmap, temperature[channel].reg, &value);
+ 			if (ret || value == 0xFFFF)
+ 				return 0;
+-		break;
++			break;
++		default:
++			break;
+ 		}
++		break;
+ 	default:
+ 		break;
+ 	}
+
+base-commit: 0ffb687b6508c36a17b99bdaf014b38532404182
+-- 
+2.38.1
+
