@@ -2,149 +2,137 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF4E7ECAAA1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Oct 2022 17:13:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD1ACC38A02
+	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Oct 2022 18:14:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbiJ1RNm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 28 Oct 2022 13:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
+        id S229788AbiJ1SOi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 28 Oct 2022 14:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiJ1RN1 (ORCPT
+        with ESMTP id S230132AbiJ1SOi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:13:27 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5BD768CFE;
-        Fri, 28 Oct 2022 10:12:18 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D8A121FB;
-        Fri, 28 Oct 2022 10:12:24 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A29C93F703;
-        Fri, 28 Oct 2022 10:12:17 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 18:12:11 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 7/8] hwmon: (scmi) Register explicitly with Thermal
- Framework
-Message-ID: <Y1wNWFmTi8O84rTA@e120937-lin>
-References: <20221028140833.280091-1-cristian.marussi@arm.com>
- <20221028140833.280091-7-cristian.marussi@arm.com>
- <b914ea25-a9a8-f443-2ba0-615bdd6cc04f@roeck-us.net>
- <Y1v2ozURFdIk1PfU@e120937-lin>
- <e4040686-851c-d8b0-b274-ac71d38685e1@roeck-us.net>
- <Y1wAHyV/tLKQmo7l@e120937-lin>
- <7acc7a49-debb-abdb-f01c-f8adef4c1f0e@roeck-us.net>
+        Fri, 28 Oct 2022 14:14:38 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6294D133;
+        Fri, 28 Oct 2022 11:14:34 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id f8so3968684qkg.3;
+        Fri, 28 Oct 2022 11:14:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mm2xmltH5cssbfoG7DhNPzMHrojXBex0FsFFvjiLnbA=;
+        b=Xh0pirw8ScVQtoFuI5mkHbYhfJdG7ft40xss/CBCZTY9wiS2Dig2U2910H0byfIZUd
+         0Kk/lZRwJex/UFE00dvJ99kwvcEd4TQlXXQoRP5NZO4Ws+4B5e8zJXd/WgYFgSXOf9xx
+         cGQ4sK19LeEjLg9/HBOBE663TkQx/TypJrlDJbw6kEzvnc0tNd/fZDzqcisL/bWD1Pa8
+         16c9AAY1qloOMzLecG7Fgs3vMVFDevT5Sd2Oh8ycPtM4BRU8KCPcmdWekodHqhSEoRRK
+         He4NDIIyCbDIZLQ7pz++5iHz4zk9Bbe0W4SJIz7khjQZsk7IoNt1KFX/zgpd8RZ/xM99
+         O9+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mm2xmltH5cssbfoG7DhNPzMHrojXBex0FsFFvjiLnbA=;
+        b=cYDi+JMTS8c8tqYpqh+KvWbcKXcC4gC9j2+QNCLmR8Z5GM19BmU56Z9ZHKrnPp+stx
+         v+U+ol3C34hH1xaITUlZT6apRiqNvi6eW4HVNuqDUr8ToyVy8T6Eu73ESAtY3HgrHefB
+         yfPdDNrwQ3wgeH5Ys0iB2I4R3e9XhaCmKfydO2H1c20C/Ktg6Y776Dnvz+BzM3A55BT7
+         Z7c4TI3BdEcO2wxCXminVZfA9FNs2Yc2jnua9n1L+PAtOmMQ4Nfu/hHhoxHQhDswEaoQ
+         15BlZ0l12iW7gaiTlHKtRKB5uYcx1DTJGrygiv9obqRj8ScMTCCqjyk8VSjfXD/izgQh
+         /JhQ==
+X-Gm-Message-State: ACrzQf3TeHmyntDpJOS+bJrhJrSJWbzVT0Iv5LIXz/tEEuyQiVqg/0LY
+        iwalAF61twaP7vpXUrCc1WAmHGv+rTA=
+X-Google-Smtp-Source: AMsMyM5PIYaZ3lwRrrkaNIKK5fx3FY37HHCsIo+hdulqZccPAIrDzgZN3BrmAexxzlNsEoFwwcXjHg==
+X-Received: by 2002:a05:620a:404c:b0:6da:ecec:a072 with SMTP id i12-20020a05620a404c00b006daececa072mr446116qko.358.1666980873506;
+        Fri, 28 Oct 2022 11:14:33 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y27-20020a37f61b000000b006cf19068261sm3271027qkj.116.2022.10.28.11.14.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 11:14:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 28 Oct 2022 11:14:30 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Quan Nguyen <quan@os.amperecomputing.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH -next v2] hwmon: (smpro-hwmon) Improve switch statments
+ in smpro_is_visible()
+Message-ID: <20221028181430.GA2079477@roeck-us.net>
+References: <20221027231611.3824800-1-nathan@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7acc7a49-debb-abdb-f01c-f8adef4c1f0e@roeck-us.net>
+In-Reply-To: <20221027231611.3824800-1-nathan@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 09:34:05AM -0700, Guenter Roeck wrote:
-> On 10/28/22 09:15, Cristian Marussi wrote:
-> > On Fri, Oct 28, 2022 at 08:58:58AM -0700, Guenter Roeck wrote:
-> > > On 10/28/22 08:35, Cristian Marussi wrote:
-> > > [ ... ]
-> > > > > > +	/*
-> > > > > > +	 * Try to register a temperature sensor with the Thermal Framework:
-> > > > > > +	 * skip sensors not defined as part of any thermal zone (-ENODEV) but
-> > > > > > +	 * report any other errors related to misconfigured zones/sensors.
-> > > > > > +	 */
-> > > > > > +	tzd = devm_thermal_of_zone_register(dev, th_sensor->info->id, th_sensor,
-> > > > > > +					    &scmi_hwmon_thermal_ops);
-> > > > > > +	if (IS_ERR(tzd)) {
-> > > > > > +		devm_kfree(dev, th_sensor);
-> > > > > > +
-> > > > > > +		if (PTR_ERR(tzd) != -ENODEV)
-> > > > > > +			return PTR_ERR(tzd);
-> > > > > > +
-> > > > > > +		dev_info(dev, "Sensor '%s' not attached to any thermal zone.\n",
-> > > > > > +			 sensor->name);
-> > > > > 
-> > > > > There were complaints about this message as it is noisy. If you send
-> > > > > another version, please drop it unless attaching each sensor to a thermal
-> > > > > zone is strongly expected. If you don't send another version, I'll drop it
-> > > > > while applying.
-> > > > > 
-> > > > 
-> > > > Ok fine for me. I am waiting to have some feedback from Sudeep too, but
-> > > > I do not have plan for another version as of now.
-> > > > 
-> > > > As a side note, though, I understand the 'noisiness' argument, but,
-> > > > sincerely this same message in the original HWMON code was the only
-> > > > reason why I spotted that something was wrong with the SCMI/HWMON
-> > > > interactions and discovered the indexes/ids mismatch...if not for
-> > > > that it would have gone un-noticed that a perfectly configured
-> > > > ThermalZone/Sensor was not working properly...
-> > > > (un-noticed at least until something would have been burnt to fire
-> > > >    in my house .. joking :P)
-> > > > 
-> > > 
-> > > Good point.
-> > > 
-> > > Did you ever check the returned error code ? Maybe we could use it to
-> > > distinguish "it is not attached to a thermal zone because it is not
-> > > associated with one" from "attaching to a thermal zone failed because
-> > > its configuration is bad/incomplete".
-> > > 
-> > 
-> > Yes, it is what I do already indeed, in this regards I mimicked what
-> > the hwmon-thermal bridge was doing.
-> > 
-> > In scmi_thermal_sensor_register() this message is printed out only
-> > if Thermal registration returned -ENODEV and no err is reported
-> > (which means teh specified sensor was not found attached to any TZ),
-> > while in the caller of scmi_thermal_sensor_register() for any error
-> > returned but -ENOMEM I print:
-> > 
-> > 	"Thermal zone misconfigured for %s. err=%d\n",
-> > 
-> > since any error reported by Thermal other than ENODEV and ENOMEM
-> > means the DT parsing unveiled some configuration anomaly.
-> > 
+On Thu, Oct 27, 2022 at 04:16:12PM -0700, Nathan Chancellor wrote:
+> Clang warns:
 > 
-> Ok, then let's hope that this finds misconfigurations and drop the
-> info message.
+>   drivers/hwmon/smpro-hwmon.c:378:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+>           default:
+>           ^
+>   drivers/hwmon/smpro-hwmon.c:378:2: note: insert 'break;' to avoid fall-through
+>           default:
+>           ^
+>           break;
+>   1 error generated.
+> 
+> Clang is a little more pedantic than GCC, which does not warn when
+> falling through to a case that is just break or return. Clang's version
+> is more in line with the kernel's own stance in deprecated.rst, which
+> states that all switch/case blocks must end in either break,
+> fallthrough, continue, goto, or return.
+> 
+> Add the missing break to silence the warning. Additionally, adjust the
+> indentation of a break and add a default case to the inner switch
+> statement.
+> 
+> Fixes: a87456864cbb ("hwmon: Add Ampere's Altra smpro-hwmon driver")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1751
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-The mismatch of indexes at hand won't be catched being reported by
-Thermal as misconfig but just as not found ENODEV.
-
-Anyway it is fine for me to drop the message.
-
-> 
-> I just noticed another problem in your code:
-> 
-> +		if (ret == -ENOMEM)
-> +			return ret;
-> +		else if (ret)
-> +			dev_warn(dev,
-> +				 "Thermal zone misconfigured for %s. err=%d\n",
-> +				 sensor->name, ret);
-> 
-> Static analyzers will rightfully notice that else after return is unnecessary.
-> Please rewrite and drop the else. I think something like
-> 
-
-Ah yes...my bad.
-
-> 		if (ret) {
-> 			if (ret == -ENOMEM)
-> 				return ret;
-> 			dev_warn(dev,
-> 				 "Thermal zone misconfigured for %s. err=%d\n",
-> 				 sensor->name, ret);
-> 		}
-> 
-> would be better since ret would only be evaluated once in the no-error case.
-> 
-
-I'll resend this one with the fix and the dropped message.
+Applied.
 
 Thanks,
-Cristian
+Guenter
 
+> ---
+> 
+> v2:
+> 
+>     * Add missing default case to inner switch statement (Guenter)
+>     * Fix indentation of break in inner switch statement (Guenter)
+>     * Reword commit message to include these changes
+> 
+> v1: https://lore.kernel.org/20221027195238.1789586-1-nathan@kernel.org/
+> 
+>  drivers/hwmon/smpro-hwmon.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> 
+> base-commit: 0ffb687b6508c36a17b99bdaf014b38532404182
+> 
+> diff --git a/drivers/hwmon/smpro-hwmon.c b/drivers/hwmon/smpro-hwmon.c
+> index ee54e21c2c12..a76c49dd8438 100644
+> --- a/drivers/hwmon/smpro-hwmon.c
+> +++ b/drivers/hwmon/smpro-hwmon.c
+> @@ -373,8 +373,11 @@ static umode_t smpro_is_visible(const void *data, enum hwmon_sensor_types type,
+>  			ret = regmap_read(hwmon->regmap, temperature[channel].reg, &value);
+>  			if (ret || value == 0xFFFF)
+>  				return 0;
+> -		break;
+> +			break;
+> +		default:
+> +			break;
+>  		}
+> +		break;
+>  	default:
+>  		break;
+>  	}
