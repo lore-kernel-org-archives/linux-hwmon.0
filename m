@@ -2,137 +2,79 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD1ACC38A02
-	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Oct 2022 18:14:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C068C38A02
+	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Oct 2022 18:16:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiJ1SOi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 28 Oct 2022 14:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S229779AbiJ1SQI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 28 Oct 2022 14:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiJ1SOi (ORCPT
+        with ESMTP id S229597AbiJ1SQH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 28 Oct 2022 14:14:38 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6294D133;
-        Fri, 28 Oct 2022 11:14:34 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id f8so3968684qkg.3;
-        Fri, 28 Oct 2022 11:14:34 -0700 (PDT)
+        Fri, 28 Oct 2022 14:16:07 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD0A230AA9
+        for <linux-hwmon@vger.kernel.org>; Fri, 28 Oct 2022 11:16:02 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id bb5so3959981qtb.11
+        for <linux-hwmon@vger.kernel.org>; Fri, 28 Oct 2022 11:16:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mm2xmltH5cssbfoG7DhNPzMHrojXBex0FsFFvjiLnbA=;
-        b=Xh0pirw8ScVQtoFuI5mkHbYhfJdG7ft40xss/CBCZTY9wiS2Dig2U2910H0byfIZUd
-         0Kk/lZRwJex/UFE00dvJ99kwvcEd4TQlXXQoRP5NZO4Ws+4B5e8zJXd/WgYFgSXOf9xx
-         cGQ4sK19LeEjLg9/HBOBE663TkQx/TypJrlDJbw6kEzvnc0tNd/fZDzqcisL/bWD1Pa8
-         16c9AAY1qloOMzLecG7Fgs3vMVFDevT5Sd2Oh8ycPtM4BRU8KCPcmdWekodHqhSEoRRK
-         He4NDIIyCbDIZLQ7pz++5iHz4zk9Bbe0W4SJIz7khjQZsk7IoNt1KFX/zgpd8RZ/xM99
-         O9+g==
+        bh=8FEjwmAlGCF9DftBi4q3gPLOuGfhXXV/QT/oQnizxu0=;
+        b=XrFsWJmsIhUYGTlVezfOR3jNzu9w04q0b8eDff/C/mjyWcwWR4qJUi+QpD702iJl/D
+         EFJ5EuJjnPsdg4FnEaw5PQdvIIObEez/jixTMnFdOFMr+8alDBkss2zGWqW5bHXNNHrh
+         evVTE5fFgvTnrnBf7aGE6X6rWDD7bp2QleOIauY153Bm8DoY7IAeVzbVx+6OCMDGthhN
+         swIoYhsIDZEWx6IjdSzFkKkCJWCoyYzbCcVRdkm+Z21l3z4pkD1cbO9p2XQO3mFnxN41
+         5AZZL5ftBG9QfqOyRKp0/s5X5OL1jrq39rsU8qbmCGxv8Rx9Sm3ur5C4OxudwUQ6Jox8
+         Saeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mm2xmltH5cssbfoG7DhNPzMHrojXBex0FsFFvjiLnbA=;
-        b=cYDi+JMTS8c8tqYpqh+KvWbcKXcC4gC9j2+QNCLmR8Z5GM19BmU56Z9ZHKrnPp+stx
-         v+U+ol3C34hH1xaITUlZT6apRiqNvi6eW4HVNuqDUr8ToyVy8T6Eu73ESAtY3HgrHefB
-         yfPdDNrwQ3wgeH5Ys0iB2I4R3e9XhaCmKfydO2H1c20C/Ktg6Y776Dnvz+BzM3A55BT7
-         Z7c4TI3BdEcO2wxCXminVZfA9FNs2Yc2jnua9n1L+PAtOmMQ4Nfu/hHhoxHQhDswEaoQ
-         15BlZ0l12iW7gaiTlHKtRKB5uYcx1DTJGrygiv9obqRj8ScMTCCqjyk8VSjfXD/izgQh
-         /JhQ==
-X-Gm-Message-State: ACrzQf3TeHmyntDpJOS+bJrhJrSJWbzVT0Iv5LIXz/tEEuyQiVqg/0LY
-        iwalAF61twaP7vpXUrCc1WAmHGv+rTA=
-X-Google-Smtp-Source: AMsMyM5PIYaZ3lwRrrkaNIKK5fx3FY37HHCsIo+hdulqZccPAIrDzgZN3BrmAexxzlNsEoFwwcXjHg==
-X-Received: by 2002:a05:620a:404c:b0:6da:ecec:a072 with SMTP id i12-20020a05620a404c00b006daececa072mr446116qko.358.1666980873506;
-        Fri, 28 Oct 2022 11:14:33 -0700 (PDT)
+        bh=8FEjwmAlGCF9DftBi4q3gPLOuGfhXXV/QT/oQnizxu0=;
+        b=efySS6K20BxD4uzvYYYeRK/jwZZPVWLYLJIz5JrrgHXX3IjRIRBcu14EsUXyomucLj
+         2XwoChpqQbEwQJnI5FjF60Bh1kKieQWoaQXmfU/XrHRymdC845x5tEcjJV9xXVPfwRZs
+         kD3VkGibC8wQmHx/IjODC/QgojNuGleEWzRGy62S91lzAe0nfGvhtqW3S0DNaFhGzH+U
+         vzMfICAogIJgNxMWe18TZb7Yon8VjH9lCOG2rtTDtBbKlKx3/yt7f+nFaR9Ca5XaQH8+
+         T0+oK68IflXtonXyUHTg1ti6wOm9j/YbkvNDKxdz5gmXZhoiAZinBU+/vJJoKaZJ33an
+         WbRw==
+X-Gm-Message-State: ACrzQf1IYiXIuxBS74ffCU6WxcDL0HY1uDxXnjl715o2IK6dThB8mauh
+        /Q0S0oNElwqdfZn9S9hRsd9ZQIwYR5E=
+X-Google-Smtp-Source: AMsMyM6RRWYP3gfudYAyWl1zSJ6EmUwFrS7su5w1LPn7Yg/Aex0MSE293KNwb8yJZYHtvMnllhfoHg==
+X-Received: by 2002:a05:622a:1747:b0:39c:d4f5:a65 with SMTP id l7-20020a05622a174700b0039cd4f50a65mr646310qtk.583.1666980961504;
+        Fri, 28 Oct 2022 11:16:01 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y27-20020a37f61b000000b006cf19068261sm3271027qkj.116.2022.10.28.11.14.32
+        by smtp.gmail.com with ESMTPSA id h129-20020a37b787000000b006e702033b15sm3353300qkf.66.2022.10.28.11.16.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 11:14:32 -0700 (PDT)
+        Fri, 28 Oct 2022 11:16:01 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 28 Oct 2022 11:14:30 -0700
+Date:   Fri, 28 Oct 2022 11:15:59 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH -next v2] hwmon: (smpro-hwmon) Improve switch statments
- in smpro_is_visible()
-Message-ID: <20221028181430.GA2079477@roeck-us.net>
-References: <20221027231611.3824800-1-nathan@kernel.org>
+To:     Felix Nieuwenhuizen <Felix.Nieuwenhuizen@etas.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH v2] hwmon: (pmbus/ltc2978) add support for LTC7132
+Message-ID: <20221028181559.GA2132092@roeck-us.net>
+References: <0221027133201.GA566451@roeck-us.net>
+ <20221027145135.31802-1-Felix.Nieuwenhuizen@etas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221027231611.3824800-1-nathan@kernel.org>
+In-Reply-To: <20221027145135.31802-1-Felix.Nieuwenhuizen@etas.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 04:16:12PM -0700, Nathan Chancellor wrote:
-> Clang warns:
+On Thu, Oct 27, 2022 at 04:51:35PM +0200, Felix Nieuwenhuizen wrote:
+> Add support for LTC7132.
+> The relevant registers in the LTC7132 are identical to the LTC7880.
+> So it's just a matter of adding the chip id.
 > 
->   drivers/hwmon/smpro-hwmon.c:378:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
->           default:
->           ^
->   drivers/hwmon/smpro-hwmon.c:378:2: note: insert 'break;' to avoid fall-through
->           default:
->           ^
->           break;
->   1 error generated.
-> 
-> Clang is a little more pedantic than GCC, which does not warn when
-> falling through to a case that is just break or return. Clang's version
-> is more in line with the kernel's own stance in deprecated.rst, which
-> states that all switch/case blocks must end in either break,
-> fallthrough, continue, goto, or return.
-> 
-> Add the missing break to silence the warning. Additionally, adjust the
-> indentation of a break and add a default case to the inner switch
-> statement.
-> 
-> Fixes: a87456864cbb ("hwmon: Add Ampere's Altra smpro-hwmon driver")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1751
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Felix Nieuwenhuizen <Felix.Nieuwenhuizen@etas.com>
 
-Applied.
+Applied to hwmon-next.
 
 Thanks,
 Guenter
-
-> ---
-> 
-> v2:
-> 
->     * Add missing default case to inner switch statement (Guenter)
->     * Fix indentation of break in inner switch statement (Guenter)
->     * Reword commit message to include these changes
-> 
-> v1: https://lore.kernel.org/20221027195238.1789586-1-nathan@kernel.org/
-> 
->  drivers/hwmon/smpro-hwmon.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> 
-> base-commit: 0ffb687b6508c36a17b99bdaf014b38532404182
-> 
-> diff --git a/drivers/hwmon/smpro-hwmon.c b/drivers/hwmon/smpro-hwmon.c
-> index ee54e21c2c12..a76c49dd8438 100644
-> --- a/drivers/hwmon/smpro-hwmon.c
-> +++ b/drivers/hwmon/smpro-hwmon.c
-> @@ -373,8 +373,11 @@ static umode_t smpro_is_visible(const void *data, enum hwmon_sensor_types type,
->  			ret = regmap_read(hwmon->regmap, temperature[channel].reg, &value);
->  			if (ret || value == 0xFFFF)
->  				return 0;
-> -		break;
-> +			break;
-> +		default:
-> +			break;
->  		}
-> +		break;
->  	default:
->  		break;
->  	}
