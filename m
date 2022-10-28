@@ -2,123 +2,107 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A993C38A02
-	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Oct 2022 16:01:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F430C38A02
+	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Oct 2022 16:17:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbiJ1QBp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 28 Oct 2022 12:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S230376AbiJ1QRO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 28 Oct 2022 12:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbiJ1P74 (ORCPT
+        with ESMTP id S230367AbiJ1QQi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:59:56 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36F5214657;
-        Fri, 28 Oct 2022 08:59:01 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id n83so6549650oif.11;
-        Fri, 28 Oct 2022 08:59:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kGV5CRuXO/AflfNqwOyb3q124XfnO4+Le7SUJ2VJU3I=;
-        b=YEtveQ5geZPkTIxyIW1RGzgwGnwFThDcL8Wv8vKpWOWescIp3AKZvU140u86bHSctS
-         /WHC/hmjpHBos5Hsg0sNydLxJm4tylUPI8AzWzyWluY1vVuXG/7OjgnTWV2zDOBQ2tgh
-         2YIIErFMOMyFYdwhQ285czT3VOJpUm8T9YJgxEQvLj1Rd4ZX/bFyImyiSJ0Mc/1okjkI
-         JcInEEarNY+WFTfmOAsL5smiQld4j8i/XdWjxxwznnvmmqB6CYjLjXOT73p7CvI2Dnwr
-         CTHW1+tadB0YLfZ02AD8Tk0QlPInG43fpuM7w8eLUkFLnrVfJ3NmH2HDECrKJlDIDVuA
-         oNlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kGV5CRuXO/AflfNqwOyb3q124XfnO4+Le7SUJ2VJU3I=;
-        b=XjEW36iyuH1+PNyWU3bocMDYjqjjws7diM14xC6V5JAGS56vQDZJW5o/Fe5nYkVHAD
-         X3/zlxPRFmp91T6A7Bz5Ae6YXXVfRTxicKn9CQOLjhJbUEY3GmEoVGwrB92xuut8H4La
-         nOFZLxdXhZFpkfaospJ+4/VyL2Ay7B6qhJrKQBSOcqV7YjIaTBooFDqO5KGRrL3FpPy7
-         zMpwhuRwMXJSuEy2x3jLs8MeOr5Y6E8wsKV7u7LRh024nC/KSFg4c1Md1Gaku8UaXwII
-         URiUS0JwewA8MVQYJlYI5exi/OFwLPZijlKdF+t1MT1rY7vpIX2JSkTkvVd5PANML5BO
-         JHHw==
-X-Gm-Message-State: ACrzQf2rc4G/+GP5zNXLeIbuKb9oQHl91g3kjUWyPDugXArEqI8ekjNM
-        jDw4Q3A0Uj0+e03wJq5gUiVCajXYwR4=
-X-Google-Smtp-Source: AMsMyM4SI17djKyPfTO294g8vpTQAc+lvUiYSSoWh5QXmXPQBgV9ybiftpT43M5gbq2CZaSK3grXfg==
-X-Received: by 2002:a05:6808:2083:b0:355:2c71:7e58 with SMTP id s3-20020a056808208300b003552c717e58mr8578008oiw.168.1666972740889;
-        Fri, 28 Oct 2022 08:59:00 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l23-20020a544517000000b00359ba124b07sm1626854oil.36.2022.10.28.08.58.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 08:59:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e4040686-851c-d8b0-b274-ac71d38685e1@roeck-us.net>
-Date:   Fri, 28 Oct 2022 08:58:58 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Cristian Marussi <cristian.marussi@arm.com>
+        Fri, 28 Oct 2022 12:16:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9943F10B8;
+        Fri, 28 Oct 2022 09:15:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A53FA1FB;
+        Fri, 28 Oct 2022 09:15:50 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 706363F534;
+        Fri, 28 Oct 2022 09:15:43 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 17:15:41 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         sudeep.holla@arm.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
         linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 7/8] hwmon: (scmi) Register explicitly with Thermal
+ Framework
+Message-ID: <Y1wAHyV/tLKQmo7l@e120937-lin>
 References: <20221028140833.280091-1-cristian.marussi@arm.com>
  <20221028140833.280091-7-cristian.marussi@arm.com>
  <b914ea25-a9a8-f443-2ba0-615bdd6cc04f@roeck-us.net>
  <Y1v2ozURFdIk1PfU@e120937-lin>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 7/8] hwmon: (scmi) Register explicitly with Thermal
- Framework
-In-Reply-To: <Y1v2ozURFdIk1PfU@e120937-lin>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <e4040686-851c-d8b0-b274-ac71d38685e1@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e4040686-851c-d8b0-b274-ac71d38685e1@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/28/22 08:35, Cristian Marussi wrote:
-[ ... ]
->>> +	/*
->>> +	 * Try to register a temperature sensor with the Thermal Framework:
->>> +	 * skip sensors not defined as part of any thermal zone (-ENODEV) but
->>> +	 * report any other errors related to misconfigured zones/sensors.
->>> +	 */
->>> +	tzd = devm_thermal_of_zone_register(dev, th_sensor->info->id, th_sensor,
->>> +					    &scmi_hwmon_thermal_ops);
->>> +	if (IS_ERR(tzd)) {
->>> +		devm_kfree(dev, th_sensor);
->>> +
->>> +		if (PTR_ERR(tzd) != -ENODEV)
->>> +			return PTR_ERR(tzd);
->>> +
->>> +		dev_info(dev, "Sensor '%s' not attached to any thermal zone.\n",
->>> +			 sensor->name);
->>
->> There were complaints about this message as it is noisy. If you send
->> another version, please drop it unless attaching each sensor to a thermal
->> zone is strongly expected. If you don't send another version, I'll drop it
->> while applying.
->>
+On Fri, Oct 28, 2022 at 08:58:58AM -0700, Guenter Roeck wrote:
+> On 10/28/22 08:35, Cristian Marussi wrote:
+> [ ... ]
+> > > > +	/*
+> > > > +	 * Try to register a temperature sensor with the Thermal Framework:
+> > > > +	 * skip sensors not defined as part of any thermal zone (-ENODEV) but
+> > > > +	 * report any other errors related to misconfigured zones/sensors.
+> > > > +	 */
+> > > > +	tzd = devm_thermal_of_zone_register(dev, th_sensor->info->id, th_sensor,
+> > > > +					    &scmi_hwmon_thermal_ops);
+> > > > +	if (IS_ERR(tzd)) {
+> > > > +		devm_kfree(dev, th_sensor);
+> > > > +
+> > > > +		if (PTR_ERR(tzd) != -ENODEV)
+> > > > +			return PTR_ERR(tzd);
+> > > > +
+> > > > +		dev_info(dev, "Sensor '%s' not attached to any thermal zone.\n",
+> > > > +			 sensor->name);
+> > > 
+> > > There were complaints about this message as it is noisy. If you send
+> > > another version, please drop it unless attaching each sensor to a thermal
+> > > zone is strongly expected. If you don't send another version, I'll drop it
+> > > while applying.
+> > > 
+> > 
+> > Ok fine for me. I am waiting to have some feedback from Sudeep too, but
+> > I do not have plan for another version as of now.
+> > 
+> > As a side note, though, I understand the 'noisiness' argument, but,
+> > sincerely this same message in the original HWMON code was the only
+> > reason why I spotted that something was wrong with the SCMI/HWMON
+> > interactions and discovered the indexes/ids mismatch...if not for
+> > that it would have gone un-noticed that a perfectly configured
+> > ThermalZone/Sensor was not working properly...
+> > (un-noticed at least until something would have been burnt to fire
+> >   in my house .. joking :P)
+> > 
 > 
-> Ok fine for me. I am waiting to have some feedback from Sudeep too, but
-> I do not have plan for another version as of now.
+> Good point.
 > 
-> As a side note, though, I understand the 'noisiness' argument, but,
-> sincerely this same message in the original HWMON code was the only
-> reason why I spotted that something was wrong with the SCMI/HWMON
-> interactions and discovered the indexes/ids mismatch...if not for
-> that it would have gone un-noticed that a perfectly configured
-> ThermalZone/Sensor was not working properly...
-> (un-noticed at least until something would have been burnt to fire
->   in my house .. joking :P)
+> Did you ever check the returned error code ? Maybe we could use it to
+> distinguish "it is not attached to a thermal zone because it is not
+> associated with one" from "attaching to a thermal zone failed because
+> its configuration is bad/incomplete".
 > 
 
-Good point.
+Yes, it is what I do already indeed, in this regards I mimicked what
+the hwmon-thermal bridge was doing.
 
-Did you ever check the returned error code ? Maybe we could use it to
-distinguish "it is not attached to a thermal zone because it is not
-associated with one" from "attaching to a thermal zone failed because
-its configuration is bad/incomplete".
+In scmi_thermal_sensor_register() this message is printed out only
+if Thermal registration returned -ENODEV and no err is reported
+(which means teh specified sensor was not found attached to any TZ),
+while in the caller of scmi_thermal_sensor_register() for any error
+returned but -ENOMEM I print:
+
+	"Thermal zone misconfigured for %s. err=%d\n",
+
+since any error reported by Thermal other than ENODEV and ENOMEM
+means the DT parsing unveiled some configuration anomaly.
 
 Thanks,
-Guenter
+Cristian
 
