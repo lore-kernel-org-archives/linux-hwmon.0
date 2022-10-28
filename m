@@ -2,263 +2,149 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B60D9FA3743
-	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Oct 2022 16:58:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF4E7ECAAA1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Oct 2022 17:13:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiJ1Q6f (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 28 Oct 2022 12:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
+        id S230512AbiJ1RNm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 28 Oct 2022 13:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbiJ1Q6V (ORCPT
+        with ESMTP id S230499AbiJ1RN1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:58:21 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB582248D3;
-        Fri, 28 Oct 2022 09:57:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666976270; x=1698512270;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CsAjO6F7Pf0KaWAvJqCa4wx+02xCaYRf2NDvydAD4zc=;
-  b=ZN8WbP8nhWjnYwENkhdqzeV11WtkER/HqawGZGnapp0xfQYQ2nrRzWk2
-   YV+viRu+atU0aUfUT5YplZ2EVoWWOSmh/t2O/rib9z9pT5kgrzUeXCeJe
-   cPDDcMpnZHYVF2WwuViPNfsCjItcB/zijXrCWPmNNoLNzi40IBxJ4SZN0
-   7IY1P01ukI1m0xp5ci3mD0p55uNXtx2tSTVm6F87+WjQXLz9KiYPMumO8
-   U7llrApDNr3dud6HRG9WZNklRT1/nLxdMrd3lNJYpp+PX/BuoaolUpS6A
-   wAwTWnLvCqEhYLIjKs5prl5qoUG6JkwukcGb84gDWJnWt1t/8HXBGEH6I
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="372750159"
-X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
-   d="scan'208";a="372750159"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 09:57:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="583983809"
-X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
-   d="scan'208";a="583983809"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 28 Oct 2022 09:57:45 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ooSfx-000A4N-0G;
-        Fri, 28 Oct 2022 16:57:45 +0000
-Date:   Sat, 29 Oct 2022 00:56:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     ntfs3@lists.linux.dev, netdev@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- fd8dab197cca2746e1fcd399a218eec5164726d4
-Message-ID: <635c09d2.Uo03FEcDk/bchhMt%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 28 Oct 2022 13:13:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5BD768CFE;
+        Fri, 28 Oct 2022 10:12:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D8A121FB;
+        Fri, 28 Oct 2022 10:12:24 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A29C93F703;
+        Fri, 28 Oct 2022 10:12:17 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 18:12:11 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 7/8] hwmon: (scmi) Register explicitly with Thermal
+ Framework
+Message-ID: <Y1wNWFmTi8O84rTA@e120937-lin>
+References: <20221028140833.280091-1-cristian.marussi@arm.com>
+ <20221028140833.280091-7-cristian.marussi@arm.com>
+ <b914ea25-a9a8-f443-2ba0-615bdd6cc04f@roeck-us.net>
+ <Y1v2ozURFdIk1PfU@e120937-lin>
+ <e4040686-851c-d8b0-b274-ac71d38685e1@roeck-us.net>
+ <Y1wAHyV/tLKQmo7l@e120937-lin>
+ <7acc7a49-debb-abdb-f01c-f8adef4c1f0e@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <7acc7a49-debb-abdb-f01c-f8adef4c1f0e@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: fd8dab197cca2746e1fcd399a218eec5164726d4  Add linux-next specific files for 20221028
+On Fri, Oct 28, 2022 at 09:34:05AM -0700, Guenter Roeck wrote:
+> On 10/28/22 09:15, Cristian Marussi wrote:
+> > On Fri, Oct 28, 2022 at 08:58:58AM -0700, Guenter Roeck wrote:
+> > > On 10/28/22 08:35, Cristian Marussi wrote:
+> > > [ ... ]
+> > > > > > +	/*
+> > > > > > +	 * Try to register a temperature sensor with the Thermal Framework:
+> > > > > > +	 * skip sensors not defined as part of any thermal zone (-ENODEV) but
+> > > > > > +	 * report any other errors related to misconfigured zones/sensors.
+> > > > > > +	 */
+> > > > > > +	tzd = devm_thermal_of_zone_register(dev, th_sensor->info->id, th_sensor,
+> > > > > > +					    &scmi_hwmon_thermal_ops);
+> > > > > > +	if (IS_ERR(tzd)) {
+> > > > > > +		devm_kfree(dev, th_sensor);
+> > > > > > +
+> > > > > > +		if (PTR_ERR(tzd) != -ENODEV)
+> > > > > > +			return PTR_ERR(tzd);
+> > > > > > +
+> > > > > > +		dev_info(dev, "Sensor '%s' not attached to any thermal zone.\n",
+> > > > > > +			 sensor->name);
+> > > > > 
+> > > > > There were complaints about this message as it is noisy. If you send
+> > > > > another version, please drop it unless attaching each sensor to a thermal
+> > > > > zone is strongly expected. If you don't send another version, I'll drop it
+> > > > > while applying.
+> > > > > 
+> > > > 
+> > > > Ok fine for me. I am waiting to have some feedback from Sudeep too, but
+> > > > I do not have plan for another version as of now.
+> > > > 
+> > > > As a side note, though, I understand the 'noisiness' argument, but,
+> > > > sincerely this same message in the original HWMON code was the only
+> > > > reason why I spotted that something was wrong with the SCMI/HWMON
+> > > > interactions and discovered the indexes/ids mismatch...if not for
+> > > > that it would have gone un-noticed that a perfectly configured
+> > > > ThermalZone/Sensor was not working properly...
+> > > > (un-noticed at least until something would have been burnt to fire
+> > > >    in my house .. joking :P)
+> > > > 
+> > > 
+> > > Good point.
+> > > 
+> > > Did you ever check the returned error code ? Maybe we could use it to
+> > > distinguish "it is not attached to a thermal zone because it is not
+> > > associated with one" from "attaching to a thermal zone failed because
+> > > its configuration is bad/incomplete".
+> > > 
+> > 
+> > Yes, it is what I do already indeed, in this regards I mimicked what
+> > the hwmon-thermal bridge was doing.
+> > 
+> > In scmi_thermal_sensor_register() this message is printed out only
+> > if Thermal registration returned -ENODEV and no err is reported
+> > (which means teh specified sensor was not found attached to any TZ),
+> > while in the caller of scmi_thermal_sensor_register() for any error
+> > returned but -ENOMEM I print:
+> > 
+> > 	"Thermal zone misconfigured for %s. err=%d\n",
+> > 
+> > since any error reported by Thermal other than ENODEV and ENOMEM
+> > means the DT parsing unveiled some configuration anomaly.
+> > 
+> 
+> Ok, then let's hope that this finds misconfigurations and drop the
+> info message.
 
-Error/Warning reports:
+The mismatch of indexes at hand won't be catched being reported by
+Thermal as misconfig but just as not found ENODEV.
 
-https://lore.kernel.org/linux-mm/202210090954.pTR6m6rj-lkp@intel.com
-https://lore.kernel.org/linux-mm/202210111318.mbUfyhps-lkp@intel.com
-https://lore.kernel.org/linux-mm/202210261404.b6UlzG7H-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202210270637.Q5Y7FiKJ-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202210271517.snUEnhD0-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202210281745.XFMUiMEf-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202210282021.SKiobE3i-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202210282125.x112bh8U-lkp@intel.com
+Anyway it is fine for me to drop the message.
 
-Error/Warning: (recently discovered and may have been fixed)
+> 
+> I just noticed another problem in your code:
+> 
+> +		if (ret == -ENOMEM)
+> +			return ret;
+> +		else if (ret)
+> +			dev_warn(dev,
+> +				 "Thermal zone misconfigured for %s. err=%d\n",
+> +				 sensor->name, ret);
+> 
+> Static analyzers will rightfully notice that else after return is unnecessary.
+> Please rewrite and drop the else. I think something like
+> 
 
-ERROR: modpost: "__ld_r13_to_r18_ret" [lib/zstd/zstd_decompress.ko] undefined!
-ERROR: modpost: "__ld_r13_to_r22" [lib/zstd/zstd_decompress.ko] undefined!
-arch/mips/pic32/pic32mzda/early_console.c:141:11: warning: result of comparison of constant -1 with expression of type 'char' is always false [-Wtautological-constant-out-of-range-compare]
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:4878: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-drivers/hwmon/smpro-hwmon.c:378:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-drivers/phy/mediatek/phy-mtk-hdmi-mt2701.c:116:2: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask_), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask_)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-drivers/phy/mediatek/phy-mtk-hdmi-mt8173.c:160:2: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask_), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask_)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8173.c:207:2: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask_), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask_)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8183.c:83:2: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask_), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask_)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
-include/asm-generic/div64.h:234:32: warning: right shift count >= width of type [-Wshift-count-overflow]
+Ah yes...my bad.
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+> 		if (ret) {
+> 			if (ret == -ENOMEM)
+> 				return ret;
+> 			dev_warn(dev,
+> 				 "Thermal zone misconfigured for %s. err=%d\n",
+> 				 sensor->name, ret);
+> 		}
+> 
+> would be better since ret would only be evaluated once in the no-error case.
+> 
 
-drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c:555:6: warning: Redundant initialization for 'err'. The initialized value is overwritten before it is read. [redundantInitialization]
-drivers/net/ethernet/microchip/lan743x_ethtool.c:442:33: warning: Parameter 'data' can be declared as pointer to const [constParameter]
-drivers/net/ethernet/microchip/lan743x_main.c:3522:49: warning: Operator '|' with one operand equal to zero is redundant. [badBitmaskCheck]
-drivers/net/ethernet/microchip/lan743x_main.c:532:6: warning: Redundant initialization for 'ret'. The initialized value is overwritten before it is read. [redundantInitialization]
-drivers/net/ieee802154/mcr20a.c:388:54: warning: Operator '|' with one operand equal to zero is redundant. [badBitmaskCheck]
-drivers/net/phy/micrel.c:2043:9: warning: Uninitialized variable: ret [uninitvar]
-drivers/net/phy/micrel.c:2323:24: warning: Uninitialized variable: &rx_ts->seq_id [uninitvar]
-lib/zstd/compress/huf_compress.c:460 HUF_getIndex() warn: the 'RANK_POSITION_LOG_BUCKETS_BEGIN' macro might need parens
-lib/zstd/decompress/zstd_decompress_block.c:1009 ZSTD_execSequence() warn: inconsistent indenting
-lib/zstd/decompress/zstd_decompress_block.c:894 ZSTD_execSequenceEnd() warn: inconsistent indenting
-lib/zstd/decompress/zstd_decompress_block.c:942 ZSTD_execSequenceEndSplitLitBuffer() warn: inconsistent indenting
-lib/zstd/decompress/zstd_decompress_internal.h:206 ZSTD_DCtx_get_bmi2() warn: inconsistent indenting
+I'll resend this one with the fix and the dropped message.
 
-Error/Warning ids grouped by kconfigs:
+Thanks,
+Cristian
 
-gcc_recent_errors
-|-- arc-allyesconfig
-|   |-- include-asm-generic-div64.h:warning:comparison-of-distinct-pointer-types-lacks-a-cast
-|   `-- include-asm-generic-div64.h:warning:right-shift-count-width-of-type
-|-- arc-randconfig-r043-20221028
-|   |-- ERROR:__ld_r13_to_r18_ret-lib-zstd-zstd_decompress.ko-undefined
-|   `-- ERROR:__ld_r13_to_r22-lib-zstd-zstd_decompress.ko-undefined
-|-- arm-allyesconfig
-|   |-- include-asm-generic-div64.h:warning:comparison-of-distinct-pointer-types-lacks-a-cast
-|   `-- include-asm-generic-div64.h:warning:right-shift-count-width-of-type
-|-- arm64-randconfig-s041-20221026
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-priv1-got-restricted-__le16-addressable-usertype-fc_len
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-tag-got-restricted-__le16-addressable-usertype-fc_tag
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-short-usertype-tag-got-restricted-__le16-addressable-usertype-fc_tag
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_len-got-unsigned-short-usertype
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_tag-got-unsigned-short-usertype
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-int-tag-got-restricted-__le16-usertype-fc_tag
-|   `-- fs-ext4-fast_commit.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- arm64-randconfig-s053-20221026
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-priv1-got-restricted-__le16-addressable-usertype-fc_len
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-tag-got-restricted-__le16-addressable-usertype-fc_tag
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-short-usertype-tag-got-restricted-__le16-addressable-usertype-fc_tag
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_len-got-unsigned-short-usertype
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_tag-got-unsigned-short-usertype
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-int-tag-got-restricted-__le16-usertype-fc_tag
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|   |-- fs-ntfs3-index.c:sparse:sparse:restricted-__le32-degrades-to-integer
-|   |-- fs-ntfs3-namei.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-restricted-__le16-const-usertype-s1-got-unsigned-short
-|   `-- fs-ntfs3-namei.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-restricted-__le16-const-usertype-s2-got-unsigned-short
-|-- csky-randconfig-r003-20221027
-|   |-- include-asm-generic-div64.h:warning:comparison-of-distinct-pointer-types-lacks-a-cast
-|   `-- include-asm-generic-div64.h:warning:right-shift-count-width-of-type
-|-- csky-randconfig-s033-20221026
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-priv1-got-restricted-__le16-addressable-usertype-fc_len
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-tag-got-restricted-__le16-addressable-usertype-fc_tag
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-short-usertype-tag-got-restricted-__le16-addressable-usertype-fc_tag
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_len-got-unsigned-short-usertype
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_tag-got-unsigned-short-usertype
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-int-tag-got-restricted-__le16-usertype-fc_tag
-|   `-- fs-ext4-fast_commit.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- i386-randconfig-m021
-|   |-- arch-x86-boot-compressed-..-..-..-..-lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequence()-warn:inconsistent-indenting
-|   |-- arch-x86-boot-compressed-..-..-..-..-lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequenceEnd()-warn:inconsistent-indenting
-|   |-- arch-x86-boot-compressed-..-..-..-..-lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequenceEndSplitLitBuffer()-warn:inconsistent-indenting
-|   |-- arch-x86-boot-compressed-..-..-..-..-lib-zstd-decompress-zstd_decompress_internal.h-ZSTD_DCtx_get_bmi2()-warn:inconsistent-indenting
-|   |-- lib-zstd-compress-huf_compress.c-HUF_getIndex()-warn:the-RANK_POSITION_LOG_BUCKETS_BEGIN-macro-might-need-parens
-|   |-- lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequence()-warn:inconsistent-indenting
-|   |-- lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequenceEnd()-warn:inconsistent-indenting
-|   |-- lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequenceEndSplitLitBuffer()-warn:inconsistent-indenting
-|   `-- lib-zstd-decompress-zstd_decompress_internal.h-ZSTD_DCtx_get_bmi2()-warn:inconsistent-indenting
-|-- ia64-randconfig-p001-20221026
-clang_recent_errors
-|-- hexagon-randconfig-r034-20221028
-|   `-- drivers-hwmon-smpro-hwmon.c:warning:unannotated-fall-through-between-switch-labels
-|-- hexagon-randconfig-r041-20221027
-|   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-|   `-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8183.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-|-- mips-pic32mzda_defconfig
-|   `-- arch-mips-pic32-pic32mzda-early_console.c:warning:result-of-comparison-of-constant-with-expression-of-type-char-is-always-false
-`-- powerpc-randconfig-r031-20221026
-    |-- drivers-phy-mediatek-phy-mtk-hdmi-mt2701.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(uns
-    `-- drivers-phy-mediatek-phy-mtk-hdmi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(uns
-
-elapsed time: 726m
-
-configs tested: 78
-configs skipped: 2
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-i386                                defconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-arc                                 defconfig
-x86_64                           rhel-8.3-kvm
-x86_64                               rhel-8.3
-s390                             allmodconfig
-x86_64                           rhel-8.3-syz
-ia64                             allmodconfig
-x86_64                         rhel-8.3-kunit
-i386                          randconfig-a005
-arm                                 defconfig
-x86_64                        randconfig-a002
-x86_64                           allyesconfig
-alpha                               defconfig
-arc                  randconfig-r043-20221027
-arc                              allyesconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a013
-s390                             allyesconfig
-arm                            pleb_defconfig
-s390                                defconfig
-x86_64                          rhel-8.3-func
-arc                    vdk_hs38_smp_defconfig
-x86_64                        randconfig-a011
-alpha                            allyesconfig
-powerpc                    sam440ep_defconfig
-powerpc                          allmodconfig
-i386                             allyesconfig
-x86_64                        randconfig-a015
-x86_64                        randconfig-a006
-arm                              allyesconfig
-x86_64                    rhel-8.3-kselftests
-m68k                             allyesconfig
-sh                               allmodconfig
-i386                          randconfig-a014
-x86_64                        randconfig-a004
-m68k                             allmodconfig
-mips                             allyesconfig
-i386                          randconfig-a012
-arm64                            allyesconfig
-i386                          randconfig-a016
-m68k                        m5307c3_defconfig
-arm                        keystone_defconfig
-arm                        mvebu_v7_defconfig
-x86_64                           alldefconfig
-sh                           sh2007_defconfig
-powerpc                mpc7448_hpc2_defconfig
-riscv                            allmodconfig
-i386                          randconfig-c001
-loongarch                         allnoconfig
-ia64                        generic_defconfig
-
-clang tested configs:
-i386                          randconfig-a002
-x86_64                        randconfig-a014
-hexagon              randconfig-r041-20221027
-i386                          randconfig-a006
-x86_64                        randconfig-a005
-i386                          randconfig-a004
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-hexagon              randconfig-r045-20221027
-s390                 randconfig-r044-20221027
-x86_64                        randconfig-a001
-riscv                randconfig-r042-20221027
-i386                          randconfig-a013
-powerpc                     tqm5200_defconfig
-i386                          randconfig-a015
-x86_64                        randconfig-a003
-i386                          randconfig-a011
-powerpc                 mpc836x_mds_defconfig
-arm                         mv78xx0_defconfig
-arm                      pxa255-idp_defconfig
-arm                   milbeaut_m10v_defconfig
-x86_64                          rhel-8.3-rust
-mips                        maltaup_defconfig
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
