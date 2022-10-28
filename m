@@ -2,223 +2,123 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78392C38A02
-	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Oct 2022 15:35:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A993C38A02
+	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Oct 2022 16:01:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiJ1PfX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 28 Oct 2022 11:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S230433AbiJ1QBp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 28 Oct 2022 12:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiJ1PfW (ORCPT
+        with ESMTP id S230487AbiJ1P74 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:35:22 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FA615D72E;
-        Fri, 28 Oct 2022 08:35:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 112181FB;
-        Fri, 28 Oct 2022 08:35:26 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D28323F534;
-        Fri, 28 Oct 2022 08:35:18 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 16:35:12 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Guenter Roeck <linux@roeck-us.net>
+        Fri, 28 Oct 2022 11:59:56 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36F5214657;
+        Fri, 28 Oct 2022 08:59:01 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id n83so6549650oif.11;
+        Fri, 28 Oct 2022 08:59:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kGV5CRuXO/AflfNqwOyb3q124XfnO4+Le7SUJ2VJU3I=;
+        b=YEtveQ5geZPkTIxyIW1RGzgwGnwFThDcL8Wv8vKpWOWescIp3AKZvU140u86bHSctS
+         /WHC/hmjpHBos5Hsg0sNydLxJm4tylUPI8AzWzyWluY1vVuXG/7OjgnTWV2zDOBQ2tgh
+         2YIIErFMOMyFYdwhQ285czT3VOJpUm8T9YJgxEQvLj1Rd4ZX/bFyImyiSJ0Mc/1okjkI
+         JcInEEarNY+WFTfmOAsL5smiQld4j8i/XdWjxxwznnvmmqB6CYjLjXOT73p7CvI2Dnwr
+         CTHW1+tadB0YLfZ02AD8Tk0QlPInG43fpuM7w8eLUkFLnrVfJ3NmH2HDECrKJlDIDVuA
+         oNlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kGV5CRuXO/AflfNqwOyb3q124XfnO4+Le7SUJ2VJU3I=;
+        b=XjEW36iyuH1+PNyWU3bocMDYjqjjws7diM14xC6V5JAGS56vQDZJW5o/Fe5nYkVHAD
+         X3/zlxPRFmp91T6A7Bz5Ae6YXXVfRTxicKn9CQOLjhJbUEY3GmEoVGwrB92xuut8H4La
+         nOFZLxdXhZFpkfaospJ+4/VyL2Ay7B6qhJrKQBSOcqV7YjIaTBooFDqO5KGRrL3FpPy7
+         zMpwhuRwMXJSuEy2x3jLs8MeOr5Y6E8wsKV7u7LRh024nC/KSFg4c1Md1Gaku8UaXwII
+         URiUS0JwewA8MVQYJlYI5exi/OFwLPZijlKdF+t1MT1rY7vpIX2JSkTkvVd5PANML5BO
+         JHHw==
+X-Gm-Message-State: ACrzQf2rc4G/+GP5zNXLeIbuKb9oQHl91g3kjUWyPDugXArEqI8ekjNM
+        jDw4Q3A0Uj0+e03wJq5gUiVCajXYwR4=
+X-Google-Smtp-Source: AMsMyM4SI17djKyPfTO294g8vpTQAc+lvUiYSSoWh5QXmXPQBgV9ybiftpT43M5gbq2CZaSK3grXfg==
+X-Received: by 2002:a05:6808:2083:b0:355:2c71:7e58 with SMTP id s3-20020a056808208300b003552c717e58mr8578008oiw.168.1666972740889;
+        Fri, 28 Oct 2022 08:59:00 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l23-20020a544517000000b00359ba124b07sm1626854oil.36.2022.10.28.08.58.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 08:59:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e4040686-851c-d8b0-b274-ac71d38685e1@roeck-us.net>
+Date:   Fri, 28 Oct 2022 08:58:58 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Content-Language: en-US
+To:     Cristian Marussi <cristian.marussi@arm.com>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         sudeep.holla@arm.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
         linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 7/8] hwmon: (scmi) Register explicitly with Thermal
- Framework
-Message-ID: <Y1v2ozURFdIk1PfU@e120937-lin>
 References: <20221028140833.280091-1-cristian.marussi@arm.com>
  <20221028140833.280091-7-cristian.marussi@arm.com>
  <b914ea25-a9a8-f443-2ba0-615bdd6cc04f@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b914ea25-a9a8-f443-2ba0-615bdd6cc04f@roeck-us.net>
+ <Y1v2ozURFdIk1PfU@e120937-lin>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 7/8] hwmon: (scmi) Register explicitly with Thermal
+ Framework
+In-Reply-To: <Y1v2ozURFdIk1PfU@e120937-lin>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 08:11:59AM -0700, Guenter Roeck wrote:
-> On 10/28/22 07:08, Cristian Marussi wrote:
-> > Available sensors are enumerated and reported by the SCMI platform server
-> > using a 16bit identification number; not all such sensors are of a type
-> > supported by hwmon subsystem and, among the supported ones, only a subset
-> > could be temperature sensors that have to be registered with the Thermal
-> > Framework.
-> > Potential clashes between hwmon channels indexes and the underlying real
-> > sensors IDs do not play well with the hwmon<-->thermal bridge automatic
-> > registration routines and could need a sensible number of fake dummy
-> > sensors to be made up in order to keep indexes and IDs in sync.
-> > 
-> > Avoid to use the hwmon<-->thermal bridge dropping the HWMON_C_REGISTER_TZ
-> > attribute and instead explicit register temperature sensors directly with
-> > the Thermal Framework.
-> > 
+On 10/28/22 08:35, Cristian Marussi wrote:
+[ ... ]
+>>> +	/*
+>>> +	 * Try to register a temperature sensor with the Thermal Framework:
+>>> +	 * skip sensors not defined as part of any thermal zone (-ENODEV) but
+>>> +	 * report any other errors related to misconfigured zones/sensors.
+>>> +	 */
+>>> +	tzd = devm_thermal_of_zone_register(dev, th_sensor->info->id, th_sensor,
+>>> +					    &scmi_hwmon_thermal_ops);
+>>> +	if (IS_ERR(tzd)) {
+>>> +		devm_kfree(dev, th_sensor);
+>>> +
+>>> +		if (PTR_ERR(tzd) != -ENODEV)
+>>> +			return PTR_ERR(tzd);
+>>> +
+>>> +		dev_info(dev, "Sensor '%s' not attached to any thermal zone.\n",
+>>> +			 sensor->name);
+>>
+>> There were complaints about this message as it is noisy. If you send
+>> another version, please drop it unless attaching each sensor to a thermal
+>> zone is strongly expected. If you don't send another version, I'll drop it
+>> while applying.
+>>
 > 
+> Ok fine for me. I am waiting to have some feedback from Sudeep too, but
+> I do not have plan for another version as of now.
 > 
-> For my reference:
-> 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> $subject says "patch 7/8". Patches 1-6 are firmware patches. Does this patch
-> depend on the other patches of the series or can I apply it on its own ?
-
-Thanks for having a look first of all !
-
-This patch can be applied on its own...it's just that I have bundled
-together a bunch of fixes (... this being probably a bit too big really it
-should have been on its own, sorry for that...)
-
-> 
-> Additional comment inline below.
-> 
-> Thanks,
-> Guenter
-> 
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: linux-hwmon@vger.kernel.org
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > ---
-> >   drivers/hwmon/scmi-hwmon.c | 115 ++++++++++++++++++++++++++++++++-----
-> >   1 file changed, 102 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
-> > index b1329a58ce40..124fe8ee1b9b 100644
-> > --- a/drivers/hwmon/scmi-hwmon.c
-> > +++ b/drivers/hwmon/scmi-hwmon.c
-> > @@ -20,6 +20,11 @@ struct scmi_sensors {
-> >   	const struct scmi_sensor_info **info[hwmon_max];
-> >   };
-> > +struct scmi_thermal_sensor {
-> > +	const struct scmi_protocol_handle *ph;
-> > +	const struct scmi_sensor_info *info;
-> > +};
-> > +
-> >   static inline u64 __pow10(u8 x)
-> >   {
-> >   	u64 r = 1;
-> > @@ -64,16 +69,14 @@ static int scmi_hwmon_scale(const struct scmi_sensor_info *sensor, u64 *value)
-> >   	return 0;
-> >   }
-> > -static int scmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> > -			   u32 attr, int channel, long *val)
-> > +static int scmi_hwmon_read_scaled_value(const struct scmi_protocol_handle *ph,
-> > +					const struct scmi_sensor_info *sensor,
-> > +					long *val)
-> >   {
-> >   	int ret;
-> >   	u64 value;
-> > -	const struct scmi_sensor_info *sensor;
-> > -	struct scmi_sensors *scmi_sensors = dev_get_drvdata(dev);
-> > -	sensor = *(scmi_sensors->info[type] + channel);
-> > -	ret = sensor_ops->reading_get(scmi_sensors->ph, sensor->id, &value);
-> > +	ret = sensor_ops->reading_get(ph, sensor->id, &value);
-> >   	if (ret)
-> >   		return ret;
-> > @@ -84,6 +87,17 @@ static int scmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> >   	return ret;
-> >   }
-> > +static int scmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> > +			   u32 attr, int channel, long *val)
-> > +{
-> > +	const struct scmi_sensor_info *sensor;
-> > +	struct scmi_sensors *scmi_sensors = dev_get_drvdata(dev);
-> > +
-> > +	sensor = *(scmi_sensors->info[type] + channel);
-> > +
-> > +	return scmi_hwmon_read_scaled_value(scmi_sensors->ph, sensor, val);
-> > +}
-> > +
-> >   static int
-> >   scmi_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
-> >   		       u32 attr, int channel, const char **str)
-> > @@ -122,6 +136,25 @@ static struct hwmon_chip_info scmi_chip_info = {
-> >   	.info = NULL,
-> >   };
-> > +static int scmi_hwmon_thermal_get_temp(struct thermal_zone_device *tz,
-> > +				       int *temp)
-> > +{
-> > +	int ret;
-> > +	long value;
-> > +	struct scmi_thermal_sensor *th_sensor = tz->devdata;
-> > +
-> > +	ret = scmi_hwmon_read_scaled_value(th_sensor->ph, th_sensor->info,
-> > +					   &value);
-> > +	if (!ret)
-> > +		*temp = value;
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static const struct thermal_zone_device_ops scmi_hwmon_thermal_ops = {
-> > +	.get_temp = scmi_hwmon_thermal_get_temp,
-> > +};
-> > +
-> >   static int scmi_hwmon_add_chan_info(struct hwmon_channel_info *scmi_hwmon_chan,
-> >   				    struct device *dev, int num,
-> >   				    enum hwmon_sensor_types type, u32 config)
-> > @@ -149,7 +182,6 @@ static enum hwmon_sensor_types scmi_types[] = {
-> >   };
-> >   static u32 hwmon_attributes[hwmon_max] = {
-> > -	[hwmon_chip] = HWMON_C_REGISTER_TZ,
-> >   	[hwmon_temp] = HWMON_T_INPUT | HWMON_T_LABEL,
-> >   	[hwmon_in] = HWMON_I_INPUT | HWMON_I_LABEL,
-> >   	[hwmon_curr] = HWMON_C_INPUT | HWMON_C_LABEL,
-> > @@ -157,6 +189,43 @@ static u32 hwmon_attributes[hwmon_max] = {
-> >   	[hwmon_energy] = HWMON_E_INPUT | HWMON_E_LABEL,
-> >   };
-> > +static int scmi_thermal_sensor_register(struct device *dev,
-> > +					const struct scmi_protocol_handle *ph,
-> > +					const struct scmi_sensor_info *sensor)
-> > +{
-> > +	struct scmi_thermal_sensor *th_sensor;
-> > +	struct thermal_zone_device *tzd;
-> > +
-> > +	th_sensor = devm_kzalloc(dev, sizeof(*th_sensor), GFP_KERNEL);
-> > +	if (!th_sensor)
-> > +		return -ENOMEM;
-> > +
-> > +	th_sensor->ph = ph;
-> > +	th_sensor->info = sensor;
-> > +
-> > +	/*
-> > +	 * Try to register a temperature sensor with the Thermal Framework:
-> > +	 * skip sensors not defined as part of any thermal zone (-ENODEV) but
-> > +	 * report any other errors related to misconfigured zones/sensors.
-> > +	 */
-> > +	tzd = devm_thermal_of_zone_register(dev, th_sensor->info->id, th_sensor,
-> > +					    &scmi_hwmon_thermal_ops);
-> > +	if (IS_ERR(tzd)) {
-> > +		devm_kfree(dev, th_sensor);
-> > +
-> > +		if (PTR_ERR(tzd) != -ENODEV)
-> > +			return PTR_ERR(tzd);
-> > +
-> > +		dev_info(dev, "Sensor '%s' not attached to any thermal zone.\n",
-> > +			 sensor->name);
-> 
-> There were complaints about this message as it is noisy. If you send
-> another version, please drop it unless attaching each sensor to a thermal
-> zone is strongly expected. If you don't send another version, I'll drop it
-> while applying.
+> As a side note, though, I understand the 'noisiness' argument, but,
+> sincerely this same message in the original HWMON code was the only
+> reason why I spotted that something was wrong with the SCMI/HWMON
+> interactions and discovered the indexes/ids mismatch...if not for
+> that it would have gone un-noticed that a perfectly configured
+> ThermalZone/Sensor was not working properly...
+> (un-noticed at least until something would have been burnt to fire
+>   in my house .. joking :P)
 > 
 
-Ok fine for me. I am waiting to have some feedback from Sudeep too, but
-I do not have plan for another version as of now.
+Good point.
 
-As a side note, though, I understand the 'noisiness' argument, but,
-sincerely this same message in the original HWMON code was the only
-reason why I spotted that something was wrong with the SCMI/HWMON
-interactions and discovered the indexes/ids mismatch...if not for
-that it would have gone un-noticed that a perfectly configured
-ThermalZone/Sensor was not working properly...
-(un-noticed at least until something would have been burnt to fire
- in my house .. joking :P)
+Did you ever check the returned error code ? Maybe we could use it to
+distinguish "it is not attached to a thermal zone because it is not
+associated with one" from "attaching to a thermal zone failed because
+its configuration is bad/incomplete".
 
 Thanks,
-Cristian
+Guenter
 
