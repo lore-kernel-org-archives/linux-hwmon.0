@@ -2,108 +2,172 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 430BAC433FE
-	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Oct 2022 13:00:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9757EC38A02
+	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Oct 2022 13:08:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiJ2NAS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 29 Oct 2022 09:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
+        id S229562AbiJ2NIO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 29 Oct 2022 09:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiJ2NAR (ORCPT
+        with ESMTP id S229482AbiJ2NIN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 29 Oct 2022 09:00:17 -0400
-X-Greylist: delayed 1591 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 29 Oct 2022 06:00:16 PDT
-Received: from shakotay.alphanet.ch (shakotay.alphanet.ch [46.140.72.222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A016476DB
-        for <linux-hwmon@vger.kernel.org>; Sat, 29 Oct 2022 06:00:14 -0700 (PDT)
-Received: by shakotay.alphanet.ch (Postfix, from userid 1022)
-        id 667C7124AE72; Sat, 29 Oct 2022 14:33:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=alphanet.ch; s=mail;
-        t=1667046822; bh=kplED39BPMPOKR9ZCncJmwFekXx0gyBf5mb/sVGyUtg=;
-        h=Date:From:To:Subject:From;
-        b=IXl21wWm9qmVNsdMcfwHatv6wytKWlcz2jIeIZ+3LM6KoBAfbJ+RZ4TnO4DE1P3Z2
-         PnDXGbAfxs1jNNKj08cgt3sthOGuz8TJYJbuQUMgIp1OEZ3RXfFNXRhXK1r4HcO43/
-         8OG2uNRj0NW8gIEbvWBttQ5vXHUbAfRQO9kzczGJ6nIgdfVD87erVmpKUAS5+6imuZ
-         LKk34/PIaSOy8SJGCjZSdRFqDtM7NyDFIVBZ+C1mkIojifKyXgh21hpRul58kkjtAt
-         IoUkZhlqPQSAekdOFgd8Sci38/zuJSndttxeREdZYl0LcEpVtESlXK7JiQAC8SMi5Q
-         roPqQZ9jDKUyQ==
-Received: from reliant.alphanet.ch (reliant.alphanet.ch [192.168.1.30])
-        by shakotay.alphanet.ch (Postfix) with ESMTP id 31EE61245C97
-        for <linux-hwmon@vger.kernel.org>; Sat, 29 Oct 2022 14:33:38 +0200 (CEST)
-Received: by reliant.alphanet.ch (Postfix, from userid 1000)
-        id 2815217FA95; Sat, 29 Oct 2022 14:33:38 +0200 (CEST)
-Date:   Sat, 29 Oct 2022 14:33:38 +0200
-From:   Marc SCHAEFER <schaefer@alphanet.ch>
-To:     linux-hwmon@vger.kernel.org
-Subject: Power measurement wrong when idle
-Message-ID: <20221029123338.GA11915@alphanet.ch>
+        Sat, 29 Oct 2022 09:08:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81ADE27CCD;
+        Sat, 29 Oct 2022 06:08:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D8A0B80C63;
+        Sat, 29 Oct 2022 13:08:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE16FC433C1;
+        Sat, 29 Oct 2022 13:08:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667048889;
+        bh=quMDOfP1QXfzQ6F0KCVWRa5HH46e9O2tMvwS/Aw9lB4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eBFymFPKFa3NrMnJKmOaI2ORyY7Ha9urPdBGJDtPtGuPBSln8Wj/vU6DW6R3LoheL
+         cFBo4FGtgubxaMd72SlDKlpAN65MXF08HZgxYOb+5dTF0ZVggep9DzW2F0+BNnIo59
+         RzjlnRs8WHo099wgBCHJnMOC6K7uwHObkkPwTI4rDWi4X83NNNHmp95H4qe8Y4Fr93
+         ZQzKl4OqwviodcDjyauB9pLUDfQpXyDnJxrEU184aI9bhaD0Rt7Drb5Lx3AdYN+FW/
+         BG8dw497iFpOi4e/HMt9pl5DI97ntLekHKxi/ArTUWtfenWnffjA/21a7zCmnEkAtM
+         DsWR63Q38vaCg==
+Date:   Sat, 29 Oct 2022 21:08:00 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Alistair Francis <alistair@alistair23.me>
+Cc:     lgirdwood@gmail.com, robh+dt@kernel.org, broonie@kernel.org,
+        kernel@pengutronix.de, lee.jones@linaro.org,
+        linux-arm-kernel@lists.infradead.org, alistair23@gmail.com,
+        linux-imx@nxp.com, amitk@kernel.org, s.hauer@pengutronix.de,
+        linux@roeck-us.net, rui.zhang@intel.com,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, andreas@kemnade.info,
+        linux-kernel@vger.kernel.org, geert@linux-m68k.org
+Subject: Re: [PATCH v23 2/2] ARM: dts: imx7d-remarkable2: Enable
+ silergy,sy7636a
+Message-ID: <20221029130800.GZ125525@dragon>
+References: <20221029100646.294583-1-alistair@alistair23.me>
+ <20221029100646.294583-3-alistair@alistair23.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20221029100646.294583-3-alistair@alistair23.me>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello,
+On Sat, Oct 29, 2022 at 08:06:46PM +1000, Alistair Francis wrote:
+> Enable the silergy,sy7636a and silergy,sy7636a-regulator on the
+> reMarkable2.
+> 
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> ---
+>  arch/arm/boot/dts/imx7d-remarkable2.dts | 63 +++++++++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> index a2a91bfdd98e..58581295b9a0 100644
+> --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
+> +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> @@ -22,6 +22,28 @@ memory@80000000 {
+>  		reg = <0x80000000 0x40000000>;
+>  	};
+>  
+> +	thermal-zones {
+> +		epd-thermal {
+> +			thermal-sensors = <&epd_pmic>;
+> +			polling-delay-passive = <30000>;
+> +			polling-delay = <30000>;
+> +
+> +			trips {
+> +				trip0 {
+> +					temperature = <49000>;
+> +					hysteresis = <2000>;
+> +					type = "passive";
+> +				};
+> +
+> +				trip1 {
+> +					temperature = <50000>;
+> +					hysteresis = <2000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+>  	reg_brcm: regulator-brcm {
+>  		compatible = "regulator-fixed";
+>  		regulator-name = "brcm_reg";
+> @@ -84,6 +106,33 @@ wacom_digitizer: digitizer@9 {
+>  	};
+>  };
+>  
+> +&i2c4 {
+> +	clock-frequency = <100000>;
+> +	pinctrl-names = "default", "sleep";
+> +	pinctrl-0 = <&pinctrl_i2c4>;
+> +	pinctrl-1 = <&pinctrl_i2c4>;
+> +	status = "okay";
+> +
+> +	sy7636a: pmic@62 {
+> +		compatible = "silergy,sy7636a";
+> +		reg = <0x62>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_epdpmic>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		#thermal-sensor-cells = <0>;
+> +		epd-pwr-good-gpios = <&gpio6 21 GPIO_ACTIVE_HIGH>;
+> +		status = "okay";
 
-I am using the apu2 embedded platform, which uses an amd64 AMD GX-412TC SOC,
-stepping        : 1
-microcode       : 0x7030105
+The "okay" status is only needed to flip disabled devices.  It can be
+dropped here.
 
-With Debian bullseye, the power measurement when idle is very big, and wrong (>
-80 .. 100 W). We have observed this behaviour on multiple systems.
+I fixed it up and applied both patches.
 
-The problem did not occur with Debian buster, does not occur with the
-temperature sensor, and the power measurement goes back to apparently correct
-values when the system is no longer idle.
+Shawn
 
-It does not seem to be linked to amd64 specific firmwares.
-
-The problem lies in the /sys/class/hwmon/hwmon0/power1_average not in the
-lm-sensors package (direct reading the /sys files gives the same isue).
-
-So it appears to be within the kernel: 4.19.0-22-amd64 seems ok and
-5.10.0-18-amd64 is not.
-
-Funnily, there does not seem to be relevant changes in the specific kernel
-driver (fam15h_power).
-
-Any idea what could lead to this strange behaviour?
-
-Thank you for any ideas or pointers.
-
-Examples:
-
-When bullseye is idle, it's completely wrong (' are from me):
-
-cat /sys/class/hwmon/hwmon0/power1_average
-94'019'396
-
-When bullseye has 100% CPU used (one core):
-cat /sys/class/hwmon/hwmon0/power1_average
-10'917'309
-
-The only visible change is that hwmon1 and hwmon0 are interchanged:
-
-bullseye:
-   fam15h_power-pci-00c4
-   Adapter: PCI adapter
-   power1:       88.61 W  (interval =   0.01 s, crit =   6.00 W)
-   
-   k10temp-pci-00c3
-   Adapter: PCI adapter
-   temp1:        +54.5 C  (high = +70.0 C)
-                          (crit = +105.0 C, hyst = +104.0 C)
-   
-buster:
-   k10temp-pci-00c3
-   Adapter: PCI adapter
-   temp1:        +59.6°C  (high = +70.0°C)
-                          (crit = +105.0°C, hyst = +104.0°C)
-   
-   fam15h_power-pci-00c4
-   Adapter: PCI adapter
-   power1:        8.00 W  (interval =   0.01 s, crit =   6.00 W)
-   
+> +
+> +		regulators {
+> +			reg_epdpmic: vcom {
+> +				regulator-name = "vcom";
+> +				regulator-boot-on;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+>  &snvs_pwrkey {
+>  	status = "okay";
+>  };
+> @@ -177,6 +226,13 @@ MX7D_PAD_SAI1_TX_BCLK__GPIO6_IO13	0x14
+>  		>;
+>  	};
+>  
+> +	pinctrl_epdpmic: epdpmicgrp {
+> +		fsl,pins = <
+> +			MX7D_PAD_SAI2_RX_DATA__GPIO6_IO21	0x00000074
+> +			MX7D_PAD_ENET1_RGMII_TXC__GPIO7_IO11	0x00000014
+> +		>;
+> +	};
+> +
+>  	pinctrl_i2c1: i2c1grp {
+>  		fsl,pins = <
+>  			MX7D_PAD_I2C1_SDA__I2C1_SDA		0x4000007f
+> @@ -184,6 +240,13 @@ MX7D_PAD_I2C1_SCL__I2C1_SCL		0x4000007f
+>  		>;
+>  	};
+>  
+> +	pinctrl_i2c4: i2c4grp {
+> +		fsl,pins = <
+> +			MX7D_PAD_I2C4_SDA__I2C4_SDA		0x4000007f
+> +			MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
+> +		>;
+> +	};
+> +
+>  	pinctrl_uart1: uart1grp {
+>  		fsl,pins = <
+>  			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
+> -- 
+> 2.38.1
+> 
