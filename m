@@ -2,148 +2,524 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 552AAC433FE
-	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Oct 2022 19:20:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45E1FC433FE
+	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Oct 2022 22:51:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbiJ2TU6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 29 Oct 2022 15:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53414 "EHLO
+        id S229476AbiJ2WvE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 29 Oct 2022 18:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ2TU6 (ORCPT
+        with ESMTP id S229441AbiJ2WvD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 29 Oct 2022 15:20:58 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE9A1C127
-        for <linux-hwmon@vger.kernel.org>; Sat, 29 Oct 2022 12:20:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667071257; x=1698607257;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=F5K9x1oIQLtoINoX34exDlDDFF/xUnM4qc/fNHCAeE0=;
-  b=MZo1yev8QNnzW9rUmDyrQPrV+3REEYSz7YF2c4TGgAs/uKbm+BNfSIHv
-   7CAQOHWoph3PPitFbzsaXpJe9SMAH9i2i6sTj+i5b8Yu8l2JnzWikWI2m
-   K7wxXXQ1z+nwt2DEeyrznVq161gXiKH0+e+KRAMsMYeY9O52lMyBYGHif
-   2BvWAOR13NvSPssMuyOc92EG6dDTQbG9VpdIdYfXO0aPYWFJdQufJWNb/
-   fn5uwDR9X5dyCZlpskIBIP4jlkGudbcNSHz8Coec1rtu4KXoQoMZ5pb4n
-   PbGcrT+kAB6J4m1NyxykucCCQJjvtRdyQPcHZRETvXLLG7Y716kmHoBme
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="289083457"
-X-IronPort-AV: E=Sophos;i="5.95,224,1661842800"; 
-   d="scan'208";a="289083457"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 12:20:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="666417336"
-X-IronPort-AV: E=Sophos;i="5.95,224,1661842800"; 
-   d="scan'208";a="666417336"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 29 Oct 2022 12:20:55 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oorO2-000BIl-2m;
-        Sat, 29 Oct 2022 19:20:54 +0000
-Date:   Sun, 30 Oct 2022 03:20:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
- 4ed8d458b8820f1df07c78c4cb523f7e49f9556d
-Message-ID: <635d7d04.aZgFJu//KbkO4WaO%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 29 Oct 2022 18:51:03 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DAC186DF;
+        Sat, 29 Oct 2022 15:51:02 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id cb2-20020a056830618200b00661b6e5dcd8so4933779otb.8;
+        Sat, 29 Oct 2022 15:51:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wm5ehpL9z0ZqyAzTuD0lB2sMDTxxynY9F1uqWIUffkM=;
+        b=U9GkezbOefI3n6uUTMtwbNORSAJ3BEATAAGCBYewsfyOg2nalur9CRTz/5qkxAey1x
+         EmNaXFJEi83cCiiOHf3yBvch+b6jPRyPrG/HIJFi0qwKUZpiWNgcj1hUL48cw4hrynsr
+         q6HHW1o/vo9ZXQy/YuGNhEnmT1v/iG00NFMAw7M2EKr+WGlmp3bZDh5Q5vD8uaLABVYp
+         FDBwXnJIajswPmlQFiM7i1trUek5OldnTosdoENRcST5UNfd41gU3cfYi1CX4ofljSIK
+         FjHElwGAWpP8mQE4gwxVd2gVqeqhLClUb6Aeii9XIRecb0bcxk9BNPmgws6pz744QYlC
+         CSlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Wm5ehpL9z0ZqyAzTuD0lB2sMDTxxynY9F1uqWIUffkM=;
+        b=50TAYbK8bgTM/9cU7f1fALcWVhsfTNUWmrWo7DyZFZ8Hpu0LuKoLxNhsnsZ2amhGXl
+         N1VgHPNUGinxcuPCsUyP5Tzw7l6SyG4/IHqOQEysUKSp1g3GTuHXYxYMC/kgdKTZ+Qyh
+         /1/5vE7VxBOUPZ1JcO+lpq2trUbWnWOCBSOTxkL2LPsZOt5Ghe/j6NEYiOBZMtALup6s
+         iOVpznZ/MPb4fsRmamwtgCHm5leLPWS25rB7NW8haXQo+ob3b+CMT6yYSH5Wmh7H/Gli
+         P4aDxY8abo7/h6iSHerjnW/u5VJymqPngj8S35WxQoD+hppgHER/7P2Kiyr+kjPmhgh3
+         57Tw==
+X-Gm-Message-State: ACrzQf3157mU6gGx9e3A14QUIK2ejS9EaEwATXOJ7iVHV1HEY0vpfnCY
+        mJJEXWIL4D/lC0Ijvb0aNko=
+X-Google-Smtp-Source: AMsMyM4TriULgVoOqAZjLPk0gSc2rpYMvLiWq4TAcDqJEqzYYjmHZzg6RCll95R+LreDbiM2WvXXHQ==
+X-Received: by 2002:a9d:f43:0:b0:638:c3c4:73ee with SMTP id 61-20020a9d0f43000000b00638c3c473eemr2874400ott.186.1667083861916;
+        Sat, 29 Oct 2022 15:51:01 -0700 (PDT)
+Received: from smeagol.fibertel.com.ar ([201.235.4.68])
+        by smtp.gmail.com with ESMTPSA id l4-20020a0568301d6400b0066c495a651dsm54742oti.38.2022.10.29.15.50.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Oct 2022 15:51:01 -0700 (PDT)
+From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+To:     hdegoede@redhat.com
+Cc:     markgross@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+Subject: [PATCH] Add OneXPlayer mini AMD board driver
+Date:   Sat, 29 Oct 2022 19:50:51 -0300
+Message-Id: <20221029225051.1171795-1-samsagax@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-branch HEAD: 4ed8d458b8820f1df07c78c4cb523f7e49f9556d  watchdog: iTCO_wdt: Set NO_REBOOT if the watchdog is not already running
+Platform driver for OXP Handhelds that expose fan reading and control
+via hwmon sysfs.
 
-elapsed time: 720m
+As far as I could gather all OXP boards have the same DMI strings and
+they are told appart by the boot cpu vendor (Intel/AMD).
+Currently only AMD boards are supported but the code is made to be simple
+to add other handheld boards in the future.
 
-configs tested: 71
-configs skipped: 2
+Fan control is provided via pwm interface in the range [0-255]. AMD
+boards have [0-100] as range in the EC, the written value is scaled to
+accomodate for that.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+PWM control is disabled by default, can be enabled via module parameter
+`fan_control=1`.
+---
+ drivers/platform/x86/Kconfig        |   8 +
+ drivers/platform/x86/Makefile       |   3 +
+ drivers/platform/x86/oxp-platform.c | 393 ++++++++++++++++++++++++++++
+ 3 files changed, 404 insertions(+)
+ create mode 100644 drivers/platform/x86/oxp-platform.c
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allmodconfig
-s390                                defconfig
-s390                             allyesconfig
-ia64                             allmodconfig
-x86_64                           rhel-8.3-kvm
-i386                                defconfig
-x86_64                           rhel-8.3-syz
-x86_64                              defconfig
-x86_64                          rhel-8.3-func
-x86_64                        randconfig-a002
-x86_64                         rhel-8.3-kunit
-arc                  randconfig-r043-20221028
-powerpc                           allnoconfig
-arm                                 defconfig
-x86_64                    rhel-8.3-kselftests
-powerpc                          allmodconfig
-x86_64                               rhel-8.3
-i386                          randconfig-a001
-x86_64                        randconfig-a006
-x86_64                           allyesconfig
-i386                          randconfig-a003
-x86_64                        randconfig-a013
-mips                             allyesconfig
-riscv                randconfig-r042-20221028
-x86_64                        randconfig-a011
-arc                              allyesconfig
-i386                          randconfig-a005
-x86_64                        randconfig-a004
-s390                 randconfig-r044-20221028
-i386                          randconfig-a014
-alpha                            allyesconfig
-m68k                             allyesconfig
-sh                               allmodconfig
-i386                          randconfig-a012
-x86_64                        randconfig-a015
-i386                          randconfig-a016
-m68k                             allmodconfig
-i386                             allyesconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-m68k                         apollo_defconfig
-m68k                       m5249evb_defconfig
-arm                       multi_v4t_defconfig
-sh                           se7722_defconfig
-arm                        spear6xx_defconfig
-xtensa                  nommu_kc705_defconfig
-sparc64                          alldefconfig
-arm                          pxa3xx_defconfig
-sh                        dreamcast_defconfig
-sh                            titan_defconfig
-powerpc                      mgcoge_defconfig
-i386                          randconfig-c001
+diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+index f5312f51de19..8fe3ca1dd808 100644
+--- a/drivers/platform/x86/Kconfig
++++ b/drivers/platform/x86/Kconfig
+@@ -738,6 +738,14 @@ config XO1_RFKILL
+ 	  Support for enabling/disabling the WLAN interface on the OLPC XO-1
+ 	  laptop.
 
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-i386                          randconfig-a013
-hexagon              randconfig-r041-20221028
-x86_64                        randconfig-a014
-i386                          randconfig-a015
-hexagon              randconfig-r045-20221028
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a004
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a011
-i386                          randconfig-a006
-x86_64                        randconfig-k001
++config OXP_DEVICE
++	tristate "OneXPlayer EC fan control"
++	depends on ACPI
++	depends on HWMON
++	help
++		Support for OneXPlayer device board EC fan control. Only AMD boards
++		are supported.
++
+ config PCENGINES_APU2
+ 	tristate "PC Engines APUv2/3 front button and LEDs driver"
+ 	depends on INPUT && INPUT_KEYBOARD && GPIOLIB
+diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+index 5a428caa654a..fa6f5c68ec45 100644
+--- a/drivers/platform/x86/Makefile
++++ b/drivers/platform/x86/Makefile
+@@ -80,6 +80,9 @@ obj-$(CONFIG_MSI_WMI)		+= msi-wmi.o
+ obj-$(CONFIG_XO15_EBOOK)	+= xo15-ebook.o
+ obj-$(CONFIG_XO1_RFKILL)	+= xo1-rfkill.o
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
++# OneXPlayer
++obj-$(CONFIG_OXP_DEVICE) += oxp-platform.o
++
+ # PC Engines
+ obj-$(CONFIG_PCENGINES_APU2)	+= pcengines-apuv2.o
+
+diff --git a/drivers/platform/x86/oxp-platform.c b/drivers/platform/x86/oxp-platform.c
+new file mode 100644
+index 000000000000..4fb13e7450ff
+--- /dev/null
++++ b/drivers/platform/x86/oxp-platform.c
+@@ -0,0 +1,393 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Platform driver for OXP Handhelds that expose fan reading and control
++ * via hwmon sysfs.
++ *
++ * All boards have the same DMI strings and they are told appart by the
++ * boot cpu vendor (Intel/AMD). Currently only AMD boards are supported
++ * but the code is made to be simple to add other handheld boards in the
++ * future.
++ * Fan control is provided via pwm interface in the range [0-255]. AMD
++ * boards use [0-100] as range in the EC, the written value is scaled to
++ * accomodate for that.
++ *
++ * PWM control is disabled by default, can be enabled via module parameter.
++ *
++ * Copyright (C) 2022 Joaquín I. Aramendía <samsagax@gmail.com>
++ */
++
++#include <linux/acpi.h>
++#include <linux/dev_printk.h>
++#include <linux/dmi.h>
++#include <linux/hwmon.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <asm/processor.h>
++
++static bool fan_control;
++module_param_hw(fan_control, bool, other, 0644);
++MODULE_PARM_DESC(fan_control, "Enable fan control");
++
++#define ACPI_LOCK_DELAY_MS	500
++
++/* Handle ACPI lock mechanism */
++struct lock_data {
++	u32 mutex;
++	bool (*lock)(struct lock_data *data);
++	bool (*unlock)(struct lock_data *data);
++};
++
++static bool lock_global_acpi_lock(struct lock_data *data)
++{
++	return ACPI_SUCCESS(acpi_acquire_global_lock(ACPI_LOCK_DELAY_MS,
++								 &data->mutex));
++}
++
++static bool unlock_global_acpi_lock(struct lock_data *data)
++{
++	return ACPI_SUCCESS(acpi_release_global_lock(data->mutex));
++}
++
++#define MAX_IDENTICAL_BOARD_VARIATIONS	2
++
++enum board_family {
++	family_unknown,
++	family_mini_amd,
++};
++
++enum oxp_sensor_type {
++	oxp_sensor_fan = 0,
++	oxp_sensor_pwm,
++	oxp_sensor_number,
++};
++
++struct oxp_ec_sensor_addr {
++	enum hwmon_sensor_types type;
++	u8 reg;
++	short size;
++	union {
++		struct {
++			u8 enable;
++			u8 val_enable;
++			u8 val_disable;
++		};
++		struct {
++		  int max_speed;
++		};
++	};
++};
++
++
++/* AMD board EC addresses */
++static const struct oxp_ec_sensor_addr amd_sensors[] = {
++	[oxp_sensor_fan] = {
++		.type = hwmon_fan,
++		.reg = 0x76,
++		.size = 2,
++		.max_speed = 5000,
++	},
++	[oxp_sensor_pwm] = {
++		.type = hwmon_pwm,
++		.reg = 0x4B,
++		.size = 1,
++		.enable = 0x4A,
++		.val_enable = 0x01,
++		.val_disable = 0x00,
++	},
++	{},
++};
++
++struct ec_board_info {
++	const char *board_names[MAX_IDENTICAL_BOARD_VARIATIONS];
++	enum board_family family;
++	const struct oxp_ec_sensor_addr *sensors;
++};
++
++static const struct ec_board_info board_info[] = {
++	{
++		.board_names = {"ONE XPLAYER", "ONEXPLAYER mini A07"},
++		.family = family_mini_amd,
++		.sensors = amd_sensors,
++	},
++	{}
++};
++
++struct oxp_status {
++	struct ec_board_info board;
++	struct lock_data lock_data;
++};
++
++/* Helper functions */
++static int read_from_ec(u8 reg, int size, long *val)
++{
++	int i;
++	int ret;
++	u8 buffer;
++
++	*val = 0;
++	for (i = 0; i < size; i++) {
++		ret = ec_read(reg + i, &buffer);
++		if (ret)
++			return ret;
++		(*val) <<= i*8;
++		*val += buffer;
++	}
++	return ret;
++}
++
++static int write_to_ec(const struct device *dev, u8 reg, u8 value)
++{
++	struct oxp_status *state = dev_get_drvdata(dev);
++	int ret = -1;
++
++	if (!state->lock_data.lock(&state->lock_data)) {
++		dev_warn(dev, "Failed to acquire mutex");
++		return -EBUSY;
++	}
++
++	ret = ec_write(reg, value);
++
++	if (!state->lock_data.unlock(&state->lock_data))
++		dev_err(dev, "Failed to release mutex");
++
++	return ret;
++}
++
++/* Callbacks for hwmon interface */
++static umode_t oxp_ec_hwmon_is_visible(const void *drvdata,
++					enum hwmon_sensor_types type, u32 attr, int channel)
++{
++	switch (type) {
++		case hwmon_fan:
++			return S_IRUGO;
++		case hwmon_pwm:
++			return S_IRUGO | S_IWUSR;
++		default:
++			return 0;
++	}
++	return 0;
++}
++
++static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
++		u32 attr, int channel, long *val)
++{
++	int ret = -1;
++	const struct oxp_status *state = dev_get_drvdata(dev);
++	const struct ec_board_info *board = &state->board;
++
++	switch(type) {
++		case hwmon_fan:
++			switch(attr) {
++				case hwmon_fan_input:
++					ret = read_from_ec(board->sensors[oxp_sensor_fan].reg,
++							board->sensors[oxp_sensor_fan].size, val);
++					break;
++				case hwmon_fan_max:
++					ret = 0;
++					*val = board->sensors[oxp_sensor_fan].max_speed;
++					break;
++				case hwmon_fan_min:
++					ret = 0;
++					*val = 0;
++					break;
++				default:
++					dev_dbg(dev, "Unknown attribute for type %d: %d\n", type, attr);
++			}
++			return ret;
++		case hwmon_pwm:
++			switch(attr) {
++				case hwmon_pwm_input:
++					ret = read_from_ec(board->sensors[oxp_sensor_pwm].reg,
++							board->sensors[oxp_sensor_pwm].size, val);
++					if (board->family == family_mini_amd) {
++						*val = (*val * 255) / 100;
++					}
++					break;
++				case hwmon_pwm_enable:
++					ret = read_from_ec(board->sensors[oxp_sensor_pwm].enable, 1, val);
++					if (*val == board->sensors[oxp_sensor_pwm].val_enable) {
++						*val = 1;
++					} else {
++						*val = 0;
++					}
++					break;
++				default:
++					dev_dbg(dev, "Unknown attribute for type %d: %d\n", type, attr);
++			}
++			return ret;
++		default:
++			dev_dbg(dev, "Unknown sensor type %d.\n", type);
++			return -1;
++	}
++}
++
++static int oxp_pwm_enable(const struct device *dev)
++{
++	int ret = -1;
++	struct oxp_status *state = dev_get_drvdata(dev);
++	const struct ec_board_info *board = &state->board;
++
++	if (!fan_control) {
++		dev_info(dev, "Can't enable pwm, fan_control=0");
++		return -EPERM;
++	}
++
++	ret = write_to_ec(dev, board->sensors[oxp_sensor_pwm].enable,
++		board->sensors[oxp_sensor_pwm].val_enable);
++
++	return ret;
++}
++
++static int oxp_pwm_disable(const struct device *dev)
++{
++	int ret = -1;
++	struct oxp_status *state = dev_get_drvdata(dev);
++	const struct ec_board_info *board = &state->board;
++
++	if (!fan_control) {
++		dev_info(dev, "Can't disable pwm, fan_control=0");
++		return -EPERM;
++	}
++
++	ret = write_to_ec(dev, board->sensors[oxp_sensor_pwm].enable,
++		board->sensors[oxp_sensor_pwm].val_disable);
++
++	return ret;
++}
++
++static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
++		u32 attr, int channel, long val)
++{
++	int ret = -1;
++	struct oxp_status *state = dev_get_drvdata(dev);
++	const struct ec_board_info *board = &state->board;
++
++	switch(type) {
++		case hwmon_pwm:
++			if (!fan_control) {
++				dev_info(dev, "Can't control fans, fan_control=0");
++				return -EPERM;
++			}
++			switch(attr) {
++				case hwmon_pwm_enable:
++					if (val == 1) {
++						ret = oxp_pwm_enable(dev);
++					} else if (val == 0) {
++						ret = oxp_pwm_disable(dev);
++					} else {
++						return -EINVAL;
++					}
++					return ret;
++				case hwmon_pwm_input:
++					if (val < 0 || val > 255)
++						return -EINVAL;
++					if (board->family == family_mini_amd)
++						val = (val * 100) / 255;
++					ret = write_to_ec(dev, board->sensors[oxp_sensor_pwm].reg, val);
++					return ret;
++				default:
++					dev_dbg(dev, "Unknown attribute for type %d: %d", type, attr);
++					return ret;
++			}
++		default:
++			dev_dbg(dev, "Unknown sensor type: %d", type);
++	}
++	return ret;
++}
++
++/* Known sensors in the OXP EC controllers */
++static const struct hwmon_channel_info *oxp_platform_sensors[] = {
++	HWMON_CHANNEL_INFO(fan,
++		HWMON_F_INPUT | HWMON_F_MAX | HWMON_F_MIN),
++	HWMON_CHANNEL_INFO(pwm,
++		HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
++	NULL
++};
++
++static const struct hwmon_ops oxp_ec_hwmon_ops = {
++	.is_visible = oxp_ec_hwmon_is_visible,
++	.read = oxp_platform_read,
++	.write = oxp_platform_write,
++};
++
++static const struct hwmon_chip_info oxp_ec_chip_info = {
++	.ops = &oxp_ec_hwmon_ops,
++	.info = oxp_platform_sensors,
++};
++
++/* Initialization logic */
++static const struct ec_board_info * __init get_board_info(struct device *dev)
++{
++	const char *dmi_board_vendor = dmi_get_system_info(DMI_BOARD_VENDOR);
++	const char *dmi_board_name = dmi_get_system_info(DMI_BOARD_NAME);
++	const struct ec_board_info *board;
++
++	if (!dmi_board_vendor || !dmi_board_name ||
++	    (strcasecmp(dmi_board_vendor, "ONE-NETBOOK TECHNOLOGY CO., LTD.") &&
++	     strcasecmp(dmi_board_vendor, "ONE-NETBOOK")))
++		return NULL;
++
++	/* Match our known boards */
++	/* Need to check for AMD/Intel here */
++	for (board = board_info; board->sensors; board++) {
++		if (match_string(board->board_names,
++				 MAX_IDENTICAL_BOARD_VARIATIONS,
++				 dmi_board_name) >= 0) {
++			if (board->family == family_mini_amd &&
++					boot_cpu_data.x86_vendor == X86_VENDOR_AMD) {
++				return board;
++			}
++		}
++	}
++	return NULL;
++}
++
++static int __init oxp_platform_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct device *hwdev;
++	const struct ec_board_info *pboard_info;
++	struct oxp_status *state;
++
++	pboard_info = get_board_info(dev);
++	if (!pboard_info)
++		return -ENODEV;
++
++	state = devm_kzalloc(dev, sizeof(struct oxp_status), GFP_KERNEL);
++	if (!state)
++		return -ENOMEM;
++
++	state->board = *pboard_info;
++
++	state->lock_data.mutex = 0;
++	state->lock_data.lock = lock_global_acpi_lock;
++	state->lock_data.unlock = unlock_global_acpi_lock;
++
++	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", state,
++							&oxp_ec_chip_info, NULL);
++
++	return PTR_ERR_OR_ZERO(hwdev);
++}
++
++static const struct acpi_device_id acpi_ec_ids[] = {
++	/* Embedded Controller Device */
++	{ "PNP0C09", 0 },
++	{}
++};
++
++static struct platform_driver oxp_platform_driver = {
++	.driver = {
++		.name	= "oxp-platform",
++		.acpi_match_table = acpi_ec_ids,
++	},
++};
++
++MODULE_DEVICE_TABLE(acpi, acpi_ec_ids);
++module_platform_driver_probe(oxp_platform_driver, oxp_platform_probe);
++
++MODULE_AUTHOR("Joaquín Ignacio Aramendía <samsagax@gmail.com>");
++MODULE_DESCRIPTION(
++	"Platform driver that handles ACPI EC of OneXPlayer devices");
++MODULE_LICENSE("GPL");
+--
+2.38.1
+
