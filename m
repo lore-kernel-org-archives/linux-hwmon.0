@@ -2,261 +2,198 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85755C433FE
-	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Oct 2022 10:31:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCF02C433FE
+	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Oct 2022 12:06:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbiJ2Kbg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 29 Oct 2022 06:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
+        id S229976AbiJ2MF6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 29 Oct 2022 08:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiJ2Kbf (ORCPT
+        with ESMTP id S229926AbiJ2MFl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 29 Oct 2022 06:31:35 -0400
-Received: from ipmail03.adl6.internode.on.net (ipmail03.adl6.internode.on.net [150.101.137.143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B4026FA2E
-        for <linux-hwmon@vger.kernel.org>; Sat, 29 Oct 2022 03:31:28 -0700 (PDT)
-IronPort-SDR: ECkGNbbYt4RNxim9VPLfh/LLdIi85eUi9ORcRMN2P6VxaxfAKfKzzEj1AooozkM5Rnb9nYXnYo
- lHm4NHZGOiHt6t9b3lzOH0RwP19F3FWcdN0wI/+C7yaxSP8ROdZ512KoQJxfgg/jmPBZQ4gopU
- oLyDwHPhwqurjX0ky3xrfvZBFff7bV4g+o6mN7FH+3HlD8Zz8Bu1B6CZfCt8FGUF/hw1QI+emt
- zfzxuXMnbkZZW73oWESDHUSBZ1M+JENKpghyvL2KsMx6qnC8S8dZUqZqVZGmko8V681yDytI/X
- GZNlxw89lco/AOwyzpw9y75z
-X-SMTP-MATCH: 0
-X-IPAS-Result: =?us-ascii?q?A2AADABmAF1j//Qc8jxaHgEBCxIMSYE7C4ItglmVaJ0kg?=
- =?us-ascii?q?X0PAQ8BAUQEAQGFBYR8JjYHDgECBAEBAQEDAgMBAQEBAQEDAQEGAQEBAQEBB?=
- =?us-ascii?q?gRvATkHC1IHC1gHB4FBC4FhEwsDMQ2GRSsLAQ0BATcBKIEVARKCfYMhrhMzg?=
- =?us-ascii?q?QGCCAEBBoJggy6BXQmBPYsvgRCDNoE9P4FOgRWCem6EJoZblmcDCQMHBUlAA?=
- =?us-ascii?q?wsYDRYyAwoTOhtYDgkfHCUNBQYSAyBuBQc6DygvZxAbHBsHgQwqKBUDBAQDA?=
- =?us-ascii?q?gYTAyACDSkxFAQpEw0rByNxCQIDImoDAwQoLAMJQAcnJjwHWDoFAwIQIjwGA?=
- =?us-ascii?q?wkDAiJYdTASFAUDDRclCAVPBAg6AgUGUhICChEDEg8sRw5KPjkWBidEATQPD?=
- =?us-ascii?q?hYDYlEemWgBawYBLRAcNYIxQ5JbOo4LoSyDcIFMnmhMgUSnT5crIKFsgRiEK?=
- =?us-ascii?q?AIKBxaBaQ2CAU0fGYMiTwECAQEBDQECAQEDAQIBAQEJAQEBAY4dDBYVgXWMO?=
- =?us-ascii?q?GE7AgcLAQEDCYo+AQE?=
-IronPort-PHdr: A9a23:MUUXbhCLUlexCFG75ZUMUyQVWBdPi9zP1kY94Js7kPRFaK288ZP4M
- ArS4OgrjVOPVJiIo/tegL/QtKbtEXcF/Y7Hqn0Hd4BBEh4d3Msak1ZyX8eMBR/3cKG6PXVoT
- s9IDQc39HrjbiBo
-IronPort-Data: A9a23:wAHwva2EpuDs0x8+3/bD5eR3kn2cJEfYwER7XKvMYLTBsI5bpzZWz
- TAbWGuCPf+KYzCgeY9/a9m1oE1X7ZGAndRlG1E4rnxjRSwT9cbMXt6ScUytbiiccZTIR0lps
- JRDO4bOIJAdQy6HrH9BEJC4/SEmj/3gqpkQqQLgEnosLeOxYH550XqPo8Zg3sgwx4LR7zql4
- bsemeWGULOY82cc3lw8u/rrRCxH5JweiBtA1rDpTa0jUPf2zhH5PbpHTU2DByKQrrp8QoZWc
- 93+IISRpQs1yfuM5uSNyd4XemVSKlLb0JPnZnB+A8BOiTAazsA+PzpS2Pc0MS9qZzu1c99Z8
- sVJu8OyRDgQb5aLnf0xYyJ+MHp3MvgTkFPHCSDXXc27xUzaaD3n2fxxAkYsMcsV//sxAG0I/
- OFwxDIlMEjF3b7shujrDLMw2qzPL+GyVG8bkn96xDfaJf08SI/NRL/Go9JdwXExioZHAJ4yY
- uJDOGAxN0WYP0Qn1lE/WLNjg+iJwUvGeSRSrXnMmZY6yVTs01kkuFTqGIGNIYzQH5Q9clyjj
- mbH+XnpRxEFMduZ4SSK/2jqheLVmy7/HoUIG9WQ8v9snU273GseAx5TSED9p/Sl4ma8V99bN
- UUO9wI1sLM/skesS7HAswaQ/ibB5EJGHoAAVrdmtEeW1qPI4g3fGnALT3hKb9lgvdJeqSEWO
- kGhpcPtC2NtvYKsGEna8664nQiUGnMcIjpXDcMbdjct797mqYA1qxvASNd/DaK45uEZ/xmun
- lhmSwBg2d0uYd43O7aTuAuc0231+vAlWiZsu1yNBjr7hu9sTNT9D7FE/2Q3+t5pEe51pHG6r
- XQCltn2AAsmV8nVzERhrM0rEa7h3PGYLD2UvldrEoJJythA0yD7ONoMunQkdAIzbppCYiPgf
- E7Y/x9J654VN3yvK6ZqC25QNyjI5fOwfTgGfqqPBjarXnSXXFXflM2JTRfBt10BaGB2zckC1
- W6zKK5A90oyB6V91yaRTOwAy7ItzS1W7TqNG86qn033iuLGPSH9pVI53L2mML5RAESs/lu9z
- jqjH5HTo/mieLegM3aMq957wa4icyFlW8meRzNrmh6reVI9SDt7Wpc9MJs9Y4MtnqJJm/3O8
- 23VZ6Or4ASXuJEzEi3UMC8LVV8Zdcsn9SpT0O1FFQ3A5kXPlq71tvhBKsNmJuV8nAGhpNYtJ
- 8Q4lwy7KqwnYlz6F/41NPERdaRuK0amgxygJS2gbGRtdpJsXVWZqNT+dxTh8zMCSCeyqI0/r
- /upy1qDE5YEQg1jCufQae6ulg3v4SRBx74iBEaYcMNOfEjM8ZRxL3KjhPEAI/YKdUfJyAyFh
- lSfDhovrOXQp5M4rYvSjqeeoob3T+ZzRxIIH2TS4busGzPd+26vnd1JXOqSJGCPX3n956ulf
- +kTwvThdvwL2l9X6tIuH7FuxKM4xt3uu74DkFo4QCmUMwTwB+o5cHec3MRJuqlc/ZNjuFO7C
- hCV591XGbSVI8e7QlQfEwoSaLjR3/8jhWiA5Ps4F0z2+Str8efVSk5VJRSN1nBQIbYpYoMox
- eAt5Jwf5wCl0EF4ONealWZf7W2TIHsaX+Mqs4xcAYOtgxdykgNOZpnVCynX5pCTaowSbBV2f
- mDI1PHP1+ZG207PU3svDnyTj+BTspQ5vkwYxlE1OAXbk9XIsfY7wRlN/GllVQ9S1BhGjb5+N
- zQ5LUFzPqnSrT5kiNIYBTLyQ0QbWEfcoBy0kQdV0nbFRlWpXSrRNGI8f+2K+QYQ7jsELDRc+
- biZzkfjUCrrJZ+vgnduBhI18PGzH8Zs8gDimdy8G5jXFZcNZ2u3i6CjUmMEth/7DJ5jn0bAv
- +Rrorp9ZKCT2fT8eEHn51R2DYgtdS0=
-IronPort-HdrOrdr: A9a23:hx9326NYruxmVMBcTu+jsMiBIKoaSvp037BK7SpMoNJuE/Bw8P
- re+8jyt3fP5Qr5PUtNpTnuAtjifZqxz/FICOoqTNOftXfdyQmVxehZhOOI/9SKIU3DH4Bmu5
- uJ/MVFebvN5CBB/KPHCRGDYqwdKce8gduVbDjlvg5QpdADUdAZ0ztE
-X-IronPort-Anti-Spam-Filtered: true
-Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
-  by ipmail03.adl6.internode.on.net with ESMTP; 29 Oct 2022 21:01:23 +1030
-Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
-        (authenticated bits=0)
-        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 29TAV25w1738314
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sat, 29 Oct 2022 21:31:12 +1100
-Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
-DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 29TAV25w1738314
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
-        s=s1; t=1667039472; bh=uqk/JFFjsWGipySvgWqY+xeZqFcSjY1L7V5klbQ4L/o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rFJfbUuHXWvphT36u+GJoYoPVPU+h+almO13TU1ao+WFCmIOqDj5QjgpZW/Ih+kQ2
-         uaM44NG9f8IjEPqnWUwYg7BjJLlYYT/Fd6WyMGTQ7yZQqYc7Nh1xB/7sLhAmaL7JHv
-         Bzcee/d1lf0rTUczh7hboTE/A21QiSGT9rBebAvcFA7imu7Af8FFiFPwozSol/ba27
-         L83eTlZDzvwnNzq3XuV+QjQlms3YyYqznSX0/9K8pq08r2n0nf1NGdCe36qGXOT7bI
-         NuwrBghtA+DG4C0etj6hfYnDw5C8idHblf2xHQOVkCADarnT6754flophItkYhPhzH
-         iC08ZbZz2gzGw==
-From:   Frank Crawford <frank@crawford.emu.id.au>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org,
-        Frank Crawford <frank@crawford.emu.id.au>
-Subject: [PATCH v2 1/1] hwmon: (it87) Create DMI matching table for various board settings
-Date:   Sat, 29 Oct 2022 21:30:57 +1100
-Message-Id: <20221029103057.3234561-1-frank@crawford.emu.id.au>
-X-Mailer: git-send-email 2.37.3
+        Sat, 29 Oct 2022 08:05:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C77158082;
+        Sat, 29 Oct 2022 05:05:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24F316010F;
+        Sat, 29 Oct 2022 12:05:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6808BC433C1;
+        Sat, 29 Oct 2022 12:05:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667045117;
+        bh=OtZDT/As12nGJ7lylmrts3vX2uaqID/HTfb/hQ5AFpc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=P2Wweqp/n9lZqD67N4d7B/OiA3eleqX64r0mvKpG0DHHs+t2LpIWzFniVlPcEEFoE
+         GI0RYjRac6yawVjBG9KwwN7IKQ+uhpi5LlcV01QUn6J5Xb0qD38lsY45ILUNzsqj+g
+         HIveD0+2eX/tkJCJHOpPzCCjV/74eWM39XkS+BWwfUnghZX3pHl6Gt0+89GxaqBGEW
+         jyjXRmNdCbuvNFkwjbIZAC7nO2n1Qq6uRaZzhuNaRDRFwq0iBIDOKyZWvJBXKnO9cF
+         NjiE4eQI9P3uHU0sm1pPVcY2jy4EH4seMsKRH0G2eO9G/ow/A7CI+e+vwqldrpEqXt
+         xwdhicHWkj/Mg==
+Date:   Sat, 29 Oct 2022 13:17:11 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "Khandelwal, Rajat" <rajat.khandelwal@intel.com>,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v5] iio: temperature: Add driver support for Maxim
+ MAX30208
+Message-ID: <20221029131711.020400de@jic23-huawei>
+In-Reply-To: <20221024183148.GA3170088@roeck-us.net>
+References: <20221024165658.181340-1-rajat.khandelwal@linux.intel.com>
+        <20221024112829.GA2807876@roeck-us.net>
+        <CO1PR11MB483509CDD93AFA3176C42080962E9@CO1PR11MB4835.namprd11.prod.outlook.com>
+        <20221024183148.GA3170088@roeck-us.net>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sat, 29 Oct 2022 21:31:12 +1100 (AEDT)
-X-Virus-Scanned: clamav-milter 0.103.7 at bits.crawford.emu.id.au
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Changes in this patch set:
+On Mon, 24 Oct 2022 11:31:48 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-* Define the DMI matching table for board specific settings during the
-  chip initialisation and move the only current board specific setting
-  to this new table.
+> On Mon, Oct 24, 2022 at 05:11:17PM +0000, Khandelwal, Rajat wrote:
+> > Hi Guenter,
+> > Thanks for the acknowledgement.
+> >   
+> > >Agreed; the sensor doesn't seem to be very useful for traditional hardware
+> > >monitoring. The driver better resides in IIO.  
+> > Cool! I didn't know the categorical reasoning behind this but since this is 
+> > accepted in IIO, I don't have to do anything more.   
+> 
+> Huh. There is no "categorical" reasoning. Call it a gut feeling.
+> I can not imagine anyone using this chip for hardware monitoring,
+> and presumably you have an IIO use case or you would not have
+> implemented an IIO driver.
+> 
+> >   
+> > >I don't understand why readings are discarded. Why trigger multiple
+> > >readings just to discard all but the last one ? I thought iio would
+> > >be expected to return all values.  
+> > Ok. The plan is to trigger temperature conversion on the GPIO input also.
+> > The user can trigger as many times the temperature conversion he wants (I accept unnecessary),
+> > which will keep the FIFO increasing (without reading converted values) but the driver should be
+> > resilient to all the erroneous zones. Also, when the user does really make a syscall to read the
+> > temperature, it definitely should be the last converted reading.   
+> 
+> That is your use case. I don't know how IIO drivers are normally
+> implemented, but I would expect a generic driver. In this case,
+> I would expect userspace to decide what it wants to with the data
+> and not let the kernel driver discard most of it.
 
-* Export the table for use by udev.
+Two separate interfaces - the sysfs one this driver initially supports (in common
+with many other first submissions) - that is normally for polling of the channel
+value - we want the latest. Second interface is chardev version that uses
+a kfifo to avoid dropping data and is commonly interrupt driven.  For that
+interface, we indeed try to pass all the data to userspace.
 
-v2: updates following comments:
+> 
+> >   
+> > >This is really pointless. The register has only one bit to set.
+> > >Just write that bit; reading the register before that is pointless.  
+> > I think the register also has some bits which are reserved. Hence, rather than to make a number
+> > for specifically the value keeping those bits the same, I read whatever is there and only store the
+> > required one. 
+> >   
+> I personally would not accept that kind of code, but that is just
+> me.
 
-* Converted to use callback function.
+I'm completely lost on this.  Please don't move comments to the top, put
+them inline alongside the code.  Do crop the code to only include relevant
+parts though to save us all scrolling through uncomnented code!
+If you agree with a reviewer comment it's also fine to crop that bit out -
+if we don't see a reply we assume you accept the feedback.
 
-* Moved call to callback funtion to sio_data into it87_find in line
-  with other settings for sio_data.  This requires dmi_data also passed
-  to access additional data.
 
-* Added macro for defining entries in DMI table to simplify future 
-  additions.
-
-* Note dmi_data is defined in sm_it87_init to simplify tests and for
-  future additions.
-
-Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
----
- drivers/hwmon/it87.c | 79 ++++++++++++++++++++++++++++++++------------
- 1 file changed, 58 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index 73ed21ab325b..4314bbca2c22 100644
---- a/drivers/hwmon/it87.c
-+++ b/drivers/hwmon/it87.c
-@@ -567,6 +567,14 @@ struct it87_data {
- 	s8 auto_temp[NUM_AUTO_PWM][5];	/* [nr][0] is point1_temp_hyst */
- };
- 
-+/* Board specific settings from DMI matching */
-+struct it87_dmi_data {
-+	u8 skip_pwm;		/* pwm channels to skip for this board  */
-+	/* Callback for option setting */
-+	void (*apply_cb)(struct it87_sio_data *sio_data,
-+			 struct it87_dmi_data *dmi_data);
-+};
-+
- static int adc_lsb(const struct it87_data *data, int nr)
- {
- 	int lsb;
-@@ -2389,11 +2397,11 @@ static const struct attribute_group it87_group_auto_pwm = {
- 
- /* SuperIO detection - will change isa_address if a chip is found */
- static int __init it87_find(int sioaddr, unsigned short *address,
--			    struct it87_sio_data *sio_data)
-+			    struct it87_sio_data *sio_data,
-+			    struct it87_dmi_data *dmi_data)
- {
- 	int err;
- 	u16 chip_type;
--	const char *board_vendor, *board_name;
- 	const struct it87_devices *config;
- 
- 	err = superio_enter(sioaddr);
-@@ -2812,24 +2820,9 @@ static int __init it87_find(int sioaddr, unsigned short *address,
- 	if (sio_data->beep_pin)
- 		pr_info("Beeping is supported\n");
- 
--	/* Disable specific features based on DMI strings */
--	board_vendor = dmi_get_system_info(DMI_BOARD_VENDOR);
--	board_name = dmi_get_system_info(DMI_BOARD_NAME);
--	if (board_vendor && board_name) {
--		if (strcmp(board_vendor, "nVIDIA") == 0 &&
--		    strcmp(board_name, "FN68PT") == 0) {
--			/*
--			 * On the Shuttle SN68PT, FAN_CTL2 is apparently not
--			 * connected to a fan, but to something else. One user
--			 * has reported instant system power-off when changing
--			 * the PWM2 duty cycle, so we disable it.
--			 * I use the board name string as the trigger in case
--			 * the same board is ever used in other systems.
--			 */
--			pr_info("Disabling pwm2 due to hardware constraints\n");
--			sio_data->skip_pwm = BIT(1);
--		}
--	}
-+	/* Set values based on DMI matches */
-+	if (dmi_data && dmi_data->apply_cb)
-+		dmi_data->apply_cb(sio_data, dmi_data);
- 
- exit:
- 	superio_exit(sioaddr);
-@@ -3307,14 +3300,57 @@ static int __init it87_device_add(int index, unsigned short address,
- 	return err;
- }
- 
-+static void it87_dmi_cb_apply_data(struct it87_sio_data *sio_data,
-+				   struct it87_dmi_data *dmi_data)
-+{
-+	if (dmi_data->skip_pwm) {
-+		pr_info("Disabling pwm2 due to hardware constraints\n");
-+		sio_data->skip_pwm |= dmi_data->skip_pwm;
-+	}
-+}
-+
-+/*
-+ * On the Shuttle SN68PT, FAN_CTL2 is apparently not
-+ * connected to a fan, but to something else. One user
-+ * has reported instant system power-off when changing
-+ * the PWM2 duty cycle, so we disable it.
-+ * I use the board name string as the trigger in case
-+ * the same board is ever used in other systems.
-+ */
-+static struct it87_dmi_data nvidia_fn68pt = {
-+	.skip_pwm = BIT(1),
-+	.apply_cb = it87_dmi_cb_apply_data,
-+};
-+
-+#define IT87_DMI_MATCH_VND(vendor, name, data) \
-+	{ \
-+		.matches = { \
-+			DMI_EXACT_MATCH(DMI_BOARD_VENDOR, vendor), \
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, name), \
-+		}, \
-+		.driver_data = data, \
-+	}
-+
-+static const struct dmi_system_id it87_dmi_table[] __initconst = {
-+	IT87_DMI_MATCH_VND("nVIDIA", "FN68PT", &nvidia_fn68pt),
-+	{ }
-+
-+};
-+MODULE_DEVICE_TABLE(dmi, it87_dmi_table);
-+
- static int __init sm_it87_init(void)
- {
-+	const struct dmi_system_id *dmi = dmi_first_match(it87_dmi_table);
-+	struct it87_dmi_data *dmi_data = NULL;
- 	int sioaddr[2] = { REG_2E, REG_4E };
- 	struct it87_sio_data sio_data;
- 	unsigned short isa_address[2];
- 	bool found = false;
- 	int i, err;
- 
-+	if (dmi)
-+		dmi_data = dmi->driver_data;
-+
- 	err = platform_driver_register(&it87_driver);
- 	if (err)
- 		return err;
-@@ -3322,7 +3358,8 @@ static int __init sm_it87_init(void)
- 	for (i = 0; i < ARRAY_SIZE(sioaddr); i++) {
- 		memset(&sio_data, 0, sizeof(struct it87_sio_data));
- 		isa_address[i] = 0;
--		err = it87_find(sioaddr[i], &isa_address[i], &sio_data);
-+		err = it87_find(sioaddr[i], &isa_address[i], &sio_data,
-+				dmi_data);
- 		if (err || isa_address[i] == 0)
- 			continue;
- 		/*
--- 
-2.37.3
+> 
+> > >Also, the code assumes that one of the gpio input registers would be used
+> > >to trigger temperature readings. Why trigger another one if this is indeed
+> > >the case ? Triggering a temperature reading should only be necessary if
+> > >there is no data in the fifo.  
+> > GPIO input triggering is yet not implemented as I would have to work on ACPI interrupts and I have
+> > written the driver for now to get it included in Linux. 
+> > There are 2 ways - via GPIO and making a syscall. I agree that temperature reading should be
+> > necessary only when there is no data in FIFO but since we intend to keep GPIO as a trigger point,
+> > user can keep triggering conversions and not reading them out. (As pointed above, driver should be
+> > resilient to all erroneous zones).  
+> 
+> What does that have to do with interrupts ? Anything connected to the
+> gpio pin would trigger a reading.
+> 
+> >   
+> > >The datasheet says that it can take up to 50 ms to report a result.
+> > >10 retries with 50ms wait each time seems overkill.  
+> > That's correct. But, the response time can be up to 500 ms. Also, while debugging I had put timestamps
+> > which when analyzed, indicated that time may go beyond 50 ms. 
+> >   
+> 
+> It seems to me that this would warrant an explanation in the driver.
+> 500ms seems hard to believe.
+> 
+> > >And why use usleep_range() here
+> > >but msleep() above ?  
+> > I am sorry about that. I have converted usleep_range into msleep (2 places). 
+> >   
+> > >This is wrong. It uses the overflow counter as data counter if it
+> > >is != 0. The overflow counter counts the number of overflows, not
+> > >the number of entries in the fifo.  
+> > So there is no such thing as 'overflow counter'. The point is if the overflow counter has  
+> 
+> Interesting statement. MAX30208_FIFO_OVF_CNTR very much
+> sounds like overflow counter to me, and the datasheet
+> suggests the same.
+> 
+> > even one word, I use the data count equal to the overflow counter value. However, if it
+> > has zero, then use the number of words in actual FIFO. 
+> > This logic is just used to count how many values to pop to get the most recent reading.
+> >   
+> 
+> The code is
+> 
+> +       ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_OVF_CNTR);
+> +       if (ret < 0) {
+> +               dev_err(&data->client->dev, "Error reading reg FIFO overflow counter\n");
+> +               goto unlock;
+> +       } else if (!ret) {
+> +               ret = i2c_smbus_read_byte_data(data->client,
+> +                                              MAX30208_FIFO_DATA_CNTR);
+> +               if (ret < 0) {
+> +                       dev_err(&data->client->dev, "Error reading reg FIFO data counter\n");
+> +                       goto unlock;
+> +               }
+> +       }
+> +
+> +       data_count = ret;
+> 
+> If reading MAX30208_FIFO_OVF_CNTR returns a value > 0, it is used as
+> data_count. That does not seem correct. The data sheet says if
+> MAX30208_FIFO_OVF_CNTR is != 0, data_count is 32. Maybe the datasheet
+> is wrong all over the place, but at least in this case that seems
+> very unlikely.
+> 
+> > > data_count is declared as u8 and will never be < 0.  
+> > Data count can never be <0 as only first few bits of the 8 bits are used in the register. 
+> >   
+> 	u8 data_count;
+> ...
+> 	data_count = i2c_smbus_read_byte_data(data->client,
+>                                               MAX30208_FIFO_DATA_CNTR);
+>         if (data_count < 0) {
+> 
+> Really ? Static analyzers will have a field day with this code.
+> 
+> Anyway, I don't really care much about this code, so I'll let
+> Jonathan take it from here. I just wanted to share my observations.
+> 
+> Thanks,
+> Guenter
 
