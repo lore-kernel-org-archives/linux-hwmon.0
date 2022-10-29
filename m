@@ -2,79 +2,156 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C068C38A02
-	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Oct 2022 18:16:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07E03C433FE
+	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Oct 2022 08:09:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiJ1SQI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 28 Oct 2022 14:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S229491AbiJ2IJS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 29 Oct 2022 04:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJ1SQH (ORCPT
+        with ESMTP id S229574AbiJ2IJS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 28 Oct 2022 14:16:07 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD0A230AA9
-        for <linux-hwmon@vger.kernel.org>; Fri, 28 Oct 2022 11:16:02 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id bb5so3959981qtb.11
-        for <linux-hwmon@vger.kernel.org>; Fri, 28 Oct 2022 11:16:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8FEjwmAlGCF9DftBi4q3gPLOuGfhXXV/QT/oQnizxu0=;
-        b=XrFsWJmsIhUYGTlVezfOR3jNzu9w04q0b8eDff/C/mjyWcwWR4qJUi+QpD702iJl/D
-         EFJ5EuJjnPsdg4FnEaw5PQdvIIObEez/jixTMnFdOFMr+8alDBkss2zGWqW5bHXNNHrh
-         evVTE5fFgvTnrnBf7aGE6X6rWDD7bp2QleOIauY153Bm8DoY7IAeVzbVx+6OCMDGthhN
-         swIoYhsIDZEWx6IjdSzFkKkCJWCoyYzbCcVRdkm+Z21l3z4pkD1cbO9p2XQO3mFnxN41
-         5AZZL5ftBG9QfqOyRKp0/s5X5OL1jrq39rsU8qbmCGxv8Rx9Sm3ur5C4OxudwUQ6Jox8
-         Saeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8FEjwmAlGCF9DftBi4q3gPLOuGfhXXV/QT/oQnizxu0=;
-        b=efySS6K20BxD4uzvYYYeRK/jwZZPVWLYLJIz5JrrgHXX3IjRIRBcu14EsUXyomucLj
-         2XwoChpqQbEwQJnI5FjF60Bh1kKieQWoaQXmfU/XrHRymdC845x5tEcjJV9xXVPfwRZs
-         kD3VkGibC8wQmHx/IjODC/QgojNuGleEWzRGy62S91lzAe0nfGvhtqW3S0DNaFhGzH+U
-         vzMfICAogIJgNxMWe18TZb7Yon8VjH9lCOG2rtTDtBbKlKx3/yt7f+nFaR9Ca5XaQH8+
-         T0+oK68IflXtonXyUHTg1ti6wOm9j/YbkvNDKxdz5gmXZhoiAZinBU+/vJJoKaZJ33an
-         WbRw==
-X-Gm-Message-State: ACrzQf1IYiXIuxBS74ffCU6WxcDL0HY1uDxXnjl715o2IK6dThB8mauh
-        /Q0S0oNElwqdfZn9S9hRsd9ZQIwYR5E=
-X-Google-Smtp-Source: AMsMyM6RRWYP3gfudYAyWl1zSJ6EmUwFrS7su5w1LPn7Yg/Aex0MSE293KNwb8yJZYHtvMnllhfoHg==
-X-Received: by 2002:a05:622a:1747:b0:39c:d4f5:a65 with SMTP id l7-20020a05622a174700b0039cd4f50a65mr646310qtk.583.1666980961504;
-        Fri, 28 Oct 2022 11:16:01 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h129-20020a37b787000000b006e702033b15sm3353300qkf.66.2022.10.28.11.16.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 11:16:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 28 Oct 2022 11:15:59 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Felix Nieuwenhuizen <Felix.Nieuwenhuizen@etas.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v2] hwmon: (pmbus/ltc2978) add support for LTC7132
-Message-ID: <20221028181559.GA2132092@roeck-us.net>
-References: <0221027133201.GA566451@roeck-us.net>
- <20221027145135.31802-1-Felix.Nieuwenhuizen@etas.com>
+        Sat, 29 Oct 2022 04:09:18 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1FC7B7AD
+        for <linux-hwmon@vger.kernel.org>; Sat, 29 Oct 2022 01:09:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667030957; x=1698566957;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ylKAa9z2lgpzaCKeogQul/V3yyN5+g5I6l0rEvDzR4E=;
+  b=ORd5Glr6mPz364kh9nTCXRc8PACDJK/FVKezf0XXrLOS3sP41C27PT3L
+   iKIMmDTNTexaGFki+C22mqoW52H7z/7g5yrMcsNLL0P3e1yqi3MIywMBA
+   dI+4KDsTFfKBojtglABCMXE9P4cSI+oAYEArJdOHopLUjFFWtqp0mUq0m
+   J0DWuD42tOdprP4WJjr2dG4qamd6LZDBZh8NvkApVkwgQ0tSZAOlHwL5U
+   pvunqmzKxPUAhLr+bbDm000DFSc/5kUczsGs2XBzdE1PX0Kiobboxvu4l
+   j93m0TodvgDRl3qD3rk/5xaDe8sImFnUrCT9Ioe/V1XGl4bdDLkkOgs8n
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="288364290"
+X-IronPort-AV: E=Sophos;i="5.95,223,1661842800"; 
+   d="scan'208";a="288364290"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 01:09:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="610994405"
+X-IronPort-AV: E=Sophos;i="5.95,223,1661842800"; 
+   d="scan'208";a="610994405"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 29 Oct 2022 01:09:16 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oogu3-000AnR-1i;
+        Sat, 29 Oct 2022 08:09:15 +0000
+Date:   Sat, 29 Oct 2022 16:09:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ e9fab0e2edf917b825608a6b8ca77135a295636a
+Message-ID: <635cdfa0.1IAUfygvdFy66o1t%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027145135.31802-1-Felix.Nieuwenhuizen@etas.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 04:51:35PM +0200, Felix Nieuwenhuizen wrote:
-> Add support for LTC7132.
-> The relevant registers in the LTC7132 are identical to the LTC7880.
-> So it's just a matter of adding the chip id.
-> 
-> Signed-off-by: Felix Nieuwenhuizen <Felix.Nieuwenhuizen@etas.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: e9fab0e2edf917b825608a6b8ca77135a295636a  hwmon: (pmbus/ltc2978) add support for LTC7132
 
-Applied to hwmon-next.
+elapsed time: 796m
 
-Thanks,
-Guenter
+configs tested: 79
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+powerpc                          allmodconfig
+arc                                 defconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+alpha                               defconfig
+sh                               allmodconfig
+s390                             allmodconfig
+s390                                defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+ia64                             allmodconfig
+arc                              allyesconfig
+x86_64                              defconfig
+alpha                            allyesconfig
+s390                             allyesconfig
+m68k                             allyesconfig
+i386                                defconfig
+x86_64                               rhel-8.3
+x86_64                         rhel-8.3-kunit
+x86_64                           allyesconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+arc                  randconfig-r043-20221028
+x86_64                    rhel-8.3-kselftests
+riscv                randconfig-r042-20221028
+s390                 randconfig-r044-20221028
+i386                          randconfig-a014
+i386                          randconfig-a012
+x86_64                        randconfig-a002
+i386                          randconfig-a016
+i386                             allyesconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+x86_64                        randconfig-a004
+arm                                 defconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a006
+x86_64                        randconfig-a015
+i386                          randconfig-a005
+arm64                            allyesconfig
+arm                              allyesconfig
+m68k                             allmodconfig
+sh                           se7722_defconfig
+arm                        spear6xx_defconfig
+xtensa                  nommu_kc705_defconfig
+sparc64                          alldefconfig
+powerpc                      ep88xc_defconfig
+powerpc                       ppc64_defconfig
+powerpc                      makalu_defconfig
+arm                           u8500_defconfig
+arm                         lpc18xx_defconfig
+arm                      jornada720_defconfig
+i386                          randconfig-c001
+sparc                            allyesconfig
+powerpc                    sam440ep_defconfig
+csky                             alldefconfig
+m68k                        mvme16x_defconfig
+powerpc                 canyonlands_defconfig
+
+clang tested configs:
+hexagon              randconfig-r041-20221028
+hexagon              randconfig-r045-20221028
+i386                          randconfig-a013
+i386                          randconfig-a011
+x86_64                        randconfig-a001
+i386                          randconfig-a015
+x86_64                        randconfig-a003
+x86_64                        randconfig-a014
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+x86_64                        randconfig-a012
+i386                          randconfig-a004
+x86_64                        randconfig-a016
+i386                          randconfig-a006
+s390                 randconfig-r044-20221029
+hexagon              randconfig-r041-20221029
+hexagon              randconfig-r045-20221029
+riscv                randconfig-r042-20221029
+x86_64                        randconfig-k001
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
