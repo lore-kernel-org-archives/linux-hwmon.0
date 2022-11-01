@@ -2,132 +2,106 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44859C4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Nov 2022 22:44:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47C32C4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Nov 2022 23:21:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbiKAWoC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 1 Nov 2022 18:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
+        id S231131AbiKAXVH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 1 Nov 2022 19:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbiKAWny (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Nov 2022 18:43:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F1D1DF2F;
-        Tue,  1 Nov 2022 15:43:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8C66B81D5E;
-        Tue,  1 Nov 2022 22:43:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 575F7C433B5;
-        Tue,  1 Nov 2022 22:43:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667342630;
-        bh=2zNKF9sIrblZIsup7pAfIEmiHmxsXlJEBUxwNTmO6lk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WuFx8933JHTEaadMAo6XrnWpo7g90tPRQXRB7DjNMKQsdDQFCmBF6z2ATeQ3euU32
-         YBGfwPJKcJyhJDvV2HVx01O8lxSvdmvftj49OjVWC2lj4f8SX+znJm4IHz+2p0iWHj
-         BV+J+bK1SRItD5IU5Z15NXggaCX44NYUK+0I6LSjAg/1TQqaS67nRVOcttR0LLCc9V
-         45FZsSbEtoIaQMEwuvKXA4VFegTvmUt1t725ep8CTMfNLWrjykTJkuI+VuquWX55ty
-         UdgdVccL3o85KRdikcu4o6sXDJx+6+WtFzQbSupglm8bbenKmKfmSOp9gBiKk2C0vq
-         H9zjXfz5qaTfg==
-Received: by pali.im (Postfix)
-        id 1312D7F8; Tue,  1 Nov 2022 23:43:48 +0100 (CET)
-Date:   Tue, 1 Nov 2022 23:43:48 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Josef Schlehofer <josef.schlehofer@nic.cz>
-Subject: Re: [PATCH] powerpc: dts: turris1x.dts: Add channel labels for
- temperature sensor
-Message-ID: <20221101224348.xkpzucskunn46i5z@pali>
-References: <20220930123901.10251-1-pali@kernel.org>
- <20220930124618.kyaansrl7ls5kn3i@pali>
- <20221009120506.itwa4n25nljn2tll@pali>
+        with ESMTP id S229846AbiKAXVG (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Nov 2022 19:21:06 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A9817E39;
+        Tue,  1 Nov 2022 16:21:01 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id bg9-20020a05600c3c8900b003bf249616b0so247535wmb.3;
+        Tue, 01 Nov 2022 16:21:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wxyxXUAbWcBHc9d21EGasKXnhPYfVJvAuFGJWn1enDs=;
+        b=W4VJj2OxkzduLyb1JVdbRtO0v8jmkBqRu5rWTymTBs2xiND8ig1Kf6Dk6XCJ/2f9ep
+         cQJzoRGlY6/DWX+5JYKcdKIHfr0JS0MdaBQyIDUhRd+FOJaZxF3pHcf2xbHChhlW4rty
+         ILkUYe3cws4PsfmVl+bjjyCH5pdUl/TjK0Gb9vr9EHjpFN12YTCZePl8gviTuDyZCDK8
+         0bez6hGXn81BQtpLrWRp/HB6XLFdulYs7Cg5evyxfNLJKpKuGR4tQyfTfrvvLO+6Uevh
+         tYBaubwq+L0LF2LYlxCace4VZ7EeIJQm7yZYpxUbOkPwwXmHvp+E7J4lRV4blnxjtOVV
+         JqCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wxyxXUAbWcBHc9d21EGasKXnhPYfVJvAuFGJWn1enDs=;
+        b=WyJKLVRoyV9N9cf7pUk6rDRJ1x2mWnJMb9a+cln3bMvmVdMrfxOq3IkfSBFDDCWbAR
+         axVbGykYJmtzsb7cHSgmNT3jnKPry6nxT/nFB50aPos9bJdMSILm/LsLLBzk4hN7DMV2
+         tORYcxN/gqdVZ8yzCYsuFop2NJs5113NTROENdRAJlcdmZ+sL5o6XtfhOslY479sp5wf
+         SkqKhEO9/ktTmnAeimyxajtI2++PdZLOCZ23Cx0666tWtCSPtFqWbhyiEgU6zZ9eeJK8
+         FRwgEYm9ptx2W935NGbMK/hF5N8hM96b/9sRpuOwmILxacQAySz0oys23F27nhWt6m/L
+         TSuA==
+X-Gm-Message-State: ACrzQf0nHjgE+9gcfDo3T75wjXQZAirLE3WTFKeMdRL0LM0guHlVsve/
+        MwdtuqWUHdE+XToGOU/Pkic=
+X-Google-Smtp-Source: AMsMyM50e+QYw8SxGLXTQQSN/H4evMDT0wK2OPuH/ZtE+ylXd4szu1ziml/ktY5vD0j1TqS9pHNVkw==
+X-Received: by 2002:a05:600c:1c0d:b0:3cf:5fd2:1fd1 with SMTP id j13-20020a05600c1c0d00b003cf5fd21fd1mr15921329wms.8.1667344860058;
+        Tue, 01 Nov 2022 16:21:00 -0700 (PDT)
+Received: from suse.localnet (host-79-43-11-206.retail.telecomitalia.it. [79.43.11.206])
+        by smtp.gmail.com with ESMTPSA id dn12-20020a05600c654c00b003cf537ec2efsm123480wmb.36.2022.11.01.16.20.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 16:20:58 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexdeucher@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Christian Brauner <brauner@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kees Cook <keescook@chromium.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-hwmon@vger.kernel.org, linux-hardening@vger.kernel.org,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH] drm/radeon: Replace kmap() with kmap_local_page()
+Date:   Wed, 02 Nov 2022 00:11:53 +0100
+Message-ID: <1942083.usQuhbGJ8B@suse>
+In-Reply-To: <CADnq5_PP3VCXQ5rbC0-8Qsi5W7Ew87U_bRknz4=qxbrPxVQ+qA@mail.gmail.com>
+References: <20221013210714.16320-1-fmdefrancesco@gmail.com> <fb0b7389-7121-04f8-176d-1ababe0ad8f2@amd.com> <CADnq5_PP3VCXQ5rbC0-8Qsi5W7Ew87U_bRknz4=qxbrPxVQ+qA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221009120506.itwa4n25nljn2tll@pali>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Michael, could you take this patch?
+On luned=EC 17 ottobre 2022 18:52:10 CET Alex Deucher wrote:
+> Applied.  Thanks!
 
-On Sunday 09 October 2022 14:05:06 Pali Rohár wrote:
-> On Friday 30 September 2022 14:46:18 Pali Rohár wrote:
-> > + CC hwmon ML
-> > 
-> > On Friday 30 September 2022 14:39:01 Pali Rohár wrote:
-> > > Channel 0 of SA56004ED chip refers to internal SA56004ED chip sensor (chip
-> > > itself is located on the board) and channel 1 of SA56004ED chip refers to
-> > > external sensor which is connected to temperature diode of the P2020 CPU.
-> > > 
-> > > Fixes: 54c15ec3b738 ("powerpc: dts: Add DTS file for CZ.NIC Turris 1.x routers")
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > ---
-> > > With this change userspace 'sensors' applications prints labels:
-> > > 
-> > >     $ sensors
-> > >     sa56004-i2c-0-4c
-> > >     Adapter: MPC adapter (i2c@3000)
-> > >     board:        +34.2°C  (low  =  +0.0°C, high = +70.0°C)
-> > >                            (crit = +85.0°C, hyst = +75.0°C)
-> > >     cpu:          +58.9°C  (low  =  +0.0°C, high = +70.0°C)
-> > >                            (crit = +85.0°C, hyst = +75.0°C)
-> > > 
-> > > And without this change it prints just generic tempX names:
-> > > 
-> > >     $ sensors
-> > >     sa56004-i2c-0-4c
-> > >     Adapter: MPC adapter (i2c@3000)
-> > >     temp1:        +43.0°C  (low  =  +0.0°C, high = +70.0°C)
-> > >                            (crit = +85.0°C, hyst = +75.0°C)
-> > >     temp2:        +63.4°C  (low  =  +0.0°C, high = +70.0°C)
-> > >                            (crit = +85.0°C, hyst = +75.0°C)
-> > > ---
-> > >  arch/powerpc/boot/dts/turris1x.dts | 14 ++++++++++++++
-> > >  1 file changed, 14 insertions(+)
-> > > 
-> > > diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
-> > > index 4033c554b06a..5b5278c32e43 100644
-> > > --- a/arch/powerpc/boot/dts/turris1x.dts
-> > > +++ b/arch/powerpc/boot/dts/turris1x.dts
-> > > @@ -69,6 +69,20 @@
-> > >  				interrupt-parent = <&gpio>;
-> > >  				interrupts = <12 IRQ_TYPE_LEVEL_LOW>, /* GPIO12 - ALERT pin */
-> > >  					     <13 IRQ_TYPE_LEVEL_LOW>; /* GPIO13 - CRIT pin */
-> > > +				#address-cells = <1>;
-> > > +				#size-cells = <0>;
-> > > +
-> > > +				/* Local temperature sensor (SA56004ED internal) */
-> > > +				channel@0 {
-> > > +					reg = <0>;
-> > > +					label = "board";
-> > > +				};
-> > > +
-> > > +				/* Remote temperature sensor (D+/D- connected to P2020 CPU Temperature Diode) */
-> > > +				channel@1 {
-> > > +					reg = <1>;
-> > > +					label = "cpu";
-> > > +				};
-> > 
-> > I'm not sure if you want UPPERCASE, lowercase, PascalCase, kebab-case
-> > or snake_case format of labels. Or if you want also "temp" or
-> > "temperature" keyword in the label. So please adjust label to the
-> > preferred one, if proposed format is not the correct.
-> 
-> Ok, if nobody complains then please take this patch as is.
-> 
-> > >  			};
-> > >  
-> > >  			/* DDR3 SPD/EEPROM */
-> > > -- 
-> > > 2.20.1
-> > > 
+Many thanks to you!
+
+However, about a week ago, I received a report saying that this patch is "N=
+ot=20
+Applicable".=20
+
+That email was also referring to another patch, for which I'll reply in its=
+=20
+own thread.
+
+That report has a link to https://patchwork.linuxtv.org/project/linux-media/
+patch/20221013210714.16320-1-fmdefrancesco@gmail.com/
+
+Can you please let me understand why, despite it was applied, this patch la=
+ter=20
+shifted "State" to "Not Applicable"?
+
+Thanks,
+
+=46abio
+
+
+
