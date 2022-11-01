@@ -2,236 +2,85 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 384A6C433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Nov 2022 14:37:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60E7DC433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Nov 2022 18:40:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbiKAOhk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 1 Nov 2022 10:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
+        id S230281AbiKASkn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 1 Nov 2022 14:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiKAOhk (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Nov 2022 10:37:40 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEBF1B9D8
-        for <linux-hwmon@vger.kernel.org>; Tue,  1 Nov 2022 07:37:38 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id p8-20020a056830130800b0066bb73cf3bcso8571911otq.11
-        for <linux-hwmon@vger.kernel.org>; Tue, 01 Nov 2022 07:37:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XyZQt0p2EDTdgzyz9Llq1rBCpL76qQPePjIezrAVLiI=;
-        b=RHYmq1EUquS7Qz3UpcoYU06JsgSw/zGXKtxgWfOi16Ago104yw652+vcZeS+x9TTTm
-         +dq7o538qWb9oL8ZEnM4KBABrNuoqxvnRPiwzoK5tKSzJz8zGak6Yx1QHLWNoURjj4c4
-         nSnKMd8Xz4NiOiBM96z41ZqlRHk4KaSGHuhVEOtnxmHL5pJOW7AVJQ9QIRmQvjKgQeO3
-         XzTgaJnTgx1aYYFcrmtFkE42Ja/1ScI8RBNBMgArnwr+mm+POW9qB2LilM+4Mnap383k
-         AYqn1n+hYNZTOqrCxQ1r33s8ElHcPnXgNNJLFOlyZgeZFmZr1IxPrZs3WMuVa0bcUZRF
-         5I+w==
+        with ESMTP id S230173AbiKASkj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Nov 2022 14:40:39 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39B91DDE0;
+        Tue,  1 Nov 2022 11:40:32 -0700 (PDT)
+Received: by mail-oi1-f171.google.com with SMTP id r76so10308333oie.13;
+        Tue, 01 Nov 2022 11:40:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XyZQt0p2EDTdgzyz9Llq1rBCpL76qQPePjIezrAVLiI=;
-        b=Q5ZhK6JaQ/BsZRWp0YJO3Ek5VJmseHzciPLZXsmojZlgT28Elz/YI7bTLkG3rOiVCO
-         JjeE1Jho52EMZ4Ip9hajrMyWw/u1dAKCKfBx9JxnH8aEHcE603LKz6Wyw+EWEs4Fe+RD
-         tvOfZLlBs2c1VhF2RUS8d5t7jKYy4+ELObTUBkODXogaetoyg+m/8wy0bBWoHH9OuDfE
-         qMsZWNnXe4DjWbs0cG6GTjeRx/l+fOhbGc0CZSwcCtHq/oI8mWG3vQuOywLyNOIFghrI
-         ZBWTsRMxYjgIlTQuDXNiTyEqXU5+6OSWTFNIb82g0mgxMpm5DlE+NhPszEMDDhz5DUDO
-         QlDQ==
-X-Gm-Message-State: ACrzQf3xwfXtv/QbcE2xI6v9JsTHrCIGJaHGGViDIAHqlvTl2huPzI81
-        BAbDwgfZ1oJdZAgmq2+4SDvZzP0lzCI=
-X-Google-Smtp-Source: AMsMyM4ISITe97GR3JCk6gbmqHlEt1lPri1N5P964wujbF4HP3OAKfiDJWPC/GNR5tbDdBY4HcqOOQ==
-X-Received: by 2002:a05:6830:1012:b0:66c:6237:e6e4 with SMTP id a18-20020a056830101200b0066c6237e6e4mr3516045otp.72.1667313458004;
-        Tue, 01 Nov 2022 07:37:38 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r84-20020acaa857000000b00359d1b125bdsm3425529oie.37.2022.11.01.07.37.37
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X9hzjd9ZHijyciHnKdGg6ad5FqSz4oFo9jluuiQAUYc=;
+        b=xLsi/LIJ+Sa7HTVvuooL9c6CsXfEKUnNKCkP3YIlKNvywjoZumbQqsc+2pKmhFzcZw
+         LEqdJgVluyzaA2mZ/PwM3tDci//KioQ1HLK20N1l3zIvKdGMET8ZxsIJzfJsrkd7GG77
+         jmcZSgGDUaEsox7vVq0AmCUjyE53wJM7M5qyJmk3oJ5gTfhh2nHKFtswmgRncNpVWZGe
+         znhx39E3cI+MHEIVlx6w/v1CXbV9N4OG1GO8V1Fx7hEBcxc0I5jd1oIt/i/6Caq0W76c
+         TqJ35IlB5RXywlr4fSBL8sn8OxPzfeMgdhoAxlN7opuBM0ZOkM+1WmnjdUIYpftU27Z4
+         cQ6Q==
+X-Gm-Message-State: ACrzQf0PuVCNBsfEV3QQ0IybkAc8wc5F+TEvm1XXT+DgsUPr7aoAJh+B
+        kWMBQPNORqi9fz7gtxKKKw==
+X-Google-Smtp-Source: AMsMyM7OY/1BncaNebgnDhimX7u3Eh4GfMoUFZ38+wmSUfWGXZz7innDDugb8enD/+xkKsm+4iBR0Q==
+X-Received: by 2002:a05:6808:1908:b0:35a:b52:7955 with SMTP id bf8-20020a056808190800b0035a0b527955mr6310195oib.177.1667328031904;
+        Tue, 01 Nov 2022 11:40:31 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x1-20020a4ad041000000b004956ee06cadsm3677487oor.43.2022.11.01.11.40.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 07:37:37 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 1 Nov 2022 07:37:36 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Frank Crawford <frank@crawford.emu.id.au>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] hwmon: (it87) Add DMI table for future extensions
-Message-ID: <20221101143736.GA1311791@roeck-us.net>
-References: <20221030083841.3433967-1-frank@crawford.emu.id.au>
+        Tue, 01 Nov 2022 11:40:31 -0700 (PDT)
+Received: (nullmailer pid 1883701 invoked by uid 1000);
+        Tue, 01 Nov 2022 18:40:33 -0000
+Date:   Tue, 1 Nov 2022 13:40:33 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, joel@jms.id.au,
+        andrew@aj.id.au, lee.jones@linaro.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, p.zabel@pengutronix.de,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, BMC-SW@aspeedtech.com,
+        garnermic@meta.com
+Subject: Re: [v2 1/3] dt-bindings: Add bindings for aspeed pwm-tach.
+Message-ID: <20221101184033.GA1879756-robh@kernel.org>
+References: <20221101095156.30591-1-billy_tsai@aspeedtech.com>
+ <20221101095156.30591-2-billy_tsai@aspeedtech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221030083841.3433967-1-frank@crawford.emu.id.au>
+In-Reply-To: <20221101095156.30591-2-billy_tsai@aspeedtech.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 07:38:41PM +1100, Frank Crawford wrote:
-> Changes in this patch set:
+On Tue, Nov 01, 2022 at 05:51:54PM +0800, Billy Tsai wrote:
+> This patch adds device binding for aspeed pwm-tach device which is a
+> multi-function device include pwm and tach function and pwm/tach device
+> bindings which should be the child-node of pwm-tach device.
 > 
-> * Define the DMI matching table for board specific settings during the
->   chip initialisation and move the only current board specific setting
->   to this new table.
-> 
-> * Export the table for use by udev.
-> 
-> v2: updates following comments:
-> 
-> * Converted to use callback function.
-> 
-> * Moved call to callback funtion to sio_data into it87_find in line
->   with other settings for sio_data.  This requires dmi_data also passed
->   to access additional data.
-> 
-> * Added macro for defining entries in DMI table to simplify future 
->   additions.
-> 
-> * Note dmi_data is defined in sm_it87_init to simplify tests and for
->   future additions.
-> 
-> v3: further updates following comments:
-> 
-> * Proper use of callback functions for DMI functions.  This also
->   involves saving dmi_data in a static variable for use as required.
-> 
-> * Moved to dmi_check_system() for testing DMI table.
-> 
-> Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
 > ---
->  drivers/hwmon/it87.c | 72 ++++++++++++++++++++++++++++++++------------
->  1 file changed, 53 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-> index 73ed21ab325b..6eac15a5f647 100644
-> --- a/drivers/hwmon/it87.c
-> +++ b/drivers/hwmon/it87.c
-> @@ -567,6 +567,14 @@ struct it87_data {
->  	s8 auto_temp[NUM_AUTO_PWM][5];	/* [nr][0] is point1_temp_hyst */
->  };
->  
-> +/* Board specific settings from DMI matching */
-> +struct it87_dmi_data {
-> +	u8 skip_pwm;		/* pwm channels to skip for this board  */
-> +};
-> +
-> +/* Global for results from DMI matching, if needed */
-> +static struct it87_dmi_data *dmi_data = NULL;
-> +
+>  .../bindings/hwmon/aspeed,ast2600-tach.yaml   | 48 ++++++++++++
+>  .../bindings/mfd/aspeed,ast2600-pwm-tach.yaml | 76 +++++++++++++++++++
+>  .../bindings/pwm/aspeed,ast2600-pwm.yaml      | 64 ++++++++++++++++
+>  3 files changed, 188 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,ast2600-tach.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml
+>  create mode 100644 Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
 
-static variables do not need to be initialized with NULL/0.
+I'm pretty sure I've said this before, but I'm not taking more fan 
+controller bindings without comming up with a common binding. Please see 
+this series[1] and help ensure it meets your needs.
 
->  static int adc_lsb(const struct it87_data *data, int nr)
->  {
->  	int lsb;
-> @@ -2393,7 +2401,6 @@ static int __init it87_find(int sioaddr, unsigned short *address,
->  {
->  	int err;
->  	u16 chip_type;
-> -	const char *board_vendor, *board_name;
->  	const struct it87_devices *config;
->  
->  	err = superio_enter(sioaddr);
-> @@ -2812,24 +2819,9 @@ static int __init it87_find(int sioaddr, unsigned short *address,
->  	if (sio_data->beep_pin)
->  		pr_info("Beeping is supported\n");
->  
-> -	/* Disable specific features based on DMI strings */
-> -	board_vendor = dmi_get_system_info(DMI_BOARD_VENDOR);
-> -	board_name = dmi_get_system_info(DMI_BOARD_NAME);
-> -	if (board_vendor && board_name) {
-> -		if (strcmp(board_vendor, "nVIDIA") == 0 &&
-> -		    strcmp(board_name, "FN68PT") == 0) {
-> -			/*
-> -			 * On the Shuttle SN68PT, FAN_CTL2 is apparently not
-> -			 * connected to a fan, but to something else. One user
-> -			 * has reported instant system power-off when changing
-> -			 * the PWM2 duty cycle, so we disable it.
-> -			 * I use the board name string as the trigger in case
-> -			 * the same board is ever used in other systems.
-> -			 */
-> -			pr_info("Disabling pwm2 due to hardware constraints\n");
-> -			sio_data->skip_pwm = BIT(1);
-> -		}
-> -	}
-> +	/* Set values based on DMI matches */
-> +	if (dmi_data && dmi_data->skip_pwm)
-> +		sio_data->skip_pwm |= dmi_data->skip_pwm;
+Rob
 
-The second condition is unnecessary. If dmi_data->skip_pwm is 0 the |=
-won't do anything.
-
->  
->  exit:
->  	superio_exit(sioaddr);
-> @@ -3307,6 +3299,46 @@ static int __init it87_device_add(int index, unsigned short address,
->  	return err;
->  }
->  
-> +/* callback function for DMI */
-> +static int it87_dmi_cb(const struct dmi_system_id *dmi_entry)
-> +{
-> +	dmi_data = dmi_entry->driver_data;
-> +
-> +	if (dmi_data && dmi_data->skip_pwm)
-
-A dmi entry without dmi_data would be pointless, or am I missing
-something ? That means that checking for dmi_data should be unnecessary
-because it should always be set (and anyone trying to add an entry into
-the match table without it would learn quickly that it does not
-work).
-
-> +		pr_info("Disabling pwm2 due to hardware constraints\n");
-> +
-> +	return 1;
-> +}
-> +
-> +/*
-> + * On the Shuttle SN68PT, FAN_CTL2 is apparently not
-> + * connected to a fan, but to something else. One user
-> + * has reported instant system power-off when changing
-> + * the PWM2 duty cycle, so we disable it.
-> + * I use the board name string as the trigger in case
-> + * the same board is ever used in other systems.
-> + */
-> +static struct it87_dmi_data nvidia_fn68pt = {
-> +	.skip_pwm = BIT(1),
-> +};
-> +
-> +#define IT87_DMI_MATCH_VND(vendor, name, cb, data) \
-> +	{ \
-> +		.callback = cb, \
-
-Do you envison more than one callback function ? Because if not
-the above could just point to it87_dmi_cb directly.
-
-> +		.matches = { \
-> +			DMI_EXACT_MATCH(DMI_BOARD_VENDOR, vendor), \
-> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, name), \
-> +		}, \
-> +		.driver_data = data, \
-> +	}
-> +
-> +static const struct dmi_system_id it87_dmi_table[] __initconst = {
-> +	IT87_DMI_MATCH_VND("nVIDIA", "FN68PT", &it87_dmi_cb, &nvidia_fn68pt),
-
-The callback function does not need a &
-
-> +	{ }
-> +
-> +};
-> +MODULE_DEVICE_TABLE(dmi, it87_dmi_table);
-> +
->  static int __init sm_it87_init(void)
->  {
->  	int sioaddr[2] = { REG_2E, REG_4E };
-> @@ -3319,6 +3351,8 @@ static int __init sm_it87_init(void)
->  	if (err)
->  		return err;
->  
-> +	dmi_check_system(it87_dmi_table);
-> +
->  	for (i = 0; i < ARRAY_SIZE(sioaddr); i++) {
->  		memset(&sio_data, 0, sizeof(struct it87_sio_data));
->  		isa_address[i] = 0;
-> -- 
-> 2.37.3
-> 
+[1] https://lore.kernel.org/all/20221013094838.1529153-2-Naresh.Solanki@9elements.com/
