@@ -2,175 +2,146 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC4E9C4332F
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Nov 2022 03:21:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BF08C433FE
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Nov 2022 03:23:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbiKBDV4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 1 Nov 2022 23:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
+        id S230294AbiKBDXn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 1 Nov 2022 23:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbiKBDVk (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Nov 2022 23:21:40 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2122.outbound.protection.outlook.com [40.107.255.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B7925C4C;
-        Tue,  1 Nov 2022 20:21:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CAee28tU7p0sNzY2AphHGmh2tfiI1zLkhT17QyN6qL3meIsnYA5eOmP19yZeEpPwT/eIx0KhdHR863qBS4P8YB32V6wBoFVQne5YcMBBF+oYcFsTvd3NSoUk4mvbvdPJIKEv57KCYCLWlREZ829zjsJcR8ip2e4mgNwaJ9LFY8gb9v/nxh/Injs9zw/aZh+bOh7CA2RDjXfPbGjkfVQYznW1kktG8M6ZpojLAxuR64/EpGJuuD+5r4d4AtJ4UaNbAh5bjg6WZa8HEo3fEIdig7zYFomjvwy83rbZ3+nvAhbTjh8BB4G6uDgvntnV2AhnOXYVRHXSf6agW6OHJxoSag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KBOndhZ03xETFgMICQLNX0kCejCitjq8yKIutzoavQ8=;
- b=lyeP+yHOv8bATF97nD4aYIkJEKW6HaUYBPRG0JRIVcPV7ZhyEBzoxzwTNhHWAhZ8fr0mRRpjxzR7dlq9Md/6B9WJUgTvWZGyxZ+taoxUMKB0NwmKiW5KB5Vo8mNaXgvaicpGZvZbvtT4cvXjvQy5s0JzvX7xn8yD8GePek0UAtjsOyqipJDaVp03g+tAfNR5l1OLtIFI26ZgYva9T0xCGSy/baV2D4rU+7Ivj+M6EI6mTSRUluARYvNBtNVA6IG1C2S74wTW4od6tGxOgIsAihwHGfgZdla8qKUi1b66zPG+JoEfk+OkGX00p1sfGOkSXZIapnOuS0ijs3UdJkqNKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KBOndhZ03xETFgMICQLNX0kCejCitjq8yKIutzoavQ8=;
- b=QOuTyj3eXj204wpTd2a4bwVQgu4B+RdKC12tVnUvZPQJ+xDaMtiGJFA0v3mUq6t9gDz/mDIFqBZBRr1u6i2JP5/cDweMPrVzyjxEbHjUn1VSF/WZ2iqCGG3qOd5fD+pUtpzGqc7+/DBeaPZsjLHp87REI9GrDHLQ0frlhGmXKd+91ghzC+ysNb1WYn1qTT7+MNUtsVlUD0H7fddRMqn5V0AhHjvwKA7bmr+b1uleCrkTj2rLPgX21907H6BJeUpaOwsmaRpFpa60QDGxR4vQq5mFbhBI+H2NVfhcOQsDrPGgkFo0mG995KhTBZXaUIDZUhZuFKDU/1YS2kw70P3Udw==
-Received: from SG2PR06MB3365.apcprd06.prod.outlook.com (2603:1096:4:69::12) by
- SEZPR06MB5788.apcprd06.prod.outlook.com (2603:1096:101:aa::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5769.18; Wed, 2 Nov 2022 03:21:22 +0000
-Received: from SG2PR06MB3365.apcprd06.prod.outlook.com
- ([fe80::dd5d:e720:e00f:831]) by SG2PR06MB3365.apcprd06.prod.outlook.com
- ([fe80::dd5d:e720:e00f:831%6]) with mapi id 15.20.5769.019; Wed, 2 Nov 2022
- 03:21:21 +0000
-From:   Billy Tsai <billy_tsai@aspeedtech.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>,
-        "garnermic@meta.com" <garnermic@meta.com>
-Subject: Re: [v2 1/3] dt-bindings: Add bindings for aspeed pwm-tach.
-Thread-Topic: [v2 1/3] dt-bindings: Add bindings for aspeed pwm-tach.
-Thread-Index: AQHY7ddeW4ZmCSdnLkm5NlBsHfM2O64qZyqAgAEXnQA=
-Date:   Wed, 2 Nov 2022 03:21:21 +0000
-Message-ID: <C4090559-71D3-4DC4-A994-474D375DC4EF@aspeedtech.com>
-References: <20221101095156.30591-1-billy_tsai@aspeedtech.com>
- <20221101095156.30591-2-billy_tsai@aspeedtech.com>
- <20221101184033.GA1879756-robh@kernel.org>
-In-Reply-To: <20221101184033.GA1879756-robh@kernel.org>
-Accept-Language: zh-TW, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Microsoft-MacOutlook/16.66.22101101
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SG2PR06MB3365:EE_|SEZPR06MB5788:EE_
-x-ms-office365-filtering-correlation-id: 13fb60df-72a2-4524-1b64-08dabc815067
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: S8vJokTMaKAHa0h/z0orZomYGvaU3B2bpvfoBxN/yW49Sdmfd2rdxlC7ylVGjkeC0Ss3vORcpzhpOQY1iK6Uq3l4T2Dkhn3QB+Bfl/R742dk2kYo0WUGMzL5JKY9YQDFuUwrZqguT2epqqFGgecUGXayOZpglH6EsXrXHzHYyDQM36QMLVlwYx8ekFRo8ZcAxeYReC/Vn1j9JwenUDXHgOej/EGYhhWs1U5B3A+42EIOsIYXanSmCJQec+J1chMZyuLLX0A6b+TZDJoMCUiFmzbLlYU1+/t2y9wsh21W+CWXgzbi/YX1h/cseFsLROVNMsdgIxmv9W0hi9wDTc2ysfMYP6IX6cycs5huPSJ+gdiRRGq/iaKnQak30Mp+WbxHDWH5lrkaCPw97o/VyKIaUX0OmG++VN3grm++xnjpqAv/LuJPOjR2ItXaOOQXV1zXhyqbmQvomaCpy+WTRRS1UHk3nkDGnNxv7PEMauJxwDElDxA1rWeDbLQIsF7YpxlruCpQzQ7L+UCU/B9cOBEv+dU3sX/D/D0RH2SDXclbwE/orexsZhkqyb0lyGOs3HQsiA+bMQdcUhgHL1zgkg7cNC8Vg7yxjXHogLyA28nXWpb90bsqRG+DYrg9XFnY669XjFi4hiFX7m6+HivUNhoiFKy1/WHAJ/0lQpKgswkLhLssuVgPjC2sQsvORYJ3UOTfCuLnxAvec3rthyK7Msx63jbJ9NYA1cgb4xVcQQc+ZVOls13LsTv5LBpaxZtLrvp/UhJZfwcvBHzsGaYAqTgT74hCxDX71Ux0Poenw14jBaPhQoXs8ljv2Zq8vuvleTI9Bfu92cOc3McT2EavJ5MWdw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3365.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(366004)(136003)(39850400004)(376002)(451199015)(86362001)(5660300002)(186003)(41300700001)(122000001)(8936002)(7416002)(36756003)(26005)(38100700002)(33656002)(6512007)(38070700005)(83380400001)(2906002)(2616005)(478600001)(71200400001)(316002)(53546011)(54906003)(6916009)(76116006)(66946007)(91956017)(66556008)(66476007)(6486002)(64756008)(4326008)(8676002)(6506007)(66446008)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OVdOQlJLMzA1VUx0YTJrMWNrNmN1UzZjWVRaL2NxUWNrTjA4OWVyVEdQdDNH?=
- =?utf-8?B?VkJPU0FkVlU2UEtCTzFUazhyWXcyNldGZFRQTitNelJNdDBGY242UFluRFl1?=
- =?utf-8?B?TXVCalg4cEJDU3ptcXhKV2JnREJkUkhaNW84QUtRU2VMaDdxTXVDa2laRjJ1?=
- =?utf-8?B?OE5yVmYvdTZ4disyWVMzQmgrbUcvR2ttR3dhYkV1M1lNWHdFQ3dCOTUrV3Jy?=
- =?utf-8?B?Z2Vyc3k2QVJuSXlqNHdRaEVWajk3UFdmRFpGQmEwS21zcWdmK0ZzSzkrZXlC?=
- =?utf-8?B?MzVsenVBeGxkSUFCWDg2eTUzOWtJZTRvamxVL3EzTGdwT05JQ1p2UjZ0Wmh2?=
- =?utf-8?B?akl3RVFiRVJ2WWJPdHVvcnNrY1A4NTAyenI1NHQyRUN3U0FMNmwzU202OTVn?=
- =?utf-8?B?MVZYOUJGelhzOE5jWUl0aFVWR3N5S2Z3SXNHbVB2cjdua3M1R0t0TmRkN0VD?=
- =?utf-8?B?Z3BtemdUVHBqb0JyWlFWdnpEZTlXVWprSUpIMTU1V0hyTU1lNjhYOEtxWE9V?=
- =?utf-8?B?N3VFN2h2Y3RkNnZ5T0k5ZVI5a2k0YkdoMnZmSVdVYmE2bWtUclpld2pkWnJE?=
- =?utf-8?B?OHV2MzUrRjlOM3A4TnFHeHY2OUFJSmdldm1QWGVGUFRHOW5uaDJNZmh2NHVF?=
- =?utf-8?B?SW9BMnFRWDVnSklhcjZHdkNORGpYc3o1czlsdmRocXRwcHBLeCtVRndJeWhU?=
- =?utf-8?B?RVV0VmppcXdlZ3VGclpwRHJRVXdmWW1CejFwdlRkTitKSmJtbVJCekE2UmpF?=
- =?utf-8?B?Zm8vY0NBcGZTc0M0TGU1bWF4VlhxQXFSamt0cTJOcFBBbmp6K2EzNWQ4QjdN?=
- =?utf-8?B?SGVuV1pPNm9qbmFzaElUOVRZSVdWNUw3bis5TGpQL3ZqWWNnazA5Q2xFa0lU?=
- =?utf-8?B?ZTVpcFlwejFURWZWRkY2WVFONXd2ZWR0TGlnZXJGMW50RkRGRWRneWlzYW81?=
- =?utf-8?B?NFdqUTF3Ni9mdFhNSU94WGNkRUcvSGpKQTJ1SmpWUjc5ZEtMcXJ5RnBCNlo3?=
- =?utf-8?B?ZFRSVktPV1QxWWpLZFprNnZRbFNpczdTRDdubXdHcERSN2FwckdiclQrOGF3?=
- =?utf-8?B?S0VFWFkya01YRGF0ZkRnZTYyTXg3R3hpdXNlemp0YXBHT2RZNitpa3NSOEJL?=
- =?utf-8?B?cHpjSTBtLzlUMTNKQmVuaWFQT1ovVzRyTTM3eVBjQUIrRUZzWVhGVEh0RDlG?=
- =?utf-8?B?anFseTFBbVFvKzBPSkM3L3ZZWStKaTRtMmdlaE84YmlrVlFrWTZiMzFiM1Yz?=
- =?utf-8?B?czNpWkNEanp1QXozaUpldmsvOFNmOU8xZ24zSVBXTmNRS3lmcExTL3dyS3NC?=
- =?utf-8?B?WEVhaGYwSDJ5MVlvbU9aZi9PSVNBWEpQblYxc3VJSkNYcnFLK0IrOXo5NWdk?=
- =?utf-8?B?bE9paXpicHpoRHhzSG5QQWl0WFc5cDhxdVRMZzZYWTl0alJPYldMQ1VUaVNB?=
- =?utf-8?B?UG5YbUY1QnJhb1pVQkl2TmFsdmF3OFlDbVhJOGluVVhETk53c0ljNTVGZ1Qr?=
- =?utf-8?B?b0FMd09IaHBFRDJpUzUrL21md2Rlb2twR1REM2tLdmFrOWppNzhXZzg0OGVY?=
- =?utf-8?B?SzhrQW9jRXVZZmNIZWVDSW9pR0VCYmhiOFRXWitvYlRGWjJ3ZDZHZVQyTUZH?=
- =?utf-8?B?UithR3hYS3g4cC8vU3pGRTVDQmZXemFCSWg0VnhzOTR6ZHN2d3dCRzJxRVZN?=
- =?utf-8?B?WXN2Y1Z3LzFndTlURitSWVZqY1Uwb0FkbEZaSGNrQ3JCRG5MQkJyaWlVeWRW?=
- =?utf-8?B?YUlSREJoTzBSSEwrS0dUVksxSEtNdStaTjhKd3RpZE80Yk1Mek44T2ZwbE4x?=
- =?utf-8?B?MkVjaW83cThvQk9obDk0bXRad0xmbEpSTGxiRXdmYk56RzZQVnNjQ0NOTndQ?=
- =?utf-8?B?MGxacHIzRm02YkFsTlFsaVo2YStYbkk0QlZ2dGNrZWNDOFhQemxOc29EMGVv?=
- =?utf-8?B?YVcyZmN1dFNZZTVSb2NSS1IwUkN1cjl1SkFDT1NxZ1lFalNzRkk4Y2tFcis1?=
- =?utf-8?B?SVNMSUp2MVhqN1lZRC9YUjRTRVNLQWwrc3RHQjJERStlWFZIanRkWFk1Z01B?=
- =?utf-8?B?RWVmWmduOVVzbWZ2a08zMzhEWlVHeEZIYUZYTHJ5S3dHYlJOcVlwOWIvZVNX?=
- =?utf-8?B?MWhCQytZdVkvWGtpeUhQK3p1SHQ3a0RiUkc2VFVXODQ5UkhnOUdCcHhjZDR1?=
- =?utf-8?B?K3c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <221958AF23BCE941AD9B352404CCD794@apcprd06.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S230249AbiKBDXm (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Nov 2022 23:23:42 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0851324962
+        for <linux-hwmon@vger.kernel.org>; Tue,  1 Nov 2022 20:23:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667359421; x=1698895421;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=M4iaj9TOH0YSds2JdhWDJngEGxaBvDTakHTlEfVSEL0=;
+  b=QHJJgngI7vbct3bqy2Jj99RfKLZ3nZ9ZGBY6qft/DmM238VJXADTRifm
+   crI1vDC8lTT/q115+M3AXbMf2ZTtBUiOqIqUwJNjrjBvRAil3FL1YaXmG
+   oBL9o85vZnXKhEY7lGDAn6wCPUiZamNI+qC9UIKwj9zZlQbYx0HO/i1Um
+   uUOaxTsOvIw8i2aukNaZPt3HSk25wS8+K6qO9ai4iUYpKutJGLRfDoPcX
+   OrbT6OTYKmkeNy4S3MHhbiHyqLpXYhqhyPkMFWfKGZwaXCwUUdRhR0SDx
+   M+MZsMSkWPZ6WwZesbzjBGgmtDcLJWfTHmnZbZoBDct2HoOnnPxYw3vBO
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="289690451"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="289690451"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 20:23:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="634099975"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="634099975"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 01 Nov 2022 20:23:40 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oq4Lr-000EOM-1X;
+        Wed, 02 Nov 2022 03:23:39 +0000
+Date:   Wed, 02 Nov 2022 11:22:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ d9a6e10e51ac6b774bab68836cb2eae005a47bfc
+Message-ID: <6361e292.QaGYAfpH2gQPHvDt%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3365.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 13fb60df-72a2-4524-1b64-08dabc815067
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Nov 2022 03:21:21.1615
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Z1JOUp63kChL99PLp09Q4dfT5Hh5oh1H6DF3ih+CaiuZEUWjI2Ff5OuYvBB6EaxPoEbv2YAc2aw2tTBs4k+2tmjXkAk+y6bOwnu+kAeMC5c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5788
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-SGkgUm9iLA0KDQpPbiAyMDIyLzExLzIsIDI6NDAgQU0sICJSb2IgSGVycmluZyIgPHJvYmhAa2Vy
-bmVsLm9yZz4gd3JvdGU6DQoNCiAgPiAgT24gVHVlLCBOb3YgMDEsIDIwMjIgYXQgMDU6NTE6NTRQ
-TSArMDgwMCwgQmlsbHkgVHNhaSB3cm90ZToNCiAgPiAgPiBUaGlzIHBhdGNoIGFkZHMgZGV2aWNl
-IGJpbmRpbmcgZm9yIGFzcGVlZCBwd20tdGFjaCBkZXZpY2Ugd2hpY2ggaXMgYQ0KICA+ICA+IG11
-bHRpLWZ1bmN0aW9uIGRldmljZSBpbmNsdWRlIHB3bSBhbmQgdGFjaCBmdW5jdGlvbiBhbmQgcHdt
-L3RhY2ggZGV2aWNlDQogID4gID4gYmluZGluZ3Mgd2hpY2ggc2hvdWxkIGJlIHRoZSBjaGlsZC1u
-b2RlIG9mIHB3bS10YWNoIGRldmljZS4NCiAgPiAgPiANCiAgPiAgPiBTaWduZWQtb2ZmLWJ5OiBC
-aWxseSBUc2FpIDxiaWxseV90c2FpQGFzcGVlZHRlY2guY29tPg0KICA+ICA+IC0tLQ0KICA+ICA+
-ICAuLi4vYmluZGluZ3MvaHdtb24vYXNwZWVkLGFzdDI2MDAtdGFjaC55YW1sICAgfCA0OCArKysr
-KysrKysrKysNCiAgPiAgPiAgLi4uL2JpbmRpbmdzL21mZC9hc3BlZWQsYXN0MjYwMC1wd20tdGFj
-aC55YW1sIHwgNzYgKysrKysrKysrKysrKysrKysrKw0KICA+ICA+ICAuLi4vYmluZGluZ3MvcHdt
-L2FzcGVlZCxhc3QyNjAwLXB3bS55YW1sICAgICAgfCA2NCArKysrKysrKysrKysrKysrDQogID4g
-ID4gIDMgZmlsZXMgY2hhbmdlZCwgMTg4IGluc2VydGlvbnMoKykNCiAgPiAgPiAgY3JlYXRlIG1v
-ZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9hc3BlZWQs
-YXN0MjYwMC10YWNoLnlhbWwNCiAgPiAgPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRp
-b24vZGV2aWNldHJlZS9iaW5kaW5ncy9tZmQvYXNwZWVkLGFzdDI2MDAtcHdtLXRhY2gueWFtbA0K
-ICA+ICA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
-bmdzL3B3bS9hc3BlZWQsYXN0MjYwMC1wd20ueWFtbA0KDQogID4gIEknbSBwcmV0dHkgc3VyZSBJ
-J3ZlIHNhaWQgdGhpcyBiZWZvcmUsIGJ1dCBJJ20gbm90IHRha2luZyBtb3JlIGZhbiANCiAgPiAg
-Y29udHJvbGxlciBiaW5kaW5ncyB3aXRob3V0IGNvbW1pbmcgdXAgd2l0aCBhIGNvbW1vbiBiaW5k
-aW5nLiBQbGVhc2Ugc2VlIA0KICA+ICB0aGlzIHNlcmllc1sxXSBhbmQgaGVscCBlbnN1cmUgaXQg
-bWVldHMgeW91ciBuZWVkcy4NCg0KICA+ICBSb2INCg0KICA+ICBbMV0gMjAyMjEwMTMwOTQ4Mzgu
-MTUyOTE1My0yLU5hcmVzaC5Tb2xhbmtpQDllbGVtZW50cy5jb20gPGh0dHBzOi8vbG9yZS5rZXJu
-ZWwub3JnL2FsbC88YSBocmVmPT4vIj5odHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvMjAyMjEw
-MTMwOTQ4MzguMTUyOTE1My0yLU5hcmVzaC5Tb2xhbmtpQDllbGVtZW50cy5jb20vDQoNClRoZSBs
-aW5rIHlvdSBwcm92aWRlIGRvZXNuJ3QgbWVldCBteSBuZWVkcy4gVGhpcyBpcyBmYW4gYmluZGlu
-Zy4NCkFzIEkgdG9sZCBiZWZvcmUgDQoiVGhpcyBwYXRjaCBkb2Vzbid0IHVzZSB0byBiaW5kaW5n
-IHRoZSBmYW4gY29udHJvbCBoL3cuIEl0IGlzIHVzZWQgdG8gYmluZGluZyB0aGUgdHdvIGluZGVw
-ZW5kZW50IGgvdyBibG9ja3MuDQpPbmUgaXMgdXNlZCB0byBwcm92aWRlIHB3bSBvdXRwdXQgYW5k
-IGFub3RoZXIgaXMgdXNlZCB0byBtb25pdG9yIHRoZSBzcGVlZCBvZiB0aGUgaW5wdXQuIiANCk15
-IHBhdGNoIGlzIHVzZWQgdG8gcG9pbnQgb3V0IHRoYXQgdGhlIHB3bSBhbmQgdGhlIHRhY2ggaXMg
-dGhlIGRpZmZlcmVudCBmdW5jdGlvbiBhbmQgZG9uJ3QgbmVlZCB0bw0KYmluZCB0b2dldGhlci4g
-WW91IGNhbiBub3Qgb25seSBjb21iaW5lIHRoZW0gYXMgdGhlIGZhbiB1c2FnZSBidXQgYWxzbyB0
-cmVhdCB0aGVtIGFzIHRoZSBpbmRpdmlkdWFsIG1vZHVsZSBmb3INCnVzZS4gRm9yIGV4YW1wbGU6
-IHRoZSBwd20gY2FuIHVzZSB0byBiZSB0aGUgYmVlcGVyIChwd20tYmVlcGVyLmMpLCB0aGUgdGFj
-aCBjYW4gYmUgdXNlZCB0byBtb25pdG9yIGFueSBkZXZpY2UncyBzcGVlZC4NCg0KVGhhbmtzDQoN
-CkJlc3QgUmVnYXJkcywNCkJpbGx5IFRzYWkNCg0K
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: d9a6e10e51ac6b774bab68836cb2eae005a47bfc  hwmon: (jc42) Consistently use bit and bitfield macros in the driver
+
+elapsed time: 724m
+
+configs tested: 70
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+powerpc                           allnoconfig
+um                           x86_64_defconfig
+mips                             allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                 randconfig-a011-20221031
+i386                 randconfig-a012-20221031
+i386                 randconfig-a013-20221031
+i386                 randconfig-a014-20221031
+i386                 randconfig-a015-20221031
+arc                                 defconfig
+alpha                               defconfig
+i386                 randconfig-a016-20221031
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                           rhel-8.3-syz
+x86_64                               rhel-8.3
+x86_64                         rhel-8.3-kunit
+s390                             allmodconfig
+i386                                defconfig
+s390                                defconfig
+x86_64                              defconfig
+x86_64                           rhel-8.3-kvm
+arc                  randconfig-r043-20221101
+s390                             allyesconfig
+alpha                            allyesconfig
+x86_64                        randconfig-a013
+m68k                             allyesconfig
+ia64                             allmodconfig
+x86_64                        randconfig-a011
+arm                                 defconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+x86_64                        randconfig-a015
+arm64                            allyesconfig
+x86_64                           allyesconfig
+arm                              allyesconfig
+i386                             allyesconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+
+clang tested configs:
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+hexagon              randconfig-r041-20221101
+hexagon              randconfig-r045-20221101
+s390                 randconfig-r044-20221101
+x86_64                        randconfig-a012
+riscv                randconfig-r042-20221101
+i386                 randconfig-a001-20221031
+i386                 randconfig-a003-20221031
+i386                 randconfig-a002-20221031
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                 randconfig-a004-20221031
+i386                 randconfig-a006-20221031
+i386                 randconfig-a005-20221031
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64               randconfig-a005-20221031
+x86_64               randconfig-a006-20221031
+x86_64               randconfig-a004-20221031
+x86_64               randconfig-a001-20221031
+x86_64               randconfig-a003-20221031
+x86_64               randconfig-a002-20221031
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
