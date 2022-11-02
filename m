@@ -2,146 +2,275 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BF08C433FE
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Nov 2022 03:23:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69553C4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Nov 2022 06:22:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbiKBDXn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 1 Nov 2022 23:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
+        id S229684AbiKBGWT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Nov 2022 02:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiKBDXm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Nov 2022 23:23:42 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0851324962
-        for <linux-hwmon@vger.kernel.org>; Tue,  1 Nov 2022 20:23:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667359421; x=1698895421;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=M4iaj9TOH0YSds2JdhWDJngEGxaBvDTakHTlEfVSEL0=;
-  b=QHJJgngI7vbct3bqy2Jj99RfKLZ3nZ9ZGBY6qft/DmM238VJXADTRifm
-   crI1vDC8lTT/q115+M3AXbMf2ZTtBUiOqIqUwJNjrjBvRAil3FL1YaXmG
-   oBL9o85vZnXKhEY7lGDAn6wCPUiZamNI+qC9UIKwj9zZlQbYx0HO/i1Um
-   uUOaxTsOvIw8i2aukNaZPt3HSk25wS8+K6qO9ai4iUYpKutJGLRfDoPcX
-   OrbT6OTYKmkeNy4S3MHhbiHyqLpXYhqhyPkMFWfKGZwaXCwUUdRhR0SDx
-   M+MZsMSkWPZ6WwZesbzjBGgmtDcLJWfTHmnZbZoBDct2HoOnnPxYw3vBO
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="289690451"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="289690451"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 20:23:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="634099975"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="634099975"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 01 Nov 2022 20:23:40 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oq4Lr-000EOM-1X;
-        Wed, 02 Nov 2022 03:23:39 +0000
-Date:   Wed, 02 Nov 2022 11:22:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- d9a6e10e51ac6b774bab68836cb2eae005a47bfc
-Message-ID: <6361e292.QaGYAfpH2gQPHvDt%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S230075AbiKBGWS (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Nov 2022 02:22:18 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2092.outbound.protection.outlook.com [40.107.243.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DC425EA8;
+        Tue,  1 Nov 2022 23:22:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BY9E0RXr+V+JxRHns5xHoBhZwVfkNbmkYQpvK7f0ys/4XAbndWslc4A6c4p3BtOMlx/31x/gintkhyxEfM1/Bx+3MGjdKR1l5aVke5aRwoWm0CKTEJy78N+N4wzy5bj4fK9XpRZpQU07XlTfc6Rv2p4Osi8VqRbi55akykCSjSAutKTdz3J4Wj4DSE3BNOaWKlJvOyhpFZDDimVwv4y0HDt/QmEGXbyab8zPtY84SRzDvBaUqOHle6o/nsRAbaR+r3x8AVS++otiN5uLn4duY37YQvJnYKwSzvMUGQ6sD8YOiJbFW4XUGOdgoOSZ9tYi/aGxoH2rsMLynEzfbMSXyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6ry8pFc20PzL+G+6Aq+qUOSE42ml9EzM3SxC9OYDN8s=;
+ b=UQWV6cddWa5de41kH8KLzDOLLguikdQu78zfaw+mTVORL8aeQuATUMcsI+kuPG0ViR05brTpqRaWmAAwP+jdoA4rBsVmU8SuW2245sExguZaXQ0k1OcPrUCUnik4x8NHg509AAZMFxYtqRLrpUOZ8hvAptMQ7aZNQytPD/zXSYiT68Ak9nihsjboAZgBWJ60z84AaR2GhtyV7sTK72VJ8t2hIszVd4UwCaNTBYmr4GmoiT2s/uScDp9EGwROjr04dPGr121iaynWzCRmRcBdiCYpPev/gz2Z0iRh+Hd3NpPf0daBRWOoPEizpl5VB10Q8GjtmJjl9czBh5s/MaKIBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6ry8pFc20PzL+G+6Aq+qUOSE42ml9EzM3SxC9OYDN8s=;
+ b=SWZzW6UxgDrc9ZCqbBTNQQHl/1KBnAKxq+jaADqdb1nS9n81g6SXG1lAsQzEFVYUGuFhx/KkJMnWsIgaGMsAyvO4iKkyAj0M6Se5xJ7CP+tC6kZfYIIyW3CfrDVrTbpGaLI94MTkgPw4qhKBGovkl0cNhxzDBKaBh42dj+LmJ7c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SN4PR01MB7455.prod.exchangelabs.com (2603:10b6:806:202::11) by
+ DM6PR01MB3835.prod.exchangelabs.com (2603:10b6:5:87::18) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5769.16; Wed, 2 Nov 2022 06:21:45 +0000
+Received: from SN4PR01MB7455.prod.exchangelabs.com ([fe80::44c1:e119:56:cd90])
+ by SN4PR01MB7455.prod.exchangelabs.com ([fe80::44c1:e119:56:cd90%7]) with
+ mapi id 15.20.5769.021; Wed, 2 Nov 2022 06:21:45 +0000
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Open Source Submission <patches@amperecomputing.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Phong Vo <phong@os.amperecomputing.com>,
+        thang@os.amperecomputing.com, openbmc@lists.ozlabs.org,
+        Quan Nguyen <quan@os.amperecomputing.com>
+Subject: [PATCH] docs: hwmon: (smpro-hwmon) Improve grammar and formatting
+Date:   Wed,  2 Nov 2022 13:21:03 +0700
+Message-Id: <20221102062103.3135417-1-quan@os.amperecomputing.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR06CA0010.apcprd06.prod.outlook.com
+ (2603:1096:4:186::6) To SN4PR01MB7455.prod.exchangelabs.com
+ (2603:10b6:806:202::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN4PR01MB7455:EE_|DM6PR01MB3835:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1aa1f40b-e7bd-463c-e544-08dabc9a83e7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ejrmvWHtbdT2QyKsJQJ3tVM27rOP/121tCQwEyRq07l46qgEgAO8Y3ZI5+H9Lwz/u3dsvg8blk9wDcXCF20Nv4qZUqKlGwK9TOC+YTUOpW1HArbR7Blwr9MUjngwm84yR2KIlkEyBiGzfLvoyLsXYNzX+Y9B26bYeExrMs/7T7lSSz6/xeCSdhd8twEycfyG1TFVhgL9UJ1uUwsM/xqUeCaz05D4cDctX7jSrZO67ZBlALgKUEXwi23+aXjlGlGHkxPV53Itf4461pKY+UUOdVTVrUrQEvOBiJncvSVnmaRwwAKjHHx5f03DqBco6T0XNKi8Fm6I/tVGCPOuWOXO1a/8WTeYEF2Tb1SD2sgsvhpb/Yj/66OpfpBYa4nfuKfrDqP2XNUtzHI7GCTQZGu3IChSeqZjsxuHvXNWvEPqhHYDT1Ae+VMYfQYNSYXtlVv9IiDSsV6lOMSpHMtffVs5FA1Ptu36f8vakWUW/tQtlEr6l99/hLDCR3FuLFYV8DzGB7PbCBhMbKi1isIoIl62kMJCiGnt8g3rm6KaljdMm/ouCtHC0i4NVcbxRCkPowu5lqJI5dtLfNpno9Lo9QvQKgePT3nJ2rcKrrhOJozXMKqJ8O++cUVoopt36HhLvV4Drq/Ik971q9XopaKyLgIEGdwwf2IMSIRHRnQJflDB4Fdnox+qlfcY3LG/IEjVa9Go9YrD3IQW+uIp3DAhVFeJyhIj/7eWOD0qVct1ivB4x8RVRdkYmrbryOzdv51HrXdqPFyq5ynL+ZXwXiSp5Fed1jFdfCJcbqompF+XyQs/NPs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR01MB7455.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(136003)(39850400004)(396003)(346002)(451199015)(6486002)(6506007)(478600001)(966005)(38350700002)(110136005)(38100700002)(54906003)(186003)(316002)(107886003)(8936002)(86362001)(6666004)(2906002)(2616005)(1076003)(83380400001)(66476007)(66556008)(52116002)(5660300002)(4326008)(66946007)(8676002)(26005)(6512007)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xp5euZGUHsLN/pX/io6PTgtnIi5SOuQjGT44nMM4yQs8t00pL3L3TFWaBpa3?=
+ =?us-ascii?Q?7M7CcAfMSe5mNVWIPnsL8hNprCfvS6eilGc5uNHtgvU3Ua6iR7eN+eM9WVJA?=
+ =?us-ascii?Q?SHGB6ng06fDikjDxsitQ12jmZVcXieOXXNSBcqFOAQXNu4ZZxddw9mNrW8u+?=
+ =?us-ascii?Q?2SqlS5I8/XyQM+jLvJudmn6FE8ZNmZleb+2iDJKXptp1dd6zELoEZU0hrqMV?=
+ =?us-ascii?Q?g/vCflixGGlTc8ulXso3T0goKezirNNSeUNabLVWkaXc00Bnfzu85qaGIlmm?=
+ =?us-ascii?Q?iEMcBMxC0vm/aq0+KnPOxMG5Xhu41zTKCJnI0oAjtTauR0D6dwxCGpgp7KUD?=
+ =?us-ascii?Q?d70b7JmJSOvYkNScNBZJlHHFEi0nQXvrbglhPVQ5SXBPPPsXPhpN8qN4xlVo?=
+ =?us-ascii?Q?X9jBBKxGnL10s4N0pDMWk0CWsRio4K6/dOhTO7oIU8okzQoaKfcWI9DDfKiG?=
+ =?us-ascii?Q?Oc7mAQk9kZC23mInRYBINWuGobTkaHjN5AftKH8h2BM5MR/14vleIQY6IEug?=
+ =?us-ascii?Q?tmx1xH890WhmO2Qzr1h+JOF0xltqwagAU+lLEvbPNqUjUbcg7sxLPcuqE2WM?=
+ =?us-ascii?Q?G9DTfaZWg9SoO5eqHwMDP1xapYtRFVJCttpjW7AuDGQOFFYjpc4+B5lUrAku?=
+ =?us-ascii?Q?ILY45qisIiN/GFtN1LvyQ+wdA9g+J12e0m8f7h2QA4bfAqPjvAcY416h9wxj?=
+ =?us-ascii?Q?P78TWb5GpP+tX/5lXA0HeA+D5wOpecE8S1RVKZ0zYM0GMJ7unnGVcw6DAVoh?=
+ =?us-ascii?Q?8gOrEXimuLvsIXFNwdWDlUp4AjGaEchWzGhwjneQUy4Zk+z5VgvRlJuwgbrl?=
+ =?us-ascii?Q?8zxZTFkZCw0m8Gaapi+umtT7pREY7Yc4OiWtOrBlOmFpydrW1s/xBibYtKwX?=
+ =?us-ascii?Q?FGN62J3FVX0Od2RgkDA6fxe1r3zLiBGZR7Uw17AOw5IUHD2XVYJAVWUsyruW?=
+ =?us-ascii?Q?OiIfGQWH/fQ4kfeo9s3VlDq6r+Lfo2lsq1tIjtjs/3hFKmNzWCYp4874vt52?=
+ =?us-ascii?Q?BitZUXaQBWtY7zIoOx5XN+XtQ14EcT4GI3ek4YUxByQzcevae0763Td9A4P6?=
+ =?us-ascii?Q?nmmr8Rdk2PdRSkX/U8lsokN/qJtG0myUUaDuev4/tPJ51UoBkPw1C+yU8clJ?=
+ =?us-ascii?Q?PhIlWfEQ0KFEgWcyBPxcPVR1N2/sZzCVD3FCuZ3ZMJqMWZvqyGcTPCjJHXVv?=
+ =?us-ascii?Q?7kxp8N5SQktOl8HephcQ5ylQ79d3QTDwUEM00D5fN41OejU6lxcYph55kRdb?=
+ =?us-ascii?Q?Q4slHUr2F9CDvd2+QBU2OUYF6cxvLtiUbyGYZziT13qgOYth4OUQOmJQAumD?=
+ =?us-ascii?Q?11IERfUWIdPM1bcj8Bfqv2Rq7AybW+sFBJu07FPgjQ3HjRFFntQjXx7Q7iKP?=
+ =?us-ascii?Q?ws7iDaklu0hCuwHIpwSYNjUBMpN0zBKpawIfb6gtQVCJzc1IlOc4EA8JLmJ9?=
+ =?us-ascii?Q?vYFgupPEOxH3X7NWKtPFVL3M689mii5jrIuizIbz2rjHEQZt99FYydG2efGa?=
+ =?us-ascii?Q?SRLyetDcML+BLDWZ2yZBqz96xC9U0eMx+ilWhf9JM4bLIoG72gjqSqtzqZm1?=
+ =?us-ascii?Q?Oxis4b/5dn3IDR0cSahHRWkusD658XyKbiCBpuryPXWoFHFO3rZCvRqAIlj2?=
+ =?us-ascii?Q?iMDQLFNiekyHhY5wWpk4y/Q=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1aa1f40b-e7bd-463c-e544-08dabc9a83e7
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR01MB7455.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 06:21:45.5707
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /HIPs8vPYyhdp/JRhhay8eiNpEqfzrIzvYmNrVF5tumBsLuxpdObngW8/oc/C65xPsRrytgHeDEEsZ3mVooAQNwapYlmlLcuVf5L4iApPk8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB3835
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: d9a6e10e51ac6b774bab68836cb2eae005a47bfc  hwmon: (jc42) Consistently use bit and bitfield macros in the driver
+Improve documentation grammar and formatting for the
+Ampere(R)'s Altra(R) SMpro hwmon driver.
 
-elapsed time: 724m
+Thanks Bagas for the changes in the link below.
 
-configs tested: 70
-configs skipped: 2
+Link: https://lore.kernel.org/lkml/Y1aHiaZ1OpHZIzS9@google.com/T/#mfea2167b99384486a1b75d9304536015116c1821
+Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+---
+ Documentation/hwmon/smpro-hwmon.rst | 111 ++++++++++++++--------------
+ 1 file changed, 56 insertions(+), 55 deletions(-)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-powerpc                           allnoconfig
-um                           x86_64_defconfig
-mips                             allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                 randconfig-a011-20221031
-i386                 randconfig-a012-20221031
-i386                 randconfig-a013-20221031
-i386                 randconfig-a014-20221031
-i386                 randconfig-a015-20221031
-arc                                 defconfig
-alpha                               defconfig
-i386                 randconfig-a016-20221031
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                           rhel-8.3-syz
-x86_64                               rhel-8.3
-x86_64                         rhel-8.3-kunit
-s390                             allmodconfig
-i386                                defconfig
-s390                                defconfig
-x86_64                              defconfig
-x86_64                           rhel-8.3-kvm
-arc                  randconfig-r043-20221101
-s390                             allyesconfig
-alpha                            allyesconfig
-x86_64                        randconfig-a013
-m68k                             allyesconfig
-ia64                             allmodconfig
-x86_64                        randconfig-a011
-arm                                 defconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-x86_64                        randconfig-a015
-arm64                            allyesconfig
-x86_64                           allyesconfig
-arm                              allyesconfig
-i386                             allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-hexagon              randconfig-r041-20221101
-hexagon              randconfig-r045-20221101
-s390                 randconfig-r044-20221101
-x86_64                        randconfig-a012
-riscv                randconfig-r042-20221101
-i386                 randconfig-a001-20221031
-i386                 randconfig-a003-20221031
-i386                 randconfig-a002-20221031
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                 randconfig-a004-20221031
-i386                 randconfig-a006-20221031
-i386                 randconfig-a005-20221031
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64               randconfig-a005-20221031
-x86_64               randconfig-a006-20221031
-x86_64               randconfig-a004-20221031
-x86_64               randconfig-a001-20221031
-x86_64               randconfig-a003-20221031
-x86_64               randconfig-a002-20221031
-
+diff --git a/Documentation/hwmon/smpro-hwmon.rst b/Documentation/hwmon/smpro-hwmon.rst
+index 3a9b14dacf89..fb7b3665735b 100644
+--- a/Documentation/hwmon/smpro-hwmon.rst
++++ b/Documentation/hwmon/smpro-hwmon.rst
+@@ -7,39 +7,39 @@ Supported chips:
+ 
+   * Ampere(R) Altra(R)
+ 
+-    Prefix: 'smpro'
++    Prefix: ``smpro``
+ 
+-    Reference: Altra SoC BMC Interface Specification
++    Reference: `Altra SoC BMC Interface Specification`
+ 
+ Author: Thu Nguyen <thu@os.amperecomputing.com>
+ 
+ Description
+ -----------
+-This driver supports hardware monitoring for Ampere(R) Altra(R) SoC's based on the
+-SMpro co-processor (SMpro).
+-The following sensor types are supported by the driver:
++The smpro-hwmon driver supports hardware monitoring for Ampere(R) Altra(R)
++SoCs based on the SMpro co-processor (SMpro).  The following sensor metrics
++are supported by the driver:
+ 
+   * temperature
+   * voltage
+   * current
+   * power
+ 
+-The SMpro interface provides the registers to query the various sensors and
++The interface provides the registers to query the various sensors and
+ their values which are then exported to userspace by this driver.
+ 
+ Usage Notes
+ -----------
+ 
+-SMpro hwmon driver creates at least two sysfs files for each sensor.
++The driver creates at least two sysfs files for each sensor.
+ 
+-* File ``<sensor_type><idx>_label`` reports the sensor label.
+-* File ``<sensor_type><idx>_input`` returns the sensor value.
++* ``<sensor_type><idx>_label`` reports the sensor label.
++* ``<sensor_type><idx>_input`` returns the sensor value.
+ 
+-The sysfs files are allocated in the SMpro root fs folder.
+-There is one root folder for each SMpro instance.
++The sysfs files are allocated in the SMpro rootfs folder, with one root
++directory for each instance.
+ 
+-When the SoC is turned off, the driver will fail to read registers
+-and return -ENXIO.
++When the SoC is turned off, the driver will fail to read registers and
++return ``-ENXIO``.
+ 
+ Sysfs entries
+ -------------
+@@ -48,48 +48,49 @@ The following sysfs files are supported:
+ 
+ * Ampere(R) Altra(R):
+ 
+-============    =============   ======  ===============================================
+-Name            Unit            Perm    Description
+-temp1_input     milli Celsius   RO      SoC temperature
+-temp2_input     milli Celsius   RO      Max temperature reported among SoC VRDs
+-temp2_crit      milli Celsius   RO      SoC VRD HOT Threshold temperature
+-temp3_input     milli Celsius   RO      Max temperature reported among DIMM VRDs
+-temp4_input     milli Celsius   RO      Max temperature reported among Core VRDs
+-temp5_input     milli Celsius   RO      Temperature of DIMM0 on CH0
+-temp5_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp6_input     milli Celsius   RO      Temperature of DIMM0 on CH1
+-temp6_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp7_input     milli Celsius   RO      Temperature of DIMM0 on CH2
+-temp7_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp8_input     milli Celsius   RO      Temperature of DIMM0 on CH3
+-temp8_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp9_input     milli Celsius   RO      Temperature of DIMM0 on CH4
+-temp9_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp10_input    milli Celsius   RO      Temperature of DIMM0 on CH5
+-temp10_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp11_input    milli Celsius   RO      Temperature of DIMM0 on CH6
+-temp11_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp12_input    milli Celsius   RO      Temperature of DIMM0 on CH7
+-temp12_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp13_input    milli Celsius   RO      Max temperature reported among RCA VRDs
+-in0_input       milli Volts     RO      Core voltage
+-in1_input       milli Volts     RO      SoC voltage
+-in2_input       milli Volts     RO      DIMM VRD1 voltage
+-in3_input       milli Volts     RO      DIMM VRD2 voltage
+-in4_input       milli Volts     RO      RCA VRD voltage
+-cur1_input      milli Amperes   RO      Core VRD current
+-cur2_input      milli Amperes   RO      SoC VRD current
+-cur3_input      milli Amperes   RO      DIMM VRD1 current
+-cur4_input      milli Amperes   RO      DIMM VRD2 current
+-cur5_input      milli Amperes   RO      RCA VRD current
+-power1_input    micro Watts     RO      Core VRD power
+-power2_input    micro Watts     RO      SoC VRD power
+-power3_input    micro Watts     RO      DIMM VRD1 power
+-power4_input    micro Watts     RO      DIMM VRD2 power
+-power5_input    micro Watts     RO      RCA VRD power
+-============    =============   ======  ===============================================
+-
+-Example::
++  ============    =============  ======  ===============================================
++  Name            Unit           Perm    Description
++  ============    =============  ======  ===============================================
++  temp1_input     millicelsius   RO      SoC temperature
++  temp2_input     millicelsius   RO      Max temperature reported among SoC VRDs
++  temp2_crit      millicelsius   RO      SoC VRD HOT Threshold temperature
++  temp3_input     millicelsius   RO      Max temperature reported among DIMM VRDs
++  temp4_input     millicelsius   RO      Max temperature reported among Core VRDs
++  temp5_input     millicelsius   RO      Temperature of DIMM0 on CH0
++  temp5_crit      millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp6_input     millicelsius   RO      Temperature of DIMM0 on CH1
++  temp6_crit      millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp7_input     millicelsius   RO      Temperature of DIMM0 on CH2
++  temp7_crit      millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp8_input     millicelsius   RO      Temperature of DIMM0 on CH3
++  temp8_crit      millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp9_input     millicelsius   RO      Temperature of DIMM0 on CH4
++  temp9_crit      millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp10_input    millicelsius   RO      Temperature of DIMM0 on CH5
++  temp10_crit     millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp11_input    millicelsius   RO      Temperature of DIMM0 on CH6
++  temp11_crit     millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp12_input    millicelsius   RO      Temperature of DIMM0 on CH7
++  temp12_crit     millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp13_input    millicelsius   RO      Max temperature reported among RCA VRDs
++  in0_input       millivolts     RO      Core voltage
++  in1_input       millivolts     RO      SoC voltage
++  in2_input       millivolts     RO      DIMM VRD1 voltage
++  in3_input       millivolts     RO      DIMM VRD2 voltage
++  in4_input       millivolts     RO      RCA VRD voltage
++  cur1_input      milliamperes   RO      Core VRD current
++  cur2_input      milliamperes   RO      SoC VRD current
++  cur3_input      milliamperes   RO      DIMM VRD1 current
++  cur4_input      milliamperes   RO      DIMM VRD2 current
++  cur5_input      milliamperes   RO      RCA VRD current
++  power1_input    microwatts     RO      Core VRD power
++  power2_input    microwatts     RO      SoC VRD power
++  power3_input    microwatts     RO      DIMM VRD1 power
++  power4_input    microwatts     RO      DIMM VRD2 power
++  power5_input    microwatts     RO      RCA VRD power
++  ============    =============  ======  ===============================================
++
++  Example::
+ 
+     # cat in0_input
+     830
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
