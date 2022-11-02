@@ -2,176 +2,344 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2078EC4332F
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Nov 2022 06:54:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0115DC433FE
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Nov 2022 07:35:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiKBGyy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Nov 2022 02:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
+        id S230420AbiKBHfc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Nov 2022 03:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiKBGyx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Nov 2022 02:54:53 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2094.outbound.protection.outlook.com [40.107.255.94])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EA423398;
-        Tue,  1 Nov 2022 23:54:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OX2vq56UUEpgqqIWe9LXOpiIuyUARLG9nBwI5oLn7BS3htmwANu7hkkqbp00OQPvtORd2E/JFXcJ/txsyAWVDJHP0HDMD1oQxvF8EZnQ/0QqA5jkasEi7A/cFLzstHqEPabbx5k52hXtgbBpPiRJ+TunnGklzOWyVkCzZsemfqd8IIGrFq8oYz3dY7JFCNQOA9v1Hst4mInTzfBw4WqrLWbxRPHF8ZJgbEGQq7k6PIHXpjOUzlkOQYu9aENRlzwKPuP7JslC6qwt/9opPRco4qWTSH+1sR+QS4MLXbaYGSnjGwIOfjzsBABx3AQafN5ojXtIKxeVp51CidwQGsnPsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bV2HCPkCaFcUXZfY7XGCLPBI2vM9Km2epssA/QF2fIk=;
- b=WYo7iZPbPyeIvsAIvehc6eUahj3CqkJUVKG85XC2jf3QwdPjERs4GDDRUPNPlGfrCoDZccSipzgCxNXDq/fkXli+i9BNizPAJ+H7BZERu42CsURGrjjHDKvNnVfCNolPBa6d5HujZn06VYT1Cuw+up+eKOd7ICDrW+LEQnRWHVYFJYuNDxNL2SLpwyEZP5SZT19T0wTvHSr+53/wRifNZgicyk9FN5gBI0e+APcsaO9CgjBffyr7TcIz68+EuXL3dVOLNqeKMXzuwEGcYhGl6iw9RIfwtFB2uiFX3A0TrISVKBoJxdc7IdrOIldcZY8BjXgmct2oeI7P5EoosnSwdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bV2HCPkCaFcUXZfY7XGCLPBI2vM9Km2epssA/QF2fIk=;
- b=LvxjV4qkNJGAra9RR0mY7tE0WqM15hatsG1HAh9LrOLw0lWuCJ8IuzahHnE+iMRm6VlwBpqz/4csd6jhzEEwZL0sruN6caLSFPgTRxCPmU8OvS1EywQBSIWdD91kZefLHiv8ZM5NLnYv9EQHbGDmtFVGMU7+Du3Mt0pzCKePcQCYEhuFaFOAaumEmQsbneuGJotNgklClE+93SPYQ0ssqX02/ugnsEnFAu4r18a+JT3/CicmGvsKN7+b38PjTXopUBbNyJyzF47GpZHsntBsiCvDSZzMFV4vPoZv6nzwqgCrNOy9VcyOFcq1Xat7zVlwZ1T3yevNKW5G9sZ6oWq3cQ==
-Received: from SG2PR06MB3365.apcprd06.prod.outlook.com (2603:1096:4:69::12) by
- PUZPR06MB6032.apcprd06.prod.outlook.com (2603:1096:301:116::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.20; Wed, 2 Nov
- 2022 06:54:43 +0000
-Received: from SG2PR06MB3365.apcprd06.prod.outlook.com
- ([fe80::dd5d:e720:e00f:831]) by SG2PR06MB3365.apcprd06.prod.outlook.com
- ([fe80::dd5d:e720:e00f:831%6]) with mapi id 15.20.5769.019; Wed, 2 Nov 2022
- 06:54:43 +0000
-From:   Billy Tsai <billy_tsai@aspeedtech.com>
+        with ESMTP id S230395AbiKBHf0 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Nov 2022 03:35:26 -0400
+Received: from ipmail06.adl3.internode.on.net (ipmail06.adl3.internode.on.net [150.101.137.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54D322529B
+        for <linux-hwmon@vger.kernel.org>; Wed,  2 Nov 2022 00:35:23 -0700 (PDT)
+IronPort-SDR: T5O/mlAfJ/VcOb+vs4QHNpk1wWFBnQr1Rg5v9CYHfRqvQ+yvFvOwtfX2ruIXrVY8zYSKTLcAlf
+ cb9v+LWyGP8ms+WjkSvDfrHb+n626LdM+UMXzznr70RIJ4KU1txzWmtNjXucbVi0m8kMO+N92k
+ HY/xdeLuK+nPVk9n1nbkX5b9q2O2geU+2FUPixJt5Jl94yAmL7pawyMnnxrnGuJzZNJh+M04mb
+ +SDRcCYH4uRzulgwct4CedFj5U02Anhs+4GZiHxnigmLT5dypygLgX+O00i4oNrPIVkVIKuNNf
+ SxZaNT2G0Sxv+TSp5ORpzD99
+X-SMTP-MATCH: 0
+X-IPAS-Result: =?us-ascii?q?A2CHAQD3HGJjjPQc8jxaHAEBAQEBAQcBARIBAQQEAQFAC?=
+ =?us-ascii?q?YE1BAEBCwGCBCiCWZVoA58iDwEPAQFEBAEBhQUChHomNwYOAQIEAQEBAQMCA?=
+ =?us-ascii?q?wEBAQEBAQMBAQYBAQEBAQEGBBQBAQEBPxgBOQcLUgcLWAcHgUELgWETCwMxD?=
+ =?us-ascii?q?YZDAQEBAycZAQE3AQ8LDgouVwYTgn2DIaxBgQEzgQGCCAEBBoJhlnGBXQmBP?=
+ =?us-ascii?q?QGPfnpDP4FOgRWBPIE+MD6DfCoehj2MPIoYOAMZKx1AAws7Mg1MG1gOCR8cD?=
+ =?us-ascii?q?hcNBQYSAyBuBQo3DygvZyscGweBDCooFQMEBAMCBhMDIAINKTEUBCkTDSsHI?=
+ =?us-ascii?q?3EJAgMiZQUDAwQoLAMJQAcWESQ8B1g6AQQDAhAiPAYDCQMCJFh1LxEVBQMNF?=
+ =?us-ascii?q?yUIBU4ECDoCBQZSEgIKEQMSDwYmRw5KPjkWBidEATQPDhYDYIFxBplgAWsHP?=
+ =?us-ascii?q?Rw1CoImAUMvkmaODIEyn36DcYFMnzWBRKdPly2iDj6FAgIKBxaBeIF/TR8Zg?=
+ =?us-ascii?q?yJPAQIBAQENAQIBAQMBAgEBAQkBAQEBjh0MDQmBBAEJfIw4YTsCBwsBAQMJi?=
+ =?us-ascii?q?AeCNwEB?=
+IronPort-PHdr: A9a23:Y87lZBR+k4KqdvqVk42fGqX85Npso4vLVj580XJvo7hPbr/l9I7rI
+ 0LY//krgVrUG4TXrftZ2KLfqau1X2sG7N6atWwaNoZBUhgZhIAXh1kuDMLfWxLyJfK4Y3BlT
+ JYbBg1u9SjjY0NeQJmWWg==
+IronPort-Data: A9a23:rtjIdqPxs8619ZDvrR2ckcFynXyQoLVcMsEvi/4bfWQNrUol1TBTz
+ mobDWDUPfrbMDahco8lbdvio0MFvMeHyt5mHQtv/Hg0EXkTo5GUW4nFdxuoNiicf5PPEh5tt
+ cwSZ4DJBc1lFXW0SjWFa+i59yMgvU2rqhsQLMaeZ0idkCc9EH9JZSpLwrJ/2sgy6TSAK1vlV
+ ena+qUzBXf8s9JKGjJMg068gEsHUMTa4Fv0aXRjDRzjlAa2e0g9VPrzF4noR5fLatU88tqBe
+ gr25OrRElU1XvsaIojNfr7TKiXmS1NJVOSEoiI+t6OK2nCuqsGuu0o2HKJ0VKtZt9mGt+ot7
+ ex8sYaQciwCDoqLp7gySRBaVAgraMWq+JefSZS+mcaS01aAeGHl3PtpFk1wMIgFvOd7R2hTn
+ RAaAG5VKErf3aTskPThFrUEascLdaEHOKsRoHhmzhnSF/85T5fZT+PH4MIe3Tt2j90m8fP2O
+ 5FHMGI1NkuRC/FJEmYSFso/g7j4vH68XzF4627Io7gxyUGGmWSd15C2aIGFIIbbLSlPpW6cp
+ 2Tb7yH5HRQdMvSBxjeftHGhnOnCmWX8Qo16PL+0+/p0iUee7ncOExBQXly+ydG9i0ijS/pFL
+ EEf+W8ztu40+VDDczXmd0Pg5STY5FtGC58KT7F88x2E1qvfpRqBCWlCRTlELtU73CMredA0/
+ mXVuurYASZPi5a+eVXayeu7tzqwfgFAeAfuehQ4ZQcC5tDipqQ6gRTOUstvHcaJYjvdR2yYL
+ 9ei8nZWulkDsSIY/+DgpgCY2m7ESozhF1NsvF2PAApJ+yskDLNJcbBE/nDy0J6sxq6iX1WHs
+ WlsdyO2trhWVflheASrTfpFJ7a0+/bNDzTYjEUHInXM32r1viT/J8UKsHQkeBsvKdoNZT7iJ
+ lPLtgIX75hWenK3BUOWX25TI597pUQDPY6+PhwxUjaoSsIpHONg1Hs2DXN8J0i3zCARfVgXY
+ P93i/qEA3cAErhAxzGrXeob2rJD7nlgmzyIH8+nlUr7jev2iJuppVEtbgbmggcRsv3snekp2
+ 4wFXyd3408BAbKlOHm/HXA7cwpRdCBT6W/KRzx/LbbYclA8SQnN+tfN2bxpeop5kr5Tm/ugw
+ 51OchEw9bYLvlWecV/iQi45N9vSsWNX8SpT0doEYQ/2hxDOoO+HsM8iSnfAVeJ6rbI7nKcpE
+ 6ltlgfpKq0ndwkrMg81NfHVxLGOvjzy7e5XFyb6MjU5YbB6QAnFpo3tcgf1rXlcBTC+qsU5u
+ bHm2wbGB5sPAQ1/VZ6EZPWqxlK3nH4chOMrARWUfYkJJRy9/dg4MTH1g982P9oId0fJyAya4
+ ADKUx0Wkvac8YY6/e7Aib2As4r0QfB1GVBXHjeH4LvvbXva82OvzJVuSuGNeTyBBmr49L/7N
+ bde1fjjPvodkBBHtpc6ErotxL9nv4njoLpTzwJFGnTXbg31VO8/ciPbhJhC7/QfyKVYtA26X
+ lO01uNbYbjZatn4FFMxJRY+arrR3/8jmg7UsaY/LnLltX1+87ewWElPOwWB1X5GJ7xvPYJ7n
+ eostZJE6wG7jRZ2YN+KgjoOrDaGL2AbFa49v44UB5XnzAcu1xdDbdrVF3ausp2IbtxNNGgsI
+ yOV3fSc2+sMnBebIndjR2LQ2ed9hIgVvE4YxlE1J2OPxojPiMgojU9Y/jkARwhIyglKjrBoM
+ W9xOkwreaiDo2VyiM5YUzz+Eg1NHkbDqBKpjgFVziiDHwzyCjCLN3E0JeeGulwB/GMadT9eu
+ riFkT63XTHvdcD3/y0zRU889aK/Eowrq1STlZD1BdmBErk7fSHh3v2ka10O+knuDs4GjUHao
+ fVnobRrYqrhOC9O/6A2BuF2D1jLpMxo+YCafcxcwQ==
+IronPort-HdrOrdr: A9a23:hi6ySquSu5Wubpl9PZaMulUo7skDptV00zEX/kB9WHVpm6yj/f
+ xGUs5rtiMc7wxhPk3I+OrwX5VpIxvnmKKdhLN8AV7MZniFhILFFuBfBM7Zsljd8k7Fh5ZgPM
+ VbHJSWYeeYZTNHZITBkW2F+r0bruVvnprJuQ6T9QYVcenkBpsQlDuREjzrbXGeWjM2eabRy6
+ DsnPaudlKbCAkqUvg=
+X-IronPort-Anti-Spam-Filtered: true
+Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
+  by ipmail06.adl3.internode.on.net with ESMTP; 02 Nov 2022 18:05:19 +1030
+Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
+        (authenticated bits=0)
+        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 2A27ZEnL1305925
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Wed, 2 Nov 2022 18:35:15 +1100
+Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 2A27ZEnL1305925
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
+        s=s1; t=1667374515; bh=jdqfJ/7L1SS9h8mooS8E6aPM1ZHI92+1p8QkgVcGULA=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=r3l61dRHlU13AXXe8tTxmea5nIkWstLgbVkCZtwYGoCil6eXMB5KJ9tbyKl1XvUEb
+         RzNyR5ppnsUtmtoLbMISX0FWb4wuUTpy4ivL3DQIQH6HKlh0E3HH9KRwQpYzGN9nQp
+         bwwVRmyiuGvEyjlnc8uPdZyr356G+yMwlid4qdXQRySRaeYv+ptm/bVXuuM08R1ByZ
+         ll35Nq6S7yzlZ/pK9QKOaAH4ElikRtXB23whS3uKtClG6ZCimXf1kBFuf9G9m+pMUw
+         x68M+Kn5dvPqtt7G1krFsL02LbdoGFhpkbJPVW1AYaP8LJgVw9hsL9Qgg9q5/6FRaz
+         dqzRUnqhHUDeg==
+Message-ID: <8d00fbea0526ad8f8d8a954963186a4ffcca5ca4.camel@crawford.emu.id.au>
+Subject: Re: [PATCH v3 1/1] hwmon: (it87) Add DMI table for future extensions
+From:   Frank Crawford <frank@crawford.emu.id.au>
 To:     Guenter Roeck <linux@roeck-us.net>
-CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>,
-        "garnermic@meta.com" <garnermic@meta.com>
-Subject: Re: [v2 3/3] hwmon: Add Aspeed ast2600 TACH support
-Thread-Topic: [v2 3/3] hwmon: Add Aspeed ast2600 TACH support
-Thread-Index: AQHY7ddiCLgpICHNHkaN+NgNt8n5/K4qDDAAgAGuNQA=
-Date:   Wed, 2 Nov 2022 06:54:43 +0000
-Message-ID: <271C521D-8F20-4C86-B3DA-9C0AD74242D4@aspeedtech.com>
-References: <20221101095156.30591-1-billy_tsai@aspeedtech.com>
- <20221101095156.30591-4-billy_tsai@aspeedtech.com>
- <20221101131456.GA1310110@roeck-us.net>
-In-Reply-To: <20221101131456.GA1310110@roeck-us.net>
-Accept-Language: zh-TW, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Microsoft-MacOutlook/16.66.22101101
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SG2PR06MB3365:EE_|PUZPR06MB6032:EE_
-x-ms-office365-filtering-correlation-id: ba22b636-41c8-4cf1-791c-08dabc9f1f2a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hQNL2N3LfGCWJLcUa6tf9u+pvujfPcg2sZxbHTMmvwe568rbNVjgkWBybUNgj1fcVq8fdYNImsryv0t4Qchv8DPZO1y5avnSQlV++nKW/JjD+41XuOqpJLrvmUkVV3g2E5glMsJDN1EblsoNGtLhi9TRQj/D2+DJtcis/256tCA0RzYYZDNn1sRVlvNtGVCyxp69FvLsJdBxsAHr7kPDeTyfGuyV+wQach7FMzJ6EQ5lwf9zUZ5CoViSUpmYxvlcc7l+NAsTdCbDziN1L3E17GhpxzfG0rrmB9Bld1w3YBGUUSxGGZDkCHpgvOPTmySLEExJoWQQnF3FAeJSeMwpJYM214s14AETSx4Xf1hxKu55Mry64Ylmwr4hbr5WdGfRZi16JgTgX6ObojVVER0ZbTxhHdGu+I74F3rk51rMfMK6WzbC3jRw8C1O6qLmyfe61t+HR2jWWsfQj3fisZ/YRI8+7L7Fvv4yILOtJGspjv1R8Ihju/0y4+HRbYofY19LPSN9scejZBcjJLxOhr1JQSOJ4MrRS0l4k+l4O3EaVZcqFbocGSqZ00NxBme34QNqCCXKv19gsyz+QrBd/8Ziu9OZcObGtOzo37PJUItINlP0FjiIOdPthjB7/Jb+yMNVKDgTmUwQnLwnJH5KwIVkGON2QVm0schIGCWY3iAoYD7lz767lB1mepM8k61x994FkrAXiARu3ctqZuG00P8EHHjbZ7Y/ezMh7slZZr0KzEbR1M+MRncbhsaqYluVNLkDA3ok7Y7LxlPWSYKDVNsJHB8wnXcqKMo7T4cuJdhFoUs=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3365.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(136003)(346002)(366004)(396003)(39850400004)(451199015)(86362001)(36756003)(33656002)(122000001)(38100700002)(38070700005)(316002)(478600001)(66446008)(91956017)(54906003)(6916009)(71200400001)(66946007)(5660300002)(6512007)(2616005)(41300700001)(186003)(26005)(8936002)(7416002)(66556008)(66476007)(8676002)(6506007)(4326008)(64756008)(6486002)(53546011)(2906002)(76116006)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZEVKRkVGdTNNSlhzeWxzWEcrZnNtNzNSN3dRR1hKdlcwWE9OVHZDZ0xVbkNl?=
- =?utf-8?B?VG82Ung4aFpCeElPbVBHK090SmkrdHp4V2JUSVJBN0plUTJkUVZsa0lwWExB?=
- =?utf-8?B?WFQ3dGs1UzJvbXZnMWE3Z3hyeG9sdXQzNzY0dWpYN2JtSHdZSzByelh4TENy?=
- =?utf-8?B?c1U1azJ5YkdqcjloZDlmQ0JLTFhIMkxRNE0rUDVIdDZCVlR1bUkvOW1WUENL?=
- =?utf-8?B?U3ZLNkFvOEg0WEQ1L0p6cERPQTkyOFp6b0JxdzhuVG00Y3E3amtSZys4R3BO?=
- =?utf-8?B?TmsvNjhxQllwMmxKVkNlc1NWL2VRT2JDUk5vVlhqV0w3V2NxZjhBR2kxYjRr?=
- =?utf-8?B?MWIvajZ4c1NUcXRaVWdDNHluU3c5by9uWkh3dnVSeVA3bmVlOWIza1J6bHg0?=
- =?utf-8?B?TnhkWjBweU9pOVliR1RzVUFQM2M3cVRVK1lNMDRCQXBFWHRJRUNiK01WL3Ja?=
- =?utf-8?B?dHZFc1RmNTZ1UVNBbWxTcnZvUVQrR1ZlRUwxSUZqdzUzODdBMk5HUkwya1ZX?=
- =?utf-8?B?cjlSeHJhRTQxVFFzYjljV1ZWdnhITmJqdktESXBHQkw2Rkt0YWcxZThHTjls?=
- =?utf-8?B?Z0pwbjNwSlFpY2lqSEF3ejVBWW9RQ1E2dmdZcHVEODh1OVlMYXdFMm5KMTJO?=
- =?utf-8?B?dC92TUhxWFNXZzVVSFNkKzc1WktlajZqcGFsazZGVTQyQXdpbldEUHZtQmoz?=
- =?utf-8?B?WDlkbWZ2TGVrQjRJUnBOM29SS3p4SUNqZlFZb2dEaGFDakhQa1RKaGRIRVhl?=
- =?utf-8?B?WW1xeVl5enNzNmY0OWFQWUw5MnhxNDlldjRpOGRFeXhWNGRmdDZDbTFpa0hE?=
- =?utf-8?B?UmtUeG03Z0V4YnZwaDJ0bXVFLy9POWVxZE1CWnc4WTgxWE00d3BHai9XY2Vt?=
- =?utf-8?B?UjE4Nk1MOG1abzZlb2lEZ0xzM3I2c1crWDNJWHlCSURId20wSnh1ZmZ3MTg3?=
- =?utf-8?B?MTI0VU9seW9CWGFDaEVld1A0dEVuTzFlWDJ2OVRQQ01pNDJqVm90bnIrbHhN?=
- =?utf-8?B?TFh0ejB1ZkpsUFNHNG9LSXRsYWZpU21xTU9XbmFzdWlDNGdScCtlbk83bXR0?=
- =?utf-8?B?UXBZMUoxbGVuVWJvbzMxWlNvY2YraEhpYjFtaStzekhYQjNTamtQYkN2cHRx?=
- =?utf-8?B?SzMyRmVPdGUveU42b2NWMElLY1R2Zy9FbUxGQkdsUnlCOEk4dVFpRmlkNUY5?=
- =?utf-8?B?d2xqdDRFN2o0T0I3TmNSNDdxTGVDbHlGY1YwOG5XTDkwQS9RYm10TlNJd1VZ?=
- =?utf-8?B?MXJ6QThYN3plU1RrUGFrUWVJanU2SGI3RWNNK0EvUVB0UWx2Sm8vc3haVWtT?=
- =?utf-8?B?K0J5TXYwZ0dyNTY2OEFzQzVKMXVVM1FDeGtLbFVEeTVZZ0FLRkdZeEk1UlVm?=
- =?utf-8?B?VVVaZVZOTnQxa1lXU3FzNHN3NDF3bnRTbnJBcW5sOEZWeWF6ay92ZllxQWJq?=
- =?utf-8?B?dGp1QkZPQ29GUjNYWTV4eE1XM2hMLzB3UWgwOHNWR1pDTmlvTVZRMFdnSkli?=
- =?utf-8?B?MzVBazBsUHdBWnRjd01kUGplZC8zdmc3QmZHQUpJZS9OcTFIbzBpUExmVDB2?=
- =?utf-8?B?NDdJSUE1RWNCcHNJcmF3VnRMVHBtUnpYL29RTVU4WGpGd1hLNmUzUi9haGE5?=
- =?utf-8?B?Q0tLLzhMUVJ3dFpCK1AwdVU0RENNNXdkb2RlODN0Smc5eUMrZ2c0VUIvTjFs?=
- =?utf-8?B?R2todmJHbHREN2tWY3pCM01YNUNDS0hORUVtT2lPaithYk9RaCtVbWs4MWwv?=
- =?utf-8?B?UVFSeGZvTEdleElZUzhheVdDSGo0dTJGRVFteU1yYXR0S3hteVpIWEt1SDlI?=
- =?utf-8?B?b2tTcXJVVTlKd1BjYm1ZNTRxVitUTGhWNDk0YTd2RDdMd05pTFR1bDY2WDlK?=
- =?utf-8?B?UmhKbUtMVHB6d2d5QzJsb2k2bVFIQ1VQM3p1b0t0cSs0R0ppTTd0UlNGdEl0?=
- =?utf-8?B?TlBLeGkxdzYxWlpUQ0g2RTFheGJ2UCtqaWJWcmJiNmtublE0U3k5KzM2dk03?=
- =?utf-8?B?OGFsR0g4a0R2SXdMSndSYkZHUHlSTDd1ZXduWVVqWmRWS2xBK3pFQWNjSlc3?=
- =?utf-8?B?N2xMNXl5L3VxdzBJSWhyd3BLNVEzV3I4Um9kMGF3SzdNTThzOUgrVFBMVFow?=
- =?utf-8?B?S1h4b0Irb3NscXVPVEh5dHMwYkRIQncyRkxtWGwwcGp4TlFZTCtPT0VEenJB?=
- =?utf-8?B?QXc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8C9AC82443FBDB46A1865C06EAE224C1@apcprd06.prod.outlook.com>
-Content-Transfer-Encoding: base64
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Date:   Wed, 02 Nov 2022 18:35:14 +1100
+In-Reply-To: <20221101143736.GA1311791@roeck-us.net>
+References: <20221030083841.3433967-1-frank@crawford.emu.id.au>
+         <20221101143736.GA1311791@roeck-us.net>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3365.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba22b636-41c8-4cf1-791c-08dabc9f1f2a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Nov 2022 06:54:43.4420
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: b1B8JSWLqHPUk99oEtU60OSUlSozlr7sy387S0HwgO4n0Umsn0vm9fLIJUx39puZ7K2nUr3w8ZA1l0NotfCoSwaa0Uu+yov655Vr2+XFHNo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR06MB6032
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Wed, 02 Nov 2022 18:35:15 +1100 (AEDT)
+X-Virus-Scanned: clamav-milter 0.103.7 at bits.crawford.emu.id.au
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-SGkgR3VlbnRlciwNCg0KT24gMjAyMi8xMS8xLCA5OjE1IFBNLCAiR3VlbnRlciBSb2VjayIgPGdy
-b2VjazdAZ21haWwuY29tIG9uIGJlaGFsZiBvZiBsaW51eEByb2Vjay11cy5uZXQ+IHdyb3RlOg0K
-DQogICAgT24gVHVlLCBOb3YgMDEsIDIwMjIgYXQgMDU6NTE6NTZQTSArMDgwMCwgQmlsbHkgVHNh
-aSB3cm90ZToNCiAgICA+ID4gKw0KICAgID4gPiArCS8qIFJlc3RhcnQgdGhlIFRhY2ggY2hhbm5l
-bCB0byBndWFyYW50ZWUgdGhlIHZhbHVlIGlzIGZyZXNoICovDQogICAgPiA+ICsJYXNwZWVkX3Rh
-Y2hfY2hfZW5hYmxlKHByaXYsIGZhbl90YWNoX2NoLCBmYWxzZSk7DQogICAgPiA+ICsJYXNwZWVk
-X3RhY2hfY2hfZW5hYmxlKHByaXYsIGZhbl90YWNoX2NoLCB0cnVlKTsNCg0KICAgID4gSXMgdGhh
-dCByZWFsbHkgbmVlZGVkID8gRG9lc24ndCB0aGUgY29udHJvbGxlciBtZWFzdXJlIHZhbHVlcyBj
-b250aW51b3VzbHkgPw0KDQpZZXMsIHRoZSBjb250cm9sbGVyIHdpbGwgbWVhc3VyZSB2YWx1ZXMg
-Y29udGludW91c2x5IGJ5IGhhcmR3YXJlLiBJIHdpbGwgcmVtb3ZlIGl0LiANCklmIHRoZSB1c2Vy
-IHdhbnQgdG8gZ2V0IHRoZSBmcmVzaCB2YWx1ZSwgaXQgc2hvdWxkIGJlIGRvbmUgYnkgdGhlIGFw
-cGxpY2F0aW9uIGxheWVyDQooZS5nLiByZWFkIHR3byB0aW1lcykuDQoNCiAgICA+ID4gKw0KICAg
-ID4gPiArCWlmIChyZXQpIHsNCiAgICA+ID4gKwkJLyogcmV0dXJuIDAgaWYgd2UgZGlkbid0IGdl
-dCBhbiBhbnN3ZXIgYmVjYXVzZSBvZiB0aW1lb3V0Ki8NCiAgICA+ID4gKwkJaWYgKHJldCA9PSAt
-RVRJTUVET1VUKQ0KICAgID4gPiArCQkJcmV0dXJuIDA7DQogICAgPiA+ICsJCWVsc2UNCiAgICA+
-ID4gKwkJCXJldHVybiByZXQ7DQoNCiAgICA+IGVsc2UgYWZ0ZXIgcmV0dXJuIGlzIHVubmVjZXNz
-YXJ5LCBhbmQgd2h5IHdvdWxkIGEgdGltZW91dCBiZSBiZSBpZ25vcmVkID8NCg0KV2hlbiB0aGUg
-dXNlciBzZXRzIHRoZSBjb3JyZWN0IGZhbiBpbmZvcm1hdGlvbiAoaS5lLiwgbWluX3JwbSwgbWF4
-X3JwbSksIHRoZSByZWFkDQpwb2xsIHRpbWVvdXQgd2lsbCBvbmx5IG9jY3VyIGlmIHRoZSB0YWNo
-IHBpbiBkb2VzIG5vdCBnZXQgYW55IHNpZ25hbCAoaS5lLiBycG09MCkuDQoNCiAgICA+ID4gKwl9
-DQogICAgPiA+ICsNCiAgICA+ID4gKwlyYXdfZGF0YSA9IHZhbCAmIFRBQ0hfQVNQRUVEX1ZBTFVF
-X01BU0s7DQogICAgPiA+ICsJLyoNCiAgICA+ID4gKwkgKiBXZSBuZWVkIHRoZSBtb2RlIHRvIGRl
-dGVybWluZSBpZiB0aGUgcmF3X2RhdGEgaXMgZG91YmxlIChmcm9tDQogICAgPiA+ICsJICogY291
-bnRpbmcgYm90aCBlZGdlcykuDQogICAgPiA+ICsJICovDQogICAgPiA+ICsJaWYgKHByaXYtPnRh
-Y2hfY2hhbm5lbFtmYW5fdGFjaF9jaF0udGFjaF9lZGdlID09IEJPVEhfRURHRVMpDQogICAgPiA+
-ICsJCXJhd19kYXRhIDw8PSAxOw0KICAgID4gPiArDQogICAgPiA+ICsJdGFjaF9kaXYgPSByYXdf
-ZGF0YSAqIChwcml2LT50YWNoX2NoYW5uZWxbZmFuX3RhY2hfY2hdLmRpdmlzb3IpICoNCiAgICA+
-ID4gKwkJICAgKHByaXYtPnRhY2hfY2hhbm5lbFtmYW5fdGFjaF9jaF0ucHVsc2VfcHIpOw0KICAg
-ID4gPiArDQogICAgPiA+ICsJY2xrX3NvdXJjZSA9IGNsa19nZXRfcmF0ZShwcml2LT5jbGspOw0K
-ICAgID4gPiArCWRldl9kYmcocHJpdi0+ZGV2LCAiY2xrICVsZCwgcmF3X2RhdGEgJWQgLCB0YWNo
-X2RpdiAlZFxuIiwgY2xrX3NvdXJjZSwNCiAgICA+ID4gKwkJcmF3X2RhdGEsIHRhY2hfZGl2KTsN
-CiAgICA+ID4gKw0KICAgID4gPiArCWlmICh0YWNoX2RpdiA9PSAwKQ0KICAgID4gPiArCQlyZXR1
-cm4gLUVET007DQoNCiAgICA+IElmIHRoZSBmYW4gaXMgb2ZmIG9yIG5vdCBjb25uZWN0ZWQsIHdv
-dWxkIHRoYXQgcmV0dXJuIGFuIGVycm9yID8NCiAgICA+IElmIHNvLCB0aGF0IHdvdWxkIGJlIGlu
-YXBwcm9wcmlhdGU7IGl0IHNob3VsZCByZXR1cm4gYSBzcGVlZA0KICAgID4gb2YgMCBpbiB0aGF0
-IGNhc2UuDQoNCkl0IHdpbGwgYmUgaGFuZGxlZCBieSB0aGUgcmVnbWFwX3JlYWRfcG9sbF90aW1l
-b3V0Lg0KDQpUaGFua3MNCg0KQmVzdCBSZWdhcmRzLA0KQmlsbHkgVHNhaQ0KDQo=
+Guenter,
+
+First, thanks for your comments, it has forced me to look at some of
+the other kernel functions and I've learnt from it.
+
+On Tue, 2022-11-01 at 07:37 -0700, Guenter Roeck wrote:
+> On Sun, Oct 30, 2022 at 07:38:41PM +1100, Frank Crawford wrote:
+> > Changes in this patch set:
+> >=20
+> > * Define the DMI matching table for board specific settings during
+> > the
+> > =A0 chip initialisation and move the only current board specific
+> > setting
+> > =A0 to this new table.
+> >=20
+> > * Export the table for use by udev.
+> >=20
+> > v2: updates following comments:
+> >=20
+> > * Converted to use callback function.
+> >=20
+> > * Moved call to callback funtion to sio_data into it87_find in line
+> > =A0 with other settings for sio_data.=A0 This requires dmi_data also
+> > passed
+> > =A0 to access additional data.
+> >=20
+> > * Added macro for defining entries in DMI table to simplify future=20
+> > =A0 additions.
+> >=20
+> > * Note dmi_data is defined in sm_it87_init to simplify tests and
+> > for
+> > =A0 future additions.
+> >=20
+> > v3: further updates following comments:
+> >=20
+> > * Proper use of callback functions for DMI functions.=A0 This also
+> > =A0 involves saving dmi_data in a static variable for use as
+> > required.
+> >=20
+> > * Moved to dmi_check_system() for testing DMI table.
+> >=20
+> > Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
+> > ---
+> > =A0drivers/hwmon/it87.c | 72 ++++++++++++++++++++++++++++++++--------
+> > ----
+> > =A01 file changed, 53 insertions(+), 19 deletions(-)
+> >=20
+> > diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+> > index 73ed21ab325b..6eac15a5f647 100644
+> > --- a/drivers/hwmon/it87.c
+> > +++ b/drivers/hwmon/it87.c
+> > @@ -567,6 +567,14 @@ struct it87_data {
+> > =A0=A0=A0=A0=A0=A0=A0=A0s8 auto_temp[NUM_AUTO_PWM][5];=A0=A0/* [nr][0] =
+is
+> > point1_temp_hyst */
+> > =A0};
+> > =A0
+> > +/* Board specific settings from DMI matching */
+> > +struct it87_dmi_data {
+> > +=A0=A0=A0=A0=A0=A0=A0u8 skip_pwm;=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0/=
+* pwm channels to skip for this
+> > board=A0 */
+> > +};
+> > +
+> > +/* Global for results from DMI matching, if needed */
+> > +static struct it87_dmi_data *dmi_data =3D NULL;
+> > +
+>=20
+> static variables do not need to be initialized with NULL/0.
+
+Okay, will drop it in the next version.
+>=20
+> > =A0static int adc_lsb(const struct it87_data *data, int nr)
+> > =A0{
+> > =A0=A0=A0=A0=A0=A0=A0=A0int lsb;
+> > @@ -2393,7 +2401,6 @@ static int __init it87_find(int sioaddr,
+> > unsigned short *address,
+> > =A0{
+> > =A0=A0=A0=A0=A0=A0=A0=A0int err;
+> > =A0=A0=A0=A0=A0=A0=A0=A0u16 chip_type;
+> > -=A0=A0=A0=A0=A0=A0=A0const char *board_vendor, *board_name;
+> > =A0=A0=A0=A0=A0=A0=A0=A0const struct it87_devices *config;
+> > =A0
+> > =A0=A0=A0=A0=A0=A0=A0=A0err =3D superio_enter(sioaddr);
+> > @@ -2812,24 +2819,9 @@ static int __init it87_find(int sioaddr,
+> > unsigned short *address,
+> > =A0=A0=A0=A0=A0=A0=A0=A0if (sio_data->beep_pin)
+> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0pr_info("Beeping is sup=
+ported\n");
+> > =A0
+> > -=A0=A0=A0=A0=A0=A0=A0/* Disable specific features based on DMI strings=
+ */
+> > -=A0=A0=A0=A0=A0=A0=A0board_vendor =3D dmi_get_system_info(DMI_BOARD_VE=
+NDOR);
+> > -=A0=A0=A0=A0=A0=A0=A0board_name =3D dmi_get_system_info(DMI_BOARD_NAME=
+);
+> > -=A0=A0=A0=A0=A0=A0=A0if (board_vendor && board_name) {
+> > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0if (strcmp(board_vendor, =
+"nVIDIA") =3D=3D 0 &&
+> > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 strcmp(board_na=
+me, "FN68PT") =3D=3D 0) {
+> > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0/=
+*
+> > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 =
+* On the Shuttle SN68PT, FAN_CTL2 is
+> > apparently not
+> > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 =
+* connected to a fan, but to something
+> > else. One user
+> > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 =
+* has reported instant system power-off
+> > when changing
+> > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 =
+* the PWM2 duty cycle, so we disable it.
+> > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 =
+* I use the board name string as the
+> > trigger in case
+> > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 =
+* the same board is ever used in other
+> > systems.
+> > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 =
+*/
+> > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0p=
+r_info("Disabling pwm2 due to hardware
+> > constraints\n");
+> > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0s=
+io_data->skip_pwm =3D BIT(1);
+> > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0}
+> > -=A0=A0=A0=A0=A0=A0=A0}
+> > +=A0=A0=A0=A0=A0=A0=A0/* Set values based on DMI matches */
+> > +=A0=A0=A0=A0=A0=A0=A0if (dmi_data && dmi_data->skip_pwm)
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0sio_data->skip_pwm |=3D d=
+mi_data->skip_pwm;
+>=20
+> The second condition is unnecessary. If dmi_data->skip_pwm is 0 the
+> |=3D
+> won't do anything.
+
+Okay, will also drop that.
+>=20
+> > =A0
+> > =A0exit:
+> > =A0=A0=A0=A0=A0=A0=A0=A0superio_exit(sioaddr);
+> > @@ -3307,6 +3299,46 @@ static int __init it87_device_add(int index,
+> > unsigned short address,
+> > =A0=A0=A0=A0=A0=A0=A0=A0return err;
+> > =A0}
+> > =A0
+> > +/* callback function for DMI */
+> > +static int it87_dmi_cb(const struct dmi_system_id *dmi_entry)
+> > +{
+> > +=A0=A0=A0=A0=A0=A0=A0dmi_data =3D dmi_entry->driver_data;
+> > +
+> > +=A0=A0=A0=A0=A0=A0=A0if (dmi_data && dmi_data->skip_pwm)
+>=20
+> A dmi entry without dmi_data would be pointless, or am I missing
+> something ? That means that checking for dmi_data should be
+> unnecessary
+> because it should always be set (and anyone trying to add an entry
+> into
+> the match table without it would learn quickly that it does not
+> work).
+
+For this simple case, true, but one of the patches I would like to put
+up shortly is one that is used the callback to set a second chip in
+configuration mode before accessing the first chip.  This appears to be
+a common requirement for all recent boards that have 2 chips, but not
+for those boards that have only a single chip.
+>=20
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0pr_info("Disabling pwm2 d=
+ue to hardware
+> > constraints\n");
+> > +
+> > +=A0=A0=A0=A0=A0=A0=A0return 1;
+> > +}
+> > +
+> > +/*
+> > + * On the Shuttle SN68PT, FAN_CTL2 is apparently not
+> > + * connected to a fan, but to something else. One user
+> > + * has reported instant system power-off when changing
+> > + * the PWM2 duty cycle, so we disable it.
+> > + * I use the board name string as the trigger in case
+> > + * the same board is ever used in other systems.
+> > + */
+> > +static struct it87_dmi_data nvidia_fn68pt =3D {
+> > +=A0=A0=A0=A0=A0=A0=A0.skip_pwm =3D BIT(1),
+> > +};
+> > +
+> > +#define IT87_DMI_MATCH_VND(vendor, name, cb, data) \
+> > +=A0=A0=A0=A0=A0=A0=A0{ \
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0.callback =3D cb, \
+>=20
+> Do you envison more than one callback function ? Because if not
+> the above could just point to it87_dmi_cb directly.
+
+Yes, see the note above.
+>=20
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0.matches =3D { \
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0D=
+MI_EXACT_MATCH(DMI_BOARD_VENDOR, vendor),
+> > \
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0D=
+MI_EXACT_MATCH(DMI_BOARD_NAME, name), \
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0}, \
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0.driver_data =3D data, \
+> > +=A0=A0=A0=A0=A0=A0=A0}
+> > +
+> > +static const struct dmi_system_id it87_dmi_table[] __initconst =3D {
+> > +=A0=A0=A0=A0=A0=A0=A0IT87_DMI_MATCH_VND("nVIDIA", "FN68PT", &it87_dmi_=
+cb,
+> > &nvidia_fn68pt),
+>=20
+> The callback function does not need a &
+
+Okay, will fix that.
+>=20
+> > +=A0=A0=A0=A0=A0=A0=A0{ }
+> > +
+> > +};
+> > +MODULE_DEVICE_TABLE(dmi, it87_dmi_table);
+> > +
+> > =A0static int __init sm_it87_init(void)
+> > =A0{
+> > =A0=A0=A0=A0=A0=A0=A0=A0int sioaddr[2] =3D { REG_2E, REG_4E };
+> > @@ -3319,6 +3351,8 @@ static int __init sm_it87_init(void)
+> > =A0=A0=A0=A0=A0=A0=A0=A0if (err)
+> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0return err;
+> > =A0
+> > +=A0=A0=A0=A0=A0=A0=A0dmi_check_system(it87_dmi_table);
+> > +
+> > =A0=A0=A0=A0=A0=A0=A0=A0for (i =3D 0; i < ARRAY_SIZE(sioaddr); i++) {
+> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0memset(&sio_data, 0, si=
+zeof(struct it87_sio_data));
+> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0isa_address[i] =3D 0;
+> > --=20
+> > 2.37.3
+> >=20
+Regards
+Frank
