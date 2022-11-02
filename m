@@ -2,184 +2,452 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 311EDC4332F
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Nov 2022 09:43:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77F48C43217
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Nov 2022 15:05:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiKBJnI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Nov 2022 05:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53578 "EHLO
+        id S230193AbiKBPFV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Nov 2022 11:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiKBJnH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Nov 2022 05:43:07 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2116.outbound.protection.outlook.com [40.107.215.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA642181C;
-        Wed,  2 Nov 2022 02:43:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nEpTS3BQiJnaPZxe514fVm5xVSwE97VzU1/Wqar9tLue18KPUf/X4IX1G1v2C2QfUV0v113zjS8euRPdhpZUXd1iSAad8W9wLOfZgq3/B96IKvtKHauzXwNaOgv62aijXLJS1ISjvuExIB7+PhY2Zzyis5ueJBlg4ZK6fstER5MJeZ8Z579rTBKU8/tVlq2Lvry6TVv7esMn0S0I4plk+Cpo7K3JifNg9z7zPqd8HG6fdv8CMft1OdAuI5E/aOu9pKoR20YaqaLdPyGFyQ2AMsV7DzlgUZSuFaG9dMFeQWnkGFX4EALP8DYtqeoUALVHkHvgDne2co5eV7GJZInfKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O63s0xAslaAdnALEW5GvyF7Ua3VAeWGbaGo+IIG1bYo=;
- b=czMUCNb9qccJzl8Fg977YXb0gpPuPdDe6ISay7R7SNo/BS+dNwe79HeDkmX1dDLmi4QcjylPXFZj+Ow+5Z8tyJyrMXz8XppVC4HiK0WS4LLQyPDX/43yk4ztHqGdXXVHnoi5g3gsdKvcYIRo4sfEnbjGVaOy9btFN28w6ifFq5/u2rg19UssSZ/7+oVKO8gTw1Z0wl5CEa31gkAbNqSI2SkCSVbbtgqzF1Ld9Yu7M/6T3C7BJ4J8VSaHQ2225rDUKYKsZRjq2K1wIDU0GKRtfVZ+6bUUfvxh64GsSR07EglwDzLxo2zRLQQjN9nWJCjZVj3nwduNtIMCfDCI8nE6xA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O63s0xAslaAdnALEW5GvyF7Ua3VAeWGbaGo+IIG1bYo=;
- b=hi6ABgfcGjT6wcwf/5jeoZXCD53Glp6qYwGS1MFgPewKk/vCSBjkzWf5IcDIG/2/gSPHMLOMowyT/Upb8q7pFu54+kGITjWbqhGlHEnN2awfVo8znOOLM7RpR4akHJjUEjhiLq5ENlgaaPy5D90Uf6cc+xOnX1ulBnioP6ZpxaNDE6YgRd04CvOjCGeBhYaTkCC2XRfMng6zMlSSHgo3fmkVcNJL5ZAy858OsmevMoi8VQnhX0F/a0To5SAc4pTTqNecPxxQIN9aXEBb8v0Yu2QL9qs90Fqw+WTDpVeLq3GMzG5oH6YxoX5Jqb1kMi82TWJ3j+ANOf2mZuR+tBMYJA==
-Received: from SG2PR06MB3365.apcprd06.prod.outlook.com (2603:1096:4:69::12) by
- KL1PR06MB6259.apcprd06.prod.outlook.com (2603:1096:820:d9::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5769.19; Wed, 2 Nov 2022 09:42:56 +0000
-Received: from SG2PR06MB3365.apcprd06.prod.outlook.com
- ([fe80::dd5d:e720:e00f:831]) by SG2PR06MB3365.apcprd06.prod.outlook.com
- ([fe80::dd5d:e720:e00f:831%6]) with mapi id 15.20.5769.019; Wed, 2 Nov 2022
- 09:42:55 +0000
-From:   Billy Tsai <billy_tsai@aspeedtech.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>,
-        "garnermic@meta.com" <garnermic@meta.com>
-Subject: Re: [v3 3/3] hwmon: Add Aspeed ast2600 TACH support
-Thread-Topic: [v3 3/3] hwmon: Add Aspeed ast2600 TACH support
-Thread-Index: AQHY7pXwP4hgXsCTc0uFdcCd9dGwvq4rYDwAgACHq4A=
-Date:   Wed, 2 Nov 2022 09:42:55 +0000
-Message-ID: <B823C23A-6FF5-41C6-B461-C4F8D6A00F55@aspeedtech.com>
-References: <20221102083601.10456-1-billy_tsai@aspeedtech.com>
- <20221102083601.10456-4-billy_tsai@aspeedtech.com>
- <74726285-ae5a-459d-7b83-31025e47ea03@wanadoo.fr>
-In-Reply-To: <74726285-ae5a-459d-7b83-31025e47ea03@wanadoo.fr>
-Accept-Language: zh-TW, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Microsoft-MacOutlook/16.66.22101101
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SG2PR06MB3365:EE_|KL1PR06MB6259:EE_
-x-ms-office365-filtering-correlation-id: 661900ea-8eac-4de8-3d3e-08dabcb69e9d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: T21xqOIfp2/G6xwqjaU/z3ltByHbZZ9HDyuhpqqlfrL94xtoDzDAYrjdcE/Xsa/WNWsdM2uE86TSqnDfpTYsefFTl1o2WSWBhd8sHH2DYQQAKBwKtJOMrrkurFE2VyXpV8FLAvZJandNHE0u/9c0p86Avbb3OVHd2bMofxvPUQ7K/mV9cATjgLrCbCO94s5YNg3PkfRA1/U81hp0AOSmJ0R/T35qNMHHj0MVmaBTQzNUgWha7rxhWPDabRROm906hM7SPIdTtui1GYw8t10ihFpLIJihX1g79nkqguGNbXD0543AXPtB2SxwHM5HYm8/fSgBxxYBKBGlI6eraedwWFzasnCS4J+xeH731VvEUKOPb0DWkqXeS8eiLHHzKEH2BsQA8j2pzQbMrkTg+QS4EopCw9kMXDylADL/1b27SjkFF8fJ5EWYjDhpofYbQir+RuMCfeM1MuQledwt5jPA6GLY69724SvOD3o/aE6E0XeAOmIyvae/OwTJfMEwZEVvPN8AN1X7qMSwIwK/Ze9dF7/Sk/f7c/zPLQ9xwJmy4AHxwp40ElrtT0wp9RSdDm+fwL588U2z+RRX12Jts2F+JTPjrL9vZ70EBIyisKGY9CyaVMsGCH6/BDxDPJrTVjvhnFDdiDaPhIkg424Pxp8UqjsYkUVYIpNEJh3cSSv80ho3h9ittGZJEEGS3d2tLoA4Y28sgwxRpv7IHXhs7vL/wxj6Yv9ES3wIfw00MDmzMgchTxrBEuwGsK1SS3b49FHk/MBfhXDT/XoLBcjRttvCLsHAhQshXaztd6geR2ugvfw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3365.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39850400004)(346002)(396003)(366004)(136003)(376002)(451199015)(86362001)(36756003)(186003)(33656002)(2616005)(38100700002)(122000001)(26005)(6506007)(66574015)(6512007)(2906002)(7416002)(5660300002)(8936002)(41300700001)(83380400001)(54906003)(38070700005)(66476007)(316002)(66556008)(478600001)(64756008)(6486002)(71200400001)(66446008)(6916009)(4326008)(66946007)(76116006)(91956017)(8676002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NzFBMlQ2eGIrNCs3cVMrdFJEaGhkZkxrYkxudmdJRHV2MVVhRW5Pd2toN1Ay?=
- =?utf-8?B?OUVtSklYSTNqZDRTUlZ5VHkxeURXdWw4d2owTXIvMWkzdzMwQnBOM3M4NExw?=
- =?utf-8?B?U2FMMzZqcjhuYmhyTVVaSUhTR3h5ZWRGTGpCckludGF1MmFkeWkwTkU1Wkh5?=
- =?utf-8?B?TWZnS1pVbzRyaDlkclVrcWNHd2s5SDBYbElRREMrYUdvaUh1ZlZObUZsWlB4?=
- =?utf-8?B?SVp6MXVvQlhNWE92VDgzZUczSmxCL3hxTi8wQzUwUVRRSm9pYWV6THl3OUUx?=
- =?utf-8?B?cklqMEI0YnlIdGQ5dVFycnFUOEg4UXo3ZFBndTIyekJlbC8yb1Uxa0hkOGdS?=
- =?utf-8?B?Nk9qZ3pGZW9FSnkrUVQwY29tcThGUmlLV1ErZktvclNJNm0rbTZnQUh5N1hu?=
- =?utf-8?B?aU1aUG4xbXB5a3FKaVBxemZsUU1CYWxIZHdZSkpuRXpXVmlGMUxYeVZSR3h5?=
- =?utf-8?B?RVpyeW04RTFkbDQxK2ZBL0lzOUNCSHZzc2hHQm01SXJYWXpnTEloa0NvclRX?=
- =?utf-8?B?cHhiNEhyRjBNTGV5eEJ6a3ZRMHdsWUZyZlVtVjU3TVRlWEozdm45MEhhN3lW?=
- =?utf-8?B?bFNTNDJxR3JqNHE4bkg2NWhEVXNJM1c1RlFLK0pSeERqTDdLRVlsOEpvdlJa?=
- =?utf-8?B?bHpZUXhDbXZRemNGMncyZjdqUkkzUkhtK3JJV1c0NzZLRDZ6cFlCalFBZDFR?=
- =?utf-8?B?RDhpekJCOVl4VndHZUw3MGxrMWJwTk4rMWNsUWFZTW9IUERmYXR3bzMyL3kw?=
- =?utf-8?B?eVo5czk4VmRJT05TaG9MTThBLzNPZ2NSVHIrSE9iS09ob00wbHFQcWtWS0pm?=
- =?utf-8?B?YjhhclFDbFdsajRESTE0T0gwbitYMGt3Qythby83ZGw0bkt3emo2SkFOOEJm?=
- =?utf-8?B?ZEVEdzRsT09pck1UWlJYUktYOHZpbnpRY1lNbkRWNXpoNWVGZEVBZll4dm9i?=
- =?utf-8?B?S2JhNUdDWHpIVU5LZVczRmlUNW9GMDlqQmJ6c1BUMU9mOWpnQTJxYlNRS0o1?=
- =?utf-8?B?Vm11Q3FBWENrcEtxN29lUU9vWUpISS9sZ0xoOElRVnNsa1FiN2JWSkIycHpz?=
- =?utf-8?B?T1psZzRKZzY5UkJyWXF5UnI2MVB4OFRzT2NXbmVOUkMyLzB5SXpvUjFrTk10?=
- =?utf-8?B?aTBpMXRicUZUaFpiOGlTaWRUQXl2emJFR2UwTnhoSjhQZWwyamlsb000Sk5Y?=
- =?utf-8?B?MktFV3hZc05acmorejArVVJ2UXYzSVQ0c280d3hVbGc5eHVIZVo3RUw5Tnh5?=
- =?utf-8?B?VjV2eGd4R2l6Nnp2TUFyUzdCQWlRZVFkU0o5dmJoaEZUZlRkOGErY0tUZVA0?=
- =?utf-8?B?VTNVWWNIbjJVM3daOGpTNWdXdnA2MExCdTNhWjdISEdxL20wL3VLbkJpTm5q?=
- =?utf-8?B?V0k3Ujk0YWZPRjRldXE2MFhHYXN0RkxPamVCRFZLYUZjVUloVDBCNXBzVzE4?=
- =?utf-8?B?QnVuRVZkMFJ3NTVEdWExSVFUL0lSTk1kenFqNWRjb3lZUXM5WE0vcnBmdUF1?=
- =?utf-8?B?M0tqbE91SGVvdjJFZEk4RjVzT2x0UTFhejNXbTBzeUNsR3dSOEdidGtqMUVB?=
- =?utf-8?B?QTlGRUFpdUV6YmVXY2lRQVFuc2syTktVS2paNHd5cjV4RS8wa3FJalpEdUdL?=
- =?utf-8?B?Q1plZUhzcndUMVAxVVF5U2ZTTnk0QjBhbnpTMjdmUVdqTEhVSG8xVzVIMTFq?=
- =?utf-8?B?RmJvZWZHTmpIbnB4Y1R1M2lTQ1phcy9hU0RrN0VUMUFmbGViUGpkampHN3J3?=
- =?utf-8?B?OGwxY2tyOEovN0czNCszTEhUc1FiU0xyWWt6R1MzY2tSWnEzQXRRVTlZZ2tz?=
- =?utf-8?B?TWpIaVdsNlppeW04cTZaTzRWNFo1Z2FoQUxDZ0xwRFRQMTZaTDYraTE2ZGUy?=
- =?utf-8?B?ZThtUWVHSnJXVGZVRGhhQnU5eThrU0VocVp6dHJ6RmcvYm5xQitiSDNXR3Uv?=
- =?utf-8?B?dEI4QTljSmdHVjdnMHN0ajJaNERFdTBwY25GU2VXZTJCTXZlUHpFU3htQmRM?=
- =?utf-8?B?VEZNV3lEUU85cnpwcEx3aEw2ZkRuWGxEUXR3SnNRYWN0WmVEN09PbVNlOG5T?=
- =?utf-8?B?dHQyem16ZnFYYTlGczdFaXhyTExJR1VDUkozZktGSzJ3czJsNWJmaHRNOC9l?=
- =?utf-8?B?bUNrOXQ1NHJCY1ROdTIyMTFjUWttaDdFQkVvZWMrTEs5QjJZUTZFVVFMZ0Uz?=
- =?utf-8?Q?C+oQYeDwlUDZmXrp7OLJBxw=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <09BDA027023A234AA8605216D347CD7B@apcprd06.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S229516AbiKBPFU (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Nov 2022 11:05:20 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4058B5F47;
+        Wed,  2 Nov 2022 08:05:19 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id p127so19440508oih.9;
+        Wed, 02 Nov 2022 08:05:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZW70V2rv95GT70cldLFZziEYNvSr04/ZlMRnONZZJsY=;
+        b=Hf/XtO+Vr3FdXBqRveV/AhsW4HNWK/o18g/mQzjV6t8vMRewBZ3igpXKtY2FrU64xt
+         DaygmbRDph0Bz0h0eOCtHfz7XleTZ2DkvFW2OuCAialhfnuSpFqV1rKnNzxLhHT/eZ8K
+         1RF7Y0j1UYWTNztCptyr592ym/EuFsd9/VEi5zz1Rx1mVszp4M9P9CNGGJCsrV041Mkb
+         b8/GkKRCjMN541KsZf3aeDrqOBXDSekA8loNfbTImG8/i/clLXpcWxdelaAJwIshEpkP
+         GcewGA8KjscY3hAiWH6HZ/gZgYSHJ6ZfwlemwRWd8kMBDII754mu76fQQiMGrD46aI9T
+         o1DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZW70V2rv95GT70cldLFZziEYNvSr04/ZlMRnONZZJsY=;
+        b=o/D2AylnglvMuwF5x8Z69YLqaN4SExkOKkb1znTiNqHwYut7THk+Qs+SOUUTe9bLHg
+         XPHUcGPXeUgKmOomKl/5eSO5ETltlp2CqzKz1HLCgsmfsT2dUN0ABOKW1bro71jmWpF5
+         xSQN9e1o12FBhOi0m24ayd1i7zNgOo0QmFGY8A9I3zHrtZp1Re2AHhVCNO1+kYfr+f9W
+         Wnjm3QJKfCoqeSJ4M4xuyMNZnuPeSlVoggskSBHh52ICS4k3ChaELmeX1xmm3fu2m78i
+         uE+sLviYJLqTMmdxMSrvnfin+q/vV0k3ECOqClkcxpwv7IoUTvxSMfulSsoBOJRS+Hvn
+         z4IQ==
+X-Gm-Message-State: ACrzQf0hWyw7RK3/oXs8b8/E90rsaOqFlft30DJduwgXiWwz/DKL1/TZ
+        tHIIin0pxU6fE0NrJ2OAF80=
+X-Google-Smtp-Source: AMsMyM7F4Rr/KNGytT3XE3kdXEWbgjreLwkbBr/rmiwWXgYX2bMLtJgVFBM7qouDr/g4Cx4Bej74sA==
+X-Received: by 2002:a05:6808:140a:b0:355:230f:b7f1 with SMTP id w10-20020a056808140a00b00355230fb7f1mr22126795oiv.8.1667401518482;
+        Wed, 02 Nov 2022 08:05:18 -0700 (PDT)
+Received: from smeagol.fibertel.com.ar ([201.235.4.68])
+        by smtp.gmail.com with ESMTPSA id y7-20020a056808130700b00359ba124b07sm3165878oiv.36.2022.11.02.08.05.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 08:05:17 -0700 (PDT)
+From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+To:     pobrn@protonmail.com
+Cc:     hdegoede@redhat.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux@roeck-us.net,
+        markgross@kernel.org, platform-driver-x86@vger.kernel.org,
+        =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+Subject: [PATCH v4] Add OneXPlayer mini AMD sensors driver
+Date:   Wed,  2 Nov 2022 12:04:40 -0300
+Message-Id: <20221102150440.208228-1-samsagax@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3365.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 661900ea-8eac-4de8-3d3e-08dabcb69e9d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Nov 2022 09:42:55.7364
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MSfVKaowHWhOHK/PeKYTOO5DBnWcY5tlAHzljycHIYzvHbaqQlCvW9XW1ycBOJkxfxnLI047mL2DPU+b5bjZ37xlerFPpRr5SvZHRq8Ze9Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB6259
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-SGkgQ0osDQoNClNvcnJ5IEkgbWlzcyBpdDsgSSB3aWxsIHdhaXQgb3RoZXIgY29tbWVudHMgYW5k
-IHNlbmQgdGhlIHY0Lg0KDQpUaGFua3MNCg0KQmVzdCBSZWdhcmRzLA0KQmlsbHkgVHNhaQ0KDQrv
-u79PbiAyMDIyLzExLzIsIDU6MzcgUE0sICJDaHJpc3RvcGhlIEpBSUxMRVQiIDxjaHJpc3RvcGhl
-LmphaWxsZXRAd2FuYWRvby5mcj4gd3JvdGU6DQoNCiAgICBMZSAwMi8xMS8yMDIyIMOgIDA5OjM2
-LCBCaWxseSBUc2FpIGEgw6ljcml0IDoNCiAgICA+IFRoaXMgcGF0Y2ggYWRkIHRoZSBzdXBwb3J0
-IG9mIFRhY2hvbWV0ZXIgd2hpY2ggY2FuIHVzZSB0byBtb25pdG9yIHRoZQ0KICAgID4gZnJlcXVl
-bmN5IG9mIHRoZSBpbnB1dC4gVGhlIHRhY2ggc3VwcG9ydHMgdXAgdG8gMTYgY2hhbm5lbHMgYW5k
-IGl0J3MgcGFydA0KICAgID4gZnVuY3Rpb24gb2YgbXVsdGktZnVuY3Rpb24gZGV2aWNlICJwd20t
-dGFjaCBjb250cm9sbGVyIi4NCiAgICA+IA0KICAgID4gU2lnbmVkLW9mZi1ieTogQmlsbHkgVHNh
-aSA8YmlsbHlfdHNhaUBhc3BlZWR0ZWNoLmNvbT4NCiAgICA+IFJlcG9ydGVkLWJ5OiBrZXJuZWwg
-dGVzdCByb2JvdCA8bGtwQGludGVsLmNvbT4NCiAgICA+IC0tLQ0KICAgID4gICBEb2N1bWVudGF0
-aW9uL2h3bW9uL2luZGV4LnJzdCAgICAgICAgICAgICAgIHwgICAxICsNCiAgICA+ICAgRG9jdW1l
-bnRhdGlvbi9od21vbi90YWNoLWFzcGVlZC1hc3QyNjAwLnJzdCB8ICAyOCArKw0KICAgID4gICBk
-cml2ZXJzL2h3bW9uL0tjb25maWcgICAgICAgICAgICAgICAgICAgICAgIHwgICA5ICsNCiAgICA+
-ICAgZHJpdmVycy9od21vbi9NYWtlZmlsZSAgICAgICAgICAgICAgICAgICAgICB8ICAgMSArDQog
-ICAgPiAgIGRyaXZlcnMvaHdtb24vdGFjaC1hc3BlZWQtYXN0MjYwMC5jICAgICAgICAgfCA0NzYg
-KysrKysrKysrKysrKysrKysrKysNCiAgICA+ICAgNSBmaWxlcyBjaGFuZ2VkLCA1MTUgaW5zZXJ0
-aW9ucygrKQ0KICAgID4gICBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9od21vbi90
-YWNoLWFzcGVlZC1hc3QyNjAwLnJzdA0KICAgID4gICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVy
-cy9od21vbi90YWNoLWFzcGVlZC1hc3QyNjAwLmMNCiAgICA+IA0KDQogICAgWy4uLl0NCg0KICAg
-ID4gK3N0YXRpYyBpbnQgYXNwZWVkX3RhY2hfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAq
-cGRldikNCiAgICA+ICt7DQogICAgPiArCXN0cnVjdCBkZXZpY2UgKmRldiA9ICZwZGV2LT5kZXY7
-DQogICAgPiArCXN0cnVjdCBkZXZpY2Vfbm9kZSAqbnAsICpjaGlsZDsNCiAgICA+ICsJc3RydWN0
-IGFzcGVlZF90YWNoX2RhdGEgKnByaXY7DQogICAgPiArCXN0cnVjdCBkZXZpY2UgKmh3bW9uOw0K
-ICAgID4gKwlzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwYXJlbnRfZGV2Ow0KICAgID4gKwlpbnQg
-cmV0Ow0KICAgID4gKw0KICAgID4gKwlucCA9IGRldi0+cGFyZW50LT5vZl9ub2RlOw0KICAgID4g
-KwlpZiAoIW9mX2RldmljZV9pc19jb21wYXRpYmxlKG5wLCAiYXNwZWVkLGFzdDI2MDAtcHdtLXRh
-Y2giKSkNCiAgICA+ICsJCXJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwgLUVOT0RFViwNCiAgICA+
-ICsJCQkJICAgICAiVW5zdXBwb3J0ZWQgdGFjaCBkZXZpY2UgYmluZGluZ1xuIik7DQogICAgPiAr
-DQogICAgPiArCXByaXYgPSBkZXZtX2t6YWxsb2MoZGV2LCBzaXplb2YoKnByaXYpLCBHRlBfS0VS
-TkVMKTsNCiAgICA+ICsJaWYgKCFwcml2KQ0KICAgID4gKwkJcmV0dXJuIC1FTk9NRU07DQogICAg
-PiArCXByaXYtPmRldiA9ICZwZGV2LT5kZXY7DQogICAgPiArCXByaXYtPnRhY2hfY2hhbm5lbCA9
-DQogICAgPiArCQlkZXZtX2tjYWxsb2MoZGV2LCBUQUNIX0FTUEVFRF9OUl9UQUNIUywNCiAgICA+
-ICsJCQkgICAgIHNpemVvZigqcHJpdi0+dGFjaF9jaGFubmVsKSwgR0ZQX0tFUk5FTCk7DQoNCiAg
-ICBIaSwNCiAgICB0aGUgZXJyb3IgaGFuZGxpbmcgaXMgc3RpbGwgbWlzc2luZzoNCg0KICAgIAlp
-ZiAoIXByaXYtPnRhY2hfY2hhbm5lbCkNCiAgICAJCXJldHVybiAtRU5PTUVNOw0KDQogICAgQ0oN
-Cg0KICAgID4gKw0KICAgID4gKwlwcml2LT5yZWdtYXAgPSBzeXNjb25fbm9kZV90b19yZWdtYXAo
-bnApOw0KICAgID4gKwlpZiAoSVNfRVJSKHByaXYtPnJlZ21hcCkpDQogICAgPiArCQlyZXR1cm4g
-ZGV2X2Vycl9wcm9iZShkZXYsIFBUUl9FUlIocHJpdi0+cmVnbWFwKSwNCiAgICA+ICsJCQkJICAg
-ICAiQ291bGRuJ3QgZ2V0IHJlZ21hcFxuIik7DQogICAgPiArCXBhcmVudF9kZXYgPSBvZl9maW5k
-X2RldmljZV9ieV9ub2RlKG5wKTsNCiAgICA+ICsJcHJpdi0+Y2xrID0gZGV2bV9jbGtfZ2V0X2Vu
-YWJsZWQoJnBhcmVudF9kZXYtPmRldiwgTlVMTCk7DQogICAgPiArCWlmIChJU19FUlIocHJpdi0+
-Y2xrKSkNCiAgICA+ICsJCXJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwgUFRSX0VSUihwcml2LT5j
-bGspLA0KICAgID4gKwkJCQkgICAgICJDb3VsZG4ndCBnZXQgY2xvY2tcbiIpOw0KICAgID4gKw0K
-DQogICAgWy4uLl0NCg0KDQo=
+Sensors driver for OXP Handhelds from One-Netbook that expose fan reading
+and control via hwmon sysfs.
+
+As far as I could gather all OXP boards have the same DMI strings and
+they are told appart by the boot cpu vendor (Intel/AMD).
+Currently only AMD boards are supported.
+
+Fan control is provided via pwm interface in the range [0-255]. AMD
+boards have [0-100] as range in the EC, the written value is scaled to
+accommodate for that.
+
+Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
+---
+Added Documentation entry
+Added MAINTAINERS entry
+Removed unnecessary code complexity
+Fixed all checkpatch --strict checks
+---
+ Documentation/hwmon/index.rst       |   1 +
+ Documentation/hwmon/oxp-sensors.rst |  24 +++
+ MAINTAINERS                         |   6 +
+ drivers/hwmon/Kconfig               |  11 ++
+ drivers/hwmon/Makefile              |   1 +
+ drivers/hwmon/oxp-sensors.c         | 254 ++++++++++++++++++++++++++++
+ 6 files changed, 297 insertions(+)
+ create mode 100644 Documentation/hwmon/oxp-sensors.rst
+ create mode 100644 drivers/hwmon/oxp-sensors.c
+
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index c1d11cf13eef..098986bfbfdd 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -160,6 +160,7 @@ Hardware Monitoring Kernel Drivers
+    nzxt-kraken2
+    nzxt-smart2
+    occ
++   oxp-sensors
+    pc87360
+    pc87427
+    pcf8591
+diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
+new file mode 100644
+index 000000000000..023441d17a45
+--- /dev/null
++++ b/Documentation/hwmon/oxp-sensors.rst
+@@ -0,0 +1,24 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
++
++Kernel driver oxp-sensors
++=========================
++
++Authors:
++    - Joaquín Ignacio Aramendía <samsagax@gmail.com>
++
++Description:
++------------
++
++One X Player devices from One Netbook provide fan readings and fan control
++through its Embedded Controller.
++
++Currently only supports AMD boards from the One X Player lineup. Intel boards
++could be supported if we could figure out the EC registers and values to write
++to since the EC layout and model is different.
++
++Sensor values are read and written from EC registers, and to avoid race with
++the board firmware the driver acquires ACPI mutex.
++
++Fan control is provided via pwm sysfs attribute in the range [0-255]. AMD
++boards use [0-100] as range values in the EC, the value is scaled to
++accommodate for that.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2034e7d26684..c2e24a830875 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15337,6 +15337,12 @@ S:	Maintained
+ F:	drivers/mtd/nand/onenand/
+ F:	include/linux/mtd/onenand*.h
+
++ONEXPLAYER FAN DRIVER
++M:	Joaquín Ignacio Aramendía <samsagax@gmail.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	drivers/hwmon/oxp-sensors.c
++
+ ONION OMEGA2+ BOARD
+ M:	Harvey Hunt <harveyhuntnexus@gmail.com>
+ L:	linux-mips@vger.kernel.org
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 7ac3daaf59ce..993ffa26e44f 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1607,6 +1607,17 @@ config SENSORS_NZXT_SMART2
+
+ source "drivers/hwmon/occ/Kconfig"
+
++config SENSORS_OXP
++	tristate "OneXPlayer EC fan control"
++	depends on ACPI
++	depends on X86
++	help
++		If you say yes here you get support for fan readings and control over
++		OneXPlayer handheld devices. Only OneXPlayer mini AMD handheld variant
++		boards are supported.
++
++		Can also be built as a module. In that case it will be called oxp-sensors.
++
+ config SENSORS_PCF8591
+ 	tristate "Philips PCF8591 ADC/DAC"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 11d076cad8a2..35824f8be455 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -167,6 +167,7 @@ obj-$(CONFIG_SENSORS_NSA320)	+= nsa320-hwmon.o
+ obj-$(CONFIG_SENSORS_NTC_THERMISTOR)	+= ntc_thermistor.o
+ obj-$(CONFIG_SENSORS_NZXT_KRAKEN2) += nzxt-kraken2.o
+ obj-$(CONFIG_SENSORS_NZXT_SMART2) += nzxt-smart2.o
++obj-$(CONFIG_SENSORS_OXP) += oxp-sensors.o
+ obj-$(CONFIG_SENSORS_PC87360)	+= pc87360.o
+ obj-$(CONFIG_SENSORS_PC87427)	+= pc87427.o
+ obj-$(CONFIG_SENSORS_PCF8591)	+= pcf8591.o
+diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+new file mode 100644
+index 000000000000..00b3aacfb017
+--- /dev/null
++++ b/drivers/hwmon/oxp-sensors.c
+@@ -0,0 +1,254 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Platform driver for OXP Handhelds that expose fan reading and control
++ * via hwmon sysfs.
++ *
++ * All boards have the same DMI strings and they are told appart by the
++ * boot cpu vendor (Intel/AMD). Currently only AMD boards are supported
++ * but the code is made to be simple to add other handheld boards in the
++ * future.
++ * Fan control is provided via pwm interface in the range [0-255]. AMD
++ * boards use [0-100] as range in the EC, the written value is scaled to
++ * accommodate for that.
++ *
++ * Copyright (C) 2022 Joaquín I. Aramendía <samsagax@gmail.com>
++ */
++
++#include <linux/acpi.h>
++#include <linux/dev_printk.h>
++#include <linux/dmi.h>
++#include <linux/hwmon.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/processor.h>
++
++/* Handle ACPI lock mechanism */
++static u32 oxp_mutex;
++
++#define ACPI_LOCK_DELAY_MS	500
++
++static bool lock_global_acpi_lock(void)
++{
++	return ACPI_SUCCESS(acpi_acquire_global_lock(ACPI_LOCK_DELAY_MS, &oxp_mutex));
++}
++
++static bool unlock_global_acpi_lock(void)
++{
++	return ACPI_SUCCESS(acpi_release_global_lock(oxp_mutex));
++}
++
++#define OXP_SENSOR_FAN_REG		0x76 /* Fan reading is 2 registers long */
++#define OXP_SENSOR_PWM_ENABLE_REG	0x4A /* PWM enable is 1 register long */
++#define OXP_SENSOR_PWM_REG		0x4B /* PWM reading is 1 register long */
++
++static const struct dmi_system_id dmi_table[] = {
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONE XPLAYER"),
++		},
++	},
++	{},
++};
++
++/* Helper functions to handle EC read/write */
++static int read_from_ec(u8 reg, int size, long *val)
++{
++	int i;
++	int ret;
++	u8 buffer;
++
++	if (!lock_global_acpi_lock())
++		return -EBUSY;
++
++	*val = 0;
++	for (i = 0; i < size; i++) {
++		ret = ec_read(reg + i, &buffer);
++		if (ret)
++			return ret;
++		*val <<= i * 8;
++		*val += buffer;
++	}
++
++	if (!unlock_global_acpi_lock())
++		return -EBUSY;
++
++	return 0;
++}
++
++static int write_to_ec(const struct device *dev, u8 reg, u8 value)
++{
++	int ret;
++
++	if (!lock_global_acpi_lock())
++		return -EBUSY;
++
++	ret = ec_write(reg, value);
++
++	if (!unlock_global_acpi_lock())
++		return -EBUSY;
++
++	return ret;
++}
++
++static int oxp_pwm_enable(const struct device *dev)
++{
++	return write_to_ec(dev, OXP_SENSOR_PWM_ENABLE_REG, 0x01);
++}
++
++static int oxp_pwm_disable(const struct device *dev)
++{
++	return write_to_ec(dev, OXP_SENSOR_PWM_ENABLE_REG, 0x00);
++}
++
++/* Callbacks for hwmon interface */
++static umode_t oxp_ec_hwmon_is_visible(const void *drvdata,
++				       enum hwmon_sensor_types type, u32 attr, int channel)
++{
++	switch (type) {
++	case hwmon_fan:
++		return 0444;
++	case hwmon_pwm:
++		return 0644;
++	default:
++		return 0;
++	}
++	return 0;
++}
++
++static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
++			     u32 attr, int channel, long *val)
++{
++	int ret;
++
++	switch (type) {
++	case hwmon_fan:
++		switch (attr) {
++		case hwmon_fan_input:
++			return read_from_ec(OXP_SENSOR_FAN_REG, 2, val);
++		default:
++		}
++		break;
++	case hwmon_pwm:
++		switch (attr) {
++		case hwmon_pwm_input:
++			ret = read_from_ec(OXP_SENSOR_PWM_REG, 2, val);
++			*val = (*val * 255) / 100;
++			return ret;
++		case hwmon_pwm_enable:
++			return read_from_ec(OXP_SENSOR_PWM_ENABLE_REG, 1, val);
++		default:
++		}
++		break;
++	default:
++	}
++	dev_dbg(dev, "Unknown attribute for type %d: %d\n", type, attr);
++	return -EOPNOTSUPP;
++}
++
++static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
++			      u32 attr, int channel, long val)
++{
++	switch (type) {
++	case hwmon_pwm:
++		switch (attr) {
++		case hwmon_pwm_enable:
++			if (val == 1)
++				return oxp_pwm_enable(dev);
++			else if (val == 0)
++				return oxp_pwm_disable(dev);
++			else
++				return -EINVAL;
++		case hwmon_pwm_input:
++			if (val < 0 || val > 255)
++				return -EINVAL;
++			val = (val * 100) / 255;
++			return write_to_ec(dev, OXP_SENSOR_PWM_REG, val);
++		default:
++			break;
++		}
++	default:
++	}
++	dev_dbg(dev, "Unknown sensor type: %d", type);
++	return -EOPNOTSUPP;
++}
++
++/* Known sensors in the OXP EC controllers */
++static const struct hwmon_channel_info *oxp_platform_sensors[] = {
++	HWMON_CHANNEL_INFO(fan,
++			   HWMON_F_INPUT),
++	HWMON_CHANNEL_INFO(pwm,
++			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
++	NULL,
++};
++
++static const struct hwmon_ops oxp_ec_hwmon_ops = {
++	.is_visible = oxp_ec_hwmon_is_visible,
++	.read = oxp_platform_read,
++	.write = oxp_platform_write,
++};
++
++static const struct hwmon_chip_info oxp_ec_chip_info = {
++	.ops = &oxp_ec_hwmon_ops,
++	.info = oxp_platform_sensors,
++};
++
++/* Initialization logic */
++static int oxp_platform_probe(struct platform_device *pdev)
++{
++	const struct dmi_system_id *dmi_entry;
++	struct device *dev = &pdev->dev;
++	struct device *hwdev;
++
++	/* Have to check for AMD processor here because DMI strings are the
++	 * same between Intel and AMD boards, the only way to tell them appart
++	 * is the CPU.
++	 * Intel boards seem to have different EC registers and values to
++	 * read/write.
++	 */
++	dmi_entry = dmi_first_match(dmi_table);
++	if (!dmi_entry || boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
++		return -ENODEV;
++
++	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
++						     &oxp_ec_chip_info, NULL);
++
++	return PTR_ERR_OR_ZERO(hwdev);
++}
++
++static struct platform_driver oxp_platform_driver = {
++	.driver = {
++		.name = "oxp-platform",
++	},
++	.probe = oxp_platform_probe,
++};
++
++static struct platform_device *oxp_platform_device;
++
++static int __init oxp_platform_init(void)
++{
++	oxp_platform_device =
++		platform_create_bundle(&oxp_platform_driver,
++				       oxp_platform_probe, NULL, 0, NULL, 0);
++
++	if (IS_ERR(oxp_platform_device))
++		return PTR_ERR(oxp_platform_device);
++
++	return 0;
++}
++
++static void __exit oxp_platform_exit(void)
++{
++	platform_device_unregister(oxp_platform_device);
++	platform_driver_unregister(&oxp_platform_driver);
++}
++
++MODULE_DEVICE_TABLE(dmi, dmi_table);
++module_init(oxp_platform_init);
++module_exit(oxp_platform_exit);
++
++MODULE_AUTHOR("Joaquín Ignacio Aramendía <samsagax@gmail.com>");
++MODULE_DESCRIPTION("Platform driver that handles EC sensors of OneXPlayer devices");
++MODULE_LICENSE("GPL");
+--
+2.38.1
+
