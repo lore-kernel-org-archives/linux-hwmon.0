@@ -2,110 +2,125 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B980AC433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Nov 2022 15:25:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3CF5C433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Nov 2022 15:27:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiKCPZu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 3 Nov 2022 11:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
+        id S232207AbiKCP13 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 3 Nov 2022 11:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232172AbiKCPZm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 3 Nov 2022 11:25:42 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93FA1929C;
-        Thu,  3 Nov 2022 08:25:41 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id m204so2308517oib.6;
-        Thu, 03 Nov 2022 08:25:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w0yJDjVaa8CK7Zh+Yg+dLsD3M1CdI6efU1k/W84Y0cY=;
-        b=QCO7sVUYL78hch9+q3cvlRDg4d/U8RF/+oi24omMzqJEmtq3vxjhMM9Om7UuaszObE
-         LnaYtBwo17UylZ7xO3o8vK354lJszs+va/RVz3DW4qZip8bGPsX/KwlFr7v4pWg41UaO
-         oDI2HiR5Lm7YSkDb8o/dGm23bmdtUSHFkP3DGrWCXEw20GJCXuZFOVD0MPY9/hseReWv
-         XhWedlwyjmz+lDLtLGLjlYDDO18KHhmb5Ax+IUPU6tDtj4s5KzkUT1ilyvIkIMKOTxLm
-         K5CVIb0LC7hG4ttcVoZNmiDMhV9WO2hLVTYdHeqOC1D6iOfnO26RxmqOPhFOibPzQN9Q
-         viXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w0yJDjVaa8CK7Zh+Yg+dLsD3M1CdI6efU1k/W84Y0cY=;
-        b=qgJcBxWKbHSL4ho5ytgEFVRP8HITcF/Nrq9p9l4244zwYNjCLlmfjpUrpmS+AgNoSE
-         7zCjLRVKuvp5EjoVTpQYwKc+snMZwDyuwlewwqdSEGUdqk/9RgoPP+xU55Lz8Bzgr1Zu
-         Rcj4noboY0TY8G1VW8WQRUdi49YfJ18XkwPCPTUb6J4T9QKZ3WY3tiNyfdSGanEj1owl
-         jxU7efT3o/4bANhunMHEO4lRZ92x/Blcgl9I5Otz1QACeASvUjJFmdD4Vi9/4J1wU5Se
-         MUTZYtYAAFmaL8qRAGA8+VAGqYLKzu617KELjZFkkoPuv7cHEsrfFigrJ5Rb0zlPBmiu
-         LdLg==
-X-Gm-Message-State: ACrzQf34OeWuBtWgvLpjJVtbeY3E01PMHetRqtETsmSqUzY1QWF+fnrM
-        CnyD5RwXEvULkFXfxszK79w=
-X-Google-Smtp-Source: AMsMyM6g/S5qAZyDD2vuIZei8r+THzEAk1XIMSlMdCfOBIj6hvZYkhmCQHBdVoWBBPm6K1jH8uP7sw==
-X-Received: by 2002:aca:1c0c:0:b0:359:fb5e:727b with SMTP id c12-20020aca1c0c000000b00359fb5e727bmr14364409oic.132.1667489141178;
-        Thu, 03 Nov 2022 08:25:41 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j16-20020a056830015000b00660fe564e12sm440647otp.58.2022.11.03.08.25.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 08:25:37 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 3 Nov 2022 08:25:33 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     wangkailong@jari.cn, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (amc6821) Fix unsigned expression compared with
- zero
-Message-ID: <20221103152533.GB146501@roeck-us.net>
-References: <1872639a.89.1843b5106aa.Coremail.wangkailong@jari.cn>
- <f699bbba-69e6-2e62-98ed-0482f4c9a900@infradead.org>
- <20221103141727.GA145042@roeck-us.net>
- <a530b209-36bd-c2c3-8196-a9c5001f6333@infradead.org>
+        with ESMTP id S232214AbiKCP1O (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 3 Nov 2022 11:27:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E1D1B1FD;
+        Thu,  3 Nov 2022 08:27:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1751361F3F;
+        Thu,  3 Nov 2022 15:27:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1E4BC433D6;
+        Thu,  3 Nov 2022 15:27:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667489232;
+        bh=9B6TUpcxiiK6nYvO+tZ9kBnE+5WGkzDACOo23ch8WCA=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=tZ5WpOZ7axSdC5g+29cT7yfgHFK7yRD4IMa9dxMheFgkrT+RotkRJIfGpMbS8c2oB
+         GLepVRcm47TWGrS8XxZEjPXQd/dhZ6MHaRdTgQE31CF/NUJyg5qIHfYpybQjsxv1Sz
+         H2ohLNem3YsF5qko+37yaXfV8sIS4HQIKF6qKwpuokjcSPbDtfVxb/xymZ2rriGS6M
+         ddt5ca0zSqtZofSKXTQ+7ZluG2cY4BnUqNrxvVVUcEo4//EFGYCwRch+2ymfS8cz/T
+         BrzbhTK7MwpypzEP6XkeN5A91xn5vzWYaYa2FDwBHNazQQjScK29irhQTMFeGE2Bhn
+         0tGxzRJKJruRQ==
+Message-ID: <576c42c4-1256-304d-3513-7bf02cddb220@kernel.org>
+Date:   Thu, 3 Nov 2022 11:27:09 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a530b209-36bd-c2c3-8196-a9c5001f6333@infradead.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 1/3] dt-bindings: Add bindings for aspeed pwm-tach.
+Content-Language: en-US
+To:     Billy Tsai <billy_tsai@aspeedtech.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>,
+        "garnermic@meta.com" <garnermic@meta.com>
+References: <20221031103809.20225-1-billy_tsai@aspeedtech.com>
+ <20221031103809.20225-2-billy_tsai@aspeedtech.com>
+ <ee6c5a96-81c4-5729-f623-4b23bc3b8e0a@kernel.org>
+ <2508B515-E153-42C2-B013-2A64A110BCF2@aspeedtech.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <2508B515-E153-42C2-B013-2A64A110BCF2@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 08:03:35AM -0700, Randy Dunlap wrote:
+On 03/11/2022 06:36, Billy Tsai wrote:
 > 
+> On 2022/11/3, 5:20 AM, "Krzysztof Kozlowski" <krzk@kernel.org> wrote:
 > 
-> On 11/3/22 07:17, Guenter Roeck wrote:
-> > On Wed, Nov 02, 2022 at 07:59:06PM -0700, Randy Dunlap wrote:
-> >>
-> >>
-> >> On 11/2/22 19:27, wangkailong@jari.cn wrote:
-> >>> Fix the following coccicheck warning:
-> >>>
-> >>> drivers/hwmon/amc6821.c:215: WARNING: Unsigned expression compared
-> >>> with zero: reg > 0
-> >>> drivers/hwmon/amc6821.c:228: WARNING: Unsigned expression compared
-> >>> with zero: reg > 0
-> >>>
-> >>> Signed-off-by: KaiLong Wang <wangkailong@jari.cn>
-> >>
-> >> Hm. IDGI. What's wrong with comparing an unsigned value to > 0?
-> >> I mean, it could be == 0 or > 0.
-> >> Please explain.
-> > 
-> > I don't get it either. The real problem with this driver is that error
-> > returns from i2c functions are not checked. However, that problem is not
-> > fixed by this patch. That means the patch would change behavior without
-> > fixing the actual problem.
-> > 
-> > I wonder what kind of (broken) compiler or analyzer produces above errors.
-> > We'll have to watch out for similar broken "fixes".
+>     On 31/10/2022 06:38, Billy Tsai wrote:
+>     > > +patternProperties:
+>     > > +  "^pwm(@[0-9a-f]+)?$":
+>     > > +    $ref: ../pwm/aspeed,ast2600-pwm.yaml
 > 
-> It says above that it's a coccicheck warning.
+>     > Full path, so: /schemas/pwm/aspeed,ast2600-pwm.yaml
 > 
+>     > Why unit addresses are optional?
+> 
+>     > > +
+>     > > +  "^tach(@[0-9a-f]+)?$":
+>     > > +    $ref: ../hwmon/aspeed,ast2600-tach.yaml
+> 
+>     > Ditto
+> 
+>     > Why unit addresses are optional?
+> 
+> The pwm_tach is not the bus. I will use
+> pwm:
+>     type: object
+>     $ref: "/schemas/pwm/aspeed,ast2600-pwm.yaml"
+> 
+> tach:
+>     type: object
+>     $ref: "/schemas/hwmon/aspeed,ast2600-tach.yaml"
+> to replace it.
+> 
+>     > > +
+>     > > +additionalProperties: false
+>     > > +
+>     > > +examples:
+>     > > +  - |
+>     > > +    #include <dt-bindings/clock/ast2600-clock.h>
+>     > > +    pwm_tach: pwm_tach@1e610000 {
+> 
+>     > Node names should be generic.
+>     > https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+> 
+> This is the mfd with pwm and tach, so they are combined as the node name.
+> 
+>     > No underscores in node names.
+> 
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#table-1
+> I see that the underscore is the valid characters for node names.
+> Did I miss any information?
 
-I see, unsigned_lesser_than_zero.cocci. It actually complains that an
-unsigned variable is used to hold the return code of a function which
-returns an int. In other words, it really tries to warn that the error
-return code from that function is not or not properly checked.
-The message is misleading for that situation.
+W=2 warnings.
 
-Guenter
+Best regards,
+Krzysztof
+
