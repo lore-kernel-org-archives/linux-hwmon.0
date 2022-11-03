@@ -2,95 +2,135 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0FA1C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Nov 2022 14:18:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F462C43217
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Nov 2022 14:31:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbiKCOSw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 3 Nov 2022 10:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
+        id S230376AbiKCObF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 3 Nov 2022 10:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbiKCOSM (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 3 Nov 2022 10:18:12 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FAE14D0C;
-        Thu,  3 Nov 2022 07:17:31 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id cb2-20020a056830618200b00661b6e5dcd8so1038264otb.8;
-        Thu, 03 Nov 2022 07:17:31 -0700 (PDT)
+        with ESMTP id S229935AbiKCObE (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 3 Nov 2022 10:31:04 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6EFF5D;
+        Thu,  3 Nov 2022 07:31:03 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id p127so2101156oih.9;
+        Thu, 03 Nov 2022 07:31:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EitdsXRzGfmz+XIYSw7ljKU8CMo4715fYNhm2adSG7o=;
-        b=qfL+gTMBfj9E6+znXpMuosKwDB/HLPxIByRas7WxKQa1SEf0zb/vRtwfFEi33tuFyy
-         RsKOYtLImap/odkSiyZ9dMAUIH8gARsid8XZZDLAZIXG7QYrUnIXuLJC3a1/0KoegZy1
-         8OG/CaMpkCdIcCfGkM3xJsZJfotymqavlv2beRkE6Yn2/YQStgI/+YhNOgZ5YPZJcNyc
-         26nHz4QnyOr9PEsfUuLc7mK1YCzStX7ClDzR4+tmIq3Jqn+B9FTbFGTdUf7bxMUOUcn8
-         bDoQw898KeDv0oJHA/XA3+5tjPdrr8rwIcktKba7+1h3QNrnJi1BPyyRVVnBY809Dtxp
-         z4TA==
+        bh=wTr6gc/qL3/cvufhP664wBsVqSVnACz7cyfjWA6pJ/A=;
+        b=inEVvhjX66DeMO1AjWgK9izci/93Si0haRH+O02Xndneum6cFm49kmaOrUGUUxKJqO
+         lGq+ITuxZHEN8pV5mQBAofz07U0AStDDR0AztGlLRFALigFRhIhtGWKlbjyefVCZpPU0
+         MlFVxEnlgqY8A2SoyoGcz1ToGr1SysyXMgHvr7f1quTkQokhds1LRRNaLZh2X3wofiPQ
+         HRPDK+iHw8/H/037UV2x+YJ6ijcgTQgrzxA0NHL22dOnnj9MkI3lVOZ/FV3wPX1teER3
+         mPtZNuEQzmGuhXoOeXzYARJFxID/jfhanw9oWrzFCJk9AjtxhFoIKisjmGZG7w5cP/mX
+         8Q4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EitdsXRzGfmz+XIYSw7ljKU8CMo4715fYNhm2adSG7o=;
-        b=6j66W1Tc5YJfZEUxE+jySvHNTGSnUczy/DEJuBzr18EY0I8gUCnf/muzGSrQcdQ7q+
-         4WtcnjokkWrSCOtCjC3qifTtRfLJCpOMSa7D0jPs9MAJO5GqUwr6JKzCDgdzOwD/yd7v
-         4fQYT+DSCeystG+vuDgMRXHUfIzMEC5j/x11gWD44vhrF3PM6j9hhJAEug0w7YWMdPyb
-         EKdA1xjGdHWkxm0cb+1E3uaN5qCHP2Pj4iuiUvlT4R5oEvTi+yXzWuJ7fjQFvGsCdj5C
-         OfRKe1bDxhGrqGEquSpLzMuN0l8FJy2V7PgNhVour5cCtDgM/My7wA1Z0LSKxYCxg8ck
-         VsVQ==
-X-Gm-Message-State: ACrzQf0j3b2mRtbKryTqNJpzdiwhEt0SiI72RU46FatxCfsX6WSMCSU6
-        a13XlZ2pcnssewmu5Nw5IXzUTKF9aoA=
-X-Google-Smtp-Source: AMsMyM7Hj5KogDtpD8hw4TzbyJCt0WJ4ECSBmXe8HEJrKKOfU3Cv5Bg2ihpnIjHAJb8pUXqyNrgZqQ==
-X-Received: by 2002:a9d:60ca:0:b0:66c:30e4:9297 with SMTP id b10-20020a9d60ca000000b0066c30e49297mr15191196otk.150.1667485050636;
-        Thu, 03 Nov 2022 07:17:30 -0700 (PDT)
+        bh=wTr6gc/qL3/cvufhP664wBsVqSVnACz7cyfjWA6pJ/A=;
+        b=lDmg2AZDrq0CxtRaogRpl1EonEoOBz5h+auusZTydGklAJCUMXjyRwX2uMOfZmk/tH
+         bZ+2nTR18bLcg2NxH+bdOV30wPiBwKcT/Yxaab+bYcX2DlvOouwVuk3EAFEbRb9cFkmR
+         mtMN6VFGCC/HAcf3XR59xzYpWmcUoK6IcyxPeDkvvCz54EBSh96tGwBYxHbLmFX2RPi0
+         /gmw/CQYuRWt6qqG/dzDyHF3f4KxIauLPbrQKBSynfCNPSPlVRFG78cIjNRshffn+2zM
+         4o3rO3M5FSk6nskUBpcZP4kQx2SjWE0a1M8jNoWO0uGEu19KZk2IuMyvrL9NV5wCTbp8
+         VpUA==
+X-Gm-Message-State: ACrzQf1uhBvIP50GVbrIob1reG2r0s8xYqSGSuXup51qYczXFSa86rya
+        H/P7ZsoLGfAXGbe0mDOrZhw=
+X-Google-Smtp-Source: AMsMyM6kiE1p+72Nbb5v+BVoVNZhakWQwxVmLMnU2jpvd+wAruwzA58msN/e0z+ahu5+6GQaCdfr+A==
+X-Received: by 2002:a05:6808:19a6:b0:355:3ac8:8386 with SMTP id bj38-20020a05680819a600b003553ac88386mr23002209oib.229.1667485863264;
+        Thu, 03 Nov 2022 07:31:03 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q143-20020a4a3395000000b0048fb9b6dd70sm279884ooq.0.2022.11.03.07.17.28
+        by smtp.gmail.com with ESMTPSA id w9-20020a9d6749000000b00660e833baddsm387598otm.29.2022.11.03.07.31.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 07:17:29 -0700 (PDT)
+        Thu, 03 Nov 2022 07:31:01 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 3 Nov 2022 07:17:27 -0700
+Date:   Thu, 3 Nov 2022 07:30:59 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     wangkailong@jari.cn, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (amc6821) Fix unsigned expression compared with
- zero
-Message-ID: <20221103141727.GA145042@roeck-us.net>
-References: <1872639a.89.1843b5106aa.Coremail.wangkailong@jari.cn>
- <f699bbba-69e6-2e62-98ed-0482f4c9a900@infradead.org>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>,
+        "garnermic@meta.com" <garnermic@meta.com>
+Subject: Re: [v2 3/3] hwmon: Add Aspeed ast2600 TACH support
+Message-ID: <20221103143059.GB145042@roeck-us.net>
+References: <20221101095156.30591-1-billy_tsai@aspeedtech.com>
+ <20221101095156.30591-4-billy_tsai@aspeedtech.com>
+ <20221101131456.GA1310110@roeck-us.net>
+ <271C521D-8F20-4C86-B3DA-9C0AD74242D4@aspeedtech.com>
+ <20221102170138.GA2913353@roeck-us.net>
+ <F1166366-99CC-4A36-A0A2-4965C787E60B@aspeedtech.com>
+ <20221103043034.GA2113834@roeck-us.net>
+ <E9E92BC7-CB1A-487F-9E5D-2A403A01CB17@aspeedtech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f699bbba-69e6-2e62-98ed-0482f4c9a900@infradead.org>
+In-Reply-To: <E9E92BC7-CB1A-487F-9E5D-2A403A01CB17@aspeedtech.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 07:59:06PM -0700, Randy Dunlap wrote:
+On Thu, Nov 03, 2022 at 05:40:44AM +0000, Billy Tsai wrote:
+> On 2022/11/3, 12:30 PM, "Guenter Roeck" <groeck7@gmail.com on behalf of linux@roeck-us.net> wrote:
 > 
+>     On Thu, Nov 03, 2022 at 03:52:59AM +0000, Billy Tsai wrote:
+>     > > 
+>     > > Can't I use a min/max RPM to let the driver know a reasonable timeout/polling period when
+>     > > the driver is trying to get RPM?
+>     > > Beacause that our tach controller have the falg to indicates the hardware detected the change
+>     > > in the input signal. I need the proper timout to rule out slow RPMs.
 > 
-> On 11/2/22 19:27, wangkailong@jari.cn wrote:
-> > Fix the following coccicheck warning:
-> > 
-> > drivers/hwmon/amc6821.c:215: WARNING: Unsigned expression compared
-> > with zero: reg > 0
-> > drivers/hwmon/amc6821.c:228: WARNING: Unsigned expression compared
-> > with zero: reg > 0
-> > 
-> > Signed-off-by: KaiLong Wang <wangkailong@jari.cn>
+>     > If the chip measures the fan speed continuously, why would that ever be a
+>     > problem, and why wait in the first place instead of just taking the most
+>     > recent result ?
 > 
-> Hm. IDGI. What's wrong with comparing an unsigned value to > 0?
-> I mean, it could be == 0 or > 0.
-> Please explain.
+>     > Pretty much every other driver is doing that, so I really don't understand
+>     > why that would not work here.
+> 
+> When the fan speed drop from a very fast RPM to a very slow RPM. Especially when it is close to stopping.
+> The most recent result will be no meaningful value. The slower RPM needs more time to sample it. E.g., If
+> we want to measure the fan with 600 RPM, the controller needs at least 100ms. During this time period, we
+> will always get the wrong value. So, our tach controller have the flag to avoid this problem:
+> TACH_ASPEED_VALUE_UPDATE: tach value updated since last read
+> This flag will be set when the controller detected the change of the signal and clear by read it.
+> In order to use this flag, the controller needs the proper timeout based on minimum RPM to avoid waiting forever.
+> 
 
-I don't get it either. The real problem with this driver is that error
-returns from i2c functions are not checked. However, that problem is not
-fixed by this patch. That means the patch would change behavior without
-fixing the actual problem.
+I am not going to accept this patch as-is. If userspace wants to have
+values accurate down to ms, this kind of approach is just wrong. Users
+will have to live with the fact that measurements may be a bit (in the 
+< 1 second range) out of date. Many older drivers even implement code
+which avoids reading registers again for a second or longer. Older
+temperature sensors may take several seconds to provide new readings.
+That is not a reason to block userspace until a new value is available.
+I do not see that as a problem. In my opinion it is much more of a
+problem if the driver returns a completely bad value such as 0 or even
+an error code because its software parameters did not match reality and
+the driver didn't wait long enough for a new value. That would be _much_
+worse than providing a value which is a few 100 ms out of date, and your
+code is vulnerable to that problem.
 
-I wonder what kind of (broken) compiler or analyzer produces above errors.
-We'll have to watch out for similar broken "fixes".
+Besides, for a fan to reduce its speed that quickly, it has to be manually
+stopped. Normally fans take several seconds to stop if power is taken away
+completely. Your code is adding a lot of complexity (and unnecessary
+attributes) for no good reason.
 
 Guenter
