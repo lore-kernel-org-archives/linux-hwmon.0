@@ -2,125 +2,55 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3CF5C433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Nov 2022 15:27:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DE07C4332F
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Nov 2022 10:32:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiKCP13 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 3 Nov 2022 11:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
+        id S231741AbiKDKcp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Nov 2022 06:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232214AbiKCP1O (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 3 Nov 2022 11:27:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E1D1B1FD;
-        Thu,  3 Nov 2022 08:27:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1751361F3F;
-        Thu,  3 Nov 2022 15:27:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1E4BC433D6;
-        Thu,  3 Nov 2022 15:27:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667489232;
-        bh=9B6TUpcxiiK6nYvO+tZ9kBnE+5WGkzDACOo23ch8WCA=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=tZ5WpOZ7axSdC5g+29cT7yfgHFK7yRD4IMa9dxMheFgkrT+RotkRJIfGpMbS8c2oB
-         GLepVRcm47TWGrS8XxZEjPXQd/dhZ6MHaRdTgQE31CF/NUJyg5qIHfYpybQjsxv1Sz
-         H2ohLNem3YsF5qko+37yaXfV8sIS4HQIKF6qKwpuokjcSPbDtfVxb/xymZ2rriGS6M
-         ddt5ca0zSqtZofSKXTQ+7ZluG2cY4BnUqNrxvVVUcEo4//EFGYCwRch+2ymfS8cz/T
-         BrzbhTK7MwpypzEP6XkeN5A91xn5vzWYaYa2FDwBHNazQQjScK29irhQTMFeGE2Bhn
-         0tGxzRJKJruRQ==
-Message-ID: <576c42c4-1256-304d-3513-7bf02cddb220@kernel.org>
-Date:   Thu, 3 Nov 2022 11:27:09 -0400
+        with ESMTP id S231744AbiKDKca (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Nov 2022 06:32:30 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315542B188;
+        Fri,  4 Nov 2022 03:32:29 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oqtzv-0001Rb-8u; Fri, 04 Nov 2022 11:32:27 +0100
+Message-ID: <69a138bb-1638-421b-a38c-f81a90701a3b@leemhuis.info>
+Date:   Fri, 4 Nov 2022 11:32:26 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 1/3] dt-bindings: Add bindings for aspeed pwm-tach.
-Content-Language: en-US
-To:     Billy Tsai <billy_tsai@aspeedtech.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>,
-        "garnermic@meta.com" <garnermic@meta.com>
-References: <20221031103809.20225-1-billy_tsai@aspeedtech.com>
- <20221031103809.20225-2-billy_tsai@aspeedtech.com>
- <ee6c5a96-81c4-5729-f623-4b23bc3b8e0a@kernel.org>
- <2508B515-E153-42C2-B013-2A64A110BCF2@aspeedtech.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <2508B515-E153-42C2-B013-2A64A110BCF2@aspeedtech.com>
+ Thunderbird/102.4.0
+Subject: Re: (bug report) HWMON & Thermal interactions #forregzbot
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <Y1WHnJ6h1RSOipV4@e120937-lin>
+ <b0bf779e-6195-4fad-377a-ba1e63419c5d@leemhuis.info>
+In-Reply-To: <b0bf779e-6195-4fad-377a-ba1e63419c5d@leemhuis.info>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1667557949;5851c01c;
+X-HE-SMSGID: 1oqtzv-0001Rb-8u
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 03/11/2022 06:36, Billy Tsai wrote:
+On 24.10.22 12:18, Thorsten Leemhuis wrote:
+> On 23.10.22 20:27, Cristian Marussi wrote:
+>>
+>> Starting with v6.1-rc1 the SCMI HWMON driver failed probing on my JUNO due
+>> to the fact that no trip points were (ever !) defined in the DT; bisecting it
+>> looks like that after:
 > 
-> On 2022/11/3, 5:20 AM, "Krzysztof Kozlowski" <krzk@kernel.org> wrote:
+> Thanks for the report. To be sure below issue doesn't fall through the
+> cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+> tracking bot:
 > 
->     On 31/10/2022 06:38, Billy Tsai wrote:
->     > > +patternProperties:
->     > > +  "^pwm(@[0-9a-f]+)?$":
->     > > +    $ref: ../pwm/aspeed,ast2600-pwm.yaml
-> 
->     > Full path, so: /schemas/pwm/aspeed,ast2600-pwm.yaml
-> 
->     > Why unit addresses are optional?
-> 
->     > > +
->     > > +  "^tach(@[0-9a-f]+)?$":
->     > > +    $ref: ../hwmon/aspeed,ast2600-tach.yaml
-> 
->     > Ditto
-> 
->     > Why unit addresses are optional?
-> 
-> The pwm_tach is not the bus. I will use
-> pwm:
->     type: object
->     $ref: "/schemas/pwm/aspeed,ast2600-pwm.yaml"
-> 
-> tach:
->     type: object
->     $ref: "/schemas/hwmon/aspeed,ast2600-tach.yaml"
-> to replace it.
-> 
->     > > +
->     > > +additionalProperties: false
->     > > +
->     > > +examples:
->     > > +  - |
->     > > +    #include <dt-bindings/clock/ast2600-clock.h>
->     > > +    pwm_tach: pwm_tach@1e610000 {
-> 
->     > Node names should be generic.
->     > https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-> 
-> This is the mfd with pwm and tach, so they are combined as the node name.
-> 
->     > No underscores in node names.
-> 
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#table-1
-> I see that the underscore is the valid characters for node names.
-> Did I miss any information?
+> #regzbot ^introduced e51813313
+> #regzbot title SCMI HWMON driver failed probing on JUNO
+> #regzbot ignore-activity
 
-W=2 warnings.
-
-Best regards,
-Krzysztof
-
+#regzbot fixed-by: c4a7b9b587ca
