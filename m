@@ -2,55 +2,55 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DE07C4332F
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Nov 2022 10:32:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0893C4332F
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Nov 2022 10:53:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbiKDKcp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Nov 2022 06:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
+        id S229485AbiKDKxH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Nov 2022 06:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbiKDKca (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Nov 2022 06:32:30 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315542B188;
-        Fri,  4 Nov 2022 03:32:29 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oqtzv-0001Rb-8u; Fri, 04 Nov 2022 11:32:27 +0100
-Message-ID: <69a138bb-1638-421b-a38c-f81a90701a3b@leemhuis.info>
-Date:   Fri, 4 Nov 2022 11:32:26 +0100
+        with ESMTP id S231627AbiKDKxF (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Nov 2022 06:53:05 -0400
+Received: from shakotay.alphanet.ch (shakotay.alphanet.ch [46.140.72.222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306C62B63C
+        for <linux-hwmon@vger.kernel.org>; Fri,  4 Nov 2022 03:53:03 -0700 (PDT)
+Received: by shakotay.alphanet.ch (Postfix, from userid 1022)
+        id CC21C125108E; Fri,  4 Nov 2022 11:53:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=alphanet.ch; s=mail;
+        t=1667559181; bh=hgiZOKXiy9mopmGWSpZkMVfbxGy+xGhBx5rZNhEDb+A=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=KKVWBNDEgGfuJr5C95IxCQYbJNpSTZiszu+70gYdDH9dArz3lVtnfgdxi+4ysWgdM
+         KJ7ivG3T871p/VkZxZKF9aH/P7hcS494k9n2IHgbCXcqS4isHr+VOkF1ukoRejnRB9
+         sMfrZHW74AlEAD62jOyRVVlGEcwEWzupQX+/IxbYkcjXjzRnYjkoY3C5a8fp9X6edi
+         oB0TwE12JHhCG33ZbXiwZE4O3smQ5ojpoYDnuuf6sJRfK+3uDNUVavAuPRJ6zqNNqg
+         gSNX5khHkA65P8b6vZvFFn3SJSHdR2zxahMqh3543dMHt7w9NOWzvp27rYoFjBt1uS
+         Vh2ovEaVRCQ5A==
+Received: from reliant.alphanet.ch (reliant.alphanet.ch [192.168.1.30])
+        by shakotay.alphanet.ch (Postfix) with ESMTP id C06DA124ACB3
+        for <linux-hwmon@vger.kernel.org>; Fri,  4 Nov 2022 11:52:57 +0100 (CET)
+Received: by reliant.alphanet.ch (Postfix, from userid 1000)
+        id B937117FC0E; Fri,  4 Nov 2022 11:52:57 +0100 (CET)
+Date:   Fri, 4 Nov 2022 11:52:57 +0100
+From:   Marc SCHAEFER <schaefer@alphanet.ch>
+To:     linux-hwmon@vger.kernel.org
+Subject: Re: Power measurement wrong when idle
+Message-ID: <20221104105257.GA8083@alphanet.ch>
+References: <20221029123338.GA11915@alphanet.ch>
+ <532f711c-6566-8a69-a199-4753bd24111e@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: (bug report) HWMON & Thermal interactions #forregzbot
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <Y1WHnJ6h1RSOipV4@e120937-lin>
- <b0bf779e-6195-4fad-377a-ba1e63419c5d@leemhuis.info>
-In-Reply-To: <b0bf779e-6195-4fad-377a-ba1e63419c5d@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1667557949;5851c01c;
-X-HE-SMSGID: 1oqtzv-0001Rb-8u
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <532f711c-6566-8a69-a199-4753bd24111e@roeck-us.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 24.10.22 12:18, Thorsten Leemhuis wrote:
-> On 23.10.22 20:27, Cristian Marussi wrote:
->>
->> Starting with v6.1-rc1 the SCMI HWMON driver failed probing on my JUNO due
->> to the fact that no trip points were (ever !) defined in the DT; bisecting it
->> looks like that after:
-> 
-> Thanks for the report. To be sure below issue doesn't fall through the
-> cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-> tracking bot:
-> 
-> #regzbot ^introduced e51813313
-> #regzbot title SCMI HWMON driver failed probing on JUNO
-> #regzbot ignore-activity
+Hello Guenter,
 
-#regzbot fixed-by: c4a7b9b587ca
+so far I could install a 5.10 kernel on buster (that kernel contains drivers
+and some firmwares, in form of .ko).
+
+Nothing else was installed, and the bug is now present (was not with 4.19).
+
+So, now, I will try the first stock kernel 5 release manually.
