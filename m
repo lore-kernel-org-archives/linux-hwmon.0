@@ -2,106 +2,105 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88444C4332F
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Nov 2022 23:46:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03665C433FE
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Nov 2022 01:43:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiKDXq1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Nov 2022 19:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
+        id S229582AbiKEBn0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Nov 2022 21:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiKDXq1 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Nov 2022 19:46:27 -0400
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA7E2E9D3;
-        Fri,  4 Nov 2022 16:46:26 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id j1-20020a4ad181000000b0049e6e8c13b4so835687oor.1;
-        Fri, 04 Nov 2022 16:46:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=p4lPoKL1RWNuy897FDzE5HGIgTwpr2K0oV8rbjzJsp0=;
-        b=oe8xhJj52G5t5uSB76V7g/ZJQK2/x/1DjqYUl0vSZg9seIiLuR+ySI8fzMioxmY49h
-         5DkPDEsTpEJTLFwFe1Q6z9YTbfGPeu+n5yyZlgmKW3dR3kUY1YthJGIXNc2+2auO9+e1
-         TU8d+Sh8Wa4Q5rpbdajZCZYkA4obP0rbL4CL3Vhw4eP0FzUauUpcslcB3TJNK3r4lLt9
-         n00oQnyTEBRgB9UQtkB3YOZ1g7Z7byVYMmiAFn8LsYSiuiuCxjFWUVHzHn3J9Tki+PFR
-         ztNH+zui12UpLv30OCnof3I7d2Ovq78L+nRKiVKtFiP8jg0TPIH1p+au+REC93mrb1QT
-         jj7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p4lPoKL1RWNuy897FDzE5HGIgTwpr2K0oV8rbjzJsp0=;
-        b=gXJOIL+SAJvnqsAPd1zOS6Qib0rQNkDxCOvK4tW4FL1s08lf0IprWgjhwSpW/pOnT9
-         nQ0al1o991L1FHIvE0PG2RypN4vw0oVOgPAyeEsjAPRTtNcjWKwNyd15T5r5gLn57wvp
-         /8qGzhVrl492/tSJZB7v+Qz56XSS7mIg75+y8q8hvP7r2FORWKhkFzr3KNJlzeEk4FzG
-         jtxkmLJTbJ5vn6OpJLrpAgba8TGOGbBgLPF6vPX9EcIElIsQQ4GcMnt+r61lfcFvJf1J
-         3+9mJsK0MahFPA/Pmz+iywfHJdYrK0oCKQADmOsz46640vRllGiDn7h1k2ZgUp+BUWbR
-         v90g==
-X-Gm-Message-State: ACrzQf3F20YYujjYdzJdQgPZXmPkevjXKiJb0Gzj5N8HVbBZ3M22RY4T
-        D3v1S2nC9wqDo1tFICIoWA0YsMz7+WE=
-X-Google-Smtp-Source: AMsMyM4AdYlWxjVcGi73/hYvM46Qdj6sGaxqlvAMyY5f5C7L/uq60+WCZpRA9/qBzo+FXVKDwxm8tA==
-X-Received: by 2002:a4a:d127:0:b0:49b:2b6f:a074 with SMTP id n7-20020a4ad127000000b0049b2b6fa074mr13006459oor.20.1667605585893;
-        Fri, 04 Nov 2022 16:46:25 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id fp19-20020a056870659300b0013b8b3710bfsm203577oab.13.2022.11.04.16.46.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 16:46:25 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        Zev Weiss <zev@bewilderbeest.net>
-Subject: [PATCH] Revert "hwmon: (pmbus) Add regulator supply into macro"
-Date:   Fri,  4 Nov 2022 16:46:22 -0700
-Message-Id: <20221104234622.2444747-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.36.2
+        with ESMTP id S229572AbiKEBnZ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Nov 2022 21:43:25 -0400
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050:0:465::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38411DFD;
+        Fri,  4 Nov 2022 18:43:22 -0700 (PDT)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4N40d01Z6Wz9sLw;
+        Sat,  5 Nov 2022 02:43:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
+        t=1667612596;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q9MpPY/CCOcTDSed4LlfWRh5Fv+iRkBbMnta7aKGGA0=;
+        b=MNsTVvxfb55Rm3kRQ9vVwESFU8GJc987eq4prXHUJG4lDYkKXfCae25Jy3Y7hUQPCf+HFD
+        3ggPmtG/TJAtOiDLFfj1BpIait33ulfCKkPHUBRBHTQzWkH4PiJKMcktZjoW8v36qqnL/3
+        Idd+RFxJ0pkdVIplyHYOQ9pdoBQm2YzIQ0aIer2vWkI/7E7Fdi7yJ5XMTXMqcsHd82oycx
+        SEvfwWAyr2DaeOyZAZvQowzX31LuOBkiziKLaLl27krerPjGNMP7tJEnUWFf+rBJJ2i6/C
+        O+mP/aPwEcn8BJ0Klilq13Y77VX3D/gBfhF0ZVHVdP8RKJamr4WVbsjPHQck0w==
+Message-ID: <c33ec3b6-0e5b-5bb2-1793-c23406c68b40@sylv.io>
+Date:   Sat, 5 Nov 2022 02:43:11 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 1/1] hwmon: (pmbus) Add regulator supply into macro
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Zev Weiss <zev@bewilderbeest.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+References: <cover.1645437439.git.sylv@sylv.io>
+ <58f2ff7b90233fad3d7ae2e9d66d5192e2c1ac01.1645437439.git.sylv@sylv.io>
+ <20220222165104.GA255067@roeck-us.net>
+ <Y2WShmSmnEjpgVEE@hatter.bewilderbeest.net>
+ <20221104234250.GB2443898@roeck-us.net>
+Content-Language: en-US
+From:   Marcello Sylverster Bauer <sylv@sylv.io>
+In-Reply-To: <20221104234250.GB2443898@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 4N40d01Z6Wz9sLw
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This reverts commit 54cc3dbfc10dc3db7cb1cf49aee4477a8398fbde.
 
-Zev Weiss reports that the reverted patch may cause a regulator
-undercount. Here is his report:
+On 11/5/22 00:42, Guenter Roeck wrote:
+> On Fri, Nov 04, 2022 at 03:30:30PM -0700, Zev Weiss wrote:
+>> On Tue, Feb 22, 2022 at 08:51:04AM PST, Guenter Roeck wrote:
+>>> On Mon, Feb 21, 2022 at 12:09:56PM +0100, Marcello Sylvester Bauer wrote:
+>>>> Add regulator supply into PWBUS_REGULATOR macro. This makes it optional
+>>>> to define a vin-supply in DT. Not defining a supply will add a dummy
+>>>> regulator supply instead and only cause the following debug output:
+>>>>
+>>>> ```
+>>>> Looking up vin-supply property in node [...] failed
+>>>> ```
+>>>>
+>>>> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+>>> Applied to hwmon-next. That should give it some time to mature,
+>>> and we can pull or modify it if it causes any problems.
+>>>
+>> Wish I'd caught this sooner, but unfortunately I've just discovered that
+>> this does in fact cause breakage on my systems -- having regulator-dummy set
+>> as a supply on my PMBus regulators (instead of having them as their own
+>> top-level regulators without an upstream supply) leads to enable-count
+>> underflow errors when disabling them:
+>>
+>>      # echo 0 > /sys/bus/platform/devices/efuse01/state
+>>      [  906.094477] regulator-dummy: Underflow of regulator enable count
+>>      [  906.100563] Failed to disable vout: -EINVAL
+>>      [  136.992676] reg-userspace-consumer efuse01: Failed to configure state: -22
+>>
+>> A simple revert solves the problem for me, but since I'm honestly a little
+>> unclear on the intent of the patch itself I'm not sure what a revert might
+>> break and hence I don't know if that's necessarily the right fix.  Marcello
+>> (or others), any thoughts?
+Oh, my bad. I thought this makes it optional to add a supply without 
+having a negative effect.
+Reverting this patch makes sense, but I'm not sure how else to integrate 
+this.
 
-... having regulator-dummy set as a supply on my PMBus regulators
-(instead of having them as their own top-level regulators without
-an upstream supply) leads to enable-count underflow errors when
-disabling them:
+Thanks,
+Marcello
 
-    # echo 0 > /sys/bus/platform/devices/efuse01/state
-    [  906.094477] regulator-dummy: Underflow of regulator enable count
-    [  906.100563] Failed to disable vout: -EINVAL
-    [  136.992676] reg-userspace-consumer efuse01: Failed to configure state: -22
-
-Zev reports that reverting the patch fixes the problem. So let's do that
-for now.
-
-Fixes: 54cc3dbfc10d ("hwmon: (pmbus) Add regulator supply into macro")
-Cc: Marcello Sylvester Bauer <sylv@sylv.io>
-Reported-by: Zev Weiss <zev@bewilderbeest.net>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/pmbus/pmbus.h | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-index 7daaf0caf4d3..10fb17879f8e 100644
---- a/drivers/hwmon/pmbus/pmbus.h
-+++ b/drivers/hwmon/pmbus/pmbus.h
-@@ -467,7 +467,6 @@ extern const struct regulator_ops pmbus_regulator_ops;
- #define PMBUS_REGULATOR_STEP(_name, _id, _voltages, _step)  \
- 	[_id] = {						\
- 		.name = (_name # _id),				\
--		.supply_name = "vin",				\
- 		.id = (_id),					\
- 		.of_match = of_match_ptr(_name # _id),		\
- 		.regulators_node = of_match_ptr("regulators"),	\
--- 
-2.36.2
-
+> Revert now, ask questions later. I'll send a patch.
+>
+> Guenter
+>
+>>
+>> Thanks,
+>> Zev
+>>
