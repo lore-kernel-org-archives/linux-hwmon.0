@@ -2,70 +2,90 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FAC2C4332F
-	for <linux-hwmon@archiver.kernel.org>; Sun,  6 Nov 2022 15:28:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80D3CC4332F
+	for <linux-hwmon@archiver.kernel.org>; Sun,  6 Nov 2022 16:32:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiKFP23 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 6 Nov 2022 10:28:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
+        id S229913AbiKFQc1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 6 Nov 2022 11:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiKFP2Y (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 6 Nov 2022 10:28:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3E6E9F;
-        Sun,  6 Nov 2022 07:28:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229894AbiKFQc1 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 6 Nov 2022 11:32:27 -0500
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B6EA1B0;
+        Sun,  6 Nov 2022 08:32:24 -0800 (PST)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BC9560BFF;
-        Sun,  6 Nov 2022 15:28:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 831EBC433C1;
-        Sun,  6 Nov 2022 15:28:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667748502;
-        bh=E9NRTTEykCALmdyzeT0Ev2PHNAi8E5E9zOmBGoR0aek=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YBO7cJ2t00yDUPmHVOQNZrOGiaFTdT1twkaVa4dQzVTfRNTeDecrLyeHWj9S4m1FD
-         gctw89/r0kxy3Ra2+XQscUdbBtIqYfL2IjlVgtHza9QhhOhXLoFVrrinY+v0VfvBXz
-         CRTvoPEEqBZ98xz7ubzxeTQ6XujFp0dwe9WcJeWRYvEPpzxeBwXHVw/1q7iXLRHahT
-         JdcEP6q1PBpgJdD85UeBgZ2zcLX1h2LFuCUXx6JhVlX6yLpqVyqKBTqHd0FFDLSbtk
-         +T73+CY8/9XfT0dB6COU+sbri+1MMoN+Iw8oBd3Ww1+WKl3QQfl0AmbpXx6IYW7q1I
-         zqLpLkR01WkPw==
-Date:   Sun, 6 Nov 2022 15:28:12 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Cc:     lars@metafoo.de, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net,
-        linux-hwmon@vger.kernel.org, rajat.khandelwal@intel.com
-Subject: Re: [PATCH v7] iio: temperature: Add driver support for Maxim
- MAX30208
-Message-ID: <20221106152812.5ed5ef2f@jic23-huawei>
-In-Reply-To: <20221101174409.316447-1-rajat.khandelwal@linux.intel.com>
-References: <20221101174409.316447-1-rajat.khandelwal@linux.intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4N50JK4fNRz9scS;
+        Sun,  6 Nov 2022 17:32:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
+        t=1667752337;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OccA8rWskEjO8SKrGg5kJEkiqge1IiOm2jciYGaQByI=;
+        b=YvMtjwM1f2FABAvFqs0+IxAliPfdS7ub4rJi4nibuTBFtcMT3FTy73ArCyCvci+NMm9jEM
+        3VFyvCcBLfIMcxgENeFFCZShMv79iYRhKAJWNElNSHgDQAyK9VseBHdx3Xw6/v2I36Mn8o
+        oegPV8rVOygrJw7m0K7JRFvi2hAjG2uep2EYMkClYVJScqiDrB26WqXYBHFZpxy4t3htb+
+        OZW/GMCILISFi/pjzFutEWlW/wIGdw85dOki5Jp/pU2wQZqbMF7Tbeddy2k/7wSzC2OGBQ
+        8Bw2DVtR2b7S/FmgphvcYK+kjOdnAkd3zZKwioikjDz5+O9yqmd87zdOnYsjFQ==
+Message-ID: <84838ebd-f2da-9249-02fc-b959faa64c76@sylv.io>
+Date:   Sun, 6 Nov 2022 17:32:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] Revert "hwmon: (pmbus) Add regulator supply into macro"
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Zev Weiss <zev@bewilderbeest.net>,
+        naresh.solanki@9elements.com
+References: <20221104234622.2444747-1-linux@roeck-us.net>
+Content-Language: en-US
+From:   Marcello Sylverster Bauer <sylv@sylv.io>
+In-Reply-To: <20221104234622.2444747-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue,  1 Nov 2022 23:14:09 +0530
-Rajat Khandelwal <rajat.khandelwal@linux.intel.com> wrote:
-
-> Maxim MAX30208 is a digital temperature sensor with 0.1=C2=B0C accuracy.
->=20
-> Add support for max30208 driver in iio subsystem.
-> Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX30208.pdf
->=20
-> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-
-Hi Rajat,
-
-Given ongoing discussion on v6 (sorry I didn't get back to you earlier
-in the week), will result in some changes in here, I'll wait for v8 before
-taking another close look.
-
-Jonathan
-
-
+On 11/5/22 00:46, Guenter Roeck wrote:
+> This reverts commit 54cc3dbfc10dc3db7cb1cf49aee4477a8398fbde.
+>
+> Zev Weiss reports that the reverted patch may cause a regulator
+> undercount. Here is his report:
+>
+> ... having regulator-dummy set as a supply on my PMBus regulators
+> (instead of having them as their own top-level regulators without
+> an upstream supply) leads to enable-count underflow errors when
+> disabling them:
+>
+>      # echo 0 > /sys/bus/platform/devices/efuse01/state
+>      [  906.094477] regulator-dummy: Underflow of regulator enable count
+>      [  906.100563] Failed to disable vout: -EINVAL
+>      [  136.992676] reg-userspace-consumer efuse01: Failed to configure state: -22
+>
+> Zev reports that reverting the patch fixes the problem. So let's do that
+> for now.
+>
+> Fixes: 54cc3dbfc10d ("hwmon: (pmbus) Add regulator supply into macro")
+> Cc: Marcello Sylvester Bauer <sylv@sylv.io>
+> Reported-by: Zev Weiss <zev@bewilderbeest.net>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Acked-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> ---
+>   drivers/hwmon/pmbus/pmbus.h | 1 -
+>   1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> index 7daaf0caf4d3..10fb17879f8e 100644
+> --- a/drivers/hwmon/pmbus/pmbus.h
+> +++ b/drivers/hwmon/pmbus/pmbus.h
+> @@ -467,7 +467,6 @@ extern const struct regulator_ops pmbus_regulator_ops;
+>   #define PMBUS_REGULATOR_STEP(_name, _id, _voltages, _step)  \
+>   	[_id] = {						\
+>   		.name = (_name # _id),				\
+> -		.supply_name = "vin",				\
+>   		.id = (_id),					\
+>   		.of_match = of_match_ptr(_name # _id),		\
+>   		.regulators_node = of_match_ptr("regulators"),	\
