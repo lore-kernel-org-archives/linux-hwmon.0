@@ -2,108 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E75A1C4332F
-	for <linux-hwmon@archiver.kernel.org>; Sun,  6 Nov 2022 14:07:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AF55C433FE
+	for <linux-hwmon@archiver.kernel.org>; Sun,  6 Nov 2022 15:25:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiKFOHL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 6 Nov 2022 09:07:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
+        id S229962AbiKFPZQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 6 Nov 2022 10:25:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiKFOHK (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 6 Nov 2022 09:07:10 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DED4958F;
-        Sun,  6 Nov 2022 06:07:10 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-13c2cfd1126so10188712fac.10;
-        Sun, 06 Nov 2022 06:07:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=2KhYhp2BwkuWBEvWp+z7vdf8yClr0/C6oTL4ZhQsXHc=;
-        b=h9iVakAxBuQR8O0gRXf9iumT6VSg28deMK+k7Qdlh0ktdRFDf/CfjFGy2OoO8DAaCk
-         1JG/v6mxtOj38AAs6KYNAS/UN49qaHn0zEiPeo4sKuakvZ8G7TgMD3njxyZ4/7YAXh6z
-         8/cRxdxQSUDbeyEui6FgUNxpf4faoaBra8815FqcZ8v3GtpGOtRg+L4IMAgnxhN5NDX3
-         xYBWDKAmjWkQAO3cAyomAAkAbm1IkDCsa3QYEr1C6onW9OHFMU/FHG9iBEen/WRpSiWE
-         /eOX5bA9qRKL3oHrGdpO1JgO0LeSi58R9RIXn9I/LRkI4enjXt0yvUgpRreN04q6wWH1
-         /OTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2KhYhp2BwkuWBEvWp+z7vdf8yClr0/C6oTL4ZhQsXHc=;
-        b=IQqKziAXSWJu6WezQwJzMrlqJTMR5guDBGhY6RtijGMo6mGKzMW7wsEuwkRJonI1MA
-         GuB7S4RoRI53eJhaSSbueRWsqBMXZDPBLz+Plaac1PE9+7jFGvI6gQJT7jxK17u4CqTf
-         LCovI7d7baTV+hJcJAIXNpuCrwUJbYYtAXYBzOwOp+s0PlBir4jsPcFRgFfrD3ZLCQXS
-         dP3VR2bk48k6apbUEju+5crR0NrFgJekrP+fcaVUTZrHsUk3f6G+T241aev5rDL95XeA
-         lXA7MnXa3INmMaMH3SPVLAIInnr0w165tIrE3QCdpP7HlmAPSDge0Mdn2aXNEcQfBB1i
-         K+sw==
-X-Gm-Message-State: ACrzQf0fV6zy+pxFCR023Tw5JIybjzFzz95KWMOKiwKormaB3KKBotwg
-        sa7V0vX1CaRuH8ZsBV4aC0x0B3uwEfM=
-X-Google-Smtp-Source: AMsMyM4Ew2NSS4liq5UU3de2aiBY9yMDPmg6umCLzma1g+EgiPVQjLRH9mdEHxHsOzM14uO7CjasvQ==
-X-Received: by 2002:a05:6870:5a9:b0:13d:9452:c8e1 with SMTP id m41-20020a05687005a900b0013d9452c8e1mr10622738oap.188.1667743629233;
-        Sun, 06 Nov 2022 06:07:09 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ba12-20020a056870c58c00b0013b911d5960sm1895535oab.49.2022.11.06.06.07.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Nov 2022 06:07:07 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v6.1-rc4
-Date:   Sun,  6 Nov 2022 06:07:06 -0800
-Message-Id: <20221106140706.808902-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.36.2
+        with ESMTP id S229925AbiKFPZP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 6 Nov 2022 10:25:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE8D2DCC;
+        Sun,  6 Nov 2022 07:25:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BB0160C88;
+        Sun,  6 Nov 2022 15:25:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66AF1C433D6;
+        Sun,  6 Nov 2022 15:25:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667748313;
+        bh=lZ9gOuIK/p/+AxLeA6qMbQ9qzDHEck1QexyR55L+9Dk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=c2y2LmsiNGpYap3pOrD5SdXfqIiha/uI8LpSIwt1cVR3iAeWm5IzMw4DEag7FexRL
+         3psNGNKKApsOtEiNsGcFeMu0R2mf2KZSwsitsraVEfq0o4d79YzVhLtBkU03JbTfcb
+         tko2Vmg+0BFDkqO8h48ldic8vzZoQX6nS+ygnGRGB5ALgOc8wmtP6+RhbbmaNPCzcA
+         HDAdsOZC/0GownoZBG5hrHFU3fOZmuOcJrfvG2/i+jYXWtPZacVeYGScnDfan+Ghut
+         kllEULi5d/JA5tUXwDLZQqptHULr1suHpqQEVo/LIMSdebhcQyfg2+QOl5zQHgJWMO
+         l5Y2sUzyxDiAQ==
+Date:   Sun, 6 Nov 2022 15:25:03 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
+        lars@metafoo.de, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+        linux-hwmon@vger.kernel.org, rajat.khandelwal@intel.com
+Subject: Re: [PATCH v7] iio: temperature: Add driver support for Maxim
+ MAX30208
+Message-ID: <20221106152503.2f7e9f7f@jic23-huawei>
+In-Reply-To: <202211041434.J9y1aows-lkp@intel.com>
+References: <20221101174409.316447-1-rajat.khandelwal@linux.intel.com>
+        <202211041434.J9y1aows-lkp@intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+On Fri, 4 Nov 2022 14:50:33 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-Please pull hwmon fixes for Linux v6.1-rc4 from signed tag:
+> Hi Rajat,
+> 
+> I love your patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on jic23-iio/togreg]
+> [also build test WARNING on linus/master v6.1-rc3 next-20221104]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Rajat-Khandelwal/iio-temperature-Add-driver-support-for-Maxim-MAX30208/20221101-102308
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+> patch link:    https://lore.kernel.org/r/20221101174409.316447-1-rajat.khandelwal%40linux.intel.com
+> patch subject: [PATCH v7] iio: temperature: Add driver support for Maxim MAX30208
+> config: riscv-randconfig-c006-20221103
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install riscv cross compiling tool for clang build
+>         # apt-get install binutils-riscv64-linux-gnu
+>         # https://github.com/intel-lab-lkp/linux/commit/2375dabd39957ad8e80878c5604eda8a9f73932d
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Rajat-Khandelwal/iio-temperature-Add-driver-support-for-Maxim-MAX30208/20221101-102308
+>         git checkout 2375dabd39957ad8e80878c5604eda8a9f73932d
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/block/ drivers/iio/temperature/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/iio/temperature/max30208.c:195:36: warning: unused variable 'max30208_acpi_match' [-Wunused-const-variable]  
+>    static const struct acpi_device_id max30208_acpi_match[] = {
+>                                       ^
+>    1 warning generated.
+> 
+See review comments on v6 that said to drop the use of ACPI_PTR(). It's not worth
+the fiddly handling to save a trivial amount of data.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.1-rc4
+Jonathan
 
-Thanks,
-Guenter
-------
+> 
+> vim +/max30208_acpi_match +195 drivers/iio/temperature/max30208.c
+> 
+>    194	
+>  > 195	static const struct acpi_device_id max30208_acpi_match[] = {  
+>    196		{ "MAX30208" },
+>    197		{ }
+>    198	};
+>    199	MODULE_DEVICE_TABLE(acpi, max30208_acpi_match);
+>    200	
+> 
 
-The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763:
-
-  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.1-rc4
-
-for you to fetch changes up to 1e699e177e339e462cdc8571e3d0fcf29665608e:
-
-  Revert "hwmon: (pmbus) Add regulator supply into macro" (2022-11-04 16:47:01 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v6.1-rc4
-
-Fix two regressions:
-
-- Commit 54cc3dbfc10d ("hwmon: (pmbus) Add regulator supply into macro")
-  resulted in regulator undercount when disabling regulators. Revert it.
-
-- The thermal subsystem rework caused the scmi driver to no longer register
-  with the thermal subsystem because index values no longer match.
-  To fix the problem, the scmi driver now directly registers with the
-  thermal subsystem, no longer through the hwmon core.
-
-----------------------------------------------------------------
-Cristian Marussi (1):
-      hwmon: (scmi) Register explicitly with Thermal Framework
-
-Guenter Roeck (1):
-      Revert "hwmon: (pmbus) Add regulator supply into macro"
-
- drivers/hwmon/pmbus/pmbus.h |   1 -
- drivers/hwmon/scmi-hwmon.c  | 116 +++++++++++++++++++++++++++++++++++++++-----
- 2 files changed, 103 insertions(+), 14 deletions(-)
