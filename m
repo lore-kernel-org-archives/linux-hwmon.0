@@ -2,94 +2,162 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C4FEC433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Nov 2022 02:41:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C8C0C433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Nov 2022 03:57:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbiKGCl6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 6 Nov 2022 21:41:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
+        id S230430AbiKGD5F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 6 Nov 2022 22:57:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbiKGCl5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 6 Nov 2022 21:41:57 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B78B654B
-        for <linux-hwmon@vger.kernel.org>; Sun,  6 Nov 2022 18:41:55 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id m204so10865311oib.6
-        for <linux-hwmon@vger.kernel.org>; Sun, 06 Nov 2022 18:41:55 -0800 (PST)
+        with ESMTP id S230304AbiKGD5E (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 6 Nov 2022 22:57:04 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61289B7F5;
+        Sun,  6 Nov 2022 19:57:03 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id l6so9428369pjj.0;
+        Sun, 06 Nov 2022 19:57:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oxZ+k7gdIji03RCQaZ41likzUEk0OuGwS76cc6ZNWEQ=;
-        b=pDPNUzn1EI3qtOpdkjgnI0HwcCRAjOjtJgCAV+y+15tnnrwfuWY6+1SMa4PKhjF2Hl
-         dQHgTihpXnAy5nmGO8JNInnp1uXuDwyf5txW6mB6ZEyZPq+rFiTUzl0yVo/POOJJgamQ
-         WOknwxb35Aval5EGVzCWDic1s06yvpHJz4xJJ8PxRs/UYRZjvlqGf+DxbvOpuk6UdQLt
-         eZwoLwZtUO1USu9mJ/sDyWVQsiqgTurNAP3ZO1Fk2S9dBCr6EZQbY2MvmcOSXcxVGxsb
-         gEwIFZ0zXq9Ozwp8/fsBaqjezGlPTG4g8t0Qpjy31jhIgisJ/hb+86v/U3qrBdhrz5CP
-         hqgg==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jFMW3O4nMzzbsjps13fey55rZ3wr/PRwCQWHd1qcbcA=;
+        b=cBnySRhwG9RoqlHnyyNDFqhPlpjxDLCS4e5dnFc2lZK2UFHxFIIFJwEkPyJ3PHw3c/
+         Q0fP3TgkwQoRItRNssOvfgKeobkt2uXGkcn7kZxO3BbWQ0jBRvGCKb3hCfUJafKjqq8k
+         uR6Cd4x1u48Ox6DzxUTa19AeGAq6ZdpD+lBSwFXqmULfd/mXqsil114RRgw6TxpdTiLz
+         /tm9VL/RTqfc5Q53iwcCAK8WtnF653mfAd6XQv9kGUlvTiYZTKGW11cG5qDm8l8AeNYt
+         OobCKgopZrtYt6ugCFghPhU4FVwgvqbH5G50GBZuL6yk9XGYmNxH9lcDHRC4DXMu2TPI
+         1XZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oxZ+k7gdIji03RCQaZ41likzUEk0OuGwS76cc6ZNWEQ=;
-        b=yHy8rBS2gsQtJRHyS4pJVu2/3DeHzYY6cloIW+UpxUD0ZF5wSvhWM6EbHnZpgQ3+qB
-         xLJkb//Epmq9y21FsdUUZEUkYiOifnv1ZQ6sza6tuhsGh+6w5O/JFpsIL97lZt/ApFid
-         QXBFSwzn8mGziBvK8dMwxmmTY6zORCTzMP51HjNb51v/2ZpLDFX9TdMEOkkSZD6p0pEK
-         VvjqhQuOSHS0OCZf/m9hvk/HHd5Ty/OD5oOQ4WhH2gATfFhp/gnX2jsBZblytro4o6r0
-         9P9GENj/UBx8bytwuWCRCjEp5U47fZdHskeDa7uvad2uPDaB0cdEeIv0l+ngsQLvZgpC
-         D+SA==
-X-Gm-Message-State: ACrzQf0oLxViFyaZdKCyTrlgpytS3TY+jT57Ysxld49FSzPyzi629wF7
-        Su9rBM5Hq7DXzvrZ8MQiBYtRqqRr7b0=
-X-Google-Smtp-Source: AMsMyM4dg+UHjL22PVkJ4fT4Eh3mVcxKIBxrQELtHEeVdUYV1PxhJIHz7cPsnlryiGpKwjhumnoZWA==
-X-Received: by 2002:a05:6808:1247:b0:353:4258:718f with SMTP id o7-20020a056808124700b003534258718fmr25863376oiv.155.1667788913319;
-        Sun, 06 Nov 2022 18:41:53 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f18-20020a4ae612000000b0049052c66126sm1844170oot.2.2022.11.06.18.41.50
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jFMW3O4nMzzbsjps13fey55rZ3wr/PRwCQWHd1qcbcA=;
+        b=UNgni8SrPuwTh+sAQERrK00jugrI/t7H0J+THUw4n4bEWgtlYjpGP93TuC6tbpkY0I
+         B1CbTYliBSWshhzUqfr4g61ZgG63+1oip8cfWjypWzJJ0SUnp5JiBNeVw4ggMGKebgJG
+         KrgShBMn7kEjmC39zJ5/Zjn5MJBxgodUDMNxnTPwLzFGyUfFDieTvUCkCPqG+2zXlPU7
+         Q82+RWaJzLKWIDH/kMOlsvkwkO7E+/lL8j7NXvwjV0R88d95HrqJXf795YJ3C1gIXNJ4
+         h5rzWup7aKU9YpggV04IefKF8huECDtscB+ePxglTL5A+JqrYjCVyTluT+za2Oz3yzOW
+         kJuA==
+X-Gm-Message-State: ACrzQf10uspqETAk3axpsNxh0Pu/Ew/iECtV2100JvaNLkhiOKOJT1vK
+        31kVPU7Nu3PnA4aPQCSkquA=
+X-Google-Smtp-Source: AMsMyM4dGSaEfzbbZa2tW2MWyiEUxcwujp0EXKxIC/QK7xq2+L6A/rW/IJiML0aA97pqbqrq5krEUg==
+X-Received: by 2002:a17:902:ccc2:b0:178:29e1:899e with SMTP id z2-20020a170902ccc200b0017829e1899emr48045976ple.114.1667793422831;
+        Sun, 06 Nov 2022 19:57:02 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-14.three.co.id. [180.214.232.14])
+        by smtp.gmail.com with ESMTPSA id 68-20020a621647000000b0056bd1bf4243sm3282388pfw.53.2022.11.06.19.57.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Nov 2022 18:41:51 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 6 Nov 2022 18:41:49 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Marc SCHAEFER <schaefer@alphanet.ch>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: Re: Power measurement wrong when idle
-Message-ID: <20221107024149.GA977242@roeck-us.net>
-References: <20221029123338.GA11915@alphanet.ch>
- <532f711c-6566-8a69-a199-4753bd24111e@roeck-us.net>
- <20221104105257.GA8083@alphanet.ch>
- <20221105143119.GA27879@alphanet.ch>
+        Sun, 06 Nov 2022 19:57:02 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id B260E103B90; Mon,  7 Nov 2022 10:56:58 +0700 (WIB)
+Date:   Mon, 7 Nov 2022 10:56:58 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     nick.hawkins@hpe.com
+Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com, corbet@lwn.net,
+        linux@armlinux.org.uk, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 1/6] hwmon: (gxp-fan-ctrl) Add GXP fan controller
+Message-ID: <Y2iCCpKYRm0c7gvZ@debian.me>
+References: <20221104193657.105130-1-nick.hawkins@hpe.com>
+ <20221104193657.105130-2-nick.hawkins@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Xo6UyqZ2b1CGVEcP"
 Content-Disposition: inline
-In-Reply-To: <20221105143119.GA27879@alphanet.ch>
+In-Reply-To: <20221104193657.105130-2-nick.hawkins@hpe.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Nov 05, 2022 at 03:31:19PM +0100, Marc SCHAEFER wrote:
-> Hello,
-> 
-> On Fri, Nov 04, 2022 at 11:52:57AM +0100, Marc SCHAEFER wrote:
-> > so far I could install a 5.10 kernel on buster (that kernel contains drivers
-> > and some firmwares, in form of .ko).
-> 
-> I just compiled some stock kernels from kernel.org using make bindeb-pkg
-> 
-> The results:
-> 
-> 4.19.260 HAS NOT the bug
-> 4.19.264 HAS NOT the bug
-> 5.0.1 HAS the bug
-> 5.1   HAS the bug
-> 
-> If I understand it well, 5.0.1 is the first ever 5.x kernel and
-> 4.19.264 the latest 4.x kernel.
 
-Unfortunately I don't find a relevant change between v4.19 and v5.0.
+--Xo6UyqZ2b1CGVEcP
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The only chance I can see would be to bisect between those kernel versions
-to try to find the responsible commit.
+On Fri, Nov 04, 2022 at 02:36:52PM -0500, nick.hawkins@hpe.com wrote:
+> diff --git a/Documentation/hwmon/gxp-fan-ctrl.rst b/Documentation/hwmon/g=
+xp-fan-ctrl.rst
+> new file mode 100644
+> index 000000000000..fc1709fb113b
+> --- /dev/null
+> +++ b/Documentation/hwmon/gxp-fan-ctrl.rst
+> @@ -0,0 +1,36 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +Kernel driver gxp-fan-ctrl
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> +
+> +Supported chips:
+> +
+> +  * HPE GXP SOC
+> +
+> +Author: Nick Hawkins <nick.hawkins@hpe.com>
+> +
+> +
+> +Description
+> +-----------
+> +
+> +gxp-fan-ctrl is a driver which provides fan control for the hpe gxp soc.
+> +The driver allows the gathering of fan status and the use of fan
+> +pwm control.
+> +
+> +
+> +Usage Notes
+> +-----------
+> +
+> +Traditionally fanY_input returns an RPM value, on HPE GXP systems it is
+> +the pwm value [0-255] due to the fan speeds being reported as
+> +percentages.
+> +
+> +
+> +Sysfs attributes
+> +----------------
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +pwm[0-15]		Fan 0 to 15 respective pwm value
+> +fan[0-15]_input		Fan 0 to 15 respective input value: pwm value
+> +fan[0-15]_fault		Fan 0 to 15 respective fault status: 1 fail, 0 ok
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
-Guenter
+You need to add the documentation to toctree of hwmon documentation:
+
+---- >8 ----
+
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index ddff3c5713d74e..29ecef3ba4870b 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -73,6 +73,7 @@ Hardware Monitoring Kernel Drivers
+    g762
+    gsc-hwmon
+    gl518sm
++   gxp-fan-ctrl
+    hih6130
+    ibmaem
+    ibm-cffps
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--Xo6UyqZ2b1CGVEcP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY2iCBQAKCRD2uYlJVVFO
+o9iXAQC5dCdUaEBhlftegSoX9NMmwqr5otKpX0J4Hyg6r6BWxQEAwN3T6R2st6FD
+eQsWtMfkIixxZzJaGvqzv40MwM9tfAg=
+=Jvc3
+-----END PGP SIGNATURE-----
+
+--Xo6UyqZ2b1CGVEcP--
