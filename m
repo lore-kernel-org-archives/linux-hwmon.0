@@ -2,300 +2,203 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C3DBC43217
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Nov 2022 14:30:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D6C3C433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Nov 2022 22:37:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbiKGOaU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 7 Nov 2022 09:30:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
+        id S232396AbiKGWhZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 7 Nov 2022 17:37:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbiKGO3z (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Nov 2022 09:29:55 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C0620340;
-        Mon,  7 Nov 2022 06:25:28 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id q9so30679151ejd.0;
-        Mon, 07 Nov 2022 06:25:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tlpScT6F60pSrsogTaj9VnxNe1/Gb44ya536wXTLSMQ=;
-        b=J1NkmOATv/g3GqPNlMXwpr363k2bqh7cQFPn11o4w3Td3IgbdXQrgcd+qeQGgppqPC
-         N4xpQa7GnULDoTFNFdt9oxJuBvvrzb9/95GTJCDIvK3JYG88zfExrZlEU9auZtidrbRG
-         NT7bHyQRA5Fyrj8rdwikUDWiYEbNkw0G5DKn5TT392gS0XJY7XCTebDlbTnYrCt9RaCV
-         M9zWDo5GhusTkHKDzqCnfgD0l3/FkwzVOGr7nVMvo8LK3VVZIqBvAlVaZeSnKtDNfR5i
-         mCf4F88xNlVzoYXDEmSrNV55AbxZtus73an8ApAKR2+XAEAJpTbP2E/eKnuHUJYtzTsU
-         EqQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tlpScT6F60pSrsogTaj9VnxNe1/Gb44ya536wXTLSMQ=;
-        b=s3p/VaM3vV8xuO+oGubp9T9r7FdaIO/IlE1k0f54HRrCgmaziAt+Fv0xinHEbae8bE
-         mvgkmnIM1Vg7MjjUt/oD3AXT+lfddREhF/L8RAza9MdfGcApdmwWbqTUMjI3iIe6xZIc
-         6qyB+ta1WHb7b9WGewzZjjQgRFny7Qbgt6us17Gsm/0Hoi9knFeydT9xiIXKnrJJ8Wlx
-         /8G6j3o5BBfLy4rs7mShrSliVhRUQJ7rgU0u9l8eJqHbhjrQslCTjXAOL4SyU4PCBMIG
-         1Hyjm1YiuM6XU5Ttgt4tYSNP3pH+xHkaz9zqyZLXMK2VL5tjVtdxmDD4v9U9IUBjswim
-         l7jQ==
-X-Gm-Message-State: ACrzQf2sxZBzOF/cnqlz1IwV7m8NmctQL3rHswmqHs7cCijVB6EBNzna
-        UuyzDk7yj/PX5oyXBFGoFBFB+CuTlslisQ==
-X-Google-Smtp-Source: AMsMyM6RMieTI78k+MwqWZF6jdWL2SBGgr++u1vvQWxrjZOpiTzlWYsLH2cCH/UDTSMDlUPHB6X6uA==
-X-Received: by 2002:a17:906:328c:b0:780:7574:ced2 with SMTP id 12-20020a170906328c00b007807574ced2mr48354885ejw.634.1667831127043;
-        Mon, 07 Nov 2022 06:25:27 -0800 (PST)
-Received: from fedora.. ([87.116.164.153])
-        by smtp.gmail.com with ESMTPSA id fy8-20020a170906b7c800b007877ad05b32sm3489265ejb.208.2022.11.07.06.25.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 06:25:26 -0800 (PST)
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (aquacomputer_d5next) Clear up macros and comments
-Date:   Mon,  7 Nov 2022 15:24:55 +0100
-Message-Id: <20221107142455.655998-1-savicaleksa83@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        with ESMTP id S232258AbiKGWhY (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Nov 2022 17:37:24 -0500
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA7F17A9C;
+        Mon,  7 Nov 2022 14:37:23 -0800 (PST)
+Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A7KWNq3028029;
+        Mon, 7 Nov 2022 22:36:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id : references : in-reply-to : content-type : content-id :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=yy9cVGaKyD20oHziGJGbDYEQqI+ud6MuB7MO1J0sa10=;
+ b=Cs4CBjSKRAjE9x5tWCl8/WjpjXmtSS3ZgDUvbrBos6cYTmAwbVhbFGCIWwkUp4FAwJMS
+ ydDMskysBO6JUCMwt3jAjgn3in90xtLvfdlrzO208K6dMvMO0SLMPT0/uxogCG0L+A0w
+ pk/nXK0cNUH1VFYun9kx4lnOpQTg+f/8rrS5gYPH3Do7Jdvc/jsrgm3mvP0Nv5vk/jRz
+ KosuIhnooqjAK3un+XA96nfIsXjP3/QbG0TRYaOqX0D5bRsmal0WnheViMZC+gV0Iyu2
+ 3cD5pL4Swrvp2j5GYm3DZ5fBObolPO5CHYv71arBmFknhsJyxjTj+iq0z6kNeLG8kXHs KA== 
+Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3kq94xgs2t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Nov 2022 22:36:53 +0000
+Received: from p1wg14924.americas.hpqcorp.net (unknown [10.119.18.113])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id E180380471E;
+        Mon,  7 Nov 2022 22:36:52 +0000 (UTC)
+Received: from p1wg14925.americas.hpqcorp.net (10.119.18.114) by
+ p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 7 Nov 2022 10:36:52 -1200
+Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
+ p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
+ via Frontend Transport; Mon, 7 Nov 2022 10:36:52 -1200
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 7 Nov 2022 22:36:50 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g532hu+VUP9G8PrCwvMvvdCeRsRCxp6G1i49L14QNwK1jZeEBLXmcSBQmKy5SrM6s7n183Sl9ptF7CjLIjab6rI8T5iSXULZKQR+ysIyjhbD65GW6MD1X5FfGJBy+Oyk4fltywHogZgvCZPrYK3ntTzGISZ0vO3NjfA+ZntedIdYvsQUywod53QgfV7rD+OAEWeQZ9cpZuqg9ZIxXbaN2kKxs13ttW1CNPqNMH/+BYbS9L8pdvy9BLeQ8D/UZIbgDHgIBqfkAagBOY6MSxl3c8VU1YymsHs4tYNGD9LdFBSZRT+EJ9kXokB5YC4z3H1k6lnd+nLbJ1rayw1e9NaN8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yy9cVGaKyD20oHziGJGbDYEQqI+ud6MuB7MO1J0sa10=;
+ b=IcxgyNsNnjbzbm6TQTdYjGQEftx1wQZsARrfjFdSHjOsxSOMUQ+9d8d4zJw8glXQl68NWT1iP171P+TgoC74+ceFyHoFMwo1BeGuyfHznhhy+dDIg2qu7m9eK6MQtr9LQ5JyNEo2KASxkjklaPkEdRkaXHH9wMHKZJLHUcTXYiGm4sroPYiQ4RwSLMUcLvWivA1RsGc9rp/4mfuK8CmBGsNb5BYczr0hvf7Q2KauCKOtTOBKAGIjxQBM+HGh1BSYfn7z+QftvS+5AEpyemrWegrLFFp8ohYipm9V8gyA3pptar7mciQrTwmX2leGR0+yK2Fz3V9HQpgLx+speUnE9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
+ MW4PR84MB1682.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1a5::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
+ 2022 22:36:48 +0000
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::7949:4505:4974:ad5f]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::7949:4505:4974:ad5f%5]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
+ 22:36:48 +0000
+From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v1 3/6] dt-bindings: hwmon: Add hpe,gxp-fan-ctrl
+Thread-Topic: [PATCH v1 3/6] dt-bindings: hwmon: Add hpe,gxp-fan-ctrl
+Thread-Index: AQHY8IUEH8BHEDSFJkCt/7SN3E/8Qa4xtsSAgAH2dAA=
+Date:   Mon, 7 Nov 2022 22:36:48 +0000
+Message-ID: <236F9C0A-797D-41C6-B342-4C32DF28C426@hpe.com>
+References: <20221104193657.105130-1-nick.hawkins@hpe.com>
+ <20221104193657.105130-4-nick.hawkins@hpe.com>
+ <1b90f86c-9c0f-225b-38b5-6f37a4eded69@linaro.org>
+In-Reply-To: <1b90f86c-9c0f-225b-38b5-6f37a4eded69@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Microsoft-MacOutlook/16.66.22102801
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|MW4PR84MB1682:EE_
+x-ms-office365-filtering-correlation-id: 9a4beafd-1982-4d55-3aea-08dac1108ee0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jOkQQYipdjCNYYJQCvWIwI29VhtyPa2XtGoBJSx03flGag2mirJ1hN/pE4nRUXQ3SUCUhy2/9m2T6RpbuGzdt3eW5PSNOui+zplFF/fNF4ToUuiVdR8/8QBB0gOGaEvCfcskubfrBHTx7BDCqqtpLXxcb32ztCQUUUXDtvTPqjMp1bMCbIBzFVYCIzq+cZfCrAYImX52dQBpHQds8K/bRJKv3IT8NiqdXNiSpqb4f+Uev6wNtCgn8k8OG05qcUt4lTOSWpHPrEz2gQ0wUd4gT8j5PiC95O6FoEfO+S5IAUiF6nn0HGUG4y2XMmAlNn9cMUCDGB7rn8wKhKnz1wJ15WNPNKxt/HVgOGtZOumZewLk57on+yy02qIVU7sMK9kC3gyJkCXG5wNbP1+8HP2YWu8DVKsGKeZjoEnutPjI7bMxdvoLDWmdNYi65/ht1ex7aAyLscwilci89sdla3btAFp44viXFvEVm5s0dUjFe6fuCUE961Nz19afK/ueli8cyenL0pgw4hQN3AXNss9dcsTtBzCpZMA/n8beFtxnGK9reVvZjQJnKZbKxKM0fZfpP4UXAArcNTUo13YCTuXvFyEqqEuQCJZ7fP4aTXoF6bamRtwdydZ9f0Cg06+5KjZW3uqQ0zrYJvFrXmgzvTV8T7FACYB4hlBUdAv8HxEu4hzYV7E5t+zEMR/oKxybfrskMaBmeNG5OGN6ilZoiw2qMnNJo4PU8/YIu4IWm97vnW50Bu9Ixrq+I7krRMYD5JqWeFZfPMP+FyiOOq8e6Cka8z9EmIUuNkpfQSyeLEtGqvqcEw/cQ9Ou3Vn+yzxn5ZOmBbyG3/G+eeUZLgHkN0ig6g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(366004)(346002)(376002)(396003)(136003)(451199015)(2616005)(186003)(6512007)(38100700002)(6506007)(122000001)(26005)(83380400001)(2906002)(7416002)(8676002)(110136005)(316002)(478600001)(6486002)(71200400001)(966005)(41300700001)(5660300002)(8936002)(91956017)(76116006)(66446008)(66556008)(64756008)(66946007)(66476007)(33656002)(36756003)(38070700005)(921005)(82960400001)(86362001)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZkNIRFYxbkxCZTVHL1E5Sjd6NVRic3FNVjdXRW5YN2oxWXd1Q2N0cnlhOUwv?=
+ =?utf-8?B?OFp6TElreCttL2V6M3lydnBBRVNCSndiQ2hsekI0QUZWMGVteDFGUEtpdkRH?=
+ =?utf-8?B?d0o1RmFaa3dVbk5CcXlpUG9aamFXSTZDdmdLMnA4NGhJY21RWUJEUmFCMTN1?=
+ =?utf-8?B?Mm4yT3FVSEhaakZSQmxSVFZPUjNXeE00dEVhOFFOWVdzVlNFUFo5N0x4VC9Z?=
+ =?utf-8?B?ZGVqUlJCcm1zUWJ4SzlQMWpubFFuUDVNdVhDdjd0MDRVOGtueVZLWmZUL09T?=
+ =?utf-8?B?MTl1QjRJZWFQcDU3Ry9peFlHdFBxR2lSeENqS3ZtQ24rcUQwREtXS0dTUjVu?=
+ =?utf-8?B?YzQ5SXNtNlZoYlpLdWFranZFRE9zRVhHUFplOTZ6VXArLzRzZEVuNWY3THBF?=
+ =?utf-8?B?cnVWbzdzZHNvSU11eEpYaWNYREFvL1V4VFY2ckkwMEJIVG1Gb2ZvcWp1dW5w?=
+ =?utf-8?B?M09zUFYyVFRERW5pSWlmc3VTaG0zU29uVG03eWxySzZ1ZEJIWVZXNHRYQ0Fs?=
+ =?utf-8?B?WUMvZ0dyYlhlQWZTVElVblppdW5JSlNLVUh3MStsOHBvWkRCOVhnRnlXZW50?=
+ =?utf-8?B?VHN0cFNvbXV2Q1VEc3IwdnByUC9QdGJnSnVzcXlkQWE1VkxXZU9HSUVrWm5y?=
+ =?utf-8?B?TWM3WFNENmFxWXVRMVlDQjlESVh3UjBYZmNuaU1DYjJlWjFNRk5UWGJGRUU2?=
+ =?utf-8?B?b0UvcVh6UzFtejRIQXVnVVc3RUg5bytsaUlGbS95WTl1anduckZ5eUNKZExj?=
+ =?utf-8?B?cU84YlJXZGQ4MDRNdThXY3IvSXZRZ3hnQ0JtandPVUpkRUtOanpQeW5GVXEv?=
+ =?utf-8?B?U3F3dXBWS3BhSmhWUldQM29Ec1REUGpSbnhVZTJlekg1YWU1dytIbVlRdko1?=
+ =?utf-8?B?ejZRRXFwZjRwNDdSY003Zm94aWFjNjMwUTBSVkVqdmt6UnVDeHE5V2c1NWVs?=
+ =?utf-8?B?T0hVSWJvZnJwVVl2YjBXVHE1MmZTajJNcDJHLzlIOGZtMXlnSWdNejZmaGx6?=
+ =?utf-8?B?T1o4VHNka2tCakhPcVFFSktvTHlCQmZ3dUJveCtBZkxhKzdzUndFMkNvRFhi?=
+ =?utf-8?B?U3JqN2x5Q0c3YjltWDBiSzJ4YWNlM2Z5WWJZdzRrMG91em52VWpsaVY0YjMv?=
+ =?utf-8?B?dit1ck96S3dnUGtJdnlhcHJxWHVpdGRyVUlWRzR5K1dWU3JHK0ZlUkdmUmF4?=
+ =?utf-8?B?cE5ob09xeEZnNVlKUGFkaW5PaVV3RzNheVZqTEY1cWY0VGhSU01PUUJ1MnZH?=
+ =?utf-8?B?eVpTQm5pWjN3TjQ0TVk2SnFyblM4aXJJRUJGUXc2VERGUmVJUGhzSmhoaStx?=
+ =?utf-8?B?VnVubnRYQmQ5MHU0b0lSVk1WM2kyNEVuY3BJWjZQdkQ5a0pLc25VdndVY1N3?=
+ =?utf-8?B?b1B2VXdPc1F0bmtONS9PU0hScDhQTzNUd3JkdURjWDBYeDFoYlJ1U1VUdmVK?=
+ =?utf-8?B?L2xHVXVmMHVNdmJ5Nm5OL0paVTcyeldlbitLUXF3c2t4enNKb3dKbnYyOHBr?=
+ =?utf-8?B?WnJJOXRGTWVVb1E1YUpDNHplSjNEMnBTOFVScktvTWlkUCtlTmJIWGFlVXFa?=
+ =?utf-8?B?amxsYndkSjVjY1NTamlLbXY0VlkvSEN3SmtBUlh3ZWZrOCtzTVpCS1YzYllM?=
+ =?utf-8?B?YjRIUHBRMjRLb1NyQThvb3ovZ0lCc1pNczIwSEZCeHpNeFV1M2RDYjI3dzhS?=
+ =?utf-8?B?Sm9zMDJTSWc2OWxPTElzL2pBaW80SjhPVXhudXd6enNTNEM5SngzVTBXY1Y1?=
+ =?utf-8?B?bFBlWlRxNmVZb3hLdkFJK0g0T0VhUDJvV3JFVktIdFg4T2pJcDY3eHBWenhl?=
+ =?utf-8?B?YUpvOE5JZW1OYWJjK0NNOXQ2QnQ3TDBOZmVWcklNWGxkNVRhOEZBbzE1T0lB?=
+ =?utf-8?B?Z0tqK0ptQ3lXWUdNWnR4Snp1ME5jekRHdEtSWWp3M1JlZ25Camlya1RMNEVJ?=
+ =?utf-8?B?S2VuRWkxQmx1THZodGFybnRoR3B3dmMyeGlmZVo3RmZXWm1TVEtCS1pOckFN?=
+ =?utf-8?B?SUN4QzhDd0VpR0tBcmUvRUN1VnFCYVZ5SlV4ZFBHTWs5ZysvSm9aQy95dExy?=
+ =?utf-8?B?VkJYZFFYaVdrMWxQV2V4MEw1UVJXdFdWRUVrcmZuWDlqcmtTVXRJQ2wzRFZw?=
+ =?utf-8?B?b3JkRWRFbWZZSHBJWVJaWm5VM3d6STBZQlFRby9VQ3RWNWhQcER2MlhLUGtm?=
+ =?utf-8?B?T3c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F5720AA577A5E04A8CF196A473BBF3B0@NAMPRD84.PROD.OUTLOOK.COM>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a4beafd-1982-4d55-3aea-08dac1108ee0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Nov 2022 22:36:48.6887
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 66vgEjhtUea1Q6xa0D3I1eGlryO+CzxNAqrGscBNol9izmHXm5MoHb6G9HAaGjkomRWT6BZ/mPw6WLDuQYkyRw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR84MB1682
+X-OriginatorOrg: hpe.com
+X-Proofpoint-GUID: 2a9BHeMtAM5NMWJmidN3yqibN5IVNZoR
+X-Proofpoint-ORIG-GUID: 2a9BHeMtAM5NMWJmidN3yqibN5IVNZoR
+Content-Transfer-Encoding: base64
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 malwarescore=0 clxscore=1015
+ mlxlogscore=999 impostorscore=0 phishscore=0 spamscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211070170
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Reorganize macro definitions into sections for each supported
-device, with additional comments on their purpose. This should
-make it easier to follow what report each offset is coming
-from. Also, reformat per-device initializations in
-aqc_probe() to organize them into sections (fan info,
-temp sensors, other parameters and lastly labels).
-
-No functional changes.
-
-Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
----
- drivers/hwmon/aquacomputer_d5next.c | 97 +++++++++++++++++++----------
- 1 file changed, 63 insertions(+), 34 deletions(-)
-
-diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-index 608f57f59cf9..49d3f9876fe8 100644
---- a/drivers/hwmon/aquacomputer_d5next.c
-+++ b/drivers/hwmon/aquacomputer_d5next.c
-@@ -59,7 +59,7 @@ static u8 secondary_ctrl_report[] = {
- 	0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x34, 0xC6
- };
- 
--/* Register offsets for all Aquacomputer devices */
-+/* Sensor sizes and offsets for all Aquacomputer devices */
- #define AQC_TEMP_SENSOR_SIZE		0x02
- #define AQC_TEMP_SENSOR_DISCONNECTED	0x7FFF
- #define AQC_FAN_PERCENT_OFFSET		0x00
-@@ -68,67 +68,80 @@ static u8 secondary_ctrl_report[] = {
- #define AQC_FAN_POWER_OFFSET		0x06
- #define AQC_FAN_SPEED_OFFSET		0x08
- 
--/* Register offsets for the D5 Next pump */
--#define D5NEXT_POWER_CYCLES		0x18
--#define D5NEXT_COOLANT_TEMP		0x57
-+/* Specs of the D5 Next pump */
- #define D5NEXT_NUM_FANS			2
- #define D5NEXT_NUM_SENSORS		1
- #define D5NEXT_NUM_VIRTUAL_SENSORS	8
--#define D5NEXT_VIRTUAL_SENSORS_START	0x3f
-+#define D5NEXT_CTRL_REPORT_SIZE		0x329
-+
-+/* Sensor report offsets for the D5 Next pump */
-+#define D5NEXT_POWER_CYCLES		0x18
-+#define D5NEXT_COOLANT_TEMP		0x57
- #define D5NEXT_PUMP_OFFSET		0x6c
- #define D5NEXT_FAN_OFFSET		0x5f
- #define D5NEXT_5V_VOLTAGE		0x39
- #define D5NEXT_12V_VOLTAGE		0x37
--#define D5NEXT_CTRL_REPORT_SIZE		0x329
--#define D5NEXT_TEMP_CTRL_OFFSET		0x2D
-+#define D5NEXT_VIRTUAL_SENSORS_START	0x3f
- static u8 d5next_sensor_fan_offsets[] = { D5NEXT_PUMP_OFFSET, D5NEXT_FAN_OFFSET };
- 
--/* Pump and fan speed registers in D5 Next control report (from 0-100%) */
--static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };
-+/* Control report offsets for the D5 Next pump */
-+#define D5NEXT_TEMP_CTRL_OFFSET		0x2D	/* Temperature sensor offsets location */
-+static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };	/* Pump and fan speed (from 0-100%) */
- 
--/* Register offsets for the Farbwerk RGB controller */
-+/* Spec and sensor report offset for the Farbwerk RGB controller */
- #define FARBWERK_NUM_SENSORS		4
- #define FARBWERK_SENSOR_START		0x2f
- 
--/* Register offsets for the Farbwerk 360 RGB controller */
-+/* Specs of the Farbwerk 360 RGB controller */
- #define FARBWERK360_NUM_SENSORS			4
--#define FARBWERK360_SENSOR_START		0x32
- #define FARBWERK360_NUM_VIRTUAL_SENSORS		16
--#define FARBWERK360_VIRTUAL_SENSORS_START	0x3a
- #define FARBWERK360_CTRL_REPORT_SIZE		0x682
-+
-+/* Sensor report offsets for the Farbwerk 360 */
-+#define FARBWERK360_SENSOR_START		0x32
-+#define FARBWERK360_VIRTUAL_SENSORS_START	0x3a
-+
-+/* Control report offsets for the Farbwerk 360 */
- #define FARBWERK360_TEMP_CTRL_OFFSET		0x8
- 
--/* Register offsets for the Octo fan controller */
--#define OCTO_POWER_CYCLES		0x18
-+/* Specs of the Octo fan controller */
- #define OCTO_NUM_FANS			8
- #define OCTO_NUM_SENSORS		4
--#define OCTO_SENSOR_START		0x3D
- #define OCTO_NUM_VIRTUAL_SENSORS	16
--#define OCTO_VIRTUAL_SENSORS_START	0x45
- #define OCTO_CTRL_REPORT_SIZE		0x65F
--#define OCTO_TEMP_CTRL_OFFSET		0xA
-+
-+/* Sensor report offsets for the Octo */
-+#define OCTO_POWER_CYCLES		0x18
-+#define OCTO_SENSOR_START		0x3D
-+#define OCTO_VIRTUAL_SENSORS_START	0x45
- static u8 octo_sensor_fan_offsets[] = { 0x7D, 0x8A, 0x97, 0xA4, 0xB1, 0xBE, 0xCB, 0xD8 };
- 
--/* Fan speed registers in Octo control report (from 0-100%) */
-+/* Control report offsets for the Octo */
-+#define OCTO_TEMP_CTRL_OFFSET		0xA
-+/* Fan speed offsets (0-100%) */
- static u16 octo_ctrl_fan_offsets[] = { 0x5B, 0xB0, 0x105, 0x15A, 0x1AF, 0x204, 0x259, 0x2AE };
- 
--/* Register offsets for the Quadro fan controller */
--#define QUADRO_POWER_CYCLES		0x18
-+/* Specs of Quadro fan controller */
- #define QUADRO_NUM_FANS			4
- #define QUADRO_NUM_SENSORS		4
--#define QUADRO_SENSOR_START		0x34
- #define QUADRO_NUM_VIRTUAL_SENSORS	16
--#define QUADRO_VIRTUAL_SENSORS_START	0x3c
- #define QUADRO_CTRL_REPORT_SIZE		0x3c1
-+
-+/* Sensor report offsets for the Quadro */
-+#define QUADRO_POWER_CYCLES		0x18
-+#define QUADRO_SENSOR_START		0x34
-+#define QUADRO_VIRTUAL_SENSORS_START	0x3c
- #define QUADRO_FLOW_SENSOR_OFFSET	0x6e
--#define QUADRO_TEMP_CTRL_OFFSET		0xA
- static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
- 
--/* Fan speed registers in Quadro control report (from 0-100%) */
--static u16 quadro_ctrl_fan_offsets[] = { 0x37, 0x8c, 0xe1, 0x136 };
-+/* Control report offsets for the Quadro */
-+#define QUADRO_TEMP_CTRL_OFFSET		0xA
-+static u16 quadro_ctrl_fan_offsets[] = { 0x37, 0x8c, 0xe1, 0x136 }; /* Fan speed offsets (0-100%) */
- 
--/* Register offsets for the High Flow Next */
-+/* Specs of High Flow Next flow sensor */
- #define HIGHFLOWNEXT_NUM_SENSORS	2
-+
-+/* Sensor report offsets for the High Flow Next */
- #define HIGHFLOWNEXT_SENSOR_START	85
- #define HIGHFLOWNEXT_FLOW		81
- #define HIGHFLOWNEXT_WATER_QUALITY	89
-@@ -903,14 +916,17 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		priv->num_fans = D5NEXT_NUM_FANS;
- 		priv->fan_sensor_offsets = d5next_sensor_fan_offsets;
- 		priv->fan_ctrl_offsets = d5next_ctrl_fan_offsets;
-+
- 		priv->num_temp_sensors = D5NEXT_NUM_SENSORS;
- 		priv->temp_sensor_start_offset = D5NEXT_COOLANT_TEMP;
- 		priv->num_virtual_temp_sensors = D5NEXT_NUM_VIRTUAL_SENSORS;
- 		priv->virtual_temp_sensor_start_offset = D5NEXT_VIRTUAL_SENSORS_START;
--		priv->power_cycle_count_offset = D5NEXT_POWER_CYCLES;
--		priv->buffer_size = D5NEXT_CTRL_REPORT_SIZE;
- 		priv->temp_ctrl_offset = D5NEXT_TEMP_CTRL_OFFSET;
- 
-+		priv->buffer_size = D5NEXT_CTRL_REPORT_SIZE;
-+
-+		priv->power_cycle_count_offset = D5NEXT_POWER_CYCLES;
-+
- 		priv->temp_label = label_d5next_temp;
- 		priv->virtual_temp_label = label_virtual_temp_sensors;
- 		priv->speed_label = label_d5next_speeds;
-@@ -922,20 +938,25 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		priv->kind = farbwerk;
- 
- 		priv->num_fans = 0;
-+
- 		priv->num_temp_sensors = FARBWERK_NUM_SENSORS;
- 		priv->temp_sensor_start_offset = FARBWERK_SENSOR_START;
-+
- 		priv->temp_label = label_temp_sensors;
- 		break;
- 	case USB_PRODUCT_ID_FARBWERK360:
- 		priv->kind = farbwerk360;
- 
- 		priv->num_fans = 0;
-+
- 		priv->num_temp_sensors = FARBWERK360_NUM_SENSORS;
- 		priv->temp_sensor_start_offset = FARBWERK360_SENSOR_START;
- 		priv->num_virtual_temp_sensors = FARBWERK360_NUM_VIRTUAL_SENSORS;
- 		priv->virtual_temp_sensor_start_offset = FARBWERK360_VIRTUAL_SENSORS_START;
--		priv->buffer_size = FARBWERK360_CTRL_REPORT_SIZE;
- 		priv->temp_ctrl_offset = FARBWERK360_TEMP_CTRL_OFFSET;
-+
-+		priv->buffer_size = FARBWERK360_CTRL_REPORT_SIZE;
-+
- 		priv->temp_label = label_temp_sensors;
- 		priv->virtual_temp_label = label_virtual_temp_sensors;
- 		break;
-@@ -945,14 +966,17 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		priv->num_fans = OCTO_NUM_FANS;
- 		priv->fan_sensor_offsets = octo_sensor_fan_offsets;
- 		priv->fan_ctrl_offsets = octo_ctrl_fan_offsets;
-+
- 		priv->num_temp_sensors = OCTO_NUM_SENSORS;
- 		priv->temp_sensor_start_offset = OCTO_SENSOR_START;
- 		priv->num_virtual_temp_sensors = OCTO_NUM_VIRTUAL_SENSORS;
- 		priv->virtual_temp_sensor_start_offset = OCTO_VIRTUAL_SENSORS_START;
--		priv->power_cycle_count_offset = OCTO_POWER_CYCLES;
--		priv->buffer_size = OCTO_CTRL_REPORT_SIZE;
- 		priv->temp_ctrl_offset = OCTO_TEMP_CTRL_OFFSET;
- 
-+		priv->buffer_size = OCTO_CTRL_REPORT_SIZE;
-+
-+		priv->power_cycle_count_offset = OCTO_POWER_CYCLES;
-+
- 		priv->temp_label = label_temp_sensors;
- 		priv->virtual_temp_label = label_virtual_temp_sensors;
- 		priv->speed_label = label_fan_speed;
-@@ -966,14 +990,17 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		priv->num_fans = QUADRO_NUM_FANS;
- 		priv->fan_sensor_offsets = quadro_sensor_fan_offsets;
- 		priv->fan_ctrl_offsets = quadro_ctrl_fan_offsets;
-+
- 		priv->num_temp_sensors = QUADRO_NUM_SENSORS;
- 		priv->temp_sensor_start_offset = QUADRO_SENSOR_START;
- 		priv->num_virtual_temp_sensors = QUADRO_NUM_VIRTUAL_SENSORS;
- 		priv->virtual_temp_sensor_start_offset = QUADRO_VIRTUAL_SENSORS_START;
--		priv->power_cycle_count_offset = QUADRO_POWER_CYCLES;
-+		priv->temp_ctrl_offset = QUADRO_TEMP_CTRL_OFFSET;
-+
- 		priv->buffer_size = QUADRO_CTRL_REPORT_SIZE;
-+
- 		priv->flow_sensor_offset = QUADRO_FLOW_SENSOR_OFFSET;
--		priv->temp_ctrl_offset = QUADRO_TEMP_CTRL_OFFSET;
-+		priv->power_cycle_count_offset = QUADRO_POWER_CYCLES;
- 
- 		priv->temp_label = label_temp_sensors;
- 		priv->virtual_temp_label = label_virtual_temp_sensors;
-@@ -986,8 +1013,10 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		priv->kind = highflownext;
- 
- 		priv->num_fans = 0;
-+
- 		priv->num_temp_sensors = HIGHFLOWNEXT_NUM_SENSORS;
- 		priv->temp_sensor_start_offset = HIGHFLOWNEXT_SENSOR_START;
-+
- 		priv->power_cycle_count_offset = QUADRO_POWER_CYCLES;
- 
- 		priv->temp_label = label_highflownext_temp_sensors;
--- 
-2.38.1
-
+DQogICAgPiA+IFRoaXMgcHJvdmlkZXMgdGhlIGJhc2UgcmVnaXN0ZXJzIGFkZHJlc3MsIHByb2dy
+YW1tYWJsZSBsb2dpYyByZWdpc3RlcnMNCiAgICA+ID4gYWRkcmVzcywgYW5kIHRoZSBmdW5jdGlv
+biAyIHJlZ2lzdGVycyB0byBhbGxvdyBjb250cm9sIGFjY2VzcyBvZiB0aGUgSFBFDQogICAgPiA+
+IGZhbnMgb24gdGhlIEdYUCBTb0MuDQoNCiAgICA+IFdoYXQgaXMgIlRoaXMiPyBJZiAiVGhpcyBw
+YXRjaCIsIHRoZW4gZHJvcCBpdC4NCiAgICA+IGh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xp
+bnV4L3Y1LjE3LjEvc291cmNlL0RvY3VtZW50YXRpb24vcHJvY2Vzcy9zdWJtaXR0aW5nLXBhdGNo
+ZXMucnN0I0w5NQ0KDQogICAgPiBJZiAiVGhpcyBoYXJkd2FyZSIgdGhlbiBwbGVhc2UgaW5zdGVh
+ZCBkZXNjcmliZSB0aGUgaGFyZHdhcmUsIG5vdCBpdA0KICAgIGNvbXBvbmVudHMuIFdoYXQgYXJl
+IGl0cyBmZWF0dXJlcz8gSWYgaXQgY29udHJvbHMgdGhlIGZhbiwgdGhlbiB3aHkNCiAgICB0aGVy
+ZSBhcmUgbm8gUFdNLXJlbGF0ZWQgY2VsbHM/IEhvdyBkbyB5b3Ugc2V0IHRoZSBzcGVlZD8NCg0K
+R3JlZXRpbmdzIEtyenlzenRvZiwNCg0KICAgIFRoYW5rIHlvdSBmb3IgdGhlIGZlZWRiYWNrLiBU
+aGUgaW50ZW50aW9uIHdhcyB0aGlzIGJpbmRpbmcuLiBob3dldmVyLCB0aGF0IHdhcyBhbiBlcnJv
+ciBvbiBteSBwYXJ0LCBhbmQgSSB3aWxsIGNvcnJlY3QgaXQgdG8gcmVmbGVjdCB0aGUgaGFyZHdh
+cmUgc2l0dWF0aW9uIG9mIHRoZSBHWFAgd2l0aCB0aGUgZmFuIGNvbnRyb2xsZXIgYW5kIGhvdyBl
+YWNoIG9mIHRoZSBtYXBwZWQgcmVnaXN0ZXJzIHByb3ZpZGUgY29udHJvbCB0byB0aGUgc3lzdGVt
+LiBUbyBhbnN3ZXIgeW91ciBxdWVzdGlvbnM6IFRoZSBmYW5zIHNwZWVkcyBhcmUgY29udHJvbGxl
+ZCB0aHJvdWdoIGFuIGV4dGVybmFsIENQTEQgZGV2aWNlIHdoaWNoIHdlIHByb3ZpZGUgYSBQV00g
+dmFsdWUgKDAtMjU1KSB1c2luZyB0aGUgImJhc2UiIHJlZ2lzdGVyIHRvIHRoZSBDSUYgaW50ZXJm
+YWNlLiBUaGlzIGludGVyZmFjZSBwcm92aWRlcyBhY2Nlc3MgdG8gdGhlIENQTEQuIFRoZSBDUExE
+IHRoZW4gZHJpdmVzIHRoZSBmYW4uIFRoZSBDUExEIGNhbiBnZW5lcmF0ZSB1cCB0byA4IHVuaXF1
+ZSBkaWZmZXJlbnQgUFdNcyB0byBtdWx0aXBsZSBmYW5zLiBUaGUgQ1BMRCBtb25pdG9ycyB0aGUg
+ZmFucyBhbmQgcmVwb3J0cyB0aGUgc3RhdHVzIGJhY2sgdG8gdGhlIFNvQyB0aHJvdWdoIHRoZSBD
+SUYgaW50ZXJmYWNlIHRvIHRoZSAicGxyZWcgYmFzZSIuIFRoZSBwbHJlZyBpbmNsdWRlcyB0aGUg
+aW5zdGFsbGF0aW9uLCBmYWlsZWQsIGFuZCBpZGVudGlmaWNhdGlvbiBzdGF0dXNlcy4gVGhlIGZ1
+bmN0aW9uIDIgcmVnaXN0ZXIgYmFzZSBpcyB1c2VkIHRvIGNoZWNrIHRoZSBwb3dlciBzdGF0ZSBv
+ZiB0aGUgc3lzdGVtIGFzIHRoYXQgaW5mbHVlbmNlcyB0aGUgUFdNIHZhbHVlcyByZWFkIGJhY2su
+DQoNCkFzIHRoZSBQV00gZ2VuZXJhdGlvbiBoYXBwZW5zIG91dHNpZGUgdGhlIFNvQyBkbyB3ZSBz
+dGlsbCBuZWVkIHB3bS1jZWxscz8gSWYgc28sIHNob3VsZCB3ZSBoYXZlIGEgY3VzdG9tIGNvbXBh
+dGlibGUgZm9yIHRoYXQ/DQoNClRoYW5rcywNCg0KLU5pY2sNCg0KDQo=
