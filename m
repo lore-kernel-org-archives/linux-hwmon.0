@@ -2,51 +2,60 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55DF5C4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Nov 2022 14:00:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7352C4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Nov 2022 14:44:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234850AbiKHOAM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Nov 2022 09:00:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
+        id S234579AbiKHOoC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 8 Nov 2022 09:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234842AbiKHN77 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Nov 2022 08:59:59 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C67668289;
-        Tue,  8 Nov 2022 05:59:57 -0800 (PST)
+        with ESMTP id S234430AbiKHOnk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Nov 2022 09:43:40 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF5210AA;
+        Tue,  8 Nov 2022 06:43:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667915997; x=1699451997;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=uiVXa/lYjKwCyK41WwxoRvtr6GZWe50v8inroEjyyfg=;
-  b=NhF7nEhQSwi81J2+z65AmGgEz4bhSad1kyylJqneO3SKE1fFjAZu80Bh
-   IbIiCRuAkpXJWFTpAMci6+p8pElWVGqnLwOxnXehDJETh5BJewlMnXKXG
-   5Z5e8GI4kTEZV67cFafKRoPHeOt/DrY3LLXedrS76ZOzkss13rZ/MBaiS
-   /SQ22SnIvSe8DWR9OA2xrOXRTPGi3UrIZLrI7lXm6EcWU3KnFDHL3MRO1
-   GIpj3BQbFAOz7jrH69o1JWVDyUSIc5UgbN7jtVzF/3zHftmy1zAW4MtxO
-   AFUw6vreLufLf0gTgCNQH8hk9//RivXgmQtXGeC8f/Yx2AcYQxjKxxCR6
+  t=1667918617; x=1699454617;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=EQA4zq5Aza6o2++oliZzx/FMqAgtSVgf9BxxvU9ea74=;
+  b=SE3R4Yc5MibTI/uXrYmc3sOTzCMEj8RFXbCLvLFxb2lkWQTAM4F7ZI/E
+   4lsG/FFKdA2hQV18LilCm8c1f3wlJRjInB0GpxkZz37XUmcGurUydtMUT
+   G0WctDVwSUl9jE1ojDOpnMeGLrS6lnkbDbhImHeFbxXrEqrGqNmTAIUjd
+   znJtn+Fjny03gIRe9NM32q5LX7IJRFO+B/dfd7XJx4ypiNHuV3CHw6pF0
+   ACE7dugR01zk42dBtwEAUKpj6ZaIZertPsihjDB6CgtwodbvH2zgLk1Me
+   T6KtygwlQnDS8fo8TsYk23/nlg5CkUeSGfxR7Dm5xKTtqlbBepnvYeACN
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="374969264"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="374969264"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:59:56 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="705306050"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="705306050"
-Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:59:53 -0800
-From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-To:     jic23@kernel.org, lars@metafoo.de
-Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        rajat.khandelwal@intel.com,
-        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Subject: [PATCH v9] iio: temperature: Add driver support for Maxim MAX30208
-Date:   Wed,  9 Nov 2022 19:29:49 +0530
-Message-Id: <20221109135949.734180-1-rajat.khandelwal@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="310705551"
+X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
+   d="scan'208";a="310705551"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 06:43:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="638809762"
+X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
+   d="scan'208";a="638809762"
+Received: from ppkrause-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.44.73])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 06:43:31 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 04/12] mfd: intel-m10-bmc: Split into core and spi specific parts
+Date:   Tue,  8 Nov 2022 16:42:57 +0200
+Message-Id: <20221108144305.45424-5-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com>
+References: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -54,372 +63,455 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Maxim MAX30208 is a digital temperature sensor with 0.1°C accuracy.
+Split the common code from intel-m10-bmc driver into intel-m10-bmc-core
+and move the SPI bus parts into an interface specific file.
 
-Add support for max30208 driver in iio subsystem.
-Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX30208.pdf
+intel-m10-bmc-core becomes the core MFD functions which can support
+multiple bus interface like SPI bus.
 
-Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
+Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
-
-v9: Repositioning register data
-
-v8:
-1. Returning time out if conversion fails to happen
-2. Setting rollover bit to '1' to allow FIFO overwriting
-3. Dropping ACPI_PTR
-
-v7:
-1. Dropped GPIOs use for now
-2. Driver name string directly used
-3. Mutex lock description added
-4. Removed noisy errors and only kept errors on larger code blocks
-5. dev_warn -> dev_err for temperature conversion failure
-6. Improvised the logic of popping out values
-7. Fixed line breaks
-8. module_i2c_driver
-
-v6: Converted usleep_range to msleep as delay is quite large
-
-v5:
-1. Fixed comment position in max30208_request
-2. Use of local u8 variable to build register values
-3. Using u8 instead of s8 in data_count
-4. Removed global MAX30208_RES_MILLICELCIUS
-5. Removed 'comma' on NULL terminators
-
-v4: Version comments go below line separator of signed-off-by
-
-v3: Release the mutex lock after error gets returned
-
-v2:
-1. Removed TODO
-2. Removed unnecessary blank spaces
-3. Corrected MC->MILLICELCIUS
-4. Comments added wherever required
-5. dev_err on i2c fails
-6. Rearranged some flows
-7. Removed PROCESSED
-8. int error return on gpio setup
-9. device_register at the end of probe
-10. Return on unsuccessful reset
-11. acpi_match_table and of_match_table added
-12. Minor quirks
-
- MAINTAINERS                        |   6 +
- drivers/iio/temperature/Kconfig    |  10 ++
- drivers/iio/temperature/Makefile   |   1 +
- drivers/iio/temperature/max30208.c | 251 +++++++++++++++++++++++++++++
- 4 files changed, 268 insertions(+)
- create mode 100644 drivers/iio/temperature/max30208.c
+ MAINTAINERS                                   |   2 +-
+ drivers/fpga/Kconfig                          |   2 +-
+ drivers/hwmon/Kconfig                         |   2 +-
+ drivers/mfd/Kconfig                           |  30 ++--
+ drivers/mfd/Makefile                          |   5 +-
+ drivers/mfd/intel-m10-bmc-core.c              | 122 +++++++++++++++++
+ .../{intel-m10-bmc.c => intel-m10-bmc-spi.c}  | 128 +++---------------
+ include/linux/mfd/intel-m10-bmc.h             |   6 +
+ 8 files changed, 173 insertions(+), 124 deletions(-)
+ create mode 100644 drivers/mfd/intel-m10-bmc-core.c
+ rename drivers/mfd/{intel-m10-bmc.c => intel-m10-bmc-spi.c} (60%)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index f1390b8270b2..7f1fd2e31b94 100644
+index cf0f18502372..ddfa4f8b3c80 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -12373,6 +12373,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/regulator/maxim,max20086.yaml
- F:	drivers/regulator/max20086-regulator.c
+@@ -10452,7 +10452,7 @@ S:	Maintained
+ F:	Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
+ F:	Documentation/hwmon/intel-m10-bmc-hwmon.rst
+ F:	drivers/hwmon/intel-m10-bmc-hwmon.c
+-F:	drivers/mfd/intel-m10-bmc.c
++F:	drivers/mfd/intel-m10-bmc*
+ F:	include/linux/mfd/intel-m10-bmc.h
  
-+MAXIM MAX30208 TEMPERATURE SENSOR DRIVER
-+M:	Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-+L:	linux-iio@vger.kernel.org
-+S:	Maintained
-+F:	drivers/iio/temperature/max30208.c
-+
- MAXIM MAX77650 PMIC MFD DRIVER
- M:	Bartosz Golaszewski <brgl@bgdev.pl>
- L:	linux-kernel@vger.kernel.org
-diff --git a/drivers/iio/temperature/Kconfig b/drivers/iio/temperature/Kconfig
-index e8ed849e3b76..ed384f33e0c7 100644
---- a/drivers/iio/temperature/Kconfig
-+++ b/drivers/iio/temperature/Kconfig
-@@ -128,6 +128,16 @@ config TSYS02D
- 	  This driver can also be built as a module. If so, the module will
- 	  be called tsys02d.
+ INTEL MENLOW THERMAL DRIVER
+diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+index d1a8107fdcb3..e4daf79943ee 100644
+--- a/drivers/fpga/Kconfig
++++ b/drivers/fpga/Kconfig
+@@ -246,7 +246,7 @@ config FPGA_MGR_VERSAL_FPGA
  
-+config MAX30208
-+	tristate "Maxim MAX30208 digital temperature sensor"
-+	depends on I2C
-+	help
-+	  If you say yes here you get support for Maxim MAX30208
-+	  digital temperature sensor connected via I2C.
+ config FPGA_M10_BMC_SEC_UPDATE
+ 	tristate "Intel MAX10 BMC Secure Update driver"
+-	depends on MFD_INTEL_M10_BMC && FW_UPLOAD
++	depends on MFD_INTEL_M10_BMC_CORE && FW_UPLOAD
+ 	help
+ 	  Secure update support for the Intel MAX10 board management
+ 	  controller.
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 7ac3daaf59ce..984a55e0f313 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -2321,7 +2321,7 @@ config SENSORS_XGENE
+ 
+ config SENSORS_INTEL_M10_BMC_HWMON
+ 	tristate "Intel MAX10 BMC Hardware Monitoring"
+-	depends on MFD_INTEL_M10_BMC
++	depends on MFD_INTEL_M10_BMC_CORE
+ 	help
+ 	  This driver provides support for the hardware monitoring functionality
+ 	  on Intel MAX10 BMC chip.
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index 8b93856de432..a09d4ac60dc7 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -2219,18 +2219,24 @@ config SGI_MFD_IOC3
+ 	  If you have an SGI Origin, Octane, or a PCI IOC3 card,
+ 	  then say Y. Otherwise say N.
+ 
+-config MFD_INTEL_M10_BMC
+-	tristate "Intel MAX 10 Board Management Controller"
+-	depends on SPI_MASTER
+-	select REGMAP_SPI_AVMM
+-	select MFD_CORE
+-	help
+-	  Support for the Intel MAX 10 board management controller using the
+-	  SPI interface.
+-
+-	  This driver provides common support for accessing the device,
+-	  additional drivers must be enabled in order to use the functionality
+-	  of the device.
++config MFD_INTEL_M10_BMC_CORE
++        tristate
++        select MFD_CORE
++        select REGMAP
++        default n
 +
-+	  This driver can also be built as a module. If so, the module
-+	  will be called max30208.
++config MFD_INTEL_M10_BMC_SPI
++        tristate "Intel MAX 10 Board Management Controller with SPI"
++        depends on SPI_MASTER
++        select MFD_INTEL_M10_BMC_CORE
++        select REGMAP_SPI_AVMM
++        help
++          Support for the Intel MAX 10 board management controller using the
++          SPI interface.
 +
- config MAX31856
- 	tristate "MAX31856 thermocouple sensor"
- 	depends on SPI
-diff --git a/drivers/iio/temperature/Makefile b/drivers/iio/temperature/Makefile
-index dd08e562ffe0..dfec8c6d3019 100644
---- a/drivers/iio/temperature/Makefile
-+++ b/drivers/iio/temperature/Makefile
-@@ -7,6 +7,7 @@ obj-$(CONFIG_IQS620AT_TEMP) += iqs620at-temp.o
- obj-$(CONFIG_LTC2983) += ltc2983.o
- obj-$(CONFIG_HID_SENSOR_TEMP) += hid-sensor-temperature.o
- obj-$(CONFIG_MAXIM_THERMOCOUPLE) += maxim_thermocouple.o
-+obj-$(CONFIG_MAX30208) += max30208.o
- obj-$(CONFIG_MAX31856) += max31856.o
- obj-$(CONFIG_MAX31865) += max31865.o
- obj-$(CONFIG_MLX90614) += mlx90614.o
-diff --git a/drivers/iio/temperature/max30208.c b/drivers/iio/temperature/max30208.c
++          This driver provides common support for accessing the device,
++          additional drivers must be enabled in order to use the functionality
++          of the device.
+ 
+ config MFD_RSMU_I2C
+ 	tristate "Renesas Synchronization Management Unit with I2C"
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index 7ed3ef4a698c..f32276cdd0c2 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -271,7 +271,10 @@ obj-$(CONFIG_MFD_QCOM_PM8008)	+= qcom-pm8008.o
+ 
+ obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
+ obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
+-obj-$(CONFIG_MFD_INTEL_M10_BMC)   += intel-m10-bmc.o
++
++intel-m10-bmc-objs             := intel-m10-bmc-core.o
++obj-$(CONFIG_MFD_INTEL_M10_BMC_CORE)   += intel-m10-bmc.o
++obj-$(CONFIG_MFD_INTEL_M10_BMC_SPI)   += intel-m10-bmc-spi.o
+ 
+ obj-$(CONFIG_MFD_ATC260X)	+= atc260x-core.o
+ obj-$(CONFIG_MFD_ATC260X_I2C)	+= atc260x-i2c.o
+diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
 new file mode 100644
-index 000000000000..102eb2b77dbe
+index 000000000000..6630b81b10c4
 --- /dev/null
-+++ b/drivers/iio/temperature/max30208.c
-@@ -0,0 +1,251 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
++++ b/drivers/mfd/intel-m10-bmc-core.c
+@@ -0,0 +1,122 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Copyright (c) Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
++ * Intel MAX 10 Board Management Controller chip - common code
 + *
-+ * Maxim MAX30208 digital temperature sensor with 0.1°C accuracy
-+ * (7-bit I2C slave address (0x50 - 0x53))
++ * Copyright (C) 2018-2020 Intel Corporation. All rights reserved.
 + */
 +
-+#include <linux/bitops.h>
-+#include <linux/delay.h>
-+#include <linux/iio/iio.h>
-+#include <linux/i2c.h>
++#include <linux/bitfield.h>
++#include <linux/device.h>
++#include <linux/dev_printk.h>
++#include <linux/mfd/core.h>
++#include <linux/mfd/intel-m10-bmc.h>
 +#include <linux/module.h>
-+#include <linux/types.h>
 +
-+#define MAX30208_STATUS			0x00
-+#define MAX30208_STATUS_TEMP_RDY	BIT(0)
-+#define MAX30208_INT_ENABLE		0x01
-+#define MAX30208_INT_ENABLE_TEMP_RDY	BIT(0)
-+
-+#define MAX30208_FIFO_OVF_CNTR		0x06
-+#define MAX30208_FIFO_DATA_CNTR		0x07
-+#define MAX30208_FIFO_DATA		0x08
-+
-+#define MAX30208_FIFO_CONFIG		0x0a
-+#define MAX30208_FIFO_CONFIG_RO		BIT(1)
-+
-+#define MAX30208_SYSTEM_CTRL		0x0c
-+#define MAX30208_SYSTEM_CTRL_RESET	0x01
-+
-+#define MAX30208_TEMP_SENSOR_SETUP	0x14
-+#define MAX30208_TEMP_SENSOR_SETUP_CONV	BIT(0)
-+
-+struct max30208_data {
-+	struct i2c_client *client;
-+	struct iio_dev *indio_dev;
-+	struct mutex lock; /* Lock to prevent concurrent reads of temperature readings */
-+};
-+
-+static const struct iio_chan_spec max30208_channels[] = {
-+	{
-+		.type = IIO_TEMP,
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
-+	},
-+};
-+
-+/**
-+ * max30208_request() - Request a reading
-+ * @data: Struct comprising member elements of the device
-+ *
-+ * Requests a reading from the device and waits until the conversion is ready.
-+ */
-+static int max30208_request(struct max30208_data *data)
++static ssize_t bmc_version_show(struct device *dev,
++				struct device_attribute *attr, char *buf)
 +{
-+	/*
-+	 * Sensor can take up to 500 ms to respond so execute a total of
-+	 * 10 retries to give the device sufficient time.
-+	 */
-+	int retries = 10;
-+	u8 regval;
++	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
++	unsigned int val;
 +	int ret;
 +
-+	ret = i2c_smbus_read_byte_data(data->client, MAX30208_TEMP_SENSOR_SETUP);
-+	if (ret < 0)
-+		return ret;
-+
-+	regval = ret | MAX30208_TEMP_SENSOR_SETUP_CONV;
-+
-+	ret = i2c_smbus_write_byte_data(data->client, MAX30208_TEMP_SENSOR_SETUP, regval);
++	ret = m10bmc_sys_read(ddata, M10BMC_BUILD_VER, &val);
 +	if (ret)
 +		return ret;
 +
-+	while (retries--) {
-+		ret = i2c_smbus_read_byte_data(data->client, MAX30208_STATUS);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (ret & MAX30208_STATUS_TEMP_RDY)
-+			return 0;
-+
-+		msleep(50);
-+	}
-+	dev_err(&data->client->dev, "Temperature conversion failed\n");
-+
-+	return -ETIMEDOUT;
++	return sprintf(buf, "0x%x\n", val);
 +}
++static DEVICE_ATTR_RO(bmc_version);
 +
-+static int max30208_update_temp(struct max30208_data *data)
++static ssize_t bmcfw_version_show(struct device *dev,
++				  struct device_attribute *attr, char *buf)
 +{
-+	u8 data_count;
++	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
++	unsigned int val;
 +	int ret;
 +
-+	mutex_lock(&data->lock);
-+
-+	ret = max30208_request(data);
++	ret = m10bmc_sys_read(ddata, NIOS2_FW_VERSION, &val);
 +	if (ret)
-+		goto unlock;
++		return ret;
 +
-+	ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_OVF_CNTR);
-+	if (ret < 0)
-+		goto unlock;
-+	else if (!ret) {
-+		ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_DATA_CNTR);
-+		if (ret < 0)
-+			goto unlock;
-+	}
++	return sprintf(buf, "0x%x\n", val);
++}
++static DEVICE_ATTR_RO(bmcfw_version);
 +
-+	data_count = ret;
++static ssize_t mac_address_show(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
++	unsigned int macaddr_low, macaddr_high;
++	int ret;
 +
-+	while (data_count) {
-+		ret = i2c_smbus_read_word_swapped(data->client, MAX30208_FIFO_DATA);
-+		if (ret < 0)
-+			goto unlock;
++	ret = m10bmc_sys_read(ddata, M10BMC_MAC_LOW, &macaddr_low);
++	if (ret)
++		return ret;
 +
-+		data_count--;
-+	}
++	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
++	if (ret)
++		return ret;
 +
-+unlock:
-+	mutex_unlock(&data->lock);
++	return sysfs_emit(buf, "%02x:%02x:%02x:%02x:%02x:%02x\n",
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE1, macaddr_low),
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE2, macaddr_low),
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE3, macaddr_low),
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE4, macaddr_low),
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE5, macaddr_high),
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE6, macaddr_high));
++}
++static DEVICE_ATTR_RO(mac_address);
++
++static ssize_t mac_count_show(struct device *dev,
++			      struct device_attribute *attr, char *buf)
++{
++	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
++	unsigned int macaddr_high;
++	int ret;
++
++	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%u\n", (u8)FIELD_GET(M10BMC_MAC_COUNT, macaddr_high));
++}
++static DEVICE_ATTR_RO(mac_count);
++
++static struct attribute *m10bmc_attrs[] = {
++	&dev_attr_bmc_version.attr,
++	&dev_attr_bmcfw_version.attr,
++	&dev_attr_mac_address.attr,
++	&dev_attr_mac_count.attr,
++	NULL,
++};
++
++static const struct attribute_group m10bmc_group = {
++	.attrs = m10bmc_attrs,
++};
++
++const struct attribute_group *m10bmc_dev_groups[] = {
++	&m10bmc_group,
++	NULL,
++};
++EXPORT_SYMBOL_GPL(m10bmc_dev_groups);
++
++int m10bmc_dev_init(struct intel_m10bmc *m10bmc, const struct intel_m10bmc_platform_info *info)
++{
++	int ret;
++
++	m10bmc->info = info;
++	dev_set_drvdata(m10bmc->dev, m10bmc);
++
++	ret = devm_mfd_add_devices(m10bmc->dev, PLATFORM_DEVID_AUTO,
++				   info->cells, info->n_cells,
++				   NULL, 0, NULL);
++	if (ret)
++		dev_err(m10bmc->dev, "Failed to register sub-devices: %d\n", ret);
++
 +	return ret;
 +}
++EXPORT_SYMBOL_GPL(m10bmc_dev_init);
 +
-+/**
-+ * max30208_config_setup() - Set up FIFO configuration register
-+ * @data: Struct comprising member elements of the device
-+ *
-+ * Sets the rollover bit to '1' to enable overwriting FIFO during overflow.
++MODULE_DESCRIPTION("Intel MAX 10 BMC core MFD driver");
++MODULE_AUTHOR("Intel Corporation");
++MODULE_LICENSE("GPL v2");
+diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc-spi.c
+similarity index 60%
+rename from drivers/mfd/intel-m10-bmc.c
+rename to drivers/mfd/intel-m10-bmc-spi.c
+index 80487a2f0024..84c46926bebf 100644
+--- a/drivers/mfd/intel-m10-bmc.c
++++ b/drivers/mfd/intel-m10-bmc-spi.c
+@@ -5,29 +5,14 @@
+  * Copyright (C) 2018-2020 Intel Corporation. All rights reserved.
+  */
+ #include <linux/bitfield.h>
++#include <linux/dev_printk.h>
+ #include <linux/init.h>
+ #include <linux/mfd/core.h>
+ #include <linux/mfd/intel-m10-bmc.h>
+ #include <linux/module.h>
+-#include <linux/mutex.h>
+ #include <linux/regmap.h>
+ #include <linux/spi/spi.h>
+ 
+-static struct mfd_cell m10bmc_d5005_subdevs[] = {
+-	{ .name = "d5005bmc-hwmon" },
+-	{ .name = "d5005bmc-sec-update" }
+-};
+-
+-static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
+-	{ .name = "n3000bmc-hwmon" },
+-	{ .name = "n3000bmc-retimer" },
+-	{ .name = "n3000bmc-sec-update" },
+-};
+-
+-static struct mfd_cell m10bmc_n5010_subdevs[] = {
+-	{ .name = "n5010bmc-hwmon" },
+-};
+-
+ static const struct regmap_range m10bmc_regmap_range[] = {
+ 	regmap_reg_range(M10BMC_LEGACY_BUILD_VER, M10BMC_LEGACY_BUILD_VER),
+ 	regmap_reg_range(M10BMC_SYS_BASE, M10BMC_SYS_END),
+@@ -48,86 +33,6 @@ static struct regmap_config intel_m10bmc_regmap_config = {
+ 	.max_register = M10BMC_MEM_END,
+ };
+ 
+-static ssize_t bmc_version_show(struct device *dev,
+-				struct device_attribute *attr, char *buf)
+-{
+-	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
+-	unsigned int val;
+-	int ret;
+-
+-	ret = m10bmc_sys_read(ddata, M10BMC_BUILD_VER, &val);
+-	if (ret)
+-		return ret;
+-
+-	return sprintf(buf, "0x%x\n", val);
+-}
+-static DEVICE_ATTR_RO(bmc_version);
+-
+-static ssize_t bmcfw_version_show(struct device *dev,
+-				  struct device_attribute *attr, char *buf)
+-{
+-	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
+-	unsigned int val;
+-	int ret;
+-
+-	ret = m10bmc_sys_read(ddata, NIOS2_FW_VERSION, &val);
+-	if (ret)
+-		return ret;
+-
+-	return sprintf(buf, "0x%x\n", val);
+-}
+-static DEVICE_ATTR_RO(bmcfw_version);
+-
+-static ssize_t mac_address_show(struct device *dev,
+-				struct device_attribute *attr, char *buf)
+-{
+-	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
+-	unsigned int macaddr_low, macaddr_high;
+-	int ret;
+-
+-	ret = m10bmc_sys_read(ddata, M10BMC_MAC_LOW, &macaddr_low);
+-	if (ret)
+-		return ret;
+-
+-	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
+-	if (ret)
+-		return ret;
+-
+-	return sysfs_emit(buf, "%02x:%02x:%02x:%02x:%02x:%02x\n",
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE1, macaddr_low),
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE2, macaddr_low),
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE3, macaddr_low),
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE4, macaddr_low),
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE5, macaddr_high),
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE6, macaddr_high));
+-}
+-static DEVICE_ATTR_RO(mac_address);
+-
+-static ssize_t mac_count_show(struct device *dev,
+-			      struct device_attribute *attr, char *buf)
+-{
+-	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
+-	unsigned int macaddr_high;
+-	int ret;
+-
+-	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
+-	if (ret)
+-		return ret;
+-
+-	return sysfs_emit(buf, "%u\n",
+-			  (u8)FIELD_GET(M10BMC_MAC_COUNT, macaddr_high));
+-}
+-static DEVICE_ATTR_RO(mac_count);
+-
+-static struct attribute *m10bmc_attrs[] = {
+-	&dev_attr_bmc_version.attr,
+-	&dev_attr_bmcfw_version.attr,
+-	&dev_attr_mac_address.attr,
+-	&dev_attr_mac_count.attr,
+-	NULL,
+-};
+-ATTRIBUTE_GROUPS(m10bmc);
+-
+ static int check_m10bmc_version(struct intel_m10bmc *ddata)
+ {
+ 	unsigned int v;
+@@ -166,11 +71,9 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+ 		return -ENOMEM;
+ 
+ 	info = (struct intel_m10bmc_platform_info *)id->driver_data;
+-	ddata->info = info;
+ 	ddata->dev = dev;
+ 
+-	ddata->regmap =
+-		devm_regmap_init_spi_avmm(spi, &intel_m10bmc_regmap_config);
++	ddata->regmap = devm_regmap_init_spi_avmm(spi, &intel_m10bmc_regmap_config);
+ 	if (IS_ERR(ddata->regmap)) {
+ 		ret = PTR_ERR(ddata->regmap);
+ 		dev_err(dev, "Failed to allocate regmap: %d\n", ret);
+@@ -185,15 +88,24 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+ 		return ret;
+ 	}
+ 
+-	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
+-				   info->cells, info->n_cells,
+-				   NULL, 0, NULL);
+-	if (ret)
+-		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
+-
+-	return ret;
++	return m10bmc_dev_init(ddata, info);
+ }
+ 
++static struct mfd_cell m10bmc_d5005_subdevs[] = {
++	{ .name = "d5005bmc-hwmon" },
++	{ .name = "d5005bmc-sec-update" },
++};
++
++static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
++	{ .name = "n3000bmc-hwmon" },
++	{ .name = "n3000bmc-retimer" },
++	{ .name = "n3000bmc-sec-update" },
++};
++
++static struct mfd_cell m10bmc_n5010_subdevs[] = {
++	{ .name = "n5010bmc-hwmon" },
++};
++
+ static const struct intel_m10bmc_platform_info m10bmc_m10_n3000 = {
+ 	.type = M10_N3000,
+ 	.cells = m10bmc_pacn3000_subdevs,
+@@ -223,14 +135,14 @@ MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
+ static struct spi_driver intel_m10bmc_spi_driver = {
+ 	.driver = {
+ 		.name = "intel-m10-bmc",
+-		.dev_groups = m10bmc_groups,
++		.dev_groups = m10bmc_dev_groups,
+ 	},
+ 	.probe = intel_m10_bmc_spi_probe,
+ 	.id_table = m10bmc_spi_id,
+ };
+ module_spi_driver(intel_m10bmc_spi_driver);
+ 
+-MODULE_DESCRIPTION("Intel MAX 10 BMC Device Driver");
++MODULE_DESCRIPTION("Intel MAX 10 BMC SPI bus interface");
+ MODULE_AUTHOR("Intel Corporation");
+ MODULE_LICENSE("GPL v2");
+ MODULE_ALIAS("spi:intel-m10-bmc");
+diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+index e58115f514b9..93ec905c928e 100644
+--- a/include/linux/mfd/intel-m10-bmc.h
++++ b/include/linux/mfd/intel-m10-bmc.h
+@@ -179,4 +179,10 @@ m10bmc_raw_read(struct intel_m10bmc *m10bmc, unsigned int addr,
+ #define m10bmc_sys_read(m10bmc, offset, val) \
+ 	m10bmc_raw_read(m10bmc, M10BMC_SYS_BASE + (offset), val)
+ 
++/*
++ * MAX10 BMC Core support
 + */
-+static int max30208_config_setup(struct max30208_data *data)
-+{
-+	u8 regval;
-+	int ret;
++int m10bmc_dev_init(struct intel_m10bmc *m10bmc, const struct intel_m10bmc_platform_info *info);
++extern const struct attribute_group *m10bmc_dev_groups[];
 +
-+	ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_CONFIG);
-+	if (ret < 0)
-+		return ret;
-+
-+	regval = ret | MAX30208_FIFO_CONFIG_RO;
-+
-+	ret = i2c_smbus_write_byte_data(data->client, MAX30208_FIFO_CONFIG, regval);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int max30208_read(struct iio_dev *indio_dev,
-+			 struct iio_chan_spec const *chan,
-+			 int *val, int *val2, long mask)
-+{
-+	struct max30208_data *data = iio_priv(indio_dev);
-+	int ret;
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_RAW:
-+		ret = max30208_update_temp(data);
-+		if (ret < 0)
-+			return ret;
-+
-+		*val = sign_extend32(ret, 15);
-+		return IIO_VAL_INT;
-+
-+	case IIO_CHAN_INFO_SCALE:
-+		*val = 5;
-+		return IIO_VAL_INT;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static const struct iio_info max30208_info = {
-+	.read_raw = max30208_read,
-+};
-+
-+static int max30208_probe(struct i2c_client *i2c)
-+{
-+	struct device *dev = &i2c->dev;
-+	struct max30208_data *data;
-+	struct iio_dev *indio_dev;
-+	int ret;
-+
-+	indio_dev = devm_iio_device_alloc(dev, sizeof(*data));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	data = iio_priv(indio_dev);
-+	data->client = i2c;
-+	mutex_init(&data->lock);
-+
-+	indio_dev->name = "max30208";
-+	indio_dev->channels = max30208_channels;
-+	indio_dev->num_channels = ARRAY_SIZE(max30208_channels);
-+	indio_dev->info = &max30208_info;
-+	indio_dev->modes = INDIO_DIRECT_MODE;
-+
-+	ret = i2c_smbus_write_byte_data(data->client, MAX30208_SYSTEM_CTRL,
-+					MAX30208_SYSTEM_CTRL_RESET);
-+	if (ret) {
-+		dev_err(dev, "Failure in performing reset\n");
-+		return ret;
-+	}
-+
-+	msleep(50);
-+
-+	ret = max30208_config_setup(data);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_iio_device_register(dev, indio_dev);
-+	if (ret) {
-+		dev_err(dev, "Failed to register IIO device\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct i2c_device_id max30208_id_table[] = {
-+	{ "max30208" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, max30208_id_table);
-+
-+static const struct acpi_device_id max30208_acpi_match[] = {
-+	{ "MAX30208" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(acpi, max30208_acpi_match);
-+
-+static const struct of_device_id max30208_of_match[] = {
-+	{ .compatible = "maxim,max30208" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, max30208_of_match);
-+
-+static struct i2c_driver max30208_driver = {
-+	.driver = {
-+		.name = "max30208",
-+		.of_match_table = max30208_of_match,
-+		.acpi_match_table = max30208_acpi_match,
-+	},
-+	.probe_new = max30208_probe,
-+	.id_table = max30208_id_table,
-+};
-+module_i2c_driver(max30208_driver);
-+
-+MODULE_AUTHOR("Rajat Khandelwal <rajat.khandelwal@linux.intel.com>");
-+MODULE_DESCRIPTION("Maxim MAX30208 digital temperature sensor");
-+MODULE_LICENSE("GPL");
+ #endif /* __MFD_INTEL_M10_BMC_H */
 -- 
-2.34.1
+2.30.2
 
