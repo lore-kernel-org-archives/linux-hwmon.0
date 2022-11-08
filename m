@@ -2,184 +2,128 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C4B8C433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Nov 2022 07:48:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 537D8C4167E
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Nov 2022 11:22:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233297AbiKHHsp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Nov 2022 02:48:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
+        id S233410AbiKHLWu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 8 Nov 2022 06:22:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232654AbiKHHso (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Nov 2022 02:48:44 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287D813D2E
-        for <linux-hwmon@vger.kernel.org>; Mon,  7 Nov 2022 23:48:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667893724; x=1699429724;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=zVBcmm98NjukADnIfTD1x1JQliaGxLCGBcl2oLJB3Hk=;
-  b=dZ4Qh+tXqqqsopTfduvnEDOHAbgH4d5iGS2WDnYDS2BHo6yAeClN4V6F
-   u6TxO3FRk1OZ8IhNcNAnYaG3+x6uZzdssAKnaz68Lme3cV07HEpEyTFhh
-   pkfKSsLjcIDJMd5/Swdp9skuiqgdIc85Jta0J3dnxeZIjrq3Y/Xqm2rC0
-   36nHMxmeRWBLLosuR3+gfhzkNPiAqgVxfuajslyIv4ZCqWqBPaQglTTvh
-   VENSFoS+AmZ0007JLAJk1oaOVstGeK18AV5aclQ/FIPEtylvoEC18xe8p
-   li2rRSqI8ybSkLApmbRf2LFycerHzWH0wszHn24FkjToJqBMAd1p2RfDs
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="290351698"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="290351698"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 23:48:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="705204816"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="705204816"
-Received: from power-sh.sh.intel.com ([10.239.183.122])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Nov 2022 23:48:42 -0800
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     linux@roeck-us.net, jdelvare@suse.com, fenghua.yu@intel.com
-Cc:     linux-hwmon@vger.kernel.org, srinivas.pandruvada@linux.intel.com
-Subject: [PATCH 3/3] hwmon (coretemp): Add support for dynamic ttarget
-Date:   Tue,  8 Nov 2022 15:50:51 +0800
-Message-Id: <20221108075051.5139-4-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221108075051.5139-1-rui.zhang@intel.com>
-References: <20221108075051.5139-1-rui.zhang@intel.com>
+        with ESMTP id S234126AbiKHLWR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Nov 2022 06:22:17 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87354D5D0
+        for <linux-hwmon@vger.kernel.org>; Tue,  8 Nov 2022 03:22:11 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id j4so20846518lfk.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 08 Nov 2022 03:22:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6S31b1GgAuSZeRVi3aE6k9Lv1kYy2JgOJdueU/WrfPk=;
+        b=FQVTX03+/jYDhFiJtnC4PlzY3j6O7eqRrURGbxCj9uxURjFPxqXVMZP/7fLhWbImBm
+         JdC6fC+nWdrCet4LQal83kXfuzLLawXKFxu/oLYv8Kh2r6x559FfrsvfHjCmy2lBT2pa
+         QV3OVJL19Mn4gyrzkg6t6afH5exahrLMKp49Zciw9Ta4DwOEluePqPBp/VNPXU+77weK
+         lmit955EmN4VKHGupVAVSjMQxm/PKGzojOJMymAfU8+zG2QjMYaXztogXBUZ6oJAEr9X
+         BXxZOLcPkDq8/wEIfmqbcQ9xMX56E55y+wwH5Tx8zJ331BBicVaEbuCsdYGaIZWrHAOU
+         7t/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6S31b1GgAuSZeRVi3aE6k9Lv1kYy2JgOJdueU/WrfPk=;
+        b=t2qgIBYA+2RyUGhnDYrCaR4PweUBu69B6YavX8MT6ClKJ8RQu4KjD1ujWneWbsDUPG
+         AXl6jhWWEaP5HCFvqxL2kpfSVsFDsKKACdQGft25swpSoJv2dh/nHoHZwWgpq5PKlM8n
+         PfWYUAGEW3ym44va5CQ4p1BGJ9qSv12EaPuiNgfnxQmY5xrwX9F8NjDsAOSCSXz0XcSa
+         YCRN/gQeIo1GKHqDAMe4E0HNyYAuTk6PwWx6pOi49gFgDXuKIOK2Z5bAN4zdEyzk1aFV
+         MiGpXJ/3CFe96G4dJX8cfuPOBKHg4riOR9B8SXS9EMakYrKetbvrXbdEg50K96MT/BjR
+         FeGw==
+X-Gm-Message-State: ANoB5pn1ppZ1YKahpeIVmVkSlEbVXKFfiabyFCeuyUy7+Q5atWHFQk/L
+        CSvbySmQSucERrD8/KcK9j6/gg==
+X-Google-Smtp-Source: AA0mqf71iUpqb4+BI/4RUZw1laBPRBQU7iqH2g/sTobl9bST23hwOoH26omyo1cgyvEyZZV9JTdQ2Q==
+X-Received: by 2002:ac2:43b0:0:b0:4b2:805:f5cb with SMTP id t16-20020ac243b0000000b004b20805f5cbmr5885841lfl.204.1667906530035;
+        Tue, 08 Nov 2022 03:22:10 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id q7-20020ac25107000000b004b40c2fccfdsm221399lfb.59.2022.11.08.03.22.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 03:22:09 -0800 (PST)
+Message-ID: <95f588d2-04f3-0be6-ebce-cb6957f5aa1a@linaro.org>
+Date:   Tue, 8 Nov 2022 12:22:08 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 3/6] dt-bindings: hwmon: Add hpe,gxp-fan-ctrl
+Content-Language: en-US
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20221104193657.105130-1-nick.hawkins@hpe.com>
+ <20221104193657.105130-4-nick.hawkins@hpe.com>
+ <1b90f86c-9c0f-225b-38b5-6f37a4eded69@linaro.org>
+ <236F9C0A-797D-41C6-B342-4C32DF28C426@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <236F9C0A-797D-41C6-B342-4C32DF28C426@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Tjmax value retrieved from MSR_IA32_TEMPERATURE_TARGET can be changed at
-runtime when the Intel SST-PP (Intel Speed Select Technology -
-Performance Profile) level is changed. As a result, the ttarget value
-also becomes dyamic.
+On 07/11/2022 23:36, Hawkins, Nick wrote:
+> 
+>     > > This provides the base registers address, programmable logic registers
+>     > > address, and the function 2 registers to allow control access of the HPE
+>     > > fans on the GXP SoC.
+> 
+>     > What is "This"? If "This patch", then drop it.
+>     > https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+> 
+>     > If "This hardware" then please instead describe the hardware, not it
+>     components. What are its features? If it controls the fan, then why
+>     there are no PWM-related cells? How do you set the speed?
+> 
+> Greetings Krzysztof,
+> 
+>     Thank you for the feedback. The intention was this binding.. however, that was an error on my part, and I will correct it to reflect the hardware situation of the GXP with the fan controller and how each of the mapped registers provide control to the system. To answer your questions: The fans speeds are controlled through an external CPLD device which we provide a PWM value (0-255) using the "base" register to the CIF interface. 
 
-Improve the code to always get updated ttarget value.
+Wrap your emails, it's impossible to simply reply to it.
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- drivers/hwmon/coretemp.c | 69 ++++++++++++++++++++++++++++------------
- 1 file changed, 48 insertions(+), 21 deletions(-)
+Then your CIF interface is a PWM device?
 
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index 5292f7844860..d6084600862f 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -69,7 +69,6 @@ MODULE_PARM_DESC(tjmax, "TjMax value in degrees Celsius");
-  */
- struct temp_data {
- 	int temp;
--	int ttarget;
- 	int tjmax;
- 	unsigned long last_updated;
- 	unsigned int cpu;
-@@ -96,6 +95,7 @@ struct platform_data {
- };
- 
- static int get_tjmax(struct temp_data *tdata, struct device *dev);
-+static int get_ttarget(struct temp_data *tdata, struct device *dev);
- 
- /* Keep track of how many zone pointers we allocated in init() */
- static int max_zones __read_mostly;
-@@ -150,8 +150,17 @@ static ssize_t show_ttarget(struct device *dev,
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
- 	struct platform_data *pdata = dev_get_drvdata(dev);
-+	struct temp_data *tdata = pdata->core_data[attr->index];
-+	int ttarget;
-+
-+	mutex_lock(&tdata->update_lock);
-+	ttarget = get_ttarget(tdata, dev);
-+	mutex_unlock(&tdata->update_lock);
- 
--	return sprintf(buf, "%d\n", pdata->core_data[attr->index]->ttarget);
-+	if (ttarget >= 0)
-+		return sprintf(buf, "%d\n", ttarget);
-+	else
-+		return ttarget;
- }
- 
- static ssize_t show_temp(struct device *dev,
-@@ -393,6 +402,38 @@ static int get_tjmax(struct temp_data *tdata, struct device *dev)
- 	return tdata->tjmax;
- }
- 
-+static int get_ttarget(struct temp_data *tdata, struct device *dev)
-+{
-+	u32 eax, edx;
-+	struct cpuinfo_x86 *c = &cpu_data(tdata->cpu);
-+	int tj_max, ttarget_offset, ret;
-+
-+	/*
-+	 * ttarget is valid only if tjmax can be retrieved from
-+	 * MSR_IA32_TEMPERATURE_TARGET
-+	 */
-+	if (tdata->tjmax)
-+		return -ENODEV;
-+
-+	if (c->x86_model <= 0xe || c->x86_model == 0x1c)
-+		return -ENODEV;
-+
-+	/*
-+	 * Read the still undocumented bits 8:15 of IA32_TEMPERATURE_TARGET.
-+	 * The target temperature is available on older CPUs but not in this
-+	 * register. Atoms don't have the register at all.
-+	 */
-+	ret = rdmsr_safe_on_cpu(tdata->cpu, MSR_IA32_TEMPERATURE_TARGET,
-+					&eax, &edx);
-+	if (ret)
-+		return ret;
-+
-+	tj_max = (eax >> 16) & 0xff;
-+	ttarget_offset = (eax >> 8) & 0xff;
-+
-+	return (tj_max - ttarget_offset) * 1000;
-+}
-+
- static int create_core_attrs(struct temp_data *tdata, struct device *dev,
- 			     int attr_no)
- {
-@@ -468,9 +509,8 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
- {
- 	struct temp_data *tdata;
- 	struct platform_data *pdata = platform_get_drvdata(pdev);
--	struct cpuinfo_x86 *c = &cpu_data(cpu);
- 	u32 eax, edx;
--	int err, index, attr_no, tjmax;
-+	int err, index, attr_no;
- 
- 	/*
- 	 * Find attr number for sysfs:
-@@ -504,23 +544,10 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
- 	if (err)
- 		goto exit_free;
- 
--	/* We can access status register. Get Critical Temperature */
--	tjmax = get_tjmax(tdata, &pdev->dev);
--
--	/*
--	 * Read the still undocumented bits 8:15 of IA32_TEMPERATURE_TARGET.
--	 * The target temperature is available on older CPUs but not in this
--	 * register. Atoms don't have the register at all.
--	 */
--	if (c->x86_model > 0xe && c->x86_model != 0x1c) {
--		err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET,
--					&eax, &edx);
--		if (!err) {
--			tdata->ttarget
--			  = tjmax - ((eax >> 8) & 0xff) * 1000;
--			tdata->attr_size++;
--		}
--	}
-+	/* Make sure tdata->tjmax is a valid indicator for dynamic/static tjmax */
-+	get_tjmax(tdata, &pdev->dev);
-+	if (get_ttarget(tdata, &pdev->dev) >= 0)
-+		tdata->attr_size++;
- 
- 	pdata->core_data[attr_no] = tdata;
- 
--- 
-2.25.1
+
+> This interface provides access to the CPLD. The CPLD then drives the fan. The CPLD can generate up to 8 unique different PWMs to multiple fans. 
+
+So you have other CPLD (not external) which generates PWM based on first
+CPLD base register? Hm, I think it's one CPLD.
+
+> The CPLD monitors the fans and reports the status back to the SoC through the CIF interface to the "plreg base". The plreg includes the installation, failed, and identification statuses. The function 2 register base is used to check the power state of the system as that influences the PWM values read back.
+
+> As the PWM generation happens outside the SoC do we still need pwm-cells? If so, should we have a custom compatible for that?
+> 
+
+Depends, if these are actually tightly coupled and you cannot use PWM
+for anything else, then you do not need.
+
+> Thanks,
+> 
+> -Nick
+> 
+> 
+
+Best regards,
+Krzysztof
 
