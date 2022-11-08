@@ -2,128 +2,108 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 537D8C4167E
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Nov 2022 11:22:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0A53C433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Nov 2022 12:24:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233410AbiKHLWu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Nov 2022 06:22:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
+        id S234084AbiKHMYA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 8 Nov 2022 07:24:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234126AbiKHLWR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Nov 2022 06:22:17 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87354D5D0
-        for <linux-hwmon@vger.kernel.org>; Tue,  8 Nov 2022 03:22:11 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id j4so20846518lfk.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 08 Nov 2022 03:22:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6S31b1GgAuSZeRVi3aE6k9Lv1kYy2JgOJdueU/WrfPk=;
-        b=FQVTX03+/jYDhFiJtnC4PlzY3j6O7eqRrURGbxCj9uxURjFPxqXVMZP/7fLhWbImBm
-         JdC6fC+nWdrCet4LQal83kXfuzLLawXKFxu/oLYv8Kh2r6x559FfrsvfHjCmy2lBT2pa
-         QV3OVJL19Mn4gyrzkg6t6afH5exahrLMKp49Zciw9Ta4DwOEluePqPBp/VNPXU+77weK
-         lmit955EmN4VKHGupVAVSjMQxm/PKGzojOJMymAfU8+zG2QjMYaXztogXBUZ6oJAEr9X
-         BXxZOLcPkDq8/wEIfmqbcQ9xMX56E55y+wwH5Tx8zJ331BBicVaEbuCsdYGaIZWrHAOU
-         7t/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6S31b1GgAuSZeRVi3aE6k9Lv1kYy2JgOJdueU/WrfPk=;
-        b=t2qgIBYA+2RyUGhnDYrCaR4PweUBu69B6YavX8MT6ClKJ8RQu4KjD1ujWneWbsDUPG
-         AXl6jhWWEaP5HCFvqxL2kpfSVsFDsKKACdQGft25swpSoJv2dh/nHoHZwWgpq5PKlM8n
-         PfWYUAGEW3ym44va5CQ4p1BGJ9qSv12EaPuiNgfnxQmY5xrwX9F8NjDsAOSCSXz0XcSa
-         YCRN/gQeIo1GKHqDAMe4E0HNyYAuTk6PwWx6pOi49gFgDXuKIOK2Z5bAN4zdEyzk1aFV
-         MiGpXJ/3CFe96G4dJX8cfuPOBKHg4riOR9B8SXS9EMakYrKetbvrXbdEg50K96MT/BjR
-         FeGw==
-X-Gm-Message-State: ANoB5pn1ppZ1YKahpeIVmVkSlEbVXKFfiabyFCeuyUy7+Q5atWHFQk/L
-        CSvbySmQSucERrD8/KcK9j6/gg==
-X-Google-Smtp-Source: AA0mqf71iUpqb4+BI/4RUZw1laBPRBQU7iqH2g/sTobl9bST23hwOoH26omyo1cgyvEyZZV9JTdQ2Q==
-X-Received: by 2002:ac2:43b0:0:b0:4b2:805:f5cb with SMTP id t16-20020ac243b0000000b004b20805f5cbmr5885841lfl.204.1667906530035;
-        Tue, 08 Nov 2022 03:22:10 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id q7-20020ac25107000000b004b40c2fccfdsm221399lfb.59.2022.11.08.03.22.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 03:22:09 -0800 (PST)
-Message-ID: <95f588d2-04f3-0be6-ebce-cb6957f5aa1a@linaro.org>
-Date:   Tue, 8 Nov 2022 12:22:08 +0100
+        with ESMTP id S233633AbiKHMX7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Nov 2022 07:23:59 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D0B12AA4;
+        Tue,  8 Nov 2022 04:23:58 -0800 (PST)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A8Ap0sS019015;
+        Tue, 8 Nov 2022 07:23:22 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kq8ec5hw1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 07:23:22 -0500
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2A8CNLhI043204
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 8 Nov 2022 07:23:21 -0500
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Tue, 8 Nov 2022 07:23:20 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Tue, 8 Nov 2022 07:23:20 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Tue, 8 Nov 2022 07:23:20 -0500
+Received: from IST-LT-39247.ad.analog.com (IST-LT-39247.ad.analog.com [10.25.16.20])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2A8CN2OP018748;
+        Tue, 8 Nov 2022 07:23:05 -0500
+From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v3 0/2] drivers: rtc: add max313xx series rtc driver
+Date:   Tue, 8 Nov 2022 15:22:52 +0300
+Message-ID: <20221108122254.1185-1-Ibrahim.Tilki@analog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 3/6] dt-bindings: hwmon: Add hpe,gxp-fan-ctrl
-Content-Language: en-US
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20221104193657.105130-1-nick.hawkins@hpe.com>
- <20221104193657.105130-4-nick.hawkins@hpe.com>
- <1b90f86c-9c0f-225b-38b5-6f37a4eded69@linaro.org>
- <236F9C0A-797D-41C6-B342-4C32DF28C426@hpe.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <236F9C0A-797D-41C6-B342-4C32DF28C426@hpe.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: qNk4NK24LLq4NVsPcZ3dvwtmKtfGRHc9
+X-Proofpoint-ORIG-GUID: qNk4NK24LLq4NVsPcZ3dvwtmKtfGRHc9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ bulkscore=0 suspectscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
+ malwarescore=0 priorityscore=1501 impostorscore=0 mlxlogscore=481
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211080071
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 07/11/2022 23:36, Hawkins, Nick wrote:
-> 
->     > > This provides the base registers address, programmable logic registers
->     > > address, and the function 2 registers to allow control access of the HPE
->     > > fans on the GXP SoC.
-> 
->     > What is "This"? If "This patch", then drop it.
->     > https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-> 
->     > If "This hardware" then please instead describe the hardware, not it
->     components. What are its features? If it controls the fan, then why
->     there are no PWM-related cells? How do you set the speed?
-> 
-> Greetings Krzysztof,
-> 
->     Thank you for the feedback. The intention was this binding.. however, that was an error on my part, and I will correct it to reflect the hardware situation of the GXP with the fan controller and how each of the mapped registers provide control to the system. To answer your questions: The fans speeds are controlled through an external CPLD device which we provide a PWM value (0-255) using the "base" register to the CIF interface. 
 
-Wrap your emails, it's impossible to simply reply to it.
+Hi,
 
-Then your CIF interface is a PWM device?
-
-
-> This interface provides access to the CPLD. The CPLD then drives the fan. The CPLD can generate up to 8 unique different PWMs to multiple fans. 
-
-So you have other CPLD (not external) which generates PWM based on first
-CPLD base register? Hm, I think it's one CPLD.
-
-> The CPLD monitors the fans and reports the status back to the SoC through the CIF interface to the "plreg base". The plreg includes the installation, failed, and identification statuses. The function 2 register base is used to check the power state of the system as that influences the PWM values read back.
-
-> As the PWM generation happens outside the SoC do we still need pwm-cells? If so, should we have a custom compatible for that?
-> 
-
-Depends, if these are actually tightly coupled and you cannot use PWM
-for anything else, then you do not need.
-
-> Thanks,
-> 
-> -Nick
-> 
-> 
+Sending v3 to fix a warning reported by kernel test robot.
+Also added reviewed-by tag for Krzysztof since dt-bindings patch
+has not been modified.
 
 Best regards,
-Krzysztof
+Ibrahim
+
+changelog:
+since v3:
+  - add "break" to fix warning: unannotated fall-through 
+    Reported-by: kernel test robot <lkp@intel.com>
+
+since v2:
+  - dtbinding: update title and description
+  - dtbinding: remove last example
+  - drop watchdog support
+  - support reading 12Hr format instead of forcing 24hr at probe time
+  - use "tm_year % 100" instead of range check
+  - refactor max313xx_init for readability
+
+
+Ibrahim Tilki (2):
+  drivers: rtc: add max313xx series rtc driver
+  dt-bindings: rtc: add max313xx RTCs
+
+ .../devicetree/bindings/rtc/adi,max313xx.yaml |  151 +++
+ drivers/rtc/Kconfig                           |   11 +
+ drivers/rtc/Makefile                          |    1 +
+ drivers/rtc/rtc-max313xx.c                    | 1070 +++++++++++++++++
+ 4 files changed, 1233 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+ create mode 100644 drivers/rtc/rtc-max313xx.c
+
+-- 
+2.25.1
 
