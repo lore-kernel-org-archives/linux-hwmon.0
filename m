@@ -2,167 +2,92 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 775D9C4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Nov 2022 12:57:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02D0DC4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Nov 2022 13:03:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234068AbiKHM5Q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Nov 2022 07:57:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
+        id S234402AbiKHNDk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 8 Nov 2022 08:03:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233962AbiKHM5O (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Nov 2022 07:57:14 -0500
-Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9321758E
-        for <linux-hwmon@vger.kernel.org>; Tue,  8 Nov 2022 04:57:11 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id sOA7o2YX9XaejsOA7odE9X; Tue, 08 Nov 2022 13:57:09 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 08 Nov 2022 13:57:09 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <482e8394-ceac-658f-7a69-29033f805440@wanadoo.fr>
-Date:   Tue, 8 Nov 2022 13:57:07 +0100
+        with ESMTP id S234421AbiKHNDQ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Nov 2022 08:03:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA52D554EF;
+        Tue,  8 Nov 2022 05:03:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61251B81A9A;
+        Tue,  8 Nov 2022 13:03:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99853C433D6;
+        Tue,  8 Nov 2022 13:02:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667912580;
+        bh=AkKnvGBH75slHzzHE2jOu7sJWLUsxZlpFfrdZcyFTDM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ns+E8Tv7GPN5IgSqRS+SQMVv63+PFMmAcROp3vocZleoS0OhimwEkzyKlTsJPbRpK
+         b89ftBToApCSbcTIw+xwsBD8M5qupBHwoYIZP93SnFoxXBWKZiJ6xPj8KVYrYesB59
+         bDecqOSum9jPc6lPx3kM3CRgMioAOmHiZpUYaw5WI1EooChmwOdvSp3JOjphWcGFEy
+         fl06d96hdvcuJHPuPRqVA6kNDC+nqyninhzcx8O+uqmQfnRChAOpI3hqg4cs6oJwBf
+         WevwRPSQzVHGCrscqW79e2OYEizuf1fq7BS6TzubN6vrhpWiGt4X0wsCHDOyJjWpbN
+         vT0F9X4YnxIjA==
+Message-ID: <af3bc209-5c89-e0c4-1534-7d190d5daae0@kernel.org>
+Date:   Tue, 8 Nov 2022 14:02:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 1/2] drivers: rtc: add max313xx series rtc driver
-To:     ibrahim.tilki@analog.com
-Cc:     Zeynep.Arslanbenzer@analog.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
-        jdelvare@suse.com, krzysztof.kozlowski+dt@linaro.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux@roeck-us.net, robh+dt@kernel.org
-References: <20221108122254.1185-1-Ibrahim.Tilki@analog.com>
- <20221108122254.1185-2-Ibrahim.Tilki@analog.com>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20221108122254.1185-2-Ibrahim.Tilki@analog.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] ina3221: add support for summation channel control
+To:     Ninad Malwade <nmalwade@nvidia.com>, treding@nvidia.com,
+        jonathanh@nvidia.com, linux@roeck-us.net, jdelvare@suse.com,
+        nicolinc@nvidia.com, rkasirajan@nvidia.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20221108045243.24143-1-nmalwade@nvidia.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20221108045243.24143-1-nmalwade@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Le 08/11/2022 à 13:22, Ibrahim Tilki a écrit :
-> Adding support for Analog Devices MAX313XX series RTCs.
+On 08/11/2022 05:52, Ninad Malwade wrote:
+> Add support to initialize summation channel control via kernel device
+> tree property "summation-bypass". The channel which has this property
+> is excluded from channel summation.
 > 
-> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki-OyLXuOCK7orQT0dZR+AlfA@public.gmane.org>
-> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer-OyLXuOCK7orQT0dZR+AlfA@public.gmane.org>
+> Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
+
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
+
+You skipped not only one, but all DT maintainers and mailing lists...
+
 > ---
+>  .../devicetree/bindings/hwmon/ina3221.txt          |  2 ++
+>  drivers/hwmon/ina3221.c                            | 14 ++++++++++++--
 
-[...]
+DT bindings and driver changes are separate patches.
 
-> +static int max313xx_clkout_register(struct device *dev)
-> +{
-> +	struct max313xx *rtc = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	if (!device_property_present(dev, "#clock-cells"))
-> +		return 0;
-> +
-> +	max313xx_clk_init.name = rtc->chip->clkout_name;
-> +	device_property_read_string(dev, "clock-output-names",
-> +				    &max313xx_clk_init.name);
-> +	rtc->clkout.init = &max313xx_clk_init;
-> +
-> +	ret = devm_clk_hw_register(dev, &rtc->clkout);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "cannot register clock\n");
-> +
-> +	return of_clk_add_provider(dev->of_node, of_clk_src_simple_get,
-> +				   rtc->clkout.clk);
 
-Hi,
+>  2 files changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ina3221.txt b/Documentation/devicetree/bindings/hwmon/ina3221.txt
+> index fa63b6171407..c6e8e6aafcce 100644
+> --- a/Documentation/devicetree/bindings/hwmon/ina3221.txt
+> +++ b/Documentation/devicetree/bindings/hwmon/ina3221.txt
+> @@ -29,6 +29,7 @@ Texas Instruments INA3221 Device Tree Bindings
+>    Optional properties:
+>    - label: Name of the input source
+>    - shunt-resistor-micro-ohms: Shunt resistor value in micro-Ohm
+> +  - summation-bypass: exclude from channel summation.
 
-No devm like functionality here?
+Convert to DT schema first.
 
-devm_of_clk_add_hw_provider()? (not sure of the impact or not of the 
-"_hw_" in the function name)
 
-> +}
-
-[...]
-
-> +static int max313xx_irq_init(struct device *dev, const char *devname)
-> +{
-> +	struct max313xx *rtc = dev_get_drvdata(dev);
-> +	bool wakeup;
-> +	int ret;
-> +
-> +	rtc->irq = rtc->irqs[0];
-> +
-> +	switch (rtc->id) {
-> +	case ID_MAX31328:
-> +		/* max31328 sqw ant int pin is shared */
-> +		if (rtc->id == ID_MAX31328 && rtc->irq > 0 && rtc->clkout.clk)
-> +			return dev_err_probe(dev, -EOPNOTSUPP,
-> +					     "cannot have both sqw clock output and irq enabled");
-> +
-> +		break;
-> +	case ID_MAX31331:
-> +	case ID_MAX31334:
-> +		if (rtc->clkout.clk) {
-> +			/* clockout needs to be enabled for using INTA pin */
-> +			ret = clk_prepare_enable(rtc->clkout.clk);
-> +			if (ret)
-> +				return dev_err_probe(dev, ret,
-> +						     "cannot enable clkout\n");
-> +		} else {
-> +			rtc->irq = rtc->irqs[1];
-> +		}
-> +		break;
-> +	default:
-> +		if (rtc->clkin) {
-> +			rtc->irq = rtc->irqs[1];
-> +
-> +			/* wrong interrupt specified */
-> +			if (rtc->irqs[0] > 0 && rtc->irqs[1] <= 0)
-> +				dev_warn(dev, "INTA is specified but INTB required for irq when clkin is enabled\n");
-> +
-> +			if (rtc->clkout.clk && rtc->irq > 0)
-> +				return dev_err_probe(dev, -EOPNOTSUPP,
-> +						"irq not possible when both clkin and clkout are configured\n");
-> +
-> +			if (rtc->irq <= 0)
-> +				break;
-> +
-> +			/* clkout needs to be disabled for using INTB pin */
-> +			if (rtc->chip->clkout->en_invert)
-> +				ret = regmap_set_bits(rtc->regmap,
-> +						      rtc->chip->clkout->reg,
-> +						      rtc->chip->clkout->en_bit);
-> +			else
-> +				ret = regmap_clear_bits(rtc->regmap,
-> +							rtc->chip->clkout->reg,
-> +							rtc->chip->clkout->en_bit);
-> +
-> +			if (ret)
-> +				return ret;
-> +		}
-> +		break;
-> +	}
-> +
-> +	if (rtc->irq > 0) {
-> +		ret = devm_request_threaded_irq(dev, rtc->irq, NULL,
-> +						&max313xx_irq, IRQF_ONESHOT,
-> +						devname, rtc);
-> +		if (ret)
-> +			return ret;
-> +
-> +		wakeup = device_property_read_bool(dev, "wakeup-source");
-> +		return device_init_wakeup(dev, wakeup);
-> +	}
-> +
-> +	__clear_bit(RTC_FEATURE_ALARM, rtc->rtc->features);
-
-Is it safe? Does it worth it to use __clear_bit() instead of clear_bit() 
-here?
-
-> +
-> +	return 0;
-> +}
-
-[...]
-
+Best regards,
+Krzysztof
 
