@@ -2,269 +2,310 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 694FCC4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Nov 2022 17:08:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C00BC4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Nov 2022 16:20:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234183AbiKHRID (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Nov 2022 12:08:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
+        id S229678AbiKJQUf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Nov 2022 11:20:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234164AbiKHRIC (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Nov 2022 12:08:02 -0500
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338784874D;
-        Tue,  8 Nov 2022 09:08:01 -0800 (PST)
-Received: from pps.filterd (m0150245.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A8FQ86N000855;
-        Tue, 8 Nov 2022 17:07:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pps0720;
- bh=ytIZCGjJ/R1zkcVHgVdQAa0kj1Jkc8l9xXqY1AZ+78A=;
- b=eA2N3FkY6WMUnFo+rOOYdQMM0oHMllCPl5ZkjrLrV8mA8Edyk8Eg+GouRDbL5kKgspB6
- aVjtbN7Uc+CLv8dPDhwJt0Uy8sHW1tULWT3hywJVj5V7H8tRqNbKQhKT8m5wbdnlGU+y
- cgDU8nFg6iHz009NzKr0iJBmXbN6b7GSrdl9a9AbDoe1JJGpYH1J4gRkbhblBijJ71Hw
- /8a+GCWqDtybfiprHzZOprNytxEd6DerF9wtiZDKNvVFCI0xM5qGNsR8vY07sf+Fafrj
- oqmen0NucMITY2SBTbbOB8pjeqr5tihxVdDZJrtSA1fXcr9rKgKMvkN9GJ34wZWUerH6 ug== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3kqsrbh2pv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Nov 2022 17:07:30 +0000
-Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 876E0803740;
-        Tue,  8 Nov 2022 17:07:29 +0000 (UTC)
-Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
- p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 8 Nov 2022 05:07:29 -1200
-Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
- p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
- via Frontend Transport; Tue, 8 Nov 2022 05:07:29 -1200
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 8 Nov 2022 05:07:29 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GgHQUqRvDHN1KT9Fh6IuGe3X7dFy2NnNrF07DuhH85jLh1Fw36vzXCYpb5WzS/MJwMgzlmjtI0TvWAAo2r/EeEwNBFgITdpYqrqdeiaaMywk7LHfIIr3akqpbkovTB+iAfbDOIw71I+T9QewRB+2ux0ZoXaf6ZfNMYBKPdnaXeFUqBMbIkFDyBwWpnLRTcuzct9bAK/PSyJnOReEsxYj5LDAAyFf4HQYFpt1ULKHSptd63yBizwEzFJ+otjrOr7P4wwnCG6Lwlg0WkYbJf/4CD9jJCZL63dqDXvOt9yLSLUyPOgaBPzvupYrfvL125fkGZtBTgArrt2W/opomh4C/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ytIZCGjJ/R1zkcVHgVdQAa0kj1Jkc8l9xXqY1AZ+78A=;
- b=DRz9iYcD4OHBrCFKUwf3ccBnsSGrdk5uRNTcnCbEH1on37dXwS6q7AiUaIN5nXxDyB5TwLZxPmpNElAsKiWc0Uro0vm/eMxYXCB6NQskSjSn9hWXHJWS8n9SoF3ilr+OUtAcoqXB+RWYYQe7DdJhlvqMt++hdifzlxVrJQtEl9tyHxFksryxQ2qNqROIhYDMdsdq7R0mBstZdHOyGn2r7+YjrpER3p23QNqu2/IPoIs3PNiyznxv4lRLOR3+8H4hdvTTb6/PMuixmUAcFsTqD7QoJ+haSWc6PePDrabnsSV8gL6HHSeIOm8EbY9l8tf7JwRXemFSPsM0GynC+0E2Kg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
- DM4PR84MB1494.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:49::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5791.26; Tue, 8 Nov 2022 17:07:28 +0000
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::7949:4505:4974:ad5f]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::7949:4505:4974:ad5f%6]) with mapi id 15.20.5791.027; Tue, 8 Nov 2022
- 17:07:28 +0000
-From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH v1 1/6] hwmon: (gxp-fan-ctrl) Add GXP fan controller
-Thread-Topic: [PATCH v1 1/6] hwmon: (gxp-fan-ctrl) Add GXP fan controller
-Thread-Index: AQHY8IUCr0UALtDyXEemicJgxN8JHq4vL1SAgAYIcpCAAA5QoA==
-Date:   Tue, 8 Nov 2022 17:07:28 +0000
-Message-ID: <DM4PR84MB1927932BB574CD149E1C1809883F9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-References: <20221104193657.105130-1-nick.hawkins@hpe.com>
- <20221104193657.105130-2-nick.hawkins@hpe.com>
- <20221104200111.GA2562021@roeck-us.net>
- <DM4PR84MB192759BA77DDC69C61E5923F883F9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-In-Reply-To: <DM4PR84MB192759BA77DDC69C61E5923F883F9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|DM4PR84MB1494:EE_
-x-ms-office365-filtering-correlation-id: 4b1e7bb7-c002-494c-49ed-08dac1abb709
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: gYXw6NxtCMDfIW0lK/qqwyoTapRT3APOhONfUmesTWW2qxX2W9hIoNp4aVGG5pIbf3dNJxHgy4CQsKdmY/0OXV39WFb6wMqveH5R7LjCBjWMhAG6/IQrxm5To2/AxH4v84JEdE6JfMtGNdkFWJGHXVeuCz4BSHOAnzFksiK3r6+qA8DbKEwUSvpxKG5WC0n5zQQOt/bUvojZz1fTpms1VFUrDGJ8CSSjzGxqqaMJVwKseqLn9pxiEFQ56+/tS2CcNMQl5HhDjseEQw3SUwHyewF+EKyoyJiIuuRMNbd8V52deTjHHXaosd/vOHv6OmR8WIPmDFlKtJyncsUmh2nxZVi18OkmMM7szMp+f6HqfFTe2rN2XXjFKEp4NxMw86yJ0tdHJuh9SrhdscP63B9WZl+fJXRffk9NymwHX/spM3pjWqdzye9GmePAGbl+JC4VFEUzXcqaZJtHpPby0NyubwM09YJV21Y7iws0Q7dweX5N0wzCW9ugr11UqFrPUDgcD1VyeZXi7fJt5IR5tWH9UdGDRBD3E7R0lDWx9XaFGjlodtioMxVubJWVKmFeFeQZcEAYWvNL4ApCmbzBSWw++yo/3wz0Aljxacfz4uYQzeJxrpHOb79MZ0k5KT3Zjr31ubJlSevFk/DYFQj4qI0sIa15bhapd+tW82weH0BCxDMdK2vm0ZOHEjWJRHCxGuAP2yWt/6S6oJrY/rmKlfEbHl095R5DliwXLUYaNw/+4DevqqfnQ3LhFg5tBFoFxf5TqqN4AZFQ0vMoMVtEuUYFsw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(376002)(396003)(39860400002)(346002)(451199015)(7696005)(9686003)(2940100002)(26005)(186003)(55236004)(83380400001)(122000001)(55016003)(6506007)(2906002)(7416002)(478600001)(54906003)(76116006)(5660300002)(52536014)(41300700001)(4326008)(8936002)(38100700002)(316002)(66556008)(66946007)(64756008)(66476007)(8676002)(66446008)(71200400001)(6916009)(33656002)(38070700005)(82960400001)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VRS5/3j+83uTZKUbqr+W3+SVuiiCpI6nA34mIXL4j01w9lbGfAIALe6FhgPm?=
- =?us-ascii?Q?WKMz9ftBLXlHoS4pDRG51lQLfKNpiR8pzEWNmqX05D4aJJm9crzk1ujrR2fJ?=
- =?us-ascii?Q?KD5oEZe+BcwAJRplVoaUpj6ArgpEsE7b9ny3tMGJRMwn9ai430Jgw3Szvjf4?=
- =?us-ascii?Q?YYmJIwERi/MP3NVCIppMj7S2nXEgv57fQKkugDHB4Wt31fjn/Ql1Qu4ONbe/?=
- =?us-ascii?Q?GRGBFnswKCXUEW0hXaJq/NV3ao+vlZa0wKfyPexvrt5TqdwKTRSX4qW73bp6?=
- =?us-ascii?Q?6qINQB0wpSK8Dot7sSJ9PxbZG+sDrUAMJNGooepfhl+i7KvO19Ne0NhCpwVh?=
- =?us-ascii?Q?KkOAZfCIaCFaZUTte3tvtmIVqPTnXoCkClGUDIkWSNNhyjoVlrEhFEDSpxVI?=
- =?us-ascii?Q?mcwgI1WSs5D35SLkf1iFOYRNpopdsvolvf19HF9Dd6HzGcb+0rsQjdo47EoH?=
- =?us-ascii?Q?XRh5+nf60Q6rVShBt8k8Y2wG/SZdRm0r3wmfvEzpRbHTH44kPcSxQYnADpvh?=
- =?us-ascii?Q?z2nzRNJvH54z/ehdUmtuF2UGaeA+NjH/Gn3+4ELuY2ATMHUJP11MNvsloC/z?=
- =?us-ascii?Q?8m9aJJkGWQZ7dnf9ZfufKDRc8D4c5tcD4QFuhc0DbtzGZZV6u6LbN7qEdQmx?=
- =?us-ascii?Q?y2isRVYsK+7RJR74ACjW4lIa61SkmYHGVRERobinW+j+Owcw1BRk3uwhlGYF?=
- =?us-ascii?Q?ijS9pW6eIl0Nl7Elh2gUqc8k+0M7gaWjyspCfOK9Vfo12ysaMmiwFkohAKDE?=
- =?us-ascii?Q?xfxl2Tw1Gqd7LktHmWZQdU8U6JV/W1lW4umJ5rHrbSjKk3xloKSP30dA7e0N?=
- =?us-ascii?Q?tiuV4Xf0rdWMQn3LPg99iUJG5wfeT5v8CzwGJvBLXshSmArhZ7bH3FIUJr72?=
- =?us-ascii?Q?dPwleILQOqPIB+e5EWQDKqmO+e9SpOTYe9E59ZIXm96ZmizbpITI9vmRV3go?=
- =?us-ascii?Q?kcqRNjZspw9wixMFm8BfqcFDBMtDMUxPlZAh1UPBFBm+CN73hOnMAnTA0ICO?=
- =?us-ascii?Q?29Ys3rz60QJ3DcDzYdYF+ul/Xym/PiCuJSgmno7VugL2EtHURz+mqwrqvfbY?=
- =?us-ascii?Q?GerTmsPLlSBaIpYgg5q8UsAcUWEjheEdzVq/ZR/MKfpBn5GlxjeAUXh4vSmn?=
- =?us-ascii?Q?hZBu6oU70HY1QY/rfWKsRHyW/SuF3pu5rIE5FNZWgKnjHpSE47BJl9ldI/j4?=
- =?us-ascii?Q?OA6pYlL8hVOSXzR38yi1oy1VLOobUfJw5yJ7lGOt9+j7bc0NxEUqwihs0aJb?=
- =?us-ascii?Q?zdtDbb6nHZFjok9RkxPU5Lkpj0Egc8k50Hwnc7PUAnyGe+TJp35HhBpJ7Unt?=
- =?us-ascii?Q?5Svtd9A4Okyf5v68MIUy4E6OQUOBM2AjU6k3weJLD15aFKBNj010nVukPu/W?=
- =?us-ascii?Q?eez5DKn4PE2uB4M+XMkzrbIQZX26ACBy+dNNe4zsPk8VS/dsHuMXBRdcrMx5?=
- =?us-ascii?Q?k/SkigiL9+fNntC/l4rUNb42z4bfY3zbKfEgOsVLmsXd2RVA5Xtx0YRyFUi5?=
- =?us-ascii?Q?xKQQEkidmCQtfVPdBBl36uvhyJFUT2dhfcqkPEvcGuva8f9zE4Vof1Z83HRd?=
- =?us-ascii?Q?oFqTW04Kpf0uMJBFEFMHZwro6NYF0OzU7ozjJmQd?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S230506AbiKJQUd (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 10 Nov 2022 11:20:33 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 037841B1D6;
+        Thu, 10 Nov 2022 08:20:31 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C8EFD1FB;
+        Thu, 10 Nov 2022 08:20:37 -0800 (PST)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 82FD63F703;
+        Thu, 10 Nov 2022 08:20:30 -0800 (PST)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     fenghua.yu@intel.com, jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, janusz.krzysztofik@linux.intel.com,
+        lucas.demarchi@intel.com
+Subject: [PATCH] hwmon/coretemp: Simplify platform device antics
+Date:   Thu, 10 Nov 2022 16:20:25 +0000
+Message-Id: <898dbb76a54aae6ca58ceefcab9ab18beeee2fff.1668096928.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.36.1.dirty
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b1e7bb7-c002-494c-49ed-08dac1abb709
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Nov 2022 17:07:28.0441
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GUKric/grM7NsAZb9DA7G7Kh3cht2I1jEvpNuyDV8H9uk0F8SjcfG5PaS1XOZ2hWvYl4NDKwUz4ZmC6Q5ZnWKA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR84MB1494
-X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: cBz9k5_MbPttnWieZ2hDZYxnHLdq4Re0
-X-Proofpoint-ORIG-GUID: cBz9k5_MbPttnWieZ2hDZYxnHLdq4Re0
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- phishscore=0 priorityscore=1501 suspectscore=0 adultscore=0 bulkscore=0
- malwarescore=0 impostorscore=0 mlxscore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211080107
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Note: This is a resend, my email client decided to
-Change my paragraph format with 70 char lines.
-Apologies.
+Coretemp's vestigial platform driver is odd. All the real work is done
+globally by the initcall and CPU hotplug notifiers, while the "driver"
+effectively just wraps an allocation and the registration of the hwmon
+interface in a long-winded round-trip through the driver core. The whole
+logic of dynamically creating and destroying platform devices to bring
+the interfaces up and down is fatally flawed right away, since it
+assumes platform_device_add() will synchronously bind the driver and set
+drvdata before it returns, thus results in a NULL dereference if
+drivers_autoprobe is turned off for the platform bus. Furthermore, the
+unusual approach of doing that from within a CPU hotplug notifier is
+also problematic. It's already commented in the code that it deadlocks
+suspend, but it also causes lockdep issues for other drivers or
+subsystems which may want to legitimately register a CPU hotplug
+notifier from a platform bus notifier.
 
-Greetings Guenter,
+All of these issues can be solved by ripping this questionable behaviour
+out completely, simply tying the platform devices to the lifetime of the
+module itself, and directly managing the hwmon interfaces from the
+hotplug notifiers. There is a slight user-visible change in that
+/sys/bus/platform/drivers/coretemp will no longer appear, and
+/sys/devices/platform/coretemp.n will remain present if package n is
+hotplugged off, but hwmon users should really only be looking for the
+presence of the hwmon interfaces, whose behaviour remains unchanged.
 
-> > +static bool fan_installed(struct device *dev, int fan) {
-> > +	struct gxp_fan_ctrl_drvdata *drvdata =3D dev_get_drvdata(dev);
-> > +	u32 trans_offset;
-> > +	u32 trans_shift;
-> > +	u32 val;
-> > +
-> > +	address_translation(drvdata->data->fan[fan].inst,
-> > +			    &trans_offset,
-> > +			    &trans_shift);
-> > +
-> > +	regmap_read(drvdata->plreg_map, trans_offset, &val);
-> > +	val =3D (val >> trans_shift) & drvdata->data->fan[fan].bit;
-> > +	if (val =3D=3D drvdata->data->fan[fan].bit)
-> > +		return 1;
-> > +	else
-> > +		return 0;
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
 
->	return val =3D=3D drvdata->data->fan[fan].bit;
+I haven't been able to fully test hotplug since I only have a
+single-socket Intel system to hand.
 
-> Those calculations look quite complex. Is there a public datasheet that w=
-ould enable me to understand how registers are actually assigned ?
+ drivers/hwmon/coretemp.c | 134 ++++++++++++++++++---------------------
+ 1 file changed, 61 insertions(+), 73 deletions(-)
 
-There is no public datasheet as of yet but there is work ongoing to
-create one. I will however document exactly how it is setup in hwmon.
-There is so much I/O on our board that most of the inputs and outputs
-go through an external CPLD we are interfaced with to save pins. A
-memory area in our SoC reflects some of the I/O from CPLD in bytes
-ranging from 0 to 0xff. Each byte represents information such as byte
-0x27, which on this particular platform represents the fan installation
-status of fans 0 to 7 respectively with bit 0 to 7. The byte 0x28 represent=
-s
-something else. Regmap_read/write does a word instead of a single byte
-which we are interested in so we use address_translation to keep offsets
-easier to read.
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index 8bf32c6c85d9..9fa68a81625e 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -543,66 +543,49 @@ static void coretemp_remove_core(struct platform_data *pdata, int indx)
+ 		ida_free(&pdata->ida, indx - BASE_SYSFS_ATTR_NO);
+ }
+ 
+-static int coretemp_probe(struct platform_device *pdev)
++static int coretemp_device_add(int zoneid)
+ {
+-	struct device *dev = &pdev->dev;
++	struct platform_device *pdev;
+ 	struct platform_data *pdata;
++	int err;
+ 
+ 	/* Initialize the per-zone data structures */
+-	pdata = devm_kzalloc(dev, sizeof(struct platform_data), GFP_KERNEL);
++	pdata = kzalloc(sizeof(*pdata), GFP_KERNEL);
+ 	if (!pdata)
+ 		return -ENOMEM;
+ 
+-	pdata->pkg_id = pdev->id;
++	pdata->pkg_id = zoneid;
+ 	ida_init(&pdata->ida);
+-	platform_set_drvdata(pdev, pdata);
+-
+-	pdata->hwmon_dev = devm_hwmon_device_register_with_groups(dev, DRVNAME,
+-								  pdata, NULL);
+-	return PTR_ERR_OR_ZERO(pdata->hwmon_dev);
+-}
+-
+-static int coretemp_remove(struct platform_device *pdev)
+-{
+-	struct platform_data *pdata = platform_get_drvdata(pdev);
+-	int i;
+-
+-	for (i = MAX_CORE_DATA - 1; i >= 0; --i)
+-		if (pdata->core_data[i])
+-			coretemp_remove_core(pdata, i);
+-
+-	ida_destroy(&pdata->ida);
+-	return 0;
+-}
+-
+-static struct platform_driver coretemp_driver = {
+-	.driver = {
+-		.name = DRVNAME,
+-	},
+-	.probe = coretemp_probe,
+-	.remove = coretemp_remove,
+-};
+-
+-static struct platform_device *coretemp_device_add(unsigned int cpu)
+-{
+-	int err, zoneid = topology_logical_die_id(cpu);
+-	struct platform_device *pdev;
+-
+-	if (zoneid < 0)
+-		return ERR_PTR(-ENOMEM);
+ 
+ 	pdev = platform_device_alloc(DRVNAME, zoneid);
+-	if (!pdev)
+-		return ERR_PTR(-ENOMEM);
+-
+-	err = platform_device_add(pdev);
+-	if (err) {
+-		platform_device_put(pdev);
+-		return ERR_PTR(err);
++	if (!pdev) {
++		err = -ENOMEM;
++		goto err_free_pdata;
+ 	}
+ 
++	err = platform_device_add(pdev);
++	if (err)
++		goto err_put_dev;
++
++	platform_set_drvdata(pdev, pdata);
+ 	zone_devices[zoneid] = pdev;
+-	return pdev;
++	return 0;
++
++err_put_dev:
++	platform_device_put(pdev);
++err_free_pdata:
++	kfree(pdata);
++	return err;
++}
++
++static void coretemp_device_remove(int zoneid)
++{
++	struct platform_device *pdev = zone_devices[zoneid];
++	struct platform_data *pdata = platform_get_drvdata(pdev);
++
++	ida_destroy(&pdata->ida);
++	kfree(pdata);
++	platform_device_unregister(pdev);
+ }
+ 
+ static int coretemp_cpu_online(unsigned int cpu)
+@@ -626,7 +609,10 @@ static int coretemp_cpu_online(unsigned int cpu)
+ 	if (!cpu_has(c, X86_FEATURE_DTHERM))
+ 		return -ENODEV;
+ 
+-	if (!pdev) {
++	pdata = platform_get_drvdata(pdev);
++	if (!pdata->hwmon_dev) {
++		struct device *hwmon;
++
+ 		/* Check the microcode version of the CPU */
+ 		if (chk_ucode_version(cpu))
+ 			return -EINVAL;
+@@ -637,9 +623,11 @@ static int coretemp_cpu_online(unsigned int cpu)
+ 		 * online. So, initialize per-pkg data structures and
+ 		 * then bring this core online.
+ 		 */
+-		pdev = coretemp_device_add(cpu);
+-		if (IS_ERR(pdev))
+-			return PTR_ERR(pdev);
++		hwmon = hwmon_device_register_with_groups(&pdev->dev, DRVNAME,
++							  pdata, NULL);
++		if (IS_ERR(hwmon))
++			return PTR_ERR(hwmon);
++		pdata->hwmon_dev = hwmon;
+ 
+ 		/*
+ 		 * Check whether pkgtemp support is available.
+@@ -649,7 +637,6 @@ static int coretemp_cpu_online(unsigned int cpu)
+ 			coretemp_add_core(pdev, cpu, 1);
+ 	}
+ 
+-	pdata = platform_get_drvdata(pdev);
+ 	/*
+ 	 * Check whether a thread sibling is already online. If not add the
+ 	 * interface for this CPU core.
+@@ -668,18 +655,14 @@ static int coretemp_cpu_offline(unsigned int cpu)
+ 	struct temp_data *tdata;
+ 	int i, indx = -1, target;
+ 
+-	/*
+-	 * Don't execute this on suspend as the device remove locks
+-	 * up the machine.
+-	 */
++	/* No need to tear down any interfaces for suspend */
+ 	if (cpuhp_tasks_frozen)
+ 		return 0;
+ 
+ 	/* If the physical CPU device does not exist, just return */
+-	if (!pdev)
+-		return 0;
+-
+ 	pd = platform_get_drvdata(pdev);
++	if (!pd->hwmon_dev)
++		return 0;
+ 
+ 	for (i = 0; i < NUM_REAL_CORES; i++) {
+ 		if (pd->cpu_map[i] == topology_core_id(cpu)) {
+@@ -711,13 +694,14 @@ static int coretemp_cpu_offline(unsigned int cpu)
+ 	}
+ 
+ 	/*
+-	 * If all cores in this pkg are offline, remove the device. This
+-	 * will invoke the platform driver remove function, which cleans up
+-	 * the rest.
++	 * If all cores in this pkg are offline, remove the interface.
+ 	 */
++	tdata = pd->core_data[PKG_SYSFS_ATTR_NO];
+ 	if (cpumask_empty(&pd->cpumask)) {
+-		zone_devices[topology_logical_die_id(cpu)] = NULL;
+-		platform_device_unregister(pdev);
++		if (tdata)
++			coretemp_remove_core(pd, PKG_SYSFS_ATTR_NO);
++		hwmon_device_unregister(pd->hwmon_dev);
++		pd->hwmon_dev = NULL;
+ 		return 0;
+ 	}
+ 
+@@ -725,7 +709,6 @@ static int coretemp_cpu_offline(unsigned int cpu)
+ 	 * Check whether this core is the target for the package
+ 	 * interface. We need to assign it to some other cpu.
+ 	 */
+-	tdata = pd->core_data[PKG_SYSFS_ATTR_NO];
+ 	if (tdata && tdata->cpu == cpu) {
+ 		target = cpumask_first(&pd->cpumask);
+ 		mutex_lock(&tdata->update_lock);
+@@ -744,7 +727,7 @@ static enum cpuhp_state coretemp_hp_online;
+ 
+ static int __init coretemp_init(void)
+ {
+-	int err;
++	int i, err;
+ 
+ 	/*
+ 	 * CPUID.06H.EAX[0] indicates whether the CPU has thermal
+@@ -760,20 +743,22 @@ static int __init coretemp_init(void)
+ 	if (!zone_devices)
+ 		return -ENOMEM;
+ 
+-	err = platform_driver_register(&coretemp_driver);
+-	if (err)
+-		goto outzone;
++	for (i = 0; i < max_zones; i++) {
++		err = coretemp_device_add(i);
++		if (err)
++			goto outzone;
++	}
+ 
+ 	err = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "hwmon/coretemp:online",
+ 				coretemp_cpu_online, coretemp_cpu_offline);
+ 	if (err < 0)
+-		goto outdrv;
++		goto outzone;
+ 	coretemp_hp_online = err;
+ 	return 0;
+ 
+-outdrv:
+-	platform_driver_unregister(&coretemp_driver);
+ outzone:
++	while (i--)
++		coretemp_device_remove(i);
+ 	kfree(zone_devices);
+ 	return err;
+ }
+@@ -781,8 +766,11 @@ module_init(coretemp_init)
+ 
+ static void __exit coretemp_exit(void)
+ {
++	int i;
++
+ 	cpuhp_remove_state(coretemp_hp_online);
+-	platform_driver_unregister(&coretemp_driver);
++	for (i = 0; i < max_zones; i++)
++		coretemp_device_remove(i);
+ 	kfree(zone_devices);
+ }
+ module_exit(coretemp_exit)
+-- 
+2.36.1.dirty
 
-> > +	} else {
-> > +		/* Power Off */
-> > +		val =3D 0;
-> > +	}
-
-> What determines power to a fan ? Should the power state be reported with =
-fanX_enable ? Or possibly the installed state ?
-
-This actually is the power state of the system, not the fan. When the
-system is off we will see a PWM value of 0xFF on the fan. The idea
-here was to report a value of 0 if the system was off.
-
-Would you like me to use fanX_enable (read only) to show it as
-disabled while the system is off ?
-From a hardware standpoint that would be accurate.
-
-> > +static const struct fan_ctrl_data g10_data =3D {
-> > +	.fan[0] =3D { .inst =3D 0x00, .fail =3D 0x02, .id =3D 0x04, .bit =3D =
-0x01 },
-> > +	.fan[1] =3D { .inst =3D 0x00, .fail =3D 0x02, .id =3D 0x04, .bit =3D =
-0x02 },
-> > +	.fan[2] =3D { .inst =3D 0x00, .fail =3D 0x02, .id =3D 0x04, .bit =3D =
-0x04 },
-> > +	.fan[3] =3D { .inst =3D 0x00, .fail =3D 0x02, .id =3D 0x04, .bit =3D =
-0x08 },
-> > +	.fan[4] =3D { .inst =3D 0x00, .fail =3D 0x02, .id =3D 0x04, .bit =3D =
-0x10 },
-> > +	.fan[5] =3D { .inst =3D 0x00, .fail =3D 0x02, .id =3D 0x04, .bit =3D =
-0x20 },
-> > +	.fan[6] =3D { .inst =3D 0x00, .fail =3D 0x02, .id =3D 0x04, .bit =3D =
-0x40 },
-> > +	.fan[7] =3D { .inst =3D 0x00, .fail =3D 0x02, .id =3D 0x04, .bit =3D =
-0x80 },
-> > +	.fan[8] =3D { .inst =3D 0x01, .fail =3D 0x03, .id =3D 0x05, .bit =3D =
-0x01 },
-> > +	.fan[9] =3D { .inst =3D 0x01, .fail =3D 0x03, .id =3D 0x05, .bit =3D =
-0x02 },
-> > +	.fan[10] =3D { .inst =3D 0x01, .fail =3D 0x03, .id =3D 0x05, .bit =3D=
- 0x04 },
-> > +	.fan[11] =3D { .inst =3D 0x01, .fail =3D 0x03, .id =3D 0x05, .bit =3D=
- 0x08 },
-> > +	.fan[12] =3D { .inst =3D 0x01, .fail =3D 0x03, .id =3D 0x05, .bit =3D=
- 0x10 },
-> > +	.fan[13] =3D { .inst =3D 0x01, .fail =3D 0x03, .id =3D 0x05, .bit =3D=
- 0x20 },
-> > +	.fan[14] =3D { .inst =3D 0x01, .fail =3D 0x03, .id =3D 0x05, .bit =3D=
- 0x40 },
-> > +	.fan[15] =3D { .inst =3D 0x01, .fail =3D 0x03, .id =3D 0x05, .bit =3D=
- 0x80 },
-> > +	.power_bit =3D 24,
-> > +};
-> > +
-> > +static const struct of_device_id gxp_fan_ctrl_of_match[] =3D {
-> > +	{ .compatible =3D "hpe,gxp-fan-ctrl", .data =3D &g10_data },
-
-> I don't understand the point of attaching g10_data here.
-> Why not just access it directly ? There is just one table.
-
-The reason for having this data with the of_device_id binding is that
-each platform has different byte offsets as mentioned above. We
-would like to be able to reuse the driver if possible for this. We will
-soon need g11_data that will be added here. Would a description in
-Documentation, comments and commit message allow us to keep
-this ?
-
-Thank you for your assistance and feedback with this code,
-
--Nick Hawkins
