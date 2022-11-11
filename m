@@ -2,131 +2,125 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46F5EC433FE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Nov 2022 21:07:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AF74C433FE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Nov 2022 21:14:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234080AbiKKVHp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 11 Nov 2022 16:07:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44956 "EHLO
+        id S233750AbiKKVOh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 11 Nov 2022 16:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233842AbiKKVHo (ORCPT
+        with ESMTP id S231911AbiKKVOh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 11 Nov 2022 16:07:44 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682DE833AC
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Nov 2022 13:07:43 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id v17so5170878plo.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Nov 2022 13:07:43 -0800 (PST)
+        Fri, 11 Nov 2022 16:14:37 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C2E6EB72
+        for <linux-hwmon@vger.kernel.org>; Fri, 11 Nov 2022 13:14:36 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id jr19so3379044qtb.7
+        for <linux-hwmon@vger.kernel.org>; Fri, 11 Nov 2022 13:14:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1UbHOqnPNCOilnpyC/Gk6owDbQr/DghKe/AIdJFL7OA=;
-        b=dcqjaS5Sm4AFaJ7A8iLje/A4mP/MuV/4c61ZgTQZyLFNnGrZZ/BGiUXI09P1InJiFR
-         KW0Xm6rz6GpThAC0xv5uqffYho4bvpSMBTuoqW4KOh+mOUlEix0p7YZhkV11KlQpoy2K
-         ifVskTSrHPisCc47y4ok1EkR0YbtEILMfy3CUr4+Vq96T+6aW8FAhac7YsiRUa+QXhSr
-         2NqNbVwfSo1HAyTd+JW/g0EGjO4M2C5GBeM5jHLMYMnPNGEFR+1iD82/tlFjKeQrUrs7
-         AJrohjKqYCTrhGr4OhyQ5sX+/jGoVvKvgX/9DGz7ua8UbvT3qQhq74wWw4l0Xl0wNmYf
-         69jA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u/0wntlKhpymLohyiSQtUWQoSGtbyU58tp9wuLP3590=;
+        b=Ji6yi/YuEo5QPIRs6+YqxBBuVI0Kvy8/8kqDJNPGGMcPJEBNGagSWNVPSCwmx+216u
+         0017g12k5q1CP6t1dhMucD7lmCAJSDgTrWYXfp+N4T7nvynDtvAN63OBgRamVgfvgauG
+         iVg26xnU7ojshwLytH2lc6Vv0NOMzvQQaBEd88tvmuBa8Dc6JjDQUnhMjx7jpqnyXp1A
+         Rm5HGKxyk64u92pvpEMMa8PB3mak9dFeuUX8n2lXIOssX/2kvcTw0E4+4vzLKAxbl4hD
+         FWLIYWtWKiwMXBO5M9zcyal+wtFpPEfMpVwwPSD9iTjBj+WHmeyVXcqCm9yqQoIYnjFC
+         ha9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1UbHOqnPNCOilnpyC/Gk6owDbQr/DghKe/AIdJFL7OA=;
-        b=XvekU6InAGL6vcbOeMO+RqT5oRqlOFuj5bGUIUDcLLU+AU5cDsTKr+UAVU8l/J3337
-         2aC5gfSOHIQIpd7BYzVu34DrDiQkLK11D+ED9JEr+EC7HuR6YuEcB5Ik/Z7mHQSqoQoa
-         o82FheTMCsq+x1Xb6S5aQUcOpo7M9uFDv/RCtrenNwhnZj8ajdjX/+nMNwCcCkxL9DFr
-         aIeNIwRZu7YZvO50KCHK1bfQFVI27QUExwC/75/tQ7xTXrS5rW+fGXUnP07Rtf6bQLj+
-         PmF60Z2Iy3mCuItsB7jUCMtHQbflhuU9RzVfV6hAHJ18plyRfroGxC4nlkautvxk8Iqg
-         /eWw==
-X-Gm-Message-State: ANoB5pk3e7jR4Q67sFVB6XBRY2N+6/2zOM8S2F3mWyPYNfPSl3H3R1rK
-        17HYqF2opFOldVdawQhD5NOYvg==
-X-Google-Smtp-Source: AA0mqf6A3RRROpoZCJbd2mFTNzmTgQE6WZbH93Czcwbm8bITJSEMnmyIrjCwAdplvykKwvdBjqBreQ==
-X-Received: by 2002:a17:90b:4fce:b0:203:6932:1d5f with SMTP id qa14-20020a17090b4fce00b0020369321d5fmr3813947pjb.112.1668200862943;
-        Fri, 11 Nov 2022 13:07:42 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:da6a:d4a2:1253:adfc:370? ([2405:201:d02f:da6a:d4a2:1253:adfc:370])
-        by smtp.gmail.com with ESMTPSA id w125-20020a623083000000b00571bdf45885sm980169pfw.196.2022.11.11.13.07.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 13:07:42 -0800 (PST)
-Message-ID: <cc62e433-83c4-f285-edc2-a2d808163074@9elements.com>
-Date:   Sat, 12 Nov 2022 02:37:38 +0530
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u/0wntlKhpymLohyiSQtUWQoSGtbyU58tp9wuLP3590=;
+        b=mAmZ0wrRhYvMlUQgv+Zq8VwTRhcMb2Uz/vpQRWgCk/9ljiPcpD06tJYXlat+r7JBqq
+         OBKSUITo81Nmm1xWfkIn+yQ18XtSnJvl+SDEAs0+fON9TbuVAyQug5mNE0882/vBQURo
+         mtzzkvIgUR8um6SnWEDtjI8Vo32QmjzBmBJXsGIf+dKv8ORs3ivQkE/1mC0p4l1Sondl
+         EKtpu/4FNJDIa1BMj18ebhPtzNrsUVlKLmc7zrPF5LtjeBxOPIrlr5dliw9PcMhgaa+Y
+         RIY8nIIFetfbz9djpiFuVAvnhXMPMdwWUFvz6LALc2G9RP7iau8sObcINQjQz7Vk2Don
+         awrQ==
+X-Gm-Message-State: ANoB5pmRyKj3GAS7YNUpNpX+n9GzKYiS1hWGiGQtbtIXckzfolek/vur
+        oaiw//R/08/3hsl3G88vF18=
+X-Google-Smtp-Source: AA0mqf5vxqxDoh/PuU0Of4T2IHQADeZcdFCzmnR81huR0pUjdTZDzevrC/pFlNN6Ngxijv+Qqd290w==
+X-Received: by 2002:a05:622a:8cc:b0:3a5:5987:42c6 with SMTP id i12-20020a05622a08cc00b003a5598742c6mr3073009qte.147.1668201275366;
+        Fri, 11 Nov 2022 13:14:35 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s19-20020a05620a0bd300b006bb8b5b79efsm2035305qki.129.2022.11.11.13.14.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 13:14:34 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 11 Nov 2022 13:14:32 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     jdelvare@suse.com, fenghua.yu@intel.com,
+        linux-hwmon@vger.kernel.org, srinivas.pandruvada@linux.intel.com
+Subject: Re: [PATCH 1/3] hwmon (coretemp): Remove obsolete temp_data->valid
+Message-ID: <20221111211432.GA1059403@roeck-us.net>
+References: <20221108075051.5139-1-rui.zhang@intel.com>
+ <20221108075051.5139-2-rui.zhang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-References: <20221013094838.1529153-1-Naresh.Solanki@9elements.com>
- <20221013094838.1529153-2-Naresh.Solanki@9elements.com>
- <20221024161806.GA1855651-robh@kernel.org>
- <dcd22f70-e51c-290e-c11f-9a5ce32748c1@9elements.com>
- <CAL_JsqKT52ULEZjKo9emEAt74nH2OpMO8ymLLKM_T-NzAwqGog@mail.gmail.com>
- <3152c290-8aca-b91a-df20-335c33395835@9elements.com>
- <20221101184402.GA1884153-robh@kernel.org>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <20221101184402.GA1884153-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221108075051.5139-2-rui.zhang@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Rob,
-
-On 02-11-2022 12:14 am, Rob Herring wrote:
-> On Mon, Oct 31, 2022 at 01:35:09PM +0530, Naresh Solanki wrote:
->> Hi Rob,
->>
->> On 26-10-2022 07:07 pm, Rob Herring wrote:
->>> fanc: fan-controller {
->>>     #pwm-cells = <3>;
->>>     ...
->>>
->>>     fan {
->>>       pwms = <&fanc 0 500000  PWM_POLARITY_INVERTED>;
->>>       ...
->>>     };
->>> };
->>>
->>> 0 is PWM number and 500000 is the PWM frequency. The 3rd cell are per
->>> consumer flags. See pwm.txt for more details.
->>
->> Did the implementation & while testing getting the below err:
->> [63.626505] max6639 166-002e: failed to create device link to 166-002e
+On Tue, Nov 08, 2022 at 03:50:49PM +0800, Zhang Rui wrote:
+> Checking for the valid bit of IA32_THERM_STATUS is removed in commit
+> bf6ea084ebb5 ("hwmon: (coretemp) Do not return -EAGAIN for low
+> temperatures"), and temp_data->valid is set and never cleared when the
+> temperature has been read once.
 > 
-> Does turning off fw_devlink help (fw_devlink=off)?
+> Remove the obsolete temp_data->valid field.
+> 
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 
-Will supplier == consumer, device link creation fails.
-Not sure what is best approach but not creating device link in this 
-scenario help & for that below additional changes needed in pwm core.
+Applied to hwmon-next.
 
-diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
-index 4527f09a5c50..afea51c49138 100644
---- a/drivers/pwm/core.c
-+++ b/drivers/pwm/core.c
-@@ -730,6 +730,12 @@ static struct device_link 
-*pwm_device_link_add(struct device *dev,
-  		return NULL;
-  	}
+Thanks,
+Guenter
 
-+	/*
-+	 * Do not attempt to create link if consumer itself is supplier.
-+	 */
-+	if (dev == pwm->chip->dev)
-+		return 0;
-+
-  	dl = device_link_add(dev, pwm->chip->dev, DL_FLAG_AUTOREMOVE_CONSUMER);
-  	if (!dl) {
-  		dev_err(dev, "failed to create device link to %s\n",
-
-
-
-Regards,
-Naresh
+> ---
+>  drivers/hwmon/coretemp.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+> index 8bf32c6c85d9..ec35ada68455 100644
+> --- a/drivers/hwmon/coretemp.c
+> +++ b/drivers/hwmon/coretemp.c
+> @@ -64,7 +64,6 @@ MODULE_PARM_DESC(tjmax, "TjMax value in degrees Celsius");
+>   * @attr_size:  Total number of pre-core attrs displayed in the sysfs.
+>   * @is_pkg_data: If this is 1, the temp_data holds pkgtemp data.
+>   *		Otherwise, temp_data holds coretemp data.
+> - * @valid: If this is 1, the current temperature is valid.
+>   */
+>  struct temp_data {
+>  	int temp;
+> @@ -76,7 +75,6 @@ struct temp_data {
+>  	u32 status_reg;
+>  	int attr_size;
+>  	bool is_pkg_data;
+> -	bool valid;
+>  	struct sensor_device_attribute sd_attrs[TOTAL_ATTRS];
+>  	char attr_name[TOTAL_ATTRS][CORETEMP_NAME_LENGTH];
+>  	struct attribute *attrs[TOTAL_ATTRS + 1];
+> @@ -157,7 +155,7 @@ static ssize_t show_temp(struct device *dev,
+>  	mutex_lock(&tdata->update_lock);
+>  
+>  	/* Check whether the time interval has elapsed */
+> -	if (!tdata->valid || time_after(jiffies, tdata->last_updated + HZ)) {
+> +	if (time_after(jiffies, tdata->last_updated + HZ)) {
+>  		rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax, &edx);
+>  		/*
+>  		 * Ignore the valid bit. In all observed cases the register
+> @@ -166,7 +164,6 @@ static ssize_t show_temp(struct device *dev,
+>  		 * really help at all.
+>  		 */
+>  		tdata->temp = tdata->tjmax - ((eax >> 16) & 0x7f) * 1000;
+> -		tdata->valid = true;
+>  		tdata->last_updated = jiffies;
+>  	}
+>  
