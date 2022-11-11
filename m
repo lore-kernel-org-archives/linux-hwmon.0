@@ -2,98 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FE8BC4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Nov 2022 20:32:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B3A1C433FE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Nov 2022 16:16:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiKJUc1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Nov 2022 15:32:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
+        id S232979AbiKKQQt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 11 Nov 2022 11:16:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiKJUc1 (ORCPT
+        with ESMTP id S232372AbiKKQQs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:32:27 -0500
-X-Greylist: delayed 3908 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Nov 2022 12:32:25 PST
-Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com [67.231.152.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6C41CFFC
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Nov 2022 12:32:25 -0800 (PST)
-Received: from pps.filterd (m0075793.ppops.net [127.0.0.1])
-        by mx0b-00105401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 2AAIaE42022207;
-        Thu, 10 Nov 2022 19:26:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=collins.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type :
- content-transfer-encoding; s=POD051818;
- bh=GGNpyjey7trgrQrtboqiWpP39Y6gjOTAcCo75T6Gt2k=;
- b=fVUQEqtPmxG82mcL4X6Gn0czU/hc60Poj34kZw4aXKPBut7bTLbY8OsgXpeQFvtfzxr4
- BS1K9ZdCqX+I5F4qVAytiVfPH1DTL8wf/TVTLxLQgPh0kQYscyPmhBofJAuJJevw7v8F
- tHv8JIeRGyF67++ZVZEePGgnA+DZB9tk6NojE0v2LcRAVGwqoPLHKoxMqrINqrmjPtvP
- XzzMHxMqUyyUMOjZZENcYrEslzSsX33+xwds8dUk0Be0/WtdS0bux4stgpqver1paneD
- 3LwM5y5zAvkLYj/wbhJglPohR38TG5Cf+jDiVzN3lWAEymS0h+WW4D22xfGPEyyd5MKv PA== 
-Received: from xnwpv38.utc.com ([167.17.239.18])
-        by mx0b-00105401.pphosted.com with ESMTP id 3krqv43yn3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Nov 2022 19:26:57 +0000
-Received: from qusnwadv.utcapp.com (QUSNWADV.utcapp.com [10.161.48.86])
-        by xnwpv38.utc.com (8.16.1.2/8.16.1.2) with ESMTPS id 2AAJQtvj140471
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Nov 2022 19:26:56 GMT
-Received: from ciulimr02.rockwellcollins.com ([10.172.224.19])
-        by qusnwadv.utcapp.com (8.16.1.2/8.16.1.2) with ESMTPS id 2AAJMD5G028817
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 10 Nov 2022 19:22:13 GMT
-X-Received: from kirk.rockwellcollins.lab (kirk.rockwellcollins.lab [10.148.204.208])
-        by ciulimr02.rockwellcollins.com (Postfix) with ESMTP id 65D30200FE;
-        Thu, 10 Nov 2022 13:22:13 -0600 (CST)
-From:   Brandon Maier <brandon.maier@collins.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Fri, 11 Nov 2022 11:16:48 -0500
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF26658C
+        for <linux-hwmon@vger.kernel.org>; Fri, 11 Nov 2022 08:16:47 -0800 (PST)
+Received: by mail-qk1-x733.google.com with SMTP id s20so3234226qkg.5
+        for <linux-hwmon@vger.kernel.org>; Fri, 11 Nov 2022 08:16:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9WbSXE1+IjWD0R6zxIbb9nqA+kAWghGOV6tfVbux0Cw=;
+        b=deAp9oLYlxOfNFdNqnbppPdU6mm1usCTYg0GtBN4yM0i/PYLii6e0AVTQO1RoF8Nfu
+         uTFdnHw5jRbxVnw+QHXSNS7MnebivOHnfo/RmGDObVtA4b8Fom8ltD5I+CUQykx+2ywl
+         tjLUjFPaLi7EGijbQNyVYkGT1d+ldwbn2obLZyABqW+BEy2vqz29GX7HKGjKFj01gEGN
+         D6ZAG66YtpPVSOXbQjWTlnv72CYRVjhoD6NDH4lFxHILMHcwemdVR1AiSG4Mk1DtiBjd
+         KkmeACclEsznKNI2yKyj722zZsl7fUqvRr1Yxy0caMarObdVcNlfYwvlcrFb6o9GVxZ3
+         FO9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9WbSXE1+IjWD0R6zxIbb9nqA+kAWghGOV6tfVbux0Cw=;
+        b=06lxQa4e4DnSxTm4wwj14y/R11n7dUXPFFvngIPOee7qPdfdEhHKBCCU+mW7rHjucw
+         E9Xe3RaRBiltFNKdYraKxVAYTb374S+2ESR+5yoAwiNrBhHgFP1H7Bwa9w32ujO4jhlv
+         O9zac6DSO0E4ZejgYuwBS3q+i4HOizPNieABuJjTZAaVjH8suPfUQFJyy35ougrLxQFL
+         jooh10K8j+VwKXb1706hi0PYpUo8UzMr0lGBg15Yo9MYC1PcKf6HDnvHHhuFQORvuwdU
+         wmIHpgyl7Z06ntjmCeL6i4PgnZ0MBXATXJ/0cDcKu4Q22TcAdWZoAcir1503qOSguDpg
+         K3Zg==
+X-Gm-Message-State: ANoB5pmIeCMEkSM9ubZSEPwZBdzdEyo9LKvFsbYVr0n/Io2KpsUhbRB+
+        /iVVH8e1FZkxVPHFfl0SXhY=
+X-Google-Smtp-Source: AA0mqf4yZY/EoSS4fHnnxMjZcl7gR1tyzHKjZLZzE1/9N7m7RgPeFVGK+dc/Phwgv7ZW5ebpA5Tt6A==
+X-Received: by 2002:a37:80c1:0:b0:6fa:74c5:7a0d with SMTP id b184-20020a3780c1000000b006fa74c57a0dmr1644265qkd.611.1668183406991;
+        Fri, 11 Nov 2022 08:16:46 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bp16-20020a05620a459000b006cbcdc6efedsm1684628qkb.41.2022.11.11.08.16.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 08:16:46 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 11 Nov 2022 08:16:43 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Brandon Maier <brandon.maier@collins.com>
+Cc:     linux-hwmon@vger.kernel.org,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Derek Nguyen <derek.nguyen@collins.com>,
-        Brandon Maier <brandon.maier@collins.com>
-Subject: [PATCH] hwmon: (ltc2947) fix temperature scaling
-Date:   Thu, 10 Nov 2022 13:21:08 -0600
-Message-Id: <20221110192108.20624-1-brandon.maier@collins.com>
-X-Mailer: git-send-email 2.38.1
+        Derek Nguyen <derek.nguyen@collins.com>
+Subject: Re: [PATCH] hwmon: (ltc2947) fix temperature scaling
+Message-ID: <20221111161643.GA86310@roeck-us.net>
+References: <20221110192108.20624-1-brandon.maier@collins.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 6KJ4_19aywknhCNuw7nl_w0-IoTIOYs5
-X-Proofpoint-ORIG-GUID: 6KJ4_19aywknhCNuw7nl_w0-IoTIOYs5
-X-Proofpoint-Spam-Details: rule=outbound_default_notspam policy=outbound_default score=0
- lowpriorityscore=0 impostorscore=0 bulkscore=0 clxscore=1011 phishscore=0
- malwarescore=0 adultscore=0 mlxscore=0 suspectscore=0 priorityscore=1501
- spamscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211100010
+In-Reply-To: <20221110192108.20624-1-brandon.maier@collins.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Derek Nguyen <derek.nguyen@collins.com>
+On Thu, Nov 10, 2022 at 01:21:08PM -0600, Brandon Maier wrote:
+> From: Derek Nguyen <derek.nguyen@collins.com>
+> 
+> The LTC2947 datasheet (Rev. B) calls out in the section "Register
+> Description: Non-Accumulated Result Registers" (pg. 30) that "To
+> calculate temperature, multiply the TEMP register value by 0.204°C
+> and add 5.5°C". Fix to add 5.5C and not 0.55C.
+> 
+> Signed-off-by: Derek Nguyen <derek.nguyen@collins.com>
+> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 
-The LTC2947 datasheet (Rev. B) calls out in the section "Register
-Description: Non-Accumulated Result Registers" (pg. 30) that "To
-calculate temperature, multiply the TEMP register value by 0.204Â°C
-and add 5.5Â°C". Fix to add 5.5C and not 0.55C.
+Good catch. Applied.
 
-Signed-off-by: Derek Nguyen <derek.nguyen@collins.com>
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
----
- drivers/hwmon/ltc2947-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+Guenter
 
-diff --git a/drivers/hwmon/ltc2947-core.c b/drivers/hwmon/ltc2947-core.c
-index 7404e974762fd..2dbbbac9de093 100644
---- a/drivers/hwmon/ltc2947-core.c
-+++ b/drivers/hwmon/ltc2947-core.c
-@@ -396,7 +396,7 @@ static int ltc2947_read_temp(struct device *dev, const u32 attr, long *val,
- 		return ret;
- 
- 	/* in milidegrees celcius, temp is given by: */
--	*val = (__val * 204) + 550;
-+	*val = (__val * 204) + 5500;
- 
- 	return 0;
- }
--- 
-2.38.1
-
+> ---
+>  drivers/hwmon/ltc2947-core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/ltc2947-core.c b/drivers/hwmon/ltc2947-core.c
+> index 7404e974762fd..2dbbbac9de093 100644
+> --- a/drivers/hwmon/ltc2947-core.c
+> +++ b/drivers/hwmon/ltc2947-core.c
+> @@ -396,7 +396,7 @@ static int ltc2947_read_temp(struct device *dev, const u32 attr, long *val,
+>  		return ret;
+>  
+>  	/* in milidegrees celcius, temp is given by: */
+> -	*val = (__val * 204) + 550;
+> +	*val = (__val * 204) + 5500;
+>  
+>  	return 0;
+>  }
