@@ -2,133 +2,131 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB02AC4332F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Nov 2022 16:38:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46F5EC433FE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Nov 2022 21:07:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233266AbiKKQip (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 11 Nov 2022 11:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
+        id S234080AbiKKVHp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 11 Nov 2022 16:07:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233714AbiKKQii (ORCPT
+        with ESMTP id S233842AbiKKVHo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:38:38 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FAD2497A;
-        Fri, 11 Nov 2022 08:38:33 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id x21so3303389qkj.0;
-        Fri, 11 Nov 2022 08:38:33 -0800 (PST)
+        Fri, 11 Nov 2022 16:07:44 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682DE833AC
+        for <linux-hwmon@vger.kernel.org>; Fri, 11 Nov 2022 13:07:43 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id v17so5170878plo.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 11 Nov 2022 13:07:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=cc79vdpftLtKCsTxy/EdUCgt0SXSyffM6ZriKdKDbtw=;
-        b=n1RXtrlzLU+n02CT3soAPseTrXYQVpst+DE5CreTvGRr30AXGfdTHJAwTl5z881kL+
-         4LGEERExB03/Yq1vr6GzRpwkwSaKPi24hnT5xlWWEo9wki0gXDZiJ2kdh91/eoZWqtce
-         YN8dnyK4Ig4DFp/JA3DF3HgJm3iOWfFsD+YfLpg3WMwwLr/0q2yyLMa16q2PWZwlo7c+
-         A3RJwQNMhQT7aEFguxGUvn94tuj5v3Auw0RQPueXCBGczDqhhmhOqT87TdZw4BWB2zqG
-         UpG3eqKjuO05RFHM8jsAQdSqOqf7+B5IwnKB8cCp0fVon9oqGYQ+RTKgb81UW4MrCHiM
-         LHQg==
+        bh=1UbHOqnPNCOilnpyC/Gk6owDbQr/DghKe/AIdJFL7OA=;
+        b=dcqjaS5Sm4AFaJ7A8iLje/A4mP/MuV/4c61ZgTQZyLFNnGrZZ/BGiUXI09P1InJiFR
+         KW0Xm6rz6GpThAC0xv5uqffYho4bvpSMBTuoqW4KOh+mOUlEix0p7YZhkV11KlQpoy2K
+         ifVskTSrHPisCc47y4ok1EkR0YbtEILMfy3CUr4+Vq96T+6aW8FAhac7YsiRUa+QXhSr
+         2NqNbVwfSo1HAyTd+JW/g0EGjO4M2C5GBeM5jHLMYMnPNGEFR+1iD82/tlFjKeQrUrs7
+         AJrohjKqYCTrhGr4OhyQ5sX+/jGoVvKvgX/9DGz7ua8UbvT3qQhq74wWw4l0Xl0wNmYf
+         69jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cc79vdpftLtKCsTxy/EdUCgt0SXSyffM6ZriKdKDbtw=;
-        b=oZ7zMys6ebWoI3YpBhFQy5m/q8gu6zjbEVO14KnrLxMkQnwn5GCMfN3DbTWY6kGcZ+
-         18Vk0s9z+T8aRFM3SLJt3Zq4dBX0ZFAJ6ddpsq20VN+fQa2r0msCx5xKMI5p5ktE/ys4
-         D0xtbvp569LNlPnIp73bsIcWz0C1uBoarW/CE1mxUcvowCaR1e8veSG9/QyiAtopSigG
-         f0WSeSTiMtQ4xAvlWtWx0RC2lfqyz2mA8zIaP+W3N4jL5R13kh7hBd3Vg8gHka5WD/Ur
-         /yIWxmi7SHviC5jf6/IJA6RQRz6KnBLpye9P2vnEHQmwJiGcZMun9DG5s09KwIJzZvNQ
-         oy+w==
-X-Gm-Message-State: ANoB5pkFKGQOK7hSdqUKeHpxaLlasfd9o0aDe1h4xzYClVyq8ymLA+vA
-        vGJujkR+Tnjg8iYDb8oD0Y8OIB+WCgI=
-X-Google-Smtp-Source: AA0mqf7UFI1m8W80QsrDOx3KAYJvkESRmsawupXo5W/rx00YTtgm89UZ7Lic9sd1Nb5bjpF9d6s9MQ==
-X-Received: by 2002:a37:bf46:0:b0:6ec:5409:5eaf with SMTP id p67-20020a37bf46000000b006ec54095eafmr1716543qkf.404.1668184712630;
-        Fri, 11 Nov 2022 08:38:32 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m15-20020a05622a054f00b003434d3b5938sm1536008qtx.2.2022.11.11.08.38.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 08:38:30 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 11 Nov 2022 08:38:28 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ninad Malwade <nmalwade@nvidia.com>
-Cc:     treding@nvidia.com, jonathanh@nvidia.com, jdelvare@suse.com,
-        nicolinc@nvidia.com, rkasirajan@nvidia.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] ina3221: correct the update_interval value
-Message-ID: <20221111163828.GA323658@roeck-us.net>
-References: <20221108050029.24576-1-nmalwade@nvidia.com>
+        bh=1UbHOqnPNCOilnpyC/Gk6owDbQr/DghKe/AIdJFL7OA=;
+        b=XvekU6InAGL6vcbOeMO+RqT5oRqlOFuj5bGUIUDcLLU+AU5cDsTKr+UAVU8l/J3337
+         2aC5gfSOHIQIpd7BYzVu34DrDiQkLK11D+ED9JEr+EC7HuR6YuEcB5Ik/Z7mHQSqoQoa
+         o82FheTMCsq+x1Xb6S5aQUcOpo7M9uFDv/RCtrenNwhnZj8ajdjX/+nMNwCcCkxL9DFr
+         aIeNIwRZu7YZvO50KCHK1bfQFVI27QUExwC/75/tQ7xTXrS5rW+fGXUnP07Rtf6bQLj+
+         PmF60Z2Iy3mCuItsB7jUCMtHQbflhuU9RzVfV6hAHJ18plyRfroGxC4nlkautvxk8Iqg
+         /eWw==
+X-Gm-Message-State: ANoB5pk3e7jR4Q67sFVB6XBRY2N+6/2zOM8S2F3mWyPYNfPSl3H3R1rK
+        17HYqF2opFOldVdawQhD5NOYvg==
+X-Google-Smtp-Source: AA0mqf6A3RRROpoZCJbd2mFTNzmTgQE6WZbH93Czcwbm8bITJSEMnmyIrjCwAdplvykKwvdBjqBreQ==
+X-Received: by 2002:a17:90b:4fce:b0:203:6932:1d5f with SMTP id qa14-20020a17090b4fce00b0020369321d5fmr3813947pjb.112.1668200862943;
+        Fri, 11 Nov 2022 13:07:42 -0800 (PST)
+Received: from ?IPV6:2405:201:d02f:da6a:d4a2:1253:adfc:370? ([2405:201:d02f:da6a:d4a2:1253:adfc:370])
+        by smtp.gmail.com with ESMTPSA id w125-20020a623083000000b00571bdf45885sm980169pfw.196.2022.11.11.13.07.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Nov 2022 13:07:42 -0800 (PST)
+Message-ID: <cc62e433-83c4-f285-edc2-a2d808163074@9elements.com>
+Date:   Sat, 12 Nov 2022 02:37:38 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221108050029.24576-1-nmalwade@nvidia.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+References: <20221013094838.1529153-1-Naresh.Solanki@9elements.com>
+ <20221013094838.1529153-2-Naresh.Solanki@9elements.com>
+ <20221024161806.GA1855651-robh@kernel.org>
+ <dcd22f70-e51c-290e-c11f-9a5ce32748c1@9elements.com>
+ <CAL_JsqKT52ULEZjKo9emEAt74nH2OpMO8ymLLKM_T-NzAwqGog@mail.gmail.com>
+ <3152c290-8aca-b91a-df20-335c33395835@9elements.com>
+ <20221101184402.GA1884153-robh@kernel.org>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <20221101184402.GA1884153-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 01:00:29PM +0800, Ninad Malwade wrote:
-> As per the INA3221 datasheet the samples value should not be
-> considered while calculating the update_interval value.
-> Section 8.4.2.2 from datasheet says - "The conversion-time
-> settings, along with the programmable-averaging mode, enable
-> the INA3221 to optimize available timing requirements in a given
-> application. For example, if a system requires data to be read
-> every 2 ms with all three channels monitored, configure the INA3221
-> with the conversion times for the shunt- and bus-voltage
-> measurements set to 332 μs"
+Hi Rob,
+
+On 02-11-2022 12:14 am, Rob Herring wrote:
+> On Mon, Oct 31, 2022 at 01:35:09PM +0530, Naresh Solanki wrote:
+>> Hi Rob,
+>>
+>> On 26-10-2022 07:07 pm, Rob Herring wrote:
+>>> fanc: fan-controller {
+>>>     #pwm-cells = <3>;
+>>>     ...
+>>>
+>>>     fan {
+>>>       pwms = <&fanc 0 500000  PWM_POLARITY_INVERTED>;
+>>>       ...
+>>>     };
+>>> };
+>>>
+>>> 0 is PWM number and 500000 is the PWM frequency. The 3rd cell are per
+>>> consumer flags. See pwm.txt for more details.
+>>
+>> Did the implementation & while testing getting the below err:
+>> [63.626505] max6639 166-002e: failed to create device link to 166-002e
 > 
-> As per above only conversion time and number of channels are
-> required to set the update_interval value. Correcting the same in
-> the driver.
-> 
-> Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
+> Does turning off fw_devlink help (fw_devlink=off)?
 
-As a bug fix, this patch should come before any functional changes.
+Will supplier == consumer, device link creation fails.
+Not sure what is best approach but not creating device link in this 
+scenario help & for that below additional changes needed in pwm core.
 
-> ---
->  Documentation/hwmon/ina3221.rst | 3 +--
->  drivers/hwmon/ina3221.c         | 4 +---
->  2 files changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/ina3221.rst b/Documentation/hwmon/ina3221.rst
-> index 8c12c54d2c24..a4f107d1e489 100644
-> --- a/Documentation/hwmon/ina3221.rst
-> +++ b/Documentation/hwmon/ina3221.rst
-> @@ -61,10 +61,9 @@ samples                 Number of samples using in the averaging mode.
->  
->  update_interval         Data conversion time in millisecond, following:
->  
-> -                          update_interval = C x S x (BC + SC)
-> +                          update_interval = C x (BC + SC)
->  
->                            * C:	number of enabled channels
-> -                          * S:	number of samples
->                            * BC:	bus-voltage conversion time in millisecond
->                            * SC:	shunt-voltage conversion time in millisecond
->  
-> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-> index 2a57f4b60c29..e3aa57e3b039 100644
-> --- a/drivers/hwmon/ina3221.c
-> +++ b/drivers/hwmon/ina3221.c
-> @@ -183,11 +183,9 @@ static const int ina3221_avg_samples[] = {
->  static inline u32 ina3221_interval_ms_to_conv_time(u16 config, int interval)
->  {
->  	u32 channels = hweight16(config & INA3221_CONFIG_CHs_EN_MASK);
-> -	u32 samples_idx = INA3221_CONFIG_AVG(config);
-> -	u32 samples = ina3221_avg_samples[samples_idx];
->  
->  	/* Bisect the result to Bus and Shunt conversion times */
-> -	return DIV_ROUND_CLOSEST(interval * 1000 / 2, channels * samples);
-> +	return DIV_ROUND_CLOSEST(interval / 2, channels);
+diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
+index 4527f09a5c50..afea51c49138 100644
+--- a/drivers/pwm/core.c
++++ b/drivers/pwm/core.c
+@@ -730,6 +730,12 @@ static struct device_link 
+*pwm_device_link_add(struct device *dev,
+  		return NULL;
+  	}
 
-Same question as Thierry: Why drop the multiplication ?
++	/*
++	 * Do not attempt to create link if consumer itself is supplier.
++	 */
++	if (dev == pwm->chip->dev)
++		return 0;
++
+  	dl = device_link_add(dev, pwm->chip->dev, DL_FLAG_AUTOREMOVE_CONSUMER);
+  	if (!dl) {
+  		dev_err(dev, "failed to create device link to %s\n",
 
-Guenter
 
->  }
->  
->  /* Converting CONFIG register value to update_interval in usec */
+
+Regards,
+Naresh
