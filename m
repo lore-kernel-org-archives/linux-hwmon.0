@@ -2,374 +2,129 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75B4BC433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Nov 2022 08:47:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5195C4332F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Nov 2022 19:47:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235798AbiKNIrS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 14 Nov 2022 03:47:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
+        id S236720AbiKNTrI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 14 Nov 2022 14:47:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236007AbiKNIrR (ORCPT
+        with ESMTP id S231757AbiKNTrH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:47:17 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592171BE82;
-        Mon, 14 Nov 2022 00:47:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668415636; x=1699951636;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=wNLq0GPUAAuO1BeDpxpO1amb+k5tHSPib0YSTRV422w=;
-  b=A1p8iSqaw5yxHTo5QAzLUXpKLrE87YH04VHKOtgfL41+lZ6oZWGI+pHY
-   TPXvXvp51TtgpVehnyAe7pv6fcFaOGRKOsSJNxr3a9/7K3o1J3w2vzVIA
-   e0UVyglt/ACH17VWegfjTwme0RFqDl00P4j5c5FYp51LLsZ7hK0CdTUlV
-   gsS5Xzy86tWhS3rInJ9VLyFzO5RV1F64hGR2bLFZQeEVf+rQWn2thiz90
-   BlLbhic3ZBso2K2IRLHc0RzqTHIn5rAIelU3KEdkrgzyg2og0KhLzAMlw
-   71n9eunRmxODFzdU4N1U0MSC/FiD2xyVXyBKlHY9+sxkX1Jc5/bK/LCH9
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="374045401"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="374045401"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 00:47:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="883457826"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="883457826"
-Received: from jkrzyszt-mobl1.ger.corp.intel.com ([10.213.24.51])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 00:46:38 -0800
-From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-To:     fenghua.yu@intel.com, jdelvare@suse.com, linux@roeck-us.net,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, lucas.demarchi@intel.com
-Subject: Re: [PATCH] hwmon/coretemp: Simplify platform device antics
-Date:   Mon, 14 Nov 2022 09:46:35 +0100
-Message-ID: <4104517.1IzOArtZ34@jkrzyszt-mobl1.ger.corp.intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <3524411.R56niFO833@jkrzyszt-mobl1.ger.corp.intel.com>
-References: <898dbb76a54aae6ca58ceefcab9ab18beeee2fff.1668096928.git.robin.murphy@arm.com> <3524411.R56niFO833@jkrzyszt-mobl1.ger.corp.intel.com>
+        Mon, 14 Nov 2022 14:47:07 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB35DFCE7
+        for <linux-hwmon@vger.kernel.org>; Mon, 14 Nov 2022 11:47:04 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso11494198wme.5
+        for <linux-hwmon@vger.kernel.org>; Mon, 14 Nov 2022 11:47:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9vaNuduer9UPlnYE1fRAS2akD9wJj/Hf3Zb0alzhLo4=;
+        b=XZHEO1CKnnZm8Cm83VyUHL2ChEyDD806/1jIAyWC0kVi0Z43O1CnFCoC0IFXLqUSDe
+         wN93LlIgstgkkW4bXOKsa6ZVNJ/k0J3vnZvrR3JYuc6So5xsaM2+hm+9gaatsiaPP9rX
+         TitJtwRheOM+VyCKq7B3GBYU0jBFQ9CDtFzdD8ml3xHOFfWd4EMQWbW3wHXmUp7L0fYe
+         Gkb+xOoJw0wL5E2L3JS4kNiPIUN6/SdACz5xHMuZS0aHgkgyaQ3h8Sv7ODAXPiEsKvLP
+         I13xVj1+HJPSr+gbRCLH2RdUwCW8b5Q8y3ikzm62ibaJvvhlS3HcK3RPSFZiOWNa0E4a
+         IiMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9vaNuduer9UPlnYE1fRAS2akD9wJj/Hf3Zb0alzhLo4=;
+        b=eCKmPoZgEf6H7DhhKQOjYigFpNJpRoOQxTv7YDW8jGgzXeLjLSYvf6RoMw47GvZLCk
+         LY4UIA53xxcHgKPfGmsA8ixUJabHWEKllo4OeQD0SomMUC8CMjSa9R5F3WsBM37HDwf2
+         5Xj4jccihkFBlDapfkJr3FvigWSo/FPAQehu9bAn8SlSUTi5+edUf0hiWyC4BAs7samM
+         zVHQpSr+faukte0wIq+WgQtwCfP4lg0zDvuRg+IRkZLC8ZjRlYTilZUkE77U7pmQ43re
+         et7qoiZRJZIuf4GRCpjl6w9iIAIT3VKxG06sbywgXw06qbhZg6aiyxqr3flImzwYm6qk
+         Ds7g==
+X-Gm-Message-State: ANoB5pkYjKc1gywxCxXTRgXqIFYWMrPhJ7OH76osszyFcwQNG+wiWrnp
+        qcVRWFxGXEmSJEieN31qklp2xlhUbl6/h357EgGCnXDsHgI=
+X-Google-Smtp-Source: AA0mqf51YgGKcYfA5Gi1OGhlv/Ib4wBBOPxWs8QIntli6y1t/E5v55DcXHNw7DhCW20Sk/YmgHKQ1Z3BwXgf+Fc4rmk=
+X-Received: by 2002:a05:600c:3393:b0:3cf:a8a5:63ab with SMTP id
+ o19-20020a05600c339300b003cfa8a563abmr8928478wmp.101.1668455223334; Mon, 14
+ Nov 2022 11:47:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <9072e6884c86199765da31a23ef0935cedaaae6a.1668286473.git.chunkeey@gmail.com>
+ <20221112233605.GA521020@roeck-us.net>
+In-Reply-To: <20221112233605.GA521020@roeck-us.net>
+From:   Christian Lamparter <chunkeey@gmail.com>
+Date:   Mon, 14 Nov 2022 20:46:51 +0100
+Message-ID: <CAAd0S9B=n9feFQSYT3vaRg0MBSHLy9rngcJFRRWkPsj4o0zDmg@mail.gmail.com>
+Subject: Re: [PATCH v1] hwmon: (nct6775) Add chip ID for NCT6796D-S
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thursday, 10 November 2022 17:45:50 CET Janusz Krzysztofik wrote:
-> Hi Robin,
-> 
-> On Thursday, 10 November 2022 17:20:25 CET Robin Murphy wrote:
-> > Coretemp's vestigial platform driver is odd. All the real work is done
-> > globally by the initcall and CPU hotplug notifiers, while the "driver"
-> > effectively just wraps an allocation and the registration of the hwmon
-> > interface in a long-winded round-trip through the driver core. The whole
-> > logic of dynamically creating and destroying platform devices to bring
-> > the interfaces up and down is fatally flawed right away, since it
-> > assumes platform_device_add() will synchronously bind the driver and set
-> > drvdata before it returns, thus results in a NULL dereference if
-> > drivers_autoprobe is turned off for the platform bus. Furthermore, the
-> > unusual approach of doing that from within a CPU hotplug notifier is
-> > also problematic. It's already commented in the code that it deadlocks
-> > suspend, but it also causes lockdep issues for other drivers or
-> > subsystems which may want to legitimately register a CPU hotplug
-> > notifier from a platform bus notifier.
-> > 
-> > All of these issues can be solved by ripping this questionable behaviour
-> > out completely, simply tying the platform devices to the lifetime of the
-> > module itself, and directly managing the hwmon interfaces from the
-> > hotplug notifiers. There is a slight user-visible change in that
-> > /sys/bus/platform/drivers/coretemp will no longer appear, and
-> > /sys/devices/platform/coretemp.n will remain present if package n is
-> > hotplugged off, but hwmon users should really only be looking for the
-> > presence of the hwmon interfaces, whose behaviour remains unchanged.
-> > 
-> > Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Hi,
+
+On Sun, Nov 13, 2022 at 12:36 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Sat, Nov 12, 2022 at 09:56:40PM +0100, Christian Lamparter wrote:
+> > found on the ASRock X670E PG Lightning (and possibly others).
+> >
+> > the userspace sensors-detect utiliy found "a" chip right away:
+> > |Probing for Super-I/O at 0x2e/0x2f
+> > |[...]
+> > |Trying family `VIA/Winbond/Nuvoton/Fintek'...               Yes
+> > |Found unknown chip with ID 0xd802
+> > |    (logical device B has address 0x290, could be sensors)
+> >
+> > Looking at the documentation: ASRock was nice enough to point
+> > the exact chip out in the mainboard's "English User Manual" [0].
+> > In section "1.5 Block Diagram" on page 10 it says "SIO NCT6796D-S".
+> > It is also mentioned that it uses eSPI to interface with the CPU.
+> >
+> Who knows, maybe the "-S" is for "eSPI".
+
+Apparently, eSPI has been around for a while. Didn't know that, it's
+been quietly replacing
+LPC starting from 2015.
+
+I've been doing even more digging, this time on github. Should have
+done this sooner.
+What I found is that for the LibreHardwareMonitor Project that 0xd802
+ID is a new chip!
+
+<https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/pull/846>
+They call it "NCT6799D".
+I guess, I'll ask there, because I do have photos of the chip on the mainboard
+with the "NCT6796D-S" label on it. (The SuperIO is located behind the GPU).
+
+> >
+> > [0] https://download.asrock.com/Manual/X670E%20PG%20Lightning_English.pdf
+> > [1] https://www.nuvoton.com/export/resource-files/NCT6796D_Datasheet_V0_6.pdf
+> > Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
 > > ---
-> > 
-> > I haven't been able to fully test hotplug since I only have a
-> > single-socket Intel system to hand.
-> 
-> I'll give it a try on our intel-gfx-trybot, together with our former iommu 
-> workaround reverted.
+> >
+> > Any insights into the missing two fan speed sensors would be very appreciated.
+>
+> Two possibilities: There may be more options to enable those fan inputs (ie
+> different pins) not curently supported by the driver, or there is a fan
+> multiplexer on the board. Hard if not impossible to say without datasheet.
 
-With our local iommu workaround reverted, 5 out of 37 test machines failed to 
-boot cleanly, and 1 other machine failed to wake up cleanly from S3, all due 
-to coretemp / iommu lockdep splat reported.
-https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110806v1/bat-all.html?testfilter=@load%7Cs3-without-i915%7Cabort
-https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110806v1/bat-adlp-6/boot0.txt
-https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110806v1/fi-kbl-soraka/boot0.txt
-https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110806v1/fi-kbl-x1275/boot0.txt
-https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110806v1/fi-apl-guc/boot0.txt
-https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110806v1/fi-skl-guc/boot0.txt
-https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110806v1/bat-rpls-1/dmesg0.txt
+Your suggestion: "Look at the Windows Utility" was very helpful in this regard.
+So ASRock has each motherboard configurations in a separate .xml file.
+And the content of that ASRock XML for my motherboard does make sense.
+My best guess is that, I have to spend more time at driver, the missing fans
+should have been fan4 and fan5.
 
-With this coretemp patch on top, the lockdep splat was not reported on any 
-machine.
-https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110768v1/bat-all.html?testfilter=@load%7Cs3-without-i915%7Cabort
+=> Adding the ID isn't enough to get this supported just yet. For the
+time being if someone
+wants to use this: Please just stick with the force_id module
+parameter. I ask Nuvoton (apparently
+they have a github page) or try to figure this out by looking more at
+the windows utility.
 
-This patch seems to fix the coretemp / iommu lockdep splat issue.
+Thank you!
 
-Tested-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+Christian
 
-
-> 
-> Thanks,
-> Janusz
-> 
-> > 
-> >  drivers/hwmon/coretemp.c | 134 ++++++++++++++++++---------------------
-> >  1 file changed, 61 insertions(+), 73 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> > index 8bf32c6c85d9..9fa68a81625e 100644
-> > --- a/drivers/hwmon/coretemp.c
-> > +++ b/drivers/hwmon/coretemp.c
-> > @@ -543,66 +543,49 @@ static void coretemp_remove_core(struct platform_data 
-> *pdata, int indx)
-> >  		ida_free(&pdata->ida, indx - BASE_SYSFS_ATTR_NO);
-> >  }
-> >  
-> > -static int coretemp_probe(struct platform_device *pdev)
-> > +static int coretemp_device_add(int zoneid)
-> >  {
-> > -	struct device *dev = &pdev->dev;
-> > +	struct platform_device *pdev;
-> >  	struct platform_data *pdata;
-> > +	int err;
-> >  
-> >  	/* Initialize the per-zone data structures */
-> > -	pdata = devm_kzalloc(dev, sizeof(struct platform_data), 
-> GFP_KERNEL);
-> > +	pdata = kzalloc(sizeof(*pdata), GFP_KERNEL);
-> >  	if (!pdata)
-> >  		return -ENOMEM;
-> >  
-> > -	pdata->pkg_id = pdev->id;
-> > +	pdata->pkg_id = zoneid;
-> >  	ida_init(&pdata->ida);
-> > -	platform_set_drvdata(pdev, pdata);
-> > -
-> > -	pdata->hwmon_dev = devm_hwmon_device_register_with_groups(dev, 
-> DRVNAME,
-> > -								
->   pdata, NULL);
-> > -	return PTR_ERR_OR_ZERO(pdata->hwmon_dev);
-> > -}
-> > -
-> > -static int coretemp_remove(struct platform_device *pdev)
-> > -{
-> > -	struct platform_data *pdata = platform_get_drvdata(pdev);
-> > -	int i;
-> > -
-> > -	for (i = MAX_CORE_DATA - 1; i >= 0; --i)
-> > -		if (pdata->core_data[i])
-> > -			coretemp_remove_core(pdata, i);
-> > -
-> > -	ida_destroy(&pdata->ida);
-> > -	return 0;
-> > -}
-> > -
-> > -static struct platform_driver coretemp_driver = {
-> > -	.driver = {
-> > -		.name = DRVNAME,
-> > -	},
-> > -	.probe = coretemp_probe,
-> > -	.remove = coretemp_remove,
-> > -};
-> > -
-> > -static struct platform_device *coretemp_device_add(unsigned int cpu)
-> > -{
-> > -	int err, zoneid = topology_logical_die_id(cpu);
-> > -	struct platform_device *pdev;
-> > -
-> > -	if (zoneid < 0)
-> > -		return ERR_PTR(-ENOMEM);
-> >  
-> >  	pdev = platform_device_alloc(DRVNAME, zoneid);
-> > -	if (!pdev)
-> > -		return ERR_PTR(-ENOMEM);
-> > -
-> > -	err = platform_device_add(pdev);
-> > -	if (err) {
-> > -		platform_device_put(pdev);
-> > -		return ERR_PTR(err);
-> > +	if (!pdev) {
-> > +		err = -ENOMEM;
-> > +		goto err_free_pdata;
-> >  	}
-> >  
-> > +	err = platform_device_add(pdev);
-> > +	if (err)
-> > +		goto err_put_dev;
-> > +
-> > +	platform_set_drvdata(pdev, pdata);
-> >  	zone_devices[zoneid] = pdev;
-> > -	return pdev;
-> > +	return 0;
-> > +
-> > +err_put_dev:
-> > +	platform_device_put(pdev);
-> > +err_free_pdata:
-> > +	kfree(pdata);
-> > +	return err;
-> > +}
-> > +
-> > +static void coretemp_device_remove(int zoneid)
-> > +{
-> > +	struct platform_device *pdev = zone_devices[zoneid];
-> > +	struct platform_data *pdata = platform_get_drvdata(pdev);
-> > +
-> > +	ida_destroy(&pdata->ida);
-> > +	kfree(pdata);
-> > +	platform_device_unregister(pdev);
-> >  }
-> >  
-> >  static int coretemp_cpu_online(unsigned int cpu)
-> > @@ -626,7 +609,10 @@ static int coretemp_cpu_online(unsigned int cpu)
-> >  	if (!cpu_has(c, X86_FEATURE_DTHERM))
-> >  		return -ENODEV;
-> >  
-> > -	if (!pdev) {
-> > +	pdata = platform_get_drvdata(pdev);
-> > +	if (!pdata->hwmon_dev) {
-> > +		struct device *hwmon;
-> > +
-> >  		/* Check the microcode version of the CPU */
-> >  		if (chk_ucode_version(cpu))
-> >  			return -EINVAL;
-> > @@ -637,9 +623,11 @@ static int coretemp_cpu_online(unsigned int cpu)
-> >  		 * online. So, initialize per-pkg data structures and
-> >  		 * then bring this core online.
-> >  		 */
-> > -		pdev = coretemp_device_add(cpu);
-> > -		if (IS_ERR(pdev))
-> > -			return PTR_ERR(pdev);
-> > +		hwmon = hwmon_device_register_with_groups(&pdev->dev, 
-> DRVNAME,
-> > +							  
-> pdata, NULL);
-> > +		if (IS_ERR(hwmon))
-> > +			return PTR_ERR(hwmon);
-> > +		pdata->hwmon_dev = hwmon;
-> >  
-> >  		/*
-> >  		 * Check whether pkgtemp support is available.
-> > @@ -649,7 +637,6 @@ static int coretemp_cpu_online(unsigned int cpu)
-> >  			coretemp_add_core(pdev, cpu, 1);
-> >  	}
-> >  
-> > -	pdata = platform_get_drvdata(pdev);
-> >  	/*
-> >  	 * Check whether a thread sibling is already online. If not add the
-> >  	 * interface for this CPU core.
-> > @@ -668,18 +655,14 @@ static int coretemp_cpu_offline(unsigned int cpu)
-> >  	struct temp_data *tdata;
-> >  	int i, indx = -1, target;
-> >  
-> > -	/*
-> > -	 * Don't execute this on suspend as the device remove locks
-> > -	 * up the machine.
-> > -	 */
-> > +	/* No need to tear down any interfaces for suspend */
-> >  	if (cpuhp_tasks_frozen)
-> >  		return 0;
-> >  
-> >  	/* If the physical CPU device does not exist, just return */
-> > -	if (!pdev)
-> > -		return 0;
-> > -
-> >  	pd = platform_get_drvdata(pdev);
-> > +	if (!pd->hwmon_dev)
-> > +		return 0;
-> >  
-> >  	for (i = 0; i < NUM_REAL_CORES; i++) {
-> >  		if (pd->cpu_map[i] == topology_core_id(cpu)) {
-> > @@ -711,13 +694,14 @@ static int coretemp_cpu_offline(unsigned int cpu)
-> >  	}
-> >  
-> >  	/*
-> > -	 * If all cores in this pkg are offline, remove the device. This
-> > -	 * will invoke the platform driver remove function, which cleans up
-> > -	 * the rest.
-> > +	 * If all cores in this pkg are offline, remove the interface.
-> >  	 */
-> > +	tdata = pd->core_data[PKG_SYSFS_ATTR_NO];
-> >  	if (cpumask_empty(&pd->cpumask)) {
-> > -		zone_devices[topology_logical_die_id(cpu)] = NULL;
-> > -		platform_device_unregister(pdev);
-> > +		if (tdata)
-> > +			coretemp_remove_core(pd, PKG_SYSFS_ATTR_NO);
-> > +		hwmon_device_unregister(pd->hwmon_dev);
-> > +		pd->hwmon_dev = NULL;
-> >  		return 0;
-> >  	}
-> >  
-> > @@ -725,7 +709,6 @@ static int coretemp_cpu_offline(unsigned int cpu)
-> >  	 * Check whether this core is the target for the package
-> >  	 * interface. We need to assign it to some other cpu.
-> >  	 */
-> > -	tdata = pd->core_data[PKG_SYSFS_ATTR_NO];
-> >  	if (tdata && tdata->cpu == cpu) {
-> >  		target = cpumask_first(&pd->cpumask);
-> >  		mutex_lock(&tdata->update_lock);
-> > @@ -744,7 +727,7 @@ static enum cpuhp_state coretemp_hp_online;
-> >  
-> >  static int __init coretemp_init(void)
-> >  {
-> > -	int err;
-> > +	int i, err;
-> >  
-> >  	/*
-> >  	 * CPUID.06H.EAX[0] indicates whether the CPU has thermal
-> > @@ -760,20 +743,22 @@ static int __init coretemp_init(void)
-> >  	if (!zone_devices)
-> >  		return -ENOMEM;
-> >  
-> > -	err = platform_driver_register(&coretemp_driver);
-> > -	if (err)
-> > -		goto outzone;
-> > +	for (i = 0; i < max_zones; i++) {
-> > +		err = coretemp_device_add(i);
-> > +		if (err)
-> > +			goto outzone;
-> > +	}
-> >  
-> >  	err = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "hwmon/
-> coretemp:online",
-> >  				coretemp_cpu_online, 
-> coretemp_cpu_offline);
-> >  	if (err < 0)
-> > -		goto outdrv;
-> > +		goto outzone;
-> >  	coretemp_hp_online = err;
-> >  	return 0;
-> >  
-> > -outdrv:
-> > -	platform_driver_unregister(&coretemp_driver);
-> >  outzone:
-> > +	while (i--)
-> > +		coretemp_device_remove(i);
-> >  	kfree(zone_devices);
-> >  	return err;
-> >  }
-> > @@ -781,8 +766,11 @@ module_init(coretemp_init)
-> >  
-> >  static void __exit coretemp_exit(void)
-> >  {
-> > +	int i;
-> > +
-> >  	cpuhp_remove_state(coretemp_hp_online);
-> > -	platform_driver_unregister(&coretemp_driver);
-> > +	for (i = 0; i < max_zones; i++)
-> > +		coretemp_device_remove(i);
-> >  	kfree(zone_devices);
-> >  }
-> >  module_exit(coretemp_exit)
-> > 
-> 
-> 
-
-
-
-
+PS.: As luck would have it, I also got an ASRock B660M PG board. This has
+the "NCT6796D-R". However this chip reuses the existing NCT6796D ID and is
+instantly working with 6.1-rc4.
