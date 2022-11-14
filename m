@@ -2,177 +2,374 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F20B0C433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Nov 2022 08:27:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75B4BC433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Nov 2022 08:47:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236408AbiKNI1H (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 14 Nov 2022 03:27:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
+        id S235798AbiKNIrS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 14 Nov 2022 03:47:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236275AbiKNI06 (ORCPT
+        with ESMTP id S236007AbiKNIrR (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:26:58 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2106.outbound.protection.outlook.com [40.107.255.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0466461;
-        Mon, 14 Nov 2022 00:26:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ipMmknGCTO4GHfHbhasbW8ftBV5wJeEMLGt+gd66RQmAHeYGTMG5jJqblRVdsNdyBlJwXvRg/lB0x8trEu6GMHPb59yrNh89n8e+D22cP4npNJb2jk5UZVRWXikEFTb/wHK64TexJON80DToXd84CTFZ1FHLoK5FCT2WwftZ67ZB4ShNduVOYue/G+Wqcx2d7eXUZv3sF+adPg4lC+aqvujMQum0ejjvo030FKv+gAsuJEoIb4wYHamUdsm2neejLdQOSZLESuAhMltinWp3HzrCSe2KdOypW0BF+8kmiPYeqlJ6DT5+EvCAbBMfEAskmXzy8hRXyUFAjHrMUAvlaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HlMUDtuhsjRp1sHHktXsuWwSnGbHeNrfZi4hEKeucw4=;
- b=KvHr4+WHmeRbGTv0gcLZOBLiaE+/Lc8a77KhvaUVveoQBdxuSdfmm/US3pWwjUuYWhjBvcCorcebFOWPkHGt7EELkqg1xuAlL4YPpdkpbJG5XgKzc1oJXPg8qCPF0OQLE8L8bkdszXn1CI2NzPoMr0AYo2Rc7YaEVoH6oXe0nRzZDF0jmUEEeGdWSCzWoY+GZIUkFdLt34JB+ltiP8ZzwpXQ/Fth/IBcCqhMxZzaIG7g85VJhvNuA1kqkQljrxpf0mmsswj8F0siPFkl2+DkeRHj3LiAlDM+O8e1JUMz5BnwretnD/br1UzM8qn2rt1ZXH+XBnG/q7XUXa2NIId21Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HlMUDtuhsjRp1sHHktXsuWwSnGbHeNrfZi4hEKeucw4=;
- b=MWPd6smS5RskSkbI90Rrd432ZQCpI9tVe7DUXGCQ0uwpgZBXHdDgRHeRWXIncdmq1cierxVErcLOLm5GQJd+2JrqmhmQ9EYluBDb6DLLwAiCiAnj9TssQ/T7kT+AXhq2Iq7DbYiTkrEXMIOXB+zAx+rtquRhB1POmEnq7dDcBoE8IVrhWkIVeQRhH2zsHNit9s+PntyaReuYtrvfLe+KsRxLnFjebukgMfCn29fyweMVfh9sDVypziuUVQIudyx4Pem4kpYTQKVJqqI6QIarYBJghtCAl98JDydAbZ14UjVqd7WHh9mrP/oCuJdVGjkPPgBhspZZwOPGizTSWgHtcQ==
-Received: from SG2PR06MB3365.apcprd06.prod.outlook.com (2603:1096:4:69::12) by
- TY0PR06MB5185.apcprd06.prod.outlook.com (2603:1096:400:21f::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5813.17; Mon, 14 Nov 2022 08:26:50 +0000
-Received: from SG2PR06MB3365.apcprd06.prod.outlook.com
- ([fe80::dd5d:e720:e00f:831]) by SG2PR06MB3365.apcprd06.prod.outlook.com
- ([fe80::dd5d:e720:e00f:831%6]) with mapi id 15.20.5769.019; Mon, 14 Nov 2022
- 08:26:49 +0000
-From:   Billy Tsai <billy_tsai@aspeedtech.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>,
-        "garnermic@meta.com" <garnermic@meta.com>
-Subject: Re: [v2 1/3] dt-bindings: Add bindings for aspeed pwm-tach.
-Thread-Topic: [v2 1/3] dt-bindings: Add bindings for aspeed pwm-tach.
-Thread-Index: AQHY7ddeW4ZmCSdnLkm5NlBsHfM2O64qZyqAgAEXnQCAAHTPAIABZaMAgBFW4QA=
-Date:   Mon, 14 Nov 2022 08:26:49 +0000
-Message-ID: <D453751F-9FA5-4046-BC5F-866D11010805@aspeedtech.com>
-References: <20221101095156.30591-1-billy_tsai@aspeedtech.com>
- <20221101095156.30591-2-billy_tsai@aspeedtech.com>
- <20221101184033.GA1879756-robh@kernel.org>
- <C4090559-71D3-4DC4-A994-474D375DC4EF@aspeedtech.com>
- <CAL_Jsq+eiFO9JyJW=2SB-HLHJLrXggO+7kwG8G-6Zt=K2QnFUA@mail.gmail.com>
- <294877DF-1EFB-4E62-9603-3586A13BE471@aspeedtech.com>
-In-Reply-To: <294877DF-1EFB-4E62-9603-3586A13BE471@aspeedtech.com>
-Accept-Language: zh-TW, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Microsoft-MacOutlook/16.66.22101101
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SG2PR06MB3365:EE_|TY0PR06MB5185:EE_
-x-ms-office365-filtering-correlation-id: cd68299c-12d3-4d23-7d55-08dac619f9f4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: b96sVHCVlfx0BrsbhGNUIHjRtPHHuX24uIuyppeH7YYJ0BcoeSdQ18xAl6WKDpnqf+r33+v72X/x+/AiCwOVUOsGsCPqkkZuiQqy6QBhO3ygi/ZFB4WJFZXNd8MvDdpGTPxtDOobWre+y2QCIn6iKN4dEj5aBS/rj3h6OIj8QMUYrqqCAp1kNX9zgibBCo0anFJhDLG1fA2x2jdR1JVcr6oCTtvZaxZnkVwTKznrlir5vw23t7dTtrBJGtkj+hNFjrLg2A5BkIXDh14JAQv2jDUDubPyfxOn3+WbFF75IAby4Vqj1krSuaQvJxIfPfSIQbIY91b5EXrd7Qa6ULWOnBDg3FYc6ynPUtYRUY1BTJtqhpcFu/P+J6lgpMXJtzwxGPmR8LO0zKeDH4xD9NcyjSnldUaIRnOc7ER6o21CP1SwrUSxQ/tZ1fT8kEAL2ak2ycnnn6ogxtp7PCrN4BQm/vK/K3nrFuOcqGoJEyVAuDUhSEwPsI72GyVWBRt/P6EKWSGcRKAUTO1DAORtFN2SRrGZIExJbEsspLAloV2xHz3DCTmkaYbGbahf9R0tkghl/Uye6TqpvIqv8TePQ3HQ6NHDoL9K0zU6CSp8wt04I/dwuGQThSNKEX02PByKFQ0aNIyM1+m80zUpKPtAP+gUuskdd73r26Hx6L3Iuz6bj+SdBQfPQU9hsy6Rl2y3zfQ2nfzELE0Q4QmV4bZkfsLWhOOxHkan+NW4pkxdi1ipMsU1ueUCtw/Kmy4BpfwFYgK6LcHY++aEG1bSjV7f9n73QS1dz3Hu5w5NvjDARJb3Dj4qIGmNm4/NFvx25AmUMpWA9Df6rsifx3oWySNyIcLKUYg2RWqHlL8bzQkX308X2wr8hrTobTX2jNTz0yZWAlrj
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3365.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(376002)(366004)(39840400004)(346002)(451199015)(54906003)(6916009)(316002)(36756003)(478600001)(966005)(33656002)(71200400001)(26005)(86362001)(38070700005)(6512007)(6506007)(53546011)(2906002)(66476007)(8676002)(66446008)(2616005)(66556008)(186003)(64756008)(8936002)(7416002)(83380400001)(66946007)(122000001)(6486002)(41300700001)(38100700002)(5660300002)(91956017)(4326008)(76116006)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TDVSQmlJUXlqT0FhMTFlZjNrK0NQcXRvRzFVSXV1SmdabXRENUthT0ZlMTVB?=
- =?utf-8?B?RXUzb1ZmbXIyK3N4djY4UW92REM3ckM1b09nbXNNa1hKK2tEK3lraWloVkpX?=
- =?utf-8?B?VUdEOXQySjBCdEgwckVvT21oaHIwNmd0bzl6R3lySlEvQWhoUHNGWEE0R3VE?=
- =?utf-8?B?WkZ0TGFlV3BXeDJGR3I1ZzBjdzdYc0RrT3VFOVlGT3YwNXh6cU02eDM3WUhN?=
- =?utf-8?B?MzB3YSs3L0dER1BrZ2lRUUUvUHR4c0xyMkoxZzJWUll5YmtQamhJSlExV0ZU?=
- =?utf-8?B?NVdhLzh0RXdmNkQwYzdDS1dFZzh5ZTE4SS9XQktqTldWMVpUQnMxNThnTytj?=
- =?utf-8?B?blM1dnNWdTI5aXJYalBDYTNHMTR3VzIwaE55THp3NldJQ29oeWxoSklzSjJk?=
- =?utf-8?B?YU1BdnVaaDE1MCs1SVIreUlsb3BBdzZObkRLY1RkNFFWYjZxbW1OWVFFcVlr?=
- =?utf-8?B?QThOdVNGTmV2VmpwWGNvSmZJRkpua0JoUzB2U01JeGI4UnJxMVg3bGtIcGZE?=
- =?utf-8?B?azFkRHZrWGZjR3ZBdkRqM2pidEN4cUcwc0xGcm9zeTRHcFVNcUwveDR6RHBr?=
- =?utf-8?B?YVpTeVB0TkJhYTB5V0NPNTZDN0RjMW91NzA0SS9GMldQeGhHM0k1bWc3cHNz?=
- =?utf-8?B?NlpFSE80YzlDR2szQmFMMndsRm9RWmY0NnA3eHBnMmtENkExT2pFdlBqZmFW?=
- =?utf-8?B?clhlQmgwNFI1VVNFQWE0clNXNWFFc2lBaHBhTjNjaVdxQmpHMGJwYThab2lT?=
- =?utf-8?B?Nlp5b3pwQVRlTzJSM3V1ZExzUHh2V3pIYzJjSUJNdEUybjhtSXZncW14bkEy?=
- =?utf-8?B?cy9BeVBMa1BtSEV5Q052Rm5tWm9jRCtQZEtzWVRJVzdkY3R1c3AwbW1pNVlq?=
- =?utf-8?B?c3BSWWN5MDhMUW5BQ3Nid3JSRDg3RU5NQVNpcitVeGVjYVVCTzV0S1FOVmFY?=
- =?utf-8?B?amdBMHlrQlZnVm9OT1o0MlpkMmRqV0Q4T1ZqbHFycWJEQmwyZlhXNkt4dEhu?=
- =?utf-8?B?NmVQZkV1ZUF5Q1hyRzY2UGY4bzRiTVRLc0w5RFJINlZidGFvdkNrMGFLWGRn?=
- =?utf-8?B?THIxOXJCbzloaFlhYzBOSjBpbjAvajJoaldMTHE3NllTM3UyNzk5bldjUmxP?=
- =?utf-8?B?VE1XL0tNQllNaERINUJNS3ZGQklmNVVkSUJNMUd3a1dSMnlMdmk2bmNSWEVX?=
- =?utf-8?B?Z0ExNlRJK1ptOFZsUTcyTDBGYk1JZXFTekhyL1FJem81OE5jZUJtR2tDQk9D?=
- =?utf-8?B?YVJBU09GVUhGK2RMMG5LWFR4cHlQWDVXSm1kVlJJQkhnSkxjKzhPR09QRlRu?=
- =?utf-8?B?MXJna1R0UDBvSXJ3NGFWS2RlMS85bmRjMkFhdFBFSjhVU01BTS9qMCtZK09E?=
- =?utf-8?B?Ny9jTU9yRlo3RzRSUjRCWHBMUUoyZHFkdGg2STUyaEMzSEVwYkp5Szd2d1Va?=
- =?utf-8?B?UDY2bWlXWWVHZzNMdnlvVEd6bVVYNlFQWVlYcWFoZTVRUXFnWS9IaTVVZ3RV?=
- =?utf-8?B?eGVvTDZZSVpMZmtaZTRCZi9NUmZUVXNnb1RycVhWUW9XMG0wNnZzYVRQajk0?=
- =?utf-8?B?QjNKWDhlNkJRbjJiRUhZRlZ2alduZGZqUzRaWUp1cys1NDdQT3FmdXg1alJq?=
- =?utf-8?B?SW9GZ3ptRUZBRWd1eWxYQlhKYzgxRjhKcUllMXlsckUxaTliM3lzMFdRdDF4?=
- =?utf-8?B?azIxZjdxVUdmRjRRTytQYW53dHJVM2ZPVTE2eWM0MW1xSmJUcGt5QTZ0UXRu?=
- =?utf-8?B?M2wva1paNENxeFFpbm8yR2xUUVg0SlJFZm9veCtZM0pqUzJ5Vnp5SlRoZE8v?=
- =?utf-8?B?Ym9LeWt4cVdaK0pZS0ZTaWh6UVNYazRiaThNRDRGQUFobkxUQ1NER3FuSzVH?=
- =?utf-8?B?UGUxZFF0bDhmQ0cxRkZZSDFnL1NSVnd6S3hXMW1sMjRPQVR1VURvUzU3U25u?=
- =?utf-8?B?bGU1eWNtb29OaGJKd1I3akRYL2lzaFBpNEVTUjZxZFNnU0djNTRWd2FNcHV6?=
- =?utf-8?B?US9Ca1F2UkJYZlpVZ016ci9yRkEzSUF0NVJvY1lkMHdGWFVoVnlrZUtpS3cx?=
- =?utf-8?B?TVJGa0xLbGVyQmhTdjRZWEhuelRsR2RMK1BNNTFUSjlNc1JKY2g5ZjMvSTJx?=
- =?utf-8?B?ckd5YUk1Sy8vZGlrZ1RpZTAzeU9mNFdMc1lRSFBWWVl2SXgydk5QazFML2or?=
- =?utf-8?B?clE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8BCAA844BCD4A74C9D37070FDE116D94@apcprd06.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 14 Nov 2022 03:47:17 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592171BE82;
+        Mon, 14 Nov 2022 00:47:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668415636; x=1699951636;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=wNLq0GPUAAuO1BeDpxpO1amb+k5tHSPib0YSTRV422w=;
+  b=A1p8iSqaw5yxHTo5QAzLUXpKLrE87YH04VHKOtgfL41+lZ6oZWGI+pHY
+   TPXvXvp51TtgpVehnyAe7pv6fcFaOGRKOsSJNxr3a9/7K3o1J3w2vzVIA
+   e0UVyglt/ACH17VWegfjTwme0RFqDl00P4j5c5FYp51LLsZ7hK0CdTUlV
+   gsS5Xzy86tWhS3rInJ9VLyFzO5RV1F64hGR2bLFZQeEVf+rQWn2thiz90
+   BlLbhic3ZBso2K2IRLHc0RzqTHIn5rAIelU3KEdkrgzyg2og0KhLzAMlw
+   71n9eunRmxODFzdU4N1U0MSC/FiD2xyVXyBKlHY9+sxkX1Jc5/bK/LCH9
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="374045401"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="374045401"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 00:47:13 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="883457826"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="883457826"
+Received: from jkrzyszt-mobl1.ger.corp.intel.com ([10.213.24.51])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 00:46:38 -0800
+From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+To:     fenghua.yu@intel.com, jdelvare@suse.com, linux@roeck-us.net,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, lucas.demarchi@intel.com
+Subject: Re: [PATCH] hwmon/coretemp: Simplify platform device antics
+Date:   Mon, 14 Nov 2022 09:46:35 +0100
+Message-ID: <4104517.1IzOArtZ34@jkrzyszt-mobl1.ger.corp.intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <3524411.R56niFO833@jkrzyszt-mobl1.ger.corp.intel.com>
+References: <898dbb76a54aae6ca58ceefcab9ab18beeee2fff.1668096928.git.robin.murphy@arm.com> <3524411.R56niFO833@jkrzyszt-mobl1.ger.corp.intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3365.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd68299c-12d3-4d23-7d55-08dac619f9f4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2022 08:26:49.6221
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FA5HK+cuAaD/XJRAA9iChNEtBhThagv32NgXVzuLGGu61/B4Q6ize5njeeKvsW3avYihVYcidaX8ZWV6N1AWzdwMjlxSNMgCwcJwSyGpxhU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5185
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-SGkgUm9iLA0KDQpPbiAyMDIyLzExLzMsIDM6MzkgUE0sICJCaWxseSBUc2FpIiA8YmlsbHlfdHNh
-aUBhc3BlZWR0ZWNoLmNvbT4gd3JvdGU6DQoNCiAgICBPbiAyMDIyLzExLzMsIDI6MTkgQU0sICJS
-b2IgSGVycmluZyIgPHJvYmhAa2VybmVsLm9yZz4gd3JvdGU6DQoNCiAgICAgICAgT24gVHVlLCBO
-b3YgMSwgMjAyMiBhdCAxMDoyMSBQTSBCaWxseSBUc2FpIDxiaWxseV90c2FpQGFzcGVlZHRlY2gu
-Y29tPiB3cm90ZToNCg0KICAgID4gICAgPiBUaGF0IGFsbCBzb3VuZHMgbGlrZSByZXF1aXJlbWVu
-dHMgdGhhdCB5b3UgaGF2ZSB3aGljaCB5b3Ugc2hvdWxkDQogICAgPiAgICA+IGVuc3VyZSB0aGUg
-ZmFuIGJpbmRpbmcgY2FuIHN1cHBvcnQuDQoNCiAgICA+ICAgID4gSSd2ZSBhbHJlYWR5IHNhaWQg
-dG8gdXNlIHRoZSBQV00gYmluZGluZyBpbiB0aGUgZmFuIGJpbmRpbmcgZXhhY3RseQ0KICAgID4g
-ICAgPiBmb3IgdGhlIHB1cnBvc2Ugb2YgaG9va2luZyB1cCB0aGUgUFdNcyB0byBvdGhlciB0aGlu
-Z3MuIFdoZXRoZXIgdGhlDQogICAgPiAgICA+IHRhY2ggY29udHJvbGxlciBpcyB1c2VmdWwgZm9y
-IHNvbWV0aGluZyBvdGhlciB0aGFuIGZhbnMsIEkgZG9uJ3Qga25vdy4NCiAgICA+ICAgID4gU2Vl
-bXMgbGVzcyBsaWtlbHkuIFRoZSBtYXg2NjM5IGFsc28gaGFzIGEgdGFjaCBjb250cm9sbGVyLiBT
-byBpZiBvdGhlcg0KICAgID4gICAgPiB1c2VzIGFyZSBwb3NzaWJsZSBmb3IgeW91LCB0aGVuIGl0
-IGNvdWxkIGJlIHBvc3NpYmxlIGZvciBhbnkgb3RoZXIgaC93DQogICAgPiAgICA+IGxpa2UgdGhl
-IG1heDY2MzkuDQoNCiAgICA+IFRoZSBsaW51eCBrZXJuZWwgYWxyZWFkeSBoYXZlIHRoZSBzaW1p
-bGFyIGJpbmRpbmc6DQogICAgPiBodHRwczovL2dpdGh1Yi5jb20vdG9ydmFsZHMvbGludXgvYmxv
-Yi9tYXN0ZXIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2h3bW9uL3B3bS1mYW4u
-dHh0IA0KICAgID4gVGhlcmVmb3JlLCBJIHdhbnQgdG8gcmV1c2UgaXQgYW5kIHRoZSBwd20tZmFu
-LmMgaW5zdGVhZCBvZiBjcmVhdGluZyBhbm90aGVyIHNpbWlsYXIgZmFuIGJpbmRpbmcgYW5kIGRy
-aXZlci4NCiAgICA+IEkgYW0gcmVmZXJyaW5nIHRvIHRoZSBmb2xsb3dpbmcgZmlsZXM6DQogICAg
-PiBodHRwczovL2dpdGh1Yi5jb20vdG9ydmFsZHMvbGludXgvYmxvYi9tYXN0ZXIvRG9jdW1lbnRh
-dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21mZC9rb250cm9uJTJDc2wyOGNwbGQueWFtbCANCiAg
-ICA+IGh0dHBzOi8vZ2l0aHViLmNvbS90b3J2YWxkcy9saW51eC9ibG9iL21hc3Rlci9Eb2N1bWVu
-dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcHdtL2tvbnRyb24lMkNzbDI4Y3BsZC1wd20ueWFt
-bCANCiAgICA+IGh0dHBzOi8vZ2l0aHViLmNvbS90b3J2YWxkcy9saW51eC9ibG9iL21hc3Rlci9E
-b2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24va29udHJvbiUyQ3NsMjhjcGxk
-LWh3bW9uLnlhbWwgDQogICAgPiBJdCB3aWxsIGFsc28gcmV1c2UgdGhlIHB3bS1mYW4gaW5zdGVh
-ZCBjcmVhdGluZyBpdCBvd24gcHdtLWZhbiBiaW5kaW5nIGZvciB0aGVpciBod21vbih0YWNoKS4N
-CiAgICA+IGh0dHBzOi8vZ2l0aHViLmNvbS90b3J2YWxkcy9saW51eC9ibG9iL21hc3Rlci9hcmNo
-L2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9mc2wtbHMxMDI4YS1rb250cm9uLXNsMjgtdmFyMy1h
-ZHMyLmR0cyNMMjAgDQoNCkRvIHlvdSBoYXZlIGFueSBzdWdndWVzdCBhYm91dCB0aGUgYmluZGlu
-ZyBsaWtlIHRoZSBsaW5rIGFib3ZlPw0KV2UgY2FuIGp1c3QgY3JlYXQgdGhlIHB1cmUgUFdNIHBy
-b3ZpZGVyIGFuZCB1c2UgdGhlIHB3bS1mYW4gYXMgdGhlIGNvbW1vbiBmYW4gYmluZGluZyBpbnN0
-ZWFkIG9mIGNyZWF0aW5nIGFub3RoZXIgZmFuLWNvbW1vbi55YW1sLg0KDQpUaGFua3MNCg0KQmVz
-dCBSZWdhcmRzLA0KQmlsbHkgVHNhaQ0KDQoNCg0K
+On Thursday, 10 November 2022 17:45:50 CET Janusz Krzysztofik wrote:
+> Hi Robin,
+> 
+> On Thursday, 10 November 2022 17:20:25 CET Robin Murphy wrote:
+> > Coretemp's vestigial platform driver is odd. All the real work is done
+> > globally by the initcall and CPU hotplug notifiers, while the "driver"
+> > effectively just wraps an allocation and the registration of the hwmon
+> > interface in a long-winded round-trip through the driver core. The whole
+> > logic of dynamically creating and destroying platform devices to bring
+> > the interfaces up and down is fatally flawed right away, since it
+> > assumes platform_device_add() will synchronously bind the driver and set
+> > drvdata before it returns, thus results in a NULL dereference if
+> > drivers_autoprobe is turned off for the platform bus. Furthermore, the
+> > unusual approach of doing that from within a CPU hotplug notifier is
+> > also problematic. It's already commented in the code that it deadlocks
+> > suspend, but it also causes lockdep issues for other drivers or
+> > subsystems which may want to legitimately register a CPU hotplug
+> > notifier from a platform bus notifier.
+> > 
+> > All of these issues can be solved by ripping this questionable behaviour
+> > out completely, simply tying the platform devices to the lifetime of the
+> > module itself, and directly managing the hwmon interfaces from the
+> > hotplug notifiers. There is a slight user-visible change in that
+> > /sys/bus/platform/drivers/coretemp will no longer appear, and
+> > /sys/devices/platform/coretemp.n will remain present if package n is
+> > hotplugged off, but hwmon users should really only be looking for the
+> > presence of the hwmon interfaces, whose behaviour remains unchanged.
+> > 
+> > Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> > ---
+> > 
+> > I haven't been able to fully test hotplug since I only have a
+> > single-socket Intel system to hand.
+> 
+> I'll give it a try on our intel-gfx-trybot, together with our former iommu 
+> workaround reverted.
+
+With our local iommu workaround reverted, 5 out of 37 test machines failed to 
+boot cleanly, and 1 other machine failed to wake up cleanly from S3, all due 
+to coretemp / iommu lockdep splat reported.
+https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110806v1/bat-all.html?testfilter=@load%7Cs3-without-i915%7Cabort
+https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110806v1/bat-adlp-6/boot0.txt
+https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110806v1/fi-kbl-soraka/boot0.txt
+https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110806v1/fi-kbl-x1275/boot0.txt
+https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110806v1/fi-apl-guc/boot0.txt
+https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110806v1/fi-skl-guc/boot0.txt
+https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110806v1/bat-rpls-1/dmesg0.txt
+
+With this coretemp patch on top, the lockdep splat was not reported on any 
+machine.
+https://intel-gfx-ci.01.org/tree/drm-tip/Trybot_110768v1/bat-all.html?testfilter=@load%7Cs3-without-i915%7Cabort
+
+This patch seems to fix the coretemp / iommu lockdep splat issue.
+
+Tested-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+
+
+> 
+> Thanks,
+> Janusz
+> 
+> > 
+> >  drivers/hwmon/coretemp.c | 134 ++++++++++++++++++---------------------
+> >  1 file changed, 61 insertions(+), 73 deletions(-)
+> > 
+> > diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+> > index 8bf32c6c85d9..9fa68a81625e 100644
+> > --- a/drivers/hwmon/coretemp.c
+> > +++ b/drivers/hwmon/coretemp.c
+> > @@ -543,66 +543,49 @@ static void coretemp_remove_core(struct platform_data 
+> *pdata, int indx)
+> >  		ida_free(&pdata->ida, indx - BASE_SYSFS_ATTR_NO);
+> >  }
+> >  
+> > -static int coretemp_probe(struct platform_device *pdev)
+> > +static int coretemp_device_add(int zoneid)
+> >  {
+> > -	struct device *dev = &pdev->dev;
+> > +	struct platform_device *pdev;
+> >  	struct platform_data *pdata;
+> > +	int err;
+> >  
+> >  	/* Initialize the per-zone data structures */
+> > -	pdata = devm_kzalloc(dev, sizeof(struct platform_data), 
+> GFP_KERNEL);
+> > +	pdata = kzalloc(sizeof(*pdata), GFP_KERNEL);
+> >  	if (!pdata)
+> >  		return -ENOMEM;
+> >  
+> > -	pdata->pkg_id = pdev->id;
+> > +	pdata->pkg_id = zoneid;
+> >  	ida_init(&pdata->ida);
+> > -	platform_set_drvdata(pdev, pdata);
+> > -
+> > -	pdata->hwmon_dev = devm_hwmon_device_register_with_groups(dev, 
+> DRVNAME,
+> > -								
+>   pdata, NULL);
+> > -	return PTR_ERR_OR_ZERO(pdata->hwmon_dev);
+> > -}
+> > -
+> > -static int coretemp_remove(struct platform_device *pdev)
+> > -{
+> > -	struct platform_data *pdata = platform_get_drvdata(pdev);
+> > -	int i;
+> > -
+> > -	for (i = MAX_CORE_DATA - 1; i >= 0; --i)
+> > -		if (pdata->core_data[i])
+> > -			coretemp_remove_core(pdata, i);
+> > -
+> > -	ida_destroy(&pdata->ida);
+> > -	return 0;
+> > -}
+> > -
+> > -static struct platform_driver coretemp_driver = {
+> > -	.driver = {
+> > -		.name = DRVNAME,
+> > -	},
+> > -	.probe = coretemp_probe,
+> > -	.remove = coretemp_remove,
+> > -};
+> > -
+> > -static struct platform_device *coretemp_device_add(unsigned int cpu)
+> > -{
+> > -	int err, zoneid = topology_logical_die_id(cpu);
+> > -	struct platform_device *pdev;
+> > -
+> > -	if (zoneid < 0)
+> > -		return ERR_PTR(-ENOMEM);
+> >  
+> >  	pdev = platform_device_alloc(DRVNAME, zoneid);
+> > -	if (!pdev)
+> > -		return ERR_PTR(-ENOMEM);
+> > -
+> > -	err = platform_device_add(pdev);
+> > -	if (err) {
+> > -		platform_device_put(pdev);
+> > -		return ERR_PTR(err);
+> > +	if (!pdev) {
+> > +		err = -ENOMEM;
+> > +		goto err_free_pdata;
+> >  	}
+> >  
+> > +	err = platform_device_add(pdev);
+> > +	if (err)
+> > +		goto err_put_dev;
+> > +
+> > +	platform_set_drvdata(pdev, pdata);
+> >  	zone_devices[zoneid] = pdev;
+> > -	return pdev;
+> > +	return 0;
+> > +
+> > +err_put_dev:
+> > +	platform_device_put(pdev);
+> > +err_free_pdata:
+> > +	kfree(pdata);
+> > +	return err;
+> > +}
+> > +
+> > +static void coretemp_device_remove(int zoneid)
+> > +{
+> > +	struct platform_device *pdev = zone_devices[zoneid];
+> > +	struct platform_data *pdata = platform_get_drvdata(pdev);
+> > +
+> > +	ida_destroy(&pdata->ida);
+> > +	kfree(pdata);
+> > +	platform_device_unregister(pdev);
+> >  }
+> >  
+> >  static int coretemp_cpu_online(unsigned int cpu)
+> > @@ -626,7 +609,10 @@ static int coretemp_cpu_online(unsigned int cpu)
+> >  	if (!cpu_has(c, X86_FEATURE_DTHERM))
+> >  		return -ENODEV;
+> >  
+> > -	if (!pdev) {
+> > +	pdata = platform_get_drvdata(pdev);
+> > +	if (!pdata->hwmon_dev) {
+> > +		struct device *hwmon;
+> > +
+> >  		/* Check the microcode version of the CPU */
+> >  		if (chk_ucode_version(cpu))
+> >  			return -EINVAL;
+> > @@ -637,9 +623,11 @@ static int coretemp_cpu_online(unsigned int cpu)
+> >  		 * online. So, initialize per-pkg data structures and
+> >  		 * then bring this core online.
+> >  		 */
+> > -		pdev = coretemp_device_add(cpu);
+> > -		if (IS_ERR(pdev))
+> > -			return PTR_ERR(pdev);
+> > +		hwmon = hwmon_device_register_with_groups(&pdev->dev, 
+> DRVNAME,
+> > +							  
+> pdata, NULL);
+> > +		if (IS_ERR(hwmon))
+> > +			return PTR_ERR(hwmon);
+> > +		pdata->hwmon_dev = hwmon;
+> >  
+> >  		/*
+> >  		 * Check whether pkgtemp support is available.
+> > @@ -649,7 +637,6 @@ static int coretemp_cpu_online(unsigned int cpu)
+> >  			coretemp_add_core(pdev, cpu, 1);
+> >  	}
+> >  
+> > -	pdata = platform_get_drvdata(pdev);
+> >  	/*
+> >  	 * Check whether a thread sibling is already online. If not add the
+> >  	 * interface for this CPU core.
+> > @@ -668,18 +655,14 @@ static int coretemp_cpu_offline(unsigned int cpu)
+> >  	struct temp_data *tdata;
+> >  	int i, indx = -1, target;
+> >  
+> > -	/*
+> > -	 * Don't execute this on suspend as the device remove locks
+> > -	 * up the machine.
+> > -	 */
+> > +	/* No need to tear down any interfaces for suspend */
+> >  	if (cpuhp_tasks_frozen)
+> >  		return 0;
+> >  
+> >  	/* If the physical CPU device does not exist, just return */
+> > -	if (!pdev)
+> > -		return 0;
+> > -
+> >  	pd = platform_get_drvdata(pdev);
+> > +	if (!pd->hwmon_dev)
+> > +		return 0;
+> >  
+> >  	for (i = 0; i < NUM_REAL_CORES; i++) {
+> >  		if (pd->cpu_map[i] == topology_core_id(cpu)) {
+> > @@ -711,13 +694,14 @@ static int coretemp_cpu_offline(unsigned int cpu)
+> >  	}
+> >  
+> >  	/*
+> > -	 * If all cores in this pkg are offline, remove the device. This
+> > -	 * will invoke the platform driver remove function, which cleans up
+> > -	 * the rest.
+> > +	 * If all cores in this pkg are offline, remove the interface.
+> >  	 */
+> > +	tdata = pd->core_data[PKG_SYSFS_ATTR_NO];
+> >  	if (cpumask_empty(&pd->cpumask)) {
+> > -		zone_devices[topology_logical_die_id(cpu)] = NULL;
+> > -		platform_device_unregister(pdev);
+> > +		if (tdata)
+> > +			coretemp_remove_core(pd, PKG_SYSFS_ATTR_NO);
+> > +		hwmon_device_unregister(pd->hwmon_dev);
+> > +		pd->hwmon_dev = NULL;
+> >  		return 0;
+> >  	}
+> >  
+> > @@ -725,7 +709,6 @@ static int coretemp_cpu_offline(unsigned int cpu)
+> >  	 * Check whether this core is the target for the package
+> >  	 * interface. We need to assign it to some other cpu.
+> >  	 */
+> > -	tdata = pd->core_data[PKG_SYSFS_ATTR_NO];
+> >  	if (tdata && tdata->cpu == cpu) {
+> >  		target = cpumask_first(&pd->cpumask);
+> >  		mutex_lock(&tdata->update_lock);
+> > @@ -744,7 +727,7 @@ static enum cpuhp_state coretemp_hp_online;
+> >  
+> >  static int __init coretemp_init(void)
+> >  {
+> > -	int err;
+> > +	int i, err;
+> >  
+> >  	/*
+> >  	 * CPUID.06H.EAX[0] indicates whether the CPU has thermal
+> > @@ -760,20 +743,22 @@ static int __init coretemp_init(void)
+> >  	if (!zone_devices)
+> >  		return -ENOMEM;
+> >  
+> > -	err = platform_driver_register(&coretemp_driver);
+> > -	if (err)
+> > -		goto outzone;
+> > +	for (i = 0; i < max_zones; i++) {
+> > +		err = coretemp_device_add(i);
+> > +		if (err)
+> > +			goto outzone;
+> > +	}
+> >  
+> >  	err = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "hwmon/
+> coretemp:online",
+> >  				coretemp_cpu_online, 
+> coretemp_cpu_offline);
+> >  	if (err < 0)
+> > -		goto outdrv;
+> > +		goto outzone;
+> >  	coretemp_hp_online = err;
+> >  	return 0;
+> >  
+> > -outdrv:
+> > -	platform_driver_unregister(&coretemp_driver);
+> >  outzone:
+> > +	while (i--)
+> > +		coretemp_device_remove(i);
+> >  	kfree(zone_devices);
+> >  	return err;
+> >  }
+> > @@ -781,8 +766,11 @@ module_init(coretemp_init)
+> >  
+> >  static void __exit coretemp_exit(void)
+> >  {
+> > +	int i;
+> > +
+> >  	cpuhp_remove_state(coretemp_hp_online);
+> > -	platform_driver_unregister(&coretemp_driver);
+> > +	for (i = 0; i < max_zones; i++)
+> > +		coretemp_device_remove(i);
+> >  	kfree(zone_devices);
+> >  }
+> >  module_exit(coretemp_exit)
+> > 
+> 
+> 
+
+
+
+
