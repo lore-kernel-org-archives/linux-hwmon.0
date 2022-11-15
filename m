@@ -2,67 +2,68 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F309EC4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Nov 2022 12:21:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94983C4321E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Nov 2022 12:21:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238203AbiKOMVT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Nov 2022 07:21:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41322 "EHLO
+        id S238246AbiKOMVU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Nov 2022 07:21:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238205AbiKOMVC (ORCPT
+        with ESMTP id S238235AbiKOMVD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:21:02 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2848C25E98
+        Tue, 15 Nov 2022 07:21:03 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE20A26110
         for <linux-hwmon@vger.kernel.org>; Tue, 15 Nov 2022 04:20:28 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id i186-20020a1c3bc3000000b003cfe29a5733so3125918wma.3
+Received: by mail-wr1-x433.google.com with SMTP id h9so23983239wrt.0
         for <linux-hwmon@vger.kernel.org>; Tue, 15 Nov 2022 04:20:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=9elements.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GqZxBgmVFxK0RvfpAaJX1POwshKoiOnk2il2KX/mpC4=;
-        b=Km0fNSp8psPEzNuTZwTN9hN+2UQhiyilmLv07sznLh91zL21JlJSmvDPq9ahnXRLIH
-         US8qAKVP9pW9HWxuQH6k8G4OC7GxjAy4mv/TQj5+a9+7djwsVZdGFXgYeGjm3ZUunFRJ
-         vPfmERv2Gto5ze6wrF1/CyzXh9Ubh3VYZJHx7DEYBGvfNUOFD0WsTBxTboiWaZGnBB9U
-         BZksIaJen2wYsYY1swkGgXcTGL1QJBCooULzmzxHhkB5KUzhbrAw4RXx9Z4wM370ABK4
-         X/ACtHNPYQfJ7AmRhFaTY09VUojD+iked5CH2IGPd1vUxZflbo5qgfMk/Vall1hkRWm8
-         Q9Fg==
+        bh=LXBfYsOqYyi9DKVQGkMLwQ+xTrxC76f34l8uPcGALOo=;
+        b=QVuhYKf18L0AoojtU6p/3rxD6GxXhFGOP1Xd/AwvRbNUvNqS/Q9FbOsKPJ/fTcKRiG
+         0Pm4YQE6aECuWxAqkLca9LlwUWCIAQaVPYhbgzugvPiysQO0jLr2Y2O0C6H95GbbjFTa
+         QcODlRj7+C6+R/GAJlcDbhLhvMBJ+4UbL/8i/aZve8Yqcv0AeBrg7mHJnm48Hph7pUHe
+         64Gd1Jew+tJcF/acGn1RLJDFOvZV8Dkasdc4tMQzB/VQIMYCTk1EMfvE36a8LveyUBjh
+         IObqLWJVfSijorgbHoDnFMCAaxkTwa/tQreBtEyZaZ0B51ndEcmubmJAy1i1SE0CLXyN
+         qwEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GqZxBgmVFxK0RvfpAaJX1POwshKoiOnk2il2KX/mpC4=;
-        b=B2JU9afyY77bf374pINUlxAD5lah8Nw5eYEiBx7a2A/dzamU7BqXrAzxE6V3o5Hojz
-         TOMdDvBT1iAVL0Ptf7IOBLnkKpRSugfeWPouhjVLyNX8Pn6GB4OxEfGzQdOd+3EeuF56
-         pbUNWA6YUoaNnppd46MlvAjuMjyYGi/dx+R6gaOosCKJtaDS52X5yvF8sxnJVW8Pb3X9
-         +2wXN1DThEX6tQAWx6filJMo+Vx8irppCghwiMPQabcj28bAgNRGlADhYGduCBe5iKh2
-         Bczjyw86bzZq3VT2Gs8miaro1Jh/Fg6prrTXbl6+1ngUHm6BzazvNk6d93dhS7fH3dgv
-         Svqw==
-X-Gm-Message-State: ANoB5pkP2nY4ace0AEX5UHa3R2OC7SonvODSaC+7zKMIaf2yMq1dasZ8
-        IzTFfTX01pKuNwImczgAS6h71Q==
-X-Google-Smtp-Source: AA0mqf7n9JR8JIprahuVlyhrGSgvTX+kEiYG7Z2XtC3G98cayuoYzA33yqgTi8lSmGMrE3et435Pzg==
-X-Received: by 2002:a1c:540d:0:b0:3c6:c796:1071 with SMTP id i13-20020a1c540d000000b003c6c7961071mr128813wmb.138.1668514824556;
-        Tue, 15 Nov 2022 04:20:24 -0800 (PST)
+        bh=LXBfYsOqYyi9DKVQGkMLwQ+xTrxC76f34l8uPcGALOo=;
+        b=I0eVgg0yhyN8FMZP0p6Ik148DFU1h9x2ykNZwwgOMSb6iserl6AT6FZ+nntTcY24dw
+         eEIsQ/vLJmFBolKpYuEHWmYw0AsD+LAckPMrhk7L7Vpd2OxqvN36/9qYWb/7LVePjdl9
+         U06FDjo5/Ev750KxDHhso+jNy34eIOF+0WWwbK/d5TVTpv3Yiur8CENUCOSMeC5nGgNE
+         aIOQ3/WOkxPmbZTV9A515smi4SKfos1S9p3RtZOVirBgPE6q+Bdp/pefsN83kHsT+8Ei
+         S+9UftImYjC1iiVc2YAD4ofh67o52kHPPk3OTIg7ItailXJYZ2Go3w+Lnj04GToAWvjp
+         XNjw==
+X-Gm-Message-State: ANoB5pmWQsfQxRXl7qcUI/as8upjZ+Isqlsn1Q+OsxxvEgM3l5nDJpAh
+        e/pvq4aSLyi0YW44IxQnMPaUkg==
+X-Google-Smtp-Source: AA0mqf7j1Fo21UYRcFX4woKovJOTzba3enUtD3k+E0+gF7cNLcYCRUQcHtvoysCwtlAcoiA//j/0ig==
+X-Received: by 2002:a5d:694c:0:b0:238:b29e:4919 with SMTP id r12-20020a5d694c000000b00238b29e4919mr10655303wrw.583.1668514827503;
+        Tue, 15 Nov 2022 04:20:27 -0800 (PST)
 Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05600c474c00b003b435c41103sm27108954wmo.0.2022.11.15.04.20.23
+        by smtp.gmail.com with ESMTPSA id w12-20020a05600c474c00b003b435c41103sm27108954wmo.0.2022.11.15.04.20.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 04:20:24 -0800 (PST)
+        Tue, 15 Nov 2022 04:20:27 -0800 (PST)
 From:   Naresh Solanki <naresh.solanki@9elements.com>
 X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
 To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Naresh Solanki <naresh.solanki@9elements.com>
+        Roland Stigge <stigge@antcom.de>
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>,
         Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v5 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
-Date:   Tue, 15 Nov 2022 13:20:03 +0100
-Message-Id: <20221115122005.758519-2-Naresh.Solanki@9elements.com>
+Subject: [PATCH v5 2/3] dt-bindings: hwmon: Add binding for max6639
+Date:   Tue, 15 Nov 2022 13:20:04 +0100
+Message-Id: <20221115122005.758519-3-Naresh.Solanki@9elements.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221115122005.758519-1-Naresh.Solanki@9elements.com>
 References: <20221115122005.758519-1-Naresh.Solanki@9elements.com>
@@ -72,71 +73,116 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add common fan properties bindings to a schema.
+From: Marcello Sylvester Bauer <sylv@sylv.io>
 
-Bindings for fan controllers can reference the common schema for the
-fan
+Add Devicetree binding documentation for Maxim MAX6639 temperature
+monitor with PWM fan-speed controller.
 
-child nodes:
-
-  patternProperties:
-    "^fan@[0-2]":
-      type: object
-      $ref: fan-common.yaml#
-
+Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
 Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 ---
- .../devicetree/bindings/hwmon/fan-common.yaml | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+ .../bindings/hwmon/maxim,max6639.yaml         | 93 +++++++++++++++++++
+ 1 file changed, 93 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
 
-diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
 new file mode 100644
-index 000000000000..1954882eed77
+index 000000000000..da040b11d2ab
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-@@ -0,0 +1,42 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
++++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+@@ -0,0 +1,93 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
++
++$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Common fan properties
++title: Maxim max6639
 +
 +maintainers:
-+  - Naresh Solanki <naresh.solanki@9elements.com>
++  - Roland Stigge <stigge@antcom.de>
++
++description: |
++  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
++  fan-speed controller.  It monitors its own temperature and one external
++  diode-connected transistor or the temperatures of two external diode-connected
++  transistors, typically available in CPUs, FPGAs, or GPUs.
++
++  Datasheets:
++    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
 +
 +properties:
-+  max-rpm:
-+    description:
-+      Max RPM supported by fan.
-+    $ref: /schemas/types.yaml#/definitions/uint32
++  compatible:
++    enum:
++      - maxim,max6639
 +
-+  pulses-per-revolution:
-+    description:
-+      The number of pulse from fan sensor per revolution.
-+    $ref: /schemas/types.yaml#/definitions/uint32
++  reg:
++    maxItems: 1
 +
-+  target-rpm:
-+    description:
-+      Target RPM the fan should be configured during driver probe.
-+    $ref: /schemas/types.yaml#/definitions/uint32
++  '#address-cells':
++    const: 1
 +
-+  pwms:
-+    description:
-+      PWM provider.
++  '#size-cells':
++    const: 0
 +
-+  label:
-+    description:
-+      Optional fan label
++  '#pwm-cells':
++    const: 3
 +
-+  fan-supply:
-+    description:
-+      Power supply for fan.
++required:
++  - compatible
++  - reg
 +
-+additionalProperties: true
++patternProperties:
++  "^fan@[0-1]$":
++    type: object
++    description: |
++      Represents the two fans and their specific configuration.
 +
++    $ref: fan-common.yaml#
++
++    properties:
++      reg:
++        description: |
++          The fan number.
++        items:
++          minimum: 0
++          maximum: 1
++
++    required:
++      - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        fan1: fan-controller@10 {
++            compatible = "maxim,max6639";
++            reg = <0x10>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++            #pwm-cells = <3>;
++
++            fan@0 {
++                reg = <0x0>;
++                pulses-per-revolution = <2>;
++                max-rpm = <4000>;
++                target-rpm = <1000>;
++                pwms = <&fan1 0 25000 0>;
++            };
++
++            fan@1 {
++                reg = <0x1>;
++                pulses-per-revolution = <2>;
++                max-rpm = <8000>;
++                pwms = <&fan1 1 25000 0>;
++            };
++            };
++    };
 +...
 -- 
 2.37.3
