@@ -2,90 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C891CC4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Nov 2022 10:15:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CF0CC433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Nov 2022 12:21:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238257AbiKOKPO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Nov 2022 05:15:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
+        id S238306AbiKOMVM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Nov 2022 07:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238378AbiKOKO4 (ORCPT
+        with ESMTP id S238316AbiKOMU5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:14:56 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8AEFAFC;
-        Tue, 15 Nov 2022 02:14:41 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ousxh-0004BE-Dw; Tue, 15 Nov 2022 11:14:37 +0100
-Message-ID: <563f0162-ae94-0d74-bb25-1c0753af9329@leemhuis.info>
-Date:   Tue, 15 Nov 2022 11:14:36 +0100
+        Tue, 15 Nov 2022 07:20:57 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827EB29C8A
+        for <linux-hwmon@vger.kernel.org>; Tue, 15 Nov 2022 04:20:20 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id t1so9539753wmi.4
+        for <linux-hwmon@vger.kernel.org>; Tue, 15 Nov 2022 04:20:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G4CwzUDPI8BFp1FhB5WPo5aqvpH21jtoAPzMzWAnvUo=;
+        b=SBDrWcpdDInlU4msR5E2SFNE7G9leBJE5rADLMlJh8e6XKOfR9xtoLObo4euSN1Mqx
+         aNWlW5ZKJnPy+UCOoZGvUn72B69MNORKnlOGUyCvQ6OlkrIUON9NRMOKCVMuXc9xIFo7
+         jSMGXIS23HRD+nJ1q9LSC92g7PSG1jkVP+8j62+Yz+s9o3ZfdZyeoUttLgJ4/exABjCy
+         lJUXJq1ZcfeKcR2Ol/GO/CF5C+rDP8OGH33nTIysCTgNy3G/QA3B5UH6PUKhgdLzoBt6
+         kIDorvwZRZvdD++1ah22cRRu/TS6QLWUV/N16vT2BvS20KoqLKlG9BBO78G/1g4zF6yT
+         bh/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G4CwzUDPI8BFp1FhB5WPo5aqvpH21jtoAPzMzWAnvUo=;
+        b=Hs6F0XadAYcJKrVQGjttAHI7IVCX1O3PAy67JRJ/8sch3Z26SsLTgvwkRSz+KKyef/
+         dKHauaV+LhxbfQDKyvgjOy/R1Gwv8c2CZXu7gts9dOunuzdhieBiCxmtwjxKR+r3PuAb
+         6k4KK6i99Urhs0/T7ncex1aMK2olI8KyCL0aNTnqXz0q04kZxouGS6VjfbEMifmsuj7S
+         DYqbnjXanL5ShuZY37e1Vc3qZnId4087mWwd5rYaiXtyNSWZFT9L5cIo7DJnZ2FbRfiu
+         4L6n/HDQL5+Xr6R7SmkirUZVxPwMljRle/RdzYIiYZzVraWxvgUK4p62fETH8E0f7GXE
+         JwOg==
+X-Gm-Message-State: ANoB5plGmehroi5IwEjGhazDwu9vns59cWR5Jg0bIzIrGXw+WN6pkCRa
+        93KYx23/gRj+DYxH8+bhdNjkBIyQVPLk9dcV
+X-Google-Smtp-Source: AA0mqf4m+fCQ4odCISEIk8cMJZGwsbxaAB/23kYau0MzilPO5yq3Adw1x6p9hF59Fgq7Nesu3UkP+Q==
+X-Received: by 2002:a1c:f003:0:b0:3c6:7abb:9d2b with SMTP id a3-20020a1cf003000000b003c67abb9d2bmr1242227wmb.182.1668514818989;
+        Tue, 15 Nov 2022 04:20:18 -0800 (PST)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id w12-20020a05600c474c00b003b435c41103sm27108954wmo.0.2022.11.15.04.20.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 04:20:18 -0800 (PST)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>
+Subject: [PATCH v5 0/3] Add devicetree support for max6639
+Date:   Tue, 15 Nov 2022 13:20:02 +0100
+Message-Id: <20221115122005.758519-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] hwmon/coretemp: Simplify platform device antics
-Content-Language: en-US, de-DE
-To:     Robin Murphy <robin.murphy@arm.com>, fenghua.yu@intel.com,
-        jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, janusz.krzysztofik@linux.intel.com,
-        lucas.demarchi@intel.com
-References: <898dbb76a54aae6ca58ceefcab9ab18beeee2fff.1668096928.git.robin.murphy@arm.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <898dbb76a54aae6ca58ceefcab9ab18beeee2fff.1668096928.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1668507281;cf74fc89;
-X-HE-SMSGID: 1ousxh-0004BE-Dw
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10.11.22 17:20, Robin Murphy wrote:
-> Coretemp's vestigial platform driver is odd. All the real work is done
-> globally by the initcall and CPU hotplug notifiers, while the "driver"
-> effectively just wraps an allocation and the registration of the hwmon
-> interface in a long-winded round-trip through the driver core. The whole
-> logic of dynamically creating and destroying platform devices to bring
-> the interfaces up and down is fatally flawed right away, since it
-> assumes platform_device_add() will synchronously bind the driver and set
-> drvdata before it returns, thus results in a NULL dereference if
-> drivers_autoprobe is turned off for the platform bus. Furthermore, the
-> unusual approach of doing that from within a CPU hotplug notifier is
-> also problematic. It's already commented in the code that it deadlocks
-> suspend, but it also causes lockdep issues for other drivers or
-> subsystems which may want to legitimately register a CPU hotplug
-> notifier from a platform bus notifier.
-> 
-> All of these issues can be solved by ripping this questionable behaviour
-> out completely, simply tying the platform devices to the lifetime of the
-> module itself, and directly managing the hwmon interfaces from the
-> hotplug notifiers. There is a slight user-visible change in that
-> /sys/bus/platform/drivers/coretemp will no longer appear, and
-> /sys/devices/platform/coretemp.n will remain present if package n is
-> hotplugged off, but hwmon users should really only be looking for the
-> presence of the hwmon interfaces, whose behaviour remains unchanged.
-> 
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+These patches adds devicetree support for MAX6639.
 
-For future archeologists and the regression tracking this afaics should
-have the following tags, as outlined by the documentation[1].
+Changes in V5:
+- Add pwms support
+Changes V4:
+- Fix dt error
+- update comment
+Changes V3:
+- correct fan dt property name
+- remove unrelevent changes
+Changes V2:
+- Fix dt schema error.
+Changes:
+- Add fan-common dt schema.
+- add dt-binding support for max6639
+- add max6639 specific property
 
-Link:
-https://lore.kernel.org/lkml/20220922101036.87457-1-janusz.krzysztofik@linux.intel.com/
-Link: https://gitlab.freedesktop.org/drm/intel/issues/6641
+Marcello Sylvester Bauer (1):
+  dt-bindings: hwmon: Add binding for max6639
 
-Any maybe a reported-by for Janusz, too.
+Naresh Solanki (2):
+  dt-bindings: hwmon: fan: Add fan binding to schema
+  hwmon: (max6639) Change from pdata to dt configuration
 
-Ciao, Thorsten
+ .../devicetree/bindings/hwmon/fan-common.yaml |  42 ++
+ .../bindings/hwmon/maxim,max6639.yaml         |  93 ++++
+ drivers/hwmon/Kconfig                         |   1 +
+ drivers/hwmon/max6639.c                       | 465 +++++++++++++++---
+ 4 files changed, 527 insertions(+), 74 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+ create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
 
-[1] see Documentation/process/submitting-patches.rst
-(http://docs.kernel.org/process/submitting-patches.html) and
-Documentation/process/5.Posting.rst
-(https://docs.kernel.org/process/5.Posting.html)
 
-P.S.:
-
-#regzbot ^backmonitor:
-https://lore.kernel.org/lkml/20220922101036.87457-1-janusz.krzysztofik@linux.intel.com/
+base-commit: 0cf46a653bdae56683fece68dc50340f7520e6c4
+-- 
+2.37.3
 
