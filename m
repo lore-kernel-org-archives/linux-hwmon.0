@@ -2,897 +2,217 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BABBBC43217
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Nov 2022 20:58:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49E1FC4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Nov 2022 12:09:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238687AbiKOU6x (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Nov 2022 15:58:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
+        id S233224AbiKPMJE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Nov 2022 07:09:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238668AbiKOU6w (ORCPT
+        with ESMTP id S233588AbiKPMHv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:58:52 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D397E30F42
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Nov 2022 12:58:49 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id z26so15300497pff.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Nov 2022 12:58:49 -0800 (PST)
+        Wed, 16 Nov 2022 07:07:51 -0500
+Received: from DEU01-FR2-obe.outbound.protection.outlook.com (mail-fr2deu01on2111.outbound.protection.outlook.com [40.107.135.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B38427DDB;
+        Wed, 16 Nov 2022 04:02:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jIyCknN4rvYVXm9Rw4qQ2ElsQPQWg08+Pkp/7kIBJe0obDNZl/J/mKXYCz2Rh7OuZ9W6i/1bIyJngrbLC7AjvdRE1XTWGiRlaCRU9JuoIH8qawFdq5IMNHkFlb+65TCwXsQliT2CZSD92ohtLDt0o4fn4S5dmkO2L9HZQBhjg2/hXt4R1zKwwJk2TmFAQB+TaldGHEDW+qrLAy3ENEnAEqQotjwOdAGrtDEVbO0UzZLE5Bzsm1KFUKY6anjRuAToXBo8bVDZInCRdYk8vuLnKt2x+tmU3tjxWUSQ1jOw0tlnfyxqSi4kOx93dxglS7RkqnOWgyY5VqZxf+c0QYtiDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bBYBNJIqoqg5yUVGcl1HE/4QMyyUw3tCVQKARDL4HUg=;
+ b=I+hd7F9uQIiwWS+RgpwyaTQFtyLVENcodp5YKwXKwWTTVBJPOiWUw/rASMHOLvUM5TEt8eAbUqA1xuz8FbMyXYb6Nk7Ber8DsvUDtzNLsLnfw1z9/6mE1ns4VbVewUCu2KkgrQuMwtEzgDZ4mXZUvz/FOw0PCnycCbl6Ny+KqN0W+0/RvNXyh6GexG6CDWPm9VeEOF5Szamci2fkPfi1FUBU0scU0HoG+3JYLiBnZQbRuU7Df3yvO39o0YRCdHFxZ+6xDtYsYIfhQQysC1XRhjFOWneSHRDugkzW6tT7old9Jd5IYnlBrMph65icFDKDRzrsLaJFkqGP/p2mV3H+2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
+ header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=85MmKpNFbXMN1j6STlGlJ2rNa1NUgwK1ptuYvzxfKe8=;
-        b=CN/QJLvYrMmTfknWwa9jkG8V6hwBoIuFrBFCPM7nZ+RqXi/h1E6vddDbU4SEs/ZnYt
-         OEKvnaEvPPUyiUhy8aHHdK7k7/ii4v+rDSHJIGSpEvq4g4Pwn5TeQlA2ioMnG9wEp8sb
-         wbW5jqhhOgLj36xq3tI9ZZny7f9ZKz1QATOWW+7ipXX+4mdGgFEoJ+l3FK4JHierw2hl
-         RBkbeVAYs0s/YR6eA5r6PJNk9gzvr75+AmFyzjb1m4LrgsgigWLrvO5Gu7Vock3x+L5r
-         d7V266vTkEWl97mvidq7bE26Oy8djg9WPhSpiMjGjqIgUMWvvrMqAlV+uEsNcSRBdXLx
-         co6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=85MmKpNFbXMN1j6STlGlJ2rNa1NUgwK1ptuYvzxfKe8=;
-        b=4S1x1eOQfSEYSFp6ng95KC/odEKNHtiwqLDXuQ4wOsvgdBsaLZllTYHJdxKxysubek
-         8Mqpw+ZyP73x3xtakN9oO+bRS358HaL4uow5VwTunpc6RWVaqsKf047pRiHGMj2WvDlu
-         ASqHeKABNg4mwgZjRbfBT7ru4pP62bdVhyH0u4L9RamvkMG1REBU51+F55f46fvhQf1g
-         Gh5dL4pm7kxrXkohqq/y9vaUpjcvDgMvOShf2vHf333HxMzgOdNTzJf95GPT4fCuRIaq
-         xk6AD6h6PCAcLBxVvMZLtBLsm94oQ2i1+EjC4MOXhZ/mMOseH6vmU96JVnkwbh54vXcu
-         f58A==
-X-Gm-Message-State: ANoB5pn8sMhTULEchYB171NXY772KH6g2cItwImgkIYO/yieDyMIOgTU
-        ERI0iSXWl+lcgnYBhPoVPYPaZw==
-X-Google-Smtp-Source: AA0mqf4uTv/da4k4xv2bhcODK9ykiGCXJJuxa7biqF+1R3kOEGq6GHlEsRl5feYIwMD0nbLzjTsOHQ==
-X-Received: by 2002:a05:6a00:3307:b0:56e:e2f4:4191 with SMTP id cq7-20020a056a00330700b0056ee2f44191mr20182445pfb.27.1668545929056;
-        Tue, 15 Nov 2022 12:58:49 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id z6-20020aa79486000000b005636326fdbfsm9188227pfk.78.2022.11.15.12.58.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 12:58:48 -0800 (PST)
-Message-ID: <7166e596-38ea-1680-3e48-5e36807858d3@9elements.com>
-Date:   Wed, 16 Nov 2022 02:28:44 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v5 3/3] hwmon: (max6639) Change from pdata to dt
- configuration
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+ d=rohmsemiconductor.onmicrosoft.com;
+ s=selector2-rohmsemiconductor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bBYBNJIqoqg5yUVGcl1HE/4QMyyUw3tCVQKARDL4HUg=;
+ b=p0zG3Nn6BTjJl91eexhqeUbdp32yh6XZFFx6YnGW6FsoY0YxcP7Nn2dGwjaUrWX8cF2UePL94RO279/ZBOw/TsL97C3sUNR8KE6dum/mzZsutr53jUetEjsIjSib4axa+iWPGiaC2r1dsKQiZYeAiT/VMuJI5cVaYvrxn44phsQ=
+Received: from BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:59::10)
+ by BEZP281MB2597.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:2a::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Wed, 16 Nov
+ 2022 12:02:28 +0000
+Received: from BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::33b1:3599:eb56:8fd2]) by BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::33b1:3599:eb56:8fd2%4]) with mapi id 15.20.5813.017; Wed, 16 Nov 2022
+ 12:02:28 +0000
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+CC:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        linux-pwm@vger.kernel.org
-References: <20221115122005.758519-1-Naresh.Solanki@9elements.com>
- <20221115122005.758519-4-Naresh.Solanki@9elements.com>
- <20221115170150.ovrfesvy36beedyq@pengutronix.de>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <20221115170150.ovrfesvy36beedyq@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Guenter Roeck <linux@roeck-us.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v4 1/4] gpu: drm: meson: Use devm_regulator_*get_enable*()
+Thread-Topic: [PATCH v4 1/4] gpu: drm: meson: Use
+ devm_regulator_*get_enable*()
+Thread-Index: AQHY5U+UZr58xfb6e0C1JLs5PfsDA64Y8amAgAAHegCAKKLWAA==
+Date:   Wed, 16 Nov 2022 12:02:28 +0000
+Message-ID: <12f645b5-2820-0618-1271-6c254425099c@fi.rohmeurope.com>
+References: <cover.1666357434.git.mazziesaccount@gmail.com>
+ <c14058c4b7018556a78455ffef484a7ebe4d8ea2.1666357434.git.mazziesaccount@gmail.com>
+ <Y1K0h4De8UsZJE7W@pendragon.ideasonboard.com>
+ <00d90039-c38a-ad8a-80a1-5a654a528756@linaro.org>
+In-Reply-To: <00d90039-c38a-ad8a-80a1-5a654a528756@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fi.rohmeurope.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BEZP281MB2454:EE_|BEZP281MB2597:EE_
+x-ms-office365-filtering-correlation-id: da29ca80-fc7b-41db-5ff5-08dac7ca6f1d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Dr6wLHflEA3t8Zq0e9IZhHI8kpAvZWAd6o91A5Nga65ko+EnBUDKHWjUWC0GAdGBVADqzEi4w+vH3QaVQkhH5Kcy7EeWuM9PIb9o4eaQz0BriGziSRlpMoSQ6nN+xwx4gEBoS9EEI3OxTJwKjm8xSJJquQU+dqBIOjatsNIMaP2TEhQZUygBDMeadaURd7c8FhTGTFBjQqYzIQKI6uY8eMOwEAaHv9NRWeNDyedINKoDlKpeUxPmaXVQOqQipY2pC7seGtfTCfYmGBW3RN46SLyEw9YbhOz8ILqc3zw4XGE4fGD137rvqzwxTPbeN4mBdJvFtEyJabtXbGyRgfpTfk+EDI9p01CSNAfrB+/1TRudDBXyYWdBIMh7Ed71RwYyj13dmqB7Mtm+c3evdeDx7UJqKTzzpASeoAP28uq0IId3EltYr2VOzQ8pZ9JqfvC86g5XAeSSGIagKfKU4iWD8+RvAjD4dNyRGhU+j8OGi9PP1Y2yjBe1TQq+lPzNDWlsKrZVCdQTVYeEO42AJepBTTn1b792LEajXb7uNFkUcS74ZZhHi746f9/UQ1ihIeEyEYqnZvH1DQg5eedzjQqkgegU5Rt1gl10NuzGuBUzjZD1JZCqQ7Vp1EMUD4Kc2qkezBfcNkNOahPVIYzQRaJZ4G4ITi55EEYVuy8AS8eYsZ+VlJCjnJRgxuOVhS4V/7Oqj0AopCagVku3nELjBeBX21SIOjNK095ECIiaCdi4yXrX+iWMduq1fzdH951Lx2Wrt6DY6z3aZXZGSSFydUmahycsKz1wEHZUZDw3qf8urXc8rr+u/VfepqSCYCddMEth1jKHUrM+Q0Fty5ci8uvs4Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(366004)(39850400004)(396003)(346002)(451199015)(2906002)(31686004)(66556008)(66446008)(41300700001)(66946007)(76116006)(66476007)(31696002)(86362001)(83380400001)(2616005)(8936002)(38100700002)(53546011)(110136005)(54906003)(122000001)(38070700005)(6506007)(4326008)(64756008)(186003)(5660300002)(8676002)(91956017)(6486002)(478600001)(71200400001)(7416002)(6512007)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Z0wxN21ESm1jNTd5aks1U1dIdS9zbS83S1JFazYxWkF2Vm8zVVVGMEJWcFdj?=
+ =?utf-8?B?RkVJaDZ1Q0FLS25XOVRqMHNucXZoV1lyU2lOV2IvZlhNemFka0RWSEM0U0tI?=
+ =?utf-8?B?cXhOaWJxcE9BdHV1dlhPMTY4R216T2RtZ2hBTW00dk5zTGdEbzVTbGgvUDla?=
+ =?utf-8?B?c29xejZTNzZZNFZiQmxmTWV5V045UnluWGZVK1l5eVNMNHBydm5ZcVk1cHFl?=
+ =?utf-8?B?MXo1ZVFMS3k3SHZZRFNiajdSWE1xOHh6b3dBVzNkTExtb2hXM09aejcvWVRq?=
+ =?utf-8?B?KzRUNEZQdCtyTGtHVVhHQmphdlBtTUlCYnc0aWc4OGFzcys0MkxyVkxFT1hu?=
+ =?utf-8?B?bzlZcUJ0VG9VMENxMTNRalZUbzI2RlQ5ODdmb1c2RW1qb0krM3BhcERNV2NQ?=
+ =?utf-8?B?ZmlYd01jYzVCSFJMZjlydlZ0SmNWbngyajhWSFNsZjFvNjVzb2YzTTZuS1F1?=
+ =?utf-8?B?VzdBYW0rQWJyNlVnUnBVaW1LUGxUSDRSRXZNTjN5dXRJVm9mcnVMTVV1Zi84?=
+ =?utf-8?B?YzZTTjVkcVdneWIxQmEzb3BPVDdndC9Ia2VIWmpOMDdyNFdtNXlZNGZic3JF?=
+ =?utf-8?B?cGdmenQ0bWw2SnJMWi8vMVhNcjR1L0ZqQzgyazl0bCtXcVY1N2JtVkRETXkx?=
+ =?utf-8?B?YzE0RWQzTlJ5dnAwbFZ6T29rdU1oK0s1NmtTSEJPbEhWdG0yOW5Yb3RwdzlW?=
+ =?utf-8?B?ZC9SaEZtYjdjTGN6MmUxQ1BHNG1rbytWTER6c0J3dVlucHdPN1BCKzVQYWNS?=
+ =?utf-8?B?VW9KRWttUHRzaVlaTlpHVEw0ZURLKzBuQnJKMTkvU0Q5eEVtTW5wK3FaTTdT?=
+ =?utf-8?B?Q3p4UTRkOGdQSnVxaDFvWThaMWdqZUE1ZWEvZFovdXJaekhsTmxnbHQ1Vk9w?=
+ =?utf-8?B?d3ZUZUYybVNpaVZvMTBFeDVpU1dhZzdwdG1ubW9QS3JvZXNPRjd6MUJ1YUNm?=
+ =?utf-8?B?MkJpZ2NrTWJPcGFzZVN4cGJsc2dRNmVWK2Y5QlptTit3aFRUVGRMTXRWTndp?=
+ =?utf-8?B?WCtWU0RzMlFTUzU2Y2pjRjNjcTBMemlzL1NVR2ZxNHdMWFVZQThSb3hQU0pt?=
+ =?utf-8?B?c1p1R0VHYmcxMXcrUzRPM1dqRUJ6SkhCZXVHdmFENmJucmJmWXhJM3ZibUZq?=
+ =?utf-8?B?bnhlbC81N3c4U0owYTRNVEhWRlIyOXRJazNBWVNLTHhTMG1lYU04R1gzMzBM?=
+ =?utf-8?B?K2NQSlBMaVJpRVdQVS8xWnFZL0QzdTJ0SjExRUw5ajZjUXNpVnU3aGg5eE1N?=
+ =?utf-8?B?bUxOM1kvV09aWFd3aCt4R0NIYk9MMWx4REJpQjB5NWpZTitPclIrbUcveHo3?=
+ =?utf-8?B?a1E5K3dsaTJOckZIVTA5RllPTnhDUjhFWVJyTmVVWjRiSkVTOUk4cFVsRDF6?=
+ =?utf-8?B?Uk1rQVB0Y0hKQzFncjdsYlJLeEkyVUYrM0grK1MzTnkxMFZQekVKeXlWbzNx?=
+ =?utf-8?B?WFpsR3lGemRBMGh5MVJlTmxVck9vaXRLdjZQSVpnYTc0WmhkajRLZmNYU0hL?=
+ =?utf-8?B?RmJGK3ArRW4yZnlIMEs5YzlNcnZ4OHkyMTB1aW40dlR1NHRWQ0ZFTkhqU0Ro?=
+ =?utf-8?B?M2wrMkhPVnNYcUUweGFSb2hsdVpqaFp0K1EzRmJveGNXdk5xVXBHSVZlemd0?=
+ =?utf-8?B?czAxY1FRTk1leFlIQnpncy9EbXlVTnYzbExlTlF0UFVIVmROdS9Rck0zOFJF?=
+ =?utf-8?B?MVYxYnBsTk1ENlFVcVJGTGIyVW9tRlgzeVRKb1ZPMTJJM2RwUmdOMUFXckdz?=
+ =?utf-8?B?cjV1U2puc010REJXcmNVRVRlbUdtUUM4ekVLMXExN2c3RElHZ09FMXQzVThI?=
+ =?utf-8?B?NlFaOHRiR0hyVDkvNEE2MC9BOTIwcGJIeUFtNUZ5YWNQaVpsT3VITWNoZlVV?=
+ =?utf-8?B?KzlPNTgzNHkvUStueUQxVzl3R0I4RHRkZFkyUEdtamVqc1loWjcyMGw4Z3Bt?=
+ =?utf-8?B?dGhRcThaVXlUb082MlZ0VExxaEk3dkVnVVlpZ2VBNkFNWFBjNmJ4TXFYR2Jr?=
+ =?utf-8?B?VFdWUlRkTklhazhLVURNdVlVci9SdmUrbEp6WFVZUUdYMk5PUUZsQlB3cmFx?=
+ =?utf-8?B?VWdjVElBUU01dzVNYmVORStWbEo0RlNPYkI5K0diQmlSL3U1S3I0d0dqdnNs?=
+ =?utf-8?B?STMvU1N2SGVTaWljUHFsVkYrRjB3ejREeThEMHZTeCtqMHN2TWVUUWdFaEpF?=
+ =?utf-8?Q?ihA8XxfyT3wvs/8oF9uLJuQ=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7F3226CC0BA211408FA67A235CDBF4CD@DEUP281.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: fi.rohmeurope.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: da29ca80-fc7b-41db-5ff5-08dac7ca6f1d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Nov 2022 12:02:28.7551
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b24d4f96-5b40-44b1-ac2e-2ed7fdbde1c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dv22zdz6PaxIAQMwIiKX8KR/7EMCRUoWi111HEaz1mAlOIV4NWsLtZmaIg6Idw0PA23duhZYmPBVuInMb2PekJZkxp4zG23X/KfoCgy+Lj0/iStdfdV7j5kUNpETOtQN
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BEZP281MB2597
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Uwe,
-
-On 15-11-2022 10:31 pm, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Tue, Nov 15, 2022 at 01:20:05PM +0100, Naresh Solanki wrote:
->> max6639_platform_data is not used by any in-kernel driver and does not
->> address the MAX6639 fans separately.
->> Move to device tree configuration with explicit properties to configure
->> each fan.
-> 
-> My overall impression is that this patch mixes too much things. IMHO it
-> should be split in (at least)
-> 
->   - Add dt support
->   - Drop platform support
->   - Add PWM provider support
->   - Make use of the PWM API
-> 
-> maybe also add the 2nd PWM in a separate step.
-> 
-> Some more comments inline.
-> 
->> Non-DT platform can still use this module with its default
->> configuration.
->>
->> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ---
->>   drivers/hwmon/Kconfig   |   1 +
->>   drivers/hwmon/max6639.c | 465 +++++++++++++++++++++++++++++++++-------
->>   2 files changed, 392 insertions(+), 74 deletions(-)
->>
->> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->> index 5695b266abcf..ad1f6742ca50 100644
->> --- a/drivers/hwmon/Kconfig
->> +++ b/drivers/hwmon/Kconfig
->> @@ -1106,6 +1106,7 @@ config SENSORS_MAX6621
->>   config SENSORS_MAX6639
->>   	tristate "Maxim MAX6639 sensor chip"
->>   	depends on I2C
->> +	depends on PWM
->>   	help
->>   	  If you say yes here you get support for the MAX6639
->>   	  sensor chips.
->> diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
->> index 9b895402c80d..d1ae77e8f72e 100644
->> --- a/drivers/hwmon/max6639.c
->> +++ b/drivers/hwmon/max6639.c
->> @@ -19,7 +19,7 @@
->>   #include <linux/hwmon-sysfs.h>
->>   #include <linux/err.h>
->>   #include <linux/mutex.h>
->> -#include <linux/platform_data/max6639.h>
-> 
-> This file is now unused and can be dropped.
-Sure in next version.
-> 
->> +#include <linux/pwm.h>
->>   
->>   /* Addresses to scan */
->>   static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
->> @@ -54,11 +54,20 @@ static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
->>   #define MAX6639_GCONFIG_PWM_FREQ_HI		0x08
->>   
->>   #define MAX6639_FAN_CONFIG1_PWM			0x80
->> -
->> +#define MAX6639_REG_FAN_CONFIG2a_PWM_POL	0x02
->>   #define MAX6639_FAN_CONFIG3_THERM_FULL_SPEED	0x40
->> +#define MAX6639_FAN_CONFIG3_FREQ_MASK		0x03
->> +#define MAX6639_REG_TARGTDUTY_SLOT		120
->>   
->> +/* Tach supported range. This internally controls tach frequency */
->>   static const int rpm_ranges[] = { 2000, 4000, 8000, 16000 };
->>   
->> +/* Supported PWM frequency */
->> +static const unsigned int freq_table[] = { 20, 33, 50, 100, 5000, 8333, 12500,
->> +					25000 };
-> 
-> I would have put these in a single line, or one line per freq, or at
-> least aligned the last value such that it is at a higher column than the
-> opening {.
-Sure will align.
-> 
->> +
->> +
->> +
-> 
-> Three empty lines? One or two only should do it.
-Oh. Will correct this in next version.
-> 
->>   #define FAN_FROM_REG(val, rpm_range)	((val) == 0 || (val) == 255 ? \
->>   				0 : (rpm_ranges[rpm_range] * 30) / (val))
->>   #define TEMP_LIMIT_TO_REG(val)	clamp_val((val) / 1000, 0, 255)
->> @@ -76,20 +85,24 @@ struct max6639_data {
->>   	u16 temp[2];		/* Temperature, in 1/8 C, 0..255 C */
->>   	bool temp_fault[2];	/* Detected temperature diode failure */
->>   	u8 fan[2];		/* Register value: TACH count for fans >=30 */
->> +	struct pwm_device	*pwmd[2]; /* max6639 has two pwm device */
->> +	u32 target_rpm[2];
->> +	u32 max_rpm[2];
->> +
->>   	u8 status;		/* Detected channel alarms and fan failures */
->>   
->>   	/* Register values only written to */
->> -	u8 pwm[2];		/* Register value: Duty cycle 0..120 */
->>   	u8 temp_therm[2];	/* THERM Temperature, 0..255 C (->_max) */
->>   	u8 temp_alert[2];	/* ALERT Temperature, 0..255 C (->_crit) */
->>   	u8 temp_ot[2];		/* OT Temperature, 0..255 C (->_emergency) */
->>   
->>   	/* Register values initialized only once */
->> -	u8 ppr;			/* Pulses per rotation 0..3 for 1..4 ppr */
->> -	u8 rpm_range;		/* Index in above rpm_ranges table */
->> -
->> +	u8 ppr[2];		/* Pulses per rotation 0..3 for 1..4 ppr */
->> +	u8 rpm_range[2];	/* Index in above rpm_ranges table */
->>   	/* Optional regulator for FAN supply */
->>   	struct regulator *reg;
->> +	/* max6639 pwm chip */
->> +	struct pwm_chip chip;
->>   };
->>   
->>   static struct max6639_data *max6639_update_device(struct device *dev)
->> @@ -280,8 +293,12 @@ static ssize_t pwm_show(struct device *dev, struct device_attribute *dev_attr,
->>   {
->>   	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
->>   	struct max6639_data *data = dev_get_drvdata(dev);
->> +	struct pwm_state state;
->> +
->> +	pwm_get_state(data->pwmd[attr->index], &state);
->> +
->> +	return sprintf(buf, "%d\n", pwm_get_relative_duty_cycle(&state, 255));
->>   
->> -	return sprintf(buf, "%d\n", data->pwm[attr->index] * 255 / 120);
->>   }
->>   
->>   static ssize_t pwm_store(struct device *dev,
->> @@ -290,9 +307,9 @@ static ssize_t pwm_store(struct device *dev,
->>   {
->>   	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
->>   	struct max6639_data *data = dev_get_drvdata(dev);
->> -	struct i2c_client *client = data->client;
->>   	unsigned long val;
->>   	int res;
->> +	struct pwm_state state;
->>   
->>   	res = kstrtoul(buf, 10, &val);
->>   	if (res)
->> @@ -300,12 +317,12 @@ static ssize_t pwm_store(struct device *dev,
->>   
->>   	val = clamp_val(val, 0, 255);
->>   
->> -	mutex_lock(&data->update_lock);
->> -	data->pwm[attr->index] = (u8)(val * 120 / 255);
->> -	i2c_smbus_write_byte_data(client,
->> -				  MAX6639_REG_TARGTDUTY(attr->index),
->> -				  data->pwm[attr->index]);
->> -	mutex_unlock(&data->update_lock);
->> +	pwm_get_state(data->pwmd[attr->index], &state);
->> +	pwm_set_relative_duty_cycle(&state, val, 255);
->> +	res = pwm_apply_state(data->pwmd[attr->index], &state);
->> +	if (res)
->> +		return res;
->> +
->>   	return count;
->>   }
->>   
->> @@ -319,7 +336,7 @@ static ssize_t fan_input_show(struct device *dev,
->>   		return PTR_ERR(data);
->>   
->>   	return sprintf(buf, "%d\n", FAN_FROM_REG(data->fan[attr->index],
->> -		       data->rpm_range));
->> +		       data->rpm_range[attr->index]));
->>   }
->>   
->>   static ssize_t alarm_show(struct device *dev,
->> @@ -386,29 +403,41 @@ static struct attribute *max6639_attrs[] = {
->>   ATTRIBUTE_GROUPS(max6639);
->>   
->>   /*
->> - *  returns respective index in rpm_ranges table
->> - *  1 by default on invalid range
->> + *  Get respective index in rpm_ranges table
->>    */
->> -static int rpm_range_to_reg(int range)
->> +static int rpm_range_to_index(struct device *dev, u8 *index, int rpm)
->>   {
->> -	int i;
->> -
->> -	for (i = 0; i < ARRAY_SIZE(rpm_ranges); i++) {
->> -		if (rpm_ranges[i] == range)
->> -			return i;
->> +	if (rpm < 0)
->> +		return -EINVAL;
->> +
->> +	/* Set index based on chip support */
->> +	switch (rpm) {
->> +	case 0 ... 2000:
->> +		*index = 0;
->> +		break;
->> +	case 2001 ... 4000:
->> +		*index = 1;
->> +		break;
->> +	case 4001 ... 8000:
->> +		*index = 2;
->> +		break;
->> +	case 8001 ... 16000:
->> +		*index = 3;
->> +		break;
->> +	default:
->> +		/* Use max range for higher RPM */
->> +		dev_warn(dev,
->> +		    "RPM higher than supported range. Default to 16000 RPM");
->> +		*index = 3;
->>   	}
->> -
->> -	return 1; /* default: 4000 RPM */
->> +	return 0;
->>   }
->>   
->>   static int max6639_init_client(struct i2c_client *client,
->>   			       struct max6639_data *data)
->>   {
->> -	struct max6639_platform_data *max6639_info =
->> -		dev_get_platdata(&client->dev);
->> -	int i;
->> -	int rpm_range = 1; /* default: 4000 RPM */
->> -	int err;
->> +	int i, err;
->> +	struct pwm_state state;
->>   
->>   	/* Reset chip to default values, see below for GCONFIG setup */
->>   	err = i2c_smbus_write_byte_data(client, MAX6639_REG_GCONFIG,
->> @@ -416,51 +445,29 @@ static int max6639_init_client(struct i2c_client *client,
->>   	if (err)
->>   		goto exit;
->>   
->> -	/* Fans pulse per revolution is 2 by default */
->> -	if (max6639_info && max6639_info->ppr > 0 &&
->> -			max6639_info->ppr < 5)
->> -		data->ppr = max6639_info->ppr;
->> -	else
->> -		data->ppr = 2;
->> -	data->ppr -= 1;
->> -
->> -	if (max6639_info)
->> -		rpm_range = rpm_range_to_reg(max6639_info->rpm_range);
->> -	data->rpm_range = rpm_range;
->> -
->>   	for (i = 0; i < 2; i++) {
->>   
->>   		/* Set Fan pulse per revolution */
->> -		err = i2c_smbus_write_byte_data(client,
->> -				MAX6639_REG_FAN_PPR(i),
->> -				data->ppr << 6);
->> +		err = i2c_smbus_write_byte_data(client,	MAX6639_REG_FAN_PPR(i),
->> +						data->ppr[i] << 6);
->>   		if (err)
->>   			goto exit;
->>   
->>   		/* Fans config PWM, RPM */
->>   		err = i2c_smbus_write_byte_data(client,
->> -			MAX6639_REG_FAN_CONFIG1(i),
->> -			MAX6639_FAN_CONFIG1_PWM | rpm_range);
->> -		if (err)
->> -			goto exit;
->> -
->> -		/* Fans PWM polarity high by default */
->> -		if (max6639_info && max6639_info->pwm_polarity == 0)
->> -			err = i2c_smbus_write_byte_data(client,
->> -				MAX6639_REG_FAN_CONFIG2a(i), 0x00);
->> -		else
->> -			err = i2c_smbus_write_byte_data(client,
->> -				MAX6639_REG_FAN_CONFIG2a(i), 0x02);
->> +						MAX6639_REG_FAN_CONFIG1(i),
->> +						MAX6639_FAN_CONFIG1_PWM |
->> +						data->rpm_range[i]);
->>   		if (err)
->>   			goto exit;
->>   
->>   		/*
->> -		 * /THERM full speed enable,
->> +		 * /THERM full speed disable,
->>   		 * PWM frequency 25kHz, see also GCONFIG below
->>   		 */
->>   		err = i2c_smbus_write_byte_data(client,
->> -			MAX6639_REG_FAN_CONFIG3(i),
->> -			MAX6639_FAN_CONFIG3_THERM_FULL_SPEED | 0x03);
->> +						MAX6639_REG_FAN_CONFIG3(i),
->> +						0x03);
->>   		if (err)
->>   			goto exit;
->>   
->> @@ -469,31 +476,35 @@ static int max6639_init_client(struct i2c_client *client,
->>   		data->temp_alert[i] = 90;
->>   		data->temp_ot[i] = 100;
->>   		err = i2c_smbus_write_byte_data(client,
->> -				MAX6639_REG_THERM_LIMIT(i),
->> -				data->temp_therm[i]);
->> +						MAX6639_REG_THERM_LIMIT(i),
->> +						data->temp_therm[i]);
->>   		if (err)
->>   			goto exit;
->>   		err = i2c_smbus_write_byte_data(client,
->> -				MAX6639_REG_ALERT_LIMIT(i),
->> -				data->temp_alert[i]);
->> +						MAX6639_REG_ALERT_LIMIT(i),
->> +						data->temp_alert[i]);
->>   		if (err)
->>   			goto exit;
->>   		err = i2c_smbus_write_byte_data(client,
->> -				MAX6639_REG_OT_LIMIT(i), data->temp_ot[i]);
->> +						MAX6639_REG_OT_LIMIT(i),
->> +						data->temp_ot[i]);
->>   		if (err)
->>   			goto exit;
->>   
->> -		/* PWM 120/120 (i.e. 100%) */
->> -		data->pwm[i] = 120;
->> -		err = i2c_smbus_write_byte_data(client,
->> -				MAX6639_REG_TARGTDUTY(i), data->pwm[i]);
->> +		/* Configure PWM controller */
->> +		pwm_get_state(data->pwmd[i], &state);
->> +		pwm_set_relative_duty_cycle(&state, data->target_rpm[i],
->> +					    data->max_rpm[i]);
->> +		err = pwm_apply_state(data->pwmd[i], &state);
->>   		if (err)
->>   			goto exit;
->> +
->>   	}
->>   	/* Start monitoring */
->>   	err = i2c_smbus_write_byte_data(client, MAX6639_REG_GCONFIG,
->>   		MAX6639_GCONFIG_DISABLE_TIMEOUT | MAX6639_GCONFIG_CH2_LOCAL |
->>   		MAX6639_GCONFIG_PWM_FREQ_HI);
->> +
->>   exit:
->>   	return err;
->>   }
->> @@ -524,12 +535,276 @@ static void max6639_regulator_disable(void *data)
->>   	regulator_disable(data);
->>   }
->>   
->> +static int max6639_probe_child_from_dt(struct i2c_client *client,
->> +				      struct device_node *child,
->> +				      struct max6639_data *data)
->> +
->> +{
->> +	struct device *dev = &client->dev;
->> +	u32 i, maxrpm;
->> +	int val, err;
->> +
->> +	err = of_property_read_u32(child, "reg", &i);
->> +	if (err) {
->> +		dev_err(dev, "missing reg property of %pOFn\n", child);
->> +		return err;
->> +	}
->> +
->> +	if (i >= 2) {
->> +		dev_err(dev, "invalid reg %d of %pOFn\n", i, child);
->> +		return -EINVAL;
->> +	}
->> +
->> +	err = of_property_read_u32(child, "pulses-per-revolution", &val);
->> +	if (err) {
->> +		dev_err(dev, "missing pulses-per-revolution property of %pOFn",
->> +			child);
->> +		return err;
->> +	}
->> +
->> +	if (val < 0 || val > 5) {
->> +		dev_err(dev, "invalid pulses-per-revolution %d of %pOFn\n", val,
->> +			child);
->> +		return -EINVAL;
->> +	}
->> +	data->ppr[i] = val;
->> +
->> +	err = of_property_read_u32(child, "max-rpm", &maxrpm);
->> +	if (err) {
->> +		dev_err(dev, "missing max-rpm property of %pOFn\n", child);
->> +		return err;
->> +	}
->> +
->> +	err = rpm_range_to_index(dev, &data->rpm_range[i], maxrpm);
->> +	if (err) {
->> +		dev_err(dev, "invalid max-rpm %d of %pOFn\n", maxrpm, child);
->> +		return err;
->> +	}
->> +	data->max_rpm[i] = maxrpm;
->> +
->> +	err = of_property_read_u32(child, "target-rpm", &val);
->> +	/* Use provided target RPM else default to maxrpm */
->> +	if (!err)
->> +		data->target_rpm[i] = val;
->> +	else
->> +		data->target_rpm[i] = maxrpm;
->> +
->> +	/* Get pwms property for PWM control */
->> +	data->pwmd[i] = devm_fwnode_pwm_get(dev, &child->fwnode, NULL);
->> +
->> +	if (!IS_ERR(data->pwmd[i]))
->> +		return 0;
->> +
->> +	if (PTR_ERR(data->pwmd[i]) == -EPROBE_DEFER)
->> +		return PTR_ERR(data->pwmd[i]);
->> +
->> +	dev_dbg(dev, "Using chip default PWM");
->> +	data->pwmd[i] = pwm_request_from_chip(&data->chip, i, NULL);
->> +	if (!IS_ERR(data->pwmd[i]))
->> +		return 0;
-> 
-> Are these PWMs usuable at all for a consumer other than the driver
-> itself? If not I'd doubt the added value of this patch.
-That depends on DT. For testing purpose, I specified different pwm 
-handle & those pwm unreference in DT where available for use via  sysfs 
-export otherwise the resource was busy.
-> 
->> +	dev_dbg(dev, "Failed to configure pwm for fan %d", i);
->> +	return PTR_ERR_OR_ZERO(data->pwmd[i]);
->> +}
->> +
->> +static int max6639_probe_from_dt(struct i2c_client *client,
->> +				 struct max6639_data *data)
->> +{
->> +	struct device *dev = &client->dev;
->> +	const struct device_node *np = dev->of_node;
->> +	struct device_node *child;
->> +	int err;
->> +
->> +	/* Compatible with non-DT platforms */
->> +	if (!np)
->> +		return 0;
->> +
->> +	for_each_child_of_node(np, child) {
->> +		if (strcmp(child->name, "fan"))
->> +			continue;
->> +
->> +		err = max6639_probe_child_from_dt(client, child, data);
->> +		if (err) {
->> +			of_node_put(child);
->> +			return err;
->> +		}
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static struct max6639_data *to_max6639_pwm(struct pwm_chip *chip)
->> +{
->> +	return container_of(chip, struct max6639_data, chip);
->> +}
->> +
->> +static void max6639_pwm_get_state(struct pwm_chip *chip,
->> +				  struct pwm_device *pwm,
->> +				  struct pwm_state *state)
->> +{
->> +
->> +	struct max6639_data *data = to_max6639_pwm(chip);
->> +	struct i2c_client *client = data->client;
->> +	int value, i = pwm->hwpwm, x;
-> 
-> Please use pwm->hwpwm directly instead of i, this makes the code IMHO a
-> bit more readable.
-I used variable 'i' to make it look short. Can switch to pwm->hwpwm
-> 
->> +	unsigned int freq;
->> +
->> +	mutex_lock(&data->update_lock);
->> +
->> +	value = i2c_smbus_read_byte_data(client, MAX6639_REG_FAN_CONFIG1(i));
->> +	if (value < 0)
->> +		goto abort;
->> +
->> +	if (value & MAX6639_FAN_CONFIG1_PWM) {
->> +		state->enabled = true;
->> +
->> +		/* Determine frequency from respective registers */
->> +		value = i2c_smbus_read_byte_data(client,
->> +						 MAX6639_REG_FAN_CONFIG3(i));
->> +		if (value < 0)
->> +			goto abort;
->> +		x = value & MAX6639_FAN_CONFIG3_FREQ_MASK;
->> +
->> +		value = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
->> +		if (value < 0)
->> +			goto abort;
->> +		if (value & MAX6639_GCONFIG_PWM_FREQ_HI)
->> +			x |= 0x4;
->> +		x &= 0x7;
->> +		freq = freq_table[x];
->> +
->> +		state->period = DIV_ROUND_UP_ULL(NSEC_PER_SEC, freq);
-> 
-> both NSEC_PER_SEC and freq fit into an unsigned int, so you can use the
-> (cheaper) DIV_ROUND_UP here.
-Sure. will update in next version
-> 
->> +
->> +		value = i2c_smbus_read_byte_data(client,
->> +						 MAX6639_REG_TARGTDUTY(i));
->> +		if (value < 0)
->> +			goto abort;
->> +		/* max6639 supports 120 slots only */
->> +		state->duty_cycle = DIV_ROUND_UP_ULL(value * state->period,
->> +						     120);
-> 
-> s/120/MAX6639_REG_TARGTDUTY_SLOT/ ?
-> 
-> value * state->period might overflow. Use something like
-> mul_u64_u32_div. (Hmm, there doesn't seem to be a variant for unsigned *
-> unsigned / unsigned?)
-Yeah that seems better. Will update in next version
-> 
-> You're loosing precision here. Consider freq = 8333 and TARGTDUTY = 97
-> then you have state->period = 120005 and calulate duty_cycle as:
-> 
-> 	DIV_ROUND_UP_ULL(97 * 120005, 120) = 97005
-> 
-> . The exact value is (I guess)
-> 
-> 	97 * NSEC_PER_SEC / (8333 * 120) = 97003.880
-> 
-For this chip, it may not matter as it supports only 120 slots.
-
->> +		value = i2c_smbus_read_byte_data(client,
->> +						 MAX6639_REG_FAN_CONFIG2a(i));
->> +		if (value < 0)
->> +			goto abort;
->> +		value &= MAX6639_REG_FAN_CONFIG2a_PWM_POL;
->> +		state->polarity = (value != 0);
->> +	} else
->> +		state->enabled = false;
->> +
->> +abort:
->> +	mutex_unlock(&data->update_lock);
->> +
->> +}
->> +
->> +static int max6639_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
->> +			     const struct pwm_state *state)
->> +{
->> +	struct max6639_data *data = to_max6639_pwm(chip);
->> +	struct i2c_client *client = data->client;
->> +	int value = 0, i = pwm->hwpwm, x;
-> 
-> Please use pwm->hwpwm directly instead of i, this makes the code IMHO a
-> bit more readable.
-I used variable 'i' to make it look short. Can switch to pwm->hwpwm
-> 
->> +	unsigned int freq;
->> +	struct pwm_state cstate;
->> +
->> +	pwm_get_state(pwm, &cstate);
-> 
-> Please don't use pwm API functions in PWM callbacks. Accessing
-> pwm->state is fine here.
-Sure.
-> 
->> +	mutex_lock(&data->update_lock);
->> +
->> +	if (state->period != cstate.period) {
->> +		/* Configure frequency */
->> +		freq = DIV_ROUND_UP_ULL(NSEC_PER_SEC, state->period);
->> +		/* Chip supports limited number of frequency */
->> +		for (x = 0; x < sizeof(freq_table); x++)
->> +			if (freq < freq_table[x])
->> +				break;
-> 
-> For state->period = 80000 we get:
-> 
-> 	freq = 12500
-> 
-> and then x = 7 is picked while x = 6 would be an exact match.
-> 
-> I think you just need
-> 
-> 	if (freq <= freq_table[x])
-> 
-Yes. Will update in next revision.
->> +		value = i2c_smbus_read_byte_data(client,
->> +						 MAX6639_REG_FAN_CONFIG3(i));
->> +		if (value < 0)
->> +			goto abort;
->> +		value &= ~MAX6639_FAN_CONFIG3_FREQ_MASK;
->> +		value |= (x & MAX6639_FAN_CONFIG3_FREQ_MASK);
->> +		value = i2c_smbus_write_byte_data(client,
->> +						  MAX6639_REG_FAN_CONFIG3(i),
->> +						  value);
->> +
->> +		value = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
->> +		if (value < 0)
->> +			goto abort;
->> +
->> +		if ((value & MAX6639_GCONFIG_PWM_FREQ_HI) && (x >> 2))
->> +			value &= ~MAX6639_GCONFIG_PWM_FREQ_HI;
->> +		else
->> +			value |= MAX6639_GCONFIG_PWM_FREQ_HI;
->> +		value = i2c_smbus_write_byte_data(client, MAX6639_REG_GCONFIG,
->> +						  value);
-> 
-> Why does it depend on MAX6639_GCONFIG_PWM_FREQ_HI being already set if
-> you need to set it?
-> 
-Yes. Will update in next version
->> +		if (value < 0)
->> +			goto abort;
->> +	}
->> +
->> +	/* Configure dutycycle */
->> +	if (state->duty_cycle != cstate.duty_cycle) {
-> 
-> That check is wrong if you go from
-> 
-> 	.duty_cycle = 50000; .period = 200000
-> 
-> to
-> 
-> 	.duty_cycle = 50000; .period = 100000
-> 
-> 
-Yes. Will update in next revision.
->> +		value = DIV_ROUND_UP_ULL(
->> +				state->duty_cycle * MAX6639_REG_TARGTDUTY_SLOT,
->> +				state->period);
-> 
-> Please round down here. (And test with PWM_DEBUG which might have told
-> you given the right tests.) Also please use the real period to determine
-> the register value. (Otherwise for a request with
-> 
-> 	.duty_cycle = 40000; .period = 150000
-> 
-> where a real period of 120004.8 ns is picked you get
-> MAX6639_REG_TARGTDUTY_SLOT = 32 which results in a duty cycle of
-> 32001.28 ns, while with MAX6639_REG_TARGTDUTY_SLOT = 39 you'd get
-> 39001.56 ns.
-> 
-Sure will update to round down.
->> +		value = i2c_smbus_write_byte_data(client,
->> +						  MAX6639_REG_TARGTDUTY(i),
->> +						  value);
->> +		if (value < 0)
->> +			goto abort;
->> +	}
->> +
->> +	/* Configure polarity */
->> +	if (state->polarity != cstate.polarity) {
->> +		value = i2c_smbus_read_byte_data(client,
->> +						 MAX6639_REG_FAN_CONFIG2a(i));
->> +		if (value < 0)
->> +			goto abort;
->> +		if (state->polarity == PWM_POLARITY_NORMAL)
->> +			value |= MAX6639_REG_FAN_CONFIG2a_PWM_POL;
->> +		else
->> +			value &= ~MAX6639_REG_FAN_CONFIG2a_PWM_POL;
->> +		value = i2c_smbus_write_byte_data(client,
->> +						  MAX6639_REG_FAN_CONFIG2a(i),
->> +						  value);
->> +		if (value < 0)
->> +			goto abort;
->> +	}
->> +
->> +	if (state->enabled == cstate.enabled)
->> +		goto abort;
-> 
-> Please use goto only for error handling.
-> >> +
->> +	value = i2c_smbus_read_byte_data(client, MAX6639_REG_FAN_CONFIG1(i));
->> +	if (value < 0)
->> +		goto abort;
->> +	if (state->enabled)
->> +		value |= MAX6639_FAN_CONFIG1_PWM;
->> +	else
->> +		value &= ~MAX6639_FAN_CONFIG1_PWM;
->> +
->> +	value = i2c_smbus_write_byte_data(client, MAX6639_REG_FAN_CONFIG1(i),
->> +					  value);
->> +	if (value < 0)
->> +		goto abort;
->> +	value = 0;
->> +
->> +abort:
->> +	mutex_unlock(&data->update_lock);
->> +
->> +	return value;
->> +}
->> +
->> +static const struct pwm_ops max6639_pwm_ops = {
->> +	.apply = max6639_pwm_apply,
->> +	.get_state = max6639_pwm_get_state,
->> +	.owner = THIS_MODULE,
->> +};
->> +
->>   static int max6639_probe(struct i2c_client *client)
->>   {
->>   	struct device *dev = &client->dev;
->>   	struct max6639_data *data;
->>   	struct device *hwmon_dev;
->> -	int err;
->> +	int err, i;
->>   
->>   	data = devm_kzalloc(dev, sizeof(struct max6639_data), GFP_KERNEL);
->>   	if (!data)
->> @@ -537,11 +812,26 @@ static int max6639_probe(struct i2c_client *client)
->>   
->>   	data->client = client;
->>   
->> +	/* Add PWM controller of max6639 */
->> +	data->chip.dev = dev;
->> +	data->chip.ops = &max6639_pwm_ops;
->> +	data->chip.npwm = 2;
->> +	data->chip.of_pwm_n_cells = 3;
-> 
-> Please drop this, of_pwmchip_add() overwrites it anyhow.
-> 
-Sure.
->> +
->> +	err = devm_pwmchip_add(dev, &data->chip);
->> +	if (err < 0) {
->> +		dev_err(dev, "failed to add PWM chip %d\n", err);
-> 
-> dev_err_probe please.
-> 
-Sure.
->> +		return err;
->> +	}
->> +
->>   	data->reg = devm_regulator_get_optional(dev, "fan");
->>   	if (IS_ERR(data->reg)) {
->> -		if (PTR_ERR(data->reg) != -ENODEV)
->> -			return PTR_ERR(data->reg);
->> -
->> +		if (PTR_ERR(data->reg) != -ENODEV) {
->> +			err = (int)PTR_ERR(data->reg);
->> +			dev_warn(dev, "Failed looking up fan supply: %d\n",
->> +				 err);
-> 
-> unrelated change. Also dev_probe_err is better suited here.
-> 
-Sure.
->> +			return err;
->> +		}
->>   		data->reg = NULL;
->>   	} else {
->>   		/* Spin up fans */
->> @@ -560,6 +850,22 @@ static int max6639_probe(struct i2c_client *client)
->>   
->>   	mutex_init(&data->update_lock);
->>   
->> +	/* Below are defaults leter overridden by DT properties */
->> +	for (i = 0; i < 2; i++) {
->> +		/* 4000 RPM */
->> +		data->rpm_range[i] = 1;
->> +		data->ppr[i] = 2;
->> +		/* Max. temp. 80C/90C/100C */
->> +		data->temp_therm[i] = 80;
->> +		data->temp_alert[i] = 90;
->> +		data->temp_ot[i] = 100;
->> +	}
->> +
->> +	/* Probe from DT to get configuration */
->> +	err = max6639_probe_from_dt(client, data);
->> +	if (err)
->> +		return err;
->> +
->>   	/* Initialize the max6639 chip */
->>   	err = max6639_init_client(client, data);
->>   	if (err < 0)
->> @@ -571,6 +877,7 @@ static int max6639_probe(struct i2c_client *client)
->>   	return PTR_ERR_OR_ZERO(hwmon_dev);
->>   }
->>   
->> +#if IS_ENABLED(CONFIG_PM_SLEEP)
-> 
-> unrelated change
-> 
-Have put this to avoid error when CONFIG_PM_SLEEP is disabled.
->>   static int max6639_suspend(struct device *dev)
->>   {
->>   	struct i2c_client *client = to_i2c_client(dev);
->> @@ -608,6 +915,7 @@ static int max6639_resume(struct device *dev)
->>   	return i2c_smbus_write_byte_data(client,
->>   			MAX6639_REG_GCONFIG, ret & ~MAX6639_GCONFIG_STANDBY);
->>   }
->> +#endif
->>   
->>   static const struct i2c_device_id max6639_id[] = {
->>   	{"max6639", 0},
->> @@ -616,13 +924,22 @@ static const struct i2c_device_id max6639_id[] = {
->>   
->>   MODULE_DEVICE_TABLE(i2c, max6639_id);
->>   
->> -static DEFINE_SIMPLE_DEV_PM_OPS(max6639_pm_ops, max6639_suspend, max6639_resume);
->> +#ifdef CONFIG_OF
-> 
-> Note that ACPI also uses of_match_table.
-> 
->> +static const struct of_device_id maxim_of_platform_match[] = {
->> +	{.compatible = "maxim,max6639"},
->> +	{},
->> +};
->> +MODULE_DEVICE_TABLE(of, maxim_of_platform_match);
->> +#endif
->> +
->> +static SIMPLE_DEV_PM_OPS(max6639_pm_ops, max6639_suspend, max6639_resume);
->>   
->>   static struct i2c_driver max6639_driver = {
->>   	.class = I2C_CLASS_HWMON,
->>   	.driver = {
->>   		   .name = "max6639",
->>   		   .pm = pm_sleep_ptr(&max6639_pm_ops),
->> +		   .of_match_table = of_match_ptr(maxim_of_platform_match),
->>   		   },
->>   	.probe_new = max6639_probe,
->>   	.id_table = max6639_id,
-> 
-> Best regards
-> Uwe
-> 
-Regards,
-Naresh
+SGkgZGVlIEhvIExhdXJlbnQgJiBBbGwsDQoNCk9uIDEwLzIxLzIyIDE4OjI5LCBOZWlsIEFybXN0
+cm9uZyB3cm90ZToNCj4gSGksDQo+IA0KPiBPbiAyMS8xMC8yMDIyIDE3OjAyLCBMYXVyZW50IFBp
+bmNoYXJ0IHdyb3RlOg0KPj4gSGkgTWF0dGksDQo+Pg0KPj4gT24gRnJpLCBPY3QgMjEsIDIwMjIg
+YXQgMDQ6MTg6MDFQTSArMDMwMCwgTWF0dGkgVmFpdHRpbmVuIHdyb3RlOg0KPj4+IFNpbXBsaWZ5
+IHVzaW5nIHRoZSBkZXZtX3JlZ3VsYXRvcl9nZXRfZW5hYmxlX29wdGlvbmFsKCkuIEFsc28gZHJv
+cCB0aGUNCj4+PiBzZWVtaW5nbHkgdW51c2VkIHN0cnVjdCBtZW1iZXIgJ2hkbWlfc3VwcGx5Jy4N
+Cj4+Pg0KPj4+IFNpZ25lZC1vZmYtYnk6IE1hdHRpIFZhaXR0aW5lbiA8bWF6emllc2FjY291bnRA
+Z21haWwuY29tPg0KPj4+DQo+Pj4gLS0tDQo+Pj4gdjMgPT4gdjQ6DQo+Pj4gLSBzcGxpdCBtZXNv
+biBwYXJ0IHRvIG93biBwYXRjaA0KPj4+DQo+Pj4gUkZDdjEgPT4gdjI6DQo+Pj4gLSBDaGFuZ2Ug
+YWxzbyBzaWk5MDJ4IHRvIHVzZSBkZXZtX3JlZ3VsYXRvcl9idWxrX2dldF9lbmFibGUoKQ0KPj4+
+DQo+Pj4gUGxlYXNlIG5vdGUgLSB0aGlzIGlzIG9ubHkgY29tcGlsZS10ZXN0ZWQgZHVlIHRvIHRo
+ZSBsYWNrIG9mIEhXLiBDYXJlZnVsDQo+Pj4gcmV2aWV3IGFuZCB0ZXN0aW5nIGlzIF9oaWdobHlf
+IGFwcHJlY2lhdGVkLg0KPj4+IC0tLQ0KPj4+IMKgIGRyaXZlcnMvZ3B1L2RybS9tZXNvbi9tZXNv
+bl9kd19oZG1pLmMgfCAyMyArKystLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPj4+IMKgIDEgZmlsZSBj
+aGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDIwIGRlbGV0aW9ucygtKQ0KPj4+DQo+Pj4gZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9tZXNvbi9tZXNvbl9kd19oZG1pLmMgDQo+Pj4gYi9kcml2
+ZXJzL2dwdS9kcm0vbWVzb24vbWVzb25fZHdfaGRtaS5jDQo+Pj4gaW5kZXggNWNkMmIyZWJiYmQz
+Li43NjQyZjc0MDI3MmIgMTAwNjQ0DQo+Pj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL21lc29uL21l
+c29uX2R3X2hkbWkuYw0KPj4+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9tZXNvbi9tZXNvbl9kd19o
+ZG1pLmMNCj4+PiBAQCAtMTQwLDcgKzE0MCw2IEBAIHN0cnVjdCBtZXNvbl9kd19oZG1pIHsNCj4+
+PiDCoMKgwqDCoMKgIHN0cnVjdCByZXNldF9jb250cm9sICpoZG1pdHhfYXBiOw0KPj4+IMKgwqDC
+oMKgwqAgc3RydWN0IHJlc2V0X2NvbnRyb2wgKmhkbWl0eF9jdHJsOw0KPj4+IMKgwqDCoMKgwqAg
+c3RydWN0IHJlc2V0X2NvbnRyb2wgKmhkbWl0eF9waHk7DQo+Pj4gLcKgwqDCoCBzdHJ1Y3QgcmVn
+dWxhdG9yICpoZG1pX3N1cHBseTsNCj4+PiDCoMKgwqDCoMKgIHUzMiBpcnFfc3RhdDsNCj4+PiDC
+oMKgwqDCoMKgIHN0cnVjdCBkd19oZG1pICpoZG1pOw0KPj4+IMKgwqDCoMKgwqAgc3RydWN0IGRy
+bV9icmlkZ2UgKmJyaWRnZTsNCj4+PiBAQCAtNjY1LDExICs2NjQsNiBAQCBzdGF0aWMgdm9pZCBt
+ZXNvbl9kd19oZG1pX2luaXQoc3RydWN0IA0KPj4+IG1lc29uX2R3X2hkbWkgKm1lc29uX2R3X2hk
+bWkpDQo+Pj4gwqAgfQ0KPj4+IC1zdGF0aWMgdm9pZCBtZXNvbl9kaXNhYmxlX3JlZ3VsYXRvcih2
+b2lkICpkYXRhKQ0KPj4+IC17DQo+Pj4gLcKgwqDCoCByZWd1bGF0b3JfZGlzYWJsZShkYXRhKTsN
+Cj4+PiAtfQ0KPj4+IC0NCj4+PiDCoCBzdGF0aWMgdm9pZCBtZXNvbl9kaXNhYmxlX2Nsayh2b2lk
+ICpkYXRhKQ0KPj4+IMKgIHsNCj4+PiDCoMKgwqDCoMKgIGNsa19kaXNhYmxlX3VucHJlcGFyZShk
+YXRhKTsNCj4+PiBAQCAtNzIzLDIwICs3MTcsOSBAQCBzdGF0aWMgaW50IG1lc29uX2R3X2hkbWlf
+YmluZChzdHJ1Y3QgZGV2aWNlIA0KPj4+ICpkZXYsIHN0cnVjdCBkZXZpY2UgKm1hc3RlciwNCj4+
+PiDCoMKgwqDCoMKgIG1lc29uX2R3X2hkbWktPmRhdGEgPSBtYXRjaDsNCj4+PiDCoMKgwqDCoMKg
+IGR3X3BsYXRfZGF0YSA9ICZtZXNvbl9kd19oZG1pLT5kd19wbGF0X2RhdGE7DQo+Pj4gLcKgwqDC
+oCBtZXNvbl9kd19oZG1pLT5oZG1pX3N1cHBseSA9IGRldm1fcmVndWxhdG9yX2dldF9vcHRpb25h
+bChkZXYsIA0KPj4+ICJoZG1pIik7DQo+Pj4gLcKgwqDCoCBpZiAoSVNfRVJSKG1lc29uX2R3X2hk
+bWktPmhkbWlfc3VwcGx5KSkgew0KPj4+IC3CoMKgwqDCoMKgwqDCoCBpZiAoUFRSX0VSUihtZXNv
+bl9kd19oZG1pLT5oZG1pX3N1cHBseSkgPT0gLUVQUk9CRV9ERUZFUikNCj4+PiAtwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCByZXR1cm4gLUVQUk9CRV9ERUZFUjsNCj4+PiAtwqDCoMKgwqDCoMKgwqAg
+bWVzb25fZHdfaGRtaS0+aGRtaV9zdXBwbHkgPSBOVUxMOw0KPj4+IC3CoMKgwqAgfSBlbHNlIHsN
+Cj4+PiAtwqDCoMKgwqDCoMKgwqAgcmV0ID0gcmVndWxhdG9yX2VuYWJsZShtZXNvbl9kd19oZG1p
+LT5oZG1pX3N1cHBseSk7DQo+Pj4gLcKgwqDCoMKgwqDCoMKgIGlmIChyZXQpDQo+Pj4gLcKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIHJldDsNCj4+PiAtwqDCoMKgwqDCoMKgwqAgcmV0ID0g
+ZGV2bV9hZGRfYWN0aW9uX29yX3Jlc2V0KGRldiwgbWVzb25fZGlzYWJsZV9yZWd1bGF0b3IsDQo+
+Pj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+bWVzb25fZHdfaGRtaS0+aGRtaV9zdXBwbHkpOw0KPj4+IC3CoMKgwqDCoMKgwqDCoCBpZiAocmV0
+KQ0KPj4+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiByZXQ7DQo+Pj4gLcKgwqDCoCB9
+DQo+Pj4gK8KgwqDCoCByZXQgPSBkZXZtX3JlZ3VsYXRvcl9nZXRfZW5hYmxlX29wdGlvbmFsKGRl
+diwgImhkbWkiKTsNCj4+PiArwqDCoMKgIGlmIChyZXQgIT0gLUVOT0RFVikNCj4+PiArwqDCoMKg
+wqDCoMKgwqAgcmV0dXJuIHJldDsNCj4+DQo+PiBBcyBub3RlZCBpbiB0aGUgcmV2aWV3IG9mIHRo
+ZSBzZXJpZXMgdGhhdCBpbnRyb2R1Y2VkDQo+PiBkZXZtX3JlZ3VsYXRvcl9nZXRfZW5hYmxlX29w
+dGlvbmFsKCksIHRoZSByaWdodCB0aGluZyB0byBkbyBpcyB0bw0KPj4gaW1wbGVtZW50IHJ1bnRp
+bWUgUE0gaW4gdGhpcyBkcml2ZXIgdG8gYXZvaWQgd2FzdGluZyBwb3dlci4NCj4gDQo+IFdoaWxl
+IEkgYWdyZWUsIGl0J3Mgbm90IHJlYWxseSB0aGUgc2FtZSBsZXZlbCBvZiBlZmZvcnQgYXMgdGhp
+cyBwYXRjaA0KPiBzaG91bGQgYmUgZnVuY3Rpb25hbGx5IGVxdWl2YWxlbnQuDQoNCldoaWxlIHdl
+IGFsbCBhZ3JlZSB0aGF0IHBvd2VyIHNhdmluZ3MgZ2FpbmVkIGJ5IHJ1bnRpbWUgUE0gd291bGQg
+YmUgDQpncmVhdCAtIEkgZG9uJ3QgdGhpbmsgd2Ugc2hvdWxkIHN0b3AgbWlub3IgaW1wcm92ZW1l
+bnRzIHdoaWxlIHdhaXRpbmcgDQpmb3IgdGhhdCB0byBtYWdpY2FsbHkgaGFwcGVuIDspDQoNCkkg
+bGlrZSB0aGUgc2F5aW5nIEkgZmlyc3QgaGVhcmQgZnJvbSBKb25hdGhhbiBDYW1lcm9uIC0gIkRv
+bid0IGxldCB0aGUgDQpwZXJmZWN0IGJlIGFuIGVuZW15IG9mIGdvb2QiLg0KDQpBZnRlciB0aGF0
+IGJlaW5nIHNhaWQsIHNob3VsZCBJIHJlLXNwaW4gdGhpcyBvciBqdXN0IGRyb3AgaXQ/IChJIGFt
+IA0KY2xlYW5pbmcgdXAgbXkgbG9jYWwgZ2l0IGZyb20gb2xkIHN0dWZmLCBhbmQgdGhlc2UgYXJl
+IGFib3V0IHRvIHZhbmlzaCANCmZyb20gbXkgYm9va3MpLg0KDQpZb3VycywNCgktLSBNYXR0aQ0K
+DQotLSANCk1hdHRpIFZhaXR0aW5lbg0KTGludXgga2VybmVsIGRldmVsb3BlciBhdCBST0hNIFNl
+bWljb25kdWN0b3JzDQpPdWx1IEZpbmxhbmQNCg0Kfn4gV2hlbiB0aGluZ3MgZ28gdXR0ZXJseSB3
+cm9uZyB2aW0gdXNlcnMgY2FuIGFsd2F5cyB0eXBlIDpoZWxwISB+fg0KDQo=
