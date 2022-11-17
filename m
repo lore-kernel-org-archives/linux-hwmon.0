@@ -2,146 +2,519 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F0D0C43219
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Nov 2022 09:13:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02764C43217
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Nov 2022 12:07:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239797AbiKQJNv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Nov 2022 04:13:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
+        id S239991AbiKQMH2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Nov 2022 07:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239777AbiKQJNs (ORCPT
+        with ESMTP id S239856AbiKQMHV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Nov 2022 04:13:48 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62F26454E
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Nov 2022 01:13:46 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovaxc-0005Sg-6M; Thu, 17 Nov 2022 10:13:28 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovaxY-004p1e-EC; Thu, 17 Nov 2022 10:13:25 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ovaxY-00HF1m-OS; Thu, 17 Nov 2022 10:13:24 +0100
-Date:   Thu, 17 Nov 2022 10:13:24 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Thu, 17 Nov 2022 07:07:21 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E383A6A6A7;
+        Thu, 17 Nov 2022 04:07:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668686840; x=1700222840;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=JTj1Q3/LS6yau70lkn31S2p01aZjtsnGeK7AX86qR4A=;
+  b=gOP50tftNwV9ALLDK/L35rBz8Mz6h3ekG04hs44su5pDW7+qwk4//eAV
+   ksN610Mn9pZeHnHMPV73W/Do0llmV8WQkBE7gwKxjXF08mYftKQlH0feL
+   7PLQnO3UD3gALNGjgdrUVKViwua88BioDBoF2sB0D7ubFTOxVF9yRf6lV
+   1HzZVcbad7O+vCDpCaQu36dH4k2UBw0UMIFw1Qp3U/kgz89Fqs84cKXbQ
+   mva2tarInrMzexa4QqAz/WlnQNN9V7pWKhcfJZEfNaGR6EXsudN2otuud
+   0Y383LhXxDoOLCGW06DUTtMi/jcRgTTZf3iLlJgiS2jijMDCOwisFA33U
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="292538985"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="292538985"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 04:07:00 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="968855666"
+X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
+   d="scan'208";a="968855666"
+Received: from kvehmane-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.61.113])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 04:06:54 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Marco Pagani <marpagan@redhat.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v6 3/3] hwmon: (max6639) Change from pdata to dt
- configuration
-Message-ID: <20221117091324.h7etwyzckzvpoa4p@pengutronix.de>
-References: <20221116213615.1256297-1-Naresh.Solanki@9elements.com>
- <20221116213615.1256297-4-Naresh.Solanki@9elements.com>
- <20221117074510.qqtjc6h3bnh5rccx@pengutronix.de>
- <81cd642f-c5fb-77ec-a634-5655d5b6088c@9elements.com>
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 03/11] mfd: intel-m10-bmc: Split into core and spi specific parts
+Date:   Thu, 17 Nov 2022 14:05:07 +0200
+Message-Id: <20221117120515.37807-4-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221117120515.37807-1-ilpo.jarvinen@linux.intel.com>
+References: <20221117120515.37807-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lbqlkkiplftnkolk"
-Content-Disposition: inline
-In-Reply-To: <81cd642f-c5fb-77ec-a634-5655d5b6088c@9elements.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Split the common code from intel-m10-bmc driver into intel-m10-bmc-core
+and move the SPI bus parts into an interface specific file.
 
---lbqlkkiplftnkolk
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+intel-m10-bmc-core becomes the core MFD functions which can support
+multiple bus interface like SPI bus.
 
-On Thu, Nov 17, 2022 at 02:10:45PM +0530, Naresh Solanki wrote:
->=20
->=20
-> On 17-11-2022 01:15 pm, Uwe Kleine-K=F6nig wrote:
-> > Hello,
-> >=20
-> > On Wed, Nov 16, 2022 at 10:36:15PM +0100, Naresh Solanki wrote:
-> > > max6639_platform_data is not used by any in-kernel driver and does not
-> > > address the MAX6639 fans separately.
-> > > Move to device tree configuration with explicit properties to configu=
-re
-> > > each fan.
-> > >=20
-> > > Non-DT platform can still use this module with its default
-> > > configuration.
-> > >=20
-> > > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> > > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> >=20
-> > What changed here since v5? Please either add a changelog below the
-> > tripple-dash for a new revision, or make sure that all relevant people
-> > get the cover letter.
-> >=20
-> > It seems you didn't address my comments for v5 :-\
-> Not sure what I missed but did following changes:
-> Removed unused header max6639.h
-> Used dev_err_probe instead,
-> Removed of_pwm_n_cells,
-> if condition for freq_table
-> removed pwm_get_state & instead use pwm->state
-> division/multiplication optimizations,
-> indentation of freq_table,
+Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
+Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net> # hwmon
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ MAINTAINERS                                   |   2 +-
+ drivers/fpga/Kconfig                          |   2 +-
+ drivers/hwmon/Kconfig                         |   2 +-
+ drivers/mfd/Kconfig                           |  30 ++--
+ drivers/mfd/Makefile                          |   5 +-
+ drivers/mfd/intel-m10-bmc-core.c              | 122 +++++++++++++++++
+ .../{intel-m10-bmc.c => intel-m10-bmc-spi.c}  | 128 +++---------------
+ include/linux/mfd/intel-m10-bmc.h             |   6 +
+ 8 files changed, 173 insertions(+), 124 deletions(-)
+ create mode 100644 drivers/mfd/intel-m10-bmc-core.c
+ rename drivers/mfd/{intel-m10-bmc.c => intel-m10-bmc-spi.c} (59%)
 
-In the cover letter you just wrote:
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cf0f18502372..ddfa4f8b3c80 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10452,7 +10452,7 @@ S:	Maintained
+ F:	Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
+ F:	Documentation/hwmon/intel-m10-bmc-hwmon.rst
+ F:	drivers/hwmon/intel-m10-bmc-hwmon.c
+-F:	drivers/mfd/intel-m10-bmc.c
++F:	drivers/mfd/intel-m10-bmc*
+ F:	include/linux/mfd/intel-m10-bmc.h
+ 
+ INTEL MENLOW THERMAL DRIVER
+diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+index 6ce143dafd04..0a00763b9f28 100644
+--- a/drivers/fpga/Kconfig
++++ b/drivers/fpga/Kconfig
+@@ -246,7 +246,7 @@ config FPGA_MGR_VERSAL_FPGA
+ 
+ config FPGA_M10_BMC_SEC_UPDATE
+ 	tristate "Intel MAX10 BMC Secure Update driver"
+-	depends on MFD_INTEL_M10_BMC
++	depends on MFD_INTEL_M10_BMC_CORE
+ 	select FW_LOADER
+ 	select FW_UPLOAD
+ 	help
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 7ac3daaf59ce..984a55e0f313 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -2321,7 +2321,7 @@ config SENSORS_XGENE
+ 
+ config SENSORS_INTEL_M10_BMC_HWMON
+ 	tristate "Intel MAX10 BMC Hardware Monitoring"
+-	depends on MFD_INTEL_M10_BMC
++	depends on MFD_INTEL_M10_BMC_CORE
+ 	help
+ 	  This driver provides support for the hardware monitoring functionality
+ 	  on Intel MAX10 BMC chip.
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index 8b93856de432..a09d4ac60dc7 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -2219,18 +2219,24 @@ config SGI_MFD_IOC3
+ 	  If you have an SGI Origin, Octane, or a PCI IOC3 card,
+ 	  then say Y. Otherwise say N.
+ 
+-config MFD_INTEL_M10_BMC
+-	tristate "Intel MAX 10 Board Management Controller"
+-	depends on SPI_MASTER
+-	select REGMAP_SPI_AVMM
+-	select MFD_CORE
+-	help
+-	  Support for the Intel MAX 10 board management controller using the
+-	  SPI interface.
+-
+-	  This driver provides common support for accessing the device,
+-	  additional drivers must be enabled in order to use the functionality
+-	  of the device.
++config MFD_INTEL_M10_BMC_CORE
++        tristate
++        select MFD_CORE
++        select REGMAP
++        default n
++
++config MFD_INTEL_M10_BMC_SPI
++        tristate "Intel MAX 10 Board Management Controller with SPI"
++        depends on SPI_MASTER
++        select MFD_INTEL_M10_BMC_CORE
++        select REGMAP_SPI_AVMM
++        help
++          Support for the Intel MAX 10 board management controller using the
++          SPI interface.
++
++          This driver provides common support for accessing the device,
++          additional drivers must be enabled in order to use the functionality
++          of the device.
+ 
+ config MFD_RSMU_I2C
+ 	tristate "Renesas Synchronization Management Unit with I2C"
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index 7ed3ef4a698c..f32276cdd0c2 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -271,7 +271,10 @@ obj-$(CONFIG_MFD_QCOM_PM8008)	+= qcom-pm8008.o
+ 
+ obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
+ obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
+-obj-$(CONFIG_MFD_INTEL_M10_BMC)   += intel-m10-bmc.o
++
++intel-m10-bmc-objs             := intel-m10-bmc-core.o
++obj-$(CONFIG_MFD_INTEL_M10_BMC_CORE)   += intel-m10-bmc.o
++obj-$(CONFIG_MFD_INTEL_M10_BMC_SPI)   += intel-m10-bmc-spi.o
+ 
+ obj-$(CONFIG_MFD_ATC260X)	+= atc260x-core.o
+ obj-$(CONFIG_MFD_ATC260X_I2C)	+= atc260x-i2c.o
+diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
+new file mode 100644
+index 000000000000..6630b81b10c4
+--- /dev/null
++++ b/drivers/mfd/intel-m10-bmc-core.c
+@@ -0,0 +1,122 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Intel MAX 10 Board Management Controller chip - common code
++ *
++ * Copyright (C) 2018-2020 Intel Corporation. All rights reserved.
++ */
++
++#include <linux/bitfield.h>
++#include <linux/device.h>
++#include <linux/dev_printk.h>
++#include <linux/mfd/core.h>
++#include <linux/mfd/intel-m10-bmc.h>
++#include <linux/module.h>
++
++static ssize_t bmc_version_show(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
++	unsigned int val;
++	int ret;
++
++	ret = m10bmc_sys_read(ddata, M10BMC_BUILD_VER, &val);
++	if (ret)
++		return ret;
++
++	return sprintf(buf, "0x%x\n", val);
++}
++static DEVICE_ATTR_RO(bmc_version);
++
++static ssize_t bmcfw_version_show(struct device *dev,
++				  struct device_attribute *attr, char *buf)
++{
++	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
++	unsigned int val;
++	int ret;
++
++	ret = m10bmc_sys_read(ddata, NIOS2_FW_VERSION, &val);
++	if (ret)
++		return ret;
++
++	return sprintf(buf, "0x%x\n", val);
++}
++static DEVICE_ATTR_RO(bmcfw_version);
++
++static ssize_t mac_address_show(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
++	unsigned int macaddr_low, macaddr_high;
++	int ret;
++
++	ret = m10bmc_sys_read(ddata, M10BMC_MAC_LOW, &macaddr_low);
++	if (ret)
++		return ret;
++
++	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%02x:%02x:%02x:%02x:%02x:%02x\n",
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE1, macaddr_low),
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE2, macaddr_low),
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE3, macaddr_low),
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE4, macaddr_low),
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE5, macaddr_high),
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE6, macaddr_high));
++}
++static DEVICE_ATTR_RO(mac_address);
++
++static ssize_t mac_count_show(struct device *dev,
++			      struct device_attribute *attr, char *buf)
++{
++	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
++	unsigned int macaddr_high;
++	int ret;
++
++	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%u\n", (u8)FIELD_GET(M10BMC_MAC_COUNT, macaddr_high));
++}
++static DEVICE_ATTR_RO(mac_count);
++
++static struct attribute *m10bmc_attrs[] = {
++	&dev_attr_bmc_version.attr,
++	&dev_attr_bmcfw_version.attr,
++	&dev_attr_mac_address.attr,
++	&dev_attr_mac_count.attr,
++	NULL,
++};
++
++static const struct attribute_group m10bmc_group = {
++	.attrs = m10bmc_attrs,
++};
++
++const struct attribute_group *m10bmc_dev_groups[] = {
++	&m10bmc_group,
++	NULL,
++};
++EXPORT_SYMBOL_GPL(m10bmc_dev_groups);
++
++int m10bmc_dev_init(struct intel_m10bmc *m10bmc, const struct intel_m10bmc_platform_info *info)
++{
++	int ret;
++
++	m10bmc->info = info;
++	dev_set_drvdata(m10bmc->dev, m10bmc);
++
++	ret = devm_mfd_add_devices(m10bmc->dev, PLATFORM_DEVID_AUTO,
++				   info->cells, info->n_cells,
++				   NULL, 0, NULL);
++	if (ret)
++		dev_err(m10bmc->dev, "Failed to register sub-devices: %d\n", ret);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(m10bmc_dev_init);
++
++MODULE_DESCRIPTION("Intel MAX 10 BMC core MFD driver");
++MODULE_AUTHOR("Intel Corporation");
++MODULE_LICENSE("GPL v2");
+diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc-spi.c
+similarity index 59%
+rename from drivers/mfd/intel-m10-bmc.c
+rename to drivers/mfd/intel-m10-bmc-spi.c
+index 2c26203c4799..be1d4ddedabb 100644
+--- a/drivers/mfd/intel-m10-bmc.c
++++ b/drivers/mfd/intel-m10-bmc-spi.c
+@@ -5,29 +5,14 @@
+  * Copyright (C) 2018-2020 Intel Corporation. All rights reserved.
+  */
+ #include <linux/bitfield.h>
++#include <linux/dev_printk.h>
+ #include <linux/init.h>
+ #include <linux/mfd/core.h>
+ #include <linux/mfd/intel-m10-bmc.h>
+ #include <linux/module.h>
+-#include <linux/mutex.h>
+ #include <linux/regmap.h>
+ #include <linux/spi/spi.h>
+ 
+-static struct mfd_cell m10bmc_d5005_subdevs[] = {
+-	{ .name = "d5005bmc-hwmon" },
+-	{ .name = "d5005bmc-sec-update" }
+-};
+-
+-static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
+-	{ .name = "n3000bmc-hwmon" },
+-	{ .name = "n3000bmc-retimer" },
+-	{ .name = "n3000bmc-sec-update" },
+-};
+-
+-static struct mfd_cell m10bmc_n5010_subdevs[] = {
+-	{ .name = "n5010bmc-hwmon" },
+-};
+-
+ static const struct regmap_range m10bmc_regmap_range[] = {
+ 	regmap_reg_range(M10BMC_LEGACY_BUILD_VER, M10BMC_LEGACY_BUILD_VER),
+ 	regmap_reg_range(M10BMC_SYS_BASE, M10BMC_SYS_END),
+@@ -48,86 +33,6 @@ static struct regmap_config intel_m10bmc_regmap_config = {
+ 	.max_register = M10BMC_MEM_END,
+ };
+ 
+-static ssize_t bmc_version_show(struct device *dev,
+-				struct device_attribute *attr, char *buf)
+-{
+-	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
+-	unsigned int val;
+-	int ret;
+-
+-	ret = m10bmc_sys_read(ddata, M10BMC_BUILD_VER, &val);
+-	if (ret)
+-		return ret;
+-
+-	return sprintf(buf, "0x%x\n", val);
+-}
+-static DEVICE_ATTR_RO(bmc_version);
+-
+-static ssize_t bmcfw_version_show(struct device *dev,
+-				  struct device_attribute *attr, char *buf)
+-{
+-	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
+-	unsigned int val;
+-	int ret;
+-
+-	ret = m10bmc_sys_read(ddata, NIOS2_FW_VERSION, &val);
+-	if (ret)
+-		return ret;
+-
+-	return sprintf(buf, "0x%x\n", val);
+-}
+-static DEVICE_ATTR_RO(bmcfw_version);
+-
+-static ssize_t mac_address_show(struct device *dev,
+-				struct device_attribute *attr, char *buf)
+-{
+-	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
+-	unsigned int macaddr_low, macaddr_high;
+-	int ret;
+-
+-	ret = m10bmc_sys_read(ddata, M10BMC_MAC_LOW, &macaddr_low);
+-	if (ret)
+-		return ret;
+-
+-	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
+-	if (ret)
+-		return ret;
+-
+-	return sysfs_emit(buf, "%02x:%02x:%02x:%02x:%02x:%02x\n",
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE1, macaddr_low),
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE2, macaddr_low),
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE3, macaddr_low),
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE4, macaddr_low),
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE5, macaddr_high),
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE6, macaddr_high));
+-}
+-static DEVICE_ATTR_RO(mac_address);
+-
+-static ssize_t mac_count_show(struct device *dev,
+-			      struct device_attribute *attr, char *buf)
+-{
+-	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
+-	unsigned int macaddr_high;
+-	int ret;
+-
+-	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
+-	if (ret)
+-		return ret;
+-
+-	return sysfs_emit(buf, "%u\n",
+-			  (u8)FIELD_GET(M10BMC_MAC_COUNT, macaddr_high));
+-}
+-static DEVICE_ATTR_RO(mac_count);
+-
+-static struct attribute *m10bmc_attrs[] = {
+-	&dev_attr_bmc_version.attr,
+-	&dev_attr_bmcfw_version.attr,
+-	&dev_attr_mac_address.attr,
+-	&dev_attr_mac_count.attr,
+-	NULL,
+-};
+-ATTRIBUTE_GROUPS(m10bmc);
+-
+ static int check_m10bmc_version(struct intel_m10bmc *ddata)
+ {
+ 	unsigned int v;
+@@ -166,11 +71,9 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+ 		return -ENOMEM;
+ 
+ 	info = (struct intel_m10bmc_platform_info *)id->driver_data;
+-	ddata->info = info;
+ 	ddata->dev = dev;
+ 
+-	ddata->regmap =
+-		devm_regmap_init_spi_avmm(spi, &intel_m10bmc_regmap_config);
++	ddata->regmap = devm_regmap_init_spi_avmm(spi, &intel_m10bmc_regmap_config);
+ 	if (IS_ERR(ddata->regmap)) {
+ 		ret = PTR_ERR(ddata->regmap);
+ 		dev_err(dev, "Failed to allocate regmap: %d\n", ret);
+@@ -185,15 +88,24 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+ 		return ret;
+ 	}
+ 
+-	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
+-				   info->cells, info->n_cells,
+-				   NULL, 0, NULL);
+-	if (ret)
+-		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
+-
+-	return ret;
++	return m10bmc_dev_init(ddata, info);
+ }
+ 
++static struct mfd_cell m10bmc_d5005_subdevs[] = {
++	{ .name = "d5005bmc-hwmon" },
++	{ .name = "d5005bmc-sec-update" },
++};
++
++static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
++	{ .name = "n3000bmc-hwmon" },
++	{ .name = "n3000bmc-retimer" },
++	{ .name = "n3000bmc-sec-update" },
++};
++
++static struct mfd_cell m10bmc_n5010_subdevs[] = {
++	{ .name = "n5010bmc-hwmon" },
++};
++
+ static const struct intel_m10bmc_platform_info m10bmc_spi_n3000 = {
+ 	.cells = m10bmc_pacn3000_subdevs,
+ 	.n_cells = ARRAY_SIZE(m10bmc_pacn3000_subdevs),
+@@ -220,14 +132,14 @@ MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
+ static struct spi_driver intel_m10bmc_spi_driver = {
+ 	.driver = {
+ 		.name = "intel-m10-bmc",
+-		.dev_groups = m10bmc_groups,
++		.dev_groups = m10bmc_dev_groups,
+ 	},
+ 	.probe = intel_m10_bmc_spi_probe,
+ 	.id_table = m10bmc_spi_id,
+ };
+ module_spi_driver(intel_m10bmc_spi_driver);
+ 
+-MODULE_DESCRIPTION("Intel MAX 10 BMC Device Driver");
++MODULE_DESCRIPTION("Intel MAX 10 BMC SPI bus interface");
+ MODULE_AUTHOR("Intel Corporation");
+ MODULE_LICENSE("GPL v2");
+ MODULE_ALIAS("spi:intel-m10-bmc");
+diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+index 725b51ea4aee..82e0820e146e 100644
+--- a/include/linux/mfd/intel-m10-bmc.h
++++ b/include/linux/mfd/intel-m10-bmc.h
+@@ -171,4 +171,10 @@ m10bmc_raw_read(struct intel_m10bmc *m10bmc, unsigned int addr,
+ #define m10bmc_sys_read(m10bmc, offset, val) \
+ 	m10bmc_raw_read(m10bmc, M10BMC_SYS_BASE + (offset), val)
+ 
++/*
++ * MAX10 BMC Core support
++ */
++int m10bmc_dev_init(struct intel_m10bmc *m10bmc, const struct intel_m10bmc_platform_info *info);
++extern const struct attribute_group *m10bmc_dev_groups[];
++
+ #endif /* __MFD_INTEL_M10_BMC_H */
+-- 
+2.30.2
 
-| Changes in V6:
-| - Remove unused header file
-| - minor cleanup
-
-which is too short in my eyes. If you wrote instead:
-
-	Address review feedback by Uwe Kleine-K=F6nig in patch #3, patches #1 and
-	#2 unchanged.
-
-This would be much more helpful as people that were already happy with
-v5 wouldn't need to look at the first two patches and I would know that
-you addressed my feedback and would have looked in more detail.
-
-What I miss is the most critical part of my feedback, i.e.:
-| My overall impression is that this patch mixes too much things. IMHO it
-| should be split in (at least)
-|=20
-|  - Add dt support
-|  - Drop platform support
-|  - Add PWM provider support
-|  - Make use of the PWM API
-|
-| maybe also add the 2nd PWM in a separate step.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---lbqlkkiplftnkolk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN1+zEACgkQwfwUeK3K
-7AkGRwgAllZK66a+YhErW6Qlvi+M9Bd/nwKnyEiAsvmyQ2IadpKiThbMr6uw0y5/
-qlrC3gMnhKzY8u0AFTFGnZlQOS+fCVeopgahPdA5ZJNW4GvNcPXB8qHDXwdzVQOf
-yRQkbpYnu9Pt8Wtxew0QWnCeW+s/BVbJJSrWJYWZgonp+OX0dl19Su2yO+H6agHF
-TDExZrPMv8ds4Nxj7TM5V7MJn8TZ9pxecfJjFcudvTEMTkgPZ5R+EY45+L8Jg29l
-b1BRWtoDEwku4K1GTIb1BRMJ3JRS3pJVunj3R88/E128yY3vno9TownFtSSG5s/1
-+RsohjtFf/cRwzqaoYdWALCulw4anQ==
-=MgIF
------END PGP SIGNATURE-----
-
---lbqlkkiplftnkolk--
