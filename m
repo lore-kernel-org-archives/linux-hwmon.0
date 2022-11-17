@@ -2,63 +2,34 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA9AEC43219
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Nov 2022 08:40:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F0D0C43219
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Nov 2022 09:13:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239555AbiKQIkw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Nov 2022 03:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
+        id S239797AbiKQJNv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Nov 2022 04:13:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234703AbiKQIkv (ORCPT
+        with ESMTP id S239777AbiKQJNs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Nov 2022 03:40:51 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2045BD4E
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Nov 2022 00:40:50 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id v3so1383279pgh.4
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Nov 2022 00:40:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qplMXaAH/oEU5/8F3cf/ZUOQW9zkLXWofLHcj31TN/s=;
-        b=Vuy2P2T2r6KO/AE/XiLPILumQC7f2JK5sa1C10KBZ1znHMVCPbCzWeKaN25fOw0eKL
-         9SJ+eO/MqGvXQ58PvwxYqVKz+6CyDG+A1uegZU6d8RyaZ28foyko7GwmzJFKSKUC2n+R
-         2KTVJFMA/OYtFbQ7RULhUhx0/GRc+zUcyZlStNw1k4y1qQ9HcpSt/08vQmIFRXW6JUzZ
-         1CxDaQLbCxn+/eYOE2F6oJdWdbvKOeiEmK3xRtjfzsUB+lhAUD33yEjTZ5b4jmUOgz2i
-         yLwZsZ3CNIdWWnim49pScyzm0jEjv/ueOlBYF7iQnL3Q3VVdypZi+D6n+iDINfa4A2Xy
-         ojMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qplMXaAH/oEU5/8F3cf/ZUOQW9zkLXWofLHcj31TN/s=;
-        b=ESRBj2i4agbuLi+JdYiGhM4740xnnJIIt9lGiWgLU+9d2kQBGhOv17u9OukaoPIC0Y
-         KrxPJbW6X969j1ePjvS6XOe3ladJaDj2dhrVQfQxSR0OMSGIzDCndpb9Z8fuqnoAsd0U
-         qKwy0GMtFoui8ibk2yW7tad29IFqMhXssmgFepz50HXV9cEwt4B8+FmKvXrAVaNt4GxO
-         gVFlI2mFvzHv/8Z9JN5hCfmQqemtq4zmFT0PSB3NLGm6HhnEGh+HUKNSkR2BdP6bqE/W
-         SprzxrS3SD8fD9Y91B1GuZeCshmvPS2gLNt3fhBik5HD1wzk0djeNhNrWXuPLDeUuUK7
-         jf7g==
-X-Gm-Message-State: ANoB5pkHY/JrUehz8xVB6tSi3WYBEap7WMAHrv9QdB9pKaM6U7CWffuo
-        pI58HJekUL7TK2yMfoQbqII+9w==
-X-Google-Smtp-Source: AA0mqf5TDC85f9Z1mBM8VjxRxLxfOytfZLf24tEIgB5ZFuSHvP/eHelRdQ/4T74LRasVrciC6VCbNg==
-X-Received: by 2002:a63:224c:0:b0:46b:8e9:747 with SMTP id t12-20020a63224c000000b0046b08e90747mr1159323pgm.365.1668674450331;
-        Thu, 17 Nov 2022 00:40:50 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id o14-20020a170902d4ce00b00186acb14c4asm693768plg.67.2022.11.17.00.40.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 00:40:49 -0800 (PST)
-Message-ID: <81cd642f-c5fb-77ec-a634-5655d5b6088c@9elements.com>
-Date:   Thu, 17 Nov 2022 14:10:45 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v6 3/3] hwmon: (max6639) Change from pdata to dt
- configuration
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+        Thu, 17 Nov 2022 04:13:48 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62F26454E
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Nov 2022 01:13:46 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovaxc-0005Sg-6M; Thu, 17 Nov 2022 10:13:28 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovaxY-004p1e-EC; Thu, 17 Nov 2022 10:13:25 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ovaxY-00HF1m-OS; Thu, 17 Nov 2022 10:13:24 +0100
+Date:   Thu, 17 Nov 2022 10:13:24 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
 Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
         Thierry Reding <thierry.reding@gmail.com>,
@@ -66,52 +37,111 @@ Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
         Marcello Sylvester Bauer <sylv@sylv.io>,
         linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v6 3/3] hwmon: (max6639) Change from pdata to dt
+ configuration
+Message-ID: <20221117091324.h7etwyzckzvpoa4p@pengutronix.de>
 References: <20221116213615.1256297-1-Naresh.Solanki@9elements.com>
  <20221116213615.1256297-4-Naresh.Solanki@9elements.com>
  <20221117074510.qqtjc6h3bnh5rccx@pengutronix.de>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <20221117074510.qqtjc6h3bnh5rccx@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+ <81cd642f-c5fb-77ec-a634-5655d5b6088c@9elements.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lbqlkkiplftnkolk"
+Content-Disposition: inline
+In-Reply-To: <81cd642f-c5fb-77ec-a634-5655d5b6088c@9elements.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
+--lbqlkkiplftnkolk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 17-11-2022 01:15 pm, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Wed, Nov 16, 2022 at 10:36:15PM +0100, Naresh Solanki wrote:
->> max6639_platform_data is not used by any in-kernel driver and does not
->> address the MAX6639 fans separately.
->> Move to device tree configuration with explicit properties to configure
->> each fan.
->>
->> Non-DT platform can still use this module with its default
->> configuration.
->>
->> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> 
-> What changed here since v5? Please either add a changelog below the
-> tripple-dash for a new revision, or make sure that all relevant people
-> get the cover letter.
-> 
-> It seems you didn't address my comments for v5 :-\
-Not sure what I missed but did following changes:
-Removed unused header max6639.h
-Used dev_err_probe instead,
-Removed of_pwm_n_cells,
-if condition for freq_table
-removed pwm_get_state & instead use pwm->state
-division/multiplication optimizations,
-indentation of freq_table,
+On Thu, Nov 17, 2022 at 02:10:45PM +0530, Naresh Solanki wrote:
+>=20
+>=20
+> On 17-11-2022 01:15 pm, Uwe Kleine-K=F6nig wrote:
+> > Hello,
+> >=20
+> > On Wed, Nov 16, 2022 at 10:36:15PM +0100, Naresh Solanki wrote:
+> > > max6639_platform_data is not used by any in-kernel driver and does not
+> > > address the MAX6639 fans separately.
+> > > Move to device tree configuration with explicit properties to configu=
+re
+> > > each fan.
+> > >=20
+> > > Non-DT platform can still use this module with its default
+> > > configuration.
+> > >=20
+> > > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> > > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> >=20
+> > What changed here since v5? Please either add a changelog below the
+> > tripple-dash for a new revision, or make sure that all relevant people
+> > get the cover letter.
+> >=20
+> > It seems you didn't address my comments for v5 :-\
+> Not sure what I missed but did following changes:
+> Removed unused header max6639.h
+> Used dev_err_probe instead,
+> Removed of_pwm_n_cells,
+> if condition for freq_table
+> removed pwm_get_state & instead use pwm->state
+> division/multiplication optimizations,
+> indentation of freq_table,
 
-> 
-> Best regards
-> Uwe
-> 
+In the cover letter you just wrote:
 
-Thanks,
-Naresh
+| Changes in V6:
+| - Remove unused header file
+| - minor cleanup
+
+which is too short in my eyes. If you wrote instead:
+
+	Address review feedback by Uwe Kleine-K=F6nig in patch #3, patches #1 and
+	#2 unchanged.
+
+This would be much more helpful as people that were already happy with
+v5 wouldn't need to look at the first two patches and I would know that
+you addressed my feedback and would have looked in more detail.
+
+What I miss is the most critical part of my feedback, i.e.:
+| My overall impression is that this patch mixes too much things. IMHO it
+| should be split in (at least)
+|=20
+|  - Add dt support
+|  - Drop platform support
+|  - Add PWM provider support
+|  - Make use of the PWM API
+|
+| maybe also add the 2nd PWM in a separate step.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--lbqlkkiplftnkolk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN1+zEACgkQwfwUeK3K
+7AkGRwgAllZK66a+YhErW6Qlvi+M9Bd/nwKnyEiAsvmyQ2IadpKiThbMr6uw0y5/
+qlrC3gMnhKzY8u0AFTFGnZlQOS+fCVeopgahPdA5ZJNW4GvNcPXB8qHDXwdzVQOf
+yRQkbpYnu9Pt8Wtxew0QWnCeW+s/BVbJJSrWJYWZgonp+OX0dl19Su2yO+H6agHF
+TDExZrPMv8ds4Nxj7TM5V7MJn8TZ9pxecfJjFcudvTEMTkgPZ5R+EY45+L8Jg29l
+b1BRWtoDEwku4K1GTIb1BRMJ3JRS3pJVunj3R88/E128yY3vno9TownFtSSG5s/1
++RsohjtFf/cRwzqaoYdWALCulw4anQ==
+=MgIF
+-----END PGP SIGNATURE-----
+
+--lbqlkkiplftnkolk--
