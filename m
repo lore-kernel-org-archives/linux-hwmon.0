@@ -2,79 +2,101 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35129C4332F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Nov 2022 05:05:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D0A5C4332F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Nov 2022 08:44:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbiKRFFl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Nov 2022 00:05:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
+        id S241557AbiKRIow (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Nov 2022 03:44:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiKRFFj (ORCPT
+        with ESMTP id S241516AbiKRIoc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Nov 2022 00:05:39 -0500
-X-Greylist: delayed 604 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Nov 2022 21:05:38 PST
-Received: from scadrial.mjdsystems.ca (scadrial.mjdsystems.ca [192.99.73.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F0E769C4;
-        Thu, 17 Nov 2022 21:05:38 -0800 (PST)
-Received: from cwmtaff.localnet (107-190-58-99.cpe.teksavvy.com [107.190.58.99])
-        by scadrial.mjdsystems.ca (Postfix) with ESMTPSA id 79F87889AC01;
-        Thu, 17 Nov 2022 23:55:32 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed; d=mjdsystems.ca;
-        s=202010; t=1668747332;
-        bh=a3BoROREcq9yjP9BAHO6xJ2ZvTcePivtJqbREHTyI8Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=TbHqVeLA+nzeaHqafZycaDaINXWu+M82pvWzFWEucXz+5jG3xy9ev/SqCMTV9dURE
-         Q8qCCG7jl4Lls7L0i3UHxWgVp5zq5+sfmM2PkB+oE3pgck25xbBakn0WTg1Z9sUIgS
-         UtwA1UJ31OMPlY/oeqPNQ4TRZPNhz1+pGrDlNLKFRsQKIa5kgUb2+J9H3P6R8uUgC1
-         qSfsB6pyhOVHCrxlqaV/xGnfr54mEjVDTWjL1w8p8d9pAiEZ4vkT0KFfyNlcEfcKcx
-         xYahufgpzsFpPBsc+vLHwb438vu3Uhd9hoADNwtdsCf88FBpuxIpdKKlxUeVvCgWXq
-         vhXPGeScUcy6QEciMSKA6dCmucVOIJR9DT6uRCfFQwxcuEuN5A5axOJqME+3SuVY6v
-         0l8ig3QCKqcyhwSY9ymxEAsa3AL11FtwRG2QBYgxrUynhpwvyrJaINGHUHr4iTB3ix
-         NSfeINuSb52l5rrNDc2UPtsvsVWh7FpIZSfCv44rZjBTONKG/9HlX/AbJIj3vgygfL
-         RIAgYASafqFyM/B94o2vxvqA17n6B5b8wdwpNNC2ek3p1mDNMK4vSZuESOPSA9cNJj
-         1nDej2+j7qXaMiwub8eTdEvdsiQs8gd7zeM8c+xr4YWpJ+nTNf4WQ1lIpkJtqTIYIR
-         fBGPADEXmsWAFByux8JlOE/A=
-From:   Matthew Dawson <matthew@mjdsystems.ca>
-To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Eugene Shalygin <eugene.shalygin@gmail.com>
-Subject: [PATCH] hwmon: (asus-ec-sensors) add definitions for ROG ZENITH II EXTREME ALPHA
-Date:   Thu, 17 Nov 2022 23:55:31 -0500
-Message-ID: <2829949.vuYhMxLoTh@cwmtaff>
+        Fri, 18 Nov 2022 03:44:32 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED64B6E55C;
+        Fri, 18 Nov 2022 00:44:31 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id 128so4045056vsz.12;
+        Fri, 18 Nov 2022 00:44:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MVeahOj3E/f6xo0VqbPul6zdCrv5MqdlvkN5Rm5HyFw=;
+        b=f6Lt0TF5HSnqaK3wPtGnF2CHDWliyWh88gc/0NzFyZHTgMTFZKZWOxBwJd2TqAMCj3
+         RBTqwPZyOjWDE8Cka2nUQDwc+ctPLd1sA7/MTy51TYscOFJEnVxer/gg9o6pfWa2yUGi
+         xARo9n4nVsZA+3TlosovHRjIuNZuKAuFdjHREOsmVjx1g8ql4ruei8UDjbV1JrZwnmEx
+         Gsb6jKNMJ5cJagnxxpjPMPry8SGMCoJe7ecb41zLGuSNNWI2BhGP/PQl4vqclj5tK2Bp
+         zClNkdk1taSt6ePSBsFgS7n6flza9Djt57+3EUpBVBTcZ1pca8zWGCmJBitCzjjEhnZU
+         Kfmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MVeahOj3E/f6xo0VqbPul6zdCrv5MqdlvkN5Rm5HyFw=;
+        b=PVFi/CDF2zO6B31kBDXUW2fIh0a7SOrz7hP/0RmJ1iKQO0c4fukZ6T/aHDlzbS0RLa
+         TOXE8i3gUvXMzkYY2O1laMvTP50tl0YOTY0AUsxXuG7wm+LO/BztOw9srBN0I/SnaibS
+         jko0CymzopT5kEodUnNFlRaug0gahBKkgEcPhFUkBjJ+GsDJH4w7P61c0CAGbKSlQXRA
+         F1SK3z9sGtyfIp3MN8oha1gkZ2H58V4biQeKWDLtG5JtQ5oqx93aDOrC5xIYovcMLRXV
+         kzQ3nV2aIJkvvU8mKsDSK1w83yk65QcgeNDWCcIq/94OSzM9vIGWsfdrG3FaIOOTXD6p
+         aLWg==
+X-Gm-Message-State: ANoB5plLXInXdKnBk9Gln/6tGKO+M+tsY6QMKFDAxJ+oqZNg4p2QhBKJ
+        0B+8AurN6kgTZHeeEIIt+6Z4o0SIRr2Bnv60Qsg=
+X-Google-Smtp-Source: AA0mqf6Kf3a0YN7nTcz2C8GjBEO56NqmXz2f9yh0tM1ysJC9R5SRqeEcrqlmaOjC1wWHEf1K2lbVkNgxflacIjeWzGA=
+X-Received: by 2002:a05:6102:a36:b0:3ac:1e22:15ae with SMTP id
+ 22-20020a0561020a3600b003ac1e2215aemr3898855vsb.72.1668761070970; Fri, 18 Nov
+ 2022 00:44:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <2829949.vuYhMxLoTh@cwmtaff>
+In-Reply-To: <2829949.vuYhMxLoTh@cwmtaff>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Fri, 18 Nov 2022 09:44:20 +0100
+Message-ID: <CAB95QAQRx3RhW-cwLe1HRW5m8Xak_aP=o1Uk8iicQYvd_03z_A@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add definitions for ROG ZENITH
+ II EXTREME ALPHA
+To:     Matthew Dawson <matthew@mjdsystems.ca>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for the Zenith II Extreme Alpha.  It is basically the same
-board as the Zenith II Extreme, and has a similar sensor suite.  The
-DSDT is basically the same except for some address, so use the same
-board information as the non-Alpha board.
+Hi Matthew,
+On Fri, 18 Nov 2022 at 05:55, Matthew Dawson <matthew@mjdsystems.ca> wrote:
+>
+> Add support for the Zenith II Extreme Alpha.  It is basically the same
+> board as the Zenith II Extreme, and has a similar sensor suite.  The
+> DSDT is basically the same except for some address, so use the same
+> board information as the non-Alpha board.
 
-Signed-off-by: Matthew Dawson <matthew@mjdsystems.ca>
----
- drivers/hwmon/asus-ec-sensors.c | 2 ++
- 1 file changed, 2 insertions(+)
+Thank you for the patch! I'd like to keep copies of the DSDT for all
+the supported boards. Could you, please, send it to me directly or
+share at https://github.com/zeule/asus-ec-sensors ?
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 81e688975c6a..ac0459be04c7 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -466,6 +466,8 @@ static const struct dmi_system_id dmi_table[] = {
- 					&board_info_strix_z690_a_gaming_wifi_d4),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME",
- 					&board_info_zenith_ii_extreme),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME ALPHA",
-+					&board_info_zenith_ii_extreme),
- 	{},
- };
- 
--- 
-2.35.1
+>
+> Signed-off-by: Matthew Dawson <matthew@mjdsystems.ca>
+> ---
+>  drivers/hwmon/asus-ec-sensors.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+> index 81e688975c6a..ac0459be04c7 100644
+> --- a/drivers/hwmon/asus-ec-sensors.c
+> +++ b/drivers/hwmon/asus-ec-sensors.c
+> @@ -466,6 +466,8 @@ static const struct dmi_system_id dmi_table[] = {
+>                                         &board_info_strix_z690_a_gaming_wifi_d4),
+>         DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME",
+>                                         &board_info_zenith_ii_extreme),
+> +       DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME ALPHA",
 
+The board name needs to be added to the list in
+Documentation/hwmon/asus_ec_sensors.rst.
 
+> +                                       &board_info_zenith_ii_extreme),
+>         {},
+>  };
 
-
+Kind regards,
+Eugene
