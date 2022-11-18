@@ -2,148 +2,192 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8036C43217
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Nov 2022 10:25:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4DA2C433FE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Nov 2022 12:11:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241435AbiKRKZm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Nov 2022 05:25:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
+        id S241694AbiKRMLh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Nov 2022 07:11:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235247AbiKRKZl (ORCPT
+        with ESMTP id S241826AbiKRMLO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Nov 2022 05:25:41 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91FB91534
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 Nov 2022 02:25:39 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so7915894pjc.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 Nov 2022 02:25:39 -0800 (PST)
+        Fri, 18 Nov 2022 07:11:14 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89A79AC94;
+        Fri, 18 Nov 2022 04:10:52 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-13be3ef361dso5661574fac.12;
+        Fri, 18 Nov 2022 04:10:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hXadzGYPg8gH/D/ejsAudxwOh/sdzLX/WQ5IeL1dRw0=;
-        b=JGk8asImdMRrc822FzFzvhcgClh/yYcuFhUtuJtf/Pzp8GzJbTMuqESibrrlaqv2Mv
-         TrIpsJ2M4gzg6kfJFKtXezlWRA7u1ihsrCaK/CpqHbQy7LCfFI5cyZ2R8noGDg3p8h6Y
-         HBXlcLTd9xvR8XJLF90QFCVCcmiQpRC57IUQDMWtPoCmx2wVmACfETCt9ZpxyzAb15gc
-         0JKSZJ7TcvC8mD++2pRyZdwgTMbt5fvmrjuRCa04kCsSJhKtXF0pte+phFxWmUoflwEV
-         2Z0SPAIKliKI41i7C8pDcD5zSJGaH8Egzk6E26mvCa1zn8YVXz+Vp1VLtqoNLz3EzrMF
-         kbLg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LOuXcYIWLATtdUwk8V09y+iwBKLEJSqVVImR++M8UIw=;
+        b=TMUHkw3udH0LdFvhj414EMUF3h3ESNesBnSUCJ0pl6U2xdYUW5/dXRPs+ghwOV/maB
+         +7ujvaY6sR43s0vIt3fhr7p6/KDfI4QHyCHLGMhAdJeTHV7xlWaXC6bbYisSy23vpZYI
+         ZmTNwLv9uApLO8n5yLhCcWwYdeT2/3BNSFmKkR0AWjoY/QTnlfvr7zp6ALTuRkWOiLUj
+         lz+XypJ04j9GABXF+QdAx4wcrbDwu8bo10SgRYhSTTx/500o2QvvAC83vR+VbxIT5vRK
+         m2A3ym37nQJfvvgQzmH19XTdcKHku/X5fzcmMkNN8dzUEIqdxstdqq97hrYKylYv2YEX
+         RK3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hXadzGYPg8gH/D/ejsAudxwOh/sdzLX/WQ5IeL1dRw0=;
-        b=5HjalciCgIamlyrBKfs+csdgqjtF6jrHuQxfhgoyvSDp+dwZuECxbzXzuUcY14kGKk
-         cAUgQ0fsckbCxRtN1Xcb06IM5bsb2BieKhQqjRtyJTRcVO5TglKyAxdNTx0htErrYe43
-         xlGW/j6BPuzyEcJoe2g+O7mTlal9w9YYjp9eQJ5WhWdp5Q5auXb8LQeDrwDxCg6Nq8fF
-         w3sbDNQFZdgyLEZGIBFLNHCp0PZYCJ8bmTLvaV0S14JisngGNVSjeoCvs+uy8INLXjzU
-         rxM0btXyamYbSENxmbaEXLRYg05DZ1D4eneJ/ylhExJwFIHv8/OPZpLYXWyjj4NzkPW1
-         H+JQ==
-X-Gm-Message-State: ANoB5pnv4kDhCkdOI49n3UrAagk5SyQkJfX5YjQHl14aJclewoYunLiW
-        9Vdpz2qhiZKH5KyJ3HVcLky3vA==
-X-Google-Smtp-Source: AA0mqf6Kna3GdFEECz4tQtAZxJtjO29EWzBbOP3NaB+37qQM7I/xTegkTunGCitNt08e7Ajd8vYduw==
-X-Received: by 2002:a17:90a:bf13:b0:213:5d6:8280 with SMTP id c19-20020a17090abf1300b0021305d68280mr12801182pjs.185.1668767139196;
-        Fri, 18 Nov 2022 02:25:39 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id c5-20020a170903234500b001806445887asm3218915plh.223.2022.11.18.02.25.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 02:25:38 -0800 (PST)
-Message-ID: <5d8f8ed5-f0ee-9ed1-1b9f-aed2ab18c26b@9elements.com>
-Date:   Fri, 18 Nov 2022 15:55:33 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v6 3/3] hwmon: (max6639) Change from pdata to dt
- configuration
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LOuXcYIWLATtdUwk8V09y+iwBKLEJSqVVImR++M8UIw=;
+        b=0mUTia3/Cv1zArSrVN1gEbf7+ZzYCvh5Z4YVofa2ya1SbfFDHAB0ZtbOdQHXOiC2ij
+         nVDzlNHP+cKpQerdwtqM+MKv57KKijwOqUb54m5SJGJ0rQ3cacqVoGdbNKEK+1sp7kMh
+         2awKs1ZnhJWJYHf7Zqg2C+eZ7iRe08tGyHWqPI/FoRhx8bPC5eXm8Rlayl3EbsASXKVh
+         heOyX6t+ANrqtasN9J89sIsdjMhY8UIepF/9fSl1ToPs8NSPjizVeOS+vCXB2qrvio2j
+         5g81CQeAl+6l/grwdyXNMEQUxSQQS3mt0EyFMAxEMOqgJtOtvy8FUniw+FRGjBm6M2D/
+         4FDw==
+X-Gm-Message-State: ANoB5pl6amG3YvfHqX5V64r3bZhfGtZhtJeu+1t6RrtMdLuLA35DJZtE
+        mo4AfXgy2Ao1ymQra7iyJkaFe9RruNI=
+X-Google-Smtp-Source: AA0mqf55E4HZ26FehEQDDr3FZjotk/pnM1qEnVGunB+9NTWFiXLzNHM46sfEPAjPE6jUe2dfHk0oqA==
+X-Received: by 2002:a05:6870:780e:b0:13b:a8da:6bd6 with SMTP id hb14-20020a056870780e00b0013ba8da6bd6mr3811500oab.268.1668773450891;
+        Fri, 18 Nov 2022 04:10:50 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c2-20020a056830000200b006619533d1ddsm1443080otp.76.2022.11.18.04.10.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 04:10:50 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 18 Nov 2022 04:10:49 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        linux-pwm@vger.kernel.org
-References: <20221116213615.1256297-1-Naresh.Solanki@9elements.com>
- <20221116213615.1256297-4-Naresh.Solanki@9elements.com>
- <20221117074510.qqtjc6h3bnh5rccx@pengutronix.de>
- <81cd642f-c5fb-77ec-a634-5655d5b6088c@9elements.com>
- <20221117091324.h7etwyzckzvpoa4p@pengutronix.de>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <20221117091324.h7etwyzckzvpoa4p@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: pm_bus: core: Implement regulator get_status
+Message-ID: <20221118121049.GB3670981@roeck-us.net>
+References: <20221118084637.1973838-1-Naresh.Solanki@9elements.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221118084637.1973838-1-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Uwe,
+On Fri, Nov 18, 2022 at 09:46:36AM +0100, Naresh Solanki wrote:
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> 
+> Add get_status for pmbus_regulator_ops.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
 
-On 17-11-2022 02:43 pm, Uwe Kleine-König wrote:
-> On Thu, Nov 17, 2022 at 02:10:45PM +0530, Naresh Solanki wrote:
->>
->>
->> On 17-11-2022 01:15 pm, Uwe Kleine-König wrote:
->>> Hello,
->>>
->>> On Wed, Nov 16, 2022 at 10:36:15PM +0100, Naresh Solanki wrote:
->>>> max6639_platform_data is not used by any in-kernel driver and does not
->>>> address the MAX6639 fans separately.
->>>> Move to device tree configuration with explicit properties to configure
->>>> each fan.
->>>>
->>>> Non-DT platform can still use this module with its default
->>>> configuration.
->>>>
->>>> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
->>>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->>>
->>> What changed here since v5? Please either add a changelog below the
->>> tripple-dash for a new revision, or make sure that all relevant people
->>> get the cover letter.
->>>
->>> It seems you didn't address my comments for v5 :-\
->> Not sure what I missed but did following changes:
->> Removed unused header max6639.h
->> Used dev_err_probe instead,
->> Removed of_pwm_n_cells,
->> if condition for freq_table
->> removed pwm_get_state & instead use pwm->state
->> division/multiplication optimizations,
->> indentation of freq_table,
+Please provide change logs.
+
+>  drivers/hwmon/pmbus/pmbus_core.c | 72 ++++++++++++++++++++++++++++++++
+>  1 file changed, 72 insertions(+)
 > 
-> In the cover letter you just wrote:
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 7ec04934747e..5dde345c7679 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -2851,6 +2851,77 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+>  	return 0;
+>  }
+>  
+> +static int pmbus_regulator_get_status(struct regulator_dev *rdev)
+> +{
+> +	struct device *dev = rdev_get_dev(rdev);
+> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> +	struct pmbus_data *data = i2c_get_clientdata(client);
+> +	u8 page = rdev_get_id(rdev);
+> +	int status, status2;
+> +
+> +	mutex_lock(&data->update_lock);
+> +	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
+> +	mutex_unlock(&data->update_lock);
+
+I do not see the point of this lock here and elsewhere in this function.
+If you want to ensure that the status is consistent, you would need to
+hold the lock over the entire function, not repeatedly acquire and release
+it. Even then there would be no guarantee that the status is consistent
+because it can change anytime on the chip side.
+
+> +	if (status < 0)
+> +		return status;
+> +
+> +	if (status & (PB_STATUS_VIN_UV | PB_STATUS_IOUT_OC | PB_STATUS_VOUT_OV |
+> +	    PB_STATUS_UNKNOWN))
+
+Please align continuation lines with the matching '('.
+
+> +		return REGULATOR_STATUS_ERROR;
+> +
+> +	if (status & (PB_STATUS_OFF | PB_STATUS_POWER_GOOD_N))
+> +		return REGULATOR_STATUS_OFF;
+> +
+> +	if (status & PB_STATUS_VOUT &&
+> +	    data->info->func[page] & PMBUS_HAVE_STATUS_VOUT) {
+> +		mutex_lock(&data->update_lock);
+> +		status2 = _pmbus_read_byte_data(client, page,
+> +					 PMBUS_STATUS_VOUT);
+> +		mutex_unlock(&data->update_lock);
+> +		if (status2 < 0)
+> +			return status2;
+> +		if (status2 & (PB_VOLTAGE_OV_FAULT | PB_VOLTAGE_UV_FAULT))
+> +			return REGULATOR_STATUS_ERROR;
+> +	}
+> +	if (status & PB_STATUS_IOUT_POUT &&
+> +	    data->info->func[page] & PMBUS_HAVE_STATUS_IOUT) {
+> +		mutex_lock(&data->update_lock);
+> +		status2 = _pmbus_read_byte_data(client, page,
+> +						 PMBUS_STATUS_IOUT);
+
+Ok to avoid continuation lines as long as the result has less then 100
+columns.
+
+> +		mutex_unlock(&data->update_lock);
+> +		if (status2 < 0)
+> +			return status2;
+> +		if (status2 & (PB_POUT_OP_FAULT | PB_IOUT_UC_FAULT |
+> +		    PB_IOUT_OC_LV_FAULT | PB_IOUT_OC_FAULT))
+> +			return REGULATOR_STATUS_ERROR;
+> +	}
+> +	if (status & PB_STATUS_INPUT &&
+> +	    data->info->func[page] & PMBUS_HAVE_STATUS_INPUT) {
+> +		mutex_lock(&data->update_lock);
+> +		status2 = _pmbus_read_byte_data(client, page,
+> +						 PMBUS_STATUS_INPUT);
+> +		mutex_unlock(&data->update_lock);
+> +		if (status2 < 0)
+> +			return status2;
+> +		if (status2 & (PB_IIN_OC_FAULT | PB_VOLTAGE_OV_FAULT |
+> +		    PB_VOLTAGE_UV_FAULT))
+> +			return REGULATOR_STATUS_ERROR;
+> +	}
+> +	if (status & PB_STATUS_TEMPERATURE &&
+> +	    data->info->func[page] & PMBUS_HAVE_STATUS_TEMP) {
+> +		mutex_lock(&data->update_lock);
+> +		status2 = _pmbus_read_byte_data(client, page,
+> +						 PMBUS_STATUS_TEMPERATURE);
+> +		mutex_unlock(&data->update_lock);
+> +		if (status2 < 0)
+> +			return status2;
+> +		if (status2 & (PB_TEMP_UT_FAULT | PB_TEMP_OT_FAULT))
+> +			return REGULATOR_STATUS_ERROR;
+> +	}
+> +
+> +	return REGULATOR_STATUS_ON;
+> +}
+> +
+>  static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
+>  {
+>  	struct pmbus_data *data = i2c_get_clientdata(client);
+> @@ -2991,6 +3062,7 @@ const struct regulator_ops pmbus_regulator_ops = {
+>  	.disable = pmbus_regulator_disable,
+>  	.is_enabled = pmbus_regulator_is_enabled,
+>  	.get_error_flags = pmbus_regulator_get_error_flags,
+> +	.get_status = pmbus_regulator_get_status,
+>  	.get_voltage = pmbus_regulator_get_voltage,
+>  	.set_voltage = pmbus_regulator_set_voltage,
+>  	.list_voltage = pmbus_regulator_list_voltage,
 > 
-> | Changes in V6:
-> | - Remove unused header file
-> | - minor cleanup
+> base-commit: 27fea302952d8c90cafbdbee96bafeca03544401
+> -- 
+> 2.37.3
 > 
-> which is too short in my eyes. If you wrote instead:
-> 
-> 	Address review feedback by Uwe Kleine-König in patch #3, patches #1 and
-> 	#2 unchanged.
-> 
-> This would be much more helpful as people that were already happy with
-> v5 wouldn't need to look at the first two patches and I would know that
-> you addressed my feedback and would have looked in more detail.
-Sure will keep it this way next time.
-> 
-> What I miss is the most critical part of my feedback, i.e.:
-> | My overall impression is that this patch mixes too much things. IMHO it
-> | should be split in (at least)
-> |
-> |  - Add dt support
-> |  - Drop platform support
-> |  - Add PWM provider support
-> |  - Make use of the PWM API
-> |
-> | maybe also add the 2nd PWM in a separate step.
-Sure can do that.
-> 
-> Best regards
-> Uwe
-> 
-Thanks,
-Naresh
