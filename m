@@ -2,94 +2,101 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FEBFC4332F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Nov 2022 15:36:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AED3BC4332F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Nov 2022 22:07:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242032AbiKRPgh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Nov 2022 10:36:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
+        id S229835AbiKRWHR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Nov 2022 17:07:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242382AbiKRPgc (ORCPT
+        with ESMTP id S229604AbiKRWHQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:36:32 -0500
-Received: from scadrial.mjdsystems.ca (scadrial.mjdsystems.ca [192.99.73.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7269973BB4;
-        Fri, 18 Nov 2022 07:36:23 -0800 (PST)
-Received: from cwmtaff.localnet (mc-109-208.ipreg.mcmaster.ca [130.113.109.208])
-        by scadrial.mjdsystems.ca (Postfix) with ESMTPSA id 97FA7889C73B;
-        Fri, 18 Nov 2022 10:36:22 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed; d=mjdsystems.ca;
-        s=202010; t=1668785782;
-        bh=LVdqwwqRoIHLqSYZnboOGXFWnLkHvoUC0sl9Jw0oACg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dGkqu/4/BTp1K7Rn2L315JxTr/wAuniljiO5M40SQl50TpUrOQQ7oTfuOIZDSLn4E
-         aUo7U9iz+6qNHcwXTGMrI9P4FNVrhWSCKeyixDqHOpxTF8r/dyZrgZDIur2kKkehSo
-         fwwwQyq/OvIORxFsmeVhYqad9Q58btrwtBIxMRTdchIW+0KFyxRC2FJl+dNM7qulOF
-         qTN/OU1UAsCjfEJ6/A8eMQbEjB3xaP3cObvTIndVVFrCQqy5/4obC/xLvhR5/y2f+s
-         VvBS8hwxZpMOHr8ABILj32lrZV8+WwGEcd/TgyuAB2NUOXgQpxMvV1ax8PBo9QgT6m
-         cvJ1UKK+bhlrsLsFZZ6P+7n40q7efZ+e09RyvxugWMLcBpf1wtsA++L5tViYQxDnDH
-         g+FipHu0CzOSeVUD21RJHBMbdOMTFIQTRgxuyZ8eN3ndfL1ZO8JByli0iTkW/QSUTu
-         b40ztjpUFft25lmOwVdI13WlmCFU9x2gWlgyEDTXD/dnqP3jYSV8qfTQYljmbIgD6P
-         f+2o7Zs1EgSgfFoN8FNGjmRKAB+u5Lw08MZMhRHA9AEd7a5RTNqFg7eCqUTqPtDu0E
-         kpsPHagXTBVNSuh8czNvbZAuh/fFM/Cf6QE2rrbtQWEbHVxCePC1R6zYKRQidWuYY+
-         OKcuo28DOhVIQ/6UkXdG43rA=
-From:   Matthew Dawson <matthew@mjdsystems.ca>
-To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Eugene Shalygin <eugene.shalygin@gmail.com>
-Subject: [PATCH v2] hwmon: (asus-ec-sensors) add definitions for ROG ZENITH II EXTREME ALPHA
-Date:   Fri, 18 Nov 2022 10:36:22 -0500
-Message-ID: <2407243.vFx2qVVIhK@cwmtaff>
+        Fri, 18 Nov 2022 17:07:16 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202DE97374;
+        Fri, 18 Nov 2022 14:07:15 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id b124so6820250oia.4;
+        Fri, 18 Nov 2022 14:07:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pWzms7J2TkO+xgfCdVXkkK79XDRFqGG/fY/SIvweUvU=;
+        b=Q5STfrN7UbzeP7hnyJVkGDosHblR7fc7cdNGGNHTi6EoYVZ0Y+rNBHbrJISmvV6dXX
+         axtjSFA+6JKU0qs+uWJv99i0g6EzuWhVI0s1J8tYM+sp6kPFcmv6mY5+CYpgqA+rAWKI
+         WF+5x9O8VOAq4qL3ZvlFfUPNrtgVH7zQ+nL/7KKEXtLwNr/aHGgdgJiSTusVtsOv3Ow2
+         sU5KPpmVNC19c8yZywvv+QYwBS7zqWNWrBoTWrRaaSFlgT+0bUS74UxOMo5WdccCw53I
+         ykvyrNNdtEpAh3uKI5uu9kRiF85llyeP6iIt7s+ubMhzNbZ7ZwzslpT7BUmYSN/5tPCo
+         KVWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pWzms7J2TkO+xgfCdVXkkK79XDRFqGG/fY/SIvweUvU=;
+        b=qB5FslYaafvuhWI7PbXLE2A9ZTEkOKKFhxaFmMUWgNB2pwgHIe9VoO5jgTrqda4NGP
+         GBsORQB8Hb1j+dNJYOTWeFS+17pmNxDKUeRKrOLoTW8T1/mUoJvMbcb/it+IAHAe30wR
+         hxTcLP0lXYsTUDynJH2mjv0UF9hXkGO6YbqCiXP5kX+raXyUXMLfWcAX/6BBN4Ui/0Jb
+         i8I0WdFbLw+mNs3mrXZgkrE8I6i1i7N8mbVIJ7m7WMEcVBi/BdMZjkxld22dXcHtH1Gg
+         hkXS3QGUeYDGTlR+8EJx8UZfOsqqr53TrgLifN54t861sCFkG8bXcs0lpHbux1ZJVFkH
+         /yTg==
+X-Gm-Message-State: ANoB5pkn0Lb/Oj6tsdwtxduCJxJvKCqfmCiGK2QDrAqm3ech6GwsT8Q1
+        Mk28HVRP0D94PpA5Po8LDXojf+14cp4=
+X-Google-Smtp-Source: AA0mqf7eg4YvDdA3w0Uk83OQ4dTFdvr8pVQ++gjzTIBMZ8k1iwyUTyWGiwY4j+zjZ07gFZiH4r1jQg==
+X-Received: by 2002:a05:6808:111:b0:35b:4375:e9b9 with SMTP id b17-20020a056808011100b0035b4375e9b9mr1510068oie.175.1668809234392;
+        Fri, 18 Nov 2022 14:07:14 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 10-20020aca090a000000b003547a3401e6sm1838348oij.43.2022.11.18.14.07.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 14:07:13 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 18 Nov 2022 14:07:11 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: pm_bus: core: Implement regulator get_status
+Message-ID: <20221118220711.GA685644@roeck-us.net>
+References: <20221118084637.1973838-1-Naresh.Solanki@9elements.com>
+ <20221118121049.GB3670981@roeck-us.net>
+ <0fb5b5e4-ac23-01c9-a4c7-356db9ab0763@9elements.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0fb5b5e4-ac23-01c9-a4c7-356db9ab0763@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for the Zenith II Extreme Alpha.  It is basically the same
-board as the Zenith II Extreme, and has a similar sensor suite.  The
-DSDT is basically the same except for some address, so use the same
-board information as the non-Alpha board.
+On Fri, Nov 18, 2022 at 08:32:26PM +0530, Naresh Solanki wrote:
+> > > +
+> > > +	mutex_lock(&data->update_lock);
+> > > +	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
+> > > +	mutex_unlock(&data->update_lock);
+> > 
+> > I do not see the point of this lock here and elsewhere in this function.
+> > If you want to ensure that the status is consistent, you would need to
+> > hold the lock over the entire function, not repeatedly acquire and release
+> > it. Even then there would be no guarantee that the status is consistent
+> > because it can change anytime on the chip side.
+> Will hold the lock till end of function. Agree that chip side, status may
+> change any moment.
+> 
+> With this I got a question i.e., what should regulator status be reported if
+> regulator had previously encountered some fault but currently while reading
+> the status found that pgood bit indicate output power is good.
+> Should we continue to still report historical fault or instead report
+> current regulator output status based on pgood ?
+> 
+> IMHO, it should report regulator status as ON if pgood bit is clear(i.e.,
+> output is good) & leave previously encountered error reporting to
+> get_error_flag function.
+> 
+> I need your Suggestion here.
+> 
+That is really a question for the regulator subsystem. Personally I think
+the current status should be reported, but that is just me.
 
-Cc: stable@vger.kernel.org
-
-Signed-off-by: Matthew Dawson <matthew@mjdsystems.ca>
----
-v2: Add missing Documentation change
-
- Documentation/hwmon/asus_ec_sensors.rst | 1 +
- drivers/hwmon/asus-ec-sensors.c         | 2 ++
- 2 files changed, 3 insertions(+)
-
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/
-asus_ec_sensors.rst
-index 02f4ad314a1e..a4039f2f9ca4 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -23,6 +23,7 @@ Supported boards:
-  * ROG STRIX X570-I GAMING
-  * ROG STRIX Z690-A GAMING WIFI D4
-  * ROG ZENITH II EXTREME
-+ * ROG ZENITH II EXTREME ALPHA
- 
- Authors:
-     - Eugene Shalygin <eugene.shalygin@gmail.com>
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 81e688975c6a..ac0459be04c7 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -466,6 +466,8 @@ static const struct dmi_system_id dmi_table[] = {
-                                        &board_info_strix_z690_a_gaming_wifi_d4),
-        DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME",
-                                        &board_info_zenith_ii_extreme),
-+       DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME ALPHA",
-+                                       &board_info_zenith_ii_extreme),
-        {},
- };
- 
--- 
-2.37.4
-
-
+Guenter
