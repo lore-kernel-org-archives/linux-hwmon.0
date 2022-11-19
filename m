@@ -2,209 +2,197 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5EC4C4332F
-	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Nov 2022 16:26:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 776BEC433FE
+	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Nov 2022 18:25:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234812AbiKSQ0G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 19 Nov 2022 11:26:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42504 "EHLO
+        id S233670AbiKSSZg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 19 Nov 2022 13:25:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234725AbiKSQZr (ORCPT
+        with ESMTP id S233576AbiKSSZf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 19 Nov 2022 11:25:47 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E44898EE;
-        Sat, 19 Nov 2022 08:24:41 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-13c2cfd1126so9335544fac.10;
-        Sat, 19 Nov 2022 08:24:41 -0800 (PST)
+        Sat, 19 Nov 2022 13:25:35 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BB66442
+        for <linux-hwmon@vger.kernel.org>; Sat, 19 Nov 2022 10:25:33 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id vv4so10957511ejc.2
+        for <linux-hwmon@vger.kernel.org>; Sat, 19 Nov 2022 10:25:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=9elements.com; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=d5hTeburqR8Hae/XZ97a/QxzyOgDZB34hQSyr/XEb3c=;
-        b=SFVLbX+Iwz4D7pir+petUJoaeC8WYjW04P+tB87Ef8KaVtEGKVubh8VudCndZ5StJ5
-         DhYfaCmL6RrqR32W1EWZyT7z9laCSoD9LhX62ktvSyMyjoevsXbQfdUJdImfFunpWxOA
-         XXcAHKXYDX5o7zS+vY7A6SNj80DTeDL5UCAfPJYxAVXHujE3BiSynkgE8PiUFcxf5l4e
-         94NL+M3O1ccQ1YtWZN+IW/iNfU22SJBntyYmXoGdNraJ6nIht5Ol4Edq4MhR9nj2baJo
-         mh1bCpDvEL1u+n1266Koo9qXqXyuN8liAPdZZmmkkPmbu4wkuIuuhOcATfIppZ6514c2
-         5dXA==
+        bh=DyFSjdrCVc14i54RTRdROUo6a95ipWQFcDuFIId893w=;
+        b=UNMxbI8uUkeSHLvZY/5XlrrK/z63kghl8eL9wx7hXhwl0qFWlOgMpuwO/NqYYabOo4
+         FgiBZJrMdzk8khldXCyVVqiBTEOmYhuIFrweaXTl90fxLnVuBo2mL7PY193ijn8t76vU
+         fTBakhx9aCPLHnfHsmdqDePCf5E8sUlzh5vLfZu9DNhI2wvk5acRHUxx8NV9KH1szsMS
+         +lKv51JKhC5XsJDfv+IMcqFqjwtX9QstQeKueAUiCgl3tbZkEsANpn6IVpLCc7HMlg/q
+         z6xiF25m25R5Jppqu9LttFa0LeVwo0x0waAfipHSNSEG1zUe0SR0NiWo7G/9ycwNkoFL
+         hCzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=d5hTeburqR8Hae/XZ97a/QxzyOgDZB34hQSyr/XEb3c=;
-        b=KpEKkufBzoR39RXaXs6yGsCVqtqWMJgLIJRisCVCbU82609HneiaBu1VokgyjAnUZ4
-         Owpr2U8YhTPQubDA/fzlmnActZmA1e+LCIJKGOadva5lPI8pNGB3fSH9Vmwl4nh9/Ru/
-         ZMK8/rYV/mMjg2HQZmBkHlOZsaQfTfehPuV1bvYk6oI7patG6RnCrLW8+IS8Mdbdwyot
-         1/nSJGuksYTg0b6JbfwvJ0d+rsPf9xEJZUdR4di8ZL9S1XlYdkwcD/km01LYDh6P4kQr
-         zhDHTnESdlUKKfdPtUI/2Qy7dOZmCkwNaDD97C4PuH0pSwuOY+lzNlPbU+Q2FGNwn4ws
-         mVxQ==
-X-Gm-Message-State: ANoB5pmp+vKKZV/zJe7cVimwB+pZkwM86Y5nnyOQZwLmArXmqd/VsgPJ
-        Cfb7ZgP/7hYS6N7AextQBb57/15Cdag=
-X-Google-Smtp-Source: AA0mqf46lY7T+fjR7rRB3B5nMHw+UOq8AxVxyGYkUkObUHag1TkAgUyKaboU/2/Ui38oU54Hi3SU4A==
-X-Received: by 2002:a05:6870:970d:b0:13c:19bc:1350 with SMTP id n13-20020a056870970d00b0013c19bc1350mr6765530oaq.226.1668875080473;
-        Sat, 19 Nov 2022 08:24:40 -0800 (PST)
-Received: from smeagol.fibertel.com.ar ([201.235.4.68])
-        by smtp.gmail.com with ESMTPSA id h5-20020a9d5545000000b0066cb9069e0bsm2899626oti.42.2022.11.19.08.24.36
+        bh=DyFSjdrCVc14i54RTRdROUo6a95ipWQFcDuFIId893w=;
+        b=6N7bh3LyZhrn9jhrFK3Z8d6KpfhtMW/89sypoLaQAMCQ8rbYYGqgdYjUtnKy5XKMwq
+         n6DRK7VjZbLa2EhExBRFxC+YvBgjpOI3Oy1LYYz//Hz0BxBLck+5rZMtuxGOY+KNkm22
+         wEXdC3V6XxTNCWKISUl2rWsQhPhKrYsKGeyC6vLNZ9kEl2wXOlFHr2sMEDfv1fByNBFm
+         bNEbus4YXSzjoCa8YWqjfZVgsqFeUb6/4of9ylKc1vb81zusgx+TCJQw6mQWWMARDY29
+         8CuC11dfesHZd1oBmBXgEMl/N1VOLTnmGn8xsLQmo0MV+U9XmWII+H2JaxcZBXjTkf/c
+         5+Dw==
+X-Gm-Message-State: ANoB5pm0vWEAmHlhpBA0OQyYhzNsku/wjVZOY8K0kzLhudgwkAdYF/k/
+        fB7CXEsGdTqFWPyaXYEl8nP+DQ==
+X-Google-Smtp-Source: AA0mqf7V4NvsQ7lZkxJsyPolvHm4P3pmFIiqVV0FA9POqIayaATKxh1tVJmwsfJT4rlHhcjRwyO4nQ==
+X-Received: by 2002:a17:907:2ad7:b0:79e:8360:8c3d with SMTP id fm23-20020a1709072ad700b0079e83608c3dmr10497888ejc.146.1668882331955;
+        Sat, 19 Nov 2022 10:25:31 -0800 (PST)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id w14-20020a056402070e00b004691de0e25bsm1995039edx.54.2022.11.19.10.25.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Nov 2022 08:24:39 -0800 (PST)
-From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>
-To:     w_armin@gmx.de
-Cc:     hdegoede@redhat.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux@roeck-us.net,
-        markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        pobrn@protonmail.com,
-        =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>
-Subject: [PATCH] hwmon: (oxp-sensors) Add AOK ZOE and Mini PRO
-Date:   Sat, 19 Nov 2022 13:23:48 -0300
-Message-Id: <20221119162347.36698-1-samsagax@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Sat, 19 Nov 2022 10:25:31 -0800 (PST)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     broonie@kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] hwmon: (pmbus/core): Implement regulator get_status
+Date:   Sat, 19 Nov 2022 19:25:16 +0100
+Message-Id: <20221119182517.2334156-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for the AOK ZOE A1 and OXP Mini PRO handheld devices.
-DMI strings are added to this driver since the same EC layout is used and
-has similar specs as the OXP mini AMD.
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-The added devices are:
-- OneXPlayer mini PRO (AMD 6800U)
-- AOK ZOE A1 (AMD 5800U)
+Add get_status for pmbus_regulator_ops.
 
-Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
+Changes:
+- use lock throughout the function
+- Avoid line continuation upto 100 column
+- Optimize use of & and | operator
+- Check for VOUT, IOUT, TEMPERATURE bit in status word before checking
+  respective status register for fault.
+- Report regulator current status.
+
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 ---
- Documentation/hwmon/oxp-sensors.rst | 16 ++++++++---
- drivers/hwmon/oxp-sensors.c         | 41 ++++++++++++++++++++++++-----
- 2 files changed, 48 insertions(+), 9 deletions(-)
+ drivers/hwmon/pmbus/pmbus_core.c | 88 ++++++++++++++++++++++++++++++++
+ 1 file changed, 88 insertions(+)
 
-diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
-index f612dddc964a..39c588ec5c50 100644
---- a/Documentation/hwmon/oxp-sensors.rst
-+++ b/Documentation/hwmon/oxp-sensors.rst
-@@ -12,9 +12,19 @@ Description:
- One X Player devices from One Netbook provide fan readings and fan control
- through its Embedded Controller.
-
--Currently only supports AMD boards from the One X Player lineup. Intel boards
--could be supported if we could figure out the EC registers and values to write
--to since the EC layout and model is different.
-+Currently only supports AMD boards from the One X Player and AOK ZOE lineup.
-+Intel boards could be supported if we could figure out the EC registers and
-+values to write to since the EC layout and model is different.
-+
-+Supported devices
-+-----------------
-+
-+Currently the driver supports the following handhelds:
-+
-+ - AOK ZOE A1
-+ - OneXPlayer AMD
-+ - OneXPlayer mini AMD
-+ - OneXPlayer mini AMD PRO
-
- Sysfs entries
- -------------
-diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-index da54a38f4454..23e575479d1a 100644
---- a/drivers/hwmon/oxp-sensors.c
-+++ b/drivers/hwmon/oxp-sensors.c
-@@ -3,13 +3,14 @@
-  * Platform driver for OXP Handhelds that expose fan reading and control
-  * via hwmon sysfs.
-  *
-- * All boards have the same DMI strings and they are told appart by the
-+ * Old boards have the same DMI strings and they are told appart by the
-  * boot cpu vendor (Intel/AMD). Currently only AMD boards are supported
-  * but the code is made to be simple to add other handheld boards in the
-  * future.
-- * Fan control is provided via pwm interface in the range [0-255]. AMD
-- * boards use [0-100] as range in the EC, the written value is scaled to
-- * accommodate for that.
-+ * Fan control is provided via pwm interface in the range [0-255].
-+ * Old AMD boards use [0-100] as range in the EC, the written value is
-+ * scaled to accommodate for that. Newer boards like the mini PRO and
-+ * AOK ZOE are not scaled but have the same EC layout.
-  *
-  * Copyright (C) 2022 Joaquín I. Aramendía <samsagax@gmail.com>
-  */
-@@ -39,16 +40,39 @@ static bool unlock_global_acpi_lock(void)
- 	return ACPI_SUCCESS(acpi_release_global_lock(oxp_mutex));
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 7ec04934747e..f7a322d5b453 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2851,6 +2851,93 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+ 	return 0;
  }
-
-+enum oxp_board {
-+	aok_zoe_a1 = 1,
-+	oxp_mini_amd,
-+	oxp_mini_amd_pro,
-+};
+ 
++static int pmbus_regulator_get_status(struct regulator_dev *rdev)
++{
++	struct device *dev = rdev_get_dev(rdev);
++	struct i2c_client *client = to_i2c_client(dev->parent);
++	struct pmbus_data *data = i2c_get_clientdata(client);
++	u8 page = rdev_get_id(rdev);
++	int status, status2, ret;
 +
-+static enum oxp_board board;
++	mutex_lock(&data->update_lock);
++	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
++	if (status < 0) {
++		ret = status;
++		goto unlock;
++	}
 +
- #define OXP_SENSOR_FAN_REG		0x76 /* Fan reading is 2 registers long */
- #define OXP_SENSOR_PWM_ENABLE_REG	0x4A /* PWM enable is 1 register long */
- #define OXP_SENSOR_PWM_REG		0x4B /* PWM reading is 1 register long */
-
- static const struct dmi_system_id dmi_table[] = {
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "AOKZOE"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AOKZOE A1 AR07"),
-+		},
-+		.driver_data = (void *) &(enum oxp_board) {aok_zoe_a1},
-+	},
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
- 			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONE XPLAYER"),
- 		},
-+		.driver_data = (void *) &(enum oxp_board) {oxp_mini_amd},
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER Mini Pro"),
-+		},
-+		.driver_data = (void *) &(enum oxp_board) {oxp_mini_amd_pro},
- 	},
- 	{},
- };
-@@ -137,7 +161,8 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
- 			ret = read_from_ec(OXP_SENSOR_PWM_REG, 2, val);
- 			if (ret)
- 				return ret;
--			*val = (*val * 255) / 100;
-+			if (board == oxp_mini_amd)
-+				*val = (*val * 255) / 100;
- 			return 0;
- 		case hwmon_pwm_enable:
- 			return read_from_ec(OXP_SENSOR_PWM_ENABLE_REG, 1, val);
-@@ -166,7 +191,8 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
- 		case hwmon_pwm_input:
- 			if (val < 0 || val > 255)
- 				return -EINVAL;
--			val = (val * 100) / 255;
-+			if (board == oxp_mini_amd)
-+				val = (val * 100) / 255;
- 			return write_to_ec(dev, OXP_SENSOR_PWM_REG, val);
- 		default:
- 			break;
-@@ -216,6 +242,9 @@ static int oxp_platform_probe(struct platform_device *pdev)
- 	if (!dmi_entry || boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
- 		return -ENODEV;
-
-+	board = *((enum oxp_board *) dmi_entry->driver_data);
-+	dev_info(dev, "Board: %i", board);
++	if (status & PB_STATUS_OFF) {
++		ret = REGULATOR_STATUS_OFF;
++		goto unlock;
++	}
 +
- 	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
- 						     &oxp_ec_chip_info, NULL);
-
++	/* If regulator is ON & reports power good then return ON */
++	if (!(status & PB_STATUS_POWER_GOOD_N)) {
++		ret = REGULATOR_STATUS_ON;
++		goto unlock;
++	}
++
++	if (status & (PB_STATUS_VIN_UV | PB_STATUS_IOUT_OC | PB_STATUS_VOUT_OV |
++	   PB_STATUS_UNKNOWN)){
++		ret = REGULATOR_STATUS_ERROR;
++		goto unlock;
++	}
++
++	if (status & PB_STATUS_VOUT && data->info->func[page] & PMBUS_HAVE_STATUS_VOUT) {
++		status2 = _pmbus_read_byte_data(client, page,
++					 PMBUS_STATUS_VOUT);
++		if (status2 < 0) {
++			ret = status2;
++			goto unlock;
++		}
++		if (status2 & (PB_VOLTAGE_OV_FAULT | PB_VOLTAGE_UV_FAULT)) {
++			ret = REGULATOR_STATUS_ERROR;
++			goto unlock;
++		}
++	}
++
++	if (status & PB_STATUS_IOUT_POUT && data->info->func[page] & PMBUS_HAVE_STATUS_IOUT) {
++		status2 = _pmbus_read_byte_data(client, page, PMBUS_STATUS_IOUT);
++		if (status2 < 0) {
++			ret = status2;
++			goto unlock;
++		}
++		if (status2 & (PB_POUT_OP_FAULT | PB_IOUT_UC_FAULT | PB_IOUT_OC_LV_FAULT |
++		   PB_IOUT_OC_FAULT)) {
++			ret = REGULATOR_STATUS_ERROR;
++			goto unlock;
++		}
++	}
++
++	if (status & PB_STATUS_INPUT && data->info->func[page] & PMBUS_HAVE_STATUS_INPUT) {
++		status2 = _pmbus_read_byte_data(client, page, PMBUS_STATUS_INPUT);
++		if (status2 < 0) {
++			ret = status2;
++			goto unlock;
++		}
++		if (status2 & (PB_IIN_OC_FAULT | PB_VOLTAGE_OV_FAULT | PB_VOLTAGE_UV_FAULT)) {
++			ret = REGULATOR_STATUS_ERROR;
++			goto unlock;
++		}
++	}
++
++	if (status & PB_STATUS_TEMPERATURE && data->info->func[page] & PMBUS_HAVE_STATUS_TEMP) {
++		status2 = _pmbus_read_byte_data(client, page, PMBUS_STATUS_TEMPERATURE);
++		if (status2 < 0) {
++			ret = status2;
++			goto unlock;
++		}
++		if (status2 & (PB_TEMP_UT_FAULT | PB_TEMP_OT_FAULT)) {
++			ret = REGULATOR_STATUS_ERROR;
++			goto unlock;
++		}
++	}
++
++unlock:
++	mutex_unlock(&data->update_lock);
++	return ret;
++}
++
+ static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
+ {
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
+@@ -2991,6 +3078,7 @@ const struct regulator_ops pmbus_regulator_ops = {
+ 	.disable = pmbus_regulator_disable,
+ 	.is_enabled = pmbus_regulator_is_enabled,
+ 	.get_error_flags = pmbus_regulator_get_error_flags,
++	.get_status = pmbus_regulator_get_status,
+ 	.get_voltage = pmbus_regulator_get_voltage,
+ 	.set_voltage = pmbus_regulator_set_voltage,
+ 	.list_voltage = pmbus_regulator_list_voltage,
 
 base-commit: 27fea302952d8c90cafbdbee96bafeca03544401
---
-2.38.1
+-- 
+2.37.3
 
