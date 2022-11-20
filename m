@@ -2,104 +2,106 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA69EC433FE
-	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Nov 2022 13:50:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91456C4332F
+	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Nov 2022 13:51:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbiKTNuC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 20 Nov 2022 08:50:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
+        id S229561AbiKTNvT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 20 Nov 2022 08:51:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiKTNuC (ORCPT
+        with ESMTP id S229508AbiKTNvS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 20 Nov 2022 08:50:02 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A30327B06;
-        Sun, 20 Nov 2022 05:50:01 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id l2so5896664qtq.11;
-        Sun, 20 Nov 2022 05:50:01 -0800 (PST)
+        Sun, 20 Nov 2022 08:51:18 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1125727B06
+        for <linux-hwmon@vger.kernel.org>; Sun, 20 Nov 2022 05:51:18 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id d13so771663qvj.8
+        for <linux-hwmon@vger.kernel.org>; Sun, 20 Nov 2022 05:51:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pZ6ugRLwR1ztWoRfak0ibXzIu5wu6sOn2xPehqnrUrA=;
-        b=lhbZZ763i/hwX5H74KlKs3FILTyaA8mB6++B3QaCKcBz46sSGrGpnkicjgw1+Ek4ut
-         tkhgbKLk0eBHbDL0/3NYtzYnXhh6GYAENDHNfLQOO/TvCp6DdKdXmW4iqeG9XvAyB/9i
-         x2INMxI/+9UlRiULGGfHfgJvj5SMHpC8XZd+dDvmnPFrk9RAliNsKP8nPUQ0arJz7H1H
-         swHgN8rvuHwFjYt09Kr7CrWnYlxSsqUzlyHFbEUv0smQW5t/JYkn4WWYqL1Av7vJ0S3c
-         6AhCe5TNyqRMNCkCmEsPKtc0zIIQlSnMOThJGn9zjoOeok+t5idJwmNk4PCxq1tNwEfR
-         QSBw==
+        bh=1OKmIM3/qxWiF9Pn6sedsjxhhOzOH3z/We+2pbbUOz4=;
+        b=GkqNJi6ttUbZykM1/5srhZgWRhdh3L7V6pjhBzgp/m2Z+VqIew/DY2lXPBjN6xnCd5
+         xPveatLTvaOzFoaFQq0juOCEJMrA6tM8Po7Wl6CkHWBwbuzA97Ynw00LFMhI7j87fWhl
+         KyGwcplKypvmXCodCxFuUUo/ARMi4NV3+vzzTMnQPtQySrVyWjIPMumo/7pyft2f2Ml0
+         VvWcDPiswMehfPe5ysW7tn0MZ/FeuyjJFwRTENJd642xvU2gS1UrJBl19L6Nw6FLk0vr
+         VsY/df65S9cqbzzuHNWLdUX40payxyN3+rg10COfhHkfMZknGtMAW2h/2p1PcS4axnyO
+         wJDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pZ6ugRLwR1ztWoRfak0ibXzIu5wu6sOn2xPehqnrUrA=;
-        b=fIq8EgyClVJcQa+N90dinCJc2TIIcoS/IYvtOSFa+WD3w8ylEav0PJFzKaOnAMLMIT
-         gFEpA0x76jNEb9DTvx4MafPEzNdUtVTo6vzohKk1y00yPHV4z+SisJ9YojIcIFiLhg+9
-         MNZOHS+akANnVPjA+3ytNCnEpNoZgCe6m5bgiw+qzQ8uaQPjOchOyUgVRCzeVWlRPAVc
-         LX8R5RX8y4yMlsKs3ppg3SUhqXGrXjtFJId4gr43BAfMSWz21WBl9Rnl297VwrsZdZ52
-         17Wuif9HfbG6OByq6E2HTbksWxp7YcpmKvp439p9Ng7xEN6Z6e3Uu2SbnXisKDt7tr1P
-         4dLw==
-X-Gm-Message-State: ANoB5plmlgiIllimCW7YyjLO5SpZ42xErlTa98HZqLSdGJK6HHTm8RsM
-        ee/j5Hd4+phjYxJoFhq2Ga9K3hoWcBA=
-X-Google-Smtp-Source: AA0mqf59M8b1LBmtYK1ilOalZNnWQGknSauGJjzE8CiyBLr6gMY9hZZQVyN7t9KyNa4eJ+pgrnCRoA==
-X-Received: by 2002:ac8:514b:0:b0:35d:5a2e:72f with SMTP id h11-20020ac8514b000000b0035d5a2e072fmr13887428qtn.324.1668952200442;
-        Sun, 20 Nov 2022 05:50:00 -0800 (PST)
+        bh=1OKmIM3/qxWiF9Pn6sedsjxhhOzOH3z/We+2pbbUOz4=;
+        b=lofszO2I+NoY94Yic/chKrzfs36jvnFBnnhCclSgKEKUxXXhIztRnRa2BnqXitVwYE
+         EFoSCyKeVKQPUSetI34KYIJ592UEpOdrmETMz+Znmtwk3fH2A5vK0f9lYUwXTmONmFMk
+         5HKj1/JI2cLGbbKSUG4Ut0ic+TAvOd1PeGdTwaE6+bkwR2CGqNhWmCDLqqoxhk4inIPX
+         TiNPdYz5ig26CIZvI2Rqn7dqotHD5/T985uRtZjhnzFQTn7Pr5BK/O0q04cVXvHPp1wc
+         bPfbzMcxPYB7rgvq+k89XvCFFu9Fpooc0e12yxByEE8Wqsu9rY5g8RG8vwE/7h9tCOYk
+         Xlkw==
+X-Gm-Message-State: ANoB5pmV+1BK98WTpAKzxEossezTA4s3JXibK+xpdWiKjO0DT1wULqeX
+        KveeqJe2IIUcRqV4CZthxu7HqRg3zoI=
+X-Google-Smtp-Source: AA0mqf41X7Xq/k9V6eTtvyGziTjcC2YoNjIAZIKSlS8X/RhT2j6fDCvxOgpMdhk7hBlh1I5Uhe3N3g==
+X-Received: by 2002:a05:6214:5f86:b0:4c6:141f:819d with SMTP id ls6-20020a0562145f8600b004c6141f819dmr3357638qvb.34.1668952277222;
+        Sun, 20 Nov 2022 05:51:17 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id oo19-20020a05620a531300b006fa00941e9dsm6077280qkn.136.2022.11.20.05.49.59
+        by smtp.gmail.com with ESMTPSA id ge11-20020a05622a5c8b00b00342f8d4d0basm5276097qtb.43.2022.11.20.05.51.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 05:50:00 -0800 (PST)
+        Sun, 20 Nov 2022 05:51:16 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 20 Nov 2022 05:49:58 -0800
+Date:   Sun, 20 Nov 2022 05:51:15 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Phil Auld <pauld@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH] coretemp: Check for null before removing sysfs attrs
-Message-ID: <20221120134958.GA1787493@roeck-us.net>
-References: <20221117162313.3164803-1-pauld@redhat.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     fenghua.yu@intel.com, linux-hwmon@vger.kernel.org,
+        jdelvare@suse.com
+Subject: Re: [PATCH] hwmon: (coretemp) fix pci device refcount leak in
+ nv1a_ram_new()
+Message-ID: <20221120135115.GA1787592@roeck-us.net>
+References: <20221118093303.214163-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221117162313.3164803-1-pauld@redhat.com>
+In-Reply-To: <20221118093303.214163-1-yangyingliang@huawei.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 11:23:13AM -0500, Phil Auld wrote:
-> If coretemp_add_core() gets an error then pdata->core_data[indx]
-> is already NULL and has been kfreed. Don't pass that to
-> sysfs_remove_group() as that will crash in sysfs_remove_group().
+On Fri, Nov 18, 2022 at 05:33:03PM +0800, Yang Yingliang wrote:
+> As comment of pci_get_domain_bus_and_slot() says, it returns
+> a pci device with refcount increment, when finish using it,
+> the caller must decrement the reference count by calling
+> pci_dev_put(). So call it after using to avoid refcount leak.
 > 
-> [Shortened for readability]
-> [91854.020159] sysfs: cannot create duplicate filename '/devices/platform/coretemp.0/hwmon/hwmon2/temp20_label'
-> <cpu offline>
-> [91855.126115] BUG: kernel NULL pointer dereference, address: 0000000000000188
-> [91855.165103] #PF: supervisor read access in kernel mode
-> [91855.194506] #PF: error_code(0x0000) - not-present page
-> [91855.224445] PGD 0 P4D 0
-> [91855.238508] Oops: 0000 [#1] PREEMPT SMP PTI
-> ...
-> [91855.342716] RIP: 0010:sysfs_remove_group+0xc/0x80
-> ...
-> [91855.796571] Call Trace:
-> [91855.810524]  coretemp_cpu_offline+0x12b/0x1dd [coretemp]
-> [91855.841738]  ? coretemp_cpu_online+0x180/0x180 [coretemp]
-> [91855.871107]  cpuhp_invoke_callback+0x105/0x4b0
-> [91855.893432]  cpuhp_thread_fun+0x8e/0x150
-> ...
-> 
-> Fix this by checking for NULL first.
-> 
-> Signed-off-by: Phil Auld <pauld@redhat.com>
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: Fenghua Yu <fenghua.yu@intel.com>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
+> Fixes: 14513ee696a0 ("hwmon: (coretemp) Use PCI host bridge ID to identify CPU if necessary")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
 Applied.
 
 Thanks,
 Guenter
+
+> ---
+>  drivers/hwmon/coretemp.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+> index 8bf32c6c85d9..84a980fa0671 100644
+> --- a/drivers/hwmon/coretemp.c
+> +++ b/drivers/hwmon/coretemp.c
+> @@ -242,10 +242,13 @@ static int adjust_tjmax(struct cpuinfo_x86 *c, u32 id, struct device *dev)
+>  	 */
+>  	if (host_bridge && host_bridge->vendor == PCI_VENDOR_ID_INTEL) {
+>  		for (i = 0; i < ARRAY_SIZE(tjmax_pci_table); i++) {
+> -			if (host_bridge->device == tjmax_pci_table[i].device)
+> +			if (host_bridge->device == tjmax_pci_table[i].device) {
+> +				pci_dev_put(host_bridge);
+>  				return tjmax_pci_table[i].tjmax;
+> +			}
+>  		}
+>  	}
+> +	pci_dev_put(host_bridge);
+>  
+>  	for (i = 0; i < ARRAY_SIZE(tjmax_table); i++) {
+>  		if (strstr(c->x86_model_id, tjmax_table[i].id))
