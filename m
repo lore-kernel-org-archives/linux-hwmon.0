@@ -2,82 +2,145 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7F51C433FE
-	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Nov 2022 14:17:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8279FC4332F
+	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Nov 2022 15:13:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbiKTOR3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 20 Nov 2022 09:17:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60952 "EHLO
+        id S229613AbiKTPNg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 20 Nov 2022 10:13:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiKTOR2 (ORCPT
+        with ESMTP id S229478AbiKTPNf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 20 Nov 2022 09:17:28 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9145B17;
-        Sun, 20 Nov 2022 06:17:26 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id e15so6509252qvo.4;
-        Sun, 20 Nov 2022 06:17:26 -0800 (PST)
+        Sun, 20 Nov 2022 10:13:35 -0500
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B001E24;
+        Sun, 20 Nov 2022 07:13:35 -0800 (PST)
+Received: by mail-qk1-x72e.google.com with SMTP id x21so6619631qkj.0;
+        Sun, 20 Nov 2022 07:13:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cFBd2tgFU0YTAhl1+JwJGS4pxfP6J1RbVkOT1+nxdRI=;
-        b=XaMQB5OZDP+OnIAjhbIlu5OmHpuRScoEeB3IuTNBBVL3bKJhmKN0Jio8qCOS7kAPhZ
-         WaZEnYpIbe92ieEapPFrlqX01sqv+PcHOXEPjPPgzZP9Y8ea0POc2jxF+h9MUxh73eR0
-         UGfJa1q8BFcaVhLjfewjGVjb5vhZPw/5faG3+EBO3P+oWBzLu19mImTnSKkx+q5xx+uS
-         Ue16aiJ1hkmVVo3r9BESZoXc5vfwTAp+FqP4OnFr6nj/3do0K39UtMEtE/LygcdkSMf5
-         UghmcIxkiHRiClf9IOBpc4e/htCi4U6fV7DUKyMbdjZSNu7Sx7MAkMN6dwaIST9QUSRh
-         UazA==
+        bh=mEet9JOPoIEWCj66kbNHR0+VF60oaaiZgJIJ3wRRyjk=;
+        b=qMPD3RVHdnExh63OwxFip+MsErULfaa4b3a6xJv6BeVIN3Jm8JzzL0hF4WkqyKI/SP
+         RVfJbmZxNgJQshyGm8fFgryrZaJB1eje9RStDBapPy/gI2nwjjQqZmaVFuiWe3Vcxw1T
+         /SyJJblI24MFj135f0vMwRxM+ovuMVT54kIJ0BQAgjdTYwGohYlfk4gwBns0bHPNnHOI
+         Zxsct3yemewU6OEXptzsiX7XBmQBP+Xb1cu83rDSzch9RwD5NC33MXe25tvkSLlSqjC1
+         8y14bD5uztjSSXUeae9KHxh//GmhMlP+6/keyp1/vj+ylwXBYPZoXdPEuP7xjty3Bgwx
+         vUuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cFBd2tgFU0YTAhl1+JwJGS4pxfP6J1RbVkOT1+nxdRI=;
-        b=bHO9Zd8Yhlu+g6A86tmXGmAUFvgsqOb6CtZzN9mMxl3308oy/fJAUVLLPBA9DL2LUg
-         7QltKTxG2ROSyHviZoFvutdQ6stqLy/qi6KzCBXbWzEhQ+l8KTqnnh1kMD45/Bh/FbkW
-         bIeMbTv3JNew4FMTiJN+kVl9Aezhz7nNTOI7hq7Vb0B94ZXP1o95riiVzcvdZ2F6XpV+
-         xjwHx9nuGtbq9uaHW+TC//V4Bqrk01eyo6jt1VSKy3OewWJ5HjU3HZKYd5dDpM5M5PmP
-         18Y77WBxrw3PXnwDnl9eVLio4/GEup9/pybCVLeAYNKJW2Xh4lmmI05+8fSPCHKowJKe
-         +IFA==
-X-Gm-Message-State: ANoB5pntyZ8qMZU1Me9go+OGs981+YrabNlXeB5QOtp/faCRDDlcUzUm
-        tgWnlzM0Zp803pcOm1U863NvHl0JuP0=
-X-Google-Smtp-Source: AA0mqf438Ax0Gx3eJ8Yc02Ql8cQm7Nwmpy2l44nn3bmazHOxlbAkhmko7Dci6TxbvvkFZFZ9+ziUiQ==
-X-Received: by 2002:a05:6214:3504:b0:4c6:2732:d4f7 with SMTP id nk4-20020a056214350400b004c62732d4f7mr14239475qvb.83.1668953845956;
-        Sun, 20 Nov 2022 06:17:25 -0800 (PST)
+        bh=mEet9JOPoIEWCj66kbNHR0+VF60oaaiZgJIJ3wRRyjk=;
+        b=mOYv8moDFA819o2cALhHCL7vlExub+FsF9fMM3VpULXMLi5724HscY89wDzlKF6T2H
+         lU744grDWaFs4J3GTd94Z01wA+B4vzDEIpkn2HRrKOe4SWxeqcnNbGtRMYCNlDD5m0+I
+         cTYrhqOdpG0WG9w4fP881EwKedW+heQONTHmydgr6gPnZ8nFF3XVAdYaMJIrfQS5En5w
+         C1RuhUrpDKrFGRNmYsk3ZOr0IIjtLjxYBDSLNYJ24qW690xpqkNBCPtLc06NvmzaRUU5
+         OibRXQDqDKqCgw/aLwD04rUybpu1S+cHKIOsyQw0HU6Lv21bClldhlA7484mLwdeyKC9
+         qODQ==
+X-Gm-Message-State: ANoB5pnKKy6TnCQSvH4fXv9d406TKmL0TbkpZBrm497b6+t/Bw4MQ3Lc
+        f10W+482deRsIxHFhoEnPyXC3Aq+H1Q=
+X-Google-Smtp-Source: AA0mqf5vMOcNnxUvZnFESz7Fv2ej3UR5hHdpCkWO51OtX+PJIkWRBXw3iyvV17EVOpIZiGaQ4NyH8g==
+X-Received: by 2002:a05:620a:22d6:b0:6fa:2cb5:8b4b with SMTP id o22-20020a05620a22d600b006fa2cb58b4bmr12976298qki.348.1668957214274;
+        Sun, 20 Nov 2022 07:13:34 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s68-20020ae9de47000000b006eed47a1a1esm6246821qkf.134.2022.11.20.06.17.25
+        by smtp.gmail.com with ESMTPSA id m14-20020ac85b0e000000b003a591194221sm5526496qtw.7.2022.11.20.07.13.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 06:17:25 -0800 (PST)
+        Sun, 20 Nov 2022 07:13:33 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 20 Nov 2022 06:17:24 -0800
+Date:   Sun, 20 Nov 2022 07:13:31 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Tim Harvey <tharvey@gateworks.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (gsc-hwmon) Switch to flexible array to simplify
- code
-Message-ID: <20221120141724.GA1790491@roeck-us.net>
-References: <61a23e1d642397cfcecc4ac3bb0ab485d257987d.1668936855.git.christophe.jaillet@wanadoo.fr>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH v6 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
+Message-ID: <20221120151331.GA1791561@roeck-us.net>
+References: <20221116213615.1256297-1-Naresh.Solanki@9elements.com>
+ <20221116213615.1256297-2-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <61a23e1d642397cfcecc4ac3bb0ab485d257987d.1668936855.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20221116213615.1256297-2-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 10:34:41AM +0100, Christophe JAILLET wrote:
-> Using flexible array is more straight forward. It
->   - saves 1 pointer in the 'gsc_hwmon_platform_data' structure
->   - saves an indirection when using this array
->   - saves some LoC and avoids some always spurious pointer arithmetic
+On Wed, Nov 16, 2022 at 10:36:13PM +0100, Naresh Solanki wrote:
+> Add common fan properties bindings to a schema.
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Bindings for fan controllers can reference the common schema for the
+> fan
+> 
+> child nodes:
+> 
+>   patternProperties:
+>     "^fan@[0-2]":
+>       type: object
+>       $ref: fan-common.yaml#
+> 
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
+>  .../devicetree/bindings/hwmon/fan-common.yaml | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> new file mode 100644
+> index 000000000000..1954882eed77
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> @@ -0,0 +1,42 @@
+> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Common fan properties
+> +
+> +maintainers:
+> +  - Naresh Solanki <naresh.solanki@9elements.com>
+> +
+> +properties:
+> +  max-rpm:
+> +    description:
+> +      Max RPM supported by fan.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  pulses-per-revolution:
+> +    description:
+> +      The number of pulse from fan sensor per revolution.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  target-rpm:
+> +    description:
+> +      Target RPM the fan should be configured during driver probe.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  pwms:
+> +    description:
+> +      PWM provider.
+> +
+> +  label:
+> +    description:
+> +      Optional fan label
+> +
+> +  fan-supply:
+> +    description:
+> +      Power supply for fan.
+> +
 
-Applied to hwmon-next.
+I still think that at least min-rpm should be added. It is just as common
+as max-rpm.
 
-Thanks,
 Guenter
+
+> +additionalProperties: true
+> +
+> +...
