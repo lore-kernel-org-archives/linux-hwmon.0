@@ -2,113 +2,85 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA58FC433FE
-	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Nov 2022 11:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90D97C4332F
+	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Nov 2022 13:46:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiKTL5k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 20 Nov 2022 06:57:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
+        id S229508AbiKTNqz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 20 Nov 2022 08:46:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiKTL5g (ORCPT
+        with ESMTP id S229478AbiKTNqy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 20 Nov 2022 06:57:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B08AA44C;
-        Sun, 20 Nov 2022 03:57:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4087A60C47;
-        Sun, 20 Nov 2022 11:57:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16A86C433C1;
-        Sun, 20 Nov 2022 11:57:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668945451;
-        bh=5ggy0qQWOQikRZXdP6PhBP9SY1KAh6GYvEPfkQOJ5x0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CoQOfYMy1c33U6h/6Si4Kkdk/nYqh1lkdFXZ7pJNL5n9vK4HQ3DUmgzTQOLTi3J/+
-         4L3CB5IjyqYzX7X6zG+dkWGYwvA0hdGuc7N8jgmhdeJrVuTqN/xj+dhNjZlfZ7J+m8
-         NQ3W2f0KvfT6p0noOZ/qXVAUIyJBbjFLwkXHWLqq4vnB57jfFy83AYkdplnSgmAaxg
-         zCmdzQLQ0WFjr9mXKc4j8OxmQ84ISEza82CabM3W7gyfz8kIdxOd4eSw2xfIjVG+7w
-         QNO+he23TglDYzyGgKk5ZjXVMQ7a3tWEdMTEYRmF8wOpAKAo7Hnk/oHDUutDwNLNGQ
-         zJucDyu29NEnA==
-Date:   Sun, 20 Nov 2022 11:57:25 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yangtao Li <tiny.windzz@gmail.com>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Daniel Mack <zonque@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-pci@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Add missing start and/or end of line regex
- anchors
-Message-ID: <Y3oWJQRtgbHbqz0I@sirena.org.uk>
-References: <20221118223728.1721589-1-robh@kernel.org>
+        Sun, 20 Nov 2022 08:46:54 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009DC20F45;
+        Sun, 20 Nov 2022 05:46:53 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id p18so6517566qkg.2;
+        Sun, 20 Nov 2022 05:46:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LxPWn1nvFodzyvvW2zYlZFqXuEYr5haXbTLXX/xkn9o=;
+        b=b59DCt4qg7n4tM3zyNWPOK8O/Dm6nVVUJDONarwBPGOefzkZrGgHaFedM6GJeXDxm5
+         KGJY09mS1vlPLeMVlTX5pGUhMw9NQg9uGB/jtdFemfE4awJpgSavdD+Bjq4nvSY//YkP
+         e0V+vKFN+T6akGnYFvcbxobZ0X2GnxusU3d6oOVD76jm5eTGTfN7TUaz0pIex1LWgoEH
+         +NMqWIMsWJnnCV6TmcKAC4v69lsIO++Of275AdhLo/t2pB31xiPyhUBBql8AnPfw8/KH
+         rHYsv9W0VlGIRv059XmjqdgKr3ge36wgvPW/gfDRWZvBpRq1KMlwjd9RXX5dB+6l1K9Z
+         YnnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LxPWn1nvFodzyvvW2zYlZFqXuEYr5haXbTLXX/xkn9o=;
+        b=Grd9RtrZJq1BFju+GgkZugn5rq71F/mieH0mciiJZc9Bvl851u/FNa+JJO2H+S+xqB
+         Q5RYlrEPKOvevwYQxzCc+tEUMQO9o1oTSy0U68Vm+KqBrd1mmphi/DgV5Z78s0ZRc0U8
+         LynCGv0iymRMGFUGL5Ibi1QAX4y9auwwPZUDw0A1V76p+GncPSgwWnUe4/dl9YwhiRKs
+         CgDLwI5IZjoqV/FibkC7hDZ5A4snw/PwVHDGa1lyuS4sDcEEFxSnyCK/hRWviwynpQb3
+         suXaMI/bIlcDHVCnkJ3AR6BqbI7ceVN108Py1vbjlkOb45rNhbVPsTSytHyeKIED8mok
+         QtCA==
+X-Gm-Message-State: ANoB5pnnKgTMF+ifETjmJPspLnToHhjWEszQgkW/VEtlbK4NUxp9gISa
+        7TLNWRustoUVM9uOGr2QwvnVD67Ob70=
+X-Google-Smtp-Source: AA0mqf6Ht+IUf5G142cV/iGmCwzEiJdchPVk9zCX6zo690Ku52FeQarSEBFxe0JXTdrhPZQ1MHMgDA==
+X-Received: by 2002:a05:620a:38f:b0:6fb:a0ec:c5ba with SMTP id q15-20020a05620a038f00b006fba0ecc5bamr13145276qkm.493.1668952013116;
+        Sun, 20 Nov 2022 05:46:53 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bs36-20020a05620a472400b006bbc3724affsm6310886qkb.45.2022.11.20.05.46.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Nov 2022 05:46:52 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 20 Nov 2022 05:46:50 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>
+Cc:     w_armin@gmx.de, hdegoede@redhat.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, pobrn@protonmail.com
+Subject: Re: [PATCH] hwmon: (oxp-sensors) Add AOK ZOE and Mini PRO
+Message-ID: <20221120134650.GA1787156@roeck-us.net>
+References: <20221119162347.36698-1-samsagax@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Q3GCr2oBFfh1LNvT"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221118223728.1721589-1-robh@kernel.org>
-X-Cookie: Ego sum ens omnipotens.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221119162347.36698-1-samsagax@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Sat, Nov 19, 2022 at 01:23:48PM -0300, Joaquín Ignacio Aramendía wrote:
+> Add support for the AOK ZOE A1 and OXP Mini PRO handheld devices.
+> DMI strings are added to this driver since the same EC layout is used and
+> has similar specs as the OXP mini AMD.
+> 
+> The added devices are:
+> - OneXPlayer mini PRO (AMD 6800U)
+> - AOK ZOE A1 (AMD 5800U)
+> 
+> Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
 
---Q3GCr2oBFfh1LNvT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to hwmon-next.
 
-On Fri, Nov 18, 2022 at 04:37:27PM -0600, Rob Herring wrote:
-> json-schema patterns by default will match anywhere in a string, so
-> typically we want at least the start or end anchored. Fix the obvious
-> cases where the anchors were forgotten.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---Q3GCr2oBFfh1LNvT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN6FiQACgkQJNaLcl1U
-h9AA2wf/bx63PKQM05br3AtOVY9zdnicSS3gPjXP1RhIZFx5DzHwpwd0ubzHQeEN
-Kk6JXxiJGRd6UUsifgfE3wHiKuDzN/eqx3PrQeCPxvUM70Uz2XifdEqmnhRhR/ow
-HSxPCKrdL/VnVCE4OGskhnQnuNKdomuoEv5pKw5+0Ue8/O2O24vxh+Ckm/qdedgr
-oN+ptQEN4r+FDCGwsc98OKacDLoBwXp0NKSqoflhG0+AzYS3Pv4CWoSJyW7PPzYR
-Na7vdI9pcZxlPhOQilQUYKQWmFt0yl7+uUldCPsQXO/0XTBa1KTcI9H2bRK1MsOw
-EN4xxqC1SJ9Q0J7wg7TTl77qIj7PPA==
-=lgNY
------END PGP SIGNATURE-----
-
---Q3GCr2oBFfh1LNvT--
+Thanks,
+Guenter
