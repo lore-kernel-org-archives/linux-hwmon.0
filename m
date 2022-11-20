@@ -2,92 +2,82 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB8CDC43219
-	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Nov 2022 14:15:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7F51C433FE
+	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Nov 2022 14:17:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiKTOOh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 20 Nov 2022 09:14:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
+        id S229664AbiKTOR3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 20 Nov 2022 09:17:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiKTOOg (ORCPT
+        with ESMTP id S229653AbiKTOR2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 20 Nov 2022 09:14:36 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694361F9FE;
-        Sun, 20 Nov 2022 06:14:35 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id z6so5931718qtv.5;
-        Sun, 20 Nov 2022 06:14:35 -0800 (PST)
+        Sun, 20 Nov 2022 09:17:28 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9145B17;
+        Sun, 20 Nov 2022 06:17:26 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id e15so6509252qvo.4;
+        Sun, 20 Nov 2022 06:17:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JRurPD3dxAgJDwueyUw726M/HmNgn8rlVg8EEi0jmK4=;
-        b=b7//zC14ynpX3J+/pUn58m3+or6w52NB8az22w1gs4RFL3PFs6yhFZhc1BU9NryZ/Q
-         zLKGX4p+z570YgjJgH6wTHHGOAmDumfDoe50autvOooPJQN9rGIGcoMfVIjCn6L2ydSl
-         22ebXR3EBExfH1mnEDPJzT/qPSDgSUvu7WMbPworU9ba0dLFp15VjKOy3eOosFm8NkQ1
-         M7+nXkX4IxB+J1FnfQXtb9td+R0p3bZUG78vcokiTiWdI7tIngbR4+c8ioOBg2S6ia/z
-         DojD+nKlGNBfYeEUhsaxn8RnO03Vfxv9D9e1+RQxdMUEPnxTCwwmdUmXJPHVL8B4HeYD
-         +GVw==
+        bh=cFBd2tgFU0YTAhl1+JwJGS4pxfP6J1RbVkOT1+nxdRI=;
+        b=XaMQB5OZDP+OnIAjhbIlu5OmHpuRScoEeB3IuTNBBVL3bKJhmKN0Jio8qCOS7kAPhZ
+         WaZEnYpIbe92ieEapPFrlqX01sqv+PcHOXEPjPPgzZP9Y8ea0POc2jxF+h9MUxh73eR0
+         UGfJa1q8BFcaVhLjfewjGVjb5vhZPw/5faG3+EBO3P+oWBzLu19mImTnSKkx+q5xx+uS
+         Ue16aiJ1hkmVVo3r9BESZoXc5vfwTAp+FqP4OnFr6nj/3do0K39UtMEtE/LygcdkSMf5
+         UghmcIxkiHRiClf9IOBpc4e/htCi4U6fV7DUKyMbdjZSNu7Sx7MAkMN6dwaIST9QUSRh
+         UazA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JRurPD3dxAgJDwueyUw726M/HmNgn8rlVg8EEi0jmK4=;
-        b=g/w+2KiJwVt5W0lZKc5Q2jegZu2s499OhImfrtGo4wBKoTJl/+8iIYfVaJrY9L36+5
-         F3nm23DsyUe2k2G11NsKKVd/YgOJ1DA8C1jIwgSj+YF4WKKuHirn4I++F202KWOB36ps
-         6tKbyZ4v5Bw/a6eD+3G+UxmpE5hqBFBBjug41of034voTkH33MTQP7PM+uIaiGz0Il+q
-         xakHdpituOBPIbDtc+l0UGgD0ZPR9WPEuIfcLdJTKCweml+tREOnxUn2xvBQKaWPAdXr
-         ry/mrx5ETOTBRrkxyVUCeAMkMifk60Kd/QhL73691xNDIo7VGiWwDwoS6YdJ6iUpKvWN
-         0fcw==
-X-Gm-Message-State: ANoB5pm7tYZfM0J2VSvVTkAgyRB5ytpRe7ZgzB5u+JpTK+698MNulosY
-        M0cmpwem1F7m1IXA+1pS7OxjrGlzFDQ=
-X-Google-Smtp-Source: AA0mqf4J+4vwOG8VMG+PmvQo9n5pOwCcJVDUWebrJIEQ770JQVq0RUDi0Q8ES06/8L2LT5oFkM6Mcw==
-X-Received: by 2002:ac8:4243:0:b0:3a4:ec88:4985 with SMTP id r3-20020ac84243000000b003a4ec884985mr13918970qtm.521.1668953674548;
-        Sun, 20 Nov 2022 06:14:34 -0800 (PST)
+        bh=cFBd2tgFU0YTAhl1+JwJGS4pxfP6J1RbVkOT1+nxdRI=;
+        b=bHO9Zd8Yhlu+g6A86tmXGmAUFvgsqOb6CtZzN9mMxl3308oy/fJAUVLLPBA9DL2LUg
+         7QltKTxG2ROSyHviZoFvutdQ6stqLy/qi6KzCBXbWzEhQ+l8KTqnnh1kMD45/Bh/FbkW
+         bIeMbTv3JNew4FMTiJN+kVl9Aezhz7nNTOI7hq7Vb0B94ZXP1o95riiVzcvdZ2F6XpV+
+         xjwHx9nuGtbq9uaHW+TC//V4Bqrk01eyo6jt1VSKy3OewWJ5HjU3HZKYd5dDpM5M5PmP
+         18Y77WBxrw3PXnwDnl9eVLio4/GEup9/pybCVLeAYNKJW2Xh4lmmI05+8fSPCHKowJKe
+         +IFA==
+X-Gm-Message-State: ANoB5pntyZ8qMZU1Me9go+OGs981+YrabNlXeB5QOtp/faCRDDlcUzUm
+        tgWnlzM0Zp803pcOm1U863NvHl0JuP0=
+X-Google-Smtp-Source: AA0mqf438Ax0Gx3eJ8Yc02Ql8cQm7Nwmpy2l44nn3bmazHOxlbAkhmko7Dci6TxbvvkFZFZ9+ziUiQ==
+X-Received: by 2002:a05:6214:3504:b0:4c6:2732:d4f7 with SMTP id nk4-20020a056214350400b004c62732d4f7mr14239475qvb.83.1668953845956;
+        Sun, 20 Nov 2022 06:17:25 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r2-20020ae9d602000000b006cebda00630sm6366684qkk.60.2022.11.20.06.14.33
+        by smtp.gmail.com with ESMTPSA id s68-20020ae9de47000000b006eed47a1a1esm6246821qkf.134.2022.11.20.06.17.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 06:14:34 -0800 (PST)
+        Sun, 20 Nov 2022 06:17:25 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 20 Nov 2022 06:14:32 -0800
+Date:   Sun, 20 Nov 2022 06:17:24 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        broonie@kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon: (pmbus/core): Implement regulator get_status
-Message-ID: <20221120141432.GA1790249@roeck-us.net>
-References: <20221119182517.2334156-1-Naresh.Solanki@9elements.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Tim Harvey <tharvey@gateworks.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (gsc-hwmon) Switch to flexible array to simplify
+ code
+Message-ID: <20221120141724.GA1790491@roeck-us.net>
+References: <61a23e1d642397cfcecc4ac3bb0ab485d257987d.1668936855.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221119182517.2334156-1-Naresh.Solanki@9elements.com>
+In-Reply-To: <61a23e1d642397cfcecc4ac3bb0ab485d257987d.1668936855.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 07:25:16PM +0100, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On Sun, Nov 20, 2022 at 10:34:41AM +0100, Christophe JAILLET wrote:
+> Using flexible array is more straight forward. It
+>   - saves 1 pointer in the 'gsc_hwmon_platform_data' structure
+>   - saves an indirection when using this array
+>   - saves some LoC and avoids some always spurious pointer arithmetic
 > 
-> Add get_status for pmbus_regulator_ops.
-> 
-> Changes:
-> - use lock throughout the function
-> - Avoid line continuation upto 100 column
-> - Optimize use of & and | operator
-> - Check for VOUT, IOUT, TEMPERATURE bit in status word before checking
->   respective status register for fault.
-> - Report regulator current status.
-> 
-Change log should be after '---'
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Also, when looking into this, I realized that we already have
-pmbus_regulator_get_error_flags() which has somewhat overlapping
-functionality. Would it be possible to utilize that function to get
-the error status instead of more or less hand-coding it ?
+Applied to hwmon-next.
 
 Thanks,
 Guenter
