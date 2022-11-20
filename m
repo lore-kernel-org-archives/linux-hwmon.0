@@ -2,135 +2,141 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 849EBC433FE
-	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Nov 2022 17:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 370B0C433FE
+	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Nov 2022 17:14:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiKTRFR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 20 Nov 2022 12:05:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
+        id S229519AbiKTROu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 20 Nov 2022 12:14:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiKTRFQ (ORCPT
+        with ESMTP id S229454AbiKTROs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 20 Nov 2022 12:05:16 -0500
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2615800B;
-        Sun, 20 Nov 2022 09:05:14 -0800 (PST)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-14286d5ebc3so8068673fac.3;
-        Sun, 20 Nov 2022 09:05:14 -0800 (PST)
+        Sun, 20 Nov 2022 12:14:48 -0500
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6D2236;
+        Sun, 20 Nov 2022 09:14:48 -0800 (PST)
+Received: by mail-ot1-f54.google.com with SMTP id cn2-20020a056830658200b0066c74617e3dso6102587otb.2;
+        Sun, 20 Nov 2022 09:14:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VheYSDFtvLHCDiituLIR+eRxXrleFk3aorOpSVzMQ4U=;
-        b=02RCHBfY/JbB+jtltqGWqCpUs1ufgupKWQSpwdFwa8TyqXyDfRLH4IK30HR69zsWAo
-         qAcaznQ5WqaiqYBXpyZTAiXB67yiPrsyO+LA909GFIDquz2xeDQ267qpZbHZI+BfmjJN
-         /JYCP5qTLP0AQV1upJCrhUfGZjIlxIq2cAXjjTUgo4oXqluCfdaSmDiHO4SjeKWS2Kai
-         TG7FgmXiiHHlznkH0Jf4auu2Ai8lWbXzeKbit0qqgWDCiTTkCfgKa/G1xucQ3gReUzrq
-         KRJbv0ZTXtDyz0bsHATn3sr895fxE0cZ7IkSmf2aF7/2EluI0xpE/91PzMegYoBPZboq
-         8wrQ==
-X-Gm-Message-State: ANoB5plygqy5AqeesL8++1a3swnD2pqPxuP+sPEAKK0A4E4fDiuTj+06
-        oEY2rY7vkx8LEu+uYHpKCfMoGuJvGw==
-X-Google-Smtp-Source: AA0mqf67G516TnraaP+JTVCHo56B4CXRmRuPFyOwAhESA4hEJqYmyLjQMdbVK1YDhqM7/GIM3MGdLw==
-X-Received: by 2002:a05:6870:2c85:b0:13c:4592:c2f2 with SMTP id oh5-20020a0568702c8500b0013c4592c2f2mr8070284oab.160.1668963913800;
-        Sun, 20 Nov 2022 09:05:13 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n+rkX70e7RE0S7j3/g/2Phldb7Wlk6Lkj7kfdf/nfow=;
+        b=b3KmmpqRcxaSufYzxUqr3TIfPcNgr8j0RDuHfwXIpNLiAVtVE1geb+OAWmOrUMxDWO
+         p9s9VByqdhbWNTzDps+plo/4UVV+7DUSx/EOJatbhAEEmc5hkbT/ARMigeN+9KnTWZpW
+         Of9pC9A6Q79z9yS7EBkT+ITylLPNsVqxEGl4HeFjpZHE7kNdcuM8wJOHHyfgFoNbQZmZ
+         TDgLripS0FCvZR5ivXavURNdop1K5Snwf0Af1GbKTWPcIcC6C2IveLE3zHeNxLx4ngA+
+         flW3YnSoo23vrfnqatTu9/hq8hSZqUFWjona6EbkwMMVA4jlnx+38ncRqWL2Vw0PyeYD
+         Xu0w==
+X-Gm-Message-State: ANoB5pn5AYwfsyIpkqPIlPdlsic1f7luonMgroOaiDBdgZVIkAiAKKVf
+        5AOhJDxdEcidnLxO2gcvr3jlpAZbwg==
+X-Google-Smtp-Source: AA0mqf7cjZEsUZlQYmDs59qSWPEUEPIiBl5AQyT5kP2xNrQSaUWhyCc6yJkzO+Zli3vdjNuwfy/2bw==
+X-Received: by 2002:a9d:5c81:0:b0:661:c48b:12db with SMTP id a1-20020a9d5c81000000b00661c48b12dbmr7767190oti.105.1668964487486;
+        Sun, 20 Nov 2022 09:14:47 -0800 (PST)
 Received: from robh_at_kernel.org ([2605:ef80:80f8:5cb3:df5a:23c3:86fb:15a6])
-        by smtp.gmail.com with ESMTPSA id 59-20020a9d0141000000b0066aba96addbsm3945259otu.81.2022.11.20.09.05.12
+        by smtp.gmail.com with ESMTPSA id b43-20020a056870392b00b0011d02a3fa63sm1392288oap.14.2022.11.20.09.14.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 09:05:13 -0800 (PST)
-Received: (nullmailer pid 3203993 invoked by uid 1000);
-        Sun, 20 Nov 2022 17:05:14 -0000
-Date:   Sun, 20 Nov 2022 11:05:14 -0600
+        Sun, 20 Nov 2022 09:14:47 -0800 (PST)
+Received: (nullmailer pid 3214059 invoked by uid 1000);
+        Sun, 20 Nov 2022 17:14:48 -0000
+Date:   Sun, 20 Nov 2022 11:14:48 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Naresh Solanki <naresh.solanki@9elements.com>,
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
         devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Subject: Re: [PATCH v6 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
-Message-ID: <20221120170514.GA3192266-robh@kernel.org>
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>,
+        linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v6 3/3] hwmon: (max6639) Change from pdata to dt
+ configuration
+Message-ID: <20221120171448.GA3204528-robh@kernel.org>
 References: <20221116213615.1256297-1-Naresh.Solanki@9elements.com>
- <20221116213615.1256297-2-Naresh.Solanki@9elements.com>
- <20221120151331.GA1791561@roeck-us.net>
+ <20221116213615.1256297-4-Naresh.Solanki@9elements.com>
+ <20221117074510.qqtjc6h3bnh5rccx@pengutronix.de>
+ <81cd642f-c5fb-77ec-a634-5655d5b6088c@9elements.com>
+ <20221117091324.h7etwyzckzvpoa4p@pengutronix.de>
+ <20221120151946.GA1791682@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221120151331.GA1791561@roeck-us.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221120151946.GA1791682@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 07:13:31AM -0800, Guenter Roeck wrote:
-> On Wed, Nov 16, 2022 at 10:36:13PM +0100, Naresh Solanki wrote:
-> > Add common fan properties bindings to a schema.
+On Sun, Nov 20, 2022 at 07:19:46AM -0800, Guenter Roeck wrote:
+> On Thu, Nov 17, 2022 at 10:13:24AM +0100, Uwe Kleine-König wrote:
+> > On Thu, Nov 17, 2022 at 02:10:45PM +0530, Naresh Solanki wrote:
+> > > 
+> > > 
+> > > On 17-11-2022 01:15 pm, Uwe Kleine-König wrote:
+> > > > Hello,
+> > > > 
+> > > > On Wed, Nov 16, 2022 at 10:36:15PM +0100, Naresh Solanki wrote:
+> > > > > max6639_platform_data is not used by any in-kernel driver and does not
+> > > > > address the MAX6639 fans separately.
+> > > > > Move to device tree configuration with explicit properties to configure
+> > > > > each fan.
+> > > > > 
+> > > > > Non-DT platform can still use this module with its default
+> > > > > configuration.
+> > > > > 
+> > > > > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> > > > > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > > > 
+> > > > What changed here since v5? Please either add a changelog below the
+> > > > tripple-dash for a new revision, or make sure that all relevant people
+> > > > get the cover letter.
+> > > > 
+> > > > It seems you didn't address my comments for v5 :-\
+> > > Not sure what I missed but did following changes:
+> > > Removed unused header max6639.h
+> > > Used dev_err_probe instead,
+> > > Removed of_pwm_n_cells,
+> > > if condition for freq_table
+> > > removed pwm_get_state & instead use pwm->state
+> > > division/multiplication optimizations,
+> > > indentation of freq_table,
 > > 
-> > Bindings for fan controllers can reference the common schema for the
-> > fan
+> > In the cover letter you just wrote:
 > > 
-> > child nodes:
+> > | Changes in V6:
+> > | - Remove unused header file
+> > | - minor cleanup
 > > 
-> >   patternProperties:
-> >     "^fan@[0-2]":
-> >       type: object
-> >       $ref: fan-common.yaml#
+> > which is too short in my eyes. If you wrote instead:
 > > 
-> > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> > ---
-> >  .../devicetree/bindings/hwmon/fan-common.yaml | 42 +++++++++++++++++++
-> >  1 file changed, 42 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> > 	Address review feedback by Uwe Kleine-König in patch #3, patches #1 and
+> > 	#2 unchanged.
 > > 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> > new file mode 100644
-> > index 000000000000..1954882eed77
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> > @@ -0,0 +1,42 @@
-> > +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Common fan properties
-> > +
-> > +maintainers:
-> > +  - Naresh Solanki <naresh.solanki@9elements.com>
-> > +
-> > +properties:
-> > +  max-rpm:
-> > +    description:
-> > +      Max RPM supported by fan.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +
-> > +  pulses-per-revolution:
-> > +    description:
-> > +      The number of pulse from fan sensor per revolution.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +
-> > +  target-rpm:
-> > +    description:
-> > +      Target RPM the fan should be configured during driver probe.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +
-> > +  pwms:
-> > +    description:
-> > +      PWM provider.
-> > +
-> > +  label:
-> > +    description:
-> > +      Optional fan label
-> > +
-> > +  fan-supply:
-> > +    description:
-> > +      Power supply for fan.
-> > +
+> > This would be much more helpful as people that were already happy with
+> > v5 wouldn't need to look at the first two patches and I would know that
+> > you addressed my feedback and would have looked in more detail.
+> > 
+> > What I miss is the most critical part of my feedback, i.e.:
+> > | My overall impression is that this patch mixes too much things. IMHO it
+> > | should be split in (at least)
+> > | 
+> > |  - Add dt support
+> > |  - Drop platform support
+> > |  - Add PWM provider support
+> > |  - Make use of the PWM API
+> > |
+> > | maybe also add the 2nd PWM in a separate step.
 > 
-> I still think that at least min-rpm should be added. It is just as common
-> as max-rpm.
+> Those will definitely need to be separate patches. I am far from convinced
+> that all fan controllers in the hwmon subsystem should implement pwm
+> providers just to match devicetree requirements. That adds zero value in
+> 99% of all use cases. Actually, I don't know of any use cases where it
+> would add value or even make sense.
 
-Or a table if the response is not linear like LEDs/backlights? Though if 
-there's a tach, that wouldn't be necessary.
+There's no requirement that using a binding means using corresponding 
+Linux subsystem. Convenient usually, but not required.
 
 Rob
