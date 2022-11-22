@@ -2,161 +2,171 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0C8AC433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Nov 2022 18:48:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8554C4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Nov 2022 19:25:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234571AbiKVSst (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 22 Nov 2022 13:48:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
+        id S232993AbiKVTZh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 22 Nov 2022 14:25:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234599AbiKVSsk (ORCPT
+        with ESMTP id S229481AbiKVTZd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 Nov 2022 13:48:40 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42F28C4A7;
-        Tue, 22 Nov 2022 10:48:30 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id e205so16751924oif.11;
-        Tue, 22 Nov 2022 10:48:30 -0800 (PST)
+        Tue, 22 Nov 2022 14:25:33 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C887FF21;
+        Tue, 22 Nov 2022 11:25:32 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id n186so16862400oih.7;
+        Tue, 22 Nov 2022 11:25:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1vnassmWHEOpjrJ1nRETirxtdv149npQRWnOMLYVjOg=;
-        b=dLspgz+bpzT+EedBtattbgdqyXTzab5fJIyizJY4ppPsafC0paWmwTgBd9Yhrh2bQU
-         spxelrQIWyopdGa39HgeehGp9zsRSdCEtBuzTwUTtpTnqKC+IkFCK8F7iVnDKk0ZC/mH
-         yYGaJYV4XV7l9C7Ydwnm8l2j7L6nmtAe/yJhNc9UhPQx4K4N6Xqpd5roSnQI9s8h39M7
-         TJmLtv+8emi+NILKZOUIggf96GNXvF9w3hbrohnMAd+ykYr/li9VOo0d0pgUaQWGDKvw
-         K0pEiN0DVsANgAI/rHSBNz2GuLCT8FOvy7k0G/KF3hOSwmfbLm0rEuxsSDLLz7ktaw70
-         7S7w==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=09Fo0rR4StbdjPIIvlInIxSHew0e7ivCTP8R8vAEZ3Y=;
+        b=mUndDyNeXjHl/vP19NQ4bwpklc7wS/EV0Ci39R6mCfU+ZxAnNdZbU/36cdmGRifMcN
+         xzeEa2uMwqa1dKwsoh3qKVaQkCDmsxgHNYC1mpbtCEZIt4ZZ7OGdgdd3YEbaWrhFwIuK
+         4o45IeQ1Tmek/Jd6QWrtBJCLbIIYrJIOE6ClTzK7IauSF9VT5Yg3QoZQrObyxKe6yn0/
+         jqejpCxPOIp4DtUn8CMbZjKoP/Mo+yyarmZni20JTDTVHkSIPapnC7r/X0y/3Cxa8N1F
+         QvLN5GuMo+1ycb9EzV5h7bXZL/BA6gUFkbIzlxNz1zbJ+cvYGRARg3GuyBdgcx5qrnWQ
+         IckQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1vnassmWHEOpjrJ1nRETirxtdv149npQRWnOMLYVjOg=;
-        b=jlY+ukK/ONW8Yee5gLzA5PVsOGNKkUO+0mz5bOfSrBnccyMNrP8pxQf0UMJGTKipRV
-         ANsup4DlMrQDRT7mhfe16hL4Dq+sMJxlqA8PqHMY76aKU5ekID3ZLD0cjc16hmDDc44y
-         LG1GJqkF0245K0vJjFKJmJdBRjuQbFIo0yllDa2c/neRl0xuVPpCvNp1lHTymRXy2U+A
-         oIGIW6LwbyCH4v1wIELolaJgMSbPmmC2eYAyaBqdU4y/4slDM0UwzeAJ4/+9CDhfGAbz
-         MfERUhiXwfCTv1D7jprqNvvCT/9hwh+K89JtsipiN3hjvF+znfgKlt1J5QOsj6d8lUjB
-         Tw3A==
-X-Gm-Message-State: ANoB5pmxgRb8UOSZqEMCCn8U1PeZYysptOuI9harqtPWuru/v1OjWLzQ
-        Ao2tUFAKkSd22m9Bzs8FpS7HFydAtVM=
-X-Google-Smtp-Source: AA0mqf7+NMNs5yf4Vf5mplcyAR78eLvXgyCD3YXldRymsFhezRJgkEVhNTgqxFjOOdIO9LE7Tidyzg==
-X-Received: by 2002:a05:6808:219c:b0:35a:33d7:a447 with SMTP id be28-20020a056808219c00b0035a33d7a447mr2835663oib.186.1669142910117;
-        Tue, 22 Nov 2022 10:48:30 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bd32-20020a056870d7a000b0013d6d924995sm7897781oab.19.2022.11.22.10.48.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 10:48:29 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=09Fo0rR4StbdjPIIvlInIxSHew0e7ivCTP8R8vAEZ3Y=;
+        b=GInXFDXWz7Sk4S1UTP1A7x5CItkAoVvi2zW3Lw15YWhfbsKcYonOVBowgHtpfUCk6Y
+         qRpt3mQ3SVbvGM4Gt1JezsNbl3fCEr7KogR9efF11mnSg7tEkvGLA4RbHIcWgUd51h7G
+         6EPEfixNC6Sk/G4xTIZmCbxWW8HME1RmyMw4k7VneAlc1DZVsOgxUWI6ovlJIj/xpulC
+         SuOzhgYej7H16gkA27kLmvOePmvaahgOYXUar1FHB5+XGCKbZb66WqoSCVMcM5iQLcNm
+         vrMlL52MHmXwywilpghSf4TNOZBuwaRQBFnLZuYEQHnUSX2Ovvv1P8a0Evc4q/C1hE3E
+         uZTQ==
+X-Gm-Message-State: ANoB5pnCGGdqp3iD/LuPd1uoTw5pK94ux+DHDFDWu5pS8VW8TSG/2C90
+        AmdQ4mkEQjJfXkqSfRYJ1Vbf/YuCoiE=
+X-Google-Smtp-Source: AA0mqf6jwoymerXoL3TKr2O+FS3QfhwQkUTlFpCJoSPC9VFX60OhX6Tz5DTTYZX6ZvM7zf1RHow7+A==
+X-Received: by 2002:a54:4399:0:b0:355:bceb:2606 with SMTP id u25-20020a544399000000b00355bceb2606mr7342032oiv.188.1669145131637;
+        Tue, 22 Nov 2022 11:25:31 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i11-20020a9d53cb000000b00667ff6b7e9esm6491267oth.40.2022.11.22.11.25.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 11:25:30 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 22 Nov 2022 10:48:28 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        broonie@kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] hwmon: (pmbus/core): Implement regulator get_status
-Message-ID: <20221122184828.GA554748@roeck-us.net>
-References: <20221122090302.3053092-1-Naresh.Solanki@9elements.com>
+Message-ID: <25b37a72-4415-2ed5-0415-040af174a70a@roeck-us.net>
+Date:   Tue, 22 Nov 2022 11:25:29 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221122090302.3053092-1-Naresh.Solanki@9elements.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Content-Language: en-US
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+References: <20221121122932.2493174-1-Naresh.Solanki@9elements.com>
+ <20221121122932.2493174-2-Naresh.Solanki@9elements.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v7 1/4] dt-bindings: hwmon: fan: Add fan binding to schema
+In-Reply-To: <20221121122932.2493174-2-Naresh.Solanki@9elements.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 10:03:02AM +0100, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On 11/21/22 04:29, Naresh Solanki wrote:
+> Add common fan properties bindings to a schema.
 > 
-> Add get_status for pmbus_regulator_ops.
-> ---
-> Changes:
-> - use lock throughout the function
-> - Avoid line continuation upto 100 column
-> - Optimize use of & and | operator
-> - Check for VOUT, IOUT, TEMPERATURE bit in status word before checking
->   respective status register for fault.
-> - Report regulator current status.
-> - Utilize get_error_flag to check for regulator errors.
+> Bindings for fan controllers can reference the common schema for the
+> fan
 > 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> child nodes:
+> 
+>    patternProperties:
+>      "^fan@[0-2]":
+>        type: object
+>        $ref: fan-common.yaml#
+> 
 > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 > ---
->  drivers/hwmon/pmbus/pmbus_core.c | 41 ++++++++++++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
+>   .../devicetree/bindings/hwmon/fan-common.yaml | 47 +++++++++++++++++++
+>   1 file changed, 47 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
 > 
-> 
-> base-commit: 27fea302952d8c90cafbdbee96bafeca03544401
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 7ec04934747e..5df2aee549e6 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2851,6 +2851,46 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->  	return 0;
->  }
->  
-> +static int pmbus_regulator_get_status(struct regulator_dev *rdev)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	u8 page = rdev_get_id(rdev);
-> +	int status, ret;
+> diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> new file mode 100644
+> index 000000000000..0535d37624cc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	mutex_lock(&data->update_lock);
-> +	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
-> +	if (status < 0) {
-> +		ret = status;
-> +		goto unlock;
-> +	}
+> +title: Common fan properties
 > +
-> +	if (status & PB_STATUS_OFF) {
-> +		ret = REGULATOR_STATUS_OFF;
-> +		goto unlock;
-> +	}
+> +maintainers:
+> +  - Naresh Solanki <naresh.solanki@9elements.com>
 > +
-> +	/* If regulator is ON & reports power good then return ON */
-> +	if (!(status & PB_STATUS_POWER_GOOD_N)) {
-> +		ret = REGULATOR_STATUS_ON;
-> +		goto unlock;
-> +	}
+> +properties:
+> +  max-rpm:
+> +    description:
+> +      Max RPM supported by fan.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 > +
-> +	if (rdev->desc->ops->get_error_flags)
-> +		ret = rdev->desc->ops->get_error_flags(rdev, &status);
+> +  min-rpm:
+> +    description:
+> +      Min RPM supported by fan.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 > +
+> +  pulses-per-revolution:
+> +    description:
+> +      The number of pulse from fan sensor per revolution.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  target-rpm:
+> +    description:
+> +      Target RPM the fan should be configured during driver probe.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  pwms:
+> +    description:
+> +      PWM provider.
+> +
+> +  label:
+> +    description:
+> +      Optional fan label
+> +
+> +  fan-supply:
+> +    description:
+> +      Power supply for fan.
+> +
+> +additionalProperties: true
+> +
+> +...
 
-What about checking ret ?
+Still, from my second reply to v6:
 
-> +	if (status & (REGULATOR_ERROR_UNDER_VOLTAGE | REGULATOR_ERROR_OVER_CURRENT |
-> +	   REGULATOR_ERROR_REGULATION_OUT | REGULATOR_ERROR_FAIL | REGULATOR_ERROR_OVER_TEMP))
-> +		ret = REGULATOR_STATUS_ERROR;
-> +	else
-> +		ret = REGULATOR_STATUS_UNDEFINED;
+ > Another property which is definitely missing and needed
+ > will be DC vs. PWM control. That is currently pwm[1-*]_mode
+ > in sysfs attributes, but it is really a fan attribute.
+ >
+ > Many fans are DC controlled, so this property is absolutely
+ > necessary.
 
-This part has to be inside "if (rdev->desc->ops->get_error_flags)"
-or status will still contain the status word.
+Plus, with DC control there is no pwm. It would be absolutely wrong
+to declare that a fan controller MUST be pwm based.
+
+Ultimately, there are three types of fan controllers:
+
+- PWM control, such as MAX6639
+- DC control, such as MAX6620 or MAX6650/6651
+- Configurable, such as MAX1669 or pretty much all fan controllers
+   included in SuperIO chips
+
+Generic fan control bindings simply _have_ to take this into account.
 
 Guenter
 
-> +
-> +unlock:
-> +	mutex_unlock(&data->update_lock);
-> +	return ret;
-> +}
-> +
->  static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
->  {
->  	struct pmbus_data *data = i2c_get_clientdata(client);
-> @@ -2991,6 +3031,7 @@ const struct regulator_ops pmbus_regulator_ops = {
->  	.disable = pmbus_regulator_disable,
->  	.is_enabled = pmbus_regulator_is_enabled,
->  	.get_error_flags = pmbus_regulator_get_error_flags,
-> +	.get_status = pmbus_regulator_get_status,
->  	.get_voltage = pmbus_regulator_get_voltage,
->  	.set_voltage = pmbus_regulator_set_voltage,
->  	.list_voltage = pmbus_regulator_list_voltage,
