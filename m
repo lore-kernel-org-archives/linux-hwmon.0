@@ -2,430 +2,152 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69C0EC433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Nov 2022 17:53:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 606E3C4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Nov 2022 09:03:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbiKURxd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Nov 2022 12:53:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
+        id S233070AbiKVJDP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 22 Nov 2022 04:03:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbiKURxb (ORCPT
+        with ESMTP id S233053AbiKVJDM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Nov 2022 12:53:31 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C385D6AE;
-        Mon, 21 Nov 2022 09:53:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669053208; x=1700589208;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=72DDXUbs9noH5oc5Yxe1WYu0o5R0tJSS9OdV2F64vs0=;
-  b=JPqZAs6iqCzGp/0wKD6b+d+zLOFhvY7g1yDjhhlptSifPz/9AM6a0C5G
-   Bijx6ubkq8P1stpVEmimEdr3sl9oWrH8loH1WPeXc52BrX1Msy6tJQ1MM
-   c9NLpEhlHOgqSoxl5Y5K+IeGdApTbiPuah26DBOx5jpoL0KP4ObAm/7as
-   VxdMAGpygGJ6lfsMS9KpnrejB03Bux8v4dNj0rnYsoXwE2GFidjDveVyo
-   RMSYFFu9zYH72WzxduT6fG1OrMdYC+hPo+m5M65Ju/xcPipwdjvH5uvcx
-   bpjz4vRW5a2nab0oyphw+4Gi38PYCIXT+xBlICzanHAN1Iuuw/WpI1yL5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="315442520"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="315442520"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 09:53:28 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="709897564"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="709897564"
-Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 09:53:24 -0800
-From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-To:     jic23@kernel.org, lars@metafoo.de
-Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        rajat.khandelwal@intel.com,
-        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Subject: [PATCH v11] iio: temperature: Add driver support for Maxim MAX30208
-Date:   Tue, 22 Nov 2022 23:23:00 +0530
-Message-Id: <20221122175300.800956-1-rajat.khandelwal@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 22 Nov 2022 04:03:12 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03F1D2D2
+        for <linux-hwmon@vger.kernel.org>; Tue, 22 Nov 2022 01:03:07 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id b12so9864504wrn.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 22 Nov 2022 01:03:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WlO7g4Lsw0W29NZcE0ra/AJVqpRBqZGwpRSfI2r7w5Y=;
+        b=XHn2YtjbLOJMoShQ8Uuzur7XQJyv9rqI/IfrS/8/o24iIBnkbh1vaoC1ZCUmfR+W5k
+         pR9cuxus/C9I5QoH4SuyXLUTEw0vDOKujndGzluBpFR1wU5MWxB+PGFxfLbzOjWSNGLy
+         LUtJHT02Z9pN5gCXFEBXY78s2tpJ9omwPiUbXfxCHmrcQW0742Hq0VvR8TYsLHg8YVkE
+         K240BL4nTxQxAAg2snoDSeJPwPfvwYTRFZHxjkJnUTFO9ioR9I1zmQEdALS7e/2Y/SEH
+         t8RNEoJvnXxpH56Fo7S3LJ6ip5AImo/i54tk1N9TIwsTVCgqx9JaT4HZNZTvXcJdcJm5
+         U6Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WlO7g4Lsw0W29NZcE0ra/AJVqpRBqZGwpRSfI2r7w5Y=;
+        b=c9IZTY28ulv6PkbQoLOFDD1QhT4lbq6mNik6znuQRC+x17UoNDr4KEOtYy7qu1Yb+V
+         9vcY4QhIh2TcMTfk2i/Vj7C0zucb4DOPktfTTWGusZ7rIvCWaH1LXdwDKr6GQTCqOQ5/
+         TplUqJBuz5U20CwHA5kNMdLo5fMEkKuqjpynf8FrewleiwMWqLfRb+/yuklFEQxmt0KP
+         npBDhkVLpdI3YH4YsPe/HP8x4Es6utdydc7Jcs97YrKjp1SP0dsoUdaj0zp3pWzYFmfv
+         v444/8Fnpj4kKMkCRkv3Th64uIRST3vH2leWO+HRvXA09GQO34dTUIbzdEsXTy8ZaN/B
+         83ww==
+X-Gm-Message-State: ANoB5pnRw38FqsuAhp5CNfzL2bY22UvgGviUS1arR/BZfFHM0L6Qwfvg
+        N4X3fgi5tqFNzvdJzzHw8tQyWQ==
+X-Google-Smtp-Source: AA0mqf68rXUfFCPbiYFPRAEVP2GsE6Sh7ZlYje0Rb53NCB/Hi0QUvgnkvfPQfNOqxHzkmQm0uYYymw==
+X-Received: by 2002:a5d:5744:0:b0:236:b7c6:7ef9 with SMTP id q4-20020a5d5744000000b00236b7c67ef9mr1729027wrw.10.1669107785740;
+        Tue, 22 Nov 2022 01:03:05 -0800 (PST)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id l12-20020a05600c2ccc00b003cf54b77bfesm21296686wmc.28.2022.11.22.01.03.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 01:03:05 -0800 (PST)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     broonie@kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] hwmon: (pmbus/core): Implement regulator get_status
+Date:   Tue, 22 Nov 2022 10:03:02 +0100
+Message-Id: <20221122090302.3053092-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Maxim MAX30208 is a digital temperature sensor with 0.1°C accuracy.
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Add support for max30208 driver in iio subsystem.
+Add get_status for pmbus_regulator_ops.
 
-Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX30208.pdf
-Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
 ---
+Changes:
+- use lock throughout the function
+- Avoid line continuation upto 100 column
+- Optimize use of & and | operator
+- Check for VOUT, IOUT, TEMPERATURE bit in status word before checking
+  respective status register for fault.
+- Report regulator current status.
+- Utilize get_error_flag to check for regulator errors.
 
-v11: Small tweaks (blank line spacing)
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 41 ++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-v10: Correcting the overflow logic
-
-v9: Repositioning register data
-
-v8:
-1. Returning time out if conversion fails to happen
-2. Setting rollover bit to '1' to allow FIFO overwriting
-3. Dropping ACPI_PTR
-
-v7:
-1. Dropped GPIOs use for now
-2. Driver name string directly used
-3. Mutex lock description added
-4. Removed noisy errors and only kept errors on larger code blocks
-5. dev_warn -> dev_err for temperature conversion failure
-6. Improvised the logic of popping out values
-7. Fixed line breaks
-8. module_i2c_driver
-
-v6: Converted usleep_range to msleep as delay is quite large
-
-v5:
-1. Fixed comment position in max30208_request
-2. Use of local u8 variable to build register values
-3. Using u8 instead of s8 in data_count
-4. Removed global MAX30208_RES_MILLICELCIUS
-5. Removed 'comma' on NULL terminators
-
-v4: Version comments go below line separator of signed-off-by
-
-v3: Release the mutex lock after error gets returned
-
-v2:
-1. Removed TODO
-2. Removed unnecessary blank spaces
-3. Corrected MC->MILLICELCIUS
-4. Comments added wherever required
-5. dev_err on i2c fails
-6. Rearranged some flows
-7. Removed PROCESSED
-8. int error return on gpio setup
-9. device_register at the end of probe
-10. Return on unsuccessful reset
-11. acpi_match_table and of_match_table added
-12. Minor quirks
-
- MAINTAINERS                        |   6 +
- drivers/iio/temperature/Kconfig    |  10 ++
- drivers/iio/temperature/Makefile   |   1 +
- drivers/iio/temperature/max30208.c | 252 +++++++++++++++++++++++++++++
- 4 files changed, 269 insertions(+)
- create mode 100644 drivers/iio/temperature/max30208.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f1390b8270b2..7f1fd2e31b94 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12373,6 +12373,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/regulator/maxim,max20086.yaml
- F:	drivers/regulator/max20086-regulator.c
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 7ec04934747e..5df2aee549e6 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2851,6 +2851,46 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+ 	return 0;
+ }
  
-+MAXIM MAX30208 TEMPERATURE SENSOR DRIVER
-+M:	Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-+L:	linux-iio@vger.kernel.org
-+S:	Maintained
-+F:	drivers/iio/temperature/max30208.c
-+
- MAXIM MAX77650 PMIC MFD DRIVER
- M:	Bartosz Golaszewski <brgl@bgdev.pl>
- L:	linux-kernel@vger.kernel.org
-diff --git a/drivers/iio/temperature/Kconfig b/drivers/iio/temperature/Kconfig
-index e8ed849e3b76..ed384f33e0c7 100644
---- a/drivers/iio/temperature/Kconfig
-+++ b/drivers/iio/temperature/Kconfig
-@@ -128,6 +128,16 @@ config TSYS02D
- 	  This driver can also be built as a module. If so, the module will
- 	  be called tsys02d.
- 
-+config MAX30208
-+	tristate "Maxim MAX30208 digital temperature sensor"
-+	depends on I2C
-+	help
-+	  If you say yes here you get support for Maxim MAX30208
-+	  digital temperature sensor connected via I2C.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called max30208.
-+
- config MAX31856
- 	tristate "MAX31856 thermocouple sensor"
- 	depends on SPI
-diff --git a/drivers/iio/temperature/Makefile b/drivers/iio/temperature/Makefile
-index dd08e562ffe0..dfec8c6d3019 100644
---- a/drivers/iio/temperature/Makefile
-+++ b/drivers/iio/temperature/Makefile
-@@ -7,6 +7,7 @@ obj-$(CONFIG_IQS620AT_TEMP) += iqs620at-temp.o
- obj-$(CONFIG_LTC2983) += ltc2983.o
- obj-$(CONFIG_HID_SENSOR_TEMP) += hid-sensor-temperature.o
- obj-$(CONFIG_MAXIM_THERMOCOUPLE) += maxim_thermocouple.o
-+obj-$(CONFIG_MAX30208) += max30208.o
- obj-$(CONFIG_MAX31856) += max31856.o
- obj-$(CONFIG_MAX31865) += max31865.o
- obj-$(CONFIG_MLX90614) += mlx90614.o
-diff --git a/drivers/iio/temperature/max30208.c b/drivers/iio/temperature/max30208.c
-new file mode 100644
-index 000000000000..c85c21474711
---- /dev/null
-+++ b/drivers/iio/temperature/max30208.c
-@@ -0,0 +1,252 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/*
-+ * Copyright (c) Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-+ *
-+ * Maxim MAX30208 digital temperature sensor with 0.1°C accuracy
-+ * (7-bit I2C slave address (0x50 - 0x53))
-+ */
-+
-+#include <linux/bitops.h>
-+#include <linux/delay.h>
-+#include <linux/iio/iio.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/types.h>
-+
-+#define MAX30208_STATUS			0x00
-+#define MAX30208_STATUS_TEMP_RDY	BIT(0)
-+#define MAX30208_INT_ENABLE		0x01
-+#define MAX30208_INT_ENABLE_TEMP_RDY	BIT(0)
-+
-+#define MAX30208_FIFO_OVF_CNTR		0x06
-+#define MAX30208_FIFO_DATA_CNTR		0x07
-+#define MAX30208_FIFO_DATA		0x08
-+
-+#define MAX30208_FIFO_CONFIG		0x0a
-+#define MAX30208_FIFO_CONFIG_RO		BIT(1)
-+
-+#define MAX30208_SYSTEM_CTRL		0x0c
-+#define MAX30208_SYSTEM_CTRL_RESET	0x01
-+
-+#define MAX30208_TEMP_SENSOR_SETUP	0x14
-+#define MAX30208_TEMP_SENSOR_SETUP_CONV	BIT(0)
-+
-+struct max30208_data {
-+	struct i2c_client *client;
-+	struct iio_dev *indio_dev;
-+	struct mutex lock; /* Lock to prevent concurrent reads of temperature readings */
-+};
-+
-+static const struct iio_chan_spec max30208_channels[] = {
-+	{
-+		.type = IIO_TEMP,
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
-+	},
-+};
-+
-+/**
-+ * max30208_request() - Request a reading
-+ * @data: Struct comprising member elements of the device
-+ *
-+ * Requests a reading from the device and waits until the conversion is ready.
-+ */
-+static int max30208_request(struct max30208_data *data)
++static int pmbus_regulator_get_status(struct regulator_dev *rdev)
 +{
-+	/*
-+	 * Sensor can take up to 500 ms to respond so execute a total of
-+	 * 10 retries to give the device sufficient time.
-+	 */
-+	int retries = 10;
-+	u8 regval;
-+	int ret;
++	struct device *dev = rdev_get_dev(rdev);
++	struct i2c_client *client = to_i2c_client(dev->parent);
++	struct pmbus_data *data = i2c_get_clientdata(client);
++	u8 page = rdev_get_id(rdev);
++	int status, ret;
 +
-+	ret = i2c_smbus_read_byte_data(data->client, MAX30208_TEMP_SENSOR_SETUP);
-+	if (ret < 0)
-+		return ret;
-+
-+	regval = ret | MAX30208_TEMP_SENSOR_SETUP_CONV;
-+
-+	ret = i2c_smbus_write_byte_data(data->client, MAX30208_TEMP_SENSOR_SETUP, regval);
-+	if (ret)
-+		return ret;
-+
-+	while (retries--) {
-+		ret = i2c_smbus_read_byte_data(data->client, MAX30208_STATUS);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (ret & MAX30208_STATUS_TEMP_RDY)
-+			return 0;
-+
-+		msleep(50);
-+	}
-+	dev_err(&data->client->dev, "Temperature conversion failed\n");
-+
-+	return -ETIMEDOUT;
-+}
-+
-+static int max30208_update_temp(struct max30208_data *data)
-+{
-+	u8 data_count;
-+	int ret;
-+
-+	mutex_lock(&data->lock);
-+
-+	ret = max30208_request(data);
-+	if (ret)
++	mutex_lock(&data->update_lock);
++	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
++	if (status < 0) {
++		ret = status;
 +		goto unlock;
-+
-+	ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_OVF_CNTR);
-+	if (ret < 0)
-+		goto unlock;
-+	else if (!ret) {
-+		ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_DATA_CNTR);
-+		if (ret < 0)
-+			goto unlock;
-+
-+		data_count = ret;
-+	} else
-+		data_count = 1;
-+
-+	while (data_count) {
-+		ret = i2c_smbus_read_word_swapped(data->client, MAX30208_FIFO_DATA);
-+		if (ret < 0)
-+			goto unlock;
-+
-+		data_count--;
 +	}
++
++	if (status & PB_STATUS_OFF) {
++		ret = REGULATOR_STATUS_OFF;
++		goto unlock;
++	}
++
++	/* If regulator is ON & reports power good then return ON */
++	if (!(status & PB_STATUS_POWER_GOOD_N)) {
++		ret = REGULATOR_STATUS_ON;
++		goto unlock;
++	}
++
++	if (rdev->desc->ops->get_error_flags)
++		ret = rdev->desc->ops->get_error_flags(rdev, &status);
++
++	if (status & (REGULATOR_ERROR_UNDER_VOLTAGE | REGULATOR_ERROR_OVER_CURRENT |
++	   REGULATOR_ERROR_REGULATION_OUT | REGULATOR_ERROR_FAIL | REGULATOR_ERROR_OVER_TEMP))
++		ret = REGULATOR_STATUS_ERROR;
++	else
++		ret = REGULATOR_STATUS_UNDEFINED;
 +
 +unlock:
-+	mutex_unlock(&data->lock);
++	mutex_unlock(&data->update_lock);
 +	return ret;
 +}
 +
-+/**
-+ * max30208_config_setup() - Set up FIFO configuration register
-+ * @data: Struct comprising member elements of the device
-+ *
-+ * Sets the rollover bit to '1' to enable overwriting FIFO during overflow.
-+ */
-+static int max30208_config_setup(struct max30208_data *data)
-+{
-+	u8 regval;
-+	int ret;
-+
-+	ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_CONFIG);
-+	if (ret < 0)
-+		return ret;
-+
-+	regval = ret | MAX30208_FIFO_CONFIG_RO;
-+
-+	ret = i2c_smbus_write_byte_data(data->client, MAX30208_FIFO_CONFIG, regval);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int max30208_read(struct iio_dev *indio_dev,
-+			 struct iio_chan_spec const *chan,
-+			 int *val, int *val2, long mask)
-+{
-+	struct max30208_data *data = iio_priv(indio_dev);
-+	int ret;
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_RAW:
-+		ret = max30208_update_temp(data);
-+		if (ret < 0)
-+			return ret;
-+
-+		*val = sign_extend32(ret, 15);
-+		return IIO_VAL_INT;
-+
-+	case IIO_CHAN_INFO_SCALE:
-+		*val = 5;
-+		return IIO_VAL_INT;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static const struct iio_info max30208_info = {
-+	.read_raw = max30208_read,
-+};
-+
-+static int max30208_probe(struct i2c_client *i2c)
-+{
-+	struct device *dev = &i2c->dev;
-+	struct max30208_data *data;
-+	struct iio_dev *indio_dev;
-+	int ret;
-+
-+	indio_dev = devm_iio_device_alloc(dev, sizeof(*data));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	data = iio_priv(indio_dev);
-+	data->client = i2c;
-+	mutex_init(&data->lock);
-+
-+	indio_dev->name = "max30208";
-+	indio_dev->channels = max30208_channels;
-+	indio_dev->num_channels = ARRAY_SIZE(max30208_channels);
-+	indio_dev->info = &max30208_info;
-+	indio_dev->modes = INDIO_DIRECT_MODE;
-+
-+	ret = i2c_smbus_write_byte_data(data->client, MAX30208_SYSTEM_CTRL,
-+					MAX30208_SYSTEM_CTRL_RESET);
-+	if (ret) {
-+		dev_err(dev, "Failure in performing reset\n");
-+		return ret;
-+	}
-+
-+	msleep(50);
-+
-+	ret = max30208_config_setup(data);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_iio_device_register(dev, indio_dev);
-+	if (ret) {
-+		dev_err(dev, "Failed to register IIO device\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct i2c_device_id max30208_id_table[] = {
-+	{ "max30208" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, max30208_id_table);
-+
-+static const struct acpi_device_id max30208_acpi_match[] = {
-+	{ "MAX30208" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(acpi, max30208_acpi_match);
-+
-+static const struct of_device_id max30208_of_match[] = {
-+	{ .compatible = "maxim,max30208" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, max30208_of_match);
-+
-+static struct i2c_driver max30208_driver = {
-+	.driver = {
-+		.name = "max30208",
-+		.of_match_table = max30208_of_match,
-+		.acpi_match_table = max30208_acpi_match,
-+	},
-+	.probe_new = max30208_probe,
-+	.id_table = max30208_id_table,
-+};
-+module_i2c_driver(max30208_driver);
-+
-+MODULE_AUTHOR("Rajat Khandelwal <rajat.khandelwal@linux.intel.com>");
-+MODULE_DESCRIPTION("Maxim MAX30208 digital temperature sensor");
-+MODULE_LICENSE("GPL");
+ static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
+ {
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
+@@ -2991,6 +3031,7 @@ const struct regulator_ops pmbus_regulator_ops = {
+ 	.disable = pmbus_regulator_disable,
+ 	.is_enabled = pmbus_regulator_is_enabled,
+ 	.get_error_flags = pmbus_regulator_get_error_flags,
++	.get_status = pmbus_regulator_get_status,
+ 	.get_voltage = pmbus_regulator_get_voltage,
+ 	.set_voltage = pmbus_regulator_set_voltage,
+ 	.list_voltage = pmbus_regulator_list_voltage,
+
+base-commit: 27fea302952d8c90cafbdbee96bafeca03544401
 -- 
-2.34.1
+2.37.3
 
