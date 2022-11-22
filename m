@@ -2,171 +2,150 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8554C4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Nov 2022 19:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0320C4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Nov 2022 23:28:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232993AbiKVTZh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 22 Nov 2022 14:25:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
+        id S233207AbiKVX24 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 22 Nov 2022 18:28:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiKVTZd (ORCPT
+        with ESMTP id S235300AbiKVX2p (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 Nov 2022 14:25:33 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C887FF21;
-        Tue, 22 Nov 2022 11:25:32 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id n186so16862400oih.7;
-        Tue, 22 Nov 2022 11:25:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=09Fo0rR4StbdjPIIvlInIxSHew0e7ivCTP8R8vAEZ3Y=;
-        b=mUndDyNeXjHl/vP19NQ4bwpklc7wS/EV0Ci39R6mCfU+ZxAnNdZbU/36cdmGRifMcN
-         xzeEa2uMwqa1dKwsoh3qKVaQkCDmsxgHNYC1mpbtCEZIt4ZZ7OGdgdd3YEbaWrhFwIuK
-         4o45IeQ1Tmek/Jd6QWrtBJCLbIIYrJIOE6ClTzK7IauSF9VT5Yg3QoZQrObyxKe6yn0/
-         jqejpCxPOIp4DtUn8CMbZjKoP/Mo+yyarmZni20JTDTVHkSIPapnC7r/X0y/3Cxa8N1F
-         QvLN5GuMo+1ycb9EzV5h7bXZL/BA6gUFkbIzlxNz1zbJ+cvYGRARg3GuyBdgcx5qrnWQ
-         IckQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=09Fo0rR4StbdjPIIvlInIxSHew0e7ivCTP8R8vAEZ3Y=;
-        b=GInXFDXWz7Sk4S1UTP1A7x5CItkAoVvi2zW3Lw15YWhfbsKcYonOVBowgHtpfUCk6Y
-         qRpt3mQ3SVbvGM4Gt1JezsNbl3fCEr7KogR9efF11mnSg7tEkvGLA4RbHIcWgUd51h7G
-         6EPEfixNC6Sk/G4xTIZmCbxWW8HME1RmyMw4k7VneAlc1DZVsOgxUWI6ovlJIj/xpulC
-         SuOzhgYej7H16gkA27kLmvOePmvaahgOYXUar1FHB5+XGCKbZb66WqoSCVMcM5iQLcNm
-         vrMlL52MHmXwywilpghSf4TNOZBuwaRQBFnLZuYEQHnUSX2Ovvv1P8a0Evc4q/C1hE3E
-         uZTQ==
-X-Gm-Message-State: ANoB5pnCGGdqp3iD/LuPd1uoTw5pK94ux+DHDFDWu5pS8VW8TSG/2C90
-        AmdQ4mkEQjJfXkqSfRYJ1Vbf/YuCoiE=
-X-Google-Smtp-Source: AA0mqf6jwoymerXoL3TKr2O+FS3QfhwQkUTlFpCJoSPC9VFX60OhX6Tz5DTTYZX6ZvM7zf1RHow7+A==
-X-Received: by 2002:a54:4399:0:b0:355:bceb:2606 with SMTP id u25-20020a544399000000b00355bceb2606mr7342032oiv.188.1669145131637;
-        Tue, 22 Nov 2022 11:25:31 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i11-20020a9d53cb000000b00667ff6b7e9esm6491267oth.40.2022.11.22.11.25.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 11:25:30 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <25b37a72-4415-2ed5-0415-040af174a70a@roeck-us.net>
-Date:   Tue, 22 Nov 2022 11:25:29 -0800
+        Tue, 22 Nov 2022 18:28:45 -0500
+Received: from ipmail06.adl3.internode.on.net (ipmail06.adl3.internode.on.net [150.101.137.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CD4C1F9C4
+        for <linux-hwmon@vger.kernel.org>; Tue, 22 Nov 2022 15:28:39 -0800 (PST)
+IronPort-SDR: X1eDqV6Bekq6BQeogbYGHR5HMX4ex+lBwobDcSvWHGagp0T64lfBT0qoUeELpDq1FKZec9GoM/
+ lmU8F1Xil/aYAV4nBXN0gc/mCOeLkZRAS3y+W3qwQ46O2UbzHu91bf0hjbnZJ+Yq9it9gDp21j
+ zbZp8AOm0L6Op8WOhRXNyOqVPZftDquEQWcTmQcZ/OdOa4PYBZELIjSWIZR5aL1OKLCarV3AZm
+ Ypl4iHVCOOISWGqC/g0/92v9noIlsHt6quvp1D+4WUpXsRmse0p/7CgR1qJoRbFbHxStwuw9e3
+ i5AT6I3g3a8SfRIy/dupL9p5
+X-SMTP-MATCH: 0
+X-IPAS-Result: =?us-ascii?q?A2AdCQALWn1jjPQc8jxaHQEBAQEJARIBBQUBQAmBRoItg?=
+ =?us-ascii?q?lyVaAOfLw8BDwEBRAQBAYUFAoUCJjgTAQIEAQEBAQMCAwEBAQEBAQMBAQYBA?=
+ =?us-ascii?q?QEBAQEGBBQBAQEBPxgBOQcLUgcLWAcHgUELgWETCwMxDYZUAQEBA0ABATcBD?=
+ =?us-ascii?q?wsOCi5XBhOCfYMjsFCBNIEBgggBAQaCYZplgV4JgUCQFnpDP4FOgRWBCjKBV?=
+ =?us-ascii?q?hg+iwKMOot1NwMZKx1AAws7MgpJG1gOCR8cDhcNBQYSAyBsBQo3DygvZyscG?=
+ =?us-ascii?q?weBDCooFQMEBAMCBhMDIgINKTEUBCkTDSsnbwkCAyJlBQMDBCgsAwlABxYRJ?=
+ =?us-ascii?q?DwHVjoBBAMCDyA4BgMJAwIkVnUuERUFAwsVJQgFSwQIOQUGUxICChEDEg8GJ?=
+ =?us-ascii?q?EUOSD45FgYnQgExDg4UA16BaQQ1gXEKMTCbW2s0TgkSKBAMW4FNApJWkAOgD?=
+ =?us-ascii?q?oNygU6fOYFEp1SXNKIPTIR0AgoHFoF5gX5NHxmDIk8BAgEBAQ0BAgEBAwECA?=
+ =?us-ascii?q?QEBCQEBAQGOHRmCE4w4YTsCBwsBAQMJimIBAQ?=
+IronPort-PHdr: A9a23:1osdNR2bCF/EsyLwsmDPn1BlVkEcU/3cNA8J8dwskbtRfKO589LvO
+ VGZ5PkrhUKaFYzB4KdCjOzb+7vlRXRG+5uEt2wPNZ1UAhEJhZ9EwAUpDJyJVRKrfqe4PScwR
+ ZwQX1Q9oBmG
+IronPort-Data: A9a23:8okbSqIeDu/s/u/YFE+R45MlxSXFcZb7ZxGr2PjKsXjdYENS1zxWz
+ TFMUG/VP/aDMTenfdx+atzkoUlT6J7cz4JhTAA+pCFkE35A9ZrPWd/AdBv8YHrNdJOZRk5t5
+ J1ONYWRdek5HyTWzvuPGuGx9SMmiclkZVZd5MrsYH0ZqdpMEX954f5bs7dlxNYu27BVOivV0
+ T/Ii5S31GKNglaYDEpEs8pvlzs31BjCkGtwUosWOJinFHeH/5UkJMp3yZOZdhMUcaEIdgKOf
+ Nsv+Znilo/vE7bBPfv++lrzWhVirrc/pmFigFIOM0SpqkAqSiDfTs/XOdJEAXq7hQllkPhq0
+ PhGm7CfSDsZP47WtMQjTR5YGD1XaPguFL/veRBTsOSZzlHdNXD2yupgC1s6e4Ad56B2DSdH6
+ JT0KhhTNlbZ27jwmuL9ELUw7iggBJCD0Ic3tGtpyzLxBuwvXp7EWamM6NpFmjY8wMlTdRrbT
+ 5ZCNmE0NkWdO3WjPH8xEaMMn8v03EDFLRJg8A6XqrIe73n6mVkZPL/Fa4KOKobQFK25hH2wo
+ mPA4nS8Ag4fM9q31zWI6DSvi/XJkCe9X5gdfJW6+vNunlSJy0QIFQYbE1C8pJGRjk+4RsJ3M
+ UsZ8SlrsLN08kG3JuQRRDXm+Dve4kRZAYoVSbFmrhqRw7bV6ECFHmcFCDVGbZovqafaWADGy
+ HeSh/7iKxBAsYGlSFGH2peqszSyMjQ8eDpqiTA/cSMJ5NzqoYcWhx3JT8p+HKPdsjETMW+rq
+ 9xthHZj74j/nfLnxI3+pguX3GvwznTdZldov1+PBjzNAhZRPdbNWmC+1bTMxd99RGpzZmKQs
+ H4JiqByB8hUVcnV/MBhaMMAA/mS4OuZMHXjiFpiBPEcG9mFpSbmJ9wKpWsuYR01boAfZTb1Y
+ USVpRte5dlYO37sZLIfj2ON5yYCkfCI+TfNDKu8gj9yjn9ZLVDvwc2WTRTMt10BaWB1+U3FB
+ b+VcNy3EVERArl9wTy9So81iOF1l3linDOIH8ykn3xLNIZyglbLFd/p13PQM4gEAF+s+l+9H
+ yt3bZXblEUGDoUSnAGJqN5MfDjm0kTX9bit85cHLLTSSuaXMH05BLfQx68sYYpog8xoehTgo
+ BmAtrtj4AOn3xXvd1/VAk2PnZuzBf6TW1pnZHJwVbtpslB/CbuSAFA3LctnIOd8qLI6kpaZj
+ ZAtIq29PxiGcRyfkxx1UHU3hNUKmM2DiV3cMiy7TiI4epI8FQXF9sW9Llnk7iARAC2tuY0zp
+ qDm1w+dSIdaH1ZuC8PfafSOyVKtvCFDxrwvARSXe4ZeKBf27YxnCy3tlftpccsCHhX0wGfI3
+ QihHkZKrObAlIY57d3ViP3WtIyuCeZ/QBZXEjCDv7a7PCXX5ES5xopEXLradDzRTjqkqq64b
+ PpbyOvwdvACgRBLv8x1Du8zn6454tLuoZ5czxhlRSuVMQn1Vew5fXTfhJtBrKxAwLNdqDCaY
+ EPX94kII6iNNePkDEUVelgvYNOD4vdIyDPc2utkckz16Rh+8KeDTUgPbQKHjzZQLeUpPY4on
+ bUhtcoR51DtgxYmKIzd3CpV63/KJWYJTKsgrJ1cDYr2zAsnjFhfOMSOBijz6ZCJStNNLkhzf
+ GHK2fSd2O0DyxqQaWc3GFjMwfFZ28YEtidK+1ledV6HrcWU1PY40SpY/SkzUgkInA5M1Ph+O
+ zY3OkApd7+C+Sxk2JpKU2y2QFsTWkXcoBCrjgFZ0TeFEw+zSmXRLWZ7Jf6C/QYS9GcadyUCp
+ OOUz2PsUDDLesDt33JsBxA49aO8FIN8pl/YhcSqP8WZBJ1mMzDrtan/N2MHpizuDd41mECa9
+ /Jh+/x9aPOnOCMdy0Hh51J2CVjNpMi4GVF/
+IronPort-HdrOrdr: A9a23:ECwytKPowo+vdsBcThGjsMiBIKoaSvp037BK7SpMoNJuA6+lfq
+ eV7ZImPH7P+VEssBNJo7290cy7LU80mqQFg7X5UY3CYOCighrMEGgA1/qb/9SDIULDH4dmvM
+ 8KT0E9MqyVMbEQt6jHCWeDc+rIjOP3iZxBCorlvgxQpBlRGt5dBhlCe3qm+5JNNXN77UtQLu
+ vg2vZ6
+X-IronPort-Anti-Spam-Filtered: true
+Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
+  by ipmail06.adl3.internode.on.net with ESMTP; 23 Nov 2022 09:58:36 +1030
+Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
+        (authenticated bits=0)
+        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 2AMNSVEg1243385
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Wed, 23 Nov 2022 10:28:32 +1100
+Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 2AMNSVEg1243385
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
+        s=s1; t=1669159713; bh=KEan47vpnAXbRqqL19I22fV6kAHd9Y+4fPSDL8L7nJI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=mCdOifDiK7gOSb5YtcvU/jzyzHEN8myhJT4rIqE9nlIkSFaK8u0U7Tg4jUuZTcyzx
+         Ro+u8hqxkk7l445X0aFy8t9zMLU3PgA8Q8+LWQM6IK/Gqt/tJj4kahF8udzg46Bkn+
+         6tHC5PXGO2WiBxsmRw4gtJoD7hPpv4pIIqL5aYCRX1Yh09qlnCULXQ7KAZnXYK55dR
+         C9k1wST/nt26GasziFUwqxZ74rnUKiug3GgEavsVIPzjKj1iIpHf+IUxd6xJpKwwy1
+         o+CR7mNkXZFt/RAwX9ZxbZk/ZSZaDPtYtPHMyeHH4WZb7uXp5SxIF0TwVbuqVA2lgQ
+         vm3Frd8JHBi/A==
+Message-ID: <b1441faf2883a693f41439de7be0a96f60b76f05.camel@crawford.emu.id.au>
+Subject: Re: [PATCH 1/1] hwmon: (it87) Automatic handling of ACPI resource
+ failure
+From:   Frank Crawford <frank@crawford.emu.id.au>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Date:   Wed, 23 Nov 2022 10:28:31 +1100
+In-Reply-To: <20221122184328.GA553935@roeck-us.net>
+References: <20221121025718.160667-1-frank@crawford.emu.id.au>
+         <20221122184328.GA553935@roeck-us.net>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-References: <20221121122932.2493174-1-Naresh.Solanki@9elements.com>
- <20221121122932.2493174-2-Naresh.Solanki@9elements.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v7 1/4] dt-bindings: hwmon: fan: Add fan binding to schema
-In-Reply-To: <20221121122932.2493174-2-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Wed, 23 Nov 2022 10:28:33 +1100 (AEDT)
+X-Virus-Scanned: clamav-milter 0.103.7 at bits.crawford.emu.id.au
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/21/22 04:29, Naresh Solanki wrote:
-> Add common fan properties bindings to a schema.
-> 
-> Bindings for fan controllers can reference the common schema for the
-> fan
-> 
-> child nodes:
-> 
->    patternProperties:
->      "^fan@[0-2]":
->        type: object
->        $ref: fan-common.yaml#
-> 
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
->   .../devicetree/bindings/hwmon/fan-common.yaml | 47 +++++++++++++++++++
->   1 file changed, 47 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> new file mode 100644
-> index 000000000000..0535d37624cc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Common fan properties
-> +
-> +maintainers:
-> +  - Naresh Solanki <naresh.solanki@9elements.com>
-> +
-> +properties:
-> +  max-rpm:
-> +    description:
-> +      Max RPM supported by fan.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  min-rpm:
-> +    description:
-> +      Min RPM supported by fan.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  pulses-per-revolution:
-> +    description:
-> +      The number of pulse from fan sensor per revolution.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  target-rpm:
-> +    description:
-> +      Target RPM the fan should be configured during driver probe.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  pwms:
-> +    description:
-> +      PWM provider.
-> +
-> +  label:
-> +    description:
-> +      Optional fan label
-> +
-> +  fan-supply:
-> +    description:
-> +      Power supply for fan.
-> +
-> +additionalProperties: true
-> +
-> +...
 
-Still, from my second reply to v6:
 
- > Another property which is definitely missing and needed
- > will be DC vs. PWM control. That is currently pwm[1-*]_mode
- > in sysfs attributes, but it is really a fan attribute.
- >
- > Many fans are DC controlled, so this property is absolutely
- > necessary.
+On Tue, 2022-11-22 at 10:46 -0800, Guenter Roeck wrote:
+> On Mon, Nov 21, 2022 at 01:57:18PM +1100, Frank Crawford wrote:
+> > On some Gigabyte boards sensors are marked as ACPI regions but not
+> > really handled by ACPI calls, as they return no data.
+> > Most commonly this is seen on boards with multiple ITE chips.
+> > In this case we just ignore the failure and continue on.
+> >=20
+> > This is effectively the same as the use of either
+> > =A0=A0=A0 acpi_enforce_resources=3Dlax (kernel)
+> > or
+> > =A0=A0=A0 ignore_resource_conflict=3D1 (it87)
+> > but set programatically.
+> >=20
+> > Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
+> > ---
+>=20
+> Sorry, I can not accept this patch. Ignoring resource conflicts
+> may have unintentional side effects and _has_ to be explicitly
+> requested by the user.
 
-Plus, with DC control there is no pwm. It would be absolutely wrong
-to declare that a fan controller MUST be pwm based.
+I do have two comments on that decision, firstly, for the bulk of the
+boards listed I've dumped the ACPI tables and data and the conflicting
+address ranges do nothing with ACPI.  It looks like Gigabyte planned to
+implement WMI access, but stopped after developing some code for single
+chipset boards, and just nulled out anything to do with boards with two
+chips.  However, getting any information from Gigabyte about this is
+impossible, as you know.
 
-Ultimately, there are three types of fan controllers:
+Secondly, unfortunately most users have no idea what the ACPI error
+means, and just follow random comments on the Internet, which currently
+is to set "acpi_enforce_resources=3Dlax" which is even more dangerous.=20
+At least the recent addition of "ignore_resource_conflict=3D1" restricts
+the issue to a known area, and this would take it one step further in
+that we are just automating it for known "safe" boards.
 
-- PWM control, such as MAX6639
-- DC control, such as MAX6620 or MAX6650/6651
-- Configurable, such as MAX1669 or pretty much all fan controllers
-   included in SuperIO chips
+However, if you are not willing to accept it, I'll just drop it there.
+>=20
+> Guenter
 
-Generic fan control bindings simply _have_ to take this into account.
-
-Guenter
-
+Regards
+Frank
+> >=20
