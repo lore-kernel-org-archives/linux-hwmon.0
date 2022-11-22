@@ -2,89 +2,128 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23BACC433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Nov 2022 17:02:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC0F6C4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Nov 2022 18:37:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234431AbiKVRCp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 22 Nov 2022 12:02:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
+        id S232419AbiKVShl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 22 Nov 2022 13:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234432AbiKVRCl (ORCPT
+        with ESMTP id S234027AbiKVShj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 Nov 2022 12:02:41 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5A06443;
-        Tue, 22 Nov 2022 09:02:40 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id q83so16446028oib.10;
-        Tue, 22 Nov 2022 09:02:40 -0800 (PST)
+        Tue, 22 Nov 2022 13:37:39 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D3612633;
+        Tue, 22 Nov 2022 10:37:37 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id p27-20020a056830319b00b0066d7a348e20so9841032ots.8;
+        Tue, 22 Nov 2022 10:37:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=JOuzCYe5JVR4ZLts5vfYmS05YHJ/NHXyOkRd7+N9iSk=;
-        b=c0iBCVhw4e2P1A8oMhM2mNmckPzQH1kr7QRdtmzaDdTCd8Ai1FfOMFg9qYijWIEGSk
-         b1YiFpd9xRZ3PAzuDDRAbwVo8ji/1YaSfNgU8pAfsBjXek8Dmo46m6OhlfeM0swdjpdl
-         6Qsf0FD79mCMKqgyovm2qzZXvjGXg3HFjpKrPg2RzFmtxTOpi3M8QUgg3I0BAPNTehSY
-         NJoTPlED4U8l8rYlkdOGbDIUlvdT/RpgnKmNZOlvXqFhrZ3EBMG7n22GTOEj7juKtIOG
-         RU5dFlW0eZ30qbNAhVFv1ejMEKLbbfhrw5I0X9fsADh/kG5CGI8WgAmJmUCTqONmtTHl
-         gS/Q==
+        bh=ozqB6gI5zq66MVgwRB6/+mhngvf/WXv8gTNsNAf1ZUg=;
+        b=oFzqpW/NRHaHfo/NjU6hS8Fxphn82Zv+diBxMVYSL9G5G83Db1aasXXQBR8sF3NT76
+         IEkOeacWbp7GHMtgHZkqJCqFQ+a+5vIvuPNzRA0YuVyzQKqDU6ex3HQf78rHKNDo4xi4
+         g2ChVY3y5Fnq6o3C0Z2PJGkHNRGhCgC11UTZvpkpT5k47M8TqMRXH+5SpEWghHHSOBey
+         aJECnF2kixWA1aC+YejiNBs60kVidGSQxPZ3Zd3vJjRSpcBoNdLV6GoeCPMgzwGIOSzQ
+         7AVysD7AT89bAIZTLxl8K15rc7f2u3UeGSzx0/82HJllhfZT71pEoH5Tzb06Y5dYdNEc
+         9L/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JOuzCYe5JVR4ZLts5vfYmS05YHJ/NHXyOkRd7+N9iSk=;
-        b=nwsBR625nEI1uSFWyy3p1A211vuKkVPjWj87+5czva2zb/yENGtR9mC6XgL/LpXu3M
-         XAhDeZaYx9a8zdZpUUeELO7OhKH0Z1oVwOi3LN1C1sDrM2xaffjDAFL+GXvI278ltT6W
-         iXkdqJXAjbtm0h0heMyZ7jAqpw7qZS0cFOQjjJ52XnaS3EdtBwb4i+ar/s+g1MuWt56q
-         ykbX9SLEArMRRngWJqcrf8Ikd8Dp27u6/0LSmNG9pqIhvmDqnz4iTFafQrGmgWl1zagy
-         cNxvB1payKSgFn3l559TRNBwIVqvvW30y/dOtFnAJMQL86PR9imUzDW2Z/Jh/cMp/BmC
-         tsvA==
-X-Gm-Message-State: ANoB5pmrV5AzOFwknGDQdrVw4pk/EzoBq/851FXJd4EhDbZgYV5FXZ1J
-        QMY0edakhStmQ1qV3UJIFlg=
-X-Google-Smtp-Source: AA0mqf4v7XMVztXelwAGg76/2n4TGcurmOcj9GtHRRIbfzuZTgdXH851XlyjAB0I1RNvvMaX4i+iSw==
-X-Received: by 2002:a05:6808:a0a:b0:34f:bcdf:b08f with SMTP id n10-20020a0568080a0a00b0034fbcdfb08fmr2626869oij.71.1669136559509;
-        Tue, 22 Nov 2022 09:02:39 -0800 (PST)
+        bh=ozqB6gI5zq66MVgwRB6/+mhngvf/WXv8gTNsNAf1ZUg=;
+        b=WX8fv6v9FBmzJf+Vhx4JP0E0dRB3qbN1Lb5rK2+DMtZQutqCRSBLjRF3lx06jYFBXP
+         NP9EaYcVxGMN8m0DRecqA21fFuSjbJyO/7HIa9YNYS58W+fORjE0dpcr7PLqseIQSJC4
+         8SD2HFq8gznCzdhiyYGe8ZySB9Zlu4KuyM6ke1qZj7N7g1bYAGVzzqkGbYwxT/Qlahf0
+         wrEDvoGpNU8uDujxaOB3U4Hx4H3lh+3hQTJMZBNVBv/OHBLZ1oH1/GZfhMzaMVrsS6x6
+         Imwez2Ej1yqKxlwc2+I6WRCrpaiiRW4KQA3C005D99HFfJ2a77dtXMHyLSazahWaH0R1
+         ANxg==
+X-Gm-Message-State: ANoB5pl+ue9Oo3wfiLE7V1RmsUh2Gsb84scFaPLscT9vn7vE58fNwzyT
+        vgXvemYnic0z5EZK4c40KS4=
+X-Google-Smtp-Source: AA0mqf6/bW49mEfn4MWpQeLXd4hXSyIouz6Svd9XJBaM50L0y+iuRZ1O3+uA05C5NAV2x0fFAZiiSQ==
+X-Received: by 2002:a05:6830:6387:b0:654:bcaa:aa0 with SMTP id ch7-20020a056830638700b00654bcaa0aa0mr2950483otb.246.1669142256759;
+        Tue, 22 Nov 2022 10:37:36 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i9-20020a056808054900b0035acd0a6eb2sm5585858oig.41.2022.11.22.09.02.38
+        by smtp.gmail.com with ESMTPSA id e18-20020a05683013d200b0063696cbb6bdsm6293790otq.62.2022.11.22.10.37.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 09:02:39 -0800 (PST)
+        Tue, 22 Nov 2022 10:37:35 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1724dbac-024a-2758-a030-c07352b536fc@roeck-us.net>
-Date:   Tue, 22 Nov 2022 09:02:37 -0800
+Message-ID: <1fbf3ddb-3e8a-eac7-5006-b4af8b4404be@roeck-us.net>
+Date:   Tue, 22 Nov 2022 10:37:34 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH 3/3] hwmon: (pmbus/core): Implement IRQ support
+Subject: Re: [PATCH v6] hwmon: add OneXPlayer mini AMD sensors driver
 Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Cc:     broonie@kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org
-References: <20221122135014.3504094-1-Naresh.Solanki@9elements.com>
- <20221122135014.3504094-3-Naresh.Solanki@9elements.com>
+To:     Armin Wolf <W_Armin@gmx.de>,
+        =?UTF-8?Q?Joaqu=c3=adn_Ignacio_Aramend=c3=ada?= 
+        <samsagax@gmail.com>, pobrn@protonmail.com
+Cc:     hdegoede@redhat.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org
+References: <20221104140659.593608-1-samsagax@gmail.com>
+ <5b7fdb3d-7874-feb3-ad0b-c20201b5a871@gmx.de>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20221122135014.3504094-3-Naresh.Solanki@9elements.com>
+In-Reply-To: <5b7fdb3d-7874-feb3-ad0b-c20201b5a871@gmx.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/22/22 05:50, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On 11/13/22 12:41, Armin Wolf wrote:
+> Am 04.11.22 um 15:07 schrieb Joaquín Ignacio Aramendía:
 > 
-> Implement IRQ support to monitor PMBUS regulator events.
+>> Sensors driver for OXP Handhelds from One-Netbook that expose fan reading
+>> and control via hwmon sysfs.
+>>
+>> As far as I could gather all OXP boards have the same DMI strings and
+>> they can be told appart only by the boot cpu vendor (Intel/AMD).
+>> Currently only AMD boards are supported since Intel have different EC
+>> registers and values to read/write.
+>>
+>> Fan control is provided via pwm interface in the range [0-255]. AMD
+>> boards have [0-100] as range in the EC, the written value is scaled to
+>> accommodate for that.
+>>
+>> Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
 > 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ...
+> 
+>> +/*
+>> + * module_platform_driver() may be used here but somehow it breaks the module
+>> + * either by preventing it from loading or not exposing hwmon attributes.
+>> + * Either way I'm not smart enough to figure it out so I'll leave init/exit
+>> + * macros for now.
+>> + */
+>> +module_init(oxp_platform_init);
+>> +module_exit(oxp_platform_exit);
+>> +
+> 
+> Hello,
+> 
+> i know i am a bit late to point that out, but AFAIK module_platform_driver() only registers a platform driver,
+> not the corresponding platform device. With the platform device missing, the platform driver will never load.
+> This is the reason why platform_create_bundle() exists, it basically registers a platform driver and
+> a platform device together.
+> 
+> Should i send a separate patch to remove the comment?.
+> 
 
-Adding a PMBus interrupt handler should be generic and also handle hwmon
-specific events. It should report any status changes as sysfs attribute
-notifications.
+Thanks for the note. I dropped the comment; no further action needed.
 
 Guenter
+
+> Armin Wolf
+> 
+>> +MODULE_AUTHOR("Joaquín Ignacio Aramendía <samsagax@gmail.com>");
+>> +MODULE_DESCRIPTION("Platform driver that handles EC sensors of OneXPlayer devices");
+>> +MODULE_LICENSE("GPL");
+>> -- 
+>> 2.38.1
+>>
 
