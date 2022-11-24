@@ -2,38 +2,38 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 839DEC4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Nov 2022 03:06:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41E8CC4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Nov 2022 03:27:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiKXDGY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 23 Nov 2022 22:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
+        id S229533AbiKXD1p (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 23 Nov 2022 22:27:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiKXDGQ (ORCPT
+        with ESMTP id S229436AbiKXD1o (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 23 Nov 2022 22:06:16 -0500
-Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F739CDFFC;
-        Wed, 23 Nov 2022 19:06:11 -0800 (PST)
-X-QQ-mid: bizesmtpipv602t1669259157tmql
+        Wed, 23 Nov 2022 22:27:44 -0500
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C9A13DE5;
+        Wed, 23 Nov 2022 19:27:37 -0800 (PST)
+X-QQ-mid: bizesmtpipv603t1669260363t7i0
 Received: from localhost ( [255.189.44.3])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 24 Nov 2022 11:05:56 +0800 (CST)
+        id ; Thu, 24 Nov 2022 11:26:01 +0800 (CST)
 X-QQ-SSF: 01400000000000506000000A0000000
-X-QQ-FEAT: 7jw2iSiCazpZQoUIlRlr5Ga8aVxzjFitmBkR3frsxf7nmRLBJ3M4g9J5dCXoM
-        79oTKcUm2uLJ70LO/nfgTWBffpDPa7D8VHA4E6dt3E2595S5R78WwgE1CWJuSxOOo/i4QcH
-        B59Xb91ntv8MZydyFZMHM3PNKKFGPR4ODah4QRRsnqw497qiHlYfQaCK0Mu3OB1lTdLUGVk
-        A/NohfRvg7GCvmPldIEdIDteJ93f2GltHsjzhTfMgcodUHT079HlbwlIjMvEs6aXDE4XSSm
-        xMj1qKbat7NWxFUo6OQbHuCNYM/OadjMGAYS2YaxuLoMlmUWv524kldjJKEHnUEDmQgJ3Sw
-        pcdYsYcFnAYTmWYY5Q9y/3rIl7igA==
+X-QQ-FEAT: bhet8yMU7vlg0O7K5y1cuHvfOsuOnbFPWThQh75wv84jueJng5ranrq4icUFy
+        rK/0wsHKEQWOLONmuASx1Rtsq1DG9A9nsBMgWZtYFKxHa3XHD0/63mySWn5xArfbDvs/BTg
+        9BHkt4fbINdrzrTY4Dh5ltnS09IZl7WpG3g84pnhY2eNy+2C7/X0aUl/QOQsbGerQzmo4lh
+        0FzSf6gUG0hNu0Amp2GQ4t6YQwBWu65f9PPoRmYrvD0U/kjdtshzptnnTqC59bA1Yekc+2n
+        2bSWtbEDWh+1Wgay/LXeiivt0wr9phcnW2NSd5Ze86gSaUuFdxiBeAAsgaoJaoL6uWdXMo5
+        FvZhb1X61Dp4/14vyMeiHe5+y2uZUawZmmj9j40
 X-QQ-GoodBg: 2
-Date:   Thu, 24 Nov 2022 11:05:55 +0800
+Date:   Thu, 24 Nov 2022 11:26:01 +0800
 From:   Wang Honghui <honghui.wang@ucas.com.cn>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3]hwmon: Modify to support Phytium FT2000/4 CPU for acpi
-Message-ID: <1CD578BA572E3037+Y37fk/eKlI3u5+77@TP-P15V.lan>
+Subject: [PATCH V2 1/3] Modify to support Phytium FT2000/4 CPU for acpi
+Message-ID: <9CAB43B4193E4C62+Y37kSTHfZuJeOvI8@TP-P15V.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -47,71 +47,21 @@ Modify to support Phytium FT2000/4 CPU for acpi
 
 Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
 ---
- drivers/hwmon/scpi-hwmon.c | 30 +++++++++++++++++++++++++-----
- 1 file changed, 25 insertions(+), 5 deletions(-)
+ drivers/hwmon/scpi-hwmon.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
-index 4d75385f7d5e..6021ae00b334 100644
+index 6021ae00b334..a6ee9806e47e 100644
 --- a/drivers/hwmon/scpi-hwmon.c
 +++ b/drivers/hwmon/scpi-hwmon.c
-@@ -14,6 +14,7 @@
- #include <linux/slab.h>
- #include <linux/sysfs.h>
- #include <linux/thermal.h>
-+#include <linux/acpi.h>
- 
- struct sensor_data {
- 	unsigned int scale;
-@@ -132,6 +133,13 @@ static const struct of_device_id scpi_of_match[] = {
+@@ -316,6 +316,7 @@ static struct platform_driver scpi_hwmon_platdrv = {
+ 	.driver = {
+ 		.name	= "scpi-hwmon",
+ 		.of_match_table = scpi_of_match,
++		.acpi_match_table = scpi_sensors_acpi_match,
+ 	},
+ 	.probe		= scpi_hwmon_probe,
  };
- MODULE_DEVICE_TABLE(of, scpi_of_match);
- 
-+/* Wang Honghui add to support Phytium FT2000/4 CPU for acpi */
-+static const struct acpi_device_id scpi_sensors_acpi_match[] = {
-+        { .id = "PHYT000D" },
-+        { }
-+};
-+MODULE_DEVICE_TABLE(acpi, scpi_sensors_acpi_match);
-+
- static int scpi_hwmon_probe(struct platform_device *pdev)
- {
- 	u16 nr_sensors, i;
-@@ -141,6 +149,7 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
- 	struct scpi_ops *scpi_ops;
- 	struct device *hwdev, *dev = &pdev->dev;
- 	struct scpi_sensors *scpi_sensors;
-+	const struct acpi_device_id *match;
- 	int idx, ret;
- 
- 	scpi_ops = get_scpi_ops();
-@@ -170,11 +179,22 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
- 
- 	scpi_sensors->scpi_ops = scpi_ops;
- 
--	scale = of_device_get_match_data(&pdev->dev);
--	if (!scale) {
--		dev_err(&pdev->dev, "Unable to initialize scpi-hwmon data\n");
--		return -ENODEV;
--	}
-+	/* Wang Honghui modified to support Phytium FT2000/4 CPU for acpi */
-+	if (dev->of_node) {
-+		scale = of_device_get_match_data(&pdev->dev);
-+		if (!scale) {
-+			dev_err(&pdev->dev, "Unable to initialize scpi-hwmon data\n");
-+			return -ENODEV;
-+		}
-+	} else {
-+                match = acpi_match_device(dev->driver->acpi_match_table, dev);
-+                if (!match) {
-+                        dev_err(dev, "scpi-hwmon: Error ACPI match data is missing\n");
-+                        return -ENODEV;
-+                }   
-+    
-+                scale = scpi_scale;
-+        }
- 
- 	for (i = 0, idx = 0; i < nr_sensors; i++) {
- 		struct sensor_data *sensor = &scpi_sensors->data[idx];
 -- 
 2.34.1
 
