@@ -2,177 +2,100 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D362CC433FE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Nov 2022 14:20:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0170C43217
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Nov 2022 14:25:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiKXOUV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 24 Nov 2022 09:20:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
+        id S229563AbiKXOZu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 24 Nov 2022 09:25:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiKXOT5 (ORCPT
+        with ESMTP id S229514AbiKXOZu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 24 Nov 2022 09:19:57 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC75E12BFFD;
-        Thu, 24 Nov 2022 06:18:59 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id p27-20020a056830319b00b0066d7a348e20so999698ots.8;
-        Thu, 24 Nov 2022 06:18:59 -0800 (PST)
+        Thu, 24 Nov 2022 09:25:50 -0500
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E83DE916E;
+        Thu, 24 Nov 2022 06:25:49 -0800 (PST)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-142faa7a207so2093789fac.13;
+        Thu, 24 Nov 2022 06:25:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DLP2RmW6KppuUSYRYtgdQEVaoUbbSPTBaC+J7IgyCrU=;
-        b=evxYmkAsS4/H6gbAopMShJnAZcvJI4ApTWHc9q/PxTzvrOY6vHXOGz9PvnZl19hnp+
-         n8L0WfDXw+PAvBYKIw6MDuQK3qzqIUVJg4+4L5atOC1z+IFm1RY6R3QgQ5KtX0q1zsIc
-         N/wjfBI7CSdFaLQKYVAg3uMhhSmALO091LtE+LxE1P1CkkfU9ItuvagvmJouXS7WkzQE
-         PISdbuym2IqMZ48BSOPfj4CBlwHQeiaVE44iZ7D6b2oFAQmR6ATjxaNWmPnxiYAGoiN7
-         Gy2iFBzOLIPmazbkBhGO2aJTEHQQsYYBeMX8UaddAD9fKyfrnFEWkXO9RVi/WF+PD1Vi
-         2xsw==
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=G0seaWCJr0rZft9EeeuiEnWPhmbWkWE4CXIZfPXM7JE=;
+        b=E3kLvXGg7O0J0NaUJEu/KRv8ngt85hS/uECUOAIk47ks/cTXyFztdp3U+61Jt2TUu1
+         zZFXY1Xz6tfxvL8b/7MPwkWfEqkH12yKYqQxGFSS2gcvjB03FJAMB5m5HQIniZX3kscR
+         OHJ8/tz5MBwRCk3PNGmJAz1qkivxZYGiTlsGVX4pVfhNFTiCiWlQYFLDT4YEbmoWgQCN
+         E8VGnHO3Ti7+HeiBjqnAy/UD4/vqoXIq5mDdP6G/UI+bd6/MQxf1822E20/6C4XYYVGD
+         1gVC2vbt/f1qZIc26ThVmtLzaRTZdFRh1azPyW856xWD/Ze9pgjMOCI7AxGFFFGE1C76
+         yFHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DLP2RmW6KppuUSYRYtgdQEVaoUbbSPTBaC+J7IgyCrU=;
-        b=x6DiJt6G790gdGnqP7aF3uL5/3uXiHPgckYiaJ/0S+b498RCAm5xU9/Q0u/ayZgSti
-         qh+6R3t6pk1/TSqTWQz4ujbYxEfG9vwTdBRNUn+a1AqqstheqFtgng+nj/pmZfQHiTsS
-         FF8Qx8/ZjbpBo3bvrjMs0Fj24vP5NVz3dOoDM0PlTtMqI3aV6U5mxiLd05c28wqu6rxE
-         FcYtxOPmVxsqfI++G9FtbfVWApS/lwhyc1aVQYfKJob75wfJwpJyZWo50VLI+TDNyJRh
-         p47e5g8EgXXNSe68s0g92AB5cE2b9wCutjP4slx97wZR+jhUJvQqL1kYdo51CosxVl4x
-         CNKQ==
-X-Gm-Message-State: ANoB5plqcZXniTPLhA/N2W60cadlsMB2PGHW1WLlpwL79Dabnvfv8DkQ
-        gBEOjXn2eaTvxyAmvjeNaGUkKfrn2SE=
-X-Google-Smtp-Source: AA0mqf72VU88Bps6oJ9yKdM6o9A1507CNXiSmQPLbu9wzvowI5Fnb8IODIlt6MuSjhPD6Kx4oZSujg==
-X-Received: by 2002:a05:6830:1510:b0:655:bd84:a806 with SMTP id k16-20020a056830151000b00655bd84a806mr6552762otp.108.1669299538871;
-        Thu, 24 Nov 2022 06:18:58 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G0seaWCJr0rZft9EeeuiEnWPhmbWkWE4CXIZfPXM7JE=;
+        b=3TOG2yffZ/ZqT9mecHklGLQZGYH3VLEQFjKlVf/mHE+N0DDlVBKnRowu2f3CkrpP+i
+         jEQOcqAoosDOzwXzUSut8tENIo9lFrUg56/v4ptacNmBcYJ5jfRSRgtEz8r5MPhLdj5m
+         IfI+vQjClLD7L1RtnJVuj5+W/64ldcLX659/wwpRnkpDhYSsqId+mF4qxQ6Rtz2ZH05E
+         GRlQ/cR2sC1s+wap0609Jf5eHjjP2/gzz1jbctQOnjjUWzNLG1MkzhX/K/YIQ83urba+
+         xFqmgqfDEoq8u27b6/wrdM+fbPgtCVggB5ts2dhRwQZwKC1hvgOeZaBCuUxsRKwxlf53
+         kYeQ==
+X-Gm-Message-State: ANoB5pk/yBqffJjP+ys/rQ10tBMOvrfjfYsm66WlZR7FDTN3wpJwsbEY
+        DuymZvK2u4s0XfI6TJujA333QzeUUAU=
+X-Google-Smtp-Source: AA0mqf62c4t6IW8419fFzYaadU99XdDou5UmXmKwTos7NykJdpWzP8bnvfXnTERbaV/Suk8I0w/vcQ==
+X-Received: by 2002:a05:6870:ed44:b0:142:e804:b2b with SMTP id ex4-20020a056870ed4400b00142e8040b2bmr10997061oab.122.1669299948510;
+        Thu, 24 Nov 2022 06:25:48 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m46-20020a05683026ee00b0066dc76d9b7fsm424848otu.31.2022.11.24.06.18.57
+        by smtp.gmail.com with ESMTPSA id r2-20020a9d5cc2000000b00661948e6119sm432949oti.47.2022.11.24.06.25.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 06:18:58 -0800 (PST)
+        Thu, 24 Nov 2022 06:25:48 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1fcf36d3-0579-3e23-2613-61f523bcb046@roeck-us.net>
-Date:   Thu, 24 Nov 2022 06:18:57 -0800
+Message-ID: <c5fbff9f-6fad-fb1d-17a1-9d7da7761c4f@roeck-us.net>
+Date:   Thu, 24 Nov 2022 06:25:46 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
+Subject: Re: [PATCH V2 1/3] Modify to support Phytium FT2000/4 CPU for acpi
 Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+To:     Wang Honghui <honghui.wang@ucas.com.cn>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221124083439.3840025-1-Naresh.Solanki@9elements.com>
+References: <9CAB43B4193E4C62+Y37kSTHfZuJeOvI8@TP-P15V.lan>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v5] hwmon: (pmbus/core): Implement regulator get_status
-In-Reply-To: <20221124083439.3840025-1-Naresh.Solanki@9elements.com>
+In-Reply-To: <9CAB43B4193E4C62+Y37kSTHfZuJeOvI8@TP-P15V.lan>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/24/22 00:34, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On 11/23/22 19:26, Wang Honghui wrote:
+> Modify to support Phytium FT2000/4 CPU for acpi
 > 
-> Add get_status for pmbus_regulator_ops.
-> 
+> Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
 > ---
-> Changes:
-> - use lock throughout the function
-> - Avoid line continuation upto 100 column
-> - Optimize use of & and | operator
-> - Check for VOUT, IOUT, TEMPERATURE bit in status word before checking
->    respective status register for fault.
-> - Report regulator current status.
-> - Utilize get_error_flag to check for regulator errors.
-> - Check for return value of function get_error_flag
+>   drivers/hwmon/scpi-hwmon.c | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
->   drivers/hwmon/pmbus/pmbus_core.c | 44 ++++++++++++++++++++++++++++++++
->   1 file changed, 44 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 20ca26e19db7..0b13214c662f 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2855,6 +2855,49 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->   	return 0;
->   }
->   
-> +static int pmbus_regulator_get_status(struct regulator_dev *rdev)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	u8 page = rdev_get_id(rdev);
-> +	int status, ret;
-> +
-> +	mutex_lock(&data->update_lock);
-> +	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
-> +	if (status < 0) {
-> +		ret = status;
-> +		goto unlock;
-> +	}
-> +
-> +	if (status & PB_STATUS_OFF) {
-> +		ret = REGULATOR_STATUS_OFF;
-> +		goto unlock;
-> +	}
-> +
-> +	/* If regulator is ON & reports power good then return ON */
-> +	if (!(status & PB_STATUS_POWER_GOOD_N)) {
-> +		ret = REGULATOR_STATUS_ON;
-> +		goto unlock;
-> +	}
-> +
-> +	if (rdev->desc->ops->get_error_flags) {
+> diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
+> index 6021ae00b334..a6ee9806e47e 100644
+> --- a/drivers/hwmon/scpi-hwmon.c
+> +++ b/drivers/hwmon/scpi-hwmon.c
+> @@ -316,6 +316,7 @@ static struct platform_driver scpi_hwmon_platdrv = {
+>   	.driver = {
+>   		.name	= "scpi-hwmon",
+>   		.of_match_table = scpi_of_match,
+> +		.acpi_match_table = scpi_sensors_acpi_match,
+>   	},
+>   	.probe		= scpi_hwmon_probe,
+>   };
 
-Looking into this again, why is this check necessary ? Isn't this
-the regulator_ops from below ? Also, why not just call
-pmbus_regulator_get_error_flags() directly ?
 
-> +		ret = rdev->desc->ops->get_error_flags(rdev, &status);
-> +		if (ret)
-> +			goto unlock;
-> +
-> +		if (status & (REGULATOR_ERROR_UNDER_VOLTAGE | REGULATOR_ERROR_OVER_CURRENT |
-> +		   REGULATOR_ERROR_REGULATION_OUT | REGULATOR_ERROR_FAIL |
-> +		   REGULATOR_ERROR_OVER_TEMP))
-> +			ret = REGULATOR_STATUS_ERROR;
-
-If the condition above is false, the return value will be 0, or
-REGULATOR_STATUS_OFF. Is that intentional ?
-
-> +	} else
-> +		ret = REGULATOR_STATUS_UNDEFINED;
-> +
-
-CHECK: braces {} should be used on all arms of this statement
-#72: FILE: drivers/hwmon/pmbus/pmbus_core.c:2884:
-+	if (rdev->desc->ops->get_error_flags) {
-[...]
-+	} else
+This patch on its own doesn't make sense. It seems to be a fix of v1, not
+a new version of v1. Your subject lines are off. Modify what ?
+The subject should be something like "hwmon: (scpi) Add ACPI support for...".
 
 Guenter
-
-> +unlock:
-> +	mutex_unlock(&data->update_lock);
-> +	return ret;
-> +}
-> +
->   static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
->   {
->   	struct pmbus_data *data = i2c_get_clientdata(client);
-> @@ -2995,6 +3038,7 @@ const struct regulator_ops pmbus_regulator_ops = {
->   	.disable = pmbus_regulator_disable,
->   	.is_enabled = pmbus_regulator_is_enabled,
->   	.get_error_flags = pmbus_regulator_get_error_flags,
-> +	.get_status = pmbus_regulator_get_status,
->   	.get_voltage = pmbus_regulator_get_voltage,
->   	.set_voltage = pmbus_regulator_set_voltage,
->   	.list_voltage = pmbus_regulator_list_voltage,
-> 
-> base-commit: 2c71b3246ec3246522e8cb7c8191dc7a5d62cc70
 
