@@ -2,188 +2,108 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 358E9C43219
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Nov 2022 19:37:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B017C43219
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Nov 2022 20:02:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiKXThB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 24 Nov 2022 14:37:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
+        id S229491AbiKXUC6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 24 Nov 2022 15:02:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiKXTg7 (ORCPT
+        with ESMTP id S229436AbiKXUC4 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 24 Nov 2022 14:36:59 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEC1827EB
-        for <linux-hwmon@vger.kernel.org>; Thu, 24 Nov 2022 11:36:57 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so5857307pjc.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 24 Nov 2022 11:36:57 -0800 (PST)
+        Thu, 24 Nov 2022 15:02:56 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A79569302
+        for <linux-hwmon@vger.kernel.org>; Thu, 24 Nov 2022 12:02:55 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id 140so2366251pfz.6
+        for <linux-hwmon@vger.kernel.org>; Thu, 24 Nov 2022 12:02:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=9elements.com; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ychMJ5CecOOaqTuUXxUfl245iKKvBb99gKZkBpHBZLI=;
-        b=JLQeuWSc8UUiNVIXg7ORcPhQkOkHQIa4AsIv5vBsGwMw2haJMzFfq8PF5aVZQjDh3f
-         KvA2bkNWoDbBuHFBVI/PCnP3eZd2th0R8SbzfrP8HBVTAcGZ4phd94O0EXKyJ9JhEUl0
-         hOuQvq8Wo4vl0m/G+Sp4QWug3TJUClsYAqaPhkusimXijEaqw0UN5hTm0UketZtrfvnh
-         /yXtc/GtGrbIaQFdlaZ1blhKIrnHa22KOYWsgPF7qn5Rib9tjairWEJCcg2R1FXYI72h
-         +6VNVGU/EY4Sj11E9Zi5sp9QPEJ/PsmlcdsrVqFFFWmZP6EixA7+X4YyB2Tup3mvSdyT
-         rYLg==
+        bh=yriV1kcTjmeFSwCRxV7ARCgTj+gAgWe/fIgRxZlL04w=;
+        b=cY1/wpjaxZXfnPLVRiGSJlm7QWtX1QnocGOiyy3eX6+1GqoIbnKC4lO+j8ipR1BNe0
+         M0+SlJ2MQZzUGWRv4UDLp/Ro8TRYqYXiJOUqQIMCpFR56QxKw9tF/TIFfU3nBDAQr05C
+         hCD2MS6FAfUxUN9HKn12mW3YtuqPg4Zru2h1T3xOsVyYb+OBIbyqjkKtl/aOTr5eUIz4
+         I4Wky4ztJU12PCDstPMHIei32iliHLdN39gExVI/nDGy/YyeFpzTDs23odBkNVPz/9cg
+         V60TqXkU4bAlgLj7KKu7MN1KH/16Aku3K+XuNRTN0Enpea7MmTnZ0jUxFI8wqpZhzWJ+
+         jGmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ychMJ5CecOOaqTuUXxUfl245iKKvBb99gKZkBpHBZLI=;
-        b=nojUNpaYKumKyvStgVWaIZmgPqmQmFq0OfIAfr4sTMHSR1jkSQm6XaBU3tt0+thalL
-         tjf7+Uz076ufqKk1zUIrqpndV5OLbP6L/lnaO0hPisYqwa9i6XGL46/HJ3wvwqaCJ9/1
-         tHEoiQp5RB+tztNd7BIl296vDgBcx8dd1y8Gk3jh6u+ORLpHSYL1cAHyVXU/msaQF7sh
-         /PP3+BlKyzlLAPr+ye4iQ6aTV+qVhdw1GUDUqHfI/SMuCox+gKujT0XPj4zFr/vWM2wo
-         hYbIVpSaaaqcKYO3qtEwSCKFB6zkLLuL1AX0kLaOZLfI4KiqQrcWOTO3imlW0kofkjo/
-         GMzQ==
-X-Gm-Message-State: ANoB5pkinDAogKvdgdGMGkKrz5sX25bD4oqwDxKWcek43qXXM7t0XbGZ
-        GCY/1FddVMeZMb+8NqL43KLA7A==
-X-Google-Smtp-Source: AA0mqf51i9RZr2KyDoWTd1hQmf02KFmQODY/3CRDe4e7xu+BYqng65nHD9Xx4/W6YtlbGGKQKiAWxg==
-X-Received: by 2002:a17:90a:ad47:b0:218:cad8:acef with SMTP id w7-20020a17090aad4700b00218cad8acefmr15557582pjv.161.1669318617288;
-        Thu, 24 Nov 2022 11:36:57 -0800 (PST)
+        bh=yriV1kcTjmeFSwCRxV7ARCgTj+gAgWe/fIgRxZlL04w=;
+        b=Ur0KtyUjFwfjrhAjw47vhfdX0R97U0l5v0vxOCS5vLidpnacyX0+fwnp2DQLq/2OTg
+         Uxup9aU9UfS871G2zthr4v2uIERsFHXWT6lB+2BtHTYMBtjk3a9QSzYZ2gKT8J2/F9L+
+         HBWUzMPXEKa1H3r6uAekoZgEVZRzT3PPDwqCjVm6NvtDF+LvtTeD7GiB3ec2vwFgLN1P
+         ylaDuOvHYGybebTfzKgwE9hmPMjWNNXZn7SXIH+0QUjEPy1zjIYGqq0MFvUBc0jIfZqN
+         qFoy9Y7XCYRTuGIEjKxpSkXr740sesYnLerTEM11p613sv/ZhOLB7cy/cowl/4DIqQS3
+         K1Sw==
+X-Gm-Message-State: ANoB5pm07qA2mClKYxaH6aPr1g5h8T1ZSE/9WBaBfkCWeaur28w2VfA3
+        Zt07spC93HEaJgZH2/hiRPIXUw==
+X-Google-Smtp-Source: AA0mqf7CLpl2VcseuxmVIMGJYgIM04KtYDaR1vy42JGbv4harJwakksTSKcDsA0eMs87fVxdFfYyIQ==
+X-Received: by 2002:a63:ec47:0:b0:46f:c465:5848 with SMTP id r7-20020a63ec47000000b0046fc4655848mr14284641pgj.148.1669320174699;
+        Thu, 24 Nov 2022 12:02:54 -0800 (PST)
 Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id n5-20020a63f805000000b0046f1cbd2631sm1371247pgh.50.2022.11.24.11.36.55
+        by smtp.gmail.com with ESMTPSA id v10-20020aa799ca000000b0053e62b6fd22sm1473182pfi.126.2022.11.24.12.02.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 11:36:56 -0800 (PST)
-Message-ID: <44501c19-8067-5588-b3d9-e13359af6562@9elements.com>
-Date:   Fri, 25 Nov 2022 01:06:54 +0530
+        Thu, 24 Nov 2022 12:02:54 -0800 (PST)
+Message-ID: <03dfb055-bca7-5ba8-0590-f32671af1498@9elements.com>
+Date:   Fri, 25 Nov 2022 01:32:50 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v5] hwmon: (pmbus/core): Implement regulator get_status
+Subject: Re: [PATCH 3/3] hwmon: (pmbus/core): Implement IRQ support
 Content-Language: en-US
 To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
         Jean Delvare <jdelvare@suse.com>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+Cc:     broonie@kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
         linux-kernel@vger.kernel.org
-References: <20221124083439.3840025-1-Naresh.Solanki@9elements.com>
- <1fcf36d3-0579-3e23-2613-61f523bcb046@roeck-us.net>
+References: <20221122135014.3504094-1-Naresh.Solanki@9elements.com>
+ <20221122135014.3504094-3-Naresh.Solanki@9elements.com>
+ <1724dbac-024a-2758-a030-c07352b536fc@roeck-us.net>
+ <df8201b0-414e-4daf-0dae-bd3ce790304c@9elements.com>
+ <7ce64ea0-f595-a5b6-a810-2bc9133b5386@roeck-us.net>
 From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <1fcf36d3-0579-3e23-2613-61f523bcb046@roeck-us.net>
+In-Reply-To: <7ce64ea0-f595-a5b6-a810-2bc9133b5386@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hi Guenter
 
-
-On 24-11-2022 07:48 pm, Guenter Roeck wrote:
-> On 11/24/22 00:34, Naresh Solanki wrote:
->> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On 24-11-2022 07:37 pm, Guenter Roeck wrote:
+> On 11/24/22 00:56, Naresh Solanki wrote:
+>> Hi Guenter,
 >>
->> Add get_status for pmbus_regulator_ops.
+>> On 22-11-2022 10:32 pm, Guenter Roeck wrote:
+>>> On 11/22/22 05:50, Naresh Solanki wrote:
+>>>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>>>
+>>>> Implement IRQ support to monitor PMBUS regulator events.
+>>>>
+>>>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>>>
+>>> Adding a PMBus interrupt handler should be generic and also handle hwmon
+>>> specific events. It should report any status changes as sysfs attribute
+>>> notifications.
+>> This handler scope is to address regulator faults.
 >>
->> ---
->> Changes:
->> - use lock throughout the function
->> - Avoid line continuation upto 100 column
->> - Optimize use of & and | operator
->> - Check for VOUT, IOUT, TEMPERATURE bit in status word before checking
->>    respective status register for fault.
->> - Report regulator current status.
->> - Utilize get_error_flag to check for regulator errors.
->> - Check for return value of function get_error_flag
->>
->> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ---
->>   drivers/hwmon/pmbus/pmbus_core.c | 44 ++++++++++++++++++++++++++++++++
->>   1 file changed, 44 insertions(+)
->>
->> diff --git a/drivers/hwmon/pmbus/pmbus_core.c 
->> b/drivers/hwmon/pmbus/pmbus_core.c
->> index 20ca26e19db7..0b13214c662f 100644
->> --- a/drivers/hwmon/pmbus/pmbus_core.c
->> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->> @@ -2855,6 +2855,49 @@ static int 
->> pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->>       return 0;
->>   }
->> +static int pmbus_regulator_get_status(struct regulator_dev *rdev)
->> +{
->> +    struct device *dev = rdev_get_dev(rdev);
->> +    struct i2c_client *client = to_i2c_client(dev->parent);
->> +    struct pmbus_data *data = i2c_get_clientdata(client);
->> +    u8 page = rdev_get_id(rdev);
->> +    int status, ret;
->> +
->> +    mutex_lock(&data->update_lock);
->> +    status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
->> +    if (status < 0) {
->> +        ret = status;
->> +        goto unlock;
->> +    }
->> +
->> +    if (status & PB_STATUS_OFF) {
->> +        ret = REGULATOR_STATUS_OFF;
->> +        goto unlock;
->> +    }
->> +
->> +    /* If regulator is ON & reports power good then return ON */
->> +    if (!(status & PB_STATUS_POWER_GOOD_N)) {
->> +        ret = REGULATOR_STATUS_ON;
->> +        goto unlock;
->> +    }
->> +
->> +    if (rdev->desc->ops->get_error_flags) {
 > 
-> Looking into this again, why is this check necessary ? Isn't this
-> the regulator_ops from below ? Also, why not just call
-> pmbus_regulator_get_error_flags() directly ?
-Yes. Felt that to be the right way.
-Will update to do pmbus_regulator_get)error_flags directly
-> 
->> +        ret = rdev->desc->ops->get_error_flags(rdev, &status);
->> +        if (ret)
->> +            goto unlock;
->> +
->> +        if (status & (REGULATOR_ERROR_UNDER_VOLTAGE | 
->> REGULATOR_ERROR_OVER_CURRENT |
->> +           REGULATOR_ERROR_REGULATION_OUT | REGULATOR_ERROR_FAIL |
->> +           REGULATOR_ERROR_OVER_TEMP))
->> +            ret = REGULATOR_STATUS_ERROR;
-> 
-> If the condition above is false, the return value will be 0, or
-> REGULATOR_STATUS_OFF. Is that intentional ?
-No. It should be REGULATOR_ERR_UNDEFINED. will fix in next revision.
-> 
->> +    } else
->> +        ret = REGULATOR_STATUS_UNDEFINED;
->> +
-> 
-> CHECK: braces {} should be used on all arms of this statement
-> #72: FILE: drivers/hwmon/pmbus/pmbus_core.c:2884:
-> +    if (rdev->desc->ops->get_error_flags) {
-> [...]
-> +    } else
+> Maybe that is the use case from your perspective, but this is primarily
+> a hardware monitoring driver and needs to primarily serve its hardware
+> monitoring functionality.
+Yeah. What you said makes more sense. I'll do necessary changes & test & 
+get back. Thanks :)
 > 
 > Guenter
 > 
->> +unlock:
->> +    mutex_unlock(&data->update_lock);
->> +    return ret;
->> +}
->> +
->>   static int pmbus_regulator_get_low_margin(struct i2c_client *client, 
->> int page)
->>   {
->>       struct pmbus_data *data = i2c_get_clientdata(client);
->> @@ -2995,6 +3038,7 @@ const struct regulator_ops pmbus_regulator_ops = {
->>       .disable = pmbus_regulator_disable,
->>       .is_enabled = pmbus_regulator_is_enabled,
->>       .get_error_flags = pmbus_regulator_get_error_flags,
->> +    .get_status = pmbus_regulator_get_status,
->>       .get_voltage = pmbus_regulator_get_voltage,
->>       .set_voltage = pmbus_regulator_set_voltage,
->>       .list_voltage = pmbus_regulator_list_voltage,
->>
->> base-commit: 2c71b3246ec3246522e8cb7c8191dc7a5d62cc70
 > 
 
 Regards,
