@@ -2,66 +2,172 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41E8CC4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Nov 2022 03:27:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F93EC433FE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Nov 2022 08:34:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiKXD1p (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 23 Nov 2022 22:27:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
+        id S229788AbiKXIev (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 24 Nov 2022 03:34:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKXD1o (ORCPT
+        with ESMTP id S229475AbiKXIeu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 23 Nov 2022 22:27:44 -0500
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C9A13DE5;
-        Wed, 23 Nov 2022 19:27:37 -0800 (PST)
-X-QQ-mid: bizesmtpipv603t1669260363t7i0
-Received: from localhost ( [255.189.44.3])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 24 Nov 2022 11:26:01 +0800 (CST)
-X-QQ-SSF: 01400000000000506000000A0000000
-X-QQ-FEAT: bhet8yMU7vlg0O7K5y1cuHvfOsuOnbFPWThQh75wv84jueJng5ranrq4icUFy
-        rK/0wsHKEQWOLONmuASx1Rtsq1DG9A9nsBMgWZtYFKxHa3XHD0/63mySWn5xArfbDvs/BTg
-        9BHkt4fbINdrzrTY4Dh5ltnS09IZl7WpG3g84pnhY2eNy+2C7/X0aUl/QOQsbGerQzmo4lh
-        0FzSf6gUG0hNu0Amp2GQ4t6YQwBWu65f9PPoRmYrvD0U/kjdtshzptnnTqC59bA1Yekc+2n
-        2bSWtbEDWh+1Wgay/LXeiivt0wr9phcnW2NSd5Ze86gSaUuFdxiBeAAsgaoJaoL6uWdXMo5
-        FvZhb1X61Dp4/14vyMeiHe5+y2uZUawZmmj9j40
-X-QQ-GoodBg: 2
-Date:   Thu, 24 Nov 2022 11:26:01 +0800
-From:   Wang Honghui <honghui.wang@ucas.com.cn>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V2 1/3] Modify to support Phytium FT2000/4 CPU for acpi
-Message-ID: <9CAB43B4193E4C62+Y37kSTHfZuJeOvI8@TP-P15V.lan>
+        Thu, 24 Nov 2022 03:34:50 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86522CB9EE
+        for <linux-hwmon@vger.kernel.org>; Thu, 24 Nov 2022 00:34:49 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 6so1014804pgm.6
+        for <linux-hwmon@vger.kernel.org>; Thu, 24 Nov 2022 00:34:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W5ccKx8fizG4gCscMAGllzhhGT1asbD46ZbtRMN7NAQ=;
+        b=NaWt9gAey74YX97MIcdsLCn1TP41z+UNuwg9OtGNLyX+60MqAG3WXZorgpUxG4fGR4
+         tJPrYRQhsuMC9lfocuTF19x7DKZ1PVSx5CAScNk2LVDFBUdtNO5DJMaeY38/gAd2Nh3d
+         DCIb1BSzCMukm/v/MgXpViy8d8f4Yjg8pUraZnFx8qkBagdpo/L3BAh9noM4WZx0vIt6
+         8Rh90JIbrg2fOk763xeNf81wRGJtZzIYcKk1l2WaifDPfiig9YuNceghGkjs0h+mj1JG
+         81h5JzuFYfeJZTXTQINku6Y2sK3J2imw2gTzHoQz5dkG7dM7FPR6XiQjQ4h9WK3HB51/
+         gy6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W5ccKx8fizG4gCscMAGllzhhGT1asbD46ZbtRMN7NAQ=;
+        b=MbAO0hOJgIQo43xKkEiQko05xe8lp0TZ1q6PkLbSoqUH2Pc66OV1wuNRAxL4lBfvj8
+         kb08V93RXn6f92t5MOWH5hRSTvkhHKq1BYquhgoA7MdIOVX7w3yLxSg9VP7vFuCFKclV
+         yLXZqsBCqjbGqjsNwyEhtYUmliAWE/7Pp8IhU+VxZA8cSgcAFrCtSPD1Q6GJWx0k1xv6
+         0Cr1O6Y9IyqDEvNp33wUZ0M3vCmzQE/yyuRcwJmcwC6vQZr3bUA6ocowNlTx/z6pnVEv
+         /SFEcmsg3XTwTm5RjSX9QHEBblXokpmPBws3yO+t3WLzeAq5uFSarHPioEGoW1jvSq4u
+         SnBA==
+X-Gm-Message-State: ANoB5pmgadktGanQ99C20WA3UqnnDH/V+BKYU7rT0RxjK87MvNLIi3h3
+        lhSbnVl1ni/RDJup1Q7UmUkHxA==
+X-Google-Smtp-Source: AA0mqf4DAzzZjePiOdegknXnqqa9pAMSzXuDf5861QUnn4iLF0a1NGsDAmotvzNuKDt77HW+x7FFOg==
+X-Received: by 2002:a62:6142:0:b0:56c:cde:1a49 with SMTP id v63-20020a626142000000b0056c0cde1a49mr13274150pfb.9.1669278888988;
+        Thu, 24 Nov 2022 00:34:48 -0800 (PST)
+Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
+        by smtp.gmail.com with ESMTPSA id ne12-20020a17090b374c00b00218d55b33d9sm2759511pjb.8.2022.11.24.00.34.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Nov 2022 00:34:48 -0800 (PST)
+Message-ID: <f158bc8a-8351-49a7-3246-91b8a1413ccd@9elements.com>
+Date:   Thu, 24 Nov 2022 14:04:46 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpipv:ucas.com.cn:qybglogicsvr:qybglogicsvr6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v4] hwmon: (pmbus/core): Implement regulator get_status
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        broonie@kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org
+References: <20221122090302.3053092-1-Naresh.Solanki@9elements.com>
+ <20221122184828.GA554748@roeck-us.net>
+Content-Language: en-US
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <20221122184828.GA554748@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Modify to support Phytium FT2000/4 CPU for acpi
+Hi Guenter,
 
-Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
----
- drivers/hwmon/scpi-hwmon.c | 1 +
- 1 file changed, 1 insertion(+)
+On 23-11-2022 12:18 am, Guenter Roeck wrote:
+> On Tue, Nov 22, 2022 at 10:03:02AM +0100, Naresh Solanki wrote:
+>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>
+>> Add get_status for pmbus_regulator_ops.
+>> ---
+>> Changes:
+>> - use lock throughout the function
+>> - Avoid line continuation upto 100 column
+>> - Optimize use of & and | operator
+>> - Check for VOUT, IOUT, TEMPERATURE bit in status word before checking
+>>    respective status register for fault.
+>> - Report regulator current status.
+>> - Utilize get_error_flag to check for regulator errors.
+>>
+>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>> ---
+>>   drivers/hwmon/pmbus/pmbus_core.c | 41 ++++++++++++++++++++++++++++++++
+>>   1 file changed, 41 insertions(+)
+>>
+>>
+>> base-commit: 27fea302952d8c90cafbdbee96bafeca03544401
+>>
+>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+>> index 7ec04934747e..5df2aee549e6 100644
+>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+>> @@ -2851,6 +2851,46 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+>>   	return 0;
+>>   }
+>>   
+>> +static int pmbus_regulator_get_status(struct regulator_dev *rdev)
+>> +{
+>> +	struct device *dev = rdev_get_dev(rdev);
+>> +	struct i2c_client *client = to_i2c_client(dev->parent);
+>> +	struct pmbus_data *data = i2c_get_clientdata(client);
+>> +	u8 page = rdev_get_id(rdev);
+>> +	int status, ret;
+>> +
+>> +	mutex_lock(&data->update_lock);
+>> +	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
+>> +	if (status < 0) {
+>> +		ret = status;
+>> +		goto unlock;
+>> +	}
+>> +
+>> +	if (status & PB_STATUS_OFF) {
+>> +		ret = REGULATOR_STATUS_OFF;
+>> +		goto unlock;
+>> +	}
+>> +
+>> +	/* If regulator is ON & reports power good then return ON */
+>> +	if (!(status & PB_STATUS_POWER_GOOD_N)) {
+>> +		ret = REGULATOR_STATUS_ON;
+>> +		goto unlock;
+>> +	}
+>> +
+>> +	if (rdev->desc->ops->get_error_flags)
+>> +		ret = rdev->desc->ops->get_error_flags(rdev, &status);
+>> +
+> 
+> What about checking ret ?
+Fixed in next revision.
+> 
+>> +	if (status & (REGULATOR_ERROR_UNDER_VOLTAGE | REGULATOR_ERROR_OVER_CURRENT |
+>> +	   REGULATOR_ERROR_REGULATION_OUT | REGULATOR_ERROR_FAIL | REGULATOR_ERROR_OVER_TEMP))
+>> +		ret = REGULATOR_STATUS_ERROR;
+>> +	else
+>> +		ret = REGULATOR_STATUS_UNDEFINED;
+> 
+> This part has to be inside "if (rdev->desc->ops->get_error_flags)"
+> or status will still contain the status word.
+Yes. fixed in next version.
+> 
+> Guenter
+> 
+>> +
+>> +unlock:
+>> +	mutex_unlock(&data->update_lock);
+>> +	return ret;
+>> +}
+>> +
+>>   static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
+>>   {
+>>   	struct pmbus_data *data = i2c_get_clientdata(client);
+>> @@ -2991,6 +3031,7 @@ const struct regulator_ops pmbus_regulator_ops = {
+>>   	.disable = pmbus_regulator_disable,
+>>   	.is_enabled = pmbus_regulator_is_enabled,
+>>   	.get_error_flags = pmbus_regulator_get_error_flags,
+>> +	.get_status = pmbus_regulator_get_status,
+>>   	.get_voltage = pmbus_regulator_get_voltage,
+>>   	.set_voltage = pmbus_regulator_set_voltage,
+>>   	.list_voltage = pmbus_regulator_list_voltage,
 
-diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
-index 6021ae00b334..a6ee9806e47e 100644
---- a/drivers/hwmon/scpi-hwmon.c
-+++ b/drivers/hwmon/scpi-hwmon.c
-@@ -316,6 +316,7 @@ static struct platform_driver scpi_hwmon_platdrv = {
- 	.driver = {
- 		.name	= "scpi-hwmon",
- 		.of_match_table = scpi_of_match,
-+		.acpi_match_table = scpi_sensors_acpi_match,
- 	},
- 	.probe		= scpi_hwmon_probe,
- };
--- 
-2.34.1
-
+Regards,
+Naresh
