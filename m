@@ -2,100 +2,157 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0170C43217
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Nov 2022 14:25:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61D55C43217
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Nov 2022 14:35:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbiKXOZu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 24 Nov 2022 09:25:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
+        id S229481AbiKXOfs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 24 Nov 2022 09:35:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiKXOZu (ORCPT
+        with ESMTP id S229476AbiKXOfr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 24 Nov 2022 09:25:50 -0500
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E83DE916E;
-        Thu, 24 Nov 2022 06:25:49 -0800 (PST)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-142faa7a207so2093789fac.13;
-        Thu, 24 Nov 2022 06:25:49 -0800 (PST)
+        Thu, 24 Nov 2022 09:35:47 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BDE85EF4;
+        Thu, 24 Nov 2022 06:35:47 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1432a5f6468so2128088fac.12;
+        Thu, 24 Nov 2022 06:35:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=G0seaWCJr0rZft9EeeuiEnWPhmbWkWE4CXIZfPXM7JE=;
-        b=E3kLvXGg7O0J0NaUJEu/KRv8ngt85hS/uECUOAIk47ks/cTXyFztdp3U+61Jt2TUu1
-         zZFXY1Xz6tfxvL8b/7MPwkWfEqkH12yKYqQxGFSS2gcvjB03FJAMB5m5HQIniZX3kscR
-         OHJ8/tz5MBwRCk3PNGmJAz1qkivxZYGiTlsGVX4pVfhNFTiCiWlQYFLDT4YEbmoWgQCN
-         E8VGnHO3Ti7+HeiBjqnAy/UD4/vqoXIq5mDdP6G/UI+bd6/MQxf1822E20/6C4XYYVGD
-         1gVC2vbt/f1qZIc26ThVmtLzaRTZdFRh1azPyW856xWD/Ze9pgjMOCI7AxGFFFGE1C76
-         yFHQ==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y6xD/F0jYBC276f58xCfsGqi3f/gw81uLwWLcRF5aus=;
+        b=QXC8pTTXNAGpslmkmCnNdQbVBhAcMj+ubcWVDmVbl7uVO2Z0Al2CEmCBAsKzZwgDIx
+         Kq2XYH0MqCSevs7zc5HEFYST6qkLENfgC8zgxzGEyDqpGFEjCoSsYOFao8h0N6BiY7vy
+         Lfh1hDPOiBBkZa+GJZnj6pQKr79XjTVE/1ZxslChbDZw3KZQEyxASNHqVgonSintx9LS
+         PK3WpNEetWOL8GU+YDWLvVQfREqbReW811e//FyQOjctqP70af6iaTJ32KHns7Wt2jol
+         ynMQusAFzwjop7DbLLpH+563bVlRdbftYo0f0ERKkYowslYfJ7E3fPQY8bcz0JM8zvfr
+         dDJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G0seaWCJr0rZft9EeeuiEnWPhmbWkWE4CXIZfPXM7JE=;
-        b=3TOG2yffZ/ZqT9mecHklGLQZGYH3VLEQFjKlVf/mHE+N0DDlVBKnRowu2f3CkrpP+i
-         jEQOcqAoosDOzwXzUSut8tENIo9lFrUg56/v4ptacNmBcYJ5jfRSRgtEz8r5MPhLdj5m
-         IfI+vQjClLD7L1RtnJVuj5+W/64ldcLX659/wwpRnkpDhYSsqId+mF4qxQ6Rtz2ZH05E
-         GRlQ/cR2sC1s+wap0609Jf5eHjjP2/gzz1jbctQOnjjUWzNLG1MkzhX/K/YIQ83urba+
-         xFqmgqfDEoq8u27b6/wrdM+fbPgtCVggB5ts2dhRwQZwKC1hvgOeZaBCuUxsRKwxlf53
-         kYeQ==
-X-Gm-Message-State: ANoB5pk/yBqffJjP+ys/rQ10tBMOvrfjfYsm66WlZR7FDTN3wpJwsbEY
-        DuymZvK2u4s0XfI6TJujA333QzeUUAU=
-X-Google-Smtp-Source: AA0mqf62c4t6IW8419fFzYaadU99XdDou5UmXmKwTos7NykJdpWzP8bnvfXnTERbaV/Suk8I0w/vcQ==
-X-Received: by 2002:a05:6870:ed44:b0:142:e804:b2b with SMTP id ex4-20020a056870ed4400b00142e8040b2bmr10997061oab.122.1669299948510;
-        Thu, 24 Nov 2022 06:25:48 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y6xD/F0jYBC276f58xCfsGqi3f/gw81uLwWLcRF5aus=;
+        b=itOdwisGv1PXThtwi2Ev5moSGvRXFybUABFi1qzmVMr5362C/BpQlk1MHWeY23i1YL
+         vGNMpdYpL09AbaRux/v6t5LE3G/be0wfsmvNsdVPEHltPYdeGUDqe7AoOVzYrv0iGPLA
+         QuaTGIGZHwlZ9ut0nBvSKWQ3INh3FnCwnLkxoUFcliVAh8fCEj3dbxYTcx6RRvSU2SUY
+         m7MCHuM432NLIwhJpLC25+iAWkfYKwiLuDDk5cMrS+jj2l2BlCxGyBJABIxORcRp0aYw
+         NDrI/meZntk1u9dFb4mWX8DiPvwTHXfGYLO6sF04uPMp3n85cjkMTABJJU+6L5AKDKPO
+         NN7Q==
+X-Gm-Message-State: ANoB5pmqcDrVnBhXDM+n4bdbQYv4Cj7IYPQW62VubeOj6QCRV+pyfNZw
+        TaDACdfBSZA6sVGnadDrAj4=
+X-Google-Smtp-Source: AA0mqf45TumtbNTfIwWJbVngsAlUqVKKQwsD3NLEt804oI6bTmViiwEdph3/3BRPGaab0EQU3q5P8A==
+X-Received: by 2002:a05:6871:4211:b0:132:354d:71ac with SMTP id li17-20020a056871421100b00132354d71acmr7510413oab.107.1669300546383;
+        Thu, 24 Nov 2022 06:35:46 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r2-20020a9d5cc2000000b00661948e6119sm432949oti.47.2022.11.24.06.25.47
+        by smtp.gmail.com with ESMTPSA id cy26-20020a056870b69a00b0012779ba00fesm639254oab.2.2022.11.24.06.35.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 06:25:48 -0800 (PST)
+        Thu, 24 Nov 2022 06:35:46 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c5fbff9f-6fad-fb1d-17a1-9d7da7761c4f@roeck-us.net>
-Date:   Thu, 24 Nov 2022 06:25:46 -0800
+Message-ID: <6315d4e8-c3f4-6df7-b529-54f34e4e2194@roeck-us.net>
+Date:   Thu, 24 Nov 2022 06:35:44 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH V2 1/3] Modify to support Phytium FT2000/4 CPU for acpi
 Content-Language: en-US
 To:     Wang Honghui <honghui.wang@ucas.com.cn>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <9CAB43B4193E4C62+Y37kSTHfZuJeOvI8@TP-P15V.lan>
+References: <1CD578BA572E3037+Y37fk/eKlI3u5+77@TP-P15V.lan>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <9CAB43B4193E4C62+Y37kSTHfZuJeOvI8@TP-P15V.lan>
+Subject: Re: [PATCH 1/3]hwmon: Modify to support Phytium FT2000/4 CPU for acpi
+In-Reply-To: <1CD578BA572E3037+Y37fk/eKlI3u5+77@TP-P15V.lan>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/23/22 19:26, Wang Honghui wrote:
+On 11/23/22 19:05, Wang Honghui wrote:
 > Modify to support Phytium FT2000/4 CPU for acpi
 > 
 > Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
 > ---
->   drivers/hwmon/scpi-hwmon.c | 1 +
->   1 file changed, 1 insertion(+)
+>   drivers/hwmon/scpi-hwmon.c | 30 +++++++++++++++++++++++++-----
+>   1 file changed, 25 insertions(+), 5 deletions(-)
 > 
 > diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
-> index 6021ae00b334..a6ee9806e47e 100644
+> index 4d75385f7d5e..6021ae00b334 100644
 > --- a/drivers/hwmon/scpi-hwmon.c
 > +++ b/drivers/hwmon/scpi-hwmon.c
-> @@ -316,6 +316,7 @@ static struct platform_driver scpi_hwmon_platdrv = {
->   	.driver = {
->   		.name	= "scpi-hwmon",
->   		.of_match_table = scpi_of_match,
-> +		.acpi_match_table = scpi_sensors_acpi_match,
->   	},
->   	.probe		= scpi_hwmon_probe,
+> @@ -14,6 +14,7 @@
+>   #include <linux/slab.h>
+>   #include <linux/sysfs.h>
+>   #include <linux/thermal.h>
+> +#include <linux/acpi.h>
+>   
+Alphabetic include file order, please.
+
+>   struct sensor_data {
+>   	unsigned int scale;
+> @@ -132,6 +133,13 @@ static const struct of_device_id scpi_of_match[] = {
 >   };
+>   MODULE_DEVICE_TABLE(of, scpi_of_match);
+>   
+> +/* Wang Honghui add to support Phytium FT2000/4 CPU for acpi */
 
+Irrelevant comment.
 
-This patch on its own doesn't make sense. It seems to be a fix of v1, not
-a new version of v1. Your subject lines are off. Modify what ?
-The subject should be something like "hwmon: (scpi) Add ACPI support for...".
+> +static const struct acpi_device_id scpi_sensors_acpi_match[] = {
+> +        { .id = "PHYT000D" },
+> +        { }
+> +};
+> +MODULE_DEVICE_TABLE(acpi, scpi_sensors_acpi_match);
+> +
+>   static int scpi_hwmon_probe(struct platform_device *pdev)
+>   {
+>   	u16 nr_sensors, i;
+> @@ -141,6 +149,7 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
+>   	struct scpi_ops *scpi_ops;
+>   	struct device *hwdev, *dev = &pdev->dev;
+>   	struct scpi_sensors *scpi_sensors;
+> +	const struct acpi_device_id *match;
+>   	int idx, ret;
+>   
+>   	scpi_ops = get_scpi_ops();
+> @@ -170,11 +179,22 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
+>   
+>   	scpi_sensors->scpi_ops = scpi_ops;
+>   
+> -	scale = of_device_get_match_data(&pdev->dev);
+> -	if (!scale) {
+> -		dev_err(&pdev->dev, "Unable to initialize scpi-hwmon data\n");
+> -		return -ENODEV;
+> -	}
+> +	/* Wang Honghui modified to support Phytium FT2000/4 CPU for acpi */
+
+Irrelevant comment.
+
+> +	if (dev->of_node) {
+> +		scale = of_device_get_match_data(&pdev->dev);
+> +		if (!scale) {
+> +			dev_err(&pdev->dev, "Unable to initialize scpi-hwmon data\n");
+> +			return -ENODEV;
+> +		}
+> +	} else {
+> +                match = acpi_match_device(dev->driver->acpi_match_table, dev);
+> +                if (!match) {
+> +                        dev_err(dev, "scpi-hwmon: Error ACPI match data is missing\n");
+> +                        return -ENODEV;
+> +                }
+> +
+> +                scale = scpi_scale;
+> +        }
+
+	scale = device_get_match_data(&pdev->dev);
+
+should do after setting it in the acpi_device_id array.
 
 Guenter
+
+>   
+>   	for (i = 0, idx = 0; i < nr_sensors; i++) {
+>   		struct sensor_data *sensor = &scpi_sensors->data[idx];
 
