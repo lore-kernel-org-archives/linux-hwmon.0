@@ -2,229 +2,141 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACFC3C4332F
-	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Nov 2022 07:14:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04980C43217
+	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Nov 2022 11:41:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiKZHOp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 26 Nov 2022 02:14:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
+        id S229585AbiKZLl0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 26 Nov 2022 06:41:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiKZHOn (ORCPT
+        with ESMTP id S229446AbiKZLlZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 26 Nov 2022 02:14:43 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8E5252B8;
-        Fri, 25 Nov 2022 23:14:42 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id h131-20020a1c2189000000b003d02dd48c45so1841451wmh.0;
-        Fri, 25 Nov 2022 23:14:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YjO/YanQ08EW5m6oz06sLtS1VFAqUK5vxgHKpPCOEpA=;
-        b=I0/o2vnVy4DADgQq9T2sBU0BqgDrCOKyJJaUHSQWtkWH+Qar4P955TrcibYuX9VHnN
-         gcFpayMisGlJetKQIgfcDebPrT+l5HOnG2u/Y46hmtGKTxgbHrjxttEi098v7uieksu+
-         p8sc55VdInr8ttEfGkx5/XD+p2JGRy4/GLlVNRvBvkdwsJB7SbkHQQzNTgLiHaUHvsvD
-         lBzB9W2GKIrSVKIMyCJMjZaUJjDYNmrN7CPHpImHGStNa5qifKEsMtGjfCkcRCbg7XjE
-         y1ZrRkIIIWJcaHCbMEtIC3swO5eNQLHXTahEYTst7W3vw+PHwjyzlDPYRsIpgyUvT+Rx
-         PviQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YjO/YanQ08EW5m6oz06sLtS1VFAqUK5vxgHKpPCOEpA=;
-        b=J/E2oXnR+7Xr6lmgz7x79zY4bf9Z6OULkn0bhOl6nYcp9ifNSA3Y2bt1+OlICx2nLg
-         Vo+ZdM1wRRNRb563Un/lZEhqCxAXtbi/+cxuepbNgiil/P8A5EXjGH1i01yho9DiTD1U
-         KWfhRNfmzrxH6lxh3iAM0Dh6z+Il/bRFrrscWWwoWcpTpIDA5xGtCizEFjCp0AyqHYQO
-         eIMtwSgStDv5sk/6U7ynMQg+VEYKtVHWng00Vl23jsf3kn6SbSqFbIRgPUU0YI8emy4L
-         vb7tl65qK8+Qvq9J3yMklLebTunq9xjFj7q49Tnwi9pkiIDW/DgPS7uzB62lFl8W9GHy
-         PMww==
-X-Gm-Message-State: ANoB5plp27y40bkc72xHHcFSbq/SM2CriTDA3uTSo3e9hLW4/O6WRGO8
-        r474rAVCKooDJoMgbXIDuJRCXM39t/3jvw==
-X-Google-Smtp-Source: AA0mqf6g23SdGtyXd4WXDpHCfWeKdO9cMuWeJxA0k9qywiSoZagg1Unx0IJ213oAmJOOKixGr91kiw==
-X-Received: by 2002:a05:600c:a0d:b0:3cf:6c0d:a27 with SMTP id z13-20020a05600c0a0d00b003cf6c0d0a27mr30456211wmp.196.1669446881286;
-        Fri, 25 Nov 2022 23:14:41 -0800 (PST)
-Received: from fedora.. ([87.116.166.89])
-        by smtp.gmail.com with ESMTPSA id i19-20020a1c5413000000b003cfc02ab8basm11917943wmb.33.2022.11.25.23.14.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 23:14:40 -0800 (PST)
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     leonard.anderweit@gmail.com,
-        Aleksa Savic <savicaleksa83@gmail.com>,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: (aquacomputer_d5next) Add support for Quadro flow sensor pulses
-Date:   Sat, 26 Nov 2022 08:13:13 +0100
-Message-Id: <20221126071313.34356-1-savicaleksa83@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Sat, 26 Nov 2022 06:41:25 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E3D1A20E
+        for <linux-hwmon@vger.kernel.org>; Sat, 26 Nov 2022 03:41:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669462885; x=1700998885;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Xyy4jxLXi0m2kpnkMGgDAaoOAWeiKQSIPUhoI62fymQ=;
+  b=g48jLJbQP3bsiBKW2IFk+0Rt3PDtzpPQvZdOLd0xybk9vF9NMk+1HYMO
+   rk7Vl8ECO4S6ljE7ii0TicX+YN0ee5pmir+THr9eMCmUr1R8yv1D58yFC
+   tOwJAmqd9JF6jSl9f+1FAuUNbO/MbaBMx5y4iFbKM8lPkPsY0Q82F+U/4
+   CgkmqsBkb/RwkdYk2oKNBZa2Uy1zZiUvH7dHoLOM1NBlkpvSf05wqC3Sf
+   h48DPedqZXjztCxtf2QnGLV13wqIEm/3vB8DY5Ie0tedVhR7NFLvIPisU
+   t27bQmOjo3kcMVwbc/l2wb0mvscOQ62jS9MyAxXnRnBRBLjhZv2R80SPQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="341497455"
+X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
+   d="scan'208";a="341497455"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2022 03:41:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="785148353"
+X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
+   d="scan'208";a="785148353"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Nov 2022 03:41:23 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oytYh-0006GH-0s;
+        Sat, 26 Nov 2022 11:41:23 +0000
+Date:   Sat, 26 Nov 2022 19:41:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon] BUILD SUCCESS
+ 2745705ee6aa2bb17c58768edc3906c931b7c618
+Message-ID: <6381fb55.9PORoPsPwerz9VBV%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for reading and writing flow sensor pulses value on
-the Aquacomputer Quadro. Implemented by Leonard Anderweit [1].
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: 2745705ee6aa2bb17c58768edc3906c931b7c618  hwmon: (asus-ec-sensors) Add checks for devm_kcalloc
 
-[1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/45
+elapsed time: 1112m
 
-Originally-from: Leonard Anderweit <leonard.anderweit@gmail.com>
-Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
----
-Changes in v2:
-- Added missing default: in aqc_is_visible()
----
- Documentation/hwmon/aquacomputer_d5next.rst |  3 +-
- drivers/hwmon/aquacomputer_d5next.c         | 66 +++++++++++++++++----
- 2 files changed, 55 insertions(+), 14 deletions(-)
+configs tested: 64
+configs skipped: 2
 
-diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
-index 15226346434d..637bdbc8fcad 100644
---- a/Documentation/hwmon/aquacomputer_d5next.rst
-+++ b/Documentation/hwmon/aquacomputer_d5next.rst
-@@ -39,7 +39,7 @@ current.
- 
- The Quadro exposes four physical and sixteen virtual temperature sensors, a flow
- sensor and four PWM controllable fans, along with their speed (in RPM), power,
--voltage and current.
-+voltage and current. Flow sensor pulses are also available.
- 
- The Farbwerk and Farbwerk 360 expose four temperature sensors. Additionally,
- sixteen virtual temperature sensors of the Farbwerk 360 are exposed.
-@@ -64,6 +64,7 @@ Sysfs entries
- temp[1-20]_input Physical/virtual temperature sensors (in millidegrees Celsius)
- temp[1-4]_offset Temperature sensor correction offset (in millidegrees Celsius)
- fan[1-8]_input   Pump/fan speed (in RPM) / Flow speed (in dL/h)
-+fan5_pulses      Quadro flow sensor pulses
- power[1-8]_input Pump/fan power (in micro Watts)
- in[0-7]_input    Pump/fan voltage (in milli Volts)
- curr[1-8]_input  Pump/fan current (in milli Amperes)
-diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-index 49d3f9876fe8..9cc10080160b 100644
---- a/drivers/hwmon/aquacomputer_d5next.c
-+++ b/drivers/hwmon/aquacomputer_d5next.c
-@@ -136,6 +136,7 @@ static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
- 
- /* Control report offsets for the Quadro */
- #define QUADRO_TEMP_CTRL_OFFSET		0xA
-+#define QUADRO_FLOW_PULSES_CTRL_OFFSET	0x6
- static u16 quadro_ctrl_fan_offsets[] = { 0x37, 0x8c, 0xe1, 0x136 }; /* Fan speed offsets (0-100%) */
- 
- /* Specs of High Flow Next flow sensor */
-@@ -303,6 +304,7 @@ struct aqc_data {
- 	u16 temp_ctrl_offset;
- 	u16 power_cycle_count_offset;
- 	u8 flow_sensor_offset;
-+	u8 flow_pulses_ctrl_offset;
- 
- 	/* General info, same across all devices */
- 	u32 serial_number[2];
-@@ -461,20 +463,34 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
- 		}
- 		break;
- 	case hwmon_fan:
--		switch (priv->kind) {
--		case highflownext:
--			/* Special case to support flow sensor, water quality and conductivity */
--			if (channel < 3)
--				return 0444;
-+		switch (attr) {
-+		case hwmon_fan_input:
-+		case hwmon_fan_label:
-+			switch (priv->kind) {
-+			case highflownext:
-+				/* Special case to support flow sensor, water quality
-+				 * and conductivity
-+				 */
-+				if (channel < 3)
-+					return 0444;
-+				break;
-+			case quadro:
-+				/* Special case to support flow sensor */
-+				if (channel < priv->num_fans + 1)
-+					return 0444;
-+				break;
-+			default:
-+				if (channel < priv->num_fans)
-+					return 0444;
-+				break;
-+			}
- 			break;
--		case quadro:
--			/* Special case to support flow sensor */
--			if (channel < priv->num_fans + 1)
--				return 0444;
-+		case hwmon_fan_pulses:
-+			/* Special case for Quadro flow sensor */
-+			if (priv->kind == quadro && channel == priv->num_fans)
-+				return 0644;
- 			break;
- 		default:
--			if (channel < priv->num_fans)
--				return 0444;
- 			break;
- 		}
- 		break;
-@@ -552,7 +568,18 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 		}
- 		break;
- 	case hwmon_fan:
--		*val = priv->speed_input[channel];
-+		switch (attr) {
-+		case hwmon_fan_input:
-+			*val = priv->speed_input[channel];
-+			break;
-+		case hwmon_fan_pulses:
-+			ret = aqc_get_ctrl_val(priv, priv->flow_pulses_ctrl_offset, val);
-+			if (ret < 0)
-+				return ret;
-+			break;
-+		default:
-+			break;
-+		}
- 		break;
- 	case hwmon_power:
- 		*val = priv->power_input[channel];
-@@ -632,6 +659,18 @@ static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 			return -EOPNOTSUPP;
- 		}
- 		break;
-+	case hwmon_fan:
-+		switch (attr) {
-+		case hwmon_fan_pulses:
-+			val = clamp_val(val, 10, 1000);
-+			ret = aqc_set_ctrl_val(priv, priv->flow_pulses_ctrl_offset, val);
-+			if (ret < 0)
-+				return ret;
-+			break;
-+		default:
-+			break;
-+		}
-+		break;
- 	case hwmon_pwm:
- 		switch (attr) {
- 		case hwmon_pwm_input:
-@@ -691,7 +730,7 @@ static const struct hwmon_channel_info *aqc_info[] = {
- 			   HWMON_F_INPUT | HWMON_F_LABEL,
- 			   HWMON_F_INPUT | HWMON_F_LABEL,
- 			   HWMON_F_INPUT | HWMON_F_LABEL,
--			   HWMON_F_INPUT | HWMON_F_LABEL,
-+			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_PULSES,
- 			   HWMON_F_INPUT | HWMON_F_LABEL,
- 			   HWMON_F_INPUT | HWMON_F_LABEL,
- 			   HWMON_F_INPUT | HWMON_F_LABEL),
-@@ -1000,6 +1039,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		priv->buffer_size = QUADRO_CTRL_REPORT_SIZE;
- 
- 		priv->flow_sensor_offset = QUADRO_FLOW_SENSOR_OFFSET;
-+		priv->flow_pulses_ctrl_offset = QUADRO_FLOW_PULSES_CTRL_OFFSET;
- 		priv->power_cycle_count_offset = QUADRO_POWER_CYCLES;
- 
- 		priv->temp_label = label_temp_sensors;
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                  randconfig-r043-20221124
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+s390                                defconfig
+sh                               allmodconfig
+s390                             allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+ia64                             allmodconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+x86_64                        randconfig-a002
+i386                          randconfig-a001
+i386                          randconfig-a003
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+i386                          randconfig-a005
+i386                             allyesconfig
+i386                                defconfig
+x86_64                            allnoconfig
+m68k                            q40_defconfig
+arc                           tb10x_defconfig
+arm                           tegra_defconfig
+sparc                            alldefconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+
+clang tested configs:
+hexagon              randconfig-r041-20221124
+hexagon              randconfig-r045-20221124
+s390                 randconfig-r044-20221124
+riscv                randconfig-r042-20221124
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+x86_64                        randconfig-a005
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-k001
+
 -- 
-2.38.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
