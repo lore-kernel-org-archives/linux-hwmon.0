@@ -2,226 +2,237 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07614C4332F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Nov 2022 21:55:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 672A2C43217
+	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Nov 2022 01:49:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiKYVzo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 25 Nov 2022 16:55:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
+        id S229994AbiKZBtb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 25 Nov 2022 20:49:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiKYVzm (ORCPT
+        with ESMTP id S229733AbiKZBta (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 25 Nov 2022 16:55:42 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F8455CAC;
-        Fri, 25 Nov 2022 13:55:41 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id l11so7987748edb.4;
-        Fri, 25 Nov 2022 13:55:41 -0800 (PST)
+        Fri, 25 Nov 2022 20:49:30 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992412CE23;
+        Fri, 25 Nov 2022 17:49:29 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id a7-20020a056830008700b0066c82848060so3663336oto.4;
+        Fri, 25 Nov 2022 17:49:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=D3EDYbGccBK89yykxes9BQKaCfAxUWSmOZVPyYSYNP4=;
-        b=HW0RUCPUMjBLDO1TxAyw2BM+t22jEI0sTP6233lB+dAXLsWzsZYFkXRYkpOrQXnWEP
-         dyQgnwg8KFMCMlQQIPTk1hOYObv3To/VzmjzT7wv2cfQjtYf8r27A++EDccRDn1Y90Sv
-         8XFBcC18B6F/GlKYFzBr34ODmhTIKZRwUt1eNcl07WwRjG7mDOULGTz6pFuzSIgXHikx
-         og6NNgCfzlPbmGrpNcvwbfNFMBZHngQh5LTzaflitNv8wFH5xPrMF0LHXuOACoBaItZA
-         gP0vnA3+rMbT8VDL9UZzSxJEjDY6wo63azhqXJLVxeAFNurOBdKIpqyWDZ7BcyFDa2cw
-         SexQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=qrFJYNhe1eUR+cg2PLq9sf7qlUh16S1Iij0FFbWrKHU=;
+        b=Lu3daCAyy7EYi1IT7G3mGSnZlaiHzyFbgq9EUKYiYrcGgyWj9xuA0PZ/WwTL4Xu6VS
+         lqRv8mirC/+QyX1ZwWtL0of/HMFbhhrmxfEmaOIQq/RfhDL7fpfbqrm81+KFO0YZd80J
+         M2UY7BHsy6Lo0Fix8BkKhKA9UEWUXRa1fO3XlU5MuS3vYzy5xMgDOF0x/mAEG7SmwGwi
+         eh/z4R5CcSKH8LWrrvWzgRsQxmNuOrq3HBn0qHCS9RU0LYDC2+EOTrY/bKNVP1SDuXzE
+         Ux0mnsjQqjFqs5fghwkp3jJHBNlFOOOVsUQkXtttxiH6w9A5PvomyR0asbRYwAWGi8YF
+         Nahg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=D3EDYbGccBK89yykxes9BQKaCfAxUWSmOZVPyYSYNP4=;
-        b=qYNMOi5bwr7F/Ely6ITIFGzihZgYjCui0/4ghK3AIvjI7/O4+iEOKWS9SgQfJ8zqsk
-         AZQsupbpkwZBSEGuhJ5C93IqX819kjY56mBUlx1LBhOjghFZSyPD4jM42KM/VNtb7e4K
-         auiok2HYEsuSaD0RxvL8rpULV5/oobTATw9IQ0ySc7To5BJfvFmp+JTLuz7QIWfY60eQ
-         CogTfPRCVNnyTnovCPZOXnNPmtBNl57hPEmbcSyOHA9tB0rVmbJVYpX/GmF1WV/9WFdY
-         taU8eJ1HZ710HukyF5fPPR+nnmVHxwrKk7f2jz1Z5nea56Kgqyvifv4k1lLzRMNJhN5a
-         qS2Q==
-X-Gm-Message-State: ANoB5pmU/hJHT4jNiU+8afqTlAX+Isp/FFTu6N5xdH8wGr++RHm1YzcF
-        DfT6VIZ+oLS5K9JFpc+RwVZlHjjVd7E4SA==
-X-Google-Smtp-Source: AA0mqf4l5vaneNpIO321KGUaXFfMa/VazMYDj+chO79WirXmWnJ3kp1CnIm7BqmmX2Maf1ZYP4NUNg==
-X-Received: by 2002:a05:6402:1aca:b0:469:701b:588d with SMTP id ba10-20020a0564021aca00b00469701b588dmr19471780edb.384.1669413339594;
-        Fri, 25 Nov 2022 13:55:39 -0800 (PST)
-Received: from fedora.. ([87.116.166.89])
-        by smtp.gmail.com with ESMTPSA id l17-20020a1709063d3100b0077b2b0563f4sm2009764ejf.173.2022.11.25.13.55.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 13:55:39 -0800 (PST)
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     leonard.anderweit@gmail.com,
-        Aleksa Savic <savicaleksa83@gmail.com>,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        bh=qrFJYNhe1eUR+cg2PLq9sf7qlUh16S1Iij0FFbWrKHU=;
+        b=rKy3KecVDdHY45eTgojgjF67q4w4xyP3qjO2TZAUCqEpEZPvSK/gUMbMcQtmIA6l87
+         UIXtu7gbSmFLOeUCuVGjcpHcQ9SM8QWsYXYtISHhkKLAN7dEAtblEmFPLgA/OJ1BPKts
+         cT+RgWdblMX12DLCJO4dL2rKqbsfwJoFg04hwHpgPFhQm/JSjxXpOh2+FaXBkDsPhr1E
+         ltRCaoUSnja4w81J9qqqZZeJAT83XGVcYrsbLAgSe1eIk03w/t0qeagk0dHBMD0xvcZM
+         +DCF6/P1WZNW0Hgvw70I5hKFy7fMamLE6wbvh/0gm37GUdS36pHFEYEDtFrnU3nqWew7
+         6XvA==
+X-Gm-Message-State: ANoB5pnvrraf88M0aWDEYD2d7G36CrSrf8NZnZSqLKuNCCPgD9644sgO
+        dsXdvJa1eEnlc6veB3gUuRJSOmeZLjA=
+X-Google-Smtp-Source: AA0mqf7qzJnZCGRtUmx9b6Z8RAFQpFJaFhFSkj9lwX9+LwE5akFCrWjKU+XmA9GZ84oAAKagjA7R+g==
+X-Received: by 2002:a9d:5e9a:0:b0:661:dd09:fcc4 with SMTP id f26-20020a9d5e9a000000b00661dd09fcc4mr20733624otl.60.1669427368822;
+        Fri, 25 Nov 2022 17:49:28 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q1-20020a9d4b01000000b0066cc88749f8sm2251432otf.68.2022.11.25.17.49.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 17:49:28 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d9728160-001c-9e29-b195-0cbc82b45184@roeck-us.net>
+Date:   Fri, 25 Nov 2022 17:49:27 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for Quadro flow
+ sensor pulses
+Content-Language: en-US
+To:     Aleksa Savic <savicaleksa83@gmail.com>, linux-hwmon@vger.kernel.org
+Cc:     leonard.anderweit@gmail.com, Jack Doan <me@jackdoan.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (aquacomputer_d5next) Add support for Quadro flow sensor pulses
-Date:   Fri, 25 Nov 2022 22:55:15 +0100
-Message-Id: <20221125215515.31380-1-savicaleksa83@gmail.com>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221125215515.31380-1-savicaleksa83@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221125215515.31380-1-savicaleksa83@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for reading and writing flow sensor pulses value on
-the Aquacomputer Quadro. Implemented by Leonard Anderweit [1].
+On 11/25/22 13:55, Aleksa Savic wrote:
+> Add support for reading and writing flow sensor pulses value on
+> the Aquacomputer Quadro. Implemented by Leonard Anderweit [1].
+> 
+> [1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/45
+> 
+> Originally-from: Leonard Anderweit <leonard.anderweit@gmail.com>
+> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+> ---
+>   Documentation/hwmon/aquacomputer_d5next.rst |  3 +-
+>   drivers/hwmon/aquacomputer_d5next.c         | 68 ++++++++++++++++-----
+>   2 files changed, 55 insertions(+), 16 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
+> index 15226346434d..637bdbc8fcad 100644
+> --- a/Documentation/hwmon/aquacomputer_d5next.rst
+> +++ b/Documentation/hwmon/aquacomputer_d5next.rst
+> @@ -39,7 +39,7 @@ current.
+>   
+>   The Quadro exposes four physical and sixteen virtual temperature sensors, a flow
+>   sensor and four PWM controllable fans, along with their speed (in RPM), power,
+> -voltage and current.
+> +voltage and current. Flow sensor pulses are also available.
+>   
+>   The Farbwerk and Farbwerk 360 expose four temperature sensors. Additionally,
+>   sixteen virtual temperature sensors of the Farbwerk 360 are exposed.
+> @@ -64,6 +64,7 @@ Sysfs entries
+>   temp[1-20]_input Physical/virtual temperature sensors (in millidegrees Celsius)
+>   temp[1-4]_offset Temperature sensor correction offset (in millidegrees Celsius)
+>   fan[1-8]_input   Pump/fan speed (in RPM) / Flow speed (in dL/h)
+> +fan5_pulses      Quadro flow sensor pulses
+>   power[1-8]_input Pump/fan power (in micro Watts)
+>   in[0-7]_input    Pump/fan voltage (in milli Volts)
+>   curr[1-8]_input  Pump/fan current (in milli Amperes)
+> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+> index 49d3f9876fe8..77a3ac33d4ac 100644
+> --- a/drivers/hwmon/aquacomputer_d5next.c
+> +++ b/drivers/hwmon/aquacomputer_d5next.c
+> @@ -136,6 +136,7 @@ static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
+>   
+>   /* Control report offsets for the Quadro */
+>   #define QUADRO_TEMP_CTRL_OFFSET		0xA
+> +#define QUADRO_FLOW_PULSES_CTRL_OFFSET	0x6
+>   static u16 quadro_ctrl_fan_offsets[] = { 0x37, 0x8c, 0xe1, 0x136 }; /* Fan speed offsets (0-100%) */
+>   
+>   /* Specs of High Flow Next flow sensor */
+> @@ -303,6 +304,7 @@ struct aqc_data {
+>   	u16 temp_ctrl_offset;
+>   	u16 power_cycle_count_offset;
+>   	u8 flow_sensor_offset;
+> +	u8 flow_pulses_ctrl_offset;
+>   
+>   	/* General info, same across all devices */
+>   	u32 serial_number[2];
+> @@ -461,20 +463,32 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+>   		}
+>   		break;
+>   	case hwmon_fan:
+> -		switch (priv->kind) {
+> -		case highflownext:
+> -			/* Special case to support flow sensor, water quality and conductivity */
+> -			if (channel < 3)
+> -				return 0444;
+> -			break;
+> -		case quadro:
+> -			/* Special case to support flow sensor */
+> -			if (channel < priv->num_fans + 1)
+> -				return 0444;
+> +		switch (attr) {
+> +		case hwmon_fan_input:
+> +		case hwmon_fan_label:
+> +			switch (priv->kind) {
+> +			case highflownext:
+> +				/* Special case to support flow sensor, water quality
+> +				 * and conductivity
+> +				 */
+> +				if (channel < 3)
+> +					return 0444;
+> +				break;
+> +			case quadro:
+> +				/* Special case to support flow sensor */
+> +				if (channel < priv->num_fans + 1)
+> +					return 0444;
+> +				break;
+> +			default:
+> +				if (channel < priv->num_fans)
+> +					return 0444;
+> +				break;
+> +			}
+>   			break;
+> -		default:
+> -			if (channel < priv->num_fans)
+> -				return 0444;
+> +		case hwmon_fan_pulses:
+> +			/* Special case for Quadro flow sensor */
+> +			if (priv->kind == quadro && channel == priv->num_fans)
+> +				return 0644;
+>   			break;
 
-[1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/45
+I think "default:" is now missing here.
 
-Originally-from: Leonard Anderweit <leonard.anderweit@gmail.com>
-Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
----
- Documentation/hwmon/aquacomputer_d5next.rst |  3 +-
- drivers/hwmon/aquacomputer_d5next.c         | 68 ++++++++++++++++-----
- 2 files changed, 55 insertions(+), 16 deletions(-)
+Guenter
 
-diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
-index 15226346434d..637bdbc8fcad 100644
---- a/Documentation/hwmon/aquacomputer_d5next.rst
-+++ b/Documentation/hwmon/aquacomputer_d5next.rst
-@@ -39,7 +39,7 @@ current.
- 
- The Quadro exposes four physical and sixteen virtual temperature sensors, a flow
- sensor and four PWM controllable fans, along with their speed (in RPM), power,
--voltage and current.
-+voltage and current. Flow sensor pulses are also available.
- 
- The Farbwerk and Farbwerk 360 expose four temperature sensors. Additionally,
- sixteen virtual temperature sensors of the Farbwerk 360 are exposed.
-@@ -64,6 +64,7 @@ Sysfs entries
- temp[1-20]_input Physical/virtual temperature sensors (in millidegrees Celsius)
- temp[1-4]_offset Temperature sensor correction offset (in millidegrees Celsius)
- fan[1-8]_input   Pump/fan speed (in RPM) / Flow speed (in dL/h)
-+fan5_pulses      Quadro flow sensor pulses
- power[1-8]_input Pump/fan power (in micro Watts)
- in[0-7]_input    Pump/fan voltage (in milli Volts)
- curr[1-8]_input  Pump/fan current (in milli Amperes)
-diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-index 49d3f9876fe8..77a3ac33d4ac 100644
---- a/drivers/hwmon/aquacomputer_d5next.c
-+++ b/drivers/hwmon/aquacomputer_d5next.c
-@@ -136,6 +136,7 @@ static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
- 
- /* Control report offsets for the Quadro */
- #define QUADRO_TEMP_CTRL_OFFSET		0xA
-+#define QUADRO_FLOW_PULSES_CTRL_OFFSET	0x6
- static u16 quadro_ctrl_fan_offsets[] = { 0x37, 0x8c, 0xe1, 0x136 }; /* Fan speed offsets (0-100%) */
- 
- /* Specs of High Flow Next flow sensor */
-@@ -303,6 +304,7 @@ struct aqc_data {
- 	u16 temp_ctrl_offset;
- 	u16 power_cycle_count_offset;
- 	u8 flow_sensor_offset;
-+	u8 flow_pulses_ctrl_offset;
- 
- 	/* General info, same across all devices */
- 	u32 serial_number[2];
-@@ -461,20 +463,32 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
- 		}
- 		break;
- 	case hwmon_fan:
--		switch (priv->kind) {
--		case highflownext:
--			/* Special case to support flow sensor, water quality and conductivity */
--			if (channel < 3)
--				return 0444;
--			break;
--		case quadro:
--			/* Special case to support flow sensor */
--			if (channel < priv->num_fans + 1)
--				return 0444;
-+		switch (attr) {
-+		case hwmon_fan_input:
-+		case hwmon_fan_label:
-+			switch (priv->kind) {
-+			case highflownext:
-+				/* Special case to support flow sensor, water quality
-+				 * and conductivity
-+				 */
-+				if (channel < 3)
-+					return 0444;
-+				break;
-+			case quadro:
-+				/* Special case to support flow sensor */
-+				if (channel < priv->num_fans + 1)
-+					return 0444;
-+				break;
-+			default:
-+				if (channel < priv->num_fans)
-+					return 0444;
-+				break;
-+			}
- 			break;
--		default:
--			if (channel < priv->num_fans)
--				return 0444;
-+		case hwmon_fan_pulses:
-+			/* Special case for Quadro flow sensor */
-+			if (priv->kind == quadro && channel == priv->num_fans)
-+				return 0644;
- 			break;
- 		}
- 		break;
-@@ -552,7 +566,18 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 		}
- 		break;
- 	case hwmon_fan:
--		*val = priv->speed_input[channel];
-+		switch (attr) {
-+		case hwmon_fan_input:
-+			*val = priv->speed_input[channel];
-+			break;
-+		case hwmon_fan_pulses:
-+			ret = aqc_get_ctrl_val(priv, priv->flow_pulses_ctrl_offset, val);
-+			if (ret < 0)
-+				return ret;
-+			break;
-+		default:
-+			break;
-+		}
- 		break;
- 	case hwmon_power:
- 		*val = priv->power_input[channel];
-@@ -632,6 +657,18 @@ static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 			return -EOPNOTSUPP;
- 		}
- 		break;
-+	case hwmon_fan:
-+		switch (attr) {
-+		case hwmon_fan_pulses:
-+			val = clamp_val(val, 10, 1000);
-+			ret = aqc_set_ctrl_val(priv, priv->flow_pulses_ctrl_offset, val);
-+			if (ret < 0)
-+				return ret;
-+			break;
-+		default:
-+			break;
-+		}
-+		break;
- 	case hwmon_pwm:
- 		switch (attr) {
- 		case hwmon_pwm_input:
-@@ -691,7 +728,7 @@ static const struct hwmon_channel_info *aqc_info[] = {
- 			   HWMON_F_INPUT | HWMON_F_LABEL,
- 			   HWMON_F_INPUT | HWMON_F_LABEL,
- 			   HWMON_F_INPUT | HWMON_F_LABEL,
--			   HWMON_F_INPUT | HWMON_F_LABEL,
-+			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_PULSES,
- 			   HWMON_F_INPUT | HWMON_F_LABEL,
- 			   HWMON_F_INPUT | HWMON_F_LABEL,
- 			   HWMON_F_INPUT | HWMON_F_LABEL),
-@@ -1000,6 +1037,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		priv->buffer_size = QUADRO_CTRL_REPORT_SIZE;
- 
- 		priv->flow_sensor_offset = QUADRO_FLOW_SENSOR_OFFSET;
-+		priv->flow_pulses_ctrl_offset = QUADRO_FLOW_PULSES_CTRL_OFFSET;
- 		priv->power_cycle_count_offset = QUADRO_POWER_CYCLES;
- 
- 		priv->temp_label = label_temp_sensors;
--- 
-2.38.1
+>   		}
+>   		break;
+> @@ -552,7 +566,18 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>   		}
+>   		break;
+>   	case hwmon_fan:
+> -		*val = priv->speed_input[channel];
+> +		switch (attr) {
+> +		case hwmon_fan_input:
+> +			*val = priv->speed_input[channel];
+> +			break;
+> +		case hwmon_fan_pulses:
+> +			ret = aqc_get_ctrl_val(priv, priv->flow_pulses_ctrl_offset, val);
+> +			if (ret < 0)
+> +				return ret;
+> +			break;
+> +		default:
+> +			break;
+> +		}
+>   		break;
+>   	case hwmon_power:
+>   		*val = priv->power_input[channel];
+> @@ -632,6 +657,18 @@ static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>   			return -EOPNOTSUPP;
+>   		}
+>   		break;
+> +	case hwmon_fan:
+> +		switch (attr) {
+> +		case hwmon_fan_pulses:
+> +			val = clamp_val(val, 10, 1000);
+> +			ret = aqc_set_ctrl_val(priv, priv->flow_pulses_ctrl_offset, val);
+> +			if (ret < 0)
+> +				return ret;
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+>   	case hwmon_pwm:
+>   		switch (attr) {
+>   		case hwmon_pwm_input:
+> @@ -691,7 +728,7 @@ static const struct hwmon_channel_info *aqc_info[] = {
+>   			   HWMON_F_INPUT | HWMON_F_LABEL,
+>   			   HWMON_F_INPUT | HWMON_F_LABEL,
+>   			   HWMON_F_INPUT | HWMON_F_LABEL,
+> -			   HWMON_F_INPUT | HWMON_F_LABEL,
+> +			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_PULSES,
+>   			   HWMON_F_INPUT | HWMON_F_LABEL,
+>   			   HWMON_F_INPUT | HWMON_F_LABEL,
+>   			   HWMON_F_INPUT | HWMON_F_LABEL),
+> @@ -1000,6 +1037,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>   		priv->buffer_size = QUADRO_CTRL_REPORT_SIZE;
+>   
+>   		priv->flow_sensor_offset = QUADRO_FLOW_SENSOR_OFFSET;
+> +		priv->flow_pulses_ctrl_offset = QUADRO_FLOW_PULSES_CTRL_OFFSET;
+>   		priv->power_cycle_count_offset = QUADRO_POWER_CYCLES;
+>   
+>   		priv->temp_label = label_temp_sensors;
 
