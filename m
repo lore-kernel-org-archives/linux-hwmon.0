@@ -2,141 +2,206 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04980C43217
-	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Nov 2022 11:41:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7AF3C4167B
+	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Nov 2022 14:17:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiKZLl0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 26 Nov 2022 06:41:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
+        id S229450AbiKZORu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 26 Nov 2022 09:17:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiKZLlZ (ORCPT
+        with ESMTP id S229464AbiKZORt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 26 Nov 2022 06:41:25 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E3D1A20E
-        for <linux-hwmon@vger.kernel.org>; Sat, 26 Nov 2022 03:41:25 -0800 (PST)
+        Sat, 26 Nov 2022 09:17:49 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF17D12601;
+        Sat, 26 Nov 2022 06:17:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669462885; x=1700998885;
-  h=date:from:to:cc:subject:message-id:mime-version:
+  t=1669472267; x=1701008267;
+  h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=Xyy4jxLXi0m2kpnkMGgDAaoOAWeiKQSIPUhoI62fymQ=;
-  b=g48jLJbQP3bsiBKW2IFk+0Rt3PDtzpPQvZdOLd0xybk9vF9NMk+1HYMO
-   rk7Vl8ECO4S6ljE7ii0TicX+YN0ee5pmir+THr9eMCmUr1R8yv1D58yFC
-   tOwJAmqd9JF6jSl9f+1FAuUNbO/MbaBMx5y4iFbKM8lPkPsY0Q82F+U/4
-   CgkmqsBkb/RwkdYk2oKNBZa2Uy1zZiUvH7dHoLOM1NBlkpvSf05wqC3Sf
-   h48DPedqZXjztCxtf2QnGLV13wqIEm/3vB8DY5Ie0tedVhR7NFLvIPisU
-   t27bQmOjo3kcMVwbc/l2wb0mvscOQ62jS9MyAxXnRnBRBLjhZv2R80SPQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="341497455"
+  bh=MQc84tABIklxiwjd/JnPm2AoEMxnQw6t0O2sj0eZ5D4=;
+  b=VqUTw/hJzygvYM2uqZxoRAkXgP9ajRa/2tM1WyOBIjw8dyKIoUnVqPEm
+   GxbtRruMnjXjgDU6ulBkeDOTl1drUPKwYgwXRkeGemcV9g8BeQrdSFue9
+   NjNVxYeqAY56xwPheDqa7g/ZldrUn/V6J8W4ykqUk+C+ncrQij3RITJ19
+   5J612ePgqew1HSjbJugLLr4N6lUeGLJ6+waKxSVy+AmUG21GE70Mo106+
+   oEYuTDVjxYE5ma8wJ8EM55YLe/IjYLH8X2y/Yk4cpsW620rXAGvDZMmKe
+   m/COFIB0O+jkWZT2hXP77kDlmzJ/k29Uu9Lr01rA98e+l4P+IEMr55GZt
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="315755383"
 X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
-   d="scan'208";a="341497455"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2022 03:41:24 -0800
+   d="scan'208";a="315755383"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2022 06:17:47 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="785148353"
+X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="971800593"
 X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
-   d="scan'208";a="785148353"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 26 Nov 2022 03:41:23 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oytYh-0006GH-0s;
-        Sat, 26 Nov 2022 11:41:23 +0000
-Date:   Sat, 26 Nov 2022 19:41:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- 2745705ee6aa2bb17c58768edc3906c931b7c618
-Message-ID: <6381fb55.9PORoPsPwerz9VBV%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="971800593"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Nov 2022 06:17:44 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 007F710E; Sat, 26 Nov 2022 16:18:10 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/5] rtc: isl12022: Get rid of unneeded private struct isl12022
+Date:   Sat, 26 Nov 2022 16:18:02 +0200
+Message-Id: <20221126141806.62205-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: 2745705ee6aa2bb17c58768edc3906c931b7c618  hwmon: (asus-ec-sensors) Add checks for devm_kcalloc
+First of all, the struct rtc_device pointer is kept in the managed
+resources, no need to keep it outside (no users in the driver).
 
-elapsed time: 1112m
+Second, replace private struct isl12022 with a regmap.
 
-configs tested: 64
-configs skipped: 2
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/rtc/rtc-isl12022.c | 56 ++++++++++++++------------------------
+ 1 file changed, 21 insertions(+), 35 deletions(-)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                  randconfig-r043-20221124
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-s390                                defconfig
-sh                               allmodconfig
-s390                             allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-ia64                             allmodconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-i386                          randconfig-a005
-i386                             allyesconfig
-i386                                defconfig
-x86_64                            allnoconfig
-m68k                            q40_defconfig
-arc                           tb10x_defconfig
-arm                           tegra_defconfig
-sparc                            alldefconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20221124
-hexagon              randconfig-r045-20221124
-s390                 randconfig-r044-20221124
-riscv                randconfig-r042-20221124
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-x86_64                        randconfig-a005
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-k001
-
+diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
+index a3b0de3393f5..44058fa27277 100644
+--- a/drivers/rtc/rtc-isl12022.c
++++ b/drivers/rtc/rtc-isl12022.c
+@@ -46,11 +46,6 @@
+ 
+ static struct i2c_driver isl12022_driver;
+ 
+-struct isl12022 {
+-	struct rtc_device *rtc;
+-	struct regmap *regmap;
+-};
+-
+ static umode_t isl12022_hwmon_is_visible(const void *data,
+ 					 enum hwmon_sensor_types type,
+ 					 u32 attr, int channel)
+@@ -67,8 +62,7 @@ static umode_t isl12022_hwmon_is_visible(const void *data,
+  */
+ static int isl12022_hwmon_read_temp(struct device *dev, long *mC)
+ {
+-	struct isl12022 *isl12022 = dev_get_drvdata(dev);
+-	struct regmap *regmap = isl12022->regmap;
++	struct regmap *regmap = dev_get_drvdata(dev);
+ 	u8 temp_buf[2];
+ 	int temp, ret;
+ 
+@@ -115,23 +109,21 @@ static const struct hwmon_chip_info isl12022_hwmon_chip_info = {
+ 
+ static void isl12022_hwmon_register(struct device *dev)
+ {
+-	struct isl12022 *isl12022;
++	struct regmap *regmap = dev_get_drvdata(dev);
+ 	struct device *hwmon;
+ 	int ret;
+ 
+ 	if (!IS_REACHABLE(CONFIG_HWMON))
+ 		return;
+ 
+-	isl12022 = dev_get_drvdata(dev);
+-
+-	ret = regmap_update_bits(isl12022->regmap, ISL12022_REG_BETA,
++	ret = regmap_update_bits(regmap, ISL12022_REG_BETA,
+ 				 ISL12022_BETA_TSE, ISL12022_BETA_TSE);
+ 	if (ret) {
+ 		dev_warn(dev, "unable to enable temperature sensor\n");
+ 		return;
+ 	}
+ 
+-	hwmon = devm_hwmon_device_register_with_info(dev, "isl12022", isl12022,
++	hwmon = devm_hwmon_device_register_with_info(dev, "isl12022", regmap,
+ 						     &isl12022_hwmon_chip_info,
+ 						     NULL);
+ 	if (IS_ERR(hwmon))
+@@ -144,8 +136,7 @@ static void isl12022_hwmon_register(struct device *dev)
+  */
+ static int isl12022_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ {
+-	struct isl12022 *isl12022 = dev_get_drvdata(dev);
+-	struct regmap *regmap = isl12022->regmap;
++	struct regmap *regmap = dev_get_drvdata(dev);
+ 	uint8_t buf[ISL12022_REG_INT + 1];
+ 	int ret;
+ 
+@@ -190,8 +181,7 @@ static int isl12022_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 
+ static int isl12022_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ {
+-	struct isl12022 *isl12022 = dev_get_drvdata(dev);
+-	struct regmap *regmap = isl12022->regmap;
++	struct regmap *regmap = dev_get_drvdata(dev);
+ 	int ret;
+ 	uint8_t buf[ISL12022_REG_DW + 1];
+ 
+@@ -218,8 +208,7 @@ static int isl12022_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 
+ 	buf[ISL12022_REG_DW] = tm->tm_wday & 0x07;
+ 
+-	return regmap_bulk_write(isl12022->regmap, ISL12022_REG_SC,
+-				 buf, sizeof(buf));
++	return regmap_bulk_write(regmap, ISL12022_REG_SC, buf, sizeof(buf));
+ }
+ 
+ static const struct rtc_class_ops isl12022_rtc_ops = {
+@@ -235,34 +224,31 @@ static const struct regmap_config regmap_config = {
+ 
+ static int isl12022_probe(struct i2c_client *client)
+ {
+-	struct isl12022 *isl12022;
++	struct rtc_device *rtc;
++	struct regmap *regmap;
+ 
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+ 		return -ENODEV;
+ 
+-	isl12022 = devm_kzalloc(&client->dev, sizeof(struct isl12022),
+-				GFP_KERNEL);
+-	if (!isl12022)
+-		return -ENOMEM;
+-	dev_set_drvdata(&client->dev, isl12022);
+-
+-	isl12022->regmap = devm_regmap_init_i2c(client, &regmap_config);
+-	if (IS_ERR(isl12022->regmap)) {
++	regmap = devm_regmap_init_i2c(client, &regmap_config);
++	if (IS_ERR(regmap)) {
+ 		dev_err(&client->dev, "regmap allocation failed\n");
+-		return PTR_ERR(isl12022->regmap);
++		return PTR_ERR(regmap);
+ 	}
+ 
++	dev_set_drvdata(&client->dev, regmap);
++
+ 	isl12022_hwmon_register(&client->dev);
+ 
+-	isl12022->rtc = devm_rtc_allocate_device(&client->dev);
+-	if (IS_ERR(isl12022->rtc))
+-		return PTR_ERR(isl12022->rtc);
++	rtc = devm_rtc_allocate_device(&client->dev);
++	if (IS_ERR(rtc))
++		return PTR_ERR(rtc);
+ 
+-	isl12022->rtc->ops = &isl12022_rtc_ops;
+-	isl12022->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+-	isl12022->rtc->range_max = RTC_TIMESTAMP_END_2099;
++	rtc->ops = &isl12022_rtc_ops;
++	rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
++	rtc->range_max = RTC_TIMESTAMP_END_2099;
+ 
+-	return devm_rtc_register_device(isl12022->rtc);
++	return devm_rtc_register_device(rtc);
+ }
+ 
+ #ifdef CONFIG_OF
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
