@@ -2,105 +2,72 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1CA0C43217
-	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Nov 2022 15:01:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D36FC43217
+	for <linux-hwmon@archiver.kernel.org>; Sun, 27 Nov 2022 17:53:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbiK0PBz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 27 Nov 2022 10:01:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
+        id S229526AbiK0RxP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 27 Nov 2022 12:53:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiK0PBz (ORCPT
+        with ESMTP id S229450AbiK0RxO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 27 Nov 2022 10:01:55 -0500
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9F7F5BF;
-        Sun, 27 Nov 2022 07:01:51 -0800 (PST)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-14279410bf4so10362089fac.8;
-        Sun, 27 Nov 2022 07:01:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=T1gR/seHUMb9PSx4Pa55lmn5LTDZiyjov4uQ+3anCp0=;
-        b=JZI6No2hJG88G8Y1lJbIfK5fat6gphCrXyljlK59186mYUHvDEDxJzR6/nT9sy+tYj
-         PfSXihZRvJBEggYsHX6XgaJPF10bUhfwjYJ4qMg/CBs9NRdFs9OzQnEYkblwvMj2/d3i
-         sdpWdRDh6FmEVoYu+COClY+ZhIKbnGWQ2+bZV0BQnmrUX31Ota2joZYp0OW/8QVY60mb
-         iCusRBJqdya9C25E+JfzbQbyJNsjlwbX3fa9oPnBcC4Oyqfdye0lj+iytqJROPchwyqb
-         QFEiwtJGKz1IwVxb38NNP/FYcqZJ/nQLfLEoGSEgxZ0hG7xgxOFGyotBAYL3qSdU0lVC
-         paDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T1gR/seHUMb9PSx4Pa55lmn5LTDZiyjov4uQ+3anCp0=;
-        b=C/S2dxAJOuWC4Uajns3STPgIZe4+8oNdlKMqN64yuerFhNN2IeHHsEqoEFif54Y/zM
-         82377/JWs8IbU8oapPpFZuz/15NdoxdLajNkZcmsPNVF5A9I6Pjn7Fwf7izOE5wM7V49
-         aAETNYf7ARuzsvNj3GjHrYFLq1pvocP0WvApTXuDO6/zFH/UsxulxCO3D2M94Z7QUkWJ
-         onzS0qLlg42ip83D5QWp4u7v7am2bdxdMKrMpOZ25VMnEP/SIS4iOlOP4aCzqDnSK4Cz
-         jOLoM9B17syOZIkmgPJrApc/n6jPv6ujwFr9cRbmfXjTUd48eHwAxj4C/FMa1IucEKge
-         +SKw==
-X-Gm-Message-State: ANoB5pnK+9+Cdv3W3lkG0atICiBIVsq8D/KfrDizt3Eg7raPyoHBs46I
-        tdqr0lIvIqJyTuxcK/oVVE0=
-X-Google-Smtp-Source: AA0mqf7I0yxRPOHKdhNXaaYmXSC6xFadCu26Sat25jRhcuZGlvooff4WK8nmR+96/QWK61h+Un9XKg==
-X-Received: by 2002:a05:6870:6a92:b0:136:6256:a207 with SMTP id mv18-20020a0568706a9200b001366256a207mr25902292oab.154.1669561309413;
-        Sun, 27 Nov 2022 07:01:49 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r19-20020a056870581300b001438e8f097asm1913420oap.58.2022.11.27.07.01.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Nov 2022 07:01:48 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e3017eda-3764-4ff0-71fc-0f33f5ad8085@roeck-us.net>
-Date:   Sun, 27 Nov 2022 07:01:47 -0800
+        Sun, 27 Nov 2022 12:53:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E917CD2
+        for <linux-hwmon@vger.kernel.org>; Sun, 27 Nov 2022 09:53:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E875B80B3C
+        for <linux-hwmon@vger.kernel.org>; Sun, 27 Nov 2022 17:53:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98CDDC43470
+        for <linux-hwmon@vger.kernel.org>; Sun, 27 Nov 2022 17:53:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669571590;
+        bh=k9itY0/RfZYnglpECnzcgbKWaM08ZpZSr20eIcSCy2I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SZ0yQG4wH1vNSlosySQdeKJTP0YfPed7u4+gKdyljvFwPCRrrbqZjhzIRnhZcinXy
+         UcTpy1aXfV4hDzuo+4NLSZNzDse9K3cotMhNotPEXRZoVnyDpASilLw0sQSdM5lves
+         qfTHMng0zFaqevilq21lqHpVbe/kVLytScNRgMWt1wAlvUqkdKdel1o6GvvCjwPJso
+         NpRn+ZGoly+mYGrnvADunrajrIXsBvuLD0ODKQe9EijD5fZimq4bQByYLycgVVwdvB
+         VOSTd3zuSdYi3f5bIoPRjPTzGpMQ/QqtNyBnHIfOJXr+zieuEnHDA3oHNdCPFSEJnF
+         z6TkhxCWEQcPw==
+Received: by mail-ua1-f45.google.com with SMTP id y15so3124058uan.6
+        for <linux-hwmon@vger.kernel.org>; Sun, 27 Nov 2022 09:53:10 -0800 (PST)
+X-Gm-Message-State: ANoB5pnQqzKRCKhGgzAWeimEF5h8Rkko52lI9RFEqxUJj1pcorNZfiJ9
+        uhBLO1aF3vI3o7B7rtZ67/xhTRRpaCkx0tUaWw==
+X-Google-Smtp-Source: AA0mqf60WBEZo0YhfVdsddPuMpmlSJQ/DCSkiLVccmOkZSjggy6M6BjOoGgVKdvbxedmkyq+ftRnlZc0PHTxFTkIv8E=
+X-Received: by 2002:ab0:1006:0:b0:419:70a:90cb with SMTP id
+ f6-20020ab01006000000b00419070a90cbmr7253502uab.36.1669571589555; Sun, 27 Nov
+ 2022 09:53:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] hwmon: (hih6130) Modify mismatched function name
-Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20221127134351.87394-1-jiapeng.chong@linux.alibaba.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20221127134351.87394-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20221126171711.1078309-1-saravanan@linumiz.com>
+In-Reply-To: <20221126171711.1078309-1-saravanan@linumiz.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Sun, 27 Nov 2022 11:53:01 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKFHJ3rLbfiu6xv3XdYYBEPAqTXGXq_hRE2R6G8-ouxMQ@mail.gmail.com>
+Message-ID: <CAL_JsqKFHJ3rLbfiu6xv3XdYYBEPAqTXGXq_hRE2R6G8-ouxMQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] dt-bindings: hwmon/pmbus: Add mps,mpq7932
+ power-management IC
+To:     Saravanan Sekar <saravanan@linumiz.com>
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        krzysztof.kozlowski+dt@linaro.org, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/27/22 05:43, Jiapeng Chong wrote:
-> No functional modification involved.
-> 
-> drivers/hwmon/hih6130.c:185: warning: expecting prototype for hih6130_show_humidity(). Prototype was for hih6130_humidity_show() instead.
-> 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3264
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-
-NACK. We don't start changing function names because some robot
-thinks we should. Please do not submit such patches against the hwmon
-or watchdog subsystems.
-
-Guenter
-
+On Sat, Nov 26, 2022 at 11:17 AM Saravanan Sekar <saravanan@linumiz.com> wrote:
+>
+> Add bindings for mps,mpq7932 power-management IC
+>
+> Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
 > ---
->   drivers/hwmon/hih6130.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/hih6130.c b/drivers/hwmon/hih6130.c
-> index d9394e19fea8..764e6e185d98 100644
-> --- a/drivers/hwmon/hih6130.c
-> +++ b/drivers/hwmon/hih6130.c
-> @@ -172,7 +172,7 @@ static ssize_t hih6130_temperature_show(struct device *dev,
->   }
->   
->   /**
-> - * hih6130_show_humidity() - show humidity measurement value in sysfs
-> + * hih6130_humidity_show() - show humidity measurement value in sysfs
->    * @dev: device
->    * @attr: device attribute
->    * @buf: sysfs buffer (PAGE_SIZE) where measurement values are written to
+>  .../bindings/hwmon/pmbus/mps,mpq7932.yaml     | 69 +++++++++++++++++++
+>  1 file changed, 69 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq7932.yaml
 
+Use get_maintainers.pl and send patches to the right lists. DT list is
+missing so no checks run and it's not in the review queue (Patchwork).
+
+Rob
