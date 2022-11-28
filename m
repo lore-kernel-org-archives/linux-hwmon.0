@@ -2,163 +2,133 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5BD7C43217
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Nov 2022 22:41:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D27D9C43217
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Nov 2022 23:04:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbiK1Wlj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Nov 2022 17:41:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
+        id S234480AbiK1XEZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Nov 2022 18:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233219AbiK1Wli (ORCPT
+        with ESMTP id S234279AbiK1XEZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Nov 2022 17:41:38 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0452727B0D;
-        Mon, 28 Nov 2022 14:41:37 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id cn2-20020a056830658200b0066c74617e3dso7976828otb.2;
-        Mon, 28 Nov 2022 14:41:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ga2AFPqf+gTDBYqsAVJkXfVAY13WZXbPsy5HJCs9BCM=;
-        b=DuHXtFZ5/JSWlTV2FmPPeGDXGNAul/RqH5GkQfyvIELEFPiZeQAeeI1pA3Kkag+EnP
-         cinzX5AJ26WDlEz26hHmZVOiN2ma9DTaVtShatmA+Jld2oEql/33tFKQf389zz3kP7j6
-         VTS34QGwSJdkjn8S/VpZ21f08d6NnL3s8CDhDfaBDwy6bc2Dp13qVEyk0lEViHSMQJI8
-         YH55QuYGztrgGSdDU0VPllqcNedqEWjae6tI4cln7wy6kWTzVddiLQohxAUPQLPOasaa
-         +TDGBY5ke5J8fkgkJ7La+AgV/fEh7dXUdR+AP1LUaOjZwIb8tFWR3Oi28IivLNL26e66
-         tTfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ga2AFPqf+gTDBYqsAVJkXfVAY13WZXbPsy5HJCs9BCM=;
-        b=7YgRznci4Ey1+0MHiFI1cSJVCfPvUaqWyjp7Rt3MVaznXABOfTncbsfk8qQ/pPZ52d
-         hCMrcu6zZDqD1twQL73Zyeo6zvJRvdyh/J9zITq+m9NySwUrAIHImeyhPGeRWzlZBCdW
-         wZEJUPdh9QOm2LSZLciP2JNtYNcT5+TpFsd8a9ZFi44Z/WJLzWHIy5h8YFLK7Pt/y9p3
-         z02+LWex+BMqiJA8i9aBPGirXZt6PY/lxIL91BxRvK9x+W3gHrMMAqdc5g84745ZZUKu
-         /HBO2TrthUdTKDqXonGHEtsVK3Ktk8txcl/FTDUFZ25EvZeu00FXdvDN04FENcyrgroC
-         CkMg==
-X-Gm-Message-State: ANoB5pm160SmqV7hvgYrrnTHAl2hyblxem0K77tjdnFPTn2GWx6vtRhl
-        LrcY4sDwPCQeIiMXe8BBBw+YJZc8Yis=
-X-Google-Smtp-Source: AA0mqf5drTj3QQbMC/lKkn72aMWXQ9uySToimtMI7BoD5FyY9Y7V5m7+dZNYpo7ogWeICF4ccOs/Bw==
-X-Received: by 2002:a9d:6d93:0:b0:66c:7306:1d57 with SMTP id x19-20020a9d6d93000000b0066c73061d57mr27182652otp.134.1669675296300;
-        Mon, 28 Nov 2022 14:41:36 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k9-20020a4a4309000000b004956ee06cadsm4799000ooj.43.2022.11.28.14.41.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 14:41:35 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <bbba5774-b886-df08-1263-7e3489b84a8e@roeck-us.net>
-Date:   Mon, 28 Nov 2022 14:41:34 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org
-References: <20221128174715.1969957-1-Naresh.Solanki@9elements.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 1/3] hwmon: (pmbus/core): Update regulator flag map
-In-Reply-To: <20221128174715.1969957-1-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Mon, 28 Nov 2022 18:04:25 -0500
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678612B249;
+        Mon, 28 Nov 2022 15:04:24 -0800 (PST)
+Received: from pps.filterd (m0150244.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASMCR1k017358;
+        Mon, 28 Nov 2022 23:03:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id; s=pps0720;
+ bh=KfcFH3MOy6fuzSNAw8UyiHiM41rjSKFf8+hOai5NNV4=;
+ b=Dq0Zb0m+zWg7bSkvXYk51y3nJNSWXjT9sEZz0jbxedgBK7HKFkxYb7P9HC1edvi7/kMm
+ cwwWmRvCtN6CIW9f4oHzpRMDjrRCbD9DIYOEuz1Ec77DTvxjUcKuH0O2BFx6NA7wMuaw
+ N9Z8Ku4el4seR7c2qgmY5GPT4HTxgKR6WslUt33bgHR++lYPBS1VBoN7z9oZlLKBvnvF
+ KNbaUayVQN2p+QQezQqQax5/m4RIsC09T9wHQyC0VNfwN0HOAjxvYqLYFLlUY7AEBJdI
+ M5jCNaGhHgKeW0Iofm9pDokJNdKfZPwuFjA1M7AdoqKAxDsDCkhi93NTJQHiiSEkZE5f +w== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3m4x6av7pa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 23:03:49 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id DD7B0806B7E;
+        Mon, 28 Nov 2022 23:03:47 +0000 (UTC)
+Received: from hpe.com (unknown [16.231.227.36])
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 9181D806133;
+        Mon, 28 Nov 2022 23:03:46 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com,
+        nick.hawkins@hpe.com, corbet@lwn.net, linux@armlinux.org.uk,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 0/6] ARM: Add GXP Fan and SPI controllers
+Date:   Mon, 28 Nov 2022 17:02:13 -0600
+Message-Id: <20221128230219.39537-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-GUID: 2rkTC8pkTepI9rsMCROewBBMLXnSj-Y5
+X-Proofpoint-ORIG-GUID: 2rkTC8pkTepI9rsMCROewBBMLXnSj-Y5
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-28_17,2022-11-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ adultscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211280166
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/28/22 09:47, Naresh Solanki wrote:
-> Add regulator flag map for PMBUS status byte & status input.
-> 
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-You are adding a lot of input errors here. The regulator documentation
-only covers output errors. I am not sure if this set of changes is
-really appropriate. You'll have to make a much better case for those changes;
-from what I can see they are all controversial and were originally left out
-on purpose.
+The GXP SoC can support up to 16 fans through the interface provided by
+the CPLD. The fans speeds are controlled via a pwm value 0-255. The fans
+are also capable of reporting if they have failed to the CPLD which in
+turn reports the status to the GXP SoC. Based on previous feedback the
+registers required for fan control have been regmaped individualy to fan
+driver. Specifically these registers are the function 2 registers and the
+programmable logic registers from the CPLD. Additionally in this patchset
+there is support for the SPI driver which already exists as spi-gxp.c in
+the SPI driver.
 
-> ---
->   drivers/hwmon/pmbus/pmbus_core.c | 30 ++++++++++++++++++++++--------
->   1 file changed, 22 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 95e95783972a..f5caceaaef2a 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2752,6 +2752,15 @@ struct pmbus_regulator_status_category {
->   
->   static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
->   	{
-> +		.func = -1,
+---
 
-This would need a comment. I don't really see the benefit over the original
-code.
+Changes since v1:
 
-> +		.reg = PMBUS_STATUS_BYTE,
-> +		.bits = (const struct pmbus_regulator_status_assoc[]) {
-> +			{ PB_STATUS_IOUT_OC,   REGULATOR_ERROR_OVER_CURRENT },
-> +			{ PB_STATUS_VOUT_OV,   REGULATOR_ERROR_REGULATION_OUT },
-> +			{ PB_STATUS_VIN_UV,    REGULATOR_ERROR_UNDER_VOLTAGE },
-> +			{ },
-> +		},
-> +	}, {
->   		.func = PMBUS_HAVE_STATUS_VOUT,
->   		.reg = PMBUS_STATUS_VOUT,
->   		.bits = (const struct pmbus_regulator_status_assoc[]) {
-> @@ -2768,6 +2777,7 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
->   			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
->   			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
->   			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
-> +			{ PB_POUT_OP_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
+*Renamed fn2reg to fn2 in dtsi file and documentation
+*Renamed plreg to pl in dtsi file and documentation
+*Renamed fanctrl to fan-controller in dtsi file and documentation
+*Adjusted base register range for fan ctrl in dtsi
+*Changed commit description on fan-ctrl device-tree binding
+*Changed register description on fan-ctrl device-tree binding
+*Changed number of supported fans from 16 to 8 in driver code and
+ documentation
+*Modified commit description of fan code
+*Removed support for fan[0-15]_input
+*Removed PWM defines in driver code
+*Added gxp-fan-ctrl to hwmon's index.rst
+*Removed mutex in driver code
+*Added fan_enable support in fan code and documentation
+*Fixed comment in driver code presents -> present
+*Removed unecessary include files in fan code
+*Added comments to describe what power state is and
+ calculations for accessing plreg in fan code
+*Removed use of variable offsets in fan code
+*Fixed GPL header in fan code
+*Changed module description for fan controller
+*Added kfree in case of failure to initialize driver
+*Added missing yaml file to MAINTAINERS
 
-OP_FAULT (power fault) and over current are really not the same thing.
+Nick Hawkins (6):
+  hwmon: (gxp-fan-ctrl) Add GXP fan controller
+  ABI: sysfs-class-hwmon: add a description for fanY_fault
+  dt-bindings: hwmon: Add hpe,gxp-fan-ctrl
+  ARM: dts: add GXP Support for fans and SPI
+  ARM: multi_v7_defconfig: Add GXP Fan and SPI support
+  MAINTAINERS: add gxp fan controller and documents
 
->   			{ },
->   		},
->   	}, {
-> @@ -2778,6 +2788,18 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
->   			{ PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
->   			{ },
->   		},
-> +	}, {
-> +		.func = PMBUS_HAVE_STATUS_INPUT,
-> +		.reg = PMBUS_STATUS_INPUT,
-> +		.bits = (const struct pmbus_regulator_status_assoc[]) {
-> +			{ PB_IIN_OC_FAULT,       REGULATOR_ERROR_OVER_CURRENT },
-> +			{ PB_IIN_OC_WARNING,     REGULATOR_ERROR_OVER_CURRENT_WARN },
-> +			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
-> +			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
-> +			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
-> +			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_OVER_VOLTAGE_WARN },
+ Documentation/ABI/testing/sysfs-class-hwmon   |   9 +
+ .../bindings/hwmon/hpe,gxp-fan-ctrl.yaml      |  41 +++
+ Documentation/hwmon/gxp-fan-ctrl.rst          |  28 ++
+ Documentation/hwmon/index.rst                 |   1 +
+ MAINTAINERS                                   |   3 +
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      |  58 ++++
+ arch/arm/boot/dts/hpe-gxp.dtsi                |  64 ++--
+ arch/arm/configs/multi_v7_defconfig           |   2 +
+ drivers/hwmon/Kconfig                         |   9 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/gxp-fan-ctrl.c                  | 305 ++++++++++++++++++
+ 11 files changed, 502 insertions(+), 19 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
+ create mode 100644 Documentation/hwmon/gxp-fan-ctrl.rst
+ create mode 100644 drivers/hwmon/gxp-fan-ctrl.c
 
-fault -> warning ? Shouldn't this be REGULATOR_ERROR_FAIL (Regulator
-output has failed) ?
-
-> +			{ },
-> +		},
->   	},
->   };
->   
-> @@ -2834,14 +2856,6 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->   		if (status & PB_STATUS_POWER_GOOD_N)
->   			*flags |= REGULATOR_ERROR_REGULATION_OUT;
->   	}
-> -	/*
-> -	 * Unlike most other status bits, PB_STATUS_{IOUT_OC,VOUT_OV} are
-> -	 * defined strictly as fault indicators (not warnings).
-> -	 */
-> -	if (status & PB_STATUS_IOUT_OC)
-> -		*flags |= REGULATOR_ERROR_OVER_CURRENT;
-> -	if (status & PB_STATUS_VOUT_OV)
-> -		*flags |= REGULATOR_ERROR_REGULATION_OUT;
->   
->   	/*
->   	 * If we haven't discovered any thermal faults or warnings via
-> 
-> base-commit: 9494c53e1389b120ba461899207ac8a3aab2632c
+-- 
+2.17.1
 
