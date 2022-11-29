@@ -2,109 +2,150 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29B9AC4708A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 18:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A14C0C4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 18:57:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235761AbiK2S0f (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Nov 2022 13:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
+        id S236084AbiK2S5C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Nov 2022 13:57:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235885AbiK2S0c (ORCPT
+        with ESMTP id S236294AbiK2S4p (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Nov 2022 13:26:32 -0500
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4307C627C3;
-        Tue, 29 Nov 2022 10:26:31 -0800 (PST)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-13bd2aea61bso18146112fac.0;
-        Tue, 29 Nov 2022 10:26:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=0SKtbTyrcsLd7ib4BwIBICfnm5xqcJzzrg4yk4WZVbs=;
-        b=qOFB6zNhyXBlu7D3vKW/9dqlM+E5XOJ0erfcx4Ps5eASzVnoxE/RpZ244vR7KzmfEK
-         29M0/jRHKgYzwzXg58Ax+32PVMWJFWAuKl740yrdT/77PCuKzV6j2nJqgTu4TPe5/FVE
-         1Dxyun5Zb3iD4dTCQ+465AywoXoW9mFBjxp7eOv9nqsoAsYhuj6ZTyEzF4OYgs1GF3Xh
-         JqQHqZeo4DtSVXD0fruw1P/89CmgdR2OvhWLqoVvNTfN0P+8iustIvygjqo4vVzwhG+h
-         dtkzguR+oruaFzpET36ysLNZnJGyCF0ZXcJKn7T6vNXQU8KcvOGJZLSGmkWJ2o1arbUN
-         5Bkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0SKtbTyrcsLd7ib4BwIBICfnm5xqcJzzrg4yk4WZVbs=;
-        b=IVZW6gHJDlFc5QzpGf9Xi2GwTv40uk+WDO2Y+bIGzzr6Q3T6tJ2Z4LMqYQ3BjBiRBx
-         q1m44qLhLdyzgSK6LFmtvqRqZWydk+ZLCqYL/UDwZ4nSfjWAXiJjjCkKRGuTr1vQSfof
-         kCR02kMDLewWwHz+8/irapKX5nHP85CV8pZGajHwpViCRytCOMyi46HcR1Ai5hHJHymQ
-         e9VyTnN1XZ6A9KL5W+sJwk5wfY279HpZfSPm5eikhFwU7Qg1zj1/85R5VEaHDfK3c8ZU
-         AevBiIyBmyBDcPQOaa2KuY51TZijbZsgLgLGqUBMRCuVYvgyaNIgl58bN8qEPW/JhED0
-         tO2Q==
-X-Gm-Message-State: ANoB5pnef7sRL7TX5URaL4CDBK3xLWiJO1Z2aWPQwhT7zTdOXQ+5Dcte
-        A1cf4274+cdiMwgQUBBcX5U=
-X-Google-Smtp-Source: AA0mqf7pKujXUaAO+DZaepplUOaXjel7eKL7zhvuG5jR3cQhQbUwctGuf/PFl/tDqsFNOv0GQug7iA==
-X-Received: by 2002:a05:6870:6d0d:b0:13c:8028:cbec with SMTP id mw13-20020a0568706d0d00b0013c8028cbecmr20863458oab.33.1669746390642;
-        Tue, 29 Nov 2022 10:26:30 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l16-20020a05683004b000b00662228a27d3sm6240310otd.57.2022.11.29.10.26.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 10:26:30 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4fb6abe0-a68e-f391-5111-dab139891837@roeck-us.net>
-Date:   Tue, 29 Nov 2022 10:26:28 -0800
+        Tue, 29 Nov 2022 13:56:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DB161BA1;
+        Tue, 29 Nov 2022 10:56:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A129F61890;
+        Tue, 29 Nov 2022 18:56:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A686AC433D6;
+        Tue, 29 Nov 2022 18:56:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669748177;
+        bh=RGuIOhXviKMq41t9CeKW7AFIl48krHdo1X9sgB4ZdIQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EqVmxaBrBK/XMgdJsfjXkBWJMoeKNTSD6JzHwzxEnFDViQ6xizXwo81TcHZGu4FIZ
+         Utbh2JbHpkcwTIuMXC6hoxkUM+ZCRlNieNOWq6TcrVg4SWj8i/LqXVg99SzZYhvpBf
+         s47s0MEJ3FtXp/ung6zU1M/CpE8euE0ZLLsc3qGAHEFTtopCJX/UYzhVRSByPFTGnS
+         HSNRV7lidXOd2iZzCkzOVgGhPfwxvtAI7EZYPLlvpZe7iveych5nYEirbR9GPu6Udk
+         HqYUzDqsas0wusqbQqT8oS4lfCVkYg0HRK1eJl9FHYDOt5UagIqkFQR8Jj3pTaXK8j
+         FVMCAlodl4WiQ==
+Received: by pali.im (Postfix)
+        id B3076898; Tue, 29 Nov 2022 19:56:13 +0100 (CET)
+Date:   Tue, 29 Nov 2022 19:56:13 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Josef Schlehofer <josef.schlehofer@nic.cz>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] powerpc: dts: turris1x.dts: Add channel labels for
+ temperature sensor
+Message-ID: <20221129185613.gunub5hgjfgvroh5@pali>
+References: <20220930123901.10251-1-pali@kernel.org>
+ <20220930124618.kyaansrl7ls5kn3i@pali>
+ <20221009120506.itwa4n25nljn2tll@pali>
+ <20221101224348.xkpzucskunn46i5z@pali>
+ <87k03eblsr.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 1/6] hwmon: (gxp-fan-ctrl) Add GXP fan controller
-Content-Language: en-US
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20221128230219.39537-1-nick.hawkins@hpe.com>
- <20221128230219.39537-2-nick.hawkins@hpe.com>
- <20221129040232.GA1901150@roeck-us.net>
- <B3B2AA1C-0AD8-406D-B766-4CB86C39A834@hpe.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <B3B2AA1C-0AD8-406D-B766-4CB86C39A834@hpe.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87k03eblsr.fsf@mpe.ellerman.id.au>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/29/22 09:13, Hawkins, Nick wrote:
->>> +		writeb(val, drvdata->base + channel);
+On Tuesday 29 November 2022 12:18:28 Michael Ellerman wrote:
+> Pali Rohár <pali@kernel.org> writes:
+> > Michael, could you take this patch?
 > 
->> The mixed use of direct writes and regmap is odd and confusing.
->> Why use regmap for plreg_map and for fn2_map but not for base ?
->> Can this be unified ? If not, why ?
+> Yep.
 > 
-> I will still require three separate areas to access these registers as they
-> are spaced far apart (> 0x20000000). I will create a comment to
-> explain this. As for being unified methods I believe they can be
-> all __iomem's or regmaps.
+> With these dts patches it always helps if you tell me that it passes the
+> DT schema checks, so that I don't get yelled at by the DT people :)
+
+Mostly dt schemas for p1/p2 are incomplete, I sent more patches but they
+are waiting and I was not able to setup & run dt schema checker. Hence
+I tested everything on the hardware to ensure that it works correctly.
+And this patch works on Turris 1.1 board, I also tested sensors tool.
+So the important is what is in DTS file, the stuff which is used on HW.
+
+> cheers
 > 
-
-I understand that there are three regions. What I don't understand is
-that two of them are accessed through regmap and one directly. Either
-access all regions using regmap, or all regions using iomem accessors
-directly. If regmap does not support access to the base region,
-don't use regmap at all, explain why regmap doesn't support this kind
-of access, and make sure to copy the regmap maintainer.
-
-Thanks,
-Guenter
-
+> > On Sunday 09 October 2022 14:05:06 Pali Rohár wrote:
+> >> On Friday 30 September 2022 14:46:18 Pali Rohár wrote:
+> >> > + CC hwmon ML
+> >> > 
+> >> > On Friday 30 September 2022 14:39:01 Pali Rohár wrote:
+> >> > > Channel 0 of SA56004ED chip refers to internal SA56004ED chip sensor (chip
+> >> > > itself is located on the board) and channel 1 of SA56004ED chip refers to
+> >> > > external sensor which is connected to temperature diode of the P2020 CPU.
+> >> > > 
+> >> > > Fixes: 54c15ec3b738 ("powerpc: dts: Add DTS file for CZ.NIC Turris 1.x routers")
+> >> > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> >> > > ---
+> >> > > With this change userspace 'sensors' applications prints labels:
+> >> > > 
+> >> > >     $ sensors
+> >> > >     sa56004-i2c-0-4c
+> >> > >     Adapter: MPC adapter (i2c@3000)
+> >> > >     board:        +34.2°C  (low  =  +0.0°C, high = +70.0°C)
+> >> > >                            (crit = +85.0°C, hyst = +75.0°C)
+> >> > >     cpu:          +58.9°C  (low  =  +0.0°C, high = +70.0°C)
+> >> > >                            (crit = +85.0°C, hyst = +75.0°C)
+> >> > > 
+> >> > > And without this change it prints just generic tempX names:
+> >> > > 
+> >> > >     $ sensors
+> >> > >     sa56004-i2c-0-4c
+> >> > >     Adapter: MPC adapter (i2c@3000)
+> >> > >     temp1:        +43.0°C  (low  =  +0.0°C, high = +70.0°C)
+> >> > >                            (crit = +85.0°C, hyst = +75.0°C)
+> >> > >     temp2:        +63.4°C  (low  =  +0.0°C, high = +70.0°C)
+> >> > >                            (crit = +85.0°C, hyst = +75.0°C)
+> >> > > ---
+> >> > >  arch/powerpc/boot/dts/turris1x.dts | 14 ++++++++++++++
+> >> > >  1 file changed, 14 insertions(+)
+> >> > > 
+> >> > > diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
+> >> > > index 4033c554b06a..5b5278c32e43 100644
+> >> > > --- a/arch/powerpc/boot/dts/turris1x.dts
+> >> > > +++ b/arch/powerpc/boot/dts/turris1x.dts
+> >> > > @@ -69,6 +69,20 @@
+> >> > >  				interrupt-parent = <&gpio>;
+> >> > >  				interrupts = <12 IRQ_TYPE_LEVEL_LOW>, /* GPIO12 - ALERT pin */
+> >> > >  					     <13 IRQ_TYPE_LEVEL_LOW>; /* GPIO13 - CRIT pin */
+> >> > > +				#address-cells = <1>;
+> >> > > +				#size-cells = <0>;
+> >> > > +
+> >> > > +				/* Local temperature sensor (SA56004ED internal) */
+> >> > > +				channel@0 {
+> >> > > +					reg = <0>;
+> >> > > +					label = "board";
+> >> > > +				};
+> >> > > +
+> >> > > +				/* Remote temperature sensor (D+/D- connected to P2020 CPU Temperature Diode) */
+> >> > > +				channel@1 {
+> >> > > +					reg = <1>;
+> >> > > +					label = "cpu";
+> >> > > +				};
+> >> > 
+> >> > I'm not sure if you want UPPERCASE, lowercase, PascalCase, kebab-case
+> >> > or snake_case format of labels. Or if you want also "temp" or
+> >> > "temperature" keyword in the label. So please adjust label to the
+> >> > preferred one, if proposed format is not the correct.
+> >> 
+> >> Ok, if nobody complains then please take this patch as is.
+> >> 
+> >> > >  			};
+> >> > >  
+> >> > >  			/* DDR3 SPD/EEPROM */
+> >> > > -- 
+> >> > > 2.20.1
+> >> > > 
