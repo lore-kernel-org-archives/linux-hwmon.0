@@ -2,437 +2,187 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 791D8C4708A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 16:11:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20F88C4167B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 16:17:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234145AbiK2QLx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Nov 2022 11:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S235646AbiK2QRs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Nov 2022 11:17:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233910AbiK2QLs (ORCPT
+        with ESMTP id S231151AbiK2QRr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Nov 2022 11:11:48 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2258BBC9A
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 08:11:47 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id h11so15591858wrw.13
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 08:11:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7XHqJCL0YK4FWR7GzNLRu43PKAghRuEUD3cVbOeK4pc=;
-        b=G1ulTJ7wmHFUAtNopaArrimu8+9gMcFZmLmG608Ew2qPwxeismvzMnCz1iScxGxGh8
-         mSvMMabT+KyIGA8ynlBwzIgayHbodGMrpO6QKNoOU+/BYi0vPZy0DO49jrFSBOSNOZAb
-         o6srRoJiKmbtMKLZBrOEMKAZ3sEq158ATr1cgsdZMs/cZ18lwiCzriu/Sms3LnN7mCVu
-         AX3spXVw4a+LWCFTlWDnx6DiV9RtQXFvNVbvJCzDFIMi+NiFQDQJ12FOZiFikoh2jUj6
-         zgVJBYhMLTXOVlIuvrgdBJDZeBGAh9+G+AvLciJIMfZLoUVYntljkK2FGmxVdr7E8KnG
-         xqaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7XHqJCL0YK4FWR7GzNLRu43PKAghRuEUD3cVbOeK4pc=;
-        b=3CMYYtD705z32Yv5hz/1UYedxVBVegnQczrYiFlJ5mBotbbl1yQ2sYjIPPDrUO4chI
-         R9nwYvRtrgGdbxQ5KB9+R9fEFs4df+2BvFmkuYNpdyNOnrPvwSEp/EV14GJoKZYaPWdV
-         Xl66U+3IQqHnagk+SuOAR2WObWYRJ6d1kbKY7VUDQTuxLqetWt7JG4nLUNSSN/kl/9TY
-         OjDbcsWSa5VHtLo2DSZA3Gk6IZuLZXoo0byL1CiRf14Ip9e0ApWsO+kqLWPKMR5Ay8EH
-         k66dXoNcFNuHAsQRT+PanHPnazjJuwgUao990FiXDmx6t800NS0DDRTDRojvIFjB4a5K
-         8j5Q==
-X-Gm-Message-State: ANoB5pmXGBVlAoiSnOfLZTk5Kz9liW2DrH6MJdyJvDpQbk24suGtdNrG
-        aBaWJFLdFWe7gSvF34MRo1UjvA==
-X-Google-Smtp-Source: AA0mqf6pdFfstKJyCAQ+qo2FaE+Oe7pKTfzd5xV3uB77OxzJDzvCKK6xDxHPqab+QlA2Ia026Y5tNw==
-X-Received: by 2002:adf:e7cd:0:b0:236:960f:161d with SMTP id e13-20020adfe7cd000000b00236960f161dmr28379737wrn.376.1669738305611;
-        Tue, 29 Nov 2022 08:11:45 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id n26-20020a05600c3b9a00b003c6b70a4d69sm3144522wms.42.2022.11.29.08.11.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 08:11:45 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-pwm@vger.kernel.org
-Subject: [PATCH v8 4/4] hwmon: (max6639) Add pwm support
-Date:   Tue, 29 Nov 2022 17:11:34 +0100
-Message-Id: <20221129161134.2672474-5-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221129161134.2672474-1-Naresh.Solanki@9elements.com>
-References: <20221129161134.2672474-1-Naresh.Solanki@9elements.com>
+        Tue, 29 Nov 2022 11:17:47 -0500
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290B5DEBF;
+        Tue, 29 Nov 2022 08:17:46 -0800 (PST)
+Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATFwaBG010049;
+        Tue, 29 Nov 2022 16:17:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=pps0720;
+ bh=QunDWt+oYjs98+7hDElF6ttEhQzCkAA1UQEGHi8II90=;
+ b=aeQd6iBA0FxhwUBhh+V7Y82j2WbVXJ213DZc/ZDXSHtqNlPpeLqWzGJjVK7X84yEuB3T
+ SNmtKpmZEOXiw4TnZLNccgkrzhLaVTeBA0K/06SZhl6BsXDa1jjfwhiWd9yPehqk+W00
+ B4hNx6GlijW9Jh3RYWSku4Wbr1lQORHrdLZsMcs1VosET7OKyLEwpetn5lkGRsv8UInV
+ AJB9IJCpy68udjXMSyYL4+VoCdH+uQcxFd/E7OZbgnMYBbuO8sPvycplrjZBRuusfy/s
+ wrYZqD9D1+uc0S9B5xBN8b9R9nN2mtkn6vKFZHax4ULib9+35jN9nFhePVfawjAim2w8 Yg== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3m5n6qr6mj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 16:17:14 +0000
+Received: from p1wg14925.americas.hpqcorp.net (unknown [10.119.18.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 515CC81A50D;
+        Tue, 29 Nov 2022 16:16:29 +0000 (UTC)
+Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
+ p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 29 Nov 2022 04:16:17 -1200
+Received: from p1wg14924.americas.hpqcorp.net (10.119.18.113) by
+ p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 29 Nov 2022 04:16:08 -1200
+Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
+ p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
+ via Frontend Transport; Tue, 29 Nov 2022 04:16:08 -1200
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 29 Nov 2022 16:16:00 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EkZbzswqUHH9iAWPAvZE8crswpsrPtTD04C99mf6hCRFAC9EyV6lnbo+630AguLr84S2awXzvGaq+Zxfov7FM8obReZJHGMqRg7mxsKcbJ048RHRWkEMkmZoSk8h0la5h8Y9fZe5zoVOlvodHqUB/54eh4OJIIfur41vI42kp9ZXlUUMc6j8A2G+2dhv9J+05FgkgzXQvyg2C2qcXa+0Nb4dJhCsOiomiQ1+CQoPxVzipdCoWN7XX5TLhlVCEJwVthTL+z0M3Lu11mKEeuhA569fhogDTDwZbbkKSY0HJRzKwHPxBLx62JOkx4XO06LzElnp95OF2xJgdZvAPFk19A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QunDWt+oYjs98+7hDElF6ttEhQzCkAA1UQEGHi8II90=;
+ b=kzNlcQ8H4EPRoKPGM07jvsRuFfj+/3wchGE7RsZGuFbf5+3VoOlOVWJUPh87wvnp1HqYz5vNo/BkRpJ4sOOa5ratzWeHx363FB65tEZi2Gt4JDJbvGKQKQDdX5thx4iNpzQi3sX8XUx7hD+InVbk3EhhD1eIMkpvlKlXYuQFsuKsqJ3gGJVPL5qxa5rD2DGoF6uaa0nyA0Rai3Gte837P/QGTLQtvT7nJ7HcroKxaC05p2siNUDriok4ERh+11o16TTOnTxUw6UC7/BYO4D4SmtFlhKJSrSUIHOstsXGdvemPCrVxknSI390iAKT9BnpSY2oVzTD5FvQYT6xW8ZO5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
+ SJ0PR84MB1577.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:381::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5857.23; Tue, 29 Nov 2022 16:15:59 +0000
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::d24f:1a2:7006:17f9]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::d24f:1a2:7006:17f9%8]) with mapi id 15.20.5857.020; Tue, 29 Nov 2022
+ 16:15:57 +0000
+From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 2/6] ABI: sysfs-class-hwmon: add a description for
+ fanY_fault
+Thread-Topic: [PATCH v2 2/6] ABI: sysfs-class-hwmon: add a description for
+ fanY_fault
+Thread-Index: AQHZA32+teHxcxeSMEuXtU0ZSrv+C65VP/GAgABwNYA=
+Date:   Tue, 29 Nov 2022 16:15:57 +0000
+Message-ID: <0A5DF9D5-B8C2-44A4-924A-B8957EC8A2A7@hpe.com>
+References: <20221128230219.39537-1-nick.hawkins@hpe.com>
+ <20221128230219.39537-3-nick.hawkins@hpe.com>
+ <46cecf77-e989-40d9-3e08-fd970ad12a79@roeck-us.net>
+In-Reply-To: <46cecf77-e989-40d9-3e08-fd970ad12a79@roeck-us.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Microsoft-MacOutlook/16.67.22111300
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|SJ0PR84MB1577:EE_
+x-ms-office365-filtering-correlation-id: c38487e7-2d52-4124-7690-08dad224ff97
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dufFuX8hNKHNZU1nWlPcWHrQ7nqssVB4hmx1+PF35S0990rHwnQAD2mNHg25gLdWQ+u8Z99xgCoeu9piQFe47mVKm50CHGnn6ucyXgBYLM5jwkBDr4QCdJsT7L+EUF6zZsDNFc0GXIo5PD4Tvxt2PTntkRhp8yuKcvyNJA1293+JuLRTOWdHOB40LEcyhquhXHVYRJqOVWgImS33afzfPlaW16Ww/pcsXRr9pH6AlCyufP5fy6V0c5k1MhlfKbbB+tse0dJTLg4lsE81MmqL71nhh/Rehcqoe/PLkZAXVX/GFD0ysZklKhGXdg2XYv9kIyR6rlfsTYfSalIA3LT1fO10Z2QbsMXrNTyX+A8kWh+u5+o4oTIdNyiQWN0z4+CvfoMnulemshW1XqkfKWMYQp+5l0TKCu0GJar5L4QHzl9Wk92mF/nhL9UBS7VvRXft4OtVsGJmrvzb7lRVOhxPXVbPzQ8Ld4LLLWQWZbGJY+Y7hg6kPyfO9jKrP18NpulSU4IQyi5NZUTE8duEXzo7pBKSF9LON/NRwh+zFf0DwZdJBPQvKM0RmXsm0PjB+63AXN0YvImOmTFE+NNYnMfP8GjDauM4kb77auoRRooECD9Vt5OC55u1z6KwFYgZVx2BgOII1mKZJZzkpyfYsDQk+fdZ53OvbcRgOtgijO/Ir6qeGOtL0JBgsP4ayca2KzUktJpsvNQx1Q0UftG9/NAeLCgQ+X2U2Ju0yG9/CMrNw0Q=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(366004)(396003)(376002)(346002)(39860400002)(136003)(451199015)(6916009)(83380400001)(86362001)(71200400001)(6486002)(6506007)(478600001)(36756003)(6512007)(76116006)(2616005)(316002)(8936002)(41300700001)(54906003)(5660300002)(4744005)(7416002)(82960400001)(91956017)(33656002)(186003)(38070700005)(38100700002)(2906002)(66476007)(64756008)(66946007)(8676002)(66446008)(66556008)(4326008)(122000001)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eHdGVFpIbktvcEpoNUdjb2tYbFRiZ2F3bHVWK3hnTzNaUjJYYnkyd25PZjdS?=
+ =?utf-8?B?ZCtyaEVmOVVKZ1ZyeXNqR1g2MUJkWUp0b1IrYUFlMjhZZGg1dG1sTzV4UkRQ?=
+ =?utf-8?B?cWFicmt0ZDgxcjRsUmYvZVZuWlZmUEhVMkVxNHhKZ2FpdDh3czRET2JpRXpF?=
+ =?utf-8?B?SEdvSGRJajZjbHRrL2lZMVliRkdrWmZpbmk4bm5WRGwyck9uNUUxNzQ3aCtC?=
+ =?utf-8?B?OXhKaTNrSkg4RlFGanlDcjNnR282YTJvelBVWnRDU0UwbG5jNVlvajYzamd4?=
+ =?utf-8?B?aExlWEE3L1grSWpJS1J6YWFMeW1hOWtWLy9jWnlxUnJXTEluQ2F4bVV2Q1d2?=
+ =?utf-8?B?Kzl5cHBKUTBHNlVWa3l4MEo3TTJNVUcwVURnQ05JQmhpMlJta3FFeG9NdVRS?=
+ =?utf-8?B?akZCMFJYTTVhWTVJQ3RQNzR4Q3EvcVcwb3l6ZlVLYXlha3E2YUovMC9NVGRk?=
+ =?utf-8?B?MS85T2U1eURiK1FHaGl6SEpHc1Q5VHVRdzlRTndPdThkOVFnUERUbUJ0akgz?=
+ =?utf-8?B?YWpYZGxKVWNucHZzaDQ4R1RldFpnSmlOTzU5dEVudnV6eE84bytyRWJpVW4v?=
+ =?utf-8?B?dHBrK0tMZzRwY2NHVzZ3a3dmSFV1a1d6OG96aG00T1AxUUNHZ3VkSXZEeUxi?=
+ =?utf-8?B?YXVIRm1nMWdSZnhZZ1hPK21XOTFkeFQzQW5MeTVqRGY5U0tNK1o4blBTWW1v?=
+ =?utf-8?B?YjRETU92QWhja2tTNE9CSnZaOHYwNVdzdndJcllMRnNpcmxqanpwOUx2aU12?=
+ =?utf-8?B?OHRxN2YzT0toNmY2WjRVcXMyTUNkV0ZQSEQxdExkQWFsNGowL1B0czhVQ2Nq?=
+ =?utf-8?B?WU9obnd5Y1hTZ1pId3o5TS94V3loV0MwMXlQN1IySHFoWExsRU9FUDJqZ3dU?=
+ =?utf-8?B?TUtCMlFaSXRGZm8yZkZ1RFpSVW9nR3pEUnZlekR0QnZLemp4UDhDKzBNM05K?=
+ =?utf-8?B?SVIrTGllc0syZ0dqQTJaUDhtNFlFUFBpSUZzVTNJVWVJTFNZVk9iZ3ZpS0Vw?=
+ =?utf-8?B?TUE2WUFmVzdVeFl2RktibkpUK0gvMHd4K1JkdERTaVdhNEl3NDlJWXRwS0Uz?=
+ =?utf-8?B?SFlCb3IxSTdRTE05TUpwK3M1Y2kwSXlrcmVCUUsxVlhJWHY1R1M1U1Uycmsr?=
+ =?utf-8?B?THNoZlp1YS9VNzNhQjhPMDNOOUtzZi9keHJmemtUbHMyU3hyZnU1TzlzSmxw?=
+ =?utf-8?B?aDRKVFZvMmRDQ3MrNEFkYWwvTTlJZWJtQkkwVkVpZDlKR3MxUkN1VXcvdkI2?=
+ =?utf-8?B?cm1SRjZ2emdTdlpGcFBTeXVjaW4vKzVyNC9mQzk0S2Y3cWEwd0VhQW1JNlBS?=
+ =?utf-8?B?WXc1elFlOUJ1c2hPamdBTGpNaklzbmFDQkExR3VWRTZuRDNQcjVwZzI5aWR1?=
+ =?utf-8?B?Q2EzUkprT0FMNlorc1JqUTh5VXJyNzN4MXk1NFpmTVAzcjdoZ2R4ZklJSzZN?=
+ =?utf-8?B?V1JyUVJyalhud09OcHVtMU9NVW9wQWtRRHoxV1BEZktUK05PY2ZQMnUxOU1j?=
+ =?utf-8?B?RWNNVWdpNDJhSzFCODk2UjgvNkxqenhrcVQ5QVg3MzZJQ3dTNkR5emIwczFy?=
+ =?utf-8?B?YTBrd2FzMjJQQStNWEc2WGpkemRIMW41WStrWFU1ZWNYL0hCRjJpS2ZGNFlM?=
+ =?utf-8?B?YWgwWDZGSnhtN3BOYmxkWWthUTJ2djdsSlFuVWRFZ3A2QnR1NDFuK0Rac2dt?=
+ =?utf-8?B?enVoVkR3R2NEK0MyNXJYdlpwZGlBbTQwRENvMm1KcEdUOVlPbFdudmNPR091?=
+ =?utf-8?B?ZVNOb1IwNUZyb0lLT0thQVFlTnB2c3JGR3BvNk1WcnVFTFVMcUV0c2dtVzlF?=
+ =?utf-8?B?MFBMNXpUdEZSY3BaWktNU2F6MTYybE5nQlUwcEtvTE5zcWx2elRQWjhqQXR4?=
+ =?utf-8?B?bjltMUd0M1hlMVRnZ0FySEVNeDl6RGpIM3JIU2FrL3BYVXRadzl1M0krZDNi?=
+ =?utf-8?B?T0s1UHUvem1RY0cvLzIwellpQXE4NEVWTEpLZjhqSmsxencrZVdZSHhuY0V1?=
+ =?utf-8?B?cHZ4SERtQW9UYXlqeVo5VS9iUE1xMTZFNW1kZEhyT2ZQc2llOXU4cHlSWFhj?=
+ =?utf-8?B?TVZaclErdTF5Sk9jWVpqcGJzd0ZlKzdIRmUrM3hVQytDWnZhZDM4ajFrTlFB?=
+ =?utf-8?B?V25GNmFpNlRhdzBCeDRHWExLd3hyaTl4QUtRdTNJS0lsSjFrMTdpNkJkWlR1?=
+ =?utf-8?B?OWc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B730FAC0F391B4479FF83891AFD67E19@NAMPRD84.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: c38487e7-2d52-4124-7690-08dad224ff97
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2022 16:15:57.4805
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: D59txiGCvxJgTfyAfj7IXGDP+ceM81K2a1nnZeR0L0/PshX6fv5bPIpmHpGvcJXnOX4p2z6/NXJon1F4hrxJew==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1577
+X-OriginatorOrg: hpe.com
+X-Proofpoint-GUID: UZbNpbEaeqk1S-b4RjZ0pn6NOGjuO1hF
+X-Proofpoint-ORIG-GUID: UZbNpbEaeqk1S-b4RjZ0pn6NOGjuO1hF
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-29_10,2022-11-29_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ malwarescore=0 mlxlogscore=746 impostorscore=0 spamscore=0 adultscore=0
+ bulkscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211290090
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add pwm support for max6639. Also configure pwm fan speed based on pwm
-provided in DT.
-
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
----
- drivers/hwmon/Kconfig   |   1 +
- drivers/hwmon/max6639.c | 243 +++++++++++++++++++++++++++++++++++++---
- 2 files changed, 230 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 3176c33af6c6..56d9004b7a38 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1115,6 +1115,7 @@ config SENSORS_MAX6621
- config SENSORS_MAX6639
- 	tristate "Maxim MAX6639 sensor chip"
- 	depends on I2C
-+	depends on PWM
- 	help
- 	  If you say yes here you get support for the MAX6639
- 	  sensor chips.
-diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
-index e09358713bef..302186532e0f 100644
---- a/drivers/hwmon/max6639.c
-+++ b/drivers/hwmon/max6639.c
-@@ -19,6 +19,7 @@
- #include <linux/hwmon-sysfs.h>
- #include <linux/err.h>
- #include <linux/mutex.h>
-+#include <linux/pwm.h>
- 
- /* Addresses to scan */
- static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
-@@ -53,11 +54,17 @@ static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
- #define MAX6639_GCONFIG_PWM_FREQ_HI		0x08
- 
- #define MAX6639_FAN_CONFIG1_PWM			0x80
--
-+#define MAX6639_REG_FAN_CONFIG2a_PWM_POL	0x02
- #define MAX6639_FAN_CONFIG3_THERM_FULL_SPEED	0x40
-+#define MAX6639_FAN_CONFIG3_FREQ_MASK		0x03
-+#define MAX6639_REG_TARGTDUTY_SLOT		120
- 
- static const int rpm_ranges[] = { 2000, 4000, 8000, 16000 };
- 
-+/* Supported PWM frequency */
-+static const unsigned int freq_table[] = { 20, 33, 50, 100, 5000, 8333, 12500,
-+					   25000 };
-+
- #define FAN_FROM_REG(val, rpm_range)	((val) == 0 || (val) == 255 ? \
- 				0 : (rpm_ranges[rpm_range] * 30) / (val))
- #define TEMP_LIMIT_TO_REG(val)	clamp_val((val) / 1000, 0, 255)
-@@ -75,6 +82,9 @@ struct max6639_data {
- 	u16 temp[2];		/* Temperature, in 1/8 C, 0..255 C */
- 	bool temp_fault[2];	/* Detected temperature diode failure */
- 	u8 fan[2];		/* Register value: TACH count for fans >=30 */
-+	struct pwm_device *pwmd[2]; /* max6639 has two pwm device */
-+	u32 target_rpm[2];
-+	u32 max_rpm[2];
- 	u8 status;		/* Detected channel alarms and fan failures */
- 
- 	/* Register values only written to */
-@@ -89,6 +99,8 @@ struct max6639_data {
- 
- 	/* Optional regulator for FAN supply */
- 	struct regulator *reg;
-+	/* max6639 pwm chip */
-+	struct pwm_chip chip;
- };
- 
- static struct max6639_data *max6639_update_device(struct device *dev)
-@@ -279,8 +291,11 @@ static ssize_t pwm_show(struct device *dev, struct device_attribute *dev_attr,
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
- 	struct max6639_data *data = dev_get_drvdata(dev);
-+	struct pwm_state state;
-+
-+	pwm_get_state(data->pwmd[attr->index], &state);
- 
--	return sprintf(buf, "%d\n", data->pwm[attr->index] * 255 / 120);
-+	return sprintf(buf, "%d\n", pwm_get_relative_duty_cycle(&state, 255));
- }
- 
- static ssize_t pwm_store(struct device *dev,
-@@ -289,9 +304,9 @@ static ssize_t pwm_store(struct device *dev,
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
- 	struct max6639_data *data = dev_get_drvdata(dev);
--	struct i2c_client *client = data->client;
- 	unsigned long val;
- 	int res;
-+	struct pwm_state state;
- 
- 	res = kstrtoul(buf, 10, &val);
- 	if (res)
-@@ -299,12 +314,12 @@ static ssize_t pwm_store(struct device *dev,
- 
- 	val = clamp_val(val, 0, 255);
- 
--	mutex_lock(&data->update_lock);
--	data->pwm[attr->index] = (u8)(val * 120 / 255);
--	i2c_smbus_write_byte_data(client,
--				  MAX6639_REG_TARGTDUTY(attr->index),
--				  data->pwm[attr->index]);
--	mutex_unlock(&data->update_lock);
-+	pwm_get_state(data->pwmd[attr->index], &state);
-+	pwm_set_relative_duty_cycle(&state, val, 255);
-+	res = pwm_apply_state(data->pwmd[attr->index], &state);
-+	if (res)
-+		return res;
-+
- 	return count;
- }
- 
-@@ -404,6 +419,7 @@ static int max6639_init_client(struct i2c_client *client,
- 			       struct max6639_data *data)
- {
- 	int i, err;
-+	struct pwm_state state;
- 
- 	/* Reset chip to default values, see below for GCONFIG setup */
- 	err = i2c_smbus_write_byte_data(client, MAX6639_REG_GCONFIG,
-@@ -457,10 +473,11 @@ static int max6639_init_client(struct i2c_client *client,
- 		if (err)
- 			goto exit;
- 
--		/* PWM 120/120 (i.e. 100%) */
--		data->pwm[i] = 120;
--		err = i2c_smbus_write_byte_data(client,
--				MAX6639_REG_TARGTDUTY(i), data->pwm[i]);
-+		/* Configure PWM controller */
-+		pwm_get_state(data->pwmd[i], &state);
-+		pwm_set_relative_duty_cycle(&state, data->target_rpm[i],
-+					   data->max_rpm[i]);
-+		err = pwm_apply_state(data->pwmd[i], &state);
- 		if (err)
- 			goto exit;
- 	}
-@@ -539,8 +556,31 @@ static int max6639_probe_child_from_dt(struct i2c_client *client,
- 	}
- 
- 	data->rpm_range[i] = rpm_range_to_reg(maxrpm);
-+	data->max_rpm[i] = maxrpm;
- 
--	return 0;
-+	err = of_property_read_u32(child, "target-rpm", &val);
-+	/* Use provided target RPM else default to maxrpm */
-+	if (!err)
-+		data->target_rpm[i] = val;
-+	else
-+		data->target_rpm[i] = maxrpm;
-+
-+	/* Get pwms property for PWM control */
-+	data->pwmd[i] = devm_fwnode_pwm_get(dev, &child->fwnode, NULL);
-+
-+	if (!IS_ERR(data->pwmd[i]))
-+		return 0;
-+
-+	if (PTR_ERR(data->pwmd[i]) == -EPROBE_DEFER)
-+		return PTR_ERR(data->pwmd[i]);
-+
-+	dev_dbg(dev, "Using chip default PWM");
-+	data->pwmd[i] = pwm_request_from_chip(&data->chip, i, NULL);
-+	if (!IS_ERR(data->pwmd[i]))
-+		return 0;
-+
-+	dev_dbg(dev, "Failed to configure pwm for fan %d", i);
-+	return PTR_ERR_OR_ZERO(data->pwmd[i]);
- }
- static int max6639_probe_from_dt(struct i2c_client *client,
- 				struct max6639_data *data)
-@@ -568,6 +608,172 @@ static int max6639_probe_from_dt(struct i2c_client *client,
- 	return 0;
- }
- 
-+static struct max6639_data *to_max6639_pwm(struct pwm_chip *chip)
-+{
-+	return container_of(chip, struct max6639_data, chip);
-+}
-+
-+static void max6639_pwm_get_state(struct pwm_chip *chip,
-+				  struct pwm_device *pwm,
-+				  struct pwm_state *state)
-+{
-+
-+	struct max6639_data *data = to_max6639_pwm(chip);
-+	struct i2c_client *client = data->client;
-+	int value, i = pwm->hwpwm, x;
-+	unsigned int freq;
-+
-+	mutex_lock(&data->update_lock);
-+
-+	value = i2c_smbus_read_byte_data(client, MAX6639_REG_FAN_CONFIG1(i));
-+	if (value < 0)
-+		goto abort;
-+
-+	if (value & MAX6639_FAN_CONFIG1_PWM) {
-+		state->enabled = true;
-+
-+		/* Determine frequency from respective registers */
-+		value = i2c_smbus_read_byte_data(client,
-+						 MAX6639_REG_FAN_CONFIG3(i));
-+		if (value < 0)
-+			goto abort;
-+		x = value & MAX6639_FAN_CONFIG3_FREQ_MASK;
-+
-+		value = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-+		if (value < 0)
-+			goto abort;
-+		if (value & MAX6639_GCONFIG_PWM_FREQ_HI)
-+			x |= 0x4;
-+		x &= 0x7;
-+		freq = freq_table[x];
-+
-+		state->period = DIV_ROUND_UP(NSEC_PER_SEC, freq);
-+
-+		value = i2c_smbus_read_byte_data(client,
-+						 MAX6639_REG_TARGTDUTY(i));
-+		if (value < 0)
-+			goto abort;
-+		/* max6639 supports 120 slots only */
-+		state->duty_cycle = mul_u64_u32_div(state->period, value, 120);
-+
-+		value = i2c_smbus_read_byte_data(client,
-+						 MAX6639_REG_FAN_CONFIG2a(i));
-+		if (value < 0)
-+			goto abort;
-+		value &= MAX6639_REG_FAN_CONFIG2a_PWM_POL;
-+		state->polarity = (value != 0);
-+	} else
-+		state->enabled = false;
-+
-+abort:
-+	mutex_unlock(&data->update_lock);
-+
-+}
-+
-+static int max6639_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-+			     const struct pwm_state *state)
-+{
-+	struct max6639_data *data = to_max6639_pwm(chip);
-+	struct i2c_client *client = data->client;
-+	int value = 0, i = pwm->hwpwm, x;
-+	unsigned int freq;
-+	struct pwm_state cstate;
-+
-+	cstate = pwm->state;
-+
-+	mutex_lock(&data->update_lock);
-+
-+	if (state->period != cstate.period) {
-+		/* Configure frequency */
-+		freq = DIV_ROUND_UP_ULL(NSEC_PER_SEC, state->period);
-+		/* Chip supports limited number of frequency */
-+		for (x = 0; x < sizeof(freq_table); x++)
-+			if (freq <= freq_table[x])
-+				break;
-+
-+		value = i2c_smbus_read_byte_data(client,
-+						 MAX6639_REG_FAN_CONFIG3(i));
-+		if (value < 0)
-+			goto abort;
-+		value &= ~MAX6639_FAN_CONFIG3_FREQ_MASK;
-+		value |= (x & MAX6639_FAN_CONFIG3_FREQ_MASK);
-+		value = i2c_smbus_write_byte_data(client,
-+						  MAX6639_REG_FAN_CONFIG3(i),
-+						  value);
-+
-+		value = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-+		if (value < 0)
-+			goto abort;
-+
-+		if (x >> 2)
-+			value &= ~MAX6639_GCONFIG_PWM_FREQ_HI;
-+		else
-+			value |= MAX6639_GCONFIG_PWM_FREQ_HI;
-+		value = i2c_smbus_write_byte_data(client, MAX6639_REG_GCONFIG,
-+						  value);
-+		if (value < 0)
-+			goto abort;
-+	}
-+
-+	/* Configure dutycycle */
-+	if (state->duty_cycle != cstate.duty_cycle ||
-+	    state->period != cstate.period) {
-+		value = DIV_ROUND_DOWN_ULL(
-+				state->duty_cycle * MAX6639_REG_TARGTDUTY_SLOT,
-+				state->period);
-+		value = i2c_smbus_write_byte_data(client,
-+						  MAX6639_REG_TARGTDUTY(i),
-+						  value);
-+		if (value < 0)
-+			goto abort;
-+	}
-+
-+	/* Configure polarity */
-+	if (state->polarity != cstate.polarity) {
-+		value = i2c_smbus_read_byte_data(client,
-+						 MAX6639_REG_FAN_CONFIG2a(i));
-+		if (value < 0)
-+			goto abort;
-+		if (state->polarity == PWM_POLARITY_NORMAL)
-+			value |= MAX6639_REG_FAN_CONFIG2a_PWM_POL;
-+		else
-+			value &= ~MAX6639_REG_FAN_CONFIG2a_PWM_POL;
-+		value = i2c_smbus_write_byte_data(client,
-+						  MAX6639_REG_FAN_CONFIG2a(i),
-+						  value);
-+		if (value < 0)
-+			goto abort;
-+	}
-+
-+	if (state->enabled == cstate.enabled)
-+		goto abort;
-+
-+	value = i2c_smbus_read_byte_data(client, MAX6639_REG_FAN_CONFIG1(i));
-+	if (value < 0)
-+		goto abort;
-+	if (state->enabled)
-+		value |= MAX6639_FAN_CONFIG1_PWM;
-+	else
-+		value &= ~MAX6639_FAN_CONFIG1_PWM;
-+
-+	value = i2c_smbus_write_byte_data(client, MAX6639_REG_FAN_CONFIG1(i),
-+					  value);
-+	if (value < 0)
-+		goto abort;
-+	value = 0;
-+
-+abort:
-+	mutex_unlock(&data->update_lock);
-+
-+	return value;
-+}
-+
-+static const struct pwm_ops max6639_pwm_ops = {
-+	.apply = max6639_pwm_apply,
-+	.get_state = max6639_pwm_get_state,
-+	.owner = THIS_MODULE,
-+};
-+
- static int max6639_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
-@@ -581,6 +787,15 @@ static int max6639_probe(struct i2c_client *client)
- 
- 	data->client = client;
- 
-+	/* Add PWM controller of max6639 */
-+	data->chip.dev = dev;
-+	data->chip.ops = &max6639_pwm_ops;
-+	data->chip.npwm = 2;
-+
-+	err = devm_pwmchip_add(dev, &data->chip);
-+	if (err < 0)
-+		return dev_err_probe(dev, err, "failed to add PWM chip\n");
-+
- 	data->reg = devm_regulator_get_optional(dev, "fan");
- 	if (IS_ERR(data->reg)) {
- 		if (PTR_ERR(data->reg) != -ENODEV)
--- 
-2.37.3
-
+PiBUaGlzIGNoYW5nZSBpcyByZWFsbHkgY29tcGxldGVseSB1bnJlbGF0ZWQgdG8gYSBDUExEIG9y
+IHNwZWNpZmljIFNvQy4NCj4gVGhlIGNvbW1pdCBkZXNjcmlwdGlvbiBpcyBqdXN0IGNvbmZ1c2lu
+Zy4gSXQgc2hvdWxkIHNpbXBseSBzdGF0ZSB0aGF0DQo+IGl0IGRvY3VtZW50cyB0aGUgZXhpc3Rp
+bmcgZmFuWF9mYXVsdCBhdHRyaWJ1dGUuDQoNClVuZGVyc3Rvb2QuIEp1c3QgdG8gY29uZmlybSBz
+aG91bGQgSSBjaGFuZ2UgZmFuWV9mYXVsdCB0byBmYW5YX2ZhdWx0DQppbiBkb2N1bWVudGF0aW9u
+IGFzIHdlbGwgYXMgdGhlIHBhdGNoIGRlc2NyaXB0aW9uPyBGb3IgaW5zdGFuY2U6DQovc3lzL2Ns
+YXNzL2h3bW9uL2h3bW9uWC9mYW5YX2ZhdWx0DQoNCkl0IHNlZW1zIHRoYXQgdGhlIGRvY3VtZW50
+YXRpb24gYXJvdW5kIGl0IHVzZXMgZmFuWV8gZm9ybWF0Lg0KDQpUaGFua3MsDQoNCi1OaWNrIEhh
+d2tpbnMNCg0K
