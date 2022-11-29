@@ -2,558 +2,213 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23425C4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 04:02:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39619C4167B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 07:08:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235346AbiK2ECi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Nov 2022 23:02:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
+        id S229694AbiK2HIo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Nov 2022 02:08:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235560AbiK2ECg (ORCPT
+        with ESMTP id S229600AbiK2HIn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Nov 2022 23:02:36 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B4C4E405;
-        Mon, 28 Nov 2022 20:02:35 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so8324141otl.10;
-        Mon, 28 Nov 2022 20:02:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jdBZso3Vwpsp74oXRRyRaVCc75oEZpB0IFHYzSgMfQ4=;
-        b=mqOJlPqOG4YRJeReE/QpFo1T0BieGLHmqCIgckZ0wDKo0GJSAbwH4t07hqcjBpl5mu
-         +eYcKugVKP8J1QvqgUqWXqV4s/9Uue/Z8E9h+YHk+Ka4aBvcmtPCxaocxlMIe08KUNak
-         rZUPSkFt695ps6/MZn/4WiJRORCjhoeUvu10t/mowfgX6nFdHgaBP0GGLuWS+vWPrELZ
-         5dz0WqUgFcPNz04/h7/GgIkUeojgk5k3jTr06zPvLmZjGY72WmGwZpSF1fiDuVFPuqqX
-         AOVDB2AsMj95sg1Pot2lPoEpchQeO7F+G4Df5MjVJVygNJMBKBY6izsweSHz8sMtW6I5
-         DQgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jdBZso3Vwpsp74oXRRyRaVCc75oEZpB0IFHYzSgMfQ4=;
-        b=tw1OL8O/tx1RQqlHMdMU85IvkMQJn9VHhxD6X/NpgYw8YyDYIOB7kO78cxjmONTtsO
-         48kIc0/+YInBAePrOvTxqfEpEM0bbu9wBaZX/VWJ8cckFWTzjQHGnGuSEMYv2ZmRlC7X
-         i/nnUC7N8YlPcO1ijG2XlollGdnzm9NRJu++2VikboYp0VQPylDq1KlxzdChR/Nozi6u
-         0NyloDGfY/1DQkKZLup9SEgQMv3cdLOzKLKR3dzgOJRHd7/fSLMUTdmMqSZgxkmaP//J
-         NEu5zXA8GJ6NGAqZSoyeH6obxuOPLuT2VI9pB0ChKWGiGSD20Y9Ufcxne8AccNmdF3xw
-         UCeA==
-X-Gm-Message-State: ANoB5pns9qaYaYjO1Ix2O29DpRHxODGEHRN7ZKipa6moVARllv5Q5ywN
-        Tffh9T52cujnS+jqd3fKp3U=
-X-Google-Smtp-Source: AA0mqf5YHo27FVxUjCeQsfIU+jZLSL3Byyl+i+kAU1cnB2LHq3b76WRLMW7Fg3zOhdsUE3mZAcF8Iw==
-X-Received: by 2002:a9d:6244:0:b0:66c:e574:8a6b with SMTP id i4-20020a9d6244000000b0066ce5748a6bmr26533398otk.183.1669694554282;
-        Mon, 28 Nov 2022 20:02:34 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d23-20020a4aba97000000b0049ea9654facsm5052682oop.32.2022.11.28.20.02.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 20:02:33 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 28 Nov 2022 20:02:32 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     nick.hawkins@hpe.com
-Cc:     jdelvare@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com, corbet@lwn.net,
-        linux@armlinux.org.uk, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 1/6] hwmon: (gxp-fan-ctrl) Add GXP fan controller
-Message-ID: <20221129040232.GA1901150@roeck-us.net>
-References: <20221128230219.39537-1-nick.hawkins@hpe.com>
- <20221128230219.39537-2-nick.hawkins@hpe.com>
+        Tue, 29 Nov 2022 02:08:43 -0500
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2117.outbound.protection.outlook.com [40.107.117.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE0D391F7;
+        Mon, 28 Nov 2022 23:08:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TOwMHkrBOyqq80Y9cUfrA6WZNceUz/S+lh3BOWTF7FjWFyjUlvwxvBiIpUje0yWAnK3l+lcbu+n7vhylxMVpCoUDhdxk93Yl428MpDNr3J+htMKJljeqfrVg8CXvMRIxc54QS8nzB0xgDJrRdrjXC/J6ZwXNGBmiTyVB0Gu+1mZB5XiEfmttxEuBWCEGjtPpKvT7uwLK58hgi+fHu9dOunboaWkplkY3nAAFLn+juwvAWKHxEsTEj4KxmOv4zDj3nOnKIJPLQMKW4bFbUqNeG0FoQ7okpjAjye4tQxLgQelNPRT9hGAM5d4P1Dx2RKr4ZXxV+FLgGIVO4xt0/DlUDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V2JhMmyk2jk1Ry/QlLcFx0185FBA2eSgb2CYDwo7fks=;
+ b=bMUy+Z+WJsfYeDsDrEOKWYzMWRYGbhtGNQzjqeoVyqSvfCMilen3f5ycWK/AtwUBGsODfWEaAkvCNUJswqS0dwzEcH5My5+pzqmXwPDUdoy9mnjvkcup4GLBn7sA6uIUCM8sV4GBvPMSyNI627N2RvxGZd6F0s4ojET0UmZvTgky8jCJ+2u8f6B43bJ1oFxeRKd5uLKkbFDnfVYoYANKhzmSiYDBZJOLEDG5gDb6dkCENy19dG50pBupwRG8xg8J2oAFafsY8bkh3EIwTZCga7CjsGpjvaAtn3FtvDX/oxxwqgWXlb9xpe7r0xGmIp7KqxuDEGwWK139X4zNYhBjDA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V2JhMmyk2jk1Ry/QlLcFx0185FBA2eSgb2CYDwo7fks=;
+ b=KNDgaAFoglm9B0RLXTWyeXea/4jUZTP/jiSFMAysue2IiIkgxY0a7qERv8ROUH7D9M4QAopeojRlXiUCwpcjxzPD3gf6fcygxn1QRdKOZgTQqpV/JC3QdrNAbSgm8vNqspnymHFnhARG26CZ2muMuoqTIIilVCZcugUR2RxBwEjOHyljNy91wl1Q4nlt8Dd0VY68U0tYZenQzR7bEHy1alo9ECK8Yaurhfzut+YqQTuSkGpJRy665n1KKSkeSbZ5nV8SKpQVuicbeRQA7Ec6Ev6Cs4ZgpGJ8xWM1fd3phEazfxXbQxrvhcdWwWm+Xl0wna4/vlFSI9AUqLxEl0sOzg==
+Received: from SG2PR06MB3365.apcprd06.prod.outlook.com (2603:1096:4:69::12) by
+ TYZPR06MB5052.apcprd06.prod.outlook.com (2603:1096:400:1c7::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.21; Tue, 29 Nov
+ 2022 07:08:36 +0000
+Received: from SG2PR06MB3365.apcprd06.prod.outlook.com
+ ([fe80::dd5d:e720:e00f:831]) by SG2PR06MB3365.apcprd06.prod.outlook.com
+ ([fe80::dd5d:e720:e00f:831%6]) with mapi id 15.20.5769.019; Tue, 29 Nov 2022
+ 07:08:36 +0000
+From:   Billy Tsai <billy_tsai@aspeedtech.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+CC:     kernel test robot <lkp@intel.com>
+Subject: Re: [v4 5/5] hwmon: Add Aspeed ast2600 TACH support
+Thread-Topic: [v4 5/5] hwmon: Add Aspeed ast2600 TACH support
+Thread-Index: AQHY/wMRN7iyCHUoQkSgfTFaYF2aA65MpwwAgAlj1YA=
+Date:   Tue, 29 Nov 2022 07:08:36 +0000
+Message-ID: <D5F454FE-9C4B-4B7E-8817-637D5FCC047A@aspeedtech.com>
+References: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
+ <20221123061635.32025-6-billy_tsai@aspeedtech.com>
+ <bf851fa1-af62-5cdc-8cb4-bcf29b73731a@roeck-us.net>
+In-Reply-To: <bf851fa1-af62-5cdc-8cb4-bcf29b73731a@roeck-us.net>
+Accept-Language: zh-TW, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Microsoft-MacOutlook/16.67.22111300
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SG2PR06MB3365:EE_|TYZPR06MB5052:EE_
+x-ms-office365-filtering-correlation-id: a28d2602-69e3-4998-e6eb-08dad1d888b7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 9s2vQoRLF2H9d+an850kX1WJ4zWzp2qCh3hgOcibpdbkyPg4/+Mwa5vTnuHVFJ6llwnhwM0y2t2/QBYpUGREtG2hoQ0XVqc9FOpKQMajN2ouCllHvzSErKzP5RXemw80lpSBBbrj9DdQTUymvaBfcoDR13osTT3sj564tZ7AZRclI1FOo+V7PyWL+YD4OqfGi/4MMqn4+g9RgN3lyTAzRuZ9UoVy7HacOhH/5BwHOZB6TBonkklWMMmfjAHnE+uxkSL900jaipn/ZGsWHocv25J/ZyElEjyBLZCbyo68NV5E4EP78TY8TAD5LmCu/rc6My1gbEUpO+RysLfkLBWufk4WE9ACCw4g3tU9vKBVyaN3eUXAFYGY6gKN+FjVaK4+82nVQZ9Utmzx/xzFImz9zcFU9STL1Gljy0znjV+F1RVyjtdKD18DyugUrtdnyBcB61/UlYdMo0+DimxxYuFMDW0LqkEUed9hFAqOWkE3u10Z1ZW1UWeP90coxA6cMwRF4X1UHv2x5RuR0PGY6Hzxye4bQvcziGA7twaasow5+yyxXkTOqMWpQEtqBAWkcs+BLcacQ9gbDXTfgn25VVa21fYqLm0eGPufZqtYlbv1ibGlePZDeTimUU+6sCg/N5snq9QXEFvLgNbqch9Rdr0nF2pRz2mMg/OuACjmOy3W/URMXc4RnmInD5dMTVpnd1Id7xe7wiXGKxznYzAJAmmLJhDazqyzP39uJl79pvn/z/6YsZG4KGkl5txjn4lAy4X1
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3365.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(366004)(39840400004)(136003)(396003)(451199015)(186003)(41300700001)(2616005)(122000001)(38100700002)(36756003)(5660300002)(7416002)(921005)(38070700005)(8936002)(83380400001)(2906002)(71200400001)(478600001)(6486002)(110136005)(6512007)(316002)(26005)(91956017)(8676002)(4326008)(66446008)(64756008)(76116006)(66476007)(66946007)(66556008)(86362001)(33656002)(53546011)(6506007)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?S1N4Wk5NVFowcmk0NTlzM0NZWCtoWlcxd3N4bE0rYjVCMXpkaFFpOFlmOGh6?=
+ =?utf-8?B?c1BkOE5ieHFtbVZCRjFwYndKQUYvc25wUjNDeFVUR2JRQkNHSTJ0Q0RXVnN0?=
+ =?utf-8?B?aG9rcDZpWml1cFBUWVhzaFZxbTZtS0FDMkJ4biszQk5OU0dOL3pTNnVwZHpZ?=
+ =?utf-8?B?VE41VldaVG12dGxVcWlSYzUvQ2wwUDE0VTFIUG1ERG5WZXNncU5sbExmaDl2?=
+ =?utf-8?B?dkFGV1JURjc4NjlVVEd4MzVnN3ExUFhOOXRVaEowSlpSR1piRFVDbWJPdFky?=
+ =?utf-8?B?Vk1lWTA3YWVkaWZtOVNabXNsQ21GTXh0TXQ1aWQxRW1Ud1hEbCtlaHMzcG9P?=
+ =?utf-8?B?TVdpUGFNb0JPWlo5cWt2UG10ZXlTdzF3djNEQkswMWRUT1B1WXp3cHhXeVRt?=
+ =?utf-8?B?d3VPS2hKR2FJaDdDWGZLK2ZvRkdSRmRRR3J4RHFwMCtZOW1PbWRyQWF4aTVx?=
+ =?utf-8?B?WHNLYnB5OTd0aGhabEpnYkg3TGNEbzIvVjhEelVXODhlUE9mSW9ZTzcwUW04?=
+ =?utf-8?B?ZmU5Q0YzNlJIbUZ0TkMra1N5aFhKck5nc3BkVmdXcldYNmlvZ3pMTzUwdkVh?=
+ =?utf-8?B?NU53ODducHMwM0Y0ODRhNWVnK3ZSaUtMeGVXR3hMTGxMM3JtbGlxMlFRNHUx?=
+ =?utf-8?B?SmNsZjlNZWV3bFdZcElGZVV1Q3FNNjNETTYrZkhmTVNWZkNDVTNYUWZzd2d6?=
+ =?utf-8?B?NnZPdUJ3eUpYNnpyOXRvTmt2UjBGWjQvZkFoRVBoUTl5RTRqdTBEaHR1U1JT?=
+ =?utf-8?B?cHRLVmNTVXpWOEpybUpZOTFoMWtoSjh1ZlpZbkJINGxtaXlRb1lVZGpVdjkr?=
+ =?utf-8?B?NjZhd1B4amp5Tlg1MFRjdFRwOU9mNFFnbEJ6VlFxd1lUMXRXVGJINm9MN0FK?=
+ =?utf-8?B?VVJ6RWR1enNreDZrakpqVkNESnpEbXpoN1pRVEE4UE94bkxpS3VFNlZ6cFFk?=
+ =?utf-8?B?a3hVeGxVVldMcCs1RTJOOHhVQ0RmV2lPQlpjQVAzVTlsVm8rMHRHMmNLdEEw?=
+ =?utf-8?B?ZHRrQmJiZnBKV2pWQVI3eC84TytXbkJ2dzc1QmlTNGtkSnJ4ZHJ2RDB0UHBS?=
+ =?utf-8?B?SndMcnQvZ0xxMUVCeFFJc3FrS1FHdnBHQ2IvcEVMVDNWa2JMZ3ZIakt5Rngw?=
+ =?utf-8?B?TjRFa3NrdUNVOFRTS0FtcWp6TkJLYjh2cGRiL3QweWZqVENCOG1OcWxmUkor?=
+ =?utf-8?B?TlBMbUIrSHg3WVdkUmZSN2ZqT3JyaU9XV3VNekdjZHdTZFJKSVNxSC90bXl4?=
+ =?utf-8?B?VGIxMk1NcUdmRDNZdXp1VGc0akZQSm9uZ3ZRcGlmTitncEpaTmErenAwNjlv?=
+ =?utf-8?B?dmdVSHBZTjVWSnMrdXdOcUM0c2QxeTRjOHVTR2hjRkdGTDIwYnB2ZUJOZEpX?=
+ =?utf-8?B?MS9EdHF4YVFTRkpyeS9hMFgyTDBid2thT1JtZDRRcEJFZStGU0dBOU1nL0xW?=
+ =?utf-8?B?azRydDlNcnVxZ1oyYWdlRTJzc2VBWjd2NWhwc01ZTVoxS3hzakwxQnF4Y1Nt?=
+ =?utf-8?B?SEp2cStOdFdiOE5xNkVOWDA2WDJVVWQwa0RTMjZndWw5SnlDc3pHYW5rTHpG?=
+ =?utf-8?B?UjcrQncvL2N3VGdxUStBTVZuZzJpb25pdXU5M2VqYkVhVGQ5cE1BYW1tRkF2?=
+ =?utf-8?B?MnFiUU1CZlBiWjBKR1NPNTlYWWlHeXNkeG5GdUs4bm1VNE5CTUxyR2Zqa2lJ?=
+ =?utf-8?B?SEhDdEtockhSQU45QkNYclBmWW5BS0l2VElLY0dyNHFCNVRkZmdoOHREYXpu?=
+ =?utf-8?B?SDNqaHJFTFRXM2h5WHU5ZFRaZzF0MnF0VElpa1Y5T2hzbU9RZFNra1MvYURn?=
+ =?utf-8?B?aEZRazhkRHhlT0RzSUFsQkhXaVR4T29TYW40QXRMb3U3OVZ2K01ocUZxMk9D?=
+ =?utf-8?B?YUtkY0F2Uk5HL0dWbVJ6UFEwRG1JdDN3Vk1xNi9acXBueXkvZHEwZGJUUHJa?=
+ =?utf-8?B?QjJ4NVJmV1NzbW9Rcm5aVUJDUlJpMURwN2c1NElPRVZSMlFwVm84bjcxRSth?=
+ =?utf-8?B?N3BwTE54T045aGxqb2F2RThJNjFyaCtLMFBBVW1zQXFxaVlzTnNhcElReUNn?=
+ =?utf-8?B?YUdJOE50YVV6bWEweDN2TzRNVGd4eFhKSlREb0hHVFBCQTRQTlg0RUdJTTA2?=
+ =?utf-8?B?UjhCVlozelVlRGkxRkwrbGczbm0zenRsZDNMNFNub29Kb0wrSWRKcFJUTnlO?=
+ =?utf-8?B?bnc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C6EF46B92517DB47970ADB4E2E1B1778@apcprd06.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221128230219.39537-2-nick.hawkins@hpe.com>
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3365.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a28d2602-69e3-4998-e6eb-08dad1d888b7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2022 07:08:36.2772
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zPXDHdOb0gT4gfpM9Fveprr9QGl4clPcrVRvI+IDac953NJbDOsVYKpkLg6vSOD/VvsIPcredly83YSiBxpAIsDOoHXMnz0Ozwyjh+6oalc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB5052
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 05:02:14PM -0600, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> The GXP SoC can support up to 16 fans through the interface provided by
-> the CPLD. The current support is limited to 8 fans. The fans speeds are
-> controlled via 8 different PWMs which can vary in value from  0-255. The
-> fans are also capable of reporting if they have failed to the CPLD which
-> in turn reports the status to the GXP SoC.
-> 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
-> ---
-> 
-> v2:
->  *Changed number of supported fans from 16 to 8 in code
->  *Remove last sentence of commit description
->  *Removed support for fan[0-15]_input in code and documentation
->  *Changed documentation to limit fan count to 7
->  *Changed documentation license
->  *Removed PWM defines
->  *Added gxp-fan-ctrl to hwmon's index.rst
->  *Removed mutex
->  *Added fan_enable support to report if the fan is enabled
->  *Changed presents to present
->  *Removed unnecessary ()
->  *Add comment for plreg reads and calculations
->  *Add comment for the use of platform power state in code
->  *Removed use of variable offsets and went with hardcoding instead
->  *Rewrote driver to use devm_hwmon_device_register_with_info()
->  *Remove unused header files
->  *Fix GPL header
->  *Changed module description
->  *Add kfree in case of failure to get regmaps or resource
-> ---
->  Documentation/hwmon/gxp-fan-ctrl.rst |  28 +++
->  Documentation/hwmon/index.rst        |   1 +
->  drivers/hwmon/Kconfig                |   9 +
->  drivers/hwmon/Makefile               |   1 +
->  drivers/hwmon/gxp-fan-ctrl.c         | 305 +++++++++++++++++++++++++++
->  5 files changed, 344 insertions(+)
->  create mode 100644 Documentation/hwmon/gxp-fan-ctrl.rst
->  create mode 100644 drivers/hwmon/gxp-fan-ctrl.c
-> 
-> diff --git a/Documentation/hwmon/gxp-fan-ctrl.rst b/Documentation/hwmon/gxp-fan-ctrl.rst
-> new file mode 100644
-> index 000000000000..ae3397e81c04
-> --- /dev/null
-> +++ b/Documentation/hwmon/gxp-fan-ctrl.rst
-> @@ -0,0 +1,28 @@
-> +.. SPDX-License-Identifier: GPL-2.0-only
-> +
-> +Kernel driver gxp-fan-ctrl
-> +==========================
-> +
-> +Supported chips:
-> +
-> +  * HPE GXP SOC
-> +
-> +Author: Nick Hawkins <nick.hawkins@hpe.com>
-> +
-> +
-> +Description
-> +-----------
-> +
-> +gxp-fan-ctrl is a driver which provides fan control for the hpe gxp soc.
-> +The driver allows the gathering of fan status and the use of fan
-> +PWM control.
-> +
-> +
-> +Sysfs attributes
-> +----------------
-> +
-> +======================= ===========================================================
-> +pwm[0-7]		Fan 0 to 7 respective PWM value (0-255)
-> +fan[0-7]_fault		Fan 0 to 7 respective fault status: 1 fail, 0 ok
-> +fan[0-7]_enable         Fan 0 to 7 respective enabled status: 1 enabled, 0 disabled
-> +======================= ===========================================================
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index f7113b0f8b2a..b319ab173d1d 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -73,6 +73,7 @@ Hardware Monitoring Kernel Drivers
->     g762
->     gsc-hwmon
->     gl518sm
-> +   gxp-fan-ctrl
->     hih6130
->     ibmaem
->     ibm-cffps
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index e70d9614bec2..9e0427f20141 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -705,6 +705,15 @@ config SENSORS_GPIO_FAN
->  	  This driver can also be built as a module. If so, the module
->  	  will be called gpio-fan.
->  
-> +config SENSORS_GXP_FAN_CTRL
-> +	tristate "HPE GXP fan controller"
-> +	depends on ARCH_HPE_GXP || COMPILE_TEST
-> +	help
-> +	  If you say yes here you get support for GXP fan control functionality.
-> +
-> +	  The GXP controls fan function via the CPLD through the use of PWM
-> +	  registers. This driver reports status and pwm setting of the fans.
-> +
->  config SENSORS_HIH6130
->  	tristate "Honeywell Humidicon HIH-6130 humidity/temperature sensor"
->  	depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 007e829d1d0d..b474dcc708c4 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -83,6 +83,7 @@ obj-$(CONFIG_SENSORS_GL518SM)	+= gl518sm.o
->  obj-$(CONFIG_SENSORS_GL520SM)	+= gl520sm.o
->  obj-$(CONFIG_SENSORS_GSC)	+= gsc-hwmon.o
->  obj-$(CONFIG_SENSORS_GPIO_FAN)	+= gpio-fan.o
-> +obj-$(CONFIG_SENSORS_GXP_FAN_CTRL) += gxp-fan-ctrl.o
->  obj-$(CONFIG_SENSORS_HIH6130)	+= hih6130.o
->  obj-$(CONFIG_SENSORS_ULTRA45)	+= ultra45_env.o
->  obj-$(CONFIG_SENSORS_I5500)	+= i5500_temp.o
-> diff --git a/drivers/hwmon/gxp-fan-ctrl.c b/drivers/hwmon/gxp-fan-ctrl.c
-> new file mode 100644
-> index 000000000000..0b03d33a3a7b
-> --- /dev/null
-> +++ b/drivers/hwmon/gxp-fan-ctrl.c
-> @@ -0,0 +1,305 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P. */
-> +
-> +#include <linux/err.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/slab.h>
-> +
-> +#define OFS_FAN_INST 0 /* Is 0 because plreg base will be set at INST */
-> +#define OFS_FAN_FAIL 2 /* Is 2 bytes after base */
-> +#define OFS_SEVSTAT 0 /* Is 0 because fn2 base will be set at SEVSTAT */
-> +#define POWER_BIT 24
-> +
-> +struct gxp_fan_ctrl_drvdata {
-> +	struct device	*dev;
-> +	struct device	*hwmon_dev;
-
-Both dev and hwmon_dev are unused and thus pointless.
-
-> +	struct regmap	*plreg_map; /* Programmable logic register regmap */
-> +	struct regmap	*fn2_map; /* Function 2 regmap */
-> +	void __iomem	*base;
-> +};
-> +
-> +static bool fan_installed(struct device *dev, int fan)
-> +{
-> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
-> +	u32 val;
-> +
-> +	regmap_read(drvdata->plreg_map, OFS_FAN_INST, &val);
-> +	if (val & BIT(fan))
-> +		return 1;
-> +	else
-> +		return 0;
-
-else after return is unnecessary, and 
-	return !!(val & BIT(fan));
-would avoid the conditional.
-
-> +}
-> +
-> +static long fan_failed(struct device *dev, int fan)
-> +{
-> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
-> +	u32 val;
-> +
-> +	/*
-> +	 * The offset for fan fail is 2 which is not word aligned.
-> +	 * Read from fan installed which is 0 and shift value.
-> +	 */
-> +
-> +	regmap_read(drvdata->plreg_map, OFS_FAN_INST, &val);
-> +
-> +	if ((val >> (8 * OFS_FAN_FAIL)) & BIT(fan))
-> +		return 1;
-> +	else
-> +		return 0;
-
-else after return is pointless, and this can be written as
-
-	return !!((val >> (8 * OFS_FAN_FAIL)) & BIT(fan));
-
-to avoid the conditional.
-
-> +}
-> +
-> +static long fan_enabled(struct device *dev, int fan)
-> +{
-> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
-> +	unsigned int reg;
-> +
-> +	/*
-> +	 * Check the power status as if the platform is off the value
-> +	 * reported for the PWM will be incorrect. Report fan as
-> +	 * disabled.
-> +	 */
-> +	regmap_read(drvdata->fn2_map, OFS_SEVSTAT, &reg);
-> +
-> +	/* If Fan is installed and the system is on it is enabled */
-> +	if ((reg & BIT(POWER_BIT)) && fan_installed(dev, fan))
-> +		return  1;
-> +
-> +	/* Platform power is off, fan is disabled */
-> +	return 0;
-
-Same as above.
-
-> +}
-> +
-> +static int gxp_pwm_write(struct device *dev, u32 attr, int channel, long val)
-> +{
-> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
-> +
-> +	switch (attr) {
-> +	case hwmon_pwm_input:
-> +		if (val > 255)
-> +			return -EINVAL;
-
-Should also check for values < 0.
-
-> +		writeb(val, drvdata->base + channel);
-
-The mixed use of direct writes and regmap is odd and confusing.
-Why use regmap for plreg_map and for fn2_map but not for base ?
-Can this be unified ? If not, why ?
-
-> +		return 0;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int gxp_fan_ctrl_write(struct device *dev, enum hwmon_sensor_types type,
-> +			      u32 attr, int channel, long val)
-> +{
-> +	switch (type) {
-> +	case hwmon_pwm:
-> +		return gxp_pwm_write(dev, attr, channel, val);
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int gxp_fan_read(struct device *dev, u32 attr, int channel, long *val)
-> +{
-> +	switch (attr) {
-> +	case hwmon_fan_enable:
-> +		*val = fan_enabled(dev, channel);
-> +		return 0;
-> +	case hwmon_fan_fault:
-> +		*val = fan_failed(dev, channel);
-> +		return 0;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int gxp_pwm_read(struct device *dev, u32 attr, int channel, long *val)
-> +{
-> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
-> +	unsigned int reg;
-> +
-> +	/*
-> +	 * Check the power status of the platform. If the platform is off
-> +	 * the value reported for the PWM will be incorrect. In this case
-> +	 * report a PWM of zero.
-> +	 */
-> +	regmap_read(drvdata->fn2_map, 0, &reg);
-> +	if (reg & BIT(POWER_BIT)) {
-> +		/* If Fan present, then read it. */
-> +		*val = fan_installed(dev, channel) ? readb(drvdata->base + channel) : 0;
-> +	} else {
-> +		*val = 0;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int gxp_fan_ctrl_read(struct device *dev, enum hwmon_sensor_types type,
-> +			     u32 attr, int channel, long *val)
-> +{
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		return gxp_fan_read(dev, attr, channel, val);
-> +	case hwmon_pwm:
-> +		return gxp_pwm_read(dev, attr, channel, val);
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static umode_t gxp_fan_ctrl_is_visible(const void *_data,
-> +				       enum hwmon_sensor_types type,
-> +				       u32 attr, int channel)
-> +{
-> +	umode_t mode = 0;
-> +
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_enable:
-> +		case hwmon_fan_fault:
-> +			mode = 0444;
-
-break; missing. Otherwise static analyzers will complain.
-
-> +		default:
-> +			break;
-> +		}
-
-Same as above (and, in this case, prove in point why break;
-should always be added even if it seems unnecessary).
-
-> +	case hwmon_pwm:
-> +		switch (attr) {
-> +		case hwmon_pwm_input:
-> +			mode = 0644;
-
-Same as above.
-
-> +		default:
-> +			break;
-> +		}
-
-Same as above.
-
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return mode;
-> +}
-> +
-> +static const struct hwmon_ops gxp_fan_ctrl_ops = {
-> +	.is_visible = gxp_fan_ctrl_is_visible,
-> +	.read = gxp_fan_ctrl_read,
-> +	.write = gxp_fan_ctrl_write,
-> +};
-> +
-> +static const struct hwmon_channel_info *gxp_fan_ctrl_info[] = {
-> +	HWMON_CHANNEL_INFO(fan,
-> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
-> +			   HWMON_F_FAULT | HWMON_F_ENABLE),
-> +	HWMON_CHANNEL_INFO(pwm,
-> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_chip_info gxp_fan_ctrl_chip_info = {
-> +	.ops = &gxp_fan_ctrl_ops,
-> +	.info = gxp_fan_ctrl_info,
-> +
-> +};
-> +
-> +static struct regmap *gxp_fan_ctrl_init_regmap(struct platform_device *pdev, char *reg_name)
-> +{
-> +	struct regmap_config regmap_config = {
-> +		.reg_bits = 32,
-> +		.reg_stride = 4,
-> +		.val_bits = 32,
-> +	};
-> +	void __iomem *base;
-> +
-> +	base = devm_platform_ioremap_resource_byname(pdev, reg_name);
-> +	if (IS_ERR(base))
-> +		return ERR_CAST(base);
-> +
-> +	regmap_config.name = reg_name;
-> +
-> +	return devm_regmap_init_mmio(&pdev->dev, base, &regmap_config);
-> +}
-> +
-> +static int gxp_fan_ctrl_probe(struct platform_device *pdev)
-> +{
-> +	struct gxp_fan_ctrl_drvdata *drvdata;
-> +	struct resource *res;
-> +	struct device *dev = &pdev->dev;
-> +	int error;
-> +
-> +	drvdata = devm_kzalloc(&pdev->dev, sizeof(struct gxp_fan_ctrl_drvdata),
-> +			       GFP_KERNEL);
-
-There is a local variable (dev) pointing to &pdev->dev.
-I would suggest to use it.
-
-> +	if (!drvdata)
-> +		return -ENOMEM;
-> +
-> +	drvdata->dev = &pdev->dev;
-> +
-> +	platform_set_drvdata(pdev, drvdata);
-
-There is no platform_get_drvdata() in this code, meaning
-platform_set_drvdata() is unnecessary.
-
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	drvdata->base = devm_ioremap_resource(&pdev->dev, res);
-> +	if (IS_ERR(drvdata->base)) {
-> +		error = dev_err_probe(dev, PTR_ERR(drvdata->base),
-> +				      "failed to map base\n");
-> +		goto free_mem;
-> +	}
-> +	drvdata->plreg_map = gxp_fan_ctrl_init_regmap(pdev, "pl");
-> +	if (IS_ERR(drvdata->plreg_map)) {
-> +		error = dev_err_probe(dev, PTR_ERR(drvdata->plreg_map),
-> +				      "failed to map plreg_handle\n");
-> +		goto free_mem;
-> +	}
-> +
-> +	drvdata->fn2_map = gxp_fan_ctrl_init_regmap(pdev, "fn2");
-> +	if (IS_ERR(drvdata->fn2_map)) {
-> +		error = dev_err_probe(dev, PTR_ERR(drvdata->fn2_map),
-> +				      "failed to map fn2_handle\n");
-> +		goto free_mem;
-> +	}
-> +
-> +	drvdata->hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
-> +								  "fan_ctrl",
-
-fan_ctrl is a bit generic. Normally this reflects the driver name.
-
-> +								  drvdata,
-> +								  &gxp_fan_ctrl_chip_info,
-> +								  NULL);
-> +
-> +	if (IS_ERR(drvdata->hwmon_dev)) {
-> +		error = dev_err_probe(dev, PTR_ERR(drvdata->hwmon_dev),
-> +				      "failed to register fan ctrl\n");
-> +
-> +		goto free_mem;
-> +	}
-> +
-> +	return 0;
-> +
-> +free_mem:
-> +	kfree(drvdata);
-
-drvdata was allocated with a devm function. Releasing it with kfree
-results in a double free. This goto and error handling is not only
-unnecessary but wrong.
-
-> +	return error;
-> +}
-> +
-> +static const struct of_device_id gxp_fan_ctrl_of_match[] = {
-> +	{ .compatible = "hpe,gxp-fan-ctrl", },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, gxp_fan_ctrl_of_match);
-> +
-> +static struct platform_driver gxp_fan_ctrl_driver = {
-> +	.probe		= gxp_fan_ctrl_probe,
-> +	.driver = {
-> +		.name	= "gxp-fan-ctrl",
-> +		.of_match_table = gxp_fan_ctrl_of_match,
-> +	},
-> +};
-> +module_platform_driver(gxp_fan_ctrl_driver);
-> +
-> +MODULE_AUTHOR("Nick Hawkins <nick.hawkins@hpe.com>");
-> +MODULE_DESCRIPTION("HPE GXP fan controller");
-> +MODULE_LICENSE("GPL");
+T24gMjAyMi8xMS8yMywgMTE6NDUgUE0sICJHdWVudGVyIFJvZWNrIiA8Z3JvZWNrN0BnbWFpbC5j
+b20gb24gYmVoYWxmIG9mIGxpbnV4QHJvZWNrLXVzLm5ldD4gd3JvdGU6DQoNCiAgICBPbiAxMS8y
+Mi8yMiAyMjoxNiwgQmlsbHkgVHNhaSB3cm90ZToNCiAgICA+ID4gK1RoZSBkcml2ZXIgcHJvdmlk
+ZXMgdGhlIGZvbGxvd2luZyBzZW5zb3IgYWNjZXNzZXMgaW4gc3lzZnM6DQogICAgPiA+ICs9PT09
+PT09PT09PT09PT0gPT09PT09PSA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PQ0KICAgID4gPiArZmFuWF9pbnB1dAlybwlwcm92aWRlIGN1cnJlbnQg
+ZmFuIHJvdGF0aW9uIHZhbHVlIGluIFJQTSBhcyByZXBvcnRlZA0KICAgID4gPiArCQkJYnkgdGhl
+IGZhbiB0byB0aGUgZGV2aWNlLg0KICAgID4gPiArZmFuWF9kaXYJcncJRmFuIGRpdmlzb3I6IFN1
+cHBvcnRlZCB2YWx1ZSBhcmUgcG93ZXIgb2YgNCAoMSwgNCwgMTYNCiAgICA+ID4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgIDY0LCAuLi4gNDE5NDMwNCkNCg0KICAgID4gVGhlIGNvZGUgZG9lc24n
+dCBzdXBwb3J0IDEuDQoNClRoZSBjb2RlIGNhbiBzdXBwb3J0IDEuDQoNCg0KICAgID4gVGhlIGV4
+aXN0ZW5jZSBvZiBhIHN0YXR1cyByZWdpc3RlciBtYWtlcyBtZSB3b25kZXIgd2hhdCBpcyBpbiB0
+aGVyZS4NCiAgICA+IERvZXMgdGhlIGNvbnRyb2xsZXIgcmVwb3J0IGFueSBlcnJvcnMgPyBJZiBz
+bywgaXQgbWlnaHQgYmUgd29ydGh3aWxlDQogICAgPiBhZGRpbmcgYXR0cmlidXRlKHMpIGZvciBp
+dC4NCg0KICAgID4gPiArCWlmIChyZXQpDQogICAgPiA+ICsJCXJldHVybiByZXQ7DQogICAgPiA+
+ICsNCiAgICA+ID4gKwlpZiAoISh2YWwgJiBUQUNIX0FTUEVFRF9GVUxMX01FQVNVUkVNRU5UKSkN
+CiAgICA+ID4gKwkJcmV0dXJuIDA7DQogICAgPiA+ICsJcnBtID0gYXNwZWVkX3RhY2hfdmFsX3Rv
+X3JwbShwcml2LCBmYW5fdGFjaF9jaCwNCiAgICA+ID4gKwkJCQkgICAgIHZhbCAmIFRBQ0hfQVNQ
+RUVEX1ZBTFVFX01BU0spOw0KICAgID4gPiArDQogICAgPiA+ICsJcmV0dXJuIHJwbTsNCg0KVGhl
+IHN0YXR1cyByZWdpc3RlciBpcyB0aGUgVEFDSF9BU1BFRURfRlVMTF9NRUFTVVJFTUVOVCB3aGlj
+aCBpcyB1c2VkIHRvIGluZGljYXRlIHRoYXQNCnRoZSBjb250cm9sbGVyIGRvZXNuJ3QgZGV0ZWN0
+IHRoZSBjaGFuZ2UgaW4gdGFjaCBwaW4gZm9yIGEgbG9uZyB0aW1lLg0KDQogICAgPiA+ICtzdGF0
+aWMgdm9pZCBhc3BlZWRfY3JlYXRlX2Zhbl90YWNoX2NoYW5uZWwoc3RydWN0IGFzcGVlZF90YWNo
+X2RhdGEgKnByaXYsDQogICAgPiA+ICsJCQkJCSAgIHUzMiB0YWNoX2NoKQ0KICAgID4gPiArew0K
+ICAgID4gPiArCXByaXYtPnRhY2hfcHJlc2VudFt0YWNoX2NoXSA9IHRydWU7DQogICAgPiA+ICsJ
+cHJpdi0+dGFjaF9jaGFubmVsW3RhY2hfY2hdLmxpbWl0ZWRfaW52ZXJzZSA9IDA7DQogICAgPiA+
+ICsJcmVnbWFwX3dyaXRlX2JpdHMocHJpdi0+cmVnbWFwLCBUQUNIX0FTUEVFRF9DVFJMKHRhY2hf
+Y2gpLA0KICAgID4gPiArCQkJICBUQUNIX0FTUEVFRF9JTlZFUlNfTElNSVQsDQogICAgPiA+ICsJ
+CQkgIHByaXYtPnRhY2hfY2hhbm5lbFt0YWNoX2NoXS5saW1pdGVkX2ludmVyc2UgPw0KICAgID4g
+PiArCQkJCSAgVEFDSF9BU1BFRURfSU5WRVJTX0xJTUlUIDoNCiAgICA+ID4gKwkJCQkgIDApOw0K
+ICAgID4gPiArDQogICAgPiBXaGF0IGlzIHRoZSBwdXJwb3NlIG9mIHRoZSBhYm92ZSBjb2RlID8g
+bGltaXRlZF9pbnZlcnNlIGlzIGFsd2F5cyAwLg0KDQogICAgPiA+ICsJcHJpdi0+dGFjaF9jaGFu
+bmVsW3RhY2hfY2hdLnRhY2hfZGVib3VuY2UgPSBERUJPVU5DRV8zX0NMSzsNCiAgICA+ID4gKwly
+ZWdtYXBfd3JpdGVfYml0cyhwcml2LT5yZWdtYXAsIFRBQ0hfQVNQRUVEX0NUUkwodGFjaF9jaCks
+DQogICAgPiA+ICsJCQkgIFRBQ0hfQVNQRUVEX0RFQk9VTkNFX01BU0ssDQogICAgPiA+ICsJCQkg
+IHByaXYtPnRhY2hfY2hhbm5lbFt0YWNoX2NoXS50YWNoX2RlYm91bmNlDQogICAgPiA+ICsJCQkJ
+ICA8PCBUQUNIX0FTUEVFRF9ERUJPVU5DRV9CSVQpOw0KICAgID4gPiArDQogICAgPiA+ICsJcHJp
+di0+dGFjaF9jaGFubmVsW3RhY2hfY2hdLnRhY2hfZWRnZSA9IEYyRl9FREdFUzsNCiAgICA+ID4g
+KwlyZWdtYXBfd3JpdGVfYml0cyhwcml2LT5yZWdtYXAsIFRBQ0hfQVNQRUVEX0NUUkwodGFjaF9j
+aCksDQogICAgPiA+ICsJCQkgIFRBQ0hfQVNQRUVEX0lPX0VER0VfTUFTSywNCiAgICA+ID4gKwkJ
+CSAgcHJpdi0+dGFjaF9jaGFubmVsW3RhY2hfY2hdLnRhY2hfZWRnZQ0KICAgID4gPiArCQkJCSAg
+PDwgVEFDSF9BU1BFRURfSU9fRURHRV9CSVQpOw0KICAgID4gPiArDQoNCiAgICA+IGxpbWl0ZWRf
+aW52ZXJzZSwgdGFjaF9kZWJvdW5jZSwgYW5kIHRhY2hfZWRnZSBhcmUgY29uc3RhbnRzLg0KICAg
+ID4gVGhlcmUgaXMgbm8gbmVlZCB0byBrZWVwIGNvbnN0YW50cyBhcyBwZXItY2hhbm5lbCB2YXJp
+YWJsZXMuDQoNCiAgICA+ID4gKwlwcml2LT50YWNoX2NoYW5uZWxbdGFjaF9jaF0uZGl2aXNvciA9
+IERFRkFVTFRfVEFDSF9ESVY7DQogICAgPiA+ICsJcmVnbWFwX3dyaXRlX2JpdHMocHJpdi0+cmVn
+bWFwLCBUQUNIX0FTUEVFRF9DVFJMKHRhY2hfY2gpLA0KICAgID4gPiArCQkJICBUQUNIX0FTUEVF
+RF9DTEtfRElWX1RfTUFTSywNCiAgICA+ID4gKwkJCSAgRElWX1RPX1JFRyhwcml2LT50YWNoX2No
+YW5uZWxbdGFjaF9jaF0uZGl2aXNvcikNCiAgICA+ID4gKwkJCQkgIDw8IFRBQ0hfQVNQRUVEX0NM
+S19ESVZfQklUKTsNCiAgICA+ID4gKw0KICAgID4gPiArCXByaXYtPnRhY2hfY2hhbm5lbFt0YWNo
+X2NoXS50aHJlc2hvbGQgPSAwOw0KICAgID4gPiArCXJlZ21hcF93cml0ZV9iaXRzKHByaXYtPnJl
+Z21hcCwgVEFDSF9BU1BFRURfQ1RSTCh0YWNoX2NoKSwNCiAgICA+ID4gKwkJCSAgVEFDSF9BU1BF
+RURfVEhSRVNIT0xEX01BU0ssDQogICAgPiA+ICsJCQkgIHByaXYtPnRhY2hfY2hhbm5lbFt0YWNo
+X2NoXS50aHJlc2hvbGQpOw0KICAgID4gPiArDQoNCiAgICA+IFRoZSBhYm92ZSBhcHBsaWVzIHRv
+IHRocmVzaG9sZCBhcyB3ZWxsLg0KDQpUaGUgYWJvdmUgY29kZSBpcyB1c2VkIHRvIHJldGFpbiB0
+aGUgYWRqdXN0YWJsZSBmZWF0dXJlIG9mIHRoZSBjb250cm9sbGVyLg0KSSB3aWxsIHJlbW92ZSB0
+aGVtIHVudGlsIEkgYWRkIHRoZSBkdHMgcHJvcGVydHkgdG8gc3VwcG9ydCB0aGVtLg0KDQogICAg
+PiA+ICsJfQ0KICAgID4gPiArDQogICAgPiA+ICsJaHdtb24gPSBkZXZtX2h3bW9uX2RldmljZV9y
+ZWdpc3Rlcl93aXRoX2luZm8oZGV2LCAiYXNwZWVkX3RhY2giLCBwcml2LA0KICAgID4gPiArCQkJ
+CQkJICAgICAmYXNwZWVkX3RhY2hfY2hpcF9pbmZvLCBOVUxMKTsNCiAgICA+ID4gKwlyZXQgPSBQ
+VFJfRVJSX09SX1pFUk8oaHdtb24pOw0KICAgID4gPiArCWlmIChyZXQpDQogICAgPiA+ICsJCXJl
+dHVybiBkZXZfZXJyX3Byb2JlKGRldiwgcmV0LA0KICAgID4gPiArCQkJCSAgICAgIkZhaWxlZCB0
+byByZWdpc3RlciBod21vbiBkZXZpY2VcbiIpOw0KICAgID4gPiArCXJldHVybiAwOw0KDQogICAg
+PiBXaHkgbm90IHJldHVybiB0aGUgZXJyb3IgPyBFaXRoZXIgaXQgaXMgYW4gZXJyb3Igb3IgaXQg
+aXNuJ3QuIElmIGl0IGlzDQogICAgPiBub3QgYW4gZXJyb3IsIGRldl9lcnJfcHJvYmUoKSBpcyBu
+b3QgYXBwcm9wcmlhdGUuIElmIGl0IGlzLCB0aGUgZXJyb3INCiAgICA+IHNob3VsZCBiZSByZXR1
+cm5lZC4gRWl0aGVyIGNhc2UsIGlmIHRoaXMgaXMgb24gcHVycG9zZSwgaXQgbmVlZHMgYW4NCiAg
+ICA+IGV4cGxhbmF0aW9uLg0KDQpJIGhhdmUgcmV0dXJuIHRoZSByZXR1cm4gdmFsdWUgb2YgdGhl
+IGRldl9lcnJfcHJvYmUuIERpZCBJIG1pc3Mgc29tZXRpbmc/DQoNClRoYW5rcw0KDQpCZXN0IFJl
+Z2FyZHMsDQpCaWxseSBUc2FpDQoNCg==
