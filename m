@@ -2,95 +2,105 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F09AC4167B
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 16:34:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EC2EC433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 16:38:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235153AbiK2Qel (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Nov 2022 11:34:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
+        id S234427AbiK2Qij (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Nov 2022 11:38:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232537AbiK2Qek (ORCPT
+        with ESMTP id S235997AbiK2Qic (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Nov 2022 11:34:40 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35F35DBA0
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 08:34:39 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p03Yz-00042W-PT; Tue, 29 Nov 2022 17:34:29 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p03Yx-0017IJ-Hm; Tue, 29 Nov 2022 17:34:28 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p03Yx-001Gqu-NB; Tue, 29 Nov 2022 17:34:27 +0100
-Date:   Tue, 29 Nov 2022 17:34:27 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-pwm@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v8 4/4] hwmon: (max6639) Add pwm support
-Message-ID: <20221129163427.dxnqfay6ur6mvivu@pengutronix.de>
-References: <20221129161134.2672474-1-Naresh.Solanki@9elements.com>
- <20221129161134.2672474-5-Naresh.Solanki@9elements.com>
+        Tue, 29 Nov 2022 11:38:32 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFF1554EB;
+        Tue, 29 Nov 2022 08:38:29 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1433ef3b61fso17659223fac.10;
+        Tue, 29 Nov 2022 08:38:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=AIlkOn1RGTq0BXLREQR2dL++z9UYJr3//es7sMDSy6A=;
+        b=EKoyPOxWXAcv0kDDdile+YOyw3OQWwaLEiDIOyN/NHyCAVR6O2RqtkJTe76BiLFIGR
+         17KRZE8DxOXE5pNAdFCrIGA17/SVtvWpg54HaTOay5RFc6fpUvhim0843hcvEN39xnZp
+         0nM8qQUvVqIRZIl4AEmG0e0NQEm3wDcyeB0sM2EbHD2KigmremQkb7BGXWnfmxvk+B+l
+         LqZrpShZt/virc1YvHBrCrHxAEEJXLX3fAQfO2IRykdzBo4IqiJUwN+J44VDvSXBlUme
+         FpoeFTJo54oaFHYRmfJPbL32B+9DiEzbfDf6/Lg9q+5ctkp3T7vv+VknAwdajyP+6oNk
+         87Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AIlkOn1RGTq0BXLREQR2dL++z9UYJr3//es7sMDSy6A=;
+        b=mPVR/z8bgHhHKj1FVb0yqVMf2cWR4/oOwrLHmN2bgkP4zo4A0EHqAmB+GhxgvHONa4
+         suaaW4Gk5/EFFp3S/awtC/VBbUrLFkTM1HxyJ5X9qKx7S2eVwlfsVkoy6KHumBG1m0Zf
+         U573HJtkXDd6UEdCquWGnoq7fV2Fpf0+9yWc1glUBaDJPSlAIZ6/IJfZgdzkhMtZ4XMT
+         vI8RNJzuyXs7E2sW/nofWn4LPMw9F9wMQh4XMn1jH32WV7LJhyk6ztDe+wSKTcHQZn/j
+         LbEGs+wTYG/X5zaCxv7sWMF3HgsiIeOBpB2yw1gsX9DFWhMy1l0wE/dmWOUw0v8pGEO+
+         oZbw==
+X-Gm-Message-State: ANoB5pn/Xqj95QjelvicSMVk7rn3bNRRBHwxyaHBn0z6D/WxlsXB80pm
+        WmYciDUMD6yKESqlWPnpZ4o=
+X-Google-Smtp-Source: AA0mqf4c1P2rrkH8pFF2t7W8Qd8VY+UanFfxu3zqXTVS9B/EJybxD83c1QwxiBefdWn2vIwzBCN7Zg==
+X-Received: by 2002:a05:6870:888d:b0:132:c1e9:728b with SMTP id m13-20020a056870888d00b00132c1e9728bmr21864753oam.241.1669739909056;
+        Tue, 29 Nov 2022 08:38:29 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ce8-20020a056830628800b00661b019accbsm6122281otb.3.2022.11.29.08.38.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 08:38:28 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0d32c71c-9d88-26fe-60a3-e13ff64a47ad@roeck-us.net>
+Date:   Tue, 29 Nov 2022 08:38:26 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o2cqtdhvh46rznt7"
-Content-Disposition: inline
-In-Reply-To: <20221129161134.2672474-5-Naresh.Solanki@9elements.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 2/6] ABI: sysfs-class-hwmon: add a description for
+ fanY_fault
+Content-Language: en-US
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20221128230219.39537-1-nick.hawkins@hpe.com>
+ <20221128230219.39537-3-nick.hawkins@hpe.com>
+ <46cecf77-e989-40d9-3e08-fd970ad12a79@roeck-us.net>
+ <0A5DF9D5-B8C2-44A4-924A-B8957EC8A2A7@hpe.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <0A5DF9D5-B8C2-44A4-924A-B8957EC8A2A7@hpe.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On 11/29/22 08:15, Hawkins, Nick wrote:
+>> This change is really completely unrelated to a CPLD or specific SoC.
+>> The commit description is just confusing. It should simply state that
+>> it documents the existing fanX_fault attribute.
+> 
+> Understood. Just to confirm should I change fanY_fault to fanX_fault
+> in documentation as well as the patch description? For instance:
+> /sys/class/hwmon/hwmonX/fanX_fault
+> 
+> It seems that the documentation around it uses fanY_ format.
+> 
 
---o2cqtdhvh46rznt7
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Now you start splitting hairs ;-). I wanted to point out that
+fan[X,Y,Z,A,B,C,...]_fault is a generic attribute, not that I want you
+to change fanY to fanX.
 
-On Tue, Nov 29, 2022 at 05:11:34PM +0100, Naresh Solanki wrote:
-> Add pwm support for max6639. Also configure pwm fan speed based on pwm
-> provided in DT.
+Guenter
 
-Did you do anything to resolve the questions I had in reply to v5? If
-yes, I must have missed it.
-
-Note that maintainer time is scarce and with sending new versions of a
-patch with no sign that you improved in the aspects that were critized
-before, you're burning that scarce time and loosing the good will of the
-responsible maintainers.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---o2cqtdhvh46rznt7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOGNJAACgkQwfwUeK3K
-7Anr6wf+LujaKKCc8Linrm35vtpuM76BeNTyq/Vjsyfg0GyXnqeYZyaUTnjLixiS
-lZTjWsGvcfgVqWWfQCP5s2bT8F9RGxLwvF9Ceda4MRv/aySVCBR6aqo8PJDKPLK/
-ifGHPpRaIvEBJa3lRisIsuIyGLIiYw5Z1flNZAjnsarVySycOK6LalreLcOait/x
-W1Do36jTgSFCMiCdSEZnrnp9XuocxkjDEA63fU8+orcOKiJwVKgFzJf144VV+Sdl
-JMZPQXcDEFUZ5bV3CyXFZgWg3x6Uqb/59Vm0ws9aC5J0D+qSPrS3wAWqu3hDMWZw
-0VZcYe6mS6mzvM8PEqXL2wXW0jPLvA==
-=NgQw
------END PGP SIGNATURE-----
-
---o2cqtdhvh46rznt7--
