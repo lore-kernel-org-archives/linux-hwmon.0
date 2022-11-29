@@ -2,78 +2,195 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2825DC4321E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 14:18:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E13B7C433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 15:06:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234009AbiK2OSI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Nov 2022 09:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50794 "EHLO
+        id S233273AbiK2PGL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Nov 2022 10:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235250AbiK2OR3 (ORCPT
+        with ESMTP id S229693AbiK2PGK (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:17:29 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2B069300
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 06:15:35 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id l8so17289419ljh.13
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 06:15:35 -0800 (PST)
+        Tue, 29 Nov 2022 10:06:10 -0500
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8943FBA4;
+        Tue, 29 Nov 2022 07:06:08 -0800 (PST)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-142faa7a207so17281760fac.13;
+        Tue, 29 Nov 2022 07:06:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BRpdkJK2Wo92ON846N6eHVIM5x8Sd+GDvvbGsGBzl0k=;
-        b=I+R/M8dE9pmPamxZ3RSuWcocOq1rviSIGC0ap0QPJgzV1OFULdizRcDBcRmhvJ3niN
-         UBLin+dkqj5rdvepvMyFLA7YMrqpuTk0W07CFV4CEBZJdEt7RAkSdIJddwMLHap9qo5a
-         UV1W3K+GE2LD68UDPxWMo/GWAPsiZfcnL8/QY=
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=kDwNcelrs2eUV+lrqFjarpCKpHkKCs1VhcZri8buYKI=;
+        b=AoZfmFeYKOl4l2lIHPCkTbcdpAwJpSta0pfkYwaOkFHCISQw8IoGt3aERVL2/nqOkC
+         a6BHyldoXF8TPzDrKg0hHQ+iLMySV9kk5duA9ppJwI3nVnZkecI7mqXVjTzxjc1tPf1s
+         Hlx15iEgHrOjRYo0NFhhTx1q/VYw5qA3kSnG/L/75Bylsq7133s9dlcs8Qr30wwEV7OG
+         fNFek9RS1KKxHLxzZ/tujDKRHxDGuDqt7+cMME8GxWqaraogMMeyD/FP/SgXOdZq/OZw
+         5MI31UGRbttIb/R9Kk+rkdl4d+hqpbnXIkdE9XBkr6wnotATQzBzfuZTkWlopIn4Ubmp
+         l5Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BRpdkJK2Wo92ON846N6eHVIM5x8Sd+GDvvbGsGBzl0k=;
-        b=n43bL1UVq3aFMoAKHjWyy60vqhagos8R62VmTbmeJtQ+sf4xAhy06dssDjvzku+rua
-         J93Z2PRqktG4Z5ER8+m3f3kVftTlcdLbKYR5nXuOn+X+/qIRUBbko4lYqi35/7dpW6M7
-         6+VXBz6DxK5/UBo8n6FrFWgnukxAMLYZAVIud/r6VuU4k41OBkf4t5n38zH0vPvU50W/
-         bXybJfRV1xG0AvvSXfHFcxwDOrPy7Esi5pF/jh5zdKbC0wJUPIDNOcgMCd4UH41CcXGb
-         L46N/nBLNybguknavaqiHmSIvfT42zaoKs333dMichqLGPcNtVMuzqG6raPeCk1WMlAI
-         47SQ==
-X-Gm-Message-State: ANoB5pnUw4dJeTCTV7oP/byTFz9l8HckX1kCYWA3Qum5uSTBVpeLrJW6
-        QUAMzCkMy/ohlZZ/KITjhrwXYA==
-X-Google-Smtp-Source: AA0mqf66BjvHqAMZwEdJBt0dFTt5/SHy1+6HQvcJmTOWZBR9LFU3R1/MSDg9xbs8lvTCdJbqEGsmrQ==
-X-Received: by 2002:a2e:be8b:0:b0:278:ea67:a38c with SMTP id a11-20020a2ebe8b000000b00278ea67a38cmr11889405ljr.63.1669731333470;
-        Tue, 29 Nov 2022 06:15:33 -0800 (PST)
-Received: from [172.21.3.193] ([87.54.42.112])
-        by smtp.gmail.com with ESMTPSA id b16-20020a056512071000b004a8b9c68735sm2071805lfs.102.2022.11.29.06.15.32
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kDwNcelrs2eUV+lrqFjarpCKpHkKCs1VhcZri8buYKI=;
+        b=8KgAi9UJw2PaccUuK3Dotv2811EMQ5V/IvQravvE+tF9mACDZ4MB238HbctXyrrDCk
+         thxg1r9uUk8hewiKQ2uYop1kxi5p0n+/I68z0RObAkFRHm/8jQAw2zBYpi0uZrBUh/MJ
+         d3/ELl7AHrWse/u1xSg2RhD77wlOPkDOXbE+xCVpvhpth5ymFDfUBFopU+uiAQII1Wgy
+         EWr5RefFXOUrcwE4VA3OVa8YcJjOvixkU92TPr8Xw6cqopyuHHtUiKAACWJAWL/ml9Gi
+         nIFztwNHQMshzIT1Eiew0FOxTpLsCzmeraq4w2mVirXZdi+tS/D95sDrd4J/enoyDmH0
+         5RrQ==
+X-Gm-Message-State: ANoB5pm2OwqfbBgH5kVMscQqYo/jEhR3H868CIvr9TmplQjgGM51KEAh
+        vxMZL3hyZwY2mZusv4Tedmw=
+X-Google-Smtp-Source: AA0mqf5oDydb9EGtYPiKSPOiYCPpv8fl65qEocklfg33+p3F9hythil2GZwIwm+FvmCbwsKu6AnaMQ==
+X-Received: by 2002:a05:6870:54d2:b0:131:e200:1492 with SMTP id g18-20020a05687054d200b00131e2001492mr21190025oan.44.1669734367149;
+        Tue, 29 Nov 2022 07:06:07 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h9-20020a4ad009000000b0049be9c3c15dsm5517327oor.33.2022.11.29.07.06.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 06:15:33 -0800 (PST)
-Message-ID: <05782b6b-4e09-2b13-32c4-4984753dcef0@rasmusvillemoes.dk>
-Date:   Tue, 29 Nov 2022 15:15:32 +0100
+        Tue, 29 Nov 2022 07:06:06 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a0b48e60-59ce-0033-b09f-2f92983753b7@roeck-us.net>
+Date:   Tue, 29 Nov 2022 07:06:03 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 5/5] rtc: isl12022: sort header inclusion
- alphabetically
-Content-Language: en-US, da
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-References: <20221126141806.62205-1-andriy.shevchenko@linux.intel.com>
- <20221126141806.62205-5-andriy.shevchenko@linux.intel.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20221126141806.62205-5-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.2.2
+Subject: Re: [v4 5/5] hwmon: Add Aspeed ast2600 TACH support
+Content-Language: en-US
+To:     Billy Tsai <billy_tsai@aspeedtech.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Cc:     kernel test robot <lkp@intel.com>
+References: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
+ <20221123061635.32025-6-billy_tsai@aspeedtech.com>
+ <bf851fa1-af62-5cdc-8cb4-bcf29b73731a@roeck-us.net>
+ <D5F454FE-9C4B-4B7E-8817-637D5FCC047A@aspeedtech.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <D5F454FE-9C4B-4B7E-8817-637D5FCC047A@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 26/11/2022 15.18, Andy Shevchenko wrote:
-> Sort header inclusion alphabetically for better maintenance.
+On 11/28/22 23:08, Billy Tsai wrote:
+> On 2022/11/23, 11:45 PM, "Guenter Roeck" <groeck7@gmail.com on behalf of linux@roeck-us.net> wrote:
+> 
+>      On 11/22/22 22:16, Billy Tsai wrote:
+>      > > +The driver provides the following sensor accesses in sysfs:
+>      > > +=============== ======= =====================================================
+>      > > +fanX_input	ro	provide current fan rotation value in RPM as reported
+>      > > +			by the fan to the device.
+>      > > +fanX_div	rw	Fan divisor: Supported value are power of 4 (1, 4, 16
+>      > > +                        64, ... 4194304)
+> 
+>      > The code doesn't support 1.
+> 
+> The code can support 1.
+> 
+Sorry, leftover from when I misread the code and thought it didn't.
+> 
+>      > The existence of a status register makes me wonder what is in there.
+>      > Does the controller report any errors ? If so, it might be worthwile
+>      > adding attribute(s) for it.
+> 
+>      > > +	if (ret)
+>      > > +		return ret;
+>      > > +
+>      > > +	if (!(val & TACH_ASPEED_FULL_MEASUREMENT))
+>      > > +		return 0;
+>      > > +	rpm = aspeed_tach_val_to_rpm(priv, fan_tach_ch,
+>      > > +				     val & TACH_ASPEED_VALUE_MASK);
+>      > > +
+>      > > +	return rpm;
+> 
+> The status register is the TACH_ASPEED_FULL_MEASUREMENT which is used to indicate that
+> the controller doesn't detect the change in tach pin for a long time.
+> 
+>      > > +static void aspeed_create_fan_tach_channel(struct aspeed_tach_data *priv,
+>      > > +					   u32 tach_ch)
+>      > > +{
+>      > > +	priv->tach_present[tach_ch] = true;
+>      > > +	priv->tach_channel[tach_ch].limited_inverse = 0;
+>      > > +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+>      > > +			  TACH_ASPEED_INVERS_LIMIT,
+>      > > +			  priv->tach_channel[tach_ch].limited_inverse ?
+>      > > +				  TACH_ASPEED_INVERS_LIMIT :
+>      > > +				  0);
+>      > > +
+>      > What is the purpose of the above code ? limited_inverse is always 0.
+> 
+>      > > +	priv->tach_channel[tach_ch].tach_debounce = DEBOUNCE_3_CLK;
+>      > > +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+>      > > +			  TACH_ASPEED_DEBOUNCE_MASK,
+>      > > +			  priv->tach_channel[tach_ch].tach_debounce
+>      > > +				  << TACH_ASPEED_DEBOUNCE_BIT);
+>      > > +
+>      > > +	priv->tach_channel[tach_ch].tach_edge = F2F_EDGES;
+>      > > +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+>      > > +			  TACH_ASPEED_IO_EDGE_MASK,
+>      > > +			  priv->tach_channel[tach_ch].tach_edge
+>      > > +				  << TACH_ASPEED_IO_EDGE_BIT);
+>      > > +
+> 
+>      > limited_inverse, tach_debounce, and tach_edge are constants.
+>      > There is no need to keep constants as per-channel variables.
+> 
+>      > > +	priv->tach_channel[tach_ch].divisor = DEFAULT_TACH_DIV;
+>      > > +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+>      > > +			  TACH_ASPEED_CLK_DIV_T_MASK,
+>      > > +			  DIV_TO_REG(priv->tach_channel[tach_ch].divisor)
+>      > > +				  << TACH_ASPEED_CLK_DIV_BIT);
+>      > > +
+>      > > +	priv->tach_channel[tach_ch].threshold = 0;
+>      > > +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+>      > > +			  TACH_ASPEED_THRESHOLD_MASK,
+>      > > +			  priv->tach_channel[tach_ch].threshold);
+>      > > +
+> 
+>      > The above applies to threshold as well.
+> 
+> The above code is used to retain the adjustable feature of the controller.
+> I will remove them until I add the dts property to support them.
+> 
+>      > > +	}
+>      > > +
+>      > > +	hwmon = devm_hwmon_device_register_with_info(dev, "aspeed_tach", priv,
+>      > > +						     &aspeed_tach_chip_info, NULL);
+>      > > +	ret = PTR_ERR_OR_ZERO(hwmon);
+>      > > +	if (ret)
+>      > > +		return dev_err_probe(dev, ret,
+>      > > +				     "Failed to register hwmon device\n");
+>      > > +	return 0;
+> 
+>      > Why not return the error ? Either it is an error or it isn't. If it is
+>      > not an error, dev_err_probe() is not appropriate. If it is, the error
+>      > should be returned. Either case, if this is on purpose, it needs an
+>      > explanation.
+> 
+> I have return the return value of the dev_err_probe. Did I miss someting?
+> 
+No, me not having enough coffee when reviewing the code. Sorry for the noise.
 
-Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Thanks,
+Guenter
 
