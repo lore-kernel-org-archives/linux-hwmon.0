@@ -2,195 +2,203 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E13B7C433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 15:06:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE31AC4167B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 15:25:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233273AbiK2PGL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Nov 2022 10:06:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        id S232992AbiK2PY7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Nov 2022 10:24:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiK2PGK (ORCPT
+        with ESMTP id S235445AbiK2PY7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:06:10 -0500
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8943FBA4;
-        Tue, 29 Nov 2022 07:06:08 -0800 (PST)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-142faa7a207so17281760fac.13;
-        Tue, 29 Nov 2022 07:06:08 -0800 (PST)
+        Tue, 29 Nov 2022 10:24:59 -0500
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B33C1A81B;
+        Tue, 29 Nov 2022 07:24:58 -0800 (PST)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-142faa7a207so17354706fac.13;
+        Tue, 29 Nov 2022 07:24:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=kDwNcelrs2eUV+lrqFjarpCKpHkKCs1VhcZri8buYKI=;
-        b=AoZfmFeYKOl4l2lIHPCkTbcdpAwJpSta0pfkYwaOkFHCISQw8IoGt3aERVL2/nqOkC
-         a6BHyldoXF8TPzDrKg0hHQ+iLMySV9kk5duA9ppJwI3nVnZkecI7mqXVjTzxjc1tPf1s
-         Hlx15iEgHrOjRYo0NFhhTx1q/VYw5qA3kSnG/L/75Bylsq7133s9dlcs8Qr30wwEV7OG
-         fNFek9RS1KKxHLxzZ/tujDKRHxDGuDqt7+cMME8GxWqaraogMMeyD/FP/SgXOdZq/OZw
-         5MI31UGRbttIb/R9Kk+rkdl4d+hqpbnXIkdE9XBkr6wnotATQzBzfuZTkWlopIn4Ubmp
-         l5Aw==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wJDPWKUhea1UYF8DZSQeMkG2RUkLbDvjdRtmBNddCi4=;
+        b=ZWYszs34HQk0bUSdwnbG4hx4lSlDzM6z2rqcI2+ga2dubwbe7NYOmo2fudGTm/zoWw
+         ScB1UzymEXlBIO4gKc3fHT8XXNZDIYC8U9Nx++013Ns1W2Vj3JewMmWaGrNfzXFGE52C
+         1ecUtEhPDIu4yuXLKUeeQNgmIqQ90lIua7gH5KZOFjfb/2FXKcjcDaZPGsauQHDconJn
+         T7WQtCwexuS4ouE52Kquiz/zZsGSuVztCPNgIV1b2akIAdVhZ1eoH6Iixl0jZizoeTXs
+         jFUmsAbEd/L6i2YE2BXXf1M/DV4Nju4JerdgrqWmD+geEK43FPi7bBx+NlXLf6o+6Kl5
+         beUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kDwNcelrs2eUV+lrqFjarpCKpHkKCs1VhcZri8buYKI=;
-        b=8KgAi9UJw2PaccUuK3Dotv2811EMQ5V/IvQravvE+tF9mACDZ4MB238HbctXyrrDCk
-         thxg1r9uUk8hewiKQ2uYop1kxi5p0n+/I68z0RObAkFRHm/8jQAw2zBYpi0uZrBUh/MJ
-         d3/ELl7AHrWse/u1xSg2RhD77wlOPkDOXbE+xCVpvhpth5ymFDfUBFopU+uiAQII1Wgy
-         EWr5RefFXOUrcwE4VA3OVa8YcJjOvixkU92TPr8Xw6cqopyuHHtUiKAACWJAWL/ml9Gi
-         nIFztwNHQMshzIT1Eiew0FOxTpLsCzmeraq4w2mVirXZdi+tS/D95sDrd4J/enoyDmH0
-         5RrQ==
-X-Gm-Message-State: ANoB5pm2OwqfbBgH5kVMscQqYo/jEhR3H868CIvr9TmplQjgGM51KEAh
-        vxMZL3hyZwY2mZusv4Tedmw=
-X-Google-Smtp-Source: AA0mqf5oDydb9EGtYPiKSPOiYCPpv8fl65qEocklfg33+p3F9hythil2GZwIwm+FvmCbwsKu6AnaMQ==
-X-Received: by 2002:a05:6870:54d2:b0:131:e200:1492 with SMTP id g18-20020a05687054d200b00131e2001492mr21190025oan.44.1669734367149;
-        Tue, 29 Nov 2022 07:06:07 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wJDPWKUhea1UYF8DZSQeMkG2RUkLbDvjdRtmBNddCi4=;
+        b=FPIH4l5ABkR9g60WyzQzBMqLFyrtdfqWEh+Cem5T0BGpERgNPZKWXC+KTLcPJdGkYz
+         KJIHizCN5DMykUkaRGdaGwiGznEWfnwnmowfbKKUUb0eApUKVXvLi+rF5gv88NyPxMdb
+         D0NaS02cqt6NNM7UARY+6cN7BtbxLIaNqQcIlj1nbEeBF3+m01qiVtUpquIEOcLGDbVf
+         IaEJ/Cjzjt8zJkgVWeFLKbzZ7/j/OTcKm/rN6V8VywdP5ETvA6fJ16TLv4anKvzEsZ2u
+         wgHIdm+TWKY1CxK76Rr2gyTUxECSdIZQMTDymabVNATCsyDrJBpP8JBN9P9Bt5JFRDha
+         J0Kg==
+X-Gm-Message-State: ANoB5pl8jCdE/dffGzu9OBN76vMXOxalW2Eiy6evBNFc5MWZF+jk40bk
+        15s10Xi6djMrz/4YjHE4XbA=
+X-Google-Smtp-Source: AA0mqf7QpmXo7URc+f118DeqDUlk64u0wUJhe2um7JNlrd9AGjXmrymSMEzwQfk6eoH1RIwwamPHNw==
+X-Received: by 2002:a05:6870:bf14:b0:13b:5d72:f110 with SMTP id qh20-20020a056870bf1400b0013b5d72f110mr33633119oab.252.1669735497552;
+        Tue, 29 Nov 2022 07:24:57 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h9-20020a4ad009000000b0049be9c3c15dsm5517327oor.33.2022.11.29.07.06.04
+        by smtp.gmail.com with ESMTPSA id d5-20020a05680808e500b0035acd0a6eb2sm5580109oic.41.2022.11.29.07.24.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 07:06:06 -0800 (PST)
+        Tue, 29 Nov 2022 07:24:57 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a0b48e60-59ce-0033-b09f-2f92983753b7@roeck-us.net>
-Date:   Tue, 29 Nov 2022 07:06:03 -0800
+Message-ID: <6366dfd8-9e81-1ada-f41d-a687b4ab8e5a@roeck-us.net>
+Date:   Tue, 29 Nov 2022 07:24:55 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [v4 5/5] hwmon: Add Aspeed ast2600 TACH support
 Content-Language: en-US
-To:     Billy Tsai <billy_tsai@aspeedtech.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Cc:     kernel test robot <lkp@intel.com>
-References: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
- <20221123061635.32025-6-billy_tsai@aspeedtech.com>
- <bf851fa1-af62-5cdc-8cb4-bcf29b73731a@roeck-us.net>
- <D5F454FE-9C4B-4B7E-8817-637D5FCC047A@aspeedtech.com>
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org
+References: <20221128174715.1969957-1-Naresh.Solanki@9elements.com>
+ <bbba5774-b886-df08-1263-7e3489b84a8e@roeck-us.net>
+ <32b17cb1-754f-684b-a7d2-583d2e32030f@9elements.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <D5F454FE-9C4B-4B7E-8817-637D5FCC047A@aspeedtech.com>
+Subject: Re: [PATCH v2 1/3] hwmon: (pmbus/core): Update regulator flag map
+In-Reply-To: <32b17cb1-754f-684b-a7d2-583d2e32030f@9elements.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/28/22 23:08, Billy Tsai wrote:
-> On 2022/11/23, 11:45 PM, "Guenter Roeck" <groeck7@gmail.com on behalf of linux@roeck-us.net> wrote:
+On 11/28/22 23:55, Naresh Solanki wrote:
+> Hi Guenter,
 > 
->      On 11/22/22 22:16, Billy Tsai wrote:
->      > > +The driver provides the following sensor accesses in sysfs:
->      > > +=============== ======= =====================================================
->      > > +fanX_input	ro	provide current fan rotation value in RPM as reported
->      > > +			by the fan to the device.
->      > > +fanX_div	rw	Fan divisor: Supported value are power of 4 (1, 4, 16
->      > > +                        64, ... 4194304)
-> 
->      > The code doesn't support 1.
-> 
-> The code can support 1.
-> 
-Sorry, leftover from when I misread the code and thought it didn't.
-> 
->      > The existence of a status register makes me wonder what is in there.
->      > Does the controller report any errors ? If so, it might be worthwile
->      > adding attribute(s) for it.
-> 
->      > > +	if (ret)
->      > > +		return ret;
->      > > +
->      > > +	if (!(val & TACH_ASPEED_FULL_MEASUREMENT))
->      > > +		return 0;
->      > > +	rpm = aspeed_tach_val_to_rpm(priv, fan_tach_ch,
->      > > +				     val & TACH_ASPEED_VALUE_MASK);
->      > > +
->      > > +	return rpm;
-> 
-> The status register is the TACH_ASPEED_FULL_MEASUREMENT which is used to indicate that
-> the controller doesn't detect the change in tach pin for a long time.
-> 
->      > > +static void aspeed_create_fan_tach_channel(struct aspeed_tach_data *priv,
->      > > +					   u32 tach_ch)
->      > > +{
->      > > +	priv->tach_present[tach_ch] = true;
->      > > +	priv->tach_channel[tach_ch].limited_inverse = 0;
->      > > +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
->      > > +			  TACH_ASPEED_INVERS_LIMIT,
->      > > +			  priv->tach_channel[tach_ch].limited_inverse ?
->      > > +				  TACH_ASPEED_INVERS_LIMIT :
->      > > +				  0);
->      > > +
->      > What is the purpose of the above code ? limited_inverse is always 0.
-> 
->      > > +	priv->tach_channel[tach_ch].tach_debounce = DEBOUNCE_3_CLK;
->      > > +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
->      > > +			  TACH_ASPEED_DEBOUNCE_MASK,
->      > > +			  priv->tach_channel[tach_ch].tach_debounce
->      > > +				  << TACH_ASPEED_DEBOUNCE_BIT);
->      > > +
->      > > +	priv->tach_channel[tach_ch].tach_edge = F2F_EDGES;
->      > > +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
->      > > +			  TACH_ASPEED_IO_EDGE_MASK,
->      > > +			  priv->tach_channel[tach_ch].tach_edge
->      > > +				  << TACH_ASPEED_IO_EDGE_BIT);
->      > > +
-> 
->      > limited_inverse, tach_debounce, and tach_edge are constants.
->      > There is no need to keep constants as per-channel variables.
-> 
->      > > +	priv->tach_channel[tach_ch].divisor = DEFAULT_TACH_DIV;
->      > > +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
->      > > +			  TACH_ASPEED_CLK_DIV_T_MASK,
->      > > +			  DIV_TO_REG(priv->tach_channel[tach_ch].divisor)
->      > > +				  << TACH_ASPEED_CLK_DIV_BIT);
->      > > +
->      > > +	priv->tach_channel[tach_ch].threshold = 0;
->      > > +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
->      > > +			  TACH_ASPEED_THRESHOLD_MASK,
->      > > +			  priv->tach_channel[tach_ch].threshold);
->      > > +
-> 
->      > The above applies to threshold as well.
-> 
-> The above code is used to retain the adjustable feature of the controller.
-> I will remove them until I add the dts property to support them.
-> 
->      > > +	}
->      > > +
->      > > +	hwmon = devm_hwmon_device_register_with_info(dev, "aspeed_tach", priv,
->      > > +						     &aspeed_tach_chip_info, NULL);
->      > > +	ret = PTR_ERR_OR_ZERO(hwmon);
->      > > +	if (ret)
->      > > +		return dev_err_probe(dev, ret,
->      > > +				     "Failed to register hwmon device\n");
->      > > +	return 0;
-> 
->      > Why not return the error ? Either it is an error or it isn't. If it is
->      > not an error, dev_err_probe() is not appropriate. If it is, the error
->      > should be returned. Either case, if this is on purpose, it needs an
->      > explanation.
-> 
-> I have return the return value of the dev_err_probe. Did I miss someting?
-> 
-No, me not having enough coffee when reviewing the code. Sorry for the noise.
+> On 29-11-2022 04:11 am, Guenter Roeck wrote:
+>> On 11/28/22 09:47, Naresh Solanki wrote:
+>>> Add regulator flag map for PMBUS status byte & status input.
+>>>
+>>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>>
+>> You are adding a lot of input errors here. The regulator documentation
+>> only covers output errors. I am not sure if this set of changes is
+>> really appropriate. You'll have to make a much better case for those changes;
+>> from what I can see they are all controversial and were originally left out
+>> on purpose.
+> I felt it may be worth to monitor status input, but you feel otherwise then shall I remove this in next revision ?
+
+It is a set of changes which needs input from regulator subsystem maintainers.
+Maybe it even needs changes on the regulator side, for example to report
+input and/or power failures properly.
+
+It isn't something I would have expected as part of a patch or patch series
+series which is supposed to add interrupt support to pmbus drivers.
+Since it is the first patch in your series, in may hold up the series
+for some period of time until the questions around it are resolved.
+Your call, really, how to handle it. Just don't be surprised if it takes
+a while to resolve the issues.
+
+>>
+>>> ---
+>>>   drivers/hwmon/pmbus/pmbus_core.c | 30 ++++++++++++++++++++++--------
+>>>   1 file changed, 22 insertions(+), 8 deletions(-)
+>>>
+>>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+>>> index 95e95783972a..f5caceaaef2a 100644
+>>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+>>> @@ -2752,6 +2752,15 @@ struct pmbus_regulator_status_category {
+>>>   static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
+>>>       {
+>>> +        .func = -1,
+>>
+>> This would need a comment. I don't really see the benefit over the original
+>> code.
+> I pulled that in so as to handle it in same way as other status register.
+
+That would have to be a separate patch. It took me a while to understand
+how .func = -1 is handled, so without comment it just adds confusion.
+
+>>
+>>> +        .reg = PMBUS_STATUS_BYTE,
+>>> +        .bits = (const struct pmbus_regulator_status_assoc[]) {
+>>> +            { PB_STATUS_IOUT_OC,   REGULATOR_ERROR_OVER_CURRENT },
+>>> +            { PB_STATUS_VOUT_OV,   REGULATOR_ERROR_REGULATION_OUT },
+>>> +            { PB_STATUS_VIN_UV,    REGULATOR_ERROR_UNDER_VOLTAGE },
+>>> +            { },
+>>> +        },
+>>> +    }, {
+>>>           .func = PMBUS_HAVE_STATUS_VOUT,
+>>>           .reg = PMBUS_STATUS_VOUT,
+>>>           .bits = (const struct pmbus_regulator_status_assoc[]) {
+>>> @@ -2768,6 +2777,7 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
+>>>               { PB_IOUT_OC_WARNING, REGULATOR_ERROR_OVER_CURRENT_WARN },
+>>>               { PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
+>>>               { PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
+>>> +            { PB_POUT_OP_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
+>>
+>> OP_FAULT (power fault) and over current are really not the same thing.
+>>
+> I agree. But thats best I could think of. Not sure if there is better REGULATOR_ERROR_* code for this scenario. Suggestions?
+
+Options are REGULATOR_ERROR_OVER_CURRENT or REGULATOR_ERROR_FAIL or
+a new failure code or doing nothing. Personally I think REGULATOR_ERROR_FAIL
+would be better if adding a new failure code is not an option.
+
+Anyway, clarify on the regulator subsystem mailing list how to handle input
+errors, and how to handle power failures. If they say it is acceptable to
+report input errors as output errors, and to report power failures as
+current failures, resubmit. Say in comments that this is what you are doing,
+and in the commit description that this is how input errors and power
+failures are handled in the regulator subsystem. Copy regulator subsystem
+maintainers on your patch.
 
 Thanks,
 Guenter
+
+>>>               { },
+>>>           },
+>>>       }, {
+>>> @@ -2778,6 +2788,18 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
+>>>               { PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
+>>>               { },
+>>>           },
+>>> +    }, {
+>>> +        .func = PMBUS_HAVE_STATUS_INPUT,
+>>> +        .reg = PMBUS_STATUS_INPUT,
+>>> +        .bits = (const struct pmbus_regulator_status_assoc[]) {
+>>> +            { PB_IIN_OC_FAULT,       REGULATOR_ERROR_OVER_CURRENT },
+>>> +            { PB_IIN_OC_WARNING, REGULATOR_ERROR_OVER_CURRENT_WARN },
+>>> +            { PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
+>>> +            { PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
+>>> +            { PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
+>>> +            { PB_VOLTAGE_OV_FAULT, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
+>>
+>> fault -> warning ? Shouldn't this be REGULATOR_ERROR_FAIL (Regulator
+>> output has failed) ?
+>>
+> Yes. REGULATOR_ERROR_FAIL is best fit here. Will update in next revision.
+>>> +            { },
+>>> +        },
+>>>       },
+>>>   };
+>>> @@ -2834,14 +2856,6 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+>>>           if (status & PB_STATUS_POWER_GOOD_N)
+>>>               *flags |= REGULATOR_ERROR_REGULATION_OUT;
+>>>       }
+>>> -    /*
+>>> -     * Unlike most other status bits, PB_STATUS_{IOUT_OC,VOUT_OV} are
+>>> -     * defined strictly as fault indicators (not warnings).
+>>> -     */
+>>> -    if (status & PB_STATUS_IOUT_OC)
+>>> -        *flags |= REGULATOR_ERROR_OVER_CURRENT;
+>>> -    if (status & PB_STATUS_VOUT_OV)
+>>> -        *flags |= REGULATOR_ERROR_REGULATION_OUT;
+>>>       /*
+>>>        * If we haven't discovered any thermal faults or warnings via
+>>>
+>>> base-commit: 9494c53e1389b120ba461899207ac8a3aab2632c
+>>
 
