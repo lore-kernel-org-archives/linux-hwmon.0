@@ -2,213 +2,111 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A3CBC4167B
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 15:52:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2097C4167B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 15:58:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233312AbiK2Pw3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Nov 2022 10:52:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S235950AbiK2P6K (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Nov 2022 10:58:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232155AbiK2Pw2 (ORCPT
+        with ESMTP id S236067AbiK2P5Y (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:52:28 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C6DC46
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 07:52:27 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id 140so14093992pfz.6
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 07:52:27 -0800 (PST)
+        Tue, 29 Nov 2022 10:57:24 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736B860E97
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 07:57:22 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id s8so22717156lfc.8
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 07:57:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gUXPD428lBYhvSvCQztehA2Z3LbCwL5Ik8XHuLVfb/M=;
-        b=CmCcjDj3JCqVJtYLhUw4QDs200UMxPYISi8vse95iApevLls+sDrHmvVzRIAqcTmh3
-         8kI/5WcdO1uyn2GHEGW+1lOWH5jn4/Si2m/aePArWyrQ0cvzWbFMZGpGgQ91oNK/pqeB
-         GK1NZOrrV4GyGZt+RBNYvKxvtmZi0kJZoTPvuUeGv2amsYPZbdfhwM05qHw5FOb54tkg
-         5PVOfEo0vLuhjCbnGX5VDTFq39aqGGctyGxRfcoSAhAij7Csns+1E+1vZG7fxSaXYaHN
-         fcSFj9uVAHRbi3RhWkTy5Fszw1LtWLgla2YVxx1VOZGUWZol3c4yYvJ8O0G5GqZ/k01S
-         XRDw==
+        bh=mDFVPNh4/71qMRqEkALWrbJbV59lQnRr29JZ5Ud10II=;
+        b=pHoptnjw71Za8weSzrMZuoqO/WMNgzMO4tC8LVNQprtmxusuAU4+ZnzsYXHcOZ0TXg
+         qD76FmCaKxAjfR/zH4WzAicE43pmndPRcPpfKAcr3ZSIjHgFieRGMR2gFrNGKJbXFicC
+         GPDFhDCmlLJWOvwvsAcRu8wOIqszrq7QlJNwAZOOMVL18ZpsqfWrTWdJR6AZPD3hs1DC
+         dx4XJiHyqaCslldRDtlUHWafs/0iT372J6K58XgpiFTFkB8tQu6fVqjVglzSnkP7R5vn
+         YfotcZ8Rpymspq5zxVWU3f0203YTWkHG/7I4jccw2IZTWdUtq2KpYS7sVLQhDFBZm+oC
+         vdVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gUXPD428lBYhvSvCQztehA2Z3LbCwL5Ik8XHuLVfb/M=;
-        b=aRAvOI3X4qcooucrGKdxzmbZl5R3BRzG6CxcnKlQ5DKPWPMK5NTrTrvPeHo07Vu4It
-         1rE+7195Cw6AoE5g9W3RULqAB8EtuU7956EsBcax+D73cdwFWsEk5IFlMw6Cwag8v3R4
-         fEOglz2+dlsO9750c/MztUnJdE+GyepNQgmp3WSv6DpRRwnk60mxRFziVQ+pKNBduQHn
-         OtZjMGFNFdlPPdeciOXcDASQfud2xy3lIqDc5CUZ4Jp3iJioSudJuic5AEmo6nVGn2mo
-         xDNGFHcEJ+jGwYyn3So9s7u6/794tu3+3qaohHvm4F72Viffx3WTj/y3Ty62Uw3zMdlB
-         dsmw==
-X-Gm-Message-State: ANoB5pn7UM+ZMoiauyjfKQXt0iMzIiOnOghgnPTHtbBEF9IIZvgWsce9
-        1kRovfYjy5u5MDDNqrlIGJw+eiihz8gi+obP
-X-Google-Smtp-Source: AA0mqf58k9X2ecMsq50j2paFChgEdufVtlAKglPxBmptmeIobeVtP6mbLKMyoJ1xZl86jybLkdSJlw==
-X-Received: by 2002:a63:e411:0:b0:45f:b2a7:2659 with SMTP id a17-20020a63e411000000b0045fb2a72659mr33175657pgi.132.1669737147134;
-        Tue, 29 Nov 2022 07:52:27 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id b5-20020a170903228500b00176ba091cd3sm11073557plh.196.2022.11.29.07.52.23
+        bh=mDFVPNh4/71qMRqEkALWrbJbV59lQnRr29JZ5Ud10II=;
+        b=AEhJQFQkSiIi8lg2vOuMJYJl0Xi26uix8HEjwgSjyqQ0kldzRAeO4apzSscQ4W1gqY
+         o8MQJMqv3exODL+KArq746voZnKoq/JpNZWTXiqGvganfgmLU2Ng0IPsvYb33pbHfrEY
+         uwqr3pdQWCtTvMGE/9showkw5ZybozMnem/1pPXn33nXG/Ut5UcwRP2m/d1Tw73rtBxQ
+         TsSTomH7PdokCnC5ccfkAOUxqUpYhXq2aVy/Naf96Tb9XYQi1J4vMZKyRR94dHLnkVMI
+         XXYXDuK3D7J1e9n0x+IPqtUsE3e04kjBwzAPKqwYoYjEKrcm6qTbVKlGSzJFCLHMnDbp
+         uC0g==
+X-Gm-Message-State: ANoB5plDrCpBVHkJ1HLd/fw02L/KiL3RACTvLznAXxdJyC6cOayVukiE
+        3ekkO5pytq5RTDsVNthBt3fw1w==
+X-Google-Smtp-Source: AA0mqf6+Hvb2/BZUZ6/6JjMgajEPlzD5UDHF+uyv1L7CN3Vz/MpOwoe4OgBBJsjuwKPYH+BgsbC1Mg==
+X-Received: by 2002:ac2:5dd3:0:b0:4a2:6e1d:f996 with SMTP id x19-20020ac25dd3000000b004a26e1df996mr14144260lfq.114.1669737440717;
+        Tue, 29 Nov 2022 07:57:20 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id s11-20020a056512202b00b004979e1ff641sm2220303lfs.115.2022.11.29.07.57.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 07:52:26 -0800 (PST)
-Message-ID: <dad4d480-8c72-46da-b0ad-4a8235bb03cf@9elements.com>
-Date:   Tue, 29 Nov 2022 21:22:22 +0530
+        Tue, 29 Nov 2022 07:57:20 -0800 (PST)
+Message-ID: <a5e9ecca-b17e-3045-db37-e109ecca3235@linaro.org>
+Date:   Tue, 29 Nov 2022 16:57:19 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v7 2/4] dt-bindings: hwmon: Add binding for max6639
+Subject: Re: [PATCH v7 1/4] dt-bindings: hwmon: fan: Add fan binding to schema
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
         devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Roland Stigge <stigge@antcom.de>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>
+        Patrick Rudolph <patrick.rudolph@9elements.com>
 References: <20221121122932.2493174-1-Naresh.Solanki@9elements.com>
- <20221121122932.2493174-3-Naresh.Solanki@9elements.com>
- <b6943ec7-8fcd-08dc-605d-4a23629bc39c@linaro.org>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <b6943ec7-8fcd-08dc-605d-4a23629bc39c@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20221121122932.2493174-2-Naresh.Solanki@9elements.com>
+ <c35917d1-dfbd-f7d9-5c94-a9f0ee3b7ed8@linaro.org>
+ <2487f032-1261-be6e-2e2a-38ca0af7c83c@9elements.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2487f032-1261-be6e-2e2a-38ca0af7c83c@9elements.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Krzysztof,
+On 29/11/2022 16:46, Naresh Solanki wrote:
+> Hi Krzysztof,
+> 
+> On 29-11-2022 01:42 pm, Krzysztof Kozlowski wrote:
+>> On 21/11/2022 13:29, Naresh Solanki wrote:
+>>
+>>> +  pulses-per-revolution:
+>>> +    description:
+>>> +      The number of pulse from fan sensor per revolution.
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +
+>>> +  target-rpm:
+>>> +    description:
+>>> +      Target RPM the fan should be configured during driver probe.
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +
+>>> +  pwms:
+>>> +    description:
+>>> +      PWM provider.
+>>
+>> Ah, so it is not a PWM provider by this FAN controller? A bit confusing
+>> description. Instead maybe:
+>> 	PWM signal for the fan
+> Sure.
+>>
+>> and do you expect more than one PWM for one fan?
+> One pwm per fan
 
-On 29-11-2022 01:44 pm, Krzysztof Kozlowski wrote:
-> On 21/11/2022 13:29, Naresh Solanki wrote:
->> From: Marcello Sylvester Bauer <sylv@sylv.io>
->>
->> Add Devicetree binding documentation for Maxim MAX6639 temperature
->> monitor with PWM fan-speed controller.
->>
->> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ---
->>   .../bindings/hwmon/maxim,max6639.yaml         | 93 +++++++++++++++++++
->>   1 file changed, 93 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->> new file mode 100644
->> index 000000000000..da040b11d2ab
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->> @@ -0,0 +1,93 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +
->> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Maxim max6639
->> +
->> +maintainers:
->> +  - Roland Stigge <stigge@antcom.de>
->> +
->> +description: |
->> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
->> +  fan-speed controller.  It monitors its own temperature and one external
->> +  diode-connected transistor or the temperatures of two external diode-connected
->> +  transistors, typically available in CPUs, FPGAs, or GPUs.
->> +
->> +  Datasheets:
->> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - maxim,max6639
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  '#address-cells':
->> +    const: 1
->> +
->> +  '#size-cells':
->> +    const: 0
->> +
->> +  '#pwm-cells':
->> +    const: 3
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +patternProperties:
->> +  "^fan@[0-1]$":
->> +    type: object
->> +    description: |
->> +      Represents the two fans and their specific configuration.
->> +
->> +    $ref: fan-common.yaml#
-> 
-> unevalauatedProperties: false
-> 
-Sure
->> +
->> +    properties:
->> +      reg:
->> +        description: |
->> +          The fan number.
->> +        items:
->> +          minimum: 0
->> +          maximum: 1
-> 
-> This is a bit unusual syntax. Drop "items", I think it should be more
-> obvious.
-> 
-Sure
->> +
->> +    required:
->> +      - reg
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    i2c {
->> +        #address-cells = <1>;
->> +        #size-cells = <0>;
->> +
->> +        fan1: fan-controller@10 {
->> +            compatible = "maxim,max6639";
->> +            reg = <0x10>;
->> +            #address-cells = <1>;
->> +            #size-cells = <0>;
->> +            #pwm-cells = <3>;
->> +
->> +            fan@0 {
->> +                reg = <0x0>;
->> +                pulses-per-revolution = <2>;
->> +                max-rpm = <4000>;
->> +                target-rpm = <1000>;
->> +                pwms = <&fan1 0 25000 0>;
->> +            };
->> +
->> +            fan@1 {
->> +                reg = <0x1>;
->> +                pulses-per-revolution = <2>;
->> +                max-rpm = <8000>;
->> +                pwms = <&fan1 1 25000 0>;
->> +            };
->> +            };
-> 
-> Fix indentation.
->
-Sure
+then:
+  maxItems: 1
 
->> +    };
->> +...
-> 
-> Best regards,
-> Krzysztof
-> 
-Regards,
-Naresh
+Best regards,
+Krzysztof
+
