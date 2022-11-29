@@ -2,106 +2,160 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D098AC4167B
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 15:29:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC84EC4167B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 15:45:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbiK2P3Y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Nov 2022 10:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
+        id S233627AbiK2PpW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Nov 2022 10:45:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235556AbiK2P3O (ORCPT
+        with ESMTP id S233140AbiK2PpV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:29:14 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9D460EB4;
-        Tue, 29 Nov 2022 07:29:13 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id e205so15545220oif.11;
-        Tue, 29 Nov 2022 07:29:13 -0800 (PST)
+        Tue, 29 Nov 2022 10:45:21 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA84B6315A
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 07:45:18 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id o5-20020a17090a678500b00218cd5a21c9so13823437pjj.4
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 07:45:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=9elements.com; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=vPDfCCPU9UwEojn/1/N+FwhKYPS8BLympxzgAuLGb5M=;
-        b=oJhn0vcMdggKmNCuh6OVgFqQHohG1WtAmN0oLlNRr5q1lrjjabaF0GXgVO8cBHAK1r
-         e1wBnVlB6+W20iwHXwbdaEhLVgBymFDnZSfEph8dID2BrS/NriXBeb72x3kyaI2QMc3z
-         j3LtKgqWMmsRJxa7y+E1m70oxgbTX0/w/Mql7Om8Yg50b3GG2Aa8T/wyG9aZFeT42leu
-         3PNf43FW0xid9LkuI1BP8fhc2R2Pl6UxjaJsqLOSgFHn914faBHl5ZZys/fT8DohvR23
-         WWeuyupIawzxkIZ/bL5U3+oJNtK63G0/3oQq20GmJpMmNZkvkE3qaGM0fBjDrZENKI1O
-         1gLQ==
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NwqgbXWFd8mNBQRKaBAwSj1zbltG8JixRsOoLI1NOpw=;
+        b=OiDuD58ffbgMKGWLix+Hs4KWO4EX6iwpciWkUWNnprPWAB2SNUxjbx9ynkiuVXRPcc
+         uRMrTExILOjhUuN5cP3m4khovPjZGSuhDmOdTzzcUtVmmXlY+3ex6JgCgEwQStAjhztQ
+         6+kJw7vZTOL2I+DgfcekGZjaMBYJ6ZqBsfhpF8wC1GnHa5gEDH1wumTqeQwlc6y6cqNP
+         cqchmliBu/LF3x4QIZ6U7NxTVbGH5SiPXZV8dZmDU814CFlZ5P05f6nmu9vOCEBnTroR
+         NePSqvN4UMhTzeMSoWjyRF0OE1er47RID7fApsZufoEtLpTPk4W1Qfmfyb3q2eJ3wOtz
+         /D3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vPDfCCPU9UwEojn/1/N+FwhKYPS8BLympxzgAuLGb5M=;
-        b=40JJDXUGo0B7VP1LkxoI6voW5Z2vAKQMX2VImAJm4uRWgJyLlMkC2rstwrKr697htZ
-         z////v+G2HJiPnrBYIViFTSOSbH2Kl9WvWcnQHr0jLrvAM541+HOTb3cKWQQRXtIwvCf
-         qCiyViGd48yanA/x4u3LhVt6OK8Hfto4FeCZ8QkKhx0h1D6QEPadDTV1A1b63KNIV+05
-         x6/af52B3970975YqNcbKuP1gxRgha2cv07+WZQEmhM/cwtnbbqv2/u5Qy1RlTPvjlpM
-         B//k/boToF36QprnfgC0nRNPW+OPq76IB034e6/7gzTvzwNI0RlFOUFIzihduTW6Bwha
-         gtXw==
-X-Gm-Message-State: ANoB5pnbWUMd7KyUQ6CxiROXGHwRvw1qtJEb+fmjPDLwwS0g3cvGhXI6
-        8EWk3BQ0aP9u/u8YNGksqevpNn2OrFQ=
-X-Google-Smtp-Source: AA0mqf6tPdX7jAoEcpJbuJoFCsBye/iE3V37hAXr68PvRPH0lpRPOkLj7p5gv9d8Ao7ygVJQulLM4g==
-X-Received: by 2002:a54:4891:0:b0:354:63ae:721c with SMTP id r17-20020a544891000000b0035463ae721cmr31159501oic.236.1669735753134;
-        Tue, 29 Nov 2022 07:29:13 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r33-20020a056808212100b0035b99bbe30bsm4408300oiw.54.2022.11.29.07.29.12
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NwqgbXWFd8mNBQRKaBAwSj1zbltG8JixRsOoLI1NOpw=;
+        b=DzYAleR3mXWzg8ZkIcKIK6A70O61po9fR7YvGRyHI3CQBPCwdV2UambczNm4uXaz1X
+         VVCNkrSo+n7JF0vaBMXMIUmtGTmDuaQ3PyS+y6YObuIVyOSTPOIxHKbcyZ6GQ7S/lgnL
+         NYmGdtwM/yfVGqf0vsIbK7U4gJVM0eKbHvW9g8+6LvpLuHZhNQyGIikF84j57XyGuQ5L
+         /ssuA6Xg9t4axR2emBLn5q/pdyR4McaJXNotDtV1ibEJs3+hYWvVW0HRB+pi3zRhrs5D
+         kknh4MafOjBHxy8viO9cmqX88MlD2jtu83vo6ADfqcJtoTYEOjpUr6oYyXuu+f/qpb5m
+         dZWw==
+X-Gm-Message-State: ANoB5pmugB37k7sJ6YdPObjzLfyAUYkFlV2k46NzxLVwxaxLwBFuWSwT
+        paTzNi8WAr1Th0kzqSXLoTmdlw==
+X-Google-Smtp-Source: AA0mqf7Kn+irBBoSCnzUZKzpClwlJn/lbklZFWE7Q0QNHmYB17lMFRt3fPT8y0h1+7JXyWBrQWvKcw==
+X-Received: by 2002:a17:90b:3c4c:b0:218:a8a1:933a with SMTP id pm12-20020a17090b3c4c00b00218a8a1933amr45792753pjb.14.1669736718180;
+        Tue, 29 Nov 2022 07:45:18 -0800 (PST)
+Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
+        by smtp.gmail.com with ESMTPSA id 17-20020a170902c11100b001766a3b2a26sm11027094pli.105.2022.11.29.07.45.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 07:29:12 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6522b785-9fcf-93ce-9a0d-6539ca8e18a2@roeck-us.net>
-Date:   Tue, 29 Nov 2022 07:29:11 -0800
+        Tue, 29 Nov 2022 07:45:17 -0800 (PST)
+Message-ID: <840daaaf-5c0b-e462-eec6-b87c54036acc@9elements.com>
+Date:   Tue, 29 Nov 2022 21:15:14 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 3/3] hwmon: (pmbus/core): Implement irq support
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v6 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
 Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org
-References: <20221128174715.1969957-1-Naresh.Solanki@9elements.com>
- <20221128174715.1969957-3-Naresh.Solanki@9elements.com>
- <bda19726-74f3-b76d-c30c-eb2543979690@roeck-us.net>
- <1b015a86-0d65-8597-0512-b313769e307b@9elements.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <1b015a86-0d65-8597-0512-b313769e307b@9elements.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+References: <20221116213615.1256297-1-Naresh.Solanki@9elements.com>
+ <20221116213615.1256297-2-Naresh.Solanki@9elements.com>
+ <85b638f0-57dd-3114-6cac-42b0ccca49ac@linaro.org>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <85b638f0-57dd-3114-6cac-42b0ccca49ac@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/29/22 00:16, Naresh Solanki wrote:
-> Hi Guenter,
-> 
-> On 29-11-2022 04:39 am, Guenter Roeck wrote:
->> On 11/28/22 09:47, Naresh Solanki wrote:
->>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->>>
->>> Implement PMBUS irq handler to notify regulator events.
->>>
->>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+Hi Krzysztof,
+
+On 29-11-2022 01:38 pm, Krzysztof Kozlowski wrote:
+> On 16/11/2022 22:36, Naresh Solanki wrote:
+>> Add common fan properties bindings to a schema.
 >>
->> As I am sure I have mentioned before, this needs to primarily handle
->> sysfs notifications to hwmon status attributes and to generate kobject
->> events. Regulator events are secondary / optional.
+>> Bindings for fan controllers can reference the common schema for the
+>> fan
+>>
+>> child nodes:
+>>
+>>    patternProperties:
+>>      "^fan@[0-2]":
+>>        type: object
+>>        $ref: fan-common.yaml#
+>>
+>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>> ---
+>>   .../devicetree/bindings/hwmon/fan-common.yaml | 42 +++++++++++++++++++
+>>   1 file changed, 42 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+>> new file mode 100644
+>> index 000000000000..1954882eed77
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+>> @@ -0,0 +1,42 @@
+>> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Common fan properties
 > 
-> Based on previous feedback, PMBus interrupt handler is made generic
-> Based on the use case I have in my machine, my application need to monitor regulator event as soon as they occur and hence the patch.
+> If there is going to be resend - capitalize title, so:
 > 
+> Common Fan Properties
+> 
+Sure
+>> +
+>> +maintainers:
+>> +  - Naresh Solanki <naresh.solanki@9elements.com>
+>> +
+>> +properties:
+>> +  max-rpm:
+>> +    description:
+>> +      Max RPM supported by fan.
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +
+>> +  pulses-per-revolution:
+>> +    description:
+>> +      The number of pulse from fan sensor per revolution.
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +
+>> +  target-rpm:
+>> +    description:
+>> +      Target RPM the fan should be configured during driver probe.
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +
+>> +  pwms:
+>> +    description:
+>> +      PWM provider.
+> 
+> Isn't this object? If so, maybe:
+>    type: object
+With make dt_binding_check, I'm getting error for this.
+Looking at other available examples in documentation, type object is not 
+used.
 
-I understand, but this isn't just about your specific use case. Your use case is
-what triggers the change, and ensures that the code change is tested, but the
-impact by far reaches beyond your specific use case and needs to address other
-(much more common) use cases as well. Interrupt support is needed in the pmbus
-code, but it needs to address the common use case first, and that is reporting
-the status via sysfs notifications and kobject events.
+Example:
+   pwms:
+     maxItems: 1
 
-Thanks,
-Guenter
-
+One pwm per fan.
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
+Regards,
+Naresh
