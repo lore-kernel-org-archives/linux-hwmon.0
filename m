@@ -2,56 +2,56 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67CB3C433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 08:09:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4669EC4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 08:12:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiK2IJt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Nov 2022 03:09:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
+        id S230114AbiK2IMO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Nov 2022 03:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiK2IJt (ORCPT
+        with ESMTP id S229901AbiK2IMN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Nov 2022 03:09:49 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508665475C
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 00:09:48 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id l8so15877648ljh.13
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 00:09:48 -0800 (PST)
+        Tue, 29 Nov 2022 03:12:13 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D23C56D6A
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 00:12:11 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id r12so21326668lfp.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 00:12:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=q81LRK3T/EuQJCNdVN6VMMo84qLhMFEYBVI6xieT8fc=;
-        b=ChkSiQTgCeqtYFGMZueziZTw7QgAtEKAsmKs9hSQZtZiauHvC9Od+YZ76QEZWGZeBR
-         J5Im6a3PxuAPS180+BGY0cu6mEgeqpHJS5CvlJROxNcuOgeBLWtCjCfW75EHEbnQ+gAn
-         Dr6LEFFwg59tBNyMWTWD1my001eZ1sUZvQ0Yu3h0CIumsyWkL8Ws4YyGt3Y/TzNl1P7b
-         6VRSVvQz1YAlgti+hZQLa3uHr3DBt9hwGlyXpMmuD5G5lLBXl2rYHPd9aQVZzxjHi3e+
-         5scQa2GY7UlNPFN3gb6KJYSm3uhMkztodZarqQW760jurX4MNEsgRDEDVeibys2FAVeu
-         331Q==
+        bh=xeIAyDjEJnBvYeV0qZkCC/xSer38lroB7hlZ6Bpy9D8=;
+        b=QIhiG3sxHhzx3SogiNBl8JXjMovrhbAelVJRtEYkDjciVO5+Y+halevHvlFz3SP3AQ
+         k4WOmqGDcE8tUCfJgvn74q0LFazOCrO2/F1rMFVMboV0AuMipElzYiLats/ZLjbPP9SB
+         MRlGal7BnqUNwfOuy31YiAQhOqSBMpxdWPBuPJ0cDIetN1bBHnHsCtNiHR8vzimHtEPj
+         fPCKcUoTVV5qLChVPy5hn4PpGi/KcCGTkcl6xjyYI0h7cCUaVJqJh7o9C/12gTo28ILm
+         +eHlihvdmth1z4gbqoJ+zO3aY5TiLJHTafDEiSF97LPtgAnkWGD/iG0hm5FQXE56HX8w
+         rCKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q81LRK3T/EuQJCNdVN6VMMo84qLhMFEYBVI6xieT8fc=;
-        b=B+VyuBlFY+t4I1Hh0nahficqGk7kulUNV1PEE1MDa5yTRHtkqPFM7Aq+clIV9TofSB
-         lLpsp6Z+TzUVAIVCmq4AIqO2pauayKe76J837lUU0JLI3cvK47o0YlA42m4TiaqQnrwQ
-         r2Pi2BbaeAa7ffc4eXr0vZGBPEKfNHh1i7ZJ1hYRrItlalxmsHcPS7i0oWqj1jSKvaFQ
-         853CjY5ZT51qE0RrfsXtCTLGLn0IsTOd62D/mDAFypnA6N1t4RgQXsyySDPH6MD0/4vj
-         o9I7zF+8T7/dseV8FVNXRo8j7/eSqI1znIX8OBF0Z9isO0zvVa4qJm/QXcV8EaTrxRNB
-         PoQg==
-X-Gm-Message-State: ANoB5pnMiQB6a5PP8VFM9hROsQUXD1Fc4H7FGcuu5RsiwpoQA1CGZt6Y
-        EZZ4mNSGWjAzuA61tnqkiGiQIw==
-X-Google-Smtp-Source: AA0mqf7mXV3xue4WBidHzjSc01+0VNE7mNNq4JiQjZrsZi/lPuomV7rVS24BsId/4Hv2JoqpPtEsIA==
-X-Received: by 2002:a05:651c:2205:b0:26e:33f:3c3c with SMTP id y5-20020a05651c220500b0026e033f3c3cmr18005476ljq.52.1669709386697;
-        Tue, 29 Nov 2022 00:09:46 -0800 (PST)
+        bh=xeIAyDjEJnBvYeV0qZkCC/xSer38lroB7hlZ6Bpy9D8=;
+        b=T9YcwvDKWvcgQ3ku1W5lHbhenKI6VXhBAZmz+sQsncjxvCbkXvVAbOwe2vnKAarFdj
+         Mx9uy6ut07q6yFLvUi0mndM/7/em4BBw1tk4NkrxdXQSL0YO6CQqQH+AcS/DpICPD/cS
+         6tAAcxsNxLtIqvsauuQBHjPagoZ52sQq+UhW5t1SfVOR+RipPXAfuSBp6KA14FX4KmCQ
+         5oLkFL/criZvMve/kCSGsvcvJVDqcDjRk1KgIwT6vLMqyZCMzQj4osWfSobOg6UORw1m
+         pnNDF/hg1D+tcGBka/dmEHnnh3wPUzCZ9OemqC3a4bPcDQj5InOigjbFJqHD14La1v0v
+         b2Bg==
+X-Gm-Message-State: ANoB5pkUlWKMD12cdWs0g7zZ0KmPgrj7dgReTr42jxSzw4zWMB7T7qL7
+        yNTkHQmHHuIN02aVSIqkvsrWTw==
+X-Google-Smtp-Source: AA0mqf4ZPxfn3ozzitVTWganzHU9BGjc12nkj8QPpZrZKKpwCWI++8cY5zxKNGNb2k+k/MzbDo8NzQ==
+X-Received: by 2002:ac2:58d7:0:b0:4b4:fbce:606b with SMTP id u23-20020ac258d7000000b004b4fbce606bmr7107136lfo.27.1669709529913;
+        Tue, 29 Nov 2022 00:12:09 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id u12-20020a2eb80c000000b002778d482800sm1437488ljo.59.2022.11.29.00.09.45
+        by smtp.gmail.com with ESMTPSA id s5-20020a05651c200500b00279aca77a54sm216811ljo.60.2022.11.29.00.12.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 00:09:46 -0800 (PST)
-Message-ID: <a7a705b5-64b1-e735-9f1c-5318c2bdf5db@linaro.org>
-Date:   Tue, 29 Nov 2022 09:09:45 +0100
+        Tue, 29 Nov 2022 00:12:09 -0800 (PST)
+Message-ID: <c35917d1-dfbd-f7d9-5c94-a9f0ee3b7ed8@linaro.org>
+Date:   Tue, 29 Nov 2022 09:12:08 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
@@ -75,56 +75,7 @@ List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 On 21/11/2022 13:29, Naresh Solanki wrote:
-> Add common fan properties bindings to a schema.
-> 
-> Bindings for fan controllers can reference the common schema for the
-> fan
-> 
-> child nodes:
-> 
->   patternProperties:
->     "^fan@[0-2]":
->       type: object
->       $ref: fan-common.yaml#
-> 
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
->  .../devicetree/bindings/hwmon/fan-common.yaml | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> new file mode 100644
-> index 000000000000..0535d37624cc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Common fan properties
 
-I responded to v6, so let me paste here as well:
-Common Fan Properties
-
-> +
-> +maintainers:
-> +  - Naresh Solanki <naresh.solanki@9elements.com>
-> +
-> +properties:
-> +  max-rpm:
-> +    description:
-> +      Max RPM supported by fan.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  min-rpm:
-> +    description:
-> +      Min RPM supported by fan.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
 > +  pulses-per-revolution:
 > +    description:
 > +      The number of pulse from fan sensor per revolution.
@@ -139,11 +90,11 @@ Common Fan Properties
 > +    description:
 > +      PWM provider.
 
-Maybe:
-type: object
+Ah, so it is not a PWM provider by this FAN controller? A bit confusing
+description. Instead maybe:
+	PWM signal for the fan
 
-> +
-
+and do you expect more than one PWM for one fan?
 
 Best regards,
 Krzysztof
