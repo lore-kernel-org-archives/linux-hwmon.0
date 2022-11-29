@@ -2,105 +2,101 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EC2EC433FE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 16:38:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43F9CC46467
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 16:41:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234427AbiK2Qij (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Nov 2022 11:38:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
+        id S235855AbiK2QlT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Nov 2022 11:41:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235997AbiK2Qic (ORCPT
+        with ESMTP id S234117AbiK2QlQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Nov 2022 11:38:32 -0500
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFF1554EB;
-        Tue, 29 Nov 2022 08:38:29 -0800 (PST)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1433ef3b61fso17659223fac.10;
-        Tue, 29 Nov 2022 08:38:29 -0800 (PST)
+        Tue, 29 Nov 2022 11:41:16 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E0760EBC;
+        Tue, 29 Nov 2022 08:41:15 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id l42-20020a9d1b2d000000b0066c6366fbc3so9474813otl.3;
+        Tue, 29 Nov 2022 08:41:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=AIlkOn1RGTq0BXLREQR2dL++z9UYJr3//es7sMDSy6A=;
-        b=EKoyPOxWXAcv0kDDdile+YOyw3OQWwaLEiDIOyN/NHyCAVR6O2RqtkJTe76BiLFIGR
-         17KRZE8DxOXE5pNAdFCrIGA17/SVtvWpg54HaTOay5RFc6fpUvhim0843hcvEN39xnZp
-         0nM8qQUvVqIRZIl4AEmG0e0NQEm3wDcyeB0sM2EbHD2KigmremQkb7BGXWnfmxvk+B+l
-         LqZrpShZt/virc1YvHBrCrHxAEEJXLX3fAQfO2IRykdzBo4IqiJUwN+J44VDvSXBlUme
-         FpoeFTJo54oaFHYRmfJPbL32B+9DiEzbfDf6/Lg9q+5ctkp3T7vv+VknAwdajyP+6oNk
-         87Kw==
+        bh=fUQuv/dI7+GsU69YJUbsjnHv/r1JvRmLmHWg4GFC62Y=;
+        b=L7jOMrTGpMOy+lvld7IsWy0dUWpLGlaIKFMlqxeozk/84ub6lXWALRtFJ3NjPik7FI
+         vgdlQC8ICoCMn0TNuJpLSc+D4nVBz10ty+4KHUrnGuAR9T+5oChkGBe3kkUnGozndJ93
+         sw2VsmZw18oIYwEYwcf8GNmBLXtvqp00YIFi8bMe3EhFAiQ00t5LwgXvDYeEWOShb3D+
+         bzsRRNFLTUbH65uLlBfgjTgoD5RkRTnlJyB/KgyERPZ7FanbEW5TMFxn9wPChRJb8y/X
+         kALHcocJ5sSJKerTOP26eevCGp1t19bConlTAEa4yU/03/38IlbVNtX5vzOdOcIR4R8y
+         FYvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AIlkOn1RGTq0BXLREQR2dL++z9UYJr3//es7sMDSy6A=;
-        b=mPVR/z8bgHhHKj1FVb0yqVMf2cWR4/oOwrLHmN2bgkP4zo4A0EHqAmB+GhxgvHONa4
-         suaaW4Gk5/EFFp3S/awtC/VBbUrLFkTM1HxyJ5X9qKx7S2eVwlfsVkoy6KHumBG1m0Zf
-         U573HJtkXDd6UEdCquWGnoq7fV2Fpf0+9yWc1glUBaDJPSlAIZ6/IJfZgdzkhMtZ4XMT
-         vI8RNJzuyXs7E2sW/nofWn4LPMw9F9wMQh4XMn1jH32WV7LJhyk6ztDe+wSKTcHQZn/j
-         LbEGs+wTYG/X5zaCxv7sWMF3HgsiIeOBpB2yw1gsX9DFWhMy1l0wE/dmWOUw0v8pGEO+
-         oZbw==
-X-Gm-Message-State: ANoB5pn/Xqj95QjelvicSMVk7rn3bNRRBHwxyaHBn0z6D/WxlsXB80pm
-        WmYciDUMD6yKESqlWPnpZ4o=
-X-Google-Smtp-Source: AA0mqf4c1P2rrkH8pFF2t7W8Qd8VY+UanFfxu3zqXTVS9B/EJybxD83c1QwxiBefdWn2vIwzBCN7Zg==
-X-Received: by 2002:a05:6870:888d:b0:132:c1e9:728b with SMTP id m13-20020a056870888d00b00132c1e9728bmr21864753oam.241.1669739909056;
-        Tue, 29 Nov 2022 08:38:29 -0800 (PST)
+        bh=fUQuv/dI7+GsU69YJUbsjnHv/r1JvRmLmHWg4GFC62Y=;
+        b=CaArAgT7zv4OvjVJ9j5WCr3uRwS5R3+bPpHgUWR3mcIh0UmLrEqorqJo9Iz2Q4ZX7H
+         mh0cC6Nn7TmCoCcZngq3n5OP1YuCHRvvxNhF1G6qaY1va7VZpWzI+ebOR+YGQSBsF/MI
+         1OAQcHVYjqfdY2Qs/LLpQagI9x3WgXm/n0STqDZDZdqhjDdQnY/NdqozucxBI/jd8m1/
+         3o5z71JOyOkrkaUFIZoLUOiR8W4Kui/SMckayHvdtmo4HuG6BvAdwq/maH52LVqF0Mzn
+         SbHhhtFRiZxSsL4LZ7tshVkHkPXJAjHHGpSWpJEDRX1MGYaHI8fSFiXyyBiefsKznWtx
+         jFIQ==
+X-Gm-Message-State: ANoB5plKQzPty77P6pTc6G9CQW9zBmR16CVoi0YdOCpa0xJNpN8pBrwd
+        vFrqj93J05HHyJ5S5cPDuyk=
+X-Google-Smtp-Source: AA0mqf69Ahr5oPG1twbq6KsH1O8tbrJgV+O9jh9VMxpGkvLbqylZsFZZ7KO9IUOtBinYNw2M2PoGDA==
+X-Received: by 2002:a05:6830:61ce:b0:66c:a613:9843 with SMTP id cc14-20020a05683061ce00b0066ca6139843mr20176039otb.8.1669740074395;
+        Tue, 29 Nov 2022 08:41:14 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ce8-20020a056830628800b00661b019accbsm6122281otb.3.2022.11.29.08.38.27
+        by smtp.gmail.com with ESMTPSA id cb13-20020a056830618d00b00655ca9a109bsm6114699otb.36.2022.11.29.08.41.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 08:38:28 -0800 (PST)
+        Tue, 29 Nov 2022 08:41:14 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0d32c71c-9d88-26fe-60a3-e13ff64a47ad@roeck-us.net>
-Date:   Tue, 29 Nov 2022 08:38:26 -0800
+Message-ID: <d2d54a34-56dc-df83-5fde-ad0a9a73a9e0@roeck-us.net>
+Date:   Tue, 29 Nov 2022 08:41:12 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH v2 2/6] ABI: sysfs-class-hwmon: add a description for
- fanY_fault
+Subject: Re: [PATCH v8 4/4] hwmon: (max6639) Add pwm support
 Content-Language: en-US
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20221128230219.39537-1-nick.hawkins@hpe.com>
- <20221128230219.39537-3-nick.hawkins@hpe.com>
- <46cecf77-e989-40d9-3e08-fd970ad12a79@roeck-us.net>
- <0A5DF9D5-B8C2-44A4-924A-B8957EC8A2A7@hpe.com>
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-pwm@vger.kernel.org, kernel@pengutronix.de
+References: <20221129161134.2672474-1-Naresh.Solanki@9elements.com>
+ <20221129161134.2672474-5-Naresh.Solanki@9elements.com>
+ <20221129163427.dxnqfay6ur6mvivu@pengutronix.de>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <0A5DF9D5-B8C2-44A4-924A-B8957EC8A2A7@hpe.com>
+In-Reply-To: <20221129163427.dxnqfay6ur6mvivu@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/29/22 08:15, Hawkins, Nick wrote:
->> This change is really completely unrelated to a CPLD or specific SoC.
->> The commit description is just confusing. It should simply state that
->> it documents the existing fanX_fault attribute.
+On 11/29/22 08:34, Uwe Kleine-König wrote:
+> On Tue, Nov 29, 2022 at 05:11:34PM +0100, Naresh Solanki wrote:
+>> Add pwm support for max6639. Also configure pwm fan speed based on pwm
+>> provided in DT.
 > 
-> Understood. Just to confirm should I change fanY_fault to fanX_fault
-> in documentation as well as the patch description? For instance:
-> /sys/class/hwmon/hwmonX/fanX_fault
-> 
-> It seems that the documentation around it uses fanY_ format.
+> Did you do anything to resolve the questions I had in reply to v5? If
+> yes, I must have missed it.
 > 
 
-Now you start splitting hairs ;-). I wanted to point out that
-fan[X,Y,Z,A,B,C,...]_fault is a generic attribute, not that I want you
-to change fanY to fanX.
+I don't see a response to my concerns either, especially regarding fan mode
+(dc vs. pwm) in the bindings. For that reason, I won't even look at the series.
 
 Guenter
+
+> Note that maintainer time is scarce and with sending new versions of a
+> patch with no sign that you improved in the aspects that were critized
+> before, you're burning that scarce time and loosing the good will of the
+> responsible maintainers.
+> 
+> Best regards
+> Uwe
+> 
 
