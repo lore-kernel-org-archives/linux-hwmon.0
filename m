@@ -2,150 +2,133 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A14C0C4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Nov 2022 18:57:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E056CC4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Nov 2022 05:21:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236084AbiK2S5C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Nov 2022 13:57:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
+        id S233433AbiK3FVs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Nov 2022 00:21:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236294AbiK2S4p (ORCPT
+        with ESMTP id S233427AbiK3FVr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Nov 2022 13:56:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DB161BA1;
-        Tue, 29 Nov 2022 10:56:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A129F61890;
-        Tue, 29 Nov 2022 18:56:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A686AC433D6;
-        Tue, 29 Nov 2022 18:56:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669748177;
-        bh=RGuIOhXviKMq41t9CeKW7AFIl48krHdo1X9sgB4ZdIQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EqVmxaBrBK/XMgdJsfjXkBWJMoeKNTSD6JzHwzxEnFDViQ6xizXwo81TcHZGu4FIZ
-         Utbh2JbHpkcwTIuMXC6hoxkUM+ZCRlNieNOWq6TcrVg4SWj8i/LqXVg99SzZYhvpBf
-         s47s0MEJ3FtXp/ung6zU1M/CpE8euE0ZLLsc3qGAHEFTtopCJX/UYzhVRSByPFTGnS
-         HSNRV7lidXOd2iZzCkzOVgGhPfwxvtAI7EZYPLlvpZe7iveych5nYEirbR9GPu6Udk
-         HqYUzDqsas0wusqbQqT8oS4lfCVkYg0HRK1eJl9FHYDOt5UagIqkFQR8Jj3pTaXK8j
-         FVMCAlodl4WiQ==
-Received: by pali.im (Postfix)
-        id B3076898; Tue, 29 Nov 2022 19:56:13 +0100 (CET)
-Date:   Tue, 29 Nov 2022 19:56:13 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Josef Schlehofer <josef.schlehofer@nic.cz>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] powerpc: dts: turris1x.dts: Add channel labels for
- temperature sensor
-Message-ID: <20221129185613.gunub5hgjfgvroh5@pali>
-References: <20220930123901.10251-1-pali@kernel.org>
- <20220930124618.kyaansrl7ls5kn3i@pali>
- <20221009120506.itwa4n25nljn2tll@pali>
- <20221101224348.xkpzucskunn46i5z@pali>
- <87k03eblsr.fsf@mpe.ellerman.id.au>
+        Wed, 30 Nov 2022 00:21:47 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3E76A775
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Nov 2022 21:21:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669785706; x=1701321706;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DBKhb5OibnDyBiABH9gy7LK5YmVrazo5BNTpk7JgLsk=;
+  b=mSUkFp6UvKaQdFga2wjj+NICOsx6HXCDjpOo/t50uJwbtJ7bsRGqG3y9
+   F6jtOUxAy2W8HVaKisndnpszXmATJK1BLEmjpjqLoHeuVe+9ZJfWNKY3Z
+   EJueJ0ifb0aXk+DwLunrI2KsnL/QjWZUFo4UmC3KnxzMUjfdPwrU4HiW1
+   /dRI2l70wq3AzYEbm45zk3H+qDCBYnH6FjYs7X+IhsI04S59IjyP5ByR1
+   9x6rUviNkL7VBFVq2AnIHn7xtTPu1DaAlhcBlsxm1QKfOrKEuoGE4Q2JQ
+   6E9P9rSShpzXZ9zKIFTYBPpGwA+AquxGXn9HnOE8veK61FvCL0pYehikk
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="342229408"
+X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
+   d="scan'208";a="342229408"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 21:21:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="646192483"
+X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
+   d="scan'208";a="646192483"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 29 Nov 2022 21:21:43 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p0FXT-000AeR-0q;
+        Wed, 30 Nov 2022 05:21:43 +0000
+Date:   Wed, 30 Nov 2022 13:20:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 10b7c400596e0010ce12b373ac7b18b7eb334e92
+Message-ID: <6386e833.vVvRlP80ezv5OC67%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87k03eblsr.fsf@mpe.ellerman.id.au>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tuesday 29 November 2022 12:18:28 Michael Ellerman wrote:
-> Pali Rohár <pali@kernel.org> writes:
-> > Michael, could you take this patch?
-> 
-> Yep.
-> 
-> With these dts patches it always helps if you tell me that it passes the
-> DT schema checks, so that I don't get yelled at by the DT people :)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 10b7c400596e0010ce12b373ac7b18b7eb334e92  hwmon: (oxp-sensors) Fix pwm reading
 
-Mostly dt schemas for p1/p2 are incomplete, I sent more patches but they
-are waiting and I was not able to setup & run dt schema checker. Hence
-I tested everything on the hardware to ensure that it works correctly.
-And this patch works on Turris 1.1 board, I also tested sensors tool.
-So the important is what is in DTS file, the stuff which is used on HW.
+elapsed time: 1854m
 
-> cheers
-> 
-> > On Sunday 09 October 2022 14:05:06 Pali Rohár wrote:
-> >> On Friday 30 September 2022 14:46:18 Pali Rohár wrote:
-> >> > + CC hwmon ML
-> >> > 
-> >> > On Friday 30 September 2022 14:39:01 Pali Rohár wrote:
-> >> > > Channel 0 of SA56004ED chip refers to internal SA56004ED chip sensor (chip
-> >> > > itself is located on the board) and channel 1 of SA56004ED chip refers to
-> >> > > external sensor which is connected to temperature diode of the P2020 CPU.
-> >> > > 
-> >> > > Fixes: 54c15ec3b738 ("powerpc: dts: Add DTS file for CZ.NIC Turris 1.x routers")
-> >> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> >> > > ---
-> >> > > With this change userspace 'sensors' applications prints labels:
-> >> > > 
-> >> > >     $ sensors
-> >> > >     sa56004-i2c-0-4c
-> >> > >     Adapter: MPC adapter (i2c@3000)
-> >> > >     board:        +34.2°C  (low  =  +0.0°C, high = +70.0°C)
-> >> > >                            (crit = +85.0°C, hyst = +75.0°C)
-> >> > >     cpu:          +58.9°C  (low  =  +0.0°C, high = +70.0°C)
-> >> > >                            (crit = +85.0°C, hyst = +75.0°C)
-> >> > > 
-> >> > > And without this change it prints just generic tempX names:
-> >> > > 
-> >> > >     $ sensors
-> >> > >     sa56004-i2c-0-4c
-> >> > >     Adapter: MPC adapter (i2c@3000)
-> >> > >     temp1:        +43.0°C  (low  =  +0.0°C, high = +70.0°C)
-> >> > >                            (crit = +85.0°C, hyst = +75.0°C)
-> >> > >     temp2:        +63.4°C  (low  =  +0.0°C, high = +70.0°C)
-> >> > >                            (crit = +85.0°C, hyst = +75.0°C)
-> >> > > ---
-> >> > >  arch/powerpc/boot/dts/turris1x.dts | 14 ++++++++++++++
-> >> > >  1 file changed, 14 insertions(+)
-> >> > > 
-> >> > > diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
-> >> > > index 4033c554b06a..5b5278c32e43 100644
-> >> > > --- a/arch/powerpc/boot/dts/turris1x.dts
-> >> > > +++ b/arch/powerpc/boot/dts/turris1x.dts
-> >> > > @@ -69,6 +69,20 @@
-> >> > >  				interrupt-parent = <&gpio>;
-> >> > >  				interrupts = <12 IRQ_TYPE_LEVEL_LOW>, /* GPIO12 - ALERT pin */
-> >> > >  					     <13 IRQ_TYPE_LEVEL_LOW>; /* GPIO13 - CRIT pin */
-> >> > > +				#address-cells = <1>;
-> >> > > +				#size-cells = <0>;
-> >> > > +
-> >> > > +				/* Local temperature sensor (SA56004ED internal) */
-> >> > > +				channel@0 {
-> >> > > +					reg = <0>;
-> >> > > +					label = "board";
-> >> > > +				};
-> >> > > +
-> >> > > +				/* Remote temperature sensor (D+/D- connected to P2020 CPU Temperature Diode) */
-> >> > > +				channel@1 {
-> >> > > +					reg = <1>;
-> >> > > +					label = "cpu";
-> >> > > +				};
-> >> > 
-> >> > I'm not sure if you want UPPERCASE, lowercase, PascalCase, kebab-case
-> >> > or snake_case format of labels. Or if you want also "temp" or
-> >> > "temperature" keyword in the label. So please adjust label to the
-> >> > preferred one, if proposed format is not the correct.
-> >> 
-> >> Ok, if nobody complains then please take this patch as is.
-> >> 
-> >> > >  			};
-> >> > >  
-> >> > >  			/* DDR3 SPD/EEPROM */
-> >> > > -- 
-> >> > > 2.20.1
-> >> > > 
+configs tested: 56
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                           x86_64_defconfig
+um                             i386_defconfig
+powerpc                           allnoconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+alpha                            allyesconfig
+m68k                             allyesconfig
+sh                               allmodconfig
+arc                              allyesconfig
+s390                             allyesconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+x86_64                              defconfig
+ia64                             allmodconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+arc                  randconfig-r043-20221129
+s390                 randconfig-r044-20221129
+riscv                randconfig-r042-20221129
+i386                 randconfig-a002-20221128
+i386                 randconfig-a003-20221128
+i386                 randconfig-a001-20221128
+i386                 randconfig-a004-20221128
+i386                 randconfig-a005-20221128
+i386                 randconfig-a006-20221128
+i386                                defconfig
+x86_64               randconfig-a003-20221128
+x86_64               randconfig-a004-20221128
+x86_64               randconfig-a001-20221128
+x86_64               randconfig-a002-20221128
+x86_64               randconfig-a005-20221128
+x86_64               randconfig-a006-20221128
+i386                             allyesconfig
+m68k                             allmodconfig
+arm                                 defconfig
+
+clang tested configs:
+hexagon              randconfig-r045-20221129
+hexagon              randconfig-r041-20221129
+x86_64               randconfig-a013-20221128
+x86_64               randconfig-a012-20221128
+x86_64               randconfig-a014-20221128
+x86_64               randconfig-a011-20221128
+x86_64               randconfig-a016-20221128
+x86_64               randconfig-a015-20221128
+i386                 randconfig-a012-20221128
+i386                 randconfig-a015-20221128
+i386                 randconfig-a011-20221128
+i386                 randconfig-a013-20221128
+i386                 randconfig-a014-20221128
+i386                 randconfig-a016-20221128
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
