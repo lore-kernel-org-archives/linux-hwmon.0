@@ -2,152 +2,149 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E374C352A1
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Nov 2022 17:06:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2FCFC4321E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Nov 2022 18:06:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbiK3RF7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Nov 2022 12:05:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S229612AbiK3SGu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Nov 2022 13:06:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231195AbiK3RFR (ORCPT
+        with ESMTP id S229483AbiK3SGq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Nov 2022 12:05:17 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80659894A
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Nov 2022 09:00:15 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so1915961wmb.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Nov 2022 09:00:15 -0800 (PST)
+        Wed, 30 Nov 2022 13:06:46 -0500
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E7B7463E;
+        Wed, 30 Nov 2022 10:06:45 -0800 (PST)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-142b72a728fso21945107fac.9;
+        Wed, 30 Nov 2022 10:06:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ADo04tg+16fhlHcXEalyoHswqSIikOudDCDm6c2e17k=;
-        b=NKu8S/HWybo5iLmhXLOZ4iQ/6NF9zExmhhZ1XuHdPAD/XvPsE3cuPkUcIXqhhFqoOs
-         OoEcvaa3CZvsbEkiSDX7yopx8HyxBwO+ItxHGrrTl8bUJGSvt8/Db73li2ej+DNKGafy
-         n5mrkCQlx23Nt4KWd8WppTeaPRO/VMy93SeqNgQp5WYIGrKwXvHm2lZoN8JLuJ74QwYV
-         ZtRToEQ+QCegU3LS+1Q29y7fAY8nphbWSnatkHvqR9YCIBSM3ig37Hn2uA1RvMziG+sb
-         Gp9lO+F4CoNkX+tIMhHY7XpmUawd5os3UzmsnnCHsLACgg4whAxz6KJwh5aB2j+NH3jo
-         R0vA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4qOLqjoCvwfes3GQmLgLoYg/ASG8k1yJH17Rxdih0SY=;
+        b=kE5G3GxdSPqfrcLgxjyjPNqXNQCCnSanobhJICb53P3pKWlKwNQyZaZFzYvZmug4vO
+         615FCthVRwTMDoZ489UmNbudcB9H5zye46Wcivpq5uL3pw8SzTbXu3b2jOBL178ABJpW
+         kU0XBPk17lHVIHtkZ7vi7tr+rMCbQBDEQw731FYEQZG1KEltaGGNUGXGh+qf5NqPrsma
+         z7zREmmYiNwI6IcOwpDfOUCrGR3T7+YFgheEm/PunEa4Vu21asrhRObNn4x9x5nVp75f
+         kwK32Vxt4zlLeijZSDyZR7TvdXD44SvFbYyhXb0Uwv5rMPiUUZIYGdl23xdMzujy/eS7
+         TnrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ADo04tg+16fhlHcXEalyoHswqSIikOudDCDm6c2e17k=;
-        b=rat8ANyU3wwXlbPVy2EPWaZCRUk2LAL/1VQRaDkjCMb8vBsyDFz1s00F6YxRS279Af
-         j19xoGhqhQeV8mdoownqPgIFzC480cJWtlcGCDK6f7mo2weWr0L4xjNz226ThY1PUGQG
-         HucbMg3vZE9CB4mecXvGwM+BLUwL/U9Y75xExZJWrUQixnF1x0JqH4aSxOyoCyIjKx5o
-         2ZRgJl0XZAqSykiem+ZCQign4JCIwGQLI1cfkO7OOPxtOrl6bryw2F3l/SlosGnYNn19
-         H67YHyvFhC+ylG85xNTPs93Tr++osuP/ROMPUCUopy9Ja/4e5qBNiJ5t0LQsnwuHYPUc
-         qUfg==
-X-Gm-Message-State: ANoB5pnx2HUJ7jRgBQsZP37KTEMe3fLJgj5ZPukRQyufOPzVjUiWC0RO
-        5DkF9uN/BjyWp6XVHW8p0S0p2A==
-X-Google-Smtp-Source: AA0mqf6dFEgTtxymKQ/eqI2nEtCILDoCpgb5WmUZJlpi5KtpxCXvj3P5gCntwYjpnOaQ2dqKxyBMDw==
-X-Received: by 2002:a05:600c:1e25:b0:3d0:31c9:1d77 with SMTP id ay37-20020a05600c1e2500b003d031c91d77mr29100295wmb.113.1669827614406;
-        Wed, 30 Nov 2022 09:00:14 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id fn7-20020a05600c688700b003c6b70a4d69sm2457159wmb.42.2022.11.30.09.00.13
+        bh=4qOLqjoCvwfes3GQmLgLoYg/ASG8k1yJH17Rxdih0SY=;
+        b=qTJnnNeNmSFQqVAqAKRdP9qeheo6IWo86jbsy9YJv040EXF+w6/nXqUP6zfr1IRqwn
+         0/1RsF+ym2D2VKO8iwRn9FNA7WwjOiPVqJxjGE7qy7YIxeaXVcnKE2UWOaaFEiLqPezc
+         z+XYq0W050/r+405FkrgKBJ19nF7srPXLUZSFkO2hgo0WKTIB/A/Ck9CBx6FTLRcdOm7
+         SCHy/0UG9QJlk0xnzyxLVNIYORm5RPUlYpPi1Yd6nHk/EoUoJ0R9k6kdcYQQ03Q8ToAr
+         RCQCdki19qC9HwxiLfRnGKDAQgyjy8xH446J+zZVVsYPeuUHOq1U0Dp6HizVPtJAdWoJ
+         0BoA==
+X-Gm-Message-State: ANoB5plvMh5f4rwiQTcQQvS3Ip8I1zp9NXmeawL153LQeoYBpieihU8F
+        298DnykAfWsZ7L82+gxbDms=
+X-Google-Smtp-Source: AA0mqf4k6nHdZ5M/3l7PVivz+vYtbO5uyFFzHkXeiQzGAa4Lhqqrdf5h4y14CqIuT7/AVGkBvZQ+sw==
+X-Received: by 2002:a05:6870:51d:b0:13b:a486:fa2f with SMTP id j29-20020a056870051d00b0013ba486fa2fmr24796070oao.6.1669831605121;
+        Wed, 30 Nov 2022 10:06:45 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l187-20020aca3ec4000000b003509cc4ad4esm863134oia.39.2022.11.30.10.06.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 09:00:14 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
+        Wed, 30 Nov 2022 10:06:44 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 30 Nov 2022 10:06:42 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v3 4/4] hwmon: (pmbus/core): Notify hwmon events
-Date:   Wed, 30 Nov 2022 17:59:54 +0100
-Message-Id: <20221130165955.3479143-4-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221130165955.3479143-1-Naresh.Solanki@9elements.com>
-References: <20221130165955.3479143-1-Naresh.Solanki@9elements.com>
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH v3 1/4] hwmon: (pmbus/core): Add status byte to regulator
+ flag map
+Message-ID: <20221130180642.GA2656856@roeck-us.net>
+References: <20221130165833.3478555-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221130165833.3478555-1-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Notify hwmon events using the pmbus irq handler.
+On Wed, Nov 30, 2022 at 05:58:28PM +0100, Naresh Solanki wrote:
+> Add PMBus status byte to regulator flag map.
+> 
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> 
+> ---
+> Changes:
+> - Remove status input
 
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
----
- drivers/hwmon/pmbus/pmbus_core.c | 37 +++++++++++++++++++++++++++++---
- 1 file changed, 34 insertions(+), 3 deletions(-)
+Not really.
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 613e2e484a0f..da92a08484c9 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2805,8 +2805,36 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
- 	},
- };
- 
-+#define to_dev_attr(_dev_attr) \
-+	container_of(_dev_attr, struct device_attribute, attr)
-+
-+static void pmbus_notify(struct pmbus_data *data, int page, int reg, int flags)
-+{
-+	int i;
-+
-+	for (i = 0; i < data->num_attributes; i++) {
-+		struct device_attribute *da = to_dev_attr(data->group.attrs[i]);
-+		struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
-+		int index = attr->index;
-+		u16 smask = pb_index_to_mask(index);
-+		u8 spage = pb_index_to_page(index);
-+		u16 sreg = pb_index_to_reg(index);
-+
-+		if (reg == sreg && page == spage && (smask & flags)) {
-+			dev_dbg(data->dev, "sysfs notify: %s", da->attr.name);
-+			sysfs_notify(&data->dev->kobj, NULL, da->attr.name);
-+			kobject_uevent(&data->dev->kobj, KOBJ_CHANGE);
-+		}
-+
-+		flags &= ~smask;
-+
-+		if (!flags)
-+			break;
-+	}
-+}
-+
- static int pmbus_regulator_get_flags(struct regulator_dev *rdev, unsigned int *error,
--				    unsigned int *event)
-+				    unsigned int *event, bool notify)
- {
- 	int i, status;
- 	const struct pmbus_regulator_status_category *cat;
-@@ -2833,6 +2861,9 @@ static int pmbus_regulator_get_flags(struct regulator_dev *rdev, unsigned int *e
- 			return status;
- 		}
- 
-+		if (notify && status)
-+			pmbus_notify(data, page, cat->reg, status);
-+
- 		for (bit = cat->bits; bit->pflag; bit++) {
- 			if (status & bit->pflag) {
- 				*error |= bit->rflag;
-@@ -2885,7 +2916,7 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
- {
- 	unsigned int event;
- 
--	return pmbus_regulator_get_flags(rdev, flags, &event);
-+	return pmbus_regulator_get_flags(rdev, flags, &event, false);
- }
- 
- static int pmbus_regulator_get_status(struct regulator_dev *rdev)
-@@ -3095,7 +3126,7 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
- 		if (!data->rdevs[i])
- 			continue;
- 
--		ret = pmbus_regulator_get_flags(data->rdevs[i], &status, &event);
-+		ret = pmbus_regulator_get_flags(data->rdevs[i], &status, &event, true);
- 		if (ret)
- 			return ret;
- 
--- 
-2.37.3
+> - Add comment for PMBUS status byte.
+> ---
+>  drivers/hwmon/pmbus/pmbus_core.c | 20 +++++++++++---------
+>  1 file changed, 11 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 95e95783972a..a7b4ae0f1f3b 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -2751,7 +2751,16 @@ struct pmbus_regulator_status_category {
+>  };
+>  
+>  static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
+> -	{
+> +	{	/* STATUS byte is always present. */
+> +		.func = -1,
+> +		.reg = PMBUS_STATUS_BYTE,
+> +		.bits = (const struct pmbus_regulator_status_assoc[]) {
+> +			{ PB_STATUS_IOUT_OC,   REGULATOR_ERROR_OVER_CURRENT },
+> +			{ PB_STATUS_VOUT_OV,   REGULATOR_ERROR_REGULATION_OUT },
+> +			{ PB_STATUS_VIN_UV,    REGULATOR_ERROR_UNDER_VOLTAGE },
 
+Still there.
+
+> +			{ },
+> +		},
+> +	}, {
+>  		.func = PMBUS_HAVE_STATUS_VOUT,
+>  		.reg = PMBUS_STATUS_VOUT,
+>  		.bits = (const struct pmbus_regulator_status_assoc[]) {
+> @@ -2768,6 +2777,7 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
+>  			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
+>  			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
+>  			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
+> +			{ PB_POUT_OP_FAULT,      REGULATOR_ERROR_FAIL },
+
+Please document your changes in the description. There are two functional
+changes hidden under "Add PMBus status byte to regulator flag map".
+That is inappropriate. Those, as I have pointed out, should be separate
+patches.
+
+Guenter
+
+>  			{ },
+>  		},
+>  	}, {
+> @@ -2834,14 +2844,6 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+>  		if (status & PB_STATUS_POWER_GOOD_N)
+>  			*flags |= REGULATOR_ERROR_REGULATION_OUT;
+>  	}
+> -	/*
+> -	 * Unlike most other status bits, PB_STATUS_{IOUT_OC,VOUT_OV} are
+> -	 * defined strictly as fault indicators (not warnings).
+> -	 */
+> -	if (status & PB_STATUS_IOUT_OC)
+> -		*flags |= REGULATOR_ERROR_OVER_CURRENT;
+> -	if (status & PB_STATUS_VOUT_OV)
+> -		*flags |= REGULATOR_ERROR_REGULATION_OUT;
+>  
+>  	/*
+>  	 * If we haven't discovered any thermal faults or warnings via
+> 
+> base-commit: 9494c53e1389b120ba461899207ac8a3aab2632c
+> -- 
+> 2.37.3
+> 
