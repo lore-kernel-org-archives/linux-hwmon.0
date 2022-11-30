@@ -2,98 +2,100 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32500C47088
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Nov 2022 18:35:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 326D0C4321E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Nov 2022 20:13:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbiK3SfK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Nov 2022 13:35:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
+        id S230095AbiK3UN2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Nov 2022 15:13:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbiK3Seu (ORCPT
+        with ESMTP id S229815AbiK3UNF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:34:50 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D717B93A74;
-        Wed, 30 Nov 2022 10:34:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1669833268; bh=NscgIAZRMqN8AzDfYglDMPfWX6oPBec9DPODcgSPEzQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=YilvTdd6MPnBoZF1okZsAnOdDtlZ2xDxGftIohAFdYSH7ZJdr31o1/ZvOiNYzmnCr
-         kuWHUmeXrLXvggi0Jxwg1G4MyALqhS8dhk/JaPxXfNxMpjePwg6eqZFo2KZx56tLcX
-         IP7QsHsj0uCNOv/3+6IMmQnCHCAECJh/tW67ZkS8ujxo5y46gVP80lH6GUCafumfRx
-         zG7qcjtChipGbVgnAcFmv+yyxxCdDClZwedkDmjTRF2On8MMHGblcldzgOrNl29ew3
-         4aMh2pAjJG6nDPiWYkfDZM8x5Ur1bLTEih7fWcQ0yGRF59P5NvgbBfhIVkgZUof/1V
-         tSj6vntAhDYiw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1Md6R1-1oQHwt3PsZ-00aGDa; Wed, 30 Nov 2022 19:34:28 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     pali@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (dell-smm) Move error message to make probing silent
-Date:   Wed, 30 Nov 2022 19:34:18 +0100
-Message-Id: <20221130183418.357246-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:cl7FFu4dmz8bgye6pz2NXjuVh20/evlO5cStb+/Bwa9oYVDqVrM
- YXQuPG8DU+ayKe3fj2vQDzWCf8CKbGDGbW4FIonkW/H1FE766zTehnPllk4FAfm5rtLGxn+
- Od8j+Qh9unanFH8fAYcZqxF1eArEt3TAkI4EJu/bceTqeqwMXHsyQRB8EeeaOjySKSJSUkN
- OateN8j4KxN2xLU4zk9Rg==
-UI-OutboundReport: notjunk:1;M01:P0:cQXm5xf/vnQ=;JyxUz5l+6szKd3ShbnveZk/XmFc
- CAEWQBO0MUS8AsBaRSXVa87uSC3k+W+y7VrStbbDUDpVmWq1syWlVnhknDt116r32RWg5Idb6
- FBfmffYC6zNyE6iFnNXatcpI5OXTvuma7lROgRbBHIILC9cz1eWNZSEjDlafKAv6tTR6EAay/
- 5CEQhUkTZlsdsLHlgTUGFmeXs6lj04ROKpS6VPJizPa+m6FZMzxwcEs0R6dQK+O3++W51eP6Q
- Ix/A+9J5TGpUe/8lhhYOlD7NVsqllsS85xQBhoWTjjMg6LoMBPQYO7sUbfFWv4K0pkELK6jeJ
- tdf1OqoSwGBm5bRwfX+Erh+FCKJXmS8Qr2R8kn29O+llDWvlmW7x6VqLEqbWtnmZH40Tr8w/t
- K9P3nrxvOPejWCYboZUZrxQ0eYUrDY47k7j5iqio8pbXCYL8+/kHWrnSYShg0j+QkTggcFuvq
- zIX0+9+SPXF8VYwHTu1URbbv7ymfEbaNv/NlHwLyu+F6Cvg7MRqjP/D74N3nRh2xBlD1JPMZJ
- Le/UZ5Yq4Rt+a1IJQlRUs7Et2OHvaLPsQG3PR8vSWx61OAcuC9qFt9kDDLV/wqdgMfImsBc/l
- gZlSNJyK3zr34/dNLAGQe7KOqvNLjYEV/cIigCQiUFiQLDVnihrvBnQ0G5GeJu+gXii0fdWQH
- GpYTorNQKJ1EFHHEGBxWoCY3eO0BIROJ4Zvze5UVDvan3hg/na2dyvK3v23kLs2q2lucPiFGE
- X1W6gjxk9p7eFWolIIXM9skveoor0sfGXTPtYfa02IA636XTdgnivmIfv/VMjwBKq4uRzYmA+
- NGjNwJh4Q8tmPDc/n8D41oW+p23aXPa5aFayWtaJYHS0RLlek53fSyn/xj7CVedT8EJLrTUIi
- ii/mFigVyCPFKXJdDNCdF2hiFUdJhnPNoeXjyGCfskhYNKS0lf+OKpe5Jy717rCohOkhluEJW
- QJk3pKbFv0AtkZEiz0BwBVjUDCk=
+        Wed, 30 Nov 2022 15:13:05 -0500
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34E88E586;
+        Wed, 30 Nov 2022 12:10:58 -0800 (PST)
+Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AUJaisI008479;
+        Wed, 30 Nov 2022 20:10:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id : in-reply-to : references; s=pps0720;
+ bh=BaP+vpJm0HGIoKSVbIN0D8aRlNrjQWzLOwUMMVNXGpo=;
+ b=ooBgCvkqTRSw4mXD68nTmPAZagGaN551l3clQz7/ruCo8XlB3uLoReq3MME3rVYuesy7
+ W/iAvig/2720oxgDnTKDpZE5BPugo97Khlbv3uCiDBqsOLm5qg40SUKDy3vmV1C9os1r
+ vkSF1TXqHWQI1hLvb1UQ3L6BjkXqUKXcY2/WIyNXOp0uZD/wgMyTxCGAd+f1z82DR/np
+ oWnOYmebermvkd0QQKumZP/ptJ6zGeLkAgYcPi0oAbVAhUYofuxcwL9SVtVEKLFwVGJ5
+ +lnORd/TiFQsJu6BZpNxn+CjSo/slMJ/Vd1/9Nl8x5OqsloklayxXYhH00NiRD5P3tE7 qA== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3m69p3t7st-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Nov 2022 20:10:18 +0000
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 180018066E1;
+        Wed, 30 Nov 2022 20:10:18 +0000 (UTC)
+Received: from hpe.com (unknown [16.231.227.36])
+        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 7960480A272;
+        Wed, 30 Nov 2022 20:10:17 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com,
+        nick.hawkins@hpe.com, corbet@lwn.net, linux@armlinux.org.uk,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 2/6] ABI: sysfs-class-hwmon: add a description for fanY_fault
+Date:   Wed, 30 Nov 2022 14:08:42 -0600
+Message-Id: <20221130200846.4226-3-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20221130200846.4226-1-nick.hawkins@hpe.com>
+References: <20221130200846.4226-1-nick.hawkins@hpe.com>
+X-Proofpoint-GUID: EKiVIJINkiv8tWxQ7kxH0P2gqJASCj-y
+X-Proofpoint-ORIG-GUID: EKiVIJINkiv8tWxQ7kxH0P2gqJASCj-y
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-30_04,2022-11-30_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 adultscore=0 phishscore=0 suspectscore=0 malwarescore=0
+ impostorscore=0 priorityscore=1501 mlxlogscore=999 spamscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211300142
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-If dell-smm-hwmon loads on unsupported hardware like the
-Dell XPS 17 9710, an error message is printed.
-This might confuse users, as drivers are expected to be
-silent if no supported hardware is found.
-Reorder the error message so its only printed when the
-driver is loaded with the "force" option being set.
-Also reword the error message slightly.
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-Tested on a Dell Inspiron 3505.
+Document existing fanY_fault attribute.
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/dell-smm-hwmon.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+---
+ Documentation/ABI/testing/sysfs-class-hwmon | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
-.c
-index 1572b5416015..7ac778aedc68 100644
-=2D-- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -1447,9 +1447,10 @@ static int __init i8k_init(void)
- 	 */
- 	if (i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG1) &&
- 	    i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG2)) {
--		pr_err("unable to get SMM Dell signature\n");
- 		if (!force)
- 			return -ENODEV;
+diff --git a/Documentation/ABI/testing/sysfs-class-hwmon b/Documentation/ABI/testing/sysfs-class-hwmon
+index 7271781a23b2..638f4c6d4ec7 100644
+--- a/Documentation/ABI/testing/sysfs-class-hwmon
++++ b/Documentation/ABI/testing/sysfs-class-hwmon
+@@ -276,6 +276,15 @@ Description:
+ 
+ 		RW
+ 
++What:		/sys/class/hwmon/hwmonX/fanY_fault
++Description:
++		Reports if a fan has reported failure.
 +
-+		pr_err("Unable to get Dell SMM signature\n");
- 	}
-
- 	dell_smm_device =3D platform_create_bundle(&dell_smm_driver, dell_smm_pr=
-obe, NULL, 0, NULL,
-=2D-
-2.30.2
++		- 1: Failed
++		- 0: Ok
++
++		RO
++
+ What:		/sys/class/hwmon/hwmonX/pwmY
+ Description:
+ 		Pulse width modulation fan control.
+-- 
+2.17.1
 
