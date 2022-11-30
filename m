@@ -2,363 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72892C4321E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Nov 2022 18:27:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32500C47088
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Nov 2022 18:35:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiK3S1H (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Nov 2022 13:27:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
+        id S230220AbiK3SfK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Nov 2022 13:35:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiK3S1E (ORCPT
+        with ESMTP id S230242AbiK3Seu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:27:04 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3142F27173
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Nov 2022 10:27:03 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id 82so9384406pgc.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Nov 2022 10:27:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TQ108K9WPiqq9XP0xFpBdMMmDxhty1N9YdIT9yuGVos=;
-        b=b1hf0HFip+EmXU9IfJ/4UnR5ikqyFVA6HSuSuZnDWYPHHdrsakH7m/6EQe926C0YhW
-         c2j+e0oC5cW1UmAerfHsrD5TMKdUGBBrbgPgBTKHGc6LprBgxJuZvXe6P3/PaqG3jnqY
-         /M3jLjIuHBsDRwS9DvH84nguc0KWVfykwkCs5x+rMxiR6E/Ox9L/V79X8Mf85O8umKD5
-         fvDxR9XxW3LNy97j7waEVZuj1hIQxPK/R4xS6q67m1w0etdlIvz1PfB4altY9VJ67hg4
-         lDXyh64swFvZSDMWS7b8WJWaO4t+mOxxxWXc/5pf39wP+eW3SSNLNX8Pikobp7XwXBxq
-         IhLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TQ108K9WPiqq9XP0xFpBdMMmDxhty1N9YdIT9yuGVos=;
-        b=Z3UZP1EolEEsA9G4XHj0SKlBD0JUnYiGPISntGPOXAwX/wdUw5oGtlUeOStbuHYmuL
-         sQ2fjl7Ukd0tNe5T7sVtxAC7GXSPudhwD1fcGiIFqql6pnzfEX6pCG8GUjwYskHdDh7z
-         CUOoPqE4Vsi1HSJn6Sx9bxdgvuVghzfB1GbF2UmzgfJHxVeZDXjn6zmR+8iB/iUDXXvQ
-         QX0c+JHggN8xHZOUHNs+ZtCLF+Z1VrYWLfNzzKOamAaPzivuX2AHWf3JPWQbHBqY4u9r
-         WIIHZJ+xePYDY8bbQ+2FrI9b4BZUs/p7QhfyS60RqJSTZTYYhFAakLh9rdm4vfhdxVwl
-         dPLA==
-X-Gm-Message-State: ANoB5pmiWeQehV1kxAg1d51D0chxbQHz9M92hNGoxlkJlkwGVz9JvFec
-        HebwB7sXV1UF7AjXX0rOIIwm9A==
-X-Google-Smtp-Source: AA0mqf7jPW/Zl2KN/xxxM4MwggdyVC7Ha6AyE+Se43Nc/kimzjctxg7ieg3514i5txY1sKZj6wh0Iw==
-X-Received: by 2002:a63:e509:0:b0:474:4380:cca6 with SMTP id r9-20020a63e509000000b004744380cca6mr36928463pgh.229.1669832822605;
-        Wed, 30 Nov 2022 10:27:02 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902c20600b00186ff402508sm1771532pll.281.2022.11.30.10.26.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 10:27:02 -0800 (PST)
-Message-ID: <9ea32599-122f-e7c1-bf7c-6b528304fd46@9elements.com>
-Date:   Wed, 30 Nov 2022 23:56:58 +0530
+        Wed, 30 Nov 2022 13:34:50 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D717B93A74;
+        Wed, 30 Nov 2022 10:34:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1669833268; bh=NscgIAZRMqN8AzDfYglDMPfWX6oPBec9DPODcgSPEzQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=YilvTdd6MPnBoZF1okZsAnOdDtlZ2xDxGftIohAFdYSH7ZJdr31o1/ZvOiNYzmnCr
+         kuWHUmeXrLXvggi0Jxwg1G4MyALqhS8dhk/JaPxXfNxMpjePwg6eqZFo2KZx56tLcX
+         IP7QsHsj0uCNOv/3+6IMmQnCHCAECJh/tW67ZkS8ujxo5y46gVP80lH6GUCafumfRx
+         zG7qcjtChipGbVgnAcFmv+yyxxCdDClZwedkDmjTRF2On8MMHGblcldzgOrNl29ew3
+         4aMh2pAjJG6nDPiWYkfDZM8x5Ur1bLTEih7fWcQ0yGRF59P5NvgbBfhIVkgZUof/1V
+         tSj6vntAhDYiw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1Md6R1-1oQHwt3PsZ-00aGDa; Wed, 30 Nov 2022 19:34:28 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (dell-smm) Move error message to make probing silent
+Date:   Wed, 30 Nov 2022 19:34:18 +0100
+Message-Id: <20221130183418.357246-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 3/4] hwmon: (pmbus/core): Implement irq support
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-References: <20221130165955.3479143-1-Naresh.Solanki@9elements.com>
- <20221130165955.3479143-3-Naresh.Solanki@9elements.com>
- <20221130182428.GB2658232@roeck-us.net>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <20221130182428.GB2658232@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:cl7FFu4dmz8bgye6pz2NXjuVh20/evlO5cStb+/Bwa9oYVDqVrM
+ YXQuPG8DU+ayKe3fj2vQDzWCf8CKbGDGbW4FIonkW/H1FE766zTehnPllk4FAfm5rtLGxn+
+ Od8j+Qh9unanFH8fAYcZqxF1eArEt3TAkI4EJu/bceTqeqwMXHsyQRB8EeeaOjySKSJSUkN
+ OateN8j4KxN2xLU4zk9Rg==
+UI-OutboundReport: notjunk:1;M01:P0:cQXm5xf/vnQ=;JyxUz5l+6szKd3ShbnveZk/XmFc
+ CAEWQBO0MUS8AsBaRSXVa87uSC3k+W+y7VrStbbDUDpVmWq1syWlVnhknDt116r32RWg5Idb6
+ FBfmffYC6zNyE6iFnNXatcpI5OXTvuma7lROgRbBHIILC9cz1eWNZSEjDlafKAv6tTR6EAay/
+ 5CEQhUkTZlsdsLHlgTUGFmeXs6lj04ROKpS6VPJizPa+m6FZMzxwcEs0R6dQK+O3++W51eP6Q
+ Ix/A+9J5TGpUe/8lhhYOlD7NVsqllsS85xQBhoWTjjMg6LoMBPQYO7sUbfFWv4K0pkELK6jeJ
+ tdf1OqoSwGBm5bRwfX+Erh+FCKJXmS8Qr2R8kn29O+llDWvlmW7x6VqLEqbWtnmZH40Tr8w/t
+ K9P3nrxvOPejWCYboZUZrxQ0eYUrDY47k7j5iqio8pbXCYL8+/kHWrnSYShg0j+QkTggcFuvq
+ zIX0+9+SPXF8VYwHTu1URbbv7ymfEbaNv/NlHwLyu+F6Cvg7MRqjP/D74N3nRh2xBlD1JPMZJ
+ Le/UZ5Yq4Rt+a1IJQlRUs7Et2OHvaLPsQG3PR8vSWx61OAcuC9qFt9kDDLV/wqdgMfImsBc/l
+ gZlSNJyK3zr34/dNLAGQe7KOqvNLjYEV/cIigCQiUFiQLDVnihrvBnQ0G5GeJu+gXii0fdWQH
+ GpYTorNQKJ1EFHHEGBxWoCY3eO0BIROJ4Zvze5UVDvan3hg/na2dyvK3v23kLs2q2lucPiFGE
+ X1W6gjxk9p7eFWolIIXM9skveoor0sfGXTPtYfa02IA636XTdgnivmIfv/VMjwBKq4uRzYmA+
+ NGjNwJh4Q8tmPDc/n8D41oW+p23aXPa5aFayWtaJYHS0RLlek53fSyn/xj7CVedT8EJLrTUIi
+ ii/mFigVyCPFKXJdDNCdF2hiFUdJhnPNoeXjyGCfskhYNKS0lf+OKpe5Jy717rCohOkhluEJW
+ QJk3pKbFv0AtkZEiz0BwBVjUDCk=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+If dell-smm-hwmon loads on unsupported hardware like the
+Dell XPS 17 9710, an error message is printed.
+This might confuse users, as drivers are expected to be
+silent if no supported hardware is found.
+Reorder the error message so its only printed when the
+driver is loaded with the "force" option being set.
+Also reword the error message slightly.
 
-On 30-11-2022 11:54 pm, Guenter Roeck wrote:
-> On Wed, Nov 30, 2022 at 05:59:53PM +0100, Naresh Solanki wrote:
->> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->>
->> Implement PMBUS irq handler to notify regulator events.
->>
-> 
-> There should be separate patches for adding irq support, adding
-> hwmon notifications, and adding regulator notifications. The order
-> should be:
-> 
-> - Add interrupt support
-> - Add hwmon notifications
-> - Add events to regulator flag map
-> - Add regulator notifications
-Yes. Will do that as part of next revision. Thanks.
+Tested on a Dell Inspiron 3505.
 
-Naresh
-> 
-> Guenter
-> 
->> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ---
->>   drivers/hwmon/pmbus/pmbus.h      |   2 +-
->>   drivers/hwmon/pmbus/pmbus_core.c | 151 ++++++++++++++++++++++++++++---
->>   2 files changed, 137 insertions(+), 16 deletions(-)
->>
->> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
->> index 10fb17879f8e..6b2e6cf93b19 100644
->> --- a/drivers/hwmon/pmbus/pmbus.h
->> +++ b/drivers/hwmon/pmbus/pmbus.h
->> @@ -26,7 +26,7 @@ enum pmbus_regs {
->>   
->>   	PMBUS_CAPABILITY		= 0x19,
->>   	PMBUS_QUERY			= 0x1A,
->> -
->> +	PMBUS_SMBALERT_MASK		= 0x1B,
->>   	PMBUS_VOUT_MODE			= 0x20,
->>   	PMBUS_VOUT_COMMAND		= 0x21,
->>   	PMBUS_VOUT_TRIM			= 0x22,
->> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
->> index 9a9e380acc23..613e2e484a0f 100644
->> --- a/drivers/hwmon/pmbus/pmbus_core.c
->> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->> @@ -81,6 +81,7 @@ struct pmbus_label {
->>   struct pmbus_data {
->>   	struct device *dev;
->>   	struct device *hwmon_dev;
->> +	struct regulator_dev **rdevs;
->>   
->>   	u32 flags;		/* from platform data */
->>   
->> @@ -2804,7 +2805,8 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
->>   	},
->>   };
->>   
->> -static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
->> +static int pmbus_regulator_get_flags(struct regulator_dev *rdev, unsigned int *error,
->> +				    unsigned int *event)
->>   {
->>   	int i, status;
->>   	const struct pmbus_regulator_status_category *cat;
->> @@ -2815,7 +2817,8 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->>   	u8 page = rdev_get_id(rdev);
->>   	int func = data->info->func[page];
->>   
->> -	*flags = 0;
->> +	*error = 0;
->> +	*event = 0;
->>   
->>   	mutex_lock(&data->update_lock);
->>   
->> @@ -2831,8 +2834,10 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->>   		}
->>   
->>   		for (bit = cat->bits; bit->pflag; bit++) {
->> -			if (status & bit->pflag)
->> -				*flags |= bit->rflag;
->> +			if (status & bit->pflag) {
->> +				*error |= bit->rflag;
->> +				*event |= bit->eflag;
->> +			}
->>   		}
->>   	}
->>   
->> @@ -2851,11 +2856,15 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->>   		return status;
->>   
->>   	if (pmbus_regulator_is_enabled(rdev)) {
->> -		if (status & PB_STATUS_OFF)
->> -			*flags |= REGULATOR_ERROR_FAIL;
->> +		if (status & PB_STATUS_OFF) {
->> +			*error |= REGULATOR_ERROR_FAIL;
->> +			*event |= REGULATOR_EVENT_FAIL;
->> +		}
->>   
->> -		if (status & PB_STATUS_POWER_GOOD_N)
->> -			*flags |= REGULATOR_ERROR_REGULATION_OUT;
->> +		if (status & PB_STATUS_POWER_GOOD_N) {
->> +			*error |= REGULATOR_ERROR_REGULATION_OUT;
->> +			*event |= REGULATOR_EVENT_REGULATION_OUT;
->> +		}
->>   	}
->>   
->>   	/*
->> @@ -2863,13 +2872,22 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->>   	 * PMBUS_STATUS_TEMPERATURE, map PB_STATUS_TEMPERATURE to a warning as
->>   	 * a (conservative) best-effort interpretation.
->>   	 */
->> -	if (!(*flags & (REGULATOR_ERROR_OVER_TEMP | REGULATOR_ERROR_OVER_TEMP_WARN)) &&
->> -	    (status & PB_STATUS_TEMPERATURE))
->> -		*flags |= REGULATOR_ERROR_OVER_TEMP_WARN;
->> +	if (!(*error & (REGULATOR_ERROR_OVER_TEMP | REGULATOR_ERROR_OVER_TEMP_WARN)) &&
->> +	    (status & PB_STATUS_TEMPERATURE)) {
->> +		*error |= REGULATOR_ERROR_OVER_TEMP_WARN;
->> +		*event |= REGULATOR_EVENT_OVER_TEMP_WARN;
->> +	}
->>   
->>   	return 0;
->>   }
->>   
->> +static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
->> +{
->> +	unsigned int event;
->> +
->> +	return pmbus_regulator_get_flags(rdev, flags, &event);
->> +}
->> +
->>   static int pmbus_regulator_get_status(struct regulator_dev *rdev)
->>   {
->>   	struct device *dev = rdev_get_dev(rdev);
->> @@ -3060,14 +3078,61 @@ const struct regulator_ops pmbus_regulator_ops = {
->>   };
->>   EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
->>   
->> +static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg, u8 val)
->> +{
->> +	return pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
->> +}
->> +
->> +static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
->> +{
->> +	struct pmbus_data *data = pdata;
->> +	struct i2c_client *client = to_i2c_client(data->dev);
->> +	int i, ret = IRQ_NONE, status, event;
->> +	u8 page;
->> +
->> +	for (i = 0; i < data->info->num_regulators; i++) {
->> +
->> +		if (!data->rdevs[i])
->> +			continue;
->> +
->> +		ret = pmbus_regulator_get_flags(data->rdevs[i], &status, &event);
->> +		if (ret)
->> +			return ret;
->> +
->> +		if (event) {
->> +			regulator_notifier_call_chain(data->rdevs[i], event, NULL);
->> +			ret = IRQ_HANDLED;
->> +		}
->> +
->> +		page = rdev_get_id(data->rdevs[i]);
->> +		mutex_lock(&data->update_lock);
->> +		status = pmbus_read_status_word(client, page);
->> +		if (status < 0) {
->> +			mutex_unlock(&data->update_lock);
->> +			return status;
->> +		}
->> +
->> +		if (status & ~(PB_STATUS_OFF | PB_STATUS_BUSY | PB_STATUS_POWER_GOOD_N))
->> +			pmbus_clear_fault_page(client, page);
->> +
->> +		mutex_unlock(&data->update_lock);
->> +	}
->> +
->> +	return ret;
->> +}
->> +
->>   static int pmbus_regulator_register(struct pmbus_data *data)
->>   {
->>   	struct device *dev = data->dev;
->>   	const struct pmbus_driver_info *info = data->info;
->>   	const struct pmbus_platform_data *pdata = dev_get_platdata(dev);
->> -	struct regulator_dev *rdev;
->>   	int i;
->>   
->> +	data->rdevs = devm_kzalloc(dev, sizeof(struct regulator_dev *) * info->num_regulators,
->> +				  GFP_KERNEL);
->> +	if (!data->rdevs)
->> +		return -ENOMEM;
->> +
->>   	for (i = 0; i < info->num_regulators; i++) {
->>   		struct regulator_config config = { };
->>   
->> @@ -3077,21 +3142,71 @@ static int pmbus_regulator_register(struct pmbus_data *data)
->>   		if (pdata && pdata->reg_init_data)
->>   			config.init_data = &pdata->reg_init_data[i];
->>   
->> -		rdev = devm_regulator_register(dev, &info->reg_desc[i],
->> +		data->rdevs[i] = devm_regulator_register(dev, &info->reg_desc[i],
->>   					       &config);
->> -		if (IS_ERR(rdev))
->> -			return dev_err_probe(dev, PTR_ERR(rdev),
->> +		if (IS_ERR(data->rdevs[i]))
->> +			return dev_err_probe(dev, PTR_ERR(data->rdevs[i]),
->>   					     "Failed to register %s regulator\n",
->>   					     info->reg_desc[i].name);
->>   	}
->>   
->>   	return 0;
->>   }
->> +
->> +static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
->> +{
->> +	struct device *dev = &client->dev;
->> +	const struct pmbus_regulator_status_category *cat;
->> +	const struct pmbus_regulator_status_assoc *bit;
->> +	int i, j, err, ret;
->> +	u8 mask;
->> +	int func;
->> +
->> +	for (i = 0; i < data->info->pages; i++) {
->> +		func = data->info->func[i];
->> +
->> +		for (j = 0; j < ARRAY_SIZE(pmbus_regulator_flag_map); j++) {
->> +			cat = &pmbus_regulator_flag_map[i];
->> +			if (!(func & cat->func))
->> +				continue;
->> +			mask = 0;
->> +			for (bit = cat->bits; bit->pflag; bit++)
->> +				mask |= bit->pflag;
->> +
->> +			err = pmbus_write_smbalert_mask(client, i, cat->reg, ~mask);
->> +			if (err)
->> +				dev_err(dev, "Failed to set smbalert for reg 0x%02x\n",	cat->reg);
->> +		}
->> +
->> +		pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_CML, 0xff);
->> +		pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_OTHER, 0xff);
->> +		pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_MFR_SPECIFIC, 0xff);
->> +		if (data->info->func[i] & PMBUS_HAVE_FAN12)
->> +			pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_FAN_12, 0xff);
->> +		if (data->info->func[i] & PMBUS_HAVE_FAN34)
->> +			pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_FAN_34, 0xff);
->> +
->> +	}
->> +
->> +	/* Register notifiers - can fail if IRQ is not given */
->> +	ret = devm_request_threaded_irq(dev, client->irq, NULL, pmbus_fault_handler,
->> +			      0, "pmbus-irq", data);
->> +	if (ret) {
->> +		dev_warn(dev, "IRQ disabled %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	return 0;
->> +}
->>   #else
->>   static int pmbus_regulator_register(struct pmbus_data *data)
->>   {
->>   	return 0;
->>   }
->> +static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
->> +{
->> +	return 0;
->> +}
->>   #endif
->>   
->>   static struct dentry *pmbus_debugfs_dir;	/* pmbus debugfs directory */
->> @@ -3456,6 +3571,12 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
->>   	if (ret)
->>   		return ret;
->>   
->> +	if (client->irq > 0) {
->> +		ret = pmbus_irq_setup(client, data);
->> +		if (ret)
->> +			return ret;
->> +	}
->> +
->>   	ret = pmbus_init_debugfs(client, data);
->>   	if (ret)
->>   		dev_warn(dev, "Failed to register debugfs\n");
->> -- 
->> 2.37.3
->>
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/dell-smm-hwmon.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index 1572b5416015..7ac778aedc68 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1447,9 +1447,10 @@ static int __init i8k_init(void)
+ 	 */
+ 	if (i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG1) &&
+ 	    i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG2)) {
+-		pr_err("unable to get SMM Dell signature\n");
+ 		if (!force)
+ 			return -ENODEV;
++
++		pr_err("Unable to get Dell SMM signature\n");
+ 	}
+
+ 	dell_smm_device =3D platform_create_bundle(&dell_smm_driver, dell_smm_pr=
+obe, NULL, 0, NULL,
+=2D-
+2.30.2
+
