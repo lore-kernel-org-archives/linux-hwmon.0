@@ -2,67 +2,134 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E16FC43217
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 19:37:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D38DC43217
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 20:04:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiLATha (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Dec 2022 14:37:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
+        id S230123AbiLAUEX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Dec 2022 15:04:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiLATh0 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Dec 2022 14:37:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05B8BE4;
-        Thu,  1 Dec 2022 11:37:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D0AB620E3;
-        Thu,  1 Dec 2022 19:37:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A349EC433D6;
-        Thu,  1 Dec 2022 19:37:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669923444;
-        bh=o1e5cNkaeVBHeVFdVZ4Nge7QDteEUWAJtDcjpk1vBy8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=E1kyj1rsUoTDoTY1rJD9Zo5GlpSW9KDcXtPUsKUI0cKKyVWQw5XQljMqYoOolnm10
-         McznQlnhIYMI3CgddpdZ8saDWKRhKevcKPixjtrRaumRc2kTW+2iqTBso1TIM5kTT9
-         nRICS1O8siFF6BCDZLyNIIeOYvNvpkgjXbo8N+k6Als/LsdQ737j89pwydPADrFHgZ
-         Mh3sAgm6aC/wIypHiwjTzZce/2UELHcA4pJuDHCaIRVgTw+bvBL4zSqWudcAJVIs0y
-         4e42ouV/v7tDFpTFjmkiVwCPI/i140sVyNqA+d/DBrNQAK+OuPjKJMVUAf0czgmb8y
-         wz6KoIX0Tk+YQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8F901E270C8;
-        Thu,  1 Dec 2022 19:37:24 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon fixes for v6.1-rc8
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221201172526.2290129-1-linux@roeck-us.net>
-References: <20221201172526.2290129-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221201172526.2290129-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.1-rc8
-X-PR-Tracked-Commit-Id: 9bdc112be727cf1ba65be79541147f960c3349d8
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e214dd935bf154af4c2d5013b16a283d592ccea5
-Message-Id: <166992344458.6584.1340713015035746798.pr-tracker-bot@kernel.org>
-Date:   Thu, 01 Dec 2022 19:37:24 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        with ESMTP id S229723AbiLAUEW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Dec 2022 15:04:22 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CC2A2801;
+        Thu,  1 Dec 2022 12:04:21 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id q186so3184714oia.9;
+        Thu, 01 Dec 2022 12:04:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KB2rkAyzghkJoF+4UvQK5LbNR3vGX6gvot0xzapn8tw=;
+        b=TIRXRb0mjUwtLMIYiHL3+NNzco4o1HfZxaBKCOfJ8VIfzE3tSuwpFegJ+1ntUgqKsA
+         tJzY2I3EdibxGBVxehOUricTlcFD3dW1uk8FndCxwU+M/g4Hmc20rJUgBydkk+t7PfsY
+         8nazNQyb9GR5JNDSpafDI2uD9xJJXfTaYoQPQQxBrSrxLauQD7ky85+X37dAQW7SCHpL
+         zKnpk9yDUwgdPrA9Eal0ag9RUt5KMK/k2y611vnm603006rYU2upqFn19TYrSqpNldaQ
+         o6mW/n/IqqlZI8psOeTRWIp4Ex8xbA/VAxj/i0vexCHMyPwAFW2ZvUbMPo31kARLQt1J
+         BpNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KB2rkAyzghkJoF+4UvQK5LbNR3vGX6gvot0xzapn8tw=;
+        b=7yOwMHHAEJ/gSAGkLmF9PvZEroglux/1lczpmmr3qfOoY8q+2yFZLfVzOvPLpMPIh+
+         6IAw1ThFKV77xIyLhnvzHKbfUrXk/kz/FKYsO2j3uiSDp5EcHPqugT62rKr74Ydg3obS
+         rwB4VZdlzFmOijXgFhcroY0gPPaOSRkPN6r9YoVLfqdQj4hRW059EUOaigqM4eKVQmOo
+         DDZjxzAi98rikNElPA8sGYv3gvHZqzGWoBRpXOTNBkLIwYg0WmJ0zoBJJRmxm4wX9b0K
+         jw0DVuzz7fmOTr5mLOqvKJ+Pb2xN/bUEXvpuJXmt92NsESeeVxMjt4MSoePHLlLTlQJO
+         D7Dw==
+X-Gm-Message-State: ANoB5pmcgG/ismVs10xzx3GJYDiXT4eGCOeVPMM5MqrNP4Fqw9GEc08a
+        eGYjcaCk/1dFDdohE4Tyvpk=
+X-Google-Smtp-Source: AA0mqf4tQeS6OpB1bbAUG/vTVtBJ//PfvzjA6jMy878lMgJJbsBmPKvOu84v8fdnbr2LXsWgrgbZ0g==
+X-Received: by 2002:aca:e057:0:b0:35b:ae45:b9e9 with SMTP id x84-20020acae057000000b0035bae45b9e9mr11387188oig.201.1669925061148;
+        Thu, 01 Dec 2022 12:04:21 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a2-20020a05680804c200b0035418324b78sm2188761oie.11.2022.12.01.12.04.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 12:04:20 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 1 Dec 2022 12:04:19 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH v5 1/5] hwmon: (pmbus/core): Add rdev in pmbus_data struct
+Message-ID: <20221201200419.GA2110128@roeck-us.net>
+References: <20221201193025.1584365-1-Naresh.Solanki@9elements.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221201193025.1584365-1-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Thu,  1 Dec 2022 09:25:26 -0800:
+On Thu, Dec 01, 2022 at 08:30:20PM +0100, Naresh Solanki wrote:
+> Add regulator device in pmbus_data & initialize the same during PMBus
+> regulator register.
+> 
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.1-rc8
+This needs an explanation why this change is needed.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e214dd935bf154af4c2d5013b16a283d592ccea5
+Guenter
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> 
+> ---
+> Change in V5:
+> - Fix error check for rdev
+> ---
+>  drivers/hwmon/pmbus/pmbus_core.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 95e95783972a..a95f998ca247 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -81,6 +81,7 @@ struct pmbus_label {
+>  struct pmbus_data {
+>  	struct device *dev;
+>  	struct device *hwmon_dev;
+> +	struct regulator_dev **rdevs;
+>  
+>  	u32 flags;		/* from platform data */
+>  
+> @@ -3050,9 +3051,13 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+>  	struct device *dev = data->dev;
+>  	const struct pmbus_driver_info *info = data->info;
+>  	const struct pmbus_platform_data *pdata = dev_get_platdata(dev);
+> -	struct regulator_dev *rdev;
+>  	int i;
+>  
+> +	data->rdevs = devm_kzalloc(dev, sizeof(struct regulator_dev *) * info->num_regulators,
+> +				  GFP_KERNEL);
+> +	if (!data->rdevs)
+> +		return -ENOMEM;
+> +
+>  	for (i = 0; i < info->num_regulators; i++) {
+>  		struct regulator_config config = { };
+>  
+> @@ -3062,10 +3067,10 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+>  		if (pdata && pdata->reg_init_data)
+>  			config.init_data = &pdata->reg_init_data[i];
+>  
+> -		rdev = devm_regulator_register(dev, &info->reg_desc[i],
+> +		data->rdevs[i] = devm_regulator_register(dev, &info->reg_desc[i],
+>  					       &config);
+> -		if (IS_ERR(rdev))
+> -			return dev_err_probe(dev, PTR_ERR(rdev),
+> +		if (IS_ERR(data->rdevs[i]))
+> +			return dev_err_probe(dev, PTR_ERR(data->rdevs[i]),
+>  					     "Failed to register %s regulator\n",
+>  					     info->reg_desc[i].name);
+>  	}
+> 
+> base-commit: 9494c53e1389b120ba461899207ac8a3aab2632c
+> -- 
+> 2.37.3
+> 
