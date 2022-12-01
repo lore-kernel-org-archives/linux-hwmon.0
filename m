@@ -2,142 +2,91 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7AD9C4321E
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 05:09:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B40BFC4321E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 10:26:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbiLAFJh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Dec 2022 00:09:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
+        id S230207AbiLAK0l (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Dec 2022 05:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiLAFJg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Dec 2022 00:09:36 -0500
-X-Greylist: delayed 1355 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Nov 2022 21:09:36 PST
-Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.145.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA3197921
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Nov 2022 21:09:36 -0800 (PST)
-Received: from atl1wswcm04.websitewelcome.com (unknown [50.6.129.165])
-        by atl4wswob04.websitewelcome.com (Postfix) with ESMTP id BC8871E38D
-        for <linux-hwmon@vger.kernel.org>; Thu,  1 Dec 2022 04:47:00 +0000 (UTC)
-Received: from md-in-79.webhostbox.net ([43.225.55.182])
-        by cmsmtp with ESMTP
-        id 0bTOpZnZqgEOM0bTPpblmt; Thu, 01 Dec 2022 04:47:00 +0000
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
-        ; s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=a8sHx3T2VDeL3fegfd6hkMq1v2763qASnm4AuQfNaJU=; b=hxyKPInE+kMPMHDFRtfWsg3b61
-        RNtOx/S/5AURsyESZohEwJiiYnAsSZmHr62CmFIYmDHh5vR5FWZ6Ggd2LHkag7P2aMxaQipOpFZA7
-        gqory90ncb6IqKfxfnewYqW+DTGkFleOBNVVyRSHwO3s1gHMYHqXaSan9/1bSFCyzj+H4Mes9HTVS
-        2nCqvlCm6NPCH0IrZcnc7d6RiaBTZ9DNyiSXPHx7abIByk1RDsEqtytW63o4mkUggVwIe3HbZKPGI
-        ydh7LJLt1a5BCxsxpsh/7UkiTiGMlOImIlnoCkmYyJfX8Y+e45AZ/vhIeHq3kvb2XosIGd3ApOWCq
-        Md3SltCg==;
-Received: from [223.187.112.123] (port=34121 helo=discovery..)
-        by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <saravanan@linumiz.com>)
-        id 1p0bTM-003t5m-Qr;
-        Thu, 01 Dec 2022 04:46:56 +0000
-From:   Saravanan Sekar <saravanan@linumiz.com>
-To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        with ESMTP id S230408AbiLAK0T (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Dec 2022 05:26:19 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097539FAB0
+        for <linux-hwmon@vger.kernel.org>; Thu,  1 Dec 2022 02:26:10 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id z4so1356349ljq.6
+        for <linux-hwmon@vger.kernel.org>; Thu, 01 Dec 2022 02:26:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MYT2nq0QXSxRz64AN42vH74ETqWDNSsFMko9zkH39vk=;
+        b=A2j26QK6XZeEZRd1pVoVNtq3AvjNoVgfwfmhzFjUMB5j+Zdnccpi3N8UGw2F9b7gu7
+         LgWmZdSJ3SVsAtjqXbiL+GjUX1vLBxxBV95su/i3xNZBf0NZV2lHSs3FbWLclDmnzXIE
+         9WBGBhY1KveAhn71WSIBt98bDmYZ7iIRDoiYFNftcD9yQVWcHPMrbEe1cLNjaCTgNU7U
+         3ulcTG5mxZdipYHysym39htN68RXaanTR3fQyZa3Lnv4rcUm8dx7yQMmzNzRexFHM3p5
+         qowj7BH9Xh3fJPPyCmmTwpmEJj9y0DocDG3MLBTmQ8h78yKK3+EF+g61O6nWGdY+/gg2
+         HleA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MYT2nq0QXSxRz64AN42vH74ETqWDNSsFMko9zkH39vk=;
+        b=T/HUy49pvKlFnuNrsB9Ghsw87mZiHshq4zo4sLWw6JSn3j/w712scfKJMbye50XjTT
+         zOkYmfAcm2e9ING/vc1wnN37V+NuKJ6frT1HNU00Gzqruiy9VcjY28f8TUKk/TfpoGy0
+         KmAgAXT+Fc/Z7Z2QpfYQ24sn+h45I3ridlzagfQTE4Cp8B4a22DcPCi760yNXq50wp+g
+         jm5pJnF4FLidpVc0WZScOosXdVaV4pfLO0oTZ4OErlDNJMGrOPXrdPQrVn9mCEOFnL1G
+         nGMnnyXUpwqqHK2ZqbDyxct/S1ScQQYh2Kddx1OKJc+lVTk5XENNSst1EDZ9j5dgU7ds
+         LMqw==
+X-Gm-Message-State: ANoB5plG8xERukSWyc7csyY1/YaDTJ78zu6Fh3kxwRid73R72Ei1x00m
+        XnUqGndrhCAGjnPs/QU04b4O+yx7Zht4adEl
+X-Google-Smtp-Source: AA0mqf5Qinw7ldn269i13qHU7N4BlOct4Q02ZBOfbWmzYzZyjReCeMq8uWrycdBhL3R5L2q85NNOrg==
+X-Received: by 2002:a2e:a5c4:0:b0:277:c03:a7ed with SMTP id n4-20020a2ea5c4000000b002770c03a7edmr20474278ljp.283.1669890368405;
+        Thu, 01 Dec 2022 02:26:08 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c2-20020a056512324200b004b5478d8222sm74420lfr.184.2022.12.01.02.26.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 02:26:06 -0800 (PST)
+Message-ID: <bc86121f-3cc2-1e55-4c6a-02cb1644a8bd@linaro.org>
+Date:   Thu, 1 Dec 2022 11:26:05 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 2/4] dt-bindings: hwmon/pmbus: Add mps,mpq7932
+ power-management IC
+Content-Language: en-US
+To:     Saravanan Sekar <saravanan@linumiz.com>, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, marten.lindahl@axis.com
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Saravanan Sekar <saravanan@linumiz.com>
-Subject: [PATCH v2 1/4] hwmon: pm_bus: core: Add min_uV in pmbus regulator helper macro
-Date:   Thu,  1 Dec 2022 05:46:40 +0100
-Message-Id: <20221201044643.1150870-2-saravanan@linumiz.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221201044643.1150870-1-saravanan@linumiz.com>
+        linux-kernel@vger.kernel.org
 References: <20221201044643.1150870-1-saravanan@linumiz.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - linumiz.com
-X-BWhitelist: no
-X-Source-IP: 223.187.112.123
-X-Source-L: No
-X-Exim-ID: 1p0bTM-003t5m-Qr
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (discovery..) [223.187.112.123]:34121
-X-Source-Auth: saravanan@linumiz.com
-X-Email-Count: 16
-X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfPm6I3tutx1dQlgBIwF7IGLElrbff31UrDTt+j4DBr9F7rAZShcRkIapBhAxBO9aWUsDOeMwGAoU3I4NXngUCuZbhKs0AEQvb5012g+1IUTugofIO7dS
- GyRImyYMvbtjaw6UY4L0UY+JaCUZ8a99gt8ylk/FWDrOdIiLYtzcE5229HdfasCYP+0GStzgcmpztt+zR/3HihE6r1tgH3lo790=
+ <20221201044643.1150870-3-saravanan@linumiz.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221201044643.1150870-3-saravanan@linumiz.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Some regulator operates in a range of voltage which should not allow
-below the lower threshold.
+On 01/12/2022 05:46, Saravanan Sekar wrote:
+> Document mpq7932 power-management IC
+> 
+> Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
+> ---
 
-Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
----
- drivers/hwmon/pmbus/ltc2978.c | 16 ++++++++--------
- drivers/hwmon/pmbus/pmbus.h   |  5 +++--
- 2 files changed, 11 insertions(+), 10 deletions(-)
+This is a friendly reminder during the review process.
 
-diff --git a/drivers/hwmon/pmbus/ltc2978.c b/drivers/hwmon/pmbus/ltc2978.c
-index 6d2592731ba3..406a36885ef3 100644
---- a/drivers/hwmon/pmbus/ltc2978.c
-+++ b/drivers/hwmon/pmbus/ltc2978.c
-@@ -569,14 +569,14 @@ MODULE_DEVICE_TABLE(i2c, ltc2978_id);
- #define LTC2978_N_VOLTAGES	((LTC2978_MAX_UV / LTC2978_UV_STEP) + 1)
- 
- static const struct regulator_desc ltc2978_reg_desc[] = {
--	PMBUS_REGULATOR_STEP("vout", 0, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
--	PMBUS_REGULATOR_STEP("vout", 1, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
--	PMBUS_REGULATOR_STEP("vout", 2, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
--	PMBUS_REGULATOR_STEP("vout", 3, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
--	PMBUS_REGULATOR_STEP("vout", 4, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
--	PMBUS_REGULATOR_STEP("vout", 5, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
--	PMBUS_REGULATOR_STEP("vout", 6, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
--	PMBUS_REGULATOR_STEP("vout", 7, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-+	PMBUS_REGULATOR_STEP("vout", 0, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
-+	PMBUS_REGULATOR_STEP("vout", 1, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
-+	PMBUS_REGULATOR_STEP("vout", 2, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
-+	PMBUS_REGULATOR_STEP("vout", 3, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
-+	PMBUS_REGULATOR_STEP("vout", 4, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
-+	PMBUS_REGULATOR_STEP("vout", 5, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
-+	PMBUS_REGULATOR_STEP("vout", 6, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
-+	PMBUS_REGULATOR_STEP("vout", 7, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
- };
- 
- static const struct regulator_desc ltc2978_reg_desc_default[] = {
-diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-index 7daaf0caf4d3..b8c7810c812a 100644
---- a/drivers/hwmon/pmbus/pmbus.h
-+++ b/drivers/hwmon/pmbus/pmbus.h
-@@ -464,7 +464,7 @@ struct pmbus_driver_info {
- extern const struct regulator_ops pmbus_regulator_ops;
- 
- /* Macros for filling in array of struct regulator_desc */
--#define PMBUS_REGULATOR_STEP(_name, _id, _voltages, _step)  \
-+#define PMBUS_REGULATOR_STEP(_name, _id, _voltages, _step, _min_uV)  \
- 	[_id] = {						\
- 		.name = (_name # _id),				\
- 		.supply_name = "vin",				\
-@@ -476,9 +476,10 @@ extern const struct regulator_ops pmbus_regulator_ops;
- 		.owner = THIS_MODULE,				\
- 		.n_voltages = _voltages,			\
- 		.uV_step = _step,				\
-+		.min_uV = _min_uV,				\
- 	}
- 
--#define PMBUS_REGULATOR(_name, _id)	PMBUS_REGULATOR_STEP(_name, _id, 0, 0)
-+#define PMBUS_REGULATOR(_name, _id)   PMBUS_REGULATOR_STEP(_name, _id, 0, 0, 0)
- 
- /* Function declarations */
- 
--- 
-2.34.1
+It seems my previous comments were not fully addressed. Maybe my
+feedback got lost between the quotes, maybe you just forgot to apply it.
+Please go back to the previous discussion and either implement all
+requested changes or keep discussing them.
+
+Thank you.
+
+Best regards,
+Krzysztof
 
