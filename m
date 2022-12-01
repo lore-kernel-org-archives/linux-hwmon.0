@@ -2,52 +2,62 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD5A8C43217
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 16:39:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 973AEC43217
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 16:43:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiLAQjK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Dec 2022 11:39:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
+        id S229566AbiLAQnf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Dec 2022 11:43:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbiLAQjH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Dec 2022 11:39:07 -0500
-Received: from gateway32.websitewelcome.com (gateway32.websitewelcome.com [192.185.145.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81E874AB6
-        for <linux-hwmon@vger.kernel.org>; Thu,  1 Dec 2022 08:39:06 -0800 (PST)
-Received: from atl1wswcm01.websitewelcome.com (unknown [50.6.129.162])
-        by atl3wswob03.websitewelcome.com (Postfix) with ESMTP id 24B5AEB23
-        for <linux-hwmon@vger.kernel.org>; Thu,  1 Dec 2022 16:39:06 +0000 (UTC)
-Received: from md-in-79.webhostbox.net ([43.225.55.182])
-        by cmsmtp with ESMTP
-        id 0maVpWIvGR3dd0maXpROeA; Thu, 01 Dec 2022 16:39:06 +0000
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
-        ; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-        Cc:To:Subject:From:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=GgTnhe0B3cXs/oLOsaLvp0MgyDCHto0gydBPYUNi4j8=; b=O8MZrlCIlNpe/UdkM6ccTdg+j5
-        ZAx2s5ewseqOrE7vzzY3mhlmDrOjoAAchyJd7QpumSQ/65NciS+H1/vyCq1pWXu+odlqLqqhq7tGT
-        RrTsk86uS3l8lwMnOKDJtzb5GIwo5eDl5vmFPvVYLq+QbRHPhqrUsZDJspLaE/C4dM6fO8Fdc4n2+
-        9hM0134bLFgisyaXCT9/5zjRKOBxcTfJwsC/ArupZ1JupXQqgOX2mBFdafcxentyAIIVXbMLucv6t
-        lI2NU1cmJkdk5r96OwM0PyTtKYy/VcCxx6ydKOX7xJHAsjcx81hnTGG96dulol036wpedaEavnx1e
-        I/QY6TLA==;
-Received: from [106.197.183.239] (port=59743 helo=[192.168.221.42])
-        by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <saravanan@linumiz.com>)
-        id 1p0maS-003nb2-KA;
-        Thu, 01 Dec 2022 16:39:02 +0000
-Message-ID: <8228db8d-2a32-1d23-74f3-05b9fe529a82@linumiz.com>
-Date:   Thu, 1 Dec 2022 17:38:54 +0100
+        with ESMTP id S229473AbiLAQne (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Dec 2022 11:43:34 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2CFABA29
+        for <linux-hwmon@vger.kernel.org>; Thu,  1 Dec 2022 08:43:33 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id be13so3364004lfb.4
+        for <linux-hwmon@vger.kernel.org>; Thu, 01 Dec 2022 08:43:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L8hpSR/3nlqBj/Be+rcyGGbkrbq4xUfYfMKRCLbhddc=;
+        b=lCu5HlOhQ7/BGDbpuRrV2qz9X4a1j8VJ7Ddkd6cyi0SCqY0tT3RyUR6fCYkvpfXxLI
+         Sm0knrJkkt4pfkrUQdLNY5ikwXFBtrwim/h1rrqhnKWNJ8oAs+oMrx8/F6J6CD5Mds+f
+         9NAykPKuUh2xx0R3prZ4pL5903E/0iZtEaIRwYTIU87NuKgId1LNVfok6GKcJg3Kb6jB
+         gcaGyxrJdXV+BfLF802Jy68tGJ4wh/OB9Os3Ia32rVrbgTLzpr9hrafgRO4x/gtowLwC
+         VdsWFgDVYt8BDsQkFC2oQWVVJodCo+QV1Dr6S997LApfMfrw+ajXMWy2Rzm6znuyVbOn
+         Q6zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L8hpSR/3nlqBj/Be+rcyGGbkrbq4xUfYfMKRCLbhddc=;
+        b=ZpNv9DMZmaxEMPuC3pJFF0aTMZ+PkvLTmEdBwmvLThyqNpNROLa66u3jRKv1ZKRTio
+         p+x+a5KfNXYXnclbJrnyz75sdJq0nJXaZg78Zj+2VnWc2+sAMQ34IKJ2c5DZlLtmwawo
+         G2sHIqIOR/vnzF/aH3x/jSwkFjh6CpM3BloaR+RoALslZ3/moAhiMCYLtMKEGfxH4Ehu
+         prSq4183VkiJ+vq5J0et9P185cETUqNnqejQTSM4RhtMf9b1BuZ65EIoyFwKacmZA6oG
+         9Ta/CMc7or+pkkZNM/q5ZYtR0J6XqK86CURu6kYQlM/xBXLMyx/bUn9WolFuLPaDuAnE
+         Gl+Q==
+X-Gm-Message-State: ANoB5pkiTkMjn8/1KMlCGeUdrF5kIfSQIFTcZrl9ezVEm0HCGiNJJWlk
+        a9+DuAqkft4ULUPiORaTZ6wlfQ==
+X-Google-Smtp-Source: AA0mqf6oJcaRDO1AvdOI0rYdDIXBvPwvqzgXbrEtLsnIb+oxjgL46hXpu0tYvA0hGrS9xy+ixNEmSw==
+X-Received: by 2002:a05:6512:208a:b0:4b4:b2c6:5d28 with SMTP id t10-20020a056512208a00b004b4b2c65d28mr20872835lfr.47.1669913011802;
+        Thu, 01 Dec 2022 08:43:31 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id z15-20020a056512370f00b004b4b69af17dsm286886lfr.214.2022.12.01.08.43.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 08:43:30 -0800 (PST)
+Message-ID: <bdab2e58-ea12-0ccf-a25a-ed89e50a5332@linaro.org>
+Date:   Thu, 1 Dec 2022 17:43:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-From:   Saravanan Sekar <saravanan@linumiz.com>
+ Thunderbird/102.5.0
 Subject: Re: [PATCH v2 2/4] dt-bindings: hwmon/pmbus: Add mps,mpq7932
  power-management IC
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+Content-Language: en-US
+To:     Saravanan Sekar <saravanan@linumiz.com>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, marten.lindahl@axis.com,
@@ -60,107 +70,42 @@ References: <20221201044643.1150870-1-saravanan@linumiz.com>
  <29de4d2b-3e32-809e-6ccd-5e7a4fe548fc@linaro.org>
  <e0d97b79-2133-8869-eaea-eb286fdb3a11@roeck-us.net>
  <785e942a-0691-f87e-b6e9-058749a79ec1@linaro.org>
-Content-Language: en-US
-In-Reply-To: <785e942a-0691-f87e-b6e9-058749a79ec1@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <8228db8d-2a32-1d23-74f3-05b9fe529a82@linumiz.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <8228db8d-2a32-1d23-74f3-05b9fe529a82@linumiz.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - linumiz.com
-X-BWhitelist: no
-X-Source-IP: 106.197.183.239
-X-Source-L: No
-X-Exim-ID: 1p0maS-003nb2-KA
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.221.42]) [106.197.183.239]:59743
-X-Source-Auth: saravanan@linumiz.com
-X-Email-Count: 7
-X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfM3bq91SC5HQFLl4EHQks6a3rKF/irORWycZ9RALbeIXB3bYeRuOjWN59COMCmuqyy3zU7L07tvK+eBM6n/hnVCcAZGoejP3pV84FKK2sFXXuG67dYOD
- yhuR2Zb0qI3r7eF3iilY/e/K35qOzN0ZRFYbnX+Zcxot3V8PAv5JJp0R0OfME4apmY+6Bf38P4Qc1lB11iy48G6KWnAe776egi8=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 01/12/22 17:15, Krzysztof Kozlowski wrote:
-> On 01/12/2022 16:37, Guenter Roeck wrote:
->> On 12/1/22 03:38, Krzysztof Kozlowski wrote:
->>> On 01/12/2022 12:29, Saravanan Sekar wrote:
->>>> On 01/12/22 11:26, Krzysztof Kozlowski wrote:
->>>>> On 01/12/2022 05:46, Saravanan Sekar wrote:
->>>>>> Document mpq7932 power-management IC
->>>>>>
->>>>>> Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
->>>>>> ---
->>>>>
->>>>> This is a friendly reminder during the review process.
->>>>>
->>>>> It seems my previous comments were not fully addressed. Maybe my
->>>>> feedback got lost between the quotes, maybe you just forgot to apply it.
->>>>> Please go back to the previous discussion and either implement all
->>>>> requested changes or keep discussing them.
->>>>>
->>>> Hi Krzysztof,
+On 01/12/2022 17:38, Saravanan Sekar wrote:
+>>>> Plus additional comment for the driver (and related to bindings) was
+>>>> that this is not hwmon but a regulator driver. Why putting regulator
+>>>> driver in hwmon?
 >>>>
->>>> Thanks for your time to review and feedback.
->>>>
->>>> Here are the summary of comments on V1, I have fixed all according to my
->>>> understanding.
->>>>
->>>>
->>>> 1. Use subject prefixes matching the subsystem (git log --oneline -- ...).
->>>>
->>>> git log --oneline -- Documentation/devicetree/bindings/hwmon/pmbus/
->>>> 1ccca53618c4 dt-bindings: hwmon/pmbus: Add mps,mpq7932 power-management IC
->>>> 373c0a77934c dt-bindings: hwmon/pmbus: Add ti,lm25066 power-management IC
->>>> 7f464532b05d dt-bindings: Add missing 'additionalProperties: false'
->>>> 8a36e38d8b0f dt-bindings: hwmon/pmbus: Add ti,ucd90320 power sequencer
->>>>
->>>> I have used the same format of 373c0a77934c.
->>>>
->>>> 2. Does not look like you tested the bindings. Please run `make
->>>> dt_binding_check` (see
->>>> Documentation/devicetree/bindings/writing-schema.rst for instructions).
->>>>
->>>> I did run dt_binding_check on V1 but failed to notice warnings. Fixed
->>>> warning on V2 and didn't observed any warnings.
->>>>
->>>> 3. Why requiring nodename? Device schemas usually don't do that.
->>>> dropped "pattern: "pmic@[0-9a-f]{1,2}""
->>>>
->>>> 4. regulators node is a regulator with one more regulator? Drop.
->>>> dropped "$ref: regulator.yaml# "
 >>>
->>> The comment was - drop entire regulators node.
->>>
->>> Plus additional comment for the driver (and related to bindings) was
->>> that this is not hwmon but a regulator driver. Why putting regulator
->>> driver in hwmon?
->>>
+>>> Turns out this is primarily a hardware monitoring driver, like the drivers
+>>> for all other PMBus chips. Regulator support is actually optional; the driver
+>>> works perfectly well with CONFIG_REGULATOR=n (except that it needs some
+>>> #ifdefs to address that situation).
 >>
->> Turns out this is primarily a hardware monitoring driver, like the drivers
->> for all other PMBus chips. Regulator support is actually optional; the driver
->> works perfectly well with CONFIG_REGULATOR=n (except that it needs some
->> #ifdefs to address that situation).
+>> OK, this would explain location  of the driver. However the bindings are
+>> saying:
+>> "Monolithic Power System MPQ7932 PMIC"
+>> and PMIC is not mainly a hwmon device, even if it has such capabilities.
+>> It might be missing description and proper title... or might be misplaced.
+>>
 > 
-> OK, this would explain location  of the driver. However the bindings are
-> saying:
-> "Monolithic Power System MPQ7932 PMIC"
-> and PMIC is not mainly a hwmon device, even if it has such capabilities.
-> It might be missing description and proper title... or might be misplaced.
+> Indeed it is PMIC chip. I think this is not the first and not sure title 
+> has to be changed for hwmon subsystem.
 > 
+> bindings/hwmon/pmbus/ti,lm25066.yaml
+> title: National Semiconductor/Texas Instruments LM250x6/LM506x 
+> power-management ICs
 
-Indeed it is PMIC chip. I think this is not the first and not sure title 
-has to be changed for hwmon subsystem.
+Then I propose to put it in regulator directory.
 
-bindings/hwmon/pmbus/ti,lm25066.yaml
-title: National Semiconductor/Texas Instruments LM250x6/LM506x 
-power-management ICs
+Best regards,
+Krzysztof
 
-Thanks,
-Saravanan
