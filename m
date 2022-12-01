@@ -2,64 +2,62 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDCD3C4321E
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 15:39:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BC4FC47088
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 16:15:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbiLAPjF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Dec 2022 10:39:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
+        id S232085AbiLAQPk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Dec 2022 11:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232084AbiLAPij (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Dec 2022 10:38:39 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330E29D81E;
-        Thu,  1 Dec 2022 07:37:58 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so1171595otl.10;
-        Thu, 01 Dec 2022 07:37:58 -0800 (PST)
+        with ESMTP id S231963AbiLAQPh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Dec 2022 11:15:37 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D328318E17
+        for <linux-hwmon@vger.kernel.org>; Thu,  1 Dec 2022 08:15:35 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id x6so2409219lji.10
+        for <linux-hwmon@vger.kernel.org>; Thu, 01 Dec 2022 08:15:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=gEPlKgqOAwT4dYPi/LP8L4p5vA3UQVno3LcyW5TU5do=;
-        b=oTiDqVYVe8XB8vfEgM1fH7KI5SMCARIwHb5TNr4ECuffe/KlIbF3ICbwbjmg+ZgxEu
-         ILAjcFWTQqVJW8NDwxUCvP0hLl8kXsqlzf3e7sf0zSuOWsqGYRTScXBXgoHQSQd3qUdg
-         QT042AxSVUE/r0mkNmoqs/sPfZ8oB/vPAwxWMpafEDd8fPtuXTAqtCDXIiKIg79QDG/z
-         4OJo+rF7gk7Lh7vXbcY/+ky/Q2cJxP0l3s/5KRCfeeR4caQxgCIAZmvNlEeL3zIE8jze
-         i3fDoqyiurMaMxab35SksofxZnqnMY1jcaL2dfVLeD5qNTrnAg1RZXCjDY4By8WdraQ6
-         yvlg==
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yVe7HFWMhLBCylNic+cZhWHATEyLIj4l0xDW9sdNQ2M=;
+        b=DRyWXk2DOOlUS3kGg3sSzhYkdIOUzMMzyekkn1TZwMe0/2RsrZFOWWgimA5UOjCpy5
+         qKDPgv/GLYwxxUOcfetERE98yfh2eKCYoeJ3RBeWKhII3WVZknOs1sAAvjFR4ssnMo29
+         7pC9yNN9XSIbX3rVmN7fOFJ9GRaWvbp4hmAAN+rZkdobAiKwpZQ5QxxCduU5IFfVcXMt
+         f8LyJP1oRaU3AQ6E1SLooXuVQwuPO7exxY8rf8BBWE6dXounnI3psjZlPwcnMqfjgWeM
+         OynlFP7ofqvU+97GIOdTgJzR8eojtOxiV4aN9T1e2GzZUbQs8HBdKsxQ7CVJkouCKEak
+         TF+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gEPlKgqOAwT4dYPi/LP8L4p5vA3UQVno3LcyW5TU5do=;
-        b=T/z7BlsnHDiv4zvyezo0SpQLctgBN9C3qn4nB1VMdVguO+MbZP/S31ykdGtt8UQS8F
-         XvywyTS2BYL/Z/YH6vK/zwgTjsCYCFG1O2rb1G+Y62GUeWHo7twZBjbbnr1WiiGdClmt
-         B9SZJ3oMnlORRW/pTETcHpIG+JzTAHiOs2ObPq2uKDHT1ITAa66lw3enRDduDl8gdS+q
-         TrTyjfuELEfn03fFzjnVE/pt3jRZ0JjBI/VxCb1ZWzaz+hnYXV5H7V+RYZ44I9Ra1GiM
-         bAl8VYGmQVvRFVuiApmGUo9swfEEThMOxaxt5knSyGPx01M6aqvdWBJrsHM28ALn2vKh
-         eJTA==
-X-Gm-Message-State: ANoB5pmCkidWzjnHZW0pZUsbwPHPVVv/dbXi3Ijfv13UOTqxsDl/FjWI
-        0MERKvyhXvEHaK/3b6dInFY=
-X-Google-Smtp-Source: AA0mqf4RoyxUmaMmV/OQumiM/v0A/BK5z6bCEClp390ndUSxS3og9fFl/A1ZLIE5QkFevyFizE4SJA==
-X-Received: by 2002:a05:6830:1215:b0:66d:78b8:7b1a with SMTP id r21-20020a056830121500b0066d78b87b1amr24948947otp.206.1669909077169;
-        Thu, 01 Dec 2022 07:37:57 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e5-20020a544f05000000b0035a5ed5d935sm1918539oiy.16.2022.12.01.07.37.56
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yVe7HFWMhLBCylNic+cZhWHATEyLIj4l0xDW9sdNQ2M=;
+        b=zXl/CtVlv3fa/MbileH6Oc8VkU7iKZsyifjYZKHNc23woItHEWrh5WIm38z+wgWZqi
+         5MewVNQKXWF6icWGpnkHZlXCplNoaM5yYdCmqgTeguDbYIRHAODIeW2tk2Kyo/I4azeZ
+         Ac2lcHHhbYOVmf77X5sDVbUrI2ytqJMyfhht5dcPI7x5LJAr4iyusU0vXWBGrGmKQDjc
+         capCEhQE1ABXwGobwQGGLRcozkCzhdyp588KHabBXIzTbg7tyYBlVABGPChLyaz7R6o8
+         /8bg4TSKectT6/xrOtj+n8EX/nwCQ1ffsHcKLUKOtAUBiT9X91GQPiKjf/4CKF1cOZmW
+         grcg==
+X-Gm-Message-State: ANoB5pkSHkdtOJCLStPAeH3FMyBZ3M1P4OYVqeFzr4z3+CznXgKZBST3
+        4ZbxfTkfLjm9M0B4F9v29+NfrQ==
+X-Google-Smtp-Source: AA0mqf71+KG05AOpxBsK2+Wku76C5RQTX31OiWIJub6xX1MDWpXmKNE4alKMSmb7U18uoTko0XBNzg==
+X-Received: by 2002:a05:651c:98e:b0:277:a9d:9370 with SMTP id b14-20020a05651c098e00b002770a9d9370mr20152951ljq.103.1669911334190;
+        Thu, 01 Dec 2022 08:15:34 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id v3-20020a05651203a300b004a4754c5db5sm688946lfp.244.2022.12.01.08.15.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 07:37:56 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e0d97b79-2133-8869-eaea-eb286fdb3a11@roeck-us.net>
-Date:   Thu, 1 Dec 2022 07:37:55 -0800
+        Thu, 01 Dec 2022 08:15:32 -0800 (PST)
+Message-ID: <785e942a-0691-f87e-b6e9-058749a79ec1@linaro.org>
+Date:   Thu, 1 Dec 2022 17:15:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
+ Thunderbird/102.5.0
 Subject: Re: [PATCH v2 2/4] dt-bindings: hwmon/pmbus: Add mps,mpq7932
  power-management IC
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Guenter Roeck <linux@roeck-us.net>,
         Saravanan Sekar <saravanan@linumiz.com>
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, marten.lindahl@axis.com,
@@ -70,72 +68,81 @@ References: <20221201044643.1150870-1-saravanan@linumiz.com>
  <bc86121f-3cc2-1e55-4c6a-02cb1644a8bd@linaro.org>
  <e7b20055-4f44-aa91-e18d-9fb0f835fbf1@linumiz.com>
  <29de4d2b-3e32-809e-6ccd-5e7a4fe548fc@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <29de4d2b-3e32-809e-6ccd-5e7a4fe548fc@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <e0d97b79-2133-8869-eaea-eb286fdb3a11@roeck-us.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e0d97b79-2133-8869-eaea-eb286fdb3a11@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 12/1/22 03:38, Krzysztof Kozlowski wrote:
-> On 01/12/2022 12:29, Saravanan Sekar wrote:
->> On 01/12/22 11:26, Krzysztof Kozlowski wrote:
->>> On 01/12/2022 05:46, Saravanan Sekar wrote:
->>>> Document mpq7932 power-management IC
+On 01/12/2022 16:37, Guenter Roeck wrote:
+> On 12/1/22 03:38, Krzysztof Kozlowski wrote:
+>> On 01/12/2022 12:29, Saravanan Sekar wrote:
+>>> On 01/12/22 11:26, Krzysztof Kozlowski wrote:
+>>>> On 01/12/2022 05:46, Saravanan Sekar wrote:
+>>>>> Document mpq7932 power-management IC
+>>>>>
+>>>>> Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
+>>>>> ---
 >>>>
->>>> Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
->>>> ---
+>>>> This is a friendly reminder during the review process.
+>>>>
+>>>> It seems my previous comments were not fully addressed. Maybe my
+>>>> feedback got lost between the quotes, maybe you just forgot to apply it.
+>>>> Please go back to the previous discussion and either implement all
+>>>> requested changes or keep discussing them.
+>>>>
+>>> Hi Krzysztof,
 >>>
->>> This is a friendly reminder during the review process.
+>>> Thanks for your time to review and feedback.
 >>>
->>> It seems my previous comments were not fully addressed. Maybe my
->>> feedback got lost between the quotes, maybe you just forgot to apply it.
->>> Please go back to the previous discussion and either implement all
->>> requested changes or keep discussing them.
+>>> Here are the summary of comments on V1, I have fixed all according to my
+>>> understanding.
 >>>
->> Hi Krzysztof,
+>>>
+>>> 1. Use subject prefixes matching the subsystem (git log --oneline -- ...).
+>>>
+>>> git log --oneline -- Documentation/devicetree/bindings/hwmon/pmbus/
+>>> 1ccca53618c4 dt-bindings: hwmon/pmbus: Add mps,mpq7932 power-management IC
+>>> 373c0a77934c dt-bindings: hwmon/pmbus: Add ti,lm25066 power-management IC
+>>> 7f464532b05d dt-bindings: Add missing 'additionalProperties: false'
+>>> 8a36e38d8b0f dt-bindings: hwmon/pmbus: Add ti,ucd90320 power sequencer
+>>>
+>>> I have used the same format of 373c0a77934c.
+>>>
+>>> 2. Does not look like you tested the bindings. Please run `make
+>>> dt_binding_check` (see
+>>> Documentation/devicetree/bindings/writing-schema.rst for instructions).
+>>>
+>>> I did run dt_binding_check on V1 but failed to notice warnings. Fixed
+>>> warning on V2 and didn't observed any warnings.
+>>>
+>>> 3. Why requiring nodename? Device schemas usually don't do that.
+>>> dropped "pattern: "pmic@[0-9a-f]{1,2}""
+>>>
+>>> 4. regulators node is a regulator with one more regulator? Drop.
+>>> dropped "$ref: regulator.yaml# "
 >>
->> Thanks for your time to review and feedback.
+>> The comment was - drop entire regulators node.
 >>
->> Here are the summary of comments on V1, I have fixed all according to my
->> understanding.
+>> Plus additional comment for the driver (and related to bindings) was
+>> that this is not hwmon but a regulator driver. Why putting regulator
+>> driver in hwmon?
 >>
->>
->> 1. Use subject prefixes matching the subsystem (git log --oneline -- ...).
->>
->> git log --oneline -- Documentation/devicetree/bindings/hwmon/pmbus/
->> 1ccca53618c4 dt-bindings: hwmon/pmbus: Add mps,mpq7932 power-management IC
->> 373c0a77934c dt-bindings: hwmon/pmbus: Add ti,lm25066 power-management IC
->> 7f464532b05d dt-bindings: Add missing 'additionalProperties: false'
->> 8a36e38d8b0f dt-bindings: hwmon/pmbus: Add ti,ucd90320 power sequencer
->>
->> I have used the same format of 373c0a77934c.
->>
->> 2. Does not look like you tested the bindings. Please run `make
->> dt_binding_check` (see
->> Documentation/devicetree/bindings/writing-schema.rst for instructions).
->>
->> I did run dt_binding_check on V1 but failed to notice warnings. Fixed
->> warning on V2 and didn't observed any warnings.
->>
->> 3. Why requiring nodename? Device schemas usually don't do that.
->> dropped "pattern: "pmic@[0-9a-f]{1,2}""
->>
->> 4. regulators node is a regulator with one more regulator? Drop.
->> dropped "$ref: regulator.yaml# "
 > 
-> The comment was - drop entire regulators node.
-> 
-> Plus additional comment for the driver (and related to bindings) was
-> that this is not hwmon but a regulator driver. Why putting regulator
-> driver in hwmon?
-> 
+> Turns out this is primarily a hardware monitoring driver, like the drivers
+> for all other PMBus chips. Regulator support is actually optional; the driver
+> works perfectly well with CONFIG_REGULATOR=n (except that it needs some
+> #ifdefs to address that situation).
 
-Turns out this is primarily a hardware monitoring driver, like the drivers
-for all other PMBus chips. Regulator support is actually optional; the driver
-works perfectly well with CONFIG_REGULATOR=n (except that it needs some
-#ifdefs to address that situation).
+OK, this would explain location  of the driver. However the bindings are
+saying:
+"Monolithic Power System MPQ7932 PMIC"
+and PMIC is not mainly a hwmon device, even if it has such capabilities.
+It might be missing description and proper title... or might be misplaced.
 
-Guenter
+Best regards,
+Krzysztof
 
