@@ -2,127 +2,114 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71439C43217
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 17:25:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3C00C43217
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 19:04:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiLARZa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Dec 2022 12:25:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43924 "EHLO
+        id S229773AbiLATEQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Dec 2022 14:04:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiLARZ3 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Dec 2022 12:25:29 -0500
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109A525C65;
-        Thu,  1 Dec 2022 09:25:29 -0800 (PST)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-143ffc8c2b2so2936453fac.2;
-        Thu, 01 Dec 2022 09:25:29 -0800 (PST)
+        with ESMTP id S229669AbiLATEQ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Dec 2022 14:04:16 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E719B8464
+        for <linux-hwmon@vger.kernel.org>; Thu,  1 Dec 2022 11:04:14 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id l39-20020a05600c1d2700b003cf93c8156dso2403751wms.4
+        for <linux-hwmon@vger.kernel.org>; Thu, 01 Dec 2022 11:04:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=9elements.com; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=o4SL2qQtVNDajwN9ygYSjpW78VenkkkZuoHCF2FKV6M=;
-        b=KylwmePAilaWNd40ryK6VQeiIE9BXRlJ4iPgzRzp7xChDfebK32ZQCj0EWZ0YUymUf
-         QWdAA7Ykv0m6QBKgtj1a8eydzlnMfdRzpWkJcN0k5Tf++xbJOOb1PCXPvkBMtLoZ1Wgd
-         eE7voof6QUKwsjr0LybzNzJ3YNc1OE9mkLz7CdVfHC/iMKLltRRVvgPu6M1KL9g3oEeI
-         SRPySUTkZQoiP+p5Gq/JsizL3ifnHGoKMkKYYUFUNVDdjbxYhTad2jnvgv6/vNdXtOIV
-         9qS2aK2kF1zC/SJQkdUrmPiQ5+0pXiR9ungnJpty2PoATqkxg9f3776cgGaKgZbxTXKv
-         2gcw==
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0qJrq6T31sJxCZwbEqlMuOvpG+K/8IjspbhkPV4Km1Q=;
+        b=BieDI7j0p2k4UdvUw+VseK1zFN/ztcclH0dB7sS8W8Y/OxGaD60WT2GdYKQxhMAeIb
+         9wTFwgyyGGXiObTgAO8mQbDW/RqBv032O2a0OdeSgUprDsLQGl+Amt8OAB+OAXV0WZwL
+         GViNwHvMUEiuSzwnqP4JY7wAFw3Qbkn3I8/K0tCqdLdV9mEqD7w09jvud1SRCmk+xHlS
+         Om854Z9Wej7HDLmz9QPUk9fkLa9nsHzHAp9NRXu+K9izFTIzoJLiEku2nFeMfQ9vx+9P
+         9Vn9r4zcWc8q4O5R00GiDkjNl49P0pEO1f8ErU5eeyUqckBm5KWYRJw/qZIQgojrKLXR
+         Qhwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o4SL2qQtVNDajwN9ygYSjpW78VenkkkZuoHCF2FKV6M=;
-        b=tA49DHLd6GeweD3PNnqQZjRBTdeWY8y/jVFJpXE+kLjJarc8Hgcwq20le6bzkJt0lm
-         YBaw24nsyiPNB88ftjbI2nsshhLj3yfqfucy7qpTDI+nWUVQUILWryQiQKqQbFGMVdPL
-         Z3Zt8WGD4rvtcNYghnl21wGI70Gsgr3y3oRKssv52KtZL+qIL9jaERV5hhyIiUUHbgz7
-         YxIh9xH+TerDZvSZFFQp7nM4g8dThYDBkI5loZ0gLEzNL99BUXlI7/s0hQ1ii6n2UKY5
-         Je9mmUotIb0tu346zvANAIfJtbNuyfVbFfOWKP9ujIcKLlcxWAnvuWkTrsRDW1rP+C/3
-         jwDw==
-X-Gm-Message-State: ANoB5plWs5B2gCksnkb+mPgMQggp9hip8QMQzW1sFCOm1qvyfYTKtrhi
-        y0pDeGTPfYzXtsNP4OEy8ExCxYiN+EM=
-X-Google-Smtp-Source: AA0mqf7xlmd6CKHc12w3hACcxP3J/URytYcUGpV39hcAzjBPlBXu3XzHg4EnB37+8PQCP6QD1bVDdA==
-X-Received: by 2002:a05:6870:9a18:b0:142:efc1:1394 with SMTP id fo24-20020a0568709a1800b00142efc11394mr26395149oab.11.1669915528295;
-        Thu, 01 Dec 2022 09:25:28 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o13-20020a056870524d00b00130e66a7644sm2954746oai.25.2022.12.01.09.25.27
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0qJrq6T31sJxCZwbEqlMuOvpG+K/8IjspbhkPV4Km1Q=;
+        b=YmPKP+ECn7UUW4PDahQBQ5SLjOixNSydbq7GiVr5/h+gVaM0xi+f6CbygK8da/VF1w
+         aN1azjQy+ERErFrJWlJWLm1SAOTh9ziqn5uT5v9lZrPegjptWJOqznmkuNq4ToKlzf+7
+         EN+WR8i3cM/2/dbaZtHezpmWy8Upzi1syFOQ+KXnHgC6vdNamI4GOjr0ihaz656BY1O8
+         m+gMkPn2MsQ3ZUojnlBqn1JkS3T13xNiCQxAeashfvyWbWxDoEmRnMKWChWeEMA4Y9/F
+         yXA9ay/4ewBiJyiA0IFhjwIolDNc2ZCDupT8A9d78087HnclLJRE7lUHA3paRLLW472E
+         DPUQ==
+X-Gm-Message-State: ANoB5plEFUslWG8J6ulC900O+27swT/FCJC4jKVIcga71auMYwgB2rFh
+        o/WmU1/onLi0w2/+yAiardXMKw==
+X-Google-Smtp-Source: AA0mqf4fIEZTSOeRw64Yxt3yShlZP2ND8snsB+jMWw6ZZXDJYGyu3r+mKmhyCxA+ooxov0eeyZ4D8w==
+X-Received: by 2002:a1c:f617:0:b0:3cf:e0ef:1f69 with SMTP id w23-20020a1cf617000000b003cfe0ef1f69mr36382054wmc.163.1669921452846;
+        Thu, 01 Dec 2022 11:04:12 -0800 (PST)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id h20-20020a05600c351400b003c6cd82596esm11848474wmq.43.2022.12.01.11.04.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 09:25:27 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v6.1-rc8
-Date:   Thu,  1 Dec 2022 09:25:26 -0800
-Message-Id: <20221201172526.2290129-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.36.2
+        Thu, 01 Dec 2022 11:04:12 -0800 (PST)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>
+Subject: [PATCH v4 1/5] hwmon: (pmbus/core): Add rdev in pmbus_data struct
+Date:   Thu,  1 Dec 2022 20:03:50 +0100
+Message-Id: <20221201190354.1512790-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+Add regulator device in pmbus_data & initialize the same during PMBus
+regulator register.
 
-Please pull hwmon fixes for Linux v6.1-rc8 from signed tag:
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.1-rc8
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 95e95783972a..7a23794c0b93 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -81,6 +81,7 @@ struct pmbus_label {
+ struct pmbus_data {
+ 	struct device *dev;
+ 	struct device *hwmon_dev;
++	struct regulator_dev **rdevs;
+ 
+ 	u32 flags;		/* from platform data */
+ 
+@@ -3053,6 +3054,11 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+ 	struct regulator_dev *rdev;
+ 	int i;
+ 
++	data->rdevs = devm_kzalloc(dev, sizeof(struct regulator_dev *) * info->num_regulators,
++				  GFP_KERNEL);
++	if (!data->rdevs)
++		return -ENOMEM;
++
+ 	for (i = 0; i < info->num_regulators; i++) {
+ 		struct regulator_config config = { };
+ 
+@@ -3062,7 +3068,7 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+ 		if (pdata && pdata->reg_init_data)
+ 			config.init_data = &pdata->reg_init_data[i];
+ 
+-		rdev = devm_regulator_register(dev, &info->reg_desc[i],
++		data->rdevs[i] = devm_regulator_register(dev, &info->reg_desc[i],
+ 					       &config);
+ 		if (IS_ERR(rdev))
+ 			return dev_err_probe(dev, PTR_ERR(rdev),
 
-Thanks,
-Guenter
-------
+base-commit: 9494c53e1389b120ba461899207ac8a3aab2632c
+-- 
+2.37.3
 
-The following changes since commit 094226ad94f471a9f19e8f8e7140a09c2625abaa:
-
-  Linux 6.1-rc5 (2022-11-13 13:12:55 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.1-rc8
-
-for you to fetch changes up to 9bdc112be727cf1ba65be79541147f960c3349d8:
-
-  hwmon: (asus-ec-sensors) Add checks for devm_kcalloc (2022-12-01 09:20:55 -0800)
-
-----------------------------------------------------------------
-hwmon fixes for v6.1-rc8
-
-- Fix refcount leak and NULL pointer access in coretemp driver
-
-- Fix UAF in ibmpex driver
-
-- Add missing pci_disable_device() to i5500_temp driver
-
-- Fix calculation in ina3221 driver
-
-- Fix temperature scaling in ltc2947 driver
-
-- Check result of devm_kcalloc call in asus-ec-sensors driver
-
-----------------------------------------------------------------
-Derek Nguyen (1):
-      hwmon: (ltc2947) fix temperature scaling
-
-Gaosheng Cui (1):
-      hwmon: (ibmpex) Fix possible UAF when ibmpex_register_bmc() fails
-
-Ninad Malwade (1):
-      hwmon: (ina3221) Fix shunt sum critical calculation
-
-Phil Auld (1):
-      hwmon: (coretemp) Check for null before removing sysfs attrs
-
-Yang Yingliang (2):
-      hwmon: (i5500_temp) fix missing pci_disable_device()
-      hwmon: (coretemp) fix pci device refcount leak in nv1a_ram_new()
-
-Yuan Can (1):
-      hwmon: (asus-ec-sensors) Add checks for devm_kcalloc
-
- drivers/hwmon/asus-ec-sensors.c | 2 ++
- drivers/hwmon/coretemp.c        | 9 ++++++++-
- drivers/hwmon/i5500_temp.c      | 2 +-
- drivers/hwmon/ibmpex.c          | 1 +
- drivers/hwmon/ina3221.c         | 4 ++--
- drivers/hwmon/ltc2947-core.c    | 2 +-
- 6 files changed, 15 insertions(+), 5 deletions(-)
