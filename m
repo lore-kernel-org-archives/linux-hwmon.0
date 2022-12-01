@@ -2,282 +2,165 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01000C4708D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Nov 2022 20:13:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF62AC4321E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 03:30:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbiK3UNf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Nov 2022 15:13:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
+        id S229749AbiLADak (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Nov 2022 22:30:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiK3UNH (ORCPT
+        with ESMTP id S229515AbiLADaj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:13:07 -0500
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3C88E583;
-        Wed, 30 Nov 2022 12:10:58 -0800 (PST)
-Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AUH37Dm028849;
-        Wed, 30 Nov 2022 20:10:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=pps0720;
- bh=ll031SR+kAaxL16fqeXW3X9vRYzryfygRDNccWalYBg=;
- b=bPAJnUPDq7TVJottCDTfKTPRFdMrPqKK6t+U/rL1V3J1hYD6zuMgciHmEltJ8ySfheCx
- LUCkKpIidK/RvUOMmkpPaqES2V5SsM9qorMglb+lvUCtYI98VC+bEH9HL5TLCrRFDnfM
- CD5E9qZz9stQ2RDNRM1dnnVzB9Q4bgjKsufQ+iQAkONv6ZqAvH1e2uo/e4Ya880ROkHa
- OhAyDiITF63oSEumKLmh11+IMlKeUHodPwOfODYeq8+S1OM5vW5UK22NedUW5KnF1KTf
- xHGWzu4klkFL4Nrq4KFfHoUcoRwjvsAeUV1ZsAMd7PGAEk5jh1vjywACzUV4cggFpNCX 4A== 
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3m693gjt95-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Nov 2022 20:10:20 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 30 Nov 2022 22:30:39 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC0F5BD69;
+        Wed, 30 Nov 2022 19:30:38 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 38C492FCF3;
-        Wed, 30 Nov 2022 20:10:19 +0000 (UTC)
-Received: from hpe.com (unknown [16.231.227.36])
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id A5BBF805CDF;
-        Wed, 30 Nov 2022 20:10:18 +0000 (UTC)
-From:   nick.hawkins@hpe.com
-To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com,
-        nick.hawkins@hpe.com, corbet@lwn.net, linux@armlinux.org.uk,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 4/6] ARM: dts: add GXP Support for fans and SPI
-Date:   Wed, 30 Nov 2022 14:08:44 -0600
-Message-Id: <20221130200846.4226-5-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221130200846.4226-1-nick.hawkins@hpe.com>
-References: <20221130200846.4226-1-nick.hawkins@hpe.com>
-X-Proofpoint-GUID: IVPac_UJqHX8ZmSVqicH8_PsWAU5xDpR
-X-Proofpoint-ORIG-GUID: IVPac_UJqHX8ZmSVqicH8_PsWAU5xDpR
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-30_04,2022-11-30_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- malwarescore=0 suspectscore=0 adultscore=0 bulkscore=0 clxscore=1015
- impostorscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=898
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211300142
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NN1mr3BP4z4xyCG;
+        Thu,  1 Dec 2022 11:30:36 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2B13UUSP049820;
+        Thu, 1 Dec 2022 11:30:30 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 1 Dec 2022 11:30:31 +0800 (CST)
+Date:   Thu, 1 Dec 2022 11:30:31 +0800 (CST)
+X-Zmail-TransId: 2af963881fd7ffffffffa9070c69
+X-Mailer: Zmail v1.0
+Message-ID: <202212011130317080061@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <jdelvare@suse.com>
+Cc:     <linux@roeck-us.net>, <guillaume.ligneul@gmail.com>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBod21vbjogdXNlIHN5c2ZzX2VtaXQoKSB0byBpbnN0ZWFkIG9mIHNjbnByaW50Zigp?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2B13UUSP049820
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 63881FDC.001 by FangMail milter!
+X-FangMail-Envelope: 1669865436/4NN1mr3BP4z4xyCG/63881FDC.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63881FDC.001/4NN1mr3BP4z4xyCG
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Reorganize the base address of AHB to accommodate the SPI and fan driver
-register requirements. Add the hpe,gxp-spifi and hpe,gxp-fan-ctrl
-compatibles. Add comments to make the register range more clear.
+Replace the open-code with sysfs_emit() to simplify the code.
 
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- arch/arm/boot/dts/hpe-bmc-dl360gen10.dts | 58 +++++++++++++++++++++
- arch/arm/boot/dts/hpe-gxp.dtsi           | 64 +++++++++++++++++-------
- 2 files changed, 103 insertions(+), 19 deletions(-)
+ drivers/hwmon/ds1621.c |  2 +-
+ drivers/hwmon/lm73.c   |  6 +++---
+ drivers/hwmon/sht3x.c  | 12 ++++++------
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
-index 3a7382ce40ef..d49dcef95c5c 100644
---- a/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
-+++ b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
-@@ -24,3 +24,61 @@
- 		reg = <0x40000000 0x20000000>;
- 	};
- };
-+
-+&spifi {
-+	status = "okay";
-+	flash@0 {
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			u-boot@0 {
-+				label = "u-boot";
-+				reg = <0x0 0x60000>;
-+			};
-+
-+			u-boot-env@60000 {
-+				label = "u-boot-env";
-+				reg = <0x60000 0x20000>;
-+			};
-+
-+			kernel@80000 {
-+				label = "kernel";
-+				reg = <0x80000 0x4c0000>;
-+			};
-+
-+			rofs@540000 {
-+				label = "rofs";
-+				reg = <0x540000 0x1740000>;
-+			};
-+
-+			rwfs@1c80000 {
-+				label = "rwfs";
-+				reg = <0x1c80000 0x250000>;
-+			};
-+
-+			section@1ed0000{
-+				label = "section";
-+				reg = <0x1ed0000 0x130000>;
-+			};
-+		};
-+	};
-+	flash@1 {
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			host-prime@0 {
-+				label = "host-prime";
-+				reg = <0x0 0x02000000>;
-+			};
-+
-+			host-second@2000000 {
-+				label = "host-second";
-+				reg = <0x02000000 0x02000000>;
-+			};
-+		};
-+	};
-+};
-diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi b/arch/arm/boot/dts/hpe-gxp.dtsi
-index cf735b3c4f35..b73b22a93716 100644
---- a/arch/arm/boot/dts/hpe-gxp.dtsi
-+++ b/arch/arm/boot/dts/hpe-gxp.dtsi
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
+diff --git a/drivers/hwmon/ds1621.c b/drivers/hwmon/ds1621.c
+index 0886abf6ebab..e803d6393b9e 100644
+--- a/drivers/hwmon/ds1621.c
++++ b/drivers/hwmon/ds1621.c
+@@ -269,7 +269,7 @@ static ssize_t update_interval_show(struct device *dev,
+ 				    struct device_attribute *da, char *buf)
+ {
+ 	struct ds1621_data *data = dev_get_drvdata(dev);
+-	return scnprintf(buf, PAGE_SIZE, "%hu\n", data->update_interval);
++	return sysfs_emit(buf, "%hu\n", data->update_interval);
+ }
+
+ static ssize_t update_interval_store(struct device *dev,
+diff --git a/drivers/hwmon/lm73.c b/drivers/hwmon/lm73.c
+index 1346b3b3f463..b6433ae2d75c 100644
+--- a/drivers/hwmon/lm73.c
++++ b/drivers/hwmon/lm73.c
+@@ -92,7 +92,7 @@ static ssize_t temp_show(struct device *dev, struct device_attribute *da,
+ 	/* use integer division instead of equivalent right shift to
+ 	   guarantee arithmetic shift and preserve the sign */
+ 	temp = (((s16) err) * 250) / 32;
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", temp);
++	return sysfs_emit(buf, "%d\n", temp);
+ }
+
+ static ssize_t convrate_store(struct device *dev, struct device_attribute *da,
+@@ -137,7 +137,7 @@ static ssize_t convrate_show(struct device *dev, struct device_attribute *da,
+ 	int res;
+
+ 	res = (data->ctrl & LM73_CTRL_RES_MASK) >> LM73_CTRL_RES_SHIFT;
+-	return scnprintf(buf, PAGE_SIZE, "%hu\n", lm73_convrates[res]);
++	return sysfs_emit(buf, "%hu\n", lm73_convrates[res]);
+ }
+
+ static ssize_t maxmin_alarm_show(struct device *dev,
+@@ -154,7 +154,7 @@ static ssize_t maxmin_alarm_show(struct device *dev,
+ 	data->ctrl = ctrl;
+ 	mutex_unlock(&data->lock);
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", (ctrl >> attr->index) & 1);
++	return sysfs_emit(buf, "%d\n", (ctrl >> attr->index) & 1);
+
+ abort:
+ 	mutex_unlock(&data->lock);
+diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+index 3f279aa1cee5..8305e44d9ab2 100644
+--- a/drivers/hwmon/sht3x.c
++++ b/drivers/hwmon/sht3x.c
+@@ -320,7 +320,7 @@ static ssize_t temp1_limit_show(struct device *dev,
+ 	u8 index = to_sensor_dev_attr(attr)->index;
+ 	int temperature_limit = data->temperature_limits[index];
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", temperature_limit);
++	return sysfs_emit(buf, "%d\n", temperature_limit);
+ }
+
+ static ssize_t humidity1_limit_show(struct device *dev,
+@@ -331,7 +331,7 @@ static ssize_t humidity1_limit_show(struct device *dev,
+ 	u8 index = to_sensor_dev_attr(attr)->index;
+ 	u32 humidity_limit = data->humidity_limits[index];
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", humidity_limit);
++	return sysfs_emit(buf, "%u\n", humidity_limit);
+ }
+
  /*
-- * Device Tree file for HPE GXP
-+ * Device Tree for HPE
-  */
- 
- /dts-v1/;
-@@ -52,76 +52,102 @@
- 			cache-level = <2>;
- 		};
- 
--		ahb@c0000000 {
-+		ahb@80000000 {
- 			compatible = "simple-bus";
- 			#address-cells = <1>;
- 			#size-cells = <1>;
--			ranges = <0x0 0xc0000000 0x30000000>;
-+			ranges = <0x0 0x80000000 0xf000000>, /* 0x80000000 - 0x8f000000 */
-+				 <0x40000000 0xc0000000 0x7fffffff>; /* 0xc0000000 - 0xffffffff */
- 			dma-ranges;
- 
--			vic0: interrupt-controller@eff0000 {
-+			spifi: spi@40000200 { /* 0xc0000200 */
-+				compatible = "hpe,gxp-spifi";
-+				reg = <0x40000200 0x80>, <0x4000c000 0x100>, <0x78000000 0x7ff0000>;
-+				interrupts = <20>;
-+				interrupt-parent = <&vic0>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+				flash@0 {
-+					reg = <0>;
-+					compatible = "jedec,spi-nor";
-+				};
-+
-+				flash@1 {
-+					reg = <1>;
-+					compatible = "jedec,spi-nor";
-+				};
-+			};
-+
-+			vic0: interrupt-controller@4eff0000 { /* 0xceff0000 */
- 				compatible = "arm,pl192-vic";
--				reg = <0xeff0000 0x1000>;
-+				reg = <0x4eff0000 0x1000>;
- 				interrupt-controller;
- 				#interrupt-cells = <1>;
- 			};
- 
--			vic1: interrupt-controller@80f00000 {
-+			vic1: interrupt-controller@f00000 { /* 0x80f00000 */
- 				compatible = "arm,pl192-vic";
--				reg = <0x80f00000 0x1000>;
-+				reg = <0xf00000 0x1000>;
- 				interrupt-controller;
- 				#interrupt-cells = <1>;
- 			};
- 
--			uarta: serial@e0 {
-+			uarta: serial@400000e0 { /* 0xc00000e0 */
- 				compatible = "ns16550a";
--				reg = <0xe0 0x8>;
-+				reg = <0x400000e0 0x8>;
- 				interrupts = <17>;
- 				interrupt-parent = <&vic0>;
- 				clock-frequency = <1846153>;
- 				reg-shift = <0>;
- 			};
- 
--			uartb: serial@e8 {
-+			uartb: serial@400000e8 { /* 0xc00000e8 */
- 				compatible = "ns16550a";
--				reg = <0xe8 0x8>;
-+				reg = <0x400000e8 0x8>;
- 				interrupts = <18>;
- 				interrupt-parent = <&vic0>;
- 				clock-frequency = <1846153>;
- 				reg-shift = <0>;
- 			};
- 
--			uartc: serial@f0 {
-+			uartc: serial@400000f0 { /* 0xc00000f0 */
- 				compatible = "ns16550a";
--				reg = <0xf0 0x8>;
-+				reg = <0x400000f0 0x8>;
- 				interrupts = <19>;
- 				interrupt-parent = <&vic0>;
- 				clock-frequency = <1846153>;
- 				reg-shift = <0>;
- 			};
- 
--			usb0: usb@efe0000 {
-+			usb0: usb@4efe0000 { /* 0xcefe0000 */
- 				compatible = "hpe,gxp-ehci", "generic-ehci";
--				reg = <0xefe0000 0x100>;
-+				reg = <0x4efe0000 0x100>;
- 				interrupts = <7>;
- 				interrupt-parent = <&vic0>;
- 			};
- 
--			st: timer@80 {
-+			st: timer@40000080 { /* 0xc0000080 */
- 				compatible = "hpe,gxp-timer";
--				reg = <0x80 0x16>;
-+				reg = <0x40000080 0x16>;
- 				interrupts = <0>;
- 				interrupt-parent = <&vic0>;
- 				clocks = <&iopclk>;
- 				clock-names = "iop";
- 			};
- 
--			usb1: usb@efe0100 {
-+			usb1: usb@4efe0100 { /* 0xcefe0100 */
- 				compatible = "hpe,gxp-ohci", "generic-ohci";
--				reg = <0xefe0100 0x110>;
-+				reg = <0x4efe0100 0x110>;
- 				interrupts = <6>;
- 				interrupt-parent = <&vic0>;
- 			};
-+
-+			fan-controller@40000c10 { /* 0xc0000c10 */
-+				compatible = "hpe,gxp-fan-ctrl";
-+				reg = <0x40000c10 0x8>, <0x51000027 0x06>, <0x200070 0x04>;
-+				reg-names = "base", "pl", "fn2";
-+			};
- 		};
- 	};
- };
--- 
-2.17.1
+@@ -483,7 +483,7 @@ static ssize_t temp1_alarm_show(struct device *dev,
+ 	if (ret)
+ 		return ret;
 
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(buffer[0] & 0x04));
++	return sysfs_emit(buf, "%d\n", !!(buffer[0] & 0x04));
+ }
+
+ static ssize_t humidity1_alarm_show(struct device *dev,
+@@ -498,7 +498,7 @@ static ssize_t humidity1_alarm_show(struct device *dev,
+ 	if (ret)
+ 		return ret;
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(buffer[0] & 0x08));
++	return sysfs_emit(buf, "%d\n", !!(buffer[0] & 0x08));
+ }
+
+ static ssize_t heater_enable_show(struct device *dev,
+@@ -513,7 +513,7 @@ static ssize_t heater_enable_show(struct device *dev,
+ 	if (ret)
+ 		return ret;
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(buffer[0] & 0x20));
++	return sysfs_emit(buf, "%d\n", !!(buffer[0] & 0x20));
+ }
+
+ static ssize_t heater_enable_store(struct device *dev,
+@@ -550,7 +550,7 @@ static ssize_t update_interval_show(struct device *dev,
+ {
+ 	struct sht3x_data *data = dev_get_drvdata(dev);
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n",
++	return sysfs_emit(buf, "%u\n",
+ 			 mode_to_update_interval[data->mode]);
+ }
+
+-- 
+2.25.1
