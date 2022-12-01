@@ -2,97 +2,67 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A27FC4321E
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 19:31:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E16FC43217
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 19:37:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbiLATbV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Dec 2022 14:31:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S229777AbiLATha (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Dec 2022 14:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbiLATao (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Dec 2022 14:30:44 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35755CAB58
-        for <linux-hwmon@vger.kernel.org>; Thu,  1 Dec 2022 11:30:36 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id o13so6652862ejm.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 01 Dec 2022 11:30:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JHC6ytZAHLrNLiHuUN2hc1jXap++ZHEcJiLjtBPhfto=;
-        b=AUxf8Xm6UpCWhAeGDcR+3W5Z4SnIFEAv3fiL9oHqUJoa5WoxIlahHfcmR9mvTQCvZ0
-         MlvtW/BT2XFgh4zIhtnqE+P3QGK1LZrWRLAWuey+2v/ozgM9UmK15XA09InVz968DA1F
-         kT7FMPmrydaUJcVh/AKcj5HbAMRaK9NyoDKXhAS792EyNFsK2D2UA39aKXmifavWBdnm
-         6aOlCGYV7P/sdQGEXYj8JBDtAk0aJSnSBW2DeD8ycmiGmITghzLW7rFRl5ur9GtNrLku
-         rbCusZH9cwlRfbGeKpTG+rw7aAWE8/e27NPrO9MuW4vLQIu2veBTwc6E45+umqQE4IhO
-         Cc4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JHC6ytZAHLrNLiHuUN2hc1jXap++ZHEcJiLjtBPhfto=;
-        b=vZx06sXvbo6L/hLpASIhszyv9oGJ0vL8WQEZzmqSPnvCfcnYT8QgDykOZBb8kZa1oU
-         5CPjxR13pWEb9bHTNjIrEvWA4QzLuE6XawEB0ZQsYxXVmnh6D8IczjTNVZcy4uC29FDu
-         /QMJTbpjj2Sgw3F5X2rsOg4DtvlqAABI7QBzMSC06BEkEKrwYo+tJ/XZm+QA1EQwzFOX
-         Ex02ymTvHrTTE2mF13hVj4UqSrAbdDa1f/JCv/TDvQzL9iCP8/xEY6FGVM+Nb1Em+QiK
-         MaWerQJ+3yIYN0a99rv2MKIbGUsZvcc7tE4Mftf8+vE4Ms40LaS5LBu18X0zgGdanfDP
-         3hZQ==
-X-Gm-Message-State: ANoB5pkf7OecL5DWPIjadDWVfkm2zSurn/ScP4h1e/mWznpEvzqvImua
-        bMXAT+dDyI9TfvICtS6qvz8LGw==
-X-Google-Smtp-Source: AA0mqf4FN2LlAcctT2gQ+2sI+0CRqoL0SJP2GLj//yvst5I/C/b7mWqa3qMoHOBWeC5EOA3kCTVgdQ==
-X-Received: by 2002:a17:906:cc8f:b0:78b:8ce7:fe3c with SMTP id oq15-20020a170906cc8f00b0078b8ce7fe3cmr57197229ejb.557.1669923034733;
-        Thu, 01 Dec 2022 11:30:34 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id g15-20020aa7c84f000000b004619f024864sm2054110edt.81.2022.12.01.11.30.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 11:30:34 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v5 5/5] hwmon: (pmbus/core): Notify regulator events
-Date:   Thu,  1 Dec 2022 20:30:24 +0100
-Message-Id: <20221201193025.1584365-5-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221201193025.1584365-1-Naresh.Solanki@9elements.com>
-References: <20221201193025.1584365-1-Naresh.Solanki@9elements.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S230022AbiLATh0 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Dec 2022 14:37:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05B8BE4;
+        Thu,  1 Dec 2022 11:37:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D0AB620E3;
+        Thu,  1 Dec 2022 19:37:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A349EC433D6;
+        Thu,  1 Dec 2022 19:37:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669923444;
+        bh=o1e5cNkaeVBHeVFdVZ4Nge7QDteEUWAJtDcjpk1vBy8=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=E1kyj1rsUoTDoTY1rJD9Zo5GlpSW9KDcXtPUsKUI0cKKyVWQw5XQljMqYoOolnm10
+         McznQlnhIYMI3CgddpdZ8saDWKRhKevcKPixjtrRaumRc2kTW+2iqTBso1TIM5kTT9
+         nRICS1O8siFF6BCDZLyNIIeOYvNvpkgjXbo8N+k6Als/LsdQ737j89pwydPADrFHgZ
+         Mh3sAgm6aC/wIypHiwjTzZce/2UELHcA4pJuDHCaIRVgTw+bvBL4zSqWudcAJVIs0y
+         4e42ouV/v7tDFpTFjmkiVwCPI/i140sVyNqA+d/DBrNQAK+OuPjKJMVUAf0czgmb8y
+         wz6KoIX0Tk+YQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8F901E270C8;
+        Thu,  1 Dec 2022 19:37:24 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon fixes for v6.1-rc8
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221201172526.2290129-1-linux@roeck-us.net>
+References: <20221201172526.2290129-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221201172526.2290129-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.1-rc8
+X-PR-Tracked-Commit-Id: 9bdc112be727cf1ba65be79541147f960c3349d8
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e214dd935bf154af4c2d5013b16a283d592ccea5
+Message-Id: <166992344458.6584.1340713015035746798.pr-tracker-bot@kernel.org>
+Date:   Thu, 01 Dec 2022 19:37:24 +0000
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Notify regulator events in PMBus irq handler.
+The pull request you sent on Thu,  1 Dec 2022 09:25:26 -0800:
 
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
----
- drivers/hwmon/pmbus/pmbus_core.c | 5 +++++
- 1 file changed, 5 insertions(+)
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.1-rc8
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index caefcb99aadf..5241a3c9bd21 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -3158,6 +3158,11 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
- 		if (ret)
- 			return ret;
- 
-+		if (event) {
-+			regulator_notifier_call_chain(data->rdevs[i], event, NULL);
-+			ret = IRQ_HANDLED;
-+		}
-+
- 		page = rdev_get_id(data->rdevs[i]);
- 		mutex_lock(&data->update_lock);
- 		status = pmbus_read_status_word(client, page);
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e214dd935bf154af4c2d5013b16a283d592ccea5
+
+Thank you!
+
 -- 
-2.37.3
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
