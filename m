@@ -2,97 +2,75 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A027DC43217
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 13:36:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94D96C4321E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 15:02:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbiLANgj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Dec 2022 08:36:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
+        id S230464AbiLAPCI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Dec 2022 10:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbiLANgg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Dec 2022 08:36:36 -0500
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A329C7722;
-        Thu,  1 Dec 2022 05:36:31 -0800 (PST)
-Received: by mail-oi1-f177.google.com with SMTP id s186so1917265oia.5;
-        Thu, 01 Dec 2022 05:36:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8Klj16cU1mtrWiiQAip05GLt5Hnkht/EiPyy1Xk8o6Y=;
-        b=jkC418wUUN9rbZ6BfqY45pD2x4sSIUFloajeSEtz847z99/8/drVw9Uc0aO167C+J7
-         /roBgy7QLy+ea3eZ4HDEax0WOdwyVzIIDHsXt6reEz/JWTyM5WQ+QiV0XFMNFSyYeyfe
-         cuN8bgXBk97DsYqtUSj0FuoTY8n2vGX1O763YUjSrPxsPK+ApFXjZ6/5qYtoPYD//wyV
-         pNBE5Vu/4g3ln81jCbsxIQoeJppuaFZlCPJl1Hu/SHUvTd4xhdlk4lZJPtPSwq+e3Yci
-         MA7nijPRzbRbmaCpj6ws/0HjK0jvvpOJmZ9ZMTkO/vHc8kw4yIz/0CX97Ek6/jDkjVZ2
-         cdIg==
-X-Gm-Message-State: ANoB5pm5x+8cBCnvz/W4MPTwL06eViHMn9pEySFrveJURhEm+rtK3xt0
-        misiGHQ1bjf/p652tVgdRaYfWio4XQ==
-X-Google-Smtp-Source: AA0mqf4eI/tqppRx6qJ7bUdnKLs1yb66LbrRb7kME/EKcEm+rpS9k2Et0w/CkRsOU/ILU0PizVQkSw==
-X-Received: by 2002:a05:6808:1392:b0:359:a4de:1d3a with SMTP id c18-20020a056808139200b00359a4de1d3amr33834535oiw.138.1669901790559;
-        Thu, 01 Dec 2022 05:36:30 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j14-20020a9d7f0e000000b0066bb73cce68sm2070309otq.69.2022.12.01.05.36.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 05:36:30 -0800 (PST)
-Received: (nullmailer pid 486289 invoked by uid 1000);
-        Thu, 01 Dec 2022 13:36:29 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S230132AbiLAPCI (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Dec 2022 10:02:08 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E42513F5A;
+        Thu,  1 Dec 2022 07:02:07 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p0l4d-0006Mh-Ox; Thu, 01 Dec 2022 16:02:03 +0100
+Message-ID: <ac2e553f-fa8b-8b08-aba9-e04529adad34@leemhuis.info>
+Date:   Thu, 1 Dec 2022 16:02:03 +0100
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Saravanan Sekar <saravanan@linumiz.com>
-Cc:     robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
-        linux@roeck-us.net, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com, marten.lindahl@axis.com,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org
-In-Reply-To: <20221201044643.1150870-3-saravanan@linumiz.com>
-References: <20221201044643.1150870-1-saravanan@linumiz.com>
- <20221201044643.1150870-3-saravanan@linumiz.com>
-Message-Id: <166990139199.476214.11896276603520678291.robh@kernel.org>
-Subject: Re: [PATCH v2 2/4] dt-bindings: hwmon/pmbus: Add mps,mpq7932
- power-management IC
-Date:   Thu, 01 Dec 2022 07:36:29 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] hwmon/coretemp: Simplify platform device antics
+Content-Language: en-US, de-DE
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     fenghua.yu@intel.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, janusz.krzysztofik@linux.intel.com,
+        lucas.demarchi@intel.com, Guenter Roeck <linux@roeck-us.net>
+References: <898dbb76a54aae6ca58ceefcab9ab18beeee2fff.1668096928.git.robin.murphy@arm.com>
+ <20221111213753.GA1059841@roeck-us.net>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20221111213753.GA1059841@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669906927;4713558b;
+X-HE-SMSGID: 1p0l4d-0006Mh-Ox
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hi, this is your Linux kernel regression tracker. I wondered what
+happened to this regression fix, as things looks stalled from here --
+but maybe I'm missing something.
 
-On Thu, 01 Dec 2022 05:46:41 +0100, Saravanan Sekar wrote:
-> Document mpq7932 power-management IC
-> 
-> Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
-> ---
->  .../bindings/hwmon/pmbus/mps,mpq7932.yaml     | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq7932.yaml
-> 
+On 11.11.22 22:37, Guenter Roeck wrote:
+> On Thu, Nov 10, 2022 at 04:20:25PM +0000, Robin Murphy wrote:
+>> Coretemp's vestigial platform driver is odd. All the real work is done
+>> globally by the initcall and CPU hotplug notifiers, while the "driver"
+>> effectively just wraps an allocation and the registration of the hwmon
+>> interface in a long-winded round-trip through the driver core. The whole
+>> logic of dynamically creating and destroying platform devices to bring
+>> the interfaces up and down is fatally flawed right away, since it
+>> notifier from a platform bus notifier.
+> [...]
+>> I haven't been able to fully test hotplug since I only have a
+>> single-socket Intel system to hand.
+> Someone with access to hardware will have to validate this.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+That afaics has happened.
 
-yamllint warnings/errors:
+> For both subject and description, please avoid terms like "antics",
+> "odd", or "questionable". Please describe the problem in neutral terms.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq7932.example.dtb: pmic@3: regulators: Additional properties are not allowed ('buck1' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq7932.yaml
+Robin, did you take care of that?
 
-doc reference errors (make refcheckdocs):
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221201044643.1150870-3-saravanan@linumiz.com
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+#regzbot ignore-activity
