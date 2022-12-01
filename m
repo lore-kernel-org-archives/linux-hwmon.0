@@ -2,165 +2,100 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF62AC4321E
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 03:30:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEBD8C43217
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Dec 2022 04:47:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiLADak (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Nov 2022 22:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
+        id S229513AbiLAErI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Nov 2022 23:47:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiLADaj (ORCPT
+        with ESMTP id S229671AbiLAErF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Nov 2022 22:30:39 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC0F5BD69;
-        Wed, 30 Nov 2022 19:30:38 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NN1mr3BP4z4xyCG;
-        Thu,  1 Dec 2022 11:30:36 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2B13UUSP049820;
-        Thu, 1 Dec 2022 11:30:30 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 1 Dec 2022 11:30:31 +0800 (CST)
-Date:   Thu, 1 Dec 2022 11:30:31 +0800 (CST)
-X-Zmail-TransId: 2af963881fd7ffffffffa9070c69
-X-Mailer: Zmail v1.0
-Message-ID: <202212011130317080061@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <jdelvare@suse.com>
-Cc:     <linux@roeck-us.net>, <guillaume.ligneul@gmail.com>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBod21vbjogdXNlIHN5c2ZzX2VtaXQoKSB0byBpbnN0ZWFkIG9mIHNjbnByaW50Zigp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2B13UUSP049820
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 63881FDC.001 by FangMail milter!
-X-FangMail-Envelope: 1669865436/4NN1mr3BP4z4xyCG/63881FDC.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63881FDC.001/4NN1mr3BP4z4xyCG
+        Wed, 30 Nov 2022 23:47:05 -0500
+Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.144.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FBB99505
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Nov 2022 20:46:59 -0800 (PST)
+Received: from atl1wswcm04.websitewelcome.com (unknown [50.6.129.165])
+        by atl3wswob02.websitewelcome.com (Postfix) with ESMTP id 4DBFC11BAF
+        for <linux-hwmon@vger.kernel.org>; Thu,  1 Dec 2022 04:46:59 +0000 (UTC)
+Received: from md-in-79.webhostbox.net ([43.225.55.182])
+        by cmsmtp with ESMTP
+        id 0bTMpZnYngEOM0bTOpbllm; Thu, 01 Dec 2022 04:46:59 +0000
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
+        ; s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
+        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=GtPPFXFKQWd88ykrxWYieq1xl8IAIXPVRnRMrWifEHw=; b=jIS8Vx0IZ5Oj+DDtDjUARUagVx
+        on7EYtsn+jblWiE5hoRVndcBm3RqRL1qh0PupN5Y7dqXbBYqK64/8FYMVu9nMuQNhWB7z0xX1Wd1x
+        D042vPqJnc7kyetjRElv/cLvWb40mKvUg9aVVTOVXRrUlSUk0mBfYIS++fJYH1XW7jNoWRBhkhJWy
+        DVTVu2x4DFYMyAZW9HChEC0BnsiOoXf/NnO/JRiA9MdGN8aedmGKErpLQrAvyG8PqX4YxxZzlRzpn
+        oAlja/85/JYYiPOHM6WXP5ZzgE0IWVi4Q1vCchuZd082u3+iXYtR2l0NPnnt5h1KGimHYIYIBauR/
+        juUNodWA==;
+Received: from [223.187.112.123] (port=34121 helo=discovery..)
+        by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <saravanan@linumiz.com>)
+        id 1p0bTL-003t5m-6z;
+        Thu, 01 Dec 2022 04:46:55 +0000
+From:   Saravanan Sekar <saravanan@linumiz.com>
+To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, marten.lindahl@axis.com
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Saravanan Sekar <saravanan@linumiz.com>
+Subject: [PATCH v2 0/4] Add support for mpq7932 PMIC IC
+Date:   Thu,  1 Dec 2022 05:46:39 +0100
+Message-Id: <20221201044643.1150870-1-saravanan@linumiz.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - linumiz.com
+X-BWhitelist: no
+X-Source-IP: 223.187.112.123
+X-Source-L: No
+X-Exim-ID: 1p0bTL-003t5m-6z
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (discovery..) [223.187.112.123]:34121
+X-Source-Auth: saravanan@linumiz.com
+X-Email-Count: 8
+X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfDGVJS27s+POWdiBYR7h0Ch3wARZ5qr+9OlTmEc/oDxe/CSMA14EaMmbjWcr8phEAGp8/BvG3dWVOvn++DQA4kg4WN8RGNjVYzmlJK/LSkPI1Mm86QVl
+ fLZ/Sko90B7JtfVRTvXIzybtRAPKPfUYoHhGUwFgEBcZPU91q+Jnjxc2PbKaVz92XBATncQY+KlslQdQbMNmg51Kh3LnvigfZSk=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+changes in v2:
+  - add new patch to include min_uV in PMBUS_REGULATOR_STEP
+  - fix review comments mpq7932 driver, bindings document and Maintiners file
 
-Replace the open-code with sysfs_emit() to simplify the code.
+Saravanan Sekar (4):
+  hwmon: pm_bus: core: Add min_uV in pmbus regulator helper macro
+  dt-bindings: hwmon/pmbus: Add mps,mpq7932 power-management IC
+  hwmon: (pmbus/mpq7932) Add a support for mpq7932 Power Management IC
+  MAINTAINERS: Update the entry for MPQ7932 PMIC driver
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/hwmon/ds1621.c |  2 +-
- drivers/hwmon/lm73.c   |  6 +++---
- drivers/hwmon/sht3x.c  | 12 ++++++------
- 3 files changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/hwmon/ds1621.c b/drivers/hwmon/ds1621.c
-index 0886abf6ebab..e803d6393b9e 100644
---- a/drivers/hwmon/ds1621.c
-+++ b/drivers/hwmon/ds1621.c
-@@ -269,7 +269,7 @@ static ssize_t update_interval_show(struct device *dev,
- 				    struct device_attribute *da, char *buf)
- {
- 	struct ds1621_data *data = dev_get_drvdata(dev);
--	return scnprintf(buf, PAGE_SIZE, "%hu\n", data->update_interval);
-+	return sysfs_emit(buf, "%hu\n", data->update_interval);
- }
-
- static ssize_t update_interval_store(struct device *dev,
-diff --git a/drivers/hwmon/lm73.c b/drivers/hwmon/lm73.c
-index 1346b3b3f463..b6433ae2d75c 100644
---- a/drivers/hwmon/lm73.c
-+++ b/drivers/hwmon/lm73.c
-@@ -92,7 +92,7 @@ static ssize_t temp_show(struct device *dev, struct device_attribute *da,
- 	/* use integer division instead of equivalent right shift to
- 	   guarantee arithmetic shift and preserve the sign */
- 	temp = (((s16) err) * 250) / 32;
--	return scnprintf(buf, PAGE_SIZE, "%d\n", temp);
-+	return sysfs_emit(buf, "%d\n", temp);
- }
-
- static ssize_t convrate_store(struct device *dev, struct device_attribute *da,
-@@ -137,7 +137,7 @@ static ssize_t convrate_show(struct device *dev, struct device_attribute *da,
- 	int res;
-
- 	res = (data->ctrl & LM73_CTRL_RES_MASK) >> LM73_CTRL_RES_SHIFT;
--	return scnprintf(buf, PAGE_SIZE, "%hu\n", lm73_convrates[res]);
-+	return sysfs_emit(buf, "%hu\n", lm73_convrates[res]);
- }
-
- static ssize_t maxmin_alarm_show(struct device *dev,
-@@ -154,7 +154,7 @@ static ssize_t maxmin_alarm_show(struct device *dev,
- 	data->ctrl = ctrl;
- 	mutex_unlock(&data->lock);
-
--	return scnprintf(buf, PAGE_SIZE, "%d\n", (ctrl >> attr->index) & 1);
-+	return sysfs_emit(buf, "%d\n", (ctrl >> attr->index) & 1);
-
- abort:
- 	mutex_unlock(&data->lock);
-diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-index 3f279aa1cee5..8305e44d9ab2 100644
---- a/drivers/hwmon/sht3x.c
-+++ b/drivers/hwmon/sht3x.c
-@@ -320,7 +320,7 @@ static ssize_t temp1_limit_show(struct device *dev,
- 	u8 index = to_sensor_dev_attr(attr)->index;
- 	int temperature_limit = data->temperature_limits[index];
-
--	return scnprintf(buf, PAGE_SIZE, "%d\n", temperature_limit);
-+	return sysfs_emit(buf, "%d\n", temperature_limit);
- }
-
- static ssize_t humidity1_limit_show(struct device *dev,
-@@ -331,7 +331,7 @@ static ssize_t humidity1_limit_show(struct device *dev,
- 	u8 index = to_sensor_dev_attr(attr)->index;
- 	u32 humidity_limit = data->humidity_limits[index];
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n", humidity_limit);
-+	return sysfs_emit(buf, "%u\n", humidity_limit);
- }
-
- /*
-@@ -483,7 +483,7 @@ static ssize_t temp1_alarm_show(struct device *dev,
- 	if (ret)
- 		return ret;
-
--	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(buffer[0] & 0x04));
-+	return sysfs_emit(buf, "%d\n", !!(buffer[0] & 0x04));
- }
-
- static ssize_t humidity1_alarm_show(struct device *dev,
-@@ -498,7 +498,7 @@ static ssize_t humidity1_alarm_show(struct device *dev,
- 	if (ret)
- 		return ret;
-
--	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(buffer[0] & 0x08));
-+	return sysfs_emit(buf, "%d\n", !!(buffer[0] & 0x08));
- }
-
- static ssize_t heater_enable_show(struct device *dev,
-@@ -513,7 +513,7 @@ static ssize_t heater_enable_show(struct device *dev,
- 	if (ret)
- 		return ret;
-
--	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(buffer[0] & 0x20));
-+	return sysfs_emit(buf, "%d\n", !!(buffer[0] & 0x20));
- }
-
- static ssize_t heater_enable_store(struct device *dev,
-@@ -550,7 +550,7 @@ static ssize_t update_interval_show(struct device *dev,
- {
- 	struct sht3x_data *data = dev_get_drvdata(dev);
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n",
-+	return sysfs_emit(buf, "%u\n",
- 			 mode_to_update_interval[data->mode]);
- }
+ .../bindings/hwmon/pmbus/mps,mpq7932.yaml     |  63 ++++++++
+ MAINTAINERS                                   |   2 +
+ drivers/hwmon/pmbus/Kconfig                   |  10 ++
+ drivers/hwmon/pmbus/Makefile                  |   1 +
+ drivers/hwmon/pmbus/ltc2978.c                 |  16 +-
+ drivers/hwmon/pmbus/mpq7932.c                 | 144 ++++++++++++++++++
+ drivers/hwmon/pmbus/pmbus.h                   |   5 +-
+ 7 files changed, 231 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq7932.yaml
+ create mode 100644 drivers/hwmon/pmbus/mpq7932.c
 
 -- 
-2.25.1
+2.34.1
+
