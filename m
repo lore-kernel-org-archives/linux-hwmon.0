@@ -2,121 +2,63 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5344EC4332F
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Dec 2022 21:32:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD57FC4332F
+	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Dec 2022 22:54:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbiLDVc4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 4 Dec 2022 16:32:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54118 "EHLO
+        id S230161AbiLDWyS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 4 Dec 2022 17:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbiLDVcx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 4 Dec 2022 16:32:53 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97296544;
-        Sun,  4 Dec 2022 13:32:52 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1442977d77dso10287887fac.6;
-        Sun, 04 Dec 2022 13:32:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kljJ4RzgvM2q+VPiZHXWFDSN1hYWKqhRugd9yYXPieU=;
-        b=KvfIlJEJyUBlgHwuV8Y8mtaUUvDhggluwetYO6hydTBYYKmqWNQZ4ewY1gxJpluDHT
-         EZb3BAnGNM87Brui3oXpE+FL+dy07vTz0FmeWS5I5TJ/YytNlGJl+Q/ni6N+RjQXtvOe
-         ScFcrtmbVilO1oEGiJhF2DBBZrCz91uACNPpZc3t2TJK0vQQ0GbGsZQdXs5ohIXmSKb2
-         /c5LmWYrHEJowEi8L7x7NH60ajlbB3ch8xlS2tn55YBo6pCXEl0ZssojOvtmrBl7coeJ
-         GSO1dhQzytfAyCzSYE2gByxsPYztkkOwtGn7duM5454eXlq47U9spi5WHWZv6tT5oWga
-         e1rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kljJ4RzgvM2q+VPiZHXWFDSN1hYWKqhRugd9yYXPieU=;
-        b=o6gKrhKe2GMaseXMOJuL/S1vsh++SBeKGePMOy1LswEbFaUiv1rq211jcvf8o41gMi
-         j2YxNL++MLscdL7v5bCm8WXWzMVpXETpQIgFJemUttDhopZzmmmaoBWPKZs3FvfJZZIW
-         bdtv+DobWVavYQl3dOJFKlfWPXsbfIody5yMqWlAXTPQRIzzJ9FvCcoo67ALEAJtoU1y
-         Zw4VxmobPheMxcrTxXs3tqLyRvt9Dg1zLc/tXbvr5LPQ3p/FMm0rYY3dCQjFA0D7Wh1j
-         48zQ+IHxTsvZECU6kBUIcFJqXInqU2h3eOP9aKwE8s4UCnL2KFJSmlU4duxcPr2sC64m
-         b96g==
-X-Gm-Message-State: ANoB5pm8UZAzvnAsBHmH7N0l1g61zHEfHWPXMIEJUgYX+mYnJBItMj7j
-        VYw6jq4X05To5wfHsSZ3o+N1BkeEZA0=
-X-Google-Smtp-Source: AA0mqf6XzQZ6JTSedBgwXlB1/2vTeOLlHC3tbYCuFE3sI/0Q0DMzOZ5Iqc/oN9t87Lx93cp7H5TlQg==
-X-Received: by 2002:a05:6871:4494:b0:142:6cb4:8b3a with SMTP id ne20-20020a056871449400b001426cb48b3amr34785050oab.190.1670189572261;
-        Sun, 04 Dec 2022 13:32:52 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r15-20020a4a964f000000b00499527def25sm5762678ooi.47.2022.12.04.13.32.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Dec 2022 13:32:51 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8eadc1cb-3648-b0b8-0250-9b745bb8b71d@roeck-us.net>
-Date:   Sun, 4 Dec 2022 13:32:50 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
+        with ESMTP id S229949AbiLDWyR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 4 Dec 2022 17:54:17 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865BCE08C;
+        Sun,  4 Dec 2022 14:54:16 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e72f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e72f:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 037431EC0662;
+        Sun,  4 Dec 2022 23:54:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670194454;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=BeMthFctUynP+ijWo+gAkXBXZmHN+zwjWM9OMuQz6L8=;
+        b=S4knuQByGEDef200v/oyW8W2juDLoVZzB2lIhVcaHAb/7ETP8q7Lrl7KRjnobuB/xDzCsG
+        RHn6UEeVvbOBtaxg9gJKUWDnzMkX13AeIuZO5uP8gJENLcA27RgRJKE1tBswb8GIZl3/Yt
+        mw1PO4/cvHRTl8htIIx0XYWTB5qzhN4=
+Date:   Sun, 4 Dec 2022 23:54:09 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Eddie James <eajames@linux.vnet.ibm.com>,
         linux-hwmon@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
+Subject: Re: CONFIG_SENSORS_OCC_P8_I2C
+Message-ID: <Y40lEZwV4rEA/Fui@zn.tnic>
 References: <Y4zfBRahZJ0QM758@zn.tnic>
  <1085cc7c-00af-83f3-7da6-7820143b162e@roeck-us.net>
  <Y4zxSEo4OhZUd2OU@zn.tnic>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: CONFIG_SENSORS_OCC_P8_I2C
-In-Reply-To: <Y4zxSEo4OhZUd2OU@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <8eadc1cb-3648-b0b8-0250-9b745bb8b71d@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8eadc1cb-3648-b0b8-0250-9b745bb8b71d@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 12/4/22 11:13, Borislav Petkov wrote:
-> On Sun, Dec 04, 2022 at 10:37:09AM -0800, Guenter Roeck wrote:
->> I don't immediately see why this should depend on a P8 configuration.
->> The driver runs on a BMC, after all. My understanding is that a BMC can be
->> of any architecture. Is there a guarantee that there are and never will be
->> any x86 BMCs, and/or that BMCs are limited to a certain subset of
->> architectures ?
-> 
-> Well, then it should depend on the architectures which are currently
-> running BMCs for P8 machines. ARM maybe?
-> 
-> At least on x86 the majority of BMCs are ARM-based AFAIK.
-> 
+On Sun, Dec 04, 2022 at 01:32:50PM -0800, Guenter Roeck wrote:
+> We are not typically that restrictive in the hwmon subsystem. That isn't done
+> for many of the other drivers which are typically only used on x86 either.
+> Why is that suddenly a problem ? Just don't enable it if you don't need it.
 
-We are not typically that restrictive in the hwmon subsystem. That isn't done
-for many of the other drivers which are typically only used on x86 either.
-Why is that suddenly a problem ? Just don't enable it if you don't need it.
+Yeah, ok, fair enough. I've switched my build script to use
+olddefconfig.
 
-Anyway,
+Thx.
 
-commit 58c0399db8bf6bf88c7580b742b0cb45e02f55d5
-Author:     Jeremy Kerr <jk@codeconstruct.com.au>
-AuthorDate: Mon Oct 24 16:15:27 2022 +0800
-Commit:     Guenter Roeck <linux@roeck-us.net>
-CommitDate: Thu Dec 1 09:21:06 2022 -0800
+-- 
+Regards/Gruss,
+    Boris.
 
-     hwmon: (occ) OCC sensors aren't arch-specific
-
-     Commit c112d75840fb ("hwmon: OCC drivers are ARM-only") made the OCC
-     sensor drivers not selectable on powerpc64:
-
-       These drivers are for a BMC inside PowerPC servers. The BMC runs on
-       ARM hardware, so only propose the drivers on this architecture, unless
-       build-testing.
-
-     ... but we now have a powerpc64 BMC (still for a powerpc64 host), so
-     drop the `depends on` that excludes building for this platform.
-
-     Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
-     Acked-by: Joel Stanley <joel@jms.id.au>
-     Link: https://lore.kernel.org/r/20221024081527.3842565-1-jk@codeconstruct.com.au
-     Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-
-I really don't want to end up in a situation where I constantly have
-to deal with changing architecture support, so I would strongly prefer
-to keep it that way unless it is a real problem.
-
-Guenter
-
+https://people.kernel.org/tglx/notes-about-netiquette
