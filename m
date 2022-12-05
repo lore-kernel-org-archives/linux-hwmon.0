@@ -2,112 +2,204 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F4E0C4332F
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Dec 2022 19:22:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4A34C47089
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Dec 2022 19:24:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbiLETWb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Dec 2022 14:22:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46558 "EHLO
+        id S233145AbiLETYr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Dec 2022 14:24:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233504AbiLETVv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2022 14:21:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9565164D7;
-        Mon,  5 Dec 2022 11:17:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59F96B81201;
-        Mon,  5 Dec 2022 19:16:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A95FCC433C1;
-        Mon,  5 Dec 2022 19:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670267799;
-        bh=7uVZopgE1e0SapTb5i26gNiN1i0iX2gcULH+t0ZU+pQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=euAc01JOlvy3X0Zg+B1jq5NvaaIGta4prC58gf5Zg1fNbGNgy11XNeXaEvEODyiRj
-         UHH9bVr1KXaUu2oHOzbiT5GL019zzJ5dCf2OAzzw9AP6I9nf0F1qvGdlmZpheFcBGH
-         vvn/vMR8m5duhT9dFUex+jjC66/7BZAReVn8uXsw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Phil Auld <pauld@redhat.com>,
-        linux-hwmon@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
+        with ESMTP id S233823AbiLETYT (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2022 14:24:19 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12B22B27E
+        for <linux-hwmon@vger.kernel.org>; Mon,  5 Dec 2022 11:19:36 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id bj12so820209ejb.13
+        for <linux-hwmon@vger.kernel.org>; Mon, 05 Dec 2022 11:19:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5L+qTAfuZPG5WnKaVEWtwjcOqVnyYOacNUwcNu1tFHs=;
+        b=Y31lbTMUiQr0kXpiCqWx16+GvJOMMjMmzARKZjw8mjNl3+1Y20WLfJ+6J7WBeDDv9R
+         3OKW6WKcuQ5A6H8csb7jfgKTIouKnIbrMUKjX6/Tnlsd++n6HPhprexi5skue4poGt+l
+         H0qKJfrgyAEwTUa+BhGPDdSSk9EzYmVGUzmoKU8rku3nRK6xHhE70jw8eOrIANcKknXW
+         Sbv1qLeuHhShcJyVW8YfPTPnfQxFJdHcqFezTrixidwLST+SqV6MYYTQtZoW9PHQBAW8
+         N6wLiypYh8CPKYPFY2ornU1zj5d4BvX1UDnZLRXxbzaX2dFSKTk7GwOPmvLJR/dmUUHu
+         kkEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5L+qTAfuZPG5WnKaVEWtwjcOqVnyYOacNUwcNu1tFHs=;
+        b=wWrOFEu9VlCzlK/jRhDF5HjvGx8NdUKOxuHrUQvJwvUsY23exO3kEP36gygmlTv0tO
+         rq87M4sxUenEfi5RKZZUhxMgDzC2F9zHb0MlllCXVgpFbKlTNUeJv/hJS8mHqk5foZwj
+         qZeEYZwKuezh/RghCzigJ7LmqkozNZJecB4CMkHstbAjm/k3Okk9BrV/BG7iynGomJYd
+         QdWjAOZRMDPfr6O8+hJtI+kmgwfP3u+sGYs0R7Dk032lDKm8PK/k9cfvU7Pbx0El31M4
+         4DhsR58WPc0sNa8jdwDqcsdQE26T+oqtgESczMnBo8RSOUrCYgM/alaF4xnfDtsSWZoa
+         kn/Q==
+X-Gm-Message-State: ANoB5pn95upS09YtVDlw7r7Y+nM22RDpf1Ce4bKHgrU+xFyd+bMtIG2H
+        07l6h95XG2prbX/aZyzNaRAtpw==
+X-Google-Smtp-Source: AA0mqf5VNbbalgVMqqH4SE6bfakYXlA038qT0LPKYSLdVX2azR4i+BC5AHu9UJRLisgaGTnQKdfTDw==
+X-Received: by 2002:a17:906:b811:b0:7c0:9ff2:c206 with SMTP id dv17-20020a170906b81100b007c09ff2c206mr20485560ejb.609.1670267975533;
+        Mon, 05 Dec 2022 11:19:35 -0800 (PST)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id t16-20020aa7db10000000b0045cf4f72b04sm112739eds.94.2022.12.05.11.19.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 11:19:35 -0800 (PST)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 56/77] hwmon: (coretemp) Check for null before removing sysfs attrs
-Date:   Mon,  5 Dec 2022 20:09:47 +0100
-Message-Id: <20221205190802.850592627@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221205190800.868551051@linuxfoundation.org>
-References: <20221205190800.868551051@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>
+Subject: [PATCH v6 1/5] hwmon: (pmbus/core): Add interrupt support
+Date:   Mon,  5 Dec 2022 20:19:12 +0100
+Message-Id: <20221205191917.2614603-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Phil Auld <pauld@redhat.com>
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-[ Upstream commit a89ff5f5cc64b9fe7a992cf56988fd36f56ca82a ]
+Implement PMBUS irq handler.
 
-If coretemp_add_core() gets an error then pdata->core_data[indx]
-is already NULL and has been kfreed. Don't pass that to
-sysfs_remove_group() as that will crash in sysfs_remove_group().
-
-[Shortened for readability]
-[91854.020159] sysfs: cannot create duplicate filename '/devices/platform/coretemp.0/hwmon/hwmon2/temp20_label'
-<cpu offline>
-[91855.126115] BUG: kernel NULL pointer dereference, address: 0000000000000188
-[91855.165103] #PF: supervisor read access in kernel mode
-[91855.194506] #PF: error_code(0x0000) - not-present page
-[91855.224445] PGD 0 P4D 0
-[91855.238508] Oops: 0000 [#1] PREEMPT SMP PTI
-...
-[91855.342716] RIP: 0010:sysfs_remove_group+0xc/0x80
-...
-[91855.796571] Call Trace:
-[91855.810524]  coretemp_cpu_offline+0x12b/0x1dd [coretemp]
-[91855.841738]  ? coretemp_cpu_online+0x180/0x180 [coretemp]
-[91855.871107]  cpuhp_invoke_callback+0x105/0x4b0
-[91855.893432]  cpuhp_thread_fun+0x8e/0x150
-...
-
-Fix this by checking for NULL first.
-
-Signed-off-by: Phil Auld <pauld@redhat.com>
-Cc: linux-hwmon@vger.kernel.org
-Cc: Fenghua Yu <fenghua.yu@intel.com>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20221117162313.3164803-1-pauld@redhat.com
-Fixes: 199e0de7f5df3 ("hwmon: (coretemp) Merge pkgtemp with coretemp")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 ---
- drivers/hwmon/coretemp.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/hwmon/pmbus/pmbus.h      |  2 +-
+ drivers/hwmon/pmbus/pmbus_core.c | 84 ++++++++++++++++++++++++++++++++
+ 2 files changed, 85 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index a42744c7665b..ee35bbc1714a 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -531,6 +531,10 @@ static void coretemp_remove_core(struct platform_data *pdata, int indx)
- {
- 	struct temp_data *tdata = pdata->core_data[indx];
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index 10fb17879f8e..6b2e6cf93b19 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -26,7 +26,7 @@ enum pmbus_regs {
  
-+	/* if we errored on add then this is already gone */
-+	if (!tdata)
-+		return;
+ 	PMBUS_CAPABILITY		= 0x19,
+ 	PMBUS_QUERY			= 0x1A,
+-
++	PMBUS_SMBALERT_MASK		= 0x1B,
+ 	PMBUS_VOUT_MODE			= 0x20,
+ 	PMBUS_VOUT_COMMAND		= 0x21,
+ 	PMBUS_VOUT_TRIM			= 0x22,
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 95e95783972a..244fd2597252 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -3072,11 +3072,89 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+ 
+ 	return 0;
+ }
 +
- 	/* Remove the sysfs attributes */
- 	sysfs_remove_group(&pdata->hwmon_dev->kobj, &tdata->attr_group);
++static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg, u8 val)
++{
++	return pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
++}
++
++static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
++{
++	struct pmbus_data *data = pdata;
++	struct i2c_client *client = to_i2c_client(data->dev);
++	int i, status;
++
++	for (i = 0; i < data->info->pages; i++) {
++
++		mutex_lock(&data->update_lock);
++		status = pmbus_read_status_word(client, i);
++		if (status < 0) {
++			mutex_unlock(&data->update_lock);
++			return status;
++		}
++
++		if (status & ~(PB_STATUS_OFF | PB_STATUS_BUSY | PB_STATUS_POWER_GOOD_N))
++			pmbus_clear_fault_page(client, i);
++
++		mutex_unlock(&data->update_lock);
++	}
++
++	return IRQ_HANDLED;
++}
++
++static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
++{
++	struct device *dev = &client->dev;
++	const struct pmbus_regulator_status_category *cat;
++	const struct pmbus_regulator_status_assoc *bit;
++	int i, j, err, ret, func;
++	u8 mask;
++
++	for (i = 0; i < data->info->pages; i++) {
++		func = data->info->func[i];
++
++		for (j = 0; j < ARRAY_SIZE(pmbus_regulator_flag_map); j++) {
++			cat = &pmbus_regulator_flag_map[j];
++			if (!(func & cat->func))
++				continue;
++			mask = 0;
++			for (bit = cat->bits; bit->pflag; bit++)
++				mask |= bit->pflag;
++
++			err = pmbus_write_smbalert_mask(client, i, cat->reg, ~mask);
++			if (err)
++				dev_err(dev, "Failed to set smbalert for reg 0x%02x\n",	cat->reg);
++		}
++
++		pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_CML, 0xff);
++		pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_OTHER, 0xff);
++		pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_MFR_SPECIFIC, 0xff);
++		if (data->info->func[i] & PMBUS_HAVE_FAN12)
++			pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_FAN_12, 0xff);
++		if (data->info->func[i] & PMBUS_HAVE_FAN34)
++			pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_FAN_34, 0xff);
++	}
++
++	/* Register notifiers - can fail if IRQ is not given */
++	ret = devm_request_threaded_irq(dev, client->irq, NULL, pmbus_fault_handler,
++			      0, "pmbus-irq", data);
++	if (ret) {
++		dev_warn(dev, "IRQ disabled %d\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++
+ #else
+ static int pmbus_regulator_register(struct pmbus_data *data)
+ {
+ 	return 0;
+ }
++static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
++{
++	return 0;
++}
+ #endif
  
+ static struct dentry *pmbus_debugfs_dir;	/* pmbus debugfs directory */
+@@ -3441,6 +3519,12 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
+ 	if (ret)
+ 		return ret;
+ 
++	if (client->irq > 0) {
++		ret = pmbus_irq_setup(client, data);
++		if (ret)
++			return ret;
++	}
++
+ 	ret = pmbus_init_debugfs(client, data);
+ 	if (ret)
+ 		dev_warn(dev, "Failed to register debugfs\n");
+
+base-commit: 9494c53e1389b120ba461899207ac8a3aab2632c
 -- 
-2.35.1
-
-
+2.37.3
 
