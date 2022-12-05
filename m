@@ -2,110 +2,112 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DF5DC4321E
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Dec 2022 19:25:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62D68C4708D
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Dec 2022 19:26:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233785AbiLETZU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Dec 2022 14:25:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
+        id S233835AbiLET0A (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Dec 2022 14:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbiLETYl (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2022 14:24:41 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2CD25C5D
-        for <linux-hwmon@vger.kernel.org>; Mon,  5 Dec 2022 11:19:50 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id bj12so821649ejb.13
-        for <linux-hwmon@vger.kernel.org>; Mon, 05 Dec 2022 11:19:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YmisXUUTcc/2wLYtw2JwGMf2iLn2WSeYXglBIEeZoho=;
-        b=Y4YvMsNmXqwQtQ6fylpBqSvy3d7S0QQKyzC+msMpaJ9yJ2fXrCtlT8C6h1WiGav9r4
-         TDZ3jUw0Gsmhvma6muAvIM/saALuR5+52UawobQWBDvSS5Ew2WxebwU/YuO/PrsvpTMk
-         gfwlDJ0LQvEQkbTqdoiWwQUHgkra8WZWKwtSKF9bYjQNUshjJi73kqWZFv4Nz/hmJrz2
-         98myjXjxobhazglF9IJyWQlrhaaZpKQZ75vM0vyHYpdAAAEUdsmMn7UI7BMRAGFewOtk
-         TiRCnmEHDvo5dJ6kMIdW6pELmO5XoPZeiaCy0qVeG2Kr+Myn85Fm7lK7tBGphWc17N8v
-         DdJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YmisXUUTcc/2wLYtw2JwGMf2iLn2WSeYXglBIEeZoho=;
-        b=UdXKU3duHwWsGuTzxNEM42bXDNOGWq77PrIqTHdWQdI2v44JL5JHHUE4EGjrH/dHFN
-         SOy+0wTVHTqiKdd3CsqKsUakxxvqJBQHbj0uooXIrDYEE8WIse/OPfUPtRaC0lCnCpDj
-         8TQKNfetI/NcoGHAAefJoLqSZ4jE/0iwrSymOAMmQlo+xgabTpM8prUd8srsDBisjvcv
-         jxo+S8ZIN2jYZn96L+1Ad0DVnaSsy8g/L5V6TA4rRYlKvbttDcNKPQ0UugIU/brvZJvA
-         /J4GeHcCZdb5gvZswwWyB68Nyo64NJQtjd1azhI3gWJcRI8LnxHjpnpYdfkU8CvmAm58
-         HV3A==
-X-Gm-Message-State: ANoB5plEJ7q9ImAvT3I6Xvb8+eW5wf4V6EOSmPyFuDoq7ZSbXOxjBnOt
-        LCZGHEzdtWSe2jLEOu/I/xojuw==
-X-Google-Smtp-Source: AA0mqf62EG0f6npo76wD2RQldxw2ZuSO3bPY8/OKQ9K9hhSaGTbejpbzJ3Z1YlSk4OWCtLd/Gmdfpg==
-X-Received: by 2002:a17:906:5156:b0:7c0:efb6:8744 with SMTP id jr22-20020a170906515600b007c0efb68744mr5950005ejc.267.1670267990223;
-        Mon, 05 Dec 2022 11:19:50 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id t16-20020aa7db10000000b0045cf4f72b04sm112739eds.94.2022.12.05.11.19.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 11:19:50 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        with ESMTP id S232307AbiLETZf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2022 14:25:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF6B26110;
+        Mon,  5 Dec 2022 11:21:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2AEB0B81151;
+        Mon,  5 Dec 2022 19:21:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78B99C433D6;
+        Mon,  5 Dec 2022 19:21:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670268084;
+        bh=rI9PGfQ6gQfyrTgJVCZvwEFx9Q/k3+fmu4A3g7ICcd4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RwJUKqej6z+5B4Ts4t8EoWFnSHj+pbclOTcogbCUG+odC5/PV5EiA0UissZZKI1wr
+         2tMrjZshwyQG+DpvexGyfN8y2aZA2EjLSdZXW4qEOpwZFG+wqVkkrCHzMguKTUsgAn
+         kdH/1bNPvWGnqCVKO4UG8ZyMyRhe7LlANWk5ODYM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Phil Auld <pauld@redhat.com>,
+        linux-hwmon@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v6 5/5] hwmon: (pmbus/core): Notify regulator events
-Date:   Mon,  5 Dec 2022 20:19:16 +0100
-Message-Id: <20221205191917.2614603-5-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221205191917.2614603-1-Naresh.Solanki@9elements.com>
-References: <20221205191917.2614603-1-Naresh.Solanki@9elements.com>
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 080/105] hwmon: (coretemp) Check for null before removing sysfs attrs
+Date:   Mon,  5 Dec 2022 20:09:52 +0100
+Message-Id: <20221205190805.865256670@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221205190803.124472741@linuxfoundation.org>
+References: <20221205190803.124472741@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Notify regulator events in PMBus irq handler.
+From: Phil Auld <pauld@redhat.com>
 
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+[ Upstream commit a89ff5f5cc64b9fe7a992cf56988fd36f56ca82a ]
+
+If coretemp_add_core() gets an error then pdata->core_data[indx]
+is already NULL and has been kfreed. Don't pass that to
+sysfs_remove_group() as that will crash in sysfs_remove_group().
+
+[Shortened for readability]
+[91854.020159] sysfs: cannot create duplicate filename '/devices/platform/coretemp.0/hwmon/hwmon2/temp20_label'
+<cpu offline>
+[91855.126115] BUG: kernel NULL pointer dereference, address: 0000000000000188
+[91855.165103] #PF: supervisor read access in kernel mode
+[91855.194506] #PF: error_code(0x0000) - not-present page
+[91855.224445] PGD 0 P4D 0
+[91855.238508] Oops: 0000 [#1] PREEMPT SMP PTI
+...
+[91855.342716] RIP: 0010:sysfs_remove_group+0xc/0x80
+...
+[91855.796571] Call Trace:
+[91855.810524]  coretemp_cpu_offline+0x12b/0x1dd [coretemp]
+[91855.841738]  ? coretemp_cpu_online+0x180/0x180 [coretemp]
+[91855.871107]  cpuhp_invoke_callback+0x105/0x4b0
+[91855.893432]  cpuhp_thread_fun+0x8e/0x150
+...
+
+Fix this by checking for NULL first.
+
+Signed-off-by: Phil Auld <pauld@redhat.com>
+Cc: linux-hwmon@vger.kernel.org
+Cc: Fenghua Yu <fenghua.yu@intel.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20221117162313.3164803-1-pauld@redhat.com
+Fixes: 199e0de7f5df3 ("hwmon: (coretemp) Merge pkgtemp with coretemp")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/hwmon/coretemp.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 22176f266891..c8fae2a9502d 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -3154,7 +3154,7 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index 6030cb539a7b..02711014aee7 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -546,6 +546,10 @@ static void coretemp_remove_core(struct platform_data *pdata, int indx)
  {
- 	struct pmbus_data *data = pdata;
- 	struct i2c_client *client = to_i2c_client(data->dev);
--	int i, status, ret, event;
-+	int i, j, status, ret, event;
+ 	struct temp_data *tdata = pdata->core_data[indx];
  
- 	for (i = 0; i < data->info->pages; i++) {
- 
-@@ -3163,6 +3163,15 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
- 		if (ret)
- 			return ret;
- 
-+		if (event) {
-+			for (j = 0; j < data->info->num_regulators; j++) {
-+				if (i == rdev_get_id(data->rdevs[i])) {
-+					regulator_notifier_call_chain(data->rdevs[i], event, NULL);
-+					ret = IRQ_HANDLED;
-+				}
-+			}
-+		}
++	/* if we errored on add then this is already gone */
++	if (!tdata)
++		return;
 +
- 		mutex_lock(&data->update_lock);
- 		status = pmbus_read_status_word(client, i);
- 		if (status < 0) {
+ 	/* Remove the sysfs attributes */
+ 	sysfs_remove_group(&pdata->hwmon_dev->kobj, &tdata->attr_group);
+ 
 -- 
-2.37.3
+2.35.1
+
+
 
