@@ -2,112 +2,76 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84034C47089
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Dec 2022 19:48:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65295C4332F
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Dec 2022 20:03:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235193AbiLETs2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Dec 2022 14:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
+        id S231598AbiLEUDV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Dec 2022 15:03:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235043AbiLETry (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2022 14:47:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D8F25EF;
-        Mon,  5 Dec 2022 11:44:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F295B811CF;
-        Mon,  5 Dec 2022 19:44:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D82C433C1;
-        Mon,  5 Dec 2022 19:44:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670269478;
-        bh=aBXti4EF3GBx1TWbwGEgNQ7KMgvLAPbY1whfbPALMD8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vvCMfo+c0ZsQhugIqGPJrwkHseQH+UY41KLaY9YwRDpPBSYTl+Pn1hg/on4cb6VpH
-         N3p2wYzi6Zd8wnlZO2VHxdJpA6iQUYbRM5fs/dCTrVkcyUHfY6CZDqipOLYkSjlQv6
-         BgJyjBPH6PhoNuMLlZw3/fohnu9vQtrd8nuXRA/k=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Phil Auld <pauld@redhat.com>,
-        linux-hwmon@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 114/153] hwmon: (coretemp) Check for null before removing sysfs attrs
-Date:   Mon,  5 Dec 2022 20:10:38 +0100
-Message-Id: <20221205190811.995803124@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221205190808.733996403@linuxfoundation.org>
-References: <20221205190808.733996403@linuxfoundation.org>
-User-Agent: quilt/0.67
+        with ESMTP id S232149AbiLEUDM (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2022 15:03:12 -0500
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFAA10CB;
+        Mon,  5 Dec 2022 12:03:10 -0800 (PST)
+Received: by mail-ot1-f46.google.com with SMTP id cn2-20020a056830658200b0066c74617e3dso7963040otb.2;
+        Mon, 05 Dec 2022 12:03:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+W1sj6RAGXizx4i/Qzvpsvihqw6KYbgIgrAWRGb7Mos=;
+        b=rS2Hjmd1NI/0ZJb0kFceq8+fyQwI4LUfsJAv3U2QDZfxatyDN7WxFS+srZ8TauCUMz
+         JzyRZklCIMFthCscsUJ7Ofpmj5WsKydOqAY6jvNh+vo2nlIu4jpMZEealcjOSzSNg4DP
+         aGzLbaCdmaH2tKTbBh9+HVIGd13GYPKOPpG+Zl2XxxKgIjLiAN2ZXipbWb4ChfceJBKO
+         0eOBARM42qDap9xruyzx5XTRsobuWD9QjD1NcnVz2wFVvTUFOUSqo63spWTUUm3N1Eym
+         dmHeBMBVG8L0CAVokc7PYhDgyioUDS55jyqXtAamECGnvISF3ZpF66ZUU7uiQU4IS+Pk
+         6chg==
+X-Gm-Message-State: ANoB5pl8CSIlkO1Shd5VCuvq7OOCGCeHqea4BsCdJayLHsR68YF+eRq/
+        sV1msEFRsb4qcM9486HWXA==
+X-Google-Smtp-Source: AA0mqf4cy9gGp0M4GuPbOqNQwOUFNqLWLBMdSYtbIP79ziXVLqNr5+8hFB9zk2AYaadp3H7A0yZHoQ==
+X-Received: by 2002:a9d:2941:0:b0:66c:2a6d:e5a0 with SMTP id d59-20020a9d2941000000b0066c2a6de5a0mr30900337otb.373.1670270590064;
+        Mon, 05 Dec 2022 12:03:10 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u19-20020a4ae693000000b004a0cb488f14sm1601735oot.23.2022.12.05.12.03.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 12:03:09 -0800 (PST)
+Received: (nullmailer pid 2500878 invoked by uid 1000);
+        Mon, 05 Dec 2022 20:03:08 -0000
+Date:   Mon, 5 Dec 2022 14:03:08 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, linux@armlinux.org.uk, linux-hwmon@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, corbet@lwn.net,
+        jdelvare@suse.com
+Subject: Re: [PATCH v3 3/6] dt-bindings: hwmon: Add hpe,gxp-fan-ctrl
+Message-ID: <167027058851.2500814.11700544023248077261.robh@kernel.org>
+References: <20221130200846.4226-1-nick.hawkins@hpe.com>
+ <20221130200846.4226-4-nick.hawkins@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221130200846.4226-4-nick.hawkins@hpe.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Phil Auld <pauld@redhat.com>
 
-[ Upstream commit a89ff5f5cc64b9fe7a992cf56988fd36f56ca82a ]
+On Wed, 30 Nov 2022 14:08:43 -0600, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> Create documentation for the binding to support control of the fans on
+> HPE platforms.
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> ---
+>  .../bindings/hwmon/hpe,gxp-fan-ctrl.yaml      | 45 +++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
+> 
 
-If coretemp_add_core() gets an error then pdata->core_data[indx]
-is already NULL and has been kfreed. Don't pass that to
-sysfs_remove_group() as that will crash in sysfs_remove_group().
-
-[Shortened for readability]
-[91854.020159] sysfs: cannot create duplicate filename '/devices/platform/coretemp.0/hwmon/hwmon2/temp20_label'
-<cpu offline>
-[91855.126115] BUG: kernel NULL pointer dereference, address: 0000000000000188
-[91855.165103] #PF: supervisor read access in kernel mode
-[91855.194506] #PF: error_code(0x0000) - not-present page
-[91855.224445] PGD 0 P4D 0
-[91855.238508] Oops: 0000 [#1] PREEMPT SMP PTI
-...
-[91855.342716] RIP: 0010:sysfs_remove_group+0xc/0x80
-...
-[91855.796571] Call Trace:
-[91855.810524]  coretemp_cpu_offline+0x12b/0x1dd [coretemp]
-[91855.841738]  ? coretemp_cpu_online+0x180/0x180 [coretemp]
-[91855.871107]  cpuhp_invoke_callback+0x105/0x4b0
-[91855.893432]  cpuhp_thread_fun+0x8e/0x150
-...
-
-Fix this by checking for NULL first.
-
-Signed-off-by: Phil Auld <pauld@redhat.com>
-Cc: linux-hwmon@vger.kernel.org
-Cc: Fenghua Yu <fenghua.yu@intel.com>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20221117162313.3164803-1-pauld@redhat.com
-Fixes: 199e0de7f5df3 ("hwmon: (coretemp) Merge pkgtemp with coretemp")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/hwmon/coretemp.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index d2530f581186..65e06e18b8f0 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -533,6 +533,10 @@ static void coretemp_remove_core(struct platform_data *pdata, int indx)
- {
- 	struct temp_data *tdata = pdata->core_data[indx];
- 
-+	/* if we errored on add then this is already gone */
-+	if (!tdata)
-+		return;
-+
- 	/* Remove the sysfs attributes */
- 	sysfs_remove_group(&pdata->hwmon_dev->kobj, &tdata->attr_group);
- 
--- 
-2.35.1
-
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>
