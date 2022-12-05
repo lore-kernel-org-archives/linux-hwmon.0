@@ -2,131 +2,112 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85B13C47089
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Dec 2022 19:34:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33855C4321E
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Dec 2022 19:35:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234309AbiLETeC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Dec 2022 14:34:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
+        id S234471AbiLETfK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Dec 2022 14:35:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234129AbiLETdq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2022 14:33:46 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3773628726
-        for <linux-hwmon@vger.kernel.org>; Mon,  5 Dec 2022 11:28:36 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id q71so11363881pgq.8
-        for <linux-hwmon@vger.kernel.org>; Mon, 05 Dec 2022 11:28:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PMgJpPVGFf2CTmBqfB8Ron+eiO7KrRxZmO2QtEp2lsM=;
-        b=KKxbsFBFUBlxl1NFHn1WxO6k25Y6zUU02b5x8BJLQyCE1gOD8tqr9eLsGLLm4dD5J4
-         Dk208kvxuVyK0E5gWtbPHygqwlqVckRknMeMMp0R3KsFgv7M7++oFTixt/G8rjAVSDhG
-         2PsCAn5MeBiYZwy1T4pK/dVPyvMWo6K4rcWI8fjdpbV5Yn6DApjHUMQW8ab98H7D9yWO
-         iVmenHiMWpWlduoJayRDnVMMsR/3QiFTwDP1ybi4IVPwzz+5fFGVxTX8ipaujq4URhrs
-         nd6LJx4xnR4Rk65Vz9cQVquBK8OYddNTODSP+eW8KxHZ/8aHuftGBr3djzvt0HycKBjK
-         T6Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PMgJpPVGFf2CTmBqfB8Ron+eiO7KrRxZmO2QtEp2lsM=;
-        b=IfdMWtKoHzFr29a8EbJAbnXlG/1mTv9d95nz9fz6H+laJl1vUGrHXM5qCstCSgYNiN
-         /9pHgfeaLkUKfQtMyLLzN1z2BwwHlS4jR0FBTi9F+Jt+4LotwR3cuvITR7EX8xloSUXH
-         yf9kSGTiTp0sgl2nBsPDdZ+it1MRrmjRGhBTiPcc+jLzTNXM/jDd1P+81CMXqQ8W+dT9
-         eumef3J7EJ33KH4ARTXIUnmHi18zztUEJ9J6JDqfQ7UUPu0i7r/6rWJ+R7Aiyiiu7cFy
-         6Rtlej1TiKiZtHhnGAd0/jfaDESD2zyIIfYW7vIevJ4c2gCkIXJMQZ/fUviE83MPRI6i
-         85Fg==
-X-Gm-Message-State: ANoB5pmQfJq4Kv2dgPUOH/91N0XYJs+4FdZLkOf3tOygqtjG7vCa9Eym
-        YLiadqy8C/7hLYLtZEnY6peGPM3UT+ekvtYkkWQ=
-X-Google-Smtp-Source: AA0mqf5hB1K85GHRxWS3DJj18gs7YP8L5r2g77hmMSGPl3S7GFCLH5EEv+nuVrfKDV9901+2ad0Ayw==
-X-Received: by 2002:a63:1f63:0:b0:460:ec46:3645 with SMTP id q35-20020a631f63000000b00460ec463645mr77906532pgm.92.1670268515498;
-        Mon, 05 Dec 2022 11:28:35 -0800 (PST)
-Received: from localhost.localdomain ([193.122.98.110])
-        by smtp.gmail.com with ESMTPSA id a10-20020a1709027e4a00b001898aa48d17sm10896614pln.185.2022.12.05.11.28.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 11:28:35 -0800 (PST)
-From:   Xingjiang Qiao <nanpuyue@gmail.com>
-To:     michaelsh@nvidia.com, Jean Delvare <jdelvare@suse.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Xingjiang Qiao <nanpuyue@gmail.com>,
-        linux-hwmon@vger.kernel.org
-Subject: RE: [PATCH 2/2] hwmon: (emc2305) fix pwm never being able to set lower
-Date:   Tue,  6 Dec 2022 03:28:25 +0800
-Message-Id: <20221205192825.155209-1-nanpuyue@gmail.com>
+        with ESMTP id S234209AbiLETeu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2022 14:34:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E2A29CA4;
+        Mon,  5 Dec 2022 11:30:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B774C6130C;
+        Mon,  5 Dec 2022 19:30:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4D59C433C1;
+        Mon,  5 Dec 2022 19:30:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670268639;
+        bh=dWoWa9c3N7KCEFmn7jda1SE9xRdTIAW4aNEPlki+1V4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JQ8FFb3ZBrj2qCnAcyAuRf4r6oTmQIMFhDrvNUMmZAZNFV5D4v4YL04neWV7UXrS5
+         vT+G6pmDr30mc+hDgVWLp88sSejxxc44TD5lgPAxdmyO15BkR0bue0El6kY2Ha/2CW
+         Zb26eF40fJHknGG4us0U1+v72cLAcZVosCJbO0Fg=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Phil Auld <pauld@redhat.com>,
+        linux-hwmon@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 51/92] hwmon: (coretemp) Check for null before removing sysfs attrs
+Date:   Mon,  5 Dec 2022 20:10:04 +0100
+Message-Id: <20221205190805.184292742@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <DM6PR12MB40742D85F5F8932F81C8C34DD4189@DM6PR12MB4074.namprd12.prod.outlook.com>
-References: <DM6PR12MB40742D85F5F8932F81C8C34DD4189@DM6PR12MB4074.namprd12.prod.outlook.com>
+In-Reply-To: <20221205190803.464934752@linuxfoundation.org>
+References: <20221205190803.464934752@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Even when the cooling state is not set by the thermal subsystem, no lower state can be set by hwmon.
+From: Phil Auld <pauld@redhat.com>
+
+[ Upstream commit a89ff5f5cc64b9fe7a992cf56988fd36f56ca82a ]
+
+If coretemp_add_core() gets an error then pdata->core_data[indx]
+is already NULL and has been kfreed. Don't pass that to
+sysfs_remove_group() as that will crash in sysfs_remove_group().
+
+[Shortened for readability]
+[91854.020159] sysfs: cannot create duplicate filename '/devices/platform/coretemp.0/hwmon/hwmon2/temp20_label'
+<cpu offline>
+[91855.126115] BUG: kernel NULL pointer dereference, address: 0000000000000188
+[91855.165103] #PF: supervisor read access in kernel mode
+[91855.194506] #PF: error_code(0x0000) - not-present page
+[91855.224445] PGD 0 P4D 0
+[91855.238508] Oops: 0000 [#1] PREEMPT SMP PTI
+...
+[91855.342716] RIP: 0010:sysfs_remove_group+0xc/0x80
+...
+[91855.796571] Call Trace:
+[91855.810524]  coretemp_cpu_offline+0x12b/0x1dd [coretemp]
+[91855.841738]  ? coretemp_cpu_online+0x180/0x180 [coretemp]
+[91855.871107]  cpuhp_invoke_callback+0x105/0x4b0
+[91855.893432]  cpuhp_thread_fun+0x8e/0x150
+...
+
+Fix this by checking for NULL first.
+
+Signed-off-by: Phil Auld <pauld@redhat.com>
+Cc: linux-hwmon@vger.kernel.org
+Cc: Fenghua Yu <fenghua.yu@intel.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20221117162313.3164803-1-pauld@redhat.com
+Fixes: 199e0de7f5df3 ("hwmon: (coretemp) Merge pkgtemp with coretemp")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/coretemp.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index 032129292957..9b49bfc63ffc 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -533,6 +533,10 @@ static void coretemp_remove_core(struct platform_data *pdata, int indx)
+ {
+ 	struct temp_data *tdata = pdata->core_data[indx];
+ 
++	/* if we errored on add then this is already gone */
++	if (!tdata)
++		return;
++
+ 	/* Remove the sysfs attributes */
+ 	sysfs_remove_group(&pdata->hwmon_dev->kobj, &tdata->attr_group);
+ 
+-- 
+2.35.1
 
 
 
-> On Tue, Dec 6, 2022 at 2:27 AM Michael Shych <michaelsh@nvidia.com> wrote:
-> Hi,
-> 
-> This is intention - to set low limit through 'hwmon'.
-> Thus, if it is set through 'hwom', cooling state is limited and not allowed to be set to a lower value.
-> If user doesn't want this feature, he is not supposed to use 'hwmon' for fan speed setting.
-> 
-> Regards,
->    Michael.
-> 
-> > -----Original Message-----
-> > From: Xingjiang Qiao <nanpuyue@gmail.com>
-> > Sent: Monday, December 5, 2022 7:36 PM
-> > To: Guenter Roeck <linux@roeck-us.net>; Jean Delvare
-> > <jdelvare@suse.com>
-> > Cc: Michael Shych <michaelsh@nvidia.com>; Xingjiang Qiao
-> > <nanpuyue@gmail.com>; linux-hwmon@vger.kernel.org
-> > Subject: [PATCH 2/2] hwmon: (emc2305) fix pwm never being able to set
-> > lower
-> >
-> > There are fields 'last_hwmon_state' and 'last_thermal_state' in the structure
-> > 'emc2305_cdev_data', which respectively store the cooling state set by the
-> > 'hwmon' and 'thermal' subsystem, and the driver author hopes that if the
-> > state set by 'hwmon' is lower than the value set by 'thermal', the driver will
-> > just save it without actually setting the pwm. Currently, the
-> > 'last_thermal_state' also be updated by 'hwmon', which will cause the
-> > cooling state to never be set to a lower value. This patch fixes that.
-> >
-> > Signed-off-by: Xingjiang Qiao <nanpuyue@gmail.com>
-> > ---
-> >  drivers/hwmon/emc2305.c | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c index
-> > 4df84065cbfb..f51760f8aa85 100644
-> > --- a/drivers/hwmon/emc2305.c
-> > +++ b/drivers/hwmon/emc2305.c
-> > @@ -398,11 +398,9 @@ emc2305_write(struct device *dev, enum
-> > hwmon_sensor_types type, u32 attr, int ch
-> >                                * Update PWM only in case requested state
-> > is not less than the
-> >                                * last thermal state.
-> >                                */
-> > -                             if (data-
-> > >cdev_data[cdev_idx].last_hwmon_state >=
-> > +                             if (data-
-> > >cdev_data[cdev_idx].last_hwmon_state <
-> >                                   data-
-> > >cdev_data[cdev_idx].last_thermal_state)
-> > -                                     return emc2305_set_cur_state(data-
-> > >cdev_data[cdev_idx].cdev,
-> > -                                                     data-
-> > >cdev_data[cdev_idx].last_hwmon_state);
-> > -                             return 0;
-> > +                                     return 0;
-> >                       }
-> >                       return emc2305_set_pwm(dev, val, channel);
-> >               default:
-> > --
-> > 2.38.1
