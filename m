@@ -2,124 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77417C352A1
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Dec 2022 07:03:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35604C352A1
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Dec 2022 12:05:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233961AbiLFHDt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Dec 2022 02:03:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
+        id S235317AbiLFMFP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Dec 2022 07:05:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233912AbiLFHDs (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Dec 2022 02:03:48 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3A119C22
-        for <linux-hwmon@vger.kernel.org>; Mon,  5 Dec 2022 23:03:47 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id m204so15933577oib.6
-        for <linux-hwmon@vger.kernel.org>; Mon, 05 Dec 2022 23:03:47 -0800 (PST)
+        with ESMTP id S235313AbiLFMEn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Dec 2022 07:04:43 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C86728E02
+        for <linux-hwmon@vger.kernel.org>; Tue,  6 Dec 2022 04:02:03 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id t18so3984001pfq.13
+        for <linux-hwmon@vger.kernel.org>; Tue, 06 Dec 2022 04:02:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=efUCPFwfKP2AglJG+S1ZVk06le9S0acNz3fx23bcGD0=;
-        b=nGMcWotYvrbBr717SjNVA4u87+0RlnP+DentxUDf6z+XdYiL7ExTOrQ0hpCI0htmnQ
-         khlGTNZ8dYpdAiFHFcQIWdrqxqJHMyp8yInvWwyk1LwWJT3uMEHto6GTlxNK9UFJBmqG
-         7uE5PlaYdjHCtqPlfOrFpMnvz3pI9sYN8J03SssHIFvcmrGwA0OOh0dji0CzATNJHVHL
-         RLxaccjmlOwEEgXjHI/HN0WHM6QCqzSg1KTZj+q5RRVVdRngnU/ae49ap3gKJ7NCuMHt
-         JPN7HfKfdHw1iolPytf9CrBVhjHBCbWPgJfbFFHVxYrryumNH9F7YfnhrA+8xvUTG7LF
-         dSNQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HUoakayqhFKDKE4DaNdlFCE2+L8ZIJYRgf5IW1pz5X8=;
+        b=W9m/Uy4KJ/Re3ir1JS2F85EUSV0+y6F5l+lTOsLBV6DVCvwszUnYmaJKpYagi4Bldw
+         xEEvmZZs8OUIj7bkULWxPgNtwdEMD5eSf4rwlvIg2oIQr0kYpHHYsZOlaSPx5x+Hpp96
+         ALbbLegI/65/K5H7ELSPWmUyd5nWkBXt/MXbaQoJGcl+WRUjLmnAQcLWb1hgoW/5n2kc
+         4IyYZoIATqcDN3trZ2APFP/aj85hFp0kk1K/oSm8Do5TAP0g+IVMxz783FvH6a8iGs65
+         YW+OUd/ph3gbvliYwWx3uTOVUvjoopdR0VzbxrmKw/C3NXF7Y9IKSUFjPzBC9h4m8DHK
+         N4Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=efUCPFwfKP2AglJG+S1ZVk06le9S0acNz3fx23bcGD0=;
-        b=6m2X968aetHkIWmcOYXWj70Tgk4TSTpUa3Nllr8t65/2k8kXZo0aHmkis5VeKKIm2c
-         fJPQ6yTE01QjgWnA/X+HcLxx7H52C8BL38RcCj8y1JbVJCAH2DCCrZQojCh06X+s1L5v
-         FIGLmcgXar4g78cm293haV2229robDtZsezkI4/zl57QsLhzKC6ZvHWlBo6mH+NAvOj9
-         SF1GXmWDKMsrGpAo/62EiWBchbIFPKUSENGPvQ/xP9sbYspViU1uvRs4I2tMj8EPStGu
-         K1k5VdZpuIXwxIrIC4JA+F1+vEC76pd4hMcnv3Hducjwstb5gtVoFnQ3NRtuVKMGsei2
-         W7cw==
-X-Gm-Message-State: ANoB5pmef1457+06Ra3hAaiAa3khQKmUSVziTzX0xUqoXg0I45S0C/Pg
-        q6oAj/E5iq11r563tMnJt+iunOMl+tQ=
-X-Google-Smtp-Source: AA0mqf6K2ctMEflsGoPH7M7phqOX4KtYGjOQS0i9VYj8DII78TxifBbILGe/jt0ZU5w7WUkCNuODqw==
-X-Received: by 2002:a05:6808:199c:b0:35a:260b:794d with SMTP id bj28-20020a056808199c00b0035a260b794dmr31566115oib.123.1670310226728;
-        Mon, 05 Dec 2022 23:03:46 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id by13-20020a056830608d00b0066e873e4c2csm5756323otb.45.2022.12.05.23.03.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 23:03:46 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <eeb76b93-53d5-bc5b-b132-475c11f8ce1b@roeck-us.net>
-Date:   Mon, 5 Dec 2022 23:03:43 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 1/2] hwmon: (emc2305) fix unable to probe emc2301/2/3
-Content-Language: en-US
-To:     Xingjiang Qiao <nanpuyue@gmail.com>
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HUoakayqhFKDKE4DaNdlFCE2+L8ZIJYRgf5IW1pz5X8=;
+        b=MvB+V/GWdsyp3oB+BdqMws8tNLZ5hKWfBFGU8B3NX/7vNXaz2+rQGRlX9UGd9iyt/y
+         VaIAiH6/XzYlaVNPrqd5emRpSK41/+rhaasmbx2rWu9ukAjEMDitXtDChghz6ENNpao4
+         Rt/w1n/OseVEpFLERt038Ke0BAVWjNIjYhb8aXbNVsmblwigSlymF2RC8sUAlaNHKrpi
+         29l8cSkUn33swWAR/LqHQTfog8GDac7hH2CuBL4OkjbLT/3aRewaO1UdCZV5tfLnITFq
+         0nAl+IjIlqc1S7Xtta2m83lBjHAcxz+FJJRAQfE5dzD4TjaMXGz4RuCE33+/y4dG8jxz
+         m4Tw==
+X-Gm-Message-State: ANoB5pk89vJnmQC2xrYb9xqdkXwkeojDeBS6sLHcfH1mJoxZOocOHaIk
+        xwb4zTiqZCJRZTu32AMVFH8=
+X-Google-Smtp-Source: AA0mqf48tPPb6q5sAKo/3k5i0qCdV00M4VVrB74tcUjzLr8zSBtEO7xcSKjqRsEAEidNsdhv8cKLTw==
+X-Received: by 2002:a63:2251:0:b0:476:cb2a:b99b with SMTP id t17-20020a632251000000b00476cb2ab99bmr78744813pgm.436.1670328122675;
+        Tue, 06 Dec 2022 04:02:02 -0800 (PST)
+Received: from localhost.localdomain ([193.122.98.110])
+        by smtp.gmail.com with ESMTPSA id a10-20020a1709027e4a00b0018912c37c8fsm12376560pln.129.2022.12.06.04.02.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 04:02:02 -0800 (PST)
+From:   Xingjiang Qiao <nanpuyue@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Michael Shych <michaelsh@nvidia.com>,
+        Xingjiang Qiao <nanpuyue@gmail.com>,
         linux-hwmon@vger.kernel.org
-References: <20221205173611.145571-1-nanpuyue@gmail.com>
- <20221206055331.170459-1-nanpuyue@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20221206055331.170459-1-nanpuyue@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v3 1/2] hwmon: (emc2305) fix unable to probe emc2301/2/3
+Date:   Tue,  6 Dec 2022 20:01:49 +0800
+Message-Id: <20221206120149.176298-1-nanpuyue@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <eeb76b93-53d5-bc5b-b132-475c11f8ce1b@roeck-us.net>
+References: <eeb76b93-53d5-bc5b-b132-475c11f8ce1b@roeck-us.net>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 12/5/22 21:53, Xingjiang Qiao wrote:
-> The definitions of 'EMC2305_REG_PRODUCT_ID' and 'EMC2305_REG_DEVICE' are
-> both '0xfd', they actually return the same value, but the values returned
-> by emc2301/2/3/5 are different, so probe emc2301/2/3 will fail, This patch
-> fixes that.
+> Please stop sending new versions of your patches as reply to previous versions,
+> and please provide change logs. I have no idea what is different between
+> versions 2 and 3 of this patch, and v2 as well as v3 almost got lost.
 > 
-> Signed-off-by: Xingjiang Qiao <nanpuyue@gmail.com>
+> Guenter
 
-Please stop sending new versions of your patches as reply to previous versions,
-and please provide change logs. I have no idea what is different between
-versions 2 and 3 of this patch, and v2 as well as v3 almost got lost.
+Sorry about that.
 
-Guenter
+And the changlogs of the patch 1/2 is:
 
-> ---
->   drivers/hwmon/emc2305.c | 7 +------
->   1 file changed, 1 insertion(+), 6 deletions(-)
+- V1 -> V2: Just remove the check for 'EMC2305_REG_DEVICE' instead of
+  moving the functionality of 'emc2305_identify'
+- V2 -> V3: Reword the commit as there is no emc2304
+
+changlogs of the patch 2/2 is:
+
+- V1 -> V2: No substantive changes, was going to send later, but v3 has
+  being sent before that (sorry about that again)
+- V1 -> V3: Add 'emc2305_set_cur_state_shim' to avoid updating
+  'last_thermal_state' when cooling state is set by 'hwmon' subsystem
+
+The v3 patch 2/2 can be found at:
+https://lore.kernel.org/all/20221206055331.170459-2-nanpuyue@gmail.com/
+
+Should I resend them?
+
+One more question about 'EMC2305_FAN_MAX_STATE':
+https://lore.kernel.org/all/20221206053029.169506-1-nanpuyue@gmail.com/
+
+> The value range of the chip's 'FAN DRIVE SETTING' register is 0-255.
+> But currently, the driver can only set up to 10 values at most (even via
+> the 'hwmon' subsystem) when the 'thermal' subsystem is reachable, and
+> there is no way to increase this limit via "emc2305_platform_data".
 > 
-> diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
-> index aa1f25add0b6..9a78ca22541e 100644
-> --- a/drivers/hwmon/emc2305.c
-> +++ b/drivers/hwmon/emc2305.c
-> @@ -16,7 +16,6 @@ static const unsigned short
->   emc2305_normal_i2c[] = { 0x27, 0x2c, 0x2d, 0x2e, 0x2f, 0x4c, 0x4d, I2C_CLIENT_END };
->   
->   #define EMC2305_REG_DRIVE_FAIL_STATUS	0x27
-> -#define EMC2305_REG_DEVICE		0xfd
->   #define EMC2305_REG_VENDOR		0xfe
->   #define EMC2305_FAN_MAX			0xff
->   #define EMC2305_FAN_MIN			0x00
-> @@ -524,7 +523,7 @@ static int emc2305_probe(struct i2c_client *client, const struct i2c_device_id *
->   	struct device *dev = &client->dev;
->   	struct emc2305_data *data;
->   	struct emc2305_platform_data *pdata;
-> -	int vendor, device;
-> +	int vendor;
->   	int ret;
->   	int i;
->   
-> @@ -535,10 +534,6 @@ static int emc2305_probe(struct i2c_client *client, const struct i2c_device_id *
->   	if (vendor != EMC2305_VENDOR)
->   		return -ENODEV;
->   
-> -	device = i2c_smbus_read_byte_data(client, EMC2305_REG_DEVICE);
-> -	if (device != EMC2305_DEVICE)
-> -		return -ENODEV;
-> -
->   	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
->   	if (!data)
->   		return -ENOMEM;
-
+> Should the "pdata->max_state > EMC2305_FAN_MAX_STATE" check be removed?
+> Or 'EMC2305_FAN_MAX_STATE' should be defined as '0xff'?
+> 
+> This should be the third patch?
+> 
+> 
+> > 	pdata = dev_get_platdata(&client->dev);
+> > 	if (pdata) {
+> > 		if (!pdata->max_state || pdata->max_state > EMC2305_FAN_MAX_STATE)
+> > 			return -EINVAL;
+> > 		data->max_state = pdata->max_state;
