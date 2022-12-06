@@ -2,113 +2,111 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35604C352A1
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Dec 2022 12:05:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86B10C4708C
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Dec 2022 17:45:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235317AbiLFMFP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Dec 2022 07:05:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
+        id S229484AbiLFRpi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Dec 2022 12:45:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235313AbiLFMEn (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Dec 2022 07:04:43 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C86728E02
-        for <linux-hwmon@vger.kernel.org>; Tue,  6 Dec 2022 04:02:03 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id t18so3984001pfq.13
-        for <linux-hwmon@vger.kernel.org>; Tue, 06 Dec 2022 04:02:03 -0800 (PST)
+        with ESMTP id S229448AbiLFRph (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Dec 2022 12:45:37 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED5237201
+        for <linux-hwmon@vger.kernel.org>; Tue,  6 Dec 2022 09:45:36 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id g10so14635644plo.11
+        for <linux-hwmon@vger.kernel.org>; Tue, 06 Dec 2022 09:45:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HUoakayqhFKDKE4DaNdlFCE2+L8ZIJYRgf5IW1pz5X8=;
-        b=W9m/Uy4KJ/Re3ir1JS2F85EUSV0+y6F5l+lTOsLBV6DVCvwszUnYmaJKpYagi4Bldw
-         xEEvmZZs8OUIj7bkULWxPgNtwdEMD5eSf4rwlvIg2oIQr0kYpHHYsZOlaSPx5x+Hpp96
-         ALbbLegI/65/K5H7ELSPWmUyd5nWkBXt/MXbaQoJGcl+WRUjLmnAQcLWb1hgoW/5n2kc
-         4IyYZoIATqcDN3trZ2APFP/aj85hFp0kk1K/oSm8Do5TAP0g+IVMxz783FvH6a8iGs65
-         YW+OUd/ph3gbvliYwWx3uTOVUvjoopdR0VzbxrmKw/C3NXF7Y9IKSUFjPzBC9h4m8DHK
-         N4Dw==
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QnXuCMBJLGvaQ8GD/oAIn2hbJLbNYlY5oG7JUQ6WrZs=;
+        b=Car3FCxir2IE4cCpDcdBvjDJODCtqU/FMnhPBQ2ZChw6LybsvXbSbeYIgCEpqS8zBk
+         O/bxcfu3V4iJBezsRvo6tIt26lzNsUEkzolUMvX8tnvcPUJZpNENQ3KuIYGEltvAbESe
+         kGByCtOcbf6ztbG7j7qI6gqmxiGXN2o8iBeVpgxkU/yXsZgsWcESWVqEhLhg0gCMgVFo
+         GpMQ9XoKlYkEhnvfY6KNa+LUfgqA1AyKMhMA7rnAObIHx2v/TzBYVoj3TobWg81LDXTs
+         epubBmQA9sYHkjid0ofIfDBnrGw4+sDXl/t30F4bxM97+yppivRJV0AgegKWVHoEKA1X
+         X+nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HUoakayqhFKDKE4DaNdlFCE2+L8ZIJYRgf5IW1pz5X8=;
-        b=MvB+V/GWdsyp3oB+BdqMws8tNLZ5hKWfBFGU8B3NX/7vNXaz2+rQGRlX9UGd9iyt/y
-         VaIAiH6/XzYlaVNPrqd5emRpSK41/+rhaasmbx2rWu9ukAjEMDitXtDChghz6ENNpao4
-         Rt/w1n/OseVEpFLERt038Ke0BAVWjNIjYhb8aXbNVsmblwigSlymF2RC8sUAlaNHKrpi
-         29l8cSkUn33swWAR/LqHQTfog8GDac7hH2CuBL4OkjbLT/3aRewaO1UdCZV5tfLnITFq
-         0nAl+IjIlqc1S7Xtta2m83lBjHAcxz+FJJRAQfE5dzD4TjaMXGz4RuCE33+/y4dG8jxz
-         m4Tw==
-X-Gm-Message-State: ANoB5pk89vJnmQC2xrYb9xqdkXwkeojDeBS6sLHcfH1mJoxZOocOHaIk
-        xwb4zTiqZCJRZTu32AMVFH8=
-X-Google-Smtp-Source: AA0mqf48tPPb6q5sAKo/3k5i0qCdV00M4VVrB74tcUjzLr8zSBtEO7xcSKjqRsEAEidNsdhv8cKLTw==
-X-Received: by 2002:a63:2251:0:b0:476:cb2a:b99b with SMTP id t17-20020a632251000000b00476cb2ab99bmr78744813pgm.436.1670328122675;
-        Tue, 06 Dec 2022 04:02:02 -0800 (PST)
-Received: from localhost.localdomain ([193.122.98.110])
-        by smtp.gmail.com with ESMTPSA id a10-20020a1709027e4a00b0018912c37c8fsm12376560pln.129.2022.12.06.04.02.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 04:02:02 -0800 (PST)
-From:   Xingjiang Qiao <nanpuyue@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Michael Shych <michaelsh@nvidia.com>,
-        Xingjiang Qiao <nanpuyue@gmail.com>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] hwmon: (emc2305) fix unable to probe emc2301/2/3
-Date:   Tue,  6 Dec 2022 20:01:49 +0800
-Message-Id: <20221206120149.176298-1-nanpuyue@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <eeb76b93-53d5-bc5b-b132-475c11f8ce1b@roeck-us.net>
-References: <eeb76b93-53d5-bc5b-b132-475c11f8ce1b@roeck-us.net>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QnXuCMBJLGvaQ8GD/oAIn2hbJLbNYlY5oG7JUQ6WrZs=;
+        b=vC4k4RXDNYkxu2SHtXOpLU9Z1FAe2Nn6G9FPC3xVuPUdFC0Yr/skwFeCkHx7MfLnE4
+         KJ9f0uSOcj/s2FPhu/NO+RxHSGGVgr5DsIxVsHZJqfyl8gHfwRraEKAaEBEnfd7WTv2A
+         IKndCD2BPLuLTJyqa0OvJkwB/DRgyPbayD29Q4iOzhU3QwwX2domGsU9KsTEari39MB6
+         M+9EpgZ4k3jyU0iUjcH12m2arXLLjPLgxdka40CavxkKG9RRqkqmBLaK/lWeGJalBLxK
+         TLDatFb/uAIaGbDN758P+TdeRN344zL0sUupLhCJhAY9sbiPaCGxi4isks11t1rKD3Lt
+         L+Qw==
+X-Gm-Message-State: ANoB5pnhw6I5MWi1FID8PUEDrXENkLnIZ+/fU8QBEeS089upIAaJ948b
+        2fNtlG192hdvj38+K70ENlnqxg==
+X-Google-Smtp-Source: AA0mqf63M5QudRaFUyWkka3wLk0yj7w6tH3rMCRjclZAEfsaj6iitdAM4YgOb8a9ZCk928yrZDL1Ig==
+X-Received: by 2002:a05:6a20:441e:b0:ac:16ae:1082 with SMTP id ce30-20020a056a20441e00b000ac16ae1082mr795935pzb.32.1670348736388;
+        Tue, 06 Dec 2022 09:45:36 -0800 (PST)
+Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
+        by smtp.gmail.com with ESMTPSA id s1-20020a635241000000b0046ff3634a78sm10143474pgl.71.2022.12.06.09.45.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 09:45:35 -0800 (PST)
+Message-ID: <77c5a9e2-ce25-df19-1eba-ba4808bbeb9d@9elements.com>
+Date:   Tue, 6 Dec 2022 23:15:31 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v8 4/4] hwmon: (max6639) Add pwm support
+To:     Guenter Roeck <linux@roeck-us.net>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-pwm@vger.kernel.org, kernel@pengutronix.de
+References: <20221129161134.2672474-1-Naresh.Solanki@9elements.com>
+ <20221129161134.2672474-5-Naresh.Solanki@9elements.com>
+ <20221129163427.dxnqfay6ur6mvivu@pengutronix.de>
+ <d2d54a34-56dc-df83-5fde-ad0a9a73a9e0@roeck-us.net>
+Content-Language: en-US
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <d2d54a34-56dc-df83-5fde-ad0a9a73a9e0@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> Please stop sending new versions of your patches as reply to previous versions,
-> and please provide change logs. I have no idea what is different between
-> versions 2 and 3 of this patch, and v2 as well as v3 almost got lost.
+Hi Guenter, Rob
+
+On 29-11-2022 10:11 pm, Guenter Roeck wrote:
+> On 11/29/22 08:34, Uwe Kleine-König wrote:
+>> On Tue, Nov 29, 2022 at 05:11:34PM +0100, Naresh Solanki wrote:
+>>> Add pwm support for max6639. Also configure pwm fan speed based on pwm
+>>> provided in DT.
+>>
+>> Did you do anything to resolve the questions I had in reply to v5? If
+>> yes, I must have missed it.
+>>
+> 
+> I don't see a response to my concerns either, especially regarding fan mode
+> (dc vs. pwm) in the bindings. For that reason, I won't even look at the 
+> series.
+Best I can think of regulator with voltage control. Because as per my 
+understanding, DC control fan essentially control DC voltage on negative 
+pin of fan.
+
+
+Regards,
+Naresh
 > 
 > Guenter
-
-Sorry about that.
-
-And the changlogs of the patch 1/2 is:
-
-- V1 -> V2: Just remove the check for 'EMC2305_REG_DEVICE' instead of
-  moving the functionality of 'emc2305_identify'
-- V2 -> V3: Reword the commit as there is no emc2304
-
-changlogs of the patch 2/2 is:
-
-- V1 -> V2: No substantive changes, was going to send later, but v3 has
-  being sent before that (sorry about that again)
-- V1 -> V3: Add 'emc2305_set_cur_state_shim' to avoid updating
-  'last_thermal_state' when cooling state is set by 'hwmon' subsystem
-
-The v3 patch 2/2 can be found at:
-https://lore.kernel.org/all/20221206055331.170459-2-nanpuyue@gmail.com/
-
-Should I resend them?
-
-One more question about 'EMC2305_FAN_MAX_STATE':
-https://lore.kernel.org/all/20221206053029.169506-1-nanpuyue@gmail.com/
-
-> The value range of the chip's 'FAN DRIVE SETTING' register is 0-255.
-> But currently, the driver can only set up to 10 values at most (even via
-> the 'hwmon' subsystem) when the 'thermal' subsystem is reachable, and
-> there is no way to increase this limit via "emc2305_platform_data".
 > 
-> Should the "pdata->max_state > EMC2305_FAN_MAX_STATE" check be removed?
-> Or 'EMC2305_FAN_MAX_STATE' should be defined as '0xff'?
+>> Note that maintainer time is scarce and with sending new versions of a
+>> patch with no sign that you improved in the aspects that were critized
+>> before, you're burning that scarce time and loosing the good will of the
+>> responsible maintainers.
+>>
+>> Best regards
+>> Uwe
+>>
 > 
-> This should be the third patch?
-> 
-> 
-> > 	pdata = dev_get_platdata(&client->dev);
-> > 	if (pdata) {
-> > 		if (!pdata->max_state || pdata->max_state > EMC2305_FAN_MAX_STATE)
-> > 			return -EINVAL;
-> > 		data->max_state = pdata->max_state;
