@@ -2,156 +2,365 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B8F8C3A5A7
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Dec 2022 22:47:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86BAAC352A1
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Dec 2022 03:51:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbiLFWrB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Dec 2022 17:47:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
+        id S229775AbiLGDvs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Dec 2022 22:51:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiLFWqh (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Dec 2022 17:46:37 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107B94A07F
-        for <linux-hwmon@vger.kernel.org>; Tue,  6 Dec 2022 14:46:22 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id q18-20020a056830441200b006704633f258so3872012otv.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 06 Dec 2022 14:46:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n+hmOP+7htJWAAk5TWvv2AZ42b3pmm8FuF0oJ6QpSpA=;
-        b=B4iyH11D1cFzMNNVSnwnMfejAWshWJoePoF27w/xQIuHOvjCMTSOY9t6oOZBC4hsk4
-         pFgEvLX/SGkq5wR2iQNs4y+WTYEfdo2RGXun5y8xvWUYejOzB4OHLxi5qcyENyL0jnjz
-         L4YHqtZ8vxCPVSxxXZsE2NQRWXVVR8eRN12RuzsHJj3AJ96phqSZA7vvlnBeT5RlpUi4
-         xWd+uE4E14LTIRvi4eV9Fm3Wy908W6tLpkFbk4o/FlyLKeb/B3EoAEyRdwwgtlTtmhjO
-         isKfrSzR/+Nf4Y2bMT6axNVYu6Btq77orYCip+mvwGa/zdXpoZRL2ks7JDADZV9ycOh8
-         /+lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n+hmOP+7htJWAAk5TWvv2AZ42b3pmm8FuF0oJ6QpSpA=;
-        b=gqijb/9qP6aVIMnEV8OXg6Br4pDXzEvqp7T1Vn2GSeuNAqBtLtGRsVZD46dy0H3R9T
-         tYR+BD7tkuEVv/LUchTluz5sxikOffncLyW+SnGqa7Pplx22oETjTLEV20//wxoteGU0
-         qfSfT4PedtpX0Buk0PSh8wMLuQYmwh4UWq0ElU+stwxfX6wMUrP92SjpOmZVYS4hgUm3
-         +oFy6wMEcEYxVLMPD2g59SEO8B8A81URegv5smcq/nWNOChZJ2WigPZS0mx8Z8rEBMYw
-         QpRQWEC3oH5AgU1OTTljy4vaqZj7nC6i0xh4pOFVVvAt0kWpnPgPPkxTo+xB776p+iMJ
-         JFSA==
-X-Gm-Message-State: ANoB5pmJ2EhZGxTjv8bBCitwtT5P5J88zDBQ7IVczAgcKdPzZQvyWVmi
-        mm8UgE4vNxZZ3Ta121aL6Cw=
-X-Google-Smtp-Source: AA0mqf7RsmdDCEYI+gXHMlnClTgjY2wGx2BWfOyjOdBASPZFsqbMGu4M5mql4PUBBZRck+Lt49BUpA==
-X-Received: by 2002:a05:6830:2b2b:b0:66c:52d6:50c8 with SMTP id l43-20020a0568302b2b00b0066c52d650c8mr45888390otv.200.1670366781002;
-        Tue, 06 Dec 2022 14:46:21 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l17-20020a056871069100b0013d6d924995sm11385024oao.19.2022.12.06.14.46.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 14:46:20 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 6 Dec 2022 14:46:19 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Xingjiang Qiao <nanpuyue@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Michael Shych <michaelsh@nvidia.com>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] hwmon: (emc2305) fix pwm never being able to set
- lower
-Message-ID: <20221206224619.GA1001408@roeck-us.net>
-References: <20221205173611.145571-1-nanpuyue@gmail.com>
- <20221206055331.170459-2-nanpuyue@gmail.com>
+        with ESMTP id S229544AbiLGDvr (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Dec 2022 22:51:47 -0500
+Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.144.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2769B55C88
+        for <linux-hwmon@vger.kernel.org>; Tue,  6 Dec 2022 19:51:45 -0800 (PST)
+Received: from atl1wswcm06.websitewelcome.com (unknown [50.6.129.167])
+        by atl3wswob02.websitewelcome.com (Postfix) with ESMTP id 734ADC3B5
+        for <linux-hwmon@vger.kernel.org>; Wed,  7 Dec 2022 03:51:44 +0000 (UTC)
+Received: from md-in-79.webhostbox.net ([43.225.55.182])
+        by cmsmtp with ESMTP
+        id 2lTBpOKiSIG5U2lTDpBPWv; Wed, 07 Dec 2022 03:51:44 +0000
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
+        ; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=IGd+S9iKxc/QWHPNM22V3DTZnmHuJbTeEl2S7KOPdTg=; b=FEyxXrPQoS41HvKRTptp5udgOA
+        1Jehj7dxZeCrCfAz5Rv2nM7i+RFlmSrFvPg7wtq/Q2Xt0EnzQAT169YLZG5QiOuaE7WpJLN2CVY20
+        txwCl9rEia9p0pCPTeIjaSigqdGRSoY9IqW+iDTCgLbq5y5WdlnespgorHtjqQb3GkDcggMRceKhk
+        DpmSM3Oz1sfb1C83wfN8I0sfyGYj2/AWmcsauiRyZlABHNdsAJgR6IhoTUG7vJGQePC7reFFKNEG/
+        hyg24qzH/2FpjtiYl0OcCYHqxRM8CJLB1A32SVqMT+ac79JEz6ptifOteSmNULVtinIHC62zcplaB
+        GtS+QRcQ==;
+Received: from [106.203.57.45] (port=20281 helo=[192.168.40.42])
+        by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <saravanan@linumiz.com>)
+        id 1p2lTA-001bAN-KR;
+        Wed, 07 Dec 2022 03:51:40 +0000
+Message-ID: <6773256d-2842-fadc-1222-f76e0b495eda@linumiz.com>
+Date:   Wed, 7 Dec 2022 04:51:37 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206055331.170459-2-nanpuyue@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 3/4] hwmon: (pmbus/mpq7932) Add a support for mpq7932
+ Power Management IC
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+        marten.lindahl@axis.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221201044643.1150870-1-saravanan@linumiz.com>
+ <20221201044643.1150870-4-saravanan@linumiz.com>
+ <00de62b2-51dc-2a72-6659-3425d5e1b72c@roeck-us.net>
+Content-Language: en-US
+From:   Saravanan Sekar <saravanan@linumiz.com>
+In-Reply-To: <00de62b2-51dc-2a72-6659-3425d5e1b72c@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - linumiz.com
+X-BWhitelist: no
+X-Source-IP: 106.203.57.45
+X-Source-L: No
+X-Exim-ID: 1p2lTA-001bAN-KR
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.40.42]) [106.203.57.45]:20281
+X-Source-Auth: saravanan@linumiz.com
+X-Email-Count: 7
+X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfHRlZ7NvAIKbnA82MT+A056lcuSPKFEd1O0AvBRqjNvQqF2XstyFmDCG2N7VCbbmKGWP0pH+vFm0YBXyWxxGqUXQgojp0ORPiK1r2TiP7gCQSDRvFJpd
+ np1ARjpHExqHPM17CoFd6nGJ+OXBeFmb3iqpvFTSnx2vaANgWohOxJyxH6ZNxNlRj2tAZTaxQug9cH0TriKaPz9iCSgxVdP5bmg=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 01:53:31PM +0800, Xingjiang Qiao wrote:
-> There are fields 'last_hwmon_state' and 'last_thermal_state' in the
-> structure 'emc2305_cdev_data', which respectively store the cooling state
-> set by the 'hwmon' and 'thermal' subsystem, and the driver author hopes
-> that if the state set by 'hwmon' is lower than the value set by 'thermal',
-> the driver will just save it without actually setting the pwm. Currently,
-> the 'last_thermal_state' also be updated by 'hwmon', which will cause the
-> cooling state to never be set to a lower value. This patch fixes that.
+On 01/12/22 16:34, Guenter Roeck wrote:
+> On 11/30/22 20:46, Saravanan Sekar wrote:
+>> The MPQ7932 is a power management IC designed to operate from 5V buses to
+>> power a variety of Advanced driver-assistance system SOCs. Six integrated
+>> buck converters with hardware monitoring capability powers a variety of
+>> target rails configurable over PMBus interface.
+>>
+>> Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
+>> ---
+>>   drivers/hwmon/pmbus/Kconfig   |  10 +++
+>>   drivers/hwmon/pmbus/Makefile  |   1 +
+>>   drivers/hwmon/pmbus/mpq7932.c | 144 ++++++++++++++++++++++++++++++++++
+>>   3 files changed, 155 insertions(+)
+>>   create mode 100644 drivers/hwmon/pmbus/mpq7932.c
+>>
+>> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+>> index 89668af67206..4a1538949a73 100644
+>> --- a/drivers/hwmon/pmbus/Kconfig
+>> +++ b/drivers/hwmon/pmbus/Kconfig
+>> @@ -317,6 +317,16 @@ config SENSORS_MP5023
+>>         This driver can also be built as a module. If so, the module will
+>>         be called mp5023.
+>> +config SENSORS_MPQ7932
+>> +    tristate "MPS MPQ7932"
 > 
-> Signed-off-by: Xingjiang Qiao <nanpuyue@gmail.com>
+> As written, a dependency on REGULATOR is missing. However, we want the 
+> driver
+> enabled even if CONFIG_REGULATOR is not enabled. I would suggest to 
+> follow the
+> approach used by other drivers: add a second configuration option
+> SENSORS_MPQ7932_REGULATOR which depends on SENSORS_MPQ7932 and REGULATOR
+> and enables regulator functionality, and use that in the driver to
+> make regulator support optional.
+> 
 
-Applied, after renaming emc2305_set_cur_state_shim to __emc2305_set_cur_state.
+Hello Guenter,
+
+I need clarification or confirmation from you before V3.
+
+Here is my view, communication to MPQ7932 PMIC chip is based on pmbus 
+specification.
+
+Now the conflict is that we have pmbus directory under hwmon subsystem, 
+if pmbus spec implementation would have been separate like i2c-smbus 
+then we can implement chip driver in regulator subsystem which access pmbus.
+
+pmbus_core does supports regulator framework PMBUS_REGUALTOR and I 
+believe it is valid MPQ7932 driver implantation under pmbus directory.
+
+Kindly suggest to remove pmbus dependency on hwmon and proceed further.
+
+
+>> +    help
+>> +      If you say yes here you get six integrated buck converter 
+>> regulator
+>> +      with hardware monitoring functionality support for power 
+>> management
+>> +      IC MPS MPQ7932.
+> 
+> That description is more appropriate for the second configuration option.
+> Primarily one gets hardware monitoring support for the chip.
+> 
+>> +
+>> +      This driver can also be built as a module. If so, the module will
+>> +      be called mpq7932.
+>> +
+>>   config SENSORS_PIM4328
+>>       tristate "Flex PIM4328 and compatibles"
+>>       help
+>> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+>> index 0002dbe22d52..28a534629cc3 100644
+>> --- a/drivers/hwmon/pmbus/Makefile
+>> +++ b/drivers/hwmon/pmbus/Makefile
+>> @@ -34,6 +34,7 @@ obj-$(CONFIG_SENSORS_MAX8688)    += max8688.o
+>>   obj-$(CONFIG_SENSORS_MP2888)    += mp2888.o
+>>   obj-$(CONFIG_SENSORS_MP2975)    += mp2975.o
+>>   obj-$(CONFIG_SENSORS_MP5023)    += mp5023.o
+>> +obj-$(CONFIG_SENSORS_MPQ7932_REGULATOR) += mpq7932.o
+>>   obj-$(CONFIG_SENSORS_PLI1209BC)    += pli1209bc.o
+>>   obj-$(CONFIG_SENSORS_PM6764TR)    += pm6764tr.o
+>>   obj-$(CONFIG_SENSORS_PXE1610)    += pxe1610.o
+>> diff --git a/drivers/hwmon/pmbus/mpq7932.c 
+>> b/drivers/hwmon/pmbus/mpq7932.c
+>> new file mode 100644
+>> index 000000000000..3747d7862afd
+>> --- /dev/null
+>> +++ b/drivers/hwmon/pmbus/mpq7932.c
+>> @@ -0,0 +1,144 @@
+>> +/*
+>> + * SPDX-License-Identifier: GPL-2.0+
+> 
+> The SPDX license must be in the first line and be a C++ style comment.
+> Please run checkpatch --strict and fix what it reports (including the
+> various continuation line misalignments and unnecessary empty lines).
+> 
+>> + *
+>> + * mpq7932.c  - regulator driver for mps mpq7932
+>> + * Copyright 2022 Monolithic Power Systems, Inc
+> 
+> This is a hwmon driver with optional regulator functionality.
+> 
+>> + *
+>> + * Author: Saravanan Sekar <saravanan@linumiz.com>
+>> + */
+>> +
+>> +#include <linux/err.h>
+>> +#include <linux/i2c.h>
+>> +#include <linux/init.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/pmbus.h>
+>> +#include "pmbus.h"
+>> +
+>> +#define MPQ7932_BUCK_UV_MIN        206250
+>> +#define MPQ7932_UV_STEP            6250
+>> +#define MPQ7932_N_VOLTAGES        0xFF
+>> +#define MPQ7932_NUM_PAGES        6
+>> +
+>> +#define MPQ7932_TON_DELAY        0x60
+>> +#define MPQ7932_VOUT_STARTUP_SLEW    0xA3
+>> +#define MPQ7932_VOUT_SHUTDOWN_SLEW    0xA5
+>> +#define MPQ7932_VOUT_SLEW_MASK        GENMASK(1, 0)
+>> +#define MPQ7932_TON_DELAY_MASK        GENMASK(4, 0)
+> 
+> Please include the appropriate include file defining GENMASK.
+> 
+>> +
+>> +struct mpq7932_data {
+>> +    struct pmbus_driver_info info;
+>> +    struct pmbus_platform_data pdata;
+>> +};
+>> +
+>> +static struct regulator_desc mpq7932_regulators_desc[] = {
+>> +    PMBUS_REGULATOR_STEP("buck", 0, MPQ7932_N_VOLTAGES,
+>> +                MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
+>> +    PMBUS_REGULATOR_STEP("buck", 1, MPQ7932_N_VOLTAGES,
+>> +                MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
+>> +    PMBUS_REGULATOR_STEP("buck", 2, MPQ7932_N_VOLTAGES,
+>> +                MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
+>> +    PMBUS_REGULATOR_STEP("buck", 3, MPQ7932_N_VOLTAGES,
+>> +                MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
+>> +    PMBUS_REGULATOR_STEP("buck", 4, MPQ7932_N_VOLTAGES,
+>> +                MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
+>> +    PMBUS_REGULATOR_STEP("buck", 5, MPQ7932_N_VOLTAGES,
+>> +                MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
+>> +};
+>> +
+>> +static int mpq7932_write_word_data(struct i2c_client *client, int 
+>> page, int reg,
+>> +                   u16 word)
+>> +{
+>> +
+>> +    switch (reg) {
+>> +    case PMBUS_VOUT_COMMAND:
+> 
+> This needs a comment explaining why it is needed.
+> 
+>> +        return pmbus_write_byte_data(client, page, reg, (u8)word);
+> 
+> word should be clamped to [0, 255], not cut off.
+> 
+>> +
+>> +    default:
+>> +        return -ENODATA;
+>> +    }
+>> +}
+>> +
+>> +static int mpq7932_read_word_data(struct i2c_client *client, int page,
+>> +                  int phase, int reg)
+>> +{
+>> +
+>> +    switch (reg) {
+>> +    case PMBUS_MFR_VOUT_MIN:
+>> +        return 0;
+>> +
+>> +    case PMBUS_MFR_VOUT_MAX:
+>> +        return MPQ7932_N_VOLTAGES;
+> 
+> The above need comments. Also, MPQ7932_N_VOLTAGES is inappropriate. This 
+> is not the
+> number of voltages, it is the maximum voltage. Even if the values happen 
+> to be the
+> same, the content is different.
+> 
+> Also, with PMBUS_MFR_VOUT_MIN=0 and PMBUS_MFR_VOUT_MAX=0xff, the number 
+> of voltages
+> would actually be 256, not 255.
+> 
+>> +
+>> +    case PMBUS_READ_VOUT:
+>> +        return pmbus_read_byte_data(client, page, PMBUS_VOUT_COMMAND);
+>> +
+> Needs same comment as above.
+> 
+>> +    default:
+>> +        return -ENODATA;
+>> +    }
+>> +}
+>> +
+>> +static int mpq7932_probe(struct i2c_client *client)
+>> +{
+>> +    struct mpq7932_data *data;
+>> +    struct pmbus_driver_info *info;
+>> +    struct device *dev = &client->dev;
+>> +    int i;
+>> +
+>> +    if (!i2c_check_functionality(client->adapter,
+>> +                     I2C_FUNC_SMBUS_READ_WORD_DATA))
+> 
+> Unnecessary check. This code doesn't use it, and pmbus_do_probe()
+> does its own check.
+> 
+>> +        return -ENODEV;
+>> +
+>> +    data = devm_kzalloc(&client->dev, sizeof(struct mpq7932_data),
+> 
+> Use dev.
+> 
+>> +                GFP_KERNEL);
+>> +    if (!data)
+>> +        return -ENOMEM;
+>> +
+>> +    info = &data->info;
+>> +    info->pages = MPQ7932_NUM_PAGES;
+>> +    info->num_regulators = ARRAY_SIZE(mpq7932_regulators_desc);
+>> +    info->reg_desc = mpq7932_regulators_desc;
+>> +    info->format[PSC_VOLTAGE_OUT] = direct;
+>> +    info->m[PSC_VOLTAGE_OUT] = 160;
+>> +    info->b[PSC_VOLTAGE_OUT] = -33;
+>> +    for (i = 0; i < info->pages; i++) {
+>> +        info->func[i] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+>> +                | PMBUS_HAVE_STATUS_TEMP;
+> 
+> I think I already asked: Is this really all telemetry supported by the 
+> chip ?
+> I keep asking because that would be highly unusual.
+> 
+
+Yes, only the above.
 
 Thanks,
-Guenter
+Saravanan
 
-> ---
->  drivers/hwmon/emc2305.c | 37 ++++++++++++++++++++++++-------------
->  1 file changed, 24 insertions(+), 13 deletions(-)
+>> +    }
+>> +
+>> +    info->read_word_data = mpq7932_read_word_data;
+>> +    info->write_word_data = mpq7932_write_word_data;
+>> +
+>> +    data->pdata.flags = PMBUS_NO_CAPABILITY;
+>> +    dev->platform_data = &data->pdata;
+>> +
+>> +    return pmbus_do_probe(client, info);
+>> +}
+>> +
+>> +static const struct of_device_id mpq7932_of_match[] = {
+>> +    { .compatible = "mps,mpq7932"},
+>> +    {},
+>> +};
+>> +MODULE_DEVICE_TABLE(of, mpq7932_of_match);
+>> +
+>> +static const struct i2c_device_id mpq7932_id[] = {
+>> +    { "mpq7932", },
+>> +    { },
+>> +};
+>> +MODULE_DEVICE_TABLE(i2c, mpq7932_id);
+>> +
+>> +static struct i2c_driver mpq7932_regulator_driver = {
+>> +    .driver = {
+>> +        .name = "mpq7932",
+>> +        .of_match_table = mpq7932_of_match,
+>> +    },
+>> +    .probe_new = mpq7932_probe,
+>> +    .id_table = mpq7932_id,
+>> +};
+>> +module_i2c_driver(mpq7932_regulator_driver);
+>> +
+>> +MODULE_AUTHOR("Saravanan Sekar <saravanan@linumiz.com>");
+>> +MODULE_DESCRIPTION("MPQ7932 PMIC regulator driver");
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_IMPORT_NS(PMBUS);
 > 
-> diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
-> index 9a78ca22541e..e0f6eb8d72fc 100644
-> --- a/drivers/hwmon/emc2305.c
-> +++ b/drivers/hwmon/emc2305.c
-> @@ -171,22 +171,12 @@ static int emc2305_get_max_state(struct thermal_cooling_device *cdev, unsigned l
->  	return 0;
->  }
->  
-> -static int emc2305_set_cur_state(struct thermal_cooling_device *cdev, unsigned long state)
-> +static int emc2305_set_cur_state_shim(struct emc2305_data *data, int cdev_idx, unsigned long state)
->  {
-> -	int cdev_idx, ret;
-> -	struct emc2305_data *data = cdev->devdata;
-> +	int ret;
->  	struct i2c_client *client = data->client;
->  	u8 val, i;
->  
-> -	if (state > data->max_state)
-> -		return -EINVAL;
-> -
-> -	cdev_idx =  emc2305_get_cdev_idx(cdev);
-> -	if (cdev_idx < 0)
-> -		return cdev_idx;
-> -
-> -	/* Save thermal state. */
-> -	data->cdev_data[cdev_idx].last_thermal_state = state;
->  	state = max_t(unsigned long, state, data->cdev_data[cdev_idx].last_hwmon_state);
->  
->  	val = EMC2305_PWM_STATE2DUTY(state, data->max_state, EMC2305_FAN_MAX);
-> @@ -211,6 +201,27 @@ static int emc2305_set_cur_state(struct thermal_cooling_device *cdev, unsigned l
->  	return 0;
->  }
->  
-> +static int emc2305_set_cur_state(struct thermal_cooling_device *cdev, unsigned long state)
-> +{
-> +	int cdev_idx, ret;
-> +	struct emc2305_data *data = cdev->devdata;
-> +
-> +	if (state > data->max_state)
-> +		return -EINVAL;
-> +
-> +	cdev_idx =  emc2305_get_cdev_idx(cdev);
-> +	if (cdev_idx < 0)
-> +		return cdev_idx;
-> +
-> +	/* Save thermal state. */
-> +	data->cdev_data[cdev_idx].last_thermal_state = state;
-> +	ret = emc2305_set_cur_state_shim(data, cdev_idx, state);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
->  static const struct thermal_cooling_device_ops emc2305_cooling_ops = {
->  	.get_max_state = emc2305_get_max_state,
->  	.get_cur_state = emc2305_get_cur_state,
-> @@ -401,7 +412,7 @@ emc2305_write(struct device *dev, enum hwmon_sensor_types type, u32 attr, int ch
->  				 */
->  				if (data->cdev_data[cdev_idx].last_hwmon_state >=
->  				    data->cdev_data[cdev_idx].last_thermal_state)
-> -					return emc2305_set_cur_state(data->cdev_data[cdev_idx].cdev,
-> +					return emc2305_set_cur_state_shim(data, cdev_idx,
->  							data->cdev_data[cdev_idx].last_hwmon_state);
->  				return 0;
->  			}
