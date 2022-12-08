@@ -2,58 +2,58 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0090CC63705
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Dec 2022 08:22:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4BD7C63709
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Dec 2022 11:02:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbiLHIWr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Dec 2022 03:22:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
+        id S229665AbiLHLBj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Dec 2022 06:01:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiLHIWp (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Dec 2022 03:22:45 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2972EAE7F
-        for <linux-hwmon@vger.kernel.org>; Thu,  8 Dec 2022 00:22:44 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so3896886pje.5
-        for <linux-hwmon@vger.kernel.org>; Thu, 08 Dec 2022 00:22:44 -0800 (PST)
+        with ESMTP id S230259AbiLHLAf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Dec 2022 06:00:35 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A1E248C1
+        for <linux-hwmon@vger.kernel.org>; Thu,  8 Dec 2022 02:57:14 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id v3so900462pgh.4
+        for <linux-hwmon@vger.kernel.org>; Thu, 08 Dec 2022 02:57:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7u/E5qpdHwFQuHeaPU2cEPl1VrhfJjZCudUhgqf6PS4=;
-        b=zIICd3HQmh+fecmGSrbUQMD3zmtzx+bfsFr6o8meAHfbGoqA6dXKsdNQ2s5Sxtn3xS
-         xTYIxAFw/dmd14039xC1dFywEtxcf1sgW3WPXQ3mw7KCpROMWnIPhUz6XQPDgoBQCQaH
-         xUGOsubLCOJty5hwpmdjnOobW03CFChjaZOZc2B0fugRPQLO7AFuADqSgj92EPi77zka
-         tTfudr9abjUP7rcsZj7tmaiPlV5OipoEbngQQ4YerRvrC+OGJ63nRJU3aUjefLACWlX/
-         OCZsUfZmFL+iuVvnsFWEO6SVJw+3hO//VERjEr8SVVNbCILaZT+AOsMlAvKdQSJGGH2l
-         E/2Q==
+        bh=p6Hy6inKJaWeXfEPAcwWc9YGEOkG6OFcL/TidBUWVYw=;
+        b=Qa23l/w0kOmruayCdapirmF1WzXk+IUl6eYbb6lgzuhAZ3dmENgulc+Co/h1uqb7H8
+         32wmfxzPEK8J0O5V28NuVUyEWlaOyvJFmE3Oyklkw6NSYIZPhBH/OPoCcy1XbPyACAFJ
+         OWz2rFaoPtJOeCFz4ZG5PnFdgmGFJDWJ+lacAynuiW7IaAHvBjw1lbPO+EKzPMbGHTAa
+         +but+j2+scUg9bHbG9CNYF1l6B1LgyYtcr8w87iFeyuenBveaTMm/XJdUGiI8sJ4Votc
+         mxI3z3BSoovKa0TOjLl4gcDATeq/P8b7u8jYASD8t8Pg2hteyQhpSEg8T4SfXQvGrIbO
+         +JcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7u/E5qpdHwFQuHeaPU2cEPl1VrhfJjZCudUhgqf6PS4=;
-        b=JIu4gvQv8zpMhPuk/kA9tPJLrO1LUbEQZZf+UddRW79poXJqFqAMipT6tCR8YBxLi1
-         5PBrtFzgtwVUvpJvqMH/EQTHjhVpPODkLwWzfQoaKy3n79Em/1vvBUrIk12F8EA4YHeA
-         ci+/FmLfx2DzUs0PlkIqc4I41k065G+4jby+BiNASc+V++1OTdtcqKNx29gWKSp90nrV
-         ys42K3DNdt/7I6vLUtlcSKv7/W7uhtIU0U/FqcBUgVBEcn5ZtQLZJziXsk6c6JES5dud
-         5B8VTjQrViZdx6LW4fBqCIWX5EUccPkgw2gIHTK9YRI/X3JNBoQjUXP7b0E13R0LuFxy
-         Kl+A==
-X-Gm-Message-State: ANoB5pnBqqmGQRkkalV5SP89qvloPpKFmg2Ta8H3cIKuMGvaQPSU0OKU
-        ae7dbSF+P8hp+nT0cyWmsk5bxQ==
-X-Google-Smtp-Source: AA0mqf64b8xGKD4D1SAtTLAAbF3xdkkMRv6p7PsPsPC7K60mDS165m0Zj8QKel7QZDYCB5BAzIdL4A==
-X-Received: by 2002:a05:6a20:9f05:b0:a5:798c:f929 with SMTP id mk5-20020a056a209f0500b000a5798cf929mr2180406pzb.10.1670487763592;
-        Thu, 08 Dec 2022 00:22:43 -0800 (PST)
-Received: from localhost ([49.7.199.160])
-        by smtp.gmail.com with ESMTPSA id w63-20020a626242000000b005624e2e0508sm14749705pfb.207.2022.12.08.00.22.42
+        bh=p6Hy6inKJaWeXfEPAcwWc9YGEOkG6OFcL/TidBUWVYw=;
+        b=yIRn5n08z5uo/qjySWI0xhPPBNzEcppsr077sep8PiGoBAzweLe3+FpJmhs0UPRP0U
+         vLegntxu7EytYx0X0wgDBqtpHOWm9kd1A2zvbmqFKUWYP0yfyM5sbZvydmUiLPGVjHk6
+         iAoG0uxH1Tb2oVk4FBUclJy+YROExb1YtzSKoZ9+Db5th79iWgDbzIeUT1J4JCLg1aPy
+         grzYj2EEjZ8aEDeb4qOxblqjmrFlFeCUEdul76pbhmrVfaqNloSxJfx2UkzXmQkl0zuP
+         vChkmFwFzL+FW34PdQMmXUfemS/GZe9YrTE3YVjQtlmFbVvWmP1yWBQ2nY7wIz2BE1mO
+         2Dzw==
+X-Gm-Message-State: ANoB5pn2rh4W81idUDlSuxsUjSeO6Wtiz2yhIQLamG/urVvqGxfwOhav
+        sztypBBSlyYT85TBxaJ9WHoSrAkBygcxJJ4J
+X-Google-Smtp-Source: AA0mqf4+gDti+xFAi1xfGDsEZPN+G/E4ZaRB7vavu8oRafy4oZdvKF9QvZdBVMEGLESVGHbH3pmKtg==
+X-Received: by 2002:a05:6a00:4188:b0:577:bd6c:5936 with SMTP id ca8-20020a056a00418800b00577bd6c5936mr791451pfb.16.1670497033809;
+        Thu, 08 Dec 2022 02:57:13 -0800 (PST)
+Received: from localhost ([49.7.199.230])
+        by smtp.gmail.com with ESMTPSA id h15-20020aa79f4f000000b005772d55df03sm5361326pfr.35.2022.12.08.02.57.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 00:22:43 -0800 (PST)
+        Thu, 08 Dec 2022 02:57:13 -0800 (PST)
 From:   Wang Xiaohua <wangxiaohua.1217@bytedance.com>
 To:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
         linux-hwmon@vger.kernel.org, jdelvare@suse.com,
         openbmc@lists.ozlabs.org, joel@jms.id.au
 Subject: [PATCH linux dev-6.0] pmbus: Add mp2971/mp2973 support in mp2975
-Date:   Thu,  8 Dec 2022 16:22:39 +0800
-Message-Id: <20221208082239.1062679-1-wangxiaohua.1217@bytedance.com>
+Date:   Thu,  8 Dec 2022 18:57:09 +0800
+Message-Id: <20221208105709.1266299-1-wangxiaohua.1217@bytedance.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -117,7 +117,7 @@ Signed-off-by: Wang Xiaohua <wangxiaohua.1217@bytedance.com>
  1 file changed, 372 insertions(+), 41 deletions(-)
 
 diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
-index 51986adfbf47..972b5b02dfdd 100644
+index 51986adfbf47..44dc62d67ccd 100644
 --- a/drivers/hwmon/pmbus/mp2975.c
 +++ b/drivers/hwmon/pmbus/mp2975.c
 @@ -52,10 +52,33 @@
@@ -446,7 +446,7 @@ index 51986adfbf47..972b5b02dfdd 100644
  	int ret;
 +	char *name;
 +
-+	name = (int)i2c_match_id(mp2975_id, client)->name;
++	name = (char *)i2c_match_id(mp2975_id, client)->name;
 +	if (name == NULL)
 +		return 0;
 +	if (!strcmp(name, "mp2971") || !strcmp(name, "mp2973")) {
