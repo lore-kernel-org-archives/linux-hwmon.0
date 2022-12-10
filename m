@@ -2,127 +2,688 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E657C4332F
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Dec 2022 14:36:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DF77C4332F
+	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Dec 2022 17:54:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiLIOgC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Dec 2022 09:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57132 "EHLO
+        id S229650AbiLJRyr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 10 Dec 2022 12:54:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiLIOgB (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Dec 2022 09:36:01 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2061d.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::61d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC3913F31;
-        Fri,  9 Dec 2022 06:36:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VduUwdcQD0c3Sht0awE2fQ5OFg5BL0o3CNFGdLIXYOGduaG2Wofe521K205f4wX05DPSa1mg8piNCfU5OgXgf/ZDeg0McggDnWRQ8YLag67TDVMOfgdBdah4ReLzRhDq5f96ymIPlH5YUGZm3vrbg694lrIJlFHeETwdI680woEn1KYP19WN9TvHICsJBh1KT5LZR+y2flppYRyVusAQZG3FWV8qgOwBXQXl+LnIbqyk2CCGPqEwLRx2/eGU1IiBHH8EXpUXw9GtrVCDQgfZTzFTPvUy1oWJIS2Zkxh2rh0ciYOHc2faPw2kzaG8NCIKjRfT1+jQ2rD44UxKc3PpiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CdlLRQWoNMbzDS+LDBqZZUuBOgcmo64YDdztOV9LKO0=;
- b=Ppt4v4/JfjU+d2Mnu1k6wo6+0a73TyvdNp2rJxKdNkjc/+Fnn800B3r93XHZHsVWFYET8US9fqS4wpzM56lVRgH3Bp6cA/1b9PjFcbgV3zBBH7UOmpLEPJCmHCWmffuoD7iCmF0b023T3B3GWK78iZUaD+ymO9aCtO2aJvsu1yzADiuZKz7G5eiTQbMrkyF6H4GDOUeJedHVZ5Opb7qjfN85Lz4jy2br8IoFSxzuHZfEMV/k8aRZLFIJlSuwsvKvk52WpUuS4a6fNXYjHhHBRoXjTlj5NXG32r+mfc4z0u6QcrK1oKLJdgpk/HlWGLgVCztqaIkhZvRu+usAiEg/XA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=suse.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CdlLRQWoNMbzDS+LDBqZZUuBOgcmo64YDdztOV9LKO0=;
- b=tWgRqyRZYx5nYnq6E3dtx8hKMViOFu2vxpfoQ6oARYIEp9y6zylhSOxdyzy8wS1QjGYkW+RR+a2DxRZHB+yYhqs7QGjSB0EI3HVsOjkfNrE009skBfmZYjEYQvZgSQS8oEXWXjQsl1RhNl2EsWGdV6ikhXKr5wTI5fmWesB3S1Y8sUzfK/7PERwWpbDF8bQn9A8k9G8Q/kUMZYs5ijUYNehp8pmrMK8thq7N1MK7EROQ1ugakNIlnVDDuQG0UQTPBNKB7VpDD1TROnhvQI2dWgvp5c6P+4vBTY+ULI3RGSXZ9mOLwNxCCNhU5++HISaR2T0dh8VwASQD4C3ZSsBt3A==
-Received: from CY5PR15CA0154.namprd15.prod.outlook.com (2603:10b6:930:67::21)
- by MW3PR12MB4521.namprd12.prod.outlook.com (2603:10b6:303:53::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.18; Fri, 9 Dec
- 2022 14:35:57 +0000
-Received: from CY4PEPF0000C97D.namprd02.prod.outlook.com
- (2603:10b6:930:67:cafe::24) by CY5PR15CA0154.outlook.office365.com
- (2603:10b6:930:67::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8 via Frontend
- Transport; Fri, 9 Dec 2022 14:35:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CY4PEPF0000C97D.mail.protection.outlook.com (10.167.241.136) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5880.8 via Frontend Transport; Fri, 9 Dec 2022 14:35:57 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 9 Dec 2022
- 06:35:48 -0800
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 9 Dec 2022
- 06:35:48 -0800
-Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server id 15.2.986.36 via Frontend Transport; Fri, 9 Dec
- 2022 06:35:47 -0800
-From:   James Hurley <jahurley@nvidia.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>,
-        <linux-kernel@vger.kernel.org>, <hdegoede@redhat.com>,
-        <markgross@kernel.org>, <vadimp@nvidia.com>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-hwmon@vger.kernel.org>
-CC:     James Hurley <jahurley@nvidia.com>,
-        David Thompson <davthompson@nvidia.com>,
-        Shravan Kumar Ramani <shravankr@nvidia.com>
-Subject: [PATCH v1 1/1] platform/mellanox: mlxbf-pmc: Fix event typo
-Date:   Fri, 9 Dec 2022 09:35:19 -0500
-Message-ID: <aadacdbbd3186c55e74ea9456fe011b77938eb6c.1670535330.git.jahurley@nvidia.com>
-X-Mailer: git-send-email 2.30.1
+        with ESMTP id S229475AbiLJRyq (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 10 Dec 2022 12:54:46 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2A4183B8;
+        Sat, 10 Dec 2022 09:54:44 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id p24-20020a0568301d5800b0066e6dc09be5so4801427oth.8;
+        Sat, 10 Dec 2022 09:54:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aDHX7cygh2F2PlO2m4bnZHnzuSLvlOnaM2jX4nIJQzw=;
+        b=SOJLTQpLE09vvcDojeTNge63yNLUD0UaiCPOrep0tmcOiRaXWXqitDSepu1dgkT+Rm
+         AbBjoP+xjfm9hIXzTlEzJoWtyUXAN9YKzxkP4s80Sn2BEDQGgcWqZDKJBZgWCM1WXaU2
+         v+vrbLxf/6OGGBiNOEhb7r3JKMt2HUApuy0PkASkhGSKUwFZI7ftrbIhhJxZQGXJUIHC
+         UUZqKV/0CeGnAGwTNC19GjksW49esa6zsVUlX8rAfZ30KKbL7w7D5eSxbbyXHgxyhRDI
+         WiM+BYXb1bn157uoqTfT/0Rk+VKkZRW7ahz/4NXYDA+40xlh6V5dl07IWkmYGcC1c8G+
+         Pg8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aDHX7cygh2F2PlO2m4bnZHnzuSLvlOnaM2jX4nIJQzw=;
+        b=uNSedDFxBm2OSWQusFFcwqE2OdM/BrLofSbTuTXaT+WT8C66v78/pOiPt3d1qF7Z3x
+         pXxKLhVDd8k6+FxcxS52huHk5r5a70Sw3oqRzdcR3nHfOEMS2r+e4LK/KlbBYxjTqnr0
+         G7kqRt180GP9Sqy+umehJ44kWzK7L99iJuqi9lWQbhZDLd3qwwMhmVRcaDTUoHeXgStS
+         dq0lZmHWkT7BKG+n6lLvM8HZM/36gL5x3pP8AHI0MKS34/2vwb1CouNv8I3HXdZa2B1b
+         bKz8N3aUmWLp5asNsQc8YV4BSPFMm2zORvAC5oMokEjT0/bqcGDdn3btZQCY/hwtTwfi
+         o6fw==
+X-Gm-Message-State: ANoB5pmN04eP3sQJ6eQ/vz9J5zJuS4fAuEshuxGBdSjR4/FPmLskk1OY
+        rstr0/k26Bj4dhFkRBBW8dIiNeJHvfw=
+X-Google-Smtp-Source: AA0mqf5cRz4eYx1FxpNwTMM7EODydd/U1dintZy3Wh6x5Ym0LXxGsiyA9ZELb96M6CcQlB+QRvvAUA==
+X-Received: by 2002:a05:6830:2907:b0:66e:aece:1fc6 with SMTP id z7-20020a056830290700b0066eaece1fc6mr4678330otu.23.1670694883433;
+        Sat, 10 Dec 2022 09:54:43 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m6-20020a05683026c600b00667ff6b7e9esm2114812otu.40.2022.12.10.09.54.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Dec 2022 09:54:43 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c319b24e-a2bf-9516-5ae3-1b7da73862f7@roeck-us.net>
+Date:   Sat, 10 Dec 2022 09:54:41 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Wang Xiaohua <wangxiaohua.1217@bytedance.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        jdelvare@suse.com, openbmc@lists.ozlabs.org, joel@jms.id.au
+References: <20221209024522.2102509-1-wangxiaohua.1217@bytedance.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH linux dev-6.0 v3] pmbus: Add mp2971/mp2973 support in
+ mp2975
+In-Reply-To: <20221209024522.2102509-1-wangxiaohua.1217@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000C97D:EE_|MW3PR12MB4521:EE_
-X-MS-Office365-Filtering-Correlation-Id: a8ac1609-3c54-4e42-5f16-08dad9f2af7a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QNwPe4is6urI7ZjHvUvw/lZsMlRtTqIUf3HFw6h5ckrYLUHCQIM4Fu45QwnmX1Efddb1klN8Akt6F5Xk1hrw0vbUAy9FIwaV6riuxgjy+I3+8f8QfUnJu2Zmra1sbh9V5vMAR+mB9ADBzBtFKvhUkHjBgS3DhRUNupS7OrfMZJV++6VlEGwXoUzhCbqFf1QLG8Q/S7GNYDFRCEWw55k6PrZkOeb1F9VcTw0SJhVtrGruWnRCEC5O0mq00DFIJPDU3wR7nSwkAjSXRlydf1namQNJLGm2IwPzkfBLlj6X2zFrxlvskBgiNATe2o/bdkn/t9aVRTdf3AbHjj/s33/l4KCDU2rWE51A+pmjdeQ6jEohHBARajMWFk3wEZctQDtab20Cl4xtWbMnksGhFilabosU/gvduMflRhFN5VmnuN99Ve3v/jNJ/HhJd4XKr/V0Fcd+onZ6lLJoDf069lz+vH4q2kaBHk6KJ6jCUVNf5baW4bjGFBZewyY01MICdf/d9ThG8Ydhg2MLqyIkUz5qqwXjLcK/9XxEAaMpW1d9rVnNJHeUSLVNhuOq085NBp+7/tmi1l3WYGM5ZqHOMqWth3Gd5T1155n5tAWHvsaKT82OhWVR5dmfcdqfmiyEN4y4Ej2GeJRZySydfnlrekkK+NoH24merBDlWa151ObEHI6Kh/qVabEO/0+kk69JGLHHXnSNMd1/R04dhYc0mr4qXKKt9XaIXddNoYIru8uPHU4=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(346002)(376002)(136003)(451199015)(36840700001)(40470700004)(46966006)(5660300002)(82310400005)(2906002)(107886003)(6666004)(478600001)(40460700003)(86362001)(7636003)(356005)(36860700001)(316002)(8676002)(36756003)(7696005)(40480700001)(41300700001)(4326008)(110136005)(54906003)(8936002)(70586007)(70206006)(83380400001)(82740400003)(2616005)(186003)(47076005)(426003)(336012)(26005)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2022 14:35:57.4597
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8ac1609-3c54-4e42-5f16-08dad9f2af7a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C97D.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4521
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Had a duplicate event typo, so just fixed the 1 character typo.
+On 12/8/22 18:45, Wang Xiaohua wrote:
+> Add mp2971/mp2973 support in mp2975
+> 
+> Tested with:
+> My unit only include mp2971 and mp2973 devices
+> MP2973:
+> cat /sys/bus/i2c/devices/5-0076/hwmon/hwmon24/*label
+> iin
+> iout1
+> iout2
+> vin
+> vout1
+> vout2
+> pin
+> pout1
+> pout2
+> cat /sys/bus/i2c/devices/5-0076/hwmon/hwmon24/*input
+> 0
+> 82500
+> 14000
+> 12187
+> 1787
+> 1793
+> 0
+> 148000000
+> 25000000
+> 54000
+> MP2971:
+> cat /sys/bus/i2c/devices/5-0062/hwmon/hwmon20/*label
+> iin
+> iout1
+> iout2
+> vin
+> vout1
+> vout2
+> pin
+> pout1
+> pout2
+> cat /sys/bus/i2c/devices/5-0062/hwmon/hwmon20/*input
+> 18500
+> 22000
+> 500
+> 12187
+> 1025
+> 1800
+> 226000000
+> 22000000
+> 1000000
+> 55000
+> 
 
-Fixes: 1a218d312e65 ("platform/mellanox: mlxbf-pmc: Add Mellanox BlueField PMC driver")
-Signed-off-by: James Hurley <jahurley@nvidia.com>
-Reviewed-by: David Thompson <davthompson@nvidia.com>
-Reviewed-by: Shravan Kumar Ramani <shravankr@nvidia.com>
----
- drivers/platform/mellanox/mlxbf-pmc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Test results are not very useful. Better use something like
+"grep . /sys/bus/i2c/devices/5-0062/hwmon/hwmon20/*".
 
-diff --git a/drivers/platform/mellanox/mlxbf-pmc.c b/drivers/platform/mellanox/mlxbf-pmc.c
-index 65b4a819f1bd..c2c9b0d3244c 100644
---- a/drivers/platform/mellanox/mlxbf-pmc.c
-+++ b/drivers/platform/mellanox/mlxbf-pmc.c
-@@ -358,7 +358,7 @@ static const struct mlxbf_pmc_events mlxbf_pmc_hnfnet_events[] = {
- 	{ 0x32, "DDN_DIAG_W_INGRESS" },
- 	{ 0x33, "DDN_DIAG_C_INGRESS" },
- 	{ 0x34, "DDN_DIAG_CORE_SENT" },
--	{ 0x35, "NDN_DIAG_S_OUT_OF_CRED" },
-+	{ 0x35, "NDN_DIAG_N_OUT_OF_CRED" },
- 	{ 0x36, "NDN_DIAG_S_OUT_OF_CRED" },
- 	{ 0x37, "NDN_DIAG_E_OUT_OF_CRED" },
- 	{ 0x38, "NDN_DIAG_W_OUT_OF_CRED" },
--- 
-2.30.1
+Either case, test results should be provided after "---" and not be part
+of the commit description. Instead, the commit description should explain
+what those chips actually are.
+
+
+> Signed-off-by: Wang Xiaohua <wangxiaohua.1217@bytedance.com>
+> 
+> v2:
+> - Fix auto build test WARNING
+> 
+> v3:
+> - Fix incorrect return code
+> ---
+>   drivers/hwmon/pmbus/mp2975.c | 415 +++++++++++++++++++++++++++++++----
+>   1 file changed, 374 insertions(+), 41 deletions(-)
+> 
+
+Update to Documentation/hwmon/mp2975.rst and
+Documentation/devicetree/bindings/trivial-devices.yaml required.
+
+However, there is a more severe problem: The changes are too complex
+for me to review, and the chip datasheets are not published. I can not evaluate
+if the changes are really needed, if there is a less complex solution,
+or if they even make sense. Someone with access to a datasheet will have
+to step up as maintainer for this driver.
+
+Additional comments inline.
+
+Guenter
+
+> diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
+> index 51986adfbf47..4d1b7ac1800e 100644
+> --- a/drivers/hwmon/pmbus/mp2975.c
+> +++ b/drivers/hwmon/pmbus/mp2975.c
+> @@ -52,10 +52,33 @@
+>   #define MP2975_MAX_PHASE_RAIL2	4
+>   #define MP2975_PAGE_NUM		2
+>   
+> +#define MP2971_RAIL2_FUNC                                                      \
+> +	(PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_IOUT |          \
+> +	 PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT)
+> +
+>   #define MP2975_RAIL2_FUNC	(PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | \
+>   				 PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | \
+>   				 PMBUS_HAVE_POUT | PMBUS_PHASE_VIRTUAL)
+>   
+> +struct mp2971_device_info {
+> +	int max_phase_rail1;
+> +	int max_phase_rail2;
+> +	int imvp9_en_r1_mask;
+> +	int imvp9_en_r2_mask;
+> +};
+> +
+> +struct mp2971_data {
+> +	struct pmbus_driver_info info;
+> +	int vid_step[MP2975_PAGE_NUM];
+> +	int vout_format[MP2975_PAGE_NUM];
+> +	int vout_mode[MP2975_PAGE_NUM];
+> +	int vout_exponent[MP2975_PAGE_NUM];
+> +	int max_phase_rail1;
+> +	int max_phase_rail2;
+> +	int imvp9_en_r1_mask;
+> +	int imvp9_en_r2_mask;
+> +};
+> +
+>   struct mp2975_data {
+>   	struct pmbus_driver_info info;
+>   	int vout_scale;
+> @@ -68,6 +91,9 @@ struct mp2975_data {
+>   	int curr_sense_gain[MP2975_PAGE_NUM];
+>   };
+>   
+> +static const struct i2c_device_id mp2975_id[];
+> +
+> +#define to_mp2971_data(x) container_of(x, struct mp2971_data, info)
+>   #define to_mp2975_data(x)  container_of(x, struct mp2975_data, info)
+>   
+>   static int mp2975_read_byte_data(struct i2c_client *client, int page, int reg)
+> @@ -95,6 +121,40 @@ mp2975_read_word_helper(struct i2c_client *client, int page, int phase, u8 reg,
+>   	return (ret > 0) ? ret & mask : ret;
+>   }
+>   
+> +static int
+> +mp2971_linear2direct(struct mp2971_data *data, int page, int val)
+> +{
+> +	/* simple case */
+> +	if (val == 0)
+> +		return 0;
+> +
+> +	/* LINEAR16 does not support negative voltages */
+> +	if (val < 0)
+> +		return 0;
+> +
+> +	/*
+> +	 * For a static exponents, we don't have a choice
+> +	 * but to adjust the value to it.
+> +	 */
+> +
+> +	if (data->vout_exponent[page] < 0)
+> +		val <<= -data->vout_exponent[page];
+> +	else
+> +		val >>= data->vout_exponent[page];
+> +	return clamp_val(val, 0, 0xffff);
+> +}
+> +
+> +static int
+> +mp2971_vid2direct(struct mp2971_data *data, int page, int val)
+> +{
+> +	int vrf = data->info.vrm_version[page];
+> +
+> +	if (vrf == imvp9)
+> +		return (val + 29) * data->vid_step[page];
+> +
+> +	return (val + 49) * data->vid_step[page];
+> +}
+> +
+
+This looks suspicious. VID -> voltage calculations should be well
+defined and be implemented in mp2975_vid2direct(). It is not entirely
+clear why a second conversion function should be needed, and why it would
+use different calculations with different results than those for
+mp2975.
+
+Example, for vrf == imvp9, 10mV step size, and vid==1:
+
+mp2971: (1 + 29) * 10 = 30 * 10 = 300
+mp2975: 200 + (1 - 1) * 10 = 200 + 0 = 200
+
+vid = 0xff = 255:
+
+mp2971: (255 + 29) * 10 = 284 * 10 = 2840
+mp2975: 200 + (255 - 1) * 10 = 200 + 254 * 10 = 2740
+
+Also questionable is how there could ever be an IMVP9 setting with 5mV
+step size since IMVP9 explicitly specifies a step size of 10mV.
+Also, the maximum voltage for IMVP9 is specified as 2.74V.
+
+>   static int
+>   mp2975_vid2direct(int vrf, int val)
+>   {
+> @@ -214,6 +274,74 @@ mp2975_read_phases(struct i2c_client *client, struct mp2975_data *data,
+>   	return ret;
+>   }
+>   
+> +static int
+> +mp2971_read_word_data(struct i2c_client *client, int page,
+> +				int phase, int reg)
+> +{
+> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> +	struct mp2971_data *data = to_mp2971_data(info);
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_OT_FAULT_LIMIT:
+> +	case PMBUS_VIN_OV_FAULT_LIMIT:
+> +	case PMBUS_VOUT_OV_FAULT_LIMIT:
+> +	case PMBUS_VOUT_UV_FAULT_LIMIT:
+> +	case PMBUS_READ_IOUT:
+> +		ret = mp2975_read_word_helper(client, page, phase,
+> +						 reg, GENMASK(15, 0));
+> +		break;
+> +	case PMBUS_READ_VOUT:
+> +		ret = mp2975_read_word_helper(client, page, phase, reg,
+> +					      GENMASK(11, 0));
+> +		if (ret < 0)
+> +			return ret;
+> +		/*
+> +		 * READ_VOUT can be provided in VID or direct format. The
+> +		 * format type is specified by bit 15 of the register
+> +		 * MP2971_MFR_DC_LOOP_CTRL. The driver enforces VOUT direct
+> +		 * format, since device allows to set the different formats for
+> +		 * the different rails and also all VOUT limits registers are
+> +		 * provided in a direct format. In case format is VID - convert
+> +		 * to direct.
+> +		 */
+> +		switch (data->vout_format[page]) {
+> +		case linear:
+> +			ret = mp2971_linear2direct(data, page, ret);
+> +			break;
+> +		case vid:
+> +			ret = mp2971_vid2direct(data, page, ret);
+> +			break;
+> +		case direct:
+> +			break;
+> +		default:
+> +			return -ENODATA;
+> +		}
+> +		break;
+> +	case PMBUS_UT_WARN_LIMIT:
+> +	case PMBUS_UT_FAULT_LIMIT:
+> +	case PMBUS_VIN_UV_WARN_LIMIT:
+> +	case PMBUS_VIN_UV_FAULT_LIMIT:
+> +	case PMBUS_VOUT_UV_WARN_LIMIT:
+> +	case PMBUS_VOUT_OV_WARN_LIMIT:
+> +	case PMBUS_VIN_OV_WARN_LIMIT:
+> +	case PMBUS_IIN_OC_FAULT_LIMIT:
+> +	case PMBUS_IOUT_OC_LV_FAULT_LIMIT:
+> +	case PMBUS_IIN_OC_WARN_LIMIT:
+> +	case PMBUS_IOUT_OC_WARN_LIMIT:
+> +	case PMBUS_IOUT_OC_FAULT_LIMIT:
+> +	case PMBUS_IOUT_UC_FAULT_LIMIT:
+> +	case PMBUS_POUT_OP_FAULT_LIMIT:
+> +	case PMBUS_POUT_OP_WARN_LIMIT:
+> +	case PMBUS_PIN_OP_WARN_LIMIT:
+> +		return -ENXIO;
+> +	default:
+> +		return -ENODATA;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+
+Much of that code seems duplicate from mp2975_read_word_data().
+Without datasheets I can not determine if this really makes sense
+and/or is needed, or if a single function can be used for all chips.
+
+>   static int mp2975_read_word_data(struct i2c_client *client, int page,
+>   				 int phase, int reg)
+>   {
+> @@ -365,6 +493,63 @@ mp2975_set_phase_rail2(struct pmbus_driver_info *info, int num_phases)
+>   		info->pfunc[MP2975_MAX_PHASE_RAIL1 - i] = PMBUS_HAVE_IOUT;
+>   }
+>   
+> +static int mp2971_identify_multiphase(struct i2c_client *client,
+> +				      struct mp2971_data *data,
+> +				      struct pmbus_driver_info *info)
+> +{
+> +	int ret;
+> +
+> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 2);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Identify multiphase for rail 1 - could be from 1 to 12. */
+> +	ret = i2c_smbus_read_word_data(client, MP2975_MFR_VR_MULTI_CONFIG_R1);
+> +	if (ret <= 0)
+> +		return ret;
+> +
+> +	info->phases[0] = ret & GENMASK(3, 0);
+> +
+> +	/*
+> +	 * The device provides a total of 8 PWM pins, and can be configured
+> +	 * to different phase count applications for rail 1 and rail 2.
+> +	 * Rail 1 can be set to 8 phases, while rail 2 can only be set to 4
+> +	 * phases at most. When rail 1’s phase count is configured as 0, rail
+> +	 * 1 operates with 1-phase DCM. When rail 2 phase count is configured
+> +	 * as 0, rail 2 is disabled.
+> +	 */
+> +	if (info->phases[0] > data->max_phase_rail1)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+
+Same here. The code is almost the same as mp2975_identify_multiphase().
+Again, without datasheets I can not determine if this really makes sense
+and/or is needed, or if a single function can be used for all chips.
+
+This is a recurring problem. It appears that the patch maximizes the
+changes against the current code instead of even trying to minimize them.
+Without datasheet, it is impossible to compare the chips to check if an
+implementation with fewer / less extensive changes would be warranted.
+
+> +
+> +static int
+> +mp2971_identify_vid(struct i2c_client *client, struct mp2971_data *data,
+> +			struct pmbus_driver_info *info, u32 reg, int page,
+> +			u32 imvp_bit, u32 vr_bit)
+> +{
+> +	int ret;
+> +
+> +	/* Identify VID mode and step selection. */
+> +	ret = i2c_smbus_read_word_data(client, reg);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (ret & imvp_bit) {
+> +		info->vrm_version[page] = imvp9;
+> +		data->vid_step[page] = MP2975_PROT_DEV_OV_OFF;
+> +	} else if (ret & vr_bit) {
+> +		info->vrm_version[page] = vr12;
+> +		data->vid_step[page] = MP2975_PROT_DEV_OV_ON;
+> +	} else {
+> +		info->vrm_version[page] = vr13;
+> +		data->vid_step[page] = MP2975_PROT_DEV_OV_OFF;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   static int
+>   mp2975_identify_multiphase(struct i2c_client *client, struct mp2975_data *data,
+>   			   struct pmbus_driver_info *info)
+> @@ -428,6 +613,68 @@ mp2975_identify_vid(struct i2c_client *client, struct mp2975_data *data,
+>   	return 0;
+>   }
+>   
+> +static int
+> +mp2971_identify_rails_vid(struct i2c_client *client, struct mp2971_data *data,
+> +				     struct pmbus_driver_info *info)
+> +{
+> +	int ret;
+> +
+> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 2);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Identify VID mode for rail 1. */
+> +	ret = mp2971_identify_vid(client, data, info,
+> +				  MP2975_MFR_VR_MULTI_CONFIG_R1, 0,
+> +				  data->imvp9_en_r1_mask,
+> +				  MP2975_VID_STEP_SEL_R1);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Identify VID mode for rail 2, if connected. */
+> +	if (info->phases[1])
+> +		ret = mp2971_identify_vid(client, data, info,
+> +					  MP2975_MFR_VR_MULTI_CONFIG_R2, 1,
+> +					  data->imvp9_en_r2_mask,
+> +					  MP2975_VID_STEP_SEL_R2);
+> +	return ret;
+> +}
+> +
+> +static int mp2971_identify_vout_format(struct i2c_client *client,
+> +				       struct mp2971_data *data,
+> +				       struct pmbus_driver_info *info)
+> +{
+> +	int i, ret, vout_mode;
+> +
+> +	for (i = 0; i < info->pages; i++) {
+> +		ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, i);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = i2c_smbus_read_byte_data(client, PMBUS_VOUT_MODE);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		vout_mode = ret;
+> +
+> +		switch (vout_mode >> 5) {
+> +		case 0:
+> +			data->vout_format[i] = linear;
+> +			data->vout_exponent[i] = ((s8)(vout_mode << 3)) >> 3;
+> +			break;
+> +		case 1:
+> +			data->vout_format[i] = vid;
+> +			break;
+> +		case 2:
+> +			data->vout_format[i] = direct;
+> +			break;
+> +		default:
+> +			return -ENODEV;
+> +		}
+> +	}
+> +	return 0;
+> +}
+> +
+>   static int
+>   mp2975_identify_rails_vid(struct i2c_client *client, struct mp2975_data *data,
+>   			  struct pmbus_driver_info *info)
+> @@ -659,6 +906,24 @@ mp2975_vout_per_rail_config_get(struct i2c_client *client,
+>   	return 0;
+>   }
+>   
+> +static struct pmbus_driver_info mp2971_info = {
+> +	.pages = 1,
+> +	.format[PSC_VOLTAGE_IN] = linear,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +	.format[PSC_TEMPERATURE] = linear,
+> +	.format[PSC_CURRENT_IN] = linear,
+> +	.format[PSC_CURRENT_OUT] = linear,
+> +	.format[PSC_POWER] = linear,
+> +	.m[PSC_VOLTAGE_OUT] = 1,
+> +	.R[PSC_VOLTAGE_OUT] = 3,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+> +		   PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+> +		   PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_POUT |
+> +		   PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
+> +	.read_byte_data = mp2975_read_byte_data,
+> +	.read_word_data = mp2971_read_word_data,
+> +};
+> +
+>   static struct pmbus_driver_info mp2975_info = {
+>   	.pages = 1,
+>   	.format[PSC_VOLTAGE_IN] = linear,
+> @@ -683,63 +948,131 @@ static struct pmbus_driver_info mp2975_info = {
+>   static int mp2975_probe(struct i2c_client *client)
+>   {
+>   	struct pmbus_driver_info *info;
+> -	struct mp2975_data *data;
+>   	int ret;
+> +	char *name;
+>   
+> -	data = devm_kzalloc(&client->dev, sizeof(struct mp2975_data),
+> -			    GFP_KERNEL);
+> -	if (!data)
+> -		return -ENOMEM;
+> +	name = (char *)i2c_match_id(mp2975_id, client)->name;
+>   
+> -	memcpy(&data->info, &mp2975_info, sizeof(*info));
+> -	info = &data->info;
+> +	if (!name)
+> +		return -EINVAL;
+>   
+> -	/* Identify multiphase configuration for rail 2. */
+> -	ret = mp2975_identify_multiphase_rail2(client);
+> -	if (ret < 0)
+> -		return ret;
+> +	if (!strcmp(name, "mp2971") || !strcmp(name, "mp2973")) {
+> +		struct mp2971_data *data;
+> +		struct mp2971_device_info *device_info;
+>   
+> -	if (ret) {
+> -		/* Two rails are connected. */
+> -		data->info.pages = MP2975_PAGE_NUM;
+> -		data->info.phases[1] = ret;
+> -		data->info.func[1] = MP2975_RAIL2_FUNC;
+> -	}
+> +		data = devm_kzalloc(&client->dev, sizeof(struct mp2971_data),
+> +					GFP_KERNEL);
+> +		if (!data)
+> +			return -ENOMEM;
+>   
+> -	/* Identify multiphase configuration. */
+> -	ret = mp2975_identify_multiphase(client, data, info);
+> -	if (ret)
+> -		return ret;
+> +		device_info =
+> +			(struct mp2971_device_info *)i2c_match_id(mp2975_id, client)
+> +				->driver_data;
+>   
+> -	/* Identify VID setting per rail. */
+> -	ret = mp2975_identify_rails_vid(client, data, info);
+> -	if (ret < 0)
+> -		return ret;
+> +		memcpy(&data->info, &mp2971_info, sizeof(*info));
+> +		info = &data->info;
+>   
+> -	/* Obtain current sense gain of power stage. */
+> -	ret = mp2975_current_sense_gain_get(client, data);
+> -	if (ret)
+> -		return ret;
+> +		if (device_info) {
+> +			data->imvp9_en_r1_mask = device_info->imvp9_en_r1_mask;
+> +			data->imvp9_en_r2_mask = device_info->imvp9_en_r2_mask;
+> +			data->max_phase_rail1 = device_info->max_phase_rail1;
+> +			data->max_phase_rail2 = device_info->max_phase_rail2;
+> +		}
+>   
+> -	/* Obtain voltage reference values. */
+> -	ret = mp2975_vref_get(client, data, info);
+> -	if (ret)
+> -		return ret;
+> +		/* Identify multiphase configuration for rail 2. */
+> +		ret = mp2975_identify_multiphase_rail2(client);
+> +		if (ret < 0)
+> +			return ret;
+>   
+> -	/* Obtain vout over-voltage scales. */
+> -	ret = mp2975_vout_ov_scale_get(client, data, info);
+> -	if (ret < 0)
+> -		return ret;
+> +		if (ret) {
+> +			/* Two rails are connected. */
+> +			data->info.pages = MP2975_PAGE_NUM;
+> +			data->info.phases[1] = ret;
+> +			data->info.func[1] = MP2971_RAIL2_FUNC;
+> +		}
+>   
+> -	/* Obtain offsets, maximum and format for vout. */
+> -	ret = mp2975_vout_per_rail_config_get(client, data, info);
+> -	if (ret)
+> -		return ret;
+> +		/* Identify multiphase configuration. */
+> +		ret = mp2971_identify_multiphase(client, data, info);
+> +		if (ret)
+> +			return ret;
+> +
+> +		/* Identify VID setting per rail. */
+> +		ret = mp2971_identify_rails_vid(client, data, info);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		/* Identify vout format. */
+> +		ret = mp2971_identify_vout_format(client, data, info);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +	} else {
+> +		struct mp2975_data *data;
+> +
+> +		data = devm_kzalloc(&client->dev, sizeof(struct mp2975_data),
+> +					GFP_KERNEL);
+> +		if (!data)
+> +			return -ENOMEM;
+> +
+> +		memcpy(&data->info, &mp2975_info, sizeof(*info));
+> +		info = &data->info;
+> +
+> +		/* Identify multiphase configuration for rail 2. */
+> +		ret = mp2975_identify_multiphase_rail2(client);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (ret) {
+> +			/* Two rails are connected. */
+> +			data->info.pages = MP2975_PAGE_NUM;
+> +			data->info.phases[1] = ret;
+> +			data->info.func[1] = MP2975_RAIL2_FUNC;
+> +		}
+> +
+> +		/* Identify multiphase configuration. */
+> +		ret = mp2975_identify_multiphase(client, data, info);
+> +		if (ret)
+> +			return ret;
+> +
+> +		/* Identify VID setting per rail. */
+> +		ret = mp2975_identify_rails_vid(client, data, info);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		/* Obtain current sense gain of power stage. */
+> +		ret = mp2975_current_sense_gain_get(client, data);
+> +		if (ret)
+> +			return ret;
+> +
+> +		/* Obtain voltage reference values. */
+> +		ret = mp2975_vref_get(client, data, info);
+> +		if (ret)
+> +			return ret;
+> +
+> +		/* Obtain vout over-voltage scales. */
+> +		ret = mp2975_vout_ov_scale_get(client, data, info);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		/* Obtain offsets, maximum and format for vout. */
+> +		ret = mp2975_vout_per_rail_config_get(client, data, info);
+> +		if (ret)
+> +			return ret;
+> +	}
+>   
+>   	return pmbus_do_probe(client, info);
+>   }
+>   
+> +static const struct mp2971_device_info mp2971_device_info = {
+> +	.imvp9_en_r1_mask = BIT(14),
+> +	.imvp9_en_r2_mask = BIT(13),
+> +	.max_phase_rail1 = 8,
+> +	.max_phase_rail2 = 4,
+> +};
+> +
+>   static const struct i2c_device_id mp2975_id[] = {
+> +	{"mp2971", (kernel_ulong_t)&mp2971_device_info },
+> +	{"mp2973", (kernel_ulong_t)&mp2971_device_info },
+>   	{"mp2975", 0},
+>   	{}
+>   };
 
