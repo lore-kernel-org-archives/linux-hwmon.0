@@ -2,304 +2,518 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83262C4332F
-	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Dec 2022 22:01:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F136C4167B
+	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Dec 2022 10:40:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiLJWB0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 10 Dec 2022 17:01:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S230022AbiLKKkD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 11 Dec 2022 05:40:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLJWBZ (ORCPT
+        with ESMTP id S230060AbiLKKjz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 10 Dec 2022 17:01:25 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACA8164BE;
-        Sat, 10 Dec 2022 14:01:20 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5906840002;
-        Sat, 10 Dec 2022 22:01:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1670709679;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dj66ileNThfbYMkUit2UrNW8iwPVKP+X8giQrCy7hYk=;
-        b=LOsJEBmoNQMVozVKAke5k2xsTfc2T3friuiSsL8bqSCRndGE6JkaPSDaoKrkIrOioIA28D
-        S8PQI28sNtRiAHEHbWFCEPoKtIu1eDjzndSYZRThOzO4tmvkCKPe7vW64lB+awXa7IfhHL
-        M6JmNyq4UZP7thrioBzGFEMJIrriSjJh7qdDSqe8KARVqCQ173pm5tyxRqGpl+0JmymhCx
-        j4JkcV50kLR4BAqtzgSqC5ijRaKSvdT5Iu5vkCrW3CNwq/n8DcWAu4GPBWUCTjuFPwmONx
-        RIe5+DkCMFhlSeadlqIe35bVZD39RimsthboOojOtNjqjW5jLU+cAdFujQuEcQ==
-Date:   Sat, 10 Dec 2022 23:01:18 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-Cc:     a.zummo@towertech.it, jdelvare@suse.com, linux@roeck-us.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-Subject: Re: [PATCH v3 1/2] drivers: rtc: add max313xx series rtc driver
-Message-ID: <Y5UBrivA48RyW6nT@mail.local>
-References: <20221108122254.1185-1-Ibrahim.Tilki@analog.com>
- <20221108122254.1185-2-Ibrahim.Tilki@analog.com>
+        Sun, 11 Dec 2022 05:39:55 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF875EE0C;
+        Sun, 11 Dec 2022 02:39:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670755193; x=1702291193;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=7hHWgTtNcQbs/mJFN5c6H+ANwskmFrdHfUVt7pR+ZGs=;
+  b=KC7I2Byw1/NQLmVp5tK4jXuU/1K7C58pi66FsqP67ZZatDojXFFMcYKX
+   L+qlSNub70E8O/nu5hvPllPhs+Jwqf0RnCPIK3kOozZdeDVPsDWs2YGCt
+   i0IeaezVH7yzjJp1zVvBc6VgcHSAChBuGm2K/qqPn+AFTZiPBJfiM3/Wn
+   D+pdDTDJzR/8JcfmynVmciHBUeP3vzCBRn4FEzgVOXNAo+Y0IaSbocUii
+   E5eNF7oV0oTbI/bC030439T/F0jNYGSS1h4b5IvFsT2XSUGCja9e0kdN1
+   Wh/mScfu/LDHQ0H09ujDNke2LazmKLBUU0FjFGs/mFQnPSFvjVakBdCic
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="379899623"
+X-IronPort-AV: E=Sophos;i="5.96,236,1665471600"; 
+   d="scan'208";a="379899623"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2022 02:39:53 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="754575444"
+X-IronPort-AV: E=Sophos;i="5.96,236,1665471600"; 
+   d="scan'208";a="754575444"
+Received: from dratzker-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.214.1])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2022 02:39:46 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v4 3/8] mfd: intel-m10-bmc: Split into core and spi specific parts
+Date:   Sun, 11 Dec 2022 12:39:08 +0200
+Message-Id: <20221211103913.5287-4-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221211103913.5287-1-ilpo.jarvinen@linux.intel.com>
+References: <20221211103913.5287-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108122254.1185-2-Ibrahim.Tilki@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 08/11/2022 15:22:53+0300, Ibrahim Tilki wrote:
-> +static int max313xx_trickle_charger_setup(struct device *dev)
-> +{
-> +	struct max313xx *rtc = dev_get_drvdata(dev);
-> +	bool diode_disable;
-> +	int index, reg;
-> +	u32 ohms = 0;
-> +	int ret;
-> +
-> +	device_property_read_u32(dev, "trickle-resistor-ohms", &ohms);
-> +	if (!ohms)
-> +		return 0;
-> +
-> +	diode_disable = device_property_read_bool(dev, "trickle-diode-disable");
+Split the common code from intel-m10-bmc driver into intel-m10-bmc-core
+and move the SPI bus parts into an interface specific file.
 
-This property is deprecated, please do not add a new user.
+intel-m10-bmc-core becomes the core MFD functions which can support
+multiple bus interface like SPI bus.
 
-> +static int max313xx_irq_init(struct device *dev, const char *devname)
-> +{
-> +	struct max313xx *rtc = dev_get_drvdata(dev);
-> +	bool wakeup;
-> +	int ret;
-> +
-> +	rtc->irq = rtc->irqs[0];
-> +
-> +	switch (rtc->id) {
-> +	case ID_MAX31328:
-> +		/* max31328 sqw ant int pin is shared */
-> +		if (rtc->id == ID_MAX31328 && rtc->irq > 0 && rtc->clkout.clk)
-> +			return dev_err_probe(dev, -EOPNOTSUPP,
-> +					     "cannot have both sqw clock output and irq enabled");
-> +
-> +		break;
-> +	case ID_MAX31331:
-> +	case ID_MAX31334:
-> +		if (rtc->clkout.clk) {
-> +			/* clockout needs to be enabled for using INTA pin */
-> +			ret = clk_prepare_enable(rtc->clkout.clk);
-> +			if (ret)
-> +				return dev_err_probe(dev, ret,
-> +						     "cannot enable clkout\n");
-> +		} else {
-> +			rtc->irq = rtc->irqs[1];
-> +		}
-> +		break;
-> +	default:
-> +		if (rtc->clkin) {
-> +			rtc->irq = rtc->irqs[1];
-> +
-> +			/* wrong interrupt specified */
-> +			if (rtc->irqs[0] > 0 && rtc->irqs[1] <= 0)
-> +				dev_warn(dev, "INTA is specified but INTB required for irq when clkin is enabled\n");
-> +
-> +			if (rtc->clkout.clk && rtc->irq > 0)
-> +				return dev_err_probe(dev, -EOPNOTSUPP,
-> +						"irq not possible when both clkin and clkout are configured\n");
-> +
-> +			if (rtc->irq <= 0)
-> +				break;
-> +
-> +			/* clkout needs to be disabled for using INTB pin */
-> +			if (rtc->chip->clkout->en_invert)
-> +				ret = regmap_set_bits(rtc->regmap,
-> +						      rtc->chip->clkout->reg,
-> +						      rtc->chip->clkout->en_bit);
-> +			else
-> +				ret = regmap_clear_bits(rtc->regmap,
-> +							rtc->chip->clkout->reg,
-> +							rtc->chip->clkout->en_bit);
-> +
-> +			if (ret)
-> +				return ret;
-> +		}
-> +		break;
-> +	}
+Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
+Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net> # hwmon
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ MAINTAINERS                                   |   2 +-
+ drivers/fpga/Kconfig                          |   2 +-
+ drivers/hwmon/Kconfig                         |   2 +-
+ drivers/mfd/Kconfig                           |  30 ++--
+ drivers/mfd/Makefile                          |   4 +-
+ drivers/mfd/intel-m10-bmc-core.c              | 122 +++++++++++++++++
+ .../{intel-m10-bmc.c => intel-m10-bmc-spi.c}  | 128 +++---------------
+ include/linux/mfd/intel-m10-bmc.h             |   6 +
+ 8 files changed, 172 insertions(+), 124 deletions(-)
+ create mode 100644 drivers/mfd/intel-m10-bmc-core.c
+ rename drivers/mfd/{intel-m10-bmc.c => intel-m10-bmc-spi.c} (59%)
 
-I really don't like this logic that relies on interrupt-names.
-interrupt-names has to be optional and the interrupt position is
-meaningful. You are doing/enforcing pinmuxing on this property which
-should really not be done. what you need is rather properties
-explicitly telling what is muxed to INTA and INTB.
-
-Your current logic enforces clkout on INTB which may not be what a user
-wants.
-
-> +
-> +	if (rtc->irq > 0) {
-> +		ret = devm_request_threaded_irq(dev, rtc->irq, NULL,
-> +						&max313xx_irq, IRQF_ONESHOT,
-> +						devname, rtc);
-> +		if (ret)
-> +			return ret;
-> +
-> +		wakeup = device_property_read_bool(dev, "wakeup-source");
-
-wakeup-source is only needed when you don't have an interrupt. If an
-interrupt is present, it is assumed it is able to wakeup.
-
-
-> +		return device_init_wakeup(dev, wakeup);
-> +	}
-> +
-> +	__clear_bit(RTC_FEATURE_ALARM, rtc->rtc->features);
-> +
-> +	return 0;
-> +}
-> +
-> +static int max313xx_probe(struct i2c_client *client,
-> +			  const struct i2c_device_id *id)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct max313xx *max313xx;
-> +	struct device *hwmon;
-> +	const void *match;
-> +	int ret;
-> +
-> +	max313xx = devm_kzalloc(&client->dev, sizeof(*max313xx), GFP_KERNEL);
-> +	if (!max313xx)
-> +		return -ENOMEM;
-> +
-> +	dev_set_drvdata(&client->dev, max313xx);
-> +
-> +	max313xx->regmap = devm_regmap_init_i2c(client, &regmap_config);
-> +	if (IS_ERR(max313xx->regmap)) {
-> +		return dev_err_probe(dev, PTR_ERR(max313xx->regmap),
-> +				     "regmap init failed\n");
-> +	}
-> +
-> +	i2c_set_clientdata(client, max313xx);
-> +
-> +	match = device_get_match_data(dev);
-> +	if (match)
-> +		max313xx->id = (enum max313xx_ids)match;
-> +	else if (id)
-> +		max313xx->id = id->driver_data;
-> +	else
-> +		return -ENODEV;
-> +
-> +	max313xx->chip = &chip[max313xx->id];
-> +
-> +	ret = max313xx_init(max313xx);
-> +	if (ret)
-> +		return ret;
-> +
-> +	max313xx->rtc = devm_rtc_allocate_device(dev);
-> +	if (IS_ERR(max313xx->rtc))
-> +		return PTR_ERR(max313xx->rtc);
-> +
-> +	max313xx->rtc->ops = &max3133x_rtc_ops;
-> +	max313xx->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> +	max313xx->rtc->range_max = RTC_TIMESTAMP_END_2199;
-> +
-> +	ret = devm_rtc_register_device(max313xx->rtc);
-> +	if (ret)
-> +		return ret;
-> +
-> +	switch (max313xx->id) {
-> +	case ID_MAX31328:
-> +	case ID_MAX31343:
-> +		max313xx->irqs[0] = client->irq;
-> +		break;
-> +	default:
-> +		max313xx->irqs[0] = fwnode_irq_get_byname(dev_fwnode(dev), "INTA");
-> +		max313xx->irqs[1] = fwnode_irq_get_byname(dev_fwnode(dev), "INTB");
-> +		if (max313xx->irqs[0] <= 0 && max313xx->irqs[1] <= 0 && client->irq)
-> +			return dev_err_probe(dev, -ENOENT,
-> +					     "interrupt requested but no interrupt name specified\n");
-> +
-> +		break;
-> +	}
-> +
-> +	ret = max313xx_clkout_register(dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = max313xx_clkin_init(dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* IRQ wiring depends on the clock configuration so parse them first */
-> +	ret = max313xx_irq_init(dev, client->name);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (max313xx->chip->ram_size) {
-> +		max313xx_nvmem_cfg.size = max313xx->chip->ram_size;
-> +		max313xx_nvmem_cfg.priv = max313xx;
-> +
-> +		ret = devm_rtc_nvmem_register(max313xx->rtc, &max313xx_nvmem_cfg);
-> +		if (ret)
-> +			dev_warn(dev, "cannot register rtc nvmem\n");
-> +	}
-> +
-> +	if (max313xx->chip->temp_reg) {
-> +		hwmon = devm_hwmon_device_register_with_info(dev, client->name,
-> +							     max313xx,
-> +							     &max313xx_chip_info,
-> +							     NULL);
-> +		if (IS_ERR(hwmon))
-> +			dev_warn(dev, "cannot register hwmon device: %li\n",
-> +				 PTR_ERR(hwmon));
-> +	}
-> +
-> +	return max313xx_trickle_charger_setup(dev);
-> +}
-> +
-> +static const struct of_device_id max313xx_of_id[] = {
-> +	{ .compatible = "adi,max31328", .data = (void *)ID_MAX31328 },
-> +	{ .compatible = "adi,max31329", .data = (void *)ID_MAX31329 },
-> +	{ .compatible = "adi,max31331", .data = (void *)ID_MAX31331 },
-> +	{ .compatible = "adi,max31334", .data = (void *)ID_MAX31334 },
-> +	{ .compatible = "adi,max31341", .data = (void *)ID_MAX31341 },
-> +	{ .compatible = "adi,max31342", .data = (void *)ID_MAX31342 },
-> +	{ .compatible = "adi,max31343", .data = (void *)ID_MAX31343 },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, max313xx_of_id);
-> +
-> +static const struct i2c_device_id max313xx_id[] = {
-> +	{ "max31328", ID_MAX31328 },
-> +	{ "max31329", ID_MAX31329 },
-> +	{ "max31331", ID_MAX31331 },
-> +	{ "max31334", ID_MAX31334 },
-> +	{ "max31341", ID_MAX31341 },
-> +	{ "max31342", ID_MAX31342 },
-> +	{ "max31343", ID_MAX31343 },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, max313xx_id);
-> +
-> +static struct i2c_driver max313xx_driver = {
-> +	.driver = {
-> +		.name	= "rtc-max313xx",
-> +		.of_match_table = max313xx_of_id,
-> +	},
-> +	.probe		= max313xx_probe,
-> +	.id_table	= max313xx_id,
-> +};
-> +module_i2c_driver(max313xx_driver);
-> +
-> +MODULE_DESCRIPTION("Analog Devices MAX313XX RTCs");
-> +MODULE_AUTHOR("Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>");
-> +MODULE_AUTHOR("Ibrahim Tilki <Ibrahim.Tilki@analog.com>");
-> +MODULE_SOFTDEP("pre: regmap-i2c");
-> +MODULE_LICENSE("GPL");
-> +MODULE_VERSION("1.0");
-> -- 
-> 2.25.1
-> 
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cf0f18502372..ddfa4f8b3c80 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10452,7 +10452,7 @@ S:	Maintained
+ F:	Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
+ F:	Documentation/hwmon/intel-m10-bmc-hwmon.rst
+ F:	drivers/hwmon/intel-m10-bmc-hwmon.c
+-F:	drivers/mfd/intel-m10-bmc.c
++F:	drivers/mfd/intel-m10-bmc*
+ F:	include/linux/mfd/intel-m10-bmc.h
+ 
+ INTEL MENLOW THERMAL DRIVER
+diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+index 6ce143dafd04..0a00763b9f28 100644
+--- a/drivers/fpga/Kconfig
++++ b/drivers/fpga/Kconfig
+@@ -246,7 +246,7 @@ config FPGA_MGR_VERSAL_FPGA
+ 
+ config FPGA_M10_BMC_SEC_UPDATE
+ 	tristate "Intel MAX10 BMC Secure Update driver"
+-	depends on MFD_INTEL_M10_BMC
++	depends on MFD_INTEL_M10_BMC_CORE
+ 	select FW_LOADER
+ 	select FW_UPLOAD
+ 	help
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 7ac3daaf59ce..984a55e0f313 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -2321,7 +2321,7 @@ config SENSORS_XGENE
+ 
+ config SENSORS_INTEL_M10_BMC_HWMON
+ 	tristate "Intel MAX10 BMC Hardware Monitoring"
+-	depends on MFD_INTEL_M10_BMC
++	depends on MFD_INTEL_M10_BMC_CORE
+ 	help
+ 	  This driver provides support for the hardware monitoring functionality
+ 	  on Intel MAX10 BMC chip.
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index 8b93856de432..a09d4ac60dc7 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -2219,18 +2219,24 @@ config SGI_MFD_IOC3
+ 	  If you have an SGI Origin, Octane, or a PCI IOC3 card,
+ 	  then say Y. Otherwise say N.
+ 
+-config MFD_INTEL_M10_BMC
+-	tristate "Intel MAX 10 Board Management Controller"
+-	depends on SPI_MASTER
+-	select REGMAP_SPI_AVMM
+-	select MFD_CORE
+-	help
+-	  Support for the Intel MAX 10 board management controller using the
+-	  SPI interface.
+-
+-	  This driver provides common support for accessing the device,
+-	  additional drivers must be enabled in order to use the functionality
+-	  of the device.
++config MFD_INTEL_M10_BMC_CORE
++        tristate
++        select MFD_CORE
++        select REGMAP
++        default n
++
++config MFD_INTEL_M10_BMC_SPI
++        tristate "Intel MAX 10 Board Management Controller with SPI"
++        depends on SPI_MASTER
++        select MFD_INTEL_M10_BMC_CORE
++        select REGMAP_SPI_AVMM
++        help
++          Support for the Intel MAX 10 board management controller using the
++          SPI interface.
++
++          This driver provides common support for accessing the device,
++          additional drivers must be enabled in order to use the functionality
++          of the device.
+ 
+ config MFD_RSMU_I2C
+ 	tristate "Renesas Synchronization Management Unit with I2C"
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index 7ed3ef4a698c..5d1f308ee2a7 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -271,7 +271,9 @@ obj-$(CONFIG_MFD_QCOM_PM8008)	+= qcom-pm8008.o
+ 
+ obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
+ obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
+-obj-$(CONFIG_MFD_INTEL_M10_BMC)   += intel-m10-bmc.o
++
++obj-$(CONFIG_MFD_INTEL_M10_BMC_CORE)	+= intel-m10-bmc-core.o
++obj-$(CONFIG_MFD_INTEL_M10_BMC_SPI)	+= intel-m10-bmc-spi.o
+ 
+ obj-$(CONFIG_MFD_ATC260X)	+= atc260x-core.o
+ obj-$(CONFIG_MFD_ATC260X_I2C)	+= atc260x-i2c.o
+diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
+new file mode 100644
+index 000000000000..6630b81b10c4
+--- /dev/null
++++ b/drivers/mfd/intel-m10-bmc-core.c
+@@ -0,0 +1,122 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Intel MAX 10 Board Management Controller chip - common code
++ *
++ * Copyright (C) 2018-2020 Intel Corporation. All rights reserved.
++ */
++
++#include <linux/bitfield.h>
++#include <linux/device.h>
++#include <linux/dev_printk.h>
++#include <linux/mfd/core.h>
++#include <linux/mfd/intel-m10-bmc.h>
++#include <linux/module.h>
++
++static ssize_t bmc_version_show(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
++	unsigned int val;
++	int ret;
++
++	ret = m10bmc_sys_read(ddata, M10BMC_BUILD_VER, &val);
++	if (ret)
++		return ret;
++
++	return sprintf(buf, "0x%x\n", val);
++}
++static DEVICE_ATTR_RO(bmc_version);
++
++static ssize_t bmcfw_version_show(struct device *dev,
++				  struct device_attribute *attr, char *buf)
++{
++	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
++	unsigned int val;
++	int ret;
++
++	ret = m10bmc_sys_read(ddata, NIOS2_FW_VERSION, &val);
++	if (ret)
++		return ret;
++
++	return sprintf(buf, "0x%x\n", val);
++}
++static DEVICE_ATTR_RO(bmcfw_version);
++
++static ssize_t mac_address_show(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
++	unsigned int macaddr_low, macaddr_high;
++	int ret;
++
++	ret = m10bmc_sys_read(ddata, M10BMC_MAC_LOW, &macaddr_low);
++	if (ret)
++		return ret;
++
++	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%02x:%02x:%02x:%02x:%02x:%02x\n",
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE1, macaddr_low),
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE2, macaddr_low),
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE3, macaddr_low),
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE4, macaddr_low),
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE5, macaddr_high),
++			  (u8)FIELD_GET(M10BMC_MAC_BYTE6, macaddr_high));
++}
++static DEVICE_ATTR_RO(mac_address);
++
++static ssize_t mac_count_show(struct device *dev,
++			      struct device_attribute *attr, char *buf)
++{
++	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
++	unsigned int macaddr_high;
++	int ret;
++
++	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%u\n", (u8)FIELD_GET(M10BMC_MAC_COUNT, macaddr_high));
++}
++static DEVICE_ATTR_RO(mac_count);
++
++static struct attribute *m10bmc_attrs[] = {
++	&dev_attr_bmc_version.attr,
++	&dev_attr_bmcfw_version.attr,
++	&dev_attr_mac_address.attr,
++	&dev_attr_mac_count.attr,
++	NULL,
++};
++
++static const struct attribute_group m10bmc_group = {
++	.attrs = m10bmc_attrs,
++};
++
++const struct attribute_group *m10bmc_dev_groups[] = {
++	&m10bmc_group,
++	NULL,
++};
++EXPORT_SYMBOL_GPL(m10bmc_dev_groups);
++
++int m10bmc_dev_init(struct intel_m10bmc *m10bmc, const struct intel_m10bmc_platform_info *info)
++{
++	int ret;
++
++	m10bmc->info = info;
++	dev_set_drvdata(m10bmc->dev, m10bmc);
++
++	ret = devm_mfd_add_devices(m10bmc->dev, PLATFORM_DEVID_AUTO,
++				   info->cells, info->n_cells,
++				   NULL, 0, NULL);
++	if (ret)
++		dev_err(m10bmc->dev, "Failed to register sub-devices: %d\n", ret);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(m10bmc_dev_init);
++
++MODULE_DESCRIPTION("Intel MAX 10 BMC core MFD driver");
++MODULE_AUTHOR("Intel Corporation");
++MODULE_LICENSE("GPL v2");
+diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc-spi.c
+similarity index 59%
+rename from drivers/mfd/intel-m10-bmc.c
+rename to drivers/mfd/intel-m10-bmc-spi.c
+index 2c26203c4799..be1d4ddedabb 100644
+--- a/drivers/mfd/intel-m10-bmc.c
++++ b/drivers/mfd/intel-m10-bmc-spi.c
+@@ -5,29 +5,14 @@
+  * Copyright (C) 2018-2020 Intel Corporation. All rights reserved.
+  */
+ #include <linux/bitfield.h>
++#include <linux/dev_printk.h>
+ #include <linux/init.h>
+ #include <linux/mfd/core.h>
+ #include <linux/mfd/intel-m10-bmc.h>
+ #include <linux/module.h>
+-#include <linux/mutex.h>
+ #include <linux/regmap.h>
+ #include <linux/spi/spi.h>
+ 
+-static struct mfd_cell m10bmc_d5005_subdevs[] = {
+-	{ .name = "d5005bmc-hwmon" },
+-	{ .name = "d5005bmc-sec-update" }
+-};
+-
+-static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
+-	{ .name = "n3000bmc-hwmon" },
+-	{ .name = "n3000bmc-retimer" },
+-	{ .name = "n3000bmc-sec-update" },
+-};
+-
+-static struct mfd_cell m10bmc_n5010_subdevs[] = {
+-	{ .name = "n5010bmc-hwmon" },
+-};
+-
+ static const struct regmap_range m10bmc_regmap_range[] = {
+ 	regmap_reg_range(M10BMC_LEGACY_BUILD_VER, M10BMC_LEGACY_BUILD_VER),
+ 	regmap_reg_range(M10BMC_SYS_BASE, M10BMC_SYS_END),
+@@ -48,86 +33,6 @@ static struct regmap_config intel_m10bmc_regmap_config = {
+ 	.max_register = M10BMC_MEM_END,
+ };
+ 
+-static ssize_t bmc_version_show(struct device *dev,
+-				struct device_attribute *attr, char *buf)
+-{
+-	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
+-	unsigned int val;
+-	int ret;
+-
+-	ret = m10bmc_sys_read(ddata, M10BMC_BUILD_VER, &val);
+-	if (ret)
+-		return ret;
+-
+-	return sprintf(buf, "0x%x\n", val);
+-}
+-static DEVICE_ATTR_RO(bmc_version);
+-
+-static ssize_t bmcfw_version_show(struct device *dev,
+-				  struct device_attribute *attr, char *buf)
+-{
+-	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
+-	unsigned int val;
+-	int ret;
+-
+-	ret = m10bmc_sys_read(ddata, NIOS2_FW_VERSION, &val);
+-	if (ret)
+-		return ret;
+-
+-	return sprintf(buf, "0x%x\n", val);
+-}
+-static DEVICE_ATTR_RO(bmcfw_version);
+-
+-static ssize_t mac_address_show(struct device *dev,
+-				struct device_attribute *attr, char *buf)
+-{
+-	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
+-	unsigned int macaddr_low, macaddr_high;
+-	int ret;
+-
+-	ret = m10bmc_sys_read(ddata, M10BMC_MAC_LOW, &macaddr_low);
+-	if (ret)
+-		return ret;
+-
+-	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
+-	if (ret)
+-		return ret;
+-
+-	return sysfs_emit(buf, "%02x:%02x:%02x:%02x:%02x:%02x\n",
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE1, macaddr_low),
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE2, macaddr_low),
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE3, macaddr_low),
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE4, macaddr_low),
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE5, macaddr_high),
+-			  (u8)FIELD_GET(M10BMC_MAC_BYTE6, macaddr_high));
+-}
+-static DEVICE_ATTR_RO(mac_address);
+-
+-static ssize_t mac_count_show(struct device *dev,
+-			      struct device_attribute *attr, char *buf)
+-{
+-	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
+-	unsigned int macaddr_high;
+-	int ret;
+-
+-	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
+-	if (ret)
+-		return ret;
+-
+-	return sysfs_emit(buf, "%u\n",
+-			  (u8)FIELD_GET(M10BMC_MAC_COUNT, macaddr_high));
+-}
+-static DEVICE_ATTR_RO(mac_count);
+-
+-static struct attribute *m10bmc_attrs[] = {
+-	&dev_attr_bmc_version.attr,
+-	&dev_attr_bmcfw_version.attr,
+-	&dev_attr_mac_address.attr,
+-	&dev_attr_mac_count.attr,
+-	NULL,
+-};
+-ATTRIBUTE_GROUPS(m10bmc);
+-
+ static int check_m10bmc_version(struct intel_m10bmc *ddata)
+ {
+ 	unsigned int v;
+@@ -166,11 +71,9 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+ 		return -ENOMEM;
+ 
+ 	info = (struct intel_m10bmc_platform_info *)id->driver_data;
+-	ddata->info = info;
+ 	ddata->dev = dev;
+ 
+-	ddata->regmap =
+-		devm_regmap_init_spi_avmm(spi, &intel_m10bmc_regmap_config);
++	ddata->regmap = devm_regmap_init_spi_avmm(spi, &intel_m10bmc_regmap_config);
+ 	if (IS_ERR(ddata->regmap)) {
+ 		ret = PTR_ERR(ddata->regmap);
+ 		dev_err(dev, "Failed to allocate regmap: %d\n", ret);
+@@ -185,15 +88,24 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+ 		return ret;
+ 	}
+ 
+-	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
+-				   info->cells, info->n_cells,
+-				   NULL, 0, NULL);
+-	if (ret)
+-		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
+-
+-	return ret;
++	return m10bmc_dev_init(ddata, info);
+ }
+ 
++static struct mfd_cell m10bmc_d5005_subdevs[] = {
++	{ .name = "d5005bmc-hwmon" },
++	{ .name = "d5005bmc-sec-update" },
++};
++
++static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
++	{ .name = "n3000bmc-hwmon" },
++	{ .name = "n3000bmc-retimer" },
++	{ .name = "n3000bmc-sec-update" },
++};
++
++static struct mfd_cell m10bmc_n5010_subdevs[] = {
++	{ .name = "n5010bmc-hwmon" },
++};
++
+ static const struct intel_m10bmc_platform_info m10bmc_spi_n3000 = {
+ 	.cells = m10bmc_pacn3000_subdevs,
+ 	.n_cells = ARRAY_SIZE(m10bmc_pacn3000_subdevs),
+@@ -220,14 +132,14 @@ MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
+ static struct spi_driver intel_m10bmc_spi_driver = {
+ 	.driver = {
+ 		.name = "intel-m10-bmc",
+-		.dev_groups = m10bmc_groups,
++		.dev_groups = m10bmc_dev_groups,
+ 	},
+ 	.probe = intel_m10_bmc_spi_probe,
+ 	.id_table = m10bmc_spi_id,
+ };
+ module_spi_driver(intel_m10bmc_spi_driver);
+ 
+-MODULE_DESCRIPTION("Intel MAX 10 BMC Device Driver");
++MODULE_DESCRIPTION("Intel MAX 10 BMC SPI bus interface");
+ MODULE_AUTHOR("Intel Corporation");
+ MODULE_LICENSE("GPL v2");
+ MODULE_ALIAS("spi:intel-m10-bmc");
+diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+index 725b51ea4aee..82e0820e146e 100644
+--- a/include/linux/mfd/intel-m10-bmc.h
++++ b/include/linux/mfd/intel-m10-bmc.h
+@@ -171,4 +171,10 @@ m10bmc_raw_read(struct intel_m10bmc *m10bmc, unsigned int addr,
+ #define m10bmc_sys_read(m10bmc, offset, val) \
+ 	m10bmc_raw_read(m10bmc, M10BMC_SYS_BASE + (offset), val)
+ 
++/*
++ * MAX10 BMC Core support
++ */
++int m10bmc_dev_init(struct intel_m10bmc *m10bmc, const struct intel_m10bmc_platform_info *info);
++extern const struct attribute_group *m10bmc_dev_groups[];
++
+ #endif /* __MFD_INTEL_M10_BMC_H */
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.30.2
+
