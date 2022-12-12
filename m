@@ -2,124 +2,258 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A8A7C4332F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Dec 2022 09:37:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AF29C00145
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Dec 2022 13:28:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231683AbiLLJhL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 12 Dec 2022 04:37:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
+        id S232399AbiLLN2l (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 12 Dec 2022 08:28:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiLLJhI (ORCPT
+        with ESMTP id S232432AbiLLN2S (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 12 Dec 2022 04:37:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94EE260
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Dec 2022 01:36:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670837774;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2KUELeKmljunJTroYRAME1A+aHuRMujTAsqDtNdtlfc=;
-        b=Br+rf2ap6V2DI3e5em1e4P2KWOAWTr7zl8WZCSw+Vn07FVbJOD2DUSM8E2oBzN1F4GwKBw
-        qxFaU6Bn4qPhmL0BBSm4+a5qi7zsIPotjOVLxnYcJUToStZKFH2prwIXE1miyaUg/kZglm
-        0Ch7KPaQDzN4sROoRM27p/ZkYqi3OWU=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-271-EyeREq1sNd6kgS9RqjnjeQ-1; Mon, 12 Dec 2022 04:36:13 -0500
-X-MC-Unique: EyeREq1sNd6kgS9RqjnjeQ-1
-Received: by mail-ed1-f70.google.com with SMTP id y20-20020a056402271400b0046c9a6ec30fso4694905edd.14
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Dec 2022 01:36:13 -0800 (PST)
+        Mon, 12 Dec 2022 08:28:18 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25123F08;
+        Mon, 12 Dec 2022 05:28:16 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id s186so11185603oia.5;
+        Mon, 12 Dec 2022 05:28:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=CjFXPlGZowJgMV8nnTYwn9x6IUXRk0DZC30EumVqm7c=;
+        b=HRC75xduVh0IxwE/vLNwnveLZ1A3QU3pyoIUFjphBfVHojaCrrRpaeiFAn7+/7D05u
+         H56yE69W1Wz/S1BOMFN2GrCic1JXFQPSLotEjyAc257sup3qZ2xWTWT8DHsPAqdAFQrP
+         FX35skfIhAkliIZ1RU6F11amUliD/PTyuRYxXWSED1Z21EzSF5qVAXB5S/PY4/FuBN95
+         f51xmAkkkfCZBJTk8I1yAbrEAaqBB7i24Hxo2m6QSc3tHlNAIYRTY2/rXBXpLMwiA6M1
+         LeXevrWDsKRswp0RGH1dNm6XkqGa3GWQQEgZYQQD4v5hCL+a+iq3kB3KLijkHS9p4JV3
+         F0Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2KUELeKmljunJTroYRAME1A+aHuRMujTAsqDtNdtlfc=;
-        b=IMYSxvD5kFIVU8zrAum5KOn8hcSvpulJTwuH1BenoTFmrBnn096G5tjK+iy7cOBSeT
-         NemW+rdyI5StbWOpcDd9exGTwO/u4Iu1pr4t47nitt4jpYyyyNh42wnlV7OoKcr8i7sj
-         +RzEZJlvvo+k1J2wvsA3kzHAQbIb24gcLfe6j9pq2vYI4UEzCtoAJ7ZLo0QJhx49LKvo
-         R0Xm2GWmWCLiAHB6a/p8vRmFpVEXOLg+y3ZTA5jqv3e1edC25SwG+VcsZbTs1dlF/sir
-         uty+5zJuMpmrYSzNbOrnuhaFMSATo9qzGNHDZDo9QXV7i108tYdjr/oTd00KAaMDBUn3
-         Opig==
-X-Gm-Message-State: ANoB5plo3Umljufxy/uJ3dwqyc5ew1rOIqVX3WOZJc6ht/4D2kOYim9B
-        iVz1CCj0r+ZT9DmGdaXuYUPU0Ts0ECiqPkD3m7wWaD/dFUc6U3Ml4DYh8BcLrqMhDTQ5PwALJ8C
-        tmBFMJq+VlmYgqxQVTgU9tAg=
-X-Received: by 2002:a17:907:c688:b0:7bb:af66:f38c with SMTP id ue8-20020a170907c68800b007bbaf66f38cmr12962850ejc.10.1670837772145;
-        Mon, 12 Dec 2022 01:36:12 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7b4L3oDcExS8fiXn0n2mTN1JhoLWlmkKf3o6uQoEQ/bXXapsRRgWHDInEsCAnxbywPyBG+Fg==
-X-Received: by 2002:a17:907:c688:b0:7bb:af66:f38c with SMTP id ue8-20020a170907c68800b007bbaf66f38cmr12962837ejc.10.1670837771965;
-        Mon, 12 Dec 2022 01:36:11 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id i17-20020a1709064ed100b007c0dcade045sm3073485ejv.43.2022.12.12.01.36.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 01:36:11 -0800 (PST)
-Message-ID: <95864fee-ade9-d3a8-8dba-01afc4e4d87c@redhat.com>
-Date:   Mon, 12 Dec 2022 10:36:09 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CjFXPlGZowJgMV8nnTYwn9x6IUXRk0DZC30EumVqm7c=;
+        b=mH9ZQfcYgzQihB0m5CTJlgdFyrFNGavJonh8EQat0qWqLpKfnNZpnfRxOXjZjjsSP3
+         d5/eVUTPFkvIq0hdwjMikj++70sb3ECqoNrMn29drWTz8v/HDyQRgqyJHtf48OLi6O+h
+         s9JsDzLE2PIIFLEcnYveVBvprVk6vEK1tTGmVqINBXaDe1CA9N4MHeWqn7WBLOzHwJGR
+         b9c23hZgHI7aI+hsQvmBcy04h/RKadk7VLq/oUC1sC0iIscC9viVY/iOeoatN/4C5d1s
+         PD6UkIkf2+7Pqu88f5u9ivMeHGfbiUiz0975junlCGIZbyZAvnbAmu1OazPe778zciYS
+         Gz7A==
+X-Gm-Message-State: ANoB5pkxjRpk3Wi19s3XD4D1D60nl06VlzX4Exhdv3EGeZ0nKSt7ddIq
+        RjkjRMCJ+lzDDZ68JZ6vrmsTATWDEvg=
+X-Google-Smtp-Source: AA0mqf5K5koWOxiO/t5jVIFTyPF9c8rqgKYnn6kO1/19sjuCv7d8ttB9kS3bCOLK24duqMp9FXngGw==
+X-Received: by 2002:a05:6808:199f:b0:35e:a4fa:ede6 with SMTP id bj31-20020a056808199f00b0035ea4faede6mr189983oib.40.1670851695345;
+        Mon, 12 Dec 2022 05:28:15 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h10-20020a05683040ca00b00670679748f9sm4129037otu.49.2022.12.12.05.28.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 05:28:14 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v6.2-rc1
+Date:   Mon, 12 Dec 2022 05:28:13 -0800
+Message-Id: <20221212132813.3627306-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.36.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v1 1/1] platform/mellanox: mlxbf-pmc: Fix event typo
-Content-Language: en-US
-To:     James Hurley <jahurley@nvidia.com>, jdelvare@suse.com,
-        linux@roeck-us.net, linux-kernel@vger.kernel.org,
-        markgross@kernel.org, vadimp@nvidia.com,
-        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org
-Cc:     David Thompson <davthompson@nvidia.com>,
-        Shravan Kumar Ramani <shravankr@nvidia.com>
-References: <aadacdbbd3186c55e74ea9456fe011b77938eb6c.1670535330.git.jahurley@nvidia.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <aadacdbbd3186c55e74ea9456fe011b77938eb6c.1670535330.git.jahurley@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+Hi Linus,
 
-On 12/9/22 15:35, James Hurley wrote:
-> Had a duplicate event typo, so just fixed the 1 character typo.
-> 
-> Fixes: 1a218d312e65 ("platform/mellanox: mlxbf-pmc: Add Mellanox BlueField PMC driver")
-> Signed-off-by: James Hurley <jahurley@nvidia.com>
-> Reviewed-by: David Thompson <davthompson@nvidia.com>
-> Reviewed-by: Shravan Kumar Ramani <shravankr@nvidia.com>
+Please pull hwmon fixes for Linux v6.2-rc1 from signed tag:
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.2-rc1
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
+Thanks,
+Guenter
+------
 
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
+The following changes since commit 76dcd734eca23168cb008912c0f69ff408905235:
 
-Regards,
+  Linux 6.1-rc8 (2022-12-04 14:48:12 -0800)
 
-Hans
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.2-rc1
 
-> ---
->  drivers/platform/mellanox/mlxbf-pmc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/mellanox/mlxbf-pmc.c b/drivers/platform/mellanox/mlxbf-pmc.c
-> index 65b4a819f1bd..c2c9b0d3244c 100644
-> --- a/drivers/platform/mellanox/mlxbf-pmc.c
-> +++ b/drivers/platform/mellanox/mlxbf-pmc.c
-> @@ -358,7 +358,7 @@ static const struct mlxbf_pmc_events mlxbf_pmc_hnfnet_events[] = {
->  	{ 0x32, "DDN_DIAG_W_INGRESS" },
->  	{ 0x33, "DDN_DIAG_C_INGRESS" },
->  	{ 0x34, "DDN_DIAG_CORE_SENT" },
-> -	{ 0x35, "NDN_DIAG_S_OUT_OF_CRED" },
-> +	{ 0x35, "NDN_DIAG_N_OUT_OF_CRED" },
->  	{ 0x36, "NDN_DIAG_S_OUT_OF_CRED" },
->  	{ 0x37, "NDN_DIAG_E_OUT_OF_CRED" },
->  	{ 0x38, "NDN_DIAG_W_OUT_OF_CRED" },
+for you to fetch changes up to 364ffd2537c44cb6914ff5669153f4a86fffad29:
 
+  hwmon: (emc2305) fix pwm never being able to set lower (2022-12-06 14:45:19 -0800)
+
+----------------------------------------------------------------
+hwmon updates for v6.2 merge window
+
+New drivers
+
+- Driver for OneXPlayer mini AMD sensors
+
+- Ampere's Altra smpro-hwmon driver
+
+New chip and attribute support in existing drivers
+
+- nct6775: Support for ASUS CROSSHAIR VIII/TUF/ProArt B550M
+
+- pmbus/ltc2978: Support for LTC7132
+
+- aquacomputer_d5next: Support for temperature sensor offsets
+  and flow sensor pulses
+
+- coretemp: Support for dynamic ttarget and tjmax
+
+Improvements
+
+- Use devm_regulator_get_enable() where appropriate
+
+- Use sysfs_emit() instead of scnprintf()
+
+- Remove some useless #include <linux/hwmon-vid.h>
+
+- Include <linux/kstrtox.h> when appropriate
+
+- Use simple i2c probe
+
+- it87: Check for a valid chip before using force_id, and new
+  new module parameter to ignore ACPI resource conflicts
+
+- jc42: Use regmap, and restore min/max/critical temperatures on resume
+
+- Add reporting power good and status to PMBus based regulators
+
+Last minute fixes
+
+- emc2305: Fix probing of emc2301/2/3, and fix setting pwm values
+  manually if THERMAL is enabled
+
+Various other minor fixes and improvements
+
+----------------------------------------------------------------
+Ahmad Khalifa (2):
+      hwmon: (it87) Add param to ignore ACPI resource conflicts
+      hwmon: (it87) Check for a valid chip before using force_id
+
+Aleksa Savic (3):
+      hwmon: (aquacomputer_d5next) Add support for temperature sensor offsets
+      hwmon: (aquacomputer_d5next) Clear up macros and comments
+      hwmon: (aquacomputer_d5next) Add support for Quadro flow sensor pulses
+
+Armin Wolf (1):
+      hwmon: (dell-smm) Move error message to make probing silent
+
+Christophe JAILLET (3):
+      hwmon: Include <linux/kstrtox.h> when appropriate
+      hwmon: Remove some useless #include <linux/hwmon-vid.h>
+      hwmon: (gsc-hwmon) Switch to flexible array to simplify code
+
+Colin Ian King (1):
+      hwmon: (fschmd) Make const arrays static const
+
+Denis Pauk (1):
+      hwmon: (nct6775) add ASUS CROSSHAIR VIII/TUF/ProArt B550M
+
+Felix Nieuwenhuizen (1):
+      hwmon: (pmbus/ltc2978) add support for LTC7132
+
+Frank Crawford (1):
+      hwmon: (it87) Add DMI table for future extensions
+
+Jeremy Kerr (1):
+      hwmon: (occ) OCC sensors aren't arch-specific
+
+Joaquín Ignacio Aramendía (3):
+      hwmon: add OneXPlayer mini AMD sensors driver
+      hwmon: (oxp-sensors) Add AOK ZOE and Mini PRO
+      hwmon: (oxp-sensors) Fix pwm reading
+
+Martin Blumenstingl (3):
+      hwmon: (jc42) Convert register access and caching to regmap/regcache
+      hwmon: (jc42) Restore the min/max/critical temperatures on resume
+      hwmon: (jc42) Consistently use bit and bitfield macros in the driver
+
+Matti Vaittinen (2):
+      hwmon: (lm90) simplify using devm_regulator_get_enable()
+      hwmon: (adm1177) simplify using devm_regulator_get_enable()
+
+Nathan Chancellor (1):
+      hwmon: (smpro-hwmon) Improve switch statments in smpro_is_visible()
+
+Patrick Rudolph (2):
+      hwmon: (pmbus) Add power good support
+      hwmon: (pmbus/core) Implement regulator get_status
+
+Quan Nguyen (3):
+      hwmon: Add Ampere's Altra smpro-hwmon driver
+      docs: hwmon: (smpro-hwmon) Add documentation
+      docs: hwmon: (smpro-hwmon) Improve grammar and formatting
+
+Stephen Kitt (1):
+      hwmon: use simple i2c probe
+
+Xingjiang Qiao (2):
+      hwmon: (emc2305) fix unable to probe emc2301/2/3
+      hwmon: (emc2305) fix pwm never being able to set lower
+
+Yang Yingliang (1):
+      hwmon: (jc42) Fix missing unlock on error in jc42_write()
+
+Zhang Rui (4):
+      hwmon: (coretemp) Remove obsolete temp_data->valid
+      hwmon: (coretemp) rearrange tjmax handing code
+      hwmon: (coretemp) Add support for dynamic tjmax
+      hwmon: (coretemp) Add support for dynamic ttarget
+
+ye xingchen (1):
+      hwmon: use sysfs_emit() to instead of scnprintf()
+
+ Documentation/hwmon/aquacomputer_d5next.rst |   4 +-
+ Documentation/hwmon/index.rst               |   2 +
+ Documentation/hwmon/oxp-sensors.rst         |  44 +++
+ Documentation/hwmon/smpro-hwmon.rst         | 102 ++++++
+ MAINTAINERS                                 |   6 +
+ drivers/hwmon/Kconfig                       |  20 ++
+ drivers/hwmon/Makefile                      |   2 +
+ drivers/hwmon/adm1177.c                     |  27 +-
+ drivers/hwmon/aht10.c                       |   5 +-
+ drivers/hwmon/aquacomputer_d5next.c         | 233 ++++++++++----
+ drivers/hwmon/atxp1.c                       |   1 +
+ drivers/hwmon/coretemp.c                    | 242 +++++++++------
+ drivers/hwmon/dell-smm-hwmon.c              |   3 +-
+ drivers/hwmon/ds1621.c                      |   2 +-
+ drivers/hwmon/emc2305.c                     |  48 +--
+ drivers/hwmon/fschmd.c                      |   4 +-
+ drivers/hwmon/gpio-fan.c                    |   1 +
+ drivers/hwmon/gsc-hwmon.c                   |   6 +-
+ drivers/hwmon/hwmon.c                       |   1 +
+ drivers/hwmon/it87.c                        |  90 ++++--
+ drivers/hwmon/jc42.c                        | 273 +++++++++-------
+ drivers/hwmon/lm73.c                        |   6 +-
+ drivers/hwmon/lm90.c                        |  21 +-
+ drivers/hwmon/ltc2992.c                     |   4 +-
+ drivers/hwmon/max127.c                      |   5 +-
+ drivers/hwmon/mr75203.c                     |   1 +
+ drivers/hwmon/nct6775-platform.c            |   7 +
+ drivers/hwmon/occ/Kconfig                   |   2 -
+ drivers/hwmon/oxp-sensors.c                 | 284 +++++++++++++++++
+ drivers/hwmon/pcf8591.c                     |   1 +
+ drivers/hwmon/pmbus/ltc2978.c               |  17 +-
+ drivers/hwmon/pmbus/pmbus_core.c            |  52 +++-
+ drivers/hwmon/pmbus/q54sj108a2.c            |   1 +
+ drivers/hwmon/sbrmi.c                       |   5 +-
+ drivers/hwmon/sbtsi_temp.c                  |   5 +-
+ drivers/hwmon/sht3x.c                       |  12 +-
+ drivers/hwmon/sht4x.c                       |   5 +-
+ drivers/hwmon/smpro-hwmon.c                 | 466 ++++++++++++++++++++++++++++
+ drivers/hwmon/vt8231.c                      |   1 -
+ drivers/hwmon/w83l786ng.c                   |   1 -
+ include/linux/hwmon-sysfs.h                 |   1 +
+ include/linux/platform_data/gsc_hwmon.h     |   5 +-
+ 42 files changed, 1611 insertions(+), 407 deletions(-)
+ create mode 100644 Documentation/hwmon/oxp-sensors.rst
+ create mode 100644 Documentation/hwmon/smpro-hwmon.rst
+ create mode 100644 drivers/hwmon/oxp-sensors.c
+ create mode 100644 drivers/hwmon/smpro-hwmon.c
