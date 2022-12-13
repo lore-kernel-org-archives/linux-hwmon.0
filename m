@@ -2,83 +2,57 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 536CEC4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Dec 2022 05:47:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E06BDC4167B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Dec 2022 09:21:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233843AbiLMFrf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 13 Dec 2022 00:47:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38466 "EHLO
+        id S234276AbiLMJVF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 13 Dec 2022 04:21:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233813AbiLMFre (ORCPT
+        with ESMTP id S234719AbiLMJU1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Dec 2022 00:47:34 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EBC18E08;
-        Mon, 12 Dec 2022 21:47:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670910454; x=1702446454;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=6EB7Bi7g6h+WwBvEMhQIZpLI/dHhIiBPPxI1Y0FWFAI=;
-  b=f9bQZQqZqfiNF7i3pgk9iK6s1hqG2VS0J9qHo2lpE5IIurjw6gH68UvE
-   SIrM1CtLax19dZ8A+QT/LB+t/+wTUzniQPG2imND74GfRKvbFjUbZnPFf
-   F/iE7W8zx6vT9JPWPR+IWs+VMUiczrhkQyqnDHMgsvIJli1EGZGxah1+G
-   6X/tqlRFnDk99rPvESoxl0adcw2qtNJNIRHTRusHPiXTvwTXvmymB+Tpg
-   P96pECwmMsC2jQw7JHTmjekPq3kgtA2h8xskhKJg/DZHH6wIM4DbGql6I
-   IBiv7/fbRy4VAHrMKRn6NG5NDwfQ1qYpb9ySehZVH60YcKBLhDLO9EmSm
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="297728259"
-X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
-   d="scan'208";a="297728259"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 21:47:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="641990832"
-X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
-   d="scan'208";a="641990832"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga007.jf.intel.com with ESMTP; 12 Dec 2022 21:46:56 -0800
-Date:   Tue, 13 Dec 2022 13:37:05 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v4 3/8] mfd: intel-m10-bmc: Split into core and spi
- specific parts
-Message-ID: <Y5gPgXFM24klp/4Q@yilunxu-OptiPlex-7050>
-References: <20221211103913.5287-1-ilpo.jarvinen@linux.intel.com>
- <20221211103913.5287-4-ilpo.jarvinen@linux.intel.com>
+        Tue, 13 Dec 2022 04:20:27 -0500
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B436BFB
+        for <linux-hwmon@vger.kernel.org>; Tue, 13 Dec 2022 01:20:27 -0800 (PST)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id CC422859CF; Tue, 13 Dec 2022 09:18:26 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1670923170; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=Up57crNvsD5x3RqDDGf5ni2dMcmnSNf8dYQC2t49xv04/IT6mO9zfss5CrsHn9vCt
+         F+7jYu8xEUrvhYoQli66Oclo7xjdN2bzcyrVtfftRDEt+c9I/7LkCZkZ8nIQhfdbtR
+         m5NwE9IaTkXhykqkZlMFVLbPdBWVHrIvUKqDf4DflJncnyVqztj61iDnQjSIZ1auj1
+         Xx+oXldsBZtfmNBEJvipiAgWfZzujFdj5L19k3b6/PSfn+blc/ZxyvvvSvzyB/FZWE
+         IEg7mWTV0C71z+SEGfdCJpl/Gl5G/l496o2J2gJ3Rk5gpIWPJv0RY5OgDqCBs4zCo+
+         4cW4RcEFVL3bg==
+Received: by mail.lokoho.com for <linux-hwmon@vger.kernel.org>; Tue, 13 Dec 2022 09:17:13 GMT
+Message-ID: <20221213074501-0.1.2s.95zf.0.o47yj4s4yr@lokoho.com>
+Date:   Tue, 13 Dec 2022 09:17:13 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221211103913.5287-4-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2022-12-11 at 12:39:08 +0200, Ilpo Järvinen wrote:
-> Split the common code from intel-m10-bmc driver into intel-m10-bmc-core
-> and move the SPI bus parts into an interface specific file.
-> 
-> intel-m10-bmc-core becomes the core MFD functions which can support
-> multiple bus interface like SPI bus.
-> 
-> Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
-> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> Acked-by: Guenter Roeck <linux@roeck-us.net> # hwmon
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Dzie=C5=84 dobry,
 
-Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
+
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+
+
+Pozdrawiam
+Adam Charachuta
