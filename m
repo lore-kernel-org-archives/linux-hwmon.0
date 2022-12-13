@@ -2,98 +2,68 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C78C1C4167B
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Dec 2022 14:48:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 474CAC25B04
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Dec 2022 21:56:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235689AbiLMOs5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 13 Dec 2022 09:48:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
+        id S236292AbiLMV4F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 13 Dec 2022 16:56:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235679AbiLMOsq (ORCPT
+        with ESMTP id S237649AbiLMVze (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Dec 2022 09:48:46 -0500
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E629FE4;
-        Tue, 13 Dec 2022 06:48:39 -0800 (PST)
-Received: by mail-oi1-f181.google.com with SMTP id l127so14388667oia.8;
-        Tue, 13 Dec 2022 06:48:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CzVIBqgCMRj+d25frQPQuCRYoHnOg+Yv+NlxwZk81AY=;
-        b=4KIg5Q7mcbq3JGT0fJW+zO7BcrAtLycrfU6s/A+F8TPr0HI31OSMi7AoOkzVcvKpSz
-         3X8ozjq/t6bPpF7PnMU2zgiu/Cj/hCqhxzs1W5zTvb5yVjn3kFQU2GaPcmaVCNBIajJc
-         Ac9Vru3F4V1sg7OJLiXYlWklChw8lssKC5qfxgsfWbuRz0r4R4tL9PhlIfu/7RLIFLqy
-         bROs3G0As+7p0dAmVIBH0IDMZ5XBUKzY7ALAFP/YUXscV+EwWt7K7P/3SRTgnOqzgiLj
-         tpASw9DjaUm05XRgN9RuSt7iIZzFdK0bx1zqxjHrHFlQMatBDCvx+LKNrTkRqcLmnbIU
-         judg==
-X-Gm-Message-State: ANoB5pm3ixfrfUKCCiZfEk/8ciXvn5Wqrbf7He9vjrY9EEPOqsOQB/GF
-        6jfPoD03OG8X/0Nx6FvPEQ==
-X-Google-Smtp-Source: AA0mqf5U39GQd+Lq+x42Zx2jUiu3ICKx3nCbHogvtDuqaYRYED6hOHplsR4OXSyz5MzrCOZAtpd+yw==
-X-Received: by 2002:a05:6808:286:b0:35c:4d3a:6d00 with SMTP id z6-20020a056808028600b0035c4d3a6d00mr9185787oic.24.1670942918522;
-        Tue, 13 Dec 2022 06:48:38 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n26-20020a9d741a000000b0066e7fb52ca2sm1248803otk.14.2022.12.13.06.48.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 06:48:38 -0800 (PST)
-Received: (nullmailer pid 992743 invoked by uid 1000);
-        Tue, 13 Dec 2022 14:48:37 -0000
-Date:   Tue, 13 Dec 2022 08:48:37 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Akshay Gupta <Akshay.Gupta@amd.com>,
-        linux-hwmon@vger.kernel.org,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Kun Yi <kunyi@google.com>, Jonathan Cameron <jic23@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Krishna Chatradhi <ch.naveen@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Supreeth Venkatesh <supreeth.venkatesh@amd.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: correct indentation and style in
- examples
-Message-ID: <167094291641.992665.14962893906742419729.robh@kernel.org>
-References: <20221213092643.20404-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221213092643.20404-1-krzysztof.kozlowski@linaro.org>
+        Tue, 13 Dec 2022 16:55:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB9025C59;
+        Tue, 13 Dec 2022 13:53:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13D2EB81239;
+        Tue, 13 Dec 2022 21:53:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BD973C433EF;
+        Tue, 13 Dec 2022 21:53:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670968430;
+        bh=RFSyUOwwODKbTMLmiV+ry0vRDIZ9880E3mYzJ3VXSjE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=T0IzCt1QknYcHdxsl5inTCf+bpmgae1+Bo+BEMmqGE7i5SBtB6/4sO/Abuk6qT/4b
+         F/cnzLhbn9wehPSiRZu38jOHKMp5WzE0g+xf9Z+QFpzk8KI7Hq80vyE+vngXvayVqk
+         yy8nbtcW8HKRCO2IfhKRDQuavdwocizhCEGGBHr+WdqhwCc5A42MzMwQ0qKB4V+ZxU
+         fQm/NfjfQ2oXagw+rVUtfpyR9o5hitVLpjADp9B4ufFv90sT3CJoIQRQkU6lS5Hcl6
+         dQpSIiOg529us3nkFBYACoSoQO3E2/ykRDfvx/ZwynodRSEghIPuV7divdLsuHXPFA
+         Ftpj88DSOiuTg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AC7BDC00445;
+        Tue, 13 Dec 2022 21:53:50 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon fixes for v6.2-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221212132813.3627306-1-linux@roeck-us.net>
+References: <20221212132813.3627306-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221212132813.3627306-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.2-rc1
+X-PR-Tracked-Commit-Id: 364ffd2537c44cb6914ff5669153f4a86fffad29
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4d03390b5cb97ea8562fcf324106c4735805d558
+Message-Id: <167096843070.13204.5378650532017426147.pr-tracker-bot@kernel.org>
+Date:   Tue, 13 Dec 2022 21:53:50 +0000
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+The pull request you sent on Mon, 12 Dec 2022 05:28:13 -0800:
 
-On Tue, 13 Dec 2022 10:26:41 +0100, Krzysztof Kozlowski wrote:
-> Fix mixed indentation to 4-spaces, remove unnecessary suffix from
-> i2c node name and use lower-case hex.  No functional impact.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/hwmon/adi,adm1177.yaml           | 12 ++---
->  .../bindings/hwmon/adi,adm1266.yaml           |  6 +--
->  .../bindings/hwmon/adi,axi-fan-control.yaml   | 20 ++++-----
->  .../bindings/hwmon/adi,ltc2947.yaml           | 20 ++++-----
->  .../bindings/hwmon/adi,ltc2992.yaml           | 26 +++++------
->  .../devicetree/bindings/hwmon/amd,sbrmi.yaml  |  6 +--
->  .../devicetree/bindings/hwmon/amd,sbtsi.yaml  |  6 +--
->  .../devicetree/bindings/hwmon/iio-hwmon.yaml  |  8 ++--
->  .../bindings/hwmon/national,lm90.yaml         | 44 +++++++++----------
->  .../bindings/hwmon/ntc-thermistor.yaml        |  2 +-
->  .../bindings/hwmon/nuvoton,nct7802.yaml       | 16 +++----
->  .../devicetree/bindings/hwmon/ti,tmp513.yaml  | 22 +++++-----
->  .../bindings/hwmon/ti,tps23861.yaml           | 16 +++----
->  13 files changed, 102 insertions(+), 102 deletions(-)
-> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.2-rc1
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4d03390b5cb97ea8562fcf324106c4735805d558
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
