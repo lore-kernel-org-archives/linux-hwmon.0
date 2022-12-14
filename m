@@ -2,76 +2,74 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1D51C4167B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Dec 2022 15:56:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 078B6C4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Dec 2022 15:56:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238641AbiLNP4L (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Dec 2022 10:56:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
+        id S238611AbiLNP4W (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Dec 2022 10:56:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238880AbiLNPzm (ORCPT
+        with ESMTP id S238543AbiLNPzt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Dec 2022 10:55:42 -0500
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0663A28E18;
-        Wed, 14 Dec 2022 07:52:53 -0800 (PST)
-Received: by mail-oi1-f172.google.com with SMTP id l127so2925020oia.8;
-        Wed, 14 Dec 2022 07:52:52 -0800 (PST)
+        Wed, 14 Dec 2022 10:55:49 -0500
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E13228E2E;
+        Wed, 14 Dec 2022 07:53:21 -0800 (PST)
+Received: by mail-ot1-f45.google.com with SMTP id db10-20020a0568306b0a00b0066d43e80118so1986009otb.1;
+        Wed, 14 Dec 2022 07:53:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H4xHwLe/pd/VD5CKhSEoAMsLKafV5CRSbF22OBqvyP8=;
-        b=NgzX6l6WICjbmWY+o3o951tCy7a/wVFaZ2Fj+N/+ynXwu7llgIqQGBlAXnlJnbkeKE
-         cVKfpPFCgeem0wMkNZQ2Q8x8U1MRyE3XlgvpWRwSYcXGJvC2fsxG9DaTNVEvw5NsnuZg
-         phZVROpk5xOKHl+BUBsZX+8jGEYesL0o6nz7ytvJi0WbR7MolnEaB47Fx8dyR5BYQA8S
-         vYT1GOIc5dCn3Lwq7KAog9zK8Fv0zCfWzd/q8yXN9mxh+HPINkyUj7MGbGGOHWuOQAAq
-         OQ63mS326miAizhGgAUjcX16Nq4DDWvwGBTU7SK3aIWdlWIL2zZ6vruWuJf6aI2L2EZS
-         ko8A==
-X-Gm-Message-State: ANoB5pkXhgrQa+EB5aXHuLfPXOgPeO1L0xvRRutl0jpUa+YveXkUJ5K0
-        zVS2fKTleDHV0vYnGZjuaA==
-X-Google-Smtp-Source: AA0mqf533Y3MXNGVuA3GJkuW7JtzHZqn2fg4QDPst1Zqq/hgTjNtN2e6RQhnUAJ9S1oggdCXIjSXVA==
-X-Received: by 2002:a05:6808:159c:b0:35e:9270:7b0e with SMTP id t28-20020a056808159c00b0035e92707b0emr6784321oiw.29.1671033172176;
-        Wed, 14 Dec 2022 07:52:52 -0800 (PST)
+        bh=Ky7CWyr1K56tgcvD1JqeLwmsHrDvSN4irv7fwBETXmo=;
+        b=lnHTUM19TWA3os/xeNrBSUyUfj1xf1/uDwOEv0dO9EdVei2bJCGkDyyuwVoLiqk3vz
+         tHkLg3H0xjiVrCP2lixr0S+9BfIX3lMI2RYpJ/cZI9FHvTtuS6OlOWFkCgfuVvKveACE
+         p2QO21aqBnQgfoE9ISkQ2sRJSHftYKxz+0ivNBSiw91KrJVaIy7dbhbO5dxU8hsJ4aud
+         pGpO9cYnMAYAe4EyCqErnQUaBPszhQouQSqLJ+yoDol5DqbDcRUleXJv2ndZt3hWfOau
+         M4jdsnU73llZ2RnniC6V3/0SQEGNalRVVg4LAKgnPJwqJP2PjE5JrkTXyQ823ATu/iMG
+         2ouw==
+X-Gm-Message-State: ANoB5pmiSh5uoy2R3S4hSzdwXfnqAc+CwuTkKgQ6IgBN1s1Sx//XnPPy
+        xyuCRpssXzkn49aO3cO+5Q==
+X-Google-Smtp-Source: AA0mqf6Jy4JxfKbg0+GmdD9/xG8edNlc+K2I6SLZBGFlYNtCsBXx1+2czz2rWLJhnt4uFNrSJIz7nw==
+X-Received: by 2002:a9d:7cc7:0:b0:670:5d89:b1d4 with SMTP id r7-20020a9d7cc7000000b006705d89b1d4mr12535835otn.35.1671033200310;
+        Wed, 14 Dec 2022 07:53:20 -0800 (PST)
 Received: from robh_at_kernel.org (rrcs-98-6-157-194.sw.biz.rr.com. [98.6.157.194])
-        by smtp.gmail.com with ESMTPSA id z7-20020aca6707000000b0035c073aa0d8sm37229oix.18.2022.12.14.07.52.51
+        by smtp.gmail.com with ESMTPSA id a2-20020a05683012c200b006705829996fsm2488526otq.56.2022.12.14.07.53.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 07:52:51 -0800 (PST)
-Received: (nullmailer pid 1127423 invoked by uid 1000);
-        Wed, 14 Dec 2022 15:52:48 -0000
-Date:   Wed, 14 Dec 2022 09:52:48 -0600
+        Wed, 14 Dec 2022 07:53:20 -0800 (PST)
+Received: (nullmailer pid 1128398 invoked by uid 1000);
+        Wed, 14 Dec 2022 15:53:19 -0000
+Date:   Wed, 14 Dec 2022 09:53:19 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: adi,ltc2992: correct unit
- address in example
-Message-ID: <167103316837.1127369.14707637163188224968.robh@kernel.org>
-References: <20221213092643.20404-1-krzysztof.kozlowski@linaro.org>
- <20221213092643.20404-2-krzysztof.kozlowski@linaro.org>
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] dt-bindings: hwmon: ntc-thermistor: drop Naveen Krishna
+ Chatradhi from maintainers
+Message-ID: <167103319775.1128325.7970103574763866861.robh@kernel.org>
+References: <20221213100626.36150-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221213092643.20404-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221213100626.36150-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
-On Tue, 13 Dec 2022 10:26:42 +0100, Krzysztof Kozlowski wrote:
-> lower-case hex is expected for unit addresses:
-> 
->   adi,ltc2992.example.dts:22.24-38.15: Warning (i2c_bus_reg): /example-0/i2c/ltc2992@6F: I2C bus unit address format error, expected "6f"
+On Tue, 13 Dec 2022 11:06:26 +0100, Krzysztof Kozlowski wrote:
+> Emails to Naveen Krishna Chatradhi bounce ("550 5.1.1 Recipient address
+> rejected: User unknown").
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  Documentation/devicetree/bindings/hwmon/adi,ltc2992.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml | 1 -
+>  1 file changed, 1 deletion(-)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Applied, thanks!
