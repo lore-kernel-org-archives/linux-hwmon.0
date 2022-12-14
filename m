@@ -2,90 +2,80 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54E23C4332F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Dec 2022 19:48:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6DB5C4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Dec 2022 22:01:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238856AbiLNTsT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Dec 2022 14:48:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
+        id S229655AbiLNWB0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Dec 2022 17:01:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238982AbiLNTrp (ORCPT
+        with ESMTP id S229441AbiLNWBZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Dec 2022 14:47:45 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094F42B259;
-        Wed, 14 Dec 2022 11:47:42 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id v8so24118506edi.3;
-        Wed, 14 Dec 2022 11:47:41 -0800 (PST)
+        Wed, 14 Dec 2022 17:01:25 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4532CDFDD
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Dec 2022 14:01:24 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id x44-20020a05683040ac00b006707c74330eso2563641ott.10
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Dec 2022 14:01:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/pdRu8+DHcrMelvbEuUo+8sJIjuRyafDUypUYPd0m5s=;
-        b=mueDwdWaXiiPqMSF4hXy6FtVy02TiPVCU9twXxlMP5lYHcgTETxrSG83SP/hhHirBc
-         X3lyQ8ubwxspEvO6U6ftXzcsnOd92zKry6ikSgli94zVfrnDa2/ixP4fU06Unsy1OEEj
-         FyvlXBqg4UBLRHCnDJ8wLAgcX7TVjA/f7AXLryCc6PZiJ+2+dsGN0uV20nbR2sPzfQBS
-         u0GItbkXwv9YhrQOlNMaqZ04QXcfoIj+Z/vRdhaPnQ5qVUeWuUb17QBRobHBrbdVC5s3
-         /jAcNU288q5+y5ljwRWYW4QyhJI0UMzNGe1k0ld94tEAiKX461iRB7MTo3RpyMy2McCU
-         b14g==
+        d=criticallink.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2JUpU8XbUBeWziRzLd+hSHISaqkRCe9RKeFMCtB/GcM=;
+        b=YWp+DF9xBAl3T66CYp65RMTBPha/cVnAFe4kRmP9tCFQno+f68ol1vUKHbf/fC2MVO
+         3qhzRhbD0g0OmLL9u83LCP7EAc6bgu/PTvJ18hwsU6CI9YNGF1oq05zLmZvZGvh+BXxU
+         aCgyLgkv+5gf9GdJjORE2NsXHhNhykjUXOJxKBq+rx1Mbz6RAjtPwWnzGymR88BteNJ/
+         C9WonwEwnEIUqnazMB6Y9KLE1xVkTJf+YSFcd1W/5udf5MaVIyuHY9/CBxdH0+GgQ1bN
+         TP6YHKRl66zsl68coyT/K3o8WY7MUvfvjs4GIsmpPbT5S7SeeXKDuCbSFJT2tLWoCFA8
+         D6zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/pdRu8+DHcrMelvbEuUo+8sJIjuRyafDUypUYPd0m5s=;
-        b=lckg2tzx6PelBKW/OIeyCN6b2q/fcWu77hqqOYQA6K12RIj23wncnmp7KZTRDtyyfn
-         nu0loPTizNtr018EggLrrW1bgBluePd3KeOGLdN7bwBp2xhTKLE0yiP1CqULXWK2gxOQ
-         3J94MbRSmdwW/JJv69gAMG/DYcK0nSm4bbfyLVSv/UpnkvNEgK2My+5gvgD8Zb9rj5YB
-         6RVdRSY9XOxiOwm7gKFHFxlJToJWfpNQi/22wpr0Bty2BbYp/xjk6FmfAzCuS10jewaK
-         mb6pR89lAb1MHDx052l5Hx07zbSW0l/2gallHZCRiz8LBbZixsd1vmOInZRd3XNUhMq2
-         Xq0Q==
-X-Gm-Message-State: ANoB5pmCSkvdZGtQIcwBKzqUv/a4nvYU+kw7Hs+oyE7u9e1EFIMJi3ni
-        tcNDd4URmHz82+2XL+QhGuyi6Nf6ouw=
-X-Google-Smtp-Source: AA0mqf53mN3u+fCBd3RoUE9vTHS5eErQeEO7ojQNeDJnWRuWvAaHyL5eV6u5tkplBiAJs59UVu1Nwg==
-X-Received: by 2002:a05:6402:c0b:b0:46c:a763:5889 with SMTP id co11-20020a0564020c0b00b0046ca7635889mr28925680edb.25.1671047260484;
-        Wed, 14 Dec 2022 11:47:40 -0800 (PST)
-Received: from hal.gr.local.zebar.de ([2a02:8109:8c00:1c73:ecc7:4b4b:dc6c:b68b])
-        by smtp.googlemail.com with ESMTPSA id v18-20020aa7cd52000000b0046ae912ff36sm6658701edw.84.2022.12.14.11.47.39
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2JUpU8XbUBeWziRzLd+hSHISaqkRCe9RKeFMCtB/GcM=;
+        b=rnnwH4pomZzZ1uC37jWqcjHAFdeeVW93O1Zfll3ov2bS7wtZRlTYRvrBbA7P+hTyIS
+         o0cx+C7vZz4ADDH+af356YddAFESVYMiPL5Vw/UNfTbF3ULveq+qtyhNnWfFyo49V9Ly
+         fAbmKezjbSH5yUEadEFjk8jKJBVfA/UmcKhgE+BsgCNXtMI/BQVUYed/kulX8yhmzry8
+         LayCEDFPvXSgcK9vHBBaIx0MDUby8CE1nmBL+bWR+lL4EULA3inZTnDs+ImOTgruakPX
+         Ug3oanqLYV81DYOGGyM9eN6drG8NphNu5DH/WPRi6YQgHLHorqjJakWkYHM0N5DMWzYx
+         W+Og==
+X-Gm-Message-State: ANoB5pl9AEIOKQAdBn5edmTRb3CLCv8DaQ4idsM6iZrAMEGQlOcm5Mbg
+        KTtEoMJ7hES+ZmAJ6p9Hd/iz+w==
+X-Google-Smtp-Source: AA0mqf5Sy3ytPOoKj76/MBT0X6Zq/xUPPDIOU/6PaGM+9U1mLIODvfKnRkzA+YGmAy4F0aLgtz5Wug==
+X-Received: by 2002:a9d:7cd5:0:b0:670:99fe:2dcc with SMTP id r21-20020a9d7cd5000000b0067099fe2dccmr6281174otn.18.1671055283563;
+        Wed, 14 Dec 2022 14:01:23 -0800 (PST)
+Received: from jcormier-MS-7A93.syr.criticallink.com (static-72-90-70-109.syrcny.fios.verizon.net. [72.90.70.109])
+        by smtp.gmail.com with ESMTPSA id u7-20020a05620a454700b006fb112f512csm11195043qkp.74.2022.12.14.14.01.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 11:47:39 -0800 (PST)
-From:   Herman Fries <baracoder@googlemail.com>
-Cc:     Herman Fries <baracoder@googlemail.com>,
-        Aleksandr Mezin <mezin.alexander@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (nzxt-smart2) Add device id
-Date:   Wed, 14 Dec 2022 20:46:28 +0100
-Message-Id: <20221214194627.135692-1-baracoder@googlemail.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 14 Dec 2022 14:01:22 -0800 (PST)
+From:   "Cormier, Jonathan" <jcormier@criticallink.com>
+To:     jcormier@criticallink.com, linux-hwmon@vger.kernel.org
+Subject: [PATCH 0/2] hwmon: ltc2945: Add binding and shunt resistor support
+Date:   Wed, 14 Dec 2022 17:01:11 -0500
+Message-Id: <20221214220113.1127408-1-jcormier@criticallink.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Adding support for new device id
-1e71:2019 NZXT NZXT RGB & Fan Controller
+Added the ability to specify the value of the shunt resistor in the
+device tree instead of assuming it is 1 milliOhm.
 
-Signed-off-by: Herman Fries <baracoder@googlemail.com>
----
- drivers/hwmon/nzxt-smart2.c | 1 +
- 1 file changed, 1 insertion(+)
+Would be good to backport as well
 
-diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-index 533f38b0b4e9..2b93ba89610a 100644
---- a/drivers/hwmon/nzxt-smart2.c
-+++ b/drivers/hwmon/nzxt-smart2.c
-@@ -791,6 +791,7 @@ static const struct hid_device_id nzxt_smart2_hid_id_table[] = {
- 	{ HID_USB_DEVICE(0x1e71, 0x2009) }, /* NZXT RGB & Fan Controller */
- 	{ HID_USB_DEVICE(0x1e71, 0x200e) }, /* NZXT RGB & Fan Controller */
- 	{ HID_USB_DEVICE(0x1e71, 0x2010) }, /* NZXT RGB & Fan Controller */
-+	{ HID_USB_DEVICE(0x1e71, 0x2019) }, /* NZXT RGB & Fan Controller */
- 	{},
- };
- 
+Cormier, Jonathan (1):
+  dt-bindings: hwmon: adi,ltc2945: Add binding
+
+John Pruitt (1):
+  hwmon: ltc2945: Allow setting shunt resistor
+
+ .../bindings/hwmon/adi,ltc2945.yaml           | 50 +++++++++++
+ drivers/hwmon/ltc2945.c                       | 86 ++++++++++++++-----
+ 2 files changed, 115 insertions(+), 21 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
+
 -- 
-2.38.1
+2.25.1
 
