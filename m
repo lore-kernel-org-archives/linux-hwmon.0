@@ -2,74 +2,124 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 078B6C4332F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Dec 2022 15:56:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 927B5C4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Dec 2022 16:36:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238611AbiLNP4W (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Dec 2022 10:56:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
+        id S239088AbiLNQgK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Dec 2022 11:36:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238543AbiLNPzt (ORCPT
+        with ESMTP id S239092AbiLNQfl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Dec 2022 10:55:49 -0500
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E13228E2E;
-        Wed, 14 Dec 2022 07:53:21 -0800 (PST)
-Received: by mail-ot1-f45.google.com with SMTP id db10-20020a0568306b0a00b0066d43e80118so1986009otb.1;
-        Wed, 14 Dec 2022 07:53:21 -0800 (PST)
+        Wed, 14 Dec 2022 11:35:41 -0500
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4871B17A91;
+        Wed, 14 Dec 2022 08:35:13 -0800 (PST)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1442977d77dso17291147fac.6;
+        Wed, 14 Dec 2022 08:35:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=P7BkHVo7lr7IoLxj4xozJR7ZfwY1TDrJJZ/qfyWx7lo=;
+        b=ZPJNEtQ9wJ+DV4Dw4CjmW5qiwP8u2MNp2GcqLcoE2CLFKf/pkdihOjjRGcISdALmY/
+         lYj5e/aHTNtAxVddERrRtjz+mT2qfE+2PrBmyIXG8b3nJjlraBGzguHdgZz/clWlRrRu
+         zPA0LuRN7H7mWJESqaoYcdieI4kbaYfyXOKap+UdcGRRbMCkyyl8ojZ5YL8KXH6C72Xc
+         KIKduj6epwd4YyCq5MKepAIFhlkWbBvvDUTiETtqcIwqfzrmOy8V59Zl9l8bKSty3Fyt
+         1cm5t4gC7FQkMXgUc4wzSlKNFDwyUi5sYwxqxpypJZ1sFXPbWDnMFc0yzBWO3xUI/Qjw
+         1FXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ky7CWyr1K56tgcvD1JqeLwmsHrDvSN4irv7fwBETXmo=;
-        b=lnHTUM19TWA3os/xeNrBSUyUfj1xf1/uDwOEv0dO9EdVei2bJCGkDyyuwVoLiqk3vz
-         tHkLg3H0xjiVrCP2lixr0S+9BfIX3lMI2RYpJ/cZI9FHvTtuS6OlOWFkCgfuVvKveACE
-         p2QO21aqBnQgfoE9ISkQ2sRJSHftYKxz+0ivNBSiw91KrJVaIy7dbhbO5dxU8hsJ4aud
-         pGpO9cYnMAYAe4EyCqErnQUaBPszhQouQSqLJ+yoDol5DqbDcRUleXJv2ndZt3hWfOau
-         M4jdsnU73llZ2RnniC6V3/0SQEGNalRVVg4LAKgnPJwqJP2PjE5JrkTXyQ823ATu/iMG
-         2ouw==
-X-Gm-Message-State: ANoB5pmiSh5uoy2R3S4hSzdwXfnqAc+CwuTkKgQ6IgBN1s1Sx//XnPPy
-        xyuCRpssXzkn49aO3cO+5Q==
-X-Google-Smtp-Source: AA0mqf6Jy4JxfKbg0+GmdD9/xG8edNlc+K2I6SLZBGFlYNtCsBXx1+2czz2rWLJhnt4uFNrSJIz7nw==
-X-Received: by 2002:a9d:7cc7:0:b0:670:5d89:b1d4 with SMTP id r7-20020a9d7cc7000000b006705d89b1d4mr12535835otn.35.1671033200310;
-        Wed, 14 Dec 2022 07:53:20 -0800 (PST)
-Received: from robh_at_kernel.org (rrcs-98-6-157-194.sw.biz.rr.com. [98.6.157.194])
-        by smtp.gmail.com with ESMTPSA id a2-20020a05683012c200b006705829996fsm2488526otq.56.2022.12.14.07.53.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 07:53:20 -0800 (PST)
-Received: (nullmailer pid 1128398 invoked by uid 1000);
-        Wed, 14 Dec 2022 15:53:19 -0000
-Date:   Wed, 14 Dec 2022 09:53:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] dt-bindings: hwmon: ntc-thermistor: drop Naveen Krishna
- Chatradhi from maintainers
-Message-ID: <167103319775.1128325.7970103574763866861.robh@kernel.org>
-References: <20221213100626.36150-1-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P7BkHVo7lr7IoLxj4xozJR7ZfwY1TDrJJZ/qfyWx7lo=;
+        b=GNZCwZVrvqHEG/iVo0PVd6WP/G5TPCLPfvNyI+EE/KFbZl6Z4Wdk7GbAN3RsNTtE8L
+         QE/wbJIUm7gTQr/LdATWwcMjxzO63p/k8slByvkKj5dAv9CzW9M70426ZvhbRNbI/zIw
+         uwkIjnyKU6mvlL6Ftj33Zrre2Ov2nluJhfpVIvoi1VG8bEzLH/6u/W/HstrxRDbEkqB7
+         cYU1Jy48O3knzrZXxEoiRrMFu4MSmbSYQlOv0VH2XPycJmlySCQ0siVP23zadoAG/Pes
+         KAPvuSK+gogpu+q6jUVIaXnuv5T4IENnDz2qlglN4w8uLvYGQ2+I2eDxc55pEsZio5EO
+         5V8w==
+X-Gm-Message-State: ANoB5png6uoGVlyf1zoupMIRThY9g90TEZLvIaKg5hPTOgieSXsDvGRm
+        WjzC/STACG0yQ4r2sOXdpc+bToUTS3U=
+X-Google-Smtp-Source: AA0mqf5I0qwaz6CoKiv1lNLzxBrKXK9kWDmPd0i+okA26FaqgtNUM4DzbWncbGIWvCTUo+hru9Ls1A==
+X-Received: by 2002:a05:6870:3049:b0:144:fc01:370 with SMTP id u9-20020a056870304900b00144fc010370mr12389841oau.0.1671035712365;
+        Wed, 14 Dec 2022 08:35:12 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j19-20020a056870021300b001446d5702b5sm2844422oad.56.2022.12.14.08.35.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 08:35:11 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <79a2245d-0a69-836a-fb78-30d2d3ae5185@roeck-us.net>
+Date:   Wed, 14 Dec 2022 08:35:09 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221213100626.36150-1-krzysztof.kozlowski@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: correct indentation and style in
+ examples
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Akshay Gupta <Akshay.Gupta@amd.com>,
+        linux-hwmon@vger.kernel.org,
+        Eric Tremblay <etremblay@distech-controls.com>,
+        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
+        Kun Yi <kunyi@google.com>, Jonathan Cameron <jic23@kernel.org>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Krishna Chatradhi <ch.naveen@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Supreeth Venkatesh <supreeth.venkatesh@amd.com>,
+        devicetree@vger.kernel.org
+References: <20221213092643.20404-1-krzysztof.kozlowski@linaro.org>
+ <167094291641.992665.14962893906742419729.robh@kernel.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <167094291641.992665.14962893906742419729.robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-
-On Tue, 13 Dec 2022 11:06:26 +0100, Krzysztof Kozlowski wrote:
-> Emails to Naveen Krishna Chatradhi bounce ("550 5.1.1 Recipient address
-> rejected: User unknown").
+On 12/13/22 06:48, Rob Herring wrote:
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml | 1 -
->  1 file changed, 1 deletion(-)
+> On Tue, 13 Dec 2022 10:26:41 +0100, Krzysztof Kozlowski wrote:
+>> Fix mixed indentation to 4-spaces, remove unnecessary suffix from
+>> i2c node name and use lower-case hex.  No functional impact.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>   .../bindings/hwmon/adi,adm1177.yaml           | 12 ++---
+>>   .../bindings/hwmon/adi,adm1266.yaml           |  6 +--
+>>   .../bindings/hwmon/adi,axi-fan-control.yaml   | 20 ++++-----
+>>   .../bindings/hwmon/adi,ltc2947.yaml           | 20 ++++-----
+>>   .../bindings/hwmon/adi,ltc2992.yaml           | 26 +++++------
+>>   .../devicetree/bindings/hwmon/amd,sbrmi.yaml  |  6 +--
+>>   .../devicetree/bindings/hwmon/amd,sbtsi.yaml  |  6 +--
+>>   .../devicetree/bindings/hwmon/iio-hwmon.yaml  |  8 ++--
+>>   .../bindings/hwmon/national,lm90.yaml         | 44 +++++++++----------
+>>   .../bindings/hwmon/ntc-thermistor.yaml        |  2 +-
+>>   .../bindings/hwmon/nuvoton,nct7802.yaml       | 16 +++----
+>>   .../devicetree/bindings/hwmon/ti,tmp513.yaml  | 22 +++++-----
+>>   .../bindings/hwmon/ti,tps23861.yaml           | 16 +++----
+>>   13 files changed, 102 insertions(+), 102 deletions(-)
+>>
 > 
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Applied, thanks!
+
+Are you going to apply the series through your tree, or should I
+apply it through hwmon ? I am asking because you applied the
+ntc-thermistor patch, so it might sense to apply this series
+as well.
+
+Thanks,
+Guenter
+
