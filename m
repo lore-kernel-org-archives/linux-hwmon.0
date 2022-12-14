@@ -2,53 +2,54 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1885C4332F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Dec 2022 15:40:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37DE6C001B2
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Dec 2022 15:47:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiLNPko (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Dec 2022 10:40:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
+        id S238894AbiLNPr5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Dec 2022 10:47:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238680AbiLNPkl (ORCPT
+        with ESMTP id S238850AbiLNPrd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Dec 2022 10:40:41 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE0160DC;
-        Wed, 14 Dec 2022 07:40:40 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id q18-20020a056830441200b006704633f258so1985746otv.0;
-        Wed, 14 Dec 2022 07:40:40 -0800 (PST)
+        Wed, 14 Dec 2022 10:47:33 -0500
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC4A27FE6;
+        Wed, 14 Dec 2022 07:47:17 -0800 (PST)
+Received: by mail-oo1-xc34.google.com with SMTP id f184-20020a4a58c1000000b004a3c01646a0so2310106oob.12;
+        Wed, 14 Dec 2022 07:47:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
         bh=MB+cjJ0APVSPLYKSXokJmYfJJzb5hyUnGFn3uvrOCQs=;
-        b=YzK6BC77zHknUwqd/KFXfr2QqsoewRVPzPQNToJD2oWI12PC2oGU+FIEn1Esh1cWru
-         t/12wDjSd8xJL93Dg34+waP3jflFCF8pZYFgl2j2kpJzIAK+beIW2DarCOAPNqZ23jXe
-         XdtXnG0cw2GSnTg0lYk8zfgAmPba2GBmUSARVsF+0n14/upTmIjtwgShbbFOSwCcy8kJ
-         kt0s9p60N4Jzn+GN1Mn9jZG9/5a10Tj0dl8tPiXAiHg9P+nARR+OrPPFwkO9VuCehrVv
-         cZdbGaXP38BrLMtpdZGFgQ95eDPsAbrWc0PM4PGc+txf1cJjSLoPlgwS8C8RzkAsFOhR
-         H9SA==
+        b=VknEFKrJmu9Pr/B/X9LlnnHGqp1nZzP9w+qqAkBG+UBa5JNhLLcWpOlBltqY/z9/7+
+         yd/oHDf6H8tbtxDUCWGQbI2O9B7Cq+P/cB0vV0cIuUDigV1N/ZMx5dtjATaUcwo+Zrjl
+         pmdtVyaS8CoZuYBs9Kqfs1DR/B5acRfI25qWN6pkBgKx8b1DrswACaCx29NwOzKrtjYj
+         GMdHgzxZIefyoePCFeX3IxhD5rOIoyFRtUMWQ3yPdmM/KVlwUPT8od2t7PxnIcfW4PLG
+         3ztosdgEWlInX6BtPzv4V7SZx3DXs5KGg3hQsA93dc30TbVwo8p0iGSxREgbbRITpz74
+         IU+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
         bh=MB+cjJ0APVSPLYKSXokJmYfJJzb5hyUnGFn3uvrOCQs=;
-        b=2eBWyi75o3uv+6CNjGtT4PInlYXcvjk4OBbVDPsIydlNqd0aS6Ptb/cMBoOsoAd5yg
-         VjNsDCee1sVnbhRIxPBt4gw7HVzruYaX5zvVpK6FoEu7oVd+hRt5F1ridKK7WRhxR7Zi
-         IEkULIESXxuoy9iEK2uLNQsO2+4voe2F4U0861uWFVQ/VDHraByeBlWfqaaqYmB/gcDr
-         o9qmt6KHrm7GKLrkmMyMMP9/mTpjlbAVz9Htzf6DKzo5l9wq9kmVNNeCyn2Ki+EOrwMr
-         M8+xArua4H4oJQPGMziyMQBtlzafzetvhuSVfuRtmmYlpQF27QybnBHswmymTMz8kzBW
-         l/+Q==
-X-Gm-Message-State: ANoB5pkaL8q5fr8A+U8csKIO7VHClSeeRRFolf+xbiBe8sE1bL37IpHo
-        UaihvD0o2rFi+g5h3CZ6E8s=
-X-Google-Smtp-Source: AA0mqf7zsaBsYwvuGben3iQe/1eXAlkowHMFEXh5oHiN/FQHD3DDN9RTrC9mYp+67NsWGu41mk8R3A==
-X-Received: by 2002:a9d:51c3:0:b0:670:6cfe:385 with SMTP id d3-20020a9d51c3000000b006706cfe0385mr13244001oth.23.1671032439413;
-        Wed, 14 Dec 2022 07:40:39 -0800 (PST)
+        b=gJSFFXFO0IF56KU5C3PhOBBKUC5CCCJX0g1n6EL4TWuaRxI6spTFWE1dC9LqtvM4uh
+         bkdrpXOGgHSCGK7ZtQiqjwb7SrmbgC4HgikinJc/bS0fbF/fFrpmVSF+OKaz2JeJNJAt
+         7Veor+PQn8vK91kTmKT6J9oJ8OZ3EKPmjTgdhDBI2+Fy4NO7U+tBPurecFA7M3yu+gGH
+         PDkKs5qW48VfmpzovIyvDw1bVWwUp+AIj6W0ht9AIKKsWaNbF5LsshLyRF4TR34Q00r1
+         MBWR3ysNw0cAMO/HN7ESaTVCimbcZrACYh9gUxnhbF4CdgTOQo625JjsESmqhVEvjseC
+         QFFA==
+X-Gm-Message-State: ANoB5plWAiyiI7vMPOkGQW+T6H38IIy8U9DdPTldcBUkaNvcBJ+RiUqa
+        fWsx0XmVox36DHMI8L5ivtk=
+X-Google-Smtp-Source: AA0mqf4haL+cQbuRxCnem1h+c5sf2MFQ7DNmFMcC4n1xjH0BM9e9aVMOR8ADEbdobsXs41hj7MitqA==
+X-Received: by 2002:a4a:e511:0:b0:4a0:9e4e:11ac with SMTP id r17-20020a4ae511000000b004a09e4e11acmr11549450oot.7.1671032837009;
+        Wed, 14 Dec 2022 07:47:17 -0800 (PST)
 Received: from localhost.localdomain (108-228-232-20.lightspeed.sndgca.sbcglobal.net. [108.228.232.20])
-        by smtp.gmail.com with ESMTPSA id 88-20020a9d0161000000b0066c49ce8b77sm2455146otu.77.2022.12.14.07.40.38
+        by smtp.gmail.com with ESMTPSA id v9-20020a4ae049000000b004a3543fbfbbsm2386367oos.14.2022.12.14.07.47.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 07:40:39 -0800 (PST)
+        Wed, 14 Dec 2022 07:47:16 -0800 (PST)
 From:   "Derek J. Clark" <derekjohn.clark@gmail.com>
 To:     linux@roeck-us.net
 Cc:     "Derek J. Clark" <derekjohn.clark@gmail.com>,
@@ -58,9 +59,11 @@ Cc:     "Derek J. Clark" <derekjohn.clark@gmail.com>,
         <samsagax@gmail.com>, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: [PATCH v2] hwmon: (oxp-sensors) Add AYANEO AIR and AIR Pro
-Date:   Wed, 14 Dec 2022 07:39:08 -0800
-Message-Id: <20221214153908.99926-1-derekjohn.clark@gmail.com>
+Date:   Wed, 14 Dec 2022 07:47:13 -0800
+Message-Id: <20221214154713.100648-1-derekjohn.clark@gmail.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <Y5lBue87IXkhNs42@debian.me>
+References: <Y5lBue87IXkhNs42@debian.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
