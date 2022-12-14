@@ -2,171 +2,241 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2713C4332F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Dec 2022 14:27:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1885C4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Dec 2022 15:40:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238722AbiLNO1s (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Dec 2022 09:27:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S229772AbiLNPko (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Dec 2022 10:40:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238663AbiLNO1X (ORCPT
+        with ESMTP id S238680AbiLNPkl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Dec 2022 09:27:23 -0500
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0410A27CE7;
-        Wed, 14 Dec 2022 06:27:16 -0800 (PST)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEB5WdP007022;
-        Wed, 14 Dec 2022 09:26:58 -0500
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3mf6rn2tqj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 09:26:58 -0500
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 2BEEQvM1028773
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 14 Dec 2022 09:26:57 -0500
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Wed, 14 Dec 2022 09:26:56 -0500
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Wed, 14 Dec 2022 09:26:55 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Wed, 14 Dec 2022 09:26:55 -0500
-Received: from IST-LT-40003.ad.analog.com (IST-LT-40003.ad.analog.com [10.25.36.26])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2BEEQLNE022112;
-        Wed, 14 Dec 2022 09:26:48 -0500
-From:   Sinan Divarci <Sinan.Divarci@analog.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Sinan Divarci <Sinan.Divarci@analog.com>
-Subject: [PATCH v2 3/3] dt-bindings: hwmon: Add bindings for max31732
-Date:   Wed, 14 Dec 2022 17:22:06 +0300
-Message-ID: <20221214142206.13288-4-Sinan.Divarci@analog.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221214142206.13288-1-Sinan.Divarci@analog.com>
-References: <20221214142206.13288-1-Sinan.Divarci@analog.com>
+        Wed, 14 Dec 2022 10:40:41 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE0160DC;
+        Wed, 14 Dec 2022 07:40:40 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id q18-20020a056830441200b006704633f258so1985746otv.0;
+        Wed, 14 Dec 2022 07:40:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MB+cjJ0APVSPLYKSXokJmYfJJzb5hyUnGFn3uvrOCQs=;
+        b=YzK6BC77zHknUwqd/KFXfr2QqsoewRVPzPQNToJD2oWI12PC2oGU+FIEn1Esh1cWru
+         t/12wDjSd8xJL93Dg34+waP3jflFCF8pZYFgl2j2kpJzIAK+beIW2DarCOAPNqZ23jXe
+         XdtXnG0cw2GSnTg0lYk8zfgAmPba2GBmUSARVsF+0n14/upTmIjtwgShbbFOSwCcy8kJ
+         kt0s9p60N4Jzn+GN1Mn9jZG9/5a10Tj0dl8tPiXAiHg9P+nARR+OrPPFwkO9VuCehrVv
+         cZdbGaXP38BrLMtpdZGFgQ95eDPsAbrWc0PM4PGc+txf1cJjSLoPlgwS8C8RzkAsFOhR
+         H9SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MB+cjJ0APVSPLYKSXokJmYfJJzb5hyUnGFn3uvrOCQs=;
+        b=2eBWyi75o3uv+6CNjGtT4PInlYXcvjk4OBbVDPsIydlNqd0aS6Ptb/cMBoOsoAd5yg
+         VjNsDCee1sVnbhRIxPBt4gw7HVzruYaX5zvVpK6FoEu7oVd+hRt5F1ridKK7WRhxR7Zi
+         IEkULIESXxuoy9iEK2uLNQsO2+4voe2F4U0861uWFVQ/VDHraByeBlWfqaaqYmB/gcDr
+         o9qmt6KHrm7GKLrkmMyMMP9/mTpjlbAVz9Htzf6DKzo5l9wq9kmVNNeCyn2Ki+EOrwMr
+         M8+xArua4H4oJQPGMziyMQBtlzafzetvhuSVfuRtmmYlpQF27QybnBHswmymTMz8kzBW
+         l/+Q==
+X-Gm-Message-State: ANoB5pkaL8q5fr8A+U8csKIO7VHClSeeRRFolf+xbiBe8sE1bL37IpHo
+        UaihvD0o2rFi+g5h3CZ6E8s=
+X-Google-Smtp-Source: AA0mqf7zsaBsYwvuGben3iQe/1eXAlkowHMFEXh5oHiN/FQHD3DDN9RTrC9mYp+67NsWGu41mk8R3A==
+X-Received: by 2002:a9d:51c3:0:b0:670:6cfe:385 with SMTP id d3-20020a9d51c3000000b006706cfe0385mr13244001oth.23.1671032439413;
+        Wed, 14 Dec 2022 07:40:39 -0800 (PST)
+Received: from localhost.localdomain (108-228-232-20.lightspeed.sndgca.sbcglobal.net. [108.228.232.20])
+        by smtp.gmail.com with ESMTPSA id 88-20020a9d0161000000b0066c49ce8b77sm2455146otu.77.2022.12.14.07.40.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 07:40:39 -0800 (PST)
+From:   "Derek J. Clark" <derekjohn.clark@gmail.com>
+To:     linux@roeck-us.net
+Cc:     "Derek J. Clark" <derekjohn.clark@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: (oxp-sensors) Add AYANEO AIR and AIR Pro
+Date:   Wed, 14 Dec 2022 07:39:08 -0800
+Message-Id: <20221214153908.99926-1-derekjohn.clark@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: S0M_byp6vi9rnmlHYWIjD3JipbMr1Q7U
-X-Proofpoint-ORIG-GUID: S0M_byp6vi9rnmlHYWIjD3JipbMr1Q7U
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-14_06,2022-12-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- bulkscore=0 adultscore=0 suspectscore=0 phishscore=0 malwarescore=0
- mlxlogscore=637 impostorscore=0 spamscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212140114
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Adding bindings for max31732 quad remote temperature sensor
+Add support for the AYANEO AIR and AYANEO AIR Pro models of handheld
+devices. These devices use the same EC registers and logic as the One X
+Player mini AMD. Previous AYANEO models are not supported as they use a
+different EC and do not have the necessary fan speed write enable and
+setting registers. Tihe driver is tested on Aya Neo AIR while AIR Pro
+model EC functionality and DMI data were verified using command line
+tools by another user.
 
-Signed-off-by: Sinan Divarci <Sinan.Divarci@analog.com>
+The added devices are:
+- AYANEO AIR (AMD 5560U)
+- AYANEO AIR Pro (AMD 5560U)
+- AYANEO AIR Pro (AMD 5825U)
+
+Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
 ---
- .../bindings/hwmon/adi,max31732.yaml          | 83 +++++++++++++++++++
- 1 file changed, 83 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
+ Documentation/hwmon/oxp-sensors.rst | 19 ++++++----
+ MAINTAINERS                         |  1 +
+ drivers/hwmon/oxp-sensors.c         | 54 ++++++++++++++++++++++++-----
+ 3 files changed, 59 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
-new file mode 100644
-index 000000000..c701cda95
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
-@@ -0,0 +1,83 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2022 Analog Devices Inc.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/adi,max31732.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Analog Devices MAX31732 Temperature Sensor Device Driver
-+
-+maintainers:
-+  - Sinan Divarci <Sinan.Divarci@analog.com>
-+
-+description: Bindings for the Analog Devices MAX31732 Temperature Sensor Device.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,max31732
-+
-+  reg:
-+    description: I2C address of the Temperature Sensor Device.
-+    maxItems: 1
-+
-+  interrupts:
-+    minItems: 1
-+    maxItems: 2
-+
-+  interrupt-names:
-+    description: Name of the interrupt pin of max31732 used for IRQ.
-+    minItems: 1
-+    items:
-+      - enum: [ALARM1, ALARM2]
-+      - enum: [ALARM1, ALARM2]
-+
-+  adi,alarm1-interrupt-mode:
-+    description: |
-+      Enables the ALARM1 output to function in interrupt mode.
-+      Default ALARM1 output function is comparator mode.
-+    type: boolean
-+
-+  adi,alarm2-interrupt-mode:
-+    description: |
-+      Enables the ALARM2 output to function in interrupt mode.
-+      Default ALARM2 output function is comparator mode.
-+    type: boolean
-+
-+  adi,alarm1-fault-queue:
-+    description: The number of consecutive faults required to assert ALARM1.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [1, 2, 4, 6]
-+    default: 1
-+
-+  adi,alarm2-fault-queue:
-+    description: The number of consecutive faults required to assert ALARM2.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [1, 2, 4, 6]
-+    default: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        sensor@1c {
-+            compatible = "adi,max31732";
-+            reg = <0x1c>;
-+            interrupt-parent = <&gpio>;
-+            interrupts = <17 IRQ_TYPE_EDGE_BOTH>, <27 IRQ_TYPE_EDGE_BOTH>;
-+            interrupt-names = "ALARM1", "ALARM2";
-+            adi,alarm1-fault-queue = <4>;
-+            adi,alarm2-fault-queue = <2>;
-+            adi,alarm2-interrupt-mode;
-+      };
-+    };
+diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
+index 39c588ec5c50..a53c961065b2 100644
+--- a/Documentation/hwmon/oxp-sensors.rst
++++ b/Documentation/hwmon/oxp-sensors.rst
+@@ -3,18 +3,21 @@
+ Kernel driver oxp-sensors
+ =========================
+ 
+-Author:
++Authors:
++    - Derek John Clark <derekjohn.clark@gmail.com>
+     - Joaquín Ignacio Aramendía <samsagax@gmail.com>
+ 
+-Description:
++Description
+ ------------
+ 
+-One X Player devices from One Netbook provide fan readings and fan control
+-through its Embedded Controller.
++Handheld devices from One Netbook and Aya Neo provide fan readings and fan
++control through their embedded controllers.
+ 
+-Currently only supports AMD boards from the One X Player and AOK ZOE lineup.
+-Intel boards could be supported if we could figure out the EC registers and
+-values to write to since the EC layout and model is different.
++Currently only supports AMD boards from One X Player, AOK ZOE, and some Aya
++Neo devices. One X PLayer Intel boards could be supported if we could figure
++out the EC registers and values to write to since the EC layout and model is
++different. Aya Neo devices preceding the AIR may not be usable as the EC model
++is different and do not appear to have manual control capabiltities.
+ 
+ Supported devices
+ -----------------
+@@ -22,6 +25,8 @@ Supported devices
+ Currently the driver supports the following handhelds:
+ 
+  - AOK ZOE A1
++ - Aya Neo AIR
++ - Aya Neo AIR Pro
+  - OneXPlayer AMD
+  - OneXPlayer mini AMD
+  - OneXPlayer mini AMD PRO
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 90220659206c..8bce95170f12 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15346,6 +15346,7 @@ F:	drivers/mtd/nand/onenand/
+ F:	include/linux/mtd/onenand*.h
+ 
+ ONEXPLAYER FAN DRIVER
++M:	Derek John Clark <derekjohn.clark@gmail.com>
+ M:	Joaquín Ignacio Aramendía <samsagax@gmail.com>
+ L:	linux-hwmon@vger.kernel.org
+ S:	Maintained
+diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+index f84ec8f8eda9..7adc0199ea66 100644
+--- a/drivers/hwmon/oxp-sensors.c
++++ b/drivers/hwmon/oxp-sensors.c
+@@ -1,12 +1,12 @@
+ // SPDX-License-Identifier: GPL-2.0+
+ /*
+- * Platform driver for OXP Handhelds that expose fan reading and control
+- * via hwmon sysfs.
++ * Platform driver for Handhelds that expose fan reading and control via
++ * hwmon sysfs.
+  *
+- * Old boards have the same DMI strings and they are told appart by the
+- * boot cpu vendor (Intel/AMD). Currently only AMD boards are supported
+- * but the code is made to be simple to add other handheld boards in the
+- * future.
++ * Old OXP boards have the same DMI strings and they are told appart by
++ * the boot cpu vendor (Intel/AMD). Currently only AMD boards are
++ * supported but the code is made to be simple to add other handheld
++ * boards in the future.
+  * Fan control is provided via pwm interface in the range [0-255].
+  * Old AMD boards use [0-100] as range in the EC, the written value is
+  * scaled to accommodate for that. Newer boards like the mini PRO and
+@@ -42,6 +42,8 @@ static bool unlock_global_acpi_lock(void)
+ 
+ enum oxp_board {
+ 	aok_zoe_a1 = 1,
++	aya_neo_air,
++	aya_neo_air_pro,
+ 	oxp_mini_amd,
+ 	oxp_mini_amd_pro,
+ };
+@@ -60,6 +62,20 @@ static const struct dmi_system_id dmi_table[] = {
+ 		},
+ 		.driver_data = (void *) &(enum oxp_board) {aok_zoe_a1},
+ 	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR"),
++		},
++		.driver_data = (void *) &(enum oxp_board) {aya_neo_air},
++	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR Pro"),
++		},
++		.driver_data = (void *) &(enum oxp_board) {aya_neo_air_pro},
++	},
+ 	{
+ 		.matches = {
+ 			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
+@@ -161,8 +177,19 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+ 			ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
+ 			if (ret)
+ 				return ret;
+-			if (board == oxp_mini_amd)
++			switch (board) {
++			case aok_zoe_a1:
++				break;
++			case aya_neo_air:
++			case aya_neo_air_pro:
++			case oxp_mini_amd:
+ 				*val = (*val * 255) / 100;
++				break;
++			case oxp_mini_amd_pro:
++				break;
++			default:
++				break;
++			}
+ 			return 0;
+ 		case hwmon_pwm_enable:
+ 			return read_from_ec(OXP_SENSOR_PWM_ENABLE_REG, 1, val);
+@@ -191,8 +218,19 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+ 		case hwmon_pwm_input:
+ 			if (val < 0 || val > 255)
+ 				return -EINVAL;
+-			if (board == oxp_mini_amd)
++			switch (board) {
++			case aok_zoe_a1:
++				break;
++			case aya_neo_air:
++			case aya_neo_air_pro:
++			case oxp_mini_amd:
+ 				val = (val * 100) / 255;
++				break;
++			case oxp_mini_amd_pro:
++				break;
++			default:
++				break;
++			}
+ 			return write_to_ec(dev, OXP_SENSOR_PWM_REG, val);
+ 		default:
+ 			break;
 -- 
-2.25.1
+2.38.1
 
