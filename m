@@ -2,124 +2,211 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 927B5C4332F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Dec 2022 16:36:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5AACC4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Dec 2022 17:00:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239088AbiLNQgK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Dec 2022 11:36:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
+        id S239196AbiLNRAK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Dec 2022 12:00:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239092AbiLNQfl (ORCPT
+        with ESMTP id S238278AbiLNRAI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Dec 2022 11:35:41 -0500
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4871B17A91;
-        Wed, 14 Dec 2022 08:35:13 -0800 (PST)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1442977d77dso17291147fac.6;
-        Wed, 14 Dec 2022 08:35:13 -0800 (PST)
+        Wed, 14 Dec 2022 12:00:08 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92180140C7
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Dec 2022 09:00:07 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id 1so11512014lfz.4
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Dec 2022 09:00:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=P7BkHVo7lr7IoLxj4xozJR7ZfwY1TDrJJZ/qfyWx7lo=;
-        b=ZPJNEtQ9wJ+DV4Dw4CjmW5qiwP8u2MNp2GcqLcoE2CLFKf/pkdihOjjRGcISdALmY/
-         lYj5e/aHTNtAxVddERrRtjz+mT2qfE+2PrBmyIXG8b3nJjlraBGzguHdgZz/clWlRrRu
-         zPA0LuRN7H7mWJESqaoYcdieI4kbaYfyXOKap+UdcGRRbMCkyyl8ojZ5YL8KXH6C72Xc
-         KIKduj6epwd4YyCq5MKepAIFhlkWbBvvDUTiETtqcIwqfzrmOy8V59Zl9l8bKSty3Fyt
-         1cm5t4gC7FQkMXgUc4wzSlKNFDwyUi5sYwxqxpypJZ1sFXPbWDnMFc0yzBWO3xUI/Qjw
-         1FXw==
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lvd2yKCxN/cWI7hKHlLa8cJjk+ps/lRVDsToMSf8tOg=;
+        b=BW3IyTwR01kc+dH1hnbs7li3oFVb2chs6RVIFA2xJhgglw1bx/SZ3Mn7T30fspgpRJ
+         rOgWd+zeyEFpXGQKeD+vfZppdNjsPjdM0CgSpNh+Lvp6HrTOoxMLa1g5eDSoNaqcgv0m
+         oqBED1QZ3UskYFcDkkDDvGrN23dIXwNfH9760TsARKdTaxMXIq/D/TRVj51amENCd587
+         sf8a9rLheuux/ZNC8nujss3cWHG9P3PJYLgCAz4hkAJQCPCZvg6OOiQ4qXZH12FJ2/8V
+         9+cR4I5+sxAD/CEcACJfXfRa2UJ4sAHUikHgMxVD6I9WGCDQLSHQ7Rgqg9Fu3CO8GXeD
+         I40g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P7BkHVo7lr7IoLxj4xozJR7ZfwY1TDrJJZ/qfyWx7lo=;
-        b=GNZCwZVrvqHEG/iVo0PVd6WP/G5TPCLPfvNyI+EE/KFbZl6Z4Wdk7GbAN3RsNTtE8L
-         QE/wbJIUm7gTQr/LdATWwcMjxzO63p/k8slByvkKj5dAv9CzW9M70426ZvhbRNbI/zIw
-         uwkIjnyKU6mvlL6Ftj33Zrre2Ov2nluJhfpVIvoi1VG8bEzLH/6u/W/HstrxRDbEkqB7
-         cYU1Jy48O3knzrZXxEoiRrMFu4MSmbSYQlOv0VH2XPycJmlySCQ0siVP23zadoAG/Pes
-         KAPvuSK+gogpu+q6jUVIaXnuv5T4IENnDz2qlglN4w8uLvYGQ2+I2eDxc55pEsZio5EO
-         5V8w==
-X-Gm-Message-State: ANoB5png6uoGVlyf1zoupMIRThY9g90TEZLvIaKg5hPTOgieSXsDvGRm
-        WjzC/STACG0yQ4r2sOXdpc+bToUTS3U=
-X-Google-Smtp-Source: AA0mqf5I0qwaz6CoKiv1lNLzxBrKXK9kWDmPd0i+okA26FaqgtNUM4DzbWncbGIWvCTUo+hru9Ls1A==
-X-Received: by 2002:a05:6870:3049:b0:144:fc01:370 with SMTP id u9-20020a056870304900b00144fc010370mr12389841oau.0.1671035712365;
-        Wed, 14 Dec 2022 08:35:12 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j19-20020a056870021300b001446d5702b5sm2844422oad.56.2022.12.14.08.35.10
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lvd2yKCxN/cWI7hKHlLa8cJjk+ps/lRVDsToMSf8tOg=;
+        b=2ll3lvSG5SLWXp7LVV2nIY9h9VLBGm1zu69LBewSWqMPWNThGQyE7CGjBWy/jzgKpw
+         6ChmyYTnVWxSD6GJh05qQ0f1Bf9QxmJMMq/APOgCshsBRRqo933ZU6RTS8PyGCvYK7Dw
+         jFpw9Rm19hOCizrCtCOxXzGBb95kTPiIBLdbWPnIwUPznt/r5u/ISFgRBHJ1vjwkOwF+
+         YrJHgrgi0YPdG03T3ITOuqvMe74cADj/bGn6MT2ScXPI54zvyxZuqhs1BYoJEUUUFMOV
+         xN0OrESsoImsIk2N8aZ5I9N0l0mcYTdwerYVV2Z0UTS7EcmDezqbnh6xDzNb9My3uK1h
+         3cmw==
+X-Gm-Message-State: ANoB5pnfQRpR0wpjkvSrbIP19bfXuLcw9b2UXrlzEQqzfSqb2n2gmvE9
+        lm8dm7A53au0K7etEr2Iu0VBJA==
+X-Google-Smtp-Source: AA0mqf4mABnqZl7/+BzWI1hOTFIk5UPhZ/K7k+NH9eQxXgxiXKyPbLEF853q1jLsfbrbTV5vlrJM3g==
+X-Received: by 2002:a19:6405:0:b0:4b5:b268:dbc8 with SMTP id y5-20020a196405000000b004b5b268dbc8mr5539381lfb.45.1671037205985;
+        Wed, 14 Dec 2022 09:00:05 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id l11-20020ac24a8b000000b004b55e16931fsm865442lfp.259.2022.12.14.09.00.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 08:35:11 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <79a2245d-0a69-836a-fb78-30d2d3ae5185@roeck-us.net>
-Date:   Wed, 14 Dec 2022 08:35:09 -0800
+        Wed, 14 Dec 2022 09:00:04 -0800 (PST)
+Message-ID: <386e3717-a063-a2ea-6028-19d11b5838b0@linaro.org>
+Date:   Wed, 14 Dec 2022 18:00:03 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: correct indentation and style in
- examples
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 3/3] dt-bindings: hwmon: Add bindings for max31732
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Akshay Gupta <Akshay.Gupta@amd.com>,
-        linux-hwmon@vger.kernel.org,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
-        Kun Yi <kunyi@google.com>, Jonathan Cameron <jic23@kernel.org>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Krishna Chatradhi <ch.naveen@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Supreeth Venkatesh <supreeth.venkatesh@amd.com>,
-        devicetree@vger.kernel.org
-References: <20221213092643.20404-1-krzysztof.kozlowski@linaro.org>
- <167094291641.992665.14962893906742419729.robh@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <167094291641.992665.14962893906742419729.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Sinan Divarci <Sinan.Divarci@analog.com>, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221214142206.13288-1-Sinan.Divarci@analog.com>
+ <20221214142206.13288-4-Sinan.Divarci@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221214142206.13288-4-Sinan.Divarci@analog.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 12/13/22 06:48, Rob Herring wrote:
+On 14/12/2022 15:22, Sinan Divarci wrote:
+> Adding bindings for max31732 quad remote temperature sensor
+
+Full stop.
+
+Subject: drop second, redundant "bindings for".
+
 > 
-> On Tue, 13 Dec 2022 10:26:41 +0100, Krzysztof Kozlowski wrote:
->> Fix mixed indentation to 4-spaces, remove unnecessary suffix from
->> i2c node name and use lower-case hex.  No functional impact.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>   .../bindings/hwmon/adi,adm1177.yaml           | 12 ++---
->>   .../bindings/hwmon/adi,adm1266.yaml           |  6 +--
->>   .../bindings/hwmon/adi,axi-fan-control.yaml   | 20 ++++-----
->>   .../bindings/hwmon/adi,ltc2947.yaml           | 20 ++++-----
->>   .../bindings/hwmon/adi,ltc2992.yaml           | 26 +++++------
->>   .../devicetree/bindings/hwmon/amd,sbrmi.yaml  |  6 +--
->>   .../devicetree/bindings/hwmon/amd,sbtsi.yaml  |  6 +--
->>   .../devicetree/bindings/hwmon/iio-hwmon.yaml  |  8 ++--
->>   .../bindings/hwmon/national,lm90.yaml         | 44 +++++++++----------
->>   .../bindings/hwmon/ntc-thermistor.yaml        |  2 +-
->>   .../bindings/hwmon/nuvoton,nct7802.yaml       | 16 +++----
->>   .../devicetree/bindings/hwmon/ti,tmp513.yaml  | 22 +++++-----
->>   .../bindings/hwmon/ti,tps23861.yaml           | 16 +++----
->>   13 files changed, 102 insertions(+), 102 deletions(-)
->>
+> Signed-off-by: Sinan Divarci <Sinan.Divarci@analog.com>
+> ---
+>  .../bindings/hwmon/adi,max31732.yaml          | 83 +++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
+> new file mode 100644
+> index 000000000..c701cda95
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
+> @@ -0,0 +1,83 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2022 Analog Devices Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/adi,max31732.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices MAX31732 Temperature Sensor Device Driver
+
+Drop "Device Driver"
+
+> +
+> +maintainers:
+> +  - Sinan Divarci <Sinan.Divarci@analog.com>
+> +
+> +description: Bindings for the Analog Devices MAX31732 Temperature Sensor Device.
+
+Drop "Bindings for". Actually, either drop entire description or write
+something else than title.
+
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,max31732
+> +
+> +  reg:
+> +    description: I2C address of the Temperature Sensor Device.
+
+Drop description.
+
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  interrupt-names:
+> +    description: Name of the interrupt pin of max31732 used for IRQ.
+
+Drop description.
+
+> +    minItems: 1
+> +    items:
+> +      - enum: [ALARM1, ALARM2]
+> +      - enum: [ALARM1, ALARM2]
+
+This should be fixed, not flexible. Why it's flexible?
+
+lowercase letters only
+
+> +
+> +  adi,alarm1-interrupt-mode:
+> +    description: |
+> +      Enables the ALARM1 output to function in interrupt mode.
+> +      Default ALARM1 output function is comparator mode.
+
+Why this is a property of DT/hardware? Don't encode policy in DT.
+
+> +    type: boolean
+> +
+> +  adi,alarm2-interrupt-mode:
+> +    description: |
+> +      Enables the ALARM2 output to function in interrupt mode.
+> +      Default ALARM2 output function is comparator mode.
+
+Same question.
+
+> +    type: boolean
+> +
+> +  adi,alarm1-fault-queue:
+> +    description: The number of consecutive faults required to assert ALARM1.
+
+Same question - why this number differs with hardware?
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [1, 2, 4, 6]
+> +    default: 1
+> +
+> +  adi,alarm2-fault-queue:
+> +    description: The number of consecutive faults required to assert ALARM2.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [1, 2, 4, 6]
+> +    default: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        sensor@1c {
+> +            compatible = "adi,max31732";
+> +            reg = <0x1c>;
+> +            interrupt-parent = <&gpio>;
+> +            interrupts = <17 IRQ_TYPE_EDGE_BOTH>, <27 IRQ_TYPE_EDGE_BOTH>;
+> +            interrupt-names = "ALARM1", "ALARM2";
+> +            adi,alarm1-fault-queue = <4>;
+> +            adi,alarm2-fault-queue = <2>;
+> +            adi,alarm2-interrupt-mode;
+> +      };
+
+Messed indentation.
 
 
-Are you going to apply the series through your tree, or should I
-apply it through hwmon ? I am asking because you applied the
-ntc-thermistor patch, so it might sense to apply this series
-as well.
+> +    };
 
-Thanks,
-Guenter
+Best regards,
+Krzysztof
 
