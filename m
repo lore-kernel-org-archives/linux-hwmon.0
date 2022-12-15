@@ -2,291 +2,94 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 465F8C001B2
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Dec 2022 22:07:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD683C001B2
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Dec 2022 00:19:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiLNWHy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Dec 2022 17:07:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
+        id S230026AbiLOATf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Dec 2022 19:19:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiLNWHu (ORCPT
+        with ESMTP id S229547AbiLOATE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Dec 2022 17:07:50 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89E940479
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Dec 2022 14:07:43 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id g7so3726681qts.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Dec 2022 14:07:43 -0800 (PST)
+        Wed, 14 Dec 2022 19:19:04 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4B7316;
+        Wed, 14 Dec 2022 16:19:00 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id l8-20020a056830054800b006705fd35eceso2735634otb.12;
+        Wed, 14 Dec 2022 16:19:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=criticallink.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KkruMqduxIbjtx8gXwhOn81yywW3pdpreSNZQFqbSOk=;
-        b=TcJVe3cOaqvIGQaH6BmLwuzQ18Pqn6CwMr9RJM6kFs2gxALvRVq7dTcBOngYh5vES7
-         iDZJzdeftZnWyRsIFKX06imAc3Vc0CBCvOHLR83C4DV/LFwMz1mRf+XZew9nrCcCtBu3
-         z/Cj09zA8ZnL8sOrLiKhUg1v9NlhoT5KXtdnCjASLj1UGkXEl72qQPqQ4L9SK1FzC8mv
-         jec6AxiFPSofa9b2+mRw6zE8MG7roXNobJxG6JD+fdAJV++GHdoKzQ4jGzE39SEvU2rF
-         NxAXm5kqD4o3MSvy2YNIzuaEGQHgLgK6iShzWiHU3ZItTY/LBo20HAZzfC2pHk1yw5Fw
-         zhFQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=gdmHglzdWNf/DUwjqm59a2A1zMO/VnLL8Ae1GW4halg=;
+        b=cNMJuQ3GHcPni+psrYouPcOeYlibvBUryANLwnSj1GepFGyV/hpuoX1bqGSooVOyaX
+         kshiJtEW5stdMYib8vS0Iqnjc7Nngrz6wwatwZzWNPHH1oxMVtkHMimv18hXkMg2ZZ+Q
+         LkQQiLHRqh2dsNXVEoPBk8NljYsUaP4hZQ9E43b5CZBru3U1vC0E1LbOgVagrL1qtoWp
+         LOYQXN9meK4fg8c0PPms1h+YsShqRN+oyjrYMldktkiweUpxNqfvyyznTtylnkbl+WC4
+         o8BegIOv4WyWSWz9S/WyC122PXVHaJfq6mnRXIPBFXmcOA93K6poWOgnjY5lLHzS1itl
+         TGgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KkruMqduxIbjtx8gXwhOn81yywW3pdpreSNZQFqbSOk=;
-        b=TaLOY9956+oPlI+jZ68e8zMCP5dL65wHLhQqMkCl1Yd9DONRJ8/umDoRMwTKc8pzok
-         CMZC+ORvbn3dKtrVT71vrHFN9FvXfRl/nGhe19I15CvfUDDhz4ThxwazC8IGNCvqWa50
-         vaK383wctbF+Rjki27ZOSyp01j5YXo7Ldk1A3PG7Cae5+StVU5A3eq+z4xhRqjMlxbg4
-         GrQLmhecXk+G10gQ4fZi7bOELuX6HZVREXR0K2TAcwOVCxSvxBJQinB9rMpNToRFtJdn
-         cUEqSwBPmorW5/kdnvFukLcHBdNMHzF6yV7qosiCnII1OLIH0KJyLK/kHKGzT2j/o77O
-         RYXA==
-X-Gm-Message-State: ANoB5pn9JrjgjbPJ2J1uxGJTOpxWKYB2fnakDY6+eTJSMrZV+q48SX+e
-        6sGGpM8gCH9ycNoGynIIt0rsQhRdPEeX3V5m
-X-Google-Smtp-Source: AA0mqf61hmftnE2cie9po67xol3T56V060QxdLlDKUi4YXYmHzfqUmHNiaujOiiymdbHijyRbv4FEw==
-X-Received: by 2002:ac8:689a:0:b0:3a7:ec54:cfa2 with SMTP id m26-20020ac8689a000000b003a7ec54cfa2mr38298744qtq.56.1671055662630;
-        Wed, 14 Dec 2022 14:07:42 -0800 (PST)
-Received: from jcormier-MS-7A93.syr.criticallink.com (static-72-90-70-109.syrcny.fios.verizon.net. [72.90.70.109])
-        by smtp.gmail.com with ESMTPSA id l24-20020ae9f018000000b006fc2b672950sm10623939qkg.37.2022.12.14.14.07.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 14:07:42 -0800 (PST)
-From:   "Cormier, Jonathan" <jcormier@criticallink.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     John Pruitt <jpruitt@criticallink.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bob Duke <bduke@criticallink.com>,
-        "Cormier, Jonathan" <jcormier@criticallink.com>
-Subject: [PATCH 2/2] hwmon: ltc2945: Allow setting shunt resistor
-Date:   Wed, 14 Dec 2022 17:07:27 -0500
-Message-Id: <20221214220727.1350784-3-jcormier@criticallink.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221214220727.1350784-1-jcormier@criticallink.com>
-References: <20221214220727.1350784-1-jcormier@criticallink.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gdmHglzdWNf/DUwjqm59a2A1zMO/VnLL8Ae1GW4halg=;
+        b=A7QGS7PIdXRuwBUnJLcgaAu9CuRLlwUc24zmW6gzJFBESWQ1XvjiEZKV2VfkH86beK
+         193Xp1MkKleF6X42yan3zadwGtW3YYOj2pGMjxZJYzpz5zO2ZbhGccRHVUl0RROvyLwv
+         9F6ACAzfmUn/AvqeSRpeCXR4CDwLUTN0UtqhuFD6xGkXtrmNY6lho1UNIq4E5Tz+AkPK
+         H8YP7KkzN2hDwhi0Q58jxS10JXpLcstsLQZDs03NXzS5d7me0DsTSfgx6Dji5fG5kOyY
+         rYzWGUnLPdl/9sk01FEE2vtRMAztcys0O+Y/SIN4g46CzWHoSpDRuF6p13ciGkNcBbsK
+         /gbA==
+X-Gm-Message-State: ANoB5pkbcronbXP1jhkzWgScyC8Ms2BfV5cICj7rtldBlGz5Arha/V02
+        23qysfeoWDHQz2+fK3oTenxzJWy1IXc=
+X-Google-Smtp-Source: AA0mqf6ficMbbQGzbCauoQOMriZxh9SnxdqjhyGgX8lZJ8HIuOF2RhGRrQfBu+fDaouj6wUMsE8kcA==
+X-Received: by 2002:a05:6830:2015:b0:670:7757:173a with SMTP id e21-20020a056830201500b006707757173amr12772084otp.10.1671063539841;
+        Wed, 14 Dec 2022 16:18:59 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 96-20020a9d0869000000b00661b46cc26bsm2937444oty.9.2022.12.14.16.18.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 16:18:59 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <93732ff5-aa9d-3a90-efa5-ceaecdac82dd@roeck-us.net>
+Date:   Wed, 14 Dec 2022 16:18:57 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] hwmon: (oxp-sensors) Add AYANEO AIR and AIR Pro
+Content-Language: en-US
+To:     Joaquin Aramendia <samsagax@gmail.com>,
+        "Derek J. Clark" <derekjohn.clark@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221214153908.99926-1-derekjohn.clark@gmail.com>
+ <CABgtM3ibh0k8LcEnSNUx7DwJBQfMK6K3G_Rhk4GR5oSsx+Rmaw@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CABgtM3ibh0k8LcEnSNUx7DwJBQfMK6K3G_Rhk4GR5oSsx+Rmaw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: John Pruitt <jpruitt@criticallink.com>
+On 12/14/22 14:05, Joaquin Aramendia wrote:
+>>   Currently the driver supports the following handhelds:
+>>
+>>    - AOK ZOE A1
+>> + - Aya Neo AIR
+>> + - Aya Neo AIR Pro
+>>    - OneXPlayer AMD
+>>    - OneXPlayer mini AMD
+>>    - OneXPlayer mini AMD PRO
+> 
+> Since there is more support now for this type of device and not only
+> from one brand (even though it seems they all come from the same
+> manufacturer) I might be sending a patch to change the name of the
+> driver after this gets merged.
 
-Added the ability to specify the value of the shunt resistor in the
-device tree instead of assuming it is 1 milliOhm. The value in the
-device tree has the name shunt-resistor-micro-ohms and the
-default value is 1000 micro-ohms in order to preserve the
-current behavior.
+No, please don't do that.
 
-Signed-off-by: "Cormier, Jonathan" <jcormier@criticallink.com>
-Signed-off-by: John Pruitt <jpruitt@criticallink.com>
----
- drivers/hwmon/ltc2945.c | 86 +++++++++++++++++++++++++++++++----------
- 1 file changed, 65 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
-index 9adebb59f604..4e8b92e53133 100644
---- a/drivers/hwmon/ltc2945.c
-+++ b/drivers/hwmon/ltc2945.c
-@@ -58,6 +58,11 @@
- #define CONTROL_MULT_SELECT	(1 << 0)
- #define CONTROL_TEST_MODE	(1 << 4)
- 
-+struct ltc2945_data {
-+	struct regmap *regmap;
-+	u32 shunt_resistor; // number of microohms
-+};
-+
- static inline bool is_power_reg(u8 reg)
- {
- 	return reg < LTC2945_SENSE_H;
-@@ -66,7 +71,9 @@ static inline bool is_power_reg(u8 reg)
- /* Return the value from the given register in uW, mV, or mA */
- static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
- {
--	struct regmap *regmap = dev_get_drvdata(dev);
-+	struct ltc2945_data *data = dev_get_drvdata(dev);
-+	struct regmap *regmap = data->regmap;
-+	u32 shunt_resistor = data->shunt_resistor;
- 	unsigned int control;
- 	u8 buf[3];
- 	long long val;
-@@ -93,8 +100,11 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
- 	case LTC2945_MIN_POWER_THRES_H:
- 		/*
- 		 * Convert to uW by assuming current is measured with
--		 * an 1mOhm sense resistor, similar to current
--		 * measurements.
-+		 * a 1000 microOhm sense resistor (aka shunt resistor)
-+		 * or what is specified in DT, similar to current
-+		 * measurements. The shunt_resistor value is in
-+		 * microOhms.
-+		 *
- 		 * Control register bit 0 selects if voltage at SENSE+/VDD
- 		 * or voltage at ADIN is used to measure power.
- 		 */
-@@ -108,6 +118,8 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
- 			/* 0.5 mV * 25 uV = 0.0125 uV resolution. */
- 			val = (val * 25LL) >> 1;
- 		}
-+		val *= 1000;
-+		val = DIV_ROUND_CLOSEST_ULL(val, shunt_resistor);
- 		break;
- 	case LTC2945_VIN_H:
- 	case LTC2945_MAX_VIN_H:
-@@ -132,12 +144,15 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
- 	case LTC2945_MIN_SENSE_THRES_H:
- 		/*
- 		 * 25 uV resolution. Convert to current as measured with
--		 * an 1 mOhm sense resistor, in mA. If a different sense
--		 * resistor is installed, calculate the actual current by
--		 * dividing the reported current by the sense resistor value
--		 * in mOhm.
-+		 * an 1000 microOhm sense (or shunt) resistor, in mA.
-+		 * If a different shunt resistor is installed, calculate
-+		 * the actual current by dividing the reported current
-+		 * by the shunt resistor value in microOhms. The actual
-+		 * The actual shunt resistor value can be specified
-+		 * in the device tree.
- 		 */
--		val *= 25;
-+		val *= 25 * 1000;
-+		val = DIV_ROUND_CLOSEST_ULL(val, shunt_resistor);
- 		break;
- 	default:
- 		return -EINVAL;
-@@ -148,7 +163,9 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
- static int ltc2945_val_to_reg(struct device *dev, u8 reg,
- 			      unsigned long val)
- {
--	struct regmap *regmap = dev_get_drvdata(dev);
-+	struct ltc2945_data *data = dev_get_drvdata(dev);
-+	struct regmap *regmap = data->regmap;
-+	u32 shunt_resistor = data->shunt_resistor;
- 	unsigned int control;
- 	int ret;
- 
-@@ -160,8 +177,10 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
- 	case LTC2945_MIN_POWER_THRES_H:
- 		/*
- 		 * Convert to register value by assuming current is measured
--		 * with an 1mOhm sense resistor, similar to current
-+		 * with a 1000 microOhm sense resistor, (aka shunt resistor)
-+		 * or what is specified in DT, similar to current
- 		 * measurements.
-+		 *
- 		 * Control register bit 0 selects if voltage at SENSE+/VDD
- 		 * or voltage at ADIN is used to measure power, which in turn
- 		 * determines register calculations.
-@@ -171,14 +190,16 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
- 			return ret;
- 		if (control & CONTROL_MULT_SELECT) {
- 			/* 25 mV * 25 uV = 0.625 uV resolution. */
--			val = DIV_ROUND_CLOSEST(val, 625);
-+			val *= shunt_resistor;
-+			val = DIV_ROUND_CLOSEST(val, 625 * 1000);
- 		} else {
- 			/*
- 			 * 0.5 mV * 25 uV = 0.0125 uV resolution.
- 			 * Divide first to avoid overflow;
- 			 * accept loss of accuracy.
- 			 */
--			val = DIV_ROUND_CLOSEST(val, 25) * 2;
-+			val *= shunt_resistor;
-+			val = DIV_ROUND_CLOSEST(val, 25 * 1000) * 2;
- 		}
- 		break;
- 	case LTC2945_VIN_H:
-@@ -204,12 +225,14 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
- 	case LTC2945_MIN_SENSE_THRES_H:
- 		/*
- 		 * 25 uV resolution. Convert to current as measured with
--		 * an 1 mOhm sense resistor, in mA. If a different sense
--		 * resistor is installed, calculate the actual current by
--		 * dividing the reported current by the sense resistor value
--		 * in mOhm.
-+		 * a 1000 microOhm sense (or shunt) resistor, in mA. If
-+		 * a different shunt resistor is installed, calculate
-+		 * the actual current by dividing the reported current
-+		 * by the sense resistor value in microOhms. The actual
-+		 * shunt resistor value can be specified in the device tree.
- 		 */
--		val = DIV_ROUND_CLOSEST(val, 25);
-+		val *= shunt_resistor;
-+		val = DIV_ROUND_CLOSEST(val, 25 * 1000);
- 		break;
- 	default:
- 		return -EINVAL;
-@@ -234,7 +257,8 @@ static ssize_t ltc2945_value_store(struct device *dev,
- 				   const char *buf, size_t count)
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
--	struct regmap *regmap = dev_get_drvdata(dev);
-+	struct ltc2945_data *data = dev_get_drvdata(dev);
-+	struct regmap *regmap = data->regmap;
- 	u8 reg = attr->index;
- 	unsigned long val;
- 	u8 regbuf[3];
-@@ -269,7 +293,8 @@ static ssize_t ltc2945_history_store(struct device *dev,
- 				     const char *buf, size_t count)
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
--	struct regmap *regmap = dev_get_drvdata(dev);
-+	struct ltc2945_data *data = dev_get_drvdata(dev);
-+	struct regmap *regmap = data->regmap;
- 	u8 reg = attr->index;
- 	int num_regs = is_power_reg(reg) ? 3 : 2;
- 	u8 buf_min[3] = { 0xff, 0xff, 0xff };
-@@ -321,7 +346,8 @@ static ssize_t ltc2945_bool_show(struct device *dev,
- 				 struct device_attribute *da, char *buf)
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
--	struct regmap *regmap = dev_get_drvdata(dev);
-+	struct ltc2945_data *data = dev_get_drvdata(dev);
-+	struct regmap *regmap = data->regmap;
- 	unsigned int fault;
- 	int ret;
- 
-@@ -450,6 +476,14 @@ static int ltc2945_probe(struct i2c_client *client)
- 	struct device *dev = &client->dev;
- 	struct device *hwmon_dev;
- 	struct regmap *regmap;
-+	u32 shunt_resistor;
-+
-+	struct ltc2945_data *data;
-+
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+	dev_set_drvdata(dev, data);
- 
- 	regmap = devm_regmap_init_i2c(client, &ltc2945_regmap_config);
- 	if (IS_ERR(regmap)) {
-@@ -457,11 +491,21 @@ static int ltc2945_probe(struct i2c_client *client)
- 		return PTR_ERR(regmap);
- 	}
- 
-+	data->regmap = regmap;
-+	if (of_property_read_u32(client->dev.of_node,
-+				 "shunt-resistor-micro-ohms", &shunt_resistor))
-+		shunt_resistor = 1000; /* 1000 micro-Ohm if not set via DT */
-+
-+	if (shunt_resistor == 0)
-+		return -EINVAL;
-+
-+	data->shunt_resistor = shunt_resistor;
-+
- 	/* Clear faults */
- 	regmap_write(regmap, LTC2945_FAULT, 0x00);
- 
- 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
--							   regmap,
-+							   data,
- 							   ltc2945_groups);
- 	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
--- 
-2.25.1
+Guenter
 
