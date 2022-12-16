@@ -2,335 +2,116 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC3A2C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Dec 2022 19:42:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C933C54E76
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Dec 2022 16:39:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiLOTmw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 15 Dec 2022 14:42:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43190 "EHLO
+        id S231705AbiLPQjP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 16 Dec 2022 11:39:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiLOTmv (ORCPT
+        with ESMTP id S231630AbiLPQif (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Dec 2022 14:42:51 -0500
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A577511CB
-        for <linux-hwmon@vger.kernel.org>; Thu, 15 Dec 2022 11:42:50 -0800 (PST)
-Received: by mail-ua1-x92d.google.com with SMTP id n21so2954uaj.8
-        for <linux-hwmon@vger.kernel.org>; Thu, 15 Dec 2022 11:42:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=criticallink.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rHbX/9pdBJCPlt7rLakm1ev9LsnGgN+B441Y+SBJEk8=;
-        b=aJ3GMKFqDC48dhp8Uw9nYA+3LagpHlHlbDIPFSDppkD3MUupJWTbsN2V/+/JlnRdNq
-         zBFmm+mKBU//o0lzhzU3I5MaZXwX7Wt6/IPLcdSKzRMmZ1u2ayvOVTvB1+9A97gWPdgI
-         S9ojuGJSFTxmRYRgj5lvwNjSbfXh6cMtM4wEPRrYMXLDcUHsoD9HFOlYiWUMQTEoo5o0
-         LvLdt5kwzBWIhgVoDw3bi4J5XpWnDHkMQVAAc4mGRXPfRQVbY0YkKy9R9k/nKpeBO7XO
-         W+UaRMSazHpPDPQbDy+NA+wUIVEf6AKZfOgaFLNZMJDmAinPgV7BTT9Hy7Q+WhHNy8qt
-         PXSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rHbX/9pdBJCPlt7rLakm1ev9LsnGgN+B441Y+SBJEk8=;
-        b=vHckvrVeMidyuA/gyG6rTxio0oUwSTjSZ5D2Zni+xGmBnNXqylCSR211WocrKNtGZb
-         YKT1OjzwXee0a/z4SU5b+zgeVQOTHOd7UzurRCRzt1h9fAthwTzGpCwVFBE2h/2vRBKm
-         3p4+kINhKlftLj4jaDuqtNCAX3IUzsir0QedzJUcLUXrllSJrxjzsoymm5zsWolBsau2
-         cuFVsfbyOvxhb8lePPwCVMgPP7FwGbAzzIDM8oGVue3tGlnsS8Bc5GZFcFXWKMpRdcx6
-         g20BMU0CPlHdLc/0E0mBM2EpIKYlrgSYENJnzz7qkx5fGyvQ8ASXHjEmTqBQaIKyXGnA
-         i9LA==
-X-Gm-Message-State: ANoB5pkZ4avhVzqL+oOZVzEAS75uGQ+hip/2NyZ6U7IhzGf4JUrnkNIV
-        zrW74MU2xf269Q0G3sXuN+aNbA9Q83o2oR0aj0GuVQ==
-X-Google-Smtp-Source: AA0mqf7eDQsajaexQCaers4ICvmKfL+VhgYzE8A+KZB37B6hUYayyyaAqmeHEhL18zOMmt3E9wysFS3e439XDRKF5qE=
-X-Received: by 2002:ab0:6845:0:b0:423:5afb:644a with SMTP id
- a5-20020ab06845000000b004235afb644amr2991841uas.121.1671133369248; Thu, 15
- Dec 2022 11:42:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20221214220727.1350784-1-jcormier@criticallink.com>
- <20221214220727.1350784-3-jcormier@criticallink.com> <601ddc9c-66a8-0ab4-69ef-ba4e9c0f9420@roeck-us.net>
-In-Reply-To: <601ddc9c-66a8-0ab4-69ef-ba4e9c0f9420@roeck-us.net>
-From:   Jon Cormier <jcormier@criticallink.com>
-Date:   Thu, 15 Dec 2022 14:42:38 -0500
-Message-ID: <CADL8D3b2U6xdcsa4CySgvFJMHPF6sOPZQuA-tZO9NHtamVPCxA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] hwmon: ltc2945: Allow setting shunt resistor
+        Fri, 16 Dec 2022 11:38:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305782DAB9
+        for <linux-hwmon@vger.kernel.org>; Fri, 16 Dec 2022 08:37:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671208671;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iYWX1JVBYSUKLXVYpGQr+eXLajFPQi0WiXT4Nb6R2Yo=;
+        b=WtQXesfmWvejS4fdTRKzgSThuT8T5JnGPdx12IrJCJ4V4Kv/jclTQnsxtLNeelm6BaBIGY
+        qf+D21btTHhPIq3nRXb/t7kXoigd/5gt6WP64sQVN6ZU8symk8iyQHpJjgOv356QXlq+5g
+        CPnn7B3ffW5LLE2QEP0DM0o20Yu/rEY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-663-CI_Xdn4APQSUGfk2Kx0WoQ-1; Fri, 16 Dec 2022 11:37:48 -0500
+X-MC-Unique: CI_Xdn4APQSUGfk2Kx0WoQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 71487857F82;
+        Fri, 16 Dec 2022 16:37:47 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 45A451401C34;
+        Fri, 16 Dec 2022 16:37:47 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 66F9B40416677; Fri, 16 Dec 2022 11:07:01 -0300 (-03)
+Date:   Fri, 16 Dec 2022 11:07:01 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org,
-        John Pruitt <jpruitt@criticallink.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bob Duke <bduke@criticallink.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Fenghua Yu <fenghua.yu@intel.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: [PATCH v2] hwmon: coretemp: avoid RDMSR interruptions to isolated
+ CPUs
+Message-ID: <Y5x7hXGGLkcmejKq@tpad>
+References: <Y5sWMEG0xCl9bgEi@tpad>
+ <68f76ac7-5edd-d437-8bef-e233f2876660@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <68f76ac7-5edd-d437-8bef-e233f2876660@roeck-us.net>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 10:11 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 12/14/22 14:07, Cormier, Jonathan wrote:
-> > From: John Pruitt <jpruitt@criticallink.com>
-> >
-> > Added the ability to specify the value of the shunt resistor in the
-> > device tree instead of assuming it is 1 milliOhm. The value in the
-> > device tree has the name shunt-resistor-micro-ohms and the
-> > default value is 1000 micro-ohms in order to preserve the
-> > current behavior.
-> >
->
-> Also needs a devicetree match table.
-On it
->
-> > Signed-off-by: "Cormier, Jonathan" <jcormier@criticallink.com>
-> > Signed-off-by: John Pruitt <jpruitt@criticallink.com>
-> > ---
-> >   drivers/hwmon/ltc2945.c | 86 +++++++++++++++++++++++++++++++----------
-> >   1 file changed, 65 insertions(+), 21 deletions(-)
-> >
-> > diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
-> > index 9adebb59f604..4e8b92e53133 100644
-> > --- a/drivers/hwmon/ltc2945.c
-> > +++ b/drivers/hwmon/ltc2945.c
-> > @@ -58,6 +58,11 @@
-> >   #define CONTROL_MULT_SELECT (1 << 0)
-> >   #define CONTROL_TEST_MODE   (1 << 4)
-> >
-> > +struct ltc2945_data {
-> > +     struct regmap *regmap;
-> > +     u32 shunt_resistor; // number of microohms
->
-> No C++ comments in this code, please. Also, "number of" is not needed.
-> Something like "in microohms" or just "microohms" would be sufficient.
->
-> > +};
-> > +
-> >   static inline bool is_power_reg(u8 reg)
-> >   {
-> >       return reg < LTC2945_SENSE_H;
-> > @@ -66,7 +71,9 @@ static inline bool is_power_reg(u8 reg)
-> >   /* Return the value from the given register in uW, mV, or mA */
-> >   static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
-> >   {
-> > -     struct regmap *regmap = dev_get_drvdata(dev);
-> > +     struct ltc2945_data *data = dev_get_drvdata(dev);
-> > +     struct regmap *regmap = data->regmap;
-> > +     u32 shunt_resistor = data->shunt_resistor;
-> >       unsigned int control;
-> >       u8 buf[3];
-> >       long long val;
-> > @@ -93,8 +100,11 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
-> >       case LTC2945_MIN_POWER_THRES_H:
-> >               /*
-> >                * Convert to uW by assuming current is measured with
-> > -              * an 1mOhm sense resistor, similar to current
-> > -              * measurements.
-> > +              * a 1000 microOhm sense resistor (aka shunt resistor)
-> > +              * or what is specified in DT, similar to current
-> > +              * measurements. The shunt_resistor value is in
-> > +              * microOhms.
->
-> The units are already in the variable declaration. No need to repeat.
-> There is no need to replace "1 mOhm" with "1000 microOhm".
->
-> It might make sense to drop all those comments, add a kerneldoc comment
-> to struct ltc2945_data, and explain it all there.
-Will do
->
-> > +              *
-> >                * Control register bit 0 selects if voltage at SENSE+/VDD
-> >                * or voltage at ADIN is used to measure power.
-> >                */
-> > @@ -108,6 +118,8 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
-> >                       /* 0.5 mV * 25 uV = 0.0125 uV resolution. */
-> >                       val = (val * 25LL) >> 1;
-> >               }
-> > +             val *= 1000;
-> > +             val = DIV_ROUND_CLOSEST_ULL(val, shunt_resistor);
-> >               break;
-> >       case LTC2945_VIN_H:
-> >       case LTC2945_MAX_VIN_H:
-> > @@ -132,12 +144,15 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
-> >       case LTC2945_MIN_SENSE_THRES_H:
-> >               /*
-> >                * 25 uV resolution. Convert to current as measured with
-> > -              * an 1 mOhm sense resistor, in mA. If a different sense
-> > -              * resistor is installed, calculate the actual current by
-> > -              * dividing the reported current by the sense resistor value
-> > -              * in mOhm.
-> > +              * an 1000 microOhm sense (or shunt) resistor, in mA.
-> > +              * If a different shunt resistor is installed, calculate
-> > +              * the actual current by dividing the reported current
-> > +              * by the shunt resistor value in microOhms. The actual
-> > +              * The actual shunt resistor value can be specified
-> > +              * in the device tree.
->
-> All but the last sentence just replace 1 mOhm with 1000 microOhm, which
-> does not add any value. Applies to all similar changes; I won't comment
-> on it anymore below.
->
-> >                */
-> > -             val *= 25;
-> > +             val *= 25 * 1000;
-> > +             val = DIV_ROUND_CLOSEST_ULL(val, shunt_resistor);
-> >               break;
-> >       default:
-> >               return -EINVAL;
-> > @@ -148,7 +163,9 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
-> >   static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> >                             unsigned long val)
-> >   {
-> > -     struct regmap *regmap = dev_get_drvdata(dev);
-> > +     struct ltc2945_data *data = dev_get_drvdata(dev);
-> > +     struct regmap *regmap = data->regmap;
-> > +     u32 shunt_resistor = data->shunt_resistor;
-> >       unsigned int control;
-> >       int ret;
-> >
-> > @@ -160,8 +177,10 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> >       case LTC2945_MIN_POWER_THRES_H:
-> >               /*
-> >                * Convert to register value by assuming current is measured
-> > -              * with an 1mOhm sense resistor, similar to current
-> > +              * with a 1000 microOhm sense resistor, (aka shunt resistor)
-> > +              * or what is specified in DT, similar to current
-> >                * measurements.
-> > +              *
-> >                * Control register bit 0 selects if voltage at SENSE+/VDD
-> >                * or voltage at ADIN is used to measure power, which in turn
-> >                * determines register calculations.
-> > @@ -171,14 +190,16 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> >                       return ret;
-> >               if (control & CONTROL_MULT_SELECT) {
-> >                       /* 25 mV * 25 uV = 0.625 uV resolution. */
-> > -                     val = DIV_ROUND_CLOSEST(val, 625);
-> > +                     val *= shunt_resistor;
->
-> This can now easily result in an overflow.
-Okay will fix
->
-> > +                     val = DIV_ROUND_CLOSEST(val, 625 * 1000);
-> >               } else {
-> >                       /*
-> >                        * 0.5 mV * 25 uV = 0.0125 uV resolution.
-> >                        * Divide first to avoid overflow;
-> >                        * accept loss of accuracy.
-> >                        */
-> > -                     val = DIV_ROUND_CLOSEST(val, 25) * 2;
-> > +                     val *= shunt_resistor;
-> > +                     val = DIV_ROUND_CLOSEST(val, 25 * 1000) * 2;
-> >               }
-> >               break;
-> >       case LTC2945_VIN_H:
-> > @@ -204,12 +225,14 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> >       case LTC2945_MIN_SENSE_THRES_H:
-> >               /*
-> >                * 25 uV resolution. Convert to current as measured with
-> > -              * an 1 mOhm sense resistor, in mA. If a different sense
-> > -              * resistor is installed, calculate the actual current by
-> > -              * dividing the reported current by the sense resistor value
-> > -              * in mOhm.
-> > +              * a 1000 microOhm sense (or shunt) resistor, in mA. If
-> > +              * a different shunt resistor is installed, calculate
-> > +              * the actual current by dividing the reported current
-> > +              * by the sense resistor value in microOhms. The actual
-> > +              * shunt resistor value can be specified in the device tree.
-> >                */
-> > -             val = DIV_ROUND_CLOSEST(val, 25);
-> > +             val *= shunt_resistor;
->
-> Needs to ensure that there are no overflows. Try to write the maximum value
-> for unsigned long and see what happens.
->
-> > +             val = DIV_ROUND_CLOSEST(val, 25 * 1000);
-> >               break;
-> >       default:
-> >               return -EINVAL;
-> > @@ -234,7 +257,8 @@ static ssize_t ltc2945_value_store(struct device *dev,
-> >                                  const char *buf, size_t count)
-> >   {
-> >       struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
-> > -     struct regmap *regmap = dev_get_drvdata(dev);
-> > +     struct ltc2945_data *data = dev_get_drvdata(dev);
-> > +     struct regmap *regmap = data->regmap;
-> >       u8 reg = attr->index;
-> >       unsigned long val;
-> >       u8 regbuf[3];
-> > @@ -269,7 +293,8 @@ static ssize_t ltc2945_history_store(struct device *dev,
-> >                                    const char *buf, size_t count)
-> >   {
-> >       struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
-> > -     struct regmap *regmap = dev_get_drvdata(dev);
-> > +     struct ltc2945_data *data = dev_get_drvdata(dev);
-> > +     struct regmap *regmap = data->regmap; >         u8 reg = attr->index;
-> >       int num_regs = is_power_reg(reg) ? 3 : 2;
-> >       u8 buf_min[3] = { 0xff, 0xff, 0xff };
-> > @@ -321,7 +346,8 @@ static ssize_t ltc2945_bool_show(struct device *dev,
-> >                                struct device_attribute *da, char *buf)
-> >   {
-> >       struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
-> > -     struct regmap *regmap = dev_get_drvdata(dev);
-> > +     struct ltc2945_data *data = dev_get_drvdata(dev);
-> > +     struct regmap *regmap = data->regmap;
-> >       unsigned int fault;
-> >       int ret;
-> >
-> > @@ -450,6 +476,14 @@ static int ltc2945_probe(struct i2c_client *client)
-> >       struct device *dev = &client->dev;
-> >       struct device *hwmon_dev;
-> >       struct regmap *regmap;
-> > +     u32 shunt_resistor;
-> > +
-> drop this empty line
->
-> > +     struct ltc2945_data *data;
-> > +
-> > +     data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> > +     if (!data)
-> > +             return -ENOMEM;
-> > +     dev_set_drvdata(dev, data);
-> >
-> >       regmap = devm_regmap_init_i2c(client, &ltc2945_regmap_config);
-> >       if (IS_ERR(regmap)) {
-> > @@ -457,11 +491,21 @@ static int ltc2945_probe(struct i2c_client *client)
-> >               return PTR_ERR(regmap);
-> >       }
-> >
-> > +     data->regmap = regmap;
-> > +     if (of_property_read_u32(client->dev.of_node,
-> > +                              "shunt-resistor-micro-ohms", &shunt_resistor))
->
-> Please consider using device_property_read_u32().
->
-> > +             shunt_resistor = 1000; /* 1000 micro-Ohm if not set via DT */
->
-> "if not set via DT" -> "default value". With device_property_read_u32(),
-> this can be set by other means, not just DT.
->
-> > +
-> > +     if (shunt_resistor == 0)
-> > +             return -EINVAL;
-> > +
-> > +     data->shunt_resistor = shunt_resistor;
-> > +
-> >       /* Clear faults */
-> >       regmap_write(regmap, LTC2945_FAULT, 0x00);
-> >
-> >       hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
-> > -                                                        regmap,
-> > +                                                        data,
-> >                                                          ltc2945_groups);
-> >       return PTR_ERR_OR_ZERO(hwmon_dev);
-> >   }
->
 
+The coretemp driver uses rdmsr_on_cpu calls to read
+MSR_IA32_PACKAGE_THERM_STATUS/MSR_IA32_THERM_STATUS registers,
+which contain information about current core temperature.
 
--- 
-Jonathan Cormier
-Software Engineer
+For certain low latency applications, the RDMSR interruption exceeds
+the applications requirements.
 
-Voice:  315.425.4045 x222
+So disallow reading of crit_alarm and temp files via /sys, returning 
+-EINVAL, in case CPU isolation is enabled.
+
+Temperature information from the housekeeping cores should be
+sufficient to infer die temperature.
+
+Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+
+---
+v2: improve changelog to mention that an error is returned,
+    and sysfs file is not disabled (Guenter Roeck)
+
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index 9bee4d33fbdf..30a35f4130d5 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -27,6 +27,7 @@
+ #include <asm/msr.h>
+ #include <asm/processor.h>
+ #include <asm/cpu_device_id.h>
++#include <linux/sched/isolation.h>
+ 
+ #define DRVNAME	"coretemp"
+ 
+@@ -121,6 +122,10 @@ static ssize_t show_crit_alarm(struct device *dev,
+ 	struct platform_data *pdata = dev_get_drvdata(dev);
+ 	struct temp_data *tdata = pdata->core_data[attr->index];
+ 
++
++	if (!housekeeping_cpu(tdata->cpu, HK_TYPE_MISC))
++		return -EINVAL;
++
+ 	mutex_lock(&tdata->update_lock);
+ 	rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax, &edx);
+ 	mutex_unlock(&tdata->update_lock);
+@@ -158,6 +163,8 @@ static ssize_t show_temp(struct device *dev,
+ 
+ 	/* Check whether the time interval has elapsed */
+ 	if (!tdata->valid || time_after(jiffies, tdata->last_updated + HZ)) {
++		if (!housekeeping_cpu(tdata->cpu, HK_TYPE_MISC))
++			return -EINVAL;
+ 		rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax, &edx);
+ 		/*
+ 		 * Ignore the valid bit. In all observed cases the register
 
 
 
-http://www.CriticalLink.com
-6712 Brooklawn Parkway, Syracuse, NY 13211
+
