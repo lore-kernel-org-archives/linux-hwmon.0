@@ -2,122 +2,97 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9E81C10F1E
-	for <linux-hwmon@archiver.kernel.org>; Sun, 18 Dec 2022 16:34:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E90AC4332F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Dec 2022 00:05:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbiLRQeD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 18 Dec 2022 11:34:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
+        id S229515AbiLTAFr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 19 Dec 2022 19:05:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbiLRQdO (ORCPT
+        with ESMTP id S230035AbiLTAFq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 18 Dec 2022 11:33:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B8AB4AB;
-        Sun, 18 Dec 2022 08:12:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C514F60DD3;
-        Sun, 18 Dec 2022 16:12:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A5BEC43396;
-        Sun, 18 Dec 2022 16:12:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671379930;
-        bh=ipKdulpmmSmjZ0WXk55vOzU802/+Oml+uBFJbdoVsIk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kdjNqNSnwFm6lwf1ssgQzOQN4IQch2pmDLNJAvTXgR2aBqxpQDCZrFjm0irGAduHI
-         qhi1ESFpo9GxoSb+NIURbkOKvq4r4jDP1GReufUI5Wvhg6H5cB6T3agysQAE16rLGS
-         MxaYY5/vJh066adDXAXGWQakkuE1asFBJG1wpoOEjQX/iejCL9RpUUO7wAPTOvdEn3
-         A3DiK348pPqbEaSyGJc2ajLqTcq+akcRlQdvQ2h6GF4lmZHC/csdbnbGvAaUNlH8+U
-         WB7ZkH043jne3X+BHTFAECCf3FHsAT2LjHGg8lGFXv9dSQ89bYR/IidBdIrEGi1ejv
-         /Q538KPHM3Z7Q==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Denis Pauk <pauk.denis@gmail.com>,
-        yutesdb <mundanedefoliation@gmail.com>,
+        Mon, 19 Dec 2022 19:05:46 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1A62B8
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Dec 2022 16:05:43 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id i2so10382502vsc.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Dec 2022 16:05:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=criticallink.com; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x550/OsiWnsnhCUH29zWgidKchxtQqaOBRoxd0yhd7E=;
+        b=GPj+5IMRq85Ho5NoEcvHo8LtajbZsJ8dG9i7MTd85YImxaRBB9aIQq4hcxc7u2Tsl5
+         tcbkTr/hO7d0u5DKnxFhxpd5R1inx8+cbEcDnTG30hIGAU7zmmOJA8cFNXcZv3T7jUD/
+         p8OwhospT1ni8Y5B4jX6AGJ3DI/bHVaDthDgexvKds2CBJ30AhagUJOlt9y8Jwi8EVVr
+         mtqVYCLFgObGhUCwYtNaK1218e5khIWj46SQ2IHsDTfsUT05yG75qXYjj6Ahu8gb6YSL
+         +Bnv8Vv3UO71PjYB7jlNhyJ+Me8xEhwBO+DvayhrZydv7+c+9Lg+/39aUgSHApbel9M6
+         J6Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=x550/OsiWnsnhCUH29zWgidKchxtQqaOBRoxd0yhd7E=;
+        b=q8sPzkVMZvT+y163pTSfD5VB+QhBW/LF8k2ujk9yMnWgTo3RNMWfFOor+CnrxjkARU
+         cMxRxUh0iwdfxYgx1MR8de5NdsvzHprQDC9v4qpY9O8U4JDof/AHAqa54Bj6w+vy8Al4
+         ZxkwXV2+uXe4yk41a1KUiCHioHb2S7oTd/5/9tA3GZ+5oX9Wjdj9O+P/2u3QCfFzLZ86
+         dPPTVyP+VDVo18k0tlSsmC8OF9ek4IwrQ5TfgTI7VgRZ4aQ5ftTTSL6QA9yihYeE1xRu
+         uoNxBum9Re5TwhtH9+rnNiNmhroEylTRUJgPLc5ZLekcBiOCPxBuwndDO0Y1fPfx8OI5
+         53tQ==
+X-Gm-Message-State: AFqh2krw9crEJ9CzLOiwn3bEUEC0vxYTvPUx4290SJQXFp8vJaSUYp40
+        auGVP+Mic5NI3sB8mVeAN6Tdjr9NG4K8p6oV
+X-Google-Smtp-Source: AMrXdXtxeE+xv5Ro1p1xozvtIVG8oryRUQqJ43vEvCn0SHdJtiWMLmXV4nqIUbrxWF9bWawfoWGDyg==
+X-Received: by 2002:a67:af1a:0:b0:3ac:df02:e954 with SMTP id v26-20020a67af1a000000b003acdf02e954mr3720164vsl.10.1671494742304;
+        Mon, 19 Dec 2022 16:05:42 -0800 (PST)
+Received: from jcormier-MS-7A93.syr.criticallink.com (static-72-90-70-109.syrcny.fios.verizon.net. [72.90.70.109])
+        by smtp.gmail.com with ESMTPSA id o70-20020a374149000000b006e702033b15sm7721430qka.66.2022.12.19.16.05.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 16:05:41 -0800 (PST)
+From:   "Cormier, Jonathan" <jcormier@criticallink.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     "Cormier, Jonathan" <jcormier@criticallink.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 62/73] hwmon: (nct6775) add ASUS CROSSHAIR VIII/TUF/ProArt B550M
-Date:   Sun, 18 Dec 2022 11:07:30 -0500
-Message-Id: <20221218160741.927862-62-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221218160741.927862-1-sashal@kernel.org>
-References: <20221218160741.927862-1-sashal@kernel.org>
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bob Duke <bduke@criticallink.com>,
+        John Pruitt <jpruitt@criticallink.com>
+Subject: [PATCH v2 0/2] hwmon: ltc2945: Add binding and shunt resistor support
+Date:   Mon, 19 Dec 2022 19:04:53 -0500
+Message-Id: <20221220000457.1163446-1-jcormier@criticallink.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221214220727.1350784-1-jcormier@criticallink.com>
+References: <20221214220727.1350784-1-jcormier@criticallink.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Denis Pauk <pauk.denis@gmail.com>
+Added the ability to specify the value of the shunt resistor in the
+device tree instead of assuming it is 1 milliOhm.
 
-[ Upstream commit 1864069c695d475e0ce98a335c62274b81be57b4 ]
+Would be good to backport as well
 
-Boards such as
-* ProArt B550-CREATOR
-* ProArt Z490-CREATOR 10G
-* ROG CROSSHAIR VIII EXTREME
-* ROG CROSSHAIR VIII HERO (WI-FI)
-* TUF GAMING B550M-E
-* TUF GAMING B550M-E (WI-FI)
-* TUF GAMING B550M-PLUS WIFI II
-have got a nct6775 chip, but by default there's no use of it
-because of resource conflict with WMI method.
+Changes since v1:
+- Add devicetree match table
+- Add kerneldoc for the ltc2945_data struct
+- Cleanup excesive comments about the shunt resistor
+- Switch to device_property_read_u32()
 
-This commit adds such boards to the WMI monitoring list.
+Cormier, Jonathan (1):
+  dt-bindings: hwmon: adi,ltc2945: Add binding
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Reported-by: yutesdb <mundanedefoliation@gmail.com>
-Tested-by: yutesdb <mundanedefoliation@gmail.com>
-Link: https://lore.kernel.org/r/20221114214456.3891-1-pauk.denis@gmail.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/hwmon/nct6775-platform.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+John Pruitt (1):
+  hwmon: ltc2945: Allow setting shunt resistor
 
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index 41c97cfacfb8..50fe9533cf43 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -1043,7 +1043,9 @@ static struct platform_device *pdev[2];
- 
- static const char * const asus_wmi_boards[] = {
- 	"PRO H410T",
-+	"ProArt B550-CREATOR",
- 	"ProArt X570-CREATOR WIFI",
-+	"ProArt Z490-CREATOR 10G",
- 	"Pro B550M-C",
- 	"Pro WS X570-ACE",
- 	"PRIME B360-PLUS",
-@@ -1055,8 +1057,10 @@ static const char * const asus_wmi_boards[] = {
- 	"PRIME X570-P",
- 	"PRIME X570-PRO",
- 	"ROG CROSSHAIR VIII DARK HERO",
-+	"ROG CROSSHAIR VIII EXTREME",
- 	"ROG CROSSHAIR VIII FORMULA",
- 	"ROG CROSSHAIR VIII HERO",
-+	"ROG CROSSHAIR VIII HERO (WI-FI)",
- 	"ROG CROSSHAIR VIII IMPACT",
- 	"ROG STRIX B550-A GAMING",
- 	"ROG STRIX B550-E GAMING",
-@@ -1080,8 +1084,11 @@ static const char * const asus_wmi_boards[] = {
- 	"ROG STRIX Z490-G GAMING (WI-FI)",
- 	"ROG STRIX Z490-H GAMING",
- 	"ROG STRIX Z490-I GAMING",
-+	"TUF GAMING B550M-E",
-+	"TUF GAMING B550M-E (WI-FI)",
- 	"TUF GAMING B550M-PLUS",
- 	"TUF GAMING B550M-PLUS (WI-FI)",
-+	"TUF GAMING B550M-PLUS WIFI II",
- 	"TUF GAMING B550-PLUS",
- 	"TUF GAMING B550-PLUS WIFI II",
- 	"TUF GAMING B550-PRO",
--- 
-2.35.1
+ .../bindings/hwmon/adi,ltc2945.yaml           | 50 +++++++++++
+ drivers/hwmon/ltc2945.c                       | 86 ++++++++++++++-----
+ 2 files changed, 115 insertions(+), 21 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
 
+--
+2.25.1
