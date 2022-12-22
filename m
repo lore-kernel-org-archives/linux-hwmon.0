@@ -2,82 +2,97 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58718C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Dec 2022 21:20:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59F4AC4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Dec 2022 23:41:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbiLVVU1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 22 Dec 2022 16:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S229603AbiLVXl5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 22 Dec 2022 18:41:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiLVVU0 (ORCPT
+        with ESMTP id S229722AbiLVXlw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Dec 2022 16:20:26 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172C410FEC;
-        Thu, 22 Dec 2022 13:20:26 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id i15so4685212edf.2;
-        Thu, 22 Dec 2022 13:20:26 -0800 (PST)
+        Thu, 22 Dec 2022 18:41:52 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A8624F3C;
+        Thu, 22 Dec 2022 15:41:51 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-14455716674so4283295fac.7;
+        Thu, 22 Dec 2022 15:41:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=U9J0SAOJWmGg3K+OYwmd0BD0E3Ym8yEDir998iVg4B8=;
-        b=hNgAdv6CJv+fGQM1pzmmqDVEAdsmQ3tjZltuJAd87S6ssz6ZUmn2LevZ7lQlhIuefz
-         MNNugjW0FXa7H9YS/nUz1fWi9J7C4QQpUxBfPukCajzr4OpNMmS+rxIrZVjr+o7XsRo9
-         5Z+iwkgEiHuTEASxV0sOAcP2iQAuHv45bFdsn/Nbmeh+tXfUmkZZRNkkESREC2mbB1WD
-         XF/F5EXhQcb3B7G6wo30Uf7w15c4RYkUihg3UxPASgdBaDIfbiACQ3NOdgNAdL0Qcn/E
-         yifDo9hiAHiofQLEHTff8tGQcJtrn/GNr8lNrsmwmUE8/7riIVUVYwPffQcyyB4cCgE6
-         NCgA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/zLVTDhQkhkkOhVaajrbRJWJyIpvSWPik4eDzrj93Eo=;
+        b=VeRJmeuCpd+YvybCRDK5hCn9VxGaB2UyHLccBz5tXVRCduoovoONjzUw2/NhLV+pZ5
+         XLWGVAkJbx2jkF+mJ/2dIJmuHePqxZKlFugMT5fFg6m87pGj0meUsZGYHeewSteZx+PD
+         QnT6AWBeURXUQHQItU5JBLKdPuRNYSTU2624TnqeZSQF7YJNCTv5hVthqdNVofoswHxv
+         7u+1NDixhKBX6BExD2p/Ud1LIPBtGvOnFyS3JiP/+bzP5plfxUMYVl1H4fMCKrF1UixC
+         BliaJSAJDZlp+N6q3DsK59c4pWRiEH1XFzYGI3vUKzv3iHL3Xj01OQB4JdFmkLOXsxTk
+         0giA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U9J0SAOJWmGg3K+OYwmd0BD0E3Ym8yEDir998iVg4B8=;
-        b=3mduN0N1fgkv51I/7spcceXohn2K6ACax3TxrO3lbRPQ4Kv8qQdZ8xhE48TmoVXWUV
-         ov7KlozIQjHHojpQymPqJ+pR/1eHk7BP8f8xaXypuWUiOnHhmpGsbImM0fpm6mjbG5MO
-         dC8yfiQmr3ll4HOFhF7CTmYpyf8Z0ddF4urand5iNJ/huHVYFlx0ki45B9paQFAUU/vy
-         +pIaloTr1WNCkSIWQHFcSytJF7kMmzldlampgYlV6uNuoWpuZGasx2H6qi+Q7oC9f8np
-         gjf/Ai4gRdmMbqQfFPCTvSAaBQFPHiXz1HeOzLqQCosoMVAMVCdAnsLg675jviO3R1YB
-         Y8Dg==
-X-Gm-Message-State: AFqh2kpOvk2cH6ZQrfwbmFV1B8dQkePReGFftobSOMzrjO1e9EHKdZC6
-        sDcEfvR1k3zooS0XEyE8BGC1/F4a1J5j1E8xUtUvOr2XGik=
-X-Google-Smtp-Source: AMrXdXueYdmjnNh5yZELCbKtKxe28suM1LRbcNb1OFiOLZtELR4RzoTx0nAysskex8TahO1zsxYVCAYPELpmaGm7FRk=
-X-Received: by 2002:a50:ef0e:0:b0:46c:fa25:f03d with SMTP id
- m14-20020a50ef0e000000b0046cfa25f03dmr871442eds.291.1671744024348; Thu, 22
- Dec 2022 13:20:24 -0800 (PST)
-MIME-Version: 1.0
-References: <202212222251.Xacx8c4D-lkp@intel.com>
-In-Reply-To: <202212222251.Xacx8c4D-lkp@intel.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Thu, 22 Dec 2022 22:20:13 +0100
-Message-ID: <CAFBinCAB0VuoKKm4YHv_zB1d1xN3nP0=-xg9EotiWMJ_vikc2w@mail.gmail.com>
-Subject: Re: drivers/hwmon/jc42.c:477 jc42_readable_reg() warn: always true
- condition '(reg >= 0) => (0-u32max >= 0)'
-To:     Guenter Roeck <linux@roeck-us.net>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/zLVTDhQkhkkOhVaajrbRJWJyIpvSWPik4eDzrj93Eo=;
+        b=ZV6CjVpIracHqL+TnFcDPaBCKphYC6qHny3Q878mdxtPmbqPaCJrYjXC6yvhpboZEW
+         Au5DZNofYtcRgI+gs+w32XhVe1IdFBkk+mSkxutoWRTXGcYxjrVb9fpDND3dGLIqL7Lw
+         4uwKpEIsGsrLn9dzQe1UVjM3yggvQNZaoLMNRq/E9ZxzqZeix0gp11ovlINRY2LrXIai
+         Dw7klJiyqFQ3IeXO3adIBaeNGUX4p681j1UyCQCwEsFn9vHwucZ8uXfIaUhd8x6WfQsd
+         JXywZhjD2NjIA8/eSijcN7LWr9zQMML1NmVKs5cejOqyqTvHYsiW5MKUBjAXGNcQ0YNj
+         y+4g==
+X-Gm-Message-State: AFqh2krYUkBBTR2jXyaMvqlwjopTt7ZLzIxcgEelzYNKYICFO82GmXQZ
+        kjiAxxBWBuy/iADzhe+YE6o=
+X-Google-Smtp-Source: AMrXdXty65bPwZdolsRHLGbGuU6BUhDVw/GAZUX0Csf0dV6gHtH6s/Vk+AF9C9LTh/ILV9ECKdSeow==
+X-Received: by 2002:a05:6870:2f01:b0:144:e6fb:b2b4 with SMTP id qj1-20020a0568702f0100b00144e6fbb2b4mr3504664oab.20.1671752511261;
+        Thu, 22 Dec 2022 15:41:51 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z44-20020a056870c22c00b001375188dae9sm681952oae.16.2022.12.22.15.41.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 15:41:50 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 22 Dec 2022 15:41:48 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 Cc:     kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: drivers/hwmon/jc42.c:477 jc42_readable_reg() warn: always true
+ condition '(reg >= 0) => (0-u32max >= 0)'
+Message-ID: <20221222234148.GA2776378@roeck-us.net>
+References: <202212222251.Xacx8c4D-lkp@intel.com>
+ <CAFBinCAB0VuoKKm4YHv_zB1d1xN3nP0=-xg9EotiWMJ_vikc2w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFBinCAB0VuoKKm4YHv_zB1d1xN3nP0=-xg9EotiWMJ_vikc2w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter et al.,
+On Thu, Dec 22, 2022 at 10:20:13PM +0100, Martin Blumenstingl wrote:
+> Hi Guenter et al.,
+> 
+> On Thu, Dec 22, 2022 at 3:36 PM kernel test robot <lkp@intel.com> wrote:
+> [...]
+> >    475  static bool jc42_readable_reg(struct device *dev, unsigned int reg)
+> >    476  {
+> >  > 477          return (reg >= JC42_REG_CAP && reg <= JC42_REG_DEVICEID) ||
+> >    478                  reg == JC42_REG_SMBUS;
+> The bot is right: we can omit "reg >= JC42_REG_CAP" as it's already
+> covered by the fact that:
+> - the reg variable is unsigned, which means the lower limit is zero
+> - reg <= JC42_REG_DEVICEID covers the upper limit
+> 
+> Before I send a patch I'd like to hear if removal of "reg >=
+> JC42_REG_CAP" makes sense to other people.
+> 
 
-On Thu, Dec 22, 2022 at 3:36 PM kernel test robot <lkp@intel.com> wrote:
-[...]
->    475  static bool jc42_readable_reg(struct device *dev, unsigned int reg)
->    476  {
->  > 477          return (reg >= JC42_REG_CAP && reg <= JC42_REG_DEVICEID) ||
->    478                  reg == JC42_REG_SMBUS;
-The bot is right: we can omit "reg >= JC42_REG_CAP" as it's already
-covered by the fact that:
-- the reg variable is unsigned, which means the lower limit is zero
-- reg <= JC42_REG_DEVICEID covers the upper limit
+The bot keeps complaining about it. Yes, it is technically unnecessary,
+but I left it in on purpose to indicate that JC42_REG_CAP is the first
+register and that it wasn't forgotten. Any modern C compiler notices
+that the check is unnecessary and drops it, so there is no runtime penalty.
 
-Before I send a patch I'd like to hear if removal of "reg >=
-JC42_REG_CAP" makes sense to other people.
+This is one of those situations where I'd like to have a means to tell
+the checker to please stop complaining.
 
-
-Best regards,
-Martin
+Guenter
