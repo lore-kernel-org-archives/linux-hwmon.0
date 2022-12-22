@@ -1,196 +1,83 @@
-Return-Path: <linux-hwmon-owner@kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3071FC4332F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Dec 2022 21:47:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58718C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Dec 2022 21:20:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233757AbiLTVrv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 20 Dec 2022 16:47:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
+        id S229630AbiLVVU1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 22 Dec 2022 16:20:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233685AbiLTVrt (ORCPT
+        with ESMTP id S229603AbiLVVU0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Dec 2022 16:47:49 -0500
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B12BC05
-        for <linux-hwmon@vger.kernel.org>; Tue, 20 Dec 2022 13:47:47 -0800 (PST)
-Received: by mail-vk1-xa33.google.com with SMTP id q7so6394421vka.7
-        for <linux-hwmon@vger.kernel.org>; Tue, 20 Dec 2022 13:47:47 -0800 (PST)
+        Thu, 22 Dec 2022 16:20:26 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172C410FEC;
+        Thu, 22 Dec 2022 13:20:26 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id i15so4685212edf.2;
+        Thu, 22 Dec 2022 13:20:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=criticallink.com; s=google;
+        d=googlemail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VhZgaicca9LJo+DcaX0+4mdob/y6A/dlgKOdUG8hAQ8=;
-        b=EDJt3mLQj1WwTJ31Q6XEL5N7U3t3sJCRSw5Gl+XLC+KJrTSm5kPmgNu1r+geG53I1w
-         dZ4ZdF4Uq5McPr5gRJFnoSVpx2RwRF0hKtABLwjJ6UjO1q1aQ4nnGoNsFIUu948Hh6Ql
-         TI6D7O7W9TOHkpwmeB5w+jD4UgEc2VmtX9ereM4H4PQdelRY/7S16ZHiOGqZ+FzzwMKU
-         oYBiri4PKyBJW9oYimO1afyXI17pZowy4QySimCq0r3xgmMZczmQ9dQfNMnYzeKaIdrD
-         2nma3SQy0teE60eQphOA3jMXOanP8r1SAWAtxQIPRYAAJfFloko2ZbgpH2lPRaV+M6n4
-         nM3g==
+        bh=U9J0SAOJWmGg3K+OYwmd0BD0E3Ym8yEDir998iVg4B8=;
+        b=hNgAdv6CJv+fGQM1pzmmqDVEAdsmQ3tjZltuJAd87S6ssz6ZUmn2LevZ7lQlhIuefz
+         MNNugjW0FXa7H9YS/nUz1fWi9J7C4QQpUxBfPukCajzr4OpNMmS+rxIrZVjr+o7XsRo9
+         5Z+iwkgEiHuTEASxV0sOAcP2iQAuHv45bFdsn/Nbmeh+tXfUmkZZRNkkESREC2mbB1WD
+         XF/F5EXhQcb3B7G6wo30Uf7w15c4RYkUihg3UxPASgdBaDIfbiACQ3NOdgNAdL0Qcn/E
+         yifDo9hiAHiofQLEHTff8tGQcJtrn/GNr8lNrsmwmUE8/7riIVUVYwPffQcyyB4cCgE6
+         NCgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VhZgaicca9LJo+DcaX0+4mdob/y6A/dlgKOdUG8hAQ8=;
-        b=cYpzw9nN1+VI6nU9EtrNQANNJ62a2pj4cExAhPflzp3i36NPwCTp1pkhYCYO2NnNy9
-         7fe/5C2+XDCIP/Y5k4vQ2j2kDZ+8XoIdv/CU529PopL6HEbe+F2vRmgpfA9Cmd9s+Bvb
-         FV0irkFlDBwDRpQY3YZNID/QTUk02TW6T8EnVpFJ82zrHKM4CmnrqGIKSb7FmimX25ep
-         hBCxgcnH3tlKK2PVXeosSkXS/Iv/U2T4lTRTHfHtX/HrcD8ybkDK8rxdbrHWo6g7Xpbh
-         gk26bB8SxFlVDwZ3jFtiqRPCPINRIXVkygYrS6FUdW/xipfDIRYoLg379Aw4+bwxFFZx
-         jTZg==
-X-Gm-Message-State: AFqh2krCWeZ+b7A11DZTShr4ckl4vgjjpCyO9kJx9gGt2G7owjcC1OpD
-        Tl8FjrMs3ErKsuqMscsCLtyL71MXs9XAyOVneTyu/A==
-X-Google-Smtp-Source: AMrXdXt121kbSX/DN1gbxAGQs1zdX6/46XJEuREBUk/e9/77sXOnjAs85qH1gLyo4Ed2wpSZsPW8gyKMsUixPohw24Q=
-X-Received: by 2002:a05:6122:2cd:b0:3c8:f99f:1934 with SMTP id
- k13-20020a05612202cd00b003c8f99f1934mr2557502vki.28.1671572866443; Tue, 20
- Dec 2022 13:47:46 -0800 (PST)
+        bh=U9J0SAOJWmGg3K+OYwmd0BD0E3Ym8yEDir998iVg4B8=;
+        b=3mduN0N1fgkv51I/7spcceXohn2K6ACax3TxrO3lbRPQ4Kv8qQdZ8xhE48TmoVXWUV
+         ov7KlozIQjHHojpQymPqJ+pR/1eHk7BP8f8xaXypuWUiOnHhmpGsbImM0fpm6mjbG5MO
+         dC8yfiQmr3ll4HOFhF7CTmYpyf8Z0ddF4urand5iNJ/huHVYFlx0ki45B9paQFAUU/vy
+         +pIaloTr1WNCkSIWQHFcSytJF7kMmzldlampgYlV6uNuoWpuZGasx2H6qi+Q7oC9f8np
+         gjf/Ai4gRdmMbqQfFPCTvSAaBQFPHiXz1HeOzLqQCosoMVAMVCdAnsLg675jviO3R1YB
+         Y8Dg==
+X-Gm-Message-State: AFqh2kpOvk2cH6ZQrfwbmFV1B8dQkePReGFftobSOMzrjO1e9EHKdZC6
+        sDcEfvR1k3zooS0XEyE8BGC1/F4a1J5j1E8xUtUvOr2XGik=
+X-Google-Smtp-Source: AMrXdXueYdmjnNh5yZELCbKtKxe28suM1LRbcNb1OFiOLZtELR4RzoTx0nAysskex8TahO1zsxYVCAYPELpmaGm7FRk=
+X-Received: by 2002:a50:ef0e:0:b0:46c:fa25:f03d with SMTP id
+ m14-20020a50ef0e000000b0046cfa25f03dmr871442eds.291.1671744024348; Thu, 22
+ Dec 2022 13:20:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20221214220727.1350784-1-jcormier@criticallink.com>
- <20221220000457.1163446-1-jcormier@criticallink.com> <20221220000457.1163446-2-jcormier@criticallink.com>
- <e0f620b4-5780-fbea-4446-fd68f281281a@linaro.org> <CADL8D3YUzgk+H70wEG1Qfq-kcn_csUdJyRg2rWfraVb3JsEa_g@mail.gmail.com>
- <20221220144656.GA3748047@roeck-us.net>
-In-Reply-To: <20221220144656.GA3748047@roeck-us.net>
-From:   Jon Cormier <jcormier@criticallink.com>
-Date:   Tue, 20 Dec 2022 16:47:34 -0500
-Message-ID: <CADL8D3bRFdj0FL41xNc+sdH515sEyxH5Uk-g+n5rpyKck_ES7A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: hwmon: adi,ltc2945: Add binding
+References: <202212222251.Xacx8c4D-lkp@intel.com>
+In-Reply-To: <202212222251.Xacx8c4D-lkp@intel.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Thu, 22 Dec 2022 22:20:13 +0100
+Message-ID: <CAFBinCAB0VuoKKm4YHv_zB1d1xN3nP0=-xg9EotiWMJ_vikc2w@mail.gmail.com>
+Subject: Re: drivers/hwmon/jc42.c:477 jc42_readable_reg() warn: always true
+ condition '(reg >= 0) => (0-u32max >= 0)'
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bob Duke <bduke@criticallink.com>,
-        John Pruitt <jpruitt@criticallink.com>
+Cc:     kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Okay so for V3, I see only 2 changes. Please let me know if I've
-overlooked something else.
-- Remove "Also adds shunt-resistor-micro-ohms parameter" from commit description
-- Remove extra newline from binding doc
+Hi Guenter et al.,
 
-Resending in plaintext...
+On Thu, Dec 22, 2022 at 3:36 PM kernel test robot <lkp@intel.com> wrote:
+[...]
+>    475  static bool jc42_readable_reg(struct device *dev, unsigned int reg)
+>    476  {
+>  > 477          return (reg >= JC42_REG_CAP && reg <= JC42_REG_DEVICEID) ||
+>    478                  reg == JC42_REG_SMBUS;
+The bot is right: we can omit "reg >= JC42_REG_CAP" as it's already
+covered by the fact that:
+- the reg variable is unsigned, which means the lower limit is zero
+- reg <= JC42_REG_DEVICEID covers the upper limit
 
-
-On Tue, Dec 20, 2022 at 9:46 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Tue, Dec 20, 2022 at 09:35:38AM -0500, Jon Cormier wrote:
-> > On Tue, Dec 20, 2022 at 5:15 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> > >
-> > > On 20/12/2022 01:04, Cormier, Jonathan wrote:
-> > > > Create initial binding for the LTC2945 I2C power monitor.
-> > > > Also adds shunt-resistor-micro-ohms parameter
-> > >
-> > > The last sentence does not make sense. I propose to skip it.
-> > Ok
-> > >
-> > > >
-> > > > Signed-off-by: "Cormier, Jonathan" <jcormier@criticallink.com>
-> > > > ---
-> > > >  .../bindings/hwmon/adi,ltc2945.yaml           | 50 +++++++++++++++++++
-> > > >  1 file changed, 50 insertions(+)
-> > > >  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..f90d40919ee6
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
-> > > > @@ -0,0 +1,50 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/hwmon/adi,ltc2945.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Analog Devices LTC2945 wide range i2c power monitor
-> > > > +
-> > > > +maintainers:
-> > > > +  - Guenter Roeck <linux@roeck-us.net>
-> > >
-> > > Maintainer of binding is person interested in the device, e.g. having
-> > > the hardware or datasheet. Not the subsystem maintainer. Unless by
-> > > coincidence this is the same person here?
-> > What do you do with a basic kernel driver which hasn't been touched
-> > since it was introduced except for various refactors? He seems to be
-> > the one who introduced it and most consistently made changes to it.
->
-> FWIW, if I was not ok with being listed as maintainer I would have objected.
->
-> Having said that, it is just as fine with me to list someone else.
->
-> Guenter
->
-> > >
-> > >
-> > > > +
-> > > > +description: |
-> > > > +  Analog Devices LTC2945 wide range i2c power monitor over I2C.
-> > > > +
-> > > > +  https://www.analog.com/media/en/technical-documentation/data-sheets/LTC2945.pdf
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    enum:
-> > > > +      - adi,ltc2945
-> > > > +
-> > > > +  reg:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  shunt-resistor-micro-ohms:
-> > > > +    description:
-> > > > +      Shunt resistor value in micro-Ohms
-> > > > +    default: 1000
-> > > > +
-> > > > +required:
-> > > > +  - compatible
-> > > > +  - reg
-> > > > +
-> > > > +
-> > > This is a friendly reminder during the review process.
-> > >
-> > > It seems my previous comments were not fully addressed. Maybe my
-> > > feedback got lost between the quotes, maybe you just forgot to apply it.
-> > > Please go back to the previous discussion and either implement all
-> > > requested changes or keep discussing them.
-> > My bad,
-> > >
-> > > Thank you.
-> > >
-> > > > +additionalProperties: false
-> > > > +
-> > >
-> > > Best regards,
-> > > Krzysztof
-> > >
-> >
-> >
-> > --
-> > Jonathan Cormier
-> > Software Engineer
-> >
-> > Voice:  315.425.4045 x222
-> >
-> >
-> >
-> > http://www.CriticalLink.com
-> > 6712 Brooklawn Parkway, Syracuse, NY 13211
+Before I send a patch I'd like to hear if removal of "reg >=
+JC42_REG_CAP" makes sense to other people.
 
 
-
--- 
-Jonathan Cormier
-Software Engineer
-
-Voice:  315.425.4045 x222
-
-
-
-http://www.CriticalLink.com
-6712 Brooklawn Parkway, Syracuse, NY 13211
+Best regards,
+Martin
