@@ -2,124 +2,93 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59038C4167B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 23 Dec 2022 10:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7005C10F1B
+	for <linux-hwmon@archiver.kernel.org>; Sat, 24 Dec 2022 04:19:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiLWKsW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 23 Dec 2022 05:48:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
+        id S231272AbiLXETY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 23 Dec 2022 23:19:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiLWKsV (ORCPT
+        with ESMTP id S230386AbiLXETT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 23 Dec 2022 05:48:21 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6602EFA0;
-        Fri, 23 Dec 2022 02:48:19 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id ja17so3351531wmb.3;
-        Fri, 23 Dec 2022 02:48:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KhLbfasIT+IsJ/fzFBKm8bjMLim3B3v7a2BR1YCQf9s=;
-        b=R/pAZCVvoENYrH4goqJ89J4Ckc+WVtX/QbCDc3wROEHKQQV99DN7Uep1LmyeRh8BY6
-         KD5TmmrjLxVB3TJMWOrL5L3+J0wl4oUNhNGQHDDDPmezF6byXFfcJQKm0ybBgQEgMIXS
-         yj9ghPLj/8CdpJSnjGvJvHp8Uz+tZI+RciFNwbGOBX93W66RdH5bCdhWGh+reox5Op3t
-         7evSXHDc3QW93KuI2O19bQvyEHYBuN46caTfdNmLGjEcwqvBte8lLRDopScBBKArsEUL
-         QLBMWyvDKBMk4flJj3ERvgm1PRmJVDN7by7SIRs0PRMyqX0Sxfv0yZxSDx1QIukgALrx
-         0ObA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KhLbfasIT+IsJ/fzFBKm8bjMLim3B3v7a2BR1YCQf9s=;
-        b=P9PfZYWxt3zbeu1m4co8i/SyyiNQnAX9GmseIbdeo8fx1ck4L5hm01MtPMexoBgkwm
-         4pMrlIHXMxoGQb+lIvtHO5V0+WYDFCDCSOb5DDji62Nsw69IHV2nCazyiploByitVX9x
-         0wMWYMRencIQJmSPYVXFEs2QA0mo1igu5cYstxADzzSX9xURZkXyhuoYTMjcEDUhiz1G
-         jyIQdYRL8EKpVIows++/DmMoezpXlc8mvbLOAWjIfOJgceZ+UTtHb1FsH9h2GfyFdUVE
-         tywRekUo7eKvD0cmvLtNYgby+K+0j92bTg05hf08Td3dF7/amUdeQpXbn4O+iT5hiyKY
-         +ITQ==
-X-Gm-Message-State: AFqh2kp5T9exq3D55X0YUKcnqKG3xtSiat36963tL4l/EkODt53g2uOo
-        ykRN7r3DGgBFRgLGu+d47LnAnhgURzddTg==
-X-Google-Smtp-Source: AMrXdXsTQYAO6Q2FNPFL5FF5iydUP7T2+MRL5z2C2M44EbYBBjg0EEG5KDdXv76nv5T67i7PTYyP7Q==
-X-Received: by 2002:a05:600c:4d97:b0:3d2:3e73:7175 with SMTP id v23-20020a05600c4d9700b003d23e737175mr6720694wmp.40.1671792498197;
-        Fri, 23 Dec 2022 02:48:18 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id e16-20020a05600c4e5000b003c21ba7d7d6sm4156299wmq.44.2022.12.23.02.48.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Dec 2022 02:48:17 -0800 (PST)
-Date:   Fri, 23 Dec 2022 13:48:14 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, Marcelo Tosatti <mtosatti@redhat.com>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH] hwmon: coretemp: avoid RDMSR interruptions to isolated
- CPUs
-Message-ID: <202212170101.tpSDqf7K-lkp@intel.com>
+        Fri, 23 Dec 2022 23:19:19 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF401C934;
+        Fri, 23 Dec 2022 20:19:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1671855539; bh=ADj8j6/BUuQBYyxAwlKsfqY5hsrX2k4RAQgZk47ua6c=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=CJv8nXZXasufGfn3c4aQ5hO79VmhuF+CJe04esSkKbLPUS7k3zVdKzGB18gxnEc5X
+         3LrJJQyKflmaKyG+QKmWjO+Ip2sR6QmEqM6Z03QHMCiv+qe/woQt1ug6JXhPfk6PqN
+         WqqyT0/yYI+CJDDfH3PB17klEhu/CJeozkfE/EdtjB5K9JSb4sLPFzJS1jTXAOeNa6
+         gTFHdRPXMN+i6rUBhTTb2jw+vvw0n0VauPbgBgNDFILXHplpukKvl401wm/sS5FvJa
+         G51viqrXih4iSqKNIt33dX80ex43EkjTV7lFoGxfdmsurh4S0+mDN30/dbqFH78Bib
+         N6wIRtEGGQPFg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MzQg6-1ovmpH01aK-00vMnc; Sat, 24 Dec 2022 05:18:59 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] hwmon: (ftsteutates) Various fixes
+Date:   Sat, 24 Dec 2022 05:18:52 +0100
+Message-Id: <20221224041855.83981-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5sWMEG0xCl9bgEi@tpad>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:eExvhEnXCe011nUidf8E87CZzTm1rlfwWya2IayXQ4mWGaBuZ6q
+ TD0WbIe8IWmICQrZUGCbcNDemQMXqniUicgIREHrONngr9mi2+kfVIyHG1/s9vFRTzr5vNr
+ 6cVS8PlmZteWLPV6ruy6qtl8c6DwE/0qnCjShZIK2Ds3jeMZ5li6hz65iu7OhhDuahyMa2m
+ BmOICj+lQX/5MdXvMgjDQ==
+UI-OutboundReport: notjunk:1;M01:P0:gh/w4R16Ex0=;N2JX/2s4GWqIcKfpwSkazey5Nlo
+ 5XIhUOdPYTHIcAMBK2oXcw88YEpp6Cfdr3lQtlA+fimAv+rCV6dSqQraIux1phTrfx9FcYlh8
+ wkARo3BGPj51Muu4nMeUJoy92sPmNctkcBCdIjd4+2XLv136HtMRNYEJ0cYvHitP7e6phetzC
+ jOkfljJp+p+uliXnqXMRSjKfOAtPmVhG0tA9dX2piyz5wsrbesPr6855xvEOX07W7zZ3Qfgep
+ kn7HVNtz3G6ETEFpJgvm3LVE2VzHSd3w8Wwg8coQIpUuDuBnLrRs41f/KC/UaZACr65dWKl7x
+ /hat6UN1IpDsA2u6jmTOFZbXLAMvQ1zcKP4UFv02pXYislSyWv14MSC6WB++IUW1lRLKjqCPl
+ oEr6WM6YJeK8c1cXfAp2IKBdlXFPNesO3WoSUJdsNX4WJrzYqGyJESCAoGxeAVpFwpkcU2I/q
+ s1kXDcBVnTM7mm2yoBtQx80YS9cbHzsP0fkqRJEOipaarTB3ptZuSAe5zt0yCiuysQuq0MoAt
+ 0LEgVxfDK88gGde25WOm9nIh26PCEg9430bVx3EINthH036+JptFnNP4Zxi4rOBu6nqhfbhGK
+ UQ1nBMlykAgunSldCy6CR0J8pxUwZd5OeZDMLbfSdx60ZmQA9JZ5PIdN/yWeqL2ZmNuFcntve
+ YIxECZxr3J+zsgx6rin0pBOdf17TNv5eSkJUoT1P1H8kTXtB6SsGGVroG3/GUv3id9yo3Y7zJ
+ zwRC4vIWXBL+xdU5Ul9cap0nCkcOASSeErS/NFuhNV7KiF6rN+s6t0NUUpEwALHa+ezYVEFRU
+ HVW+8EmuY5FWNF55lI+2avggQzchP0jXVgJP7cBlxeu0gBi8FP7cTOSl8BWAeUe4anCyJl49Y
+ WHkel6SLCmJ/SV/21gqmQgwLNXG4Jin/MlxDaXi16U2JfBdSkn6UiVwS1/9hlzzgHWVph0MXo
+ zPhTkXrk/AdOetkZmjw0V4v/N7g=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Marcelo,
+Merry Christmas,
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+a user reported strange sensors values when using the ftsteutates driver
+on kernel 6.1. A bit of research revealed that the drivers was omiting
+any scaling of the measurements, causing strange sensor values being
+reported with the sensors command. This was likely done since when the
+ftsteutates driver was still out-of-tree, all scaling was done by
+libsensors with an custom config file provided by Fujitsu.
+The first patch fixes this issue.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marcelo-Tosatti/hwmon-coretemp-avoid-RDMSR-interruptions-to-isolated-CPUs/20221215-204904
-patch link:    https://lore.kernel.org/r/Y5sWMEG0xCl9bgEi%40tpad
-patch subject: [PATCH] hwmon: coretemp: avoid RDMSR interruptions to isolated CPUs
-config: i386-randconfig-m021
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+The seconds patch converts the driver to use the modern *_with_info() API
+and also adds support for fanX_fault and pwmX_auto_channels_temp attribute=
+s.
+Since the behaviour of the pwmX_auto_channels_temp attributes is a bit
+special with the teutates BMC, it is added to the drivers documentation.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
+The last patch is a minor improvement regarding the watchdog registration.
 
-smatch warnings:
-drivers/hwmon/coretemp.c:181 show_temp() warn: inconsistent returns '&tdata->update_lock'.
+All changes where tested on a Fujitsu DS3401-B1 and apppear to work.
 
-vim +181 drivers/hwmon/coretemp.c
+Armin Wolf (3):
+  hwmon: (ftsteutates) Fix scaling of measurements
+  hwmon: (ftsteutates) Convert to devm_hwmon_device_register_with_info()
+  hwmon: (ftsteutates) Use devm_watchdog_register_device()
 
-199e0de7f5df31 Durgadoss R     2011-05-20  154  static ssize_t show_temp(struct device *dev,
-199e0de7f5df31 Durgadoss R     2011-05-20  155  			struct device_attribute *devattr, char *buf)
-199e0de7f5df31 Durgadoss R     2011-05-20  156  {
-bebe467823c0d8 Rudolf Marek    2007-05-08  157  	u32 eax, edx;
-199e0de7f5df31 Durgadoss R     2011-05-20  158  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
-199e0de7f5df31 Durgadoss R     2011-05-20  159  	struct platform_data *pdata = dev_get_drvdata(dev);
-199e0de7f5df31 Durgadoss R     2011-05-20  160  	struct temp_data *tdata = pdata->core_data[attr->index];
-199e0de7f5df31 Durgadoss R     2011-05-20  161  
-199e0de7f5df31 Durgadoss R     2011-05-20  162  	mutex_lock(&tdata->update_lock);
-bebe467823c0d8 Rudolf Marek    2007-05-08  163  
-199e0de7f5df31 Durgadoss R     2011-05-20  164  	/* Check whether the time interval has elapsed */
-199e0de7f5df31 Durgadoss R     2011-05-20  165  	if (!tdata->valid || time_after(jiffies, tdata->last_updated + HZ)) {
-e78264610cd902 Marcelo Tosatti 2022-12-15  166  		if (!housekeeping_cpu(tdata->cpu, HK_TYPE_MISC))
-e78264610cd902 Marcelo Tosatti 2022-12-15  167  			return -EINVAL;
+ Documentation/hwmon/ftsteutates.rst |   9 +
+ drivers/hwmon/ftsteutates.c         | 551 ++++++++++------------------
+ 2 files changed, 213 insertions(+), 347 deletions(-)
 
-mutex_unlock(&tdata->update_lock);
-
-199e0de7f5df31 Durgadoss R     2011-05-20  168  		rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax, &edx);
-bf6ea084ebb54c Guenter Roeck   2013-11-20  169  		/*
-bf6ea084ebb54c Guenter Roeck   2013-11-20  170  		 * Ignore the valid bit. In all observed cases the register
-bf6ea084ebb54c Guenter Roeck   2013-11-20  171  		 * value is either low or zero if the valid bit is 0.
-bf6ea084ebb54c Guenter Roeck   2013-11-20  172  		 * Return it instead of reporting an error which doesn't
-bf6ea084ebb54c Guenter Roeck   2013-11-20  173  		 * really help at all.
-bf6ea084ebb54c Guenter Roeck   2013-11-20  174  		 */
-bf6ea084ebb54c Guenter Roeck   2013-11-20  175  		tdata->temp = tdata->tjmax - ((eax >> 16) & 0x7f) * 1000;
-952a11ca32a604 Paul Fertser    2021-09-24  176  		tdata->valid = true;
-199e0de7f5df31 Durgadoss R     2011-05-20  177  		tdata->last_updated = jiffies;
-bebe467823c0d8 Rudolf Marek    2007-05-08  178  	}
-bebe467823c0d8 Rudolf Marek    2007-05-08  179  
-199e0de7f5df31 Durgadoss R     2011-05-20  180  	mutex_unlock(&tdata->update_lock);
-bf6ea084ebb54c Guenter Roeck   2013-11-20 @181  	return sprintf(buf, "%d\n", tdata->temp);
-bebe467823c0d8 Rudolf Marek    2007-05-08  182  }
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+=2D-
+2.30.2
 
