@@ -2,178 +2,113 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7867C4167B
-	for <linux-hwmon@archiver.kernel.org>; Sat, 24 Dec 2022 04:19:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BA57C4332F
+	for <linux-hwmon@archiver.kernel.org>; Sat, 24 Dec 2022 04:19:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232830AbiLXETZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 23 Dec 2022 23:19:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50496 "EHLO
+        id S233004AbiLXET0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 23 Dec 2022 23:19:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbiLXETT (ORCPT
+        with ESMTP id S231219AbiLXETX (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 23 Dec 2022 23:19:19 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF941CB14;
-        Fri, 23 Dec 2022 20:19:16 -0800 (PST)
+        Fri, 23 Dec 2022 23:19:23 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7A71CB2E;
+        Fri, 23 Dec 2022 20:19:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1671855540; bh=5PoiGuKTjTB2f9D4z+MnZKdOvcx2VJpMI8xwt9UGaxg=;
+        t=1671855545; bh=C3o0ZLdtTlEJI2pYfk3GoSAVs6STbyj1X4ArX6hGlPs=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=WnFVltG1bY+7NVl6gfuDWom0b0Dx0Mgy2UI4yUSie5PlVXvx+jB0G3pNanK3QlyTs
-         DOYrBpfsM4b13rWxYC4mCQcp2LzxA7Lbxh90GGVIUj5MOtuQuVzON7evI7lA7izLbM
-         eV6wOr+kOglPbgIJz2M2fTUNYJZw4KGeTqPCIaDJpUOX2He9oBaU2vzaFXOPLxW0+L
-         SBcJAENjN6uNEnWvZSMaBtFHGPfL0vV0132jCZZ5SKePeaRLsZf0hmGRPYosJN8+Ou
-         KX69b+CeOGgH4qq+2ggfccxhmKV1CnohV0xk58LJ6viuve3XSeBWWNs9H9f3J6NTHU
-         QGOJCGQjEJdfw==
+        b=cHzsmviExQDJFCME5rIWjUizcfRy/tU2AJDHU1k+bc2F9fa67IXMOUuMgqRpUHyLI
+         fGOZoW1O89+eFS6AoC0K6FfwfaUo4YCSY0duNO8Cb9NpMotioNsfwxvKfp1h5JHQF8
+         sqclrRZlr4fM/OfnFt7p/MklUdvTUfGLGP8Dtaq65Z4i7jCjimrXuycqJXbGXriqm5
+         myV8Km1dPW23+sag1G0hIMNV+s+pMVC/sEf8HQYrwvRxRJeEwYQgGAX+ehYaefzrD7
+         GqfKZ8bv1cCfW6GXlWwevDhT0NW0HBYaqSgl5hf6lXnFSAEXU1EyafiZgiVznUNhL+
+         T0vh536NeqVZA==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MirjS-1od9Tk2KYO-00euL0; Sat, 24 Dec 2022 05:19:00 +0100
+ 1M59C2-1p7pXR2j5g-001BZi; Sat, 24 Dec 2022 05:19:05 +0100
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     jdelvare@suse.com, linux@roeck-us.net
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] hwmon: (ftsteutates) Fix scaling of measurements
-Date:   Sat, 24 Dec 2022 05:18:53 +0100
-Message-Id: <20221224041855.83981-2-W_Armin@gmx.de>
+Subject: [PATCH 3/3] hwmon: (ftsteutates) Use devm_watchdog_register_device()
+Date:   Sat, 24 Dec 2022 05:18:55 +0100
+Message-Id: <20221224041855.83981-4-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221224041855.83981-1-W_Armin@gmx.de>
 References: <20221224041855.83981-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:zwsmSLNj/mM9MGI2msAmznXpdXUl/1DAJ8f8clp9J97TVKEyIhw
- AoGW6GY3BGa5Wll0tpAH7rabhsDh4rDa/JHVkU/DCYoGmo72w9JLjiVMFkV7H7XKhl/QH/g
- ju45yhE8jQw5dlCefEvkMpOrR8PSpwuRgBrmvLEyh4C62QnlmZkutxT9VCNN9qQHpCMkT/Z
- bTHizQjYALjtuZgpdCqaQ==
-UI-OutboundReport: notjunk:1;M01:P0:AOpju1sjKI8=;5PPtJWo1UXanX9WNFPqb27wSHH0
- pUDlqwuEnp9RuN9cudXP5f8l+ybmehDFT/1wG1soDFFQHwHNStqH57zCPTHlY8YI8v0la347F
- 0by9KCCfAco79UG4A9oSh81pINHeFZJZ2sPPo42Z0SsBvgrGc/XOp0HKnMhVSmfxXouZmH/f5
- sFPXQS6BrrBj61necy2ERgAvO0FlC3cTHqCmFyPKGnD9N0ghzOh7IfEDT3yO6I2aPW/Tgq+EW
- tLwtX+VQjuoFFM3ZT1dVEo3Xcx6fl01sK1OdTxLGPRk58FBLmHzTH6rqUPD3jaQra2UPB74TB
- hhg8bU1hX6VjlAi15ZvYHhfySoVniLTlyZ8rmPvIawu6UmAX0vbnCSHunbb5x/QWuwFWwOI3r
- T1rR2NcMcCAG1Ez/wDqU7/Mj5pABBTXLnVZZegVopHB8g9kWod3axREl/BRejDhrnYilId+Bi
- 47AOgvVMPaLHQmww+mlzPf67uw6QnF3Xy3v7Qb2FkIH5f8bbq3OvaVnKbKGZ1OuQmLNL/3BUJ
- sHiND6AxZwc2Lkehg2uR2ZPQVD6E1eKww//lLccn1fg3Zx3vzJl2zSWUQCzIonBF+OKMHxu5L
- oOBbmMylbtTpOefigQ1PebBmgeP6mGRHQ2L4tTruL4JfEvBtVuF4sawnDxtmCystHOIKFZEoH
- 5d0UeK5ZUGWFB9w9aZ7xfuu5vU5GVytaTkYAMx0CVYUqUVd3l+6JNF0ciydjtrSnwY7jZL72t
- n/eZuk925vseTbXqDuYn78ENAi5EYHgZDZf8Xj2N8E19He00q0Nn+OzJM5zBSej4wyv6UtjhT
- BLqADd2ah17GZw1l/T7NLmmLA1FU7S3KjMCypKh3yBymJm6pG+qhptv4iX+42pLQdgUkSWeSg
- EQ3AVbQkU7/rF9f7GE8TRUcWiy38Ek2iKD8oEugXMrcVm7OGij/vu7aKslPOgswO1QZrtHTUr
- 1qjjlcnpXeeOAUIRH9yulzUQAN8=
+X-Provags-ID: V03:K1:7nl4MURSq3AU+KB+lIzKjozqIBMe8kzrct014sU7H0mlIb1sBgW
+ jVkbMR3KWEy400YVlz538qrJrp01ieThQsskQ/yjYOBSK/v+cZNbe/OKHDJlNMVaXpzFIh9
+ ZCkNq1C22MuCLgJbTTjA0VPPRG5MKrBlhUENVofGuTndydiqsmwms0SNgPnphk/gtEy1iB9
+ WAIsoqtgFwenY5y7G3pDQ==
+UI-OutboundReport: notjunk:1;M01:P0:S6UXNNAY8rY=;S+0q/L4KlVSl1hCKyPxForzHkCd
+ WzJTR/JjArww35upLCENkuqFOtlQWG3gfAKULKfRKqZsKoxMFGOMesDFcjIlNzhoKNEQa5FxX
+ pUoqiKVtB2mIxgC4EAk12EkT6D/vs2LZ6L7Ydawq4PXNh5HoBLtNJZ7w/YNVzHPw0VNQw0ddE
+ d9Z+r+dCM7YeVuSYg6Yw2RhxXtBzv2WcW5Oe0PCko6Y4WtUxsqLKvsgnGVCBBwb5L4W4F5NwH
+ 8kvQk6vBuJ2b23TKSpx6WsFSg1nVeNQUDS8BdRHDltux0zdVcAJbPMhmQ9gSwhrG5ZijT2yxq
+ LFJ7H0yZLx7A2Oim1gVFRMUzE58IpanVGBLm3nmvtWDxZBRBdbWvf8PMmCsmUCBEqEZe0q2Ya
+ CXKZ4wNA6W8fi+G/hzXF9dxr2dZABGbE5tHeqIo+8/BN5i7+Qzvqsqq0zDsG6o0zJay45cK+a
+ g0neAgjzGYf/KfUCFiAflAts6C+Z/KXCpWVvOvfegJQi7yCqbcDTOMQdG2PBom8pdgu4nmrBN
+ AzITE+MDnn6tUqhXRAX31z6zz3vwhl/geyp23v/NF4jdpfJsq1ZszSP9c1SrOAS7t6OR65155
+ ReDn6kYydAuYJ1UWMBdVzKAfLu7OMAqfNpYQMZ2rpw27StZdj8DM4ZgNAeK3O/wl8cDnIOXCb
+ Cv3MAQywmsuA4TAAzIxNpkZGzuGYAqVC4wf0VozsUqkf/XUCoBZIcCL7DT/9TGx6rXzjgHTW4
+ buBzZjLSIIX7NyFFdhW4qsAeCvtszXA4FohYSTC7HRRm3f6jnfJgVHshvnpAPwdxSX3ZuEKyS
+ kRz9F42EnVRQ6VW9dOqRSrrlE34JnZBpLMdkdgL8OhQD6pD/urLJPfFtNnQ9t5YofMGRE0LeL
+ s0VfVif1w1WAitExu5z5/BAsLV2u9qB6p1wG6RdLyME6P+FHIifbtcGcCgDoo96A+zvXpXb+A
+ WmD67kryh0UM6q9saar/QmSIl48=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-A user complained that the ftsteutates driver was displaying
-bogus values since its introduction. This happens because the
-sensor measurements need to be scaled in order to produce
-meaningful results:
-- the fan speed needs to be multiplied by 60 since its in RPS
-- the temperature is in degrees celsius and needs an offset of 64
-- the voltage is in 1/256 of 3.3V
-
-The offical datasheet says the voltage needs to be divided by 256,
-but this is likely an off-by-one-error, since even the BIOS
-devides by 255 (otherwise 3.3V could not be measured).
-
-The voltage channels additionally need a board-specific multiplier,
-however this can be done by the driver since its board-specific.
-
-The reason the missing scaling of measurements is the way Fujitsu
-used this driver when it was still out-of-tree. Back then, all
-scaling was done in userspace by libsensors, even the generic one.
+Use devm_watchdog_register_device() to let devres take care
+of unregistering the watchdog at device removal. Remove the
+now pointless fts_remove() function.
 
 Tested on a Fujitsu DS3401-B1.
 
-Fixes: 08426eda58e0 ("hwmon: Add driver for FTS BMC chip "Teutates"")
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- Documentation/hwmon/ftsteutates.rst |  4 ++++
- drivers/hwmon/ftsteutates.c         | 19 +++++++++++++------
- 2 files changed, 17 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/hwmon/ftsteutates.rst b/Documentation/hwmon/fts=
-teutates.rst
-index 58a2483d8d0d..198fa8e2819d 100644
-=2D-- a/Documentation/hwmon/ftsteutates.rst
-+++ b/Documentation/hwmon/ftsteutates.rst
-@@ -22,6 +22,10 @@ enhancements. It can monitor up to 4 voltages, 16 tempe=
-ratures and
- 8 fans. It also contains an integrated watchdog which is currently
- implemented in this driver.
-
-+The 4 voltages require a board-specific multiplier, since the BMC can
-+only measure voltages up to 3.3V and thus relies on voltage dividers.
-+Consult your motherboard manual for details.
-+
- To clear a temperature or fan alarm, execute the following command with t=
-he
- correct path to the alarm file::
+ drivers/hwmon/ftsteutates.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
 diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
-index f5b8e724a8ca..ffa0bb364877 100644
+index 66ff8d69a0de..d8878b8d16bc 100644
 =2D-- a/drivers/hwmon/ftsteutates.c
 +++ b/drivers/hwmon/ftsteutates.c
-@@ -12,6 +12,7 @@
- #include <linux/i2c.h>
- #include <linux/init.h>
- #include <linux/jiffies.h>
-+#include <linux/math.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/slab.h>
-@@ -347,13 +348,15 @@ static ssize_t in_value_show(struct device *dev,
- {
- 	struct fts_data *data =3D dev_get_drvdata(dev);
- 	int index =3D to_sensor_dev_attr(devattr)->index;
--	int err;
-+	int value, err;
+@@ -333,7 +333,7 @@ static int fts_watchdog_init(struct fts_data *data)
+ 	/* max timeout 255 minutes. */
+ 	data->wdd.max_hw_heartbeat_ms =3D 0xFF * 60 * MSEC_PER_SEC;
 
- 	err =3D fts_update_device(data);
- 	if (err < 0)
- 		return err;
-
--	return sprintf(buf, "%u\n", data->volt[index]);
-+	value =3D DIV_ROUND_CLOSEST(data->volt[index] * 3300, 255);
-+
-+	return sprintf(buf, "%d\n", value);
+-	return watchdog_register_device(&data->wdd);
++	return devm_watchdog_register_device(&data->client->dev, &data->wdd);
  }
 
- static ssize_t temp_value_show(struct device *dev,
-@@ -361,13 +364,15 @@ static ssize_t temp_value_show(struct device *dev,
- {
- 	struct fts_data *data =3D dev_get_drvdata(dev);
- 	int index =3D to_sensor_dev_attr(devattr)->index;
--	int err;
-+	int value, err;
-
- 	err =3D fts_update_device(data);
- 	if (err < 0)
- 		return err;
-
--	return sprintf(buf, "%u\n", data->temp_input[index]);
-+	value =3D (data->temp_input[index] - 64) * 1000;
-+
-+	return sprintf(buf, "%d\n", value);
+ static umode_t fts_is_visible(const void *devdata, enum hwmon_sensor_type=
+s type, u32 attr,
+@@ -611,13 +611,6 @@ static int fts_detect(struct i2c_client *client,
+ 	return 0;
  }
 
- static ssize_t temp_fault_show(struct device *dev,
-@@ -436,13 +441,15 @@ static ssize_t fan_value_show(struct device *dev,
+-static void fts_remove(struct i2c_client *client)
+-{
+-	struct fts_data *data =3D dev_get_drvdata(&client->dev);
+-
+-	watchdog_unregister_device(&data->wdd);
+-}
+-
+ static int fts_probe(struct i2c_client *client)
  {
- 	struct fts_data *data =3D dev_get_drvdata(dev);
- 	int index =3D to_sensor_dev_attr(devattr)->index;
--	int err;
-+	int value, err;
-
- 	err =3D fts_update_device(data);
- 	if (err < 0)
- 		return err;
-
--	return sprintf(buf, "%u\n", data->fan_input[index]);
-+	value =3D data->fan_input[index] * 60;
-+
-+	return sprintf(buf, "%d\n", value);
- }
-
- static ssize_t fan_source_show(struct device *dev,
+ 	u8 revision;
+@@ -684,7 +677,6 @@ static struct i2c_driver fts_driver =3D {
+ 	},
+ 	.id_table =3D fts_id,
+ 	.probe_new =3D fts_probe,
+-	.remove =3D fts_remove,
+ 	.detect =3D fts_detect,
+ 	.address_list =3D normal_i2c,
+ };
 =2D-
 2.30.2
 
