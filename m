@@ -2,102 +2,122 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3EA3C4332F
-	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Dec 2022 14:18:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1558C3DA79
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Dec 2022 13:58:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbiLYOSp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 25 Dec 2022 09:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53460 "EHLO
+        id S229533AbiLZN6R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 26 Dec 2022 08:58:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiLYOSm (ORCPT
+        with ESMTP id S229502AbiLZN6Q (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 25 Dec 2022 09:18:42 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E4025FC;
-        Sun, 25 Dec 2022 06:18:39 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id m18so21778881eji.5;
-        Sun, 25 Dec 2022 06:18:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=niYqII/y6uSXj/qldxCx5zx8OzKaw3GEXnxBhhCFXOg=;
-        b=hmkFiOteIM1MtZAN0cHoQuZiqcnf1HUhX+/5XHKscPDBWysXzEx6yjvwkqCT5jnowM
-         PvrPbwzBPvbHb7Duwq+31mlctE60unvh+AYNG3f9psbome+U3ET1tloSdSlEiwyYnv2M
-         eC7i4E76F5XZmkmhDJKVPIXRTaEU7Q/03mc1TczUEmsPKcVn26T6Y+D7q+YYUnHp3qp4
-         ofz3EBf2BUrbH/LYagShvQCAD5BvN4JGWdxOnQncvVhlQD6E8FiSK4UlkmN1kL9ZHsJh
-         yZsAfCtZKNbfoZDOOCEoq8lN0iYr9/TuMRqaAb5mwycy+Hevr5HXQljrAghD4z+9iLdv
-         8HzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=niYqII/y6uSXj/qldxCx5zx8OzKaw3GEXnxBhhCFXOg=;
-        b=06el0W+4Z/fu/riJ0Vwgv6j1Vha35g0tUzI5bXBN3aXQP98d3FupcTNUdRnexw3VRa
-         v3tpRV2Ti3UT5pYjQEQSplYUyNS5KvlJyQvKptzpeBJdHoXde1070E2jQTHWwPDdEyHA
-         ofozJmrSGEueKD5YYknpg7uImZIAxZRzFZ1qlqOny5fABg/62u6T0TtuWDVR+SiATaBj
-         WkWXz7vGihug9mFjUbAyt/JrgUIap9vBQFcZxUz9+OfpmGHerq8wgl+V4zxkDqpv8Lrb
-         YTJqB8Q8WvkQU6bmqFo1HyPqj3dB0D49SfiQuZSFUWEtL7lJE3IszPi6EkfPdELXbEKH
-         Bhqg==
-X-Gm-Message-State: AFqh2krI4PAm4OV8ara8F2fMpJjQ2RPg/JjR48uPy7YN6xx4TvCEBzRL
-        2MbZ+UVhqcoz3YYFddHXpbXvv9Ft90xh+COBCHD2erF8
-X-Google-Smtp-Source: AMrXdXtx0tvpEG7FURZMaljXjcQr9ggA/FmU+9dgktRDtX7TywqZ9zxo1uoAB+x6Qs1o0qDiPIwXD+rEzpXuWs/rz4Y=
-X-Received: by 2002:a17:906:3989:b0:7c1:1f28:afed with SMTP id
- h9-20020a170906398900b007c11f28afedmr1265191eje.678.1671977917920; Sun, 25
- Dec 2022 06:18:37 -0800 (PST)
+        Mon, 26 Dec 2022 08:58:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82840CE9
+        for <linux-hwmon@vger.kernel.org>; Mon, 26 Dec 2022 05:57:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672063048;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xNkpB2+u8Eqmau278f4T4WUJLfMelhcgCd97s/yvcas=;
+        b=URDFDYzSTYNLdF+m0Wdis6htYB5NE9l++KgOaDCDMUULTCFbCggMSEWgSHlmxaQD0u9uOe
+        BKavCwtDuCL5uJsC+i6RrM5t1GyuzLBy/Bi+BHwN67KVd01frrsvvcFt8r8giRf3cQG3Um
+        kPyJDFwmnKxPTCiAI5iNz+c1nXo3T4c=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-N1_Ltle7OD-TxwLYhWP6PQ-1; Mon, 26 Dec 2022 08:57:23 -0500
+X-MC-Unique: N1_Ltle7OD-TxwLYhWP6PQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EB2A82A59572;
+        Mon, 26 Dec 2022 13:57:22 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B8781140EBF4;
+        Mon, 26 Dec 2022 13:57:22 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id B20EF404EA357; Mon, 26 Dec 2022 09:43:57 -0300 (-03)
+Date:   Mon, 26 Dec 2022 09:43:57 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     oe-kbuild@lists.linux.dev, Fenghua Yu <fenghua.yu@intel.com>,
+        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH] hwmon: coretemp: avoid RDMSR interruptions to isolated
+ CPUs
+Message-ID: <Y6mXDUZkII5OnuE8@tpad>
+References: <Y5sWMEG0xCl9bgEi@tpad>
+ <202212170101.tpSDqf7K-lkp@intel.com>
 MIME-Version: 1.0
-References: <202212222251.Xacx8c4D-lkp@intel.com> <CAFBinCAB0VuoKKm4YHv_zB1d1xN3nP0=-xg9EotiWMJ_vikc2w@mail.gmail.com>
- <20221222234148.GA2776378@roeck-us.net>
-In-Reply-To: <20221222234148.GA2776378@roeck-us.net>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sun, 25 Dec 2022 15:18:27 +0100
-Message-ID: <CAFBinCCr=Q0796zK09=uY_bhBTR-xpKegT3i48psjZEpSjxkww@mail.gmail.com>
-Subject: Re: drivers/hwmon/jc42.c:477 jc42_readable_reg() warn: always true
- condition '(reg >= 0) => (0-u32max >= 0)'
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202212170101.tpSDqf7K-lkp@intel.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+On Fri, Dec 23, 2022 at 01:48:14PM +0300, Dan Carpenter wrote:
+> Hi Marcelo,
+> 
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Marcelo-Tosatti/hwmon-coretemp-avoid-RDMSR-interruptions-to-isolated-CPUs/20221215-204904
+> patch link:    https://lore.kernel.org/r/Y5sWMEG0xCl9bgEi%40tpad
+> patch subject: [PATCH] hwmon: coretemp: avoid RDMSR interruptions to isolated CPUs
+> config: i386-randconfig-m021
+> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Reported-by: Dan Carpenter <error27@gmail.com>
+> 
+> smatch warnings:
+> drivers/hwmon/coretemp.c:181 show_temp() warn: inconsistent returns '&tdata->update_lock'.
+> 
+> vim +181 drivers/hwmon/coretemp.c
+> 
+> 199e0de7f5df31 Durgadoss R     2011-05-20  154  static ssize_t show_temp(struct device *dev,
+> 199e0de7f5df31 Durgadoss R     2011-05-20  155  			struct device_attribute *devattr, char *buf)
+> 199e0de7f5df31 Durgadoss R     2011-05-20  156  {
+> bebe467823c0d8 Rudolf Marek    2007-05-08  157  	u32 eax, edx;
+> 199e0de7f5df31 Durgadoss R     2011-05-20  158  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+> 199e0de7f5df31 Durgadoss R     2011-05-20  159  	struct platform_data *pdata = dev_get_drvdata(dev);
+> 199e0de7f5df31 Durgadoss R     2011-05-20  160  	struct temp_data *tdata = pdata->core_data[attr->index];
+> 199e0de7f5df31 Durgadoss R     2011-05-20  161  
+> 199e0de7f5df31 Durgadoss R     2011-05-20  162  	mutex_lock(&tdata->update_lock);
+> bebe467823c0d8 Rudolf Marek    2007-05-08  163  
+> 199e0de7f5df31 Durgadoss R     2011-05-20  164  	/* Check whether the time interval has elapsed */
+> 199e0de7f5df31 Durgadoss R     2011-05-20  165  	if (!tdata->valid || time_after(jiffies, tdata->last_updated + HZ)) {
+> e78264610cd902 Marcelo Tosatti 2022-12-15  166  		if (!housekeeping_cpu(tdata->cpu, HK_TYPE_MISC))
+> e78264610cd902 Marcelo Tosatti 2022-12-15  167  			return -EINVAL;
+> 
+> mutex_unlock(&tdata->update_lock);
+> 
+> 199e0de7f5df31 Durgadoss R     2011-05-20  168  		rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax, &edx);
+> bf6ea084ebb54c Guenter Roeck   2013-11-20  169  		/*
+> bf6ea084ebb54c Guenter Roeck   2013-11-20  170  		 * Ignore the valid bit. In all observed cases the register
+> bf6ea084ebb54c Guenter Roeck   2013-11-20  171  		 * value is either low or zero if the valid bit is 0.
+> bf6ea084ebb54c Guenter Roeck   2013-11-20  172  		 * Return it instead of reporting an error which doesn't
+> bf6ea084ebb54c Guenter Roeck   2013-11-20  173  		 * really help at all.
+> bf6ea084ebb54c Guenter Roeck   2013-11-20  174  		 */
+> bf6ea084ebb54c Guenter Roeck   2013-11-20  175  		tdata->temp = tdata->tjmax - ((eax >> 16) & 0x7f) * 1000;
+> 952a11ca32a604 Paul Fertser    2021-09-24  176  		tdata->valid = true;
+> 199e0de7f5df31 Durgadoss R     2011-05-20  177  		tdata->last_updated = jiffies;
+> bebe467823c0d8 Rudolf Marek    2007-05-08  178  	}
+> bebe467823c0d8 Rudolf Marek    2007-05-08  179  
+> 199e0de7f5df31 Durgadoss R     2011-05-20  180  	mutex_unlock(&tdata->update_lock);
+> bf6ea084ebb54c Guenter Roeck   2013-11-20 @181  	return sprintf(buf, "%d\n", tdata->temp);
+> bebe467823c0d8 Rudolf Marek    2007-05-08  182  }
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
 
-On Fri, Dec 23, 2022 at 12:41 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Thu, Dec 22, 2022 at 10:20:13PM +0100, Martin Blumenstingl wrote:
-> > Hi Guenter et al.,
-> >
-> > On Thu, Dec 22, 2022 at 3:36 PM kernel test robot <lkp@intel.com> wrote:
-> > [...]
-> > >    475  static bool jc42_readable_reg(struct device *dev, unsigned int reg)
-> > >    476  {
-> > >  > 477          return (reg >= JC42_REG_CAP && reg <= JC42_REG_DEVICEID) ||
-> > >    478                  reg == JC42_REG_SMBUS;
-> > The bot is right: we can omit "reg >= JC42_REG_CAP" as it's already
-> > covered by the fact that:
-> > - the reg variable is unsigned, which means the lower limit is zero
-> > - reg <= JC42_REG_DEVICEID covers the upper limit
-> >
-> > Before I send a patch I'd like to hear if removal of "reg >=
-> > JC42_REG_CAP" makes sense to other people.
-> >
->
-> The bot keeps complaining about it. Yes, it is technically unnecessary,
-> but I left it in on purpose to indicate that JC42_REG_CAP is the first
-> register and that it wasn't forgotten. Any modern C compiler notices
-> that the check is unnecessary and drops it, so there is no runtime penalty.
-Thanks for your feedback. Since I had to double check the bot's
-complaint I'll just keep this as-is (and not send any patch for this
-at all).
+Thanks,
 
-> This is one of those situations where I'd like to have a means to tell
-> the checker to please stop complaining.
-I see, in some cases this may be an actual logic error (for example:
-accidentally using an unsigned data type instead of a signed one).
+v3 of the patch should not suffer from this issue.
 
-
-Best regards,
-Martin
