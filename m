@@ -2,122 +2,114 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62A5FC3DA7D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Dec 2022 15:59:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5B38C4167B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Dec 2022 16:48:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234224AbiL1P7l (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 28 Dec 2022 10:59:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
+        id S235144AbiL1Qs5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 28 Dec 2022 11:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234226AbiL1P7k (ORCPT
+        with ESMTP id S235124AbiL1QsP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Dec 2022 10:59:40 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F83C18E1D;
-        Wed, 28 Dec 2022 07:59:39 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id j130so9490131oif.4;
-        Wed, 28 Dec 2022 07:59:39 -0800 (PST)
+        Wed, 28 Dec 2022 11:48:15 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD391EAEB;
+        Wed, 28 Dec 2022 08:43:47 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id x44-20020a05683040ac00b006707c74330eso10115667ott.10;
+        Wed, 28 Dec 2022 08:43:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2QUTtEkYcM1hcNSnuld4ZxvgWpVaBeAZ6MuL2nL7biI=;
-        b=Cx02UtrmFKr3aEWXNvfpXP6CFbnJe/FleFllv5N9b7gIQRjPWRHzsujTpFywKOZ69a
-         T4tu/NkvWspa8+K3EGCTtu1MJv+PXWDpM7WxtWt1i81zAruOD8jYCZIOEOf5Jp3LHvOV
-         7sylocrbxD9PVewpY+V8DU8jp+JzeUdaoKmF3xX6fECFcWNc988haFcNIWWgo6H7O0ts
-         Xc4DRBymIhXQ1oSb3yOAYynt+GCwh5E+HEpym4GK9kFFkSLJ8wwv5/ApsiRu1IIR7XTk
-         862zBpZcd8JetJkjaMN3X7DnMIx8qYEAhEqrwva5WTIpQyQ7a98veJXI+6fev1bJbdql
-         p1SA==
+        bh=YQnCrhO6AKq+gpRyWcdcxzO02zH/wV4Yr26kZOjwumU=;
+        b=qTR3nxDn4gUfYaSPGy2lmOXO9F1qBxWnK/JCCDwUDuTq/cjYtsW6mRdw3L4NDVutXR
+         MnODtHcixA6knwVhh5ssVQnnRWBLxNLWXQgELgz5n2Z5mSXTby6J71AyFLnFNOCVw6C6
+         Yxr8eCaAipNK3BCxDtgq4dDVxQsxTJ+6GsViEZmfmE1eJuquZfsAIDMzPIcJNvLDanz4
+         1xLgvEDoImCtvAApIGDVgu45NQ1S2MDwy7SgjcPvWof0uaGvWlGvAkdrgOQIpIOtGQQo
+         9nsWChHH1dzZbNFe3z2tvlzn1XFLBqCksNzRb6oeQNrS6jWgGr93qkNVEx032SSgMQ4P
+         EmQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2QUTtEkYcM1hcNSnuld4ZxvgWpVaBeAZ6MuL2nL7biI=;
-        b=AXFS1t+RIMBxHBNumbasoWkQ12mDuZS7O5tggX9XFOm1W/YMoe55M4zDPyef6YbYYO
-         8ofo9hHm1a59/cBNkqfFmbo01GmInyfKJ4zLZqpeaPQpLSXGKBIEjyg8BJJsAHHEWhsS
-         OO6GbB0KIgGPuRZSUKHznR/VZIp+d9EnUP5bRGhcJ74lqjBqDW9s9FYUdg/C8LvZikOU
-         68f72ugfBBY75o4JuB9+SWZdtfCzEEG2r/gmW3qS0TNWKF0GfDnVWRgj7iBkiOarKUth
-         j8tCm6hNoPjXa5EDgMhs7Br0Pjwe+PlIztHWjllf7sD1pthhewhOF3x7J2EC3Dv2W44N
-         vgjg==
-X-Gm-Message-State: AFqh2krqA4QlqCNGWLReAEtUAB3Pbu6qvngDfAeKO2Dnzh1tEL1471mn
-        1WSGJKmq6zETlYB0mAyCIu1GlGo0iU4=
-X-Google-Smtp-Source: AMrXdXsRGZeSqsgBVhNVNqSC3BgaAv93wcLsJxW2n2ByMobf1W0iI68MurJ/la+Ki/jon9tKO/Epxw==
-X-Received: by 2002:a54:4193:0:b0:35c:58a2:edf7 with SMTP id 19-20020a544193000000b0035c58a2edf7mr11381045oiy.54.1672243178682;
-        Wed, 28 Dec 2022 07:59:38 -0800 (PST)
+        bh=YQnCrhO6AKq+gpRyWcdcxzO02zH/wV4Yr26kZOjwumU=;
+        b=MznWP2Lwk3V/UfB60stBBGNHXeP5X8yz7TkshASBtdinY2aNp93qL1Fou+GACLCPf7
+         Z+jVrQ02CNzkWmyoM6bphM6C1UKkPyqonmSBLvSu4INR13RNzVWRGBBfmSe6Ds8uglpP
+         /37BYAeqwcb1MHLBOgzTb5mhanHAwDjZMzOqeeRInba0mLElcGTF7Ysq20vtnHUpH4cd
+         ZN7SSj2wSTMWEID8kQnadj3+Dn1QzSMPOH/gnfTWmja+AVa1aKeP7q1caQluk5sJ1WA2
+         1A6pYwrtl1qj62eGLWqV4SsCOY4zndswNuRAcm3o9/2moJ7JWFSSvC+XeGjs3RMOziEM
+         0krA==
+X-Gm-Message-State: AFqh2kpHb1A24rC+PpWQtmALPA9HAaA/SwXxWw2J1xMUbODSGeBY/t7U
+        dtDz2ajMfjpY6njhsgbzLOwJJlAnT1E=
+X-Google-Smtp-Source: AMrXdXus8lns6O5PUhZnkXlvB4P0Ybk6baKuuXoHPGfSHLo2hfxQVGqSvzjcLIdbsvZXT1158PMAlw==
+X-Received: by 2002:a05:6830:1112:b0:671:b52f:5c3a with SMTP id w18-20020a056830111200b00671b52f5c3amr13488556otq.34.1672245826349;
+        Wed, 28 Dec 2022 08:43:46 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b189-20020aca34c6000000b0035bd1909a66sm7064524oia.57.2022.12.28.07.59.37
+        by smtp.gmail.com with ESMTPSA id x4-20020a9d6d84000000b0066e7e4b2f76sm7910356otp.17.2022.12.28.08.43.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 07:59:38 -0800 (PST)
+        Wed, 28 Dec 2022 08:43:45 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 28 Dec 2022 07:59:37 -0800
+Date:   Wed, 28 Dec 2022 08:43:44 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH v3] hwmon: coretemp: avoid RDMSR interruptions to
- isolated CPUs
-Message-ID: <20221228155937.GA64676@roeck-us.net>
-References: <Y5sWMEG0xCl9bgEi@tpad>
- <68f76ac7-5edd-d437-8bef-e233f2876660@roeck-us.net>
- <Y5x7hXGGLkcmejKq@tpad>
- <34dc4244-4e62-0b73-b6f9-430e4ee1a1e6@roeck-us.net>
- <Y5zT6B1mY9/pnwJV@tpad>
+To:     "Cormier, Jonathan" <jcormier@criticallink.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bob Duke <bduke@criticallink.com>,
+        John Pruitt <jpruitt@criticallink.com>
+Subject: Re: [PATCH v2 2/4] hwmon: ltc2945: Add devicetree match table
+Message-ID: <20221228164344.GA1267483@roeck-us.net>
+References: <20221214220727.1350784-1-jcormier@criticallink.com>
+ <20221220000457.1163446-1-jcormier@criticallink.com>
+ <20221220000457.1163446-3-jcormier@criticallink.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5zT6B1mY9/pnwJV@tpad>
+In-Reply-To: <20221220000457.1163446-3-jcormier@criticallink.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Dec 16, 2022 at 05:24:08PM -0300, Marcelo Tosatti wrote:
-> The coretemp driver uses rdmsr_on_cpu calls to read
-> MSR_IA32_PACKAGE_THERM_STATUS/MSR_IA32_THERM_STATUS registers,
-> which contain information about current core temperature.
-> 
-> For certain low latency applications, the RDMSR interruption exceeds
-> the applications requirements.
-> 
-> So do not create core files in sysfs, for CPUs which have
-> isolation and nohz_full enabled.
-> 
-> Temperature information from the housekeeping cores should be
-> sufficient to infer die temperature.
-> 
-> Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+On Mon, Dec 19, 2022 at 07:04:55PM -0500, Cormier, Jonathan wrote:
+> Signed-off-by: "Cormier, Jonathan" <jcormier@criticallink.com>
 
-Applied to hwmon-next.
-
-Thanks,
-Guenter
+There should still be some description here.
 
 > ---
-> v3: do not create sysfs files for isolated CPUs (Guenter Roeck)
-> v2: improve changelog to mention that an error is returned,
->      and sysfs file is not disabled (Guenter Roeck)
+>  drivers/hwmon/ltc2945.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> index 9bee4d33fbdf..619dfde7a712 100644
-> --- a/drivers/hwmon/coretemp.c
-> +++ b/drivers/hwmon/coretemp.c
-> @@ -27,6 +27,7 @@
->  #include <asm/msr.h>
->  #include <asm/processor.h>
->  #include <asm/cpu_device_id.h>
-> +#include <linux/sched/isolation.h>
->  
->  #define DRVNAME	"coretemp"
->  
-> @@ -458,6 +459,9 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
->  	u32 eax, edx;
->  	int err, index, attr_no;
->  
-> +	if (!housekeeping_cpu(cpu, HK_TYPE_MISC))
-> +		return 0;
+> diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
+> index 9adebb59f604..9af3e3821152 100644
+> --- a/drivers/hwmon/ltc2945.c
+> +++ b/drivers/hwmon/ltc2945.c
+> @@ -58,6 +58,12 @@
+>  #define CONTROL_MULT_SELECT	(1 << 0)
+>  #define CONTROL_TEST_MODE	(1 << 4)
+> 
+> +static const struct of_device_id __maybe_unused ltc2945_of_match[] = {
+> +	{ .compatible = "adi,ltc2945" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ltc2945_of_match);
 > +
->  	/*
->  	 * Find attr number for sysfs:
->  	 * We map the attr number to core id of the CPU
+>  static inline bool is_power_reg(u8 reg)
+>  {
+>  	return reg < LTC2945_SENSE_H;
+> @@ -475,8 +481,9 @@ MODULE_DEVICE_TABLE(i2c, ltc2945_id);
+> 
+>  static struct i2c_driver ltc2945_driver = {
+>  	.driver = {
+> -		   .name = "ltc2945",
+> -		   },
+> +		.name = "ltc2945",
+> +		.of_match_table = of_match_ptr(ltc2945_of_match),
+> +	},
+>  	.probe_new = ltc2945_probe,
+>  	.id_table = ltc2945_id,
+>  };
+> --
+> 2.25.1
