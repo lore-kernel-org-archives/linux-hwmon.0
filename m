@@ -2,114 +2,107 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04D6DC4708D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Dec 2022 17:16:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BAECC4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Dec 2022 22:50:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232809AbiL1RQ3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 28 Dec 2022 12:16:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
+        id S232023AbiL1Wuh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 28 Dec 2022 17:50:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbiL1RQ2 (ORCPT
+        with ESMTP id S231956AbiL1Wug (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Dec 2022 12:16:28 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978C312A88;
-        Wed, 28 Dec 2022 09:16:27 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-144bd860fdbso19227637fac.0;
-        Wed, 28 Dec 2022 09:16:27 -0800 (PST)
+        Wed, 28 Dec 2022 17:50:36 -0500
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A50140E9;
+        Wed, 28 Dec 2022 14:50:35 -0800 (PST)
+Received: by mail-ua1-x930.google.com with SMTP id q3so3052312uao.2;
+        Wed, 28 Dec 2022 14:50:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SPha2JC7a5iWhjDoT4npjZ1YLSAi405g3BMufo6wT/g=;
-        b=UbT1axoKTsV9y4Vh/fM15Otwo/1bmqUw6oOxnmBX9m29PNANBbRtcMla9mQWFkBEuR
-         bOevDFSgFQyyE33xJ5HFcnheKlvquZxG1j7NSsc3AURg9SHa+pv9cNI0bMdVF4LxqSrb
-         3Ctrhh3uqHpv+DtTs+kH6BoHH7AYgopIxOBFca6jOvFP5OypuVkwYGXGuw9+bC2jalnD
-         QJTKDEtVWK82cxnA3oXriJNuQqioj70VoU5b/vbXwH2Vcg69kZydvGIUZA4iwwf2xk5c
-         +YrpybWZrDTCn/O1/qy+LPWotLK8U1CVDKqAC53EcRGBIpy8U3BaavqLeTqB5IHT0+ww
-         gW7g==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SXS0WTkQS796wH+169yPGp3Qy/IBZ8bIc/3/txwl1TU=;
+        b=D4dNC0LMGYdzYCOsJT1n2E7i/egbcnTZfkyivV/mdZAa/UWiaAXemdGimbhvLfSV6/
+         F+IXZhKfxufhAM+1VbxOO/rjOYDC6q7TVxhxmb8eRVYhc27PLrVO/JL/xeoClJdYHOPi
+         zNhRfHybfZapjyxiTmZUOZVgzVt6+DMjGGD9k1ziu7UpxCJPr6Ra266nDw97RG5M39Fb
+         yFdIHABl6ijhPPOTXl2fUu8gQk08jz7A6aRkNKCKuJh+NvHHEOojY7ODgMeRmUTzTHUH
+         vo1XcPltVZndKurUwrYL/FUEQDIvw8UHy5RVg7s33gouIXJ4rya1eGbZ52TtqtfBV+p0
+         vxIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SPha2JC7a5iWhjDoT4npjZ1YLSAi405g3BMufo6wT/g=;
-        b=tMCBUy4ZANLubtoRg1Ziudnwlj5Gy3f7NtLE4cfoa69O3fwNsYVJDsefFztYCL00WF
-         5iYSDZo3iDCCPfB/xhk1rD6oDCCGMem3Xdb0fOy82bh6Z2oQU+ehK+0pERQ1U1Vaomp9
-         YcAtivZrC995+9GQrmg9icGF8tzwpJtS+pkFKxRWoX2EvtziU9RWltVK3uo0yWLcEIc0
-         wEg0Gj+xEkQFPdsnCMSMmS5/gxEliSmxGcI8lbR8M1PK/BzB2zaUJqY/1a4yeqp1ulPD
-         7NcGvvx9azFZ/4vHUIFNUnrUHYVvGiubCsvO7VRfBF+O2EmgLQWFAl5byleryKqo1vBS
-         Pcqw==
-X-Gm-Message-State: AFqh2kq7UBmR+ZQX5+B6nyD8s1krvItlDCOXRK7KYEdgYSQ03hgP3pIQ
-        ivXr80q6YmrlikteeYO1LtA=
-X-Google-Smtp-Source: AMrXdXsYX4EqajaqLFS10AU61WljgCZOA1UeSh/cwjMj5l5aHoT7rCfWm4TxzifkG6rBbi7x//0jwg==
-X-Received: by 2002:a05:6870:883:b0:14f:e487:11b9 with SMTP id fx3-20020a056870088300b0014fe48711b9mr5358432oab.56.1672247786858;
-        Wed, 28 Dec 2022 09:16:26 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g15-20020a9d6a0f000000b006770e855c61sm8015918otn.31.2022.12.28.09.16.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 09:16:26 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 28 Dec 2022 09:16:25 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     nick.hawkins@hpe.com
-Cc:     jdelvare@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com, corbet@lwn.net,
-        linux@armlinux.org.uk, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 6/6] MAINTAINERS: add gxp fan controller and documents
-Message-ID: <20221228171625.GA2575735@roeck-us.net>
-References: <20221130200846.4226-1-nick.hawkins@hpe.com>
- <20221130200846.4226-7-nick.hawkins@hpe.com>
+        bh=SXS0WTkQS796wH+169yPGp3Qy/IBZ8bIc/3/txwl1TU=;
+        b=XIF0u76uzuCBHrcTYEVJ3k8AHTFcF3eGLAOZqvz/kDWGRmG5UXaLYEZcoL4PHYVaQw
+         0ESeRRrkOlZn5/8QpIQotSX9gB0t2d2cW9Xq80qFibDS0AQyeKHZv09PK4dDJTaFf38M
+         aWlxSgqPQLcV5Awa6R4mqeGWY75PFgHINXN2xyp77p5HzyxwQ4mlZHcWp4S/UR8XLcTU
+         8eBmwpfEQUSf0z1sCw6JgCQBNC5J4PEqQW6vQxBKf2Fvo+1gO3OaaaIuO/GjXX8teZln
+         gdW6t3pMclliLFIsHxcmS8QqB5o9olAWc1yUlDRnJGnMm7s8qw8oEVzSOu0boGrgtYlc
+         x4bA==
+X-Gm-Message-State: AFqh2kptZrIYUVx3D3CRvODo/M40GXwV73vRN5sLUOIXfFk3tZnbsT9h
+        QlTcisYdsEPXRDTDUoB0OwyyFHHumEddvqCtyN0=
+X-Google-Smtp-Source: AMrXdXsGzFIdAzhOfKdOYCkzaOB3A9f7se7KWmm8nehxEkpwJXMiXcBNIbYpThf6q3UTlYt/z+E13d7JDdB6LSOetaQ=
+X-Received: by 2002:ab0:2b0f:0:b0:40c:caeb:5130 with SMTP id
+ e15-20020ab02b0f000000b0040ccaeb5130mr2605937uar.24.1672267834723; Wed, 28
+ Dec 2022 14:50:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130200846.4226-7-nick.hawkins@hpe.com>
+References: <Y5lBue87IXkhNs42@debian.me> <20221214154713.100648-1-derekjohn.clark@gmail.com>
+ <20221228155542.GA3964987@roeck-us.net>
+In-Reply-To: <20221228155542.GA3964987@roeck-us.net>
+From:   Derek John Clark <derekjohn.clark@gmail.com>
+Date:   Wed, 28 Dec 2022 14:50:23 -0800
+Message-ID: <CAFqHKT=OO6367zfbEGmghahCUkV4ECLvCH+A_WLhBQyZf4k_jw@mail.gmail.com>
+Subject: Re: [PATCH v2] hwmon: (oxp-sensors) Add AYANEO AIR and AIR Pro
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= 
+        <samsagax@gmail.com>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 02:08:46PM -0600, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> Add the gxp-fan-ctrl.c and gxp-fan-ctrl.rst in hwmon
-> driver/documentation.
-> 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> > ---
+> >  Documentation/hwmon/oxp-sensors.rst | 19 ++++++----
+> >  MAINTAINERS                         |  1 +
+> >  drivers/hwmon/oxp-sensors.c         | 54 ++++++++++++++++++++++++-----
+> >  3 files changed, 59 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/=
+oxp-sensors.rst
+> > index 39c588ec5c50..a53c961065b2 100644
+> > --- a/Documentation/hwmon/oxp-sensors.rst
+> > +++ b/Documentation/hwmon/oxp-sensors.rst
+> > @@ -3,18 +3,21 @@
+> >  Kernel driver oxp-sensors
+> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> >
+> > -Author:
+> > +Authors:
+> > +    - Derek John Clark <derekjohn.clark@gmail.com>
+> >      - Joaqu=C3=ADn Ignacio Aramend=C3=ADa <samsagax@gmail.com>
+> >
+> > -Description:
+> > +Description
+> >  ------------
+>
+> Why drop ":" here ?
+To match the style of the rest of the Documentation section titles.
+Per Bagas Sanjaya previously:
 
-For my reference:
+>> -Author:
+>> +Authors:
+>> +    - Derek John Clark <derekjohn.clark@gmail.com>
+>>      - Joaqu=C3=ADn Ignacio Aramend=C3=ADa <samsagax@gmail.com>
+>>
+>>  Description:
+>>  ------------
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>Trim the trailing colon as it is not needed for section title.
 
-... assuming the assumption is that I would apply the patch through
-the hwmon subsystem. If not please let me know.
-
-Guenter
-
-> ---
->  MAINTAINERS | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 1daadaa4d48b..00b52be102d6 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2216,13 +2216,16 @@ ARM/HPE GXP ARCHITECTURE
->  M:	Jean-Marie Verdun <verdun@hpe.com>
->  M:	Nick Hawkins <nick.hawkins@hpe.com>
->  S:	Maintained
-> +F:	Documentation/hwmon/gxp-fan-ctrl.rst
->  F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
-> +F:	Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
->  F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
->  F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
->  F:	arch/arm/boot/dts/hpe-bmc*
->  F:	arch/arm/boot/dts/hpe-gxp*
->  F:	arch/arm/mach-hpe/
->  F:	drivers/clocksource/timer-gxp.c
-> +F:	drivers/hwmon/gxp-fan-ctrl.c
->  F:	drivers/spi/spi-gxp.c
->  F:	drivers/watchdog/gxp-wdt.c
->  
+Additional changes forthcoming. Thanks.
