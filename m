@@ -2,375 +2,260 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77D0BC4167B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Dec 2022 13:57:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA96BC3DA7D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Dec 2022 15:46:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiL1N5v (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 28 Dec 2022 08:57:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
+        id S234040AbiL1Pqb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 28 Dec 2022 10:46:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiL1N5u (ORCPT
+        with ESMTP id S234039AbiL1Pq2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Dec 2022 08:57:50 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDCCBC9B
-        for <linux-hwmon@vger.kernel.org>; Wed, 28 Dec 2022 05:57:49 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id l8-20020a056830054800b006705fd35eceso9881374otb.12
-        for <linux-hwmon@vger.kernel.org>; Wed, 28 Dec 2022 05:57:49 -0800 (PST)
+        Wed, 28 Dec 2022 10:46:28 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929A814080;
+        Wed, 28 Dec 2022 07:46:23 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id r2-20020a9d7cc2000000b006718a7f7fbaso10041499otn.2;
+        Wed, 28 Dec 2022 07:46:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=aZoVoXiQBc68tqQe6+rkxUgeuJw9SK3gDNLTv2csP4o=;
-        b=K+05YitJ9vtO6GosdwNwYCZF+3LHJe+zwkIprDGJFd+o//S1rX+f9NDTYavVWfXk0+
-         C2EyG607iBhBSV/FLWX8xpAha/zfoW9zMjVsPMCFaga5kAiq/hZurCGtiIVw7brHMCiP
-         YDICCSbOkHVtvEJC50N++7sUSpOdLnN7agJZXhbTn+JZhBR/5jffaphfyC0EdL1E8oON
-         fv8fVqQoExj0XhTiXRHs8oSI8LZ291ZUUdJOmz6a//iYO33p3g68zvFZfzOXd19k3nho
-         R1RPsOkhGsoAUZZE7fkyTxEKz+ppx6PFRsPOHsBV5Io8X+3oG3aEOubRHAsSdNpiZfN8
-         R5hg==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QOHEPs2ASaFaM4UuELaDCcG6NnUi5FD8VN5Ownoh3RY=;
+        b=mJJfvF//ABlfwtF4GSM3KaxeMZHS/IKVutZepN8JVJCyp4yyKSgby6na59W4dJKF7c
+         94cVVr84R5LftybAlum+/UuAlSk5big7dr8uIpqEW3UvedaL+6EyVeYcPx+mx4baT4Yy
+         O2OwumS+zAbkDHf5WiyWTTKzy5RVluhowb0OJbl3vYCMBm8qVFmwfv7Hlc+7QJGnbNl7
+         KFUM5/U+jPZDExUa4RLZz9csRtVuCfryNTbnYCg/B6pqDRFo/6yBT46psH8q7Mu+qs1F
+         lwZz3eMQVLfPLk4SakyvxZh1yi5a3mhaW39pFq0KoDRemVSvQ/ejAVrYId2HPoisyudM
+         ITAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aZoVoXiQBc68tqQe6+rkxUgeuJw9SK3gDNLTv2csP4o=;
-        b=7FxKuklSdX0mSxtnluZWMTHkTSh0BTWly64d2JsZTOelL0Ut3BllZ8kRsp9AfLtrpM
-         IVTERdoAVXl4m7LemaOllSPh6OU+oTFgm+PyLD5J5estLdSzHMyQtK1e9slWe46VWY0F
-         Rb3vpEkoclmAR6Wuew+y5NXGLbk8Sk06UOJq0yY8kAsHYNMCgFKeWH7pHmYxKWUUMt+P
-         yCKkQH9D2f+5JLoKcKxAUw2MX21Fsi920Jwx5+HY7wMJN445NtXyGveyxiVpk7xnsIHA
-         Ass63zO/Q5moA8HKVLdoYGCWtQu4wo0LjmUcuKkcI0tP75NTrBFdUTD8k6ILvfg9WyZV
-         1NAQ==
-X-Gm-Message-State: AFqh2kq37A1+c4fan12W0zW1WVBffW3Det/bHcVicQs4kzaLEuk5bdbP
-        hW+Th88G8xBHkYsP2QFNVB3jqx3QCsY=
-X-Google-Smtp-Source: AMrXdXuZSm0/nXZHnJH0EzHZCibsYkPPIK26fCbyXh6rym5lf71kHIed7RVNhVKiULlY45pwt1dsFg==
-X-Received: by 2002:a05:6830:2a86:b0:670:9d63:6dcc with SMTP id s6-20020a0568302a8600b006709d636dccmr14568170otu.2.1672235868241;
-        Wed, 28 Dec 2022 05:57:48 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QOHEPs2ASaFaM4UuELaDCcG6NnUi5FD8VN5Ownoh3RY=;
+        b=6yqjDIIQLBwLe88ssePIHK4YAWES3VoNgH5VdK1S5eUoaQqZ/G9D2y/gDGzEKALCXQ
+         dmSYXVqMnD+WTlecrDUkCT1q19LLFhN5o7wl/3pvsBnnfUdf7IE8qXvcPTpX2yFowBq6
+         Bv8c8T5K2IxnCXndVI/czGPGVoYowhKXk86ZsTh71Fb1wFshxGmhY9z8wwHQTrthq7GF
+         DI1gUcUNdbZW6Y64nnwq+gFu33bo2E7zf0Qhi8Vkw5tehlRG37iWfh9hfBDeVDSxcBrp
+         IN7LbbSi5qLXlk7Hsr3UgGvBRZFSS+UjfrY4QSDDaeYFz2Qg0w30wbFCM77wS2FuisZ5
+         TmNg==
+X-Gm-Message-State: AFqh2kpgYRCq3DcSbP2LPGLWNEw9/F7FK2n+gcMmXZ16J7zlRP22oTVE
+        Tu8FzhaSrTuDf21ZKtQoab7wj8V7fig=
+X-Google-Smtp-Source: AMrXdXuBnNYdEGvaSar8SjL6Z4+WIhij+cstkVYKv3lyO7fyLTALuftpLz9LXLg5hUVk0UkCL9OHhQ==
+X-Received: by 2002:a9d:538c:0:b0:670:6cfe:385 with SMTP id w12-20020a9d538c000000b006706cfe0385mr11861071otg.23.1672242382801;
+        Wed, 28 Dec 2022 07:46:22 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a16-20020a0568300b9000b00670763270fcsm7809990otv.71.2022.12.28.05.57.46
+        by smtp.gmail.com with ESMTPSA id m12-20020a9d400c000000b0066e80774203sm8037876ote.43.2022.12.28.07.46.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 05:57:47 -0800 (PST)
+        Wed, 28 Dec 2022 07:46:22 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 28 Dec 2022 07:46:20 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Arnhold <sebastian.arnhold@posteo.de>,
-        Ahmad Khalifa <ahmad@khalifa.ws>
-Subject: [PATCH RFT] hwmon: (nct6755) Add support for NCT6799D
-Date:   Wed, 28 Dec 2022 05:57:44 -0800
-Message-Id: <20221228135744.281752-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.36.2
+To:     "Derek J. Clark" <derekjohn.clark@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (oxp-sensors) Add AYANEO AIR and AIR Pro
+Message-ID: <20221228154620.GA3600958@roeck-us.net>
+References: <20221213225511.77442-1-derekjohn.clark@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221213225511.77442-1-derekjohn.clark@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-NCT6799D is mostly compatible to NCT6798D, with minor variations.
+On Tue, Dec 13, 2022 at 02:55:11PM -0800, Derek J. Clark wrote:
+> Adds support for the AYANEO AIR and AYANEO AIR Pro models of handheld
 
-Note that NCT6798D and NCT6799D have a new means to select temperature
-sources, and to report temperatures from those sources. This is not
-currently implemented, meaning that most likely not all temperatures
-are reported.
+s/Adds/Add/
 
-Initial support. Compile tested only.
+> devices. These devices use the same EC registers and logic as the One X
+> Player mini AMD. Previous AYANEO models are not supported as they use a
+> different EC and do not have the necessary fan speed write enable and
+> setting registers. Tested on Aya Neo AIR. AIR Pro model EC functionality
+> and DMI data were verified using command line tools by another user.
+> 
+> The added devices are:
+> - AYANEO AIR (AMD 5560U)
+> - AYANEO AIR Pro (AMD 5560U)
+> - AYANEO AIR Pro (AMD 5825U)
+> 
+> Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> ---
+>  Documentation/hwmon/oxp-sensors.rst | 17 +++++----
+>  MAINTAINERS                         |  6 ++++
+>  drivers/hwmon/oxp-sensors.c         | 54 ++++++++++++++++++++++++-----
+>  3 files changed, 63 insertions(+), 14 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
+> index 39c588ec5c50..b93892c892c5 100644
+> --- a/Documentation/hwmon/oxp-sensors.rst
+> +++ b/Documentation/hwmon/oxp-sensors.rst
+> @@ -3,18 +3,21 @@
+>  Kernel driver oxp-sensors
+>  =========================
+>  
+> -Author:
+> +Authors:
+> +    - Derek John Clark <derekjohn.clark@gmail.com>
+>      - Joaquín Ignacio Aramendía <samsagax@gmail.com>
+>  
+>  Description:
+>  ------------
+>  
+> -One X Player devices from One Netbook provide fan readings and fan control
+> -through its Embedded Controller.
+> +Handheld devices from One Netbook and Aya Neo provide fan readings and fan
+> +control through their Embedded Controllers.
+>  
+> -Currently only supports AMD boards from the One X Player and AOK ZOE lineup.
+> -Intel boards could be supported if we could figure out the EC registers and
+> -values to write to since the EC layout and model is different.
+> +Currently only supports AMD boards from One X Player, AOK ZOE, and some Aya
+> +Neo devices. One X PLayer Intel boards could be supported if we could figure
+> +out the EC registers and values to write to since the EC layout and model is
+> +different. Aya Neo devices preceding the AIR may not be usable as the EC model
+> +is different and do not appear to have manual control capabiltities.
+>  
+>  Supported devices
+>  -----------------
+> @@ -22,6 +25,8 @@ Supported devices
+>  Currently the driver supports the following handhelds:
+>  
+>   - AOK ZOE A1
+> + - Aya Neo AIR
+> + - Aya Neo AIR Pro
+>   - OneXPlayer AMD
+>   - OneXPlayer mini AMD
+>   - OneXPlayer mini AMD PRO
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 90220659206c..ba03a2983045 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15345,6 +15345,12 @@ S:	Maintained
+>  F:	drivers/mtd/nand/onenand/
+>  F:	include/linux/mtd/onenand*.h
+>  
+> +ONEXPLAYER FAN DRIVER
+> +M:	Derek John Clark <derekjohn.clark@gmail.com>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/hwmon/oxp-sensors.c
+> +
+This doesn't make sense. Why add another entry for the same driver ?
+Add yourself as second maintianer, no problem with that, but don't
+add a second entry for the same driver.
 
-Cc: Sebastian Arnhold <sebastian.arnhold@posteo.de>
-Cc: Ahmad Khalifa <ahmad@khalifa.ws>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/nct6775-core.c     | 55 ++++++++++++++++++++++++++++++--
- drivers/hwmon/nct6775-i2c.c      |  2 ++
- drivers/hwmon/nct6775-platform.c | 41 ++++++++++++++++++++++--
- drivers/hwmon/nct6775.h          |  2 +-
- 4 files changed, 94 insertions(+), 6 deletions(-)
+>  ONEXPLAYER FAN DRIVER
+>  M:	Joaquín Ignacio Aramendía <samsagax@gmail.com>
+>  L:	linux-hwmon@vger.kernel.org
+> diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+> index f84ec8f8eda9..7adc0199ea66 100644
+> --- a/drivers/hwmon/oxp-sensors.c
+> +++ b/drivers/hwmon/oxp-sensors.c
+> @@ -1,12 +1,12 @@
+>  // SPDX-License-Identifier: GPL-2.0+
+>  /*
+> - * Platform driver for OXP Handhelds that expose fan reading and control
+> - * via hwmon sysfs.
+> + * Platform driver for Handhelds that expose fan reading and control via
 
-diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-index da9ec6983e13..d415ae8f3b4b 100644
---- a/drivers/hwmon/nct6775-core.c
-+++ b/drivers/hwmon/nct6775-core.c
-@@ -33,6 +33,7 @@
-  *                                           (0xd451)
-  * nct6798d    14      7       7       2+6    0xd428 0xc1    0x5ca3
-  *                                           (0xd429)
-+ * nct6799d    14      7       7       2+6    0xd802 0xc1    0x5ca3
-  *
-  * #temp lists the number of monitored temperature sources (first value) plus
-  * the number of directly connectable temperature sensors (second value).
-@@ -73,6 +74,7 @@ static const char * const nct6775_device_names[] = {
- 	"nct6796",
- 	"nct6797",
- 	"nct6798",
-+	"nct6799",
- };
- 
- /* Common and NCT6775 specific data */
-@@ -381,7 +383,7 @@ static const u16 NCT6779_REG_TEMP_OVER[ARRAY_SIZE(NCT6779_REG_TEMP)] = {
- 	0x39, 0x155 };
- 
- static const u16 NCT6779_REG_TEMP_OFFSET[] = {
--	0x454, 0x455, 0x456, 0x44a, 0x44b, 0x44c };
-+	0x454, 0x455, 0x456, 0x44a, 0x44b, 0x44c, 0x44d, 0x449 };
- 
- static const char *const nct6779_temp_label[] = {
- 	"",
-@@ -654,6 +656,44 @@ static const char *const nct6798_temp_label[] = {
- #define NCT6798_TEMP_MASK	0xbfff0ffe
- #define NCT6798_VIRT_TEMP_MASK	0x80000c00
- 
-+static const char *const nct6799_temp_label[] = {
-+	"",
-+	"SYSTIN",
-+	"CPUTIN",
-+	"AUXTIN0",
-+	"AUXTIN1",
-+	"AUXTIN2",
-+	"AUXTIN3",
-+	"AUXTIN4",
-+	"SMBUSMASTER 0",
-+	"SMBUSMASTER 1",
-+	"Virtual_TEMP",
-+	"Virtual_TEMP",
-+	"",
-+	"AUXTIN5",
-+	"",
-+	"",
-+	"PECI Agent 0",
-+	"PECI Agent 1",
-+	"PCH_CHIP_CPU_MAX_TEMP",
-+	"PCH_CHIP_TEMP",
-+	"PCH_CPU_TEMP",
-+	"PCH_MCH_TEMP",
-+	"Agent0 Dimm0",
-+	"Agent0 Dimm1",
-+	"Agent1 Dimm0",
-+	"Agent1 Dimm1",
-+	"BYTE_TEMP0",
-+	"BYTE_TEMP1",
-+	"PECI Agent 0 Calibration",	/* undocumented */
-+	"PECI Agent 1 Calibration",	/* undocumented */
-+	"",
-+	"Virtual_TEMP"
-+};
-+
-+#define NCT6799_TEMP_MASK	0xbfff2ffe
-+#define NCT6799_VIRT_TEMP_MASK	0x80000c00
-+
- /* NCT6102D/NCT6106D specific data */
- 
- #define NCT6106_REG_VBAT	0x318
-@@ -1109,6 +1149,7 @@ bool nct6775_reg_is_word_sized(struct nct6775_data *data, u16 reg)
- 	case nct6796:
- 	case nct6797:
- 	case nct6798:
-+	case nct6799:
- 		return reg == 0x150 || reg == 0x153 || reg == 0x155 ||
- 		  (reg & 0xfff0) == 0x4c0 ||
- 		  reg == 0x402 ||
-@@ -1462,6 +1503,7 @@ static int nct6775_update_pwm_limits(struct device *dev)
- 		case nct6796:
- 		case nct6797:
- 		case nct6798:
-+		case nct6799:
- 			err = nct6775_read_value(data, data->REG_CRITICAL_PWM_ENABLE[i], &reg);
- 			if (err)
- 				return err;
-@@ -3109,6 +3151,7 @@ store_auto_pwm(struct device *dev, struct device_attribute *attr,
- 		case nct6796:
- 		case nct6797:
- 		case nct6798:
-+		case nct6799:
- 			err = nct6775_write_value(data, data->REG_CRITICAL_PWM[nr], val);
- 			if (err)
- 				break;
-@@ -3807,10 +3850,12 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
- 	case nct6796:
- 	case nct6797:
- 	case nct6798:
-+	case nct6799:
- 		data->in_num = 15;
- 		data->pwm_num = (data->kind == nct6796 ||
- 				 data->kind == nct6797 ||
--				 data->kind == nct6798) ? 7 : 6;
-+				 data->kind == nct6798 ||
-+				 data->kind == nct6799) ? 7 : 6;
- 		data->auto_pwm_num = 4;
- 		data->has_fan_div = false;
- 		data->temp_fixed_num = 6;
-@@ -3859,6 +3904,11 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
- 			data->temp_mask = NCT6798_TEMP_MASK;
- 			data->virt_temp_mask = NCT6798_VIRT_TEMP_MASK;
- 			break;
-+		case nct6799:
-+			data->temp_label = nct6799_temp_label;
-+			data->temp_mask = NCT6799_TEMP_MASK;
-+			data->virt_temp_mask = NCT6799_VIRT_TEMP_MASK;
-+			break;
- 		}
- 
- 		data->REG_CONFIG = NCT6775_REG_CONFIG;
-@@ -3918,6 +3968,7 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
- 		case nct6796:
- 		case nct6797:
- 		case nct6798:
-+		case nct6799:
- 			data->REG_TSI_TEMP = NCT6796_REG_TSI_TEMP;
- 			num_reg_tsi_temp = ARRAY_SIZE(NCT6796_REG_TSI_TEMP);
- 			break;
-diff --git a/drivers/hwmon/nct6775-i2c.c b/drivers/hwmon/nct6775-i2c.c
-index e1bcd1146191..779ce65db1a1 100644
---- a/drivers/hwmon/nct6775-i2c.c
-+++ b/drivers/hwmon/nct6775-i2c.c
-@@ -87,6 +87,7 @@ static const struct of_device_id __maybe_unused nct6775_i2c_of_match[] = {
- 	{ .compatible = "nuvoton,nct6796", .data = (void *)nct6796, },
- 	{ .compatible = "nuvoton,nct6797", .data = (void *)nct6797, },
- 	{ .compatible = "nuvoton,nct6798", .data = (void *)nct6798, },
-+	{ .compatible = "nuvoton,nct6799", .data = (void *)nct6799, },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, nct6775_i2c_of_match);
-@@ -104,6 +105,7 @@ static const struct i2c_device_id nct6775_i2c_id[] = {
- 	{ "nct6796", nct6796 },
- 	{ "nct6797", nct6797 },
- 	{ "nct6798", nct6798 },
-+	{ "nct6799", nct6799 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, nct6775_i2c_id);
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index bf43f73dc835..906394b26781 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -36,6 +36,7 @@ static const char * const nct6775_sio_names[] __initconst = {
- 	"NCT6796D",
- 	"NCT6797D",
- 	"NCT6798D",
-+	"NCT6799D",
- };
- 
- static unsigned short force_id;
-@@ -86,6 +87,7 @@ MODULE_PARM_DESC(fan_debounce, "Enable debouncing for fan RPM signal");
- #define SIO_NCT6796_ID		0xd420
- #define SIO_NCT6797_ID		0xd450
- #define SIO_NCT6798_ID		0xd428
-+#define SIO_NCT6799_ID		0xd800
- #define SIO_ID_MASK		0xFFF8
- 
- /*
-@@ -408,7 +410,7 @@ static int nct6775_resume(struct device *dev)
- 	if (data->kind == nct6791 || data->kind == nct6792 ||
- 	    data->kind == nct6793 || data->kind == nct6795 ||
- 	    data->kind == nct6796 || data->kind == nct6797 ||
--	    data->kind == nct6798)
-+	    data->kind == nct6798 || data->kind == nct6799)
- 		nct6791_enable_io_mapping(sio_data);
- 
- 	sio_data->sio_exit(sio_data);
-@@ -555,7 +557,7 @@ nct6775_check_fan_inputs(struct nct6775_data *data, struct nct6775_sio_data *sio
- 	} else {
- 		/*
- 		 * NCT6779D, NCT6791D, NCT6792D, NCT6793D, NCT6795D, NCT6796D,
--		 * NCT6797D, NCT6798D
-+		 * NCT6797D, NCT6798D, NCT6799D
- 		 */
- 		int cr1a = sio_data->sio_inb(sio_data, 0x1a);
- 		int cr1b = sio_data->sio_inb(sio_data, 0x1b);
-@@ -565,12 +567,17 @@ nct6775_check_fan_inputs(struct nct6775_data *data, struct nct6775_sio_data *sio
- 		int cr2b = sio_data->sio_inb(sio_data, 0x2b);
- 		int cr2d = sio_data->sio_inb(sio_data, 0x2d);
- 		int cr2f = sio_data->sio_inb(sio_data, 0x2f);
-+		bool vsb_ctl_en = cr2f & BIT(0);
- 		bool dsw_en = cr2f & BIT(3);
- 		bool ddr4_en = cr2f & BIT(4);
-+		bool as_seq1_en = cr2f & BIT(7);
- 		int cre0;
-+		int cre6;
- 		int creb;
- 		int cred;
- 
-+			cre6 = sio_data->sio_inb(sio_data, 0xe0);
-+
- 		sio_data->sio_select(sio_data, NCT6775_LD_12);
- 		cre0 = sio_data->sio_inb(sio_data, 0xe0);
- 		creb = sio_data->sio_inb(sio_data, 0xeb);
-@@ -673,6 +680,29 @@ nct6775_check_fan_inputs(struct nct6775_data *data, struct nct6775_sio_data *sio
- 			pwm7pin = !(cr1d & (BIT(2) | BIT(3)));
- 			pwm7pin |= cr2d & BIT(7);
- 			pwm7pin |= creb & BIT(2);
-+			break;
-+		case nct6799:
-+			fan4pin = cr1c & BIT(6);
-+			fan5pin = cr1c & BIT(7);
-+
-+			fan6pin = !(cr1b & BIT(0)) && (cre0 & BIT(3));
-+			fan6pin |= cre6 & BIT(5);
-+			fan6pin |= creb & BIT(5);
-+			fan6pin |= !as_seq1_en && (cr2a & BIT(4));
-+
-+			fan7pin = cr1b & BIT(5);
-+			fan7pin |= !vsb_ctl_en && !(cr2b & BIT(2));
-+			fan7pin |= creb & BIT(3);
-+
-+			pwm6pin = !(cr1b & BIT(0)) && (cre0 & BIT(4));
-+			pwm6pin |= !as_seq1_en && !(cred & BIT(2)) && (cr2a & BIT(3));
-+			pwm6pin |= (creb & BIT(4)) && !(cr2a & BIT(0));
-+			pwm6pin |= cre6 & BIT(3);
-+
-+			pwm7pin = !vsb_ctl_en && !(cr1d & (BIT(2) | BIT(3)));
-+			pwm7pin |= creb & BIT(2);
-+			pwm7pin |= cr2d & BIT(7);
-+
- 			break;
- 		default:	/* NCT6779D */
- 			break;
-@@ -828,6 +858,7 @@ static int nct6775_platform_probe_init(struct nct6775_data *data)
- 	case nct6796:
- 	case nct6797:
- 	case nct6798:
-+	case nct6799:
- 		break;
- 	}
- 
-@@ -866,6 +897,7 @@ static int nct6775_platform_probe_init(struct nct6775_data *data)
- 		case nct6796:
- 		case nct6797:
- 		case nct6798:
-+		case nct6799:
- 			tmp |= 0x7e;
- 			break;
- 		}
-@@ -995,6 +1027,9 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
- 	case SIO_NCT6798_ID:
- 		sio_data->kind = nct6798;
- 		break;
-+	case SIO_NCT6799_ID:
-+		sio_data->kind = nct6799;
-+		break;
- 	default:
- 		if (val != 0xffff)
- 			pr_debug("unsupported chip ID: 0x%04x\n", val);
-@@ -1023,7 +1058,7 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
- 	if (sio_data->kind == nct6791 || sio_data->kind == nct6792 ||
- 	    sio_data->kind == nct6793 || sio_data->kind == nct6795 ||
- 	    sio_data->kind == nct6796 || sio_data->kind == nct6797 ||
--	    sio_data->kind == nct6798)
-+	    sio_data->kind == nct6798 || sio_data->kind == nct6799)
- 		nct6791_enable_io_mapping(sio_data);
- 
- 	sio_data->sio_exit(sio_data);
-diff --git a/drivers/hwmon/nct6775.h b/drivers/hwmon/nct6775.h
-index be41848c3cd2..44f79c5726a9 100644
---- a/drivers/hwmon/nct6775.h
-+++ b/drivers/hwmon/nct6775.h
-@@ -5,7 +5,7 @@
- #include <linux/types.h>
- 
- enum kinds { nct6106, nct6116, nct6775, nct6776, nct6779, nct6791, nct6792,
--	     nct6793, nct6795, nct6796, nct6797, nct6798 };
-+	     nct6793, nct6795, nct6796, nct6797, nct6798, nct6799 };
- enum pwm_enable { off, manual, thermal_cruise, speed_cruise, sf3, sf4 };
- 
- #define NUM_TEMP	10	/* Max number of temp attribute sets w/ limits*/
--- 
-2.36.2
+That is too generic. It is not a driver which supports _all_ handhelds.
 
+> + * hwmon sysfs.
+>   *
+> - * Old boards have the same DMI strings and they are told appart by the
+> - * boot cpu vendor (Intel/AMD). Currently only AMD boards are supported
+> - * but the code is made to be simple to add other handheld boards in the
+> - * future.
+> + * Old OXP boards have the same DMI strings and they are told appart by
+> + * the boot cpu vendor (Intel/AMD). Currently only AMD boards are
+> + * supported but the code is made to be simple to add other handheld
+> + * boards in the future.
+>   * Fan control is provided via pwm interface in the range [0-255].
+>   * Old AMD boards use [0-100] as range in the EC, the written value is
+>   * scaled to accommodate for that. Newer boards like the mini PRO and
+> @@ -42,6 +42,8 @@ static bool unlock_global_acpi_lock(void)
+>  
+>  enum oxp_board {
+>  	aok_zoe_a1 = 1,
+> +	aya_neo_air,
+> +	aya_neo_air_pro,
+>  	oxp_mini_amd,
+>  	oxp_mini_amd_pro,
+>  };
+> @@ -60,6 +62,20 @@ static const struct dmi_system_id dmi_table[] = {
+>  		},
+>  		.driver_data = (void *) &(enum oxp_board) {aok_zoe_a1},
+>  	},
+> +	{
+> +		.matches = {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
+> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR"),
+> +		},
+> +		.driver_data = (void *) &(enum oxp_board) {aya_neo_air},
+> +	},
+> +	{
+> +		.matches = {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
+> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR Pro"),
+> +		},
+> +		.driver_data = (void *) &(enum oxp_board) {aya_neo_air_pro},
+> +	},
+>  	{
+>  		.matches = {
+>  			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
+> @@ -161,8 +177,19 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+>  			ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
+>  			if (ret)
+>  				return ret;
+> -			if (board == oxp_mini_amd)
+> +			switch (board) {
+> +			case aok_zoe_a1:
+> +				break;
+> +			case aya_neo_air:
+> +			case aya_neo_air_pro:
+> +			case oxp_mini_amd:
+>  				*val = (*val * 255) / 100;
+> +				break;
+> +			case oxp_mini_amd_pro:
+> +				break;
+> +			default:
+> +				break;
+
+case statements doing nothing can be bundled.
+
+> +			}
+>  			return 0;
+>  		case hwmon_pwm_enable:
+>  			return read_from_ec(OXP_SENSOR_PWM_ENABLE_REG, 1, val);
+> @@ -191,8 +218,19 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+>  		case hwmon_pwm_input:
+>  			if (val < 0 || val > 255)
+>  				return -EINVAL;
+> -			if (board == oxp_mini_amd)
+> +			switch (board) {
+> +			case aok_zoe_a1:
+> +				break;
+> +			case aya_neo_air:
+> +			case aya_neo_air_pro:
+> +			case oxp_mini_amd:
+>  				val = (val * 100) / 255;
+> +				break;
+> +			case oxp_mini_amd_pro:
+> +				break;
+> +			default:
+> +				break;
+
+Same as above.
+
+> +			}
+>  			return write_to_ec(dev, OXP_SENSOR_PWM_REG, val);
+>  		default:
+>  			break;
