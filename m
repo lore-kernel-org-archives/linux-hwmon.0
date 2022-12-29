@@ -2,137 +2,171 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78F7DC4167B
-	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Dec 2022 14:02:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56E18C4332F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Dec 2022 14:08:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233380AbiL2OCQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 29 Dec 2022 09:02:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
+        id S233231AbiL2OIi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 29 Dec 2022 09:08:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233494AbiL2OCO (ORCPT
+        with ESMTP id S229487AbiL2OIh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 29 Dec 2022 09:02:14 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A4E1014;
-        Thu, 29 Dec 2022 06:02:13 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id e17-20020a9d7311000000b00678202573f1so11500904otk.8;
-        Thu, 29 Dec 2022 06:02:13 -0800 (PST)
+        Thu, 29 Dec 2022 09:08:37 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30024D13C;
+        Thu, 29 Dec 2022 06:08:36 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id r130so17246550oih.2;
+        Thu, 29 Dec 2022 06:08:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JXArgKaUTK7bUwW6m7GDFoDzl4YNyLjGSKQdPTwGKDc=;
-        b=YbmDz38jMg2x1DyCeETQir8cvipSZBLgO+Qf4O8Jjj69FIVqhQFv5gEogQhiiNQFIl
-         BLAc6nMInVsHHyzmN7ITL8TBArcA73g02Lm5njnD27L3btjH9NHoUG1XU3LmAJqjFukb
-         jTbJHjEekRJ0jjCmRAHRdXKoN/xSogSQ2bVoV8DpDmZCuVNZ3WPnA/JVPEpYFYgKIZcl
-         4y7crh9J1KloYZux3BGudvihEmjFmSzv32ux2eYxl+iqv3OcVKfQvFFW0ClsPp1tOUaY
-         87naRsZN7fHbJ3rtSLGndML7E2La7W+8XtdEV5F2E1vSl2MgG0ZRUVM4NLzDxC+IT43H
-         RZFg==
+        bh=Ke7StXTwXQ2hVrjMRliGLMG0bCAKmCvlu1qj8Ppc7ck=;
+        b=L3guNH9dvXatTPRNPk20RBmq7TnpcjG9djNbKXmSuKura7H8i2w4QFn+Xu5jVXL+Yv
+         iYQ3/5GB2mB3AQVgKRk0HgPb2DCm2j7xc5H8eiRQ4SF50zdWWwNh6sQWPVKyUuKY8wpO
+         z3FAC3wqpkbaDRFKnqoj06xaRKqRNcWTJo70HK3Qi8Q+KwCMg1fmLxeR7vDBizgDt20d
+         qtdfLoXQ+lslVRiGngCjL9CJFkNFkFUHhCY3VZmGCe0fbiJXg2l8x3tjuLZ+PoplVZSG
+         DKGL+7ipceV7CkW7heYB2uindV097AGNnA51RT+rHdZdZ0iM5oCZwoTcU3bP/HYsN7bp
+         2SrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JXArgKaUTK7bUwW6m7GDFoDzl4YNyLjGSKQdPTwGKDc=;
-        b=Vv+LPt75PLyAnNXaYl2oBQioSHoewqlkFbEUA3RbMVp7d48t85EaaXVdwnlO7m4fwQ
-         gW5w+L/CSZ0EAH1XB/7lDyAaYRFlHdGgGX0N8qPJUvtcDDg5uhTyeWZWTFYe+G0nanka
-         0Vq0IGX5HvfTx0+Ht3UVfdn59hnn5i2Jf8tgeuBs8GrwawJ8JwJuiPRa22jjE8WNeMaH
-         3nF1MN9egSFlfT7r3iXUlo1WABPtz6NY5qZe76qRgBhkj20LaTkWUu8JAFeIkVqhLWOL
-         x1RBg/TJcPGZIo74Fr2FsQATrEbTiUKaN69IFMUscbAXvgkNSEhlCB0435wFOpW2biyj
-         AqVw==
-X-Gm-Message-State: AFqh2koQZWyyDu00dECjUOAboi38cYv8PspzVEq1Hcfbd2FkIfpi41vE
-        T+DK6+1tkEiXk48tuAo5Ue/0ZBNCOUU=
-X-Google-Smtp-Source: AMrXdXsUXRUtYQ88aZCCv9lGBIB5KT/VKtNTqv7oxkvC2NYthzkFdSreqy32Dti8ybeAoUEon1xKIw==
-X-Received: by 2002:a05:6830:d6:b0:670:5fd6:4c2e with SMTP id x22-20020a05683000d600b006705fd64c2emr15937144oto.31.1672322533283;
-        Thu, 29 Dec 2022 06:02:13 -0800 (PST)
+        bh=Ke7StXTwXQ2hVrjMRliGLMG0bCAKmCvlu1qj8Ppc7ck=;
+        b=xUrpAB5fNjSKNKeRMMVrc/GKHJaIJJIKj9RicGanrs0cmFew5ua9S0Fj29d9VI3il5
+         A61s+sKJsyofSsmQI7cpmwDP7vzBculAw3BfNT3vNSIMcR+EnJZdb2OpWklQLevBOKwj
+         g83J7iNBjiAhP3rJ96sMgosGynhOQs7cUvTG9LB4p6z+/5XsB71yz95x/26ZLQ7Pj/57
+         gnW2pZq/5nh2M2CeoWCMBajXXTvYMt9aC6FAYomwtmO+F8WPWPFSWHd1C9Ig+ROvy3iD
+         g3iRYx44B1HGVpNLGmSYjlxs4BJJMEXMKeqNizklbI5dLSnQOms4ii4RJuqoUlxKWUu+
+         FWgg==
+X-Gm-Message-State: AFqh2krS8o2NK2bTJget1b+grpVcijFSxPxXKrSlAJKBC6dQ1W0LKDyL
+        ZGD/qhaSMMClouD0IN8UmME=
+X-Google-Smtp-Source: AMrXdXusbWGskS9q/0SDAxfvziuHmzaF+xYuvGyYi5uLMAQ1zZlcAK+zr363gezafa/LZ1PRMIIlgg==
+X-Received: by 2002:a05:6808:13d6:b0:361:12d7:c15c with SMTP id d22-20020a05680813d600b0036112d7c15cmr16455997oiw.4.1672322915493;
+        Thu, 29 Dec 2022 06:08:35 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e20-20020a0568301f3400b0066e820696edsm8983251oth.13.2022.12.29.06.02.12
+        by smtp.gmail.com with ESMTPSA id s83-20020acac256000000b003509cc4ad4esm8069734oif.39.2022.12.29.06.08.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 06:02:12 -0800 (PST)
+        Thu, 29 Dec 2022 06:08:35 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 29 Dec 2022 06:02:11 -0800
+Date:   Thu, 29 Dec 2022 06:08:33 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Saravanan Sekar <saravanan@linumiz.com>
 Cc:     jdelvare@suse.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, marten.lindahl@axis.com,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] hwmon: pm_bus: core: Add min_uV in pmbus
- regulator helper macro
-Message-ID: <20221229140211.GA17976@roeck-us.net>
+Subject: Re: [PATCH v3 2/4] dt-bindings: regulator: Add mps,mpq7932
+ power-management IC
+Message-ID: <20221229140833.GA18009@roeck-us.net>
 References: <20221207173716.123223-1-saravanan@linumiz.com>
- <20221207173716.123223-2-saravanan@linumiz.com>
+ <20221207173716.123223-3-saravanan@linumiz.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221207173716.123223-2-saravanan@linumiz.com>
+In-Reply-To: <20221207173716.123223-3-saravanan@linumiz.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 06:37:13PM +0100, Saravanan Sekar wrote:
-> Some regulator operates in a range of voltage which should not allow
-> below the lower threshold.
+On Wed, Dec 07, 2022 at 06:37:14PM +0100, Saravanan Sekar wrote:
+> Document mpq7932 power-management IC
 > 
 > Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Applied to hwmon-next.
+Since this is in the regulator subsystem domain, I can not apply the
+patch through hwmon without Acked-by: or Reviewed-by: from a regulator
+maintainer.
+
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
+assuming that it will be applied through the regulator subsystem.
+
+Turns out you did not actually copy a a regulator subsystem maintainer
+or the regulator mailing list, so you'll have to re-send this patch for
+inclusion there.
+
+Guenter
 
 > ---
->  drivers/hwmon/pmbus/ltc2978.c | 16 ++++++++--------
->  drivers/hwmon/pmbus/pmbus.h   |  5 +++--
->  2 files changed, 11 insertions(+), 10 deletions(-)
+>  .../bindings/regulator/mps,mpq7932.yaml       | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/mps,mpq7932.yaml
 > 
-> diff --git a/drivers/hwmon/pmbus/ltc2978.c b/drivers/hwmon/pmbus/ltc2978.c
-> index 6d2592731ba3..406a36885ef3 100644
-> --- a/drivers/hwmon/pmbus/ltc2978.c
-> +++ b/drivers/hwmon/pmbus/ltc2978.c
-> @@ -569,14 +569,14 @@ MODULE_DEVICE_TABLE(i2c, ltc2978_id);
->  #define LTC2978_N_VOLTAGES	((LTC2978_MAX_UV / LTC2978_UV_STEP) + 1)
->  
->  static const struct regulator_desc ltc2978_reg_desc[] = {
-> -	PMBUS_REGULATOR_STEP("vout", 0, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-> -	PMBUS_REGULATOR_STEP("vout", 1, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-> -	PMBUS_REGULATOR_STEP("vout", 2, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-> -	PMBUS_REGULATOR_STEP("vout", 3, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-> -	PMBUS_REGULATOR_STEP("vout", 4, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-> -	PMBUS_REGULATOR_STEP("vout", 5, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-> -	PMBUS_REGULATOR_STEP("vout", 6, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-> -	PMBUS_REGULATOR_STEP("vout", 7, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
-> +	PMBUS_REGULATOR_STEP("vout", 0, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
-> +	PMBUS_REGULATOR_STEP("vout", 1, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
-> +	PMBUS_REGULATOR_STEP("vout", 2, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
-> +	PMBUS_REGULATOR_STEP("vout", 3, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
-> +	PMBUS_REGULATOR_STEP("vout", 4, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
-> +	PMBUS_REGULATOR_STEP("vout", 5, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
-> +	PMBUS_REGULATOR_STEP("vout", 6, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
-> +	PMBUS_REGULATOR_STEP("vout", 7, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
->  };
->  
->  static const struct regulator_desc ltc2978_reg_desc_default[] = {
-> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-> index 10fb17879f8e..713ea7915425 100644
-> --- a/drivers/hwmon/pmbus/pmbus.h
-> +++ b/drivers/hwmon/pmbus/pmbus.h
-> @@ -464,7 +464,7 @@ struct pmbus_driver_info {
->  extern const struct regulator_ops pmbus_regulator_ops;
->  
->  /* Macros for filling in array of struct regulator_desc */
-> -#define PMBUS_REGULATOR_STEP(_name, _id, _voltages, _step)  \
-> +#define PMBUS_REGULATOR_STEP(_name, _id, _voltages, _step, _min_uV)  \
->  	[_id] = {						\
->  		.name = (_name # _id),				\
->  		.id = (_id),					\
-> @@ -475,9 +475,10 @@ extern const struct regulator_ops pmbus_regulator_ops;
->  		.owner = THIS_MODULE,				\
->  		.n_voltages = _voltages,			\
->  		.uV_step = _step,				\
-> +		.min_uV = _min_uV,				\
->  	}
->  
-> -#define PMBUS_REGULATOR(_name, _id)	PMBUS_REGULATOR_STEP(_name, _id, 0, 0)
-> +#define PMBUS_REGULATOR(_name, _id)   PMBUS_REGULATOR_STEP(_name, _id, 0, 0, 0)
->  
->  /* Function declarations */
->  
+> diff --git a/Documentation/devicetree/bindings/regulator/mps,mpq7932.yaml b/Documentation/devicetree/bindings/regulator/mps,mpq7932.yaml
+> new file mode 100644
+> index 000000000000..2185cd011c46
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/mps,mpq7932.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/mps,mpq7932.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Monolithic Power System MPQ7932 PMIC
+> +
+> +maintainers:
+> +  - Saravanan Sekar <saravanan@linumiz.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mps,mpq7932
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  regulators:
+> +    type: object
+> +    description: |
+> +      list of regulators provided by this controller, must be named
+> +      after their hardware counterparts BUCK[1-6]
+> +
+> +    patternProperties:
+> +      "^buck[1-6]$":
+> +        type: object
+> +        $ref: regulator.yaml#
+> +        unevaluatedProperties: false
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - regulators
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        pmic@3 {
+> +            compatible = "mps,mpq7932";
+> +            reg = <0x3>;
+> +
+> +            regulators {
+> +                buck1 {
+> +                    regulator-name = "buck1";
+> +                    regulator-min-microvolt = <1600000>;
+> +                    regulator-max-microvolt = <1800000>;
+> +                    regulator-boot-on;
+> +                };
+> +
+> +                buck2 {
+> +                    regulator-name = "buck2";
+> +                    regulator-min-microvolt = <1700000>;
+> +                    regulator-max-microvolt = <1800000>;
+> +                    regulator-boot-on;
+> +                };
+> +            };
+> +        };
+> +    };
+> +...
