@@ -2,213 +2,197 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B8E3C4332F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Dec 2022 18:30:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52F8CC4167B
+	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Dec 2022 17:32:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233924AbiL2Sap (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 29 Dec 2022 13:30:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
+        id S229967AbiL3Rc1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 30 Dec 2022 12:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233791AbiL2Sai (ORCPT
+        with ESMTP id S229832AbiL3Rc1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 29 Dec 2022 13:30:38 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C491FBBA;
-        Thu, 29 Dec 2022 10:30:37 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id c133so17784887oif.1;
-        Thu, 29 Dec 2022 10:30:37 -0800 (PST)
+        Fri, 30 Dec 2022 12:32:27 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A2E14028
+        for <linux-hwmon@vger.kernel.org>; Fri, 30 Dec 2022 09:32:26 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id z16so3933462wrw.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 30 Dec 2022 09:32:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8xdAcfpKxTu7PYGnCACWMz2o9LPaeAapSTfB4+aqGA4=;
-        b=GkB1ZyaXEkUC55bjqZpj5ME+hgpvvGfN9MkXwaLwo205xZNmGsrsuKtC2qPIokuxZP
-         mzjzs4ogAI8ggEGKxvU1EbIHO7LtF0UgHgBMk4bncb/j6W82CU4nMm0tVH/wU/hY4QdJ
-         FxkYzFOF3uInQaE7KQyvVZtlz5OBIqV2+MM0Q98N5AxJwEnI6atlrTFkumfkU3Yses0n
-         EzlRXvSwihN4oSBd5/pBDCewheqoX7POSJenyAe5qYcwDqrzVDChLB7LBbHL1AjLz2I3
-         Ym9nxqJZpVutG8ywOz0z0VLSNnrsI4uBm8yTJV4601iBcMkGQ67W4mPcUiPyKNd1EHwm
-         r2pg==
+        h=content-transfer-encoding:in-reply-to:from:cc:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=o+XYRYLfeWPx9Hka5dzk6MfvgjXD/aL1HpwaQCGzzeU=;
+        b=B+7XmYqvnjc2DtZ7u22OQIlAHqcyUvQswqIHj9sDEvMV94VU4CJpM0kyIBpElEQ+0W
+         VcaAAXQywSGNuCmBYZeKgLBRq35DgMLuephSgKxuTS0Md8lhry2eKIjqAvoYpP/B0oyT
+         riZXknpKIVS/bfhqFtQS/a+vAkAz54lZalH4gwZ/8Iw40u25DH6VTeGHaJolTdOzBCWY
+         uAbWC7EYHoVEOFSXztJNpSzv3+YhjxVJWK7dpD8e4KTSX+3eD68rTesA81TLwPzmi/1R
+         4gHitH6+GwYc5iWVIArvoXUyTz9gdBoguVe83NbqPvgGZ0NrLBoOy8j7WUl+3QbyilnR
+         PtCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8xdAcfpKxTu7PYGnCACWMz2o9LPaeAapSTfB4+aqGA4=;
-        b=qJw5YYxfsz1gW2NlNgqBvqiweGSEctAN1QF7Vzv3xV5Gt/ZkRU1gHdtehBvxd9wFzq
-         9YTY1uX06tdGkGxKpLFOjKE6+ogTOOMAIsTWrabnep2PD9i6qBxQ7H6YZfYVDjQAY26w
-         D/TMxVO+AsW7KtXjwpLQhSbhxnH0QziCtYSryanbuLuCML9rMcj3G+fDXFTt4EcfIlaT
-         g7nIYrwARQqNhcCPl+/gXqWaUYfOskoOoteIu1y+d9mKMa7kQ4+JHJDim3HMSartvTLG
-         /cF2tg/SqC4OQ5QUXvaqSMj2lehuImZsN16lX+WcNYuXczEk6Ptkd/1EKKjmuC8vkxMB
-         nPgw==
-X-Gm-Message-State: AFqh2kqISNEDq9iAyfl6NYheNrydFencOEyIWmWQWbjlPaLCMImIIemy
-        8QMV7yx7P4pc7TUdlRIa9wI=
-X-Google-Smtp-Source: AMrXdXsGlNcSn3qYLZQUeL9Gsgz7KL6dpIcfIqcAyE7rZt/1LLKN8L09OU11w1rhzSS83PE0If0NEw==
-X-Received: by 2002:a05:6808:2082:b0:35e:93bf:a9bb with SMTP id s2-20020a056808208200b0035e93bfa9bbmr25489995oiw.13.1672338636883;
-        Thu, 29 Dec 2022 10:30:36 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bl22-20020a056808309600b0035e7d07bf9dsm8412857oib.16.2022.12.29.10.30.35
+        h=content-transfer-encoding:in-reply-to:from:cc:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o+XYRYLfeWPx9Hka5dzk6MfvgjXD/aL1HpwaQCGzzeU=;
+        b=ck8vfagEdmQEeqAIU6bcKILtizJ8BZjvE+axrDJHzeiLPyxcrB1t9FunXEGAms22MU
+         c/dwGc877sq57+uIm3Yp6kBh2+hwDLy8n0dYpmCvI4pv0J79eCRWNeR9nSX7+l8rEauH
+         81ekL2nUI5b4vSb2vCYuL82GAVrFq578gf1mtGV4Xd2Ox4JqsReR4A5eeNukGHviWCIh
+         bCuB/b2RfjmuqeMbEPIi4yq/P7+ButfMp2s97eKIF6d22kan9XmL0raq5gOpFXTktlcl
+         LMZHUKHssPcZ3x8yR6+r7nGJo52z73BOP29rFmu0mfKWlp88x0jgu9FvvuQaY755Yd8g
+         8y3Q==
+X-Gm-Message-State: AFqh2kramGdCDD5E2xgdd0Rr+JuvJIeh2Eb0bHVRJInDVpQhfvly0WcC
+        6RoSqS97Hda5WpKy6bAU9y3eCjyjtV0=
+X-Google-Smtp-Source: AMrXdXt3KX/MqvtVldoUC6J4X7eqBb29sjaVa+6TTOFVjrTYkm8u5yyS3zRUavYuRWzdF/pnocXrqQ==
+X-Received: by 2002:adf:f60b:0:b0:242:45e7:db25 with SMTP id t11-20020adff60b000000b0024245e7db25mr20933632wrp.37.1672421544174;
+        Fri, 30 Dec 2022 09:32:24 -0800 (PST)
+Received: from shift.daheim (pd9e2923a.dip0.t-ipconnect.de. [217.226.146.58])
+        by smtp.gmail.com with ESMTPSA id t18-20020a5d42d2000000b00288a3fd9248sm6949990wrr.91.2022.12.30.09.32.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 10:30:36 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 29 Dec 2022 10:30:34 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Sinan Divarci <Sinan.Divarci@analog.com>, jdelvare@suse.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] dt-bindings: hwmon: Add bindings for max31732
-Message-ID: <20221229183034.GA29265@roeck-us.net>
-References: <20221214142206.13288-1-Sinan.Divarci@analog.com>
- <20221214142206.13288-4-Sinan.Divarci@analog.com>
- <386e3717-a063-a2ea-6028-19d11b5838b0@linaro.org>
- <20221229155227.GA22937@roeck-us.net>
- <105cae8a-ba03-ea60-70f2-8a307a26ad14@linaro.org>
+        Fri, 30 Dec 2022 09:32:23 -0800 (PST)
+Received: from localhost ([127.0.0.1])
+        by shift.daheim with esmtp (Exim 4.96)
+        (envelope-from <chunkeey@gmail.com>)
+        id 1pBJF1-0008Rl-0g;
+        Fri, 30 Dec 2022 18:32:23 +0100
+Message-ID: <184c3523-fb00-b0df-cf29-cc1b171c4ab4@gmail.com>
+Date:   Fri, 30 Dec 2022 18:32:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <105cae8a-ba03-ea60-70f2-8a307a26ad14@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH RFT] hwmon: (nct6755) Add support for NCT6799D
+To:     linux-hwmon@vger.kernel.org
+References: <20221228135744.281752-1-linux () roeck-us ! net>
+Content-Language: de-DE, en-US
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Ahmad Khalifa <ahmad@khalifa.ws>,
+        Sebastian Arnhold <sebastian.arnhold@posteo.de>
+From:   Christian Lamparter <chunkeey@gmail.com>
+In-Reply-To: <20221228135744.281752-1-linux () roeck-us ! net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 05:39:30PM +0100, Krzysztof Kozlowski wrote:
-> On 29/12/2022 16:52, Guenter Roeck wrote:
-> >>> +  adi,alarm1-interrupt-mode:
-> >>> +    description: |
-> >>> +      Enables the ALARM1 output to function in interrupt mode.
-> >>> +      Default ALARM1 output function is comparator mode.
-> >>
-> >> Why this is a property of DT/hardware? Don't encode policy in DT.
-> >>
-> > 
-> > I would not call this "policy". Normally it is an implementation
-> > question or decision, since interrupts behave differently depending
-> > on the mode. Impact is difficult to see, though, since the chip
-> > documentation is not available to the public.
-> 
-> Some more background would be useful here from the author...
-> 
+On 12/28/22 14:57, Guenter Roeck wrote:
+> NCT6799D is mostly compatible to NCT6798D, with minor variations.
+>
+> Note that NCT6798D and NCT6799D have a new means to select temperature
+> sources, and to report temperatures from those sources. This is not
+> currently implemented, meaning that most likely not all temperatures
+> are reported.
+>
+> Initial support. Compile tested only.
 
-Indeed. Oddly enough I found the datasheet (as Google employee), but 
-it is under NDA which means that I can't say much but "this is wrong"
-or "this doesn't work" in some or even all situations. I am not even
-sure if I can say that much because saying so implies providing
-information about the chip which I am bound to not expose. Sigh.
+FYI: This ID is compatible with the NCT6796D-S on the ASRock X670E PG Lighting Mainboard.
+(Previous discussion: "[PATCH v1] hwmon: (nct6775) Add chip ID for NCT6796D-S"
+<https://www.spinics.net/lists/linux-hwmon/msg17785.html>)
 
-Anyway, from public information and the driver.
+With this patch applied, the nct6775 module loads and produces the following output when loaded.
 
-- The chip has one internal and four external channels. Channel
-  configuration is per channel (there is an enable flag for each
-  channel). This means devicetree configuration must be nested and
-  include per-channel information (at the very least information
-  if a channel is enabled). Other configuration information, if it exists,
-  may also be per channel. That includes both resistance cancellation,
-  beta compensation, and possibly other configuration data. One thing
-  that came to mind was diode linearity factor. Examples for existing
-  properties in other drivers:
-	adi,ideal-factor-value (ltc2983)
-	transistor-ideality (max6697)
-	ti,n-factor (tmp421)
-	extended-range-enable (may be dynamic; the driver currently
-		disables it)
-	ti,extended-range-enable (lm90)
-	resistance-cancellation (max6697)
-	beta-compensation-enable (max6697)
-	ti,beta-compensation (tmp401)
-	smbus-timeout-disable (max6697)
-	alert-mask, over-temperature-mask (max6697)
-		I am really happy with those; I think it should be
-		automatic based on enabled channels
-	temperature-offset-millicelsius (lm90)
+| [28152.009197] nct6775: Found NCT6799D or compatible chip at 0x2e:0x290
 
-Then there is the question if temperature limits should be provided
-in devicetree, in addition to the above where appropriate. After all,
-those are thermal system properties.
+and lm-sensors also enumerates the sensors and finally all six fans.
+So this is definitively an improvement over my patch.
 
-Examples for channel based devicetree property descriptions:
+|# sensors
+|
+|nct6799-isa-0290
+|Adapter: ISA adapter
+|in0:                   720.00 mV (min =  +0.00 V, max =  +1.74 V)
+|in1:                     1.82 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+|in2:                     3.39 V  (min =  +2.98 V, max =  +3.63 V)
+|in3:                     3.28 V  (min =  +2.98 V, max =  +3.63 V)
+|in4:                     1.65 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+|in5:                     1.05 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+|in6:                     1.41 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+|in7:                     3.39 V  (min =  +2.98 V, max =  +3.63 V)
+|in8:                     3.23 V  (min =  +2.70 V, max =  +3.63 V)
+|in9:                   904.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+|in10:                  600.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+|in11:                  608.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+|in12:                    1.04 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+|in13:                  896.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+|in14:                    1.26 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+|fan1:                   891 RPM  (min =    0 RPM)
+|fan2:                     0 RPM  (min =    0 RPM)
+|fan3:                  1345 RPM  (min =    0 RPM)
+|fan4:                   774 RPM  (min =    0 RPM)
+|fan5:                     0 RPM  (min =    0 RPM)
+|fan7:                     0 RPM  (min =    0 RPM)
+|SYSTIN:                 +29.5°C    sensor = thermistor
+|CPUTIN:                 +29.0°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
+|AUXTIN0:                 +4.0°C  (high = +67.0°C, hyst = +110.0°C)  sensor = thermistor
+|AUXTIN1:                +15.0°C    sensor = thermistor
+|AUXTIN2:                +15.0°C    sensor = thermistor
+|AUXTIN3:                +13.0°C    sensor = thermistor
+|SMBUSMASTER 0:          +40.0°C  (high = +80.0°C, hyst = +75.0°C)
+|PCH_CHIP_CPU_MAX_TEMP:   +0.0°C
+|PCH_CHIP_TEMP:           +0.0°C
+|PCH_CPU_TEMP:            +0.0°C
+|TSI0_TEMP:              +40.0°C
+|intrusion0:            ALARM
+|intrusion1:            ALARM
+|beep_enable:           disabled
 
-devicetree/bindings/hwmon/
-	ti,tmp421.yaml
-	nuvoton,nct7802.yaml
-	national,lm90.yaml
+Tested-by: Christian Lamparter <chunkeey@gmail.com>
 
-Looking into interrupts and interrupt modes:
+Cheers,
+Christian
 
-For the interrupt mode, I'll assume for the time being that its
-implementation is similar to that of other chips. I'll use MAX31730
-as example, and subsequently refer to it as if MAX31732 would
-implement the same mechanism.
+(one comment below)
+> diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
+> index bf43f73dc835..906394b26781 100644
+> --- a/drivers/hwmon/nct6775-platform.c
+> +++ b/drivers/hwmon/nct6775-platform.c
+> @@ -36,6 +36,7 @@ static const char * const nct6775_sio_names[] __initconst = {
+>   	"NCT6796D",
+>   	"NCT6797D",
+>   	"NCT6798D",
+> +	"NCT6799D",
+>   };
+>   
+>   static unsigned short force_id;
+> @@ -86,6 +87,7 @@ MODULE_PARM_DESC(fan_debounce, "Enable debouncing for fan RPM signal");
+>   #define SIO_NCT6796_ID		0xd420
+>   #define SIO_NCT6797_ID		0xd450
+>   #define SIO_NCT6798_ID		0xd428
+> +#define SIO_NCT6799_ID		0xd800
+>   #define SIO_ID_MASK		0xFFF8
+>   
+>   /*
+> @@ -408,7 +410,7 @@ static int nct6775_resume(struct device *dev)
+>   	if (data->kind == nct6791 || data->kind == nct6792 ||
+>   	    data->kind == nct6793 || data->kind == nct6795 ||
+>   	    data->kind == nct6796 || data->kind == nct6797 ||
+> -	    data->kind == nct6798)
+> +	    data->kind == nct6798 || data->kind == nct6799)
+>   		nct6791_enable_io_mapping(sio_data);
+>   
+>   	sio_data->sio_exit(sio_data);
+> @@ -555,7 +557,7 @@ nct6775_check_fan_inputs(struct nct6775_data *data, struct nct6775_sio_data *sio
+>   	} else {
+>   		/*
+>   		 * NCT6779D, NCT6791D, NCT6792D, NCT6793D, NCT6795D, NCT6796D,
+> -		 * NCT6797D, NCT6798D
+> +		 * NCT6797D, NCT6798D, NCT6799D
+>   		 */
+>   		int cr1a = sio_data->sio_inb(sio_data, 0x1a);
+>   		int cr1b = sio_data->sio_inb(sio_data, 0x1b);
+> @@ -565,12 +567,17 @@ nct6775_check_fan_inputs(struct nct6775_data *data, struct nct6775_sio_data *sio
+>   		int cr2b = sio_data->sio_inb(sio_data, 0x2b);
+>   		int cr2d = sio_data->sio_inb(sio_data, 0x2d);
+>   		int cr2f = sio_data->sio_inb(sio_data, 0x2f);
+> +		bool vsb_ctl_en = cr2f & BIT(0);
+>   		bool dsw_en = cr2f & BIT(3);
+>   		bool ddr4_en = cr2f & BIT(4);
+> +		bool as_seq1_en = cr2f & BIT(7);
+>   		int cre0;
+> +		int cre6;
+>   		int creb;
+>   		int cred;
+>   
+> +			cre6 = sio_data->sio_inb(sio_data, 0xe0);
+                         ^^ looks like one extra indent sneaked in?
 
-In interrupt mode, interrupts are cleared by writing into the
-status register. If the condition still exists, the interrupt will
-be re-asserted after the next conversion. Clearly, that does not work
-with the driver as written - it would fill the log with messages,
-and send an endless amount of notifications to userspace.
-
-In comparator mode, interrupts are asserted whenever a temperature
-measurement exceeds a threshold value, and is deasserted when the
-temperature is back in the acceptable range. This would be equivalent
-to an edge triggered interrupt.
-
-The example below configures interrupts in interrupt mode but with
-IRQ_TYPE_EDGE_BOTH. No idea how that is supposed to work, because
-in interrupt mode the interrupt would have to be level triggered,
-not edge triggered, to make sense. Edge triggered interrupt only
-makes sense if the chip is in comparator mode, since only in that mode
-the edges have any meaning.
-
-The driver would need to know if the interrupt is edge triggered or
-level triggered, and that should decide how to handle it. Edge triggered
-should result in comparator mode, and level triggered should result
-in interrupt mode.
-
-Overall I am not sure if comparator mode even makes sense, since
-the interrupt line(s) would become active if a single temperature
-is out of range, and only become inactive if all temperatures are
-within range. Effecively this mode could only be used on a subset
-of channels, but that would require the ability to enable alerts
-on a per-channel basis.
-
-Either case, the interrupt handler would need to cache any previously
-reported status, since it should only generate a notification if the
-status changes, and not for each interrupt and each channel. 
-
-With that, enough for now.
-
-Guenter
-
-> > 
-> >>> +    type: boolean
-> >>> +
-> >>> +  adi,alarm2-interrupt-mode:
-> >>> +    description: |
-> >>> +      Enables the ALARM2 output to function in interrupt mode.
-> >>> +      Default ALARM2 output function is comparator mode.
-> >>
-> >> Same question.
-> >>
-> >>> +    type: boolean
-> >>> +
-> >>> +  adi,alarm1-fault-queue:
-> >>> +    description: The number of consecutive faults required to assert ALARM1.
-> >>
-> >> Same question - why this number differs with hardware?
-> >>
-> > 
-> > Noisier hardware will require more samples to avoid spurious faults.
-> > Trade-off is speed of reporting a fault. Normally the board designer
-> > would determine a value which is low enough to avoid spurious faults.
-> > 
-> > Note that the chip (according to patch 2/3) supports resistance
-> > cancellation as well as beta compensation, which are also board specific.
-> > I don't have access to the datasheet, so I don't know for sure if those
-> > are configurable (typically they are). If they are configurable, I would
-> > expect to see respective properties.
-> 
-> If that's the argument behind property, then it's fine.
-> 
-> Best regards,
-> Krzysztof
-> 
