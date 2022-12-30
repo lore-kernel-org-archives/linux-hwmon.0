@@ -2,209 +2,191 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11466C4167B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Dec 2022 17:50:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54C0EC4332F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Dec 2022 20:34:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235159AbiL3Ruc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 30 Dec 2022 12:50:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39956 "EHLO
+        id S229536AbiL3Ue2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 30 Dec 2022 15:34:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235248AbiL3Ru0 (ORCPT
+        with ESMTP id S229527AbiL3Ue1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 30 Dec 2022 12:50:26 -0500
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2CB1B9C2
-        for <linux-hwmon@vger.kernel.org>; Fri, 30 Dec 2022 09:50:25 -0800 (PST)
-Received: by mail-oo1-xc34.google.com with SMTP id d2-20020a4ab202000000b004ae3035538bso3771398ooo.12
-        for <linux-hwmon@vger.kernel.org>; Fri, 30 Dec 2022 09:50:25 -0800 (PST)
+        Fri, 30 Dec 2022 15:34:27 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325B81C122
+        for <linux-hwmon@vger.kernel.org>; Fri, 30 Dec 2022 12:34:26 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id w1so8569448wrt.8
+        for <linux-hwmon@vger.kernel.org>; Fri, 30 Dec 2022 12:34:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=FhmZ22vsqZ2JZNeRUAw5wUYiuSDzAhKbzppVj16mDOI=;
-        b=GaZl/Yb92HvvE+0CwdC2ZYrHg8q2cnTyu8uk3UQmyiGNY0rrLrUMLvCINT1Zbr0SFA
-         /mKzmzYztlO/LrGwuTjXTcDHsk/FspZW+CbcWyiSdtRTJPV+94aBiAy/vdAd+iUazj+U
-         hyzvJIeknTwHCiA1LW9tiVvnZoPlkLGYgsLHax/xIwLU4LoFIi1V034yKStW1er5gi1Z
-         1fq3aqW25AaJ1+zxCBsnat7ZZkqTPSYBIRfWZr5aEMHSZNNFddoFFjalUeIojIUPjsse
-         ZjpaG3IOEh4iMLfpuJWb6coi3ZhBz1rWvj4fn4gOgA19j3ptKd4sF3b+8NnVMlMpAQZD
-         h9nQ==
+        bh=oNyl68UzJGjrptP2vUd2iIonedSHFxgdHeshjpu6V70=;
+        b=HsajQBwBmR0bjEcGV6EyVyO4/U6x1wOD+4pp5Wvhv91O+q66IVoElH3yoF4XIcdq0s
+         ig7i9NIKekQs0odvmmx3pvL3UnKK/ybampeJ1F3xWY9WVYJQxLt2+7l0QDwnf8KnDMeH
+         5wKBnHgxrA9ew/sK2gxIXhw10Juyd0IaWBCOjuA63oHV+cKC+r+KUhEUkRD8SOwRNMKd
+         rFeN07Lyjlj50goFtjT8BGgrjR4CNHUk35KC4IuyEguMQZwoe0k6+4Mp6b05D1NVvO1V
+         U2Aj5uo7caP9x4qXa4UORDWKam3xLpegLtcMEdRxQGB6iQmjNlJAc/OBI+66s6mcJ2EY
+         Yx9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FhmZ22vsqZ2JZNeRUAw5wUYiuSDzAhKbzppVj16mDOI=;
-        b=5goUWrBrnzv8lOb3zdP+eCjo2bhAc7ilBW9HBIC9nzkGEUoGsXcIdUBe6lfKIkLvTw
-         0g7U6SERHBTkZOEaW9HCyjmLR0HMB5Gyk93VtOCjK9agGDhwDWY9uq7ryS1N8/CDLpQV
-         WXNOY+nRm3hi05J6i5nn96MAHBdJag1KVal7ftKLntY93KrqCSryWOFniVWOjl2nNQqp
-         MRLqXD8VaCifvVjvgw0c1CsyoimBQ+vqk3JqaDqBXwjfGkNzX96zMvVZKOQ2dO1OfaAG
-         c0yTPXX+QcKoBIiuocoKduA4V2d0+0Xocaz6ylpJUFbuy2J/EB1FXTK+2Xrs5Lq3E747
-         sxYg==
-X-Gm-Message-State: AFqh2kpR2QV2ghqw+7qJNl4f8cb2t3ViqdzOh19FRVGhJN3uaZ7yKmv1
-        rqgRILbN8ccMAXWjmu8cyCY=
-X-Google-Smtp-Source: AMrXdXumVm0XaXSt+FnaVCZpWolkvci/S5WWCLkhy+/hd/2Hhh1JVsp6VLXKDqSfYabcrZVpkQukIg==
-X-Received: by 2002:a4a:3794:0:b0:4a5:d0bf:41c3 with SMTP id r142-20020a4a3794000000b004a5d0bf41c3mr17798133oor.6.1672422624571;
-        Fri, 30 Dec 2022 09:50:24 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h7-20020a4aa287000000b004805b00b2cdsm8786681ool.28.2022.12.30.09.50.23
+        bh=oNyl68UzJGjrptP2vUd2iIonedSHFxgdHeshjpu6V70=;
+        b=oItAwXQWyHAwduI076RJ6U3WVmkkRO11nKRwYftmaGdNsFlPUX0zXFyTKnfkF3DzPr
+         NXQb37J0Sq1uN41KgjXyU92lF5B1aou3obvTRyBYAKqKlHs0P2PE7uomY3rkUOmH+wJ2
+         H/qd2zXU4sfaFiK7YMeifBtygu0Zz5vE8zpDms61g6F3BvGY0YVExkp2mDV7U5gaTmDq
+         9jd7olU7FY+ApHuOUNSYG6+cjhPUoNvPdMDmfqIKgMPTZ9T0OVzzih2AjfV/0Oj39Egs
+         3nzUO3Xat+G4/2zDKRiygDx5F3fYnnEJ/otBbhx7bYAy08RvcQgNW3o4NJwcpmXc8FNm
+         a7Ug==
+X-Gm-Message-State: AFqh2krmASgC3oC2knnNnO9YrO1IRqIMYOlucntDIW+xicNhuFGfryhu
+        JPZ2j86g9nmvmFEO9BBPFfc=
+X-Google-Smtp-Source: AMrXdXu2GWoLQ4GICemL3QbFJpL3eKdWAvSM5z6pCWR5VukYX/8w44sIcmvQPkGU5GhEVKrB2aqzcQ==
+X-Received: by 2002:adf:fc51:0:b0:27d:ddaa:8bd8 with SMTP id e17-20020adffc51000000b0027dddaa8bd8mr12042031wrs.13.1672432464577;
+        Fri, 30 Dec 2022 12:34:24 -0800 (PST)
+Received: from shift.daheim (pd9e2923a.dip0.t-ipconnect.de. [217.226.146.58])
+        by smtp.gmail.com with ESMTPSA id f14-20020adfe90e000000b002365730eae8sm21465010wrm.55.2022.12.30.12.34.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 09:50:23 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 30 Dec 2022 09:50:21 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christian Lamparter <chunkeey@gmail.com>
+        Fri, 30 Dec 2022 12:34:24 -0800 (PST)
+Received: from localhost ([127.0.0.1])
+        by shift.daheim with esmtp (Exim 4.96)
+        (envelope-from <chunkeey@gmail.com>)
+        id 1pBM59-000BCb-2m;
+        Fri, 30 Dec 2022 21:34:23 +0100
+Message-ID: <c8d68feb-d44f-02c6-0a08-d199cef00b46@gmail.com>
+Date:   Fri, 30 Dec 2022 21:34:23 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH RFT] hwmon: (nct6755) Add support for NCT6799D
+Content-Language: de-DE
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org, Ahmad Khalifa <ahmad@khalifa.ws>,
         Sebastian Arnhold <sebastian.arnhold@posteo.de>
-Subject: Re: [PATCH RFT] hwmon: (nct6755) Add support for NCT6799D
-Message-ID: <20221230175021.GA1136102@roeck-us.net>
 References: <184c3523-fb00-b0df-cf29-cc1b171c4ab4@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+ <20221230175021.GA1136102@roeck-us.net>
+From:   Christian Lamparter <chunkeey@gmail.com>
+In-Reply-To: <20221230175021.GA1136102@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <184c3523-fb00-b0df-cf29-cc1b171c4ab4@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Christian,
+Hi Guenter,
 
-On Fri, Dec 30, 2022 at 06:32:23PM +0100, Christian Lamparter wrote:
-> On 12/28/22 14:57, Guenter Roeck wrote:
-> > NCT6799D is mostly compatible to NCT6798D, with minor variations.
-> > 
-> > Note that NCT6798D and NCT6799D have a new means to select temperature
-> > sources, and to report temperatures from those sources. This is not
-> > currently implemented, meaning that most likely not all temperatures
-> > are reported.
-> > 
-> > Initial support. Compile tested only.
-> 
-> FYI: This ID is compatible with the NCT6796D-S on the ASRock X670E PG Lighting Mainboard.
-> (Previous discussion: "[PATCH v1] hwmon: (nct6775) Add chip ID for NCT6796D-S"
-> <https://www.spinics.net/lists/linux-hwmon/msg17785.html>)
-> 
-> With this patch applied, the nct6775 module loads and produces the following output when loaded.
-> 
-> | [28152.009197] nct6775: Found NCT6799D or compatible chip at 0x2e:0x290
-> 
-> and lm-sensors also enumerates the sensors and finally all six fans.
-> So this is definitively an improvement over my patch.
-> 
+On 12/30/22 18:50, Guenter Roeck wrote:
+ > On Fri, Dec 30, 2022 at 06:32:23PM +0100, Christian Lamparter wrote:
+ >> On 12/28/22 14:57, Guenter Roeck wrote:
+ >>> NCT6799D is mostly compatible to NCT6798D, with minor variations.
+ >>>
+ >>> Note that NCT6798D and NCT6799D have a new means to select temperature
+ >>> sources, and to report temperatures from those sources. This is not
+ >>> currently implemented, meaning that most likely not all temperatures
+ >>> are reported.
+ >>>
+ >>> Initial support. Compile tested only.
+ >>
+ >> FYI: This ID is compatible with the NCT6796D-S on the ASRock X670E PG Lighting Mainboard.
+ >> (Previous discussion: "[PATCH v1] hwmon: (nct6775) Add chip ID for NCT6796D-S"
+ >> <https://www.spinics.net/lists/linux-hwmon/msg17785.html>)
+ >>
+ >> With this patch applied, the nct6775 module loads and produces the following output when loaded.
+ >>
+ >> | [28152.009197] nct6775: Found NCT6799D or compatible chip at 0x2e:0x290
+ >>
+ >> and lm-sensors also enumerates the sensors and finally all six fans.
+ >> So this is definitively an improvement over my patch.
+ >>
+ >
+ > Thanks a lot for testing. I'd suspect that NCT6796D-S was mislabeled
+ > in the user manual. That would not be the first time.
+The chips sits behind the GPU now. But I made a blurry photo before
+I added the GPU though :-). The IC's label shows "Nuvoton NCT6796D-S"
+<https://gist.github.com/chunkeey/89aeb85d6f71e7a2da9344615303c203>
+(the chip is soldered at an 45Â° angle, hence I rotated the picture)
 
-Thanks a lot for testing. I'd suspect that NCT6796D-S was mislabeled
-in the user manual. That would not be the first time.
+I got that MB because of the phoronix review:
+<https://www.phoronix.com/review/asrock-x670e-pg>
+(NB: The review also noted the missing sensor support...
+But not for much longer ;-) )
 
-> |# sensors
-> |
-> |nct6799-isa-0290
-> |Adapter: ISA adapter
-> |in0:                   720.00 mV (min =  +0.00 V, max =  +1.74 V)
-> |in1:                     1.82 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> |in2:                     3.39 V  (min =  +2.98 V, max =  +3.63 V)
-> |in3:                     3.28 V  (min =  +2.98 V, max =  +3.63 V)
-> |in4:                     1.65 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> |in5:                     1.05 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> |in6:                     1.41 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> |in7:                     3.39 V  (min =  +2.98 V, max =  +3.63 V)
-> |in8:                     3.23 V  (min =  +2.70 V, max =  +3.63 V)
-> |in9:                   904.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> |in10:                  600.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> |in11:                  608.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> |in12:                    1.04 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> |in13:                  896.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> |in14:                    1.26 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> |fan1:                   891 RPM  (min =    0 RPM)
-> |fan2:                     0 RPM  (min =    0 RPM)
-> |fan3:                  1345 RPM  (min =    0 RPM)
-> |fan4:                   774 RPM  (min =    0 RPM)
-> |fan5:                     0 RPM  (min =    0 RPM)
-> |fan7:                     0 RPM  (min =    0 RPM)
+Michael Larabel also made (better) pictures:
+<https://www.phoronix.com/image-viewer.php?id=asrock-x670e-pg&image=asrock_x670pglightning_3_lrg>
 
-Interesting. Do you have three fans connected, and the motherboard has
-seven fans ?
+(While not the same motherboard, this Japanese review site has a
+really sharp picture from the ASRock X670E Taichi NCT6796D-S SuperIO
+<https://www.gdm.or.jp/x670etaichi_57_1024x768>)
 
-> |SYSTIN:                 +29.5°C    sensor = thermistor
-> |CPUTIN:                 +29.0°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
-> |AUXTIN0:                 +4.0°C  (high = +67.0°C, hyst = +110.0°C)  sensor = thermistor
+That all being said: Other users in the github thread for the
+lm-sensors project:
+<https://github.com/lm-sensors/lm-sensors/issues/416#issuecomment-1276620580>
+clearly stated that their ASUS X670E TUF came with a "NCT6799D-R".
 
-Hmm, that hysteresis value seems wrong. I'll need to check if the
-register addresses are correct.
+Obviously, I'm totally fine with what the module calls it:
+"NCT6799D or compatible".
 
-> |AUXTIN1:                +15.0°C    sensor = thermistor
-> |AUXTIN2:                +15.0°C    sensor = thermistor
-> |AUXTIN3:                +13.0°C    sensor = thermistor
+ >> |# sensors
+ >> |
+ >> |nct6799-isa-0290
+ >> |Adapter: ISA adapter
+ >> |in0:                   720.00 mV (min =  +0.00 V, max =  +1.74 V)
+ >> |in1:                     1.82 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+ >> |in2:                     3.39 V  (min =  +2.98 V, max =  +3.63 V)
+ >> |in3:                     3.28 V  (min =  +2.98 V, max =  +3.63 V)
+ >> |in4:                     1.65 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+ >> |in5:                     1.05 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+ >> |in6:                     1.41 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+ >> |in7:                     3.39 V  (min =  +2.98 V, max =  +3.63 V)
+ >> |in8:                     3.23 V  (min =  +2.70 V, max =  +3.63 V)
+ >> |in9:                   904.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+ >> |in10:                  600.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+ >> |in11:                  608.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+ >> |in12:                    1.04 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+ >> |in13:                  896.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+ >> |in14:                    1.26 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+ >> |fan1:                   891 RPM  (min =    0 RPM)
+ >> |fan2:                     0 RPM  (min =    0 RPM)
+ >> |fan3:                  1345 RPM  (min =    0 RPM)
+ >> |fan4:                   774 RPM  (min =    0 RPM)
+ >> |fan5:                     0 RPM  (min =    0 RPM)
+ >> |fan7:                     0 RPM  (min =    0 RPM)
+ >
+ > Interesting. Do you have three fans connected, and the motherboard has
+ > seven fans ?
 
-Looks like either those are not connected, or there is a temperature
-offset which is not applied, or it is set to wrong values (the chip
-does support temperature offset registers).
+There are six 4-pin fan ports on the motherboard (the list above has fan7
+but not fan6. So there are still in total: six fans).
 
-Thanks,
-Guenter
+Three fans (well - one AIO with a pump and two extra fans) are permanently installed
+into the case. But I have connected an old, external CPU-Fan just to check the function
+of fan2,fan5 and fan7 tachometers. So this worked :).
 
-> |SMBUSMASTER 0:          +40.0°C  (high = +80.0°C, hyst = +75.0°C)
-> |PCH_CHIP_CPU_MAX_TEMP:   +0.0°C
-> |PCH_CHIP_TEMP:           +0.0°C
-> |PCH_CPU_TEMP:            +0.0°C
-> |TSI0_TEMP:              +40.0°C
-> |intrusion0:            ALARM
-> |intrusion1:            ALARM
-> |beep_enable:           disabled
-> 
-> Tested-by: Christian Lamparter <chunkeey@gmail.com>
-> 
-> Cheers,
-> Christian
-> 
-> (one comment below)
-> > diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-> > index bf43f73dc835..906394b26781 100644
-> > --- a/drivers/hwmon/nct6775-platform.c
-> > +++ b/drivers/hwmon/nct6775-platform.c
-> > @@ -36,6 +36,7 @@ static const char * const nct6775_sio_names[] __initconst = {
-> >   	"NCT6796D",
-> >   	"NCT6797D",
-> >   	"NCT6798D",
-> > +	"NCT6799D",
-> >   };
-> >   static unsigned short force_id;
-> > @@ -86,6 +87,7 @@ MODULE_PARM_DESC(fan_debounce, "Enable debouncing for fan RPM signal");
-> >   #define SIO_NCT6796_ID		0xd420
-> >   #define SIO_NCT6797_ID		0xd450
-> >   #define SIO_NCT6798_ID		0xd428
-> > +#define SIO_NCT6799_ID		0xd800
-> >   #define SIO_ID_MASK		0xFFF8
-> >   /*
-> > @@ -408,7 +410,7 @@ static int nct6775_resume(struct device *dev)
-> >   	if (data->kind == nct6791 || data->kind == nct6792 ||
-> >   	    data->kind == nct6793 || data->kind == nct6795 ||
-> >   	    data->kind == nct6796 || data->kind == nct6797 ||
-> > -	    data->kind == nct6798)
-> > +	    data->kind == nct6798 || data->kind == nct6799)
-> >   		nct6791_enable_io_mapping(sio_data);
-> >   	sio_data->sio_exit(sio_data);
-> > @@ -555,7 +557,7 @@ nct6775_check_fan_inputs(struct nct6775_data *data, struct nct6775_sio_data *sio
-> >   	} else {
-> >   		/*
-> >   		 * NCT6779D, NCT6791D, NCT6792D, NCT6793D, NCT6795D, NCT6796D,
-> > -		 * NCT6797D, NCT6798D
-> > +		 * NCT6797D, NCT6798D, NCT6799D
-> >   		 */
-> >   		int cr1a = sio_data->sio_inb(sio_data, 0x1a);
-> >   		int cr1b = sio_data->sio_inb(sio_data, 0x1b);
-> > @@ -565,12 +567,17 @@ nct6775_check_fan_inputs(struct nct6775_data *data, struct nct6775_sio_data *sio
-> >   		int cr2b = sio_data->sio_inb(sio_data, 0x2b);
-> >   		int cr2d = sio_data->sio_inb(sio_data, 0x2d);
-> >   		int cr2f = sio_data->sio_inb(sio_data, 0x2f);
-> > +		bool vsb_ctl_en = cr2f & BIT(0);
-> >   		bool dsw_en = cr2f & BIT(3);
-> >   		bool ddr4_en = cr2f & BIT(4);
-> > +		bool as_seq1_en = cr2f & BIT(7);
-> >   		int cre0;
-> > +		int cre6;
-> >   		int creb;
-> >   		int cred;
-> > +			cre6 = sio_data->sio_inb(sio_data, 0xe0);
->                         ^^ looks like one extra indent sneaked in?
-> 
+ >
+ >> |SYSTIN:                 +29.5Â°C    sensor = thermistor
+ >> |CPUTIN:                 +29.0Â°C  (high = +80.0Â°C, hyst = +75.0Â°C)  sensor = thermistor
+ >> |AUXTIN0:                 +4.0Â°C  (high = +67.0Â°C, hyst = +110.0Â°C)  sensor = thermistor
+ >
+ > Hmm, that hysteresis value seems wrong. I'll need to check if the
+ > register addresses are correct.
+Do you have the datasheet? I'm looking for it (I've also asked Nuvoton).
+But so far no response. If you need a register range dump,
+please let me know.
+
+(AFAIK, all AMD5 X670E broads have dual chipset "chips". I think CPUTIN is
+one of the two "PROM21" chips. Don't know what AUXTIN0 is...)
+ >> |AUXTIN1:                +15.0Â°C    sensor = thermistor
+ >> |AUXTIN2:                +15.0Â°C    sensor = thermistor
+ >> |AUXTIN3:                +13.0Â°C    sensor = thermistor
+ >
+ > Looks like either those are not connected, or there is a temperature
+ > offset which is not applied, or it is set to wrong values (the chip
+ > does support temperature offset registers).
+yes, I too think these are not connected. The values don't move, even after
+a prolonged stresstest. Furthermore, neither the UEFI BIOS nor the Windows
+utility has additional temperature gauges.
+
+Regards,
+Christian
