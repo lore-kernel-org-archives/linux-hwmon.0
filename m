@@ -2,95 +2,151 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE98BC4332F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Dec 2022 22:59:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D821C3DA7C
+	for <linux-hwmon@archiver.kernel.org>; Sat, 31 Dec 2022 03:23:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235683AbiL3W7C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 30 Dec 2022 17:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
+        id S236370AbiLaDXH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 30 Dec 2022 22:23:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235680AbiL3W7B (ORCPT
+        with ESMTP id S236377AbiLaDWw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 30 Dec 2022 17:59:01 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA001CFC6
-        for <linux-hwmon@vger.kernel.org>; Fri, 30 Dec 2022 14:59:00 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so16077061wms.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 30 Dec 2022 14:59:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f7j2TTrNgzMM8cleI/IQxtrJnF5o03MsL4TpkXBMmrs=;
-        b=de0OZcWcQUD6iKmPV98jnRk2ieTrSgFtYvmuZgpRtRlhJgJC2rSEidm0P3CvpVKkaY
-         yH3GzYQsIcUxTodXAwdB1XNoI10TRrr7ntTKZFzGVU8Ny5kEKGEiXlbydFYaKv9Tsbtp
-         jdLiwdQAE2nABY1qVFZXCJ8ie1c4orHP8s7AzryLNU8a4llUDsL0OPsTPtXM2mTCXpvN
-         d89lYTmTWMJfhcBN+md2XQGJZ/WkFzSNLOWTpjwz6a/W8xYQoVnMoxOOm2UWx4SL6dR8
-         ZqTUFlzPs8gKUu/VI5pPgLun6Jr7wsjhcCOXX/m+V6Rp1Ah5IcK1PLrIubQ9D/uoMp+b
-         x0cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f7j2TTrNgzMM8cleI/IQxtrJnF5o03MsL4TpkXBMmrs=;
-        b=uyt5WgPY4ET8222TNU51izJlhhBWlqZa2seD9JGQZaZbCzOuFmHZF2YM5QvAkOmfGS
-         nsfABlvjZEHs5T4SCj2WbA/0phWwudgMkfXILpwwTllAmlcbkGzvnkpGWgaU1gl5y9+/
-         rkWwDoPjvCqX8ngOLfBf2sPzMZ09U3PqrS5e7rQEesscYG1g7Qi7Junrz7PQ1jJGq7e4
-         MeBIvJxC1EPcyw5HMVFrz6Yg92hDRd/8AuWlxd9JK3Ay/pyDCor4COWa97ut8rDlQ1Qo
-         jK9fhCJwzAoDE3iQsfy8S7hxUb2KGpLcbgxZof0GiRN4m1IzGLQG5Br1iXnwB+Q4l1xU
-         uicg==
-X-Gm-Message-State: AFqh2koyz1cRBClj+2xkVXD+VsLQTtTxhpYgapNGadeT6AqYyc4WDG1e
-        F47SxVekq3bEVFgwJSQ6tU0HoewjZL4=
-X-Google-Smtp-Source: AMrXdXvDLTVDQxTyJahmA9zWz1SkLI2JJ43DtowXycs74sOdN/eYKBuCdEepPooinr0X0h/17fy/Yg==
-X-Received: by 2002:a05:600c:1c21:b0:3cf:9844:7b11 with SMTP id j33-20020a05600c1c2100b003cf98447b11mr29241574wms.23.1672441138725;
-        Fri, 30 Dec 2022 14:58:58 -0800 (PST)
-Received: from shift.daheim (pd9e2923a.dip0.t-ipconnect.de. [217.226.146.58])
-        by smtp.gmail.com with ESMTPSA id m22-20020a05600c4f5600b003d995a704fdsm11990658wmq.33.2022.12.30.14.58.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 14:58:58 -0800 (PST)
-Received: from localhost ([127.0.0.1])
-        by shift.daheim with esmtp (Exim 4.96)
-        (envelope-from <chunkeey@gmail.com>)
-        id 1pBOL3-000C2Y-35;
-        Fri, 30 Dec 2022 23:58:57 +0100
-Message-ID: <73d1eb21-6cb9-a60f-218b-af129c2cb7a4@gmail.com>
-Date:   Fri, 30 Dec 2022 23:58:57 +0100
+        Fri, 30 Dec 2022 22:22:52 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A813D12AB2
+        for <linux-hwmon@vger.kernel.org>; Fri, 30 Dec 2022 19:22:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672456971; x=1703992971;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=q+i5/anPiLAwh0pQlv/Eiv0ICOvyW/DnWp6CUnAkwGM=;
+  b=BHlkPBBnkC0RO8y8CKA2MTmoMJq2P7xuT63orPNOPi5MLwT3dAjmMfLL
+   nhO7cWoFNsNvW0lSm03xcQiA1Y2jPwQ/vF4c3PnPBKAiVPS0nT1zBLBg/
+   5YmlED068YW0/RPkvBGE0s8rGkgV7U8RbfkKqtA6vjgZGCdg296Mtym/H
+   RjXGgATMy1X3zyGtc2V7/qvhuVS4DBF6BNe0rhA2BojlFREZqwD6OYkPd
+   0hw3P0R/Q7GYjAoQaPLW2E8HvaVC1CBo4gRGWqkwU/aHecF1icGUsrq1l
+   4GrWmWhzVTXxEcutGZObzXOTqY07cNuCmXxhLGA2wZqksowd3kB/BknNP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10576"; a="318978282"
+X-IronPort-AV: E=Sophos;i="5.96,289,1665471600"; 
+   d="scan'208";a="318978282"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2022 19:22:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10576"; a="982797988"
+X-IronPort-AV: E=Sophos;i="5.96,289,1665471600"; 
+   d="scan'208";a="982797988"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Dec 2022 19:22:50 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pBSSP-000Mw8-0S;
+        Sat, 31 Dec 2022 03:22:49 +0000
+Date:   Sat, 31 Dec 2022 11:22:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 3cf5ad9eb41101658b601d718c40cdc54f1e9bde
+Message-ID: <63afaaf7.HQbtJiCeeUUikh5B%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH RFT] hwmon: (nct6755) Add support for NCT6799D
-Content-Language: en-US
-To:     Sebastian Arnhold <sebastian.arnhold@posteo.de>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Ahmad Khalifa <ahmad@khalifa.ws>
-References: <184c3523-fb00-b0df-cf29-cc1b171c4ab4@gmail.com>
- <20221230175021.GA1136102@roeck-us.net>
- <c8d68feb-d44f-02c6-0a08-d199cef00b46@gmail.com>
- <20221230214855.GA3881237@roeck-us.net>
- <b31ed9ec-3bd5-e032-ea03-b116ece4dac3@posteo.de>
-From:   Christian Lamparter <chunkeey@gmail.com>
-In-Reply-To: <b31ed9ec-3bd5-e032-ea03-b116ece4dac3@posteo.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Sebastian,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 3cf5ad9eb41101658b601d718c40cdc54f1e9bde  hwmon: (aht10) Fix some kernel-doc comments
 
-On 12/30/22 23:13, Sebastian Arnhold wrote:
-> Thank you very much for the patch, Guenter Roeck!
-> 
-> I just compiled it using the mainline Kernel as a basis, but "sensors-detect" still claims there are no sensors detected on my ASUS TUF GAMING X670E-PLUS WIFI.
+elapsed time: 721m
 
-Unfortunately, this might be because ASUS has some "new" ideas :/.
-See this RFC from Ahmad back from October (Author is in Cc)
-for an in-depth view why this is happening:
+configs tested: 74
+configs skipped: 2
 
-https://patchwork.kernel.org/project/linux-hwmon/patch/20221018173428.71080-1-ahmad@khalifa.ws/
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Regards,
-Christian
+gcc tested configs:
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+powerpc                           allnoconfig
+i386                 randconfig-a012-20221226
+i386                 randconfig-a011-20221226
+i386                 randconfig-a013-20221226
+i386                 randconfig-a014-20221226
+x86_64                    rhel-8.3-kselftests
+i386                                defconfig
+i386                 randconfig-a016-20221226
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-bpf
+i386                 randconfig-a015-20221226
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                              defconfig
+ia64                             allmodconfig
+sh                               allmodconfig
+x86_64                           rhel-8.3-kvm
+powerpc                          allmodconfig
+m68k                             allyesconfig
+mips                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+i386                             allyesconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64               randconfig-a012-20221226
+x86_64               randconfig-a014-20221226
+x86_64               randconfig-a013-20221226
+x86_64               randconfig-a011-20221226
+x86_64               randconfig-a015-20221226
+x86_64               randconfig-a016-20221226
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+arm                  randconfig-r046-20221225
+arc                  randconfig-r043-20221225
+x86_64                            allnoconfig
+arc                  randconfig-r043-20221227
+arm                  randconfig-r046-20221227
+arc                  randconfig-r043-20221226
+riscv                randconfig-r042-20221226
+s390                 randconfig-r044-20221226
 
+clang tested configs:
+x86_64                          rhel-8.3-rust
+x86_64               randconfig-a005-20221226
+x86_64               randconfig-a003-20221226
+x86_64               randconfig-a001-20221226
+x86_64               randconfig-a004-20221226
+x86_64               randconfig-a002-20221226
+i386                 randconfig-a004-20221226
+i386                 randconfig-a001-20221226
+x86_64               randconfig-a006-20221226
+i386                 randconfig-a003-20221226
+i386                 randconfig-a002-20221226
+i386                 randconfig-a005-20221226
+i386                 randconfig-a006-20221226
+hexagon              randconfig-r045-20221225
+riscv                randconfig-r042-20221227
+hexagon              randconfig-r041-20221225
+hexagon              randconfig-r041-20221227
+hexagon              randconfig-r041-20221226
+arm                  randconfig-r046-20221226
+s390                 randconfig-r044-20221225
+hexagon              randconfig-r045-20221226
+riscv                randconfig-r042-20221225
+hexagon              randconfig-r045-20221227
+s390                 randconfig-r044-20221227
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
