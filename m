@@ -2,143 +2,269 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FCC8C53210
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Jan 2023 01:56:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 504E8C3DA7D
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Jan 2023 06:49:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236718AbjACB4p (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 Jan 2023 20:56:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56262 "EHLO
+        id S230306AbjACGtM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Jan 2023 01:49:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236766AbjACB4Z (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Jan 2023 20:56:25 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD5BCE3E;
-        Mon,  2 Jan 2023 17:56:07 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-14455716674so35360381fac.7;
-        Mon, 02 Jan 2023 17:56:07 -0800 (PST)
+        with ESMTP id S236850AbjACGtD (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Jan 2023 01:49:03 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E75D2D9
+        for <linux-hwmon@vger.kernel.org>; Mon,  2 Jan 2023 22:48:54 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id v23so31997991pju.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 02 Jan 2023 22:48:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=96ZA3U+4lODUN3hIoOOVli3grSMHv8whVkE4ZtfzuJM=;
-        b=KvXgqBoo9WmoGuCe5vzbMWxElgDcbFiloThShHoBMxljzX+4aV4siZiqAROHBM4128
-         2DHl0I4Fz/mmYz49C47k8fQJN3TgddLm5A83pEAOElNOxm72x4v7Ag7vZruc8/h7ODLl
-         +gAhtSug9qHjhpoRju+X/hrAAK88RT95HwR3rk97Ut92tAJff9VUb1iQ6Lkz/3RsHX99
-         Ri0t1eb/0d6/RV1UnBZqTrfZaglg9kHfOqOAM1of7MO4Ght4sRqKfOJwH6Y5I/MgBczG
-         Is1ggOpBcSHlFkKudF5qHDf6ap86WuZOe5JIAVe7f9iMrgmz0WKu8lsU5f5e32NkH/cw
-         SF3Q==
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mOLjQ0SfRbtrkqrkch5GrcFqVEymhIn0qzHuKEHkf1Q=;
+        b=LZVJleUqcS9hGd2mO/5kYqyLhUK6aAz8EoIMSHTEV/hKqLX2c+tFJ7xEKTK9dwp1pf
+         sxBvE4iCfe8j62U1MFyUkgGZ8YtasuLKJiTiDsHuVG2VXJH7B5VZ1LdhUzALt39QBWYt
+         pr+q7TvCuDOohyiPdRh5ZS11OBW9+mLaWXDUtjO22WmU9/opEGn90brNUG+p15t/rrYB
+         2GVOoc94iKxHSYaf9HIb4eFG9mBsm1R2qp/zvbK8UCNkvIlmJIRSMgtgBTmoMjCFFvoH
+         6++08abU/b5T58akos0kqQ7U9zOeue81gdkrfubt9br6LWVt96r5G6YCUcvBscfpDqTm
+         4YeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=96ZA3U+4lODUN3hIoOOVli3grSMHv8whVkE4ZtfzuJM=;
-        b=PrWFSX6slnDndpoA4viQbpb5E28xMDVw7X1rynn7lXlMtt6o8S+XJSYzrbMS4Jq0/y
-         mQs94YZWGQlGGwe2lmEfPlqVic3pA20YTlYbU8jnmw9fV88sb0okeBwmjc1wvRQimujS
-         9v7RhV4B+0/zQZnPpdk3V+qOMgidFwMsT/bXZ1k1dsiXDnxtPmgCyNjNv6sh9ScsGhib
-         rXGAR7zGHl0vQAInIO0+8aCWwxIm33mGQvREqyIkE2DJycXJEzGmpoy2PHaDUIuY/x03
-         FREmge8/4poXgvOFrVqHf/Hp+xDRhKRKp9mKqh4+JcE2NEub912JlsfWDc1CEw7fv/xW
-         lTBg==
-X-Gm-Message-State: AFqh2kq8rf+Smct3AfngkOVAnlF+6Dh2Tx47fPYqLieYi/W7ewQ3x8lM
-        k7X08QSP0fmxxTcgY7G5Ng0=
-X-Google-Smtp-Source: AMrXdXtb4bHZ9umAo6HHJUafiGC78lfkM4bBWYxkhrmL8rbnxkgsx2BdYpvMkIIJoXpc34YlsCkINA==
-X-Received: by 2002:a05:6870:d8aa:b0:144:7eb3:c9b0 with SMTP id dv42-20020a056870d8aa00b001447eb3c9b0mr20918406oab.42.1672710962830;
-        Mon, 02 Jan 2023 17:56:02 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c9-20020a056870b28900b0014474019e50sm13663486oao.24.2023.01.02.17.56.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 17:56:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 2 Jan 2023 17:56:01 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/4] Temperature sensor support for StarFive JH7110
- RISC-V SoC
-Message-ID: <20230103015601.GB313835@roeck-us.net>
-References: <20230103013145.9570-1-hal.feng@starfivetech.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mOLjQ0SfRbtrkqrkch5GrcFqVEymhIn0qzHuKEHkf1Q=;
+        b=yGK0RM4tg3btcVLGGYcdsX/2lwVFOUea7hMrs+R22x6Kuq1LD4A4CW7pxdQ2yzn+8u
+         0Q9qkAZKOpbw19mSgERwPnMviSfcLkbXB/CQ48Xehrphkc0wMOkAEnvmKd5MWdHUU0vV
+         GEKsWEoFC6lAS/WImDOxZtfSnv05piV/fPobsMSR3+UWoEoWe3GdtQKz3edw9EXmGfvh
+         dMZCVaYrrKWJC/LHalpI2k0Jnxe+gt8Gr+K0OPg99Y7xyL3C9NqjfI6aQAdGRMFkjSs9
+         +HGkBjJEU/+tw89/cRETwFoBbeVxNR+G7hVaklaUdOMZsZZRZPoTbnjm4ARjrAwS4M55
+         7Mxg==
+X-Gm-Message-State: AFqh2koeW8nnzbcq2NA6kBg3vA4svmKLcLALF9BEgZfRr32f5Bplg/fc
+        Jc2l+DnVboHSV4kqKtzeg3+XQQ==
+X-Google-Smtp-Source: AMrXdXsHVE6HtwVk072XLAae1liRFjKuG7KJEPnrZ3RC0q6EnP4sbgc4CFRNh+egRlk/B2qxfNeg1g==
+X-Received: by 2002:a17:90a:a788:b0:219:9a7b:b6a8 with SMTP id f8-20020a17090aa78800b002199a7bb6a8mr47008451pjq.32.1672728533730;
+        Mon, 02 Jan 2023 22:48:53 -0800 (PST)
+Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
+        by smtp.gmail.com with ESMTPSA id m10-20020a17090a3f8a00b002195819d541sm20402551pjc.8.2023.01.02.22.48.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 22:48:53 -0800 (PST)
+Message-ID: <ecdf887d-d2c8-d9d4-ab19-3b30ee1d4607@9elements.com>
+Date:   Tue, 3 Jan 2023 12:18:49 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103013145.9570-1-hal.feng@starfivetech.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH RESEND v6 1/5] hwmon: (pmbus/core): Add interrupt support
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+References: <20221214080715.2700442-1-Naresh.Solanki@9elements.com>
+ <20221229144012.GA21213@roeck-us.net>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <20221229144012.GA21213@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 09:31:41AM +0800, Hal Feng wrote:
-> This patch series adds temperature sensor support for StarFive JH7110 SoC.
-> The last two patches depend on series [1].
-> 
-> [1]: https://lore.kernel.org/all/20221220011247.35560-1-hal.feng@starfivetech.com/
-> 
-> Emil Renner Berthing (4):
->   dt-bindings: hwmon: Add starfive,jh71x0-temp
->   hwmon: (sfctemp) Add StarFive JH71x0 temperature sensor
->   riscv: dts: starfive: jh7110: Add temperature sensor node
->   riscv: dts: starfive: visionfive-2: Add thermal-zones
-> 
+Hi Guenter,
 
-The hardware monitoring driver is obviously either the same
-or derived from the previous series at
-https://patchwork.kernel.org/project/linux-hwmon/list/?series=&submitter=&state=*&q=starfive
-
-Why is this not submitted as v4 of the original series ?
-What has changed, and what is the rationale for (re-)submitting
-it as v1 ?
-
-Guenter
-
->  .../bindings/hwmon/starfive,jh71x0-temp.yaml  |  75 ++++
->  Documentation/hwmon/index.rst                 |   1 +
->  Documentation/hwmon/sfctemp.rst               |  33 ++
->  MAINTAINERS                                   |   8 +
->  .../jh7110-starfive-visionfive-2.dtsi         |  28 ++
->  arch/riscv/boot/dts/starfive/jh7110.dtsi      |  13 +
->  drivers/hwmon/Kconfig                         |  10 +
->  drivers/hwmon/Makefile                        |   1 +
->  drivers/hwmon/sfctemp.c                       | 350 ++++++++++++++++++
->  9 files changed, 519 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
->  create mode 100644 Documentation/hwmon/sfctemp.rst
->  create mode 100644 drivers/hwmon/sfctemp.c
+On 29-12-2022 08:10 pm, Guenter Roeck wrote:
+> On Wed, Dec 14, 2022 at 09:07:11AM +0100, Naresh Solanki wrote:
+>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>
+>> Implement PMBUS irq handler.
+>>
+>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 > 
+> $ scripts/checkpatch.pl --strict index.html
+> CHECK: Blank lines aren't necessary after an open brace '{'
+> #131: FILE: drivers/hwmon/pmbus/pmbus_core.c:3088:
+> +	for (i = 0; i < data->info->pages; i++) {
+> +
 > 
-> base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
-> prerequisite-patch-id: 4dc515731ce237184553c1606ffb3afaeb51c3d8
-> prerequisite-patch-id: 09c98554df52d17ba5fd604125f8cdd62cbe80d1
-> prerequisite-patch-id: a798370d170dc2bcc79ed86f741c21c1e6d87c78
-> prerequisite-patch-id: bd9fd8b5cb2376dc7a5e08e1a1fbb969cf475926
-> prerequisite-patch-id: c57ebb83bc43ccd2a8366ff166eb499da1e1d2cf
-> prerequisite-patch-id: a1673a9e9f19d6fab5a51abb721e54e36636f067
-> prerequisite-patch-id: 94860423c7acc9025249d4bb36652a585bd0a797
-> prerequisite-patch-id: b5084253283929d9a6d0e66c350400c7c85d034d
-> prerequisite-patch-id: 6e369dbe9dca2785e4ea7d0b80e525e227a90a6e
-> prerequisite-patch-id: e08806183c152714c563f3a21c6d7b2f539c4d6e
-> prerequisite-patch-id: 79db8036abdc48fd36da227652ec62627a6b548b
-> prerequisite-patch-id: 06971b8e6bddc0e87e63bfdb0ce8bfb653bd73aa
-> prerequisite-patch-id: 16309a0e23811a2c55d2e56886de3e8eccc51554
-> prerequisite-patch-id: bf4f7ab0b6cfa90b6e49e66c7d75ed2eaaebbe78
-> prerequisite-patch-id: 38468d532e87867990055d3320679f18c5f52278
-> prerequisite-patch-id: 4710f2ac22dca0bdd9ff5d744d2c37cab3c74515
-> prerequisite-patch-id: 6bb9a780c62af3bcc2368dfd20303c7b1bc91e23
-> prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
-> prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
-> prerequisite-patch-id: e3b986b9c60b2b93b7812ec174c9e1b4cfb14c97
-> prerequisite-patch-id: a2b3a9cff8a683422eb0ccf3a0850091401812d4
-> prerequisite-patch-id: e0ba7af0f8d3d41844da9fbcba14b548cbc18f55
-> prerequisite-patch-id: bc0176325c11a632c6abaa83e54e891cc92d1c74
-> -- 
-> 2.38.1
+> CHECK: Alignment should match open parenthesis
+> #183: FILE: drivers/hwmon/pmbus/pmbus_core.c:3140:
+> +	ret = devm_request_threaded_irq(dev, client->irq, NULL, pmbus_fault_handler,
+> +			      0, "pmbus-irq", data);
 > 
+> CHECK: Please use a blank line after function/struct/union/enum declarations
+> #197: FILE: drivers/hwmon/pmbus/pmbus_core.c:3154:
+>   }
+> +static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
+> 
+> total: 0 errors, 0 warnings, 3 checks, 109 lines checked
+> 
+> NOTE: For some of the reported defects, checkpatch may be able to
+>        mechanically convert to the typical style using --fix or --fix-inplace.
+> 
+> index.html has style problems, please review.
+> 
+> Please run checkpatch --strict on your patches.
+> Also see Documentation/hwmon/submitting-patches.rst.
+I will take care of these errors in the updated version.
+> 
+>> ---
+>>   drivers/hwmon/pmbus/pmbus.h      |  2 +-
+>>   drivers/hwmon/pmbus/pmbus_core.c | 84 ++++++++++++++++++++++++++++++++
+>>   2 files changed, 85 insertions(+), 1 deletion(-)
+>>
+>>
+>> base-commit: 364ffd2537c44cb6914ff5669153f4a86fffad29
+>>
+>> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+>> index 10fb17879f8e..6b2e6cf93b19 100644
+>> --- a/drivers/hwmon/pmbus/pmbus.h
+>> +++ b/drivers/hwmon/pmbus/pmbus.h
+>> @@ -26,7 +26,7 @@ enum pmbus_regs {
+>>   
+>>   	PMBUS_CAPABILITY		= 0x19,
+>>   	PMBUS_QUERY			= 0x1A,
+>> -
+>> +	PMBUS_SMBALERT_MASK		= 0x1B,
+>>   	PMBUS_VOUT_MODE			= 0x20,
+>>   	PMBUS_VOUT_COMMAND		= 0x21,
+>>   	PMBUS_VOUT_TRIM			= 0x22,
+>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+>> index 95e95783972a..244fd2597252 100644
+>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+>> @@ -3072,11 +3072,89 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+>>   
+>>   	return 0;
+>>   }
+>> +
+>> +static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg, u8 val)
+>> +{
+>> +	return pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
+>> +}
+>> +
+>> +static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
+>> +{
+>> +	struct pmbus_data *data = pdata;
+>> +	struct i2c_client *client = to_i2c_client(data->dev);
+>> +	int i, status;
+>> +
+>> +	for (i = 0; i < data->info->pages; i++) {
+>> +
+>> +		mutex_lock(&data->update_lock);
+>> +		status = pmbus_read_status_word(client, i);
+>> +		if (status < 0) {
+>> +			mutex_unlock(&data->update_lock);
+>> +			return status;
+>> +		}
+>> +
+>> +		if (status & ~(PB_STATUS_OFF | PB_STATUS_BUSY | PB_STATUS_POWER_GOOD_N))
+>> +			pmbus_clear_fault_page(client, i);
+>> +
+>> +		mutex_unlock(&data->update_lock);
+>> +	}
+>> +
+>> +	return IRQ_HANDLED;
+>> +}
+>> +
+>> +static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
+>> +{
+>> +	struct device *dev = &client->dev;
+>> +	const struct pmbus_regulator_status_category *cat;
+>> +	const struct pmbus_regulator_status_assoc *bit;
+>> +	int i, j, err, ret, func;
+>> +	u8 mask;
+>> +
+>> +	for (i = 0; i < data->info->pages; i++) {
+>> +		func = data->info->func[i];
+>> +
+>> +		for (j = 0; j < ARRAY_SIZE(pmbus_regulator_flag_map); j++) {
+>> +			cat = &pmbus_regulator_flag_map[j];
+>> +			if (!(func & cat->func))
+>> +				continue;
+>> +			mask = 0;
+>> +			for (bit = cat->bits; bit->pflag; bit++)
+>> +				mask |= bit->pflag;
+>> +
+>> +			err = pmbus_write_smbalert_mask(client, i, cat->reg, ~mask);
+>> +			if (err)
+>> +				dev_err(dev, "Failed to set smbalert for reg 0x%02x\n",	cat->reg);
+> 
+> This concerns me. It might mean that the chip does not support
+> PMBUS_SMBALERT_MASK. If so, there would be lots of error messages.
+After going through the PMBus specification, it appears that this should 
+not be an issue unless there is a violation of the specification.
+> 
+>> +		}
+>> +
+>> +		pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_CML, 0xff);
+>> +		pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_OTHER, 0xff);
+>> +		pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_MFR_SPECIFIC, 0xff);
+> 
+> Why check the return value from pmbus_write_smbalert_mask above but not here ?
+Thank you for pointing out the oversight. I will make sure to include an 
+error check at this point.
+> 
+>> +		if (data->info->func[i] & PMBUS_HAVE_FAN12)
+>> +			pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_FAN_12, 0xff);
+>> +		if (data->info->func[i] & PMBUS_HAVE_FAN34)
+>> +			pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_FAN_34, 0xff);
+>> +	}
+>> +
+>> +	/* Register notifiers - can fail if IRQ is not given */
+> 
+> The comment does not make sense. pmbus_irq_setup() is not called
+> if the interrupt "is not given".
+Yes. The comment here is not relevant and will be removed.
+> 
+>> +	ret = devm_request_threaded_irq(dev, client->irq, NULL, pmbus_fault_handler,
+>> +			      0, "pmbus-irq", data);
+>> +	if (ret) {
+>> +		dev_warn(dev, "IRQ disabled %d\n", ret);
+> 
+> This is not a warning, it is an error.
+Thank you for bringing this to my attention. I will make sure to update 
+the code to reflect that this is an error.
+> 
+>> +		return ret;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   #else
+> 
+> This is still in regulator code. I said several times that this is not
+> acceptable.
+Thank you for pointing out the mistake. I will make sure to correct this 
+in the next revision.
+> 
+>>   static int pmbus_regulator_register(struct pmbus_data *data)
+>>   {
+>>   	return 0;
+>>   }
+>> +static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
+>> +{
+>> +	return 0;
+>> +}
+>>   #endif
+>>   
+>>   static struct dentry *pmbus_debugfs_dir;	/* pmbus debugfs directory */
+>> @@ -3441,6 +3519,12 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> +	if (client->irq > 0) {
+>> +		ret = pmbus_irq_setup(client, data);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+>> +
+>>   	ret = pmbus_init_debugfs(client, data);
+>>   	if (ret)
+>>   		dev_warn(dev, "Failed to register debugfs\n");
+
+Thanks,
+Naresh
