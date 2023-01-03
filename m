@@ -2,192 +2,272 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A62BBC54EBC
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Jan 2023 06:51:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6D65C53210
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Jan 2023 06:54:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236776AbjACGv6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 Jan 2023 01:51:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
+        id S230254AbjACGyR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Jan 2023 01:54:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236805AbjACGv5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Jan 2023 01:51:57 -0500
-Received: from ipmail06.adl3.internode.on.net (ipmail06.adl3.internode.on.net [150.101.137.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3C3FD2E2
-        for <linux-hwmon@vger.kernel.org>; Mon,  2 Jan 2023 22:51:55 -0800 (PST)
-IronPort-SDR: SZJS8wveH6/EiECU606pWMMwh0kC5S/P6WU1n6vJZmQQlqDBbfQlKy/Gmmh26zJYk4vPmgGS9F
- u+KqsORsjOcp0Tv9g0tCco5GIi14J0JqOkLLgjUI3OM4uAkDC/e4tngUlTspXyN1hW7+tTKpy4
- f7EECMigR+aiX6NPb8CyGHCcBqz7VmolswX5Q++XmRe1dcs16/C+zNSoSYN0Msg5hpke8OxiLG
- +lcxmxaLDrveTsOK+PD/o3fAqZABMGFE5Qz6FqfAdOO1/rGofSaAOJkTMcwHY4OKPxh40n5RXM
- DjAjd85SMo20hIF/lQMnzaop
-X-SMTP-MATCH: 0
-X-IPAS-Result: =?us-ascii?q?A2ArBgAozrNjjPQc8jxaHQEBAQEJARIBBQUBSYFGgi2CX?=
- =?us-ascii?q?5VtnzoPAQ8BAUQEAQGFBQKFESY4EwECBAEBAQEDAgMBAQEBAQEDAQEGAQEBA?=
- =?us-ascii?q?QEBBgQUAQEBAUBSBwtSBwtYBweBQQuBYRMLAzENhlcCAQMyAQ0BATcBDxk4V?=
- =?us-ascii?q?wYBEoJ+gyOzVIEBgggBAQaCYppmgV4JgUCLYIESgzd6Qz+BToEVg2iDfIcGm?=
- =?us-ascii?q?RoKgT19gScOTFcDCQMHBUlAAwsYDRYyChMtNQsMSysaGweBCiooFQMEBAMCB?=
- =?us-ascii?q?hMDIAINKDEUBCkTDScmawkCAyJhBQMDBCgtCUAHJiY8B1Y3BQMCDx83BgMJA?=
- =?us-ascii?q?wIfEj9xLxISBQMLFSpHBAg2BQYcNhICCA8SDyxDDkI3NhMGXAEqCw4TA1BHG?=
- =?us-ascii?q?W8EggwKBikonAaBCB9vgXGBA6E2oViDeIFQnnZMgUSCNaUrLZcZIIIrn0qBG?=
- =?us-ascii?q?IQoAgoHFoF5gX5NHxmDIk8BAgEBAQ0BAgEBAwECAQEBCQEBAQGOHRmCE4w4Y?=
- =?us-ascii?q?TsCBwsBAQMJiVuCSAEB?=
-IronPort-PHdr: A9a23:yW6d/RHf0y98ssXb3+6r751GfhYY04WdBeZdwpAml6kIeb6q4JrlJ
- kCZ6PBwyl7FG4zGuLpNkeGDtafmVCQb5IqZ9moPdZtQWloEkZAYkwB6UpGMAEGpIKK1P35jT
- pZJXgY9rXqwaRc9JQ==
-IronPort-Data: A9a23:lMji7avtiOHdJzKi0d5gDl9/2+fnVGFYMUV32f8akzHdYApBsoF/q
- tZmKWiEaKzfNDChfNh3Poq0phhV7cKBx9JkHgs/rS5kRiIb9pWcC4uVdBb5Yi7Cc5bIQEg7s
- s5AO9fOcZBoFnSEq0uEP+m6pxGQ94nRFuKmUrKs1gOd5ONAYH184f62s7dh2uaEufDgX0XV/
- 4maT/T3YDdJ4RYtWo4pw/vrRC1H7KyaVAww5jTSVdgT1LMJvyR94Do3fMldHlOgKmVmNrfSq
- 9XrkNlVyljkEyIFUbtJpFpannoiGdY+NSDW4pZftjPLbhJq/kTe2Y5jXBYQhNs+Zzihx7hMJ
- NtxWZOYUl8qDq70k/YhfwB/OCBnArYZ1uD9Li3q2SCT5xWun3rEyfRyFwc9J4QH9OFtDSdD8
- OFeKTxLZw3ra+Cenur9ELU2wJ5zapO3YOvzuVk5pd3dJfg8SJbAa67Q7MBW2y08wM1LALDfa
- 4wQdFKDaTycOEwRZA1NVc5WcOGAmGTzXjNosA+su4Uv73bNjwwo6eXtGY+AEjCNbZ4NxRbC/
- DOuE37CKhUbMsGPjDqa93WqrvHAkDm9W48IErC8sPlwjzW7wm0VFQ0+T1y2qvr8l1X4Xd9DQ
- 2QW9icqs6Eo+WSwU8LwGRa/pRa5UgU0BYIVSbFgrVvdj/CIv0CCGmEYTzUHdMQptYk9Qjls3
- 0Lhc87V6SJHq+WWeXGl/aWogSqVEikMEnRdS3A+Ql5QizX8m70bghXKR9dlNae6iNzpBD39q
- wxmSgBg2d3/auZVjM2GEUD7byGE48OSHlFsum07Skr8s1ojPNb7D2C9wQWDhcusOrp1WXGog
- RDoceCl/ewIAIDleMelGr1VRNlFC96jPSKUullyA5lpyD2p9mXLQGy9yG8mYR01aINeKXqzP
- BOVoh9Y+J5YemeyYq4xaIW0Tc03pUQBKTgHfqyIBjatSsIqHONiwM2JTRTOt10BaGB2zckC1
- W6zKK5A90oyB6V91yaRTOwAy7ItzS1W7TqNGsqln0j9i+fBPyL9pVI53L2mML5RAESs/l69z
- jqjH5DTo/mieLehOXKModZ7wa4icSRrXsCeRzNrmh6reVI9SDt7Wpc9MJs9Y4MtnqJJm/3O8
- 23VZ6Or4ASXuJEzEi3TMioLVV8adconxZ7NFXB1YwrANrlKSdrH0ZrzgLNtJeZ+pLIynK4lJ
- xTHEu3Zaslypv3802x1RfHAQEZKLXxHXCqCYHioZiYRZZllS1Cb89PoZFK/piIUBzW5stEy5
- bCly0XaTdwKWl06XsrRbfuuyXK3vGQcwbwtBxKTfIUKIUi8opJ3LyHRj+MsJ59eIxv0xgyci
- 1ScDyAH9LvErIIC+dXUgbyJ8tWyGOxkE0sEQ2TWtO7kNSTT8me575VHVeKEIWLUWG/uofXwb
- v9c0P/7KvFBkVNX9YtwVb92lPps69zqrr5c7wJlAHSSMQvzU+g+fiDf0JAW5KNXx7JftQ+nY
- W61+4FXaeeTJcfoMF8NPw57PO6N4vEjnGWA5/oCPxSo7SB6y7OLTEFOMkTekydaNrZ0bt8oz
- Op96s4b7wuz1kgjPtqc1HsG/WWQNToLSaw4uJYADMnmjxdty10EaIGFUn3655SGatNtNEg2I
- 2bK2/Kb3OoAnxPPIygpCHzA/etBnpBQ6hpE+181IQjbkNTyma5l1RJcxj07UwBJw0gVyOl0I
- GVqaRF4KPnc5Ttun8QfDWmgFxsaXk/HogmrlwFMzj2cFRX0EHfRJXE8MqCR5E8YtWlbe35S4
- ejAmmriVD/reuD33zczABA686W4E4AorwCSytq6G8mlHoUhZWa3iKGZYztaohTqNso9mUnbq
- LQ45+13c6D6a3IdrqBT51N2DljMpM1o/FB/fMw=
-IronPort-HdrOrdr: A9a23:SmgGK6OZrd2jjcBcThujsMiBIKoaSvp037BK7SpMoNJuE/Bw8P
- re5cjyt3fP5Qr5PUtNpTnuAtjifZqxz/FICMwqTNOftWrdyQ2Vxf9ZnOnfKlTbckWUygce79
- YGT0EUMr3N5DZB4/oTb2SDYq4dKaG8gcWVbP/lvgtQpB9RGtxdBthCe32m+pwffng9OaYE
-X-IronPort-Anti-Spam-Filtered: true
-Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
-  by ipmail06.adl3.internode.on.net with ESMTP; 03 Jan 2023 17:16:51 +1030
-Received: from agc.com.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
-        (authenticated bits=0)
-        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 3036kRlN2641329
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Tue, 3 Jan 2023 17:46:47 +1100
-Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
-DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 3036kRlN2641329
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
-        s=s1; t=1672728407; bh=iTvONrBDoBWEZbW7cFmRUhkmGPwZtaCj5pXblnMvgGI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P88wRTj38zhQsX3DEliENOY7xtYKLvTEdFfqqH5JM8Xaspjc3tM9x844EmOzdQAxk
-         fyXLHgTAVQY7SmzyspUGqn8Qzh01GXOGn87EG0O8KWjuzaat5IsqgEc1toH22Y/qJd
-         9HwvYUhMjI9AEIkpKMhJgPu8O2S8O9L9N5mTmOpWVkacwpDv3ErFzhOsYBnMNMmU6x
-         MBrS+r/YnhEgbBkjCi5YxIyA2aAs8qKJM3QueLJHf7oQmiK6nmrUoEq0ioZ9pSRf5H
-         yzJo6aZk67jEgT+69yFZVgtZwPE3kf+haqy3aycKZhCy+C4Wv+1mQUoMjR6ush3/Ta
-         JLXZBmGfOzLRw==
-From:   Frank Crawford <frank@crawford.emu.id.au>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org,
-        Frank Crawford <frank@crawford.emu.id.au>
-Subject: [PATCH v1 2/2] hwmon: (it87) Add entries to dmi_table
-Date:   Tue,  3 Jan 2023 17:46:12 +1100
-Message-Id: <20230103064612.404401-3-frank@crawford.emu.id.au>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230103064612.404401-1-frank@crawford.emu.id.au>
-References: <20230103064612.404401-1-frank@crawford.emu.id.au>
+        with ESMTP id S236805AbjACGyQ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Jan 2023 01:54:16 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F9E5F90
+        for <linux-hwmon@vger.kernel.org>; Mon,  2 Jan 2023 22:54:14 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id o21so1877675pjw.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 02 Jan 2023 22:54:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Opo/Hg1HYv0dDEG3+YYjERBKK4XAeSo3rsEnyl3wq8I=;
+        b=OLda5p2x3pWZwojHIMVHz86YQeongl6IVl/K1+Dy2BiazBgEHvjxz7Wdh1WRL7GKKW
+         6ZbjR733IbfmHVRBQjPLNBejk+aNbdv6E/lAzBDdzdGQZerTCx/HX2mFLtW2y7nn1izm
+         6p3yVodaYkeF9uisFOShByR1+bW/qCvPx07vWnAHLUmNBryczjzropqEQwLyZvZ583Vk
+         60XxdeglM2GzOUoQ7h9I2QO59zrgC43PubfJR5HM+6eP9aECrBA8n2k/v1/rwdNiiCYe
+         4BMGjgAxCwmiqG4U1m8+3PCnjlnr8G8K74Ecbddc+qBxyJ3OmNXceD3JgQEXDLr+ttpO
+         YfFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Opo/Hg1HYv0dDEG3+YYjERBKK4XAeSo3rsEnyl3wq8I=;
+        b=obiwKLoYo2C9+vSSx4+ooe0BK2gq1rOvgrLE14ut8YfFHqt3DJNeBsz1XPlGTxRLna
+         uIYiu+Wu2zoPHWsw7//EGgGdZ6sP0w2CX4AFe9I+Y7HDwkeSKgPXyOlBe2nIX8OKdmE5
+         1ruSUHm5fmccnoAnL0UNQAyR1Vu7oNHMGEwMpDtjUCiBPDu1+c+LVCpEKvWvu81s8yDU
+         uB3U0U5lz13GYS5O24Sip/yv6YJRdEzfJo0SzVpbgedNoxLQqxn7xb9/Vog75Pemb43+
+         tL1+fJ4Sjor5afPEPDFMek3NYGNLXNq6HM4hycQCQcga2e4msOKTaD6wRj/e4sDPW1tq
+         O78g==
+X-Gm-Message-State: AFqh2kqi7ypLXjr11uSuPkjHn61I7s6QvMFaMn+TKXH7QQ0zH+y7dmyI
+        aWAHlJHawHi28dy++hqkXJV6KjBMChRF+KVUQTc=
+X-Google-Smtp-Source: AMrXdXsa2YsxSfHS5kt+4CgStOyp1YDc5nAaBrJmNUL+Z4Q1KjV8y85Zmgpkbg42G2rRlfYQfi4QLA==
+X-Received: by 2002:a17:90a:540a:b0:219:9da5:40d3 with SMTP id z10-20020a17090a540a00b002199da540d3mr45781219pjh.1.1672728853709;
+        Mon, 02 Jan 2023 22:54:13 -0800 (PST)
+Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
+        by smtp.gmail.com with ESMTPSA id i15-20020a17090a2a0f00b00225e670e4c7sm14125822pjd.35.2023.01.02.22.54.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 22:54:13 -0800 (PST)
+Message-ID: <37782482-1441-6be0-e66c-0e8c344d2368@9elements.com>
+Date:   Tue, 3 Jan 2023 12:24:09 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Tue, 03 Jan 2023 17:46:47 +1100 (AEDT)
-X-Virus-Scanned: clamav-milter 0.103.7 at bits.crawford.emu.id.au
-X-Virus-Status: Clean
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH RESEND v6 2/5] hwmon: (pmbus/core): Notify hwmon events
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+References: <20221214080715.2700442-1-Naresh.Solanki@9elements.com>
+ <20221214080715.2700442-2-Naresh.Solanki@9elements.com>
+ <20221229144643.GA21642@roeck-us.net>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <20221229144643.GA21642@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Call initialisation of second chipset.
+Hi Guenter,
 
-Update the dmi_table with mother boards that have been tested.
-
-Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
----
- drivers/hwmon/it87.c | 58 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
-
-diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index 4ebce2c661d7..2ecfa2c901f6 100644
---- a/drivers/hwmon/it87.c
-+++ b/drivers/hwmon/it87.c
-@@ -3315,6 +3315,27 @@ static int it87_dmi_cb(const struct dmi_system_id *dmi_entry)
- 	return 1;
- }
- 
-+/*
-+ * On various Gigabyte AM4 boards (AB350, AX370), the second Super-IO chip
-+ * (IT8792E) needs to be in configuration mode before accessing the first
-+ * due to a bug in IT8792E which otherwise results in LPC bus access errors.
-+ * This needs to be done before accessing the first Super-IO chip since
-+ * the second chip may have been accessed prior to loading this driver.
-+ *
-+ * The problem is also reported to affect IT8795E, which is used on X299 boards
-+ * and has the same chip ID as IT8792E (0x8733). It also appears to affect
-+ * systems with IT8790E, which is used on some Z97X-Gaming boards as well as
-+ * Z87X-OC.
-+ * DMI entries for those systems will be added as they become available and
-+ * as the problem is confirmed to affect those boards.
-+ */
-+static int gigabyte_sio2_force(const struct dmi_system_id *dmi_entry)
-+{
-+	__superio_enter(REG_4E);
-+
-+	return it87_dmi_cb(dmi_entry);
-+};
-+
- /*
-  * On the Shuttle SN68PT, FAN_CTL2 is apparently not
-  * connected to a fan, but to something else. One user
-@@ -3337,7 +3358,44 @@ static struct it87_dmi_data nvidia_fn68pt = {
- 		.driver_data = data, \
- 	}
- 
-+#define IT87_DMI_MATCH_GBT(name, cb, data) \
-+	IT87_DMI_MATCH_VND("Gigabyte Technology Co., Ltd.", name, cb, data)
-+
- static const struct dmi_system_id it87_dmi_table[] __initconst = {
-+	IT87_DMI_MATCH_GBT("AB350", gigabyte_sio2_force, NULL),
-+		/* ? + IT8792E/IT8795E */
-+	IT87_DMI_MATCH_GBT("AX370", gigabyte_sio2_force, NULL),
-+		/* ? + IT8792E/IT8795E */
-+	IT87_DMI_MATCH_GBT("Z97X-Gaming G1", gigabyte_sio2_force, NULL),
-+		/* ? + IT8790E */
-+	IT87_DMI_MATCH_GBT("TRX40 AORUS XTREME", gigabyte_sio2_force, NULL),
-+		/* IT8688E + IT8792E/IT8795E */
-+	IT87_DMI_MATCH_GBT("Z390 AORUS ULTRA-CF", gigabyte_sio2_force, NULL),
-+		/* IT8688E + IT8792E/IT8795E */
-+	IT87_DMI_MATCH_GBT("Z490 AORUS ELITE AC", it87_dmi_cb, NULL),
-+		/* IT8688E */
-+	IT87_DMI_MATCH_GBT("B550 AORUS PRO AC", gigabyte_sio2_force, NULL),
-+		/* IT8688E + IT8792E/IT8795E */
-+	IT87_DMI_MATCH_GBT("B560I AORUS PRO AX", it87_dmi_cb, NULL),
-+		/* IT8689E */
-+	IT87_DMI_MATCH_GBT("X570 AORUS ELITE WIFI", it87_dmi_cb, NULL),
-+		/* IT8688E */
-+	IT87_DMI_MATCH_GBT("X570 AORUS MASTER", gigabyte_sio2_force, NULL),
-+		/* IT8688E + IT8792E/IT8795E */
-+	IT87_DMI_MATCH_GBT("X570 AORUS PRO", gigabyte_sio2_force, NULL),
-+		/* IT8688E + IT8792E/IT8795E */
-+	IT87_DMI_MATCH_GBT("X570 AORUS PRO WIFI", gigabyte_sio2_force, NULL),
-+		/* IT8688E + IT8792E/IT8795E */
-+	IT87_DMI_MATCH_GBT("X570 I AORUS PRO WIFI", it87_dmi_cb, NULL),
-+		/* IT8688E */
-+	IT87_DMI_MATCH_GBT("X570S AERO G", gigabyte_sio2_force, NULL),
-+		/* IT8689E + IT87952E */
-+	IT87_DMI_MATCH_GBT("X670E AORUS MASTER", it87_dmi_cb, NULL),
-+		/* IT8689E - Note there may also be a second chip */
-+	IT87_DMI_MATCH_GBT("Z690 AORUS PRO DDR4", gigabyte_sio2_force, NULL),
-+		/* IT8689E + IT87952E */
-+	IT87_DMI_MATCH_GBT("Z690 AORUS PRO", gigabyte_sio2_force, NULL),
-+		/* IT8689E + IT87952E */
- 	IT87_DMI_MATCH_VND("nVIDIA", "FN68PT", it87_dmi_cb, &nvidia_fn68pt),
- 	{ }
- 
--- 
-2.38.1
-
+On 29-12-2022 08:16 pm, Guenter Roeck wrote:
+> On Wed, Dec 14, 2022 at 09:07:12AM +0100, Naresh Solanki wrote:
+>> Notify hwmon events using the pmbus irq handler.
+>>
+>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>> ---
+>>   drivers/hwmon/pmbus/pmbus_core.c | 95 ++++++++++++++++++++++++--------
+>>   1 file changed, 72 insertions(+), 23 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+>> index 244fd2597252..b005a1c8ad7e 100644
+>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+>> @@ -2781,18 +2781,43 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
+>>   	},
+>>   };
+>>   
+>> -static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
+>> +#define to_dev_attr(_dev_attr) \
+>> +	container_of(_dev_attr, struct device_attribute, attr)
+>> +
+>> +static void pmbus_notify(struct pmbus_data *data, int page, int reg, int flags)
+>> +{
+>> +	int i;
+>> +
+>> +	for (i = 0; i < data->num_attributes; i++) {
+>> +		struct device_attribute *da = to_dev_attr(data->group.attrs[i]);
+>> +		struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+>> +		int index = attr->index;
+>> +		u16 smask = pb_index_to_mask(index);
+>> +		u8 spage = pb_index_to_page(index);
+>> +		u16 sreg = pb_index_to_reg(index);
+>> +
+>> +		if (reg == sreg && page == spage && (smask & flags)) {
+>> +			dev_dbg(data->dev, "sysfs notify: %s", da->attr.name);
+>> +			sysfs_notify(&data->dev->kobj, NULL, da->attr.name);
+>> +			kobject_uevent(&data->dev->kobj, KOBJ_CHANGE);
+>> +			flags &= ~smask;
+>> +		}
+>> +
+>> +		if (!flags)
+>> +			break;
+>> +	}
+>> +}
+> 
+> Interrupt aupport as well as sysfs and kobject notifications are not
+> regulator specific and do not depend on regulator support. It has to be
+> independent of regulator support, meaning it must also work if regulator
+> support is disabled.
+> 
+> I seem to have trouble expressing myself, but I don't know how else to say
+> it, sorry.
+> 
+> It doesn't make sense to review the series further until this is addressed.
+I understand your concern about the independence of the interrupt 
+support, sysfs, and kobject notifications from the regulator support. I 
+will make sure to address this issue and ensure that these features work 
+regardless of whether regulator support is enabled or disabled in the 
+next revision. Thank you for your patience and for your feedback.
+I will make sure to address your concerns.
+> 
+> Guenter
+> 
+>> +
+>> +static int pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *error,
+>> +				    bool notify)
+>>   {
+>> -	int i, status;
+>>   	const struct pmbus_regulator_status_category *cat;
+>>   	const struct pmbus_regulator_status_assoc *bit;
+>> -	struct device *dev = rdev_get_dev(rdev);
+>> -	struct i2c_client *client = to_i2c_client(dev->parent);
+>> -	struct pmbus_data *data = i2c_get_clientdata(client);
+>> -	u8 page = rdev_get_id(rdev);
+>> +	struct i2c_client *client = to_i2c_client(data->dev);
+>>   	int func = data->info->func[page];
+>> +	int i, status, ret;
+>>   
+>> -	*flags = 0;
+>> +	*error = 0;
+>>   
+>>   	mutex_lock(&data->update_lock);
+>>   
+>> @@ -2803,14 +2828,17 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+>>   
+>>   		status = _pmbus_read_byte_data(client, page, cat->reg);
+>>   		if (status < 0) {
+>> -			mutex_unlock(&data->update_lock);
+>> -			return status;
+>> +			ret = status;
+>> +			goto unlock;
+>>   		}
+>>   
+>>   		for (bit = cat->bits; bit->pflag; bit++) {
+>>   			if (status & bit->pflag)
+>> -				*flags |= bit->rflag;
+>> +				*error |= bit->rflag;
+>>   		}
+>> +
+>> +		if (notify && status)
+>> +			pmbus_notify(data, page, cat->reg, status);
+>>   	}
+>>   
+>>   	/*
+>> @@ -2823,36 +2851,53 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+>>   	 * REGULATOR_ERROR_<foo>_WARN.
+>>   	 */
+>>   	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
+>> -	mutex_unlock(&data->update_lock);
+>> -	if (status < 0)
+>> -		return status;
+>>   
+>> -	if (pmbus_regulator_is_enabled(rdev)) {
+>> +	if (status < 0) {
+>> +		ret = status;
+>> +		goto unlock;
+>> +	}
+>> +
+>> +	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
+>> +	if (ret < 0)
+>> +		goto unlock;
+>> +
+>> +	if (ret & PB_OPERATION_CONTROL_ON) {
+>>   		if (status & PB_STATUS_OFF)
+>> -			*flags |= REGULATOR_ERROR_FAIL;
+>> +			*error |= REGULATOR_ERROR_FAIL;
+>>   
+>>   		if (status & PB_STATUS_POWER_GOOD_N)
+>> -			*flags |= REGULATOR_ERROR_REGULATION_OUT;
+>> +			*error |= REGULATOR_ERROR_REGULATION_OUT;
+>>   	}
+>>   	/*
+>>   	 * Unlike most other status bits, PB_STATUS_{IOUT_OC,VOUT_OV} are
+>>   	 * defined strictly as fault indicators (not warnings).
+>>   	 */
+>>   	if (status & PB_STATUS_IOUT_OC)
+>> -		*flags |= REGULATOR_ERROR_OVER_CURRENT;
+>> +		*error |= REGULATOR_ERROR_OVER_CURRENT;
+>>   	if (status & PB_STATUS_VOUT_OV)
+>> -		*flags |= REGULATOR_ERROR_REGULATION_OUT;
+>> +		*error |= REGULATOR_ERROR_REGULATION_OUT;
+>>   
+>>   	/*
+>>   	 * If we haven't discovered any thermal faults or warnings via
+>>   	 * PMBUS_STATUS_TEMPERATURE, map PB_STATUS_TEMPERATURE to a warning as
+>>   	 * a (conservative) best-effort interpretation.
+>>   	 */
+>> -	if (!(*flags & (REGULATOR_ERROR_OVER_TEMP | REGULATOR_ERROR_OVER_TEMP_WARN)) &&
+>> +	if (!(*error & (REGULATOR_ERROR_OVER_TEMP | REGULATOR_ERROR_OVER_TEMP_WARN)) &&
+>>   	    (status & PB_STATUS_TEMPERATURE))
+>> -		*flags |= REGULATOR_ERROR_OVER_TEMP_WARN;
+>> +		*error |= REGULATOR_ERROR_OVER_TEMP_WARN;
+>>   
+>> -	return 0;
+>> +unlock:
+>> +	mutex_unlock(&data->update_lock);
+>> +	return ret;
+>> +}
+>> +
+>> +static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
+>> +{
+>> +	struct device *dev = rdev_get_dev(rdev);
+>> +	struct i2c_client *client = to_i2c_client(dev->parent);
+>> +	struct pmbus_data *data = i2c_get_clientdata(client);
+>> +
+>> +	return pmbus_get_flags(data, rdev_get_id(rdev), flags, false);
+>>   }
+>>   
+>>   static int pmbus_regulator_get_status(struct regulator_dev *rdev)
+>> @@ -3082,10 +3127,14 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
+>>   {
+>>   	struct pmbus_data *data = pdata;
+>>   	struct i2c_client *client = to_i2c_client(data->dev);
+>> -	int i, status;
+>> +	int i, status, ret;
+>>   
+>>   	for (i = 0; i < data->info->pages; i++) {
+>>   
+>> +		ret = pmbus_get_flags(data, i, &status, true);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>>   		mutex_lock(&data->update_lock);
+>>   		status = pmbus_read_status_word(client, i);
+>>   		if (status < 0) {
+>> @@ -3099,7 +3148,7 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
+>>   		mutex_unlock(&data->update_lock);
+>>   	}
+>>   
+>> -	return IRQ_HANDLED;
+>> +	return ret;
+>>   }
+>>   
+>>   static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
+Regards,
+Naresh
