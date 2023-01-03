@@ -2,178 +2,144 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 155E3C53210
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Jan 2023 18:48:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DC81C5479D
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Jan 2023 20:39:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238273AbjACSs3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 Jan 2023 13:48:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
+        id S238193AbjACUj3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Jan 2023 15:39:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238985AbjACSrh (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Jan 2023 13:47:37 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F84140A5
-        for <linux-hwmon@vger.kernel.org>; Tue,  3 Jan 2023 10:46:52 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id k7-20020a056830168700b0067832816190so19592982otr.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 03 Jan 2023 10:46:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=So7TxHZWgjwP9U7KHE1giofiiZZ83KP7j/ivuiIHB8M=;
-        b=RJGBLPTmIG/GD8HPNyOp+c9nF+dGiUchSHpOKl1Bic7iEvjQO+tzCENtKbcELTxDPJ
-         CIcmHk17DWwEtjKCHmtXz+hQCaqss6bsge7N4DD51wFQIwPI6+1g7LRhNnjhvVcfVgmW
-         pYgkY+AarckVtwJc511iXojvFSd9Jvij3DLHkApmf0EKbpvarWBgy7CiM1MwueyDQzuC
-         O+0ym2XdIAh+QfoKck9+po13pIzbaUFIq60+5trCEkBp4TfTddTmopT4OvaNR1Ox9zpJ
-         HeVM1pIJ4+xLxLYkqzqM7jcStBIVmDjUg+y92iP4Fd+QblgWrzwHyFllLt+VuCS1cHaS
-         eHHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=So7TxHZWgjwP9U7KHE1giofiiZZ83KP7j/ivuiIHB8M=;
-        b=PPBwV84Izry5Cce2jMIMBpA5qU+TnsLluq4IcEvtHt3afcBs4YoK7dV+ahckI0Gvfz
-         xJU0uU6Pzq/+sIKZ1OqiCxnorogRnLy+X+JOknqOzdABGl5MbOKKimoMLUvIKJkw7LyD
-         68l73NO6lMKSEQKw3QBCDSVpSq073wazJ1qBcWEA27CyjasfulXtMp1N+Mr99L46PWl5
-         9JbjuMA30cZje34EqfetGEqHOp2tEmudoC34Mi/lJ6Q0f96zTDFOh6+IxWzDA6FMkY9Z
-         wYb6VIm6gy0LllQ6Rg9CHca1KaXzfcfBQGm5p2Zwr5SzmPYdwHj3eqV4uuQIX60PA+Df
-         Odow==
-X-Gm-Message-State: AFqh2kqZUwoRBPxpDXgHLttanoujwbIHDhVReHaswUue4blkRRg7qRON
-        f8TiG3rWdyt/glKrmWA7Pno=
-X-Google-Smtp-Source: AMrXdXth0CgloPMKnjRtGU/i87AmOpF5Pfqi1p1dlFwPll1nIqPhBEsTixLgEhU/tjvTkBdfJV1L8w==
-X-Received: by 2002:a05:6830:3354:b0:670:5f0e:8b70 with SMTP id l20-20020a056830335400b006705f0e8b70mr19827009ott.5.1672771612157;
-        Tue, 03 Jan 2023 10:46:52 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x3-20020a056830278300b006605883eae6sm14941047otu.63.2023.01.03.10.46.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 10:46:51 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 3 Jan 2023 10:46:50 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Frank Crawford <frank@crawford.emu.id.au>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] hwmon: (it87) Add entries to dmi_table
-Message-ID: <20230103184650.GB204971@roeck-us.net>
-References: <20230103064612.404401-1-frank@crawford.emu.id.au>
- <20230103064612.404401-3-frank@crawford.emu.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103064612.404401-3-frank@crawford.emu.id.au>
+        with ESMTP id S230388AbjACUj2 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Jan 2023 15:39:28 -0500
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD3F13D61;
+        Tue,  3 Jan 2023 12:39:26 -0800 (PST)
+Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 303GJmxU025311;
+        Tue, 3 Jan 2023 20:38:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id; s=pps0720;
+ bh=Ex5PEvXIB00plOjxJ83CsVaJEiZJSp/AaY1qjeMp9E8=;
+ b=LX/G9chXOM/fS/PRoNUYV0jChUSzJEBZ3cldtRdSMDXi1RxFenpbzqkyMTv1+S6R31UN
+ kszD7zIwJDvr5N8jcw/rdrv3vApEhweaqv4V+F9niz8SnqyrsMMZpt1vAqhUeJOq7L1d
+ 4uS+lGwo8CNxypE18st33l/3D0BvPD5eu3CYSmzQUaFQ1jjDexX8YLe6/1Ua2BGPm1AE
+ D5FaKSXFNbrY/4rnqNpP5Kwiv7sghhaw1XZglEon+i9vduYT9tJzIc9yfkGTC+NMPK4Y
+ RZAUbI0pmqdZk7lqCgpZkJnNcnf0rFSYJO7Z+XV1xGGw1hlmNNNXHK+dmksZibSNkhQn gw== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3mvqsm1c55-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Jan 2023 20:38:50 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id A6997807EFF;
+        Tue,  3 Jan 2023 20:38:49 +0000 (UTC)
+Received: from hpe.com (unknown [16.231.227.36])
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 326B2809052;
+        Tue,  3 Jan 2023 20:38:47 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     verdun@hpe.com, nick.hawkins@hpe.com, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net,
+        linux@armlinux.org.uk, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v4 0/5] ARM: Add GXP Fan and SPI controllers
+Date:   Tue,  3 Jan 2023 14:36:49 -0600
+Message-Id: <20230103203654.59322-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-ORIG-GUID: -G41T4cBI76UbO2X7MfG2eD6rPhamt64
+X-Proofpoint-GUID: -G41T4cBI76UbO2X7MfG2eD6rPhamt64
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-03_07,2023-01-03_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ clxscore=1011 malwarescore=0 mlxlogscore=999 bulkscore=0 spamscore=0
+ priorityscore=1501 adultscore=0 impostorscore=0 lowpriorityscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301030174
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 05:46:12PM +1100, Frank Crawford wrote:
-> Call initialisation of second chipset.
-> 
-> Update the dmi_table with mother boards that have been tested.
-> 
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-That doesn't really describe what is done and why. See
-Documentation/process/submitting-patches.rst, "Describe your changes".
-The comment iin the code is much better. 
+The GXP SoC can support up to 16 fans through the interface provided by
+the CPLD. The fans speeds are controlled via a pwm value 0-255. The fans
+are also capable of reporting if they have failed to the CPLD which in
+turn reports the status to the GXP SoC. Based on previous feedback the
+registers required for fan control have been regmaped individualy to fan
+driver. Specifically these registers are the function 2 registers and the
+programmable logic registers from the CPLD. Additionally in this patchset
+there is support for the SPI driver which already exists as spi-gxp.c in
+the SPI driver.
 
-> Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
-> ---
->  drivers/hwmon/it87.c | 58 ++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 58 insertions(+)
-> 
-> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-> index 4ebce2c661d7..2ecfa2c901f6 100644
-> --- a/drivers/hwmon/it87.c
-> +++ b/drivers/hwmon/it87.c
-> @@ -3315,6 +3315,27 @@ static int it87_dmi_cb(const struct dmi_system_id *dmi_entry)
->  	return 1;
->  }
->  
-> +/*
-> + * On various Gigabyte AM4 boards (AB350, AX370), the second Super-IO chip
-> + * (IT8792E) needs to be in configuration mode before accessing the first
-> + * due to a bug in IT8792E which otherwise results in LPC bus access errors.
-> + * This needs to be done before accessing the first Super-IO chip since
-> + * the second chip may have been accessed prior to loading this driver.
-> + *
-> + * The problem is also reported to affect IT8795E, which is used on X299 boards
-> + * and has the same chip ID as IT8792E (0x8733). It also appears to affect
-> + * systems with IT8790E, which is used on some Z97X-Gaming boards as well as
-> + * Z87X-OC.
-> + * DMI entries for those systems will be added as they become available and
-> + * as the problem is confirmed to affect those boards.
-> + */
-> +static int gigabyte_sio2_force(const struct dmi_system_id *dmi_entry)
+---
 
-s/gigabyte/it87/
+Changes since v3:
+ *Removed patch for ABI documentation of sysfs-class-hwmon as it
+  was applied
+ *Removed unecessary HWMON_PWM_ENABLE usage
 
-While this is seen on Gigabyte boards, it doesn't _have_ to be Gigabyte
-specific. Other boards i using the same chips (it there are any) may be
-affected as well.
+Changes since v2:
+ *Removed use of regmap in favor of __iomem
+ *Updated description on yaml documentation
+ *Simplified commit description on sysfs-class-hwmon
+ *Removed use of dev and hwmon_dev from drvdata structure
+ *Fixed missing breaks in switch statements
+ *Added check for pwm values less than 0
+ *Removed regmap and slab header file includes
 
-> +{
-> +	__superio_enter(REG_4E);
-> +
-> +	return it87_dmi_cb(dmi_entry);
-> +};
-> +
->  /*
->   * On the Shuttle SN68PT, FAN_CTL2 is apparently not
->   * connected to a fan, but to something else. One user
-> @@ -3337,7 +3358,44 @@ static struct it87_dmi_data nvidia_fn68pt = {
->  		.driver_data = data, \
->  	}
->  
-> +#define IT87_DMI_MATCH_GBT(name, cb, data) \
-> +	IT87_DMI_MATCH_VND("Gigabyte Technology Co., Ltd.", name, cb, data)
-> +
->  static const struct dmi_system_id it87_dmi_table[] __initconst = {
-> +	IT87_DMI_MATCH_GBT("AB350", gigabyte_sio2_force, NULL),
-> +		/* ? + IT8792E/IT8795E */
-> +	IT87_DMI_MATCH_GBT("AX370", gigabyte_sio2_force, NULL),
-> +		/* ? + IT8792E/IT8795E */
-> +	IT87_DMI_MATCH_GBT("Z97X-Gaming G1", gigabyte_sio2_force, NULL),
-> +		/* ? + IT8790E */
-> +	IT87_DMI_MATCH_GBT("TRX40 AORUS XTREME", gigabyte_sio2_force, NULL),
-> +		/* IT8688E + IT8792E/IT8795E */
-> +	IT87_DMI_MATCH_GBT("Z390 AORUS ULTRA-CF", gigabyte_sio2_force, NULL),
-> +		/* IT8688E + IT8792E/IT8795E */
-> +	IT87_DMI_MATCH_GBT("Z490 AORUS ELITE AC", it87_dmi_cb, NULL),
-> +		/* IT8688E */
+Changes since v1:
 
-Why list boards with only a single chip ?
+*Renamed fn2reg to fn2 in dtsi file and documentation
+*Renamed plreg to pl in dtsi file and documentation
+*Renamed fanctrl to fan-controller in dtsi file and documentation
+*Adjusted base register range for fan ctrl in dtsi
+*Changed commit description on fan-ctrl device-tree binding
+*Changed register description on fan-ctrl device-tree binding
+*Changed number of supported fans from 16 to 8 in driver code and
+ documentation
+*Modified commit description of fan code
+*Removed support for fan[0-15]_input
+*Removed PWM defines in driver code
+*Added gxp-fan-ctrl to hwmon's index.rst
+*Removed mutex in driver code
+*Added fan_enable support in fan code and documentation
+*Fixed comment in driver code presents -> present
+*Removed unecessary include files in fan code
+*Added comments to describe what power state is and
+ calculations for accessing plreg in fan code
+*Removed use of variable offsets in fan code
+*Fixed GPL header in fan code
+*Changed module description for fan controller
+*Added kfree in case of failure to initialize driver
+*Added missing yaml file to MAINTAINERS*** SUBJECT HERE ***
 
-> +	IT87_DMI_MATCH_GBT("B550 AORUS PRO AC", gigabyte_sio2_force, NULL),
-> +		/* IT8688E + IT8792E/IT8795E */
-> +	IT87_DMI_MATCH_GBT("B560I AORUS PRO AX", it87_dmi_cb, NULL),
-> +		/* IT8689E */
-> +	IT87_DMI_MATCH_GBT("X570 AORUS ELITE WIFI", it87_dmi_cb, NULL),
-> +		/* IT8688E */
-> +	IT87_DMI_MATCH_GBT("X570 AORUS MASTER", gigabyte_sio2_force, NULL),
-> +		/* IT8688E + IT8792E/IT8795E */
-> +	IT87_DMI_MATCH_GBT("X570 AORUS PRO", gigabyte_sio2_force, NULL),
-> +		/* IT8688E + IT8792E/IT8795E */
-> +	IT87_DMI_MATCH_GBT("X570 AORUS PRO WIFI", gigabyte_sio2_force, NULL),
-> +		/* IT8688E + IT8792E/IT8795E */
-> +	IT87_DMI_MATCH_GBT("X570 I AORUS PRO WIFI", it87_dmi_cb, NULL),
-> +		/* IT8688E */
-> +	IT87_DMI_MATCH_GBT("X570S AERO G", gigabyte_sio2_force, NULL),
-> +		/* IT8689E + IT87952E */
+Nick Hawkins (5):
+  hwmon: (gxp-fan-ctrl) Add GXP fan controller
+  dt-bindings: hwmon: Add hpe,gxp-fan-ctrl
+  ARM: dts: add GXP Support for fans and SPI
+  ARM: multi_v7_defconfig: Add GXP Fan and SPI support
+  MAINTAINERS: add gxp fan controller and documents
 
-IT87952E ? Is that chip known to be affected as well ?
+ .../bindings/hwmon/hpe,gxp-fan-ctrl.yaml      |  45 ++++
+ Documentation/hwmon/gxp-fan-ctrl.rst          |  28 ++
+ Documentation/hwmon/index.rst                 |   1 +
+ MAINTAINERS                                   |   3 +
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      |  58 ++++
+ arch/arm/boot/dts/hpe-gxp.dtsi                |  64 +++--
+ arch/arm/configs/multi_v7_defconfig           |   2 +
+ drivers/hwmon/Kconfig                         |   9 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/gxp-fan-ctrl.c                  | 254 ++++++++++++++++++
+ 10 files changed, 446 insertions(+), 19 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
+ create mode 100644 Documentation/hwmon/gxp-fan-ctrl.rst
+ create mode 100644 drivers/hwmon/gxp-fan-ctrl.c
 
-> +	IT87_DMI_MATCH_GBT("X670E AORUS MASTER", it87_dmi_cb, NULL),
-> +		/* IT8689E - Note there may also be a second chip */
+-- 
+2.17.1
 
-Don't add an entry unless known that it is needed.
-
-> +	IT87_DMI_MATCH_GBT("Z690 AORUS PRO DDR4", gigabyte_sio2_force, NULL),
-> +		/* IT8689E + IT87952E */
-> +	IT87_DMI_MATCH_GBT("Z690 AORUS PRO", gigabyte_sio2_force, NULL),
-> +		/* IT8689E + IT87952E */
->  	IT87_DMI_MATCH_VND("nVIDIA", "FN68PT", it87_dmi_cb, &nvidia_fn68pt),
->  	{ }
->  
-> -- 
-> 2.38.1
-> 
