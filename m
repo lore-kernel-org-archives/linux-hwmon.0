@@ -2,348 +2,467 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D81DAC5479D
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Jan 2023 21:26:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49A36C3DA7D
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Jan 2023 21:34:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbjACV0C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 Jan 2023 16:26:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
+        id S233894AbjACVeh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Jan 2023 16:34:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238251AbjACV0B (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Jan 2023 16:26:01 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEF6F26;
-        Tue,  3 Jan 2023 13:25:59 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id d127so26772345oif.12;
-        Tue, 03 Jan 2023 13:25:59 -0800 (PST)
+        with ESMTP id S231156AbjACVeg (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Jan 2023 16:34:36 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE0D12AA2;
+        Tue,  3 Jan 2023 13:34:35 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id s187so28129105oie.10;
+        Tue, 03 Jan 2023 13:34:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=694YS9SOspcSvtjCObhPD7jOKavy/ZO9Dr+Cqvpl+vI=;
-        b=JGSSRyqfzLY10qJoJZA53zCBOOVi51oS1bxGkRM7+xCO0XCMmQMhO115PlCOQwA+H2
-         ml8vZX6d0382kl7/uIzUiAqhKP+P+rKBqhUQyTyIdF+VE7s0qi+DhtJWqIOM4BsP78/f
-         fHLV2o1GkHlANfL+mPMHlEjFPcg7zbfjt3OkL8rB/pDo3R+L5vGoXudaTkjtM3VEP3Cv
-         DWFI7yAyBojxBJ7kyLWk/6rewan5w2biWG/MjNZjrS/PqybYChrneQmuyejOsgYgEa1/
-         dPtAu/bgYsFkeBm+aA2rz/hN8VhJ29eVTWK3pfuY9qpXLbDFKm0zYtVWD7pVVjWDIpYm
-         BLaQ==
+        bh=AC5QJoAZ5rnQq6LLpcC8VbI0ICl3TJ/EMMRWenLyPj0=;
+        b=BxBtbBgYjjDOql1CFs3lbBdR4eYktdg45jZUWRz1HpkE7jy1w84DAl/4BqaoE1Jn2t
+         j3e/g+ff2bbxg5IU8n5ONpjOgsqg/x+46LqN/DTEHJCOKyQFkdyO539WOoLPacH1Rbc5
+         D48Y9BwpijHl3/ze072Ggfrm2+1wiV3ONg8NOn1a/B34c9SQ6CbmJ+IhX2fw/P0yoBAL
+         RGmb8Z5zI5f8XU4HoriG3Mxbungte5k5crCdDbkmTMSNSBjgJbCstKnOTAoLSlv0zds5
+         LWnxNuxinFqWiGk3rHBWpN7zcjo9DmIpCrRFqduUmNQT+X7oTpYRofEUv4IU2S4glzWn
+         W95Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=694YS9SOspcSvtjCObhPD7jOKavy/ZO9Dr+Cqvpl+vI=;
-        b=Aw3Tl3O/4gmE+OWGUgEQdFnjcbDFVHpKIfN0EzgRk0DdQ7/NV4Duj4Xbjmgg2CpbXu
-         7PGnmWIJNriueapEQ/0hy+A4vx++sXESroiyovTMasxzO7zntEA3UakXGPzgOZqd9H0W
-         fMvSbvWVzrOvm+ll0qm1qs4sgUMN1yoxyRZn3FZOGoQ0U5rKXammlDlOX7XQ9Iw6GP5x
-         rzbiVR+/4Ae3wqwAspfe9Ky6+v0NF2Rp5AdSCjBMySwxUD/U0AaK/m1bQPIQcC+fRArO
-         ywNsID/Y8fnTBQIqiMv5fB6tgW8mmZ3sDKWFhfQQCX95TfodOgqQY8X0cbJcjpbz6sE4
-         RDsQ==
-X-Gm-Message-State: AFqh2kqla+OQ7f94jrF5o4Te4HxZuIeNgXXxqfxPY6m5yzpBg/8Mxt0T
-        acXNO5mbm9axZ1YT10L91xQ=
-X-Google-Smtp-Source: AMrXdXt9/RsocZzW+qAGcHc4ol9X0vz443IWbjZYCBf/2L7JyiZ8K61og9r5F7/8YIIMKIYOpD34kw==
-X-Received: by 2002:aca:c246:0:b0:35e:2dc2:ca78 with SMTP id s67-20020acac246000000b0035e2dc2ca78mr18984148oif.57.1672781158958;
-        Tue, 03 Jan 2023 13:25:58 -0800 (PST)
+        bh=AC5QJoAZ5rnQq6LLpcC8VbI0ICl3TJ/EMMRWenLyPj0=;
+        b=hHMhlUBslBf6A9M5c4x/RBTk4wSesKiyoZi8kNRzXKY9SO4JDCFcmgoj48zlZWSct6
+         qzLM9r3/cdZgchLjzFJlQV760GjXQBZTYn5nBYym5q3Pn7/qOyVhsqAta6SlHm2O9fN5
+         cbX4CtEWfcHSKbYxIFyx4iK+yikH2ZHYIOcB9mM5x03yBkztTEftvjU86JKADDc4A4lt
+         9TUUlQGQKpKv2ITup9kN2Cyfa389h4sK2wf9xzQv6WkgbM00wJ7DAAfmBr8XZj0H7pML
+         DBHPmcQ5oopaARPK3NvH2j3g6c9HPQAo+Tl/Ey735osPyL7j7LTOlkqSNnMaOmSJ4upO
+         9amw==
+X-Gm-Message-State: AFqh2kpRJG1SvIf3VXoAPTc+SB/dHv5y9n8DvU94G19Mh4QJAQb2C8uO
+        PvzYi/mpQYF/je2fFRRGi2c=
+X-Google-Smtp-Source: AMrXdXtLpjixByMMEClI1newSB3ojuWHTbN4AqTudWvIZKyhC7luiSI3oZxw3dKZpIerfnZ3+FUCCg==
+X-Received: by 2002:a05:6808:3af:b0:360:ea74:b6b9 with SMTP id n15-20020a05680803af00b00360ea74b6b9mr20248349oie.37.1672781674579;
+        Tue, 03 Jan 2023 13:34:34 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o20-20020a0568080bd400b0036305193c4bsm13613354oik.3.2023.01.03.13.25.58
+        by smtp.gmail.com with ESMTPSA id j9-20020a056808056900b0034d9042758fsm13478924oig.24.2023.01.03.13.34.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 13:25:58 -0800 (PST)
+        Tue, 03 Jan 2023 13:34:34 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 3 Jan 2023 13:25:57 -0800
+Date:   Tue, 3 Jan 2023 13:34:32 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, regressions@lists.linux.dev
-Subject: Re: [PATCH v2] hwmon/coretemp: Simplify platform device handling
-Message-ID: <20230103212557.GA213597@roeck-us.net>
-References: <20230103114620.15319-1-janusz.krzysztofik@linux.intel.com>
+To:     nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, jdelvare@suse.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net,
+        linux@armlinux.org.uk, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 1/5] hwmon: (gxp-fan-ctrl) Add GXP fan controller
+Message-ID: <20230103213432.GA216090@roeck-us.net>
+References: <20230103203654.59322-1-nick.hawkins@hpe.com>
+ <20230103203654.59322-2-nick.hawkins@hpe.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230103114620.15319-1-janusz.krzysztofik@linux.intel.com>
+In-Reply-To: <20230103203654.59322-2-nick.hawkins@hpe.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 12:46:20PM +0100, Janusz Krzysztofik wrote:
-> From: Robin Murphy <robin.murphy@arm.com>
+On Tue, Jan 03, 2023 at 02:36:50PM -0600, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> Coretemp's platform driver is unconventional. All the real work is done
-> globally by the initcall and CPU hotplug notifiers, while the "driver"
-> effectively just wraps an allocation and the registration of the hwmon
-> interface in a long-winded round-trip through the driver core.  The whole
-> logic of dynamically creating and destroying platform devices to bring
-> the interfaces up and down is error prone, since it assumes
-> platform_device_add() will synchronously bind the driver and set drvdata
-> before it returns, thus results in a NULL dereference if drivers_autoprobe
-> is turned off for the platform bus. Furthermore, the unusual approach of
-> doing that from within a CPU hotplug notifier, already commented in the
-> code that it deadlocks suspend, also causes lockdep issues for other
-> drivers or subsystems which may want to legitimately register a CPU
-> hotplug notifier from a platform bus notifier.
+> The GXP SoC can support up to 16 fans through the interface provided by
+> the CPLD. The current support is limited to 8 fans. The fans speeds are
+> controlled via 8 different PWMs which can vary in value from  0-255. The
+> fans are also capable of reporting if they have failed to the CPLD which
+> in turn reports the status to the GXP SoC.
 > 
-> All of these issues can be solved by ripping this unusual behaviour out
-> completely, simply tying the platform devices to the lifetime of the
-> module itself, and directly managing the hwmon interfaces from the
-> hotplug notifiers. There is a slight user-visible change in that
-> /sys/bus/platform/drivers/coretemp will no longer appear, and
-> /sys/devices/platform/coretemp.n will remain present if package n is
-> hotplugged off, but hwmon users should really only be looking for the
-> presence of the hwmon interfaces, whose behaviour remains unchanged.
-> 
-> v2: describe the problem in neutral terms
-> 
-> Link: https://lore.kernel.org/lkml/20220922101036.87457-1-janusz.krzysztofik@linux.intel.com/
-> Link: https://gitlab.freedesktop.org/drm/intel/issues/6641
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 
-Applied to hwmon-next.
-
-Thanks,
-Guenter
+Applied, with two minor changes (see below)
 
 > ---
->  drivers/hwmon/coretemp.c | 128 ++++++++++++++++++---------------------
->  1 file changed, 58 insertions(+), 70 deletions(-)
+> v4:
+>  *Removed unecessary HWMON_PWM_ENABLE
+> v3:
+>  *Removed use of regmap in favor of __iomem
+>  *Removed use of dev and hwmon_dev from drvdata structure
+>  *Fixed missing breaks in switch statements
+>  *Added check for pwm values less than 0
+>  *Removed regmap and slab header file includes
+> v2:
+>  *Changed number of supported fans from 16 to 8 in code
+>  *Remove last sentence of commit description
+>  *Removed support for fan[0-15]_input in code and documentation
+>  *Changed documentation to limit fan count to 7
+>  *Changed documentation license
+>  *Removed PWM defines
+>  *Added gxp-fan-ctrl to hwmon's index.rst
+>  *Removed mutex
+>  *Added fan_enable support to report if the fan is enabled
+>  *Changed presents to present
+>  *Removed unnecessary ()
+>  *Add comment for plreg reads and calculations
+>  *Add comment for the use of platform power state in code
+>  *Removed use of variable offsets and went with hardcoding instead
+>  *Rewrote driver to use devm_hwmon_device_register_with_info()
+>  *Remove unused header files
+>  *Fix GPL header
+>  *Changed module description
+>  *Add kfree in case of failure to get regmaps or resource
+> ---
+>  Documentation/hwmon/gxp-fan-ctrl.rst |  28 +++
+>  Documentation/hwmon/index.rst        |   1 +
+>  drivers/hwmon/Kconfig                |   9 +
+>  drivers/hwmon/Makefile               |   1 +
+>  drivers/hwmon/gxp-fan-ctrl.c         | 254 +++++++++++++++++++++++++++
+>  5 files changed, 293 insertions(+)
+>  create mode 100644 Documentation/hwmon/gxp-fan-ctrl.rst
+>  create mode 100644 drivers/hwmon/gxp-fan-ctrl.c
 > 
-> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> index ca7a9b373bbd6..3e440ebe2508c 100644
-> --- a/drivers/hwmon/coretemp.c
-> +++ b/drivers/hwmon/coretemp.c
-> @@ -588,66 +588,49 @@ static void coretemp_remove_core(struct platform_data *pdata, int indx)
->  		ida_free(&pdata->ida, indx - BASE_SYSFS_ATTR_NO);
->  }
+> diff --git a/Documentation/hwmon/gxp-fan-ctrl.rst b/Documentation/hwmon/gxp-fan-ctrl.rst
+> new file mode 100644
+> index 000000000000..ae3397e81c04
+> --- /dev/null
+> +++ b/Documentation/hwmon/gxp-fan-ctrl.rst
+> @@ -0,0 +1,28 @@
+> +.. SPDX-License-Identifier: GPL-2.0-only
+> +
+> +Kernel driver gxp-fan-ctrl
+> +==========================
+> +
+> +Supported chips:
+> +
+> +  * HPE GXP SOC
+> +
+> +Author: Nick Hawkins <nick.hawkins@hpe.com>
+> +
+> +
+> +Description
+> +-----------
+> +
+> +gxp-fan-ctrl is a driver which provides fan control for the hpe gxp soc.
+> +The driver allows the gathering of fan status and the use of fan
+> +PWM control.
+> +
+> +
+> +Sysfs attributes
+> +----------------
+> +
+> +======================= ===========================================================
+> +pwm[0-7]		Fan 0 to 7 respective PWM value (0-255)
+> +fan[0-7]_fault		Fan 0 to 7 respective fault status: 1 fail, 0 ok
+> +fan[0-7]_enable         Fan 0 to 7 respective enabled status: 1 enabled, 0 disabled
+> +======================= ===========================================================
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index c1d11cf13eef..97819cf5c97f 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -73,6 +73,7 @@ Hardware Monitoring Kernel Drivers
+>     g762
+>     gsc-hwmon
+>     gl518sm
+> +   gxp-fan-ctrl
+>     hih6130
+>     ibmaem
+>     ibm-cffps
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 7ac3daaf59ce..45febd5d5cf7 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -706,6 +706,15 @@ config SENSORS_GPIO_FAN
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called gpio-fan.
 >  
-> -static int coretemp_probe(struct platform_device *pdev)
-> +static int coretemp_device_add(int zoneid)
->  {
-> -	struct device *dev = &pdev->dev;
-> +	struct platform_device *pdev;
->  	struct platform_data *pdata;
-> +	int err;
->  
->  	/* Initialize the per-zone data structures */
-> -	pdata = devm_kzalloc(dev, sizeof(struct platform_data), GFP_KERNEL);
-> +	pdata = kzalloc(sizeof(*pdata), GFP_KERNEL);
->  	if (!pdata)
->  		return -ENOMEM;
->  
-> -	pdata->pkg_id = pdev->id;
-> +	pdata->pkg_id = zoneid;
->  	ida_init(&pdata->ida);
-> -	platform_set_drvdata(pdev, pdata);
->  
-> -	pdata->hwmon_dev = devm_hwmon_device_register_with_groups(dev, DRVNAME,
-> -								  pdata, NULL);
-> -	return PTR_ERR_OR_ZERO(pdata->hwmon_dev);
-> -}
-> -
-> -static int coretemp_remove(struct platform_device *pdev)
-> -{
-> -	struct platform_data *pdata = platform_get_drvdata(pdev);
-> -	int i;
-> +	pdev = platform_device_alloc(DRVNAME, zoneid);
-> +	if (!pdev) {
-> +		err = -ENOMEM;
-> +		goto err_free_pdata;
-> +	}
->  
-> -	for (i = MAX_CORE_DATA - 1; i >= 0; --i)
-> -		if (pdata->core_data[i])
-> -			coretemp_remove_core(pdata, i);
-> +	err = platform_device_add(pdev);
-> +	if (err)
-> +		goto err_put_dev;
->  
-> -	ida_destroy(&pdata->ida);
-> +	platform_set_drvdata(pdev, pdata);
-> +	zone_devices[zoneid] = pdev;
->  	return 0;
-> -}
->  
-> -static struct platform_driver coretemp_driver = {
-> -	.driver = {
-> -		.name = DRVNAME,
-> -	},
-> -	.probe = coretemp_probe,
-> -	.remove = coretemp_remove,
-> -};
-> +err_put_dev:
-> +	platform_device_put(pdev);
-> +err_free_pdata:
-> +	kfree(pdata);
-> +	return err;
+> +config SENSORS_GXP_FAN_CTRL
+> +	tristate "HPE GXP fan controller"
+> +	depends on ARCH_HPE_GXP || COMPILE_TEST
+> +	help
+> +	  If you say yes here you get support for GXP fan control functionality.
+> +
+> +	  The GXP controls fan function via the CPLD through the use of PWM
+> +	  registers. This driver reports status and pwm setting of the fans.
+> +
+>  config SENSORS_HIH6130
+>  	tristate "Honeywell Humidicon HIH-6130 humidity/temperature sensor"
+>  	depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 11d076cad8a2..b5782dc4dc6e 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -83,6 +83,7 @@ obj-$(CONFIG_SENSORS_GL518SM)	+= gl518sm.o
+>  obj-$(CONFIG_SENSORS_GL520SM)	+= gl520sm.o
+>  obj-$(CONFIG_SENSORS_GSC)	+= gsc-hwmon.o
+>  obj-$(CONFIG_SENSORS_GPIO_FAN)	+= gpio-fan.o
+> +obj-$(CONFIG_SENSORS_GXP_FAN_CTRL) += gxp-fan-ctrl.o
+>  obj-$(CONFIG_SENSORS_HIH6130)	+= hih6130.o
+>  obj-$(CONFIG_SENSORS_ULTRA45)	+= ultra45_env.o
+>  obj-$(CONFIG_SENSORS_I5500)	+= i5500_temp.o
+> diff --git a/drivers/hwmon/gxp-fan-ctrl.c b/drivers/hwmon/gxp-fan-ctrl.c
+> new file mode 100644
+> index 000000000000..c7ebd3bbf35b
+> --- /dev/null
+> +++ b/drivers/hwmon/gxp-fan-ctrl.c
+> @@ -0,0 +1,254 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P. */
+> +
+> +#include <linux/err.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+
+Use of BITS() asks for include of linux/bits.h
+
+> +
+> +#define OFS_FAN_INST 0 /* Is 0 because plreg base will be set at INST */
+> +#define OFS_FAN_FAIL 2 /* Is 2 bytes after base */
+> +#define OFS_SEVSTAT 0 /* Is 0 because fn2 base will be set at SEVSTAT */
+> +#define POWER_BIT 24
+
+Tab-aligned defines
+
+> +
+> +struct gxp_fan_ctrl_drvdata {
+> +	void __iomem	*base;
+> +	void __iomem	*plreg;
+> +	void __iomem	*fn2;
+> +};
+> +
+> +static bool fan_installed(struct device *dev, int fan)
+> +{
+> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+> +	u8 val;
+> +
+> +	val = readb(drvdata->plreg + OFS_FAN_INST);
+> +
+> +	return !!(val & BIT(fan));
 > +}
->  
-> -static struct platform_device *coretemp_device_add(unsigned int cpu)
-> +static void coretemp_device_remove(int zoneid)
->  {
-> -	int err, zoneid = topology_logical_die_id(cpu);
-> -	struct platform_device *pdev;
-> -
-> -	if (zoneid < 0)
-> -		return ERR_PTR(-ENOMEM);
-> -
-> -	pdev = platform_device_alloc(DRVNAME, zoneid);
-> -	if (!pdev)
-> -		return ERR_PTR(-ENOMEM);
-> -
-> -	err = platform_device_add(pdev);
-> -	if (err) {
-> -		platform_device_put(pdev);
-> -		return ERR_PTR(err);
-> -	}
-> +	struct platform_device *pdev = zone_devices[zoneid];
-> +	struct platform_data *pdata = platform_get_drvdata(pdev);
->  
-> -	zone_devices[zoneid] = pdev;
-> -	return pdev;
-> +	ida_destroy(&pdata->ida);
-> +	kfree(pdata);
-> +	platform_device_unregister(pdev);
->  }
->  
->  static int coretemp_cpu_online(unsigned int cpu)
-> @@ -671,7 +654,10 @@ static int coretemp_cpu_online(unsigned int cpu)
->  	if (!cpu_has(c, X86_FEATURE_DTHERM))
->  		return -ENODEV;
->  
-> -	if (!pdev) {
-> +	pdata = platform_get_drvdata(pdev);
-> +	if (!pdata->hwmon_dev) {
-> +		struct device *hwmon;
 > +
->  		/* Check the microcode version of the CPU */
->  		if (chk_ucode_version(cpu))
->  			return -EINVAL;
-> @@ -682,9 +668,11 @@ static int coretemp_cpu_online(unsigned int cpu)
->  		 * online. So, initialize per-pkg data structures and
->  		 * then bring this core online.
->  		 */
-> -		pdev = coretemp_device_add(cpu);
-> -		if (IS_ERR(pdev))
-> -			return PTR_ERR(pdev);
-> +		hwmon = hwmon_device_register_with_groups(&pdev->dev, DRVNAME,
-> +							  pdata, NULL);
-> +		if (IS_ERR(hwmon))
-> +			return PTR_ERR(hwmon);
-> +		pdata->hwmon_dev = hwmon;
->  
->  		/*
->  		 * Check whether pkgtemp support is available.
-> @@ -694,7 +682,6 @@ static int coretemp_cpu_online(unsigned int cpu)
->  			coretemp_add_core(pdev, cpu, 1);
->  	}
->  
-> -	pdata = platform_get_drvdata(pdev);
->  	/*
->  	 * Check whether a thread sibling is already online. If not add the
->  	 * interface for this CPU core.
-> @@ -713,18 +700,14 @@ static int coretemp_cpu_offline(unsigned int cpu)
->  	struct temp_data *tdata;
->  	int i, indx = -1, target;
->  
-> -	/*
-> -	 * Don't execute this on suspend as the device remove locks
-> -	 * up the machine.
-> -	 */
-> +	/* No need to tear down any interfaces for suspend */
->  	if (cpuhp_tasks_frozen)
->  		return 0;
->  
->  	/* If the physical CPU device does not exist, just return */
-> -	if (!pdev)
-> -		return 0;
-> -
->  	pd = platform_get_drvdata(pdev);
-> +	if (!pd->hwmon_dev)
+> +static long fan_failed(struct device *dev, int fan)
+> +{
+> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+> +	u8 val;
+> +
+> +	val = readb(drvdata->plreg + OFS_FAN_FAIL);
+> +
+> +	return !!(val & BIT(fan));
+> +}
+> +
+> +static long fan_enabled(struct device *dev, int fan)
+> +{
+> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+> +	u32 val;
+> +
+> +	/*
+> +	 * Check the power status as if the platform is off the value
+> +	 * reported for the PWM will be incorrect. Report fan as
+> +	 * disabled.
+> +	 */
+> +	val = readl(drvdata->fn2 + OFS_SEVSTAT);
+> +
+> +	return !!((val & BIT(POWER_BIT)) && fan_installed(dev, fan));
+> +}
+> +
+> +static int gxp_pwm_write(struct device *dev, u32 attr, int channel, long val)
+> +{
+> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+> +
+> +	switch (attr) {
+> +	case hwmon_pwm_input:
+> +		if (val > 255 || val < 0)
+> +			return -EINVAL;
+> +		writeb(val, drvdata->base + channel);
 > +		return 0;
->  
->  	for (i = 0; i < NUM_REAL_CORES; i++) {
->  		if (pd->cpu_map[i] == topology_core_id(cpu)) {
-> @@ -756,13 +739,14 @@ static int coretemp_cpu_offline(unsigned int cpu)
->  	}
->  
->  	/*
-> -	 * If all cores in this pkg are offline, remove the device. This
-> -	 * will invoke the platform driver remove function, which cleans up
-> -	 * the rest.
-> +	 * If all cores in this pkg are offline, remove the interface.
->  	 */
-> +	tdata = pd->core_data[PKG_SYSFS_ATTR_NO];
->  	if (cpumask_empty(&pd->cpumask)) {
-> -		zone_devices[topology_logical_die_id(cpu)] = NULL;
-> -		platform_device_unregister(pdev);
-> +		if (tdata)
-> +			coretemp_remove_core(pd, PKG_SYSFS_ATTR_NO);
-> +		hwmon_device_unregister(pd->hwmon_dev);
-> +		pd->hwmon_dev = NULL;
->  		return 0;
->  	}
->  
-> @@ -770,7 +754,6 @@ static int coretemp_cpu_offline(unsigned int cpu)
->  	 * Check whether this core is the target for the package
->  	 * interface. We need to assign it to some other cpu.
->  	 */
-> -	tdata = pd->core_data[PKG_SYSFS_ATTR_NO];
->  	if (tdata && tdata->cpu == cpu) {
->  		target = cpumask_first(&pd->cpumask);
->  		mutex_lock(&tdata->update_lock);
-> @@ -789,7 +772,7 @@ static enum cpuhp_state coretemp_hp_online;
->  
->  static int __init coretemp_init(void)
->  {
-> -	int err;
-> +	int i, err;
->  
->  	/*
->  	 * CPUID.06H.EAX[0] indicates whether the CPU has thermal
-> @@ -805,20 +788,22 @@ static int __init coretemp_init(void)
->  	if (!zone_devices)
->  		return -ENOMEM;
->  
-> -	err = platform_driver_register(&coretemp_driver);
-> -	if (err)
-> -		goto outzone;
-> +	for (i = 0; i < max_zones; i++) {
-> +		err = coretemp_device_add(i);
-> +		if (err)
-> +			goto outzone;
+> +	default:
+> +		return -EOPNOTSUPP;
 > +	}
->  
->  	err = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "hwmon/coretemp:online",
->  				coretemp_cpu_online, coretemp_cpu_offline);
->  	if (err < 0)
-> -		goto outdrv;
-> +		goto outzone;
->  	coretemp_hp_online = err;
->  	return 0;
->  
-> -outdrv:
-> -	platform_driver_unregister(&coretemp_driver);
->  outzone:
-> +	while (i--)
-> +		coretemp_device_remove(i);
->  	kfree(zone_devices);
->  	return err;
->  }
-> @@ -826,8 +811,11 @@ module_init(coretemp_init)
->  
->  static void __exit coretemp_exit(void)
->  {
-> +	int i;
+> +}
 > +
->  	cpuhp_remove_state(coretemp_hp_online);
-> -	platform_driver_unregister(&coretemp_driver);
-> +	for (i = 0; i < max_zones; i++)
-> +		coretemp_device_remove(i);
->  	kfree(zone_devices);
->  }
->  module_exit(coretemp_exit)
+> +static int gxp_fan_ctrl_write(struct device *dev, enum hwmon_sensor_types type,
+> +			      u32 attr, int channel, long val)
+> +{
+> +	switch (type) {
+> +	case hwmon_pwm:
+> +		return gxp_pwm_write(dev, attr, channel, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int gxp_fan_read(struct device *dev, u32 attr, int channel, long *val)
+> +{
+> +	switch (attr) {
+> +	case hwmon_fan_enable:
+> +		*val = fan_enabled(dev, channel);
+> +		return 0;
+> +	case hwmon_fan_fault:
+> +		*val = fan_failed(dev, channel);
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int gxp_pwm_read(struct device *dev, u32 attr, int channel, long *val)
+> +{
+> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+> +	u32 reg;
+> +
+> +	/*
+> +	 * Check the power status of the platform. If the platform is off
+> +	 * the value reported for the PWM will be incorrect. In this case
+> +	 * report a PWM of zero.
+> +	 */
+> +
+> +	reg = readl(drvdata->fn2 + OFS_SEVSTAT);
+> +
+> +	if (reg & BIT(POWER_BIT))
+> +		*val = fan_installed(dev, channel) ? readb(drvdata->base + channel) : 0;
+> +	else
+> +		*val = 0;
+> +
+> +	return 0;
+> +}
+> +
+> +static int gxp_fan_ctrl_read(struct device *dev, enum hwmon_sensor_types type,
+> +			     u32 attr, int channel, long *val)
+> +{
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		return gxp_fan_read(dev, attr, channel, val);
+> +	case hwmon_pwm:
+> +		return gxp_pwm_read(dev, attr, channel, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static umode_t gxp_fan_ctrl_is_visible(const void *_data,
+> +				       enum hwmon_sensor_types type,
+> +				       u32 attr, int channel)
+> +{
+> +	umode_t mode = 0;
+> +
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		switch (attr) {
+> +		case hwmon_fan_enable:
+> +		case hwmon_fan_fault:
+> +			mode = 0444;
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	case hwmon_pwm:
+> +		switch (attr) {
+> +		case hwmon_pwm_input:
+> +			mode = 0644;
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return mode;
+> +}
+> +
+> +static const struct hwmon_ops gxp_fan_ctrl_ops = {
+> +	.is_visible = gxp_fan_ctrl_is_visible,
+> +	.read = gxp_fan_ctrl_read,
+> +	.write = gxp_fan_ctrl_write,
+> +};
+> +
+> +static const struct hwmon_channel_info *gxp_fan_ctrl_info[] = {
+> +	HWMON_CHANNEL_INFO(fan,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE),
+> +	HWMON_CHANNEL_INFO(pwm,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_chip_info gxp_fan_ctrl_chip_info = {
+> +	.ops = &gxp_fan_ctrl_ops,
+> +	.info = gxp_fan_ctrl_info,
+> +
+> +};
+> +
+> +static int gxp_fan_ctrl_probe(struct platform_device *pdev)
+> +{
+> +	struct gxp_fan_ctrl_drvdata *drvdata;
+> +	struct resource *res;
+> +	struct device *dev = &pdev->dev;
+> +	struct device *hwmon_dev;
+> +
+> +	drvdata = devm_kzalloc(dev, sizeof(struct gxp_fan_ctrl_drvdata),
+> +			       GFP_KERNEL);
+> +	if (!drvdata)
+> +		return -ENOMEM;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	drvdata->base = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(drvdata->base))
+> +		return dev_err_probe(dev, PTR_ERR(drvdata->base),
+> +				     "failed to map base\n");
+> +
+> +	drvdata->plreg = devm_platform_ioremap_resource_byname(pdev,
+> +							       "pl");
+> +	if (IS_ERR(drvdata->plreg))
+> +		return dev_err_probe(dev, PTR_ERR(drvdata->plreg),
+> +				     "failed to map plreg\n");
+> +
+> +	drvdata->fn2 = devm_platform_ioremap_resource_byname(pdev,
+> +							     "fn2");
+> +	if (IS_ERR(drvdata->fn2))
+> +		return dev_err_probe(dev, PTR_ERR(drvdata->fn2),
+> +				     "failed to map fn2\n");
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
+> +							 "hpe_gxp_fan_ctrl",
+> +							 drvdata,
+> +							 &gxp_fan_ctrl_chip_info,
+> +							 NULL);
+> +
+> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+> +}
+> +
+> +static const struct of_device_id gxp_fan_ctrl_of_match[] = {
+> +	{ .compatible = "hpe,gxp-fan-ctrl", },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, gxp_fan_ctrl_of_match);
+> +
+> +static struct platform_driver gxp_fan_ctrl_driver = {
+> +	.probe		= gxp_fan_ctrl_probe,
+> +	.driver = {
+> +		.name	= "gxp-fan-ctrl",
+> +		.of_match_table = gxp_fan_ctrl_of_match,
+> +	},
+> +};
+> +module_platform_driver(gxp_fan_ctrl_driver);
+> +
+> +MODULE_AUTHOR("Nick Hawkins <nick.hawkins@hpe.com>");
+> +MODULE_DESCRIPTION("HPE GXP fan controller");
+> +MODULE_LICENSE("GPL");
