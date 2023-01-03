@@ -2,89 +2,110 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A0A6C3DA7A
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Jan 2023 21:39:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECE69C3DA7A
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Jan 2023 01:31:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjABVjN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 Jan 2023 16:39:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
+        id S234059AbjACBb4 convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 Jan 2023 20:31:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbjABVjN (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Jan 2023 16:39:13 -0500
-X-Greylist: delayed 589 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 02 Jan 2023 13:39:12 PST
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155E2B1C2;
-        Mon,  2 Jan 2023 13:39:11 -0800 (PST)
-Received: from hatter.bewilderbeest.net (97-113-250-99.tukw.qwest.net [97.113.250.99])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 406C59E;
-        Mon,  2 Jan 2023 13:29:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1672694962;
-        bh=GXgDixVN2v8Oc04bdIaziXMcEz5MIwaiT/ZeCIbmMqg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LTo8r23kLZD/9lLzLaWNLTP/6Dg6z3BRlTzUrenvQhgu9oicIvVfsabH7qgFq+C3s
-         m6qVzEDjDUmwS2LBtrI6pSntjkJLMLc3muR5/dQYvwEelvUZcYfz74LQvrKmjEPowr
-         2JbR13BmxyPDwtwgPI98k84CaSFBMPkuakdW/B9o=
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Cc:     Zev Weiss <zev@bewilderbeest.net>, Joel Stanley <joel@jms.id.au>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-kernel@vger.kernel.org, stable@kernel.org
-Subject: [PATCH] hwmon: (nct6775) Fix incorrect parenthesization in nct6775_write_fan_div()
-Date:   Mon,  2 Jan 2023 13:28:57 -0800
-Message-Id: <20230102212857.5670-1-zev@bewilderbeest.net>
-X-Mailer: git-send-email 2.39.0
+        with ESMTP id S232646AbjACBbz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Jan 2023 20:31:55 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F406199;
+        Mon,  2 Jan 2023 17:31:51 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 3B73924DF03;
+        Tue,  3 Jan 2023 09:31:49 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 3 Jan
+ 2023 09:31:49 +0800
+Received: from ubuntu.localdomain (113.72.146.202) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 3 Jan
+ 2023 09:31:48 +0800
+From:   Hal Feng <hal.feng@starfivetech.com>
+To:     <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>
+CC:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Conor Dooley <conor@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 0/4] Temperature sensor support for StarFive JH7110 RISC-V SoC
+Date:   Tue, 3 Jan 2023 09:31:41 +0800
+Message-ID: <20230103013145.9570-1-hal.feng@starfivetech.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [113.72.146.202]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Commit 4ef2774511dc ("hwmon: (nct6775) Convert register access to
-regmap API") fumbled the shifting & masking of the fan_div values such
-that odd-numbered fan divisors would always be set to zero.  Fix it so
-that we actually OR in the bits we meant to.
+This patch series adds temperature sensor support for StarFive JH7110 SoC.
+The last two patches depend on series [1].
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-Fixes: 4ef2774511dc ("hwmon: (nct6775) Convert register access to regmap API")
-Cc: stable@kernel.org # v5.19+
----
+[1]: https://lore.kernel.org/all/20221220011247.35560-1-hal.feng@starfivetech.com/
 
-This bug got noticed during review [0] and the fix was incorporated
-into v3 of the patch series [1], but then I somehow managed to
-accidentally revert the fix in v4 [2] that actually got applied.
+Emil Renner Berthing (4):
+  dt-bindings: hwmon: Add starfive,jh71x0-temp
+  hwmon: (sfctemp) Add StarFive JH71x0 temperature sensor
+  riscv: dts: starfive: jh7110: Add temperature sensor node
+  riscv: dts: starfive: visionfive-2: Add thermal-zones
 
-I'm fairly confident this is correct, but I don't have any nct6775
-hardware to test on (this code path is only used on that specific
-chip, not others in the family).  If any one who does can try it out
-and report back that would of course be welcome.
+ .../bindings/hwmon/starfive,jh71x0-temp.yaml  |  75 ++++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/sfctemp.rst               |  33 ++
+ MAINTAINERS                                   |   8 +
+ .../jh7110-starfive-visionfive-2.dtsi         |  28 ++
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  13 +
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/sfctemp.c                       | 350 ++++++++++++++++++
+ 9 files changed, 519 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
+ create mode 100644 Documentation/hwmon/sfctemp.rst
+ create mode 100644 drivers/hwmon/sfctemp.c
 
-[0] https://lore.kernel.org/linux-hwmon/YiiMfJV3bjUmoUcV@hatter.bewilderbeest.net/
-[1] https://lore.kernel.org/linux-hwmon/20220426071848.11619-3-zev@bewilderbeest.net/
-[2] https://lore.kernel.org/linux-hwmon/20220427010154.29749-3-zev@bewilderbeest.net/
 
- drivers/hwmon/nct6775-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-index da9ec6983e13..c54233f0369b 100644
---- a/drivers/hwmon/nct6775-core.c
-+++ b/drivers/hwmon/nct6775-core.c
-@@ -1150,7 +1150,7 @@ static int nct6775_write_fan_div(struct nct6775_data *data, int nr)
- 	if (err)
- 		return err;
- 	reg &= 0x70 >> oddshift;
--	reg |= data->fan_div[nr] & (0x7 << oddshift);
-+	reg |= (data->fan_div[nr] & 0x7) << oddshift;
- 	return nct6775_write_value(data, fandiv_reg, reg);
- }
- 
+base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
+prerequisite-patch-id: 4dc515731ce237184553c1606ffb3afaeb51c3d8
+prerequisite-patch-id: 09c98554df52d17ba5fd604125f8cdd62cbe80d1
+prerequisite-patch-id: a798370d170dc2bcc79ed86f741c21c1e6d87c78
+prerequisite-patch-id: bd9fd8b5cb2376dc7a5e08e1a1fbb969cf475926
+prerequisite-patch-id: c57ebb83bc43ccd2a8366ff166eb499da1e1d2cf
+prerequisite-patch-id: a1673a9e9f19d6fab5a51abb721e54e36636f067
+prerequisite-patch-id: 94860423c7acc9025249d4bb36652a585bd0a797
+prerequisite-patch-id: b5084253283929d9a6d0e66c350400c7c85d034d
+prerequisite-patch-id: 6e369dbe9dca2785e4ea7d0b80e525e227a90a6e
+prerequisite-patch-id: e08806183c152714c563f3a21c6d7b2f539c4d6e
+prerequisite-patch-id: 79db8036abdc48fd36da227652ec62627a6b548b
+prerequisite-patch-id: 06971b8e6bddc0e87e63bfdb0ce8bfb653bd73aa
+prerequisite-patch-id: 16309a0e23811a2c55d2e56886de3e8eccc51554
+prerequisite-patch-id: bf4f7ab0b6cfa90b6e49e66c7d75ed2eaaebbe78
+prerequisite-patch-id: 38468d532e87867990055d3320679f18c5f52278
+prerequisite-patch-id: 4710f2ac22dca0bdd9ff5d744d2c37cab3c74515
+prerequisite-patch-id: 6bb9a780c62af3bcc2368dfd20303c7b1bc91e23
+prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
+prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
+prerequisite-patch-id: e3b986b9c60b2b93b7812ec174c9e1b4cfb14c97
+prerequisite-patch-id: a2b3a9cff8a683422eb0ccf3a0850091401812d4
+prerequisite-patch-id: e0ba7af0f8d3d41844da9fbcba14b548cbc18f55
+prerequisite-patch-id: bc0176325c11a632c6abaa83e54e891cc92d1c74
 -- 
-2.39.0
+2.38.1
 
