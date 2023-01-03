@@ -2,55 +2,55 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 979D9C3DA7D
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Jan 2023 21:35:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CCD3C3DA7D
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Jan 2023 21:36:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbjACVfS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 Jan 2023 16:35:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
+        id S238342AbjACVgO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Jan 2023 16:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbjACVfR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Jan 2023 16:35:17 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0951261B;
-        Tue,  3 Jan 2023 13:35:16 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id e17-20020a9d7311000000b00678202573f1so19819233otk.8;
-        Tue, 03 Jan 2023 13:35:16 -0800 (PST)
+        with ESMTP id S233600AbjACVgM (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Jan 2023 16:36:12 -0500
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42F31112;
+        Tue,  3 Jan 2023 13:36:09 -0800 (PST)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1433ef3b61fso38258445fac.10;
+        Tue, 03 Jan 2023 13:36:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8P3ginyQKonop89J+7DfYw/82uc/ZrqaQ0PG8kTwCUs=;
-        b=aKWf8bJ2k99asm2tdDzzSf+UesabGJMsbYuOQAyTZrAnsTCM9+2cZ575ukwyyO2Ptp
-         4acoeTFmOi4aebndnbsjqyUgwEYYs3IVKDmfmnXE5LUJV2AuMAUQOtxLsc3hnojfk3Jc
-         VXNXNkXPuuiqT759l3b9TYMYmVunrQ48R4Tba7zuPALTY5+cMT5MtEGw1hwh0dzasqME
-         MzGZ/czI8Lm1JvcZNF+zWCWeN+R7aMpB1JECMh6dJCJ/7fCh6hOwlKoI291Vvy6qTsg8
-         5+shTGz4gDQaK989SAESyHkTP92crWqmnZqAHTHic5a26q+gMvIWiRhohgFu7mx7AbE3
-         +/eQ==
+        bh=HNUKxvrHmcIA89tmaFwCfLMzI7iP8jQKEoV7Sjy4mpw=;
+        b=qkkDWQE2iuKR6V2q8puC6QQ1JkkAuMlQfV82w7KE+o3ub1x0WBJYkL3+DYTN/ADave
+         9dqttdRGRrzlWbH9p6GKYGVQjcL/H3jmm6PlTfWlYbY+EGBp0l/C8rqlJlrtHePGkshx
+         UnzMdnpR1UAiOQckh/ZTQN3KYQVURvQsCabddCco13B+XGmasfTDurLy76JWIhYULXac
+         SF36nWS36b2QvUEuNCrR1mrrWXG0L7Q32xVBKrTNpLrOrfoHJprAI9Z8zzlPn1NM4zvX
+         PKZNgIPCfq1srf1gsT1wrLV4pqMJyEIH9Kb92vuq/h99qkMaUGIuuQWHNzU/EGR1FINi
+         xI1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8P3ginyQKonop89J+7DfYw/82uc/ZrqaQ0PG8kTwCUs=;
-        b=aDSmDnoWtwh7RI9SZmD178CoBLDR9ifQ/EYxthAIYUqlI/bwQPdBxgm23SOtRxow07
-         858XdsleOAUArb9ieo8jshTAXbkLSvK9etUWXz/QlMSRyidIcY7/7pRePt/AwCAf92uR
-         3Rf78CF1INdJnNaz+kGEiKCLy3O8ZuuV4b8f2jq65rXXFW+ga9UrQyl1YKqmzdLA78qe
-         JtHKlNwMKrCConUhCWMSjlfyUHTeZIL/0z6KwzbeTKLTCH06lUbyL2mi2pXfu67wSsex
-         VQdpX6o/KSvFqIrYEJjJhXfBNF7Zgno2EUYglImn+6Vsfbyk9iQtGpIEr6gkaM4DxZgK
-         0U/A==
-X-Gm-Message-State: AFqh2kr6mUvJFsQnvlxOsS9J91bp6caiXKHqs14whzr/QSpRLyyr34EW
-        51Fy5RzHr1MkE6hg0c036/g=
-X-Google-Smtp-Source: AMrXdXuFoDGPeAwH/nDZ3FkyWvhEXgHn6dPjZyJ/mzFc5kwKVIuBNaUayVo5Cwy1W/onbY3+f+hd4A==
-X-Received: by 2002:a9d:4701:0:b0:671:81c2:6406 with SMTP id a1-20020a9d4701000000b0067181c26406mr22659086otf.38.1672781715760;
-        Tue, 03 Jan 2023 13:35:15 -0800 (PST)
+        bh=HNUKxvrHmcIA89tmaFwCfLMzI7iP8jQKEoV7Sjy4mpw=;
+        b=rC6toxAXKDjv9wiMsVZVgcI1NuEO+anBxaVShs9STYC1j3z0lE0rMpYRJLB1ubRn2x
+         Lj8L5YSNLoNSdu7lOUwENKeOeEvkGOeKJqdo+20AChT4h5Ou9ga9D0rP7FPoo422L07W
+         gp8FJY82Z1Fl0GTF4clhLZxoUe+4VS6OIXih2GclWYXq3ux6dA6vweqOsEfFtWibZyjt
+         B0kMMdXsmpe4mje4dcp2nWSLilcuYemd9b3YFiUGtxy/7ddtUqPK+TIcJGbQd/pGyShl
+         vNNnc14sn+UlWrHNF2YjhJw/LVU5hxlgBc0HgIzqhENbwGUStjz9TccCAeB9Sw0AqYwI
+         l9Uw==
+X-Gm-Message-State: AFqh2koYinq77s+W1TgBZuMhupDx29Rd6wVcDS1sq2AvgWtO7r0loYVe
+        A63XPE2lk/lthJj3IwZatrQ=
+X-Google-Smtp-Source: AMrXdXsiQhODPNOQiY3t4RUTcdLet7k6YGCoqyaS22wMtqPFUVzvxjEdtQpnGYsrJYPPsaLMzuT13g==
+X-Received: by 2002:a05:6870:a1a8:b0:143:89ce:80ee with SMTP id a40-20020a056870a1a800b0014389ce80eemr23687305oaf.20.1672781769263;
+        Tue, 03 Jan 2023 13:36:09 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id db6-20020a0568306b0600b00683e4084740sm11448796otb.10.2023.01.03.13.35.15
+        by smtp.gmail.com with ESMTPSA id fp15-20020a056870658f00b0013ae39d0575sm14750693oab.15.2023.01.03.13.36.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 13:35:15 -0800 (PST)
+        Tue, 03 Jan 2023 13:36:08 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 3 Jan 2023 13:35:14 -0800
+Date:   Tue, 3 Jan 2023 13:36:07 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     nick.hawkins@hpe.com
 Cc:     verdun@hpe.com, jdelvare@suse.com, robh+dt@kernel.org,
@@ -58,27 +58,26 @@ Cc:     verdun@hpe.com, jdelvare@suse.com, robh+dt@kernel.org,
         linux@armlinux.org.uk, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 2/5] dt-bindings: hwmon: Add hpe,gxp-fan-ctrl
-Message-ID: <20230103213514.GA216224@roeck-us.net>
+Subject: Re: [PATCH v4 5/5] MAINTAINERS: add gxp fan controller and documents
+Message-ID: <20230103213607.GA216349@roeck-us.net>
 References: <20230103203654.59322-1-nick.hawkins@hpe.com>
- <20230103203654.59322-3-nick.hawkins@hpe.com>
+ <20230103203654.59322-6-nick.hawkins@hpe.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230103203654.59322-3-nick.hawkins@hpe.com>
+In-Reply-To: <20230103203654.59322-6-nick.hawkins@hpe.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 02:36:51PM -0600, nick.hawkins@hpe.com wrote:
+On Tue, Jan 03, 2023 at 02:36:54PM -0600, nick.hawkins@hpe.com wrote:
 > From: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> Create documentation for the binding to support control of the fans on
-> HPE platforms.
+> Add the gxp-fan-ctrl.c and gxp-fan-ctrl.rst in hwmon
+> driver/documentation.
 > 
 > Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Reviewed-by: Guenter Roek <linux@roek-us.net>
 
 Applied to hwmon-next.
 
@@ -91,64 +90,29 @@ Guenter
 > v3:
 >  *No change
 > v2:
->  *Changed plreg to pl
->  *Changed fn2reg to reg
->  *Edited descriptions for all registers
->  *Changed fanctrl to fan-controller
->  *Changed commit description
+>  *Added missing gxp-fan-ctrl.yaml
 > ---
->  .../bindings/hwmon/hpe,gxp-fan-ctrl.yaml      | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
+>  MAINTAINERS | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml b/Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
-> new file mode 100644
-> index 000000000000..4a52aac6be72
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/hpe,gxp-fan-ctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: HPE GXP Fan Controller
-> +
-> +maintainers:
-> +  - Nick Hawkins <nick.hawkins@hpe.com>
-> +
-> +description: |
-> +  The HPE GXP fan controller controls the fans through an external CPLD
-> +  device that connects to the fans.
-> +
-> +properties:
-> +  compatible:
-> +    const: hpe,gxp-fan-ctrl
-> +
-> +  reg:
-> +    items:
-> +      - description: Fan controller PWM
-> +      - description: Programmable logic
-> +      - description: Function 2
-> +
-> +  reg-names:
-> +    items:
-> +      - const: base
-> +      - const: pl
-> +      - const: fn2
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    fan-controller@1000c00 {
-> +      compatible = "hpe,gxp-fan-ctrl";
-> +      reg = <0x1000c00 0x200>, <0xd1000000 0xff>, <0x80200000 0x100000>;
-> +      reg-names = "base", "pl", "fn2";
-> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1daadaa4d48b..00b52be102d6 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2216,13 +2216,16 @@ ARM/HPE GXP ARCHITECTURE
+>  M:	Jean-Marie Verdun <verdun@hpe.com>
+>  M:	Nick Hawkins <nick.hawkins@hpe.com>
+>  S:	Maintained
+> +F:	Documentation/hwmon/gxp-fan-ctrl.rst
+>  F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
+> +F:	Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
+>  F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
+>  F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
+>  F:	arch/arm/boot/dts/hpe-bmc*
+>  F:	arch/arm/boot/dts/hpe-gxp*
+>  F:	arch/arm/mach-hpe/
+>  F:	drivers/clocksource/timer-gxp.c
+> +F:	drivers/hwmon/gxp-fan-ctrl.c
+>  F:	drivers/spi/spi-gxp.c
+>  F:	drivers/watchdog/gxp-wdt.c
+>  
