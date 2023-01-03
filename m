@@ -2,330 +2,274 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDB3CC3DA7D
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Jan 2023 11:48:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A2E4C46467
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Jan 2023 12:27:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237435AbjACLsh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 Jan 2023 06:48:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
+        id S233783AbjACM1B (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Jan 2023 07:27:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237491AbjACLsX (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Jan 2023 06:48:23 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD09710555;
-        Tue,  3 Jan 2023 03:47:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672746477; x=1704282477;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8dZkxVOI6PyfoIo2vV+E9Vgk67Nph2gFq+gQLmyC8KE=;
-  b=a5fmkryapHgJazzLwF1w/1IhEH5jg3G7F2x5+iW67Qp7ZjBdqvw2Q96w
-   1SAGRlyNj22fMxyMNphG1l7RZky27LNEg5/Xfs33FqVWO8Ls9qiDLndcz
-   /gFyOyw5AsE/IzqccyDU2DC2k/BAW8s+kvmr2KOrx2M43mzvAJHAgT9XI
-   8rBZBuA5o5xeWuRVT/vnLJV/xMUztdUYhYfkGUFAyKuRZ60c+zgKdSMDy
-   WyLDrW31CzlRebSWSvlPgr0PRRkTNJwuVEXr1FO/Cv9gMHGrMhUqu6eJM
-   p0M94yvUmkpND9LsSS4tmCR00Wgcu0t1p3RgsKwrLhBotrL51Lyhcr7jH
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="407899903"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="407899903"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 03:47:35 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="723239138"
-X-IronPort-AV: E=Sophos;i="5.96,296,1665471600"; 
-   d="scan'208";a="723239138"
-Received: from jkrzyszt-mobl1.ger.corp.intel.com (HELO jkrzyszt-mobl1.lan) ([10.213.19.68])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 03:47:32 -0800
-From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, regressions@lists.linux.dev
-Subject: [PATCH v2] hwmon/coretemp: Simplify platform device handling
-Date:   Tue,  3 Jan 2023 12:46:20 +0100
-Message-Id: <20230103114620.15319-1-janusz.krzysztofik@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S233197AbjACM1A (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Jan 2023 07:27:00 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF696C17;
+        Tue,  3 Jan 2023 04:26:58 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id d127so25588032oif.12;
+        Tue, 03 Jan 2023 04:26:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=elKk2CRSCXPsY6Uz3HKUaHc/eYbE3f9rF9bSm8jtO2I=;
+        b=OH4PVapnQd07SeLW6bw529lkkZCa8fwCb8g2WRF6pu0+4Zk3KyvxbQWEH18zpPQa5B
+         TKqlMxZ9pgQIv5oXp+PgQ3O0InTIQ7SRpQ1TFwFr+nSWmnPRz3rWPuRW/eMbtol1c+HL
+         WdcfcY4S/cT+d1P+XXZxEPh5izLk4BfDxX8CppdCetkrJpexn+1jDxI3qdSUHD3cCIJq
+         aR+/WOLD2abYdrJHvTf0b9oPsYhurUIhtJgT4njvgr8n9RyDCmNh3jpqIMq0LYw8un6e
+         6nCNtq1fYQE0ScJrrKOmxRuB5bOlNzZHG2lFSa6ARlS44dHaH+lEmU9l6/j83bdqUwIo
+         cjvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=elKk2CRSCXPsY6Uz3HKUaHc/eYbE3f9rF9bSm8jtO2I=;
+        b=1UrHqCV2QyrMGb+9h8mlkTqlmWDUULOcQWa1bOyucP3Xmr6cSSwuTP82CF21qX2gjC
+         XYu39+1NQRr2OMFFSggfzyrpem1Wq+wI7CuX2+ue5TKYYyZkrs8nDRE2F1rY8UfrL/Pv
+         o3u54mxyXH09VRgzFx5GZuA6i3/AYWdRuZDWuuTtMyEyKDN7n7LBhWVfbpfPenVW0nQH
+         Z5MQxLD4NmT0OJwNAv/H3ZET+i20OIiIFFTkbOiOVP+yF2ZLYupTqXX9z8QN1++EXvbM
+         2XXdmIkTk5XVVY/VmahB6PVau/DrGUHsrsPO/z07q/jKixOLYzlT0R/4lc8FEKF1H9L1
+         p/Qw==
+X-Gm-Message-State: AFqh2kpyM6JCtEgAC7sGhzDBr0wMvWrFlYT+jjcGi44zKKtEcuwWgyvV
+        mKSjb/JRar1o2S5MtApZl+M=
+X-Google-Smtp-Source: AMrXdXtdYpuvW7N8FQu+ndJI9ufhCfipkxs2XjNtUxlYKb8z0obdFAMZrmjXU+tAWvPkQmTfVschZA==
+X-Received: by 2002:a05:6808:1828:b0:35b:e207:e50 with SMTP id bh40-20020a056808182800b0035be2070e50mr25082119oib.43.1672748818032;
+        Tue, 03 Jan 2023 04:26:58 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p14-20020a54460e000000b00359ad661d3csm13028532oip.30.2023.01.03.04.26.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 04:26:57 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 3 Jan 2023 04:26:56 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH RESEND v6 1/5] hwmon: (pmbus/core): Add interrupt support
+Message-ID: <20230103122656.GB190111@roeck-us.net>
+References: <20221214080715.2700442-1-Naresh.Solanki@9elements.com>
+ <20221229144012.GA21213@roeck-us.net>
+ <ecdf887d-d2c8-d9d4-ab19-3b30ee1d4607@9elements.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ecdf887d-d2c8-d9d4-ab19-3b30ee1d4607@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Robin Murphy <robin.murphy@arm.com>
+On Tue, Jan 03, 2023 at 12:18:49PM +0530, Naresh Solanki wrote:
+> Hi Guenter,
+> 
+> On 29-12-2022 08:10 pm, Guenter Roeck wrote:
+> > On Wed, Dec 14, 2022 at 09:07:11AM +0100, Naresh Solanki wrote:
+> > > From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > > 
+> > > Implement PMBUS irq handler.
+> > > 
+> > > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > 
+> > $ scripts/checkpatch.pl --strict index.html
+> > CHECK: Blank lines aren't necessary after an open brace '{'
+> > #131: FILE: drivers/hwmon/pmbus/pmbus_core.c:3088:
+> > +	for (i = 0; i < data->info->pages; i++) {
+> > +
+> > 
+> > CHECK: Alignment should match open parenthesis
+> > #183: FILE: drivers/hwmon/pmbus/pmbus_core.c:3140:
+> > +	ret = devm_request_threaded_irq(dev, client->irq, NULL, pmbus_fault_handler,
+> > +			      0, "pmbus-irq", data);
+> > 
+> > CHECK: Please use a blank line after function/struct/union/enum declarations
+> > #197: FILE: drivers/hwmon/pmbus/pmbus_core.c:3154:
+> >   }
+> > +static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
+> > 
+> > total: 0 errors, 0 warnings, 3 checks, 109 lines checked
+> > 
+> > NOTE: For some of the reported defects, checkpatch may be able to
+> >        mechanically convert to the typical style using --fix or --fix-inplace.
+> > 
+> > index.html has style problems, please review.
+> > 
+> > Please run checkpatch --strict on your patches.
+> > Also see Documentation/hwmon/submitting-patches.rst.
+> I will take care of these errors in the updated version.
+> > 
+> > > ---
+> > >   drivers/hwmon/pmbus/pmbus.h      |  2 +-
+> > >   drivers/hwmon/pmbus/pmbus_core.c | 84 ++++++++++++++++++++++++++++++++
+> > >   2 files changed, 85 insertions(+), 1 deletion(-)
+> > > 
+> > > 
+> > > base-commit: 364ffd2537c44cb6914ff5669153f4a86fffad29
+> > > 
+> > > diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> > > index 10fb17879f8e..6b2e6cf93b19 100644
+> > > --- a/drivers/hwmon/pmbus/pmbus.h
+> > > +++ b/drivers/hwmon/pmbus/pmbus.h
+> > > @@ -26,7 +26,7 @@ enum pmbus_regs {
+> > >   	PMBUS_CAPABILITY		= 0x19,
+> > >   	PMBUS_QUERY			= 0x1A,
+> > > -
+> > > +	PMBUS_SMBALERT_MASK		= 0x1B,
+> > >   	PMBUS_VOUT_MODE			= 0x20,
+> > >   	PMBUS_VOUT_COMMAND		= 0x21,
+> > >   	PMBUS_VOUT_TRIM			= 0x22,
+> > > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> > > index 95e95783972a..244fd2597252 100644
+> > > --- a/drivers/hwmon/pmbus/pmbus_core.c
+> > > +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> > > @@ -3072,11 +3072,89 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+> > >   	return 0;
+> > >   }
+> > > +
+> > > +static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg, u8 val)
+> > > +{
+> > > +	return pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
+> > > +}
+> > > +
+> > > +static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
+> > > +{
+> > > +	struct pmbus_data *data = pdata;
+> > > +	struct i2c_client *client = to_i2c_client(data->dev);
+> > > +	int i, status;
+> > > +
+> > > +	for (i = 0; i < data->info->pages; i++) {
+> > > +
+> > > +		mutex_lock(&data->update_lock);
+> > > +		status = pmbus_read_status_word(client, i);
+> > > +		if (status < 0) {
+> > > +			mutex_unlock(&data->update_lock);
+> > > +			return status;
+> > > +		}
+> > > +
+> > > +		if (status & ~(PB_STATUS_OFF | PB_STATUS_BUSY | PB_STATUS_POWER_GOOD_N))
+> > > +			pmbus_clear_fault_page(client, i);
+> > > +
+> > > +		mutex_unlock(&data->update_lock);
+> > > +	}
+> > > +
+> > > +	return IRQ_HANDLED;
+> > > +}
+> > > +
+> > > +static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
+> > > +{
+> > > +	struct device *dev = &client->dev;
+> > > +	const struct pmbus_regulator_status_category *cat;
+> > > +	const struct pmbus_regulator_status_assoc *bit;
+> > > +	int i, j, err, ret, func;
+> > > +	u8 mask;
+> > > +
+> > > +	for (i = 0; i < data->info->pages; i++) {
+> > > +		func = data->info->func[i];
+> > > +
+> > > +		for (j = 0; j < ARRAY_SIZE(pmbus_regulator_flag_map); j++) {
+> > > +			cat = &pmbus_regulator_flag_map[j];
+> > > +			if (!(func & cat->func))
+> > > +				continue;
+> > > +			mask = 0;
+> > > +			for (bit = cat->bits; bit->pflag; bit++)
+> > > +				mask |= bit->pflag;
+> > > +
+> > > +			err = pmbus_write_smbalert_mask(client, i, cat->reg, ~mask);
+> > > +			if (err)
+> > > +				dev_err(dev, "Failed to set smbalert for reg 0x%02x\n",	cat->reg);
+> > 
+> > This concerns me. It might mean that the chip does not support
+> > PMBUS_SMBALERT_MASK. If so, there would be lots of error messages.
+> After going through the PMBus specification, it appears that this should not
+> be an issue unless there is a violation of the specification.
 
-Coretemp's platform driver is unconventional. All the real work is done
-globally by the initcall and CPU hotplug notifiers, while the "driver"
-effectively just wraps an allocation and the registration of the hwmon
-interface in a long-winded round-trip through the driver core.  The whole
-logic of dynamically creating and destroying platform devices to bring
-the interfaces up and down is error prone, since it assumes
-platform_device_add() will synchronously bind the driver and set drvdata
-before it returns, thus results in a NULL dereference if drivers_autoprobe
-is turned off for the platform bus. Furthermore, the unusual approach of
-doing that from within a CPU hotplug notifier, already commented in the
-code that it deadlocks suspend, also causes lockdep issues for other
-drivers or subsystems which may want to legitimately register a CPU
-hotplug notifier from a platform bus notifier.
+PMBus chips have lots of issues which violate the specification.
+Have a look at the various drivers and the workarounds implemented there.
+You'll need to check if the command/register is supported before using it.
+Also, if you want to keep the error message, make it dev_err_once().
 
-All of these issues can be solved by ripping this unusual behaviour out
-completely, simply tying the platform devices to the lifetime of the
-module itself, and directly managing the hwmon interfaces from the
-hotplug notifiers. There is a slight user-visible change in that
-/sys/bus/platform/drivers/coretemp will no longer appear, and
-/sys/devices/platform/coretemp.n will remain present if package n is
-hotplugged off, but hwmon users should really only be looking for the
-presence of the hwmon interfaces, whose behaviour remains unchanged.
+Either case, an error is an error, not to be ignored. An error here
+should result in an error abort.
 
-v2: describe the problem in neutral terms
-
-Link: https://lore.kernel.org/lkml/20220922101036.87457-1-janusz.krzysztofik@linux.intel.com/
-Link: https://gitlab.freedesktop.org/drm/intel/issues/6641
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
----
- drivers/hwmon/coretemp.c | 128 ++++++++++++++++++---------------------
- 1 file changed, 58 insertions(+), 70 deletions(-)
-
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index ca7a9b373bbd6..3e440ebe2508c 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -588,66 +588,49 @@ static void coretemp_remove_core(struct platform_data *pdata, int indx)
- 		ida_free(&pdata->ida, indx - BASE_SYSFS_ATTR_NO);
- }
- 
--static int coretemp_probe(struct platform_device *pdev)
-+static int coretemp_device_add(int zoneid)
- {
--	struct device *dev = &pdev->dev;
-+	struct platform_device *pdev;
- 	struct platform_data *pdata;
-+	int err;
- 
- 	/* Initialize the per-zone data structures */
--	pdata = devm_kzalloc(dev, sizeof(struct platform_data), GFP_KERNEL);
-+	pdata = kzalloc(sizeof(*pdata), GFP_KERNEL);
- 	if (!pdata)
- 		return -ENOMEM;
- 
--	pdata->pkg_id = pdev->id;
-+	pdata->pkg_id = zoneid;
- 	ida_init(&pdata->ida);
--	platform_set_drvdata(pdev, pdata);
- 
--	pdata->hwmon_dev = devm_hwmon_device_register_with_groups(dev, DRVNAME,
--								  pdata, NULL);
--	return PTR_ERR_OR_ZERO(pdata->hwmon_dev);
--}
--
--static int coretemp_remove(struct platform_device *pdev)
--{
--	struct platform_data *pdata = platform_get_drvdata(pdev);
--	int i;
-+	pdev = platform_device_alloc(DRVNAME, zoneid);
-+	if (!pdev) {
-+		err = -ENOMEM;
-+		goto err_free_pdata;
-+	}
- 
--	for (i = MAX_CORE_DATA - 1; i >= 0; --i)
--		if (pdata->core_data[i])
--			coretemp_remove_core(pdata, i);
-+	err = platform_device_add(pdev);
-+	if (err)
-+		goto err_put_dev;
- 
--	ida_destroy(&pdata->ida);
-+	platform_set_drvdata(pdev, pdata);
-+	zone_devices[zoneid] = pdev;
- 	return 0;
--}
- 
--static struct platform_driver coretemp_driver = {
--	.driver = {
--		.name = DRVNAME,
--	},
--	.probe = coretemp_probe,
--	.remove = coretemp_remove,
--};
-+err_put_dev:
-+	platform_device_put(pdev);
-+err_free_pdata:
-+	kfree(pdata);
-+	return err;
-+}
- 
--static struct platform_device *coretemp_device_add(unsigned int cpu)
-+static void coretemp_device_remove(int zoneid)
- {
--	int err, zoneid = topology_logical_die_id(cpu);
--	struct platform_device *pdev;
--
--	if (zoneid < 0)
--		return ERR_PTR(-ENOMEM);
--
--	pdev = platform_device_alloc(DRVNAME, zoneid);
--	if (!pdev)
--		return ERR_PTR(-ENOMEM);
--
--	err = platform_device_add(pdev);
--	if (err) {
--		platform_device_put(pdev);
--		return ERR_PTR(err);
--	}
-+	struct platform_device *pdev = zone_devices[zoneid];
-+	struct platform_data *pdata = platform_get_drvdata(pdev);
- 
--	zone_devices[zoneid] = pdev;
--	return pdev;
-+	ida_destroy(&pdata->ida);
-+	kfree(pdata);
-+	platform_device_unregister(pdev);
- }
- 
- static int coretemp_cpu_online(unsigned int cpu)
-@@ -671,7 +654,10 @@ static int coretemp_cpu_online(unsigned int cpu)
- 	if (!cpu_has(c, X86_FEATURE_DTHERM))
- 		return -ENODEV;
- 
--	if (!pdev) {
-+	pdata = platform_get_drvdata(pdev);
-+	if (!pdata->hwmon_dev) {
-+		struct device *hwmon;
-+
- 		/* Check the microcode version of the CPU */
- 		if (chk_ucode_version(cpu))
- 			return -EINVAL;
-@@ -682,9 +668,11 @@ static int coretemp_cpu_online(unsigned int cpu)
- 		 * online. So, initialize per-pkg data structures and
- 		 * then bring this core online.
- 		 */
--		pdev = coretemp_device_add(cpu);
--		if (IS_ERR(pdev))
--			return PTR_ERR(pdev);
-+		hwmon = hwmon_device_register_with_groups(&pdev->dev, DRVNAME,
-+							  pdata, NULL);
-+		if (IS_ERR(hwmon))
-+			return PTR_ERR(hwmon);
-+		pdata->hwmon_dev = hwmon;
- 
- 		/*
- 		 * Check whether pkgtemp support is available.
-@@ -694,7 +682,6 @@ static int coretemp_cpu_online(unsigned int cpu)
- 			coretemp_add_core(pdev, cpu, 1);
- 	}
- 
--	pdata = platform_get_drvdata(pdev);
- 	/*
- 	 * Check whether a thread sibling is already online. If not add the
- 	 * interface for this CPU core.
-@@ -713,18 +700,14 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	struct temp_data *tdata;
- 	int i, indx = -1, target;
- 
--	/*
--	 * Don't execute this on suspend as the device remove locks
--	 * up the machine.
--	 */
-+	/* No need to tear down any interfaces for suspend */
- 	if (cpuhp_tasks_frozen)
- 		return 0;
- 
- 	/* If the physical CPU device does not exist, just return */
--	if (!pdev)
--		return 0;
--
- 	pd = platform_get_drvdata(pdev);
-+	if (!pd->hwmon_dev)
-+		return 0;
- 
- 	for (i = 0; i < NUM_REAL_CORES; i++) {
- 		if (pd->cpu_map[i] == topology_core_id(cpu)) {
-@@ -756,13 +739,14 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	}
- 
- 	/*
--	 * If all cores in this pkg are offline, remove the device. This
--	 * will invoke the platform driver remove function, which cleans up
--	 * the rest.
-+	 * If all cores in this pkg are offline, remove the interface.
- 	 */
-+	tdata = pd->core_data[PKG_SYSFS_ATTR_NO];
- 	if (cpumask_empty(&pd->cpumask)) {
--		zone_devices[topology_logical_die_id(cpu)] = NULL;
--		platform_device_unregister(pdev);
-+		if (tdata)
-+			coretemp_remove_core(pd, PKG_SYSFS_ATTR_NO);
-+		hwmon_device_unregister(pd->hwmon_dev);
-+		pd->hwmon_dev = NULL;
- 		return 0;
- 	}
- 
-@@ -770,7 +754,6 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	 * Check whether this core is the target for the package
- 	 * interface. We need to assign it to some other cpu.
- 	 */
--	tdata = pd->core_data[PKG_SYSFS_ATTR_NO];
- 	if (tdata && tdata->cpu == cpu) {
- 		target = cpumask_first(&pd->cpumask);
- 		mutex_lock(&tdata->update_lock);
-@@ -789,7 +772,7 @@ static enum cpuhp_state coretemp_hp_online;
- 
- static int __init coretemp_init(void)
- {
--	int err;
-+	int i, err;
- 
- 	/*
- 	 * CPUID.06H.EAX[0] indicates whether the CPU has thermal
-@@ -805,20 +788,22 @@ static int __init coretemp_init(void)
- 	if (!zone_devices)
- 		return -ENOMEM;
- 
--	err = platform_driver_register(&coretemp_driver);
--	if (err)
--		goto outzone;
-+	for (i = 0; i < max_zones; i++) {
-+		err = coretemp_device_add(i);
-+		if (err)
-+			goto outzone;
-+	}
- 
- 	err = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "hwmon/coretemp:online",
- 				coretemp_cpu_online, coretemp_cpu_offline);
- 	if (err < 0)
--		goto outdrv;
-+		goto outzone;
- 	coretemp_hp_online = err;
- 	return 0;
- 
--outdrv:
--	platform_driver_unregister(&coretemp_driver);
- outzone:
-+	while (i--)
-+		coretemp_device_remove(i);
- 	kfree(zone_devices);
- 	return err;
- }
-@@ -826,8 +811,11 @@ module_init(coretemp_init)
- 
- static void __exit coretemp_exit(void)
- {
-+	int i;
-+
- 	cpuhp_remove_state(coretemp_hp_online);
--	platform_driver_unregister(&coretemp_driver);
-+	for (i = 0; i < max_zones; i++)
-+		coretemp_device_remove(i);
- 	kfree(zone_devices);
- }
- module_exit(coretemp_exit)
--- 
-2.25.1
-
+> > 
+> > > +		}
+> > > +
+> > > +		pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_CML, 0xff);
+> > > +		pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_OTHER, 0xff);
+> > > +		pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_MFR_SPECIFIC, 0xff);
+> > 
+> > Why check the return value from pmbus_write_smbalert_mask above but not here ?
+> Thank you for pointing out the oversight. I will make sure to include an
+> error check at this point.
+> > 
+> > > +		if (data->info->func[i] & PMBUS_HAVE_FAN12)
+> > > +			pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_FAN_12, 0xff);
+> > > +		if (data->info->func[i] & PMBUS_HAVE_FAN34)
+> > > +			pmbus_write_smbalert_mask(client, i, PMBUS_STATUS_FAN_34, 0xff);
+> > > +	}
+> > > +
+> > > +	/* Register notifiers - can fail if IRQ is not given */
+> > 
+> > The comment does not make sense. pmbus_irq_setup() is not called
+> > if the interrupt "is not given".
+> Yes. The comment here is not relevant and will be removed.
+> > 
+> > > +	ret = devm_request_threaded_irq(dev, client->irq, NULL, pmbus_fault_handler,
+> > > +			      0, "pmbus-irq", data);
+> > > +	if (ret) {
+> > > +		dev_warn(dev, "IRQ disabled %d\n", ret);
+> > 
+> > This is not a warning, it is an error.
+> Thank you for bringing this to my attention. I will make sure to update the
+> code to reflect that this is an error.
+> > 
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > >   #else
+> > 
+> > This is still in regulator code. I said several times that this is not
+> > acceptable.
+> Thank you for pointing out the mistake. I will make sure to correct this in
+> the next revision.
+> > 
+> > >   static int pmbus_regulator_register(struct pmbus_data *data)
+> > >   {
+> > >   	return 0;
+> > >   }
+> > > +static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
+> > > +{
+> > > +	return 0;
+> > > +}
+> > >   #endif
+> > >   static struct dentry *pmbus_debugfs_dir;	/* pmbus debugfs directory */
+> > > @@ -3441,6 +3519,12 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
+> > >   	if (ret)
+> > >   		return ret;
+> > > +	if (client->irq > 0) {
+> > > +		ret = pmbus_irq_setup(client, data);
+> > > +		if (ret)
+> > > +			return ret;
+> > > +	}
+> > > +
+> > >   	ret = pmbus_init_debugfs(client, data);
+> > >   	if (ret)
+> > >   		dev_warn(dev, "Failed to register debugfs\n");
+> 
+> Thanks,
+> Naresh
