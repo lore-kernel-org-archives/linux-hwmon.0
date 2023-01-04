@@ -2,181 +2,180 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9093BC5479D
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Jan 2023 22:14:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 111BAC3DA7D
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Jan 2023 00:37:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbjACWOK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 Jan 2023 17:14:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        id S230219AbjADAhq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Jan 2023 19:37:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234043AbjACWOI (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Jan 2023 17:14:08 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB5FF71;
-        Tue,  3 Jan 2023 14:14:08 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id r130so28258934oih.2;
-        Tue, 03 Jan 2023 14:14:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K1IksS8NxxXXZYII/OPwlDewaxwz5V+ENNWWsENNd3U=;
-        b=ejJpFhOUTCkKi7QY8QrTP7v0x6Gg8ffP257/zLnvfmXki/CzK0hKkK4Y+BoVV5493a
-         nHI5xUgKyIYKNDH5+YXeiZzU2J3xVmDc1KArcBMoqWrKplB5immB8R5HqjRS2aNubiIL
-         WHuwIQHuTiZouMVC3U0tvyTmhToR8tRvU6VPw+3j48PAcKAmxaI0ATSMRN/dAWv+jnvv
-         RsyHFSm6w8hzTxFMy33FjvnCtnRYEb1GBvKMyFqnpsBT2EwyeGOmbZ/m+OYXoxRUIDNT
-         3jxxOnmfUQkWZmDKklHCuLgtI31FkbWia8urHZ0IYl7xMEay9sZjKnEUPQ6fMCO2s58n
-         P28Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K1IksS8NxxXXZYII/OPwlDewaxwz5V+ENNWWsENNd3U=;
-        b=BZPG+tDcBt4OTT6ZAUDjgYFDeSFxid0XXSXOMeqBJtNcjePHaicDvglCDAqlF3Zap4
-         9myaCl3W+9vDp9ckQxKrqmq/f4OhziUTJ24hCc051OCCJ+dxiscbqyT126fqaDU5heBw
-         c/h23ZWuj3dkhpX9X7vEQURUxWkHhYY8qQuCTM5lNCvIr7gQNc4UkkhlU/sDh6xY0VwH
-         7wtVIk+WsRckJJJcOoqsmw6a8HswPF+1opNR9pMLnRwNH8EvpcSFxu/Cl8Cy087sprvN
-         NVP4kOO/dkU6t0vyy7/eECB+r5y/4sa9AfWDhLQAjqXxt4/4AvH09REchbzqBwQk4Nsz
-         tYZw==
-X-Gm-Message-State: AFqh2kr0LWi/IWBO8ANaAbNuj4oJ8C8H1Q0g+hb5vyCAb40ZOSKEG0Lb
-        RJ5zTnqArNPSFKE5hmOoub0=
-X-Google-Smtp-Source: AMrXdXsj1u6ooXmWsaBlvs9AC+gDm/4awnmYnYB9Um0hPJ/NuIZvtGDq5unbn7E3nvgUDUAR/6uz1w==
-X-Received: by 2002:a05:6808:6d4:b0:363:a6c3:8dd3 with SMTP id m20-20020a05680806d400b00363a6c38dd3mr7133019oih.44.1672784047526;
-        Tue, 03 Jan 2023 14:14:07 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n67-20020acabd46000000b0035b451d80afsm13468032oif.58.2023.01.03.14.14.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 14:14:07 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 3 Jan 2023 14:14:05 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/4] dt-bindings: hwmon: Add starfive,jh71x0-temp
-Message-ID: <20230103221405.GA217696@roeck-us.net>
-References: <20230103013145.9570-1-hal.feng@starfivetech.com>
- <20230103013145.9570-2-hal.feng@starfivetech.com>
+        with ESMTP id S230352AbjADAhl (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Jan 2023 19:37:41 -0500
+Received: from ipmail03.adl6.internode.on.net (ipmail03.adl6.internode.on.net [150.101.137.143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF28FC43
+        for <linux-hwmon@vger.kernel.org>; Tue,  3 Jan 2023 16:37:39 -0800 (PST)
+IronPort-SDR: LCHpatM3idzortOqTGByyaBdz8UyThgPHQrKQADBSV5vFq13gyHAXABtpvHZp/wrnukshgGA7U
+ BnVKqcZn3LOVRoJY/6tNgTZQmsj7NFcjmO8cs83urS/uVt3TnSGg7RCEPVEyILKWmgrptkTC+s
+ p+lh7BXEKWfai5+JOkmSrp+gJlzJ45i1beVuiqI/xsEc7MnzNdJTShRRwKXnZup4GZrfnmPGoG
+ YUeSDIWr3ZVMDl68Q0fxRyZLvHYQfHQWjkgaS7B3GYveWlftgmAv6PG4ZZEPVOYNJdQuQRnXjf
+ Dhas/ZzaMfxbtvnVAwNXzwnH
+X-SMTP-MATCH: 0
+X-IPAS-Result: =?us-ascii?q?A2AGAQBjybRjjPQc8jxaHAEBAQEBAQcBARIBAQQEAQFAC?=
+ =?us-ascii?q?YE1BAEBCwGCLIJflXCfNw8BDwEBRAQBAYUFAoURJjcGDgECBAEBAQEDAgMBA?=
+ =?us-ascii?q?QEBAQEDAQEGAQEBAQEBBgQUAQEBAUBSBwtSBwtYBweBQQuBYRMLAzENhlcBA?=
+ =?us-ascii?q?QEDQAEBNwEPCw4KLlcGE4J+gyOvHIE0gQGCCAEBBoJjmmWBXgmBQAGMWoNOe?=
+ =?us-ascii?q?kM/gU6CUYFuPoREhj6MLoxnCoE9fIEnDmw3AxkrHUADCzsyCkA1CwtLKxobB?=
+ =?us-ascii?q?4EKKigVAwQEAwIGEwMiAg0oMRQEKRMNJyZrCQIDImEFAwMEKC0JQAcVESQ8B?=
+ =?us-ascii?q?1Y3AQQDAg8fNwYDCQMCHk9yLhETBQMLFSpHBAg2BQYcNhICCA8SDwYmQw5CN?=
+ =?us-ascii?q?zYTBlwBKgsOEwNQgU4EL4FdCgYpKJ0IdRmkKoEyjCaUAIN4gVCfQoFEgjWMW?=
+ =?us-ascii?q?phRLZcZgkugF4RzAgoHFoF4gX9NHxmDIk8BAgEBAQ0BAgEBAwECAQEBCQEBA?=
+ =?us-ascii?q?QGOHQwNCYIKjDhhOwIHCwEBAwmMIwEB?=
+IronPort-PHdr: A9a23:tyeezh0VSC8uFbMZsmDPn1BlVkEcU/3cNA8J8dwskbtRfKO589LvO
+ VGZ5PkrhUKaFYzB4KdCjOzb+7vlRXRG+5uEt2wPNZ1UAhEJhZ9EwAUpDJyJVRKrfqe4PScwR
+ ZwQX1Q9oBmG
+IronPort-Data: A9a23:Urj8ya0jEAdi5WsmKPbD5e53kn2cJEfYwER7XKvMYLTBsI5bpzNUn
+ zYbXT/TbPbbZzTxct1zO4my8UIBscCHnYU1GgY++C8xQngU85qeXtiVJ03+ZiiYJJTIQBhu4
+ 5sVMNOZc84dQy6HrH9BEJC4/SEmj/3gqpkQqQLgEnosLeOxYH550XqPo8Zg3sgwx4LR7zql4
+ bsemeWGULOY82cc3lw8u/rrRCxH5JweiBtA1rDpTa0jUPf2zhH5PbpHTU2DByKQrrp8QoZWc
+ 93+IISRpQs1yfuM5uSNyd4XemVSKlLb0JPnZnB+A8BOiTAazsA+PzpS2Pc0MS9qZzu1c99Z+
+ fBrirCVSjkSIqjOse4iAgt/HxpeMvgTkFPHCSDXXc27xUzaaD3n2fxxAkYsMcsV//sxAG0I/
+ OFwxDIlMEjF3b7shujrDLMw2qzPL+GyVG8bkn96xDfaJf08SI/NRL/Go9JdwXExioZHAJ4yY
+ uJDOGczM0qdPUUn1lE/BcsFg7+3wVjGTB56qny5o5QJ+Dn45VkkuFTqGIGNIYzQH5Q9clyjj
+ mbH+XnpRxEFMduZ4SSK/2jqheLVmy7/HoUIG9WQ9PJnhEOa3GE7EwANWB2wpvzRokq/Xc9PA
+ 1YT9yEt6LUpskqmUrHAswaQ/ibB5EJGHoAAVrdmtEeW1qPI4g3fGnALT3hKb9lgvdJeqSEWO
+ kGhrvbPOhBKs4OuVXef372r/CGVNRM1IjpXDcMbdjct797mqYA1qxvASNd/DaK45uEZ/xmuk
+ lhmSwBg3N0uYd43O7aTuAuc0231+vAlWiZsu1yNBjr7hu9sTNP9D7FE/2Q3+t5pEe51pHG6r
+ XQCltn2AAsmV8nVzERhrM0rEa7h3PGYLD2UvldrEoJJythA0yD7ONoMunQkdAIzbppCYiPgf
+ E7Y/x9J654VN3yvK6ZqC25QNyjI5fS7fTgGfqqPBjarXnSXXFXYlM2JTRTOt10BaGB2zckC1
+ W6zKK5A90oyB6V91yaRTOwAy7ItzS1W7TqNGsqkkEz5i+XGOy79pVI53L2mMLFRAESs/l69z
+ jqjH5DTo/mieLehOXKModZ7wa4icSZjXsieRzNrmh6reVI9SDt7Wpc9MJs9Y4MtnqJJm/3O8
+ 23VZ6Or4ASXuJEzEi3TMioLVV8adconxZ7NFXB1YwrANrlKSdrH0ZrzgLNsLeZ7qbI/lK4qJ
+ xTHEu3Zaslypv3802x1RfHAQEZKLXxHXCqCYHioZiYRZZllS1Cb89PoZFK/piIUBzW5stEy5
+ bCly0XaTdwKWl06XsrRbfuuyXK3vGQcwbwtBxGQeocOJ0i8opJ3LyHRj+MsJ59eIxv0xgyci
+ 1ScDyAH9LvErIIC+dXUgbyJ8tWyGOxkE0sEQ2TWtO7kNSTT8me575VHVeKEIWLUWG/uofXwb
+ v9c0P/7KvFBkVNX9YtwVb92lPps69zqrr5c7wJlAHSSMQvzUOs4fCTZ0JAW5KNXx7JftQ+nY
+ W61+4FXaeeTJcfoMF8NPw57PO6N4vEjnGWA5/oCPxSo7SB6y7OLTEFOMkTekydaNrZ0bt8oz
+ Op96s4b7wuz1kgjPtqc1HsG/WWQNToLSaw4uJYADMnmjxdty10EaIGFUn3655SGatNtNEg2I
+ 2bK2/KY3+wCmxXPIygpCHzA/etBnpBQ6hpE+181IQjbkNTyma5l1RJcxj07UwBJw0gVyOl0I
+ GVqaRF4KPnc5Ttun8QfDWmgFxsaXk/HogmrlwFMzj2cFRX0EHfRJXE8MqCR5E8YtWlbe35S4
+ ejAmmriVD/reuD33zczABA686a7FYIsqQCSytq6G8mlHoUhZWa3iKGZYztaohTqNso9mUnbq
+ LQ45+13c6D6a3IdrqBT51N2DljMpM1o/FB/fMw=
+IronPort-HdrOrdr: A9a23:tuIWH6oK2yOQkvm548GTptIaV5r7eYIsimQD101hICG9Evbzqy
+ lhpoV56faSskd2ZJhAo6HmBEHjKUmwyXcR2+Us1NiZLWvbUQeTTb2KqLGSpgEIeBeOjtK1t5
+ 0OT0EWMrSZZmSSz/yKhDVQeOxP/DDoysCVbKvlvg5QpY4GUdAa0+5gMHflLqRpfng7OXPnLu
+ vn2iKXzwDQBEgqUg==
+X-IronPort-Anti-Spam-Filtered: true
+Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
+  by ipmail03.adl6.internode.on.net with ESMTP; 04 Jan 2023 11:07:37 +1030
+Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
+        (authenticated bits=0)
+        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 3040bSLG3044805
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Wed, 4 Jan 2023 11:37:29 +1100
+Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 3040bSLG3044805
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
+        s=s1; t=1672792649; bh=lvzGsmNhCr7S4rHYT5ynS5NVg9qxnaiPQIQ1IlRDSGs=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=ALqBe9wB8of6eZOQyKHKUrhHmJVo0P12sRnoJ/4ApEiqIVFCrQis9roL4ctO4Py7v
+         0OFK7Kc3/BpUUyt08s89hRZqBtaOyzStb5xC4+BSTVNLIz+kC4AqrpWu1XYINnvmgT
+         M9kRAuhcLWLscB6pqug8X21BHRI7ENGjDej41jH396lR04gho8dIJgd9Ppxa79CgmM
+         jM6PCSWUI5gwaSaWs9GT9J4aTUW49l1IHzkMxSapqhCZncVfQyJejfD57tM3q0/74x
+         EB2V6gaXQUGpZp75A5YUPESVx8PiIGFD7modaQl97jXv6AAyc5HgNLDZxU/HAaXT/R
+         eo0x/yJv9SFJw==
+Message-ID: <164ad5b0da8309728955ff06b7cae863c8d8f3df.camel@crawford.emu.id.au>
+Subject: Re: [PATCH v1 1/2] hwmon: (it87) Allow calling superio_enter
+ outside mux
+From:   Frank Crawford <frank@crawford.emu.id.au>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Date:   Wed, 04 Jan 2023 11:37:28 +1100
+In-Reply-To: <20230103183707.GA204971@roeck-us.net>
+References: <20230103064612.404401-1-frank@crawford.emu.id.au>
+         <20230103064612.404401-2-frank@crawford.emu.id.au>
+         <20230103183707.GA204971@roeck-us.net>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103013145.9570-2-hal.feng@starfivetech.com>
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Wed, 04 Jan 2023 11:37:29 +1100 (AEDT)
+X-Virus-Scanned: clamav-milter 0.103.7 at bits.crawford.emu.id.au
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 09:31:42AM +0800, Hal Feng wrote:
-> From: Emil Renner Berthing <kernel@esmil.dk>
-> 
-> Add bindings for the temperature sensor on the StarFive JH7100 and
-> JH7110 SoCs.
-> 
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+On Tue, 2023-01-03 at 10:37 -0800, Guenter Roeck wrote:
+> On Tue, Jan 03, 2023 at 05:46:11PM +1100, Frank Crawford wrote:
+> > Allow for superio_enter to be called outside mux, in particular for
+>=20
+> "outside mux" is really a bad wording. I had to look into the code
+> to understand what it means. "without requesting the muxed memory
+> region", maybe.
+>=20
+> Guenter
 
-The previous version of this bindings document (v3, 
-https://patchwork.kernel.org/project/linux-hwmon/patch/20210726171802.1052716-2-kernel@esmil.dk/
-had been reviewed by Rob Herring. Even though this version is named differently
-(starfive,jh71x0-temp.yaml instead of starfive,jh7100-temp.yaml), the old version
-should be referenced, and there should be a change log.
+Will update with better wording, such as you suggest.
+>=20
+> > initialisation of the second chipset, which must be entered, but
+> > never
+> > exited.
+>=20
+> The second chipset is not "entered", it must enter configuration
+> mode (or be put into configuration mode). The name of the function
+> does not reflect the associated functionality.
+>=20
+> Please rephrase.
 
-Guenter
+Will do.
 
-> ---
->  .../bindings/hwmon/starfive,jh71x0-temp.yaml  | 75 +++++++++++++++++++
->  1 file changed, 75 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml b/Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
-> new file mode 100644
-> index 000000000000..2600881e2cdc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
-> @@ -0,0 +1,75 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/starfive,jh71x0-temp.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive JH71x0 Temperature Sensor
-> +
-> +maintainers:
-> +  - Emil Renner Berthing <kernel@esmil.dk>
-> +
-> +description: |
-> +  StarFive Technology Co. JH71x0 embedded temperature sensor
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - starfive,jh7100-temp
-> +      - starfive,jh7110-temp
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 2
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    items:
-> +      - const: "sense"
-> +      - const: "bus"
-> +
-> +  '#thermal-sensor-cells':
-> +    const: 0
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    minItems: 2
-> +    maxItems: 2
-> +
-> +  reset-names:
-> +    items:
-> +      - const: "sense"
-> +      - const: "bus"
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - interrupts
-> +  - resets
-> +  - reset-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/starfive-jh7100.h>
-> +    #include <dt-bindings/reset/starfive-jh7100.h>
-> +
-> +    tmon@124a0000 {
-> +        compatible = "starfive,jh7100-temp";
-> +        reg = <0x124a0000 0x10000>;
-> +        clocks = <&clkgen JH7100_CLK_TEMP_SENSE>,
-> +                 <&clkgen JH7100_CLK_TEMP_APB>;
-> +        clock-names = "sense", "bus";
-> +        #thermal-sensor-cells = <0>;
-> +        interrupts = <122>;
-> +        resets = <&rstgen JH7100_RSTN_TEMP_SENSE>,
-> +                 <&rstgen JH7100_RSTN_TEMP_APB>;
-> +        reset-names = "sense", "bus";
-> +    };
+Do you believe the function should be renamed as well?
+>=20
+> Thanks,
+> Guenter
+
+Regards
+Frank
+>=20
+> >=20
+> > Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
+> > ---
+> > =A0drivers/hwmon/it87.c | 13 +++++++++----
+> > =A01 file changed, 9 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+> > index 9997f76b1f4a..4ebce2c661d7 100644
+> > --- a/drivers/hwmon/it87.c
+> > +++ b/drivers/hwmon/it87.c
+> > @@ -87,6 +87,14 @@ static struct platform_device *it87_pdev[2];
+> > =A0#define=A0=A0=A0=A0=A0=A0=A0=A0DEVID=A0=A0=A00x20=A0=A0=A0=A0/* Regi=
+ster: Device ID */
+> > =A0#define=A0=A0=A0=A0=A0=A0=A0=A0DEVREV=A0=A00x22=A0=A0=A0=A0/* Regist=
+er: Device Revision */
+> > =A0
+> > +static inline void __superio_enter(int ioreg)
+> > +{
+> > +=A0=A0=A0=A0=A0=A0=A0outb(0x87, ioreg);
+> > +=A0=A0=A0=A0=A0=A0=A0outb(0x01, ioreg);
+> > +=A0=A0=A0=A0=A0=A0=A0outb(0x55, ioreg);
+> > +=A0=A0=A0=A0=A0=A0=A0outb(ioreg =3D=3D REG_4E ? 0xaa : 0x55, ioreg);
+> > +}
+> > +
+> > =A0static inline int superio_inb(int ioreg, int reg)
+> > =A0{
+> > =A0=A0=A0=A0=A0=A0=A0=A0outb(reg, ioreg);
+> > @@ -124,10 +132,7 @@ static inline int superio_enter(int ioreg)
+> > =A0=A0=A0=A0=A0=A0=A0=A0if (!request_muxed_region(ioreg, 2, DRVNAME))
+> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0return -EBUSY;
+> > =A0
+> > -=A0=A0=A0=A0=A0=A0=A0outb(0x87, ioreg);
+> > -=A0=A0=A0=A0=A0=A0=A0outb(0x01, ioreg);
+> > -=A0=A0=A0=A0=A0=A0=A0outb(0x55, ioreg);
+> > -=A0=A0=A0=A0=A0=A0=A0outb(ioreg =3D=3D REG_4E ? 0xaa : 0x55, ioreg);
+> > +=A0=A0=A0=A0=A0=A0=A0__superio_enter(ioreg);
+> > =A0=A0=A0=A0=A0=A0=A0=A0return 0;
+> > =A0}
+> > =A0
+> > --=20
+> > 2.38.1
+> >=20
