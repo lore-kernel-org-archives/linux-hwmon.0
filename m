@@ -2,107 +2,127 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C1FCC54EBD
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Jan 2023 03:41:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A0AFC4332F
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Jan 2023 06:10:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjADDlk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 Jan 2023 22:41:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38376 "EHLO
+        id S229469AbjADGKX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 4 Jan 2023 01:10:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjADDlj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Jan 2023 22:41:39 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD8B2726
-        for <linux-hwmon@vger.kernel.org>; Tue,  3 Jan 2023 19:41:38 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id e17-20020a9d7311000000b00678202573f1so20182401otk.8
-        for <linux-hwmon@vger.kernel.org>; Tue, 03 Jan 2023 19:41:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6zs6+fCAK3ni71daGn3KGJL/3xSTQK+7nK7UwLbctL8=;
-        b=ZOaeAkPzsD5PFrhANgbrEUyzFe5LHRmX7V0bBYg77Z3J5itaQs1ZizLosfucm9eJVn
-         lpFNwxUL11uSTqR63tVlv4YSRw2xxNWIyG0+fOeKxtMK9Fx818m/NQCYGRYM27Q4yyte
-         u4l47WKLWmt4gvQxsP/DhAs3Sl4pHFfKMPf0IjpsySXK9L8AftTVYROQr5CVRhEOnnlv
-         7Cevhjw+UPgEQdFW6rlSvIdEiy9x+gGcvlKvDSNviKJ4/Q28/635cOrGS8JRlPr/7rSd
-         qXdfErNmrQ4RSD/tIrpsEs888pInoPo5RSR9AYuvGSRvNozKZ28Ai/WrNRvsNGbSbRPx
-         B9Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6zs6+fCAK3ni71daGn3KGJL/3xSTQK+7nK7UwLbctL8=;
-        b=q2FDnBaPJD37i7nPzRJ+roSCnvJLHBpFZYG3eBLpk787O2wsHD0vN7Vn8CSbYF/Nw6
-         8+tVOk4BxWcDavYdWmMLEnANzIOFL77DdlgWpWT93qGdxl4u+VbXlgZ3+Nx6cq7KApVX
-         qjuuq4wu52XaSGtuAD1C35rZ4AnCeKIKPxdCCFifyzI/e7jFYNk9DiAwJ5CUsgnhU5Mi
-         ullDCqMc+xeb4MLiuH43jmkaHdWsInSjGl+lG0aqof5phvEvEp895qbc8rkrs7uCR2mI
-         vfaaag8V6OPevrQQgH7v0/m63zswILMsmMXVX3FVRTEwjcUKCp3TgQJUjgbZ/9eA8GVr
-         L71A==
-X-Gm-Message-State: AFqh2koo8kC1umWWVi8Z1BaRZibygftVSAOD+7iJKN6OBq2Ur6dZek9D
-        xJbavurDctYUr6iPjlhLHFM=
-X-Google-Smtp-Source: AMrXdXuNLWNXiJw3gxwAEQ0BymPQEoMxSrnjpno1HDoivqzlI+ETrEQA7qsXjFDtkVcNr2A55cA9sg==
-X-Received: by 2002:a05:6830:2906:b0:670:9a97:218e with SMTP id z6-20020a056830290600b006709a97218emr22436795otu.18.1672803698097;
-        Tue, 03 Jan 2023 19:41:38 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o2-20020a9d6d02000000b006704589eb54sm15561296otp.74.2023.01.03.19.41.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 19:41:37 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 3 Jan 2023 19:41:36 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Sebastian Arnhold <sebastian.arnhold@posteo.de>
-Cc:     Christian Lamparter <chunkeey@gmail.com>,
-        linux-hwmon@vger.kernel.org, Ahmad Khalifa <ahmad@khalifa.ws>
-Subject: Re: [PATCH RFT] hwmon: (nct6755) Add support for NCT6799D
-Message-ID: <20230104034136.GA228903@roeck-us.net>
-References: <184c3523-fb00-b0df-cf29-cc1b171c4ab4@gmail.com>
- <20221230175021.GA1136102@roeck-us.net>
- <c8d68feb-d44f-02c6-0a08-d199cef00b46@gmail.com>
- <20221230214855.GA3881237@roeck-us.net>
- <b31ed9ec-3bd5-e032-ea03-b116ece4dac3@posteo.de>
- <73d1eb21-6cb9-a60f-218b-af129c2cb7a4@gmail.com>
- <3ba37e2d-413b-4d7d-e99b-8e0a53bd7f4e@posteo.de>
+        with ESMTP id S233264AbjADGJ6 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 Jan 2023 01:09:58 -0500
+Received: from ipmail06.adl3.internode.on.net (ipmail06.adl3.internode.on.net [150.101.137.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72FD618396
+        for <linux-hwmon@vger.kernel.org>; Tue,  3 Jan 2023 22:09:55 -0800 (PST)
+IronPort-SDR: 4oaXXng61TEruC+obcE3Na4GfZAaeV+c+aG5wrESnEFgX1fr9f2TJeq1rNdSrHHMgXhnz9q+ow
+ 5uLu0jzpFZdZhamLiw7f9RNq3+j23cRwN0QEqhcI0c9T8dj1c1Q+egBbL13EnjrS6+HREF+MO2
+ lZJBv714EUUaP1f20CpGTnvlMAmoYet6vcckJcClrPIyjUSAkIafcR5CvN476lT7Wg/bJzfIUd
+ zzPI8mo0IMytfXYPRiHvBRTA8oEzyMXsdVIAI6iN2hGTSqoeDHpMEegjIC688UqwPqf6FJIoUj
+ m8UxPMcQQkKSb5wQg/S92wZM
+X-SMTP-MATCH: 0
+X-IPAS-Result: =?us-ascii?q?A2BeBwDfFrVjjPQc8jxaHgEBCxIMSYNzgl+1Jw8BDwEBR?=
+ =?us-ascii?q?AQBAYUFhRMmOBMBAgQBAQEBAwIDAQEBAQEBAwEBBgEBAQEBAQYEFAEBAQFAU?=
+ =?us-ascii?q?gcLUgcLWAcHgUELgWETCwMxDYZZNgENAQE3ASiBFQGDEIMjr0CBAYIIAQEGg?=
+ =?us-ascii?q?mKaZoFeCYFAi2CBEoM3gT0/gU6ED26DfIcGmRUKgT18gScOTFcDCQMHBUlAA?=
+ =?us-ascii?q?wsYDRYyChMtNRZLEBsaGweBCiooFQMEBAMCBhMDIgINKDEUBCkTDScmawkCA?=
+ =?us-ascii?q?yJmAwMEKC0JQAcmJDwHVjcFAwIPHzcGAwkDAh5PcS8SEgUDCxUqRwQINgUGU?=
+ =?us-ascii?q?hICCA8SDyxDDkI3NhMGXAEqCw4TA1BGGW8EggwKLyicAIEIgQ6BccQRg3iBU?=
+ =?us-ascii?q?J52TIFEp2CXRiChdYEYhCgCCgcWgXmBfk0fGYMiTwECAQEBDQECAQEDAQIBA?=
+ =?us-ascii?q?QEJAQEBAY4dGYITjDhhOwIHCwEBAwmJW4JIAQE?=
+IronPort-PHdr: A9a23:skTmexTlYdH0UsLSFIdDTHsYhNpso4vLVj580XJvo7hPbr/l9I7rI
+ 0LY//krgVrUG4TXrftZ2KLfqau1X2sG7N6atWwaNoZBUhgZhIAXh1kuDMLfWxLyJfK4Y3BlT
+ JYbBg1u9SjjY0NeQJmWWg==
+IronPort-Data: A9a23:vTWhd686ybuRajyodUA/DrUDsniTJUtcMsCJ2f8bNWPcYEJGY0x3x
+ zNJXjuPOPyJYzfwKIhxadzi8EkCscXRm9JkG1Fv+C5hHypG+JeVX46QcEqgZH/KI5zJRRJsv
+ stOO4LJd5lqH1bR90ynWlTDhSAsjfvSGtIQKwJl1gRZH1IMpPIJ0Eo78wIBqtc0x4D/WWthg
+ PuqyyHlEAbNNwNcawr41YrT8HuDg9yq0N8olgRWiSdj4TcyP1FMZH4uDfnZw0nQG+G4LcbmL
+ wr394xVy0uCl/sb5nJJpZ6gGqECaua60QFjERO6UYD66vRJjnRaPqrWqJPwZG8P4whlkeydx
+ /1z8oWSTCN4OpfBndQ9fSgfGB4nFvVJreqvzXiX6aR/zmXMcmf3hf50BV44OpcUvOtyHCdP+
+ boRNVjhbDjd36TsnOj9ELkq3Jh/RCXoFNp3VnVIwyvQC/UOSorKXKvN/9Me0TItwMFCW//DD
+ yYcQWY0PUuYP0wUZj/7DroTl+6kgkDdTAFd8kysvLIZx2vpzwtIhe2F3N39IYTRFZ8Pzy50v
+ Fnu+2X/HwFfNMOazjyt7H2hnKnMkDn9VYZUE6e3ntZugVuO1kQJDxAdVh6mur+/h1LWc9BTJ
+ kgK8zAjhbMv70HtRd74NyBUu1ba5ltGB4AVSb1/sl3RjLHI6hqYDS4YVjFALtchsYk/WFTGy
+ 2NlgfvXQiVNtZnETUiQ84e0gwL1MhdMBjcNMHpsoRQ+3/Hvp4Q6jxTqR9llEbKogtCdJd0W6
+ 27bxMTZr+tI5fPnx5lX7niC2Gn8+cGVJuIhzlyKBzj9tl0RiJuNOtTA1LTN0RpXBK+kJrVrl
+ EMVl86T/Yji5rnXzHTVKAnhNJek+L6+NyDAgRZQFp0s7FyQF5OLI9gVum0kYR05d5xYJXnyf
+ EbPuAgX+IdcPT2haqoxap/Z5yUWIUrISY+NuhP8NIEmjn1NmOmvpn4Giam4hT6FraTUuftjU
+ ap3iO71ZZrgNYxpzSCtW8AW2qIxyyY1yAv7HM6klUv4ieTEOybKGd/p1WdiiMhnvctoRy2Lq
+ L5i2zeikEw3vBDWOHaMqtVDdTjm01BnW8it86S7idJv0iI9QDpxUaWAqV/QU5B9kOxUkPvF5
+ HewRidlJKnX2xX6xfGxQik7MtvSsWNX8SpT0doEYQ/2hxDOoO+HsM8iSnfAVeN7r705lqIsE
+ pHouayoW5xyd9gOwBxFBbGVkWCoXE/DadumM3X3bT4hUYRnQgCVqNbochG2pHsFFCOou8wkr
+ /ut0x6dQJZFThk7VJTab/emzlWQu3kBmbssABOSeIEOKR7hoNpwNij8rv4rOMVSex/N8Tut0
+ VrECxkvurifqoA4x9DFmKSYotr7COB5BEdbQTXW4O/uZynX92au26FaV+OMcWyPXW/44vzyN
+ +5Pxu7yN+cL2ltPrsx9H/Bi0PtmtdfoorZbyCViHWnKNgr0Uuk6eiTXhsQW7/9D3L5UvweyS
+ 3mjwNgCNOXbIt7hHX4QOBEhMLaJ28YUrT+Ov/47F1qrtiZ48Y2OXVhWIxTR2jdWK6F4Md15z
+ Oos5JwW5gi4hkZ4O9qKlHoPpW6NMmdGWL8uqZ8dGoOthw82jFBOJ5XBU3ek7JaKYtRKE08rP
+ j7N2vWa3e4EmxuZfiphD2XJ0MpcmY8K5kJAwmgCEFLVyNDLseBmjhRe/AM+QhlR0hgagfl4P
+ XJmNhMpKKjSrS1kgtNPAzKlFw1bX0fLpBS0kQdT0TeJChP0CirWMGQhOO3L4FgW8iRXeT0d9
+ azBkDTpVjPjfcfQ2CouWBc79KS5F4Qsp1bPyJK9AsCIP5gmej650KWgUmxZ+RLoDPQ4iFDDu
+ eQ3rv17brf2NHBMrqA2Y2VAOW/8lPxZyLR+fMxc
+IronPort-HdrOrdr: A9a23:qIU0OaGrk2Bw3si4pLqExseALOsnbusQ8zAXPiBKIyC9vPb4qy
+ nIpoV96feX4Ax9ZJhEo7y90ca7MBDhHPJOjrX5Xo3SODUOxlHYTr2KhLGKq1bd8kbFltK1u5
+ 0PT0DwZeeAa2SS9fyKhTVQC+xQuuVv7prY/ts2EE0dND2Duslbnn9ENjo=
+X-IronPort-Anti-Spam-Filtered: true
+Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
+  by ipmail06.adl3.internode.on.net with ESMTP; 04 Jan 2023 16:39:53 +1030
+Received: from agc.com.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
+        (authenticated bits=0)
+        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 30469VlC3124168
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Wed, 4 Jan 2023 17:09:41 +1100
+Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 30469VlC3124168
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
+        s=s1; t=1672812581; bh=Rm7lB51OAh8/bUal+PHA07ErAREdO4p/T6B65RokLls=;
+        h=From:To:Cc:Subject:Date:From;
+        b=m2eJvB1lKjtdXp4+jjSxyVxtQ4/BiNcYnlApLaVt6eAf/8q/jzurh/2CZfS2SknJ6
+         yUFbISVpFAGhhrpgPphIulNEWbW5xlLS95e0IckwQ2t6scOWigpl3rIhg5MG1otNAM
+         i6MZqUPuGv8/XYlqKntgnUllqkegseMKIl8KX8FbJGchfLDJ3OLyQMhesVLQb/vUth
+         06UhCetDzFFphwW8It0dn4sn8eRxSrRIfsLeuZkXz/KK5vlv4hsWP+FI7rDKQ3Ve3x
+         Yd2SJvhuHkuhx9/4C+3TDAGNpMtes4yhEHqJ1n+n8cpjBkX7oBO581khPnrFYqZXzB
+         CHMl6IaKgw/XQ==
+From:   Frank Crawford <frank@crawford.emu.id.au>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org,
+        Frank Crawford <frank@crawford.emu.id.au>
+Subject: [PATCH v2 0/2] hwmon: (it87) Set second Super-IO chip in configuration mode
+Date:   Wed,  4 Jan 2023 17:09:24 +1100
+Message-Id: <20230104060926.619686-1-frank@crawford.emu.id.au>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3ba37e2d-413b-4d7d-e99b-8e0a53bd7f4e@posteo.de>
+Content-Transfer-Encoding: 8bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Wed, 04 Jan 2023 17:09:41 +1100 (AEDT)
+X-Virus-Scanned: clamav-milter 0.103.7 at bits.crawford.emu.id.au
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 11:42:57PM +0000, Sebastian Arnhold wrote:
-> I tried to add acpi_enforce_resources=lax, but sadly, it does not solve the
-> problem.
-> 
-What do you see in the kernel log after adding that ?
+On various Gigabyte AM4 boards (AB350, AX370), the second Super-IO chip
+(IT8792E) needs to be in configuration mode before accessing the first
+due to a bug in IT8792E which otherwise results in LPC bus access errors.
+This needs to be done before accessing the first Super-IO chip since
+the second chip may have been accessed prior to loading this driver.
 
-Thanks,
-Guenter
+The problem is also reported to affect IT8795E, which is used on X299 boards
+and has the same chip ID as IT8792E (0x8733). It also appears to affect
+systems with IT8790E, which is used on some Z97X-Gaming boards as well as
+Z87X-OC.
 
-> Maybe Ahmad can help add support for the board?
-> 
-> Thanks,
-> Sebastian
-> 
-> Am 30.12.22 um 23:58 schrieb Christian Lamparter:
-> > Hi Sebastian,
-> > 
-> > On 12/30/22 23:13, Sebastian Arnhold wrote:
-> > > Thank you very much for the patch, Guenter Roeck!
-> > > 
-> > > I just compiled it using the mainline Kernel as a basis, but
-> > > "sensors-detect" still claims there are no sensors detected on my
-> > > ASUS TUF GAMING X670E-PLUS WIFI.
-> > 
-> > Unfortunately, this might be because ASUS has some "new" ideas :/.
-> > See this RFC from Ahmad back from October (Author is in Cc)
-> > for an in-depth view why this is happening:
-> > 
-> > https://patchwork.kernel.org/project/linux-hwmon/patch/20221018173428.71080-1-ahmad@khalifa.ws/
-> > 
-> > 
-> > Regards,
-> > Christian
-> > 
+---
+
+Changes since v1:
+ * Improved description for both patches
+ * Renamed function from gigabyte_sio_force to it87_sio_force
+
+Frank Crawford (2):
+  Allow calling __superio_enter outside mux
+  Set second Super-IO chip in configuration mode
+
+ drivers/hwmon/it87.c | 61 +++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 57 insertions(+), 4 deletions(-)
+
+-- 
+2.38.1
+
