@@ -2,151 +2,195 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5351FC4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40A60C46467
 	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Jan 2023 06:10:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjADGKZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S230297AbjADGKZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Wed, 4 Jan 2023 01:10:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233336AbjADGKC (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 Jan 2023 01:10:02 -0500
+        with ESMTP id S231203AbjADGKG (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 Jan 2023 01:10:06 -0500
 Received: from ipmail06.adl3.internode.on.net (ipmail06.adl3.internode.on.net [150.101.137.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD1D018695
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E2A41839B
         for <linux-hwmon@vger.kernel.org>; Tue,  3 Jan 2023 22:09:58 -0800 (PST)
-IronPort-SDR: k4hbEVMrstG8bu8qXHfYO2bdeTSys4Sb0p0HjWSW69ymMp9lWKe9WUcu56hzekBrFADnStC5z2
- svEDtubj6WbOFIJJQQwGaVmMVBdw1g04uEDirjKOmTMRf4pVVEmPBHpspH8meK2VRjxTOw4Qed
- AVR3BwmzoFeS3XwWs0biVmRI6g4QWzTITl1kaCbjxJOQDWS0k/HMz5aGRu3OMYw80bpap70lW8
- IOWw1RnSYw3EjuEd6H/jG98kj1++7/2H4O5bz160Qu/X/NBW0/BFJCcqCxn1pBdBTQpCEfrwVg
- FNEx5/gyRQWp4GuN6B086zmv
+IronPort-SDR: 6JStRmBMcNBpyF/nFkIUGLoOI70G1bVJ9bC0E+2I/iZ9uDMKP0wU34OWkAePq6paoW63WVugve
+ yrd5JPY1q+cDrRrUZOHday92YrO6DoV7kbzHQtvvuDutkjNpUxoKeh8BqOVROSeuNm8NgOPyfo
+ SLPwfxB1vkPa+K6tK8YkYCYdq8eFI2MvJCnCcinfb/U136O/zlP4O31rZcQ5WM2GGUfGD3CVHY
+ ik/DozzhcATxiVvtW+fx6kcdpXTsFGHthO//Aai8FMFs7L354/5p6SFO/cEkCHyniEVk8wW2F+
+ FSDi9Za0KO0BAsBxXWVjF3Su
 X-SMTP-MATCH: 0
-X-IPAS-Result: =?us-ascii?q?A2CqBgDfFrVjjPQc8jxaHgEBCxIMSYE7C4Itgl+1Jw8BD?=
- =?us-ascii?q?wEBRAQBAYUFAoURJjcGDgECBAEBAQEDAgMBAQEBAQEDAQEGAQEBAQEBBgQUA?=
- =?us-ascii?q?QEBAUBSBwtSBwtYBweBQQuBYRMLAzENhlcCAQMyAQ0BATcBDxk4VwYBEoJ+g?=
- =?us-ascii?q?yOvQIEBgggBAQaCYppmgV4JgUABi1+BEoM3ekM/gU6CUYIsiwKMLoxnCoE9f?=
- =?us-ascii?q?IEnDkxXAwkDBwVJQAMLGA0WMgoTLTULC0srGhsHgQoqKBUDBAQDAgYTAyICD?=
- =?us-ascii?q?SgxFAQpEw0nJmsJAgMiYQUDAwQoLQlAByYkPAdWNwUDAg8fNwYDCQMCHk9xL?=
- =?us-ascii?q?xISBQMLFSpHBAg2BQYcNhICCA8SDyxDDkI3NhMGXAEqCw4TA1BGGW8EggwKB?=
- =?us-ascii?q?ikonQiBDsYCg3iBUJ52TIFEp2AtlxkgokJLhCgCCgcWgXiBf00fGYMiTwECA?=
- =?us-ascii?q?QEBDQECAQEDAQIBAQEJAQEBAY4dDA0JggqMOGE7AgcLAQEDCYwjAQE?=
-IronPort-PHdr: A9a23:KHQoURUN295ulIiGMiXboM1va4rV8K3KAWYlg6HPw5pEc7i4uZ/4N
- VPR4u9hylLMQMPa57RNlrmeurrrDGoH55vJq3UeaNpWWhoClchTnhR1DsKJUx+kJffmPSBmQ
- 5QQDQ039HviaRpeE56hD2A=
-IronPort-Data: A9a23:Wt3c4qD+2P8knBVW/xvlw5YqxClBgxIJ4kV8jS/XYbTApGxx0jcFm
- zRNWTzSPfaNNmOgfNx+O4S/pEgHvcTSztBjQQI5q3g2RHxGo5CeWo3JcBqvYX/Ic52ZEktrs
- chGM4jpIZFvRBcwhD/0YuC79yUUOYJk51bYILSZUsykbVY8EE/NsTo6x6hhxNQAbeGRW2thg
- /uryyHiEAbNNwBcYjp8B52r8HuDjNyq0N/PlgFWiVhj5TcyplFNZH4tDfjZw0jQHuG4KtWHq
- 9Prl9lVyI94EyAFUbtJmp6jGqEDryW70QKm0hK6UID66vROS7BbPqsTbJIhhUlrZzqhmuogz
- e5OqcOJFRosP4bzs+5HVT5yDHQrVUFG0OevzXmXu82P1AvNaXLzzfJ0AAc7OJBe++oxCHwmG
- f4wdmhLNEzZwbjmhujnFoGAhex6RCXvFI0Fs3dj5TrDBOkoRorPBajP+JlZ0HE5m6iiGN6CP
- JtGMWY+N0mojxtnPm0YOawsw+2UrWjSSGUIgn2EmpVoyj2GpOB2+OO1a4qPII3iqd9utkKZo
- H/WumTmBxYcHMKQxCDD8X+2gOLL2yThV+o6ELy+6+5CmlqezW9WFQZQU1anydG7hkO6RdtFJ
- mQP5zEj66M18SSWosLVAUX9+iLe+0RMHoAMT6sh9AiRy6GS/x6WBy4PSTsHYcFOWNIKqSIC0
- 2XYmujqGWNW7KCQSFmi3b3OqxSYJn1ARYMdXhMsQQwA6tjlhYg8iBPTU9pueJJZaPWrSFkcJ
- BjU90ADa6UvYd0jkv7grQ+e31pAsrCQE1dvvl2JNo6wxl4hDLNJcbBE/nDy0J6sxq6iX1WHs
- WlsdyO2trhWVflheASrTfpFJ7a0+/bNDzTYjEUHInXM32r1viT/J8UKsHQkeBsvKdoNZT7iJ
- lPLtgIX75hWenK3BUOWX25TI5hxpUQDPY6+PhwxUjaoSsIuHONg1HswDXN8J0i3zCARfVgXY
- P93i/qEA3cAErhAxzGrXeob2rJD7nlgmjmMGsillUv/jur2iJuppVEtbgrmggcRsvjsnekp2
- 40GXyd3408AC7alMnG/HXA7cQ5SdiBT6W/KRzx/LbbYclA8SQnN+tfN2bxpeop5kr5Tm/ugw
- 51OchEw9bYLvlWecV/iV5yWQO+3NXqJhS5iY3BE0JfB8yRLXLtDG49FK8BmJ+J7rLELIDwdZ
- 6BtRvhsy89nElzvkwnxp7GmxGC7XBj01w+IIQS/Zz0zI8xpSwDTo4+2dRHm6ycJFCbxuM4j5
- byskArGGMJRSwNnBcfQSfSu01Lo4ydFwrgqAhqTL4kBYljo/ahrNzf10K09LfYMHhOflDGU4
- BnHUx4XqN7Er5Ix7NSU17uPqJ2kErUiE0cDRzvb4L+6ODP05G2mxYMcAu+EcSqEBDH/4qy9a
- +JPw7fxNeBBnVoMupclS+Rnyqc35t3Oob5Gz106Qy2RNQz2W+hteyDU09NOu6tBwq5ilTG3A
- k/fqMNHPbipOd/+FABDLgQSbtOFiaMelA7NvKY8L0jN7SNq+KaKDBdJNB6WhS0DcLZ4Pd93w
- eolv8JKuQWzhgBwaYSMjzxPsW+WJ2MOVL8r8JwfHcnqhkwi1wgaM5DbDyb35rCJaslNaxd1e
- mXO3PeT3LkMlFDfd3cTFGTW2bQPj5o5uCdMkA0IKWOWy4jMifIA1RFM9Sg6E1ZOxRJd3uMtZ
- mVmax9vKaOV82s6jcRPRTv2SV8ZQUfFoAmrmx5TyDGfVFWhSm3GanElNufL90cctWtBJ2AJ8
- LadwWfjcDDrYMCogHRqAxQ99q24QIwj7BDGleCmA9+BQ8swbw3j0/2namc/ohf6Bd882R/cr
- u5w8ecuNaD2OEb8eUHg51V2CFjIdC25GQ==
-IronPort-HdrOrdr: A9a23:V/PwtK6ME6buRMBwCgPXwBLXdLJyesId70hD6qkQc3ZomwKj9v
- xG+85rrCMd6l4qNU3I/OrtBEDuewK+yXcY2+Ys1PKZLW3bUQiTXedfBPXZsl/d8kTFn4Y36U
- 4jSdkYNDSaNzhHZKjBjjVRnLsbsaG6GdiT9ILjJm9WPH1Xgr9bnnpE49mgYzZLrNgvP+tCKK
- ah
+X-IPAS-Result: =?us-ascii?q?A2ArBgDfFrVjjPQc8jxaHQEBAQEJARIBBQUBSYFGgi2CX?=
+ =?us-ascii?q?5VtnzoPAQ8BAUQEAQGFBQKFESY4EwECBAEBAQEDAgMBAQEBAQEDAQEGAQEBA?=
+ =?us-ascii?q?QEBBgQUAQEBAUBSBwtSBwtYBweBQQuBYRMLAzENhlcCAQMyAQ0BATcBDxk4V?=
+ =?us-ascii?q?wYBEoJ+gyOvQIEBgggBAQaCYppmgV4JgUCLYIESgzd6Qz+BToEVgnpug3yHB?=
+ =?us-ascii?q?pkVCoE9fIEnDkxXAwkDBwVJQAMLGA0WMgoTLTULC0sQGxobB4EKKigVAwQEA?=
+ =?us-ascii?q?wIGEwMiAg0oMRQEKRMNJyZrCQIDImEFAwMEKC0JQAcmJDwHVjcFAwIPHzcGA?=
+ =?us-ascii?q?wkDAh5PcS8SEgUDCxUqRwQINgUGHDYSAggPEg8sQw5CNzYTBlwBKgsOEwNQR?=
+ =?us-ascii?q?hlvBIIMCgYpKJwAgQgfb4FxgQOhNqFYg3iBUJ52TIFEp2CXRiChdYEYhCgCC?=
+ =?us-ascii?q?gcWgXmBfk0fGYMiTwECAQEBDQECAQEDAQIBAQEJAQEBAY4dGYITjDhhOwIHC?=
+ =?us-ascii?q?wEBAwmJW4JIAQE?=
+IronPort-PHdr: A9a23:7sbX0ReptwFHZJyOL3Uv7qhhlGM/hYqcDmcuAtIPgbNSaeKo5Z39M
+ kvF6bNgiUKPXImd4u8Xw+PMuPXmXmoNqY2ErGhEapFJUAMIzMQOygIsDJTXVkTyIKzmM3NqT
+ p0QBlRvpinpOkMNR67D
+IronPort-Data: A9a23:u9DX36wb4zR9b0EijIV6t+cFwCrEfRIJ4+MujC+fZmUNrF6WrkUGm
+ DcfDGiBP/rZNGrxKN0lbo+woB4G68TVztMxTgQ+/y89FHxB9ZrLDoyUIhmrZi3JI8OSQkhs5
+ M4SOoiRJpk+Z3KN/R3F3prJ9Ckkj/vULlbf5E8oHggrGGeInQ940UoLd9YR29Iu2Z7ja++0k
+ YuaT/f3YTdJ5hYtWo4qw/LbwP9QlKyaVAMw5jTSstgW1LN2vyB94KM3fcldHVOhKmVnNrLSq
+ 9L48V2M1jixEyHBqz+Suu2TnkUiGtY+NOUV45Zcc/DKbhNq/kTe3kunXRYRQR8/ttmHozx+4
+ PRRmraSQlYbApPnnuIUQxVxMzhnIqITrdcrIVDn2SCS50fHb2CqyO9nE08xJ4Fe9+NqR2BCs
+ /UFQNwPRk7bwbjqmvThGq822phLwMrDZevzvllu1zjfDt4tW5ncTaLQ6ZlV2Sp2h8wIFOu2i
+ 88xNWE+M0ycMkYRUrsRILYemdiYiFTZSQN/rVa6uLY66Gz6lTUkhdABN/KOIofaH58E9qqCn
+ UrC/mLkElQaK9mYzxKb/X+2wOzChyX2XMQVDrLQ3vprhkCD7nYUBRYVEEag5/+0liaWWd5SL
+ 1Id4CcGtrUp+QqgSdyVYvGjiCDc+0RAAZ8KQ6hgtF3L0bbd/weSQHQcQT8HY9sj8sYrLdA36
+ rOXt/L1KhZNu+yndUy28LGdvT+bGTEMMmBXMEfoUjA5y9XkpYgyiDfGQdBiDLO5g7XJ9dfYn
+ WHiQM8W2e57sCIb60mo1RWc2GLz/8Shohodv1iOBDr9sGuVcab4P+SVBU7nAeFoBbvxorOph
+ 2kIncWPhAzlJcvVzHTlrAklOry2r82CLSHcyWFmG5Q6nwlBFlb9JcUKvGs7fhcsaJpYPyT1a
+ VPSskVN/JBSenCtaOl+fupd6vjGL4C8TrwJtdiONbKih6Sdkifdo0mCgmbKgQjQfLAEy/1XB
+ HtiWZ/E4YwmIapm1iGqYOwWzKUmwCszrUuKG8+hkEv/j+DBPCHFIVvgDLdoRr5ohE9jiFuOm
+ +uzy+PRkn2zrcWkPXKMqt5LRbz0BSRlXcuuwyCoSgJzClE+QzF7Ua65LUIJZ5Rq16VTiurS+
+ HyhMnK0O3Kh7UAr3T6iMyg5AI4DqL4j9RrXywRwZAj0s5XiCK7zhJoim2wfJ+V8pbY4kaYpJ
+ xTHEu3Zaslypv3802x1RfHAQEZKLnxHXCqCYHioZiYRZZllS1Cb89PoZFK/piIUBzW5stEy5
+ bCly0XaTdwKWl06XsrRbfuuyXK3vGQcwbwtBxGSeoQCJEi8opJ3LyHRj+MsJ59eIxv0xgyci
+ 1ScDyAH9LvErIIC+dXUgbyJ8tWyGOxkE0sEQ2TWtO7kNSTT8me575VHVeKEIWLUWG/uofXwb
+ v9c0P/7KvFBkVNX9YtwVb92lPps69zqrr5c7wJlAHSSMQvzUOk4fyja0JAW5KNXx7JftQ+nY
+ W61+4FXaeeTJcfoMF8NPw57PO6N4vEjnGWA5/oCPxSo7SB6y7OLTEFOMkTekydaNrZ0bt8oz
+ Op96s4b7wuz1kgjPtqc1HsG/WWQNToLSaw4uJYADMnmjxdty10EaIGFUn3655SGatNtNEg2I
+ 2bK2/KY3ewBlxbPIygpCHzA/etBnpBQ6hpE+181IQjbkNTyma5l1RJcxj07UwBJw0gVyOl0I
+ GVqaRF4KPnc5Ttun8QfDWmgFxsaXk/HogmrlwFMzj2cFRX0EHfRJXE8MqCR5E8YtWlbe35S4
+ ejAmmriVD/reuD33zczABA686a5FYEgqgCSytq6G8mlHoUhZWa3iKGZYztaohTqNso9mUnbq
+ LQ45+13c6D6a3IdrqBT51N2DljMpM1o/FB/fMw=
+IronPort-HdrOrdr: A9a23:iACC8qlDrTKHjhVEAuY0UNW1q1TpDfL23DAbv31ZSRFFG/Fw9/
+ rFoB3U737JYVEqKQgdcbLpAsS9qBbnmaKdjrNhXotKMDOIhILsFvAH0WKA+UyHJ8SBzJ8+6U
+ 4IScEXY+EYT2IK6voSizPZLz9P+re6GC/Ev5an854Ud3AOV0h51XYENu+EKDwKeOCYP+tDKH
+ JMjvA33QadRQ==
 X-IronPort-Anti-Spam-Filtered: true
 Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
-  by ipmail06.adl3.internode.on.net with ESMTP; 04 Jan 2023 16:39:53 +1030
+  by ipmail06.adl3.internode.on.net with ESMTP; 04 Jan 2023 16:39:54 +1030
 Received: from agc.com.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
         (authenticated bits=0)
-        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 30469VlD3124168
+        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 30469VlE3124168
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Wed, 4 Jan 2023 17:09:46 +1100
+        Wed, 4 Jan 2023 17:09:50 +1100
 Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
-DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 30469VlD3124168
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 30469VlE3124168
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
-        s=s1; t=1672812586; bh=prUI4jFWh12MC3Qn9mW7eRKQoghRyQjqQIGBqQKol/E=;
+        s=s1; t=1672812590; bh=RypKh8n2yWkPM/jjDRUa4zOwNaMphUmh7ryIuL03reM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cKxtS2O7lS8z/dfXFbyJ7eDbzorM47qD3zVq+FrhdOP5foZ21i/ZO6pHS1ZcLivFx
-         i5Mq+efkgC/3UpJ1G4uHdAVaLooNjbXgGf/Bl9Jv10Owj5CEm6gnprxzaakUoFRpH9
-         2552+OAe2bHPbAQiWAwz0zDXPB+cLpL79QKChsYZ8oOLv8Pss0fd79rp5G7Q5+KXKK
-         1yNSytEeb9D8sUs/UkVetAzK+FpFLVZuVP0ENBytV3OoGIo6R4hmKp28WhPuxxal3W
-         bqa5HktxbWIVAzjdYuqB51tL2KqjrB+qrwH3mt3RSoNSAKRUGMt2HzACSh6kkYTxfn
-         InPQXrtL9TupA==
+        b=u9ddUxfizN5SYv7H3O97heDxnpvRcZ5fAcSfZcez72earqOIoKYaICiWkAwUjSyS4
+         VKH7TmqtEthgtfZpQxw16NLqW090JVTNOmhNYO5Za67HjYzpsQEVzWnnWgeSZYFKyO
+         sOVgl4sTvcvzpCFRFANjK7LBFNeWsr2vx2MloZsXs7ZtBMamWTdU942fVp4S5MZXfO
+         KGgM9GN5lEtWrLvvdaibaIwrxbdHse+aDviVHsfa8PKie0qAZj/9PUHJ/pw/x7/yiw
+         IRdwJNCrR5Wzvb91NTwVaskNrqNI4Yu6upN/cJDAOxbYLKmM+EuwBc5WkxufkJ7t35
+         HR1DjFEQ+XQDw==
 From:   Frank Crawford <frank@crawford.emu.id.au>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org,
         Frank Crawford <frank@crawford.emu.id.au>
-Subject: [PATCH v2 1/2] hwmon: (it87) Allow calling __superio_enter outside mux
-Date:   Wed,  4 Jan 2023 17:09:25 +1100
-Message-Id: <20230104060926.619686-2-frank@crawford.emu.id.au>
+Subject: [PATCH v2 2/2] hwmon: (it87) Set second Super-IO chip in configuration mode
+Date:   Wed,  4 Jan 2023 17:09:26 +1100
+Message-Id: <20230104060926.619686-3-frank@crawford.emu.id.au>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230104060926.619686-1-frank@crawford.emu.id.au>
 References: <20230104060926.619686-1-frank@crawford.emu.id.au>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Wed, 04 Jan 2023 17:09:46 +1100 (AEDT)
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Wed, 04 Jan 2023 17:09:50 +1100 (AEDT)
 X-Virus-Scanned: clamav-milter 0.103.7 at bits.crawford.emu.id.au
 X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Allow for superio_enter to be called without requesting the muxed memory
-region, in particular for initialisation of the second chipset, which must
-be put into configuration mode, but without an associated call to leave
-configuration mode.
+On various Gigabyte AM4 boards (AB350, AX370), the second Super-IO chip
+(IT8792E) needs to be in configuration mode before accessing the first
+due to a bug in IT8792E which otherwise results in LPC bus access errors.
+This needs to be done before accessing the first Super-IO chip since
+the second chip may have been accessed prior to loading this driver.
+
+The problem is also reported to affect IT8795E, which is used on X299 boards
+and has the same chip ID as IT8792E (0x8733). It also appears to affect
+systems with IT8790E, which is used on some Z97X-Gaming boards as well as
+Z87X-OC, and other more recent Gigabyte boards.
 
 Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
 ---
 
 v2:
  * Improved description for patch
+ * Renamed function from gigabyte_sio_force to it87_sio_force
 
 ---
- drivers/hwmon/it87.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/hwmon/it87.c | 48 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
 diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index 9997f76b1f4a..4ebce2c661d7 100644
+index 4ebce2c661d7..ee48e238e46f 100644
 --- a/drivers/hwmon/it87.c
 +++ b/drivers/hwmon/it87.c
-@@ -87,6 +87,14 @@ static struct platform_device *it87_pdev[2];
- #define	DEVID	0x20	/* Register: Device ID */
- #define	DEVREV	0x22	/* Register: Device Revision */
- 
-+static inline void __superio_enter(int ioreg)
-+{
-+	outb(0x87, ioreg);
-+	outb(0x01, ioreg);
-+	outb(0x55, ioreg);
-+	outb(ioreg == REG_4E ? 0xaa : 0x55, ioreg);
-+}
-+
- static inline int superio_inb(int ioreg, int reg)
- {
- 	outb(reg, ioreg);
-@@ -124,10 +132,7 @@ static inline int superio_enter(int ioreg)
- 	if (!request_muxed_region(ioreg, 2, DRVNAME))
- 		return -EBUSY;
- 
--	outb(0x87, ioreg);
--	outb(0x01, ioreg);
--	outb(0x55, ioreg);
--	outb(ioreg == REG_4E ? 0xaa : 0x55, ioreg);
-+	__superio_enter(ioreg);
- 	return 0;
+@@ -3315,6 +3315,27 @@ static int it87_dmi_cb(const struct dmi_system_id *dmi_entry)
+ 	return 1;
  }
+ 
++/*
++ * On various Gigabyte AM4 boards (AB350, AX370), the second Super-IO chip
++ * (IT8792E) needs to be in configuration mode before accessing the first
++ * due to a bug in IT8792E which otherwise results in LPC bus access errors.
++ * This needs to be done before accessing the first Super-IO chip since
++ * the second chip may have been accessed prior to loading this driver.
++ *
++ * The problem is also reported to affect IT8795E, which is used on X299 boards
++ * and has the same chip ID as IT8792E (0x8733). It also appears to affect
++ * systems with IT8790E, which is used on some Z97X-Gaming boards as well as
++ * Z87X-OC.
++ * DMI entries for those systems will be added as they become available and
++ * as the problem is confirmed to affect those boards.
++ */
++static int it87_sio_force(const struct dmi_system_id *dmi_entry)
++{
++	__superio_enter(REG_4E);
++
++	return it87_dmi_cb(dmi_entry);
++};
++
+ /*
+  * On the Shuttle SN68PT, FAN_CTL2 is apparently not
+  * connected to a fan, but to something else. One user
+@@ -3337,7 +3358,34 @@ static struct it87_dmi_data nvidia_fn68pt = {
+ 		.driver_data = data, \
+ 	}
+ 
++#define IT87_DMI_MATCH_GBT(name, cb, data) \
++	IT87_DMI_MATCH_VND("Gigabyte Technology Co., Ltd.", name, cb, data)
++
+ static const struct dmi_system_id it87_dmi_table[] __initconst = {
++	IT87_DMI_MATCH_GBT("AB350", it87_sio_force, NULL),
++		/* ? + IT8792E/IT8795E */
++	IT87_DMI_MATCH_GBT("AX370", it87_sio_force, NULL),
++		/* ? + IT8792E/IT8795E */
++	IT87_DMI_MATCH_GBT("Z97X-Gaming G1", it87_sio_force, NULL),
++		/* ? + IT8790E */
++	IT87_DMI_MATCH_GBT("TRX40 AORUS XTREME", it87_sio_force, NULL),
++		/* IT8688E + IT8792E/IT8795E */
++	IT87_DMI_MATCH_GBT("Z390 AORUS ULTRA-CF", it87_sio_force, NULL),
++		/* IT8688E + IT8792E/IT8795E */
++	IT87_DMI_MATCH_GBT("B550 AORUS PRO AC", it87_sio_force, NULL),
++		/* IT8688E + IT8792E/IT8795E */
++	IT87_DMI_MATCH_GBT("X570 AORUS MASTER", it87_sio_force, NULL),
++		/* IT8688E + IT8792E/IT8795E */
++	IT87_DMI_MATCH_GBT("X570 AORUS PRO", it87_sio_force, NULL),
++		/* IT8688E + IT8792E/IT8795E */
++	IT87_DMI_MATCH_GBT("X570 AORUS PRO WIFI", it87_sio_force, NULL),
++		/* IT8688E + IT8792E/IT8795E */
++	IT87_DMI_MATCH_GBT("X570S AERO G", it87_sio_force, NULL),
++		/* IT8689E + IT87952E */
++	IT87_DMI_MATCH_GBT("Z690 AORUS PRO DDR4", it87_sio_force, NULL),
++		/* IT8689E + IT87952E */
++	IT87_DMI_MATCH_GBT("Z690 AORUS PRO", it87_sio_force, NULL),
++		/* IT8689E + IT87952E */
+ 	IT87_DMI_MATCH_VND("nVIDIA", "FN68PT", it87_dmi_cb, &nvidia_fn68pt),
+ 	{ }
  
 -- 
 2.38.1
