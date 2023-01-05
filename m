@@ -2,152 +2,81 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB2BC3DA7D
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Jan 2023 12:46:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C08D3C3DA7A
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Jan 2023 14:19:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232920AbjAEMqV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 5 Jan 2023 07:46:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
+        id S229713AbjAEOTh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 5 Jan 2023 09:19:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232072AbjAEMqP (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Jan 2023 07:46:15 -0500
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F06443A27
-        for <linux-hwmon@vger.kernel.org>; Thu,  5 Jan 2023 04:46:13 -0800 (PST)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 880972403EE
-        for <linux-hwmon@vger.kernel.org>; Thu,  5 Jan 2023 13:46:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1672922771; bh=CnA3qdEWCR7KtqQJ4O+LFKT7n4VrUdRkiEoU27jo+48=;
-        h=Date:Subject:To:Cc:From:From;
-        b=IFr+2Xe3hUMri6YsP9QRpQRWyO2424Zsf4eCxZng5lJsW3X6xlWrQqLzon7gfbiMn
-         bZep9SxtK1QhKVTCfKWsCbWtGasVvaF2wd1Hvx3IJjOSNryXHpDnrfVUbS4hiShpgg
-         jbU1M264AzX/u2UnA9EzzTPY5EeocW/5H+kzAovIsDWkz7Igi1s1jvYhSE2QtbmhMD
-         sqXAgntS+1le5FUXMxXXsw7FMulIjHwYGI6IbzmwwUcbyw9RAxOI54l0NIHKUENrSp
-         XfbvjG4Nu+IlRXXsHPdcpG8/oiIp3BCbbdEOSwPpw1z101riV6T4+GKUsT72gQXqXQ
-         kjJNCsF6SPZ/Q==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4NnmRh2f8xz6tmV;
-        Thu,  5 Jan 2023 13:46:08 +0100 (CET)
-Message-ID: <767c4090-007c-a819-e047-11971ea9cc17@posteo.de>
-Date:   Thu,  5 Jan 2023 12:46:07 +0000
+        with ESMTP id S229530AbjAEOTf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Jan 2023 09:19:35 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD80DD2D7;
+        Thu,  5 Jan 2023 06:19:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1672928358; bh=wIz0BoSUc31ugcqNmIKcIFhbT2sYdHTdsIFwKNmgt3c=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=RME5plFvOeHxkPSPC8NUcEWmioeYrtEvMDw1dUjVf5BhO+rEboJlr6WqVZodpvWW/
+         Ipdu6eGvVU2ic7snqC4PPd7oqkO0YYctlJfIZwsM0nYnUJSRUOB0apyKEF7r9zugkQ
+         OcOWQGizmLnj5Kt4EyxEwUuN+YbVghpJ8qVjFeWfKRfAynl81/J5yNuXtvZUM+g8Ez
+         k7G3ZKkZxic7d+dcIpXLde9TM1M1xq7RmWY9fXnrjLQQeXHD9j545Bp9EMYyWi+veO
+         wsMBHvZw1mjfnK5jB0Iw8Ur7h02vQ7Edkz6rRCABGldAYZbDavLvRfkc0iEVeoD17y
+         75aFUVvlyAWtw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MWRVb-1pJhfC3df9-00XqJR; Thu, 05 Jan 2023 15:19:18 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] Convert to *_with_info() API
+Date:   Thu,  5 Jan 2023 15:19:08 +0100
+Message-Id: <20230105141911.8040-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: Re: [PATCH RFT] hwmon: (nct6755) Add support for NCT6799D
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Christian Lamparter <chunkeey@gmail.com>,
-        linux-hwmon@vger.kernel.org, Ahmad Khalifa <ahmad@khalifa.ws>
-References: <184c3523-fb00-b0df-cf29-cc1b171c4ab4@gmail.com>
- <20221230175021.GA1136102@roeck-us.net>
- <c8d68feb-d44f-02c6-0a08-d199cef00b46@gmail.com>
- <20221230214855.GA3881237@roeck-us.net>
- <b31ed9ec-3bd5-e032-ea03-b116ece4dac3@posteo.de>
- <73d1eb21-6cb9-a60f-218b-af129c2cb7a4@gmail.com>
- <3ba37e2d-413b-4d7d-e99b-8e0a53bd7f4e@posteo.de>
- <20230104034136.GA228903@roeck-us.net>
-Content-Language: de-DE
-From:   Sebastian Arnhold <sebastian.arnhold@posteo.de>
-In-Reply-To: <20230104034136.GA228903@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:P+VnuccQuxbVylJ/aoMnO10jH2ggKviSZwlBemNMjXUK0KVPsJI
+ jIbaRZJ0o4NMYkbOxYV33FqCy86KGTO3ugcyVzlNT0hVWVqSNLHo+yhVfoMZ2ahcsCBK8ld
+ xQOnuKqiBCAzpFypwBBs5O/4k6twep6p9bByQ+tzoMlVhJlYhKuew4yX00LG6lJ1o5Ve+PS
+ 9w2CFuO83v30vnsceKRlw==
+UI-OutboundReport: notjunk:1;M01:P0:Jm7Ns/0S2/M=;vF7aIa4EFgNX/fnazeAaBFWdVBO
+ yHy81OZK/1ONCKlCIm12TpgRdkU6+Kf616DXfOVuHGy/zEp7dYRW6yoyl3QsQq3Lb/JKr0Fab
+ mkCWf9psv/pWsHxBkcU/isjn3Q3I1dcLhy31RGZBcu+8P3gCfdV4WbfPhz4OPkD5MVwcowxXD
+ vrLK145wNHkjHJiK6UkgkpSd6UWOqmZf1mb+GNZY8RWL+xVWuLgKCEGQiSqQwsurwYE/c2LVA
+ eSc1yLs6NkU+nBMS6qKfCVNAnArIlHjdf6zwXJzPe2Igtaxb1KvWzPUpDSAcE2lOf+Sd5b9IC
+ y9KXYuoY0S+SMIIo8HUAMvgmHN4TQcV3p2PMP0Ubxs88G5e7bt3OgLT8bjbEkmQiL175E3fdj
+ yPUxzhWqQ5hTJRhPjqAzK89Jr1x8Ooe1tIS67hhu0VoLeo3JRR+Cjnw3YCD/fy8BiWSUu7ygX
+ +otiZx/pI1vBLpM2aTZyQMZGOzedVBD425WI3J5vwXyLntc1aEo4vonN+pdt+OUJqsqhLudmo
+ pwNEd+3nmRRxmM1ib/yIvxcP2cHwpXkKTUv9NvIbG3cZ2RlDzOPmzdAy+QYwpFEkD1IYxAXyj
+ AJPvhQv3FfeH5ro1eIlGRsJVcGqEY5b/1JDVAJrEpjJ741s4uonpfs2tSu5/CKC6gdyMk9dun
+ 5wFXw8l+9XqFlWRq6v4mREzeN4oHHf4/ZWSFBS670HDpioI7EtZnio79P1tOZCVlxJji4/eId
+ clRbu4U6qbUoLsXrV+YpXffyUO+9YoZ1/uU8VOdkia6VHrH2X2cZWPSmibhqB5CyzjYoFZzvt
+ hRr/yeKMuVRuWYNagi3kT7qgM4yY1jX822WbalPxBxJOAxxFmNw2XjjSAtMplUczDUBgv2fMy
+ +Dl3R51DqnmMRtVKtNk0gXPkpwoJS3FMOKDVDkaNW/iYFS6Uk07J4xbn0wfJEhVMmaaX/YXjl
+ Pa3P6MUOO4WDHPhlA5VANpMN2ZE=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello Guenter & friends,
+This patch series converts the ftsteutates driver to the *_with_info()
+API, reducing module size by ~30%.
+The first patch does the actual conversion, while the second patch deals
+with the nonstandard fanX_source attributes, which are being replaced
+with the standard pwmX_auto_channels_temp attributes. The last patch
+adds support for fanX_fault attributes.
 
-I'm such an idiot! The patch works, of course. I did everything 
-correctly and then simply forgot to load the module. :D
+All patches where tested on a Fujitsu DS3401-B1.
 
-Adding "acpi_enforce_resources=lax" is necessary for my system, but then 
-it works! Other people on the lm-sensors project report that, too. So 
-the driver seems to be working for a first release.
+Armin Wolf (3):
+  hwmon: (ftsteutates) Convert to devm_hwmon_device_register_with_info()
+  hwmon: (ftsteutates) Replace fanX_source with pwmX_auto_channels_temp
+  hwmon: (ftsteutates) Add support for fanX_fault attributes
 
-Watching my fanspeeds with the "Vitals" GNOME extension and generating 
-fancurves with pwmconfig/fanspeed as we speak! Awesome!
+ Documentation/hwmon/ftsteutates.rst |   5 +
+ drivers/hwmon/ftsteutates.c         | 550 +++++++++++-----------------
+ 2 files changed, 210 insertions(+), 345 deletions(-)
 
-Now we should get it into the Linux kernel for the next release asap. 
-I've heard on Phoronix that the driver additions queque for Kernel 6.3 
-has now begun. I don't think there would be any negative side effects, 
-since the module was based on the datasheet. Some values seem to be off, 
-though - I'll attach my "sensors" output.
+=2D-
+2.30.2
 
-Thank you all very much! :)
-Sebastian
-
-
-nct6799-isa-0290
-Adapter: ISA adapter
-in0:                      840.00 mV (min =  +0.00 V, max =  +1.74 V)
-in1:                      1000.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-in2:                        3.41 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in3:                        3.33 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in4:                      992.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-in5:                        1.04 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in6:                      472.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-in7:                        3.39 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in8:                        3.30 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in9:                        1.66 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in10:                     560.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-in11:                     552.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-in12:                       1.05 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in13:                     216.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-in14:                       2.04 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-fan1:                      607 RPM  (min =    0 RPM)
-fan2:                        0 RPM  (min =    0 RPM)
-fan3:                        0 RPM  (min =    0 RPM)
-fan4:                      910 RPM  (min =    0 RPM)
-fan5:                      625 RPM  (min =    0 RPM)
-fan6:                        0 RPM  (min =    0 RPM)
-fan7:                        0 RPM  (min =    0 RPM)
-SYSTIN:                    +34.0°C  (high = +80.0°C, hyst = +75.0°C)  
-sensor = thermistor
-CPUTIN:                    +40.5°C  (high = +80.0°C, hyst = +75.0°C)  
-sensor = thermistor
-AUXTIN0:                   +61.0°C    sensor = thermistor
-AUXTIN1:                   +19.0°C    sensor = thermistor
-AUXTIN2:                   +20.0°C    sensor = thermistor
-AUXTIN3:                   -62.0°C    sensor = thermistor
-PECI Agent 0 Calibration:  +40.5°C
-PCH_CHIP_CPU_MAX_TEMP:      +0.0°C
-PCH_CHIP_TEMP:              +0.0°C
-PCH_CPU_TEMP:               +0.0°C
-TSI0_TEMP:                 +50.6°C
-intrusion0:               ALARM
-intrusion1:               OK
-beep_enable:              disabled
-
-
-Am 04.01.23 um 04:41 schrieb Guenter Roeck:
-> On Sat, Dec 31, 2022 at 11:42:57PM +0000, Sebastian Arnhold wrote:
->> I tried to add acpi_enforce_resources=lax, but sadly, it does not solve the
->> problem.
->>
-> What do you see in the kernel log after adding that ?
->
-> Thanks,
-> Guenter
->
->> Maybe Ahmad can help add support for the board?
->>
->> Thanks,
->> Sebastian
->>
->> Am 30.12.22 um 23:58 schrieb Christian Lamparter:
->>> Hi Sebastian,
->>>
->>> On 12/30/22 23:13, Sebastian Arnhold wrote:
->>>> Thank you very much for the patch, Guenter Roeck!
->>>>
->>>> I just compiled it using the mainline Kernel as a basis, but
->>>> "sensors-detect" still claims there are no sensors detected on my
->>>> ASUS TUF GAMING X670E-PLUS WIFI.
->>> Unfortunately, this might be because ASUS has some "new" ideas :/.
->>> See this RFC from Ahmad back from October (Author is in Cc)
->>> for an in-depth view why this is happening:
->>>
->>> https://patchwork.kernel.org/project/linux-hwmon/patch/20221018173428.71080-1-ahmad@khalifa.ws/
->>>
->>>
->>> Regards,
->>> Christian
->>>
