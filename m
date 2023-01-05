@@ -2,126 +2,98 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3198FC3DA7A
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Jan 2023 14:19:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F053C3DA7D
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Jan 2023 14:58:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjAEOTl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 5 Jan 2023 09:19:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        id S234333AbjAEO6C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 5 Jan 2023 09:58:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231644AbjAEOTj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Jan 2023 09:19:39 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB55159309;
-        Thu,  5 Jan 2023 06:19:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1672928363; bh=jGqmtBpJFhDWl3+/3Q4iGUyNOyvE0pOn9VoLM3cxvNw=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=aWJVKi4kKq3+bkujuqlXXDtH7qS4s3vkkFJEWa9769Jkh5Cf2ypqHSTrq/Pl6pJBl
-         atVy7ORdW45o2dl+uSRizAjHeoj7JlPKYcslC3XdyE8VY+Rwrm6BB0csraFjJLegbG
-         4RbwWSq/kEl2BnAMv1h27+2SuCVkpG34zHwscQYJjvbvV7CqbZVhF+agn7Ob+jmMr/
-         od29xWBwuxH2rgBdsTJIiTxr9xJ8UqvoRk/vb5puVxY+RA2t+Z7paGoJ55sajSxtAD
-         q465h8yKJstcaG0CvOV51DJWnWXm/Y9UXLxr+Sd92Til7sXtmqA05zAo0TzTcdtifJ
-         LoPDh1olt4s8Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MiacH-1oYJBN3kzn-00fjNy; Thu, 05 Jan 2023 15:19:22 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] hwmon: (ftsteutates) Add support for fanX_fault attributes
-Date:   Thu,  5 Jan 2023 15:19:11 +0100
-Message-Id: <20230105141911.8040-4-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230105141911.8040-1-W_Armin@gmx.de>
+        with ESMTP id S232614AbjAEO6B (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Jan 2023 09:58:01 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D96A1A3B7;
+        Thu,  5 Jan 2023 06:58:00 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id c133so32191603oif.1;
+        Thu, 05 Jan 2023 06:58:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gYSt1XatIEk02lW48s5E9qx2qd+gLfOO7+rMgHWKSs0=;
+        b=b7+RfIlWTcoTNF07h8P0DfMNVsnAI/BVbHQ39VMph/CsEHAcpkALkgSlBIFAZAQAFr
+         c2LRSs8Tw1JRozJRk/LEV7efR5ODBOicH16ob7OOAxlq53nE4nGSXoB0QqMdOETUX+w7
+         m8iV+Ek4tfvd0S5muUaLR+VbPil26w8Q+we2lKCLqlcQGrFfFLmmbweaJNFSdcI7TfFx
+         9x/L5USKI20uKfZTP47PT1vzIA/gp8B+Um2eki5FM/LFO881QJRzDbYuBw0ekrVk2BEi
+         jEPOQ6oq3djdbJEgLMACO0e/WoSuek9fOnEu2AmCVNA+ybq3V6rZC1np//s4z7W+98rK
+         nOTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gYSt1XatIEk02lW48s5E9qx2qd+gLfOO7+rMgHWKSs0=;
+        b=ecD3gydhjaZ1PzOutvTCgcJukyBIV52DhViU5ij5Ipf05nRlMOtnPv0AP979O+5OUz
+         iX4xVLk9PLWXQ7fsMZeifmC9p92DStGd4l6EhYvIXJhUsb5W/zDHIXsxGJW4AdKWrqag
+         pGh+yFHav4xt7HWjd5ONsOCEbIhvutYYZ2DoeFlDerNvAq9q3K2WVr50O+3Xeeo6zKtd
+         TsHPthh7gkfwSXuZdn/jhhYX6QAKt60VvW0PqEaE5CGW3AM9uuaMrIfRSDLgb38SPI/N
+         g9bVlmTviGrgJkL6CYl0yd2wYt31sHh7M5US+dVtPqTleSbhW8dXQdW/JnrZvHIE4zXt
+         6miw==
+X-Gm-Message-State: AFqh2kqlsSX8H1acnhHCegKQe1X9q7EQ8aAwFpXTcTN5iq6SBI3VW2Nh
+        X2c+7ekQhtIEFysc5Du8r5vErdRzFK4=
+X-Google-Smtp-Source: AMrXdXsRPZJwcMGKWjlSZROm2i5nLPxaVnDaO+UzzOzRUhNgZkrAXrwIO0329ofmm03gc9pRRYJSFA==
+X-Received: by 2002:a05:6808:1b0d:b0:35e:574c:c246 with SMTP id bx13-20020a0568081b0d00b0035e574cc246mr28434515oib.24.1672930679555;
+        Thu, 05 Jan 2023 06:57:59 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 63-20020aca0742000000b0035028730c90sm15646273oih.1.2023.01.05.06.57.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 06:57:59 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 5 Jan 2023 06:57:57 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] Convert to *_with_info() API
+Message-ID: <20230105145757.GB2405273@roeck-us.net>
 References: <20230105141911.8040-1-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Wr0zOroG7LIq3kzpUYWfHXGxFxEa/RaUBdqfrpGwrccgs0UGXXt
- HDhhPIXJEACq3foul9FLFSqXgc9ValFo4665jsijaQrhIQbAxzhrVmEV4HetlcKIQJ6IMG7
- G+6YJBULJ16KHXVvBZGdSNLRU2oZY3oYHVd7d/S4i6Wg2Rfj+JgMsC3m3GMWute19CVHBPC
- XIJUTFWf/1z9qOoRxAWVA==
-UI-OutboundReport: notjunk:1;M01:P0:A1D8S5zeCd8=;lItq4H59LTBZ4+5unBI3q1Orly9
- uYDYG1TVcmrTxWR7ISzl467UK+QTFN6F/98d4GOLq1//X9zfjdv9zX1QcCVVWKU9+aGwzmmxk
- URbsY1oiMyAz+NVrGVFuhimRH0Ic43bgFmSERrtyVdvHPO+QNWBufquGtkRNkyppBd+dkmJFm
- cUC1NFCXiVjuXyp9IItX5XWpRextp4qnjJiTJZUXPltMxMO72mYZKvbI8MzQ04YNdOwdOHLG8
- OsGK0NiD1EZLof9MbqrZ6fE5uyD0LdA0UZwIK3w6YEnfVTvqsAghe3Bq4jplfX0CSR+/KXu+N
- CehZiqP90vPK+qb6H3u/2dp3jfz66tZTqV9/rQ/QuMm3qLR0WrasqvvaVfA4FSU8Qj2arKcXI
- xBO4DG3Lu26fJWfXDaJj2vWBIHtZYyq1M4lL3jXc4bJk82gmmpvGZF9DzGxON3HpXdAFdmGV+
- Q2ZVJ6AC45AaVrO/k7uT3m0eAwTwPdKePZzV55043wU26bZYxE7lWl3Z94D/zVQHyP+aIO9kQ
- n4nk4IEc3NGVIx2bAOYnxUQPQ2FJm6ia0A2WPu4j80El7UICwgDSJkMHORsaMoRDpGyi4PGV0
- eBMg4rx1tZ3bmv3M29hJuE6mDqVKPlAB4FhzwSk9AaDwAPwLjfKL4Q70U6/8x5I1aHV7RY0hj
- 6E8OBtAP7CWvnfCHhJ1tKbzO5EEkCyQsglo+V/3RBanv56351LTph2JV13rI7iRA7F1mW5rSO
- nm9s3Rr8ieVI31dFfWaL3d6Y1pIsqAD17rKE0jvXv8NfaEWAzUYeABOH3szyfyhH/zGv1dyf4
- xJ2fYIMrKfBAVBR5xaGj5FwwOIkdFm0s3s6GeVAwxRiTDQ44QRrsW/x0v7l17ZiR/gTXCXhjl
- jpR++DFl+OQs0Vze12j7j4Rv0wTlPsxQYPg9xOldizTrZ4GtLl04PCyCH/K0UEHKiZCA1jaN8
- Ue/reQKfj3mfH/MPt6e9XgQXcxA=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230105141911.8040-1-W_Armin@gmx.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The driver knows internally when a fan is not connected,
-but does not export this knowledge to userspace. Use the
-standard fanX_fault attributes to notify userspace if a
-fan is not connected.
+On Thu, Jan 05, 2023 at 03:19:08PM +0100, Armin Wolf wrote:
+> This patch series converts the ftsteutates driver to the *_with_info()
+> API, reducing module size by ~30%.
+> The first patch does the actual conversion, while the second patch deals
+> with the nonstandard fanX_source attributes, which are being replaced
+> with the standard pwmX_auto_channels_temp attributes. The last patch
+> adds support for fanX_fault attributes.
+> 
+> All patches where tested on a Fujitsu DS3401-B1.
+> 
 
-Tested on a Fujitsu DS3401-B1.
+This is the second time in less than two weeks that I get a follow-up
+version of a patch series, unversioned and without change log.
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/ftsteutates.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+That makes me wonder - is that just coincidence or is someone promoting
+that ?
 
-diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
-index 0d8ab94250a9..25afd9167a34 100644
-=2D-- a/drivers/hwmon/ftsteutates.c
-+++ b/drivers/hwmon/ftsteutates.c
-@@ -356,6 +356,7 @@ static umode_t fts_is_visible(const void *devdata, enu=
-m hwmon_sensor_types type,
- 	case hwmon_fan:
- 		switch (attr) {
- 		case hwmon_fan_input:
-+		case hwmon_fan_fault:
- 			return 0444;
- 		case hwmon_fan_alarm:
- 			return 0644;
-@@ -411,6 +412,10 @@ static int fts_read(struct device *dev, enum hwmon_se=
-nsor_types type, u32 attr,
- 		case hwmon_fan_alarm:
- 			*val =3D !!(data->fan_alarm & BIT(channel));
+Guenter
 
-+			return 0;
-+		case hwmon_fan_fault:
-+			*val =3D !(data->fan_present & BIT(channel));
-+
- 			return 0;
- 		default:
- 			break;
-@@ -536,14 +541,14 @@ static const struct hwmon_channel_info *fts_info[] =
-=3D {
- 			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_FAULT
- 			   ),
- 	HWMON_CHANNEL_INFO(fan,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT
- 			   ),
- 	HWMON_CHANNEL_INFO(pwm,
- 			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-=2D-
-2.30.2
-
+> Armin Wolf (3):
+>   hwmon: (ftsteutates) Convert to devm_hwmon_device_register_with_info()
+>   hwmon: (ftsteutates) Replace fanX_source with pwmX_auto_channels_temp
+>   hwmon: (ftsteutates) Add support for fanX_fault attributes
+> 
+>  Documentation/hwmon/ftsteutates.rst |   5 +
+>  drivers/hwmon/ftsteutates.c         | 550 +++++++++++-----------------
+>  2 files changed, 210 insertions(+), 345 deletions(-)
+> 
+> --
+> 2.30.2
+> 
