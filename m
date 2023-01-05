@@ -2,118 +2,152 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84AF1C3DA7A
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Jan 2023 07:49:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB2BC3DA7D
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Jan 2023 12:46:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbjAEHtT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 5 Jan 2023 02:49:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44548 "EHLO
+        id S232920AbjAEMqV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 5 Jan 2023 07:46:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjAEHtS (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Jan 2023 02:49:18 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2054.outbound.protection.outlook.com [40.107.22.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770B339F9D
-        for <linux-hwmon@vger.kernel.org>; Wed,  4 Jan 2023 23:49:16 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GFCa3M2q99MYo17ZyEDAnJug1GSj/tQPd1AsAjNuzRMX5VizJmRFKTVw0+uYVFjZIydO+RIAEfexG5HmD/YpjgaPb4jC+2tA2XdBH9TIc1CQdAgjAKhVhkcg2jAix3oi17PlbK9KcjtxZkx7GKdrXD4UX+OFeM+8dQc6fVg9fH9GoDZ28pH2Y7CkP/6HbwFopWSJcSgIQwEjWRFM4l8YuRwcXagDtsixqR/v73v74LEhquG2yaitCrnx0f4R0IANKFsE77JWRtEvRxywV8OdSkX5m1LWctEY/VZnwwtydkF8p4bP7VlJFTUwXGvAmmN683BV0lMjKYNlyrCmnfsezA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EhGQY/DAvEpIoP1ziBFObJAbc5u9bX5bxeNkJHUIrQY=;
- b=EpV8+HhHsKSc1gO8tLp0+Y7gvvUuq1YgqmlO81QhHFua4dK8VD8gy0qVv3iIbG9OC/CQHd7RislH5pik/ulCtHKzu+f11tLXCwLvmW03bBXa0VrBL7CrcRXawfuqpVL+qyPIAFj2r6UIvQnB7VKV4aImbT+b1J5oqVFOKAJz5+CumNM4CAx+OB5uIDTagCijVR78nNz8Y+gcmbOYip9t0bttsnagtlXkZmN9cgjrMs5T1bXdwlZmn6e2aVYaoapDGUae0wq4tQAggZriEDwrnhgLS5M17MFz91ZoPRBDkalhwpIczNl2X4rTKa7QYfYStSENv+sH34XMvpd244+Pjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 139.15.153.201) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=etas.com;
- dmarc=pass (p=reject sp=none pct=100) action=none header.from=etas.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=etas.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EhGQY/DAvEpIoP1ziBFObJAbc5u9bX5bxeNkJHUIrQY=;
- b=IMGfpTDFa4uiI7N5jCSHgRyRWe97ndZRY8Zqu2xWn2Fp7t2leTxIf/HXN1GcYbHT8DAD4xOjLT8yUQSxvMrUAq9XmB3a+1p+g6waI8Pg+DL4tZzlP+G3xvE12D3VOD6KOaRbkq6Fv+y05Dcm7B8AEzTw+Rfhv0GbLPAXN0L9NGA=
-Received: from DB6P193CA0022.EURP193.PROD.OUTLOOK.COM (2603:10a6:6:29::32) by
- DU0PR10MB7237.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:44b::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.19; Thu, 5 Jan 2023 07:49:14 +0000
-Received: from DBAEUR03FT052.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:6:29:cafe::41) by DB6P193CA0022.outlook.office365.com
- (2603:10a6:6:29::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5966.19 via Frontend
- Transport; Thu, 5 Jan 2023 07:49:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 139.15.153.201)
- smtp.mailfrom=etas.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=etas.com;
-Received-SPF: Pass (protection.outlook.com: domain of etas.com designates
- 139.15.153.201 as permitted sender) receiver=protection.outlook.com;
- client-ip=139.15.153.201; helo=eop.bosch-org.com; pr=C
-Received: from eop.bosch-org.com (139.15.153.201) by
- DBAEUR03FT052.mail.protection.outlook.com (100.127.142.144) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5966.18 via Frontend Transport; Thu, 5 Jan 2023 07:49:14 +0000
-Received: from SI-EXCAS2001.de.bosch.com (10.139.217.202) by eop.bosch-org.com
- (139.15.153.201) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2375.34; Thu, 5 Jan
- 2023 08:49:10 +0100
-Received: from getk-dev.de.bosch.com (10.139.217.196) by
- SI-EXCAS2001.de.bosch.com (10.139.217.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.34; Thu, 5 Jan 2023 08:49:10 +0100
-From:   Felix Nieuwenhuizen <Felix.Nieuwenhuizen@etas.com>
-To:     <linux-hwmon@vger.kernel.org>
-CC:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        "Rob Herring" <robh@kernel.org>,
-        Felix Nieuwenhuizen <Felix.Nieuwenhuizen@etas.com>
-Subject: [PATCH] hwmon: (pmbus/ltc2978) add support for LTC7132 - docs
-Date:   Thu, 5 Jan 2023 08:49:00 +0100
-Message-ID: <20230105074900.5730-1-Felix.Nieuwenhuizen@etas.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221208021303.GA3373033-robh@kernel.org>
-References: <20221208021303.GA3373033-robh@kernel.org>
+        with ESMTP id S232072AbjAEMqP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Jan 2023 07:46:15 -0500
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F06443A27
+        for <linux-hwmon@vger.kernel.org>; Thu,  5 Jan 2023 04:46:13 -0800 (PST)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 880972403EE
+        for <linux-hwmon@vger.kernel.org>; Thu,  5 Jan 2023 13:46:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1672922771; bh=CnA3qdEWCR7KtqQJ4O+LFKT7n4VrUdRkiEoU27jo+48=;
+        h=Date:Subject:To:Cc:From:From;
+        b=IFr+2Xe3hUMri6YsP9QRpQRWyO2424Zsf4eCxZng5lJsW3X6xlWrQqLzon7gfbiMn
+         bZep9SxtK1QhKVTCfKWsCbWtGasVvaF2wd1Hvx3IJjOSNryXHpDnrfVUbS4hiShpgg
+         jbU1M264AzX/u2UnA9EzzTPY5EeocW/5H+kzAovIsDWkz7Igi1s1jvYhSE2QtbmhMD
+         sqXAgntS+1le5FUXMxXXsw7FMulIjHwYGI6IbzmwwUcbyw9RAxOI54l0NIHKUENrSp
+         XfbvjG4Nu+IlRXXsHPdcpG8/oiIp3BCbbdEOSwPpw1z101riV6T4+GKUsT72gQXqXQ
+         kjJNCsF6SPZ/Q==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4NnmRh2f8xz6tmV;
+        Thu,  5 Jan 2023 13:46:08 +0100 (CET)
+Message-ID: <767c4090-007c-a819-e047-11971ea9cc17@posteo.de>
+Date:   Thu,  5 Jan 2023 12:46:07 +0000
 MIME-Version: 1.0
+Subject: Re: [PATCH RFT] hwmon: (nct6755) Add support for NCT6799D
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Christian Lamparter <chunkeey@gmail.com>,
+        linux-hwmon@vger.kernel.org, Ahmad Khalifa <ahmad@khalifa.ws>
+References: <184c3523-fb00-b0df-cf29-cc1b171c4ab4@gmail.com>
+ <20221230175021.GA1136102@roeck-us.net>
+ <c8d68feb-d44f-02c6-0a08-d199cef00b46@gmail.com>
+ <20221230214855.GA3881237@roeck-us.net>
+ <b31ed9ec-3bd5-e032-ea03-b116ece4dac3@posteo.de>
+ <73d1eb21-6cb9-a60f-218b-af129c2cb7a4@gmail.com>
+ <3ba37e2d-413b-4d7d-e99b-8e0a53bd7f4e@posteo.de>
+ <20230104034136.GA228903@roeck-us.net>
+Content-Language: de-DE
+From:   Sebastian Arnhold <sebastian.arnhold@posteo.de>
+In-Reply-To: <20230104034136.GA228903@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.139.217.196]
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DBAEUR03FT052:EE_|DU0PR10MB7237:EE_
-X-MS-Office365-Filtering-Correlation-Id: 23744e2b-87f9-4a2c-1c66-08daeef15717
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MEX4+lp3gVSAyh2Dkl5IcPaNiLgPLS1n2N7vyuDHTPNgkU0H6Lninq9VgLUlTqx7FgFNs9UXSayWN0lutYUMjhxukZp8ia3iHeTrACzgpWtgze5QkXfTwgHqQMTFjkfrBpIJWUdWm6a4CkOnKM/RXiBGZ4pWkkgzxr5pKe+gwl4yZoTD4pvz6n7jCSEoRxm5OVVuNvUF1my3l6gGVvUSRd6IjXXwiPlJ+/Yh7/whq27E9L0VOxux7WNyjCGhn21XkBsqK/fzgnofvOzC8ZWxIGHlaGq2d9wi6yGLZMWMCDF3mT8Dhg+nxx09mrsKMJdfysc69fgAP8XaSH+FZfVTiAVRS8elQr2XR8JyaifcIA6fhVhEJJ15GiB4fst/b9cQZfHpO82q7aaXBmJ3qGseAjexI+FJJHWZo02biqFeWzXlIPTAuVRs573sugStZ/g5KRQGxCtQpWaI7mho+DxqCQ5HP/vbYIoAeBkKXccxyeAe0dntv0hfr+H1pzpof1ugeD7oCJqH5HXHSRs9+wIjilte01fTfWtzdl2OyPso/599uXffgycr3G3Dc8hqngiS5csimzrqZS7D4shYwKOcrKQ0hWQ4B0XTBCrculd+/HCrgaf9JRPdbOQ6u+mVyzyuxtgbu7Kd7MGo5ur181A/UvflQPV4HNpPOnS1MA8+RL+R4dFynxMF4YAWPB5WcOxGNlxLGUPWxOQOwVchf5VGz5lPmDdMV6XQKDxQ5ILozK0=
-X-Forefront-Antispam-Report: CIP:139.15.153.201;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:eop.bosch-org.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(396003)(39860400002)(346002)(451199015)(36840700001)(46966006)(40470700004)(47076005)(1076003)(26005)(16526019)(6666004)(107886003)(336012)(82310400005)(40480700001)(86362001)(40460700003)(36756003)(36860700001)(356005)(82740400003)(82960400001)(2616005)(81166007)(186003)(316002)(4326008)(41300700001)(478600001)(8676002)(2906002)(5660300002)(8936002)(4744005)(54906003)(70206006)(70586007)(6916009)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: etas.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 07:49:14.0602
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23744e2b-87f9-4a2c-1c66-08daeef15717
-X-MS-Exchange-CrossTenant-Id: 0ae51e19-07c8-4e4b-bb6d-648ee58410f4
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0ae51e19-07c8-4e4b-bb6d-648ee58410f4;Ip=[139.15.153.201];Helo=[eop.bosch-org.com]
-X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT052.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR10MB7237
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add missing compatible string "lltc,ltc7132" to the bindings documentation.
+Hello Guenter & friends,
 
-Signed-off-by: Felix Nieuwenhuizen <Felix.Nieuwenhuizen@etas.com>
----
- Documentation/devicetree/bindings/hwmon/ltc2978.txt | 1 +
- 1 file changed, 1 insertion(+)
+I'm such an idiot! The patch works, of course. I did everything 
+correctly and then simply forgot to load the module. :D
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ltc2978.txt b/Documentation/devicetree/bindings/hwmon/ltc2978.txt
-index 4e7f6215a453..61783b3819bf 100644
---- a/Documentation/devicetree/bindings/hwmon/ltc2978.txt
-+++ b/Documentation/devicetree/bindings/hwmon/ltc2978.txt
-@@ -16,6 +16,7 @@ Required properties:
-   * "lltc,ltc3886"
-   * "lltc,ltc3887"
-   * "lltc,ltc3889"
-+  * "lltc,ltc7132"
-   * "lltc,ltc7880"
-   * "lltc,ltm2987"
-   * "lltc,ltm4664"
--- 
-2.30.2
+Adding "acpi_enforce_resources=lax" is necessary for my system, but then 
+it works! Other people on the lm-sensors project report that, too. So 
+the driver seems to be working for a first release.
 
+Watching my fanspeeds with the "Vitals" GNOME extension and generating 
+fancurves with pwmconfig/fanspeed as we speak! Awesome!
+
+Now we should get it into the Linux kernel for the next release asap. 
+I've heard on Phoronix that the driver additions queque for Kernel 6.3 
+has now begun. I don't think there would be any negative side effects, 
+since the module was based on the datasheet. Some values seem to be off, 
+though - I'll attach my "sensors" output.
+
+Thank you all very much! :)
+Sebastian
+
+
+nct6799-isa-0290
+Adapter: ISA adapter
+in0:                      840.00 mV (min =  +0.00 V, max =  +1.74 V)
+in1:                      1000.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+in2:                        3.41 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+in3:                        3.33 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+in4:                      992.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+in5:                        1.04 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+in6:                      472.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+in7:                        3.39 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+in8:                        3.30 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+in9:                        1.66 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+in10:                     560.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+in11:                     552.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+in12:                       1.05 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+in13:                     216.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+in14:                       2.04 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+fan1:                      607 RPM  (min =    0 RPM)
+fan2:                        0 RPM  (min =    0 RPM)
+fan3:                        0 RPM  (min =    0 RPM)
+fan4:                      910 RPM  (min =    0 RPM)
+fan5:                      625 RPM  (min =    0 RPM)
+fan6:                        0 RPM  (min =    0 RPM)
+fan7:                        0 RPM  (min =    0 RPM)
+SYSTIN:                    +34.0°C  (high = +80.0°C, hyst = +75.0°C)  
+sensor = thermistor
+CPUTIN:                    +40.5°C  (high = +80.0°C, hyst = +75.0°C)  
+sensor = thermistor
+AUXTIN0:                   +61.0°C    sensor = thermistor
+AUXTIN1:                   +19.0°C    sensor = thermistor
+AUXTIN2:                   +20.0°C    sensor = thermistor
+AUXTIN3:                   -62.0°C    sensor = thermistor
+PECI Agent 0 Calibration:  +40.5°C
+PCH_CHIP_CPU_MAX_TEMP:      +0.0°C
+PCH_CHIP_TEMP:              +0.0°C
+PCH_CPU_TEMP:               +0.0°C
+TSI0_TEMP:                 +50.6°C
+intrusion0:               ALARM
+intrusion1:               OK
+beep_enable:              disabled
+
+
+Am 04.01.23 um 04:41 schrieb Guenter Roeck:
+> On Sat, Dec 31, 2022 at 11:42:57PM +0000, Sebastian Arnhold wrote:
+>> I tried to add acpi_enforce_resources=lax, but sadly, it does not solve the
+>> problem.
+>>
+> What do you see in the kernel log after adding that ?
+>
+> Thanks,
+> Guenter
+>
+>> Maybe Ahmad can help add support for the board?
+>>
+>> Thanks,
+>> Sebastian
+>>
+>> Am 30.12.22 um 23:58 schrieb Christian Lamparter:
+>>> Hi Sebastian,
+>>>
+>>> On 12/30/22 23:13, Sebastian Arnhold wrote:
+>>>> Thank you very much for the patch, Guenter Roeck!
+>>>>
+>>>> I just compiled it using the mainline Kernel as a basis, but
+>>>> "sensors-detect" still claims there are no sensors detected on my
+>>>> ASUS TUF GAMING X670E-PLUS WIFI.
+>>> Unfortunately, this might be because ASUS has some "new" ideas :/.
+>>> See this RFC from Ahmad back from October (Author is in Cc)
+>>> for an in-depth view why this is happening:
+>>>
+>>> https://patchwork.kernel.org/project/linux-hwmon/patch/20221018173428.71080-1-ahmad@khalifa.ws/
+>>>
+>>>
+>>> Regards,
+>>> Christian
+>>>
