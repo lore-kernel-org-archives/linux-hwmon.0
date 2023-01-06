@@ -2,126 +2,100 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 633AEC4708E
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Jan 2023 22:51:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E418C3DA7A
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Jan 2023 01:12:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236293AbjAEWvf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 5 Jan 2023 17:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
+        id S236337AbjAFBMD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 5 Jan 2023 20:12:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236273AbjAEWvc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Jan 2023 17:51:32 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701CB58820;
-        Thu,  5 Jan 2023 14:51:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1672959075; bh=jGqmtBpJFhDWl3+/3Q4iGUyNOyvE0pOn9VoLM3cxvNw=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=SX+53odXcOSY/gg9DN4453hhebH3D8CpXdcsg1EoQesO8lVZFFw1MOlmxLfQnmS6S
-         9SKG/gIREabUvtxNbNzB6f4TOeKLuAMBxOiVr4pS1xtKLbdsdY49FaNSuV5QJViRYZ
-         EMRH2UH7mUZI5EQaOnNR2HM6ZqD5t0dysMc6Ut41f6XodFH3ft24G456S+n1rqotZ7
-         +zUAOJVnhJIXGLiHbGq2oyAlY+j8E8czcbJUepQr56GDCGRSUw3ljMLfSy2t3YmW6l
-         zwfXLV4Y4X1nEJwMXephrlCJXZzZRREceJWSl45IMYYUK7yQeXWWXFFyLpoL2GesEU
-         okwJmHUvEVStQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MD9XF-1p4WeY1ACP-0099E0; Thu, 05 Jan 2023 23:51:15 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] hwmon: (ftsteutates) Add support for fanX_fault attributes
-Date:   Thu,  5 Jan 2023 23:51:07 +0100
-Message-Id: <20230105225107.58308-4-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230105225107.58308-1-W_Armin@gmx.de>
-References: <20230105225107.58308-1-W_Armin@gmx.de>
+        with ESMTP id S232331AbjAFBMB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Jan 2023 20:12:01 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57ED71FC2;
+        Thu,  5 Jan 2023 17:11:59 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 4B76424DBC0;
+        Fri,  6 Jan 2023 09:11:57 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 6 Jan
+ 2023 09:11:57 +0800
+Received: from [192.168.2.237] (183.27.98.121) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 6 Jan
+ 2023 09:11:55 +0800
+Message-ID: <2286c916-c54c-bdda-b1d9-b704813b6fec@starfivetech.com>
+Date:   Fri, 6 Jan 2023 09:11:53 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:1IbpAIpZxtlA3c3W6IInAlAIKGzqpBwvLzm1zc41/PnopcAoh8x
- miGWNOsjZS0vMQLkqnnwObDuIfs/eEts/k/PWIXx5Cis4X52iDH690+O8GAuDEA8sa/Oj6/
- ZZ+x3Abj9qDVnknFtlwx/jDx8Da4Rrp/1+SUFOsSn/b5Ra8sykx9q5y0rTBUlke+02kKQDP
- byOfk2kPpJaVrdQBM4t9g==
-UI-OutboundReport: notjunk:1;M01:P0:RrZhXS+p/QQ=;ff2fMn08FZn1+MKmcFLfPg+uqg4
- GBjmVOf+eRtK8a4sOry9wMNFsHKBVQVlnvsNhrUHVXUDEmQfjG/xnqXrdxUOBUxQbCd4OKvvt
- wcv685P8tJo1sCDlXNUk0SuGh/xlyjt9L/0WaS7xsUq9HIeqRqcbyTjf0B8FC4rzqvIzCjuSI
- sSpmYmP0BpVvixZ4MuLOHQU1LbSF4zZFYpXAv9tmzYK4k3vLhGImKxWRzLTUoiWIzuSp6SzJN
- zm6U0dsq1maUvnoi6v0NC5j1W4KVQOxyErTvSt/QBPLnsPFC1EqNVmRcIy69g6aLf4H5j5SpW
- C9i80frIG6pcwPn6p/FBwLzELQgS47/HPH64rf5j2/dkbzDg1Br05U/dD6pp6J+Dm9Y67Pjbw
- GhjwRfuM8e4fySNAS3Ri99hwsLSCLf3Sfi22Oabxh4NsuSpH4J3YU1rfgV+X/yF09PhG/qPYO
- q6qdAxHEJf2xnawmybTXDV6pJ3TOIulW3tKVULpnGO3xv19FsLDtOg7+pPel/vInfN/bkI8hl
- JxyrhF4QXnWvQCmgF06AbwN2mrlVfSl0t8yj1iOpbkJeN7QbNv5yC/3wv+GELW8oc0Och+hgu
- uhpuBW3TSa1Z05oCSD0nZFpaDPGbSd57p1Af0oslCukEzHvjJcoaPOnFxnPMpF8mAS8XNfs9U
- CJPBgSrNkZcFNL5HVBZt2wyMdNuKJawbkJSdRBUKsBwEILPdywyIavUWM2vuW2e67ZuaUtBvG
- VP/ImIhyO8yWO/HQ81AGvyPfwzZD3d7rqU2trHYylGADgr74mIsLy/jnpfsJbaAeNTNyw93dl
- 66H5v1EMXR0nKx4DZ2Q+5I4kBOMtBfjPyiLNCtyttJjOJP7CVg8l57jApGQa2tnLKKhutQ2am
- 4U2bpAxaAr2SbjP7PSMU4mt+CCuJQslt+pLLnl97PPlKfjfPdfYQaLa718RPzCc6SX+QLpm75
- vODjDTmiWF3iiwEdCUwhzmZTH9U=
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v1 0/4] Temperature sensor support for StarFive JH7110
+ RISC-V SoC
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230103013145.9570-1-hal.feng@starfivetech.com>
+ <20230103015601.GB313835@roeck-us.net>
+Content-Language: en-US
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <20230103015601.GB313835@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.98.121]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The driver knows internally when a fan is not connected,
-but does not export this knowledge to userspace. Use the
-standard fanX_fault attributes to notify userspace if a
-fan is not connected.
+On Mon, 2 Jan 2023 17:56:01 -0800, Guenter Roeck wrote:
+> On Tue, Jan 03, 2023 at 09:31:41AM +0800, Hal Feng wrote:
+> > This patch series adds temperature sensor support for StarFive JH7110 SoC.
+> > The last two patches depend on series [1].
+> > 
+> > [1]: https://lore.kernel.org/all/20221220011247.35560-1-hal.feng@starfivetech.com/
+> > 
+> > Emil Renner Berthing (4):
+> >   dt-bindings: hwmon: Add starfive,jh71x0-temp
+> >   hwmon: (sfctemp) Add StarFive JH71x0 temperature sensor
+> >   riscv: dts: starfive: jh7110: Add temperature sensor node
+> >   riscv: dts: starfive: visionfive-2: Add thermal-zones
+> > 
+> 
+> The hardware monitoring driver is obviously either the same
+> or derived from the previous series at
+> https://patchwork.kernel.org/project/linux-hwmon/list/?series=&submitter=&state=*&q=starfive
+> 
+> Why is this not submitted as v4 of the original series ?
+> What has changed, and what is the rationale for (re-)submitting
+> it as v1 ?
 
-Tested on a Fujitsu DS3401-B1.
+Sorry for the late reply. I feel sorry to say that I didn't know
+the submitting history of this patch series and Emil forgot to
+tell me maybe. After comparing with the previous series, I find
+the changes between this one and the previous one can be concluded
+as below.
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/ftsteutates.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+Change log:
+- Added support for StarFive JH7110 SoC besides JH7100.
+- Added clock and reset support in dt-bindings and driver.
+- Added two patches for adding nodes in JH7110 and VisionFive 2 dts
+  which were being reviewed.
 
-diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
-index 0d8ab94250a9..25afd9167a34 100644
-=2D-- a/drivers/hwmon/ftsteutates.c
-+++ b/drivers/hwmon/ftsteutates.c
-@@ -356,6 +356,7 @@ static umode_t fts_is_visible(const void *devdata, enu=
-m hwmon_sensor_types type,
- 	case hwmon_fan:
- 		switch (attr) {
- 		case hwmon_fan_input:
-+		case hwmon_fan_fault:
- 			return 0444;
- 		case hwmon_fan_alarm:
- 			return 0644;
-@@ -411,6 +412,10 @@ static int fts_read(struct device *dev, enum hwmon_se=
-nsor_types type, u32 attr,
- 		case hwmon_fan_alarm:
- 			*val =3D !!(data->fan_alarm & BIT(channel));
+Thank you for your kindly reminding. I will resend this patch
+series as version 4 and add the change log.
 
-+			return 0;
-+		case hwmon_fan_fault:
-+			*val =3D !(data->fan_present & BIT(channel));
-+
- 			return 0;
- 		default:
- 			break;
-@@ -536,14 +541,14 @@ static const struct hwmon_channel_info *fts_info[] =
-=3D {
- 			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_FAULT
- 			   ),
- 	HWMON_CHANNEL_INFO(fan,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM,
--			   HWMON_F_INPUT | HWMON_F_ALARM
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_ALARM | HWMON_F_FAULT
- 			   ),
- 	HWMON_CHANNEL_INFO(pwm,
- 			   HWMON_PWM_AUTO_CHANNELS_TEMP,
-=2D-
-2.30.2
-
+Best regards,
+Hal
