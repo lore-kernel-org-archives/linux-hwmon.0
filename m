@@ -2,80 +2,91 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A3B7C46467
-	for <linux-hwmon@archiver.kernel.org>; Sat,  7 Jan 2023 18:38:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ACFDC54EBE
+	for <linux-hwmon@archiver.kernel.org>; Sat,  7 Jan 2023 18:50:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbjAGSij (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 7 Jan 2023 13:38:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S232804AbjAGSu6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 7 Jan 2023 13:50:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjAGSij (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 7 Jan 2023 13:38:39 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B16C45641
-        for <linux-hwmon@vger.kernel.org>; Sat,  7 Jan 2023 10:38:38 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id v30so6599825edb.9
-        for <linux-hwmon@vger.kernel.org>; Sat, 07 Jan 2023 10:38:38 -0800 (PST)
+        with ESMTP id S230360AbjAGSuy (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 7 Jan 2023 13:50:54 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90CF306
+        for <linux-hwmon@vger.kernel.org>; Sat,  7 Jan 2023 10:50:53 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id fy8so10469399ejc.13
+        for <linux-hwmon@vger.kernel.org>; Sat, 07 Jan 2023 10:50:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oSDH2EupTOrpEz9CCZUJ3Zv24Eo4wJFRMafxgvePobs=;
-        b=nacmK0iYUbBq9daO8Uw4P/9Lbmyx4BWsH1WQIXARTsJXsXIB2DYsxG3Bw0TeW+1pqm
-         jjR35rLGdLJEuv3Pb3pYWugWt95RIqNwZTqUBQ6C+v6Ltvr6oD1HqvInoMg7NlKTbbW9
-         mLPdA+1eVkIJkrC1A1HXNXaotDgaLNFBaMLVhChUNFC6lshb+llH7vkQ+FNYW2hmR5rO
-         mB4vjz7c63/Zn4IR4khu8hRlzLPUoJ3oxgN8Lw2BFzfHPr+pjlWpmHsh8KpgVwU97rMs
-         k8b12huBAGqUKac0In5Q42uvqZ3/8nNY3T02/G6XnLoz928ClE34TW1hbJ6M3uEZgtcm
-         rq7Q==
+        bh=NlE/Tn8MueavSemqR5qbbHx1xtEswnMMSqgwHT5F/ig=;
+        b=CyYLMKjGniAE5sxr8FJBpoGk6skQ5e+V39Bx2hcU7n/qUOtl816ePeKJfb91ye5Idj
+         le3XoOzI9EWkFoMvhDbEO0lxJlS98EzIyhp1ce38hmLyqYA1l+lY5WWTZif1aOoeyeuE
+         61tX8U6tQeGYqVeG8HDyKfZFiSKwVzOMy3HPtFrZe4D+oGJOoNc9BB/UwY7g+E/16bW4
+         zm/nmBFD9Z6fmmv8V9BkOJtCBS5SwnM/7DP4L0HxcL1IGTxgaMPR480f3yIttWSw9hDy
+         4xPC8jB5QHOLu1It8DG7Isdgdr/hwvAupMTKFiMAf/amf6RJOC3B0iPY2sC4tNsKuXF4
+         ZIPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oSDH2EupTOrpEz9CCZUJ3Zv24Eo4wJFRMafxgvePobs=;
-        b=W0JEObsY2hn0XeUXCxexwOy6SBQmklq/IY9BmjUe6lK9h6lUph6+nzDIWustvm1Sxj
-         vFeboP1IMzM7w2gkO+zxSUKJVDR0Pb5SoB3trMf26itke4tbfeTO1Bi1+B6GIqyhsIvj
-         GHPtS8/KG0X/1ZlPit81MIzjsf0jW4778wnXH5BP0cXrCtJZ2TYUXStjQmgBvR2usYTu
-         5QksqDulaWtB3Pi+zqGZDbHKDO5BOH2rEFU1Gb+vWrpkjfyXhEKN+UZFg9utOr5MO4YQ
-         Wh4Lov9IYTZz8plblIiO5yZWeBcbO5ru7q0QRqoqRkZcQGxxX7Dg74nhMLMHS1zVGxZD
-         QWLA==
-X-Gm-Message-State: AFqh2kr3i7kGpo9bItqgVqV109Mywb1nMBZVt0TfvdH/P2u5+KrcE2Zy
-        vZTS+tTU57Dm2VTOyMM9edT/3572HdypnQ==
-X-Google-Smtp-Source: AMrXdXvBsuzRR1ev3sV+ROLwfTexOiIL0qOi+6vs5iVV+me7sy6hBAc2TIg7ZsNPtLK2n+Y8C6Vukw==
-X-Received: by 2002:a05:6402:538f:b0:47c:4479:d60d with SMTP id ew15-20020a056402538f00b0047c4479d60dmr50379108edb.20.1673116716698;
-        Sat, 07 Jan 2023 10:38:36 -0800 (PST)
-Received: from localhost.localdomain ([46.211.83.22])
-        by smtp.googlemail.com with ESMTPSA id t32-20020a056402242000b0049148f6461dsm1704943eda.65.2023.01.07.10.38.33
+        bh=NlE/Tn8MueavSemqR5qbbHx1xtEswnMMSqgwHT5F/ig=;
+        b=Cc8W01jDql0Yth80QYAvu6YTqIsB+1oVubIHjEEcgH0ImhGBlsOm8nlVWfOsXKGbhe
+         WgRNeH0+J2QMharYk3pCQj+tQDLk6gRmt3brArfPaciLL5OZz04d6rnZtvFPMDEciIpM
+         PmtIy3bO4nLbLTKvCjGxss3sfoab1axJkT1Hc+kl5KfHISSKvprPGiI0O/Bo3DuICwUt
+         BM5MCjgM9gLPubmfZux2U8A+hzn6yp6LiUGy52lETElDzxoN5DRvu20bAeKOJ8B6ZBf7
+         XzRokLQf948OvVMTSMXux6Oko0iJFKHOBkKIYeHJjkKmGn+mjL+h8uoF9CfJrEo2haPI
+         L9yQ==
+X-Gm-Message-State: AFqh2krE4r6taVwHt5KQdk0fUvenIOCzJhVgOWPyDDZz2SWEzPMvaVZ4
+        2AJrbNDEor45ppbktqHioZraMPyTxRBwjg==
+X-Google-Smtp-Source: AMrXdXt444dP968EvMpVwAbPYUmS9kD1uK6j6D0zIt+lFqUZQe8gzFnVEZ1NBtMPcE+tryjF4GNnuw==
+X-Received: by 2002:a17:906:6a05:b0:7c1:28a7:f7a0 with SMTP id qw5-20020a1709066a0500b007c128a7f7a0mr74368513ejc.31.1673117452428;
+        Sat, 07 Jan 2023 10:50:52 -0800 (PST)
+Received: from localhost ([46.211.83.22])
+        by smtp.gmail.com with ESMTPSA id 18-20020a170906329200b007c0c679ca2fsm1686263ejw.26.2023.01.07.10.50.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Jan 2023 10:38:36 -0800 (PST)
+        Sat, 07 Jan 2023 10:50:52 -0800 (PST)
+Date:   Sat, 7 Jan 2023 20:50:36 +0200
 From:   Denis Pauk <pauk.denis@gmail.com>
 To:     sebastian.arnhold@posteo.de
 Cc:     ahmad@khalifa.ws, chunkeey@gmail.com, linux-hwmon@vger.kernel.org,
         linux@roeck-us.net, jdelvare@suse.com, jeroen@beerstra.org,
-        sst@poczta.fm, pauk.denis@gmail.com
+        sst@poczta.fm
 Subject: Re: [PATCH RFT] hwmon: (nct6755) Add support for NCT6799D
-Date:   Sat,  7 Jan 2023 20:37:39 +0200
-Message-Id: <20230107183739.2101-1-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <767c4090-007c-a819-e047-11971ea9cc17@posteo.de>
+Message-ID: <20230107205036.7aff1267@gmail.com>
+In-Reply-To: <20230107183739.2101-1-pauk.denis@gmail.com>
 References: <767c4090-007c-a819-e047-11971ea9cc17@posteo.de>
+        <20230107183739.2101-1-pauk.denis@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+On Sat,  7 Jan 2023 20:37:39 +0200
+Denis Pauk <pauk.denis@gmail.com> wrote:
 
-Jeroen Beerstra and Slawomir Stepien have tested ASUS boards with nct6799d
-chip.
+Of course, if Ahmad does not have any objections.
 
-I have merged your patch with rewrited wmi access patch and attached to
-https://bugzilla.kernel.org/show_bug.cgi?id=204807#c281
+I have cleaned up patch and reused same method for both types of boards and
+have added more boards.
 
-I will send patches with updated wmi code after feedbacks from 204807
-receipients.
+> Hi,
+> 
+> Jeroen Beerstra and Slawomir Stepien have tested ASUS boards with nct6799d
+> chip.
+> 
+> I have merged your patch with rewrited wmi access patch and attached to
+> https://bugzilla.kernel.org/show_bug.cgi?id=204807#c281
+> 
+> I will send patches with updated wmi code after feedbacks from 204807
+> receipients.
+> 
+> Best regards,
+>              Denis.
 
-Best regards,
-             Denis.
