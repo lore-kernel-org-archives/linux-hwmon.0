@@ -2,266 +2,294 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52CBAC54EBE
-	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Jan 2023 13:39:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F032C6379F
+	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Jan 2023 16:22:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjAINjZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 9 Jan 2023 08:39:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
+        id S229472AbjAIQWw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 9 Jan 2023 11:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237474AbjAINir (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Jan 2023 08:38:47 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C533AB09;
-        Mon,  9 Jan 2023 05:36:39 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id v10so11288682edi.8;
-        Mon, 09 Jan 2023 05:36:39 -0800 (PST)
+        with ESMTP id S230315AbjAIQWm (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Jan 2023 11:22:42 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A32231;
+        Mon,  9 Jan 2023 08:22:41 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id e17-20020a9d7311000000b00678202573f1so5421608otk.8;
+        Mon, 09 Jan 2023 08:22:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Mu9hDSbTzRMUgvFYdQZZOFApJrrdYnBaeGTuNYeU5c=;
-        b=Mi/nEJIfVqoxaA2Fvj3l8Z9FQxKpYg0BswYPQdjDG3BvBZQOSOL3XYJzXRgOWRyhPQ
-         2bvmaT2KDd+5ldvoWVFcqDb+CvNe5QXIQGNcwseNBK+bw9rk9tI0YNBXQqigq+s9xaz5
-         AblefvhwNMOV8DhqC2lqZDiCmpLDn1jsEAF/ZG2N3tnzC3vTjjNc/qGHGdJSNKgmSqdy
-         dq63IU2+pSv803Fy1HBYDEZ/I6o9HGYq4ytG/YktgTYiEeQssKetF0j7qpfzLk0GOYgK
-         Yl8xfVDoALC6nYAoCZzSTvCb8NJjV4k0dN6EsWCKLRchhnJx+UvyjvQlEh7cm2W6nls5
-         S2Bw==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XQm8dR/XHPVykaByHc76wRoeysV+gD3DuL1oGzIuixk=;
+        b=R8iupi7BoPbpnRhTmvb9KW+bNBmHtOqNgYvHtWAGtTw2a9ljRkM2bNJyhpx/aG1tBO
+         LVRPTUvTlmaW0SJ6V0SFJ4eYuMxexjWW413IJbS9wk38B1kJGbPszmM21RirBcj0HbCd
+         dM/JayPgouzqoBglh05qvwp0ML3Dsx4iSsZluijjpcX3tS6jfHhef2tzoqdKRtHqAGu8
+         PbSEYP13Qow9UXpOdyWTSb+dEN+62PQbBo4N4BgWqkyptyaZX3rTkKPEeKwq88AGIYyy
+         kuy4SALEUBJPUAgd3DueKfNbEvbZqBPtWz9YBS/JdrWgFfcFgsP4GA5mW2GCpw5UlpGJ
+         srrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1Mu9hDSbTzRMUgvFYdQZZOFApJrrdYnBaeGTuNYeU5c=;
-        b=KDsWmsIGqthPmAOVMZ6VAjrXjjfAb43kFZSEsBG6NembqsGJeVjQ/3BdjdkwFe+BJX
-         2naoc1EUHxp/ZO7I2D9dpxgZCKb+wGSAMViv3zgXoROki/W0irt7unvRtwAyDeReoMdi
-         hjCiu7a+FYbiL59raio+6HSmJt813ESu/ZOxGnjSPliqAu+bj4UTGoKia0yChvZcVBJY
-         ohaXZiRBRKM4t2BL7ea+l0zmaVcz7ZWaFM2AUDN5VtYohyzCxG1HGOaMF1V6EqOaR37t
-         w0IdcMqc7X9WR1ijiyvmiN7Dqp8pIpS+21oJbe8h8GxGSz7yTv5qJKgutWSKSk+i8wjx
-         6dSw==
-X-Gm-Message-State: AFqh2kqXfxCL9aYnSMZL4Nn/eMRLsNs4P3vssBc3xEEKciDPUXMD8mU/
-        wj8aeT6PAL6tsSAz+GBI8gI=
-X-Google-Smtp-Source: AMrXdXttmCWEOFKEA0hFZ6yOTeNBJe7R16TYp2V5BLxwRYi6zkxpyQPqfZmGz7EpvZU32SNj4bAlcw==
-X-Received: by 2002:a05:6402:f05:b0:45c:834b:f28c with SMTP id i5-20020a0564020f0500b0045c834bf28cmr57783370eda.9.1673271392633;
-        Mon, 09 Jan 2023 05:36:32 -0800 (PST)
-Received: from localhost.localdomain ([46.211.15.47])
-        by smtp.googlemail.com with ESMTPSA id e20-20020a170906249400b0084d4cb00f0csm812918ejb.99.2023.01.09.05.36.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 05:36:32 -0800 (PST)
-From:   Denis Pauk <pauk.denis@gmail.com>
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XQm8dR/XHPVykaByHc76wRoeysV+gD3DuL1oGzIuixk=;
+        b=a5D9EBAkAzTrbn5lScL8sNigFIDq+nInlYFbAGvtJ+G8VXJ7vI8hr3P8P7sjO7+JZF
+         Bz6pqe8/3jfm8K81yoLOc1L9vQQT3TAtjHG9V4BUFuV/9ZzxOVHXk0qMJOcxv7Z9Vfm7
+         YH85QHj+CENXJpPfkSATNnkyDY7CBu6E5grzfBJoW+Lf4pv5dzNgGHDkGysdIpqS2byO
+         1H6Qx3CB8rDcplqEVoUZj3BDRDhj+VIgQMO4WKmbDY/SzqrjmgLe8pqza8iB9B9LEB7h
+         7c7SoQYVSgQFlaX6NfD3BUNgSPUQ9kc0n/gmBF8PnQ30YHO6OcDzG1DyQkeV8Ab8hoVW
+         dzNQ==
+X-Gm-Message-State: AFqh2kpf4Aq/bBoGuxE74IF3LXmQX8Qvc7IVYE1+RbHKiRUq1WljB020
+        Yj8R5qIxdk95DIRBTY2BLNI=
+X-Google-Smtp-Source: AMrXdXvteD1YsNjg3D04ZpZ2ivFboNHM0uD8eMCnF69EtkjtArFkwRdiqXcMFx4dvdHz4grRDMrvvw==
+X-Received: by 2002:a05:6830:929:b0:670:9f08:2c48 with SMTP id v41-20020a056830092900b006709f082c48mr41665961ott.9.1673281361068;
+        Mon, 09 Jan 2023 08:22:41 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ca18-20020a056830611200b0066e873e4c2csm4926372otb.45.2023.01.09.08.22.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 08:22:40 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4ded6dcb-0bf0-60a4-9386-b39cea457cc7@roeck-us.net>
+Date:   Mon, 9 Jan 2023 08:22:36 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Denis Pauk <pauk.denis@gmail.com>
 Cc:     ahmad@khalifa.ws, chunkeey@gmail.com, greg@krypto.org,
         hubert.banas@gmail.com, igor@svelig.com, jaap.dehaan@freenet.de,
         jdelvare@suse.com, jeroen@beerstra.org, jonfarr87@gmail.com,
         jwp@redhat.com, kdudka@redhat.com, kernel@melin.net,
         kpietrzak@disroot.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@roeck-us.net, me@rebtoor.com,
+        linux-kernel@vger.kernel.org, me@rebtoor.com,
         metalcaedes@gmail.com, michael@theoddone.net,
         mikhail.v.gavrilov@gmail.com, mundanedefoliation@gmail.com,
-        nephartyz@gmail.com, oleksandr@natalenko.name,
-        pauk.denis@gmail.com, pehlm@pekholm.org, renedis@hotmail.com,
-        robert@swiecki.net, sahan.h.fernando@gmail.com,
-        sebastian.arnhold@posteo.de, sefoci9222@rerunway.com,
-        sst@poczta.fm, to.eivind@gmail.com, torvic9@mailbox.org
-Subject: [PATCH 2/2] hwmon: (nct6775) B650/B660/X670 ASUS boards support
-Date:   Mon,  9 Jan 2023 15:35:36 +0200
-Message-Id: <20230109133536.5720-2-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230109133536.5720-1-pauk.denis@gmail.com>
+        nephartyz@gmail.com, oleksandr@natalenko.name, pehlm@pekholm.org,
+        renedis@hotmail.com, robert@swiecki.net,
+        sahan.h.fernando@gmail.com, sebastian.arnhold@posteo.de,
+        sefoci9222@rerunway.com, sst@poczta.fm, to.eivind@gmail.com,
+        torvic9@mailbox.org
 References: <20230109133536.5720-1-pauk.denis@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/2] hwmon: (nct6775) Directly call ASUS ACPI WMI method
+In-Reply-To: <20230109133536.5720-1-pauk.denis@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Boards such as:
-  "EX-B660M-V5 PRO D4",
-  "PRIME B650-PLUS",
-  "PRIME B650M-A",
-  "PRIME B650M-A AX",
-  "PRIME B650M-A II",
-  "PRIME B650M-A WIFI",
-  "PRIME B650M-A WIFI II",
-  "PRIME B660M-A D4",
-  "PRIME B660M-A WIFI D4",
-  "PRIME X670-P",
-  "PRIME X670-P WIFI",
-  "PRIME X670E-PRO WIFI",
-  "Pro B660M-C-D4",
-  "ProArt B660-CREATOR D4",
-  "ProArt X670E-CREATOR WIFI",
-  "ROG CROSSHAIR X670E EXTREME",
-  "ROG CROSSHAIR X670E GENE",
-  "ROG CROSSHAIR X670E HERO",
-  "ROG MAXIMUS XIII EXTREME GLACIAL",
-  "ROG MAXIMUS Z690 EXTREME",
-  "ROG MAXIMUS Z690 EXTREME GLACIAL",
-  "ROG STRIX B650-A GAMING WIFI",
-  "ROG STRIX B650E-E GAMING WIFI",
-  "ROG STRIX B650E-F GAMING WIFI",
-  "ROG STRIX B650E-I GAMING WIFI",
-  "ROG STRIX B660-A GAMING WIFI D4",
-  "ROG STRIX B660-F GAMING WIFI",
-  "ROG STRIX B660-G GAMING WIFI",
-  "ROG STRIX B660-I GAMING WIFI",
-  "ROG STRIX X670E-A GAMING WIFI",
-  "ROG STRIX X670E-E GAMING WIFI",
-  "ROG STRIX X670E-F GAMING WIFI",
-  "ROG STRIX X670E-I GAMING WIFI",
-  "ROG STRIX Z590-A GAMING WIFI II",
-  "ROG STRIX Z690-A GAMING WIFI D4",
-  "TUF GAMING B650-PLUS",
-  "TUF GAMING B650-PLUS WIFI",
-  "TUF GAMING B650M-PLUS",
-  "TUF GAMING B650M-PLUS WIFI",
-  "TUF GAMING B660M-PLUS WIFI",
-  "TUF GAMING X670E-PLUS",
-  "TUF GAMING X670E-PLUS WIFI",
-  "TUF GAMING Z590-PLUS WIFI",
-have got a nct6775 chip, but by default there's no use of it
-because of resource conflict with WMI method.
+On 1/9/23 05:35, Denis Pauk wrote:
+> New ASUS B650/B660/X670 boards firmware have not exposed WMI monitoring
+> GUID  and entrypoint method WMBD could be implemented for different device
+> UID.
+> 
+> Implement the direct call to entrypoint method for monitoring the device
+> UID of B550/X570 boards.
+> 
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+> Co-developed-by: Ahmad Khalifa <ahmad@khalifa.ws>
+> Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
+> ---
+>   drivers/hwmon/Kconfig            |   2 +-
+>   drivers/hwmon/nct6775-platform.c | 100 ++++++++++++++++++++++---------
+>   2 files changed, 72 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 3176c33af6c6..300ce8115ce4 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1516,7 +1516,7 @@ config SENSORS_NCT6775_CORE
+>   config SENSORS_NCT6775
+>   	tristate "Platform driver for Nuvoton NCT6775F and compatibles"
+>   	depends on !PPC
+> -	depends on ACPI_WMI || ACPI_WMI=n
+> +	depends on ACPI || ACPI=n
+>   	select HWMON_VID
+>   	select SENSORS_NCT6775_CORE
+>   	help
+> diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
+> index bf43f73dc835..7f5b430e1e2c 100644
+> --- a/drivers/hwmon/nct6775-platform.c
+> +++ b/drivers/hwmon/nct6775-platform.c
+> @@ -17,7 +17,6 @@
+>   #include <linux/module.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/regmap.h>
+> -#include <linux/wmi.h>
+>   
+>   #include "nct6775.h"
+>   
+> @@ -107,40 +106,44 @@ struct nct6775_sio_data {
+>   	void (*sio_exit)(struct nct6775_sio_data *sio_data);
+>   };
+>   
+> -#define ASUSWMI_MONITORING_GUID		"466747A0-70EC-11DE-8A39-0800200C9A66"
+> +#define ASUSWMI_METHOD			"WMBD"
+>   #define ASUSWMI_METHODID_RSIO		0x5253494F
+>   #define ASUSWMI_METHODID_WSIO		0x5753494F
+>   #define ASUSWMI_METHODID_RHWM		0x5248574D
+>   #define ASUSWMI_METHODID_WHWM		0x5748574D
+>   #define ASUSWMI_UNSUPPORTED_METHOD	0xFFFFFFFE
+> +#define ASUSWMI_DEVICE_HID		"PNP0C14"
+> +#define ASUSWMI_DEVICE_UID		"ASUSWMI"
+> +
+> +struct acpi_device *asus_acpi_dev;
+>   
+>   static int nct6775_asuswmi_evaluate_method(u32 method_id, u8 bank, u8 reg, u8 val, u32 *retval)
+>   {
+> -#if IS_ENABLED(CONFIG_ACPI_WMI)
+> +#if IS_ENABLED(CONFIG_ACPI)
+> +	acpi_handle handle = acpi_device_handle(asus_acpi_dev);
+>   	u32 args = bank | (reg << 8) | (val << 16);
+> -	struct acpi_buffer input = { (acpi_size) sizeof(args), &args };
+> -	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
+> +	struct acpi_object_list input;
+> +	union acpi_object params[3];
+> +	unsigned long long result;
+>   	acpi_status status;
+> -	union acpi_object *obj;
+> -	u32 tmp = ASUSWMI_UNSUPPORTED_METHOD;
+> -
+> -	status = wmi_evaluate_method(ASUSWMI_MONITORING_GUID, 0,
+> -				     method_id, &input, &output);
+>   
+> +	params[0].type = ACPI_TYPE_INTEGER;
+> +	params[0].integer.value = 0;
+> +	params[1].type = ACPI_TYPE_INTEGER;
+> +	params[1].integer.value = method_id;
+> +	params[2].type = ACPI_TYPE_BUFFER;
+> +	params[2].buffer.length = sizeof(args);
+> +	params[2].buffer.pointer = (void *)&args;
+> +	input.count = 3;
+> +	input.pointer = params;
+> +
+> +	status = acpi_evaluate_integer(handle, ASUSWMI_METHOD, &input, &result);
+>   	if (ACPI_FAILURE(status))
+>   		return -EIO;
+>   
+> -	obj = output.pointer;
+> -	if (obj && obj->type == ACPI_TYPE_INTEGER)
+> -		tmp = obj->integer.value;
+> -
+>   	if (retval)
+> -		*retval = tmp;
+> -
+> -	kfree(obj);
+> +		*retval = (u32)result & 0xFFFFFFFF;
+>   
+> -	if (tmp == ASUSWMI_UNSUPPORTED_METHOD)
+> -		return -ENODEV;
+>   	return 0;
+>   #else
+>   	return -EOPNOTSUPP;
+> @@ -1099,6 +1102,53 @@ static const char * const asus_wmi_boards[] = {
+>   	"TUF GAMING Z490-PLUS (WI-FI)",
+>   };
+>   
+> +struct each_port_arg {
+> +	struct acpi_device *adev;
+> +	const char *match;
+> +};
+> +
+> +/*
+> + * Callback for acpi_bus_for_each_dev() to find the
+> + * right device by _UID and _HID and stop.
+> + * return is an error to exit the loop
 
-This commit adds such boards to the monitoring list with new ACPI device 
-UID. 
+This is a match function, which does not and should not return error/0
+but a match result (true / false or 1/0), and it should be named
+accordingly.
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Co-developed-by: Ahmad Khalifa <ahmad@khalifa.ws>
-Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
-Tested-by: Jeroen Beerstra <jeroen@beerstra.org>
-Tested-by: Slawomir Stepien <sst@poczta.fm>
+> + */
+> +static int nct6775_find_asus_acpi(struct device *dev, void *data)
+> +{
+> +	struct acpi_device *adev = to_acpi_device(dev);
+> +	const char *uid = acpi_device_uid(adev);
+> +	const char *hid = acpi_device_hid(adev);
+> +	struct each_port_arg *arg = data;
+> +
+> +	if (hid && !strcmp(hid, ASUSWMI_DEVICE_HID) &&
+> +		uid && !strcmp(uid, arg->match)) {
+> +		arg->adev = adev;
+> +		return -EEXIST;
 
----
+... and is most definitely should not return "File Exists".
 
-B650/B660/X670 boards use NCT6799D and code is checked with 
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static enum sensor_access nct6775_determine_access(const char *device_uid)
+> +{
+> +	struct each_port_arg arg;
+> +	u8 tmp;
+> +
+> +	arg.match = device_uid;
+> +	acpi_bus_for_each_dev(nct6775_find_asus_acpi, &arg);
+> +	if (!arg.adev)
+> +		return access_direct;
+> +
+> +	asus_acpi_dev = arg.adev;
+> +	/* if reading chip id via ACPI succeeds, use WMI "WMBD" method for access */
+> +	if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp) && tmp) {
+> +		pr_info("Using Asus ACPI to access %#x chip.\n", tmp);
 
-https://patchwork.kernel.org/project/linux-hwmon/patch/20221228135744.281752-1-linux@roeck-us.net/  
+Please reduce the noise. Make this a debug message if you think you need it.
 
-Feedback form Jeroen Beerstra https://bugzilla.kernel.org/show_bug.cgi?id=204807#c282
+> +		return access_asuswmi;
+> +	}
+> +
+> +	pr_err("Can't read ChipID by Asus ACPI %s device.\n", device_uid);
 
-nct6799-isa-0290
-Adapter: ISA adapter
-in0:                        1.37 V  (min =  +0.00 V, max =  +1.74 V)
-in1:                      1000.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-in2:                        3.39 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in3:                        3.34 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in4:                        1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in5:                        1.03 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in6:                      752.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-in7:                        3.39 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in8:                        3.30 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in9:                        1.67 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in10:                     560.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-in11:                     560.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-in12:                       1.03 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in13:                     496.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-in14:                     424.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-fan1:                      755 RPM  (min =    0 RPM)
-fan2:                      819 RPM  (min =    0 RPM)
-fan3:                      712 RPM  (min =    0 RPM)
-fan4:                        0 RPM  (min =    0 RPM)
-fan5:                      674 RPM  (min =    0 RPM)
-fan7:                        0 RPM  (min =    0 RPM)
-SYSTIN:                    +31.0°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
-CPUTIN:                    +36.5°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
-AUXTIN0:                   +39.5°C    sensor = thermistor
-AUXTIN1:                   +19.0°C    sensor = thermistor
-AUXTIN2:                   +20.0°C    sensor = thermistor
-AUXTIN3:                   +73.0°C    sensor = thermistor
-PECI Agent 0 Calibration:  +54.0°C  
-PCH_CHIP_CPU_MAX_TEMP:      +0.0°C  
-PCH_CHIP_TEMP:              +0.0°C  
-PCH_CPU_TEMP:               +0.0°C  
-TSI0_TEMP:                 +64.5°C  
-intrusion0:               ALARM
-intrusion1:               ALARM
-beep_enable:              disabled
+If this is an error, I expect the code to return an error and abort
+the probe function. Otherwise make it a debug message. Also, even as
+debug message this is misleading, because it suggests and error when
+the result is really that the code uses direct access. There should
+be something like "Using direct access" or "Accessing chip registers
+directly" in the message.
 
+> +	return access_direct;
+> +}
+> +
+>   static int __init sensors_nct6775_platform_init(void)
+>   {
+>   	int i, err;
+> @@ -1109,7 +1159,6 @@ static int __init sensors_nct6775_platform_init(void)
+>   	int sioaddr[2] = { 0x2e, 0x4e };
+>   	enum sensor_access access = access_direct;
+>   	const char *board_vendor, *board_name;
+> -	u8 tmp;
+>   
+>   	err = platform_driver_register(&nct6775_driver);
+>   	if (err)
+> @@ -1122,15 +1171,8 @@ static int __init sensors_nct6775_platform_init(void)
+>   	    !strcmp(board_vendor, "ASUSTeK COMPUTER INC.")) {
+>   		err = match_string(asus_wmi_boards, ARRAY_SIZE(asus_wmi_boards),
+>   				   board_name);
+> -		if (err >= 0) {
+> -			/* if reading chip id via WMI succeeds, use WMI */
+> -			if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp) && tmp) {
+> -				pr_info("Using Asus WMI to access %#x chip.\n", tmp);
+> -				access = access_asuswmi;
+> -			} else {
+> -				pr_err("Can't read ChipID by Asus WMI.\n");
+> -			}
 
----
- drivers/hwmon/nct6775-platform.c | 52 ++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+Ah, that noise was already there. Comments above still apply, though.
 
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index 7f5b430e1e2c..b0c6958809b9 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -114,6 +114,7 @@ struct nct6775_sio_data {
- #define ASUSWMI_UNSUPPORTED_METHOD	0xFFFFFFFE
- #define ASUSWMI_DEVICE_HID		"PNP0C14"
- #define ASUSWMI_DEVICE_UID		"ASUSWMI"
-+#define ASUSMSI_DEVICE_UID		"AsusMbSwInterface"
- 
- struct acpi_device *asus_acpi_dev;
- 
-@@ -1102,6 +1103,52 @@ static const char * const asus_wmi_boards[] = {
- 	"TUF GAMING Z490-PLUS (WI-FI)",
- };
- 
-+static const char * const asus_msi_boards[] = {
-+	"EX-B660M-V5 PRO D4",
-+	"PRIME B650-PLUS",
-+	"PRIME B650M-A",
-+	"PRIME B650M-A AX",
-+	"PRIME B650M-A II",
-+	"PRIME B650M-A WIFI",
-+	"PRIME B650M-A WIFI II",
-+	"PRIME B660M-A D4",
-+	"PRIME B660M-A WIFI D4",
-+	"PRIME X670-P",
-+	"PRIME X670-P WIFI",
-+	"PRIME X670E-PRO WIFI",
-+	"Pro B660M-C-D4",
-+	"ProArt B660-CREATOR D4",
-+	"ProArt X670E-CREATOR WIFI",
-+	"ROG CROSSHAIR X670E EXTREME",
-+	"ROG CROSSHAIR X670E GENE",
-+	"ROG CROSSHAIR X670E HERO",
-+	"ROG MAXIMUS XIII EXTREME GLACIAL",
-+	"ROG MAXIMUS Z690 EXTREME",
-+	"ROG MAXIMUS Z690 EXTREME GLACIAL",
-+	"ROG STRIX B650-A GAMING WIFI",
-+	"ROG STRIX B650E-E GAMING WIFI",
-+	"ROG STRIX B650E-F GAMING WIFI",
-+	"ROG STRIX B650E-I GAMING WIFI",
-+	"ROG STRIX B660-A GAMING WIFI D4",
-+	"ROG STRIX B660-F GAMING WIFI",
-+	"ROG STRIX B660-G GAMING WIFI",
-+	"ROG STRIX B660-I GAMING WIFI",
-+	"ROG STRIX X670E-A GAMING WIFI",
-+	"ROG STRIX X670E-E GAMING WIFI",
-+	"ROG STRIX X670E-F GAMING WIFI",
-+	"ROG STRIX X670E-I GAMING WIFI",
-+	"ROG STRIX Z590-A GAMING WIFI II",
-+	"ROG STRIX Z690-A GAMING WIFI D4",
-+	"TUF GAMING B650-PLUS",
-+	"TUF GAMING B650-PLUS WIFI",
-+	"TUF GAMING B650M-PLUS",
-+	"TUF GAMING B650M-PLUS WIFI",
-+	"TUF GAMING B660M-PLUS WIFI",
-+	"TUF GAMING X670E-PLUS",
-+	"TUF GAMING X670E-PLUS WIFI",
-+	"TUF GAMING Z590-PLUS WIFI",
-+};
-+
- struct each_port_arg {
- 	struct acpi_device *adev;
- 	const char *match;
-@@ -1173,6 +1220,11 @@ static int __init sensors_nct6775_platform_init(void)
- 				   board_name);
- 		if (err >= 0)
- 			access = nct6775_determine_access(ASUSWMI_DEVICE_UID);
-+
-+		err = match_string(asus_msi_boards, ARRAY_SIZE(asus_msi_boards),
-+				   board_name);
-+		if (err >= 0)
-+			access = nct6775_determine_access(ASUSMSI_DEVICE_UID);
- 	}
- 
- 	/*
--- 
-2.39.0
+Thanks,
+Guenter
+
+> -		}
+> +		if (err >= 0)
+> +			access = nct6775_determine_access(ASUSWMI_DEVICE_UID);
+>   	}
+>   
+>   	/*
+> 
+> base-commit: b0587c87abc891e313d63946ff8c9f4939d1ea1a
 
