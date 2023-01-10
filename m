@@ -2,91 +2,80 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBA6DC54EBE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Jan 2023 09:08:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C80C7C46467
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Jan 2023 14:07:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjAJJIw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 10 Jan 2023 04:08:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53452 "EHLO
+        id S232214AbjAJOHy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 10 Jan 2023 09:07:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237980AbjAJJHy (ORCPT
+        with ESMTP id S238659AbjAJOHn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 Jan 2023 04:07:54 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9C84ECB0
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 Jan 2023 01:07:53 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id i17-20020a05600c355100b003d99434b1cfso9285112wmq.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 Jan 2023 01:07:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7JbaxC7KPieHLp+g5p9tmnTTK4fIMEmiIEMJJms0GZ4=;
-        b=zQAoaBT8syYTjq/VlJv6oSVm1PPkQlXAL2RZQE0RInE74XU48Z10cR7uTFMV3tPGi2
-         B6JPTTK7nJvGTu6APUx3VIkQCfsUiCWXBkAdgb0kWyERoOrPTKZjpXPSX6WezXRsMMZy
-         uUNRpc7GaUQz6GRaIc2O1PDNyttUlwJH+zJYsLlvg1YXhSiyzf6wtZdrosT3L5R39H03
-         fl0oE7UEMnxUpqKpHoz7dk2XeVP/itmoeLA0qC580aUwBPH+RiJAZuGrO6rxccKsDoh9
-         kS9tdJBHedoVZ/Z4Rt8xJ9gSrxlY5ftL1a0Nfu7dzZnNqJnHri/G4amtVqozh3U/vJn+
-         wGcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7JbaxC7KPieHLp+g5p9tmnTTK4fIMEmiIEMJJms0GZ4=;
-        b=HEMlE8TIZLItmAEI9IQfQ6/NDkskHg/xi/si3URQ8+BrNygmLecCJ3amemPTzXqz7H
-         YkURztLYydgQUIUVdK2U39ICpcGzAvDb+aqsi46vCA1sNIlrfSBfsZyuYpPPfDYTJukg
-         AU6K26QdAk4r9EtT0QGGSV52X+aIx0klogXtSvzLMi6pJtesRQuGlRy/1/HgKN2G6yoF
-         C4hshdqZkugn83bL6WXaprls0Bqma9Uj9sBIJZwEVdpuAxuXBehKiL+H2vmVQ7Xb4xlT
-         WdgSS8eOf3OnTR3Pzdyn4JekTPDwdL2R64Tgf3943bgYx0Hr5kABeJOCxQa8o/gW96Hn
-         Mqqw==
-X-Gm-Message-State: AFqh2kpJ7nqvJl0PXs8p4cVl2w/XdF+MOVJ1Uf/oPO3qs4BF6WNSqVsV
-        LL2d6831OAZQFUsvk0iRoGIeaA==
-X-Google-Smtp-Source: AMrXdXs6ZSGkTV66Vz7LmN9fgcIN/7pcFQbA/DwdXkepR6WdHGhSJpt/3Tqxt+j9manNylw8VlkBKw==
-X-Received: by 2002:a05:600c:1da3:b0:3d0:965f:63ed with SMTP id p35-20020a05600c1da300b003d0965f63edmr49170877wms.23.1673341672120;
-        Tue, 10 Jan 2023 01:07:52 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id fc14-20020a05600c524e00b003a3442f1229sm21206674wmb.29.2023.01.10.01.07.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 01:07:51 -0800 (PST)
-Message-ID: <f2d70c17-e519-fbde-eb61-1acba70a59a0@linaro.org>
-Date:   Tue, 10 Jan 2023 10:07:49 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 1/5] dt-bindings: hwmon: adi,ltc2945: Add binding
-Content-Language: en-US
-To:     Jonathan Cormier <jcormier@criticallink.com>,
+        Tue, 10 Jan 2023 09:07:43 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F5BB1FD;
+        Tue, 10 Jan 2023 06:07:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673359663; x=1704895663;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MrltX0Mbfq5di0+cEUd00fzCE2JUwG4J0N0gH0rA9sM=;
+  b=KCUGyR5GingMfiNDGABiPev6egDpKYNW1tDH/NGJ09oweDR8oJo1DEbn
+   rHo6nbTJ+XOcxvHHDrQshMwUq9gvAZNQgaxz2eBP7GTSHJfrbrD4scuFa
+   IlmHjoNj74xk5WAgT/qjCFAOPPn5HudH9jRO3t7RYAlb9/HvWL9ndQANC
+   3sCOgXKeVnw4bmKJvW5OrsfJuSAX3dV/9FTqV8nE3wfSduSOy5rJ5jDF/
+   VnathzoXVMKUntBcTtjujTWWCQ3mb9Kt0LN3xebuRggvMqEJFga8v5DqJ
+   cu4vboZkSRGIfpE6mKKT3Gpvp7ZItxgLocxTYHJrtwZHPMH43vF4JLFAw
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="325156495"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="325156495"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 06:07:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="606971784"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="606971784"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 10 Jan 2023 06:07:39 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D6F65130; Tue, 10 Jan 2023 16:08:12 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bob Duke <bduke@criticallink.com>,
-        John Pruitt <jpruitt@criticallink.com>
-References: <20221214220727.1350784-3-jcormier@criticallink.com>
- <20230109233534.1932370-1-jcormier@criticallink.com>
- <20230109233534.1932370-2-jcormier@criticallink.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230109233534.1932370-2-jcormier@criticallink.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 0/5] rtc: isl12022: Clean up and simplify the driver
+Date:   Tue, 10 Jan 2023 16:08:01 +0200
+Message-Id: <20230110140806.87432-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/01/2023 00:35, Jonathan Cormier wrote:
-> Create initial binding for the LTC2945 I2C power monitor.
-> Add shunt-resistor-micro-ohms parameter
+While looking for something else I noticed that this driver is dusted
+a bit. Clean up and simplify it using available kernel types and APIs.
 
-If you want to keep that sentence, sure, but let's make it a sentence -
-missing full stop.
+Changelog v2:
+- added tags to patches 1,2,4,5 (Rasmus)
 
+Andy Shevchenko (5):
+  rtc: isl12022: Get rid of unneeded private struct isl12022
+  rtc: isl12022: Explicitly use __le16 type for ISL12022_REG_TEMP_L
+  rtc: isl12022: Drop unneeded OF guards and of_match_ptr()
+  rtc: isl12022: Join string literals back
+  rtc: isl12022: sort header inclusion alphabetically
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ drivers/rtc/rtc-isl12022.c | 93 ++++++++++++++------------------------
+ 1 file changed, 34 insertions(+), 59 deletions(-)
 
-Best regards,
-Krzysztof
+-- 
+2.39.0
 
