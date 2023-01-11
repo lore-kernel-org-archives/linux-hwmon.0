@@ -2,301 +2,76 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F12BC46467
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Jan 2023 00:48:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C75EC54EBC
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Jan 2023 02:07:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbjAKAst (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 10 Jan 2023 19:48:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
+        id S234570AbjAKCHo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 10 Jan 2023 21:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234891AbjAKAsk (ORCPT
+        with ESMTP id S232465AbjAKCHm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 Jan 2023 19:48:40 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB032116;
-        Tue, 10 Jan 2023 16:48:39 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id e205so11552623oif.11;
-        Tue, 10 Jan 2023 16:48:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q06FqpFx0nvKrzdQDalDMDAWRkL1oZcppaMTnZE7VQg=;
-        b=LEpqKcFO9ek/11ZsxN3ZV5hy/jP99P0frEJIbbbnjy/IKtwN7qn1KuwY3yxmLMj2tw
-         44OLNAYujqUGv5cadkI4IFTwUimOzUJHch/K8rsNndEm/nir4fazy/dPrelIIBWP4XOU
-         7ja53Thme/DcJtM7bLeBNLiUDMAu8bLy1iIk86ZrQQCrrDQKlIW2qRqUuIVqI5nT5sTi
-         81dZGcSmlC7o7I0x1LhtbS4PABFdQAcCCg1ndST7ve08ATS1AuYsILzzcTtWxL2i21Gj
-         dvDXBVbHVIjVqFr7FJNqBp2cGDDGKCUfYdY9mXCwD3uGXhG/kzPFAtnLWtMmHlp76BLJ
-         pmkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q06FqpFx0nvKrzdQDalDMDAWRkL1oZcppaMTnZE7VQg=;
-        b=GoOhrFmBed0vU7VZXCS7VVj5eNPMO58IhAB5wamXwi+4d8SUsc5TN2NA382AvmaIER
-         YdZdX9L+sEbXV6CjTSmB1NtG9Y+IQyRWh5RY1xeATtB2If/aUhXH5jHrxPXJmU8zjscs
-         iStyB3R8dnmrfD79fvS0ft+LtS4V5qZ/KBxOPhwLSvOEqTbtWejqhqMmr+nY7dEb4KSc
-         vDZbiuKUnbd0c89gf5BVc2z8DF/gqHr68HUpmz064GvxxUrK6YkgPBMq8ZUqS4+O1q8G
-         ETcb5VflPKxY5MdVLUcrf6lUQfWYnLmxV510pe/O7T7PtkYpkPNwm0GPplusbibbdF2r
-         H/2Q==
-X-Gm-Message-State: AFqh2kpdzkNjNnDn1KQXZhMK20XckswDxqAq9lH2fMAjQxPEjslNML2+
-        onrf0IGyraRZvYlQswcwlP0=
-X-Google-Smtp-Source: AMrXdXtWpr98L9SYHWVg+XbPYXbpf+Mt/n2iKRtIgSLmT1/XXKF1RAMj6kwZPy5TNiu4BTmX1ZfJvg==
-X-Received: by 2002:a05:6808:1290:b0:355:1df0:9b84 with SMTP id a16-20020a056808129000b003551df09b84mr45177228oiw.2.1673398118919;
-        Tue, 10 Jan 2023 16:48:38 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g21-20020a0568080dd500b00360f68d509csm5996950oic.49.2023.01.10.16.48.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 16:48:38 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a790fdb2-69f4-aa59-8459-f156774238f7@roeck-us.net>
-Date:   Tue, 10 Jan 2023 16:48:33 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     ahmad@khalifa.ws, chunkeey@gmail.com, greg@krypto.org,
-        hubert.banas@gmail.com, igor@svelig.com, jaap.dehaan@freenet.de,
-        jdelvare@suse.com, jeroen@beerstra.org, jonfarr87@gmail.com,
-        jwp@redhat.com, kdudka@redhat.com, kernel@melin.net,
-        kpietrzak@disroot.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, me@rebtoor.com,
-        metalcaedes@gmail.com, michael@theoddone.net,
-        mikhail.v.gavrilov@gmail.com, mundanedefoliation@gmail.com,
-        nephartyz@gmail.com, oleksandr@natalenko.name, pehlm@pekholm.org,
-        renedis@hotmail.com, robert@swiecki.net,
-        sahan.h.fernando@gmail.com, sebastian.arnhold@posteo.de,
-        sst@poczta.fm, to.eivind@gmail.com, torvic9@mailbox.org
-References: <20230110224823.14524-1-pauk.denis@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3 1/2] hwmon: (nct6775) Directly call ASUS ACPI WMI
- method
-In-Reply-To: <20230110224823.14524-1-pauk.denis@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Tue, 10 Jan 2023 21:07:42 -0500
+Received: from mail.nfschina.com (unknown [42.101.60.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB2C20F;
+        Tue, 10 Jan 2023 18:07:41 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id C9BB91A009FE;
+        Wed, 11 Jan 2023 10:07:55 +0800 (CST)
+X-Virus-Scanned: amavisd-new at nfschina.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id tI5tCzWo8b1T; Wed, 11 Jan 2023 10:07:55 +0800 (CST)
+Received: from localhost.localdomain.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: xupengfei@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id E7CBF1A0092A;
+        Wed, 11 Jan 2023 10:07:54 +0800 (CST)
+From:   XU pengfei <xupengfei@nfschina.com>
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        XU pengfei <xupengfei@nfschina.com>
+Subject: [PATCH 1/1] hwmon: remove unnecessary (void*) conversions
+Date:   Wed, 11 Jan 2023 10:07:24 +0800
+Message-Id: <20230111020723.3194-1-xupengfei@nfschina.com>
+X-Mailer: git-send-email 2.18.2
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 1/10/23 14:48, Denis Pauk wrote:
-> New ASUS B650/B660/X670 boards firmware have not exposed WMI monitoring
-> GUID  and entrypoint method WMBD could be implemented for different device
-> UID.
-> 
-> Implement the direct call to entrypoint method for monitoring the device
-> UID of B550/X570 boards.
-> 
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-> Co-developed-by: Ahmad Khalifa <ahmad@khalifa.ws>
-> Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
-> ---
-> Changes:
-> v1:
->    Rename each_port_arg to each_device_arg
->    Rename nct6775_find_asus_acpi to nct6775_asuswmi_device_match
->    Remove unrequired return -EEXIST, and iterate whole list of devices
->    Make asus_acpi_dev static
-> v2:
->    Restore break iteration logic in nct6775_asuswmi_device_match
->    Add config check if ACPI disabled and acpi_device_* are undefined
->    Pass device_id as data parameter of acpi_bus_for_each_dev
-> 
->>> Also, the use of a static variable makes me wonder: would asus_acpi_dev
->     be the same for both chips if there are two Super-IO chips in the system ?
-> 
-> Available B550/X570/B650/B660/X670 firmwares have contained only one device
-> with WMBD method and provided proxy only to 0x0270 port. Difference between
-> board generation is only in name of the such device.
-> 
->   drivers/hwmon/Kconfig            |  2 +-
->   drivers/hwmon/nct6775-platform.c | 97 ++++++++++++++++++++++----------
->   2 files changed, 69 insertions(+), 30 deletions(-)
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 3176c33af6c6..300ce8115ce4 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1516,7 +1516,7 @@ config SENSORS_NCT6775_CORE
->   config SENSORS_NCT6775
->   	tristate "Platform driver for Nuvoton NCT6775F and compatibles"
->   	depends on !PPC
-> -	depends on ACPI_WMI || ACPI_WMI=n
-> +	depends on ACPI || ACPI=n
->   	select HWMON_VID
->   	select SENSORS_NCT6775_CORE
->   	help
-> diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-> index bf43f73dc835..082f48785999 100644
-> --- a/drivers/hwmon/nct6775-platform.c
-> +++ b/drivers/hwmon/nct6775-platform.c
-> @@ -17,7 +17,6 @@
->   #include <linux/module.h>
->   #include <linux/platform_device.h>
->   #include <linux/regmap.h>
-> -#include <linux/wmi.h>
+Pointer variables of void * type do not require type cast.
 
-0-day reported various errors. I suspect those are seen with CONFIG_ACPI=n.
-Have you tried the build reported as problematic ?
+Signed-off-by: XU pengfei <xupengfei@nfschina.com>
+---
+ drivers/hwmon/ibmpex.c   | 2 +-
+ drivers/hwmon/powr1220.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I get
-
-drivers/hwmon/nct6775-platform.c:122:28: error: ‘asus_acpi_dev’ defined but not used [-Werror=unused-variable]
-   122 | static struct acpi_device *asus_acpi_dev;
-
-if I try to build nct6775-platform.o with W=1 and CONFIG_ACPI=n.
-
-Overall the #ifdefs in the driver get a bit out of hand. I think it
-may be time to consolidate that. Not necessarily now, but sometime soon.
-
-Guenter
-
->   
->   #include "nct6775.h"
->   
-> @@ -107,40 +106,48 @@ struct nct6775_sio_data {
->   	void (*sio_exit)(struct nct6775_sio_data *sio_data);
->   };
->   
-> -#define ASUSWMI_MONITORING_GUID		"466747A0-70EC-11DE-8A39-0800200C9A66"
-> +#define ASUSWMI_METHOD			"WMBD"
->   #define ASUSWMI_METHODID_RSIO		0x5253494F
->   #define ASUSWMI_METHODID_WSIO		0x5753494F
->   #define ASUSWMI_METHODID_RHWM		0x5248574D
->   #define ASUSWMI_METHODID_WHWM		0x5748574D
->   #define ASUSWMI_UNSUPPORTED_METHOD	0xFFFFFFFE
-> +#define ASUSWMI_DEVICE_HID		"PNP0C14"
-> +#define ASUSWMI_DEVICE_UID		"ASUSWMI"
-> +
-> +/*
-> + * ASUS boards have only one device with WMI "WMBD" method and have provided
-> + * access to only one SuperIO chip at 0x0290.
-> + */
-> +static struct acpi_device *asus_acpi_dev;
->   
->   static int nct6775_asuswmi_evaluate_method(u32 method_id, u8 bank, u8 reg, u8 val, u32 *retval)
->   {
-> -#if IS_ENABLED(CONFIG_ACPI_WMI)
-> +#if IS_ENABLED(CONFIG_ACPI)
-> +	acpi_handle handle = acpi_device_handle(asus_acpi_dev);
->   	u32 args = bank | (reg << 8) | (val << 16);
-> -	struct acpi_buffer input = { (acpi_size) sizeof(args), &args };
-> -	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-> +	struct acpi_object_list input;
-> +	union acpi_object params[3];
-> +	unsigned long long result;
->   	acpi_status status;
-> -	union acpi_object *obj;
-> -	u32 tmp = ASUSWMI_UNSUPPORTED_METHOD;
-> -
-> -	status = wmi_evaluate_method(ASUSWMI_MONITORING_GUID, 0,
-> -				     method_id, &input, &output);
->   
-> +	params[0].type = ACPI_TYPE_INTEGER;
-> +	params[0].integer.value = 0;
-> +	params[1].type = ACPI_TYPE_INTEGER;
-> +	params[1].integer.value = method_id;
-> +	params[2].type = ACPI_TYPE_BUFFER;
-> +	params[2].buffer.length = sizeof(args);
-> +	params[2].buffer.pointer = (void *)&args;
-> +	input.count = 3;
-> +	input.pointer = params;
-> +
-> +	status = acpi_evaluate_integer(handle, ASUSWMI_METHOD, &input, &result);
->   	if (ACPI_FAILURE(status))
->   		return -EIO;
->   
-> -	obj = output.pointer;
-> -	if (obj && obj->type == ACPI_TYPE_INTEGER)
-> -		tmp = obj->integer.value;
-> -
->   	if (retval)
-> -		*retval = tmp;
-> -
-> -	kfree(obj);
-> +		*retval = (u32)result & 0xFFFFFFFF;
->   
-> -	if (tmp == ASUSWMI_UNSUPPORTED_METHOD)
-> -		return -ENODEV;
->   	return 0;
->   #else
->   	return -EOPNOTSUPP;
-> @@ -1099,6 +1106,46 @@ static const char * const asus_wmi_boards[] = {
->   	"TUF GAMING Z490-PLUS (WI-FI)",
->   };
->   
-> +#if IS_ENABLED(CONFIG_ACPI)
-> +/*
-> + * Callback for acpi_bus_for_each_dev() to find the right device
-> + * by _UID and _HID and return 1 to stop iteration.
-> + */
-> +static int nct6775_asuswmi_device_match(struct device *dev, void *data)
-> +{
-> +	struct acpi_device *adev = to_acpi_device(dev);
-> +	const char *uid = acpi_device_uid(adev);
-> +	const char *hid = acpi_device_hid(adev);
-> +
-> +	if (hid && !strcmp(hid, ASUSWMI_DEVICE_HID) &&
-> +		uid && !strcmp(uid, data)) {
-> +		asus_acpi_dev = adev;
-> +		return 1;
-> +	}
-> +
-> +	return 0;
-> +}
-> +#endif
-> +
-> +static enum sensor_access nct6775_determine_access(const char *device_uid)
-> +{
-> +#if IS_ENABLED(CONFIG_ACPI)
-> +	u8 tmp;
-> +
-> +	acpi_bus_for_each_dev(nct6775_asuswmi_device_match, (void *)device_uid);
-> +	if (!asus_acpi_dev)
-> +		return access_direct;
-> +
-> +	/* if reading chip id via ACPI succeeds, use WMI "WMBD" method for access */
-> +	if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp) && tmp) {
-> +		pr_debug("Using Asus WMBD method of %s to access %#x chip.\n", device_uid, tmp);
-> +		return access_asuswmi;
-> +	}
-> +#endif
-> +
-> +	return access_direct;
-> +}
-> +
->   static int __init sensors_nct6775_platform_init(void)
->   {
->   	int i, err;
-> @@ -1109,7 +1156,6 @@ static int __init sensors_nct6775_platform_init(void)
->   	int sioaddr[2] = { 0x2e, 0x4e };
->   	enum sensor_access access = access_direct;
->   	const char *board_vendor, *board_name;
-> -	u8 tmp;
->   
->   	err = platform_driver_register(&nct6775_driver);
->   	if (err)
-> @@ -1122,15 +1168,8 @@ static int __init sensors_nct6775_platform_init(void)
->   	    !strcmp(board_vendor, "ASUSTeK COMPUTER INC.")) {
->   		err = match_string(asus_wmi_boards, ARRAY_SIZE(asus_wmi_boards),
->   				   board_name);
-> -		if (err >= 0) {
-> -			/* if reading chip id via WMI succeeds, use WMI */
-> -			if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp) && tmp) {
-> -				pr_info("Using Asus WMI to access %#x chip.\n", tmp);
-> -				access = access_asuswmi;
-> -			} else {
-> -				pr_err("Can't read ChipID by Asus WMI.\n");
-> -			}
-> -		}
-> +		if (err >= 0)
-> +			access = nct6775_determine_access(ASUSWMI_DEVICE_UID);
->   	}
->   
->   	/*
-> 
-> base-commit: b0587c87abc891e313d63946ff8c9f4939d1ea1a
+diff --git a/drivers/hwmon/ibmpex.c b/drivers/hwmon/ibmpex.c
+index 1837cccd993c..db066b368918 100644
+--- a/drivers/hwmon/ibmpex.c
++++ b/drivers/hwmon/ibmpex.c
+@@ -546,7 +546,7 @@ static void ibmpex_bmc_gone(int iface)
+ 
+ static void ibmpex_msg_handler(struct ipmi_recv_msg *msg, void *user_msg_data)
+ {
+-	struct ibmpex_bmc_data *data = (struct ibmpex_bmc_data *)user_msg_data;
++	struct ibmpex_bmc_data *data = user_msg_data;
+ 
+ 	if (msg->msgid != data->tx_msgid) {
+ 		dev_err(data->bmc_device,
+diff --git a/drivers/hwmon/powr1220.c b/drivers/hwmon/powr1220.c
+index f77dc6db31ac..501337ee5aa3 100644
+--- a/drivers/hwmon/powr1220.c
++++ b/drivers/hwmon/powr1220.c
+@@ -174,7 +174,7 @@ static umode_t
+ powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
+ 		    attr, int channel)
+ {
+-	struct powr1220_data *chip_data = (struct powr1220_data *)data;
++	struct powr1220_data *chip_data = data;
+ 
+ 	if (channel >= chip_data->max_channels)
+ 		return 0;
+-- 
+2.18.2
 
