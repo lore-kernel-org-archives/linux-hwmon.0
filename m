@@ -2,75 +2,95 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 898A2C5479D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Jan 2023 06:04:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 733DDC46467
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Jan 2023 06:09:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjAKGEB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Jan 2023 01:04:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
+        id S235615AbjAKGJq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Jan 2023 01:09:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbjAKGEA (ORCPT
+        with ESMTP id S231616AbjAKGJl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Jan 2023 01:04:00 -0500
+        Wed, 11 Jan 2023 01:09:41 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C2B6403;
-        Tue, 10 Jan 2023 22:03:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81838DF37;
+        Tue, 10 Jan 2023 22:09:39 -0800 (PST)
 Received: from [10.7.7.5] (unknown [182.253.183.184])
-        by gnuweeb.org (Postfix) with ESMTPSA id 269227E4CF;
-        Wed, 11 Jan 2023 06:03:56 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 840C87E4CF;
+        Wed, 11 Jan 2023 06:09:37 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1673417038;
-        bh=f/3A1vIt8FrC/KEXKsPDv+Qz2qkQtjVjdgOmhSlxA7U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZgoGicZ2orlsdD5fUa++p24WOsUtiwRQQC5ko9IxURfFgS075I8MYzxrq3gO/YVWe
-         8Xi50R96v9JI1rA2vILOd2U2mloAM50szmg2O/7ukrHDc7PWpLLB/+UihHeq0/BZ/l
-         r4+pp9PxTwqjFJRzjsaEQ8eL/kAOlJ3myOXvVjmd6ymRX8s7BQzAS+2K/ndlhrxmwV
-         /hDiW5DQRZ6LpW6DYK8i+4N+eHIkufeAK/JSYv89IwvyJwNqOjSnmw4xYkSxGUnSOR
-         cSR2tuunWVDco09GvnHg3fFKD3WRlnUzdFi4aMClhrmDj5h8AwZjCFc6WvIOIjN6aQ
-         Xp24oKKKsafNQ==
-Message-ID: <423fcac8-97cc-88b7-19d8-f93baddea3cd@gnuweeb.org>
-Date:   Wed, 11 Jan 2023 13:03:54 +0700
+        s=default; t=1673417379;
+        bh=NkdpfklbguF0iKykjTEZLjjzqPuc3x168kbqCcp4VOI=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=QHROOwny6tEFS1M7PYvD89/YUY95YHQ5d4OKOzFwAnOrmH/m9BYzL7yGuV0P9SlMi
+         FZ9lzNN1WA7uSzvZBGSdvdf0YfmCdAxKy6K8Ea0p0SVJX04qF2Sts8w8te2Zoh7R80
+         +vG390AdzZRoPSY1zqODPlRe9RltD0Wsib+7AkcYHik6SevO5ViArmWAFwnKggszFG
+         oVAbN4Mw9sBD2LGjm7TA908BzA7wdz8poidxuIyJhb8XXmoYjoCrJoCc1Po0VSuNzA
+         jcXgavPdUgT8zKu12XlWx3O4MXMIJfDCMOgQj+dmo0b4TmKNHCvdn02lCjzaoJHLur
+         iMVlzPkv8fVGQ==
+Message-ID: <dada9a9c-32fd-9d8c-b692-5efb8a94c20f@gnuweeb.org>
+Date:   Wed, 11 Jan 2023 13:09:35 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
 Subject: Re: [PATCH 1/1] hwmon: remove unnecessary (void*) conversions
 Content-Language: en-US
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     XU pengfei <xupengfei@nfschina.com>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
 References: <20230111020723.3194-1-xupengfei@nfschina.com>
  <db4276db-bbec-142a-d306-928421eb49fc@roeck-us.net>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <db4276db-bbec-142a-d306-928421eb49fc@roeck-us.net>
+ <423fcac8-97cc-88b7-19d8-f93baddea3cd@gnuweeb.org>
+In-Reply-To: <423fcac8-97cc-88b7-19d8-f93baddea3cd@gnuweeb.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 1/11/23 10:29 AM, Guenter Roeck wrote:
-> On 1/10/23 18:07, XU pengfei wrote:
->> diff --git a/drivers/hwmon/powr1220.c b/drivers/hwmon/powr1220.c
->> index f77dc6db31ac..501337ee5aa3 100644
->> --- a/drivers/hwmon/powr1220.c
->> +++ b/drivers/hwmon/powr1220.c
->> @@ -174,7 +174,7 @@ static umode_t
->>   powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
->>               attr, int channel)
->>   {
->> -    struct powr1220_data *chip_data = (struct powr1220_data *)data;
->> +    struct powr1220_data *chip_data = data;
+On 1/11/23 1:03 PM, Ammar Faizi wrote:
+> On 1/11/23 10:29 AM, Guenter Roeck wrote:
+>> On 1/10/23 18:07, XU pengfei wrote:
+>>> diff --git a/drivers/hwmon/powr1220.c b/drivers/hwmon/powr1220.c
+>>> index f77dc6db31ac..501337ee5aa3 100644
+>>> --- a/drivers/hwmon/powr1220.c
+>>> +++ b/drivers/hwmon/powr1220.c
+>>> @@ -174,7 +174,7 @@ static umode_t
+>>>   powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
+>>>               attr, int channel)
+>>>   {
+>>> -    struct powr1220_data *chip_data = (struct powr1220_data *)data;
+>>> +    struct powr1220_data *chip_data = data;
+> 
+> This is wrong. That cast is needed to discard the "const".
+> 
+>    CC [M]  drivers/hwmon/powr1220.o
+> drivers/hwmon/powr1220.c: In function ‘powr1220_is_visible’:
+> drivers/hwmon/powr1220.c:177:43: error: initialization discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
+>    177 |         struct powr1220_data *chip_data = data;
+>        |                                           ^~~~
+> cc1: all warnings being treated as errors
 
-This is wrong. That cast is needed to discard the "const".
+Anyway, powr1220_is_visible() doesn't write via that pointer, but
+the local variable needs to be a const as well.
 
-   CC [M]  drivers/hwmon/powr1220.o
-drivers/hwmon/powr1220.c: In function ‘powr1220_is_visible’:
-drivers/hwmon/powr1220.c:177:43: error: initialization discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
-   177 |         struct powr1220_data *chip_data = data;
-       |                                           ^~~~
-cc1: all warnings being treated as errors
+diff --git a/drivers/hwmon/powr1220.c b/drivers/hwmon/powr1220.c
+index f77dc6db31ac..7cbbed5a6f5e 100644
+--- a/drivers/hwmon/powr1220.c
++++ b/drivers/hwmon/powr1220.c
+@@ -174,7 +174,7 @@ static umode_t
+  powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
+                     attr, int channel)
+  {
+-       struct powr1220_data *chip_data = (struct powr1220_data *)data;
++       const struct powr1220_data *chip_data = data;
+  
+         if (channel >= chip_data->max_channels)
+                 return 0;
+
 
 -- 
 Ammar Faizi
