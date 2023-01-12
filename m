@@ -2,77 +2,78 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7F6DC54EBC
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Jan 2023 14:34:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1D70C61DB3
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Jan 2023 14:40:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238528AbjALOeY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 12 Jan 2023 09:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        id S239810AbjALOk0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 12 Jan 2023 09:40:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239450AbjALOdn (ORCPT
+        with ESMTP id S238664AbjALOjt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 12 Jan 2023 09:33:43 -0500
+        Thu, 12 Jan 2023 09:39:49 -0500
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF555AC55;
-        Thu, 12 Jan 2023 06:25:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876B853701;
+        Thu, 12 Jan 2023 06:29:34 -0800 (PST)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id A7CC23200923;
-        Thu, 12 Jan 2023 09:25:12 -0500 (EST)
+        by mailout.west.internal (Postfix) with ESMTP id 2C5D0320097C;
+        Thu, 12 Jan 2023 09:29:33 -0500 (EST)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 12 Jan 2023 09:25:13 -0500
+  by compute6.internal (MEProxy); Thu, 12 Jan 2023 09:29:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1673533512; x=1673619912; bh=zd2a00NEe4
-        +bDxczc+Ry0ob6zOWTcbtiiMyZcdFcU0w=; b=YGNxNqkRDCogME/TIrJwOFu+Aw
-        KREFfDsPOtB+pMQXTRSOjSADpBtRnn7ra9dThQy9nYwC5yaFT1k3aZoi1r0cw8k+
-        tZtQBFckNDlZiYSPEjFu22B1zw3L8alU9JbOhL2cROrmsh2p6L75WEvDRpGOlgd2
-        0Oe0Oh6/0kUY1aVj2noXhURTil8Q8TZiK64DpyY7HOtLraktXAnQF2cQNIub/Fd+
-        TBLb7phal05/bJz7ZEvhP6cNFIDtQbD0Ifa7+IUKdSYBrlIu+O75PMLYYnO341zD
-        VmwdYG9nyS06eac4RqrejbcNIO6da7iyTziQCz+EZuoMtNT3oUn/hPg7TlXw==
+        :subject:to:to; s=fm2; t=1673533772; x=1673620172; bh=AhjbbWm8r+
+        Pw4BQBEtEyFPfrXz0EzGlo++1xsl3ewec=; b=S7WnE5qnpG6GUsRr7LUFNqHKbg
+        7HK10LzSf0SlJqdBvA2m6B0MqCERAzJHqFCnnbSryhvnYMsBDoj22WSxVwKfCiTf
+        1l5gKwsF1CPnQ0qlTRRj6IFPkG9rMcUTLrxC+3AkVBnwmGJZShp8/Sdlw0tQtW1v
+        RzBz0XeO8lAmkYIxqlKQ6jWB+lkcBCp1Y/Fp0f1ILQ1DW8LJoUbpz+Ql9qONrriB
+        6fDPmMt2n9It7YkTG8vUiiSkM9DZUvRZny26E3HKGNfHwG4AJE15uu9n3Ts/yDuz
+        1u1qbry2g+MdBM6SwsY1GcsEEgkzMdGERrdNsqo5BDoG3Kyd+drpcTn1P7Ag==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:date:feedback-id
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673533512; x=1673619912; bh=zd2a00NEe4+bDxczc+Ry0ob6zOWT
-        cbtiiMyZcdFcU0w=; b=lvKLryXdOqdEofsFsgIJQHOGktZeXc6Az43dxqpjOy4o
-        AffAcHAPxJ0T5mqZ46mKeyrq78/6Dc3K0kLAPr9ElHiyu+h78rtMrtkUNr5Kr6dj
-        GAmBZvUfhKZgbcfDoG9khuNbZ6S+OHA7stvHly/frsr3kr+KKfBBpk8twcj8W2UZ
-        S3rWWH/zrYnfFQA9xKiP6r6yWFHUERBHkAJX72Q/9hLou0QzOCcUgeQcqhzU5VoI
-        DyDNOvUqTentQ0QcgBG8kDfJrIelN2jzDdQnpaQFtSS2k9t9AbRdtJBAF8ONQo6P
-        9hSfp0kKE4X+diUWCs14nZNTtR+ib4YGVMUz0T/euA==
-X-ME-Sender: <xms:RxjAY2-gAMTQkme3l1_1vUzceEGq89VRd3miCOPsXW-AfkRe0R5ARw>
-    <xme:RxjAY2slsnRZE7VDPM4gfQgGCfPJH0cLwE7mmlWVRHb-xTJR-2pyWS86LMm3K9wJ7
-    Wp7mggCGcmA-_Y7huo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeigdeigecutefuodetggdotefrodftvf
+        fm3; t=1673533772; x=1673620172; bh=AhjbbWm8r+Pw4BQBEtEyFPfrXz0E
+        zGlo++1xsl3ewec=; b=iC3mvF6Ntfdvnv/henI2GNUtYvh9Mq5M94nC2lBq3Ipt
+        h4W/W4kwovxVS9kcQvE0Ke2dB+G+MxJMBFVH0vvDlBRl4j2bUF0t+E+RTDl8hoEB
+        UpW7xclTDsQk8QB7z7bZCwSOT71aTRg4mEfGCccm4i/ynG1Jggn46BxXJEqwsB8O
+        RbnxMjkAIEtrvppkEavRE/S8q4GrWE5uOFQ6au2Dzuvhrkz3Ap3Lk3JZ6t55k1bD
+        WDCc3Fygam36uLYsL0EyAAiPVIIyVO0isGnmej0oH3iP2dS33ifePdt5aRrzSYHe
+        BB+KLrNbXsQg0XfdQJdwGqDhPnE1Tlp6LRT0Ur8oRw==
+X-ME-Sender: <xms:TBnAYwBvPQBCQzgpWyGVBQ2vM8WM32xxXG5lFzUmeiEsDnd7Dim78A>
+    <xme:TBnAYyhf2OeVwaUAVgnzUM0B_Ob4ZAVSGjJqhYtuOi8Es8YrktOJjwB2Bykcnxw1b
+    IFeS7mpFdpW-N0wuHw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeigdeihecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepffegffdutddvhefffeeltefhjeejgedvleffjeeigeeuteelvdettddulefgudfg
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:RxjAY8BofP2iwlr4WsTRUE3GFTIilbevoETcx1AdLHUD0DpcEl2baw>
-    <xmx:RxjAY-eF-AmA_kcO6TRy-o70WLcT3DX1-vMFSqtmLyNUVWXbG0nJIQ>
-    <xmx:RxjAY7NRVoYzjn-7RIfz09uKphRe7p3VSBb53XcRHtHlvy3ElmXcZA>
-    <xmx:SBjAY8G2EH6syEFGmLuK_5FPcRgYYbtaUDEmOfbvtGp86NqBKeGo_Q>
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:TBnAYznM3nwi7kT9G9wjzPs7Qoov7IIUvTwYxOaxlJRZpgt6_dBbaA>
+    <xmx:TBnAY2yWx01JLM1NYFAAOmMna6TzpWGj6bZ1MzTNWMEbSCEldMC7aA>
+    <xmx:TBnAY1TY8_7botTyu5J2oLw9k07p4BzV_h7tzdKWHGI7xbOvxua79g>
+    <xmx:TBnAY6InEbqIfwU6muYiODHMeiqlT7mtKzzU4968LebyMY0Mr9SAIg>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CFB53B60086; Thu, 12 Jan 2023 09:25:11 -0500 (EST)
+        id 8E865B60086; Thu, 12 Jan 2023 09:29:32 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
 Mime-Version: 1.0
-Message-Id: <5ad677f3-2cbc-4ba0-bd48-2f832a72fb28@app.fastmail.com>
-In-Reply-To: <20230103203654.59322-4-nick.hawkins@hpe.com>
+Message-Id: <8171f4a5-d5ec-43e3-a6df-5a3965c87479@app.fastmail.com>
+In-Reply-To: <20230103213844.GA216540@roeck-us.net>
 References: <20230103203654.59322-1-nick.hawkins@hpe.com>
- <20230103203654.59322-4-nick.hawkins@hpe.com>
-Date:   Thu, 12 Jan 2023 15:24:51 +0100
+ <20230103203654.59322-5-nick.hawkins@hpe.com>
+ <20230103213844.GA216540@roeck-us.net>
+Date:   Thu, 12 Jan 2023 15:29:10 +0100
 From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
+To:     "Guenter Roeck" <linux@roeck-us.net>,
+        "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
         "Jean Delvare" <jdelvare@suse.com>,
-        "Guenter Roeck" <linux@roeck-us.net>,
         "Rob Herring" <robh+dt@kernel.org>,
         krzysztof.kozlowski+dt@linaro.org,
         "Jonathan Corbet" <corbet@lwn.net>,
@@ -80,62 +81,31 @@ To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 3/5] ARM: dts: add GXP Support for fans and SPI
+Subject: Re: [PATCH v4 4/5] ARM: multi_v7_defconfig: Add GXP Fan and SPI support
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jan 3, 2023, at 21:36, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
+On Tue, Jan 3, 2023, at 22:38, Guenter Roeck wrote:
+> On Tue, Jan 03, 2023 at 02:36:53PM -0600, nick.hawkins@hpe.com wrote:
+>> From: Nick Hawkins <nick.hawkins@hpe.com>
+>> 
+>> In order for HPE platforms to be supported by linux on GXP it is
+>> necessary for there to be fan and spi driver support. There fan driver
+>> can support up to 16 fans that are driven by pwm through the CPLD. The
+>> SPI driver supports access to the core flash and bios part. The SPI
+>> driver spi-gxp was added previously to linux.
+>> 
+>> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 >
-> Reorganize the base address of AHB to accommodate the SPI and fan driver
-> register requirements. Add the hpe,gxp-spifi and hpe,gxp-fan-ctrl
-> compatibles. Add comments to make the register range more clear.
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
 >
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> This patch will have to be applied through the arm tree.
 >
 
-> diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi 
-> b/arch/arm/boot/dts/hpe-gxp.dtsi
-> index cf735b3c4f35..b73b22a93716 100644
-> --- a/arch/arm/boot/dts/hpe-gxp.dtsi
-> +++ b/arch/arm/boot/dts/hpe-gxp.dtsi
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
-> - * Device Tree file for HPE GXP
-> + * Device Tree for HPE
->   */
-> 
->  /dts-v1/;
-> @@ -52,76 +52,102 @@
->  			cache-level = <2>;
->  		};
-> 
-> -		ahb@c0000000 {
-> +		ahb@80000000 {
->  			compatible = "simple-bus";
->  			#address-cells = <1>;
->  			#size-cells = <1>;
-> -			ranges = <0x0 0xc0000000 0x30000000>;
-> +			ranges = <0x0 0x80000000 0xf000000>, /* 0x80000000 - 0x8f000000 */
-> +				 <0x40000000 0xc0000000 0x7fffffff>; /* 0xc0000000 - 0xffffffff */
+The patch looks good to me, please send it to soc@kernel.org
+(Cc the interested parties and lists) for inclusion, I'll
+pick it up from there.
 
-I'm a bit confused by the change in the mappings: are you
-sure this all the same ahb bus and not two separate buses?
-
-The comment for the second range looks wrong to me, as
-you define a 2GB (minus one byte) sized mapping but the
-comment only lists a 1GB (including the last byte) mapping.
-
-I would expect that the original 0x30000000 (including the
-last byte) was correct here.
-
-> -			vic1: interrupt-controller@80f00000 {
-> +			vic1: interrupt-controller@f00000 { /* 0x80f00000 */
-
-This is not the same address as before. I'm also not sure the
-comment is helpful here.
-
-    Arnd
+     Arnd
