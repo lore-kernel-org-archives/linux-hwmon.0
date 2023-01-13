@@ -2,123 +2,96 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BC31C54EBD
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Jan 2023 07:00:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F182BC61DB3
+	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Jan 2023 14:56:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241237AbjAMHAk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 13 Jan 2023 02:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
+        id S229884AbjAMO4f (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 13 Jan 2023 09:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241097AbjAMG7g (ORCPT
+        with ESMTP id S229732AbjAMO4E (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 13 Jan 2023 01:59:36 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24718235;
-        Thu, 12 Jan 2023 22:45:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=MmWO9HI/fqEBVN+B802vvmSHYfQAKEOqu/eZMK0viVI=; b=1uCHAczluEigvg/9GbYT3i7R8y
-        ArTnj5v+tWDuLLTd2kT5UVAV/vTSIhCRq+trNvfA8VzmlcZtSJVLANTzg6rXZtHERpS4sEw9YfojZ
-        ho4YVDpT9VDbjoAm5IGpHW2QiPCR/55JI4mF6zUCRk1kh0+tfCefabumyRqJzK1fB5XAmKssHos37
-        RhSLO/UEzmCv3eYeA50V4WgU73L/OrUs4vTu2K2IY4uk7zJSGGAkHiayCQK+RmHTf0Vemq9K56tTq
-        WYFtr9WWJDFbkct+tyvapp+yrVNmjYsMdFLfOYy1Zb0nuISvq1NNo5qqHtriChBIMdjCxeO5xgCA4
-        8TQwZFfQ==;
-Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pGDp7-000sPw-FO; Fri, 13 Jan 2023 06:45:57 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Fri, 13 Jan 2023 09:56:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C068D5FD;
+        Fri, 13 Jan 2023 06:42:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A890B82171;
+        Fri, 13 Jan 2023 14:42:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1CBFC433EF;
+        Fri, 13 Jan 2023 14:42:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673620934;
+        bh=f9xYLBEdIZS6xHzO4ogzkto2j4CKNmGShIFM0BXcVss=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QEmS8yn2txSOdlKbJJdbxLku7cU0PZmRStyAP87J55DPSpT5bLoSZTJ4RS4RtLR4W
+         t6kYnPrwqhKS80huFweNl+qeVEpgtzWn61YFL8E2uPhU76pZ0kVmJrZI+Giq56HLrA
+         81VthUgoJyRkVfmJ4dw/I62vcnxstsrqEoSSufm+5sr4bw5BUBdKdWKiHhlK3bxauQ
+         iNePD7wwrxuQBpHNAeiQsQzgnDNFOuDpwt0ZaLczp2/8pL+SUYOBmYMKjdO/AZxbnb
+         5gl8FZqxDz2OJpkzPoqKJXwDsGE0ofX4EOjGE1Sse5iy68PhS/yQOYIbV7YT1w9yUd
+         wMM6SZITU3CGw==
+Date:   Fri, 13 Jan 2023 14:42:07 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Pagani <marpagan@redhat.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: (sht15,sht21) fix kernel-doc warnings
-Date:   Thu, 12 Jan 2023 22:45:56 -0800
-Message-Id: <20230113064556.21685-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.0
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v5 03/10] mfd: intel-m10-bmc: Split into core and spi
+ specific parts
+Message-ID: <Y8Ftv3/SwNI403I3@google.com>
+References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com>
+ <20221226175849.13056-4-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221226175849.13056-4-ilpo.jarvinen@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Use the correct function names in kernel-doc comments to prevent these
-warnings:
+On Mon, 26 Dec 2022, Ilpo Järvinen wrote:
 
-drivers/hwmon/sht15.c:682: warning: expecting prototype for sht15_show_status(). Prototype was for sht15_status_show() instead
-drivers/hwmon/sht15.c:705: warning: expecting prototype for sht15_store_heater(). Prototype was for sht15_status_store() instead
-drivers/hwmon/sht15.c:738: warning: expecting prototype for sht15_show_temp(). Prototype was for sht15_temp_show() instead
-drivers/hwmon/sht15.c:760: warning: expecting prototype for sht15_show_humidity(). Prototype was for sht15_humidity_show() instead
-drivers/hwmon/sht21.c:128: warning: expecting prototype for sht21_show_temperature(). Prototype was for sht21_temperature_show() instead
-drivers/hwmon/sht21.c:149: warning: expecting prototype for sht21_show_humidity(). Prototype was for sht21_humidity_show() instead
+> Split the common code from intel-m10-bmc driver into intel-m10-bmc-core
+> and move the SPI bus parts into an interface specific file.
+> 
+> intel-m10-bmc-core becomes the core MFD functions which can support
+> multiple bus interface like SPI bus.
+> 
+> Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
+> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> Acked-by: Guenter Roeck <linux@roeck-us.net> # hwmon
+> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  MAINTAINERS                                   |   2 +-
+>  drivers/fpga/Kconfig                          |   2 +-
+>  drivers/hwmon/Kconfig                         |   2 +-
+>  drivers/mfd/Kconfig                           |  30 ++--
+>  drivers/mfd/Makefile                          |   4 +-
+>  drivers/mfd/intel-m10-bmc-core.c              | 122 +++++++++++++++++
+>  .../{intel-m10-bmc.c => intel-m10-bmc-spi.c}  | 128 +++---------------
+>  include/linux/mfd/intel-m10-bmc.h             |   6 +
+>  8 files changed, 172 insertions(+), 124 deletions(-)
+>  create mode 100644 drivers/mfd/intel-m10-bmc-core.c
+>  rename drivers/mfd/{intel-m10-bmc.c => intel-m10-bmc-spi.c} (59%)
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
----
- drivers/hwmon/sht15.c |    8 ++++----
- drivers/hwmon/sht21.c |    4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Looks okay:
 
-diff -- a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
---- a/drivers/hwmon/sht15.c
-+++ b/drivers/hwmon/sht15.c
-@@ -668,7 +668,7 @@ static inline int sht15_calc_humid(struc
- }
- 
- /**
-- * sht15_show_status() - show status information in sysfs
-+ * sht15_status_show() - show status information in sysfs
-  * @dev:	device.
-  * @attr:	device attribute.
-  * @buf:	sysfs buffer where information is written to.
-@@ -690,7 +690,7 @@ static ssize_t sht15_status_show(struct
- }
- 
- /**
-- * sht15_store_heater() - change heater state via sysfs
-+ * sht15_status_store() - change heater state via sysfs
-  * @dev:	device.
-  * @attr:	device attribute.
-  * @buf:	sysfs buffer to read the new heater state from.
-@@ -725,7 +725,7 @@ static ssize_t sht15_status_store(struct
- }
- 
- /**
-- * sht15_show_temp() - show temperature measurement value in sysfs
-+ * sht15_temp_show() - show temperature measurement value in sysfs
-  * @dev:	device.
-  * @attr:	device attribute.
-  * @buf:	sysfs buffer where measurement values are written to.
-@@ -747,7 +747,7 @@ static ssize_t sht15_temp_show(struct de
- }
- 
- /**
-- * sht15_show_humidity() - show humidity measurement value in sysfs
-+ * sht15_humidity_show() - show humidity measurement value in sysfs
-  * @dev:	device.
-  * @attr:	device attribute.
-  * @buf:	sysfs buffer where measurement values are written to.
-diff -- a/drivers/hwmon/sht21.c b/drivers/hwmon/sht21.c
---- a/drivers/hwmon/sht21.c
-+++ b/drivers/hwmon/sht21.c
-@@ -114,7 +114,7 @@ out:
- }
- 
- /**
-- * sht21_show_temperature() - show temperature measurement value in sysfs
-+ * sht21_temperature_show() - show temperature measurement value in sysfs
-  * @dev: device
-  * @attr: device attribute
-  * @buf: sysfs buffer (PAGE_SIZE) where measurement values are written to
-@@ -136,7 +136,7 @@ static ssize_t sht21_temperature_show(st
- }
- 
- /**
-- * sht21_show_humidity() - show humidity measurement value in sysfs
-+ * sht21_humidity_show() - show humidity measurement value in sysfs
-  * @dev: device
-  * @attr: device attribute
-  * @buf: sysfs buffer (PAGE_SIZE) where measurement values are written to
+For my own reference (apply this as-is to your sign-off block):
+
+Acked-for-MFD-by: Lee Jones <lee@kernel.org>
+
+-- 
+Lee Jones [李琼斯]
