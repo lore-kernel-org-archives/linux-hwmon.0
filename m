@@ -2,82 +2,75 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30612C3DA78
-	for <linux-hwmon@archiver.kernel.org>; Sun, 15 Jan 2023 16:07:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F5C7C3DA78
+	for <linux-hwmon@archiver.kernel.org>; Sun, 15 Jan 2023 16:13:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbjAOQHn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 15 Jan 2023 11:07:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
+        id S231548AbjAOQNV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 15 Jan 2023 11:13:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbjAOQHT (ORCPT
+        with ESMTP id S230508AbjAOQNU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 15 Jan 2023 11:07:19 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A531353E;
-        Sun, 15 Jan 2023 08:04:34 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id n8so21498141oih.0;
-        Sun, 15 Jan 2023 08:04:33 -0800 (PST)
+        Sun, 15 Jan 2023 11:13:20 -0500
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C13A72B8;
+        Sun, 15 Jan 2023 08:13:18 -0800 (PST)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-15b9c93848dso18764669fac.1;
+        Sun, 15 Jan 2023 08:13:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=D04CJM4/P5lSZvVChP8Z+y9dpKnG05jyZJaJFC5t9xA=;
-        b=mc6+AdIZ186PlrkdUmvrvrg0xNGeupZV4SOjF8IQqQ0Gv2JLd98flOoZ6AS/tb3lSR
-         jNPc/5geD5SuFyZPcnbqN2/5Yhk/Zqb9KuXGGP1evyxw3yg4U+ei9v68uRkcRB6Dmg6J
-         Qm9JZhvs+wcLk0WiF7Ybhhkwbw0RpJ20HVdIicmHapJ3Uf07NgP5k7woi+GxZoUYNzfx
-         zZedeQvxVDENg6u7Nx+TlIA9zPLiln7U+zEP3V2zp+uNPNAeSZj4/rcv4lrwQDm2HaeI
-         0R75YchHGaeVgss6ZQ+nu68koVtnSm5YyLduZcQII9KEKrIZuNBz4HB8BEAyb+YsFa8G
-         xgWg==
+        bh=dKDWNfyaCCVlqTNLhcNrknSAUVDiMextrN4qIAT2sVw=;
+        b=ciJQkbJebkxZGds0qPuqu3bQPB6g0z5hzjptry52/3kRDFyk0y6IMbAunHIfR9kEtk
+         rPsS3L9o+fEdFYkJ+dsrG2UOw+Tp+vOkcSg0V6E0SUFigis4b8Zpf2dVp2dz5dBW7vWj
+         XeN5d1Y/RJ93IYcXchAUhCMPunhGglcW5NIwUx+XrRDe2mdZfciSSRn/pn0fDMB9xcff
+         Ml/c1i8u3nfBkvLRdp20lDLcnBfEUDvlh1Vje7Oa9qsT/u48+bdGGnNn2okOJCMmXVkJ
+         RFrRegh8rAhzkA5YHxqOOHemVdhUX3ZfE38baPyNKa3dqeFzVvSAC/Co9mS9/DKqv2M+
+         W3JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=D04CJM4/P5lSZvVChP8Z+y9dpKnG05jyZJaJFC5t9xA=;
-        b=CUuYNlcfdXox96bgBVvV3c6rM6lCW77w4zOarZguVsKPAW0HY93tVuuWjMY1TuKmfp
-         WpyNjuR38i6wdV2K0O59qqetR91xziD0Ke+lE+hRjx6Yeg6Ug8omTblWSvUR97bwx96t
-         vKe8m77o8ffLD5HToJw6f5Qso3dsdbph/3K3lwTIWUsGfN1izobrQU6HJDLymWwvKxN3
-         ljIA45sDP+x5uAs29Hpnjyqh2gwEgsumTt9pG+oiOzvlRIKp4ia0ssbjGqZ7AGUUQ/jg
-         oc0UJngmwwoxGM7aPOm8UOlJYGu4Hn/Ytt44LSsEI3US0IiQNqSPnKQfl52IFX9HiK7v
-         Ynsg==
-X-Gm-Message-State: AFqh2ko9rJjxaFgcwXoZxRTvClILT8gVYNuvIfZwiTSD/WTAxOgSnLMQ
-        LLrVK38xx+2EO0AkQ7dRY2Q=
-X-Google-Smtp-Source: AMrXdXu426fH72t/ib0srJ7xpjgY2wpiBJytVGmrAh+Ta9c1+YMUmaTEDcms6IUp3AiAQfEFmUNh5A==
-X-Received: by 2002:a05:6808:2222:b0:363:a27:a336 with SMTP id bd34-20020a056808222200b003630a27a336mr47814966oib.42.1673798673322;
-        Sun, 15 Jan 2023 08:04:33 -0800 (PST)
+        bh=dKDWNfyaCCVlqTNLhcNrknSAUVDiMextrN4qIAT2sVw=;
+        b=MXlgE+6qQdY/OZqBM+bHFyuy/iXsvxgG6ocmRqttTAf/FcxtI/ZQWpf3ZxNdkvZKGI
+         ZOrwyV3RGkjTUuN8RJ/IgFbyFt54GNa43pI4hG2qNBfhgNUQSTGFe5gLQsilHd9CqAvo
+         zSZpNg8MNpuUgxK1cFKAYDLEqvLEuGqLM8uF+c9eCD0Og/Cr2gCAF+HmYi5ezYBb9UkI
+         KHnJq1XbkHG7wfJF8aMsK8FUbI+469GZJtk8dS8DELGBSgFDL8p17fJ5CHtMsCzJcRKH
+         9rojEmaIx1KNBNly+q7DO2TQvxBzIGxj+P63iVgB+oqiTU9aLtku9tP8qVO8gqSWxh/g
+         b24g==
+X-Gm-Message-State: AFqh2krv3sWWgOwKWtncgRwuFz/CLIUBgEXkjMiUslfnb9ouGdRA4Iwz
+        Ob1xmDuLta3Ee0MhqUp4lOSDu6Nt8U4=
+X-Google-Smtp-Source: AMrXdXu6+ZKqabhHWDfj5mCvlJ1iBpEAASg1GQkQc07c9T86jozs80H1dDgkNScnxntjc7vCl0bp6g==
+X-Received: by 2002:a05:6870:7908:b0:15b:9ab8:2cd4 with SMTP id hg8-20020a056870790800b0015b9ab82cd4mr13406252oab.44.1673799197884;
+        Sun, 15 Jan 2023 08:13:17 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o9-20020a0568080f8900b0035e461d9b1bsm11669057oiw.50.2023.01.15.08.04.32
+        by smtp.gmail.com with ESMTPSA id z36-20020a056870d6a400b00144bb1013e6sm13222236oap.4.2023.01.15.08.13.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Jan 2023 08:04:32 -0800 (PST)
+        Sun, 15 Jan 2023 08:13:17 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 15 Jan 2023 08:04:31 -0800
+Date:   Sun, 15 Jan 2023 08:13:16 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (hih6130) fix kernel-doc warnings
-Message-ID: <20230115160431.GA1245975@roeck-us.net>
-References: <20230113064549.21289-1-rdunlap@infradead.org>
+To:     XU pengfei <xupengfei@nfschina.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] hwmon: ibmpex: remove unnecessary (void*) conversions
+Message-ID: <20230115161316.GA1246652@roeck-us.net>
+References: <20230111043605.3726-1-xupengfei@nfschina.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230113064549.21289-1-rdunlap@infradead.org>
+In-Reply-To: <20230111043605.3726-1-xupengfei@nfschina.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 10:45:49PM -0800, Randy Dunlap wrote:
-> Use the correct function name in kernel-doc comments to prevent these
-> warnings:
+On Wed, Jan 11, 2023 at 12:36:06PM +0800, XU pengfei wrote:
+> Pointer variables of void * type do not require type cast.
 > 
-> drivers/hwmon/hih6130.c:164: warning: expecting prototype for hih6130_show_temperature(). Prototype was for hih6130_temperature_show() instead
-> drivers/hwmon/hih6130.c:185: warning: expecting prototype for hih6130_show_humidity(). Prototype was for hih6130_humidity_show() instead
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
+> Signed-off-by: XU pengfei <xupengfei@nfschina.com>
 
 Applied to hwmon-next.
 
