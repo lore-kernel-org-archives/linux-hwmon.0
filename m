@@ -2,95 +2,122 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 904A4C63797
-	for <linux-hwmon@archiver.kernel.org>; Sun, 15 Jan 2023 16:15:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D573FC3DA78
+	for <linux-hwmon@archiver.kernel.org>; Sun, 15 Jan 2023 16:17:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbjAOQPw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 15 Jan 2023 11:15:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42432 "EHLO
+        id S231199AbjAOQRc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 15 Jan 2023 11:17:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbjAOQPv (ORCPT
+        with ESMTP id S231518AbjAOQRb (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 15 Jan 2023 11:15:51 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2A95594
-        for <linux-hwmon@vger.kernel.org>; Sun, 15 Jan 2023 08:15:50 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id n8so21512470oih.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 15 Jan 2023 08:15:50 -0800 (PST)
+        Sun, 15 Jan 2023 11:17:31 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C10CC1C
+        for <linux-hwmon@vger.kernel.org>; Sun, 15 Jan 2023 08:17:30 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id o66so21478787oia.6
+        for <linux-hwmon@vger.kernel.org>; Sun, 15 Jan 2023 08:17:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qq9sMdPGuZtT4iwkxs1RRMlAkCor4GaDdugrENnDFUc=;
-        b=pEY0CBoJTiA/w1UFMXvDnWVw8gZKHe2S2jvuanbWCzWfIxb5lDZY9g+PCqi5e1QW5t
-         y5ESkAPXU9PYYJ7sU3Bt19X35jia9CEG0BR8aHy9LUO9+mUZjhGny0FNWiA9Esc6/S0O
-         CptEwUWGekobE9liTshtFlmJH0YnRa7rOTTUea0eHjh7D0u5zlR8qnrrO/75pvBgoKYK
-         tFrOGcV27s7hRamBoH85x1a7rm+SZ5nFOvxB1kt78YAvCihq0qsEmjdewIfWv3f4onLy
-         PoinkVYZaCSbeK/gfdTSr56vUn/ManFzcFT3Ft4BrhKjpjxSvuKx+tlbfjYKN6PrZCdw
-         JcFQ==
+        bh=LnPvt/LcsK9rPxyw/xGon4FdjMi9yyD9WS4+kPvqjWM=;
+        b=PefQaFFB2JzHYyea0QNNLf2CjIWped1/PgV9SCNkD7zF0faEw6uT23+H1A6PNn/Dl5
+         TjzQ95fimFIJ9i2ShUYWMcizrhdJ+ruKFPbategz80sX1qYmUw2o7k0CKR0ctL0cL0NC
+         x+e8ayf6CYzukeJwUrjWJxazJXQL2KC9EW361bL4kIuJ6ofczPK1gYFiEuVc1oeuLVwZ
+         jiSjsEByWZHFXJEWJa3CDdg8dMvcynrgMrxZcAd2CapWoVvLVa3o20LG+XlXHG3W8FmY
+         ofTb1pmaUWl2zr2kOodALgebKT6xii6/FRUfpH0Eukm/7UPBZYYi9HZ71OA6JUNZNuT9
+         4yzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qq9sMdPGuZtT4iwkxs1RRMlAkCor4GaDdugrENnDFUc=;
-        b=2pQ7fXECPUjupF2AASWEEpDWZQ3aBZ4tgCHD+vEI5ouff89zhsmIyhRes+HPq3j2Uz
-         1/ThBbje9Lj8hd+JOF/MTTVO3Jcnut6YFDbXhQ/StJiKBKdXUBIlyflROgbwJakX+jRy
-         s2AOfvaGGap9w0KZey632qzLtFiiY3N1SBrTYwNq4EMVwqAg56HI/ej6oQ8kDkqQFc7t
-         CpnfRGqA3ztdPnrwxwFypiYlXrdhtCVYZjhKqMVgRIARwNEAo6XHCe2/PqAnlYVL+08g
-         rKxy+azYiLwpGpivvwg6Dg3KhcBBYWBJ7c9iInAPoRb6LVlhPlToNCBmGhlRNYJe/DiQ
-         xXNw==
-X-Gm-Message-State: AFqh2kpMepkC512f2o09pk364F1a+P0XV8bS8mCRymp03QUfqgqYvNFO
-        e1BBQbHwcERKu1KVYY/eRy+l0VRoMgo=
-X-Google-Smtp-Source: AMrXdXs6EuCY97CXShjwwJb2NfMcOjd2O+zpeYdMTpXQ6XJk81Udh9UznmdV8WQka7vwdOIySQN8bg==
-X-Received: by 2002:a05:6808:30a8:b0:35e:728d:6de4 with SMTP id bl40-20020a05680830a800b0035e728d6de4mr52496486oib.2.1673799349348;
-        Sun, 15 Jan 2023 08:15:49 -0800 (PST)
+        bh=LnPvt/LcsK9rPxyw/xGon4FdjMi9yyD9WS4+kPvqjWM=;
+        b=NYgayq01hvrIC+iyyGTeeORnWGEtuOf1SD7r3UqCE8rrXOrXEZBuPKyahaTlf2whz+
+         6HAD1aEzgD7oKUejXa+ugwb1Jebfhc4s2aeiIEcm7dD8sDD4ZQsZIP2amFf9BsHGZ9v5
+         tjOOPQPkTPxgY1xHE0B0vi8SQFwNpykcTSLgw7fT1Wl19ue+2L415t4E322pmEr1ldbv
+         C5TMbpdRlZXOJ7YiFlcWTjT3rtbNH3aCep7OzEGW79aPlxwwe26VXgLJySQEnYmMAYtt
+         gJJ/wBkPMesFyrz/+6rySiEQztO5Skgba8bawRtPTNpUNIUF/B/khyNCP7AELcWBRh4+
+         aAKQ==
+X-Gm-Message-State: AFqh2koCFf4c8Es1lscvJrYAyuRQLOWriqsYsQ1AmJHyGSbzrxIVy3Q1
+        UktPDlsAgxjOPyFwacTz+ORKxxMor5I=
+X-Google-Smtp-Source: AMrXdXsyNqIbtXaRtwflPZYlp7pJ+VQIXSE/tuQiHlkTDJTOFtWvvHd5bufoNTSkYxcyV/qFlOJmAg==
+X-Received: by 2002:a05:6808:1595:b0:360:fc5b:48f8 with SMTP id t21-20020a056808159500b00360fc5b48f8mr52745312oiw.59.1673799450084;
+        Sun, 15 Jan 2023 08:17:30 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bd25-20020a056808221900b0035e7d07bf9dsm11508705oib.16.2023.01.15.08.15.48
+        by smtp.gmail.com with ESMTPSA id m6-20020a9d73c6000000b006860be3a43fsm244990otk.14.2023.01.15.08.17.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Jan 2023 08:15:48 -0800 (PST)
+        Sun, 15 Jan 2023 08:17:29 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 15 Jan 2023 08:15:47 -0800
+Date:   Sun, 15 Jan 2023 08:17:28 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Felix Nieuwenhuizen <Felix.Nieuwenhuizen@etas.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH] hwmon: (pmbus/ltc2978) add support for LTC7132 - docs
-Message-ID: <20230115161547.GA1246825@roeck-us.net>
-References: <20221208021303.GA3373033-robh@kernel.org>
- <20230105074900.5730-1-Felix.Nieuwenhuizen@etas.com>
+To:     Frank Crawford <frank@crawford.emu.id.au>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] hwmon: (it87) Allow calling __superio_enter
+ outside mux
+Message-ID: <20230115161728.GA1247062@roeck-us.net>
+References: <20230104060926.619686-1-frank@crawford.emu.id.au>
+ <20230104060926.619686-2-frank@crawford.emu.id.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230105074900.5730-1-Felix.Nieuwenhuizen@etas.com>
+In-Reply-To: <20230104060926.619686-2-frank@crawford.emu.id.au>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 08:49:00AM +0100, Felix Nieuwenhuizen wrote:
-> Add missing compatible string "lltc,ltc7132" to the bindings documentation.
+On Wed, Jan 04, 2023 at 05:09:25PM +1100, Frank Crawford wrote:
+> Allow for superio_enter to be called without requesting the muxed memory
+> region, in particular for initialisation of the second chipset, which must
+> be put into configuration mode, but without an associated call to leave
+> configuration mode.
 > 
-> Signed-off-by: Felix Nieuwenhuizen <Felix.Nieuwenhuizen@etas.com>
+> Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
 
-This needs to be reviewed by a DT maintainer. Please refer to
-scripts/get_maintainer.pl to determine who needs to be copied.
+Applied to hwmon-next.
 
+Thanks,
 Guenter
 
 > ---
->  Documentation/devicetree/bindings/hwmon/ltc2978.txt | 1 +
->  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ltc2978.txt b/Documentation/devicetree/bindings/hwmon/ltc2978.txt
-> index 4e7f6215a453..61783b3819bf 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ltc2978.txt
-> +++ b/Documentation/devicetree/bindings/hwmon/ltc2978.txt
-> @@ -16,6 +16,7 @@ Required properties:
->    * "lltc,ltc3886"
->    * "lltc,ltc3887"
->    * "lltc,ltc3889"
-> +  * "lltc,ltc7132"
->    * "lltc,ltc7880"
->    * "lltc,ltm2987"
->    * "lltc,ltm4664"
+> v2:
+>  * Improved description for patch
+> 
+> ---
+>  drivers/hwmon/it87.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+> index 9997f76b1f4a..4ebce2c661d7 100644
+> --- a/drivers/hwmon/it87.c
+> +++ b/drivers/hwmon/it87.c
+> @@ -87,6 +87,14 @@ static struct platform_device *it87_pdev[2];
+>  #define	DEVID	0x20	/* Register: Device ID */
+>  #define	DEVREV	0x22	/* Register: Device Revision */
+>  
+> +static inline void __superio_enter(int ioreg)
+> +{
+> +	outb(0x87, ioreg);
+> +	outb(0x01, ioreg);
+> +	outb(0x55, ioreg);
+> +	outb(ioreg == REG_4E ? 0xaa : 0x55, ioreg);
+> +}
+> +
+>  static inline int superio_inb(int ioreg, int reg)
+>  {
+>  	outb(reg, ioreg);
+> @@ -124,10 +132,7 @@ static inline int superio_enter(int ioreg)
+>  	if (!request_muxed_region(ioreg, 2, DRVNAME))
+>  		return -EBUSY;
+>  
+> -	outb(0x87, ioreg);
+> -	outb(0x01, ioreg);
+> -	outb(0x55, ioreg);
+> -	outb(ioreg == REG_4E ? 0xaa : 0x55, ioreg);
+> +	__superio_enter(ioreg);
+>  	return 0;
+>  }
+>  
