@@ -2,85 +2,80 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30085C63797
-	for <linux-hwmon@archiver.kernel.org>; Sun, 15 Jan 2023 16:20:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F8C3C63797
+	for <linux-hwmon@archiver.kernel.org>; Sun, 15 Jan 2023 16:22:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbjAOQUF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 15 Jan 2023 11:20:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
+        id S231488AbjAOQWq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 15 Jan 2023 11:22:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbjAOQUC (ORCPT
+        with ESMTP id S230508AbjAOQWp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 15 Jan 2023 11:20:02 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC39CC3C
-        for <linux-hwmon@vger.kernel.org>; Sun, 15 Jan 2023 08:20:02 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id d6-20020a056830138600b0068585c52f86so305698otq.4
-        for <linux-hwmon@vger.kernel.org>; Sun, 15 Jan 2023 08:20:02 -0800 (PST)
+        Sun, 15 Jan 2023 11:22:45 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F245ECDC9;
+        Sun, 15 Jan 2023 08:22:44 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id i5so3256313oih.11;
+        Sun, 15 Jan 2023 08:22:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rDeQycTByzPfOLw+Cf8dPzpUsgcgImgbA5BApntH61Q=;
-        b=NJwhleRV8suKuqYlyq+RlAn1J3/CAVNkSg1BE3at+oYTS5MEM50I5/T+iQAHk83BmJ
-         PSrfThKget8ldWqdJdHCAtIJR1f/aG97g+XCgh3ukb5syulQMiI433CH4wytyFvdU4qG
-         V92U687JEQnNZiXy3WpyT0H+zVy+qEmZSQ9tEJM56MssSyZTGBYf9RJV9SnYKj13WPs1
-         lGW7Eu8vMojXHeqMwnjDCUrU1hzM9tnWR9Lxt+Nr8nSYmfnR8+iV7iEq9dSG2nEnM9V1
-         OHH1VNY5bXelGWi0SgWo2bM/gw8lJ7xwp4GZyJfE4bYnNrg7u7PzaRQkRCe6zJgkj5eo
-         j7PQ==
+        bh=vFEz1YP7mDc9kIKl/6A2QBgCrlrE/z2Z4ocdAtEZchg=;
+        b=bEsHg3JCZix5DkhIkbp6nBcz3upD/6u3PSPteaCoEgjgQkh4JHm2tTL4dGezmc+6fj
+         S+qW0/5zA3kD5RxOGHopVsB6K+UQrMxTZ714y6oPF+39nRq1AeiGirt6OlAM3oaHXxgO
+         4RUEsKKS4gb43s/qHbRstmuvZXJxN6coQmgsrUIqPY8BTChIeweYrlMpUualrkqmJwHY
+         6rw8RLAYFjGINuUwH/oVc+e9BEF6nFgr5YfLyE+tzis+Jpv1TaCuUFD/04/E2B3cbRne
+         srr/ucfgPVIFxmrysf+3a0MrcejUiF7Zy4HCbdaPMgifdejCRNPiIw2Molwic7UEPC7G
+         lq4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rDeQycTByzPfOLw+Cf8dPzpUsgcgImgbA5BApntH61Q=;
-        b=RR5aJ1WntpKkvTUNmC8GuTSfNqUFR7R3THtJWbh53aQZR3PEa7/I+jSankIu22LrJl
-         o4XwoXrhIsWWpTZbU/fdRCm3QENxJbIkUcTbWU3RX176tdt+0/KSoLbvqCQlJobNw7kM
-         2cxsIfbJ129bS2YcNR3xv3DLB3McFN5xIZ/USrNka2Gwmm0bNkJA0iMOcnwYCeB9QlOD
-         mpk2RZjBcCvZPk4P0hnO6yHk8HMYwgufBsVHhGPT4eBBdig3l8KuglGOl9Xi1gvozZPQ
-         gQ8g3gg6Kmk9RsJPA2nccennmnuF29pCd8TqnF2Q/Kh+DBpOrY1EHfJfDFgOlQyO2qB6
-         aqTA==
-X-Gm-Message-State: AFqh2kp/wvgF4Qqh152WfptaKD2tHYFapSr9f2bQMQgvUYixfi3lEDhw
-        LpPQbB0EJQ2RIehxqwUc76KuD5vhqts=
-X-Google-Smtp-Source: AMrXdXvRVlrqYIKZWvvI/ggYBJV5jpCkYsGv1jhJq5a4fd/b/V7bZ25bO48fYb3/YFHCAq50ghT5Pw==
-X-Received: by 2002:a9d:12c5:0:b0:684:ba4f:deb0 with SMTP id g63-20020a9d12c5000000b00684ba4fdeb0mr8080664otg.22.1673799601722;
-        Sun, 15 Jan 2023 08:20:01 -0800 (PST)
+        bh=vFEz1YP7mDc9kIKl/6A2QBgCrlrE/z2Z4ocdAtEZchg=;
+        b=JUMB++Jfv+7gbYAO+bMbiSOaPk7rEcpxkG/+17CQjrqsuY2wZeClGHy8PTp8xeY1Ef
+         girBDpubIURb6gp2vkf6Xn23KqfzQ4f2Hcy7N55aTdZudOyRbO6lLTi1oCVylM6UofIw
+         c4q7h1BfrMu/Gcpu9j9PjCWPz6VYpAk9HGPyeo9aoAyoP6H6Rt/O/voca00GPdgQlTDN
+         ahzjw8XaxwJVvvZgZw5AwFMTKsXN4ntFElfgInScvVALV/u8rDVwxaqDlz7AsCDprZLH
+         YSDWr/8FvU0WQT2Ny+red7d8DKQUh+gQvIySryCfq0CanRdeKp1aW59HLZx1z2M8ldMo
+         Tbig==
+X-Gm-Message-State: AFqh2krp24GGbYoM3F4whg7+JiALFXXAsmkLVSi3hU4CzsbfGQTdzzQD
+        Fg3dja60+oTu2SxrcjqJSbFV7MvwUv4=
+X-Google-Smtp-Source: AMrXdXt2QAqDmJc0mKv8dTh6IJS40oBg8dcJJE57YisFcaKKAEnbGuvwpfT8xnm5bfC/4Nveovw59A==
+X-Received: by 2002:a05:6808:1b06:b0:364:b2bb:8951 with SMTP id bx6-20020a0568081b0600b00364b2bb8951mr4586523oib.24.1673799764341;
+        Sun, 15 Jan 2023 08:22:44 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n9-20020a9d6f09000000b00684e3182294sm1741889otq.55.2023.01.15.08.20.00
+        by smtp.gmail.com with ESMTPSA id 73-20020a9d04cf000000b00684a10970adsm8057801otm.16.2023.01.15.08.22.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Jan 2023 08:20:01 -0800 (PST)
+        Sun, 15 Jan 2023 08:22:43 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 15 Jan 2023 08:20:00 -0800
+Date:   Sun, 15 Jan 2023 08:22:42 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Frank Crawford <frank@crawford.emu.id.au>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (it87) Set second Super-IO chip in
- configuration mode
-Message-ID: <20230115162000.GA1247300@roeck-us.net>
-References: <20230104060926.619686-1-frank@crawford.emu.id.au>
- <20230104060926.619686-3-frank@crawford.emu.id.au>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] hwmon: (ftsteutates) Convert to
+ devm_hwmon_device_register_with_info()
+Message-ID: <20230115162242.GA1247464@roeck-us.net>
+References: <20230105225107.58308-1-W_Armin@gmx.de>
+ <20230105225107.58308-2-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230104060926.619686-3-frank@crawford.emu.id.au>
+In-Reply-To: <20230105225107.58308-2-W_Armin@gmx.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 05:09:26PM +1100, Frank Crawford wrote:
-> On various Gigabyte AM4 boards (AB350, AX370), the second Super-IO chip
-> (IT8792E) needs to be in configuration mode before accessing the first
-> due to a bug in IT8792E which otherwise results in LPC bus access errors.
-> This needs to be done before accessing the first Super-IO chip since
-> the second chip may have been accessed prior to loading this driver.
+On Thu, Jan 05, 2023 at 11:51:05PM +0100, Armin Wolf wrote:
+> Convert driver to use devm_hwmon_device_register_with_info()
+> to reduce module size by ~30%.
 > 
-> The problem is also reported to affect IT8795E, which is used on X299 boards
-> and has the same chip ID as IT8792E (0x8733). It also appears to affect
-> systems with IT8790E, which is used on some Z97X-Gaming boards as well as
-> Z87X-OC, and other more recent Gigabyte boards.
+> Tested on a Fujitsu DS3401-B1.
 > 
-> Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
 Applied to hwmon-next.
 
