@@ -2,61 +2,38 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D387AC46467
-	for <linux-hwmon@archiver.kernel.org>; Mon, 16 Jan 2023 10:15:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C413AC54EBE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 16 Jan 2023 13:49:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjAPKOU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 16 Jan 2023 05:14:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55994 "EHLO
+        id S231199AbjAPNt4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 16 Jan 2023 08:49:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjAPKKB (ORCPT
+        with ESMTP id S230151AbjAPNtz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:10:01 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0901204C;
-        Mon, 16 Jan 2023 02:09:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673863757; x=1705399757;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tYeiDSBFzEI8N0k+JDsXeDV/WPeteonN3bqMq6g7kg4=;
-  b=n89dTj8VIkuBtA2Tr4MyhN5tl5e5PijxBhdWcpxW0Qfua4hsDxQFymvi
-   U55Q06LFbpBfBpKJXgGFyu6XpxUXuFHQQi5we6EmBxVtUMpEEajJv7fSw
-   tJG6In7MZ3jEMskvh71bwF2mJjfc0OiJDwV7CHsuTuuHi4fcMT5dTa3eX
-   UyIGg14/jFISx/rcM6hQoQs6fgdpZFh/hWaiTVHOw4IX3xqnJsbXJKzo4
-   k38CqCQk4gxHdpoJxHi3GTTfW2YkXZlK31sQ/qXlmbhxuBbFV/zVPBvlz
-   58KIsxfxixbaEC2Fvk8YGzGim6gMdgyFxnY4+PmF1Qhkx1P80im8nfNtX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="326489304"
-X-IronPort-AV: E=Sophos;i="5.97,220,1669104000"; 
-   d="scan'208";a="326489304"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 02:09:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="832785725"
-X-IronPort-AV: E=Sophos;i="5.97,220,1669104000"; 
-   d="scan'208";a="832785725"
-Received: from xsanroma-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.39.155])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 02:09:12 -0800
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v6 04/11] mfd: intel-m10-bmc: Split into core and spi specific parts
-Date:   Mon, 16 Jan 2023 12:08:38 +0200
-Message-Id: <20230116100845.6153-5-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230116100845.6153-1-ilpo.jarvinen@linux.intel.com>
-References: <20230116100845.6153-1-ilpo.jarvinen@linux.intel.com>
+        Mon, 16 Jan 2023 08:49:55 -0500
+X-Greylist: delayed 400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 Jan 2023 05:49:52 PST
+Received: from mail.zeus06.de (www.zeus06.de [194.117.254.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545EB1F5C5
+        for <linux-hwmon@vger.kernel.org>; Mon, 16 Jan 2023 05:49:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=kicherer.org; h=from:to
+        :cc:subject:date:message-id:mime-version:content-type
+        :content-transfer-encoding; s=k1; bh=cW6sg199Dn9e019EslJm8HTYEmb
+        3t/VavP6Q0lgX/eA=; b=Xegq+qt1aoqTS/NUqOs1Mf1SydP5B6rhvXx1Zgbi/HI
+        VnLMljhR99AAhiUWycidlwkPlC5suNRdEywHrUjKsoBcoukereO+VgKlfArWX0GT
+        Q1XQxAx0rqXmwMfsd0ugz2sn0WSbqO70cvFVa6er/rgiigstkvqcD6vwsXOgJPcM
+        =
+Received: (qmail 702149 invoked from network); 16 Jan 2023 14:43:09 +0100
+Received: by mail.zeus06.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 16 Jan 2023 14:43:09 +0100
+X-UD-Smtp-Session: l3s6476p2@eFlaw2HyAx/CtAHJ
+From:   Mario Kicherer <dev@kicherer.org>
+To:     linux-hwmon@vger.kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        Mario Kicherer <dev@kicherer.org>
+Subject: [PATCH] hwmon: add initial NXP MC34VR500 PMIC monitoring support
+Date:   Mon, 16 Jan 2023 14:42:58 +0100
+Message-Id: <20230116134258.3136852-1-dev@kicherer.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -64,457 +41,624 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Split the common code from intel-m10-bmc driver into intel-m10-bmc-core
-and move the SPI bus parts into an interface specific file.
+This patch adds initial monitoring support for the MC34VR500 PMIC. In its
+current form, input voltage and temperature events are reported to hwmon.
+Other interrupts only generate a generic entry in the kernel log so far.
 
-intel-m10-bmc-core becomes the core MFD functions which can support
-multiple bus interface like SPI bus.
+The header file is copied from U-Boot and placed next to the C file as the
+chip is usually only configured by the bootloader and it is unlikely that
+it will be used by another Linux subsystem. If I should remove unused parts
+or move the file to another path, let me know.
 
-Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
-Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net> # hwmon
-Reviewed-by: Xu Yilun <yilun.xu@intel.com>
-Acked-for-MFD-by: Lee Jones <lee@kernel.org>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Datasheet:
+ - https://www.nxp.com/docs/en/data-sheet/MC34VR500.pdf
+
+Signed-off-by: Mario Kicherer <dev@kicherer.org>
 ---
- MAINTAINERS                                   |   2 +-
- drivers/fpga/Kconfig                          |   2 +-
- drivers/hwmon/Kconfig                         |   2 +-
- drivers/mfd/Kconfig                           |  30 ++--
- drivers/mfd/Makefile                          |   4 +-
- drivers/mfd/intel-m10-bmc-core.c              | 122 +++++++++++++++++
- .../{intel-m10-bmc.c => intel-m10-bmc-spi.c}  | 128 +++---------------
- include/linux/mfd/intel-m10-bmc.h             |   6 +
- 8 files changed, 172 insertions(+), 124 deletions(-)
- create mode 100644 drivers/mfd/intel-m10-bmc-core.c
- rename drivers/mfd/{intel-m10-bmc.c => intel-m10-bmc-spi.c} (59%)
+ drivers/hwmon/Kconfig          |   7 +
+ drivers/hwmon/Makefile         |   1 +
+ drivers/hwmon/mc34vr500.c      | 382 +++++++++++++++++++++++++++++++++
+ drivers/hwmon/mc34vr500_pmic.h | 172 +++++++++++++++
+ 4 files changed, 562 insertions(+)
+ create mode 100644 drivers/hwmon/mc34vr500.c
+ create mode 100644 drivers/hwmon/mc34vr500_pmic.h
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cf0f18502372..ddfa4f8b3c80 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10452,7 +10452,7 @@ S:	Maintained
- F:	Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
- F:	Documentation/hwmon/intel-m10-bmc-hwmon.rst
- F:	drivers/hwmon/intel-m10-bmc-hwmon.c
--F:	drivers/mfd/intel-m10-bmc.c
-+F:	drivers/mfd/intel-m10-bmc*
- F:	include/linux/mfd/intel-m10-bmc.h
- 
- INTEL MENLOW THERMAL DRIVER
-diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-index 6ce143dafd04..0a00763b9f28 100644
---- a/drivers/fpga/Kconfig
-+++ b/drivers/fpga/Kconfig
-@@ -246,7 +246,7 @@ config FPGA_MGR_VERSAL_FPGA
- 
- config FPGA_M10_BMC_SEC_UPDATE
- 	tristate "Intel MAX10 BMC Secure Update driver"
--	depends on MFD_INTEL_M10_BMC
-+	depends on MFD_INTEL_M10_BMC_CORE
- 	select FW_LOADER
- 	select FW_UPLOAD
- 	help
 diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 7ac3daaf59ce..984a55e0f313 100644
+index 3176c33af6c6..b917c2528b62 100644
 --- a/drivers/hwmon/Kconfig
 +++ b/drivers/hwmon/Kconfig
-@@ -2321,7 +2321,7 @@ config SENSORS_XGENE
+@@ -2350,6 +2350,13 @@ config SENSORS_INTEL_M10_BMC_HWMON
+ 	  sensors monitor various telemetry data of different components on the
+ 	  card, e.g. board temperature, FPGA core temperature/voltage/current.
  
- config SENSORS_INTEL_M10_BMC_HWMON
- 	tristate "Intel MAX10 BMC Hardware Monitoring"
--	depends on MFD_INTEL_M10_BMC
-+	depends on MFD_INTEL_M10_BMC_CORE
- 	help
- 	  This driver provides support for the hardware monitoring functionality
- 	  on Intel MAX10 BMC chip.
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 8b93856de432..a09d4ac60dc7 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -2219,18 +2219,24 @@ config SGI_MFD_IOC3
- 	  If you have an SGI Origin, Octane, or a PCI IOC3 card,
- 	  then say Y. Otherwise say N.
- 
--config MFD_INTEL_M10_BMC
--	tristate "Intel MAX 10 Board Management Controller"
--	depends on SPI_MASTER
--	select REGMAP_SPI_AVMM
--	select MFD_CORE
--	help
--	  Support for the Intel MAX 10 board management controller using the
--	  SPI interface.
--
--	  This driver provides common support for accessing the device,
--	  additional drivers must be enabled in order to use the functionality
--	  of the device.
-+config MFD_INTEL_M10_BMC_CORE
-+        tristate
-+        select MFD_CORE
-+        select REGMAP
-+        default n
++config SENSORS_MC34VR500
++	tristate "NXP MC34VR500 hardware monitoring driver"
++	depends on I2C
++	help
++	  If you say yes here you get support for the temperature and input
++	  voltage sensors of the NXP MC34VR500.
 +
-+config MFD_INTEL_M10_BMC_SPI
-+        tristate "Intel MAX 10 Board Management Controller with SPI"
-+        depends on SPI_MASTER
-+        select MFD_INTEL_M10_BMC_CORE
-+        select REGMAP_SPI_AVMM
-+        help
-+          Support for the Intel MAX 10 board management controller using the
-+          SPI interface.
-+
-+          This driver provides common support for accessing the device,
-+          additional drivers must be enabled in order to use the functionality
-+          of the device.
+ if ACPI
  
- config MFD_RSMU_I2C
- 	tristate "Renesas Synchronization Management Unit with I2C"
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index 7ed3ef4a698c..5d1f308ee2a7 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -271,7 +271,9 @@ obj-$(CONFIG_MFD_QCOM_PM8008)	+= qcom-pm8008.o
+ comment "ACPI drivers"
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index e2e4e87b282f..99e8cd8275c5 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -216,6 +216,7 @@ obj-$(CONFIG_SENSORS_W83L786NG)	+= w83l786ng.o
+ obj-$(CONFIG_SENSORS_WM831X)	+= wm831x-hwmon.o
+ obj-$(CONFIG_SENSORS_WM8350)	+= wm8350-hwmon.o
+ obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
++obj-$(CONFIG_SENSORS_MC34VR500)	+= mc34vr500.o
  
- obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
- obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
--obj-$(CONFIG_MFD_INTEL_M10_BMC)   += intel-m10-bmc.o
-+
-+obj-$(CONFIG_MFD_INTEL_M10_BMC_CORE)	+= intel-m10-bmc-core.o
-+obj-$(CONFIG_MFD_INTEL_M10_BMC_SPI)	+= intel-m10-bmc-spi.o
- 
- obj-$(CONFIG_MFD_ATC260X)	+= atc260x-core.o
- obj-$(CONFIG_MFD_ATC260X_I2C)	+= atc260x-i2c.o
-diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
+ obj-$(CONFIG_SENSORS_OCC)	+= occ/
+ obj-$(CONFIG_SENSORS_PECI)	+= peci/
+diff --git a/drivers/hwmon/mc34vr500.c b/drivers/hwmon/mc34vr500.c
 new file mode 100644
-index 000000000000..dd26e3a6c3ab
+index 000000000000..bddf108d05ae
 --- /dev/null
-+++ b/drivers/mfd/intel-m10-bmc-core.c
-@@ -0,0 +1,122 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/drivers/hwmon/mc34vr500.c
+@@ -0,0 +1,382 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * Intel MAX 10 Board Management Controller chip - common code
++ * An hwmon driver for the NXP MC34VR500
 + *
-+ * Copyright (C) 2018-2020 Intel Corporation. All rights reserved.
++ * Copyright 2022 Mario Kicherer <dev@kicherer.org>
 + */
 +
-+#include <linux/bitfield.h>
-+#include <linux/device.h>
-+#include <linux/dev_printk.h>
-+#include <linux/mfd/core.h>
-+#include <linux/mfd/intel-m10-bmc.h>
-+#include <linux/module.h>
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/i2c.h>
++#include <linux/regmap.h>
++#include "mc34vr500_pmic.h"
 +
-+static ssize_t bmc_version_show(struct device *dev,
-+				struct device_attribute *attr, char *buf)
++#define MC34VR500_DEVICEID_VALUE	0x14
++
++// INTSENSE0
++#define ENS_BIT		(1<<0)
++#define LOWVINS_BIT	(1<<1)
++#define THERM110S_BIT	(1<<2)
++#define THERM120S_BIT	(1<<3)
++#define THERM125S_BIT	(1<<4)
++#define THERM130S_BIT	(1<<5)
++
++// INTSENSE1
++#define SW1FAULTS1_BIT	(1<<0)
++#define SW1FAULTS2_BIT	(1<<1)
++#define SW1FAULTS3_BIT	(1<<2)
++#define SW2FAULTS_BIT	(1<<3)
++#define SW3FAULTS1_BIT	(1<<4)
++#define SW3FAULTS2_BIT	(1<<5)
++#define SW4FAULTS_BIT	(1<<6)
++
++// INTSENSE4
++#define LDO1FAULTS_BIT	(1<<1)
++#define LDO2FAULTS_BIT	(1<<2)
++#define LDO3FAULTS_BIT	(1<<3)
++#define LDO4FAULTS_BIT	(1<<4)
++#define LDO5FAULTS_BIT	(1<<5)
++
++struct mc34vr500_data {
++	struct i2c_client	*client;
++	struct regmap *regmap;
++};
++
++static ssize_t mc34vr500_bool_show(struct device *dev,
++				   struct device_attribute *da, char *buf)
 +{
-+	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
-+	unsigned int val;
++	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
++	struct mc34vr500_data *data = (struct mc34vr500_data *) dev_get_drvdata(dev);
++	unsigned int reg;
 +	int ret;
 +
-+	ret = m10bmc_sys_read(ddata, M10BMC_BUILD_VER, &val);
-+	if (ret)
++	ret = regmap_read(data->regmap, MC34VR500_INTSENSE0 + (attr->index >> 8), &reg);
++	if (ret < 0)
 +		return ret;
 +
-+	return sprintf(buf, "0x%x\n", val);
-+}
-+static DEVICE_ATTR_RO(bmc_version);
++	reg &= (attr->index & 0xff);
 +
-+static ssize_t bmcfw_version_show(struct device *dev,
-+				  struct device_attribute *attr, char *buf)
++	return sysfs_emit(buf, "%d\n", !!reg);
++}
++
++// INTSENSE0
++static SENSOR_DEVICE_ATTR_RO(in1_alarm, mc34vr500_bool, 0x00 | LOWVINS_BIT);
++static SENSOR_DEVICE_ATTR_RO(temp110_alarm, mc34vr500_bool, 0x00 | THERM110S_BIT);
++static SENSOR_DEVICE_ATTR_RO(temp120_alarm, mc34vr500_bool, 0x00 | THERM120S_BIT);
++static SENSOR_DEVICE_ATTR_RO(temp125_alarm, mc34vr500_bool, 0x00 | THERM125S_BIT);
++static SENSOR_DEVICE_ATTR_RO(temp130_alarm, mc34vr500_bool, 0x00 | THERM130S_BIT);
++
++// INTSENSE1
++static SENSOR_DEVICE_ATTR_RO(curr1_alarm, mc34vr500_bool, 0x300 | SW1FAULTS1_BIT);
++static SENSOR_DEVICE_ATTR_RO(curr2_alarm, mc34vr500_bool, 0x300 | SW1FAULTS2_BIT);
++static SENSOR_DEVICE_ATTR_RO(curr3_alarm, mc34vr500_bool, 0x300 | SW1FAULTS3_BIT);
++static SENSOR_DEVICE_ATTR_RO(curr4_alarm, mc34vr500_bool, 0x300 | SW2FAULTS_BIT);
++static SENSOR_DEVICE_ATTR_RO(curr5_alarm, mc34vr500_bool, 0x300 | SW3FAULTS1_BIT);
++static SENSOR_DEVICE_ATTR_RO(curr6_alarm, mc34vr500_bool, 0x300 | SW3FAULTS2_BIT);
++static SENSOR_DEVICE_ATTR_RO(curr7_alarm, mc34vr500_bool, 0x300 | SW4FAULTS_BIT);
++
++// INTSENSE4
++static SENSOR_DEVICE_ATTR_RO(curr8_alarm, mc34vr500_bool, 0x600 | LDO1FAULTS_BIT);
++static SENSOR_DEVICE_ATTR_RO(curr9_alarm, mc34vr500_bool, 0x600 | LDO2FAULTS_BIT);
++static SENSOR_DEVICE_ATTR_RO(curr10_alarm, mc34vr500_bool, 0x600 | LDO3FAULTS_BIT);
++static SENSOR_DEVICE_ATTR_RO(curr11_alarm, mc34vr500_bool, 0x600 | LDO4FAULTS_BIT);
++static SENSOR_DEVICE_ATTR_RO(curr12_alarm, mc34vr500_bool, 0x600 | LDO5FAULTS_BIT);
++
++static struct attribute *mc34vr500_attrs[] = {
++	&sensor_dev_attr_in1_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp110_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp120_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp125_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp130_alarm.dev_attr.attr,
++
++	&sensor_dev_attr_curr1_alarm.dev_attr.attr,
++	&sensor_dev_attr_curr2_alarm.dev_attr.attr,
++	&sensor_dev_attr_curr3_alarm.dev_attr.attr,
++	&sensor_dev_attr_curr4_alarm.dev_attr.attr,
++	&sensor_dev_attr_curr5_alarm.dev_attr.attr,
++	&sensor_dev_attr_curr6_alarm.dev_attr.attr,
++	&sensor_dev_attr_curr7_alarm.dev_attr.attr,
++
++	&sensor_dev_attr_curr8_alarm.dev_attr.attr,
++	&sensor_dev_attr_curr9_alarm.dev_attr.attr,
++	&sensor_dev_attr_curr10_alarm.dev_attr.attr,
++	&sensor_dev_attr_curr11_alarm.dev_attr.attr,
++	&sensor_dev_attr_curr12_alarm.dev_attr.attr,
++	NULL
++};
++ATTRIBUTE_GROUPS(mc34vr500);
++
++static irqreturn_t mc34vr500_process_interrupt(int irq, void *userdata)
 +{
-+	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
-+	unsigned int val;
++	struct mc34vr500_data *data = (struct mc34vr500_data *) userdata;
++	struct i2c_client *client = data->client;
++	unsigned int reg;
 +	int ret;
 +
-+	ret = m10bmc_sys_read(ddata, NIOS2_FW_VERSION, &val);
-+	if (ret)
++	pr_debug("mc34vr500: received interrupt\n");
++
++	ret = regmap_read(data->regmap, MC34VR500_INTSTAT0, &reg);
++	if (ret < 0) {
++		dev_err(&client->dev, "unable to read mc34vr500 intsense0 register\n");
 +		return ret;
++	}
 +
-+	return sprintf(buf, "0x%x\n", val);
++	if (reg) {
++		pr_warn("mc34vr500: interrupt intstat0 %u\n", reg);
++
++		if (reg & LOWVINS_BIT) {
++			ret = hwmon_notify_event(&client->dev, hwmon_in,
++						 hwmon_in_alarm, 1);
++			if (ret)
++				dev_err(&client->dev,
++					"mc34vr500: error, hwmon_notify_event() failed: %d\n",
++					ret);
++		}
++
++		if (reg & THERM110S_BIT) {
++			ret = hwmon_notify_event(&client->dev, hwmon_temp,
++						 hwmon_temp_alarm, 110);
++			if (ret)
++				dev_err(&client->dev,
++					"mc34vr500: error, hwmon_notify_event() failed: %d\n",
++					ret);
++		}
++
++		reg = 0;
++		ret = regmap_write(data->regmap, MC34VR500_INTSTAT0, reg);
++		if (ret) {
++			dev_err(&client->dev, "unable to enable intmask0 interrupts\n");
++			return ret;
++		}
++	}
++
++	ret = regmap_read(data->regmap, MC34VR500_INTSTAT1, &reg);
++	if (ret < 0) {
++		dev_err(&client->dev, "unable to read mc34vr500 intsense1 register\n");
++		return ret;
++	}
++
++	if (reg) {
++		pr_warn("mc34vr500: interrupt intstat1 %u\n", reg);
++
++		reg = 0;
++		ret = regmap_write(data->regmap, MC34VR500_INTSTAT1, reg);
++		if (ret) {
++			dev_err(&client->dev, "unable to enable intmask1 interrupts\n");
++			return ret;
++		}
++	}
++
++	ret = regmap_read(data->regmap, MC34VR500_INTSTAT4, &reg);
++	if (ret < 0) {
++		dev_err(&client->dev, "unable to read mc34vr500 intsense4 register\n");
++		return ret;
++	}
++
++	if (reg) {
++		pr_warn("mc34vr500: interrupt intstat4 %u\n", reg);
++
++		reg = 0;
++		ret = regmap_write(data->regmap, MC34VR500_INTSTAT4, reg);
++		if (ret) {
++			dev_err(&client->dev, "unable to enable intmask4 interrupts\n");
++			return ret;
++		}
++	}
++
++	return IRQ_HANDLED;
 +}
-+static DEVICE_ATTR_RO(bmcfw_version);
 +
-+static ssize_t mac_address_show(struct device *dev,
-+				struct device_attribute *attr, char *buf)
++static const struct regmap_config mc34vr500_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.max_register = MC34VR500_PWRGD_EN,
++};
++
++static int mc34vr500_probe(struct i2c_client *client)
 +{
-+	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
-+	unsigned int macaddr_low, macaddr_high;
++	struct device *dev = &client->dev;
++	struct mc34vr500_data *data;
++	struct device *hwmon_dev;
 +	int ret;
++	unsigned int reg, revid, fabid;
++	struct regmap *regmap;
++	u32 interrupt_mask;
 +
-+	ret = m10bmc_sys_read(ddata, M10BMC_MAC_LOW, &macaddr_low);
-+	if (ret)
++	regmap = devm_regmap_init_i2c(client, &mc34vr500_regmap_config);
++	if (IS_ERR(regmap)) {
++		dev_err(dev, "failed to allocate register map\n");
++		return PTR_ERR(regmap);
++	}
++
++	data = devm_kzalloc(dev, sizeof(struct mc34vr500_data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->regmap = regmap;
++	data->client = client;
++
++	ret = regmap_read(regmap, MC34VR500_DEVICEID, &reg);
++	if (ret < 0) {
++		dev_err(dev, "unable to read config register\n");
++
 +		return ret;
++	}
 +
-+	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
-+	if (ret)
++	if (reg != MC34VR500_DEVICEID_VALUE) {
++		dev_err(dev, "invalid config register value 0x%x\n", reg);
++
++		return -ENODEV;
++	}
++
++	ret = regmap_read(regmap, MC34VR500_SILICONREVID, &revid);
++	if (ret < 0) {
++		dev_err(dev, "unable to read mc34vr500 revid register\n");
 +		return ret;
++	}
 +
-+	return sysfs_emit(buf, "%02x:%02x:%02x:%02x:%02x:%02x\n",
-+			  (u8)FIELD_GET(M10BMC_MAC_BYTE1, macaddr_low),
-+			  (u8)FIELD_GET(M10BMC_MAC_BYTE2, macaddr_low),
-+			  (u8)FIELD_GET(M10BMC_MAC_BYTE3, macaddr_low),
-+			  (u8)FIELD_GET(M10BMC_MAC_BYTE4, macaddr_low),
-+			  (u8)FIELD_GET(M10BMC_MAC_BYTE5, macaddr_high),
-+			  (u8)FIELD_GET(M10BMC_MAC_BYTE6, macaddr_high));
-+}
-+static DEVICE_ATTR_RO(mac_address);
-+
-+static ssize_t mac_count_show(struct device *dev,
-+			      struct device_attribute *attr, char *buf)
-+{
-+	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
-+	unsigned int macaddr_high;
-+	int ret;
-+
-+	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
-+	if (ret)
++	ret = regmap_read(regmap, MC34VR500_FABID, &fabid);
++	if (ret < 0) {
++		dev_err(dev, "unable to read mc34vr500 fabid register\n");
 +		return ret;
++	}
 +
-+	return sysfs_emit(buf, "%u\n", (u8)FIELD_GET(M10BMC_MAC_COUNT, macaddr_high));
++	pr_notice("mc34vr500: revid 0x%x fabid 0x%x\n", revid, fabid);
++
++
++	ret = of_property_read_u32(dev->of_node,
++				   "interrupt-mask",
++				   &interrupt_mask);
++	if (ret == -EINVAL) {
++		interrupt_mask = 0;
++	} else if (ret) {
++		dev_err(dev, "Error reading interrupt_mask\n");
++		return ret;
++	}
++
++	ret = regmap_read(regmap, MC34VR500_INTSTAT0, &reg);
++	if (ret < 0) {
++		dev_err(dev, "unable to read mc34vr500 intstat0 register\n");
++		return ret;
++	}
++	reg = reg & (~interrupt_mask);
++
++	if (reg)
++		pr_notice("mc34vr500: intstat0: 0x%x\n", reg);
++
++	if (reg & LOWVINS_BIT)
++		pr_notice("mc34vr500: low input voltage detected\n");
++
++	if (reg & THERM130S_BIT)
++		pr_notice("mc34vr500: temperature >= 130°c\n");
++	else if (reg & THERM125S_BIT)
++		pr_notice("mc34vr500: temperature >= 125°c\n");
++	else if (reg & THERM120S_BIT)
++		pr_notice("mc34vr500: temperature >= 120°c\n");
++	else if (reg & THERM110S_BIT)
++		pr_notice("mc34vr500: temperature >= 110°c\n");
++
++	ret = regmap_read(regmap, MC34VR500_INTSTAT1, &reg);
++	if (ret < 0) {
++		dev_err(dev, "unable to read mc34vr500 intstat1 register\n");
++		return ret;
++	}
++	reg = reg & ((~interrupt_mask) >> 8);
++
++	if (reg)
++		pr_notice("mc34vr500: intstat1: 0x%x\n", reg);
++
++	ret = regmap_read(regmap, MC34VR500_INTSTAT4, &reg);
++	if (ret < 0) {
++		dev_err(dev, "unable to read mc34vr500 intstat4 register\n");
++		return ret;
++	}
++	reg = reg & ((~interrupt_mask) >> 16);
++
++	if (reg)
++		pr_notice("mc34vr500: intstat4: 0x%x\n", reg);
++
++	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
++							   data,
++							   mc34vr500_groups);
++
++	if (client->irq) {
++		pr_notice("mc34vr500: enabling IRQ...\n");
++
++		ret = devm_request_threaded_irq(dev, client->irq, NULL,
++						mc34vr500_process_interrupt,
++						IRQF_TRIGGER_RISING |
++							IRQF_ONESHOT |
++							IRQF_SHARED,
++						dev_name(dev),
++						data);
++		if (ret) {
++			dev_err(dev, "Error requesting irq\n");
++			return ret;
++		}
++
++		/* clear interrupts */
++		reg = 0;
++		ret = regmap_write(regmap, MC34VR500_INTSTAT0, reg);
++		if (ret) {
++			dev_err(dev, "unable to write intstat0 register\n");
++			return ret;
++		}
++
++		/* enable interrupts */
++		ret = regmap_write(regmap, MC34VR500_INTMASK0, interrupt_mask & 0xff);
++		if (ret) {
++			dev_err(dev, "unable to enable intmask0 interrupts\n");
++			return ret;
++		}
++
++		reg = 0;
++		ret = regmap_write(regmap, MC34VR500_INTSTAT1, reg);
++		if (ret) {
++			dev_err(dev, "unable to write intstat1 register\n");
++			return ret;
++		}
++
++		ret = regmap_write(regmap, MC34VR500_INTMASK1, (interrupt_mask >> 8) & 0xff);
++		if (ret) {
++			dev_err(dev, "unable to enable intmask1 interrupts\n");
++			return ret;
++		}
++
++		reg = 0;
++		ret = regmap_write(regmap, MC34VR500_INTSTAT4, reg);
++		if (ret) {
++			dev_err(dev, "unable to write intstat1 register\n");
++			return ret;
++		}
++
++		ret = regmap_write(regmap, MC34VR500_INTMASK4, (interrupt_mask >> 16) & 0xff);
++		if (ret) {
++			dev_err(dev, "unable to enable intmask1 interrupts\n");
++			return ret;
++		}
++	}
++
++	return PTR_ERR_OR_ZERO(hwmon_dev);
 +}
-+static DEVICE_ATTR_RO(mac_count);
 +
-+static struct attribute *m10bmc_attrs[] = {
-+	&dev_attr_bmc_version.attr,
-+	&dev_attr_bmcfw_version.attr,
-+	&dev_attr_mac_address.attr,
-+	&dev_attr_mac_count.attr,
-+	NULL,
++static const struct i2c_device_id mc34vr500_id[] = {
++	{ "mc34vr500", 0 },
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, mc34vr500_id);
++
++static struct i2c_driver mc34vr500_driver = {
++	.driver = {
++		.name	= "mc34vr500",
++	},
++	.probe_new = mc34vr500_probe,
++	.id_table = mc34vr500_id,
 +};
 +
-+static const struct attribute_group m10bmc_group = {
-+	.attrs = m10bmc_attrs,
-+};
++module_i2c_driver(mc34vr500_driver);
 +
-+const struct attribute_group *m10bmc_dev_groups[] = {
-+	&m10bmc_group,
-+	NULL,
-+};
-+EXPORT_SYMBOL_GPL(m10bmc_dev_groups);
++MODULE_AUTHOR("Mario Kicherer <dev@kicherer.org>");
 +
-+int m10bmc_dev_init(struct intel_m10bmc *m10bmc, const struct intel_m10bmc_platform_info *info)
-+{
-+	int ret;
-+
-+	m10bmc->info = info;
-+	dev_set_drvdata(m10bmc->dev, m10bmc);
-+
-+	ret = devm_mfd_add_devices(m10bmc->dev, PLATFORM_DEVID_AUTO,
-+				   info->cells, info->n_cells,
-+				   NULL, 0, NULL);
-+	if (ret)
-+		dev_err(m10bmc->dev, "Failed to register sub-devices: %d\n", ret);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(m10bmc_dev_init);
-+
-+MODULE_DESCRIPTION("Intel MAX 10 BMC core driver");
-+MODULE_AUTHOR("Intel Corporation");
-+MODULE_LICENSE("GPL v2");
-diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc-spi.c
-similarity index 59%
-rename from drivers/mfd/intel-m10-bmc.c
-rename to drivers/mfd/intel-m10-bmc-spi.c
-index 2c26203c4799..be1d4ddedabb 100644
---- a/drivers/mfd/intel-m10-bmc.c
-+++ b/drivers/mfd/intel-m10-bmc-spi.c
-@@ -5,29 +5,14 @@
-  * Copyright (C) 2018-2020 Intel Corporation. All rights reserved.
-  */
- #include <linux/bitfield.h>
-+#include <linux/dev_printk.h>
- #include <linux/init.h>
- #include <linux/mfd/core.h>
- #include <linux/mfd/intel-m10-bmc.h>
- #include <linux/module.h>
--#include <linux/mutex.h>
- #include <linux/regmap.h>
- #include <linux/spi/spi.h>
- 
--static struct mfd_cell m10bmc_d5005_subdevs[] = {
--	{ .name = "d5005bmc-hwmon" },
--	{ .name = "d5005bmc-sec-update" }
--};
--
--static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
--	{ .name = "n3000bmc-hwmon" },
--	{ .name = "n3000bmc-retimer" },
--	{ .name = "n3000bmc-sec-update" },
--};
--
--static struct mfd_cell m10bmc_n5010_subdevs[] = {
--	{ .name = "n5010bmc-hwmon" },
--};
--
- static const struct regmap_range m10bmc_regmap_range[] = {
- 	regmap_reg_range(M10BMC_LEGACY_BUILD_VER, M10BMC_LEGACY_BUILD_VER),
- 	regmap_reg_range(M10BMC_SYS_BASE, M10BMC_SYS_END),
-@@ -48,86 +33,6 @@ static struct regmap_config intel_m10bmc_regmap_config = {
- 	.max_register = M10BMC_MEM_END,
- };
- 
--static ssize_t bmc_version_show(struct device *dev,
--				struct device_attribute *attr, char *buf)
--{
--	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
--	unsigned int val;
--	int ret;
--
--	ret = m10bmc_sys_read(ddata, M10BMC_BUILD_VER, &val);
--	if (ret)
--		return ret;
--
--	return sprintf(buf, "0x%x\n", val);
--}
--static DEVICE_ATTR_RO(bmc_version);
--
--static ssize_t bmcfw_version_show(struct device *dev,
--				  struct device_attribute *attr, char *buf)
--{
--	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
--	unsigned int val;
--	int ret;
--
--	ret = m10bmc_sys_read(ddata, NIOS2_FW_VERSION, &val);
--	if (ret)
--		return ret;
--
--	return sprintf(buf, "0x%x\n", val);
--}
--static DEVICE_ATTR_RO(bmcfw_version);
--
--static ssize_t mac_address_show(struct device *dev,
--				struct device_attribute *attr, char *buf)
--{
--	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
--	unsigned int macaddr_low, macaddr_high;
--	int ret;
--
--	ret = m10bmc_sys_read(ddata, M10BMC_MAC_LOW, &macaddr_low);
--	if (ret)
--		return ret;
--
--	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
--	if (ret)
--		return ret;
--
--	return sysfs_emit(buf, "%02x:%02x:%02x:%02x:%02x:%02x\n",
--			  (u8)FIELD_GET(M10BMC_MAC_BYTE1, macaddr_low),
--			  (u8)FIELD_GET(M10BMC_MAC_BYTE2, macaddr_low),
--			  (u8)FIELD_GET(M10BMC_MAC_BYTE3, macaddr_low),
--			  (u8)FIELD_GET(M10BMC_MAC_BYTE4, macaddr_low),
--			  (u8)FIELD_GET(M10BMC_MAC_BYTE5, macaddr_high),
--			  (u8)FIELD_GET(M10BMC_MAC_BYTE6, macaddr_high));
--}
--static DEVICE_ATTR_RO(mac_address);
--
--static ssize_t mac_count_show(struct device *dev,
--			      struct device_attribute *attr, char *buf)
--{
--	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
--	unsigned int macaddr_high;
--	int ret;
--
--	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
--	if (ret)
--		return ret;
--
--	return sysfs_emit(buf, "%u\n",
--			  (u8)FIELD_GET(M10BMC_MAC_COUNT, macaddr_high));
--}
--static DEVICE_ATTR_RO(mac_count);
--
--static struct attribute *m10bmc_attrs[] = {
--	&dev_attr_bmc_version.attr,
--	&dev_attr_bmcfw_version.attr,
--	&dev_attr_mac_address.attr,
--	&dev_attr_mac_count.attr,
--	NULL,
--};
--ATTRIBUTE_GROUPS(m10bmc);
--
- static int check_m10bmc_version(struct intel_m10bmc *ddata)
- {
- 	unsigned int v;
-@@ -166,11 +71,9 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
- 		return -ENOMEM;
- 
- 	info = (struct intel_m10bmc_platform_info *)id->driver_data;
--	ddata->info = info;
- 	ddata->dev = dev;
- 
--	ddata->regmap =
--		devm_regmap_init_spi_avmm(spi, &intel_m10bmc_regmap_config);
-+	ddata->regmap = devm_regmap_init_spi_avmm(spi, &intel_m10bmc_regmap_config);
- 	if (IS_ERR(ddata->regmap)) {
- 		ret = PTR_ERR(ddata->regmap);
- 		dev_err(dev, "Failed to allocate regmap: %d\n", ret);
-@@ -185,15 +88,24 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
- 		return ret;
- 	}
- 
--	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
--				   info->cells, info->n_cells,
--				   NULL, 0, NULL);
--	if (ret)
--		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
--
--	return ret;
-+	return m10bmc_dev_init(ddata, info);
- }
- 
-+static struct mfd_cell m10bmc_d5005_subdevs[] = {
-+	{ .name = "d5005bmc-hwmon" },
-+	{ .name = "d5005bmc-sec-update" },
-+};
-+
-+static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
-+	{ .name = "n3000bmc-hwmon" },
-+	{ .name = "n3000bmc-retimer" },
-+	{ .name = "n3000bmc-sec-update" },
-+};
-+
-+static struct mfd_cell m10bmc_n5010_subdevs[] = {
-+	{ .name = "n5010bmc-hwmon" },
-+};
-+
- static const struct intel_m10bmc_platform_info m10bmc_spi_n3000 = {
- 	.cells = m10bmc_pacn3000_subdevs,
- 	.n_cells = ARRAY_SIZE(m10bmc_pacn3000_subdevs),
-@@ -220,14 +132,14 @@ MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
- static struct spi_driver intel_m10bmc_spi_driver = {
- 	.driver = {
- 		.name = "intel-m10-bmc",
--		.dev_groups = m10bmc_groups,
-+		.dev_groups = m10bmc_dev_groups,
- 	},
- 	.probe = intel_m10_bmc_spi_probe,
- 	.id_table = m10bmc_spi_id,
- };
- module_spi_driver(intel_m10bmc_spi_driver);
- 
--MODULE_DESCRIPTION("Intel MAX 10 BMC Device Driver");
-+MODULE_DESCRIPTION("Intel MAX 10 BMC SPI bus interface");
- MODULE_AUTHOR("Intel Corporation");
- MODULE_LICENSE("GPL v2");
- MODULE_ALIAS("spi:intel-m10-bmc");
-diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
-index f418cad88e64..a80deb61b69a 100644
---- a/include/linux/mfd/intel-m10-bmc.h
-+++ b/include/linux/mfd/intel-m10-bmc.h
-@@ -174,4 +174,10 @@ m10bmc_raw_read(struct intel_m10bmc *m10bmc, unsigned int addr,
- #define m10bmc_sys_read(m10bmc, offset, val) \
- 	m10bmc_raw_read(m10bmc, M10BMC_SYS_BASE + (offset), val)
- 
++MODULE_DESCRIPTION("MC34VR500 driver");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/hwmon/mc34vr500_pmic.h b/drivers/hwmon/mc34vr500_pmic.h
+new file mode 100644
+index 000000000000..1543ac692d72
+--- /dev/null
++++ b/drivers/hwmon/mc34vr500_pmic.h
+@@ -0,0 +1,172 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
 +/*
-+ * MAX10 BMC Core support
++ * Copyright 2016 Freescale Semiconductor, Inc.
++ * Hou Zhiqiang <Zhiqiang.Hou@freescale.com>
 + */
-+int m10bmc_dev_init(struct intel_m10bmc *m10bmc, const struct intel_m10bmc_platform_info *info);
-+extern const struct attribute_group *m10bmc_dev_groups[];
 +
- #endif /* __MFD_INTEL_M10_BMC_H */
++#ifndef __MC34VR500_H_
++#define __MC34VR500_H_
++
++#define MC34VR500_I2C_ADDR	0x08
++
++/* Drivers name */
++#define MC34VR500_REGULATOR_DRIVER	"mc34vr500_regulator"
++
++/* Register map */
++enum {
++	MC34VR500_DEVICEID		= 0x00,
++
++	MC34VR500_SILICONREVID		= 0x03,
++	MC34VR500_FABID,
++	MC34VR500_INTSTAT0,
++	MC34VR500_INTMASK0,
++	MC34VR500_INTSENSE0,
++	MC34VR500_INTSTAT1,
++	MC34VR500_INTMASK1,
++	MC34VR500_INTSENSE1,
++
++	MC34VR500_INTSTAT4		= 0x11,
++	MC34VR500_INTMASK4,
++	MC34VR500_INTSENSE4,
++
++	MC34VR500_PWRCTL		= 0x1B,
++
++	MC34VR500_SW1VOLT		= 0x2E,
++	MC34VR500_SW1STBY,
++	MC34VR500_SW1OFF,
++	MC34VR500_SW1MODE,
++	MC34VR500_SW1CONF,
++	MC34VR500_SW2VOLT,
++	MC34VR500_SW2STBY,
++	MC34VR500_SW2OFF,
++	MC34VR500_SW2MODE,
++	MC34VR500_SW2CONF,
++
++	MC34VR500_SW3VOLT		= 0x3C,
++	MC34VR500_SW3STBY,
++	MC34VR500_SW3OFF,
++	MC34VR500_SW3MODE,
++	MC34VR500_SW3CONF,
++
++	MC34VR500_SW4VOLT		= 0x4A,
++	MC34VR500_SW4STBY,
++	MC34VR500_SW4OFF,
++	MC34VR500_SW4MODE,
++	MC34VR500_SW4CONF,
++
++	MC34VR500_REFOUTCRTRL		= 0x6A,
++
++	MC34VR500_LDO1CTL		= 0x6D,
++	MC34VR500_LDO2CTL,
++	MC34VR500_LDO3CTL,
++	MC34VR500_LDO4CTL,
++	MC34VR500_LDO5CTL,
++
++	MC34VR500_PAGE_REGISTER		= 0x7F,
++
++	/* Internal RAM */
++	MC34VR500_SW1_VOLT		= 0xA8,
++	MC34VR500_SW1_SEQ,
++	MC34VR500_SW1_CONFIG,
++
++	MC34VR500_SW2_VOLT		= 0xAC,
++	MC34VR500_SW2_SEQ,
++	MC34VR500_SW2_CONFIG,
++
++	MC34VR500_SW3_VOLT		= 0xB0,
++	MC34VR500_SW3_SEQ,
++	MC34VR500_SW3_CONFIG,
++
++	MC34VR500_SW4_VOLT		= 0xB8,
++	MC34VR500_SW4_SEQ,
++	MC34VR500_SW4_CONFIG,
++
++	MC34VR500_REFOUT_SEQ		= 0xC4,
++
++	MC34VR500_LDO1_VOLT		= 0xCC,
++	MC34VR500_LDO1_SEQ,
++
++	MC34VR500_LDO2_VOLT		= 0xD0,
++	MC34VR500_LDO2_SEQ,
++
++	MC34VR500_LDO3_VOLT		= 0xD4,
++	MC34VR500_LDO3_SEQ,
++
++	MC34VR500_LDO4_VOLT		= 0xD8,
++	MC34VR500_LDO4_SEQ,
++
++	MC34VR500_LDO5_VOLT		= 0xDC,
++	MC34VR500_LDO5_SEQ,
++
++	MC34VR500_PU_CONFIG1		= 0xE0,
++
++	MC34VR500_TBB_POR		= 0xE4,
++
++	MC34VR500_PWRGD_EN		= 0xE8,
++
++	MC34VR500_NUM_OF_REGS,
++};
++
++/* Registor offset based on SWxVOLT register */
++#define MC34VR500_VOLT_OFFSET	0
++#define MC34VR500_STBY_OFFSET	1
++#define MC34VR500_OFF_OFFSET	2
++#define MC34VR500_MODE_OFFSET	3
++#define MC34VR500_CONF_OFFSET	4
++
++#define SW_MODE_MASK	0xf
++#define SW_MODE_SHIFT	0
++
++#define LDO_VOL_MASK	0xf
++#define LDO_EN		(1 << 4)
++#define LDO_MODE_SHIFT	4
++#define LDO_MODE_MASK	(1 << 4)
++#define LDO_MODE_OFF	0
++#define LDO_MODE_ON	1
++
++#define REFOUTEN	(1 << 4)
++
++/*
++ * Regulator Mode Control
++ *
++ * OFF: The regulator is switched off and the output voltage is discharged.
++ * PFM: In this mode, the regulator is always in PFM mode, which is useful
++ *      at light loads for optimized efficiency.
++ * PWM: In this mode, the regulator is always in PWM mode operation
++ *	regardless of load conditions.
++ * APS: In this mode, the regulator moves automatically between pulse
++ *	skipping mode and PWM mode depending on load conditions.
++ *
++ * SWxMODE[3:0]
++ * Normal Mode  |  Standby Mode	|      value
++ *   OFF		OFF		0x0
++ *   PWM		OFF		0x1
++ *   PFM		OFF		0x3
++ *   APS		OFF		0x4
++ *   PWM		PWM		0x5
++ *   PWM		APS		0x6
++ *   APS		APS		0x8
++ *   APS		PFM		0xc
++ *   PWM		PFM		0xd
++ */
++#define OFF_OFF		0x0
++#define PWM_OFF		0x1
++#define PFM_OFF		0x3
++#define APS_OFF		0x4
++#define PWM_PWM		0x5
++#define PWM_APS		0x6
++#define APS_APS		0x8
++#define APS_PFM		0xc
++#define PWM_PFM		0xd
++
++enum swx {
++	SW1 = 0,
++	SW2,
++	SW3,
++	SW4,
++};
++
++int mc34vr500_get_sw_volt(uint8_t sw);
++int mc34vr500_set_sw_volt(uint8_t sw, int sw_volt);
++int power_mc34vr500_init(unsigned char bus);
++#endif /* __MC34VR500_PMIC_H_ */
 -- 
-2.30.2
+2.34.1
 
