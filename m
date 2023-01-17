@@ -2,56 +2,56 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CB73C67871
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Jan 2023 18:29:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C33D6C677F1
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Jan 2023 18:36:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbjAQS3f (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 Jan 2023 13:29:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
+        id S231642AbjAQSf5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 Jan 2023 13:35:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbjAQS1P (ORCPT
+        with ESMTP id S232562AbjAQSbu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 Jan 2023 13:27:15 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E6145BEB;
-        Tue, 17 Jan 2023 09:58:33 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id cm26-20020a056830651a00b00684e5c0108dso4534472otb.9;
-        Tue, 17 Jan 2023 09:58:33 -0800 (PST)
+        Tue, 17 Jan 2023 13:31:50 -0500
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D57530E9;
+        Tue, 17 Jan 2023 10:03:30 -0800 (PST)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-142b72a728fso32791714fac.9;
+        Tue, 17 Jan 2023 10:03:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=peHZzcdlWiZtJMYXBU66hMnjAkeh9CWIRD8xSD3q8Yg=;
-        b=HIu0XDHtZoEvy8/0DHv7GlG95JvEaUh+Br9gsWlsa6OwVUQKgILFdcuZvlK/A61zjy
-         9XWuDQ7HfaYUOsZOnWieE6Ol5IcOKOPXOAhzS8OA3nGN8lzSPb/RF1Flpo0KbpVsis7F
-         YdjTifZ6a8e3URQTZdpPF4Ye6GBObHhO7bRPbz6l8CBArfFaKibLtUkzUhar7+ukHIq4
-         RQIMuL+qgUPKkWPYjpFsjOsCf30mbDhPvct6eICWDoOZtsVSaMmiH8v+J5BcZOxLG/0l
-         BDdOzyLMrvqybiPsmVhM4NpUf7tsLxKdnT+FgrUrrzifQ4kugbkURgebl0yl0q5JQ2/1
-         thtg==
+        bh=7d32lIS5659adSUN+iGBcEeQw3rbNcJYLe52JOdmiBs=;
+        b=C7OSeH0WQtcY4HD9YyT8kWNdvCs3c7i7LSInGN39SebJr9XKJx7JSDSmdcC8S4s+lK
+         IdusFb8LWN9nlffgU9LI42RPw16F8B+QdmnMYqZSWgpy9CbCeaM4IxFd9JkRqlTeHcEe
+         QY3+mNcn0OGGbFhTf9+agwz/cEufMbt3XQCBcAeXrbBWVFXzaOkarnwg3UKneuM5Iqet
+         6XEDSyT1fzbs4oZjJ8PDU9QJK1oLRWkZkkbT7ZIVtd2X4LcfQN3YYEmRCbUUFbtasCSL
+         fScUihr3l+bqO/mb7XGAPPNcSVZH08Tk1SiTiIXLFBJux8io2jZcOaAgVYGeswE55e44
+         4Mnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=peHZzcdlWiZtJMYXBU66hMnjAkeh9CWIRD8xSD3q8Yg=;
-        b=ZmKhXXekZ85gmuJzHa/MSbN4EQ1+cfT2oc2n0q0EaZvAjqbm6F1V7LfhAiDiaytYAn
-         ouzxV13vmfZ4U0ujl/7klk5GOJVmYaS2gMU6IdJLaV+ad8BQNucUlGzOUVboivSoDoZv
-         Xe28ckZp+l7NCPSrBbzNiQYyBGXLmUnapdtydfJS854plfSeLFEtoKP1nsgeFodxzXK7
-         0KtkzXNsgYpNdb9cgaMwKu1b2SpqIV4IXn7EZASi6P5+h4MfqTPL9ed7/2h5dHgQt991
-         KoKj/IwIvifwP+tVzoheri9QnHpYNIKBf4aKvvYEG7KC0ITnVaf4t9t2Zre4Vw4zWETr
-         8mgg==
-X-Gm-Message-State: AFqh2koOyEMQwm+QjjtUPKlbGereGZCMELcuVcDZ+IY05zjBiLEt5so1
-        NDrSW3bsfm3m/gD5jBeoyhs=
-X-Google-Smtp-Source: AMrXdXtvDkHGWSZUXaL1l21Yecfkbva5ULq2A6Q10MGZGMGSyqpsB3SCjTly2WUXyRrrji+wwdnd3g==
-X-Received: by 2002:a9d:62c4:0:b0:672:3f94:26a2 with SMTP id z4-20020a9d62c4000000b006723f9426a2mr1747692otk.11.1673978312233;
-        Tue, 17 Jan 2023 09:58:32 -0800 (PST)
+        bh=7d32lIS5659adSUN+iGBcEeQw3rbNcJYLe52JOdmiBs=;
+        b=Hh98v41fFlExd2yhNZZOj+L0Atths4R/62RLuzBV6IypCjFvwZ9Xfmxf8DgwnSugrD
+         DpIyWNnFVaBbaxxaFjud7YmzM8t9XZyh5uDyA38MNIcQjwUG6yv9eLkKJutAGnO8sijE
+         AKwy47iBVgxjaDnswkzb7h2Hj9Ew/553OlSSnK1O+uLxxMAewetuuTLcI2ugeU0CjU6G
+         CuQOQMlhH4v0pWDQEZIVHAGe9mTmkP/wCJHdaypvIOodT0gd1PeOdhbqQbflVUa0mebz
+         AhHSpR+/XhFpJ7knU88wo2pnHRdewaJSSiWZNzLsnEFGf+9d7N4hI8JNj5b9/JfJl3p3
+         /qqA==
+X-Gm-Message-State: AFqh2kqOylP/lsNPx9ODkZI3Yv+lJ29PI5VHiHxUsLL3QxcTrPNAFG3b
+        fh6dZY/IBqX5ilsa5V6Cim3ezM47wi8=
+X-Google-Smtp-Source: AMrXdXsPuVUno1dEGhtkQP1JoZz2SJs1789g5ykTB7L3WkAfYmNJxaPWzHic17cs36a+DId+kqpREg==
+X-Received: by 2002:a05:6870:588c:b0:15f:6de0:b74 with SMTP id be12-20020a056870588c00b0015f6de00b74mr1367503oab.19.1673978590928;
+        Tue, 17 Jan 2023 10:03:10 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l11-20020a056830268b00b006706cd202b0sm16750652otu.11.2023.01.17.09.58.30
+        by smtp.gmail.com with ESMTPSA id i7-20020a9d6507000000b00683e80b5ca7sm16634570otl.38.2023.01.17.10.03.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 09:58:31 -0800 (PST)
+        Tue, 17 Jan 2023 10:03:10 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 17 Jan 2023 09:58:29 -0800
+Date:   Tue, 17 Jan 2023 10:03:09 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Mario Kicherer <dev@kicherer.org>
 Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com, robh+dt@kernel.org,
@@ -59,7 +59,7 @@ Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com, robh+dt@kernel.org,
         linux-doc@vger.kernel.org, devicetree@vger.kernel.org
 Subject: Re: [PATCH v3 1/3] hwmon: add initial NXP MC34VR500 PMIC monitoring
  support
-Message-ID: <20230117175829.GA2335664@roeck-us.net>
+Message-ID: <20230117180309.GC2335664@roeck-us.net>
 References: <20230117161340.1310936-1-dev@kicherer.org>
  <20230117161340.1310936-2-dev@kicherer.org>
 MIME-Version: 1.0
@@ -72,6 +72,21 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 On Tue, Jan 17, 2023 at 05:13:38PM +0100, Mario Kicherer wrote:
 > This patch adds initial monitoring support for the MC34VR500 PMIC. In its
+
+I forgot:
+
+Documentation/process/submitting-patches.rst
+
+Describe your changes
+---------------------
+...
+Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+to do frotz", as if you are giving orders to the codebase to change
+its behaviour.
+
+Guenter
+
 > current form, input voltage and temperature alarms are reported to hwmon.
 > 
 > Datasheet:
@@ -138,17 +153,8 @@ On Tue, Jan 17, 2023 at 05:13:38PM +0100, Mario Kicherer wrote:
 > +
 > +#include <linux/hwmon.h>
 > +#include <linux/hwmon-sysfs.h>
-
-No longer necessary.
-
 > +#include <linux/i2c.h>
 > +#include <linux/regmap.h>
-
-You are sparse with include files. The point is not to include as
-few as possible, but to include everything that declares functions
-or defines used in the code. I identified some below, but there may
-be more missing.
-
 > +
 > +#define MC34VR500_I2C_ADDR		0x08
 > +#define MC34VR500_DEVICEID_VALUE	0x14
@@ -160,9 +166,6 @@ be more missing.
 > +#define THERM120S_BIT	BIT(3)
 > +#define THERM125S_BIT	BIT(4)
 > +#define THERM130S_BIT	BIT(5)
-
-#include <linux/bits.h>
-
 > +
 > +#define MC34VR500_DEVICEID	0x00
 > +
@@ -175,16 +178,10 @@ be more missing.
 > +struct mc34vr500_data {
 > +	struct device *hwmon_dev;
 > +	struct i2c_client *client;
-
-Unused
-
 > +	struct regmap *regmap;
 > +};
 > +
 > +static irqreturn_t mc34vr500_process_interrupt(int irq, void *userdata)
-
-#include <linux/irqreturn.h>
-
 > +{
 > +	struct mc34vr500_data *data = (struct mc34vr500_data *)userdata;
 > +	unsigned int reg;
@@ -255,9 +252,6 @@ Unused
 > +			  u32 attr, int channel, long *val)
 > +{
 > +	struct mc34vr500_data *data = dev_get_drvdata(dev);
-
-#include <linux/device.h>
-
 > +
 > +	switch (type) {
 > +	case hwmon_in:
@@ -266,9 +260,6 @@ Unused
 > +			return mc34vr500_alarm_read(data, LOWVINS_BIT, val);
 > +		default:
 > +			return -EOPNOTSUPP;
-
-#include <linux/errno.h>
-
 > +		}
 > +	case hwmon_temp:
 > +		switch (attr) {
@@ -345,9 +336,6 @@ Unused
 > +		return ret;
 > +
 > +	dev_dbg(dev, "mc34vr500: revid 0x%x fabid 0x%x\n", revid, fabid);
-
-#include <linux/dev_printk.h>
-
 > +
 > +	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
 > +							 data,
@@ -356,24 +344,12 @@ Unused
 > +	data->hwmon_dev = hwmon_dev;
 > +
 > +	if (client->irq) {
-
-This would still request and enable interrupts after registering the hwmon
-device failed for whatever reason. If an interrupt then occurs before the
-probe function actually fails, hwmon_notify_event() would be called with
-a bad hwmon device pointer and crash.
-
-The return value from devm_hwmon_device_register_with_info() needs to be
-checked before the interrupt is enabled.
-
 > +		ret = devm_request_threaded_irq(dev, client->irq, NULL,
 > +						mc34vr500_process_interrupt,
 > +						IRQF_TRIGGER_RISING |
 > +						IRQF_ONESHOT |
 > +						IRQF_SHARED,
 > +						dev_name(dev), data);
-
-#include <linux/interrupt.h>
-
 > +		if (ret)
 > +			return ret;
 > +
@@ -385,21 +361,11 @@ checked before the interrupt is enabled.
 > +		/* unmask interrupts */
 > +		ret = regmap_write(regmap, MC34VR500_INTMASK0,
 > +				   ~(LOWVINS_BIT | THERM110S_BIT));
-
-Why not enable the other handled thermal event bits ?
-
 > +		if (ret)
 > +			return ret;
 > +	}
 > +
 > +	return PTR_ERR_OR_ZERO(hwmon_dev);
-
-Then this can just return 0. Also
-
-#include <linux/err.h>
-
-for both PTR_ERR_OR_ZERO() and PTR_ERR().
-
 > +}
 > +
 > +static const struct i2c_device_id mc34vr500_id[] = {
@@ -407,18 +373,8 @@ for both PTR_ERR_OR_ZERO() and PTR_ERR().
 > +	{ }
 > +};
 > +
-
-Drop this empty line
-
 > +MODULE_DEVICE_TABLE(i2c, mc34vr500_id);
-
-#include <linux/module.h>
-
 > +
-
-What happened with nxp,mc34vr500 ? You'll need the devicetree
-match to instantiate the device in devicetree systems.
-
 > +static struct i2c_driver mc34vr500_driver = {
 > +	.driver = {
 > +		   .name = "mc34vr500",
