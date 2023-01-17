@@ -2,97 +2,93 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D716C677F1
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Jan 2023 22:02:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84A45C6379F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Jan 2023 22:49:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjAQWCL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 Jan 2023 17:02:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
+        id S229877AbjAQWtg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 Jan 2023 17:49:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbjAQWAG (ORCPT
+        with ESMTP id S229597AbjAQWrr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:00:06 -0500
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABA553FA2;
-        Tue, 17 Jan 2023 12:40:34 -0800 (PST)
-Received: by mail-oi1-f182.google.com with SMTP id p185so5875459oif.2;
-        Tue, 17 Jan 2023 12:40:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=67/7qFGKU8v+ncCe98IgRm1sBY7EEsIFhO8RWKpy1ms=;
-        b=oLwIjmnbd11o+N3onDhjd/7mDTpHICkyYMhzyFd9cv4tSiWTWEJwgk+IuMfQUrpZFH
-         R5tK3lY9XiW0Jy8D7hVkhIewhTnDlQufCOTVcnm6oq56F4KKtDduEv/pcG8x7MoDhnsQ
-         gw/yHid/NNd+bAL6K8UHJuqPhYziu6kXNj+ZuZ8/lSBVl4D4UuWx4FYHIMhw+QMwrbrE
-         gvdUg01b7ynsHVprZfhzkhaNXBAaUsvQoYtB3087c1rtj2LWg7k53pEiYxrOZZgYCkIq
-         41nFtLOK7U6uY6qxF41jV+63F8kRHJFHf2nal3lweh1kxXC/MUGYSIbsP7egq61H+Hb9
-         qGBg==
-X-Gm-Message-State: AFqh2kpwcAFaXMZw2tMreQ+37SWVx/0L7O/q/GW0YFyP0nPIFGYg5pzc
-        2pHWPNP5gD9wo37smdGfuQ==
-X-Google-Smtp-Source: AMrXdXure+5iEtDRLsla/oJrLqVm1rjH+eOc28MjSr7MGs42Rvef5APfJfN9jWPwzpWJRiZswegkGw==
-X-Received: by 2002:a05:6808:193:b0:364:3de0:f933 with SMTP id w19-20020a056808019300b003643de0f933mr11257851oic.52.1673988033446;
-        Tue, 17 Jan 2023 12:40:33 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o9-20020a0568080f8900b0035e461d9b1bsm15272517oiw.50.2023.01.17.12.40.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 12:40:33 -0800 (PST)
-Received: (nullmailer pid 3669412 invoked by uid 1000);
-        Tue, 17 Jan 2023 20:40:32 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Tue, 17 Jan 2023 17:47:47 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AC9B4E0E
+        for <linux-hwmon@vger.kernel.org>; Tue, 17 Jan 2023 13:48:54 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHtog-0004mh-3v; Tue, 17 Jan 2023 22:48:26 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHtoa-006lhq-DJ; Tue, 17 Jan 2023 22:48:20 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHtoZ-00DhVz-MN; Tue, 17 Jan 2023 22:48:19 +0100
+Date:   Tue, 17 Jan 2023 22:48:06 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
+        lee@kernel.org, thierry.reding@gmail.com, corbet@lwn.net,
+        p.zabel@pengutronix.de, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [v4 0/5] Support pwm/tach driver for aspeed ast26xx
+Message-ID: <20230117214806.ptnnhgxmlvyzjdzp@pengutronix.de>
+References: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Mario Kicherer <dev@kicherer.org>
-Cc:     linux@roeck-us.net, robh+dt@kernel.org, corbet@lwn.net,
-        linux-hwmon@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jdelvare@suse.com, linux-doc@vger.kernel.org,
-        devicetree@vger.kernel.org
-In-Reply-To: <20230117161340.1310936-3-dev@kicherer.org>
-References: <20230117161340.1310936-1-dev@kicherer.org>
- <20230117161340.1310936-3-dev@kicherer.org>
-Message-Id: <167398779869.3664156.14251778655302872617.robh@kernel.org>
-Subject: Re: [PATCH v3 2/3] dt-bindings: hwmon: add nxp,mc34vr500
-Date:   Tue, 17 Jan 2023 14:40:32 -0600
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="y5jqbiyht4hvalnt"
+Content-Disposition: inline
+In-Reply-To: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
-On Tue, 17 Jan 2023 17:13:39 +0100, Mario Kicherer wrote:
-> This patch adds dt-bindings for the NXP MC34VR500 PMIC.
-> 
-> Signed-off-by: Mario Kicherer <dev@kicherer.org>
-> ---
->  .../bindings/hwmon/nxp,mc34vr500.yaml         | 36 +++++++++++++++++++
->  1 file changed, 36 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/nxp,mc34vr500.yaml
-> 
+--y5jqbiyht4hvalnt
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Hello Billy,
 
-yamllint warnings/errors:
+I wonder if you address the feedback you got for this series. I think
+there are no big issues left, are there?
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/hwmon/nxp,mc34vr500.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/hwmon/nxp,mc34vr500.yaml#
+There is only one patch left open in the PWM patchwork (i.e. the patch
+implementing the driver that already has my Reviewed-by tag). I'll
+discard that one, too, as "changes requested" and hope you will send a
+v5.
 
-doc reference errors (make refcheckdocs):
+Best regards
+Uwe
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230117161340.1310936-3-dev@kicherer.org
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+--y5jqbiyht4hvalnt
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+-----BEGIN PGP SIGNATURE-----
 
-pip3 install dtschema --upgrade
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPHF5MACgkQwfwUeK3K
+7Am6Rgf/dyL2yHQajtxCDMIEYXoOPD0fs1U+AFUQZWILgnBky3GTsjqPb+iRF0Zr
+w+4QERyKzgxAyfJE3EptEtnxjBOPWZ1JKx1tBpJDsEBem7ew5QmjSZ9vX28jfcaa
+NR8HzbJdZKOdM/Brmd3jCKGNj63CYH8rD0CW4mUf07oVvw55j6g1ZULwVvHnOGse
+DG9GpBgzzhaIPYapwlkhIdfeESU84fWfQLlOxdcNxR4/8OXDCO2lUbzXULBVbjUe
+lzBlQzwJk2bQegMSAIXRIACskEMbmoMY6RBKJCJUEniyIcPyJ8//YGW1pHq8fnRO
+xriqAmZs2kKuyqloDKo4g/GVvGVikQ==
+=FqEI
+-----END PGP SIGNATURE-----
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+--y5jqbiyht4hvalnt--
