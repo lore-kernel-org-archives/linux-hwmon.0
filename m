@@ -2,83 +2,72 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DBDFC46467
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Jan 2023 03:56:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4F83C32793
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Jan 2023 05:43:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjARD4H (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 Jan 2023 22:56:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37300 "EHLO
+        id S229454AbjARFnY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 18 Jan 2023 00:43:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjARDzx (ORCPT
+        with ESMTP id S229453AbjARFnW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 Jan 2023 22:55:53 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA8F54237;
-        Tue, 17 Jan 2023 19:55:51 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id vm8so80177931ejc.2;
-        Tue, 17 Jan 2023 19:55:51 -0800 (PST)
+        Wed, 18 Jan 2023 00:43:22 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FCE53565
+        for <linux-hwmon@vger.kernel.org>; Tue, 17 Jan 2023 21:42:53 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id o7-20020a17090a0a0700b00226c9b82c3aso1103527pjo.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 17 Jan 2023 21:42:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HcT5Z2kZpgpCs/H5CSpJUBKOlxzXUkwsQ72IKLNAM6A=;
-        b=hf3jwcSM3LErt5VoJyNZ76KtqHK0KCmJ/4wD6UGyTKAskIHSoCayvjIqXKFdK7Qwni
-         e2UwyP6TmHAM3aNlLBudDYPe5aTULyjuDG1Wn0wMV0irHHqAu+SSNd1e4fKE0pTrlZLn
-         64zhHySdv9XAhiBTQgoFL8h5IyS0kswCoOBLU=
+        bh=B0NQsbUzZHwj9TdEdJxAoLZF7IG828B+Vx2mBIfdrsI=;
+        b=uZ8qN7sjAkP96u910J7ICFh2dufjFu18YYpo8rdCDZmV1QSVVR5EiU0BqtMff70/G6
+         4e2GzzllpnzMTTHqoy4p14Ttva5FRHW97yjvCEdlnXPq+/j5YJ4aqJVWQipxmaE9Ri7K
+         PiHjQyAzMIu8Kr4M/E/pjvjGhl5X5ZxF6d12GgWtHiAUIAAw1nOWPwa9VpJTMsDgnmtN
+         wdg/3Ygrv+6lrXCC2hBVdjXhRwwmA6f3HGAEKeTQiKercgLFC9Bb+JgAqInj3dZ5m1cT
+         K4k69gJnGlzqrRQQuxQPyD3haXOZtJYY0oA/W1L2O4QF+U3TbMehB3g4Epdun+oYSAKr
+         fO4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HcT5Z2kZpgpCs/H5CSpJUBKOlxzXUkwsQ72IKLNAM6A=;
-        b=HCZYwT1pGf48a4S/+jTv9U/IdtsRfprbPFxalbToVhSibKOXOeJvhetzCAyMgWgXAX
-         dg+CcunVler4R/bbZZ3ZgEb4vzao2+op6L4+T8odsykXFw35A+LT52Fo9zxQvT0cTTLc
-         /y/geBERDkwBBFZfCoCEpf9yM72x3samnlwZhHjzZoCWIKWRmAihzyYGvpSEN4v/NxmW
-         tScn7oT4b9T8YOAiqvKDT0i36CXwrYZQ+jJvEpMlBgMdboGDIKaBVU6Ugrdf/1RCrLnZ
-         cemK1rlR/Ddufl7Ca8rh9lKCy4ztK19rw7cd0XKJKIVVoy/w/AwXc+e+Ku2HWje28o9S
-         UtPg==
-X-Gm-Message-State: AFqh2kpCSwlK4inYV+jBQzqDvAMsD4sJndQ2NNN03aBKAQo8rMoRUiLK
-        5Z8tfqKcvf0/Z0o9Cabpm7JuVCdu0hghqGTdWbM=
-X-Google-Smtp-Source: AMrXdXt0hc10x0K73L0tm5fBfFF0XWK8jWggYbaXH1vOomxPm7E4QvIL+XpCg+PT91fmDey6NxJPSsQIXxL8ZRi+FHs=
-X-Received: by 2002:a17:906:ecb9:b0:86d:97d4:9fea with SMTP id
- qh25-20020a170906ecb900b0086d97d49feamr701815ejb.141.1674014149868; Tue, 17
- Jan 2023 19:55:49 -0800 (PST)
+        bh=B0NQsbUzZHwj9TdEdJxAoLZF7IG828B+Vx2mBIfdrsI=;
+        b=jIkqq79640zxczrlLbWFG4s+EY6/Q7vwRct/agZbw9Sxul15QMrbWbkblm5nRF4PvL
+         9D6pHbc9wNQbzfo1Yqks54HfDIgu5vyOj641pwIv2GPfeh3RZU1IHLLNtuvkhTswSSLL
+         Yzb0QqkjjvOhCmMCYayUp2uYqgoVfVKTdOgFZp5FBm1lMTBse2khlGuSjhakw4XvYgQZ
+         GFRMe0tIpBMpivh6xV8Np/kRUi8Nf0Ns438xPtvq5ril5U+4blC+Bg57uGXBVqqLZ4bJ
+         RLWqz+0BVUvj5Wv6DLqpCP8QLzzEiz22b/G+u1RBR5OhgOog7tVQ7UhieglOAPXTdPU2
+         xBXQ==
+X-Gm-Message-State: AFqh2kpd7/QL3S+u7y2hc+buEepv3/37gN/Ju2k2zUxsWMTGMBVwTIal
+        T3zWKJHN3N9ccpNVg9lzp6F+wsIK/eQW92ew1Fzt2w==
+X-Google-Smtp-Source: AMrXdXsams3wHxQhETfG0ZnksdhNdPGE4tcNFElb0o1sePFlNiYz49JEbg5AW+EzGuoX9FtjxLsgKp01fl1D4P/jb3M=
+X-Received: by 2002:a17:90b:8d:b0:227:23c3:5db0 with SMTP id
+ bb13-20020a17090b008d00b0022723c35db0mr742198pjb.160.1674020573093; Tue, 17
+ Jan 2023 21:42:53 -0800 (PST)
 MIME-Version: 1.0
 References: <20221209024522.2102509-1-wangxiaohua.1217@bytedance.com> <c319b24e-a2bf-9516-5ae3-1b7da73862f7@roeck-us.net>
 In-Reply-To: <c319b24e-a2bf-9516-5ae3-1b7da73862f7@roeck-us.net>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 18 Jan 2023 03:55:37 +0000
-Message-ID: <CACPK8Xekz5LPqMH4_2cT2gg3NtoPt0rjM6ZY=8XccytMoaN=Bw@mail.gmail.com>
-Subject: Re: [PATCH linux dev-6.0 v3] pmbus: Add mp2971/mp2973 support in mp2975
+From:   =?UTF-8?B?5pmT5Y2O546L?= <wangxiaohua.1217@bytedance.com>
+Date:   Wed, 18 Jan 2023 13:42:40 +0800
+Message-ID: <CAEJrW_jPJTPd7Fx6_ATJsLED7SKibXaBPQJzhyyAM2+RRVUQAw@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH linux dev-6.0 v3] pmbus: Add mp2971/mp2973
+ support in mp2975
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Wang Xiaohua <wangxiaohua.1217@bytedance.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        jdelvare@suse.com, openbmc@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        jdelvare@suse.com, openbmc@lists.ozlabs.org, joel@jms.id.au
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello Xiaohua,
-
-
-On Sat, 10 Dec 2022 at 17:54, Guenter Roeck <linux@roeck-us.net> wrote:
+On Sun, Dec 11, 2022 at 1:54 AM Guenter Roeck <linux@roeck-us.net> wrote:
 >
 > On 12/8/22 18:45, Wang Xiaohua wrote:
 > > Add mp2971/mp2973 support in mp2975
-
-Guenter has some comments for you to address. Are you planning on
-working on this further?
-
-I would like to help you get support for this device in the tree, but
-it will require some more work.
-
-Cheers,
-
-Joel
-
 > >
 > > Tested with:
 > > My unit only include mp2971 and mp2973 devices
@@ -134,8 +123,9 @@ Joel
 > Either case, test results should be provided after "---" and not be part
 > of the commit description. Instead, the commit description should explain
 > what those chips actually are.
->
->
+
+Thanks for your comments.
+
 > > Signed-off-by: Wang Xiaohua <wangxiaohua.1217@bytedance.com>
 > >
 > > v2:
@@ -151,7 +141,9 @@ Joel
 >
 > Update to Documentation/hwmon/mp2975.rst and
 > Documentation/devicetree/bindings/trivial-devices.yaml required.
->
+
+Thanks. I will update the Documentation/hwmon/mp2975.rst.
+
 > However, there is a more severe problem: The changes are too complex
 > for me to review, and the chip datasheets are not published. I can not ev=
 aluate
@@ -162,6 +154,10 @@ aluate
 > Additional comments inline.
 >
 > Guenter
+
+Yes, the chip datasheets are still not published. I will try to use a
+less complex solution.
+
 >
 > > diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.=
 c
@@ -263,6 +259,10 @@ int page, int phase, u8 reg,
 > use different calculations with different results than those for
 > mp2975.
 >
+
+Thanks, I will define and implement it in mp2975_vid2direct() and add
+more comments in the code.
+
 > Example, for vrf =3D=3D imvp9, 10mV step size, and vid=3D=3D1:
 >
 > mp2971: (1 + 29) * 10 =3D 30 * 10 =3D 300
@@ -277,6 +277,9 @@ int page, int phase, u8 reg,
 > step size since IMVP9 explicitly specifies a step size of 10mV.
 > Also, the maximum voltage for IMVP9 is specified as 2.74V.
 >
+
+Yes, you are right, the step size is 10mV.
+
 > >   static int
 > >   mp2975_vid2direct(int vrf, int val)
 > >   {
@@ -363,6 +366,10 @@ onvert
 > Without datasheets I can not determine if this really makes sense
 > and/or is needed, or if a single function can be used for all chips.
 >
+
+Thanks for your suggestion, I will try to optimize the
+mp2975_vid2direct() function so it can be used for all chips.
+
 > >   static int mp2975_read_word_data(struct i2c_client *client, int page,
 > >                                int phase, int reg)
 > >   {
@@ -417,6 +424,9 @@ ured
 > Without datasheet, it is impossible to compare the chips to check if an
 > implementation with fewer / less extensive changes would be warranted.
 >
+
+Thanks for your comments. I will optimize the code.
+
 > > +
 > > +static int
 > > +mp2971_identify_vid(struct i2c_client *client, struct mp2971_data *dat=
@@ -737,3 +747,7 @@ o);
 > >       {}
 > >   };
 >
+
+BR,
+
+Xiaohua
