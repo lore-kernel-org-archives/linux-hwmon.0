@@ -2,88 +2,136 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B56FFC004D4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Jan 2023 11:43:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE4A9C05027
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Jan 2023 18:27:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbjASLnj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 Jan 2023 06:43:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49360 "EHLO
+        id S229862AbjATS11 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 20 Jan 2023 13:27:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231162AbjASLnS (ORCPT
+        with ESMTP id S229739AbjATS1Z (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 Jan 2023 06:43:18 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1196875A18
-        for <linux-hwmon@vger.kernel.org>; Thu, 19 Jan 2023 03:42:49 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id l41-20020a05600c1d2900b003daf986faaeso1044390wms.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 19 Jan 2023 03:42:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aGOCUa90Q6GecXZlyktaQMT3FaJcTaKaXef4xUwVlsI=;
-        b=mQJdRPQT/G925muxm5y5X5xxGvrzo9HRieViv3UPDfZ0YnByak959w8xB5xBRvW691
-         +pvsFhbbf0sKaRSDu744jxUU2O/kZyH3j4plKgd2/4caZ2b0yfAybXtbjNWL3vhjGVDS
-         SWFzsbuIrnhhJoFFP62F1nfIFAk5oAdkEMElKmbHx8Efk2rCMQ59pNNnfxWh/NQUYEdx
-         wHWaK4yeFhFPPVSZpzOpOpjYuW3iqKQIAnTM2BH1yu8LD48ni1sgvqK5rSAL8G3tUlgy
-         gz9LUuxC4fcLDeQkOUzFnK46bF97fyHhhDw5rqYjSFNRJutq1oHNNyRdFoptOcd3yhrR
-         AunQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aGOCUa90Q6GecXZlyktaQMT3FaJcTaKaXef4xUwVlsI=;
-        b=SBdjgUYkKPZ6EtkoWyb3xNJs+wFTyF2zQNe3eH5MiH3y8ihBnzrcYYaNIQvyY8cTc/
-         AVq8FQp6PHoPWWDhBvThWRL5zDe/YdzfCtdsWXMud/clHA5ib4nu0c+ZEnlqUsc0rUcu
-         9TC8ZQllNSkYNLwNW7i0oTqFaGcn2SuMmvUEnPISHmHSabFn/Hrj23JYpHt0uz8No3xn
-         rLAYBrZxn4PYFkAFiKEjwxcYORF6Uxs4qt+ZUzZshM7h8ZA5hwT6sTL6vyRl/siWdZnR
-         qGjx/zD9GP4K6g9L6MFielszEI6lQmlCH14huChFm3zS+kHRbElw08GWHErRyDXRwpyG
-         TsPw==
-X-Gm-Message-State: AFqh2krAB9hKm/v8PMht3GbkiLlwYMJdQBEmMDWE3ufbaZi/qOIwBx/9
-        DBebqkbvPtW5azwpljoY/BkRNQ==
-X-Google-Smtp-Source: AMrXdXssEIeVpk3X1FIFFciJq51Cu5AreREsl/mdQ1un6vSac+sLtqMVI3HE4pbO8c7AuMUXfQ38Qw==
-X-Received: by 2002:a1c:cc11:0:b0:3da:1d52:26b5 with SMTP id h17-20020a1ccc11000000b003da1d5226b5mr18469160wmb.14.1674128565881;
-        Thu, 19 Jan 2023 03:42:45 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p18-20020a05600c359200b003db040f0d5esm4959764wmq.33.2023.01.19.03.42.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 03:42:45 -0800 (PST)
-Message-ID: <5e504304-9130-1662-c048-a5863ba9ddb2@linaro.org>
-Date:   Thu, 19 Jan 2023 12:42:44 +0100
+        Fri, 20 Jan 2023 13:27:25 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABD8DBCD;
+        Fri, 20 Jan 2023 10:27:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674239244; x=1705775244;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bK/QfWInN9l3kz5q4PkVtOoQHNxxsyUB2TiL2Yk9kJ0=;
+  b=Mynev58HmCORXXQrQT3HXldnpkbjF9MfcY2znqOkxX9BpCD7J7WAjfYm
+   jZ0TbHbfh+AIjuN+aO1lfRdLjCOiNvyIlF6LYn1jA9SeZjQ6vwDsFgHIM
+   +1GunRZuh4z0gD2CC/XLZupeLtSgWh7CnDwIrhaqoVvgMzPKIWCAKtGmy
+   +VboH/3RY+4Kj7fl+z7xd2v9JleaH9iEDXmbQorAolSMXdSbiwpR4cxkM
+   h11AXAD3JHHF3HLnE1kC7p9jU03N9JlQarPjYnFIFa5CZ0eBpMTyVi8Bx
+   4NmsOXTGnaMakkBRihge97gH9M1H1AeUDmjTf1CcEEx/VW8oh6Ldjm1hD
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="305325484"
+X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
+   d="scan'208";a="305325484"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 10:27:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="691145006"
+X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
+   d="scan'208";a="691145006"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 20 Jan 2023 10:27:21 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIw6d-0002o3-2q;
+        Fri, 20 Jan 2023 18:27:15 +0000
+Date:   Sat, 21 Jan 2023 02:26:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     XU pengfei <xupengfei@nfschina.com>, jdelvare@suse.com,
+        linux@roeck-us.net
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        XU pengfei <xupengfei@nfschina.com>
+Subject: Re: [PATCH 1/1] hwmon: powr1220: remove unnecessary (void*)
+ conversions
+Message-ID: <202301210219.P2QHV5eM-lkp@intel.com>
+References: <20230111043729.3792-1-xupengfei@nfschina.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: add nxp,mc34vr500
-Content-Language: en-US
-To:     Mario Kicherer <dev@kicherer.org>, linux-hwmon@vger.kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230118123019.3041303-1-dev@kicherer.org>
- <20230118123019.3041303-2-dev@kicherer.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230118123019.3041303-2-dev@kicherer.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111043729.3792-1-xupengfei@nfschina.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 18/01/2023 13:30, Mario Kicherer wrote:
-> Add dt-bindings for the NXP MC34VR500 PMIC.
-> 
-> Signed-off-by: Mario Kicherer <dev@kicherer.org>
-> ---
->  .../bindings/hwmon/nxp,mc34vr500.yaml         | 36 +++++++++++++++++++
->  1 file changed, 36 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/nxp,mc34vr500.yaml
-> 
+Hi XU,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.2-rc4 next-20230120]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/XU-pengfei/hwmon-powr1220-remove-unnecessary-void-conversions/20230111-123826
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230111043729.3792-1-xupengfei%40nfschina.com
+patch subject: [PATCH 1/1] hwmon: powr1220: remove unnecessary (void*) conversions
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230121/202301210219.P2QHV5eM-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2eb252eb3b198f857b200cd1b3aee679a7129baa
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review XU-pengfei/hwmon-powr1220-remove-unnecessary-void-conversions/20230111-123826
+        git checkout 2eb252eb3b198f857b200cd1b3aee679a7129baa
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/powr1220.c:177:24: error: initializing 'struct powr1220_data *' with an expression of type 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           struct powr1220_data *chip_data = data;
+                                 ^           ~~~~
+   1 error generated.
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+vim +177 drivers/hwmon/powr1220.c
 
-Best regards,
-Krzysztof
+   172	
+   173	static umode_t
+   174	powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
+   175			    attr, int channel)
+   176	{
+ > 177		struct powr1220_data *chip_data = data;
+   178	
+   179		if (channel >= chip_data->max_channels)
+   180			return 0;
+   181	
+   182		switch (type) {
+   183		case hwmon_in:
+   184			switch (attr) {
+   185			case hwmon_in_input:
+   186			case hwmon_in_highest:
+   187			case hwmon_in_label:
+   188				return 0444;
+   189			default:
+   190				break;
+   191			}
+   192			break;
+   193		default:
+   194			break;
+   195		}
+   196	
+   197		return 0;
+   198	}
+   199	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
