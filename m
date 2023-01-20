@@ -2,48 +2,48 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE4A9C05027
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Jan 2023 18:27:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42CBBC25B4E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Jan 2023 19:08:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjATS11 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 20 Jan 2023 13:27:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
+        id S230170AbjATTIZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 20 Jan 2023 14:08:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjATS1Z (ORCPT
+        with ESMTP id S230161AbjATTIZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 20 Jan 2023 13:27:25 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABD8DBCD;
-        Fri, 20 Jan 2023 10:27:24 -0800 (PST)
+        Fri, 20 Jan 2023 14:08:25 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345D172C00;
+        Fri, 20 Jan 2023 11:08:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674239244; x=1705775244;
+  t=1674241704; x=1705777704;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=bK/QfWInN9l3kz5q4PkVtOoQHNxxsyUB2TiL2Yk9kJ0=;
-  b=Mynev58HmCORXXQrQT3HXldnpkbjF9MfcY2znqOkxX9BpCD7J7WAjfYm
-   jZ0TbHbfh+AIjuN+aO1lfRdLjCOiNvyIlF6LYn1jA9SeZjQ6vwDsFgHIM
-   +1GunRZuh4z0gD2CC/XLZupeLtSgWh7CnDwIrhaqoVvgMzPKIWCAKtGmy
-   +VboH/3RY+4Kj7fl+z7xd2v9JleaH9iEDXmbQorAolSMXdSbiwpR4cxkM
-   h11AXAD3JHHF3HLnE1kC7p9jU03N9JlQarPjYnFIFa5CZ0eBpMTyVi8Bx
-   4NmsOXTGnaMakkBRihge97gH9M1H1AeUDmjTf1CcEEx/VW8oh6Ldjm1hD
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="305325484"
+  bh=xtYLh5cCbuko2Qpbfy5LnQspRBl8mkaXM2fjsHpiBBQ=;
+  b=j8y8MF39+LjMq6xIu8mCRr7pAj/jW4YIM9Z7WpzpxALQXM0Dd62GR/Lz
+   LyTYbhoOE5COei1U93G6eKglBh8UxPB7XXLfo+GskwKeUq5V9VpgKrqcO
+   sQZtru0tHivlxwJJXEoLbHMpHT0pomp5HGvWNugYUAfJmY7b9MmhCFATI
+   /TAYq0AeLGj3M16ACi6o3KDqNdEzfcuZiSHqGYO3FnYJOxm5TRGBqz8Vs
+   dKoMAwEjgBe0IOiGuQS0xAO6kfTb3MQmzPmT0qVrHsToe8rcd0+4JK1mt
+   bCeCp4Hm3sXHx8Ej2rOap1GRM7TMrj619ee77nntL3cPUzp0XPwICw8eK
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="309236501"
 X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
-   d="scan'208";a="305325484"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 10:27:24 -0800
+   d="scan'208";a="309236501"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 11:08:22 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="691145006"
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="662634474"
 X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
-   d="scan'208";a="691145006"
+   d="scan'208";a="662634474"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 20 Jan 2023 10:27:21 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 20 Jan 2023 11:08:18 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pIw6d-0002o3-2q;
-        Fri, 20 Jan 2023 18:27:15 +0000
-Date:   Sat, 21 Jan 2023 02:26:37 +0800
+        id 1pIwkL-0002py-2L;
+        Fri, 20 Jan 2023 19:08:17 +0000
+Date:   Sat, 21 Jan 2023 03:08:09 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     XU pengfei <xupengfei@nfschina.com>, jdelvare@suse.com,
         linux@roeck-us.net
@@ -52,7 +52,7 @@ Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         XU pengfei <xupengfei@nfschina.com>
 Subject: Re: [PATCH 1/1] hwmon: powr1220: remove unnecessary (void*)
  conversions
-Message-ID: <202301210219.P2QHV5eM-lkp@intel.com>
+Message-ID: <202301210322.r2vwtdN5-lkp@intel.com>
 References: <20230111043729.3792-1-xupengfei@nfschina.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -76,7 +76,7 @@ url:    https://github.com/intel-lab-lkp/linux/commits/XU-pengfei/hwmon-powr1220
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
 patch link:    https://lore.kernel.org/r/20230111043729.3792-1-xupengfei%40nfschina.com
 patch subject: [PATCH 1/1] hwmon: powr1220: remove unnecessary (void*) conversions
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230121/202301210219.P2QHV5eM-lkp@intel.com/config)
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230121/202301210322.r2vwtdN5-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
