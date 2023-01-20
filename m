@@ -2,65 +2,40 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BDC4C05027
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Jan 2023 20:28:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD30CC25B50
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Jan 2023 20:32:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjATU2l (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 20 Jan 2023 15:28:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
+        id S229609AbjATUcU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 20 Jan 2023 15:32:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjATU2l (ORCPT
+        with ESMTP id S229450AbjATUcT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 20 Jan 2023 15:28:41 -0500
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D5071379;
-        Fri, 20 Jan 2023 12:28:40 -0800 (PST)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-15f83e0fc63so7496628fac.11;
-        Fri, 20 Jan 2023 12:28:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ZlMeRVUsWNss7A9ALjJ6icC270gH0NiCS0tX3tXuWE=;
-        b=akc+wlZX34+ao85SDAufJ30abCRRK3sm1U2iDQaUHx1GCtwx84Og/TB9QW168Z1Cda
-         oSaf8gJc3ouDbziEm7DldHcToQXYtcJtbg7X4eGmcNgtsnJpBDC0LVPYadvD1iKCcVBm
-         P2bIezOIuOpfiXayBktmu9r62frbYORYPAHp816ZsqL//h4vTAgmkAj04vICkMLjRwBH
-         iqdfD0zoo6QvFttPlzmU2tbiOmatojUoYWY1icXa1Jcu3vLK1X/+mufhaY3tZOyN+v1n
-         jeo9+ZjAlruY7NkSCbXl9wm0txIVnyyHfKFcpwV2NarM6QoznS8B9j/HOtjM+kwzXxGz
-         hYyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4ZlMeRVUsWNss7A9ALjJ6icC270gH0NiCS0tX3tXuWE=;
-        b=Crd4Jj+d4I0df7ohPfHtWeU360M3tVVM08IoJjrT3ikF+GvaQumtT6oRNV4vCNIoFW
-         z7STmQwj2wW5MlmYRzM4qJHT3IwEEpAbghhD//b7VilnuXp+iYBAHuqYIwtuZJXKAm5y
-         cwAB+O4TH1Lb11AdFyj12BQX26b6O3rCQVqYbf0tYhA9UAn8EHMiWyvkxPeWH3CC/xEO
-         sYougllSiJzuGyKFpHtdVZHXC8Ow10JREk3H+QqEmoMsCAGB2U2ExNmJP+q5/jCujdW2
-         WIzWUMPXjYzmQc0yAoQ5kEJ4oh6Km/1wCzIg9rIEETfjK0QAJmw/BX5+JaXOHZ/jsdEt
-         k2Zw==
-X-Gm-Message-State: AFqh2koBC7FUuTCRj5kazMI5ABsSevuQ0hCY5MsO9Gv5pT/my7DaBYDT
-        lpQNEil61/jv2tPrECe28Zc=
-X-Google-Smtp-Source: AMrXdXu5e99uZ0fGT+4DzsURCF2xQaGQvr7i5kqFGTV2UZKeiZXjjlM4M7aFiUKNcgWjYi7ENkaQ6g==
-X-Received: by 2002:a05:6870:d628:b0:15f:da23:18a9 with SMTP id a40-20020a056870d62800b0015fda2318a9mr1417459oaq.26.1674246519198;
-        Fri, 20 Jan 2023 12:28:39 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k19-20020a056870571300b00150aca072e8sm22177791oap.38.2023.01.20.12.28.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 12:28:38 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a6906293-634f-a7b0-8fde-92816192130f@roeck-us.net>
-Date:   Fri, 20 Jan 2023 12:28:34 -0800
+        Fri, 20 Jan 2023 15:32:19 -0500
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC8785369
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 Jan 2023 12:32:18 -0800 (PST)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 2E284240755
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 Jan 2023 21:32:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1674246737; bh=3U0QnUhsNTtPLMBnBxIw39Ig6pLG0EYmIgcK+IN7/kA=;
+        h=Date:Subject:To:Cc:From:From;
+        b=EPkwnkvLqv2AwwBtomWlVDCBZGFP2N0pdw/aQtJQ7lxEmPYP1KybdCWd9mlTthko2
+         pDohf4+15VO9UVdf12rpvMTgW9m9dEe1K/HT3cwAFCURlggWvEBL7Cjd8wY+ZAwOU7
+         qCCTYe5v3noiuXY0zBAb8plviBLs20OlMbT032Bh9uqAFIbxabG5njA0LSYGEB2yNL
+         iRrWpvA9wud2jXTPL7MIYT70rWgCI7tNFnaAR006Cox7KLTxBG5Y6HPNNIYfj3vPVv
+         CEtItMqrRmk/61gt/qITb3ChgrCGOXdgdgxGTZL7rCKOHP/hUn2ijhIYFZ4L2nWYbQ
+         EFoY6l7qutVug==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4NzB4Y0LxQz9rxL;
+        Fri, 20 Jan 2023 21:32:13 +0100 (CET)
+Message-ID: <5de61071-6b22-440c-d095-1360512fbccd@posteo.de>
+Date:   Fri, 20 Jan 2023 20:32:12 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
 Subject: Re: [PATCH v4 2/2] hwmon: (nct6775) B650/B660/X670 ASUS boards
  support
-Content-Language: en-US
-To:     Sebastian Arnhold <sebastian.arnhold@posteo.de>,
+To:     Guenter Roeck <linux@roeck-us.net>,
         Denis Pauk <pauk.denis@gmail.com>
 Cc:     ahmad@khalifa.ws, chunkeey@gmail.com, greg@krypto.org,
         hubert.banas@gmail.com, igor@svelig.com, jaap.dehaan@freenet.de,
@@ -78,23 +53,41 @@ References: <20230111212241.7456-1-pauk.denis@gmail.com>
  <20230111212241.7456-2-pauk.denis@gmail.com>
  <20230115161224.GA1246527@roeck-us.net>
  <6fd769f9-da0e-c4a8-dc0e-a1e464c2d9fc@posteo.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <6fd769f9-da0e-c4a8-dc0e-a1e464c2d9fc@posteo.de>
+ <a6906293-634f-a7b0-8fde-92816192130f@roeck-us.net>
+Content-Language: de-DE
+From:   Sebastian Arnhold <sebastian.arnhold@posteo.de>
+In-Reply-To: <a6906293-634f-a7b0-8fde-92816192130f@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 1/20/23 11:50, Sebastian Arnhold wrote:
-> Is it just me, or is the support for my mainboard "TUF GAMING X670E-PLUS WIFI" now implemented into the latest "linux-next" kernel (I verified this by looking at the source code at /drivers/hwmon/nct6775-core.c), but the actual patch that contains the NCT6799D driver is still missing?
-> 
-> I had to patch my linux-next kernel with the patch from https://patchwork.kernel.org/project/linux-hwmon/patch/20221228135744.281752-1-linux@roeck-us.net/ to get it working.
-> 
+Sorry, I didn't want to annoy you! Just wondered why it didn't work and 
+whether I made a mistake, or if it really wasn't included in linux-next.
 
-Well, yes, I do have day-to-day work that I am getting paid for,
-and I did not have time to resubmit the patch adding support for
-NCT6799.
+Thanks for all your amazing work in making this chip function properly 
+and bringing fan control to many of the latest AM5 boards! :)
 
-Guenter
+Kind regards,
+Sebastian
 
+Am 20.01.23 um 21:28 schrieb Guenter Roeck:
+> On 1/20/23 11:50, Sebastian Arnhold wrote:
+>> Is it just me, or is the support for my mainboard "TUF GAMING 
+>> X670E-PLUS WIFI" now implemented into the latest "linux-next" kernel 
+>> (I verified this by looking at the source code at 
+>> /drivers/hwmon/nct6775-core.c), but the actual patch that contains 
+>> the NCT6799D driver is still missing?
+>>
+>> I had to patch my linux-next kernel with the patch from 
+>> https://patchwork.kernel.org/project/linux-hwmon/patch/20221228135744.281752-1-linux@roeck-us.net/ 
+>> to get it working.
+>>
+>
+> Well, yes, I do have day-to-day work that I am getting paid for,
+> and I did not have time to resubmit the patch adding support for
+> NCT6799.
+>
+> Guenter
+>
