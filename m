@@ -2,71 +2,206 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C38ACC61DA3
-	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Jan 2023 21:37:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1CC3C38142
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Jan 2023 06:40:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbjAVVhC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 22 Jan 2023 16:37:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
+        id S230365AbjAWGkd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 23 Jan 2023 01:40:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbjAVVhB (ORCPT
+        with ESMTP id S229441AbjAWGkc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 22 Jan 2023 16:37:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1B316AEB;
-        Sun, 22 Jan 2023 13:37:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0C998B80B6C;
-        Sun, 22 Jan 2023 21:37:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2520EC433EF;
-        Sun, 22 Jan 2023 21:36:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674423418;
-        bh=o9lSawkK9T9fjfOX0fWqWjbaWCpSn2+Q+PHaC6zmQqE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=In8f5LKtFJjMF53bp3P5vB+XosPascOJa/K698RcXjJ8XqQ88Wu9/fnSC+e3gTj2v
-         /HouLaxlABhcbyBFBepEagG1qDRFDUsV+0qnVKL4bc91rqwPMJdicduv+Bm/fjy/+C
-         nvSy3mZzeVM3l3l7qcQkFCreLXxLATI4/s7PSrXOAqkGFGUdtGmC4D1uLJUVqilayL
-         oqMZwyc567b2Ja1j6yXG1rwzUVFOVZV2xxCxj/wuxBb+6V9n7urPo3+MdihYDOyN/x
-         KDA1YsyQ4X8iJBwrK0lwIV9yGdis1t0Newc/KmuJhMwRl3LRo5Dtuq8pmA4vKk5j2+
-         LvGTKuf+byr8A==
-From:   SeongJae Park <sj@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     SeongJae Park <sj@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        Mon, 23 Jan 2023 01:40:32 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2230DBF4
+        for <linux-hwmon@vger.kernel.org>; Sun, 22 Jan 2023 22:40:30 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso7737232wmq.5
+        for <linux-hwmon@vger.kernel.org>; Sun, 22 Jan 2023 22:40:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MjXpKA4JxoE+HGRIALy1sJ9Tu9aDnL5aCNpUki8vVSA=;
+        b=PD4DhGvyQlMosWSqNvtIA94x91f/g4ZCjum1Bvtbpz5vdftz7uoYdm9wfnn10J0Cr3
+         bDdqKZiPHnUv0Wr523BMCIDaiHDGV/wAFRGOoRsYNvROfZKB0MQhVtW+o9lMfLewy3ZC
+         kCCv/LModEn9KXp8SeBCFjL3RXGD7vrewT1EPrsFinjzWezRw+A0ZJcDycyjsY8c25Wd
+         67mDdjnAnCxzPPkrFrHLHt4jVwjUfHSavsATkEC8how8xrzWgeKb7zYos52z5L2CDcL/
+         BkKkC4aci8Z7Jm/xlmf5G920phTtUj09YLKcBOrBImZuxqfPKM6nbIjocTJTgbGsjiP+
+         aj2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MjXpKA4JxoE+HGRIALy1sJ9Tu9aDnL5aCNpUki8vVSA=;
+        b=QsLHM7HnbQDTRkW3iijoct9lp+1XUaFQImvS1p10wmVvy3FEO5XsAqwTO8nkDAR5xJ
+         G57q9ruLpv9pmxiHbONbhbv1FXnDIzqgHsjjrTU93Uln8mGO1uLHo+XYg+NwZa3TTno3
+         UcOihcBSJhNJmk2/25emD8BqZSi8GJDSmzfaucMJ3FFMNSB6DfI8CbUCfz4n3rGpxDuu
+         IobSMdFKViDMxZ35Joe4mpYFmSo4TFzYezHaK1D6dTommXn0DsMfc064z3OqmTJT5O6d
+         gtCqGRdKVSTcY1rLANEikZ13k06dDcmhevNagcQLwMsS/LR4kDoPKca3ObTFfr4Vpa5D
+         HvJQ==
+X-Gm-Message-State: AFqh2kpcKX2FCHYIKITtxm5GgkcNikV0msYgGvcvBe+LvtJPC1Tt+IZt
+        tHNYb0c/lkm6vaaohXZaUZcmTx7ESJFluRjh2+w=
+X-Google-Smtp-Source: AMrXdXu+18/1OqjCXE9wZk08tLBTTt7yAAghn/6qG7PgZaJWKlSv89RGQ3AU0I12q5VuWtqu2LW2yg==
+X-Received: by 2002:a05:600c:2206:b0:3d2:2a72:2577 with SMTP id z6-20020a05600c220600b003d22a722577mr22708887wml.27.1674456029235;
+        Sun, 22 Jan 2023 22:40:29 -0800 (PST)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id o4-20020a1c7504000000b003da28dfdedcsm11439373wmc.5.2023.01.22.22.40.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Jan 2023 22:40:28 -0800 (PST)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-hwmon@vger.kernel.org,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/8] Docs/hwmon/index: Add missing SPDX License Identifier
-Date:   Sun, 22 Jan 2023 21:36:46 +0000
-Message-Id: <20230122213650.187710-5-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230122213650.187710-1-sj@kernel.org>
-References: <20230122213650.187710-1-sj@kernel.org>
+Subject: [PATCH 1/4] hwmon: (pmbus/core): Generalize pmbus status flag map
+Date:   Mon, 23 Jan 2023 07:40:18 +0100
+Message-Id: <20230123064021.2657670-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add missing SPDX License Identifier for hwmon documentation index file.
+The PMBus status flag map(pmbus_regulator_status_flag_map) is moved
+outside of the regulator #if block and the associated variable/struct
+name updated to reflect as generic PMBus status.
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
+This will make the PMBus status flag map more versatile and easier to
+incorporate into different contexts and functions.
+
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 ---
- Documentation/hwmon/index.rst | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/hwmon/pmbus/pmbus_core.c | 94 ++++++++++++++++----------------
+ 1 file changed, 47 insertions(+), 47 deletions(-)
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index c2b3c1a822dd..2186d732654f 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -1,3 +1,5 @@
-+.. SPDX-License-Identifier: GPL-2.0
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 95e95783972a..1b70cf3be313 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2692,6 +2692,49 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 	return 0;
+ }
+ 
++/* A PMBus status flag and the corresponding REGULATOR_ERROR_* flag */
++struct pmbus_status_assoc {
++	int pflag, rflag;
++};
 +
- ===================
- Hardware Monitoring
- ===================
++/* PMBus->regulator bit mappings for a PMBus status register */
++struct pmbus_status_category {
++	int func;
++	int reg;
++	const struct pmbus_status_assoc *bits; /* zero-terminated */
++};
++
++static const struct pmbus_status_category __maybe_unused pmbus_status_flag_map[] = {
++	{
++		.func = PMBUS_HAVE_STATUS_VOUT,
++		.reg = PMBUS_STATUS_VOUT,
++		.bits = (const struct pmbus_status_assoc[]) {
++			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
++			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
++			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
++			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_REGULATION_OUT },
++			{ },
++		},
++	}, {
++		.func = PMBUS_HAVE_STATUS_IOUT,
++		.reg = PMBUS_STATUS_IOUT,
++		.bits = (const struct pmbus_status_assoc[]) {
++			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
++			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
++			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
++			{ },
++		},
++	}, {
++		.func = PMBUS_HAVE_STATUS_TEMP,
++		.reg = PMBUS_STATUS_TEMPERATURE,
++		.bits = (const struct pmbus_status_assoc[]) {
++			{ PB_TEMP_OT_WARNING,    REGULATOR_ERROR_OVER_TEMP_WARN },
++			{ PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
++			{ },
++		},
++	},
++};
++
+ #if IS_ENABLED(CONFIG_REGULATOR)
+ static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
+ {
+@@ -2738,54 +2781,11 @@ static int pmbus_regulator_disable(struct regulator_dev *rdev)
+ 	return _pmbus_regulator_on_off(rdev, 0);
+ }
+ 
+-/* A PMBus status flag and the corresponding REGULATOR_ERROR_* flag */
+-struct pmbus_regulator_status_assoc {
+-	int pflag, rflag;
+-};
+-
+-/* PMBus->regulator bit mappings for a PMBus status register */
+-struct pmbus_regulator_status_category {
+-	int func;
+-	int reg;
+-	const struct pmbus_regulator_status_assoc *bits; /* zero-terminated */
+-};
+-
+-static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
+-	{
+-		.func = PMBUS_HAVE_STATUS_VOUT,
+-		.reg = PMBUS_STATUS_VOUT,
+-		.bits = (const struct pmbus_regulator_status_assoc[]) {
+-			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
+-			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
+-			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
+-			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_REGULATION_OUT },
+-			{ },
+-		},
+-	}, {
+-		.func = PMBUS_HAVE_STATUS_IOUT,
+-		.reg = PMBUS_STATUS_IOUT,
+-		.bits = (const struct pmbus_regulator_status_assoc[]) {
+-			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
+-			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
+-			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
+-			{ },
+-		},
+-	}, {
+-		.func = PMBUS_HAVE_STATUS_TEMP,
+-		.reg = PMBUS_STATUS_TEMPERATURE,
+-		.bits = (const struct pmbus_regulator_status_assoc[]) {
+-			{ PB_TEMP_OT_WARNING,    REGULATOR_ERROR_OVER_TEMP_WARN },
+-			{ PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
+-			{ },
+-		},
+-	},
+-};
+-
+ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
+ {
+ 	int i, status;
+-	const struct pmbus_regulator_status_category *cat;
+-	const struct pmbus_regulator_status_assoc *bit;
++	const struct pmbus_status_category *cat;
++	const struct pmbus_status_assoc *bit;
+ 	struct device *dev = rdev_get_dev(rdev);
+ 	struct i2c_client *client = to_i2c_client(dev->parent);
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
+@@ -2796,8 +2796,8 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+ 
+ 	mutex_lock(&data->update_lock);
+ 
+-	for (i = 0; i < ARRAY_SIZE(pmbus_regulator_flag_map); i++) {
+-		cat = &pmbus_regulator_flag_map[i];
++	for (i = 0; i < ARRAY_SIZE(pmbus_status_flag_map); i++) {
++		cat = &pmbus_status_flag_map[i];
+ 		if (!(func & cat->func))
+ 			continue;
+ 
+
+base-commit: 4d891f76a30d3be4194a805c5e4277786140ef05
 -- 
-2.25.1
+2.38.1
 
