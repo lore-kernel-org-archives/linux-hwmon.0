@@ -2,105 +2,114 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4794AC54E94
-	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Jan 2023 15:02:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C887CC05027
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Jan 2023 20:34:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbjAWPCj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 23 Jan 2023 10:02:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
+        id S232506AbjAWUei (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 23 Jan 2023 15:34:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbjAWPCi (ORCPT
+        with ESMTP id S229791AbjAWUeh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:02:38 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397017DB5;
-        Mon, 23 Jan 2023 07:02:38 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        Mon, 23 Jan 2023 15:34:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFF0E04C;
+        Mon, 23 Jan 2023 12:34:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 8D62E4E5;
-        Mon, 23 Jan 2023 15:02:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 8D62E4E5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1674486157; bh=wxSnxIUwdkEE3c/KbtJ9Rj/dEJdzd01IhaDBd3YRbOA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=NmRRM54uhrNW9CPQE0Rj7FopmjfzAKSU48AkFmXI0PBahR3aZFhVv/eI2ez+LoQdt
-         GAwYh6oeA5wECwc1VQwN51GdGKYJ3pRv9sjFAyB5PU6NyuPRJB5Fj49M9rtpAg90hA
-         mGPUpT3XUv7qqmpuYvcPec8YgT+TOBIcluJ1TZ6CAVlJnVS8pi6FNVqF+QhufMW4B+
-         FV+OdLKAsAKEypABjdte4J85m/2O/g6sbTnwMqgqCRN+jZ4f78bASoJqxscJz6dI3F
-         Hho+mHPNvcZo038OgNds35wZPvtdAVg0kaVxnJntVPoQ1g5X7wLgwH/M1nzD8v/OGH
-         XykY+7P/t3Ggg==
-From:   Jonathan Corbet <corbet@lwn.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E28661026;
+        Mon, 23 Jan 2023 20:34:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 795F8C433EF;
+        Mon, 23 Jan 2023 20:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674506075;
+        bh=FmnPLtlEEZLnIMIwawfGix9wzSwjvgWL7c11CtPG7VM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=gF5F3tETTnRMP1JPBnu7Ptp/If+nrlkHmh1UvayGFWUyXYmpvpFIlY+pg0zyr7IvH
+         EVxJOqmXmJX4Qp/NQU69I9zkedvW44RZCoOXej3wWBme0Mdka7wWgcqiXHBS0ZO9AT
+         gCCeJ5Uq2QZnfqQa2fxLrDKyt14RL6D7czuJJnAOpLLNhbfPWA+yt32/GYape34E4O
+         F5mvBPdKOsbsv8biqPPZmtLiy9WobD+Fa+Nr4SCWtPIUvLRWLgmYTlf3NVqXtdDuWD
+         rOx+KcDSyNsyRQHtz5q6KnNbBnT517gw8xLmWe7kphfoQ/6r8WJFEAIN5ITvVAGWH0
+         7e32wlfHKB2Xw==
+Date:   Mon, 23 Jan 2023 14:34:34 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
 To:     SeongJae Park <sj@kernel.org>
-Cc:     SeongJae Park <sj@kernel.org>,
-        Alex Deucher <alexdeucher@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+Cc:     Jonathan Corbet <corbet@lwn.net>, alsa-devel@alsa-project.org,
+        linux-doc@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
+        dri-devel@lists.freedesktop.org, Jaroslav Kysela <perex@perex.cz>,
+        linux-mm@kvack.org, linux-watchdog@vger.kernel.org,
         Herbert Xu <herbert@gondor.apana.org.au>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jean Delvare <jdelvare@suse.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
+        Iwona Winiarska <iwona.winiarska@intel.com>,
+        openbmc@lists.ozlabs.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-pci@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-pm@vger.kernel.org,
+        linux-input@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-hwmon@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        alsa-devel@alsa-project.org, dri-devel@lists.freedesktop.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/8] Docs: Add missing SPDX license identifiers of
-In-Reply-To: <20230122213650.187710-1-sj@kernel.org>
-References: <20230122213650.187710-1-sj@kernel.org>
-Date:   Mon, 23 Jan 2023 08:02:36 -0700
-Message-ID: <874jshl2er.fsf@meer.lwn.net>
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v2 1/1] Docs/subsystem-apis: Remove '[The ]Linux'
+ prefixes from titles of listed documents
+Message-ID: <20230123203434.GA979965@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230122184834.181977-1-sj@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-SeongJae Park <sj@kernel.org> writes:
+On Sun, Jan 22, 2023 at 06:48:34PM +0000, SeongJae Park wrote:
+> Some documents that listed on subsystem-apis have 'Linux' or 'The Linux'
+> title prefixes.  It's duplicated information, and makes finding the
+> document of interest with human eyes not easy.  Remove the prefixes from
+> the titles.
+> 
+> Signed-off-by: SeongJae Park <sj@kernel.org>
 
-> Some subsystem documents are missing SPDX license identifiers on index
-> files.  This patchset adds those.
+PCI/index.rst change is fine with me:
 
-Documentation/ is far behind on the SPDX front, and I'm all in favor of
-fixing that.  I do worry, though, about sticking license declarations
-onto files that did not previously have them; do we know what the
-original contributor's intent was?
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 
+> ---
 > Changes from v1
-> (https://lore.kernel.org/lkml/20230114194741.115855-2-sj@kernel.org/)
-> - Separate from index file content changes
-> - Separate patch for each subsystem doc (Alex Deucher)
-> - Use MIT license for gpu (Alex Deucher)
->
-> SeongJae Park (8):
->   Docs/crypto/index: Add missing SPDX License Identifier
->   Docs/driver-api/index: Add missing SPDX License Identifier
->   Docs/gpu/index: Add missing SPDX License Identifier
->   Docs/hwmon/index: Add missing SPDX License Identifier
->   Docs/input/index: Add missing SPDX License Identifier
->   Docs/mm/index: Add missing SPDX License Identifier
->   Docs/scheduler/index: Add missing SPDX License Identifier
->   Docs/sound/index: Add missing SPDX License Identifier
->
->  Documentation/crypto/index.rst     | 2 ++
->  Documentation/driver-api/index.rst | 2 ++
-
-I added this one, and GPLv2 is fine there.
-
->  Documentation/gpu/index.rst        | 2 ++
->  Documentation/hwmon/index.rst      | 2 ++
->  Documentation/input/index.rst      | 2 ++
->  Documentation/mm/index.rst         | 2 ++
->  Documentation/scheduler/index.rst  | 2 ++
->  Documentation/sound/index.rst      | 2 ++
->  8 files changed, 16 insertions(+)
-
-Thanks,
-
-jon
+> (https://lore.kernel.org/lkml/20230114194741.115855-1-sj@kernel.org/)
+> - Drop second patch (will post later for each subsystem)
+> 
+>  Documentation/PCI/index.rst        | 6 +++---
+>  Documentation/cpu-freq/index.rst   | 6 +++---
+>  Documentation/crypto/index.rst     | 6 +++---
+>  Documentation/driver-api/index.rst | 6 +++---
+>  Documentation/gpu/index.rst        | 6 +++---
+>  Documentation/hwmon/index.rst      | 6 +++---
+>  Documentation/input/index.rst      | 6 +++---
+>  Documentation/mm/index.rst         | 6 +++---
+>  Documentation/peci/index.rst       | 6 +++---
+>  Documentation/scheduler/index.rst  | 6 +++---
+>  Documentation/scsi/index.rst       | 6 +++---
+>  Documentation/sound/index.rst      | 6 +++---
+>  Documentation/virt/index.rst       | 6 +++---
+>  Documentation/watchdog/index.rst   | 6 +++---
+>  14 files changed, 42 insertions(+), 42 deletions(-)
+> 
+> diff --git a/Documentation/PCI/index.rst b/Documentation/PCI/index.rst
+> index c17c87af1968..e73f84aebde3 100644
+> --- a/Documentation/PCI/index.rst
+> +++ b/Documentation/PCI/index.rst
+> @@ -1,8 +1,8 @@
+>  .. SPDX-License-Identifier: GPL-2.0
+>  
+> -=======================
+> -Linux PCI Bus Subsystem
+> -=======================
+> +=================
+> +PCI Bus Subsystem
+> +=================
+>  
+>  .. toctree::
+>     :maxdepth: 2
