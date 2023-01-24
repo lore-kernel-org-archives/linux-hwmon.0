@@ -2,101 +2,97 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 253CFC25B50
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Jan 2023 12:24:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EF01C54E94
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Jan 2023 13:53:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233653AbjAXMYR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 24 Jan 2023 07:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
+        id S233970AbjAXNxk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 24 Jan 2023 08:53:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233827AbjAXMYQ (ORCPT
+        with ESMTP id S233992AbjAXNxW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:24:16 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646A538022
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Jan 2023 04:23:46 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id iv8-20020a05600c548800b003db04a0a46bso1013180wmb.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Jan 2023 04:23:46 -0800 (PST)
+        Tue, 24 Jan 2023 08:53:22 -0500
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F9447EEF;
+        Tue, 24 Jan 2023 05:51:17 -0800 (PST)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-15085b8a2f7so17735053fac.2;
+        Tue, 24 Jan 2023 05:51:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QkTslYMiKbk7wM257ny2CAnZjADL3oZfRoJOLk54k/Y=;
-        b=fzwSE+w049j/XzsIp7VUc9Q4DMyKfqq3Fp9d7DWaBMheW9x2sAs/MEIqyXhSwh2Ov+
-         lHJkJNtaj2yX0tcWoYrO94slISdmHHwqb5BJPTm0+aVrRe17mD3+ouSS5nqgx17rmuWW
-         P3WgVVhT2eNj5WfW1CsxGFGRQgREq/ge11+AXiKBtdgqqWe+RwvPWzwiN6gIMVxXeBZq
-         Jsaf6aqpsdKgVx1p4407eetShAwkNMocLtr4P0EvGNrYCE72VI0cUNEjOSfQbSbc6k0h
-         FlcoIj+kxvNDX0HFC6VC613tx/fb/Rw27XhuLn2fhJ+aeKbL76OMuE5mOyBKRKPJZPfa
-         jIzg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dNmYUl409IZsHj9DfvEccpURlLXPvpb9z3n6thycbJw=;
+        b=PXOHVyAvtCMtMRojfLNF22ATgUORqO8lp6WIdj/cBaLXsXDALbbPQr9TGIOKf5GKuE
+         iOKUxb/ZzKId/+UaQZEuOfgrseJYJkzCbnz95mHxbOikAUVP+67Pom+MZDaC0ICpxj0S
+         /Hz5Rrc3mEWqTMyBj744OjBkxopwMAY2/H0M1VdZAcPIdI82S0o8SDygU9AAseZRnrRk
+         3kdvhh+h3Nsvgtnw3lKF+PV4RVsLMzI4Mf1Fa82G+Y8BJgGeAmDehwFQup631sj1fgfP
+         n+xJW44ap2rtLdftsZqVbcnkFngJkH9PaiVYNeY5DMr6wXcoNTa/+f/Cjsj20K1ehspJ
+         mcGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QkTslYMiKbk7wM257ny2CAnZjADL3oZfRoJOLk54k/Y=;
-        b=KR6t1QQm5qjiZAr4jXPJpGCa5zcBU9qgY4jCqoybrBAtLwSWqD820SXvmRqzgZHGIW
-         IlSuJh7wlV6pPFeG7VbQKpSQUk/nPUZrSL2+roJOOTiYNFgZrmbjTjFZ0SmaQUS5xP2d
-         5LvU4t3PPPg4AkZdO1+8QRzTdRm4ZnGbht00vuMpJApSdCtKA8b4tq+hEgf/5wlSUfc2
-         WNc6czGlqrBy4Wcqk0x8hEpb/goglOOjO4zM9KAEcurPFPBy5sxhh0+O4wBGF59qfQwi
-         u9Pmfzt6mgu5ZP7Sw8WwSI3WHyOWzApPPTZhEjWk3fucDj/+d9vDmlzWiS+tnm9Q/kq8
-         a76w==
-X-Gm-Message-State: AFqh2komAMCE9KAf0B1v8MKHiS8Wk7x6rKNcRrh+uT3IsMgTAV4yuSTj
-        AZ6O+v4mQx0gmYya1uyWjX+IkA==
-X-Google-Smtp-Source: AMrXdXuHLbuyQsCikp2sixdbE7T4vLrvn3duH3fx+F/wRHrodHvlBxYaP9Buh5DxlemteuWNTR2HPQ==
-X-Received: by 2002:a05:600c:601c:b0:3d3:4f56:62e1 with SMTP id az28-20020a05600c601c00b003d34f5662e1mr27626827wmb.27.1674563006565;
-        Tue, 24 Jan 2023 04:23:26 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id y11-20020a1c4b0b000000b003daffc2ecdesm13175479wma.13.2023.01.24.04.23.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 04:23:26 -0800 (PST)
-Message-ID: <cfc6b527-3293-b2aa-fd37-f2112b0bfb92@linaro.org>
-Date:   Tue, 24 Jan 2023 13:23:24 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH] hwmon: (pmbus/tda38640) Add driver for Infineon TDA38640
- Voltage Regulator
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dNmYUl409IZsHj9DfvEccpURlLXPvpb9z3n6thycbJw=;
+        b=qBREczcIUSypBHCyvPBF4PrVpaKLSWR9uQo/wyB+bCa4MeKU2miKeia+oJ3f/n0ltv
+         mEUfRtWgqLKinBLIL1dgJIaqpj3DW3jQvDw600LlUJaKro78hONvnzRolMl86NNlPVOR
+         CaXCuTX9qXOdjcwr1je0oOV82zA5Q8g6oOBZdSFHItyMGerugulfJdIGRKumOaZ3hbr8
+         mlZKJN9ljTiZIY8lo3YAnejBa5DC2y0usf2/H+xLDHSrNwgD8quGOmh/y+uu4ovsbjfJ
+         8or7MEbJ0TCMxxBdlnyJJPC9p7pMzTwqU0cRaJfaISunDkdyA9MjhDd7SuhRuz7dnhdW
+         75Zg==
+X-Gm-Message-State: AO0yUKVdZkRn7uYXA8NWsuDiUp4ahmdolYxKlbIxBlZnaW6uahw3Rfpz
+        Mj5fLOrL+Uv7v/p1PXKDGbQ=
+X-Google-Smtp-Source: AK7set89KGI+5szNvQVzjZUVYqBHzkd3rsbRL3vhfBOS8WcKB8UdGVG6c1E225mpRamBavwCd1vPyQ==
+X-Received: by 2002:a05:6870:f28b:b0:163:1eab:b7d6 with SMTP id u11-20020a056870f28b00b001631eabb7d6mr619353oap.11.1674568201235;
+        Tue, 24 Jan 2023 05:50:01 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k8-20020a05680808c800b0036718f58b7esm1024007oij.15.2023.01.24.05.49.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 05:50:00 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 24 Jan 2023 05:49:58 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230124110111.3965317-1-Naresh.Solanki@9elements.com>
- <b4b11836-5a4b-a2b7-18e2-89ca26f19817@linaro.org>
- <05947e9f-0667-4565-b481-ca5635da4174@9elements.com>
- <d8fb3c45-435d-f080-6ba4-e9e4595f3638@linaro.org>
- <3993c666-7038-76f8-9216-3db23ca0bffb@9elements.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3993c666-7038-76f8-9216-3db23ca0bffb@9elements.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v2 4/8] Docs/hwmon/index: Add missing SPDX License
+ Identifier
+Message-ID: <20230124134958.GA36313@roeck-us.net>
+References: <20230122213650.187710-1-sj@kernel.org>
+ <20230122213650.187710-5-sj@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230122213650.187710-5-sj@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 24/01/2023 13:19, Naresh Solanki wrote:
->>>>
->>>>> +static const struct of_device_id tda38640_of_match[] = {
->>>>> +	{ .compatible = "infineon,tda38640"},
->>>>> +	{ },
->>>>> +};
->>>>> +MODULE_DEVICE_TABLE(of, tda38640_of_match);
->>>>
->>>> Where is it used? You miss the user.
->>> I'm not sure if I get your question right.
->>> This chip is used in sbp1 board to power CPU rails.
->>
->> No, where is the data structure used (except module autoloading)?
-> My use case is loading the driver base on DT. Not sure of other uses.
+On Sun, Jan 22, 2023 at 09:36:46PM +0000, SeongJae Park wrote:
+> Add missing SPDX License Identifier for hwmon documentation index file.
+> 
+> Signed-off-by: SeongJae Park <sj@kernel.org>
 
-Where is it used in the code?
+Is it documented somewhere that GPL 2.0 is the default in the absence
+of an explicit SPDX or other license identifier ? I don't find it
+in Documentation/process/license-rules.rst, though maybe I am missing
+it.
 
-Best regards,
-Krzysztof
+Guenter
 
+> ---
+>  Documentation/hwmon/index.rst | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index c2b3c1a822dd..2186d732654f 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -1,3 +1,5 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+>  ===================
+>  Hardware Monitoring
+>  ===================
