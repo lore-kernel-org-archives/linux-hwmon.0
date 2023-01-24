@@ -2,300 +2,169 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9337BC54EAA
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Jan 2023 17:48:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BC7CC54E94
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Jan 2023 18:26:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234251AbjAXRsV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 24 Jan 2023 12:48:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        id S229503AbjAXS0P (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 24 Jan 2023 13:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234547AbjAXRsR (ORCPT
+        with ESMTP id S229681AbjAXS0P (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:48:17 -0500
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F60049541;
-        Tue, 24 Jan 2023 09:48:12 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id d16-20020a4a5210000000b004f23d1aea58so2748145oob.3;
-        Tue, 24 Jan 2023 09:48:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wrFn+R1+WoRDi2f+Orum41K5vIa0ar/tkJKZq4XpqOA=;
-        b=PonE1S16ys/i4jNUsTe4Y0pT16iA1KmxP6/NMdWFdnLUWKkej/NZtDhJFRmXWFhhh6
-         nQtokSXLs7h/B3byad0F84O2Xv/uvCXKsbIie/pMSiE9aPf+gVbKMtOieJ9s6ncVvpgD
-         8nhq/KUKp2aHHzDVDSHwswu8N8krQ8sf10Ts27tNr7erJ6v58fXXZpGMz8BzJp3jbM61
-         INpwc+BI1FcZQAuUN/tEO1pszE8OGiq+Lf6jdsGLdQRdtcDQzPKopJPZJI6uzbofKGnl
-         YFcd3xPpQyuv6kXKvntwWhWnhiyCFKJ/Xcjtf1NSkmxeqpeOtwtekpRGH/HM7oVInaLZ
-         2PBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wrFn+R1+WoRDi2f+Orum41K5vIa0ar/tkJKZq4XpqOA=;
-        b=GmQkopdx8dDfo4Nzy3bC9LHB3ENpIn32tk7ejWVrEUJZBx9uDNsWOj7X8FhRy0/f9L
-         CKfzg5126jmHyJtuSuJT19Gp/K5TCPRLuQx2BwpQ7DNSZ+COrDdFoJzx1lBL4gh23tCp
-         3CWoD76qWLQDs1Ssz2AOc8viXJtYTQO4DXqxsyHZL78lTx+nUm0EdKPWOLcTSDMf2SFG
-         Jh2QaITTUy6JZGbDpxrZjtp0JB/gafn6ev2oWWiuk/Lp4Ie1tEIyx4PyNYOPTomTVa4j
-         NXvl6QV0xCi61wq7J9k7ZR2XgfpVwdBMcFZG8ogd2P/X5MonNbDTWUe8pFA767sV2ty9
-         LJ5Q==
-X-Gm-Message-State: AFqh2krtlP7cV/lDuPW1uZ50H+RKFru3iqFVFs76xKjIWK8eoIBRCeYT
-        5xuu8zVTRX2qGKvnKM/G2RC0rORfdrc=
-X-Google-Smtp-Source: AMrXdXtJgcoLRiE0TnKmN8XyLCa9nGRyMq/G/57KbfrkEj11EsaB3trTh587JQqRQURxWvi02V+Cxw==
-X-Received: by 2002:a4a:4f95:0:b0:4f1:f375:c240 with SMTP id c143-20020a4a4f95000000b004f1f375c240mr13917828oob.6.1674582491383;
-        Tue, 24 Jan 2023 09:48:11 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k43-20020a4a94ae000000b004f1f6b25091sm979687ooi.41.2023.01.24.09.48.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 09:48:10 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 24 Jan 2023 09:48:09 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] hwmon: (pmbus/core) Generalise pmbus get status
-Message-ID: <20230124174809.GA563974@roeck-us.net>
-References: <20230123064021.2657670-1-Naresh.Solanki@9elements.com>
- <20230123064021.2657670-2-Naresh.Solanki@9elements.com>
+        Tue, 24 Jan 2023 13:26:15 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785C942DD1
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Jan 2023 10:26:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674584774; x=1706120774;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QO5yGQ3t9U6GQxaRwkN9j0cY2vtM4T6pnPPyyuBK+eA=;
+  b=bM/T9VXgaBU9yaGsN5pH1RIDis0sopaU/O5ItxliVhhOcPBGVctzm2QY
+   dohwy74bLuuOKC4X1x3SylHMWy+NGAwl96VCTjn1scgTgC1na5VVI3l9I
+   Nyx5Ozga4h6EeiE4okafGPBwhvbNKF2KqkLgn7O/gjLEtW6/I+/3NyNEJ
+   0dR/Qo5DrxTRiM02z/o3lMbb9x2NlmzLxOSbSkXzuIkT89x3scCMOwQaf
+   f1QcwhQWmU5uD+/sORGO1vbqAuY37PhnzeB1LGAHynXkaFqmUfvsOdJ+1
+   oy3S2yqm8iDETDtXqZGhpHnR9c701C4flbI40zwsvy6ZPuzq74mfh/v21
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="309941568"
+X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
+   d="scan'208";a="309941568"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 10:26:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="612136084"
+X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
+   d="scan'208";a="612136084"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 24 Jan 2023 10:26:12 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pKNzn-0006gq-1D;
+        Tue, 24 Jan 2023 18:26:11 +0000
+Date:   Wed, 25 Jan 2023 02:25:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mario Kicherer <dev@kicherer.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [groeck-staging:hwmon-next 41/41] drivers/hwmon/mc34vr500.c:228:36:
+ warning: conversion from 'long unsigned int' to 'unsigned int' changes value
+ from '18446744073709551569' to '4294967249'
+Message-ID: <202301250221.kOJxNanJ-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230123064021.2657670-2-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 07:40:19AM +0100, Naresh Solanki wrote:
-> Add function pmbus get status that can be used to get both pmbus
-> specific status & regulator status
-> 
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
->  drivers/hwmon/pmbus/pmbus_core.c | 148 +++++++++++++++++--------------
->  1 file changed, 82 insertions(+), 66 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 1b70cf3be313..12b662b91306 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2735,64 +2735,16 @@ static const struct pmbus_status_category __maybe_unused pmbus_status_flag_map[]
->  	},
->  };
->  
-> -#if IS_ENABLED(CONFIG_REGULATOR)
-> -static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
-> -{
-> -	struct device *dev = rdev_get_dev(rdev);
-> -	struct i2c_client *client = to_i2c_client(dev->parent);
-> -	struct pmbus_data *data = i2c_get_clientdata(client);
-> -	u8 page = rdev_get_id(rdev);
-> -	int ret;
->  
-> -	mutex_lock(&data->update_lock);
-> -	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-> -	mutex_unlock(&data->update_lock);
-> -
-> -	if (ret < 0)
-> -		return ret;
-> -
-> -	return !!(ret & PB_OPERATION_CONTROL_ON);
-> -}
-> -
-> -static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
-> +static int pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *error)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   513d7b190ab3715103357afd8e2ddf4b5e986ff3
+commit: 513d7b190ab3715103357afd8e2ddf4b5e986ff3 [41/41] hwmon: add initial NXP MC34VR500 PMIC monitoring support
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20230125/202301250221.kOJxNanJ-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=513d7b190ab3715103357afd8e2ddf4b5e986ff3
+        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+        git fetch --no-tags groeck-staging hwmon-next
+        git checkout 513d7b190ab3715103357afd8e2ddf4b5e986ff3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Moving this code outside the conditional without usage there will result
-in compile errors due to an unused function if compiled with REGULATOR
-disabled. While this will (hopefully) change in one of the later patches,
-it is still unacceptable because it may result in bisect failures.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
->  {
-> -	struct device *dev = rdev_get_dev(rdev);
-> -	struct i2c_client *client = to_i2c_client(dev->parent);
-> -	struct pmbus_data *data = i2c_get_clientdata(client);
-> -	u8 page = rdev_get_id(rdev);
-> -	int ret;
-> -
-> -	mutex_lock(&data->update_lock);
-> -	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-> -				     PB_OPERATION_CONTROL_ON,
-> -				     enable ? PB_OPERATION_CONTROL_ON : 0);
-> -	mutex_unlock(&data->update_lock);
-> -
-> -	return ret;
-> -}
-> -
-> -static int pmbus_regulator_enable(struct regulator_dev *rdev)
-> -{
-> -	return _pmbus_regulator_on_off(rdev, 1);
-> -}
-> -
-> -static int pmbus_regulator_disable(struct regulator_dev *rdev)
-> -{
-> -	return _pmbus_regulator_on_off(rdev, 0);
-> -}
-> -
-> -static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
-> -{
-> -	int i, status;
->  	const struct pmbus_status_category *cat;
->  	const struct pmbus_status_assoc *bit;
-> -	struct device *dev = rdev_get_dev(rdev);
-> -	struct i2c_client *client = to_i2c_client(dev->parent);
-> -	struct pmbus_data *data = i2c_get_clientdata(client);
-> -	u8 page = rdev_get_id(rdev);
-> +	struct i2c_client *client = to_i2c_client(data->dev);
->  	int func = data->info->func[page];
-> +	int i, status, ret;
->  
-> -	*flags = 0;
-> +	*error = 0;
+All warnings (new ones prefixed by >>):
 
-You are making personal preference changes here. Maybe that is the reason
-why the patch looks that large. Please try to leave existing code alone.
-If there is a reason to change a variable name (or other cosmetic changes,
-like moving variable declarations around), do it in a separate patch which
-only does that, and explain why it is needed and/or makes sense.
+   drivers/hwmon/mc34vr500.c: In function 'mc34vr500_probe':
+>> drivers/hwmon/mc34vr500.c:228:36: warning: conversion from 'long unsigned int' to 'unsigned int' changes value from '18446744073709551569' to '4294967249' [-Woverflow]
+     228 |                                    ~(LOWVINS_BIT | THERM110S_BIT |
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     229 |                                    THERM120S_BIT | THERM130S_BIT));
+         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Thanks,
-Guenter
 
->  
->  	mutex_lock(&data->update_lock);
->  
-> @@ -2803,14 +2755,15 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->  
->  		status = _pmbus_read_byte_data(client, page, cat->reg);
->  		if (status < 0) {
-> -			mutex_unlock(&data->update_lock);
-> -			return status;
-> +			ret = status;
-> +			goto unlock;
->  		}
->  
->  		for (bit = cat->bits; bit->pflag; bit++) {
->  			if (status & bit->pflag)
-> -				*flags |= bit->rflag;
-> +				*error |= bit->rflag;
->  		}
-> +
->  	}
->  
->  	/*
-> @@ -2823,36 +2776,99 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->  	 * REGULATOR_ERROR_<foo>_WARN.
->  	 */
->  	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
-> -	mutex_unlock(&data->update_lock);
-> -	if (status < 0)
-> -		return status;
->  
-> -	if (pmbus_regulator_is_enabled(rdev)) {
-> +	if (status < 0) {
-> +		ret = status;
-> +		goto unlock;
-> +	}
-> +
-> +	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-> +	if (ret < 0)
-> +		goto unlock;
-> +
-> +	if (ret & PB_OPERATION_CONTROL_ON) {
->  		if (status & PB_STATUS_OFF)
-> -			*flags |= REGULATOR_ERROR_FAIL;
-> +			*error |= REGULATOR_ERROR_FAIL;
->  
->  		if (status & PB_STATUS_POWER_GOOD_N)
-> -			*flags |= REGULATOR_ERROR_REGULATION_OUT;
-> +			*error |= REGULATOR_ERROR_REGULATION_OUT;
->  	}
->  	/*
->  	 * Unlike most other status bits, PB_STATUS_{IOUT_OC,VOUT_OV} are
->  	 * defined strictly as fault indicators (not warnings).
->  	 */
->  	if (status & PB_STATUS_IOUT_OC)
-> -		*flags |= REGULATOR_ERROR_OVER_CURRENT;
-> +		*error |= REGULATOR_ERROR_OVER_CURRENT;
->  	if (status & PB_STATUS_VOUT_OV)
-> -		*flags |= REGULATOR_ERROR_REGULATION_OUT;
-> +		*error |= REGULATOR_ERROR_REGULATION_OUT;
->  
->  	/*
->  	 * If we haven't discovered any thermal faults or warnings via
->  	 * PMBUS_STATUS_TEMPERATURE, map PB_STATUS_TEMPERATURE to a warning as
->  	 * a (conservative) best-effort interpretation.
->  	 */
-> -	if (!(*flags & (REGULATOR_ERROR_OVER_TEMP | REGULATOR_ERROR_OVER_TEMP_WARN)) &&
-> +	if (!(*error & (REGULATOR_ERROR_OVER_TEMP | REGULATOR_ERROR_OVER_TEMP_WARN)) &&
->  	    (status & PB_STATUS_TEMPERATURE))
-> -		*flags |= REGULATOR_ERROR_OVER_TEMP_WARN;
-> +		*error |= REGULATOR_ERROR_OVER_TEMP_WARN;
->  
-> -	return 0;
-> +unlock:
-> +	mutex_unlock(&data->update_lock);
-> +	return ret;
-> +}
-> +
-> +#if IS_ENABLED(CONFIG_REGULATOR)
-> +static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	u8 page = rdev_get_id(rdev);
-> +	int ret;
-> +
-> +	mutex_lock(&data->update_lock);
-> +	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-> +	mutex_unlock(&data->update_lock);
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return !!(ret & PB_OPERATION_CONTROL_ON);
-> +}
-> +
-> +static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	u8 page = rdev_get_id(rdev);
-> +	int ret;
-> +
-> +	mutex_lock(&data->update_lock);
-> +	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-> +				     PB_OPERATION_CONTROL_ON,
-> +				     enable ? PB_OPERATION_CONTROL_ON : 0);
-> +	mutex_unlock(&data->update_lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int pmbus_regulator_enable(struct regulator_dev *rdev)
-> +{
-> +	return _pmbus_regulator_on_off(rdev, 1);
-> +}
-> +
-> +static int pmbus_regulator_disable(struct regulator_dev *rdev)
-> +{
-> +	return _pmbus_regulator_on_off(rdev, 0);
-> +}
-> +
-> +static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +
-> +	return pmbus_get_flags(data, rdev_get_id(rdev), flags);
->  }
->  
->  static int pmbus_regulator_get_status(struct regulator_dev *rdev)
-> -- 
-> 2.38.1
-> 
+vim +228 drivers/hwmon/mc34vr500.c
+
+   163	
+   164	static int mc34vr500_probe(struct i2c_client *client)
+   165	{
+   166		struct device *dev = &client->dev;
+   167		struct mc34vr500_data *data;
+   168		struct device *hwmon_dev;
+   169		int ret;
+   170		unsigned int reg, revid, fabid;
+   171		struct regmap *regmap;
+   172	
+   173		regmap = devm_regmap_init_i2c(client, &mc34vr500_regmap_config);
+   174		if (IS_ERR(regmap))
+   175			return PTR_ERR(regmap);
+   176	
+   177		data = devm_kzalloc(dev, sizeof(struct mc34vr500_data), GFP_KERNEL);
+   178		if (!data)
+   179			return -ENOMEM;
+   180	
+   181		data->regmap = regmap;
+   182	
+   183		ret = regmap_read(regmap, MC34VR500_DEVICEID, &reg);
+   184		if (ret < 0)
+   185			return ret;
+   186	
+   187		if (reg != MC34VR500_DEVICEID_VALUE)
+   188			return -ENODEV;
+   189	
+   190		ret = regmap_read(regmap, MC34VR500_SILICONREVID, &revid);
+   191		if (ret < 0)
+   192			return ret;
+   193	
+   194		ret = regmap_read(regmap, MC34VR500_FABID, &fabid);
+   195		if (ret < 0)
+   196			return ret;
+   197	
+   198		dev_dbg(dev, "mc34vr500: revid 0x%x fabid 0x%x\n", revid, fabid);
+   199	
+   200		hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
+   201								 data,
+   202								 &mc34vr500_chip_info,
+   203								 NULL);
+   204		if (IS_ERR(hwmon_dev))
+   205			return PTR_ERR(hwmon_dev);
+   206	
+   207		data->hwmon_dev = hwmon_dev;
+   208	
+   209		if (client->irq) {
+   210			ret = devm_request_threaded_irq(dev, client->irq, NULL,
+   211							mc34vr500_process_interrupt,
+   212							IRQF_TRIGGER_RISING |
+   213							IRQF_ONESHOT |
+   214							IRQF_SHARED,
+   215							dev_name(dev), data);
+   216			if (ret)
+   217				return ret;
+   218	
+   219			/* write 1 to clear interrupts */
+   220			ret = regmap_write(regmap, MC34VR500_INTSTAT0, LOWVINS_BIT |
+   221					   THERM110S_BIT | THERM120S_BIT |
+   222					   THERM130S_BIT);
+   223			if (ret)
+   224				return ret;
+   225	
+   226			/* unmask interrupts */
+   227			ret = regmap_write(regmap, MC34VR500_INTMASK0,
+ > 228					   ~(LOWVINS_BIT | THERM110S_BIT |
+   229					   THERM120S_BIT | THERM130S_BIT));
+   230			if (ret)
+   231				return ret;
+   232		}
+   233	
+   234		return 0;
+   235	}
+   236	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
