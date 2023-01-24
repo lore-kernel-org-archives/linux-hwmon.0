@@ -2,136 +2,99 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DDAFC25B4E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Jan 2023 13:54:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 363C7C25B4E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Jan 2023 13:56:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234110AbjAXNyj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 24 Jan 2023 08:54:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
+        id S234307AbjAXN4q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 24 Jan 2023 08:56:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234668AbjAXNy1 (ORCPT
+        with ESMTP id S234481AbjAXN4d (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 Jan 2023 08:54:27 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E702047EFA
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Jan 2023 05:52:26 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id r9so13293971oie.13
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Jan 2023 05:52:26 -0800 (PST)
+        Tue, 24 Jan 2023 08:56:33 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE9BA244;
+        Tue, 24 Jan 2023 05:55:55 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id s124so13357350oif.1;
+        Tue, 24 Jan 2023 05:55:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/4CxMjFXAztob//KrW4rLhMCRq0sdIk880iwjKfZL+M=;
-        b=bAi+puFU7syBwasARor0T9NrOgK8iymBEktT8wMxS7lULCz7uAy1WZQT4vh4AqPA39
-         6mH1+cBnFbm8UQ7/LM01n96I5LWJ0HP4o31mMaYi3jaA5HqdkJwzqxHENdhdCN6QHm6n
-         bc93lckImNR6kguLlxX5Cz40UQ52C6Cb6QDo8wdvXfRoT4WTF5bEjJ5fk4zqs6mthIf8
-         xWfcAxFp64orQ99EsLAHqBoCS8bVY0xltbFQIO4Va5mwWacDTzv05ADRxnxqN7gcjPyk
-         gFHFXgEJ4TrhIZYb7NXevcQ0V/SAXmCimRonQ8caf26UF1P9kZlUCLi/u1hwdBuv1wRB
-         foZw==
+        bh=iOxy8nRrMl9o1+5fkSajeQlg6uVJJoMX8dNBYKvIR8c=;
+        b=KNAzVcKodXMPvsTLkJxFgMDhm6fzJsUTyS1WwRHcxlA3g5B2dMtS7Yz5e4j4RE0ehH
+         Lz2XuEwDX5TPKBZ891DDLUTZrN4MzzB5/ZiATrmMH5PamCSvUfiWZaLNWjE6Y1ntkpHf
+         Q+ipcNDXZhGRJVYFkrJZoa0I9zERTLMOzjVK+XBonIzkMQ9LjqWt0IhOUlwPDaqVGfWb
+         Le61dgfgUR3bx8DPrbBrcG15ul5hMNiaR+2MgUNgazq69Y9oE1K9SSAuqtmylsOwpxBv
+         GCbVKn9IY01waQ5rcTykOuZGP8lbZycvIVe7RgGjdOI0ibwn/C/91od52PTFyxQsprsK
+         Ogsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/4CxMjFXAztob//KrW4rLhMCRq0sdIk880iwjKfZL+M=;
-        b=ThKlbzdQuWCKtGpCzMS483ApMY4cbuYlENuWKyYy81FUhn56kqDwRWUYDnjf1NGljx
-         ZFI7qx333Pvi42Id48480X4fWUzctB1XaPS4MOcYkWJkHUp1fa44jyd7vX1xIRbC6iIS
-         Y3psEDrqf+TGSrhKs3J2UbuKKWFlQDhOLJ7szPCRSmKMBBMoZa8PIyLaTeub+WU1VOKL
-         DUoefhzdleI/jHefjTweESdSLvqz7VmwhxWOktcS8BfYNarxhNq2p2htxPvcYNk/DNbI
-         JpUWZKHZZ2y7jZr4rLCsKLnYN9RW0JNmLzlF0iRWJQyQ+/Gxf0Kt3oQUt8Ceg3SWknYy
-         HVpg==
-X-Gm-Message-State: AFqh2koKXnk1oYybpogZAPVQBWBXDmEuBgFZPPMiC27NzsZdA41qIryk
-        RR8xPG351Z8XCgUBU7Ebsd9PoG4rb+I=
-X-Google-Smtp-Source: AMrXdXszwBMdXjwQzhLgAPVDlIhzh1UZisH58F7MSlO6beou6pitEe5CBLe/jZgphf/HA7v39c4PiA==
-X-Received: by 2002:a05:6808:286:b0:368:ea29:7b32 with SMTP id z6-20020a056808028600b00368ea297b32mr12780487oic.9.1674568296647;
-        Tue, 24 Jan 2023 05:51:36 -0800 (PST)
+        bh=iOxy8nRrMl9o1+5fkSajeQlg6uVJJoMX8dNBYKvIR8c=;
+        b=FbQyrRgR9nko1URYkWwgu7tZ/V78nIjTU86MtptVOPWdfXnVX8mp/Gq1b0Zwx2z0aN
+         n1tB7iSPGl6+nYkbxzfMGGfs5JzumavJ7Pj2XQjByHPpopk0t4BgEZ+1THPQvfdDaGNF
+         Px9Kv7uk0RcbBgiZuGEAtFs7fcrsoox8P5S/XfZaZXKS1uvBmb5MOAX8a8RlBVHY/3g5
+         mFbYXnNYWGVZFsOPqCIXxj/Ggobdq/X7TmMDxXueeTurJizEuXqCLMfACIWsqEczlYRl
+         DB8YUUoO8fqLEdlLi59APoVT0qtITpUcUnleYiw50rI3EeRWKECJaKkQm+hQ7jAJ0FpE
+         R/hg==
+X-Gm-Message-State: AFqh2krR/EOcUxx9nYtpD6hhhbVXnV+VxJVEvCLr1y4inehMaLoG54YR
+        SWCW+H7vrsyUuoq0HkF430M=
+X-Google-Smtp-Source: AMrXdXvMIz+0euvOP4Hw+9t0VHiqasYsVJb8Ude+av3K42nOrbeJdLFUKaKzZ73SMFge/F7ptLDfYg==
+X-Received: by 2002:aca:f09:0:b0:36e:f396:b8fb with SMTP id 9-20020aca0f09000000b0036ef396b8fbmr1525249oip.29.1674568525803;
+        Tue, 24 Jan 2023 05:55:25 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h4-20020a056808014400b0035028730c90sm1042628oie.1.2023.01.24.05.51.35
+        by smtp.gmail.com with ESMTPSA id s5-20020a9d7585000000b006865246ace0sm929730otk.53.2023.01.24.05.55.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 05:51:36 -0800 (PST)
+        Tue, 24 Jan 2023 05:55:25 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 24 Jan 2023 05:51:35 -0800
+Date:   Tue, 24 Jan 2023 05:55:24 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Frank Crawford <frank@crawford.emu.id.au>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] hwmon: (it87) Group all related MODULE_PARM
- definitions together
-Message-ID: <20230124135135.GA36662@roeck-us.net>
-References: <20230121085754.1693336-1-frank@crawford.emu.id.au>
- <20230121085754.1693336-2-frank@crawford.emu.id.au>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] hwmon: (asus-ec-sensors) add missing mutex path
+Message-ID: <20230124135524.GA36884@roeck-us.net>
+References: <20230121111728.168514-1-eugene.shalygin@gmail.com>
+ <20230121111728.168514-2-eugene.shalygin@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230121085754.1693336-2-frank@crawford.emu.id.au>
+In-Reply-To: <20230121111728.168514-2-eugene.shalygin@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 07:57:53PM +1100, Frank Crawford wrote:
-> Group the MODULE_PARM definitions together to make them easier for
-> future maintenance, rather than having them spread across the file.
+On Sat, Jan 21, 2023 at 12:17:28PM +0100, Eugene Shalygin wrote:
+> Add missing mutex path for ProArt X570-CREATOR WIFI.
 > 
-> Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
+> Fixes: de8fbac5 (hwmon: (asus-ec-sensors) implement locking via the ACPI global lock)
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
-Applied to hwmon-next.
+Applied.
 
+The abbreviated SHA in Fixes: tags should include 12 SHA letters/digits.
+I fixed that up, but please keep it in mind for future patches.
+
+Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/it87.c | 23 +++++++++++++++--------
->  1 file changed, 15 insertions(+), 8 deletions(-)
+>  drivers/hwmon/asus-ec-sensors.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-> index ee48e238e46f..a8a6a0ffee82 100644
-> --- a/drivers/hwmon/it87.c
-> +++ b/drivers/hwmon/it87.c
-> @@ -65,14 +65,6 @@ enum chips { it87, it8712, it8716, it8718, it8720, it8721, it8728, it8732,
->  	     it8771, it8772, it8781, it8782, it8783, it8786, it8790,
->  	     it8792, it8603, it8620, it8622, it8628 };
+> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+> index a901e4e33d81..b4d65916b3c0 100644
+> --- a/drivers/hwmon/asus-ec-sensors.c
+> +++ b/drivers/hwmon/asus-ec-sensors.c
+> @@ -299,6 +299,7 @@ static const struct ec_board_info board_info_pro_art_x570_creator_wifi = {
+>  	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
+>  		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CPU_OPT |
+>  		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
+> +	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+>  	.family = family_amd_500_series,
+>  };
 >  
-> -static unsigned short force_id;
-> -module_param(force_id, ushort, 0);
-> -MODULE_PARM_DESC(force_id, "Override the detected device ID");
-> -
-> -static bool ignore_resource_conflict;
-> -module_param(ignore_resource_conflict, bool, 0);
-> -MODULE_PARM_DESC(ignore_resource_conflict, "Ignore ACPI resource conflict");
-> -
->  static struct platform_device *it87_pdev[2];
->  
->  #define	REG_2E	0x2e	/* The register to read/write */
-> @@ -181,6 +173,12 @@ static inline void superio_exit(int ioreg)
->  #define IT87_SIO_VID_REG	0xfc	/* VID value */
->  #define IT87_SIO_BEEP_PIN_REG	0xf6	/* Beep pin mapping */
->  
-> +/* Force chip ID to specified value. Should only be used for testing */
-> +static unsigned short force_id;
-> +
-> +/* ACPI resource conflicts are ignored if this parameter is set to 1 */
-> +static bool ignore_resource_conflict;
-> +
->  /* Update battery voltage after every reading if true */
->  static bool update_vbat;
->  
-> @@ -3457,11 +3455,20 @@ static void __exit sm_it87_exit(void)
->  
->  MODULE_AUTHOR("Chris Gauthron, Jean Delvare <jdelvare@suse.de>");
->  MODULE_DESCRIPTION("IT8705F/IT871xF/IT872xF hardware monitoring driver");
-> +
-> +module_param(force_id, ushort, 0);
-> +MODULE_PARM_DESC(force_id, "Override the detected device ID");
-> +
-> +module_param(ignore_resource_conflict, bool, 0);
-> +MODULE_PARM_DESC(ignore_resource_conflict, "Ignore ACPI resource conflict");
-> +
->  module_param(update_vbat, bool, 0);
->  MODULE_PARM_DESC(update_vbat, "Update vbat if set else return powerup value");
-> +
->  module_param(fix_pwm_polarity, bool, 0);
->  MODULE_PARM_DESC(fix_pwm_polarity,
->  		 "Force PWM polarity to active high (DANGEROUS)");
-> +
->  MODULE_LICENSE("GPL");
->  
->  module_init(sm_it87_init);
