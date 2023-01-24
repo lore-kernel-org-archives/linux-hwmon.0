@@ -2,206 +2,88 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEC21C61D97
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Jan 2023 20:23:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB669C54EED
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Jan 2023 21:40:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232542AbjAXUXm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 24 Jan 2023 15:23:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
+        id S229851AbjAXVk0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 24 Jan 2023 16:40:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbjAXUXl (ORCPT
+        with ESMTP id S234384AbjAXVkZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 Jan 2023 15:23:41 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD187D8D
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Jan 2023 12:23:40 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so13664930wmb.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Jan 2023 12:23:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UICSQ0KGAaDFDCLkijObhcNXoKPNZnLJdEBdbwNAlQE=;
-        b=Dz5k9Nf07Dqj3/RKEWR1jVbWe2JasrqI2F2GyAzepJiUyPK7Jlrae9KcaXbASnDVz3
-         n3paHvE4ZAHL0bCVD/vHuLW4BWZFmjnQD9eG3KWN1+8KGnHThJWvPNr1tC4VQoeL9kM2
-         Si3CJp1hV4H/NOYdwFC/vVJIg3xb7ewXvBZ1PEJ6wNBzFtoqMDbpAAw5ysyEkSk20Itp
-         X7lx7yiCkYWYM2D+/hYFh9lGDh9VXvYyyan0M3TLbL/hT0i+KeB14RypbG8XUZPGNGEx
-         vZIJvCB6/UsK8GTMxgz6flhHFTl6hNY+CZtewwCLCqwjEDndJCgFxRc4Wnx1enKSlpRS
-         2rYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UICSQ0KGAaDFDCLkijObhcNXoKPNZnLJdEBdbwNAlQE=;
-        b=lemdCggIR6XbF74ardmSlrVK6JrdYeut8svUJzfp8sGnzbhXdsnjkDJp3sYvrZQEoG
-         5WLUVS0AAH4iLOGGn3WTArMJ6ZqFBvA3CvQnJSbYUIP8nunPR0C2/+bUHMJlezmDtsa+
-         hzQlU50ke/pUAgOVg7UA8FaWWUL2BTqpwxrt7HF4Fqt73Z3E5ppPHTImK+X+EMykjrlH
-         pnzcmqaXDknVmnIfYmm8v7UZMnZIZCjoixcQhD+hohKod9d2FTEp9+b632XY4/OXpmZk
-         1bXjPQkirIaNAwZ5AK/LfsqE4Br+antSzNCGFimUxq3jFVX/ATHc37u4IAtHULc2ezOf
-         hvaA==
-X-Gm-Message-State: AFqh2krwsApFbD59Y54bmMysCMQd1Pd29/f84BLkgty6ak4uxSTZhEJV
-        rZ+PR3LlKhIJQ/Ccd/4bFtopgA==
-X-Google-Smtp-Source: AMrXdXu/xUDrf9o/hA6BewLo6QzV20PMyGf99JVLTS7aC8wuYy0K0IpHpd+RcCeVDJj8RvyS9x55mQ==
-X-Received: by 2002:a05:600c:540d:b0:3d9:fb59:c16b with SMTP id he13-20020a05600c540d00b003d9fb59c16bmr26200435wmb.36.1674591818673;
-        Tue, 24 Jan 2023 12:23:38 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id l15-20020a05600c4f0f00b003d9df9e59c4sm15334737wmq.37.2023.01.24.12.23.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 12:23:38 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-hwmon@vger.kernel.org, krzysztof.kozlowski@linaro.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/2] hwmon: (pmbus/tda38640) Add driver for Infineon TDA38640 Voltage Regulator
-Date:   Tue, 24 Jan 2023 21:23:17 +0100
-Message-Id: <20230124202317.3704963-2-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230124202317.3704963-1-Naresh.Solanki@9elements.com>
-References: <20230124202317.3704963-1-Naresh.Solanki@9elements.com>
+        Tue, 24 Jan 2023 16:40:25 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555B87ECB
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Jan 2023 13:40:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674596424; x=1706132424;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=s+4gXBn+CiWiSXzKmf75cTJsSW9p7I7gPrFpc4ztksQ=;
+  b=G0bUcZ7qZ+dGKdfSeYtOFndeAp0ThG63TevNQZ5ZSP+/UdOovdesN660
+   fehlRoWJX+5COV+rUt+CVMQGKmdLui5Wjem8H4S5z/GbLARTTvAPn46vS
+   v1PpXkNffNVEJud4QSBqh0s5BM8vJ3Ssz3bIbpnue7Oq+k7qv43Yhccx5
+   SR5p6eVGPsC7/UUYVtCYCRkisD9n6L3RGq6LKwc7jyLLgebw89s9J/DbK
+   6gz+dEE6gJf07smm+ijdaawsWsnxOBnvgWE8lzFczN2gNNhGgwfNnn+k0
+   uVF0vHAuGxh9pDPqPK8MRsnhUYVrg5lh3cYk3MldbeTATdTtksd5HJc6v
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="412645877"
+X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
+   d="scan'208";a="412645877"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 13:40:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="664254618"
+X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
+   d="scan'208";a="664254618"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 24 Jan 2023 13:40:22 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pKR1i-0006nk-08;
+        Tue, 24 Jan 2023 21:40:22 +0000
+Date:   Wed, 25 Jan 2023 05:40:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mario Kicherer <dev@kicherer.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [groeck-staging:hwmon-next 41/41] FATAL: modpost:
+ drivers/hwmon/mc34vr500: struct of_device_id is not terminated with a NULL
+ entry!
+Message-ID: <202301250559.SIEQsOH2-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   513d7b190ab3715103357afd8e2ddf4b5e986ff3
+commit: 513d7b190ab3715103357afd8e2ddf4b5e986ff3 [41/41] hwmon: add initial NXP MC34VR500 PMIC monitoring support
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230125/202301250559.SIEQsOH2-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=513d7b190ab3715103357afd8e2ddf4b5e986ff3
+        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+        git fetch --no-tags groeck-staging hwmon-next
+        git checkout 513d7b190ab3715103357afd8e2ddf4b5e986ff3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Add the pmbus driver for the Infineon TDA38640 voltage regulator.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
----
- drivers/hwmon/pmbus/Kconfig    | 16 ++++++++
- drivers/hwmon/pmbus/Makefile   |  1 +
- drivers/hwmon/pmbus/tda38640.c | 74 ++++++++++++++++++++++++++++++++++
- 3 files changed, 91 insertions(+)
- create mode 100644 drivers/hwmon/pmbus/tda38640.c
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 30448e049486..9f4bbb9c487a 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -395,6 +395,22 @@ config SENSORS_STPDDC60
- 	  This driver can also be built as a module. If so, the module will
- 	  be called stpddc60.
- 
-+config SENSORS_TDA38640
-+	tristate "Infineon TDA38640"
-+	help
-+	  If you say yes here you get hardware monitoring support for Infineon
-+	  TDA38640.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called tda38640.
-+
-+config SENSORS_TDA38640_REGULATOR
-+	bool "Regulator support for TDA38640 and compatibles"
-+	depends on SENSORS_TDA38640 && REGULATOR
-+	help
-+	  If you say yes here you get regulator support for Infineon
-+	  TDA38640 as regulator.
-+
- config SENSORS_TPS40422
- 	tristate "TI TPS40422"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index d9d2fa4bd6f7..3ae019916267 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -40,6 +40,7 @@ obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
- obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
- obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
- obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
-+obj-$(CONFIG_SENSORS_TDA38640)	+= tda38640.o
- obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
- obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
- obj-$(CONFIG_SENSORS_TPS546D24)	+= tps546d24.o
-diff --git a/drivers/hwmon/pmbus/tda38640.c b/drivers/hwmon/pmbus/tda38640.c
-new file mode 100644
-index 000000000000..c3e781319cd1
---- /dev/null
-+++ b/drivers/hwmon/pmbus/tda38640.c
-@@ -0,0 +1,74 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Hardware monitoring driver for Infineon TDA38640
-+ *
-+ * Copyright (c) 2023 9elements GmbH
-+ *
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/regulator/driver.h>
-+#include "pmbus.h"
-+
-+static const struct regulator_desc __maybe_unused tda38640_reg_desc[] = {
-+	PMBUS_REGULATOR("vout", 0),
-+};
-+
-+static struct pmbus_driver_info tda38640_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_VOLTAGE_OUT] = linear,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.format[PSC_CURRENT_IN] = linear,
-+	.format[PSC_POWER] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
-+	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
-+	    | PMBUS_HAVE_IIN
-+	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-+	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
-+	    | PMBUS_HAVE_POUT | PMBUS_HAVE_PIN,
-+#if IS_ENABLED(CONFIG_SENSORS_TDA38640_REGULATOR)
-+	.num_regulators = 1,
-+	.reg_desc = tda38640_reg_desc,
-+#endif
-+};
-+
-+static int tda38640_probe(struct i2c_client *client)
-+{
-+	return pmbus_do_probe(client, &tda38640_info);
-+}
-+
-+static const struct i2c_device_id tda38640_id[] = {
-+	{"tda38640", 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, tda38640_id);
-+
-+static const struct of_device_id __maybe_unused tda38640_of_match[] = {
-+	{ .compatible = "infineon,tda38640"},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, tda38640_of_match);
-+
-+/* This is the driver that will be inserted */
-+static struct i2c_driver tda38640_driver = {
-+	.driver = {
-+		.name = "tda38640",
-+		.of_match_table = of_match_ptr(tda38640_of_match),
-+	},
-+	.probe_new = tda38640_probe,
-+	.id_table = tda38640_id,
-+};
-+
-+module_i2c_driver(tda38640_driver);
-+
-+MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
-+MODULE_DESCRIPTION("PMBus driver for Infineon TDA38640");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(PMBUS);
+drivers/hwmon/mc34vr500: struct of_device_id is 196 bytes.  The last of 1 is:
+0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x6e 0x78 0x70 0x2c 0x6d 0x63 0x33 0x34 0x76 0x72 0x35 0x30 0x30 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+>> FATAL: modpost: drivers/hwmon/mc34vr500: struct of_device_id is not terminated with a NULL entry!
+
 -- 
-2.38.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
