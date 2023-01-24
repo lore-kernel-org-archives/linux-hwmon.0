@@ -2,88 +2,102 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB669C54EED
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Jan 2023 21:40:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32B1BC54EED
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Jan 2023 22:28:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbjAXVk0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 24 Jan 2023 16:40:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
+        id S234648AbjAXW2L (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 24 Jan 2023 17:28:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234384AbjAXVkZ (ORCPT
+        with ESMTP id S234522AbjAXW2I (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 Jan 2023 16:40:25 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555B87ECB
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Jan 2023 13:40:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674596424; x=1706132424;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=s+4gXBn+CiWiSXzKmf75cTJsSW9p7I7gPrFpc4ztksQ=;
-  b=G0bUcZ7qZ+dGKdfSeYtOFndeAp0ThG63TevNQZ5ZSP+/UdOovdesN660
-   fehlRoWJX+5COV+rUt+CVMQGKmdLui5Wjem8H4S5z/GbLARTTvAPn46vS
-   v1PpXkNffNVEJud4QSBqh0s5BM8vJ3Ssz3bIbpnue7Oq+k7qv43Yhccx5
-   SR5p6eVGPsC7/UUYVtCYCRkisD9n6L3RGq6LKwc7jyLLgebw89s9J/DbK
-   6gz+dEE6gJf07smm+ijdaawsWsnxOBnvgWE8lzFczN2gNNhGgwfNnn+k0
-   uVF0vHAuGxh9pDPqPK8MRsnhUYVrg5lh3cYk3MldbeTATdTtksd5HJc6v
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="412645877"
-X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
-   d="scan'208";a="412645877"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 13:40:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="664254618"
-X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
-   d="scan'208";a="664254618"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 24 Jan 2023 13:40:22 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pKR1i-0006nk-08;
-        Tue, 24 Jan 2023 21:40:22 +0000
-Date:   Wed, 25 Jan 2023 05:40:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Kicherer <dev@kicherer.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [groeck-staging:hwmon-next 41/41] FATAL: modpost:
- drivers/hwmon/mc34vr500: struct of_device_id is not terminated with a NULL
- entry!
-Message-ID: <202301250559.SIEQsOH2-lkp@intel.com>
+        Tue, 24 Jan 2023 17:28:08 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FA2193C9;
+        Tue, 24 Jan 2023 14:28:01 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 5D12E739;
+        Tue, 24 Jan 2023 22:27:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 5D12E739
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1674599273; bh=MTaO760PJgYwDFixyQndXwkcxJ6qlGsTUp+EUcJgaCs=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=XW1biFoIP9a4rIRf2cLd3puFe2cCFrQPnLjCIkaYxizp+J6e+ypbS83QROQV7RjZL
+         x+AsBikpA3Vkk3ujbg62UV6QrSznWRdtlGR3w9N1P6p5SjPTaB1VvvVuFhl7bYnzao
+         e+Pb9bvOHC00Tv7pEsztMhT9Z72Gat9MaqdsTs8TiPqfNYcDgG/+/KR+sn5dVczsue
+         lu1v1+vuz/4hzlpLBA+KYbHbvLOlZ4/b/+Fc8THgu2Xt0YT87foyxCIQE79oboIidh
+         ZhOk8JFsQO6mPuPHLHgprow+Ki52f77LDa52ffGAHq1nhkgYRnJAeU48pOJekm2FoI
+         ARNZkhtCcl3AQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Iwona Winiarska <iwona.winiarska@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-pci@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-mm@kvack.org,
+        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+        linux-input@vger.kernel.org, openbmc@lists.ozlabs.org,
+        alsa-devel@alsa-project.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] Docs/subsystem-apis: Remove '[The ]Linux'
+ prefixes from titles of listed documents
+In-Reply-To: <20230122184834.181977-1-sj@kernel.org>
+References: <20230122184834.181977-1-sj@kernel.org>
+Date:   Tue, 24 Jan 2023 15:27:52 -0700
+Message-ID: <87edrjftzr.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   513d7b190ab3715103357afd8e2ddf4b5e986ff3
-commit: 513d7b190ab3715103357afd8e2ddf4b5e986ff3 [41/41] hwmon: add initial NXP MC34VR500 PMIC monitoring support
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230125/202301250559.SIEQsOH2-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=513d7b190ab3715103357afd8e2ddf4b5e986ff3
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch --no-tags groeck-staging hwmon-next
-        git checkout 513d7b190ab3715103357afd8e2ddf4b5e986ff3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+SeongJae Park <sj@kernel.org> writes:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+> Some documents that listed on subsystem-apis have 'Linux' or 'The Linux'
+> title prefixes.  It's duplicated information, and makes finding the
+> document of interest with human eyes not easy.  Remove the prefixes from
+> the titles.
+>
+> Signed-off-by: SeongJae Park <sj@kernel.org>
+> ---
+> Changes from v1
+> (https://lore.kernel.org/lkml/20230114194741.115855-1-sj@kernel.org/)
+> - Drop second patch (will post later for each subsystem)
+>
+>  Documentation/PCI/index.rst        | 6 +++---
+>  Documentation/cpu-freq/index.rst   | 6 +++---
+>  Documentation/crypto/index.rst     | 6 +++---
+>  Documentation/driver-api/index.rst | 6 +++---
+>  Documentation/gpu/index.rst        | 6 +++---
+>  Documentation/hwmon/index.rst      | 6 +++---
+>  Documentation/input/index.rst      | 6 +++---
+>  Documentation/mm/index.rst         | 6 +++---
+>  Documentation/peci/index.rst       | 6 +++---
+>  Documentation/scheduler/index.rst  | 6 +++---
+>  Documentation/scsi/index.rst       | 6 +++---
+>  Documentation/sound/index.rst      | 6 +++---
+>  Documentation/virt/index.rst       | 6 +++---
+>  Documentation/watchdog/index.rst   | 6 +++---
+>  14 files changed, 42 insertions(+), 42 deletions(-)
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Applied, thanks.
 
-drivers/hwmon/mc34vr500: struct of_device_id is 196 bytes.  The last of 1 is:
-0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x6e 0x78 0x70 0x2c 0x6d 0x63 0x33 0x34 0x76 0x72 0x35 0x30 0x30 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
->> FATAL: modpost: drivers/hwmon/mc34vr500: struct of_device_id is not terminated with a NULL entry!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+jon
