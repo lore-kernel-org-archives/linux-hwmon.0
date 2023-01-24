@@ -2,205 +2,144 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64019C25B4E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Jan 2023 14:49:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15509C25B4E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Jan 2023 15:10:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235080AbjAXOtc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 24 Jan 2023 09:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
+        id S234703AbjAXPKB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 24 Jan 2023 10:10:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235082AbjAXOtN (ORCPT
+        with ESMTP id S234477AbjAXPKA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:49:13 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159624ABDD
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Jan 2023 06:48:57 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id mp20so39589187ejc.7
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Jan 2023 06:48:57 -0800 (PST)
+        Tue, 24 Jan 2023 10:10:00 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6278648A0B
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Jan 2023 07:09:48 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id d14so10504789wrr.9
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Jan 2023 07:09:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jo1Yi/+DTb6H4LwCmDu+mCgzAi4RW77ZGtpcAUxfPiA=;
-        b=NUNiL3/r1VxF2E4vy/Jt7PTrKDCPDcv5rwz+aCpO005AQlPSXs67WUrucFx2vpAy1u
-         4L6ufwrBBjU5g3NEqo36bNgz2qMx312Px3YHk3mHf3+/lGulUkyzXhzmHGvS8ujlcCAE
-         tA07O6QoUDlk7WZE7TbfuFEjF2/6LmIMStlGKqxYelJD8Lai60PmuNnQLvyQagDFgNBI
-         nIcTtw6rpwVa2lSX252zT2iJrgwRt1wdpGuSMmJjdwEVB5BmhJJLGkmI+Cz/TnR/8FAd
-         pNpGIeHigf8IxtBhcYaszL6PwN+tZOB8pyAXHKF7BBxk+n8PFzgqvkrb6m5guRA/PNag
-         LKRg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bd7QOS6DKQNvC+u0Ay2yK9OLDkUOBEv/PXTWAR2BBBM=;
+        b=uQujS7Lb/d8GruUmQRDuEQniQPoaVA1Bue2lzduwBpvn9y5qiBepZ04DLH4S++hCO/
+         v0dfmjIKlKVT+qHGTnGDPfL/zog/atFMKIwaq7F4MNVmmx8rHwb7sg0gWMZ05SK2MCfU
+         E35HnauqPSRCqlIAQb4e8jek6nmkK2Zka6e2c5CboM9qTYyQkKyL0v/LfSJFm+rQyctX
+         pg8dy1o1MXGQVftjW5pmF4eAdnwKS/wV2WqwbBRC+/GKQjmQ/lbLDRU2S+R78xs0nAgD
+         HL0dskJh1CNqjtgu+sZCqPnY9TRC2FAWnjIWgWKGil1CYQydhefziT36iRjZQ3Pkrr8q
+         2LVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jo1Yi/+DTb6H4LwCmDu+mCgzAi4RW77ZGtpcAUxfPiA=;
-        b=BFIhJhPNM399FEauFeUvqElAgO6kjntM2cvbuSqsrEBrTNVbJ3S7HOgPTWrsF0pAbU
-         zoad6cDDGy5N5KCiAXKeE9KhWjr+Dvtzr3rl99OwsOHDg/NBV8VZkH1IV7ur7g7G9xFX
-         ocfvTbP/bwoYe8CyqAcEaWY56z21BVB5Yhyzmmxb6a/5hFaXyoh7BanMuplLZuAH3kTH
-         aQqqgH+AhRJva64pJdXaHOXeObi/LSxazJrS7u5FXqtWORnaIzD95sSY8Q4gSblIadls
-         /rybYnYDXxzjRsXAaX5N5H40l/2XUkZvElpal/kVdpDJYGW+OuKn7kAzJVaNCeovM6Yh
-         Ns+w==
-X-Gm-Message-State: AFqh2kpNnGD/o2QQ2DBMWhtNH3XGgTfg1IGIAzwcxzNV1yljcq0OR71t
-        7xCi/xLCzNi1XbdNuXlJzNqF5Q==
-X-Google-Smtp-Source: AMrXdXuMprR6KdKez4AqxipAisbHwu1sq61yo+BMPZvwXgY9t578q+ZN6NWI3g7hAJCcEdLeuWXUNg==
-X-Received: by 2002:a17:907:6745:b0:86c:f7ac:71f7 with SMTP id qm5-20020a170907674500b0086cf7ac71f7mr30558635ejc.8.1674571735346;
-        Tue, 24 Jan 2023 06:48:55 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id b8-20020aa7c908000000b00482e0c55e2bsm728104edt.93.2023.01.24.06.48.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 06:48:54 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-hwmon@vger.kernel.org, krzysztof.kozlowski@linaro.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] hwmon: (pmbus/tda38640) Add driver for Infineon TDA38640 Voltage Regulator
-Date:   Tue, 24 Jan 2023 15:48:46 +0100
-Message-Id: <20230124144847.423129-2-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230124144847.423129-1-Naresh.Solanki@9elements.com>
-References: <20230124144847.423129-1-Naresh.Solanki@9elements.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bd7QOS6DKQNvC+u0Ay2yK9OLDkUOBEv/PXTWAR2BBBM=;
+        b=lNoTreziVsrI7uPThNYR2ui7D/l68+InTZ9FN1XpezYX8SIzKnIdzvxuL5gw0yJFOi
+         Tab5KgANAh0XI7cb/y/NeVQXBlX3WD1TLYjyJo2GTSvbSdA27HuVO+8fQ76w9AbRuJCU
+         wlRzGvJ1a1XQWF4qOuexuPZLHPAvWr6zH7RVxYFzaHGUmfUffBNyaJYFSMan9SfYpMKj
+         ji+GbtF2KFNfC3NvBJSeN6R1FfQ8FhaHHEpq+xY82bml45PegZ6QbXl9kv/PjaALnrpV
+         rJssg7RkRKLz+2s0E0f4thH+X8HKQ8CJL5pLYAAIqILFowuoJmZR6v1Imbkw3Wp5F8ie
+         F0WQ==
+X-Gm-Message-State: AFqh2kpqsUGan+ON24yeuTqlRwl3iokWhE5ZTECqu0hTaCX/o568bnMH
+        lXcVgijbFlSXbkj/Wehiv9bQVg==
+X-Google-Smtp-Source: AMrXdXuc/zx2xSMvHW7hkFLFb09tioxWpLyLzKdpmMKXs1CBsxLR9q9g0BwnxuyCYKDy1ki6ArsXmw==
+X-Received: by 2002:a5d:5949:0:b0:2bb:ea1d:e36e with SMTP id e9-20020a5d5949000000b002bbea1de36emr23455035wri.15.1674572986894;
+        Tue, 24 Jan 2023 07:09:46 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id g9-20020adfa489000000b002b065272da2sm2180246wrb.13.2023.01.24.07.09.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 07:09:46 -0800 (PST)
+Message-ID: <94176a1b-f9ad-b096-fc39-5e333f4eb09f@linaro.org>
+Date:   Tue, 24 Jan 2023 16:09:45 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v3 2/2] hwmon: (pmbus/tda38640) Add driver for Infineon
+ TDA38640 Voltage Regulator
+Content-Language: en-US
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org
+References: <20230124144847.423129-1-Naresh.Solanki@9elements.com>
+ <20230124144847.423129-2-Naresh.Solanki@9elements.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230124144847.423129-2-Naresh.Solanki@9elements.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On 24/01/2023 15:48, Naresh Solanki wrote:
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> 
+> Add the pmbus driver for the Infineon TDA38640 voltage regulator.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
 
-Add the pmbus driver for the Infineon TDA38640 voltage regulator.
+(...)
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
----
- drivers/hwmon/pmbus/Kconfig    | 16 ++++++++
- drivers/hwmon/pmbus/Makefile   |  1 +
- drivers/hwmon/pmbus/tda38640.c | 73 ++++++++++++++++++++++++++++++++++
- 3 files changed, 90 insertions(+)
- create mode 100644 drivers/hwmon/pmbus/tda38640.c
+> +
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/regulator/driver.h>
+> +#include "pmbus.h"
+> +
+> +static const struct regulator_desc __maybe_unused tda38640_reg_desc[] = {
+> +	PMBUS_REGULATOR("vout", 0),
+> +};
+> +
+> +static struct pmbus_driver_info tda38640_info = {
+> +	.pages = 1,
+> +	.format[PSC_VOLTAGE_IN] = linear,
+> +	.format[PSC_VOLTAGE_OUT] = linear,
+> +	.format[PSC_CURRENT_OUT] = linear,
+> +	.format[PSC_CURRENT_IN] = linear,
+> +	.format[PSC_POWER] = linear,
+> +	.format[PSC_TEMPERATURE] = linear,
+> +
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
+> +	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
+> +	    | PMBUS_HAVE_IIN
+> +	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> +	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+> +	    | PMBUS_HAVE_POUT | PMBUS_HAVE_PIN,
+> +#if IS_ENABLED(CONFIG_SENSORS_TDA38640_REGULATOR)
+> +	.num_regulators = 1,
+> +	.reg_desc = tda38640_reg_desc,
+> +#endif
+> +};
+> +
+> +static int tda38640_probe(struct i2c_client *client)
+> +{
+> +	return pmbus_do_probe(client, &tda38640_info);
+> +}
+> +
+> +static const struct i2c_device_id tda38640_id[] = {
+> +	{"tda38640", 0},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, tda38640_id);
+> +
+> +static const struct of_device_id __maybe_unused tda38640_of_match[] = {
+> +	{ .compatible = "infineon,tda38640"},
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, tda38640_of_match);
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 30448e049486..9f4bbb9c487a 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -395,6 +395,22 @@ config SENSORS_STPDDC60
- 	  This driver can also be built as a module. If so, the module will
- 	  be called stpddc60.
- 
-+config SENSORS_TDA38640
-+	tristate "Infineon TDA38640"
-+	help
-+	  If you say yes here you get hardware monitoring support for Infineon
-+	  TDA38640.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called tda38640.
-+
-+config SENSORS_TDA38640_REGULATOR
-+	bool "Regulator support for TDA38640 and compatibles"
-+	depends on SENSORS_TDA38640 && REGULATOR
-+	help
-+	  If you say yes here you get regulator support for Infineon
-+	  TDA38640 as regulator.
-+
- config SENSORS_TPS40422
- 	tristate "TI TPS40422"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index d9d2fa4bd6f7..3ae019916267 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -40,6 +40,7 @@ obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
- obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
- obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
- obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
-+obj-$(CONFIG_SENSORS_TDA38640)	+= tda38640.o
- obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
- obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
- obj-$(CONFIG_SENSORS_TPS546D24)	+= tps546d24.o
-diff --git a/drivers/hwmon/pmbus/tda38640.c b/drivers/hwmon/pmbus/tda38640.c
-new file mode 100644
-index 000000000000..6099a3cc568e
---- /dev/null
-+++ b/drivers/hwmon/pmbus/tda38640.c
-@@ -0,0 +1,73 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Hardware monitoring driver for Infineon TDA38640
-+ *
-+ * Copyright (c) 2023 9elements GmbH
-+ *
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/regulator/driver.h>
-+#include "pmbus.h"
-+
-+static const struct regulator_desc __maybe_unused tda38640_reg_desc[] = {
-+	PMBUS_REGULATOR("vout", 0),
-+};
-+
-+static struct pmbus_driver_info tda38640_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_VOLTAGE_OUT] = linear,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.format[PSC_CURRENT_IN] = linear,
-+	.format[PSC_POWER] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
-+	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
-+	    | PMBUS_HAVE_IIN
-+	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-+	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
-+	    | PMBUS_HAVE_POUT | PMBUS_HAVE_PIN,
-+#if IS_ENABLED(CONFIG_SENSORS_TDA38640_REGULATOR)
-+	.num_regulators = 1,
-+	.reg_desc = tda38640_reg_desc,
-+#endif
-+};
-+
-+static int tda38640_probe(struct i2c_client *client)
-+{
-+	return pmbus_do_probe(client, &tda38640_info);
-+}
-+
-+static const struct i2c_device_id tda38640_id[] = {
-+	{"tda38640", 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, tda38640_id);
-+
-+static const struct of_device_id __maybe_unused tda38640_of_match[] = {
-+	{ .compatible = "infineon,tda38640"},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, tda38640_of_match);
-+
-+/* This is the driver that will be inserted */
-+static struct i2c_driver tda38640_driver = {
-+	.driver = {
-+		   .name = "tda38640",
-+		   },
-+	.probe_new = tda38640_probe,
-+	.id_table = tda38640_id,
-+};
-+
-+module_i2c_driver(tda38640_driver);
-+
-+MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
-+MODULE_DESCRIPTION("PMBus driver for Infineon TDA38640");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(PMBUS);
--- 
-2.38.1
+No improvements here. Do not send new version without solving the
+feedback (or finishing the discussion). Its usage is still missing in
+your i2c_driver.
+
+Best regards,
+Krzysztof
 
