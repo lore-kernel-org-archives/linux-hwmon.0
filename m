@@ -2,154 +2,108 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0AF3C54E94
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Jan 2023 11:17:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EA40C54E94
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Jan 2023 11:41:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235795AbjAYLQz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Jan 2023 06:16:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
+        id S235714AbjAYLla (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Jan 2023 06:41:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233356AbjAYLQN (ORCPT
+        with ESMTP id S235575AbjAYLl3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Jan 2023 06:16:13 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F8F582AC
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Jan 2023 03:16:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674645361; x=1706181361;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4+vTRrDuTCpEre/qVy/aNfoHBt0INTHHSFIN8hA0vSY=;
-  b=HePQBDn8e38M31g/nnMTfOxAGCcjxXzLdNUn4+XEx8V7Yir5PgZnY8sR
-   98kfkIln5e97KvqJTDL5ORcC71XIJgUPxe+oXnCrHCeLhTBc0YFirrcgl
-   08MGeBCKqqZzAmAnfqvZQwKv/BcoDYQzZhtT+69wzlhSUV2TFBCd7i/To
-   ZpFnIClMvpiehKqA9r2cryQKvG8Jol48f5idwFqfOahLdwU0ztHgVC4zr
-   F6J70+9xqh2qfnTJtBeLlmE2eTa0kzUNn5q+8FDys+XzFE51IPjU9jvbX
-   yyLMCBZkA10+qEB4+TEJvzceVVAF+wcejr60HN0/meEGkeEmUyB8B5DCw
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="306194978"
-X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="306194978"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 03:15:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="836316437"
-X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="836316437"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 25 Jan 2023 03:15:56 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pKdkx-0007GC-24;
-        Wed, 25 Jan 2023 11:15:55 +0000
-Date:   Wed, 25 Jan 2023 19:15:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD REGRESSION
- ecabca1a36d59ec32fa315f3dc2e81784670b25b
-Message-ID: <63d10f44.ltDdflGPZdh1xXiU%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 25 Jan 2023 06:41:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5D9298CC;
+        Wed, 25 Jan 2023 03:41:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D3C4614D4;
+        Wed, 25 Jan 2023 11:41:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E044DC433D2;
+        Wed, 25 Jan 2023 11:41:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674646887;
+        bh=BSf4VdDu/Cipkbp8RNs0rNyAzPjqHzof5Fj9ZYA48xM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GfilqO/eKu/QoPePHTTuTn8J1r0Gfr8WyYnJTWSK83NPY89Lt3LaqRMiaWnnxEdz1
+         5GfmqGH8yJFKJlrPMbcp84JgDUzRLc2uldIX4k89jTMcPIFXHFbL6PPgMyEPoohaU3
+         uAQ2xL2z2Rjhzaa8w1lCI5+i1z2YED4iJtXXyaxZ0XqaEafwrnSL76HnHSEhWrfZh2
+         BSVoMTAFP3PkmPkb7Kyti1fKVYFgPbZvpPHr2csZ0HOGM4Do6P0nTDzzOAj/HPpgzU
+         RU4p1z0AJO7YjLO6ciSZmTplImSf9p4ZS2V0k6wbLHUb3lAFakk5haqH41gWo/0kO1
+         OKWEJLNDmmlsQ==
+Date:   Wed, 25 Jan 2023 11:41:25 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Add missing
+ (unevaluated|additional)Properties on child node schemas
+Message-ID: <Y9EVZQJEV8i5vdgp@sirena.org.uk>
+References: <20230124230048.371144-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YLw58GmZKH9QcKuc"
+Content-Disposition: inline
+In-Reply-To: <20230124230048.371144-1-robh@kernel.org>
+X-Cookie: Serving suggestion.
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: ecabca1a36d59ec32fa315f3dc2e81784670b25b  hwmon: add initial NXP MC34VR500 PMIC monitoring support
 
-Error/Warning reports:
+--YLw58GmZKH9QcKuc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-https://lore.kernel.org/oe-kbuild-all/202301251348.HFHcROTP-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202301251734.bFyrYeeG-lkp@intel.com
+On Tue, Jan 24, 2023 at 05:00:48PM -0600, Rob Herring wrote:
+> Just as unevaluatedProperties or additionalProperties are required at
+> the top level of schemas, they should (and will) also be required for
+> child node schemas. That ensures only documented properties are
+> present.
+>=20
+> Add unevaluatedProperties or additionalProperties as appropriate, and
+> then add any missing properties flagged by the addition.
 
-Error/Warning: (recently discovered and may have been fixed)
+Acked-by: Mark Brown <broonie@kernel.org>
 
-Documentation/hwmon/mc34vr500.rst: WARNING: document isn't included in any toctree
-FATAL: modpost: drivers/hwmon/mc34vr500: struct i2c_device_id is not terminated with a NULL entry!
+--YLw58GmZKH9QcKuc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Error/Warning ids grouped by kconfigs:
+-----BEGIN PGP SIGNATURE-----
 
-gcc_recent_errors
-|-- m68k-allmodconfig
-|   `-- FATAL:modpost:drivers-hwmon-mc34vr500:struct-i2c_device_id-is-not-terminated-with-a-NULL-entry
-`-- x86_64-allnoconfig
-    `-- Documentation-hwmon-mc34vr500.rst:WARNING:document-isn-t-included-in-any-toctree
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPRFWIACgkQJNaLcl1U
+h9C5IQf9Gj9QI/FW6Xw+gMpDw41zL45NSAa01ZJ7G8XkRAaJNWXTMWR1sZKiK4XJ
+5rjn6QJUusYQuPpRmgG2DjO115ttDY8PNNWUlbpHxdQ+0dQI/dzilsrEFOrFXH1S
+PcEA3qn6o7eU3ICxhOnhcJzf1auMMUeq0hHtfjHxHLhgxeJZ13yZA61DnR9uShhF
+DT2ZXj0DrflrKoX2haOnuhvLc0Rx5qV+O3LfPBcO53OdCgjkAkmW2Jll2UrtTUIc
+9+G5v1R2fy/qBGUUQSzfPcTESH8bAwxpdP3i61xeoUYzaRNM/K4F/00nXADmY71w
+uWdFdQq7y1nxrTCAKIbIk2i8KCJlTg==
+=IpOI
+-----END PGP SIGNATURE-----
 
-elapsed time: 721m
-
-configs tested: 62
-configs skipped: 2
-
-gcc tested configs:
-x86_64                            allnoconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-um                             i386_defconfig
-s390                             allyesconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-arc                  randconfig-r043-20230123
-arm                  randconfig-r046-20230123
-x86_64                           allyesconfig
-powerpc                           allnoconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-i386                                defconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-sh                               allmodconfig
-arm                                 defconfig
-x86_64               randconfig-a002-20230123
-x86_64               randconfig-a001-20230123
-x86_64               randconfig-a004-20230123
-x86_64               randconfig-a003-20230123
-x86_64                           rhel-8.3-syz
-x86_64               randconfig-a006-20230123
-x86_64                         rhel-8.3-kunit
-x86_64               randconfig-a005-20230123
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-bpf
-arm64                            allyesconfig
-i386                 randconfig-a003-20230123
-i386                 randconfig-a002-20230123
-i386                 randconfig-a001-20230123
-i386                 randconfig-a004-20230123
-arm                              allyesconfig
-i386                 randconfig-a005-20230123
-i386                 randconfig-a006-20230123
-i386                             allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-ia64                             allmodconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20230123
-hexagon              randconfig-r045-20230123
-s390                 randconfig-r044-20230123
-riscv                randconfig-r042-20230123
-x86_64               randconfig-a013-20230123
-x86_64               randconfig-a011-20230123
-x86_64               randconfig-a012-20230123
-x86_64               randconfig-a014-20230123
-x86_64               randconfig-a016-20230123
-x86_64               randconfig-a015-20230123
-x86_64                          rhel-8.3-rust
-i386                 randconfig-a012-20230123
-i386                 randconfig-a013-20230123
-i386                 randconfig-a011-20230123
-i386                 randconfig-a014-20230123
-i386                 randconfig-a016-20230123
-i386                 randconfig-a015-20230123
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--YLw58GmZKH9QcKuc--
