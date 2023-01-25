@@ -2,81 +2,113 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F58CC54E94
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Jan 2023 09:30:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22BC3C27C76
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Jan 2023 10:10:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235260AbjAYJaN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Jan 2023 04:30:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
+        id S234955AbjAYKKo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Jan 2023 05:10:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233965AbjAYJaM (ORCPT
+        with ESMTP id S232999AbjAYKKn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Jan 2023 04:30:12 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2468B26863;
-        Wed, 25 Jan 2023 01:30:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674639004; x=1706175004;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Iib1gOh8mT+FDy8DZl6H+FgLTsEkN7huold2ibuCi1o=;
-  b=MmYOXEjXXgze7IxYzMptRkXvPQ+yRjb+GNsJO4lOH1KOcyPkWM524dlj
-   LroVUmgQr6hkYstkiuk1qfMtXuSyGrhhVpMzjRDKKgpVpAd4WN/EJ8wG4
-   pemaxGtEfvarb4KnUl+jl+VzJ+lFM4K/bqUpMtM37w+BUjy/p5cJz2M1t
-   H2rSlwQpecA7+0GhFN7jGE4wrC3aBNinfSgzoGisznT9wvm3AoclDsOfE
-   afE1mimBbUHMiaGabY12M5y3eWsauZ/ELOCLKJt82ALk1IHP9RbZthuwd
-   DyXT5I60M/LHCxtT6PZdp/KCh2BGwIXBKTFxbKmeIL298rOAULAdcBkpY
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="310092166"
-X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
-   d="scan'208";a="310092166"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 01:29:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="804938298"
-X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
-   d="scan'208";a="804938298"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Jan 2023 01:29:52 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pKc6J-0007CY-26;
-        Wed, 25 Jan 2023 09:29:51 +0000
-Date:   Wed, 25 Jan 2023 17:29:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Kicherer <dev@kicherer.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>, linux-doc@vger.kernel.org
-Subject: [groeck-staging:hwmon-next 40/41] htmldocs:
- Documentation/hwmon/mc34vr500.rst: WARNING: document isn't included in any
- toctree
-Message-ID: <202301251734.bFyrYeeG-lkp@intel.com>
+        Wed, 25 Jan 2023 05:10:43 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4F3FF3E
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Jan 2023 02:10:42 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id bk16so16487108wrb.11
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Jan 2023 02:10:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+YbmCODXrWbUn0nWKxLJPq1L6PfEga2OS1d1Yrw45IU=;
+        b=EWZ+hu4S4a62p8gA2V9ZYPkv1qLN+s8IMtIROJN7y8CarZG2svVmLvXgd+cIXCTqYK
+         NmDzRiCF06lhNIqcgTEj1tarMHcDsKa7kHDQPaG8pOtIq/W5AbCQB6RvTcD1myTpCzRp
+         TRVPIsNn/MVN84z/l/E40mM1M3YZ9xN3d/JOW4gawseKTBi9l/HQ5vDPs0OzNhZfxYZO
+         aDNpO0Ibc/PEQId4AU9aFKgNJhl4vADNywb3qlpc3BO7gpS9YHIB2cwG5XYpu1Xj9faD
+         FC0dRFpKpviOy+GKJ1IlFSq1v3ihdct8DCv97iaxXiys1mUD8mQh4tZ+cpBZvSJ/9qt+
+         sssw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+YbmCODXrWbUn0nWKxLJPq1L6PfEga2OS1d1Yrw45IU=;
+        b=nua/ObBOxo9NYskHgWXbUtarvPup4bkRpcM0CgKfvsZeBPSGY6q27CoSR5bFvBSIb1
+         ADYfErmsD0gA1xYFAKeVZygeENAG0VmFb1YvWr4FzuZ1NIux0ciEFj7eL1cD3sknth9y
+         0ecQNz8+rYuu4QBBVETo2pVzWDSaQVLvpcM7a2AQKn5ZqUI+s/2Sx5/KdGZwSiYKJYb3
+         qj1rdWOD6eP6LRgQK3hu1EiGg6Ewz57142Bpi6ep+Ef2sfPzlcrbc7MHyy03Nqms3tpY
+         9/YVSokBH0eyQg02hdxtBIKnN36ZfhHmSmQ5tCsVUvrFcqXVTHiAtw/JG4/Dbyjg4a0y
+         8URg==
+X-Gm-Message-State: AO0yUKXdbutDn8dMqazsbShDDn7UMRtKdkIoRrkf7Eh4OTOKFIFaQSnj
+        +FNXr8wGCI4BGsUGTJBjGEprIw==
+X-Google-Smtp-Source: AK7set8k1yyqihkL7lEDeuIamGfJrPidQaf3VL7shCTdtPbifYjaUj0j3ZCA+tCz22qbl5k7/4CR7Q==
+X-Received: by 2002:adf:facb:0:b0:2bf:b746:6224 with SMTP id a11-20020adffacb000000b002bfb7466224mr2062674wrs.0.1674641440862;
+        Wed, 25 Jan 2023 02:10:40 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id s8-20020a5d69c8000000b002755e301eeasm4024686wrw.100.2023.01.25.02.10.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 02:10:40 -0800 (PST)
+Message-ID: <859715d1-a442-7f64-2345-60d0fe28bdb5@linaro.org>
+Date:   Wed, 25 Jan 2023 11:10:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH] dt-bindings: Add missing
+ (unevaluated|additional)Properties on child node schemas
+To:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230124230228.372305-1-robh@kernel.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230124230228.372305-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   ecabca1a36d59ec32fa315f3dc2e81784670b25b
-commit: be5d5218ef86618ad7b0cd7abf34550e048944a8 [40/41] docs: hwmon: add docs for the NXP MC34VR500 PMIC
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=be5d5218ef86618ad7b0cd7abf34550e048944a8
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch --no-tags groeck-staging hwmon-next
-        git checkout be5d5218ef86618ad7b0cd7abf34550e048944a8
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+On 25/01/2023 00:02, Rob Herring wrote:
+> Just as unevaluatedProperties or additionalProperties are required at
+> the top level of schemas, they should (and will) also be required for
+> child node schemas. That ensures only documented properties are
+> present.
+> 
+> Add unevaluatedProperties or additionalProperties as appropriate, and
+> then add any missing properties flagged by the addition.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
->> Documentation/hwmon/mc34vr500.rst: WARNING: document isn't included in any toctree
+Best regards,
+Krzysztof
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
