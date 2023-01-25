@@ -2,742 +2,154 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E8A1C54EED
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Jan 2023 10:23:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0AF3C54E94
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Jan 2023 11:17:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235528AbjAYKXL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Jan 2023 05:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
+        id S235795AbjAYLQz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Jan 2023 06:16:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234540AbjAYKXL (ORCPT
+        with ESMTP id S233356AbjAYLQN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Jan 2023 05:23:11 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B1C305CE
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Jan 2023 02:23:04 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id g205so13088182pfb.6
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Jan 2023 02:23:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CkEleT+3Wjg+Nam521Ma9RWXpCOG46/jAix6PwpJZoI=;
-        b=BPZzOyjrsS3xtQ6btYKo8bqzcXf0SzUkwbYF0qRSw+q1/0D/zyW0/gVkoBQMaqBg5T
-         ciN4yQrDaGJUgyMNOvvEhFAEfvf9qAUxE0LPBnsXFCHTmzty0zEAjM5wacBzxSAvHH4a
-         GMEl5jRSAFg0ZVQxXgQ3+6fOWIFaNBsqGuCKGYRk5ThjgBwAwyJnGdoOWiJ0Viv01TlS
-         PTPw2l/OREe5SsCvgiV7jQxrSHFZBZ6bCefpkjpiGydmQ+03IunLBnwUiBGomG5DghRW
-         q2U0HKiGi6oJTAFuOE2dDjKNcxaOc2L8G3q97Y8hjxT4DCsbg/hwZJSGqIxvDZfFhrhT
-         yCGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CkEleT+3Wjg+Nam521Ma9RWXpCOG46/jAix6PwpJZoI=;
-        b=Dx9EjJCWNaQSbGI7YxK5OBj3oo2HYbXmV27JYC1jMoTxytc2R9J4/0ka8cdYH7u1N9
-         c6DGtNoykDOMsLzh0ywFNwb4MtirOAmSmTX4pKceSGBLHbOY+5wS3CoPUXjPupspCAkm
-         qoamcxFlDLK+JkZgbK1KFKNXwMsTRxkz/sVOBvHQ0C/fo+MHwAmtc1UmGvLKYEaSap/Q
-         F2mDDvRIEyIIpKXYWoHO6j/2SURX2NQhHTo60J8Vw35VSR5YuwOlNlr6WEOO7aOs2Fp4
-         cv5Tk1UYt67UL7PL0UTd4lRBHo5Qrl9d40GIk8d5VK4SBC0yauMn0huwaq+DQpcoYJSp
-         2RjA==
-X-Gm-Message-State: AO0yUKVrM+6WHTZnYiohGtcqjHQ5//Oz6adHlwlTcPLjKaLhGxn/xEw8
-        DcK3byOAd2PEDUu26ycGEA8SB7jRW5YXrhWlYZ3pHw==
-X-Google-Smtp-Source: AK7set84zIasQmo1pR9dGaGkUG/LqqDN6R4ZsasOk1jdp57Ub7njHPajpPeB0GiOI9gB57G3d9xBuO8CmaspADP/obw=
-X-Received: by 2002:a63:e612:0:b0:4da:6c3c:74cf with SMTP id
- g18-20020a63e612000000b004da6c3c74cfmr40452pgh.10.1674642183692; Wed, 25 Jan
- 2023 02:23:03 -0800 (PST)
+        Wed, 25 Jan 2023 06:16:13 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F8F582AC
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Jan 2023 03:16:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674645361; x=1706181361;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4+vTRrDuTCpEre/qVy/aNfoHBt0INTHHSFIN8hA0vSY=;
+  b=HePQBDn8e38M31g/nnMTfOxAGCcjxXzLdNUn4+XEx8V7Yir5PgZnY8sR
+   98kfkIln5e97KvqJTDL5ORcC71XIJgUPxe+oXnCrHCeLhTBc0YFirrcgl
+   08MGeBCKqqZzAmAnfqvZQwKv/BcoDYQzZhtT+69wzlhSUV2TFBCd7i/To
+   ZpFnIClMvpiehKqA9r2cryQKvG8Jol48f5idwFqfOahLdwU0ztHgVC4zr
+   F6J70+9xqh2qfnTJtBeLlmE2eTa0kzUNn5q+8FDys+XzFE51IPjU9jvbX
+   yyLMCBZkA10+qEB4+TEJvzceVVAF+wcejr60HN0/meEGkeEmUyB8B5DCw
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="306194978"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="306194978"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 03:15:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="836316437"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="836316437"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 25 Jan 2023 03:15:56 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pKdkx-0007GC-24;
+        Wed, 25 Jan 2023 11:15:55 +0000
+Date:   Wed, 25 Jan 2023 19:15:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD REGRESSION
+ ecabca1a36d59ec32fa315f3dc2e81784670b25b
+Message-ID: <63d10f44.ltDdflGPZdh1xXiU%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20230124230048.371144-1-robh@kernel.org>
-In-Reply-To: <20230124230048.371144-1-robh@kernel.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 25 Jan 2023 11:22:27 +0100
-Message-ID: <CAPDyKFpL_XB1hhq+q1dAsscQu-q9-ZNt08Kuz6bFgZXBjDUYdw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Add missing (unevaluated|additional)Properties
- on child node schemas
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 25 Jan 2023 at 00:00, Rob Herring <robh@kernel.org> wrote:
->
-> Just as unevaluatedProperties or additionalProperties are required at
-> the top level of schemas, they should (and will) also be required for
-> child node schemas. That ensures only documented properties are
-> present.
->
-> Add unevaluatedProperties or additionalProperties as appropriate, and
-> then add any missing properties flagged by the addition.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: ecabca1a36d59ec32fa315f3dc2e81784670b25b  hwmon: add initial NXP MC34VR500 PMIC monitoring support
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # For MMC
+Error/Warning reports:
 
-Kind regards
-Uffe
+https://lore.kernel.org/oe-kbuild-all/202301251348.HFHcROTP-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202301251734.bFyrYeeG-lkp@intel.com
 
-> ---
-> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> To: David Airlie <airlied@gmail.com>
-> To: Daniel Vetter <daniel@ffwll.ch>
-> To: Bartosz Golaszewski <brgl@bgdev.pl>
-> To: Jean Delvare <jdelvare@suse.com>
-> To: Guenter Roeck <linux@roeck-us.net>
-> To: Thomas Gleixner <tglx@linutronix.de>
-> To: Marc Zyngier <maz@kernel.org>
-> To: Jassi Brar <jassisinghbrar@gmail.com>
-> To: Mauro Carvalho Chehab <mchehab@kernel.org>
-> To: Lee Jones <lee@kernel.org>
-> To: Ulf Hansson <ulf.hansson@linaro.org>
-> To: Richard Weinberger <richard@nod.at>
-> To: Vignesh Raghavendra <vigneshr@ti.com>
-> To: Sebastian Reichel <sre@kernel.org>
-> To: Mark Brown <broonie@kernel.org>
-> To: "Rafael J. Wysocki" <rafael@kernel.org>
-> To: Daniel Lezcano <daniel.lezcano@linaro.org>
-> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: openbmc@lists.ozlabs.org
-> Cc: linux-mmc@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-spi@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> ---
->  .../devicetree/bindings/arm/arm,vexpress-juno.yaml     |  1 +
->  .../bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml |  5 +++--
->  .../bindings/arm/tegra/nvidia,tegra20-pmc.yaml         |  4 ++++
->  .../bindings/bus/allwinner,sun50i-a64-de2.yaml         |  1 +
->  .../bindings/bus/allwinner,sun8i-a23-rsb.yaml          |  1 +
->  .../bus/intel,ixp4xx-expansion-bus-controller.yaml     |  6 ++++++
->  Documentation/devicetree/bindings/bus/palmbus.yaml     |  1 +
->  .../devicetree/bindings/display/msm/qcom,mdss.yaml     |  5 +++++
->  Documentation/devicetree/bindings/example-schema.yaml  |  2 ++
->  .../devicetree/bindings/gpio/x-powers,axp209-gpio.yaml |  1 +
->  .../devicetree/bindings/hwmon/adi,ltc2992.yaml         |  1 +
->  .../bindings/interrupt-controller/arm,gic-v3.yaml      |  2 ++
->  .../bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml      |  1 +
->  .../devicetree/bindings/media/i2c/maxim,max9286.yaml   |  7 +++++++
->  .../bindings/memory-controllers/arm,pl35x-smc.yaml     |  1 +
->  .../bindings/memory-controllers/exynos-srom.yaml       |  1 +
->  .../memory-controllers/nvidia,tegra124-emc.yaml        |  1 +
->  .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml |  1 +
->  .../devicetree/bindings/mfd/mediatek,mt6370.yaml       |  2 ++
->  .../devicetree/bindings/mmc/aspeed,sdhci.yaml          |  1 +
->  Documentation/devicetree/bindings/mtd/mtd.yaml         |  1 +
->  .../devicetree/bindings/power/supply/ti,lp8727.yaml    |  1 +
->  .../devicetree/bindings/soc/imx/fsl,imx93-src.yaml     |  3 ++-
->  .../bindings/soc/microchip/atmel,at91rm9200-tcb.yaml   |  1 +
->  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml |  1 +
->  .../devicetree/bindings/sound/marvell,mmp-sspa.yaml    |  1 +
->  .../devicetree/bindings/sound/qcom,wcd934x.yaml        |  1 +
->  .../devicetree/bindings/sound/samsung,odroid.yaml      |  2 ++
->  .../devicetree/bindings/soundwire/qcom,soundwire.yaml  |  1 +
->  .../bindings/spi/allwinner,sun4i-a10-spi.yaml          |  1 +
->  .../bindings/spi/allwinner,sun6i-a31-spi.yaml          |  1 +
->  .../devicetree/bindings/spi/spi-controller.yaml        |  1 +
->  .../sram/allwinner,sun4i-a10-system-control.yaml       | 10 +++++-----
->  Documentation/devicetree/bindings/sram/qcom,ocmem.yaml |  1 +
->  .../devicetree/bindings/thermal/thermal-zones.yaml     |  1 +
->  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml   |  1 +
->  36 files changed, 65 insertions(+), 8 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
-> index eec190a96225..09c319f803ba 100644
-> --- a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
-> +++ b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
-> @@ -144,6 +144,7 @@ patternProperties:
->        it is stricter and always has two compatibles.
->      type: object
->      $ref: '/schemas/simple-bus.yaml'
-> +    unevaluatedProperties: false
->
->      properties:
->        compatible:
-> diff --git a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-> index b369b374fc4a..39e3c248f5b7 100644
-> --- a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-> +++ b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-> @@ -30,6 +30,7 @@ properties:
->
->    clocks:
->      type: object
-> +    additionalProperties: false
->
->      properties:
->        compatible:
-> @@ -47,6 +48,7 @@ properties:
->
->    reset:
->      type: object
-> +    additionalProperties: false
->
->      properties:
->        compatible:
-> @@ -63,6 +65,7 @@ properties:
->
->    pwm:
->      type: object
-> +    additionalProperties: false
->
->      properties:
->        compatible:
-> @@ -76,8 +79,6 @@ properties:
->        - compatible
->        - "#pwm-cells"
->
-> -    additionalProperties: false
-> -
->  required:
->    - compatible
->    - mboxes
-> diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
-> index 4a00593b9f7f..89191cfdf619 100644
-> --- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
-> +++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
-> @@ -234,6 +234,7 @@ properties:
->      patternProperties:
->        "^[a-z0-9]+$":
->          type: object
-> +        additionalProperties: false
->
->          properties:
->            clocks:
-> @@ -252,6 +253,9 @@ properties:
->                for controlling a power-gate.
->                See ../reset/reset.txt for more details.
->
-> +          power-domains:
-> +            maxItems: 1
-> +
->            '#power-domain-cells':
->              const: 0
->              description: Must be 0.
-> diff --git a/Documentation/devicetree/bindings/bus/allwinner,sun50i-a64-de2.yaml b/Documentation/devicetree/bindings/bus/allwinner,sun50i-a64-de2.yaml
-> index 85c4a979aec4..9845a187bdf6 100644
-> --- a/Documentation/devicetree/bindings/bus/allwinner,sun50i-a64-de2.yaml
-> +++ b/Documentation/devicetree/bindings/bus/allwinner,sun50i-a64-de2.yaml
-> @@ -46,6 +46,7 @@ patternProperties:
->    # All other properties should be child nodes with unit-address and 'reg'
->    "^[a-zA-Z][a-zA-Z0-9,+\\-._]{0,63}@[0-9a-fA-F]+$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        reg:
->          maxItems: 1
-> diff --git a/Documentation/devicetree/bindings/bus/allwinner,sun8i-a23-rsb.yaml b/Documentation/devicetree/bindings/bus/allwinner,sun8i-a23-rsb.yaml
-> index bee5f53f837f..24c939f59091 100644
-> --- a/Documentation/devicetree/bindings/bus/allwinner,sun8i-a23-rsb.yaml
-> +++ b/Documentation/devicetree/bindings/bus/allwinner,sun8i-a23-rsb.yaml
-> @@ -45,6 +45,7 @@ properties:
->  patternProperties:
->    "^.*@[0-9a-fA-F]+$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        reg:
->          maxItems: 1
-> diff --git a/Documentation/devicetree/bindings/bus/intel,ixp4xx-expansion-bus-controller.yaml b/Documentation/devicetree/bindings/bus/intel,ixp4xx-expansion-bus-controller.yaml
-> index 5fb4e7bfa4da..8073988937a8 100644
-> --- a/Documentation/devicetree/bindings/bus/intel,ixp4xx-expansion-bus-controller.yaml
-> +++ b/Documentation/devicetree/bindings/bus/intel,ixp4xx-expansion-bus-controller.yaml
-> @@ -56,8 +56,11 @@ patternProperties:
->      description: Devices attached to chip selects are represented as
->        subnodes.
->      type: object
-> +    additionalProperties: true
->
->      properties:
-> +      reg: true
-> +
->        intel,ixp4xx-eb-t1:
->          description: Address timing, extend address phase with n cycles.
->          $ref: /schemas/types.yaml#/definitions/uint32
-> @@ -120,6 +123,9 @@ patternProperties:
->          $ref: /schemas/types.yaml#/definitions/uint32
->          enum: [0, 1]
->
-> +    required:
-> +      - reg
-> +
->  required:
->    - compatible
->    - reg
-> diff --git a/Documentation/devicetree/bindings/bus/palmbus.yaml b/Documentation/devicetree/bindings/bus/palmbus.yaml
-> index 30fa6526cfc2..c36c1e92a573 100644
-> --- a/Documentation/devicetree/bindings/bus/palmbus.yaml
-> +++ b/Documentation/devicetree/bindings/bus/palmbus.yaml
-> @@ -36,6 +36,7 @@ patternProperties:
->    # All other properties should be child nodes with unit-address and 'reg'
->    "@[0-9a-f]+$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        reg:
->          maxItems: 1
-> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,mdss.yaml
-> index ba0460268731..14380596027b 100644
-> --- a/Documentation/devicetree/bindings/display/msm/qcom,mdss.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/qcom,mdss.yaml
-> @@ -86,18 +86,21 @@ required:
->  patternProperties:
->    "^mdp@[1-9a-f][0-9a-f]*$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        compatible:
->          const: qcom,mdp5
->
->    "^dsi@[1-9a-f][0-9a-f]*$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        compatible:
->          const: qcom,mdss-dsi-ctrl
->
->    "^phy@[1-9a-f][0-9a-f]*$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        compatible:
->          enum:
-> @@ -110,6 +113,7 @@ patternProperties:
->
->    "^hdmi-phy@[1-9a-f][0-9a-f]*$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        compatible:
->          enum:
-> @@ -121,6 +125,7 @@ patternProperties:
->
->    "^hdmi-tx@[1-9a-f][0-9a-f]*$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        compatible:
->          enum:
-> diff --git a/Documentation/devicetree/bindings/example-schema.yaml b/Documentation/devicetree/bindings/example-schema.yaml
-> index dfcf4c27d44a..f4eec4c42fb3 100644
-> --- a/Documentation/devicetree/bindings/example-schema.yaml
-> +++ b/Documentation/devicetree/bindings/example-schema.yaml
-> @@ -176,6 +176,8 @@ properties:
->      description: Child nodes are just another property from a json-schema
->        perspective.
->      type: object  # DT nodes are json objects
-> +    # Child nodes also need additionalProperties or unevaluatedProperties
-> +    additionalProperties: false
->      properties:
->        vendor,a-child-node-property:
->          description: Child node properties have all the same schema
-> diff --git a/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml b/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
-> index 7f26f6b1eea1..31906c253940 100644
-> --- a/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
-> @@ -35,6 +35,7 @@ properties:
->  patternProperties:
->    "^.*-pins?$":
->      $ref: /schemas/pinctrl/pinmux-node.yaml#
-> +    additionalProperties: false
->
->      properties:
->        pins:
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2992.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc2992.yaml
-> index 64a8fcb7bc46..14142b59ee9c 100644
-> --- a/Documentation/devicetree/bindings/hwmon/adi,ltc2992.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2992.yaml
-> @@ -32,6 +32,7 @@ properties:
->  patternProperties:
->    "^channel@([0-1])$":
->      type: object
-> +    additionalProperties: false
->      description: |
->        Represents the two supplies to be monitored.
->
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml b/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-> index 9f7d3e11aacb..2e72d0acc13d 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-> @@ -133,12 +133,14 @@ properties:
->
->    ppi-partitions:
->      type: object
-> +    additionalProperties: false
->      description:
->        PPI affinity can be expressed as a single "ppi-partitions" node,
->        containing a set of sub-nodes.
->      patternProperties:
->        "^interrupt-partition-[0-9]+$":
->          type: object
-> +        additionalProperties: false
->          properties:
->            affinity:
->              $ref: /schemas/types.yaml#/definitions/phandle-array
-> diff --git a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
-> index 2193141dd7fd..d546b9e0744d 100644
-> --- a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
-> +++ b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
-> @@ -72,6 +72,7 @@ patternProperties:
->    '^mailbox@[0-9a-f]+$':
->      description: Internal ipi mailbox node
->      type: object  # DT nodes are json objects
-> +    additionalProperties: false
->      properties:
->        xlnx,ipi-id:
->          description:
-> diff --git a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-> index 90315e217003..13681748559e 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-> @@ -141,6 +141,7 @@ properties:
->      patternProperties:
->        "^i2c@[0-3]$":
->          type: object
-> +        additionalProperties: false
->          description: |
->            Child node of the i2c bus multiplexer which represents a GMSL link.
->            Each serializer device on the GMSL link remote end is represented with
-> @@ -152,6 +153,12 @@ properties:
->              description: The index of the GMSL channel.
->              maxItems: 1
->
-> +          '#address-cells':
-> +            const: 1
-> +
-> +          '#size-cells':
-> +            const: 0
-> +
->          patternProperties:
->            "^camera@[a-f0-9]+$":
->              type: object
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/arm,pl35x-smc.yaml b/Documentation/devicetree/bindings/memory-controllers/arm,pl35x-smc.yaml
-> index bd23257fe021..6d3962a17e49 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/arm,pl35x-smc.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/arm,pl35x-smc.yaml
-> @@ -73,6 +73,7 @@ properties:
->  patternProperties:
->    "@[0-7],[a-f0-9]+$":
->      type: object
-> +    additionalProperties: true
->      description: |
->        The child device node represents the controller connected to the SMC
->        bus. The controller can be a NAND controller or a pair of any memory
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/exynos-srom.yaml b/Documentation/devicetree/bindings/memory-controllers/exynos-srom.yaml
-> index c6e44f47ce7c..10a2d97e5f8b 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/exynos-srom.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/exynos-srom.yaml
-> @@ -38,6 +38,7 @@ properties:
->  patternProperties:
->    "^.*@[0-3],[a-f0-9]+$":
->      type: object
-> +    additionalProperties: true
->      description:
->        The actual device nodes should be added as subnodes to the SROMc node.
->        These subnodes, in addition to regular device specification, should
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra124-emc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra124-emc.yaml
-> index 9163c3f12a85..f5f03bf36413 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra124-emc.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra124-emc.yaml
-> @@ -50,6 +50,7 @@ properties:
->  patternProperties:
->    "^emc-timings-[0-9]+$":
->      type: object
-> +    additionalProperties: false
->      properties:
->        nvidia,ram-code:
->          $ref: /schemas/types.yaml#/definitions/uint32
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml b/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml
-> index e76ba767dfd2..14f1833d37c9 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml
-> @@ -47,6 +47,7 @@ properties:
->
->  patternProperties:
->    "^.*@[0-4],[a-f0-9]+$":
-> +    additionalProperties: true
->      type: object
->      $ref: mc-peripheral-props.yaml#
->
-> diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> index 5644882db2e8..c9574b243046 100644
-> --- a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> @@ -35,6 +35,7 @@ properties:
->
->    adc:
->      type: object
-> +    additionalProperties: false
->      description: |
->        Provides 9 channels for system monitoring, including VBUSDIV5 (lower
->        accuracy, higher measure range), VBUSDIV2 (higher accuracy, lower
-> @@ -73,6 +74,7 @@ properties:
->
->    regulators:
->      type: object
-> +    additionalProperties: false
->      description: |
->        List all supported regulators, which support the control for DisplayBias
->        voltages and one general purpose LDO which commonly used to drive the
-> diff --git a/Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml b/Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml
-> index 987b287f3bff..9fce8cd7b0b6 100644
-> --- a/Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml
-> @@ -42,6 +42,7 @@ patternProperties:
->    "^sdhci@[0-9a-f]+$":
->      type: object
->      $ref: mmc-controller.yaml
-> +    unevaluatedProperties: false
->
->      properties:
->        compatible:
-> diff --git a/Documentation/devicetree/bindings/mtd/mtd.yaml b/Documentation/devicetree/bindings/mtd/mtd.yaml
-> index 78da129e9985..da3d488c335f 100644
-> --- a/Documentation/devicetree/bindings/mtd/mtd.yaml
-> +++ b/Documentation/devicetree/bindings/mtd/mtd.yaml
-> @@ -44,6 +44,7 @@ patternProperties:
->
->    "^otp(-[0-9]+)?$":
->      $ref: ../nvmem/nvmem.yaml#
-> +    unevaluatedProperties: false
->
->      description: |
->        An OTP memory region. Some flashes provide a one-time-programmable
-> diff --git a/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml b/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> index ce6fbdba8f6b..0542d4126cf5 100644
-> --- a/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> @@ -28,6 +28,7 @@ properties:
->  patternProperties:
->    '^(ac|usb)$':
->      type: object
-> +    additionalProperties: false
->      description: USB/AC charging parameters
->      properties:
->        charger-type:
-> diff --git a/Documentation/devicetree/bindings/soc/imx/fsl,imx93-src.yaml b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-src.yaml
-> index c1cc69b51981..9ce8d8b427fa 100644
-> --- a/Documentation/devicetree/bindings/soc/imx/fsl,imx93-src.yaml
-> +++ b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-src.yaml
-> @@ -38,8 +38,9 @@ properties:
->
->  patternProperties:
->    "power-domain@[0-9a-f]+$":
-> -
->      type: object
-> +    additionalProperties: false
-> +
->      properties:
->        compatible:
->          items:
-> diff --git a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
-> index 33748a061898..a46411149571 100644
-> --- a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
-> +++ b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
-> @@ -54,6 +54,7 @@ patternProperties:
->    "^timer@[0-2]$":
->      description: The timer block channels that are used as timers or counters.
->      type: object
-> +    additionalProperties: false
->      properties:
->        compatible:
->          items:
-> diff --git a/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml b/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
-> index 847873289f25..7ab96baf2064 100644
-> --- a/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
-> +++ b/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
-> @@ -130,6 +130,7 @@ patternProperties:
->        PRU-ICSS configuration space. CFG sub-module represented as a SysCon.
->
->      type: object
-> +    additionalProperties: false
->
->      properties:
->        compatible:
-> diff --git a/Documentation/devicetree/bindings/sound/marvell,mmp-sspa.yaml b/Documentation/devicetree/bindings/sound/marvell,mmp-sspa.yaml
-> index f302fe89a253..4193d17d1c62 100644
-> --- a/Documentation/devicetree/bindings/sound/marvell,mmp-sspa.yaml
-> +++ b/Documentation/devicetree/bindings/sound/marvell,mmp-sspa.yaml
-> @@ -60,6 +60,7 @@ properties:
->      properties:
->        endpoint:
->          type: object
-> +        additionalProperties: true
->
->          properties:
->            dai-format:
-> diff --git a/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml b/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-> index 184e8ccbdd13..19c4deae74b8 100644
-> --- a/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-> +++ b/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-> @@ -132,6 +132,7 @@ properties:
->  patternProperties:
->    "^.*@[0-9a-f]+$":
->      type: object
-> +    additionalProperties: true
->      description: |
->        WCD934x subnode for each slave devices. Bindings of each subnodes
->        depends on the specific driver providing the functionality and
-> diff --git a/Documentation/devicetree/bindings/sound/samsung,odroid.yaml b/Documentation/devicetree/bindings/sound/samsung,odroid.yaml
-> index 7b4e08ddef6a..51a101558c7b 100644
-> --- a/Documentation/devicetree/bindings/sound/samsung,odroid.yaml
-> +++ b/Documentation/devicetree/bindings/sound/samsung,odroid.yaml
-> @@ -35,12 +35,14 @@ properties:
->
->    cpu:
->      type: object
-> +    additionalProperties: false
->      properties:
->        sound-dai:
->          description: phandles to the I2S controllers
->
->    codec:
->      type: object
-> +    additionalProperties: false
->      properties:
->        sound-dai:
->          items:
-> diff --git a/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml b/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
-> index bcbfa71536cd..a191a966cf64 100644
-> --- a/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
-> +++ b/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
-> @@ -200,6 +200,7 @@ properties:
->  patternProperties:
->    "^.*@[0-9a-f],[0-9a-f]$":
->      type: object
-> +    additionalProperties: true
->      description:
->        Child nodes for a standalone audio codec or speaker amplifier IC.
->        It has RX and TX Soundwire secondary devices.
-> diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun4i-a10-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun4i-a10-spi.yaml
-> index f1176a28fd87..c18eafbfde8c 100644
-> --- a/Documentation/devicetree/bindings/spi/allwinner,sun4i-a10-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/allwinner,sun4i-a10-spi.yaml
-> @@ -51,6 +51,7 @@ properties:
->  patternProperties:
->    "^.*@[0-9a-f]+":
->      type: object
-> +    additionalProperties: true
->      properties:
->        reg:
->          items:
-> diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> index 58b7056f4a70..e2187d395bd1 100644
-> --- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> @@ -63,6 +63,7 @@ properties:
->  patternProperties:
->    "^.*@[0-9a-f]+":
->      type: object
-> +    additionalProperties: true
->      properties:
->        reg:
->          items:
-> diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-> index 5a7c72cadf76..90945f59b7e8 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-> @@ -94,6 +94,7 @@ patternProperties:
->    "^.*@[0-9a-f]+$":
->      type: object
->      $ref: spi-peripheral-props.yaml
-> +    additionalProperties: true
->
->      properties:
->        spi-3wire:
-> diff --git a/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml b/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-> index 98a7dc7f467d..a1c96985951f 100644
-> --- a/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-> +++ b/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-> @@ -57,17 +57,17 @@ properties:
->
->  patternProperties:
->    "^sram@[a-z0-9]+":
-> -    type: object
-> -
-> -    properties:
-> -      compatible:
-> -        const: mmio-sram
-> +    $ref: /schemas/sram/sram.yaml#
-> +    unevaluatedProperties: false
->
->      patternProperties:
->        "^sram-section?@[a-f0-9]+$":
->          type: object
-> +        additionalProperties: false
->
->          properties:
-> +          reg: true
-> +
->            compatible:
->              oneOf:
->                - const: allwinner,sun4i-a10-sram-a3-a4
-> diff --git a/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml b/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
-> index 071f2d676196..4bbf6db0b6bd 100644
-> --- a/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
-> +++ b/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
-> @@ -61,6 +61,7 @@ additionalProperties: false
->  patternProperties:
->    "-sram@[0-9a-f]+$":
->      type: object
-> +    additionalProperties: false
->      description: A region of reserved memory.
->
->      properties:
-> diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> index 8581821fa4e1..4f3acdc4dec0 100644
-> --- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> @@ -171,6 +171,7 @@ patternProperties:
->
->        cooling-maps:
->          type: object
-> +        additionalProperties: false
->          description:
->            This node describes the action to be taken when a thermal zone
->            crosses one of the temperature thresholds described in the trips
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> index a3f8a3f49852..3cdd40f8acc0 100644
-> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> @@ -118,6 +118,7 @@ properties:
->  patternProperties:
->    "^usb@[0-9a-f]+$":
->      $ref: snps,dwc3.yaml#
-> +    unevaluatedProperties: false
->
->      properties:
->        wakeup-source: false
-> --
-> 2.39.0
->
+Error/Warning: (recently discovered and may have been fixed)
+
+Documentation/hwmon/mc34vr500.rst: WARNING: document isn't included in any toctree
+FATAL: modpost: drivers/hwmon/mc34vr500: struct i2c_device_id is not terminated with a NULL entry!
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- m68k-allmodconfig
+|   `-- FATAL:modpost:drivers-hwmon-mc34vr500:struct-i2c_device_id-is-not-terminated-with-a-NULL-entry
+`-- x86_64-allnoconfig
+    `-- Documentation-hwmon-mc34vr500.rst:WARNING:document-isn-t-included-in-any-toctree
+
+elapsed time: 721m
+
+configs tested: 62
+configs skipped: 2
+
+gcc tested configs:
+x86_64                            allnoconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+um                             i386_defconfig
+s390                             allyesconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+arc                  randconfig-r043-20230123
+arm                  randconfig-r046-20230123
+x86_64                           allyesconfig
+powerpc                           allnoconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+alpha                            allyesconfig
+arc                              allyesconfig
+i386                                defconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+sh                               allmodconfig
+arm                                 defconfig
+x86_64               randconfig-a002-20230123
+x86_64               randconfig-a001-20230123
+x86_64               randconfig-a004-20230123
+x86_64               randconfig-a003-20230123
+x86_64                           rhel-8.3-syz
+x86_64               randconfig-a006-20230123
+x86_64                         rhel-8.3-kunit
+x86_64               randconfig-a005-20230123
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+arm64                            allyesconfig
+i386                 randconfig-a003-20230123
+i386                 randconfig-a002-20230123
+i386                 randconfig-a001-20230123
+i386                 randconfig-a004-20230123
+arm                              allyesconfig
+i386                 randconfig-a005-20230123
+i386                 randconfig-a006-20230123
+i386                             allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+ia64                             allmodconfig
+
+clang tested configs:
+hexagon              randconfig-r041-20230123
+hexagon              randconfig-r045-20230123
+s390                 randconfig-r044-20230123
+riscv                randconfig-r042-20230123
+x86_64               randconfig-a013-20230123
+x86_64               randconfig-a011-20230123
+x86_64               randconfig-a012-20230123
+x86_64               randconfig-a014-20230123
+x86_64               randconfig-a016-20230123
+x86_64               randconfig-a015-20230123
+x86_64                          rhel-8.3-rust
+i386                 randconfig-a012-20230123
+i386                 randconfig-a013-20230123
+i386                 randconfig-a011-20230123
+i386                 randconfig-a014-20230123
+i386                 randconfig-a016-20230123
+i386                 randconfig-a015-20230123
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
