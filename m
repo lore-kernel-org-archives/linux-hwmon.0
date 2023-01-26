@@ -2,61 +2,62 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B53BC54EAA
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Jan 2023 22:33:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56F97C54EAA
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Jan 2023 22:33:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232888AbjAZWdP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 26 Jan 2023 17:33:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
+        id S233231AbjAZWdT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 26 Jan 2023 17:33:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233227AbjAZWcw (ORCPT
+        with ESMTP id S233234AbjAZWcw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Thu, 26 Jan 2023 17:32:52 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2871728D6
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 14:32:30 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id e19so2559243qvw.13
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 14:32:30 -0800 (PST)
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E481728EC
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 14:32:31 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id ll10so1448962qvb.6
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 14:32:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=criticallink.com; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4xEhI3axOJYS2dd9mxNrX3agzmt2SZlxn5ns5AzUH58=;
-        b=cEzkNNjy9xdn2V+pJO12CL+zMeml5aYU0d5MSRymk3vzhECNfnAxv1i6QuiVcSung9
-         HKYXTxKhnCqIQpI5WID+qZM4HBfq75uXYeRVOoN7J9VOOhb2MbC8GUJ8z/vwK6MgWhH7
-         l8zzsyqzuNrtLFoh3MogI7R9KgSFwfyb4ysrZsOHEm/e3CaNdURMwSmuG0z3LXh9UuMv
-         SIFOhIVuYksdSG/fttoK7FrudzTxSUuMREd/wnDFhDhCeb2LyBH+0i1AtDuYb+rPg1hK
-         vwF81gE0fo/5zvsSrS9iRVv3ZT/m0zAGoqQCLHd+YqYcyJ+Jm6FRe2j8+3DYT0RorNsL
-         cyIA==
+        bh=OlgJAvEkxbhhdbp3uu9+lWHtfcFwlocAfS6RLhi2B3k=;
+        b=mT/ufr4G73UuIeie3utMHAeoQ+z9zmYRgkQgaLFdHEFErxqGa+40raWQ02BdISm+Q7
+         aw7jMlVwoqdta6ZGsBNXwLg0NdjhlUA1JPoyWlQ8EJMR+QeGttil0fYJd8rtBjNgGobS
+         k9x6qTNK7zjl8bXyb7FLwl0qoLwBE1O4SmuZh76Yd8ndk43ScY33lNt+93W9vXBWyuQB
+         fJWtUHAArrcuNo5pAI1DtGLcBUS0NrqA11XQXKRHscUTsitukwj6Kadqqi7a82AVpyM1
+         fWgXJ49XVk//zGvPkPJBjnuDh4cHgVZO6guW+TBMfuLk4u8yLP+C/jS66q6kMO4jRtE1
+         +vWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4xEhI3axOJYS2dd9mxNrX3agzmt2SZlxn5ns5AzUH58=;
-        b=XkoQXybX4qkhHgkTgkI61mQkBgyaxbpna05/AgjY4cCFXt2prK5w4Fsau4FJMuLPAO
-         Tvuo4S9n4Rof65LwGnDZ79kg3JKvTbKJheQN2EYBmY77ezFkzZ7OZ3yTyS/L/kQA5jko
-         dfeye5LfYkTylgqvt8SQVu2AjQWj/785af4zPU/7j+JNVhdkMFQbN0q9UBX1JE8lt0yI
-         65460tWVAQbP2NwBX3YlfWGcUcsEfBOj2fAlOI67zIMHrZ1tHS10IJfkxaiP5RwqcPY0
-         vU6VBKeRFkiPMwPhJHs5wrtRNLxmoYpXCgIkzH1imk7rDTBWb+PKQiR/Hbkb65u0uxVY
-         Jz/g==
-X-Gm-Message-State: AFqh2kr1/bEXLt1mtuaC4kAoWtaz7g4VIy26DVLqfMre+qgD3lnDd82g
-        BiuZh99eDB558Vz8CQ8o5fTkoA==
-X-Google-Smtp-Source: AMrXdXuzBOyI5/KyWaygGhCjxZsF6FqdobUQud3r/7841g2Ny78wWU6KYvEP1doyOL2yMhzPTNjRZA==
-X-Received: by 2002:a05:6214:4287:b0:535:2d28:bf1d with SMTP id og7-20020a056214428700b005352d28bf1dmr61600177qvb.33.1674772349768;
-        Thu, 26 Jan 2023 14:32:29 -0800 (PST)
+        bh=OlgJAvEkxbhhdbp3uu9+lWHtfcFwlocAfS6RLhi2B3k=;
+        b=d8uHarH6QjJ2OWp70m/y0+oAlL69vmjitAiiMeClPeU2eUVxJq61mxUAxqtRxNJEkF
+         /3c1UdyZcftvm8flMOE4g0sTpr9WwY4zoIUd1m3HRXgTR9aNcWsqT8TZHWvicV/gGVcO
+         tW3UsQ6X/m7nfA73wQCASrclEda6cgtawtEIKj9QB4IrVMOdc4ZYZVeNLE55prPwhNOd
+         TgSiFH3663wliL83SqJZFXAEmDtPmi3YJrM6RAEIybyc9+JhW41fATg1RCGerTCD5pUf
+         WH54Do101anGWHwbZ6TOLhGU+amWwHNC/OtAcXAzhjPcUnXYN/j7JCbcVbdMNJlT6bq0
+         q8bQ==
+X-Gm-Message-State: AFqh2kp9O6a7brsEqLJMHbkJALbBd7ee1ovMbAV6yRkAkAhtBck7aGBn
+        PoSOtZqAPMko/BFXyoqmJttJ01XhuvnPIN1hXq8=
+X-Google-Smtp-Source: AMrXdXswtksS87z+wKAojoUFgd3Nv8zRGClxzKUFC/+fjkmlOEVmTBk+1kHsWA7F7LG5JVy15APQRQ==
+X-Received: by 2002:a05:6214:803:b0:532:d34:5aaa with SMTP id df3-20020a056214080300b005320d345aaamr58644565qvb.11.1674772350870;
+        Thu, 26 Jan 2023 14:32:30 -0800 (PST)
 Received: from [127.0.1.1] (static-72-90-70-109.syrcny.fios.verizon.net. [72.90.70.109])
-        by smtp.gmail.com with ESMTPSA id m7-20020a05620a220700b006ff8a122a1asm1723091qkh.78.2023.01.26.14.32.28
+        by smtp.gmail.com with ESMTPSA id m7-20020a05620a220700b006ff8a122a1asm1723091qkh.78.2023.01.26.14.32.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 14:32:29 -0800 (PST)
+        Thu, 26 Jan 2023 14:32:30 -0800 (PST)
 From:   Jonathan Cormier <jcormier@criticallink.com>
-Date:   Thu, 26 Jan 2023 17:32:24 -0500
-Subject: [PATCH v4 2/5] hwmon: ltc2945: Add devicetree match table
+Date:   Thu, 26 Jan 2023 17:32:25 -0500
+Subject: [PATCH v4 3/5] hwmon: ltc2945: Handle error case in
+ ltc2945_value_store
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230126-b4-ltc2945_shunt_resistor-v4-2-bb913470d8da@criticallink.com>
+Message-Id: <20230126-b4-ltc2945_shunt_resistor-v4-3-bb913470d8da@criticallink.com>
 References: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
 In-Reply-To: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
 To:     Jean Delvare <jdelvare@suse.com>,
@@ -68,62 +69,50 @@ Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         John Pruitt <jpruitt@criticallink.com>,
         Jonathan Cormier <jcormier@criticallink.com>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1025;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=867;
  i=jcormier@criticallink.com; h=from:subject:message-id;
- bh=Ko4/DNeywEIQUpedzI15zf/CLimbk3xwVSNJ1d5SvMM=;
- b=owEBbQKS/ZANAwAKAdzX/S4LNuuqAcsmYgBj0v967dbZK3pTHY2jf3XbNoFu7verxjCaGB5B9/94
- 99Zfs7eJAjMEAAEKAB0WIQT/MozqCeZtYxNnVN/c1/0uCzbrqgUCY9L/egAKCRDc1/0uCzbrqqUfD/
- 4oWWVTbKPgDKGULT2hNoHx/PX85X3YWhcjEp1/ZPPYjIXrqO/Fbu0x3mXg1ki52jK7s5bqdjxPn8Im
- br2YFa9GAiX7kRSE8JQqtsypb7cD8SP6WhXEftP8I7jJMDINzWkIrqrguLlxnk+gdypv4jydKPb0Sv
- h91mCNu/hc2Zs6uV/+P9Yozh71LK9r7uVB4Sk9OSag6Ld2cYmHDVoVl5cNZmOvFxrQEjbn1nGvsfpl
- VJbMZ4sALN8wX0MJ05ISUf8+Py9fq9Cto+cwPAkKo5CemIGoGf5renPvPLgWQMyJiY/PyTDCeM+S4P
- GRY1r5KsOBsCEc++b2riR7Shjy72oQZY+j9XAXs39vSZrY9/0+xfmbjDkBWEtP8mHzzbIeeYpe43Ir
- fAWhkbJP+VW7ZfKmOCw2TbgYeBf/2fD7/3vAro2ZBE6PMu1+yqIEHZ3tWwelW2PmfsddvgchoruM1j
- aaxlCeHlG8xjOdiNXiWuTFzPtnXup5a/aiBrCJG3ftT45xtRDwTFIosHRp7ZrCXcUVhB09JAqysPM3
- 9XWaKXRjz9NkYdTN/BVbhpPyVXvG9DCmkw1lUTUEhQKU26Bnr96fBrMydOF4vbeEpdXO0T2F82QrDI
- zCnCXAq2Q4Od6fA9XDEVplrpnl6Ahc38XDbOMbvuDxyefknFaNMlJxFIWkUw==
+ bh=SzzENIrGiaejxh+uQZSs7e+ccCHGcUqjL1/OnwF5OmY=;
+ b=owEBbQKS/ZANAwAKAdzX/S4LNuuqAcsmYgBj0v96I9AKEpN83mKapP1hTRkeYHRy84kppIwH+CdQ
+ eL5pKQiJAjMEAAEKAB0WIQT/MozqCeZtYxNnVN/c1/0uCzbrqgUCY9L/egAKCRDc1/0uCzbrqudhEA
+ CuNh+CQew2a5gTfSFibY46D0O2N0QAEvr3Rsa0msLInZGzGb/Q37NW4Bek/e1UDQ9akNCC5edWUmSV
+ leReoDCSY5V6auNoZggWimfdebz5pXtmZMoci4TLpq9opdQZ7M9ZR2yu50sPMN25UX+U+fSdjPJ/9F
+ ZcOFS8a9dhWg9E40XXJdAqo3GjZG9+REU/Amh1e4I3JX4QZwHgxLgiVvhPuVW0A8p8TJRStovoi/4c
+ m1l0sz3XYRhtQeEpuw1Kp5BVpG3s1ZVRQSLU2qVPs6/+myvT55V01RoDUkWmq98y0EzhAoKPVmHQ03
+ gF04Un76awayLjOYjEMUlKLAXPqnq32cwHLqCrmWN6OFO6cx+ckxI6OvlNQ08g+MrnrxPJfk+afSRl
+ tjJZXx9rMNAHw5ZJi7dzOlBqrZivp4qVViLKPDWWdA2iXTpnInPf1IgZc7eKX+s1JPc6y00U4V4pTm
+ +QCYQROzi/dRarcDB+FjkTUG0AaXG8Oa6mCIiIMfOvf7tzKfv2UbXUmgXRRx4pBWdc4U+UlTfT8toO
+ yso+VmuZTXHJv3HaVHkUWSftvvh3SnofhhoR/O7WVXuIQKLQR731wF5y8WfuJmTMyTZ4QFPS+hVLC7
+ HRbEe8dV9CvuZ+iyYrOf+y184YJzZks7H1NN/4zLU0ze7gofQsjfp+XEVSIQ==
 X-Developer-Key: i=jcormier@criticallink.com; a=openpgp;
  fpr=FF328CEA09E66D63136754DFDCD7FD2E0B36EBAA
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add adi,ltc2945 compatible
+ltc2945_val_to_reg errors were not being handled
+which would have resulted in register being set to
+0 (clamped) instead of being left alone.
+
+Fixes: 6700ce035f83 ("hwmon: Driver for Linear Technologies LTC2945")
 
 Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
 ---
- drivers/hwmon/ltc2945.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/hwmon/ltc2945.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
-index 9adebb59f604..9af3e3821152 100644
+index 9af3e3821152..ac15298a6558 100644
 --- a/drivers/hwmon/ltc2945.c
 +++ b/drivers/hwmon/ltc2945.c
-@@ -58,6 +58,12 @@
- #define CONTROL_MULT_SELECT	(1 << 0)
- #define CONTROL_TEST_MODE	(1 << 4)
+@@ -254,6 +254,8 @@ static ssize_t ltc2945_value_store(struct device *dev,
  
-+static const struct of_device_id __maybe_unused ltc2945_of_match[] = {
-+	{ .compatible = "adi,ltc2945" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, ltc2945_of_match);
-+
- static inline bool is_power_reg(u8 reg)
- {
- 	return reg < LTC2945_SENSE_H;
-@@ -475,8 +481,9 @@ MODULE_DEVICE_TABLE(i2c, ltc2945_id);
- 
- static struct i2c_driver ltc2945_driver = {
- 	.driver = {
--		   .name = "ltc2945",
--		   },
-+		.name = "ltc2945",
-+		.of_match_table = of_match_ptr(ltc2945_of_match),
-+	},
- 	.probe_new = ltc2945_probe,
- 	.id_table = ltc2945_id,
- };
+ 	/* convert to register value, then clamp and write result */
+ 	regval = ltc2945_val_to_reg(dev, reg, val);
++	if (regval < 0)
++		return regval;
+ 	if (is_power_reg(reg)) {
+ 		regval = clamp_val(regval, 0, 0xffffff);
+ 		regbuf[0] = regval >> 16;
 
 -- 
 2.25.1
