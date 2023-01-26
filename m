@@ -2,147 +2,96 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 392A3C05027
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Jan 2023 13:54:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27A15C05027
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Jan 2023 19:40:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231860AbjAZNyD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 26 Jan 2023 08:54:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
+        id S232400AbjAZTkw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 26 Jan 2023 14:40:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231874AbjAZNxh (ORCPT
+        with ESMTP id S229781AbjAZTkv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:53:37 -0500
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A13730C7
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 05:53:17 -0800 (PST)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-16332831ed0so2390096fac.10
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 05:53:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rXFAlgB6wpO5hnNA64ezQhUqBbRsULsfgF3AZIsqFXY=;
-        b=gvL/ULeCqje36i2CcI1+6VFhPwYN9wyhPdF6YEprhNETgAudu5T2nsVEKX97qzrD5V
-         9kObmmuawx18tpeh23zidnIFtcfjw+laZLKtjRQlCLdRLzdGCX1yQIP1upLvqK/T3Fga
-         m9r12gA55CnFrME8lwEyJrOB981rbtLMnIG2QMqTT7S7eEQ1de830cK3dqln1dyELlTR
-         AM2zpPJiiDnMVLt7HsISQvcjFPbx/+rTMiK0zdIRfVAu0qZaZStfvDMwNrwbAYCj/g3S
-         tH02lKHlXWG7rePgOfJdgSbETjlA0nvttEjqOqwmt+BlWj4lyJsLt4lijj9db9t8sw7H
-         4KOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rXFAlgB6wpO5hnNA64ezQhUqBbRsULsfgF3AZIsqFXY=;
-        b=xWv0go7CvGQYGd9g+u+FuSezD8K+y2b89WFZCjstdFONyAvW+ZEGcawRCVFojxvLOg
-         cnVAAeULuItIRamwuGSNGXBqktMfUxB5yLndZJAKdt94ukmtHwj1qDNDlWifUMqTawVP
-         ykoM/9OC3mAB6pRUlObJcN9thlMLScpMbghA9jGwcKQEKp5qLXOQ1P0GKveFhNvQXiz1
-         nDVCJ5A6Nn4Vj/rAg6IGDxSg/ENIx114Fj7TfFv8zdeJpHfKABf0Wz3qTzkx9WCgfXgx
-         k2z8O2Jm/CMBTCpR/zvuDBiOYwkkGVo1W3cQ+R5XWjtDTQDYPqrYGyNZM+5RX+KPU3aZ
-         xIGA==
-X-Gm-Message-State: AFqh2kq9hrwxUsclba37DtJ96OIBiteDidIx71jA2BC2+McdARrphai3
-        syrReYXaqm1PATbtPz4Y48A=
-X-Google-Smtp-Source: AMrXdXvND+1UUHWdwjWfh0Z29yw0WVo3MWkrQ3nYGnFhIsRb2px7MINYnUOqUymB/h1tS0hIzlQcxQ==
-X-Received: by 2002:a05:6870:cc8e:b0:15f:20b4:40c6 with SMTP id ot14-20020a056870cc8e00b0015f20b440c6mr18509654oab.24.1674741195876;
-        Thu, 26 Jan 2023 05:53:15 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id gn12-20020a056870d98c00b0013ae39d0575sm501602oab.15.2023.01.26.05.53.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 05:53:15 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 26 Jan 2023 05:53:14 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Frank Crawford <frank@crawford.emu.id.au>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v1 6/7] hwmon: (it87) Add new chipset IT87952E
-Message-ID: <20230126135314.GB1635195@roeck-us.net>
-References: <20230126040223.986189-1-frank@crawford.emu.id.au>
- <20230126040223.986189-7-frank@crawford.emu.id.au>
+        Thu, 26 Jan 2023 14:40:51 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37ABA10C3;
+        Thu, 26 Jan 2023 11:40:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1674762028; bh=3Cy3fCheTmqrR4p/UHrSVDCpMr75DaSNbA/rdAI8n7U=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=HBa6NFSjxwkVC4icAYKaEvjCReBs6NeoPMh8yzRGk391NN4RwTbYrogm6AfFBTsRb
+         57LXbqt0MgQYNtotRKkrgjTsnkRK9zn3ZmAmmrtVVj+9ivjH8Y/P+SWxsD3a1RwBQ2
+         bWPWs0erExlgu1GzfNIhNVSXzRd0SpXGZs/XBkXDawDx0BuiHVfCraWzuqXIkvu1nz
+         Pp/jW79KvDMZmg2TkXp0KCcgyZeM2Bo0TC9JldHcSTEqcppzRpXOEq7687LQRx7mCO
+         5MVEUQNC+Jxhf58IVuMyLCzlXxmScwNy8NCpGj5QhMHDyFpzj1lcvmwbrJPbjlfHng
+         UIOE27mVRR0CA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1M5QFB-1pMV1F2FzJ-001NnE; Thu, 26 Jan 2023 20:40:28 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/5] platform/x86: dell-ddv: Various driver updates
+Date:   Thu, 26 Jan 2023 20:40:16 +0100
+Message-Id: <20230126194021.381092-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126040223.986189-7-frank@crawford.emu.id.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Xs56crRTDDmuGrLXwfgHDSMS9wth5egEMSFsoUFS0MPo0fgEe6L
+ 1SuiXN15NOPi6kvgvZNICz1u51ZNbkGmeyr+pfGHGduf8HdhpygvZjnqG6Bg7hwjMOp/Bv2
+ 0ONQ1fZD5U27pU21BVzMB+I7zMiQ4Fl2n15qfLkJwopHrldk2Qw3EfWZjHDfAv9u0dSGVia
+ 1fy6GaISU3MuClFTZG9ZQ==
+UI-OutboundReport: notjunk:1;M01:P0:ySjuomt81y0=;8mydRG8VOwe1OL2MnGsIjHoPX35
+ kG8L/e17mbvxowjjKSTI2cqPLfqgNvcAlpbGoTuTwwuuG5MbkxJrde33C/z6smCwxzGSUv14s
+ 1tTFVZUy/KLgGqZ6XV6/JwFhu87DP2sJdW9SHiDWQpScfED5DbqTSjYvtphtteCanuGrz9G10
+ 5uTsnuwTxzC/YD6FbmOxpjaqmhCSsy4ooNbHfWmfvnYTXzkcXDHN6bu4nb6KUUVYF9rwKbNUE
+ PNxnTmwDpEkcvRngb05jlQFE/E87xZXVT8upJpcX8kLGl9CZH4LwhWGCjnl2Ds8G2Yf6D0xSJ
+ zlWwvS3TnV+6PqSCe/eKM0pEKw7piFHukjZkYgTI4Ttry9TR162bnEULMwYRF96olLga14DbM
+ pXRq68OSWH5SUc91qxGhpDXwVlA7TTNBE2A6giKEUse5kSniNkpprbnxtPP8QvexjIADkGC/7
+ U8tIqyAIvAyCAu7YSVHavy2q9xnyu9jDi2DdOCjZtFdnJUp9PZZGctsOo1o4O7zdth7BRTzFw
+ NYjpk+PpVaV8oxbOSxg7A4QrI3ZYXz3MIGiQlIJ0kAybEf3HSNtVnPEkP4YloLVle7S/+qtvm
+ iazn8OUdKa8ZzXuuabXRDGQSNyhKPpimPfh8OMlP/kHatPpode9468ja3Lb3w5s1JGv3Po4V7
+ IYyy5tZjDTBYhZFIlEyztTXnplRXOHKDqnfzz/I3TqUI3KNhRc7/im1IjR3B8ijJbNT2nd3AE
+ pCaG4ei8kVEthmNUH+KAEDunCGZtYF6aMj3Yw/ZhdcDYJOkfj7BKVDHah6awQVQAoZF0KooCa
+ PO7CJ/unC05ouZaoADp692P/9Wj76+W5B1vtsBQgUZkRZXLhd/YZERBCnIzCNtvKto2FIbv80
+ 3LjN9bTxOlkDtBCRcLFzmfzTXaJIBD0ou2VRQX/fCuN3SKE3P5ZciKeZ6xBlhj8gXSwDAV7wO
+ UtZ4YBLKGRNujdwrHAnWFmi+BfY=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 03:02:22PM +1100, Frank Crawford wrote:
-> Add IT87952E, a new chip ID (DEV ID 0x8695), which appears to be an
-> updated version of the IT8792E and takes the same configuration.
-> 
-> The model name comes from the model name printed on the chip.
-> 
-> There is no datasheet publicly available.
-> 
-> Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
-> ---
->  drivers/hwmon/it87.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-> index e8eeedd23bee..85ecc61dbf9e 100644
-> --- a/drivers/hwmon/it87.c
-> +++ b/drivers/hwmon/it87.c
-> @@ -34,6 +34,7 @@
->   *            IT8786E  Super I/O chip w/LPC interface
->   *            IT8790E  Super I/O chip w/LPC interface
->   *            IT8792E  Super I/O chip w/LPC interface
-> + *            IT87952E  Super I/O chip w/LPC interface
->   *            Sis950   A clone of the IT8705F
->   *
->   *  Copyright (C) 2001 Chris Gauthron
-> @@ -63,7 +64,7 @@
->  
->  enum chips { it87, it8712, it8716, it8718, it8720, it8721, it8728, it8732,
->  	     it8771, it8772, it8781, it8782, it8783, it8786, it8790,
-> -	     it8792, it8603, it8620, it8622, it8628 };
-> +	     it8792, it8603, it8620, it8622, it8628, it87952 };
->  
->  static struct platform_device *it87_pdev[2];
->  
-> @@ -160,6 +161,7 @@ static inline void superio_exit(int ioreg, bool doexit)
->  #define IT8622E_DEVID 0x8622
->  #define IT8623E_DEVID 0x8623
->  #define IT8628E_DEVID 0x8628
-> +#define IT87952E_DEVID 0x8695
->  #define IT87_ACT_REG  0x30
->  #define IT87_BASE_REG 0x60
->  
-> @@ -470,6 +472,15 @@ static const struct it87_devices it87_devices[] = {
->  		  | FEAT_SIX_TEMP | FEAT_VIN3_5V,
->  		.peci_mask = 0x07,
->  	},
-> +	[it87952] = {
-> +		.name = "it87952",
-> +		.model = "IT87952E",
-> +		.features = FEAT_NEWER_AUTOPWM | FEAT_16BIT_FANS
-> +		  | FEAT_TEMP_OFFSET | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
-> +		  | FEAT_10_9MV_ADC | FEAT_IN7_INTERNAL,
-> +		.peci_mask = 0x07,
-> +		.old_peci_mask = 0x02,	/* Actually reports PCH */
-> +	},
->  };
->  
->  #define has_16bit_fans(data)	((data)->features & FEAT_16BIT_FANS)
-> @@ -2501,6 +2512,10 @@ static int __init it87_find(int sioaddr, unsigned short *address,
->  	case IT8628E_DEVID:
->  		sio_data->type = it8628;
->  		break;
-> +	case IT87952E_DEVID:
-> +		sio_data->type = it87952;
-> +		doexit = false;	/* See IT8792E comment above */
-> +		break;
+Thanks to bugreport 216655 on bugzilla, the contents of the
+fan/thermal sensor buffers could be almost completely decoded.
+It was also found out that newer Dell notebooks support a new
+DDV WMI interface version, which just adds a additional method.
 
-Is that true for this chip as well ? I would have hoped they fix
-the problem for an updated version of the same chip.
+The first patch adds support for this new DDV WMI interface version,
+while the second patch simplifies error handling then dealing with
+empty buffers. The fourth patch adds a module param useful for testing
+the driver on hardware exposing an unsupported DDV WMI interface
+version. The last patch finally adds support for exposing the sensor
+values over a standard hwmon interface.
 
-Thanks,
-Guenter
+The patch series was tested on a Dell Inspiron 3505, with the hwmon
+patch being tested by multiple people over bugzilla and email. Those
+who tested the final version of the hwmon patch are credited with
+Tested-by tags.
 
->  	case 0xffff:	/* No device at all */
->  		goto exit;
->  	default:
-> -- 
-> 2.39.1
-> 
+Armin Wolf (5):
+  platform/x86: dell-ddv: Add support for interface version 3
+  platform/x86: dell-ddv: Return error if buffer is empty
+  platform/x86: dell-ddv: Replace EIO with ENOMSG
+  platform/x86: dell-ddv: Add "force" module param
+  platform/x86: dell-ddv: Add hwmon support
+
+ .../admin-guide/kernel-parameters.txt         |   3 +
+ drivers/platform/x86/dell/Kconfig             |   1 +
+ drivers/platform/x86/dell/dell-wmi-ddv.c      | 471 +++++++++++++++++-
+ 3 files changed, 465 insertions(+), 10 deletions(-)
+
+=2D-
+2.30.2
+
