@@ -2,176 +2,206 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06469C54E94
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Jan 2023 04:03:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6235EC05027
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Jan 2023 04:03:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjAZEDE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Jan 2023 23:03:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
+        id S229650AbjAZEDM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Jan 2023 23:03:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjAZEDD (ORCPT
+        with ESMTP id S229537AbjAZEDL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Jan 2023 23:03:03 -0500
+        Wed, 25 Jan 2023 23:03:11 -0500
 Received: from ipmail06.adl3.internode.on.net (ipmail06.adl3.internode.on.net [150.101.137.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0B8F12042
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Jan 2023 20:03:01 -0800 (PST)
-IronPort-SDR: 0wxu9zT8UyCLwHes9Hdoigz1kqQPKS+HFIwmq+VEbpdnNijNRLlStFLBAuYa1d8IPEE2TcuCtN
- mGAZX9IV+JUfxQYD2MZ1vRor/Ytl6evlqX1C4XAQ+4qXQHaEJG8vOwel5M4PP7/ysJlqggk3pw
- YjIwmN3SV4sfXwlWI9OXTHNo5zL8p5zO8+6TpQ5KYABMqX7buhn5lpPcmZmh5UuAjcM7nwqXuM
- xoRRtGQP5Ji7JpPR9wBvkoMy7D9gFf26JAHK6TECX0aQCxFxRFov17500nF9jEIJzM/KLg29YT
- wMIzu5O8/k04NfwpqQRzUXOM
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36DB02D72
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Jan 2023 20:03:10 -0800 (PST)
+IronPort-SDR: psbGyEhsS9L2cm2XCYpJ2mjSx8cqU8nIK3n8hgq2XauspANQRdRhDTlLAhr1Ve4RZI7BTGbKSI
+ D2yD0mFh8pStxN2U8hP+bMn0iNNPDX3KjiomDVTO0zPZKHipGY8N5OC6H0kIelm39Yqi6cLNCE
+ nw+t89jQhrlxQ8e44O9609CTQnyntK0B1LQ9+89vMDGIPSjGJ2bXxu+wU1Xs4izVqkogSNdpCI
+ 7xuUdzHbDCi+vfyBVNEXRLXqCHz0gXhOZScIQ3iZul9ILboA0ETa0DaQS90mg0RU4paBAsGtG7
+ EaY6tLtRhsGpszeSgDsDpvCY
 X-SMTP-MATCH: 0
-X-IPAS-Result: =?us-ascii?q?A2B8AQCK+tFjjPQc8jxaHQEBAQEJARIBBQUBSYE1BQELA?=
- =?us-ascii?q?YIsgmCzQYFqDwEPAQFEBAEBhQYChSMmNwYOAQIEAQEBAQMCAwEBAQEBAQMBA?=
- =?us-ascii?q?QYBAQEBAQEGBBQBAQEBQFIHC1IHC1gHB4FBC4FhEwsDBAglDYZWAgEDJwsBD?=
- =?us-ascii?q?QEBNwEPGThXBgESgn6DI6xjM4EBgggBAQaCYppngV4JgUABi2CBFIM3ekM/g?=
- =?us-ascii?q?U6CUYIsgQWDAgSGeI4IjTYKgTl4gSUOTHqBDwIJAhGBLAMJAwcFSUADCxgNF?=
- =?us-ascii?q?jIKEyw1CwtKEBsaGweBBiooFQMEBAMCBhMDIAINKDEUBCkTDScmaQkCAyFfB?=
- =?us-ascii?q?QMDBCgtCT8HJiQ8B1Y3BgIPHzcGAwkDAh9PcS8SEgUDCxUqRwQINgUGHDYSA?=
- =?us-ascii?q?ggPEg8sRA5CNzQTBlwBKQsOEQNQRxluBIIRBikmnhxrB4EOpDWhYoN8gVKef?=
- =?us-ascii?q?UyBRKdml00goxyEKwIKBxaBeIF/TR8ZgyJPAQIBAQENAQIBAQMBAgEBAQkBA?=
- =?us-ascii?q?QEBgTOMagwLAgmCCow4YTsCBwsBAQMJiUqCWQEB?=
-IronPort-PHdr: A9a23:WzaKjBxHW4CFrPfXCzPpngc9DxPP853+PxIOrJE9gq1Adb6vuZnnI
- Qre6bNkkQyBVJ/QvvRDjeeeqKX8QSoa7JOGrH1HcYQZWRMJ05dJlgUsUsLZVh2pday4ZCZjR
- JZJXwc6l0w=
-IronPort-Data: A9a23:HDoSnKuZPS43na0QsM+aj21Y2+fnVGJYMUV32f8akzHdYApBsoF/q
- tZmKTiBMvaKYTGheNElOo3j9koAu5bXy4I3S1dopHsxQnwaosSdWIqVIBqgY3LLIMaeEx5r4
- cwTM4jMJ849RyGEqEyEP+m6pxGQ94nRFuKmUrKs1gOd5ONAYH184f62s7dh2uaEufDgX0XV/
- 4maT/T3YDdJ4RYtWo4pw/vrRC1H7KyaVAww5jTSVdgT1LMJvyR94Do3fMldHlOgKmVmNrfSq
- 9XrkNlVyljkEyIFUbtJpFpannoiGdY+NSDW4pZftjPLbhJq/kTe2Y5jXBYQhNs+Zzihx7hMJ
- NtxWZOYZDoyb4rQveInDEcbFQclYp9l2biaPi3q2SCT5xWun3rEyfRyFwc9J4QH9OFtDSdD8
- OFeKTxLZw3ra+Cenur9ELU2wJ5zapO3YOvzuVk5pd3dJfg8SJbAa67Q7MBW2y08wM1LALDfa
- 4wQdFKDaTycP0UfawtNU8JWcOGAtiPQWjJAiFuunoE+3U7awj1VzZLoL4+AEjCNbZ4NxRbC/
- DOuE37CKhUbMsGPjDqa93WqrvHAkDm9W48IErC8sPlwjzW7wm0VFQ0+T1y2qvr8l1X4Xd9DQ
- 2QW9icqs6Eo+WSwU8LwGRa/pRa5UgU0BYIVSbFgrVvdj/CIv0CCGmEYTzUHdMQptYk9Qjls3
- 0Lhc87V6SJHnYCOGFWB07Gu8m3xPw5Ocl0hRChZUl5QizX8m70bghXKR9dlNae6iNzpBD39q
- wxmSgBg3t3/auZVis2GEUD7byGE48OSHlFsum07Skr8s1ojPNb7D2C9wQKDhcusOrp1WXGog
- RDoceCl/ewIAIDleMelGr1VRNlFC96jPSKUullyA5lpyD2p9mXLQGy9yG8mYR01aINeKXqzP
- BOVoh9Y+J5YemeyYq4xaIW0Tc03pUQBKTgHfqyIBjatSsIqHONiwM2JTRTOt10BaGB2zckC1
- W6zKK5A90oyB6V91yaRTOwAy7ItzS1W7TqNGsylkE37i+XGNCX9pVI53L2mMLlRAESs/li9z
- jqjH5Hbo/mieLehOXCMqd57wa4icChlXMieRzNrmh6reVI9SDt7Wpc9MJs9Y4MtnqJJm/3O8
- 23VZ6Or4ASXuJEzEi3TMioLVV8adconxZ7NFXB1YwrANrlKSdrH0ZrzgLNoIOl8qLwylaAco
- jtsU5zoP8mjgw/vo1w1BaQRZqQ7HPhyrQ7RbSejfhYleJtsG17A9tP+J1u9/zMHESSwr8d4r
- ri9kALXB5MeHlwwAMHTYfOp7lWwoXlExr0oBhKTfYkLdRW+6pVuJgzwkuQzfZMGJyLD8T3Gh
- QyYNghJ9+DCrrg8/MTNma3Z/ZyiFPFzHxQGEmSCteS2OCDW83CN24hFVOrULznRWHmtqPepf
- +xKwfbmPLsKmUsMsoY6GqsylfAy4N7mprl7yAV4HSyVMA7yU+g/ciGLhJAduLdMy7lVvRqNd
- niOotQKa6+UPM7FEUIKIFR3ZOq01cYSxmvY48MqcRfz6yJA9baaVVlfYkuXgytHIborbI4oz
- LtzuMMS7ADj2BMmPszc1XJe9niXaHcaWropsYsWRoLul0wqxhdLfMWEWCPx5ZiObfRKM1Ure
- 2HL3vOb3OsMnkeSIWAuEXXt3PZGgcpcsh59zGgEewaDlO3a160+0xBm+DgqShhYk0dc2OVpN
- 2k1a0B4efeU8zFziJQRVmygAVobVkPBvxatkR5TxCiDExXuTXDEMGw2f/qV80Ff+GVZODFGp
- enKxGHgWDfsXcfwwiprBxE/8qW4Eowp+12Qgt2jEuSEA4I+PWjvjJioNDgBpBbQCM8sgFHK+
- Ltx9+FqZKylaSMdrsXX0WVBOWj8lfxcGFF/fA==
-IronPort-HdrOrdr: A9a23:9D4sFanxRDAY0MI7lORbdXjtvj7pDfL23DAbv31ZSRFFG/Fw9/
- rFoB3U737JYVEqKQgdcbLpAsS9qBbnmaKdjrNhXotKMDOIhILsFvAH0WKA+UyHJ8SBzJ8+6U
- 4IScEXY+EYT2IK6voSizPZLz9P+re6GC/Ev5an854Ud3AOV0h51XYENu+EKDwKeOCYP+tDKH
- JMjvA33QadRQ==
+X-IPAS-Result: =?us-ascii?q?A2A1BgCK+tFjjPQc8jxaHgEBCxIMSYE7C4ItgmCVbZ1Ag?=
+ =?us-ascii?q?X4PAQ8BAUQEAQGFBgKFIyY2Bw4BAgQBAQEBAwIDAQEBAQEBAwEBBgEBAQEBA?=
+ =?us-ascii?q?QYEFAEBAQFAUgcLUgcLWAcHgUELgWETCwMECCUNhlYCAQMyAQ0BATcBDxk4V?=
+ =?us-ascii?q?wYBEhmCZYMjrRaBAYIIAQEGgmKaZ4FeCYFAi2GBFIM3ekM/gU6BFYE8gT5uh?=
+ =?us-ascii?q?AElEYYqIo4IjTYKgTl4gSUOTHqBDwIJAhGBLAMJAwcFSUADCxgNFjIKEyw1C?=
+ =?us-ascii?q?wtKKxobB4EGKigVAwQEAwIGEwMgAg0NGzEUBCkTDScmJkMJAgMhXwUDAwQoL?=
+ =?us-ascii?q?Qk/ByYkPAdWNwYCDx83BgMJAwIfT3EvEhIFAwsVKkcECDYFBhw2EgIIDxIPL?=
+ =?us-ascii?q?EQOQjc0EwZcASkIAw4RA1BHGW4EghEGKSafBwcOHBNRgSeBKRmSdRytaX6BN?=
+ =?us-ascii?q?oN8gVKefUyBRII1jF+GaJFqhRaPYYJWIKIEgRiEKwIKBxaBaQKCDE0fGTuCZ?=
+ =?us-ascii?q?08BAgEBAQ0BAgEBAwECAQEBCQEBAQGCBIwZGYITjDhhOwIHCwEBAwmMIwEB?=
+IronPort-PHdr: A9a23:jp1W+BbJVNvQXNmoc+wTLmz/LTAZhN3EVzX9orItiq5VNK+59ovsO
+ 1bTo/hokRnIUcPS9qEMgvDd5qbnX2FI+pOdqDYYfZlLSxJAiN1DkQAsWpzaAET3fvK2MHxoR
+ ZYQX1U8pyOwOhAKcPs=
+IronPort-Data: A9a23:2znzwaz8i8Aa7tAutBZ6t+cDwCrEfRIJ4+MujC+fZmUNrF6WrkVVm
+ jBNUWGHO/aIYmXwfNl3YY2z9h4EsZGAmNVkQFBopS4wQi0aoJbJXd7FfhqoZnLCcMefF05rt
+ ZwSO4SRJ59kZ3KN/R3F3prJ9Ckkj/vULlbf5E8oHggrGGeInQ940UoLd9YR29Iu2Z7ja++0k
+ YuaT/f3YTdJ5hYtWo4qw/LbwP9QlKyaVAMw5jTSstgW1LN2vyB94KM3fcldHVOhKmVnNrLSq
+ 9L48V2M1jixEyHBqz+Suu2TnkUiGtY+NOUV45Zcc/DKbhNq/kTe3kunXRYRQR8/ttmHozx+4
+ MVUlp6XRy4oApH3xeVGYytoUAZlfpQTrdcrIVDn2SCS50fHb2CqyO9nE08xJ4Fe9+NqR2BCs
+ /UFQNwPRk7bwbjqmvThGq822phLwMrDZevzvllu1zjfDt4tW5ncTaLQ6ZlV2Sp2h8wIFOu2i
+ 88xNWY3PEWcOUEUUrsRILQYjsP2un70TwRFsFWX4qA0+k3W1AMkhdABN/KOIofaH58E9qqCn
+ UrC/mLkElQaK9mYzxKb/X+2wOzChyX2XMQVDrLQ3vprhkCD7nYUBRYVEEag5/+0liaWWd5SL
+ 1Id4CcGtrUp+QqgSdyVYvGjiCDc+0RAAZ8KQ6hgtF3L0bbd/weSQHQcQT8HY9sj8sYrLdA36
+ rOXt8PwJj5IvpSUdU6mq7bPnQGCeg8OblZXMEfoUjA5y9XkpYgyiDfGQdBiDLO5g7XJ9dfYn
+ WniQM8W2eh7sCIb60mo1RWc2GLz/8Shohodv1iOBDr9sGuVcab/P+SVBU7nAeFoBbvxorOph
+ 2kIncWPhAzlJcvVzHTlrAklOry2r82CLSHcyWFmG5Q6nwlBFlb9JcUKvGs7fhcsaJpYPyT1a
+ VPSskVN/JBSenCtaOl+fupd6vjGL4C8SbwJtdiONbKih6SdkyfdoklTiba4hTyFraTVufhX1
+ W2nWcitF20GLq9s0SC7QewQuZdymH9imzyKGcqkl0T8uVZ7WJJzYelcWLdpRr5khJ5oXC2Po
+ r6zyuPQlE4GC7WuCsUp2dNDcwlSRZTEOXwGg5cPLb7ZeFsO9JAJF+feibInZ4F/malJ/tokD
+ VnjMnK0PGHX3CWdQThmn1g/MNsDq74j9CxnVcHtVH70s0UejXGHs/pPLMdnLOF5nAGhpNYtJ
+ 8Q4lwy7KqwnYlz6F/41NPERdaRuK0amgxygJS2gbGRtdpJsXVWZqNT+dxTh8zMCSCeyqI0/r
+ /upy1qDE5YEQg1jCufQae6ulg3u5yFEw70iD0aYcMNOfEjM8ZRxL3KjhPEAI/YKdUfJyAyFh
+ lSfDhovrOXQp5M4rYvSjqeeoob3T+ZzRxIIH2TS4busGzPd+26vnd1JXOqSJGCPX3n956ulf
+ +kTwvThdvwL2l9X6tIuH7FuxKM4xt3uu74DkFs+RSyQMAT7B+o5cHec3MRJuqlc/ZNjuFO7C
+ hCV591XGbSVI8e7QlQfEwoSaLjR3/8jhWiA5Ps4F0z2+Str8efVSk5VJRSN1nBQIbYpYoMox
+ eAt5Jwf5wCl0EF4ONealWZf7W2TIHsaX+Mqs4xcAYOtgxdykgNOZpnVCynX5pCTaowSbRNze
+ 2TL1PrP1+ZG207PU3svDnyTj+BTspQ5vkwYxlE1OAXbk9XIsfY7wRlN/GllVQ9S1BhGjb5+N
+ zQ5LUFzPqnSrT5kiNIYBTLyQ0QbWEfcoBy0kQdV0nbFRlWpXSrRNGI8f+2K+QYQ7jsELDRc+
+ biZzkfjUCrrJZ+uhHJrAhE1+/GzH8Zs8gDimdy8G5jXFZcNZ2u3i6CjUmMEth/7DJ5jn0bAv
+ +Rrorp9ZKCT2fT8eEHn51R2DYgtdS0=
+IronPort-HdrOrdr: A9a23:814RcaG+FgMWrTULpLqEMseALOsnbusQ8zAXPiBKIyC9vPb4qy
+ nIpoVj6feX4Ax9ZJhEo7y90ca7MBDhHPJOjrX5eI3SODUO21HYSr2Kk7GSoQEIcheWnoVgPO
+ VbAs9D4bbLbWSS4/yV3OE2fuxQuOVviJrY4Ns2100dMT2CdZsQkjuR1TzraXGflWF9dOAEKK
+ Y=
 X-IronPort-Anti-Spam-Filtered: true
 Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
-  by ipmail06.adl3.internode.on.net with ESMTP; 26 Jan 2023 14:33:00 +1030
+  by ipmail06.adl3.internode.on.net with ESMTP; 26 Jan 2023 14:33:08 +1030
 Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
         (authenticated bits=0)
-        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 30Q42O5Z1960730
+        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 30Q42O5a1960730
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Thu, 26 Jan 2023 15:02:56 +1100
+        Thu, 26 Jan 2023 15:02:59 +1100
 Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
-DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 30Q42O5Z1960730
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 30Q42O5a1960730
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
-        s=s1; t=1674705776; bh=tdQZHnX3FSPggPw9g2HOssmXYd+rzqSj9YmgIAzCZzo=;
+        s=s1; t=1674705780; bh=qvNHfDoiv+ywiowF+uC67ZtVUGDsZYxajcY210GkE+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TqVXUr7uO5GGuWOI6m29wZJtyJCrVWRojws8W29lIavmeb14wYWVqTMeiW4E9Y2SJ
-         +S18zJCRBFG+wAlWhjEDKC3kYCvOw2NQpkpC0+4LmNchLRyP45G2rajgNBqOUlo9yM
-         TKgXtD47yYJTys0YpCORUv6RiKi9ICrXqwU8j+twAHm/NdjkQ01F8M46UC1f5xkKmn
-         +JYXeu4H05obRtrJmeKNI0MXH2kqA2c7cAxQ8K27m53cL8VayyK0W4NUeEI7r9gCEH
-         zu3h2XzYeF7nuiutxWM9R2/rOKaM91r608v5N68+uyysfCfgPXd+9r78eszT9k+G/f
-         yd+XDn2uXovqA==
+        b=FZjLUo7B75n8Hfs6PbIngfUVdxRwfotCe/5I8gM1HVlP0ZIsxwpGutA6GFaxWcb4Y
+         etmfpIxyKfW6A6ZrXc1WUNBn7ihuMDimT6XPijjik7hSo+BqRLm+s+o7IwKLya6qFV
+         A97LfEuxLtZ0WDrODvvvazCLwLHTZ86sWiYuMNu93hWDJtQ8EYFNed816Vj/aQM9X7
+         8oKKP4tkq79pML9YfUFeY3Q+9pphVpRPRWgM7XQc2YDdAWDvvQ+6ntfKY322JlIRfC
+         2cfwspM7HbEDL7L8M3FJLzpNVQda+lJDlrzEB/mTlOiofoz0FuRlMPxmq7AITpwLIq
+         VgxjAtsnARMPw==
 From:   Frank Crawford <frank@crawford.emu.id.au>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org,
         Frank Crawford <frank@crawford.emu.id.au>
-Subject: [PATCH v1 6/7] hwmon: (it87) Add new chipset IT87952E
-Date:   Thu, 26 Jan 2023 15:02:22 +1100
-Message-Id: <20230126040223.986189-7-frank@crawford.emu.id.au>
+Subject: [PATCH v1 7/7] hwmon: (it87) Updated documentation for recent updates to it87
+Date:   Thu, 26 Jan 2023 15:02:23 +1100
+Message-Id: <20230126040223.986189-8-frank@crawford.emu.id.au>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230126040223.986189-1-frank@crawford.emu.id.au>
 References: <20230126040223.986189-1-frank@crawford.emu.id.au>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Thu, 26 Jan 2023 15:02:56 +1100 (AEDT)
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Thu, 26 Jan 2023 15:03:00 +1100 (AEDT)
 X-Virus-Scanned: clamav-milter 0.103.7 at bits.crawford.emu.id.au
 X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add IT87952E, a new chip ID (DEV ID 0x8695), which appears to be an
-updated version of the IT8792E and takes the same configuration.
-
-The model name comes from the model name printed on the chip.
-
-There is no datasheet publicly available.
+Updated the driver documentation to list all current chips and
+describe the module parameters as per descriptions in the code.
 
 Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
 ---
- drivers/hwmon/it87.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ Documentation/hwmon/it87.rst | 47 ++++++++++++++++++++++++++++++++----
+ 1 file changed, 42 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index e8eeedd23bee..85ecc61dbf9e 100644
---- a/drivers/hwmon/it87.c
-+++ b/drivers/hwmon/it87.c
-@@ -34,6 +34,7 @@
-  *            IT8786E  Super I/O chip w/LPC interface
-  *            IT8790E  Super I/O chip w/LPC interface
-  *            IT8792E  Super I/O chip w/LPC interface
-+ *            IT87952E  Super I/O chip w/LPC interface
-  *            Sis950   A clone of the IT8705F
-  *
-  *  Copyright (C) 2001 Chris Gauthron
-@@ -63,7 +64,7 @@
+diff --git a/Documentation/hwmon/it87.rst b/Documentation/hwmon/it87.rst
+index 2d83f23bee93..5cef4f265000 100644
+--- a/Documentation/hwmon/it87.rst
++++ b/Documentation/hwmon/it87.rst
+@@ -145,6 +145,22 @@ Supported chips:
  
- enum chips { it87, it8712, it8716, it8718, it8720, it8721, it8728, it8732,
- 	     it8771, it8772, it8781, it8782, it8783, it8786, it8790,
--	     it8792, it8603, it8620, it8622, it8628 };
-+	     it8792, it8603, it8620, it8622, it8628, it87952 };
+     Datasheet: Not publicly available
  
- static struct platform_device *it87_pdev[2];
++  * IT8792E/IT8795E
++
++    Prefix: 'it8792'
++
++    Addresses scanned: from Super I/O config space (8 I/O ports)
++
++    Datasheet: Not publicly available
++
++  * IT87952E
++
++    Prefix: 'it87952'
++
++    Addresses scanned: from Super I/O config space (8 I/O ports)
++
++    Datasheet: Not publicly available
++
+   * SiS950   [clone of IT8705F]
  
-@@ -160,6 +161,7 @@ static inline void superio_exit(int ioreg, bool doexit)
- #define IT8622E_DEVID 0x8622
- #define IT8623E_DEVID 0x8623
- #define IT8628E_DEVID 0x8628
-+#define IT87952E_DEVID 0x8695
- #define IT87_ACT_REG  0x30
- #define IT87_BASE_REG 0x60
+     Prefix: 'it87'
+@@ -162,7 +178,7 @@ Authors:
+ Module Parameters
+ -----------------
  
-@@ -470,6 +472,15 @@ static const struct it87_devices it87_devices[] = {
- 		  | FEAT_SIX_TEMP | FEAT_VIN3_5V,
- 		.peci_mask = 0x07,
- 	},
-+	[it87952] = {
-+		.name = "it87952",
-+		.model = "IT87952E",
-+		.features = FEAT_NEWER_AUTOPWM | FEAT_16BIT_FANS
-+		  | FEAT_TEMP_OFFSET | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
-+		  | FEAT_10_9MV_ADC | FEAT_IN7_INTERNAL,
-+		.peci_mask = 0x07,
-+		.old_peci_mask = 0x02,	/* Actually reports PCH */
-+	},
- };
+-* update_vbat: int
++* update_vbat bool
+     0 if vbat should report power on value, 1 if vbat should be updated after
+     each read. Default is 0. On some boards the battery voltage is provided
+     by either the battery or the onboard power supply. Only the first reading
+@@ -171,11 +187,31 @@ Module Parameters
+     the chip so can be read at any time. Excessive reading may decrease
+     battery life but no information is given in the datasheet.
  
- #define has_16bit_fans(data)	((data)->features & FEAT_16BIT_FANS)
-@@ -2501,6 +2512,10 @@ static int __init it87_find(int sioaddr, unsigned short *address,
- 	case IT8628E_DEVID:
- 		sio_data->type = it8628;
- 		break;
-+	case IT87952E_DEVID:
-+		sio_data->type = it87952;
-+		doexit = false;	/* See IT8792E comment above */
-+		break;
- 	case 0xffff:	/* No device at all */
- 		goto exit;
- 	default:
+-* fix_pwm_polarity int
++* fix_pwm_polarity bool
+     Force PWM polarity to active high (DANGEROUS). Some chips are
+     misconfigured by BIOS - PWM values would be inverted. This option tries
+     to fix this. Please contact your BIOS manufacturer and ask him for fix.
+ 
++* force_id short, short
++
++  Force multiple chip ID to specified value, separated by ','.
++  For example "force_id=0x8689,0x8633".  A value of 0 is ignored
++  for that chip.
++  Note: A single force_id value (e.g. "force_id=0x8689") is used for
++  all chips, to only set the first chip use "force_id=0x8689,0".
++  Should only be used for testing.
++
++* ignore_resource_conflict bool
++
++  Similar to acpi_enforce_resources=lax, but only affects this driver.
++  ACPI resource conflicts are ignored if this parameter is provided and
++  set to 1.
++  Provided since there are reports that system-wide acpi_enfore_resources=lax
++  can result in boot failures on some systems.
++  Note: This is inherently risky since it means that both ACPI and this driver
++  may access the chip at the same time. This can result in race conditions and,
++  worst case, result in unexpected system reboots.
++
+ 
+ Hardware Interfaces
+ -------------------
+@@ -193,8 +229,8 @@ Description
+ 
+ This driver implements support for the IT8603E, IT8620E, IT8623E, IT8628E,
+ IT8705F, IT8712F, IT8716F, IT8718F, IT8720F, IT8721F, IT8726F, IT8728F, IT8732F,
+-IT8758E, IT8771E, IT8772E, IT8781F, IT8782F, IT8783E/F, IT8786E, IT8790E, and
+-SiS950 chips.
++IT8758E, IT8771E, IT8772E, IT8781F, IT8782F, IT8783E/F, IT8786E, IT8790E,
++IT8792E/IT8795E, IT87952E and SiS950 chips.
+ 
+ These chips are 'Super I/O chips', supporting floppy disks, infrared ports,
+ joysticks and other miscellaneous stuff. For hardware monitoring, they
+@@ -238,7 +274,8 @@ of the fan is not supported (value 0 of pwmX_enable).
+ The IT8620E and IT8628E are custom designs, hardware monitoring part is similar
+ to IT8728F. It only supports 16-bit fan mode. Both chips support up to 6 fans.
+ 
+-The IT8790E supports up to 3 fans. 16-bit fan mode is always enabled.
++The IT8790E, IT8792E/IT8795E and IT87952E support up to 3 fans. 16-bit fan
++mode is always enabled.
+ 
+ The IT8732F supports a closed-loop mode for fan control, but this is not
+ currently implemented by the driver.
 -- 
 2.39.1
 
