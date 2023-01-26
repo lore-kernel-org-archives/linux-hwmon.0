@@ -2,109 +2,147 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1E28C54E94
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Jan 2023 13:50:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 392A3C05027
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Jan 2023 13:54:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjAZNuX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 26 Jan 2023 08:50:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37040 "EHLO
+        id S231860AbjAZNyD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 26 Jan 2023 08:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231563AbjAZNuR (ORCPT
+        with ESMTP id S231874AbjAZNxh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:50:17 -0500
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9BF6227D
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 05:49:57 -0800 (PST)
-Received: by mail-oo1-xc2f.google.com with SMTP id c145-20020a4a4f97000000b004f505540a20so240569oob.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 05:49:57 -0800 (PST)
+        Thu, 26 Jan 2023 08:53:37 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A13730C7
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 05:53:17 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-16332831ed0so2390096fac.10
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 05:53:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Mow2e6yK+wVJ/rFQCQr5C+Jap4aTM2OyOVwxNn+AWjM=;
-        b=nnZ7MDAESdGVgkdeHy+I/hVL4MrOZVQbTg3VvEAYmuI2GWE6KUG/4PIUETTjT3pZ6s
-         F1q55kNXtRwD/twcIzZeYbT6DzK/FSi0XL0gJsW31cxnumfgO97WDPMamQoUadIqpFZD
-         IQvcTrWxkCCiWSsd8SzRXSow/VZeQxOSPOXM0fEiAqN16zkSbIe3/Vb7rJBQXU1FzCon
-         T1Tza+G9Or5TD+98goEVpGZixtHS5i2zJQP2NXvGZ4avdBnewPE/ncOPfI/U0VN3Z2Zt
-         7TTNGI2RPavwZTt4GpEkNV2t6XMdUbHm9/v93zsmevO7xDfGtRk9HCUzWUTOMaMcbqdl
-         Q8IA==
+        bh=rXFAlgB6wpO5hnNA64ezQhUqBbRsULsfgF3AZIsqFXY=;
+        b=gvL/ULeCqje36i2CcI1+6VFhPwYN9wyhPdF6YEprhNETgAudu5T2nsVEKX97qzrD5V
+         9kObmmuawx18tpeh23zidnIFtcfjw+laZLKtjRQlCLdRLzdGCX1yQIP1upLvqK/T3Fga
+         m9r12gA55CnFrME8lwEyJrOB981rbtLMnIG2QMqTT7S7eEQ1de830cK3dqln1dyELlTR
+         AM2zpPJiiDnMVLt7HsISQvcjFPbx/+rTMiK0zdIRfVAu0qZaZStfvDMwNrwbAYCj/g3S
+         tH02lKHlXWG7rePgOfJdgSbETjlA0nvttEjqOqwmt+BlWj4lyJsLt4lijj9db9t8sw7H
+         4KOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Mow2e6yK+wVJ/rFQCQr5C+Jap4aTM2OyOVwxNn+AWjM=;
-        b=R7HxLORU681ntv8mlTMQjyKgCttmHr7AlkQP5kE4Ue5KRNZjIs3EKOdNIjawmzyUc4
-         YXmbf0ZoGNpf/IY2c1+dh685n5xowhn6iInRMuCLMz8sK9n9ZvXG/WGc6DkE+k8F/KZG
-         nQiFb1l1tHBrMqRyBu9yuOcA/jCbED2qD5B2NRz7KvBmWdNTAKHy5kmXx1/N65i+6NZ0
-         xs8Bpeo+U7B50k3enyXHZnh1E8mUP23uh6uTgnV82slq8UM93U7fiyZeB1Yp1TJXDFUj
-         JSUIJh4fhiOQUV/Jki3zHRYGayNoaq0ObPqGKKvuIVIfZiiDYdp0JeSuUGA9NrCFzTG0
-         F2FA==
-X-Gm-Message-State: AFqh2ko94UV4TROdlvzieIkEetn1G4Rx4syQah+n/xHmdkUQ09ou43ru
-        HFBDAHKVmQtYnQJV0nO1WOKBT157idM=
-X-Google-Smtp-Source: AMrXdXsW/GxSh+VTkHlfkLVFK3v7k//IhvNUjBq8TM/dnvH8Jy9RmALGOY8Z2h3vpgGcForSOtpnwQ==
-X-Received: by 2002:a4a:1843:0:b0:4f2:8fa2:acda with SMTP id 64-20020a4a1843000000b004f28fa2acdamr15342050ooo.5.1674740995786;
-        Thu, 26 Jan 2023 05:49:55 -0800 (PST)
+        bh=rXFAlgB6wpO5hnNA64ezQhUqBbRsULsfgF3AZIsqFXY=;
+        b=xWv0go7CvGQYGd9g+u+FuSezD8K+y2b89WFZCjstdFONyAvW+ZEGcawRCVFojxvLOg
+         cnVAAeULuItIRamwuGSNGXBqktMfUxB5yLndZJAKdt94ukmtHwj1qDNDlWifUMqTawVP
+         ykoM/9OC3mAB6pRUlObJcN9thlMLScpMbghA9jGwcKQEKp5qLXOQ1P0GKveFhNvQXiz1
+         nDVCJ5A6Nn4Vj/rAg6IGDxSg/ENIx114Fj7TfFv8zdeJpHfKABf0Wz3qTzkx9WCgfXgx
+         k2z8O2Jm/CMBTCpR/zvuDBiOYwkkGVo1W3cQ+R5XWjtDTQDYPqrYGyNZM+5RX+KPU3aZ
+         xIGA==
+X-Gm-Message-State: AFqh2kq9hrwxUsclba37DtJ96OIBiteDidIx71jA2BC2+McdARrphai3
+        syrReYXaqm1PATbtPz4Y48A=
+X-Google-Smtp-Source: AMrXdXvND+1UUHWdwjWfh0Z29yw0WVo3MWkrQ3nYGnFhIsRb2px7MINYnUOqUymB/h1tS0hIzlQcxQ==
+X-Received: by 2002:a05:6870:cc8e:b0:15f:20b4:40c6 with SMTP id ot14-20020a056870cc8e00b0015f20b440c6mr18509654oab.24.1674741195876;
+        Thu, 26 Jan 2023 05:53:15 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bm27-20020a056820189b00b0049fd5c02d25sm555607oob.12.2023.01.26.05.49.54
+        by smtp.gmail.com with ESMTPSA id gn12-20020a056870d98c00b0013ae39d0575sm501602oab.15.2023.01.26.05.53.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 05:49:55 -0800 (PST)
+        Thu, 26 Jan 2023 05:53:15 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 26 Jan 2023 05:49:54 -0800
+Date:   Thu, 26 Jan 2023 05:53:14 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Frank Crawford <frank@crawford.emu.id.au>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v1 4/7] hwmon: (it87) Add chip_id in some info message
-Message-ID: <20230126134954.GA1635195@roeck-us.net>
+Subject: Re: [PATCH v1 6/7] hwmon: (it87) Add new chipset IT87952E
+Message-ID: <20230126135314.GB1635195@roeck-us.net>
 References: <20230126040223.986189-1-frank@crawford.emu.id.au>
- <20230126040223.986189-5-frank@crawford.emu.id.au>
+ <20230126040223.986189-7-frank@crawford.emu.id.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230126040223.986189-5-frank@crawford.emu.id.au>
+In-Reply-To: <20230126040223.986189-7-frank@crawford.emu.id.au>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 03:02:20PM +1100, Frank Crawford wrote:
-> In cases where there are multiple chips, print out which chip is
-> referred to, in the informational message.
+On Thu, Jan 26, 2023 at 03:02:22PM +1100, Frank Crawford wrote:
+> Add IT87952E, a new chip ID (DEV ID 0x8695), which appears to be an
+> updated version of the IT8792E and takes the same configuration.
+> 
+> The model name comes from the model name printed on the chip.
+> 
+> There is no datasheet publicly available.
 > 
 > Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
 > ---
->  drivers/hwmon/it87.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  drivers/hwmon/it87.c | 17 ++++++++++++++++-
+>  1 file changed, 16 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-> index 16394b38dce3..5ca8449887da 100644
+> index e8eeedd23bee..85ecc61dbf9e 100644
 > --- a/drivers/hwmon/it87.c
 > +++ b/drivers/hwmon/it87.c
-> @@ -2505,13 +2505,15 @@ static int __init it87_find(int sioaddr, unsigned short *address,
+> @@ -34,6 +34,7 @@
+>   *            IT8786E  Super I/O chip w/LPC interface
+>   *            IT8790E  Super I/O chip w/LPC interface
+>   *            IT8792E  Super I/O chip w/LPC interface
+> + *            IT87952E  Super I/O chip w/LPC interface
+>   *            Sis950   A clone of the IT8705F
+>   *
+>   *  Copyright (C) 2001 Chris Gauthron
+> @@ -63,7 +64,7 @@
 >  
->  	superio_select(sioaddr, PME);
->  	if (!(superio_inb(sioaddr, IT87_ACT_REG) & 0x01)) {
-> -		pr_info("Device not activated, skipping\n");
-> +		pr_info("Device (DEVID=0x%x) not activated, skipping\n",
-> +			chip_type);
+>  enum chips { it87, it8712, it8716, it8718, it8720, it8721, it8728, it8732,
+>  	     it8771, it8772, it8781, it8782, it8783, it8786, it8790,
+> -	     it8792, it8603, it8620, it8622, it8628 };
+> +	     it8792, it8603, it8620, it8622, it8628, it87952 };
+>  
+>  static struct platform_device *it87_pdev[2];
+>  
+> @@ -160,6 +161,7 @@ static inline void superio_exit(int ioreg, bool doexit)
+>  #define IT8622E_DEVID 0x8622
+>  #define IT8623E_DEVID 0x8623
+>  #define IT8628E_DEVID 0x8628
+> +#define IT87952E_DEVID 0x8695
+>  #define IT87_ACT_REG  0x30
+>  #define IT87_BASE_REG 0x60
+>  
+> @@ -470,6 +472,15 @@ static const struct it87_devices it87_devices[] = {
+>  		  | FEAT_SIX_TEMP | FEAT_VIN3_5V,
+>  		.peci_mask = 0x07,
+>  	},
+> +	[it87952] = {
+> +		.name = "it87952",
+> +		.model = "IT87952E",
+> +		.features = FEAT_NEWER_AUTOPWM | FEAT_16BIT_FANS
+> +		  | FEAT_TEMP_OFFSET | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
+> +		  | FEAT_10_9MV_ADC | FEAT_IN7_INTERNAL,
+> +		.peci_mask = 0x07,
+> +		.old_peci_mask = 0x02,	/* Actually reports PCH */
+> +	},
+>  };
+>  
+>  #define has_16bit_fans(data)	((data)->features & FEAT_16BIT_FANS)
+> @@ -2501,6 +2512,10 @@ static int __init it87_find(int sioaddr, unsigned short *address,
+>  	case IT8628E_DEVID:
+>  		sio_data->type = it8628;
+>  		break;
+> +	case IT87952E_DEVID:
+> +		sio_data->type = it87952;
+> +		doexit = false;	/* See IT8792E comment above */
+> +		break;
 
-At this point the textual name (it87_devices[sio_data->type].model)
-is already known. I would suggest to print that instead.
+Is that true for this chip as well ? I would have hoped they fix
+the problem for an updated version of the same chip.
 
 Thanks,
 Guenter
 
+>  	case 0xffff:	/* No device at all */
 >  		goto exit;
->  	}
->  
->  	*address = superio_inw(sioaddr, IT87_BASE_REG) & ~(IT87_EXTENT - 1);
->  	if (*address == 0) {
-> -		pr_info("Base address not set, skipping\n");
-> +		pr_info("Base address not set (DEVID=0x%x), skipping\n",
-> +			chip_type);
->  		goto exit;
->  	}
->  
+>  	default:
 > -- 
 > 2.39.1
 > 
