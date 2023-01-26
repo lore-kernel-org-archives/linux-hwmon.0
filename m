@@ -2,115 +2,173 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6939C61DA7
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Jan 2023 22:33:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFD09C54EAA
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Jan 2023 22:49:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbjAZWdW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 26 Jan 2023 17:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        id S232959AbjAZWtW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 26 Jan 2023 17:49:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233240AbjAZWcx (ORCPT
+        with ESMTP id S232367AbjAZWtU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 26 Jan 2023 17:32:53 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E070259998
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 14:32:33 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id k2so2559436qvd.12
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 14:32:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=criticallink.com; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SMXyMh+Lwz3neJnqgLoV44iMFdZ/93CQTC6eXheel78=;
-        b=khx+stdm8gj3hVORCp3vGGwzfpFUtfpBgTEIanFn6fjEYFTnrg3+LJgDpc96HX/Ty7
-         4r8nwbwrUYp33LQaJHweQcEKn8jjR8j7kqqFxk55wQLrkNkkwZMLgPnXhCBVRRB8wRD4
-         YjNo3Y7rVbe+cT8kXRVPzB/FCCBY+8JRM2SHLeXxJjRUndyxqED4/EVnvYQLPafZmOBE
-         fHQiMZuR+zPKShSVcp/k9YHvED3hQ0szFF+oWdaqPwNspv/2yQ37ogMmIOdWaKo9p/fJ
-         +etDkPnrFgxbbafSb+giy1XA1g061fGgoHhmDN1gVZcc0AAm7jZ4fpNeMg9fv5eL8TQW
-         IfrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SMXyMh+Lwz3neJnqgLoV44iMFdZ/93CQTC6eXheel78=;
-        b=Uodc74OLScOvvPaTVjmuxi1H/YxClP57PaDYrJZlpw6li1asx/MDF43SZ+NU4wHWS3
-         UQAvsYAgnDzdDNq83OO/SlWb7St8DjIOj+NWw2ODyDcYmKPV30ci5YZCRXWRKXYbSWfw
-         iQPy7blAv9RWl4440nsTrD7/jfB5wyHqQ+io5/kCQEg+yE+ZniyPr+kWQEWFlxfIVc1C
-         XLH78CL963ZQ4FiBL6+11rY79T7SOPi8GKkE6x5kL29NGNT/q1VTy8f2abYyfyv54KPZ
-         AF9SVG4kqsYErqwBoNBAvYkSQL28i0L7FkFSkc8yPk0W6DyTZgIHkLNstF8AHCkvK4m7
-         SUTA==
-X-Gm-Message-State: AFqh2kqKYOVXLkw8Iwk+pg5Ej0UgIp+TiymB5OvTPS5Gn5LEtjfvDKVN
-        DarRdvS0M6OERW+psOduDqlHXQ==
-X-Google-Smtp-Source: AMrXdXuGmsLBqfAHwn5t37b9KDNwt3R6jfn4nDAVPNlKXvZkF7hctLEEKstGiDeMd9zvJeYTrKdZ+Q==
-X-Received: by 2002:a05:6214:3492:b0:534:2b55:6320 with SMTP id mr18-20020a056214349200b005342b556320mr55824540qvb.9.1674772353054;
-        Thu, 26 Jan 2023 14:32:33 -0800 (PST)
-Received: from [127.0.1.1] (static-72-90-70-109.syrcny.fios.verizon.net. [72.90.70.109])
-        by smtp.gmail.com with ESMTPSA id m7-20020a05620a220700b006ff8a122a1asm1723091qkh.78.2023.01.26.14.32.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 14:32:32 -0800 (PST)
-From:   Jonathan Cormier <jcormier@criticallink.com>
-Date:   Thu, 26 Jan 2023 17:32:27 -0500
-Subject: [PATCH v4 5/5] hwmon: ltc2945: Convert division to
- DIV_ROUND_CLOSEST_ULL
+        Thu, 26 Jan 2023 17:49:20 -0500
+Received: from ipmail06.adl3.internode.on.net (ipmail06.adl3.internode.on.net [150.101.137.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50B9D47ED3
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 14:49:14 -0800 (PST)
+IronPort-SDR: qvht4nr2ovjAhcEiE3dr2yho1EreMosILt5FxQwKoCPCyzYfaFP8vfoXbKWQgK5wiqBcwKhhna
+ 1cIIyPYtBaFzVswyIEcehgG9f96eMLghr94wX1bva3ow3atqLYndGPTOs/ywHHvsExEz+v6/4m
+ B9JVB7JHU8aSYsj87yQS9u40nIvHvJh0UgET3Rl6j9R+qHqdL/rkbSZ57u1OsoXYj8f+C1Fehz
+ QAidB0tFkVExSyALeg0JlnBrlVKUQ05Gf9ZEHVdQgDS7fmlGUKWhBXO50wbAVdJpiJm7FPxlSN
+ LDHGYeEt0bjupNVGo34hiVG7
+X-SMTP-MATCH: 0
+X-IPAS-Result: =?us-ascii?q?A2ByAACkAtNj//Qc8jxaGwEBAQEBAQEBBQEBARIBAQEDA?=
+ =?us-ascii?q?wEBAUAJgTUDAQEBCwGCLIJglW0DnzsPAQ8BAUQEAQGFBwKFIyY3Bg4BAgQBA?=
+ =?us-ascii?q?QEBAwIDAQEBAQEBAwEBBgEBAQEBAQYEgSoHC1IHC1gHB4FBC4FhEwsDBAglD?=
+ =?us-ascii?q?YZVAQEBAQIBJxkBATcBDwsOCi5XBhOFfiOqPXiBATOBAYIIAQEGgmOaZoFeC?=
+ =?us-ascii?q?YFAAZArekM/gU6CUYFuPoREhj+OH408CoE5eIElDoFGgQ8CCQIRdB83AxkrH?=
+ =?us-ascii?q?UADCzsyCj81CwtKEBsaGweBBiooFQMEBAMCBhMDIgINKDEUBCkTDScmaQkCA?=
+ =?us-ascii?q?yJiAwMEKC0JPwcVESQ8B1Y3AQUCDx83BgMJAwIfT3IuERMFAwsVKkcECDYFB?=
+ =?us-ascii?q?hw2EgIIDxIPBiZEDkI3NBMGXAEpCw4RA1CBTgQvgWIGKSaeOWsHWTUcMoEjk?=
+ =?us-ascii?q?z8KkC2gMIN8gVKfSYFEp2aXTYQGnh6FQwIKBxaBeIF/TR8ZgyJPAQIBAQENA?=
+ =?us-ascii?q?QIBAQMBAgEBAQkBAQEBgTOMaoIskUthOwIHCwEBAwmMIwEB?=
+IronPort-PHdr: A9a23:2+AcHhZQpiFG/BnYky2pTZH/LTAZhN3EVzX9orItiq5VNK+59ovsO
+ 1bTo/hokRnIUcPS9qEMgvDd5qbnX2FI+pOdqDYYfZlLSxJAiN1DkQAsWpzaAET3fvK2MHxoR
+ ZYQX1U8pyOwOhAKcPs=
+IronPort-Data: A9a23:UGT0jatoGdyyhpOhw11PP9DlUOfnVHJYMUV32f8akzHdYApBsoF/q
+ tZmKT+Baf+Oa2b8eo1waYri90MH7JaGxoU3TQFp+C01HnwRo5WVCYTDf0r+ZC3NIsCZQBtqt
+ J9GYIXKcJ05FiOF+kiEP+m6pxGQ94nRFuKmUrKs1gOd5ONAYH184f62s7dh2uaEufDgX0XV/
+ 4maT/T3YDdJ4RYtWo4pw/vrRC1H7KyaVAww5jTSVdgT1LMJvyR94Do3fMldHlOgKmVmNrfSq
+ 9XrkNlVyljkEyIFUbtJpFpannoiGdY+NSDW4pZftjPLbhJq/kTe2Y5jXBYQhNs+Zzihx7hMJ
+ NtxWZOYQDo2HvfRubomQwgEEiFENLd75eDYLi3q2SCT5xWun3rEyfRyFwc9J4QH9OFtDSdD8
+ OFeKTxLZw3ra+Cenur9ELU2wJ5zapO3YOvzuVk5pd3dJfg8SJbAa67Q7MBW2y08wM1LALDfa
+ 4wQdFKDaTycP0UeYQxGVclWcOGAqUTRKQNkuW6vna8e/TP+izZI3r3jGY+AEjCNbZ4NxRbC/
+ DOuE37CKhUbMsGPjDqa93WqrvHAkDm9W48IErC8sPlwjzW7xGAeDAMfT1aTuuSihwi1XNc3A
+ 0gV/Dc+hbI1+UeoC8TmGRu1vBa5UgU0BYIVSbFgrVvdj/CIv0CCGmEYTzUHdMQptYk9Qjls3
+ 0Lhc87V6SJHuYCKaSiA1+mvvSLuOCgvJHU/eHAbQl5QizX8m70bghXKR9dlNae6iNzpBD39q
+ wxmSgBj193/auZVis2GEUD7byGE48OSHlFsum07Skr8s1ojPNb7D2C9wQKDhcusOrp1WXGog
+ RDoceCl/ewIAIDleMelGr1VRNlFC96jPSKUullyA5lpyD2p9mXLQGy9yG8mYR01aINeKXqzP
+ BOVoh9Y+J5YemeyYq4xaIW0Tc03pUQBKTgHfqyIBjatSsIqHONiwM2JTRTOt10BaGB2zckC1
+ W6zKK5BzR8yUMyLNgaeSeYHyqMMzSsj327VTp2T5035jubBOSHFEu9eaAfmggUFAEWs/VW9H
+ zF3aZbi9vmjeLevCsUq2dRMdglRdShT6W7e9p0MLLXrzvVa9JEJUKeKkel7KuSJboxJjuiA/
+ 3ehV1VexUaXuJE0AVviV52iAZuxNatCQYUTZHR3bAvxhydzO+5CLs43LvMKQFXuz8Q7pdYcc
+ hXPU57o7i1nRmuV9jIDQ4P6qYA+Jh2niRjXb3iuejEgcZl6S0rE/8Kifwep/TRXVni7ss43o
+ ruB0ALHQMNdGF47XJ+NNaiinwGroHwQuONuRE+WcNNdT0Xb9tQ4ISLGka5lKs4BHhzP2z+G2
+ lvEGhwfv+TM/dM4/YCR16CJpoukCcVkGU9eEzWJ5Lq6L3CKrGG5yJBOV/yEOz3YSSX19OOre
+ LwNnf37NfQGmndMspZ9Sug0l/tuvoCy/bIDl1ZqBnTGaVivG4hMGHje0JkdrLBJy59YpRCyB
+ BCF9O5aDrPVasnrJ0FAdgMqY9OK2ewQhjSPv+8+J1/35XEr8beKDRdSMh2LhHAPJbd5Ktl+k
+ +0gpNVQ4Ba2lRQtKNrAgyVJsWWAaHUdCv11upYfCY7tqwwq1lAbP8OGU3+vu8zVZoUeKFQuL
+ x+VmLHG2eZWyH3CRHxvR3LD6vUM150BtSdDwEIGO1nUyMHOgeU63UMN/DlrHB5ZyA5Lj7B6N
+ mRxbBcne/3LpWsywZITGjrwR0daGBSF+0e310MGlSvSSEzuX3GUdD8xPuOE/UY49WNAf2EFo
+ +vBmD++DGznLJPrwy8/eU95sPi/H9Z/wQuTysmoEvOME4Q+fTe40LSlYnAFqkW7DM487KEdS
+ TKGIAqthXXHCBMt
+IronPort-HdrOrdr: A9a23:XmhJHaoaAFHFo0IZgzJetRkaV5r7eYIsimQD101hICG9Evbzqy
+ lhpoV56faSskd2ZJhAo6HmBEHjKUmwyXcR2+Us1NiZLWvbUQeTTb2KqLGSpgEIeBeOjtK1t5
+ 0OT0EWMrSZZmSSz/yKhDVQeOxP/DDoysCVbKvlvg5QpY4GUdAa0+5gMHflLqRpfng7OXPnLu
+ vn2iKXzwDQBEgqUg==
+X-IronPort-Anti-Spam-Filtered: true
+Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
+  by ipmail06.adl3.internode.on.net with ESMTP; 27 Jan 2023 09:19:12 +1030
+Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
+        (authenticated bits=0)
+        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 30QMn7uf2378160
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Fri, 27 Jan 2023 09:49:07 +1100
+Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 30QMn7uf2378160
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
+        s=s1; t=1674773347; bh=uTm+W0onGdSnWFhrySf0WWlijSCKdKbVCheCJr4nB/o=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=vF1imw72lqs4DujtUzJQCLL+lTvZVVleUVrgTQhEbIQBvhqoccWwLWfGyil67Pg8g
+         yPQa28OOKh1tkLCBHMseL9h7FbS/kRILSgD+/OB5vMjK9XgyL3p8Tc8jFq1kcbyaLZ
+         N7iMjwBsxAC13BN5d86UQfELTLP4QpfwAe5lNKVIS9bZdA7fKZS/UKXxirklVlvdU3
+         fJk8LrNXgw3t/mFIgijAyIdUzOe7LFBYwUdQzH11cF0DMuf52vOdDx6GGgSxX30nYF
+         kvNuOEc9iO9NdQj5AUb4F20KYAYqVsJJ/Pr4sLcvzAZnTUSMgs9gGtzJ5dSzlCJpwS
+         Ryi/HX/U057Yw==
+Message-ID: <3ee724de76a18a7ab49908aa0d63d33dfc465850.camel@crawford.emu.id.au>
+Subject: Re: [PATCH v1 2/7] hwmon: (it87) Disable configuration exit for
+ certain chips
+From:   Frank Crawford <frank@crawford.emu.id.au>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Date:   Fri, 27 Jan 2023 09:49:07 +1100
+In-Reply-To: <20230126134216.GA1634570@roeck-us.net>
+References: <20230126040223.986189-1-frank@crawford.emu.id.au>
+         <20230126040223.986189-3-frank@crawford.emu.id.au>
+         <20230126134216.GA1634570@roeck-us.net>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230126-b4-ltc2945_shunt_resistor-v4-5-bb913470d8da@criticallink.com>
-References: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
-In-Reply-To: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bob Duke <bduke@criticallink.com>,
-        John Pruitt <jpruitt@criticallink.com>,
-        Jonathan Cormier <jcormier@criticallink.com>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=708;
- i=jcormier@criticallink.com; h=from:subject:message-id;
- bh=ztSizwKCRQbuO5hjHb+ixZi9TnHDXa8I5HXLLGMpWUk=;
- b=owEBbQKS/ZANAwAKAdzX/S4LNuuqAcsmYgBj0v96Md1xv21n7cR5HEwD5IPLFz0I12Y2BnjVI/ES
- HP4bOeCJAjMEAAEKAB0WIQT/MozqCeZtYxNnVN/c1/0uCzbrqgUCY9L/egAKCRDc1/0uCzbrqoLlD/
- wNZmu751rOnzdh7g2RQ5g7eZ3Y51D8vPnAwxHLHA8qgc1jAv7nVp4+T4xtxMyfbrI8R8VNK0PM8NLe
- l/expSHT30K8SZhxjrLn7r5AdiAh2jOLIxPCbMTnf4ZSZOAAViy9YUhLFpg94Qa9bNOVupLDd6p3ml
- QJuuW4HoPRJkcjetV/cQLrHhkdcJd/fxExAnQABDGltSrKhbIFDwVVKxkOhgAzCs4QiZgB91KWpdei
- sa5xVLscph09wvnHjkKGG1hIK0pISajE9GIBPdM1R7ek8rdhQCU3jblxIkQxDFnjWHgjE01V2W9HQ1
- 5NOM8sFqobmMsOyr4S8h6Y+Kcikh6HGZRdquU+oMQy+c6Y97VH4gG24ZWTNhNxau3qIVJcCb4Cmv2m
- KWYrNfJCNe3zF7wN0qy7D4WT2aVhRWGHZCGztcQdhg6CMc+jESLjuc4maOg0pxjh8mKOledXGK6LLm
- 3nKoCUicm14yoD6vnCcHB+FuZLc+o1crK/+UmOTKEYbzMY79FNEHQNfx90bs+qz0wOzdG70lb11OqU
- /OcejxRTDxEHxdsXj7p29v1a/NOfvUrzW0rmZqoNdGB1kESXI+bOINOhSyWeb9TUAfmQYC4rISi15G
- FTTLoHHR5blXPO0dLrzaJ9g6O2dO/ZiTKmUEQAwYDQmUuy2sZdn+acrXVrXg==
-X-Developer-Key: i=jcormier@criticallink.com; a=openpgp;
- fpr=FF328CEA09E66D63136754DFDCD7FD2E0B36EBAA
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Fri, 27 Jan 2023 09:49:07 +1100 (AEDT)
+X-Virus-Scanned: clamav-milter 0.103.7 at bits.crawford.emu.id.au
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert division to DIV_ROUND_CLOSEST_ULL to match code
-in same function.
+On Thu, 2023-01-26 at 05:42 -0800, Guenter Roeck wrote:
+> On Thu, Jan 26, 2023 at 03:02:18PM +1100, Frank Crawford wrote:
+> > IT8790E and IT8792E/IT8795E have been identified as chips that can
+> > have
+> > issues when disabling configuration mode.
+> >=20
+> > Set to never exit configuration mode.
+> >=20
+> > Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
+> > ---
+> > =A0drivers/hwmon/it87.c | 8 ++++++++
+> > =A01 file changed, 8 insertions(+)
+> >=20
+> > diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+> > index 7049e81f5af1..c5e46b94f0b8 100644
+> > --- a/drivers/hwmon/it87.c
+> > +++ b/drivers/hwmon/it87.c
+> > @@ -2453,6 +2453,13 @@ static int __init it87_find(int sioaddr,
+> > unsigned short *address,
+> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0break;
+> > =A0=A0=A0=A0=A0=A0=A0=A0case IT8792E_DEVID:
+> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0sio_data->type =3D it87=
+92;
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0/*
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * Disabling configuratio=
+n mode on IT8792E can
+> > result in system
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * hang-ups and access fa=
+ilures to the Super-IO
+> > chip at the
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * second SIO address. Ne=
+ver exit configuration
+> > mode on this
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * chip to avoid the prob=
+lem.
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 */
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0doexit =3D false;
+>=20
+> Why not just use a feature flag ?
 
-Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
----
- drivers/hwmon/ltc2945.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Good point.  I'll rework it to do that.
 
-diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
-index 0b5e448b4f12..33341d01f1f7 100644
---- a/drivers/hwmon/ltc2945.c
-+++ b/drivers/hwmon/ltc2945.c
-@@ -212,7 +212,7 @@ static long long ltc2945_val_to_reg(struct device *dev, u8 reg,
- 	case LTC2945_MAX_VIN_THRES_H:
- 	case LTC2945_MIN_VIN_THRES_H:
- 		/* 25 mV resolution. */
--		val /= 25;
-+		val = DIV_ROUND_CLOSEST_ULL(val, 25);
- 		break;
- 	case LTC2945_ADIN_H:
- 	case LTC2945_MAX_ADIN_H:
+>=20
+> Guenter
 
--- 
-2.25.1
-
+Regards
+Frank
+>=20
+> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0break;
+> > =A0=A0=A0=A0=A0=A0=A0=A0case IT8771E_DEVID:
+> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0sio_data->type =3D it87=
+71;
+> > @@ -2474,6 +2481,7 @@ static int __init it87_find(int sioaddr,
+> > unsigned short *address,
+> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0break;
+> > =A0=A0=A0=A0=A0=A0=A0=A0case IT8790E_DEVID:
+> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0sio_data->type =3D it87=
+90;
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0doexit =3D false;=A0/* Se=
+e IT8792E comment above */
+> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0break;
+> > =A0=A0=A0=A0=A0=A0=A0=A0case IT8603E_DEVID:
+> > =A0=A0=A0=A0=A0=A0=A0=A0case IT8623E_DEVID:
+> > --=20
+> > 2.39.1
+> >=20
