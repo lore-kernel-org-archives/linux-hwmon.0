@@ -2,65 +2,63 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B662C636BD
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Jan 2023 22:33:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B53BC54EAA
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Jan 2023 22:33:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233244AbjAZWdN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 26 Jan 2023 17:33:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
+        id S232888AbjAZWdP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 26 Jan 2023 17:33:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233221AbjAZWcu (ORCPT
+        with ESMTP id S233227AbjAZWcw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 26 Jan 2023 17:32:50 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A413E59992
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 14:32:28 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id ll10so1448867qvb.6
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 14:32:28 -0800 (PST)
+        Thu, 26 Jan 2023 17:32:52 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2871728D6
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 14:32:30 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id e19so2559243qvw.13
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 14:32:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=criticallink.com; s=google;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SypAcRsRGzHhFPMDy6VkPjsCL8zFvVsNw/XJ5tPEVcY=;
-        b=efuaVL0Qm37vcUypEIcgbVoS1Vqqe488UZ8MTte6T0J7ssEwQ7fEY1dkzJIbj8S7E8
-         1aUD44gCPB7puYCswzn1ztv8km0VbM53zvi9+uFVtlUmdH2Xo8L2fr5mYKS/m0Obd7E4
-         m6ofpouoXgvh74lfLmHDrUYk66up3W/YQEV5RAyERXF2OEGmnHeXGRTUoLlL2mee6Zcn
-         WsDucOBTJFm5836z0UAe67+n5M/fpd2evCUpI8rHNsbIiHvPRB47z49nkkUfm46SDKcB
-         ll+XD12STjyOaw4Ka0Ne4Jt4gzXgnpOfZoqw/0tX2HJiB2ENPgA0Vu/aW+nk7iN6Z9uA
-         dXsA==
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4xEhI3axOJYS2dd9mxNrX3agzmt2SZlxn5ns5AzUH58=;
+        b=cEzkNNjy9xdn2V+pJO12CL+zMeml5aYU0d5MSRymk3vzhECNfnAxv1i6QuiVcSung9
+         HKYXTxKhnCqIQpI5WID+qZM4HBfq75uXYeRVOoN7J9VOOhb2MbC8GUJ8z/vwK6MgWhH7
+         l8zzsyqzuNrtLFoh3MogI7R9KgSFwfyb4ysrZsOHEm/e3CaNdURMwSmuG0z3LXh9UuMv
+         SIFOhIVuYksdSG/fttoK7FrudzTxSUuMREd/wnDFhDhCeb2LyBH+0i1AtDuYb+rPg1hK
+         vwF81gE0fo/5zvsSrS9iRVv3ZT/m0zAGoqQCLHd+YqYcyJ+Jm6FRe2j8+3DYT0RorNsL
+         cyIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SypAcRsRGzHhFPMDy6VkPjsCL8zFvVsNw/XJ5tPEVcY=;
-        b=6XwC3nb5AQ2FcFLyAnQuT1DBrj+M04eTDIhcfLaTWbTcLcqDqgELr45LJSFjK6w1P3
-         YYcoSLMEodbxXVvhhvilzdummYNP8k7Vkt8ShltSA+QluCvTycWTRdI/QrjmbMia2l9K
-         CcciybwXop4SfEj1twnCx1bXxwVeHXFZ9UCzmNTYLPLUOY6LSFHCUrCmTX2pT5XOXFT6
-         nj9Rcc4f+S9uIJenma/kIIxik/V1U6Bo+h1YOfPoTLmqYnk4xnZ/8eLV5LZGJnFCCBPS
-         3GAwdBWF1KxCMJdwALALxK7dsyNo6Y+tBB3wUOFoe+T4AHJiyJlZuUzP8zTwf9J3NsMF
-         RNBQ==
-X-Gm-Message-State: AO0yUKWTq1o/EOVz47r1WQKfXp3cG7ZrXIWCOLTOJ+OgcUgKUgDGVqB3
-        vQxGEpExlANqVE6m950kA9Qc8Q==
-X-Google-Smtp-Source: AK7set8j39WFl26zDOVkE8AB9B9BKmg0mfHSyv5sD9/kg17OgAvML4uOSTenWt/JZjRGg2pSQ4i87g==
-X-Received: by 2002:a05:6214:192c:b0:537:708d:3fef with SMTP id es12-20020a056214192c00b00537708d3fefmr12386015qvb.38.1674772347729;
-        Thu, 26 Jan 2023 14:32:27 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4xEhI3axOJYS2dd9mxNrX3agzmt2SZlxn5ns5AzUH58=;
+        b=XkoQXybX4qkhHgkTgkI61mQkBgyaxbpna05/AgjY4cCFXt2prK5w4Fsau4FJMuLPAO
+         Tvuo4S9n4Rof65LwGnDZ79kg3JKvTbKJheQN2EYBmY77ezFkzZ7OZ3yTyS/L/kQA5jko
+         dfeye5LfYkTylgqvt8SQVu2AjQWj/785af4zPU/7j+JNVhdkMFQbN0q9UBX1JE8lt0yI
+         65460tWVAQbP2NwBX3YlfWGcUcsEfBOj2fAlOI67zIMHrZ1tHS10IJfkxaiP5RwqcPY0
+         vU6VBKeRFkiPMwPhJHs5wrtRNLxmoYpXCgIkzH1imk7rDTBWb+PKQiR/Hbkb65u0uxVY
+         Jz/g==
+X-Gm-Message-State: AFqh2kr1/bEXLt1mtuaC4kAoWtaz7g4VIy26DVLqfMre+qgD3lnDd82g
+        BiuZh99eDB558Vz8CQ8o5fTkoA==
+X-Google-Smtp-Source: AMrXdXuzBOyI5/KyWaygGhCjxZsF6FqdobUQud3r/7841g2Ny78wWU6KYvEP1doyOL2yMhzPTNjRZA==
+X-Received: by 2002:a05:6214:4287:b0:535:2d28:bf1d with SMTP id og7-20020a056214428700b005352d28bf1dmr61600177qvb.33.1674772349768;
+        Thu, 26 Jan 2023 14:32:29 -0800 (PST)
 Received: from [127.0.1.1] (static-72-90-70-109.syrcny.fios.verizon.net. [72.90.70.109])
-        by smtp.gmail.com with ESMTPSA id m7-20020a05620a220700b006ff8a122a1asm1723091qkh.78.2023.01.26.14.32.26
+        by smtp.gmail.com with ESMTPSA id m7-20020a05620a220700b006ff8a122a1asm1723091qkh.78.2023.01.26.14.32.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 14:32:27 -0800 (PST)
+        Thu, 26 Jan 2023 14:32:29 -0800 (PST)
 From:   Jonathan Cormier <jcormier@criticallink.com>
-Subject: [PATCH v4 0/5] hwmon: ltc2945: Add binding and shunt resistor
- support
-Date:   Thu, 26 Jan 2023 17:32:22 -0500
-Message-Id: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
+Date:   Thu, 26 Jan 2023 17:32:24 -0500
+Subject: [PATCH v4 2/5] hwmon: ltc2945: Add devicetree match table
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHb/0mMC/y2Nyw6CMBQFf8V0bUnpA4Mr/8MQUmqxV0trbgvRE
- P7dSlzOJOfMSpJFsImcDytBu0CCGArI44EYp8PdUrgVJpxxwWre0EFSnw1vpeqTm0Pu0SZIOSI
- dG9kqxaQUjSJlP+hk6YA6GFcewux9kS+0I7z34LUr7PbtZ+8v4mf/KdZyIZSQVd0KLk6M1vRhI
- k5g8WIQMhjtPYRnZeJEum3bvnnfqJbLAAAA
+Message-Id: <20230126-b4-ltc2945_shunt_resistor-v4-2-bb913470d8da@criticallink.com>
+References: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
+In-Reply-To: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
@@ -68,75 +66,65 @@ To:     Jean Delvare <jdelvare@suse.com>,
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Bob Duke <bduke@criticallink.com>,
         John Pruitt <jpruitt@criticallink.com>,
-        Jonathan Cormier <jcormier@criticallink.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        Jonathan Cormier <jcormier@criticallink.com>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1912;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1025;
  i=jcormier@criticallink.com; h=from:subject:message-id;
- bh=V0FNKX9YAVgdV6qQtndh4lVLUCURCHYt+xc2qtMk9AU=;
- b=owEBbQKS/ZANAwAKAdzX/S4LNuuqAcsmYgBj0v96YYBjH5bl7+oD5yN3Mu+4Qfb2R9YVuyoeBN+Y
- Od/xXU6JAjMEAAEKAB0WIQT/MozqCeZtYxNnVN/c1/0uCzbrqgUCY9L/egAKCRDc1/0uCzbrqgKyD/
- 0anhM64UpBpa8TtU69DKDW0uL3AU4HuKH2i3UEaV85FS3f2PFwWpk+Oq41YDikbRb6sF+ugr+/uq4U
- j5rpdJvtfXQxVZjrmIaqn2BBYqBnD563Kejkkuf8bqmaCELW4GetrUODdj2QNlm4RtRixFASRn67GB
- RyBlssv12Jk8Twvfp2ORa/z8iStY9QesiB37n9ii89ye5gXDmbH+owGjN9OQNcf810aRgFn74iZnqB
- /lKLFfI44cn/vNt6qTtPrkYpugwSuPeElX8wXqUAfze7kPd42stfkPaCjU4bfmyhrCec65PpodIrN+
- nFYzQ7NfRKx0I+OQzEq8RQj+Rq1LJNQnd7Q245eOCWqdAIjtPNwguLXIHPfLOtMXRrMpqS/IppUAJJ
- YNmw/Azd1om/RmRM14/QsSB/sS1S5uqczNmZKBzQ2VaX5LRifE5uQVBkoSoFJmAekDHb0yub3HTZnT
- MCq/BjBvN4O3J7goK0e8RFFW3HNxlE2nJjYsvIdZl/AXz3lf4kYpsQd2rHzFW82BgZbXf/kLQskvyj
- Y1+0p15b5OZhkxg9dZJVmQqE1CQa9L6IHllMtjORyWCXoR1r9WKkZtldp+CGPl/9eI3eBC/512z/kR
- N5d7Cb9bsMmi8vHrjNyR4FLIqhZVPMAo5jF85hpLAOnSPHFKpZnKfi3Lp1CQ==
+ bh=Ko4/DNeywEIQUpedzI15zf/CLimbk3xwVSNJ1d5SvMM=;
+ b=owEBbQKS/ZANAwAKAdzX/S4LNuuqAcsmYgBj0v967dbZK3pTHY2jf3XbNoFu7verxjCaGB5B9/94
+ 99Zfs7eJAjMEAAEKAB0WIQT/MozqCeZtYxNnVN/c1/0uCzbrqgUCY9L/egAKCRDc1/0uCzbrqqUfD/
+ 4oWWVTbKPgDKGULT2hNoHx/PX85X3YWhcjEp1/ZPPYjIXrqO/Fbu0x3mXg1ki52jK7s5bqdjxPn8Im
+ br2YFa9GAiX7kRSE8JQqtsypb7cD8SP6WhXEftP8I7jJMDINzWkIrqrguLlxnk+gdypv4jydKPb0Sv
+ h91mCNu/hc2Zs6uV/+P9Yozh71LK9r7uVB4Sk9OSag6Ld2cYmHDVoVl5cNZmOvFxrQEjbn1nGvsfpl
+ VJbMZ4sALN8wX0MJ05ISUf8+Py9fq9Cto+cwPAkKo5CemIGoGf5renPvPLgWQMyJiY/PyTDCeM+S4P
+ GRY1r5KsOBsCEc++b2riR7Shjy72oQZY+j9XAXs39vSZrY9/0+xfmbjDkBWEtP8mHzzbIeeYpe43Ir
+ fAWhkbJP+VW7ZfKmOCw2TbgYeBf/2fD7/3vAro2ZBE6PMu1+yqIEHZ3tWwelW2PmfsddvgchoruM1j
+ aaxlCeHlG8xjOdiNXiWuTFzPtnXup5a/aiBrCJG3ftT45xtRDwTFIosHRp7ZrCXcUVhB09JAqysPM3
+ 9XWaKXRjz9NkYdTN/BVbhpPyVXvG9DCmkw1lUTUEhQKU26Bnr96fBrMydOF4vbeEpdXO0T2F82QrDI
+ zCnCXAq2Q4Od6fA9XDEVplrpnl6Ahc38XDbOMbvuDxyefknFaNMlJxFIWkUw==
 X-Developer-Key: i=jcormier@criticallink.com; a=openpgp;
  fpr=FF328CEA09E66D63136754DFDCD7FD2E0B36EBAA
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Added the ability to specify the value of the shunt resistor in the
-device tree instead of assuming it is 1 milliOhm.
-
-Would be good to backport as well
-
-Changes since v3:
-- Remove shunt-resistor-micro-ohms in binding commit message
-- Simplify ltc2945_value_store fix
-- Validate overflow
-- ltc2945_value_store accept only 32-bit uint from user to avoid overflow
-- Link to v3: https://lore.kernel.org/r/20230109233534.1932370-1-jcormier@criticallink.com
-Changes since v2:
-- Remove newline
-- Combined overflow fix with "Allow setting shunt resistor" commit
-- Add description to "Add devicetree match table"
-- Add fix for unhandled error case in ltc2945_value_store
-- Use imperative in descriptions
-- Remove unneeded overflow check from ltc2945_reg_to_val
-- Fix up DIV_ROUND_CLOSEST_ULL calls, per docs divisor should be 32-bit
-- Split one DIV_ROUND_CLOSEST_ULL change into separate commit per
- Guenter Roeck's comment
-Changes since v1:
-- Add devicetree match table
-- Add kerneldoc for the ltc2945_data struct
-- Cleanup excesive comments about the shunt resistor
-- Switch to device_property_read_u32()
+Add adi,ltc2945 compatible
 
 Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
 ---
-John Pruitt (1):
-      hwmon: ltc2945: Allow setting shunt resistor
+ drivers/hwmon/ltc2945.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-Jonathan Cormier (4):
-      dt-bindings: hwmon: adi,ltc2945: Add binding
-      hwmon: ltc2945: Add devicetree match table
-      hwmon: ltc2945: Handle error case in ltc2945_value_store
-      hwmon: ltc2945: Convert division to DIV_ROUND_CLOSEST_ULL
+diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
+index 9adebb59f604..9af3e3821152 100644
+--- a/drivers/hwmon/ltc2945.c
++++ b/drivers/hwmon/ltc2945.c
+@@ -58,6 +58,12 @@
+ #define CONTROL_MULT_SELECT	(1 << 0)
+ #define CONTROL_TEST_MODE	(1 << 4)
+ 
++static const struct of_device_id __maybe_unused ltc2945_of_match[] = {
++	{ .compatible = "adi,ltc2945" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, ltc2945_of_match);
++
+ static inline bool is_power_reg(u8 reg)
+ {
+ 	return reg < LTC2945_SENSE_H;
+@@ -475,8 +481,9 @@ MODULE_DEVICE_TABLE(i2c, ltc2945_id);
+ 
+ static struct i2c_driver ltc2945_driver = {
+ 	.driver = {
+-		   .name = "ltc2945",
+-		   },
++		.name = "ltc2945",
++		.of_match_table = of_match_ptr(ltc2945_of_match),
++	},
+ 	.probe_new = ltc2945_probe,
+ 	.id_table = ltc2945_id,
+ };
 
- .../devicetree/bindings/hwmon/adi,ltc2945.yaml     |  49 ++++++++
- drivers/hwmon/ltc2945.c                            | 132 ++++++++++++++-------
- 2 files changed, 136 insertions(+), 45 deletions(-)
----
-base-commit: 93f875a8526a291005e7f38478079526c843cbec
-change-id: 20230126-b4-ltc2945_shunt_resistor-f64955044365
-
-Best regards,
 -- 
-Jonathan Cormier <jcormier@criticallink.com>
+2.25.1
 
