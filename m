@@ -2,182 +2,180 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AF53C38142
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Jan 2023 04:41:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1C22C54EAA
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Jan 2023 04:41:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjA0Elw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 26 Jan 2023 23:41:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
+        id S229529AbjA0El4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 26 Jan 2023 23:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjA0Elv (ORCPT
+        with ESMTP id S229496AbjA0Elz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 26 Jan 2023 23:41:51 -0500
+        Thu, 26 Jan 2023 23:41:55 -0500
 Received: from ipmail06.adl3.internode.on.net (ipmail06.adl3.internode.on.net [150.101.137.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74CEC3B0C9
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 20:41:50 -0800 (PST)
-IronPort-SDR: +M9xOtF+rJYlSG6yMX5ImpTcrUo3mQsSI45ZBCd1fmZb/zCjf4P2zF4e/HElE2JdM6Yvzx/5/n
- mBAfYBAbrj0GfgscyH/K+HQF0BXqesdA/g9g0rTJ3BL7++wAbstfudzL16jYA+k4KHhC9A0EJN
- vg0DokG4nV6kefGPXItUEGgZQAgyJoti1mBcZHrD1XhlqXtIczkUl5aeGFMocDpsHvddUWIb3u
- vf65fiEHOVF2M1KVkcdWMWMDoqtXdF3jAM3dSVtKLT8ojrfpFwctbhVDZy1Z1ycZR3KAqsukVY
- x3s1z5Q9Tn0IRn4xuHtlE3KY
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED46F4FAE0
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Jan 2023 20:41:53 -0800 (PST)
+IronPort-SDR: N3hOJY8ovt40HMyze7RZHzp12bDiVi6YAj/Q7hrwKZJryUm6eZcVzBFNMtH3i3ChCsh2j80ZY9
+ MztmEVpZtRtxI+GJroJ9Vb+8DoLZnIdXcsImj8i8k0UtTTq76SOnH9TsNbJXAhFNFfYGC7sYcn
+ dggKajxMDlEE3qU3IqRb671D9uGzpJtX5nC4j5rb8NM19gk2H8g8hv94bSv/clGmap8iWXdTZz
+ G2TEVDAXlnmARpctYMIgi2bdwxnjvsPGAdeuPDIggT+cONu/8/2NxZjzGkcEO310lJ747ngDOP
+ MxY6Mjqn7Y/gWssjGO1XupQW
 X-SMTP-MATCH: 0
-X-IPAS-Result: =?us-ascii?q?A2ApCACKVdNj//Qc8jxaHQEBAQEJARIBBQUBSYFGgi2CY?=
- =?us-ascii?q?JVtnz4PAQ8BAUQEAQGFBwKFIyY4EwECBAEBAQEDAgMBAQEBAQEDAQEGAQEBA?=
- =?us-ascii?q?QEBBgSBKgcLUgcLWAcHgUELgWETCwMxDYZWAgEDMgENAQE3AQ8ZOFcGARKCf?=
- =?us-ascii?q?oMjrByBAYIIAQEGgmKaZ4FeCYFAi2GBFIM3ekM/gU6BFYE8giyLA44ijTwKg?=
- =?us-ascii?q?Tl4gSUOTHqBDwIJAhF0WQMJAwcFSUADCxgNFjIKEyw1CwtKEBsaGweBBiooF?=
- =?us-ascii?q?QMEBAMCBhMDIgINKDEUBCkTDScmaQkCAyJiAwMEKC0JPwcmJDwHVjcGAg8fN?=
- =?us-ascii?q?wYDCQMCH09xLxISBQMLFSpHBAg2BQYcNhICCA8SDyxEDkI3NBMGXAEpCw4RA?=
- =?us-ascii?q?1BHGW4EghEGKSaeOWsGAS0mOzB3xHCDfIFSnn1MgUSmXIEKLZcgIKMchCsCC?=
- =?us-ascii?q?gcWgXmBfk0fGYMiTwECAQEBDQECAQEDAQIBAQEJAQEBAY4dDBaCCpFLYTsCB?=
- =?us-ascii?q?wsBAQMJjCMBAQ?=
-IronPort-PHdr: A9a23:PSChzB0KG9ttIqCvsmDPn1BlVkEcU/3cNA8J8dwskbtRfKO589LvO
- VGZ5PkrhUKaFYzB4KdCjOzb+7vlRXRG+5uEt2wPNZ1UAhEJhZ9EwAUpDJyJVRKrfqe4PScwR
- ZwQX1Q9oBmG
-IronPort-Data: A9a23:H1dSharXzkLQjLwvtoS4tzXYTXFeBmI8YxIvgKrLsJaIsI4StFCzt
- garIBnUP66MNGKkeI0kbIi+9RwO6sSGm4NqGVdkrC8xFXtE8cSVC92Xcx/+bn2ZJ5GeQk5ut
- pkUMdXNIJBoEySBqhzwG7Ww9nMUOYOgH+qkUrSYUsxSqa6IbA971HqPTsZg2tYAbeCRWl/L4
- ZWoyyHmEAfNNwRcawr41orawP9RlKSq0N8nlgRWicBj5DcyQFFIZH63DfjZw0rQGuG4LMbjL
- wrw5O3RElfiwvsYIojNfoAX06E9auW60QCm0hK6UkU56/RIjnRaPq0TbJLwZarL4tmEt4gZ9
- TlDiXC/YSg5brf2tbUdaD4bSCxyLad6x5vAIEHq5KR/z2WeG5ft6/9vEFpwNpcR5ehwG20I+
- PkFbjEBKBme7w606OzjDLMw3IJ5fI+xYN93VnJIlFk1Cd4oW5nFQI3B/9ZH0jAqioZDGOuYZ
- sZfYCcHgBHoP0EXawpKV85l9AuuriT0NGNbtHK7nqsq+WPX4FYyibe2C/OAL7RmQu0Oxh3I/
- DiXl4jjOTkeNdqC2X+F7XergMfRki7hHoEfDru18rhtmlL77mgSDgAGfUG8rPK6z1OlHdRSN
- yQ8+CYjqbY77kGDVcTmUluzp3vsg/IHc4QIVrdmskTXmu+Ov1rfHXQNUj9KLsA+u85wTjsvk
- FaU9z/0OdBxmJKFGWin2+aUlhTxYiUZPWU+WgsDTDJQtrEPv7oPph7IS99iFou8gdv0BSz8z
- li2QM4W2uV7YSkjifjTwLzXv96/jt2SFV5qv1m/snaNt14gPtb9OeRE/HCBtZ59wJClok6pl
- UVsdyK21/ECC5yc/MBmaL9VROnBCxqtFjDDyWVoAoUhvwuk/3O4Fb28DRkgfAIzbpxBI2+sO
- hOP/xhN7YNSNz22daB2JYm2DoIj0MAM9OgJtNiIMrKigbArL2drGR2CgmbKgQjQfLAEy/1XB
- HtiWZ/E4LZzIf0PIMCKb+kcy6Q34Ss12HneQ5v2pzz+j+XCOyPKGexdawPSBgzc0E9iiFiFm
- zq4H5XXoyizrMWkM0E7DKZJcgtTdiBrbXwIg5EGLbTYSuaZJI3RI6SJmuN7Id0Nc1V9iv/Ht
- nC7RkJCzlfj7UAr2i3UAk2OqdrHA/5CkJ7MFXV0YAz3hCJ+P9/HAWV2X8JfQITLPddLlZZcJ
- 8Tpse3ZahiWYjiYqTkbc7fnq4luKEaiiQ6UZnr3ayI2YJBnXQCP99r5OArjsiATV3Llucw7q
- rym9wXaXZtaGVs4Vp6MNar+wgPjp2UZlcJzQ1DMfItZdnLsx442eSb/ueBmccgDJCLKyiaey
- wvLUwwTovPAotFp/dSQ3fKEoo6lHvFQBE1fG2WHv7+6OTODrjio24ZfXuGScXbQUX6y+ankb
- PgMl6PwN/gOnVBrtYtgEu81kvhkv4Gy/+5Xl102Em/KYlKnDqJbDkOHhcQf5LdQwrJ5uBetX
- hzd8NdtOYKPZJHvHmkOdVgsYem03P0JniXfsKYuK0Lg6S4poLeKXBkAPxSIjyABfrJ5PJl/m
- rUrudINrQelgwUkNcyKyC1R6iKNIjoJTvx/5J0dBYbqjCsty01DOMKDUHWuuszXOtgcYFM3J
- jK0hbbZg+oOzET1c001SSrH091C1MYHtx19xVMfI0iEx4jejfgt0RwPrTk6ElZPwhNc374hM
- 2RnLRYvd/vWum003o0ZDyX2R10HHwGQ5k36jUcRm2yfRE6tEGXQdTVvNeGI9UEf0mRdYjkCo
- u7Ckj6/DG67cZGjxDY2VG5kt+fnEY57+DrEyZKuEMmyFpUnZSbo3/21bm0Sphq5Xc48iSUrf
- wWxEDqctEEjCRMtng==
-IronPort-HdrOrdr: A9a23:ErHXAqqExL7Hs0iZbtMz/+gaV5rxeYIsimQD101hICG9Evbzqy
- lhppUmPHjP+U8ssBNJo7290cy7LU80mqQFgrX5UY3MYOCighrNEGgA1/qF/9SfIVydygc178
- 4JGJSWSueAamSS5vyb3ODXKbgdKFbrytHRuQ6n9QYJcehzUdAd0+5mMHfnLqSofng8OXLpfK
- DsnPZ6mw==
+X-IPAS-Result: =?us-ascii?q?A2D7AQCKVdNj//Qc8jxaHQEBAQEJARIBBQUBSYE1BQELA?=
+ =?us-ascii?q?YIsgmCzQYFqDwEPAQFEBAEBhQcChSMmNwYOAQIEAQEBAQMCAwEBAQEBAQMBA?=
+ =?us-ascii?q?QYBAQEBAQEGBIEqBwtSBwtYBweBQQuBYRMLAwQIJQ2GVgIBAycLAQ0BATcBD?=
+ =?us-ascii?q?xk4VwYBEoJ+gyOraTOBAYIIAQEGgmKaZ4FeCYFAAYtggRSDN3pDP4FOglGCL?=
+ =?us-ascii?q?IEFgwIEhniOIo08CoE5eIElDkx6gQ8CCQIRdFkDCQMHBUlAAwsYDRYyChMsN?=
+ =?us-ascii?q?QsLShAbGhsHgQYqKBUDBAQDAgYTAyICDSgxFAQpEw0nJmkJAgMiYgMDBCgtC?=
+ =?us-ascii?q?T8HJiQ8B1Y3BgIPHzcGAwkDAh9PcS8SEgUDCxUqRwQINgUGHDYSAggPEg8sR?=
+ =?us-ascii?q?A5CNzQTBlwBKQsOEQNQRxluBIIRBikmnjlrB4EOpDWhYoN8gVKefUyBRKdml?=
+ =?us-ascii?q?00goxyEKwIKBxaBeIF/TR8ZgyJPAQIBAQENAQIBAQMBAgEBAQkBAQEBgTOMa?=
+ =?us-ascii?q?gwLC4IKkUthOwIHCwEBAwmJSoJZAQE?=
+IronPort-PHdr: A9a23:G11Y4BfU+ZHUpUiFXofRbTu9lGM/hYqcDmcuAtIPgbNSaeKo5Z39M
+ kvF6bNgiUKPXImd4u8Xw+PMuPXmXmoNqY2ErGhEapFJUAMIzMQOygIsDJTXVkTyIKzmM3NqT
+ p0QBlRvpinpOkMNR67D
+IronPort-Data: A9a23:FVZ3HKnZ3CYMLjCEg3NbBtbo5gylIERdPkR7XQ2eYbSJt1+Wr1Gzt
+ xIdWm6PPf2INGCjctByYYy3pBsHsZaGyIU3T1c4/CA9RXlG8paUVI3DckmrbijPdsbNQBprs
+ 5sUMYfMcZ5kFnKCjxr8abKJQVtUjPHQHOCgYALn1oGdYSc+FU/NXDo6w7ZRbrZA2IT/W0XX0
+ T/Li5W31GWNglaYD0pNg069gEM31BjNkGtwUmwWPZina3eD/5W9JMt3yZCZdxMUcKENdgKJb
+ 7qrIIWCw4/s10xF5uVJM1rMWhZirrb6ZWBig5fNMkSoqkAqSicais7XOBeAAKtao23hojx/9
+ DlCncPtVTorb4CPo9sYcSlzNSR4F/N6yJaSdBBTseTLp6HHW3Ht3+4oB1s/IoMf4OoxDGRTs
+ /0UbjkQBvyBr7zuhujnEK821oJ5cJWD0IA34xmMyRnXF/8gQrjIWazV69hC0HE9g90IHPqYb
+ tdxhT9HMEiYMkASZQtJYH44tL/riFDGSx5Kk3KEmI49xXXU1ikp/Le4ZbI5ffTRHZ4FxBzJz
+ o7cxEz9AxcHJJmf1j+C9FqyieLV2yD2QoQfEPu/7PECqFmSwHEDIAcRWFC45OSizEizR7p3K
+ UAZ/jQnt6Ua71GwQ5/2WBjQnZKflkBEHoAMSahguETXlvaS+BqQGmkPCCJZZ91gv8gzAzU3v
+ rOUoz/3LWMyrICXGF/ezYiRjwOZHy0TBzE+VQZRGGPp/OLfiI00ixvOSPNqH6i0ksD5FFnML
+ 9ai8XhWa1I705Nj6kmrwbzUq3f3/ciWF1JdChH/Bz/8tFshOuZJcqTysTDmAeB8wJGxZ2TpU
+ JIsoNmS6u0fZX1mvHbVGL1l8F2BwfuaeAbbnEJvV6Yo8zm2k0NPkKgOuHQkeB0saJZBI2O1J
+ lTPsB9Q79lPJHSrK6RwZsS4FqzGLJQM9/y5Cpg4jfIUOfCdkTNrGwk0OyatM5jFyhRErE3GE
+ c7znAbFJS9y5V5b5DS3XfwB9rQg2zozw2jeLbiikUv7jufBNCXNEu9ZWLdrUgzfxP7UyOky2
+ 4gCX/ZmNz0FAYUSnwGNrtVKdghaRZTFLc2n8JYMHgJ8HuaWMDp5UK+Lm+JJl31Ng7xa3ubO4
+ nynXEJEoGcTdlWZQThnqxlLNtvSYHqIhStjYHZzYgz1hSFLjETGxP53SqbbtIIPrIRLpcOYh
+ dFfEylZKvgQGDnB5RoHapzx8N5reBix3FLcNDCsfzY4ZZImSgnUvN7oOALyrXFcAi2yvMo4g
+ ruhygKCH8VZHVw4UZ+NZaL91U61sFgchPl2ARnCLO5TT0OwooJkHDOg3PY4LvYFJQjH2jbHh
+ R2dBg0VpLeRroJsqIvJiKmIop2HCex7GkYGTWDX4azvZXvR5GO8z4haXKCFeC2bVW+y8bj7P
+ bdZyPT1MfsmmldWstMiTOwxlfhjvoDi/uYIwB5lEXPHa0WQJolhenTWj9NSsqBtx6NCvVXkU
+ Ey4+u5cZeeDNvT6QQwYKwcSZ+ie0e0Zx2vJ5vMvLUSkuCJ68ebVUUhWOBXQ2iVRIKEva9Evw
+ Ps6/sUM4hOxjQAmdNuDk2ZV+yKFMyVYAakgs5gbBq7tixYqkw8dO8aEUHKvu5zfOc9RNkQKI
+ yOPgPSQjbprxn3ELyg5G0/SjLhUipk5sRxXyEMPegaSkd3fi/5pgBBcrWYtQgJOwkkV2u5/I
+ DMxZRMtYP/SpXIy1I0ZAzzqAB1IGBySvFDpxFpPn2rcCUC1DzSfIGo4MOeL3UYY72MFIGcBp
+ unClT++XGa4Ztz10wszRVVh967pQ+t3p1/Ll82QFsiYG4U3PGj+iai0aGtW9xbqDKvdXqEcS
+ TWGIQqoVZDGCA==
+IronPort-HdrOrdr: A9a23:7YOq/anF2fXxzlbJ1WKuJ6jpFr3pDfL23DAbv31ZSRFFG/Fw9/
+ rFoB3U737JYVEqKQgdcbLpAsS9qBbnmaKdjrNhXotKMDOIhILsFvAH0WKA+UyHJ8SBzJ8+6U
+ 4IScEXY+EYT2IK6voSizPZLz9P+re6GC/Ev5an854Ud3AOV0h51XYENu+EKDwKeOCYP+tDKH
+ JMjvA33QadRQ==
 X-IronPort-Anti-Spam-Filtered: true
 Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
-  by ipmail06.adl3.internode.on.net with ESMTP; 27 Jan 2023 15:11:49 +1030
+  by ipmail06.adl3.internode.on.net with ESMTP; 27 Jan 2023 15:11:53 +1030
 Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
         (authenticated bits=0)
-        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 30R4fIgi2462776
+        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 30R4fIgj2462776
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Fri, 27 Jan 2023 15:41:45 +1100
+        Fri, 27 Jan 2023 15:41:49 +1100
 Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
-DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 30R4fIgi2462776
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 30R4fIgj2462776
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
-        s=s1; t=1674794506; bh=hcotMYrz3/juQ80iYm5gcIUjBnolTH1T+VhLUa/Dlug=;
+        s=s1; t=1674794509; bh=biKFHKUv+mXskoknmYPVejp/Q75GPmy61AfbzxwGfRY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oGMTIQpo61cuchpClulwU9W/g59Aa3wG+r9I8I61yOQ/UIw/wqC4CJCp98M3A61A2
-         0FtiAA2wozWZPQXwrDVg5TCFPUY2smncFIL55i/gzgGZWpVu5V2b1Mnqo4Zg8hx7Sn
-         XSbV3t1+/OFzC1TqEAT/5J7aZmgrgMdesoJCtu7XF3j0COEAxMNYx8OYu3DlWn3BkL
-         1HbjT+W+P5zHzpaylm/eefAy5+oYYRKti4G3z9NZhiKUUjRhbf7aA3QVeU1ESwy2lt
-         pimrvxInZLIVcU9dEDMtiHFqBfHUFDhTJQLQNen00MNhbwF2ULEM7MNzP5qgIMF/r1
-         pc/lG5E46RwKg==
+        b=TvjNVdTZG/JMbeZrZPr4M1ORFC9SY/HMKqpgr7enynSeEVQbViaOBKr/1+xye30lq
+         Q2aU4tbTco6puQmLK+rdZMw8jaCp3FNq1F6NpFTsHwtHEcwJBvSBcrld7CqtXQMsuc
+         SqA1tR2ZXa7QEem7hkTNljfMUFbs3HeaH9cTfvKrE74w09XeiRthV7WkqM7f2cl7IV
+         XVRA0Pr3CiHK60MZPu6mSKufy2xwCzaoamwNFDW/Q0rVHi8jOp+uQ5VwHAe1lFcIaC
+         7L0rWlW7pkPmGtBHADckGO85verjAh2Aq4HHBIUQWkYezvb/pA+z0nKNRKdJ9XarS0
+         +6tY8kdvdKgow==
 From:   Frank Crawford <frank@crawford.emu.id.au>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org,
         Frank Crawford <frank@crawford.emu.id.au>
-Subject: [PATCH v2 5/7] hwmon: (it87) Allow multiple chip IDs for force_id
-Date:   Fri, 27 Jan 2023 15:41:14 +1100
-Message-Id: <20230127044116.1257799-6-frank@crawford.emu.id.au>
+Subject: [PATCH v2 6/7] hwmon: (it87) Add new chipset IT87952E
+Date:   Fri, 27 Jan 2023 15:41:15 +1100
+Message-Id: <20230127044116.1257799-7-frank@crawford.emu.id.au>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230127044116.1257799-1-frank@crawford.emu.id.au>
 References: <20230127044116.1257799-1-frank@crawford.emu.id.au>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Fri, 27 Jan 2023 15:41:46 +1100 (AEDT)
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Fri, 27 Jan 2023 15:41:49 +1100 (AEDT)
 X-Virus-Scanned: clamav-milter 0.103.7 at bits.crawford.emu.id.au
 X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Extend the force_id module parameter to allow specifying one or both
-chip IDs separately.  If only a single parameter is given it defaults
-to using that value for all chips, similar to previous usage.
+Add IT87952E, a new chip ID (DEV ID 0x8695), which appears to be an
+updated version of the IT8792E and takes the same configuration.
+
+The model name comes from the model name printed on the chip.
+
+There is no datasheet publicly available.
 
 Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
 ---
 
 v2:
- * No change.
+ * Make use of feature flag for definition.
 
 ---
- drivers/hwmon/it87.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ drivers/hwmon/it87.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index 61a1a2c643ed..f41da0896097 100644
+index f41da0896097..fdba5873434a 100644
 --- a/drivers/hwmon/it87.c
 +++ b/drivers/hwmon/it87.c
-@@ -175,8 +175,9 @@ static inline void superio_exit(int ioreg, bool noexit)
- #define IT87_SIO_VID_REG	0xfc	/* VID value */
- #define IT87_SIO_BEEP_PIN_REG	0xf6	/* Beep pin mapping */
+@@ -34,6 +34,7 @@
+  *            IT8786E  Super I/O chip w/LPC interface
+  *            IT8790E  Super I/O chip w/LPC interface
+  *            IT8792E  Super I/O chip w/LPC interface
++ *            IT87952E  Super I/O chip w/LPC interface
+  *            Sis950   A clone of the IT8705F
+  *
+  *  Copyright (C) 2001 Chris Gauthron
+@@ -63,7 +64,7 @@
  
--/* Force chip ID to specified value. Should only be used for testing */
--static unsigned short force_id;
-+/* Force chip IDs to specified values. Should only be used for testing */
-+static unsigned short force_id[2];
-+static unsigned int force_id_cnt;
+ enum chips { it87, it8712, it8716, it8718, it8720, it8721, it8728, it8732,
+ 	     it8771, it8772, it8781, it8782, it8783, it8786, it8790,
+-	     it8792, it8603, it8620, it8622, it8628 };
++	     it8792, it8603, it8620, it8622, it8628, it87952 };
  
- /* ACPI resource conflicts are ignored if this parameter is set to 1 */
- static bool ignore_resource_conflict;
-@@ -2410,7 +2411,7 @@ static const struct attribute_group it87_group_auto_pwm = {
+ static struct platform_device *it87_pdev[2];
  
- /* SuperIO detection - will change isa_address if a chip is found */
- static int __init it87_find(int sioaddr, unsigned short *address,
--			    struct it87_sio_data *sio_data)
-+			    struct it87_sio_data *sio_data, int chip_cnt)
- {
- 	int err;
- 	u16 chip_type;
-@@ -2426,8 +2427,12 @@ static int __init it87_find(int sioaddr, unsigned short *address,
- 	if (chip_type == 0xffff)
+@@ -160,6 +161,7 @@ static inline void superio_exit(int ioreg, bool noexit)
+ #define IT8622E_DEVID 0x8622
+ #define IT8623E_DEVID 0x8623
+ #define IT8628E_DEVID 0x8628
++#define IT87952E_DEVID 0x8695
+ #define IT87_ACT_REG  0x30
+ #define IT87_BASE_REG 0x60
+ 
+@@ -477,6 +479,15 @@ static const struct it87_devices it87_devices[] = {
+ 		  | FEAT_SIX_TEMP | FEAT_VIN3_5V,
+ 		.peci_mask = 0x07,
+ 	},
++	[it87952] = {
++		.name = "it87952",
++		.model = "IT87952E",
++		.features = FEAT_NEWER_AUTOPWM | FEAT_16BIT_FANS
++		  | FEAT_TEMP_OFFSET | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
++		  | FEAT_10_9MV_ADC | FEAT_IN7_INTERNAL | FEAT_CONF_NOEXIT,
++		.peci_mask = 0x07,
++		.old_peci_mask = 0x02,	/* Actually reports PCH */
++	},
+ };
+ 
+ #define has_16bit_fans(data)	((data)->features & FEAT_16BIT_FANS)
+@@ -2497,6 +2508,9 @@ static int __init it87_find(int sioaddr, unsigned short *address,
+ 	case IT8628E_DEVID:
+ 		sio_data->type = it8628;
+ 		break;
++	case IT87952E_DEVID:
++		sio_data->type = it87952;
++		break;
+ 	case 0xffff:	/* No device at all */
  		goto exit;
- 
--	if (force_id)
--		chip_type = force_id;
-+	if (force_id_cnt == 1) {
-+		/* If only one value given use for all chips */
-+		if (force_id[0])
-+			chip_type = force_id[0];
-+	} else if (force_id[chip_cnt])
-+		chip_type = force_id[chip_cnt];
- 
- 	switch (chip_type) {
- 	case IT8705F_DEVID:
-@@ -3419,7 +3424,7 @@ static int __init sm_it87_init(void)
- 	for (i = 0; i < ARRAY_SIZE(sioaddr); i++) {
- 		memset(&sio_data, 0, sizeof(struct it87_sio_data));
- 		isa_address[i] = 0;
--		err = it87_find(sioaddr[i], &isa_address[i], &sio_data);
-+		err = it87_find(sioaddr[i], &isa_address[i], &sio_data, i);
- 		if (err || isa_address[i] == 0)
- 			continue;
- 		/*
-@@ -3468,8 +3473,8 @@ static void __exit sm_it87_exit(void)
- MODULE_AUTHOR("Chris Gauthron, Jean Delvare <jdelvare@suse.de>");
- MODULE_DESCRIPTION("IT8705F/IT871xF/IT872xF hardware monitoring driver");
- 
--module_param(force_id, ushort, 0);
--MODULE_PARM_DESC(force_id, "Override the detected device ID");
-+module_param_array(force_id, ushort, &force_id_cnt, 0);
-+MODULE_PARM_DESC(force_id, "Override one or more detected device ID(s)");
- 
- module_param(ignore_resource_conflict, bool, 0);
- MODULE_PARM_DESC(ignore_resource_conflict, "Ignore ACPI resource conflict");
+ 	default:
 -- 
 2.39.1
 
