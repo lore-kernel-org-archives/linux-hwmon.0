@@ -2,108 +2,659 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50DB0C38142
-	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Jan 2023 10:22:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F84FC38142
+	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Jan 2023 13:13:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233249AbjA1KWP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 28 Jan 2023 05:22:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
+        id S233982AbjA1NN0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 28 Jan 2023 08:13:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234073AbjA1KWK (ORCPT
+        with ESMTP id S230502AbjA1NNZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 28 Jan 2023 05:22:10 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FB4C169;
-        Sat, 28 Jan 2023 02:22:08 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id kt14so19814650ejc.3;
-        Sat, 28 Jan 2023 02:22:08 -0800 (PST)
+        Sat, 28 Jan 2023 08:13:25 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6514E9038;
+        Sat, 28 Jan 2023 05:13:23 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-15b9c93848dso9941356fac.1;
+        Sat, 28 Jan 2023 05:13:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4CRR4r0MZ+tPXqof/6V6RPxQYuUvZaCxsFPAFM4cyeo=;
-        b=qDdMJ2Jx3MmTPNxx8QI39ZBnCWXIyEPILLUB3UeSEwAms+RjYhmHcq0wgIXnoHHJ+z
-         paQFhlN3XNS/0pTJ5oHv7kwm4jGyKjHAp/7YVSwxOznudzxxcCLfPeRXPeA6fSwVBWrR
-         bCdIVGMNP44E2q9+CwMP2wWL4HC8f8jb1xxis1NQIngrtjMXubVhts0in2lfk2PZKmer
-         y66eJTk7vDwTcV5jpruk9he+Q6/g64Zh6uLPaWk/Ow5hgU1Vv5B9tIfvN2wfGPYbEke4
-         tjPbX5QNuDwM/lWjCwkwGNk+QqpikNAJblBYyy1kRCh4BAkiVQsObJ7urjrMk6kyBlYI
-         PQfw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BWubGOw7QBjF8YdSc1/ZZp3WUWMpDjO6sFvplfMEm9k=;
+        b=XNkYIJMN4OhgEf9hMGRelmYieIBO+69zciaVr4owZzo/3htvDI5nZ9keOzrz3Jw1ix
+         5RIN7Dal4NYWjniYzXp4I5hzbHWTY1CsbzXtH1D2bCCswGbDEmX1vlo/K/PwP/8g2Z2c
+         pzerHIbfGDS5tHaATTEkZCmlrPFOeAuGQ+XnzD4kWfkCBc7hhLrQpqnM3Qa4VuGe1TRE
+         ItN2nqqlkjzFS7Au/d2xYgriK2L24oUHpSWV6Me+xj1C0Mj8kyj3iIKtuQcdv1AMDa4D
+         Nm9UmktsQh0VyPAAZSXby2Ny0YfinsIzu9VxnJ9u/7j1l3UwM1/R8SHwzWZ+54u7Pti8
+         /aAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4CRR4r0MZ+tPXqof/6V6RPxQYuUvZaCxsFPAFM4cyeo=;
-        b=d85V/broB3ms7l15jenhL0E4o0EK2ahu3mhfwbUWl6ciU1zObsTRfssBQ7xi+CyCzn
-         fJqhHOaACETc1jVp/2yn5L4AkpnBv0iJuYmyThcj4qttgCWkmMDK1ex5VxGuNfXJJH/C
-         zpknoDUOzLABfPnSvB9LYgltvybWxgqSZxepji7k80TXl1s4Sb/Ht349nZhO1Vuio+Ds
-         oeD8AZjPDsIeYg+RhZQTDvecXnWK5/e4nmOOdxOED4DuHUkxm4j7DhF4wri+cpihmk11
-         kDBct5Py3mo2DqNzpdKsz308hLkfvW7WgprcYYIaEMLXWLk9YIfbdABgrxX4VSvT65IQ
-         EhcQ==
-X-Gm-Message-State: AO0yUKV7B/Z3CECF5v57IgdHZIuQ6mS5z/hPE2vPbSfNF0l/99EWdzRM
-        47GFdmaQ0EF40RBPUzVKZ+TKLLu2ZIA=
-X-Google-Smtp-Source: AK7set/PdIk85tcctr/HUuUiEqAamXktWGt/O9i2DDGe5hvM9VsLdbgM8/LYcolzYkoLhTkCg+Re1g==
-X-Received: by 2002:a17:906:28d2:b0:87d:f29:3a14 with SMTP id p18-20020a17090628d200b0087d0f293a14mr3810549ejd.68.1674901326510;
-        Sat, 28 Jan 2023 02:22:06 -0800 (PST)
-Received: from caracal.museclub.art (p200300cf9f0a9b009a6833f6d97b7651.dip0.t-ipconnect.de. [2003:cf:9f0a:9b00:9a68:33f6:d97b:7651])
-        by smtp.googlemail.com with ESMTPSA id lj8-20020a170906f9c800b007c14ae38a80sm31456ejb.122.2023.01.28.02.22.05
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BWubGOw7QBjF8YdSc1/ZZp3WUWMpDjO6sFvplfMEm9k=;
+        b=OYhoI5gUcPplhUfaaFKOrAsopBf9o15qiBKhuZ2kS2H+MEUpQsnKfrttU/PMwldJ6v
+         R9yGjn8nIp35B4ky1EPt1nN3vE4trCvjdWYQzuq1IgfbnHuTDKqK+yJgwurRk+xmoWI+
+         SuyJZIKE3dByfNsjZuc5xDcSbZHNU2aaY8dQnE9z3vBABD+7l6Vd11gPfsAeuzHWK3mG
+         EWo9VBSkKTkY47ff9HHj1JVd2W90R6XR6ZNCvzFGoFyfkKykcp3ZE0CjE5DLn5biFb5p
+         lFswIyTJ2vvWjlTGWHySXI9+sfv1srigUZCO9NvdJ4Ow2Lr01g/Be8BQWU4d6jzo5WRK
+         7x3A==
+X-Gm-Message-State: AO0yUKUtVZx8JeMXoovlyUdf88nhK8qUIslx6voryZMoQESzfi/YWiWo
+        6tnlv4jZj/YsSXLK8jYQTElCp8TohO4=
+X-Google-Smtp-Source: AK7set9xqIHpprZ5w04lHrD0r+/pLFksX4VsNK2whk1AdLIzfQqlyMkhrZjv2n9uJZ5+nc+2Nt1vkQ==
+X-Received: by 2002:a05:6870:5689:b0:163:88f9:2c56 with SMTP id p9-20020a056870568900b0016388f92c56mr1803757oao.13.1674911601909;
+        Sat, 28 Jan 2023 05:13:21 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id qk5-20020a056870cd0500b0013b92b3ac64sm3117424oab.3.2023.01.28.05.13.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Jan 2023 02:22:05 -0800 (PST)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     Eric Nguyen <linux@drogman.ch>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) add zenith ii extreme alpha
-Date:   Sat, 28 Jan 2023 11:21:34 +0100
-Message-Id: <20230128102135.5199-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.39.1
+        Sat, 28 Jan 2023 05:13:21 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 28 Jan 2023 05:13:19 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] lm85: Bounds check to_sensor_dev_attr()->index usage
+Message-ID: <20230128131319.GA4173006@roeck-us.net>
+References: <20230127223744.never.113-kees@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127223744.never.113-kees@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Eric Nguyen <linux@drogman.ch>
+On Fri, Jan 27, 2023 at 02:37:45PM -0800, Kees Cook wrote:
+> The index into various register arrays was not bounds checked. Add
+> checking. Seen under GCC 13:
+> 
+> drivers/hwmon/lm85.c: In function 'pwm_auto_pwm_minctl_store':
+> drivers/hwmon/lm85.c:1110:26: warning: array subscript [0, 31] is outside array bounds of 'struct lm85_autofan[3]' [-Warray-bounds=]
+>  1110 |         if (data->autofan[nr].min_off)
+>       |             ~~~~~~~~~~~~~^~~~
+> drivers/hwmon/lm85.c:317:29: note: while referencing 'autofan'
+>   317 |         struct lm85_autofan autofan[3];
+>       |                             ^~~~~~~
+> 
 
-The ROG ZENITH II EXTREME ALPHA provides the same set of sensors as the
-no-ALPHA version. Tested with the hardware [1].
+This is a false positive. The value can never be >= 3.
+It is derived from the last value of the following
+SENSOR_DEVICE_ATTR_RW() entries.
 
-[1] https://github.com/zeule/asus-ec-sensors/issues/31
+I resist making changes like this to the code just because
+the compiler can not determine the range of a variable.
+It blows up code size amd makes it hard to read just to
+make the compiler happy.
 
-Signed-off-by: Eric Nguyen <linux@drogman.ch>
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- Documentation/hwmon/asus_ec_sensors.rst | 1 +
- drivers/hwmon/asus-ec-sensors.c         | 2 ++
- 2 files changed, 3 insertions(+)
+Guenter
 
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index 02f4ad314a1e..a4039f2f9ca4 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -23,6 +23,7 @@ Supported boards:
-  * ROG STRIX X570-I GAMING
-  * ROG STRIX Z690-A GAMING WIFI D4
-  * ROG ZENITH II EXTREME
-+ * ROG ZENITH II EXTREME ALPHA
- 
- Authors:
-     - Eugene Shalygin <eugene.shalygin@gmail.com>
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index a901e4e33d81..bd7beefde586 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -466,6 +466,8 @@ static const struct dmi_system_id dmi_table[] = {
- 					&board_info_strix_z690_a_gaming_wifi_d4),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME",
- 					&board_info_zenith_ii_extreme),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME ALPHA",
-+					&board_info_zenith_ii_extreme),
- 	{},
- };
- 
--- 
-2.39.1
-
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  drivers/hwmon/lm85.c        | 221 +++++++++++++++++++++++++++---------
+>  include/linux/hwmon-sysfs.h |   2 +-
+>  2 files changed, 167 insertions(+), 56 deletions(-)
+> 
+> diff --git a/drivers/hwmon/lm85.c b/drivers/hwmon/lm85.c
+> index 8d33c2484755..367a77660dda 100644
+> --- a/drivers/hwmon/lm85.c
+> +++ b/drivers/hwmon/lm85.c
+> @@ -552,29 +552,40 @@ static struct lm85_data *lm85_update_device(struct device *dev)
+>  static ssize_t fan_show(struct device *dev, struct device_attribute *attr,
+>  			char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", FAN_FROM_REG(data->fan[nr]));
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->fan))
+> +		val = FAN_FROM_REG(data->fan[nr]);
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t fan_min_show(struct device *dev, struct device_attribute *attr,
+>  			    char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", FAN_FROM_REG(data->fan_min[nr]));
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->fan_min))
+> +		val = FAN_FROM_REG(data->fan_min[nr]);
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t fan_min_store(struct device *dev,
+>  			     struct device_attribute *attr, const char *buf,
+>  			     size_t count)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+>  	unsigned long val;
+>  	int err;
+>  
+> +	if (nr >= ARRAY_SIZE(data->fan_min))
+> +		return -EINVAL;
+> +
+>  	err = kstrtoul(buf, 10, &val);
+>  	if (err)
+>  		return err;
+> @@ -683,20 +694,27 @@ static SENSOR_DEVICE_ATTR_RO(fan4_alarm, alarm, 13);
+>  static ssize_t pwm_show(struct device *dev, struct device_attribute *attr,
+>  			char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", PWM_FROM_REG(data->pwm[nr]));
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->pwm))
+> +		val = PWM_FROM_REG(data->pwm[nr]);
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t pwm_store(struct device *dev, struct device_attribute *attr,
+>  			 const char *buf, size_t count)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+>  	unsigned long val;
+>  	int err;
+>  
+> +	if (nr >= ARRAY_SIZE(data->pwm))
+> +		return -EINVAL;
+> +
+>  	err = kstrtoul(buf, 10, &val);
+>  	if (err)
+>  		return err;
+> @@ -711,11 +729,12 @@ static ssize_t pwm_store(struct device *dev, struct device_attribute *attr,
+>  static ssize_t pwm_enable_show(struct device *dev,
+>  			       struct device_attribute *attr, char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	int pwm_zone, enable;
+> +	int pwm_zone = -1, enable;
+>  
+> -	pwm_zone = ZONE_FROM_REG(data->autofan[nr].config);
+> +	if (nr < ARRAY_SIZE(data->autofan))
+> +		pwm_zone = ZONE_FROM_REG(data->autofan[nr].config);
+>  	switch (pwm_zone) {
+>  	case -1:	/* PWM is always at 100% */
+>  		enable = 0;
+> @@ -734,13 +753,16 @@ static ssize_t pwm_enable_store(struct device *dev,
+>  				struct device_attribute *attr,
+>  				const char *buf, size_t count)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+>  	u8 config;
+>  	unsigned long val;
+>  	int err;
+>  
+> +	if (nr >= ARRAY_SIZE(data->autofan))
+> +		return -EINVAL;
+> +
+>  	err = kstrtoul(buf, 10, &val);
+>  	if (err)
+>  		return err;
+> @@ -777,10 +799,13 @@ static ssize_t pwm_enable_store(struct device *dev,
+>  static ssize_t pwm_freq_show(struct device *dev,
+>  			     struct device_attribute *attr, char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+>  	int freq;
+>  
+> +	if (nr >= ARRAY_SIZE(data->pwm_freq))
+> +		return -EINVAL;
+> +
+>  	if (IS_ADT7468_HFPWM(data))
+>  		freq = 22500;
+>  	else
+> @@ -794,12 +819,15 @@ static ssize_t pwm_freq_store(struct device *dev,
+>  			      struct device_attribute *attr, const char *buf,
+>  			      size_t count)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+>  	unsigned long val;
+>  	int err;
+>  
+> +	if (nr >= ARRAY_SIZE(data->pwm_freq))
+> +		return -EINVAL;
+> +
+>  	err = kstrtoul(buf, 10, &val);
+>  	if (err)
+>  		return err;
+> @@ -843,10 +871,13 @@ static SENSOR_DEVICE_ATTR_RW(pwm3_freq, pwm_freq, 2);
+>  static ssize_t in_show(struct device *dev, struct device_attribute *attr,
+>  		       char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", INSEXT_FROM_REG(nr, data->in[nr],
+> -						    data->in_ext[nr]));
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->in))
+> +		val = INSEXT_FROM_REG(nr, data->in[nr], data->in_ext[nr]);
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t in_min_show(struct device *dev, struct device_attribute *attr,
+> @@ -854,18 +885,25 @@ static ssize_t in_min_show(struct device *dev, struct device_attribute *attr,
+>  {
+>  	int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", INS_FROM_REG(nr, data->in_min[nr]));
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->in_min))
+> +		val = INS_FROM_REG(nr, data->in_min[nr]);
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t in_min_store(struct device *dev, struct device_attribute *attr,
+>  			    const char *buf, size_t count)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+>  	long val;
+>  	int err;
+>  
+> +	if (nr >= ARRAY_SIZE(data->in_min))
+> +		return -EINVAL;
+> +
+>  	err = kstrtol(buf, 10, &val);
+>  	if (err)
+>  		return err;
+> @@ -880,20 +918,27 @@ static ssize_t in_min_store(struct device *dev, struct device_attribute *attr,
+>  static ssize_t in_max_show(struct device *dev, struct device_attribute *attr,
+>  			   char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", INS_FROM_REG(nr, data->in_max[nr]));
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->in_max))
+> +		val = INS_FROM_REG(nr, data->in_max[nr]);
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t in_max_store(struct device *dev, struct device_attribute *attr,
+>  			    const char *buf, size_t count)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+>  	long val;
+>  	int err;
+>  
+> +	if (nr >= ARRAY_SIZE(data->in_max))
+> +		return -EINVAL;
+> +
+>  	err = kstrtol(buf, 10, &val);
+>  	if (err)
+>  		return err;
+> @@ -935,30 +980,40 @@ static SENSOR_DEVICE_ATTR_RW(in7_max, in_max, 7);
+>  static ssize_t temp_show(struct device *dev, struct device_attribute *attr,
+>  			 char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", TEMPEXT_FROM_REG(data->temp[nr],
+> -						     data->temp_ext[nr]));
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->temp))
+> +		val = TEMPEXT_FROM_REG(data->temp[nr], data->temp_ext[nr]);
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t temp_min_show(struct device *dev,
+>  			     struct device_attribute *attr, char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp_min[nr]));
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->temp_min))
+> +		val = TEMP_FROM_REG(data->temp_min[nr]);
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t temp_min_store(struct device *dev,
+>  			      struct device_attribute *attr, const char *buf,
+>  			      size_t count)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+>  	long val;
+>  	int err;
+>  
+> +	if (nr >= ARRAY_SIZE(data->temp_min))
+> +		return -EINVAL;
+> +
+>  	err = kstrtol(buf, 10, &val);
+>  	if (err)
+>  		return err;
+> @@ -976,21 +1031,28 @@ static ssize_t temp_min_store(struct device *dev,
+>  static ssize_t temp_max_show(struct device *dev,
+>  			     struct device_attribute *attr, char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp_max[nr]));
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->temp_max))
+> +		val = TEMP_FROM_REG(data->temp_max[nr]);
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t temp_max_store(struct device *dev,
+>  			      struct device_attribute *attr, const char *buf,
+>  			      size_t count)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+>  	long val;
+>  	int err;
+>  
+> +	if (nr >= ARRAY_SIZE(data->temp_max))
+> +		return -EINVAL;
+> +
+>  	err = kstrtol(buf, 10, &val);
+>  	if (err)
+>  		return err;
+> @@ -1021,21 +1083,28 @@ static ssize_t pwm_auto_channels_show(struct device *dev,
+>  				      struct device_attribute *attr,
+>  				      char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", ZONE_FROM_REG(data->autofan[nr].config));
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->autofan))
+> +		val = ZONE_FROM_REG(data->autofan[nr].config);
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t pwm_auto_channels_store(struct device *dev,
+>  				       struct device_attribute *attr,
+>  				       const char *buf, size_t count)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+>  	long val;
+>  	int err;
+>  
+> +	if (nr >= ARRAY_SIZE(data->autofan))
+> +		return -EINVAL;
+> +
+>  	err = kstrtol(buf, 10, &val);
+>  	if (err)
+>  		return err;
+> @@ -1052,21 +1121,28 @@ static ssize_t pwm_auto_channels_store(struct device *dev,
+>  static ssize_t pwm_auto_pwm_min_show(struct device *dev,
+>  				     struct device_attribute *attr, char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", PWM_FROM_REG(data->autofan[nr].min_pwm));
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->autofan))
+> +		val = PWM_FROM_REG(data->autofan[nr].min_pwm);
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t pwm_auto_pwm_min_store(struct device *dev,
+>  				      struct device_attribute *attr,
+>  				      const char *buf, size_t count)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+>  	unsigned long val;
+>  	int err;
+>  
+> +	if (nr >= ARRAY_SIZE(data->autofan))
+> +		return -EINVAL;
+> +
+>  	err = kstrtoul(buf, 10, &val);
+>  	if (err)
+>  		return err;
+> @@ -1083,22 +1159,29 @@ static ssize_t pwm_auto_pwm_minctl_show(struct device *dev,
+>  					struct device_attribute *attr,
+>  					char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", data->autofan[nr].min_off);
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->autofan))
+> +		val = data->autofan[nr].min_off;
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t pwm_auto_pwm_minctl_store(struct device *dev,
+>  					 struct device_attribute *attr,
+>  					 const char *buf, size_t count)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+>  	u8 tmp;
+>  	long val;
+>  	int err;
+>  
+> +	if (nr >= ARRAY_SIZE(data->autofan))
+> +		return -EINVAL;
+> +
+>  	err = kstrtol(buf, 10, &val);
+>  	if (err)
+>  		return err;
+> @@ -1130,23 +1213,30 @@ static ssize_t temp_auto_temp_off_show(struct device *dev,
+>  				       struct device_attribute *attr,
+>  				       char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->zone[nr].limit) -
+> -		HYST_FROM_REG(data->zone[nr].hyst));
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->zone))
+> +		val = TEMP_FROM_REG(data->zone[nr].limit) -
+> +			HYST_FROM_REG(data->zone[nr].hyst);
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t temp_auto_temp_off_store(struct device *dev,
+>  					struct device_attribute *attr,
+>  					const char *buf, size_t count)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+>  	int min;
+>  	long val;
+>  	int err;
+>  
+> +	if (nr >= ARRAY_SIZE(data->zone))
+> +		return -EINVAL;
+> +
+>  	err = kstrtol(buf, 10, &val);
+>  	if (err)
+>  		return err;
+> @@ -1170,21 +1260,28 @@ static ssize_t temp_auto_temp_min_show(struct device *dev,
+>  				       struct device_attribute *attr,
+>  				       char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->zone[nr].limit));
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->zone))
+> +		val = TEMP_FROM_REG(data->zone[nr].limit);
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t temp_auto_temp_min_store(struct device *dev,
+>  					struct device_attribute *attr,
+>  					const char *buf, size_t count)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+>  	long val;
+>  	int err;
+>  
+> +	if (nr >= ARRAY_SIZE(data->zone))
+> +		return -EINVAL;
+> +
+>  	err = kstrtol(buf, 10, &val);
+>  	if (err)
+>  		return err;
+> @@ -1194,7 +1291,7 @@ static ssize_t temp_auto_temp_min_store(struct device *dev,
+>  	lm85_write_value(client, LM85_REG_AFAN_LIMIT(nr),
+>  		data->zone[nr].limit);
+>  
+> -/* Update temp_auto_max and temp_auto_range */
+> +	/* Update temp_auto_max and temp_auto_range */
+>  	data->zone[nr].range = RANGE_TO_REG(
+>  		TEMP_FROM_REG(data->zone[nr].max_desired) -
+>  		TEMP_FROM_REG(data->zone[nr].limit));
+> @@ -1210,23 +1307,30 @@ static ssize_t temp_auto_temp_max_show(struct device *dev,
+>  				       struct device_attribute *attr,
+>  				       char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->zone[nr].limit) +
+> -		RANGE_FROM_REG(data->zone[nr].range));
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->zone))
+> +		val = TEMP_FROM_REG(data->zone[nr].limit) +
+> +			RANGE_FROM_REG(data->zone[nr].range);
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t temp_auto_temp_max_store(struct device *dev,
+>  					struct device_attribute *attr,
+>  					const char *buf, size_t count)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+>  	int min;
+>  	long val;
+>  	int err;
+>  
+> +	if (nr >= ARRAY_SIZE(data->zone))
+> +		return -EINVAL;
+> +
+>  	err = kstrtol(buf, 10, &val);
+>  	if (err)
+>  		return err;
+> @@ -1247,21 +1351,28 @@ static ssize_t temp_auto_temp_crit_show(struct device *dev,
+>  					struct device_attribute *attr,
+>  					char *buf)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = lm85_update_device(dev);
+> -	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->zone[nr].critical));
+> +	int val = 0;
+> +
+> +	if (nr < ARRAY_SIZE(data->zone))
+> +		val = TEMP_FROM_REG(data->zone[nr].critical);
+> +	return sprintf(buf, "%d\n", val);
+>  }
+>  
+>  static ssize_t temp_auto_temp_crit_store(struct device *dev,
+>  					 struct device_attribute *attr,
+>  					 const char *buf, size_t count)
+>  {
+> -	int nr = to_sensor_dev_attr(attr)->index;
+> +	unsigned int nr = to_sensor_dev_attr(attr)->index;
+>  	struct lm85_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+>  	long val;
+>  	int err;
+>  
+> +	if (nr >= ARRAY_SIZE(data->zone))
+> +		return -EINVAL;
+> +
+>  	err = kstrtol(buf, 10, &val);
+>  	if (err)
+>  		return err;
+> diff --git a/include/linux/hwmon-sysfs.h b/include/linux/hwmon-sysfs.h
+> index d896713359cd..f0505d10bfad 100644
+> --- a/include/linux/hwmon-sysfs.h
+> +++ b/include/linux/hwmon-sysfs.h
+> @@ -10,7 +10,7 @@
+>  #include <linux/device.h>
+>  #include <linux/kstrtox.h>
+>  
+> -struct sensor_device_attribute{
+> +struct sensor_device_attribute {
+>  	struct device_attribute dev_attr;
+>  	int index;
+>  };
+> -- 
+> 2.34.1
+> 
