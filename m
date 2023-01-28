@@ -2,140 +2,173 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FE93C61DA4
-	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Jan 2023 06:04:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E4CAC61DB3
+	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Jan 2023 06:04:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232284AbjA1GEK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S230306AbjA1GEK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Sat, 28 Jan 2023 01:04:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbjA1GEJ (ORCPT
+        with ESMTP id S231496AbjA1GEJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Sat, 28 Jan 2023 01:04:09 -0500
 Received: from ipmail06.adl3.internode.on.net (ipmail06.adl3.internode.on.net [150.101.137.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F4977D29D
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F4107C70D
         for <linux-hwmon@vger.kernel.org>; Fri, 27 Jan 2023 22:04:08 -0800 (PST)
-IronPort-SDR: t+NROiXVzhvtnhvh3kBwGkCMFL5c0WCfl3eWlqTP2R3UloNEyfdJhuF6R2a1Qwsq+ni5jcmJsB
- yzu/De/T3KNr9YK1Qs9UIoTTCQV52MVnbQeT6JwDNSQe7nzIPeEkX9HuIF+UHVIEd7qMGTbluM
- X83oNeMBrZI7+mYpB8YvWEH/dyZKlXo7VPAvPbtpadBfFB9puaR1FwpQ5EEVJtz3rY+T7LqEdR
- PLs3kNzEcqdWqOLCfHi/iDw/Hr/Pn+ENGPvXu4Wt5BUzuA5NzFGOBbNmMdtf1olfp/nRwpxE35
- XlA3UYJkA2H/PhQEnsgxAN9J
+IronPort-SDR: meiESD1APBckwnL4LGBmVcJpS6ScejMTXFFjcTRhKWi18Mq7bGM809Dnl1UPSUZPxLQTXIgD44
+ /RU62pZfA+/w9xQ80H4qf0T1WEqY1qQ9UkVP/RASSsYo3vUOpxcgL/kU+d3Kk4HKAagFATlL1q
+ O/f/N9Nb0r0Ruk27R6KMScOa729XJoxJfyZK+E3zyEQYanU6gZ4lwTfWrnx9EKbu+yvW7N3oJS
+ GO5PEvEUQhXSl7Ic6frY5/tMcoaCdRt4Mw35kne1/OUuo3mba26kA5Z4f/PXJrspf5XvjWlRwS
+ LxxnWZlxVWJ8PmEMw65NwJx3
 X-SMTP-MATCH: 0
 Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
-  by ipmail06.adl3.internode.on.net with ESMTP; 28 Jan 2023 16:33:47 +1030
+  by ipmail06.adl3.internode.on.net with ESMTP; 28 Jan 2023 16:33:31 +1030
 Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
         (authenticated bits=0)
-        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 30S63ChD2973396
+        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 30S63Ch92973396
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sat, 28 Jan 2023 17:03:43 +1100
+        Sat, 28 Jan 2023 17:03:27 +1100
 Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
-DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 30S63ChD2973396
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 30S63Ch92973396
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
-        s=s1; t=1674885823; bh=i2XGXabeeiO+pdS/NSVl7gpDwA49NN/JXqrhvG0Iwds=;
+        s=s1; t=1674885807; bh=xjv0PrvDFugp3Xa6stTohRT1XaShoZVbSrBrTOCs7U8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o8KLiu7V8YNyU6e/cr7L9pBSF4yYNq1QgCJldAQsUJGj3Lqwb/1HCaN5r9cDKIlw5
-         UUy5EV+7akA4Bhkqr2ZBwUrsWKrBxs7FedFwZSrCZPH3cITrLU4/sseymK69rQ+jsc
-         Zy7eK2DXMhQPttShGNbOLnEed4Sd/KWFKJlfbDFd3h6dhuwgPEVyxRCw2ny4ttZRXK
-         bvdFRHHuiYAQ2+6BZ0r96COpWOl9cnWqe6J0mNgsBdShbXqrflXdZpVzeK/oPKVHOE
-         alTqmHls1K1NTUZobGgL5my+xZEiJehXE2xqjyvv8zxtvMS6AIeG4YvbbSELtnMu2x
-         1+Rm/vc/pAc1g==
+        b=IPGPCWWIBDA4w3xBzXwuVZ0dLzB69Y/FJr4uf6h982bV2J8WPrfRm8YluDKcW95ss
+         gaM2NSN/VpgnmulX0s0Nqsma+9+gZ0vKXOdxPY2BX2q27Knm0c5pV4a9un0WidfoAj
+         whEg+XSdXj8ajOViNJuQiFbts5EYvzSBV4PaEDedS/txjDA1S8hjSkENisOWQzdIEA
+         FGYB9VzJqmPneJkSBlDUXNSMSAsOzCGOXAhqzmFxQdqtv/tdCzRqWlNZEyas3qP+0/
+         IdCsGzOSAZEoAsKMxOOzk0GO+nJ244vcVLO/MadZDT59ZdZmOxA6bkjZr9AEcrpGsP
+         QtCS9oRR8ZW2w==
 From:   Frank Crawford <frank@crawford.emu.id.au>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org,
         Frank Crawford <frank@crawford.emu.id.au>
-Subject: [PATCH v3 5/7] hwmon: (it87) Allow multiple chip IDs for force_id
-Date:   Sat, 28 Jan 2023 17:03:06 +1100
-Message-Id: <20230128060308.1549707-6-frank@crawford.emu.id.au>
+Subject: [PATCH v3 1/7] hwmon: (it87) Allow disabling exiting of configuration mode
+Date:   Sat, 28 Jan 2023 17:03:02 +1100
+Message-Id: <20230128060308.1549707-2-frank@crawford.emu.id.au>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230128060308.1549707-1-frank@crawford.emu.id.au>
 References: <20230128060308.1549707-1-frank@crawford.emu.id.au>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sat, 28 Jan 2023 17:03:43 +1100 (AEDT)
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sat, 28 Jan 2023 17:03:27 +1100 (AEDT)
 X-Virus-Scanned: clamav-milter 0.103.7 at bits.crawford.emu.id.au
 X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Extend the force_id module parameter to allow specifying one or both
-chip IDs separately.  If only a single parameter is given it defaults
-to using that value for all chips, similar to previous usage.
+Disabling configuration mode on some chips can result in system
+hang-ups and access failures to the Super-IO chip at the
+second SIO address. Never exit configuration mode on these
+chips to avoid the problem.
+
+This patch should be applied in conjunction with a previous one to
+initialise the second chip for certain mother boards.
 
 Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
 ---
 
 v3:
- * No change.
+ * Correct possible uninitialised pointer issue.
 
 v2:
- * No change.
+ * Convert to use feature flag and related macros rather than a separate
+   field, as suggested in review.
+ * Reverse sense of flag in superio_exit to simplify feature macro.
 
 ---
- drivers/hwmon/it87.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ drivers/hwmon/it87.c | 26 ++++++++++++++++++--------
+ 1 file changed, 18 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index 450f0bfec328..83de34119d74 100644
+index a8a6a0ffee82..923a9563be92 100644
 --- a/drivers/hwmon/it87.c
 +++ b/drivers/hwmon/it87.c
-@@ -175,8 +175,9 @@ static inline void superio_exit(int ioreg, bool noexit)
- #define IT87_SIO_VID_REG	0xfc	/* VID value */
- #define IT87_SIO_BEEP_PIN_REG	0xf6	/* Beep pin mapping */
+@@ -128,10 +128,12 @@ static inline int superio_enter(int ioreg)
+ 	return 0;
+ }
  
--/* Force chip ID to specified value. Should only be used for testing */
--static unsigned short force_id;
-+/* Force chip IDs to specified values. Should only be used for testing */
-+static unsigned short force_id[2];
-+static unsigned int force_id_cnt;
+-static inline void superio_exit(int ioreg)
++static inline void superio_exit(int ioreg, bool noexit)
+ {
+-	outb(0x02, ioreg);
+-	outb(0x02, ioreg + 1);
++	if (!noexit) {
++		outb(0x02, ioreg);
++		outb(0x02, ioreg + 1);
++	}
+ 	release_region(ioreg, 2);
+ }
  
- /* ACPI resource conflicts are ignored if this parameter is set to 1 */
- static bool ignore_resource_conflict;
-@@ -2410,7 +2411,7 @@ static const struct attribute_group it87_group_auto_pwm = {
+@@ -300,6 +302,13 @@ struct it87_devices {
+ #define FEAT_PWM_FREQ2		BIT(16)	/* Separate pwm freq 2 */
+ #define FEAT_SIX_TEMP		BIT(17)	/* Up to 6 temp sensors */
+ #define FEAT_VIN3_5V		BIT(18)	/* VIN3 connected to +5V */
++/*
++ * Disabling configuration mode on some chips can result in system
++ * hang-ups and access failures to the Super-IO chip at the
++ * second SIO address. Never exit configuration mode on these
++ * chips to avoid the problem.
++ */
++#define FEAT_CONF_NOEXIT	BIT(28)	/* Chip should not exit conf mode */
  
- /* SuperIO detection - will change isa_address if a chip is found */
- static int __init it87_find(int sioaddr, unsigned short *address,
--			    struct it87_sio_data *sio_data)
-+			    struct it87_sio_data *sio_data, int chip_cnt)
+ static const struct it87_devices it87_devices[] = {
+ 	[it87] = {
+@@ -493,6 +502,7 @@ static const struct it87_devices it87_devices[] = {
+ #define has_pwm_freq2(data)	((data)->features & FEAT_PWM_FREQ2)
+ #define has_six_temp(data)	((data)->features & FEAT_SIX_TEMP)
+ #define has_vin3_5v(data)	((data)->features & FEAT_VIN3_5V)
++#define has_conf_noexit(data)	((data)->features & FEAT_CONF_NOEXIT)
+ 
+ struct it87_sio_data {
+ 	int sioaddr;
+@@ -2404,7 +2414,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
  {
  	int err;
  	u16 chip_type;
-@@ -2426,8 +2427,12 @@ static int __init it87_find(int sioaddr, unsigned short *address,
- 	if (chip_type == 0xffff)
+-	const struct it87_devices *config;
++	const struct it87_devices *config = NULL;
+ 
+ 	err = superio_enter(sioaddr);
+ 	if (err)
+@@ -2489,6 +2499,8 @@ static int __init it87_find(int sioaddr, unsigned short *address,
  		goto exit;
+ 	}
  
--	if (force_id)
--		chip_type = force_id;
-+	if (force_id_cnt == 1) {
-+		/* If only one value given use for all chips */
-+		if (force_id[0])
-+			chip_type = force_id[0];
-+	} else if (force_id[chip_cnt])
-+		chip_type = force_id[chip_cnt];
++	config = &it87_devices[sio_data->type];
++
+ 	superio_select(sioaddr, PME);
+ 	if (!(superio_inb(sioaddr, IT87_ACT_REG) & 0x01)) {
+ 		pr_info("Device not activated, skipping\n");
+@@ -2508,8 +2520,6 @@ static int __init it87_find(int sioaddr, unsigned short *address,
+ 		it87_devices[sio_data->type].suffix,
+ 		*address, sio_data->revision);
  
- 	switch (chip_type) {
- 	case IT8705F_DEVID:
-@@ -3419,7 +3424,7 @@ static int __init sm_it87_init(void)
- 	for (i = 0; i < ARRAY_SIZE(sioaddr); i++) {
- 		memset(&sio_data, 0, sizeof(struct it87_sio_data));
- 		isa_address[i] = 0;
--		err = it87_find(sioaddr[i], &isa_address[i], &sio_data);
-+		err = it87_find(sioaddr[i], &isa_address[i], &sio_data, i);
- 		if (err || isa_address[i] == 0)
- 			continue;
- 		/*
-@@ -3468,8 +3473,8 @@ static void __exit sm_it87_exit(void)
- MODULE_AUTHOR("Chris Gauthron, Jean Delvare <jdelvare@suse.de>");
- MODULE_DESCRIPTION("IT8705F/IT871xF/IT872xF hardware monitoring driver");
+-	config = &it87_devices[sio_data->type];
+-
+ 	/* in7 (VSB or VCCH5V) is always internal on some chips */
+ 	if (has_in7_internal(config))
+ 		sio_data->internal |= BIT(1);
+@@ -2827,7 +2837,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
+ 		sio_data->skip_pwm |= dmi_data->skip_pwm;
  
--module_param(force_id, ushort, 0);
--MODULE_PARM_DESC(force_id, "Override the detected device ID");
-+module_param_array(force_id, ushort, &force_id_cnt, 0);
-+MODULE_PARM_DESC(force_id, "Override one or more detected device ID(s)");
+ exit:
+-	superio_exit(sioaddr);
++	superio_exit(sioaddr, config ? has_conf_noexit(config) : false);
+ 	return err;
+ }
  
- module_param(ignore_resource_conflict, bool, 0);
- MODULE_PARM_DESC(ignore_resource_conflict, "Ignore ACPI resource conflict");
+@@ -3213,7 +3223,7 @@ static void it87_resume_sio(struct platform_device *pdev)
+ 			     reg2c);
+ 	}
+ 
+-	superio_exit(data->sioaddr);
++	superio_exit(data->sioaddr, has_conf_noexit(data));
+ }
+ 
+ static int it87_resume(struct device *dev)
 -- 
 2.39.1
 
