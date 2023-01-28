@@ -2,110 +2,110 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B842C38142
-	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Jan 2023 06:04:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABC23C61DA4
+	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Jan 2023 06:04:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjA1GEQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 28 Jan 2023 01:04:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
+        id S229530AbjA1GER (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 28 Jan 2023 01:04:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbjA1GEP (ORCPT
+        with ESMTP id S229883AbjA1GER (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 28 Jan 2023 01:04:15 -0500
+        Sat, 28 Jan 2023 01:04:17 -0500
 Received: from ipmail06.adl3.internode.on.net (ipmail06.adl3.internode.on.net [150.101.137.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8A7388F33
-        for <linux-hwmon@vger.kernel.org>; Fri, 27 Jan 2023 22:04:13 -0800 (PST)
-IronPort-SDR: 3SXw8OffwzkTqydqY8/vFmXDZH19N2wtNnVY/G8znFpZ3tDlRRLs9KI8KP1OpBCC91h2wO5dZR
- B7AYp2WdOwKI9xXguhuaE6F8VBJ7WkQzd+wSOPUmYyQ7Enfj6y6SMoeaDup0Yt/maM1GOItXNh
- tEbH6ikY763KXkeDOx15aOOfAXRpTTUx38gc5JPpGwjpUEPRWz4eyNZ1sQe+/TSh/tGfyc+K68
- JhrkUMPWm/9XW9WnXNzk/5rNmIMxxMcVHrX/o4jjZP4wOs5TJBtOLDOQh6o9d2+SrXsnVyvhWt
- dz++v8lvb5Z+enRF8q1BPann
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B7737C70D
+        for <linux-hwmon@vger.kernel.org>; Fri, 27 Jan 2023 22:04:14 -0800 (PST)
+IronPort-SDR: 9Kq2EQKYxMi4CC/lWREMh+xXZBc4nmkN7jhh4KpIkG4jgL3FQyEunTXrJDgH+r5oK6nobeUBSs
+ vcpbBQV1+QZ0U5YNqrmYG5Ovsbdosri2GxPuXxI1mJh0aMDwdojxhwxCWP3c+jqe/54Jzla7m9
+ DZfonuZvu0k98wqAxMn/PjooGLZO3FTUiByAWNANqO5haWZI/KP00dkdpki9iOeYMbhbGVmcGp
+ eksZCuwaj6rOKTlfwNZOTdXE764GYZzparkc29y1HdARtJ3I8gADRo2xcad9KYFDG06UN2mk8C
+ WbZwd2nJUlrmYF4Lhitm4ykU
 X-SMTP-MATCH: 0
-X-IPAS-Result: =?us-ascii?q?A2BtAABJutRj//Qc8jxaHQEBAQEJARIBBQUBSYEyCAELA?=
- =?us-ascii?q?YIsgmCMbaZAgX4PAQ8BAUQEAQGFBwKFJSY0CQ4BAgQBAQEBAwIDAQEBAQEBA?=
- =?us-ascii?q?wEBBgEBAQEBAQYEgSoHC1IHC1gHB4FBC4FhEwsDMQ2GVgIBAycLAQ0BATcBD?=
- =?us-ascii?q?xk4VwYBEoJ+gyOqbjOBAYIIAQEGgmKaZ4FeCYFAAYthgRSDNnpDP4FOhH2LA?=
- =?us-ascii?q?5tzCoE5d4ElDkx6gQ8CCQIRdHkDCQMHBUlAAwsYDRYyChMsNQsLShAbGhsHg?=
- =?us-ascii?q?QYqKBUDBAQDAgYTAyACDSgxFAQpEw0nJmkJAgMiXwUDAwQoLQk/ByYkPAdWN?=
- =?us-ascii?q?wYCDx83BgMJAwIfUHEvEhIFAwsVKkcECDYFBhw2EgIIDxIPLEMOQjc0EwZcA?=
- =?us-ascii?q?SkLDhEDUEYZbgSCDAoGKSaeTnEBgQ6VXo5YoWODfoFSnn5MgUSna5dPIKMch?=
- =?us-ascii?q?CsCCgcWgWKCFU0fGTuCZ08BAgEBAQ0BAgEBAwECAQEBCQEBAQGOHYIskUthO?=
- =?us-ascii?q?wIHCwEBAwmMIwEB?=
-IronPort-PHdr: A9a23:fs8mERGphnkCR+8uSo14jZ1GfhYY04WdBeZdwpAml6kIeb6q4JrlJ
- kCZ6PBwyl7FG4zGuLpNkeGDtafmVCQb5IqZ9moPdZtQWloEkZAYkwB6UpGMAEGpIKK1P35jT
- pZJXgY9rXqwaRc9JQ==
-IronPort-Data: A9a23:UuGSLq7l9kcn7PBzhblNMAxRtBrBchMFZxGqfqrLsTDasY5as4F+v
- mpMDDqFaPnYYmPwLY0gPtmz9BxQvpSEy4JqHgVkrn83EiNG8peeCInAcUz9MynIIsSYQU9qt
- p1GYISRJ8luEif1q0b2ONANj1ElhfnSHOaU5M0om8xVbVU5IMv0oUs7w4bVuqYx3Z7hRVnlV
- era+6UzAnf8s9JJGjt8B5yr+EsHUMva4Fv0jnRmDRyclAK2e9E9VfrzFInpR5fKatA88t2SG
- 44v+IqEElbxpH/BPD8EfoHTKSXmSpaKVeSHZ+E/t6KK2nCurQRquko32WZ1hUp/0120c95NJ
- Nplh9+TewkxP5H3tcsGCRV1M3BXE4xY9+qSSZS/mZT7I0zueXrw2LNlFkgpM4oC9qB6BHwI9
- PBeIS1lghKr2brwmu7hDLM8wJ5/cKEHP6tG0p1k5T/DBPAlaZvZSrrE4sVUmjo1m4ZPEbDXe
- qL1bBIzME2YO0cWawh/5JQWh7mTm0OnTQBkp2nNjpM7wVaO4SJ6+e24WDbSUofSHpUPxBfwS
- nj912D4BAwKcdyAzD2D2myji/WJni7hXo8WUrqi+ZZChFyV23w7EhobXlj+vOL/jEOiM/pdJ
- 0EQ5CM0oIAp6VemCNL6WnWFTGWs4EZZAYYKVrdqrVvRluzP/w+FB2NCUiZOaZots8pwTCFCO
- kK1c83BN39MgrONSE6m25iP9z+fGXk8A04canpRJeca2OXLrIY2hxPJa99sFq+pk9H4cQ0cJ
- RjU9EDSYJ1N0KY2O7WHEUPvxmn39seQEmbZ8i2OAzv/tlsnDGKwT9bwgWU3+8qsO66wczFtV
- lA/isSY4fFm4XqlznTVGI3h8JmP6unNCzrBnV4nIJAl+i/FxpJOVd4IpWsifgIzYoNeJWOve
- 1PapQJaooNLM3rsZqhyJYusYyjL8UQCPYi5Phw3RoAVCnSUSONh1Hs2DaJ39zqz+HXAaYllZ
- f+mnT+EVB73yc1PlVJavds1374x3TwZzmjOX539xBnP+ePAOyLFFetfagXTNLBRAEa4TOP9r
- Y432yyilUg3bQECSnOGmWLuBQpVdiNgWMqeRzJ/K7/ZelMO9J4d5w/5mut6K9Y/zsy5Z8/U5
- n71W0lExUD5iGGvFOl5Qi4LVV4uNL4hxU8G0dsEZAjziyh/Pdrxts/ytfIfJNEayQCq9tYsJ
- 9FtRilKKqonpu3v92tPYJ/jgpZlcRj31wuCMzD8MGo0ZZd/SQvT9pnpexap9SVIBzfu7Zkyp
- Lip1wX6R5sfRl08U5yMOan/lgK87SoHheZ/f0rUOd0NKk/ix4hdLXCjhPEAPJBeIBrO8TKWy
- gKKDEpKvuLKuYI0roXEiPnc/YekGudzBGRAGGzf4erkPCXW5DPzk4RaWfmGeirREm7x5eOja
- aNc0qikYvEAmV9Ltat6EqpqlPxhvYG+/O8Dnwk9RSfFdVWmDL9kM0Kq58gXu/0f3KJdtCu3R
- lmLpItQN4KJD8W5QlQfExV0PO2M2MYdliTW8flocl7x4zV6/eTbXEhfY0uMhShaIOcnOY8p2
- 7166sQX9xf5gQAjLdiBlCwS+mGRaH0MFaw678lIDIjugwst61dDfZ2FVHCsusDUO4wdPxl4O
- CKQiYrDm69YmBjIfU0zIn6Rj+BTsotf6hlFwWgLK0mNhteY1OQ82wdc8GprQwkJnA9L1fl/Z
- jpiO0Fvfv/coW8t3pQZGjr8XlsdWFuC5kXtylBPiHXWTg+jUWmLJXBkYbSB+0UQ8mR9eDlH/
- ejGlzy/AG26JZD8jnkoREpoi/3/VtgtpAfMr8b2Tc2KEq4zbSfhnqLzN3EDrAHqAJ1tiUDKz
- QWwED2ctUEm2fYsnpAG
-IronPort-HdrOrdr: A9a23:l422YKPGP4FYscBcThujsMiBIKoaSvp037BK7SpMoNJuE/Bw8P
- re5cjyt3fP5Qr5PUtNpTnuAtjifZqxz/FICMwqTNOftWrdyQ2Vxf9ZnOnfKlTbckWUygce79
- YGT0EUMr3N5DZB4/oTb2SDYq4dKaG8gcWVbP/lvgtQpB9RGtxdBthCe32m+pwffng9OaYE
+X-IPAS-Result: =?us-ascii?q?A2CoBwBJutRj//Qc8jxaHgEBCxIMSYE7C4ItgmCVbZ1Ag?=
+ =?us-ascii?q?X4PAQ8BAUQEAQGFBwKFJSY1CA4BAgQBAQEBAwIDAQEBAQEBAwEBBgEBAQEBA?=
+ =?us-ascii?q?QYEgSoHC1IHC1gHB4FBC4FhEwsDBAglDYZWAgEDMgENAQE3AQ8ZOFcGARIZg?=
+ =?us-ascii?q?mWDI6shgQGCCAEBBoJimmeBXgmBQItigRSDNnpDP4FOgRWBPIE+boQBJRGGK?=
+ =?us-ascii?q?iKOMY1CCoE5d4ElDkx6gQ8CCQIRdHkDCQMHBUlAAwsYDRYyChMsNQsLSisaG?=
+ =?us-ascii?q?weBBiooFQMEBAMCBhMDIAINDRsxFAQpEw0nJiZDCQIDIl8FAwMEKC0JPwcmJ?=
+ =?us-ascii?q?DwHVjcGAg8fNwYDCQMCH1BxLxISBQMLFSpHBAg2BQYcNhICCA8SDyxDDkI3N?=
+ =?us-ascii?q?BMGXAEpCAMOEQNQRhluBIIMCgYpJp85BgEOHBNRgSeBKRmSdRyta36BNoN+g?=
+ =?us-ascii?q?VKefkyBRII1jGKGaZFrhRePYoJWIKIEgRiEKwIKBxaBZAKCEU0fGTuCZ08BA?=
+ =?us-ascii?q?gEBAQ0BAgEBAwECAQEBCQEBAQGCBIwZgiyRS2E7AgcLAQEDCYwjAQE?=
+IronPort-PHdr: A9a23:Z/+pMx8ltTMHiP9uWBXoyV9kXcBvk7/1IhVT4YAulLxJaKjl8pH/e
+ k3To/xw3xfAR46O7fVChqLNtrz4H3YN5JGdvTUDaMlCWxNf25oflgByDJLaWR+ifqzhZXViT
+ s9JDAANwg==
+IronPort-Data: A9a23:NtYc/qx20AW+UZmDMU96t+cawCrEfRIJ4+MujC+fZmUNrF6WrkUCm
+ 2YdUGqEafbcNGWjctx2atvkoBxUvcDVzdNrTwVvqiBjHiNA8MDPD9qVcUypYHicJJWdRUs45
+ MwUM9PJJ5pqZ3KN/R3F3prJ9Ckkj/vULlbf5E8oHggrGGeInQ940UoLd9YR29Iu2Z7ja++0k
+ YuaT/f3YTdJ5hYtWo4qw/LbwP9QlKyaVAMw5jTSstgW1LN2vyB94KM3fcldHVOhKmVnNrLSq
+ 9L48V2M1jixEyHBqz+Suu2TnkUiGtY+NOUV45Zcc/DKbhNq/kTe3kunXRYRQR8/ttmHozx+4
+ N9PkregCggTB7Dds91DCiV/HwE9P7ITrdcrIVDn2SCS50fHb2CqyO9nE08xJ4Fe9+NqR2BCs
+ /UFQNwPRk7bwbjqmvThGq822phLwMrDZevzvllu1zjfDt4tW5ncTaLQ6ZlV2Sp2h8wIFOu2i
+ 88xNWY2NEyaOUQSUrsRILdvw8iBg3eiSGZ/tUm39PoewWruxzUkhdABN/KOIofaH58E9qqCn
+ UrC/mLkElQaK9mYzxKb/X+2wOzChyX2XMQVDrLQ3vprhkCD7nYUBRYVEEag5/+0liaWWd5SL
+ 1Id4CcGtrUp+QqgSdyVYvGjiCDc+0RAAZ8KQ6hgtF3L0bbd/weSQHQcQT8HY9sj8sYrLdA36
+ rOXt9nrIhd/87KvcG+M3Y7K9A+VNQhWL3BXMEfoUjA5y9XkpYgyiDfGQdBiDLO5g7XJ9dfYn
+ WjiQM8W2eh7sCIb60mo1RWc2GLz/8Shohodv1iOBDr9sGuVcab/P+SVBU7nAeFoBbvxorOph
+ 2kIncWPhAzlJcvVzHTlrAklOry2r82CLSHcyWFmG5Q6nwlBFlb9JcUKvGs7fhcsaJpYPyT1a
+ VPSskVN/JBSenCtaOl+fupd6vjGL4C8SbwJtdiONbKih6SdkifdpEmCgmbKgQjQfLAEy/1XB
+ HtiWZ/E4LZzIf0PIMCKb+kcy6Q34Ss12HneQ5v2pzz+j+XCNCLJE+1bbQHeBgzc0E9iiFuNm
+ zq4H5XXoyizrMWkM0E7DKZJcgtRdiVhbXwIg5EGLLbaSuaZJI3RI6SJmuN7Id0Nc1V9iv/Ht
+ nC7RkJCzlfj7UAr2i3UAk2OqdrHA/5CkJ7MFXVyZgb4hyR/P9zHAWV2X8JfQITLPddLlZZcJ
+ 8Tpse3ZUpyjkxzLpGYQa4fTtotneEj5jA6CJXP1MjMldoFuQBbFvNLhY03u+G8HE3Pv58c5p
+ rSh0CLdQIYCHlo9VpyHM6L0k17h72IAnO9SXlfTJocBckvb8L9sd377gMgocpMFJhj0zzeH0
+ xqbXEUDru7Xro5rrNTE3PjWr4qgH+ZkMFBdGm3XseS/OSXApzrxypVJT+iPZzybWWbpvqSuI
+ +xIlqmuPPoClVdMkox9D7cyk/1kvYq09+QGw109TnvRblmtBrdxGVW83JFC5v9X27tUmQqqQ
+ UbRqNNUDrW+Pp+3GlAmO1t3Z+uO4vgYhz3O4KlnO079/iJ2ouaKXEgObRmBjCtRcOl8PI8/m
+ 7xzss8K8Eq0kBM1PNGcgmZZ8nnKL3BGWrh+7sMWB4riiwwKzFBeYMWCVXWsscrfMIlBYhswP
+ zuZpKvenLAClEDMRHoEEySf1+RqmsVcsR9H+1YOOlCVl4eXnfQwxhBQr2g6Q1gH1BlByO4va
+ GFnO1cuf/fQp3Iy2JIGBTDpQV0dQgaF81DwwB0VjGLYCUKvUyrEMTRla+qK+UkY9UNafyRap
+ e/Hkjy0CmaxIMyhjDEvXUNFquD4SYAj/AP1npH1FsuIKJA2fD75j/L8fmEPsRbmX588iUCvS
+ TOGJwqshXAX7RItnpA=
+IronPort-HdrOrdr: A9a23:gMi7q6phoLTentYt4RchuxAaV5rxeYIsimQD101hICG9Evbzqy
+ lhppUmPHjP+U8ssBNJo7290cy7LU80mqQFgrX5UY3MYOCighrNEGgA1/qF/9SfIVydygc178
+ 4JGJSWSueAamSS5vyb3ODXKbgdKFbrytHRuQ6n9QYJcehzUdAd0+5mMHfnLqSofng8OXLpfK
+ DsnPZ6mw==
 X-IronPort-Anti-Spam-Filtered: true
 Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
-  by ipmail06.adl3.internode.on.net with ESMTP; 28 Jan 2023 16:33:38 +1030
+  by ipmail06.adl3.internode.on.net with ESMTP; 28 Jan 2023 16:33:54 +1030
 Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
         (authenticated bits=0)
-        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 30S63ChB2973396
+        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 30S63ChF2973396
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sat, 28 Jan 2023 17:03:34 +1100
+        Sat, 28 Jan 2023 17:03:50 +1100
 Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
-DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 30S63ChB2973396
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 30S63ChF2973396
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
-        s=s1; t=1674885815; bh=M2MVaha1xLw9k0+IL2I0shECySHA7DuKZiKIFVRIjkE=;
+        s=s1; t=1674885830; bh=MSNYIPrAfW4K6tz4R4oTou9pEQiEgFnaPs8051r27P8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NpqK9ibpR4r69g+SxPn2Ev/pcYENxcaMQvD55437z3iYx8Gz1/crtRM6A1YJGa7uc
-         Aqi8LWmDXxGcCRK7bE+1VIh2V9w8TvDRqqVT+OLhoFkg8cLoF/0cBmsVbAhj8c3hzC
-         scBFJKSZcLJnzEa2REp7rHSnk2iLmGykZ+jmveKy4QDAeTZ2ECbpQCZztmBArR1OMb
-         Lq6ofYsGECUQR1tpWJR5tnZ8dcAB1Qp4jKGSzP2P5BJrl1c6O+C2iXTSlN0VY2HXfO
-         xeAfi/RIVhOG70iYTt6D0kx+Gdm7m8xwfB95vwzXzbPX27u/vH+wsNkLqxETBi7weW
-         90Ii7NNP0+PoQ==
+        b=MM0zgOVp06+ttY1sffwZ9G0/DrpyOyBcfvl7mtVZe92owD+mbsSIH6mQqr/k80OFS
+         IJhmD8nObgiN/ry/6ogEMIjz0KCibXGmwaGQB/HSx7OVNIrm7qTtK4vzjSqlLgLVPw
+         /hcTRKrme0HX6utgSbZxShQ7DoxnmviAqa7plxn+x+zM0yTaEUPJ6cmk8Xzy252z6W
+         VX0i5T3aJPbX58kFsObDnd3ZxWw5njrES16AdlVo/HwM/YjSKRh83Ds4bQyEMX8E2L
+         eqo1zv5VabMWGpy/f7chJuxmjg3SWJLS6sf8N6V3y/BBwLGJGLLd5gD0cOBF83AuUL
+         I8U8pCEP3FBMg==
 From:   Frank Crawford <frank@crawford.emu.id.au>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org,
         Frank Crawford <frank@crawford.emu.id.au>
-Subject: [PATCH v3 3/7] hwmon: (it87) List full chip model name
-Date:   Sat, 28 Jan 2023 17:03:04 +1100
-Message-Id: <20230128060308.1549707-4-frank@crawford.emu.id.au>
+Subject: [PATCH v3 7/7] hwmon: (it87) Updated documentation for recent updates to it87
+Date:   Sat, 28 Jan 2023 17:03:08 +1100
+Message-Id: <20230128060308.1549707-8-frank@crawford.emu.id.au>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230128060308.1549707-1-frank@crawford.emu.id.au>
 References: <20230128060308.1549707-1-frank@crawford.emu.id.au>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sat, 28 Jan 2023 17:03:35 +1100 (AEDT)
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sat, 28 Jan 2023 17:03:50 +1100 (AEDT)
 X-Virus-Scanned: clamav-milter 0.103.7 at bits.crawford.emu.id.au
 X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-ITE model names do not always match the chip ID.
-
-Convert from just adding a suffix to specifying the full model name.
+Updated the driver documentation to list all current chips and
+describe the module parameters as per descriptions in the code.
 
 Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
 ---
@@ -117,203 +117,99 @@ v2:
  * No change.
 
 ---
- drivers/hwmon/it87.c | 46 ++++++++++++++++++++++----------------------
- 1 file changed, 23 insertions(+), 23 deletions(-)
+ Documentation/hwmon/it87.rst | 47 ++++++++++++++++++++++++++++++++----
+ 1 file changed, 42 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index 45d4b5ee3701..1d9f0c6dfeb9 100644
---- a/drivers/hwmon/it87.c
-+++ b/drivers/hwmon/it87.c
-@@ -277,7 +277,7 @@ static const u8 IT87_REG_AUTO_BASE[] = { 0x60, 0x68, 0x70, 0x78, 0xa0, 0xa8 };
+diff --git a/Documentation/hwmon/it87.rst b/Documentation/hwmon/it87.rst
+index 2d83f23bee93..5cef4f265000 100644
+--- a/Documentation/hwmon/it87.rst
++++ b/Documentation/hwmon/it87.rst
+@@ -145,6 +145,22 @@ Supported chips:
  
- struct it87_devices {
- 	const char *name;
--	const char * const suffix;
-+	const char * const model;
- 	u32 features;
- 	u8 peci_mask;
- 	u8 old_peci_mask;
-@@ -313,24 +313,24 @@ struct it87_devices {
- static const struct it87_devices it87_devices[] = {
- 	[it87] = {
- 		.name = "it87",
--		.suffix = "F",
-+		.model = "IT87F",
- 		.features = FEAT_OLD_AUTOPWM,	/* may need to overwrite */
- 	},
- 	[it8712] = {
- 		.name = "it8712",
--		.suffix = "F",
-+		.model = "IT8712F",
- 		.features = FEAT_OLD_AUTOPWM | FEAT_VID,
- 						/* may need to overwrite */
- 	},
- 	[it8716] = {
- 		.name = "it8716",
--		.suffix = "F",
-+		.model = "IT8716F",
- 		.features = FEAT_16BIT_FANS | FEAT_TEMP_OFFSET | FEAT_VID
- 		  | FEAT_FAN16_CONFIG | FEAT_FIVE_FANS | FEAT_PWM_FREQ2,
- 	},
- 	[it8718] = {
- 		.name = "it8718",
--		.suffix = "F",
-+		.model = "IT8718F",
- 		.features = FEAT_16BIT_FANS | FEAT_TEMP_OFFSET | FEAT_VID
- 		  | FEAT_TEMP_OLD_PECI | FEAT_FAN16_CONFIG | FEAT_FIVE_FANS
- 		  | FEAT_PWM_FREQ2,
-@@ -338,7 +338,7 @@ static const struct it87_devices it87_devices[] = {
- 	},
- 	[it8720] = {
- 		.name = "it8720",
--		.suffix = "F",
-+		.model = "IT8720F",
- 		.features = FEAT_16BIT_FANS | FEAT_TEMP_OFFSET | FEAT_VID
- 		  | FEAT_TEMP_OLD_PECI | FEAT_FAN16_CONFIG | FEAT_FIVE_FANS
- 		  | FEAT_PWM_FREQ2,
-@@ -346,7 +346,7 @@ static const struct it87_devices it87_devices[] = {
- 	},
- 	[it8721] = {
- 		.name = "it8721",
--		.suffix = "F",
-+		.model = "IT8721F",
- 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
- 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
- 		  | FEAT_FAN16_CONFIG | FEAT_FIVE_FANS | FEAT_IN7_INTERNAL
-@@ -356,7 +356,7 @@ static const struct it87_devices it87_devices[] = {
- 	},
- 	[it8728] = {
- 		.name = "it8728",
--		.suffix = "F",
-+		.model = "IT8728F",
- 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
- 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_FIVE_FANS
- 		  | FEAT_IN7_INTERNAL | FEAT_PWM_FREQ2,
-@@ -364,7 +364,7 @@ static const struct it87_devices it87_devices[] = {
- 	},
- 	[it8732] = {
- 		.name = "it8732",
--		.suffix = "F",
-+		.model = "IT8732F",
- 		.features = FEAT_NEWER_AUTOPWM | FEAT_16BIT_FANS
- 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
- 		  | FEAT_10_9MV_ADC | FEAT_IN7_INTERNAL,
-@@ -373,7 +373,7 @@ static const struct it87_devices it87_devices[] = {
- 	},
- 	[it8771] = {
- 		.name = "it8771",
--		.suffix = "E",
-+		.model = "IT8771E",
- 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
- 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
- 		  | FEAT_PWM_FREQ2,
-@@ -385,7 +385,7 @@ static const struct it87_devices it87_devices[] = {
- 	},
- 	[it8772] = {
- 		.name = "it8772",
--		.suffix = "E",
-+		.model = "IT8772E",
- 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
- 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
- 		  | FEAT_PWM_FREQ2,
-@@ -397,28 +397,28 @@ static const struct it87_devices it87_devices[] = {
- 	},
- 	[it8781] = {
- 		.name = "it8781",
--		.suffix = "F",
-+		.model = "IT8781F",
- 		.features = FEAT_16BIT_FANS | FEAT_TEMP_OFFSET
- 		  | FEAT_TEMP_OLD_PECI | FEAT_FAN16_CONFIG | FEAT_PWM_FREQ2,
- 		.old_peci_mask = 0x4,
- 	},
- 	[it8782] = {
- 		.name = "it8782",
--		.suffix = "F",
-+		.model = "IT8782F",
- 		.features = FEAT_16BIT_FANS | FEAT_TEMP_OFFSET
- 		  | FEAT_TEMP_OLD_PECI | FEAT_FAN16_CONFIG | FEAT_PWM_FREQ2,
- 		.old_peci_mask = 0x4,
- 	},
- 	[it8783] = {
- 		.name = "it8783",
--		.suffix = "E/F",
-+		.model = "IT8783E/F",
- 		.features = FEAT_16BIT_FANS | FEAT_TEMP_OFFSET
- 		  | FEAT_TEMP_OLD_PECI | FEAT_FAN16_CONFIG | FEAT_PWM_FREQ2,
- 		.old_peci_mask = 0x4,
- 	},
- 	[it8786] = {
- 		.name = "it8786",
--		.suffix = "E",
-+		.model = "IT8786E",
- 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
- 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
- 		  | FEAT_PWM_FREQ2,
-@@ -426,7 +426,7 @@ static const struct it87_devices it87_devices[] = {
- 	},
- 	[it8790] = {
- 		.name = "it8790",
--		.suffix = "E",
-+		.model = "IT8790E",
- 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
- 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
- 		  | FEAT_PWM_FREQ2 | FEAT_CONF_NOEXIT,
-@@ -434,7 +434,7 @@ static const struct it87_devices it87_devices[] = {
- 	},
- 	[it8792] = {
- 		.name = "it8792",
--		.suffix = "E",
-+		.model = "IT8792E/IT8795E",
- 		.features = FEAT_NEWER_AUTOPWM | FEAT_16BIT_FANS
- 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
- 		  | FEAT_10_9MV_ADC | FEAT_IN7_INTERNAL | FEAT_CONF_NOEXIT,
-@@ -443,7 +443,7 @@ static const struct it87_devices it87_devices[] = {
- 	},
- 	[it8603] = {
- 		.name = "it8603",
--		.suffix = "E",
-+		.model = "IT8603E",
- 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
- 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
- 		  | FEAT_AVCC3 | FEAT_PWM_FREQ2,
-@@ -451,7 +451,7 @@ static const struct it87_devices it87_devices[] = {
- 	},
- 	[it8620] = {
- 		.name = "it8620",
--		.suffix = "E",
-+		.model = "IT8620E",
- 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
- 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_SIX_FANS
- 		  | FEAT_IN7_INTERNAL | FEAT_SIX_PWM | FEAT_PWM_FREQ2
-@@ -460,7 +460,7 @@ static const struct it87_devices it87_devices[] = {
- 	},
- 	[it8622] = {
- 		.name = "it8622",
--		.suffix = "E",
-+		.model = "IT8622E",
- 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
- 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_FIVE_FANS
- 		  | FEAT_FIVE_PWM | FEAT_IN7_INTERNAL | FEAT_PWM_FREQ2
-@@ -469,7 +469,7 @@ static const struct it87_devices it87_devices[] = {
- 	},
- 	[it8628] = {
- 		.name = "it8628",
--		.suffix = "E",
-+		.model = "IT8628E",
- 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
- 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_SIX_FANS
- 		  | FEAT_IN7_INTERNAL | FEAT_SIX_PWM | FEAT_PWM_FREQ2
-@@ -2516,8 +2516,8 @@ static int __init it87_find(int sioaddr, unsigned short *address,
- 	err = 0;
- 	sio_data->sioaddr = sioaddr;
- 	sio_data->revision = superio_inb(sioaddr, DEVREV) & 0x0f;
--	pr_info("Found IT%04x%s chip at 0x%x, revision %d\n", chip_type,
--		it87_devices[sio_data->type].suffix,
-+	pr_info("Found %s chip at 0x%x, revision %d\n",
-+		it87_devices[sio_data->type].model,
- 		*address, sio_data->revision);
+     Datasheet: Not publicly available
  
- 	/* in7 (VSB or VCCH5V) is always internal on some chips */
++  * IT8792E/IT8795E
++
++    Prefix: 'it8792'
++
++    Addresses scanned: from Super I/O config space (8 I/O ports)
++
++    Datasheet: Not publicly available
++
++  * IT87952E
++
++    Prefix: 'it87952'
++
++    Addresses scanned: from Super I/O config space (8 I/O ports)
++
++    Datasheet: Not publicly available
++
+   * SiS950   [clone of IT8705F]
+ 
+     Prefix: 'it87'
+@@ -162,7 +178,7 @@ Authors:
+ Module Parameters
+ -----------------
+ 
+-* update_vbat: int
++* update_vbat bool
+     0 if vbat should report power on value, 1 if vbat should be updated after
+     each read. Default is 0. On some boards the battery voltage is provided
+     by either the battery or the onboard power supply. Only the first reading
+@@ -171,11 +187,31 @@ Module Parameters
+     the chip so can be read at any time. Excessive reading may decrease
+     battery life but no information is given in the datasheet.
+ 
+-* fix_pwm_polarity int
++* fix_pwm_polarity bool
+     Force PWM polarity to active high (DANGEROUS). Some chips are
+     misconfigured by BIOS - PWM values would be inverted. This option tries
+     to fix this. Please contact your BIOS manufacturer and ask him for fix.
+ 
++* force_id short, short
++
++  Force multiple chip ID to specified value, separated by ','.
++  For example "force_id=0x8689,0x8633".  A value of 0 is ignored
++  for that chip.
++  Note: A single force_id value (e.g. "force_id=0x8689") is used for
++  all chips, to only set the first chip use "force_id=0x8689,0".
++  Should only be used for testing.
++
++* ignore_resource_conflict bool
++
++  Similar to acpi_enforce_resources=lax, but only affects this driver.
++  ACPI resource conflicts are ignored if this parameter is provided and
++  set to 1.
++  Provided since there are reports that system-wide acpi_enfore_resources=lax
++  can result in boot failures on some systems.
++  Note: This is inherently risky since it means that both ACPI and this driver
++  may access the chip at the same time. This can result in race conditions and,
++  worst case, result in unexpected system reboots.
++
+ 
+ Hardware Interfaces
+ -------------------
+@@ -193,8 +229,8 @@ Description
+ 
+ This driver implements support for the IT8603E, IT8620E, IT8623E, IT8628E,
+ IT8705F, IT8712F, IT8716F, IT8718F, IT8720F, IT8721F, IT8726F, IT8728F, IT8732F,
+-IT8758E, IT8771E, IT8772E, IT8781F, IT8782F, IT8783E/F, IT8786E, IT8790E, and
+-SiS950 chips.
++IT8758E, IT8771E, IT8772E, IT8781F, IT8782F, IT8783E/F, IT8786E, IT8790E,
++IT8792E/IT8795E, IT87952E and SiS950 chips.
+ 
+ These chips are 'Super I/O chips', supporting floppy disks, infrared ports,
+ joysticks and other miscellaneous stuff. For hardware monitoring, they
+@@ -238,7 +274,8 @@ of the fan is not supported (value 0 of pwmX_enable).
+ The IT8620E and IT8628E are custom designs, hardware monitoring part is similar
+ to IT8728F. It only supports 16-bit fan mode. Both chips support up to 6 fans.
+ 
+-The IT8790E supports up to 3 fans. 16-bit fan mode is always enabled.
++The IT8790E, IT8792E/IT8795E and IT87952E support up to 3 fans. 16-bit fan
++mode is always enabled.
+ 
+ The IT8732F supports a closed-loop mode for fan control, but this is not
+ currently implemented by the driver.
 -- 
 2.39.1
 
