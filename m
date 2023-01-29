@@ -2,261 +2,255 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C46DC05027
-	for <linux-hwmon@archiver.kernel.org>; Sun, 29 Jan 2023 23:11:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32582C636D0
+	for <linux-hwmon@archiver.kernel.org>; Sun, 29 Jan 2023 23:11:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235082AbjA2XLD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 29 Jan 2023 18:11:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
+        id S235485AbjA2XLM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 29 Jan 2023 18:11:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjA2XLC (ORCPT
+        with ESMTP id S235195AbjA2XLD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 29 Jan 2023 18:11:02 -0500
+        Sun, 29 Jan 2023 18:11:03 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB09D1ADC2;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1781ADC4;
         Sun, 29 Jan 2023 15:10:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=hSVWChRDN+7R1q+eUNK+va/B9M97WY52yd2h5OskBp0=; b=yUv0VVi7AzeHRNOF30ohLHw5zu
-        /EpIh2+vV2zjgdq1rrJGU4FU7Sqo3t43U7K9gOpKF2ubTcAqhQMdBAKf9YG61i3DRGLxb36dWzOn4
-        TXERwYxHRQiAAy1QS4TbBkPJjGjssSK0oXUUkhaBVLbi5lWSYk/zdo8NTqj2ZWLFRTJGDjfc9SXCo
-        hEyl0nMWxtlsPZdxJLXFFxiBry9YP3GQ2ymXTqnEEmFkjSyqg7W/xed6YUo1nzs/vQ3P3iMno43XC
-        fR+uzw5JFLfCHWvOnYuSJPKJh1y/QGWAtpfsfWLJYQRzO6RHZG7xApoodt05CnWQeQCNvBJpPuS5d
-        KUkWt7MA==;
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=NQ7YgokTLfJq7c2D1zhGDjpisfmSP8xp8m3MmzMVL98=; b=tR5ChEh1M0Z7mmYghFZYDZkhYF
+        VwsBdewvyOhjcUGdyWIEJ3H9OnSGJvzGgGGGZK6So26F8lFBlOPLSVyT2MgVqp0F/7kFDvXC0/wJF
+        F8V88o2nnHVDmRqJkD+BL/KiXWv1Qm/VpDm8EvQqOCt6xD7Jf2tOAs/CfeuJLkkpjtQ6A3d9a7aIl
+        HBWFgKjNcLjPBir7kxsZcNI6e0nzt4fhSIlVln5iSKgticGUPEh3W2m/O3n7k+jPNFAodh6KmJuNN
+        sZE8ZbojS58xsI1pVvol23kXer5LTKxefgKbY9W0Us1t9+zMCnqXwf9SmPbfwDh5BVi7DqyzxV771
+        6Mnq71Lw==;
 Received: from [2601:1c2:d00:6a60::9526] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pMGp7-0020M2-IK; Sun, 29 Jan 2023 23:10:57 +0000
+        id 1pMGp5-0020M2-Rb; Sun, 29 Jan 2023 23:10:55 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH 3/9] Documentation: hwmon: correct spelling
-Date:   Sun, 29 Jan 2023 15:10:47 -0800
-Message-Id: <20230129231053.20863-4-rdunlap@infradead.org>
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-mm@kvack.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, nvdimm@lists.linux.dev,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Song Liu <song@kernel.org>, linux-raid@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, Jiri Pirko <jiri@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>, rcu@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, sparclinux@vger.kernel.org
+Subject: [PATCH 0/9] Documentation: correct lots of spelling errors (series 2)
+Date:   Sun, 29 Jan 2023 15:10:44 -0800
+Message-Id: <20230129231053.20863-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230129231053.20863-1-rdunlap@infradead.org>
-References: <20230129231053.20863-1-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Correct spelling problems for Documentation/hwmon/ as reported
-by codespell.
+Maintainers of specific kernel subsystems are only Cc-ed on their
+respective patches, not the entire series. [if all goes well]
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+These patches are based on linux-next-20230127.
+
+
+ [PATCH 1/9] Documentation: admin-guide: correct spelling
+ [PATCH 2/9] Documentation: driver-api: correct spelling
+ [PATCH 3/9] Documentation: hwmon: correct spelling
+ [PATCH 4/9] Documentation: networking: correct spelling
+ [PATCH 5/9] Documentation: RCU: correct spelling
+ [PATCH 6/9] Documentation: scsi/ChangeLog*: correct spelling
+ [PATCH 7/9] Documentation: scsi: correct spelling
+ [PATCH 8/9] Documentation: sparc: correct spelling
+ [PATCH 9/9] Documentation: userspace-api: correct spelling
+
+
+ Documentation/RCU/Design/Expedited-Grace-Periods/Expedited-Grace-Periods.rst         |    6 -
+ Documentation/RCU/Design/Memory-Ordering/Tree-RCU-Memory-Ordering.rst                |    2 
+ Documentation/RCU/RTFP.txt                                                           |   10 +-
+ Documentation/RCU/UP.rst                                                             |    4 
+ Documentation/RCU/lockdep.rst                                                        |    2 
+ Documentation/RCU/torture.rst                                                        |    4 
+ Documentation/admin-guide/bcache.rst                                                 |    2 
+ Documentation/admin-guide/cgroup-v1/blkio-controller.rst                             |    2 
+ Documentation/admin-guide/cgroup-v2.rst                                              |   10 +-
+ Documentation/admin-guide/cifs/usage.rst                                             |    4 
+ Documentation/admin-guide/device-mapper/cache-policies.rst                           |    2 
+ Documentation/admin-guide/device-mapper/dm-ebs.rst                                   |    2 
+ Documentation/admin-guide/device-mapper/dm-zoned.rst                                 |    2 
+ Documentation/admin-guide/device-mapper/unstriped.rst                                |   10 +-
+ Documentation/admin-guide/dynamic-debug-howto.rst                                    |    2 
+ Documentation/admin-guide/gpio/gpio-sim.rst                                          |    2 
+ Documentation/admin-guide/hw-vuln/mds.rst                                            |    4 
+ Documentation/admin-guide/kernel-parameters.txt                                      |    8 -
+ Documentation/admin-guide/laptops/thinkpad-acpi.rst                                  |    2 
+ Documentation/admin-guide/md.rst                                                     |    2 
+ Documentation/admin-guide/media/bttv.rst                                             |    2 
+ Documentation/admin-guide/media/building.rst                                         |    2 
+ Documentation/admin-guide/media/si476x.rst                                           |    2 
+ Documentation/admin-guide/media/vivid.rst                                            |    2 
+ Documentation/admin-guide/mm/hugetlbpage.rst                                         |    2 
+ Documentation/admin-guide/mm/numa_memory_policy.rst                                  |    4 
+ Documentation/admin-guide/perf/hns3-pmu.rst                                          |    2 
+ Documentation/admin-guide/pm/amd-pstate.rst                                          |    2 
+ Documentation/admin-guide/spkguide.txt                                               |    4 
+ Documentation/admin-guide/sysctl/vm.rst                                              |    4 
+ Documentation/admin-guide/sysrq.rst                                                  |    2 
+ Documentation/driver-api/dma-buf.rst                                                 |    2 
+ Documentation/driver-api/dmaengine/client.rst                                        |    2 
+ Documentation/driver-api/dmaengine/dmatest.rst                                       |    2 
+ Documentation/driver-api/hsi.rst                                                     |    4 
+ Documentation/driver-api/io-mapping.rst                                              |    4 
+ Documentation/driver-api/md/md-cluster.rst                                           |    2 
+ Documentation/driver-api/md/raid5-cache.rst                                          |    2 
+ Documentation/driver-api/media/drivers/vidtv.rst                                     |    2 
+ Documentation/driver-api/media/dtv-demux.rst                                         |    2 
+ Documentation/driver-api/media/v4l2-subdev.rst                                       |    4 
+ Documentation/driver-api/mei/nfc.rst                                                 |    2 
+ Documentation/driver-api/nfc/nfc-hci.rst                                             |    2 
+ Documentation/driver-api/nvdimm/nvdimm.rst                                           |    2 
+ Documentation/driver-api/nvdimm/security.rst                                         |    2 
+ Documentation/driver-api/pin-control.rst                                             |    2 
+ Documentation/driver-api/pldmfw/index.rst                                            |    2 
+ Documentation/driver-api/serial/driver.rst                                           |    2 
+ Documentation/driver-api/surface_aggregator/ssh.rst                                  |    2 
+ Documentation/driver-api/thermal/intel_powerclamp.rst                                |    2 
+ Documentation/driver-api/usb/dwc3.rst                                                |    2 
+ Documentation/driver-api/usb/usb3-debug-port.rst                                     |    2 
+ Documentation/hwmon/aht10.rst                                                        |    2 
+ Documentation/hwmon/aspeed-pwm-tacho.rst                                             |    2 
+ Documentation/hwmon/corsair-psu.rst                                                  |    2 
+ Documentation/hwmon/gsc-hwmon.rst                                                    |    6 -
+ Documentation/hwmon/hwmon-kernel-api.rst                                             |    4 
+ Documentation/hwmon/ltc2978.rst                                                      |    2 
+ Documentation/hwmon/max6697.rst                                                      |    2 
+ Documentation/hwmon/menf21bmc.rst                                                    |    2 
+ Documentation/hwmon/pmbus-core.rst                                                   |    2 
+ Documentation/hwmon/sht4x.rst                                                        |    2 
+ Documentation/hwmon/smm665.rst                                                       |    2 
+ Documentation/hwmon/stpddc60.rst                                                     |    2 
+ Documentation/hwmon/vexpress.rst                                                     |    2 
+ Documentation/hwmon/via686a.rst                                                      |    2 
+ Documentation/networking/af_xdp.rst                                                  |    4 
+ Documentation/networking/arcnet-hardware.rst                                         |    2 
+ Documentation/networking/can.rst                                                     |    2 
+ Documentation/networking/can_ucan_protocol.rst                                       |    2 
+ Documentation/networking/cdc_mbim.rst                                                |    2 
+ Documentation/networking/device_drivers/atm/iphase.rst                               |    2 
+ Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst                  |    4 
+ Documentation/networking/device_drivers/can/ctu/fsm_txt_buffer_user.svg              |    4 
+ Documentation/networking/device_drivers/ethernet/3com/vortex.rst                     |    2 
+ Documentation/networking/device_drivers/ethernet/aquantia/atlantic.rst               |    6 -
+ Documentation/networking/device_drivers/ethernet/freescale/dpaa2/mac-phy-support.rst |    2 
+ Documentation/networking/device_drivers/ethernet/marvell/octeontx2.rst               |    2 
+ Documentation/networking/device_drivers/ethernet/pensando/ionic.rst                  |    2 
+ Documentation/networking/device_drivers/ethernet/ti/am65_nuss_cpsw_switchdev.rst     |    2 
+ Documentation/networking/device_drivers/ethernet/ti/cpsw_switchdev.rst               |    2 
+ Documentation/networking/device_drivers/wwan/iosm.rst                                |    2 
+ Documentation/networking/devlink/ice.rst                                             |    4 
+ Documentation/networking/devlink/netdevsim.rst                                       |    2 
+ Documentation/networking/devlink/prestera.rst                                        |    2 
+ Documentation/networking/dsa/configuration.rst                                       |    2 
+ Documentation/networking/ethtool-netlink.rst                                         |    6 -
+ Documentation/networking/gtp.rst                                                     |    2 
+ Documentation/networking/ieee802154.rst                                              |    2 
+ Documentation/networking/ip-sysctl.rst                                               |    6 -
+ Documentation/networking/ipvlan.rst                                                  |    2 
+ Documentation/networking/j1939.rst                                                   |    2 
+ Documentation/networking/net_failover.rst                                            |    2 
+ Documentation/networking/netconsole.rst                                              |    2 
+ Documentation/networking/page_pool.rst                                               |    6 -
+ Documentation/networking/phonet.rst                                                  |    2 
+ Documentation/networking/phy.rst                                                     |    2 
+ Documentation/networking/regulatory.rst                                              |    4 
+ Documentation/networking/rxrpc.rst                                                   |    2 
+ Documentation/networking/snmp_counter.rst                                            |    4 
+ Documentation/networking/sysfs-tagging.rst                                           |    2 
+ Documentation/scsi/ChangeLog.lpfc                                                    |   36 ++++----
+ Documentation/scsi/ChangeLog.megaraid                                                |    8 -
+ Documentation/scsi/ChangeLog.megaraid_sas                                            |    4 
+ Documentation/scsi/ChangeLog.ncr53c8xx                                               |   16 +--
+ Documentation/scsi/ChangeLog.sym53c8xx                                               |   14 +--
+ Documentation/scsi/ChangeLog.sym53c8xx_2                                             |   10 +-
+ Documentation/scsi/ncr53c8xx.rst                                                     |    4 
+ Documentation/scsi/sym53c8xx_2.rst                                                   |    2 
+ Documentation/scsi/tcm_qla2xxx.rst                                                   |    2 
+ Documentation/scsi/ufs.rst                                                           |    2 
+ Documentation/sparc/adi.rst                                                          |    4 
+ Documentation/sparc/oradax/dax-hv-api.txt                                            |   44 +++++-----
+ Documentation/userspace-api/iommufd.rst                                              |    2 
+ Documentation/userspace-api/media/drivers/st-vgxy61.rst                              |    2 
+ Documentation/userspace-api/media/rc/lirc-set-wideband-receiver.rst                  |    2 
+ Documentation/userspace-api/media/rc/rc-protos.rst                                   |    2 
+ Documentation/userspace-api/media/rc/rc-tables.rst                                   |    2 
+ Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst                             |    2 
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst                  |    2 
+ Documentation/userspace-api/media/v4l/ext-ctrls-jpeg.rst                             |    2 
+ Documentation/userspace-api/media/v4l/hist-v4l2.rst                                  |    4 
+ Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst                            |    2 
+ Documentation/userspace-api/media/v4l/vidioc-cropcap.rst                             |    2 
+ Documentation/userspace-api/seccomp_filter.rst                                       |    2 
+ Documentation/userspace-api/sysfs-platform_profile.rst                               |    2 
+ 126 files changed, 232 insertions(+), 232 deletions(-)
+
+
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: linux-doc@vger.kernel.org
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Zefan Li <lizefan.x@bytedance.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: cgroups@vger.kernel.org
+Cc: Alasdair Kergon <agk@redhat.com>
+Cc: Mike Snitzer <snitzer@kernel.org>
+Cc: dm-devel@redhat.com
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Vishal Verma <vishal.l.verma@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: nvdimm@lists.linux.dev
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: dmaengine@vger.kernel.org
+Cc: Song Liu <song@kernel.org>
+Cc: linux-raid@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
 Cc: Jean Delvare <jdelvare@suse.com>
 Cc: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
----
- Documentation/hwmon/aht10.rst            |    2 +-
- Documentation/hwmon/aspeed-pwm-tacho.rst |    2 +-
- Documentation/hwmon/corsair-psu.rst      |    2 +-
- Documentation/hwmon/gsc-hwmon.rst        |    6 +++---
- Documentation/hwmon/hwmon-kernel-api.rst |    4 ++--
- Documentation/hwmon/ltc2978.rst          |    2 +-
- Documentation/hwmon/max6697.rst          |    2 +-
- Documentation/hwmon/menf21bmc.rst        |    2 +-
- Documentation/hwmon/pmbus-core.rst       |    2 +-
- Documentation/hwmon/sht4x.rst            |    2 +-
- Documentation/hwmon/smm665.rst           |    2 +-
- Documentation/hwmon/stpddc60.rst         |    2 +-
- Documentation/hwmon/vexpress.rst         |    2 +-
- Documentation/hwmon/via686a.rst          |    2 +-
- 14 files changed, 17 insertions(+), 17 deletions(-)
-
-diff -- a/Documentation/hwmon/aspeed-pwm-tacho.rst b/Documentation/hwmon/aspeed-pwm-tacho.rst
---- a/Documentation/hwmon/aspeed-pwm-tacho.rst
-+++ b/Documentation/hwmon/aspeed-pwm-tacho.rst
-@@ -10,7 +10,7 @@ Authors:
- Description:
- ------------
- This driver implements support for ASPEED AST2400/2500 PWM and Fan Tacho
--controller. The PWM controller supports upto 8 PWM outputs. The Fan tacho
-+controller. The PWM controller supports up to 8 PWM outputs. The Fan tacho
- controller supports up to 16 tachometer inputs.
- 
- The driver provides the following sensor accesses in sysfs:
-diff -- a/Documentation/hwmon/gsc-hwmon.rst b/Documentation/hwmon/gsc-hwmon.rst
---- a/Documentation/hwmon/gsc-hwmon.rst
-+++ b/Documentation/hwmon/gsc-hwmon.rst
-@@ -31,7 +31,7 @@ Temperature Monitoring
- 
- Temperatures are measured with 12-bit or 10-bit resolution and are scaled
- either internally or by the driver depending on the GSC version and firmware.
--The values returned by the driver reflect millidegree Celcius:
-+The values returned by the driver reflect millidegree Celsius:
- 
- tempX_input                Measured temperature.
- tempX_label                Name of temperature input.
-@@ -41,8 +41,8 @@ PWM Output Control
- ------------------
- 
- The GSC features 1 PWM output that operates in automatic mode where the
--PWM value will be scalled depending on 6 temperature boundaries.
--The tempeature boundaries are read-write and in millidegree Celcius and the
-+PWM value will be scaled depending on 6 temperature boundaries.
-+The tempeature boundaries are read-write and in millidegree Celsius and the
- read-only PWM values range from 0 (off) to 255 (full speed).
- Fan speed will be set to minimum (off) when the temperature sensor reads
- less than pwm1_auto_point1_temp and maximum when the temperature sensor
-diff -- a/Documentation/hwmon/sht4x.rst b/Documentation/hwmon/sht4x.rst
---- a/Documentation/hwmon/sht4x.rst
-+++ b/Documentation/hwmon/sht4x.rst
-@@ -37,7 +37,7 @@ Sysfs entries
- -------------
- 
- =============== ============================================
--temp1_input     Measured temperature in millidegrees Celcius
-+temp1_input     Measured temperature in millidegrees Celsius
- humidity1_input Measured humidity in %H
- update_interval The minimum interval for polling the sensor,
-                 in milliseconds. Writable. Must be at least
-diff -- a/Documentation/hwmon/stpddc60.rst b/Documentation/hwmon/stpddc60.rst
---- a/Documentation/hwmon/stpddc60.rst
-+++ b/Documentation/hwmon/stpddc60.rst
-@@ -39,7 +39,7 @@ output voltage as a positive or negative
- in 50mV steps. This means that the absolute values of the limits will change
- when the commanded output voltage changes. Also, care should be taken when
- writing to those limits since in the worst case the commanded output voltage
--could change at the same time as the limit is written to, wich will lead to
-+could change at the same time as the limit is written to, which will lead to
- unpredictable results.
- 
- 
-diff -- a/Documentation/hwmon/smm665.rst b/Documentation/hwmon/smm665.rst
---- a/Documentation/hwmon/smm665.rst
-+++ b/Documentation/hwmon/smm665.rst
-@@ -180,7 +180,7 @@ in9_crit_alarm		AIN1 critical alarm
- in10_crit_alarm		AIN2 critical alarm
- 
- temp1_input		Chip temperature
--temp1_min		Mimimum chip temperature
-+temp1_min		Minimum chip temperature
- temp1_max		Maximum chip temperature
- temp1_crit		Critical chip temperature
- temp1_crit_alarm	Temperature critical alarm
-diff -- a/Documentation/hwmon/via686a.rst b/Documentation/hwmon/via686a.rst
---- a/Documentation/hwmon/via686a.rst
-+++ b/Documentation/hwmon/via686a.rst
-@@ -58,7 +58,7 @@ representable value is around 2600 RPM.
- 
- Voltage sensors (also known as IN sensors) report their values in volts.
- An alarm is triggered if the voltage has crossed a programmable minimum
--or maximum limit. Voltages are internally scalled, so each voltage channel
-+or maximum limit. Voltages are internally scaled, so each voltage channel
- has a different resolution and range.
- 
- If an alarm triggers, it will remain triggered until the hardware register
-diff -- a/Documentation/hwmon/aht10.rst b/Documentation/hwmon/aht10.rst
---- a/Documentation/hwmon/aht10.rst
-+++ b/Documentation/hwmon/aht10.rst
-@@ -38,7 +38,7 @@ Sysfs entries
- -------------
- 
- =============== ============================================
--temp1_input     Measured temperature in millidegrees Celcius
-+temp1_input     Measured temperature in millidegrees Celsius
- humidity1_input Measured humidity in %H
- update_interval The minimum interval for polling the sensor,
-                 in milliseconds. Writable. Must be at
-diff -- a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
---- a/Documentation/hwmon/corsair-psu.rst
-+++ b/Documentation/hwmon/corsair-psu.rst
-@@ -40,7 +40,7 @@ This driver implements the sysfs interfa
- interface of the HXi and RMi series.
- These power supplies provide access to a micro-controller with 2 attached
- temperature sensors, 1 fan rpm sensor, 4 sensors for volt levels, 4 sensors for
--power usage and 4 sensors for current levels and addtional non-sensor information
-+power usage and 4 sensors for current levels and additional non-sensor information
- like uptimes.
- 
- Sysfs entries
-diff -- a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
---- a/Documentation/hwmon/hwmon-kernel-api.rst
-+++ b/Documentation/hwmon/hwmon-kernel-api.rst
-@@ -57,7 +57,7 @@ register/unregister functions::
- hwmon_device_register_with_groups registers a hardware monitoring device.
- The first parameter of this function is a pointer to the parent device.
- The name parameter is a pointer to the hwmon device name. The registration
--function wil create a name sysfs attribute pointing to this name.
-+function will create a name sysfs attribute pointing to this name.
- The drvdata parameter is the pointer to the local driver data.
- hwmon_device_register_with_groups will attach this pointer to the newly
- allocated hwmon device. The pointer can be retrieved by the driver using
-@@ -360,7 +360,7 @@ functions is used.
- The header file linux/hwmon-sysfs.h provides a number of useful macros to
- declare and use hardware monitoring sysfs attributes.
- 
--In many cases, you can use the exsting define DEVICE_ATTR or its variants
-+In many cases, you can use the existing define DEVICE_ATTR or its variants
- DEVICE_ATTR_{RW,RO,WO} to declare such attributes. This is feasible if an
- attribute has no additional context. However, in many cases there will be
- additional information such as a sensor index which will need to be passed
-diff -- a/Documentation/hwmon/ltc2978.rst b/Documentation/hwmon/ltc2978.rst
---- a/Documentation/hwmon/ltc2978.rst
-+++ b/Documentation/hwmon/ltc2978.rst
-@@ -333,7 +333,7 @@ temp[N]_input		Measured temperature.
- 			- On LTC3883, temp1 reports an external temperature,
- 			  and temp2 reports the chip temperature.
- 
--temp[N]_min		Mimimum temperature.
-+temp[N]_min		Minimum temperature.
- 
- 			LTC2972, LTC2974, LCT2977, LTM2980, LTC2978,
- 			LTC2979, and LTM2987 only.
-diff -- a/Documentation/hwmon/max6697.rst b/Documentation/hwmon/max6697.rst
---- a/Documentation/hwmon/max6697.rst
-+++ b/Documentation/hwmon/max6697.rst
-@@ -73,7 +73,7 @@ Description
- This driver implements support for several MAX6697 compatible temperature sensor
- chips. The chips support one local temperature sensor plus four, six, or seven
- remote temperature sensors. Remote temperature sensors are diode-connected
--thermal transitors, except for MAX6698 which supports three diode-connected
-+thermal transistors, except for MAX6698 which supports three diode-connected
- thermal transistors plus three thermistors in addition to the local temperature
- sensor.
- 
-diff -- a/Documentation/hwmon/menf21bmc.rst b/Documentation/hwmon/menf21bmc.rst
---- a/Documentation/hwmon/menf21bmc.rst
-+++ b/Documentation/hwmon/menf21bmc.rst
-@@ -7,7 +7,7 @@ Supported chips:
- 
- 	  Prefix: 'menf21bmc_hwmon'
- 
--	  Adresses scanned: -
-+	  Addresses scanned: -
- 
- Author: Andreas Werner <andreas.werner@men.de>
- 
-diff -- a/Documentation/hwmon/pmbus-core.rst b/Documentation/hwmon/pmbus-core.rst
---- a/Documentation/hwmon/pmbus-core.rst
-+++ b/Documentation/hwmon/pmbus-core.rst
-@@ -174,7 +174,7 @@ Read byte from page <page>, register <re
-   int (*read_word_data)(struct i2c_client *client, int page, int phase,
-                         int reg);
- 
--Read word from page <page>, phase <pase>, register <reg>. If the chip does not
-+Read word from page <page>, phase <phase>, register <reg>. If the chip does not
- support multiple phases, the phase parameter can be ignored. If the chip
- supports multiple phases, a phase value of 0xff indicates all phases.
- 
-diff -- a/Documentation/hwmon/vexpress.rst b/Documentation/hwmon/vexpress.rst
---- a/Documentation/hwmon/vexpress.rst
-+++ b/Documentation/hwmon/vexpress.rst
-@@ -27,7 +27,7 @@ Versatile Express platform (http://www.a
- reference & prototyping system for ARM Ltd. processors. It can be set up
- from a wide range of boards, each of them containing (apart of the main
- chip/FPGA) a number of microcontrollers responsible for platform
--configuration and control. Theses microcontrollers can also monitor the
-+configuration and control. These microcontrollers can also monitor the
- board and its environment by a number of internal and external sensors,
- providing information about power lines voltages and currents, board
- temperature and power usage. Some of them also calculate consumed energy
+Cc: Jiri Pirko <jiri@nvidia.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc: Josh Triplett <josh@joshtriplett.org>
+Cc: rcu@vger.kernel.org
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
