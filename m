@@ -2,99 +2,84 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C4A4C636CB
-	for <linux-hwmon@archiver.kernel.org>; Sun, 29 Jan 2023 09:48:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D4A4C61D97
+	for <linux-hwmon@archiver.kernel.org>; Sun, 29 Jan 2023 18:38:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjA2JsF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 29 Jan 2023 04:48:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
+        id S235146AbjA2SiB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 29 Jan 2023 13:38:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjA2JsE (ORCPT
+        with ESMTP id S229605AbjA2SiB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 29 Jan 2023 04:48:04 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F02CAD06;
-        Sun, 29 Jan 2023 01:48:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674985683; x=1706521683;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TP0zpb9R5uK7bNYIk1uNAfZNOdPTZzcFV0KLQLxMD44=;
-  b=SWsROLd/u+9LNZVsf1OO9sEygiHLmaR8hgp2ZRd50izFm4ZV5ypSnA/d
-   LRRQUCHSvHmvvrPgpgu6muakoCLrpjAfoVDQUBN8ZVtogDTknVoxYqcKl
-   xUbUxWJchIOezgAhG7ItLvjA0nT1sd2Fqu9cNa2bO8+gUmI1mh4JgGjkK
-   ngAi1tV7VgD9AgaQReBGugfCSqaa/ECPNQ1BO3/pwc0etJEUAXN3VZ3d8
-   DNT580k5tXLiRfpDO2JJEEpF5oc5J4vr18XihNLHgZu4YZMtGTzPTVkXx
-   W/hM9xBtSpTVTFUQ6WxpHAfYXbUnAXXqOmmvOysNILxGy5ZOe0sititv+
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="315339544"
-X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
-   d="scan'208";a="315339544"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 01:48:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="641217818"
-X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
-   d="scan'208";a="641217818"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 29 Jan 2023 01:47:59 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pM4I2-0002gE-2b;
-        Sun, 29 Jan 2023 09:47:58 +0000
-Date:   Sun, 29 Jan 2023 17:47:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Armin Wolf <W_Armin@gmx.de>, hdegoede@redhat.com,
-        markgross@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, jdelvare@suse.com,
-        linux@roeck-us.net, platform-driver-x86@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] platform/x86: dell-ddv: Add hwmon support
-Message-ID: <202301291705.JVYNKBnd-lkp@intel.com>
-References: <20230126194021.381092-6-W_Armin@gmx.de>
+        Sun, 29 Jan 2023 13:38:01 -0500
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEF2144B9;
+        Sun, 29 Jan 2023 10:37:59 -0800 (PST)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1636eae256cso8335933fac.0;
+        Sun, 29 Jan 2023 10:37:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YqvPN10TpxePFaQiCDfEmJae23SIsLPwO0G190apMU8=;
+        b=C80IOpthPO/BdyDB6g/K1W4lKyUg6C1yilWgdQX7XO12lo2n5xUCxml+gVIHyR+db8
+         5jI3zKfUMshWNEFAR011pF2NhkCN/d3UpbhdKdCTSTdhdGyleUIY6pPwTjIrVWU3xPb6
+         +jfcolzn4TAZnZrE5FJmaiNshov9QeB3PeWU5hQsOvchbIO9REwIEWbS5kdj8Zj3RB0v
+         Bv/jI3S/j11UAq7JoYF7ggk5cgkTjkfbuMwvZ8rVH/zQwkuulYtssPGIYKS5gIe8ELrd
+         wBGE6JcFHn6f8Pg4akTfYCSVdEf0ljEjmQA/0jLRTR+lbhc2PKjtUuc1FKGiRuoyhF++
+         UwNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YqvPN10TpxePFaQiCDfEmJae23SIsLPwO0G190apMU8=;
+        b=slaLy+2rZd9fWrKuP5idBc725lfOuun22SgVAPcdgdY2RbPRP4oF9PDkwP7ty3L+gg
+         2Y5oeYqwNzppaCTfJrG60XXlbRRpl78dDiApmtvmB43J+W2NWq7ELQD+ouCEPjht4uH9
+         +mbSRh7lgktJVGWG7QFZ9DVolXmFZpYDe3CAUSObDxK7HFjuzvbJc3CmVMGSkvygg6hD
+         g0nEShSxzV7Vjkx7AZN5dK12ALoJqGp4FfnRdnOFkKHN6QMvKyG1Z++BfaT47PArrcMY
+         tu1Iduv26OCDxfamaANQ01gFb9h0Oa6VczQz2zSFCrz2M78d33iXNPJ4IcE0ahpxycCi
+         vvGQ==
+X-Gm-Message-State: AFqh2koMEPIbzRRA51ry5BU8IhUn6Yrr4jnmOjs80x2b2yQdJw2vBP7u
+        Ek09O1eXwkJwk0FIsa/iGfPekKrYz3E=
+X-Google-Smtp-Source: AMrXdXtT6+VqrnvyGIMlpZ4+bEjZT8vg7lhafHqqsO+bI1lYycueeuxzgAMNXrZJL8y+TRF1q/VNWQ==
+X-Received: by 2002:a05:6870:c21e:b0:15b:9290:3905 with SMTP id z30-20020a056870c21e00b0015b92903905mr27373054oae.42.1675017479112;
+        Sun, 29 Jan 2023 10:37:59 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id pa13-20020a0568701d0d00b0015f9cc16ef7sm4319879oab.46.2023.01.29.10.37.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 10:37:58 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 29 Jan 2023 10:37:56 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Eric Nguyen <linux@drogman.ch>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add zenith ii extreme alpha
+Message-ID: <20230129183756.GA1416397@roeck-us.net>
+References: <20230128102135.5199-1-eugene.shalygin@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230126194021.381092-6-W_Armin@gmx.de>
+In-Reply-To: <20230128102135.5199-1-eugene.shalygin@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Armin,
+On Sat, Jan 28, 2023 at 11:21:34AM +0100, Eugene Shalygin wrote:
+> From: Eric Nguyen <linux@drogman.ch>
+> 
+> The ROG ZENITH II EXTREME ALPHA provides the same set of sensors as the
+> no-ALPHA version. Tested with the hardware [1].
+> 
+> [1] https://github.com/zeule/asus-ec-sensors/issues/31
+> 
+> Signed-off-by: Eric Nguyen <linux@drogman.ch>
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
-I love your patch! Yet something to improve:
+Applied to hwmon-next.
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.2-rc5 next-20230127]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Armin-Wolf/platform-x86-dell-ddv-Add-support-for-interface-version-3/20230128-153324
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230126194021.381092-6-W_Armin%40gmx.de
-patch subject: [PATCH 5/5] platform/x86: dell-ddv: Add hwmon support
-config: i386-randconfig-c021 (https://download.01.org/0day-ci/archive/20230129/202301291705.JVYNKBnd-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/36be415c22eab400b1546b2c5a6737b28e847774
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Armin-Wolf/platform-x86-dell-ddv-Add-support-for-interface-version-3/20230128-153324
-        git checkout 36be415c22eab400b1546b2c5a6737b28e847774
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "__umoddi3" [drivers/platform/x86/dell/dell-wmi-ddv.ko] undefined!
->> ERROR: modpost: "__udivdi3" [drivers/platform/x86/dell/dell-wmi-ddv.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+Guenter
