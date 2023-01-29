@@ -2,108 +2,88 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC05EC05027
-	for <linux-hwmon@archiver.kernel.org>; Sun, 29 Jan 2023 19:55:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FEBCC05027
+	for <linux-hwmon@archiver.kernel.org>; Sun, 29 Jan 2023 20:16:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjA2Tzc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 29 Jan 2023 14:55:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
+        id S233970AbjA2UQK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 29 Jan 2023 15:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjA2Tzb (ORCPT
+        with ESMTP id S229492AbjA2UQJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 29 Jan 2023 14:55:31 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C27A1CF47;
-        Sun, 29 Jan 2023 11:55:30 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1636eae256cso8478225fac.0;
-        Sun, 29 Jan 2023 11:55:30 -0800 (PST)
+        Sun, 29 Jan 2023 15:16:09 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D761C586;
+        Sun, 29 Jan 2023 12:16:07 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id e12-20020a0568301e4c00b0068bc93e7e34so971085otj.4;
+        Sun, 29 Jan 2023 12:16:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iLbGoONm+xqkc97+A+Zml853XMzw+B9pcYL8n8StFtc=;
-        b=glgR4Glc5nCL8S38ROz9Eol5ou+EwE88pZMvzmg9G0C0UFLvFS9zx2l9qX35HD8X0c
-         Lt3jYr7P7Sim+CwD3YTqTRjQOTVZBYoRdp0K+fOV6NPvIuMoB6L3i2gn8glZF6vrkBp7
-         Kwr9/NNeqXlnrgJCq2Gnj30mG562pjU30JJn43C8wgjBh8O5MODomLHYaz1YFO4oZpPK
-         kAuVguFXqwmUnX1gKcp0FuAYAO3GlzNdZolhhxQ9TWLVQQs9sOPI68miGGt+oUGbyo+Z
-         dGwEqbxyWOyNbXsrr6EWoXo9pTknyxFz0Dcg58iTmOwRNI7BZHdW4wIfEIIOms2t1PER
-         h1Aw==
+        bh=QcUvGf3SnNJxJpngwgS9E38WXihDAHpNbeo4S+i2+60=;
+        b=cYD7YfYm0ILqmo0ok/tIMKHHzSl5YLmOYhTocxYL5rksY2xPX+uTYSGcUC3OCK7jdm
+         2REzNnZCJB8GEFqp1oSI6E8uSjf7GjO9n6eVtQ590WNwheyogkFr82/X/Rvu8gSsguaJ
+         fdF5f29h9dewTOX8xkLqrmf8yT4Iu6IqN9Z5HXc0R/h88R2pCcH8gYQ7j3dfqeG9Vg0B
+         EeRMCT7Pgl1Hi6XMWHcU1MpAjphreZ4fDdH/V39ktDJCzE7LX01HXyFsJn5gT7LQxX3t
+         yOT3sW1rQP7NTPdTPoWOWv20PLzFwGSVT/luUO+/HvNvAl5gPx+MZKpuTeY1jpWik2n8
+         a2gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iLbGoONm+xqkc97+A+Zml853XMzw+B9pcYL8n8StFtc=;
-        b=4F/KeiAaVt7ap6w9kdcG5sJ39NrGPTXiTzHi+RSEMywynD9mjTciBOBQp/9Dumy0W7
-         GGSyXV3mqAArB4ZdDis3GD5H/HAlDdP1e/sprlxJYAPkGnu7MZoZwL/9CyfL6JrxK+2W
-         puBCB+q3IIzYjkVoU5Br6MdsOgf9dVWdIx5Ue2ztzbi4UohKd4lP+VWe9Z1nm1xSPCQm
-         U11tZuZqXLFSp4gsP7/+8iKSRJeZ+Yf1eS36FKp5MKWclRcyD60WQEQpI4p09aHpPI69
-         uCRpgOJrMJbnY4ldYE+GpztFY/YBhLJbwBV9R5fhvv6xWga0uzYdyy4oyafkyd9oN/TD
-         IQGg==
-X-Gm-Message-State: AO0yUKUOGp7PhP6saYOu8LAG+vfJnKd2sS4ZkoS1bMXggb7q6jszTbRg
-        xlS8Nn/pA1b95UkKtui9Zt+vxSpLlH8=
-X-Google-Smtp-Source: AK7set+okvx2usDN7KXb0eVoAYP+qVRqZ2yWIGMLR8EbD4Cr34aPvBS58WDLuGaWP1Mj3KYRBCcvZQ==
-X-Received: by 2002:a05:6870:42cc:b0:163:1568:bdc9 with SMTP id z12-20020a05687042cc00b001631568bdc9mr11214890oah.2.1675022129681;
-        Sun, 29 Jan 2023 11:55:29 -0800 (PST)
+        bh=QcUvGf3SnNJxJpngwgS9E38WXihDAHpNbeo4S+i2+60=;
+        b=CW76y+6U+5AgNJeDuN/DWxxBlrPKteAfaEuUdgutmkOYELEkai7t+nAXfs6kyZkdNV
+         C4orNTdB+OCbqDZdtd2l2FqpmTfHahL/bwKrWO84EbvIe2N2yb0hI6CFsZI7YHAFYSX9
+         QTpNfq5PSWGklyDBq/v6NOjc1EH5zNumbOsWAJtkegibv2aicGY+bZCEjIxCXrJb5hd4
+         jS6OS7DGFAoYbzkk9hf3WRXi7X85Nyc1RfMP1AEz9S/o+wlozYQ8pPgWEi2HFS2l6wvW
+         BljqeoWxf9iG9RJrFzKhbpAJrxuD0awUBxkFtXbYIYfbt9Dpb0g13cQtBHK5OJOuwsT1
+         FzFw==
+X-Gm-Message-State: AO0yUKXLI3FP8q47HWhcmaN4ODXkq/OocpZT/9YFBrKW6YKYEWDRuATK
+        6yg8uZvEGioXY1qDCY0igUvB0eO5T9k=
+X-Google-Smtp-Source: AK7set+GkYHlOmIsVlnTVKZnuTEDSVDrRNryjt+RdJ9ezxZnho6Hgqo1Wds3ZKfQckXmLzs7Pme0vQ==
+X-Received: by 2002:a05:6830:4d4:b0:670:9cff:64bf with SMTP id s20-20020a05683004d400b006709cff64bfmr2901235otd.21.1675023366301;
+        Sun, 29 Jan 2023 12:16:06 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l11-20020a4ab2cb000000b004a3527e8279sm4206123ooo.0.2023.01.29.11.55.28
+        by smtp.gmail.com with ESMTPSA id c5-20020a9d75c5000000b006866a9b28eesm341103otl.18.2023.01.29.12.16.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 11:55:29 -0800 (PST)
+        Sun, 29 Jan 2023 12:16:05 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 29 Jan 2023 11:55:28 -0800
+Date:   Sun, 29 Jan 2023 12:16:04 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Jonathan Cormier <jcormier@criticallink.com>
 Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Bob Duke <bduke@criticallink.com>,
-        John Pruitt <jpruitt@criticallink.com>
-Subject: Re: [PATCH v4 5/5] hwmon: ltc2945: Convert division to
- DIV_ROUND_CLOSEST_ULL
-Message-ID: <20230129195528.GA1418977@roeck-us.net>
+        John Pruitt <jpruitt@criticallink.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v4 1/5] dt-bindings: hwmon: adi,ltc2945: Add binding
+Message-ID: <20230129201604.GA1583293@roeck-us.net>
 References: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
- <20230126-b4-ltc2945_shunt_resistor-v4-5-bb913470d8da@criticallink.com>
+ <20230126-b4-ltc2945_shunt_resistor-v4-1-bb913470d8da@criticallink.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230126-b4-ltc2945_shunt_resistor-v4-5-bb913470d8da@criticallink.com>
+In-Reply-To: <20230126-b4-ltc2945_shunt_resistor-v4-1-bb913470d8da@criticallink.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 05:32:27PM -0500, Jonathan Cormier wrote:
-> Convert division to DIV_ROUND_CLOSEST_ULL to match code
-> in same function.
+On Thu, Jan 26, 2023 at 05:32:23PM -0500, Jonathan Cormier wrote:
+> Create initial binding for the LTC2945 I2C power monitor.
 > 
-> Signed-off-by: Jonathan Cormier <jcormier@criticallink.comi
-> ---
->  drivers/hwmon/ltc2945.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
-> index 0b5e448b4f12..33341d01f1f7 100644
-> --- a/drivers/hwmon/ltc2945.c
-> +++ b/drivers/hwmon/ltc2945.c
-> @@ -212,7 +212,7 @@ static long long ltc2945_val_to_reg(struct device *dev, u8 reg,
->  	case LTC2945_MAX_VIN_THRES_H:
->  	case LTC2945_MIN_VIN_THRES_H:
->  		/* 25 mV resolution. */
-> -		val /= 25;
-> +		val = DIV_ROUND_CLOSEST_ULL(val, 25);
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
 
-This needs to be combined with the previous patch since that patch changes
-'val' from unsigned long to unsigned long long, causing a compile failure
-on 32-bit builds.
+Series applied, after merging patch 4/5 and 5/5 of the series
+to avoid spurious 32-bit build failures, and after fixing a
+continuation line alignment.
 
-I'll do that unless some other 32 bit build failure shows up.
+In the future, please run checkpatch --strict on your patches,
+and please provide change logs.
 
+Thanks,
 Guenter
-
->  		break;
->  	case LTC2945_ADIN_H:
->  	case LTC2945_MAX_ADIN_H:
-> 
-> -- 
-> 2.25.1
-> 
