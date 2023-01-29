@@ -2,187 +2,261 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B39C6C61D97
-	for <linux-hwmon@archiver.kernel.org>; Sun, 29 Jan 2023 20:56:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C46DC05027
+	for <linux-hwmon@archiver.kernel.org>; Sun, 29 Jan 2023 23:11:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbjA2U4w (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 29 Jan 2023 15:56:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S235082AbjA2XLD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 29 Jan 2023 18:11:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjA2U4v (ORCPT
+        with ESMTP id S229476AbjA2XLC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 29 Jan 2023 15:56:51 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E8914EA3
-        for <linux-hwmon@vger.kernel.org>; Sun, 29 Jan 2023 12:56:50 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id i5so8542590oih.11
-        for <linux-hwmon@vger.kernel.org>; Sun, 29 Jan 2023 12:56:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s2WnSGJyGgy8PCTck0OmurOwVCMy+56HvlELd4SRj1Q=;
-        b=aQzDPVYaMk1ToUCfcL+En5vMklsyj00n0J3tZRmtqFNbVzX30ltTwUThk+W0o5xhox
-         aDi0z/X/oVVAEXXdDlgLhgYXgx31GFbOxiZv2KCdwtCuoCQi5zaXEuSheaZdrDGRPKHS
-         AHIUzwF08KqIEBPRrWMTsqlU0+He8IQcE5p9geCqmlS53hdCgv9Ur8nDTUvalklWLumI
-         tkSxT+O3ah8pPnmj0aSn+aX1C6crKFvMhesUzESMNuCdA79C41d1O8hpoZR4JJMIcSPW
-         aNZw5mlUyaajrEmI9JNUuV74Gqh1eXT3rCeoImlAz/CKFQDa8tqjpSHanj3Ivu+qdArJ
-         zsXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s2WnSGJyGgy8PCTck0OmurOwVCMy+56HvlELd4SRj1Q=;
-        b=ZJpJBwPI+vyt1sw8s9do8Zjx4rzvI4awJVgihXw98OYElCmevLocgAKHxWIqlQz3sK
-         mbSuShqZQczpb2vZc+aIYk84niM0Io3frbyGRu7dTkJgkq75i4CeFDYgNOciL/eBDgyl
-         ZF2yPcCzneuvYKaaLcAuzJypkT6kFh65q+0V//IKKXye8PXdJWk3+izhI7d7QxSr4+so
-         T777Qw45//53i6ufsnpPiwmFwiIPqSv3Tt2SpyDKhujx2LRVsnMf3kFenC4XlMZaxgIU
-         8eEmN93S3SGwWGn8ghxAotyVyKXUeKUuq9y5LOkMpTU7zSq7h+fX7vk5adY2R/k7J051
-         1TEQ==
-X-Gm-Message-State: AO0yUKUCDJVG1wE+MoKGJtxU5d6uMQ82czeju6rOvEvPn7kMPouyAKWP
-        ndMq3vo+wbDm+3zFUSCe6HjwUIK2g2o=
-X-Google-Smtp-Source: AK7set/i++aWWHHLYwq1iRMT0oqIFQctn3DvgPd+C/OFH3WoaZ5Mwrb0DEu7W5qLSQMmAX28k4JPMQ==
-X-Received: by 2002:a05:6808:651:b0:378:4265:f347 with SMTP id z17-20020a056808065100b003784265f347mr850265oih.31.1675025809725;
-        Sun, 29 Jan 2023 12:56:49 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o51-20020a0568301c7300b0068bbb818c64sm2346359otg.25.2023.01.29.12.56.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 12:56:48 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 29 Jan 2023 12:56:47 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Frank Crawford <frank@crawford.emu.id.au>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 1/7] hwmon: (it87) Allow disabling exiting of
- configuration mode
-Message-ID: <20230129205647.GA1951466@roeck-us.net>
-References: <20230128060308.1549707-1-frank@crawford.emu.id.au>
- <20230128060308.1549707-2-frank@crawford.emu.id.au>
+        Sun, 29 Jan 2023 18:11:02 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB09D1ADC2;
+        Sun, 29 Jan 2023 15:10:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
+        :Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=hSVWChRDN+7R1q+eUNK+va/B9M97WY52yd2h5OskBp0=; b=yUv0VVi7AzeHRNOF30ohLHw5zu
+        /EpIh2+vV2zjgdq1rrJGU4FU7Sqo3t43U7K9gOpKF2ubTcAqhQMdBAKf9YG61i3DRGLxb36dWzOn4
+        TXERwYxHRQiAAy1QS4TbBkPJjGjssSK0oXUUkhaBVLbi5lWSYk/zdo8NTqj2ZWLFRTJGDjfc9SXCo
+        hEyl0nMWxtlsPZdxJLXFFxiBry9YP3GQ2ymXTqnEEmFkjSyqg7W/xed6YUo1nzs/vQ3P3iMno43XC
+        fR+uzw5JFLfCHWvOnYuSJPKJh1y/QGWAtpfsfWLJYQRzO6RHZG7xApoodt05CnWQeQCNvBJpPuS5d
+        KUkWt7MA==;
+Received: from [2601:1c2:d00:6a60::9526] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pMGp7-0020M2-IK; Sun, 29 Jan 2023 23:10:57 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: [PATCH 3/9] Documentation: hwmon: correct spelling
+Date:   Sun, 29 Jan 2023 15:10:47 -0800
+Message-Id: <20230129231053.20863-4-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230129231053.20863-1-rdunlap@infradead.org>
+References: <20230129231053.20863-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230128060308.1549707-2-frank@crawford.emu.id.au>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 05:03:02PM +1100, Frank Crawford wrote:
-> Disabling configuration mode on some chips can result in system
-> hang-ups and access failures to the Super-IO chip at the
-> second SIO address. Never exit configuration mode on these
-> chips to avoid the problem.
-> 
-> This patch should be applied in conjunction with a previous one to
-> initialise the second chip for certain mother boards.
-> 
-> Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
-> ---
-> 
-> v3:
->  * Correct possible uninitialised pointer issue.
-> 
-> v2:
->  * Convert to use feature flag and related macros rather than a separate
->    field, as suggested in review.
->  * Reverse sense of flag in superio_exit to simplify feature macro.
-> 
-> ---
->  drivers/hwmon/it87.c | 26 ++++++++++++++++++--------
->  1 file changed, 18 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-> index a8a6a0ffee82..923a9563be92 100644
-> --- a/drivers/hwmon/it87.c
-> +++ b/drivers/hwmon/it87.c
-> @@ -128,10 +128,12 @@ static inline int superio_enter(int ioreg)
->  	return 0;
->  }
->  
-> -static inline void superio_exit(int ioreg)
-> +static inline void superio_exit(int ioreg, bool noexit)
->  {
-> -	outb(0x02, ioreg);
-> -	outb(0x02, ioreg + 1);
-> +	if (!noexit) {
-> +		outb(0x02, ioreg);
-> +		outb(0x02, ioreg + 1);
-> +	}
->  	release_region(ioreg, 2);
->  }
->  
-> @@ -300,6 +302,13 @@ struct it87_devices {
->  #define FEAT_PWM_FREQ2		BIT(16)	/* Separate pwm freq 2 */
->  #define FEAT_SIX_TEMP		BIT(17)	/* Up to 6 temp sensors */
->  #define FEAT_VIN3_5V		BIT(18)	/* VIN3 connected to +5V */
-> +/*
-> + * Disabling configuration mode on some chips can result in system
-> + * hang-ups and access failures to the Super-IO chip at the
-> + * second SIO address. Never exit configuration mode on these
-> + * chips to avoid the problem.
-> + */
-> +#define FEAT_CONF_NOEXIT	BIT(28)	/* Chip should not exit conf mode */
+Correct spelling problems for Documentation/hwmon/ as reported
+by codespell.
 
-Feature bits are supposed to be numbered sequentially, not randomly
-assigned. Please use bit 19.
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+---
+ Documentation/hwmon/aht10.rst            |    2 +-
+ Documentation/hwmon/aspeed-pwm-tacho.rst |    2 +-
+ Documentation/hwmon/corsair-psu.rst      |    2 +-
+ Documentation/hwmon/gsc-hwmon.rst        |    6 +++---
+ Documentation/hwmon/hwmon-kernel-api.rst |    4 ++--
+ Documentation/hwmon/ltc2978.rst          |    2 +-
+ Documentation/hwmon/max6697.rst          |    2 +-
+ Documentation/hwmon/menf21bmc.rst        |    2 +-
+ Documentation/hwmon/pmbus-core.rst       |    2 +-
+ Documentation/hwmon/sht4x.rst            |    2 +-
+ Documentation/hwmon/smm665.rst           |    2 +-
+ Documentation/hwmon/stpddc60.rst         |    2 +-
+ Documentation/hwmon/vexpress.rst         |    2 +-
+ Documentation/hwmon/via686a.rst          |    2 +-
+ 14 files changed, 17 insertions(+), 17 deletions(-)
 
->  
->  static const struct it87_devices it87_devices[] = {
->  	[it87] = {
-> @@ -493,6 +502,7 @@ static const struct it87_devices it87_devices[] = {
->  #define has_pwm_freq2(data)	((data)->features & FEAT_PWM_FREQ2)
->  #define has_six_temp(data)	((data)->features & FEAT_SIX_TEMP)
->  #define has_vin3_5v(data)	((data)->features & FEAT_VIN3_5V)
-> +#define has_conf_noexit(data)	((data)->features & FEAT_CONF_NOEXIT)
->  
->  struct it87_sio_data {
->  	int sioaddr;
-> @@ -2404,7 +2414,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
->  {
->  	int err;
->  	u16 chip_type;
-> -	const struct it87_devices *config;
-> +	const struct it87_devices *config = NULL;
->  
->  	err = superio_enter(sioaddr);
->  	if (err)
-> @@ -2489,6 +2499,8 @@ static int __init it87_find(int sioaddr, unsigned short *address,
->  		goto exit;
->  	}
->  
-> +	config = &it87_devices[sio_data->type];
-> +
->  	superio_select(sioaddr, PME);
->  	if (!(superio_inb(sioaddr, IT87_ACT_REG) & 0x01)) {
->  		pr_info("Device not activated, skipping\n");
-> @@ -2508,8 +2520,6 @@ static int __init it87_find(int sioaddr, unsigned short *address,
->  		it87_devices[sio_data->type].suffix,
->  		*address, sio_data->revision);
->  
-> -	config = &it87_devices[sio_data->type];
-> -
->  	/* in7 (VSB or VCCH5V) is always internal on some chips */
->  	if (has_in7_internal(config))
->  		sio_data->internal |= BIT(1);
-> @@ -2827,7 +2837,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
->  		sio_data->skip_pwm |= dmi_data->skip_pwm;
->  
->  exit:
-> -	superio_exit(sioaddr);
-> +	superio_exit(sioaddr, config ? has_conf_noexit(config) : false);
-
-Nit: "config && has_conf_noexit(config)" would avoid the conditional code.
-
->  	return err;
->  }
->  
-> @@ -3213,7 +3223,7 @@ static void it87_resume_sio(struct platform_device *pdev)
->  			     reg2c);
->  	}
->  
-> -	superio_exit(data->sioaddr);
-> +	superio_exit(data->sioaddr, has_conf_noexit(data));
->  }
->  
->  static int it87_resume(struct device *dev)
+diff -- a/Documentation/hwmon/aspeed-pwm-tacho.rst b/Documentation/hwmon/aspeed-pwm-tacho.rst
+--- a/Documentation/hwmon/aspeed-pwm-tacho.rst
++++ b/Documentation/hwmon/aspeed-pwm-tacho.rst
+@@ -10,7 +10,7 @@ Authors:
+ Description:
+ ------------
+ This driver implements support for ASPEED AST2400/2500 PWM and Fan Tacho
+-controller. The PWM controller supports upto 8 PWM outputs. The Fan tacho
++controller. The PWM controller supports up to 8 PWM outputs. The Fan tacho
+ controller supports up to 16 tachometer inputs.
+ 
+ The driver provides the following sensor accesses in sysfs:
+diff -- a/Documentation/hwmon/gsc-hwmon.rst b/Documentation/hwmon/gsc-hwmon.rst
+--- a/Documentation/hwmon/gsc-hwmon.rst
++++ b/Documentation/hwmon/gsc-hwmon.rst
+@@ -31,7 +31,7 @@ Temperature Monitoring
+ 
+ Temperatures are measured with 12-bit or 10-bit resolution and are scaled
+ either internally or by the driver depending on the GSC version and firmware.
+-The values returned by the driver reflect millidegree Celcius:
++The values returned by the driver reflect millidegree Celsius:
+ 
+ tempX_input                Measured temperature.
+ tempX_label                Name of temperature input.
+@@ -41,8 +41,8 @@ PWM Output Control
+ ------------------
+ 
+ The GSC features 1 PWM output that operates in automatic mode where the
+-PWM value will be scalled depending on 6 temperature boundaries.
+-The tempeature boundaries are read-write and in millidegree Celcius and the
++PWM value will be scaled depending on 6 temperature boundaries.
++The tempeature boundaries are read-write and in millidegree Celsius and the
+ read-only PWM values range from 0 (off) to 255 (full speed).
+ Fan speed will be set to minimum (off) when the temperature sensor reads
+ less than pwm1_auto_point1_temp and maximum when the temperature sensor
+diff -- a/Documentation/hwmon/sht4x.rst b/Documentation/hwmon/sht4x.rst
+--- a/Documentation/hwmon/sht4x.rst
++++ b/Documentation/hwmon/sht4x.rst
+@@ -37,7 +37,7 @@ Sysfs entries
+ -------------
+ 
+ =============== ============================================
+-temp1_input     Measured temperature in millidegrees Celcius
++temp1_input     Measured temperature in millidegrees Celsius
+ humidity1_input Measured humidity in %H
+ update_interval The minimum interval for polling the sensor,
+                 in milliseconds. Writable. Must be at least
+diff -- a/Documentation/hwmon/stpddc60.rst b/Documentation/hwmon/stpddc60.rst
+--- a/Documentation/hwmon/stpddc60.rst
++++ b/Documentation/hwmon/stpddc60.rst
+@@ -39,7 +39,7 @@ output voltage as a positive or negative
+ in 50mV steps. This means that the absolute values of the limits will change
+ when the commanded output voltage changes. Also, care should be taken when
+ writing to those limits since in the worst case the commanded output voltage
+-could change at the same time as the limit is written to, wich will lead to
++could change at the same time as the limit is written to, which will lead to
+ unpredictable results.
+ 
+ 
+diff -- a/Documentation/hwmon/smm665.rst b/Documentation/hwmon/smm665.rst
+--- a/Documentation/hwmon/smm665.rst
++++ b/Documentation/hwmon/smm665.rst
+@@ -180,7 +180,7 @@ in9_crit_alarm		AIN1 critical alarm
+ in10_crit_alarm		AIN2 critical alarm
+ 
+ temp1_input		Chip temperature
+-temp1_min		Mimimum chip temperature
++temp1_min		Minimum chip temperature
+ temp1_max		Maximum chip temperature
+ temp1_crit		Critical chip temperature
+ temp1_crit_alarm	Temperature critical alarm
+diff -- a/Documentation/hwmon/via686a.rst b/Documentation/hwmon/via686a.rst
+--- a/Documentation/hwmon/via686a.rst
++++ b/Documentation/hwmon/via686a.rst
+@@ -58,7 +58,7 @@ representable value is around 2600 RPM.
+ 
+ Voltage sensors (also known as IN sensors) report their values in volts.
+ An alarm is triggered if the voltage has crossed a programmable minimum
+-or maximum limit. Voltages are internally scalled, so each voltage channel
++or maximum limit. Voltages are internally scaled, so each voltage channel
+ has a different resolution and range.
+ 
+ If an alarm triggers, it will remain triggered until the hardware register
+diff -- a/Documentation/hwmon/aht10.rst b/Documentation/hwmon/aht10.rst
+--- a/Documentation/hwmon/aht10.rst
++++ b/Documentation/hwmon/aht10.rst
+@@ -38,7 +38,7 @@ Sysfs entries
+ -------------
+ 
+ =============== ============================================
+-temp1_input     Measured temperature in millidegrees Celcius
++temp1_input     Measured temperature in millidegrees Celsius
+ humidity1_input Measured humidity in %H
+ update_interval The minimum interval for polling the sensor,
+                 in milliseconds. Writable. Must be at
+diff -- a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
+--- a/Documentation/hwmon/corsair-psu.rst
++++ b/Documentation/hwmon/corsair-psu.rst
+@@ -40,7 +40,7 @@ This driver implements the sysfs interfa
+ interface of the HXi and RMi series.
+ These power supplies provide access to a micro-controller with 2 attached
+ temperature sensors, 1 fan rpm sensor, 4 sensors for volt levels, 4 sensors for
+-power usage and 4 sensors for current levels and addtional non-sensor information
++power usage and 4 sensors for current levels and additional non-sensor information
+ like uptimes.
+ 
+ Sysfs entries
+diff -- a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
+--- a/Documentation/hwmon/hwmon-kernel-api.rst
++++ b/Documentation/hwmon/hwmon-kernel-api.rst
+@@ -57,7 +57,7 @@ register/unregister functions::
+ hwmon_device_register_with_groups registers a hardware monitoring device.
+ The first parameter of this function is a pointer to the parent device.
+ The name parameter is a pointer to the hwmon device name. The registration
+-function wil create a name sysfs attribute pointing to this name.
++function will create a name sysfs attribute pointing to this name.
+ The drvdata parameter is the pointer to the local driver data.
+ hwmon_device_register_with_groups will attach this pointer to the newly
+ allocated hwmon device. The pointer can be retrieved by the driver using
+@@ -360,7 +360,7 @@ functions is used.
+ The header file linux/hwmon-sysfs.h provides a number of useful macros to
+ declare and use hardware monitoring sysfs attributes.
+ 
+-In many cases, you can use the exsting define DEVICE_ATTR or its variants
++In many cases, you can use the existing define DEVICE_ATTR or its variants
+ DEVICE_ATTR_{RW,RO,WO} to declare such attributes. This is feasible if an
+ attribute has no additional context. However, in many cases there will be
+ additional information such as a sensor index which will need to be passed
+diff -- a/Documentation/hwmon/ltc2978.rst b/Documentation/hwmon/ltc2978.rst
+--- a/Documentation/hwmon/ltc2978.rst
++++ b/Documentation/hwmon/ltc2978.rst
+@@ -333,7 +333,7 @@ temp[N]_input		Measured temperature.
+ 			- On LTC3883, temp1 reports an external temperature,
+ 			  and temp2 reports the chip temperature.
+ 
+-temp[N]_min		Mimimum temperature.
++temp[N]_min		Minimum temperature.
+ 
+ 			LTC2972, LTC2974, LCT2977, LTM2980, LTC2978,
+ 			LTC2979, and LTM2987 only.
+diff -- a/Documentation/hwmon/max6697.rst b/Documentation/hwmon/max6697.rst
+--- a/Documentation/hwmon/max6697.rst
++++ b/Documentation/hwmon/max6697.rst
+@@ -73,7 +73,7 @@ Description
+ This driver implements support for several MAX6697 compatible temperature sensor
+ chips. The chips support one local temperature sensor plus four, six, or seven
+ remote temperature sensors. Remote temperature sensors are diode-connected
+-thermal transitors, except for MAX6698 which supports three diode-connected
++thermal transistors, except for MAX6698 which supports three diode-connected
+ thermal transistors plus three thermistors in addition to the local temperature
+ sensor.
+ 
+diff -- a/Documentation/hwmon/menf21bmc.rst b/Documentation/hwmon/menf21bmc.rst
+--- a/Documentation/hwmon/menf21bmc.rst
++++ b/Documentation/hwmon/menf21bmc.rst
+@@ -7,7 +7,7 @@ Supported chips:
+ 
+ 	  Prefix: 'menf21bmc_hwmon'
+ 
+-	  Adresses scanned: -
++	  Addresses scanned: -
+ 
+ Author: Andreas Werner <andreas.werner@men.de>
+ 
+diff -- a/Documentation/hwmon/pmbus-core.rst b/Documentation/hwmon/pmbus-core.rst
+--- a/Documentation/hwmon/pmbus-core.rst
++++ b/Documentation/hwmon/pmbus-core.rst
+@@ -174,7 +174,7 @@ Read byte from page <page>, register <re
+   int (*read_word_data)(struct i2c_client *client, int page, int phase,
+                         int reg);
+ 
+-Read word from page <page>, phase <pase>, register <reg>. If the chip does not
++Read word from page <page>, phase <phase>, register <reg>. If the chip does not
+ support multiple phases, the phase parameter can be ignored. If the chip
+ supports multiple phases, a phase value of 0xff indicates all phases.
+ 
+diff -- a/Documentation/hwmon/vexpress.rst b/Documentation/hwmon/vexpress.rst
+--- a/Documentation/hwmon/vexpress.rst
++++ b/Documentation/hwmon/vexpress.rst
+@@ -27,7 +27,7 @@ Versatile Express platform (http://www.a
+ reference & prototyping system for ARM Ltd. processors. It can be set up
+ from a wide range of boards, each of them containing (apart of the main
+ chip/FPGA) a number of microcontrollers responsible for platform
+-configuration and control. Theses microcontrollers can also monitor the
++configuration and control. These microcontrollers can also monitor the
+ board and its environment by a number of internal and external sensors,
+ providing information about power lines voltages and currents, board
+ temperature and power usage. Some of them also calculate consumed energy
