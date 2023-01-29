@@ -2,82 +2,80 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D4A4C61D97
-	for <linux-hwmon@archiver.kernel.org>; Sun, 29 Jan 2023 18:38:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55F2CC61D97
+	for <linux-hwmon@archiver.kernel.org>; Sun, 29 Jan 2023 19:47:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235146AbjA2SiB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 29 Jan 2023 13:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
+        id S230073AbjA2TrF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 29 Jan 2023 14:47:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjA2SiB (ORCPT
+        with ESMTP id S229760AbjA2TrF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 29 Jan 2023 13:38:01 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEF2144B9;
-        Sun, 29 Jan 2023 10:37:59 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1636eae256cso8335933fac.0;
-        Sun, 29 Jan 2023 10:37:59 -0800 (PST)
+        Sun, 29 Jan 2023 14:47:05 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5070F1ABE0;
+        Sun, 29 Jan 2023 11:47:04 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1442977d77dso12733481fac.6;
+        Sun, 29 Jan 2023 11:47:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YqvPN10TpxePFaQiCDfEmJae23SIsLPwO0G190apMU8=;
-        b=C80IOpthPO/BdyDB6g/K1W4lKyUg6C1yilWgdQX7XO12lo2n5xUCxml+gVIHyR+db8
-         5jI3zKfUMshWNEFAR011pF2NhkCN/d3UpbhdKdCTSTdhdGyleUIY6pPwTjIrVWU3xPb6
-         +jfcolzn4TAZnZrE5FJmaiNshov9QeB3PeWU5hQsOvchbIO9REwIEWbS5kdj8Zj3RB0v
-         Bv/jI3S/j11UAq7JoYF7ggk5cgkTjkfbuMwvZ8rVH/zQwkuulYtssPGIYKS5gIe8ELrd
-         wBGE6JcFHn6f8Pg4akTfYCSVdEf0ljEjmQA/0jLRTR+lbhc2PKjtUuc1FKGiRuoyhF++
-         UwNQ==
+        bh=v8O/cRRsAjvRSUFWhqOftJSo8NlvCf8iVIgYQungJRY=;
+        b=FZw1I3XDHAlGQgXRR04Bf+xHf3qPGKQ6jSh9pCrGteruu452yZ2u5jAMpaU/FeLyE9
+         z77rgJ/H3zFIX6n2K8bGiYWOFvGGnFo4YV0B0PcOAZIoeeicE2pauwyXA1/ueJOWMYu/
+         1kphCeWB1YTY15aLLhBSY03JRA5TNiJa8B2YVD1sn7xoY2lpjBGcbCwTrysnyHZ95kbs
+         +AedOtgjaVn+93998WpNtRHZlUT7XZMNq3XGgx/Arap3z1KhzaWa3FzMBNa6H4vRYp9r
+         AqetUF3houBxQIBRVH2No+XrCzuBMN5O3HCX8wUpGhZN8uLRI/VNNU67r/scyNGTIrsn
+         /O7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YqvPN10TpxePFaQiCDfEmJae23SIsLPwO0G190apMU8=;
-        b=slaLy+2rZd9fWrKuP5idBc725lfOuun22SgVAPcdgdY2RbPRP4oF9PDkwP7ty3L+gg
-         2Y5oeYqwNzppaCTfJrG60XXlbRRpl78dDiApmtvmB43J+W2NWq7ELQD+ouCEPjht4uH9
-         +mbSRh7lgktJVGWG7QFZ9DVolXmFZpYDe3CAUSObDxK7HFjuzvbJc3CmVMGSkvygg6hD
-         g0nEShSxzV7Vjkx7AZN5dK12ALoJqGp4FfnRdnOFkKHN6QMvKyG1Z++BfaT47PArrcMY
-         tu1Iduv26OCDxfamaANQ01gFb9h0Oa6VczQz2zSFCrz2M78d33iXNPJ4IcE0ahpxycCi
-         vvGQ==
-X-Gm-Message-State: AFqh2koMEPIbzRRA51ry5BU8IhUn6Yrr4jnmOjs80x2b2yQdJw2vBP7u
-        Ek09O1eXwkJwk0FIsa/iGfPekKrYz3E=
-X-Google-Smtp-Source: AMrXdXtT6+VqrnvyGIMlpZ4+bEjZT8vg7lhafHqqsO+bI1lYycueeuxzgAMNXrZJL8y+TRF1q/VNWQ==
-X-Received: by 2002:a05:6870:c21e:b0:15b:9290:3905 with SMTP id z30-20020a056870c21e00b0015b92903905mr27373054oae.42.1675017479112;
-        Sun, 29 Jan 2023 10:37:59 -0800 (PST)
+        bh=v8O/cRRsAjvRSUFWhqOftJSo8NlvCf8iVIgYQungJRY=;
+        b=G0hkiAMofeUP9tsPpRnV4VjjxAUeZMFESwh3Q6PvUfHZMdJ7/AwoGavWMwcWXbRDUd
+         ZQj5Z7x+OFmd9DbmjSYObfZKKgiA4iZEYmHkfCdm8Kca7tYiI48/Ubn4HFt/14Vr8rnl
+         Aj33GrQVaAuc2ED8XaneUpJu5xU0lWyAFKQlpZdjQwtQGZx9aJMrvLumuHkMiQO41xCQ
+         L85nFq9YIaVjmkPaFn+ZNvtndyIINt2oH+XxSSoHIidmPIHhwqVw5FDev3ZlKlviAru0
+         mSh20jEyAO1IzgucPlfpUdAs7vGjnHkE/ZtLawtt3K4WtkSwq9ZBGvD9FPdIPf3QrsUA
+         R0vA==
+X-Gm-Message-State: AFqh2kqxNzWGblUChC9OfoA1bWJAdM806BqaIN+/4ZzJipNKzcUyNrFj
+        38ea0OILzTwraB4Y+ybmJAY=
+X-Google-Smtp-Source: AMrXdXuQIGGNUv0m9e9hWsi93lvGw9ADu/LxpBXvX2xcuoK+DdOJdZ+TkSxrRqDgmOr6LPiRnPBI5w==
+X-Received: by 2002:a05:6870:cd0f:b0:144:c95f:a305 with SMTP id qk15-20020a056870cd0f00b00144c95fa305mr26615075oab.29.1675021623636;
+        Sun, 29 Jan 2023 11:47:03 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id pa13-20020a0568701d0d00b0015f9cc16ef7sm4319879oab.46.2023.01.29.10.37.57
+        by smtp.gmail.com with ESMTPSA id x2-20020a4a2a42000000b0050dc3c2f77asm1253760oox.8.2023.01.29.11.47.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 10:37:58 -0800 (PST)
+        Sun, 29 Jan 2023 11:47:02 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 29 Jan 2023 10:37:56 -0800
+Date:   Sun, 29 Jan 2023 11:47:01 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Eric Nguyen <linux@drogman.ch>, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add zenith ii extreme alpha
-Message-ID: <20230129183756.GA1416397@roeck-us.net>
-References: <20230128102135.5199-1-eugene.shalygin@gmail.com>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-hwmon@vger.kernel.org, krzysztof.kozlowski@linaro.org,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: trivial-devices: Add Infineon
+ TDA38640 Voltage Regulator
+Message-ID: <20230129194701.GA1418791@roeck-us.net>
+References: <20230124202317.3704963-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230128102135.5199-1-eugene.shalygin@gmail.com>
+In-Reply-To: <20230124202317.3704963-1-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 11:21:34AM +0100, Eugene Shalygin wrote:
-> From: Eric Nguyen <linux@drogman.ch>
+On Tue, Jan 24, 2023 at 09:23:16PM +0100, Naresh Solanki wrote:
+> Infineon TDA38640 is PMBUS compliant voltage regulator.
 > 
-> The ROG ZENITH II EXTREME ALPHA provides the same set of sensors as the
-> no-ALPHA version. Tested with the hardware [1].
-> 
-> [1] https://github.com/zeule/asus-ec-sensors/issues/31
-> 
-> Signed-off-by: Eric Nguyen <linux@drogman.ch>
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Applied to hwmon-next.
 
