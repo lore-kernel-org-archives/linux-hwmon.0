@@ -2,85 +2,157 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D126DC61D97
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Jan 2023 00:39:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73C18C54EAA
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Jan 2023 13:00:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjA3AjS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 29 Jan 2023 19:39:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
+        id S236724AbjA3NA1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 Jan 2023 08:00:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjA3AjR (ORCPT
+        with ESMTP id S235504AbjA3NA0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 29 Jan 2023 19:39:17 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DD51CF41;
-        Sun, 29 Jan 2023 16:39:16 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1442977d77dso13255205fac.6;
-        Sun, 29 Jan 2023 16:39:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eQdDfBq+vMF/O7FM4LZuZL7r34CL6O59Wnl755Km6vU=;
-        b=l8ipMy4pGRnmFzWMy34EV5s6qCA0dnFvcV1WLPYwuDAQ+YddGB2zNSOgkvAXkoB7oO
-         9d2foK6XKFbc6GuRwa/zyw0na72IN6jphiv+6326y4Xqz8O+zqcKc2GQfaZIEwoXbySs
-         /7jIwYIcxFSAZ1SfEYlJid5m8TgqZebvd5EL+rBP1EMmqmpm11wYF9vMyPnf83WJ6hgt
-         MT2lBXCjNyTjer5or8HnMWmHhu1m/8WaezQNUzciD4MPwZPEtZruOWIroEXso48NAN3/
-         xmr/eBGIT51nD4iKCctsTk6+gzOOtfACyWv0GVQ0rFcuFJ9cYptmEGT/UfOwWQMDVarV
-         cL1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eQdDfBq+vMF/O7FM4LZuZL7r34CL6O59Wnl755Km6vU=;
-        b=0raitiX0cxhaERlnzuQ/ZSQBskdM/vR6qhE869tIaT9f2UuRxoaONWmoF4iM7lYiW/
-         Mf4qwU/ktKGS+zmyk0U0oueBD5PnZvI3or3/f+OjP69aZq4Ra35GOy5z49JpStu6kKNM
-         HmRs4xSOrRsRimmrp9dPTEHR/87Lbnq1VzRjasyDpvcce7HLj1ahRze3gDQqJmLXJHWU
-         QGUSrljfPvrFPb0xre09wuBBaV24uxxrwZwnndgXU/ieflSxagJtXE7GeFoQhRa2y8gc
-         a9gP6NWWmXbawg/KY7nmBbnSCGOKqX2iKsxv3aA47+noP4O5EZCjlzK6q2LXMrjIUFno
-         tSzg==
-X-Gm-Message-State: AO0yUKWPTq2tw8SJw5K4i9ejX4uj0VOr8RGVVuAXfIkuGcFzETjwXF4B
-        Svxg/BAmwo7v+tSJ3fud62w=
-X-Google-Smtp-Source: AK7set8m5admbPwz4sasitoVVR4miMIKzg4X7vK3ORG1mDwTWn0RYkMMpJR4KaFUvGXHSI58z1ReRw==
-X-Received: by 2002:a05:6870:7014:b0:15b:b523:3299 with SMTP id u20-20020a056870701400b0015bb5233299mr3432682oae.28.1675039155910;
-        Sun, 29 Jan 2023 16:39:15 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x8-20020a056870e38800b00144e18d8525sm4608589oad.25.2023.01.29.16.39.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 16:39:15 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 29 Jan 2023 16:39:13 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 3/9] Documentation: hwmon: correct spelling
-Message-ID: <20230130003913.GA384090@roeck-us.net>
-References: <20230129231053.20863-1-rdunlap@infradead.org>
- <20230129231053.20863-4-rdunlap@infradead.org>
+        Mon, 30 Jan 2023 08:00:26 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DE234304
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Jan 2023 05:00:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675083605; x=1706619605;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xb8qYDm+wYfa8X+YIL0yvSaKLYWlW87iKjqMp+guw68=;
+  b=Z6XqVxrJPJJWR7h1I4x5lyHNhobtcKskBJy+LCHtncJvUsR9/CRQ4EBV
+   zAUSWnlPHj//6cnYMCt6Tzirq5TkfAmdN0xdN/ABFgeJB4aRgcMDqAgg7
+   nCdC2JXCz/swkOBHJeTPoMfcNQtbzTcmaMGf5d24UxVh8ZOneSqZyGd3g
+   5CDCtvObpZxWbFw+2K/LRPxafDv7fsxvokvfiAlI+zVffroG5HxgYdSr1
+   5KhhH/mL0/+XbcP1P2bb26AYCp+VBJSP/DCkg6xLmahXXWv7Lycnuafkf
+   8NPSyDcy7bDl+tmSZFiqwUOHvVGIaRz63Cjoje7CqSY5rzCYNJIH73tbl
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="329662480"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="329662480"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 05:00:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="752812434"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="752812434"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 Jan 2023 05:00:03 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pMTlS-0003dG-1O;
+        Mon, 30 Jan 2023 13:00:02 +0000
+Date:   Mon, 30 Jan 2023 20:59:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 054d0c889cb50ecec17d67aa2ea11ccea42b71a8
+Message-ID: <63d7bf47.xMhOUFTH9/g/CON8%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230129231053.20863-4-rdunlap@infradead.org>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 03:10:47PM -0800, Randy Dunlap wrote:
-> Correct spelling problems for Documentation/hwmon/ as reported
-> by codespell.
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 054d0c889cb50ecec17d67aa2ea11ccea42b71a8  Documentation: hwmon: correct spelling
 
-Applied to hwmon-next.
+elapsed time: 721m
 
-Thanks,
-Guenter
+configs tested: 80
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+x86_64                            allnoconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20230130
+i386                 randconfig-a001-20230130
+i386                 randconfig-a004-20230130
+um                             i386_defconfig
+x86_64                              defconfig
+i386                 randconfig-a003-20230130
+um                           x86_64_defconfig
+x86_64               randconfig-a001-20230130
+x86_64                           allyesconfig
+i386                 randconfig-a005-20230130
+i386                 randconfig-a006-20230130
+x86_64                               rhel-8.3
+arc                                 defconfig
+x86_64               randconfig-a003-20230130
+alpha                               defconfig
+s390                             allyesconfig
+s390                                defconfig
+x86_64               randconfig-a004-20230130
+x86_64               randconfig-a002-20230130
+s390                             allmodconfig
+arm                                 defconfig
+ia64                             allmodconfig
+x86_64                    rhel-8.3-kselftests
+arc                  randconfig-r043-20230129
+m68k                             allmodconfig
+x86_64               randconfig-a006-20230130
+arc                              allyesconfig
+sh                               allmodconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+x86_64                          rhel-8.3-func
+x86_64               randconfig-a005-20230130
+i386                                defconfig
+x86_64                           rhel-8.3-syz
+arm                  randconfig-r046-20230129
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+mips                             allyesconfig
+x86_64                         rhel-8.3-kunit
+powerpc                          allmodconfig
+arm                  randconfig-r046-20230130
+arm64                            allyesconfig
+arc                  randconfig-r043-20230130
+arm                              allyesconfig
+i386                             allyesconfig
+powerpc                mpc7448_hpc2_defconfig
+xtensa                              defconfig
+sparc                            alldefconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+powerpc                     ep8248e_defconfig
+arm                         axm55xx_defconfig
+sh                           se7722_defconfig
+xtensa                  nommu_kc705_defconfig
+powerpc                     asp8347_defconfig
+arm                        oxnas_v6_defconfig
+
+clang tested configs:
+i386                 randconfig-a013-20230130
+i386                 randconfig-a011-20230130
+i386                 randconfig-a012-20230130
+i386                 randconfig-a014-20230130
+i386                 randconfig-a015-20230130
+i386                 randconfig-a016-20230130
+s390                 randconfig-r044-20230130
+x86_64                          rhel-8.3-rust
+hexagon              randconfig-r041-20230129
+x86_64               randconfig-a014-20230130
+riscv                randconfig-r042-20230129
+x86_64               randconfig-a012-20230130
+x86_64               randconfig-a015-20230130
+riscv                randconfig-r042-20230130
+hexagon              randconfig-r045-20230130
+x86_64               randconfig-a013-20230130
+x86_64               randconfig-a016-20230130
+hexagon              randconfig-r041-20230130
+x86_64               randconfig-a011-20230130
+hexagon              randconfig-r045-20230129
+s390                 randconfig-r044-20230129
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
