@@ -2,694 +2,143 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 981EFC61DA4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Jan 2023 15:31:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD56EC636D4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Jan 2023 18:42:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237967AbjA3Pbi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 Jan 2023 10:31:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
+        id S235545AbjA3Smn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 Jan 2023 13:42:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238215AbjA3Pbh (ORCPT
+        with ESMTP id S236120AbjA3Smk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:31:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83BA3BD91
-        for <linux-hwmon@vger.kernel.org>; Mon, 30 Jan 2023 07:30:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675092647;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7W1MuWAjR0OB0X+7FKdl8QDF939WLO0Ry5A9KV0FdU4=;
-        b=DYhSt92TOGtSwHXiF2Q1a/22BLJOcuVnA8PMjnXuONyCCJWLl5DeqKPnNOhiPXJFVB1LyI
-        dr3H4EsTDukExjy3RAlTBEnSpX8MsnYx0yF7ibqhEQMT8ILrOXCsC/aBUP5VWXIhW8IQ5M
-        xL1W3KVMwgsrsBz8R2IYZPbcfmweKxA=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-230-H7DYLAaCNQeUOUWVdCEwtg-1; Mon, 30 Jan 2023 10:30:46 -0500
-X-MC-Unique: H7DYLAaCNQeUOUWVdCEwtg-1
-Received: by mail-ed1-f70.google.com with SMTP id z18-20020a05640235d200b0049d84165065so8471283edc.18
-        for <linux-hwmon@vger.kernel.org>; Mon, 30 Jan 2023 07:30:46 -0800 (PST)
+        Mon, 30 Jan 2023 13:42:40 -0500
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DBA2138
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Jan 2023 10:42:39 -0800 (PST)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-163ba2b7c38so4426275fac.4
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Jan 2023 10:42:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=mwQ90WN7hGutRn+8+JfFDyi61llfAAzsJ/3LE5BLw94=;
+        b=bsSiytm2hBdFkLEltokTt03Ye/ktZ5j4kRFK/yADQqkw/5zcy9JfzlVlcZrXOSH4yd
+         ylebtMxCW7CG9r8GGQkRzNxkuT1Itv8XB4Sc9ahvoLvuO/Fy0r17rV6RsXap05jTXctu
+         kUaBIGX/KsB43rHc3/j87O3v3kn0Q/J8CBAA6QLYVmmrDV5xgYVgKHEYE6+LKo7He7UM
+         aWO1OfW0hVJFHpJW9i5rjXTakPWSARHKaUNH1mhLoRJ7ef1cUQ7TgVAxjNyLGEkHybpD
+         k4+m7VHBhx6r1tr8WEvfDph8EjkAgMDxkEug9DSXSlLZbzO5ityPOvAhZAGE7zygPWO0
+         zxrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7W1MuWAjR0OB0X+7FKdl8QDF939WLO0Ry5A9KV0FdU4=;
-        b=xgOGrnE2EC6XODf7Rbl24f2DiU1T4JEWILFXusWBL6tOkcpSMy+gSXQmOGrtNyD0rj
-         SbqdpFA8vRSR6RnzxP55MbbxeeQvAkHScI65YGcncqMWn7gwOBiUBe1+e0SIO5zaBcLA
-         cpOAnhneQ+FGsWta9IabXj0ShzQMfBFPzSag9f1JvIGJE001vTmclj++sajk0dB0Fqgm
-         7IXwwm1bsCHtsytE3vXdEN4huMQbxImgMsg77IaE37fcq4wkjMdodUnQgboCykhyPmEY
-         675L8/CuBrh1s9lo5dBNR/C36iUUFO8/0Q69zTwne3/FkSg/4w67GoLyOPwX4XEfADdZ
-         7ydA==
-X-Gm-Message-State: AFqh2krzeuIeCXPIVSxbj4ZzUOqpiUGixhMcSmmdRw5MO5hMIsfj650v
-        M4Iej8RhhYojmAwTkUqtgHF1P6wwmZoWYw/FUq9kSv5znDky0cwtjVmznvvoZecJJtKnRfimINO
-        MrTAL8HeFu1n0yM0FRZyEvP0=
-X-Received: by 2002:a05:6402:528b:b0:49e:28c1:9375 with SMTP id en11-20020a056402528b00b0049e28c19375mr53987197edb.10.1675092645230;
-        Mon, 30 Jan 2023 07:30:45 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXukQme/Sec8I/w0YypnYiTaMAM1stJuuJK4kkO0erwe5I8WKCX+den1Mk9JE9Hwn9WzKXagkw==
-X-Received: by 2002:a05:6402:528b:b0:49e:28c1:9375 with SMTP id en11-20020a056402528b00b0049e28c19375mr53987170edb.10.1675092644929;
-        Mon, 30 Jan 2023 07:30:44 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id n3-20020a05640204c300b004a23609fab4sm2792267edw.70.2023.01.30.07.30.44
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mwQ90WN7hGutRn+8+JfFDyi61llfAAzsJ/3LE5BLw94=;
+        b=qdoHT9MbSbe+S8jquSdzrTFBKpZeb/omoyPO7mMw0RW35hUGJWwkgqjZF4EvQfojLG
+         DfZC0AgGMkCeD+5qicx6WMKkZ11iMvXXiFNZ1x09vCrc9I37saXmLpkmYprAP/00DDv3
+         YnJinYrZx9ORWXSJz94C8vEZ56a56JY4h4GM12KgCxmImWfa56ikhvkcWSk6XR6Wp8HS
+         CV8AwjBkqxVudVfGfx6+V/qRCec5arunK/bZVBIOUDQMd0Oai6EQS9kPCz/6uIDHWgaC
+         AqSmNGF29iOmfxB7W7lR5+wHooVgaxfkPEOpyb5x6HKvKY3mfksl3MQomZc7p3oRACPS
+         4K1g==
+X-Gm-Message-State: AO0yUKUWiqITE+w4Nloc0zmHsQiku0E85BrIBlrBFYIircSNIvG+g0uL
+        zKuSD6KIf3nnovCRlrDxgTIXsNrrOmg=
+X-Google-Smtp-Source: AK7set8iJRA0z5JnUdIEcYjwozGuzskI8xf8404ICs5m+MLPYqQqvHbHyigHMQJtUvp7eeflmogmpQ==
+X-Received: by 2002:a05:6870:470e:b0:163:c9c1:3f4c with SMTP id b14-20020a056870470e00b00163c9c13f4cmr1449322oaq.45.1675104158653;
+        Mon, 30 Jan 2023 10:42:38 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g5-20020a05687054c500b0014866eb34cesm5482671oan.48.2023.01.30.10.42.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 07:30:44 -0800 (PST)
-Message-ID: <aaf3e646-b117-3ddf-444e-fabc12d76543@redhat.com>
-Date:   Mon, 30 Jan 2023 16:30:43 +0100
+        Mon, 30 Jan 2023 10:42:38 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <1d51e281-15a9-7997-acbd-6ea1518ef596@roeck-us.net>
+Date:   Mon, 30 Jan 2023 10:42:36 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 5/5] platform/x86: dell-ddv: Add hwmon support
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 1/7] hwmon: (it87) Allow disabling exiting of
+ configuration mode
 Content-Language: en-US
-To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net,
-        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230126194021.381092-1-W_Armin@gmx.de>
- <20230126194021.381092-6-W_Armin@gmx.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230126194021.381092-6-W_Armin@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Frank Crawford <frank@crawford.emu.id.au>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <20230128060308.1549707-1-frank@crawford.emu.id.au>
+ <20230128060308.1549707-2-frank@crawford.emu.id.au>
+ <20230129205647.GA1951466@roeck-us.net>
+In-Reply-To: <20230129205647.GA1951466@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Armin,
-
-On 1/26/23 20:40, Armin Wolf wrote:
-> Thanks to bugreport 216655 on bugzilla triggered by the
-> dell-smm-hwmon driver, the contents of the sensor buffers
-> could be almost completely decoded.
-> Add an hwmon interface for exposing the fan and thermal
-> sensor values. The debugfs interface remains in place to
-> aid in reverse-engineering of unknown sensor types
-> and the thermal buffer.
+On 1/29/23 12:56, Guenter Roeck wrote:
+> On Sat, Jan 28, 2023 at 05:03:02PM +1100, Frank Crawford wrote:
+>> Disabling configuration mode on some chips can result in system
+>> hang-ups and access failures to the Super-IO chip at the
+>> second SIO address. Never exit configuration mode on these
+>> chips to avoid the problem.
+>>
+>> This patch should be applied in conjunction with a previous one to
+>> initialise the second chip for certain mother boards.
+>>
+>> Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
+>> ---
+>>
+>> v3:
+>>   * Correct possible uninitialised pointer issue.
+>>
+>> v2:
+>>   * Convert to use feature flag and related macros rather than a separate
+>>     field, as suggested in review.
+>>   * Reverse sense of flag in superio_exit to simplify feature macro.
+>>
+>> ---
+>>   drivers/hwmon/it87.c | 26 ++++++++++++++++++--------
+>>   1 file changed, 18 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+>> index a8a6a0ffee82..923a9563be92 100644
+>> --- a/drivers/hwmon/it87.c
+>> +++ b/drivers/hwmon/it87.c
+>> @@ -128,10 +128,12 @@ static inline int superio_enter(int ioreg)
+>>   	return 0;
+>>   }
+>>   
+>> -static inline void superio_exit(int ioreg)
+>> +static inline void superio_exit(int ioreg, bool noexit)
+>>   {
+>> -	outb(0x02, ioreg);
+>> -	outb(0x02, ioreg + 1);
+>> +	if (!noexit) {
+>> +		outb(0x02, ioreg);
+>> +		outb(0x02, ioreg + 1);
+>> +	}
+>>   	release_region(ioreg, 2);
+>>   }
+>>   
+>> @@ -300,6 +302,13 @@ struct it87_devices {
+>>   #define FEAT_PWM_FREQ2		BIT(16)	/* Separate pwm freq 2 */
+>>   #define FEAT_SIX_TEMP		BIT(17)	/* Up to 6 temp sensors */
+>>   #define FEAT_VIN3_5V		BIT(18)	/* VIN3 connected to +5V */
+>> +/*
+>> + * Disabling configuration mode on some chips can result in system
+>> + * hang-ups and access failures to the Super-IO chip at the
+>> + * second SIO address. Never exit configuration mode on these
+>> + * chips to avoid the problem.
+>> + */
+>> +#define FEAT_CONF_NOEXIT	BIT(28)	/* Chip should not exit conf mode */
 > 
-> Tested-by: Antonín Skala <skala.antonin@gmail.com>
-> Tested-by: Gustavo Walbon <gustavowalbon@gmail.com>
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> ---
->  drivers/platform/x86/dell/Kconfig        |   1 +
->  drivers/platform/x86/dell/dell-wmi-ddv.c | 435 ++++++++++++++++++++++-
->  2 files changed, 435 insertions(+), 1 deletion(-)
+> Feature bits are supposed to be numbered sequentially, not randomly
+> assigned. Please use bit 19.
 > 
-> diff --git a/drivers/platform/x86/dell/Kconfig b/drivers/platform/x86/dell/Kconfig
-> index d319de8f2132..21a74b63d9b1 100644
-> --- a/drivers/platform/x86/dell/Kconfig
-> +++ b/drivers/platform/x86/dell/Kconfig
-> @@ -194,6 +194,7 @@ config DELL_WMI_DDV
->  	default m
->  	depends on ACPI_BATTERY
->  	depends on ACPI_WMI
-> +	depends on HWMON
->  	help
->  	  This option adds support for WMI-based sensors like
->  	  battery temperature sensors found on some Dell notebooks.
-> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> index 9695bf493ea6..5b30bb85199e 100644
-> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
-> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> @@ -13,6 +13,7 @@
->  #include <linux/dev_printk.h>
->  #include <linux/errno.h>
->  #include <linux/kernel.h>
-> +#include <linux/hwmon.h>
->  #include <linux/kstrtox.h>
->  #include <linux/math.h>
->  #include <linux/module.h>
-> @@ -21,10 +22,13 @@
->  #include <linux/printk.h>
->  #include <linux/seq_file.h>
->  #include <linux/sysfs.h>
-> +#include <linux/types.h>
->  #include <linux/wmi.h>
-> 
->  #include <acpi/battery.h>
-> 
-> +#include <asm/unaligned.h>
-> +
->  #define DRIVER_NAME	"dell-wmi-ddv"
-> 
->  #define DELL_DDV_SUPPORTED_VERSION_MIN	2
-> @@ -63,6 +67,29 @@ enum dell_ddv_method {
->  	DELL_DDV_THERMAL_SENSOR_INFORMATION	= 0x22,
->  };
-> 
-> +struct fan_sensor_entry {
-> +	u8 type;
-> +	__le16 rpm;
-> +} __packed;
-> +
-> +struct thermal_sensor_entry {
-> +	u8 type;
-> +	s8 now;
-> +	s8 min;
-> +	s8 max;
-> +	u8 unknown;
-> +} __packed;
-> +
-> +struct combined_channel_info {
-> +	struct hwmon_channel_info info;
-> +	u32 config[];
-> +};
-> +
-> +struct combined_chip_info {
-> +	struct hwmon_chip_info chip;
-> +	const struct hwmon_channel_info *info[];
-> +};
-> +
->  struct dell_wmi_ddv_data {
->  	struct acpi_battery_hook hook;
->  	struct device_attribute temp_attr;
-> @@ -70,6 +97,24 @@ struct dell_wmi_ddv_data {
->  	struct wmi_device *wdev;
->  };
-> 
-> +static const char * const fan_labels[] = {
-> +	"CPU Fan",
-> +	"Chassis Motherboard Fan",
-> +	"Video Fan",
-> +	"Power Supply Fan",
-> +	"Chipset Fan",
-> +	"Memory Fan",
-> +	"PCI Fan",
-> +	"HDD Fan",
-> +};
-> +
-> +static const char * const fan_dock_labels[] = {
-> +	"Docking Chassis/Motherboard Fan",
-> +	"Docking Video Fan",
-> +	"Docking Power Supply Fan",
-> +	"Docking Chipset Fan",
-> +};
-> +
->  static int dell_wmi_ddv_query_type(struct wmi_device *wdev, enum dell_ddv_method method, u32 arg,
->  				   union acpi_object **result, acpi_object_type type)
->  {
-> @@ -171,6 +216,386 @@ static int dell_wmi_ddv_query_string(struct wmi_device *wdev, enum dell_ddv_meth
->  	return dell_wmi_ddv_query_type(wdev, method, arg, result, ACPI_TYPE_STRING);
->  }
-> 
-> +static int dell_wmi_ddv_query_sensors(struct wmi_device *wdev, enum dell_ddv_method method,
-> +				      size_t entry_size, union acpi_object **result, u64 *count)
-> +{
-> +	union acpi_object *obj;
-> +	u64 buffer_size;
-> +	u8 *buffer;
-> +	int ret;
-> +
-> +	ret = dell_wmi_ddv_query_buffer(wdev, method, 0, &obj);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	buffer_size = obj->package.elements[0].integer.value;
-> +	buffer = obj->package.elements[1].buffer.pointer;
-> +	if (buffer_size % entry_size != 1 || buffer[buffer_size - 1] != 0xff) {
-> +		kfree(obj);
-> +
-> +		return -ENOMSG;
-> +	}
-> +
-> +	*count = (buffer_size - 1) / entry_size;
-> +	*result = obj;
-> +
-> +	return 0;
-> +}
-> +
-> +static umode_t dell_wmi_ddv_is_visible(const void *drvdata, enum hwmon_sensor_types type, u32 attr,
-> +				       int channel)
-> +{
-> +	return 0444;
-> +}
-> +
-> +static int dell_wmi_ddv_fan_read_channel(struct dell_wmi_ddv_data *data, u32 attr, int channel,
-> +					 long *val)
-> +{
-> +	struct fan_sensor_entry *entry;
-> +	union acpi_object *obj;
-> +	u64 count;
-> +	int ret;
-> +
-> +	ret = dell_wmi_ddv_query_sensors(data->wdev, DELL_DDV_FAN_SENSOR_INFORMATION,
-> +					 sizeof(*entry), &obj, &count);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	entry = (struct fan_sensor_entry *)obj->package.elements[1].buffer.pointer;
-> +	if (count > channel) {
-> +		switch (attr) {
-> +		case hwmon_fan_input:
-> +			*val = get_unaligned_le16(&entry[channel].rpm);
-> +
-> +			break;
-> +		default:
-> +			ret = -EOPNOTSUPP;
-> +		}
-> +	} else {
-> +		ret = -ENXIO;
-> +	}
-> +
-> +	kfree(obj);
-> +
-> +	return ret;
-> +}
-> +
-> +static int dell_wmi_ddv_temp_read_channel(struct dell_wmi_ddv_data *data, u32 attr, int channel,
-> +					  long *val)
-> +{
-> +	struct thermal_sensor_entry *entry;
-> +	union acpi_object *obj;
-> +	u64 count;
-> +	int ret;
-> +
-> +	ret = dell_wmi_ddv_query_sensors(data->wdev, DELL_DDV_THERMAL_SENSOR_INFORMATION,
-> +					 sizeof(*entry), &obj, &count);
 
-Previously we discussed how expensive some of these calls are. I assume that this
-call also is not really "free" to make. Even if it does a fast read from some hw
-buffer it still needs to go through the ACPI interpreter and then actually read
-from the hw.
+Given that the commit window is coming up, and since I don't have
+other issues with your series, I am inclined to apply it with the
+bit changed. Please let me know in the next day or two if this is
+acceptable for you. If not, the series will have to wait until v6.4.
 
-It seems that there are just 2 sort of calls made to dell_wmi_ddv_query_sensors:
-
-1. DELL_DDV_THERMAL_SENSOR_INFORMATION
-2. DELL_DDV_FAN_SENSOR_INFORMATION
-
-Userspace apps using hwmon will typically have some periodically refreshing
-display and when the refresh timer expires they will read all hwmon
-attributes in one go.
-
-To avoid this causing unnecessary overhead many hwmon drivers use a driver
-based cache and they then refresh the cache if the cache is older then 30 seconds
-when userspace does its next read of an attribute.
-
-See e.g. drivers/hwmon/f71882fg.c and the use of the update_lock, valid and
-last_updated members of struct f71882fg_data.
-
-Below I see that the return value of a single dell_wmi_ddv_query_sensors() call
-returns data for 3 different attributes * count-channels = 3, 6 or 9 read
-calls. So to me this sounds like it is worthwhile caching the result.
-
-You can just store a pointer to the returned ACPI-obj and free the old
-ACPI obj when it is time to refresh the cache, instead of immidiately
-free-ing the obj when the read function returns.
-
-You can use either separate last_updated timestamps for 
-DELL_DDV_THERMAL_SENSOR_INFORMATION + DELL_DDV_FAN_SENSOR_INFORMATION,
-or just update both at once when the cache is stale. Either way works for me.
-
-This way we gain a significant amount of efficiency wrt not doing the
-expensive WMI call multiple times for naught and we avoid userspace
-being able to "hammer" the underlying hw with repeated requests (userspace
-can still burn 100% CPU on one core of course).
-
-
-
-
-
-
-
-
-
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	entry = (struct thermal_sensor_entry *)obj->package.elements[1].buffer.pointer;
-> +	if (count > channel) {
-
-As Guenter already sorta said, please do error handling first,
-change this to something like this:
-
-	if (channel >= count) {
-		ret = -ENXIO;
-		goto out_free;
-	}
-
-
-And then reduce the indentation the switch case by 1 tab / level.
-
-Generally speaking we want the straight (no errors) path to be
-indentend by only 1 tab so that if you just read all the lines at
-that 1 tab indentation level you are actually reading the normal /
-no-errors code path.
-
-Also note that if you switch to a cache as suggested above,
-you no longer need the kfree() since that is now done in your
-cache-refresh helper.
-
-And then the error check changes to just:
-
-	if (channel >= data->thermal_sensor_count)
-		return -ENXIO;
-
-
-
-
-> +		switch (attr) {
-> +		case hwmon_temp_input:
-> +			*val = entry[channel].now * 1000;
-> +
-> +			break;
-> +		case hwmon_temp_min:
-> +			*val = entry[channel].min * 1000;
-> +
-> +			break;
-> +		case hwmon_temp_max:
-> +			*val = entry[channel].max * 1000;
-> +
-> +			break;
-> +		default:
-> +			ret = -EOPNOTSUPP;
-> +		}
-> +	} else {
-> +		ret = -ENXIO;
-> +	}
-> +
-> +	kfree(obj);
-> +
-> +	return ret;
-> +}
-> +
-> +static int dell_wmi_ddv_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +			     int channel, long *val)
-> +{
-> +	struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
-> +
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		return dell_wmi_ddv_fan_read_channel(data, attr, channel, val);
-> +	case hwmon_temp:
-> +		return dell_wmi_ddv_temp_read_channel(data, attr, channel, val);
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static int dell_wmi_ddv_fan_read_string(struct dell_wmi_ddv_data *data, int channel,
-> +					const char **str)
-> +{
-> +	struct fan_sensor_entry *entry;
-> +	union acpi_object *obj;
-> +	u64 count;
-> +	u8 type;
-> +	int ret;
-> +
-> +	ret = dell_wmi_ddv_query_sensors(data->wdev, DELL_DDV_FAN_SENSOR_INFORMATION,
-> +					 sizeof(*entry), &obj, &count);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	entry = (struct fan_sensor_entry *)obj->package.elements[1].buffer.pointer;
-> +	if (count > channel) {
-> +		type = entry[channel].type;
-> +
-> +		switch (type) {
-> +		case 0x00 ... 0x07:
-> +			*str = fan_labels[type];
-> +
-> +			break;
-> +		case 0x11 ... 0x14:
-> +			*str = fan_dock_labels[type - 0x11];
-> +
-> +			break;
-> +		default:
-> +			*str = "Unknown Fan";
-> +		}
-> +	} else {
-> +		ret = -ENXIO;
-> +	}
-> +
-> +	kfree(obj);
-> +
-> +	return ret;
-> +}
-> +
-> +static int dell_wmi_ddv_temp_read_string(struct dell_wmi_ddv_data *data, int channel,
-> +					 const char **str)
-> +{
-> +	struct thermal_sensor_entry *entry;
-> +	union acpi_object *obj;
-> +	u64 count;
-> +	int ret;
-> +
-> +	ret = dell_wmi_ddv_query_sensors(data->wdev, DELL_DDV_THERMAL_SENSOR_INFORMATION,
-> +					 sizeof(*entry), &obj, &count);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	entry = (struct thermal_sensor_entry *)obj->package.elements[1].buffer.pointer;
-> +	if (count > channel) {
-> +		switch (entry[channel].type) {
-> +		case 0x00:
-> +			*str = "CPU";
-> +
-> +			break;
-> +		case 0x11:
-> +			*str = "Video";
-> +
-> +			break;
-> +		case 0x22:
-> +			*str = "Memory"; // sometimes called DIMM
-> +
-> +			break;
-> +		case 0x33:
-> +			*str = "Other";
-> +
-> +			break;
-> +		case 0x44:
-> +			*str = "Ambient"; // sometimes called SKIN
-> +
-> +			break;
-> +		case 0x52:
-> +			*str = "SODIMM";
-> +
-> +			break;
-> +		case 0x55:
-> +			*str = "HDD";
-> +
-> +			break;
-> +		case 0x62:
-> +			*str = "SODIMM 2";
-> +
-> +			break;
-> +		case 0x73:
-> +			*str = "NB";
-> +
-> +			break;
-> +		case 0x83:
-> +			*str = "Charger";
-> +
-> +			break;
-> +		case 0xbb:
-> +			*str = "Memory 3";
-> +
-> +			break;
-> +		default:
-> +			*str = "Unknown";
-> +		}
-> +	} else {
-> +		ret = -ENXIO;
-> +	}
-> +
-> +	kfree(obj);
-> +
-> +	return ret;
-> +}
-> +
-> +static int dell_wmi_ddv_read_string(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +				    int channel, const char **str)
-> +{
-> +	struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
-> +
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_label:
-> +			return dell_wmi_ddv_fan_read_string(data, channel, str);
-> +		default:
-> +			break;
-> +		}
-> +		break;
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_label:
-> +			return dell_wmi_ddv_temp_read_string(data, channel, str);
-> +		default:
-> +			break;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static const struct hwmon_ops dell_wmi_ddv_ops = {
-> +	.is_visible = dell_wmi_ddv_is_visible,
-> +	.read = dell_wmi_ddv_read,
-> +	.read_string = dell_wmi_ddv_read_string,
-> +};
-> +
-> +static struct hwmon_channel_info *dell_wmi_ddv_channel_create(struct device *dev, u64 count,
-> +							      enum hwmon_sensor_types type,
-> +							      u32 config)
-> +{
-> +	struct combined_channel_info *cinfo;
-> +	int i;
-> +
-> +	cinfo = devm_kzalloc(dev, struct_size(cinfo, config, count + 1), GFP_KERNEL);
-> +	if (!cinfo)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	cinfo->info.type = type;
-> +	cinfo->info.config = cinfo->config;
-> +
-> +	for (i = 0; i < count; i++)
-> +		cinfo->config[i] = config;
-> +
-> +	return &cinfo->info;
-> +}
-> +
-> +static struct hwmon_channel_info *dell_wmi_ddv_channel_init(struct wmi_device *wdev,
-> +							    enum dell_ddv_method method,
-> +							    size_t entry_size,
-> +							    enum hwmon_sensor_types type,
-> +							    u32 config)
-> +{
-> +	union acpi_object *obj;
-> +	u64 count;
-> +	int ret;
-> +
-> +	ret = dell_wmi_ddv_query_sensors(wdev, method, entry_size, &obj, &count);
-> +	if (ret < 0)
-> +		return ERR_PTR(ret);
-> +
-> +	kfree(obj);
-> +
-> +	if (!count)
-> +		return ERR_PTR(-ENODEV);
-> +
-> +	return dell_wmi_ddv_channel_create(&wdev->dev, count, type, config);
-> +}
-> +
-> +static int dell_wmi_ddv_hwmon_add(struct dell_wmi_ddv_data *data)
-> +{
-> +	struct wmi_device *wdev = data->wdev;
-> +	struct combined_chip_info *cinfo;
-> +	struct device *hdev;
-> +	int index = 0;
-> +	int ret;
-> +
-> +	if (!devres_open_group(&wdev->dev, dell_wmi_ddv_hwmon_add, GFP_KERNEL))
-> +		return -ENOMEM;
-> +
-> +	cinfo = devm_kzalloc(&wdev->dev, struct_size(cinfo, info, 4), GFP_KERNEL);
-> +	if (!cinfo) {
-> +		ret = -ENOMEM;
-> +
-> +		goto err_release;
-> +	}
-> +
-> +	cinfo->chip.ops = &dell_wmi_ddv_ops;
-> +	cinfo->chip.info = cinfo->info;
-> +
-> +	cinfo->info[index] = dell_wmi_ddv_channel_create(&wdev->dev, 1, hwmon_chip,
-> +							 HWMON_C_REGISTER_TZ);
-> +
-> +	if (IS_ERR(cinfo->info[index])) {
-> +		ret = PTR_ERR(cinfo->info[index]);
-> +
-> +		goto err_release;
-> +	}
-> +
-> +	index++;
-> +
-> +	cinfo->info[index] = dell_wmi_ddv_channel_init(wdev, DELL_DDV_FAN_SENSOR_INFORMATION,
-> +						       sizeof(struct fan_sensor_entry), hwmon_fan,
-> +						       (HWMON_F_INPUT | HWMON_F_LABEL));
-> +	if (!IS_ERR(cinfo->info[index]))
-> +		index++;
-> +
-> +	cinfo->info[index] = dell_wmi_ddv_channel_init(wdev, DELL_DDV_THERMAL_SENSOR_INFORMATION,
-> +						       sizeof(struct thermal_sensor_entry),
-> +						       hwmon_temp, (HWMON_T_INPUT | HWMON_T_MIN |
-> +						       HWMON_T_MAX | HWMON_T_LABEL));
-> +	if (!IS_ERR(cinfo->info[index]))
-> +		index++;
-> +
-> +	if (!index) {
-> +		ret = -ENODEV;
-> +
-> +		goto err_release;
-> +	}
-> +
-> +	cinfo->info[index] = NULL;
-> +
-> +	hdev = devm_hwmon_device_register_with_info(&wdev->dev, "dell_ddv", data, &cinfo->chip,
-> +						    NULL);
-> +	if (IS_ERR(hdev)) {
-> +		ret = PTR_ERR(hdev);
-> +
-> +		goto err_release;
-> +	}
-> +
-> +	devres_close_group(&wdev->dev, dell_wmi_ddv_hwmon_add);
-> +
-> +	return 0;
-> +
-> +err_release:
-> +	devres_release_group(&wdev->dev, dell_wmi_ddv_hwmon_add);
-> +
-> +	return ret;
-> +}
-> +
->  static int dell_wmi_ddv_battery_index(struct acpi_device *acpi_dev, u32 *index)
->  {
->  	const char *uid_str;
-> @@ -370,7 +795,15 @@ static int dell_wmi_ddv_probe(struct wmi_device *wdev, const void *context)
-> 
->  	dell_wmi_ddv_debugfs_init(wdev);
-> 
-> -	return dell_wmi_ddv_battery_add(data);
-> +	ret = dell_wmi_ddv_hwmon_add(data);
-> +	if (ret < 0)
-> +		dev_dbg(&wdev->dev, "Unable to register hwmon interface: %d\n", ret);
-
-I'm fine with not making either _add failing an error, but can we make this a dev_warn,
-dev_dbg is a bit too low of a log-level for something which is not supposed to happen.
-
-E.g. change this to:
-
-	ret = dell_wmi_ddv_hwmon_add(data);
-	if (ret && ret != -ENODEV)
-		dev_warn(&wdev->dev, "Unable to register hwmon interface: %d\n", ret);
-
-
-
-> +
-> +	ret = dell_wmi_ddv_battery_add(data);
-> +	if (ret < 0)
-> +		dev_dbg(&wdev->dev, "Unable to register acpi battery hook: %d\n", ret);
-
-And the same here.
-
-Regards,
-
-Hans
-
-
-> +
-> +	return 0;
->  }
-> 
->  static const struct wmi_device_id dell_wmi_ddv_id_table[] = {
-> --
-> 2.30.2
-> 
+Thanks,
+Guenter
 
