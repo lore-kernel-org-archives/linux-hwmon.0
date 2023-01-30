@@ -2,135 +2,85 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52140C05027
-	for <linux-hwmon@archiver.kernel.org>; Sun, 29 Jan 2023 23:51:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D126DC61D97
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Jan 2023 00:39:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjA2Xvk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 29 Jan 2023 18:51:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
+        id S230206AbjA3AjS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 29 Jan 2023 19:39:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjA2Xvj (ORCPT
+        with ESMTP id S229476AbjA3AjR (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 29 Jan 2023 18:51:39 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD7FFF32;
-        Sun, 29 Jan 2023 15:51:38 -0800 (PST)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 64034660086E;
-        Sun, 29 Jan 2023 23:51:36 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675036296;
-        bh=IIIAwVilRWbK/VxJ9R07BpYKGovKnA/g9pkFp6lqOE0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BqkFNT0Zs/lQ4ZAdZec7R7noK9RCNBkqilV/t1bQhOMZbIlDsCTR8QIJkJbNxvyOU
-         VbE7ue6VTg0M3DdOWcJ6aGjsAcjTr2+ZxqzGv8a4wgAiwvMHBZJQ6DDXAkuexFJSWl
-         X/R91K3+3QzQ9ulj8z1XnphRoMblYCn+zpF9EVSp+xN1/FLHdO8Hkm6XRWqdErQRuJ
-         XeOTeXAI9WSIaEqngDpgSjhUg3RwspINiAkv6i7zlzWrTopqAX91YHvKTxV3bw79iu
-         MRFOyiLlAzyqG/4UwvkFeNkVVuel8NH5rRpODeuULeaiH/bQDGOlXtMZ5C14IPTwFL
-         k7BwaWsFHnZdQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 44F4B1060A24; Mon, 30 Jan 2023 00:51:34 +0100 (CET)
-Date:   Mon, 30 Jan 2023 00:51:34 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Add missing
- (unevaluated|additional)Properties on child node schemas
-Message-ID: <20230129235134.bmlr33mmxkges22h@mercury.elektranox.org>
-References: <20230124230228.372305-1-robh@kernel.org>
+        Sun, 29 Jan 2023 19:39:17 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DD51CF41;
+        Sun, 29 Jan 2023 16:39:16 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1442977d77dso13255205fac.6;
+        Sun, 29 Jan 2023 16:39:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eQdDfBq+vMF/O7FM4LZuZL7r34CL6O59Wnl755Km6vU=;
+        b=l8ipMy4pGRnmFzWMy34EV5s6qCA0dnFvcV1WLPYwuDAQ+YddGB2zNSOgkvAXkoB7oO
+         9d2foK6XKFbc6GuRwa/zyw0na72IN6jphiv+6326y4Xqz8O+zqcKc2GQfaZIEwoXbySs
+         /7jIwYIcxFSAZ1SfEYlJid5m8TgqZebvd5EL+rBP1EMmqmpm11wYF9vMyPnf83WJ6hgt
+         MT2lBXCjNyTjer5or8HnMWmHhu1m/8WaezQNUzciD4MPwZPEtZruOWIroEXso48NAN3/
+         xmr/eBGIT51nD4iKCctsTk6+gzOOtfACyWv0GVQ0rFcuFJ9cYptmEGT/UfOwWQMDVarV
+         cL1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eQdDfBq+vMF/O7FM4LZuZL7r34CL6O59Wnl755Km6vU=;
+        b=0raitiX0cxhaERlnzuQ/ZSQBskdM/vR6qhE869tIaT9f2UuRxoaONWmoF4iM7lYiW/
+         Mf4qwU/ktKGS+zmyk0U0oueBD5PnZvI3or3/f+OjP69aZq4Ra35GOy5z49JpStu6kKNM
+         HmRs4xSOrRsRimmrp9dPTEHR/87Lbnq1VzRjasyDpvcce7HLj1ahRze3gDQqJmLXJHWU
+         QGUSrljfPvrFPb0xre09wuBBaV24uxxrwZwnndgXU/ieflSxagJtXE7GeFoQhRa2y8gc
+         a9gP6NWWmXbawg/KY7nmBbnSCGOKqX2iKsxv3aA47+noP4O5EZCjlzK6q2LXMrjIUFno
+         tSzg==
+X-Gm-Message-State: AO0yUKWPTq2tw8SJw5K4i9ejX4uj0VOr8RGVVuAXfIkuGcFzETjwXF4B
+        Svxg/BAmwo7v+tSJ3fud62w=
+X-Google-Smtp-Source: AK7set8m5admbPwz4sasitoVVR4miMIKzg4X7vK3ORG1mDwTWn0RYkMMpJR4KaFUvGXHSI58z1ReRw==
+X-Received: by 2002:a05:6870:7014:b0:15b:b523:3299 with SMTP id u20-20020a056870701400b0015bb5233299mr3432682oae.28.1675039155910;
+        Sun, 29 Jan 2023 16:39:15 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x8-20020a056870e38800b00144e18d8525sm4608589oad.25.2023.01.29.16.39.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 16:39:15 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 29 Jan 2023 16:39:13 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 3/9] Documentation: hwmon: correct spelling
+Message-ID: <20230130003913.GA384090@roeck-us.net>
+References: <20230129231053.20863-1-rdunlap@infradead.org>
+ <20230129231053.20863-4-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gicruapujo3hf3sv"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230124230228.372305-1-robh@kernel.org>
+In-Reply-To: <20230129231053.20863-4-rdunlap@infradead.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Sun, Jan 29, 2023 at 03:10:47PM -0800, Randy Dunlap wrote:
+> Correct spelling problems for Documentation/hwmon/ as reported
+> by codespell.
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
 
---gicruapujo3hf3sv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to hwmon-next.
 
-Hi,
-
-On Tue, Jan 24, 2023 at 05:02:28PM -0600, Rob Herring wrote:
-> Just as unevaluatedProperties or additionalProperties are required at
-> the top level of schemas, they should (and will) also be required for
-> child node schemas. That ensures only documented properties are
-> present.
->=20
-> Add unevaluatedProperties or additionalProperties as appropriate, and
-> then add any missing properties flagged by the addition.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> [...]
-> diff --git a/Documentation/devicetree/bindings/power/supply/ti,lp8727.yam=
-l b/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> index ce6fbdba8f6b..0542d4126cf5 100644
-> --- a/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> @@ -28,6 +28,7 @@ properties:
->  patternProperties:
->    '^(ac|usb)$':
->      type: object
-> +    additionalProperties: false
->      description: USB/AC charging parameters
->      properties:
->        charger-type:
-
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
--- Sebastian
-
---gicruapujo3hf3sv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPXBoUACgkQ2O7X88g7
-+ppJ7Q/9G9KiN17FVwYLLs8SnUjgqv/kYKrPVShDKerSSX6M0f7jyOVMBZz/QMpm
-Qzn0tl5laK3KtKo8zTuT/nHHQrwIyURSi8k3pEYUNc4KW8lTxLA4gLOCNjU+mA3r
-hFuUUvRcrmDnS9e+du/tWzYg8mSp0eucjWzURwTq+OA2qeUlEfH+1YAb+8LWHxWP
-O1pnLG9pGJMA1D3WDQzfXB0YfKpOkPYhxczD3VK0xqO77Z/PFANzD0Us/1XKtoFn
-NcsoPPSPBA/KpyjVWi94Rgy7zCXxKTeodChRqTVNUpms71aK75cO7z13ZOSYj3Kh
-5ZDpVLxWk2Yp5UujqxsMBYkJ31nQHS63CirMS84oPRR6WKbWzl9Qavl9VdPLMDe5
-9lwmcjlHoe0MSwwwuBDuwJRuO2Yr6KcOYvepEbv0/aes6hCB0e4IGq716JG2clLQ
-ZDVV5R3dmZk3KR3Ctu5twKz22MXyzqmoemtciqIsHkrLePBXwK6ylrLJfadUpgc1
-9hvsiNNTMntVlLI3gIQvsqw3W89s8UmTQAV02ykLZ19yAXhSQW34aslkoG204Dbk
-JRW+Mp6cXkXwNoMyqq1rCt4yFIG3ys3ELjFNGRX4we4+XJ7ZVU6agwxNMbyrFuUt
-UKXHATWoGucDR6hd83W0A7eREcm/GZzUnBKCAMTu4FUu1UBEOqM=
-=p8Fr
------END PGP SIGNATURE-----
-
---gicruapujo3hf3sv--
+Thanks,
+Guenter
