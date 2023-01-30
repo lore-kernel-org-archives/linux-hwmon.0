@@ -2,157 +2,145 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73C18C54EAA
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Jan 2023 13:00:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63B0EC54EAA
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Jan 2023 15:06:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236724AbjA3NA1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 Jan 2023 08:00:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
+        id S237760AbjA3PGp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 Jan 2023 10:06:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235504AbjA3NA0 (ORCPT
+        with ESMTP id S237769AbjA3PGn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Jan 2023 08:00:26 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DE234304
-        for <linux-hwmon@vger.kernel.org>; Mon, 30 Jan 2023 05:00:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675083605; x=1706619605;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xb8qYDm+wYfa8X+YIL0yvSaKLYWlW87iKjqMp+guw68=;
-  b=Z6XqVxrJPJJWR7h1I4x5lyHNhobtcKskBJy+LCHtncJvUsR9/CRQ4EBV
-   zAUSWnlPHj//6cnYMCt6Tzirq5TkfAmdN0xdN/ABFgeJB4aRgcMDqAgg7
-   nCdC2JXCz/swkOBHJeTPoMfcNQtbzTcmaMGf5d24UxVh8ZOneSqZyGd3g
-   5CDCtvObpZxWbFw+2K/LRPxafDv7fsxvokvfiAlI+zVffroG5HxgYdSr1
-   5KhhH/mL0/+XbcP1P2bb26AYCp+VBJSP/DCkg6xLmahXXWv7Lycnuafkf
-   8NPSyDcy7bDl+tmSZFiqwUOHvVGIaRz63Cjoje7CqSY5rzCYNJIH73tbl
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="329662480"
-X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
-   d="scan'208";a="329662480"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 05:00:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="752812434"
-X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
-   d="scan'208";a="752812434"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 30 Jan 2023 05:00:03 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pMTlS-0003dG-1O;
-        Mon, 30 Jan 2023 13:00:02 +0000
-Date:   Mon, 30 Jan 2023 20:59:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 054d0c889cb50ecec17d67aa2ea11ccea42b71a8
-Message-ID: <63d7bf47.xMhOUFTH9/g/CON8%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 30 Jan 2023 10:06:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003081DBA4
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Jan 2023 07:05:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675091152;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yUM0dPONsUdhNpTsUP0aFbzs6vKtU/sYkU05mhf9k4M=;
+        b=FBTHPWYUI9M2pxGGSEDBKN6pCU0yo/dkRXtvBAhzWWKj0tXYk/jk5Mzr7yDYba3GbDPg7h
+        IeRCTaYPf36TIsoZVy/W7CfeyCmd+BUzaa6VD5l/K/W2++VgLKhXJa2e3lYn8YAAK+2Xpz
+        Tf+C7CxVZjsLvBUao5JdvCZhTYERaIs=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-14-SV3ahWepM6acbPLTDVcpyA-1; Mon, 30 Jan 2023 10:05:44 -0500
+X-MC-Unique: SV3ahWepM6acbPLTDVcpyA-1
+Received: by mail-ej1-f69.google.com with SMTP id he34-20020a1709073da200b00887ced84328so2184007ejc.10
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Jan 2023 07:05:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yUM0dPONsUdhNpTsUP0aFbzs6vKtU/sYkU05mhf9k4M=;
+        b=ghzRpQ6P20FBjInOPMEM3IpEyfdmlnNtn6S3oGsije915/N7QksrjglXWE7f1yh3zd
+         EKwazB6X2jTpudLpmkhJIMBD9wvNPDltxdOYg8Pbe1faHFrCNdJUj/6OGZ5JsNBo5zqs
+         lYZUMeXyCVcuQpFoFXTUdfpqQxmvz32UMkU9iFGeMMKkoXKOaQUIdid5eUD5joxJynvr
+         za2shKVnhgBQ+ltg/PZ6mgBzWOdyIYJDM9RkR/wGHRvk5DP495nd9n0EHjCdfM8CyXpO
+         8e8juHHG4nkYKxY/kNiYvuK6s2NmE7O4X6XXJ58sVa4jC59nH/NdLMlFI6dLLJaglpcm
+         tnHQ==
+X-Gm-Message-State: AFqh2koSa28Esnx9hGGHXgka+Lai27di9xu65w5uvvgKDB4d+C1VWbSv
+        PvItc6PL5ZqERpUcLNqBe5AvnLxjlokWnjjpOs0YGZ7Cwz+8Ae241uPk4kmDXdmoDlwyecFWd9J
+        hb/po+fe5IzcXYwMHnQNwso0=
+X-Received: by 2002:a05:6402:28cb:b0:49e:db43:1722 with SMTP id ef11-20020a05640228cb00b0049edb431722mr38656373edb.18.1675091143708;
+        Mon, 30 Jan 2023 07:05:43 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuQOsjZdhW/i+bNK1dRKHsjjmyb26SL93PMVoyqdZSzL8SNaRBxQ88jkzC8E8k04Wif130wzw==
+X-Received: by 2002:a05:6402:28cb:b0:49e:db43:1722 with SMTP id ef11-20020a05640228cb00b0049edb431722mr38656350edb.18.1675091143523;
+        Mon, 30 Jan 2023 07:05:43 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id ec2-20020a0564020d4200b004a21d03155bsm4346533edb.88.2023.01.30.07.05.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 07:05:42 -0800 (PST)
+Message-ID: <c7f18127-6be2-87b4-d462-af312cc68032@redhat.com>
+Date:   Mon, 30 Jan 2023 16:05:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/5] platform/x86: dell-ddv: Add support for interface
+ version 3
+Content-Language: en-US
+To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230126194021.381092-1-W_Armin@gmx.de>
+ <20230126194021.381092-2-W_Armin@gmx.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230126194021.381092-2-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 054d0c889cb50ecec17d67aa2ea11ccea42b71a8  Documentation: hwmon: correct spelling
+Hi,
 
-elapsed time: 721m
+On 1/26/23 20:40, Armin Wolf wrote:
+> While trying to solve a bugreport on bugzilla, i learned that
+> some devices (for example the Dell XPS 17 9710) provide a more
+> recent DDV WMI interface (version 3).
+> Since the new interface version just adds an additional method,
+> no code changes are necessary apart from whitelisting the version.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-configs tested: 80
-configs skipped: 2
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
-gcc tested configs:
-x86_64                            allnoconfig
-powerpc                           allnoconfig
-i386                 randconfig-a002-20230130
-i386                 randconfig-a001-20230130
-i386                 randconfig-a004-20230130
-um                             i386_defconfig
-x86_64                              defconfig
-i386                 randconfig-a003-20230130
-um                           x86_64_defconfig
-x86_64               randconfig-a001-20230130
-x86_64                           allyesconfig
-i386                 randconfig-a005-20230130
-i386                 randconfig-a006-20230130
-x86_64                               rhel-8.3
-arc                                 defconfig
-x86_64               randconfig-a003-20230130
-alpha                               defconfig
-s390                             allyesconfig
-s390                                defconfig
-x86_64               randconfig-a004-20230130
-x86_64               randconfig-a002-20230130
-s390                             allmodconfig
-arm                                 defconfig
-ia64                             allmodconfig
-x86_64                    rhel-8.3-kselftests
-arc                  randconfig-r043-20230129
-m68k                             allmodconfig
-x86_64               randconfig-a006-20230130
-arc                              allyesconfig
-sh                               allmodconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-x86_64                          rhel-8.3-func
-x86_64               randconfig-a005-20230130
-i386                                defconfig
-x86_64                           rhel-8.3-syz
-arm                  randconfig-r046-20230129
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-bpf
-mips                             allyesconfig
-x86_64                         rhel-8.3-kunit
-powerpc                          allmodconfig
-arm                  randconfig-r046-20230130
-arm64                            allyesconfig
-arc                  randconfig-r043-20230130
-arm                              allyesconfig
-i386                             allyesconfig
-powerpc                mpc7448_hpc2_defconfig
-xtensa                              defconfig
-sparc                            alldefconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-powerpc                     ep8248e_defconfig
-arm                         axm55xx_defconfig
-sh                           se7722_defconfig
-xtensa                  nommu_kc705_defconfig
-powerpc                     asp8347_defconfig
-arm                        oxnas_v6_defconfig
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
 
-clang tested configs:
-i386                 randconfig-a013-20230130
-i386                 randconfig-a011-20230130
-i386                 randconfig-a012-20230130
-i386                 randconfig-a014-20230130
-i386                 randconfig-a015-20230130
-i386                 randconfig-a016-20230130
-s390                 randconfig-r044-20230130
-x86_64                          rhel-8.3-rust
-hexagon              randconfig-r041-20230129
-x86_64               randconfig-a014-20230130
-riscv                randconfig-r042-20230129
-x86_64               randconfig-a012-20230130
-x86_64               randconfig-a015-20230130
-riscv                randconfig-r042-20230130
-hexagon              randconfig-r045-20230130
-x86_64               randconfig-a013-20230130
-x86_64               randconfig-a016-20230130
-hexagon              randconfig-r041-20230130
-x86_64               randconfig-a011-20230130
-hexagon              randconfig-r045-20230129
-s390                 randconfig-r044-20230129
+Regards,
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Hans
+
+> ---
+>  drivers/platform/x86/dell/dell-wmi-ddv.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> index 2bb449845d14..9cb6ae42dbdc 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> @@ -26,7 +26,8 @@
+> 
+>  #define DRIVER_NAME	"dell-wmi-ddv"
+> 
+> -#define DELL_DDV_SUPPORTED_INTERFACE 2
+> +#define DELL_DDV_SUPPORTED_VERSION_MIN	2
+> +#define DELL_DDV_SUPPORTED_VERSION_MAX	3
+>  #define DELL_DDV_GUID	"8A42EA14-4F2A-FD45-6422-0087F7A7E608"
+> 
+>  #define DELL_EPPID_LENGTH	20
+> @@ -49,6 +50,7 @@ enum dell_ddv_method {
+>  	DELL_DDV_BATTERY_RAW_ANALYTICS_START	= 0x0E,
+>  	DELL_DDV_BATTERY_RAW_ANALYTICS		= 0x0F,
+>  	DELL_DDV_BATTERY_DESIGN_VOLTAGE		= 0x10,
+> +	DELL_DDV_BATTERY_RAW_ANALYTICS_A_BLOCK	= 0x11, /* version 3 */
+> 
+>  	DELL_DDV_INTERFACE_VERSION		= 0x12,
+> 
+> @@ -340,7 +342,7 @@ static int dell_wmi_ddv_probe(struct wmi_device *wdev, const void *context)
+>  		return ret;
+> 
+>  	dev_dbg(&wdev->dev, "WMI interface version: %d\n", version);
+> -	if (version != DELL_DDV_SUPPORTED_INTERFACE)
+> +	if (version < DELL_DDV_SUPPORTED_VERSION_MIN || version > DELL_DDV_SUPPORTED_VERSION_MAX)
+>  		return -ENODEV;
+> 
+>  	data = devm_kzalloc(&wdev->dev, sizeof(*data), GFP_KERNEL);
+> --
+> 2.30.2
+> 
+
