@@ -2,96 +2,57 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 870EAC636D3
-	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Jan 2023 03:44:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19B54C636CC
+	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Jan 2023 08:33:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjAaDoH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 Jan 2023 22:44:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
+        id S231130AbjAaId1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 31 Jan 2023 03:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjAaDoH (ORCPT
+        with ESMTP id S231295AbjAaIdU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Jan 2023 22:44:07 -0500
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC09EFBF;
-        Mon, 30 Jan 2023 19:44:06 -0800 (PST)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-15fe106c7c7so17848043fac.8;
-        Mon, 30 Jan 2023 19:44:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dDrLZ++5N+sw+ZK0t3EaqYJtg0ZAcMsbhUYSmXTMd7c=;
-        b=LmvHYI/hQfhLg3zN+FbsCSdzogdn1isNJ7cfe5A8SziJ0bvJ4vA/w/WjkmevSMJudA
-         apTco4buzXOoicguENtP2jyJMpgTCUC6j1qe8i0hxI8vw2ARr+qk5EChICslk6/naHxP
-         AUBtIaO8bZ6l+xH2VR+43oyj5rhMi1JATwHEdgbZdE+y+Ig1gNZENTeemB+gHQgYtYPK
-         kOzbYf5pph6G88FKH5izbeTA2IalyWJzz0NKvLbSaGgco+g1KKtIO9izbAqHYSI8BYVl
-         vTMdnWF/w7wwCK4N6a3PL6VUp/xMxOtIXD4qgD4oIfx70JZ73r/fWu3UvVeq7G1iDdWl
-         nM4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dDrLZ++5N+sw+ZK0t3EaqYJtg0ZAcMsbhUYSmXTMd7c=;
-        b=GyZ0YU9T9mx9N9DWM3GfC/BIznjbyftaI8CEUABNkni+J9k26A43IMCo5seVQTb1aS
-         tUvW2hdDpZEe/SM3XQ73woTLhD4A8qTm2XqWtWVmXKEZP54lY5v94QUzKBA1KKX1Xfgq
-         K6kk+0sXGEwee4OORuTEYUzV1WrH/sU8XuzsCJbg4ywJO8w4DK3WxweBLBh/bjiuCXs1
-         ANvF9BkZ2+LOBxYr9tNraUP7b66LX3QhBEzo+QwzvhELb8YFWp07ld5O7zsdVv/5doeC
-         /GtPv68LMDkJBIY/0AmOSXqCsrcmZB2a55GHK+LLiVbHJtCWoFRg1UC192uN+8/Pp2oB
-         hFsg==
-X-Gm-Message-State: AO0yUKXIHiOWA1mSfS3HcdX9GNgH9DjkXSkxpoBY65d9r/x0ZpMVi4T6
-        kHn2z/uygbl1ZHgje2FKk7uPvaZGADY=
-X-Google-Smtp-Source: AK7set9TAOmFkF7TpbGY6qpBnEzhdcJtoG5aCtcO1Ay+7/w8nDVqK0QsofjJ7DpKeeUGBNXcEhHk0Q==
-X-Received: by 2002:a05:6870:b00b:b0:163:98d1:ba0c with SMTP id y11-20020a056870b00b00b0016398d1ba0cmr5136904oae.49.1675136645990;
-        Mon, 30 Jan 2023 19:44:05 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id gq11-20020a056870d90b00b001435fe636f2sm6042847oab.53.2023.01.30.19.44.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 19:44:05 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 30 Jan 2023 19:44:04 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/8] Docs/hwmon/index: Add missing SPDX License
- Identifier
-Message-ID: <20230131034404.GA837158@roeck-us.net>
-References: <20230122213650.187710-1-sj@kernel.org>
- <20230122213650.187710-5-sj@kernel.org>
+        Tue, 31 Jan 2023 03:33:20 -0500
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC8D1C5A8
+        for <linux-hwmon@vger.kernel.org>; Tue, 31 Jan 2023 00:33:17 -0800 (PST)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id E689B83779; Tue, 31 Jan 2023 08:31:51 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1675153995; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=UhG130VPMtlilNVRV3i3pyiLRdFWwGnyaEcPXK79dyFb8UL7Q+KUiNhDcY2xHTk97
+         68acrvzX1TJywcc7vmgmjLDhoJgMb5UFz7CJ4mYh6ZYDOOYUFthBmix4ZH2jFD11Z/
+         CpSZhuZH41I6rn+9q6NF/7oGkC9oM1gmmJCPt8U+FeVCOQ6BtW8x7/7f7Fg1SKNYSc
+         A43YNSN45Zn66eXBfmVJMZiB0cwyuKQEO6ZeUp/U9JSm3WGM5FyowIUI1dUUyVzmdb
+         jmcpAUmcsi5DSJNKYJb5Q2EuUrUBhYbnMwDjMpTaoMD6kWzdpFpg1ST1CFR3NPm0Sk
+         pyWn7iT7tlTLQ==
+Received: by mail.lokoho.com for <linux-hwmon@vger.kernel.org>; Tue, 31 Jan 2023 08:30:34 GMT
+Message-ID: <20230131074501-0.1.3q.w0pu.0.udjf64pj46@lokoho.com>
+Date:   Tue, 31 Jan 2023 08:30:34 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230122213650.187710-5-sj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Jan 22, 2023 at 09:36:46PM +0000, SeongJae Park wrote:
-> Add missing SPDX License Identifier for hwmon documentation index file.
-> 
+Dzie=C5=84 dobry,
 
-I do not feel comfortable accepting this change without confirmation
-that changing the license from <none> to an explicit <GPL v2.0> is
-legally acceptable.
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-Guenter
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-> Signed-off-by: SeongJae Park <sj@kernel.org>
-> ---
->  Documentation/hwmon/index.rst | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index c2b3c1a822dd..2186d732654f 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -1,3 +1,5 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
->  ===================
->  Hardware Monitoring
->  ===================
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+
+
+Pozdrawiam
+Adam Charachuta
