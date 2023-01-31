@@ -2,108 +2,101 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7456C38142
-	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Jan 2023 10:34:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00EDDC636CC
+	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Jan 2023 12:10:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjAaKeH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 31 Jan 2023 05:34:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
+        id S231151AbjAaMKW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 31 Jan 2023 07:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjAaKeG (ORCPT
+        with ESMTP id S231220AbjAaMKV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Jan 2023 05:34:06 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8188C1422A;
-        Tue, 31 Jan 2023 02:34:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1675161244; x=1706697244;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=r4kjuULXMnJtmj88iglwf80C4myiNq+dzKNJ7ZMal+c=;
-  b=UzvAd1EnwRn2DmRzzbLMvs6EXQygS2arczCpKfJT97HTT56T0k5d/wkZ
-   ZRkFPfKZNfm5UsRJHUuhhfUMIQGy5oqWrY/fT+PNVFbX7RqX0RYaoUKo2
-   XURCrSlQuQKTiwxtKM0YKi73VRsTfrymYbbZD9V78ngkZSR8HZWC4Tc7q
-   1q1HC7jmyjAAfaPrFa5Ih/Pjx3lSy0+1uQGbbzvUcdprxxzkz37gRoDBE
-   QlmfG2GV6v60WC4Jq9tX0cyKPGyRxf7MeDJT0RVk7mKbCGCQ9bDN5zJ7w
-   0jhrJe4+iQdKqceYb9acKU5+wEDpEiXXBS5nKd11qSYi0CXrsPCLbF2kt
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,261,1669071600"; 
-   d="scan'208";a="28767327"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 31 Jan 2023 11:34:03 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 31 Jan 2023 11:34:03 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 31 Jan 2023 11:34:03 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1675161243; x=1706697243;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=r4kjuULXMnJtmj88iglwf80C4myiNq+dzKNJ7ZMal+c=;
-  b=AlyjSfLvgHNDFL3vxw6/gzOGrVWY1TpFOMQNQjBH95ntpK93iXdesPsu
-   AIi4Rv11xDCt8sRJz2e6lQBZhZp/YAqlxrYdf9+L6za3P2YSopZT7HHZ1
-   SWz4QZZR0v5SW0A3JqAwwqTmX+oMBcn9a8eKUzHlJC4qZutsjmefzJ02L
-   n2azQALl6q9WxjlaOKX9Y9M/B7uClZP+okNR72kt5jypjiT8Rp0lJ9jRl
-   JOuOSBHy6Mf0cqfyZ6yr27cVibDk2t9F6G3dbSE3k1d3qeweyDEaQ1Ng+
-   2wodbbN4JW/QQhNeiSXDtRF7MdAp5YclxjNDLEeq40UEXCcOXlgTUIiVq
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,261,1669071600"; 
-   d="scan'208";a="28767326"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 31 Jan 2023 11:34:02 +0100
-Received: from steina-w.tq-net.de (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        Tue, 31 Jan 2023 07:10:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A49265AA;
+        Tue, 31 Jan 2023 04:10:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id AA533280072;
-        Tue, 31 Jan 2023 11:34:02 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] hwmon: (iio_hwmon) use dev_err_probe
-Date:   Tue, 31 Jan 2023 11:33:59 +0100
-Message-Id: <20230131103359.625081-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0FD64B81C34;
+        Tue, 31 Jan 2023 12:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A32A6C4339B;
+        Tue, 31 Jan 2023 12:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675167017;
+        bh=05Q0a0laoCL7B6cNeIdWae9i1mi1jqE1MmHEn48y7wY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=AiLDIkfX/yC0s7oWbtxL2qgShGmaWg6DGpF2fcHDuTAYOpe4a0iGTOaS6tx1RZ7Na
+         y9uZae2xgPIq5V8e5Uwh3KWRbXPs/2kTYa4F1NdAZpGtECOprYO7b8lUGzbEWfbpRf
+         ZHvZzYUDj+Y/+NwYcyBDD/3Bj82qhjsbu3dP1BO5Rrkfj4jl7Tkbtin8JNyymkiFJa
+         IO+rix27EvPxnRVABnUcTTGGzu6v5gKk15JhkBCsgtnRe4Nk9cbI10R/FYiCalCEjJ
+         AewgByYVYe6k8wGX3tbIjdvlUsVbjKG5sps5v2mWvEaoR+hd2pQAJkeYt52xf2vZOQ
+         ciDD188aOinZw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7574CC4314C;
+        Tue, 31 Jan 2023 12:10:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/9] Documentation: correct lots of spelling errors (series 2)
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167516701747.19012.10728935395396675001.git-patchwork-notify@kernel.org>
+Date:   Tue, 31 Jan 2023 12:10:17 +0000
+References: <20230129231053.20863-1-rdunlap@infradead.org>
+In-Reply-To: <20230129231053.20863-1-rdunlap@infradead.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-doc@vger.kernel.org, tj@kernel.org, lizefan.x@bytedance.com,
+        hannes@cmpxchg.org, cgroups@vger.kernel.org, agk@redhat.com,
+        snitzer@kernel.org, dm-devel@redhat.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-mm@kvack.org,
+        dan.j.williams@intel.com, vishal.l.verma@intel.com,
+        dave.jiang@intel.com, nvdimm@lists.linux.dev, vkoul@kernel.org,
+        dmaengine@vger.kernel.org, song@kernel.org,
+        linux-raid@vger.kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+        linux-hwmon@vger.kernel.org, jiri@nvidia.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, paulmck@kernel.org, frederic@kernel.org,
+        quic_neeraju@quicinc.com, josh@joshtriplett.org,
+        rcu@vger.kernel.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        sparclinux@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Instead of just returning an error code, add an error message as well.
-While at it, simplify the code and use a common return path.
-Upon deferral this also nicely lists the following message in
-/sys/kernel/debug/devices_deferred:
-adc     iio_hwmon: Failed to get channels
+Hello:
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
- drivers/hwmon/iio_hwmon.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+This patch was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
-index 3aa40893fc09..4c8a80847891 100644
---- a/drivers/hwmon/iio_hwmon.c
-+++ b/drivers/hwmon/iio_hwmon.c
-@@ -77,9 +77,11 @@ static int iio_hwmon_probe(struct platform_device *pdev)
- 
- 	channels = devm_iio_channel_get_all(dev);
- 	if (IS_ERR(channels)) {
--		if (PTR_ERR(channels) == -ENODEV)
--			return -EPROBE_DEFER;
--		return PTR_ERR(channels);
-+		ret = PTR_ERR(channels);
-+		if (ret == -ENODEV)
-+			ret = -EPROBE_DEFER;
-+		return dev_err_probe(dev, ret,
-+				     "Failed to get channels\n");
- 	}
- 
- 	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
+On Sun, 29 Jan 2023 15:10:44 -0800 you wrote:
+> Maintainers of specific kernel subsystems are only Cc-ed on their
+> respective patches, not the entire series. [if all goes well]
+> 
+> These patches are based on linux-next-20230127.
+> 
+> 
+>  [PATCH 1/9] Documentation: admin-guide: correct spelling
+>  [PATCH 2/9] Documentation: driver-api: correct spelling
+>  [PATCH 3/9] Documentation: hwmon: correct spelling
+>  [PATCH 4/9] Documentation: networking: correct spelling
+>  [PATCH 5/9] Documentation: RCU: correct spelling
+>  [PATCH 6/9] Documentation: scsi/ChangeLog*: correct spelling
+>  [PATCH 7/9] Documentation: scsi: correct spelling
+>  [PATCH 8/9] Documentation: sparc: correct spelling
+>  [PATCH 9/9] Documentation: userspace-api: correct spelling
+> 
+> [...]
+
+Here is the summary with links:
+  - [4/9] Documentation: networking: correct spelling
+    https://git.kernel.org/netdev/net-next/c/a266ef69b890
+
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
