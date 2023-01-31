@@ -2,130 +2,317 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60ED4C636D3
-	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Jan 2023 12:19:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9913FC636CC
+	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Jan 2023 13:55:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbjAaMTL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 31 Jan 2023 07:19:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
+        id S231799AbjAaNze (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 31 Jan 2023 08:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjAaMTK (ORCPT
+        with ESMTP id S229961AbjAaNzd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Jan 2023 07:19:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AD74C6D6
-        for <linux-hwmon@vger.kernel.org>; Tue, 31 Jan 2023 04:17:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675167464;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0xKlxpkUZRo2mPicdjcp1VlQPa8+dcAbG4ZeEJrymiQ=;
-        b=UWb42KNSY48B46V1kyvhV27kMAc4nZ595D9LQe5taP+PgDaO7D2er9ZyFJg8lJyWo7wZ4X
-        5mOj/2dJgpltXjVIKsJnQ3FXKTm1H5HvxEnHLEOHfYFqMC0T1iI91q7O57dK159erG2GTw
-        FlMg/urmObm75CH3hgxbWUFAnOLelYQ=
-Received: from mail-vs1-f69.google.com (mail-vs1-f69.google.com
- [209.85.217.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-584-19FWU_SKMzqpgF9l2L780Q-1; Tue, 31 Jan 2023 07:17:43 -0500
-X-MC-Unique: 19FWU_SKMzqpgF9l2L780Q-1
-Received: by mail-vs1-f69.google.com with SMTP id c20-20020a67c414000000b003ea09dfe14aso2952902vsk.7
-        for <linux-hwmon@vger.kernel.org>; Tue, 31 Jan 2023 04:17:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0xKlxpkUZRo2mPicdjcp1VlQPa8+dcAbG4ZeEJrymiQ=;
-        b=Z2OUFKtSka1bBa0J7re03GcTYxcSWUnHcGni+IOwGIDOYWXEbd2+MIiSQSTG2KcuGw
-         Tf/HunMQZ62iyICnUXMdPHPrgYXpD8bNwNITqZyEEYg+HfhTs15aB0yenJ834EsvAkCx
-         wrmmdHGzWZf/kCYb6KsP7SO87qXuujvkQqretwdzoXWREYbyvK91/Kk/ph1vVFtmRoLC
-         mYagrYvRDrQgLErE6AIyZfEsjOM239hnx8w0BcGX/BKCdFEnr+IqB5ip6pqGSfj0kzzb
-         /S8rZk+FucMcBCC0ifzJr+WWHpn+vEWUuWQ2C/LybxXh6r+S6/s2Wwf4lOoNb8w0MaaY
-         Gl0A==
-X-Gm-Message-State: AO0yUKXhelnWZQGyCmK4EJ7CLfVihl7dhWBaAUpcN3wb1oswYtq9CM0n
-        A/AEnTtQ/YheOgxsaT4NmV18qnPww6lE9ALfCtwRQARJ0ZFygMvILY9BP/kwl6CSHNEWCSbBsMv
-        YhBZZ/nwOSompzN+GCnO19L4=
-X-Received: by 2002:a67:c119:0:b0:3ea:99cb:c3e with SMTP id d25-20020a67c119000000b003ea99cb0c3emr2996491vsj.2.1675167462886;
-        Tue, 31 Jan 2023 04:17:42 -0800 (PST)
-X-Google-Smtp-Source: AK7set/3cWf1zFQSzSaXyTvYZFmhtrofj2WcZS5Lru0KQCl9i0U0TOY96Lm9fQ3ijteXPFUn2WOINw==
-X-Received: by 2002:a67:c119:0:b0:3ea:99cb:c3e with SMTP id d25-20020a67c119000000b003ea99cb0c3emr2996457vsj.2.1675167462612;
-        Tue, 31 Jan 2023 04:17:42 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
-        by smtp.gmail.com with ESMTPSA id 10-20020a370b0a000000b007203bbbbb31sm3325683qkl.47.2023.01.31.04.17.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 04:17:42 -0800 (PST)
-Message-ID: <865b04949b69c3470ecb3fa5f93005e4c5a9e86e.camel@redhat.com>
-Subject: Re: [PATCH 0/9] Documentation: correct lots of spelling errors
- (series 2)
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     patchwork-bot+netdevbpf@kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org, tj@kernel.org, lizefan.x@bytedance.com,
-        hannes@cmpxchg.org, cgroups@vger.kernel.org, agk@redhat.com,
-        snitzer@kernel.org, dm-devel@redhat.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-mm@kvack.org,
-        dan.j.williams@intel.com, vishal.l.verma@intel.com,
-        dave.jiang@intel.com, nvdimm@lists.linux.dev, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, song@kernel.org,
-        linux-raid@vger.kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net,
-        linux-hwmon@vger.kernel.org, jiri@nvidia.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, netdev@vger.kernel.org,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, rcu@vger.kernel.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        sparclinux@vger.kernel.org
-Date:   Tue, 31 Jan 2023 13:17:35 +0100
-In-Reply-To: <167516701747.19012.10728935395396675001.git-patchwork-notify@kernel.org>
-References: <20230129231053.20863-1-rdunlap@infradead.org>
-         <167516701747.19012.10728935395396675001.git-patchwork-notify@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Tue, 31 Jan 2023 08:55:33 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A641E4B1A9;
+        Tue, 31 Jan 2023 05:55:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675173331; x=1706709331;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IejCjfETg28DEDjjWsKtgjkb7Y0hOwxTAEjBfl4ZLhE=;
+  b=Vt7RHBsrQWC5Bq6J9xT5WLRjWaRTxUutaXSR0c3iF4SbOYTklcLJ4FJc
+   H3HSl72dJOo3ohj4xkH1Te7O6R1u6C+1qm7pFVp572EvF4pbOUndHA43u
+   RmP2iyrZRjR1qFCZR+fMgTJ8KMzhcTuN/MsBuDmWJ2DrmbQNirGBDyqwc
+   MrhsKXvJJNrtF7I9OdGH+SliYG1OGbg5zick/kiI6itJM8h5Y1w7HiHva
+   x3X03CYqnPryqcCF2Af67JNfgz75YHKipkCSaESM+V5HHMmmEuXXOsMW5
+   2nXT1ce5QphgZD0L5Ti3bSqfoQjADLsosZpk3VQ2bjmMNmrvvx6f2fIZq
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="392392291"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="392392291"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 05:55:19 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="909911049"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="909911049"
+Received: from amedve1x-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.35.45])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 05:55:11 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>
+Subject: [PATCH] hwmon: intel-m10-bmc-hwmon: Add N6000 sensors
+Date:   Tue, 31 Jan 2023 15:54:50 +0200
+Message-Id: <20230131135450.43072-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 2023-01-31 at 12:10 +0000, patchwork-bot+netdevbpf@kernel.org
-wrote:
-> Hello:
->=20
-> This patch was applied to netdev/net-next.git (master)
-> by Paolo Abeni <pabeni@redhat.com>:
->=20
-> On Sun, 29 Jan 2023 15:10:44 -0800 you wrote:
-> > Maintainers of specific kernel subsystems are only Cc-ed on their
-> > respective patches, not the entire series. [if all goes well]
-> >=20
-> > These patches are based on linux-next-20230127.
-> >=20
-> >=20
-> >  [PATCH 1/9] Documentation: admin-guide: correct spelling
-> >  [PATCH 2/9] Documentation: driver-api: correct spelling
-> >  [PATCH 3/9] Documentation: hwmon: correct spelling
-> >  [PATCH 4/9] Documentation: networking: correct spelling
-> >  [PATCH 5/9] Documentation: RCU: correct spelling
-> >  [PATCH 6/9] Documentation: scsi/ChangeLog*: correct spelling
-> >  [PATCH 7/9] Documentation: scsi: correct spelling
-> >  [PATCH 8/9] Documentation: sparc: correct spelling
-> >  [PATCH 9/9] Documentation: userspace-api: correct spelling
-> >=20
-> > [...]
->=20
-> Here is the summary with links:
->   - [4/9] Documentation: networking: correct spelling
->     https://git.kernel.org/netdev/net-next/c/a266ef69b890
->=20
-> You are awesome, thank you!
+From: Tianfei zhang <tianfei.zhang@intel.com>
 
-That is just a bot glitch. I actually applied only patch 4/9 to the
-net-next tree. I hope this is not too much scarying/confusing.
+Add sensors supported by N6000 card with MAX10 BMC to monitor
+temperature, voltage, current, and power on board.
 
-Thanks,
+Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
 
-Paolo
+---
+ drivers/hwmon/intel-m10-bmc-hwmon.c | 229 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 229 insertions(+)
 
+diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
+index 6e82f7200d1c..2f0323c14bab 100644
+--- a/drivers/hwmon/intel-m10-bmc-hwmon.c
++++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
+@@ -340,6 +340,231 @@ static const struct m10bmc_hwmon_board_data n5010bmc_hwmon_bdata = {
+ 	.hinfo = n5010bmc_hinfo,
+ };
+ 
++static const struct m10bmc_sdata n6000bmc_temp_tbl[] = {
++	{ 0x444, 0x448, 0x44c, 0x0, 0x0, 500, "FPGA E-TILE Temperature #1" },
++	{ 0x450, 0x454, 0x458, 0x0, 0x0, 500, "FPGA E-TILE Temperature #2" },
++	{ 0x45c, 0x460, 0x464, 0x0, 0x0, 500, "FPGA E-TILE Temperature #3" },
++	{ 0x468, 0x46c, 0x470, 0x0, 0x0, 500, "FPGA E-TILE Temperature #4" },
++	{ 0x474, 0x478, 0x47c, 0x0, 0x0, 500, "FPGA P-TILE Temperature" },
++	{ 0x484, 0x488, 0x48c, 0x0, 0x0, 500, "FPGA FABRIC Digital Temperature #1" },
++	{ 0x490, 0x494, 0x498, 0x0, 0x0, 500, "FPGA FABRIC Digital Temperature #2" },
++	{ 0x49c, 0x4a0, 0x4a4, 0x0, 0x0, 500, "FPGA FABRIC Digital Temperature #3" },
++	{ 0x4a8, 0x4ac, 0x4b0, 0x0, 0x0, 500, "FPGA FABRIC Digital Temperature #4" },
++	{ 0x4b4, 0x4b8, 0x4bc, 0x0, 0x0, 500, "FPGA FABRIC Digital Temperature #5" },
++	{ 0x4c0, 0x4c4, 0x4c8, 0x0, 0x0, 500, "FPGA FABRIC Remote Digital Temperature #1" },
++	{ 0x4cc, 0x4d0, 0x4d4, 0x0, 0x0, 500, "FPGA FABRIC Remote Digital Temperature #2" },
++	{ 0x4d8, 0x4dc, 0x4e0, 0x0, 0x0, 500, "FPGA FABRIC Remote Digital Temperature #3" },
++	{ 0x4e4, 0x4e8, 0x4ec, 0x0, 0x0, 500, "FPGA FABRIC Remote Digital Temperature #4" },
++	{ 0x4f0, 0x4f4, 0x4f8, 0x52c, 0x0, 500, "Board Top Near FPGA Temperature" },
++	{ 0x4fc, 0x500, 0x504, 0x52c, 0x0, 500, "Board Bottom Near CVL Temperature" },
++	{ 0x508, 0x50c, 0x510, 0x52c, 0x0, 500, "Board Top East Near VRs Temperature" },
++	{ 0x514, 0x518, 0x51c, 0x52c, 0x0, 500, "Columbiaville Die Temperature" },
++	{ 0x520, 0x524, 0x528, 0x52c, 0x0, 500, "Board Rear Side Temperature" },
++	{ 0x530, 0x534, 0x538, 0x52c, 0x0, 500, "Board Front Side Temperature" },
++	{ 0x53c, 0x540, 0x544, 0x0, 0x0, 500, "QSFP1 Case Temperature" },
++	{ 0x548, 0x54c, 0x550, 0x0, 0x0, 500, "QSFP2 Case Temperature" },
++	{ 0x554, 0x0, 0x0, 0x0, 0x0, 500, "FPGA Core Voltage Phase 0 VR Temperature" },
++	{ 0x560, 0x0, 0x0, 0x0, 0x0, 500, "FPGA Core Voltage Phase 1 VR Temperature" },
++	{ 0x56c, 0x0, 0x0, 0x0, 0x0, 500, "FPGA Core Voltage Phase 2 VR Temperature" },
++	{ 0x578, 0x0, 0x0, 0x0, 0x0, 500, "FPGA Core Voltage VR Controller Temperature" },
++	{ 0x584, 0x0, 0x0, 0x0, 0x0, 500, "FPGA VCCH VR Temperature" },
++	{ 0x590, 0x0, 0x0, 0x0, 0x0, 500, "FPGA VCC_1V2 VR Temperature" },
++	{ 0x59c, 0x0, 0x0, 0x0, 0x0, 500, "FPGA VCCH, VCC_1V2 VR Controller Temperature" },
++	{ 0x5a8, 0x0, 0x0, 0x0, 0x0, 500, "3V3 VR Temperature" },
++	{ 0x5b4, 0x0, 0x0, 0x0, 0x0, 500, "CVL Core Voltage VR Temperature" },
++	{ 0x5c4, 0x5c8, 0x5cc, 0x5c0, 0x0, 500, "FPGA P-Tile Temperature [Remote]" },
++	{ 0x5d0, 0x5d4, 0x5d8, 0x5c0, 0x0, 500, "FPGA E-Tile Temperature [Remote]" },
++	{ 0x5dc, 0x5e0, 0x5e4, 0x5c0, 0x0, 500, "FPGA SDM Temperature [Remote]" },
++	{ 0x5e8, 0x5ec, 0x5f0, 0x5c0, 0x0, 500, "FPGA Corner Temperature [Remote]" },
++};
++
++static const struct m10bmc_sdata n6000bmc_in_tbl[] = {
++	{ 0x5f4, 0x0, 0x0, 0x0, 0x0, 1, "Inlet 12V PCIe Rail Voltage" },
++	{ 0x60c, 0x0, 0x0, 0x0, 0x0, 1, "Inlet 12V Aux Rail Voltage" },
++	{ 0x624, 0x0, 0x0, 0x0, 0x0, 1, "Inlet 3V3 PCIe Rail Voltage" },
++	{ 0x63c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA Core Voltage Rail Voltage" },
++	{ 0x644, 0x0, 0x0, 0x0, 0x0, 1, "FPGA VCCH Rail Voltage" },
++	{ 0x64c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA VCC_1V2 Rail Voltage" },
++	{ 0x654, 0x0, 0x0, 0x0, 0x0, 1, "FPGA VCCH_GXER_1V1, VCCA_1V8 Voltage" },
++	{ 0x664, 0x0, 0x0, 0x0, 0x0, 1, "FPGA VCCIO_1V2 Voltage" },
++	{ 0x674, 0x0, 0x0, 0x0, 0x0, 1, "CVL Non Core Rails Inlet Voltage" },
++	{ 0x684, 0x0, 0x0, 0x0, 0x0, 1, "MAX10 & Board CLK PWR 3V3 Inlet Voltage" },
++	{ 0x694, 0x0, 0x0, 0x0, 0x0, 1, "CVL Core Voltage Rail Voltage" },
++	{ 0x6ac, 0x0, 0x0, 0x0, 0x0, 1, "Board 3V3 VR Voltage" },
++	{ 0x6b4, 0x0, 0x0, 0x0, 0x0, 1, "QSFP 3V3 Rail Voltage" },
++	{ 0x6c4, 0x0, 0x0, 0x0, 0x0, 1, "QSFP (Primary) Supply Rail Voltage" },
++	{ 0x6c8, 0x0, 0x0, 0x0, 0x0, 1, "QSFP (Secondary) Supply Rail Voltage" },
++	{ 0x6cc, 0x0, 0x0, 0x0, 0x0, 1, "VCCCLK_GXER_2V5 Voltage" },
++	{ 0x6d0, 0x0, 0x0, 0x0, 0x0, 1, "AVDDH_1V1_CVL Voltage" },
++	{ 0x6d4, 0x0, 0x0, 0x0, 0x0, 1, "VDDH_1V8_CVL Voltage" },
++	{ 0x6d8, 0x0, 0x0, 0x0, 0x0, 1, "VCCA_PLL Voltage" },
++	{ 0x6e0, 0x0, 0x0, 0x0, 0x0, 1, "VCCRT_GXER_0V9 Voltage" },
++	{ 0x6e8, 0x0, 0x0, 0x0, 0x0, 1, "VCCRT_GXPL_0V9 Voltage" },
++	{ 0x6f0, 0x0, 0x0, 0x0, 0x0, 1, "VCCH_GXPL_1V8 Voltage" },
++	{ 0x6f4, 0x0, 0x0, 0x0, 0x0, 1, "VCCPT_1V8 Voltage" },
++	{ 0x6fc, 0x0, 0x0, 0x0, 0x0, 1, "VCC_3V3_M10 Voltage" },
++	{ 0x700, 0x0, 0x0, 0x0, 0x0, 1, "VCC_1V8_M10 Voltage" },
++	{ 0x704, 0x0, 0x0, 0x0, 0x0, 1, "VCC_1V2_EMIF1_2_3 Voltage" },
++	{ 0x70c, 0x0, 0x0, 0x0, 0x0, 1, "VCC_1V2_EMIF4_5 Voltage" },
++	{ 0x714, 0x0, 0x0, 0x0, 0x0, 1, "VCCA_1V8 Voltage" },
++	{ 0x718, 0x0, 0x0, 0x0, 0x0, 1, "VCCH_GXER_1V1 Voltage" },
++	{ 0x71c, 0x0, 0x0, 0x0, 0x0, 1, "AVDD_ETH_0V9_CVL Voltage" },
++	{ 0x720, 0x0, 0x0, 0x0, 0x0, 1, "AVDD_PCIE_0V9_CVL Voltage" },
++};
++
++static const struct m10bmc_sdata n6000bmc_curr_tbl[] = {
++	{ 0x600, 0x604, 0x608, 0x0, 0x0, 1, "Inlet 12V PCIe Rail Current" },
++	{ 0x618, 0x61c, 0x620, 0x0, 0x0, 1, "Inlet 12V Aux Rail Current" },
++	{ 0x630, 0x634, 0x638, 0x0, 0x0, 1, "Inlet 3V3 PCIe Rail Current" },
++	{ 0x640, 0x0, 0x0, 0x0, 0x0, 1, "FPGA Core Voltage Rail Current" },
++	{ 0x648, 0x0, 0x0, 0x0, 0x0, 1, "FPGA VCCH Rail Current" },
++	{ 0x650, 0x0, 0x0, 0x0, 0x0, 1, "FPGA VCC_1V2 Rail Current" },
++	{ 0x658, 0x65c, 0x660, 0x0, 0x0, 1, "FPGA VCCH_GXER_1V1, VCCA_1V8 Current" },
++	{ 0x668, 0x66c, 0x670, 0x0, 0x0, 1, "FPGA VCCIO_1V2 Current" },
++	{ 0x678, 0x67c, 0x680, 0x0, 0x0, 1, "CVL Non Core Rails Inlet Current" },
++	{ 0x688, 0x68c, 0x690, 0x0, 0x0, 1, "MAX10 & Board CLK PWR 3V3 Inlet Current" },
++	{ 0x698, 0x0, 0x0, 0x0, 0x0, 1, "CVL Core Voltage Rail Current" },
++	{ 0x6b0, 0x0, 0x0, 0x0, 0x0, 1, "Board 3V3 VR Current" },
++	{ 0x6b8, 0x6bc, 0x6c0, 0x0, 0x0, 1, "QSFP 3V3 Rail Current" },
++};
++
++static const struct m10bmc_sdata n6000bmc_power_tbl[] = {
++	{ 0x724, 0x0, 0x0, 0x0, 0x0, 1, "Board Power" },
++};
++
++static const struct hwmon_channel_info *n6000bmc_hinfo[] = {
++	HWMON_CHANNEL_INFO(temp,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
++			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
++			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
++			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
++			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
++			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
++			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
++			   HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
++			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
++			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
++			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
++			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL),
++	HWMON_CHANNEL_INFO(in,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL),
++	HWMON_CHANNEL_INFO(curr,
++			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
++			   HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
++			   HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
++			   HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
++			   HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
++			   HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
++			   HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
++			   HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
++			   HWMON_C_LABEL),
++	HWMON_CHANNEL_INFO(power,
++			   HWMON_P_INPUT | HWMON_P_LABEL),
++	NULL
++};
++
++static const struct m10bmc_hwmon_board_data n6000bmc_hwmon_bdata = {
++	.tables = {
++		[hwmon_temp] = n6000bmc_temp_tbl,
++		[hwmon_in] = n6000bmc_in_tbl,
++		[hwmon_curr] = n6000bmc_curr_tbl,
++		[hwmon_power] = n6000bmc_power_tbl,
++	},
++
++	.hinfo = n6000bmc_hinfo,
++};
++
+ static umode_t
+ m10bmc_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
+ 			u32 attr, int channel)
+@@ -549,6 +774,10 @@ static const struct platform_device_id intel_m10bmc_hwmon_ids[] = {
+ 		.name = "n5010bmc-hwmon",
+ 		.driver_data = (unsigned long)&n5010bmc_hwmon_bdata,
+ 	},
++	{
++		.name = "n6000bmc-hwmon",
++		.driver_data = (unsigned long)&n6000bmc_hwmon_bdata,
++	},
+ 	{ }
+ };
+ 
+
+-- 
+tg: (65f974c89cff..) hwmon/n6000 (depends on: log/drv)
