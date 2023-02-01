@@ -2,90 +2,158 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60FFBC636CC
-	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Jan 2023 15:11:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A078EC636CD
+	for <linux-hwmon@archiver.kernel.org>; Wed,  1 Feb 2023 04:14:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbjAaPK7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 31 Jan 2023 10:10:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
+        id S229615AbjBAEOR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 31 Jan 2023 23:14:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233692AbjAaPKi (ORCPT
+        with ESMTP id S229500AbjBAEOQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:10:38 -0500
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDCA53E77;
-        Tue, 31 Jan 2023 07:08:43 -0800 (PST)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1631b928691so19648453fac.11;
-        Tue, 31 Jan 2023 07:08:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Tc5Kvp0umQS2+cFz/6CoiaZuikDRmqi00WdsNv9qzeM=;
-        b=RFbALft+O8FOTZ6dBGJ+XXGD0PT4vCYMATFMiWsAfqgDWgSBMwQf//bFkGd4kwVRGp
-         svXtnuKsZPUz6WYFo6DP7L3r8AC7Gd/6nHbt3+6hkxN65jozJa14KK4aPeGq9tb7WXSN
-         lasKuvBYrrplr+nhJL42VS8X6hEzJLKnyJq7cfC/Gneam7+19vf+fGB7pWBtHWZ00AW0
-         mcLIQAKJrnQpqWdkRQweEIURvLKutv/ZwsNGNtMIVaHgvvGiMpWz/5Pqcwu7xoblrUoo
-         sgb2sm1XJSnPV9zaL12EhuqeNtQ0reXZ/Ek8l3+cmTFPcEuB97yc2VNwjBoI4mw5GTdt
-         5UGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Tc5Kvp0umQS2+cFz/6CoiaZuikDRmqi00WdsNv9qzeM=;
-        b=ALyVQHnrcRdDUcty+IKZ9lJbueKyytNoaS09cM6jetfeXFPVfHB9QknJVdzUh/xTJZ
-         F8DjJx12lTEy7GrONU4RAj5OU+a111u+OoHeUKgQ/q7Fl4T8LHHTs9nQgHTA+HVita4g
-         CxbzfgnHew44jUFRb0Aixq+T2Ln49wep/bmfF4JZfa9T241qnrOV6s6BCVm15hnLyYrh
-         Ns6K7qPHCIPnYyl0M8vHxaH+F9XOIJBKgntOQHTTWy6bcSSEN4FuYcZJrx12XPC2aN6H
-         IBwMUJx0qahEJ3r2sk8AasKvlYhj45Tiu4X/5ADvz4tQKt9ilfaYyYzkWHlzQRfyAzsn
-         rV0Q==
-X-Gm-Message-State: AO0yUKWXqudFSVZdPiE8oFJ2MLNpIQDEd0LNfrAXBO1YMtMk2nRQTI2/
-        9SS/XIk2PXTuJZz1JI/zMHW1FKTxrRE=
-X-Google-Smtp-Source: AK7set9A/kk3t6DfM37h61mZmJqtmBN4LFXqhOlPw5VuWGO7oM4LE9C8DoZatsTrczMjFjzTHabLxg==
-X-Received: by 2002:a05:6870:ea87:b0:163:b347:22f7 with SMTP id s7-20020a056870ea8700b00163b34722f7mr4414849oap.28.1675177664747;
-        Tue, 31 Jan 2023 07:07:44 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c17-20020a056870479100b0014fd25bd3b5sm6697779oaq.0.2023.01.31.07.07.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 07:07:44 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 31 Jan 2023 07:07:43 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Aleksa Savic <savicaleksa83@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for
- Aquacomputer Poweradjust 3
-Message-ID: <20230131150743.GA3592045@roeck-us.net>
-References: <20230131101210.8095-1-savicaleksa83@gmail.com>
+        Tue, 31 Jan 2023 23:14:16 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF985422F
+        for <linux-hwmon@vger.kernel.org>; Tue, 31 Jan 2023 20:14:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675224855; x=1706760855;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=c1LsUIRmTUmbzqoyWAdHaLqpRe64iZIosrRqjS+jNlA=;
+  b=f2F8sbZMh+4eu9uGrk2OJtnXCbwBP3joEELBMQueTFnUpsEOMJF3BaWT
+   3yKp/oV8Wv+CCfGfME0A7uOL+JKcUg4PVH0fUY6r5dMtm8rrwlcWOimZ2
+   Vl2SVrWXb+Ekf8TzcsZVf2xaIyM8FwLLMpE5abcZoJN2Ld2TgZYHQA1oj
+   3d0CVZAbuqWEuIgKiw3yMqUg3S0sFxO8M+cDxu8WycPGm8RjYqf9exQa7
+   Gl5lDX8Y6OpqdF6reDRnn1jGmM1rE1X8bGN3sHlfLyhXPJpToCsrPim3F
+   9gv6FAlT7orjnkVfiTZOETorulUBkkgbLK6fAi5OY5A7s6hkHLn5BrS1G
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="392589368"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="392589368"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 20:12:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="838628552"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="838628552"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 31 Jan 2023 20:12:43 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pN4UE-000530-2h;
+        Wed, 01 Feb 2023 04:12:42 +0000
+Date:   Wed, 01 Feb 2023 12:12:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 5e5c0d0341059c332284384df9dece084713f5ac
+Message-ID: <63d9e6b6.LoQIc2fGuyBr28t3%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230131101210.8095-1-savicaleksa83@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 11:12:09AM +0100, Aleksa Savic wrote:
-> Extend aquacomputer_d5next driver to expose the temp sensor of the
-> Aquacomputer Poweradjust 3 fan controller, which communicates
-> through a proprietary USB HID protocol.
-> 
-> The Poweradjust 3 is not currently known to expose firmware version
-> and serial number, so don't create debugfs entries if their values
-> can't be retrieved.
-> 
-> Tested by a user on Github [1].
-> 
-> [1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/issues/57
-> 
-> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 5e5c0d0341059c332284384df9dece084713f5ac  hwmon: (aquacomputer_d5next) Add support for Aquacomputer Poweradjust 3
 
-Applied to hwmon-next.
+elapsed time: 720m
 
-Thanks,
-Guenter
+configs tested: 81
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+x86_64                            allnoconfig
+x86_64               randconfig-a001-20230130
+s390                                defconfig
+x86_64               randconfig-a003-20230130
+x86_64               randconfig-a004-20230130
+x86_64               randconfig-a002-20230130
+s390                             allyesconfig
+x86_64               randconfig-a006-20230130
+x86_64               randconfig-a005-20230130
+powerpc                           allnoconfig
+i386                                defconfig
+x86_64                              defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+ia64                             allmodconfig
+i386                 randconfig-a001-20230130
+i386                 randconfig-a004-20230130
+i386                 randconfig-a003-20230130
+x86_64                               rhel-8.3
+i386                 randconfig-a002-20230130
+m68k                             allmodconfig
+x86_64                    rhel-8.3-kselftests
+alpha                            allyesconfig
+x86_64                          rhel-8.3-func
+i386                 randconfig-a005-20230130
+m68k                             allyesconfig
+i386                 randconfig-a006-20230130
+arc                              allyesconfig
+x86_64                           allyesconfig
+arc                  randconfig-r043-20230129
+arm                  randconfig-r046-20230129
+arm                  randconfig-r046-20230130
+arc                  randconfig-r043-20230130
+i386                             allyesconfig
+arm                                 defconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+arm64                            allyesconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+arm                              allyesconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+sh                               allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+i386                          randconfig-c001
+arm                            pleb_defconfig
+mips                  maltasmvp_eva_defconfig
+powerpc                       holly_defconfig
+arm                            mps2_defconfig
+arm                      jornada720_defconfig
+
+clang tested configs:
+x86_64                          rhel-8.3-rust
+hexagon              randconfig-r041-20230129
+hexagon              randconfig-r045-20230130
+hexagon              randconfig-r041-20230130
+hexagon              randconfig-r045-20230129
+i386                 randconfig-a013-20230130
+i386                 randconfig-a012-20230130
+s390                 randconfig-r044-20230129
+i386                 randconfig-a014-20230130
+riscv                randconfig-r042-20230129
+riscv                randconfig-r042-20230130
+s390                 randconfig-r044-20230130
+i386                 randconfig-a011-20230130
+i386                 randconfig-a015-20230130
+i386                 randconfig-a016-20230130
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-k001
+x86_64               randconfig-a014-20230130
+x86_64               randconfig-a015-20230130
+x86_64               randconfig-a016-20230130
+x86_64               randconfig-a013-20230130
+x86_64               randconfig-a011-20230130
+x86_64               randconfig-a012-20230130
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
