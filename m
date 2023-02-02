@@ -2,443 +2,678 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFF5EC61DA4
-	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Feb 2023 21:13:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9A47C61DA4
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Feb 2023 21:30:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjBBVNR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 2 Feb 2023 16:13:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
+        id S231917AbjBBVas (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 2 Feb 2023 16:30:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjBBVNQ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Feb 2023 16:13:16 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3F1303F2;
-        Thu,  2 Feb 2023 13:13:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1675372368; bh=nefQ5eXpS+lueIM5lgy9AccW170MkQxcHQU5Sb1jvt8=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:References:Date:In-Reply-To;
-        b=EmjNBQ8ugOWJS4DIcorSominlX5YhEOghT3F3E/pYnaPxl/J/3wZTpjSgDiFShKzx
-         0AAZ+sAGKNUj2guXUB8DfZcK4I2BA7fDaj3PFBuMNdwUn57FKmYybFVCkCErt8ilKy
-         wJNH9hp1grXXguUc9racapjqWEBEH2x1+RAMJiwH1HogD66DSGdNQdmRolOMZTfaNo
-         Ay+hW9724ghyjgCKP8d0TbcMd5qc1fJ3iofPh/DADM0siEZPM+vO2KpwDsNydzi5Gu
-         GjCtQGVTwUYJvSXDTS82/xdxAvTLjyxRsz1tc+D4z4Nvr6lxK8AT0nLWJ0MFhlmoIo
-         sGkGNj45o7CbQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MbAgq-1omRKK1D9k-00bZCR; Thu, 02
- Feb 2023 22:12:48 +0100
+        with ESMTP id S229554AbjBBVar (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Feb 2023 16:30:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86285834AA
+        for <linux-hwmon@vger.kernel.org>; Thu,  2 Feb 2023 13:30:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675373401;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=68G7Tu7aPcVfn4N7dRtLC8yfx8e8kO73ONxQiUtNPJE=;
+        b=W5fk9LpQ8l8riLOnN9uc/8VbnaK/pgRUi7MK0NQddEPJpeMkwnfLX5BZ53IvD/JM7qIizq
+        hpaGxc+P0PZODQYCSBPhlVJkLjd4B8CSCH1cO6kM3dDO7SNjobnHynKVMmTTZDuYCS7YCa
+        G+Gn3RL2zmHE20LM2WuOriRCiEYrA/8=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-166-TF-03ModPM-dmQ6wdELZoA-1; Thu, 02 Feb 2023 16:29:59 -0500
+X-MC-Unique: TF-03ModPM-dmQ6wdELZoA-1
+Received: by mail-ed1-f69.google.com with SMTP id c12-20020a05640227cc00b0049e2c079aabso2259004ede.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 02 Feb 2023 13:29:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=68G7Tu7aPcVfn4N7dRtLC8yfx8e8kO73ONxQiUtNPJE=;
+        b=306vQ4QGnJU7tHXsE7pjvo+JM8LHZI25kKPApGBLG6uQgL0R8frjtMKeoPGXkdtf55
+         abtqyjYY/Kx2BGjQyq0SgDCmnvsS8ZNxkliGkmie9NpNrjVe7A4NAnWySoyh9LKNz4gN
+         vDIrt5rWuvW7R9uTXcJ6Gi/uoGQbp+GAJwSnJdXX4cABsJ4E53k+6+DYkmXNeC3gZgb0
+         QE08hkNEyIh1ab2qdW56TrQ5aWK11secYbyQib/j1y4LsDihYAGu0MTsdpi7AW9gbNHY
+         BTtNIs0uN0MR2/OipAH2/4Z9SYi+yFTHPuerLkionW839+/oIP1pqqqNt2k7CcTlQ7qM
+         ULhw==
+X-Gm-Message-State: AO0yUKWLv6hYyF+3SPeHkLpK/OdZWSoNeJ0eoNdoK3i2izUEVOpmEQzH
+        yLA47mF078ZESjgERtFVHgK2s5kpez6pdkeRpor8f82rkjYNw1OMdTCaFi7fWMYIgAoW15zK/9d
+        pPQSxjVjZkR67+S6tgTqQBtg=
+X-Received: by 2002:aa7:d84d:0:b0:49c:96f9:417e with SMTP id f13-20020aa7d84d000000b0049c96f9417emr8278275eds.2.1675373398357;
+        Thu, 02 Feb 2023 13:29:58 -0800 (PST)
+X-Google-Smtp-Source: AK7set8P7uYy9K75CzpiLRGwkC0FHS9PlhilVxiuVPMomILhN/aaCSi9T+jilXQwsp2VJJUMe690mg==
+X-Received: by 2002:aa7:d84d:0:b0:49c:96f9:417e with SMTP id f13-20020aa7d84d000000b0049c96f9417emr8278266eds.2.1675373398046;
+        Thu, 02 Feb 2023 13:29:58 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id cq25-20020a056402221900b004a0afea4c9csm252682edb.18.2023.02.02.13.29.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 13:29:57 -0800 (PST)
+Message-ID: <cf12d944-34ed-83ea-8570-3ce202e317ce@redhat.com>
+Date:   Thu, 2 Feb 2023 22:29:56 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
 Subject: Re: [PATCH 5/5] platform/x86: dell-ddv: Add hwmon support
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     hdegoede@redhat.com, markgross@kernel.org, jdelvare@suse.com,
+To:     Armin Wolf <W_Armin@gmx.de>, Guenter Roeck <linux@roeck-us.net>
+Cc:     markgross@kernel.org, jdelvare@suse.com,
         platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230126194021.381092-1-W_Armin@gmx.de>
  <20230126194021.381092-6-W_Armin@gmx.de>
  <20230127130815.GA3911997@roeck-us.net>
  <d425820d-f0ce-4349-1b99-1b3d78ac2495@gmx.de>
-Message-ID: <91099107-73bf-8340-96a2-9a7ff1bfd4ad@gmx.de>
-Date:   Thu, 2 Feb 2023 22:12:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <d425820d-f0ce-4349-1b99-1b3d78ac2495@gmx.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: base64
-Content-Language: en-US
-X-Provags-ID: V03:K1:Bc0JlrtscvZAzB58V/pl2OH9ewA/iRi5YdqLbUpv3h8IiB4u3HF
- ap9idtIxwz9Z36ShuJbiFoi8UqdsLXqcybxBA47+EIHQeaQkdhz/NZ96FOZeOfKfFv09NTT
- eed7/KY9yOgMR1wzbgK8HhV82bUBaNoxv49y9RDhH76Z9MHvD8j4VujDb4tNrEPjBvfgEf5
- R6nJnzeblVNiniqaPrwrA==
-UI-OutboundReport: notjunk:1;M01:P0:uP2yZmsYbAM=;HXW1XKPYsnwFCJ5IuF7WETEA5tu
- abmR/7BQYc94Ff956vmKdoMYjd7VYTxR0/QXS2+oTeoh2wpaquWbg2HOsQ+ob7U61H6Lk/+Yl
- QZwEj6dSbs2aIDVw8MRAZVjtd1/etyxg/7tiyu1uwwPqL7pp7P6fPyHO0zruH+LtNQS71a2L8
- W1kRNcth60JnneYy684CcU2ewjGQRMoSnn0usXsQ7Id72l1r4qtxYjEiIYYE6zdVjt2USOIvW
- sL8YXddHMvBD+kxYNbkcQTluc+ynH2FPyRs+7hx9KnkOi5alUh5XVeAKPLrqKcaZYgRLsKOYd
- n+foK4gUGlVNzwSnzCAvsUVNDwKfoE5PdPnR5R/htx68dp5RR5hP78qxOby5xlfCqSth6ZDE/
- Boj4vcnmi9ylF8sOn1CS1wt0fkKWx6l13EP3SFpU0IivqHNZdkESIbCYLR2dA+Wn5vfloenH+
- C23U51QbMFCAv+I47mBd4r54v4HMXfNWJuixAnzI2afBahhdFHT8aZEu3y37BhDbUKzQVtzKf
- E8Am5+rf7Mv19cXHhw93xF7Dj0R/9jQMU8t0YakPoTMIw9kw+Bx2+2SqKAP2x1UsbzqF1KC2j
- r/NJTUAkeESf+B0mfpjUbC4gVKB5f5jP4d0UJ77CeGr5FKAHpMtenvZHYfcYHiJfwm6JUquT5
- WVj/+Cow820sysoN8vmV7Yv6GB/rC6N+41E1xIvaucLKg6MR3DiYeyAPZJAm8gvJ7kpWKrXxy
- Jd0lzrxcyD7pFSf8jP0fbRDUe0kI0E/uCpwbx1MRfKd15Boo/wZvaTSxBrMXkw6SdgxUbMxIo
- xnwhXoLMqWx3ECxhTVzIIOFnBzxctS/tIP2Fw9DX4JJGjnCPQFK7eIJUVvm8cMWdCJX/jQlos
- XbN0SgkP8QRS1HT9Y2fmGTY0r+5UMcP9aslQUYb/aBVWGZE4SKPE87Ljfumr0GnEP6BhPRgyO
- Hf4KqGCQJM7HIaD64wxc9O7KL6c=
+ <91099107-73bf-8340-96a2-9a7ff1bfd4ad@gmx.de>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <91099107-73bf-8340-96a2-9a7ff1bfd4ad@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-QW0gMjcuMDEuMjMgdW0gMTc6MDkgc2NocmllYiBBcm1pbiBXb2xmOg0KDQo+IEFtIDI3LjAxLjIz
-IHVtIDE0OjA4IHNjaHJpZWIgR3VlbnRlciBSb2VjazoNCj4NCj4+IE9uIFRodSwgSmFuIDI2LCAy
-MDIzIGF0IDA4OjQwOjIxUE0gKzAxMDAsIEFybWluIFdvbGYgd3JvdGU6DQo+Pj4gVGhhbmtzIHRv
-IGJ1Z3JlcG9ydCAyMTY2NTUgb24gYnVnemlsbGEgdHJpZ2dlcmVkIGJ5IHRoZQ0KPj4+IGRlbGwt
-c21tLWh3bW9uIGRyaXZlciwgdGhlIGNvbnRlbnRzIG9mIHRoZSBzZW5zb3IgYnVmZmVycw0KPj4+
-IGNvdWxkIGJlIGFsbW9zdCBjb21wbGV0ZWx5IGRlY29kZWQuDQo+Pj4gQWRkIGFuIGh3bW9uIGlu
-dGVyZmFjZSBmb3IgZXhwb3NpbmcgdGhlIGZhbiBhbmQgdGhlcm1hbA0KPj4+IHNlbnNvciB2YWx1
-ZXMuIFRoZSBkZWJ1Z2ZzIGludGVyZmFjZSByZW1haW5zIGluIHBsYWNlIHRvDQo+Pj4gYWlkIGlu
-IHJldmVyc2UtZW5naW5lZXJpbmcgb2YgdW5rbm93biBzZW5zb3IgdHlwZXMNCj4+PiBhbmQgdGhl
-IHRoZXJtYWwgYnVmZmVyLg0KPj4+DQo+Pj4gVGVzdGVkLWJ5OiBBbnRvbsOtbiBTa2FsYSA8c2th
-bGEuYW50b25pbkBnbWFpbC5jb20+DQo+Pj4gVGVzdGVkLWJ5OiBHdXN0YXZvIFdhbGJvbiA8Z3Vz
-dGF2b3dhbGJvbkBnbWFpbC5jb20+DQo+Pj4gU2lnbmVkLW9mZi1ieTogQXJtaW4gV29sZiA8V19B
-cm1pbkBnbXguZGU+DQo+Pj4gLS0tDQo+Pj4gwqAgZHJpdmVycy9wbGF0Zm9ybS94ODYvZGVsbC9L
-Y29uZmlnwqDCoMKgwqDCoMKgwqAgfMKgwqAgMSArDQo+Pj4gwqAgZHJpdmVycy9wbGF0Zm9ybS94
-ODYvZGVsbC9kZWxsLXdtaS1kZHYuYyB8IDQzNSANCj4+PiArKysrKysrKysrKysrKysrKysrKysr
-LQ0KPj4+IMKgIDIgZmlsZXMgY2hhbmdlZCwgNDM1IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24o
-LSkNCj4+Pg0KPj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3BsYXRmb3JtL3g4Ni9kZWxsL0tjb25m
-aWcgDQo+Pj4gYi9kcml2ZXJzL3BsYXRmb3JtL3g4Ni9kZWxsL0tjb25maWcNCj4+PiBpbmRleCBk
-MzE5ZGU4ZjIxMzIuLjIxYTc0YjYzZDliMSAxMDA2NDQNCj4+PiAtLS0gYS9kcml2ZXJzL3BsYXRm
-b3JtL3g4Ni9kZWxsL0tjb25maWcNCj4+PiArKysgYi9kcml2ZXJzL3BsYXRmb3JtL3g4Ni9kZWxs
-L0tjb25maWcNCj4+PiBAQCAtMTk0LDYgKzE5NCw3IEBAIGNvbmZpZyBERUxMX1dNSV9ERFYNCj4+
-PiDCoMKgwqDCoMKgIGRlZmF1bHQgbQ0KPj4+IMKgwqDCoMKgwqAgZGVwZW5kcyBvbiBBQ1BJX0JB
-VFRFUlkNCj4+PiDCoMKgwqDCoMKgIGRlcGVuZHMgb24gQUNQSV9XTUkNCj4+PiArwqDCoMKgIGRl
-cGVuZHMgb24gSFdNT04NCj4+IE5vdCBzdXJlIGlmIGFkZGluZyBzdWNoIGEgZGVwZW5kZW5jeSBp
-cyBhIGdvb2QgaWRlYS4NCj4+IFVwIHRvIHRoZSBtYWludGFpbmVyIHRvIGRlY2lkZS4gUGVyc29u
-YWxseSBJIHdvdWxkIHByZWZlcg0KPj4gc29tZXRoaW5nIGxpa2UNCj4+IMKgwqDCoMKgZGVwZW5k
-cyBvbiBIV01PTiB8fCBIV01PTj1uDQo+PiBhbmQgc29tZSBjb25kaXRpb25hbHMgaW4gdGhlIGNv
-ZGUsIGFzIGl0IGlzIGRvbmUgd2l0aCBvdGhlciBkcml2ZXJzDQo+PiBvdXRzaWRlIHRoZSBod21v
-biBkaXJlY3RvcnkuDQo+Pg0KPiBHb29kIHBvaW50LCBpIHdpbGwgaW5jbHVkZSB0aGlzIGluIHRo
-ZSBuZXh0IHBhdGNoIHJldmlzaW9uLg0KPg0KPj4+IMKgwqDCoMKgwqAgaGVscA0KPj4+IMKgwqDC
-oMKgwqDCoMKgIFRoaXMgb3B0aW9uIGFkZHMgc3VwcG9ydCBmb3IgV01JLWJhc2VkIHNlbnNvcnMg
-bGlrZQ0KPj4+IMKgwqDCoMKgwqDCoMKgIGJhdHRlcnkgdGVtcGVyYXR1cmUgc2Vuc29ycyBmb3Vu
-ZCBvbiBzb21lIERlbGwgbm90ZWJvb2tzLg0KPj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3BsYXRm
-b3JtL3g4Ni9kZWxsL2RlbGwtd21pLWRkdi5jIA0KPj4+IGIvZHJpdmVycy9wbGF0Zm9ybS94ODYv
-ZGVsbC9kZWxsLXdtaS1kZHYuYw0KPj4+IGluZGV4IDk2OTViZjQ5M2VhNi4uNWIzMGJiODUxOTll
-IDEwMDY0NA0KPj4+IC0tLSBhL2RyaXZlcnMvcGxhdGZvcm0veDg2L2RlbGwvZGVsbC13bWktZGR2
-LmMNCj4+PiArKysgYi9kcml2ZXJzL3BsYXRmb3JtL3g4Ni9kZWxsL2RlbGwtd21pLWRkdi5jDQo+
-Pj4gQEAgLTEzLDYgKzEzLDcgQEANCj4+PiDCoCAjaW5jbHVkZSA8bGludXgvZGV2X3ByaW50ay5o
-Pg0KPj4+IMKgICNpbmNsdWRlIDxsaW51eC9lcnJuby5oPg0KPj4+IMKgICNpbmNsdWRlIDxsaW51
-eC9rZXJuZWwuaD4NCj4+PiArI2luY2x1ZGUgPGxpbnV4L2h3bW9uLmg+DQo+Pj4gwqAgI2luY2x1
-ZGUgPGxpbnV4L2tzdHJ0b3guaD4NCj4+PiDCoCAjaW5jbHVkZSA8bGludXgvbWF0aC5oPg0KPj4+
-IMKgICNpbmNsdWRlIDxsaW51eC9tb2R1bGUuaD4NCj4+PiBAQCAtMjEsMTAgKzIyLDEzIEBADQo+
-Pj4gwqAgI2luY2x1ZGUgPGxpbnV4L3ByaW50ay5oPg0KPj4+IMKgICNpbmNsdWRlIDxsaW51eC9z
-ZXFfZmlsZS5oPg0KPj4+IMKgICNpbmNsdWRlIDxsaW51eC9zeXNmcy5oPg0KPj4+ICsjaW5jbHVk
-ZSA8bGludXgvdHlwZXMuaD4NCj4+PiDCoCAjaW5jbHVkZSA8bGludXgvd21pLmg+DQo+Pj4NCj4+
-PiDCoCAjaW5jbHVkZSA8YWNwaS9iYXR0ZXJ5Lmg+DQo+Pj4NCj4+PiArI2luY2x1ZGUgPGFzbS91
-bmFsaWduZWQuaD4NCj4+PiArDQo+Pj4gwqAgI2RlZmluZSBEUklWRVJfTkFNRcKgwqDCoCAiZGVs
-bC13bWktZGR2Ig0KPj4+DQo+Pj4gwqAgI2RlZmluZSBERUxMX0REVl9TVVBQT1JURURfVkVSU0lP
-Tl9NSU7CoMKgwqAgMg0KPj4+IEBAIC02Myw2ICs2NywyOSBAQCBlbnVtIGRlbGxfZGR2X21ldGhv
-ZCB7DQo+Pj4gwqDCoMKgwqDCoCBERUxMX0REVl9USEVSTUFMX1NFTlNPUl9JTkZPUk1BVElPTsKg
-wqDCoCA9IDB4MjIsDQo+Pj4gwqAgfTsNCj4+Pg0KPj4+ICtzdHJ1Y3QgZmFuX3NlbnNvcl9lbnRy
-eSB7DQo+Pj4gK8KgwqDCoCB1OCB0eXBlOw0KPj4+ICvCoMKgwqAgX19sZTE2IHJwbTsNCj4+PiAr
-fSBfX3BhY2tlZDsNCj4+PiArDQo+Pj4gK3N0cnVjdCB0aGVybWFsX3NlbnNvcl9lbnRyeSB7DQo+
-Pj4gK8KgwqDCoCB1OCB0eXBlOw0KPj4+ICvCoMKgwqAgczggbm93Ow0KPj4+ICvCoMKgwqAgczgg
-bWluOw0KPj4+ICvCoMKgwqAgczggbWF4Ow0KPj4+ICvCoMKgwqAgdTggdW5rbm93bjsNCj4+PiAr
-fSBfX3BhY2tlZDsNCj4+PiArDQo+Pj4gK3N0cnVjdCBjb21iaW5lZF9jaGFubmVsX2luZm8gew0K
-Pj4+ICvCoMKgwqAgc3RydWN0IGh3bW9uX2NoYW5uZWxfaW5mbyBpbmZvOw0KPj4+ICvCoMKgwqAg
-dTMyIGNvbmZpZ1tdOw0KPj4+ICt9Ow0KPj4+ICsNCj4+PiArc3RydWN0IGNvbWJpbmVkX2NoaXBf
-aW5mbyB7DQo+Pj4gK8KgwqDCoCBzdHJ1Y3QgaHdtb25fY2hpcF9pbmZvIGNoaXA7DQo+Pj4gK8Kg
-wqDCoCBjb25zdCBzdHJ1Y3QgaHdtb25fY2hhbm5lbF9pbmZvICppbmZvW107DQo+Pj4gK307DQo+
-Pj4gKw0KPj4+IMKgIHN0cnVjdCBkZWxsX3dtaV9kZHZfZGF0YSB7DQo+Pj4gwqDCoMKgwqDCoCBz
-dHJ1Y3QgYWNwaV9iYXR0ZXJ5X2hvb2sgaG9vazsNCj4+PiDCoMKgwqDCoMKgIHN0cnVjdCBkZXZp
-Y2VfYXR0cmlidXRlIHRlbXBfYXR0cjsNCj4+PiBAQCAtNzAsNiArOTcsMjQgQEAgc3RydWN0IGRl
-bGxfd21pX2Rkdl9kYXRhIHsNCj4+PiDCoMKgwqDCoMKgIHN0cnVjdCB3bWlfZGV2aWNlICp3ZGV2
-Ow0KPj4+IMKgIH07DQo+Pj4NCj4+PiArc3RhdGljIGNvbnN0IGNoYXIgKiBjb25zdCBmYW5fbGFi
-ZWxzW10gPSB7DQo+Pj4gK8KgwqDCoCAiQ1BVIEZhbiIsDQo+Pj4gK8KgwqDCoCAiQ2hhc3NpcyBN
-b3RoZXJib2FyZCBGYW4iLA0KPj4+ICvCoMKgwqAgIlZpZGVvIEZhbiIsDQo+Pj4gK8KgwqDCoCAi
-UG93ZXIgU3VwcGx5IEZhbiIsDQo+Pj4gK8KgwqDCoCAiQ2hpcHNldCBGYW4iLA0KPj4+ICvCoMKg
-wqAgIk1lbW9yeSBGYW4iLA0KPj4+ICvCoMKgwqAgIlBDSSBGYW4iLA0KPj4+ICvCoMKgwqAgIkhE
-RCBGYW4iLA0KPj4+ICt9Ow0KPj4+ICsNCj4+PiArc3RhdGljIGNvbnN0IGNoYXIgKiBjb25zdCBm
-YW5fZG9ja19sYWJlbHNbXSA9IHsNCj4+PiArwqDCoMKgICJEb2NraW5nIENoYXNzaXMvTW90aGVy
-Ym9hcmQgRmFuIiwNCj4+PiArwqDCoMKgICJEb2NraW5nIFZpZGVvIEZhbiIsDQo+Pj4gK8KgwqDC
-oCAiRG9ja2luZyBQb3dlciBTdXBwbHkgRmFuIiwNCj4+PiArwqDCoMKgICJEb2NraW5nIENoaXBz
-ZXQgRmFuIiwNCj4+PiArfTsNCj4+PiArDQo+Pj4gwqAgc3RhdGljIGludCBkZWxsX3dtaV9kZHZf
-cXVlcnlfdHlwZShzdHJ1Y3Qgd21pX2RldmljZSAqd2RldiwgZW51bSANCj4+PiBkZWxsX2Rkdl9t
-ZXRob2QgbWV0aG9kLCB1MzIgYXJnLA0KPj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgdW5pb24gYWNwaV9vYmplY3QgKipyZXN1bHQsIGFjcGlfb2JqZWN0X3R5cGUg
-dHlwZSkNCj4+PiDCoCB7DQo+Pj4gQEAgLTE3MSw2ICsyMTYsMzg2IEBAIHN0YXRpYyBpbnQgZGVs
-bF93bWlfZGR2X3F1ZXJ5X3N0cmluZyhzdHJ1Y3QgDQo+Pj4gd21pX2RldmljZSAqd2RldiwgZW51
-bSBkZWxsX2Rkdl9tZXRoDQo+Pj4gwqDCoMKgwqDCoCByZXR1cm4gZGVsbF93bWlfZGR2X3F1ZXJ5
-X3R5cGUod2RldiwgbWV0aG9kLCBhcmcsIHJlc3VsdCwgDQo+Pj4gQUNQSV9UWVBFX1NUUklORyk7
-DQo+Pj4gwqAgfQ0KPj4+DQo+Pj4gK3N0YXRpYyBpbnQgZGVsbF93bWlfZGR2X3F1ZXJ5X3NlbnNv
-cnMoc3RydWN0IHdtaV9kZXZpY2UgKndkZXYsIGVudW0gDQo+Pj4gZGVsbF9kZHZfbWV0aG9kIG1l
-dGhvZCwNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNp
-emVfdCBlbnRyeV9zaXplLCB1bmlvbiBhY3BpX29iamVjdCANCj4+PiAqKnJlc3VsdCwgdTY0ICpj
-b3VudCkNCj4+PiArew0KPj4+ICvCoMKgwqAgdW5pb24gYWNwaV9vYmplY3QgKm9iajsNCj4+PiAr
-wqDCoMKgIHU2NCBidWZmZXJfc2l6ZTsNCj4+PiArwqDCoMKgIHU4ICpidWZmZXI7DQo+Pj4gK8Kg
-wqDCoCBpbnQgcmV0Ow0KPj4+ICsNCj4+PiArwqDCoMKgIHJldCA9IGRlbGxfd21pX2Rkdl9xdWVy
-eV9idWZmZXIod2RldiwgbWV0aG9kLCAwLCAmb2JqKTsNCj4+PiArwqDCoMKgIGlmIChyZXQgPCAw
-KQ0KPj4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gcmV0Ow0KPj4+ICsNCj4+PiArwqDCoMKgIGJ1
-ZmZlcl9zaXplID0gb2JqLT5wYWNrYWdlLmVsZW1lbnRzWzBdLmludGVnZXIudmFsdWU7DQo+Pj4g
-K8KgwqDCoCBidWZmZXIgPSBvYmotPnBhY2thZ2UuZWxlbWVudHNbMV0uYnVmZmVyLnBvaW50ZXI7
-DQo+Pj4gK8KgwqDCoCBpZiAoYnVmZmVyX3NpemUgJSBlbnRyeV9zaXplICE9IDEgfHwgYnVmZmVy
-W2J1ZmZlcl9zaXplIC0gMV0gIT0gDQo+Pj4gMHhmZikgew0KPj4+ICvCoMKgwqDCoMKgwqDCoCBr
-ZnJlZShvYmopOw0KPj4+ICsNCj4+IFN0cmF5IGVtcHR5IGxpbmUNCj4+DQo+Pj4gK8KgwqDCoMKg
-wqDCoMKgIHJldHVybiAtRU5PTVNHOw0KPj4+ICvCoMKgwqAgfQ0KPj4+ICsNCj4+PiArwqDCoMKg
-ICpjb3VudCA9IChidWZmZXJfc2l6ZSAtIDEpIC8gZW50cnlfc2l6ZTsNCj4+PiArwqDCoMKgICpy
-ZXN1bHQgPSBvYmo7DQo+Pj4gKw0KPj4+ICvCoMKgwqAgcmV0dXJuIDA7DQo+Pj4gK30NCj4+PiAr
-DQo+Pj4gK3N0YXRpYyB1bW9kZV90IGRlbGxfd21pX2Rkdl9pc192aXNpYmxlKGNvbnN0IHZvaWQg
-KmRydmRhdGEsIGVudW0gDQo+Pj4gaHdtb25fc2Vuc29yX3R5cGVzIHR5cGUsIHUzMiBhdHRyLA0K
-Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpbnQgY2hh
-bm5lbCkNCj4+PiArew0KPj4+ICvCoMKgwqAgcmV0dXJuIDA0NDQ7DQo+Pj4gK30NCj4+PiArDQo+
-Pj4gK3N0YXRpYyBpbnQgZGVsbF93bWlfZGR2X2Zhbl9yZWFkX2NoYW5uZWwoc3RydWN0IGRlbGxf
-d21pX2Rkdl9kYXRhIA0KPj4+ICpkYXRhLCB1MzIgYXR0ciwgaW50IGNoYW5uZWwsDQo+Pj4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgbG9uZyAqdmFsKQ0KPj4+ICt7
-DQo+Pj4gK8KgwqDCoCBzdHJ1Y3QgZmFuX3NlbnNvcl9lbnRyeSAqZW50cnk7DQo+Pj4gK8KgwqDC
-oCB1bmlvbiBhY3BpX29iamVjdCAqb2JqOw0KPj4+ICvCoMKgwqAgdTY0IGNvdW50Ow0KPj4+ICvC
-oMKgwqAgaW50IHJldDsNCj4+PiArDQo+Pj4gK8KgwqDCoCByZXQgPSBkZWxsX3dtaV9kZHZfcXVl
-cnlfc2Vuc29ycyhkYXRhLT53ZGV2LCANCj4+PiBERUxMX0REVl9GQU5fU0VOU09SX0lORk9STUFU
-SU9OLA0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNpemVv
-ZigqZW50cnkpLCAmb2JqLCAmY291bnQpOw0KPj4+ICvCoMKgwqAgaWYgKHJldCA8IDApDQo+Pj4g
-K8KgwqDCoMKgwqDCoMKgIHJldHVybiByZXQ7DQo+Pj4gKw0KPj4+ICvCoMKgwqAgZW50cnkgPSAo
-c3RydWN0IGZhbl9zZW5zb3JfZW50cnkgDQo+Pj4gKilvYmotPnBhY2thZ2UuZWxlbWVudHNbMV0u
-YnVmZmVyLnBvaW50ZXI7DQo+Pj4gK8KgwqDCoCBpZiAoY291bnQgPiBjaGFubmVsKSB7DQo+Pj4g
-K8KgwqDCoMKgwqDCoMKgIHN3aXRjaCAoYXR0cikgew0KPj4+ICvCoMKgwqDCoMKgwqDCoCBjYXNl
-IGh3bW9uX2Zhbl9pbnB1dDoNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqdmFsID0gZ2V0
-X3VuYWxpZ25lZF9sZTE2KCZlbnRyeVtjaGFubmVsXS5ycG0pOw0KPj4+ICsNCj4+IEFub3RoZXIg
-c3RyYXkgZW1wdHkgbGluZS4gSSBzZWUgdGhhdCAiZW1wdHkgbGluZSBiZWZvcmUgcmV0dXJuIG9y
-IGJyZWFrIg0KPj4gaXMgY29tbW9uLiBMb29rcyBvZGQgdG8gbWUsIGFuZCBJIGRvbid0IHNlZSB0
-aGUgcG9pbnQgKGl0IGNvbmZ1c2VzDQo+PiB0aGUgY29kZSBmbG93IGZvciBtZSBhbmQgbGV0cyBt
-eSBicmFpbiBmb2N1cyBvbiB0aGUgZW1wdHkgbGluZSBpbnN0ZWFkDQo+PiBvZiB0aGUgY29kZSBp
-biBxdWVzdGlvbiksIGJ1dCBJIGd1ZXNzIHRoYXQgaXMgUG9WLiBJIHdvbid0IGNvbW1lbnQgb24N
-Cj4+IGl0IGZ1cnRoZXIgYW5kIGxldCB0aGUgbWFpbnRhaW5lciBkZWNpZGUuDQo+Pg0KPj4+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOw0KPj4+ICvCoMKgwqDCoMKgwqDCoCBkZWZhdWx0
-Og0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldCA9IC1FT1BOT1RTVVBQOw0KPj4+ICvC
-oMKgwqDCoMKgwqDCoCB9DQo+Pj4gK8KgwqDCoCB9IGVsc2Ugew0KPj4+ICvCoMKgwqDCoMKgwqDC
-oCByZXQgPSAtRU5YSU87DQo+Pj4gK8KgwqDCoCB9DQo+PiBFcnJvciBoYW5kbGluZyBzaG91bGQg
-Y29tZSBmaXJzdC4NCj4+PiArDQo+Pj4gK8KgwqDCoCBrZnJlZShvYmopOw0KPj4+ICsNCj4+PiAr
-wqDCoMKgIHJldHVybiByZXQ7DQo+Pj4gK30NCj4+PiArDQo+Pj4gK3N0YXRpYyBpbnQgZGVsbF93
-bWlfZGR2X3RlbXBfcmVhZF9jaGFubmVsKHN0cnVjdCBkZWxsX3dtaV9kZHZfZGF0YSANCj4+PiAq
-ZGF0YSwgdTMyIGF0dHIsIGludCBjaGFubmVsLA0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgbG9uZyAqdmFsKQ0KPj4+ICt7DQo+Pj4gK8KgwqDCoCBzdHJ1
-Y3QgdGhlcm1hbF9zZW5zb3JfZW50cnkgKmVudHJ5Ow0KPj4+ICvCoMKgwqAgdW5pb24gYWNwaV9v
-YmplY3QgKm9iajsNCj4+PiArwqDCoMKgIHU2NCBjb3VudDsNCj4+PiArwqDCoMKgIGludCByZXQ7
-DQo+Pj4gKw0KPj4+ICvCoMKgwqAgcmV0ID0gZGVsbF93bWlfZGR2X3F1ZXJ5X3NlbnNvcnMoZGF0
-YS0+d2RldiwgDQo+Pj4gREVMTF9ERFZfVEhFUk1BTF9TRU5TT1JfSU5GT1JNQVRJT04sDQo+Pj4g
-K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2l6ZW9mKCplbnRyeSks
-ICZvYmosICZjb3VudCk7DQo+Pj4gK8KgwqDCoCBpZiAocmV0IDwgMCkNCj4+PiArwqDCoMKgwqDC
-oMKgwqAgcmV0dXJuIHJldDsNCj4+PiArDQo+Pj4gK8KgwqDCoCBlbnRyeSA9IChzdHJ1Y3QgdGhl
-cm1hbF9zZW5zb3JfZW50cnkgDQo+Pj4gKilvYmotPnBhY2thZ2UuZWxlbWVudHNbMV0uYnVmZmVy
-LnBvaW50ZXI7DQo+Pj4gK8KgwqDCoCBpZiAoY291bnQgPiBjaGFubmVsKSB7DQo+PiBUaGlzIGlz
-IGEgYml0IG9mIEpvZGEgcHJvZ3JhbW1pbmcuIEl0IGlzIHJlYWxseSAiY2hhbm5lbCA8IGNvdW50
-IiwNCj4+IGllIHRoZSByZXF1ZXN0ZWQgY2hhbm5lbCBudW1iZXIgaXMgaW4gdGhlIHJhbmdlIG9m
-IGNoYW5uZWxzIHJlcG9ydGVkDQo+PiBieSB0aGUgV01JIGNvZGUuIFBvViwgb2YgY291cnNlLCBi
-dXQgSSBmaW5kIHRoYXQgdGhlIGFib3ZlIG1ha2VzIHRoZQ0KPj4gY29kZSBtb3JlIGRpZmZpY3Vs
-dCB0byByZWFkLg0KPj4+ICvCoMKgwqDCoMKgwqDCoCBzd2l0Y2ggKGF0dHIpIHsNCj4+PiArwqDC
-oMKgwqDCoMKgwqAgY2FzZSBod21vbl90ZW1wX2lucHV0Og0KPj4+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgICp2YWwgPSBlbnRyeVtjaGFubmVsXS5ub3cgKiAxMDAwOw0KPj4+ICsNCj4+PiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsNCj4+PiArwqDCoMKgwqDCoMKgwqAgY2FzZSBod21v
-bl90ZW1wX21pbjoNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqdmFsID0gZW50cnlbY2hh
-bm5lbF0ubWluICogMTAwMDsNCj4+PiArDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJl
-YWs7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIGNhc2UgaHdtb25fdGVtcF9tYXg6DQo+Pj4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgKnZhbCA9IGVudHJ5W2NoYW5uZWxdLm1heCAqIDEwMDA7DQo+Pj4g
-Kw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOw0KPj4+ICvCoMKgwqDCoMKgwqDC
-oCBkZWZhdWx0Og0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldCA9IC1FT1BOT1RTVVBQ
-Ow0KPj4gYnJlYWs7IG1pc3NpbmcNCj4+DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIH0NCj4+PiArwqDC
-oMKgIH0gZWxzZSB7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIHJldCA9IC1FTlhJTzsNCj4+PiArwqDC
-oMKgIH0NCj4+IFNhbWUgYXMgYWJvdmUgLSBlcnJvciBoYW5kbGluZyBzaG91bGQgY29tZSBmaXJz
-dC4NCj4+DQo+Pj4gKw0KPj4+ICvCoMKgwqAga2ZyZWUob2JqKTsNCj4+PiArDQo+Pj4gK8KgwqDC
-oCByZXR1cm4gcmV0Ow0KPj4+ICt9DQo+Pj4gKw0KPj4+ICtzdGF0aWMgaW50IGRlbGxfd21pX2Rk
-dl9yZWFkKHN0cnVjdCBkZXZpY2UgKmRldiwgZW51bSANCj4+PiBod21vbl9zZW5zb3JfdHlwZXMg
-dHlwZSwgdTMyIGF0dHIsDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlu
-dCBjaGFubmVsLCBsb25nICp2YWwpDQo+Pj4gK3sNCj4+PiArwqDCoMKgIHN0cnVjdCBkZWxsX3dt
-aV9kZHZfZGF0YSAqZGF0YSA9IGRldl9nZXRfZHJ2ZGF0YShkZXYpOw0KPj4+ICsNCj4+PiArwqDC
-oMKgIHN3aXRjaCAodHlwZSkgew0KPj4+ICvCoMKgwqAgY2FzZSBod21vbl9mYW46DQo+Pj4gK8Kg
-wqDCoMKgwqDCoMKgIHJldHVybiBkZWxsX3dtaV9kZHZfZmFuX3JlYWRfY2hhbm5lbChkYXRhLCBh
-dHRyLCBjaGFubmVsLCANCj4+PiB2YWwpOw0KPj4+ICvCoMKgwqAgY2FzZSBod21vbl90ZW1wOg0K
-Pj4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gZGVsbF93bWlfZGR2X3RlbXBfcmVhZF9jaGFubmVs
-KGRhdGEsIGF0dHIsIGNoYW5uZWwsIA0KPj4+IHZhbCk7DQo+Pj4gK8KgwqDCoCBkZWZhdWx0Og0K
-Pj4+ICvCoMKgwqDCoMKgwqDCoCBicmVhazsNCj4+PiArwqDCoMKgIH0NCj4+PiArDQo+Pj4gK8Kg
-wqDCoCByZXR1cm4gLUVPUE5PVFNVUFA7DQo+Pj4gK30NCj4+PiArDQo+Pj4gK3N0YXRpYyBpbnQg
-ZGVsbF93bWlfZGR2X2Zhbl9yZWFkX3N0cmluZyhzdHJ1Y3QgZGVsbF93bWlfZGR2X2RhdGEgDQo+
-Pj4gKmRhdGEsIGludCBjaGFubmVsLA0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoCBjb25zdCBjaGFyICoqc3RyKQ0KPj4+ICt7DQo+Pj4gK8KgwqDCoCBzdHJ1Y3Qg
-ZmFuX3NlbnNvcl9lbnRyeSAqZW50cnk7DQo+Pj4gK8KgwqDCoCB1bmlvbiBhY3BpX29iamVjdCAq
-b2JqOw0KPj4+ICvCoMKgwqAgdTY0IGNvdW50Ow0KPj4+ICvCoMKgwqAgdTggdHlwZTsNCj4+PiAr
-wqDCoMKgIGludCByZXQ7DQo+Pj4gKw0KPj4+ICvCoMKgwqAgcmV0ID0gZGVsbF93bWlfZGR2X3F1
-ZXJ5X3NlbnNvcnMoZGF0YS0+d2RldiwgDQo+Pj4gREVMTF9ERFZfRkFOX1NFTlNPUl9JTkZPUk1B
-VElPTiwNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzaXpl
-b2YoKmVudHJ5KSwgJm9iaiwgJmNvdW50KTsNCj4+PiArwqDCoMKgIGlmIChyZXQgPCAwKQ0KPj4+
-ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gcmV0Ow0KPj4+ICsNCj4+PiArwqDCoMKgIGVudHJ5ID0g
-KHN0cnVjdCBmYW5fc2Vuc29yX2VudHJ5IA0KPj4+ICopb2JqLT5wYWNrYWdlLmVsZW1lbnRzWzFd
-LmJ1ZmZlci5wb2ludGVyOw0KPj4+ICvCoMKgwqAgaWYgKGNvdW50ID4gY2hhbm5lbCkgew0KPj4+
-ICvCoMKgwqDCoMKgwqDCoCB0eXBlID0gZW50cnlbY2hhbm5lbF0udHlwZTsNCj4+PiArDQo+Pj4g
-K8KgwqDCoMKgwqDCoMKgIHN3aXRjaCAodHlwZSkgew0KPj4+ICvCoMKgwqDCoMKgwqDCoCBjYXNl
-IDB4MDAgLi4uIDB4MDc6DQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKnN0ciA9IGZhbl9s
-YWJlbHNbdHlwZV07DQo+Pj4gKw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOw0K
-Pj4+ICvCoMKgwqDCoMKgwqDCoCBjYXNlIDB4MTEgLi4uIDB4MTQ6DQo+Pj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgKnN0ciA9IGZhbl9kb2NrX2xhYmVsc1t0eXBlIC0gMHgxMV07DQo+Pj4gKw0K
-Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOw0KPj4+ICvCoMKgwqDCoMKgwqDCoCBk
-ZWZhdWx0Og0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICpzdHIgPSAiVW5rbm93biBGYW4i
-Ow0KPj4gYnJlYWs7IG1pc3NpbmcuDQo+Pg0KPj4+ICvCoMKgwqDCoMKgwqDCoCB9DQo+Pj4gK8Kg
-wqDCoCB9IGVsc2Ugew0KPj4+ICvCoMKgwqDCoMKgwqDCoCByZXQgPSAtRU5YSU87DQo+Pj4gK8Kg
-wqDCoCB9DQo+PiBBbmQgYWdhaW4uDQo+Pg0KPj4+ICsNCj4+PiArwqDCoMKgIGtmcmVlKG9iaik7
-DQo+Pj4gKw0KPj4+ICvCoMKgwqAgcmV0dXJuIHJldDsNCj4+PiArfQ0KPj4+ICsNCj4+PiArc3Rh
-dGljIGludCBkZWxsX3dtaV9kZHZfdGVtcF9yZWFkX3N0cmluZyhzdHJ1Y3QgZGVsbF93bWlfZGR2
-X2RhdGEgDQo+Pj4gKmRhdGEsIGludCBjaGFubmVsLA0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNvbnN0IGNoYXIgKipzdHIpDQo+Pj4gK3sNCj4+PiArwqDC
-oMKgIHN0cnVjdCB0aGVybWFsX3NlbnNvcl9lbnRyeSAqZW50cnk7DQo+Pj4gK8KgwqDCoCB1bmlv
-biBhY3BpX29iamVjdCAqb2JqOw0KPj4+ICvCoMKgwqAgdTY0IGNvdW50Ow0KPj4+ICvCoMKgwqAg
-aW50IHJldDsNCj4+PiArDQo+Pj4gK8KgwqDCoCByZXQgPSBkZWxsX3dtaV9kZHZfcXVlcnlfc2Vu
-c29ycyhkYXRhLT53ZGV2LCANCj4+PiBERUxMX0REVl9USEVSTUFMX1NFTlNPUl9JTkZPUk1BVElP
-TiwNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzaXplb2Yo
-KmVudHJ5KSwgJm9iaiwgJmNvdW50KTsNCj4+PiArwqDCoMKgIGlmIChyZXQgPCAwKQ0KPj4+ICvC
-oMKgwqDCoMKgwqDCoCByZXR1cm4gcmV0Ow0KPj4+ICsNCj4+PiArwqDCoMKgIGVudHJ5ID0gKHN0
-cnVjdCB0aGVybWFsX3NlbnNvcl9lbnRyeSANCj4+PiAqKW9iai0+cGFja2FnZS5lbGVtZW50c1sx
-XS5idWZmZXIucG9pbnRlcjsNCj4+PiArwqDCoMKgIGlmIChjb3VudCA+IGNoYW5uZWwpIHsNCj4+
-PiArwqDCoMKgwqDCoMKgwqAgc3dpdGNoIChlbnRyeVtjaGFubmVsXS50eXBlKSB7DQo+Pj4gK8Kg
-wqDCoMKgwqDCoMKgIGNhc2UgMHgwMDoNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqc3Ry
-ID0gIkNQVSI7DQo+Pj4gKw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOw0KPj4+
-ICvCoMKgwqDCoMKgwqDCoCBjYXNlIDB4MTE6DQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-KnN0ciA9ICJWaWRlbyI7DQo+Pj4gKw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFr
-Ow0KPj4+ICvCoMKgwqDCoMKgwqDCoCBjYXNlIDB4MjI6DQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgKnN0ciA9ICJNZW1vcnkiOyAvLyBzb21ldGltZXMgY2FsbGVkIERJTU0NCj4+IFBlcnNv
-bmFsbHkgSSBkb24ndCBwZXJtaXQgQysrIHN0eWxlIGNvbW1lbnRzIGluIGEgaHdtb24gZHJpdmVy
-DQo+PiB1bmxlc3MgX2FsbF8gY29tbWVudHMgYXJlIEMrKyBzdHlsZS4gSnVzdCBhIHJlbWFyayBo
-ZXJlLg0KPj4NCj4+PiArDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7DQo+Pj4g
-K8KgwqDCoMKgwqDCoMKgIGNhc2UgMHgzMzoNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAq
-c3RyID0gIk90aGVyIjsNCj4+PiArDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7
-DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIGNhc2UgMHg0NDoNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCAqc3RyID0gIkFtYmllbnQiOyAvLyBzb21ldGltZXMgY2FsbGVkIFNLSU4NCj4+PiArDQo+
-Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIGNh
-c2UgMHg1MjoNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqc3RyID0gIlNPRElNTSI7DQo+
-Pj4gKw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOw0KPj4+ICvCoMKgwqDCoMKg
-wqDCoCBjYXNlIDB4NTU6DQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKnN0ciA9ICJIREQi
-Ow0KPj4+ICsNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsNCj4+PiArwqDCoMKg
-wqDCoMKgwqAgY2FzZSAweDYyOg0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICpzdHIgPSAi
-U09ESU1NIDIiOw0KPj4+ICsNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsNCj4+
-PiArwqDCoMKgwqDCoMKgwqAgY2FzZSAweDczOg0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-ICpzdHIgPSAiTkIiOw0KPj4+ICsNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsN
-Cj4+PiArwqDCoMKgwqDCoMKgwqAgY2FzZSAweDgzOg0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgICpzdHIgPSAiQ2hhcmdlciI7DQo+Pj4gKw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IGJyZWFrOw0KPj4+ICvCoMKgwqDCoMKgwqDCoCBjYXNlIDB4YmI6DQo+Pj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgKnN0ciA9ICJNZW1vcnkgMyI7DQo+Pj4gKw0KPj4+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgIGJyZWFrOw0KPj4+ICvCoMKgwqDCoMKgwqDCoCBkZWZhdWx0Og0KPj4+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgICpzdHIgPSAiVW5rbm93biI7DQo+PiBicmVhazsgbWlzc2luZw0K
-Pj4gT2ssIEkgZ3Vlc3MgdGhpcyBpcyBvbiBwdXJwb3NlLiBJIHBlcnNvbmFsbHkgZG9uJ3QgcGVy
-bWl0DQo+PiB0aGF0IHNpbmNlIGl0IGFsd2F5cyBsZWF2ZXMgdGhlIHF1ZXN0aW9uIGlmIGl0IHdh
-cyBvbiBwdXJwb3NlIG9yIG5vdC4NCj4+DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIH0NCj4+PiArwqDC
-oMKgIH0gZWxzZSB7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIHJldCA9IC1FTlhJTzsNCj4+PiArwqDC
-oMKgIH0NCj4+PiArDQo+Pj4gK8KgwqDCoCBrZnJlZShvYmopOw0KPj4+ICsNCj4+PiArwqDCoMKg
-IHJldHVybiByZXQ7DQo+Pj4gK30NCj4+PiArDQo+Pj4gK3N0YXRpYyBpbnQgZGVsbF93bWlfZGR2
-X3JlYWRfc3RyaW5nKHN0cnVjdCBkZXZpY2UgKmRldiwgZW51bSANCj4+PiBod21vbl9zZW5zb3Jf
-dHlwZXMgdHlwZSwgdTMyIGF0dHIsDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgIGludCBjaGFubmVsLCBjb25zdCBjaGFyICoqc3RyKQ0KPj4+ICt7DQo+Pj4gK8Kg
-wqDCoCBzdHJ1Y3QgZGVsbF93bWlfZGR2X2RhdGEgKmRhdGEgPSBkZXZfZ2V0X2RydmRhdGEoZGV2
-KTsNCj4+PiArDQo+Pj4gK8KgwqDCoCBzd2l0Y2ggKHR5cGUpIHsNCj4+PiArwqDCoMKgIGNhc2Ug
-aHdtb25fZmFuOg0KPj4+ICvCoMKgwqDCoMKgwqDCoCBzd2l0Y2ggKGF0dHIpIHsNCj4+PiArwqDC
-oMKgwqDCoMKgwqAgY2FzZSBod21vbl9mYW5fbGFiZWw6DQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgcmV0dXJuIGRlbGxfd21pX2Rkdl9mYW5fcmVhZF9zdHJpbmcoZGF0YSwgY2hhbm5lbCwg
-c3RyKTsNCj4+PiArwqDCoMKgwqDCoMKgwqAgZGVmYXVsdDoNCj4+PiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCBicmVhazsNCj4+PiArwqDCoMKgwqDCoMKgwqAgfQ0KPj4+ICvCoMKgwqDCoMKgwqDC
-oCBicmVhazsNCj4+PiArwqDCoMKgIGNhc2UgaHdtb25fdGVtcDoNCj4+PiArwqDCoMKgwqDCoMKg
-wqAgc3dpdGNoIChhdHRyKSB7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIGNhc2UgaHdtb25fdGVtcF9s
-YWJlbDoNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gZGVsbF93bWlfZGR2X3Rl
-bXBfcmVhZF9zdHJpbmcoZGF0YSwgY2hhbm5lbCwgc3RyKTsNCj4+PiArwqDCoMKgwqDCoMKgwqAg
-ZGVmYXVsdDoNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsNCj4+PiArwqDCoMKg
-wqDCoMKgwqAgfQ0KPj4+ICvCoMKgwqDCoMKgwqDCoCBicmVhazsNCj4+PiArwqDCoMKgIGRlZmF1
-bHQ6DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIGJyZWFrOw0KPj4+ICvCoMKgwqAgfQ0KPj4+ICsNCj4+
-PiArwqDCoMKgIHJldHVybiAtRU9QTk9UU1VQUDsNCj4+PiArfQ0KPj4+ICsNCj4+PiArc3RhdGlj
-IGNvbnN0IHN0cnVjdCBod21vbl9vcHMgZGVsbF93bWlfZGR2X29wcyA9IHsNCj4+PiArwqDCoMKg
-IC5pc192aXNpYmxlID0gZGVsbF93bWlfZGR2X2lzX3Zpc2libGUsDQo+Pj4gK8KgwqDCoCAucmVh
-ZCA9IGRlbGxfd21pX2Rkdl9yZWFkLA0KPj4+ICvCoMKgwqAgLnJlYWRfc3RyaW5nID0gZGVsbF93
-bWlfZGR2X3JlYWRfc3RyaW5nLA0KPj4+ICt9Ow0KPj4+ICsNCj4+PiArc3RhdGljIHN0cnVjdCBo
-d21vbl9jaGFubmVsX2luZm8gDQo+Pj4gKmRlbGxfd21pX2Rkdl9jaGFubmVsX2NyZWF0ZShzdHJ1
-Y3QgZGV2aWNlICpkZXYsIHU2NCBjb3VudCwNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVudW0gaHdtb25fc2Vu
-c29yX3R5cGVzIHR5cGUsDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB1MzIgY29uZmlnKQ0KPj4+ICt7DQo+Pj4g
-K8KgwqDCoCBzdHJ1Y3QgY29tYmluZWRfY2hhbm5lbF9pbmZvICpjaW5mbzsNCj4+PiArwqDCoMKg
-IGludCBpOw0KPj4+ICsNCj4+PiArwqDCoMKgIGNpbmZvID0gZGV2bV9remFsbG9jKGRldiwgc3Ry
-dWN0X3NpemUoY2luZm8sIGNvbmZpZywgY291bnQgKyANCj4+PiAxKSwgR0ZQX0tFUk5FTCk7DQo+
-Pj4gK8KgwqDCoCBpZiAoIWNpbmZvKQ0KPj4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gRVJSX1BU
-UigtRU5PTUVNKTsNCj4+PiArDQo+Pj4gK8KgwqDCoCBjaW5mby0+aW5mby50eXBlID0gdHlwZTsN
-Cj4+PiArwqDCoMKgIGNpbmZvLT5pbmZvLmNvbmZpZyA9IGNpbmZvLT5jb25maWc7DQo+Pj4gKw0K
-Pj4+ICvCoMKgwqAgZm9yIChpID0gMDsgaSA8IGNvdW50OyBpKyspDQo+Pj4gK8KgwqDCoMKgwqDC
-oMKgIGNpbmZvLT5jb25maWdbaV0gPSBjb25maWc7DQo+Pj4gKw0KPj4+ICvCoMKgwqAgcmV0dXJu
-ICZjaW5mby0+aW5mbzsNCj4+PiArfQ0KPj4+ICsNCj4+PiArc3RhdGljIHN0cnVjdCBod21vbl9j
-aGFubmVsX2luZm8gKmRlbGxfd21pX2Rkdl9jaGFubmVsX2luaXQoc3RydWN0IA0KPj4+IHdtaV9k
-ZXZpY2UgKndkZXYsDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVudW0gZGVsbF9kZHZfbWV0aG9kIG1ldGhvZCwNCj4+
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgc2l6ZV90IGVudHJ5X3NpemUsDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVudW0gaHdtb25fc2Vuc29y
-X3R5cGVzIHR5cGUsDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHUzMiBjb25maWcpDQo+Pj4gK3sNCj4+PiArwqDCoMKg
-IHVuaW9uIGFjcGlfb2JqZWN0ICpvYmo7DQo+Pj4gK8KgwqDCoCB1NjQgY291bnQ7DQo+Pj4gK8Kg
-wqDCoCBpbnQgcmV0Ow0KPj4+ICsNCj4+PiArwqDCoMKgIHJldCA9IGRlbGxfd21pX2Rkdl9xdWVy
-eV9zZW5zb3JzKHdkZXYsIG1ldGhvZCwgZW50cnlfc2l6ZSwgDQo+Pj4gJm9iaiwgJmNvdW50KTsN
-Cj4+PiArwqDCoMKgIGlmIChyZXQgPCAwKQ0KPj4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gRVJS
-X1BUUihyZXQpOw0KPj4+ICsNCj4+PiArwqDCoMKgIGtmcmVlKG9iaik7DQo+Pj4gKw0KPj4+ICvC
-oMKgwqAgaWYgKCFjb3VudCkNCj4+PiArwqDCoMKgwqDCoMKgwqAgcmV0dXJuIEVSUl9QVFIoLUVO
-T0RFVik7DQo+Pj4gKw0KPj4+ICvCoMKgwqAgcmV0dXJuIGRlbGxfd21pX2Rkdl9jaGFubmVsX2Ny
-ZWF0ZSgmd2Rldi0+ZGV2LCBjb3VudCwgdHlwZSwgDQo+Pj4gY29uZmlnKTsNCj4+PiArfQ0KPj4+
-ICsNCj4+PiArc3RhdGljIGludCBkZWxsX3dtaV9kZHZfaHdtb25fYWRkKHN0cnVjdCBkZWxsX3dt
-aV9kZHZfZGF0YSAqZGF0YSkNCj4+PiArew0KPj4+ICvCoMKgwqAgc3RydWN0IHdtaV9kZXZpY2Ug
-KndkZXYgPSBkYXRhLT53ZGV2Ow0KPj4+ICvCoMKgwqAgc3RydWN0IGNvbWJpbmVkX2NoaXBfaW5m
-byAqY2luZm87DQo+Pj4gK8KgwqDCoCBzdHJ1Y3QgZGV2aWNlICpoZGV2Ow0KPj4+ICvCoMKgwqAg
-aW50IGluZGV4ID0gMDsNCj4+PiArwqDCoMKgIGludCByZXQ7DQo+Pj4gKw0KPj4+ICvCoMKgwqAg
-aWYgKCFkZXZyZXNfb3Blbl9ncm91cCgmd2Rldi0+ZGV2LCBkZWxsX3dtaV9kZHZfaHdtb25fYWRk
-LCANCj4+PiBHRlBfS0VSTkVMKSkNCj4+PiArwqDCoMKgwqDCoMKgwqAgcmV0dXJuIC1FTk9NRU07
-DQo+Pj4gKw0KPj4+ICvCoMKgwqAgY2luZm8gPSBkZXZtX2t6YWxsb2MoJndkZXYtPmRldiwgc3Ry
-dWN0X3NpemUoY2luZm8sIGluZm8sIDQpLCANCj4+PiBHRlBfS0VSTkVMKTsNCj4+PiArwqDCoMKg
-IGlmICghY2luZm8pIHsNCj4+PiArwqDCoMKgwqDCoMKgwqAgcmV0ID0gLUVOT01FTTsNCj4+PiAr
-DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIGdvdG8gZXJyX3JlbGVhc2U7DQo+Pj4gK8KgwqDCoCB9DQo+
-Pj4gKw0KPj4+ICvCoMKgwqAgY2luZm8tPmNoaXAub3BzID0gJmRlbGxfd21pX2Rkdl9vcHM7DQo+
-Pj4gK8KgwqDCoCBjaW5mby0+Y2hpcC5pbmZvID0gY2luZm8tPmluZm87DQo+Pj4gKw0KPj4+ICvC
-oMKgwqAgY2luZm8tPmluZm9baW5kZXhdID0gZGVsbF93bWlfZGR2X2NoYW5uZWxfY3JlYXRlKCZ3
-ZGV2LT5kZXYsIDEsIA0KPj4+IGh3bW9uX2NoaXAsDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEhXTU9OX0NfUkVHSVNURVJfVFop
-Ow0KPj4+ICsNCj4+PiArwqDCoMKgIGlmIChJU19FUlIoY2luZm8tPmluZm9baW5kZXhdKSkgew0K
-Pj4+ICvCoMKgwqDCoMKgwqDCoCByZXQgPSBQVFJfRVJSKGNpbmZvLT5pbmZvW2luZGV4XSk7DQo+
-Pj4gKw0KPj4+ICvCoMKgwqDCoMKgwqDCoCBnb3RvIGVycl9yZWxlYXNlOw0KPj4+ICvCoMKgwqAg
-fQ0KPj4+ICsNCj4+PiArwqDCoMKgIGluZGV4Kys7DQo+Pj4gKw0KPj4+ICvCoMKgwqAgY2luZm8t
-PmluZm9baW5kZXhdID0gZGVsbF93bWlfZGR2X2NoYW5uZWxfaW5pdCh3ZGV2LCANCj4+PiBERUxM
-X0REVl9GQU5fU0VOU09SX0lORk9STUFUSU9OLA0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2l6ZW9mKHN0cnVjdCBmYW5f
-c2Vuc29yX2VudHJ5KSwgDQo+Pj4gaHdtb25fZmFuLA0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKEhXTU9OX0ZfSU5QVVQg
-fCBIV01PTl9GX0xBQkVMKSk7DQo+Pj4gK8KgwqDCoCBpZiAoIUlTX0VSUihjaW5mby0+aW5mb1tp
-bmRleF0pKQ0KPj4+ICvCoMKgwqDCoMKgwqDCoCBpbmRleCsrOw0KPj4+ICsNCj4+PiArwqDCoMKg
-IGNpbmZvLT5pbmZvW2luZGV4XSA9IGRlbGxfd21pX2Rkdl9jaGFubmVsX2luaXQod2RldiwgDQo+
-Pj4gREVMTF9ERFZfVEhFUk1BTF9TRU5TT1JfSU5GT1JNQVRJT04sDQo+Pj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzaXplb2Yo
-c3RydWN0IHRoZXJtYWxfc2Vuc29yX2VudHJ5KSwNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGh3bW9uX3RlbXAsIChIV01P
-Tl9UX0lOUFVUIHwgDQo+Pj4gSFdNT05fVF9NSU4gfA0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgSFdNT05fVF9NQVggfCBI
-V01PTl9UX0xBQkVMKSk7DQo+Pj4gK8KgwqDCoCBpZiAoIUlTX0VSUihjaW5mby0+aW5mb1tpbmRl
-eF0pKQ0KPj4+ICvCoMKgwqDCoMKgwqDCoCBpbmRleCsrOw0KPj4+ICsNCj4+PiArwqDCoMKgIGlm
-ICghaW5kZXgpIHsNCj4+PiArwqDCoMKgwqDCoMKgwqAgcmV0ID0gLUVOT0RFVjsNCj4+PiArDQo+
-Pj4gK8KgwqDCoMKgwqDCoMKgIGdvdG8gZXJyX3JlbGVhc2U7DQo+Pj4gK8KgwqDCoCB9DQo+Pj4g
-Kw0KPj4+ICvCoMKgwqAgY2luZm8tPmluZm9baW5kZXhdID0gTlVMTDsNCj4+PiArDQo+Pj4gK8Kg
-wqDCoCBoZGV2ID0gZGV2bV9od21vbl9kZXZpY2VfcmVnaXN0ZXJfd2l0aF9pbmZvKCZ3ZGV2LT5k
-ZXYsIA0KPj4+ICJkZWxsX2RkdiIsIGRhdGEsICZjaW5mby0+Y2hpcCwNCj4+PiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIE5VTEwpOw0KPj4+
-ICvCoMKgwqAgaWYgKElTX0VSUihoZGV2KSkgew0KPj4+ICvCoMKgwqDCoMKgwqDCoCByZXQgPSBQ
-VFJfRVJSKGhkZXYpOw0KPj4+ICsNCj4+PiArwqDCoMKgwqDCoMKgwqAgZ290byBlcnJfcmVsZWFz
-ZTsNCj4+PiArwqDCoMKgIH0NCj4+PiArDQo+Pj4gK8KgwqDCoCBkZXZyZXNfY2xvc2VfZ3JvdXAo
-JndkZXYtPmRldiwgZGVsbF93bWlfZGR2X2h3bW9uX2FkZCk7DQo+Pj4gKw0KPj4+ICvCoMKgwqAg
-cmV0dXJuIDA7DQo+Pj4gKw0KPj4+ICtlcnJfcmVsZWFzZToNCj4+PiArwqDCoMKgIGRldnJlc19y
-ZWxlYXNlX2dyb3VwKCZ3ZGV2LT5kZXYsIGRlbGxfd21pX2Rkdl9od21vbl9hZGQpOw0KPj4+ICsN
-Cj4+PiArwqDCoMKgIHJldHVybiByZXQ7DQo+Pj4gK30NCj4+PiArDQo+Pj4gwqAgc3RhdGljIGlu
-dCBkZWxsX3dtaV9kZHZfYmF0dGVyeV9pbmRleChzdHJ1Y3QgYWNwaV9kZXZpY2UgDQo+Pj4gKmFj
-cGlfZGV2LCB1MzIgKmluZGV4KQ0KPj4+IMKgIHsNCj4+PiDCoMKgwqDCoMKgIGNvbnN0IGNoYXIg
-KnVpZF9zdHI7DQo+Pj4gQEAgLTM3MCw3ICs3OTUsMTUgQEAgc3RhdGljIGludCBkZWxsX3dtaV9k
-ZHZfcHJvYmUoc3RydWN0IHdtaV9kZXZpY2UgDQo+Pj4gKndkZXYsIGNvbnN0IHZvaWQgKmNvbnRl
-eHQpDQo+Pj4NCj4+PiDCoMKgwqDCoMKgIGRlbGxfd21pX2Rkdl9kZWJ1Z2ZzX2luaXQod2Rldik7
-DQo+Pj4NCj4+PiAtwqDCoMKgIHJldHVybiBkZWxsX3dtaV9kZHZfYmF0dGVyeV9hZGQoZGF0YSk7
-DQo+Pj4gK8KgwqDCoCByZXQgPSBkZWxsX3dtaV9kZHZfaHdtb25fYWRkKGRhdGEpOw0KPj4+ICvC
-oMKgwqAgaWYgKHJldCA8IDApDQo+Pj4gK8KgwqDCoMKgwqDCoMKgIGRldl9kYmcoJndkZXYtPmRl
-diwgIlVuYWJsZSB0byByZWdpc3RlciBod21vbiBpbnRlcmZhY2U6IA0KPj4+ICVkXG4iLCByZXQp
-Ow0KPj4+ICsNCj4+PiArwqDCoMKgIHJldCA9IGRlbGxfd21pX2Rkdl9iYXR0ZXJ5X2FkZChkYXRh
-KTsNCj4+PiArwqDCoMKgIGlmIChyZXQgPCAwKQ0KPj4+ICvCoMKgwqDCoMKgwqDCoCBkZXZfZGJn
-KCZ3ZGV2LT5kZXYsICJVbmFibGUgdG8gcmVnaXN0ZXIgYWNwaSBiYXR0ZXJ5IGhvb2s6IA0KPj4+
-ICVkXG4iLCByZXQpOw0KPj4+ICsNCj4+IFRoaXMgdXNlZCB0byBiZSBhbiBlcnJvciwgYnV0IG5v
-IGxvbmdlciBpcy4gTm90IG15IGNhbGwgdG8gbWFrZQ0KPj4gaWYgdGhpcyBpcyBhY2NlcHRhYmxl
-LCBqdXN0IHBvaW50aW5nIGl0IG91dC4NCj4NCj4gSSBkZWNpZGVkIHRvIG5vdCB0cmVhdCB0aGUg
-YmF0dGVyeSBob29rIGFzIGVzc2VudGlhbCBmdW5jdGlvbiBhbnltb3JlIA0KPiBiZWNhdXNlDQo+
-IHRoZSBiYXR0ZXJ5IGhvb2sgYW5kIGh3bW9uIGZ1bmN0aW9uYWxpdHkgYXJlIG1vcmUgb3IgbGVz
-cyBkaXNjb25uZWN0ZWQgDQo+IGZyb20NCj4gZWFjaCBvdGhlciwgc28gaGF2aW5nIHRoZSBkcml2
-ZXIgYWJvcnQgcHJvYmluZyBqdXN0IGJlY2F1c2Ugb25lIA0KPiBmdW5jdGlvbmFsaXR5DQo+IGNv
-dWxkIG5vdCBiZSBpbml0aWFsaXplZCBzZWVtZWQgdW5yZWFzb25hYmxlIHRvIG1lLg0KPg0KPiBJ
-IGFscmVhZHkgdGhvdWdodCBhYm91dCBwdXR0aW5nIHRoZSBiYXR0ZXJ5IGhvb2sgYW5kIGh3bW9u
-IA0KPiBmdW5jdGlvbmFsaXR5IGludG8NCj4gc2VwYXJhdGUgZHJpdmVycywgd2l0aCB0aGUgbWFp
-biBkcml2ZXIgcmVnaXN0ZXJpbmcgYSBNRkQgZGV2aWNlIG9yIA0KPiBzb21ldGhpbmcgc2ltaWxh
-ci4NCj4gQmVjYXVzZSBhcGFydCBmcm9tIHNvbWUgZ2VuZXJpYyByb3V0aW5lcywgYm90aCBmdW5j
-dGlvbnMgYXJlIG5vdCANCj4gY29ubmVjdGVkIGluIGFueSB3YXkuDQo+DQo+IElzIGl0IGFjY2Vw
-dGFibGUgdG8gc3BsaXQgdGhlIGRyaXZlciBmb3Igc3VjaCBhIHRoaW5nPw0KPg0KPiBBcm1pbiBX
-b2xmDQo+DQpBbnkgdGhvdWdodHMgYWJvdXQgdGhpcz8gT3RoZXJ3aXNlIGkgd2lsbCBqdXN0IHVz
-ZSBjb25kaXRpb25hbHMuDQoNCkFybWluIFdvbGYNCg0KPj4+ICvCoMKgwqAgcmV0dXJuIDA7DQo+
-Pj4gwqAgfQ0KPj4+DQo+Pj4gwqAgc3RhdGljIGNvbnN0IHN0cnVjdCB3bWlfZGV2aWNlX2lkIGRl
-bGxfd21pX2Rkdl9pZF90YWJsZVtdID0gew0KPj4+IC0tIA0KPj4+IDIuMzAuMg0KPj4+DQo=
+Hi,
+
+On 2/2/23 22:12, Armin Wolf wrote:
+> Am 27.01.23 um 17:09 schrieb Armin Wolf:
+> 
+>> Am 27.01.23 um 14:08 schrieb Guenter Roeck:
+>>
+>>> On Thu, Jan 26, 2023 at 08:40:21PM +0100, Armin Wolf wrote:
+>>>> Thanks to bugreport 216655 on bugzilla triggered by the
+>>>> dell-smm-hwmon driver, the contents of the sensor buffers
+>>>> could be almost completely decoded.
+>>>> Add an hwmon interface for exposing the fan and thermal
+>>>> sensor values. The debugfs interface remains in place to
+>>>> aid in reverse-engineering of unknown sensor types
+>>>> and the thermal buffer.
+>>>>
+>>>> Tested-by: Antonín Skala <skala.antonin@gmail.com>
+>>>> Tested-by: Gustavo Walbon <gustavowalbon@gmail.com>
+>>>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+>>>> ---
+>>>>   drivers/platform/x86/dell/Kconfig        |   1 +
+>>>>   drivers/platform/x86/dell/dell-wmi-ddv.c | 435 ++++++++++++++++++++++-
+>>>>   2 files changed, 435 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/platform/x86/dell/Kconfig b/drivers/platform/x86/dell/Kconfig
+>>>> index d319de8f2132..21a74b63d9b1 100644
+>>>> --- a/drivers/platform/x86/dell/Kconfig
+>>>> +++ b/drivers/platform/x86/dell/Kconfig
+>>>> @@ -194,6 +194,7 @@ config DELL_WMI_DDV
+>>>>       default m
+>>>>       depends on ACPI_BATTERY
+>>>>       depends on ACPI_WMI
+>>>> +    depends on HWMON
+>>> Not sure if adding such a dependency is a good idea.
+>>> Up to the maintainer to decide. Personally I would prefer
+>>> something like
+>>>     depends on HWMON || HWMON=n
+>>> and some conditionals in the code, as it is done with other drivers
+>>> outside the hwmon directory.
+>>>
+>> Good point, i will include this in the next patch revision.
+>>
+>>>>       help
+>>>>         This option adds support for WMI-based sensors like
+>>>>         battery temperature sensors found on some Dell notebooks.
+>>>> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+>>>> index 9695bf493ea6..5b30bb85199e 100644
+>>>> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+>>>> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+>>>> @@ -13,6 +13,7 @@
+>>>>   #include <linux/dev_printk.h>
+>>>>   #include <linux/errno.h>
+>>>>   #include <linux/kernel.h>
+>>>> +#include <linux/hwmon.h>
+>>>>   #include <linux/kstrtox.h>
+>>>>   #include <linux/math.h>
+>>>>   #include <linux/module.h>
+>>>> @@ -21,10 +22,13 @@
+>>>>   #include <linux/printk.h>
+>>>>   #include <linux/seq_file.h>
+>>>>   #include <linux/sysfs.h>
+>>>> +#include <linux/types.h>
+>>>>   #include <linux/wmi.h>
+>>>>
+>>>>   #include <acpi/battery.h>
+>>>>
+>>>> +#include <asm/unaligned.h>
+>>>> +
+>>>>   #define DRIVER_NAME    "dell-wmi-ddv"
+>>>>
+>>>>   #define DELL_DDV_SUPPORTED_VERSION_MIN    2
+>>>> @@ -63,6 +67,29 @@ enum dell_ddv_method {
+>>>>       DELL_DDV_THERMAL_SENSOR_INFORMATION    = 0x22,
+>>>>   };
+>>>>
+>>>> +struct fan_sensor_entry {
+>>>> +    u8 type;
+>>>> +    __le16 rpm;
+>>>> +} __packed;
+>>>> +
+>>>> +struct thermal_sensor_entry {
+>>>> +    u8 type;
+>>>> +    s8 now;
+>>>> +    s8 min;
+>>>> +    s8 max;
+>>>> +    u8 unknown;
+>>>> +} __packed;
+>>>> +
+>>>> +struct combined_channel_info {
+>>>> +    struct hwmon_channel_info info;
+>>>> +    u32 config[];
+>>>> +};
+>>>> +
+>>>> +struct combined_chip_info {
+>>>> +    struct hwmon_chip_info chip;
+>>>> +    const struct hwmon_channel_info *info[];
+>>>> +};
+>>>> +
+>>>>   struct dell_wmi_ddv_data {
+>>>>       struct acpi_battery_hook hook;
+>>>>       struct device_attribute temp_attr;
+>>>> @@ -70,6 +97,24 @@ struct dell_wmi_ddv_data {
+>>>>       struct wmi_device *wdev;
+>>>>   };
+>>>>
+>>>> +static const char * const fan_labels[] = {
+>>>> +    "CPU Fan",
+>>>> +    "Chassis Motherboard Fan",
+>>>> +    "Video Fan",
+>>>> +    "Power Supply Fan",
+>>>> +    "Chipset Fan",
+>>>> +    "Memory Fan",
+>>>> +    "PCI Fan",
+>>>> +    "HDD Fan",
+>>>> +};
+>>>> +
+>>>> +static const char * const fan_dock_labels[] = {
+>>>> +    "Docking Chassis/Motherboard Fan",
+>>>> +    "Docking Video Fan",
+>>>> +    "Docking Power Supply Fan",
+>>>> +    "Docking Chipset Fan",
+>>>> +};
+>>>> +
+>>>>   static int dell_wmi_ddv_query_type(struct wmi_device *wdev, enum dell_ddv_method method, u32 arg,
+>>>>                      union acpi_object **result, acpi_object_type type)
+>>>>   {
+>>>> @@ -171,6 +216,386 @@ static int dell_wmi_ddv_query_string(struct wmi_device *wdev, enum dell_ddv_meth
+>>>>       return dell_wmi_ddv_query_type(wdev, method, arg, result, ACPI_TYPE_STRING);
+>>>>   }
+>>>>
+>>>> +static int dell_wmi_ddv_query_sensors(struct wmi_device *wdev, enum dell_ddv_method method,
+>>>> +                      size_t entry_size, union acpi_object **result, u64 *count)
+>>>> +{
+>>>> +    union acpi_object *obj;
+>>>> +    u64 buffer_size;
+>>>> +    u8 *buffer;
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = dell_wmi_ddv_query_buffer(wdev, method, 0, &obj);
+>>>> +    if (ret < 0)
+>>>> +        return ret;
+>>>> +
+>>>> +    buffer_size = obj->package.elements[0].integer.value;
+>>>> +    buffer = obj->package.elements[1].buffer.pointer;
+>>>> +    if (buffer_size % entry_size != 1 || buffer[buffer_size - 1] != 0xff) {
+>>>> +        kfree(obj);
+>>>> +
+>>> Stray empty line
+>>>
+>>>> +        return -ENOMSG;
+>>>> +    }
+>>>> +
+>>>> +    *count = (buffer_size - 1) / entry_size;
+>>>> +    *result = obj;
+>>>> +
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>> +static umode_t dell_wmi_ddv_is_visible(const void *drvdata, enum hwmon_sensor_types type, u32 attr,
+>>>> +                       int channel)
+>>>> +{
+>>>> +    return 0444;
+>>>> +}
+>>>> +
+>>>> +static int dell_wmi_ddv_fan_read_channel(struct dell_wmi_ddv_data *data, u32 attr, int channel,
+>>>> +                     long *val)
+>>>> +{
+>>>> +    struct fan_sensor_entry *entry;
+>>>> +    union acpi_object *obj;
+>>>> +    u64 count;
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = dell_wmi_ddv_query_sensors(data->wdev, DELL_DDV_FAN_SENSOR_INFORMATION,
+>>>> +                     sizeof(*entry), &obj, &count);
+>>>> +    if (ret < 0)
+>>>> +        return ret;
+>>>> +
+>>>> +    entry = (struct fan_sensor_entry *)obj->package.elements[1].buffer.pointer;
+>>>> +    if (count > channel) {
+>>>> +        switch (attr) {
+>>>> +        case hwmon_fan_input:
+>>>> +            *val = get_unaligned_le16(&entry[channel].rpm);
+>>>> +
+>>> Another stray empty line. I see that "empty line before return or break"
+>>> is common. Looks odd to me, and I don't see the point (it confuses
+>>> the code flow for me and lets my brain focus on the empty line instead
+>>> of the code in question), but I guess that is PoV. I won't comment on
+>>> it further and let the maintainer decide.
+>>>
+>>>> +            break;
+>>>> +        default:
+>>>> +            ret = -EOPNOTSUPP;
+>>>> +        }
+>>>> +    } else {
+>>>> +        ret = -ENXIO;
+>>>> +    }
+>>> Error handling should come first.
+>>>> +
+>>>> +    kfree(obj);
+>>>> +
+>>>> +    return ret;
+>>>> +}
+>>>> +
+>>>> +static int dell_wmi_ddv_temp_read_channel(struct dell_wmi_ddv_data *data, u32 attr, int channel,
+>>>> +                      long *val)
+>>>> +{
+>>>> +    struct thermal_sensor_entry *entry;
+>>>> +    union acpi_object *obj;
+>>>> +    u64 count;
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = dell_wmi_ddv_query_sensors(data->wdev, DELL_DDV_THERMAL_SENSOR_INFORMATION,
+>>>> +                     sizeof(*entry), &obj, &count);
+>>>> +    if (ret < 0)
+>>>> +        return ret;
+>>>> +
+>>>> +    entry = (struct thermal_sensor_entry *)obj->package.elements[1].buffer.pointer;
+>>>> +    if (count > channel) {
+>>> This is a bit of Joda programming. It is really "channel < count",
+>>> ie the requested channel number is in the range of channels reported
+>>> by the WMI code. PoV, of course, but I find that the above makes the
+>>> code more difficult to read.
+>>>> +        switch (attr) {
+>>>> +        case hwmon_temp_input:
+>>>> +            *val = entry[channel].now * 1000;
+>>>> +
+>>>> +            break;
+>>>> +        case hwmon_temp_min:
+>>>> +            *val = entry[channel].min * 1000;
+>>>> +
+>>>> +            break;
+>>>> +        case hwmon_temp_max:
+>>>> +            *val = entry[channel].max * 1000;
+>>>> +
+>>>> +            break;
+>>>> +        default:
+>>>> +            ret = -EOPNOTSUPP;
+>>> break; missing
+>>>
+>>>> +        }
+>>>> +    } else {
+>>>> +        ret = -ENXIO;
+>>>> +    }
+>>> Same as above - error handling should come first.
+>>>
+>>>> +
+>>>> +    kfree(obj);
+>>>> +
+>>>> +    return ret;
+>>>> +}
+>>>> +
+>>>> +static int dell_wmi_ddv_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>>>> +                 int channel, long *val)
+>>>> +{
+>>>> +    struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
+>>>> +
+>>>> +    switch (type) {
+>>>> +    case hwmon_fan:
+>>>> +        return dell_wmi_ddv_fan_read_channel(data, attr, channel, val);
+>>>> +    case hwmon_temp:
+>>>> +        return dell_wmi_ddv_temp_read_channel(data, attr, channel, val);
+>>>> +    default:
+>>>> +        break;
+>>>> +    }
+>>>> +
+>>>> +    return -EOPNOTSUPP;
+>>>> +}
+>>>> +
+>>>> +static int dell_wmi_ddv_fan_read_string(struct dell_wmi_ddv_data *data, int channel,
+>>>> +                    const char **str)
+>>>> +{
+>>>> +    struct fan_sensor_entry *entry;
+>>>> +    union acpi_object *obj;
+>>>> +    u64 count;
+>>>> +    u8 type;
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = dell_wmi_ddv_query_sensors(data->wdev, DELL_DDV_FAN_SENSOR_INFORMATION,
+>>>> +                     sizeof(*entry), &obj, &count);
+>>>> +    if (ret < 0)
+>>>> +        return ret;
+>>>> +
+>>>> +    entry = (struct fan_sensor_entry *)obj->package.elements[1].buffer.pointer;
+>>>> +    if (count > channel) {
+>>>> +        type = entry[channel].type;
+>>>> +
+>>>> +        switch (type) {
+>>>> +        case 0x00 ... 0x07:
+>>>> +            *str = fan_labels[type];
+>>>> +
+>>>> +            break;
+>>>> +        case 0x11 ... 0x14:
+>>>> +            *str = fan_dock_labels[type - 0x11];
+>>>> +
+>>>> +            break;
+>>>> +        default:
+>>>> +            *str = "Unknown Fan";
+>>> break; missing.
+>>>
+>>>> +        }
+>>>> +    } else {
+>>>> +        ret = -ENXIO;
+>>>> +    }
+>>> And again.
+>>>
+>>>> +
+>>>> +    kfree(obj);
+>>>> +
+>>>> +    return ret;
+>>>> +}
+>>>> +
+>>>> +static int dell_wmi_ddv_temp_read_string(struct dell_wmi_ddv_data *data, int channel,
+>>>> +                     const char **str)
+>>>> +{
+>>>> +    struct thermal_sensor_entry *entry;
+>>>> +    union acpi_object *obj;
+>>>> +    u64 count;
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = dell_wmi_ddv_query_sensors(data->wdev, DELL_DDV_THERMAL_SENSOR_INFORMATION,
+>>>> +                     sizeof(*entry), &obj, &count);
+>>>> +    if (ret < 0)
+>>>> +        return ret;
+>>>> +
+>>>> +    entry = (struct thermal_sensor_entry *)obj->package.elements[1].buffer.pointer;
+>>>> +    if (count > channel) {
+>>>> +        switch (entry[channel].type) {
+>>>> +        case 0x00:
+>>>> +            *str = "CPU";
+>>>> +
+>>>> +            break;
+>>>> +        case 0x11:
+>>>> +            *str = "Video";
+>>>> +
+>>>> +            break;
+>>>> +        case 0x22:
+>>>> +            *str = "Memory"; // sometimes called DIMM
+>>> Personally I don't permit C++ style comments in a hwmon driver
+>>> unless _all_ comments are C++ style. Just a remark here.
+>>>
+>>>> +
+>>>> +            break;
+>>>> +        case 0x33:
+>>>> +            *str = "Other";
+>>>> +
+>>>> +            break;
+>>>> +        case 0x44:
+>>>> +            *str = "Ambient"; // sometimes called SKIN
+>>>> +
+>>>> +            break;
+>>>> +        case 0x52:
+>>>> +            *str = "SODIMM";
+>>>> +
+>>>> +            break;
+>>>> +        case 0x55:
+>>>> +            *str = "HDD";
+>>>> +
+>>>> +            break;
+>>>> +        case 0x62:
+>>>> +            *str = "SODIMM 2";
+>>>> +
+>>>> +            break;
+>>>> +        case 0x73:
+>>>> +            *str = "NB";
+>>>> +
+>>>> +            break;
+>>>> +        case 0x83:
+>>>> +            *str = "Charger";
+>>>> +
+>>>> +            break;
+>>>> +        case 0xbb:
+>>>> +            *str = "Memory 3";
+>>>> +
+>>>> +            break;
+>>>> +        default:
+>>>> +            *str = "Unknown";
+>>> break; missing
+>>> Ok, I guess this is on purpose. I personally don't permit
+>>> that since it always leaves the question if it was on purpose or not.
+>>>
+>>>> +        }
+>>>> +    } else {
+>>>> +        ret = -ENXIO;
+>>>> +    }
+>>>> +
+>>>> +    kfree(obj);
+>>>> +
+>>>> +    return ret;
+>>>> +}
+>>>> +
+>>>> +static int dell_wmi_ddv_read_string(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>>>> +                    int channel, const char **str)
+>>>> +{
+>>>> +    struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
+>>>> +
+>>>> +    switch (type) {
+>>>> +    case hwmon_fan:
+>>>> +        switch (attr) {
+>>>> +        case hwmon_fan_label:
+>>>> +            return dell_wmi_ddv_fan_read_string(data, channel, str);
+>>>> +        default:
+>>>> +            break;
+>>>> +        }
+>>>> +        break;
+>>>> +    case hwmon_temp:
+>>>> +        switch (attr) {
+>>>> +        case hwmon_temp_label:
+>>>> +            return dell_wmi_ddv_temp_read_string(data, channel, str);
+>>>> +        default:
+>>>> +            break;
+>>>> +        }
+>>>> +        break;
+>>>> +    default:
+>>>> +        break;
+>>>> +    }
+>>>> +
+>>>> +    return -EOPNOTSUPP;
+>>>> +}
+>>>> +
+>>>> +static const struct hwmon_ops dell_wmi_ddv_ops = {
+>>>> +    .is_visible = dell_wmi_ddv_is_visible,
+>>>> +    .read = dell_wmi_ddv_read,
+>>>> +    .read_string = dell_wmi_ddv_read_string,
+>>>> +};
+>>>> +
+>>>> +static struct hwmon_channel_info *dell_wmi_ddv_channel_create(struct device *dev, u64 count,
+>>>> +                                  enum hwmon_sensor_types type,
+>>>> +                                  u32 config)
+>>>> +{
+>>>> +    struct combined_channel_info *cinfo;
+>>>> +    int i;
+>>>> +
+>>>> +    cinfo = devm_kzalloc(dev, struct_size(cinfo, config, count + 1), GFP_KERNEL);
+>>>> +    if (!cinfo)
+>>>> +        return ERR_PTR(-ENOMEM);
+>>>> +
+>>>> +    cinfo->info.type = type;
+>>>> +    cinfo->info.config = cinfo->config;
+>>>> +
+>>>> +    for (i = 0; i < count; i++)
+>>>> +        cinfo->config[i] = config;
+>>>> +
+>>>> +    return &cinfo->info;
+>>>> +}
+>>>> +
+>>>> +static struct hwmon_channel_info *dell_wmi_ddv_channel_init(struct wmi_device *wdev,
+>>>> +                                enum dell_ddv_method method,
+>>>> +                                size_t entry_size,
+>>>> +                                enum hwmon_sensor_types type,
+>>>> +                                u32 config)
+>>>> +{
+>>>> +    union acpi_object *obj;
+>>>> +    u64 count;
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = dell_wmi_ddv_query_sensors(wdev, method, entry_size, &obj, &count);
+>>>> +    if (ret < 0)
+>>>> +        return ERR_PTR(ret);
+>>>> +
+>>>> +    kfree(obj);
+>>>> +
+>>>> +    if (!count)
+>>>> +        return ERR_PTR(-ENODEV);
+>>>> +
+>>>> +    return dell_wmi_ddv_channel_create(&wdev->dev, count, type, config);
+>>>> +}
+>>>> +
+>>>> +static int dell_wmi_ddv_hwmon_add(struct dell_wmi_ddv_data *data)
+>>>> +{
+>>>> +    struct wmi_device *wdev = data->wdev;
+>>>> +    struct combined_chip_info *cinfo;
+>>>> +    struct device *hdev;
+>>>> +    int index = 0;
+>>>> +    int ret;
+>>>> +
+>>>> +    if (!devres_open_group(&wdev->dev, dell_wmi_ddv_hwmon_add, GFP_KERNEL))
+>>>> +        return -ENOMEM;
+>>>> +
+>>>> +    cinfo = devm_kzalloc(&wdev->dev, struct_size(cinfo, info, 4), GFP_KERNEL);
+>>>> +    if (!cinfo) {
+>>>> +        ret = -ENOMEM;
+>>>> +
+>>>> +        goto err_release;
+>>>> +    }
+>>>> +
+>>>> +    cinfo->chip.ops = &dell_wmi_ddv_ops;
+>>>> +    cinfo->chip.info = cinfo->info;
+>>>> +
+>>>> +    cinfo->info[index] = dell_wmi_ddv_channel_create(&wdev->dev, 1, hwmon_chip,
+>>>> +                             HWMON_C_REGISTER_TZ);
+>>>> +
+>>>> +    if (IS_ERR(cinfo->info[index])) {
+>>>> +        ret = PTR_ERR(cinfo->info[index]);
+>>>> +
+>>>> +        goto err_release;
+>>>> +    }
+>>>> +
+>>>> +    index++;
+>>>> +
+>>>> +    cinfo->info[index] = dell_wmi_ddv_channel_init(wdev, DELL_DDV_FAN_SENSOR_INFORMATION,
+>>>> +                               sizeof(struct fan_sensor_entry), hwmon_fan,
+>>>> +                               (HWMON_F_INPUT | HWMON_F_LABEL));
+>>>> +    if (!IS_ERR(cinfo->info[index]))
+>>>> +        index++;
+>>>> +
+>>>> +    cinfo->info[index] = dell_wmi_ddv_channel_init(wdev, DELL_DDV_THERMAL_SENSOR_INFORMATION,
+>>>> +                               sizeof(struct thermal_sensor_entry),
+>>>> +                               hwmon_temp, (HWMON_T_INPUT | HWMON_T_MIN |
+>>>> +                               HWMON_T_MAX | HWMON_T_LABEL));
+>>>> +    if (!IS_ERR(cinfo->info[index]))
+>>>> +        index++;
+>>>> +
+>>>> +    if (!index) {
+>>>> +        ret = -ENODEV;
+>>>> +
+>>>> +        goto err_release;
+>>>> +    }
+>>>> +
+>>>> +    cinfo->info[index] = NULL;
+>>>> +
+>>>> +    hdev = devm_hwmon_device_register_with_info(&wdev->dev, "dell_ddv", data, &cinfo->chip,
+>>>> +                            NULL);
+>>>> +    if (IS_ERR(hdev)) {
+>>>> +        ret = PTR_ERR(hdev);
+>>>> +
+>>>> +        goto err_release;
+>>>> +    }
+>>>> +
+>>>> +    devres_close_group(&wdev->dev, dell_wmi_ddv_hwmon_add);
+>>>> +
+>>>> +    return 0;
+>>>> +
+>>>> +err_release:
+>>>> +    devres_release_group(&wdev->dev, dell_wmi_ddv_hwmon_add);
+>>>> +
+>>>> +    return ret;
+>>>> +}
+>>>> +
+>>>>   static int dell_wmi_ddv_battery_index(struct acpi_device *acpi_dev, u32 *index)
+>>>>   {
+>>>>       const char *uid_str;
+>>>> @@ -370,7 +795,15 @@ static int dell_wmi_ddv_probe(struct wmi_device *wdev, const void *context)
+>>>>
+>>>>       dell_wmi_ddv_debugfs_init(wdev);
+>>>>
+>>>> -    return dell_wmi_ddv_battery_add(data);
+>>>> +    ret = dell_wmi_ddv_hwmon_add(data);
+>>>> +    if (ret < 0)
+>>>> +        dev_dbg(&wdev->dev, "Unable to register hwmon interface: %d\n", ret);
+>>>> +
+>>>> +    ret = dell_wmi_ddv_battery_add(data);
+>>>> +    if (ret < 0)
+>>>> +        dev_dbg(&wdev->dev, "Unable to register acpi battery hook: %d\n", ret);
+>>>> +
+>>> This used to be an error, but no longer is. Not my call to make
+>>> if this is acceptable, just pointing it out.
+>>
+>> I decided to not treat the battery hook as essential function anymore because
+>> the battery hook and hwmon functionality are more or less disconnected from
+>> each other, so having the driver abort probing just because one functionality
+>> could not be initialized seemed unreasonable to me.
+>>
+>> I already thought about putting the battery hook and hwmon functionality into
+>> separate drivers, with the main driver registering a MFD device or something similar.
+>> Because apart from some generic routines, both functions are not connected in any way.
+>>
+>> Is it acceptable to split the driver for such a thing?
+>>
+>> Armin Wolf
+>>
+> Any thoughts about this? Otherwise i will just use conditionals.
+
+I addressed this already in my earlier review of this (5/5) patch:
+
+"""
+I'm fine with not making either _add failing an error, but can we make this a dev_warn,
+dev_dbg is a bit too low of a log-level for something which is not supposed to happen.
+
+E.g. change this to:
+
+	ret = dell_wmi_ddv_hwmon_add(data);
+	if (ret && ret != -ENODEV)
+		dev_warn(&wdev->dev, "Unable to register hwmon interface: %d\n", ret);
+"""
+
+IOW I agree to not have one of the _add() calls failing making probe() fail,
+because as you say there are 2 independent calls and just because one does
+not work does not mean we don't still want the other.
+
+But as mentioned please change the logging to a warning (and make it
+silent when ret == -ENODEV).
+
+Regards,
+
+Hans
+
+
+
