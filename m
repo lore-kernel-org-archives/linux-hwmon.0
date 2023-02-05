@@ -2,119 +2,96 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E9FAC636CD
-	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Feb 2023 17:37:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8A4BC636CD
+	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Feb 2023 20:55:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbjBERh3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 5 Feb 2023 12:37:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40830 "EHLO
+        id S229486AbjBEUzZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 5 Feb 2023 15:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBERh2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Feb 2023 12:37:28 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12E0193FE;
-        Sun,  5 Feb 2023 09:37:25 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id d21-20020a056830005500b0068bd2e0b25bso2681024otp.1;
-        Sun, 05 Feb 2023 09:37:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=KzQczVVwdRA/Z7vPglNFmtc/zQXF/DwmrsXVAsLwTdg=;
-        b=avJOayGlLjRxU+jq/ig5PQKFbwQcxqMRd8Ye4uah8mBDRxVB572NXSwgYYfW3VEh7l
-         9C758+cF3deGOsoKohyE5SVhVqdhu7Vjxdo8r404fOE9cxiw0940D5fKv13abqgkRLfW
-         CW64WH9mRF7D2MZClevv/S5FWWMQMQVodLnxflqiLY+5aJNk7vKAo70f0FljfRQz+Wt1
-         3ROw4ZSgOUdOTN9zIgR5N1B/yi6TVZYMQdTPW+Z37p6OeFqZONgQoqhvtLg6LNNagdLq
-         4dGdyRf2ZBEwP+u3qOFqspAfYxJF4BHT7kF1923vNkwXxi+LeaS4qNMZ8m25LBFWR6Nx
-         NB2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KzQczVVwdRA/Z7vPglNFmtc/zQXF/DwmrsXVAsLwTdg=;
-        b=gbPprRv90XNMHF9PRhHH4tQIM1yfdSgkUNykIBfJkFnmGP1/WNdEH6Mg1LzcwXw5JS
-         PKxMfQh01E9KxiUA0kovBQsz7bB/VifE19vqFvsbsmZYYx4aVY99evZQzgigKwtmn5m8
-         zaQqNCz0U3CDtQttxXqkqcEIGoDmti/620knpMceJdFsAOvVLaFKgXAMkjsy2OJ+Tkkm
-         y2fgozHoPS4c1nkJ8aUoCtzhnjJ9EBzH0aru7Q0jNkw/mFbSloq89F0NI2YTy+q4Bueq
-         5oIcGlfG5hbOQqAyoELQTD/l3ZomFWcMoFj6uRNsH1mvkVsLkcbd+/3XOdYGtRiTQduO
-         cKhg==
-X-Gm-Message-State: AO0yUKW6NIhVo3NLI8cxgQF4ieCib+3uEMqRdcRNu7nwo1+W9XIonqfG
-        LSY7mifNHKakzF6LuhTHo3w=
-X-Google-Smtp-Source: AK7set/PMbNUNqAeQfSvfNitlbsFwkiO1hktS3+JuSXne4TE0U++RBummdiQURisHcIWvvnesUV9zw==
-X-Received: by 2002:a9d:6243:0:b0:68b:c67c:5d0b with SMTP id i3-20020a9d6243000000b0068bc67c5d0bmr8130416otk.10.1675618645178;
-        Sun, 05 Feb 2023 09:37:25 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x39-20020a056830246700b0068bb7bd2668sm3722805otr.73.2023.02.05.09.37.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Feb 2023 09:37:24 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b3829a0f-ff83-651e-f78d-794565b023ec@roeck-us.net>
-Date:   Sun, 5 Feb 2023 09:37:22 -0800
+        with ESMTP id S229379AbjBEUzX (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Feb 2023 15:55:23 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA7A1A49F;
+        Sun,  5 Feb 2023 12:55:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1675630500; bh=hLmcV1s3cTU9WLWvvGVPIAQYigFM6bBky19OK8b5U+4=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=r04R8TkdI/HeOSf9yxBHWMhiBCfq0YEMiBbvizy0UzhTMT6tEMe+Qy5JkJz4CgLkz
+         is2zRJ9fH9tpta+RsL2vLBYGnLp4/oh7MQ2L2QHNdObii1SztKzaBe/UvQTlXci7cb
+         sdO8khr/ETjtd9m4c/RxeJB3JvsjMCv463kbq4zeR7+OLDMpUMv7h1Obi6fuq+u8db
+         AsTuJm9si3ZgL5ip4ozrZKMWBY9y7EuwhU7VSB6j+IfWyVc2cyxsKPNfgTQcr66O+k
+         bq7ZZr/j/hF1tUyCDxj1ygXeJWpNEUpvqwlmWofV+xTYYx4IuYFypcf3OTnojF7P2j
+         LO9ypmdvrmDPQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MRCOK-1pCips0Hw4-00NC3W; Sun, 05 Feb 2023 21:55:00 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] platform/x86: dell-ddv: Various driver updates
+Date:   Sun,  5 Feb 2023 21:54:54 +0100
+Message-Id: <20230205205456.2364-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] lm85: Bounds check to_sensor_dev_attr()->index usage
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20230127223744.never.113-kees@kernel.org>
- <20230128131319.GA4173006@roeck-us.net>
- <63dd8c1a.170a0220.d3456.3451@mx.google.com>
- <20230204015700.GG3089769@roeck-us.net>
- <63deaa0b.050a0220.bf1e1.6c26@mx.google.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <63deaa0b.050a0220.bf1e1.6c26@mx.google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:AnwqbvaAXsbxdJGkH7b1Gm31VKClQFeRvB7plgX+K72lnZG/+lx
+ M+6Jm2KGyxSI4+1EBVpsF1oGD0Ary+kUSmivCoK7XEvRRo/tlAy0K5OYgvyXUTmKyD8ikR+
+ cI8pxZYF9aqJ+fGhfwYxXhZADGZ5bOh79me5k9Kvul0/YyGimjyHZRY+77/NAoDXK+v0VDv
+ gzwWcEyEtc4l4SrxWKC8A==
+UI-OutboundReport: notjunk:1;M01:P0:OYmw2vWMjYQ=;4Advj6m7nggOxT8CrA6ZpNpMQ31
+ ghGW7xp8fI/No93C56DlimE4y7CPhAvCu56RAJz2ypzl0ADHR9IdccPXwIo9L1RpV2J5SL/WI
+ mFGQWT/86n10483UgiilhyfI7dUpwUABPNnHnjBG26g6QqHON4eSXMCI9VIteOsZ8JKZ02+qQ
+ sTzTiineqMyOgBYT7aa6Dr4+mKUUVlts0ovy7TqU8JCbaiT022CQo/Yr/6gMGRWF6ONYR95yd
+ UnhTKpXCnR2WzrPE0JMTcyAEtjYuOvVblgH6lAVm0T+yk9T9/cXnznXMqO8Cfs9gI9K5J8Pz0
+ LWu5rMmQP7tRBJF+WfzLc/OWwPcU5oijsPbZhezmv9uqYW5Bk89BB61KPMMbnEiiT78xGN84B
+ kK2uAmLQ0qrzQZPg+wOVvv/h8P39sZVzL3rKds8HuyUaLjnS6L8Ei2GORDKl3FKKPvlEiCeEp
+ I5i9kGV/pSAa32u3ibIo7tGTWyvi5JPy/qFOdne7oR5AyuwvAmCfupgW44qe0FM1t84HLzcTT
+ GE+GaBs30U6Xoq5Du7oqNHZxfVG0XHcL99IdKo6NMNbjRCM5RCAbsiSxaq8LSVLMLDWt7GJV9
+ 5oHjKvPv3vkwcQKtXavqumMAZSxBqsEwIIPcUSEBObqovX6PaAmaWXwgJo604Ba9jgLfBBe5E
+ RlZushojNHtCV9gJ2rssNXU+2Sjmx9vEoqvJ20XLlOA3OVYZL0rh38piJMC1GKfNo6JKNZirt
+ 1xwkVd4twcthfqXNrn/nHBojOHlEHCZK4H+GQS3Okq3eGvFZTFQG535FVvvSZj/Amk2gwyAW+
+ /+4lByLABok4u4/cUGQoUN8WlXrI9p9DgMLBRF/hMlYGzaMrN+9E8O3sT9EGBEONWv1kWNAgc
+ 1MSeBAquT4gQtz6DzWfYhadpXAuRX1/cl9sRQHMG4VQF3GRliEnWkkm+oBZ1dEJbmG5MuqLkA
+ X4Sj2GtBFTIt4EJCm1ZmHKFihQY=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/4/23 10:55, Kees Cook wrote:
-> On Fri, Feb 03, 2023 at 05:57:00PM -0800, Guenter Roeck wrote:
->> That line of argument would suggest that we should perform parameter checks
->> on each function entry all over the place, no matter if the range is known
->> to be valid or not. Maybe that is the way things are going, but I don't
->> like it at all. I have seen that kind of code before, in the telco space,
->> where it typically at least doubled code size and resulted in mediocre
->> performance, just because of a rule that mandated checking all parameters
->> at the beginning of each function.
-> 
-> Well, I doubt I'll be able to change your opinion of telco code, but I
-> do think robustness is not an unreasonable default state for software,
-> and that GCC and Clang do a pretty good job with optimization, etc.
-> 
->> I assume this is just one of many many patches you plan to send to add
->> parameter checks to similar hwmon code ? I _really_ don't want to have
->> the hwmon code cluttered with such unnecessary checks.
-> 
-> I was trying to provide complete coverage inspired by the specific
-> complaint GCC had, but this would also silence the warning:
-> 
-> diff --git a/drivers/hwmon/lm85.c b/drivers/hwmon/lm85.c
-> index 8d33c2484755..87d2455e721f 100644
-> --- a/drivers/hwmon/lm85.c
-> +++ b/drivers/hwmon/lm85.c
-> @@ -1106,6 +1106,7 @@ static ssize_t pwm_auto_pwm_minctl_store(struct device *dev,
->   	mutex_lock(&data->update_lock);
->   	data->autofan[nr].min_off = val;
->   	tmp = lm85_read_value(client, LM85_REG_AFAN_SPIKE1);
-> +	nr = clamp_t(int, nr, 0, ARRAY_SIZE(data->autofan) - 1);
->   	tmp &= ~(0x20 << nr);
->   	if (data->autofan[nr].min_off)
->   		tmp |= 0x20 << nr;
-> 
-> What's happening is GCC see that "nr" is used as a shift argument, so it
-> believes (not unreasonably) that this otherwise unknown value could be
-> up to 32. Here we can give it the bounded range ahead of time, keeping
-> it happy.
-> 
-I'll accept that if you also add a note clarifying that this is to silence
-a gcc/clang warning.
+Thanks to bugreport 216655 on bugzilla, the contents of the
+fan/thermal sensor buffers could be almost completely decoded.
 
-Guenter
+The first patch adds support for exposing the sensor values
+over a standard hwmon interface, and the second patch enables
+asynchronous probing for the driver since the sensor interface
+can be quiet slow.
+
+The patch series was tested on a Dell Inspiron 3505, with the hwmon
+patch being tested by multiple people over bugzilla and email. Those
+who tested the final version of the hwmon patch are credited with
+Tested-by tags.
+=2D--
+Changes in v2:
+- remove already merged patches
+- add patch enabling asynchronous probing
+- cache sensor buffers
+- add missing break statements
+- remove C++ style comments
+- rework battery hook and hwmon probing
+- rework Kconfig dependencies
+
+Armin Wolf (2):
+  platform/x86: dell-ddv: Add hwmon support
+  platform/x86: dell-ddv: Prefer asynchronous probing
+
+ drivers/platform/x86/dell/Kconfig        |   8 +-
+ drivers/platform/x86/dell/dell-wmi-ddv.c | 494 ++++++++++++++++++++++-
+ 2 files changed, 497 insertions(+), 5 deletions(-)
+
+=2D-
+2.30.2
 
