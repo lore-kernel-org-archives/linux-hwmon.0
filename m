@@ -2,291 +2,109 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1347BC05027
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Feb 2023 06:20:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85F4EC636D6
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Feb 2023 17:38:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjBIGU6 convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Feb 2023 01:20:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
+        id S229750AbjBIRiE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Feb 2023 12:38:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjBIGU5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Feb 2023 01:20:57 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4385227D5A;
-        Wed,  8 Feb 2023 22:20:50 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id E491A24E236;
-        Thu,  9 Feb 2023 14:20:41 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 9 Feb
- 2023 14:20:41 +0800
-Received: from [192.168.125.110] (183.27.96.33) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 9 Feb
- 2023 14:20:40 +0800
-Message-ID: <2c424d39-3a1d-3c91-d049-c0b941359bc3@starfivetech.com>
-Date:   Thu, 9 Feb 2023 14:20:40 +0800
+        with ESMTP id S229460AbjBIRiD (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Feb 2023 12:38:03 -0500
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB7CD53D;
+        Thu,  9 Feb 2023 09:38:02 -0800 (PST)
+Received: by mail-oo1-xc2a.google.com with SMTP id i17-20020a4adf11000000b0051abd9835d4so278899oou.1;
+        Thu, 09 Feb 2023 09:38:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hRgbQaat3TvaktqpMQsV43Rlffwg2V4Ut7Dv2IAE0aM=;
+        b=QFExAjY+wZcdoLq/Uwj3YiLcKCsp6mJMyaIAvIarvgRmkYCvYeLJ281CJ9Xl50Dwtp
+         EuXefx2OMC99olMHYaGCPZiV5lNnJZg0I5s7+Vmk8FVFZ6ACYPDa3fLViJN/QS66j6Qu
+         pcwbVkLTvAc9Q20beBr0OteuUbeBGCT1QTgckRZnAByvFseuJZXM1X6+0bTxoHlaHGsL
+         Ej10d91Nj12SCJ74HuMbJwjfoaAq+zYJViRKFBphpKoCsZsR/mgjxscMmL6/dmU3tz9f
+         HLBLg4H9GUUZXjG+49p5plIZT8vpfFotS6MqQoAOm6PqKoo9Nn3ol+2kS1QgC+ttFtqw
+         e/oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hRgbQaat3TvaktqpMQsV43Rlffwg2V4Ut7Dv2IAE0aM=;
+        b=Xb8CYGOrrOdVyRGbYSsoV8jpA7ww/Ofop6w8MbomfSCzplECeSiIbQihkcdu05fZjt
+         a/Ezer7vBumnkSmQ5jNqK04GCGXBVuZL2BzCWqPT5T7o4M8G1R71VyZ4zN4AAC6BMQR1
+         j1PWyDFR//D2om5Lqx7A2PCkhnRsZdZJwJor/7CP/MuMT+kPuYUGo5I33cANZn5VB6DB
+         g/AWckbTvQdJoFLUDc+2tbHb0AT/afA9PmXYU7bW2qI+7sq12UxaOyOn49zEj5nuqpoJ
+         TcpRzkOQaHR7jhONbaOSX3cnGyCam4cE+M7NnLuCjZ0NnlNNBMSSXhnsUrfDgHWQW6G0
+         LxgQ==
+X-Gm-Message-State: AO0yUKVBqhpOry7BCOe02Pe2v7xDHS4KM2a4rfXIiGBGAhmyVDOh1PiB
+        ArxWi7hTW+it5izuHQEza5k=
+X-Google-Smtp-Source: AK7set+2YA81fQpUX5pAN/VxK19wrRO8T2DI06OKQXZHAM0ct5mzz7MQfyHRFcsqK9yMKtqw20Hlxg==
+X-Received: by 2002:a4a:88a2:0:b0:51a:c822:1e02 with SMTP id j31-20020a4a88a2000000b0051ac8221e02mr2216853ooa.7.1675964281385;
+        Thu, 09 Feb 2023 09:38:01 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bn12-20020a056820180c00b004f28d09a880sm982981oob.13.2023.02.09.09.38.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 09:38:00 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 9 Feb 2023 09:37:59 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     ye.xingchen@zte.com.cn
+Cc:     nick.hawkins@hpe.com, verdun@hpe.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: =?iso-8859-1?Q?gxp-fan-?=
+ =?iso-8859-1?Q?ctrl=3A_use=A0devm=5Fplatform=5Fget=5Fand=5Fioremap=5Freso?=
+ =?iso-8859-1?B?dXJjZSgp?=
+Message-ID: <20230209173759.GA652733@roeck-us.net>
+References: <202302081546067270324@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v1 2/4] hwmon: (sfctemp) Add StarFive JH71x0 temperature
- sensor
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230103013145.9570-1-hal.feng@starfivetech.com>
- <20230103013145.9570-3-hal.feng@starfivetech.com>
- <20230103221017.GA217155@roeck-us.net>
- <ddb197c3-9c77-c8c2-1d41-1691de05847e@starfivetech.com>
- <7580df6b-e97f-0036-8f7f-63acde8cd42a@roeck-us.net>
- <629e070a-5138-8754-e86c-3458ae5d7a16@starfivetech.com>
- <7c375ccf-509a-aea3-62a3-d4f43d6b6c8a@roeck-us.net>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <7c375ccf-509a-aea3-62a3-d4f43d6b6c8a@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [183.27.96.33]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202302081546067270324@zte.com.cn>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 8 Feb 2023 07:16:52 -0800, Guenter Roeck wrote:
-> On 2/8/23 04:40, Hal Feng wrote:
->> On Mon, 6 Feb 2023 11:21:38 -0800, Guenter Roeck wrote:
->>> On 2/6/23 09:12, Hal Feng wrote:
->>>> On Tue, 3 Jan 2023 14:10:17 -0800, Guenter Roeck wrote:
->>>>> On Tue, Jan 03, 2023 at 09:31:43AM +0800, Hal Feng wrote:
->> [...]
->>>>>> diff --git a/drivers/hwmon/sfctemp.c b/drivers/hwmon/sfctemp.c
->>>>>> new file mode 100644
->>>>>> index 000000000000..e56716ad9587
->>>>>> --- /dev/null
->>>>>> +++ b/drivers/hwmon/sfctemp.c
->>>>>> @@ -0,0 +1,350 @@
->>>>>> +// SPDX-License-Identifier: GPL-2.0
->>>>>> +/*
->>>>>> + * Copyright (C) 2021 Emil Renner Berthing <kernel@esmil.dk>
->>>>>> + * Copyright (C) 2021 Samin Guo <samin.guo@starfivetech.com>
->>>>>> + */
->>>>>> +#include <linux/clk.h>
->>>>>> +#include <linux/completion.h>
->>>>>> +#include <linux/delay.h>
->>>>>> +#include <linux/hwmon.h>
->>>>>> +#include <linux/interrupt.h>
->>>>>> +#include <linux/io.h>
->>>>>> +#include <linux/module.h>
->>>>>> +#include <linux/mutex.h>
->>>>>> +#include <linux/of.h>
->>>>>> +#include <linux/platform_device.h>
->>>>>> +#include <linux/reset.h>
->>>>>> +
->>>>>> +/*
->>>>>> + * TempSensor reset. The RSTN can be de-asserted once the analog core has
->>>>>> + * powered up. Trst(min 100ns)
->>>>>> + * 0:reset  1:de-assert
->>>>>> + */
->>>>>> +#define SFCTEMP_RSTN    BIT(0)
->>>>>
->>>>> Missing include of linux/bits.h
->>>>
->>>> Will add it. Thanks.
->>>>
->>>>>
->>>>>> +
->>>>>> +/*
->>>>>> + * TempSensor analog core power down. The analog core will be powered up
->>>>>> + * Tpu(min 50us) after PD is de-asserted. RSTN should be held low until the
->>>>>> + * analog core is powered up.
->>>>>> + * 0:power up  1:power down
->>>>>> + */
->>>>>> +#define SFCTEMP_PD    BIT(1)
->>>>>> +
->>>>>> +/*
->>>>>> + * TempSensor start conversion enable.
->>>>>> + * 0:disable  1:enable
->>>>>> + */
->>>>>> +#define SFCTEMP_RUN    BIT(2)
->>>>>> +
->>>>>> +/*
->>>>>> + * TempSensor conversion value output.
->>>>>> + * Temp(C)=DOUT*Y/4094 - K
->>>>>> + */
->>>>>> +#define SFCTEMP_DOUT_POS    16
->>>>>> +#define SFCTEMP_DOUT_MSK    GENMASK(27, 16)
->>>>>> +
->>>>>> +/* DOUT to Celcius conversion constants */
->>>>>> +#define SFCTEMP_Y1000    237500L
->>>>>> +#define SFCTEMP_Z    4094L
->>>>>> +#define SFCTEMP_K1000    81100L
->>>>>> +
->>>>>> +struct sfctemp {
->>>>>> +    /* serialize access to hardware register and enabled below */
->>>>>> +    struct mutex lock;
->>>>>> +    struct completion conversion_done;
->>>>>> +    void __iomem *regs;
->>>>>> +    struct clk *clk_sense;
->>>>>> +    struct clk *clk_bus;
->>>>>> +    struct reset_control *rst_sense;
->>>>>> +    struct reset_control *rst_bus;
->>>>>> +    bool enabled;
->>>>>> +};
->>>>>> +
->>>>>> +static irqreturn_t sfctemp_isr(int irq, void *data)
->>>>>> +{
->>>>>> +    struct sfctemp *sfctemp = data;
->>>>>> +
->>>>>> +    complete(&sfctemp->conversion_done);
->>>>>> +    return IRQ_HANDLED;
->>>>>> +}
->>>>>> +
->>>>>> +static void sfctemp_power_up(struct sfctemp *sfctemp)
->>>>>> +{
->>>>>> +    /* make sure we're powered down first */
->>>>>> +    writel(SFCTEMP_PD, sfctemp->regs);
->>>>>> +    udelay(1);
->>>>>> +
->>>>>> +    writel(0, sfctemp->regs);
->>>>>> +    /* wait t_pu(50us) + t_rst(100ns) */
->>>>>> +    usleep_range(60, 200);
->>>>>> +
->>>>>> +    /* de-assert reset */
->>>>>> +    writel(SFCTEMP_RSTN, sfctemp->regs);
->>>>>> +    udelay(1); /* wait t_su(500ps) */
->>>>>> +}
->>>>>> +
->>>>>> +static void sfctemp_power_down(struct sfctemp *sfctemp)
->>>>>> +{
->>>>>> +    writel(SFCTEMP_PD, sfctemp->regs);
->>>>>> +}
->>>>>> +
->>>>>> +static void sfctemp_run_single(struct sfctemp *sfctemp)
->>>>>> +{
->>>>>> +    writel(SFCTEMP_RSTN | SFCTEMP_RUN, sfctemp->regs);
->>>>>> +    udelay(1);
->>>>>> +    writel(SFCTEMP_RSTN, sfctemp->regs);
->>>>>
->>>>> The datasheet (or, rather, programming manual) does not appear
->>>>> to be public, so I have to guess here.
->>>>>
->>>>> The code suggests that running a single conversion may be a choice,
->>>>> not a requirement. If it is indeed a choice, the reasoning needs to be
->>>>> explained since it adds a lot of complexity and dependencies to the
->>>>> driver (for example, interrupt support is only mandatory or even needed
->>>>> due to this choice). It also adds a significant delay to temperature
->>>>> read operations, which may have practical impact on thermal control
->>>>> software.
->>>>>
->>>>> If the chip only supports single temperature readings, that needs to be
->>>>> explained as well (and why SFCTEMP_RUN has to be reset in that case).
->>>>
->>>> The chip supports continuous conversion. When you set SFCTEMP_RUN, the
->>>> temperature raw data will be generated all the time. However, it will
->>>> also generate interrupts all the time when the conversion is finished,
->>>> because of the hardware limitation. So in this driver, we just support
->>>> the single conversion.
->>>>
->>>
->>> Sorry, I don't follow the logic. The interrupt is, for all practical
->>> purposes, useless because there are no limits and exceeding any such
->>> limits is therefore not supported. The only reason to have and enable
->>> to interrupt is because continuous mode is disabled.
->>>
->>> The code could be simplified a lot if interrupt support would be
->>> dropped and continuous mode would be enabled.
->>
->> If we enable continuous mode, which means SFCTEMP_RUN remains asserted,
->> the conversion finished interrupt will be raised after each sample
->> time (8.192 ms). Within a few minutes, a lot of interrupts are raised,
->> as showed below.
->>
->> # cat /proc/interrupts
->>             CPU0       CPU1       CPU2       CPU3
->>    1:          0          0          0          0  SiFive PLIC   1 Edge      ccache_ecc
->>    2:          1          0          0          0  SiFive PLIC   3 Edge      ccache_ecc
->>    3:          1          0          0          0  SiFive PLIC   4 Edge      ccache_ecc
->>    4:          0          0          0          0  SiFive PLIC   2 Edge      ccache_ecc
->>    5:       1116       1670        411       1466  RISC-V INTC   5 Edge      riscv-timer
->>    6:      32093          0          0          0  SiFive PLIC  81 Edge      120e0000.temperature-sensor
->>   10:       1233          0          0          0  SiFive PLIC  32 Edge      ttyS0
->> IPI0:       117         62        123        117  Rescheduling interrupts
->> IPI1:       278        353        105        273  Function call interrupts
->> IPI2:         0          0          0          0  CPU stop interrupts
->> IPI3:         0          0          0          0  CPU stop (for crash dump) interrupts
->> IPI4:         0          0          0          0  IRQ work interrupts
->> IPI5:         0          0          0          0  Timer broadcast interrupts
->>
->> If we enable continuous mode and drop the interrupt support in the
->> driver, the kernel will not know the interrupts but a lot of interrupts
->> are still raised in hardware. Can we do such like that?
+On Wed, Feb 08, 2023 at 03:46:06PM +0800, ye.xingchen@zte.com.cn wrote:
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
 > 
-> Why not ? It just stays raised. That happens a lot.
-
-OK, I see. Thanks.
-
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
 > 
->> Without the interrupt support, the temperature we read may be the value
->> generated in the last cycle.
-> 
-> That would be highly unusual and should be documented.
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
 
-Because without the interrupt, there is no flag pointing out when the
-conversion is finished, and the temperature we read is the data generated
-before. With further consideration, the error is no more than one sample
-time (8.192 ms) in continuous mode while the error is no less than one sample
-time in single mode. In this respect, continuous mode is better than single
-mode.
+Applied to hwmon-next.
 
-> 
-> 
->>
->> I think the temperature has its value only when we read it, so we start
-> 
-> "may be" ? "I think" ? That means you don't know ? Maybe test it, or ask
-> the chip designers.
+Thanks,
+Guenter
 
-Sorry for my inexact statement. I means the temperature data is useful to us
-only when we read it. If we don't read it, the temperature data will just be
-discarded every sample time.
-
+> ---
+>  drivers/hwmon/gxp-fan-ctrl.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
->> conversion only when we read the temperature. Further more, it will
->> consume more power if we enable continuous mode.
->>
+> diff --git a/drivers/hwmon/gxp-fan-ctrl.c b/drivers/hwmon/gxp-fan-ctrl.c
+> index 0e9225a8b805..0014b8b0fd41 100644
+> --- a/drivers/hwmon/gxp-fan-ctrl.c
+> +++ b/drivers/hwmon/gxp-fan-ctrl.c
+> @@ -199,7 +199,6 @@ static const struct hwmon_chip_info gxp_fan_ctrl_chip_info = {
+>  static int gxp_fan_ctrl_probe(struct platform_device *pdev)
+>  {
+>  	struct gxp_fan_ctrl_drvdata *drvdata;
+> -	struct resource *res;
+>  	struct device *dev = &pdev->dev;
+>  	struct device *hwmon_dev;
 > 
-> Usually that is not a concern, much less so than delaying each reader.
-
-After some test, it's found that there is almost no difference between these
-two modes in power consumption.
-
+> @@ -208,8 +207,7 @@ static int gxp_fan_ctrl_probe(struct platform_device *pdev)
+>  	if (!drvdata)
+>  		return -ENOMEM;
 > 
-> Ultimately, sure, you can do whatever you want. I'll still accept the driver.
-> I do expect you to explain your reasons (all of them) in the driver, though.
-> 
-> If you don't _know_ if the temperature is updated in continuous mode,
-> please state exactly that in the comments. Also explain how much power
-> is saved by not running in continuous mode. I don't want anyone to come
-> back later on and change the code because they don't know the reasons
-> why it doesn't use continuous mode.
-
-It's OK to run the continuous mode instead and remove the "- interrupts" entry
-in "required:" of DT bindings. I will modify in the next version. Thank you
-for your suggestions.
-
-Best regards,
-Hal
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	drvdata->base = devm_ioremap_resource(&pdev->dev, res);
+> +	drvdata->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+>  	if (IS_ERR(drvdata->base))
+>  		return dev_err_probe(dev, PTR_ERR(drvdata->base),
+>  				     "failed to map base\n");
