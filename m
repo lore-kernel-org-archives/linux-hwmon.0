@@ -2,109 +2,152 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85F4EC636D6
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Feb 2023 17:38:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1943C636D6
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Feb 2023 17:50:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjBIRiE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Feb 2023 12:38:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
+        id S229518AbjBIRuJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Feb 2023 12:50:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBIRiD (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Feb 2023 12:38:03 -0500
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB7CD53D;
-        Thu,  9 Feb 2023 09:38:02 -0800 (PST)
-Received: by mail-oo1-xc2a.google.com with SMTP id i17-20020a4adf11000000b0051abd9835d4so278899oou.1;
-        Thu, 09 Feb 2023 09:38:02 -0800 (PST)
+        with ESMTP id S230162AbjBIRuG (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Feb 2023 12:50:06 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA17466EE3;
+        Thu,  9 Feb 2023 09:50:03 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id t5so2321969oiw.1;
+        Thu, 09 Feb 2023 09:50:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hRgbQaat3TvaktqpMQsV43Rlffwg2V4Ut7Dv2IAE0aM=;
-        b=QFExAjY+wZcdoLq/Uwj3YiLcKCsp6mJMyaIAvIarvgRmkYCvYeLJ281CJ9Xl50Dwtp
-         EuXefx2OMC99olMHYaGCPZiV5lNnJZg0I5s7+Vmk8FVFZ6ACYPDa3fLViJN/QS66j6Qu
-         pcwbVkLTvAc9Q20beBr0OteuUbeBGCT1QTgckRZnAByvFseuJZXM1X6+0bTxoHlaHGsL
-         Ej10d91Nj12SCJ74HuMbJwjfoaAq+zYJViRKFBphpKoCsZsR/mgjxscMmL6/dmU3tz9f
-         HLBLg4H9GUUZXjG+49p5plIZT8vpfFotS6MqQoAOm6PqKoo9Nn3ol+2kS1QgC+ttFtqw
-         e/oQ==
+        bh=JUmPEXG2VuMuFoU/wyedYPRe8F6+umYR6krkjNR0xv4=;
+        b=bnQHojBdUEw55oXqicBCehGlJrxaEUIrVuhWlIJHKVwjNbqk6raR2FlwossfjPghmu
+         51thQBL12cAQpPp2X17/D/UcA9rtYRc1PHY7TStPhrQBWmoSyKEm4P1MYP8tohx6zMYo
+         Ms/VvsYqs3tDtdS/SXB4t913Y4qphy4O9oCy/yXLLjd3E2l64VVUySvfeTkOcmbTzQmY
+         O1jeap5a+9CyBkk5U8GjZKDgVCdqjucxbPTClYhSslcQF18FVt6NLZyryn1uMrvm5BFj
+         12NX9ggV9953eOa34Xi0t3ZL5ouuL6orYteHt3zBvXRjHaVa5BMbzuMGMspZ/gj2eL2g
+         ydhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hRgbQaat3TvaktqpMQsV43Rlffwg2V4Ut7Dv2IAE0aM=;
-        b=Xb8CYGOrrOdVyRGbYSsoV8jpA7ww/Ofop6w8MbomfSCzplECeSiIbQihkcdu05fZjt
-         a/Ezer7vBumnkSmQ5jNqK04GCGXBVuZL2BzCWqPT5T7o4M8G1R71VyZ4zN4AAC6BMQR1
-         j1PWyDFR//D2om5Lqx7A2PCkhnRsZdZJwJor/7CP/MuMT+kPuYUGo5I33cANZn5VB6DB
-         g/AWckbTvQdJoFLUDc+2tbHb0AT/afA9PmXYU7bW2qI+7sq12UxaOyOn49zEj5nuqpoJ
-         TcpRzkOQaHR7jhONbaOSX3cnGyCam4cE+M7NnLuCjZ0NnlNNBMSSXhnsUrfDgHWQW6G0
-         LxgQ==
-X-Gm-Message-State: AO0yUKVBqhpOry7BCOe02Pe2v7xDHS4KM2a4rfXIiGBGAhmyVDOh1PiB
-        ArxWi7hTW+it5izuHQEza5k=
-X-Google-Smtp-Source: AK7set+2YA81fQpUX5pAN/VxK19wrRO8T2DI06OKQXZHAM0ct5mzz7MQfyHRFcsqK9yMKtqw20Hlxg==
-X-Received: by 2002:a4a:88a2:0:b0:51a:c822:1e02 with SMTP id j31-20020a4a88a2000000b0051ac8221e02mr2216853ooa.7.1675964281385;
-        Thu, 09 Feb 2023 09:38:01 -0800 (PST)
+        bh=JUmPEXG2VuMuFoU/wyedYPRe8F6+umYR6krkjNR0xv4=;
+        b=DWZt2Ruay/ykH9rjnbvGcJkL3cEBUvIIibQ8jBo0NZVK1xzLas1P0oGCMSowAzcmee
+         syubV/mEyoB4qZ3VNunsRNcpj2/tlK/S1ZyeTEPHo1GfesmzAnC4EoYMAbpUEOXmsI3M
+         v93W1LKXgNm30G4PcSLuaHFLV0BiwYK275blTsfdAqtQaSxj6eOgCI5FLhB/ZckSw5QL
+         xBChceZtcBBt9THpXEIz5tmrMrJal3n1T9aFmXXPOKX6KI4Vc/V3r81XVNiOREdwoqa1
+         46LNXNI9uEwtCuFWCfVmRJYYGoItBNn3XsEXPGSF6R3xogknSl99NfRH3CfBeCNY+x5R
+         9XzQ==
+X-Gm-Message-State: AO0yUKUyWgEbMavlXDcEZj2CScJlDjqlBM4219nZeJ4IjEQ0xP3PyUtJ
+        On6jfhh/K6qi5zgDyYojnq4=
+X-Google-Smtp-Source: AK7set9NTGeaamp6UxQT4WSW3nDL5+j2RR9BpVi5+7fySkof0KyEVaBX+tjL9yAynsT4Lx1dl7XIzg==
+X-Received: by 2002:a05:6808:6c5:b0:35e:9b84:bf35 with SMTP id m5-20020a05680806c500b0035e9b84bf35mr5250841oih.6.1675965003031;
+        Thu, 09 Feb 2023 09:50:03 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bn12-20020a056820180c00b004f28d09a880sm982981oob.13.2023.02.09.09.38.00
+        by smtp.gmail.com with ESMTPSA id f21-20020a056830205500b0068bdca29f97sm957351otp.52.2023.02.09.09.50.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 09:38:00 -0800 (PST)
+        Thu, 09 Feb 2023 09:50:02 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 9 Feb 2023 09:37:59 -0800
+Date:   Thu, 9 Feb 2023 09:50:01 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     ye.xingchen@zte.com.cn
-Cc:     nick.hawkins@hpe.com, verdun@hpe.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: =?iso-8859-1?Q?gxp-fan-?=
- =?iso-8859-1?Q?ctrl=3A_use=A0devm=5Fplatform=5Fget=5Fand=5Fioremap=5Freso?=
- =?iso-8859-1?B?dXJjZSgp?=
-Message-ID: <20230209173759.GA652733@roeck-us.net>
-References: <202302081546067270324@zte.com.cn>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Iwona Winiarska <iwona.winiarska@intel.com>,
+        openbmc@lists.ozlabs.org, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Joel Stanley <joel@jms.id.au>
+Subject: Re: [RFC PATCH] hwmon: (peci/cputemp) Number cores as seen by host
+ system
+Message-ID: <20230209175001.GA667937@roeck-us.net>
+References: <20230209011632.32668-1-zev@bewilderbeest.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202302081546067270324@zte.com.cn>
+In-Reply-To: <20230209011632.32668-1-zev@bewilderbeest.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 03:46:06PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+On Wed, Feb 08, 2023 at 05:16:32PM -0800, Zev Weiss wrote:
+> While porting OpenBMC to a new platform with a Xeon Gold 6314U CPU
+> (Ice Lake, 32 cores), I discovered that the core numbering used by the
+> PECI interface appears to correspond to the cores that are present in
+> the physical silicon, rather than those that are actually enabled and
+> usable by the host OS (i.e. it includes cores that the chip was
+> manufactured with but later had fused off).
 > 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
+> Thus far the cputemp driver has transparently exposed that numbering
+> to userspace in its 'tempX_label' sysfs files, making the core numbers
+> it reported not align with the core numbering used by the host system,
+> which seems like an unfortunate source of confusion.
 > 
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+> We can instead use a separate counter to label the cores in a
+> contiguous fashion (0 through numcores-1) so that the core numbering
+> reported by the PECI cputemp driver matches the numbering seen by the
+> host.
+> 
 
-Applied to hwmon-next.
+I don't really have an opinion if this change is desirable or not.
+I suspect one could argue either way. I'l definitely want to see
+feedback from others. Any comments or thoughts, anyone ?
+
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> ---
+> 
+> Offhand I can't think of any other examples of side effects of that
+> manufacturing detail (fused-off cores) leaking out in
+> externally-visible ways, so I'd think it's probably not something we
+> really want to propagate further.
+> 
+> I've verified that at least on the system I'm working on the numbering
+> provided by this patch aligns with the host's CPU numbering (loaded
+> each core individually one by one and saw a corresponding temperature
+> increase visible via PECI), but I'm not sure if that relationship is
+> guaranteed to hold on all parts -- Iwona, do you know if that's
+> something we can rely on?
+> 
+> This patch also leaves the driver's internal core tracking with the
+> "physical" numbering the PECI interface uses, and hence it's still
+> sort of visible to userspace in the form of the hwmon channel numbers
+> used in the names of the sysfs attribute files.  If desired we could
+> also change that to keep the tempX_* file numbers contiguous as well,
+> though it would necessitate a bit of additional remapping in the
+> driver to translate between the two.
+
+I don't really see the point or benefit of doing that.
 
 Thanks,
 Guenter
 
-> ---
->  drivers/hwmon/gxp-fan-ctrl.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> diff --git a/drivers/hwmon/gxp-fan-ctrl.c b/drivers/hwmon/gxp-fan-ctrl.c
-> index 0e9225a8b805..0014b8b0fd41 100644
-> --- a/drivers/hwmon/gxp-fan-ctrl.c
-> +++ b/drivers/hwmon/gxp-fan-ctrl.c
-> @@ -199,7 +199,6 @@ static const struct hwmon_chip_info gxp_fan_ctrl_chip_info = {
->  static int gxp_fan_ctrl_probe(struct platform_device *pdev)
+>  drivers/hwmon/peci/cputemp.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
+> index 30850a479f61..6b4010cbbfdf 100644
+> --- a/drivers/hwmon/peci/cputemp.c
+> +++ b/drivers/hwmon/peci/cputemp.c
+> @@ -400,14 +400,15 @@ static int init_core_mask(struct peci_cputemp *priv)
+>  static int create_temp_label(struct peci_cputemp *priv)
 >  {
->  	struct gxp_fan_ctrl_drvdata *drvdata;
-> -	struct resource *res;
->  	struct device *dev = &pdev->dev;
->  	struct device *hwmon_dev;
-> 
-> @@ -208,8 +207,7 @@ static int gxp_fan_ctrl_probe(struct platform_device *pdev)
->  	if (!drvdata)
+>  	unsigned long core_max = find_last_bit(priv->core_mask, CORE_NUMS_MAX);
+> -	int i;
+> +	int i, corenum = 0;
+>  
+>  	priv->coretemp_label = devm_kzalloc(priv->dev, (core_max + 1) * sizeof(char *), GFP_KERNEL);
+>  	if (!priv->coretemp_label)
 >  		return -ENOMEM;
+>  
+>  	for_each_set_bit(i, priv->core_mask, CORE_NUMS_MAX) {
+> -		priv->coretemp_label[i] = devm_kasprintf(priv->dev, GFP_KERNEL, "Core %d", i);
+> +		priv->coretemp_label[i] = devm_kasprintf(priv->dev, GFP_KERNEL,
+> +							 "Core %d", corenum++);
+>  		if (!priv->coretemp_label[i])
+>  			return -ENOMEM;
+>  	}
+> -- 
+> 2.39.1.236.ga8a28b9eace8
 > 
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	drvdata->base = devm_ioremap_resource(&pdev->dev, res);
-> +	drvdata->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
->  	if (IS_ERR(drvdata->base))
->  		return dev_err_probe(dev, PTR_ERR(drvdata->base),
->  				     "failed to map base\n");
