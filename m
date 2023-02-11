@@ -2,258 +2,269 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93533C678D4
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Feb 2023 16:59:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB710C61DA4
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Feb 2023 17:41:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjBKQ7T (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 11 Feb 2023 11:59:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
+        id S229514AbjBKRl7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Feb 2023 12:41:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjBKQ7Q (ORCPT
+        with ESMTP id S229485AbjBKRl5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Feb 2023 11:59:16 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD014C14;
-        Sat, 11 Feb 2023 08:59:12 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id bu23so8144349wrb.8;
-        Sat, 11 Feb 2023 08:59:12 -0800 (PST)
+        Sat, 11 Feb 2023 12:41:57 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F4B126E0;
+        Sat, 11 Feb 2023 09:41:56 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id 70-20020a9d084c000000b0068bccf754f1so2527724oty.7;
+        Sat, 11 Feb 2023 09:41:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k4hKRpZ+hEFQcyNwS5GOyvO7MtSq27VTxXLUqx+BqEE=;
-        b=gf9WGAXomfqvl9gBc576Y0OAlru1UJ0z2cbJ4vtU/Bvi6+POa/Was0k7sL6kBDsz3K
-         +ingw4XCeJG/t6APudjgh5/iApG/Hdpu+Y+QZIatoSlex5fOWkp/CsWcQzc93/AzDhWv
-         XQrW0a/fy023nQy1rwJoQbU0+peGwvcT8cbYTq3e29z7ThNwqTUDQjG3Iu/LRBMTmR2p
-         Vk6XNqYeRx+E4B7Gu/cYoDG9xfCA8UdqhzTjDYChS+AqATFLQ0lIve3AflwGM21YHfcd
-         O8wu8AKcF5UHmmwowknfP5pHL28cQx3d7iaz2XTuLM5a04Qs1eMHUIXX7IfIEZnwi5a7
-         9VCg==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lB4BYaKypxug/Usxg3JHYWD2etWYVYsCzwgp8OF/toA=;
+        b=XGp0TX1TJXUAWmb8g/lMmsPjIPLN/i9DKQ8/skM9467YRbR83Po+Sowy1dm3gPTJt3
+         WTGqIpW4w5hgMBIe7+51AfYbv0SKfzt1igxb+t31qruN4Sije36MGn6w2ASbpryzyUBw
+         j4a1nP/jlDjpCkgMckStnuKvTWa+zq5vQIgR6YuCn+xxkOy7BUgb9XWCyKzTQ0cGArjH
+         hticXh43eIVW+xws6gcLtF5sX9lkNIrWjADxIi+V8drDOjgyh0hw55xcXHuFcnkJAxGE
+         y2hBn4iSixXuZF89uXeKKeqFh7/iIdL2Y/O3v8+81TvT+av4ZuOKoPPI/M3ip1HClfei
+         4MAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k4hKRpZ+hEFQcyNwS5GOyvO7MtSq27VTxXLUqx+BqEE=;
-        b=zX0acVWn061iG9Slgw2dZ6jIfN7M9i2cY4ar/rI76frTEn3Cik1ZqvgL7pCsN/lTHI
-         N6YryNnWNc+xMo0ooXKGuVRGSlRcW+QW0+XLDV6NIcdCKcglYnZpB2Sh4GrsZ6XHq5xw
-         N3xr7pOrWNC4I/Vcz4SN3RHrX4vXH2DhLZNY36BKuyQgpqrcjXqah9rUovHgrss6F8ld
-         Xkn+ZdhNS8mPsIacb2RVJwhHOfb/44Pan22VFuYVFP3CX1JD86gTUlm2fGcOw+VPGiN+
-         bse08boueWv2JJuzdOs8obST1/AlLp0LZEM58V8RO0B8yZFpz9OPkSE9qa/2qBA3wFhF
-         qksg==
-X-Gm-Message-State: AO0yUKUYKDyqbKUW+4PB85ueeINhETzeWQgAxNhl9++QkvuLMDWdiJfd
-        ZVbDimUAOuADbA4Vs3dZ7mhsb9/lgZpomw==
-X-Google-Smtp-Source: AK7set/8WPwPTjxbE+2w323WC9PdsMzpDrO8rtQlbmJfcsHMlA+47RWZoiieotQIChIIAybX7ZJGqQ==
-X-Received: by 2002:a05:6000:12cb:b0:2bf:cb91:a40a with SMTP id l11-20020a05600012cb00b002bfcb91a40amr15759490wrx.46.1676134750780;
-        Sat, 11 Feb 2023 08:59:10 -0800 (PST)
-Received: from localhost.localdomain ([2001:9e8:20d3:ac00:30d6:d4a1:e6f6:5876])
-        by smtp.gmail.com with ESMTPSA id k16-20020adfe8d0000000b002c54536c662sm5097893wrn.34.2023.02.11.08.59.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Feb 2023 08:59:10 -0800 (PST)
-From:   Leonard Anderweit <leonard.anderweit@gmail.com>
-To:     linux-hwmon@vger.kernel.org
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lB4BYaKypxug/Usxg3JHYWD2etWYVYsCzwgp8OF/toA=;
+        b=OgH0Hg1jqQsfzPnb2nizqzOksMnEi6nBrbU3n40lyNk7+R+cZwm1lGEdrvdVMxACc6
+         VPdKsgLHKQI6bVayI1IZX5lgFgnwYAWMdVCyC10zMcSwLL8p/4zbxPyYPfJT13uiPFE8
+         AMvhVLRxbWwDGYqS7PeFcbxWIk2vKt53gwSjWTw1LRPexXqtwWaFmB8Z1KZbv5qIQhpW
+         YCSL3nTfHJ72EWC0EUcPcsGYjRKvJ/J8rexYoziebLwGbLJdhEe7vpALJyOOJw2i5wNp
+         DsNAmX+3b30YIpxJzuZesYhvVS1C0PdIWTrtGAvINOA9BP+oaYYt6yQfb5qiLEiRjaWm
+         kmpw==
+X-Gm-Message-State: AO0yUKUuDZZG5DNezh4/cmH8s53TYJEpkDFYstKs5qjikF+C2Hr4LRpg
+        vXyC9dMNKxqFNsILqyEKtvZ/43asclU=
+X-Google-Smtp-Source: AK7set+XLqmBXbzcKZ8FKtIE+ku4zpYPa2S4L8c5yXo/kAp7AwMC/zgxRjW0lNooXwQGZQqd/6oOtg==
+X-Received: by 2002:a05:6830:610b:b0:68d:3e67:22a7 with SMTP id ca11-20020a056830610b00b0068d3e6722a7mr13771369otb.33.1676137315407;
+        Sat, 11 Feb 2023 09:41:55 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v23-20020a9d5a17000000b0068bc8968753sm3300435oth.17.2023.02.11.09.41.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Feb 2023 09:41:54 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ef64d9c3-65e1-636c-1cb7-8721b1e8746e@roeck-us.net>
+Date:   Sat, 11 Feb 2023 09:41:52 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Leonard Anderweit <leonard.anderweit@gmail.com>,
+        linux-hwmon@vger.kernel.org
 Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
         Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Leonard Anderweit <leonard.anderweit@gmail.com>
-Subject: [PATCH 3/5] hwmon: (aquacomputer_d5next) Add temperature offset control for Aquaero
-Date:   Sat, 11 Feb 2023 17:59:21 +0100
-Message-Id: <20230211165923.17807-4-leonard.anderweit@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230211165923.17807-1-leonard.anderweit@gmail.com>
+        linux-kernel@vger.kernel.org
 References: <20230211165923.17807-1-leonard.anderweit@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+ <20230211165923.17807-6-leonard.anderweit@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 5/5] hwmon: (aquacomputer_d5next) Add PWM mode control for
+ Aquaero
+In-Reply-To: <20230211165923.17807-6-leonard.anderweit@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Support sending control reports to Aquacomputer Aquaero. This commit only
-enables control of the temperature offset as this works in the same manner as
-with already supported devices.
-Also, mention temperature offset control for Aquaero in docs.
+On 2/11/23 08:59, Leonard Anderweit wrote:
+> Add PWM mode control for the Aquacomputer Aquaero. On the Aquaero 6 all four
+> ports can switch between DC and PWM control. On the Aquaero 5 this is only
+> supported for the fourth port, but changing the setting for the other ports has
+> no consequences.
+> 
 
-Signed-off-by: Leonard Anderweit <leonard.anderweit@gmail.com>
----
- Documentation/hwmon/aquacomputer_d5next.rst |  4 +-
- drivers/hwmon/aquacomputer_d5next.c         | 62 ++++++++++++++++-----
- 2 files changed, 50 insertions(+), 16 deletions(-)
+Adding the capability without actually supporting it raises the expectation
+that it works from those who don't know better. Please only provide the
+capability to set the mode where it is actually supported.
 
-diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
-index 7d0d015b1a52..de43374940b8 100644
---- a/Documentation/hwmon/aquacomputer_d5next.rst
-+++ b/Documentation/hwmon/aquacomputer_d5next.rst
-@@ -25,7 +25,7 @@ communicate through proprietary USB HID protocols.
- 
- The Aquaero devices expose eight physical, eight virtual and four calculated
- virtual temperature sensors, as well as two flow sensors. The fans expose their
--speed (in RPM), power, voltage and current.
-+speed (in RPM), power, voltage and current. The temperature offset can be controlled.
- 
- For the D5 Next pump, available sensors are pump and fan speed, power, voltage
- and current, as well as coolant temperature and eight virtual temp sensors. Also
-@@ -75,7 +75,7 @@ Sysfs entries
- 
- ================ ==============================================================
- temp[1-20]_input Physical/virtual temperature sensors (in millidegrees Celsius)
--temp[1-4]_offset Temperature sensor correction offset (in millidegrees Celsius)
-+temp[1-8]_offset Temperature sensor correction offset (in millidegrees Celsius)
- fan[1-8]_input   Pump/fan speed (in RPM) / Flow speed (in dL/h)
- fan5_pulses      Quadro flow sensor pulses
- power[1-8]_input Pump/fan power (in micro Watts)
-diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-index 03ef9e0258d2..95461e2907e1 100644
---- a/drivers/hwmon/aquacomputer_d5next.c
-+++ b/drivers/hwmon/aquacomputer_d5next.c
-@@ -56,6 +56,7 @@ static const char *const aqc_device_names[] = {
- #define SERIAL_PART_OFFSET		2
- 
- #define CTRL_REPORT_ID			0x03
-+#define AQUAERO_CTRL_REPORT_ID		0x0b
- 
- /* The HID report that the official software always sends
-  * after writing values, currently same for all devices
-@@ -67,6 +68,14 @@ static u8 secondary_ctrl_report[] = {
- 	0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x34, 0xC6
- };
- 
-+/* Secondary HID report values for Aquaero */
-+#define AQUAERO_SECONDARY_CTRL_REPORT_ID	0x06
-+#define AQUAERO_SECONDARY_CTRL_REPORT_SIZE	0x07
-+
-+static u8 aquaero_secondary_ctrl_report[] = {
-+	0x06, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00
-+};
-+
- /* Report IDs for legacy devices */
- #define POWERADJUST3_STATUS_REPORT_ID	0x03
- 
-@@ -94,6 +103,7 @@ static u8 secondary_ctrl_report[] = {
- #define AQUAERO_NUM_VIRTUAL_SENSORS		8
- #define AQUAERO_NUM_CALC_VIRTUAL_SENSORS	4
- #define AQUAERO_NUM_FLOW_SENSORS		2
-+#define AQUAERO_CTRL_REPORT_SIZE		0xa93
- 
- /* Sensor report offsets for Aquaero fan controllers */
- #define AQUAERO_SENSOR_START			0x65
-@@ -106,6 +116,9 @@ static u8 secondary_ctrl_report[] = {
- #define AQUAERO_FAN_SPEED_OFFSET		0x00
- static u16 aquaero_sensor_fan_offsets[] = { 0x167, 0x173, 0x17f, 0x18B };
- 
-+/* Control report offsets for the Aquaero fan controllers */
-+#define AQUAERO_TEMP_CTRL_OFFSET	0xdb
-+
- /* Specs of the D5 Next pump */
- #define D5NEXT_NUM_FANS			2
- #define D5NEXT_NUM_SENSORS		1
-@@ -441,6 +454,10 @@ struct aqc_data {
- 	const char *name;
- 
- 	int status_report_id;	/* Used for legacy devices, report is stored in buffer */
-+	int ctrl_report_id;
-+	int secondary_ctrl_report_id;
-+	int secondary_ctrl_report_size;
-+	u8 *secondary_ctrl_report;
- 
- 	int buffer_size;
- 	u8 *buffer;
-@@ -513,7 +530,7 @@ static int aqc_get_ctrl_data(struct aqc_data *priv)
- 	int ret;
- 
- 	memset(priv->buffer, 0x00, priv->buffer_size);
--	ret = hid_hw_raw_request(priv->hdev, CTRL_REPORT_ID, priv->buffer, priv->buffer_size,
-+	ret = hid_hw_raw_request(priv->hdev, priv->ctrl_report_id, priv->buffer, priv->buffer_size,
- 				 HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
- 	if (ret < 0)
- 		ret = -ENODATA;
-@@ -527,23 +544,27 @@ static int aqc_send_ctrl_data(struct aqc_data *priv)
- 	int ret;
- 	u16 checksum;
- 
--	/* Init and xorout value for CRC-16/USB is 0xffff */
--	checksum = crc16(0xffff, priv->buffer + priv->checksum_start, priv->checksum_length);
--	checksum ^= 0xffff;
-+	/* Checksum is not needed for Aquaero */
-+	if (priv->kind != aquaero) {
-+		/* Init and xorout value for CRC-16/USB is 0xffff */
-+		checksum = crc16(0xffff, priv->buffer + priv->checksum_start,
-+				 priv->checksum_length);
-+		checksum ^= 0xffff;
- 
--	/* Place the new checksum at the end of the report */
--	put_unaligned_be16(checksum, priv->buffer + priv->checksum_offset);
-+		/* Place the new checksum at the end of the report */
-+		put_unaligned_be16(checksum, priv->buffer + priv->checksum_offset);
-+	}
- 
- 	/* Send the patched up report back to the device */
--	ret = hid_hw_raw_request(priv->hdev, CTRL_REPORT_ID, priv->buffer, priv->buffer_size,
-+	ret = hid_hw_raw_request(priv->hdev, priv->ctrl_report_id, priv->buffer, priv->buffer_size,
- 				 HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
- 	if (ret < 0)
- 		return ret;
- 
- 	/* The official software sends this report after every change, so do it here as well */
--	ret = hid_hw_raw_request(priv->hdev, SECONDARY_CTRL_REPORT_ID, secondary_ctrl_report,
--				 SECONDARY_CTRL_REPORT_SIZE, HID_FEATURE_REPORT,
--				 HID_REQ_SET_REPORT);
-+	ret = hid_hw_raw_request(priv->hdev, priv->secondary_ctrl_report_id,
-+				 priv->secondary_ctrl_report, priv->secondary_ctrl_report_size,
-+				 HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
- 	return ret;
- }
- 
-@@ -969,10 +990,10 @@ static const struct hwmon_channel_info *aqc_info[] = {
- 			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
- 			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
- 			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
--			   HWMON_T_INPUT | HWMON_T_LABEL,
--			   HWMON_T_INPUT | HWMON_T_LABEL,
--			   HWMON_T_INPUT | HWMON_T_LABEL,
--			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
-+			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
-+			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
-+			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
-@@ -1275,6 +1296,9 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		priv->num_flow_sensors = AQUAERO_NUM_FLOW_SENSORS;
- 		priv->flow_sensors_start_offset = AQUAERO_FLOW_SENSORS_START;
- 
-+		priv->buffer_size = AQUAERO_CTRL_REPORT_SIZE;
-+		priv->temp_ctrl_offset = AQUAERO_TEMP_CTRL_OFFSET;
-+
- 		priv->temp_label = label_temp_sensors;
- 		priv->virtual_temp_label = label_virtual_temp_sensors;
- 		priv->calc_virt_temp_label = label_aquaero_calc_temp_sensors;
-@@ -1438,6 +1462,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		priv->firmware_version_offset = AQUAERO_FIRMWARE_VERSION;
- 
- 		priv->fan_structure = &aqc_aquaero_fan_structure;
-+
-+		priv->ctrl_report_id = AQUAERO_CTRL_REPORT_ID;
-+		priv->secondary_ctrl_report_id = AQUAERO_SECONDARY_CTRL_REPORT_ID;
-+		priv->secondary_ctrl_report_size = AQUAERO_SECONDARY_CTRL_REPORT_SIZE;
-+		priv->secondary_ctrl_report = aquaero_secondary_ctrl_report;
- 		break;
- 	case poweradjust3:
- 		priv->status_report_id = POWERADJUST3_STATUS_REPORT_ID;
-@@ -1446,6 +1475,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		priv->serial_number_start_offset = AQC_SERIAL_START;
- 		priv->firmware_version_offset = AQC_FIRMWARE_VERSION;
- 
-+		priv->ctrl_report_id = CTRL_REPORT_ID;
-+		priv->secondary_ctrl_report_id = SECONDARY_CTRL_REPORT_ID;
-+		priv->secondary_ctrl_report_size = SECONDARY_CTRL_REPORT_SIZE;
-+		priv->secondary_ctrl_report = secondary_ctrl_report;
-+
- 		if (priv->kind == aquastreamult)
- 			priv->fan_structure = &aqc_aquastreamult_fan_structure;
- 		else
--- 
-2.39.1
+Otherwise one could argue along the line of 'hey, let's just "enable"
+all attributes no matter if supported or not', which would lead to a
+lot of confusion. I really hope that isn't done with other attributes
+in this driver.
+
+> Signed-off-by: Leonard Anderweit <leonard.anderweit@gmail.com>
+> ---
+>   Documentation/hwmon/aquacomputer_d5next.rst |  4 +-
+>   drivers/hwmon/aquacomputer_d5next.c         | 86 ++++++++++++++++-----
+>   2 files changed, 70 insertions(+), 20 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
+> index 2dbb3bd37878..002cb9eecdf5 100644
+> --- a/Documentation/hwmon/aquacomputer_d5next.rst
+> +++ b/Documentation/hwmon/aquacomputer_d5next.rst
+> @@ -26,7 +26,8 @@ communicate through proprietary USB HID protocols.
+>   The Aquaero devices expose eight physical, eight virtual and four calculated
+>   virtual temperature sensors, as well as two flow sensors. The fans expose their
+>   speed (in RPM), power, voltage and current. The temperature offset and the fan speed
+> -can be controlled.
+> +can be controlled. The fan PWM mode (DC/PWM) can be controlled. The Aquaero 6 supports
+> +this on all four fan connectors and the Aquaero 5 only on the fourth connector.
+>   
+>   For the D5 Next pump, available sensors are pump and fan speed, power, voltage
+>   and current, as well as coolant temperature and eight virtual temp sensors. Also
+> @@ -83,6 +84,7 @@ power[1-8]_input Pump/fan power (in micro Watts)
+>   in[0-7]_input    Pump/fan voltage (in milli Volts)
+>   curr[1-8]_input  Pump/fan current (in milli Amperes)
+>   pwm[1-8]         Fan PWM (0 - 255)
+> +pwm[1-4]_mode    Fan control mode (0: DC mode; 1: PWM mode)
+
+... and it isn't even mentioned here that the mode only works on
+Aquacomputer Aquaero, and only on the 4th port for Aquaero 5.
+
+Really, please don't do that, and I sincerely hope that the driver
+doesn't hide (i.e., claim to support when it isn't really supported)
+other similar limitations.
+
+Guenter
+
+>   ================ ==============================================================
+>   
+>   Debugfs entries
+> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+> index 02551c26918a..2ec00124785f 100644
+> --- a/drivers/hwmon/aquacomputer_d5next.c
+> +++ b/drivers/hwmon/aquacomputer_d5next.c
+> @@ -123,6 +123,7 @@ static u16 aquaero_sensor_fan_offsets[] = { 0x167, 0x173, 0x17f, 0x18B };
+>   #define AQUAERO_TEMP_CTRL_OFFSET	0xdb
+>   #define AQUAERO_FAN_CTRL_MIN_PWR_OFFSET	0x04
+>   #define AQUAERO_FAN_CTRL_MAX_PWR_OFFSET	0x06
+> +#define AQUAERO_FAN_CTRL_MODE_OFFSET	0x0f
+>   #define AQUAERO_FAN_CTRL_SRC_OFFSET	0x10
+>   static u16 aquaero_ctrl_fan_offsets[] = { 0x20c, 0x220, 0x234, 0x248 };
+>   
+> @@ -672,10 +673,23 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+>   		break;
+>   	case hwmon_pwm:
+>   		if (priv->fan_ctrl_offsets && channel < priv->num_fans) {
+> -			switch (attr) {
+> -			case hwmon_pwm_input:
+> -				return 0644;
+> +			switch (priv->kind) {
+> +			case aquaero:
+> +				switch (attr) {
+> +				case hwmon_pwm_input:
+> +				case hwmon_pwm_mode:
+> +					return 0644;
+> +				default:
+> +					break;
+> +				}
+> +				break;
+>   			default:
+> +				switch (attr) {
+> +				case hwmon_pwm_input:
+> +					return 0644;
+> +				default:
+> +					break;
+> +				}
+>   				break;
+>   			}
+>   		}
+> @@ -863,22 +877,46 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>   		*val = priv->power_input[channel];
+>   		break;
+>   	case hwmon_pwm:
+> -		switch (priv->kind) {
+> -		case aquaero:
+> -			ret = aqc_get_ctrl_val(priv, AQUAERO_CTRL_PRESET_START + channel * AQUAERO_CTRL_PRESET_SIZE,
+> -					       val, AQC_BE16);
+> -			if (ret < 0)
+> -				return ret;
+> -			*val = aqc_percent_to_pwm(*val);
+> +		switch (attr) {
+> +		case hwmon_pwm_input:
+> +			switch (priv->kind) {
+> +			case aquaero:
+> +				ret = aqc_get_ctrl_val(priv, AQUAERO_CTRL_PRESET_START +
+> +						       channel * AQUAERO_CTRL_PRESET_SIZE,
+> +						       val, AQC_BE16);
+> +				if (ret < 0)
+> +					return ret;
+> +				*val = aqc_percent_to_pwm(*val);
+> +				break;
+> +			default:
+> +				ret = aqc_get_ctrl_val(priv, priv->fan_ctrl_offsets[channel],
+> +						       val, AQC_BE16);
+> +				if (ret < 0)
+> +					return ret;
+> +
+> +				*val = aqc_percent_to_pwm(ret);
+> +				break;
+> +			}
+>   			break;
+> -		default:
+> -			ret = aqc_get_ctrl_val(priv, priv->fan_ctrl_offsets[channel],
+> -					       val, AQC_BE16);
+> +		case hwmon_pwm_mode:
+> +			ret = aqc_get_ctrl_val(priv,
+> +					       priv->fan_ctrl_offsets[channel] +
+> +					       AQUAERO_FAN_CTRL_MODE_OFFSET, val, AQC_8);
+>   			if (ret < 0)
+>   				return ret;
+>   
+> -			*val = aqc_percent_to_pwm(ret);
+> +			switch (*val) {
+> +			case 0:	/* DC mode */
+> +				break;
+> +			case 2:	/* PWM mode */
+> +				*val = 1;
+> +				break;
+> +			default:
+> +				break;
+> +			}
+>   			break;
+> +		default:
+> +			return -EOPNOTSUPP;
+>   		}
+>   		break;
+>   	case hwmon_in:
+> @@ -936,7 +974,7 @@ static int aqc_read_string(struct device *dev, enum hwmon_sensor_types type, u32
+>   static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr, int channel,
+>   		     long val)
+>   {
+> -	int ret, pwm_value;
+> +	int ret, pwm_value, ctrl_mode;
+>   	/* Arrays for setting multiple values at once in the control report */
+>   	int ctrl_values_offsets[4];
+>   	long ctrl_values[4];
+> @@ -1018,6 +1056,16 @@ static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>   				break;
+>   			}
+>   			break;
+> +		case hwmon_pwm_mode:
+> +			if (val > 1 || val < 0)
+> +				return -EINVAL;
+> +			ctrl_mode = 2 * val;
+> +			ret = aqc_set_ctrl_val(priv,
+> +					       priv->fan_ctrl_offsets[channel] +
+> +					       AQUAERO_FAN_CTRL_MODE_OFFSET, ctrl_mode, AQC_8);
+> +			if (ret < 0)
+> +				return ret;
+> +			break;
+>   		default:
+>   			break;
+>   		}
+> @@ -1077,10 +1125,10 @@ static const struct hwmon_channel_info *aqc_info[] = {
+>   			   HWMON_P_INPUT | HWMON_P_LABEL,
+>   			   HWMON_P_INPUT | HWMON_P_LABEL),
+>   	HWMON_CHANNEL_INFO(pwm,
+> -			   HWMON_PWM_INPUT,
+> -			   HWMON_PWM_INPUT,
+> -			   HWMON_PWM_INPUT,
+> -			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_MODE,
+>   			   HWMON_PWM_INPUT,
+>   			   HWMON_PWM_INPUT,
+>   			   HWMON_PWM_INPUT,
 
