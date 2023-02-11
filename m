@@ -2,281 +2,110 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D7FEC61DA4
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Feb 2023 18:08:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54D33C636CC
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Feb 2023 18:54:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjBKSId (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 11 Feb 2023 13:08:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
+        id S229503AbjBKSyK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Feb 2023 13:54:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjBKSIc (ORCPT
+        with ESMTP id S229488AbjBKSyJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Feb 2023 13:08:32 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DB6199D1;
-        Sat, 11 Feb 2023 10:08:31 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id y11-20020a05683009cb00b0068dbf908574so2536704ott.8;
-        Sat, 11 Feb 2023 10:08:31 -0800 (PST)
+        Sat, 11 Feb 2023 13:54:09 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E04193EE;
+        Sat, 11 Feb 2023 10:54:08 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id cq19so5423448edb.5;
+        Sat, 11 Feb 2023 10:54:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Yo9Q/zSH+BJ8u/pEoG/a2N9Q2keTYj9JnQ4wGmR0b8E=;
-        b=RXmmVA+BwnOzV0B+p6FportxmT30vr/xPopd8KCaSBfN85+HXYBelIX3tqd7Lj8W6Y
-         /YLP9bv5Pkf6qbohA+l+uypMccG/MN8sjrlI3a9x0EAHXd1bxw8zlYPraNrFnCFTjWde
-         T5W4ArHtvsNdJ3yPL71K4FzNjO4/64ibgBKLaxstop0iA3WrbJazqa7h8DuciB7aHPbg
-         ACbzZTUa4iKU9PN1na94YfdypPDYwO/bKR2+k6BCAjOD2ClTfnCgc1jF3dnN6xF9rpBB
-         m1sUG6O/9r/Y5SNm4vcHoMpSea5seeRTONa3NKxNj2DLUwRLS/QIP4Geop7rM0+cCMNh
-         G8Rg==
+        bh=qQilzVYvGI9FErjP5374cx23YQpTQrZLFOEiYvclZpg=;
+        b=EW8Ig6xfjGwrXgjurd+dwrxjBE8obvY6P/pLIzwDJfCBhZCKEaHPHYdPl0g/Lrikl4
+         1XwdixE/Zjb7BHJp5tehvK6Tx2GiMjmHn5ltazzbVU3wfVOt2cgfh2tUzTYLknMwhZvz
+         r23lUPe7HcY3CY8kZYUnEbUzlX50givr6h20zOiTLszJtUnabrFtOjC3k1CfIg0cen6Z
+         h9MFrUHgtTYlmQktMZ88H5qfllHST9QzsYnL2g+ZGZN07TXDjYwI8gVoUZuH33gQQWi+
+         7BFYwCvOAbaj83bYotI6EssvCUTb4V5CX3POLt0sZLIdQNgMUxeMRSieWLce40dwKxGB
+         lDFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yo9Q/zSH+BJ8u/pEoG/a2N9Q2keTYj9JnQ4wGmR0b8E=;
-        b=ur4D5u8Sc86oZcaN7UfX8czrTKXPprWGos5sS/OBpk7zrgYfw/oW0RpJt7b9gyIEYa
-         pz4SNWXsVMECpW+wbye6vGuciGWVGtexu8p09WDKvhfMJqLC5RfTtgFI4EDcqKUB9WvW
-         Ms5tV6XqN33FeVxrmBIVL/Lk2eF4Qv9N0tQAB2sTkqgbYI2NWk2rEw/JDcFZGCqgTJLg
-         PjtxDVLMsPfvS5YJ/CqX+mplO1/y51Bo9xsngLR7LUpc+GOvt3o/swZt3G62CTQxcSN2
-         p9P6LT3SYxcddnPnB0URqtwwrp1W5bC74rbkg06NrWEtnIhrUtpimcMjKIwkanMSfrmG
-         +XAg==
-X-Gm-Message-State: AO0yUKW8Zlg90nm4cb8kqGqYDqhMapdgB0YHxO5SM43ccfOXZOw2DAsL
-        p9lxCCi/hVPAyJ5RBqDbdL0=
-X-Google-Smtp-Source: AK7set+deEVGsrefanpAl0Q2HTFhqT+Z25pgkLWnzbTjEep3HQK9wpAfBRTDdizcKPbqafF10qENRg==
-X-Received: by 2002:a05:6830:68cd:b0:68b:e3da:8eff with SMTP id cw13-20020a05683068cd00b0068be3da8effmr10080130otb.17.1676138910553;
-        Sat, 11 Feb 2023 10:08:30 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a19-20020a05683012d300b00686574e98d6sm3310856otq.72.2023.02.11.10.08.28
+        bh=qQilzVYvGI9FErjP5374cx23YQpTQrZLFOEiYvclZpg=;
+        b=v6smk3hP9LvclqeMR41gzuT8j89XEMNH0pV+F8+Pjs4pmZjQ0bCUmOhl27MwXS2mIZ
+         3p0Bc2AcSjZxe97m8xvOq4IjawnjV+pQ3HGOL6225MFeCt14RQCcOmb1brBoBn5rst+u
+         AbVsyXt1gv/xwFKOSMY4dGDiHYtMs3X603zoEtpMFsLOJ6gfDjWUUCtsGyeYvqtcCVjP
+         ZxBxrT0/v0lygGyqXeWuYeBtK1EoSunNqGMf410kdWiS6vjrTRE5rY+5HDy6Z+3sMt/l
+         F+mUn02h7OoCL/JN/M8WdOmQhspvTdJNTfi3oty2cC4adVOD9mP5oqfPlTcV13BT9ehU
+         0xIQ==
+X-Gm-Message-State: AO0yUKWOuLf+wVbXxLQ+EsffUiixTdWek8k1Z4pG2brxp+bitV/leSnu
+        VWG+e4H2Vwvz4ImDLbmDQqI=
+X-Google-Smtp-Source: AK7set94rpGvGlXmQuz0W6b4tXTpKCBBYMNLk5z2yIdqtfLeBWaBMud6rjJFCtzg2tAegUrAAlDSwA==
+X-Received: by 2002:a50:d756:0:b0:4ac:b7ba:3d58 with SMTP id i22-20020a50d756000000b004acb7ba3d58mr2401860edj.12.1676141647232;
+        Sat, 11 Feb 2023 10:54:07 -0800 (PST)
+Received: from [192.168.0.22] ([87.116.164.178])
+        by smtp.gmail.com with ESMTPSA id o8-20020a50c908000000b004a2666397casm4006188edh.63.2023.02.11.10.54.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Feb 2023 10:08:29 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0664b935-d201-419a-3f1d-3df4226a8db1@roeck-us.net>
-Date:   Sat, 11 Feb 2023 10:08:27 -0800
+        Sat, 11 Feb 2023 10:54:06 -0800 (PST)
+Message-ID: <00875064-0407-b114-56c9-87aecb0d3ee4@gmail.com>
+Date:   Sat, 11 Feb 2023 19:54:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Leonard Anderweit <leonard.anderweit@gmail.com>,
-        linux-hwmon@vger.kernel.org
-Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+ Thunderbird/102.7.1
+Cc:     savicaleksa83@gmail.com, Jack Doan <me@jackdoan.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230211165923.17807-1-leonard.anderweit@gmail.com>
- <20230211165923.17807-4-leonard.anderweit@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
 Subject: Re: [PATCH 3/5] hwmon: (aquacomputer_d5next) Add temperature offset
  control for Aquaero
-In-Reply-To: <20230211165923.17807-4-leonard.anderweit@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Leonard Anderweit <leonard.anderweit@gmail.com>,
+        linux-hwmon@vger.kernel.org
+References: <20230211165923.17807-1-leonard.anderweit@gmail.com>
+ <20230211165923.17807-4-leonard.anderweit@gmail.com>
+ <0664b935-d201-419a-3f1d-3df4226a8db1@roeck-us.net>
+Content-Language: en-US
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+In-Reply-To: <0664b935-d201-419a-3f1d-3df4226a8db1@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/11/23 08:59, Leonard Anderweit wrote:
-> Support sending control reports to Aquacomputer Aquaero. This commit only
-> enables control of the temperature offset as this works in the same manner as
-> with already supported devices.
-> Also, mention temperature offset control for Aquaero in docs.
+On 2023-02-11 19:08:27 GMT+01:00, Guenter Roeck wrote:
 > 
-> Signed-off-by: Leonard Anderweit <leonard.anderweit@gmail.com>
-> ---
->   Documentation/hwmon/aquacomputer_d5next.rst |  4 +-
->   drivers/hwmon/aquacomputer_d5next.c         | 62 ++++++++++++++++-----
->   2 files changed, 50 insertions(+), 16 deletions(-)
+> aquaero is already supported, and the checksum is so far generated
+> and sent. Is it ignored ? Also, is it guaranteed that _all_ aquero devices
+> don't need it ?
+
+Reading its sensors is currently supported, not writing to it (before these
+patches).
+
+The checksum is ignored and not needed for either aquaero 5 (which Leonard has)
+nor 6 (which I have).
+
 > 
-> diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
-> index 7d0d015b1a52..de43374940b8 100644
-> --- a/Documentation/hwmon/aquacomputer_d5next.rst
-> +++ b/Documentation/hwmon/aquacomputer_d5next.rst
-> @@ -25,7 +25,7 @@ communicate through proprietary USB HID protocols.
->   
->   The Aquaero devices expose eight physical, eight virtual and four calculated
->   virtual temperature sensors, as well as two flow sensors. The fans expose their
-> -speed (in RPM), power, voltage and current.
-> +speed (in RPM), power, voltage and current. The temperature offset can be controlled.
->   
->   For the D5 Next pump, available sensors are pump and fan speed, power, voltage
->   and current, as well as coolant temperature and eight virtual temp sensors. Also
-> @@ -75,7 +75,7 @@ Sysfs entries
->   
->   ================ ==============================================================
->   temp[1-20]_input Physical/virtual temperature sensors (in millidegrees Celsius)
-> -temp[1-4]_offset Temperature sensor correction offset (in millidegrees Celsius)
-> +temp[1-8]_offset Temperature sensor correction offset (in millidegrees Celsius)
->   fan[1-8]_input   Pump/fan speed (in RPM) / Flow speed (in dL/h)
->   fan5_pulses      Quadro flow sensor pulses
->   power[1-8]_input Pump/fan power (in micro Watts)
-> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-> index 03ef9e0258d2..95461e2907e1 100644
-> --- a/drivers/hwmon/aquacomputer_d5next.c
-> +++ b/drivers/hwmon/aquacomputer_d5next.c
-> @@ -56,6 +56,7 @@ static const char *const aqc_device_names[] = {
->   #define SERIAL_PART_OFFSET		2
->   
->   #define CTRL_REPORT_ID			0x03
-> +#define AQUAERO_CTRL_REPORT_ID		0x0b
->   
->   /* The HID report that the official software always sends
->    * after writing values, currently same for all devices
-> @@ -67,6 +68,14 @@ static u8 secondary_ctrl_report[] = {
->   	0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x34, 0xC6
->   };
->   
-> +/* Secondary HID report values for Aquaero */
-> +#define AQUAERO_SECONDARY_CTRL_REPORT_ID	0x06
-> +#define AQUAERO_SECONDARY_CTRL_REPORT_SIZE	0x07
-> +
-> +static u8 aquaero_secondary_ctrl_report[] = {
-> +	0x06, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00
-> +};
-> +
->   /* Report IDs for legacy devices */
->   #define POWERADJUST3_STATUS_REPORT_ID	0x03
->   
-> @@ -94,6 +103,7 @@ static u8 secondary_ctrl_report[] = {
->   #define AQUAERO_NUM_VIRTUAL_SENSORS		8
->   #define AQUAERO_NUM_CALC_VIRTUAL_SENSORS	4
->   #define AQUAERO_NUM_FLOW_SENSORS		2
-> +#define AQUAERO_CTRL_REPORT_SIZE		0xa93
->   
->   /* Sensor report offsets for Aquaero fan controllers */
->   #define AQUAERO_SENSOR_START			0x65
-> @@ -106,6 +116,9 @@ static u8 secondary_ctrl_report[] = {
->   #define AQUAERO_FAN_SPEED_OFFSET		0x00
->   static u16 aquaero_sensor_fan_offsets[] = { 0x167, 0x173, 0x17f, 0x18B };
->   
-> +/* Control report offsets for the Aquaero fan controllers */
-> +#define AQUAERO_TEMP_CTRL_OFFSET	0xdb
-> +
->   /* Specs of the D5 Next pump */
->   #define D5NEXT_NUM_FANS			2
->   #define D5NEXT_NUM_SENSORS		1
-> @@ -441,6 +454,10 @@ struct aqc_data {
->   	const char *name;
->   
->   	int status_report_id;	/* Used for legacy devices, report is stored in buffer */
-> +	int ctrl_report_id;
-> +	int secondary_ctrl_report_id;
-> +	int secondary_ctrl_report_size;
-> +	u8 *secondary_ctrl_report;
->   
->   	int buffer_size;
->   	u8 *buffer;
-> @@ -513,7 +530,7 @@ static int aqc_get_ctrl_data(struct aqc_data *priv)
->   	int ret;
->   
->   	memset(priv->buffer, 0x00, priv->buffer_size);
-> -	ret = hid_hw_raw_request(priv->hdev, CTRL_REPORT_ID, priv->buffer, priv->buffer_size,
-> +	ret = hid_hw_raw_request(priv->hdev, priv->ctrl_report_id, priv->buffer, priv->buffer_size,
->   				 HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
->   	if (ret < 0)
->   		ret = -ENODATA;
-> @@ -527,23 +544,27 @@ static int aqc_send_ctrl_data(struct aqc_data *priv)
->   	int ret;
->   	u16 checksum;
->   
-> -	/* Init and xorout value for CRC-16/USB is 0xffff */
-> -	checksum = crc16(0xffff, priv->buffer + priv->checksum_start, priv->checksum_length);
-> -	checksum ^= 0xffff;
-> +	/* Checksum is not needed for Aquaero */
-> +	if (priv->kind != aquaero) {
-> +		/* Init and xorout value for CRC-16/USB is 0xffff */
-> +		checksum = crc16(0xffff, priv->buffer + priv->checksum_start,
-> +				 priv->checksum_length);
-> +		checksum ^= 0xffff;
+> If it is not needed and ignored, does it really add value to selectively drop it ?
 
-aquaero is already supported, and the checksum is so far generated
-and sent. Is it ignored ? Also, is it guaranteed that _all_ aquero devices
-don't need it ?
-
-If it is not needed and ignored, does it really add value to selectively drop it ?
-
-Either case, this change is not mentioned in the commit log, and it
-violates the "one logical change per patch" rule. Please split it into
-a separate patch and explain why the change is needed.
-
-Another change to separate is the introduction of ctrl_report_id
-and the secondary_ctrl_report variables, which is also done silently
-and not explained. That should also be a separate patch to simplify
-review.
+I think we can indeed remove that check.
 
 Thanks,
-Guenter
+Aleksa
 
->   
-> -	/* Place the new checksum at the end of the report */
-> -	put_unaligned_be16(checksum, priv->buffer + priv->checksum_offset);
-> +		/* Place the new checksum at the end of the report */
-> +		put_unaligned_be16(checksum, priv->buffer + priv->checksum_offset);
-> +	}
->   
->   	/* Send the patched up report back to the device */
-> -	ret = hid_hw_raw_request(priv->hdev, CTRL_REPORT_ID, priv->buffer, priv->buffer_size,
-> +	ret = hid_hw_raw_request(priv->hdev, priv->ctrl_report_id, priv->buffer, priv->buffer_size,
->   				 HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
->   	if (ret < 0)
->   		return ret;
->   
->   	/* The official software sends this report after every change, so do it here as well */
-> -	ret = hid_hw_raw_request(priv->hdev, SECONDARY_CTRL_REPORT_ID, secondary_ctrl_report,
-> -				 SECONDARY_CTRL_REPORT_SIZE, HID_FEATURE_REPORT,
-> -				 HID_REQ_SET_REPORT);
-> +	ret = hid_hw_raw_request(priv->hdev, priv->secondary_ctrl_report_id,
-> +				 priv->secondary_ctrl_report, priv->secondary_ctrl_report_size,
-> +				 HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
->   	return ret;
->   }
->   
-> @@ -969,10 +990,10 @@ static const struct hwmon_channel_info *aqc_info[] = {
->   			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
->   			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
->   			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
-> -			   HWMON_T_INPUT | HWMON_T_LABEL,
-> -			   HWMON_T_INPUT | HWMON_T_LABEL,
-> -			   HWMON_T_INPUT | HWMON_T_LABEL,
-> -			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
->   			   HWMON_T_INPUT | HWMON_T_LABEL,
->   			   HWMON_T_INPUT | HWMON_T_LABEL,
->   			   HWMON_T_INPUT | HWMON_T_LABEL,
-> @@ -1275,6 +1296,9 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
->   		priv->num_flow_sensors = AQUAERO_NUM_FLOW_SENSORS;
->   		priv->flow_sensors_start_offset = AQUAERO_FLOW_SENSORS_START;
->   
-> +		priv->buffer_size = AQUAERO_CTRL_REPORT_SIZE;
-> +		priv->temp_ctrl_offset = AQUAERO_TEMP_CTRL_OFFSET;
-> +
->   		priv->temp_label = label_temp_sensors;
->   		priv->virtual_temp_label = label_virtual_temp_sensors;
->   		priv->calc_virt_temp_label = label_aquaero_calc_temp_sensors;
-> @@ -1438,6 +1462,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
->   		priv->firmware_version_offset = AQUAERO_FIRMWARE_VERSION;
->   
->   		priv->fan_structure = &aqc_aquaero_fan_structure;
-> +
-> +		priv->ctrl_report_id = AQUAERO_CTRL_REPORT_ID;
-> +		priv->secondary_ctrl_report_id = AQUAERO_SECONDARY_CTRL_REPORT_ID;
-> +		priv->secondary_ctrl_report_size = AQUAERO_SECONDARY_CTRL_REPORT_SIZE;
-> +		priv->secondary_ctrl_report = aquaero_secondary_ctrl_report;
->   		break;
->   	case poweradjust3:
->   		priv->status_report_id = POWERADJUST3_STATUS_REPORT_ID;
-> @@ -1446,6 +1475,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
->   		priv->serial_number_start_offset = AQC_SERIAL_START;
->   		priv->firmware_version_offset = AQC_FIRMWARE_VERSION;
->   
-> +		priv->ctrl_report_id = CTRL_REPORT_ID;
-> +		priv->secondary_ctrl_report_id = SECONDARY_CTRL_REPORT_ID;
-> +		priv->secondary_ctrl_report_size = SECONDARY_CTRL_REPORT_SIZE;
-> +		priv->secondary_ctrl_report = secondary_ctrl_report;
-> +
->   		if (priv->kind == aquastreamult)
->   			priv->fan_structure = &aqc_aquastreamult_fan_structure;
->   		else
+> 
+> Either case, this change is not mentioned in the commit log, and it
+> violates the "one logical change per patch" rule. Please split it into
+> a separate patch and explain why the change is needed.
+> 
+> Another change to separate is the introduction of ctrl_report_id
+> and the secondary_ctrl_report variables, which is also done silently
+> and not explained. That should also be a separate patch to simplify
+> review.
+> 
+> Thanks,
+> Guenter
 
