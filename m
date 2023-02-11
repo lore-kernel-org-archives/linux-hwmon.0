@@ -2,167 +2,243 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5707AC636D7
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Feb 2023 18:45:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9787C61DA4
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Feb 2023 15:07:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232617AbjBJSpU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 10 Feb 2023 13:45:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
+        id S229461AbjBKPHz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Feb 2023 10:07:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232525AbjBJSpT (ORCPT
+        with ESMTP id S229460AbjBKPHy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Feb 2023 13:45:19 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353C437730;
-        Fri, 10 Feb 2023 10:45:15 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-16aa71c1600so7783597fac.11;
-        Fri, 10 Feb 2023 10:45:15 -0800 (PST)
+        Sat, 11 Feb 2023 10:07:54 -0500
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF1025E08;
+        Sat, 11 Feb 2023 07:07:52 -0800 (PST)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-15f97c478a8so10228135fac.13;
+        Sat, 11 Feb 2023 07:07:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MSmWk4P1YdFXvxvTiIVgI852UVWnz4vy/QS6724V8nM=;
-        b=AgHc2OLZAJTXrrYhFJxKcHFJ80JZaMxxY0zBeovUHhkMVvICh1SlBt2y49oTdA1Kdh
-         cCBf+qLh6qmKG2l6A2n1SFFnjnfeLTRJ/gt0H+8AWHo7tR2dQBGvdCEgyjpLBBOdhKaL
-         dxtBqF7fXoLRI8S0lJEvMMGCy2mX/qsbThJC8S2cxsgCxSWM0N/+KqbvBrvdcAlV+Kss
-         BgCcRWjSZlBGhbeS/fjrgwPDx8TBPiIi/IeaC9OWwLazVT+PQikjfxyhb4pYrZ2t1w/B
-         WHAzSc76Bq/j2Ch6kWZT1qX4amxS0z4Oc9OAqtkce3FW5naNQEWX5tMjG7NhejSYavNZ
-         uv6A==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oc8Oeui3K1tb0XrrtmwUkZ3knxpX/4Xz8AB8zRYwT74=;
+        b=Ou+rBGt9DmvBAtwRnHGA4UyxE59kurGI2AULIOanzbE8AHzxg+UVbwaG6C5MY9VD89
+         RqoNMQzAR8i0zblJsqL9boxtp2ZWefM5SNBInQIouoSSpqSOD4cYecqQyR6r0J7UHOhb
+         kqfCARNLiWLg+ogqemIVOB5VlOE4Q10Pceqr/9kyLH3U4nVDiLA9s1xrcqkv3Ro2VVxx
+         Tz4al1YgxAIyoJlIClLU3FfReX2v8IeoAMTkjtf70fyB3iXQjq5pkTzmbQQgN6mVswTv
+         4wyfzLGS5zt6zSbnLaiE8sd7lFDS8vctrhR/ZEkD9K0Q77+rqRFfRN0EV1YEuFcWQOIz
+         VOoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MSmWk4P1YdFXvxvTiIVgI852UVWnz4vy/QS6724V8nM=;
-        b=aQf3p1oDc0vCN1VFzRWX8mhLgbv1qTM1yfMA1g8q0EQlZaADYHF+1glZeOQ6fEei8g
-         2uninkkcWM0YGaFnXFpZezegXTuTtGtW8yrN1+qLJmfVXQ0iANL4/zMw+65thejU94A8
-         H7xGYtxfGBPynkZLF8s4a04C3DPM/iyxlvmGM/PafGrF3YKFiueAmicpzZ/o2L8DRpz5
-         XP+t9MNtuQjyVuALLhCpXza57D7U7rB0F6V714Sd28466yMZfVXA1TZUobgkKaFimxnk
-         qcvDnBUYLqbPIEV74KlvOIFsB+/rNrAuSyzpnTobfXbBhK+Q/pvWB/KARg0R/D6NgOD8
-         6jxw==
-X-Gm-Message-State: AO0yUKXocsVAS0fEkDXqHOZLlO2BC8M4Yh9r/diRiDeMShhBQRZuV4Dr
-        d04NU+XJhvzCxUkJPP6jS2RABjEJRAs=
-X-Google-Smtp-Source: AK7set9rlFZaa4Xbho8YO0ab2EMSQTJxPs8a3sqTk1xN+SDFoM69Vcqd1wLHwmQigcarQSBMBLcDbw==
-X-Received: by 2002:a05:6870:a797:b0:163:2d8e:55a7 with SMTP id x23-20020a056870a79700b001632d8e55a7mr7367961oao.24.1676054714141;
-        Fri, 10 Feb 2023 10:45:14 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oc8Oeui3K1tb0XrrtmwUkZ3knxpX/4Xz8AB8zRYwT74=;
+        b=rAqU7+sjLxRJ/X6xorYUAXNDZFQzGlD1kF1aNfhvb+BERA8/4lWcb8u9goWRlK3VhM
+         XJ+5HTLI4cRAxKHsFEpLcL6Mr+aE/tVQ5XrKZn67hSyYQ/vNKIxAv9B1ySJ7krRyR1zv
+         qfZOglFwxlgX1Rpz1HFk3//ohIQMcgkamnWsXKobaM7B5rhrYIWO0cYBU/R4bdEpOKb7
+         20Z0wCaXYyEl3Fa22IV5/w8WDf0l0jbDqrSPYM2dep+6JywCtbDN+rZ/vSZk9+36QdIC
+         F1/rCLptA7RVVsX+6CwdGINTf949flHY4+Bf1B9iXxlYz7b3cTJZakNqtqweJkbxQJkW
+         44wA==
+X-Gm-Message-State: AO0yUKWaeELwewA8mvSssvgjNedG7EzeEn14O1HTWOWQmZti1c5wUsGF
+        6H1lEaoNV+mGlqUiB3CsjVavEKG9gU4=
+X-Google-Smtp-Source: AK7set9lPcNP1UJwURIVHWLaCLdQnl44lpVSdejqmRef1HE6YFydIX2QQmnMfDNYoTKZeq2YewpEsw==
+X-Received: by 2002:a05:6870:1607:b0:16a:a8c2:c0a6 with SMTP id b7-20020a056870160700b0016aa8c2c0a6mr7925563oae.17.1676128071972;
+        Sat, 11 Feb 2023 07:07:51 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y20-20020a056870429400b0016a2330dc21sm2234801oah.0.2023.02.10.10.45.12
+        by smtp.gmail.com with ESMTPSA id o191-20020a4a2cc8000000b0050dc3c2f77asm3105378ooo.8.2023.02.11.07.07.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 10:45:13 -0800 (PST)
+        Sat, 11 Feb 2023 07:07:51 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 10 Feb 2023 10:45:11 -0800
+Date:   Sat, 11 Feb 2023 07:07:49 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Iwona Winiarska <iwona.winiarska@intel.com>,
-        openbmc@lists.ozlabs.org, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Subject: Re: [RFC PATCH] hwmon: (peci/cputemp) Number cores as seen by host
- system
-Message-ID: <20230210184511.GA3670524@roeck-us.net>
-References: <20230209011632.32668-1-zev@bewilderbeest.net>
- <20230209175001.GA667937@roeck-us.net>
- <Y+WMcCukyTvPcN2F@hatter.bewilderbeest.net>
- <97485a97-08c4-917b-1b8d-8102a8575a58@roeck-us.net>
- <Y+WieWyU+055eEom@hatter.bewilderbeest.net>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] hwmon: (pmbus/core) Generalise pmbus get status
+Message-ID: <20230211150749.GA202703@roeck-us.net>
+References: <20230207120241.2800662-1-Naresh.Solanki@9elements.com>
+ <20230207120241.2800662-2-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y+WieWyU+055eEom@hatter.bewilderbeest.net>
+In-Reply-To: <20230207120241.2800662-2-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 05:48:41PM -0800, Zev Weiss wrote:
-> On Thu, Feb 09, 2023 at 04:26:47PM PST, Guenter Roeck wrote:
-> > On 2/9/23 16:14, Zev Weiss wrote:
-> > > On Thu, Feb 09, 2023 at 09:50:01AM PST, Guenter Roeck wrote:
-> > > > On Wed, Feb 08, 2023 at 05:16:32PM -0800, Zev Weiss wrote:
-> > > > > While porting OpenBMC to a new platform with a Xeon Gold 6314U CPU
-> > > > > (Ice Lake, 32 cores), I discovered that the core numbering used by the
-> > > > > PECI interface appears to correspond to the cores that are present in
-> > > > > the physical silicon, rather than those that are actually enabled and
-> > > > > usable by the host OS (i.e. it includes cores that the chip was
-> > > > > manufactured with but later had fused off).
-> > > > > 
-> > > > > Thus far the cputemp driver has transparently exposed that numbering
-> > > > > to userspace in its 'tempX_label' sysfs files, making the core numbers
-> > > > > it reported not align with the core numbering used by the host system,
-> > > > > which seems like an unfortunate source of confusion.
-> > > > > 
-> > > > > We can instead use a separate counter to label the cores in a
-> > > > > contiguous fashion (0 through numcores-1) so that the core numbering
-> > > > > reported by the PECI cputemp driver matches the numbering seen by the
-> > > > > host.
-> > > > > 
-> > > > 
-> > > > I don't really have an opinion if this change is desirable or not.
-> > > > I suspect one could argue either way. I'l definitely want to see
-> > > > feedback from others. Any comments or thoughts, anyone ?
-> > > > 
-> > > 
-> > > Agreed, I'd definitely like to get some input from Intel folks on this.
-> > > 
-> > > Though since I realize my initial email didn't quite explain this explicitly, I should probably clarify with an example how weird the numbering can get with the existing code -- on the 32-core CPU I'm working with at the moment, the tempX_label files produce the following core numbers:
-> > > 
-> > >     Core 0
-> > >     Core 1
-> > >     Core 2
-> > >     Core 3
-> > >     Core 4
-> > >     Core 5
-> > >     Core 6
-> > >     Core 7
-> > >     Core 8
-> > >     Core 9
-> > >     Core 11
-> > >     Core 12
-> > >     Core 13
-> > >     Core 14
-> > >     Core 15
-> > >     Core 18
-> > >     Core 20
-> > >     Core 22
-> > >     Core 23
-> > >     Core 24
-> > >     Core 26
-> > >     Core 27
-> > >     Core 28
-> > >     Core 29
-> > >     Core 30
-> > >     Core 31
-> > >     Core 33
-> > >     Core 34
-> > >     Core 35
-> > >     Core 36
-> > >     Core 38
-> > >     Core 39
-> > > 
-> > > i.e. it's not just a different permutation of the expected core numbers, we end up with gaps (e.g. the nonexistence of core 10), and core numbers well in excess of the number of cores the processor really "has" (e.g. number 39) -- all of which seems like a rather confusing thing to see in your BMC's sensor readings.
-> > > 
-> > 
-> > Sure, but what do you see with /proc/cpuinfo and with coretemp
-> > on the host ? It might be even more confusing if the core numbers
-> > reported by the peci driver don't match the core numbers provided
-> > by other tools.
-> > 
+On Tue, Feb 07, 2023 at 01:02:39PM +0100, Naresh Solanki wrote:
+> Add function pmbus get status that can be used to get both pmbus
+> specific status & regulator status
 > 
-> The host sees them numbered as the usual 0-31 you'd generally expect, and
-> assigned to those cores in the same increasing order -- hence the patch
-> bringing the two into alignment with each other.  Currently only cores 0
-> through 9 match up between the two, and the rest are off by somewhere
-> between one and eight.
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ...
+> Changes in V2:
+> - Add __maybe_unused attribute for pmbus_get_status function
+> - Remove unrelated changes
+> ---
+>  drivers/hwmon/pmbus/pmbus_core.c | 118 +++++++++++++++++--------------
+>  1 file changed, 66 insertions(+), 52 deletions(-)
 > 
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 1b70cf3be313..5ccae8126a56 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -2735,61 +2735,14 @@ static const struct pmbus_status_category __maybe_unused pmbus_status_flag_map[]
+>  	},
+>  };
+>  
+> -#if IS_ENABLED(CONFIG_REGULATOR)
+> -static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
+> -{
+> -	struct device *dev = rdev_get_dev(rdev);
+> -	struct i2c_client *client = to_i2c_client(dev->parent);
+> -	struct pmbus_data *data = i2c_get_clientdata(client);
+> -	u8 page = rdev_get_id(rdev);
+> -	int ret;
+> -
+> -	mutex_lock(&data->update_lock);
+> -	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
+> -	mutex_unlock(&data->update_lock);
+> -
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	return !!(ret & PB_OPERATION_CONTROL_ON);
+> -}
+> -
+> -static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
+> -{
+> -	struct device *dev = rdev_get_dev(rdev);
+> -	struct i2c_client *client = to_i2c_client(dev->parent);
+> -	struct pmbus_data *data = i2c_get_clientdata(client);
+> -	u8 page = rdev_get_id(rdev);
+> -	int ret;
+> -
+> -	mutex_lock(&data->update_lock);
+> -	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
+> -				     PB_OPERATION_CONTROL_ON,
+> -				     enable ? PB_OPERATION_CONTROL_ON : 0);
+> -	mutex_unlock(&data->update_lock);
+> -
+> -	return ret;
+> -}
+> -
+> -static int pmbus_regulator_enable(struct regulator_dev *rdev)
+> -{
+> -	return _pmbus_regulator_on_off(rdev, 1);
+> -}
+> -
+> -static int pmbus_regulator_disable(struct regulator_dev *rdev)
+> -{
+> -	return _pmbus_regulator_on_off(rdev, 0);
+> -}
+>  
+> -static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
+> +static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
+>  {
+> -	int i, status;
+> +	int i, status, ret;
+>  	const struct pmbus_status_category *cat;
+>  	const struct pmbus_status_assoc *bit;
+> -	struct device *dev = rdev_get_dev(rdev);
+> -	struct i2c_client *client = to_i2c_client(dev->parent);
+> -	struct pmbus_data *data = i2c_get_clientdata(client);
+> -	u8 page = rdev_get_id(rdev);
+> +	struct device *dev = data->dev;
+> +	struct i2c_client *client = to_i2c_client(dev);
+>  	int func = data->info->func[page];
+>  
+>  	*flags = 0;
+> @@ -2827,7 +2780,13 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+>  	if (status < 0)
+>  		return status;
+>  
+> -	if (pmbus_regulator_is_enabled(rdev)) {
+> +	mutex_lock(&data->update_lock);
+> +	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
+> +	mutex_unlock(&data->update_lock);
+> +	if (ret < 0)
+> +		return status;
+> +
+> +	if (ret & PB_OPERATION_CONTROL_ON) {
 
-Hmm, interesting. It is not sequential on my large system (Intel(R) Xeon(R)
-Gold 6154). I also know for sure that core IDs on Intel server CPUs are
-typically not sequential. The processor number is sequential, but the core
-ID isn't. On my system, the output from the "sensors" command (that is,
-from the coretemp driver) matches the non-sequential core IDs from
-/proc/cpuinfo, which is exactly how I would expect it to be.
+This code is now executed twice. Please keep the original function,
+just rename it to pmbus_is_enabled() or similar, then call it from
+pmbus_regulator_is_enabled() which then just needs to adjust the
+parameter (and maybe pass 'dev' as argument).
 
+>  		if (status & PB_STATUS_OFF)
+>  			*flags |= REGULATOR_ERROR_FAIL;
+>  
+> @@ -2855,6 +2814,61 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+>  	return 0;
+>  }
+>  
+> +#if IS_ENABLED(CONFIG_REGULATOR)
+> +static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
+> +{
+> +	struct device *dev = rdev_get_dev(rdev);
+> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> +	struct pmbus_data *data = i2c_get_clientdata(client);
+> +	u8 page = rdev_get_id(rdev);
+> +	int ret;
+> +
+> +	mutex_lock(&data->update_lock);
+> +	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
+> +	mutex_unlock(&data->update_lock);
+> +
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return !!(ret & PB_OPERATION_CONTROL_ON);
+
+This could then be as simple as
+
+	return pmbus_is_enabled(rdev_get_dev(rdev));
+
+Thanks,
 Guenter
+
+> +}
+> +
+> +static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
+> +{
+> +	struct device *dev = rdev_get_dev(rdev);
+> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> +	struct pmbus_data *data = i2c_get_clientdata(client);
+> +	u8 page = rdev_get_id(rdev);
+> +	int ret;
+> +
+> +	mutex_lock(&data->update_lock);
+> +	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
+> +				     PB_OPERATION_CONTROL_ON,
+> +				     enable ? PB_OPERATION_CONTROL_ON : 0);
+> +	mutex_unlock(&data->update_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int pmbus_regulator_enable(struct regulator_dev *rdev)
+> +{
+> +	return _pmbus_regulator_on_off(rdev, 1);
+> +}
+> +
+> +static int pmbus_regulator_disable(struct regulator_dev *rdev)
+> +{
+> +	return _pmbus_regulator_on_off(rdev, 0);
+> +}
+> +
+> +static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
+> +{
+> +	struct device *dev = rdev_get_dev(rdev);
+> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> +	struct pmbus_data *data = i2c_get_clientdata(client);
+> +
+> +	return pmbus_get_flags(data, rdev_get_id(rdev), flags);
+> +}
+> +
+>  static int pmbus_regulator_get_status(struct regulator_dev *rdev)
+>  {
+>  	struct device *dev = rdev_get_dev(rdev);
