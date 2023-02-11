@@ -2,56 +2,56 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54D33C636CC
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Feb 2023 18:54:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F0D6C636CC
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Feb 2023 19:07:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjBKSyK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 11 Feb 2023 13:54:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
+        id S229534AbjBKTHB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Feb 2023 14:07:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjBKSyJ (ORCPT
+        with ESMTP id S229461AbjBKTHA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Feb 2023 13:54:09 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E04193EE;
-        Sat, 11 Feb 2023 10:54:08 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id cq19so5423448edb.5;
-        Sat, 11 Feb 2023 10:54:08 -0800 (PST)
+        Sat, 11 Feb 2023 14:07:00 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2FB1423D;
+        Sat, 11 Feb 2023 11:06:55 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id w3so1195302edc.2;
+        Sat, 11 Feb 2023 11:06:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qQilzVYvGI9FErjP5374cx23YQpTQrZLFOEiYvclZpg=;
-        b=EW8Ig6xfjGwrXgjurd+dwrxjBE8obvY6P/pLIzwDJfCBhZCKEaHPHYdPl0g/Lrikl4
-         1XwdixE/Zjb7BHJp5tehvK6Tx2GiMjmHn5ltazzbVU3wfVOt2cgfh2tUzTYLknMwhZvz
-         r23lUPe7HcY3CY8kZYUnEbUzlX50givr6h20zOiTLszJtUnabrFtOjC3k1CfIg0cen6Z
-         h9MFrUHgtTYlmQktMZ88H5qfllHST9QzsYnL2g+ZGZN07TXDjYwI8gVoUZuH33gQQWi+
-         7BFYwCvOAbaj83bYotI6EssvCUTb4V5CX3POLt0sZLIdQNgMUxeMRSieWLce40dwKxGB
-         lDFg==
+        bh=rWWLFwjwXxaSFcUV635NAOtQG8/udwOIXa9FG4BJ85E=;
+        b=otZuQrVb7TFjSTbAIfCKtzLgQEIsq+6/ivb+xqO117HQpmaGlcbIXGw6o5C8D9UEgm
+         DKPZd651TxMQIg/DMFyhY7LMXx58/eWQFtCQV6NuNOnJztriBUb8QdttdvHL+MKFf1TG
+         zZKqXYJoWWFY3yedN39B53LbgZOaoFk7DrwK05y2lvgcvK2tY3JqBu0bmCsA/aRpK7EE
+         vpDQXOk8IrxTSmGn3GCKPCd+C7ZQiSCj5eJffhvF8uATtW+pngNIZCEmKUtST3cMIzfL
+         J1WjUojanJvQtELnDZqa2yfqxLeRh4sL5QaAhE7lRERa0hNrcJ+AYbP1Au8EC2jdxLbG
+         NtaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qQilzVYvGI9FErjP5374cx23YQpTQrZLFOEiYvclZpg=;
-        b=v6smk3hP9LvclqeMR41gzuT8j89XEMNH0pV+F8+Pjs4pmZjQ0bCUmOhl27MwXS2mIZ
-         3p0Bc2AcSjZxe97m8xvOq4IjawnjV+pQ3HGOL6225MFeCt14RQCcOmb1brBoBn5rst+u
-         AbVsyXt1gv/xwFKOSMY4dGDiHYtMs3X603zoEtpMFsLOJ6gfDjWUUCtsGyeYvqtcCVjP
-         ZxBxrT0/v0lygGyqXeWuYeBtK1EoSunNqGMf410kdWiS6vjrTRE5rY+5HDy6Z+3sMt/l
-         F+mUn02h7OoCL/JN/M8WdOmQhspvTdJNTfi3oty2cC4adVOD9mP5oqfPlTcV13BT9ehU
-         0xIQ==
-X-Gm-Message-State: AO0yUKWOuLf+wVbXxLQ+EsffUiixTdWek8k1Z4pG2brxp+bitV/leSnu
-        VWG+e4H2Vwvz4ImDLbmDQqI=
-X-Google-Smtp-Source: AK7set94rpGvGlXmQuz0W6b4tXTpKCBBYMNLk5z2yIdqtfLeBWaBMud6rjJFCtzg2tAegUrAAlDSwA==
-X-Received: by 2002:a50:d756:0:b0:4ac:b7ba:3d58 with SMTP id i22-20020a50d756000000b004acb7ba3d58mr2401860edj.12.1676141647232;
-        Sat, 11 Feb 2023 10:54:07 -0800 (PST)
+        bh=rWWLFwjwXxaSFcUV635NAOtQG8/udwOIXa9FG4BJ85E=;
+        b=oLrbIxIvvyoa5vNNWfjAHj0/odysCAfo42jxwtUfdeda3PYlWqxnbdKOtX6dmQBlFg
+         ExgB/AjDIAQonnrn+aEa+aNbfACHUpK+9qRj3YGU8EHGT1vasjsjnmjC7VOQVoVpw8eY
+         Wk/qTvl8YqgrECGFpOTHn8rDpjgV6Tg4Ag9GU7+juXgxzZEXwXvT/pPuDvM39uFuUNak
+         jejnjiF6akD4K3D8h1GmsN/VFXPZ73Hwpr3vM0sCkasK52gSc4dU3mElGDEX35n57yk0
+         GC1pfp/sLaJdqzzEPHwhPD6vXDHOF9OwxDj2gVUv8Kr8QRdjqkK3GgILnUhJQ4vAjlxz
+         7yLA==
+X-Gm-Message-State: AO0yUKV4pvY+VEqxtBtWbv90ylciRwl+zb13KRc75+vT0xt3KWlIRZyp
+        BURhO7JZEdeL6hvjvu7KgCs=
+X-Google-Smtp-Source: AK7set8k+CwM5OCEfLGAME57ZvTwoOl9TFBiE24RWY9+zmG2mnBLIBkTTeOBH81UI7GW0p07IHLHxg==
+X-Received: by 2002:a50:9352:0:b0:4a2:4675:2162 with SMTP id n18-20020a509352000000b004a246752162mr2078207eda.3.1676142414076;
+        Sat, 11 Feb 2023 11:06:54 -0800 (PST)
 Received: from [192.168.0.22] ([87.116.164.178])
-        by smtp.gmail.com with ESMTPSA id o8-20020a50c908000000b004a2666397casm4006188edh.63.2023.02.11.10.54.06
+        by smtp.gmail.com with ESMTPSA id t2-20020a50d702000000b004a236384909sm4137637edi.10.2023.02.11.11.06.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Feb 2023 10:54:06 -0800 (PST)
-Message-ID: <00875064-0407-b114-56c9-87aecb0d3ee4@gmail.com>
-Date:   Sat, 11 Feb 2023 19:54:05 +0100
+        Sat, 11 Feb 2023 11:06:53 -0800 (PST)
+Message-ID: <ffb7aa61-20d1-e4be-1c67-e1d3cd7a15af@gmail.com>
+Date:   Sat, 11 Feb 2023 20:06:52 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
@@ -59,53 +59,51 @@ Cc:     savicaleksa83@gmail.com, Jack Doan <me@jackdoan.com>,
         Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/5] hwmon: (aquacomputer_d5next) Add temperature offset
- control for Aquaero
+Subject: Re: [PATCH 5/5] hwmon: (aquacomputer_d5next) Add PWM mode control for
+ Aquaero
+Content-Language: en-US
 To:     Guenter Roeck <linux@roeck-us.net>,
         Leonard Anderweit <leonard.anderweit@gmail.com>,
         linux-hwmon@vger.kernel.org
 References: <20230211165923.17807-1-leonard.anderweit@gmail.com>
- <20230211165923.17807-4-leonard.anderweit@gmail.com>
- <0664b935-d201-419a-3f1d-3df4226a8db1@roeck-us.net>
-Content-Language: en-US
+ <20230211165923.17807-6-leonard.anderweit@gmail.com>
+ <ef64d9c3-65e1-636c-1cb7-8721b1e8746e@roeck-us.net>
 From:   Aleksa Savic <savicaleksa83@gmail.com>
-In-Reply-To: <0664b935-d201-419a-3f1d-3df4226a8db1@roeck-us.net>
+In-Reply-To: <ef64d9c3-65e1-636c-1cb7-8721b1e8746e@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2023-02-11 19:08:27 GMT+01:00, Guenter Roeck wrote:
+On 2023-02-11 18:41:52 GMT+01:00, Guenter Roeck wrote:
 > 
-> aquaero is already supported, and the checksum is so far generated
-> and sent. Is it ignored ? Also, is it guaranteed that _all_ aquero devices
-> don't need it ?
-
-Reading its sensors is currently supported, not writing to it (before these
-patches).
-
-The checksum is ignored and not needed for either aquaero 5 (which Leonard has)
-nor 6 (which I have).
-
+> Adding the capability without actually supporting it raises the expectation
+> that it works from those who don't know better. Please only provide the
+> capability to set the mode where it is actually supported.
 > 
-> If it is not needed and ignored, does it really add value to selectively drop it ?
+> Otherwise one could argue along the line of 'hey, let's just "enable"
+> all attributes no matter if supported or not', which would lead to a
+> lot of confusion. I really hope that isn't done with other attributes
+> in this driver.
 
-I think we can indeed remove that check.
-
-Thanks,
-Aleksa
+(snip)
 
 > 
-> Either case, this change is not mentioned in the commit log, and it
-> violates the "one logical change per patch" rule. Please split it into
-> a separate patch and explain why the change is needed.
+> ... and it isn't even mentioned here that the mode only works on
+> Aquacomputer Aquaero, and only on the 4th port for Aquaero 5.
 > 
-> Another change to separate is the introduction of ctrl_report_id
-> and the secondary_ctrl_report variables, which is also done silently
-> and not explained. That should also be a separate patch to simplify
-> review.
+> Really, please don't do that, and I sincerely hope that the driver
+> doesn't hide (i.e., claim to support when it isn't really supported)
+> other similar limitations.
 > 
-> Thanks,
 > Guenter
 
+It doesn't, features are exposed if the device supports them. I'm part
+to blame for this one, I didn't create an issue at the upstream Github
+repo to track this. We'll try to find a way to differentiate between
+aquaero 5 and 6 - the aquaero 6 is basically an expanded version of
+the 5 with more powerful hardware, firmware seems to be relatively
+similar.
+
+Aleksa
