@@ -2,243 +2,245 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9787C61DA4
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Feb 2023 15:07:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90A7CC636CC
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Feb 2023 15:37:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjBKPHz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 11 Feb 2023 10:07:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
+        id S229457AbjBKPhd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Feb 2023 10:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBKPHy (ORCPT
+        with ESMTP id S229447AbjBKPhd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Feb 2023 10:07:54 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF1025E08;
-        Sat, 11 Feb 2023 07:07:52 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-15f97c478a8so10228135fac.13;
-        Sat, 11 Feb 2023 07:07:52 -0800 (PST)
+        Sat, 11 Feb 2023 10:37:33 -0500
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AE1274AB;
+        Sat, 11 Feb 2023 07:37:32 -0800 (PST)
+Received: by mail-oo1-xc2e.google.com with SMTP id k15-20020a4adfaf000000b00517450f9bd7so818001ook.8;
+        Sat, 11 Feb 2023 07:37:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oc8Oeui3K1tb0XrrtmwUkZ3knxpX/4Xz8AB8zRYwT74=;
-        b=Ou+rBGt9DmvBAtwRnHGA4UyxE59kurGI2AULIOanzbE8AHzxg+UVbwaG6C5MY9VD89
-         RqoNMQzAR8i0zblJsqL9boxtp2ZWefM5SNBInQIouoSSpqSOD4cYecqQyR6r0J7UHOhb
-         kqfCARNLiWLg+ogqemIVOB5VlOE4Q10Pceqr/9kyLH3U4nVDiLA9s1xrcqkv3Ro2VVxx
-         Tz4al1YgxAIyoJlIClLU3FfReX2v8IeoAMTkjtf70fyB3iXQjq5pkTzmbQQgN6mVswTv
-         4wyfzLGS5zt6zSbnLaiE8sd7lFDS8vctrhR/ZEkD9K0Q77+rqRFfRN0EV1YEuFcWQOIz
-         VOoQ==
+        bh=efNSPSl29pf4HoKYhm7Cmos409EV+PeL5jl73WM1c8k=;
+        b=ac0VIM1B4Z/axRS4YCyewKk7W+OGiPdqsL8+PaeKxfOZVZ/R+2E1pGMQuS2oibYyfq
+         4X84CJpBnZ8QXlkWazfD8k3BSsH4Z/KfbzymVUg+tpPjx/eyh4ogCFwjdIbKwM7bdc6q
+         oxUT5nS0f8AFrfSpd0fGmuVIr8koa0BtQV3AGGR27PMZCgbaCLSjI41qu8X2CKu5RR31
+         D4BlmSLJb4w9ElcOzypujjVX7W+hGU0tcUA8Q5f520lNWEJfAjtfsWrv6LVpksJlek+7
+         XlIZrb6hL78GeixMaRfHrAeb/x1dI2ILacJmzp6BBbXdmYTBDmNgcO2/p0D/EkFFW7Wa
+         Nhlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oc8Oeui3K1tb0XrrtmwUkZ3knxpX/4Xz8AB8zRYwT74=;
-        b=rAqU7+sjLxRJ/X6xorYUAXNDZFQzGlD1kF1aNfhvb+BERA8/4lWcb8u9goWRlK3VhM
-         XJ+5HTLI4cRAxKHsFEpLcL6Mr+aE/tVQ5XrKZn67hSyYQ/vNKIxAv9B1ySJ7krRyR1zv
-         qfZOglFwxlgX1Rpz1HFk3//ohIQMcgkamnWsXKobaM7B5rhrYIWO0cYBU/R4bdEpOKb7
-         20Z0wCaXYyEl3Fa22IV5/w8WDf0l0jbDqrSPYM2dep+6JywCtbDN+rZ/vSZk9+36QdIC
-         F1/rCLptA7RVVsX+6CwdGINTf949flHY4+Bf1B9iXxlYz7b3cTJZakNqtqweJkbxQJkW
-         44wA==
-X-Gm-Message-State: AO0yUKWaeELwewA8mvSssvgjNedG7EzeEn14O1HTWOWQmZti1c5wUsGF
-        6H1lEaoNV+mGlqUiB3CsjVavEKG9gU4=
-X-Google-Smtp-Source: AK7set9lPcNP1UJwURIVHWLaCLdQnl44lpVSdejqmRef1HE6YFydIX2QQmnMfDNYoTKZeq2YewpEsw==
-X-Received: by 2002:a05:6870:1607:b0:16a:a8c2:c0a6 with SMTP id b7-20020a056870160700b0016aa8c2c0a6mr7925563oae.17.1676128071972;
-        Sat, 11 Feb 2023 07:07:51 -0800 (PST)
+        bh=efNSPSl29pf4HoKYhm7Cmos409EV+PeL5jl73WM1c8k=;
+        b=V+EDx24UZ/lvwSDnDIUkA9ABRJNjQmrvtuwxEaFrZo8gJD9Wl1HLNPbSwxrqJDFZHK
+         SEkHIrI2aiyRBpJAGlkHrAKs10Dy/gc2rHGGkOW5ddyzW5q30ia4Ak2q8Ypb4Hd/VG1Y
+         eKbG/gupu1yLI6vhAX52zwWM8xii+DUNp7uASmvTFFf3YSthPWPDvlk4ffNKNIoPtt59
+         wFpDx0a+MJSZhJ8An7M/wAMgr3yKWTzuSHiMr34Er9AabqOGMVZ5VhtBqmqT+YeUAsAk
+         0xPBzs7ApxiIW+S5f2aGJMbtiKxYbR7S7BuG5I3hik2OO4PGhPCFY1xEfQy0nyhygk/f
+         3mMg==
+X-Gm-Message-State: AO0yUKWkvkBjFQLpDMSuzc2qxcwcfOCSO2gTfxBTHwozQC3lwsQOeInH
+        dpU9GXl2FlKG3bugBHa99fvGv/ob/Os=
+X-Google-Smtp-Source: AK7set8ZOVw5FCC9J5VSoTNdb1bxmQpw8lxXpvnrzxqv7FWMxok+Kat1amoqR2Qrj9m9pU1LasSSqQ==
+X-Received: by 2002:a4a:d8d7:0:b0:517:7580:4764 with SMTP id c23-20020a4ad8d7000000b0051775804764mr9827411oov.0.1676129851297;
+        Sat, 11 Feb 2023 07:37:31 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o191-20020a4a2cc8000000b0050dc3c2f77asm3105378ooo.8.2023.02.11.07.07.50
+        by smtp.gmail.com with ESMTPSA id e187-20020a4a55c4000000b0051a72e69e24sm2680704oob.37.2023.02.11.07.37.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Feb 2023 07:07:51 -0800 (PST)
+        Sat, 11 Feb 2023 07:37:30 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 11 Feb 2023 07:07:49 -0800
+Date:   Sat, 11 Feb 2023 07:37:29 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Naresh Solanki <naresh.solanki@9elements.com>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] hwmon: (pmbus/core) Generalise pmbus get status
-Message-ID: <20230211150749.GA202703@roeck-us.net>
+Subject: Re: [PATCH v2 3/4] hwmon: (pmbus/core): Add interrupt support
+Message-ID: <20230211153729.GA203244@roeck-us.net>
 References: <20230207120241.2800662-1-Naresh.Solanki@9elements.com>
- <20230207120241.2800662-2-Naresh.Solanki@9elements.com>
+ <20230207120241.2800662-3-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230207120241.2800662-2-Naresh.Solanki@9elements.com>
+In-Reply-To: <20230207120241.2800662-3-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 01:02:39PM +0100, Naresh Solanki wrote:
-> Add function pmbus get status that can be used to get both pmbus
-> specific status & regulator status
+On Tue, Feb 07, 2023 at 01:02:40PM +0100, Naresh Solanki wrote:
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
 > 
+> Implement PMBUS irq handler.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ...
-> Changes in V2:
-> - Add __maybe_unused attribute for pmbus_get_status function
-> - Remove unrelated changes
 > ---
->  drivers/hwmon/pmbus/pmbus_core.c | 118 +++++++++++++++++--------------
->  1 file changed, 66 insertions(+), 52 deletions(-)
+>  drivers/hwmon/pmbus/pmbus.h      |  2 +-
+>  drivers/hwmon/pmbus/pmbus_core.c | 85 ++++++++++++++++++++++++++++++++
+>  2 files changed, 86 insertions(+), 1 deletion(-)
 > 
+> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> index 713ea7915425..11e84e141126 100644
+> --- a/drivers/hwmon/pmbus/pmbus.h
+> +++ b/drivers/hwmon/pmbus/pmbus.h
+> @@ -26,7 +26,7 @@ enum pmbus_regs {
+>  
+>  	PMBUS_CAPABILITY		= 0x19,
+>  	PMBUS_QUERY			= 0x1A,
+> -
+> +	PMBUS_SMBALERT_MASK		= 0x1B,
+>  	PMBUS_VOUT_MODE			= 0x20,
+>  	PMBUS_VOUT_COMMAND		= 0x21,
+>  	PMBUS_VOUT_TRIM			= 0x22,
 > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 1b70cf3be313..5ccae8126a56 100644
+> index 5ccae8126a56..d5403baad60a 100644
 > --- a/drivers/hwmon/pmbus/pmbus_core.c
 > +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2735,61 +2735,14 @@ static const struct pmbus_status_category __maybe_unused pmbus_status_flag_map[]
->  	},
->  };
->  
-> -#if IS_ENABLED(CONFIG_REGULATOR)
-> -static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
-> -{
-> -	struct device *dev = rdev_get_dev(rdev);
-> -	struct i2c_client *client = to_i2c_client(dev->parent);
-> -	struct pmbus_data *data = i2c_get_clientdata(client);
-> -	u8 page = rdev_get_id(rdev);
-> -	int ret;
-> -
-> -	mutex_lock(&data->update_lock);
-> -	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-> -	mutex_unlock(&data->update_lock);
-> -
-> -	if (ret < 0)
-> -		return ret;
-> -
-> -	return !!(ret & PB_OPERATION_CONTROL_ON);
-> -}
-> -
-> -static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
-> -{
-> -	struct device *dev = rdev_get_dev(rdev);
-> -	struct i2c_client *client = to_i2c_client(dev->parent);
-> -	struct pmbus_data *data = i2c_get_clientdata(client);
-> -	u8 page = rdev_get_id(rdev);
-> -	int ret;
-> -
-> -	mutex_lock(&data->update_lock);
-> -	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-> -				     PB_OPERATION_CONTROL_ON,
-> -				     enable ? PB_OPERATION_CONTROL_ON : 0);
-> -	mutex_unlock(&data->update_lock);
-> -
-> -	return ret;
-> -}
-> -
-> -static int pmbus_regulator_enable(struct regulator_dev *rdev)
-> -{
-> -	return _pmbus_regulator_on_off(rdev, 1);
-> -}
-> -
-> -static int pmbus_regulator_disable(struct regulator_dev *rdev)
-> -{
-> -	return _pmbus_regulator_on_off(rdev, 0);
-> -}
->  
-> -static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
-> +static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
->  {
-> -	int i, status;
-> +	int i, status, ret;
->  	const struct pmbus_status_category *cat;
->  	const struct pmbus_status_assoc *bit;
-> -	struct device *dev = rdev_get_dev(rdev);
-> -	struct i2c_client *client = to_i2c_client(dev->parent);
-> -	struct pmbus_data *data = i2c_get_clientdata(client);
-> -	u8 page = rdev_get_id(rdev);
-> +	struct device *dev = data->dev;
-> +	struct i2c_client *client = to_i2c_client(dev);
->  	int func = data->info->func[page];
->  
->  	*flags = 0;
-> @@ -2827,7 +2780,13 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->  	if (status < 0)
->  		return status;
->  
-> -	if (pmbus_regulator_is_enabled(rdev)) {
-> +	mutex_lock(&data->update_lock);
-> +	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-> +	mutex_unlock(&data->update_lock);
-> +	if (ret < 0)
-> +		return status;
-> +
-> +	if (ret & PB_OPERATION_CONTROL_ON) {
-
-This code is now executed twice. Please keep the original function,
-just rename it to pmbus_is_enabled() or similar, then call it from
-pmbus_regulator_is_enabled() which then just needs to adjust the
-parameter (and maybe pass 'dev' as argument).
-
->  		if (status & PB_STATUS_OFF)
->  			*flags |= REGULATOR_ERROR_FAIL;
->  
-> @@ -2855,6 +2814,61 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->  	return 0;
+> @@ -3093,6 +3093,85 @@ static int pmbus_regulator_register(struct pmbus_data *data)
 >  }
+>  #endif
 >  
-> +#if IS_ENABLED(CONFIG_REGULATOR)
-> +static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
+> +static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg, u8 val)
 > +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	u8 page = rdev_get_id(rdev);
-> +	int ret;
+> +	int err;
+> +
+> +	err = pmbus_check_word_register(client, page, reg | (val << 8));
+> +	if (err)
+> +		return err;
+
+I am not convinced that this is necessary. The next command will return an
+error anyway if the register or the specific mask is not supported, so what
+is the point ?
+
+> +
+> +	return pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
+> +}
+> +
+> +static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
+> +{
+> +	struct pmbus_data *data = pdata;
+> +	struct i2c_client *client = to_i2c_client(data->dev);
+> +	int i, status;
 > +
 > +	mutex_lock(&data->update_lock);
-> +	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
+> +	for (i = 0; i < data->info->pages; i++) {
+> +		status = pmbus_read_status_word(client, i);
+> +		if (status < 0) {
+> +			mutex_unlock(&data->update_lock);
+> +			return status;
+> +		}
+> +
+> +		if (status & ~(PB_STATUS_OFF | PB_STATUS_BUSY | PB_STATUS_POWER_GOOD_N))
+> +			pmbus_clear_fault_page(client, i);
+> +	}
 > +	mutex_unlock(&data->update_lock);
 > +
-> +	if (ret < 0)
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
+> +{
+> +	struct device *dev = &client->dev;
+> +	const struct pmbus_status_category *cat;
+> +	const struct pmbus_status_assoc *bit;
+> +	int i, j, err, ret, func;
+> +	u8 mask;
+> +	u8 misc_status[] = {PMBUS_STATUS_CML, PMBUS_STATUS_OTHER, PMBUS_STATUS_MFR_SPECIFIC,
+> +			    PMBUS_STATUS_FAN_12, PMBUS_STATUS_FAN_34};
+
+static const u8 ... 
+
+> +
+> +	for (i = 0; i < data->info->pages; i++) {
+> +		func = data->info->func[i];
+> +
+> +		for (j = 0; j < ARRAY_SIZE(pmbus_status_flag_map); j++) {
+> +			cat = &pmbus_status_flag_map[j];
+> +			if (!(func & cat->func))
+> +				continue;
+> +			mask = 0;
+> +			for (bit = cat->bits; bit->pflag; bit++)
+> +				mask |= bit->pflag;
+> +
+> +			err = pmbus_write_smbalert_mask(client, i, cat->reg, ~mask);
+> +			if (err)
+> +				dev_err_once(dev, "Failed to set smbalert for reg 0x%02x\n",
+> +					     cat->reg);
+
+dev_err implies an error. This is ignored and thus not an error. On top of that,
+not all chips support PMBUS_SMBALERT_MASK. All of those would see this message.
+We can't have that. At best make it a dev_dbg.
+
+> +		}
+> +
+> +		for (j = 0; j < ARRAY_SIZE(misc_status); j++) {
+> +			err = pmbus_write_smbalert_mask(client, i, misc_status[j], 0xff);
+> +			if (err)
+> +				dev_err_once(dev, "Failed to set smbalert for reg 0x%02x\n",
+> +					     misc_status[j]);
+
+We definitely can't have a message here; that would fire for almost
+every chip.
+
+> +		}
+> +	}
+> +
+> +	/* Register notifiers - can fail if IRQ is not given */
+
+If there is no irq, what is the point of executing this code in the first
+place ? No, wait, in that case the function isn't called in the first place.
+I think the comment doesn't add any value and is just confusing.
+
+> +	ret = devm_request_threaded_irq(dev, client->irq, NULL, pmbus_fault_handler, 0,
+> +					"pmbus-irq", data);
+> +	if (ret) {
+
+Why both "err" and "ret" ?
+
+> +		dev_warn(dev, "IRQ disabled %d\n", ret);
+
+The calling code aborts, so this should be dev_err() and say something
+better than "IRQ disabled"; It should be something like "failed to
+request irq".
+
 > +		return ret;
+> +	}
 > +
-> +	return !!(ret & PB_OPERATION_CONTROL_ON);
+> +	return 0;
+> +}
+> +
+>  static struct dentry *pmbus_debugfs_dir;	/* pmbus debugfs directory */
+>  
+>  #if IS_ENABLED(CONFIG_DEBUG_FS)
+> @@ -3455,6 +3534,12 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
+>  	if (ret)
+>  		return ret;
+>  
+> +	if (client->irq > 0) {
+> +		ret = pmbus_irq_setup(client, data);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
 
-This could then be as simple as
+I think it would be better to have the check in pmbus_irq_setup():
 
-	return pmbus_is_enabled(rdev_get_dev(rdev));
+pmbus_irq_setup()
+{
+	if (!client->irq)
+		return 0;
+	
+	...
+}
 
-Thanks,
-Guenter
+and here
+	ret = pmbus_irq_setup(client, data);
+	if (ret)
+		return ret;
 
-> +}
-> +
-> +static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	u8 page = rdev_get_id(rdev);
-> +	int ret;
-> +
-> +	mutex_lock(&data->update_lock);
-> +	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-> +				     PB_OPERATION_CONTROL_ON,
-> +				     enable ? PB_OPERATION_CONTROL_ON : 0);
-> +	mutex_unlock(&data->update_lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int pmbus_regulator_enable(struct regulator_dev *rdev)
-> +{
-> +	return _pmbus_regulator_on_off(rdev, 1);
-> +}
-> +
-> +static int pmbus_regulator_disable(struct regulator_dev *rdev)
-> +{
-> +	return _pmbus_regulator_on_off(rdev, 0);
-> +}
-> +
-> +static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +
-> +	return pmbus_get_flags(data, rdev_get_id(rdev), flags);
-> +}
-> +
->  static int pmbus_regulator_get_status(struct regulator_dev *rdev)
->  {
->  	struct device *dev = rdev_get_dev(rdev);
+
+>  	ret = pmbus_init_debugfs(client, data);
+>  	if (ret)
+>  		dev_warn(dev, "Failed to register debugfs\n");
