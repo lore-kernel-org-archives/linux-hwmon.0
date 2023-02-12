@@ -2,157 +2,130 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2EE0C61DA4
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Feb 2023 21:17:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E26A5C636D3
+	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Feb 2023 14:58:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjBKVRm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 11 Feb 2023 16:17:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
+        id S229501AbjBLO6A (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 12 Feb 2023 09:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjBKVRl (ORCPT
+        with ESMTP id S229499AbjBLO57 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Feb 2023 16:17:41 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126D3193D1;
-        Sat, 11 Feb 2023 13:17:38 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id jg8so23583158ejc.6;
-        Sat, 11 Feb 2023 13:17:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9UfozzodgNMpv0iCizdFiyBjqgkbDBCRUkbfIRJrQus=;
-        b=VUhAdNmBiZuIVnM+YlyfphNCpgCVyUcbPy6waT5hd1vo45dv7kn08Vq0OuNtoCMwsq
-         VNGXSN7qjn0g7mP62fy2kAvwT1Tk0r1UV7LhwE817Bv1S/QPRmXEniE/Uj9Z0CoNurvl
-         o8JOk7E6gbJGk7/LZYm5yrgQstBmuFe/IUKRzQTFvB8ObQm/DhQPFFpk1b/nMYHHcYZC
-         t6duUNqF3y5bpjprH68f1jpxp0MSi01vhxGvuTXXl2EiFjPIdC3Mwqf8K6Tn9XPbT9GS
-         oZlnePyDkADRYv51URZF/x/D6y97tcVVSD8/dzbt1FEyyNzBkvkFhTcTiJ2ZM+SI55qs
-         ICcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9UfozzodgNMpv0iCizdFiyBjqgkbDBCRUkbfIRJrQus=;
-        b=53CSZRVMTxYE1D6Xk/8c1DGDSIt8Y7BXMw/HA7o9PYJeD3kyiiMeeWqnUO5IQ25R//
-         VYxLMHQ7qGLLFZg8ji3zwxp9eIutUVgqDhQ20rDbEHebvAO9A44eh5U6MFgjXRahy1ti
-         PUxYpIvx1tG/u83LvmLNxpKtGmZ8VceTA6SKdQOiYuuUkiaUCq3TJaS4WntopeUGT/LV
-         1uTXVCJdYFg+Rf/4F3isvpBP3um9hxNEOeWokrXAJvpMMMLCHTNPOE5MU9S07m/olFsj
-         jRQP9K7w7YAWqR44ZT5KBr+R0lgjDkGpGIxar2DLzYqhXZKT30pzw1mGn0LJdanHtq8y
-         kJ8A==
-X-Gm-Message-State: AO0yUKWhwx4AA+rDhK1OTufsVo0lYEEYCrvmbs5q/QjuecoRMkOm4fA7
-        NxkG8d4BAU3Ojhd6v7iEylo=
-X-Google-Smtp-Source: AK7set9c/0EcmQEV4VnlgPvyHUPwvfd8W1m/mseKVrocSW/oJnGHR2orHVNjOKbCxNgIR6veD9DTjw==
-X-Received: by 2002:a17:907:6d8a:b0:88f:8a5:b4cd with SMTP id sb10-20020a1709076d8a00b0088f08a5b4cdmr26458412ejc.1.1676150256536;
-        Sat, 11 Feb 2023 13:17:36 -0800 (PST)
-Received: from [192.168.0.22] ([87.116.164.178])
-        by smtp.gmail.com with ESMTPSA id og37-20020a1709071de500b00888161349desm4345531ejc.182.2023.02.11.13.17.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Feb 2023 13:17:36 -0800 (PST)
-Message-ID: <f9442671-1978-1e7b-f262-cac3504849df@gmail.com>
-Date:   Sat, 11 Feb 2023 22:17:34 +0100
+        Sun, 12 Feb 2023 09:57:59 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2042.outbound.protection.outlook.com [40.107.237.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BBBE074
+        for <linux-hwmon@vger.kernel.org>; Sun, 12 Feb 2023 06:57:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W74swI+fM4k+dzRoo9Qn+19lBP4yoQ9WyNQi2hFQHSeeGnaIvKE3FQtpZ10CjEKCf8HcNCqr5F6oXaTkY36Bc0HNHzFb9kOrwfxlRk8uN+JkD6NaHmaiZ4NjvsVnW6whwb8A0jhb3Z8+/WOWpuV7ujZG5RMe8ioZbqieDRBO2aHqyiDcvihGTWPf4Qv9mWtkmDCF8zfv9UrWaL7FQ9+8hxxqOrrC/uKPzIOifZRvwpNY4BDAoFCIQkZWJKWFy9el0/+nsikG6Nt8ZCkOsj5i7XoS0Ps2XAlZdKhAvoGH0e2UgKZFx/GhaH2/GdblgFfk069cIUu3egneOLZqe+0Y6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sIRbOP21M7q1PhOUtJgfOgldpreyc+OI/0Qe7GRaRLk=;
+ b=Hf5UMGD1TEZhZWe980nBLvJFjd9zBYUbKvEodev2L3yDtadDtDpz4bWcYg+Ccl8itMcs/xldp4v04FkFAXTVYI3DojSM/VQRGSpjLoE27sJn1mFQPhj1rF586iP11LVKmtC/zWY9LbZPCVsahYaaO6PUeY3dOIxTzIAQyThAYj5DPtceyZYr2Ft1v4yJEhiOpnxbb7kAKbjVep1Sq47LXpYc8t+ToqQCgy56BdHVdvEjQfU7sutCzkhtiydpYNy92DEqjlNtsbpTM9yCUPnUz3G43x1FYnl7gV0LBdOxPjJRyBpAAVsM5Fc4OMDJjJfJDTeTrs1qV3DglEO/A2YMGw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sIRbOP21M7q1PhOUtJgfOgldpreyc+OI/0Qe7GRaRLk=;
+ b=UrGb03b5BN1YC47Er+7x3MCPSOloRSYrwnNErQYoMXh9RGW+Svr4QKY/vpJX/20aVKN8gPwLKsXkE29oJ4EmNy/XGEFw6yLPuccFN+bGwptm7F9n8vUzh1RTEdFwQX+UTlJy6Og90wYiTGkCqz4pGFtajgn5IvVbg+0SSxxcaAmMKeO6YZFJHLaT3zDGDOwreRRjyEeOefnw0m19bwfuw1IrL24aO7xT9u54UHfDIUTJG1W14dQwxi/oUIbJAUcGevOTNNT+YHKqXff3SeRB7VEPcOTrOUVyJajy0IoVrtjaRe2KaM5EHuQBwUJKKjPsIoYu3fspxqV3ZjzvczSj6w==
+Received: from DS7PR03CA0025.namprd03.prod.outlook.com (2603:10b6:5:3b8::30)
+ by CY8PR12MB7337.namprd12.prod.outlook.com (2603:10b6:930:53::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23; Sun, 12 Feb
+ 2023 14:57:56 +0000
+Received: from DS1PEPF0000E651.namprd02.prod.outlook.com
+ (2603:10b6:5:3b8:cafe::10) by DS7PR03CA0025.outlook.office365.com
+ (2603:10b6:5:3b8::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23 via Frontend
+ Transport; Sun, 12 Feb 2023 14:57:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS1PEPF0000E651.mail.protection.outlook.com (10.167.18.7) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6111.8 via Frontend Transport; Sun, 12 Feb 2023 14:57:55 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 12 Feb
+ 2023 06:57:49 -0800
+Received: from r-build-bsp-02.mtr.labs.mlnx (10.126.230.37) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Sun, 12 Feb 2023 06:57:48 -0800
+From:   Vadim Pasternak <vadimp@nvidia.com>
+To:     <linux@roeck-us.net>
+CC:     <linux-hwmon@vger.kernel.org>, Vadim Pasternak <vadimp@nvidia.com>
+Subject: [PATCH hwmon 1/1] hwmon: (mlxreg-fan) Return zero speed for broken fan
+Date:   Sun, 12 Feb 2023 16:57:30 +0200
+Message-ID: <20230212145730.24247-1-vadimp@nvidia.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-Subject: Re: [PATCH 3/5] hwmon: (aquacomputer_d5next) Add temperature offset
- control for Aquaero
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Leonard Anderweit <leonard.anderweit@gmail.com>,
-        linux-hwmon@vger.kernel.org
-Cc:     savicaleksa83@gmail.com, Jack Doan <me@jackdoan.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230211165923.17807-1-leonard.anderweit@gmail.com>
- <20230211165923.17807-4-leonard.anderweit@gmail.com>
- <0664b935-d201-419a-3f1d-3df4226a8db1@roeck-us.net>
- <00875064-0407-b114-56c9-87aecb0d3ee4@gmail.com>
- <b716a9ec-93ba-7c42-c8d3-1d6db950ad7b@gmail.com>
- <904da857-2e27-87a1-4541-6288df564d80@roeck-us.net>
-Content-Language: en-US
-In-Reply-To: <904da857-2e27-87a1-4541-6288df564d80@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.126.230.37]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E651:EE_|CY8PR12MB7337:EE_
+X-MS-Office365-Filtering-Correlation-Id: f9a80a49-6631-430c-bad3-08db0d098631
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hep9bYwvMpnGp9XS+Xu5ojOFNCUbQlkQY7DBPJpcVgCXD4QaSSfvQXbIGRbtxTbJ/c279zkn6K5/wYJfT4TAoowNKOlEKmku31HJJUroNddvIOf3auRycl1sL0Iwewmv4v7oabd/RoLkj7WGfdlK24f57ltm1SkGX1zpX021yvr/F/lPFygUpeWC+5j+dwmWMAJMZHFQu9/LxUy8L+ArPVugKngGqiExBcuWwuC0UtBucyMuWI6R1Np+8nvLoUdLAD6mWd3ry859GJZ8atJaEQ9n+FYhYR5hjke+tgh6xgNfppLAjzHSXHnirBfLsGPpay5cMsI9BeffLBdmhwRhawgG8faUWTwttij20NlhTR6ObfICYdTVTNl4H4duQ3FiFmgQoJlrvfyzxBBuFNeLnVUugDgG9UwXGS8KO/7apguzrs918vp8EbzdSNJ/i0RDq/+1cn3ftf9vCjD9/IFhCNgtESLWTMj4B75cO2roMMBm+2DiQeoEt2bo75IRnbDEjFP2WhagESIT5PYACNKcfHpYKRNrAM2NODXyMyOnI9s+BX7jl1LEUAfH8INv/rBBzw8WUQ0IE5vMEJlegeeUtE3dZ9m8NFwiWhVhiig1gJfWA4i/eewH79zVpqFHi2R0Zhx40NhPeisTHU17UyBES6yM44Idh2U17xS/P1RsrAfFmlljzH3S8c1NWRVU4Bv+4amdr0xkfhcaXj+M4867yQ==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39860400002)(346002)(376002)(451199018)(36840700001)(46966006)(40470700004)(107886003)(6666004)(8936002)(36860700001)(82310400005)(336012)(4326008)(6916009)(8676002)(70586007)(70206006)(426003)(47076005)(54906003)(83380400001)(36756003)(40480700001)(316002)(41300700001)(40460700003)(86362001)(478600001)(82740400003)(16526019)(26005)(186003)(2906002)(356005)(7636003)(4744005)(1076003)(5660300002)(2616005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2023 14:57:55.8923
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9a80a49-6631-430c-bad3-08db0d098631
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E651.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7337
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2023-02-11 21:48:56 GMT+01:00, Guenter Roeck wrote:
-> On 2/11/23 11:48, Leonard Anderweit wrote:
->> Am 11.02.23 um 19:54 schrieb Aleksa Savic:
->>> On 2023-02-11 19:08:27 GMT+01:00, Guenter Roeck wrote:
->>>>
->>>> aquaero is already supported, and the checksum is so far generated
->>>> and sent. Is it ignored ? Also, is it guaranteed that _all_ aquero devices
->>>> don't need it ?
->>>
->>> Reading its sensors is currently supported, not writing to it (before these
->>> patches).
->>>
->>> The checksum is ignored and not needed for either aquaero 5 (which Leonard has)
->>> nor 6 (which I have).
->>>
->>>>
->>>> If it is not needed and ignored, does it really add value to selectively drop it ?
->>>
->>> I think we can indeed remove that check.
->>
->> I don't think that check can be removed as the checksum is not appended 
->> to the control report but is in the last two bytes. So using the 
->> checksum on Aquaero will overwrite the data at that location. It is 
->> currently unknown what these two bytes do so I do not want to overwrite 
->> them.
->>
-> 
-> The current code _does_ overwrite those bytes, or am I missing something ?
-> 
-> If so, changing that would be a bug fix which really should not be hidden
-> in a patch making functional changes.
-> 
-> Thanks,
-> Guenter
+Currently for broken fan driver returns value calculated based on error
+code (0xFF) in related fan speed register.
+Thus, for such fan user gets fan{n}_fault to 1 and fan{n}_input with
+misleading value.
 
-The current code indeed does that because the devices that have writing
-implemented work that way (D5 Next, Quadro, Octo - they have priv->fan_ctrl_offsets
-set, which is checked in aqc_is_visible()) plus they need the checksum.
+Add check for fan fault prior return speed value and return zero if
+fault is detected.
 
-Regarding the aquaero checksum, I was under the wrong impression that its
-control report contained a place for it. I've just captured a few reports and it
-seems to contain purely settings all the way to the end. I've also compared
-reports before and after making changes and only the changed settings reflected
-in the hex dumps, showing there really is no checksum.
+Fixes: 65afb4c8e7e4 ("hwmon: (mlxreg-fan) Add support for Mellanox FAN driver")
+Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
+---
+ drivers/hwmon/mlxreg-fan.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-So, to correct myself from earlier: the checksum is not getting ignored; it has
-no place in it at all, as the code and testing show.
-
-Thanks,
-Aleksa
-
-> 
->>>
->>> Thanks,
->>> Aleksa
->>>
->>>>
->>>> Either case, this change is not mentioned in the commit log, and it
->>>> violates the "one logical change per patch" rule. Please split it into
->>>> a separate patch and explain why the change is needed.
->>>>
->>>> Another change to separate is the introduction of ctrl_report_id
->>>> and the secondary_ctrl_report variables, which is also done silently
->>>> and not explained. That should also be a separate patch to simplify
->>>> review.
->>
->> I will separate the changes into more commits for the next version.
->>
->> Regards,
->> Leonard
->>
->>>>
->>>> Thanks,
->>>> Guenter
->>>
-> 
+diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
+index b48bd7c961d6..96017cc8da7e 100644
+--- a/drivers/hwmon/mlxreg-fan.c
++++ b/drivers/hwmon/mlxreg-fan.c
+@@ -155,6 +155,12 @@ mlxreg_fan_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 			if (err)
+ 				return err;
+ 
++			if (MLXREG_FAN_GET_FAULT(regval, tacho->mask)) {
++				/* FAN is broken - return zero for FAN speed. */
++				*val = 0;
++				return 0;
++			}
++
+ 			*val = MLXREG_FAN_GET_RPM(regval, fan->divider,
+ 						  fan->samples);
+ 			break;
+-- 
+2.20.1
 
