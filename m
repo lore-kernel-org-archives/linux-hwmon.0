@@ -2,111 +2,150 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81BEBC05027
-	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Feb 2023 15:22:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BCF8C636D7
+	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Feb 2023 04:22:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjBLPWN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 12 Feb 2023 10:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
+        id S229468AbjBMEWI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 12 Feb 2023 23:22:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBLPWM (ORCPT
+        with ESMTP id S229436AbjBMEWH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 12 Feb 2023 10:22:12 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2791026D
-        for <linux-hwmon@vger.kernel.org>; Sun, 12 Feb 2023 07:22:11 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-16dcb07b805so6039325fac.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 12 Feb 2023 07:22:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=vJLXUjfqndEWaC1vgosgMMuEiAVyDHLSBWG8sIDikQs=;
-        b=qJ73JVmTSMfoNBB8GM0ApVX8nl66YKufvQp4UMSmVoy3Jb1O7YMB1RUACW7dwE6Bsa
-         qs5g7CjCDrh1tHwMV/Nx2xPJUQKnjdqYbIswh6zlvbMjmAdg200/uAzs8uMCv0WO8K+D
-         Kf2BUmMToP5525vX56KhJ26CO49WbqbRSsDB8qb2kCMp34xP2lua9BfSMUa6cLzFJEll
-         zR8QkTh9CQd4pfv40PY+vd0GoimozL78qliRnbmPVO33MAtvG9PuhVQtnmXjxVty+/IS
-         gFpYNQaNF28HtLs5205lYDOUJ5neAR6t1YofiwWDso6Ri9CB/PfscG77LuuXXvEW1fHZ
-         x5jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vJLXUjfqndEWaC1vgosgMMuEiAVyDHLSBWG8sIDikQs=;
-        b=koz5TxyB3VQrFtqKdB4FGFyzWL2n3kGXS1JDlDoEc3Hb0S2YZK2Iik6csmb8SJYb+g
-         ZsN61j1kAi1zR8b/Mk/iPmn8r5Wwx067ZjtNhQ1GjG36Tgm1yf9kAWUInIkAOossafeV
-         k+1gg1qbQ4bAO/esx2++LSg840QHCoWptvXGaUUeyrKVZGuo2jaW3833zhZu1gi18mt3
-         4gar4+uREVLkcCiP16nnR3JNWgKwCuj6BOo51GZEa2TiQj06pNsh8Ef2CCGym8gcUjnV
-         qZUhOzvqxIiXXrYpi0bXNjbU990xwp0oSh6o3lBH7ksk08R1YRecFIHun0zuX0dUedlG
-         sArA==
-X-Gm-Message-State: AO0yUKVPhdUXOVJrJn/43v0ZMutQ9Oo5F38Q807F6RNx3++12HwQ9R/r
-        p+qUJa/v2Aqot0ilDElNE2ScdTj2OKo=
-X-Google-Smtp-Source: AK7set8BTbF/l8GZ3IyeZ1CuL1KPoMx9JzR044WjIcU6c4waR39c3cFog+WJPi9f/7QZP5FbxrcoVg==
-X-Received: by 2002:a05:6870:c14f:b0:169:eb19:e766 with SMTP id g15-20020a056870c14f00b00169eb19e766mr13421186oad.3.1676215330417;
-        Sun, 12 Feb 2023 07:22:10 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id dv18-20020a056870d89200b0016dbf59175bsm2348952oab.47.2023.02.12.07.22.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Feb 2023 07:22:09 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b13231fb-a0e9-b8f6-ebee-40ba9cc40cb4@roeck-us.net>
-Date:   Sun, 12 Feb 2023 07:22:07 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH hwmon 1/1] hwmon: (mlxreg-fan) Return zero speed for
- broken fan
-Content-Language: en-US
-To:     Vadim Pasternak <vadimp@nvidia.com>
+        Sun, 12 Feb 2023 23:22:07 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DB0A27B
+        for <linux-hwmon@vger.kernel.org>; Sun, 12 Feb 2023 20:22:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676262126; x=1707798126;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fpRBszslz3t6mEWsROaHBmhvdiQxYiwB51UyWmDuwho=;
+  b=WU3M+BpZ7LWeaouwzOOSP8Xk+A7UE8dSvf3AxkMPvGxvnKTW/STlwWaG
+   g2/PsA8GNiMMlAtgkeXHux0VCO43l9BHNd/ED7N0zNLEPHnrjYB4BEiQZ
+   gaO7M0RD8eux1PIud85WTsZVWSYZUMkl9M5OFganUsdK6DfzT/g4mXofB
+   qCWAtzbLDXSk+Wrto+7MJGcR82d4fBmh/bORH61XFesoShPZdWq8SwHk6
+   34X9vU9XZcGMwyrChxEp00gjbiTfZloQ1ymBxltqHc1xEd+U+yFKLdyLl
+   IXQ5C5hSrPgZ2voxlDC79AC9mhaggAefkgORzi/eUEpz/GSorbbgX75lz
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="328511029"
+X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
+   d="scan'208";a="328511029"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 20:22:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="701124025"
+X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
+   d="scan'208";a="701124025"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 12 Feb 2023 20:22:04 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pRQLs-0007Yb-0i;
+        Mon, 13 Feb 2023 04:22:04 +0000
+Date:   Mon, 13 Feb 2023 12:21:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-References: <20230212145730.24247-1-vadimp@nvidia.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230212145730.24247-1-vadimp@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ a1ffd3c46267ee5c807acd780e15df9bb692223f
+Message-ID: <63e9bae5.aGeLEWpBLBxFokf3%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/12/23 06:57, Vadim Pasternak wrote:
-> Currently for broken fan driver returns value calculated based on error
-> code (0xFF) in related fan speed register.
-> Thus, for such fan user gets fan{n}_fault to 1 and fan{n}_input with
-> misleading value.
-> 
-> Add check for fan fault prior return speed value and return zero if
-> fault is detected.
-> 
-> Fixes: 65afb4c8e7e4 ("hwmon: (mlxreg-fan) Add support for Mellanox FAN driver")
-> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: a1ffd3c46267ee5c807acd780e15df9bb692223f  hwmon: (mlxreg-fan) Return zero speed for broken fan
 
-Applied.
+elapsed time: 766m
 
-Thanks,
-Guenter
+configs tested: 73
+configs skipped: 3
 
-> ---
->   drivers/hwmon/mlxreg-fan.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
-> index b48bd7c961d6..96017cc8da7e 100644
-> --- a/drivers/hwmon/mlxreg-fan.c
-> +++ b/drivers/hwmon/mlxreg-fan.c
-> @@ -155,6 +155,12 @@ mlxreg_fan_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
->   			if (err)
->   				return err;
->   
-> +			if (MLXREG_FAN_GET_FAULT(regval, tacho->mask)) {
-> +				/* FAN is broken - return zero for FAN speed. */
-> +				*val = 0;
-> +				return 0;
-> +			}
-> +
->   			*val = MLXREG_FAN_GET_RPM(regval, fan->divider,
->   						  fan->samples);
->   			break;
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+alpha                            allyesconfig
+alpha                               defconfig
+arc                              allyesconfig
+arc                                 defconfig
+arc                  randconfig-r043-20230212
+arm                              allmodconfig
+arm                              allyesconfig
+arm                                 defconfig
+arm                  randconfig-r046-20230212
+arm64                            allyesconfig
+arm64                               defconfig
+csky                                defconfig
+i386                             allyesconfig
+i386                              debian-10.3
+i386                                defconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+ia64                             allmodconfig
+ia64                                defconfig
+loongarch                        allmodconfig
+loongarch                         allnoconfig
+loongarch                           defconfig
+m68k                             allmodconfig
+m68k                                defconfig
+mips                             allmodconfig
+mips                             allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+s390                                defconfig
+sh                               allmodconfig
+sparc                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                            allnoconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+x86_64                               rhel-8.3
+
+clang tested configs:
+hexagon              randconfig-r041-20230212
+hexagon              randconfig-r045-20230212
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+riscv                randconfig-r042-20230212
+s390                 randconfig-r044-20230212
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
