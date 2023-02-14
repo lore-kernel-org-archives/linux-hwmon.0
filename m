@@ -2,93 +2,99 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32CE8C61DA4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Feb 2023 21:40:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A1EFC05027
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Feb 2023 22:01:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232952AbjBNVkK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Feb 2023 16:40:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
+        id S233172AbjBNWB6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Feb 2023 17:01:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232458AbjBNVkH (ORCPT
+        with ESMTP id S233137AbjBNWB5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Feb 2023 16:40:07 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B7828D31;
-        Tue, 14 Feb 2023 13:40:05 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DD9E960003;
-        Tue, 14 Feb 2023 21:40:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1676410804;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UQzQSgnN9o1LOREIuibj1ZFyAx16UG7jYybKa3UpZ6Y=;
-        b=K6EdBLbg5UiHwV5SrxM16Ghhup6DyBZVdCMFUAfTPQb7dLjZypNRU0eL/dAwjL8aMzzk8H
-        XPQnEcJ6iPH0bIMyqGQBknC4J5+i6yHrz3HBHDH6n5A/mwQxRtU8pCSyt3I9jad5JlfFeK
-        2a9ZN7xBvYhlRW/xIikeMrt2gci4quq1IhFnQ09MpoDyEB0LEz10qkxF1yQOpyK4Y1bSL0
-        Pe/V0uMrrXEqO839CQak/T9bsuhCIRaD/posrw2jacdDLTgq05aCWdyp86EU3L42PUquOS
-        mh5Z+TChWJE7M1xrKaUBma6bEoNLrItaEyz2/b4i9EDB2hGwYUULhgBMs3JaYg==
-Date:   Tue, 14 Feb 2023 22:40:02 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-Subject: Re: [PATCH v3 1/2] drivers: rtc: add max313xx series rtc driver
-Message-ID: <Y+v/suob0EN1REX4@mail.local>
-References: <20221108122254.1185-1-Ibrahim.Tilki@analog.com>
- <20221108122254.1185-2-Ibrahim.Tilki@analog.com>
- <68ddb833-f38e-a05b-82c4-ce12330410a5@alliedtelesis.co.nz>
+        Tue, 14 Feb 2023 17:01:57 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F49EB57;
+        Tue, 14 Feb 2023 14:01:52 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id f23-20020a05600c491700b003dff4480a17so1510430wmp.1;
+        Tue, 14 Feb 2023 14:01:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qMXnw1VQbx8Sv6EwiMKN2CItMHbinEY7o7yRWkmdY/w=;
+        b=FXSyug5ZkRqNz85G/mIciOh6KEJc19RzIJFXXm1I21jfpEbb3bTXbqeKCsp+6Swrt6
+         pRVwPLI3K5z9PLANI39ojOhskzW2C6WqnTym9AHPyappb3ZALXfE0IFZ9Reue4Ljb1nA
+         s7v/VquL9ZYV8Gu+t1EuZonlNg17UgJuVf5wwC0GXzAy8/D2LRs4r62y304qfjvheqlR
+         s5vL2wKCrZX+2ZWIjwqJseCGsVhWMkV43gTOY3vIRHN3uOuKMVHwTr7h4nI4g1sh9a1k
+         p5YHSKdTVIXyu+etWOmOsOTa/TmuyxV4plw5RdBMZaIpbilplZ/W1kOlyi4h5S4gvKRW
+         D1EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qMXnw1VQbx8Sv6EwiMKN2CItMHbinEY7o7yRWkmdY/w=;
+        b=5WNjmEf1sI1DHDTyD6jiQ7Q7pMwtL8LAZnicPERUY7Bpr+hZajbO1dKhOoMEO77Gwx
+         QLO/OCwmm8eNk3Hh2y1n1a0hLKGrDh0K2jQQMtoMDkKln8UoRDcSIOj9hWV/CFLBzPQn
+         axAcWAPZ6m4nNcAi8XJ8CBfbi47JploE7ugWf+lZoCuU0ZkRGb5Y7+R0mr5CYJdIITzP
+         Zr/OZarABTbk7WQQAIjLQjLTjh3Ws2pyDlHAOFiCGWzNsRBNX5FsbcHyg3q65N4ePPg5
+         oFM5ANjBMAfxMZtxaZ0gr1NNJf4JvMKiRnTCGtnHifeWcxIBNt0yw+mTdwj0BQMkdG38
+         JXPA==
+X-Gm-Message-State: AO0yUKXWu5K+eXsHGdNQtb81hTBNidGbi99+83WDBSmV+V/yFZmfIf3g
+        J4FEWedy2TZjVqbm5pI7upxkMiC70us=
+X-Google-Smtp-Source: AK7set/tM8s2RiEJEMN6uWf3UY9LrrDzG6rIpTwhNfcePgvPj/sWGT5FXFUz75ht5huBgV4hLdecwQ==
+X-Received: by 2002:a05:600c:539b:b0:3db:1ab:b91b with SMTP id hg27-20020a05600c539b00b003db01abb91bmr295735wmb.15.1676412110535;
+        Tue, 14 Feb 2023 14:01:50 -0800 (PST)
+Received: from localhost.localdomain ([2001:9e8:20f2:3300:c2d2:a008:b022:b1e0])
+        by smtp.gmail.com with ESMTPSA id u14-20020adff88e000000b002c56046a3b5sm4033704wrp.53.2023.02.14.14.01.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 14:01:49 -0800 (PST)
+From:   Leonard Anderweit <leonard.anderweit@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Leonard Anderweit <leonard.anderweit@gmail.com>
+Subject: [PATCH v2 0/6] hwmon: (aquacomputer_d5next) Add Aquacomputer Aquaero control
+Date:   Tue, 14 Feb 2023 23:02:15 +0100
+Message-Id: <20230214220221.15003-1-leonard.anderweit@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <68ddb833-f38e-a05b-82c4-ce12330410a5@alliedtelesis.co.nz>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 14/02/2023 20:28:05+0000, Chris Packham wrote:
-> Hi Ibrahim,
-> 
-> On 9/11/22 01:22, Ibrahim Tilki wrote:
-> > Adding support for Analog Devices MAX313XX series RTCs.
-> >
-> > Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-> > Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> > ---
-> >   drivers/rtc/Kconfig        |   11 +
-> >   drivers/rtc/Makefile       |    1 +
-> >   drivers/rtc/rtc-max313xx.c | 1070 ++++++++++++++++++++++++++++++++++++
-> >   3 files changed, 1082 insertions(+)
-> >   create mode 100644 drivers/rtc/rtc-max313xx.c
-> 
-> What is the current state of this work? I see there are some comments on 
-> this v3 iteration from late last year and I couldn't find any newer 
-> iteration on any mailing list. We've got some new hardware arriving soon 
-> that will have the MAX31331 RTC and I'm keen to see this patch series 
-> land. Is there anything I can do to help it along? I can't be very 
-> specific about when I'll see the new hardware (who can these days), the 
-> last update was "boards are due in March".
-> 
-> For the maintainers on the Cc list once the dust settles how would I get 
-> this supported in a LTS kernel (we're currently using the 5.15 series)? 
-> Or is totally out of the question because it's not just a new device id?
+Add support for controlling the Aquacomputer Aquaero 5/6 fan controllers. The
+controllable settings include temperature offsets and fan PWM.
 
-This will not happen, you will have to update to the next LTS (which you
-should do anyway)
+The first four patches expand the capabilities of the control system without
+changing functionality. Patches 4-6 add support for Aquaero control.
 
+changelog:
+v2:
+ - split original patch 3 into three patches to have one logical change each
+ - explain why Aquaero does not need the checksum
+ - improve wording of documentation
+ - drop last patch with pwmX_mode
+
+Leonard Anderweit (6):
+  hwmon: (aquacomputer_d5next) Support one byte control values
+  hwmon: (aquacomputer_d5next) Support writing multiple control values
+    at once
+  hwmon: (aquacomputer_d5next) Device dependent control report settings
+  hwmon: (aquacomputer_d5next) Add infrastructure for Aquaero control
+    reports
+  hwmon: (aquacomputer_d5next) Add temperature offset control for
+    Aquaero
+  hwmon: (aquacomputer_d5next) Add fan PWM control for Aquaero
+
+ Documentation/hwmon/aquacomputer_d5next.rst |   5 +-
+ drivers/hwmon/aquacomputer_d5next.c         | 182 ++++++++++++++++----
+ 2 files changed, 155 insertions(+), 32 deletions(-)
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.39.1
+
