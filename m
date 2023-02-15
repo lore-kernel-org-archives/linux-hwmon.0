@@ -2,221 +2,127 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ADBBC6379F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Feb 2023 03:11:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DC7EC636D4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Feb 2023 04:20:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbjBODLX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Feb 2023 22:11:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
+        id S229597AbjBOEU0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Feb 2023 23:20:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjBODLW (ORCPT
+        with ESMTP id S233497AbjBOET6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Feb 2023 22:11:22 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7A3EFA4
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Feb 2023 19:11:21 -0800 (PST)
+        Tue, 14 Feb 2023 23:19:58 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592C936686
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Feb 2023 20:18:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676430681; x=1707966681;
-  h=date:message-id:from:to:cc:subject:in-reply-to:
-   references:mime-version;
-  bh=OAkQSBKI5snieHcd7nFmC4gmWHI2U/EGxlpJA4MZcQc=;
-  b=Y/KX2AJLbPz18a5eHQKCOiJCqCL7S+84VuzV/QS6ZSA/YVIfgqc7JrNJ
-   98uQlG+ZZCaFBRkoI9upDXybLIKwXzL7C/TMlNSB2JySsiTGszL+bQ+/h
-   ff6ROzk73m9HmQRudOen/n/IP51ZeFWvIZKQobWdcdSnUILtuUPGh5Zpz
-   xYmoQMbehGu3SEyJobBgcl6PKINWeM8mVtYLgs2NYBGeqmr8hcGj50lO5
-   1gv9+l5O0ZtgUcHLPzwrodfvB5/zVfXtvQnUkNE12fnLYpY9wD6a0957M
-   SU7BzSql5y2wZPKQ35W73w6WX6sBQ8a/gMPU1xkw/4ncZEgtPG8msRxbC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="333470332"
+  t=1676434699; x=1707970699;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gAFPVujgJR3r6ekzaEiAOjP1ueLDHgnA14CBFczlyQ4=;
+  b=I2CxLGDV+gFGyVA9RFqijpKrcU7KPVI+H+RB/u04v52WQxhkxONS1WUu
+   4OgTi+b3DYH/zKNZ10pJvmuWh/iF6tv0PI4m/m6rWIMO8rKrXjf7FmeBG
+   2nCmQhViDg3d+pUCQshdLX1HaG0bdcRcaawFV/Nk5XP42HsmbZgoLfbIg
+   KHkgWPu8Sq4/xBvWm8V7SIORKbt3dKmsIfHzRKW6wpRO7RCNkQMLDd6DC
+   ZdVkJQ2HASrkmXD+NWLBhCuj92pbX93D6/dZ1oQRvYyW1njgCTfs2+AbA
+   btWPZpjIATrWelfZ8nrkPMQqzXs8qJMchNqL0dcVwem48h+oKvMIszKXg
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="311707121"
 X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
-   d="scan'208";a="333470332"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 19:11:21 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="778604879"
+   d="scan'208";a="311707121"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 20:15:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="701884217"
 X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
-   d="scan'208";a="778604879"
-Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.212.220.101])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 19:11:20 -0800
-Date:   Tue, 14 Feb 2023 19:11:16 -0800
-Message-ID: <87sff7tygb.wl-ashutosh.dixit@intel.com>
-From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
+   d="scan'208";a="701884217"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 14 Feb 2023 20:15:31 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pS9Cd-00091Z-0n;
+        Wed, 15 Feb 2023 04:15:31 +0000
+Date:   Wed, 15 Feb 2023 12:15:11 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Anshuman Gupta <anshuman.gupta@intel.com>,
-        Riana Tauro <riana.tauro@intel.com>,
-        Badal Nilawar <badal.nilawar@intel.com>,
-        gwan-gyeong.mun@intel.com, linux-hwmon@vger.kernel.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Vinay Belgaumkar <vinay.belgaumkar@intel.com>
-Subject: Re: [PATCH 3/3] drm/i915/hwmon: Expose power1_max_enable
-In-Reply-To: <f7a7e280-804f-b397-a8c5-c4dae0451111@roeck-us.net>
-References: <20230214053342.1952226-1-ashutosh.dixit@intel.com> <20230214053342.1952226-4-ashutosh.dixit@intel.com>     <f7a7e280-804f-b397-a8c5-c4dae0451111@roeck-us.net>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
- Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
+ 6e3dec4e1b356e6a4f3d3b4038ac444283155656
+Message-ID: <63ec5c4f.g56IgQgwIGsPcoRE%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 13 Feb 2023 22:16:44 -0800, Guenter Roeck wrote:
->
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: 6e3dec4e1b356e6a4f3d3b4038ac444283155656  watchdog: mt7621-wdt: avoid ralink architecture dependent code
 
-Hi Guenter,
+elapsed time: 732m
 
-> On 2/13/23 21:33, Ashutosh Dixit wrote:
-> > On ATSM the PL1 power limit is disabled at power up. The previous uapi
-> > assumed that the PL1 limit is always enabled and therefore did not have a
-> > notion of a disabled PL1 limit. This results in erroneous PL1 limit values
-> > when PL1 limit is disabled. For example at power up, the disabled ATSM PL1
-> > limit is shown as 0 which means a low PL1 limit whereas the limit being
-> > disabled actually implies a high effective PL1 limit value.
-> >
-> > To get round this problem, expose power1_max_enable as a custom hwmon
-> > attribute. power1_max_enable can be used in conjunction with power1_max to
-> > interpret power1_max (PL1 limit) values correctly. It can also be used to
-> > enable/disable the PL1 power limit.
-> >
-> > Signed-off-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
-> > ---
-> >   .../ABI/testing/sysfs-driver-intel-i915-hwmon |  7 +++
-> >   drivers/gpu/drm/i915/i915_hwmon.c             | 48 +++++++++++++++++--
-> >   2 files changed, 51 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
-> > index 2d6a472eef885..edd94a44b4570 100644
-> > --- a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
-> > +++ b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
-> > @@ -18,6 +18,13 @@ Description:	RW. Card reactive sustained  (PL1/Tau) power limit in microwatts.
-> >			Only supported for particular Intel i915 graphics
-> > platforms.
-> >   +What:		/sys/devices/.../hwmon/hwmon<i>/power1_max_enable
->
-> This is not a standard hwmon attribute. The standard attribute would be
-> power1_enable.
->
-> So from hwmon perspective this is a NACK.
+configs tested: 50
+configs skipped: 3
 
-Thanks for the feedback. I did consider power1_enable but decided to go
-with the power1_max_enable custom attribute. Documentation for
-power1_enable says it is to "Enable or disable the sensors" but in our case
-we are not enabling/disabling sensors (which we don't have any ability to,
-neither do we expose any power measurements, only energy from which power
-can be derived) but enabling/disabling a "power limit" (a limit beyond
-which HW takes steps to limit power).
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-As mentioned in the commit message, power1_max_enable is exposed to avoid
-possible misinterpretations in measured energy in response to the set power
-limit (something specific to our HW). We may have multiple such limits in
-the future with similar issues and multiplexing enabling/disabling these
-power limits via a single power1_enable file will not provide sufficient
-granularity for our purposes.
+gcc tested configs:
+alpha                            allyesconfig
+alpha                               defconfig
+arc                              allyesconfig
+arc                                 defconfig
+arm                              allmodconfig
+arm                              allyesconfig
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+csky                                defconfig
+i386                             allyesconfig
+i386                              debian-10.3
+i386                                defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+loongarch                        allmodconfig
+loongarch                         allnoconfig
+loongarch                           defconfig
+m68k                             allmodconfig
+m68k                                defconfig
+mips                             allmodconfig
+mips                             allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+s390                                defconfig
+sh                               allmodconfig
+sparc                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                            allnoconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
 
-Also, I had previously posted this patch:
+clang tested configs:
+powerpc                 xes_mpc85xx_defconfig
+x86_64               randconfig-a001-20230213
+x86_64               randconfig-a002-20230213
+x86_64               randconfig-a003-20230213
+x86_64               randconfig-a004-20230213
+x86_64               randconfig-a005-20230213
+x86_64               randconfig-a006-20230213
 
-https://patchwork.freedesktop.org/patch/522612/?series=113972&rev=1
-
-which avoids the power1_max_enable file and instead uses a power1_max value
-of -1 to indicate that the power1_max limit is disabled.
-
-So in summary we have the following options:
-
-1. Go with power1_max_enable (preferred, works well for us)
-2. Go with -1 to indicate that the power1_max limit is disabled
-   (non-intuitive and also a little ugly)
-3. Go with power1_enable (possible but confusing because multiple power
-   limits/entities are multiplexed via a single file)
-
-If you still think we should not use power1_max_enable I think I might drop
-this patch for now (I am trying to preempt future issues but in this case
-it's better to wait till people actually complain rather than expose a
-non-ideal uapi).
-
-Even if drop we this patch now, it would be good to know your preference in
-case we need to revisit this issue later.
-
-Thanks and also sorry for the rather long winded email.
-
-Ashutosh
-
-> Guenter
->
-> > +Date:		May 2023
-> > +KernelVersion:	6.3
-> > +Contact:	intel-gfx@lists.freedesktop.org
-> > +Description:	RW. Enable/disable the PL1 power limit (power1_max).
-> > +
-> > +		Only supported for particular Intel i915 graphics platforms.
-> >   What:		/sys/devices/.../hwmon/hwmon<i>/power1_rated_max
-> >   Date:		February 2023
-> >   KernelVersion:	6.2
-> > diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
-> > index 7c20a6f47b92e..5665869d8602b 100644
-> > --- a/drivers/gpu/drm/i915/i915_hwmon.c
-> > +++ b/drivers/gpu/drm/i915/i915_hwmon.c
-> > @@ -230,13 +230,52 @@ hwm_power1_max_interval_store(struct device *dev,
-> >					    PKG_PWR_LIM_1_TIME, rxy);
-> >	return count;
-> >   }
-> > +static SENSOR_DEVICE_ATTR_RW(power1_max_interval, hwm_power1_max_interval, 0);
-> >   -static SENSOR_DEVICE_ATTR(power1_max_interval, 0664,
-> > -			  hwm_power1_max_interval_show,
-> > -			  hwm_power1_max_interval_store, 0);
-> > +static ssize_t
-> > +hwm_power1_max_enable_show(struct device *dev, struct device_attribute *attr, char *buf)
-> > +{
-> > +	struct hwm_drvdata *ddat = dev_get_drvdata(dev);
-> > +	intel_wakeref_t wakeref;
-> > +	u32 r;
-> > +
-> > +	with_intel_runtime_pm(ddat->uncore->rpm, wakeref)
-> > +		r = intel_uncore_read(ddat->uncore, ddat->hwmon->rg.pkg_rapl_limit);
-> > +
-> > +	return sysfs_emit(buf, "%u\n", !!(r & PKG_PWR_LIM_1_EN));
-> > +}
-> > +
-> > +static ssize_t
-> > +hwm_power1_max_enable_store(struct device *dev, struct device_attribute *attr,
-> > +			    const char *buf, size_t count)
-> > +{
-> > +	struct hwm_drvdata *ddat = dev_get_drvdata(dev);
-> > +	intel_wakeref_t wakeref;
-> > +	u32 en, r;
-> > +	bool _en;
-> > +	int ret;
-> > +
-> > +	ret = kstrtobool(buf, &_en);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	en = REG_FIELD_PREP(PKG_PWR_LIM_1_EN, _en);
-> > +	hwm_locked_with_pm_intel_uncore_rmw(ddat, ddat->hwmon->rg.pkg_rapl_limit,
-> > +					    PKG_PWR_LIM_1_EN, en);
-> > +
-> > +	/* Verify, because PL1 limit cannot be disabled on all platforms */
-> > +	with_intel_runtime_pm(ddat->uncore->rpm, wakeref)
-> > +		r = intel_uncore_read(ddat->uncore, ddat->hwmon->rg.pkg_rapl_limit);
-> > +	if ((r & PKG_PWR_LIM_1_EN) != en)
-> > +		return -EPERM;
-> > +
-> > +	return count;
-> > +}
-> > +static SENSOR_DEVICE_ATTR_RW(power1_max_enable, hwm_power1_max_enable, 0);
-> >     static struct attribute *hwm_attributes[] = {
-> >	&sensor_dev_attr_power1_max_interval.dev_attr.attr,
-> > +	&sensor_dev_attr_power1_max_enable.dev_attr.attr,
-> >	NULL
-> >   };
-> >   @@ -247,7 +286,8 @@ static umode_t hwm_attributes_visible(struct
-> > kobject *kobj,
-> >	struct hwm_drvdata *ddat = dev_get_drvdata(dev);
-> >	struct i915_hwmon *hwmon = ddat->hwmon;
-> >   -	if (attr == &sensor_dev_attr_power1_max_interval.dev_attr.attr)
-> > +	if (attr == &sensor_dev_attr_power1_max_interval.dev_attr.attr ||
-> > +	    attr == &sensor_dev_attr_power1_max_enable.dev_attr.attr)
-> >		return i915_mmio_reg_valid(hwmon->rg.pkg_rapl_limit) ? attr->mode : 0;
-> >		return 0;
->
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
