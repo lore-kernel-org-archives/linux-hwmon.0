@@ -2,111 +2,221 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F670C05027
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Feb 2023 22:37:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ADBBC6379F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Feb 2023 03:11:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbjBNWg7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Feb 2023 17:36:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
+        id S230489AbjBODLX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Feb 2023 22:11:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232031AbjBNWg6 (ORCPT
+        with ESMTP id S229578AbjBODLW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Feb 2023 17:36:58 -0500
-X-Greylist: delayed 7724 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Feb 2023 14:36:54 PST
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15F32FCE0
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Feb 2023 14:36:54 -0800 (PST)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id F2D6D2C049F;
-        Wed, 15 Feb 2023 11:36:51 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1676414211;
-        bh=cyDTL/yYDuqCMGb1II30ndoGbPuz+1qrXx6xn9H+EoU=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=bYFpDGLzLZIkgkVR+s0EQFhtgEG3NKIAt5CpBBYwxNP/4OjpiKrAnH1N50xE8kDF+
-         WWLDl5XtUA2yNtZ6Ha7/UqwEqcYCZS/f0CbfLLz20rciXa4r+K3dAyiZ3r+gY4L2eA
-         xksK5CrdbW9YWKW+lYyFg2/sjeb2r1NeeuWGVnry34JE/eYrhANd0+LO7Dj2a16Tcx
-         1ja/8Qu/ZrO7h2UzM6wWd6nUxCQFq+W9/+AeFcUE6LmO6ENOVjbw6Rx2IwoG8n3pA5
-         V+mOfckKhSxXF7CIfXsotWLNBJ6Y1keGxTIfEnFMqiAnrCHprMOZu+765vesdxyxHI
-         7pTtraI0SmdVA==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B63ec0d030002>; Wed, 15 Feb 2023 11:36:51 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.45; Wed, 15 Feb 2023 11:36:51 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.045; Wed, 15 Feb 2023 11:36:51 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-Subject: Re: [PATCH v3 1/2] drivers: rtc: add max313xx series rtc driver
-Thread-Topic: [PATCH v3 1/2] drivers: rtc: add max313xx series rtc driver
-Thread-Index: AQHZQLLY3ijYBbo43E6McZa87qvtIa7OHnUAgAAP3wA=
-Date:   Tue, 14 Feb 2023 22:36:51 +0000
-Message-ID: <8ffabc0d-73ca-27c6-5244-95e29901c60a@alliedtelesis.co.nz>
-References: <20221108122254.1185-1-Ibrahim.Tilki@analog.com>
- <20221108122254.1185-2-Ibrahim.Tilki@analog.com>
- <68ddb833-f38e-a05b-82c4-ce12330410a5@alliedtelesis.co.nz>
- <Y+v/suob0EN1REX4@mail.local>
-In-Reply-To: <Y+v/suob0EN1REX4@mail.local>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E5D9E7D68209B645A1B54DA70F7B870B@atlnz.lc>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=U+ns8tju c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=m04uMKEZRckA:10 a=gAnH3GRIAAAA:8 a=_pSrP_Kwfl6zvDA_82YA:9 a=QEXdDO2ut3YA:10 a=oVHKYsEdi7-vN-J5QA_j:22
-X-SEG-SpamProfiler-Score: 0
+        Tue, 14 Feb 2023 22:11:22 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7A3EFA4
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Feb 2023 19:11:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676430681; x=1707966681;
+  h=date:message-id:from:to:cc:subject:in-reply-to:
+   references:mime-version;
+  bh=OAkQSBKI5snieHcd7nFmC4gmWHI2U/EGxlpJA4MZcQc=;
+  b=Y/KX2AJLbPz18a5eHQKCOiJCqCL7S+84VuzV/QS6ZSA/YVIfgqc7JrNJ
+   98uQlG+ZZCaFBRkoI9upDXybLIKwXzL7C/TMlNSB2JySsiTGszL+bQ+/h
+   ff6ROzk73m9HmQRudOen/n/IP51ZeFWvIZKQobWdcdSnUILtuUPGh5Zpz
+   xYmoQMbehGu3SEyJobBgcl6PKINWeM8mVtYLgs2NYBGeqmr8hcGj50lO5
+   1gv9+l5O0ZtgUcHLPzwrodfvB5/zVfXtvQnUkNE12fnLYpY9wD6a0957M
+   SU7BzSql5y2wZPKQ35W73w6WX6sBQ8a/gMPU1xkw/4ncZEgtPG8msRxbC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="333470332"
+X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
+   d="scan'208";a="333470332"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 19:11:21 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="778604879"
+X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
+   d="scan'208";a="778604879"
+Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.212.220.101])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 19:11:20 -0800
+Date:   Tue, 14 Feb 2023 19:11:16 -0800
+Message-ID: <87sff7tygb.wl-ashutosh.dixit@intel.com>
+From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Anshuman Gupta <anshuman.gupta@intel.com>,
+        Riana Tauro <riana.tauro@intel.com>,
+        Badal Nilawar <badal.nilawar@intel.com>,
+        gwan-gyeong.mun@intel.com, linux-hwmon@vger.kernel.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Vinay Belgaumkar <vinay.belgaumkar@intel.com>
+Subject: Re: [PATCH 3/3] drm/i915/hwmon: Expose power1_max_enable
+In-Reply-To: <f7a7e280-804f-b397-a8c5-c4dae0451111@roeck-us.net>
+References: <20230214053342.1952226-1-ashutosh.dixit@intel.com> <20230214053342.1952226-4-ashutosh.dixit@intel.com>     <f7a7e280-804f-b397-a8c5-c4dae0451111@roeck-us.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-DQpPbiAxNS8wMi8yMyAxMDo0MCwgQWxleGFuZHJlIEJlbGxvbmkgd3JvdGU6DQo+IE9uIDE0LzAy
-LzIwMjMgMjA6Mjg6MDUrMDAwMCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IEhpIElicmFoaW0s
-DQo+Pg0KPj4gT24gOS8xMS8yMiAwMToyMiwgSWJyYWhpbSBUaWxraSB3cm90ZToNCj4+PiBBZGRp
-bmcgc3VwcG9ydCBmb3IgQW5hbG9nIERldmljZXMgTUFYMzEzWFggc2VyaWVzIFJUQ3MuDQo+Pj4N
-Cj4+PiBTaWduZWQtb2ZmLWJ5OiBJYnJhaGltIFRpbGtpIDxJYnJhaGltLlRpbGtpQGFuYWxvZy5j
-b20+DQo+Pj4gU2lnbmVkLW9mZi1ieTogWmV5bmVwIEFyc2xhbmJlbnplciA8WmV5bmVwLkFyc2xh
-bmJlbnplckBhbmFsb2cuY29tPg0KPj4+IC0tLQ0KPj4+ICAgIGRyaXZlcnMvcnRjL0tjb25maWcg
-ICAgICAgIHwgICAxMSArDQo+Pj4gICAgZHJpdmVycy9ydGMvTWFrZWZpbGUgICAgICAgfCAgICAx
-ICsNCj4+PiAgICBkcml2ZXJzL3J0Yy9ydGMtbWF4MzEzeHguYyB8IDEwNzAgKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrDQo+Pj4gICAgMyBmaWxlcyBjaGFuZ2VkLCAxMDgyIGlu
-c2VydGlvbnMoKykNCj4+PiAgICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ydGMvcnRjLW1h
-eDMxM3h4LmMNCj4+IFdoYXQgaXMgdGhlIGN1cnJlbnQgc3RhdGUgb2YgdGhpcyB3b3JrPyBJIHNl
-ZSB0aGVyZSBhcmUgc29tZSBjb21tZW50cyBvbg0KPj4gdGhpcyB2MyBpdGVyYXRpb24gZnJvbSBs
-YXRlIGxhc3QgeWVhciBhbmQgSSBjb3VsZG4ndCBmaW5kIGFueSBuZXdlcg0KPj4gaXRlcmF0aW9u
-IG9uIGFueSBtYWlsaW5nIGxpc3QuIFdlJ3ZlIGdvdCBzb21lIG5ldyBoYXJkd2FyZSBhcnJpdmlu
-ZyBzb29uDQo+PiB0aGF0IHdpbGwgaGF2ZSB0aGUgTUFYMzEzMzEgUlRDIGFuZCBJJ20ga2VlbiB0
-byBzZWUgdGhpcyBwYXRjaCBzZXJpZXMNCj4+IGxhbmQuIElzIHRoZXJlIGFueXRoaW5nIEkgY2Fu
-IGRvIHRvIGhlbHAgaXQgYWxvbmc/IEkgY2FuJ3QgYmUgdmVyeQ0KPj4gc3BlY2lmaWMgYWJvdXQg
-d2hlbiBJJ2xsIHNlZSB0aGUgbmV3IGhhcmR3YXJlICh3aG8gY2FuIHRoZXNlIGRheXMpLCB0aGUN
-Cj4+IGxhc3QgdXBkYXRlIHdhcyAiYm9hcmRzIGFyZSBkdWUgaW4gTWFyY2giLg0KPj4NCj4+IEZv
-ciB0aGUgbWFpbnRhaW5lcnMgb24gdGhlIENjIGxpc3Qgb25jZSB0aGUgZHVzdCBzZXR0bGVzIGhv
-dyB3b3VsZCBJIGdldA0KPj4gdGhpcyBzdXBwb3J0ZWQgaW4gYSBMVFMga2VybmVsICh3ZSdyZSBj
-dXJyZW50bHkgdXNpbmcgdGhlIDUuMTUgc2VyaWVzKT8NCj4+IE9yIGlzIHRvdGFsbHkgb3V0IG9m
-IHRoZSBxdWVzdGlvbiBiZWNhdXNlIGl0J3Mgbm90IGp1c3QgYSBuZXcgZGV2aWNlIGlkPw0KPiBU
-aGlzIHdpbGwgbm90IGhhcHBlbiwgeW91IHdpbGwgaGF2ZSB0byB1cGRhdGUgdG8gdGhlIG5leHQg
-TFRTICh3aGljaCB5b3UNCj4gc2hvdWxkIGRvIGFueXdheSkNCkkgd2FzIGFmcmFpZCB0aGF0IHdh
-cyBnb2luZyB0byBiZSB0aGUgYW5zd2VyLiBXZSdsbCBoYXZlIHRvIGNhcnJ5IGl0IGFzIA0KYSBs
-b2NhbCBwYXRjaCB1bnRpbCB0aGVyZSBpcyBhIExUUyB2ZXJzaW9uIHdpdGggdGhlIGRyaXZlciBz
-dXBwb3J0IHdlIA0KbmVlZCBpbiBpdC4=
+On Mon, 13 Feb 2023 22:16:44 -0800, Guenter Roeck wrote:
+>
+
+Hi Guenter,
+
+> On 2/13/23 21:33, Ashutosh Dixit wrote:
+> > On ATSM the PL1 power limit is disabled at power up. The previous uapi
+> > assumed that the PL1 limit is always enabled and therefore did not have a
+> > notion of a disabled PL1 limit. This results in erroneous PL1 limit values
+> > when PL1 limit is disabled. For example at power up, the disabled ATSM PL1
+> > limit is shown as 0 which means a low PL1 limit whereas the limit being
+> > disabled actually implies a high effective PL1 limit value.
+> >
+> > To get round this problem, expose power1_max_enable as a custom hwmon
+> > attribute. power1_max_enable can be used in conjunction with power1_max to
+> > interpret power1_max (PL1 limit) values correctly. It can also be used to
+> > enable/disable the PL1 power limit.
+> >
+> > Signed-off-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
+> > ---
+> >   .../ABI/testing/sysfs-driver-intel-i915-hwmon |  7 +++
+> >   drivers/gpu/drm/i915/i915_hwmon.c             | 48 +++++++++++++++++--
+> >   2 files changed, 51 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+> > index 2d6a472eef885..edd94a44b4570 100644
+> > --- a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+> > +++ b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+> > @@ -18,6 +18,13 @@ Description:	RW. Card reactive sustained  (PL1/Tau) power limit in microwatts.
+> >			Only supported for particular Intel i915 graphics
+> > platforms.
+> >   +What:		/sys/devices/.../hwmon/hwmon<i>/power1_max_enable
+>
+> This is not a standard hwmon attribute. The standard attribute would be
+> power1_enable.
+>
+> So from hwmon perspective this is a NACK.
+
+Thanks for the feedback. I did consider power1_enable but decided to go
+with the power1_max_enable custom attribute. Documentation for
+power1_enable says it is to "Enable or disable the sensors" but in our case
+we are not enabling/disabling sensors (which we don't have any ability to,
+neither do we expose any power measurements, only energy from which power
+can be derived) but enabling/disabling a "power limit" (a limit beyond
+which HW takes steps to limit power).
+
+As mentioned in the commit message, power1_max_enable is exposed to avoid
+possible misinterpretations in measured energy in response to the set power
+limit (something specific to our HW). We may have multiple such limits in
+the future with similar issues and multiplexing enabling/disabling these
+power limits via a single power1_enable file will not provide sufficient
+granularity for our purposes.
+
+Also, I had previously posted this patch:
+
+https://patchwork.freedesktop.org/patch/522612/?series=113972&rev=1
+
+which avoids the power1_max_enable file and instead uses a power1_max value
+of -1 to indicate that the power1_max limit is disabled.
+
+So in summary we have the following options:
+
+1. Go with power1_max_enable (preferred, works well for us)
+2. Go with -1 to indicate that the power1_max limit is disabled
+   (non-intuitive and also a little ugly)
+3. Go with power1_enable (possible but confusing because multiple power
+   limits/entities are multiplexed via a single file)
+
+If you still think we should not use power1_max_enable I think I might drop
+this patch for now (I am trying to preempt future issues but in this case
+it's better to wait till people actually complain rather than expose a
+non-ideal uapi).
+
+Even if drop we this patch now, it would be good to know your preference in
+case we need to revisit this issue later.
+
+Thanks and also sorry for the rather long winded email.
+
+Ashutosh
+
+> Guenter
+>
+> > +Date:		May 2023
+> > +KernelVersion:	6.3
+> > +Contact:	intel-gfx@lists.freedesktop.org
+> > +Description:	RW. Enable/disable the PL1 power limit (power1_max).
+> > +
+> > +		Only supported for particular Intel i915 graphics platforms.
+> >   What:		/sys/devices/.../hwmon/hwmon<i>/power1_rated_max
+> >   Date:		February 2023
+> >   KernelVersion:	6.2
+> > diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
+> > index 7c20a6f47b92e..5665869d8602b 100644
+> > --- a/drivers/gpu/drm/i915/i915_hwmon.c
+> > +++ b/drivers/gpu/drm/i915/i915_hwmon.c
+> > @@ -230,13 +230,52 @@ hwm_power1_max_interval_store(struct device *dev,
+> >					    PKG_PWR_LIM_1_TIME, rxy);
+> >	return count;
+> >   }
+> > +static SENSOR_DEVICE_ATTR_RW(power1_max_interval, hwm_power1_max_interval, 0);
+> >   -static SENSOR_DEVICE_ATTR(power1_max_interval, 0664,
+> > -			  hwm_power1_max_interval_show,
+> > -			  hwm_power1_max_interval_store, 0);
+> > +static ssize_t
+> > +hwm_power1_max_enable_show(struct device *dev, struct device_attribute *attr, char *buf)
+> > +{
+> > +	struct hwm_drvdata *ddat = dev_get_drvdata(dev);
+> > +	intel_wakeref_t wakeref;
+> > +	u32 r;
+> > +
+> > +	with_intel_runtime_pm(ddat->uncore->rpm, wakeref)
+> > +		r = intel_uncore_read(ddat->uncore, ddat->hwmon->rg.pkg_rapl_limit);
+> > +
+> > +	return sysfs_emit(buf, "%u\n", !!(r & PKG_PWR_LIM_1_EN));
+> > +}
+> > +
+> > +static ssize_t
+> > +hwm_power1_max_enable_store(struct device *dev, struct device_attribute *attr,
+> > +			    const char *buf, size_t count)
+> > +{
+> > +	struct hwm_drvdata *ddat = dev_get_drvdata(dev);
+> > +	intel_wakeref_t wakeref;
+> > +	u32 en, r;
+> > +	bool _en;
+> > +	int ret;
+> > +
+> > +	ret = kstrtobool(buf, &_en);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	en = REG_FIELD_PREP(PKG_PWR_LIM_1_EN, _en);
+> > +	hwm_locked_with_pm_intel_uncore_rmw(ddat, ddat->hwmon->rg.pkg_rapl_limit,
+> > +					    PKG_PWR_LIM_1_EN, en);
+> > +
+> > +	/* Verify, because PL1 limit cannot be disabled on all platforms */
+> > +	with_intel_runtime_pm(ddat->uncore->rpm, wakeref)
+> > +		r = intel_uncore_read(ddat->uncore, ddat->hwmon->rg.pkg_rapl_limit);
+> > +	if ((r & PKG_PWR_LIM_1_EN) != en)
+> > +		return -EPERM;
+> > +
+> > +	return count;
+> > +}
+> > +static SENSOR_DEVICE_ATTR_RW(power1_max_enable, hwm_power1_max_enable, 0);
+> >     static struct attribute *hwm_attributes[] = {
+> >	&sensor_dev_attr_power1_max_interval.dev_attr.attr,
+> > +	&sensor_dev_attr_power1_max_enable.dev_attr.attr,
+> >	NULL
+> >   };
+> >   @@ -247,7 +286,8 @@ static umode_t hwm_attributes_visible(struct
+> > kobject *kobj,
+> >	struct hwm_drvdata *ddat = dev_get_drvdata(dev);
+> >	struct i915_hwmon *hwmon = ddat->hwmon;
+> >   -	if (attr == &sensor_dev_attr_power1_max_interval.dev_attr.attr)
+> > +	if (attr == &sensor_dev_attr_power1_max_interval.dev_attr.attr ||
+> > +	    attr == &sensor_dev_attr_power1_max_enable.dev_attr.attr)
+> >		return i915_mmio_reg_valid(hwmon->rg.pkg_rapl_limit) ? attr->mode : 0;
+> >		return 0;
+>
