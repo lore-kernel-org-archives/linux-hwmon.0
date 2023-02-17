@@ -2,191 +2,117 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBA01C636D6
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Feb 2023 08:36:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51660C636D4
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Feb 2023 11:13:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjBQIgq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 17 Feb 2023 03:36:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38516 "EHLO
+        id S229797AbjBQLNs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 Feb 2023 06:13:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjBQIgm (ORCPT
+        with ESMTP id S229795AbjBQLNp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 17 Feb 2023 03:36:42 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5355F249
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Feb 2023 00:36:41 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id e10so218843wrg.4
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Feb 2023 00:36:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Glx5PtLD/RY+BLX0OyzHnvMIcdeGlar2Jyclh1azXvQ=;
-        b=N7jRqIvR91vj/CV5RzLtG2QE7kIm/aYaxgaRXcYMG59naPQ3nVlWHTW3shWZnflA6L
-         /41vKHdndtIamb1fdlcp5p8OwMcwpuGpHJe/pUoVyTn8pRQgNMgnBbpZ8TR9UuWHxIKI
-         q8UvQKPtAtjAVhLncmyItdMIDojar95Zw68+Skhi/wfBnekqIrzMNIIlfxfzC1d9oY+8
-         lgz8YvWjCtTKBtfZJpZZQTqwqoUiyLF7lTfHU6OJZ7cvPLYgro4ADWr+n4DRuRprvzrJ
-         pq0GhGdas63WHhJqJi3caPQaZvXQ7XuuouCz+hVUaIZaFH2zWhKJfEa/olNIgVdJS3Hk
-         EoRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Glx5PtLD/RY+BLX0OyzHnvMIcdeGlar2Jyclh1azXvQ=;
-        b=nl15BMhdHZUgYedGsbVBeAC596TU5uzBP/jmowqARWhEBaijFqL1Qdb/3AyAJCPR1P
-         2EEIkHELS5GZlCDFHm1wcc1y9xjI1hZTgEHmb9UbzIa6PuHWDODRuHu4vYQbhe2mHXq6
-         t0DI0K4XGwXa2V+e1FMeoiRb8mxxa82eBl3nYcyDHbzook1QI5Ybpd/SfSDhTHQv/fTW
-         Fu1XgXr+74XhHrxCiB5VzoSxCfSb0x5G76b+YOXJrOivi58zssAD4A13vC3QCBMODjJ6
-         O+sXaHKfzuNDbz2+NEvzh8h9a7UDnbsXPi51iFOSP9QXcHu1RFY/TGuLWP3y7FRChAj1
-         ZJTg==
-X-Gm-Message-State: AO0yUKVNbvo44KVw+uokWS0fRDjpBxGkRD1Npfp9q7inS7LHtBLxCst+
-        +xwTbNSFg9oUNOdLVr/FJtZWyg==
-X-Google-Smtp-Source: AK7set/LFJ7OLSKFvvjRjmtE3GX5xZuj9GYzZL76ygl+9Jzy4IXfFXfpkN3yO3zTFYl6HxDBI9fAHA==
-X-Received: by 2002:adf:fb44:0:b0:2c5:4ffa:ba62 with SMTP id c4-20020adffb44000000b002c54ffaba62mr248459wrs.17.1676622999337;
-        Fri, 17 Feb 2023 00:36:39 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id m17-20020a7bce11000000b003e209b45f6bsm4857021wmc.29.2023.02.17.00.36.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 00:36:39 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] hwmon: (pmbus/core): Notify hwmon events
-Date:   Fri, 17 Feb 2023 09:36:31 +0100
-Message-Id: <20230217083631.657430-4-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230217083631.657430-1-Naresh.Solanki@9elements.com>
-References: <20230217083631.657430-1-Naresh.Solanki@9elements.com>
+        Fri, 17 Feb 2023 06:13:45 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92185644DC
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Feb 2023 03:13:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676632391; x=1708168391;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UPkb/PoRsQn4+DFL8udVs21vce44sgQtMzvjwoQuxus=;
+  b=OzkdCl8YyUhP5N1SwPl4q1+lOlupmIMKDear0g2gm5H4kLuok6N1HDZu
+   WKAfaesyyrMuLWBhcw/9As86SFNT8eu2XAzwExttq8sE1DsuPs9y+ABNF
+   jqGe/APseZCOzjFPrN24BShOPGLyrt2mxeKJkZqSph6EhC6cQumi17RSh
+   mjSbrhC+MnDVqQZl0ulE4IMel++LTnuFIBmFyNotXBzuAB8HAIgDburKO
+   C4VBkwPuFFikGTyIw+VXNRa0SpJ5XK5KW3WB8Jzd31GelKETUHIKXIiTn
+   ufoy/m/at6Zlr5ElckIJbTR+121OM09WpcJ7OCoVkqEVX6tJbwwiVEc+w
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="312330138"
+X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
+   d="scan'208";a="312330138"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 03:11:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="702942365"
+X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
+   d="scan'208";a="702942365"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 17 Feb 2023 03:11:09 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pSydw-000BNB-1w;
+        Fri, 17 Feb 2023 11:11:08 +0000
+Date:   Fri, 17 Feb 2023 19:10:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 5720a18baa4686d56d0a235e6ecbcc55f8d716d7
+Message-ID: <63ef60bf.SeFV2W4nGTgJfMd5%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 5720a18baa4686d56d0a235e6ecbcc55f8d716d7  hwmon: Deprecate [devm_]hwmon_device_register_with_groups
 
-Notify hwmon events using the pmbus irq handler.
+elapsed time: 887m
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-...
-Changes in V3:
-- Remove empty line
-- locked version of pmbus_get_flags
-Changes in V2
-- Remove __maybe_unsed attribute as its not needed.
----
- drivers/hwmon/pmbus/pmbus_core.c | 48 ++++++++++++++++++++++++++++----
- 1 file changed, 43 insertions(+), 5 deletions(-)
+configs tested: 42
+configs skipped: 3
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index d0415d5ac7d9..2d10a354fe7a 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2761,7 +2761,35 @@ static int __maybe_unused pmbus_is_enabled(struct device *dev, u8 page)
- 	return !!(ret & PB_OPERATION_CONTROL_ON);
- }
- 
--static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
-+#define to_dev_attr(_dev_attr) \
-+	container_of(_dev_attr, struct device_attribute, attr)
-+
-+static void pmbus_notify(struct pmbus_data *data, int page, int reg, int flags)
-+{
-+	int i;
-+
-+	for (i = 0; i < data->num_attributes; i++) {
-+		struct device_attribute *da = to_dev_attr(data->group.attrs[i]);
-+		struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
-+		int index = attr->index;
-+		u16 smask = pb_index_to_mask(index);
-+		u8 spage = pb_index_to_page(index);
-+		u16 sreg = pb_index_to_reg(index);
-+
-+		if (reg == sreg && page == spage && (smask & flags)) {
-+			dev_dbg(data->dev, "sysfs notify: %s", da->attr.name);
-+			sysfs_notify(&data->dev->kobj, NULL, da->attr.name);
-+			kobject_uevent(&data->dev->kobj, KOBJ_CHANGE);
-+			flags &= ~smask;
-+		}
-+
-+		if (!flags)
-+			break;
-+	}
-+}
-+
-+static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags,
-+			    bool notify)
- {
- 	int i, status;
- 	const struct pmbus_status_category *cat;
-@@ -2785,6 +2813,10 @@ static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flag
- 			if (status & bit->pflag)
- 				*flags |= bit->rflag;
- 		}
-+
-+		if (notify && status)
-+			pmbus_notify(data, page, cat->reg, status);
-+
- 	}
- 
- 	/*
-@@ -2828,12 +2860,13 @@ static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flag
- 	return 0;
- }
- 
--static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
-+static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags,
-+					  bool notify)
- {
- 	int ret;
- 
- 	mutex_lock(&data->update_lock);
--	ret = _pmbus_get_flags(data, page, flags);
-+	ret = _pmbus_get_flags(data, page, flags, notify);
- 	mutex_unlock(&data->update_lock);
- 
- 	return ret;
-@@ -2878,7 +2911,7 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
- 	struct i2c_client *client = to_i2c_client(dev->parent);
- 	struct pmbus_data *data = i2c_get_clientdata(client);
- 
--	return pmbus_get_flags(data, rdev_get_id(rdev), flags);
-+	return pmbus_get_flags(data, rdev_get_id(rdev), flags, false);
- }
- 
- static int pmbus_regulator_get_status(struct regulator_dev *rdev)
-@@ -3114,10 +3147,14 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
- {
- 	struct pmbus_data *data = pdata;
- 	struct i2c_client *client = to_i2c_client(data->dev);
--	int i, status;
-+	int i, status, ret;
- 
- 	mutex_lock(&data->update_lock);
- 	for (i = 0; i < data->info->pages; i++) {
-+		ret = _pmbus_get_flags(data, i, &status, true);
-+		if (ret)
-+			return ret;
-+
- 		status = pmbus_read_status_word(client, i);
- 		if (status < 0) {
- 			mutex_unlock(&data->update_lock);
-@@ -3126,6 +3163,7 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
- 
- 		if (status & ~(PB_STATUS_OFF | PB_STATUS_BUSY | PB_STATUS_POWER_GOOD_N))
- 			pmbus_clear_fault_page(client, i);
-+
- 	}
- 	mutex_unlock(&data->update_lock);
- 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+alpha                            allyesconfig
+alpha                               defconfig
+arc                              allyesconfig
+arc                                 defconfig
+arm                              allmodconfig
+arm                              allyesconfig
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+csky                                defconfig
+i386                             allyesconfig
+i386                              debian-10.3
+i386                                defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+loongarch                        allmodconfig
+loongarch                         allnoconfig
+loongarch                           defconfig
+m68k                             allmodconfig
+m68k                                defconfig
+mips                             allmodconfig
+mips                             allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+s390                                defconfig
+sh                               allmodconfig
+sparc                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
+
 -- 
-2.39.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
