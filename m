@@ -2,112 +2,110 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20D27C636CC
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Feb 2023 11:53:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EB23C61DA4
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Feb 2023 14:42:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjBRLx6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 18 Feb 2023 06:53:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
+        id S229461AbjBROmi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 18 Feb 2023 09:42:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjBRLxz (ORCPT
+        with ESMTP id S229436AbjBROmi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 18 Feb 2023 06:53:55 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D924F18158;
-        Sat, 18 Feb 2023 03:53:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1676721207; i=w_armin@gmx.de;
-        bh=QPjZNlJU4QJ41mwOkCGDhNx04tR/f7ULkAR65bMgRBE=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=nKjGxFVawnebHNAYS2FFFcwbyNCrcCeqKOgaSTS7E1jsD4tSgossVDuwOB8eOEF0o
-         UybTERZcm5gAvVXSanYE2Jhvn4A1tCnFsWInmRSXnio9+bt8H4YAKdbPhe9aUSYhSG
-         eflUpGZkj22FsQgeuZ6Z9TcZ5MMzYXlB8gfWbbKS54gDgzvjVE206H0tUdneNv91Fz
-         yJWMlDEJGm2EmIeMJWK5MI3XjjN3W6HHfSTHQjepqvZOY7PLpK/RZUxwUzB93fDiq3
-         tk/l6tX3HcvhY8ActknHRb1K5nxRIVJbrLCiN2wDCCTbyjCxM/8L1pw7p1YC38XfiR
-         z7ItDAfoMsh3Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1M2O6Y-1pXBnd2nQE-003yMD; Sat, 18 Feb 2023 12:53:27 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     hdegoede@redhat.com, markgross@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net,
-        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] platform/x86: dell-ddv: Fix temperature scaling
-Date:   Sat, 18 Feb 2023 12:53:18 +0100
-Message-Id: <20230218115318.20662-2-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230218115318.20662-1-W_Armin@gmx.de>
-References: <20230218115318.20662-1-W_Armin@gmx.de>
+        Sat, 18 Feb 2023 09:42:38 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3931118170
+        for <linux-hwmon@vger.kernel.org>; Sat, 18 Feb 2023 06:42:37 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id u5so194495ilk.9
+        for <linux-hwmon@vger.kernel.org>; Sat, 18 Feb 2023 06:42:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=27W8CUyexh2vu12/gxgNlkkmgM6sdtK1sFdSW2Pyqg0=;
+        b=RuufT0yiCG9HfEUVfZW3Vp4gXhqEZF9wxtkYMuMmrB8iGfwuvzKaIBOB3ain7nFZeo
+         hXDBrSaFg//xXCGlc+ZYoLFRKF0itCfGY13XwrA9j8y33rMBhEhYFCdebO2yEV30LMu2
+         zQMjCFKg2F2xBgQL5SeE9BkdS0n7Aw56BX/nRpf7AbC7B6hcMVgWBXrPym65mWoz/abw
+         LDMT3ytwJS0/38cb63tYVLwByQgPm8+CB/7cmz6byiOAiXIqkMW+FsiQoq2WTZJar2AZ
+         i2FY/NNe17QdxxyKEgqqEKi1Y+4mhr0r/N9cnSUrIdaSI3x7trZcy+NUNqLIqVKC9CHw
+         w2sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=27W8CUyexh2vu12/gxgNlkkmgM6sdtK1sFdSW2Pyqg0=;
+        b=KpOSkCP50zQcElt4SU42kyQz0DQLgNzBGw3ujEpCFgxWI08uJd1Rxgz3zbGaNFGhV9
+         ImT4G3UH3xUfgj+Z42fgxrpqS6YpaX402zptAYf5OnUDbOIiUxcGsMRc3Zadhf6uH2hV
+         NUCny4hsrwO1LhXrLV0DYTAwhAKYkuZtVsdgGPrc112GJnMyXM8JNWtFNzN14LB6I29i
+         iKAEFP3EKRRvGc1yIv1LozbA9UVWouqZ0O8Dbt8UYXWduFOqKA/qAndaYZXmkjIvfPYe
+         Z0f+IPF5e7XHOnlY14KFGaV1DplvXodrFySTYVrLjd9eMkoJFU+0/DXdo0FihymjF3cU
+         jSHQ==
+X-Gm-Message-State: AO0yUKVgbTkKk6AUmR6ycoqg1BSl6rS0NTI4rVmMg9iNlpjTT7tVFCw6
+        nfuHQmocf4e6bf1jLKWz90mEKvSJIOY=
+X-Google-Smtp-Source: AK7set+6I0n+xIIWYgJrI7Ymxl5/UwQ6yquap6CpzPB6Bbhd/O7y9NIAmlRxiB0c1IQ6MuTtHxrtww==
+X-Received: by 2002:a05:6e02:1ca9:b0:313:ce4b:a435 with SMTP id x9-20020a056e021ca900b00313ce4ba435mr3809656ill.25.1676731356559;
+        Sat, 18 Feb 2023 06:42:36 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q1-20020a056e020c2100b0031537da6ba3sm93267ilg.87.2023.02.18.06.42.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Feb 2023 06:42:35 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 18 Feb 2023 06:42:34 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Enrico Mioso <mrkiko.rs@gmail.com>, linux-hwmon@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH] net: phy: aquantia: clamp temperature value in
+ aqr_hwmon_set
+Message-ID: <20230218144234.GA2652402@roeck-us.net>
+References: <20230217231647.968107-1-mrkiko.rs@gmail.com>
+ <Y/AtxyXsMVHf0ygt@lunn.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Gbh4wqiM8biRiU8epJdlXhRMVTnObRg6WJp80kZzdY00wrcko8S
- 9Gdz0+GGC7t3nN1lu3DHOaJ1ezIsY7QGdva0Llw+oFFUNnINEogt4utp8RslV9tWg/KwVUm
- sAnDnfkjX47VjUc2crcBtec3myUtKGkwax60+GmAnWKKqs0tn620rEndVwHrVBNMefBQhqc
- 9PTwcpUCs14ucRyre+42w==
-UI-OutboundReport: notjunk:1;M01:P0:fRhWJvkkKy4=;y//mm4Qs0ynnCNKzNgCXWQXQ4Eq
- UoVtF5fB277FilJ4P22Ys91fyrt8h3MpLhwrjqivt2yHqZ1TCyYdhq9TRFabadZgesQO8vYnp
- QlUe+6VwYCoXOEWzsB4Mdgc9ut2yPLx/rItdfSDL6dNhe9zlIfmtdRnRQIuZjDOLSfkEGFTRm
- oGm3vSv/7AWkQNsNMSPUCvnWHw9eJQz48PJUTRTsd7zzMD7s4577IBycFIBbb/is/JGhTveC2
- bW1pOVcX4nmzvClQ2fMzq+QBVa55heVEXteZmnZQ3fkshRRRSUZYh9BI41BcF8kqsbHIc69ns
- p1XtMP/J+xYSi+H3FIGJA8+ZVXNZsrlsk0sgh1z78Efssxp88AOIgwsUtKqM1c2Er/EpeiTMZ
- voezy1XYD+lhDOG+1ZUK4r4u94lXaLdky6bIBiWC6m8Myw2tukHnzqak1OUyN1yLG5rxTLTUl
- W34Acg8oTQq4QByWAuJ28W1G+4MFhwQ2L4aDlYenq1zDj7l9IRSj1VPbCQwrN7uM86a3ZFx5T
- YwzacgoLUB4i7jJiOezgsbFXkyQRfcztGgS15F/PXbUOQ/yCgrFG2O1x/IFSXRbLXMfcQPYEf
- pAEGjS504TSVuHl5MXCGbetpDx8h0UMh3Di/kt9rQGHSa/M5QakV0prt+gnq5f/qjxZS+HDT8
- YLRHjKRGn7l2RRRYnoRxcQoMoVdf3WWNa47Yh7Qgd2wcXvHSEkXL4ur6BMSiP+Nvbm1l4Vvmx
- C8hqRoL1czmkcDBtlaPmUgMyMDVasmKEukG+zSeipLEvCOu5cU+LMZuiILbk3mcQUJPbxRmix
- NLs6TrcFL7pN4z0fqa55Bwui6ZhJhxIYPxby0VQJD67Fg4p/UwETIKxksLwmGyjcmrPIh8Tke
- asux1LqZBd36RLspqpkTZa9yoCbxXnQ1g3vtOQHifKwkbBuApNlpBQHvtlMXAACaGAG8dbojF
- JN+PLJTLi7vvjZL36elEu984UrE=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/AtxyXsMVHf0ygt@lunn.ch>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-After using the built-in UEFI hardware diagnostics to compare
-the measured battery temperature, i noticed that the temperature
-is actually expressed in tenth degree kelvin, similar to the
-SBS-Data standard. For example, a value of 2992 is displayed as
-26 degrees celsius.
-Fix the scaling so that the correct values are being displayed.
+On Sat, Feb 18, 2023 at 02:45:43AM +0100, Andrew Lunn wrote:
+> > diff --git a/drivers/net/phy/aquantia_hwmon.c b/drivers/net/phy/aquantia_hwmon.c
+> > index 19c4c280a6cd..6444055e720c 100644
+> > --- a/drivers/net/phy/aquantia_hwmon.c
+> > +++ b/drivers/net/phy/aquantia_hwmon.c
+> > @@ -70,8 +70,7 @@ static int aqr_hwmon_set(struct phy_device *phydev, int reg, long value)
+> >  {
+> >  	int temp;
+> >  
+> > -	if (value >= 128000 || value < -128000)
+> > -		return -ERANGE;
+> > +	clamp_val(value, -128000, 128000);
+> 
+> It could be argued that value < -128000 should return
+> -EUNOBTAINABLE. I've had trouble getting DRAMS to work at -40C, even
 
-Tested on a Dell Inspiron 3505.
+Hmm, I don't see that one anywhere.
 
-Fixes: a77272c16041 ("platform/x86: dell: Add new dell-wmi-ddv driver")
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
-Changes in v2:
-- Avoid unnecessary rounding
-=2D--
- drivers/platform/x86/dell/dell-wmi-ddv.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> those listed as industrial. Setting an alarm for -128C is pointless.
+> 
+> +128C is also a bit questionable. The aQuantia PHYs do run hot, you
+> often see a heat sink, and they are supposed to support up to 108C. So
+> an alarm for 128C probably also does not work.
+> 
 
-diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x=
-86/dell/dell-wmi-ddv.c
-index eff4e9649faf..2750dee99c3e 100644
-=2D-- a/drivers/platform/x86/dell/dell-wmi-ddv.c
-+++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
-@@ -17,7 +17,6 @@
- #include <linux/kernel.h>
- #include <linux/hwmon.h>
- #include <linux/kstrtox.h>
--#include <linux/math.h>
- #include <linux/math64.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
-@@ -665,7 +664,8 @@ static ssize_t temp_show(struct device *dev, struct de=
-vice_attribute *attr, char
- 	if (ret < 0)
- 		return ret;
+It has been an endless argument if limits should be clamped to the
+limits supported by the chip registers or to the limits supported by
+the chip according to its datasheet. I personally see that as the
+responsibility of the person actually configuring the limits, not the
+driver. After all, there could be chip variants supporting different
+limits, and who knows what chip variants are going to be available
+in the future. Anyway, as I said, this has been an endless argument,
+and it is another detail that I usually let driver developers decide
+because they often feel passionate about it.
 
--	return sysfs_emit(buf, "%d\n", DIV_ROUND_CLOSEST(value, 10));
-+	/* Use 2731 instead of 2731.5 to avoid unnecessary rounding */
-+	return sysfs_emit(buf, "%d\n", value - 2731);
- }
+Guenter
 
- static ssize_t eppid_show(struct device *dev, struct device_attribute *at=
-tr, char *buf)
-=2D-
-2.30.2
-
+> Anyway, as Guenter suggested, please change -ERANGE to -EINVAL.
+> 
+>      Andrew
