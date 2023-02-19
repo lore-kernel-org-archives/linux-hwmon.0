@@ -2,72 +2,100 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F30CDC61DA4
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Feb 2023 06:35:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A289C05027
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Feb 2023 11:00:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbjBSGfV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 19 Feb 2023 01:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
+        id S230040AbjBSLA3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 19 Feb 2023 06:00:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjBSGfV (ORCPT
+        with ESMTP id S229506AbjBSLA2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 19 Feb 2023 01:35:21 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0381C11654;
-        Sat, 18 Feb 2023 22:35:19 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pTdI2-0004KC-7X; Sun, 19 Feb 2023 07:35:14 +0100
-Message-ID: <ebfe7e80-91be-b0ce-9679-80ac5161ec1f@leemhuis.info>
-Date:   Sun, 19 Feb 2023 07:35:13 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Corentin Chary <corentin.chary@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
+        Sun, 19 Feb 2023 06:00:28 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B101C113D2
+        for <linux-hwmon@vger.kernel.org>; Sun, 19 Feb 2023 03:00:25 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id k5so2436024edo.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 19 Feb 2023 03:00:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=04773HxK6w/j5oagaAhwhgZqIaxMVK/fJO7N0+YWAos=;
+        b=nXrxzHw3dPvuYeveP2PJQIfnnMPfXpEQ0vOTIYEoZnkzYViIS6YESSA8w6BK2BYtzv
+         1btbBKI0T4zlv6r7iitTM0NwuiqbLNL7Rg+IRTpYoaWP6DJkVILQyF62axeaTSx97RgK
+         QBotKM5+/V/vEnfmd8WnNaVX79WuhAJcJtuLLn2BiC5Jrw4XuXRWykPMeAc5p3sBKlZC
+         f+MdSqpXlkEkDBnoG4lQ8AeduvABPkO2pZsg4eKgScjh7r5oIH/ZO5nDKXq5mF9XpvgT
+         B/n/+Sbe2AuVSl2QTWeTK8uGEBjMe9oTocMAFC5R4FSGQEsA5UnPXnsV5LvkEiAr965F
+         xvoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=04773HxK6w/j5oagaAhwhgZqIaxMVK/fJO7N0+YWAos=;
+        b=1wh1flB5CctZV221Yua9OaeFHgh+C9n3Axf30qaJD/VfjrnYbvQV1AvDHlql2MOuz6
+         yTGWgWfFeZ0xap+ZC1LisYEDN1EqQJRoj2PeeKzxQevxRHrhmRMg+D6uMQ2sF1wkv9Pb
+         D/URVYnOe/egt3G9tyjlGXotCysoqHOLBC77Pz28RO+fzJHTH+E2NVYeIgZxXKd5og1g
+         xSx52wf0u68f22KMnadOuwflGPXOFG2n3uZDqkgEadpvmC1O5Qky7BraId7uEiWjCff9
+         7ObeILDZLKmu/6zjHRh17NmCN7TEGh25hccCCQIfW1aSaWY/Wi6u39miibLrjfp35dT/
+         TqLw==
+X-Gm-Message-State: AO0yUKVRmRTIK5mtGlUfChwIgWfJQR+ndja3Zz2dWTtT7vhSdzhnZDxm
+        acITGW/zAvtNOgad6hvUH6yfuijOKJSuXg==
+X-Google-Smtp-Source: AK7set+sWYjj3EdJBgxCvqD1GvcIBIEJUs5zyN+HYJP1LnNANTyZ70VDNzonsW/98T08ADbA6jh9sw==
+X-Received: by 2002:a17:906:530b:b0:878:5946:c0ac with SMTP id h11-20020a170906530b00b008785946c0acmr6101841ejo.3.1676804423805;
+        Sun, 19 Feb 2023 03:00:23 -0800 (PST)
+Received: from amezin-laptop.home.arpa ([2a01:5a8:205:5bd7:aaa8:d1c0:c3d2:5983])
+        by smtp.gmail.com with ESMTPSA id u27-20020a170906409b00b008b14b4b88f2sm4416908ejj.142.2023.02.19.03.00.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Feb 2023 03:00:23 -0800 (PST)
+From:   Aleksandr Mezin <mezin.alexander@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Herman Fries <baracoder@googlemail.com>,
+        Aleksandr Mezin <mezin.alexander@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Cc:     acpi4asus-user@lists.sourceforge.net,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-        jacobecc9@gmail.com
-Subject: Bug 217057 - Asus high CPU temperature / low fan speed
-Content-Type: text/plain; charset=UTF-8
+Subject: [PATCH] hwmon: (nzxt-smart2) add another USB ID
+Date:   Sun, 19 Feb 2023 12:59:19 +0200
+Message-Id: <20230219105924.333007-1-mezin.alexander@gmail.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676788520;433fa141;
-X-HE-SMSGID: 1pTdI2-0004KC-7X
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi! I look out for reported regression in bugzilla.kernel.org and
-normally ignore everything else. But I noticed a newly submitted report
-that sounded somewhat bad, that's why I decided to write this mail to
-ensure the right people are at least aware of it.
+This seems to be a new revision of the device. RGB controls have changed,
+but this driver doesn't touch them anyway.
 
-https://bugzilla.kernel.org/show_bug.cgi?id=217057
+Fan speed control reported to be working with existing userspace (hidraw)
+software, so I assume it's compatible. Fan channel count is the same.
 
->  jacobecc9@gmail.com 2023-02-18 21:03:13 UTC
-> 
-> laptop Asus X415EA (Tiger Lake) is running fan too slow in automatic
-> mode even if CPU temperature is over 90C. There are no options in BIOS.
-> Windows has software which allows fan to reach high speed with
-> performance fan curve. Linux only allows to disable PWM.
-> 
-> [reply] [−] Comment 1 jacobecc9@gmail.com 2023-02-18 21:45:59 UTC
-> 
-> [   19.733079] asus_wmi: ASUS WMI generic driver loaded
-> [   19.779429] asus_wmi: Initialization: 0x1
-> [   19.779476] asus_wmi: BIOS WMI version: 9.0
-> [   19.779507] asus_wmi: SFUN value: 0x21
-> [   19.779510] asus-nb-wmi asus-nb-wmi: Detected ATK, not ASUSWMI, use DSTS
-> [   19.779513] asus-nb-wmi asus-nb-wmi: Detected ATK, enable event queue
-> [   19.814908] input: Asus WMI hotkeys as /devices/platform/asus-nb-wmi/input/input23
-> [   19.827710] asus_wmi: fan_curve_get_factory_default (0x00110024) failed: -19
-> [   19.827840] asus_wmi: fan_curve_get_factory_default (0x00110025) failed: -19
+Recently added (0x1e71, 0x2019) seems to be the same device.
 
-Ciao, Thorsten
+Discovered in liquidctl project:
+
+https://github.com/liquidctl/liquidctl/issues/541
+
+Signed-off-by: Aleksandr Mezin <mezin.alexander@gmail.com>
+---
+ drivers/hwmon/nzxt-smart2.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
+index 2b93ba89610a..a8e72d8fd060 100644
+--- a/drivers/hwmon/nzxt-smart2.c
++++ b/drivers/hwmon/nzxt-smart2.c
+@@ -791,7 +791,8 @@ static const struct hid_device_id nzxt_smart2_hid_id_table[] = {
+ 	{ HID_USB_DEVICE(0x1e71, 0x2009) }, /* NZXT RGB & Fan Controller */
+ 	{ HID_USB_DEVICE(0x1e71, 0x200e) }, /* NZXT RGB & Fan Controller */
+ 	{ HID_USB_DEVICE(0x1e71, 0x2010) }, /* NZXT RGB & Fan Controller */
+-	{ HID_USB_DEVICE(0x1e71, 0x2019) }, /* NZXT RGB & Fan Controller */
++	{ HID_USB_DEVICE(0x1e71, 0x2011) }, /* NZXT RGB & Fan Controller (6 RGB) */
++	{ HID_USB_DEVICE(0x1e71, 0x2019) }, /* NZXT RGB & Fan Controller (6 RGB) */
+ 	{},
+ };
+ 
+-- 
+2.39.2
+
