@@ -2,100 +2,344 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A289C05027
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Feb 2023 11:00:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 068DDC677F1
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Feb 2023 14:37:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjBSLA3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 19 Feb 2023 06:00:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
+        id S229937AbjBSOhe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 19 Feb 2023 09:37:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBSLA2 (ORCPT
+        with ESMTP id S230142AbjBSOhc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 19 Feb 2023 06:00:28 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B101C113D2
-        for <linux-hwmon@vger.kernel.org>; Sun, 19 Feb 2023 03:00:25 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id k5so2436024edo.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 19 Feb 2023 03:00:25 -0800 (PST)
+        Sun, 19 Feb 2023 09:37:32 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAC21116B
+        for <linux-hwmon@vger.kernel.org>; Sun, 19 Feb 2023 06:37:26 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id o18so572335wrw.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 19 Feb 2023 06:37:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=04773HxK6w/j5oagaAhwhgZqIaxMVK/fJO7N0+YWAos=;
-        b=nXrxzHw3dPvuYeveP2PJQIfnnMPfXpEQ0vOTIYEoZnkzYViIS6YESSA8w6BK2BYtzv
-         1btbBKI0T4zlv6r7iitTM0NwuiqbLNL7Rg+IRTpYoaWP6DJkVILQyF62axeaTSx97RgK
-         QBotKM5+/V/vEnfmd8WnNaVX79WuhAJcJtuLLn2BiC5Jrw4XuXRWykPMeAc5p3sBKlZC
-         f+MdSqpXlkEkDBnoG4lQ8AeduvABPkO2pZsg4eKgScjh7r5oIH/ZO5nDKXq5mF9XpvgT
-         B/n/+Sbe2AuVSl2QTWeTK8uGEBjMe9oTocMAFC5R4FSGQEsA5UnPXnsV5LvkEiAr965F
-         xvoQ==
+        bh=pnsqbAY13Isy9Q4vAmb7bu7Jt4464vvs/IoNIYDr6xU=;
+        b=hSKy+u5AgwaR/pjI3BVInARul9SXO0sQyw0n7yjY6yRDSg8BEuFLd5I5qrTlEpimNM
+         Xjpl9UAbCCo9nok1y4IpVJ9MLE2XeHXG98wOfKu2d3NCxoPBH32UMAye1vooyYx1ErnD
+         ricWKv9mPs3ba1qo4onNdonbsz4f+fGKOjQzVkGBoYVRHfTNp0sTV4wutDcxSYtnm8CH
+         pxpYUDxS0coiNJcCa7tzwePTrwb9jeloVabBqo+ddLL3pZ7VUpIfX0IhEiKOfXtx1d/8
+         1rUFK2J6S7yGqO9Iwiv++xzaS+2n7XjMuTbyAivc3fVQKvuBI/RXADB6caPXI29TjPRh
+         O0eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=04773HxK6w/j5oagaAhwhgZqIaxMVK/fJO7N0+YWAos=;
-        b=1wh1flB5CctZV221Yua9OaeFHgh+C9n3Axf30qaJD/VfjrnYbvQV1AvDHlql2MOuz6
-         yTGWgWfFeZ0xap+ZC1LisYEDN1EqQJRoj2PeeKzxQevxRHrhmRMg+D6uMQ2sF1wkv9Pb
-         D/URVYnOe/egt3G9tyjlGXotCysoqHOLBC77Pz28RO+fzJHTH+E2NVYeIgZxXKd5og1g
-         xSx52wf0u68f22KMnadOuwflGPXOFG2n3uZDqkgEadpvmC1O5Qky7BraId7uEiWjCff9
-         7ObeILDZLKmu/6zjHRh17NmCN7TEGh25hccCCQIfW1aSaWY/Wi6u39miibLrjfp35dT/
-         TqLw==
-X-Gm-Message-State: AO0yUKVRmRTIK5mtGlUfChwIgWfJQR+ndja3Zz2dWTtT7vhSdzhnZDxm
-        acITGW/zAvtNOgad6hvUH6yfuijOKJSuXg==
-X-Google-Smtp-Source: AK7set+sWYjj3EdJBgxCvqD1GvcIBIEJUs5zyN+HYJP1LnNANTyZ70VDNzonsW/98T08ADbA6jh9sw==
-X-Received: by 2002:a17:906:530b:b0:878:5946:c0ac with SMTP id h11-20020a170906530b00b008785946c0acmr6101841ejo.3.1676804423805;
-        Sun, 19 Feb 2023 03:00:23 -0800 (PST)
-Received: from amezin-laptop.home.arpa ([2a01:5a8:205:5bd7:aaa8:d1c0:c3d2:5983])
-        by smtp.gmail.com with ESMTPSA id u27-20020a170906409b00b008b14b4b88f2sm4416908ejj.142.2023.02.19.03.00.22
+        bh=pnsqbAY13Isy9Q4vAmb7bu7Jt4464vvs/IoNIYDr6xU=;
+        b=c8GVMamgMil5mBRCsNbhgexKTo6Fj7Q+CvgBw+QYjRpeZOgnHceWDvI+z6wNNuJTsD
+         3YLEo03qPFRUcUJKZ8TgqmNUAxVnxmzzg4TFsUtQi+lrUBIRHUDnE7JpkwdIIS8KwkzY
+         CWLp58yHuhbOE8XdBGf7iCfEaNmlM0tqPa7ol+BKNJKG1SBeuJoWcG/Vc2hXgN97AUU5
+         ALArVdZizClcmFHbbyVnS8ei/MZci5yDrr6bIsddYVN2vr+lLIGemte4kxaA6lo448B+
+         rjQZTYotOhA3sP2RUjWK+hbdN/DEONAnTo3Ehn+zywV4dtY3zoTs4wanPPDkXMhKDIAF
+         A+iw==
+X-Gm-Message-State: AO0yUKX4irDuFc2EzKvPdGwIFMV+pKSRiCGP5SyhUoMwbtJq/cvX2mzx
+        ptcIl7IggPrR7nrRecTRR02gVA==
+X-Google-Smtp-Source: AK7set9gXafURZgOj1Yem7EqSUruiomk29jrLU507lTzAdGLNHnFcqKBP+ki22tLjJJTUzMVG5WPYw==
+X-Received: by 2002:adf:f84e:0:b0:2c5:5048:8a6a with SMTP id d14-20020adff84e000000b002c550488a6amr1432164wrq.60.1676817444373;
+        Sun, 19 Feb 2023 06:37:24 -0800 (PST)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:6f43:b92:7670:463])
+        by smtp.gmail.com with ESMTPSA id a18-20020adfe5d2000000b002be505ab59asm86176wrn.97.2023.02.19.06.37.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Feb 2023 03:00:23 -0800 (PST)
-From:   Aleksandr Mezin <mezin.alexander@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Herman Fries <baracoder@googlemail.com>,
-        Aleksandr Mezin <mezin.alexander@gmail.com>,
+        Sun, 19 Feb 2023 06:37:23 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (nzxt-smart2) add another USB ID
-Date:   Sun, 19 Feb 2023 12:59:19 +0200
-Message-Id: <20230219105924.333007-1-mezin.alexander@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Talel Shenhar <talel@amazon.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        linux-acpi@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-input@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH v1 00/17] Self-encapsulate the thermal zone device structure
+Date:   Sun, 19 Feb 2023 15:36:40 +0100
+Message-Id: <20230219143657.241542-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This seems to be a new revision of the device. RGB controls have changed,
-but this driver doesn't touch them anyway.
+The exported thermal headers expose the thermal core structure while those
+should be private to the framework. The initial idea was the thermal sensor
+drivers use the thermal zone device structure pointer to pass it around from
+the ops to the thermal framework API like a handler.
 
-Fan speed control reported to be working with existing userspace (hidraw)
-software, so I assume it's compatible. Fan channel count is the same.
+Unfortunately, different drivers are using and abusing the internals of this
+structure to hook the associated struct device, read the internals values, take
+the lock, etc ...
 
-Recently added (0x1e71, 0x2019) seems to be the same device.
+rn order to fix this situation, let's encapsulate the structure leaking the
+more in the different drivers: the thermal_zone_device structure.
 
-Discovered in liquidctl project:
+This series revisit the existing drivers using the thermal zone private
+structure internals to change the access to something else. For instance, the
+get_temp() ops is using the tz->dev to write a debug trace. Despite the trace
+is not helpful, we can check the return value for the get_temp() ops in the
+call site and show the message in this place.
 
-https://github.com/liquidctl/liquidctl/issues/541
+With this set of changes, the thermal_zone_device is almost self-encapsulated.
+As usual, the acpi driver needs a more complex changes, so that will come in a
+separate series along with the structure moved the private core headers.
 
-Signed-off-by: Aleksandr Mezin <mezin.alexander@gmail.com>
----
- drivers/hwmon/nzxt-smart2.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Len Brown <lenb@kernel.org>
+Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jonathan Cameron <jic23@kernel.org>
+Cc: Lars-Peter Clausen <lars@metafoo.de>
+Cc: Chen-Yu Tsai <wens@csie.org>
+Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc: Samuel Holland <samuel@sholland.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Raju Rangoju <rajur@chelsio.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Ido Schimmel <idosch@nvidia.com>
+Cc: Petr Machata <petrm@nvidia.com>
+Cc: Gregory Greenman <gregory.greenman@intel.com>
+Cc: Kalle Valo <kvalo@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Amit Kucheria <amitk@kernel.org>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+Cc: Ray Jui <rjui@broadcom.com>
+Cc: Scott Branden <sbranden@broadcom.com>
+Cc: Markus Mayer <mmayer@broadcom.com>
+Cc: Support Opensource <support.opensource@diasemi.com>
+Cc: Andy Gross <agross@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Thara Gopinath <thara.gopinath@gmail.com>
+Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
+Cc: Heiko Stuebner <heiko@sntech.de>
+Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>
+Cc: Orson Zhai <orsonzhai@gmail.com>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+Cc: Vasily Khoruzhick <anarsoul@gmail.com>
+Cc: Yangtao Li <tiny.windzz@gmail.com>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Jonathan Hunter <jonathanh@nvidia.com>
+Cc: Talel Shenhar <talel@amazon.com>
+Cc: Eduardo Valentin <edubezval@gmail.com>
+Cc: Keerthy <j-keerthy@ti.com>
+Cc: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Stefan Wahren <stefan.wahren@i2se.com>
+Cc: Zheng Yongjun <zhengyongjun3@huawei.com>
+Cc: Yang Li <yang.lee@linux.alibaba.com>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Daniel Golle <daniel@makrotopia.org>
+Cc: Balsam CHIHI <bchihi@baylibre.com>
+Cc: Mikko Perttunen <mperttunen@nvidia.com>
+Cc: linux-acpi@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-ide@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-iio@vger.kernel.org
+Cc: linux-sunxi@lists.linux.dev
+Cc: linux-input@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-wireless@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: linux-rpi-kernel@lists.infradead.org
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-renesas-soc@vger.kernel.org
+Cc: linux-rockchip@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: linux-tegra@vger.kernel.org
+Cc: linux-omap@vger.kernel.org
+Cc: linux-mediatek@lists.infradead.org
 
-diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-index 2b93ba89610a..a8e72d8fd060 100644
---- a/drivers/hwmon/nzxt-smart2.c
-+++ b/drivers/hwmon/nzxt-smart2.c
-@@ -791,7 +791,8 @@ static const struct hid_device_id nzxt_smart2_hid_id_table[] = {
- 	{ HID_USB_DEVICE(0x1e71, 0x2009) }, /* NZXT RGB & Fan Controller */
- 	{ HID_USB_DEVICE(0x1e71, 0x200e) }, /* NZXT RGB & Fan Controller */
- 	{ HID_USB_DEVICE(0x1e71, 0x2010) }, /* NZXT RGB & Fan Controller */
--	{ HID_USB_DEVICE(0x1e71, 0x2019) }, /* NZXT RGB & Fan Controller */
-+	{ HID_USB_DEVICE(0x1e71, 0x2011) }, /* NZXT RGB & Fan Controller (6 RGB) */
-+	{ HID_USB_DEVICE(0x1e71, 0x2019) }, /* NZXT RGB & Fan Controller (6 RGB) */
- 	{},
- };
- 
+
+Daniel Lezcano (17):
+  thermal/core: Add a thermal zone 'devdata' accessor
+  thermal/core: Show a debug message when get_temp() fails
+  thermal: Remove debug or error messages in get_temp() ops
+  thermal/hwmon: Do not set no_hwmon before calling
+    thermal_add_hwmon_sysfs()
+  thermal/hwmon: Use the right device for devm_thermal_add_hwmon_sysfs()
+  thermal: Don't use 'device' internal thermal zone structure field
+  thermal/hwmon: Use the thermal API instead tampering the internals
+  thermal/drivers/spear: Don't use tz->device but pdev->dev
+  thermal: Add a thermal zone id accessor
+  thermal: Do not access 'type' field, use the tz id instead
+  thermal/drivers/da9062: Don't access the thermal zone device fields
+  thermal/hwmon: Use the thermal_core.h header
+  thermal/drivers/tegra: Remove unneeded lock when setting a trip point
+  thermal/tegra: Do not enable the thermal zone, it is already enabled
+  thermal/drivers/acerhdf: Make interval setting only at module load
+    time
+  thermal/drivers/acerhdf: Remove pointless governor test
+  thermal/traces: Replace the thermal zone structure parameter with the
+    field value
+
+ drivers/acpi/thermal.c                        | 18 +++----
+ drivers/ata/ahci_imx.c                        |  2 +-
+ drivers/hwmon/hwmon.c                         |  4 +-
+ drivers/hwmon/pmbus/pmbus_core.c              |  2 +-
+ drivers/hwmon/scmi-hwmon.c                    |  4 +-
+ drivers/hwmon/scpi-hwmon.c                    |  2 +-
+ drivers/iio/adc/sun4i-gpadc-iio.c             |  2 +-
+ drivers/input/touchscreen/sun4i-ts.c          |  2 +-
+ .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |  2 +-
+ .../ethernet/mellanox/mlxsw/core_thermal.c    | 18 +++----
+ drivers/net/wireless/intel/iwlwifi/mvm/tt.c   |  4 +-
+ drivers/platform/x86/acerhdf.c                | 19 ++------
+ drivers/power/supply/power_supply_core.c      |  2 +-
+ drivers/regulator/max8973-regulator.c         |  2 +-
+ drivers/thermal/amlogic_thermal.c             |  2 +-
+ drivers/thermal/armada_thermal.c              | 14 ++----
+ drivers/thermal/broadcom/bcm2711_thermal.c    |  3 +-
+ drivers/thermal/broadcom/bcm2835_thermal.c    |  3 +-
+ drivers/thermal/broadcom/brcmstb_thermal.c    |  8 ++--
+ drivers/thermal/broadcom/ns-thermal.c         |  2 +-
+ drivers/thermal/broadcom/sr-thermal.c         |  2 +-
+ drivers/thermal/da9062-thermal.c              | 13 +++--
+ drivers/thermal/dove_thermal.c                |  7 +--
+ drivers/thermal/gov_fair_share.c              |  2 +-
+ drivers/thermal/gov_power_allocator.c         |  4 +-
+ drivers/thermal/gov_step_wise.c               |  2 +-
+ drivers/thermal/hisi_thermal.c                |  5 +-
+ drivers/thermal/imx8mm_thermal.c              |  4 +-
+ drivers/thermal/imx_sc_thermal.c              |  9 ++--
+ drivers/thermal/imx_thermal.c                 | 47 +++++--------------
+ drivers/thermal/intel/intel_pch_thermal.c     |  2 +-
+ drivers/thermal/intel/intel_soc_dts_iosf.c    | 13 ++---
+ drivers/thermal/intel/x86_pkg_temp_thermal.c  |  4 +-
+ drivers/thermal/k3_bandgap.c                  |  4 +-
+ drivers/thermal/k3_j72xx_bandgap.c            |  2 +-
+ drivers/thermal/kirkwood_thermal.c            |  7 +--
+ drivers/thermal/max77620_thermal.c            |  6 +--
+ drivers/thermal/mediatek/auxadc_thermal.c     |  4 +-
+ drivers/thermal/mediatek/lvts_thermal.c       |  9 ++--
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c      |  6 +--
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c   |  6 +--
+ drivers/thermal/qcom/tsens.c                  |  4 +-
+ drivers/thermal/qoriq_thermal.c               |  4 +-
+ drivers/thermal/rcar_gen3_thermal.c           |  5 +-
+ drivers/thermal/rcar_thermal.c                |  8 +---
+ drivers/thermal/rockchip_thermal.c            |  8 +---
+ drivers/thermal/rzg2l_thermal.c               |  3 +-
+ drivers/thermal/samsung/exynos_tmu.c          |  4 +-
+ drivers/thermal/spear_thermal.c               | 10 ++--
+ drivers/thermal/sprd_thermal.c                |  2 +-
+ drivers/thermal/st/st_thermal.c               |  2 -
+ drivers/thermal/sun8i_thermal.c               |  4 +-
+ drivers/thermal/tegra/tegra-bpmp-thermal.c    |  6 ++-
+ drivers/thermal/tegra/tegra30-tsensor.c       | 31 ++++++------
+ drivers/thermal/thermal-generic-adc.c         |  7 ++-
+ drivers/thermal/thermal_core.c                | 17 ++++++-
+ drivers/thermal/thermal_helpers.c             |  3 ++
+ drivers/thermal/thermal_hwmon.c               | 19 +++-----
+ drivers/thermal/thermal_hwmon.h               |  4 +-
+ drivers/thermal/thermal_mmio.c                |  2 +-
+ .../ti-soc-thermal/ti-thermal-common.c        | 10 ++--
+ drivers/thermal/uniphier_thermal.c            |  2 +-
+ include/linux/thermal.h                       |  4 ++
+ include/trace/events/thermal.h                | 24 +++++-----
+ .../trace/events/thermal_power_allocator.h    | 12 ++---
+ 65 files changed, 203 insertions(+), 265 deletions(-)
+
 -- 
-2.39.2
+2.34.1
 
