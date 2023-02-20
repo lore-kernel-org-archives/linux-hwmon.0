@@ -2,226 +2,125 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1F4FC64EC4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Feb 2023 13:23:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55590C636CC
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Feb 2023 14:09:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbjBTNXd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Feb 2023 08:23:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
+        id S231714AbjBTOJH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Feb 2023 09:09:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbjBTNXc (ORCPT
+        with ESMTP id S231794AbjBTOJG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Feb 2023 08:23:32 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230097EC6;
-        Mon, 20 Feb 2023 05:23:30 -0800 (PST)
-Received: from mercury (dyndsl-095-033-158-068.ewe-ip-backbone.de [95.33.158.68])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DCA126602161;
-        Mon, 20 Feb 2023 13:23:27 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676899408;
-        bh=EpofNz6MD/mPoCdRuSgO8/RJyETCbQR5Uv8NTsFxb3M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iBi51yqn4jM/lciw1DbbnBma1n0Mje98qEA4nparqS0AovBX2Z312SVd0ATM8aMoK
-         NHcPWSIEJYTfa1uIldlewrSL01WfA0qFizBwyDJbW5zvgYjBMxZEKA2YQA0iMEx+nP
-         G7703Hja/yfjXuVbXFRvp9Q+F7MPRSQvMmCRyb8hZVUuSwYzyX/Ix9X5IiwvpBDzSi
-         vwyUvQ7OXQ2r3AxmokbSeSMxi18CQ+wb0CE+bvjXceTu82JgfAAEmxDh5eKE9tDNoP
-         mngHYZtCTl8JjVegYl8wsW5VvB40j1AYZAP6fYk5zYdf4CvfnaXOgpTXbf2f63JkZN
-         PPU+qn9bBJv6w==
-Received: by mercury (Postfix, from userid 1000)
-        id C04E310603FE; Mon, 20 Feb 2023 14:23:25 +0100 (CET)
-Date:   Mon, 20 Feb 2023 14:23:25 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Talel Shenhar <talel@amazon.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Tim Zimmermann <tim@linux4.de>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Jiang Jian <jiangjian@cdjrlc.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        "open list:ARM/Allwinner sunXi SoC support" 
-        <linux-sunxi@lists.linux.dev>,
-        "open list:INPUT (KEYBOARD, MOUSE, JOYSTICK, TOUCHSCREEN)..." 
-        <linux-input@vger.kernel.org>,
-        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
-        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
-        <linux-wireless@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>,
-        "open list:SAMSUNG THERMAL DRIVER" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        "open list:TI BANDGAP AND THERMAL DRIVER" 
-        <linux-omap@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v1 01/17] thermal/core: Add a thermal zone 'devdata'
- accessor
-Message-ID: <20230220132325.ksmho3p54zr2hm4a@mercury.elektranox.org>
-References: <20230219143657.241542-1-daniel.lezcano@linaro.org>
- <20230219143657.241542-2-daniel.lezcano@linaro.org>
+        Mon, 20 Feb 2023 09:09:06 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D141BE9;
+        Mon, 20 Feb 2023 06:08:31 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id t6so692993ioj.8;
+        Mon, 20 Feb 2023 06:08:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8Y9RRT+lR50hAVTTs81gKUUVMeO675YNPBw7XMDS9SE=;
+        b=f2IeHq3AX8ZN2qO4Ktxb3S7GNocDhX+2XVpSyXHCV7aUcHmfuZvhLwHtWvomZ2xhAG
+         xvmZDfRIaJ9iLZtnqiEbz++uOhritlUNg5wA7ihIwNWYVR4dgkUxlh9xrgd6C4UKYwU7
+         gw8ysYmMROmCNhOgjAIK+vE+hzQyPYKeBtRWdg9Px+aXRwcNhJB95ZuQD1SpBqmpc0S8
+         zNEYTPhXAgKaHrWQNcjvWY5X4jfQ4cps8ucS1iJCoVBCz/37nO4kYsrkqN3spfhlViWh
+         dwWE7mW5bnKbL2kMVDV48AB22k8mYty5t2257ZNguxqz7vP24Z9RT8gOuU0OWI/Sw6pu
+         mFkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8Y9RRT+lR50hAVTTs81gKUUVMeO675YNPBw7XMDS9SE=;
+        b=Vncvoe+8cMxikSy7pZW6/jZ8KSfwtnxeHr2WOu4KY0f/5nraci19STxSNHnhfke2o5
+         Dk8yOWAntlWsAfU/33r1FjhXgx2OqCA5RXwLnyM70B0tRDukTPHhjGVpiynXJc0eq5Sy
+         80xOuS/1e2kfUEC3b2JEJxxXExij/AoLuRiO+1n71lAVcMVQsFBOOz8/qljmNaALGRqv
+         Cu38Cma3c5bSW4zQKa8p4uj7edxp1Hzd7/Nyj4BOnw7CYDRRJgmW1S9GRL4nylgxfbC4
+         CgEr7lgb6gYFDzxpbFLehl6KnIjNu5w4jblniqkQElbH8pzK1C/OCxhsIcaUqloLfjM8
+         8eaA==
+X-Gm-Message-State: AO0yUKUvmcwPp3e+dejgEskpCqHZfm65yk2CryO5ieZcbDl0bjslR6ua
+        N5DP/qHCAdqRDkvgSpfqNDw=
+X-Google-Smtp-Source: AK7set/IdJiSmcCRQ7VUt6mWYO+d7SWfUaE/3afkJ70SPWwLaURgAeaqEYN0VYiQf4OSejLsHDVKhw==
+X-Received: by 2002:a5e:a914:0:b0:715:cba2:d505 with SMTP id c20-20020a5ea914000000b00715cba2d505mr173805iod.0.1676902110258;
+        Mon, 20 Feb 2023 06:08:30 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k17-20020a6b6f11000000b0071db3975335sm3688701ioc.12.2023.02.20.06.08.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 06:08:29 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 20 Feb 2023 06:08:26 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        chris.packham@alliedtelesis.co.nz, hdegoede@redhat.com,
+        jordan.crouse@amd.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] hwmon: (adt7475) Fix setting of hysteresis registers
+Message-ID: <20230220140826.GA4009286@roeck-us.net>
+References: <20230219232956.23784-1-tony.obrien@alliedtelesis.co.nz>
+ <20230219232956.23784-3-tony.obrien@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="amobsqjguregida6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230219143657.241542-2-daniel.lezcano@linaro.org>
+In-Reply-To: <20230219232956.23784-3-tony.obrien@alliedtelesis.co.nz>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Mon, Feb 20, 2023 at 12:29:56PM +1300, Tony O'Brien wrote:
+> In temp_store(), for the hysteresis setting calculation there were two
+> errors.  The first tries to clamp the hysteresis value by comparing the
+> required hysteresis value to THERM - 15C.  This is incorrect since the
+> hysteresis value is a relative value whereas THERM - 15C is an absolute
 
---amobsqjguregida6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No, it isn't. The hysteresis attribute is an absolute temperature.
+The value written into the attribute is expected to be in the range
+[THERM - 15, THERM] (in degrees C). The value written into the register
+is then in the range [15, 0]. I see nothing wrong with the current code.
 
-Hi,
+> value. This causes it to always select 15C for hysteresis.  Change the
+> first parameter to THERM - val to compare two absolute temperatures.
+> The second error masks the wrong bits in the hysteresis register; indices
+> 0 and 2 should zero bits [7:4] and preserve bits [3:0], and index 1 should
+> zero bits [3:0] and preserve bits [7:4].
 
-On Sun, Feb 19, 2023 at 03:36:41PM +0100, Daniel Lezcano wrote:
-> The thermal zone device structure is exposed to the different drivers
-> and obviously they access the internals while that should be
-> restricted to the core thermal code.
->=20
-> In order to self-encapsulate the thermal core code, we need to prevent
-> the drivers accessing directly the thermal zone structure and provide
-> accessor functions to deal with.
->=20
-> Provide an accessor to the 'devdata' structure and make use of it in
-> the different drivers.
->=20
-> No functional changes intended.
->=20
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+I'll have to verify that with the datasheet. Either case, one logical change
+per patch, please.
+
+Thanks,
+Guenter
+
+> 
+> Fixes: 1c301fc5394f ("hwmon: Add a driver for the ADT7475 hardware monitoring chip")
+> Signed-off-by: Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
 > ---
-
-=2E..
-
->  drivers/power/supply/power_supply_core.c         |  2 +-
-
-=2E..
-
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
-ply/power_supply_core.c
-> index 7c790c41e2fe..166f0aacc797 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -1142,7 +1142,7 @@ static int power_supply_read_temp(struct thermal_zo=
-ne_device *tzd,
->  	int ret;
-> =20
->  	WARN_ON(tzd =3D=3D NULL);
-> -	psy =3D tzd->devdata;
-> +	psy =3D thermal_zone_device_get_data(tzd);
->  	ret =3D power_supply_get_property(psy, POWER_SUPPLY_PROP_TEMP, &val);
->  	if (ret)
->  		return ret;
-
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
--- Sebastian
-
---amobsqjguregida6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPzdEUACgkQ2O7X88g7
-+pqrPhAAkn4PMww+rZzWWUIzn70JDaIM3pB6g/TwmnMJQSvxVt5bbeRkHs1Hr5p1
-wJGp1GJhv3odUIaoBVctwLzVrbnN6+o9V1WGAb73ZzZF86thow7pq49z46JaGsVU
-lmYF3cu7le+yv8hs1kdRFs8NQ8C3dJ5dodlCZMJIsIelJhyQciziF5Mkq395HKtm
-6xu/xCNssRmZhqy3yJYazBjGrqAneN9LelyMQQ4/MqeK64xdYgcz4tJ4kZ8WYrmz
-SC0Jc2aCHnm8YCTIgZHNdpRMeLAiMfQm/htrcXbwMzdfmu+K2eAb8TzI6cOS/4dF
-usYhuvr3S8YXKhyzxrZC/E1p0s0QdDQsZFBq9+2Dc84uKmAXfaGCr1IEWnXW2X39
-eqskyqWCteRO6EDM30xlV4joURLzlk5mb4f76dW9tfr7poEn+I99L+zkL/ghvStP
-sJ7cISSMIbfAHqBUaICaiZ0A51GyhTlfwdvVBxbZKRuDLYOhO4YKlI57Cl+qiMEp
-lVUJ1jcN0HiyOHfDkchkbPC1XYBfoPkxeQxAIJy5WCSg4vMs8Moa2PTuZHaovfUr
-Q8iJpfdk10e7gSUWSFPAogdiUi5gFlJs4ZiJ9Nim7l9FY7txWceX3pBzB3AbaVOn
-Sl1m3OJVy+tYn/RDEZa3Ofwu/HPOwxWEO/X0pZb/q/yk9/4c/Xs=
-=Z9fm
------END PGP SIGNATURE-----
-
---amobsqjguregida6--
+>  drivers/hwmon/adt7475.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+> index 77222c35a38e..68233191798e 100644
+> --- a/drivers/hwmon/adt7475.c
+> +++ b/drivers/hwmon/adt7475.c
+> @@ -484,14 +484,14 @@ static ssize_t temp_store(struct device *dev, struct device_attribute *attr,
+>  		adt7475_read_hystersis(client);
+>  
+>  		temp = reg2temp(data, data->temp[THERM][sattr->index]);
+> -		val = clamp_val(val, temp - 15000, temp);
+> +		val = clamp_val(temp - val, temp - 15000, temp);
+>  		val = (temp - val) / 1000;
+>  
+>  		if (sattr->index != 1) {
+> -			data->temp[HYSTERSIS][sattr->index] &= 0xF0;
+> +			data->temp[HYSTERSIS][sattr->index] &= 0x0F;
+>  			data->temp[HYSTERSIS][sattr->index] |= (val & 0xF) << 4;
+>  		} else {
+> -			data->temp[HYSTERSIS][sattr->index] &= 0x0F;
+> +			data->temp[HYSTERSIS][sattr->index] &= 0xF0;
+>  			data->temp[HYSTERSIS][sattr->index] |= (val & 0xF);
+>  		}
+>  
+> -- 
+> 2.39.2
+> 
