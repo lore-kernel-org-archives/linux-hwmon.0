@@ -2,60 +2,60 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CADEC636D7
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Feb 2023 16:45:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0F70C61DA3
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Feb 2023 16:50:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234820AbjBUQpb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Feb 2023 11:45:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
+        id S234146AbjBUQub (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Feb 2023 11:50:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234808AbjBUQp3 (ORCPT
+        with ESMTP id S233775AbjBUQu3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:45:29 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC9A1702;
-        Tue, 21 Feb 2023 08:45:13 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id w3so2380621iom.5;
-        Tue, 21 Feb 2023 08:45:13 -0800 (PST)
+        Tue, 21 Feb 2023 11:50:29 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DCA2A140;
+        Tue, 21 Feb 2023 08:50:27 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id i4so507058ils.1;
+        Tue, 21 Feb 2023 08:50:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=XDm8ut2spoTq1aEav9UGIem8pe8gf0vp241F/zMFEGg=;
-        b=HtGPq/qIV1mLW5PRs49d0+ge3P7NX0VM/pe0NXzcpAoYvgkQ1gmdeKcfHXGZySm8ll
-         HaduMHX0Q6iGoA/VLwCeIGEgjMRRkdaItF57Q2INyddSX2cmXXA5Paxg8oh0eRrj6ypi
-         fyf3O+p2Kj/h0Kngp/8pCb1up31/VSdQ1kvNGn9vuSb6hNTJSdfJR1xme05clmXiM/qx
-         HOGs9auJIzBSRZCguN1kv8nR66tidyOp0ioLz6280tza2cc2B6anUSmfgZ+/zhzg7pyu
-         fdoUjX5shykx3QGqwtV48IYNqdn72ld2pg6+VioSecE91UmHgY0Gs9hCIq/oMWBWLam2
-         c8eg==
+        bh=W7SVKRswCGsOawSL5akwB56EAa9f7lRKr2lHZ3S8x7U=;
+        b=ITBbzI8o0PDUL+MbLUPXQnW5O8FA8Gcl5V+EKARjL1LBHdXUn+27bwfQuQtSnuGHrR
+         XNfC9ib+hlCtPRCmZ7W3PXH5GLyKGcptnw7vhfg+6AzJWv1bKISoZGm2qNb9jJOKBLqZ
+         jcX16wcO3GmWAV1AaAW4Ijieqezo0hhTa81piT/4LfJOy/MhySXk4w3puAbrTsEO2OhF
+         d2Dc1XnjTZvH+K2sZDZk+SShJrl/iwvTGszieuTOrJbFnkWWDekR1nKnFP3AzCXA2yHk
+         TT3fL/SzfOUYnZ7NJ4ksVn+r/oLps7jGAaIy3/ZULwvLndr98wfRJv7wHxkZjaLhMwTV
+         Nsbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XDm8ut2spoTq1aEav9UGIem8pe8gf0vp241F/zMFEGg=;
-        b=PL8tBC3vvoo+Ishi0YFis/6/UHljIQMN4NxG9fKOfOvTx3Uad9zYBH5bJ38fIMdEgw
-         R+YLiyQTyL8C8+8i4tGm3JuWz9JXJZYDw5b/7HodkB0MJGKROzmvkGdHi1XdNV4QWpLt
-         5ARwDrj0/YRdly+ye7nuWDi06olbzOPYYv6G8SDOONT7pJpLAt62M3Nc+Z65haBSTbLm
-         leD0hm1R3pZ/njTYjwsR6/TB65vN8R1cogq0fWWxqim2wy1TP+/FrPEZt8Aajlczgj7i
-         8yUmqoWI1JEyK/4p9+pWiwDeooZI/2hGrV0BZdelZGUUo01nrTNMBlETw7StMt2s8kYj
-         8EXg==
-X-Gm-Message-State: AO0yUKUc0rS3Ja9S6g+OkJKW76eq2plGy2i0LAiOctnhesosN7/5dHYT
-        3PrY6iSKoFCxjFv+8gZeLuCZ80/KTHc=
-X-Google-Smtp-Source: AK7set8uwXiZ0ZnbvcdqsO1HGPhSZ/u8w6vKvl8P6vf8zbZ8Outcf4QxssiQeLUj4XzwsKDDRHGCnA==
-X-Received: by 2002:a05:6602:1612:b0:74c:89c4:8e03 with SMTP id x18-20020a056602161200b0074c89c48e03mr1425006iow.10.1676997912933;
-        Tue, 21 Feb 2023 08:45:12 -0800 (PST)
+        bh=W7SVKRswCGsOawSL5akwB56EAa9f7lRKr2lHZ3S8x7U=;
+        b=rRnubuKyTrm8AR7VTsB4q/kg1xOdIjIg6n98iThYMFixcMvaa2HmVe6b3HV/tth1hB
+         SUtKiEOsZZUhtTLNZCBAxB2JxPj8OQS8coLylCYOsWeweKAgE6wi3y1EjwylgAcfZ1FO
+         MvOwmDS44XQulD118mgqgYzpeo0cw0HMn/7qvXfY+Yhd+g8orl1g+zHKI+1CMekm69KO
+         iHcbYa5Bhj/NoDe5QR6GtNPMdkbtPKZwKv/gkAH1Cmw7BkzLqB/1De2VV7UZybCg8tws
+         +13ZsOU4XRkZb/CH0udT7MmCY/wd4y4cBLokc0NJ34+CEEWf8Sa4QXWCQAMuiBbZyf+W
+         Rycw==
+X-Gm-Message-State: AO0yUKWukUoaUqDrzYxF0R/zk5v8lZcOKibe036fixGeRswIFzGZI+Eo
+        as/ubz3JzpdGH9a1/kSu9ZXeBvh5mGE=
+X-Google-Smtp-Source: AK7set/AoDh4HDzpLTCZNYXxZZwk7oubwxmfF0m1rlyahG0ac5VW6tIO7Nu8VQ1vMMZvdXYuIcjWig==
+X-Received: by 2002:a92:cd89:0:b0:314:5aa:94b6 with SMTP id r9-20020a92cd89000000b0031405aa94b6mr6940690ilb.24.1676998226667;
+        Tue, 21 Feb 2023 08:50:26 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w13-20020a5ec24d000000b0074549126e97sm276455iop.1.2023.02.21.08.45.11
+        by smtp.gmail.com with ESMTPSA id o10-20020a056e02092a00b0030ef8f16056sm1420136ilt.72.2023.02.21.08.50.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 08:45:12 -0800 (PST)
+        Tue, 21 Feb 2023 08:50:26 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon updates for v6.2
-Date:   Tue, 21 Feb 2023 08:45:10 -0800
-Message-Id: <20230221164510.1589058-1-linux@roeck-us.net>
+Subject: [GIT PULL] hwmon updates for v6.3
+Date:   Tue, 21 Feb 2023 08:50:25 -0800
+Message-Id: <20230221165025.1589365-1-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -64,11 +64,13 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+[Trying again, this time with corretc tag. Sorry for the noise.]
+
 Hi Linus,
 
-Please pull hwmon updates for Linux v6.2 from signed tag:
+Please pull hwmon updates for Linux v6.3 from signed tag:
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.2
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.3
 
 Expected conflicts:
 
@@ -98,14 +100,14 @@ The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.2
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.3
 
 for you to fetch changes up to 5720a18baa4686d56d0a235e6ecbcc55f8d716d7:
 
   hwmon: Deprecate [devm_]hwmon_device_register_with_groups (2023-02-16 11:34:19 -0800)
 
 ----------------------------------------------------------------
-hwmon updates for v6.2
+hwmon updates for v6.3
 
 - New drivers
 
