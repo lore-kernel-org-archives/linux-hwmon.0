@@ -2,263 +2,202 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED87DC636D7
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Feb 2023 18:21:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0561C61DA3
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Feb 2023 23:55:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbjBUSVB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Feb 2023 13:21:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
+        id S229903AbjBUXz6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Feb 2023 18:55:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjBUSVA (ORCPT
+        with ESMTP id S229815AbjBUXz6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Feb 2023 13:21:00 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205FC2D146;
-        Tue, 21 Feb 2023 10:20:58 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id ck15so22106159edb.0;
-        Tue, 21 Feb 2023 10:20:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NEx60aGsOPq7IkDOpzyHIUcwhrl0mz7YlLyNt97/zzk=;
-        b=Vkiaa+8m8yu4NTxbblvl9Xy6xRY9QvaCJQQZbhyYuTZn8LBqKKDe7jY7cLga8bqrcE
-         YaFq3y0C2R5gLoZ44PHVCrMAdGGatzNgi+EosQ56cNauhD/qzPxPu9eWtArP/kQYf6rx
-         36GQyJWdRypl3dP6LvmlQomgaS1x7ac8qIOxKBv4iPYah7/H4U4h/V6DJktLKCDLkCNt
-         zam9FAexUE4ScIdFjriD/ldLT/qH7DYDTEMJw7I5irpI67gcvfxo0PhE5WzARIJUnSPa
-         wlya8h0DyOjyph7LZJFK7Rnd+iEZ0//cF85WuFwOA5cl7PpXtV4f/127McL5fndnVkaK
-         p+/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NEx60aGsOPq7IkDOpzyHIUcwhrl0mz7YlLyNt97/zzk=;
-        b=EIveVhgabSP6qeor31DrF/UzwIQhNyjPrFBL0M+F+KtQKk3W6nhN0QXlKc3AfU6bLD
-         Nm4w7kerBxYUue9WnCh9vAupwZoeflQJK9SX2t4cbNu4xfGAggM8H53zqZBs0+Ddc1XF
-         8mNLsINIXwUHTZ8rfKQq0OLBMpfNJoFoa8SaQWUsGpDMrKzeV6j7mCftbyeyEgcOobXS
-         f7soEG6SQKQk2eaa6edZDfdFPDWw4b93HadSi2sr25NC1ZOA4M6yczfRUGQV9BvGt3b3
-         whGie6dj/egPaZmyDHC0M9VEjFfoI69QvYrVk9W0eHlV7S9ywUjn2z/7LJ2DASBl5OBH
-         DGrg==
-X-Gm-Message-State: AO0yUKWDnCkBf4BiTf1tmSCjzRTtmHA26Vz6qN6bTq8fyAUadoqDXnxR
-        sf3ibJai6iaRxPfNCvG9vvA=
-X-Google-Smtp-Source: AK7set/77DXP7YfI8zufkfadXlbWVnpTCpeUBy9C/lrv0XbiKTxHiGSVqDS5SHlnDvtOC7YRM2po7A==
-X-Received: by 2002:a17:906:3e43:b0:88a:2e57:9813 with SMTP id t3-20020a1709063e4300b0088a2e579813mr13728718eji.33.1677003656530;
-        Tue, 21 Feb 2023 10:20:56 -0800 (PST)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id p20-20020a1709060dd400b008be5b97ca49sm4790892eji.150.2023.02.21.10.20.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 10:20:55 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Mark Brown <broonie@kernel.org>,
-        Ido Schimmel <idosch@nvidia.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Petr Machata <petrm@nvidia.com>, Kalle Valo <kvalo@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>, Heiko Stuebner <heiko@sntech.de>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Talel Shenhar <talel@amazon.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Tim Zimmermann <tim@linux4.de>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Jiang Jian <jiangjian@cdjrlc.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        "open list:ARM/Allwinner sunXi SoC support" 
-        <linux-sunxi@lists.linux.dev>,
-        "open list:INPUT (KEYBOARD, MOUSE, JOYSTICK, TOUCHSCREEN)..." 
-        <linux-input@vger.kernel.org>,
-        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
-        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
-        <linux-wireless@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:QUALCOMM TSENS THERMAL DRIVER" 
-        <linux-arm-msm@vger.kernel.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>,
-        "open list:SAMSUNG THERMAL DRIVER" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        "open list:TI BANDGAP AND THERMAL DRIVER" 
-        <linux-omap@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v2 01/16] thermal/core: Add a thermal zone 'devdata' accessor
-Date:   Tue, 21 Feb 2023 19:20:51 +0100
-Message-ID: <5907084.lOV4Wx5bFT@jernej-laptop>
-In-Reply-To: <20230221180710.2781027-2-daniel.lezcano@linaro.org>
-References: <20230221180710.2781027-1-daniel.lezcano@linaro.org>
- <20230221180710.2781027-2-daniel.lezcano@linaro.org>
+        Tue, 21 Feb 2023 18:55:58 -0500
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A61E17162;
+        Tue, 21 Feb 2023 15:55:55 -0800 (PST)
+Received: from hatter.bewilderbeest.net (174-21-161-58.tukw.qwest.net [174.21.161.58])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 6C05D218;
+        Tue, 21 Feb 2023 15:55:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1677023754;
+        bh=iA3eX2JkRVDTDT2ipfUWkJ/tJSppV02IAvBLp2GA4Hg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f3pL3kMxXRGS57bZs0bi0UxSMPqY+xoPYpikTIMQlrYctXjww6hQElNCOgEK0bF6S
+         SounwmLUpKvotErTul86fAPHZqShXvwM9BjhW9fOHqNC5RSu28AqZbheEXGdJLZs+r
+         39pQznJtrbKklL7b4bMAxcHax66ee+zPW10CsRSM=
+Date:   Tue, 21 Feb 2023 15:55:53 -0800
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     "Winiarska, Iwona" <iwona.winiarska@intel.com>
+Cc:     "linux@roeck-us.net" <linux@roeck-us.net>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+Subject: Re: [RFC PATCH] hwmon: (peci/cputemp) Number cores as seen by host
+ system
+Message-ID: <Y/VaCRIuwD0Ihp5Z@hatter.bewilderbeest.net>
+References: <20230209011632.32668-1-zev@bewilderbeest.net>
+ <20230209175001.GA667937@roeck-us.net>
+ <Y+WMcCukyTvPcN2F@hatter.bewilderbeest.net>
+ <97485a97-08c4-917b-1b8d-8102a8575a58@roeck-us.net>
+ <Y+WieWyU+055eEom@hatter.bewilderbeest.net>
+ <20230210184511.GA3670524@roeck-us.net>
+ <2e6e07e5decb9c9f2eef6a49f9e11ba23a15a180.camel@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2e6e07e5decb9c9f2eef6a49f9e11ba23a15a180.camel@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dne torek, 21. februar 2023 ob 19:06:55 CET je Daniel Lezcano napisal(a):
-> The thermal zone device structure is exposed to the different drivers
-> and obviously they access the internals while that should be
-> restricted to the core thermal code.
->=20
-> In order to self-encapsulate the thermal core code, we need to prevent
-> the drivers accessing directly the thermal zone structure and provide
-> accessor functions to deal with.
->=20
-> Provide an accessor to the 'devdata' structure and make use of it in
-> the different drivers.
->=20
-> No functional changes intended.
->=20
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Acked-by: Guenter Roeck <linux@roeck-us.net> #hwmon
-> Reviewed-by: Niklas S=F6derlund <niklas.soderlund+renesas@ragnatech.se> #=
-R-Car
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Reviewed-by: Ido Schimmel <idosch@nvidia.com> #mlxsw
-> Reviewed-by: AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> #MediaTek auxadc and lvts
-> Reviewed-by: Balsam CHIHI <bchihi@baylibre.com> #Mediatek lvts
-> Acked-by: Gregory Greenman <gregory.greenman@intel.com> #iwlwifi
-> Reviewed-by: Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com> #da9062
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>  #spread
-> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com> #power_supp=
-ly
-> ---
->  drivers/acpi/thermal.c                           | 16 ++++++++--------
->  drivers/ata/ahci_imx.c                           |  2 +-
->  drivers/hwmon/hwmon.c                            |  4 ++--
->  drivers/hwmon/pmbus/pmbus_core.c                 |  2 +-
->  drivers/hwmon/scmi-hwmon.c                       |  2 +-
->  drivers/hwmon/scpi-hwmon.c                       |  2 +-
->  drivers/iio/adc/sun4i-gpadc-iio.c                |  2 +-
->  drivers/input/touchscreen/sun4i-ts.c             |  2 +-
->  .../net/ethernet/chelsio/cxgb4/cxgb4_thermal.c   |  2 +-
->  .../net/ethernet/mellanox/mlxsw/core_thermal.c   | 14 +++++++-------
->  drivers/net/wireless/intel/iwlwifi/mvm/tt.c      |  4 ++--
->  drivers/power/supply/power_supply_core.c         |  2 +-
->  drivers/regulator/max8973-regulator.c            |  2 +-
->  drivers/thermal/armada_thermal.c                 |  4 ++--
->  drivers/thermal/broadcom/bcm2711_thermal.c       |  2 +-
->  drivers/thermal/broadcom/bcm2835_thermal.c       |  2 +-
->  drivers/thermal/broadcom/brcmstb_thermal.c       |  4 ++--
->  drivers/thermal/broadcom/ns-thermal.c            |  2 +-
->  drivers/thermal/broadcom/sr-thermal.c            |  2 +-
->  drivers/thermal/da9062-thermal.c                 |  2 +-
->  drivers/thermal/dove_thermal.c                   |  2 +-
->  drivers/thermal/hisi_thermal.c                   |  2 +-
->  drivers/thermal/imx8mm_thermal.c                 |  2 +-
->  drivers/thermal/imx_sc_thermal.c                 |  2 +-
->  drivers/thermal/imx_thermal.c                    |  6 +++---
->  drivers/thermal/intel/intel_pch_thermal.c        |  2 +-
->  drivers/thermal/intel/intel_soc_dts_iosf.c       | 13 +++++--------
->  drivers/thermal/intel/x86_pkg_temp_thermal.c     |  4 ++--
->  drivers/thermal/k3_bandgap.c                     |  2 +-
->  drivers/thermal/k3_j72xx_bandgap.c               |  2 +-
->  drivers/thermal/kirkwood_thermal.c               |  2 +-
->  drivers/thermal/max77620_thermal.c               |  2 +-
->  drivers/thermal/mediatek/auxadc_thermal.c        |  2 +-
->  drivers/thermal/mediatek/lvts_thermal.c          |  4 ++--
->  drivers/thermal/qcom/qcom-spmi-adc-tm5.c         |  4 ++--
->  drivers/thermal/qcom/qcom-spmi-temp-alarm.c      |  4 ++--
->  drivers/thermal/qoriq_thermal.c                  |  2 +-
->  drivers/thermal/rcar_gen3_thermal.c              |  4 ++--
->  drivers/thermal/rcar_thermal.c                   |  3 +--
->  drivers/thermal/rockchip_thermal.c               |  4 ++--
->  drivers/thermal/rzg2l_thermal.c                  |  2 +-
->  drivers/thermal/samsung/exynos_tmu.c             |  4 ++--
->  drivers/thermal/spear_thermal.c                  |  8 ++++----
->  drivers/thermal/sprd_thermal.c                   |  2 +-
->  drivers/thermal/sun8i_thermal.c                  |  2 +-
+On Sat, Feb 18, 2023 at 01:20:14PM PST, Winiarska, Iwona wrote:
+>On Fri, 2023-02-10 at 10:45 -0800, Guenter Roeck wrote:
+>> On Thu, Feb 09, 2023 at 05:48:41PM -0800, Zev Weiss wrote:
+>> > On Thu, Feb 09, 2023 at 04:26:47PM PST, Guenter Roeck wrote:
+>> > > On 2/9/23 16:14, Zev Weiss wrote:
+>> > > > On Thu, Feb 09, 2023 at 09:50:01AM PST, Guenter Roeck wrote:
+>> > > > > On Wed, Feb 08, 2023 at 05:16:32PM -0800, Zev Weiss wrote:
+>> > > > > > While porting OpenBMC to a new platform with a Xeon Gold 6314U CPU
+>> > > > > > (Ice Lake, 32 cores), I discovered that the core numbering used by
+>> > > > > > the
+>> > > > > > PECI interface appears to correspond to the cores that are present
+>> > > > > > in
+>> > > > > > the physical silicon, rather than those that are actually enabled
+>> > > > > > and
+>> > > > > > usable by the host OS (i.e. it includes cores that the chip was
+>> > > > > > manufactured with but later had fused off).
+>> > > > > >
+>> > > > > > Thus far the cputemp driver has transparently exposed that numbering
+>> > > > > > to userspace in its 'tempX_label' sysfs files, making the core
+>> > > > > > numbers
+>> > > > > > it reported not align with the core numbering used by the host
+>> > > > > > system,
+>> > > > > > which seems like an unfortunate source of confusion.
+>> > > > > >
+>> > > > > > We can instead use a separate counter to label the cores in a
+>> > > > > > contiguous fashion (0 through numcores-1) so that the core numbering
+>> > > > > > reported by the PECI cputemp driver matches the numbering seen by
+>> > > > > > the
+>> > > > > > host.
+>> > > > > >
+>> > > > >
+>> > > > > I don't really have an opinion if this change is desirable or not.
+>> > > > > I suspect one could argue either way. I'l definitely want to see
+>> > > > > feedback from others. Any comments or thoughts, anyone ?
+>> > > > >
+>> > > >
+>> > > > Agreed, I'd definitely like to get some input from Intel folks on this.
+>> > > >
+>> > > > Though since I realize my initial email didn't quite explain this
+>> > > > explicitly, I should probably clarify with an example how weird the
+>> > > > numbering can get with the existing code -- on the 32-core CPU I'm
+>> > > > working with at the moment, the tempX_label files produce the following
+>> > > > core numbers:
+>> > > >
+>> > > >     Core 0
+>> > > >     Core 1
+>> > > >     Core 2
+>> > > >     Core 3
+>> > > >     Core 4
+>> > > >     Core 5
+>> > > >     Core 6
+>> > > >     Core 7
+>> > > >     Core 8
+>> > > >     Core 9
+>> > > >     Core 11
+>> > > >     Core 12
+>> > > >     Core 13
+>> > > >     Core 14
+>> > > >     Core 15
+>> > > >     Core 18
+>> > > >     Core 20
+>> > > >     Core 22
+>> > > >     Core 23
+>> > > >     Core 24
+>> > > >     Core 26
+>> > > >     Core 27
+>> > > >     Core 28
+>> > > >     Core 29
+>> > > >     Core 30
+>> > > >     Core 31
+>> > > >     Core 33
+>> > > >     Core 34
+>> > > >     Core 35
+>> > > >     Core 36
+>> > > >     Core 38
+>> > > >     Core 39
+>> > > >
+>> > > > i.e. it's not just a different permutation of the expected core numbers,
+>> > > > we end up with gaps (e.g. the nonexistence of core 10), and core numbers
+>> > > > well in excess of the number of cores the processor really "has" (e.g.
+>> > > > number 39) -- all of which seems like a rather confusing thing to see in
+>> > > > your BMC's sensor readings.
+>> > > >
+>> > >
+>> > > Sure, but what do you see with /proc/cpuinfo and with coretemp
+>> > > on the host ? It might be even more confusing if the core numbers
+>> > > reported by the peci driver don't match the core numbers provided
+>> > > by other tools.
+>> > >
+>> >
+>> > The host sees them numbered as the usual 0-31 you'd generally expect, and
+>> > assigned to those cores in the same increasing order -- hence the patch
+>> > bringing the two into alignment with each other.  Currently only cores 0
+>> > through 9 match up between the two, and the rest are off by somewhere
+>> > between one and eight.
+>> >
+>>
+>> Hmm, interesting. It is not sequential on my large system (Intel(R) Xeon(R)
+>> Gold 6154). I also know for sure that core IDs on Intel server CPUs are
+>> typically not sequential. The processor number is sequential, but the core
+>> ID isn't. On my system, the output from the "sensors" command (that is,
+>> from the coretemp driver) matches the non-sequential core IDs from
+>> /proc/cpuinfo, which is exactly how I would expect it to be.
+>>
+>> Guenter
+>
+>On Linux, from host side, core ID is obtained from EDX of CPUID(EAX=0xb).
+>Unfortunately, the value exposed to the host (and whether it's in sequential or
+>non-sequential form) can vary from platform to platform (which BTW is why on
+>Linux, core ID shouldn't really be used for any logic related to task placement
+>- topology info should be used instead).
+>From BMC perspective - we'll always get the non-sequential form.
+>
+>If we just apply the patch proposed by Zev, we'll end up being consistent on one
+>set of platforms and inconsistent on other set of platforms.
+>If we want to make things consistent, we need a different approach - either by
+>obtaining additional information over PECI or by limiting the scope of the
+>proposed change to specific platforms.
+>
+>Thanks
+>-Iwona
+>
 
-=46or sun8i_thermal:
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Okay, I was sort of afraid of something like that.
 
-Best regards,
-Jernej
+Does PECI provide the necessary information to reliably map its 
+(physical silicon I presume) core numbers to the logical numbers seen by 
+the host OS?  The PECI specs I have don't seem to mention anything along 
+those lines as far as I can see, though perhaps there are newer or more 
+detailed ones I don't have access to.
 
->  drivers/thermal/tegra/tegra-bpmp-thermal.c       |  6 ++++--
->  drivers/thermal/tegra/tegra30-tsensor.c          |  4 ++--
->  drivers/thermal/thermal-generic-adc.c            |  2 +-
->  drivers/thermal/thermal_core.c                   |  6 ++++++
->  drivers/thermal/thermal_mmio.c                   |  2 +-
->  .../thermal/ti-soc-thermal/ti-thermal-common.c   |  4 ++--
->  drivers/thermal/uniphier_thermal.c               |  2 +-
->  include/linux/thermal.h                          |  7 +++++++
->  53 files changed, 102 insertions(+), 91 deletions(-)
+If not, how difficult would it be to classify known CPU models by 
+distinct core-numbering schemes to handle it "manually" in the driver?  
+If the necessary information is available I could try to develop a patch 
+for it.
 
 
+Thanks,
+Zev
 
