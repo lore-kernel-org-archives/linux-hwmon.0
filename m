@@ -2,81 +2,57 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49B5BC636CC
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Feb 2023 17:14:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0D7DC61DA3
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Feb 2023 08:32:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbjBTRON (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Feb 2023 12:14:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
+        id S233726AbjBUIc7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Feb 2023 03:32:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbjBTRON (ORCPT
+        with ESMTP id S233724AbjBUIc6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Feb 2023 12:14:13 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7058A16321
-        for <linux-hwmon@vger.kernel.org>; Mon, 20 Feb 2023 09:14:12 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id e10so495075ilu.4
-        for <linux-hwmon@vger.kernel.org>; Mon, 20 Feb 2023 09:14:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ClyVx85vpQ+A5Uj+QtVamMFVEk6ds6mSpjb67MxZ8fI=;
-        b=JZhc0FwQ2ayLn+Uj99sUpsgVFaXl8CEaALHjT8kM49X2WoYMqkp5vWdFhLNFyuxRCG
-         5U/h9MgKbladoqECzaWcWbpjUX4BKOOMZ8a8ENgMll7rsYYednF2Av72U+Udk2QNO41M
-         zQ5HAj+WO8FKQiDVVVqCXa+9s3IwYM95ZOXpdhQdBGoc0UY0iyZi/Zp//nsPnoLSsLY8
-         Xto1gHlKiYhkDdGQLeEuHJrfAwxkBJ/2aESQk82Mg30EV0sNrEm48esDaESYVsbplOiX
-         CfLjC5M/2mg4LSitfLx/6SriyqdYnegwVp7C37u2vkblZ/1/Z2zBLqYtVXrZpFZFxev3
-         c7xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ClyVx85vpQ+A5Uj+QtVamMFVEk6ds6mSpjb67MxZ8fI=;
-        b=6l6vzBqtjyGuRyWVSx2p4WHnDs0TH8zaf4XUbW3NZ1OmfRtY5zOpy4YKtpNqdEVT6m
-         ZfQJPOm32qsfydhiMFhBSJ+/TFFH0Oqi/VvwPOFai4UOW6FoT1dLzDj3hgVend93Qlmo
-         NLlAthSjgRGeB2E2/K9OmLj85VJPvbrncZzygb9jjRAb5mRuP+C9Sb5+SJWTZlrL3Vjo
-         MSCmWv6O9g18KF+6UF3C+xLneV08nJht7EKKqo+ImGk2QwF88oB6VvyKq3sJWs07Kbxh
-         YQOjyeKzo3oHnqIgLwrAxBzEKjQeof1Wj6EM37zpLf7OrI0uGLjHgY+eC7ZKi3IkQ+el
-         q4TA==
-X-Gm-Message-State: AO0yUKW4RwSrHSCadcL/v7PbqumAgYvyhh1JjY+6sLKNXJ20U5zVFJmf
-        nBOe2YPzmaMOFbFpWLP5WiWXXI24NWI=
-X-Google-Smtp-Source: AK7set+bZZx5P6ZHxyMyp+sdixQI6IKt6pfsdPTZxaNQHUCLoBQyAhNBZr9ZsCYKGkKkA/krr5HiKw==
-X-Received: by 2002:a05:6e02:1a04:b0:315:3fe4:1d0a with SMTP id s4-20020a056e021a0400b003153fe41d0amr706755ild.0.1676913251853;
-        Mon, 20 Feb 2023 09:14:11 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z4-20020a92cd04000000b003154a4a039esm872359iln.5.2023.02.20.09.14.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 09:14:11 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 20 Feb 2023 09:14:10 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Enrico Mioso <mrkiko.rs@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, linux-hwmon@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH] net: phy: aquantia: clamp temperature value in
- aqr_hwmon_set
-Message-ID: <20230220171410.GA3076234@roeck-us.net>
-References: <20230217231647.968107-1-mrkiko.rs@gmail.com>
- <Y/AtxyXsMVHf0ygt@lunn.ch>
- <20230218144234.GA2652402@roeck-us.net>
- <d49c3219-f67d-76c9-acba-f518ebbdb73f@gmail.com>
+        Tue, 21 Feb 2023 03:32:58 -0500
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED40E7D94
+        for <linux-hwmon@vger.kernel.org>; Tue, 21 Feb 2023 00:32:55 -0800 (PST)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id B7F2882E14; Tue, 21 Feb 2023 08:31:41 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1676968374; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=HHfbFkuJY0jrSgNGVv7kgDcFSnmyL2wzucYnVzsiZ22p14X7vpMGx5ECfFSxgW9FV
+         Qa07HdTJxSAnuZeK0c0xK3iUAhqv9BL8yzDJSS9Mxvkzu0+VPwPs2MqQ30ZLatPY6e
+         1JyyRGopGQgbcyTWuWO67rcW3fHRcqpkljl250Nrx465iXsXEviA+x2kNNvcGJLX+s
+         Q0edDr/i94k4I153JLooBhjuQULRJ8KQF0Kq74gvVrPCT8LmBfS3+xmdI3tsEeBA1f
+         LyPsOiIVKiSlJAGqbkcKwFBZ7u6LIrs+kk1i/sGPlYWXsSEV332v8dnr+gBw1KIG8Q
+         Jlph1Ye4BNNhw==
+Received: by mail.lokoho.com for <linux-hwmon@vger.kernel.org>; Tue, 21 Feb 2023 08:30:33 GMT
+Message-ID: <20230221074501-0.1.45.15sme.0.ghrtdhvfo5@lokoho.com>
+Date:   Tue, 21 Feb 2023 08:30:33 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d49c3219-f67d-76c9-acba-f518ebbdb73f@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 09:50:29PM +0100, Enrico Mioso wrote:
-> 
-> Onanother side - if I want to set those limits to -10 °C and +90 °C, may you suggest me a DTS snippet? Thanks,
-> Enrico
-> 
-That would hae to be supported by the driver.
+Dzie=C5=84 dobry,
 
-Guenter
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
+
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+
+
+Pozdrawiam
+Adam Charachuta
