@@ -2,82 +2,148 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3463DC636D7
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Feb 2023 16:57:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A85D0C61DA3
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Feb 2023 17:16:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234919AbjBUQ5s (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Feb 2023 11:57:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
+        id S234940AbjBURQF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Feb 2023 12:16:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234899AbjBUQ5r (ORCPT
+        with ESMTP id S234705AbjBURP7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Feb 2023 11:57:47 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534182C67A;
-        Tue, 21 Feb 2023 08:57:43 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id i4so517317ils.1;
-        Tue, 21 Feb 2023 08:57:43 -0800 (PST)
+        Tue, 21 Feb 2023 12:15:59 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172EC1DB9E;
+        Tue, 21 Feb 2023 09:15:49 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id d12so2402104ioe.10;
+        Tue, 21 Feb 2023 09:15:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JkSUsr7sEV0zMw0SDdpsmFb9iKPZTDAvp1jFrUn8SXE=;
-        b=TZaVUXjMl6ltndJXRsnFuHQreO9asrAUaPvfoLpCi9xSKjxfecW7xT/MnzZPfSYWKu
-         zqMRcLe0WwhZ3cD5fzmiJls3jWLFxDJi5TfbXcoj5LgcpcWimxbqMC50pqSHet6+S9cO
-         WXFfCUFamYS/aI2FLsALk++M+6/kCQZ3q1aB++C3hyRC90WRILo3JyHgoovmMHSvE8n1
-         l+VbvvejeMxDt1x143LcZOufKNlLyIeKV+QRIHp2Yl3d78O8TOaA5K72R3FHNQQXRZxu
-         u1s1oh1o/0JiHNWzfC+3HRd86bEVqATkYpmt6rIFm2EqynET+wciPjKlaMnvk14mqKd+
-         iAKQ==
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=l/TzWWvVuPq5evGqSb0iqFb4amroO0mXgoi8cE3IP+o=;
+        b=NocRTBZ3U5XwcGyv8zx8mD4mBGVqBJNZtDWPQPt33asM1VtttoKHYPcNRR1UCezyzC
+         TYd3C94kPoSKVUia2gcV5U5VrEcG6DHEXMffA9rTa8voFdYgquMKAMYkpNzDINBrtssB
+         X7y5IScdFw40IcR6Vcdhu2aWqg43Gcc6dENGyw4lC58E2y628KlIK/g2Pcjp4SsrmFhf
+         Cec7ddt9+IKFqLtoCGr4t0VYEvo6uCVBaeyVqzbTyePJdjd0N4ZDeqYWvutV2WgqSkZt
+         lf7L0DyyAjyw9GQeWd7EQQUrqfY8EXTmYiu3UCL55d8mrtHQH8YLCvaLLL8M31j4W1YI
+         BlQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JkSUsr7sEV0zMw0SDdpsmFb9iKPZTDAvp1jFrUn8SXE=;
-        b=RPrHP2ncjtW42sFMu2ivSfhSt/3g7c1TQwpHZP7JEZztEGgthDsIibMSyFo0AJhxjK
-         NBz3AXusjW54AYN1P0nyGoqqEGo8riV/vzrili/S5Y4p4FkbgNy3Rw7DBISZZYNH2KsF
-         iz/UtIBGIH9yHy6rh8kkujDhuivsn+Gmscpuo70C2Ao3RvjHgcCwVqQ6eLWJXYxL0wSW
-         e1uROSAA5uPBAQKzJB4zO6iDUyVc7AmscIt3j9kADPXvKbl+l3vtw64wsxUd8ckPOfJy
-         ZM3HF8qUs/JCq+HIbGJTYMq/N2zsPmMYBu8bTMjDDEuGHHYt9jaY4Vh11IS6/AS2DG4M
-         vbog==
-X-Gm-Message-State: AO0yUKVKC/OzyKoQMT5HEidnBTkHRQ+6EjqCzoMRm7+zSJN2jlY9BgRE
-        Gj+hEG4Hs6qrtVnT5KX0C6m0jaIaQdU=
-X-Google-Smtp-Source: AK7set+enNvn/OSrnjK+V+wzQGA0dIvRczca4mbEf17YhiYCuzKYvMnj8UR5WSyGieFxolZBba9jWg==
-X-Received: by 2002:a05:6e02:1d8e:b0:313:d7fc:4c09 with SMTP id h14-20020a056e021d8e00b00313d7fc4c09mr4265304ila.18.1676998662692;
-        Tue, 21 Feb 2023 08:57:42 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l/TzWWvVuPq5evGqSb0iqFb4amroO0mXgoi8cE3IP+o=;
+        b=mnaBlN+U1pfhbUNr8HTmXg5BKo9TdGHRH1S0yHhudTgDNwSHXiA4TED054e3Ie7vSw
+         jHGO7Q1maXhjA7QLc8u9RmSfDy+otA6Dj/vptV+sSISQgON5kK7uRRsf1t82ELr+LroV
+         5FOraXCO+DthywH5wizWEH8d+cusNqY6HDsyw3Ct+y0Qmea6EM89PX2QkJTpsKGuD6k7
+         1N0GURi1/KiIyeWn/uMu5+vklrsQBSMEp8vlkX6LByP+kneb6bkXuw/deN/AhZgIpbQO
+         YMd/0o70TRPKwB7SSxzpVe6CN0B8M28wynuIru3rI9RuFknYeVFQDUPPKbp/+pqisZ30
+         Zxeg==
+X-Gm-Message-State: AO0yUKVgtYvcbKsgLoLI3fwLQlT+Y8nVZ870ePWx6kE1Dm7F4wPSoLp3
+        14yzjWuBZzkssB730Zioqh4=
+X-Google-Smtp-Source: AK7set/xLBDMGbALSX6T3KG2tO/vxqerlafF7u2LCm+ILchLc/KLuvX0sqgBjzLlXhI7AXfR6O1giA==
+X-Received: by 2002:a5e:9e0c:0:b0:741:8544:7cab with SMTP id i12-20020a5e9e0c000000b0074185447cabmr9276288ioq.16.1676999748443;
+        Tue, 21 Feb 2023 09:15:48 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e23-20020a02a797000000b003a484df1652sm285792jaj.55.2023.02.21.08.57.41
+        by smtp.gmail.com with ESMTPSA id g13-20020a02bb8d000000b003b49e7d990asm1882544jan.30.2023.02.21.09.15.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 08:57:42 -0800 (PST)
+        Tue, 21 Feb 2023 09:15:47 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <83eee1e3-a585-d92e-c27c-e8d89dd67e58@roeck-us.net>
-Date:   Tue, 21 Feb 2023 08:57:40 -0800
+Message-ID: <628cd274-38a2-fd67-3cea-eef5837f58a5@roeck-us.net>
+Date:   Tue, 21 Feb 2023 09:15:46 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [GIT PULL] hwmon updates for v6.2
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230221164510.1589058-1-linux@roeck-us.net>
+Subject: Re: [PATCH 2/2] hwmon: (adt7475) Fix setting of hysteresis registers
 Content-Language: en-US
-In-Reply-To: <20230221164510.1589058-1-linux@roeck-us.net>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        chris.packham@alliedtelesis.co.nz, hdegoede@redhat.com,
+        jordan.crouse@amd.com, linux-kernel@vger.kernel.org
+References: <20230219232956.23784-1-tony.obrien@alliedtelesis.co.nz>
+ <20230219232956.23784-3-tony.obrien@alliedtelesis.co.nz>
+ <20230220140826.GA4009286@roeck-us.net>
+In-Reply-To: <20230220140826.GA4009286@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/21/23 08:45, Guenter Roeck wrote:
-> Hi Linus,
+On 2/20/23 06:08, Guenter Roeck wrote:
+> On Mon, Feb 20, 2023 at 12:29:56PM +1300, Tony O'Brien wrote:
+>> In temp_store(), for the hysteresis setting calculation there were two
+>> errors.  The first tries to clamp the hysteresis value by comparing the
+>> required hysteresis value to THERM - 15C.  This is incorrect since the
+>> hysteresis value is a relative value whereas THERM - 15C is an absolute
 > 
-> Please pull hwmon updates for Linux v6.2 from signed tag:
+> No, it isn't. The hysteresis attribute is an absolute temperature.
+> The value written into the attribute is expected to be in the range
+> [THERM - 15, THERM] (in degrees C). The value written into the register
+> is then in the range [15, 0]. I see nothing wrong with the current code.
 > 
->      git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.2
+>> value. This causes it to always select 15C for hysteresis.  Change the
+>> first parameter to THERM - val to compare two absolute temperatures.
+>> The second error masks the wrong bits in the hysteresis register; indices
+>> 0 and 2 should zero bits [7:4] and preserve bits [3:0], and index 1 should
+>> zero bits [3:0] and preserve bits [7:4].
+> 
+> I'll have to verify that with the datasheet. Either case, one logical change
+> per patch, please.
+> 
 
-Oops. I am apparently living a release in the past. Sorry for the noise.
-I sent another pull request with the correct version and tag.
+Actually, the problem is obvious from the code. Still, either drop the first
+part of the patch or separate into two patches and explain in detail what
+you think is wrong in the first part. There is a comment in the code
 
+                 /*
+                  * The value will be given as an absolute value, turn it
+                  * into an offset based on THERM
+                  */
+
+Maybe I am missing something, but I think that is exactly what the current
+code is doing.
+
+Thanks,
 Guenter
+
+> Thanks,
+> Guenter
+> 
+>>
+>> Fixes: 1c301fc5394f ("hwmon: Add a driver for the ADT7475 hardware monitoring chip")
+>> Signed-off-by: Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
+>> ---
+>>   drivers/hwmon/adt7475.c | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+>> index 77222c35a38e..68233191798e 100644
+>> --- a/drivers/hwmon/adt7475.c
+>> +++ b/drivers/hwmon/adt7475.c
+>> @@ -484,14 +484,14 @@ static ssize_t temp_store(struct device *dev, struct device_attribute *attr,
+>>   		adt7475_read_hystersis(client);
+>>   
+>>   		temp = reg2temp(data, data->temp[THERM][sattr->index]);
+>> -		val = clamp_val(val, temp - 15000, temp);
+>> +		val = clamp_val(temp - val, temp - 15000, temp);
+>>   		val = (temp - val) / 1000;
+>>   
+>>   		if (sattr->index != 1) {
+>> -			data->temp[HYSTERSIS][sattr->index] &= 0xF0;
+>> +			data->temp[HYSTERSIS][sattr->index] &= 0x0F;
+>>   			data->temp[HYSTERSIS][sattr->index] |= (val & 0xF) << 4;
+>>   		} else {
+>> -			data->temp[HYSTERSIS][sattr->index] &= 0x0F;
+>> +			data->temp[HYSTERSIS][sattr->index] &= 0xF0;
+>>   			data->temp[HYSTERSIS][sattr->index] |= (val & 0xF);
+>>   		}
+>>   
+>> -- 
+>> 2.39.2
+>>
 
