@@ -2,76 +2,94 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64329C61DA3
-	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Feb 2023 00:52:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CBAFC64ED6
+	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Feb 2023 00:52:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjBVAwg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Feb 2023 19:52:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
+        id S230129AbjBVAwh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Feb 2023 19:52:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbjBVAwf (ORCPT
+        with ESMTP id S230083AbjBVAwh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Feb 2023 19:52:35 -0500
+        Tue, 21 Feb 2023 19:52:37 -0500
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C721C590
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Feb 2023 16:52:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669AC30EA6
+        for <linux-hwmon@vger.kernel.org>; Tue, 21 Feb 2023 16:52:32 -0800 (PST)
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id C65992C0488;
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id B99EB2C034F;
         Wed, 22 Feb 2023 13:52:28 +1300 (NZDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
         s=mail181024; t=1677027148;
-        bh=keNdBvr9szQdnT+AOaLT/I7jh4u91DA9dfek36nMTaU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NhaVvxXq4IJBVtcIM7NVUBkS2myVCTzKpwuXKjrRCTzw+cHdv+VfX+fO+x3qV6XqY
-         +MKS0i2/iqSrmWeI6j2ZKHWzRGLXrEKQZk2A6Wc2wZDvAGj2PsG3uBTEzGcW2/Ql98
-         xOsBo3wqRAnR3z2P/KDCBrE0mvsBH/Bp6Xq0oJVaeuebbA2NKy+TbgCHfT5W9rvk0h
-         4GzXu8NtkwtE2KuaVrRfN0nBVlOWcY2/kd/wjUcPwamOSAiPQQoIjMXUJfBYQuaOzq
-         GQ/IFsnuzzt9/bBJOlCRDpjxXMvZxlaEguaVNKe4G973V8bmbp3A18fLggToAr4FLn
-         D7srmZ3W5T/Lg==
+        bh=Xlh9A+BoXGtR8DrhR/XI5BLDTPxz9tqhvxVveNnAApo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=zAltNOuCvDt36H85cwBdysEZAmrr7MpZlzk2dfQ3eMSCsW77J8CUCByc5ei9GCU0x
+         ENc2jqfmU1Ga/aXTdClMlneUztULGTDHFUwZDhMInxlilR5FxHm8MvsJAJp8V+SN0v
+         PLoy7aXB6YWiHi6cc4wwMlohC2xZ790Mk+oABc+UnnV0jOe1BpdEYnjKGBmh3KgOB6
+         sjAPTLXKGbfdPIvQley/56AdsrlnrdE9lUaB8teKdCELofuLg956Jy7+cib0gzciNW
+         TnqhtZmB4GX0Yef9PzoTvGVoW2mr/J64JyaWOR+l27Xn9XPUPI/PalhRtYpwhqEzt5
+         vZMC0Qnq1+3VA==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B63f5674c0000>; Wed, 22 Feb 2023 13:52:28 +1300
+        id <B63f5674c0001>; Wed, 22 Feb 2023 13:52:28 +1300
 Received: from tonyo-dl.ws.atlnz.lc (tonyo-dl.ws.atlnz.lc [10.33.12.31])
-        by pat.atlnz.lc (Postfix) with ESMTP id 7B82213ED6B;
+        by pat.atlnz.lc (Postfix) with ESMTP id 7D10013EE3F;
         Wed, 22 Feb 2023 13:52:28 +1300 (NZDT)
 Received: by tonyo-dl.ws.atlnz.lc (Postfix, from userid 1161)
-        id 7776CA0083; Wed, 22 Feb 2023 13:52:28 +1300 (NZDT)
+        id 7A51FA007D; Wed, 22 Feb 2023 13:52:28 +1300 (NZDT)
 From:   Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
 To:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
 Cc:     chris.packham@alliedtelesis.co.nz, hdegoede@redhat.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/2] hwmon: (adt7475) Fixes for acoustics and hysteresis
-Date:   Wed, 22 Feb 2023 13:52:26 +1300
-Message-Id: <20230222005228.158661-1-tony.obrien@alliedtelesis.co.nz>
+Subject: [PATCH v2 2/2] hwmon: (adt7475) Fix masking of hysteresis registers
+Date:   Wed, 22 Feb 2023 13:52:28 +1300
+Message-Id: <20230222005228.158661-3-tony.obrien@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230222005228.158661-1-tony.obrien@alliedtelesis.co.nz>
+References: <20230222005228.158661-1-tony.obrien@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=GdlpYjfL c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=m04uMKEZRckA:10 a=lM6UcDNat5HMF8i9s88A:9
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=GdlpYjfL c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=m04uMKEZRckA:10 a=1utJVCOB_o5uIfT7QvUA:9
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The patches contained herein fix the ADT7475 driver.  The first fixes
-the reading of the Enhanced Acoustics Register 2, and the second fixes th=
-e
-setting of the hysteresis registers.
+The wrong bits are masked in the hysteresis register; indices 0 and 2
+should zero bits [7:4] and preserve bits [3:0], and index 1 should zero
+bits [3:0] and preserve bits [7:4].
 
-Tony O'Brien (2):
-  hwmon: (adt7475) Display smoothing attributes in correct order
-    changes in v2:
-    - None
-  hwmon: (adt7475) Fix masking of hysteresis registers
-    changes in v2:
-    - Removed erroneous fix for clamping the hysteresis value. It
-      should be an absolute value and not a relative value.
+Fixes: 1c301fc5394f ("hwmon: Add a driver for the ADT7475 hardware monito=
+ring chip")
+Signed-off-by: Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
+---
+Changes in v2:
+- Patch headline changed.
+- Removed erroneous fix for clamping the hysteresis value. It should be
+  an absolute value and not a relative value.
+ drivers/hwmon/adt7475.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- drivers/hwmon/adt7475.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
+diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+index 77222c35a38e..6e4c92b500b8 100644
+--- a/drivers/hwmon/adt7475.c
++++ b/drivers/hwmon/adt7475.c
+@@ -488,10 +488,10 @@ static ssize_t temp_store(struct device *dev, struc=
+t device_attribute *attr,
+ 		val =3D (temp - val) / 1000;
+=20
+ 		if (sattr->index !=3D 1) {
+-			data->temp[HYSTERSIS][sattr->index] &=3D 0xF0;
++			data->temp[HYSTERSIS][sattr->index] &=3D 0x0F;
+ 			data->temp[HYSTERSIS][sattr->index] |=3D (val & 0xF) << 4;
+ 		} else {
+-			data->temp[HYSTERSIS][sattr->index] &=3D 0x0F;
++			data->temp[HYSTERSIS][sattr->index] &=3D 0xF0;
+ 			data->temp[HYSTERSIS][sattr->index] |=3D (val & 0xF);
+ 		}
+=20
 --=20
 2.39.2
 
