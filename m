@@ -2,68 +2,86 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 888D3C636D6
-	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Feb 2023 19:53:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA979C64EC7
+	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Feb 2023 20:10:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233022AbjBVTxv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 22 Feb 2023 14:53:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59504 "EHLO
+        id S230462AbjBVUKX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 22 Feb 2023 15:10:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233006AbjBVTxv (ORCPT
+        with ESMTP id S229564AbjBVUKX (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 22 Feb 2023 14:53:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD241DC;
-        Wed, 22 Feb 2023 11:53:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6CCECB81708;
-        Wed, 22 Feb 2023 19:53:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 129C6C433D2;
-        Wed, 22 Feb 2023 19:53:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677095624;
-        bh=P85c6YSf7/fev7yUkwadoI7oQG2bF/G8aZ2y8YofYL8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=HPRsgX0I0wBGXtWvxvgKEkEPCrbwmlxTjehR5qrIa4eUAkCmUC9iMiArj/6mNadzr
-         b8ke6nosUt5VhHmyUVytuZwn7OlW/by964m9ozA5So5rRVvmlkmOJeYq2DL8SXf8nu
-         uXGL9PU0Wix6KxJ105rTAiS99FoO+vSiIwRRmJSroonn+/ier0Re0Bd3T3nrjkMN6R
-         Phdb8UnoZPSbTm/wUxSuMqg+5koaKCWtszOeaB84brtXLb1AE9x2NRJ6tslS72xBeg
-         URTlLA9t1D6Y+QB7BMdcFYprVIBBVu8Jyz+F/Ejnsz6wHYCDXxK8OA43ZT7hGgbUx4
-         iBjGZSbxb4ucQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 01378C43151;
-        Wed, 22 Feb 2023 19:53:44 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon updates for v6.2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230221164510.1589058-1-linux@roeck-us.net>
-References: <20230221164510.1589058-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230221164510.1589058-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.2
-X-PR-Tracked-Commit-Id: 5720a18baa4686d56d0a235e6ecbcc55f8d716d7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 241ed6ab74f94eb3d64ee6b950cd8091b1213225
-Message-Id: <167709562398.30115.225348828025744412.pr-tracker-bot@kernel.org>
-Date:   Wed, 22 Feb 2023 19:53:43 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        Wed, 22 Feb 2023 15:10:23 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DB928228;
+        Wed, 22 Feb 2023 12:10:21 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B92A71BF208;
+        Wed, 22 Feb 2023 20:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1677096620;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vq+pTTILgv2/zfRW0a3Zsa75HyWqDc3SyopiCsnzOcE=;
+        b=EceKbULuqXgA+ACPlCdGh2hAQIzp41WNfDC7rHBXamHaF8HEkRyZgQJa+OM8bZdv8JnapC
+        dHzJ2kTywO//zhUWs+5ThJwPYx4KArcFrYlSHXLkBezUIL4Ofqi3asDOKAKTn2s/fMvIxv
+        3kiYA8EeSib+TAF6f0hNuiXYonChLellWzWqUtFRE3Tpfr1WueqAChMJyqSV6ZIhBNN04F
+        oK7B+HG4ScZK5+wXKX0h7oj9cUJ66lgWQH81PBvTdznr6DbL3qjFk9qn68h+9tRV3vjryn
+        g5fy/Oqg6xccVqvBi8E47ulLMQpc89WIwmSqHreZGzn3FZ1iALfzUvsODFWcAg==
+Date:   Wed, 22 Feb 2023 21:10:17 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 0/5] rtc: isl12022: Clean up and simplify the driver
+Message-ID: <167709656542.70897.14233242746464193107.b4-ty@bootlin.com>
+References: <20230110140806.87432-1-andriy.shevchenko@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230110140806.87432-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Tue, 21 Feb 2023 08:45:10 -0800:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.2
+On Tue, 10 Jan 2023 16:08:01 +0200, Andy Shevchenko wrote:
+> While looking for something else I noticed that this driver is dusted
+> a bit. Clean up and simplify it using available kernel types and APIs.
+> 
+> Changelog v2:
+> - added tags to patches 1,2,4,5 (Rasmus)
+> 
+> Andy Shevchenko (5):
+>   rtc: isl12022: Get rid of unneeded private struct isl12022
+>   rtc: isl12022: Explicitly use __le16 type for ISL12022_REG_TEMP_L
+>   rtc: isl12022: Drop unneeded OF guards and of_match_ptr()
+>   rtc: isl12022: Join string literals back
+>   rtc: isl12022: sort header inclusion alphabetically
+> 
+> [...]
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/241ed6ab74f94eb3d64ee6b950cd8091b1213225
+Applied, thanks!
 
-Thank you!
+[1/5] rtc: isl12022: Get rid of unneeded private struct isl12022
+      commit: f525b210e9d4dcefb88594d50e426068e62840f4
+[2/5] rtc: isl12022: Explicitly use __le16 type for ISL12022_REG_TEMP_L
+      commit: 93219a4fb8bdf279f749b5eef40bef1bbe805fc3
+[3/5] rtc: isl12022: Drop unneeded OF guards and of_match_ptr()
+      commit: c8ae2735cb3d28892fd734804b60e5abf1f6fa91
+[4/5] rtc: isl12022: Join string literals back
+      commit: 9bb1e189d7d2c3838938efcc497333803b946081
+[5/5] rtc: isl12022: sort header inclusion alphabetically
+      commit: 303eac653a181be59674920725142cfbdd5ba4cd
+
+Best regards,
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
