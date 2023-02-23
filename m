@@ -2,86 +2,143 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA979C64EC7
-	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Feb 2023 20:10:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60778C64ED8
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Feb 2023 21:57:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbjBVUKX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 22 Feb 2023 15:10:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
+        id S229681AbjBWV5q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Feb 2023 16:57:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjBVUKX (ORCPT
+        with ESMTP id S229535AbjBWV5o (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 22 Feb 2023 15:10:23 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DB928228;
-        Wed, 22 Feb 2023 12:10:21 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B92A71BF208;
-        Wed, 22 Feb 2023 20:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1677096620;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vq+pTTILgv2/zfRW0a3Zsa75HyWqDc3SyopiCsnzOcE=;
-        b=EceKbULuqXgA+ACPlCdGh2hAQIzp41WNfDC7rHBXamHaF8HEkRyZgQJa+OM8bZdv8JnapC
-        dHzJ2kTywO//zhUWs+5ThJwPYx4KArcFrYlSHXLkBezUIL4Ofqi3asDOKAKTn2s/fMvIxv
-        3kiYA8EeSib+TAF6f0hNuiXYonChLellWzWqUtFRE3Tpfr1WueqAChMJyqSV6ZIhBNN04F
-        oK7B+HG4ScZK5+wXKX0h7oj9cUJ66lgWQH81PBvTdznr6DbL3qjFk9qn68h+9tRV3vjryn
-        g5fy/Oqg6xccVqvBi8E47ulLMQpc89WIwmSqHreZGzn3FZ1iALfzUvsODFWcAg==
-Date:   Wed, 22 Feb 2023 21:10:17 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 0/5] rtc: isl12022: Clean up and simplify the driver
-Message-ID: <167709656542.70897.14233242746464193107.b4-ty@bootlin.com>
-References: <20230110140806.87432-1-andriy.shevchenko@linux.intel.com>
+        Thu, 23 Feb 2023 16:57:44 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B641CAFB
+        for <linux-hwmon@vger.kernel.org>; Thu, 23 Feb 2023 13:57:42 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id F15B72C0650;
+        Fri, 24 Feb 2023 10:57:38 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1677189458;
+        bh=NanjMPGPESIK+CNTa6AmGEKImCFQUu+FEQ970rFagjo=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=ymvdG4C3DtwEv4djMLJcFVdG3lw4LkZPZ96ImHG1kuiiOFNh7wFHNbnAwzu17QWKF
+         3wRZBtuLxo6Lw6sq8mKF5giUAxC8eiFgSLkgVoAaa/9SlVQUbmRDxYuX3rJ3mAKi7n
+         zKtnMuOiDQIm7E+HItLYoZAeTmP1HF3/FuHTKr4Mw4hTiGpoSXzyPn6XnHm244x2jv
+         o06mzVfjNLZgoezUe0HlK4qY8EmcWt0RZ1pNcP+4Y6HrtnhQzQ4daR9SKBxNTorb4S
+         mg882G0fEa5ZmEjA0cAwiTUWVGvezMAyEdIJTcTqiT2E/+a86EqYpQcrOV1wzrpCya
+         Ww78x0JLV3gcA==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B63f7e1520001>; Fri, 24 Feb 2023 10:57:38 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.47; Fri, 24 Feb 2023 10:57:38 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.047; Fri, 24 Feb 2023 10:57:38 +1300
+From:   Tony O'Brien <Tony.OBrien@alliedtelesis.co.nz>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "jordan.crouse@amd.com" <jordan.crouse@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] hwmon: (adt7475) Fix setting of hysteresis registers
+Thread-Topic: [PATCH 2/2] hwmon: (adt7475) Fix setting of hysteresis registers
+Thread-Index: AQHZRTTMlkXNzCAiSUmyuIMWTHJwBq7Yy+0AgANzawA=
+Date:   Thu, 23 Feb 2023 21:57:38 +0000
+Message-ID: <57d90678-4d1f-2aa7-aca2-6218894a91c6@alliedtelesis.co.nz>
+References: <20230219232956.23784-1-tony.obrien@alliedtelesis.co.nz>
+ <20230219232956.23784-3-tony.obrien@alliedtelesis.co.nz>
+ <20230220140826.GA4009286@roeck-us.net>
+ <628cd274-38a2-fd67-3cea-eef5837f58a5@roeck-us.net>
+In-Reply-To: <628cd274-38a2-fd67-3cea-eef5837f58a5@roeck-us.net>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D9A39EC6D03D334EA3B05A781A495635@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230110140806.87432-1-andriy.shevchenko@linux.intel.com>
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=GdlpYjfL c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=m04uMKEZRckA:10 a=1cIUIJCp_7cGnt0_jAgA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-
-On Tue, 10 Jan 2023 16:08:01 +0200, Andy Shevchenko wrote:
-> While looking for something else I noticed that this driver is dusted
-> a bit. Clean up and simplify it using available kernel types and APIs.
-> 
-> Changelog v2:
-> - added tags to patches 1,2,4,5 (Rasmus)
-> 
-> Andy Shevchenko (5):
->   rtc: isl12022: Get rid of unneeded private struct isl12022
->   rtc: isl12022: Explicitly use __le16 type for ISL12022_REG_TEMP_L
->   rtc: isl12022: Drop unneeded OF guards and of_match_ptr()
->   rtc: isl12022: Join string literals back
->   rtc: isl12022: sort header inclusion alphabetically
-> 
-> [...]
-
-Applied, thanks!
-
-[1/5] rtc: isl12022: Get rid of unneeded private struct isl12022
-      commit: f525b210e9d4dcefb88594d50e426068e62840f4
-[2/5] rtc: isl12022: Explicitly use __le16 type for ISL12022_REG_TEMP_L
-      commit: 93219a4fb8bdf279f749b5eef40bef1bbe805fc3
-[3/5] rtc: isl12022: Drop unneeded OF guards and of_match_ptr()
-      commit: c8ae2735cb3d28892fd734804b60e5abf1f6fa91
-[4/5] rtc: isl12022: Join string literals back
-      commit: 9bb1e189d7d2c3838938efcc497333803b946081
-[5/5] rtc: isl12022: sort header inclusion alphabetically
-      commit: 303eac653a181be59674920725142cfbdd5ba4cd
-
-Best regards,
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+T24gMjIvMDIvMjMgMDY6MTUsIEd1ZW50ZXIgUm9lY2sgd3JvdGU6DQo+IE9uIDIvMjAvMjMgMDY6
+MDgsIEd1ZW50ZXIgUm9lY2sgd3JvdGU6DQo+PiBPbiBNb24sIEZlYiAyMCwgMjAyMyBhdCAxMjoy
+OTo1NlBNICsxMzAwLCBUb255IE8nQnJpZW4gd3JvdGU6DQo+Pj4gSW4gdGVtcF9zdG9yZSgpLCBm
+b3IgdGhlIGh5c3RlcmVzaXMgc2V0dGluZyBjYWxjdWxhdGlvbiB0aGVyZSB3ZXJlIHR3bw0KPj4+
+IGVycm9ycy7CoCBUaGUgZmlyc3QgdHJpZXMgdG8gY2xhbXAgdGhlIGh5c3RlcmVzaXMgdmFsdWUg
+YnkgY29tcGFyaW5nIHRoZQ0KPj4+IHJlcXVpcmVkIGh5c3RlcmVzaXMgdmFsdWUgdG8gVEhFUk0g
+LSAxNUMuwqAgVGhpcyBpcyBpbmNvcnJlY3Qgc2luY2UgdGhlDQo+Pj4gaHlzdGVyZXNpcyB2YWx1
+ZSBpcyBhIHJlbGF0aXZlIHZhbHVlIHdoZXJlYXMgVEhFUk0gLSAxNUMgaXMgYW4gYWJzb2x1dGUN
+Cj4+DQo+PiBObywgaXQgaXNuJ3QuIFRoZSBoeXN0ZXJlc2lzIGF0dHJpYnV0ZSBpcyBhbiBhYnNv
+bHV0ZSB0ZW1wZXJhdHVyZS4NCj4+IFRoZSB2YWx1ZSB3cml0dGVuIGludG8gdGhlIGF0dHJpYnV0
+ZSBpcyBleHBlY3RlZCB0byBiZSBpbiB0aGUgcmFuZ2UNCj4+IFtUSEVSTSAtIDE1LCBUSEVSTV0g
+KGluIGRlZ3JlZXMgQykuIFRoZSB2YWx1ZSB3cml0dGVuIGludG8gdGhlIHJlZ2lzdGVyDQo+PiBp
+cyB0aGVuIGluIHRoZSByYW5nZSBbMTUsIDBdLiBJIHNlZSBub3RoaW5nIHdyb25nIHdpdGggdGhl
+IGN1cnJlbnQgY29kZS4NCj4+DQo+Pj4gdmFsdWUuIFRoaXMgY2F1c2VzIGl0IHRvIGFsd2F5cyBz
+ZWxlY3QgMTVDIGZvciBoeXN0ZXJlc2lzLsKgIENoYW5nZSB0aGUNCj4+PiBmaXJzdCBwYXJhbWV0
+ZXIgdG8gVEhFUk0gLSB2YWwgdG8gY29tcGFyZSB0d28gYWJzb2x1dGUgdGVtcGVyYXR1cmVzLg0K
+Pj4+IFRoZSBzZWNvbmQgZXJyb3IgbWFza3MgdGhlIHdyb25nIGJpdHMgaW4gdGhlIGh5c3RlcmVz
+aXMgcmVnaXN0ZXI7IA0KPj4+IGluZGljZXMNCj4+PiAwIGFuZCAyIHNob3VsZCB6ZXJvIGJpdHMg
+Wzc6NF0gYW5kIHByZXNlcnZlIGJpdHMgWzM6MF0sIGFuZCBpbmRleCAxIA0KPj4+IHNob3VsZA0K
+Pj4+IHplcm8gYml0cyBbMzowXSBhbmQgcHJlc2VydmUgYml0cyBbNzo0XS4NCj4+DQo+PiBJJ2xs
+IGhhdmUgdG8gdmVyaWZ5IHRoYXQgd2l0aCB0aGUgZGF0YXNoZWV0LiBFaXRoZXIgY2FzZSwgb25l
+IGxvZ2ljYWwgDQo+PiBjaGFuZ2UNCj4+IHBlciBwYXRjaCwgcGxlYXNlLg0KPj4NCj4gDQo+IEFj
+dHVhbGx5LCB0aGUgcHJvYmxlbSBpcyBvYnZpb3VzIGZyb20gdGhlIGNvZGUuIFN0aWxsLCBlaXRo
+ZXIgZHJvcCB0aGUgDQo+IGZpcnN0DQo+IHBhcnQgb2YgdGhlIHBhdGNoIG9yIHNlcGFyYXRlIGlu
+dG8gdHdvIHBhdGNoZXMgYW5kIGV4cGxhaW4gaW4gZGV0YWlsIHdoYXQNCj4geW91IHRoaW5rIGlz
+IHdyb25nIGluIHRoZSBmaXJzdCBwYXJ0LiBUaGVyZSBpcyBhIGNvbW1lbnQgaW4gdGhlIGNvZGUN
+Cj4gDQo+ICDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLyoNCj4gIMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgICogVGhlIHZhbHVlIHdpbGwgYmUgZ2l2ZW4gYXMgYW4gYWJz
+b2x1dGUgdmFsdWUsIHR1cm4gaXQNCj4gIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+ICogaW50byBhbiBvZmZzZXQgYmFzZWQgb24gVEhFUk0NCj4gIMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgICovDQo+IA0KPiBNYXliZSBJIGFtIG1pc3Npbmcgc29tZXRoaW5nLCBidXQg
+SSB0aGluayB0aGF0IGlzIGV4YWN0bHkgd2hhdCB0aGUgY3VycmVudA0KPiBjb2RlIGlzIGRvaW5n
+Lg0KU29ycnkgZm9yIHRoZSBsYXRlIHJlcGx5LCBteSBlbWFpbCB3YXNuJ3Qgd29ya2luZyBwcm9w
+ZXJseS4NCg0KWW91IGFyZSBjb3JyZWN0LCBhbmQgc28gaXMgdGhlIGNvZGUuICBJIGFzc3VtZWQg
+dGhlIGh5c3RlcmVzaXMgd291bGQgYmUgDQp3cml0dGVuIHRvIHRoZSBzeXNmcyB0ZW1wI19jcml0
+X2h5c3QgZmlsZSBhcyBhIHJlbGF0aXZlIHRlbXBlcmF0dXJlLCANCihiZWluZyBjYWxsZWQgJ2h5
+c3QnKSBub3QgYW4gYWJzb2x1dGUgdmFsdWUuICBJIGhhdmUgZml4ZWQgb3VyIGhvc3QgY29kZSAN
+CnRvIHdyaXRlIHRoaXMgY29ycmVjdGx5IGFuZCBpdCB3b3JrcyBmaW5lIG5vdy4gIFRoaXMgcGFy
+dCBvZiB0aGUgcGF0Y2ggDQpoYXMgYmVlbiBkcm9wcGVkIGFuZCB2MiBoYXMgYmVlbiBzZW50LiAg
+VGhhbmtzIGZvciB5b3VyIGhlbHAuDQoNCkNoZWVycywNClRvbnkuDQo+IA0KPiBUaGFua3MsDQo+
+IEd1ZW50ZXINCj4gDQo+PiBUaGFua3MsDQo+PiBHdWVudGVyDQo+Pg0KPj4+DQo+Pj4gRml4ZXM6
+IDFjMzAxZmM1Mzk0ZiAoImh3bW9uOiBBZGQgYSBkcml2ZXIgZm9yIHRoZSBBRFQ3NDc1IGhhcmR3
+YXJlIA0KPj4+IG1vbml0b3JpbmcgY2hpcCIpDQo+Pj4gU2lnbmVkLW9mZi1ieTogVG9ueSBPJ0Jy
+aWVuIDx0b255Lm9icmllbkBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KPj4+IC0tLQ0KPj4+IMKgIGRy
+aXZlcnMvaHdtb24vYWR0NzQ3NS5jIHwgNiArKystLS0NCj4+PiDCoCAxIGZpbGUgY2hhbmdlZCwg
+MyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KPj4+DQo+Pj4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvaHdtb24vYWR0NzQ3NS5jIGIvZHJpdmVycy9od21vbi9hZHQ3NDc1LmMNCj4+PiBpbmRl
+eCA3NzIyMmMzNWEzOGUuLjY4MjMzMTkxNzk4ZSAxMDA2NDQNCj4+PiAtLS0gYS9kcml2ZXJzL2h3
+bW9uL2FkdDc0NzUuYw0KPj4+ICsrKyBiL2RyaXZlcnMvaHdtb24vYWR0NzQ3NS5jDQo+Pj4gQEAg
+LTQ4NCwxNCArNDg0LDE0IEBAIHN0YXRpYyBzc2l6ZV90IHRlbXBfc3RvcmUoc3RydWN0IGRldmlj
+ZSAqZGV2LCANCj4+PiBzdHJ1Y3QgZGV2aWNlX2F0dHJpYnV0ZSAqYXR0ciwNCj4+PiDCoMKgwqDC
+oMKgwqDCoMKgwqAgYWR0NzQ3NV9yZWFkX2h5c3RlcnNpcyhjbGllbnQpOw0KPj4+IMKgwqDCoMKg
+wqDCoMKgwqDCoCB0ZW1wID0gcmVnMnRlbXAoZGF0YSwgZGF0YS0+dGVtcFtUSEVSTV1bc2F0dHIt
+PmluZGV4XSk7DQo+Pj4gLcKgwqDCoMKgwqDCoMKgIHZhbCA9IGNsYW1wX3ZhbCh2YWwsIHRlbXAg
+LSAxNTAwMCwgdGVtcCk7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIHZhbCA9IGNsYW1wX3ZhbCh0ZW1w
+IC0gdmFsLCB0ZW1wIC0gMTUwMDAsIHRlbXApOw0KPj4+IMKgwqDCoMKgwqDCoMKgwqDCoCB2YWwg
+PSAodGVtcCAtIHZhbCkgLyAxMDAwOw0KPj4+IMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAoc2F0dHIt
+PmluZGV4ICE9IDEpIHsNCj4+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBkYXRhLT50ZW1wW0hZ
+U1RFUlNJU11bc2F0dHItPmluZGV4XSAmPSAweEYwOw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIGRhdGEtPnRlbXBbSFlTVEVSU0lTXVtzYXR0ci0+aW5kZXhdICY9IDB4MEY7DQo+Pj4gwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZGF0YS0+dGVtcFtIWVNURVJTSVNdW3NhdHRyLT5pbmRl
+eF0gfD0gKHZhbCAmIDB4RikgPDwgNDsNCj4+PiDCoMKgwqDCoMKgwqDCoMKgwqAgfSBlbHNlIHsN
+Cj4+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBkYXRhLT50ZW1wW0hZU1RFUlNJU11bc2F0dHIt
+PmluZGV4XSAmPSAweDBGOw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGRhdGEtPnRlbXBb
+SFlTVEVSU0lTXVtzYXR0ci0+aW5kZXhdICY9IDB4RjA7DQo+Pj4gwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgZGF0YS0+dGVtcFtIWVNURVJTSVNdW3NhdHRyLT5pbmRleF0gfD0gKHZhbCAmIDB4
+Rik7DQo+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgIH0NCj4+PiAtLSANCj4+PiAyLjM5LjINCj4+Pg0K
+PiANCg==
