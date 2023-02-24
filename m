@@ -2,196 +2,94 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A02A1C678D5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Feb 2023 22:56:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C834CC677F1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Feb 2023 08:58:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjBWW45 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Feb 2023 17:56:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
+        id S229630AbjBXI6I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 24 Feb 2023 03:58:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjBWW44 (ORCPT
+        with ESMTP id S229563AbjBXI6H (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Feb 2023 17:56:56 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6149F5DCD7
-        for <linux-hwmon@vger.kernel.org>; Thu, 23 Feb 2023 14:56:51 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id iv11-20020a05600c548b00b003dc52fed235so612656wmb.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 23 Feb 2023 14:56:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cikNiAl3CsaUVzCtk0AInA3PwE1/TMQnMlzjF1gGdG0=;
-        b=DRN7VfySjUL0rYZq24bKTqYo1a7eMqo07ygSwMFUqHzuTKP65b9sTMEH8VZt0hxwu1
-         dmHGRYaPf3ggH9KZmEyIo+flPWm4zpT9CAN4fb3bb2UwUttx3rmo4vx8zo6F2tPiEUOK
-         kQWqn6QOgf2ZhhgOZ653j1GAMDb6AMca6ljq3tiMi06NSCiMzWp0EPnd6Uvs6JK9LOIe
-         r43kHvJdLLA9VFyPJO6M+KZDTGdMEFaMKztCR+nTATohFgvC9r80+cCMQ12KHZsj+SUY
-         jwwZvlnmtS9kLRvR3sEhulVIN5kRwRQDmQ/AX297OlmgtRWEUsWG1kh7J/OLhfLYqjHy
-         599w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cikNiAl3CsaUVzCtk0AInA3PwE1/TMQnMlzjF1gGdG0=;
-        b=MZEGOSW2z2I3P2jbG1TmV4vh+3sZAnW1kyg79204t1HeN9yXkDKKoUNwq2whH8t67W
-         wVJKBCCqVKbcE1XpVI979MPYiFwJibwTrgetNWTQKA3WYReDwztTeISCKWkwJQrhPOpT
-         5HwstZFwVhHzs0QM7vjwc492AOB1q5DwXJ/ynKWq161ohsl//0GKlKg+z2JdeAkVqoxs
-         Jqqrr2O+Vok9FsTntnzoUtJ4/LHhKUrRmr+NROh5A2Sj2ateggs3YcmhqnvHb6Pp+ui8
-         wZUC693PWLItBMLfQMWjQXVFY/DPow7LPn5IpmjIu4RZIyWNszDYDTsES3s6IveC43ba
-         KKTA==
-X-Gm-Message-State: AO0yUKW8KmvFBAb46pcU8TjVknvdToOu6p0T40W3Rc4ddRMYZTtutgy3
-        tm4s6EgXNk8Rk2vWTVd5r7cXdA==
-X-Google-Smtp-Source: AK7set9Z52yxWv52zRMDow6DF+DTZQX7KbVMepo+DRQCwOeMkXAXaJBNJ2zYwaSnuLVGEj/k1hBdjw==
-X-Received: by 2002:a05:600c:a695:b0:3e2:2f9:b8e2 with SMTP id ip21-20020a05600ca69500b003e202f9b8e2mr10908094wmb.35.1677193009641;
-        Thu, 23 Feb 2023 14:56:49 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:3e6f:e90a:1fc9:3708? ([2a05:6e02:1041:c10:3e6f:e90a:1fc9:3708])
-        by smtp.googlemail.com with ESMTPSA id d21-20020a1c7315000000b003b47b80cec3sm662936wmb.42.2023.02.23.14.56.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 14:56:49 -0800 (PST)
-Message-ID: <37b3b835-e992-0090-56e5-bd4d58e547a7@linaro.org>
-Date:   Thu, 23 Feb 2023 23:56:44 +0100
+        Fri, 24 Feb 2023 03:58:07 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC261136DD;
+        Fri, 24 Feb 2023 00:58:03 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 7DA1F24E2A1;
+        Fri, 24 Feb 2023 16:57:50 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
+ 2023 16:57:50 +0800
+Received: from [192.168.125.82] (113.72.147.165) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Feb
+ 2023 16:57:49 +0800
+Message-ID: <b9b4e45b-eb79-f94f-d96f-764b49ce0471@starfivetech.com>
+Date:   Fri, 24 Feb 2023 16:57:48 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 00/17] Self-encapsulate the thermal zone device
- structure
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v4 2/2] hwmon: (sfctemp) Add StarFive JH71x0 temperature
+ sensor
 Content-Language: en-US
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Talel Shenhar <talel@amazon.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        linux-acpi@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230223224844.3491251-1-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230223224844.3491251-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230207072314.62040-1-hal.feng@starfivetech.com>
+ <20230207072314.62040-3-hal.feng@starfivetech.com>
+ <20230208162312.GA3062856@roeck-us.net>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <20230208162312.GA3062856@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.147.165]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 23/02/2023 23:48, Daniel Lezcano wrote:
-> The exported thermal headers expose the thermal core structure while those
-> should be private to the framework. The initial idea was the thermal sensor
-> drivers use the thermal zone device structure pointer to pass it around from
-> the ops to the thermal framework API like a handler.
+On Wed, 8 Feb 2023 08:23:12 -0800, Guenter Roeck wrote:
+> On Tue, Feb 07, 2023 at 03:23:14PM +0800, Hal Feng wrote:
+>> From: Emil Renner Berthing <kernel@esmil.dk>
+>> 
+>> Register definitions and conversion constants based on sfctemp driver by
+>> Samin in the StarFive 5.10 kernel.
 > 
-> Unfortunately, different drivers are using and abusing the internals of this
-> structure to hook the associated struct device, read the internals values, take
-> the lock, etc ...
-> 
-> rn order to fix this situation, let's encapsulate the structure leaking the
-> more in the different drivers: the thermal_zone_device structure.
-> 
-> This series revisit the existing drivers using the thermal zone private
-> structure internals to change the access to something else. For instance, the
-> get_temp() ops is using the tz->dev to write a debug trace. Despite the trace
-> is not helpful, we can check the return value for the get_temp() ops in the
-> call site and show the message in this place.
-> 
-> With this set of changes, the thermal_zone_device is almost self-encapsulated.
-> As usual, the acpi driver needs a more complex changes, so that will come in a
-> separate series along with the structure moved the private core headers.
-> 
-> Changelog:
-> 	- V3:
-> 	   - Collected more tags
-> 	   - Added missing changes for ->devdata in some drivers
-> 	   - Added a 'type' accessor
-> 	   - Replaced the 'type' to 'id' changes by the 'type' accessor
-> 	   - Used the 'type' accessor in the drivers
-> 	- V2:
-> 	   - Collected tags
-> 	   - Added missing changes for ->devdata for the tsens driver
-> 	   - Renamed thermal_zone_device_get_data() to thermal_zone_priv()
-> 	   - Added stubs when CONFIG_THERMAL is not set
-> 	   - Dropped hwmon change where we remove the tz->lock usage
-> 
-> Thank you all for your comments
+> "based on ..." does not belong here. Describe what the driver does,
+> not what it is based on. If you want to add a note about the origin
+> of the driver, add it in the comments on the top of the driver.
 
-The series has been blocked by gsmtp because the next patch has too many 
-Cc. I'll sort out this and resend.
+Will reword the commit message in the next version.
 
+> 
+> Please add the missing default: statements in the driver,
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+OK. I will fix it accordingly.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> and explain (for example in the comments at the top of the
+> driver) why you don't use continuous mode. The description
+> needs to be detailed and compelling enough that no one comes
+> back and implements a continuous mode version of the driver.
 
+As we discussed in [1], I will use continuous mode instead.
+Thanks.
+
+[1] https://lore.kernel.org/all/2c424d39-3a1d-3c91-d049-c0b941359bc3@starfivetech.com/
+
+Best regards,
+Hal
