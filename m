@@ -2,80 +2,212 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E3F0C64EC7
-	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Feb 2023 15:09:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDC23C6FA8E
+	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Feb 2023 15:40:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjBYPJU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 25 Feb 2023 10:09:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59988 "EHLO
+        id S229540AbjBYPkh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 25 Feb 2023 10:40:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjBYPJT (ORCPT
+        with ESMTP id S229482AbjBYPkg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 25 Feb 2023 10:09:19 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BBF125BF;
-        Sat, 25 Feb 2023 07:09:18 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id e18-20020a0568301e5200b00690e6abbf3fso1216193otj.13;
-        Sat, 25 Feb 2023 07:09:18 -0800 (PST)
+        Sat, 25 Feb 2023 10:40:36 -0500
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2190013D76;
+        Sat, 25 Feb 2023 07:40:34 -0800 (PST)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-17264e9b575so2934243fac.9;
+        Sat, 25 Feb 2023 07:40:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0qNa/fooWw1RTkDA5x2nPD4n+HhSBqh6xjuBoYlXOMg=;
-        b=TuPc863yMH4JTt9dbtQobY+RHxL+miLSJwTxuEADKjwPYiT5YAXBV44JN6iL9zI0kk
-         60KlRj3s2jH7NqYnLz90C/w3UUk3IziGKve55Fjfw3aSTmB9Bmci77HuMwN/9Dql1tn1
-         Va2tzQr4+nHShc0q6emwHAhVdP0ZNx9ZqBEF8DkN9TxRvVTjkWhzBXhvmbyKtqC/t8CU
-         daqHA6zD3e2CKSsq7bffm6C7rW4e+GN6X12p/ebmNcgk5t3Uw34cO1n+pHGkSqZJ0I5u
-         B4+2KBk27EEgg7rT+/k2jCKYGIQgi88TmeulRHzn3AImlQ+vfHqJix9b470NHsg2faYr
-         APEA==
+        bh=px/d/g9mVgSDLWf3k8rN4W6hufDzMqQKNNkDt2FuWH8=;
+        b=d9P0RVCA9ocz8BhfR/p5fOPwEYDaI3drxGs3R8biifxrOx1y4tLq2hsveScMXkS49y
+         myLaYWAtFtvl1N5Adick+3rclUIPziw6prWEQvdjuU/jRDSPWv8CDByRlYzacSMbkY1H
+         F71+3fgDTlpZ32SiQ+rliMeMBw2zHgdWzFdGXe9EpxA7Hd0aSEBmXWRQbopP2Q+RlB67
+         tLEwU8rRQzydrt5ZkM3CYXYHaOJh+pqAInvPiRrVUsse6oQZBfwIyp4heCPwDC36yHOQ
+         UsCP7d4DP7LfKKelcQkaxwox3HDw/xBgoiPpqMD/Pf0CstAX30VUZnim7+4kEnuGivA5
+         w7GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0qNa/fooWw1RTkDA5x2nPD4n+HhSBqh6xjuBoYlXOMg=;
-        b=vg+FbHTJbhdVPtI3DDJVEb3yMx5qHCWtWAg+LMkDMMmC6QuGgNA1LW8aoO5cBghOAi
-         IztXD/Ia6WU3TMDdyhHcekxnwk1UYQ5nGjfjbzx8OpMefPj6nNenBgrS9hP/5dxqNdjj
-         AaN+yV1zTtn/3+vC24cvOUjNOSlE43puqEanYs50AzICHf27Pt6R533JJdGcSHLJv6NG
-         6Y8MfGx22dF2l2XT+84lVFtSW/03/F6KtK5idVoZGi+bWumEqlg3Qx9jxZS5xCTSzaYr
-         kEsPaJNiEzigl+bolIZ5Zh2ZmNEjr18zAx+oLvDf5BDhsaxr2Cp4OpK1K561t0R7/orI
-         1Mbg==
-X-Gm-Message-State: AO0yUKX9UUTyVj2rFT4p48Wepf8K07lWVxWtHM+S4CgGfU7V4bHF0YNe
-        u5w2ri+Gv3Zo6kEreZSZRIkpaIgUQaI=
-X-Google-Smtp-Source: AK7set/SC2YZfRGXbGQ4gF7WuU53OTprrlHKykxjKZD5466hH4VTsscuqo80n7PmEi0ziIBxnCSMKw==
-X-Received: by 2002:a9d:6087:0:b0:693:bf8d:379b with SMTP id m7-20020a9d6087000000b00693bf8d379bmr8778659otj.34.1677337758065;
-        Sat, 25 Feb 2023 07:09:18 -0800 (PST)
+        bh=px/d/g9mVgSDLWf3k8rN4W6hufDzMqQKNNkDt2FuWH8=;
+        b=DnvS5FocZoHmK4tW5WL3ufMjbEQli4XV5NyfPf7RehE/q1w9OU3VjqyGTlDLVbma9n
+         4iIHuRx0+sRkEJXohpTJMvQxvaZD0Ivfp9w0sF6tyXTSSqZ6AgIJ8pXcs390qkpgMqr0
+         qjKZii0UsoClnCe6ODSeAj6xT0tt6vxYyETNmK/pzlmrt/ipgZ8iT4jlzQf2hLjIuFCQ
+         3xYWp+NKRd1to7nrFB29t9f0uMqEnU7dI3rq/I1Ok8iiv968PJjhjNj/SmwucjhHe9Km
+         yiGSR5QRc1LlkZs0Ai5tUZPZglIVPsJ9g4ccvKpKqjisX8l3M+3X4bb62r4mrRFb3cwV
+         Vn1g==
+X-Gm-Message-State: AO0yUKUMkG7nHE/8jv/Pxid/yxUMY7jISWjgPHThb+YFxxrhPnTBU8Xw
+        HVziWCvQgZZ9ZlJhrTjhezRcKuTBiV8=
+X-Google-Smtp-Source: AK7set9ktFb5bcN3Mbg8jggMA2lTqbLYvuThWpm9eKl/Avj9JM5nxWIiltoLu3b6ciGQprPXQRgC3A==
+X-Received: by 2002:a05:6871:1c8:b0:16e:8e5c:cb4e with SMTP id q8-20020a05687101c800b0016e8e5ccb4emr18504224oad.9.1677339633300;
+        Sat, 25 Feb 2023 07:40:33 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bt55-20020a05683039f700b0068abc8e786fsm691533otb.10.2023.02.25.07.09.17
+        by smtp.gmail.com with ESMTPSA id a5-20020a056870618500b001723d62f997sm671023oah.32.2023.02.25.07.40.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Feb 2023 07:09:17 -0800 (PST)
+        Sat, 25 Feb 2023 07:40:32 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 25 Feb 2023 07:09:16 -0800
+Date:   Sat, 25 Feb 2023 07:40:31 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Zev Weiss <zev@bewilderbeest.net>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v1 1/1] hwmon: (nct6775) Drop unneeded casting and
- conjunction
-Message-ID: <20230225150916.GA3888060@roeck-us.net>
-References: <20230217191600.24837-1-andriy.shevchenko@linux.intel.com>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] hwmon: (pmbus/core): Add interrupt support
+Message-ID: <20230225154031.GA448701@roeck-us.net>
+References: <20230217083631.657430-1-Naresh.Solanki@9elements.com>
+ <20230217083631.657430-3-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230217191600.24837-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230217083631.657430-3-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 09:16:00PM +0200, Andy Shevchenko wrote:
-> The 64-bit result will be cut to 32-bit automatically (by compiler)
-> due to the type of the destination value. No need to have an explicit
-> casting and especially additional conjunction which does the same.
+On Fri, Feb 17, 2023 at 09:36:30AM +0100, Naresh Solanki wrote:
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Implement PMBUS irq handler.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ...
+> Changes in V3:
+> - Remove pmbus word check for SMBALERT writes
+> - Remove variable ret & use err instead.
+> - Use dev_dbg_once instead of error.
+> - Remove error print when writing to misc_status register.
+> - Move client irq check to pmbus_irq_setup.
+> ---
+>  drivers/hwmon/pmbus/pmbus.h      |  2 +-
+>  drivers/hwmon/pmbus/pmbus_core.c | 78 ++++++++++++++++++++++++++++++++
+>  2 files changed, 79 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> index 713ea7915425..11e84e141126 100644
+> --- a/drivers/hwmon/pmbus/pmbus.h
+> +++ b/drivers/hwmon/pmbus/pmbus.h
+> @@ -26,7 +26,7 @@ enum pmbus_regs {
+>  
+>  	PMBUS_CAPABILITY		= 0x19,
+>  	PMBUS_QUERY			= 0x1A,
+> -
+> +	PMBUS_SMBALERT_MASK		= 0x1B,
+>  	PMBUS_VOUT_MODE			= 0x20,
+>  	PMBUS_VOUT_COMMAND		= 0x21,
+>  	PMBUS_VOUT_TRIM			= 0x22,
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index f8ac9016ea0e..d0415d5ac7d9 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -3105,6 +3105,80 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+>  }
+>  #endif
+>  
+> +static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg, u8 val)
+> +{
+> +	return pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
+> +}
+> +
+> +static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
+> +{
+> +	struct pmbus_data *data = pdata;
+> +	struct i2c_client *client = to_i2c_client(data->dev);
+> +	int i, status;
+> +
+> +	mutex_lock(&data->update_lock);
+> +	for (i = 0; i < data->info->pages; i++) {
+> +		status = pmbus_read_status_word(client, i);
+> +		if (status < 0) {
+> +			mutex_unlock(&data->update_lock);
+> +			return status;
 
-Applied to hwmon-next.
+Unfortunately this is not a valid return value for interrupt handlers.
+I think the best approach here would be to just continue with the loop.
 
-Thanks,
-Guenter
+> +		}
+> +
+> +		if (status & ~(PB_STATUS_OFF | PB_STATUS_BUSY | PB_STATUS_POWER_GOOD_N))
+> +			pmbus_clear_fault_page(client, i);
+
+Should those fault flags even be checked ? If another bit is set, they will
+be cleared anyway, and "clear flags only if some other flag is set" seems
+a bit inconsistent.
+
+Overall it seems to me that we should maybe just call pmbus_clear_faults()
+at the end of the function. Sure, that clears faults on pages where there
+is no fault, but the above code reads the status on all pages anyway, so
+it is more costly overall then just clearing the faults on all pages.
+
+> +	}
+> +	mutex_unlock(&data->update_lock);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
+> +{
+> +	struct device *dev = &client->dev;
+> +	const struct pmbus_status_category *cat;
+> +	const struct pmbus_status_assoc *bit;
+> +	int i, j, err, func;
+> +	u8 mask;
+> +
+> +	static const u8 misc_status[] = {PMBUS_STATUS_CML, PMBUS_STATUS_OTHER,
+> +					 PMBUS_STATUS_MFR_SPECIFIC, PMBUS_STATUS_FAN_12,
+> +					 PMBUS_STATUS_FAN_34};
+> +
+> +	if (!client->irq)
+> +		return 0;
+> +
+> +	for (i = 0; i < data->info->pages; i++) {
+> +		func = data->info->func[i];
+> +
+> +		for (j = 0; j < ARRAY_SIZE(pmbus_status_flag_map); j++) {
+> +			cat = &pmbus_status_flag_map[j];
+> +			if (!(func & cat->func))
+> +				continue;
+> +			mask = 0;
+> +			for (bit = cat->bits; bit->pflag; bit++)
+> +				mask |= bit->pflag;
+> +
+> +			err = pmbus_write_smbalert_mask(client, i, cat->reg, ~mask);
+> +			if (err)
+> +				dev_dbg_once(dev, "Failed to set smbalert for reg 0x%02x\n",
+> +					     cat->reg);
+> +		}
+> +
+> +		for (j = 0; j < ARRAY_SIZE(misc_status); j++)
+> +			pmbus_write_smbalert_mask(client, i, misc_status[j], 0xff);
+> +	}
+> +
+> +	/* Register notifiers */
+> +	err = devm_request_threaded_irq(dev, client->irq, NULL, pmbus_fault_handler, 0,
+> +					"pmbus-irq", data);
+> +	if (err) {
+> +		dev_err(dev, "failed to request an irq %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static struct dentry *pmbus_debugfs_dir;	/* pmbus debugfs directory */
+>  
+>  #if IS_ENABLED(CONFIG_DEBUG_FS)
+> @@ -3467,6 +3541,10 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
+>  	if (ret)
+>  		return ret;
+>  
+> +	ret = pmbus_irq_setup(client, data);
+> +	if (ret)
+> +		return ret;
+> +
+>  	ret = pmbus_init_debugfs(client, data);
+>  	if (ret)
+>  		dev_warn(dev, "Failed to register debugfs\n");
