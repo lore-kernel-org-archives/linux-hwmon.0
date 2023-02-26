@@ -2,252 +2,100 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 353F0C6FA8E
-	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Feb 2023 17:07:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66D56C6FA8E
+	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Feb 2023 01:48:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbjBYRHO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 25 Feb 2023 12:07:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45262 "EHLO
+        id S229512AbjBZBsz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 25 Feb 2023 20:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBYRHN (ORCPT
+        with ESMTP id S229445AbjBZBsy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 25 Feb 2023 12:07:13 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9471710ABA;
-        Sat, 25 Feb 2023 09:07:12 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id bi17so2020492oib.3;
-        Sat, 25 Feb 2023 09:07:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VnB5gujaVnqBoC9xX9EZBRVvHCjUNdsJN9CYSYynhMU=;
-        b=SDMyW4qDukwZFMcU5CQNRAdfiXi0lbT7F4EhbSZMS9xvHQc76yxbx7UZp+hUgE/0IX
-         e21i5b7yCa+nwA+ShZPj/fFsFG3Ig2uJyuWubrkRWxmZ05GHhzlRfqKgAdfFYmLSgps6
-         t4eiwRl2vtvX5PLCYydUDmxmlkWcNltTVM9IsXh/7BQONvqQkn7Gfle9iADCmxodnTW9
-         bbIO+oDQC+wAG5wEUQSUhP+cmvm6qvxSAxDUpuJCDdUGWcaK8+fQG8xmdneI1jNadhs7
-         f+LsbAjYsFTs5slCQjT3lI2dKBR5oLY1ddkwGO2viE4FvHMBS7e0sLvXPFSrldHQiyCk
-         V6FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VnB5gujaVnqBoC9xX9EZBRVvHCjUNdsJN9CYSYynhMU=;
-        b=1Ql0vSjwlncOb2848GZ34JADvdxDcB5OYv9zbxKb2sRjDOXJDqjvg7q2hVmMrLhG3b
-         px0J1JLgLd+IdkvdB9OP9jEScO+LgDzb7BDWNAsS8EDqxFwKdVNpZIc/l5ZIR67ruQDE
-         1v3tHRv3tZBcveroBpWLrsmR7hAV0ge4TqJnmndAB8kOdh0MKIqHWbCwbY3M0+tG82Qk
-         rUbnkOobbIKQ206Z8ll/kXLxX98wIpELqk4KCnkca8dLNy484dmHg0hB/jQwZpyaKfjt
-         Hv4Dba1Ok7FNMxbT/GSgDellLWQ58RUzB8DNxiscpul9LJ/oVVecQKZEiYcuC/iU04hc
-         jCpw==
-X-Gm-Message-State: AO0yUKVHjU86SsI7YslDzIGnOz0/WGq8akZaByiJyL07lVrGMZZwMinu
-        zseBOCJ3mTKIf5svhXZotbM=
-X-Google-Smtp-Source: AK7set+82KW0G5rNagd+LFTsfSeMjj+S09cUq48u546rV0mTqnu8fBLCeWkKeWhUiceVxjxA5aabJA==
-X-Received: by 2002:a05:6808:319:b0:37f:83cb:8e92 with SMTP id i25-20020a056808031900b0037f83cb8e92mr8702983oie.57.1677344830443;
-        Sat, 25 Feb 2023 09:07:10 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f12-20020a9d038c000000b0068bd3001922sm788156otf.45.2023.02.25.09.07.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Feb 2023 09:07:10 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 25 Feb 2023 09:07:08 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Sat, 25 Feb 2023 20:48:54 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02955D33E;
+        Sat, 25 Feb 2023 17:48:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1677376113; i=w_armin@gmx.de;
+        bh=WUcYVEwqrG6usAiQFxSS5/w7vamMXRwl23OvRi5cT6o=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=I97Ono275JMIR9NazH2Rjw2tD1SSrKjYRayQKSTB+W/BN+SYo4fjRwoYBC8ixcl/L
+         L1ywzcJ4+hhMee1aFgMqBVKBepHYP26MVaff30Pc805fZDRn8Pqg3QCQIlIpg682Of
+         vQ6dJ4zoqfVmexUaygnxfI8NSo712WKL/jMLwAAauHH8U+purR+QiZyUAqoQyh/Eu4
+         9tMHcILAnPtCyMTHmu3cptA3lV1UkQgV2yzvdMcWF2N1LA/ZLiAGqzFl/eCYyc6lob
+         5BOqSXkEFAvDInyRCF7zZ6iy2MoMLT3KP7U1Z8NvJ3SRwm+R6cwuZzFMtZYoeX57gs
+         py2L/caJEMC/w==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MsHs0-1ocTMZ2UYc-00tom9; Sun, 26 Feb 2023 02:48:33 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net
+Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] hwmon: (pmbus/core) Generalise pmbus get status
-Message-ID: <20230225170708.GA3995447@roeck-us.net>
-References: <20230217083631.657430-1-Naresh.Solanki@9elements.com>
- <20230217083631.657430-2-Naresh.Solanki@9elements.com>
+Subject: [PATCH] hwmon: (ftsteutates) Update specifications website
+Date:   Sun, 26 Feb 2023 02:48:30 +0100
+Message-Id: <20230226014830.10929-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230217083631.657430-2-Naresh.Solanki@9elements.com>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:KJfAOvKDHvVsmTGKmNASb4WX+dMdFthNqzuX6yhwDdxyEwtZ7WJ
+ iBhadcBQjFBWJ+hmC/Er+F7WGsv2cAVzFqcPeRtnDNLbUvfCJwMm0uDA2ysNVc3gd+D07V9
+ ZwV7RWTWltGPQi3Hm3263p4OFLYcwwFx6QBBa1eFq8u9Nnr5z9z7M1a0ASEhzZAq2rat8Vv
+ 7vYmLymHWTBcHqWcbD3dw==
+UI-OutboundReport: notjunk:1;M01:P0:sVSSp4pGbGc=;YG7R0optsPk+XgcLp70gjL2xbJ9
+ 1pCohmGnqs3n34oeOgukXte742FHGOpfTSJ0yYXqT++2tTuoGxcY7VFqYZD85XUbrT/kLylxF
+ sMt3DsK7AYMPZE7AIr5QrM6pe9hXwpgTboYjYLyHRw+AGHqonkrGskls5oTNcdWeqtT1dAxwB
+ hwx0nyRlzS3aPFeJlLZLfS9DIBGeu9HG2UEcCIKk0yfpUZSv8NZCt/v6sd0M7/tB32g4n5KW2
+ hyBVotgdqRfuuJD5TJ6juKbolboF21AWSocJ5L6gKuJbiNgg0QBAtYJ6dAkQcymyBS9ExRu+U
+ JKgDaJhXORMRPA5SGZRvhe5QbTTRzVSq9VLVrdResIerICLMgi7KUbievC4Vda6IMmWfRaplZ
+ caHObdYZyPNLSnDIadduFmAB/o1MCxCd7wQbf05Uk1Uv4uIwdB9uc3eQFX5u+TrPZWwt27n45
+ kv5moWqIlpTeo5HXqDlzWKxtY90t9vBD8ZOKfWxOHYRiM1bbR9lxhU89Y0V7rwD8QWFDffM61
+ lGJoKv7msHE1SDRZM0yRj+EfUfP7kYI87SDXrpNekcZkbJZZHgvlNb93DO0ZB2Fykj4ma4DJD
+ wKO7bm6pyErgdPtoOTE4+MDEDo8EJbVhxORreTcJwK04tqDAI+6HC+Pe8eTGqBusBFJFlj4hF
+ 7ECVuTIdNEd/FMCQGgp8p1JoXRWt/JskNGTP+pvPmFlCgGnbZ4J2ChepAu/L2GfFY4jPPHeoW
+ YP8k/YYMPmtPfaSmwBN5cJgFN+X9ivoBFF7fwAOnPRKoH6EOnQhLGh1mjcit2c7j0SbMuVNaV
+ R2znAuU3xcdxXXLmRLjSEMNbbCpD4uTdamKPm2yq1iZesDC61Ra1gz8UxP4NK21IhgsZNAhpR
+ CLOl98veU12B9tis4/otuNndLPcNb5zkqEjhQH2RiYxOMmpk8ehPH2z0aeMTUorzV1nqgVClg
+ I2rknsl3Ud5i4NZGkoobNv0cB0A=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 09:36:29AM +0100, Naresh Solanki wrote:
-> Add function pmbus get status that can be used to get both pmbus
-> specific status & regulator status
-> 
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+The Fujitsu OEM Mainboard business was acquired by Kontron,
+so the specifications of the Teutates chip was transferred to
+the new Kontron FTP server.
 
-For my reference:
+Update the specifications website accordingly. The outdated
+sensors how-to was omitted.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ Documentation/hwmon/ftsteutates.rst | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> ...
-> Changes in V3:
-> - Add pmbus_is_enabled function
-> Changes in V2:
-> - Add __maybe attribute for pmbus_get_status function
-> - Remove unrelated changes
-> ---
->  drivers/hwmon/pmbus/pmbus_core.c | 98 ++++++++++++++++++++------------
->  1 file changed, 62 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 1b70cf3be313..f8ac9016ea0e 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2735,18 +2735,12 @@ static const struct pmbus_status_category __maybe_unused pmbus_status_flag_map[]
->  	},
->  };
->  
-> -#if IS_ENABLED(CONFIG_REGULATOR)
-> -static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
-> +static int _pmbus_is_enabled(struct device *dev, u8 page)
->  {
-> -	struct device *dev = rdev_get_dev(rdev);
->  	struct i2c_client *client = to_i2c_client(dev->parent);
-> -	struct pmbus_data *data = i2c_get_clientdata(client);
-> -	u8 page = rdev_get_id(rdev);
->  	int ret;
->  
-> -	mutex_lock(&data->update_lock);
->  	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-> -	mutex_unlock(&data->update_lock);
->  
->  	if (ret < 0)
->  		return ret;
-> @@ -2754,58 +2748,38 @@ static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
->  	return !!(ret & PB_OPERATION_CONTROL_ON);
->  }
->  
-> -static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
-> +static int __maybe_unused pmbus_is_enabled(struct device *dev, u8 page)
->  {
-> -	struct device *dev = rdev_get_dev(rdev);
->  	struct i2c_client *client = to_i2c_client(dev->parent);
->  	struct pmbus_data *data = i2c_get_clientdata(client);
-> -	u8 page = rdev_get_id(rdev);
->  	int ret;
->  
->  	mutex_lock(&data->update_lock);
-> -	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-> -				     PB_OPERATION_CONTROL_ON,
-> -				     enable ? PB_OPERATION_CONTROL_ON : 0);
-> +	ret = _pmbus_is_enabled(dev, page);
->  	mutex_unlock(&data->update_lock);
->  
-> -	return ret;
-> -}
-> -
-> -static int pmbus_regulator_enable(struct regulator_dev *rdev)
-> -{
-> -	return _pmbus_regulator_on_off(rdev, 1);
-> -}
-> -
-> -static int pmbus_regulator_disable(struct regulator_dev *rdev)
-> -{
-> -	return _pmbus_regulator_on_off(rdev, 0);
-> +	return !!(ret & PB_OPERATION_CONTROL_ON);
->  }
->  
-> -static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
-> +static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
->  {
->  	int i, status;
->  	const struct pmbus_status_category *cat;
->  	const struct pmbus_status_assoc *bit;
-> -	struct device *dev = rdev_get_dev(rdev);
-> -	struct i2c_client *client = to_i2c_client(dev->parent);
-> -	struct pmbus_data *data = i2c_get_clientdata(client);
-> -	u8 page = rdev_get_id(rdev);
-> +	struct device *dev = data->dev;
-> +	struct i2c_client *client = to_i2c_client(dev);
->  	int func = data->info->func[page];
->  
->  	*flags = 0;
->  
-> -	mutex_lock(&data->update_lock);
-> -
->  	for (i = 0; i < ARRAY_SIZE(pmbus_status_flag_map); i++) {
->  		cat = &pmbus_status_flag_map[i];
->  		if (!(func & cat->func))
->  			continue;
->  
->  		status = _pmbus_read_byte_data(client, page, cat->reg);
-> -		if (status < 0) {
-> -			mutex_unlock(&data->update_lock);
-> +		if (status < 0)
->  			return status;
-> -		}
->  
->  		for (bit = cat->bits; bit->pflag; bit++) {
->  			if (status & bit->pflag)
-> @@ -2823,11 +2797,10 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->  	 * REGULATOR_ERROR_<foo>_WARN.
->  	 */
->  	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
-> -	mutex_unlock(&data->update_lock);
->  	if (status < 0)
->  		return status;
->  
-> -	if (pmbus_regulator_is_enabled(rdev)) {
-> +	if (_pmbus_is_enabled(dev, page)) {
->  		if (status & PB_STATUS_OFF)
->  			*flags |= REGULATOR_ERROR_FAIL;
->  
-> @@ -2855,6 +2828,59 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->  	return 0;
->  }
->  
-> +static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&data->update_lock);
-> +	ret = _pmbus_get_flags(data, page, flags);
-> +	mutex_unlock(&data->update_lock);
-> +
-> +	return ret;
-> +}
-> +
-> +#if IS_ENABLED(CONFIG_REGULATOR)
-> +static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
-> +{
-> +	return pmbus_is_enabled(rdev_get_dev(rdev), rdev_get_id(rdev));
-> +}
-> +
-> +static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	u8 page = rdev_get_id(rdev);
-> +	int ret;
-> +
-> +	mutex_lock(&data->update_lock);
-> +	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-> +				     PB_OPERATION_CONTROL_ON,
-> +				     enable ? PB_OPERATION_CONTROL_ON : 0);
-> +	mutex_unlock(&data->update_lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int pmbus_regulator_enable(struct regulator_dev *rdev)
-> +{
-> +	return _pmbus_regulator_on_off(rdev, 1);
-> +}
-> +
-> +static int pmbus_regulator_disable(struct regulator_dev *rdev)
-> +{
-> +	return _pmbus_regulator_on_off(rdev, 0);
-> +}
-> +
-> +static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +
-> +	return pmbus_get_flags(data, rdev_get_id(rdev), flags);
-> +}
-> +
->  static int pmbus_regulator_get_status(struct regulator_dev *rdev)
->  {
->  	struct device *dev = rdev_get_dev(rdev);
+diff --git a/Documentation/hwmon/ftsteutates.rst b/Documentation/hwmon/fts=
+teutates.rst
+index b3bfec36661d..2abd16830c99 100644
+=2D-- a/Documentation/hwmon/ftsteutates.rst
++++ b/Documentation/hwmon/ftsteutates.rst
+@@ -36,7 +36,7 @@ correct path to the alarm file::
+
+ 	echo 0 >XXXX_alarm
+
+-Specification of the chip can be found here:
++Specifications of the chip can be found at the `Kontron FTP Server <http:=
+//ftp.kontron.com/>`_ (username =3D "anonymous", no password required)
++under the following path:
+
+=2D- ftp://ftp.ts.fujitsu.com/pub/Mainboard-OEM-Sales/Services/Software&To=
+ols/Linux_SystemMonitoring&Watchdog&GPIO/BMC-Teutates_Specification_V1.21.=
+pdf
+=2D- ftp://ftp.ts.fujitsu.com/pub/Mainboard-OEM-Sales/Services/Software&To=
+ols/Linux_SystemMonitoring&Watchdog&GPIO/Fujitsu_mainboards-1-Sensors_HowT=
+o-en-US.pdf
++  /Services/Software_Tools/Linux_SystemMonitoring_Watchdog_GPIO/BMC-Teuta=
+tes_Specification_V1.21.pdf
+=2D-
+2.30.2
+
