@@ -2,116 +2,129 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF4BDC64ED6
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Feb 2023 09:20:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C843BC64ED8
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Feb 2023 13:41:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjB0JUH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Feb 2023 04:20:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
+        id S229598AbjB0Nlc convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 27 Feb 2023 08:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbjB0JTv (ORCPT
+        with ESMTP id S229501AbjB0Nlc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Feb 2023 04:19:51 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F60023314;
-        Mon, 27 Feb 2023 01:15:45 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id n6so4631612plf.5;
-        Mon, 27 Feb 2023 01:15:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LpHa+9Qi+yl092RQ8sVwxFPgJ03A4k/EwplJBc+eab4=;
-        b=iK7j2q5qHQp1pfs5IP0HTzd/uPC47wQjVyQvpCU3m6dlQgdptSsWLU7vt5RbjGj5GQ
-         g+ISkHhj3wHOff1tKye952+0Ax4xj+BUWsDapEwfz45jCTest1KVZqrQ+jE3hnZiKLF9
-         V2Ionr696u9D0I5/Ks+mUmBzkagy10qu67vmi+BnH1O7CRPolulBztXpTSm8DQ6dSnYm
-         rwnukaNqakaE2km7+VzTMs4j7tdK/sjpLY4eWtM4UZC8rmcaaM3ccpQseNI8+3dEqiq5
-         x5JjlKpMyH0rVC3qnmFx4vJUKRsd0+yQQyzz5eX1xQLXzd27h2dxS8oEC3XwL5zicmuN
-         +Cfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LpHa+9Qi+yl092RQ8sVwxFPgJ03A4k/EwplJBc+eab4=;
-        b=FjW0cJF7pMoC3hoyke6MfnMAbZV/Iovvx86QF8BDGMHAPv4Bfm4dDdzMlG2b7glH7E
-         DhZLjCNjGxbQV7oDn/Weo0SYck5cPENd3R+SVuiJqUNlLTyy9rqyXcfRcjjZqghHMKd+
-         E6fbadN7VjxZPJdK6ejXk+uKL8ef1vyImGJ47Z1fH+818UzEH0+CjS85gvu/TlwPFwQg
-         lWpkHpP1zVGqdHwbkkwuEPF1Dgs/0IjvSr8lsSB7jJwRNQ15/XgUFclxJswn6Lqoqhqj
-         hKQc/Z+JZqDsKJM4Hzmnb43A+Zhl0zSwkDfbZLkiRcJjsVBkef/9zFYOuGjhf1WRd5OK
-         3vVg==
-X-Gm-Message-State: AO0yUKV4q03h2kQWPG8c7gm/Fg4l+bkqcNE7jMjF7MrXDOfrSzdGZMs+
-        EQOpWyu1fu0QsAuTvA2mXgg=
-X-Google-Smtp-Source: AK7set/irtrfwp+D585jGDRQJKWGfP6zlsSqYMAS9eOzzC2CUH9T80cEz8Yk2/UplVVK+1ZzzdbFJA==
-X-Received: by 2002:a17:902:f7c5:b0:19c:dd2e:d508 with SMTP id h5-20020a170902f7c500b0019cdd2ed508mr8032884plw.4.1677489340309;
-        Mon, 27 Feb 2023 01:15:40 -0800 (PST)
-Received: from localhost.localdomain ([103.116.245.58])
-        by smtp.gmail.com with ESMTPSA id iy12-20020a170903130c00b00183c6784704sm4068281plb.291.2023.02.27.01.15.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Feb 2023 01:15:39 -0800 (PST)
-From:   void0red <void0red@gmail.com>
-To:     linux@roeck-us.net
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mezin.alexander@gmail.com,
-        void0red@gmail.com
-Subject: [PATCH v3] hwmon: nzxt-smart2: handle failure of devm_add_action in nzxt_smart2_hid_probe
-Date:   Mon, 27 Feb 2023 17:15:34 +0800
-Message-Id: <20230227091534.907101-1-void0red@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <f5043281-9b3e-e454-16fe-ef4cde36dfdb@roeck-us.net>
-References: <f5043281-9b3e-e454-16fe-ef4cde36dfdb@roeck-us.net>
+        Mon, 27 Feb 2023 08:41:32 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354DC9008;
+        Mon, 27 Feb 2023 05:41:30 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 8FF8824E336;
+        Mon, 27 Feb 2023 21:41:28 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Feb
+ 2023 21:41:28 +0800
+Received: from ubuntu.localdomain (113.72.145.171) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 27 Feb
+ 2023 21:41:27 +0800
+From:   Hal Feng <hal.feng@starfivetech.com>
+To:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+CC:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 0/2] hwmon: Add StarFive JH71X0 temperature sensor
+Date:   Mon, 27 Feb 2023 21:41:23 +0800
+Message-ID: <20230227134125.120638-1-hal.feng@starfivetech.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [113.72.145.171]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Kang Chen <void0red@gmail.com>
+This adds a driver for the temperature sensor on the JH7100 and JH7110,
+RISC-V SoCs by StarFive Technology Co. Ltd.. The JH7100 is used on the
+BeagleV Starlight board and StarFive VisionFive board. The JH7110 is
+used on the StarFive VisionFive 2 board.
 
-1. replace the devm_add_action with devm_add_action_or_reset to ensure
-the mutex lock can be destroyed when it fails.
-2. use local wrapper function mutex_fini instead of mutex_destroy to
-avoid undefined behaviours.
-3. add a check of devm_add_action_or_reset and return early when it fails.
+v5:
+* Dropp the "interrupts" property in dt-bindings.
+* Reword the commit message of patch 2.
+* Use continuous mode instead of single mode and drop the interrupt
+  related code used in the single mode.
+* Add the missing "default:" statements in the driver.
+* Change the device name to "sfctemp" which avoids a warning when startup.
 
-Link: https://lore.kernel.org/all/f5043281-9b3e-e454-16fe-ef4cde36dfdb@roeck-us.net
-Signed-off-by: Kang Chen <void0red@gmail.com>
----
-v3 -> v2: use local function and devm_add_action_or_rest
-v2 -> v1: split the patch
+v4:
+* Change the node name from "tmon" to "temperature-sensor" in dt-binding
+  example, which is more generic.
+* Add support for StarFive JH7110 SoC besides JH7100.
+* Add clock and reset support in the dt-bindings and driver.
+* Add the missing headers in patch 2.
+* Use devm_platform_ioremap_resource() to remap instead of
+  platform_get_resource() and devm_ioremap_resource().
+* Use dev_err_probe() instead of dev_err().
+* Add Signed-off-by tag for Hal Feng. Add Co-developed-by tag for
+  Samin Guo in patch 2.
 
- drivers/hwmon/nzxt-smart2.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+v3:
+* Handle timeouts from wait_for_completion_interruptible_timeout
+  properly.
 
-diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-index 2b93ba896..340002581 100644
---- a/drivers/hwmon/nzxt-smart2.c
-+++ b/drivers/hwmon/nzxt-smart2.c
-@@ -721,6 +721,11 @@ static int __maybe_unused nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
- 	return init_device(drvdata, drvdata->update_interval);
- }
- 
-+static void mutex_fini(void *lock)
-+{
-+	mutex_destroy(lock);
-+}
-+
- static int nzxt_smart2_hid_probe(struct hid_device *hdev,
- 				 const struct hid_device_id *id)
- {
-@@ -737,8 +742,9 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
- 	init_waitqueue_head(&drvdata->wq);
- 
- 	mutex_init(&drvdata->mutex);
--	devm_add_action(&hdev->dev, (void (*)(void *))mutex_destroy,
--			&drvdata->mutex);
-+	ret = devm_add_action_or_reset(&hdev->dev, mutex_fini, &drvdata->mutex);
-+	if (ret)
-+		return ret;
- 
- 	ret = hid_parse(hdev);
- 	if (ret)
+v2:
+* Fix checkpatch.pl --strict warnings
+  - Add myself to MAINTAINERS
+  - Fix multiline comments
+  - Use proper case and whitespace for #defines
+  - Add comment to sfctemp::lock mutex.
+* Remaining comments by Guenter Roeck
+  - Add Documentation/hwmon/sfctemp.rst
+  - Use devm_add_action() and devm_hwmon_device_register_with_info()
+    instead of a driver .remove function.
+  - Don't do test conversion at probe time.
+  - #include <linux/io.h>
+  - Remove unused #defines
+  - Use int return variable in sfctemp_convert().
+* Add Samin's Signed-off-by to patch 2/2
+
+History:
+v4: https://lore.kernel.org/all/20230207072314.62040-1-hal.feng@starfivetech.com/
+v3: https://lore.kernel.org/all/20210726171802.1052716-1-kernel@esmil.dk/
+v2: https://lore.kernel.org/all/20210624162108.832518-1-esmil@mailme.dk/
+v1: https://lore.kernel.org/all/20210616181545.496149-1-kernel@esmil.dk/
+
+Emil Renner Berthing (2):
+  dt-bindings: hwmon: Add starfive,jh71x0-temp
+  hwmon: (sfctemp) Add StarFive JH71x0 temperature sensor
+
+ .../bindings/hwmon/starfive,jh71x0-temp.yaml  |  70 ++++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/sfctemp.rst               |  33 ++
+ MAINTAINERS                                   |   8 +
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/sfctemp.c                       | 331 ++++++++++++++++++
+ 7 files changed, 454 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
+ create mode 100644 Documentation/hwmon/sfctemp.rst
+ create mode 100644 drivers/hwmon/sfctemp.c
+
 -- 
-2.34.1
+2.38.1
 
