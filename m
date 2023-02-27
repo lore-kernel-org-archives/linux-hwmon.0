@@ -2,36 +2,36 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31CF3C6FA8E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Feb 2023 02:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0B92C64ED6
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Feb 2023 02:20:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbjB0CQX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 26 Feb 2023 21:16:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
+        id S230137AbjB0CU1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 26 Feb 2023 21:20:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbjB0CP2 (ORCPT
+        with ESMTP id S231426AbjB0CTu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 26 Feb 2023 21:15:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24166E89;
-        Sun, 26 Feb 2023 18:12:45 -0800 (PST)
+        Sun, 26 Feb 2023 21:19:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5091B565;
+        Sun, 26 Feb 2023 18:15:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ACAC460D36;
-        Mon, 27 Feb 2023 02:11:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31C76C4339C;
-        Mon, 27 Feb 2023 02:11:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5643CB80CBC;
+        Mon, 27 Feb 2023 02:07:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD6CC4339E;
+        Mon, 27 Feb 2023 02:07:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677463861;
-        bh=c7puZbilZFvvXT2THSOY51c5Oxpm4SLteKM616xg66w=;
+        s=k20201202; t=1677463649;
+        bh=MkuqmGABmpPbtVqzI0cFzBhZ0LR/l/lqJjLH+dIwu9g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vLRvs+BmaaD+KAYBm2GbsfBFnqjAH8PlRkiNQkopCz2Es27vRHiNNKmgkAW+/GyWZ
-         t9Q0fvcVN8rCai8FnfSB5Mqd2BCm/qKeKM8ts08GSEb8IA1HKxXiAvn07HUlxWLSBh
-         0WMhwIN5aawELS2EilSwbUIkM6ePCZZd9RClQEIjz9e1jB7sOLrHM8fAKDOQpAwo4U
-         Yqms0n8GtsDs39KZksVU2ytzHDPoMdM2i4GhsRPma15vD3+J1AdROLOuenN7XOqGLP
-         q8kcaAeQ8aWfhcfh9bmQWl2wBRJAkSh5e1pRzyZHbjz45h7P2FhKjFpCBBD/mmQG9N
-         yrucrCcnNiFUQ==
+        b=NR+GsfepVk9fcAb8N/xLACb00TR03h+2Rp7RS1QR7ClNukzSpYdUHvDrYYARGXMUY
+         kvjZlwVH2PZ/fmhMNxXvwMA16Qvh7nce8SBSQ8RiPdzicCwyL/lo96zkJUqQbb1vR8
+         H73YwzYOvKig5Ic7sblhrbOyrHesG5C85BIil3tMSC7bifRRKfsvW31+6dmOXz/Qkp
+         2JT810+ngVldan7CxngFWXfuCcv47W3U8ZUUYbqQfLq1/RiOO1/TWW9zHOCZKq5sDU
+         IvXLFW6wdRwDsTkDjn7rgnsWh3vv/NlmV2/OqkZegAT3oEctQ2FytRPcI5gOUUwMht
+         qR20hwvCyNLsQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Robin Murphy <robin.murphy@arm.com>,
@@ -39,12 +39,12 @@ Cc:     Robin Murphy <robin.murphy@arm.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, fenghua.yu@intel.com,
         jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 10/15] hwmon: (coretemp) Simplify platform device handling
-Date:   Sun, 26 Feb 2023 21:10:29 -0500
-Message-Id: <20230227021038.1052958-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 40/58] hwmon: (coretemp) Simplify platform device handling
+Date:   Sun, 26 Feb 2023 21:04:38 -0500
+Message-Id: <20230227020457.1048737-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230227021038.1052958-1-sashal@kernel.org>
-References: <20230227021038.1052958-1-sashal@kernel.org>
+In-Reply-To: <20230227020457.1048737-1-sashal@kernel.org>
+References: <20230227020457.1048737-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -92,7 +92,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 58 insertions(+), 70 deletions(-)
 
 diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index 7a64ff6a8779c..e232f44f6c9ac 100644
+index 9bee4d33fbdf0..baaf8af4cb443 100644
 --- a/drivers/hwmon/coretemp.c
 +++ b/drivers/hwmon/coretemp.c
 @@ -550,66 +550,49 @@ static void coretemp_remove_core(struct platform_data *pdata, int indx)
