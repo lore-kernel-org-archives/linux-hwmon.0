@@ -2,160 +2,329 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F273CC7EE2E
-	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Feb 2023 22:56:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4543C6FA8E
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Feb 2023 02:05:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjBZW4Y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 26 Feb 2023 17:56:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34896 "EHLO
+        id S229999AbjB0CFU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 26 Feb 2023 21:05:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjBZWzw (ORCPT
+        with ESMTP id S230011AbjB0CFM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 26 Feb 2023 17:55:52 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B9F1688D
-        for <linux-hwmon@vger.kernel.org>; Sun, 26 Feb 2023 14:55:24 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id q16so4434113wrw.2
-        for <linux-hwmon@vger.kernel.org>; Sun, 26 Feb 2023 14:55:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BXmjkOh9eXvrRm2J04oJvypw5mYaRO/S2JmWwbjlE4k=;
-        b=Ulq4K5wYfUCqgbuDpFdoU/FOsRM5gdvtGGJkxmOE5wTgsg8FIIYuLq5AnAAeMVFuX1
-         LuOO09UYlRBUpR9mb09CAXegY4XZVnLCEy6RM6jyf7fWlzG+Kpg3svI+D8616y86Pr0F
-         sxLGOI83muyWQyyhbDjOZeKdZj1XUykI3vRTYNWyfd3Xkdunxi96Zfb1Zew/OnNkIcG9
-         617PBpyvxp/npDLo+QPrUpDIwqYgJl4vPYKpkjLL7uxXa1lk950fT9tkG6kIeOaDvC3x
-         uIgyvdHhCUzuCQnhd8yWU6ttAi/z56grDblwBPnCwVgPK3xZj6gF3wqDme7D0C97Bkne
-         15qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BXmjkOh9eXvrRm2J04oJvypw5mYaRO/S2JmWwbjlE4k=;
-        b=Iavj8khjw5NmODjDedhaClvLT7DoR3hui6c4RfxuketTgrZPpfTTYLCZZhgpn0wpCP
-         6mpwYzEsiIVswHMT5HQeKpA052+cdQc7eqNavShBNlGLFd8zIYm6jjXmlOVhxJSU4/Sv
-         V2/STrFGB4jCvAS1RowYOg7WYM6ZuEqdMwRds67ML/1ulv3SZgfGStO9ljLJzmViTlQ0
-         EvjVQRFdz/NYq0Gq6Z31+1lQMgpB6kJQV/s+6WfdMRAVWebCvq4ArAq8zL+YKKjzmtOO
-         h8yRiW8gNONFDfunB0rsTWVwFMXtNBhkJPekeV2qaaz/PcKyB8SFH827ZE6e5U1C08Ns
-         JuUw==
-X-Gm-Message-State: AO0yUKWOhGiG4G5vClTjKN2b2fH8ywugK2CmuyJ3SvlXLetHcvfqRR2u
-        SLouS4ImrdzHfUCszIeTB/PT2A==
-X-Google-Smtp-Source: AK7set8xFxyrABC0AqAa0V50yAR8C3hGuB3+h4x/RKhpauXdENa+qLIafMuCLLU6M15u8Xwy0zf5hg==
-X-Received: by 2002:a05:6000:1801:b0:2c7:7701:2578 with SMTP id m1-20020a056000180100b002c777012578mr7274267wrh.54.1677452110349;
-        Sun, 26 Feb 2023 14:55:10 -0800 (PST)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:8baa:6b32:391b:62de])
-        by smtp.gmail.com with ESMTPSA id d10-20020a05600c3aca00b003eb369abd92sm6138074wms.2.2023.02.26.14.55.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 14:55:09 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sun, 26 Feb 2023 21:05:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CBC15150;
+        Sun, 26 Feb 2023 18:04:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C642B80CA7;
+        Mon, 27 Feb 2023 02:03:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60920C433B4;
+        Mon, 27 Feb 2023 02:03:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677463400;
+        bh=NrI2jcdLWThM5YcoMWB3qQGV1WoVJ7GJ1T6+dp3gZmI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SKNrgfZqYGojYHoC7D1TxpGv5LAr8yKF/x9QBr2D9FrUY1ZGMA5QicwxQfGIGdwQl
+         YFtxIPyGBenSDKh6J+byPzWCrkzrVJYnU3GXV59phAm9AE92EURVHIwU+yMO41hrYR
+         8ip02uyhs4q2hYJ5D7n1ne5P2FemvpETke5dbEJHRo9SfdjeJIRkZ7uclg/6a2LoBZ
+         atIBSc7ZC7chxRy0aDyZc4wrcvx0esl7YWuwM5FAtJdLBd2Ufgx4Uelen5arNzJXos
+         AvVi9BGA1E2xStHOxohrzpXfljpMzdhAQG0tjBlx+OnIKLK3BJ/FgnBKZNA5IN9UkC
+         j2ws2iJWwlR3g==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        linux-acpi@vger.kernel.org (open list:ACPI THERMAL DRIVER),
-        linux-hwmon@vger.kernel.org (open list:HARDWARE MONITORING)
-Subject: [PATCH v3 12/20] thermal: Add a thermal zone id accessor
-Date:   Sun, 26 Feb 2023 23:53:58 +0100
-Message-Id: <20230226225406.979703-13-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230226225406.979703-1-daniel.lezcano@linaro.org>
-References: <20230226225406.979703-1-daniel.lezcano@linaro.org>
+        Sasha Levin <sashal@kernel.org>, fenghua.yu@intel.com,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.2 41/60] hwmon: (coretemp) Simplify platform device handling
+Date:   Sun, 26 Feb 2023 21:00:26 -0500
+Message-Id: <20230227020045.1045105-41-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230227020045.1045105-1-sashal@kernel.org>
+References: <20230227020045.1045105-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-In order to get the thermal zone id but without directly accessing the
-thermal zone device structure, add an accessor.
+From: Robin Murphy <robin.murphy@arm.com>
 
-Use the accessor in the hwmon_scmi and acpi_thermal.
+[ Upstream commit 6d03bbff456befeccdd4d663177c4d6c75d0c4ff ]
 
-No functional change intented.
+Coretemp's platform driver is unconventional. All the real work is done
+globally by the initcall and CPU hotplug notifiers, while the "driver"
+effectively just wraps an allocation and the registration of the hwmon
+interface in a long-winded round-trip through the driver core.  The whole
+logic of dynamically creating and destroying platform devices to bring
+the interfaces up and down is error prone, since it assumes
+platform_device_add() will synchronously bind the driver and set drvdata
+before it returns, thus results in a NULL dereference if drivers_autoprobe
+is turned off for the platform bus. Furthermore, the unusual approach of
+doing that from within a CPU hotplug notifier, already commented in the
+code that it deadlocks suspend, also causes lockdep issues for other
+drivers or subsystems which may want to legitimately register a CPU
+hotplug notifier from a platform bus notifier.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+All of these issues can be solved by ripping this unusual behaviour out
+completely, simply tying the platform devices to the lifetime of the
+module itself, and directly managing the hwmon interfaces from the
+hotplug notifiers. There is a slight user-visible change in that
+/sys/bus/platform/drivers/coretemp will no longer appear, and
+/sys/devices/platform/coretemp.n will remain present if package n is
+hotplugged off, but hwmon users should really only be looking for the
+presence of the hwmon interfaces, whose behaviour remains unchanged.
+
+Link: https://lore.kernel.org/lkml/20220922101036.87457-1-janusz.krzysztofik@linux.intel.com/
+Link: https://gitlab.freedesktop.org/drm/intel/issues/6641
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+Link: https://lore.kernel.org/r/20230103114620.15319-1-janusz.krzysztofik@linux.intel.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/thermal.c         | 2 +-
- drivers/hwmon/scmi-hwmon.c     | 2 +-
- drivers/thermal/thermal_core.c | 6 ++++++
- include/linux/thermal.h        | 6 ++++++
- 4 files changed, 14 insertions(+), 2 deletions(-)
+ drivers/hwmon/coretemp.c | 128 ++++++++++++++++++---------------------
+ 1 file changed, 58 insertions(+), 70 deletions(-)
 
-diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-index 392b73b3e269..255efa73ed70 100644
---- a/drivers/acpi/thermal.c
-+++ b/drivers/acpi/thermal.c
-@@ -842,7 +842,7 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- 		goto acpi_bus_detach;
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index ca7a9b373bbd6..3e440ebe2508c 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -588,66 +588,49 @@ static void coretemp_remove_core(struct platform_data *pdata, int indx)
+ 		ida_free(&pdata->ida, indx - BASE_SYSFS_ATTR_NO);
+ }
  
- 	dev_info(&tz->device->dev, "registered as thermal_zone%d\n",
--		 tz->thermal_zone->id);
-+		 thermal_zone_device_id(tz->thermal_zone));
+-static int coretemp_probe(struct platform_device *pdev)
++static int coretemp_device_add(int zoneid)
+ {
+-	struct device *dev = &pdev->dev;
++	struct platform_device *pdev;
+ 	struct platform_data *pdata;
++	int err;
  
+ 	/* Initialize the per-zone data structures */
+-	pdata = devm_kzalloc(dev, sizeof(struct platform_data), GFP_KERNEL);
++	pdata = kzalloc(sizeof(*pdata), GFP_KERNEL);
+ 	if (!pdata)
+ 		return -ENOMEM;
+ 
+-	pdata->pkg_id = pdev->id;
++	pdata->pkg_id = zoneid;
+ 	ida_init(&pdata->ida);
+-	platform_set_drvdata(pdev, pdata);
+ 
+-	pdata->hwmon_dev = devm_hwmon_device_register_with_groups(dev, DRVNAME,
+-								  pdata, NULL);
+-	return PTR_ERR_OR_ZERO(pdata->hwmon_dev);
+-}
+-
+-static int coretemp_remove(struct platform_device *pdev)
+-{
+-	struct platform_data *pdata = platform_get_drvdata(pdev);
+-	int i;
++	pdev = platform_device_alloc(DRVNAME, zoneid);
++	if (!pdev) {
++		err = -ENOMEM;
++		goto err_free_pdata;
++	}
+ 
+-	for (i = MAX_CORE_DATA - 1; i >= 0; --i)
+-		if (pdata->core_data[i])
+-			coretemp_remove_core(pdata, i);
++	err = platform_device_add(pdev);
++	if (err)
++		goto err_put_dev;
+ 
+-	ida_destroy(&pdata->ida);
++	platform_set_drvdata(pdev, pdata);
++	zone_devices[zoneid] = pdev;
  	return 0;
+-}
  
-diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
-index 046ac157749d..364199b332c0 100644
---- a/drivers/hwmon/scmi-hwmon.c
-+++ b/drivers/hwmon/scmi-hwmon.c
-@@ -220,7 +220,7 @@ static int scmi_thermal_sensor_register(struct device *dev,
- 			sensor->name);
- 	} else {
- 		dev_dbg(dev, "Sensor '%s' attached to thermal zone ID:%d\n",
--			sensor->name, tzd->id);
-+			sensor->name, thermal_zone_device_id(tzd));
+-static struct platform_driver coretemp_driver = {
+-	.driver = {
+-		.name = DRVNAME,
+-	},
+-	.probe = coretemp_probe,
+-	.remove = coretemp_remove,
+-};
++err_put_dev:
++	platform_device_put(pdev);
++err_free_pdata:
++	kfree(pdata);
++	return err;
++}
+ 
+-static struct platform_device *coretemp_device_add(unsigned int cpu)
++static void coretemp_device_remove(int zoneid)
+ {
+-	int err, zoneid = topology_logical_die_id(cpu);
+-	struct platform_device *pdev;
+-
+-	if (zoneid < 0)
+-		return ERR_PTR(-ENOMEM);
+-
+-	pdev = platform_device_alloc(DRVNAME, zoneid);
+-	if (!pdev)
+-		return ERR_PTR(-ENOMEM);
+-
+-	err = platform_device_add(pdev);
+-	if (err) {
+-		platform_device_put(pdev);
+-		return ERR_PTR(err);
+-	}
++	struct platform_device *pdev = zone_devices[zoneid];
++	struct platform_data *pdata = platform_get_drvdata(pdev);
+ 
+-	zone_devices[zoneid] = pdev;
+-	return pdev;
++	ida_destroy(&pdata->ida);
++	kfree(pdata);
++	platform_device_unregister(pdev);
+ }
+ 
+ static int coretemp_cpu_online(unsigned int cpu)
+@@ -671,7 +654,10 @@ static int coretemp_cpu_online(unsigned int cpu)
+ 	if (!cpu_has(c, X86_FEATURE_DTHERM))
+ 		return -ENODEV;
+ 
+-	if (!pdev) {
++	pdata = platform_get_drvdata(pdev);
++	if (!pdata->hwmon_dev) {
++		struct device *hwmon;
++
+ 		/* Check the microcode version of the CPU */
+ 		if (chk_ucode_version(cpu))
+ 			return -EINVAL;
+@@ -682,9 +668,11 @@ static int coretemp_cpu_online(unsigned int cpu)
+ 		 * online. So, initialize per-pkg data structures and
+ 		 * then bring this core online.
+ 		 */
+-		pdev = coretemp_device_add(cpu);
+-		if (IS_ERR(pdev))
+-			return PTR_ERR(pdev);
++		hwmon = hwmon_device_register_with_groups(&pdev->dev, DRVNAME,
++							  pdata, NULL);
++		if (IS_ERR(hwmon))
++			return PTR_ERR(hwmon);
++		pdata->hwmon_dev = hwmon;
+ 
+ 		/*
+ 		 * Check whether pkgtemp support is available.
+@@ -694,7 +682,6 @@ static int coretemp_cpu_online(unsigned int cpu)
+ 			coretemp_add_core(pdev, cpu, 1);
  	}
  
+-	pdata = platform_get_drvdata(pdev);
+ 	/*
+ 	 * Check whether a thread sibling is already online. If not add the
+ 	 * interface for this CPU core.
+@@ -713,18 +700,14 @@ static int coretemp_cpu_offline(unsigned int cpu)
+ 	struct temp_data *tdata;
+ 	int i, indx = -1, target;
+ 
+-	/*
+-	 * Don't execute this on suspend as the device remove locks
+-	 * up the machine.
+-	 */
++	/* No need to tear down any interfaces for suspend */
+ 	if (cpuhp_tasks_frozen)
+ 		return 0;
+ 
+ 	/* If the physical CPU device does not exist, just return */
+-	if (!pdev)
+-		return 0;
+-
+ 	pd = platform_get_drvdata(pdev);
++	if (!pd->hwmon_dev)
++		return 0;
+ 
+ 	for (i = 0; i < NUM_REAL_CORES; i++) {
+ 		if (pd->cpu_map[i] == topology_core_id(cpu)) {
+@@ -756,13 +739,14 @@ static int coretemp_cpu_offline(unsigned int cpu)
+ 	}
+ 
+ 	/*
+-	 * If all cores in this pkg are offline, remove the device. This
+-	 * will invoke the platform driver remove function, which cleans up
+-	 * the rest.
++	 * If all cores in this pkg are offline, remove the interface.
+ 	 */
++	tdata = pd->core_data[PKG_SYSFS_ATTR_NO];
+ 	if (cpumask_empty(&pd->cpumask)) {
+-		zone_devices[topology_logical_die_id(cpu)] = NULL;
+-		platform_device_unregister(pdev);
++		if (tdata)
++			coretemp_remove_core(pd, PKG_SYSFS_ATTR_NO);
++		hwmon_device_unregister(pd->hwmon_dev);
++		pd->hwmon_dev = NULL;
+ 		return 0;
+ 	}
+ 
+@@ -770,7 +754,6 @@ static int coretemp_cpu_offline(unsigned int cpu)
+ 	 * Check whether this core is the target for the package
+ 	 * interface. We need to assign it to some other cpu.
+ 	 */
+-	tdata = pd->core_data[PKG_SYSFS_ATTR_NO];
+ 	if (tdata && tdata->cpu == cpu) {
+ 		target = cpumask_first(&pd->cpumask);
+ 		mutex_lock(&tdata->update_lock);
+@@ -789,7 +772,7 @@ static enum cpuhp_state coretemp_hp_online;
+ 
+ static int __init coretemp_init(void)
+ {
+-	int err;
++	int i, err;
+ 
+ 	/*
+ 	 * CPUID.06H.EAX[0] indicates whether the CPU has thermal
+@@ -805,20 +788,22 @@ static int __init coretemp_init(void)
+ 	if (!zone_devices)
+ 		return -ENOMEM;
+ 
+-	err = platform_driver_register(&coretemp_driver);
+-	if (err)
+-		goto outzone;
++	for (i = 0; i < max_zones; i++) {
++		err = coretemp_device_add(i);
++		if (err)
++			goto outzone;
++	}
+ 
+ 	err = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "hwmon/coretemp:online",
+ 				coretemp_cpu_online, coretemp_cpu_offline);
+ 	if (err < 0)
+-		goto outdrv;
++		goto outzone;
+ 	coretemp_hp_online = err;
  	return 0;
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 913ba9ca9792..46dedfe061df 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1390,6 +1390,12 @@ const char *thermal_zone_device_type(struct thermal_zone_device *tzd)
+ 
+-outdrv:
+-	platform_driver_unregister(&coretemp_driver);
+ outzone:
++	while (i--)
++		coretemp_device_remove(i);
+ 	kfree(zone_devices);
+ 	return err;
  }
- EXPORT_SYMBOL_GPL(thermal_zone_device_type);
+@@ -826,8 +811,11 @@ module_init(coretemp_init)
  
-+int thermal_zone_device_id(struct thermal_zone_device *tzd)
-+{
-+	return tzd->id;
-+}
-+EXPORT_SYMBOL_GPL(thermal_zone_device_id);
+ static void __exit coretemp_exit(void)
+ {
++	int i;
 +
- /**
-  * thermal_zone_device_unregister - removes the registered thermal zone device
-  * @tz: the thermal zone device to remove
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 21686e676b3d..eb80cee4f64f 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -367,6 +367,7 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
- 
- void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
- const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
-+int thermal_zone_device_id(struct thermal_zone_device *tzd);
- 
- int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
- 				     struct thermal_cooling_device *,
-@@ -449,6 +450,11 @@ static inline const char *thermal_zone_device_type(struct thermal_zone_device *t
- 	return NULL;
+ 	cpuhp_remove_state(coretemp_hp_online);
+-	platform_driver_unregister(&coretemp_driver);
++	for (i = 0; i < max_zones; i++)
++		coretemp_device_remove(i);
+ 	kfree(zone_devices);
  }
- 
-+static inline int thermal_zone_device_id(struct thermal_zone_device *tzd)
-+{
-+	return -ENODEV;
-+}
-+
- static inline int thermal_zone_device_enable(struct thermal_zone_device *tz)
- { return -ENODEV; }
- 
+ module_exit(coretemp_exit)
 -- 
-2.34.1
+2.39.0
 
