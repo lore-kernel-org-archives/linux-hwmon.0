@@ -2,160 +2,149 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 916F1C64ED6
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Feb 2023 11:24:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0F35C64ED6
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Feb 2023 13:22:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbjB1LYa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Feb 2023 06:24:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
+        id S229574AbjB1NWW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Feb 2023 08:22:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbjB1LYK (ORCPT
+        with ESMTP id S229471AbjB1NWV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:24:10 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF96EF83
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 Feb 2023 03:23:39 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id p26so6136274wmc.4
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 Feb 2023 03:23:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677583411;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BXmjkOh9eXvrRm2J04oJvypw5mYaRO/S2JmWwbjlE4k=;
-        b=soFl3x2mfMMF67I1FvokputhjZuMW2otf4WTnRYVuV+k0mQ/OS+fZdLqmnd3H6OG40
-         OkwqOSBW3UecWgcNxcHsSeCNOPkN1GE9jymZncVh/LfB3gXEkvPKtCEDXHmZbBtHL11x
-         Pthf2ZgB5Afbg/MXm18ge1cBvHUlXy9yVwciggl7ITvUnVO6U2Knf767eVqWTuBWrL8Z
-         Iei3Mwbk5rYDseKP50HVTiX9cc1nSZoXlH7oeuJ2Oz7Qpi1n/IPHb1eOsrQDtDPYSz13
-         /AbZBMJaTOhBkSIKA+bULSgW/pDu5a9ttyNypyLnA0wPkjPWc4j/4KkdeUHED+PvokAK
-         mInw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677583411;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BXmjkOh9eXvrRm2J04oJvypw5mYaRO/S2JmWwbjlE4k=;
-        b=yxBwRSRnc+6jLrDgoZh0KYHTkunRVd4lvpEwt7PLl9DwNIp4XlG1mvc9LXvH1KPjVb
-         B6RQ22VFvqImF25EzKOtteMpMR81NfeHyoPSgb9EzE69ky9KWXA6wf9NsnS9UiAH4Vb4
-         o3rag/CHOxFHxUdnxubceG58xHOigmMaZLnByQqVjvhprPX/jfxCTZT1MztX6PJ1OjAq
-         3MzJlyQK9P2cT5EquP6YF5Dll2d/XpubwbXvAwEhD9DCk/12jZo0K6HTZvgAIV4gaABB
-         lUTT2JT996IcbqAe0Vk1OO6pRU0jQCvUH7Vi0zd8Aqhvz9h5nLdh2PnmhMseqkDMGqTX
-         mWvQ==
-X-Gm-Message-State: AO0yUKVkIa1n7deonvDpldh32+j3pXgDRGN42poLeOhgf4OMFJl8Yn5i
-        fNxgBoQkS32ZXR9+gQdx+kpvkg==
-X-Google-Smtp-Source: AK7set9dvRwH1Z/L2mUIbhq8bSGuKvT3+MG29F5DU0+ncVgMRWB1EKJBS587C1/MWBMg9p20wtzp4A==
-X-Received: by 2002:a05:600c:1ca3:b0:3ea:e7f6:fc2e with SMTP id k35-20020a05600c1ca300b003eae7f6fc2emr1742726wms.6.1677583411474;
-        Tue, 28 Feb 2023 03:23:31 -0800 (PST)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:6830:6390:2815:b6a5])
-        by smtp.gmail.com with ESMTPSA id z5-20020a5d6545000000b002c5501a5803sm9598130wrv.65.2023.02.28.03.23.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 03:23:31 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        linux-acpi@vger.kernel.org (open list:ACPI THERMAL DRIVER),
-        linux-hwmon@vger.kernel.org (open list:HARDWARE MONITORING)
-Subject: [PATCH v4 12/19] thermal: Add a thermal zone id accessor
-Date:   Tue, 28 Feb 2023 12:22:31 +0100
-Message-Id: <20230228112238.2312273-13-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230228112238.2312273-1-daniel.lezcano@linaro.org>
-References: <20230228112238.2312273-1-daniel.lezcano@linaro.org>
+        Tue, 28 Feb 2023 08:22:21 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C00E2E817;
+        Tue, 28 Feb 2023 05:22:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1677590495; i=w_armin@gmx.de;
+        bh=QVP466RW3LEp6uaazzvy9ds/oekGh5o8C2F8P4Qp8ME=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:References:Date:In-Reply-To;
+        b=CxxFy5YZArUXTADOk53lp2PuIQ2Shb6L1p5lVzW9xY+jnOpLl+3M3rOVsyFdSnsVO
+         /J0gOJQBwjIioilyFIqCKX9UzR/wYyKO3tNs4MOeSo4gRo0O31/qVlE8FP0pBRdCXR
+         zmRmxJjK54K25jNM7nQ/0/D4UHDKkGQXX9hHOi8Kj0HVOVw2sgSDwq+WSXPbuthZ8o
+         +CvdhWftAP4jfLSy5iqHWlBT/MmF+QToHYXG35uj+65RZ4lm4y5vUgrVpPE2/vZMji
+         q6h1y6yV9DBX1a9KQyyJubVWQ/v92RFHc2MwBCl0OW5TBIDg8EGJkjhfxj7wqN6rew
+         VXp7vTCyqjWpw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MfYLa-1or2KF27dQ-00fy6f; Tue, 28
+ Feb 2023 14:21:35 +0100
+Subject: Re: [PATCH v2 1/2] platform/x86: dell-ddv: Fix cache invalidation on
+ resume
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230218115318.20662-1-W_Armin@gmx.de>
+Message-ID: <a50ee14a-0181-5237-ddbc-5df85bd2eb6a@gmx.de>
+Date:   Tue, 28 Feb 2023 14:21:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230218115318.20662-1-W_Armin@gmx.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:clm5n+6ihDAo+6ma3hx/EJ2ABcn2sRQKbrmgBTGjMfdbPfJj4Yy
+ coetI3rlDDwiOLeVxB2OZ3UWxxPnMACCJZP2HAxdDIJvRDpmxOw+TcUgWnGHB4HfVXPMjNO
+ uee1AErrLp5//po7YzBdQ7HSbgUa3IMqmwAa/MvXwYBtGF8xE45eNaOCmcW96DGBXR9ocZx
+ kuYmvte4lrVQCZXwmW/FA==
+UI-OutboundReport: notjunk:1;M01:P0:wg9GWKTMJ5I=;x50cEz6bWGDmmyzNX1MqkPwGeE2
+ soPANucPOvq3agMLUuJs3fQXFIp0MwQ7pQxp723ZR5d4BTQXs8FSlA7PV69tfrFTMEV9LzKs7
+ UrUkW17iZj0z5OwZmRqX95d3paVAd2wbLymok29oFzTU1ygPGSVI4RbsIQzYehgroiHsD7zZq
+ JlkdbWEPdGsCGJWAD0joGv4CcTN3Qv3N7jISfk0qyvIO+X7ohjJTdVdkTg/g1jEwFMYzUeA7k
+ oRukCzevL6y8+362lDOVOLeuuev2JQ9DxMvQlX7aJN2M136EMifmzAffQf9oJ8ArWmlSkUSjU
+ lJTl27Bp0CfP3U8Ng4sRTKAs4Zqg4gYz5IPxRMRwiPJADKK2/bKQo6VquOEUuKjPcM0VhHYA7
+ Yse29P69fqUr/cXPEC3hlATjZcMJVbMn6k961amTGnTPz9qwPtlghlMgRrkJoUzXkfPbsmFUP
+ 5hTfI6vBGBJvGovA9IdkwfyiCG48rOAuhQh+tGUMdqBa2fV2v2RoejWFiC5tbtipC9hsvdFHc
+ VeoKZXTtk8wPetx7xvasisJlfOYIL8f4+MOueVdBbg6F9cv57zgWVKbHG+D0a6z0bgW4zWIpA
+ 9sKe9EGPqOQBFCafuDsgqGN1AHoFnSuetbHARpVder/5fizAPbKA5ThdKCHL+N0y+DyC0dQmk
+ XWVJp+aJzP0jXhKjHSomvNF8nxE/5puB4++/jOfU1YL5Koj77SEFy0H2aD1c9ooeHNGqsuTe4
+ cCNvTwZUsPkBAfa1O/eYGZ3dSB2DesgCqiaCxWrtL/GN/d2DDMNrYzvTiIrQnK+jn69ggI4la
+ DWMmHiVkVTBVRTP118KcPaW6RnbLPstlOFUgaheqiaxriCVw4Vbu8uPgY2j4RTvLKHdE4oDgj
+ WTwWvnGWl66o1WD6o6WRRTIUCpZ1BJf9XfyPuAJgraWLUoVr537FdRqH7w8xtEOAEgi9tLqNr
+ 9TMKiRxRKDCZdlUhsceOY0KDkyo=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-In order to get the thermal zone id but without directly accessing the
-thermal zone device structure, add an accessor.
+Am 18.02.23 um 12:53 schrieb Armin Wolf:
 
-Use the accessor in the hwmon_scmi and acpi_thermal.
+> If one or both sensor buffers could not be initialized, either
+> due to missing hardware support or due to some error during probing,
+> the resume handler will encounter undefined behaviour when
+> attempting to lock buffers then protected by an uninitialized or
+> destroyed mutex.
+> Fix this by introducing a "active" flag which is set during probe,
+> and only invalidate buffers which where flaged as "active".
+>
+> Tested on a Dell Inspiron 3505.
 
-No functional change intented.
+Hello,
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/thermal.c         | 2 +-
- drivers/hwmon/scmi-hwmon.c     | 2 +-
- drivers/thermal/thermal_core.c | 6 ++++++
- include/linux/thermal.h        | 6 ++++++
- 4 files changed, 14 insertions(+), 2 deletions(-)
+what is the status of this series? Both patches are tested on real hardware
+and work flawlessly.
 
-diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-index 392b73b3e269..255efa73ed70 100644
---- a/drivers/acpi/thermal.c
-+++ b/drivers/acpi/thermal.c
-@@ -842,7 +842,7 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- 		goto acpi_bus_detach;
- 
- 	dev_info(&tz->device->dev, "registered as thermal_zone%d\n",
--		 tz->thermal_zone->id);
-+		 thermal_zone_device_id(tz->thermal_zone));
- 
- 	return 0;
- 
-diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
-index 046ac157749d..364199b332c0 100644
---- a/drivers/hwmon/scmi-hwmon.c
-+++ b/drivers/hwmon/scmi-hwmon.c
-@@ -220,7 +220,7 @@ static int scmi_thermal_sensor_register(struct device *dev,
- 			sensor->name);
- 	} else {
- 		dev_dbg(dev, "Sensor '%s' attached to thermal zone ID:%d\n",
--			sensor->name, tzd->id);
-+			sensor->name, thermal_zone_device_id(tzd));
- 	}
- 
- 	return 0;
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 913ba9ca9792..46dedfe061df 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1390,6 +1390,12 @@ const char *thermal_zone_device_type(struct thermal_zone_device *tzd)
- }
- EXPORT_SYMBOL_GPL(thermal_zone_device_type);
- 
-+int thermal_zone_device_id(struct thermal_zone_device *tzd)
-+{
-+	return tzd->id;
-+}
-+EXPORT_SYMBOL_GPL(thermal_zone_device_id);
-+
- /**
-  * thermal_zone_device_unregister - removes the registered thermal zone device
-  * @tz: the thermal zone device to remove
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 21686e676b3d..eb80cee4f64f 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -367,6 +367,7 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
- 
- void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
- const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
-+int thermal_zone_device_id(struct thermal_zone_device *tzd);
- 
- int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
- 				     struct thermal_cooling_device *,
-@@ -449,6 +450,11 @@ static inline const char *thermal_zone_device_type(struct thermal_zone_device *t
- 	return NULL;
- }
- 
-+static inline int thermal_zone_device_id(struct thermal_zone_device *tzd)
-+{
-+	return -ENODEV;
-+}
-+
- static inline int thermal_zone_device_enable(struct thermal_zone_device *tz)
- { return -ENODEV; }
- 
--- 
-2.34.1
+Armin Wolf
 
+> Fixes: 3b7eeff93d29 ("platform/x86: dell-ddv: Add hwmon support")
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+> Changes in v2:
+> - move checking of the "active" flag inside
+>    dell_wmi_ddv_hwmon_cache_invalidate()
+> ---
+>   drivers/platform/x86/dell/dell-wmi-ddv.c | 8 +++++++-
+>   1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> index d547c9d09725..eff4e9649faf 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> @@ -96,6 +96,7 @@ struct combined_chip_info {
+>   };
+>
+>   struct dell_wmi_ddv_sensors {
+> +	bool active;
+>   	struct mutex lock;	/* protect caching */
+>   	unsigned long timestamp;
+>   	union acpi_object *obj;
+> @@ -520,6 +521,9 @@ static struct hwmon_channel_info *dell_wmi_ddv_channel_create(struct device *dev
+>
+>   static void dell_wmi_ddv_hwmon_cache_invalidate(struct dell_wmi_ddv_sensors *sensors)
+>   {
+> +	if (!sensors->active)
+> +		return;
+> +
+>   	mutex_lock(&sensors->lock);
+>   	kfree(sensors->obj);
+>   	sensors->obj = NULL;
+> @@ -530,6 +534,7 @@ static void dell_wmi_ddv_hwmon_cache_destroy(void *data)
+>   {
+>   	struct dell_wmi_ddv_sensors *sensors = data;
+>
+> +	sensors->active = false;
+>   	mutex_destroy(&sensors->lock);
+>   	kfree(sensors->obj);
+>   }
+> @@ -549,6 +554,7 @@ static struct hwmon_channel_info *dell_wmi_ddv_channel_init(struct wmi_device *w
+>   		return ERR_PTR(ret);
+>
+>   	mutex_init(&sensors->lock);
+> +	sensors->active = true;
+>
+>   	ret = devm_add_action_or_reset(&wdev->dev, dell_wmi_ddv_hwmon_cache_destroy, sensors);
+>   	if (ret < 0)
+> @@ -852,7 +858,7 @@ static int dell_wmi_ddv_resume(struct device *dev)
+>   {
+>   	struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
+>
+> -	/* Force re-reading of all sensors */
+> +	/* Force re-reading of all active sensors */
+>   	dell_wmi_ddv_hwmon_cache_invalidate(&data->fans);
+>   	dell_wmi_ddv_hwmon_cache_invalidate(&data->temps);
+>
+> --
+> 2.30.2
+>
