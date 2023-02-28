@@ -2,65 +2,67 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6334C7EE36
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Feb 2023 11:23:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 916F1C64ED6
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Feb 2023 11:24:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbjB1LXh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Feb 2023 06:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
+        id S231600AbjB1LYa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Feb 2023 06:24:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbjB1LX3 (ORCPT
+        with ESMTP id S231559AbjB1LYK (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Feb 2023 06:23:29 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF1A1B561
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 Feb 2023 03:23:11 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id bt28so9330629wrb.8
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 Feb 2023 03:23:11 -0800 (PST)
+        Tue, 28 Feb 2023 06:24:10 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF96EF83
+        for <linux-hwmon@vger.kernel.org>; Tue, 28 Feb 2023 03:23:39 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id p26so6136274wmc.4
+        for <linux-hwmon@vger.kernel.org>; Tue, 28 Feb 2023 03:23:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677583390;
+        d=linaro.org; s=google; t=1677583411;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=664mQufj36GAinUsmDVRemqvXpqdvf+x4ah+LNp4umE=;
-        b=UlM5mZ3kJrAok/fetBNqilnPJs5MtyFy0gYgd2S0uwaV+3wPD/XR+hypoBCsNYNSHt
-         +os9lWNK2cwjkn5Dm+80SKltylmVtq4EfOBVPldmrPkZU8KX3mLK2WuGlEXphbWEL/in
-         LCjKNbiMx+IANOgV4Xc0viB+mhJiTrV5+8CcXYC3wwevvjJUqRWCqmjlLJ3xJ3VjtFHD
-         aBsRXJRrhtPB1ZVbrs/IW3mtMP0ewx0fRzAJnJ3Ul5ID7y5KTZVFkqTpj8WYnhZqGANk
-         Lu0bRURjuvSHjusYiGcN0782OEOBqAielBWwKfwtCtjSDRQpY/1wCVgqHurK9kk4MPeO
-         pf8g==
+        bh=BXmjkOh9eXvrRm2J04oJvypw5mYaRO/S2JmWwbjlE4k=;
+        b=soFl3x2mfMMF67I1FvokputhjZuMW2otf4WTnRYVuV+k0mQ/OS+fZdLqmnd3H6OG40
+         OkwqOSBW3UecWgcNxcHsSeCNOPkN1GE9jymZncVh/LfB3gXEkvPKtCEDXHmZbBtHL11x
+         Pthf2ZgB5Afbg/MXm18ge1cBvHUlXy9yVwciggl7ITvUnVO6U2Knf767eVqWTuBWrL8Z
+         Iei3Mwbk5rYDseKP50HVTiX9cc1nSZoXlH7oeuJ2Oz7Qpi1n/IPHb1eOsrQDtDPYSz13
+         /AbZBMJaTOhBkSIKA+bULSgW/pDu5a9ttyNypyLnA0wPkjPWc4j/4KkdeUHED+PvokAK
+         mInw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677583390;
+        d=1e100.net; s=20210112; t=1677583411;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=664mQufj36GAinUsmDVRemqvXpqdvf+x4ah+LNp4umE=;
-        b=3qINyxE5LvfMo1yFNy0mHkHOPubKpK9V4bSpXZV5f7FpE/CkPKwDppgm2jtDsIcRnO
-         79fyWspua4CUcswi/EKuGClN2hHENP60aol/AkVYjGdb5BWOTjUXzt5oB+knmK96whzO
-         XtIVkEoCZr1EVOAjnaj/UgFhKjr6qREjowxReH4DWpGPWQG0EunTAMEa7WWqPTGi98u9
-         WRTb65CTqkamt4/YTbL+srShvSQamSONl7rpZEk/x1927IdCQ74YRXFfpI9WESTBGpnL
-         YaJY1qKHC6D+oXlzaohr4h8BzdCLJYDCq7Yy7i/e/QJRcKiaeFsbSduBoGUn8Aib+SBl
-         GRLA==
-X-Gm-Message-State: AO0yUKWjbasjfdlp3X4FINtizV4oln9IWLkubjic2LT4Z/czcnkbuNJU
-        1b1WAbg1s1xKqxfk5U/wi+jwaQ==
-X-Google-Smtp-Source: AK7set87DxlpmsUmw6OKpp3IOw9lYuszsDPcpc3vmgPu3y4eIV2YfFgdP4ZNmSUFw4JB+7pvFSMBUg==
-X-Received: by 2002:a5d:4a0d:0:b0:2c3:f026:9085 with SMTP id m13-20020a5d4a0d000000b002c3f0269085mr1794435wrq.13.1677583389751;
-        Tue, 28 Feb 2023 03:23:09 -0800 (PST)
+        bh=BXmjkOh9eXvrRm2J04oJvypw5mYaRO/S2JmWwbjlE4k=;
+        b=yxBwRSRnc+6jLrDgoZh0KYHTkunRVd4lvpEwt7PLl9DwNIp4XlG1mvc9LXvH1KPjVb
+         B6RQ22VFvqImF25EzKOtteMpMR81NfeHyoPSgb9EzE69ky9KWXA6wf9NsnS9UiAH4Vb4
+         o3rag/CHOxFHxUdnxubceG58xHOigmMaZLnByQqVjvhprPX/jfxCTZT1MztX6PJ1OjAq
+         3MzJlyQK9P2cT5EquP6YF5Dll2d/XpubwbXvAwEhD9DCk/12jZo0K6HTZvgAIV4gaABB
+         lUTT2JT996IcbqAe0Vk1OO6pRU0jQCvUH7Vi0zd8Aqhvz9h5nLdh2PnmhMseqkDMGqTX
+         mWvQ==
+X-Gm-Message-State: AO0yUKVkIa1n7deonvDpldh32+j3pXgDRGN42poLeOhgf4OMFJl8Yn5i
+        fNxgBoQkS32ZXR9+gQdx+kpvkg==
+X-Google-Smtp-Source: AK7set9dvRwH1Z/L2mUIbhq8bSGuKvT3+MG29F5DU0+ncVgMRWB1EKJBS587C1/MWBMg9p20wtzp4A==
+X-Received: by 2002:a05:600c:1ca3:b0:3ea:e7f6:fc2e with SMTP id k35-20020a05600c1ca300b003eae7f6fc2emr1742726wms.6.1677583411474;
+        Tue, 28 Feb 2023 03:23:31 -0800 (PST)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:6830:6390:2815:b6a5])
-        by smtp.gmail.com with ESMTPSA id z5-20020a5d6545000000b002c5501a5803sm9598130wrv.65.2023.02.28.03.23.09
+        by smtp.gmail.com with ESMTPSA id z5-20020a5d6545000000b002c5501a5803sm9598130wrv.65.2023.02.28.03.23.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 03:23:09 -0800 (PST)
+        Tue, 28 Feb 2023 03:23:31 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     rafael@kernel.org, daniel.lezcano@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
-        Mark Brown <broonie@kernel.org>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        linux-acpi@vger.kernel.org (open list:ACPI THERMAL DRIVER),
         linux-hwmon@vger.kernel.org (open list:HARDWARE MONITORING)
-Subject: [PATCH v4 03/19] thermal/core: Use the thermal zone 'devdata' accessor in hwmon located drivers
-Date:   Tue, 28 Feb 2023 12:22:22 +0100
-Message-Id: <20230228112238.2312273-4-daniel.lezcano@linaro.org>
+Subject: [PATCH v4 12/19] thermal: Add a thermal zone id accessor
+Date:   Tue, 28 Feb 2023 12:22:31 +0100
+Message-Id: <20230228112238.2312273-13-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230228112238.2312273-1-daniel.lezcano@linaro.org>
 References: <20230228112238.2312273-1-daniel.lezcano@linaro.org>
@@ -70,90 +72,90 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The thermal zone device structure is exposed to the different drivers
-and obviously they access the internals while that should be
-restricted to the core thermal code.
+In order to get the thermal zone id but without directly accessing the
+thermal zone device structure, add an accessor.
 
-In order to self-encapsulate the thermal core code, we need to prevent
-the drivers accessing directly the thermal zone structure and provide
-accessor functions to deal with.
+Use the accessor in the hwmon_scmi and acpi_thermal.
 
-Use the devdata accessor introduced in the previous patch.
-
-No functional changes intended.
+No functional change intented.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Guenter Roeck <linux@roeck-us.net> #hwmon
-Acked-by: Mark Brown <broonie@kernel.org>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/hwmon/hwmon.c            | 4 ++--
- drivers/hwmon/pmbus/pmbus_core.c | 2 +-
- drivers/hwmon/scmi-hwmon.c       | 2 +-
- drivers/hwmon/scpi-hwmon.c       | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/acpi/thermal.c         | 2 +-
+ drivers/hwmon/scmi-hwmon.c     | 2 +-
+ drivers/thermal/thermal_core.c | 6 ++++++
+ include/linux/thermal.h        | 6 ++++++
+ 4 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 33edb5c02f7d..3adf5c3c75ed 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -154,7 +154,7 @@ static DEFINE_IDA(hwmon_ida);
- #ifdef CONFIG_THERMAL_OF
- static int hwmon_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
- {
--	struct hwmon_thermal_data *tdata = tz->devdata;
-+	struct hwmon_thermal_data *tdata = thermal_zone_device_priv(tz);
- 	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
- 	int ret;
- 	long t;
-@@ -171,7 +171,7 @@ static int hwmon_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
+index 392b73b3e269..255efa73ed70 100644
+--- a/drivers/acpi/thermal.c
++++ b/drivers/acpi/thermal.c
+@@ -842,7 +842,7 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
+ 		goto acpi_bus_detach;
  
- static int hwmon_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
- {
--	struct hwmon_thermal_data *tdata = tz->devdata;
-+	struct hwmon_thermal_data *tdata = thermal_zone_device_priv(tz);
- 	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
- 	const struct hwmon_chip_info *chip = hwdev->chip;
- 	const struct hwmon_channel_info **info = chip->info;
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 95e95783972a..e39a327ac2a1 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -1272,7 +1272,7 @@ struct pmbus_thermal_data {
+ 	dev_info(&tz->device->dev, "registered as thermal_zone%d\n",
+-		 tz->thermal_zone->id);
++		 thermal_zone_device_id(tz->thermal_zone));
  
- static int pmbus_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
- {
--	struct pmbus_thermal_data *tdata = tz->devdata;
-+	struct pmbus_thermal_data *tdata = thermal_zone_device_priv(tz);
- 	struct pmbus_sensor *sensor = tdata->sensor;
- 	struct pmbus_data *pmbus_data = tdata->pmbus_data;
- 	struct i2c_client *client = to_i2c_client(pmbus_data->dev);
+ 	return 0;
+ 
 diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
-index e192f0c67146..046ac157749d 100644
+index 046ac157749d..364199b332c0 100644
 --- a/drivers/hwmon/scmi-hwmon.c
 +++ b/drivers/hwmon/scmi-hwmon.c
-@@ -141,7 +141,7 @@ static int scmi_hwmon_thermal_get_temp(struct thermal_zone_device *tz,
- {
- 	int ret;
- 	long value;
--	struct scmi_thermal_sensor *th_sensor = tz->devdata;
-+	struct scmi_thermal_sensor *th_sensor = thermal_zone_device_priv(tz);
+@@ -220,7 +220,7 @@ static int scmi_thermal_sensor_register(struct device *dev,
+ 			sensor->name);
+ 	} else {
+ 		dev_dbg(dev, "Sensor '%s' attached to thermal zone ID:%d\n",
+-			sensor->name, tzd->id);
++			sensor->name, thermal_zone_device_id(tzd));
+ 	}
  
- 	ret = scmi_hwmon_read_scaled_value(th_sensor->ph, th_sensor->info,
- 					   &value);
-diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
-index 4d75385f7d5e..121e5e9f487f 100644
---- a/drivers/hwmon/scpi-hwmon.c
-+++ b/drivers/hwmon/scpi-hwmon.c
-@@ -64,7 +64,7 @@ static void scpi_scale_reading(u64 *value, struct sensor_data *sensor)
+ 	return 0;
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 913ba9ca9792..46dedfe061df 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1390,6 +1390,12 @@ const char *thermal_zone_device_type(struct thermal_zone_device *tzd)
+ }
+ EXPORT_SYMBOL_GPL(thermal_zone_device_type);
  
- static int scpi_read_temp(struct thermal_zone_device *tz, int *temp)
- {
--	struct scpi_thermal_zone *zone = tz->devdata;
-+	struct scpi_thermal_zone *zone = thermal_zone_device_priv(tz);
- 	struct scpi_sensors *scpi_sensors = zone->scpi_sensors;
- 	struct scpi_ops *scpi_ops = scpi_sensors->scpi_ops;
- 	struct sensor_data *sensor = &scpi_sensors->data[zone->sensor_id];
++int thermal_zone_device_id(struct thermal_zone_device *tzd)
++{
++	return tzd->id;
++}
++EXPORT_SYMBOL_GPL(thermal_zone_device_id);
++
+ /**
+  * thermal_zone_device_unregister - removes the registered thermal zone device
+  * @tz: the thermal zone device to remove
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 21686e676b3d..eb80cee4f64f 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -367,6 +367,7 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
+ 
+ void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
+ const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
++int thermal_zone_device_id(struct thermal_zone_device *tzd);
+ 
+ int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
+ 				     struct thermal_cooling_device *,
+@@ -449,6 +450,11 @@ static inline const char *thermal_zone_device_type(struct thermal_zone_device *t
+ 	return NULL;
+ }
+ 
++static inline int thermal_zone_device_id(struct thermal_zone_device *tzd)
++{
++	return -ENODEV;
++}
++
+ static inline int thermal_zone_device_enable(struct thermal_zone_device *tz)
+ { return -ENODEV; }
+ 
 -- 
 2.34.1
 
