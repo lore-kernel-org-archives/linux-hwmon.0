@@ -2,47 +2,39 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D50B3C64ED6
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Feb 2023 14:04:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C655EC7EE23
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Feb 2023 01:58:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjB0OD7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Feb 2023 09:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50104 "EHLO
+        id S229515AbjB1B6G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 27 Feb 2023 20:58:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjB0OD7 (ORCPT
+        with ESMTP id S229491AbjB1B6G (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Feb 2023 09:03:59 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D7A65BF;
-        Mon, 27 Feb 2023 06:03:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1677506638; x=1709042638;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lhINFStdkUVW6diIibKLb9nd7HYBVPWekTlInXGunlM=;
-  b=x+bRhmtBZx2nx6R+5HhztNXI3ptTCcbN0mW6qwlzhTiOmhGUJflpU5EY
-   L3GiUbHCzI4r1j3q2qEUTZTSqMKHsd+eXnU1klZ7y4OJ7FvtfsRn/FSqu
-   0T2DvBZJi8IGUm288xeUNVUZ8WWO7y5j7oC/QlPuq3y4Dlumh3zJIskQ4
-   pxf4uFog+BUfeqQ6rnlC6UXJ+rv2GQRc/tk63jlAyhbfToFVYuIZOm+hB
-   gNGQSR9c5YTRye0f6NnBUCyNs2PEjKg2sTSJJp1Eo7XztY/YYgKSrdZul
-   4A03PTKNiW94MD2Kj3A/KkoDZr5QCQii/s+m6YfxlF84EaWMNgMax5Wpc
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,332,1673938800"; 
-   d="asc'?scan'208";a="139247079"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Feb 2023 07:03:55 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 27 Feb 2023 07:03:55 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Mon, 27 Feb 2023 07:03:53 -0700
-Date:   Mon, 27 Feb 2023 14:03:26 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Hal Feng <hal.feng@starfivetech.com>
+        Mon, 27 Feb 2023 20:58:06 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CC77DBD;
+        Mon, 27 Feb 2023 17:58:03 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 4649624E36E;
+        Tue, 28 Feb 2023 09:57:57 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 28 Feb
+ 2023 09:57:57 +0800
+Received: from [192.168.125.82] (113.72.145.171) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 28 Feb
+ 2023 09:57:56 +0800
+Message-ID: <db0036f5-e904-36b2-b3f5-3b0c520ca6aa@starfivetech.com>
+Date:   Tue, 28 Feb 2023 09:57:55 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v5 2/2] hwmon: (sfctemp) Add StarFive JH71x0 temperature
+ sensor
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
 CC:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
         Jean Delvare <jdelvare@suse.com>,
@@ -51,74 +43,61 @@ CC:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Emil Renner Berthing <emil.renner.berthing@canonical.com>,
         Samin Guo <samin.guo@starfivetech.com>,
         <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 2/2] hwmon: (sfctemp) Add StarFive JH71x0 temperature
- sensor
-Message-ID: <Y/y4LunvriV2RYwu@wendy>
 References: <20230227134125.120638-1-hal.feng@starfivetech.com>
- <20230227134125.120638-3-hal.feng@starfivetech.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="NBI72SkxZsmpX/ON"
-Content-Disposition: inline
-In-Reply-To: <20230227134125.120638-3-hal.feng@starfivetech.com>
+ <20230227134125.120638-3-hal.feng@starfivetech.com> <Y/y4LunvriV2RYwu@wendy>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <Y/y4LunvriV2RYwu@wendy>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.171]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
---NBI72SkxZsmpX/ON
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, 27 Feb 2023 14:03:26 +0000, Conor Dooley wrote:
+> On Mon, Feb 27, 2023 at 09:41:25PM +0800, Hal Feng wrote:
+>> From: Emil Renner Berthing <kernel@esmil.dk>
+>> 
+>> Add driver for the StarFive JH71x0 temperature sensor. You
+>> can enable/disable it and read temperature in milli Celcius
+>> through sysfs.
+>> 
+>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+>> Co-developed-by: Samin Guo <samin.guo@starfivetech.com>
+>> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> 
+>> +config SENSORS_SFCTEMP
+>> +	tristate "Starfive JH71x0 temperature sensor"
+>> +	depends on SOC_STARFIVE || COMPILE_TEST
+> 
+> We (or I?) am trying to homogenise RISC-V with the rest of the kernel by
+> using ARCH_FOO rather than SOC_FOO. We've currently got a mix of both,
+> due to companies that started out with RISC-V having SOC_ symbols &
+> those with history in other archs having ARCH_ ones.
+> The ARCH_ definitions landed in mainline this week, so if you end up
+> resubmitting this driver, it'd save me a conversion if you were to use
+> the ARCH_ variant.
 
-On Mon, Feb 27, 2023 at 09:41:25PM +0800, Hal Feng wrote:
-> From: Emil Renner Berthing <kernel@esmil.dk>
->=20
-> Add driver for the StarFive JH71x0 temperature sensor. You
-> can enable/disable it and read temperature in milli Celcius
-> through sysfs.
->=20
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Co-developed-by: Samin Guo <samin.guo@starfivetech.com>
-> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+Got it. I will use the ARCH_ symbol instead in the next version. Thanks.
 
-> +config SENSORS_SFCTEMP
-> +	tristate "Starfive JH71x0 temperature sensor"
-> +	depends on SOC_STARFIVE || COMPILE_TEST
+Best regards,
+Hal
 
-We (or I?) am trying to homogenise RISC-V with the rest of the kernel by
-using ARCH_FOO rather than SOC_FOO. We've currently got a mix of both,
-due to companies that started out with RISC-V having SOC_ symbols &
-those with history in other archs having ARCH_ ones.
-The ARCH_ definitions landed in mainline this week, so if you end up
-resubmitting this driver, it'd save me a conversion if you were to use
-the ARCH_ variant.
+> 
+>> +	help
+>> +	  If you say yes here you get support for temperature sensor
+>> +	  on the Starfive JH71x0 SoCs.
+>> +
+>> +	  This driver can also be built as a module.  If so, the module
+>> +	  will be called sfctemp.
 
-Thanks,
-Conor.
-
-> +	help
-> +	  If you say yes here you get support for temperature sensor
-> +	  on the Starfive JH71x0 SoCs.
-> +
-> +	  This driver can also be built as a module.  If so, the module
-> +	  will be called sfctemp.
-
---NBI72SkxZsmpX/ON
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/y4LgAKCRB4tDGHoIJi
-0mJ0AP4vNo5Ie/2kHWAmJFUKGr8YQL9x84VEY3Xn9vgF9A6izgD/QJzmlpXfLT0E
-wuAiKkJkRPP9FP1Z+dqqrB2FAZrw3QY=
-=DO8S
------END PGP SIGNATURE-----
-
---NBI72SkxZsmpX/ON--
