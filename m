@@ -2,74 +2,74 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F312BC64ED6
-	for <linux-hwmon@archiver.kernel.org>; Wed,  1 Mar 2023 12:15:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60B3CC7EE2D
+	for <linux-hwmon@archiver.kernel.org>; Wed,  1 Mar 2023 12:20:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjCAMPz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 1 Mar 2023 07:15:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
+        id S229734AbjCAMUy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 1 Mar 2023 07:20:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjCAMPy (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Mar 2023 07:15:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F931516A
-        for <linux-hwmon@vger.kernel.org>; Wed,  1 Mar 2023 04:15:08 -0800 (PST)
+        with ESMTP id S229809AbjCAMUq (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Mar 2023 07:20:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E82136DF
+        for <linux-hwmon@vger.kernel.org>; Wed,  1 Mar 2023 04:19:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677672908;
+        s=mimecast20190719; t=1677673199;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bu+EPKiqWaJlFT+E8yHfU9ZpiuzC1YRS6XYz2PiEsE8=;
-        b=CMqg3jyxv4+H6W7Hx2W0wct85SEQoqPF4elGoWScBkd2b2zqBYPjkHBV4UJn0wbuQ9VTLc
-        oxMLWjWc9lj36kQdwkUx9YHF5R4eazG8f4nA0QB0nCU9Tti//hch0AunSr7W87RxSn8VsI
-        yEXQHA578g6bHqF0HUg6SV80fTU8Brk=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=BmnN/JeNC+uXvUWsMwj8af3J1VCxOStShW/lz3XRU5Y=;
+        b=h0RG+9Ja0OonvGY2Ug28ppBG40V05kjj3NuXnM0XX4jKEvrLK0AI3+0+mNnJdv/9khvU+b
+        nJIH/v4+WuZqkydi9PtXJaMgwn6yRYmvAbX/OX9SSKFBLheV6BloDpHjm8tOlf+YBwLUTb
+        hn76M3wrWhx1MLiTGUYxvtJSO2zQKA4=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-178-Fo8ins9FPbyAGoRT0cNZgw-1; Wed, 01 Mar 2023 07:15:07 -0500
-X-MC-Unique: Fo8ins9FPbyAGoRT0cNZgw-1
-Received: by mail-ed1-f71.google.com with SMTP id b1-20020aa7dc01000000b004ad062fee5eso18714928edu.17
-        for <linux-hwmon@vger.kernel.org>; Wed, 01 Mar 2023 04:15:06 -0800 (PST)
+ us-mta-641-gncCEWWNOYOtpLZ_Cz4r1g-1; Wed, 01 Mar 2023 07:19:57 -0500
+X-MC-Unique: gncCEWWNOYOtpLZ_Cz4r1g-1
+Received: by mail-ed1-f69.google.com with SMTP id t9-20020a056402524900b004af59c073abso18854111edd.6
+        for <linux-hwmon@vger.kernel.org>; Wed, 01 Mar 2023 04:19:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bu+EPKiqWaJlFT+E8yHfU9ZpiuzC1YRS6XYz2PiEsE8=;
-        b=I1ENF52rAVKOUwuOvMGZUULbDOyzOlyrLL6+lUes4r3aaRoHKKZWZQFreMuNZcAulK
-         Wc0q+XPFFdD10bCEWlKzyGGsVSJ0F8LF3j/KmUWfKbXyxJEEzZgMThpipPMUL+sjVrTX
-         HXYGkxVQdjc5EyrtiTkkx3aDGkd1J91mBujvLBXw2POwQnomR/nHGn5+uUq7JGZFPOsb
-         4UwSssug5/EDhIvVRLwduHU0UIyVuMcljUv7Y+/6qmp7JNsaTZlgYaLUSHL3Xtk0uNSL
-         mbaV946CkdLZbQeGvZ3S5MlR7FepgqIoLjmcWOhUXTNdSop8PxUV40JMbctcWGKRt6sb
-         wAeQ==
-X-Gm-Message-State: AO0yUKVEv/OVdmkxLU2/DxfKFyo46/6e3aKoe9KQeBhZKKHq4eSgJRf2
-        59QYKhMv5tif/h7ezWZcA+HHEnfFj0ZLiq+8PvN+aWg4WBvuItD61/DEGWc/NWRuGJ/vUluXwDB
-        iSQIspKOf+Vlwn2K8PmZYC50=
-X-Received: by 2002:a17:907:38e:b0:88d:3c85:4ccf with SMTP id ss14-20020a170907038e00b0088d3c854ccfmr5340026ejb.25.1677672906130;
-        Wed, 01 Mar 2023 04:15:06 -0800 (PST)
-X-Google-Smtp-Source: AK7set9OTmWktppMquATQgyqnsl8b3YgTg0F/aRqE8fQ+5iI4ZqkI5gqr4VvdiSzTD1tE+BDH+TxbA==
-X-Received: by 2002:a17:907:38e:b0:88d:3c85:4ccf with SMTP id ss14-20020a170907038e00b0088d3c854ccfmr5340018ejb.25.1677672905806;
-        Wed, 01 Mar 2023 04:15:05 -0800 (PST)
+        bh=BmnN/JeNC+uXvUWsMwj8af3J1VCxOStShW/lz3XRU5Y=;
+        b=ykfni4NrmA6OJtGeuOQUWMnfTFKBgKC8bvn+upuf2KCWU677xyQPTt8AAAZXDxwAKS
+         Nwzlyfy/ui39/d7eOP+KuesI8E4ao7MHq0nvv46kVnTYpQ2SFMOZ3zyXmt1d33vQh2kM
+         EuMxS0XLLEimG/U5V6zCxlGsfTtRqYF5DvAaidpRw50oAybuNXMUsRZGWV+sPqKn5bi3
+         T/bSXPL2yjV40dX+AzYNuc1aHNn1XFMRdc4lkIqbFYn0F7Ml1MDGVYO4q2rPmwWgn6Z8
+         qW9ZVKbxXGw2dzlgBHbZxlZR0bIxWgxoeptLmAFq165Mcd7p3pOB+8/0AGrT6GYcfl+r
+         XshQ==
+X-Gm-Message-State: AO0yUKXXtBukR7oJwiwYP7m3oJNtJRps6R6F5klQoUBjVABvvtM8HN/U
+        VfJm28izob9en+5ozZlfMc76qHyIBOC6K2qSzlmfqrTokD20VzHYoP4cWRYSZFYKSPXrMD+Iqw0
+        2W1gcS7CK96b50IAWwqsEjwc=
+X-Received: by 2002:a17:906:ca12:b0:87d:eff1:acc8 with SMTP id jt18-20020a170906ca1200b0087deff1acc8mr6291655ejb.48.1677673196893;
+        Wed, 01 Mar 2023 04:19:56 -0800 (PST)
+X-Google-Smtp-Source: AK7set/kUyEn9SIqaSY0Dz+h4EG4rmJU65d2AlOikKFI6qVgT5C8p4j24U16+iVEyWf9j1c2O5n3Yw==
+X-Received: by 2002:a17:906:ca12:b0:87d:eff1:acc8 with SMTP id jt18-20020a170906ca1200b0087deff1acc8mr6291639ejb.48.1677673196647;
+        Wed, 01 Mar 2023 04:19:56 -0800 (PST)
 Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id m15-20020a1709061ecf00b00882f9130eafsm5717500ejj.26.2023.03.01.04.15.05
+        by smtp.gmail.com with ESMTPSA id h11-20020a17090634cb00b008e36f9b2308sm5706107ejb.43.2023.03.01.04.19.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 04:15:05 -0800 (PST)
-Message-ID: <15d7b77d-c66e-6e31-e930-7595cdabcd11@redhat.com>
-Date:   Wed, 1 Mar 2023 13:15:04 +0100
+        Wed, 01 Mar 2023 04:19:56 -0800 (PST)
+Message-ID: <cc25ee91-5197-b694-a6d6-e7d773afb5db@redhat.com>
+Date:   Wed, 1 Mar 2023 13:19:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v2 1/2] platform/x86: dell-ddv: Fix cache invalidation on
- resume
+Subject: Re: [PATCH v2 2/2] platform/x86: dell-ddv: Fix temperature scaling
 Content-Language: en-US, nl
 To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
 Cc:     jdelvare@suse.com, linux@roeck-us.net,
         platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230218115318.20662-1-W_Armin@gmx.de>
+ <20230218115318.20662-2-W_Armin@gmx.de>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230218115318.20662-1-W_Armin@gmx.de>
+In-Reply-To: <20230218115318.20662-2-W_Armin@gmx.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -79,22 +79,17 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 Hi,
 
 On 2/18/23 12:53, Armin Wolf wrote:
-> If one or both sensor buffers could not be initialized, either
-> due to missing hardware support or due to some error during probing,
-> the resume handler will encounter undefined behaviour when
-> attempting to lock buffers then protected by an uninitialized or
-> destroyed mutex.
-> Fix this by introducing a "active" flag which is set during probe,
-> and only invalidate buffers which where flaged as "active".
+> After using the built-in UEFI hardware diagnostics to compare
+> the measured battery temperature, i noticed that the temperature
+> is actually expressed in tenth degree kelvin, similar to the
+> SBS-Data standard. For example, a value of 2992 is displayed as
+> 26 degrees celsius.
+> Fix the scaling so that the correct values are being displayed.
 > 
 > Tested on a Dell Inspiron 3505.
 > 
-> Fixes: 3b7eeff93d29 ("platform/x86: dell-ddv: Add hwmon support")
+> Fixes: a77272c16041 ("platform/x86: dell: Add new dell-wmi-ddv driver")
 > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> ---
-> Changes in v2:
-> - move checking of the "active" flag inside
->   dell_wmi_ddv_hwmon_cache_invalidate()
 
 Thanks, I've applied this patch to my review-hans branch:
 https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
@@ -109,58 +104,35 @@ Hans
 
 
 
-
 > ---
->  drivers/platform/x86/dell/dell-wmi-ddv.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+> Changes in v2:
+> - Avoid unnecessary rounding
+> ---
+>  drivers/platform/x86/dell/dell-wmi-ddv.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> index d547c9d09725..eff4e9649faf 100644
+> index eff4e9649faf..2750dee99c3e 100644
 > --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
 > +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> @@ -96,6 +96,7 @@ struct combined_chip_info {
->  };
-> 
->  struct dell_wmi_ddv_sensors {
-> +	bool active;
->  	struct mutex lock;	/* protect caching */
->  	unsigned long timestamp;
->  	union acpi_object *obj;
-> @@ -520,6 +521,9 @@ static struct hwmon_channel_info *dell_wmi_ddv_channel_create(struct device *dev
-> 
->  static void dell_wmi_ddv_hwmon_cache_invalidate(struct dell_wmi_ddv_sensors *sensors)
->  {
-> +	if (!sensors->active)
-> +		return;
-> +
->  	mutex_lock(&sensors->lock);
->  	kfree(sensors->obj);
->  	sensors->obj = NULL;
-> @@ -530,6 +534,7 @@ static void dell_wmi_ddv_hwmon_cache_destroy(void *data)
->  {
->  	struct dell_wmi_ddv_sensors *sensors = data;
-> 
-> +	sensors->active = false;
->  	mutex_destroy(&sensors->lock);
->  	kfree(sensors->obj);
->  }
-> @@ -549,6 +554,7 @@ static struct hwmon_channel_info *dell_wmi_ddv_channel_init(struct wmi_device *w
->  		return ERR_PTR(ret);
-> 
->  	mutex_init(&sensors->lock);
-> +	sensors->active = true;
-> 
->  	ret = devm_add_action_or_reset(&wdev->dev, dell_wmi_ddv_hwmon_cache_destroy, sensors);
+> @@ -17,7 +17,6 @@
+>  #include <linux/kernel.h>
+>  #include <linux/hwmon.h>
+>  #include <linux/kstrtox.h>
+> -#include <linux/math.h>
+>  #include <linux/math64.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+> @@ -665,7 +664,8 @@ static ssize_t temp_show(struct device *dev, struct device_attribute *attr, char
 >  	if (ret < 0)
-> @@ -852,7 +858,7 @@ static int dell_wmi_ddv_resume(struct device *dev)
->  {
->  	struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
+>  		return ret;
 > 
-> -	/* Force re-reading of all sensors */
-> +	/* Force re-reading of all active sensors */
->  	dell_wmi_ddv_hwmon_cache_invalidate(&data->fans);
->  	dell_wmi_ddv_hwmon_cache_invalidate(&data->temps);
+> -	return sysfs_emit(buf, "%d\n", DIV_ROUND_CLOSEST(value, 10));
+> +	/* Use 2731 instead of 2731.5 to avoid unnecessary rounding */
+> +	return sysfs_emit(buf, "%d\n", value - 2731);
+>  }
 > 
+>  static ssize_t eppid_show(struct device *dev, struct device_attribute *attr, char *buf)
 > --
 > 2.30.2
 > 
