@@ -2,138 +2,206 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60B3CC7EE2D
-	for <linux-hwmon@archiver.kernel.org>; Wed,  1 Mar 2023 12:20:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC3D5C7EE2F
+	for <linux-hwmon@archiver.kernel.org>; Wed,  1 Mar 2023 16:44:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjCAMUy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 1 Mar 2023 07:20:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        id S229811AbjCAQo5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 1 Mar 2023 11:44:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjCAMUq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Mar 2023 07:20:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E82136DF
-        for <linux-hwmon@vger.kernel.org>; Wed,  1 Mar 2023 04:19:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677673199;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BmnN/JeNC+uXvUWsMwj8af3J1VCxOStShW/lz3XRU5Y=;
-        b=h0RG+9Ja0OonvGY2Ug28ppBG40V05kjj3NuXnM0XX4jKEvrLK0AI3+0+mNnJdv/9khvU+b
-        nJIH/v4+WuZqkydi9PtXJaMgwn6yRYmvAbX/OX9SSKFBLheV6BloDpHjm8tOlf+YBwLUTb
-        hn76M3wrWhx1MLiTGUYxvtJSO2zQKA4=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-641-gncCEWWNOYOtpLZ_Cz4r1g-1; Wed, 01 Mar 2023 07:19:57 -0500
-X-MC-Unique: gncCEWWNOYOtpLZ_Cz4r1g-1
-Received: by mail-ed1-f69.google.com with SMTP id t9-20020a056402524900b004af59c073abso18854111edd.6
-        for <linux-hwmon@vger.kernel.org>; Wed, 01 Mar 2023 04:19:57 -0800 (PST)
+        with ESMTP id S229701AbjCAQo4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Mar 2023 11:44:56 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E083525C
+        for <linux-hwmon@vger.kernel.org>; Wed,  1 Mar 2023 08:44:54 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so12308478wmb.5
+        for <linux-hwmon@vger.kernel.org>; Wed, 01 Mar 2023 08:44:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1677689093;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=80hkLcYMepouVtWKST/uM+1yiDynZV+Ko2dpZLCgqAc=;
+        b=P4o1reCqD/QGWTNLgr5aZA4KP3C1RxTCuVRypmk4rJ6L+WA/F7z2VtoVFYdVEGG8cq
+         3xtCDrs/239g2eRhN95noCAQE+U4qAmwYBaI8GuxDsitIoQjjh/rIOMnl106DEfmX5Zs
+         fXfScTG6mTLTriXZdrEURjdpeLRC1Qxxr3wb8abEyhAQhlp3rB2qf0tNyDnb7bUiGv/t
+         7eliZDk81qrg9H7ZHA1StlN4tPe/xbc+XvIsuVmvOG7swcdEgd+vu4wtphEDSA4YwqWD
+         lRdMGhfy0raeFgSiLJBVyPy39e0lneBO5giYt+CvtpkjuAX1mfCKR4nc1tZtKcGB8QBA
+         p/KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BmnN/JeNC+uXvUWsMwj8af3J1VCxOStShW/lz3XRU5Y=;
-        b=ykfni4NrmA6OJtGeuOQUWMnfTFKBgKC8bvn+upuf2KCWU677xyQPTt8AAAZXDxwAKS
-         Nwzlyfy/ui39/d7eOP+KuesI8E4ao7MHq0nvv46kVnTYpQ2SFMOZ3zyXmt1d33vQh2kM
-         EuMxS0XLLEimG/U5V6zCxlGsfTtRqYF5DvAaidpRw50oAybuNXMUsRZGWV+sPqKn5bi3
-         T/bSXPL2yjV40dX+AzYNuc1aHNn1XFMRdc4lkIqbFYn0F7Ml1MDGVYO4q2rPmwWgn6Z8
-         qW9ZVKbxXGw2dzlgBHbZxlZR0bIxWgxoeptLmAFq165Mcd7p3pOB+8/0AGrT6GYcfl+r
-         XshQ==
-X-Gm-Message-State: AO0yUKXXtBukR7oJwiwYP7m3oJNtJRps6R6F5klQoUBjVABvvtM8HN/U
-        VfJm28izob9en+5ozZlfMc76qHyIBOC6K2qSzlmfqrTokD20VzHYoP4cWRYSZFYKSPXrMD+Iqw0
-        2W1gcS7CK96b50IAWwqsEjwc=
-X-Received: by 2002:a17:906:ca12:b0:87d:eff1:acc8 with SMTP id jt18-20020a170906ca1200b0087deff1acc8mr6291655ejb.48.1677673196893;
-        Wed, 01 Mar 2023 04:19:56 -0800 (PST)
-X-Google-Smtp-Source: AK7set/kUyEn9SIqaSY0Dz+h4EG4rmJU65d2AlOikKFI6qVgT5C8p4j24U16+iVEyWf9j1c2O5n3Yw==
-X-Received: by 2002:a17:906:ca12:b0:87d:eff1:acc8 with SMTP id jt18-20020a170906ca1200b0087deff1acc8mr6291639ejb.48.1677673196647;
-        Wed, 01 Mar 2023 04:19:56 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id h11-20020a17090634cb00b008e36f9b2308sm5706107ejb.43.2023.03.01.04.19.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 04:19:56 -0800 (PST)
-Message-ID: <cc25ee91-5197-b694-a6d6-e7d773afb5db@redhat.com>
-Date:   Wed, 1 Mar 2023 13:19:55 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 2/2] platform/x86: dell-ddv: Fix temperature scaling
-Content-Language: en-US, nl
-To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net,
-        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        d=1e100.net; s=20210112; t=1677689093;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=80hkLcYMepouVtWKST/uM+1yiDynZV+Ko2dpZLCgqAc=;
+        b=J/U0va2gx75CsAoIbgi2eV55W5x8GUjG9PxfD0ecaCQtRLY3XRuxNCfZMnsOcw3R/O
+         gc69MlAXI+ruxqLubJ7srNG9EpJe4NJnv6Wz/lTsEVCHnPAXGuSgqGD1LKi+ZV2dDuro
+         o5taUO4ipCprJuMKZIyxPTbPJNY2gT1fJmhCOjcMRlMU2Xf9aSLMhkS526UMf8q7UqK/
+         z551L+57fstsg2O34tbYKs4QOI2cwaKPm25tP71TGfyuVINw6J32thQ7zH+Pp2N8Nc+s
+         sBGYopOFnctswFOY7pxysnwbkX5OZWjQdSap2dGAf116FDg0mPQApIT/V+TfqFUNGgGL
+         +Xtg==
+X-Gm-Message-State: AO0yUKVoSY1Zxi45zsa+PWOY78rL3sR7jZE3/qxTpCMFlgyFQuH2+zjW
+        963/0idZVJ1t3D9DMM2KDabYYIT/LsTZMhq6wg8=
+X-Google-Smtp-Source: AK7set8+pWabP/pAl34UHxmLrR3scR40Q1mWUU11baHLjRK8iCBbCw7sdvcoOhKrmMV3bLQDO3dFQg==
+X-Received: by 2002:a05:600c:329a:b0:3db:5f1:53a5 with SMTP id t26-20020a05600c329a00b003db05f153a5mr6083636wmp.20.1677689093355;
+        Wed, 01 Mar 2023 08:44:53 -0800 (PST)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id p8-20020a7bcde8000000b003dc521f336esm105542wmj.14.2023.03.01.08.44.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 08:44:53 -0800 (PST)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-hwmon@vger.kernel.org,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
         linux-kernel@vger.kernel.org
-References: <20230218115318.20662-1-W_Armin@gmx.de>
- <20230218115318.20662-2-W_Armin@gmx.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230218115318.20662-2-W_Armin@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH v4 1/4] hwmon: (pmbus/core): Generalize pmbus status flag map
+Date:   Wed,  1 Mar 2023 17:44:31 +0100
+Message-Id: <20230301164434.1928237-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+The PMBus status flag map(pmbus_regulator_status_flag_map) is moved
+outside of the regulator #if block and the associated variable/struct
+name updated to reflect as generic PMBus status.
 
-On 2/18/23 12:53, Armin Wolf wrote:
-> After using the built-in UEFI hardware diagnostics to compare
-> the measured battery temperature, i noticed that the temperature
-> is actually expressed in tenth degree kelvin, similar to the
-> SBS-Data standard. For example, a value of 2992 is displayed as
-> 26 degrees celsius.
-> Fix the scaling so that the correct values are being displayed.
-> 
-> Tested on a Dell Inspiron 3505.
-> 
-> Fixes: a77272c16041 ("platform/x86: dell: Add new dell-wmi-ddv driver")
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+This will make the PMBus status flag map more versatile and easier to
+incorporate into different contexts and functions.
 
-Thanks, I've applied this patch to my review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 94 ++++++++++++++++----------------
+ 1 file changed, 47 insertions(+), 47 deletions(-)
 
-I'll rebase that branch once 6.3-rc1 is out and then push the rebased
-patch to the fixes branch and include it in my next 6.3 fixes pull-req
-to Linus.
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 95e95783972a..1b70cf3be313 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2692,6 +2692,49 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 	return 0;
+ }
+ 
++/* A PMBus status flag and the corresponding REGULATOR_ERROR_* flag */
++struct pmbus_status_assoc {
++	int pflag, rflag;
++};
++
++/* PMBus->regulator bit mappings for a PMBus status register */
++struct pmbus_status_category {
++	int func;
++	int reg;
++	const struct pmbus_status_assoc *bits; /* zero-terminated */
++};
++
++static const struct pmbus_status_category __maybe_unused pmbus_status_flag_map[] = {
++	{
++		.func = PMBUS_HAVE_STATUS_VOUT,
++		.reg = PMBUS_STATUS_VOUT,
++		.bits = (const struct pmbus_status_assoc[]) {
++			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
++			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
++			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
++			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_REGULATION_OUT },
++			{ },
++		},
++	}, {
++		.func = PMBUS_HAVE_STATUS_IOUT,
++		.reg = PMBUS_STATUS_IOUT,
++		.bits = (const struct pmbus_status_assoc[]) {
++			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
++			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
++			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
++			{ },
++		},
++	}, {
++		.func = PMBUS_HAVE_STATUS_TEMP,
++		.reg = PMBUS_STATUS_TEMPERATURE,
++		.bits = (const struct pmbus_status_assoc[]) {
++			{ PB_TEMP_OT_WARNING,    REGULATOR_ERROR_OVER_TEMP_WARN },
++			{ PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
++			{ },
++		},
++	},
++};
++
+ #if IS_ENABLED(CONFIG_REGULATOR)
+ static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
+ {
+@@ -2738,54 +2781,11 @@ static int pmbus_regulator_disable(struct regulator_dev *rdev)
+ 	return _pmbus_regulator_on_off(rdev, 0);
+ }
+ 
+-/* A PMBus status flag and the corresponding REGULATOR_ERROR_* flag */
+-struct pmbus_regulator_status_assoc {
+-	int pflag, rflag;
+-};
+-
+-/* PMBus->regulator bit mappings for a PMBus status register */
+-struct pmbus_regulator_status_category {
+-	int func;
+-	int reg;
+-	const struct pmbus_regulator_status_assoc *bits; /* zero-terminated */
+-};
+-
+-static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
+-	{
+-		.func = PMBUS_HAVE_STATUS_VOUT,
+-		.reg = PMBUS_STATUS_VOUT,
+-		.bits = (const struct pmbus_regulator_status_assoc[]) {
+-			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
+-			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
+-			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
+-			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_REGULATION_OUT },
+-			{ },
+-		},
+-	}, {
+-		.func = PMBUS_HAVE_STATUS_IOUT,
+-		.reg = PMBUS_STATUS_IOUT,
+-		.bits = (const struct pmbus_regulator_status_assoc[]) {
+-			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
+-			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
+-			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
+-			{ },
+-		},
+-	}, {
+-		.func = PMBUS_HAVE_STATUS_TEMP,
+-		.reg = PMBUS_STATUS_TEMPERATURE,
+-		.bits = (const struct pmbus_regulator_status_assoc[]) {
+-			{ PB_TEMP_OT_WARNING,    REGULATOR_ERROR_OVER_TEMP_WARN },
+-			{ PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
+-			{ },
+-		},
+-	},
+-};
+-
+ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
+ {
+ 	int i, status;
+-	const struct pmbus_regulator_status_category *cat;
+-	const struct pmbus_regulator_status_assoc *bit;
++	const struct pmbus_status_category *cat;
++	const struct pmbus_status_assoc *bit;
+ 	struct device *dev = rdev_get_dev(rdev);
+ 	struct i2c_client *client = to_i2c_client(dev->parent);
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
+@@ -2796,8 +2796,8 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+ 
+ 	mutex_lock(&data->update_lock);
+ 
+-	for (i = 0; i < ARRAY_SIZE(pmbus_regulator_flag_map); i++) {
+-		cat = &pmbus_regulator_flag_map[i];
++	for (i = 0; i < ARRAY_SIZE(pmbus_status_flag_map); i++) {
++		cat = &pmbus_status_flag_map[i];
+ 		if (!(func & cat->func))
+ 			continue;
+ 
 
-Regards,
-
-Hans
-
-
-
-> ---
-> Changes in v2:
-> - Avoid unnecessary rounding
-> ---
->  drivers/platform/x86/dell/dell-wmi-ddv.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> index eff4e9649faf..2750dee99c3e 100644
-> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
-> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> @@ -17,7 +17,6 @@
->  #include <linux/kernel.h>
->  #include <linux/hwmon.h>
->  #include <linux/kstrtox.h>
-> -#include <linux/math.h>
->  #include <linux/math64.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
-> @@ -665,7 +664,8 @@ static ssize_t temp_show(struct device *dev, struct device_attribute *attr, char
->  	if (ret < 0)
->  		return ret;
-> 
-> -	return sysfs_emit(buf, "%d\n", DIV_ROUND_CLOSEST(value, 10));
-> +	/* Use 2731 instead of 2731.5 to avoid unnecessary rounding */
-> +	return sysfs_emit(buf, "%d\n", value - 2731);
->  }
-> 
->  static ssize_t eppid_show(struct device *dev, struct device_attribute *attr, char *buf)
-> --
-> 2.30.2
-> 
+base-commit: 58326709e8f8122df46d29981eb39896d600c7c4
+-- 
+2.39.1
 
