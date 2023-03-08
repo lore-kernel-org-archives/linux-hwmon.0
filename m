@@ -2,52 +2,53 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCB1FC64EC4
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Mar 2023 09:40:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D5CEC678D5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Mar 2023 09:40:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjCHJkk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Mar 2023 04:40:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
+        id S230050AbjCHJkt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Mar 2023 04:40:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjCHJkj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Mar 2023 04:40:39 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689FEB1B15;
-        Wed,  8 Mar 2023 01:40:38 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id x3so63092211edb.10;
-        Wed, 08 Mar 2023 01:40:38 -0800 (PST)
+        with ESMTP id S229905AbjCHJko (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Mar 2023 04:40:44 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB28B1B15;
+        Wed,  8 Mar 2023 01:40:39 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id j11so43650413edq.4;
+        Wed, 08 Mar 2023 01:40:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678268437;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dQFy8moETWaGWRs6VMCXrP047rwgR8C0UzBrVmV4s5c=;
-        b=Np6f56ZB51bzHklHHvqyZ5rOrtgivYFKXUPd2+W414UIoa38DmZsbA5R4/UtDamPfc
-         va/fdWwq/MH+e55+0bf6X6rXNZpvfHozMbbk5D7m+0hmkG6LObquTKAdm7thbP/DyVb2
-         sqI3ecVaIknJWVVezjTcY5wyGVQ2x6YU5y+1zrxDW1bcZ/OCpnzhhQtj+gUpYgPyYPou
-         PXFe/CwJ7uOkHTUzB0FTXO74XG9O8xlzwmaYyFgKxJDuviEUXFWi4erLVHzal1gFwwKU
-         HVxbEykcV1Y2lFV9LXQZA9sMZRPIfSuUpgTRPGUFpYMCHGAmKNCnOf2wv6gtohDMRxE3
-         +7dw==
+        d=gmail.com; s=20210112; t=1678268438;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z7A7ncxskY+Crxu5hf4wRrmUlrJ73jGGH1lawChBwQk=;
+        b=O3LGEKkH6fFEw+/snzPC4P8/QhOhtUN5oxoQjgXnsPfjvU2V3SJvvUUsymPK2zQ3QL
+         PA4jzopDlVRSQg7O0UyU6eTrZC0nzWfpZncJ0PSzVjo6phyIRdOK8fS2qLdylSM5jq38
+         v+jAHuk2a3kd74oocwONf3birziI0N7+Nj7UgNZm3HvRZununWwq5M81arPhdNh56UoI
+         SDzQAzJ9tbC7bzY/j3mO8FuylJO371JEBDc4JNY+w9QJKSpBLQCoIkthZe+vtuOTzIQL
+         Qlnmuynk8qWAZ1MK9GrglFmFX3uu6Q1rRy4WKNYrcL27ssyj0gctg4+DbHkNEx85ITJ9
+         JUkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678268437;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dQFy8moETWaGWRs6VMCXrP047rwgR8C0UzBrVmV4s5c=;
-        b=1ztXZ6MIQKXYfp50qQN0F5ZG2RrWg1EGLlq9g+XOGfNjl3g4FSr2JKrOfy3hp9ggq+
-         s+UGzxkjvYCR2zl24C3u2RxBHTEPkFdF1grSEEozHgFhfZ7WA1JEcj8xnneFXFPdG7Qf
-         focfEaj5b+yiTOf9trkEbWgpZkdCVRBbv8mNMnt+AeLADNm4xUgZI5XmtJugoiSaH4CO
-         yAIkiVcmHd2ecM8oHou09dizMTFiX7+nnrNuUb2El9rNmGRPBTxFuFBMQ8fjnJ3mFiMs
-         7IEPdlRoE6+ykIJ/K5nDo+XGWdikX8Vrrvyx96g3oDtPaFNk8FbBswtXLti03RXkWlqz
-         HhQw==
-X-Gm-Message-State: AO0yUKV72JRdxjU4SFtRAGXgBGHNAcScp8Wy9RkDENF+3iKTiECdcd16
-        hxAVVfGZFXREFpDMhNiBN5U=
-X-Google-Smtp-Source: AK7set9kc6kvqVavdx3aKJpG4dnxoIzPrX/ZPIxe/gQv+Ds0+KLAHLyizuhg3o+l/pb386dw77lMbw==
-X-Received: by 2002:a17:907:9702:b0:82e:a57b:cc9b with SMTP id jg2-20020a170907970200b0082ea57bcc9bmr18094701ejc.24.1678268436813;
-        Wed, 08 Mar 2023 01:40:36 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678268438;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z7A7ncxskY+Crxu5hf4wRrmUlrJ73jGGH1lawChBwQk=;
+        b=nAAvY+06QllyixNVmXwLd1h2AD4NM9CXPMygW35GF6gElU/oA3yD892FccxpNmgmpo
+         I1jeYj3QjulyVP9HoQG//dE5wGpPYgWifrKzvD2jal1iSwM2jSTcDyyAkqtJDPsASwen
+         E7E2wtnUeQI57AidK7zFLD+ZtCLKS6iVkbOlKnDCMGHzw1iInlR5+yHJOizOcG/4IP0t
+         X1sx6+kB3rS3czAtFpL96QzU/huvyQNglunfTHYgUUkJHJGr7tFZno/+qwN6kOAbrUEO
+         igZHq30TGMO2OOl3ImbsYiEmR4axH50rkZvXxaMsfAcTC//fO0lI2+E8EQT+fH70Jd78
+         figw==
+X-Gm-Message-State: AO0yUKXog6l5ObNCBjcKcBKK70opnuqzYizdgltrW+Wr/fSxxXPbSeL5
+        wnLS1GPv9bq1hqTjHdCYOcs=
+X-Google-Smtp-Source: AK7set+KZo+Cgej4nkrBm9aGQui0knAXbD7KZNW9pqTEFypofl8sVJ/oIO9ykXm2dbdaq7u2NWpUxg==
+X-Received: by 2002:aa7:d60b:0:b0:4bd:94b9:b8a8 with SMTP id c11-20020aa7d60b000000b004bd94b9b8a8mr14864191edr.26.1678268438466;
+        Wed, 08 Mar 2023 01:40:38 -0800 (PST)
 Received: from xeon.. ([188.163.112.76])
-        by smtp.gmail.com with ESMTPSA id h17-20020a17090634d100b008ee5356801dsm7240014ejb.187.2023.03.08.01.40.35
+        by smtp.gmail.com with ESMTPSA id h17-20020a17090634d100b008ee5356801dsm7240014ejb.187.2023.03.08.01.40.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 01:40:36 -0800 (PST)
+        Wed, 08 Mar 2023 01:40:38 -0800 (PST)
 From:   Svyatoslav Ryhel <clamor95@gmail.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
@@ -57,27 +58,56 @@ To:     Guenter Roeck <linux@roeck-us.net>,
         Mark Brown <broonie@kernel.org>
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/2] Add optional power supply for INA2XX
-Date:   Wed,  8 Mar 2023 11:40:22 +0200
-Message-Id: <20230308094024.14115-1-clamor95@gmail.com>
+Subject: [PATCH v1 2/2] hwmon: ina2xx: add optional regulator support
+Date:   Wed,  8 Mar 2023 11:40:24 +0200
+Message-Id: <20230308094024.14115-3-clamor95@gmail.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230308094024.14115-1-clamor95@gmail.com>
+References: <20230308094024.14115-1-clamor95@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On some devices (like LG Optimus Vu) ina2xx hwmon may require
-power supply for correct work, hance add one.
+Some devices may need a specific supply provided
+for this sensor to work properly, like p895 does.
 
-Svyatoslav Ryhel (2):
-  dt-bindings: hwmon: ina2xx: add supply property
-  hwmon: ina2xx: add optional regulator support
+Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+---
+ drivers/hwmon/ina2xx.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
- .../devicetree/bindings/hwmon/ti,ina2xx.yaml         |  4 ++++
- drivers/hwmon/ina2xx.c                               | 12 ++++++++++++
- 2 files changed, 16 insertions(+)
-
+diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+index 00fc70305a89..4a3e2b1bbe8b 100644
+--- a/drivers/hwmon/ina2xx.c
++++ b/drivers/hwmon/ina2xx.c
+@@ -119,6 +119,7 @@ struct ina2xx_data {
+ 	long power_lsb_uW;
+ 	struct mutex config_lock;
+ 	struct regmap *regmap;
++	struct regulator *vdd_supply;
+ 
+ 	const struct attribute_group *groups[INA2XX_MAX_ATTRIBUTE_GROUPS];
+ };
+@@ -656,6 +657,17 @@ static int ina2xx_probe(struct i2c_client *client)
+ 		return PTR_ERR(data->regmap);
+ 	}
+ 
++	data->vdd_supply = devm_regulator_get_optional(dev, "vdd");
++	if (IS_ERR(data->vdd_supply))
++		return dev_err_probe(dev, PTR_ERR(data->vdd_supply),
++				     "failed to get vdd regulator\n");
++
++	ret = regulator_enable(data->vdd_supply);
++	if (ret < 0) {
++		dev_err(dev, "failed to enable vdd power supply\n");
++		return ret;
++	}
++
+ 	ret = ina2xx_init(data);
+ 	if (ret < 0) {
+ 		dev_err(dev, "error configuring the device: %d\n", ret);
 -- 
 2.37.2
 
