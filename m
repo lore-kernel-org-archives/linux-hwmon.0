@@ -2,91 +2,112 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D3E2C6FD20
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Mar 2023 12:58:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED29FC678D5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Mar 2023 13:16:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjCHM60 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Mar 2023 07:58:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35668 "EHLO
+        id S230206AbjCHNQm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Mar 2023 08:16:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjCHM6Z (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Mar 2023 07:58:25 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795644C6E5;
-        Wed,  8 Mar 2023 04:58:23 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id i34so65329189eda.7;
-        Wed, 08 Mar 2023 04:58:23 -0800 (PST)
+        with ESMTP id S230255AbjCHNQW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Mar 2023 08:16:22 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7924C6F1
+        for <linux-hwmon@vger.kernel.org>; Wed,  8 Mar 2023 05:13:12 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id ay14so61811791edb.11
+        for <linux-hwmon@vger.kernel.org>; Wed, 08 Mar 2023 05:13:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678280302;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=C4SPW930V6699YB6lnuPMQUE2QmluKgsHI0Y8xGxQGY=;
-        b=mPWxXwI3lEO/19TYqz8zAUSOxXJ2e5j9BCBeTzN9994XP6EWPZBj9XzMA/rJTHBKmx
-         yXdwK+uXJ4lfZBrlNkCXkQSGjUi/VJRKDaIjpzVCG9NcDYR86EK4mkF5IsFYbmjHG/ns
-         B3NfMf6gMhgoiDG3NHAfo6Ry0ohOpwmz2gXaC0KIMA6L0YASGjHEFBq6T+djveJ564e7
-         0v32KyXauXJLNE458MJCuC9KSyAAbZ0K0Ul/Prh/801XPy927ZCXlQ3lEsLRvPqjMm74
-         D60sDlZ89ZYyRZ+1JojAnPh/41TAQoWQf8e8si2ON/1FPS9HstklcUQG+Xaw/6g6IK6s
-         8N5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678280302;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+        d=linaro.org; s=google; t=1678281187;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=C4SPW930V6699YB6lnuPMQUE2QmluKgsHI0Y8xGxQGY=;
-        b=ZiTAb6yBgVtBmchRAVLFwjIr61EtKPwAr/ycctwHWjmFnT380H6EbCG1Wo4hFVTdfQ
-         xG4A80ZKE/4HXacL5MQPlkUrqhQIb5FCaeSSUuHt4uLeY3KYbF8s8tRQldStsdgKwlFf
-         Xq8Gt36muvDFLShdUS2Oo28Ggc8YIB6ow2wO0ZxjS3KyGkqrRcMX8fDxbU+BBOGftfZQ
-         RpyJHdD/DkBBFVtxpT9mi04yGETbSduNVYf00s2TnMjJUMXgokNOdUvd5NUPC1jqgV5c
-         Ubw67k0M9WlOH2d4J25A9d6MBmm40ORh+UL3z28whfmxt3+n5o8RkdWRH35YthWFQTmN
-         cJQw==
-X-Gm-Message-State: AO0yUKW/rJJO5BBKsa7W6QNuagP/cl9RnCdRhv3SSSzEw4sAaC3K7gaJ
-        lQFd2niN2XbpYj88kwNnwX4=
-X-Google-Smtp-Source: AK7set9hqzDkZiTTLbhjC+kWZ8yzzuAdciM3HwOw86U+HzG5twtpMjlxcwnPq4evtaKLeZGhGNtm1g==
-X-Received: by 2002:a17:907:608b:b0:873:1b57:b27f with SMTP id ht11-20020a170907608b00b008731b57b27fmr24355331ejc.61.1678280301869;
-        Wed, 08 Mar 2023 04:58:21 -0800 (PST)
-Received: from [127.0.0.1] ([46.211.69.230])
-        by smtp.gmail.com with ESMTPSA id 20-20020a170906301400b008cf1b61a73esm7457932ejz.41.2023.03.08.04.58.21
+        bh=zl9a5YR7z/ZneHIO81SBz6TtTLPvQqQTr5PQNn8diCw=;
+        b=AMcs3U9Rn+VjKT/+tfC2gO2HfbUv00+q8Q0mRyu15tA3Kax6sEgLnVNCQxt2MWjO/5
+         Y2jM2xxvYZImWuqTU+MOlvnqFucZ8nQmQz+HHdGploejQQwF3SOTNkjviLHop4/OilaD
+         cbx/hwJBhWq4en7HSM8AhQ3Q2pCtBvpIVV6ush5FEhsWRZ9y2sIPn1jSWSjJwG/KCvfd
+         ZAu+UsevLhjXiyl8f02+v9q6v95BqQBbu7er6g0+5dZ9d5uC9AYfv3D9kTUz7P4rlnuO
+         ztpljTFmqBvRaE9VyYCw4D/HNtasNeVAHhWzE/xdSbSK4hmgumaF1hFz2EHgKpdhIrHX
+         KfBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678281187;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zl9a5YR7z/ZneHIO81SBz6TtTLPvQqQTr5PQNn8diCw=;
+        b=k8GdxyuQWTqp9DA50CB6PbhVqfPte08yxrDsCTtAUm6znXW55iU4C4j26BR8LBShHo
+         7atm4GRtcnYC90Y5I2/p3nVMrpIBj53m0mXRqyP8t5q1fihDiupFpFIfOFBLP2T3UtA7
+         zlKMVgxV6uPPTVUJVhGWNIvssrtAYaJvruD+WZqzd1hjWgEPsNCJWSMeJd7+brh83cFz
+         DddVKUazzrFAMvElo/oUJXyXPjE2WBpVGK9epaNelmFdXyj7XmC5DV3jv/MLTLeKaf/A
+         29N2ZRR0k760XFuV86F80GXP5Bn+xsooNaaVJbGrKF+EaeVHE3DRbX9OJqsiknLKwJJ2
+         LZLA==
+X-Gm-Message-State: AO0yUKXptS2uLl90t/gaWRbKEI+BUVAC5EkdBrNUTl7nbiTGEYR7VDff
+        LwTwnlXVqLB3eGIzXJ6AD3q75A==
+X-Google-Smtp-Source: AK7set/5FpmW/1zhzgWVHzPGlyvoqKpijeBE+DbwesSw/NeBoeQ1LYdVkaGS4aciyPpa+VK4WO4Y8Q==
+X-Received: by 2002:a17:906:7395:b0:8e4:96c4:8a4 with SMTP id f21-20020a170906739500b008e496c408a4mr17505111ejl.62.1678281187589;
+        Wed, 08 Mar 2023 05:13:07 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:ff33:9b14:bdd2:a3da? ([2a02:810d:15c0:828:ff33:9b14:bdd2:a3da])
+        by smtp.gmail.com with ESMTPSA id w21-20020a1709064a1500b008cce6c5da29sm7440904eju.70.2023.03.08.05.13.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 04:58:21 -0800 (PST)
-Date:   Wed, 08 Mar 2023 14:58:20 +0200
-From:   Svyatoslav Ryhel <clamor95@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Guenter Roeck <linux@roeck-us.net>,
+        Wed, 08 Mar 2023 05:13:07 -0800 (PST)
+Message-ID: <bfb859da-ea8e-50a1-81b0-7f84a55e930f@linaro.org>
+Date:   Wed, 8 Mar 2023 14:13:06 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: ina2xx: add supply property
+Content-Language: en-US
+To:     Svyatoslav Ryhel <clamor95@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: ina2xx: add supply property
-User-Agent: K-9 Mail for Android
-In-Reply-To: <31ca0ede-012c-4849-bf25-d0492b116681@sirena.org.uk>
-References: <20230308094024.14115-1-clamor95@gmail.com> <20230308094024.14115-2-clamor95@gmail.com> <31ca0ede-012c-4849-bf25-d0492b116681@sirena.org.uk>
-Message-ID: <6DBD0F5A-4625-4FCD-8D64-23293D734A82@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20230308094024.14115-1-clamor95@gmail.com>
+ <20230308094024.14115-2-clamor95@gmail.com>
+ <31ca0ede-012c-4849-bf25-d0492b116681@sirena.org.uk>
+ <6DBD0F5A-4625-4FCD-8D64-23293D734A82@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <6DBD0F5A-4625-4FCD-8D64-23293D734A82@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On 08/03/2023 13:58, Svyatoslav Ryhel wrote:
+> 
+> 
+> 8 березня 2023 р. 14:54:34 GMT+02:00, Mark Brown <broonie@kernel.org> написав(-ла):
+>> On Wed, Mar 08, 2023 at 11:40:23AM +0200, Svyatoslav Ryhel wrote:
+>>> Add supply property.
+>>
+>>> +  vdd-supply: true
+>>> +
+>>>  required:
+>>>    - compatible
+>>>    - reg
+>>
+>> Unless the device can work without power the supply should be required.
+> 
+> Device can work without supply defined on most devices,
+
+Are you sure they can work without any power? INA231 does not say VS
+supply is optional. Datasheet says:
+"The INA231 is typically powered by a separate supply that can range
+from 2.7 V to 5.5 V."
+
+Although it uses word "typically" which could suggest other design, but
+are you sure it can work without it? From where it gets the power?
 
 
-8 =D0=B1=D0=B5=D1=80=D0=B5=D0=B7=D0=BD=D1=8F 2023 =D1=80=2E 14:54:34 GMT+0=
-2:00, Mark Brown <broonie@kernel=2Eorg> =D0=BD=D0=B0=D0=BF=D0=B8=D1=81=D0=
-=B0=D0=B2(-=D0=BB=D0=B0):
->On Wed, Mar 08, 2023 at 11:40:23AM +0200, Svyatoslav Ryhel wrote:
->> Add supply property=2E
->
->> +  vdd-supply: true
->> +
->>  required:
->>    - compatible
->>    - reg
->
->Unless the device can work without power the supply should be required=2E
+>  but in my case power is gated with gpio and devices will not work
+without fixed regulator.
 
-Device can work without supply defined on most devices, but in my case pow=
-er is gated with gpio and devices will not work without fixed regulator=2E
+BTW, wrap your lines to match mailing list style.
+
+Best regards,
+Krzysztof
+
