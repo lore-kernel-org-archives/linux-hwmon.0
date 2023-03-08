@@ -2,132 +2,88 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93D29C64EC4
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Mar 2023 11:59:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7404C6FD20
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Mar 2023 12:54:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjCHL7R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Mar 2023 06:59:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
+        id S229702AbjCHMys (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Mar 2023 07:54:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbjCHL7P (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Mar 2023 06:59:15 -0500
-X-Greylist: delayed 1571 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Mar 2023 03:59:14 PST
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7780782373;
-        Wed,  8 Mar 2023 03:59:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=2K9uVgNLJ8zhyr40M8P3UHt1yzkrIUdnvgfd5nwEeNY=; b=dBTqazkMRHLJLmakcB17035K+L
-        tDEWF4UinIZH6gy+nYiUN/ySLkuoVapqCz4w8MJxGmaYwUTxGPpRiW3soX60jBqp23kcIK/ua4JNI
-        fHHGbDcrlcYxNPvS3M8GiXrCoej5acV8ZOfSxSh0BMg5SLCT4ap4padg8BLqsj+/UicmTso/gN7gy
-        DaqM/7X0ZB4pYTkCBSwOPfno93EU6qmNJU91e/ANbQVOx1zeDTRAxyl5bsG0PXUYKHi3QIAkj6zvk
-        8328ae6zn5apvi+CbECVhVm3pO04qoqeUCDZNiaOHD9S1aXwyK6NR7LzF9I7DyB6iRW0YjYkg1gy4
-        sl1+BjhQ==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lars@metafoo.de>)
-        id 1pZs2V-0007r9-PG; Wed, 08 Mar 2023 12:32:59 +0100
-Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b]
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1pZs2V-000FRN-9y; Wed, 08 Mar 2023 12:32:59 +0100
-Message-ID: <bf88f6f6-681e-866f-4bd4-8c9a80796ac5@metafoo.de>
-Date:   Wed, 8 Mar 2023 03:32:56 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 2/2] hwmon: ina2xx: add optional regulator support
-To:     Svyatoslav Ryhel <clamor95@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S230057AbjCHMyq (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Mar 2023 07:54:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A869BE12;
+        Wed,  8 Mar 2023 04:54:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61DBD61790;
+        Wed,  8 Mar 2023 12:54:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C403DC4339E;
+        Wed,  8 Mar 2023 12:54:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678280079;
+        bh=HqivjhTLcI9Zd9MO0OlzSyZha29bdurLv8W0YTXg1fU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MsFxZFTY/aVRyNg0z4JPNurU4J9t0IXWsQJsgjwq1nmlMmIzDKCvbpugVljV6O6+h
+         reQRTVH/qViUmaENQdv5/f/VaBGR9quZ4vTfhzmKHABxpTlrCF6ufuZ7w5vQjiwo+o
+         XBVRcH19RCca+cFCpfWG2J2mTfaMuP1CZ/sW2qlX2MhUVqxnp1oZaLD+Ekkw+xonKc
+         TMkq4rWciNYdSsW6zDqKuGiXM6X7a0LTbzmEUCigze30aKkT4XLbpwASpLZZT5eC44
+         aKw49NHXVLJmgdk1pCKxeEWXNU06HNB9bCsG9A/dJC/rPcxuVJGZHTohV6b+b4j1Ds
+         o94X8lLqbhZ1A==
+Date:   Wed, 8 Mar 2023 12:54:34 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: ina2xx: add supply property
+Message-ID: <31ca0ede-012c-4849-bf25-d0492b116681@sirena.org.uk>
 References: <20230308094024.14115-1-clamor95@gmail.com>
- <20230308094024.14115-3-clamor95@gmail.com>
- <378db0d7-4d5a-a445-3e1a-ee6d8da5a9e2@linaro.org>
- <CAPVz0n2KgUKi-m+kjvbxq8fA_G0+KNHtkNe4T0UGpmasMjWK2A@mail.gmail.com>
- <a1187c2e-122e-36d1-dddd-c7beba282800@roeck-us.net>
- <70325083-25B9-434F-9F48-9EE7AE28B550@gmail.com>
-Content-Language: en-US
-From:   Lars-Peter Clausen <lars@metafoo.de>
-In-Reply-To: <70325083-25B9-434F-9F48-9EE7AE28B550@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26835/Wed Mar  8 09:35:43 2023)
+ <20230308094024.14115-2-clamor95@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Lx90xIVXyxO5I7OI"
+Content-Disposition: inline
+In-Reply-To: <20230308094024.14115-2-clamor95@gmail.com>
+X-Cookie: Minnie Mouse is a slow maze learner.
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/8/23 03:19, Svyatoslav Ryhel wrote:
->
-> 8 березня 2023 р. 13:13:18 GMT+02:00, Guenter Roeck <linux@roeck-us.net> написав(-ла):
->> On 3/8/23 02:35, Svyatoslav Ryhel wrote:
->>> ср, 8 бер. 2023 р. о 12:25 Krzysztof Kozlowski
->>> <krzysztof.kozlowski@linaro.org> пише:
->>>> On 08/03/2023 10:40, Svyatoslav Ryhel wrote:
->>>>> Some devices may need a specific supply provided
->>>>> for this sensor to work properly, like p895 does.
->>>>>
->>>>> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
->>>>> ---
->>>>>    drivers/hwmon/ina2xx.c | 12 ++++++++++++
->>>>>    1 file changed, 12 insertions(+)
->>>>>
->>>>> diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
->>>>> index 00fc70305a89..4a3e2b1bbe8b 100644
->>>>> --- a/drivers/hwmon/ina2xx.c
->>>>> +++ b/drivers/hwmon/ina2xx.c
->>>>> @@ -119,6 +119,7 @@ struct ina2xx_data {
->>>>>         long power_lsb_uW;
->>>>>         struct mutex config_lock;
->>>>>         struct regmap *regmap;
->>>>> +     struct regulator *vdd_supply;
->>>>>
->>>>>         const struct attribute_group *groups[INA2XX_MAX_ATTRIBUTE_GROUPS];
->>>>>    };
->>>>> @@ -656,6 +657,17 @@ static int ina2xx_probe(struct i2c_client *client)
->>>>>                 return PTR_ERR(data->regmap);
->>>>>         }
->>>>>
->>>>> +     data->vdd_supply = devm_regulator_get_optional(dev, "vdd");
->>>>> +     if (IS_ERR(data->vdd_supply))
->>>>> +             return dev_err_probe(dev, PTR_ERR(data->vdd_supply),
->>>>> +                                  "failed to get vdd regulator\n");
->>>>> +
->>>>> +     ret = regulator_enable(data->vdd_supply);
->>>>> +     if (ret < 0) {
->>>>> +             dev_err(dev, "failed to enable vdd power supply\n");
->>>>> +             return ret;
->>>> And where is disable? On each error path, removal etc.
->>>>
->>> error path ok, should I create a remove function just to disable the regulator?
->>>
->> Use devm_add_action_or_reset().
->>
->> Guenter
->>
-> That is good suggestion. Thanks!
 
-There is a new function devm_regulator_get_enable(). It will both 
-request the regulator and enable in and then automatically disable and 
-free it when the device is removed.
+--Lx90xIVXyxO5I7OI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The API can be slightly confusing in this regard. In your case you also 
-want to use the non-optional API. The optional API is for cases where 
-you need to know whether a regulator is connected or not. If you do not 
-need to know use the non-optional API, if no regulator is specified the 
-regulator framework will just a return a noop regulator as a 
-placeholder. The optional version will actually return an error if no 
-regulator is specified, so with your patch existing users of this driver 
-will break.
+On Wed, Mar 08, 2023 at 11:40:23AM +0200, Svyatoslav Ryhel wrote:
+> Add supply property.
 
+> +  vdd-supply: true
+> +
+>  required:
+>    - compatible
+>    - reg
 
+Unless the device can work without power the supply should be required.
+
+--Lx90xIVXyxO5I7OI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQIhYkACgkQJNaLcl1U
+h9DxuQgAhd9/3KHUfsZXob8PZ/h6D1Yvs9GG3wCJ2iFn5NVkVsm+++sK7UI7VjQb
+zWdpl/G//+4BA4VxxRtMsLoWba2ALW1dewxlvohBA/GkaxU/ZKDG77TmkB+pDv0x
+4KoSpS0fJxfRObVPc+XC/alDkq527HBJC1Lo/cQm5ExXr3zOOPUc8X/j8u+CCcoX
+pzCCiKt50kNltwKC0eQW8hyDfeLOWaOPWi79SuOhbY8pMei5M+2AcfpEFi3ZO8h5
+4Jhmaa/9pX2rSHLCBhZatolqbvwHt9lMHjh4F0tLNiBzOYu+EPOOiKgTPQiiR5WV
+cO9kV6PjD//OnG3ALzh8ryrGLdK68w==
+=hdxv
+-----END PGP SIGNATURE-----
+
+--Lx90xIVXyxO5I7OI--
