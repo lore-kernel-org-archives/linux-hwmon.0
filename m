@@ -2,103 +2,78 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DEC2C6FD1E
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Mar 2023 14:38:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2547C678D5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Mar 2023 15:24:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbjCHOis (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Mar 2023 09:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
+        id S231435AbjCHPYF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Mar 2023 10:24:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231579AbjCHOir (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Mar 2023 09:38:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7469E5DEC7;
-        Wed,  8 Mar 2023 06:38:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01375B81D0C;
-        Wed,  8 Mar 2023 14:38:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2D93C4339B;
-        Wed,  8 Mar 2023 14:38:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678286320;
-        bh=3X4ySPWsoyAsUgf2qhOiAzwci57Co7yc+Y4wqI6s2sQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cENv+SBuRPtyAejRhqhvY49Uk3OlvbS8pKt47PCsr0YCvZyYuSdUfSJjI9O7/Sc6Y
-         iXv/4zsDPY25jyta7lBQYmHhSQr+lB5BGXN2/VKw5dpBVSMbzhtTjPAz4By0j4jKlh
-         xi5SenYirDjH+4Pht+2WDtj6w3Su3o/DntpI0mAqyHQ6shElrm/1Xna0kYEuBgc0kK
-         YyhMBQCSlXw8ZJMjDxwwQrJqNlWhZA5ENrhd3eh9/Nsbl4cBjovDKeAchfl8//H0zH
-         cdfCycIkX9/5Wcu2kusSf2A0UWONhUPbL6j2xs7XEIeHHf8f6DjOCGomj7O0s7P169
-         qDTsVwawcYxQg==
-Date:   Wed, 8 Mar 2023 14:38:35 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Svyatoslav Ryhel <clamor95@gmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: ina2xx: add supply property
-Message-ID: <f6f02138-8ef9-4a33-9b51-0b7cd371230f@sirena.org.uk>
-References: <20230308094024.14115-1-clamor95@gmail.com>
- <20230308094024.14115-2-clamor95@gmail.com>
- <31ca0ede-012c-4849-bf25-d0492b116681@sirena.org.uk>
- <6DBD0F5A-4625-4FCD-8D64-23293D734A82@gmail.com>
- <5cd6764c-9b04-42ea-932d-9f14aa465605@sirena.org.uk>
- <135993BF-B4AC-42C1-AD36-94F66EE1620D@gmail.com>
+        with ESMTP id S231929AbjCHPX4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Mar 2023 10:23:56 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7827CB668
+        for <linux-hwmon@vger.kernel.org>; Wed,  8 Mar 2023 07:23:54 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id l25so15771350wrb.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 08 Mar 2023 07:23:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678289033;
+        h=content-transfer-encoding:subject:to:mime-version:from:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=uvm/JPrLNIQNZCtgbYSFdh/LTyOoJqjd+Huoqusb7iY=;
+        b=U+h3HgIC8VWFCysMFqyN0pdP9VTpOf3yeg219rSdkDbZVNS5Vhhm4TptYxdZ2y2RhG
+         2JQhn8XMGCvYgQY8jFl7wH+cAajFQ+qZIRadUR+mvadgvbB32y4JxyJnXIe8nxriWSCs
+         94TTWyZACzwBJ6xRFUCSsvpJ7StZctakFcxdhqOX8pPet8Pzj2TEZUuB8givRGuPbke5
+         bFJ0Q8fFoq46zagcz5/hwzod5E7ydeNUwcv+YTJoJs6E0uMKBNBwIAZCD5lEdN7ebnLZ
+         OepX0DBlqFoFaHt01ZSa9NR37eWZbWRkGtwCQlsiklTWz7gwutfLvfPrz73rbazkWxNP
+         QZXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678289033;
+        h=content-transfer-encoding:subject:to:mime-version:from:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uvm/JPrLNIQNZCtgbYSFdh/LTyOoJqjd+Huoqusb7iY=;
+        b=R59PlqsCyuizUyWcDv2U+NMZujL3mdCS6/Vf0s8SVYLVlveUuW9NyyeC4gv5j4kbZM
+         oqN9zygPho1I3BBQGM0azWUq4Qp7Qh8W8GfKpxlPqCHBj78FTzAU64zVlZZtVTCAryet
+         7o37DTDFNw0hYA6c9vJ8PxAYUWT+JVq6uXMBa6RPoyKhTDEvkPF/1ZueWzd+H5Q/4UEF
+         ZTthHXDs2QZlCBb0eqLP64WFU+wTAzSarqEiAaLGbHec3c8uAgwUUOMnWx7tcXHXVgRZ
+         q6PRYLQ0RYllAmERHXv34XcdgS2TEhh7SFcEtfUhFtt0pvYyPHOoqh0unxD7jqd8siUQ
+         f60w==
+X-Gm-Message-State: AO0yUKVL8urbOqtA9znmcp8j+JUv+Y5epYn+QeU+a3rtYEO9LDGzvA4k
+        vW37Z/UlPh8Ju7WmUncGkHJEez6RZ3Y=
+X-Google-Smtp-Source: AK7set/TMPVJMxlzZJ4bprTQae4kHKsIfetkMR3CUSc1w1+1X28LW3iIRzc4f5S+iOiuIkkez4bi7A==
+X-Received: by 2002:a5d:534a:0:b0:2c9:e34e:7d1 with SMTP id t10-20020a5d534a000000b002c9e34e07d1mr11554927wrv.6.1678289032898;
+        Wed, 08 Mar 2023 07:23:52 -0800 (PST)
+Received: from DESKTOP-8VK398V ([125.62.90.127])
+        by smtp.gmail.com with ESMTPSA id q10-20020a5d658a000000b002c70851fdd8sm15582656wru.75.2023.03.08.07.23.52
+        for <linux-hwmon@vger.kernel.org>
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Wed, 08 Mar 2023 07:23:52 -0800 (PST)
+Message-ID: <6408a888.5d0a0220.1075f.f43d@mx.google.com>
+Date:   Wed, 08 Mar 2023 07:23:52 -0800 (PST)
+X-Google-Original-Date: 8 Mar 2023 20:23:52 +0500
+From:   yosefdeclan936@gmail.com
+X-Google-Original-From: YosefDeclan936@gmail.com
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iMP8I05b9K9jEnlX"
-Content-Disposition: inline
-In-Reply-To: <135993BF-B4AC-42C1-AD36-94F66EE1620D@gmail.com>
-X-Cookie: Minnie Mouse is a slow maze learner.
+To:     linux-hwmon@vger.kernel.org
+Subject: Estimate To Bid
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hi,=0D=0A=0D=0AWe are an estimation company. We provide estimate =
+and takeoff services to the GC and subcontractors. We have expert=
+ise in following trades:-=0D=0A=0D=0A(Civil, Mechanical, Electric=
+al, Plumbing, HVAC=0D=0ARoofing, Painting, Windows, Glass and Gla=
+zing, Countertops=0D=0ALumber, Drywall, Demolition, Networking an=
+d IT, Fire Detection and Alarm System)=0D=0A =0D=0AAll you need t=
+o do is just send us the drawings via email or dropbox and we wil=
+l get back to you with our services fee proposal and turnaround t=
+ime shortly. If you approve of the proposal we will start working=
+ on your estimate.=0D=0A=0D=0AYou can ask for our sample take-off=
+s & estimates to get a better idea of our work.=0D=0A=0D=0ABest R=
+egards.=0D=0AYosef Declan=0D=0AMarketing Manager=0D=0ACrown Estim=
+ation, LLC=0D=0A
 
---iMP8I05b9K9jEnlX
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Mar 08, 2023 at 04:01:44PM +0200, Svyatoslav Ryhel wrote:
-> 8 =D0=B1=D0=B5=D1=80=D0=B5=D0=B7=D0=BD=D1=8F 2023 =D1=80. 15:46:52 GMT+02=
-:00, Mark Brown <broonie@kernel.org> =D0=BD=D0=B0=D0=BF=D0=B8=D1=81=D0=B0=
-=D0=B2(-=D0=BB=D0=B0):
-
-> >If there are devices that work without any source of power at all that
-> >would be very surprising.  It doesn't matter if a particular system has
-> >a non-controllable regulator, the binding should still make it mandatory
-> >to describe that.
-
-> Then question is WHY and WHO passed driver without power supply system im=
-plemented? Why it pops only now?
-
-You are defining a supply property.  When you define a supply property
-that supply property should be mandatory if it's physically mandatory
-for the device.
-
-Please fix your mail client to word wrap within paragraphs at something
-substantially less than 80 columns.  Doing this makes your messages much
-easier to read and reply to.
-
---iMP8I05b9K9jEnlX
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQIneoACgkQJNaLcl1U
-h9Bndgf/XmqeNtC1+eoQRHwNXd1SSMmtD0nB7GqQSiUq0mOP9Gl7Rvks3PywXWgO
-ng1krSAq7woA3kfPOQZliJm4M7uRwZNjdqkQs3D3Oas2gMKfAodUuFxCjJtM4S+T
-9HNslwe8p7b1IjG2JrsL39jogZsrXfrFMRud7JaBYudEAF2WAVFWCaP8oyzY45cZ
-1FBOhNPxFYQ1sdyNprVj908/c/x6y68gqSHIadO6BXt7Tl4sGfnr613+DGf1mu0A
-EeMkWnM2alW79dBseTgqcL0W/JZ0EvA4yyr36MF/nRviaegMnTRBwQ+lOlKn+5VO
-/LnuaM0R5S1srMHaOIYc8nI3LVmckQ==
-=fbRd
------END PGP SIGNATURE-----
-
---iMP8I05b9K9jEnlX--
