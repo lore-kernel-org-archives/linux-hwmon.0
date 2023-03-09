@@ -2,144 +2,160 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23FE5C64EC4
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Mar 2023 11:45:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5639DC61DA4
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Mar 2023 12:01:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbjCILpa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Mar 2023 06:45:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
+        id S229708AbjCIMBm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Mar 2023 07:01:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231636AbjCILp0 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Mar 2023 06:45:26 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643B4ABB28;
-        Thu,  9 Mar 2023 03:45:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678362325; x=1709898325;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IJBUHluiD9xAyzjbFJfHVvyD/VXxIi5tVeFMgU76yik=;
-  b=h5qayGp2HDrcPU3CuIUR2hBD2qilva0TOJclG7dp3H4rFlWE2a52Ok0u
-   G5GXCjsQzWZja5kpyafBJMCIPyQS4FBvaPLRYjNSunYdFxVCVa/dmU9NT
-   W0zOQ8WosBnwwVJdQWk9e4IAScuwTBsI/KUPZWHJVpz1GSZVIjdcvXbGR
-   cYXYZDsfD6quI7TIu78KciGJj8DC2t41gC8ihi/kiEdStJGKLubHdVdb7
-   vAYatm4Gj7OZ/gR/m8S83oOkjN03iTK4H9ErqYGXKMvMpgotgKSZwBolr
-   Hp+UPsmva5l8jVR7672u03eWj6MtQWoR6/mrDbQVccNYulC+tDxeR/2Vz
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="335127260"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="335127260"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 03:45:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="851485141"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="851485141"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 Mar 2023 03:45:23 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1paEi2-0002uv-1b;
-        Thu, 09 Mar 2023 11:45:22 +0000
-Date:   Thu, 9 Mar 2023 19:44:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jani Nikula <jani.nikula@intel.com>, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Jani Nikula <jani.nikula@intel.com>,
+        with ESMTP id S229870AbjCIMBV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Mar 2023 07:01:21 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57272DDB27;
+        Thu,  9 Mar 2023 04:01:20 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id f18so1961751lfa.3;
+        Thu, 09 Mar 2023 04:01:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678363278;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tve5bNapQ7T+NjlxZdJFJ3Bc6H97qUyB+SM+FU5DWVQ=;
+        b=FkrcOqO/kd7xRILlJt7gJ7NSnBuntrKA2dOVWBjLPm2dBnK08E+kNQ0tKzJSq/cMeJ
+         SUZ1sP5mO9tH5KnXp8tWMVOcKZAyXgI+5z23F6ZVA6bVW2o1rvm9sQBB899VM/IdV4vl
+         eN/KpTgZPBjrQ8yQgXo6XDhftAxw/mvimnAXE/vCc6vwGOoiFDGm48mWAk8nL/cnoCKg
+         E7EO79JIW1F7vOUKSHcmW/1UpRnKX5Pj+c3SKLYGrG2adpTAl8M2jMY4rDZl0odF6xbE
+         ETANbntU+IpbC1BN8U4yT0LDQsBzO+JUTeotGTBxkMfAh7KtbE8wMcEDMVDst923HET3
+         QYqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678363278;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tve5bNapQ7T+NjlxZdJFJ3Bc6H97qUyB+SM+FU5DWVQ=;
+        b=OFoZvsA+0oPd1NlmtqWOiDJPQ6YEnPtPBAXaiMwq2U06UEgFDKHu7RCtCMxErzduEM
+         PQj5MgeznIeOUP1Yv5qGBMTDdurLgsG9yhdeyxRKdW5B+WX6APEgwiXCVr2MOCBkmFJl
+         lUF9527xWGUWhkwSyThZfLoknrNR1oMAnbo21hDxAl69Z6H+DTxm2itYJMYCn33fIrws
+         ADbqK4kd8STduvVKlkxoQ0h1FGMEyJQzEoKiSVPQik28m4l+SNatkNX2iT4JffxqWfXf
+         LSgeMTsDM1puCaPgZTTTrUghK6bKI50DKL4m5DBUSc00t+xE0vAoXtQTAr5qClLfMUFM
+         eaPw==
+X-Gm-Message-State: AO0yUKW6IOMv/8KkJtUKsLbsEK6J1nobTnrkLmacUInIuMQz3lfwXZaM
+        wYX16Pbve1wKCf+82yKPm3Q=
+X-Google-Smtp-Source: AK7set8nOD0+LqZdtetn68p5GlyqtuV++nZo9ciY9AUQ+HN5vjNrkAFShtUUA5gctanxxG7F1gNjwA==
+X-Received: by 2002:a05:6512:25b:b0:4dd:ab39:86e0 with SMTP id b27-20020a056512025b00b004ddab3986e0mr6766687lfo.27.1678363278424;
+        Thu, 09 Mar 2023 04:01:18 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id a3-20020a056512390300b00498f77cfa63sm2606748lfu.280.2023.03.09.04.01.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 04:01:17 -0800 (PST)
+Date:   Thu, 9 Mar 2023 15:01:15 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jon Mason <jdmason@kudzu.us>, Dave Jiang <dave.jiang@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: constify struct hwmon_chip_info info member harder
-Message-ID: <202303091901.0BoQeZI2-lkp@intel.com>
-References: <20230309082841.400118-1-jani.nikula@intel.com>
+        Guenter Roeck <linux@roeck-us.net>, ntb@lists.linux.dev,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH] ntb: idt: drop redundant
+ pci_enable_pcie_error_reporting()
+Message-ID: <20230309120115.fbcjqtbm7fxvlojg@mobilestation>
+References: <20230307203021.881866-1-helgaas@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230309082841.400118-1-jani.nikula@intel.com>
+In-Reply-To: <20230307203021.881866-1-helgaas@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Jani,
+Hi Bjorn,
 
-I love your patch! Perhaps something to improve:
+On Tue, Mar 07, 2023 at 02:30:21PM -0600, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> pci_enable_pcie_error_reporting() enables the device to send ERR_*
+> Messages.  Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is
+> native"), the PCI core does this for all devices during enumeration, so the
+> driver doesn't need to do it itself.
+> 
+> Remove the redundant pci_enable_pcie_error_reporting() call from the
+> driver.  Also remove the corresponding pci_disable_pcie_error_reporting()
+> from the driver .remove() path.
+> 
+> Note that this only controls ERR_* Messages from the device.  An ERR_*
+> Message may cause the Root Port to generate an interrupt, depending on the
+> AER Root Error Command register managed by the AER service driver.
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.3-rc1 next-20230309]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for the patch.
+Acked-by: Serge Semin <fancer.lancer@gmail.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/hwmon-constify-struct-hwmon_chip_info-info-member-harder/20230309-163328
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230309082841.400118-1-jani.nikula%40intel.com
-patch subject: [PATCH] hwmon: constify struct hwmon_chip_info info member harder
-config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20230309/202303091901.0BoQeZI2-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/1ec9eaf0281f0a40044492700b7cdfe99d35d35e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jani-Nikula/hwmon-constify-struct-hwmon_chip_info-info-member-harder/20230309-163328
-        git checkout 1ec9eaf0281f0a40044492700b7cdfe99d35d35e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hwmon/
+BTW seeing the pci_aer_init() method fully clears the AER status don't
+you think the pci_aer_clear_nonfatal_status() function invocation
+should be dropped as well?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303091901.0BoQeZI2-lkp@intel.com/
+Note the patchset doing that was already submitted a while ago:
+https://lore.kernel.org/linux-pci/20220928105946.12469-1-chenzhuo.1@bytedance.com
+* particular patch:
+https://lore.kernel.org/linux-pci/20220928105946.12469-4-chenzhuo.1@bytedance.com
 
-All warnings (new ones prefixed by >>):
+-Serge(y)
 
-   drivers/hwmon/hwmon.c: In function 'hwmon_thermal_set_trips':
->> drivers/hwmon/hwmon.c:177:50: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     177 |         const struct hwmon_channel_info **info = chip->info;
-         |                                                  ^~~~
-   drivers/hwmon/hwmon.c: In function 'hwmon_thermal_register_sensors':
-   drivers/hwmon/hwmon.c:256:50: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     256 |         const struct hwmon_channel_info **info = chip->info;
-         |                                                  ^~~~
-
-
-vim +/const +177 drivers/hwmon/hwmon.c
-
-d560168b5d0fb4a Guenter Roeck   2015-08-26  171  
-e5181331359d931 Daniel Lezcano  2022-08-05  172  static int hwmon_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  173  {
-e5181331359d931 Daniel Lezcano  2022-08-05  174  	struct hwmon_thermal_data *tdata = tz->devdata;
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  175  	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  176  	const struct hwmon_chip_info *chip = hwdev->chip;
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23 @177  	const struct hwmon_channel_info **info = chip->info;
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  178  	unsigned int i;
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  179  	int err;
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  180  
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  181  	if (!chip->ops->write)
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  182  		return 0;
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  183  
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  184  	for (i = 0; info[i] && info[i]->type != hwmon_temp; i++)
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  185  		continue;
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  186  
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  187  	if (!info[i])
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  188  		return 0;
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  189  
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  190  	if (info[i]->config[tdata->index] & HWMON_T_MIN) {
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  191  		err = chip->ops->write(tdata->dev, hwmon_temp,
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  192  				       hwmon_temp_min, tdata->index, low);
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  193  		if (err && err != -EOPNOTSUPP)
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  194  			return err;
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  195  	}
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  196  
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  197  	if (info[i]->config[tdata->index] & HWMON_T_MAX) {
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  198  		err = chip->ops->write(tdata->dev, hwmon_temp,
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  199  				       hwmon_temp_max, tdata->index, high);
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  200  		if (err && err != -EOPNOTSUPP)
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  201  			return err;
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  202  	}
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  203  
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  204  	return 0;
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  205  }
-a5f6c0f85a09f46 Dmitry Osipenko 2021-06-23  206  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> 
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  drivers/ntb/hw/idt/ntb_hw_idt.c | 17 +++++------------
+>  1 file changed, 5 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/ntb/hw/idt/ntb_hw_idt.c b/drivers/ntb/hw/idt/ntb_hw_idt.c
+> index 0ed6f809ff2e..7192ff59dd91 100644
+> --- a/drivers/ntb/hw/idt/ntb_hw_idt.c
+> +++ b/drivers/ntb/hw/idt/ntb_hw_idt.c
+> @@ -2651,20 +2651,18 @@ static int idt_init_pci(struct idt_ntb_dev *ndev)
+>  	}
+>  
+>  	/*
+> -	 * Enable the device advanced error reporting. It's not critical to
+> +	 * The PCI core enables device error reporting. It's not critical to
+>  	 * have AER disabled in the kernel.
+> +	 *
+> +	 * Cleanup nonfatal error status before getting to init.
+>  	 */
+> -	ret = pci_enable_pcie_error_reporting(pdev);
+> -	if (ret != 0)
+> -		dev_warn(&pdev->dev, "PCIe AER capability disabled\n");
+> -	else /* Cleanup nonfatal error status before getting to init */
+> -		pci_aer_clear_nonfatal_status(pdev);
+> +	pci_aer_clear_nonfatal_status(pdev);
+>  
+>  	/* First enable the PCI device */
+>  	ret = pcim_enable_device(pdev);
+>  	if (ret != 0) {
+>  		dev_err(&pdev->dev, "Failed to enable PCIe device\n");
+> -		goto err_disable_aer;
+> +		return ret;
+>  	}
+>  
+>  	/*
+> @@ -2692,8 +2690,6 @@ static int idt_init_pci(struct idt_ntb_dev *ndev)
+>  
+>  err_clear_master:
+>  	pci_clear_master(pdev);
+> -err_disable_aer:
+> -	(void)pci_disable_pcie_error_reporting(pdev);
+>  
+>  	return ret;
+>  }
+> @@ -2714,9 +2710,6 @@ static void idt_deinit_pci(struct idt_ntb_dev *ndev)
+>  	/* Clear the bus master disabling the Request TLPs translation */
+>  	pci_clear_master(pdev);
+>  
+> -	/* Disable the AER capability */
+> -	(void)pci_disable_pcie_error_reporting(pdev);
+> -
+>  	dev_dbg(&pdev->dev, "NT-function PCIe interface cleared");
+>  }
+>  
+> -- 
+> 2.25.1
+> 
