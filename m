@@ -2,138 +2,121 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B6E9C61DA4
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Mar 2023 15:07:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DC9CC64EC4
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Mar 2023 16:24:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231772AbjCIPH2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Mar 2023 10:07:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
+        id S231184AbjCIQY0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Mar 2023 11:24:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231566AbjCIPHB (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Mar 2023 10:07:01 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DB3EACE3B;
-        Thu,  9 Mar 2023 07:04:55 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A049BAD7;
-        Thu,  9 Mar 2023 07:05:38 -0800 (PST)
-Received: from [10.57.48.23] (unknown [10.57.48.23])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 157B93F5A1;
-        Thu,  9 Mar 2023 07:04:51 -0800 (PST)
-Message-ID: <3a41a7ad-37c1-7104-79b2-b9be53790a6c@arm.com>
-Date:   Thu, 9 Mar 2023 15:04:50 +0000
+        with ESMTP id S229706AbjCIQYH (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Mar 2023 11:24:07 -0500
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8421DF73B7;
+        Thu,  9 Mar 2023 08:15:28 -0800 (PST)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-176b90e14a9so2789930fac.9;
+        Thu, 09 Mar 2023 08:15:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678378401;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dYOeUJJ89Hztfcvaky8Mr2gLJEdiaCb6nJHTudqVZvs=;
+        b=O2AJ3swIqJ9DTvxFmQEwTHlSVvUPVEj7ctsMdozKZiHm3NKvTN41YJybBpos+D/H1z
+         Jt6Xss7r3mPpxCcAXe2/cFBpZe4b4kDOu+Rp6Ac3wNianJJx6YJJDMzKJYupN1YpdTJC
+         SQ9rnqulBrhB+ZFyAxwD6gs9JN0ZePrVI0Z+AFt3Y3GJL0ma1AN+1KaQeLssBQD3UyI8
+         E/AXYaoKN8hhQbMOPXUipCxFuSa0BD14ffRJScv+1Rnbn8XWoV5vPVMiEqk+IlnMyP3w
+         /N26aitnnmf1b2mtNGX2gkg5Z03XQihlMV/qY0eoB9euX32BvAl9crkAIPJdy0ViqFkH
+         5MaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678378401;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dYOeUJJ89Hztfcvaky8Mr2gLJEdiaCb6nJHTudqVZvs=;
+        b=5QOp2VXLeMg5i4Vi3tNklxwVnyadRGDMHnlgk3Pn6IcyoIYiODk/24X6GuZORchJbE
+         pIMiHiVn1u/efmtbm3giZmXIA3aGIt6BTicfoBETHnLVtX7kUXZrPUcX76llvZFhKJnx
+         EvYzMrUwkeVexaISvDXk7FFwFuNEjgbNkUA+Iy6vyLnSMmL3i8IQbY/72TkLelhqVezl
+         nz7OWw2F+3mKCHTTdkhF6Y/DCjSvKcWHGkRIZRxlXLJracDffmCzm0+ydzxkETkleMFv
+         ZDrj7pObDVKJ57914qH8cDN9y+dtExO3xZVS2sgXiBBLMbxydjCPdx3Q55v6PK/3bLqg
+         xjMQ==
+X-Gm-Message-State: AO0yUKUYGwYCkXBHQhtopn5eo/a3Jr38i+SLuDo2MKJ4UmKCAmFI1U1Y
+        a7ICte7Dp/gMbi42G2BAxYvQaFVIc44=
+X-Google-Smtp-Source: AK7set8CTKtO8nszGkxqDdca/+76IH9WrUXt/+umVOrDyibD/nEBdQJ/Oi04TI4ZvCTIwescBrel1Q==
+X-Received: by 2002:a05:6871:806:b0:176:1fd8:d144 with SMTP id q6-20020a056871080600b001761fd8d144mr15629605oap.26.1678378400901;
+        Thu, 09 Mar 2023 08:13:20 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u27-20020a4a6c5b000000b00524f381f681sm7406546oof.27.2023.03.09.08.13.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 08:13:20 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 9 Mar 2023 08:13:18 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jani Nikula <jani.nikula@intel.com>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: constify struct hwmon_chip_info info member harder
+Message-ID: <2f0a6217-3747-4493-90e6-8fb129cb6a34@roeck-us.net>
+References: <20230309082841.400118-1-jani.nikula@intel.com>
+ <e0579cbe-cbd6-46cf-b425-234cfed4ff00@roeck-us.net>
+ <87h6uu9nxn.fsf@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   James Clark <james.clark@arm.com>
-Subject: Re: [PATCH 3/4] iio: adc: Use devm_krealloc_array
-To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20230306152723.3090195-1-james.clark@arm.com>
- <20230306152723.3090195-4-james.clark@arm.com>
- <a5bb0516-9a21-5d46-d557-f02893ac8bf4@amd.com>
-Content-Language: en-US
-In-Reply-To: <a5bb0516-9a21-5d46-d557-f02893ac8bf4@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87h6uu9nxn.fsf@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Thu, Mar 09, 2023 at 01:14:28PM +0200, Jani Nikula wrote:
+> On Thu, 09 Mar 2023, Guenter Roeck <linux@roeck-us.net> wrote:
+> > On Thu, Mar 09, 2023 at 10:28:41AM +0200, Jani Nikula wrote:
+> >> Let the struct hwmon_chip_info info member be a pointer to a const array
+> >> of const pointers, rather than mutable array of const pointers.
+> >> 
+> >> Cc: Jean Delvare <jdelvare@suse.com>
+> >> Cc: Guenter Roeck <linux@roeck-us.net>
+> >> Cc: linux-hwmon@vger.kernel.org
+> >> Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+> >> ---
+> >>  include/linux/hwmon.h | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >> 
+> >> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+> >> index c1b62384b6ee..492dd27a5dd8 100644
+> >> --- a/include/linux/hwmon.h
+> >> +++ b/include/linux/hwmon.h
+> >> @@ -430,7 +430,7 @@ struct hwmon_channel_info {
+> >>   */
+> >>  struct hwmon_chip_info {
+> >>  	const struct hwmon_ops *ops;
+> >> -	const struct hwmon_channel_info **info;
+> >> +	const struct hwmon_channel_info * const *info;
+> >
+> > As pointed out by 0-day, you's also have to change each
+> > instance where this is is assigned to another variable.
+> 
+> Ah, sorry, I had THERMAL_OF=n.
+> 
 
+You also didn't test compile drivers/hwmon/hwmon.c.
+I had wondered about that, and 0-day now confirmed it.
 
-On 08/03/2023 11:58, Michal Simek wrote:
+Guenter
+
+> BR,
+> Jani.
 > 
 > 
-> On 3/6/23 16:27, James Clark wrote:
->>
->> Now that it exists, use it instead of doing the multiplication and
->> checking for overflow manually.
->>
->> Signed-off-by: James Clark <james.clark@arm.com>
->> ---
->>   drivers/iio/adc/xilinx-ams.c       |  9 +++------
->>   drivers/iio/adc/xilinx-xadc-core.c | 17 +++++++----------
->>   2 files changed, 10 insertions(+), 16 deletions(-)
->>
->> diff --git a/drivers/iio/adc/xilinx-ams.c b/drivers/iio/adc/xilinx-ams.c
->> index 34cf336b3490..f0b71a1220e0 100644
->> --- a/drivers/iio/adc/xilinx-ams.c
->> +++ b/drivers/iio/adc/xilinx-ams.c
->> @@ -1263,7 +1263,7 @@ static int ams_parse_firmware(struct iio_dev
->> *indio_dev)
->>          struct device *dev = indio_dev->dev.parent;
->>          struct fwnode_handle *child = NULL;
->>          struct fwnode_handle *fwnode = dev_fwnode(dev);
->> -       size_t ams_size, dev_size;
->> +       size_t ams_size;
->>          int ret, ch_cnt = 0, i, rising_off, falling_off;
->>          unsigned int num_channels = 0;
->>
->> @@ -1320,11 +1320,8 @@ static int ams_parse_firmware(struct iio_dev
->> *indio_dev)
->>                  }
->>          }
->>
->> -       dev_size = array_size(sizeof(*dev_channels), num_channels);
->> -       if (dev_size == SIZE_MAX)
->> -               return -ENOMEM;
->> -
->> -       dev_channels = devm_krealloc(dev, ams_channels, dev_size,
->> GFP_KERNEL);
->> +       dev_channels = devm_krealloc_array(dev, ams_channels,
->> num_channels,
->> +                                          sizeof(*dev_channels),
->> GFP_KERNEL);
->>          if (!dev_channels)
->>                  return -ENOMEM;
->>
->> diff --git a/drivers/iio/adc/xilinx-xadc-core.c
->> b/drivers/iio/adc/xilinx-xadc-core.c
->> index 292f2892d223..287df3bb951e 100644
->> --- a/drivers/iio/adc/xilinx-xadc-core.c
->> +++ b/drivers/iio/adc/xilinx-xadc-core.c
->> @@ -613,20 +613,17 @@ static int xadc_update_scan_mode(struct iio_dev
->> *indio_dev,
->>          const unsigned long *mask)
->>   {
->>          struct xadc *xadc = iio_priv(indio_dev);
->> -       size_t new_size, n;
->> +       size_t n;
->>          void *data;
->>
->>          n = bitmap_weight(mask, indio_dev->masklength);
->>
->> -       if (check_mul_overflow(n, sizeof(*xadc->data), &new_size))
->> -               return -ENOMEM;
->> -
->> -       data = devm_krealloc(indio_dev->dev.parent, xadc->data,
->> -                            new_size, GFP_KERNEL);
->> +       data = devm_krealloc_array(indio_dev->dev.parent, xadc->data,
->> +                                  n, sizeof(*xadc->data), GFP_KERNEL);
->>          if (!data)
->>                  return -ENOMEM;
->>
->> -       memset(data, 0, new_size);
->> +       memset(data, 0, n*sizeof(*xadc->data));
+> >
+> > Guenter
+> >
+> >>  };
+> >>  
+> >>  /* hwmon_device_register() is deprecated */
+> >> -- 
+> >> 2.39.1
+> >> 
 > 
-> this is not correct coding style.
-
-Oops, fixed in v2, thanks.
-
-> 
-> M
+> -- 
+> Jani Nikula, Intel Open Source Graphics Center
