@@ -2,55 +2,61 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59E6DC61DA4
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Mar 2023 10:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80779C61DA4
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Mar 2023 11:12:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjCIKyh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Mar 2023 05:54:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
+        id S231500AbjCILMS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Mar 2023 06:12:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjCIKy1 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Mar 2023 05:54:27 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A420467801;
-        Thu,  9 Mar 2023 02:54:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678359264; x=1709895264;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=alC5GEn1xgVLK41r3n5/kXue0z23To81HFJv5g+mKmk=;
-  b=ADizU7dukpiiXnyMPXlX9MiOxVpjMP8SIETbMrihW7L2mdgqQUZx2Byd
-   KxQNyZmlKuw4BlXRmnkuDlGrWsb2yZYB14cNXTd7uXA68LVWw4CMt/isZ
-   /DHdL7rzsHEjQoK0fZIoj7zqOFiBoJGzxfEHKwA6P0t3c6IUr2HE1jGdP
-   X8KOEbIy9rnyVYGQBHP6ftzmceTh1UmFODv/GSIscdlbZ8Ausk9NAMtcW
-   qdI8HJfTSxZUMBElzNLNuj8k4Zj2nJq3QMVuC0I/GQrZqce57oOGz+w5X
-   mIpq3cKfjaqLeKsM/lJ3dwcwhVRRHcWOno6GJEdUrzvvaygo3mguoC+E6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="336428304"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="336428304"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 02:54:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="679709610"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="679709610"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Mar 2023 02:54:22 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1paDuf-0002tf-29;
-        Thu, 09 Mar 2023 10:54:21 +0000
-Date:   Thu, 9 Mar 2023 18:53:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jani Nikula <jani.nikula@intel.com>, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Jani Nikula <jani.nikula@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+        with ESMTP id S231504AbjCILL7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Mar 2023 06:11:59 -0500
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3F5ED0F3;
+        Thu,  9 Mar 2023 03:06:25 -0800 (PST)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-176d1a112bfso1894820fac.5;
+        Thu, 09 Mar 2023 03:06:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678359979;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=samIwn+mrYCkPDlmXVkTL6VnYSrs9OlBexxb29Tur4c=;
+        b=obi3QXc3bLKBnOvmv6OSDVVFshnXDnskKZJKDTTlYE8ToK4v3PyDRmN5czpLfs7etP
+         ah4OW+U38zylXSKYcJy71QeFY4XShRVdknvvc7RfDKg8zZHJmcZUOY8PSLziNRgubG/E
+         IUiwmSYA0rMkLRmmZLVQNUqZn0QPCrYA8Y/X9LHMjkoHFlfDg+IIN28ZCuIu2Yj/3yUN
+         CHKqYGth2G/CE5KZa+0rAmc0/2aVrEBr6N0yl7Ve1uylYR3ctY3Pcquv9Pmr9KigKVsR
+         PDxwFCticS07GGCk46gFTyjIYQLxwjxurWciduvxC9kb8kTN0YpY5CtyIaH69ZHAXQdS
+         5jmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678359979;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=samIwn+mrYCkPDlmXVkTL6VnYSrs9OlBexxb29Tur4c=;
+        b=0Zo7ewVgyxvH/U8jfnJJi+6CH7ObxpKBh5eSk65E4I8rkkNr9TcHRZPVZ9VSvmuOQs
+         VYtfQpvYey+3gf8sl/Kl68OujQ6b9kM474aXACjlGFohuLlJ7mADIP8TV+ROMiD2rlU0
+         0EKuQydM3ZG20fqwwjJcs0R2ImAWKADADOT2I+OUobKS/872m6hRqw8JTyNUVA6nofID
+         bbIWc/sMMgeM9VChUBvpsu9dWAEm1VMNwIpEJfn1QBaGbxv1XWw5zRHRId1+wB8VqGCW
+         zgMVmR5PMxXZsDvQiL2rauVwvfIUvJrKL3HcRwanaiYPdc7Nd3ccfzJsOxeWZ5TR4iVl
+         3Szg==
+X-Gm-Message-State: AO0yUKUtQSJR4yrBKGo/MqGz5PFD2yBE9DUwA/LRpS+uQiufHvxemX9J
+        dqg1vaNpVtmYOnt8O0+mfQKjnx06r8A=
+X-Google-Smtp-Source: AK7set/VP49RzW8BUZKF/HspzTXzVSvnjMdvEgb0lFm/xA03cgHDo1EM1wXG6lvWFZGkJ8OBqglZNw==
+X-Received: by 2002:a05:6871:711:b0:172:9b45:3730 with SMTP id f17-20020a056871071100b001729b453730mr13292002oap.56.1678359979287;
+        Thu, 09 Mar 2023 03:06:19 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s9-20020a05682003c900b0051763d6497fsm7028016ooj.38.2023.03.09.03.06.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 03:06:18 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 9 Mar 2023 03:06:16 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jani Nikula <jani.nikula@intel.com>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org
 Subject: Re: [PATCH] hwmon: constify struct hwmon_chip_info info member harder
-Message-ID: <202303091814.jyOAXX4n-lkp@intel.com>
+Message-ID: <e0579cbe-cbd6-46cf-b425-234cfed4ff00@roeck-us.net>
 References: <20230309082841.400118-1-jani.nikula@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -60,88 +66,37 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Jani,
+On Thu, Mar 09, 2023 at 10:28:41AM +0200, Jani Nikula wrote:
+> Let the struct hwmon_chip_info info member be a pointer to a const array
+> of const pointers, rather than mutable array of const pointers.
+> 
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+> ---
+>  include/linux/hwmon.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+> index c1b62384b6ee..492dd27a5dd8 100644
+> --- a/include/linux/hwmon.h
+> +++ b/include/linux/hwmon.h
+> @@ -430,7 +430,7 @@ struct hwmon_channel_info {
+>   */
+>  struct hwmon_chip_info {
+>  	const struct hwmon_ops *ops;
+> -	const struct hwmon_channel_info **info;
+> +	const struct hwmon_channel_info * const *info;
 
-I love your patch! Yet something to improve:
+As pointed out by 0-day, you's also have to change each
+instance where this is is assigned to another variable.
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.3-rc1 next-20230309]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Guenter
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/hwmon-constify-struct-hwmon_chip_info-info-member-harder/20230309-163328
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230309082841.400118-1-jani.nikula%40intel.com
-patch subject: [PATCH] hwmon: constify struct hwmon_chip_info info member harder
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20230309/202303091814.jyOAXX4n-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1ec9eaf0281f0a40044492700b7cdfe99d35d35e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jani-Nikula/hwmon-constify-struct-hwmon_chip_info-info-member-harder/20230309-163328
-        git checkout 1ec9eaf0281f0a40044492700b7cdfe99d35d35e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hwmon/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303091814.jyOAXX4n-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/hwmon/hwmon.c:177:36: error: initializing 'const struct hwmon_channel_info **' with an expression of type 'const struct hwmon_channel_info *const *const' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           const struct hwmon_channel_info **info = chip->info;
-                                             ^      ~~~~~~~~~~
-   drivers/hwmon/hwmon.c:256:36: error: initializing 'const struct hwmon_channel_info **' with an expression of type 'const struct hwmon_channel_info *const *const' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           const struct hwmon_channel_info **info = chip->info;
-                                             ^      ~~~~~~~~~~
-   2 errors generated.
-
-
-vim +177 drivers/hwmon/hwmon.c
-
-d560168b5d0fb4 Guenter Roeck   2015-08-26  171  
-e5181331359d93 Daniel Lezcano  2022-08-05  172  static int hwmon_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  173  {
-e5181331359d93 Daniel Lezcano  2022-08-05  174  	struct hwmon_thermal_data *tdata = tz->devdata;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  175  	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  176  	const struct hwmon_chip_info *chip = hwdev->chip;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23 @177  	const struct hwmon_channel_info **info = chip->info;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  178  	unsigned int i;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  179  	int err;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  180  
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  181  	if (!chip->ops->write)
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  182  		return 0;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  183  
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  184  	for (i = 0; info[i] && info[i]->type != hwmon_temp; i++)
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  185  		continue;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  186  
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  187  	if (!info[i])
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  188  		return 0;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  189  
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  190  	if (info[i]->config[tdata->index] & HWMON_T_MIN) {
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  191  		err = chip->ops->write(tdata->dev, hwmon_temp,
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  192  				       hwmon_temp_min, tdata->index, low);
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  193  		if (err && err != -EOPNOTSUPP)
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  194  			return err;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  195  	}
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  196  
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  197  	if (info[i]->config[tdata->index] & HWMON_T_MAX) {
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  198  		err = chip->ops->write(tdata->dev, hwmon_temp,
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  199  				       hwmon_temp_max, tdata->index, high);
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  200  		if (err && err != -EOPNOTSUPP)
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  201  			return err;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  202  	}
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  203  
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  204  	return 0;
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  205  }
-a5f6c0f85a09f4 Dmitry Osipenko 2021-06-23  206  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>  };
+>  
+>  /* hwmon_device_register() is deprecated */
+> -- 
+> 2.39.1
+> 
