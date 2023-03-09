@@ -2,24 +2,24 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1187C74A44
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Mar 2023 15:06:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 729FAC74A5B
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Mar 2023 15:06:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbjCIPGY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Mar 2023 10:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
+        id S231963AbjCIPGh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Mar 2023 10:06:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjCIPGE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Mar 2023 10:06:04 -0500
+        with ESMTP id S231384AbjCIPGL (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Mar 2023 10:06:11 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36CEDEBFBB;
-        Thu,  9 Mar 2023 07:03:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E2BFEBDB0;
+        Thu,  9 Mar 2023 07:03:50 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 10629AD7;
-        Thu,  9 Mar 2023 07:04:26 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A4CDFC14;
+        Thu,  9 Mar 2023 07:04:33 -0800 (PST)
 Received: from e127643.arm.com (unknown [10.57.48.23])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7D12F3F5A1;
-        Thu,  9 Mar 2023 07:03:39 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 20CAD3F5A1;
+        Thu,  9 Mar 2023 07:03:47 -0800 (PST)
 From:   James Clark <james.clark@arm.com>
 To:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
         michal.simek@amd.com
@@ -38,48 +38,43 @@ Cc:     James Clark <james.clark@arm.com>,
         linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH v2 0/4] devres: Provide krealloc_array
-Date:   Thu,  9 Mar 2023 15:03:29 +0000
-Message-Id: <20230309150334.216760-1-james.clark@arm.com>
+Subject: [PATCH v2 2/4] hwmon: pmbus: Use devm_krealloc_array
+Date:   Thu,  9 Mar 2023 15:03:31 +0000
+Message-Id: <20230309150334.216760-3-james.clark@arm.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230309150334.216760-1-james.clark@arm.com>
+References: <20230309150334.216760-1-james.clark@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Changes since v1:
+Now that it exists, use it instead of doing the multiplication manually.
 
- * Style fix
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: James Clark <james.clark@arm.com>
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
------------------------
-
-Hi,
-
-I had a use for a devm realloc_array in a separate change, so I've
-added one and updated all the obvious existing uses of it that I could
-find. This is basically a copy paste of the one in slab.h
-
-Applies to v6.3-rc1
-
-Thanks
-James
-
-
-James Clark (4):
-  devres: Provide krealloc_array
-  hwmon: pmbus: Use devm_krealloc_array
-  iio: adc: Use devm_krealloc_array
-  serial: qcom_geni: Use devm_krealloc_array
-
- .../driver-api/driver-model/devres.rst          |  1 +
- drivers/hwmon/pmbus/pmbus_core.c                |  6 +++---
- drivers/iio/adc/xilinx-ams.c                    |  9 +++------
- drivers/iio/adc/xilinx-xadc-core.c              | 17 +++++++----------
- drivers/tty/serial/qcom_geni_serial.c           |  6 +++---
- include/linux/device.h                          | 10 ++++++++++
- 6 files changed, 27 insertions(+), 22 deletions(-)
-
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 95e95783972a..e7bee25a3706 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -1190,9 +1190,9 @@ static int pmbus_add_attribute(struct pmbus_data *data, struct attribute *attr)
+ {
+ 	if (data->num_attributes >= data->max_attributes - 1) {
+ 		int new_max_attrs = data->max_attributes + PMBUS_ATTR_ALLOC_SIZE;
+-		void *new_attrs = devm_krealloc(data->dev, data->group.attrs,
+-						new_max_attrs * sizeof(void *),
+-						GFP_KERNEL);
++		void *new_attrs = devm_krealloc_array(data->dev, data->group.attrs,
++						      new_max_attrs, sizeof(void *),
++						      GFP_KERNEL);
+ 		if (!new_attrs)
+ 			return -ENOMEM;
+ 		data->group.attrs = new_attrs;
 -- 
 2.34.1
 
