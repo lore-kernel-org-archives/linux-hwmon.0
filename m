@@ -2,104 +2,99 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95770C742A7
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Mar 2023 14:50:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EA82C64EC4
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Mar 2023 16:33:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233283AbjCJOu2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 10 Mar 2023 09:50:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S231335AbjCJQdE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 10 Mar 2023 11:33:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233297AbjCJOtn (ORCPT
+        with ESMTP id S231336AbjCJQcl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:49:43 -0500
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F37D122CE8;
-        Fri, 10 Mar 2023 06:47:52 -0800 (PST)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-176eae36feaso6062884fac.6;
-        Fri, 10 Mar 2023 06:47:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678459667;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        Fri, 10 Mar 2023 11:32:41 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B5312CBFD;
+        Fri, 10 Mar 2023 08:30:11 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id be16so4707075oib.0;
+        Fri, 10 Mar 2023 08:30:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678465810;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ID/16gZQInzWcaBs1M1mfptd9VSUgb+tugMOzAC8KsU=;
-        b=yA215OAr9JScxnYfAtKOJCua1JPt2pJuizhBrjA13+U2oMZhf1I+MahPBN2Fs9Iy3I
-         Jp+H7MfAxa29xrvvHN5LYCM4KHV9yPfSxnrSzyWoi//kna6zqIOssZLqgISICl869gir
-         z/fxcFn8ILg4zhTn/gNLGx1WvJCcLXZujxWvpywQ+o0aY6zA4RfsqdFVw95dXcbdBSH7
-         WhvBCkzBvVbWIeWwfuew2bppTk9G5qGCKsYCyud3gfLXFBoJq3z6i/fu0fWybNkB5aY8
-         dEpupDbo72G9krJ+p8CNLXuD4D+91xeH9vDfpdYR/zb0kspUpbR79u5DkotLHXYJelXU
-         j3fw==
-X-Gm-Message-State: AO0yUKWa2y4241AqvNa5DXYzXsZXpznz3VTW0dRLO64rUjzm65Yx5iY2
-        a0Fy/Hrmp9oxzftwItkthw==
-X-Google-Smtp-Source: AK7set8iMdxoxX6e9GXoSjEAewkax5Eq5eSgzgKfIZDW+mCXcojVeKDYzqPeei2DVVH2V2SRVlMzRw==
-X-Received: by 2002:a05:6870:e0c6:b0:176:8f34:2609 with SMTP id a6-20020a056870e0c600b001768f342609mr13990149oab.58.1678459666806;
-        Fri, 10 Mar 2023 06:47:46 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p10-20020a4ae14a000000b00500c1100651sm823158oot.45.2023.03.10.06.47.45
+        bh=oAELrHo6ArQk1t5su+5ParCDpr/c39PmM5jneNHCCFI=;
+        b=G6OI5ju/nJloSHAWprDG0Nk1vm4Xb4C61Q7iax8xymVAyR6Klu17C/62lLgJxqfoiT
+         sVMdP7kTQi50XEKpVis842nV3pua2YAE/MEbiRXKGiINrWWzPlquJvWJmBh3VX+7e3gE
+         TaOGK+L8FE7uFzoVNYLuaBoinNUZmb7lKonLxGLjcj3NeLJsmAZnHtrRhJCqjNMZGM1Y
+         b0OgvvMWkn3g1DKr0YuCdvFFKOuRfbpkJ7IGTwkLJlKXKlMRwyt5Mgs2pB04so4kpqbQ
+         FUodbPzNhqIkGoAnFvlhccDV3uOmpxw0QUhORD0mWx5zoqv0iz7MI/njsMNJlzfYpzpZ
+         vtEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678465810;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oAELrHo6ArQk1t5su+5ParCDpr/c39PmM5jneNHCCFI=;
+        b=ie8LibSEZg9SOxW94IdIPjCvxBAza7YbA0pe+og+yftflVV5xedQLLqlx96SdtT5WM
+         avhAJT1SEYOW96ZfzcZZnjp8Kdb/GWoDc1Biw36GPY7QBWG3lQN7AUMjpfUp6PTv8FJH
+         +Aq4Tc1gqmpYRfVAn0fgRwhXoGxw0EYUwA8GB9H9Fj+LRP6e65TrKmOtwheKYh++51jK
+         kMcgL0YUhI5IfzDbGXiZWJQ4RGPKaYzdVIMxtBrU08qLD1kKfHrG2aPd38zqCwa6FR54
+         DKLQeWrvXRQSoxTxdvePuswy8osMSQr/NZNqDCnXuvMyI4z3ZCEHHGX/8pV2mACm/rh/
+         AEqw==
+X-Gm-Message-State: AO0yUKXcBnnT48hEigYUefVt6sCHmj7hcgsXAhFZgKeD8Cw213ED/j7g
+        9qjScrEuL+d4XfRnRKIQhjY3zaeBobE=
+X-Google-Smtp-Source: AK7set9tPWQI1zdCnMkhi2Rg+Lvrldxw38K4OsfUZH1xNGgaU8zXp+S8x4uenoIzU3cSWzusMCQX/A==
+X-Received: by 2002:aca:f0f:0:b0:378:2270:8876 with SMTP id 15-20020aca0f0f000000b0037822708876mr11948901oip.29.1678465809746;
+        Fri, 10 Mar 2023 08:30:09 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id et3-20020a056808280300b00383e0bec93bsm14559oib.49.2023.03.10.08.30.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:47:46 -0800 (PST)
-Received: (nullmailer pid 1542482 invoked by uid 1000);
-        Fri, 10 Mar 2023 14:47:06 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: Use of_property_present() for testing DT property presence
-Date:   Fri, 10 Mar 2023 08:47:06 -0600
-Message-Id: <20230310144706.1542434-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Fri, 10 Mar 2023 08:30:09 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 10 Mar 2023 08:30:06 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: ltc4245: Use of_property_read_bool() for boolean
+ properties
+Message-ID: <138ba352-97ac-4992-9fea-afcfe84a28b8@roeck-us.net>
+References: <20230310144707.1542525-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310144707.1542525-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-It is preferred to use typed property access functions (i.e.
-of_property_read_<type> functions) rather than low-level
-of_get_property/of_find_property functions for reading properties. As
-part of this, convert of_get_property/of_find_property calls to the
-recently added of_property_present() helper when we just want to test
-for presence of a property and nothing more.
+On Fri, Mar 10, 2023 at 08:47:07AM -0600, Rob Herring wrote:
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties.
+> Convert reading boolean properties to to of_property_read_bool().
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- drivers/hwmon/ibmpowernv.c | 4 ++--
- drivers/hwmon/pwm-fan.c    | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Applied after s/to to/to/
 
-diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
-index 8e3724728cce..594254d6a72d 100644
---- a/drivers/hwmon/ibmpowernv.c
-+++ b/drivers/hwmon/ibmpowernv.c
-@@ -456,9 +456,9 @@ static int populate_attr_groups(struct platform_device *pdev)
- 		 */
- 		if (!of_property_read_string(np, "label", &label))
- 			sensor_groups[type].attr_count++;
--		if (of_find_property(np, "sensor-data-min", NULL))
-+		if (of_property_present(np, "sensor-data-min"))
- 			sensor_groups[type].attr_count++;
--		if (of_find_property(np, "sensor-data-max", NULL))
-+		if (of_property_present(np, "sensor-data-max"))
- 			sensor_groups[type].attr_count++;
- 	}
- 
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 83a347ca35da..57928d270015 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -427,7 +427,7 @@ static int pwm_fan_of_get_cooling_data(struct device *dev,
- 	struct device_node *np = dev->of_node;
- 	int num, i, ret;
- 
--	if (!of_find_property(np, "cooling-levels", NULL))
-+	if (!of_property_present(np, "cooling-levels"))
- 		return 0;
- 
- 	ret = of_property_count_u32_elems(np, "cooling-levels");
--- 
-2.39.2
+Thanks,
+Guenter
 
+> ---
+>  drivers/hwmon/ltc4245.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/ltc4245.c b/drivers/hwmon/ltc4245.c
+> index 5088d28b3a7c..57cbaf3b39fa 100644
+> --- a/drivers/hwmon/ltc4245.c
+> +++ b/drivers/hwmon/ltc4245.c
+> @@ -434,7 +434,7 @@ static bool ltc4245_use_extra_gpios(struct i2c_client *client)
+>  		return pdata->use_extra_gpios;
+>  
+>  	/* fallback on OF */
+> -	if (of_find_property(np, "ltc4245,use-extra-gpios", NULL))
+> +	if (of_property_read_bool(np, "ltc4245,use-extra-gpios"))
+>  		return true;
+>  
+>  	return false;
