@@ -2,140 +2,118 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23388C6FD1F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Mar 2023 16:47:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBC8BC64EC4
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Mar 2023 16:57:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbjCJQrZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 10 Mar 2023 11:47:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58348 "EHLO
+        id S231494AbjCJQ5B (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 10 Mar 2023 11:57:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbjCJQrH (ORCPT
+        with ESMTP id S231520AbjCJQ4n (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:47:07 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A4612C401;
-        Fri, 10 Mar 2023 08:44:37 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-176e43eb199so6463100fac.7;
-        Fri, 10 Mar 2023 08:44:37 -0800 (PST)
+        Fri, 10 Mar 2023 11:56:43 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB1F13480C;
+        Fri, 10 Mar 2023 08:54:14 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id z11so4044588pfh.4;
+        Fri, 10 Mar 2023 08:54:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678466675;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Pv4U+2qJx++wtxYGFaFQz/09rJpl3rLoLpy7o0aVpu8=;
-        b=oYwmeSlbhPPUKvCUD8TIjD/sSBIXQGT8uQi+ZUwO/jzfg9rHtee0ZPcyN5AmRIZmYj
-         50C+upuCinBb+CUcctBNhDC17I8CAoEXeU5u+4U/+AXRWjBoCH7CszN8Sx8m+oORRNf8
-         e1bsZ7WA0wjsfh9MjHf/Cu0kPyzXlaW0PhSzdJEPfZ+YihdNh7GqJxP4f5h0CqYdvoF+
-         p9sA7R8M9X6oct9Klg5syifGgwsBVkAPC0Nm1ZJ4UN024X/cMdmXpANHHlLhUksAmQZp
-         0XbpwMiiaq4QApvh2JLQX/r1M4R5CMsgLlXSc4tbirGSRjKQksaihNLUhZl2TJV7wdKv
-         snpA==
+        d=gmail.com; s=20210112; t=1678467253;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fhj/T2JAbAb2Xd/ZH/KpcyXn4Xm3/uzp1Viq6gN5yfg=;
+        b=kEmv3bahZ4kT7Bgitz3YOaRHAH3HUSL/SOaTq6y72fEeUVYNtU9MpgEoznR4JDsXYO
+         WA3uNxWfsBZvev0fWhNeDT0IsnU+I1ozxM4NMjN/LWBZtSRjo4wS9SeAGjntOy4phe8a
+         CXpAcECfi3v2cixNZC6KTmInGF0KP1jQ/IL7wysfLAY20B2yHsO3Vv3gaz6sxe1UpzCp
+         ySUQcN66Gs/2CvwkiNVQML6jTtFxn2PEAQH/b/Y3niB26Uvef4gUXScT3/+O9zTeEZAE
+         NK9ASCULKgAhViXZzLhxJKD46AOLt6XnflnMUBqlt3JLsFgi8QVK+dTn806g+gDZjT7y
+         3Hpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678466675;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pv4U+2qJx++wtxYGFaFQz/09rJpl3rLoLpy7o0aVpu8=;
-        b=GGwVALLbqrNCrfJCHMyxtR+0fqy8PdfLhA4hjwtJwVagYOKchfsHs5EhdpxpVzy61H
-         AAgBy5BCumH8mUy+7tZMbcs3spIrQ/NaDfSXtBuTuiNlNUbwpoDEpe89xI/23/YjaIuI
-         XoJSbFO1vBFRYqYXE0UAhxgPgx3oE8+oGN6WN27rpcKIhddx9ZisuGBzZWiGNewsC9hI
-         5mouBdZnyL9ifagK5Lyk/xtpqQv3dItQGVQIvbyIG6UsldPhbx+Bec+usIKSYHyvxrWD
-         j2BvYo04DblMcl+kMHRR9noSUdGinrZWNzUH6OdsIT/BiLGc2eth+ug2yaAwgmDi2n7A
-         HIFQ==
-X-Gm-Message-State: AO0yUKXM9Sv/as1BlqTtEkNNMfhjQbynZprrMZL1Qc+ywZlFhD0hZCV7
-        NzfC0viqpEJSJc0Iu+joLd4=
-X-Google-Smtp-Source: AK7set83hhga4fkteTS1Sl7TxhoxPwVYjj6XhbanH7ws2DBryQEJ3dEFmHorQ99yq9U3pgSAg1DylQ==
-X-Received: by 2002:a05:6870:6388:b0:176:5de9:9b8 with SMTP id t8-20020a056870638800b001765de909b8mr15831795oap.40.1678466675382;
-        Fri, 10 Mar 2023 08:44:35 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i2-20020a056870044200b0017293fa734asm184309oak.48.2023.03.10.08.44.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 08:44:35 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 10 Mar 2023 08:44:33 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Erik Ekman <erik@kryo.se>
-Cc:     Jean Delvare <jdelvare@suse.com>, pauk.denis@gmail.com,
-        ahmad@khalifa.ws, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (nct6775) ASUS PRIME Z590 boards support
-Message-ID: <ae1ddc06-941b-4f13-8f46-6188cad4aa2c@roeck-us.net>
-References: <20230227090312.91091-1-erik@kryo.se>
+        d=1e100.net; s=20210112; t=1678467253;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fhj/T2JAbAb2Xd/ZH/KpcyXn4Xm3/uzp1Viq6gN5yfg=;
+        b=iWyPTgSkLvIgbBWjSQxQcRTG7SKIZmrQesLsjzB7caEdnQVuGrd3Cxkctqi6lgC0vL
+         qfif57yzNZNlD3ap6w682P7FaMcBLzXj4UtIa/99pEwUuSrdSjy3LLxd44jNhrq/zrIj
+         G7g1sCPBnR5NFl9KVlHvWKbAqM8AhNJsZGV/x5SfFanEujlEVOVHehDz9lY+bdca8A4Z
+         63MnHltDhgcWWfGzWO+S94NlkBL/J5GdzWufxppsh73qqbjG85V4rSnxErlamjjm+zF8
+         stqa9k0aPEy85PoUVSih3cpHkizN1iY9Mo0LP0E1mTOSf+JKko4bnkvfwiMcVCGfgxnO
+         TPbg==
+X-Gm-Message-State: AO0yUKUdvJwANBQy6VeerSw0IFD9EbIirnkBkF5xJcLH5/74iSancKlv
+        F0YdQchDnOhtwUkfjJ2GIpzL05zsuTGN4n6gh01jWetGe+GgRhnf
+X-Google-Smtp-Source: AK7set8F8jqzFxLwkszNRCT8C9n9XrJBNqQp31z8CnpW1a20zVP3ANGrXKND50vZp0yf2IrXA/GIlPZnuAIUAC7/xDI=
+X-Received: by 2002:a63:b003:0:b0:503:91ff:8dd8 with SMTP id
+ h3-20020a63b003000000b0050391ff8dd8mr9119275pgf.4.1678467253430; Fri, 10 Mar
+ 2023 08:54:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230227090312.91091-1-erik@kryo.se>
+References: <20230310084007.1403388-1-zyytlz.wz@163.com> <329d128b-5436-44ad-89a3-75d82a7a11ec@roeck-us.net>
+In-Reply-To: <329d128b-5436-44ad-89a3-75d82a7a11ec@roeck-us.net>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Sat, 11 Mar 2023 00:54:01 +0800
+Message-ID: <CAJedcCwC+hVK+55eA-Mpwcr24oJxw+7WhA+RFU+36QpKgA_Ggw@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (xgene) Fix use after free bug in
+ xgene_hwmon_remove due to race condition
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        1395428693sheep@gmail.com, alex000young@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 10:03:11AM +0100, Erik Ekman wrote:
-> Tested on Z590M-PLUS.
-> 
-> dmesg log:
-> nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
-> 
-> sensors output:
-> nct6798-isa-0290
-> Adapter: ISA adapter
-> in0:                      672.00 mV (min =  +0.00 V, max =  +1.74 V)
-> in1:                      1000.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in2:                        3.38 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in3:                        3.28 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in4:                        1.01 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in5:                      808.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in6:                      1000.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in7:                        3.38 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in8:                        3.20 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in9:                      528.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in10:                     672.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in11:                     528.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in12:                       1.21 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in13:                     992.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in14:                       1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> fan1:                      971 RPM  (min =    0 RPM)
-> fan2:                     1525 RPM  (min =    0 RPM)
-> fan3:                        0 RPM  (min =    0 RPM)
-> fan4:                     1094 RPM  (min =    0 RPM)
-> fan5:                        0 RPM  (min =    0 RPM)
-> fan6:                        0 RPM  (min =    0 RPM)
-> fan7:                        0 RPM  (min =    0 RPM)
-> SYSTIN:                    +36.0°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
-> CPUTIN:                    +40.0°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
-> AUXTIN0:                   +26.0°C    sensor = thermistor
-> AUXTIN1:                    +8.0°C    sensor = thermistor
-> AUXTIN2:                   +22.0°C    sensor = thermistor
-> AUXTIN3:                   +25.0°C    sensor = thermistor
-> PECI Agent 0 Calibration:  +40.0°C
-> PCH_CHIP_CPU_MAX_TEMP:      +0.0°C
-> PCH_CHIP_TEMP:             +55.0°C
-> PCH_CPU_TEMP:               +0.0°C
-> intrusion0:               OK
-> intrusion1:               ALARM
-> beep_enable:              disabled
-> 
-> Signed-off-by: Erik Ekman <erik@kryo.se>
+Guenter Roeck <linux@roeck-us.net> =E4=BA=8E2023=E5=B9=B43=E6=9C=8811=E6=97=
+=A5=E5=91=A8=E5=85=AD 00:34=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Fri, Mar 10, 2023 at 04:40:07PM +0800, Zheng Wang wrote:
+> > In xgene_hwmon_probe, &ctx->workq is bound with
+> > xgene_hwmon_evt_work. Then it will be started.
+> >
+> > If we remove the driver which will call
+> > xgene_hwmon_remove to make cleanup, there may
+> > be a unfinished work.
+> >
+> > The possiblesequence is as follows:
+> >
+> > Fix it by finishing the work before cleanup in the
+> > xgene_hwmon_remove
+> >
+> > CPU0                  CPU1
+> >
+> >                     |xgene_hwmon_evt_work
+> > xgene_hwmon_remove   |
+> > kfifo_free(&ctx->async_msg_fifo);|
+> >                     |
+> >                     |kfifo_out_spinlocked
+> >                     |//use &ctx->async_msg_fifo
+> > Fixes: 2ca492e22cb7 ("hwmon: (xgene) Fix crash when alarm occurs before=
+ driver probe")
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+>
+> Applied.
+>
+Thanks for your effort.
 
-Applied.
-
-Thanks,
-Guenter
-
-> ---
->  drivers/hwmon/nct6775-platform.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-> index 76c6b564d7fc..1a00f4a542fe 100644
-> --- a/drivers/hwmon/nct6775-platform.c
-> +++ b/drivers/hwmon/nct6775-platform.c
-> @@ -1122,6 +1122,9 @@ static const char * const asus_msi_boards[] = {
->  	"PRIME X670-P",
->  	"PRIME X670-P WIFI",
->  	"PRIME X670E-PRO WIFI",
-> +	"PRIME Z590-A",
-> +	"PRIME Z590-P",
-> +	"PRIME Z590M-PLUS",
->  	"Pro B660M-C-D4",
->  	"ProArt B660-CREATOR D4",
->  	"ProArt X670E-CREATOR WIFI",
+Best regards,
+Zheng
+>
+> > ---
+> >  drivers/hwmon/xgene-hwmon.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
+> > index 5cde837bfd09..d1abea49f01b 100644
+> > --- a/drivers/hwmon/xgene-hwmon.c
+> > +++ b/drivers/hwmon/xgene-hwmon.c
+> > @@ -761,6 +761,7 @@ static int xgene_hwmon_remove(struct platform_devic=
+e *pdev)
+> >  {
+> >       struct xgene_hwmon_dev *ctx =3D platform_get_drvdata(pdev);
+> >
+> > +     cancel_work_sync(&ctx->workq);
+> >       hwmon_device_unregister(ctx->hwmon_dev);
+> >       kfifo_free(&ctx->async_msg_fifo);
+> >       if (acpi_disabled)
