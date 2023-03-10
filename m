@@ -2,121 +2,89 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FB09C61DA4
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Mar 2023 16:51:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DECFAC6FA99
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Mar 2023 07:51:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjCIQvI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Mar 2023 11:51:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
+        id S229757AbjCJHvA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 10 Mar 2023 02:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjCIQuw (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Mar 2023 11:50:52 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D741CFEF01;
-        Thu,  9 Mar 2023 08:41:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678380080; x=1709916080;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=LpKKxWLJd/2/HZY+u/kidQL3j7csPh9OlT1rlldT9go=;
-  b=W2nIRKWE1Sfy4KbLeGTet9BC7enfkNhQboYsqaJQdI9+w1h2NyGoHujr
-   sgBizH9ahTXQLYvv4onRVN2LgJ4PfxJx32NzZTH7QVytbs+joWu3Wj89p
-   MMK9Gkqz6AXW1taKNF0A166i70ZfHuYSNXqlMTdIlWBxyUqzZ3JbmPxn7
-   sTzKEjxV7EIxwQEZqwHJOyyZFiUZBNMHBkP1tHDX4VCA9Yn21090FPMq2
-   Pu+2wksmW6hvxa6W3xNPMjbrT264iU8fDkBTXhtp+SrkTefxcfnzOzhf1
-   CKH17ji1bR9LbueK0vgJ70BD6Wbh02+y7z/OkGypHDt641jk6dCDIl9sL
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="320346106"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="320346106"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 08:41:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="851563693"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="851563693"
-Received: from msobrero-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.58.113])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 08:41:18 -0800
-From:   Jani Nikula <jani.nikula@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: constify struct hwmon_chip_info info member harder
-In-Reply-To: <2f0a6217-3747-4493-90e6-8fb129cb6a34@roeck-us.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230309082841.400118-1-jani.nikula@intel.com>
- <e0579cbe-cbd6-46cf-b425-234cfed4ff00@roeck-us.net>
- <87h6uu9nxn.fsf@intel.com>
- <2f0a6217-3747-4493-90e6-8fb129cb6a34@roeck-us.net>
-Date:   Thu, 09 Mar 2023 18:41:11 +0200
-Message-ID: <87zg8l98t4.fsf@intel.com>
+        with ESMTP id S229768AbjCJHu7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 10 Mar 2023 02:50:59 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FA41589F;
+        Thu,  9 Mar 2023 23:50:58 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id b10so4448696ljr.0;
+        Thu, 09 Mar 2023 23:50:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678434657;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6GyROhr1j9FfQF8Vtrexe5r5+ALuX6utFdZqThyuMXA=;
+        b=AL/x6vXYojEwDpcy19RJzTGEqIInya0uiZrP9s5Cpnhc/YKca9r4js3iuGnY65rBsc
+         ilCzLkbEJYesCjOyn9ItY6OUZECw5ba3dDvNilPzgZlNDwVo7W9W+pgaYfqwdH1spTnR
+         GAxko12Dg3wWxSGer7duQ+3nrco5pIhaUFxTf6+r9u+ADBH2jgwl6wrQAJ6bfBQ4iaD0
+         IyBdlaTxnZTLvrUjcgc8M1E/wUd7ErbC7BNQjmBmA5Aobo3ir4y9Zvzh18jqLlqrpRwj
+         kwSq94xEiZixHiHO7HRuNC8sCcuOuj0VRzL6HrRuMh2mYr5pI0VPSbjsVrpb1opUJWFy
+         OklQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678434657;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6GyROhr1j9FfQF8Vtrexe5r5+ALuX6utFdZqThyuMXA=;
+        b=HFqcaSiccx6xcKXpJ9FaB+luFZAEd28RjPPzT6kI8h0/sR5xH4qbF71WfuOdpaFqCt
+         QeC3B1VM8qE9PoRzScOa6e0Am9iAuxAB10WR6lqzQGq+lu3uAlataJW7APXxdNhFgQIm
+         T8zvkqo3Y9WOJr7o+5eraoeP9N9zD7D8g3tks9oqXQqluubCJMpyYzYjk3lXnQrq0PfD
+         LOZfjpS/vjtjOmRERTDbTckX8HxFobXMt+rDJAdbEOXrOjFOllXBT1tEm9fM1qhTjGBF
+         ybUrEMUdQB9vJfiB1SRv3DbC5cBGWHrYqzbp80ArwdQK6uzRz3yfdmo5SNU+Fcxf1QQp
+         B8ug==
+X-Gm-Message-State: AO0yUKUnKK1IZ3TwUuhvzm9+ViUYV1rY26guEYoAC83l46JjwxKanXsR
+        GNknZ458tDK10uu+Ysxt25U=
+X-Google-Smtp-Source: AK7set9hQhwK3iMCgRWgS6UtCI1T/Z8QGoIlGWEGX1GQQzZFjQpnhJ2sLInrLunrh3xMiDq3eY5Amg==
+X-Received: by 2002:a05:651c:211b:b0:295:b2a1:20e1 with SMTP id a27-20020a05651c211b00b00295b2a120e1mr10537260ljq.21.1678434656921;
+        Thu, 09 Mar 2023 23:50:56 -0800 (PST)
+Received: from localhost.localdomain (83-233-6-197.cust.bredband2.com. [83.233.6.197])
+        by smtp.gmail.com with ESMTPSA id v21-20020a2e2f15000000b002932b817990sm142566ljv.31.2023.03.09.23.50.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 23:50:55 -0800 (PST)
+From:   Marcus Folkesson <marcus.folkesson@gmail.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marcus Folkesson <marcus.folkesson@gmail.com>
+Subject: [PATCH] hwmon: (ina3221) return prober error code
+Date:   Fri, 10 Mar 2023 08:50:35 +0100
+Message-Id: <20230310075035.246083-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 09 Mar 2023, Guenter Roeck <linux@roeck-us.net> wrote:
-> On Thu, Mar 09, 2023 at 01:14:28PM +0200, Jani Nikula wrote:
->> On Thu, 09 Mar 2023, Guenter Roeck <linux@roeck-us.net> wrote:
->> > On Thu, Mar 09, 2023 at 10:28:41AM +0200, Jani Nikula wrote:
->> >> Let the struct hwmon_chip_info info member be a pointer to a const array
->> >> of const pointers, rather than mutable array of const pointers.
->> >> 
->> >> Cc: Jean Delvare <jdelvare@suse.com>
->> >> Cc: Guenter Roeck <linux@roeck-us.net>
->> >> Cc: linux-hwmon@vger.kernel.org
->> >> Signed-off-by: Jani Nikula <jani.nikula@intel.com>
->> >> ---
->> >>  include/linux/hwmon.h | 2 +-
->> >>  1 file changed, 1 insertion(+), 1 deletion(-)
->> >> 
->> >> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
->> >> index c1b62384b6ee..492dd27a5dd8 100644
->> >> --- a/include/linux/hwmon.h
->> >> +++ b/include/linux/hwmon.h
->> >> @@ -430,7 +430,7 @@ struct hwmon_channel_info {
->> >>   */
->> >>  struct hwmon_chip_info {
->> >>  	const struct hwmon_ops *ops;
->> >> -	const struct hwmon_channel_info **info;
->> >> +	const struct hwmon_channel_info * const *info;
->> >
->> > As pointed out by 0-day, you's also have to change each
->> > instance where this is is assigned to another variable.
->> 
->> Ah, sorry, I had THERMAL_OF=n.
->> 
->
-> You also didn't test compile drivers/hwmon/hwmon.c.
-> I had wondered about that, and 0-day now confirmed it.
+ret is set to 0 which do not indicate an error.
+Return -EINVAL instead.
 
-I most certainly did. And as I looked into why I didn't see the failure
-0-day hits I noticed THERMAL_OF=n like I said.
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ drivers/hwmon/ina3221.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-BR,
-Jani.
-
->
-> Guenter
->
->> BR,
->> Jani.
->> 
->> 
->> >
->> > Guenter
->> >
->> >>  };
->> >>  
->> >>  /* hwmon_device_register() is deprecated */
->> >> -- 
->> >> 2.39.1
->> >> 
->> 
->> -- 
->> Jani Nikula, Intel Open Source Graphics Center
-
+diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+index e06186986444..f3a4c5633b1e 100644
+--- a/drivers/hwmon/ina3221.c
++++ b/drivers/hwmon/ina3221.c
+@@ -772,7 +772,7 @@ static int ina3221_probe_child_from_dt(struct device *dev,
+ 		return ret;
+ 	} else if (val > INA3221_CHANNEL3) {
+ 		dev_err(dev, "invalid reg %d of %pOFn\n", val, child);
+-		return ret;
++		return -EINVAL;
+ 	}
+ 
+ 	input = &ina->inputs[val];
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.39.2
+
