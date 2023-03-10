@@ -2,96 +2,76 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D72AC6FA99
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Mar 2023 16:36:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3C7AC6FA99
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Mar 2023 16:37:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbjCJQgc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 10 Mar 2023 11:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S230394AbjCJQhA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 10 Mar 2023 11:37:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjCJQfy (ORCPT
+        with ESMTP id S229928AbjCJQg0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:35:54 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A74112DDE;
-        Fri, 10 Mar 2023 08:34:06 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id e21so4688415oie.1;
-        Fri, 10 Mar 2023 08:34:06 -0800 (PST)
+        Fri, 10 Mar 2023 11:36:26 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C435511A2EF;
+        Fri, 10 Mar 2023 08:34:30 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17671fb717cso6415211fac.8;
+        Fri, 10 Mar 2023 08:34:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678466045;
+        d=gmail.com; s=20210112; t=1678466070;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1LZymklHctXhGjv6HuiTRygfeCKyXWhZY1DVnyofWu8=;
-        b=M65m23wzC1245l1q1IhCmiq2UbpeAMdmU/SWKDojb/84/qMGWwLn5/0mrI55/5mcPi
-         n+eaXWzGD6ym78z/VOEr/Qcpjca5BcsHyANlBoS2lDqmxAauikijLXE3//j0Iqkdqs9B
-         HaV3WIpr6ka4LmGxdisp6/KeTB480jrd3KGib9fV1BRD+b0tBGJ4U9FhAEURVzySUovg
-         Ti6ci4i4v5m8Wk2VZjWGfGqadf+8hvs7pc398+xF4akKdS/YuRviu47eSgohhN9Rk5EA
-         ggXYmHVCBdrKQD3NJxAqUMaGnM22eetL+xRhtxdFrs1fJkq3+wm/vp0gkmycsvi2E1hp
-         eQGQ==
+        bh=FPJxiCRlQW/W48kByDBhimvQnyU3C5JNlIoFKiJIKsY=;
+        b=I9hW2rHEbSHl/El+QE/fJYhZuX4ngiNfGCVohLu1ytEasDqTDiDoqHvTGFDNqHTwif
+         bAKx+WxnUIzlUGnAQZ4KCkzxHLeAwExFjAJe2HWhYST4u17aPF5Huw0rpc2do/ZAFX6j
+         tNM85NC26RzFu7JDW5H/sZ2y6EcDi7QKybKzuDWS7lI4I8Tm8LJ0M1d0jUwWs1roQE51
+         4BFHty0H4e9M3cbgALyKgtmcmlS8Bnm0f+Bo3RG00l3SMG+Luo4eCDGpEIJx0ECSsyca
+         pAVWxoVySVfa6loVxqKTiHw0KG2uQuiWUhx4f13pKQYCRVISiwvEY09v3kd9BVMXT5OB
+         jHbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678466045;
+        d=1e100.net; s=20210112; t=1678466070;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1LZymklHctXhGjv6HuiTRygfeCKyXWhZY1DVnyofWu8=;
-        b=NTfW9N7Kwlof7OHDlUXtiDtFsI/aYe91NC1e+xo2jCZL/8G4ZQ/gzI3HWyBe01FjxI
-         xC2RuFxUWq/aOfNbq2xRfIV7acofyTouXyW5jhlDFk/I51y1ReyY4v0Pq97QNuycqJIE
-         OUburzoOgTt0YlUezjBeoARXHB7aJ9rLy2e15C3osiZBibh/u4ROugIJX9iKAPjqLH3g
-         WxVtKaiveUkXWEGBnnBOA29QU3nIpBitYTy7Dinh0a1+0tZPZtc8GmI7K0NejWl8zfj7
-         qYl8joCQMZ4q23VngQf8zEn/d0F5M1/b1fTEyFQN7k1ikaypdCA58F07HR75vLR1S1Wk
-         A01Q==
-X-Gm-Message-State: AO0yUKUBcuuNY0TaihDYK0nNGhF7DfcIEtSCMk3Atl8HV7rVOkExb5+a
-        Z8qe2qnHSKq+mWqh0AMf2Ks=
-X-Google-Smtp-Source: AK7set8igdVi6XKByIK2eUyaNolvwd8Z1vrZDB0CtCNLLzuyQ5ZCtTjwrMePGo6Cheh+u7YH92Jjbw==
-X-Received: by 2002:aca:f14:0:b0:384:ea1:dbea with SMTP id 20-20020aca0f14000000b003840ea1dbeamr12211919oip.47.1678466044886;
-        Fri, 10 Mar 2023 08:34:04 -0800 (PST)
+        bh=FPJxiCRlQW/W48kByDBhimvQnyU3C5JNlIoFKiJIKsY=;
+        b=EuXoMn5K9FAk4NeDIttkQ8KAV+LBHGfwQP612bI71MhBtueP21p8BO/0IMtFErNpbI
+         EF7NLc1YEMLCTXDh5lu77m1FJYQmIp8E9CnxCpvzDlLyEfB14uyG5vEWMX8sdfN3fLYw
+         /lVfOH8PtRPIOEdqC1Yan7YPLMrgASAxpmwL4le/J1zq3e+f2hnYiipwpWKL7U13vTZ8
+         nYkVkbVlsT5B1xzOucesbAYdX/rCMOp87NHA0e+AHJrZDR10a2gbJ2pJm0G8UCougIb2
+         /ICNwktq8dhbDnC2GzOnurerpbfuWemN1asldcRjSF5KBbejs+AOnenLeeiUuAdhg4dU
+         Qtrg==
+X-Gm-Message-State: AO0yUKWuaiU7vFAkKwsrxwudZCYs2t98bfhKBguSQcNof3lbN0o4gZk9
+        W72hRo84lGtqycfTmXLOhtcZgVjIfw0=
+X-Google-Smtp-Source: AK7set8eONhgxwikN6SJ1cfNKEg3V62ib8kLAFMsc33wZIBpBBWnsdGWDQECMhKDwvEFshE1fCeZkA==
+X-Received: by 2002:a05:6870:5709:b0:172:6d0c:e98c with SMTP id k9-20020a056870570900b001726d0ce98cmr14222316oap.29.1678466069925;
+        Fri, 10 Mar 2023 08:34:29 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j65-20020acab944000000b0037d74967ef6sm20950oif.44.2023.03.10.08.34.04
+        by smtp.gmail.com with ESMTPSA id v18-20020a056870e49200b0017243e98ce9sm166730oag.54.2023.03.10.08.34.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 08:34:04 -0800 (PST)
+        Fri, 10 Mar 2023 08:34:29 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 10 Mar 2023 08:34:03 -0800
+Date:   Fri, 10 Mar 2023 08:34:28 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Zheng Wang <zyytlz.wz@163.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com
-Subject: Re: [PATCH] hwmon: (xgene) Fix use after free bug in
- xgene_hwmon_remove due to race condition
-Message-ID: <329d128b-5436-44ad-89a3-75d82a7a11ec@roeck-us.net>
-References: <20230310084007.1403388-1-zyytlz.wz@163.com>
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (ina3221) return prober error code
+Message-ID: <cfbf7f59-6f93-4e21-8a1b-88a769fcec0d@roeck-us.net>
+References: <20230310075035.246083-1-marcus.folkesson@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230310084007.1403388-1-zyytlz.wz@163.com>
+In-Reply-To: <20230310075035.246083-1-marcus.folkesson@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 04:40:07PM +0800, Zheng Wang wrote:
-> In xgene_hwmon_probe, &ctx->workq is bound with
-> xgene_hwmon_evt_work. Then it will be started.
+On Fri, Mar 10, 2023 at 08:50:35AM +0100, Marcus Folkesson wrote:
+> ret is set to 0 which do not indicate an error.
+> Return -EINVAL instead.
 > 
-> If we remove the driver which will call
-> xgene_hwmon_remove to make cleanup, there may
-> be a unfinished work.
-> 
-> The possiblesequence is as follows:
-> 
-> Fix it by finishing the work before cleanup in the
-> xgene_hwmon_remove
-> 
-> CPU0                  CPU1
-> 
->                     |xgene_hwmon_evt_work
-> xgene_hwmon_remove   |
-> kfifo_free(&ctx->async_msg_fifo);|
->                     |
->                     |kfifo_out_spinlocked
->                     |//use &ctx->async_msg_fifo
-> Fixes: 2ca492e22cb7 ("hwmon: (xgene) Fix crash when alarm occurs before driver probe")
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 
 Applied.
 
@@ -99,18 +79,19 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/xgene-hwmon.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/hwmon/ina3221.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-> index 5cde837bfd09..d1abea49f01b 100644
-> --- a/drivers/hwmon/xgene-hwmon.c
-> +++ b/drivers/hwmon/xgene-hwmon.c
-> @@ -761,6 +761,7 @@ static int xgene_hwmon_remove(struct platform_device *pdev)
->  {
->  	struct xgene_hwmon_dev *ctx = platform_get_drvdata(pdev);
+> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+> index e06186986444..f3a4c5633b1e 100644
+> --- a/drivers/hwmon/ina3221.c
+> +++ b/drivers/hwmon/ina3221.c
+> @@ -772,7 +772,7 @@ static int ina3221_probe_child_from_dt(struct device *dev,
+>  		return ret;
+>  	} else if (val > INA3221_CHANNEL3) {
+>  		dev_err(dev, "invalid reg %d of %pOFn\n", val, child);
+> -		return ret;
+> +		return -EINVAL;
+>  	}
 >  
-> +	cancel_work_sync(&ctx->workq);
->  	hwmon_device_unregister(ctx->hwmon_dev);
->  	kfifo_free(&ctx->async_msg_fifo);
->  	if (acpi_disabled)
+>  	input = &ina->inputs[val];
