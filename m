@@ -2,80 +2,84 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C279AC64EC4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Mar 2023 16:43:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A371C64EC4
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Mar 2023 16:45:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbjCJQnk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 10 Mar 2023 11:43:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
+        id S229916AbjCJQpy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 10 Mar 2023 11:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbjCJQm5 (ORCPT
+        with ESMTP id S230199AbjCJQok (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:42:57 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3DB11F62D;
-        Fri, 10 Mar 2023 08:40:43 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id be16so4732306oib.0;
-        Fri, 10 Mar 2023 08:40:43 -0800 (PST)
+        Fri, 10 Mar 2023 11:44:40 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46779509A1;
+        Fri, 10 Mar 2023 08:42:13 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id 32-20020a9d0323000000b0069426a71d79so3234222otv.10;
+        Fri, 10 Mar 2023 08:42:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678466438;
+        d=gmail.com; s=20210112; t=1678466532;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jBvFWrg6mAMkwkQ8SljaAvheQM7EIirHVmL1w1bEVNo=;
-        b=X5CtmMPn2kOVec/4NiHmamfxtPdKG1/eHlLzVQjG9YPcEHdftSX3T9gXV8xtf0EAnj
-         2RKzNUtubrxpDAnxpxiJdmOvCsrBuLwiTaCke+PULh2m2TVJHERSMsPgdjf1rXdbbDi4
-         qHWyLisLzasd1fCHQ6GoFWQ4kQkmwNZ+Rjw09UIXFZW3c026F0RnYX2z75mEi/QnP0RW
-         /ufQXEN0GzWKuPPM8YdsVsINc2tp2yoA7dZg/cCNvK2DjePD8agnRGI/SDrhBgG265sg
-         Hj7zwMCvZc7zzpPkPvxdb9z0+X1hyq4FU6emGjPFRnrmunKpgDQZAU8fKFVuFpJRAQos
-         nWeA==
+        bh=Z3keoP5JJxcABarNYW93qZLS/wAAzdGHiMT52nWZiSY=;
+        b=CO0OjCTqNBrO+ktT5tZYvLuyTpSoHGHuT2uKB4gtoCiLGZy8U/0SUudmpqZO22di7b
+         jFq0ezkpqqrT/DZNrnNgNw7cUrefY6UcF0knHLp+vmYre670MN+Rsst5affcK/1K+XFe
+         G76j34DznhQoF59SuzEALU5r5Qq5hSWeikD6SoDql0WSVa5myPe1WqlpjZO4p7LzPbVo
+         HbHtoCEZL/DW4J9zrwLB0ZGUFZaQTyDjzgTFwzy2RRciHZqeECUofeDfZwrhg7oLhj+8
+         b4FcrMAa5Ri1f1ZBWZYezWzYZVG/I/eofO1iFmWHCWfyXq1uC4SXx2HDxNm96Bz41gUt
+         TchQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678466438;
+        d=1e100.net; s=20210112; t=1678466532;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jBvFWrg6mAMkwkQ8SljaAvheQM7EIirHVmL1w1bEVNo=;
-        b=u7qHZqHI88nti3+g4LfxMH9chwlGZYuTxuVjdTfZ6l2smYkkjd7C5BJwrRdljMfXSn
-         8TpvKbhSVqk+C1oJNfidPfKYrFCehLeQ+LtKwMH9Sz2fxYHrymDFjcJEPuPnxD6odOZY
-         6wsXDg7Fej5th9JcVqgo1zp9reAHubQs260mTZPKpRbLrYiLDTRX1cjiTkwfvscFhz1J
-         E2lSfBMwF58v3h5lKEWMsaVwNtM+27104bpYFpeg+XJ5//Jswg/ZJVSIbWMZ/GCTrkQh
-         n0tPXhLmp8hwZbkhdQB19vCbYGFHR/f8vCIZ6SdZBZhE44bhLTwz1xqBg9NcyO9OvDlV
-         A2pg==
-X-Gm-Message-State: AO0yUKVVjv9hsFgzooIgVIveGwEoHzqpDCriVa8CAVVCjiWPIBPCjVoV
-        nJgO3/QgA/vibGNgFC+It/7B1WjB+t8=
-X-Google-Smtp-Source: AK7set9HuDt+qOpqR7eyTe9az8RXhvaIVIIhH1ETOCOQ1Z8gdforHkz/vhtVjYHI70EKMaPzkeoQMQ==
-X-Received: by 2002:a05:6808:298a:b0:384:2942:e2e1 with SMTP id ex10-20020a056808298a00b003842942e2e1mr11393992oib.41.1678466437904;
-        Fri, 10 Mar 2023 08:40:37 -0800 (PST)
+        bh=Z3keoP5JJxcABarNYW93qZLS/wAAzdGHiMT52nWZiSY=;
+        b=wJR6lYJQSG7jNIC8NGdzPh+i5MWIeDKDdzAZ9Zt7oX4BoKEymD2VgBr/pbU/GxRf0Z
+         9HJ9gbGtnt6Sytx1upKhIkn2pJJ1B9gACG1kgL2pWZ22NRZ+RWwF5K4Hb5uT1G9v7qkr
+         2RGMpQ49sPDCYiQC9GmuMd87pE/IKUaCaoWhWaGqwHm+sYCwr02muKxQ83GxEw5ADTrF
+         7VUZMV7gR8ovZ1KGYYtlE+HGGFXc3w1RgevC1UChH3vaeLWpOdjDid0EyEz21yuzpaui
+         RS9yrzLuSof5SIc/zS19iM0/ZnAiquwPyDLulcl0hEskfaBdwjXRgwCfCzsWLYbyGCnT
+         jLCQ==
+X-Gm-Message-State: AO0yUKWLAtVf0YOyop44DvbZbNLPIXxrr4SJeFJHraRAT9ES8VclKHlK
+        AzIYLLSbCRZN28XAgpTn4zcXayWVyLQ=
+X-Google-Smtp-Source: AK7set9NuxSiYOEw/98h840vzqmBGy96qEQ6JSjqk2PIyFEbHH51M8b2Tpm8bQu/YjiEzWz2C6f9RA==
+X-Received: by 2002:a05:6830:716:b0:694:419f:4b2f with SMTP id y22-20020a056830071600b00694419f4b2fmr12256186ots.23.1678466532324;
+        Fri, 10 Mar 2023 08:42:12 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bj34-20020a05680819a200b0037d8aec19e0sm31751oib.36.2023.03.10.08.40.37
+        by smtp.gmail.com with ESMTPSA id a26-20020a9d725a000000b00684c5211c58sm216283otk.60.2023.03.10.08.42.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 08:40:37 -0800 (PST)
+        Fri, 10 Mar 2023 08:42:12 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 10 Mar 2023 08:40:36 -0800
+Date:   Fri, 10 Mar 2023 08:42:10 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (ftsteutates) Update specifications website
-Message-ID: <8c41e889-55c5-4386-b1b4-b2675bfe3330@roeck-us.net>
-References: <20230226014830.10929-1-W_Armin@gmx.de>
+To:     void0red <void0red@gmail.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mezin.alexander@gmail.com
+Subject: Re: [PATCH v3] hwmon: nzxt-smart2: handle failure of devm_add_action
+ in nzxt_smart2_hid_probe
+Message-ID: <6f835ca7-66dc-4df2-814e-ba6d94478f29@roeck-us.net>
+References: <f5043281-9b3e-e454-16fe-ef4cde36dfdb@roeck-us.net>
+ <20230227091534.907101-1-void0red@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230226014830.10929-1-W_Armin@gmx.de>
+In-Reply-To: <20230227091534.907101-1-void0red@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Feb 26, 2023 at 02:48:30AM +0100, Armin Wolf wrote:
-> The Fujitsu OEM Mainboard business was acquired by Kontron,
-> so the specifications of the Teutates chip was transferred to
-> the new Kontron FTP server.
+On Mon, Feb 27, 2023 at 05:15:34PM +0800, void0red wrote:
+> From: Kang Chen <void0red@gmail.com>
 > 
-> Update the specifications website accordingly. The outdated
-> sensors how-to was omitted.
+> 1. replace the devm_add_action with devm_add_action_or_reset to ensure
+> the mutex lock can be destroyed when it fails.
+> 2. use local wrapper function mutex_fini instead of mutex_destroy to
+> avoid undefined behaviours.
+> 3. add a check of devm_add_action_or_reset and return early when it fails.
 > 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> Link: https://lore.kernel.org/all/f5043281-9b3e-e454-16fe-ef4cde36dfdb@roeck-us.net
+> Signed-off-by: Kang Chen <void0red@gmail.com>
 
 Applied.
 
@@ -83,24 +87,37 @@ Thanks,
 Guenter
 
 > ---
->  Documentation/hwmon/ftsteutates.rst | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> v3 -> v2: use local function and devm_add_action_or_rest
+> v2 -> v1: split the patch
 > 
-> --
-> 2.30.2
+>  drivers/hwmon/nzxt-smart2.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/hwmon/ftsteutates.rst b/Documentation/hwmon/ftsteutates.rst
-> index b3bfec36661d..2abd16830c99 100644
-> --- a/Documentation/hwmon/ftsteutates.rst
-> +++ b/Documentation/hwmon/ftsteutates.rst
-> @@ -36,7 +36,7 @@ correct path to the alarm file::
-> 
->  	echo 0 >XXXX_alarm
-> 
-> -Specification of the chip can be found here:
-> +Specifications of the chip can be found at the `Kontron FTP Server <http://ftp.kontron.com/>`_ (username = "anonymous", no password required)
-> +under the following path:
-> 
-> -- ftp://ftp.ts.fujitsu.com/pub/Mainboard-OEM-Sales/Services/Software&Tools/Linux_SystemMonitoring&Watchdog&GPIO/BMC-Teutates_Specification_V1.21.pdf
-> -- ftp://ftp.ts.fujitsu.com/pub/Mainboard-OEM-Sales/Services/Software&Tools/Linux_SystemMonitoring&Watchdog&GPIO/Fujitsu_mainboards-1-Sensors_HowTo-en-US.pdf
-> +  /Services/Software_Tools/Linux_SystemMonitoring_Watchdog_GPIO/BMC-Teutates_Specification_V1.21.pdf
+> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
+> index 2b93ba896..340002581 100644
+> --- a/drivers/hwmon/nzxt-smart2.c
+> +++ b/drivers/hwmon/nzxt-smart2.c
+> @@ -721,6 +721,11 @@ static int __maybe_unused nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
+>  	return init_device(drvdata, drvdata->update_interval);
+>  }
+>  
+> +static void mutex_fini(void *lock)
+> +{
+> +	mutex_destroy(lock);
+> +}
+> +
+>  static int nzxt_smart2_hid_probe(struct hid_device *hdev,
+>  				 const struct hid_device_id *id)
+>  {
+> @@ -737,8 +742,9 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
+>  	init_waitqueue_head(&drvdata->wq);
+>  
+>  	mutex_init(&drvdata->mutex);
+> -	devm_add_action(&hdev->dev, (void (*)(void *))mutex_destroy,
+> -			&drvdata->mutex);
+> +	ret = devm_add_action_or_reset(&hdev->dev, mutex_fini, &drvdata->mutex);
+> +	if (ret)
+> +		return ret;
+>  
+>  	ret = hid_parse(hdev);
+>  	if (ret)
