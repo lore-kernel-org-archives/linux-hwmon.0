@@ -2,83 +2,78 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A371C64EC4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Mar 2023 16:45:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D53AC742A7
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Mar 2023 16:45:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjCJQpy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S230021AbjCJQpy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Fri, 10 Mar 2023 11:45:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbjCJQok (ORCPT
+        with ESMTP id S232601AbjCJQpQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:44:40 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46779509A1;
-        Fri, 10 Mar 2023 08:42:13 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id 32-20020a9d0323000000b0069426a71d79so3234222otv.10;
-        Fri, 10 Mar 2023 08:42:13 -0800 (PST)
+        Fri, 10 Mar 2023 11:45:16 -0500
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BDB7DB6;
+        Fri, 10 Mar 2023 08:42:58 -0800 (PST)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1755e639b65so6471840fac.3;
+        Fri, 10 Mar 2023 08:42:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678466532;
+        d=gmail.com; s=20210112; t=1678466578;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Z3keoP5JJxcABarNYW93qZLS/wAAzdGHiMT52nWZiSY=;
-        b=CO0OjCTqNBrO+ktT5tZYvLuyTpSoHGHuT2uKB4gtoCiLGZy8U/0SUudmpqZO22di7b
-         jFq0ezkpqqrT/DZNrnNgNw7cUrefY6UcF0knHLp+vmYre670MN+Rsst5affcK/1K+XFe
-         G76j34DznhQoF59SuzEALU5r5Qq5hSWeikD6SoDql0WSVa5myPe1WqlpjZO4p7LzPbVo
-         HbHtoCEZL/DW4J9zrwLB0ZGUFZaQTyDjzgTFwzy2RRciHZqeECUofeDfZwrhg7oLhj+8
-         b4FcrMAa5Ri1f1ZBWZYezWzYZVG/I/eofO1iFmWHCWfyXq1uC4SXx2HDxNm96Bz41gUt
-         TchQ==
+        bh=B29QGOV1oU2OAPPIlwHXxzMdgo8tuidvdIqMcEjr/vw=;
+        b=BFRQ0+/nXreA7BSsEcFenRU0URS5rguQ1hSCbD6rNSJewxQTJNgUBhj52fG6Z9achO
+         LxTmwlDQ8b+eYRfDGULK1SO68dtlfjbbT7M4rAxSGT7FrX+9mOU2GTNTsrnzFtnN0p6Q
+         jdvzB2oGfqdP+zKSLeQv7YWZQgesxSLzLsbfwdOgoAQjUaJ8Vv4lxtbFgAfhfAbhi9Ir
+         4D/GQrRCf4zP7LTTGWbk68ebG7bFXMORia8UvlcvTvMTPjeVAtWnRVW11PXcjcxisVPz
+         qiHBaQORUFPdZcxUgQJEqB9MlSUYRkdq7JSyyCuz/UchbSQqVM3FPeMIn3BrZLLhUXIT
+         aw5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678466532;
+        d=1e100.net; s=20210112; t=1678466578;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Z3keoP5JJxcABarNYW93qZLS/wAAzdGHiMT52nWZiSY=;
-        b=wJR6lYJQSG7jNIC8NGdzPh+i5MWIeDKDdzAZ9Zt7oX4BoKEymD2VgBr/pbU/GxRf0Z
-         9HJ9gbGtnt6Sytx1upKhIkn2pJJ1B9gACG1kgL2pWZ22NRZ+RWwF5K4Hb5uT1G9v7qkr
-         2RGMpQ49sPDCYiQC9GmuMd87pE/IKUaCaoWhWaGqwHm+sYCwr02muKxQ83GxEw5ADTrF
-         7VUZMV7gR8ovZ1KGYYtlE+HGGFXc3w1RgevC1UChH3vaeLWpOdjDid0EyEz21yuzpaui
-         RS9yrzLuSof5SIc/zS19iM0/ZnAiquwPyDLulcl0hEskfaBdwjXRgwCfCzsWLYbyGCnT
-         jLCQ==
-X-Gm-Message-State: AO0yUKWLAtVf0YOyop44DvbZbNLPIXxrr4SJeFJHraRAT9ES8VclKHlK
-        AzIYLLSbCRZN28XAgpTn4zcXayWVyLQ=
-X-Google-Smtp-Source: AK7set9NuxSiYOEw/98h840vzqmBGy96qEQ6JSjqk2PIyFEbHH51M8b2Tpm8bQu/YjiEzWz2C6f9RA==
-X-Received: by 2002:a05:6830:716:b0:694:419f:4b2f with SMTP id y22-20020a056830071600b00694419f4b2fmr12256186ots.23.1678466532324;
-        Fri, 10 Mar 2023 08:42:12 -0800 (PST)
+        bh=B29QGOV1oU2OAPPIlwHXxzMdgo8tuidvdIqMcEjr/vw=;
+        b=urRoZ7NYQ9FnNUCYxi1X2j8emnNWhZ1Yz8YFEwSGWOMHwDoqX92To7aj0Fokz0TfhC
+         GXTgewbXqY0s0w3rx4G+SNTf5wW2fc2ESoq+S0W9iaP7J4dwxTEd+QD9ekIcpLLRZjro
+         rRQFAoGbiK713PeuTGH/9HbA72BuOEkG0Zaxtt0Fka5eE4XHip2XbYwTVXhgwg5VOriY
+         6Aqalla8bgtZxLcW64FGOOXS4RbGcxO1l6hzCazmPvSwzjdh6l0anXNADCCH4H76q7sY
+         ngZBuqZfBBWxgaU1GK/xYuoU/sp/KkJie0iM9NCrukmxPt2HrVdgOVk04XSR+0EvGucO
+         1ZfA==
+X-Gm-Message-State: AO0yUKWiLdTQzOMKe9ajIcd7d4P+xys9tzykysfISBtPNx0S4FZPxv6E
+        PINF6fEzjQA/TR74NuUAuz87Wc1QGyg=
+X-Google-Smtp-Source: AK7set/otLxjU6FVcmOy+zMvWy/+ibTNVpcRUYxVYJoAyuFjFlQnV6L7WiOdptb1sKd/Ku0lM2rP3A==
+X-Received: by 2002:a05:6870:d389:b0:176:361c:8abb with SMTP id k9-20020a056870d38900b00176361c8abbmr17102425oag.37.1678466578287;
+        Fri, 10 Mar 2023 08:42:58 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a26-20020a9d725a000000b00684c5211c58sm216283otk.60.2023.03.10.08.42.11
+        by smtp.gmail.com with ESMTPSA id i18-20020a9d6112000000b0068bcef4f543sm239623otj.21.2023.03.10.08.42.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 08:42:12 -0800 (PST)
+        Fri, 10 Mar 2023 08:42:58 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 10 Mar 2023 08:42:10 -0800
+Date:   Fri, 10 Mar 2023 08:42:56 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     void0red <void0red@gmail.com>
 Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, mezin.alexander@gmail.com
-Subject: Re: [PATCH v3] hwmon: nzxt-smart2: handle failure of devm_add_action
- in nzxt_smart2_hid_probe
-Message-ID: <6f835ca7-66dc-4df2-814e-ba6d94478f29@roeck-us.net>
-References: <f5043281-9b3e-e454-16fe-ef4cde36dfdb@roeck-us.net>
- <20230227091534.907101-1-void0red@gmail.com>
+Subject: Re: [PATCH v2 1/2] hwmon: g762: add a check of devm_add_action in
+ g762_of_clock_enable
+Message-ID: <4f4b71ed-2c9c-4e87-aceb-1d2f098e0408@roeck-us.net>
+References: <42cdd5e4-c9da-b31a-0ffd-76846757645c@roeck-us.net>
+ <20230227030913.893004-1-void0red@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230227091534.907101-1-void0red@gmail.com>
+In-Reply-To: <20230227030913.893004-1-void0red@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 05:15:34PM +0800, void0red wrote:
+On Mon, Feb 27, 2023 at 11:09:12AM +0800, void0red wrote:
 > From: Kang Chen <void0red@gmail.com>
 > 
-> 1. replace the devm_add_action with devm_add_action_or_reset to ensure
-> the mutex lock can be destroyed when it fails.
-> 2. use local wrapper function mutex_fini instead of mutex_destroy to
-> avoid undefined behaviours.
-> 3. add a check of devm_add_action_or_reset and return early when it fails.
+> devm_add_action may fails, check it and do the cleanup.
 > 
-> Link: https://lore.kernel.org/all/f5043281-9b3e-e454-16fe-ef4cde36dfdb@roeck-us.net
 > Signed-off-by: Kang Chen <void0red@gmail.com>
 
 Applied.
@@ -87,37 +82,26 @@ Thanks,
 Guenter
 
 > ---
-> v3 -> v2: use local function and devm_add_action_or_rest
 > v2 -> v1: split the patch
 > 
->  drivers/hwmon/nzxt-smart2.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+>  drivers/hwmon/g762.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-> index 2b93ba896..340002581 100644
-> --- a/drivers/hwmon/nzxt-smart2.c
-> +++ b/drivers/hwmon/nzxt-smart2.c
-> @@ -721,6 +721,11 @@ static int __maybe_unused nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
->  	return init_device(drvdata, drvdata->update_interval);
->  }
+> diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
+> index 64a0599b2..e2c3c34f0 100644
+> --- a/drivers/hwmon/g762.c
+> +++ b/drivers/hwmon/g762.c
+> @@ -620,7 +620,12 @@ static int g762_of_clock_enable(struct i2c_client *client)
+>  	data = i2c_get_clientdata(client);
+>  	data->clk = clk;
 >  
-> +static void mutex_fini(void *lock)
-> +{
-> +	mutex_destroy(lock);
-> +}
+> -	devm_add_action(&client->dev, g762_of_clock_disable, data);
+> +	ret = devm_add_action(&client->dev, g762_of_clock_disable, data);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to add disable clock action\n");
+> +		goto clk_unprep;
+> +	}
 > +
->  static int nzxt_smart2_hid_probe(struct hid_device *hdev,
->  				 const struct hid_device_id *id)
->  {
-> @@ -737,8 +742,9 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
->  	init_waitqueue_head(&drvdata->wq);
+>  	return 0;
 >  
->  	mutex_init(&drvdata->mutex);
-> -	devm_add_action(&hdev->dev, (void (*)(void *))mutex_destroy,
-> -			&drvdata->mutex);
-> +	ret = devm_add_action_or_reset(&hdev->dev, mutex_fini, &drvdata->mutex);
-> +	if (ret)
-> +		return ret;
->  
->  	ret = hid_parse(hdev);
->  	if (ret)
+>   clk_unprep:
