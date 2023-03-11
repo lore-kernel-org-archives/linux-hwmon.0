@@ -2,93 +2,118 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F3D5C61DA4
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Mar 2023 11:18:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D694CC74A44
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Mar 2023 19:02:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbjCKLSY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 11 Mar 2023 06:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
+        id S229922AbjCKTCL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Mar 2023 14:02:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjCKLRZ (ORCPT
+        with ESMTP id S229885AbjCKTCI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Mar 2023 06:17:25 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119E613F570
-        for <linux-hwmon@vger.kernel.org>; Sat, 11 Mar 2023 03:16:25 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id j11so30743699edq.4
-        for <linux-hwmon@vger.kernel.org>; Sat, 11 Mar 2023 03:16:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678533373;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OCzg8SfNWOR6ZGwqRQLrQy1Mo0FTE4MlBOnbJtRBfZ4=;
-        b=x6ny6ewhdLvAMEqWw/3v72kyLaxkOEQQMYQmghS2Psgll1Kl6XAJkbVe7IVZPOjRQ/
-         Lz19EHwiTGVBsfi94BuHFfz+ITLVvmLB/R4E+rcM9UEvXuPZo1cDnpmuQ89F9w68mVsg
-         jz+hHWlyHpmFzs4utE+du/L35nyBCVtkBHAgqrna5CADgVdD6RI0KmqUuT67/dfwqUlA
-         xJkNduPizZaltQC3JRZtvS05az6SpWXuk/M/kfUQnOjd4E2OcZKO23x+Y7ucRZ3mKmcM
-         hO4wBI3KXesk2mGPJoUKDBaNN7hPlXnByOVo5dpEjuOqzqtNmR1U5Zyqm+u536bHkG0Z
-         jkMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678533373;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OCzg8SfNWOR6ZGwqRQLrQy1Mo0FTE4MlBOnbJtRBfZ4=;
-        b=4jRPf4m3v5b2r6SeHggo42SErFwUn0NZKaDxpfvongCiY3lJM41ybAHBd/mG1N3EfA
-         hb/n0eDKq6OwhNshABJuFsHTsq+Wk1perGS8uMTPhpiRdTPwdO10Xc5T+4/N4U2665bR
-         xo8Pxt7pGSRVW0HWx0e8CqaEVVlqKrGUMtAKJ/5Lrqmm52Ssvmk267KA8KeYkes+LxAM
-         XY0oUwhPZZrcuIY6F0FqWa6YXsCC+d0WTmQ1LX9hseHeBOygVxgoDcgEvCibgZ1fSU19
-         vNWgMrcwJBe9ms9hCXfciIkEpI1+8hHBW4CdT36JB8ZR8qZxbpupNK0fPpSu/xPTJvJp
-         xueA==
-X-Gm-Message-State: AO0yUKUexWNLiJkZaVrytu959GKsosHUGA79fy7rHnlqbWxX/AeZwPA2
-        3xURSZtfJor8PWm0P3VwElF/iQ==
-X-Google-Smtp-Source: AK7set9cjLbbYo2UOa5RfYgrzvA4oeSfkxQ06b+0q09ZBj03pG80CWlkc8SXf/95ocSPl0c1+DXLfQ==
-X-Received: by 2002:aa7:d149:0:b0:4fa:dad6:4b63 with SMTP id r9-20020aa7d149000000b004fadad64b63mr573298edo.37.1678533373699;
-        Sat, 11 Mar 2023 03:16:13 -0800 (PST)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:fa97:2d7c:bdd7:e1b])
-        by smtp.gmail.com with ESMTPSA id a20-20020a1709065f9400b008be0b7242d5sm994267eju.90.2023.03.11.03.16.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 03:16:13 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/2] hwmon: gpio-fan: mark OF related data as maybe unused
-Date:   Sat, 11 Mar 2023 12:16:09 +0100
-Message-Id: <20230311111610.251774-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Sat, 11 Mar 2023 14:02:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6955E64B2D;
+        Sat, 11 Mar 2023 11:02:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07DD160DD8;
+        Sat, 11 Mar 2023 19:02:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0275CC433D2;
+        Sat, 11 Mar 2023 19:02:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678561325;
+        bh=aRIPsVzahV4VaJZIFCg+vIsGtMpis+9um6e1rA2rVAc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=C+j+kZCat2117EEqGxts5x3SZZDixNF9zpT2XnUIqEHZlQp95CM5+y+uSy1rZnrE1
+         Z/5gClmxlQofaa+n3mg9HcR4EZkWWPqoZSw/O/554J+0IgZHlDPN/oiL5/NASKz+1R
+         MFXulOEzEx/yj6yNox+iX7rbqnBDm5bX8hv2I3ehoJGRUymVe/JnuxTL9IFraOjjHe
+         erWoFcsMZ8kYZgesrgeUpJn6cQkp5KEJBI3NYirUQ4TPh/bLhgersK/6HE6XT3gkvz
+         MokA7pKp+QEam/lKA3eAkmGzlSfdOKf0cw3bIoVKw7uuF1I1miQdoOI4J1eN3iBazj
+         U6LBsN4CXyI5Q==
+Date:   Sat, 11 Mar 2023 19:02:08 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        michal.simek@amd.com, Jonathan Corbet <corbet@lwn.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] devres: Provide krealloc_array
+Message-ID: <20230311190208.7eca8c12@jic23-huawei>
+In-Reply-To: <20230309150334.216760-2-james.clark@arm.com>
+References: <20230309150334.216760-1-james.clark@arm.com>
+        <20230309150334.216760-2-james.clark@arm.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The driver can be compile tested with !CONFIG_OF making certain data
-unused:
+On Thu,  9 Mar 2023 15:03:30 +0000
+James Clark <james.clark@arm.com> wrote:
 
-  drivers/hwmon/gpio-fan.c:484:34: error: ‘of_gpio_fan_match’ defined but not used [-Werror=unused-const-variable=]
+> There is no krealloc_array equivalent in devres. Users would have to
+> do their own multiplication overflow check so provide one.
+> 
+> Signed-off-by: James Clark <james.clark@arm.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/hwmon/gpio-fan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Trivial comment inline, but otherwise seems reasonable to me.
 
-diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-index e75db6f64e8c..be7f06fb7f78 100644
---- a/drivers/hwmon/gpio-fan.c
-+++ b/drivers/hwmon/gpio-fan.c
-@@ -481,7 +481,7 @@ static int gpio_fan_get_of_data(struct gpio_fan_data *fan_data)
- 	return 0;
- }
- 
--static const struct of_device_id of_gpio_fan_match[] = {
-+static const struct of_device_id of_gpio_fan_match[] __maybe_unused = {
- 	{ .compatible = "gpio-fan", },
- 	{},
- };
--- 
-2.34.1
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+> ---
+>  Documentation/driver-api/driver-model/devres.rst |  1 +
+>  include/linux/device.h                           | 10 ++++++++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
+> index 4249eb4239e0..8be086b3f829 100644
+> --- a/Documentation/driver-api/driver-model/devres.rst
+> +++ b/Documentation/driver-api/driver-model/devres.rst
+> @@ -364,6 +364,7 @@ MEM
+>    devm_kmalloc_array()
+>    devm_kmemdup()
+>    devm_krealloc()
+> +  devm_krealloc_array()
+>    devm_kstrdup()
+>    devm_kstrdup_const()
+>    devm_kvasprintf()
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index 1508e637bb26..0dd5956c8516 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -223,6 +223,16 @@ static inline void *devm_kcalloc(struct device *dev,
+>  {
+>  	return devm_kmalloc_array(dev, n, size, flags | __GFP_ZERO);
+>  }
+> +static inline __realloc_size(3, 4) void * __must_check
+> +devm_krealloc_array(struct device *dev, void *p, size_t new_n, size_t new_size, gfp_t flags)
+> +{
+> +	size_t bytes;
+> +
+> +	if (unlikely(check_mul_overflow(new_n, new_size, &bytes)))
+> +		return NULL;
+
+For consistency with krealloc_array and other stuff in device.h that is
+of similar 'shape' add a blank line here.
+
+> +	return devm_krealloc(dev, p, bytes, flags);
+> +}
+> +
+>  void devm_kfree(struct device *dev, const void *p);
+>  char *devm_kstrdup(struct device *dev, const char *s, gfp_t gfp) __malloc;
+>  const char *devm_kstrdup_const(struct device *dev, const char *s, gfp_t gfp);
 
