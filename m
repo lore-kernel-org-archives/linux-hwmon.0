@@ -2,81 +2,82 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2B4BC6FD19
-	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Mar 2023 18:19:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63140C6FD1C
+	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Mar 2023 18:23:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjCLST6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 12 Mar 2023 14:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S231920AbjCLSXL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 12 Mar 2023 14:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbjCLSTm (ORCPT
+        with ESMTP id S231895AbjCLSW4 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 12 Mar 2023 14:19:42 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14B83C78B;
-        Sun, 12 Mar 2023 11:12:42 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-177b78067ffso410821fac.7;
-        Sun, 12 Mar 2023 11:12:42 -0700 (PDT)
+        Sun, 12 Mar 2023 14:22:56 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA85062DB0;
+        Sun, 12 Mar 2023 11:15:35 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id j6so1460493ilr.7;
+        Sun, 12 Mar 2023 11:15:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678644617;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/5OWdrxNHbrZ4Nz2Tj3c5aciSG4U6fCqb++Fj/eR2zw=;
-        b=A30SVc7P/2K17UUXFEJm+5fxj+LazUi9c3iEeRiCMX+0X+XxZtCaYpoUqD4GXOmjwV
-         UgbrK50LZx+QM2k86Mkgp+Q4NiguwLaeFeirp8v/mpIe4/RbDgH14wELmJy+U+JABPKk
-         WQGrK1SK/Z9W8l+Ztjf/xr4HeKx8AS/X6wI11NYcJOqdpFkoWAdIRG9CoQMsg7SI+TY6
-         2mgugcNJsK0HEkFmiMWhzFGT3qnCFKskM0CBqnOCq5v1VZu6hbypZ6qEuFKsOaiLW49J
-         nTDbEMFuQmwEZyW19Zsyo19B/M8buUJvu6X0cK43Qj3hvvUCMkbfexq1mOAgS4ZL9+w1
-         XSyw==
+        d=gmail.com; s=20210112; t=1678644828;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FBhKFNngoMDbvwNSzDNWcaqW697xKA6lIAPdNAaMhoc=;
+        b=kI4NParOZ+lhNFAKR9Lep/1F+OTIJ3v6HotVPYQuM4JoQIAB04A76/fY7UTPklNHHb
+         Go7AdPhDzXG1rUa1+qjsAGAoeGo4vTrDPhWfLTGRgpCJFwd5tGyU1VjwE869/x8H/BGF
+         Vzpe0oCB57UCM9icLk4TmB22T+FG9T62OQLiW7wHcSoXOR6Lx/roASCJ1fdGox0+GJhZ
+         9XBZ5rRKKkwW1RdEGBQhw0Q4ituU4w+wpntOaXIsBBLhQXNTBQyKqsg7VF8olrFXImrw
+         yJomMoyCeUyisHOV7HyLdpmkaZZp3AMbdzs4GZYjOLnp8vMa+3sdBcdf4Vg1EnHHRlNH
+         XUog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678644617;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/5OWdrxNHbrZ4Nz2Tj3c5aciSG4U6fCqb++Fj/eR2zw=;
-        b=LIvbR5/5ht0ffSgesfv99ryaMBUBugI8ZkCqVRjB3/oJnB5mw2D7jF3SDC1t0Cx8r9
-         zE1LXV7bmkIrKMm3k6GIiELmZdIpHiA8Xkm4Udfav13rT777jPSRnMeymMQrPGdtV/0W
-         8Goyedf2Hmp/M0W+Bea301f831JbVwAIb757wR92Tinf2uMgsYNFXPvqztFmJ+n99Ww/
-         /aWcW+K27J8MWtzYLIMDrov7B/YQCjKgPqb7n8V2QbQejMgKrZR2gumJmpdW0nwBbAkd
-         +0DwwkSflycjvGSV93hDIJN4oAxeadVu06P4j12NFXpgFymks1sFLKFLQRrnCzudLdZq
-         +Cfg==
-X-Gm-Message-State: AO0yUKWAjYgH7sy4qSuzUu747PdbLK1lxKYjScrlwdY4t+AtCJ/FTxue
-        imEsw40jPH8cNmtIvwoc77f2EVCX9Ao=
-X-Google-Smtp-Source: AK7set86yzXz3FzWQ4JlBAq6djBAsmrboViOfeRyOFjOAZ5npSRtjnPvPPH61KXd7enLLum2Sb1XWg==
-X-Received: by 2002:a05:6870:e40c:b0:16e:907:e198 with SMTP id n12-20020a056870e40c00b0016e0907e198mr18895797oag.45.1678644616885;
-        Sun, 12 Mar 2023 11:10:16 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678644828;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FBhKFNngoMDbvwNSzDNWcaqW697xKA6lIAPdNAaMhoc=;
+        b=gaz5qi0UNwBgrOiX5CEbwEERUy7nGoFTfbW3wYAT/BRPnBooUJuUA4WtQ9QN798wp3
+         wIExh3LtQxCwiUKN6lOcFrk2HLAY6IZMA/M8sAUrFUXhic/WEi5ekRWfbKKhLA0Wwitq
+         r+uCJFV5lJNui9IpHRw2H2pw7/bxEBE2RcRrJ1N1zg9B1M17d6as2OWB6M9BDgiN3XRG
+         t8wrcj2M+XkYDgoEfjuk9O5FQubECRlL0MuXIL/KS9pD4FrXiURtv+0RspESh7tWdHJu
+         IfHFWK9GKXe5DHe6Wp/WkN/amapznemaMABYxWlqHKj0E/eJKpsxzl9MBOemsvf+qwOD
+         Zm+w==
+X-Gm-Message-State: AO0yUKXFudSbLq/Atr6IFoadCpJ/lZfU76oI0luQq9FHS4FZ/afewCwR
+        dxIiJu0eAVOBqUw+l0qRxboLaVZTpN0=
+X-Google-Smtp-Source: AK7set99eaB/tOAx9oetZS2Nd1lbb9Y4DcLSn1B/yluPn08tKQ8xgbuLL+TQoffPZDaHwu8q1LlAOA==
+X-Received: by 2002:aca:220a:0:b0:384:8b17:3796 with SMTP id b10-20020aca220a000000b003848b173796mr13893632oic.11.1678643998867;
+        Sun, 12 Mar 2023 10:59:58 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z13-20020a056870e14d00b00172721f6cd5sm2261635oaa.16.2023.03.12.11.10.16
+        by smtp.gmail.com with ESMTPSA id j65-20020acab944000000b0037d74967ef6sm2278346oif.44.2023.03.12.10.59.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 11:10:16 -0700 (PDT)
+        Sun, 12 Mar 2023 10:59:58 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 12 Mar 2023 11:10:15 -0700
+Date:   Sun, 12 Mar 2023 10:59:57 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: tmp512: mark OF related data as maybe unused
-Message-ID: <ad8c23e2-8a92-4fdd-b785-c485ebb597a5@roeck-us.net>
-References: <20230311111610.251774-1-krzysztof.kozlowski@linaro.org>
- <20230311111610.251774-2-krzysztof.kozlowski@linaro.org>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] docs: hwmon: sysfs-interface: Fix stray colon
+Message-ID: <e12555cc-1816-4a31-b4b4-4d07c7db4960@roeck-us.net>
+References: <20230312155714.17290-1-stefan.wahren@i2se.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230311111610.251774-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230312155714.17290-1-stefan.wahren@i2se.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 12:16:10PM +0100, Krzysztof Kozlowski wrote:
-> The driver can be compile tested with !CONFIG_OF making certain data
-> unused:
+On Sun, Mar 12, 2023 at 04:57:14PM +0100, Stefan Wahren wrote:
+> The commit 036d6a4e75c9 ("ABI: sysfs-class-hwmon: add ABI documentation
+> for it") moved all ABI attributes to the usual ABI documentation. But this
+> change left a stray colon for the fan speed control method. Fix this
+> to avoid a confusion of readers.
 > 
->   drivers/hwmon/tmp513.c:610:34: error: ‘tmp51x_of_match’ defined but not used [-Werror=unused-const-variable=]
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Fixes: 036d6a4e75c9 ("ABI: sysfs-class-hwmon: add ABI documentation for it")
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 
 Applied.
 
@@ -84,19 +85,19 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/tmp513.c | 2 +-
+>  Documentation/hwmon/sysfs-interface.rst | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
-> index 47bbe47e062f..78cdd2d2d875 100644
-> --- a/drivers/hwmon/tmp513.c
-> +++ b/drivers/hwmon/tmp513.c
-> @@ -607,7 +607,7 @@ static const struct i2c_device_id tmp51x_id[] = {
->  };
->  MODULE_DEVICE_TABLE(i2c, tmp51x_id);
+> diff --git a/Documentation/hwmon/sysfs-interface.rst b/Documentation/hwmon/sysfs-interface.rst
+> index 209626fb2405..f76e9f8cc1ad 100644
+> --- a/Documentation/hwmon/sysfs-interface.rst
+> +++ b/Documentation/hwmon/sysfs-interface.rst
+> @@ -201,7 +201,7 @@ PWM
+>  		Pulse width modulation fan control.
 >  
-> -static const struct of_device_id tmp51x_of_match[] = {
-> +static const struct of_device_id tmp51x_of_match[] __maybe_unused = {
->  	{
->  		.compatible = "ti,tmp512",
->  		.data = (void *)tmp512
+>  `pwm[1-*]_enable`
+> -		Fan speed control method:
+> +		Fan speed control method.
+>  
+>  `pwm[1-*]_mode`
+>  		direct current or pulse-width modulation.
