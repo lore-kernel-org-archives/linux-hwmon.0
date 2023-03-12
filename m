@@ -2,187 +2,135 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F3D3C6FD19
-	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Mar 2023 17:56:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26CEBC74A5B
+	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Mar 2023 18:04:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbjCLR4K (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 12 Mar 2023 13:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
+        id S231862AbjCLSEY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 12 Mar 2023 14:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjCLR4I (ORCPT
+        with ESMTP id S231544AbjCLSDQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 12 Mar 2023 13:56:08 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E1537B6F;
-        Sun, 12 Mar 2023 10:56:07 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id bi17so7967754oib.3;
-        Sun, 12 Mar 2023 10:56:06 -0700 (PDT)
+        Sun, 12 Mar 2023 14:03:16 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10614DBE1
+        for <linux-hwmon@vger.kernel.org>; Sun, 12 Mar 2023 10:59:48 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-17683b570b8so11531223fac.13
+        for <linux-hwmon@vger.kernel.org>; Sun, 12 Mar 2023 10:59:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678643766;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BlEzqNfjcrEjglxe+A1T2KUkUEySUY5I6uLCcu4h+Mc=;
-        b=Cs3fUmtvd+smCvPcmo51M+QK2M7PSStes5FdS3A4/JFqFKBUGqxJzBZr4mfJWP+ESV
-         pDxi35iJP1ku7WfewTebVmiJgWC2yrPlwl1zFfRvJjK6uPktsClC2oTO0b7YNF2L4a9s
-         fnRw8aRDmTjsDSDzv9OZ2+Q2i2Zy+RnvxkVXX0/eY5Zv/MkhQ6kTzeM8RNfzQRB04vBT
-         mccCdiYONzrV658TpJo2pYwnstRP2PMfgK+qJX+OdzsZmGo0Kcezr4iXuPj3VN7J0h7P
-         OSneaB/0wVfvEG8JsYjfp/Nk8AS4TxSDAwvvreTfZ1okQv+DtoJBGVxYUFUL91f7BUKJ
-         Ax2g==
+        d=gmail.com; s=20210112; t=1678643932;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=WMSAEUV55JyZ68eRBSqIQlAsWCOrO1Gc0N2bCMh542k=;
+        b=Y8hU5xNebe/Skczsvz281jvW4Rzy40fRpKMuvU9sJEH5GRic9ysR0gDZENjG3O93PE
+         bPOOKAMIfDLBBFLcUqYOYQXuxPa4RksKeChRP93mYGPiHUIGcoAFYVqxzi4K+cf/RnXm
+         G1t3dlx4nyLwHE41GOBpxfde4u8u/l5EWIzFcy5n9ukcGeELeroMiJCu4WvvSi9UhxXI
+         k9PNBtF+PJBuDVw3KPz7aNEZ4lvS6l9lgmgkKPyvCC++Oj7ig3UY4MfqC/GiFZfYXLN9
+         0Wc7gSg5uWnf1OW/tw5X9tmvRVXNGa4d2zoQBQTFVa+Khq0aAUpdnckLjWIlip4RUDFV
+         R8fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678643766;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BlEzqNfjcrEjglxe+A1T2KUkUEySUY5I6uLCcu4h+Mc=;
-        b=79DlFNBMXXCftNmEx3zqMHoCUrm+0ar5fXCHm4Su+yWAoKuhO1VjDw/Dd+CJtXkJRj
-         8lk/hUUOM8Dx644LJ3ncXx/BzFeBxX1uRUWL8OQJxSPOxuLsZpukffnrH/O8OOGx97t/
-         FrXwRjvfGB6mVyMuJ8X/+RTeXG0EGT2nK+dhW/ZjShLv7pZwP7DHeQlu92WDBN9c0gfC
-         w5RkMor5s/s1R47PBuBAFNmAIyfrlKVXNCNzxrNeXD1JBgJx2ZCnqXnTvVNNCDT0FJKT
-         NDs0htfb57gMjLm47j1FV4hzb5azxMkgdmX2gZD7yJnSOqM+yrOTGl0PleHFh95vqU5U
-         MBxw==
-X-Gm-Message-State: AO0yUKW6Lv0PVhTkr/tjHA162oyZ/P5cJ2L2CM4sVsKZRxsmBamalcio
-        IsdaMqscK8jh913QJHACPxc=
-X-Google-Smtp-Source: AK7set//8A3sevl5TYpFZdOi41ZJLUWzDJ/rSrkocrc/JjTwZ/g49koOUMhOcL6XMcxuN7ZCem1GJw==
-X-Received: by 2002:a05:6808:983:b0:384:3c76:e20a with SMTP id a3-20020a056808098300b003843c76e20amr16630558oic.10.1678643766290;
-        Sun, 12 Mar 2023 10:56:06 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k8-20020aca3d08000000b00383e12e20c5sm2276547oia.24.2023.03.12.10.56.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 10:56:05 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678643932;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WMSAEUV55JyZ68eRBSqIQlAsWCOrO1Gc0N2bCMh542k=;
+        b=qgT3SsuAcuSwYgtGxsrhJkqTpRQ+UtAfFG9jRs6FHZOwtU0vlphCD5oV/T9wMeKAN5
+         bYjfFgMEGL4rbJ0s1sL4bjq+QxQqdqictZqIkPwz7/ZUM+oQZZSZq6/tSzf9FfwzFcJg
+         2RG4FpS4Yh0OEzn7HFrbEeijfzo7L9hffESNlZd7EfEdeRwKxwU9DExK8lZxze4o6v3p
+         /lgY5kU/l5U3SlfNZPBi8sTXeAMZq9eXU8srmGdiDCxhO06PYAdbvpO6brwWsTj+T29h
+         AgtLMK8BSd4bPK2TUnSPWttD9VSzfjN65foc+o1Aa9U13RejR1wg/6XBEWar3iPbHE+D
+         ju0w==
+X-Gm-Message-State: AO0yUKUxJh3kRhXxpkbFO2qaPxiHCYi7JutNAFgaJGcfgFwbR2mJvWsM
+        ggc7UmFJ4g5cxJTDL+dk7hsv3sx1Fj0=
+X-Google-Smtp-Source: AK7set/pWa70Tjcg2KoLwU0yUqRpJNEgY4Ey17W440LxsE+LkxhDjohLks7icII8ZO4Y4kyRqkRiew==
+X-Received: by 2002:a05:6870:4190:b0:177:ad57:cb36 with SMTP id y16-20020a056870419000b00177ad57cb36mr1096303oac.27.1678643931808;
+        Sun, 12 Mar 2023 10:58:51 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v11-20020a9d5a0b000000b0068bcc902b82sm2338509oth.71.2023.03.12.10.58.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Mar 2023 10:58:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 12 Mar 2023 10:56:04 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 4/4] hwmon: (pmbus/core): Notify hwmon events
-Message-ID: <d88b6755-0942-464c-8853-cbef5ad41799@roeck-us.net>
-References: <20230301164434.1928237-1-Naresh.Solanki@9elements.com>
- <20230301164434.1928237-4-Naresh.Solanki@9elements.com>
+Message-ID: <0c64777d-f843-88de-f0e7-8dbd153e2a6e@roeck-us.net>
+Date:   Sun, 12 Mar 2023 10:58:49 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230301164434.1928237-4-Naresh.Solanki@9elements.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: Sensor for Asus Pro A520M-C II/CSM
+Content-Language: en-US
+To:     Holger Kiehl <Holger.Kiehl@dwd.de>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <389043e8-b523-cd89-b4da-83acea01521@praktifix.dwd.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <389043e8-b523-cd89-b4da-83acea01521@praktifix.dwd.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 05:44:34PM +0100, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On 3/12/23 06:06, Holger Kiehl wrote:
+> Hello,
 > 
-> Notify hwmon events using the pmbus irq handler.
+> with the attached patch some sensor information is shown
+> with Asus Pro A520M-C II/CSM:
 > 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ...
+>     dmesg |grep nct6775
+>     [   23.765392] nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
+> 
+> And sensors now shows:
+> 
+>     nct6798-isa-0290
+>     Adapter: ISA adapter
+>     in0:                      312.00 mV (min =  +0.00 V, max =  +1.74 V)
+>     in1:                        1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>     in2:                        3.42 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>     in3:                        3.38 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>     in4:                        1.03 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>     in5:                        1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>     in6:                      200.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+>     in7:                        3.42 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>     in8:                        3.28 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>     in9:                      920.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+>     in10:                     512.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+>     in11:                     504.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+>     in12:                       1.03 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>     in13:                     256.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+>     in14:                       1.47 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>     fan1:                        0 RPM  (min =    0 RPM)
+>     fan2:                        0 RPM  (min =    0 RPM)
+>     fan3:                      355 RPM  (min =    0 RPM)
+>     fan7:                        0 RPM  (min =    0 RPM)
+>     SYSTIN:                    +25.0°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
+>     CPUTIN:                    +26.5°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
+>     AUXTIN0:                   +97.0°C    sensor = thermistor
+>     AUXTIN1:                   +25.0°C    sensor = thermistor
+>     AUXTIN2:                   +25.0°C    sensor = thermistor
+>     AUXTIN3:                    +1.0°C    sensor = thermistor
+>     PECI Agent 0 Calibration:  +26.0°C
+>     PCH_CHIP_CPU_MAX_TEMP:      +0.0°C
+>     PCH_CHIP_TEMP:              +0.0°C
+>     PCH_CPU_TEMP:               +0.0°C
+>     TSI0_TEMP:                 +27.9°C
+>     intrusion0:               ALARM
+>     intrusion1:               OK
+>     beep_enable:              disabled
+> 
+> The patch is against 6.2.5.
+> 
+> Thank you very much for all the hwmon work!
+> 
+> Regards,
+> Holger
 
-Again, "---"
+Please see
 
-Applied.
+Documentation/process/submitting-patches.rst
+Documentation/process/submit-checklist.rst
+
+for information on how to submit patches into the upstream Linux kernel.
 
 Thanks,
 Guenter
 
-> Changes in V4:
-> - Ignore return error in irq handle & instead continue loop.
-> Changes in V3:
-> - Remove empty line
-> - locked version of pmbus_get_flags
-> Changes in V2
-> - Remove __maybe_unsed attribute as its not needed.
-> ---
->  drivers/hwmon/pmbus/pmbus_core.c | 46 +++++++++++++++++++++++++++-----
->  1 file changed, 40 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index dfd227459d8b..0ddef2c9ba9b 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2761,7 +2761,35 @@ static int __maybe_unused pmbus_is_enabled(struct device *dev, u8 page)
->  	return !!(ret & PB_OPERATION_CONTROL_ON);
->  }
->  
-> -static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
-> +#define to_dev_attr(_dev_attr) \
-> +	container_of(_dev_attr, struct device_attribute, attr)
-> +
-> +static void pmbus_notify(struct pmbus_data *data, int page, int reg, int flags)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < data->num_attributes; i++) {
-> +		struct device_attribute *da = to_dev_attr(data->group.attrs[i]);
-> +		struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
-> +		int index = attr->index;
-> +		u16 smask = pb_index_to_mask(index);
-> +		u8 spage = pb_index_to_page(index);
-> +		u16 sreg = pb_index_to_reg(index);
-> +
-> +		if (reg == sreg && page == spage && (smask & flags)) {
-> +			dev_dbg(data->dev, "sysfs notify: %s", da->attr.name);
-> +			sysfs_notify(&data->dev->kobj, NULL, da->attr.name);
-> +			kobject_uevent(&data->dev->kobj, KOBJ_CHANGE);
-> +			flags &= ~smask;
-> +		}
-> +
-> +		if (!flags)
-> +			break;
-> +	}
-> +}
-> +
-> +static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags,
-> +			    bool notify)
->  {
->  	int i, status;
->  	const struct pmbus_status_category *cat;
-> @@ -2785,6 +2813,10 @@ static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flag
->  			if (status & bit->pflag)
->  				*flags |= bit->rflag;
->  		}
-> +
-> +		if (notify && status)
-> +			pmbus_notify(data, page, cat->reg, status);
-> +
->  	}
->  
->  	/*
-> @@ -2828,12 +2860,13 @@ static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flag
->  	return 0;
->  }
->  
-> -static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
-> +static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags,
-> +					  bool notify)
->  {
->  	int ret;
->  
->  	mutex_lock(&data->update_lock);
-> -	ret = _pmbus_get_flags(data, page, flags);
-> +	ret = _pmbus_get_flags(data, page, flags, notify);
->  	mutex_unlock(&data->update_lock);
->  
->  	return ret;
-> @@ -2878,7 +2911,7 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->  	struct i2c_client *client = to_i2c_client(dev->parent);
->  	struct pmbus_data *data = i2c_get_clientdata(client);
->  
-> -	return pmbus_get_flags(data, rdev_get_id(rdev), flags);
-> +	return pmbus_get_flags(data, rdev_get_id(rdev), flags, false);
->  }
->  
->  static int pmbus_regulator_get_status(struct regulator_dev *rdev)
-> @@ -3114,9 +3147,10 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
->  {
->  	struct pmbus_data *data = pdata;
->  	struct i2c_client *client = to_i2c_client(data->dev);
-> -
-> +	int i, status;
->  	mutex_lock(&data->update_lock);
-> -	/* TODO: Check status flag & notify hwmon events */
-> +	for (i = 0; i < data->info->pages; i++)
-> +		_pmbus_get_flags(data, i, &status, true);
->  
->  	pmbus_clear_faults(client);
->  	mutex_unlock(&data->update_lock);
