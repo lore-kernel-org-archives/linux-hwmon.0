@@ -2,83 +2,83 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 047F4C6FD19
-	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Mar 2023 17:55:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F3D3C6FD19
+	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Mar 2023 17:56:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjCLRzP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 12 Mar 2023 13:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S230092AbjCLR4K (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 12 Mar 2023 13:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjCLRzO (ORCPT
+        with ESMTP id S229845AbjCLR4I (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 12 Mar 2023 13:55:14 -0400
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D90B18165;
-        Sun, 12 Mar 2023 10:55:13 -0700 (PDT)
-Received: by mail-oo1-xc2f.google.com with SMTP id b10-20020a4aba0a000000b005200c0d4a2aso1526824oop.11;
-        Sun, 12 Mar 2023 10:55:13 -0700 (PDT)
+        Sun, 12 Mar 2023 13:56:08 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E1537B6F;
+        Sun, 12 Mar 2023 10:56:07 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id bi17so7967754oib.3;
+        Sun, 12 Mar 2023 10:56:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678643712;
+        d=gmail.com; s=20210112; t=1678643766;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VoQHn5T6biYyj4hdWfbtnkoSrfY7Ep9xdtM1lhPHbiM=;
-        b=oPunSEYUR1uvnTPrF/i440sanU6oUpkIUgDc2EhwX2zIYSALPSHjol/IlRdx3JOoGp
-         0ihLi96XP47OkqGjhkDb6BwRVzgcs9NR+Lv8nDQi1xF46GDvXS90WorQpMSIosOZbJK+
-         ntgUT02QFZF+iLjLu4bx+YjCZx9OFEvnFXayQnO0n14BM59BGNa2MShWfUxH+awpF2a1
-         gjX+Xh9O9I5k1iDh/RGAOtpDS79IVwlCln8wO27sv+Okxn74bmJGwCvC3pMjr71vaFI2
-         HbDhfjgwekkE/X/OjUqWE2Hw3YTPS6wKVptn69rt3y54TTmdrIqnYcZ/hBg89gxxgWS0
-         sf0g==
+        bh=BlEzqNfjcrEjglxe+A1T2KUkUEySUY5I6uLCcu4h+Mc=;
+        b=Cs3fUmtvd+smCvPcmo51M+QK2M7PSStes5FdS3A4/JFqFKBUGqxJzBZr4mfJWP+ESV
+         pDxi35iJP1ku7WfewTebVmiJgWC2yrPlwl1zFfRvJjK6uPktsClC2oTO0b7YNF2L4a9s
+         fnRw8aRDmTjsDSDzv9OZ2+Q2i2Zy+RnvxkVXX0/eY5Zv/MkhQ6kTzeM8RNfzQRB04vBT
+         mccCdiYONzrV658TpJo2pYwnstRP2PMfgK+qJX+OdzsZmGo0Kcezr4iXuPj3VN7J0h7P
+         OSneaB/0wVfvEG8JsYjfp/Nk8AS4TxSDAwvvreTfZ1okQv+DtoJBGVxYUFUL91f7BUKJ
+         Ax2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678643712;
+        d=1e100.net; s=20210112; t=1678643766;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VoQHn5T6biYyj4hdWfbtnkoSrfY7Ep9xdtM1lhPHbiM=;
-        b=e5RX5YM2PwudQu54PcmDi7G1usS/U9yGDOzqLXiFrivkLNKFH0VJRay4whMQwGa2la
-         qEWNwO37prIoJ4A5318mVUO21NcKTiwK1hazOw8I6ojYxFHHigYVpDNo3DR4Iq9vN79F
-         +AlXKs/ryGbYbMqH3GqgWcaE6Srj+XnF4Hr5iSSi/toF1UdmnHRQ8v5hBy67a2ttG7Kb
-         bAXcWE2ccHc1j6GYQ4AjNezLjrto064MEPDyuCNpuNlxwgcl9mxpP42jkuweHKUlvBXT
-         Fzq8lxAzWyRysrM9ZRBIv1rpLoUA4db/6y7wqEVt9yyLgAvVSJ3fj8jjlZVU1OSC7Iwm
-         cWrA==
-X-Gm-Message-State: AO0yUKVxhpmeCmRFomysi1yZKoTx1Gtc3H6aw3POzs0ERq3Nv3HgiOop
-        T37NseTLyTjHVgRgK8fhMTo=
-X-Google-Smtp-Source: AK7set833UkN6xA7orT1x4uZcQWDAlsrsf7nQohf/YSMX0kfDsjDXmrhluAUIqUdNBMaCNgsVGooLQ==
-X-Received: by 2002:a4a:d637:0:b0:525:4058:2fcd with SMTP id n23-20020a4ad637000000b0052540582fcdmr5054102oon.1.1678643712663;
-        Sun, 12 Mar 2023 10:55:12 -0700 (PDT)
+        bh=BlEzqNfjcrEjglxe+A1T2KUkUEySUY5I6uLCcu4h+Mc=;
+        b=79DlFNBMXXCftNmEx3zqMHoCUrm+0ar5fXCHm4Su+yWAoKuhO1VjDw/Dd+CJtXkJRj
+         8lk/hUUOM8Dx644LJ3ncXx/BzFeBxX1uRUWL8OQJxSPOxuLsZpukffnrH/O8OOGx97t/
+         FrXwRjvfGB6mVyMuJ8X/+RTeXG0EGT2nK+dhW/ZjShLv7pZwP7DHeQlu92WDBN9c0gfC
+         w5RkMor5s/s1R47PBuBAFNmAIyfrlKVXNCNzxrNeXD1JBgJx2ZCnqXnTvVNNCDT0FJKT
+         NDs0htfb57gMjLm47j1FV4hzb5azxMkgdmX2gZD7yJnSOqM+yrOTGl0PleHFh95vqU5U
+         MBxw==
+X-Gm-Message-State: AO0yUKW6Lv0PVhTkr/tjHA162oyZ/P5cJ2L2CM4sVsKZRxsmBamalcio
+        IsdaMqscK8jh913QJHACPxc=
+X-Google-Smtp-Source: AK7set//8A3sevl5TYpFZdOi41ZJLUWzDJ/rSrkocrc/JjTwZ/g49koOUMhOcL6XMcxuN7ZCem1GJw==
+X-Received: by 2002:a05:6808:983:b0:384:3c76:e20a with SMTP id a3-20020a056808098300b003843c76e20amr16630558oic.10.1678643766290;
+        Sun, 12 Mar 2023 10:56:06 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h11-20020a4a940b000000b0051ac0f54447sm2296886ooi.33.2023.03.12.10.55.12
+        by smtp.gmail.com with ESMTPSA id k8-20020aca3d08000000b00383e12e20c5sm2276547oia.24.2023.03.12.10.56.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 10:55:12 -0700 (PDT)
+        Sun, 12 Mar 2023 10:56:05 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 12 Mar 2023 10:55:11 -0700
+Date:   Sun, 12 Mar 2023 10:56:04 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Naresh Solanki <naresh.solanki@9elements.com>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] hwmon: (pmbus/core): Add interrupt support
-Message-ID: <473d6a29-29cf-4b8a-b40b-d71fd8a5bcc8@roeck-us.net>
+Subject: Re: [PATCH v4 4/4] hwmon: (pmbus/core): Notify hwmon events
+Message-ID: <d88b6755-0942-464c-8853-cbef5ad41799@roeck-us.net>
 References: <20230301164434.1928237-1-Naresh.Solanki@9elements.com>
- <20230301164434.1928237-3-Naresh.Solanki@9elements.com>
+ <20230301164434.1928237-4-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230301164434.1928237-3-Naresh.Solanki@9elements.com>
+In-Reply-To: <20230301164434.1928237-4-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 05:44:33PM +0100, Naresh Solanki wrote:
+On Wed, Mar 01, 2023 at 05:44:34PM +0100, Naresh Solanki wrote:
 > From: Patrick Rudolph <patrick.rudolph@9elements.com>
 > 
-> Implement PMBUS irq handler.
+> Notify hwmon events using the pmbus irq handler.
 > 
 > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 > ...
 
-This should be "---"
+Again, "---"
 
 Applied.
 
@@ -86,117 +86,103 @@ Thanks,
 Guenter
 
 > Changes in V4:
-> - Clear fault using pmbus_clear_faults at end of interrupt handler.
-> - Remove for loop.
+> - Ignore return error in irq handle & instead continue loop.
 > Changes in V3:
-> - Remove pmbus word check for SMBALERT writes
-> - Remove variable ret & use err instead.
-> - Use dev_dbg_once instead of error.
-> - Remove error print when writing to misc_status register.
-> - Move client irq check to pmbus_irq_setup.
+> - Remove empty line
+> - locked version of pmbus_get_flags
+> Changes in V2
+> - Remove __maybe_unsed attribute as its not needed.
 > ---
->  drivers/hwmon/pmbus/pmbus.h      |  2 +-
->  drivers/hwmon/pmbus/pmbus_core.c | 70 ++++++++++++++++++++++++++++++++
->  2 files changed, 71 insertions(+), 1 deletion(-)
+>  drivers/hwmon/pmbus/pmbus_core.c | 46 +++++++++++++++++++++++++++-----
+>  1 file changed, 40 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-> index 713ea7915425..11e84e141126 100644
-> --- a/drivers/hwmon/pmbus/pmbus.h
-> +++ b/drivers/hwmon/pmbus/pmbus.h
-> @@ -26,7 +26,7 @@ enum pmbus_regs {
->  
->  	PMBUS_CAPABILITY		= 0x19,
->  	PMBUS_QUERY			= 0x1A,
-> -
-> +	PMBUS_SMBALERT_MASK		= 0x1B,
->  	PMBUS_VOUT_MODE			= 0x20,
->  	PMBUS_VOUT_COMMAND		= 0x21,
->  	PMBUS_VOUT_TRIM			= 0x22,
 > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index f8ac9016ea0e..dfd227459d8b 100644
+> index dfd227459d8b..0ddef2c9ba9b 100644
 > --- a/drivers/hwmon/pmbus/pmbus_core.c
 > +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -3105,6 +3105,72 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+> @@ -2761,7 +2761,35 @@ static int __maybe_unused pmbus_is_enabled(struct device *dev, u8 page)
+>  	return !!(ret & PB_OPERATION_CONTROL_ON);
 >  }
->  #endif
 >  
-> +static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg, u8 val)
+> -static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
+> +#define to_dev_attr(_dev_attr) \
+> +	container_of(_dev_attr, struct device_attribute, attr)
+> +
+> +static void pmbus_notify(struct pmbus_data *data, int page, int reg, int flags)
 > +{
-> +	return pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
-> +}
+> +	int i;
 > +
-> +static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
-> +{
-> +	struct pmbus_data *data = pdata;
-> +	struct i2c_client *client = to_i2c_client(data->dev);
+> +	for (i = 0; i < data->num_attributes; i++) {
+> +		struct device_attribute *da = to_dev_attr(data->group.attrs[i]);
+> +		struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+> +		int index = attr->index;
+> +		u16 smask = pb_index_to_mask(index);
+> +		u8 spage = pb_index_to_page(index);
+> +		u16 sreg = pb_index_to_reg(index);
 > +
-> +	mutex_lock(&data->update_lock);
-> +	/* TODO: Check status flag & notify hwmon events */
-> +
-> +	pmbus_clear_faults(client);
-> +	mutex_unlock(&data->update_lock);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
-> +{
-> +	struct device *dev = &client->dev;
-> +	const struct pmbus_status_category *cat;
-> +	const struct pmbus_status_assoc *bit;
-> +	int i, j, err, func;
-> +	u8 mask;
-> +
-> +	static const u8 misc_status[] = {PMBUS_STATUS_CML, PMBUS_STATUS_OTHER,
-> +					 PMBUS_STATUS_MFR_SPECIFIC, PMBUS_STATUS_FAN_12,
-> +					 PMBUS_STATUS_FAN_34};
-> +
-> +	if (!client->irq)
-> +		return 0;
-> +
-> +	for (i = 0; i < data->info->pages; i++) {
-> +		func = data->info->func[i];
-> +
-> +		for (j = 0; j < ARRAY_SIZE(pmbus_status_flag_map); j++) {
-> +			cat = &pmbus_status_flag_map[j];
-> +			if (!(func & cat->func))
-> +				continue;
-> +			mask = 0;
-> +			for (bit = cat->bits; bit->pflag; bit++)
-> +				mask |= bit->pflag;
-> +
-> +			err = pmbus_write_smbalert_mask(client, i, cat->reg, ~mask);
-> +			if (err)
-> +				dev_dbg_once(dev, "Failed to set smbalert for reg 0x%02x\n",
-> +					     cat->reg);
+> +		if (reg == sreg && page == spage && (smask & flags)) {
+> +			dev_dbg(data->dev, "sysfs notify: %s", da->attr.name);
+> +			sysfs_notify(&data->dev->kobj, NULL, da->attr.name);
+> +			kobject_uevent(&data->dev->kobj, KOBJ_CHANGE);
+> +			flags &= ~smask;
 > +		}
 > +
-> +		for (j = 0; j < ARRAY_SIZE(misc_status); j++)
-> +			pmbus_write_smbalert_mask(client, i, misc_status[j], 0xff);
+> +		if (!flags)
+> +			break;
 > +	}
-> +
-> +	/* Register notifiers */
-> +	err = devm_request_threaded_irq(dev, client->irq, NULL, pmbus_fault_handler, 0,
-> +					"pmbus-irq", data);
-> +	if (err) {
-> +		dev_err(dev, "failed to request an irq %d\n", err);
-> +		return err;
-> +	}
-> +
-> +	return 0;
 > +}
 > +
->  static struct dentry *pmbus_debugfs_dir;	/* pmbus debugfs directory */
->  
->  #if IS_ENABLED(CONFIG_DEBUG_FS)
-> @@ -3467,6 +3533,10 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
->  	if (ret)
->  		return ret;
->  
-> +	ret = pmbus_irq_setup(client, data);
-> +	if (ret)
-> +		return ret;
+> +static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags,
+> +			    bool notify)
+>  {
+>  	int i, status;
+>  	const struct pmbus_status_category *cat;
+> @@ -2785,6 +2813,10 @@ static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flag
+>  			if (status & bit->pflag)
+>  				*flags |= bit->rflag;
+>  		}
 > +
->  	ret = pmbus_init_debugfs(client, data);
->  	if (ret)
->  		dev_warn(dev, "Failed to register debugfs\n");
+> +		if (notify && status)
+> +			pmbus_notify(data, page, cat->reg, status);
+> +
+>  	}
+>  
+>  	/*
+> @@ -2828,12 +2860,13 @@ static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flag
+>  	return 0;
+>  }
+>  
+> -static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
+> +static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags,
+> +					  bool notify)
+>  {
+>  	int ret;
+>  
+>  	mutex_lock(&data->update_lock);
+> -	ret = _pmbus_get_flags(data, page, flags);
+> +	ret = _pmbus_get_flags(data, page, flags, notify);
+>  	mutex_unlock(&data->update_lock);
+>  
+>  	return ret;
+> @@ -2878,7 +2911,7 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+>  	struct i2c_client *client = to_i2c_client(dev->parent);
+>  	struct pmbus_data *data = i2c_get_clientdata(client);
+>  
+> -	return pmbus_get_flags(data, rdev_get_id(rdev), flags);
+> +	return pmbus_get_flags(data, rdev_get_id(rdev), flags, false);
+>  }
+>  
+>  static int pmbus_regulator_get_status(struct regulator_dev *rdev)
+> @@ -3114,9 +3147,10 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
+>  {
+>  	struct pmbus_data *data = pdata;
+>  	struct i2c_client *client = to_i2c_client(data->dev);
+> -
+> +	int i, status;
+>  	mutex_lock(&data->update_lock);
+> -	/* TODO: Check status flag & notify hwmon events */
+> +	for (i = 0; i < data->info->pages; i++)
+> +		_pmbus_get_flags(data, i, &status, true);
+>  
+>  	pmbus_clear_faults(client);
+>  	mutex_unlock(&data->update_lock);
