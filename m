@@ -2,56 +2,56 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A792DC6FD19
-	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Mar 2023 17:42:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 442D5C6FD1C
+	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Mar 2023 17:43:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjCLRmT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 12 Mar 2023 13:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
+        id S229977AbjCLRng (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 12 Mar 2023 13:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCLRmT (ORCPT
+        with ESMTP id S229534AbjCLRnf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 12 Mar 2023 13:42:19 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C49423C65;
-        Sun, 12 Mar 2023 10:42:18 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id g73-20020a9d12cf000000b006943a7df072so5590445otg.11;
-        Sun, 12 Mar 2023 10:42:18 -0700 (PDT)
+        Sun, 12 Mar 2023 13:43:35 -0400
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F8E7DB7;
+        Sun, 12 Mar 2023 10:43:34 -0700 (PDT)
+Received: by mail-oo1-xc2f.google.com with SMTP id bd3-20020a4aee03000000b00517affa07c0so1525522oob.7;
+        Sun, 12 Mar 2023 10:43:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678642937;
+        d=gmail.com; s=20210112; t=1678643013;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WWwfbTYkHpRW+P4l0UQFLedahpqjBIiVvNL5iHmrB0s=;
-        b=AQa0/1Gg5AlhSsdPdIHlPTe2gr4Qqixfu4DDPEsWRGGVNo/7GLfrzQyA/F0f+fTrcB
-         bbhPJmrWW2aK6H+ptHIht6TfODXUxkPsGqFlRiWh3X7UnjBn8bauUaA1R5cVK8jlMoZW
-         sQpW3jTFqendZTRfAMG5pV0tKaxRqOT6Hy8GlOfBdBHkB1rxnn3Pe1Udg/IqZ54oladL
-         fIsGVX7f1NXS8rmE2yngTLBK4kLNng5+jg/hyeO+zmaGglFQ+5lTF//GFtsjG2McpOO6
-         Tv3WAScec/yrmesXvyXG8A/BcE5yN8FXDCK4Pr+Sbb+amtcNH8UqCijRHDsJAstK9E/B
-         kmbw==
+        bh=GqdbbfsYH3A0BwuMoZ160BBHfFhhZcuHQkbZCTYU1CM=;
+        b=CJF1DL9whe79abZrXnMG/HdulhdMMsXNPQmtSvXfm7l8jVjJ6CCIOUHWbdjIAQmVXS
+         UispGyWavtU9mql1vboLZpsWSjZczEdbtJoYJHFvkzmta0EkGeaIy5YXmmK7vdu1GsvH
+         BqOXU+pUPjRmEozBBCNysms97UeesOpnlAZKZfWHLklkosmBiHdG6r3MnIauWDgGStrQ
+         3LZlU1Fc3+FpDlbD75F9PrQ0zMp7y7S0GPXpCeM3xVpStp4kJJYu/pPbgwqqtEd+XkGs
+         yfM6LPmXa2SnORc1Mk+b+7aQioLxednRYtub7yNaSGS2YY8bamQdwHG3/BtdLAIBImF2
+         iVEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678642937;
+        d=1e100.net; s=20210112; t=1678643013;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WWwfbTYkHpRW+P4l0UQFLedahpqjBIiVvNL5iHmrB0s=;
-        b=mwAoMM1AXV2nyaqO+J8qqBy0JM6VSdw2MbA6as4LkVvyxm0R78wl2mse7KX/JJkxtd
-         HVYwZg4lRMuotd1M0U/1H+KdBjC8pU2RLy5/NDIo3a4J64QjhQd89/QQ5PHEQhd6uP+o
-         wDq+whSIzmrzcmAHB88r/aM1RCQAX48HQtrc2Pnt25Qe/QWxAIXBZZhP3PuAP4I7WQFW
-         3w/n9TlfBltpJq6ICHPI0b5mFjTFYG5+NehiQ8Lxk4IgYTsgryvPct/1AM8Z2OXf8nm+
-         o0fKfhNWHZEb2r0jtnfeyTAZUV3NYMt/+pgS+oPCSgQRNz2uvWqgmHYD1MkW+m3iGccX
-         L92w==
-X-Gm-Message-State: AO0yUKUzjkkd2nb6bcoRjLg/Z7AEO2vZfU1qxYiLT4aZR0r19lPAnnuI
-        oZA8DSPUXn6lc7sYx0vncNk=
-X-Google-Smtp-Source: AK7set8BKsfL44lYMLBbcfleHx3YDFblAFyIshBYAploe09NQzsywV4e7G3OpsdWsF2vtSNqdOl0Qw==
-X-Received: by 2002:a9d:2a9:0:b0:693:d9a5:c5d with SMTP id 38-20020a9d02a9000000b00693d9a50c5dmr15157567otl.3.1678642937395;
-        Sun, 12 Mar 2023 10:42:17 -0700 (PDT)
+        bh=GqdbbfsYH3A0BwuMoZ160BBHfFhhZcuHQkbZCTYU1CM=;
+        b=FYi81t8JTbD32ipe0upV9mvTznVb+JH7ox70gOAAIHpXsRbw0aRc9tDAi9tSQk0hdq
+         3xUywL6OmqJ1uL19HiPYCPZzo0tqQzAsE0WcsJpECTSYayj0wgHSGdr1+BObUe0lsuWI
+         Ei/IzBQucz6G/hg7snaRnBw0bEoL273QnBXtj/wl0BxHK+BPjIowTT7gCbHsm9x3db5T
+         R8FzLUPtD1/jwZ2e+PvGU6DnkK1PCJHDeZiZ/WTjDpMhvGGO4g9mzZo7K1P11g7k2qMH
+         G2pdcmaHk5GwdaYdnWfevIH7ENK40zUDZaMmiHT0rE2ZfYfKj5QaA1d/TFZOVC1rThf3
+         1u5g==
+X-Gm-Message-State: AO0yUKUW0DWW5BnkETihN0JgXp5jH4L2z02B8eX1l0Mey29R6mFzg9W+
+        BArAM7MGyw8UwrDQcP3HGmw=
+X-Google-Smtp-Source: AK7set9sNtnfZCx+NPgAMKMwxo7sXzK5H6QNpB8kVlp3tNOCqVtteceMPBdEZzLOzi5eIFWKhoVpRQ==
+X-Received: by 2002:a4a:6f03:0:b0:525:58f7:cbef with SMTP id h3-20020a4a6f03000000b0052558f7cbefmr15652779ooc.2.1678643013475;
+        Sun, 12 Mar 2023 10:43:33 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c26-20020a9d615a000000b0068bbc9e7cc9sm2315725otk.53.2023.03.12.10.42.16
+        by smtp.gmail.com with ESMTPSA id x67-20020a4a4146000000b00525240c6149sm2251265ooa.31.2023.03.12.10.43.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 10:42:17 -0700 (PDT)
+        Sun, 12 Mar 2023 10:43:33 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 12 Mar 2023 10:42:15 -0700
+Date:   Sun, 12 Mar 2023 10:43:32 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Leonard Anderweit <leonard.anderweit@gmail.com>
 Cc:     linux-hwmon@vger.kernel.org,
@@ -59,86 +59,89 @@ Cc:     linux-hwmon@vger.kernel.org,
         Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/6] hwmon: (aquacomputer_d5next) Support writing
- multiple control values at once
-Message-ID: <1f75ef1e-6efa-4148-a387-c4b10783b477@roeck-us.net>
+Subject: Re: [PATCH v2 3/6] hwmon: (aquacomputer_d5next) Device dependent
+ control report settings
+Message-ID: <450cf27e-358b-4f26-ae7d-7216e1681ad3@roeck-us.net>
 References: <20230214220221.15003-1-leonard.anderweit@gmail.com>
- <20230214220221.15003-3-leonard.anderweit@gmail.com>
+ <20230214220221.15003-4-leonard.anderweit@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230214220221.15003-3-leonard.anderweit@gmail.com>
+In-Reply-To: <20230214220221.15003-4-leonard.anderweit@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 11:02:17PM +0100, Leonard Anderweit wrote:
-> Add new function aqc_set_ctrl_vals() to support changing multiple control
-> values at once while sending only one control report.
+On Tue, Feb 14, 2023 at 11:02:18PM +0100, Leonard Anderweit wrote:
+> Add device dependent control report id, secondary control report id, secondary
+> control report size and secondary control report for devices which need
+> different control report settings. All currently supported devices use the same
+> values.
 > 
 > Signed-off-by: Leonard Anderweit <leonard.anderweit@gmail.com>
 
-Applied.
+Applied. Same comment as before - please check line length in description.
 
 Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/aquacomputer_d5next.c | 29 ++++++++++++++++++-----------
->  1 file changed, 18 insertions(+), 11 deletions(-)
+>  drivers/hwmon/aquacomputer_d5next.c | 19 ++++++++++++++-----
+>  1 file changed, 14 insertions(+), 5 deletions(-)
 > 
 > diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-> index babfd998e70c..f0c036d38e91 100644
+> index f0c036d38e91..535d2fc0e55c 100644
 > --- a/drivers/hwmon/aquacomputer_d5next.c
 > +++ b/drivers/hwmon/aquacomputer_d5next.c
-> @@ -574,9 +574,9 @@ static int aqc_get_ctrl_val(struct aqc_data *priv, int offset, long *val, int ty
+> @@ -441,6 +441,10 @@ struct aqc_data {
+>  	const char *name;
+>  
+>  	int status_report_id;	/* Used for legacy devices, report is stored in buffer */
+> +	int ctrl_report_id;
+> +	int secondary_ctrl_report_id;
+> +	int secondary_ctrl_report_size;
+> +	u8 *secondary_ctrl_report;
+>  
+>  	int buffer_size;
+>  	u8 *buffer;
+> @@ -513,7 +517,7 @@ static int aqc_get_ctrl_data(struct aqc_data *priv)
+>  	int ret;
+>  
+>  	memset(priv->buffer, 0x00, priv->buffer_size);
+> -	ret = hid_hw_raw_request(priv->hdev, CTRL_REPORT_ID, priv->buffer, priv->buffer_size,
+> +	ret = hid_hw_raw_request(priv->hdev, priv->ctrl_report_id, priv->buffer, priv->buffer_size,
+>  				 HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
+>  	if (ret < 0)
+>  		ret = -ENODATA;
+> @@ -535,15 +539,15 @@ static int aqc_send_ctrl_data(struct aqc_data *priv)
+>  	put_unaligned_be16(checksum, priv->buffer + priv->checksum_offset);
+>  
+>  	/* Send the patched up report back to the device */
+> -	ret = hid_hw_raw_request(priv->hdev, CTRL_REPORT_ID, priv->buffer, priv->buffer_size,
+> +	ret = hid_hw_raw_request(priv->hdev, priv->ctrl_report_id, priv->buffer, priv->buffer_size,
+>  				 HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
+>  	if (ret < 0)
+>  		return ret;
+>  
+>  	/* The official software sends this report after every change, so do it here as well */
+> -	ret = hid_hw_raw_request(priv->hdev, SECONDARY_CTRL_REPORT_ID, secondary_ctrl_report,
+> -				 SECONDARY_CTRL_REPORT_SIZE, HID_FEATURE_REPORT,
+> -				 HID_REQ_SET_REPORT);
+> +	ret = hid_hw_raw_request(priv->hdev, priv->secondary_ctrl_report_id,
+> +				 priv->secondary_ctrl_report, priv->secondary_ctrl_report_size,
+> +				 HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
 >  	return ret;
 >  }
 >  
-> -static int aqc_set_ctrl_val(struct aqc_data *priv, int offset, long val, int type)
-> +static int aqc_set_ctrl_vals(struct aqc_data *priv, int *offsets, long *vals, int *types, int len)
->  {
-> -	int ret;
-> +	int ret, i;
+> @@ -1447,6 +1451,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  		priv->serial_number_start_offset = AQC_SERIAL_START;
+>  		priv->firmware_version_offset = AQC_FIRMWARE_VERSION;
 >  
->  	mutex_lock(&priv->mutex);
->  
-> @@ -584,15 +584,17 @@ static int aqc_set_ctrl_val(struct aqc_data *priv, int offset, long val, int typ
->  	if (ret < 0)
->  		goto unlock_and_return;
->  
-> -	switch (type) {
-> -	case AQC_BE16:
-> -		put_unaligned_be16((s16)val, priv->buffer + offset);
-> -		break;
-> -	case AQC_8:
-> -		priv->buffer[offset] = (u8)val;
-> -		break;
-> -	default:
-> -		ret = -EINVAL;
-> +	for (i = 0; i < len; i++) {
-> +		switch (types[i]) {
-> +		case AQC_BE16:
-> +			put_unaligned_be16((s16)vals[i], priv->buffer + offsets[i]);
-> +			break;
-> +		case AQC_8:
-> +			priv->buffer[offsets[i]] = (u8)vals[i];
-> +			break;
-> +		default:
-> +			ret = -EINVAL;
-> +		}
->  	}
->  
->  	if (ret < 0)
-> @@ -605,6 +607,11 @@ static int aqc_set_ctrl_val(struct aqc_data *priv, int offset, long val, int typ
->  	return ret;
->  }
->  
-> +static int aqc_set_ctrl_val(struct aqc_data *priv, int offset, long val, int type)
-> +{
-> +	return aqc_set_ctrl_vals(priv, &offset, &val, &type, 1);
-> +}
+> +		priv->ctrl_report_id = CTRL_REPORT_ID;
+> +		priv->secondary_ctrl_report_id = SECONDARY_CTRL_REPORT_ID;
+> +		priv->secondary_ctrl_report_size = SECONDARY_CTRL_REPORT_SIZE;
+> +		priv->secondary_ctrl_report = secondary_ctrl_report;
 > +
->  static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr, int channel)
->  {
->  	const struct aqc_data *priv = data;
+>  		if (priv->kind == aquastreamult)
+>  			priv->fan_structure = &aqc_aquastreamult_fan_structure;
+>  		else
