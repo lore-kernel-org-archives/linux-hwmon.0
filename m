@@ -2,125 +2,156 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2172EC6FD19
-	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Mar 2023 04:37:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3575C6FD19
+	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Mar 2023 04:37:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjCLEhK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 11 Mar 2023 23:37:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
+        id S229621AbjCLEhO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Mar 2023 23:37:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCLEhJ (ORCPT
+        with ESMTP id S229437AbjCLEhN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Mar 2023 23:37:09 -0500
+        Sat, 11 Mar 2023 23:37:13 -0500
 Received: from ipmail06.adl3.internode.on.net (ipmail06.adl3.internode.on.net [150.101.137.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5D4C5940C
-        for <linux-hwmon@vger.kernel.org>; Sat, 11 Mar 2023 20:37:07 -0800 (PST)
-IronPort-SDR: 640d55be_EhRyBme+0a7icCz7p8OwCp82LWXL+iQ6ykckJ6Rk+bxjGLj
- q/bBAzGATlFcvcdh5yMUED0ZO079bet0v1knFhQ==
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11C5D59E62
+        for <linux-hwmon@vger.kernel.org>; Sat, 11 Mar 2023 20:37:11 -0800 (PST)
+IronPort-SDR: 640d55c2_Bec6gPmH2KrnnduYGSammt0anZz1Amiv29RG8Ubo1g38c6x
+ zmq8m1mVOy6jDCKOMNawpEeoX7cxc24OEYNUy5Q==
 X-SMTP-MATCH: 0
-X-IPAS-Result: =?us-ascii?q?A2BPAgAwVA1kjPQc8jxagRKBRoIugk+zUIF+DwEPAQFEB?=
- =?us-ascii?q?AEBhQWFNSY0CQ4BAgQBAQEBAwIDAQEBAQEBAwEBBgEBAQEBAQYEFAEBAQFAR?=
- =?us-ascii?q?YVoDYZYNgENAQE3ASiBFQGDEIJdsHmBAYIIAQEGgmKaaIFeCYFAi22BFoM2g?=
- =?us-ascii?q?Tw/gU6EfYQ3hkyYPgqBNHWBIA5Kc4EGAgkCEWuBEghogX5BAg1lCw50gWACg?=
- =?us-ascii?q?QkDCQMHBUlAAwsYDRY6Eyw1FCFebC4SEgUDCxUqRwQIOQZPEQIIDxIPLEQOQ?=
- =?us-ascii?q?jc0EwZcASkLDhEDT0IZbASCDgcoJJw5gQ6CacNdhASBV58TTIFGgiQBpVSXZ?=
- =?us-ascii?q?iCjI4QrAgoHFoFighVNHxmDIk8DGQ+OOYITkVNhOwIHCwEBAwmLQwEB?=
-IronPort-PHdr: A9a23:tfS0JRwngZoW8RjXCzPpngc9DxPP853+PxIOrJE9gq1Adb6vuZnnI
- Qre6bNkkQyBVJ/QvvRDjeeeqKX8QSoa7JOGrH1HcYQZWRMJ05dJlgUsUsLZVh2pday4ZCZjR
- JZJXwc6l0w=
-IronPort-Data: A9a23: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
- OR2Fqcc5fRt6soBqT4v28GG
-IronPort-HdrOrdr: A9a23:hxKoFq87byru69OrfMZuk+D2I+orL9Y04lQ7vn2ZKSY+TiVXra
- GTdZMgpHjJYFR4YhwdcLW7VJVoLkmslqKdjbN/AV7AZniDhILXFvAB0WKK+VSJcBEWndQ86U
- 4PScZD4FKcNykdsS+D2njcLz85+qj8zEm3v5ak856zd3ASV0mwhz0JcjqmLg==
+X-IPAS-Result: =?us-ascii?q?A2BTAgAwVA1kjPQc8jxaHgEBCxIMSYE7C4Iugk+zUIF+D?=
+ =?us-ascii?q?wEPAQFEBAEBhQUChTMmNAkOAQIEAQEBAQMCAwEBAQEBAQMBAQYBAQEBAQEGB?=
+ =?us-ascii?q?BQBAQEBQEWFaA2GVgIBAycLAQ0BATcBDxk4VwYBEoJ+gl2wRjOBAYIIAQEGg?=
+ =?us-ascii?q?mKaaIFeCYFAi22BFoM2ekI/gU6BFYJ6boQ3hkyYPgqBNHWBIA5Kc4EGAgkCE?=
+ =?us-ascii?q?WuBEghogX5BAg1lCw50gWACgQkDCQMHBUlAAwsYDRY6Eyw1FCFebC4SEgUDC?=
+ =?us-ascii?q?xUqRwQIOQYbNBECCA8SDyxEDkI3NBMGXAEpCw4RA09CGWwEgg4GASgknDlTK?=
+ =?us-ascii?q?BNylGOwcYQEgVefE0yBRqd5l2YgoyOEKwIKBxaBYoIVTR8ZgyJPAxkPjiAZg?=
+ =?us-ascii?q?hORU2E7AgcLAQEDCYtDAQE?=
+IronPort-PHdr: A9a23:mbHjQBVbIUfF2aBfAq/nTYBsCZzV8K3KAWYlg6HPw5pEc7i4uZ/4N
+ VPR4u9hylLMQMPa57RNlrmeurrrDGoH55vJq3UeaNpWWhoClchTnhR1DsKJUx+kJffmPSBmQ
+ 5QQDQ039HviaRpeE56hD2A=
+IronPort-Data: A9a23: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
+ 8QrkpEq0sNdHrkyLQrL2sGGvA==
+IronPort-HdrOrdr: A9a23:8iEumag5amtCP1D7krYhlPxucXBQXgAji2hC6mlwRA09TyX5ra
+ qTdTogtCMc7wxhIU3J+7i7VZVoJEmxyXcb2/hzAV7PZmbbUS6TXeVfBOjZslvd8lPFh4xgPM
+ 5bGsAUNDSzNykcsS+Q2mmF+rgbruVuf82T9J/jJg9WPGRXgrlbnntE4xigYzBLrdZ9dOEE/E
+ v13Ls8mwad
 X-IronPort-Anti-Spam-Filtered: true
 Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
-  by ipmail06.adl3.internode.on.net with ESMTP; 12 Mar 2023 15:01:58 +1030
+  by ipmail06.adl3.internode.on.net with ESMTP; 12 Mar 2023 15:02:01 +1030
 Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
         (authenticated bits=0)
-        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 32C4VeSI3479492
+        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 32C4VeSK3479492
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sun, 12 Mar 2023 15:31:49 +1100
+        Sun, 12 Mar 2023 15:31:57 +1100
 Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
-DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 32C4VeSI3479492
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 32C4VeSK3479492
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
-        s=s1; t=1678595511; bh=ae9Zszh+M1I0LZZtGn0CD/iCpY2Xxw0dZN4boJLB4xU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Lh5/w3ZuveF0tBKaNO/CawHU1mpsbpim/sviDtew2K00KfVIg1eJZW+c7gcCrPc5j
-         WZPknEZr8qtfIlVV9Cqv0t74W5+ZwprFAEz1ioFUbWa53B3daA2MZyP7Zz30OYKx7C
-         LK3hJ56mmi1H6PqLZRkNsgIChTggqz7MHS/Q3uw1B9sSxcCesnpHO45byEHzEClYwX
-         S5+uaUtxCAM0Rg0HAS2spLuMJO4rSLdgFq9Cn9bSsAQXV4mkuh6G/XUvaiqBjGSIR8
-         zgnDZHb1u/GoZIsdJdEWfeBrnYjNQsbFKfxLf0MML/O/O9U9XtZVxs6XX04lqVZTAM
-         StlPXnMKefadA==
+        s=s1; t=1678595518; bh=csh4yILaXByk+BmlKyVMAylrDHSNbNk98uAL9wEBXYY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rt7uRzQqkngDBMklk/4oPaDtcfuXCF6ATnZqqCPX2iCQxMfYRL5vvpgoRhCTCjvtV
+         +hNQvLc3d7OfyuZ95h+qpQoaeF+w54ooikQ79suE+dfFJPX2T06PtCrycaprfC3Z8f
+         dcgN16wVKTamwGA+vqkSMnWUo1Ed2kdGIe21520DxSWmoJTVSv9RQqP603MY50PWMv
+         yvWa6ZJVtOESLoIpd3Mro7lXONs5XGYNrOx+ptukQcxnde7wUNPBVguzOIp32HRL2u
+         AGrgjG/VXUPciXXwYP+IKtKQ1BFherXvFMW8ixXi/Mr7qn8gOXUOfsE/j8vfRJEFlC
+         pSyiiEB0TXdZw==
 From:   Frank Crawford <frank@crawford.emu.id.au>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org,
         Frank Crawford <frank@crawford.emu.id.au>
-Subject: [PATCH v1 0/3] hwmon (it87): Support all know ADC values
-Date:   Sun, 12 Mar 2023 15:31:34 +1100
-Message-Id: <20230312043137.1744885-1-frank@crawford.emu.id.au>
+Subject: [PATCH v1 2/3] hwmon (it87): Add scaling macro for recent ADC voltages
+Date:   Sun, 12 Mar 2023 15:31:36 +1100
+Message-Id: <20230312043137.1744885-3-frank@crawford.emu.id.au>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230312043137.1744885-1-frank@crawford.emu.id.au>
+References: <20230312043137.1744885-1-frank@crawford.emu.id.au>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sun, 12 Mar 2023 15:31:51 +1100 (AEDT)
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sun, 12 Mar 2023 15:31:58 +1100 (AEDT)
 X-Virus-Scanned: clamav-milter 0.103.8 at bits.crawford.emu.id.au
 X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support of all know ADC values currently identified for it87 chips.
+Generalise scaling to include all recent ADC values and match the labels
+for internal voltage sensor to match.
 
-Generalise definitions for handling of scaled internal voltages and
-voltage labels.
+This includes correction of an existing error for voltage scaling for
+chips that have 10.9mV ADCs, where scaling was not performed.
 
-Apply some other minor optimistations.
-
+Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
 ---
+ drivers/hwmon/it87.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Frank Crawford (3):
-  Added support for 11mV ADC
-  Add scaling macro for recent ADC voltages
-  Minor optimisation of return value
-
- drivers/hwmon/it87.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
-
+diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+index fe1291d5be4b..ca4b79839d98 100644
+--- a/drivers/hwmon/it87.c
++++ b/drivers/hwmon/it87.c
+@@ -517,6 +517,9 @@ static const struct it87_devices it87_devices[] = {
+ #define has_vin3_5v(data)	((data)->features & FEAT_VIN3_5V)
+ #define has_conf_noexit(data)	((data)->features & FEAT_CONF_NOEXIT)
+ #define has_11mv_adc(data)	((data)->features & FEAT_11MV_ADC)
++#define has_scaling(data)	((data)->features & (FEAT_12MV_ADC | \
++						     FEAT_10_9MV_ADC | \
++						     FEAT_11MV_ADC))
+ 
+ struct it87_sio_data {
+ 	int sioaddr;
+@@ -2006,8 +2009,7 @@ static ssize_t show_label(struct device *dev, struct device_attribute *attr,
+ 
+ 	if (has_vin3_5v(data) && nr == 0)
+ 		label = labels[0];
+-	else if (has_12mv_adc(data) || has_10_9mv_adc(data) ||
+-			has_11mv_adc(data))
++	else if (has_scaling(data))
+ 		label = labels_it8721[nr];
+ 	else
+ 		label = labels[nr];
+@@ -3139,7 +3141,7 @@ static int it87_probe(struct platform_device *pdev)
+ 			 "Detected broken BIOS defaults, disabling PWM interface\n");
+ 
+ 	/* Starting with IT8721F, we handle scaling of internal voltages */
+-	if (has_12mv_adc(data)) {
++	if (has_scaling(data)) {
+ 		if (sio_data->internal & BIT(0))
+ 			data->in_scaled |= BIT(3);	/* in3 is AVCC */
+ 		if (sio_data->internal & BIT(1))
 -- 
 2.39.2
 
