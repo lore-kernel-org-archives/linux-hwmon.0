@@ -2,107 +2,112 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67F16C6FA99
-	for <linux-hwmon@archiver.kernel.org>; Sun, 12 Mar 2023 21:15:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95D5AC6FD19
+	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Mar 2023 02:15:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjCLVO7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 12 Mar 2023 17:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
+        id S229822AbjCMCPd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 12 Mar 2023 22:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231626AbjCLVOz (ORCPT
+        with ESMTP id S229814AbjCMCPc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 12 Mar 2023 17:14:55 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4979527D63;
-        Sun, 12 Mar 2023 14:14:55 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id l16-20020a9d4c10000000b006944b17058cso5750281otf.2;
-        Sun, 12 Mar 2023 14:14:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678655694;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b3VsWDPFaczsDfXU7WZPX8lGz1bl2jblkgzkg70JA3I=;
-        b=gJpGxB9/cF15wBrFzEtW0fT9ajVGGu/rA5cz23vyfk5ynNj9DXTY5DeFFM3rn165SF
-         DbNOenNYxuysw7kK+fXFeZY4SyelkZqQGeBLYsBasAIL3U0qOPRt5yAIi90pBWSCSpTQ
-         /RSUSGw+6oBOG0UfSDYfsjN5eWkjXiSqoEcLcHNHdzrH+VNL/cB83BCc3bJDHVzU8TEU
-         FH8VKaSsf+eX2dGPPQJBS5hhIggeRtAi9+1/2OZFk2vfjmqY/WX85+4mgVbcOLWnkeH0
-         lLYUdxwe2zK+5BFYietyHO1v6/69cszw2IFaLHqYv8WJ0IWXoduAb+1d1I1U8XovBKIO
-         r+Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678655694;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b3VsWDPFaczsDfXU7WZPX8lGz1bl2jblkgzkg70JA3I=;
-        b=rsA5PWSSl/W7+SZKGSOdjookIXFl28YnwH7+eXTAt0NB6he5X6ALjXp8HLimgBSidA
-         3Rnxj4f+HoIewZUnaHNiI7Q4aH4bTu4ggVZRWpVLiNQtK2FudT+4ALbuhol6mbVBD6nE
-         OKlZecabXJPZf9FbbBWBsPoS+Df6b31s/icBGZzQaHYLCAfh7Ci6vJNeofGxThMApdg+
-         4/CiH/o20WbJHBRfa0lWqoDaQlp0eivFshvYG4FwNPlonxXMKE+Tz8bzfqeKR4mkkU8Q
-         inN6e4xtbzrlDY3T0YRvsVZ4V+ItvwEbT6J2Bjkj88r8epmXZHsT0jFtFa4nv7HIwjsj
-         rxhg==
-X-Gm-Message-State: AO0yUKUROGWddE2Eyo15ni0CoYEuU+uA+gs4PdWR1L433xKcNKYAeefF
-        +qYsqZv+q05KZkgZ8I6r5HI=
-X-Google-Smtp-Source: AK7set+qz301ZhwVwfixwZorR/wkxy/EPudT49twzvbYcAaz6swzV2u3fDRxUpFCxwUxSI5z1XGyKQ==
-X-Received: by 2002:a9d:128a:0:b0:68b:e4d7:b8d with SMTP id g10-20020a9d128a000000b0068be4d70b8dmr14529258otg.35.1678655694595;
-        Sun, 12 Mar 2023 14:14:54 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z27-20020a9d71db000000b00690e6d56670sm2501997otj.25.2023.03.12.14.14.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 14:14:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 12 Mar 2023 14:14:53 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: tmp512: drop of_match_ptr for ID table
-Message-ID: <e3a8bf6a-fecd-4eb9-826f-0f5f974d36fa@roeck-us.net>
-References: <20230312193723.478032-1-krzysztof.kozlowski@linaro.org>
- <20230312193723.478032-2-krzysztof.kozlowski@linaro.org>
+        Sun, 12 Mar 2023 22:15:32 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1922E0CD
+        for <linux-hwmon@vger.kernel.org>; Sun, 12 Mar 2023 19:15:29 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 83C922C04A0;
+        Mon, 13 Mar 2023 15:15:27 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1678673727;
+        bh=QzXzTbqI6gPJAzPqvcn9hCrEDAGQZEo5CMEesFh4BEo=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=P+8LIkwlnWzZwtC1CiOa/WIO5+GTSOUuENduePFmSVmgBOFPNRpg6I5vYwiQM3e/l
+         pbklEy/e2twc6RKxdTAsYjC6ZorqVSgWCdcHFjCkyC6IoGKaoOu7/nthrxGg2xwFJZ
+         4GQWDyiU2XsuI4zHbGAoZ0GJjdw57EnjVbuis8QlcEORRAmU8pAYAhjD/CrwroDLb/
+         2EarPDf3Q76iyG6KiPBWV8HA2H2+/ONZc2q+scMu3VRdCtzsWoy9CFaQ/8u4p70Dc/
+         ABYtLBxDECjC70OQtGO8UaDp0I/YUb9fmk7fR5sUx5o3YNfe1DI4DZ2xgC+JGI5fgA
+         WizkrGhBKku2g==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B640e873f0002>; Mon, 13 Mar 2023 15:15:27 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.47; Mon, 13 Mar 2023 15:15:27 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.047; Mon, 13 Mar 2023 15:15:27 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
+Subject: Re: [PATCH v3 1/2] drivers: rtc: add max313xx series rtc driver
+Thread-Topic: [PATCH v3 1/2] drivers: rtc: add max313xx series rtc driver
+Thread-Index: AQHZQLLY3ijYBbo43E6McZa87qvtIa7Sap6AgCTdZwA=
+Date:   Mon, 13 Mar 2023 02:15:26 +0000
+Message-ID: <52382400-5abd-b473-6cf7-333e7deab2d4@alliedtelesis.co.nz>
+References: <20221108122254.1185-1-Ibrahim.Tilki@analog.com>
+ <20221108122254.1185-2-Ibrahim.Tilki@analog.com>
+ <68ddb833-f38e-a05b-82c4-ce12330410a5@alliedtelesis.co.nz>
+ <CY4PR03MB2488B54E722831F0375430CA96A19@CY4PR03MB2488.namprd03.prod.outlook.com>
+In-Reply-To: <CY4PR03MB2488B54E722831F0375430CA96A19@CY4PR03MB2488.namprd03.prod.outlook.com>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <697B16603D201848B6F70AC0786352B3@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230312193723.478032-2-krzysztof.kozlowski@linaro.org>
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=GdlpYjfL c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=k__wU0fu6RkA:10 a=gAnH3GRIAAAA:8 a=fNrnSkCQ5hO86qIVmZYA:9 a=QEXdDO2ut3YA:10 a=oVHKYsEdi7-vN-J5QA_j:22
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 08:37:23PM +0100, Krzysztof Kozlowski wrote:
-> The driver will match mostly by DT table (even thought there is regular
-> ID table) so there is little benefit in of_match_ptr (this also allows
-> ACPI matching via PRP0001, even though it might not be relevant here).
-> This also fixes !CONFIG_OF error:
-> 
->   drivers/hwmon/tmp513.c:610:34: error: ‘tmp51x_of_match’ defined but not used [-Werror=unused-const-variable=]
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Applied.
-
-Thanks,
-Guenter
-
-> ---
-> 
-> Changes since v1:
-> 1. Rework patch and commit msg - drop of_match_ptr.
-> ---
->  drivers/hwmon/tmp513.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
-> index 47bbe47e062f..7d5f7441aceb 100644
-> --- a/drivers/hwmon/tmp513.c
-> +++ b/drivers/hwmon/tmp513.c
-> @@ -758,7 +758,7 @@ static int tmp51x_probe(struct i2c_client *client)
->  static struct i2c_driver tmp51x_driver = {
->  	.driver = {
->  		.name	= "tmp51x",
-> -		.of_match_table = of_match_ptr(tmp51x_of_match),
-> +		.of_match_table = tmp51x_of_match,
->  	},
->  	.probe_new	= tmp51x_probe,
->  	.id_table	= tmp51x_id,
+SGkgSWJyYWhpbSwNCg0KT24gMTgvMDIvMjMgMDQ6MTcsIFRpbGtpLCBJYnJhaGltIHdyb3RlOg0K
+Pj4gSGkgSWJyYWhpbSwNCj4+DQo+PiBPbiA5LzExLzIyIDAxOjIyLCBJYnJhaGltIFRpbGtpIHdy
+b3RlOg0KPj4+IEFkZGluZyBzdXBwb3J0IGZvciBBbmFsb2cgRGV2aWNlcyBNQVgzMTNYWCBzZXJp
+ZXMgUlRDcy4NCj4+Pg0KPj4+IFNpZ25lZC1vZmYtYnk6IElicmFoaW0gVGlsa2kgPElicmFoaW0u
+VGlsa2lAYW5hbG9nLmNvbT4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBaZXluZXAgQXJzbGFuYmVuemVy
+IDxaZXluZXAuQXJzbGFuYmVuemVyQGFuYWxvZy5jb20+DQo+Pj4gLS0tDQo+Pj4gICAgZHJpdmVy
+cy9ydGMvS2NvbmZpZyAgICAgICAgfCAgIDExICsNCj4+PiAgICBkcml2ZXJzL3J0Yy9NYWtlZmls
+ZSAgICAgICB8ICAgIDEgKw0KPj4+ICAgIGRyaXZlcnMvcnRjL3J0Yy1tYXgzMTN4eC5jIHwgMTA3
+MCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4+PiAgICAzIGZpbGVzIGNo
+YW5nZWQsIDEwODIgaW5zZXJ0aW9ucygrKQ0KPj4+ICAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2
+ZXJzL3J0Yy9ydGMtbWF4MzEzeHguYw0KPj4gV2hhdCBpcyB0aGUgY3VycmVudCBzdGF0ZSBvZiB0
+aGlzIHdvcms/IEkgc2VlIHRoZXJlIGFyZSBzb21lIGNvbW1lbnRzIG9uDQo+PiB0aGlzIHYzIGl0
+ZXJhdGlvbiBmcm9tIGxhdGUgbGFzdCB5ZWFyIGFuZCBJIGNvdWxkbid0IGZpbmQgYW55IG5ld2Vy
+DQo+PiBpdGVyYXRpb24gb24gYW55IG1haWxpbmcgbGlzdC4gV2UndmUgZ290IHNvbWUgbmV3IGhh
+cmR3YXJlIGFycml2aW5nIHNvb24NCj4+IHRoYXQgd2lsbCBoYXZlIHRoZSBNQVgzMTMzMSBSVEMg
+YW5kIEknbSBrZWVuIHRvIHNlZSB0aGlzIHBhdGNoIHNlcmllcw0KPj4gbGFuZC4gSXMgdGhlcmUg
+YW55dGhpbmcgSSBjYW4gZG8gdG8gaGVscCBpdCBhbG9uZz8gSSBjYW4ndCBiZSB2ZXJ5DQo+PiBz
+cGVjaWZpYyBhYm91dCB3aGVuIEknbGwgc2VlIHRoZSBuZXcgaGFyZHdhcmUgKHdobyBjYW4gdGhl
+c2UgZGF5cyksIHRoZQ0KPj4gbGFzdCB1cGRhdGUgd2FzICJib2FyZHMgYXJlIGR1ZSBpbiBNYXJj
+aCIuDQo+Pg0KPj4gRm9yIHRoZSBtYWludGFpbmVycyBvbiB0aGUgQ2MgbGlzdCBvbmNlIHRoZSBk
+dXN0IHNldHRsZXMgaG93IHdvdWxkIEkgZ2V0DQo+PiB0aGlzIHN1cHBvcnRlZCBpbiBhIExUUyBr
+ZXJuZWwgKHdlJ3JlIGN1cnJlbnRseSB1c2luZyB0aGUgNS4xNSBzZXJpZXMpPw0KPj4gT3IgaXMg
+dG90YWxseSBvdXQgb2YgdGhlIHF1ZXN0aW9uIGJlY2F1c2UgaXQncyBub3QganVzdCBhIG5ldyBk
+ZXZpY2UgaWQ/DQo+IEhpIENocmlzLA0KPg0KPiBQYXRjaCB2NCBpcyBvbiB0aGUgd2F5LCBJIHdp
+bGwgYmUgc2VuZGluZyBpdCBpbiBhIGZldyB3ZWVrcy4NCj4gSXQgaXMgaGFyZCB0byB0ZWxsIHdo
+ZW4gaXQgaXMgZ29pbmcgdG8gbGFuZCBidXQgSSBleHBlY3QgdG8gYmUgbW9yZSByZXNwb25zaXZl
+DQo+IHRvIHJldmlld3MgYWZ0ZXIgcGF0Y2ggdjQuDQoNCkZZSSBJJ3ZlIG5vdyBnb3Qgc29tZSBi
+b2FyZHMgd2l0aCBhIE1BWDMxMzMxLiBJJ3ZlIGdpdmVuIHYzIGEgcXVpY2sgdGVzdCANCmFuZCBp
+dCB3b3JrcyBmb3IgbWUuDQoNCkFyZSB5b3UgYWxzbyBsb29raW5nIGF0IGEgdS1ib290IGRyaXZl
+cj8gSWYgbm90IEkgY2FuIHBvcnQgeW91ciBkcml2ZXIgDQphY3Jvc3MgcmVhc29uYWJseSBlYXNp
+bHkuDQoNCg==
