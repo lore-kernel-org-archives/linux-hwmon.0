@@ -2,256 +2,174 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16CE0C61DA4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 15:07:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76AB8C6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 15:36:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232643AbjCOPHV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Mar 2023 11:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
+        id S230356AbjCOPgv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 11:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232784AbjCOPHS (ORCPT
+        with ESMTP id S231903AbjCOPgt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2023 11:07:18 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD3C1DB98;
-        Wed, 15 Mar 2023 08:07:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678892836; x=1710428836;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TYUPCJzGPG0MC9ARUUEq1zGLeZL9HwQ0WV1QQvxIBv4=;
-  b=fcqYWs3eKoqdqjJ+1uJltaS2JNEnxdsT0npgEYJ5qsPob7w8VFZ3lZbl
-   5kaBC1YHo3eKzR1FLOrYi31PSCoAK/dRi7Hrd7kpt1wAq7Cz50l68FXGc
-   6VTpleab/AlD0/h1n6GfQenK+p2Ffp9bKMYekTaKJYkxwwH8dIecCbFp4
-   miQ2gADHYT0WVi5KTqxoOw1jl7UBC8cgIRrXrh7LdCF/cm6yqOsAnnI5k
-   CIq07lGVlaTNZ0bVy0Ua8nIkCP06iechoFvHS8acgSwPSlQ91tgGCkGdI
-   b9zkfrHyqWWWTPgjeIqIKhTmTd4gOOACsDEYzL3NxNln2aR80OYZIKmZ4
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="317381634"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="317381634"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 08:06:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="709712807"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="709712807"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 15 Mar 2023 08:06:54 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcSiL-0007o1-2j;
-        Wed, 15 Mar 2023 15:06:53 +0000
-Date:   Wed, 15 Mar 2023 23:06:22 +0800
-From:   kernel test robot <lkp@intel.com>
+        Wed, 15 Mar 2023 11:36:49 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F83379B07;
+        Wed, 15 Mar 2023 08:36:18 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id y12so6339750ilq.4;
+        Wed, 15 Mar 2023 08:36:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678894576;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ms6fv+hw5MJ/w0++av6ZjeeiPsBlOux2GXBW4FkF2c8=;
+        b=lLFWgW4eFpcFBnLNyCxROzsHTGzOm+csYYsZtLHvd9YKlCK19/RDEhA6yYhgGBDr4Y
+         4EKTdLHMXlcZyIUbj/W8N4rMf6Zdawye63tQZrY0fKWGrAWujB5YkkO6InZRcIs1AG04
+         xZ0Wu0fx6j+Btv/ueQZJ+eH4U3WmpJ1MVhl+2sWXAkcDKG8DRUUPXOvbi5YKXyQulKir
+         CcxLTPDh4N308pIceUAZdrhTGTzw9akPuxtT4YOetzElCJtJMvBUsSf64Nt/Z5tx2+sh
+         7AYG1qY8QgaJWEVQKiMUx7dUiLBuGWzVH94bSzpKBPdguqlXBDwUQol86KepmLMr1ztz
+         9lHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678894576;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ms6fv+hw5MJ/w0++av6ZjeeiPsBlOux2GXBW4FkF2c8=;
+        b=dKYkpOcHdOwz+DyhfZ7aTgT+JAAYVySok4H9Zj7pm1DSUGbahGhwJOb+hawiIKuV/N
+         XjmSpHZH/aPcyyXUyoddnFcIE7lA2L5zbBruSN4y5xP3a3kbKMJIH9bKtrQznMDpc2oc
+         FsRtfMn9AZlbqQid8UbpOz5m68sMVomwlG278u/mQDrRQvFLebXK+p77rc/gL9yYGPpK
+         xcSxmJUTEiOwLmn0FxOuuRZTwM7OgSrXdvGwAOOAzfB+LJCF/kiDiAXiSN0jHUoYFG3N
+         IW1V9pzxJud28etoui9wr8g1sMZkC3Jip6lsU9jouZkGMLhmkfaREZH9g9zaNP5cEIjX
+         oWdg==
+X-Gm-Message-State: AO0yUKXKhY2R2H6WDDfQw3GzHvSrkYPwUS0tWEWYaKEXKw9Rk4008EUw
+        a2vsYueq901hDO+wqVG8bWmh/CLeXLI=
+X-Google-Smtp-Source: AK7set9r9nmgdmFk3SESGK1SvIGeRVbj8PBfT/V09jQ5sEtE04xQqqz5BzD4wi2eaUbE3PT+1shVaQ==
+X-Received: by 2002:a92:d58a:0:b0:315:8bc0:1d85 with SMTP id a10-20020a92d58a000000b003158bc01d85mr4395086iln.11.1678894576122;
+        Wed, 15 Mar 2023 08:36:16 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p4-20020a02b384000000b00406101d2dcbsm1210651jan.125.2023.03.15.08.36.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 08:36:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <8dbed631-62b6-1802-8f4e-7141b1a91a56@roeck-us.net>
+Date:   Wed, 15 Mar 2023 08:36:13 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
 To:     phinex <phinex@realtek.com>, jdelvare@suse.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux@roeck-us.net,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phinex@realtek.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230315121606.GA71707@threadripper>
+From:   Guenter Roeck <linux@roeck-us.net>
 Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
  thermal_of
-Message-ID: <202303152257.cVusXid9-lkp@intel.com>
-References: <20230315121606.GA71707@threadripper>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <20230315121606.GA71707@threadripper>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi phinex,
+On 3/15/23 05:16, phinex wrote:
+> Support thermal zone so that we can just rely on dts to describe a
+> thermal zone and do the cooling operations.
+> 
+> You can define a comptible string "drivetemp,hdd-sensors" to enable
+> this, such as
+> 
+> 	sata_port0: sata-port@0 {
+> 		compatible = "drivetemp,hdd-sensors";
+> 		#thermal-sensor-cells = <0>;
+> 	}
+> 
+> Then define a thermal with this sensor to get it work.
+> 
+>                 hdd_thermal: hdd-thermal {
+>                         thermal-sensors = <&sata_port0>;
+> 		}
+> 
+> In most of the SoC systems, using dts to handle cooling is common.
+> This can eliminate the usage of user space application to check
+> the value exported in hwmon and then through sysfs to cooling.
+> 
+> Signed-off-by: phinex <phinex@realtek.com>
+> 
+> ---
+>   .../bindings/hwmon/drivetemp,hdd-sensors.yaml |  35 ++++++
+>   drivers/hwmon/drivetemp.c                     | 102 +++++++++++++++++-
+>   2 files changed, 133 insertions(+), 4 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/drivetemp,hdd-sensors.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/drivetemp,hdd-sensors.yaml b/Documentation/devicetree/bindings/hwmon/drivetemp,hdd-sensors.yaml
+> new file mode 100644
+> index 000000000000..939d7a923e94
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/drivetemp,hdd-sensors.yaml
+> @@ -0,0 +1,35 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/drivetemp,hdd-sensors.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Drivetemp Temperature Monitor
+> +
+> +maintainers:
+> +  - Phinex <phinex@realtek.com>
+> +
+> +description: |
+> +  Drivetemp Temperature Monitor that support a single thermal zone
+> +  This single thermal zone can support multiple hard drives,
+> +  it uses maximal temperature of these hard drivers as its temp value.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - drivetemp,hdd-sensors
+> +
+> +  '#thermal-sensor-cells':
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    sata_port0: sata-port@0 {
+> +        ompatible = "drivetemp,hdd-sensors";
+> +        #thermal-sensor-cells = <0>;
+> +    };
+> diff --git a/drivers/hwmon/drivetemp.c b/drivers/hwmon/drivetemp.c
+> index 1eb37106a220..9a60315d732c 100644
+> --- a/drivers/hwmon/drivetemp.c
+> +++ b/drivers/hwmon/drivetemp.c
+> @@ -107,6 +107,14 @@
+>   #include <scsi/scsi_device.h>
+>   #include <scsi/scsi_driver.h>
+>   #include <scsi/scsi_proto.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/thermal.h>
+> +#include <linux/libata.h>
+> +
+> +/*A single thermal_zone for all HDD sensors */
+> +static struct thermal_zone_device *tz;
 
-Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.3-rc2 next-20230315]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This is conceptually wrong. It returns the maximum temperature from all drives,
+not the temperature from a single drive.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/phinex/hwmon-drivetemp-support-to-be-a-platform-driver-for-thermal_of/20230315-201903
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230315121606.GA71707%40threadripper
-patch subject: [PATCH v1] hwmon: drivetemp: support to be a platform driver for thermal_of
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230315/202303152257.cVusXid9-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1c53b683440a584685795fa8ff831379577081b0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review phinex/hwmon-drivetemp-support-to-be-a-platform-driver-for-thermal_of/20230315-201903
-        git checkout 1c53b683440a584685795fa8ff831379577081b0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/
+This is not much different from collecting all temperatures from all sensors
+in the system and declaring the maximum of those as single thermal zone.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303152257.cVusXid9-lkp@intel.com/
+If anything, each drive would have to reflect a thermal zone. The big question
+is how to determine the associated devicetree property.
 
-All error/warnings (new ones prefixed by >>):
+Also, essentially your patch claims that arch/arm/boot/dts/kirkwood-nsa310s.dts
+doesn't work and no one ever noticed. I would like to see that confirmed.
 
-   drivers/hwmon/drivetemp.c: In function 'hdd_read_temp':
->> drivers/hwmon/drivetemp.c:551:13: warning: variable 'err' set but not used [-Wunused-but-set-variable]
-     551 |         int err;
-         |             ^~~
-   drivers/hwmon/drivetemp.c: At top level:
->> drivers/hwmon/drivetemp.c:575:21: error: variable 'hdd_sensor_ops' has initializer but incomplete type
-     575 | static const struct thermal_zone_of_device_ops hdd_sensor_ops = {
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hwmon/drivetemp.c:576:10: error: 'const struct thermal_zone_of_device_ops' has no member named 'get_temp'
-     576 |         .get_temp = hdd_read_temp,
-         |          ^~~~~~~~
->> drivers/hwmon/drivetemp.c:576:21: warning: excess elements in struct initializer
-     576 |         .get_temp = hdd_read_temp,
-         |                     ^~~~~~~~~~~~~
-   drivers/hwmon/drivetemp.c:576:21: note: (near initialization for 'hdd_sensor_ops')
-   drivers/hwmon/drivetemp.c: In function 'hdd_hwmon_probe':
->> drivers/hwmon/drivetemp.c:668:17: error: implicit declaration of function 'devm_thermal_zone_of_sensor_register'; did you mean 'devm_thermal_of_zone_register'? [-Werror=implicit-function-declaration]
-     668 |                 devm_thermal_zone_of_sensor_register(
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                 devm_thermal_of_zone_register
-   drivers/hwmon/drivetemp.c: At top level:
->> drivers/hwmon/drivetemp.c:575:48: error: storage size of 'hdd_sensor_ops' isn't known
-     575 | static const struct thermal_zone_of_device_ops hdd_sensor_ops = {
-         |                                                ^~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+Thanks,
+Guenter
 
-
-vim +/hdd_sensor_ops +575 drivers/hwmon/drivetemp.c
-
-   547	
-   548	#if IS_ENABLED(CONFIG_THERMAL_OF)
-   549	static int hdd_read_temp(void *data, int *temp)
-   550	{
- > 551		int err;
-   552		struct drivetemp_data *st = data;
-   553		long value, max = 0;
-   554	
-   555		list_for_each_entry(st, &drivetemp_devlist, list) {
-   556			mutex_lock(&st->lock);
-   557			err = st->get_temp(st, hwmon_temp_input, &value);
-   558			mutex_unlock(&st->lock);
-   559	
-   560			if (value > max)
-   561				max = value;
-   562		}
-   563	
-   564		/*non-existent sensor or not ready*/
-   565		if (max == 0)
-   566			return -EAGAIN;
-   567	
-   568		*temp = (int)max;
-   569	
-   570		dev_dbg(st->dev, "%s, sensor read %d\n", __func__, *temp);
-   571	
-   572		return 0;
-   573	}
-   574	
- > 575	static const struct thermal_zone_of_device_ops hdd_sensor_ops = {
- > 576		.get_temp = hdd_read_temp,
-   577	};
-   578	
-   579	static const struct of_device_id hdd_of_match[] = {
-   580		{
-   581			.compatible = "drivetemp,hdd-sensors",
-   582		},
-   583		{},
-   584	};
-   585	MODULE_DEVICE_TABLE(of, hdd_of_match);
-   586	#endif
-   587	
-   588	static const struct hwmon_ops drivetemp_ops = {
-   589		.is_visible = drivetemp_is_visible,
-   590		.read = drivetemp_read,
-   591	};
-   592	
-   593	static const struct hwmon_chip_info drivetemp_chip_info = {
-   594		.ops = &drivetemp_ops,
-   595		.info = drivetemp_info,
-   596	};
-   597	
-   598	/*
-   599	 * The device argument points to sdev->sdev_dev. Its parent is
-   600	 * sdev->sdev_gendev, which we can use to get the scsi_device pointer.
-   601	 */
-   602	static int drivetemp_add(struct device *dev, struct class_interface *intf)
-   603	{
-   604		struct scsi_device *sdev = to_scsi_device(dev->parent);
-   605		struct drivetemp_data *st;
-   606		int err;
-   607		struct ata_port *ap;
-   608	
-   609		st = kzalloc(sizeof(*st), GFP_KERNEL);
-   610		if (!st)
-   611			return -ENOMEM;
-   612	
-   613		ap = ata_shost_to_port(sdev->host);
-   614	
-   615		snprintf(st->drivename, MAX_NAME_LEN, "drivetemp_port%d", ap->port_no);
-   616	
-   617		st->sdev = sdev;
-   618		st->dev = dev;
-   619		mutex_init(&st->lock);
-   620	
-   621		if (drivetemp_identify(st)) {
-   622			err = -ENODEV;
-   623			goto abort;
-   624		}
-   625	
-   626		st->hwdev = hwmon_device_register_with_info(
-   627			dev->parent, st->drivename, st, &drivetemp_chip_info, NULL);
-   628	
-   629		if (IS_ERR(st->hwdev)) {
-   630			err = PTR_ERR(st->hwdev);
-   631			goto abort;
-   632		}
-   633	
-   634		list_add(&st->list, &drivetemp_devlist);
-   635		return 0;
-   636	
-   637	abort:
-   638		kfree(st);
-   639		return err;
-   640	}
-   641	
-   642	static void drivetemp_remove(struct device *dev, struct class_interface *intf)
-   643	{
-   644		struct drivetemp_data *st, *tmp;
-   645	
-   646		list_for_each_entry_safe(st, tmp, &drivetemp_devlist, list) {
-   647			if (st->dev == dev) {
-   648				list_del(&st->list);
-   649				hwmon_device_unregister(st->hwdev);
-   650				kfree(st);
-   651				break;
-   652			}
-   653		}
-   654	}
-   655	
-   656	static struct class_interface drivetemp_interface = {
-   657		.add_dev = drivetemp_add,
-   658		.remove_dev = drivetemp_remove,
-   659	};
-   660	
-   661	#if IS_ENABLED(CONFIG_THERMAL_OF)
-   662	static int hdd_hwmon_probe(struct platform_device *pdev)
-   663	{
-   664		if (list_empty(&drivetemp_devlist))
-   665			return -EPROBE_DEFER;
-   666	
-   667		if (!tz)
- > 668			devm_thermal_zone_of_sensor_register(
-   669				&pdev->dev, 0, &drivetemp_devlist, &hdd_sensor_ops);
-   670	
-   671		return 0;
-   672	}
-   673	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
