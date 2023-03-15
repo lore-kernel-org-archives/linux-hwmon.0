@@ -2,93 +2,100 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3374C6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 21:58:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3852C61DA4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 22:05:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjCOV63 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Mar 2023 17:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
+        id S230059AbjCOWFG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 18:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbjCOV62 (ORCPT
+        with ESMTP id S229602AbjCOWFF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:58:28 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3310E6232B;
-        Wed, 15 Mar 2023 14:58:27 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id s7so3530214ilv.12;
-        Wed, 15 Mar 2023 14:58:27 -0700 (PDT)
+        Wed, 15 Mar 2023 18:05:05 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D99158AF;
+        Wed, 15 Mar 2023 15:05:03 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id r27so26093410lfe.10;
+        Wed, 15 Mar 2023 15:05:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678917506;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=egyhGDt+hlqX/Z0LgBGD0IU2L4ojDg9iZKbAvFb0XXA=;
-        b=BTbGGU5rUrP/fJWymUjjpoKoTUG0Cwn7TlACvuypQAgNlHvmxviexrpOdlC9EPNE/z
-         o3a8wB934/eanv3D7KWPaxpK+IvgAnfY7V3tbjNI0/kGZAIRZRKeqowPILxa7+zmzelJ
-         kHxjt6cSxYL8p17/jpwz1/BkJtQHRTnyFXBrZ/2xn75mJFNpzXQ2gThfy6yL/fyI8rRo
-         wKkN2zmD4/LuEdYb9y+PLPS1AZ6/V+/QZDmjXWnmiuit6fRcuTH28IeiAJz6/QOKnpKL
-         KZG0d9MmNaCP4hD7oGKY0AVdMiR359M67DIPsPa19utmwPlcDw2m6tPZVuXo8qry5Lj9
-         0PDw==
+        d=gmail.com; s=20210112; t=1678917901;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3l4+bNuApcUZMVNqM1/aVOFmIhi6l3WI/EFGuiIHT5s=;
+        b=lPBq8K6lSPHnU13BNwtUgZF8yZpn3aa9oWXGW7t+scEsPLUO0aEWe0dexCBHinC8Mi
+         QvvwCys2ZaYd+KFe0a1JnBPmKYe8P1qzfgJ4R7DJkfnMsEj+xDSKMcBqJfjY+sJVCIiy
+         BcXBbCgG68NnQ69O0djShaKkPFcT5TJNSWgUdZAzR0k3kk4PHcJ9fEDm7RsOxHgS0cXZ
+         d+Rr8wVcOTyxlNHZHeg1o8MyUgaCj9ttqAJwKXn2Ywj8bLcBVVquBPwaG5htO1U+ghcH
+         fonNR167QufXdSsgcw4ou7t1GC+ZOPZkAVFw9TnolMS/GUbu3gE7rGukxyk0UO4DDxA5
+         hnEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678917506;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=egyhGDt+hlqX/Z0LgBGD0IU2L4ojDg9iZKbAvFb0XXA=;
-        b=j8aAjUBhMi3Ktd+hShIFi7hxUjhOPi/m24fW1mapJwiVQRleP1jc1EBEhT1LGG6SI/
-         m531umKujg1St+hKEDsYeykzX95ant6FVA3749/RQquB59pN9e1GattYpO0OSrU+Q5Jx
-         iqBml6TGKhog3mBPOIpacZnB7sTZEZVFtyYPX02o1i6bWTvN5SnYe9obzYPF4RbmsAZh
-         VF/FiXdfOfFneBXfQpWY7zLLXOGMawmxKjd5tFENtT3LxuA8aGjGq14cG0pc10cKKuua
-         hnJE6h+jph1aChJX5H+ZDXSIc9bBYvdDZFyfX/9p01L+piN5p2Cmvmt3b8f7T4BMkDky
-         Tn+Q==
-X-Gm-Message-State: AO0yUKVV1feHe6u4CMXuQxkbU3FzopNU2akhRyht2ckXmL+sUB40srTT
-        HjWSi+6UVeunFH/m2YILP/F/yZMh+6c=
-X-Google-Smtp-Source: AK7set/TOld09oomPcPWCwggPJMzRNFT7G2Y7AL62OGq/4nnFIZohB0DfhGNa1Jh13k1MRtsqogLdQ==
-X-Received: by 2002:a92:d98a:0:b0:322:ffb2:db80 with SMTP id r10-20020a92d98a000000b00322ffb2db80mr5341802iln.6.1678917506436;
-        Wed, 15 Mar 2023 14:58:26 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c21-20020a02a615000000b0040618ad53aesm882936jam.31.2023.03.15.14.58.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 14:58:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <19097c39-9703-6b7f-6cc4-8a157b00f368@roeck-us.net>
-Date:   Wed, 15 Mar 2023 14:58:24 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/2] hwmon: (nct6775) update ASUS WMI monitoring list
- A520/B360/B460/B550...
-Content-Language: en-US
-To:     Denis Pauk <pauk.denis@gmail.com>
+        d=1e100.net; s=20210112; t=1678917901;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3l4+bNuApcUZMVNqM1/aVOFmIhi6l3WI/EFGuiIHT5s=;
+        b=4dqHV36VkrL19H48aKUx5FRI64yMtQBkgKdtOBu44yrCByXoNZijPmvdDE5b8VlR+x
+         i+pFDLpmQ2G21HK7DsTF5qIrvUNMjz3qz1CwgfdF8EV+k0m0qb81z8YE8fitohqa4Jvd
+         cXF8NCZoxhxQHCsSPJVRnFrO56VeCb/eKZyXtenZapKWjAJ6W82lGMB0wgZy4/97GeKI
+         8eFXWdtZSnKmbdkhR9eb72s6RVKLGs+9iNTHmoWdjJMs4JN1MoDzSQb2b2fiDqbA4G/i
+         YmgMbHOHM/x9auVbuyplM0XBJS1JqFpfxpYmx5CaRDnqLR0USl63MJpgtONM6ZeJLWzY
+         MdDg==
+X-Gm-Message-State: AO0yUKWV7CShxGNjDQqNtjSzfeH2awriC9Pf6tmiTe65paahEoyTZwOM
+        rN7xPD5ptn3avKD4vfkwJlw=
+X-Google-Smtp-Source: AK7set9ug+yX+Y7q2oVngCJjzNN/hA6EluX2l3EnTNPJ0uPESogMnlAMh4FZjR+66njrZVTFeGcUmg==
+X-Received: by 2002:a19:700c:0:b0:4e8:a093:5eea with SMTP id h12-20020a19700c000000b004e8a0935eeamr400677lfc.11.1678917901322;
+        Wed, 15 Mar 2023 15:05:01 -0700 (PDT)
+Received: from localhost ([46.211.236.75])
+        by smtp.gmail.com with ESMTPSA id o8-20020ac24348000000b004cb43eb09dfsm953675lfl.123.2023.03.15.15.04.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 15:05:01 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 00:04:53 +0200
+From:   Denis Pauk <pauk.denis@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, mischief@offblast.org,
         de99like@mennucci.debian.net, holger.kiehl@dwd.de
+Subject: Re: [PATCH 2/2] hwmon: (nct6775) update ASUS WMI monitoring list
+ A520/B360/B460/B550...
+Message-ID: <20230316000453.553bf6a8@gmail.com>
+In-Reply-To: <19097c39-9703-6b7f-6cc4-8a157b00f368@roeck-us.net>
 References: <20230315210135.2155-1-pauk.denis@gmail.com>
- <20230315210135.2155-2-pauk.denis@gmail.com>
- <20230315233054.5ac21db0@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230315233054.5ac21db0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        <20230315210135.2155-2-pauk.denis@gmail.com>
+        <20230315233054.5ac21db0@gmail.com>
+        <19097c39-9703-6b7f-6cc4-8a157b00f368@roeck-us.net>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; aarch64-unknown-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/15/23 14:30, Denis Pauk wrote:
-> On Wed, 15 Mar 2023 23:01:35 +0200
-> Denis Pauk <pauk.denis@gmail.com> wrote:
-> 
-> Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
-> 
-> Pro A520M-C II/CSM is also tested by Holger Kiehl
-> https://patchwork.kernel.org/project/linux-hwmon/patch/868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de/
-> 
-> Could it be applied as single patch or need to rebase over "Pro A520M-C II"
-> patch?
-> 
-Sorry, I don't understand what you are trying to say. I just applied all patches
-in sequence as received, with no conflicts. Should I undo that ?
+On Wed, 15 Mar 2023 14:58:24 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-Guenter
+> On 3/15/23 14:30, Denis Pauk wrote:
+> > On Wed, 15 Mar 2023 23:01:35 +0200
+> > Denis Pauk <pauk.denis@gmail.com> wrote:
+> > 
+> > Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
+> > 
+> > Pro A520M-C II/CSM is also tested by Holger Kiehl
+> > https://patchwork.kernel.org/project/linux-hwmon/patch/868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de/
+> > 
+> > Could it be applied as single patch or need to rebase over "Pro A520M-C II"
+> > patch?
+> >   
+> Sorry, I don't understand what you are trying to say. I just applied all
+> patches in sequence as received, with no conflicts. Should I undo that ?
+> 
+> Guenter
+> 
+
+No, Thank you!
+
+I just like to mention that Holger Kiehl sent separate patch with
+"Pro A520M-C II" support and it could create conflicts. I have found it only
+when I have sent my patches.
 
