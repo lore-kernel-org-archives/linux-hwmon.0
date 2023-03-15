@@ -2,264 +2,286 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B14A5C761A6
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Mar 2023 12:15:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2590FC61DA4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 12:16:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbjCNMPI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Mar 2023 08:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S231961AbjCOMQs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 08:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbjCNMOj (ORCPT
+        with ESMTP id S231889AbjCOMQf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:14:39 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE4C9545C;
-        Tue, 14 Mar 2023 05:13:16 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32EAl8UQ030667;
-        Tue, 14 Mar 2023 12:12:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=XQzs/809zKHzqunm5o1eU+S1K4AIG8MdIMV24G0WrD0=;
- b=aPIV0Por64AeGRuCx4lJWKLOYHP7wUMvMZBx6e0qmaU5bKy4bwg98//0jQ74mC86OfIV
- PwhxUMsONy/iGGfYVfQ/ug1NDcxtpCJxTvKpTqgZAhiwjtJQPYugPrPYOLezhlir3yoH
- qM9HV8me2A76xsMarlXtFOE0OHoPbBTjJQ12h1ZsrT45UxKYJtglLb02yd8PwmRPKUpu
- CZyCwvQvVRWkdcbZrOAeaJdsbKQC51DjAQiuNwh+7b1g6qARfejYkdjniRTlCppcUWzg
- F2yH//lo/BblTznmVwTKuAMocth+rBlTxVQQPVK2muG4eak8sgyYP2lgaeLd2NpB8Isz gw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3paqftj541-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 12:12:34 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32EC9435027099;
-        Tue, 14 Mar 2023 12:12:33 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3paqftj52q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 12:12:33 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32E7i99M028619;
-        Tue, 14 Mar 2023 12:12:31 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3p8h96msmn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 12:12:31 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32ECCTFd46268908
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Mar 2023 12:12:29 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 017252007C;
-        Tue, 14 Mar 2023 12:12:29 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 852342007B;
-        Tue, 14 Mar 2023 12:12:28 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Mar 2023 12:12:28 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH v3 10/38] hwmon: add HAS_IOPORT dependencies
-Date:   Tue, 14 Mar 2023 13:11:48 +0100
-Message-Id: <20230314121216.413434-11-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230314121216.413434-1-schnelle@linux.ibm.com>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+        Wed, 15 Mar 2023 08:16:35 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2108E3E4;
+        Wed, 15 Mar 2023 05:16:31 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32FCFtrB6024487, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32FCFtrB6024487
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Wed, 15 Mar 2023 20:15:55 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Wed, 15 Mar 2023 20:16:07 +0800
+Received: from localhost (172.21.177.105) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Wed, 15 Mar
+ 2023 20:16:07 +0800
+Date:   Wed, 15 Mar 2023 20:16:06 +0800
+From:   phinex <phinex@realtek.com>
+To:     <jdelvare@suse.com>
+CC:     <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <phinex@realtek.com>
+Subject: [PATCH v1] hwmon: drivetemp: support to be a platform driver for thermal_of
+Message-ID: <20230315121606.GA71707@threadripper>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: b9Mgrpfz2nHGY7AyFAeW4h-wnj52RLiN
-X-Proofpoint-GUID: NyhqrwJNe1jr6q2Lzuk7_R5S0iLonbqR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-14_04,2023-03-14_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=682 spamscore=0
- malwarescore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0 suspectscore=0
- adultscore=0 impostorscore=0 priorityscore=1501 clxscore=1011 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303140103
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [172.21.177.105]
+X-ClientProxiedBy: RTEXH36506.realtek.com.tw (172.21.6.27) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-not being declared. We thus need to add HAS_IOPORT as dependency for
-those drivers using them.
+Support thermal zone so that we can just rely on dts to describe a
+thermal zone and do the cooling operations.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+You can define a comptible string "drivetemp,hdd-sensors" to enable
+this, such as
+
+	sata_port0: sata-port@0 {
+		compatible = "drivetemp,hdd-sensors";
+		#thermal-sensor-cells = <0>;
+	}
+
+Then define a thermal with this sensor to get it work.
+
+               hdd_thermal: hdd-thermal {
+                       thermal-sensors = <&sata_port0>;
+		}
+
+In most of the SoC systems, using dts to handle cooling is common.
+This can eliminate the usage of user space application to check
+the value exported in hwmon and then through sysfs to cooling.
+
+Signed-off-by: phinex <phinex@realtek.com>
+
 ---
- drivers/hwmon/Kconfig | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+ .../bindings/hwmon/drivetemp,hdd-sensors.yaml |  35 ++++++
+ drivers/hwmon/drivetemp.c                     | 102 +++++++++++++++++-
+ 2 files changed, 133 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/drivetemp,hdd-sensors.yaml
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 5b3b76477b0e..35afb070cae2 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -578,6 +578,7 @@ config SENSORS_SPARX5
+diff --git a/Documentation/devicetree/bindings/hwmon/drivetemp,hdd-sensors.yaml b/Documentation/devicetree/bindings/hwmon/drivetemp,hdd-sensors.yaml
+new file mode 100644
+index 000000000000..939d7a923e94
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/drivetemp,hdd-sensors.yaml
+@@ -0,0 +1,35 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/drivetemp,hdd-sensors.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Drivetemp Temperature Monitor
++
++maintainers:
++  - Phinex <phinex@realtek.com>
++
++description: |
++  Drivetemp Temperature Monitor that support a single thermal zone
++  This single thermal zone can support multiple hard drives,
++  it uses maximal temperature of these hard drivers as its temp value.
++
++properties:
++  compatible:
++    enum:
++      - drivetemp,hdd-sensors
++
++  '#thermal-sensor-cells':
++    const: 0
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |
++    sata_port0: sata-port@0 {
++        ompatible = "drivetemp,hdd-sensors";
++        #thermal-sensor-cells = <0>;
++    };
+diff --git a/drivers/hwmon/drivetemp.c b/drivers/hwmon/drivetemp.c
+index 1eb37106a220..9a60315d732c 100644
+--- a/drivers/hwmon/drivetemp.c
++++ b/drivers/hwmon/drivetemp.c
+@@ -107,6 +107,14 @@
+ #include <scsi/scsi_device.h>
+ #include <scsi/scsi_driver.h>
+ #include <scsi/scsi_proto.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/thermal.h>
++#include <linux/libata.h>
++
++/*A single thermal_zone for all HDD sensors */
++static struct thermal_zone_device *tz;
++#define MAX_NAME_LEN 255
  
- config SENSORS_F71805F
- 	tristate "Fintek F71805F/FG, F71806F/FG and F71872F/FG"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	help
- 	  If you say yes here you get support for hardware monitoring
-@@ -589,6 +590,7 @@ config SENSORS_F71805F
+ struct drivetemp_data {
+ 	struct list_head list;		/* list of instantiated devices */
+@@ -126,6 +134,7 @@ struct drivetemp_data {
+ 	int temp_max;			/* max temp */
+ 	int temp_lcrit;			/* lower critical limit */
+ 	int temp_crit;			/* critical limit */
++	u8 drivename[MAX_NAME_LEN];     /* Keep the drive name for each hdd*/
+ };
  
- config SENSORS_F71882FG
- 	tristate "Fintek F71882FG and compatibles"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	help
- 	  If you say yes here you get support for hardware monitoring
-@@ -801,6 +803,7 @@ config SENSORS_CORETEMP
+ static LIST_HEAD(drivetemp_devlist);
+@@ -537,6 +546,46 @@ static const struct hwmon_channel_info *drivetemp_info[] = {
+ 	NULL
+ };
  
- config SENSORS_IT87
- 	tristate "ITE IT87xx and compatibles"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	select HWMON_VID
- 	help
-@@ -1465,6 +1468,7 @@ config SENSORS_LM95245
++#if IS_ENABLED(CONFIG_THERMAL_OF)
++static int hdd_read_temp(void *data, int *temp)
++{
++	int err;
++	struct drivetemp_data *st = data;
++	long value, max = 0;
++
++	list_for_each_entry(st, &drivetemp_devlist, list) {
++		mutex_lock(&st->lock);
++		err = st->get_temp(st, hwmon_temp_input, &value);
++		mutex_unlock(&st->lock);
++
++		if (value > max)
++			max = value;
++	}
++
++	/*non-existent sensor or not ready*/
++	if (max == 0)
++		return -EAGAIN;
++
++	*temp = (int)max;
++
++	dev_dbg(st->dev, "%s, sensor read %d\n", __func__, *temp);
++
++	return 0;
++}
++
++static const struct thermal_zone_of_device_ops hdd_sensor_ops = {
++	.get_temp = hdd_read_temp,
++};
++
++static const struct of_device_id hdd_of_match[] = {
++	{
++		.compatible = "drivetemp,hdd-sensors",
++	},
++	{},
++};
++MODULE_DEVICE_TABLE(of, hdd_of_match);
++#endif
++
+ static const struct hwmon_ops drivetemp_ops = {
+ 	.is_visible = drivetemp_is_visible,
+ 	.read = drivetemp_read,
+@@ -556,11 +605,16 @@ static int drivetemp_add(struct device *dev, struct class_interface *intf)
+ 	struct scsi_device *sdev = to_scsi_device(dev->parent);
+ 	struct drivetemp_data *st;
+ 	int err;
++	struct ata_port *ap;
  
- config SENSORS_PC87360
- 	tristate "National Semiconductor PC87360 family"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	select HWMON_VID
- 	help
-@@ -1479,6 +1483,7 @@ config SENSORS_PC87360
+ 	st = kzalloc(sizeof(*st), GFP_KERNEL);
+ 	if (!st)
+ 		return -ENOMEM;
  
- config SENSORS_PC87427
- 	tristate "National Semiconductor PC87427"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	help
- 	  If you say yes here you get access to the hardware monitoring
-@@ -1510,6 +1515,7 @@ config SENSORS_NTC_THERMISTOR
++	ap = ata_shost_to_port(sdev->host);
++
++	snprintf(st->drivename, MAX_NAME_LEN, "drivetemp_port%d", ap->port_no);
++
+ 	st->sdev = sdev;
+ 	st->dev = dev;
+ 	mutex_init(&st->lock);
+@@ -570,9 +624,9 @@ static int drivetemp_add(struct device *dev, struct class_interface *intf)
+ 		goto abort;
+ 	}
  
- config SENSORS_NCT6683
- 	tristate "Nuvoton NCT6683D"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	help
- 	  If you say yes here you get support for the hardware monitoring
-@@ -1531,6 +1537,7 @@ config SENSORS_NCT6775_CORE
+-	st->hwdev = hwmon_device_register_with_info(dev->parent, "drivetemp",
+-						    st, &drivetemp_chip_info,
+-						    NULL);
++	st->hwdev = hwmon_device_register_with_info(
++		dev->parent, st->drivename, st, &drivetemp_chip_info, NULL);
++
+ 	if (IS_ERR(st->hwdev)) {
+ 		err = PTR_ERR(st->hwdev);
+ 		goto abort;
+@@ -605,14 +659,54 @@ static struct class_interface drivetemp_interface = {
+ 	.remove_dev = drivetemp_remove,
+ };
  
- config SENSORS_NCT6775
- 	tristate "Platform driver for Nuvoton NCT6775F and compatibles"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	depends on ACPI || ACPI=n
- 	select HWMON_VID
-@@ -1767,7 +1774,7 @@ config SENSORS_SHTC1
++#if IS_ENABLED(CONFIG_THERMAL_OF)
++static int hdd_hwmon_probe(struct platform_device *pdev)
++{
++	if (list_empty(&drivetemp_devlist))
++		return -EPROBE_DEFER;
++
++	if (!tz)
++		devm_thermal_zone_of_sensor_register(
++			&pdev->dev, 0, &drivetemp_devlist, &hdd_sensor_ops);
++
++	return 0;
++}
++
++static int hdd_hwmon_remove(struct platform_device *dev)
++{
++	thermal_zone_device_unregister(tz);
++	tz = NULL;
++	return 0;
++}
++
++static struct platform_driver hdd_hwmon_platdrv = {
++	.driver = {
++		.name   = "hdd-hwmon",
++		.of_match_table = hdd_of_match,
++	},
++	.probe          = hdd_hwmon_probe,
++	.remove		= hdd_hwmon_remove,
++};
++#endif
++
+ static int __init drivetemp_init(void)
+ {
+-	return scsi_register_interface(&drivetemp_interface);
++	int ret;
++
++	ret = scsi_register_interface(&drivetemp_interface);
++#if IS_ENABLED(CONFIG_THERMAL_OF)
++	if (ret == 0)
++		ret = platform_driver_register(&hdd_hwmon_platdrv);
++#endif
++	return ret;
+ }
  
- config SENSORS_SIS5595
- 	tristate "Silicon Integrated Systems Corp. SiS5595"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you say yes here you get support for the integrated sensors in
- 	  SiS5595 South Bridges.
-@@ -1787,6 +1794,7 @@ config SENSORS_SY7636A
+ static void __exit drivetemp_exit(void)
+ {
+ 	scsi_unregister_interface(&drivetemp_interface);
++#if IS_ENABLED(CONFIG_THERMAL_OF)
++	platform_driver_unregister(&hdd_hwmon_platdrv);
++#endif
+ }
  
- config SENSORS_DME1737
- 	tristate "SMSC DME1737, SCH311x and compatibles"
-+	depends on HAS_IOPORT
- 	depends on I2C && !PPC
- 	select HWMON_VID
- 	help
-@@ -1843,6 +1851,7 @@ config SENSORS_EMC6W201
- 
- config SENSORS_SMSC47M1
- 	tristate "SMSC LPC47M10x and compatibles"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	help
- 	  If you say yes here you get support for the integrated fan
-@@ -1877,6 +1886,7 @@ config SENSORS_SMSC47M192
- 
- config SENSORS_SMSC47B397
- 	tristate "SMSC LPC47B397-NC"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	help
- 	  If you say yes here you get support for the SMSC LPC47B397-NC
-@@ -1890,6 +1900,7 @@ config SENSORS_SCH56XX_COMMON
- 
- config SENSORS_SCH5627
- 	tristate "SMSC SCH5627"
-+	depends on HAS_IOPORT
- 	depends on !PPC && WATCHDOG
- 	select SENSORS_SCH56XX_COMMON
- 	select WATCHDOG_CORE
-@@ -1903,6 +1914,7 @@ config SENSORS_SCH5627
- 
- config SENSORS_SCH5636
- 	tristate "SMSC SCH5636"
-+	depends on HAS_IOPORT
- 	depends on !PPC && WATCHDOG
- 	select SENSORS_SCH56XX_COMMON
- 	select WATCHDOG_CORE
-@@ -2145,7 +2157,7 @@ config SENSORS_VIA_CPUTEMP
- 
- config SENSORS_VIA686A
- 	tristate "VIA686A"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you say yes here you get support for the integrated sensors in
- 	  Via 686A/B South Bridges.
-@@ -2155,6 +2167,7 @@ config SENSORS_VIA686A
- 
- config SENSORS_VT1211
- 	tristate "VIA VT1211"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	select HWMON_VID
- 	help
-@@ -2166,7 +2179,7 @@ config SENSORS_VT1211
- 
- config SENSORS_VT8231
- 	tristate "VIA VT8231"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	select HWMON_VID
- 	help
- 	  If you say yes here then you get support for the integrated sensors
-@@ -2274,6 +2287,7 @@ config SENSORS_W83L786NG
- 
- config SENSORS_W83627HF
- 	tristate "Winbond W83627HF, W83627THF, W83637HF, W83687THF, W83697HF"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	select HWMON_VID
- 	help
-@@ -2286,6 +2300,7 @@ config SENSORS_W83627HF
- 
- config SENSORS_W83627EHF
- 	tristate "Winbond W83627EHF/EHG/DHG/UHG, W83667HG"
-+	depends on HAS_IOPORT
- 	depends on !PPC
- 	select HWMON_VID
- 	help
+ module_init(drivetemp_init);
 -- 
-2.37.2
+2.17.1
 
