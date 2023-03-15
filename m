@@ -2,117 +2,93 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A70C3C6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 21:52:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3374C6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 21:58:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjCOVwJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Mar 2023 17:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
+        id S230197AbjCOV63 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 17:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjCOVwH (ORCPT
+        with ESMTP id S229941AbjCOV62 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:52:07 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2925940A
-        for <linux-hwmon@vger.kernel.org>; Wed, 15 Mar 2023 14:51:52 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id s7so3522353ilv.12
-        for <linux-hwmon@vger.kernel.org>; Wed, 15 Mar 2023 14:51:52 -0700 (PDT)
+        Wed, 15 Mar 2023 17:58:28 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3310E6232B;
+        Wed, 15 Mar 2023 14:58:27 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id s7so3530214ilv.12;
+        Wed, 15 Mar 2023 14:58:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678917112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GjGst9vQZ0GGMnXueC8vLJFfZORugzAs/PbAYufwCKY=;
-        b=qGJ58vG0yYlMWtXbsZ0UzqOESK25duXcOCfWrDyBMT77rUcqUh2wkcMgkZSA8vXYo6
-         2ukLyyPsmSytZ8gFTNrawbh7YGfAE5bM1Xrk6McGGPdYVHbCx8dJ6Ecw+6vdnyCHBvd6
-         dOZMk30tfRA/QHJK/lrbP7tMtF4alSXR0HTNIkjz1N7Fjy49HNP7KawlEb98s2htfz4s
-         EZBcXrbToVeee1SjTZreKk7D2OUR4v1HW7jIIToBjKG3yzHoatIP5Zee0LVJlrqy2+fL
-         pWNYLIN/gl5BpiYX70KAgi7CY6zTZP0Ex5xt+fRFqTdLADbJuhubJGP2Xj1A0TIjgT1w
-         u53w==
+        d=gmail.com; s=20210112; t=1678917506;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=egyhGDt+hlqX/Z0LgBGD0IU2L4ojDg9iZKbAvFb0XXA=;
+        b=BTbGGU5rUrP/fJWymUjjpoKoTUG0Cwn7TlACvuypQAgNlHvmxviexrpOdlC9EPNE/z
+         o3a8wB934/eanv3D7KWPaxpK+IvgAnfY7V3tbjNI0/kGZAIRZRKeqowPILxa7+zmzelJ
+         kHxjt6cSxYL8p17/jpwz1/BkJtQHRTnyFXBrZ/2xn75mJFNpzXQ2gThfy6yL/fyI8rRo
+         wKkN2zmD4/LuEdYb9y+PLPS1AZ6/V+/QZDmjXWnmiuit6fRcuTH28IeiAJz6/QOKnpKL
+         KZG0d9MmNaCP4hD7oGKY0AVdMiR359M67DIPsPa19utmwPlcDw2m6tPZVuXo8qry5Lj9
+         0PDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678917112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GjGst9vQZ0GGMnXueC8vLJFfZORugzAs/PbAYufwCKY=;
-        b=UrPzcRFuuPwFGBYkNmIJPDuJJ9wrGw4gmdt7aYq/NHxm9M2GBOgMAWbiWep683x7pE
-         vw7OguOaW9c9659+m3gce8krw4B2g/J+6reBWqIRpyrDcOtYoNWzy6NQ6guIW6eoX4zI
-         iP5vVte3M5IXvzaKa1S44hQjfYuNRcdbIUSrxZDVwfaKkqmDRp99fGO7xPwIPMgRwvm1
-         cim9Rv6c2e1ikfXCOS2GWTP+mCtxQ1KC9zqvsrheEl/OyASF9E9zm8j6suhCtJRTw+TX
-         4MIvtcKRBlaC/A1cUosYRVn+F3zyQM+r55+pvuGwU8VW4dxxfEQ0BWecahvRTJlkQoDG
-         J7Ng==
-X-Gm-Message-State: AO0yUKWsvkQq9rK0pWmPv/wdgLewnMWvWG8cqe5SjDN/rBWPsvq6fYu4
-        5PveoGu/92NebFd6TYict7M=
-X-Google-Smtp-Source: AK7set91QzK+BN8Ldsu7u060zoiXpyPd67wIsdb/WdHf8JcgEdjlVHPAh83uUmRaccxj3Tcn6qi2nA==
-X-Received: by 2002:a05:6e02:1a2d:b0:323:70c:ba96 with SMTP id g13-20020a056e021a2d00b00323070cba96mr7329206ile.0.1678917111954;
-        Wed, 15 Mar 2023 14:51:51 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q1-20020a056e02096100b00314201bcbdfsm1940804ilt.3.2023.03.15.14.51.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 14:51:51 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678917506;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=egyhGDt+hlqX/Z0LgBGD0IU2L4ojDg9iZKbAvFb0XXA=;
+        b=j8aAjUBhMi3Ktd+hShIFi7hxUjhOPi/m24fW1mapJwiVQRleP1jc1EBEhT1LGG6SI/
+         m531umKujg1St+hKEDsYeykzX95ant6FVA3749/RQquB59pN9e1GattYpO0OSrU+Q5Jx
+         iqBml6TGKhog3mBPOIpacZnB7sTZEZVFtyYPX02o1i6bWTvN5SnYe9obzYPF4RbmsAZh
+         VF/FiXdfOfFneBXfQpWY7zLLXOGMawmxKjd5tFENtT3LxuA8aGjGq14cG0pc10cKKuua
+         hnJE6h+jph1aChJX5H+ZDXSIc9bBYvdDZFyfX/9p01L+piN5p2Cmvmt3b8f7T4BMkDky
+         Tn+Q==
+X-Gm-Message-State: AO0yUKVV1feHe6u4CMXuQxkbU3FzopNU2akhRyht2ckXmL+sUB40srTT
+        HjWSi+6UVeunFH/m2YILP/F/yZMh+6c=
+X-Google-Smtp-Source: AK7set/TOld09oomPcPWCwggPJMzRNFT7G2Y7AL62OGq/4nnFIZohB0DfhGNa1Jh13k1MRtsqogLdQ==
+X-Received: by 2002:a92:d98a:0:b0:322:ffb2:db80 with SMTP id r10-20020a92d98a000000b00322ffb2db80mr5341802iln.6.1678917506436;
+        Wed, 15 Mar 2023 14:58:26 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c21-20020a02a615000000b0040618ad53aesm882936jam.31.2023.03.15.14.58.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 14:58:26 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 15 Mar 2023 14:51:50 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Frank Crawford <frank@crawford.emu.id.au>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v1] hwmon (it87): Add scaling macro for recent ADC
- voltages
-Message-ID: <ff68e4d9-f32d-455a-b48a-033c3278c74c@roeck-us.net>
-References: <20230313115356.334937-1-frank@crawford.emu.id.au>
+Message-ID: <19097c39-9703-6b7f-6cc4-8a157b00f368@roeck-us.net>
+Date:   Wed, 15 Mar 2023 14:58:24 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313115356.334937-1-frank@crawford.emu.id.au>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/2] hwmon: (nct6775) update ASUS WMI monitoring list
+ A520/B360/B460/B550...
+Content-Language: en-US
+To:     Denis Pauk <pauk.denis@gmail.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mischief@offblast.org,
+        de99like@mennucci.debian.net, holger.kiehl@dwd.de
+References: <20230315210135.2155-1-pauk.denis@gmail.com>
+ <20230315210135.2155-2-pauk.denis@gmail.com>
+ <20230315233054.5ac21db0@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230315233054.5ac21db0@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 10:53:56PM +1100, Frank Crawford wrote:
-> Generalise scaling to include all recent ADC values and match the labels
-> for internal voltage sensors.
+On 3/15/23 14:30, Denis Pauk wrote:
+> On Wed, 15 Mar 2023 23:01:35 +0200
+> Denis Pauk <pauk.denis@gmail.com> wrote:
 > 
-> This includes correction of an existing error for voltage scaling for
-> chips that have 10.9mV ADCs, where scaling was not performed.
+> Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
 > 
-
-This is again two logical changes in a single patch, one of which is
-a bug fix.
+> Pro A520M-C II/CSM is also tested by Holger Kiehl
+> https://patchwork.kernel.org/project/linux-hwmon/patch/868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de/
+> 
+> Could it be applied as single patch or need to rebase over "Pro A520M-C II"
+> patch?
+> 
+Sorry, I don't understand what you are trying to say. I just applied all patches
+in sequence as received, with no conflicts. Should I undo that ?
 
 Guenter
 
-> Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
-> ---
->  drivers/hwmon/it87.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-> index 66f7ceaa7c3f..f774a0732a7c 100644
-> --- a/drivers/hwmon/it87.c
-> +++ b/drivers/hwmon/it87.c
-> @@ -515,6 +515,8 @@ static const struct it87_devices it87_devices[] = {
->  #define has_six_temp(data)	((data)->features & FEAT_SIX_TEMP)
->  #define has_vin3_5v(data)	((data)->features & FEAT_VIN3_5V)
->  #define has_conf_noexit(data)	((data)->features & FEAT_CONF_NOEXIT)
-> +#define has_scaling(data)	((data)->features & (FEAT_12MV_ADC | \
-> +						     FEAT_10_9MV_ADC))
->  
->  struct it87_sio_data {
->  	int sioaddr;
-> @@ -2002,7 +2004,7 @@ static ssize_t show_label(struct device *dev, struct device_attribute *attr,
->  
->  	if (has_vin3_5v(data) && nr == 0)
->  		label = labels[0];
-> -	else if (has_12mv_adc(data) || has_10_9mv_adc(data))
-> +	else if (has_scaling(data))
->  		label = labels_it8721[nr];
->  	else
->  		label = labels[nr];
-> @@ -3134,7 +3136,7 @@ static int it87_probe(struct platform_device *pdev)
->  			 "Detected broken BIOS defaults, disabling PWM interface\n");
->  
->  	/* Starting with IT8721F, we handle scaling of internal voltages */
-> -	if (has_12mv_adc(data)) {
-> +	if (has_scaling(data)) {
->  		if (sio_data->internal & BIT(0))
->  			data->in_scaled |= BIT(3);	/* in3 is AVCC */
->  		if (sio_data->internal & BIT(1))
