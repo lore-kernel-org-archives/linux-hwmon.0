@@ -2,246 +2,223 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EF25C6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 21:03:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3FB6C6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 21:16:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232956AbjCOVDY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Mar 2023 17:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36730 "EHLO
+        id S233006AbjCOVQv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 17:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232864AbjCOVDR (ORCPT
+        with ESMTP id S232870AbjCOVQk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:03:17 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A88A3B4C;
-        Wed, 15 Mar 2023 14:02:50 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id o8so5949648lfo.0;
-        Wed, 15 Mar 2023 14:02:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678914115;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+1/N9Cqr3ApDu4tfUrZr2c43GRU0UQ/EvExfd9NX1gg=;
-        b=JzX1vlRwRB3aQPw/M3VJsZCam1nbwd2RkoVV/ooVJy36to03OiCWt+rZZ46BGXY206
-         j9t2U4F9FMJnGv7n29RrmNwemHmrPdH3yPx6CxkR0NrJ0FOrjV8+gC3fWfWZEJj87qY3
-         agcVe1Rfpsc/ascWIGfuq/IwN+fteEwwt+Uy7EkJNpEbKRSNF8gVy0+UGS5WcW0jog96
-         fXUX2/oYtYVxaSbhjsCTDRG/9zc45lbC5HPRffd+Tv/j0mFoeaAIX664omP3b0JgPren
-         2+oGOd/rZRYV1Zy/Hk/pKUmJn6blH4o4JOSkyBKc9j06u1aZPBirjwuiE2YjXTfOF3Bm
-         URTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678914115;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+1/N9Cqr3ApDu4tfUrZr2c43GRU0UQ/EvExfd9NX1gg=;
-        b=N+HkPgZCjb7hRqPtdC4qWfpcqOYQp8jhL3VGvFVgdgzfyuY+x7diSQk53URRKqCjAq
-         r4tw+fyA2hIu2YMo3vk9bQJaNVG/5JPvos3tT0HK+z9+VziA+7miqOvohf1ZOL3j02oA
-         kJBG6dKBtkopr9C+igxanl+h+CRKcWpqStbpMMQcsWPqPAmwcJkMLG/oYMnxnS+H3n10
-         Z8Q0ovT/SghnXJTeUuYHXchn9gwb9gi+uLWaWB2AQZlTxseuG5+IgsDkyb/CBz6IQoPz
-         iMiixt5RULVJXWa5XgVdPixJ43Ruf1WsS02N3YPCvuDs1LEg5HAmotORCodE8L/jaSKd
-         s+HA==
-X-Gm-Message-State: AO0yUKV8LkCK59YnO0+mZ+GdBp0RsW0W78JGnRQnbA12Ff6suqXSM0Mt
-        MQlTJP9S2xIyVsx7vg8PFg0=
-X-Google-Smtp-Source: AK7set8R+SaDA5YTU0raRklY+UuNB+SnmwaVBfVXe7NuxC9p4p0LkTQiCWGAU4y4iVskpnK+YJvuIA==
-X-Received: by 2002:ac2:5fd0:0:b0:4e8:3ea0:cf37 with SMTP id q16-20020ac25fd0000000b004e83ea0cf37mr2607704lfg.34.1678914115644;
-        Wed, 15 Mar 2023 14:01:55 -0700 (PDT)
-Received: from localhost.localdomain ([46.211.236.75])
-        by smtp.googlemail.com with ESMTPSA id p17-20020a05651238d100b0047f7722b73csm936396lft.142.2023.03.15.14.01.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 14:01:55 -0700 (PDT)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pauk.denis@gmail.com,
-        mischief@offblast.org, de99like@mennucci.debian.net
-Subject: [PATCH 2/2] hwmon: (nct6775) update ASUS WMI monitoring list A520/B360/B460/B550...
-Date:   Wed, 15 Mar 2023 23:01:35 +0200
-Message-Id: <20230315210135.2155-2-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230315210135.2155-1-pauk.denis@gmail.com>
-References: <20230315210135.2155-1-pauk.denis@gmail.com>
+        Wed, 15 Mar 2023 17:16:40 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D80A8C818;
+        Wed, 15 Mar 2023 14:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678914971; x=1710450971;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3UXG2kNtVojFaZ42t7ZbC0xYesYIqTljgmL1BPd+M8Y=;
+  b=OTu6GKVaWaj+saj54gN1SGNWAw8nHbara4fg0J11zwMqbo+jwIqpp4qg
+   I6T0J6xM1Jqkr6hRChmxxTN1XRQaK6ehir48kspA0mBBABwJ5a0+mlqk1
+   5UheulhVn0KoZPmfAhilHXz+XIn2aiePuM5p5p25FZ+EgOoNw7boZnoRo
+   YhbdOWg7YF+YLQbGgnhfr/HVLfxtDkRrxenIUePyADPX4X1B7cZJWpWKy
+   8V91T2SK0lKb8yydRSnUK2qG0CdexBjrOME2tHB3oX86kbTaW8MWiZpKh
+   IEfEyLrNq5cPDSVavW4FOZ6+J0blvdP4GcRa3TFA2DQcb0xPAZGwUxgRu
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="424091453"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="424091453"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 14:16:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="743867521"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="743867521"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 15 Mar 2023 14:16:08 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pcYTf-00082Z-1y;
+        Wed, 15 Mar 2023 21:16:07 +0000
+Date:   Thu, 16 Mar 2023 05:15:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     phinex <phinex@realtek.com>, jdelvare@suse.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phinex@realtek.com
+Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
+ thermal_of
+Message-ID: <202303160519.6Xosrf2g-lkp@intel.com>
+References: <20230315121606.GA71707@threadripper>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315121606.GA71707@threadripper>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Boards such as
-* EX-B660M-V5 D4,
-* PRIME A520M-A,
-* PRIME A520M-A II,
-* PRIME A520M-E,
-* PRIME A520M-K,
-* PRIME B360M-A,
-* PRIME B360M-C,
-* PRIME B460M-A R2.0,
-* PRIME B550M-A AC,
-* PRIME B550M-A WIFI II,
-* PRIME B550M-K,
-* PRIME B650M-A AX II,
-* PRIME Z590-P WIFI,
-* PRIME Z590-V,
-* Pro A520M-C,
-* Pro A520M-C II,
-* ProArt B650-CREATOR,
-* ProArt Z790-CREATOR WIFI,
-* Pro B660M-C,
-* Pro WS W680-ACE,
-* Pro WS W680-ACE IPMI,
-* ROG MAXIMUS XIII APEX,
-* ROG MAXIMUS XIII EXTREME,
-* ROG MAXIMUS XIII HERO,
-* ROG MAXIMUS Z690 APEX,
-* ROG MAXIMUS Z790 EXTREME,
-* ROG STRIX B660-A GAMING WIFI,
-* ROG STRIX Z590-A GAMING WIFI,
-* ROG STRIX Z590-E GAMING WIFI,
-* ROG STRIX Z590-F GAMING WIFI,
-* ROG STRIX Z590-I GAMING WIFI,
-* TUF GAMING A520M-PLUS,
-* TUF GAMING A520M-PLUS II,
-* TUF GAMING A520M-PLUS WIFI,
-* TUF GAMING B660M-E D4,
-* TUF GAMING B660-PLUS WIFI D4,
-* TUF GAMING X570-PLUS_BR,
-* TUF GAMING Z590-PLUS,
-* Z490-GUNDAM (WI-FI),
-* Z590 WIFI GUNDAM EDITION
-have got a nct6775 chip, but by default there's no use of it
-because of resource conflict with WMI method.
+Hi phinex,
 
-This commit adds such boards to the WMI monitoring list.
+Thank you for the patch! Yet something to improve:
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Tested-by: Nick Owens <mischief@offblast.org>
-Tested-by: A. M. <de99like@mennucci.debian.net>
----
- drivers/hwmon/nct6775-platform.c | 40 ++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.3-rc2 next-20230315]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index 0ded82ac7fd31..2c1a47e756bf3 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -1058,14 +1058,26 @@ static const char * const asus_wmi_boards[] = {
- 	"ProArt Z490-CREATOR 10G",
- 	"Pro B550M-C",
- 	"Pro WS X570-ACE",
-+	"PRIME A520M-A",
-+	"PRIME A520M-A II",
-+	"PRIME A520M-E",
-+	"PRIME A520M-K",
- 	"PRIME B360-PLUS",
-+	"PRIME B360M-A",
-+	"PRIME B360M-C",
- 	"PRIME B460-PLUS",
-+	"PRIME B460M-A R2.0",
- 	"PRIME B550-PLUS",
- 	"PRIME B550M-A",
- 	"PRIME B550M-A (WI-FI)",
-+	"PRIME B550M-A AC",
-+	"PRIME B550M-A WIFI II",
-+	"PRIME B550M-K",
- 	"PRIME H410M-R",
- 	"PRIME X570-P",
- 	"PRIME X570-PRO",
-+	"Pro A520M-C",
-+	"Pro A520M-C II",
- 	"ROG CROSSHAIR VIII DARK HERO",
- 	"ROG CROSSHAIR VIII EXTREME",
- 	"ROG CROSSHAIR VIII FORMULA",
-@@ -1094,6 +1106,9 @@ static const char * const asus_wmi_boards[] = {
- 	"ROG STRIX Z490-G GAMING (WI-FI)",
- 	"ROG STRIX Z490-H GAMING",
- 	"ROG STRIX Z490-I GAMING",
-+	"TUF GAMING A520M-PLUS",
-+	"TUF GAMING A520M-PLUS II",
-+	"TUF GAMING A520M-PLUS WIFI",
- 	"TUF GAMING B550M-E",
- 	"TUF GAMING B550M-E WIFI",
- 	"TUF GAMING B550M-PLUS",
-@@ -1104,16 +1119,20 @@ static const char * const asus_wmi_boards[] = {
- 	"TUF GAMING B550-PRO",
- 	"TUF GAMING X570-PLUS",
- 	"TUF GAMING X570-PLUS (WI-FI)",
-+	"TUF GAMING X570-PLUS_BR",
- 	"TUF GAMING X570-PRO (WI-FI)",
- 	"TUF GAMING Z490-PLUS",
- 	"TUF GAMING Z490-PLUS (WI-FI)",
-+	"Z490-GUNDAM (WI-FI)",
- };
- 
- static const char * const asus_msi_boards[] = {
-+	"EX-B660M-V5 D4",
- 	"EX-B660M-V5 PRO D4",
- 	"PRIME B650-PLUS",
- 	"PRIME B650M-A",
- 	"PRIME B650M-A AX",
-+	"PRIME B650M-A AX II",
- 	"PRIME B650M-A II",
- 	"PRIME B650M-A WIFI",
- 	"PRIME B650M-A WIFI II",
-@@ -1124,20 +1143,33 @@ static const char * const asus_msi_boards[] = {
- 	"PRIME X670E-PRO WIFI",
- 	"PRIME Z590-A",
- 	"PRIME Z590-P",
-+	"PRIME Z590-P WIFI",
-+	"PRIME Z590-V",
- 	"PRIME Z590M-PLUS",
-+	"Pro B660M-C",
- 	"Pro B660M-C-D4",
-+	"Pro WS W680-ACE",
-+	"Pro WS W680-ACE IPMI",
-+	"ProArt B650-CREATOR",
- 	"ProArt B660-CREATOR D4",
- 	"ProArt X670E-CREATOR WIFI",
-+	"ProArt Z790-CREATOR WIFI",
- 	"ROG CROSSHAIR X670E EXTREME",
- 	"ROG CROSSHAIR X670E GENE",
- 	"ROG CROSSHAIR X670E HERO",
-+	"ROG MAXIMUS XIII APEX",
-+	"ROG MAXIMUS XIII EXTREME",
- 	"ROG MAXIMUS XIII EXTREME GLACIAL",
-+	"ROG MAXIMUS XIII HERO",
-+	"ROG MAXIMUS Z690 APEX",
- 	"ROG MAXIMUS Z690 EXTREME",
- 	"ROG MAXIMUS Z690 EXTREME GLACIAL",
-+	"ROG MAXIMUS Z790 EXTREME",
- 	"ROG STRIX B650-A GAMING WIFI",
- 	"ROG STRIX B650E-E GAMING WIFI",
- 	"ROG STRIX B650E-F GAMING WIFI",
- 	"ROG STRIX B650E-I GAMING WIFI",
-+	"ROG STRIX B660-A GAMING WIFI",
- 	"ROG STRIX B660-A GAMING WIFI D4",
- 	"ROG STRIX B660-F GAMING WIFI",
- 	"ROG STRIX B660-G GAMING WIFI",
-@@ -1146,16 +1178,24 @@ static const char * const asus_msi_boards[] = {
- 	"ROG STRIX X670E-E GAMING WIFI",
- 	"ROG STRIX X670E-F GAMING WIFI",
- 	"ROG STRIX X670E-I GAMING WIFI",
-+	"ROG STRIX Z590-A GAMING WIFI",
- 	"ROG STRIX Z590-A GAMING WIFI II",
-+	"ROG STRIX Z590-E GAMING WIFI",
-+	"ROG STRIX Z590-F GAMING WIFI",
-+	"ROG STRIX Z590-I GAMING WIFI",
- 	"ROG STRIX Z690-A GAMING WIFI D4",
- 	"TUF GAMING B650-PLUS",
- 	"TUF GAMING B650-PLUS WIFI",
- 	"TUF GAMING B650M-PLUS",
- 	"TUF GAMING B650M-PLUS WIFI",
-+	"TUF GAMING B660-PLUS WIFI D4",
-+	"TUF GAMING B660M-E D4",
- 	"TUF GAMING B660M-PLUS WIFI",
- 	"TUF GAMING X670E-PLUS",
- 	"TUF GAMING X670E-PLUS WIFI",
-+	"TUF GAMING Z590-PLUS",
- 	"TUF GAMING Z590-PLUS WIFI",
-+	"Z590 WIFI GUNDAM EDITION",
- };
- 
- #if IS_ENABLED(CONFIG_ACPI)
+url:    https://github.com/intel-lab-lkp/linux/commits/phinex/hwmon-drivetemp-support-to-be-a-platform-driver-for-thermal_of/20230315-201903
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230315121606.GA71707%40threadripper
+patch subject: [PATCH v1] hwmon: drivetemp: support to be a platform driver for thermal_of
+config: arm-randconfig-r012-20230312 (https://download.01.org/0day-ci/archive/20230316/202303160519.6Xosrf2g-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/1c53b683440a584685795fa8ff831379577081b0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review phinex/hwmon-drivetemp-support-to-be-a-platform-driver-for-thermal_of/20230315-201903
+        git checkout 1c53b683440a584685795fa8ff831379577081b0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/hwmon/ fs/xfs/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303160519.6Xosrf2g-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/hwmon/drivetemp.c:551:6: warning: variable 'err' set but not used [-Wunused-but-set-variable]
+           int err;
+               ^
+>> drivers/hwmon/drivetemp.c:575:48: error: variable has incomplete type 'const struct thermal_zone_of_device_ops'
+   static const struct thermal_zone_of_device_ops hdd_sensor_ops = {
+                                                  ^
+   drivers/hwmon/drivetemp.c:575:21: note: forward declaration of 'struct thermal_zone_of_device_ops'
+   static const struct thermal_zone_of_device_ops hdd_sensor_ops = {
+                       ^
+>> drivers/hwmon/drivetemp.c:668:3: error: call to undeclared function 'devm_thermal_zone_of_sensor_register'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   devm_thermal_zone_of_sensor_register(
+                   ^
+   drivers/hwmon/drivetemp.c:668:3: note: did you mean 'devm_thermal_of_zone_register'?
+   include/linux/thermal.h:303:29: note: 'devm_thermal_of_zone_register' declared here
+   struct thermal_zone_device *devm_thermal_of_zone_register(struct device *dev, int id, void *data,
+                               ^
+   1 warning and 2 errors generated.
+
+
+vim +575 drivers/hwmon/drivetemp.c
+
+   574	
+ > 575	static const struct thermal_zone_of_device_ops hdd_sensor_ops = {
+   576		.get_temp = hdd_read_temp,
+   577	};
+   578	
+   579	static const struct of_device_id hdd_of_match[] = {
+   580		{
+   581			.compatible = "drivetemp,hdd-sensors",
+   582		},
+   583		{},
+   584	};
+   585	MODULE_DEVICE_TABLE(of, hdd_of_match);
+   586	#endif
+   587	
+   588	static const struct hwmon_ops drivetemp_ops = {
+   589		.is_visible = drivetemp_is_visible,
+   590		.read = drivetemp_read,
+   591	};
+   592	
+   593	static const struct hwmon_chip_info drivetemp_chip_info = {
+   594		.ops = &drivetemp_ops,
+   595		.info = drivetemp_info,
+   596	};
+   597	
+   598	/*
+   599	 * The device argument points to sdev->sdev_dev. Its parent is
+   600	 * sdev->sdev_gendev, which we can use to get the scsi_device pointer.
+   601	 */
+   602	static int drivetemp_add(struct device *dev, struct class_interface *intf)
+   603	{
+   604		struct scsi_device *sdev = to_scsi_device(dev->parent);
+   605		struct drivetemp_data *st;
+   606		int err;
+   607		struct ata_port *ap;
+   608	
+   609		st = kzalloc(sizeof(*st), GFP_KERNEL);
+   610		if (!st)
+   611			return -ENOMEM;
+   612	
+   613		ap = ata_shost_to_port(sdev->host);
+   614	
+   615		snprintf(st->drivename, MAX_NAME_LEN, "drivetemp_port%d", ap->port_no);
+   616	
+   617		st->sdev = sdev;
+   618		st->dev = dev;
+   619		mutex_init(&st->lock);
+   620	
+   621		if (drivetemp_identify(st)) {
+   622			err = -ENODEV;
+   623			goto abort;
+   624		}
+   625	
+   626		st->hwdev = hwmon_device_register_with_info(
+   627			dev->parent, st->drivename, st, &drivetemp_chip_info, NULL);
+   628	
+   629		if (IS_ERR(st->hwdev)) {
+   630			err = PTR_ERR(st->hwdev);
+   631			goto abort;
+   632		}
+   633	
+   634		list_add(&st->list, &drivetemp_devlist);
+   635		return 0;
+   636	
+   637	abort:
+   638		kfree(st);
+   639		return err;
+   640	}
+   641	
+   642	static void drivetemp_remove(struct device *dev, struct class_interface *intf)
+   643	{
+   644		struct drivetemp_data *st, *tmp;
+   645	
+   646		list_for_each_entry_safe(st, tmp, &drivetemp_devlist, list) {
+   647			if (st->dev == dev) {
+   648				list_del(&st->list);
+   649				hwmon_device_unregister(st->hwdev);
+   650				kfree(st);
+   651				break;
+   652			}
+   653		}
+   654	}
+   655	
+   656	static struct class_interface drivetemp_interface = {
+   657		.add_dev = drivetemp_add,
+   658		.remove_dev = drivetemp_remove,
+   659	};
+   660	
+   661	#if IS_ENABLED(CONFIG_THERMAL_OF)
+   662	static int hdd_hwmon_probe(struct platform_device *pdev)
+   663	{
+   664		if (list_empty(&drivetemp_devlist))
+   665			return -EPROBE_DEFER;
+   666	
+   667		if (!tz)
+ > 668			devm_thermal_zone_of_sensor_register(
+   669				&pdev->dev, 0, &drivetemp_devlist, &hdd_sensor_ops);
+   670	
+   671		return 0;
+   672	}
+   673	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
