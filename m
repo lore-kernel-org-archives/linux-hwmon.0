@@ -2,137 +2,117 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C283C6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 21:49:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A70C3C6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 21:52:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbjCOVtt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Mar 2023 17:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
+        id S230147AbjCOVwJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 17:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbjCOVts (ORCPT
+        with ESMTP id S230296AbjCOVwH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:49:48 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45ADC30D9;
-        Wed, 15 Mar 2023 14:49:47 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id w4so11177249ilv.0;
-        Wed, 15 Mar 2023 14:49:47 -0700 (PDT)
+        Wed, 15 Mar 2023 17:52:07 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2925940A
+        for <linux-hwmon@vger.kernel.org>; Wed, 15 Mar 2023 14:51:52 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id s7so3522353ilv.12
+        for <linux-hwmon@vger.kernel.org>; Wed, 15 Mar 2023 14:51:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678916986;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E9/4Xc/PzCfJtouwsKgyP22po2ulc0oevszQIyPl3QU=;
-        b=IVfby+N57zhlO/lS/5Tlw/MkzNb2SSfQgFV2fN4y3Zi6By7+ZEhnjUaJHMx+h1Pjc/
-         GtkymPCqg7C2j6CmW/rmF6ote6Jb944j9FcYA7BDzsu0n47MIIPUZZSGO9sYtsX8Hhqo
-         cztUCOso8hURad+E4dz8lgoMKspcEK23e767ooSYBTtqZmzEIwJRJzrxrd1jMlEc6/mK
-         GLrq327ieuccIc+JETXH70+YtSMz7mk4IVplz1ytNVdbnf2FiyVwvXf3BnqNJyVtJfsn
-         8XZAmnuNn0ppN0o0kUEtIVTPHOWPK9HzXq+RHjEIJ+RyZlg8T2JBCCWhhpCgAuSXd3j/
-         q2kw==
+        d=gmail.com; s=20210112; t=1678917112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GjGst9vQZ0GGMnXueC8vLJFfZORugzAs/PbAYufwCKY=;
+        b=qGJ58vG0yYlMWtXbsZ0UzqOESK25duXcOCfWrDyBMT77rUcqUh2wkcMgkZSA8vXYo6
+         2ukLyyPsmSytZ8gFTNrawbh7YGfAE5bM1Xrk6McGGPdYVHbCx8dJ6Ecw+6vdnyCHBvd6
+         dOZMk30tfRA/QHJK/lrbP7tMtF4alSXR0HTNIkjz1N7Fjy49HNP7KawlEb98s2htfz4s
+         EZBcXrbToVeee1SjTZreKk7D2OUR4v1HW7jIIToBjKG3yzHoatIP5Zee0LVJlrqy2+fL
+         pWNYLIN/gl5BpiYX70KAgi7CY6zTZP0Ex5xt+fRFqTdLADbJuhubJGP2Xj1A0TIjgT1w
+         u53w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678916986;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E9/4Xc/PzCfJtouwsKgyP22po2ulc0oevszQIyPl3QU=;
-        b=G8zD6P51EEttavpqkoVRYVYG6N1zud36dDZPhzmRhqmWEJaw+yghNpDI2F7TEwwTj4
-         X//bRIiuVGPlHOlMN5SVzzY5z5uI0jR5bWhW+6KmP4c21AbZQ1Vm1alb8wviUlyZ79fg
-         DEpWo6WO/Z9O5BaG86nmeFJcBL3XPggsWrjBXLckZrpMV9CCEc4xVkJnfdAUvJEllqw1
-         uoASvIe2H0NyWScRj8Q9Kvray9DvaxrS4SU57eU/9v3VtgVdzSFUBvK75/GDcrUTvhXs
-         taAHo1fXbcCzRnDovpJLdYlmqqI0Cyiy+1FFZ3alUyiDwm8W+v8+2fQaF4V/EU5QCpIb
-         6ChQ==
-X-Gm-Message-State: AO0yUKU+CgARXFDlqGSzTy0C5m6VYO/Z292KUpx+0DkR70Cm4v8wC5qd
-        +dztAoo5QWhtVqeSjz29YhU=
-X-Google-Smtp-Source: AK7set+XpUQTsmPrdSiKjc3wYPDM5cDuVj/eVRgaHuCABtp6FEdqFF9QxQCA4Up/Epc817T0KnycnA==
-X-Received: by 2002:a92:ce12:0:b0:313:fea2:be5c with SMTP id b18-20020a92ce12000000b00313fea2be5cmr5492196ilo.11.1678916986566;
-        Wed, 15 Mar 2023 14:49:46 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678917112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GjGst9vQZ0GGMnXueC8vLJFfZORugzAs/PbAYufwCKY=;
+        b=UrPzcRFuuPwFGBYkNmIJPDuJJ9wrGw4gmdt7aYq/NHxm9M2GBOgMAWbiWep683x7pE
+         vw7OguOaW9c9659+m3gce8krw4B2g/J+6reBWqIRpyrDcOtYoNWzy6NQ6guIW6eoX4zI
+         iP5vVte3M5IXvzaKa1S44hQjfYuNRcdbIUSrxZDVwfaKkqmDRp99fGO7xPwIPMgRwvm1
+         cim9Rv6c2e1ikfXCOS2GWTP+mCtxQ1KC9zqvsrheEl/OyASF9E9zm8j6suhCtJRTw+TX
+         4MIvtcKRBlaC/A1cUosYRVn+F3zyQM+r55+pvuGwU8VW4dxxfEQ0BWecahvRTJlkQoDG
+         J7Ng==
+X-Gm-Message-State: AO0yUKWsvkQq9rK0pWmPv/wdgLewnMWvWG8cqe5SjDN/rBWPsvq6fYu4
+        5PveoGu/92NebFd6TYict7M=
+X-Google-Smtp-Source: AK7set91QzK+BN8Ldsu7u060zoiXpyPd67wIsdb/WdHf8JcgEdjlVHPAh83uUmRaccxj3Tcn6qi2nA==
+X-Received: by 2002:a05:6e02:1a2d:b0:323:70c:ba96 with SMTP id g13-20020a056e021a2d00b00323070cba96mr7329206ile.0.1678917111954;
+        Wed, 15 Mar 2023 14:51:51 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j4-20020a02cc64000000b004035b26b6d8sm2057636jaq.2.2023.03.15.14.49.45
+        by smtp.gmail.com with ESMTPSA id q1-20020a056e02096100b00314201bcbdfsm1940804ilt.3.2023.03.15.14.51.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 14:49:46 -0700 (PDT)
+        Wed, 15 Mar 2023 14:51:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 15 Mar 2023 14:49:45 -0700
+Date:   Wed, 15 Mar 2023 14:51:50 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Holger Kiehl <Holger.Kiehl@dwd.de>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] hwmon: (nct6775) add Asus Pro A520M-C II/CSM
-Message-ID: <f8e1c010-c11e-4cd4-a2f8-a074b6983e0a@roeck-us.net>
-References: <868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de>
+To:     Frank Crawford <frank@crawford.emu.id.au>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v1] hwmon (it87): Add scaling macro for recent ADC
+ voltages
+Message-ID: <ff68e4d9-f32d-455a-b48a-033c3278c74c@roeck-us.net>
+References: <20230313115356.334937-1-frank@crawford.emu.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de>
+In-Reply-To: <20230313115356.334937-1-frank@crawford.emu.id.au>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 01:10:31PM +0000, Holger Kiehl wrote:
-> An NCT6798D chip is now detected:
+On Mon, Mar 13, 2023 at 10:53:56PM +1100, Frank Crawford wrote:
+> Generalise scaling to include all recent ADC values and match the labels
+> for internal voltage sensors.
 > 
->    dmesg|grep nct6775
->    [   23.765392] nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
+> This includes correction of an existing error for voltage scaling for
+> chips that have 10.9mV ADCs, where scaling was not performed.
 > 
-> And sensors now shows:
-> 
->    nct6798-isa-0290
->    Adapter: ISA adapter
->    in0:                      312.00 mV (min =  +0.00 V, max =  +1.74 V)
->    in1:                        1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
->    in2:                        3.42 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
->    in3:                        3.38 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
->    in4:                        1.03 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
->    in5:                        1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
->    in6:                      200.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
->    in7:                        3.42 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
->    in8:                        3.28 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
->    in9:                      920.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
->    in10:                     512.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
->    in11:                     504.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
->    in12:                       1.03 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
->    in13:                     256.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
->    in14:                       1.47 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
->    fan1:                        0 RPM  (min =    0 RPM)
->    fan2:                        0 RPM  (min =    0 RPM)
->    fan3:                      355 RPM  (min =    0 RPM)
->    fan7:                        0 RPM  (min =    0 RPM)
->    SYSTIN:                    +25.0°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
->    CPUTIN:                    +26.5°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
->    AUXTIN0:                   +97.0°C    sensor = thermistor
->    AUXTIN1:                   +25.0°C    sensor = thermistor
->    AUXTIN2:                   +25.0°C    sensor = thermistor
->    AUXTIN3:                    +1.0°C    sensor = thermistor
->    PECI Agent 0 Calibration:  +26.0°C
->    PCH_CHIP_CPU_MAX_TEMP:      +0.0°C
->    PCH_CHIP_TEMP:              +0.0°C
->    PCH_CPU_TEMP:               +0.0°C
->    TSI0_TEMP:                 +27.9°C
->    intrusion0:               ALARM
->    intrusion1:               OK
->    beep_enable:              disabled
-> 
-> Signed-off-by: Holger Kiehl <holger.kiehl@dwd.de>
-> Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
 
-Applied. In the future, please watch out for:
-
-CHECK: From:/Signed-off-by: email comments mismatch: 'From: Holger Kiehl <Holger.Kiehl@dwd.de>' != 'Signed-off-by: Holger Kiehl <holger.kiehl@dwd.de>'
-
-Little discrepancies like this just make my life harder.
+This is again two logical changes in a single patch, one of which is
+a bug fix.
 
 Guenter
 
+> Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
+> ---
+>  drivers/hwmon/it87.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-> index 76c6b564d7fc..1e6abfc7974d 100644
-> --- a/drivers/hwmon/nct6775-platform.c
-> +++ b/drivers/hwmon/nct6775-platform.c
-> @@ -1052,6 +1052,7 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
->  static struct platform_device *pdev[2];
+> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+> index 66f7ceaa7c3f..f774a0732a7c 100644
+> --- a/drivers/hwmon/it87.c
+> +++ b/drivers/hwmon/it87.c
+> @@ -515,6 +515,8 @@ static const struct it87_devices it87_devices[] = {
+>  #define has_six_temp(data)	((data)->features & FEAT_SIX_TEMP)
+>  #define has_vin3_5v(data)	((data)->features & FEAT_VIN3_5V)
+>  #define has_conf_noexit(data)	((data)->features & FEAT_CONF_NOEXIT)
+> +#define has_scaling(data)	((data)->features & (FEAT_12MV_ADC | \
+> +						     FEAT_10_9MV_ADC))
 >  
->  static const char * const asus_wmi_boards[] = {
-> +	"Pro A520M-C II",
->  	"PRO H410T",
->  	"ProArt B550-CREATOR",
->  	"ProArt X570-CREATOR WIFI",
+>  struct it87_sio_data {
+>  	int sioaddr;
+> @@ -2002,7 +2004,7 @@ static ssize_t show_label(struct device *dev, struct device_attribute *attr,
+>  
+>  	if (has_vin3_5v(data) && nr == 0)
+>  		label = labels[0];
+> -	else if (has_12mv_adc(data) || has_10_9mv_adc(data))
+> +	else if (has_scaling(data))
+>  		label = labels_it8721[nr];
+>  	else
+>  		label = labels[nr];
+> @@ -3134,7 +3136,7 @@ static int it87_probe(struct platform_device *pdev)
+>  			 "Detected broken BIOS defaults, disabling PWM interface\n");
+>  
+>  	/* Starting with IT8721F, we handle scaling of internal voltages */
+> -	if (has_12mv_adc(data)) {
+> +	if (has_scaling(data)) {
+>  		if (sio_data->internal & BIT(0))
+>  			data->in_scaled |= BIT(3);	/* in3 is AVCC */
+>  		if (sio_data->internal & BIT(1))
