@@ -2,94 +2,105 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDC16C6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 14:13:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61136C7618B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 14:16:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbjCOONv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Mar 2023 10:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
+        id S231663AbjCOOQ6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 10:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233160AbjCOONZ (ORCPT
+        with ESMTP id S232994AbjCOOQn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2023 10:13:25 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6484D5BD84;
-        Wed, 15 Mar 2023 07:13:01 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id s4so720895ioj.11;
-        Wed, 15 Mar 2023 07:13:01 -0700 (PDT)
+        Wed, 15 Mar 2023 10:16:43 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A3F1BF4;
+        Wed, 15 Mar 2023 07:16:23 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id bp11so5014203ilb.3;
+        Wed, 15 Mar 2023 07:16:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678889580;
+        d=gmail.com; s=20210112; t=1678889782;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=iKv0HvoQWJrP86iQJwPJn9bEBkh3EC6q8vX+meuj3cY=;
-        b=cF8H3YQevzGnqBCCT30wMigo3LRlJAQiGu17LKUVIuB06uuah7RuIiQ8xDB8S2uHpy
-         3DBrULOIFmIm68msXD6tIVcxseze2zOo2N6DRHndLUSTusi5VE5qYpklbJdgGLOiBLoS
-         OjXmkKrDh6+AtFlKmzkkQWRlvBuaTnLgoKQn4XWlVrZxRsILAiajeCz+6EwoDOfOTS2Z
-         aNqzyzfpd6T8uDt5fvscw2Z3yQHMhlvtZYgzezHosnQ5/x24YwPTlxHU0Ycibaqf/Zc1
-         Z4u4aU9d7X8kV7Zf53c/qBUL492iP//+ZPh6o4GpaxgZOjXVAe0pLlqyp1Lvu3AE5EHI
-         zbMQ==
+        bh=9PqS0is4BFBhZIUbIafMoHIoQlBBc9tsQxTd/4r4m0Y=;
+        b=bf4qG4jUwR6UAlaHoe9a6UH/FV/HHFjeNypHVurJVbp569Uurn6uKxILTeF1YbHAVi
+         dhNbTl8PP2yq4hcYyhrSp71hQHQHv0++5uP2q8cVLJGiiP3w5tp8skdPDcSGHn9SO8q7
+         jgg3JrLv+i4emcTEsIqDAdlZ7VZ8yXLg/9O1S73TACzgYNnm+65xARK+Dm6z/xVLLjLQ
+         1u4eumikZGNOJg8AjB9db4f3RP50/uBd8PBBS/UiYqbFh2xTc/PwBrI8z3DNw1xPEXgn
+         kMPmI3gk6qLA3ApW8Jddjz7NW/jB3+z7CBUJtXySVPA/4Bal793sWOIX1J2zETxz3LSP
+         A5CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678889580;
+        d=1e100.net; s=20210112; t=1678889782;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iKv0HvoQWJrP86iQJwPJn9bEBkh3EC6q8vX+meuj3cY=;
-        b=NEMG8H9lZo52tB/ekyxCJyxXj9Yjlas1kqPaMYeAn9bhfvxB9ywYOCtiMScbQflKDS
-         T8xflMxBwL2lUa1OYZ4B7GZvGx6tRXO98uB0VpAgR+GBuB9YytopNJJtC+V2v8LYt3IR
-         LlsE33TKbVT/EuqWlg5lt5UU6+w3fj2VfG39aufRrf8FiKKYpSmT+1mN9X8+zrt0V59Y
-         FfHk7DK1DGFD5YFIQvZOIGRQMVmiIEWHYCRHwYcRUAkfoZsVxFdVqUAXXnGiEwf6cpQo
-         8p5bLe8uC2dQ5oyLTDvDhr3CKBRsehbmUrRojo+dEbg+odsAcPRWUxuWraFbHjKY4um5
-         baWA==
-X-Gm-Message-State: AO0yUKVuck5NISikWbWocA+ANFvVcNPf5q0eoNYuiUbt4/L6XHjgiu4Y
-        dhZW4CKSjN/V95MsI92LyCnbkgR86wE=
-X-Google-Smtp-Source: AK7set/Ar8JZgtmCrNofRoZfXvFvYLH/PNlW2mqCPh+6UMWFkuUBjN133d2jUtmo0ncn5heDact8zw==
-X-Received: by 2002:a6b:f617:0:b0:74c:b8f9:651b with SMTP id n23-20020a6bf617000000b0074cb8f9651bmr12147814ioh.1.1678889580169;
-        Wed, 15 Mar 2023 07:13:00 -0700 (PDT)
+        bh=9PqS0is4BFBhZIUbIafMoHIoQlBBc9tsQxTd/4r4m0Y=;
+        b=ShB8FnBFpPKoF/Aez05RckSUWxWjp2Bn0IjkSet9//GD5+i0xSYZH040ruL8YU3wNI
+         3f3dsaJwey5eHf/Vvuy659570n8cVHffUWKFmdSIt0bj9Iok2lOCK48YqbPA0lrjEE6w
+         fWdCJQut4eTPlG79QqyOOMOt3IxWKk9oFYjGNZAmg7BfAmrNVHHNcZEWIQmh+yiw4HlX
+         hyVazIqzmfdjkfx7jQaiCq9MS+sGl1eAG6ZiafQ4WvnD4k6YDOvYXkoJUWWyd5OW2d8N
+         PYUlaNqhe4EpJXg1p86yQh30LyuxbxUALk57ZfGY3LABdv2LmjZCWvs99T6ibmR2ZZRK
+         d/pA==
+X-Gm-Message-State: AO0yUKUO69Eb6JyTSjn5TctmW9K9FfSN+qnx2zz+SxJZvK3PPml4L3pV
+        ow0OQT+tmOcTDJBhxEfwF/8U3ZmvdSs=
+X-Google-Smtp-Source: AK7set+Io//LtO6XKCL4IkO6kufc4biv6gHKOY+tK5XbcN4sTqh9/Z7Z9+LbNtv9Gpv3OSG/DVlh4Q==
+X-Received: by 2002:a05:6e02:1294:b0:323:140f:a72e with SMTP id y20-20020a056e02129400b00323140fa72emr4786141ilq.1.1678889782181;
+        Wed, 15 Mar 2023 07:16:22 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s25-20020a02ad19000000b00401b9f59475sm1671239jan.107.2023.03.15.07.12.58
+        by smtp.gmail.com with ESMTPSA id f4-20020a056638022400b0040535426261sm1691486jaq.37.2023.03.15.07.16.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 07:12:59 -0700 (PDT)
+        Wed, 15 Mar 2023 07:16:21 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d089cd3e-4115-a984-d1ce-599e0dd1160e@roeck-us.net>
-Date:   Wed, 15 Mar 2023 07:12:57 -0700
+Message-ID: <64e3ecac-6684-1989-02c5-06fc0e755631@roeck-us.net>
+Date:   Wed, 15 Mar 2023 07:16:20 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: FW: Patch for supprting thermal of using drivetemp module
+Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
+ thermal_of
 Content-Language: en-US
-To:     Phinex Hung <phinex@realtek.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <5aaa7ad83da54b0fb3b9fe9740042e04@realtek.com>
- <e9115cb68ae44b9491bc8a11fee3d989@realtek.com>
+To:     phinex <phinex@realtek.com>, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230315121606.GA71707@threadripper>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <e9115cb68ae44b9491bc8a11fee3d989@realtek.com>
+In-Reply-To: <20230315121606.GA71707@threadripper>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/15/23 03:49, Phinex Hung wrote:
-> Hi Jean,
+On 3/15/23 05:16, phinex wrote:
+> Support thermal zone so that we can just rely on dts to describe a
+> thermal zone and do the cooling operations.
 > 
-> I have a patch to support thermal zone so that we can just rely on dts to describe a thermal zone and do the cooling operations.
+> You can define a comptible string "drivetemp,hdd-sensors" to enable
+> this, such as
 > 
-> To do this, I first modify drivetemp.c to support platform driver depending on THERMAL_OF and then try to support multiple sensors using a single thermal zone.
+> 	sata_port0: sata-port@0 {
+> 		compatible = "drivetemp,hdd-sensors";
+> 		#thermal-sensor-cells = <0>;
+> 	}
+> 
+> Then define a thermal with this sensor to get it work.
+> 
+>                 hdd_thermal: hdd-thermal {
+>                         thermal-sensors = <&sata_port0>;
+> 		}
+> 
+> In most of the SoC systems, using dts to handle cooling is common.
+> This can eliminate the usage of user space application to check
+> the value exported in hwmon and then through sysfs to cooling.
+> 
+> Signed-off-by: phinex <phinex@realtek.com>
 > 
 
-First of all, this is not how to submit patches into the Linux kernel.
-Please consult the documentation.
+The driver registers drivetemp instances with the hwmon core using
+HWMON_C_REGISTER_TZ. That means there should already be a thermal zone
+for each instance. If that doesn't work, please find out why and fix it
+instead of replicating what the hwmon core already is supposed to be
+doing.
 
-Second, the driver registers its sensors with the hwmon core using
-HWMON_C_REGISTER_TZ, which should already result in its registration
-as thermal zone. If that does not work, please figure out why and
-fix it instead of re-implementing thermal zone registration in
-the driver.
-
-Thanks,
 Guenter
 
