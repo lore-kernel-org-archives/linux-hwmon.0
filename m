@@ -2,110 +2,132 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57319C6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 22:28:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4ADAC61DA4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 22:35:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjCOW2O (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Mar 2023 18:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
+        id S230369AbjCOWf3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 18:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjCOW2N (ORCPT
+        with ESMTP id S229769AbjCOWf3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2023 18:28:13 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFD4968D5;
-        Wed, 15 Mar 2023 15:28:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678919292; x=1710455292;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KOM7hWuc+mursDdv+bZS6bFfc0Blf43vlrc6huzBfUc=;
-  b=n9lKwmyvRWHlkxDMywb+tUnNjM8qtR+Y+BiE0TlY1scjDmxjFI9vyz58
-   yA6FOiPocopLkgnrpLvg3n8DO93HBi65GTmiH3o6oRKzxnDEecBm/tFy2
-   MS3CtbQ9Uv2elgB3RBnK/kkwc6TMEtzoy8IntD/qLEQJAzugpdo+H4It0
-   ZPGj58Y7ltzjg0j7zY5/3APGxyXeTjRmXIQs6AS/ajfQxdAuV5QVUnP9v
-   veeFNKIW5MeMj8S4Jkm1DaW3a1WtO1EEGkQVbBaGfw69PLBIYoFB09iSq
-   dcZOnd3ZF4HIE9HQu8sZhhivn92STN+2Dencb1pxzZp0a5a0gGvYLBWud
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="424102832"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="424102832"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 15:28:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="656937318"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="656937318"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 15 Mar 2023 15:28:10 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcZbN-000857-2y;
-        Wed, 15 Mar 2023 22:28:09 +0000
-Date:   Thu, 16 Mar 2023 06:28:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     phinex <phinex@realtek.com>, jdelvare@suse.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux@roeck-us.net,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phinex@realtek.com
-Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
- thermal_of
-Message-ID: <202303160645.7Nrjce3N-lkp@intel.com>
-References: <20230315121606.GA71707@threadripper>
+        Wed, 15 Mar 2023 18:35:29 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BBF17CFE;
+        Wed, 15 Mar 2023 15:35:27 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id br6so8026131lfb.11;
+        Wed, 15 Mar 2023 15:35:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678919726;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RBQi+5dIqeDwFMprehG3XMTRCEtSR7cljAPsT8mERhk=;
+        b=YCJc6deBGJJ0Y+WxJydUOrby+y1BUvA6LG5OzvLuJnMngDsMna+5JWeRXS9rr5wFkW
+         b2JjY9DitehAG7pqFeA26E2wM2yjQIBncu0M9cqP1ZMF3DfIcPJUBCGNxtchK+Tudrc5
+         0aF5Ndk9D6SB9R1ROSTFhrarCLDupMNfBSU3GElbRNx8v5Z+j6fssqU24N50tPZqN1AO
+         D85YKcV8XZqTLabmrDK0JFgMTVmtg+BtZmOnM3Q9IBI+cA/KWHok2Pr+Xl6tz9q6Lk4m
+         OaHBnvZ/FDNlbuwayCr9ishQU0452978OTzo5hmEk96X45E5edUUoY4N6cRNRHA9BXfk
+         TqBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678919726;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RBQi+5dIqeDwFMprehG3XMTRCEtSR7cljAPsT8mERhk=;
+        b=PFPN16n27MeEbn2zFTPcDksbnNKGQ4fbQyIzrmjEBMJPCGEgBtbBQS71krJNRmGDSY
+         KwH4gv/dSeB2gv2YJMHhMnIX7VAG3t6Q9yu9eq4EWn/yZ6GXNwAeGDi3W9SXyxjUtnQb
+         nD9QcUPTr2c665pXh7v1TDs3acf1FnXbWqi/z5K2OahdHHQJEpHVNI2+HjeiZnE5cLmN
+         tzRJGr31gFwM2LO0Sl8uyw89VjzQljiiNwbQGX0vuExaqvCUctEDy3A7FFVe5hCdbzMk
+         EvpMHJfoPGL/UcUJ6BEbVvw/hcT3ciGYYctem+wlhBY/Wh6plPuNGiGTDB5yj7D1hQ9w
+         k0sg==
+X-Gm-Message-State: AO0yUKUmS3VcnckkIBeNDQUpoXAya/R6ox+kXn+pdJ7udqZBZl3HSitD
+        4RtUeBJpTW7MFoHcZRGgfAE=
+X-Google-Smtp-Source: AK7set+NlbH77yCQNdZ8cQG/2ZLDYZrC5HNJPl6aMu2YmKjuOC6m/7SKRDYPZQ7NSWveOqb0a16ZQg==
+X-Received: by 2002:ac2:547b:0:b0:4ca:fac4:5a34 with SMTP id e27-20020ac2547b000000b004cafac45a34mr2376916lfn.61.1678919726067;
+        Wed, 15 Mar 2023 15:35:26 -0700 (PDT)
+Received: from localhost ([46.211.236.75])
+        by smtp.gmail.com with ESMTPSA id t24-20020ac24c18000000b004cca1658a41sm963226lfq.300.2023.03.15.15.35.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 15:35:25 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 00:35:19 +0200
+From:   Denis Pauk <pauk.denis@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mischief@offblast.org,
+        de99like@mennucci.debian.net, holger.kiehl@dwd.de
+Subject: Re: [PATCH 2/2] hwmon: (nct6775) update ASUS WMI monitoring list
+ A520/B360/B460/B550...
+Message-ID: <20230316003519.27224216@gmail.com>
+In-Reply-To: <20230316001749.44e51d08@gmail.com>
+References: <20230315210135.2155-1-pauk.denis@gmail.com>
+        <20230315210135.2155-2-pauk.denis@gmail.com>
+        <20230315233054.5ac21db0@gmail.com>
+        <19097c39-9703-6b7f-6cc4-8a157b00f368@roeck-us.net>
+        <20230316000453.553bf6a8@gmail.com>
+        <20230316001749.44e51d08@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315121606.GA71707@threadripper>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi phinex,
+On Thu, 16 Mar 2023 00:17:49 +0200
+Denis Pauk <pauk.denis@gmail.com> wrote:
 
-Thank you for the patch! Perhaps something to improve:
+> On Thu, 16 Mar 2023 00:04:53 +0200
+> Denis Pauk <pauk.denis@gmail.com> wrote:
+>=20
+> > On Wed, 15 Mar 2023 14:58:24 -0700
+> > Guenter Roeck <linux@roeck-us.net> wrote:
+> >  =20
+> > > On 3/15/23 14:30, Denis Pauk wrote:   =20
+> > > > On Wed, 15 Mar 2023 23:01:35 +0200
+> > > > Denis Pauk <pauk.denis@gmail.com> wrote:
+> > > >=20
+> > > > Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
+> > > >=20
+> > > > Pro A520M-C II/CSM is also tested by Holger Kiehl
+> > > > https://patchwork.kernel.org/project/linux-hwmon/patch/868bdc4f-9d4=
+5-475c-963e-f5232a8b95@praktifix.dwd.de/
+> > > >=20
+> > > > Could it be applied as single patch or need to rebase over "Pro A52=
+0M-C
+> > > > II" patch?
+> > > >      =20
+> > > Sorry, I don't understand what you are trying to say. I just applied =
+all
+> > > patches in sequence as received, with no conflicts. Should I undo tha=
+t ?
+> > >=20
+> > > Guenter
+> > >    =20
+> >=20
+> > No, Thank you!
+> >=20
+> > I just like to mention that Holger Kiehl sent separate patch with
+> > "Pro A520M-C II" support and it could create conflicts. I have found it=
+ only
+> > when I have sent my patches.
+> >  =20
+>=20
+> I have rechecked repo and "Pro A520M-C II" is added twice after apply bot=
+h of
+> patches (my and from Holger Kiehl), could you please remove one of mentio=
+n of
+> it?
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.3-rc2 next-20230315]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I have resent updated version of this patch without duplication of adding "=
+Pro
+A520M-C II",=20
+https://patchwork.kernel.org/project/linux-hwmon/patch/20230315222702.1803-=
+1-pauk.denis@gmail.com/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/phinex/hwmon-drivetemp-support-to-be-a-platform-driver-for-thermal_of/20230315-201903
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230315121606.GA71707%40threadripper
-patch subject: [PATCH v1] hwmon: drivetemp: support to be a platform driver for thermal_of
-config: i386-randconfig-a012 (https://download.01.org/0day-ci/archive/20230316/202303160645.7Nrjce3N-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/1c53b683440a584685795fa8ff831379577081b0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review phinex/hwmon-drivetemp-support-to-be-a-platform-driver-for-thermal_of/20230315-201903
-        git checkout 1c53b683440a584685795fa8ff831379577081b0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/
+you could revert this patch and add apply new one, or fix this one.=20
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303160645.7Nrjce3N-lkp@intel.com/
+Thank you!
 
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/drivetemp.c:116:36: warning: 'tz' defined but not used [-Wunused-variable]
-     116 | static struct thermal_zone_device *tz;
-         |                                    ^~
-
-
-vim +/tz +116 drivers/hwmon/drivetemp.c
-
-   114	
-   115	/*A single thermal_zone for all HDD sensors */
- > 116	static struct thermal_zone_device *tz;
-   117	#define MAX_NAME_LEN 255
-   118	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best regards,
+ =C2=A0 =C2=A0 =C2=A0	Denis.
