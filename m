@@ -2,113 +2,94 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4389C61DA4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 14:06:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDC16C6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 14:13:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbjCOOGk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Mar 2023 10:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
+        id S233089AbjCOONv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 10:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbjCOOGj (ORCPT
+        with ESMTP id S233160AbjCOONZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2023 10:06:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A88C2FCF5;
-        Wed, 15 Mar 2023 07:06:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9EDE61D5C;
-        Wed, 15 Mar 2023 14:06:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0A04C433EF;
-        Wed, 15 Mar 2023 14:06:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678889197;
-        bh=GVcHCdfi7S6027GGkrt7Alrat2aoIieLivpIm53EJ1k=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LUqvytekoPk5vKtU6zxdiJb/qc9JAmJb5nAe29512TXXvp8kZ5v9EXTNHphH0s901
-         tFs5wGXeZqawIdHjizPy2yDCpMIt5K87HA/2ynIvcLuHgRLs6WdDFzkv26QGVrCsQM
-         4T4Ju2ARJz7d/lM4lAfa3zWkuQnc7hHNj7lMBCSfF+pOnMl2tx50eitiXGD48/PjDu
-         KYAQVFszJtK0hVRuDi9f7M76ktnJjujclghL0Oyv81uPF/Ihay970SWsxbQCNDhRpB
-         O923odroMz7FC37L+t2jD2cIVF41MVh2b9PXwJJ/xks++oVLwfa/kU15bRb0vymnW4
-         6X3jV+d4sSfkQ==
-Message-ID: <f6efbd9f-27ef-7367-5b8c-9844c21a476b@kernel.org>
-Date:   Wed, 15 Mar 2023 15:06:33 +0100
+        Wed, 15 Mar 2023 10:13:25 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6484D5BD84;
+        Wed, 15 Mar 2023 07:13:01 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id s4so720895ioj.11;
+        Wed, 15 Mar 2023 07:13:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678889580;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=iKv0HvoQWJrP86iQJwPJn9bEBkh3EC6q8vX+meuj3cY=;
+        b=cF8H3YQevzGnqBCCT30wMigo3LRlJAQiGu17LKUVIuB06uuah7RuIiQ8xDB8S2uHpy
+         3DBrULOIFmIm68msXD6tIVcxseze2zOo2N6DRHndLUSTusi5VE5qYpklbJdgGLOiBLoS
+         OjXmkKrDh6+AtFlKmzkkQWRlvBuaTnLgoKQn4XWlVrZxRsILAiajeCz+6EwoDOfOTS2Z
+         aNqzyzfpd6T8uDt5fvscw2Z3yQHMhlvtZYgzezHosnQ5/x24YwPTlxHU0Ycibaqf/Zc1
+         Z4u4aU9d7X8kV7Zf53c/qBUL492iP//+ZPh6o4GpaxgZOjXVAe0pLlqyp1Lvu3AE5EHI
+         zbMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678889580;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iKv0HvoQWJrP86iQJwPJn9bEBkh3EC6q8vX+meuj3cY=;
+        b=NEMG8H9lZo52tB/ekyxCJyxXj9Yjlas1kqPaMYeAn9bhfvxB9ywYOCtiMScbQflKDS
+         T8xflMxBwL2lUa1OYZ4B7GZvGx6tRXO98uB0VpAgR+GBuB9YytopNJJtC+V2v8LYt3IR
+         LlsE33TKbVT/EuqWlg5lt5UU6+w3fj2VfG39aufRrf8FiKKYpSmT+1mN9X8+zrt0V59Y
+         FfHk7DK1DGFD5YFIQvZOIGRQMVmiIEWHYCRHwYcRUAkfoZsVxFdVqUAXXnGiEwf6cpQo
+         8p5bLe8uC2dQ5oyLTDvDhr3CKBRsehbmUrRojo+dEbg+odsAcPRWUxuWraFbHjKY4um5
+         baWA==
+X-Gm-Message-State: AO0yUKVuck5NISikWbWocA+ANFvVcNPf5q0eoNYuiUbt4/L6XHjgiu4Y
+        dhZW4CKSjN/V95MsI92LyCnbkgR86wE=
+X-Google-Smtp-Source: AK7set/Ar8JZgtmCrNofRoZfXvFvYLH/PNlW2mqCPh+6UMWFkuUBjN133d2jUtmo0ncn5heDact8zw==
+X-Received: by 2002:a6b:f617:0:b0:74c:b8f9:651b with SMTP id n23-20020a6bf617000000b0074cb8f9651bmr12147814ioh.1.1678889580169;
+        Wed, 15 Mar 2023 07:13:00 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s25-20020a02ad19000000b00401b9f59475sm1671239jan.107.2023.03.15.07.12.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 07:12:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d089cd3e-4115-a984-d1ce-599e0dd1160e@roeck-us.net>
+Date:   Wed, 15 Mar 2023 07:12:57 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
- thermal_of
+ Thunderbird/102.7.1
+Subject: Re: FW: Patch for supprting thermal of using drivetemp module
+Content-Language: en-US
 To:     Phinex Hung <phinex@realtek.com>,
         "jdelvare@suse.com" <jdelvare@suse.com>
-Cc:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230315121606.GA71707@threadripper>
- <30d2ab9a-c3d1-c9d9-3cc6-02ef7af8981a@kernel.org>
- <9DA1C2E5-C9EB-48AD-846D-92CC0C434BFE@realtek.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <9DA1C2E5-C9EB-48AD-846D-92CC0C434BFE@realtek.com>
-Content-Type: text/plain; charset=UTF-8
+References: <5aaa7ad83da54b0fb3b9fe9740042e04@realtek.com>
+ <e9115cb68ae44b9491bc8a11fee3d989@realtek.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <e9115cb68ae44b9491bc8a11fee3d989@realtek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 15/03/2023 15:02, Phinex Hung wrote:
+On 3/15/23 03:49, Phinex Hung wrote:
+> Hi Jean,
 > 
+> I have a patch to support thermal zone so that we can just rely on dts to describe a thermal zone and do the cooling operations.
 > 
-> On 15/03/2023 21:11, "Krzysztof Kozlowski" <krzk@kernel.org <mailto:krzk@kernel.org>> wrote:
+> To do this, I first modify drivetemp.c to support platform driver depending on THERMAL_OF and then try to support multiple sensors using a single thermal zone.
 > 
-> Hi Krzysztof,
-> 
-> Thanks for your comment.
-> 
->> Please use scripts/get_maintainers.pl to get a list of necessary people
->> and lists to CC. It might happen, that command when run on an older
->> kernel, gives you outdated entries. Therefore please be sure you base
->> your patches on recent Linux kernel.
-> 
-> I am working on git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-> 
-> For master branch.
-> 
-> Is there any updated git repo that I should rebase my patch?
 
-The mainline master. But even on that kernel you would get different
-people to CC, so you did not run the command to get proper addresses.
+First of all, this is not how to submit patches into the Linux kernel.
+Please consult the documentation.
 
-> 
->> No such vendor prefix. Are you sure you are describing real hardware?
->> Also device specific part looks too generic. What device is it exactly?
-> 
-> It's a generic patch, just want to support thermal zone using a simple device tree.
-> Any SoC with SCSI interface and attached hard drives can benefit this change.
+Second, the driver registers its sensors with the hwmon core using
+HWMON_C_REGISTER_TZ, which should already result in its registration
+as thermal zone. If that does not work, please figure out why and
+fix it instead of re-implementing thermal zone registration in
+the driver.
 
-Devicetree describes hardware, not generic patches. Please be more specific.
-
-> 
-> Normally a THERMAL_OF require a platform device to add a thermal zone.
-
-Whatever problem is (or is not) with THERMAL_OF does not really matter
-to bindings.
-
-> 
-> Original drivetemp.c works quite well as a hwmon device, but no thermal zone support.
-> 
-> My patch just extend its capability to support a simple thermal zone created with this hwmon.
-
-I understand. Still it is not describing any hardware. In all your
-statements above you did not reference any specific devices or hardware
-at all.
-
-> This is bind to any specific vendor, just to provide an easy way to handle cooling when hard drives' temperature gets high.
-
-Then either you need something more specific to hardware or Devicetree
-is not the place to put it.
-
-
-Best regards,
-Krzysztof
+Thanks,
+Guenter
 
