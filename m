@@ -2,178 +2,137 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97DBAC6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 21:45:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C283C6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 21:49:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbjCOVpt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Mar 2023 17:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
+        id S231244AbjCOVtt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 17:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232817AbjCOVpt (ORCPT
+        with ESMTP id S232601AbjCOVts (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:45:49 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8AB497FD0;
-        Wed, 15 Mar 2023 14:45:47 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id r4so11141170ila.2;
-        Wed, 15 Mar 2023 14:45:47 -0700 (PDT)
+        Wed, 15 Mar 2023 17:49:48 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45ADC30D9;
+        Wed, 15 Mar 2023 14:49:47 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id w4so11177249ilv.0;
+        Wed, 15 Mar 2023 14:49:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678916747;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=sCKgG+rjS0qruOZo3hjzG2lpfhG7a6+ZuOs9wue/0iQ=;
-        b=ffnp4rZgxR/X+1FCGrFXzsH83QspJwmHUJ0dybY+guIRNGUmCQc2hwfbCpOc3SE/hk
-         Vs70XTZmMFg1+DyWal1bgo2paQgPULEk6FQiORa5dauDNv++oX1esKpn1INEyYqJFQ6+
-         2tPpqpuykQrGhPwEiF95xxtif7joEzAIdM95DA6WNZw0jyAIQKVOZo0BVhsMNGqWo/RH
-         QHjjW7djECiu3WCrMtlaOTD75Rvm8UYvVKapz8NsByDqmhCgdnS8fVKWiFyBhZWVhYcn
-         tPOEOETPog9ITDQmdLHoc4L80oFLDDdUghhzwmCy86uZ/lHmec/6jxauSMDOE2Eo/Kid
-         9Htg==
+        d=gmail.com; s=20210112; t=1678916986;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E9/4Xc/PzCfJtouwsKgyP22po2ulc0oevszQIyPl3QU=;
+        b=IVfby+N57zhlO/lS/5Tlw/MkzNb2SSfQgFV2fN4y3Zi6By7+ZEhnjUaJHMx+h1Pjc/
+         GtkymPCqg7C2j6CmW/rmF6ote6Jb944j9FcYA7BDzsu0n47MIIPUZZSGO9sYtsX8Hhqo
+         cztUCOso8hURad+E4dz8lgoMKspcEK23e767ooSYBTtqZmzEIwJRJzrxrd1jMlEc6/mK
+         GLrq327ieuccIc+JETXH70+YtSMz7mk4IVplz1ytNVdbnf2FiyVwvXf3BnqNJyVtJfsn
+         8XZAmnuNn0ppN0o0kUEtIVTPHOWPK9HzXq+RHjEIJ+RyZlg8T2JBCCWhhpCgAuSXd3j/
+         q2kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678916747;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sCKgG+rjS0qruOZo3hjzG2lpfhG7a6+ZuOs9wue/0iQ=;
-        b=ZJliQ42T0XfNUGgrix7F5paHH40k5oIskCyI4bUn2/kpv7AJCKpaSCoGXLVkNY/fEw
-         Elgave2YQWNRezGjblDnSGYw4sjhMnh37PHO4t1a1VDeTgvOW67Is1WQtPmHhdKIhFix
-         VyfZUEj0fYrG2KQSoe6tWGgyeczgi0hGznJbhJ6Xff+qIAyJ8grOIix4EcQRAu7BmrQi
-         zhPkm/IjJC0RGUXjCqhbHixWWHOu7lyJLd5dz9smdZABPKflpQAAp/0q6LUllFaUseMi
-         hg2UT+0Oj8R/nBbj27CAMrlZGi911afB4imhIgxQutIkMj3zS+j9vTgQBA/NBqK2CMyg
-         DDdg==
-X-Gm-Message-State: AO0yUKVWbxhxsWSQETUubhHAYAX98BesePuw2wx9SkW6tiPEUvC3aT6v
-        r/wnsLUJmxsNyMLc2V5ZxgOnftAAA9U=
-X-Google-Smtp-Source: AK7set+KB5H2UT8an9zvVfAPHW2bzj4ICuwg5BgjGACg9vM18zMPpi4P01I+rK4NsvZjAK5ret06+w==
-X-Received: by 2002:a92:c269:0:b0:318:1cff:5e18 with SMTP id h9-20020a92c269000000b003181cff5e18mr5220397ild.3.1678916747165;
-        Wed, 15 Mar 2023 14:45:47 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678916986;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E9/4Xc/PzCfJtouwsKgyP22po2ulc0oevszQIyPl3QU=;
+        b=G8zD6P51EEttavpqkoVRYVYG6N1zud36dDZPhzmRhqmWEJaw+yghNpDI2F7TEwwTj4
+         X//bRIiuVGPlHOlMN5SVzzY5z5uI0jR5bWhW+6KmP4c21AbZQ1Vm1alb8wviUlyZ79fg
+         DEpWo6WO/Z9O5BaG86nmeFJcBL3XPggsWrjBXLckZrpMV9CCEc4xVkJnfdAUvJEllqw1
+         uoASvIe2H0NyWScRj8Q9Kvray9DvaxrS4SU57eU/9v3VtgVdzSFUBvK75/GDcrUTvhXs
+         taAHo1fXbcCzRnDovpJLdYlmqqI0Cyiy+1FFZ3alUyiDwm8W+v8+2fQaF4V/EU5QCpIb
+         6ChQ==
+X-Gm-Message-State: AO0yUKU+CgARXFDlqGSzTy0C5m6VYO/Z292KUpx+0DkR70Cm4v8wC5qd
+        +dztAoo5QWhtVqeSjz29YhU=
+X-Google-Smtp-Source: AK7set+XpUQTsmPrdSiKjc3wYPDM5cDuVj/eVRgaHuCABtp6FEdqFF9QxQCA4Up/Epc817T0KnycnA==
+X-Received: by 2002:a92:ce12:0:b0:313:fea2:be5c with SMTP id b18-20020a92ce12000000b00313fea2be5cmr5492196ilo.11.1678916986566;
+        Wed, 15 Mar 2023 14:49:46 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g4-20020a056638060400b003ffa2c6f598sm1967566jar.86.2023.03.15.14.45.46
+        by smtp.gmail.com with ESMTPSA id j4-20020a02cc64000000b004035b26b6d8sm2057636jaq.2.2023.03.15.14.49.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 14:45:46 -0700 (PDT)
+        Wed, 15 Mar 2023 14:49:46 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 15 Mar 2023 14:49:45 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jean Delvare <jdelvare@suse.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] Documentation/hwmon: Remove description of deprecated registration functions
-Date:   Wed, 15 Mar 2023 14:45:43 -0700
-Message-Id: <20230315214543.3966258-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
+To:     Holger Kiehl <Holger.Kiehl@dwd.de>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] hwmon: (nct6775) add Asus Pro A520M-C II/CSM
+Message-ID: <f8e1c010-c11e-4cd4-a2f8-a074b6983e0a@roeck-us.net>
+References: <868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Remove description of deprecated registration functions from the hardware
-monitoring kernel API documentation to help ensure that no attempts are
-made to use them in new drivers.
+On Mon, Mar 13, 2023 at 01:10:31PM +0000, Holger Kiehl wrote:
+> An NCT6798D chip is now detected:
+> 
+>    dmesg|grep nct6775
+>    [   23.765392] nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
+> 
+> And sensors now shows:
+> 
+>    nct6798-isa-0290
+>    Adapter: ISA adapter
+>    in0:                      312.00 mV (min =  +0.00 V, max =  +1.74 V)
+>    in1:                        1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in2:                        3.42 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in3:                        3.38 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in4:                        1.03 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in5:                        1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in6:                      200.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in7:                        3.42 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in8:                        3.28 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in9:                      920.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in10:                     512.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in11:                     504.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in12:                       1.03 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in13:                     256.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in14:                       1.47 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    fan1:                        0 RPM  (min =    0 RPM)
+>    fan2:                        0 RPM  (min =    0 RPM)
+>    fan3:                      355 RPM  (min =    0 RPM)
+>    fan7:                        0 RPM  (min =    0 RPM)
+>    SYSTIN:                    +25.0°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
+>    CPUTIN:                    +26.5°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
+>    AUXTIN0:                   +97.0°C    sensor = thermistor
+>    AUXTIN1:                   +25.0°C    sensor = thermistor
+>    AUXTIN2:                   +25.0°C    sensor = thermistor
+>    AUXTIN3:                    +1.0°C    sensor = thermistor
+>    PECI Agent 0 Calibration:  +26.0°C
+>    PCH_CHIP_CPU_MAX_TEMP:      +0.0°C
+>    PCH_CHIP_TEMP:              +0.0°C
+>    PCH_CPU_TEMP:               +0.0°C
+>    TSI0_TEMP:                 +27.9°C
+>    intrusion0:               ALARM
+>    intrusion1:               OK
+>    beep_enable:              disabled
+> 
+> Signed-off-by: Holger Kiehl <holger.kiehl@dwd.de>
+> Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- Documentation/hwmon/hwmon-kernel-api.rst | 60 +++++++-----------------
- 1 file changed, 16 insertions(+), 44 deletions(-)
+Applied. In the future, please watch out for:
 
-diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-index 5451a6d4c874..dbd68d7b033a 100644
---- a/Documentation/hwmon/hwmon-kernel-api.rst
-+++ b/Documentation/hwmon/hwmon-kernel-api.rst
-@@ -19,20 +19,10 @@ also read Documentation/hwmon/submitting-patches.rst.
- 
- The API
- -------
--Each hardware monitoring driver must #include <linux/hwmon.h> and, in most
-+Each hardware monitoring driver must #include <linux/hwmon.h> and, in some
- cases, <linux/hwmon-sysfs.h>. linux/hwmon.h declares the following
- register/unregister functions::
- 
--  struct device *
--  hwmon_device_register_with_groups(struct device *dev, const char *name,
--				    void *drvdata,
--				    const struct attribute_group **groups);
--
--  struct device *
--  devm_hwmon_device_register_with_groups(struct device *dev,
--					 const char *name, void *drvdata,
--					 const struct attribute_group **groups);
--
-   struct device *
-   hwmon_device_register_with_info(struct device *dev,
- 				  const char *name, void *drvdata,
-@@ -54,46 +44,30 @@ register/unregister functions::
- 
-   char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
- 
--hwmon_device_register_with_groups registers a hardware monitoring device.
--The first parameter of this function is a pointer to the parent device.
--The name parameter is a pointer to the hwmon device name. The registration
--function will create a name sysfs attribute pointing to this name.
--The drvdata parameter is the pointer to the local driver data.
--hwmon_device_register_with_groups will attach this pointer to the newly
--allocated hwmon device. The pointer can be retrieved by the driver using
--dev_get_drvdata() on the hwmon device pointer. The groups parameter is
--a pointer to a list of sysfs attribute groups. The list must be NULL terminated.
--hwmon_device_register_with_groups creates the hwmon device with name attribute
--as well as all sysfs attributes attached to the hwmon device.
--This function returns a pointer to the newly created hardware monitoring device
--or PTR_ERR for failure.
--
--devm_hwmon_device_register_with_groups is similar to
--hwmon_device_register_with_groups. However, it is device managed, meaning the
--hwmon device does not have to be removed explicitly by the removal function.
--
--hwmon_device_register_with_info is the most comprehensive and preferred means
--to register a hardware monitoring device. It creates the standard sysfs
--attributes in the hardware monitoring core, letting the driver focus on reading
--from and writing to the chip instead of having to bother with sysfs attributes.
--The parent device parameter as well as the chip parameter must not be NULL. Its
--parameters are described in more detail below.
-+hwmon_device_register_with_info registers a hardware monitoring device.
-+It creates the standard sysfs attributes in the hardware monitoring core,
-+letting the driver focus on reading from and writing to the chip instead
-+of having to bother with sysfs attributes. The parent device parameter
-+as well as the chip parameter must not be NULL. Its parameters are described
-+in more detail below.
- 
- devm_hwmon_device_register_with_info is similar to
- hwmon_device_register_with_info. However, it is device managed, meaning the
- hwmon device does not have to be removed explicitly by the removal function.
- 
-+All other hardware monitoring device registration functions are deprecated
-+and must not be used in new drivers.
-+
- hwmon_device_unregister deregisters a registered hardware monitoring device.
- The parameter of this function is the pointer to the registered hardware
- monitoring device structure. This function must be called from the driver
- remove function if the hardware monitoring device was registered with
--hwmon_device_register_with_groups or hwmon_device_register_with_info.
-+hwmon_device_register_with_info.
- 
- devm_hwmon_device_unregister does not normally have to be called. It is only
- needed for error handling, and only needed if the driver probe fails after
--the call to devm_hwmon_device_register_with_groups or
--hwmon_device_register_with_info and if the automatic (device managed)
--removal would be too late.
-+the call to hwmon_device_register_with_info and if the automatic (device
-+managed) removal would be too late.
- 
- All supported hwmon device registration functions only accept valid device
- names. Device names including invalid characters (whitespace, '*', or '-')
-@@ -351,11 +325,9 @@ Return value:
- Driver-provided sysfs attributes
- --------------------------------
- 
--If the hardware monitoring device is registered with
--hwmon_device_register_with_info or devm_hwmon_device_register_with_info,
--it is most likely not necessary to provide sysfs attributes. Only additional
--non-standard sysfs attributes need to be provided when one of those registration
--functions is used.
-+In most situations it should not be necessary for a driver to provide sysfs
-+attributes since the hardware monitoring core creates those internally.
-+Only additional non-standard sysfs attributes need to be provided.
- 
- The header file linux/hwmon-sysfs.h provides a number of useful macros to
- declare and use hardware monitoring sysfs attributes.
--- 
-2.39.2
+CHECK: From:/Signed-off-by: email comments mismatch: 'From: Holger Kiehl <Holger.Kiehl@dwd.de>' != 'Signed-off-by: Holger Kiehl <holger.kiehl@dwd.de>'
 
+Little discrepancies like this just make my life harder.
+
+Guenter
+
+> 
+> diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
+> index 76c6b564d7fc..1e6abfc7974d 100644
+> --- a/drivers/hwmon/nct6775-platform.c
+> +++ b/drivers/hwmon/nct6775-platform.c
+> @@ -1052,6 +1052,7 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
+>  static struct platform_device *pdev[2];
+>  
+>  static const char * const asus_wmi_boards[] = {
+> +	"Pro A520M-C II",
+>  	"PRO H410T",
+>  	"ProArt B550-CREATOR",
+>  	"ProArt X570-CREATOR WIFI",
