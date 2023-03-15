@@ -2,259 +2,178 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF284C6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 21:31:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97DBAC6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 21:45:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjCOVbK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Mar 2023 17:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
+        id S232490AbjCOVpt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 17:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjCOVbJ (ORCPT
+        with ESMTP id S232817AbjCOVpt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:31:09 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E1046085;
-        Wed, 15 Mar 2023 14:31:07 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id z5so20859873ljc.8;
-        Wed, 15 Mar 2023 14:31:07 -0700 (PDT)
+        Wed, 15 Mar 2023 17:45:49 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8AB497FD0;
+        Wed, 15 Mar 2023 14:45:47 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id r4so11141170ila.2;
+        Wed, 15 Mar 2023 14:45:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678915865;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:from:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c8EXqb+vzuEedIXDU+Y/gsh00ij7zHnJ78mT7aXzro4=;
-        b=X/vz8vjvU2EwwdFbP0pEE3xLKxUyGtXA6V0GJdS0R/kQQfnKf7HIRpFuJqw0kyFpsP
-         AmKptKJqqP04vR5PGTap40RbKZA/LAcn/3rJrPnP5chLlR7lJC0Jya4yuUyb796EFxSF
-         HcS9qMlrPTwb1QsTCLGMS7X033m0jDhwQWJQgdjo+j4UFPtTKnTM+FDLubWktuR14i6O
-         KUlAK1a0B5uBvBjDtK44G7zcuJU7odMQ0pj1I42NQVVDkLQVU/89vGvjWC/SWcemQSPu
-         viP45oJddbdajuU1I5cnU8RDNJhfnxbb0SGNePpVlKISufxb/n/sAXbl+nCDxrj1Rhvw
-         mFpQ==
+        d=gmail.com; s=20210112; t=1678916747;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=sCKgG+rjS0qruOZo3hjzG2lpfhG7a6+ZuOs9wue/0iQ=;
+        b=ffnp4rZgxR/X+1FCGrFXzsH83QspJwmHUJ0dybY+guIRNGUmCQc2hwfbCpOc3SE/hk
+         Vs70XTZmMFg1+DyWal1bgo2paQgPULEk6FQiORa5dauDNv++oX1esKpn1INEyYqJFQ6+
+         2tPpqpuykQrGhPwEiF95xxtif7joEzAIdM95DA6WNZw0jyAIQKVOZo0BVhsMNGqWo/RH
+         QHjjW7djECiu3WCrMtlaOTD75Rvm8UYvVKapz8NsByDqmhCgdnS8fVKWiFyBhZWVhYcn
+         tPOEOETPog9ITDQmdLHoc4L80oFLDDdUghhzwmCy86uZ/lHmec/6jxauSMDOE2Eo/Kid
+         9Htg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678915865;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c8EXqb+vzuEedIXDU+Y/gsh00ij7zHnJ78mT7aXzro4=;
-        b=bB0o1HKT/B4OPpZepIACr151HUiMvdl2X+PYPHoz4iLCBudUPtkHTIPZ1SwoDATQBT
-         uBYjFqe2LG8mhZAg/M8MWLEWwrlcCqycTmBJH5X297bIgUG0dik/H7tk4cw0Y7/yN3p3
-         Uen+1jp/Oo8oQPyL0c5/cFYK4fIzKYcCSzOuvmwYIdSsfeHXh0ipd9Hl5ZN61hh4RmDj
-         +qlT6m/CrZUz/mEIe524ckZQyoIzfA9YFVYeQkGcuttz7pNWTWL1j5diPJTctbe+CU7J
-         E7Ioxl8euv7RC8m6/cCeACmsNRzjEGx1/QuhRaWpMa2Z8b0XPfKqNaSxeq5LJIzaZAHh
-         DDYw==
-X-Gm-Message-State: AO0yUKXqh5IwcDgiWcqbXEyyR4Nt0tNolvBOGxP143pLjLJNWSDbOj4i
-        r6qEbLf2hvTmEFdqZZjrdRs=
-X-Google-Smtp-Source: AK7set8BrAU/06F8hXvSRekDWz8Z5wrqqLyP5IyTjxbmtyNPApXy6bqz2Zcuccf5EicY/69bYyqU+A==
-X-Received: by 2002:a2e:bea6:0:b0:298:aa96:4e37 with SMTP id a38-20020a2ebea6000000b00298aa964e37mr1869131ljr.39.1678915865200;
-        Wed, 15 Mar 2023 14:31:05 -0700 (PDT)
-Received: from localhost ([46.211.236.75])
-        by smtp.gmail.com with ESMTPSA id t16-20020ac24c10000000b004d4d7fb0e07sm951417lfq.216.2023.03.15.14.31.02
+        d=1e100.net; s=20210112; t=1678916747;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sCKgG+rjS0qruOZo3hjzG2lpfhG7a6+ZuOs9wue/0iQ=;
+        b=ZJliQ42T0XfNUGgrix7F5paHH40k5oIskCyI4bUn2/kpv7AJCKpaSCoGXLVkNY/fEw
+         Elgave2YQWNRezGjblDnSGYw4sjhMnh37PHO4t1a1VDeTgvOW67Is1WQtPmHhdKIhFix
+         VyfZUEj0fYrG2KQSoe6tWGgyeczgi0hGznJbhJ6Xff+qIAyJ8grOIix4EcQRAu7BmrQi
+         zhPkm/IjJC0RGUXjCqhbHixWWHOu7lyJLd5dz9smdZABPKflpQAAp/0q6LUllFaUseMi
+         hg2UT+0Oj8R/nBbj27CAMrlZGi911afB4imhIgxQutIkMj3zS+j9vTgQBA/NBqK2CMyg
+         DDdg==
+X-Gm-Message-State: AO0yUKVWbxhxsWSQETUubhHAYAX98BesePuw2wx9SkW6tiPEUvC3aT6v
+        r/wnsLUJmxsNyMLc2V5ZxgOnftAAA9U=
+X-Google-Smtp-Source: AK7set+KB5H2UT8an9zvVfAPHW2bzj4ICuwg5BgjGACg9vM18zMPpi4P01I+rK4NsvZjAK5ret06+w==
+X-Received: by 2002:a92:c269:0:b0:318:1cff:5e18 with SMTP id h9-20020a92c269000000b003181cff5e18mr5220397ild.3.1678916747165;
+        Wed, 15 Mar 2023 14:45:47 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g4-20020a056638060400b003ffa2c6f598sm1967566jar.86.2023.03.15.14.45.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 14:31:05 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 23:30:54 +0200
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mischief@offblast.org,
-        de99like@mennucci.debian.net, holger.kiehl@dwd.de
-Subject: Re: [PATCH 2/2] hwmon: (nct6775) update ASUS WMI monitoring list
- A520/B360/B460/B550...
-Message-ID: <20230315233054.5ac21db0@gmail.com>
-In-Reply-To: <20230315210135.2155-2-pauk.denis@gmail.com>
-References: <20230315210135.2155-1-pauk.denis@gmail.com>
-        <20230315210135.2155-2-pauk.denis@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; aarch64-unknown-linux-gnu)
+        Wed, 15 Mar 2023 14:45:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jean Delvare <jdelvare@suse.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] Documentation/hwmon: Remove description of deprecated registration functions
+Date:   Wed, 15 Mar 2023 14:45:43 -0700
+Message-Id: <20230315214543.3966258-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 15 Mar 2023 23:01:35 +0200
-Denis Pauk <pauk.denis@gmail.com> wrote:
+Remove description of deprecated registration functions from the hardware
+monitoring kernel API documentation to help ensure that no attempts are
+made to use them in new drivers.
 
-Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ Documentation/hwmon/hwmon-kernel-api.rst | 60 +++++++-----------------
+ 1 file changed, 16 insertions(+), 44 deletions(-)
 
-Pro A520M-C II/CSM is also tested by Holger Kiehl 
-https://patchwork.kernel.org/project/linux-hwmon/patch/868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de/
-
-Could it be applied as single patch or need to rebase over "Pro A520M-C II"
-patch?
-
-
-> Boards such as
-> * EX-B660M-V5 D4,
-> * PRIME A520M-A,
-> * PRIME A520M-A II,
-> * PRIME A520M-E,
-> * PRIME A520M-K,
-> * PRIME B360M-A,
-> * PRIME B360M-C,
-> * PRIME B460M-A R2.0,
-> * PRIME B550M-A AC,
-> * PRIME B550M-A WIFI II,
-> * PRIME B550M-K,
-> * PRIME B650M-A AX II,
-> * PRIME Z590-P WIFI,
-> * PRIME Z590-V,
-> * Pro A520M-C,
-> * Pro A520M-C II,
-> * ProArt B650-CREATOR,
-> * ProArt Z790-CREATOR WIFI,
-> * Pro B660M-C,
-> * Pro WS W680-ACE,
-> * Pro WS W680-ACE IPMI,
-> * ROG MAXIMUS XIII APEX,
-> * ROG MAXIMUS XIII EXTREME,
-> * ROG MAXIMUS XIII HERO,
-> * ROG MAXIMUS Z690 APEX,
-> * ROG MAXIMUS Z790 EXTREME,
-> * ROG STRIX B660-A GAMING WIFI,
-> * ROG STRIX Z590-A GAMING WIFI,
-> * ROG STRIX Z590-E GAMING WIFI,
-> * ROG STRIX Z590-F GAMING WIFI,
-> * ROG STRIX Z590-I GAMING WIFI,
-> * TUF GAMING A520M-PLUS,
-> * TUF GAMING A520M-PLUS II,
-> * TUF GAMING A520M-PLUS WIFI,
-> * TUF GAMING B660M-E D4,
-> * TUF GAMING B660-PLUS WIFI D4,
-> * TUF GAMING X570-PLUS_BR,
-> * TUF GAMING Z590-PLUS,
-> * Z490-GUNDAM (WI-FI),
-> * Z590 WIFI GUNDAM EDITION
-> have got a nct6775 chip, but by default there's no use of it
-> because of resource conflict with WMI method.
-> 
-> This commit adds such boards to the WMI monitoring list.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-> Tested-by: Nick Owens <mischief@offblast.org>
-> Tested-by: A. M. <de99like@mennucci.debian.net>
-> ---
->  drivers/hwmon/nct6775-platform.c | 40 ++++++++++++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
-> 
-> diff --git a/drivers/hwmon/nct6775-platform.c
-> b/drivers/hwmon/nct6775-platform.c index 0ded82ac7fd31..2c1a47e756bf3 100644
-> --- a/drivers/hwmon/nct6775-platform.c
-> +++ b/drivers/hwmon/nct6775-platform.c
-> @@ -1058,14 +1058,26 @@ static const char * const asus_wmi_boards[] = {
->  	"ProArt Z490-CREATOR 10G",
->  	"Pro B550M-C",
->  	"Pro WS X570-ACE",
-> +	"PRIME A520M-A",
-> +	"PRIME A520M-A II",
-> +	"PRIME A520M-E",
-> +	"PRIME A520M-K",
->  	"PRIME B360-PLUS",
-> +	"PRIME B360M-A",
-> +	"PRIME B360M-C",
->  	"PRIME B460-PLUS",
-> +	"PRIME B460M-A R2.0",
->  	"PRIME B550-PLUS",
->  	"PRIME B550M-A",
->  	"PRIME B550M-A (WI-FI)",
-> +	"PRIME B550M-A AC",
-> +	"PRIME B550M-A WIFI II",
-> +	"PRIME B550M-K",
->  	"PRIME H410M-R",
->  	"PRIME X570-P",
->  	"PRIME X570-PRO",
-> +	"Pro A520M-C",
-> +	"Pro A520M-C II",
->  	"ROG CROSSHAIR VIII DARK HERO",
->  	"ROG CROSSHAIR VIII EXTREME",
->  	"ROG CROSSHAIR VIII FORMULA",
-> @@ -1094,6 +1106,9 @@ static const char * const asus_wmi_boards[] = {
->  	"ROG STRIX Z490-G GAMING (WI-FI)",
->  	"ROG STRIX Z490-H GAMING",
->  	"ROG STRIX Z490-I GAMING",
-> +	"TUF GAMING A520M-PLUS",
-> +	"TUF GAMING A520M-PLUS II",
-> +	"TUF GAMING A520M-PLUS WIFI",
->  	"TUF GAMING B550M-E",
->  	"TUF GAMING B550M-E WIFI",
->  	"TUF GAMING B550M-PLUS",
-> @@ -1104,16 +1119,20 @@ static const char * const asus_wmi_boards[] = {
->  	"TUF GAMING B550-PRO",
->  	"TUF GAMING X570-PLUS",
->  	"TUF GAMING X570-PLUS (WI-FI)",
-> +	"TUF GAMING X570-PLUS_BR",
->  	"TUF GAMING X570-PRO (WI-FI)",
->  	"TUF GAMING Z490-PLUS",
->  	"TUF GAMING Z490-PLUS (WI-FI)",
-> +	"Z490-GUNDAM (WI-FI)",
->  };
->  
->  static const char * const asus_msi_boards[] = {
-> +	"EX-B660M-V5 D4",
->  	"EX-B660M-V5 PRO D4",
->  	"PRIME B650-PLUS",
->  	"PRIME B650M-A",
->  	"PRIME B650M-A AX",
-> +	"PRIME B650M-A AX II",
->  	"PRIME B650M-A II",
->  	"PRIME B650M-A WIFI",
->  	"PRIME B650M-A WIFI II",
-> @@ -1124,20 +1143,33 @@ static const char * const asus_msi_boards[] = {
->  	"PRIME X670E-PRO WIFI",
->  	"PRIME Z590-A",
->  	"PRIME Z590-P",
-> +	"PRIME Z590-P WIFI",
-> +	"PRIME Z590-V",
->  	"PRIME Z590M-PLUS",
-> +	"Pro B660M-C",
->  	"Pro B660M-C-D4",
-> +	"Pro WS W680-ACE",
-> +	"Pro WS W680-ACE IPMI",
-> +	"ProArt B650-CREATOR",
->  	"ProArt B660-CREATOR D4",
->  	"ProArt X670E-CREATOR WIFI",
-> +	"ProArt Z790-CREATOR WIFI",
->  	"ROG CROSSHAIR X670E EXTREME",
->  	"ROG CROSSHAIR X670E GENE",
->  	"ROG CROSSHAIR X670E HERO",
-> +	"ROG MAXIMUS XIII APEX",
-> +	"ROG MAXIMUS XIII EXTREME",
->  	"ROG MAXIMUS XIII EXTREME GLACIAL",
-> +	"ROG MAXIMUS XIII HERO",
-> +	"ROG MAXIMUS Z690 APEX",
->  	"ROG MAXIMUS Z690 EXTREME",
->  	"ROG MAXIMUS Z690 EXTREME GLACIAL",
-> +	"ROG MAXIMUS Z790 EXTREME",
->  	"ROG STRIX B650-A GAMING WIFI",
->  	"ROG STRIX B650E-E GAMING WIFI",
->  	"ROG STRIX B650E-F GAMING WIFI",
->  	"ROG STRIX B650E-I GAMING WIFI",
-> +	"ROG STRIX B660-A GAMING WIFI",
->  	"ROG STRIX B660-A GAMING WIFI D4",
->  	"ROG STRIX B660-F GAMING WIFI",
->  	"ROG STRIX B660-G GAMING WIFI",
-> @@ -1146,16 +1178,24 @@ static const char * const asus_msi_boards[] = {
->  	"ROG STRIX X670E-E GAMING WIFI",
->  	"ROG STRIX X670E-F GAMING WIFI",
->  	"ROG STRIX X670E-I GAMING WIFI",
-> +	"ROG STRIX Z590-A GAMING WIFI",
->  	"ROG STRIX Z590-A GAMING WIFI II",
-> +	"ROG STRIX Z590-E GAMING WIFI",
-> +	"ROG STRIX Z590-F GAMING WIFI",
-> +	"ROG STRIX Z590-I GAMING WIFI",
->  	"ROG STRIX Z690-A GAMING WIFI D4",
->  	"TUF GAMING B650-PLUS",
->  	"TUF GAMING B650-PLUS WIFI",
->  	"TUF GAMING B650M-PLUS",
->  	"TUF GAMING B650M-PLUS WIFI",
-> +	"TUF GAMING B660-PLUS WIFI D4",
-> +	"TUF GAMING B660M-E D4",
->  	"TUF GAMING B660M-PLUS WIFI",
->  	"TUF GAMING X670E-PLUS",
->  	"TUF GAMING X670E-PLUS WIFI",
-> +	"TUF GAMING Z590-PLUS",
->  	"TUF GAMING Z590-PLUS WIFI",
-> +	"Z590 WIFI GUNDAM EDITION",
->  };
->  
->  #if IS_ENABLED(CONFIG_ACPI)
+diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
+index 5451a6d4c874..dbd68d7b033a 100644
+--- a/Documentation/hwmon/hwmon-kernel-api.rst
++++ b/Documentation/hwmon/hwmon-kernel-api.rst
+@@ -19,20 +19,10 @@ also read Documentation/hwmon/submitting-patches.rst.
+ 
+ The API
+ -------
+-Each hardware monitoring driver must #include <linux/hwmon.h> and, in most
++Each hardware monitoring driver must #include <linux/hwmon.h> and, in some
+ cases, <linux/hwmon-sysfs.h>. linux/hwmon.h declares the following
+ register/unregister functions::
+ 
+-  struct device *
+-  hwmon_device_register_with_groups(struct device *dev, const char *name,
+-				    void *drvdata,
+-				    const struct attribute_group **groups);
+-
+-  struct device *
+-  devm_hwmon_device_register_with_groups(struct device *dev,
+-					 const char *name, void *drvdata,
+-					 const struct attribute_group **groups);
+-
+   struct device *
+   hwmon_device_register_with_info(struct device *dev,
+ 				  const char *name, void *drvdata,
+@@ -54,46 +44,30 @@ register/unregister functions::
+ 
+   char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
+ 
+-hwmon_device_register_with_groups registers a hardware monitoring device.
+-The first parameter of this function is a pointer to the parent device.
+-The name parameter is a pointer to the hwmon device name. The registration
+-function will create a name sysfs attribute pointing to this name.
+-The drvdata parameter is the pointer to the local driver data.
+-hwmon_device_register_with_groups will attach this pointer to the newly
+-allocated hwmon device. The pointer can be retrieved by the driver using
+-dev_get_drvdata() on the hwmon device pointer. The groups parameter is
+-a pointer to a list of sysfs attribute groups. The list must be NULL terminated.
+-hwmon_device_register_with_groups creates the hwmon device with name attribute
+-as well as all sysfs attributes attached to the hwmon device.
+-This function returns a pointer to the newly created hardware monitoring device
+-or PTR_ERR for failure.
+-
+-devm_hwmon_device_register_with_groups is similar to
+-hwmon_device_register_with_groups. However, it is device managed, meaning the
+-hwmon device does not have to be removed explicitly by the removal function.
+-
+-hwmon_device_register_with_info is the most comprehensive and preferred means
+-to register a hardware monitoring device. It creates the standard sysfs
+-attributes in the hardware monitoring core, letting the driver focus on reading
+-from and writing to the chip instead of having to bother with sysfs attributes.
+-The parent device parameter as well as the chip parameter must not be NULL. Its
+-parameters are described in more detail below.
++hwmon_device_register_with_info registers a hardware monitoring device.
++It creates the standard sysfs attributes in the hardware monitoring core,
++letting the driver focus on reading from and writing to the chip instead
++of having to bother with sysfs attributes. The parent device parameter
++as well as the chip parameter must not be NULL. Its parameters are described
++in more detail below.
+ 
+ devm_hwmon_device_register_with_info is similar to
+ hwmon_device_register_with_info. However, it is device managed, meaning the
+ hwmon device does not have to be removed explicitly by the removal function.
+ 
++All other hardware monitoring device registration functions are deprecated
++and must not be used in new drivers.
++
+ hwmon_device_unregister deregisters a registered hardware monitoring device.
+ The parameter of this function is the pointer to the registered hardware
+ monitoring device structure. This function must be called from the driver
+ remove function if the hardware monitoring device was registered with
+-hwmon_device_register_with_groups or hwmon_device_register_with_info.
++hwmon_device_register_with_info.
+ 
+ devm_hwmon_device_unregister does not normally have to be called. It is only
+ needed for error handling, and only needed if the driver probe fails after
+-the call to devm_hwmon_device_register_with_groups or
+-hwmon_device_register_with_info and if the automatic (device managed)
+-removal would be too late.
++the call to hwmon_device_register_with_info and if the automatic (device
++managed) removal would be too late.
+ 
+ All supported hwmon device registration functions only accept valid device
+ names. Device names including invalid characters (whitespace, '*', or '-')
+@@ -351,11 +325,9 @@ Return value:
+ Driver-provided sysfs attributes
+ --------------------------------
+ 
+-If the hardware monitoring device is registered with
+-hwmon_device_register_with_info or devm_hwmon_device_register_with_info,
+-it is most likely not necessary to provide sysfs attributes. Only additional
+-non-standard sysfs attributes need to be provided when one of those registration
+-functions is used.
++In most situations it should not be necessary for a driver to provide sysfs
++attributes since the hardware monitoring core creates those internally.
++Only additional non-standard sysfs attributes need to be provided.
+ 
+ The header file linux/hwmon-sysfs.h provides a number of useful macros to
+ declare and use hardware monitoring sysfs attributes.
+-- 
+2.39.2
 
