@@ -2,174 +2,119 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76AB8C6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 15:36:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41452C61DA4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Mar 2023 16:18:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjCOPgv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Mar 2023 11:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
+        id S232038AbjCOQSY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 12:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231903AbjCOPgt (ORCPT
+        with ESMTP id S231984AbjCOQSD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2023 11:36:49 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F83379B07;
-        Wed, 15 Mar 2023 08:36:18 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id y12so6339750ilq.4;
-        Wed, 15 Mar 2023 08:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678894576;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ms6fv+hw5MJ/w0++av6ZjeeiPsBlOux2GXBW4FkF2c8=;
-        b=lLFWgW4eFpcFBnLNyCxROzsHTGzOm+csYYsZtLHvd9YKlCK19/RDEhA6yYhgGBDr4Y
-         4EKTdLHMXlcZyIUbj/W8N4rMf6Zdawye63tQZrY0fKWGrAWujB5YkkO6InZRcIs1AG04
-         xZ0Wu0fx6j+Btv/ueQZJ+eH4U3WmpJ1MVhl+2sWXAkcDKG8DRUUPXOvbi5YKXyQulKir
-         CcxLTPDh4N308pIceUAZdrhTGTzw9akPuxtT4YOetzElCJtJMvBUsSf64Nt/Z5tx2+sh
-         7AYG1qY8QgaJWEVQKiMUx7dUiLBuGWzVH94bSzpKBPdguqlXBDwUQol86KepmLMr1ztz
-         9lHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678894576;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ms6fv+hw5MJ/w0++av6ZjeeiPsBlOux2GXBW4FkF2c8=;
-        b=dKYkpOcHdOwz+DyhfZ7aTgT+JAAYVySok4H9Zj7pm1DSUGbahGhwJOb+hawiIKuV/N
-         XjmSpHZH/aPcyyXUyoddnFcIE7lA2L5zbBruSN4y5xP3a3kbKMJIH9bKtrQznMDpc2oc
-         FsRtfMn9AZlbqQid8UbpOz5m68sMVomwlG278u/mQDrRQvFLebXK+p77rc/gL9yYGPpK
-         xcSxmJUTEiOwLmn0FxOuuRZTwM7OgSrXdvGwAOOAzfB+LJCF/kiDiAXiSN0jHUoYFG3N
-         IW1V9pzxJud28etoui9wr8g1sMZkC3Jip6lsU9jouZkGMLhmkfaREZH9g9zaNP5cEIjX
-         oWdg==
-X-Gm-Message-State: AO0yUKXKhY2R2H6WDDfQw3GzHvSrkYPwUS0tWEWYaKEXKw9Rk4008EUw
-        a2vsYueq901hDO+wqVG8bWmh/CLeXLI=
-X-Google-Smtp-Source: AK7set9r9nmgdmFk3SESGK1SvIGeRVbj8PBfT/V09jQ5sEtE04xQqqz5BzD4wi2eaUbE3PT+1shVaQ==
-X-Received: by 2002:a92:d58a:0:b0:315:8bc0:1d85 with SMTP id a10-20020a92d58a000000b003158bc01d85mr4395086iln.11.1678894576122;
-        Wed, 15 Mar 2023 08:36:16 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p4-20020a02b384000000b00406101d2dcbsm1210651jan.125.2023.03.15.08.36.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 08:36:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8dbed631-62b6-1802-8f4e-7141b1a91a56@roeck-us.net>
-Date:   Wed, 15 Mar 2023 08:36:13 -0700
+        Wed, 15 Mar 2023 12:18:03 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FEE61894;
+        Wed, 15 Mar 2023 09:17:45 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FDqqV6015708;
+        Wed, 15 Mar 2023 12:17:12 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3pb2bbd53b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 12:17:12 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 32FGHBTA016865
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 15 Mar 2023 12:17:11 -0400
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 15 Mar 2023 12:17:10 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 15 Mar 2023 12:17:10 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 15 Mar 2023 12:17:10 -0400
+Received: from IST-LT-39247.ad.analog.com (IST-LT-39247.ad.analog.com [10.25.16.17])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 32FGGj0l027526;
+        Wed, 15 Mar 2023 12:16:48 -0400
+From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v4 0/2] drivers: rtc: add max313xx series rtc driver
+Date:   Wed, 15 Mar 2023 19:16:24 +0300
+Message-ID: <20230315161626.247-1-Ibrahim.Tilki@analog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     phinex <phinex@realtek.com>, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230315121606.GA71707@threadripper>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
- thermal_of
-In-Reply-To: <20230315121606.GA71707@threadripper>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: Z-cOVlkKLb97K19xv2HONOm0-6TtRhpb
+X-Proofpoint-ORIG-GUID: Z-cOVlkKLb97K19xv2HONOm0-6TtRhpb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-15_08,2023-03-15_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 adultscore=0 mlxlogscore=425 impostorscore=0
+ spamscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1011 phishscore=0
+ suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2302240000 definitions=main-2303150137
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/15/23 05:16, phinex wrote:
-> Support thermal zone so that we can just rely on dts to describe a
-> thermal zone and do the cooling operations.
-> 
-> You can define a comptible string "drivetemp,hdd-sensors" to enable
-> this, such as
-> 
-> 	sata_port0: sata-port@0 {
-> 		compatible = "drivetemp,hdd-sensors";
-> 		#thermal-sensor-cells = <0>;
-> 	}
-> 
-> Then define a thermal with this sensor to get it work.
-> 
->                 hdd_thermal: hdd-thermal {
->                         thermal-sensors = <&sata_port0>;
-> 		}
-> 
-> In most of the SoC systems, using dts to handle cooling is common.
-> This can eliminate the usage of user space application to check
-> the value exported in hwmon and then through sysfs to cooling.
-> 
-> Signed-off-by: phinex <phinex@realtek.com>
-> 
-> ---
->   .../bindings/hwmon/drivetemp,hdd-sensors.yaml |  35 ++++++
->   drivers/hwmon/drivetemp.c                     | 102 +++++++++++++++++-
->   2 files changed, 133 insertions(+), 4 deletions(-)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/drivetemp,hdd-sensors.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/drivetemp,hdd-sensors.yaml b/Documentation/devicetree/bindings/hwmon/drivetemp,hdd-sensors.yaml
-> new file mode 100644
-> index 000000000000..939d7a923e94
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/drivetemp,hdd-sensors.yaml
-> @@ -0,0 +1,35 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/drivetemp,hdd-sensors.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Drivetemp Temperature Monitor
-> +
-> +maintainers:
-> +  - Phinex <phinex@realtek.com>
-> +
-> +description: |
-> +  Drivetemp Temperature Monitor that support a single thermal zone
-> +  This single thermal zone can support multiple hard drives,
-> +  it uses maximal temperature of these hard drivers as its temp value.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - drivetemp,hdd-sensors
-> +
-> +  '#thermal-sensor-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    sata_port0: sata-port@0 {
-> +        ompatible = "drivetemp,hdd-sensors";
-> +        #thermal-sensor-cells = <0>;
-> +    };
-> diff --git a/drivers/hwmon/drivetemp.c b/drivers/hwmon/drivetemp.c
-> index 1eb37106a220..9a60315d732c 100644
-> --- a/drivers/hwmon/drivetemp.c
-> +++ b/drivers/hwmon/drivetemp.c
-> @@ -107,6 +107,14 @@
->   #include <scsi/scsi_device.h>
->   #include <scsi/scsi_driver.h>
->   #include <scsi/scsi_proto.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/thermal.h>
-> +#include <linux/libata.h>
-> +
-> +/*A single thermal_zone for all HDD sensors */
-> +static struct thermal_zone_device *tz;
+
+Hi,
+
+I removed the reviewed tag by Krzysztof due to the changes below.
+
+Best regards,
+Ibrahim
+
+changelog:
+since v4:
+  - dt-binding: remove interrupt names.
+  - dt-binding: add description for "interrupts" property
+  - dt-binding: replace deprecated property "trickle-diode-disable"
+      by "aux-voltage-chargeable"
+  - dt-binding: add new property "adi,trickle-diode-enable"
+  - dt-binding: remove "wakeup-source"
+  - use clear_bit instead of __clear_bit
+  - use devm_of_clk_add_hw_provider instead of of_clk_add_provider
+  - use chip_desc pointer as driver data instead of enum.
 
 
-This is conceptually wrong. It returns the maximum temperature from all drives,
-not the temperature from a single drive.
+since v3:
+  - add "break" to fix warning: unannotated fall-through 
+    Reported-by: kernel test robot <lkp@intel.com>
 
-This is not much different from collecting all temperatures from all sensors
-in the system and declaring the maximum of those as single thermal zone.
+since v2:
+  - dt-binding: update title and description
+  - dt-binding: remove last example
+  - drop watchdog support
+  - support reading 12Hr format instead of forcing 24hr at probe time
+  - use "tm_year % 100" instead of range check
+  - refactor max313xx_init for readability
 
-If anything, each drive would have to reflect a thermal zone. The big question
-is how to determine the associated devicetree property.
 
-Also, essentially your patch claims that arch/arm/boot/dts/kirkwood-nsa310s.dts
-doesn't work and no one ever noticed. I would like to see that confirmed.
+Ibrahim Tilki (2):
+  drivers: rtc: add max313xx series rtc driver
+  dt-bindings: rtc: add max313xx RTCs
 
-Thanks,
-Guenter
+ .../devicetree/bindings/rtc/adi,max313xx.yaml |  142 +++
+ drivers/rtc/Kconfig                           |   11 +
+ drivers/rtc/Makefile                          |    1 +
+ drivers/rtc/rtc-max313xx.c                    | 1056 +++++++++++++++++
+ 4 files changed, 1210 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+ create mode 100644 drivers/rtc/rtc-max313xx.c
+
+-- 
+2.25.1
 
