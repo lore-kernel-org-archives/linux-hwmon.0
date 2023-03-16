@@ -2,130 +2,102 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E6D0C61DA4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Mar 2023 02:11:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61214C6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Mar 2023 02:14:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjCPCLi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Mar 2023 22:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
+        id S229459AbjCPCOp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 22:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjCPCLh (ORCPT
+        with ESMTP id S229631AbjCPCOo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2023 22:11:37 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B33A4B24;
-        Wed, 15 Mar 2023 19:11:36 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id w4so260941ilv.0;
-        Wed, 15 Mar 2023 19:11:36 -0700 (PDT)
+        Wed, 15 Mar 2023 22:14:44 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F071324CAD
+        for <linux-hwmon@vger.kernel.org>; Wed, 15 Mar 2023 19:14:39 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id w4so263792ilv.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 15 Mar 2023 19:14:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678932696;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=E0wPHL5tG0y6TTLnk5Nwov0SWBJZgv5AdCy7yKorfXU=;
-        b=PTeTEX8U0RSI7iE3YTurBMueiTtBZbKTZmF+mSjXq6uM/qfHDlNEL8tDL4YtA+Qq9r
-         hIWBbpck4nvDsqM2p949doiKLTL6ac0U3gACGG0J/JAU1Zi14mEbTunNptqK5dFP8W4s
-         Vf9VkPpg2BqkJCcpjN3/Sz5+qBgrOYw4YjAl6USBZusPsSKXNSQi5wpuFLi5FIWOx8nR
-         5O/bitXCV4Zq82+PawspbhQxGcIQKdxuVMDo6DV8f7gMvHleSV0bKXhurcuRrR1TvqaS
-         WJsUSLHPqooEX5SZoEJEjB1EnPTQRj4A+I9K/l50pTJSL8uCtE1UKGI68wWpYSC3EmlY
-         X5DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678932696;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20210112; t=1678932879;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=E0wPHL5tG0y6TTLnk5Nwov0SWBJZgv5AdCy7yKorfXU=;
-        b=U/mVQ0qbr6YC7oAGrEoeXrLBVg0H69Qc7MZgMmQTizgFM82n/5deKb5Mz2qF+FIZ3A
-         W9ZX0ewcua93oMWsCvXPjz6Y5KbgHVRN2X8zU87bFd7hAUj7s/nRlZO2hbnAKeIeIrSn
-         6hF7ALwRLbRqhtG1kXmQ/UBkg78Q2+lFjV1/vK2cj64iR+4ttFI81m62BLlfsJDE0vQZ
-         IiQqOqpgEXSL19KqoPINUHlL4imXPqf90gsVgYT5e2o8RmHisVdcJphHiroBlVrahSCb
-         7qIOest/lniZNoDjEjOoNU0QlCak6JyBed8Ba13vIzxLMov25JuQGm49DLpV3fMdvpFt
-         x6Dg==
-X-Gm-Message-State: AO0yUKVx9uL0vTLlGBf64bEkfM6CejK+gdpet5nceiXwDwg+4YR38ARa
-        z6IOBXjnBl3yK9gctq2Pc4w=
-X-Google-Smtp-Source: AK7set+Uiwr9aRlQrfzIKnd/Q+T1cb6r3ELsyNXB6t6Ob0UIM5MNT2jw5VdCumuowm0gNc8C7p+kcg==
-X-Received: by 2002:a05:6e02:1d82:b0:317:99c6:2791 with SMTP id h2-20020a056e021d8200b0031799c62791mr7992191ila.26.1678932695852;
-        Wed, 15 Mar 2023 19:11:35 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 20-20020a056e0211b400b003158e48f1e9sm2071154ilj.60.2023.03.15.19.11.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 19:11:35 -0700 (PDT)
+        bh=n/jbcn4eB0kYDuEpK1FR3/23TwkeXJn/LiAxdrdCatk=;
+        b=lRs0uYWlpBWYF2VzL1Th7sMWRaTD7z4dQeNV3ed1se7jELeILNKhK/YTEP3uXzPTvY
+         xWFlHo0yUZuCkinPNFhxQj9y2zlixleflnzFBRR7CPuZ+nM5etSRONGlaLy182EZCFdP
+         fcBCqpInGn6/g58ua3MvekMkmJ+++m8N4b83dMCosXlI7FKAFVC0zG2j97ahNz02P3Nd
+         UUAr9YiXxptaq3xrVZL7tGIn5QMU83cYHoppKXyYZK/RvBQgjQ4HDaEHVL1GSXh6x8yM
+         R7dJENgRJZ+CLWEOLB2gSd4LUnCJI5cKxJaO3rwKImwE/Wz7wusOGOvq2aKOPIiDGdH6
+         sHPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678932879;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n/jbcn4eB0kYDuEpK1FR3/23TwkeXJn/LiAxdrdCatk=;
+        b=0Ralg4VOsvtXNF6M4WYKhMn0ChW/BMakJ9Dmr7S/5nUiIkMaeVMvGkqg+kuFQH9gy/
+         +sXVvpKmZTTTmj4BTAWqfb/4R3MWZBS06RAh50uuoVhjgCFcdMSfkd8mq4z7b0GInW2H
+         2oLJCafQ1JE2N112WbY76G8MMe2oJ5vIU9TK+CUoyAZGcoBW0NnteiFUiMRgrn0tehCJ
+         o/fesBGvwoZw2QlviuaQ3+cncBYuYarzLRGSCANzDd2D8hpEBM67bI82c/9yiK85A2Ly
+         6zzyYd9XTdx0pl+pN6SckuUolHpz8WuhFlliVcel+j+jL+vAx5xZ9UpuTlsCgKwjoIBK
+         1NPg==
+X-Gm-Message-State: AO0yUKXCPHxHRKluDOMCOcg1jpoYK5JHG/i4cd1tLM42VLzKPm73Feb+
+        7SUUJn0dpIeCLk146T4NmhU=
+X-Google-Smtp-Source: AK7set8qqyJUPWd+h3bTFR8G3ugGDP39dbAWzWeHm4rld/f73wiVsMjPON5zbkni2p3SVCfiJGWrnA==
+X-Received: by 2002:a92:da8e:0:b0:315:53b6:d293 with SMTP id u14-20020a92da8e000000b0031553b6d293mr6299982iln.21.1678932879381;
+        Wed, 15 Mar 2023 19:14:39 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y17-20020a02a391000000b00374bf3b62a0sm2090854jak.99.2023.03.15.19.14.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 19:14:39 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <970802b8-f99d-0d26-cfcd-5b2079ed4d6f@roeck-us.net>
-Date:   Wed, 15 Mar 2023 19:11:33 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/2] hwmon: (nct6775) update ASUS WMI monitoring list
- A520/B360/B460/B550...
-Content-Language: en-US
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mischief@offblast.org,
-        de99like@mennucci.debian.net, holger.kiehl@dwd.de
-References: <20230315210135.2155-1-pauk.denis@gmail.com>
- <20230315210135.2155-2-pauk.denis@gmail.com>
- <20230315233054.5ac21db0@gmail.com>
- <19097c39-9703-6b7f-6cc4-8a157b00f368@roeck-us.net>
- <20230316000453.553bf6a8@gmail.com> <20230316001749.44e51d08@gmail.com>
- <20230316003519.27224216@gmail.com>
+Date:   Wed, 15 Mar 2023 19:14:37 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230316003519.27224216@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: (adm1266) Set `can_sleep` flag for GPIO chip
+Message-ID: <26e558fe-6bef-4777-85de-0c5746bf86ba@roeck-us.net>
+References: <20230314093146.2443845-1-lars@metafoo.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314093146.2443845-1-lars@metafoo.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/15/23 15:35, Denis Pauk wrote:
-> On Thu, 16 Mar 2023 00:17:49 +0200
-> Denis Pauk <pauk.denis@gmail.com> wrote:
+On Tue, Mar 14, 2023 at 02:31:45AM -0700, Lars-Peter Clausen wrote:
+> The adm1266 driver uses I2C bus access in its GPIO chip `set` and `get`
+> implementation. This means these functions can sleep and the GPIO chip
+> should set the `can_sleep` property to true.
 > 
->> On Thu, 16 Mar 2023 00:04:53 +0200
->> Denis Pauk <pauk.denis@gmail.com> wrote:
->>
->>> On Wed, 15 Mar 2023 14:58:24 -0700
->>> Guenter Roeck <linux@roeck-us.net> wrote:
->>>    
->>>> On 3/15/23 14:30, Denis Pauk wrote:
->>>>> On Wed, 15 Mar 2023 23:01:35 +0200
->>>>> Denis Pauk <pauk.denis@gmail.com> wrote:
->>>>>
->>>>> Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
->>>>>
->>>>> Pro A520M-C II/CSM is also tested by Holger Kiehl
->>>>> https://patchwork.kernel.org/project/linux-hwmon/patch/868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de/
->>>>>
->>>>> Could it be applied as single patch or need to rebase over "Pro A520M-C
->>>>> II" patch?
->>>>>        
->>>> Sorry, I don't understand what you are trying to say. I just applied all
->>>> patches in sequence as received, with no conflicts. Should I undo that ?
->>>>
->>>> Guenter
->>>>      
->>>
->>> No, Thank you!
->>>
->>> I just like to mention that Holger Kiehl sent separate patch with
->>> "Pro A520M-C II" support and it could create conflicts. I have found it only
->>> when I have sent my patches.
->>>    
->>
->> I have rechecked repo and "Pro A520M-C II" is added twice after apply both of
->> patches (my and from Holger Kiehl), could you please remove one of mention of
->> it?
+> This will ensure that a warning is printed when trying to set or get the
+> GPIO value from a context that potentially can't sleep.
 > 
-> I have resent updated version of this patch without duplication of adding "Pro
-> A520M-C II",
-> https://patchwork.kernel.org/project/linux-hwmon/patch/20230315222702.1803-1-pauk.denis@gmail.com/
-> 
-> you could revert this patch and add apply new one, or fix this one.
-> 
+> Fixes: d98dfad35c38 ("hwmon: (pmbus/adm1266) Add support for GPIOs")
+> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
 
-Done. You could avoid this kind of problem by keeping board names
-in alphabetic order.
+Applied.
 
+Thanks,
 Guenter
 
+> ---
+>  drivers/hwmon/pmbus/adm1266.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
+> index ec5f932fc6f0..1ac2b2f4c570 100644
+> --- a/drivers/hwmon/pmbus/adm1266.c
+> +++ b/drivers/hwmon/pmbus/adm1266.c
+> @@ -301,6 +301,7 @@ static int adm1266_config_gpio(struct adm1266_data *data)
+>  	data->gc.label = name;
+>  	data->gc.parent = &data->client->dev;
+>  	data->gc.owner = THIS_MODULE;
+> +	data->gc.can_sleep = true;
+>  	data->gc.base = -1;
+>  	data->gc.names = data->gpio_names;
+>  	data->gc.ngpio = ARRAY_SIZE(data->gpio_names);
