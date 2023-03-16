@@ -2,265 +2,153 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1496C6FD1F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Mar 2023 15:49:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D83F7C6FD19
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Mar 2023 18:18:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbjCPPtc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Mar 2023 11:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47712 "EHLO
+        id S229808AbjCPSSK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Mar 2023 14:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbjCPPta (ORCPT
+        with ESMTP id S229932AbjCPSSJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:49:30 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9901F49D9
-        for <linux-hwmon@vger.kernel.org>; Thu, 16 Mar 2023 08:49:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678981744; x=1710517744;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gEW2Vzh8k+PWTSTrBFQOCo+afn3YPZmcnMvsHraiC50=;
-  b=is+Zb2PPhr2BOV31DUwDnQQ9p/kP2qvPsd1b6aX+s7Vx8CwHQlXEQWn/
-   QP3vD6wkbpdFkkuduReZKS85yx0WohGvA/q5ipHVilQmxlo2xpVBhplHD
-   ZNiO2BUY2KtbCfJjQxiHHiyIQ3USuQ6IEOWBlutwiZ6K6FopoL3VNkbs/
-   yp3YvyNMbSdyRioJiJ3hqr939y67mfJjgdQl4rtL8lvaLi/IqJTQsSPBa
-   R6BJeoefpQnX3fxmPKbX71lSwJHy2qI5HAALOElYgYrwoiA43/sEdWzds
-   pbaOZIUe8TBU/tZVRFVlDkyvUtdWyGh0nspbEg8t0YV8vutiKV/H3+ziT
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="318420300"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="318420300"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 08:48:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="854093179"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="854093179"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 16 Mar 2023 08:48:40 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcpqE-0008by-1L;
-        Thu, 16 Mar 2023 15:48:34 +0000
-Date:   Thu, 16 Mar 2023 23:47:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- ab00709310eedcd8dae0df1f66d332f9bc64c99e
-Message-ID: <64133a25.EMYZAwNUnFuU2CXU%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 16 Mar 2023 14:18:09 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDBAE4C49;
+        Thu, 16 Mar 2023 11:17:36 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id r4so1484538ila.2;
+        Thu, 16 Mar 2023 11:17:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678990654;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bI/8jCq6po+MlaczI4bLzk/3h/MBLDIro/8WEF8KQL0=;
+        b=EhuqrwBMSRmKOpe8tLKTcmazMMMHAA9YU51FLfLOaNE5XEUtLNH10mdQ1Wy/O38ysV
+         QkLMt8oq801wfhMirTHPuzI/tvQXobFtnCwOOquDI59bJwJyPBd4SVGTFEcblY24bMLs
+         GPm9d8aZyXdJoTsjrCgGdtMsOWAtvFrob75GC7EOsqMStQKPSgnzV4xYIH4BeSjbFt6a
+         6Od23rJEE2C8QTQHqdDCvD06zUhEmRkBkFtUQCD6PEXrr7oL9trUdJc8jz5XykBUKFVA
+         K1KUoTuuzsK6w4cHAanBFXCchBPSnilvH7HZrpWHBqdTAE2zO3fhHeo+avwf94UfL74w
+         W4tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678990654;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bI/8jCq6po+MlaczI4bLzk/3h/MBLDIro/8WEF8KQL0=;
+        b=SVqYwy+kIcwt/jvPhZoHygx1J5Dgqt5QtPtRzyso+kygfzOjx98ZUCJjws2TgJIagx
+         KZcv9DzLp/mdh9JJ4GydSDc92Z+cZ0oTlTdj0XhCNDzG3A3GCHyfUNCUbSMJjtVwUv9N
+         K0vZ1CIeWlfQfaIqdfCzQE4YC99W+DPNxRG/faC/8hZg0hOc/yyWk5KOF+uWEJwyStYV
+         vmMuZyiXJHJ+KKwMYdJi8Lj6sndjsfYwuWT5GOaB4oGd/CbTb//lASrxFupBI07HRmvw
+         K+9JqbMZ6WgLHHGCj3xRSi/9nWcscnmCtOG6MsRpPoE1+xQvs8BxLBd2g31BQ3es44UC
+         1vLQ==
+X-Gm-Message-State: AO0yUKVv8awpWOI7hLIFZUQ6qKCWxWEWgB3JS1be8JTJbj/WedJnbert
+        Pix5tK2PuClS6UDZ5wk14hNLN6H3LoA=
+X-Google-Smtp-Source: AK7set8tQpY8FBEV/bepKFQkoQTm2fBm5x15loX/+3S0vXn+WU6Bm566efKvQ+mipk+EqeShoqwqSw==
+X-Received: by 2002:a05:6e02:1a8e:b0:323:338:cc50 with SMTP id k14-20020a056e021a8e00b003230338cc50mr9030414ilv.22.1678990654574;
+        Thu, 16 Mar 2023 11:17:34 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q2-20020a927502000000b003230b8aa2d6sm6984ilc.57.2023.03.16.11.17.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 11:17:33 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 16 Mar 2023 11:17:32 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Phinex Hung <phinex@realtek.com>
+Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
+ thermal_of
+Message-ID: <2b1e7e29-daa6-4f24-9fad-7ebe8b87a5fe@roeck-us.net>
+References: <20230315121606.GA71707@threadripper>
+ <8dbed631-62b6-1802-8f4e-7141b1a91a56@roeck-us.net>
+ <D23B9D06-0DEA-4E3B-A64C-C928CAF2FEF8@realtek.com>
+ <aaf0553c-48de-580f-70d5-aafeecb19e16@roeck-us.net>
+ <1E8784A0-713E-41A8-A26D-72869E3E5779@realtek.com>
+ <5c805125-4cb5-cdf8-6b50-5a6ce7e97149@roeck-us.net>
+ <2686E7B8-BD3F-4C86-97B6-447343BFCF22@realtek.com>
+ <A6DF8FB3-6318-40CD-A364-603A3E581511@realtek.com>
+ <8c835412-f78f-570d-30a5-24f4c02a8438@roeck-us.net>
+ <4BC6E9A7-13A6-429F-A586-AC60DC505838@realtek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <4BC6E9A7-13A6-429F-A586-AC60DC505838@realtek.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: ab00709310eedcd8dae0df1f66d332f9bc64c99e  hwmon: (ltc2992) Set `can_sleep` flag for GPIO chip
+On Thu, Mar 16, 2023 at 02:17:34PM +0000, Phinex Hung wrote:
+> 
+> 
+> On 3/16/23 22:48, Guenter Roeck wrote:
+> 
+> 
+> >That needs to be in the hwmon core. We can not change the device pointer
+> >passed to hwmon_device_register_with_info() because that determines the
+> >lifetime of the hwmon device.
+> 
+> 
+> >Guenter
+> 
+> Do you mean something like below?
+> 
 
-elapsed time: 728m
+Yes, except of course for the bugs (see below). That is much less
+than perfect, of course, since we'd really want the device node
+for the drive, not the controller, but it might be the best we can do.
 
-configs tested: 190
-configs skipped: 7
+> Or is it reasonable that we just match a specific compatible string and assign the device node to the original dev->parent used in drivetemp_add function ?
+> 
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+We can't add anything to the parent device node since we don't own it.
+Also, I don't know if devicetree maintainers would accept the concept
+of "virtual" device nodes (and I don't know how device nodes for drives
+would or should look like either).
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r001-20230313   gcc  
-alpha                randconfig-r002-20230313   gcc  
-alpha                randconfig-r021-20230313   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r004-20230312   gcc  
-arc                  randconfig-r014-20230312   gcc  
-arc                  randconfig-r021-20230312   gcc  
-arc                  randconfig-r026-20230315   gcc  
-arc                  randconfig-r032-20230312   gcc  
-arc                  randconfig-r043-20230312   gcc  
-arc                  randconfig-r043-20230313   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r006-20230313   clang
-arm                  randconfig-r011-20230312   clang
-arm                  randconfig-r013-20230313   gcc  
-arm                  randconfig-r016-20230313   gcc  
-arm                  randconfig-r021-20230315   gcc  
-arm                  randconfig-r046-20230312   clang
-arm                  randconfig-r046-20230313   gcc  
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r004-20230313   gcc  
-arm64        buildonly-randconfig-r006-20230313   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r004-20230312   clang
-arm64                randconfig-r006-20230312   clang
-arm64                randconfig-r011-20230312   gcc  
-arm64                randconfig-r012-20230313   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r003-20230312   gcc  
-csky                 randconfig-r011-20230313   gcc  
-csky                 randconfig-r012-20230313   gcc  
-csky                 randconfig-r026-20230312   gcc  
-csky                 randconfig-r031-20230313   gcc  
-csky                 randconfig-r033-20230313   gcc  
-csky                 randconfig-r036-20230312   gcc  
-hexagon              randconfig-r013-20230312   clang
-hexagon              randconfig-r031-20230313   clang
-hexagon              randconfig-r041-20230312   clang
-hexagon              randconfig-r041-20230313   clang
-hexagon              randconfig-r045-20230312   clang
-hexagon              randconfig-r045-20230313   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230313   gcc  
-i386                 randconfig-a002-20230313   gcc  
-i386                          randconfig-a002   clang
-i386                 randconfig-a003-20230313   gcc  
-i386                 randconfig-a004-20230313   gcc  
-i386                          randconfig-a004   clang
-i386                 randconfig-a005-20230313   gcc  
-i386                 randconfig-a006-20230313   gcc  
-i386                          randconfig-a006   clang
-i386                 randconfig-a011-20230313   clang
-i386                 randconfig-a012-20230313   clang
-i386                 randconfig-a013-20230313   clang
-i386                 randconfig-a014-20230313   clang
-i386                 randconfig-a015-20230313   clang
-i386                 randconfig-a016-20230313   clang
-i386                          randconfig-c001   gcc  
-i386                 randconfig-r005-20230313   gcc  
-i386                 randconfig-r032-20230313   gcc  
-i386                 randconfig-r035-20230313   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r002-20230313   gcc  
-ia64                 randconfig-r003-20230313   gcc  
-ia64                 randconfig-r005-20230313   gcc  
-ia64                 randconfig-r006-20230313   gcc  
-ia64                 randconfig-r022-20230312   gcc  
-ia64                 randconfig-r031-20230312   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r002-20230313   gcc  
-loongarch                           defconfig   gcc  
-loongarch                 loongson3_defconfig   gcc  
-loongarch            randconfig-r021-20230313   gcc  
-loongarch            randconfig-r024-20230312   gcc  
-loongarch            randconfig-r026-20230312   gcc  
-m68k                             allmodconfig   gcc  
-m68k                          atari_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r002-20230312   gcc  
-m68k                 randconfig-r003-20230312   gcc  
-m68k                 randconfig-r003-20230313   gcc  
-m68k                 randconfig-r014-20230313   gcc  
-m68k                 randconfig-r015-20230313   gcc  
-m68k                 randconfig-r016-20230312   gcc  
-m68k                 randconfig-r023-20230315   gcc  
-microblaze   buildonly-randconfig-r002-20230312   gcc  
-microblaze   buildonly-randconfig-r006-20230312   gcc  
-microblaze           randconfig-r001-20230312   gcc  
-microblaze           randconfig-r001-20230313   gcc  
-microblaze           randconfig-r006-20230312   gcc  
-microblaze           randconfig-r025-20230312   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                       lemote2f_defconfig   clang
-mips                 randconfig-r023-20230313   gcc  
-mips                 randconfig-r034-20230313   clang
-nios2        buildonly-randconfig-r001-20230313   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r006-20230312   gcc  
-nios2                randconfig-r012-20230312   gcc  
-nios2                randconfig-r013-20230312   gcc  
-nios2                randconfig-r023-20230313   gcc  
-nios2                randconfig-r036-20230313   gcc  
-openrisc     buildonly-randconfig-r003-20230312   gcc  
-openrisc     buildonly-randconfig-r005-20230313   gcc  
-openrisc             randconfig-r022-20230315   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r005-20230312   gcc  
-parisc               randconfig-r021-20230312   gcc  
-parisc               randconfig-r034-20230313   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                 mpc85xx_cds_defconfig   gcc  
-powerpc                      ppc40x_defconfig   gcc  
-powerpc                      ppc64e_defconfig   clang
-powerpc              randconfig-r003-20230313   gcc  
-powerpc              randconfig-r015-20230312   gcc  
-powerpc              randconfig-r015-20230313   clang
-powerpc              randconfig-r023-20230312   gcc  
-powerpc              randconfig-r036-20230313   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r001-20230312   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r012-20230313   clang
-riscv                randconfig-r031-20230313   gcc  
-riscv                randconfig-r033-20230312   clang
-riscv                randconfig-r042-20230312   gcc  
-riscv                randconfig-r042-20230313   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r006-20230313   gcc  
-s390                 randconfig-r032-20230312   clang
-s390                 randconfig-r044-20230312   gcc  
-s390                 randconfig-r044-20230313   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r035-20230312   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r005-20230312   gcc  
-sparc                randconfig-r025-20230313   gcc  
-sparc                randconfig-r025-20230315   gcc  
-sparc                randconfig-r033-20230313   gcc  
-sparc                randconfig-r035-20230313   gcc  
-sparc64              randconfig-r001-20230313   gcc  
-sparc64              randconfig-r002-20230312   gcc  
-sparc64              randconfig-r004-20230312   gcc  
-sparc64              randconfig-r004-20230313   gcc  
-sparc64              randconfig-r025-20230312   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230313   gcc  
-x86_64                        randconfig-a001   clang
-x86_64               randconfig-a002-20230313   gcc  
-x86_64                        randconfig-a002   gcc  
-x86_64               randconfig-a003-20230313   gcc  
-x86_64                        randconfig-a003   clang
-x86_64               randconfig-a004-20230313   gcc  
-x86_64                        randconfig-a004   gcc  
-x86_64               randconfig-a005-20230313   gcc  
-x86_64                        randconfig-a005   clang
-x86_64               randconfig-a006-20230313   gcc  
-x86_64                        randconfig-a006   gcc  
-x86_64               randconfig-a011-20230313   clang
-x86_64               randconfig-a012-20230313   clang
-x86_64               randconfig-a013-20230313   clang
-x86_64               randconfig-a014-20230313   clang
-x86_64               randconfig-a015-20230313   clang
-x86_64               randconfig-a016-20230313   clang
-x86_64                        randconfig-k001   clang
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r004-20230312   gcc  
-xtensa               randconfig-r032-20230313   gcc  
-xtensa               randconfig-r033-20230312   gcc  
-xtensa               randconfig-r034-20230312   gcc  
+> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> index 33edb5c02f7d..a76beeada33e 100644
+> --- a/drivers/hwmon/hwmon.c
+> +++ b/drivers/hwmon/hwmon.c
+> @@ -757,6 +757,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+>         struct hwmon_device *hwdev;
+>         const char *label;
+>         struct device *hdev;
+> +       struct device *tedv = dev;
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+			tdev =
+
+>         int i, err, id;
+> 
+>         /* Complain about invalid characters in hwmon name attribute */
+> @@ -826,7 +827,9 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+>         hwdev->name = name;
+>         hdev->class = &hwmon_class;
+>         hdev->parent = dev;
+> -       hdev->of_node = dev ? dev->of_node : NULL;
+> +       while(!tdev->of_node)
+
+	  while (tdev && !tdev->of_node)
+
+> +               tdev = tdev->parent;
+> +       hdev->of_node = tdev ? tdev->of_node : NULL;
+>         hwdev->chip = chip;
+>         dev_set_drvdata(hdev, drvdata);
+> @@ -838,7 +841,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+> 
+>         INIT_LIST_HEAD(&hwdev->tzdata);
+> 
+> -       if (dev && dev->of_node && chip && chip->ops->read &&
+> +       if (tdev && tdev->of_node && chip && chip->ops->read &&
+
+This could probably be simplified to
+	  if (hdev->of_node && chip && ..
+
+>             chip->info[0]->type == hwmon_chip &&
+>             (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
+>                 err = hwmon_thermal_register_sensors(hdev);
+> 
+> Regards,
+> Phinex
+> 
+> 
