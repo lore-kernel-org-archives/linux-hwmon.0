@@ -2,126 +2,114 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DC0EC6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Mar 2023 02:21:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E96AC61DA4
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Mar 2023 02:26:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjCPCVr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Mar 2023 22:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
+        id S229547AbjCPC03 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 22:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjCPCVp (ORCPT
+        with ESMTP id S229494AbjCPC03 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2023 22:21:45 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2C25F6DC;
-        Wed, 15 Mar 2023 19:21:43 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32G2L9icC030357, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32G2L9icC030357
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 16 Mar 2023 10:21:09 +0800
-Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 16 Mar 2023 10:21:07 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 16 Mar 2023 10:21:07 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Thu, 16 Mar 2023 10:21:07 +0800
-From:   Phinex Hung <phinex@realtek.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "jdelvare@suse.com" <jdelvare@suse.com>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for thermal_of
-Thread-Topic: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
- thermal_of
-Thread-Index: AQHZVzfsuBPt1OfUHEer519nIXIgnK77czOAgAE6SgA=
-Date:   Thu, 16 Mar 2023 02:21:07 +0000
-Message-ID: <D23B9D06-0DEA-4E3B-A64C-C928CAF2FEF8@realtek.com>
-References: <20230315121606.GA71707@threadripper>
- <8dbed631-62b6-1802-8f4e-7141b1a91a56@roeck-us.net>
-In-Reply-To: <8dbed631-62b6-1802-8f4e-7141b1a91a56@roeck-us.net>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.22.242.6]
-x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0B05974B694E044D900DDBCD317F02FF@realtek.com>
-Content-Transfer-Encoding: base64
+        Wed, 15 Mar 2023 22:26:29 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5329DC8899;
+        Wed, 15 Mar 2023 19:26:28 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id l9so260738iln.1;
+        Wed, 15 Mar 2023 19:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678933587;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wn6GTzWZhVeWN9PHLIBwYzMfzh5f2SxCuW63G3ON8vA=;
+        b=EYke7L/0V16TNrSbT6Wd/Z2S7MJA3OsZBwtYESg7GgG097KlpCDeglcU5CEslriEaK
+         dRbQ2BR8iZjhdySIZM/KnbKWRchRf+RLGhKkC4ZUMbw7qOHP/00owgNxCOXeySIBxB8N
+         ljACycgo4gC+qpBsEdUS42OyGkFX/SNxsVMU/2jM7SdQbZQBNurwGl82Ze6CEcuKWsvU
+         3NHSa/2/Rb1pVEsEl8OcsfLu+4fZ9AolNfpJcvnk4b+Hfv6Mwkfpz3ljmgU7Z9IZGemo
+         Wkq9LTBynK91Y2+x5wPhrDSeKe02iqXya9JLB0PTDf1n3CcKA4IpG/wv5tP2SPjWPVjo
+         ZkDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678933587;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wn6GTzWZhVeWN9PHLIBwYzMfzh5f2SxCuW63G3ON8vA=;
+        b=uxbB8rneAdrWo49hBj4WLNEvA5F8cWeUZubWzqsVwPSDdeT7xfFxkYkeltezLfHCFr
+         EaPG181Vl5WyS9rOaUtY7z2kZ8NA1fMfv1+iuhdGkNYuWIshGgDwnu6cuuO90r6DP2sa
+         MQdx2ssz6/vwRu+cZqEbSjNE1FOLXrDyXCYVS0Sajq6hf1U/xouFDdUje+A+KJzRzp7D
+         CvJcV2vD4pqKs5CxuuNF3xIV4Hr1zX145jLu5lhlcwTQ1fcMuhE7k6oyLvqxHW6xlWIP
+         Mfq2h3s3gDIT+3e/z2ev1lg1sGMuDW73ZcrW8gVtMO81JvlnwvC0kww7Vls7E0Fi+88I
+         l2KQ==
+X-Gm-Message-State: AO0yUKVDFFzf6qNzK4bu+kRjx8SVR3xx5ehB8Q1H15hHXAbaHzl+E409
+        JR+ZtJ89SUqgQpbIr3Q7Rnw=
+X-Google-Smtp-Source: AK7set8p2OItMZv7IfV7pyIVxYF9z9ZHhZogOGMpMQFDu6g2dTdXi3txgIEK1s1udk3ydfCVe4nUpQ==
+X-Received: by 2002:a05:6e02:68a:b0:311:e48:d64a with SMTP id o10-20020a056e02068a00b003110e48d64amr6041036ils.17.1678933587699;
+        Wed, 15 Mar 2023 19:26:27 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z9-20020a92cd09000000b00316e39f1285sm2030493iln.82.2023.03.15.19.26.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 19:26:27 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 15 Mar 2023 19:26:26 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Lorenz Brun <lorenz@brun.one>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: pwm-fan: set usage_power on PWM state
+Message-ID: <ec52f540-0f78-4cf0-ae61-314cab33ac80@roeck-us.net>
+References: <20230309011009.2109696-1-lorenz@brun.one>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309011009.2109696-1-lorenz@brun.one>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-DQpPbiAzLzE1LzIzIDExOjM2LCBHdWVudGVyIFJvZWNrIiA8Z3JvZWNrN0BnbWFpbC5jb20gPG1h
-aWx0bzpncm9lY2s3QGdtYWlsLmNvbT4gd3JvdGU6DQrvu78NCj5UaGlzIGlzIGNvbmNlcHR1YWxs
-eSB3cm9uZy4gSXQgcmV0dXJucyB0aGUgbWF4aW11bSB0ZW1wZXJhdHVyZSBmcm9tIGFsbCBkcml2
-ZXMsDQo+bm90IHRoZSB0ZW1wZXJhdHVyZSBmcm9tIGEgc2luZ2xlIGRyaXZlLg0KDQo+VGhpcyBp
-cyBub3QgbXVjaCBkaWZmZXJlbnQgZnJvbSBjb2xsZWN0aW5nIGFsbCB0ZW1wZXJhdHVyZXMgZnJv
-bSBhbGwgc2Vuc29ycw0KPmluIHRoZSBzeXN0ZW0gYW5kIGRlY2xhcmluZyB0aGUgbWF4aW11bSBv
-ZiB0aG9zZSBhcyBzaW5nbGUgdGhlcm1hbCB6b25lLg0KDQo+SWYgYW55dGhpbmcsIGVhY2ggZHJp
-dmUgd291bGQgaGF2ZSB0byByZWZsZWN0IGEgdGhlcm1hbCB6b25lLiBUaGUgYmlnIHF1ZXN0aW9u
-DQo+aXMgaG93IHRvIGRldGVybWluZSB0aGUgYXNzb2NpYXRlZCBkZXZpY2V0cmVlIHByb3BlcnR5
-Lg0KDQpNeSBiYXNpYyBpZGVhIGlzIHRvIHVzZSBhIHNpbmdsZSB0aGVybWFsIHpvbmUgZm9yIG11
-bHRpcGxlIGRpc2tzLg0KDQpJbiBtb3N0IG9mIHRoZSBzeXN0ZW1zLCB0aGVyZSBtaWdodCBiZSBv
-bmx5IGEgc2luZ2xlIGZhbiB0aGF0IHVzZWQgZm9yIGNvb2xpbmcuDQoNCklmIGVhY2ggZGlzayBo
-YXMgaXRzIG93biB0aGVybWFsIHpvbmUsIHdlIG5lZWQgdG8gYWRkIGFsbW9zdCB0aGUgc2FtZSBk
-dHMgZW50cmllcyBmb3IgZWFjaCB0aGVybWFsIHpvbmUsDQoNCmFuZCBkbyBhbG1vc3QgdGhlIHNh
-bWUgY29vbGluZyBvcGVyYXRpb25zLg0KDQpUaGF0IGlzIHdoeSBJIGFtIHRyeWluZyB0byB1c2lu
-ZyBhIHNpbmdsZSB0aGVybWFsIHpvbmUgZm9yIG11bHRpcGxlIGRpc2tzLg0KDQpJbiBhbnkgY2Fz
-ZSwgaWYgdGVtcGVyYXR1cmUgb2YgYW55IGRpc2sgZ29lcyBoaWdoLCBjb29saW5nIHNob3VsZCB0
-YWtlIGVmZmVjdC4NCg0KPkFsc28sIGVzc2VudGlhbGx5IHlvdXIgcGF0Y2ggY2xhaW1zIHRoYXQg
-YXJjaC9hcm0vYm9vdC9kdHMva2lya3dvb2QtbnNhMzEwcy5kdHMNCj5kb2Vzbid0IHdvcmsgYW5k
-IG5vIG9uZSBldmVyIG5vdGljZWQuIEkgd291bGQgbGlrZSB0byBzZWUgdGhhdCBjb25maXJtZWQu
-DQoNClRvIGJlIGhvbmVzdCwgbXkgZmlyc3QgYXR0ZW1wdCB0byBnZXQgeW91ciBkcml2ZXRlbXAu
-YyB3b3JrcyBpbiBvdXIgU29DIHdhcyByZWZlcnJpbmcgdG8gYSBzaW1pbGFyIHBhdGNoLA0KDQpo
-dHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1hcm0ta2VybmVsL0NBSk4xS2t6UjdOUjhUZ3VT
-N3VEczZwZURPcGtGbjBkdVZCcXZLS3ptM3huTXM5aUo3QUBtYWlsLmdtYWlsLmNvbS9ULw0KDQpC
-eSBhZGRpbmcgdGhlIHNpbWlsYXIgZW50cmllcyBpbiBvdXIgZHRzIGJ1dCBmYWlsZWQuDQoNClR3
-byBod21vbiBkZXZpY2VzIGFjdHVhbGx5IHBvcHVsYXRlZCwgYSB0aGVybWFsIHpvbmUgZGVzY3Jp
-YmVkIGJ5IG15IGR0cyBhbHNvIHdhcyBjcmVhdGVkLg0KDQpCdXQgdGhlcmUgaXMgbm8gbGluayBi
-ZXR3ZWVuIHRoZSB0aGVybWFsIHpvbmUgZGVzY3JpYmVkIGluIGR0cyBhbmQgaHdtb25zIGZyb20g
-ZHJpdmV0ZW1wIGRyaXZlci4NCg0KU28gdGhhdCBJIHRyYWNlZCB0aGUgc291cmNlIGFuZCBmaW5k
-aW5nIHRoYXQgdGhlIHRoZXJtYWwgem9uZSByZWdpc3RyYXRpb24gZmFpbGVkIGR1ZSB0byB0aGUg
-bGFjayBvZiBhIGRldmljZSBub2RlIG9mIGEgcGxhdGZvcm0gZGV2aWNlLg0KDQpUaGF0IGlzIHdo
-eSBJIGFtIHRyeWluZyB0byB1c2UgYSBwbGF0Zm9ybSBkZXZpY2UgZm9yIHJlZ2lzdHJhdGlvbiBh
-Z2Fpbi4NCg0KVGhlIG9yaWdpbmFsIGNhbGwgdG8gaHdtb25fZGV2aWNlX3JlZ2lzdGVyX3dpdGhf
-aW5mbyBzaG91bGQgY2FsbCBod21vbl90aGVybWFsX3JlZ2lzdGVyX3NlbnNvcnMsIA0KDQpCdXQg
-aW50IHRoZSBsYXN0IGNhbGwgdG8gdGhlcm1hbF96b25lX29mX3NlbnNvcl9yZWdpc3RlciwgZGV2
-LT5vZl9ub2RlIHdvdWxkIGJlIGNoZWNrZWQuDQoNClRoaXMgd291bGQgY2F1c2UgdGhlIHNlbnNv
-ciByZWdpc3RyYXRpb24gdG8gZmFpbCB3aGlsZSBod21vbiBzdGlsbCB3b3JrZWQuDQoNCmh3bW9u
-X2RldmljZV9yZWdpc3Rlcl93aXRoX2luZm8gPT4gX19od21vbl9kZXZpY2VfcmVnaXN0ZXIgPT4g
-aHdtb25fdGhlcm1hbF9yZWdpc3Rlcl9zZW5zb3JzID0+DQoNCmh3bW9uX3RoZXJtYWxfYWRkX3Nl
-bnNvciA9PiBkZXZtX3RoZXJtYWxfem9uZV9vZl9zZW5zb3JfcmVnaXN0ZXIgPT4gdGhlcm1hbF96
-b25lX29mX3NlbnNvcl9yZWdpc3RlciA9Pg0KDQpzdHJ1Y3QgdGhlcm1hbF96b25lX2RldmljZSAq
-DQp0aGVybWFsX3pvbmVfb2Zfc2Vuc29yX3JlZ2lzdGVyKHN0cnVjdCBkZXZpY2UgKmRldiwgaW50
-IHNlbnNvcl9pZCwgdm9pZCAqZGF0YSwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-Y29uc3Qgc3RydWN0IHRoZXJtYWxfem9uZV9vZl9kZXZpY2Vfb3BzICpvcHMpDQp7DQogICAgICAg
-IHN0cnVjdCBkZXZpY2Vfbm9kZSAqbnAsICpjaGlsZCwgKnNlbnNvcl9ucDsNCiAgICAgICAgc3Ry
-dWN0IHRoZXJtYWxfem9uZV9kZXZpY2UgKnR6ZCA9IEVSUl9QVFIoLUVOT0RFVik7DQoNCiAgICAg
-ICAgbnAgPSBvZl9maW5kX25vZGVfYnlfbmFtZShOVUxMLCAidGhlcm1hbC16b25lcyIpOw0KICAg
-ICAgICBpZiAoIW5wKQ0KICAgICAgICAgICAgICAgIHJldHVybiBFUlJfUFRSKC1FTk9ERVYpOw0K
-DQogICAgICAgIGlmICghZGV2IHx8ICFkZXYtPm9mX25vZGUpIHsNCiAgICAgICAgICAgICAgICBv
-Zl9ub2RlX3B1dChucCk7DQogICAgICAgICAgICAgICAgcmV0dXJuIEVSUl9QVFIoLUVOT0RFVik7
-DQogICAgICAgIH0NCg0KSSBhbSBhbHNvIGN1cmlvdXMgd2h5IEtpcmt3b29kIFNvQyB3b3JrcyB3
-aXRob3V0IHNwZWNpZmljIHBhdGNoLg0KDQpJbiBhbnkgY2FzZSwgaWYgZGV2aWNlIHRyZWUgYmlu
-ZGluZyBpcyB1c2VkLCBob3cgY291bGQgd2UgYXNzb2NpYXRlIGRyaXZldGVtcCBzZW5zb3JzIHdp
-dGggYSBzcGVjaWZpYyB0aGVybWFsIHpvbmUNCg0KaWYgbm8gY29tcGF0aWJsZSBzdHJpbmcgaXMg
-ZGVzY3JpYmVkIGZvciB0aGVzZSBkcml2ZXRlbXAgc2Vuc29ycyBpbiB0aGUgZHRzIGZpbGU/IA0K
-DQpUaGF0IGlzIHdoeSBJIGFtIGFkZGluZyBhIGdlbmVyaWMgY29tcGF0aWJsZSBzdHJpbmcgdG8g
-bWF0Y2ggYSBwbGF0Zm9ybSBzZW5zb3JzIHdpdGggYSBzcGVjaWZpYyB0aGVybWFsIHpvbmUuDQoN
-ClJlZ2FyZHMsDQpQaGluZXgNCg0K
+On Thu, Mar 09, 2023 at 02:10:08AM +0100, Lorenz Brun wrote:
+> PWM fans are controlled solely by the duty cycle of the PWM signal, they
+> do not care about the exact timing. Thus set usage_power to true to
+> allow less flexible hardware to work as a PWM source for fan control.
+> 
+
+This doesn't seem to be used anywhere else. I do not understand the
+rationale, and I do not understand the practical impact of this change.
+This needs to be confirmed by someone who understands what the flag is
+supposed to be used for, its impact, and if it is indeed appropriate
+in this context.
+
+Also, since in practice there is no such "less flexible hardware"
+in the upstream kernel, please describe the use case in more detail.
+The only pwm driver that supports usage_power is pwm-pca9685,
+and that driver uses the flag for EMI reasons, not because it is
+"less flexible hardware". I am not inclined to accept such a change
+without specific use case or need.
+
+Thanks,
+Guenter
+
+> Signed-off-by: Lorenz Brun <lorenz@brun.one>
+> ---
+>  drivers/hwmon/pwm-fan.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index 83a347ca35da..aa746c2bde39 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
+> @@ -507,6 +507,14 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  
+>  	pwm_init_state(ctx->pwm, &ctx->pwm_state);
+>  
+> +	/*
+> +	 * PWM fans are controlled solely by the duty cycle of the PWM signal,
+> +	 * they do not care about the exact timing. Thus set usage_power to true
+> +	 * to allow less flexible hardware to work as a PWM source for fan
+> +	 * control.
+> +	 */
+> +	ctx->pwm_state.usage_power = true;
+> +
+>  	/*
+>  	 * set_pwm assumes that MAX_PWM * (period - 1) fits into an unsigned
+>  	 * long. Check this here to prevent the fan running at a too low
