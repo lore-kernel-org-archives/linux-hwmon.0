@@ -2,175 +2,138 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36454C6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Mar 2023 03:02:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F26AC6FD1F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Mar 2023 03:32:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjCPDCq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Mar 2023 23:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
+        id S229542AbjCPDct (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 23:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjCPDCo (ORCPT
+        with ESMTP id S229479AbjCPDcc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2023 23:02:44 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD46CC328;
-        Wed, 15 Mar 2023 20:02:38 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id bp11so290616ilb.3;
-        Wed, 15 Mar 2023 20:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678935758;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=drZQHjCyOOafpC70c5NP8gNzTfwHKInPcyK0qutY9dc=;
-        b=picqHkZbro0IEpcr5gQ/IqAF8ANsUFe+R+q/qCTcmo+ACBbq7Jd6KS1Y5RmmwH/rjp
-         XVTeGz6klrGj4dqILUmZL77HGpYqJpYKwzSAvAnHx/HAgVPmWy+QA7tualptQNLctvpl
-         A2ZWOvPrJCaK4IbnVs2nFlhKTm03qsBkaolxBBMfULNNbqVWpd9m8WZxXEEFwTn1IiXO
-         ZUk+NTKg8BIaCYr41+PrsnQOKLb9zzDm/3/r/Q96S0WVlJd8RRampdagtQf3VSDgGPof
-         uBUeUhq8pV5bOg99kPUY/0UpqiVkroUFfVmDsAz4PCDP7bO6IiLdGlNO/YKdyExkGzYm
-         Pi1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678935758;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=drZQHjCyOOafpC70c5NP8gNzTfwHKInPcyK0qutY9dc=;
-        b=zU7DsRWwXrGAnsl+X6YeTtcSe0MSwL7B3GfuVbmp1iXG9X3P7IZropKAkJf+1ozVMA
-         gQjVNEuv6npGwFn0zn7Xu5+kxscS0SFFLg6ZVHN/0bg5VFWweJG9QJi3O+KhxgiriRc3
-         m0iV1PYTB1Sw8RKwpDWO9ZClwetBmLl8OQSDgrQWHHOZA5rD0K+9+2vRYQjPF7Maes9B
-         08iAAD+fMPi9ppB1E9mPV4w8h21PiGtZ4iD6j/8V0uKcOplWBsY+2K+dX38tE15tqWMb
-         Y4q7nL2np6B0EB6d73WN4Vb0O07iuo9bcKiZJGb1Ey4L+zmxYUHnPsgjjsZo53PudTCl
-         zpog==
-X-Gm-Message-State: AO0yUKVVDhKROljXVhFZz96wagAwBOBOTRJLWWDbVi7n12D7ySuEvxEc
-        /oYwHQsRw2w9LEKoci5BaU0=
-X-Google-Smtp-Source: AK7set/R92HqBcKZenUQiJAyeUFRslxvFWtnjraQLr1VMtqswM8wNnPX1u+slku/h4WPU1h82ds51A==
-X-Received: by 2002:a92:ab04:0:b0:323:aa7:befb with SMTP id v4-20020a92ab04000000b003230aa7befbmr5655735ilh.6.1678935758285;
-        Wed, 15 Mar 2023 20:02:38 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s17-20020a92c5d1000000b00313f1b861b7sm2086606ilt.51.2023.03.15.20.02.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 20:02:37 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <aaf0553c-48de-580f-70d5-aafeecb19e16@roeck-us.net>
-Date:   Wed, 15 Mar 2023 20:02:36 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     Phinex Hung <phinex@realtek.com>,
+        Wed, 15 Mar 2023 23:32:32 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7462132;
+        Wed, 15 Mar 2023 20:32:29 -0700 (PDT)
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32G3TN5Z0015493, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32G3TN5Z0015493
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 16 Mar 2023 11:29:23 +0800
+Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Thu, 16 Mar 2023 11:29:35 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 16 Mar 2023 11:29:35 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
+ RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
+ 15.01.2375.007; Thu, 16 Mar 2023 11:29:35 +0800
+From:   Phinex Hung <phinex@realtek.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
         "jdelvare@suse.com" <jdelvare@suse.com>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for thermal_of
+Thread-Topic: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
+ thermal_of
+Thread-Index: AQHZVzfsuBPt1OfUHEer519nIXIgnK77czOAgAE6SgD//4V8AIAAjaUA
+Date:   Thu, 16 Mar 2023 03:29:34 +0000
+Message-ID: <1E8784A0-713E-41A8-A26D-72869E3E5779@realtek.com>
 References: <20230315121606.GA71707@threadripper>
  <8dbed631-62b6-1802-8f4e-7141b1a91a56@roeck-us.net>
  <D23B9D06-0DEA-4E3B-A64C-C928CAF2FEF8@realtek.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
- thermal_of
-In-Reply-To: <D23B9D06-0DEA-4E3B-A64C-C928CAF2FEF8@realtek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+ <aaf0553c-48de-580f-70d5-aafeecb19e16@roeck-us.net>
+In-Reply-To: <aaf0553c-48de-580f-70d5-aafeecb19e16@roeck-us.net>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.22.242.6]
+x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <691D2079EBAAAB4DA222C505D7AF5C27@realtek.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/15/23 19:21, Phinex Hung wrote:
-> 
-> On 3/15/23 11:36, Guenter Roeck" <groeck7@gmail.com <mailto:groeck7@gmail.com> wrote:
-> ﻿
->> This is conceptually wrong. It returns the maximum temperature from all drives,
->> not the temperature from a single drive.
-> 
->> This is not much different from collecting all temperatures from all sensors
->> in the system and declaring the maximum of those as single thermal zone.
-> 
->> If anything, each drive would have to reflect a thermal zone. The big question
->> is how to determine the associated devicetree property.
-> 
-> My basic idea is to use a single thermal zone for multiple disks.
-> 
-> In most of the systems, there might be only a single fan that used for cooling.
-> 
-> If each disk has its own thermal zone, we need to add almost the same dts entries for each thermal zone,
-> 
-> and do almost the same cooling operations.
-> 
-> That is why I am trying to using a single thermal zone for multiple disks.
-> 
-> In any case, if temperature of any disk goes high, cooling should take effect.
-> 
-
-Sure. But your argument is inappropriate: You could as well argue that
-this system with a single fan should bundle all its thermal sensors into
-a single thermal zone, and that it should do so in the driver(s)
-providing the thermal zone sensors to the thermal subsystem. This does
-not take into account that there might be systems with dozens (or hundreds,
-for that matter) of drives, in a system with multiple disk trays and fans
-for each of those.
-
-I don't know if and how the thermal subsystem deals with the situation
-of having N thermal zone sensors and M << N cooling devices. This is
-a general problem, not limited to disk drives. Just as we won't bundle
-multiple thermal sensors on a multi-channel thermal sensor chip into a
-single thermal zone, we won't bundle multiple disk drives into a single
-thermal zone.
-
->> Also, essentially your patch claims that arch/arm/boot/dts/kirkwood-nsa310s.dts
->> doesn't work and no one ever noticed. I would like to see that confirmed.
-> 
-> To be honest, my first attempt to get your drivetemp.c works in our SoC was referring to a similar patch,
-> 
-> https://lore.kernel.org/linux-arm-kernel/CAJN1KkzR7NR8TguS7uDs6peDOpkFn0duVBqvKKzm3xnMs9iJ7A@mail.gmail.com/T/
-> 
-> By adding the similar entries in our dts but failed.
-> 
-> Two hwmon devices actually populated, a thermal zone described by my dts also was created.
-> 
-> But there is no link between the thermal zone described in dts and hwmons from drivetemp driver.
-> 
-> So that I traced the source and finding that the thermal zone registration failed due to the lack of a device node of a platform device.
-> 
-> That is why I am trying to use a platform device for registration again.
-> 
-> The original call to hwmon_device_register_with_info should call hwmon_thermal_register_sensors,
-> 
-> But int the last call to thermal_zone_of_sensor_register, dev->of_node would be checked.
-> 
-> This would cause the sensor registration to fail while hwmon still worked.
-> 
-> hwmon_device_register_with_info => __hwmon_device_register => hwmon_thermal_register_sensors =>
-> 
-> hwmon_thermal_add_sensor => devm_thermal_zone_of_sensor_register => thermal_zone_of_sensor_register =>
-> 
-> struct thermal_zone_device *
-> thermal_zone_of_sensor_register(struct device *dev, int sensor_id, void *data,
->                                  const struct thermal_zone_of_device_ops *ops)
-> {
->          struct device_node *np, *child, *sensor_np;
->          struct thermal_zone_device *tzd = ERR_PTR(-ENODEV);
-> 
->          np = of_find_node_by_name(NULL, "thermal-zones");
->          if (!np)
->                  return ERR_PTR(-ENODEV);
-> 
->          if (!dev || !dev->of_node) {
->                  of_node_put(np);
->                  return ERR_PTR(-ENODEV);
->          }
-> 
-> I am also curious why Kirkwood SoC works without specific patch.
-> 
-> In any case, if device tree binding is used, how could we associate drivetemp sensors with a specific thermal zone
-> 
-In theory it should work just like described in the kirkwood devicetree
-files. If that doesn't work, the question is how to find the sata port
-nodes from the drivetemp driver. I don't have a system with such nodes,
-so I have no means to find or know the answer.
-
-I also don't know how to attach more than one thermal sensor to a
-single thermal zone, or if that is even possible. If it isn't, it
-is a limitation of the thermal subsystem, and trying to hack around
-it in a driver providing thermal sensors would be inappropriate.
-
-Guenter
-
+DQpPbiAzLzE2LzIzIDExOjAyLCBHdWVudGVyIFJvZWNrIiA8Z3JvZWNrN0BnbWFpbC5jb20gPG1h
+aWx0bzpncm9lY2s3QGdtYWlsLmNvbT4gPG1haWx0bzpncm9lY2s3QGdtYWlsLmNvbSA8bWFpbHRv
+Omdyb2VjazdAZ21haWwuY29tPj4gd3JvdGU6DQoNCu+7vw0KPlN1cmUuIEJ1dCB5b3VyIGFyZ3Vt
+ZW50IGlzIGluYXBwcm9wcmlhdGU6IFlvdSBjb3VsZCBhcyB3ZWxsIGFyZ3VlIHRoYXQNCj50aGlz
+IHN5c3RlbSB3aXRoIGEgc2luZ2xlIGZhbiBzaG91bGQgYnVuZGxlIGFsbCBpdHMgdGhlcm1hbCBz
+ZW5zb3JzIGludG8NCj5hIHNpbmdsZSB0aGVybWFsIHpvbmUsIGFuZCB0aGF0IGl0IHNob3VsZCBk
+byBzbyBpbiB0aGUgZHJpdmVyKHMpDQo+cHJvdmlkaW5nIHRoZSB0aGVybWFsIHpvbmUgc2Vuc29y
+cyB0byB0aGUgdGhlcm1hbCBzdWJzeXN0ZW0uIFRoaXMgZG9lcw0KPm5vdCB0YWtlIGludG8gYWNj
+b3VudCB0aGF0IHRoZXJlIG1pZ2h0IGJlIHN5c3RlbXMgd2l0aCBkb3plbnMgKG9yIGh1bmRyZWRz
+LA0KPmZvciB0aGF0IG1hdHRlcikgb2YgZHJpdmVzLCBpbiBhIHN5c3RlbSB3aXRoIG11bHRpcGxl
+IGRpc2sgdHJheXMgYW5kIGZhbnMNCj5mb3IgZWFjaCBvZiB0aG9zZS4NCg0KPkkgZG9uJ3Qga25v
+dyBpZiBhbmQgaG93IHRoZSB0aGVybWFsIHN1YnN5c3RlbSBkZWFscyB3aXRoIHRoZSBzaXR1YXRp
+b24NCj5vZiBoYXZpbmcgTiB0aGVybWFsIHpvbmUgc2Vuc29ycyBhbmQgTSA8PCBOIGNvb2xpbmcg
+ZGV2aWNlcy4gVGhpcyBpcw0KPmEgZ2VuZXJhbCBwcm9ibGVtLCBub3QgbGltaXRlZCB0byBkaXNr
+IGRyaXZlcy4gSnVzdCBhcyB3ZSB3b24ndCBidW5kbGUNCj5tdWx0aXBsZSB0aGVybWFsIHNlbnNv
+cnMgb24gYSBtdWx0aS1jaGFubmVsIHRoZXJtYWwgc2Vuc29yIGNoaXAgaW50byBhDQo+c2luZ2xl
+IHRoZXJtYWwgem9uZSwgd2Ugd29uJ3QgYnVuZGxlIG11bHRpcGxlIGRpc2sgZHJpdmVzIGludG8g
+YSBzaW5nbGUNCj50aGVybWFsIHpvbmUuDQoNCkl0J3MgdHJ1ZSwgdGhlcmUgYXJlIHNldmVyYWwg
+ZGlmZmVyZW50IGNvbWJpbmF0aW9ucy4gDQoNCktlZXAgYSBzaW5nbGUgc2Vuc29yIHdpdGggYSBz
+aW5nbGUgdGhlcm1hbCBtaWdodCBnaXZlIG1vcmUgZmxleGliaWxpdHkuDQoNCk15IGlkZWEgaXMg
+aW5zcGlyZWQgZnJvbSB0aGUgY29tbWVudCBvZiB0aGUgZm9sbG93aW5nIHBhdGNoLi4NCg0KaHR0
+cHM6Ly93d3cuc3Bpbmljcy5uZXQvbGlzdHMvZGV2aWNldHJlZS9tc2c1MzcxODYuaHRtbA0KDQpC
+eSB0aGUgY29tbWVudCBpbiB0aGlzIHBhdGNoLCBpdCBzYWlkIHRoYXQgIlRoZXJtYWwgem9uZSB3
+b3JrcyBvbmx5IHdpdGggZmlyc3QgZGlza3MiLg0KDQpCdXQgaXQgaGFzIHR3byBoYXJkIGRpc2ss
+IGVhY2ggZGVzY3JpYmVzIGEgdGhlcm1hbC1zZW5zb3JzLWNlbGxzLg0KDQogLyogVGhlcm1hbCB6
+b25lIHdvcmtzIG9ubHkgd2l0aCBmaXJzdCBkaXNrICovLg0KDQpUaGF0IGlzIHdoeSBJIGFtIHRy
+eWluZyB0byBoYWNrIHRoZSBvcmlnaW5hbCB0ZW1wX3JlYWQgY2FsbCBiYWNrIHRvIHN1cHBvcnQg
+bXVsdGlwbGUgc2Vuc29ycy4NCg0KQW55d2F5LCBrZWVwIGEgc2luZ2xlIG1hcHBpbmcgbWlnaHQg
+YmUgZ29vZCBhbmQgdGhhbmtzIGZvciB5b3VyIGNvbW1lbnQuDQoNCg0KPkluIHRoZW9yeSBpdCBz
+aG91bGQgd29yayBqdXN0IGxpa2UgZGVzY3JpYmVkIGluIHRoZSBraXJrd29vZCBkZXZpY2V0cmVl
+DQo+ZmlsZXMuIElmIHRoYXQgZG9lc24ndCB3b3JrLCB0aGUgcXVlc3Rpb24gaXMgaG93IHRvIGZp
+bmQgdGhlIHNhdGEgcG9ydA0KPm5vZGVzIGZyb20gdGhlIGRyaXZldGVtcCBkcml2ZXIuIEkgZG9u
+J3QgaGF2ZSBhIHN5c3RlbSB3aXRoIHN1Y2ggbm9kZXMsDQo+c28gSSBoYXZlIG5vIG1lYW5zIHRv
+IGZpbmQgb3Iga25vdyB0aGUgYW5zd2VyLg0KDQoNCj5JIGFsc28gZG9uJ3Qga25vdyBob3cgdG8g
+YXR0YWNoIG1vcmUgdGhhbiBvbmUgdGhlcm1hbCBzZW5zb3IgdG8gYQ0KPnNpbmdsZSB0aGVybWFs
+IHpvbmUsIG9yIGlmIHRoYXQgaXMgZXZlbiBwb3NzaWJsZS4gSWYgaXQgaXNuJ3QsIGl0DQo+aXMg
+YSBsaW1pdGF0aW9uIG9mIHRoZSB0aGVybWFsIHN1YnN5c3RlbSwgYW5kIHRyeWluZyB0byBoYWNr
+IGFyb3VuZA0KPml0IGluIGEgZHJpdmVyIHByb3ZpZGluZyB0aGVybWFsIHNlbnNvcnMgd291bGQg
+YmUgaW5hcHByb3ByaWF0ZS4NCg0KDQpUaGFuayB5b3UgZm9yIHRoaXMgZ3JlYXQgbW9kdWxlIHRv
+IG1ha2UgdGhlcm1hbCBhbmQgY29vbGluZyBjb250cm9sIHNpbXBsZXIuDQoNClRoYXQgaXMgd2h5
+IEkgYW0gdHJ5aW5nIHRvIGdldCBpdCB3b3JrIHVuZGVyIG91ciBrZXJuZWwgNC4xOSBzaW5jZSBv
+dXIgU29DIGN1cnJlbnRseSB3b3JrcyB1bmRlciA0LjE5IG9ubHkuDQoNClNhdGEgcG9ydHMgY2Fu
+IGJlIGZvdW5kIHdpdGhvdXQgYW55IGlzc3VlLCBhbmQgdGhlIGNvcnJlc3BvbmRpbmcgaHdtb24g
+ZW50cmllcyBjYW4gYmUgZm91bmQsIHN1Y2ggYXMuDQoNCnJvb3RAT3BlbldSVC1LeWxpbjovc3lz
+L2NsYXNzL2h3bW9uIyBscyAtYWwNCnRvdGFsIDANCmRyd3hyLXhyLXggICAgMiByb290ICAgICBy
+b290ICAgICAgICAgICAgIDAgTWFyIDExIDA4OjEzIC4NCmRyd3hyLXhyLXggICA0MiByb290ICAg
+ICByb290ICAgICAgICAgICAgIDAgTWFyIDExIDA4OjEzIC4uDQpscnd4cnd4cnd4ICAgIDEgcm9v
+dCAgICAgcm9vdCAgICAgICAgICAgICAwIE1hciAxMSAwODoxMyBod21vbjAgLT4gLi4vLi4vZGV2
+aWNlcy9wbGF0Zm9ybS9zb2MvOTgwMDAwMDAuYnVzLzk4MDFiMDAwLnN5c2Nvbi85ODAxYmMwMC5y
+dGtfZmFuL2h3bW9uL2h3bW9uMA0KbHJ3eHJ3eHJ3eCAgICAxIHJvb3QgICAgIHJvb3QgICAgICAg
+ICAgICAgMCBNYXIgMTEgMDg6MTMgaHdtb24xIC0+IC4uLy4uL2RldmljZXMvcGxhdGZvcm0vc29j
+Lzk4MDAwMDAwLmJ1cy85ODAzZjAwMC5zYXRhL2F0YTEvaG9zdDAvdGFyZ2V0MDowOjAvMDowOjA6
+MC9od21vbi9od21vbjENCmxyd3hyd3hyd3ggICAgMSByb290ICAgICByb290ICAgICAgICAgICAg
+IDAgTWFyIDExIDA4OjEzIGh3bW9uMiAtPiAuLi8uLi9kZXZpY2VzL3BsYXRmb3JtL3NvYy85ODAw
+MDAwMC5idXMvOTgwM2YwMDAuc2F0YS9hdGEyL2hvc3QxL3RhcmdldDE6MDowLzE6MDowOjAvaHdt
+b24vaHdtb24yDQoNCkFuZCBJIGFkZCB0aGUgcG9ydCBudW1iZXIgaW4gdGhlIG5hbWUgb2YgdGhl
+c2UgaHdtb24gZGV2aWNlcyBzbyB0aGF0IEkgY2FuIGRpZmZlcmVudGlhdGUgdGhlbS4NCg0Kcm9v
+dEBPcGVuV1JULUt5bGluOi9zeXMvY2xhc3MvaHdtb24jIGNhdCBod21vbjEvbmFtZSBod21vbjEv
+dGVtcDFfaW5wdXQNCmRyaXZldGVtcF9wb3J0MA0KNTIwMDANCnJvb3RAT3BlbldSVC1LeWxpbjov
+c3lzL2NsYXNzL2h3bW9uIyBjYXQgaHdtb24yL25hbWUgaHdtb24yL3RlbXAxX2lucHV0DQpkcml2
+ZXRlbXBfcG9ydDENCjQ5MDAwDQoNCk15IGluaXRpYWwgcHJvYmxlbSBpcyB0aGF0ICJob3cgY291
+bGQgSSBhc3NvY2lhdGVkIHRoZXNlIGh3bW9uIGRldmljZXMgd2l0aCB0aGVybWFsIHpvbmVzIj8N
+Cg0KQnkgdHJhY2luZyB0aGUgc291cmNlIGNvZGUsIGZpbmRpbmcgdGhhdCBJIHByb2JhYmx5IG5l
+ZWQgdG8gcmVnaXN0ZXIgdGhlcm1hbF96b25lIHVzaW5nIGEgcGxhdGZvcm0gZGV2aWNlLg0KDQpI
+YWNraW5nIGludG8gdGhlIHRoZXJtYWwgZnJhbWV3b3JrIGlzIG5vdCBhIGdvb2QgdGhpbmcsIHNv
+IHRoYXQgaXMgd2h5IEkgaGF2ZSB0aGlzIHBhdGNoIHRvIGhhY2sgeW91ciBkcml2ZXIuDQoNCkFu
+eSBiZXR0ZXIgaWRlYSB0byBnZXQgdGhlcm1hbCB6b25lIHdvcmsgd2l0aG91dCByZWdpc3RlciBh
+IHBsYXRmb3JtIGRldmljZSBhbmQgdGhlbiByZWdpc3RlcnMgdGhlIHNlbnNvcnMgd2l0aCB0aGVy
+bWFsIHpvbmUgYWdhaW4/DQoNClRoYW5rcw0KDQpSZWdhcmRzLA0KUGhpbmV4DQoNCg0KDQo=
