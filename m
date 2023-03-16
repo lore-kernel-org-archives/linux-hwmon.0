@@ -2,103 +2,163 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB72CC6FD19
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Mar 2023 07:48:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E38AC6FD1F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Mar 2023 07:57:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjCPHsd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Mar 2023 03:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
+        id S229686AbjCPH5r (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Mar 2023 03:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjCPHsc (ORCPT
+        with ESMTP id S229802AbjCPH5q (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:48:32 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49722149AA;
-        Thu, 16 Mar 2023 00:48:30 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32G7lu6rB029583, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32G7lu6rB029583
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 16 Mar 2023 15:47:56 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 16 Mar 2023 15:48:09 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 16 Mar 2023 15:48:08 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Thu, 16 Mar 2023 15:48:08 +0800
-From:   Phinex Hung <phinex@realtek.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "jdelvare@suse.com" <jdelvare@suse.com>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for thermal_of
-Thread-Topic: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
- thermal_of
-Thread-Index: AQHZVzfsuBPt1OfUHEer519nIXIgnK77czOAgAE6SgD//4V8AIAAjaUA//+VWgCAAK9BgIAAA6MA
-Date:   Thu, 16 Mar 2023 07:48:08 +0000
-Message-ID: <A6DF8FB3-6318-40CD-A364-603A3E581511@realtek.com>
-References: <20230315121606.GA71707@threadripper>
- <8dbed631-62b6-1802-8f4e-7141b1a91a56@roeck-us.net>
- <D23B9D06-0DEA-4E3B-A64C-C928CAF2FEF8@realtek.com>
- <aaf0553c-48de-580f-70d5-aafeecb19e16@roeck-us.net>
- <1E8784A0-713E-41A8-A26D-72869E3E5779@realtek.com>
- <5c805125-4cb5-cdf8-6b50-5a6ce7e97149@roeck-us.net>
- <2686E7B8-BD3F-4C86-97B6-447343BFCF22@realtek.com>
-In-Reply-To: <2686E7B8-BD3F-4C86-97B6-447343BFCF22@realtek.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.22.242.6]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIzLzMvMTYg5LiK5Y2IIDA2OjAwOjAw?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <63FA54BA6D49BC4DA612F59A54F86DC7@realtek.com>
-Content-Transfer-Encoding: base64
+        Thu, 16 Mar 2023 03:57:46 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE1E26854
+        for <linux-hwmon@vger.kernel.org>; Thu, 16 Mar 2023 00:57:43 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id eg48so3958103edb.13
+        for <linux-hwmon@vger.kernel.org>; Thu, 16 Mar 2023 00:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678953462;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QUKmVZD4P10t9tCmWsV/xiC2I1YN3U8W6JtlRyatjRg=;
+        b=Xw3+Kvfeto5589ehWRE9jW0zXPLkt2pJPGHn5kE4sK3UiSZwo1y2drS68wpgBezbB+
+         1dinfQ+75yEZ0KBV8/Kt3mbU+0xEGHZgjac1ZvICtx22VfgEzgz27zxIzutLSXFjR41+
+         wkscuqTlOgdtfcxI9p+qjR/T7XIZHsSUdNF91ofT7xiLS3wS2uA6rYCwkE/Ogg16Vn1i
+         mRekwGuCl0X2oWJ80vZaDaxjnl/ypF3AS889xftnE8gYdS3WUxEGhpIR7skjfTZYMW6V
+         o0ZkPt2R4xJWJ49HLME6fAQWazlVB1USC2qu+X5OnE+IVZKrYoJmqIxRP5p7Cf9+bGsF
+         jZ9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678953462;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QUKmVZD4P10t9tCmWsV/xiC2I1YN3U8W6JtlRyatjRg=;
+        b=R06KMPlbUqHI5qxYrIKDGu5ewtkwNRHi7zMUkW91m7JzgiFm7S/zSazLhosaYGD5Kt
+         c2GGp6v05o3R6lJ5jkUpOscmOuV4hhyXUwPwJyRVVFFEzc7RcEDajCUN/BgZP+rOSvFw
+         v25/Y4HIjfr/h1PFZUcycy/O6cP7+lxsZe3eNhXWzT1VDz1RjH/IgyT2ZL6hfm68HbsX
+         JB8JrbDj756zZ2g6jvfXFP7kH+AEyWh6nQ7j/EbJnpr0ybCRojtFzghDGZAhf57b6Oyn
+         ADcEm2fmmE10QOtlpHbizsCBWbVJw5JrRJa5veaZCtHtAuDrILPPLz6U5nmJGBmy7Src
+         frig==
+X-Gm-Message-State: AO0yUKVpOWS3gmjeJby6f1Se23id4KJ7jB3RGGBC2x4Krj3aQzVqSzVe
+        7gVhdcTyBj57Bda406cY0rVG7g==
+X-Google-Smtp-Source: AK7set/44q+f7ezrCJo9lEFuuMwzHC04K9dAbeiAfdMqxRNZv/8E6WRomtaxUYP5ax2gWHBVMu1gJw==
+X-Received: by 2002:a17:906:2290:b0:8f0:9566:c1ff with SMTP id p16-20020a170906229000b008f09566c1ffmr9886317eja.69.1678953462052;
+        Thu, 16 Mar 2023 00:57:42 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
+        by smtp.gmail.com with ESMTPSA id v10-20020a170906858a00b008d173604d72sm3531809ejx.174.2023.03.16.00.57.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 00:57:41 -0700 (PDT)
+Message-ID: <c441cab6-09a1-864b-d857-0c22e15b029e@linaro.org>
+Date:   Thu, 16 Mar 2023 08:57:40 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 2/2] dt-bindings: rtc: add max313xx RTCs
+Content-Language: en-US
+To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+References: <20230315161626.247-1-Ibrahim.Tilki@analog.com>
+ <20230315161626.247-3-Ibrahim.Tilki@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230315161626.247-3-Ibrahim.Tilki@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-DQoNCu+7v09uIDMvMTYvMjMgMTU6MzUgIlBoaW5leCBIdW5nIiA8cGhpbmV4QHJlYWx0ZWsuY29t
-IDxtYWlsdG86cGhpbmV4QHJlYWx0ZWsuY29tPiB3cm90ZToNCg0KPk5vdCBzdXJlIHdoZXRoZXIg
-dGhpcyBpcyB0aGUgZGlmZmVyZW5jZSwgYnV0IHVzZSB0aGUgZm9sbG93aW5nIHBhdGNoIGNhbiBz
-b2x2ZSB0aGlzIGlzc3VlLg0KDQo+QEAgLTU0MCw5ICs1MzEsOSBAQCBzdGF0aWMgaW50IGRyaXZl
-dGVtcF9hZGQoc3RydWN0IGRldmljZSAqZGV2LCBzdHJ1Y3QgY2xhc3NfaW50ZXJmYWNlICppbnRm
-KQ0KPmdvdG8gYWJvcnQ7DQo+fQ0KPg0KPg0KPi0gc3QtPmh3ZGV2ID0gaHdtb25fZGV2aWNlX3Jl
-Z2lzdGVyX3dpdGhfaW5mbyhkZXYtPnBhcmVudCwgImRyaXZldGVtcCIsDQo+LSBzdCwgJmRyaXZl
-dGVtcF9jaGlwX2luZm8sDQo+LSBOVUxMKTsNCj4rIHN0LT5od2RldiA9IGh3bW9uX2RldmljZV9y
-ZWdpc3Rlcl93aXRoX2luZm8oDQo+KyBkZXYtPnBhcmVudC0+cGFyZW50LT5wYXJlbnQtPnBhcmVu
-dC0+cGFyZW50LCAiZHJpdmV0ZW1wIiwgc3QsDQo+KyAmZHJpdmV0ZW1wX2NoaXBfaW5mbywgTlVM
-TCk7DQoNCg0KQSBtb3JlIGdlbmVyaWMgcGF0Y2ggd29ya3MgaW4gbXkgY2FzZSwgbGlzdGVkIGJl
-bG93Og0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9kcml2ZXRlbXAuYyBiL2RyaXZlcnMv
-aHdtb24vZHJpdmV0ZW1wLmMNCmluZGV4IDFjZjRmOTAxNTMxNi4uYTRjZGRmZWE4ZDIyIDEwMDY0
-NA0KLS0tIGEvZHJpdmVycy9od21vbi9kcml2ZXRlbXAuYw0KKysrIGIvZHJpdmVycy9od21vbi9k
-cml2ZXRlbXAuYw0KQEAgLTUyNSw2ICs1MjUsNyBAQCBzdGF0aWMgaW50IGRyaXZldGVtcF9hZGQo
-c3RydWN0IGRldmljZSAqZGV2LCBzdHJ1Y3QgY2xhc3NfaW50ZXJmYWNlICppbnRmKQ0KIHsNCiAg
-ICAgICAgc3RydWN0IHNjc2lfZGV2aWNlICpzZGV2ID0gdG9fc2NzaV9kZXZpY2UoZGV2LT5wYXJl
-bnQpOw0KICAgICAgICBzdHJ1Y3QgZHJpdmV0ZW1wX2RhdGEgKnN0Ow0KKyAgICAgICBzdHJ1Y3Qg
-ZGV2aWNlICp0ZGV2ID0gZGV2LT5wYXJlbnQ7DQogICAgICAgIGludCBlcnI7DQoNCiAgICAgICAg
-c3QgPSBremFsbG9jKHNpemVvZigqc3QpLCBHRlBfS0VSTkVMKTsNCkBAIC01NDAsOCArNTQxLDEx
-IEBAIHN0YXRpYyBpbnQgZHJpdmV0ZW1wX2FkZChzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0cnVjdCBj
-bGFzc19pbnRlcmZhY2UgKmludGYpDQogICAgICAgICAgICAgICAgZ290byBhYm9ydDsNCiAgICAg
-ICAgfQ0KDQotICAgICAgIHN0LT5od2RldiA9IGh3bW9uX2RldmljZV9yZWdpc3Rlcl93aXRoX2lu
-Zm8oZGV2LT5wYXJlbnQsICJkcml2ZXRlbXAiLA0KLSAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIHN0LCAmZHJpdmV0ZW1wX2NoaXBfaW5mbywNCisgICAg
-ICAgd2hpbGUoIXRkZXYtPm9mX25vZGUpDQorICAgICAgICAgICAgICAgdGRldiA9IHRkZXYtPnBh
-cmVudDsNCisNCisgICAgICAgc3QtPmh3ZGV2ID0gaHdtb25fZGV2aWNlX3JlZ2lzdGVyX3dpdGhf
-aW5mbyh0ZGV2LCAiZHJpdmV0ZW1wIiwgc3QsDQorICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgJmRyaXZldGVtcF9jaGlwX2luZm8sDQogICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTlVMTCk7DQogICAgICAg
-IGlmIChJU19FUlIoc3QtPmh3ZGV2KSkgew0KICAgICAgICAgICAgICAgIGVyciA9IFBUUl9FUlIo
-c3QtPmh3ZGV2KTsNCg0KVGhhbmtzDQoNClJlZ2FyZHMsDQpQaGluZXgNCg0KDQoNCg0K
+On 15/03/2023 17:16, Ibrahim Tilki wrote:
+> Devicetree binding documentation for Analog Devices MAX313XX RTCs
+> 
+> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> ---
+>  .../devicetree/bindings/rtc/adi,max313xx.yaml | 142 ++++++++++++++++++
+>  1 file changed, 142 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml b/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> new file mode 100644
+> index 000000000..bed6d0bc4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> @@ -0,0 +1,142 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2022 Analog Devices Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/adi,max313xx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices MAX313XX series I2C RTCs
+> +
+> +maintainers:
+> +  - Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> +
+> +description: Analog Devices MAX313XX series I2C RTCs.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,max31328
+> +      - adi,max31329
+> +      - adi,max31331
+> +      - adi,max31334
+> +      - adi,max31341
+> +      - adi,max31342
+> +      - adi,max31343
+> +
+> +  reg:
+> +    description: I2C address of the RTC
+> +    items:
+> +      - enum: [0x68, 0x69]
+> +
+> +  interrupts:
+> +    description: |
+> +      Alarm1 interrupt line of the RTC. Some of the RTCs have two interrupt
+> +      lines and alarm1 interrupt muxing depends on the clockin/clockout
+> +      configuration.
+> +    maxItems: 1
+> +
+> +  "#clock-cells":
+> +    description: |
+> +      RTC can be used as a clock source through its clock output pin when
+> +      supplied.
+> +    const: 0
+> +
+> +  clocks:
+> +    description: |
+> +      RTC uses this clock for clock input when supplied. Clock has to provide
+> +      one of these four frequencies: 1Hz, 50Hz, 60Hz or 32.768kHz.
+> +    maxItems: 1
+> +
+> +  aux-voltage-chargeable: true
+
+Drop, coming from rtc.yaml.
+
+> +
+> +  trickle-resistor-ohms:
+> +    description: Enables trickle charger with specified resistor value.
+> +    enum: [3000, 6000, 11000]
+> +
+> +  adi,trickle-diode-enable:
+> +    description: Charge the auxiliary voltage with a diode.
+> +    type: boolean
+> +
+> +additionalProperties: false
+
+Use order like in example-schema, so required, allOf then
+unevaluatedProperties: false.
+
+
+Best regards,
+Krzysztof
+
