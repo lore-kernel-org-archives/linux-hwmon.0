@@ -2,114 +2,175 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E96AC61DA4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Mar 2023 02:26:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36454C6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Mar 2023 03:02:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbjCPC03 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Mar 2023 22:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
+        id S229780AbjCPDCq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Mar 2023 23:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCPC03 (ORCPT
+        with ESMTP id S229746AbjCPDCo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2023 22:26:29 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5329DC8899;
-        Wed, 15 Mar 2023 19:26:28 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id l9so260738iln.1;
-        Wed, 15 Mar 2023 19:26:28 -0700 (PDT)
+        Wed, 15 Mar 2023 23:02:44 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD46CC328;
+        Wed, 15 Mar 2023 20:02:38 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id bp11so290616ilb.3;
+        Wed, 15 Mar 2023 20:02:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678933587;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wn6GTzWZhVeWN9PHLIBwYzMfzh5f2SxCuW63G3ON8vA=;
-        b=EYke7L/0V16TNrSbT6Wd/Z2S7MJA3OsZBwtYESg7GgG097KlpCDeglcU5CEslriEaK
-         dRbQ2BR8iZjhdySIZM/KnbKWRchRf+RLGhKkC4ZUMbw7qOHP/00owgNxCOXeySIBxB8N
-         ljACycgo4gC+qpBsEdUS42OyGkFX/SNxsVMU/2jM7SdQbZQBNurwGl82Ze6CEcuKWsvU
-         3NHSa/2/Rb1pVEsEl8OcsfLu+4fZ9AolNfpJcvnk4b+Hfv6Mwkfpz3ljmgU7Z9IZGemo
-         Wkq9LTBynK91Y2+x5wPhrDSeKe02iqXya9JLB0PTDf1n3CcKA4IpG/wv5tP2SPjWPVjo
-         ZkDA==
+        d=gmail.com; s=20210112; t=1678935758;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=drZQHjCyOOafpC70c5NP8gNzTfwHKInPcyK0qutY9dc=;
+        b=picqHkZbro0IEpcr5gQ/IqAF8ANsUFe+R+q/qCTcmo+ACBbq7Jd6KS1Y5RmmwH/rjp
+         XVTeGz6klrGj4dqILUmZL77HGpYqJpYKwzSAvAnHx/HAgVPmWy+QA7tualptQNLctvpl
+         A2ZWOvPrJCaK4IbnVs2nFlhKTm03qsBkaolxBBMfULNNbqVWpd9m8WZxXEEFwTn1IiXO
+         ZUk+NTKg8BIaCYr41+PrsnQOKLb9zzDm/3/r/Q96S0WVlJd8RRampdagtQf3VSDgGPof
+         uBUeUhq8pV5bOg99kPUY/0UpqiVkroUFfVmDsAz4PCDP7bO6IiLdGlNO/YKdyExkGzYm
+         Pi1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678933587;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wn6GTzWZhVeWN9PHLIBwYzMfzh5f2SxCuW63G3ON8vA=;
-        b=uxbB8rneAdrWo49hBj4WLNEvA5F8cWeUZubWzqsVwPSDdeT7xfFxkYkeltezLfHCFr
-         EaPG181Vl5WyS9rOaUtY7z2kZ8NA1fMfv1+iuhdGkNYuWIshGgDwnu6cuuO90r6DP2sa
-         MQdx2ssz6/vwRu+cZqEbSjNE1FOLXrDyXCYVS0Sajq6hf1U/xouFDdUje+A+KJzRzp7D
-         CvJcV2vD4pqKs5CxuuNF3xIV4Hr1zX145jLu5lhlcwTQ1fcMuhE7k6oyLvqxHW6xlWIP
-         Mfq2h3s3gDIT+3e/z2ev1lg1sGMuDW73ZcrW8gVtMO81JvlnwvC0kww7Vls7E0Fi+88I
-         l2KQ==
-X-Gm-Message-State: AO0yUKVDFFzf6qNzK4bu+kRjx8SVR3xx5ehB8Q1H15hHXAbaHzl+E409
-        JR+ZtJ89SUqgQpbIr3Q7Rnw=
-X-Google-Smtp-Source: AK7set8p2OItMZv7IfV7pyIVxYF9z9ZHhZogOGMpMQFDu6g2dTdXi3txgIEK1s1udk3ydfCVe4nUpQ==
-X-Received: by 2002:a05:6e02:68a:b0:311:e48:d64a with SMTP id o10-20020a056e02068a00b003110e48d64amr6041036ils.17.1678933587699;
-        Wed, 15 Mar 2023 19:26:27 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z9-20020a92cd09000000b00316e39f1285sm2030493iln.82.2023.03.15.19.26.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 19:26:27 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678935758;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=drZQHjCyOOafpC70c5NP8gNzTfwHKInPcyK0qutY9dc=;
+        b=zU7DsRWwXrGAnsl+X6YeTtcSe0MSwL7B3GfuVbmp1iXG9X3P7IZropKAkJf+1ozVMA
+         gQjVNEuv6npGwFn0zn7Xu5+kxscS0SFFLg6ZVHN/0bg5VFWweJG9QJi3O+KhxgiriRc3
+         m0iV1PYTB1Sw8RKwpDWO9ZClwetBmLl8OQSDgrQWHHOZA5rD0K+9+2vRYQjPF7Maes9B
+         08iAAD+fMPi9ppB1E9mPV4w8h21PiGtZ4iD6j/8V0uKcOplWBsY+2K+dX38tE15tqWMb
+         Y4q7nL2np6B0EB6d73WN4Vb0O07iuo9bcKiZJGb1Ey4L+zmxYUHnPsgjjsZo53PudTCl
+         zpog==
+X-Gm-Message-State: AO0yUKVVDhKROljXVhFZz96wagAwBOBOTRJLWWDbVi7n12D7ySuEvxEc
+        /oYwHQsRw2w9LEKoci5BaU0=
+X-Google-Smtp-Source: AK7set/R92HqBcKZenUQiJAyeUFRslxvFWtnjraQLr1VMtqswM8wNnPX1u+slku/h4WPU1h82ds51A==
+X-Received: by 2002:a92:ab04:0:b0:323:aa7:befb with SMTP id v4-20020a92ab04000000b003230aa7befbmr5655735ilh.6.1678935758285;
+        Wed, 15 Mar 2023 20:02:38 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s17-20020a92c5d1000000b00313f1b861b7sm2086606ilt.51.2023.03.15.20.02.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 20:02:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 15 Mar 2023 19:26:26 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Lorenz Brun <lorenz@brun.one>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: pwm-fan: set usage_power on PWM state
-Message-ID: <ec52f540-0f78-4cf0-ae61-314cab33ac80@roeck-us.net>
-References: <20230309011009.2109696-1-lorenz@brun.one>
+Message-ID: <aaf0553c-48de-580f-70d5-aafeecb19e16@roeck-us.net>
+Date:   Wed, 15 Mar 2023 20:02:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309011009.2109696-1-lorenz@brun.one>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Phinex Hung <phinex@realtek.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230315121606.GA71707@threadripper>
+ <8dbed631-62b6-1802-8f4e-7141b1a91a56@roeck-us.net>
+ <D23B9D06-0DEA-4E3B-A64C-C928CAF2FEF8@realtek.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
+ thermal_of
+In-Reply-To: <D23B9D06-0DEA-4E3B-A64C-C928CAF2FEF8@realtek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 02:10:08AM +0100, Lorenz Brun wrote:
-> PWM fans are controlled solely by the duty cycle of the PWM signal, they
-> do not care about the exact timing. Thus set usage_power to true to
-> allow less flexible hardware to work as a PWM source for fan control.
+On 3/15/23 19:21, Phinex Hung wrote:
+> 
+> On 3/15/23 11:36, Guenter Roeck" <groeck7@gmail.com <mailto:groeck7@gmail.com> wrote:
+> ﻿
+>> This is conceptually wrong. It returns the maximum temperature from all drives,
+>> not the temperature from a single drive.
+> 
+>> This is not much different from collecting all temperatures from all sensors
+>> in the system and declaring the maximum of those as single thermal zone.
+> 
+>> If anything, each drive would have to reflect a thermal zone. The big question
+>> is how to determine the associated devicetree property.
+> 
+> My basic idea is to use a single thermal zone for multiple disks.
+> 
+> In most of the systems, there might be only a single fan that used for cooling.
+> 
+> If each disk has its own thermal zone, we need to add almost the same dts entries for each thermal zone,
+> 
+> and do almost the same cooling operations.
+> 
+> That is why I am trying to using a single thermal zone for multiple disks.
+> 
+> In any case, if temperature of any disk goes high, cooling should take effect.
 > 
 
-This doesn't seem to be used anywhere else. I do not understand the
-rationale, and I do not understand the practical impact of this change.
-This needs to be confirmed by someone who understands what the flag is
-supposed to be used for, its impact, and if it is indeed appropriate
-in this context.
+Sure. But your argument is inappropriate: You could as well argue that
+this system with a single fan should bundle all its thermal sensors into
+a single thermal zone, and that it should do so in the driver(s)
+providing the thermal zone sensors to the thermal subsystem. This does
+not take into account that there might be systems with dozens (or hundreds,
+for that matter) of drives, in a system with multiple disk trays and fans
+for each of those.
 
-Also, since in practice there is no such "less flexible hardware"
-in the upstream kernel, please describe the use case in more detail.
-The only pwm driver that supports usage_power is pwm-pca9685,
-and that driver uses the flag for EMI reasons, not because it is
-"less flexible hardware". I am not inclined to accept such a change
-without specific use case or need.
+I don't know if and how the thermal subsystem deals with the situation
+of having N thermal zone sensors and M << N cooling devices. This is
+a general problem, not limited to disk drives. Just as we won't bundle
+multiple thermal sensors on a multi-channel thermal sensor chip into a
+single thermal zone, we won't bundle multiple disk drives into a single
+thermal zone.
 
-Thanks,
+>> Also, essentially your patch claims that arch/arm/boot/dts/kirkwood-nsa310s.dts
+>> doesn't work and no one ever noticed. I would like to see that confirmed.
+> 
+> To be honest, my first attempt to get your drivetemp.c works in our SoC was referring to a similar patch,
+> 
+> https://lore.kernel.org/linux-arm-kernel/CAJN1KkzR7NR8TguS7uDs6peDOpkFn0duVBqvKKzm3xnMs9iJ7A@mail.gmail.com/T/
+> 
+> By adding the similar entries in our dts but failed.
+> 
+> Two hwmon devices actually populated, a thermal zone described by my dts also was created.
+> 
+> But there is no link between the thermal zone described in dts and hwmons from drivetemp driver.
+> 
+> So that I traced the source and finding that the thermal zone registration failed due to the lack of a device node of a platform device.
+> 
+> That is why I am trying to use a platform device for registration again.
+> 
+> The original call to hwmon_device_register_with_info should call hwmon_thermal_register_sensors,
+> 
+> But int the last call to thermal_zone_of_sensor_register, dev->of_node would be checked.
+> 
+> This would cause the sensor registration to fail while hwmon still worked.
+> 
+> hwmon_device_register_with_info => __hwmon_device_register => hwmon_thermal_register_sensors =>
+> 
+> hwmon_thermal_add_sensor => devm_thermal_zone_of_sensor_register => thermal_zone_of_sensor_register =>
+> 
+> struct thermal_zone_device *
+> thermal_zone_of_sensor_register(struct device *dev, int sensor_id, void *data,
+>                                  const struct thermal_zone_of_device_ops *ops)
+> {
+>          struct device_node *np, *child, *sensor_np;
+>          struct thermal_zone_device *tzd = ERR_PTR(-ENODEV);
+> 
+>          np = of_find_node_by_name(NULL, "thermal-zones");
+>          if (!np)
+>                  return ERR_PTR(-ENODEV);
+> 
+>          if (!dev || !dev->of_node) {
+>                  of_node_put(np);
+>                  return ERR_PTR(-ENODEV);
+>          }
+> 
+> I am also curious why Kirkwood SoC works without specific patch.
+> 
+> In any case, if device tree binding is used, how could we associate drivetemp sensors with a specific thermal zone
+> 
+In theory it should work just like described in the kirkwood devicetree
+files. If that doesn't work, the question is how to find the sata port
+nodes from the drivetemp driver. I don't have a system with such nodes,
+so I have no means to find or know the answer.
+
+I also don't know how to attach more than one thermal sensor to a
+single thermal zone, or if that is even possible. If it isn't, it
+is a limitation of the thermal subsystem, and trying to hack around
+it in a driver providing thermal sensors would be inappropriate.
+
 Guenter
 
-> Signed-off-by: Lorenz Brun <lorenz@brun.one>
-> ---
->  drivers/hwmon/pwm-fan.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index 83a347ca35da..aa746c2bde39 100644
-> --- a/drivers/hwmon/pwm-fan.c
-> +++ b/drivers/hwmon/pwm-fan.c
-> @@ -507,6 +507,14 @@ static int pwm_fan_probe(struct platform_device *pdev)
->  
->  	pwm_init_state(ctx->pwm, &ctx->pwm_state);
->  
-> +	/*
-> +	 * PWM fans are controlled solely by the duty cycle of the PWM signal,
-> +	 * they do not care about the exact timing. Thus set usage_power to true
-> +	 * to allow less flexible hardware to work as a PWM source for fan
-> +	 * control.
-> +	 */
-> +	ctx->pwm_state.usage_power = true;
-> +
->  	/*
->  	 * set_pwm assumes that MAX_PWM * (period - 1) fits into an unsigned
->  	 * long. Check this here to prevent the fan running at a too low
