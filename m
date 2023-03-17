@@ -2,64 +2,48 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D83F7C6FD19
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Mar 2023 18:18:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B56EC6FD1F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Mar 2023 02:26:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjCPSSK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Mar 2023 14:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
+        id S229589AbjCQC0e convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Mar 2023 22:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjCPSSJ (ORCPT
+        with ESMTP id S229455AbjCQC0e (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Mar 2023 14:18:09 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDBAE4C49;
-        Thu, 16 Mar 2023 11:17:36 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id r4so1484538ila.2;
-        Thu, 16 Mar 2023 11:17:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678990654;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bI/8jCq6po+MlaczI4bLzk/3h/MBLDIro/8WEF8KQL0=;
-        b=EhuqrwBMSRmKOpe8tLKTcmazMMMHAA9YU51FLfLOaNE5XEUtLNH10mdQ1Wy/O38ysV
-         QkLMt8oq801wfhMirTHPuzI/tvQXobFtnCwOOquDI59bJwJyPBd4SVGTFEcblY24bMLs
-         GPm9d8aZyXdJoTsjrCgGdtMsOWAtvFrob75GC7EOsqMStQKPSgnzV4xYIH4BeSjbFt6a
-         6Od23rJEE2C8QTQHqdDCvD06zUhEmRkBkFtUQCD6PEXrr7oL9trUdJc8jz5XykBUKFVA
-         K1KUoTuuzsK6w4cHAanBFXCchBPSnilvH7HZrpWHBqdTAE2zO3fhHeo+avwf94UfL74w
-         W4tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678990654;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bI/8jCq6po+MlaczI4bLzk/3h/MBLDIro/8WEF8KQL0=;
-        b=SVqYwy+kIcwt/jvPhZoHygx1J5Dgqt5QtPtRzyso+kygfzOjx98ZUCJjws2TgJIagx
-         KZcv9DzLp/mdh9JJ4GydSDc92Z+cZ0oTlTdj0XhCNDzG3A3GCHyfUNCUbSMJjtVwUv9N
-         K0vZ1CIeWlfQfaIqdfCzQE4YC99W+DPNxRG/faC/8hZg0hOc/yyWk5KOF+uWEJwyStYV
-         vmMuZyiXJHJ+KKwMYdJi8Lj6sndjsfYwuWT5GOaB4oGd/CbTb//lASrxFupBI07HRmvw
-         K+9JqbMZ6WgLHHGCj3xRSi/9nWcscnmCtOG6MsRpPoE1+xQvs8BxLBd2g31BQ3es44UC
-         1vLQ==
-X-Gm-Message-State: AO0yUKVv8awpWOI7hLIFZUQ6qKCWxWEWgB3JS1be8JTJbj/WedJnbert
-        Pix5tK2PuClS6UDZ5wk14hNLN6H3LoA=
-X-Google-Smtp-Source: AK7set8tQpY8FBEV/bepKFQkoQTm2fBm5x15loX/+3S0vXn+WU6Bm566efKvQ+mipk+EqeShoqwqSw==
-X-Received: by 2002:a05:6e02:1a8e:b0:323:338:cc50 with SMTP id k14-20020a056e021a8e00b003230338cc50mr9030414ilv.22.1678990654574;
-        Thu, 16 Mar 2023 11:17:34 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q2-20020a927502000000b003230b8aa2d6sm6984ilc.57.2023.03.16.11.17.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 11:17:33 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 16 Mar 2023 11:17:32 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Phinex Hung <phinex@realtek.com>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        Thu, 16 Mar 2023 22:26:34 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48836782A;
+        Thu, 16 Mar 2023 19:26:29 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32H2Psz26013272, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32H2Psz26013272
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Fri, 17 Mar 2023 10:25:54 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Fri, 17 Mar 2023 10:25:20 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 17 Mar 2023 10:25:12 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
+ RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
+ 15.01.2375.007; Fri, 17 Mar 2023 10:25:12 +0800
+From:   Phinex Hung <phinex@realtek.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
+Subject: RE: [PATCH v1] hwmon: drivetemp: support to be a platform driver for thermal_of
+Thread-Topic: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
  thermal_of
-Message-ID: <2b1e7e29-daa6-4f24-9fad-7ebe8b87a5fe@roeck-us.net>
+Thread-Index: AQHZVzfsuBPt1OfUHEer519nIXIgnK77czOAgAE6SgD//4V8AIAAjaUA//+VWgCAAK9BgIAAA6MA///XXIAAEq5YAP//vO8A//71L9A=
+Date:   Fri, 17 Mar 2023 02:25:12 +0000
+Message-ID: <32659f71a1784b5484e63152eec29234@realtek.com>
 References: <20230315121606.GA71707@threadripper>
  <8dbed631-62b6-1802-8f4e-7141b1a91a56@roeck-us.net>
  <D23B9D06-0DEA-4E3B-A64C-C928CAF2FEF8@realtek.com>
@@ -70,85 +54,114 @@ References: <20230315121606.GA71707@threadripper>
  <A6DF8FB3-6318-40CD-A364-603A3E581511@realtek.com>
  <8c835412-f78f-570d-30a5-24f4c02a8438@roeck-us.net>
  <4BC6E9A7-13A6-429F-A586-AC60DC505838@realtek.com>
+ <2b1e7e29-daa6-4f24-9fad-7ebe8b87a5fe@roeck-us.net>
+In-Reply-To: <2b1e7e29-daa6-4f24-9fad-7ebe8b87a5fe@roeck-us.net>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.136]
+x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4BC6E9A7-13A6-429F-A586-AC60DC505838@realtek.com>
+X-KSE-AntiSpam-Interceptor-Info: fallback
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 02:17:34PM +0000, Phinex Hung wrote:
-> 
-> 
-> On 3/16/23 22:48, Guenter Roeck wrote:
-> 
-> 
-> >That needs to be in the hwmon core. We can not change the device pointer
-> >passed to hwmon_device_register_with_info() because that determines the
-> >lifetime of the hwmon device.
-> 
-> 
-> >Guenter
-> 
-> Do you mean something like below?
-> 
 
-Yes, except of course for the bugs (see below). That is much less
-than perfect, of course, since we'd really want the device node
-for the drive, not the controller, but it might be the best we can do.
+On Friday, March 17 at 2023 2:18 AM , Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck wrote:
 
-> Or is it reasonable that we just match a specific compatible string and assign the device node to the original dev->parent used in drivetemp_add function ?
-> 
 
-We can't add anything to the parent device node since we don't own it.
-Also, I don't know if devicetree maintainers would accept the concept
-of "virtual" device nodes (and I don't know how device nodes for drives
-would or should look like either).
+>Yes, except of course for the bugs (see below). That is much less than perfect, of course, since we'd really want the device node for the drive, not the controller, but it might be the best we can do.
 
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index 33edb5c02f7d..a76beeada33e 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -757,6 +757,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
->         struct hwmon_device *hwdev;
->         const char *label;
->         struct device *hdev;
-> +       struct device *tedv = dev;
+See, thanks for the review, looks better and bug-less than my draft version.
 
-			tdev =
+Should I submit this patch again using the code snippet that we discussed? Or any suggestions ?
 
->         int i, err, id;
-> 
->         /* Complain about invalid characters in hwmon name attribute */
-> @@ -826,7 +827,9 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
->         hwdev->name = name;
->         hdev->class = &hwmon_class;
->         hdev->parent = dev;
-> -       hdev->of_node = dev ? dev->of_node : NULL;
-> +       while(!tdev->of_node)
+>> Or is it reasonable that we just match a specific compatible string and assign the device node to the original dev->parent used in drivetemp_add function ?
+>>
 
-	  while (tdev && !tdev->of_node)
+>We can't add anything to the parent device node since we don't own it.
+>Also, I don't know if devicetree maintainers would accept the concept of "virtual" device nodes (and I don't know how device nodes for drives would or should look like either).
 
-> +               tdev = tdev->parent;
-> +       hdev->of_node = tdev ? tdev->of_node : NULL;
->         hwdev->chip = chip;
->         dev_set_drvdata(hdev, drvdata);
-> @@ -838,7 +841,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
-> 
->         INIT_LIST_HEAD(&hwdev->tzdata);
-> 
-> -       if (dev && dev->of_node && chip && chip->ops->read &&
-> +       if (tdev && tdev->of_node && chip && chip->ops->read &&
+What I am thinking about is "virtual" device nodes as well, such as..
 
-This could probably be simplified to
-	  if (hdev->of_node && chip && ..
+@@ -99,6 +99,7 @@
+                status = "okay";
 
->             chip->info[0]->type == hwmon_chip &&
->             (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
->                 err = hwmon_thermal_register_sensors(hdev);
-> 
-> Regards,
-> Phinex
-> 
-> 
+                sata_port0: sata-port@0 {
++                       compatible = "drivetemp,hdd-sensors";
+                        reg = <0>;
+                        phys = <&sata_phy 0>;
+                        resets = <&clkc RTD1295_RSTN_SATA_0>,
+@@ -110,6 +110,7 @@
+                };
+
+                sata_port1: sata-port@1 {
++                       compatible = "drivetemp,hdd-sensors";
+                        reg = <1>;
+                        phys = <&sata_phy 1>;
+                        resets = <&clkc (RTD1295_RSTN_SATA_1 | RTD1295_RSTN_REG_BANK_4)>,
+
+And patches in the drivetemp.c itself..
+
+--- a/drivers/hwmon/drivetemp.c
++++ b/drivers/hwmon/drivetemp.c
+@@ -107,6 +107,7 @@
+ #include <scsi/scsi_device.h>
+ #include <scsi/scsi_driver.h>
+ #include <scsi/scsi_proto.h>
++#include <linux/of.h>
+
+ struct drivetemp_data {
+        struct list_head list;          /* list of instantiated devices */
+@@ -525,6 +526,7 @@ static int drivetemp_add(struct device *dev, struct class_interface *intf)
+ {
+        struct scsi_device *sdev = to_scsi_device(dev->parent);
+        struct drivetemp_data *st;
++       static struct device_node *node = NULL;
+        int err;
+
+        st = kzalloc(sizeof(*st), GFP_KERNEL);
+@@ -540,6 +542,11 @@ static int drivetemp_add(struct device *dev, struct class_interface *intf)
+                goto abort;
+        }
+
++       node = of_find_compatible_node(node, NULL, "drivetemp,hdd-sensors");
++
++       if(node)
++               dev->parent->of_node = node;
++
+        st->hwdev = hwmon_device_register_with_info(dev->parent, "drivetemp",
+                                                    st, &drivetemp_chip_info,
+                                                    NULL);
+
+Doing this can get my two HDD works for two thermal zones.
+
+If "virtual" device node can be used, then we don't need to patch the hwmon.c core ?
+
+>> -       hdev->of_node = dev ? dev->of_node : NULL;
+>> +       while(!tdev->of_node)
+
+>          while (tdev && !tdev->of_node)
+
+Thanks for this review, checking tdev can avoid endless loop. My fault for this.
+
+
+> >-       if (dev && dev->of_node && chip && chip->ops->read &&
+> >+       if (tdev && tdev->of_node && chip && chip->ops->read &&
+
+>This could probably be simplified to
+>          if (hdev->of_node && chip && ..
+
+Looks better and simpiler.
+
+Thanks
+
+Regards,
+Phinex
+
