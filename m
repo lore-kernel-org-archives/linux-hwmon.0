@@ -2,166 +2,82 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B56EC6FD1F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Mar 2023 02:26:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8524BC74A5B
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Mar 2023 11:35:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjCQC0e convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Mar 2023 22:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
+        id S229616AbjCQLfu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 Mar 2023 07:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCQC0e (ORCPT
+        with ESMTP id S229603AbjCQLfu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Mar 2023 22:26:34 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48836782A;
-        Thu, 16 Mar 2023 19:26:29 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32H2Psz26013272, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32H2Psz26013272
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Fri, 17 Mar 2023 10:25:54 +0800
-Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Fri, 17 Mar 2023 10:25:20 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 17 Mar 2023 10:25:12 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Fri, 17 Mar 2023 10:25:12 +0800
-From:   Phinex Hung <phinex@realtek.com>
+        Fri, 17 Mar 2023 07:35:50 -0400
+Received: from mx.dolansoft.org (s2.dolansoft.org [212.51.146.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E45B048A;
+        Fri, 17 Mar 2023 04:35:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=brun.one;
+        s=s1; h=MIME-Version:References:In-Reply-To:Message-Id:Cc:To:Subject:From:
+        Date:From:To:Subject:Date:Message-ID:Reply-To;
+        bh=C9aTotIjq9CWOwt4DF2OMCxQ6qxtlKTahgfE76R/yM0=; b=CrACuCukpK7g6mlA1qXPh4ez33
+        cP2JDTsm1r5USG7iIs+6GjflMdwD7BK2BAko9fgaw9GkM75xNR/C/ErdF9CQKN6VjZV05BhCPRcqf
+        byUE3ZMIFvH0x1MICINaZE+sYDQDBkYZK+X2xgTd9ewdoB/IQKn177JwR4BpU7bcZao19gqG82Fwr
+        40yd6xz8ySFghLD4xr1b3HGXFbJHwU1duU3fg0KPKB+pSjaQjR+7YToyWfpMW0JFlG2Ut7AvvYQPf
+        R2AsR3KpzucbcQWcXRbhVckS/ECVStVkGkj4YIL40xA3TvR6hhnRrSTB3W9y3ZxMpSIdXaXQblkIB
+        RydEQpgg==;
+Received: from [212.51.153.89] (helo=[192.168.12.42])
+        by mx.dolansoft.org with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <lorenz@dolansoft.org>)
+        id 1pd8LS-001ltX-35;
+        Fri, 17 Mar 2023 11:34:02 +0000
+Date:   Fri, 17 Mar 2023 12:33:57 +0100
+From:   Lorenz Brun <lorenz@brun.one>
+Subject: Re: [PATCH] hwmon: pwm-fan: set usage_power on PWM state
 To:     Guenter Roeck <linux@roeck-us.net>
-CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v1] hwmon: drivetemp: support to be a platform driver for thermal_of
-Thread-Topic: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
- thermal_of
-Thread-Index: AQHZVzfsuBPt1OfUHEer519nIXIgnK77czOAgAE6SgD//4V8AIAAjaUA//+VWgCAAK9BgIAAA6MA///XXIAAEq5YAP//vO8A//71L9A=
-Date:   Fri, 17 Mar 2023 02:25:12 +0000
-Message-ID: <32659f71a1784b5484e63152eec29234@realtek.com>
-References: <20230315121606.GA71707@threadripper>
- <8dbed631-62b6-1802-8f4e-7141b1a91a56@roeck-us.net>
- <D23B9D06-0DEA-4E3B-A64C-C928CAF2FEF8@realtek.com>
- <aaf0553c-48de-580f-70d5-aafeecb19e16@roeck-us.net>
- <1E8784A0-713E-41A8-A26D-72869E3E5779@realtek.com>
- <5c805125-4cb5-cdf8-6b50-5a6ce7e97149@roeck-us.net>
- <2686E7B8-BD3F-4C86-97B6-447343BFCF22@realtek.com>
- <A6DF8FB3-6318-40CD-A364-603A3E581511@realtek.com>
- <8c835412-f78f-570d-30a5-24f4c02a8438@roeck-us.net>
- <4BC6E9A7-13A6-429F-A586-AC60DC505838@realtek.com>
- <2b1e7e29-daa6-4f24-9fad-7ebe8b87a5fe@roeck-us.net>
-In-Reply-To: <2b1e7e29-daa6-4f24-9fad-7ebe8b87a5fe@roeck-us.net>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.136]
-x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <LGXNRR.0Q7OXCG5DVDQ2@brun.one>
+In-Reply-To: <ec52f540-0f78-4cf0-ae61-314cab33ac80@roeck-us.net>
+References: <20230309011009.2109696-1-lorenz@brun.one>
+        <ec52f540-0f78-4cf0-ae61-314cab33ac80@roeck-us.net>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Sender: lorenz@dolansoft.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Am Mi, 15. M=E4r 2023 um 19:26:26 -07:00:00 schrieb Guenter Roeck=20
+<linux@roeck-us.net>:
+> This doesn't seem to be used anywhere else. I do not understand the
+> rationale, and I do not understand the practical impact of this=20
+> change.
+> This needs to be confirmed by someone who understands what the flag is
+> supposed to be used for, its impact, and if it is indeed appropriate
+> in this context.
+>=20
+> Also, since in practice there is no such "less flexible hardware"
+> in the upstream kernel, please describe the use case in more detail.
+> The only pwm driver that supports usage_power is pwm-pca9685,
+> and that driver uses the flag for EMI reasons, not because it is
+> "less flexible hardware". I am not inclined to accept such a change
+> without specific use case or need.
 
-On Friday, March 17 at 2023 2:18 AM , Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck wrote:
+The reason for this is that I have a PWM-driven fan on a Mediatek=20
+MT7986a whose PWM signal is inverted by a MOSFET.
+The PWM peripheral of the MT7986a however doesn't support inverted=20
+output, at least not in a strict sense (i.e. if inverted mathematically=20
+it is out of phase). The maintainer of the PWM subsystem recommended=20
+that I only mathematically invert if usage_power is set as this means=20
+that phase doesn't matter.
 
-
->Yes, except of course for the bugs (see below). That is much less than perfect, of course, since we'd really want the device node for the drive, not the controller, but it might be the best we can do.
-
-See, thanks for the review, looks better and bug-less than my draft version.
-
-Should I submit this patch again using the code snippet that we discussed? Or any suggestions ?
-
->> Or is it reasonable that we just match a specific compatible string and assign the device node to the original dev->parent used in drivetemp_add function ?
->>
-
->We can't add anything to the parent device node since we don't own it.
->Also, I don't know if devicetree maintainers would accept the concept of "virtual" device nodes (and I don't know how device nodes for drives would or should look like either).
-
-What I am thinking about is "virtual" device nodes as well, such as..
-
-@@ -99,6 +99,7 @@
-                status = "okay";
-
-                sata_port0: sata-port@0 {
-+                       compatible = "drivetemp,hdd-sensors";
-                        reg = <0>;
-                        phys = <&sata_phy 0>;
-                        resets = <&clkc RTD1295_RSTN_SATA_0>,
-@@ -110,6 +110,7 @@
-                };
-
-                sata_port1: sata-port@1 {
-+                       compatible = "drivetemp,hdd-sensors";
-                        reg = <1>;
-                        phys = <&sata_phy 1>;
-                        resets = <&clkc (RTD1295_RSTN_SATA_1 | RTD1295_RSTN_REG_BANK_4)>,
-
-And patches in the drivetemp.c itself..
-
---- a/drivers/hwmon/drivetemp.c
-+++ b/drivers/hwmon/drivetemp.c
-@@ -107,6 +107,7 @@
- #include <scsi/scsi_device.h>
- #include <scsi/scsi_driver.h>
- #include <scsi/scsi_proto.h>
-+#include <linux/of.h>
-
- struct drivetemp_data {
-        struct list_head list;          /* list of instantiated devices */
-@@ -525,6 +526,7 @@ static int drivetemp_add(struct device *dev, struct class_interface *intf)
- {
-        struct scsi_device *sdev = to_scsi_device(dev->parent);
-        struct drivetemp_data *st;
-+       static struct device_node *node = NULL;
-        int err;
-
-        st = kzalloc(sizeof(*st), GFP_KERNEL);
-@@ -540,6 +542,11 @@ static int drivetemp_add(struct device *dev, struct class_interface *intf)
-                goto abort;
-        }
-
-+       node = of_find_compatible_node(node, NULL, "drivetemp,hdd-sensors");
-+
-+       if(node)
-+               dev->parent->of_node = node;
-+
-        st->hwdev = hwmon_device_register_with_info(dev->parent, "drivetemp",
-                                                    st, &drivetemp_chip_info,
-                                                    NULL);
-
-Doing this can get my two HDD works for two thermal zones.
-
-If "virtual" device node can be used, then we don't need to patch the hwmon.c core ?
-
->> -       hdev->of_node = dev ? dev->of_node : NULL;
->> +       while(!tdev->of_node)
-
->          while (tdev && !tdev->of_node)
-
-Thanks for this review, checking tdev can avoid endless loop. My fault for this.
-
-
-> >-       if (dev && dev->of_node && chip && chip->ops->read &&
-> >+       if (tdev && tdev->of_node && chip && chip->ops->read &&
-
->This could probably be simplified to
->          if (hdev->of_node && chip && ..
-
-Looks better and simpiler.
-
-Thanks
+See=20
+https://lore.kernel.org/linux-pwm/20230309010410.2106525-1-lorenz@brun.one/=
+=20
+for the PWM-side patch.
 
 Regards,
-Phinex
+Lorenz
+
 
