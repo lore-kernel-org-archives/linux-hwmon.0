@@ -2,121 +2,129 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BDE4C61DA4
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Mar 2023 11:29:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51CDAC61DA4
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Mar 2023 12:28:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjCRL3X (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 18 Mar 2023 07:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
+        id S229550AbjCRM2E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 18 Mar 2023 08:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjCRL3X (ORCPT
+        with ESMTP id S229478AbjCRM2D (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 18 Mar 2023 07:29:23 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910232B9C3;
-        Sat, 18 Mar 2023 04:29:19 -0700 (PDT)
-Received: from laboratory-MS-7D42.. ([10.12.190.56])
-        (user=jingfelix@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 32IBSldC031417-32IBSldD031417
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 18 Mar 2023 19:28:53 +0800
-From:   Tianyi Jing <jingfelix@hust.edu.cn>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Tianyi Jing <jingfelix@hust.edu.cn>,
-        Dongliang Mu <dzm91@hust.edu.cn>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers: hwmon: fix ioremap and memremap leak
-Date:   Sat, 18 Mar 2023 19:27:11 +0800
-Message-Id: <20230318112711.1803167-1-jingfelix@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
+        Sat, 18 Mar 2023 08:28:03 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FEB367CC;
+        Sat, 18 Mar 2023 05:28:02 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id bf15so3465053iob.7;
+        Sat, 18 Mar 2023 05:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679142481;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=1kMfWrNyQ1D1ri91TyZtrmDYPVhJFlZsofnqJcHljYU=;
+        b=m/SVzELGlViEe/y2fWFpWGDBi6pII2bdmW35mfBP5gQiQOj7OxqwuLsSx+o0kx9XCg
+         4skdyfUAaxY+keEvGlgFo5k+g/aU3nEXjWrRpcj2Oc3uOdtjp4pvka6tnNyHsM8+aKZQ
+         BecboiuPmtmVcLT8Qd5TN7tip5El1unUjVox/kTDwsYCTC8xlrgAm80wEmrc512Mphy0
+         e919atQU3cKlTzTHxhB/7THeNm4K77XHp4CLpMz+m8tX3rrXof1OGUCJK7zSK5xYLePZ
+         SUWrIc/mVC4YQyXUudcxvWAIAffu7s3tu1vI9Ye0CWh5jxcAt/ZgeHV6ya8c+I0KohEz
+         LsFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679142481;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1kMfWrNyQ1D1ri91TyZtrmDYPVhJFlZsofnqJcHljYU=;
+        b=T70yTqf+wIa6YlPoUqN73jnw9E0solS8b1We3Gz4DJx+lgu741qmeEo5mjC7vdSPko
+         r+ICCeh9IwOzf4x99ekbM4iFoqBklwuYS1smx7HMSlCwUEFooDu+dcIkwqt7zXWcj+4W
+         NzmoMF/hD+wvu579ALJwVU9JiOt/bV3KzMmU6xK9PJoG5XeGPt6+CCz1ely1eTAMqlQp
+         ywqEb3QYAE/DULcVbe9TN4j+dIcDDvLJCsT41uR4Tt037x6oVPbhEcskl/c3ri7vDms9
+         CDjFgL295jUfpW4/beHmJidEw/R/TtabMKKv02zThzjqc5nvy+D0VrtmvR94DU3OjVFP
+         +b2g==
+X-Gm-Message-State: AO0yUKU9HoVshXCN60TlWBBMZN34UFeSZBzsEYXSTdh3TecUfsASjfkh
+        0SG6W1MpB9YDqHqa1QHkkLdp/dvgGCw=
+X-Google-Smtp-Source: AK7set+gexTdc8Ur8d0cBb13JbFlkR9KoLhYjq0ZsExpcwtv9WVby4JVQUfX9t5RKEwJiJacnFqUSQ==
+X-Received: by 2002:a6b:da18:0:b0:71f:8124:de52 with SMTP id x24-20020a6bda18000000b0071f8124de52mr1206427iob.9.1679142481331;
+        Sat, 18 Mar 2023 05:28:01 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h11-20020a056602130b00b007535c8726c7sm1323317iov.38.2023.03.18.05.28.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Mar 2023 05:28:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v6.3-rc3
+Date:   Sat, 18 Mar 2023 05:27:58 -0700
+Message-Id: <20230318122758.2140868-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: jingfelix@hust.edu.cn
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Smatch reports:
+Hi Linus,
 
-drivers/hwmon/xgene-hwmon.c:757 xgene_hwmon_probe() warn:
-'ctx->pcc_comm_addr' from ioremap() not released on line: 757.
+Please pull hwmon fixes for Linux v6.3-rc3 from signed tag:
 
-This is because in drivers/hwmon/xgene-hwmon.c:701 xgene_hwmon_probe(),
-ioremap and memremap is not released, which may cause a leak.
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.3-rc3
 
-To fix this, iounmap and memunmap is added to line: 754. And the
-declaration of 'version' is moved to xgene-hwmon.c:620 to help simplify
-getting 'version' below.
+Thanks,
+Guenter
+------
 
-Signed-off-by: Tianyi Jing <jingfelix@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
----
- drivers/hwmon/xgene-hwmon.c | 28 ++++++++++++++++++++++++----
- 1 file changed, 24 insertions(+), 4 deletions(-)
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-index 5cde837bfd09..44d1004ddacb 100644
---- a/drivers/hwmon/xgene-hwmon.c
-+++ b/drivers/hwmon/xgene-hwmon.c
-@@ -617,6 +617,7 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 	struct xgene_hwmon_dev *ctx;
- 	struct mbox_client *cl;
- 	int rc;
-+	int version;
- 
- 	ctx = devm_kzalloc(&pdev->dev, sizeof(*ctx), GFP_KERNEL);
- 	if (!ctx)
-@@ -655,7 +656,6 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 	} else {
- 		struct pcc_mbox_chan *pcc_chan;
- 		const struct acpi_device_id *acpi_id;
--		int version;
- 
- 		acpi_id = acpi_match_device(pdev->dev.driver->acpi_match_table,
- 					    &pdev->dev);
-@@ -749,8 +749,15 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- out:
- 	if (acpi_disabled)
- 		mbox_free_channel(ctx->mbox_chan);
--	else
-+	else {
-+		if (ctx->comm_base_addr && ctx->pcc_comm_addr) {
-+			if (version == XGENE_HWMON_V2)
-+				iounmap(ctx->pcc_comm_addr);
-+			else
-+				memunmap(ctx->pcc_comm_addr);
-+		}
- 		pcc_mbox_free_channel(ctx->pcc_chan);
-+	}
- out_mbox_free:
- 	kfifo_free(&ctx->async_msg_fifo);
- 
-@@ -765,9 +772,22 @@ static int xgene_hwmon_remove(struct platform_device *pdev)
- 	kfifo_free(&ctx->async_msg_fifo);
- 	if (acpi_disabled)
- 		mbox_free_channel(ctx->mbox_chan);
--	else
--		pcc_mbox_free_channel(ctx->pcc_chan);
-+	else {
-+		int version;
-+		const struct acpi_device_id *acpi_id;
- 
-+		acpi_id = acpi_match_device(pdev->dev.driver->acpi_match_table,
-+					    &pdev->dev);
-+
-+		version = (int)acpi_id->driver_data;
-+
-+		if (version == XGENE_HWMON_V2)
-+			iounmap(ctx->pcc_comm_addr);
-+		else
-+			memunmap(ctx->pcc_comm_addr);
-+
-+		pcc_mbox_free_channel(ctx->pcc_chan);
-+	}
- 	return 0;
- }
- 
--- 
-2.34.1
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.3-rc3
+
+for you to fetch changes up to ab00709310eedcd8dae0df1f66d332f9bc64c99e:
+
+  hwmon: (ltc2992) Set `can_sleep` flag for GPIO chip (2023-03-15 19:15:00 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v6.3-rc3
+
+- ltc2992, adm1266: Set missing can_sleep flag
+
+- tmp512/tmp513: Drop of_match_ptr for ID table to fix build with !CONFIG_OF
+
+- ucd90320: Fix back-to-back access problem
+
+- ina3221: Fix bad error return from probe function
+
+- xgene: Fix use-after-free bug in remove function
+
+- adt7475: Fix hysteresis register bit masks, and fix association
+  of 'smoothing' attributes
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (1):
+      hwmon: tmp512: drop of_match_ptr for ID table
+
+Lars-Peter Clausen (3):
+      hwmon: (ucd90320) Add minimum delay between bus accesses
+      hwmon: (adm1266) Set `can_sleep` flag for GPIO chip
+      hwmon: (ltc2992) Set `can_sleep` flag for GPIO chip
+
+Marcus Folkesson (1):
+      hwmon: (ina3221) return prober error code
+
+Tony O'Brien (2):
+      hwmon: (adt7475) Display smoothing attributes in correct order
+      hwmon: (adt7475) Fix masking of hysteresis registers
+
+Zheng Wang (1):
+      hwmon: (xgene) Fix use after free bug in xgene_hwmon_remove due to race condition
+
+ drivers/hwmon/adt7475.c       |  8 ++---
+ drivers/hwmon/ina3221.c       |  2 +-
+ drivers/hwmon/ltc2992.c       |  1 +
+ drivers/hwmon/pmbus/adm1266.c |  1 +
+ drivers/hwmon/pmbus/ucd9000.c | 75 +++++++++++++++++++++++++++++++++++++++++++
+ drivers/hwmon/tmp513.c        |  2 +-
+ drivers/hwmon/xgene-hwmon.c   |  1 +
+ 7 files changed, 84 insertions(+), 6 deletions(-)
