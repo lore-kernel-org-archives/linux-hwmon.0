@@ -2,85 +2,121 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D4B5C74A5B
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Mar 2023 08:06:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BDE4C61DA4
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Mar 2023 11:29:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjCRIGh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 18 Mar 2023 04:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
+        id S229590AbjCRL3X (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 18 Mar 2023 07:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCRIGg (ORCPT
+        with ESMTP id S229478AbjCRL3X (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 18 Mar 2023 04:06:36 -0400
-Received: from ipmail06.adl3.internode.on.net (ipmail06.adl3.internode.on.net [150.101.137.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAB591205A
-        for <linux-hwmon@vger.kernel.org>; Sat, 18 Mar 2023 01:06:34 -0700 (PDT)
-IronPort-SDR: 641570ee_wks+GBu8FazlWHN8+pIZ109Id7DnrmTR1xIm4lyy2ATzDVv
- /XQS9uRDWIHeoYi45hdW1Sf507g3D502ZLIfyuA==
-X-SMTP-MATCH: 0
-Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
-  by ipmail06.adl3.internode.on.net with ESMTP; 18 Mar 2023 18:36:06 +1030
-Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
-        (authenticated bits=0)
-        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 32I85iJa2991191
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sat, 18 Mar 2023 19:06:01 +1100
-Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
-DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 32I85iJa2991191
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
-        s=s1; t=1679126762; bh=5KnocM6tvyAOQmZTCDe5S8EqWUci3Y4pOhixi3kI3BY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TJqp2aUCOy8+U0vZomCPwjHVtIP1rQIEzBErt1VpfBaC7C5lWUvVtzcq5j0UT8KWF
-         3WLXVInCK2oWsni4F/TflDoMZPS2taJ+zRxDvuXvKB4l0i78ND+w92CUP8EbUj5whz
-         +K+4lM7AsKaRgWVkv+cNOzUFO0ZTBY2lalvnRN58sSL+YMR+cSl5z1Ly1BJHiInko1
-         5BscVCWU8Mu20XduRyoOXHL9aiJsO0kDTX2wR7h5ldv9uLBr7qRIVOHyt3q3IYT0vN
-         +9VQINY+o4tRrfCwV4oijF5Sc1eVRWlvcMJg30s/RhGTL6Ngugnqvw2LgY9khoFOfm
-         rTzdBQrDbq+bg==
-From:   Frank Crawford <frank@crawford.emu.id.au>
+        Sat, 18 Mar 2023 07:29:23 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910232B9C3;
+        Sat, 18 Mar 2023 04:29:19 -0700 (PDT)
+Received: from laboratory-MS-7D42.. ([10.12.190.56])
+        (user=jingfelix@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 32IBSldC031417-32IBSldD031417
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 18 Mar 2023 19:28:53 +0800
+From:   Tianyi Jing <jingfelix@hust.edu.cn>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org,
-        Frank Crawford <frank@crawford.emu.id.au>
-Subject: [PATCH v2 2/2] hwmon (it87): Generalise matching labels
-Date:   Sat, 18 Mar 2023 19:05:43 +1100
-Message-Id: <20230318080543.1226700-3-frank@crawford.emu.id.au>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230318080543.1226700-1-frank@crawford.emu.id.au>
-References: <20230318080543.1226700-1-frank@crawford.emu.id.au>
+Cc:     Tianyi Jing <jingfelix@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers: hwmon: fix ioremap and memremap leak
+Date:   Sat, 18 Mar 2023 19:27:11 +0800
+Message-Id: <20230318112711.1803167-1-jingfelix@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sat, 18 Mar 2023 19:06:02 +1100 (AEDT)
-X-Virus-Scanned: clamav-milter 0.103.8 at bits.crawford.emu.id.au
-X-Virus-Status: Clean
+X-FEAS-AUTH-USER: jingfelix@hust.edu.cn
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Apply scaling macro to match the labels for internal voltage sensors.
+Smatch reports:
 
-Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
+drivers/hwmon/xgene-hwmon.c:757 xgene_hwmon_probe() warn:
+'ctx->pcc_comm_addr' from ioremap() not released on line: 757.
+
+This is because in drivers/hwmon/xgene-hwmon.c:701 xgene_hwmon_probe(),
+ioremap and memremap is not released, which may cause a leak.
+
+To fix this, iounmap and memunmap is added to line: 754. And the
+declaration of 'version' is moved to xgene-hwmon.c:620 to help simplify
+getting 'version' below.
+
+Signed-off-by: Tianyi Jing <jingfelix@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
 ---
+ drivers/hwmon/xgene-hwmon.c | 28 ++++++++++++++++++++++++----
+ 1 file changed, 24 insertions(+), 4 deletions(-)
 
-v2:
- * Split out the change to match labels to a separate patch.
-
----
- drivers/hwmon/it87.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index e9614eb557d4..f774a0732a7c 100644
---- a/drivers/hwmon/it87.c
-+++ b/drivers/hwmon/it87.c
-@@ -2004,7 +2004,7 @@ static ssize_t show_label(struct device *dev, struct device_attribute *attr,
+diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
+index 5cde837bfd09..44d1004ddacb 100644
+--- a/drivers/hwmon/xgene-hwmon.c
++++ b/drivers/hwmon/xgene-hwmon.c
+@@ -617,6 +617,7 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
+ 	struct xgene_hwmon_dev *ctx;
+ 	struct mbox_client *cl;
+ 	int rc;
++	int version;
  
- 	if (has_vin3_5v(data) && nr == 0)
- 		label = labels[0];
--	else if (has_12mv_adc(data) || has_10_9mv_adc(data))
-+	else if (has_scaling(data))
- 		label = labels_it8721[nr];
- 	else
- 		label = labels[nr];
+ 	ctx = devm_kzalloc(&pdev->dev, sizeof(*ctx), GFP_KERNEL);
+ 	if (!ctx)
+@@ -655,7 +656,6 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
+ 	} else {
+ 		struct pcc_mbox_chan *pcc_chan;
+ 		const struct acpi_device_id *acpi_id;
+-		int version;
+ 
+ 		acpi_id = acpi_match_device(pdev->dev.driver->acpi_match_table,
+ 					    &pdev->dev);
+@@ -749,8 +749,15 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
+ out:
+ 	if (acpi_disabled)
+ 		mbox_free_channel(ctx->mbox_chan);
+-	else
++	else {
++		if (ctx->comm_base_addr && ctx->pcc_comm_addr) {
++			if (version == XGENE_HWMON_V2)
++				iounmap(ctx->pcc_comm_addr);
++			else
++				memunmap(ctx->pcc_comm_addr);
++		}
+ 		pcc_mbox_free_channel(ctx->pcc_chan);
++	}
+ out_mbox_free:
+ 	kfifo_free(&ctx->async_msg_fifo);
+ 
+@@ -765,9 +772,22 @@ static int xgene_hwmon_remove(struct platform_device *pdev)
+ 	kfifo_free(&ctx->async_msg_fifo);
+ 	if (acpi_disabled)
+ 		mbox_free_channel(ctx->mbox_chan);
+-	else
+-		pcc_mbox_free_channel(ctx->pcc_chan);
++	else {
++		int version;
++		const struct acpi_device_id *acpi_id;
+ 
++		acpi_id = acpi_match_device(pdev->dev.driver->acpi_match_table,
++					    &pdev->dev);
++
++		version = (int)acpi_id->driver_data;
++
++		if (version == XGENE_HWMON_V2)
++			iounmap(ctx->pcc_comm_addr);
++		else
++			memunmap(ctx->pcc_comm_addr);
++
++		pcc_mbox_free_channel(ctx->pcc_chan);
++	}
+ 	return 0;
+ }
+ 
 -- 
-2.39.2
+2.34.1
 
