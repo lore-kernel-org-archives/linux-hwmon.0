@@ -2,139 +2,144 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 871DEC6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Mar 2023 10:03:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6763EC7618A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Mar 2023 11:45:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjCTKDk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Mar 2023 06:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
+        id S231258AbjCTLpv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Mar 2023 07:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjCTKDj (ORCPT
+        with ESMTP id S230513AbjCTLpn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:03:39 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 429002D76;
-        Mon, 20 Mar 2023 03:03:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 88CDFFEC;
-        Mon, 20 Mar 2023 03:03:47 -0700 (PDT)
-Received: from [10.57.20.45] (unknown [10.57.20.45])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6ABB3F67D;
-        Mon, 20 Mar 2023 03:03:00 -0700 (PDT)
-Message-ID: <25b5fb44-fc33-cc2d-5a36-64e780015824@arm.com>
-Date:   Mon, 20 Mar 2023 10:03:06 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 4/4] serial: qcom_geni: Use devm_krealloc_array
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        michal.simek@amd.com, Jonathan Corbet <corbet@lwn.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mon, 20 Mar 2023 07:45:43 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257452069C;
+        Mon, 20 Mar 2023 04:45:33 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id x17so14515237lfu.5;
+        Mon, 20 Mar 2023 04:45:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679312730;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pEHSkSsT1auJnkD1k0lUA29bx/Ib/zqnUvokdeITfEo=;
+        b=qoIIN/X93SlWDs0PXFHLkE7u1YWDYnGDPAQtgUO4tYJn8Rfn7BMhcmj4h3PuY9gWtc
+         EhQSy0fjAXIhMbOvPO7djjKynZfRvdpp+rNbBHJ/48x6RB/iqTVOty+3dXzdXpr2YULq
+         eYimCY9etwWZ8B3wGMJsZ/5AEMPKqR5V5ppHSvB2RRS0pu9ydwaYgwSeN7efZXkKD2wf
+         3GmagUiI/eUXa/fITuf/PlhUNhVziq4LXNCLOGBO3lwf2lG3j8hj9mXRaL3LkbLmgbn2
+         nQ+dYW++xos/dO8dnLhA6WTeeLU3ruTU3/f8l33SbG+LsWQdFBtaDWsopKsqRwGtk0lk
+         T/PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679312730;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pEHSkSsT1auJnkD1k0lUA29bx/Ib/zqnUvokdeITfEo=;
+        b=NPuSkvGMn3HJ0op9u6lEPvSWg1Ff6pt6zyVyfmDxYvVz+nzQKnB3GaAjz6D0t9nWNI
+         FJMhlIwkDT/BbYo/Uaz+dPlg5CFGcyh6PvrqoqxnCjImPkS2qM61VNGohr/ZGV+a4JlN
+         oImbuGT3j0vJs0fs4FQqCPB/T0wSPBHN1k0Awd9wQGqJoEEV594lhC+qaETwmYsWMGXM
+         o7RldPeT0LU2iRyJ3n9Lfb9WVY402Mx2fRanJwwACcJaG5TMhHsa9aZXx9Y5UrtjttR4
+         kg3iveUR6JdUhUylZCPJezGDVP0m+IKzzCNRENl6YnicXOk0M2VC2ltElaqiPaBWRwaL
+         Nw5g==
+X-Gm-Message-State: AO0yUKWoc0GAaq1R6Rqv+g/gbL6FQX974/cxUSezJDWNjEvgSw06xKM+
+        /sg0J9Z4Su+H/nmOgCaLvTA=
+X-Google-Smtp-Source: AK7set94nfBfxtpNV5AkyI1/PEssWOGhiMHEMnMDIVJBtHXo3G+el13tnDKa7fNkf5UyX9vaZgEIKg==
+X-Received: by 2002:ac2:5623:0:b0:4db:38a2:e985 with SMTP id b3-20020ac25623000000b004db38a2e985mr6724334lff.62.1679312730451;
+        Mon, 20 Mar 2023 04:45:30 -0700 (PDT)
+Received: from home.paul.comp (paulfertser.info. [2001:470:26:54b:226:9eff:fe70:80c2])
+        by smtp.gmail.com with ESMTPSA id p20-20020a19f014000000b004db44f782aesm1657416lfc.4.2023.03.20.04.45.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 04:45:30 -0700 (PDT)
+Received: from home.paul.comp (home.paul.comp [IPv6:0:0:0:0:0:0:0:1])
+        by home.paul.comp (8.15.2/8.15.2/Debian-22) with ESMTP id 32KBjPQ4007560;
+        Mon, 20 Mar 2023 14:45:27 +0300
+Received: (from paul@localhost)
+        by home.paul.comp (8.15.2/8.15.2/Submit) id 32KBjF1t007559;
+        Mon, 20 Mar 2023 14:45:15 +0300
+Date:   Mon, 20 Mar 2023 14:45:15 +0300
+From:   Paul Fertser <fercerpav@gmail.com>
+To:     Iwona Winiarska <iwona.winiarska@intel.com>
+Cc:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20230309150334.216760-1-james.clark@arm.com>
- <20230309150334.216760-5-james.clark@arm.com>
- <20230311191800.74ec2b84@jic23-huawei>
- <74d8b579-6ea8-d6f3-170f-ea13534b4565@arm.com>
- <20230318173402.20a4f60d@jic23-huawei>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20230318173402.20a4f60d@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        linux-aspeed@lists.ozlabs.org, linux-doc@vger.kernel.org,
+        Dave Hansen <dave.hansen@intel.com>,
+        Zev Weiss <zweiss@equinix.com>,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Billy Tsai <billy_tsai@aspeedtech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        Tony Luck <tony.luck@intel.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Olof Johansson <olof@lixom.net>
+Subject: Re: [PATCH v8 10/13] hwmon: peci: Add cputemp driver
+Message-ID: <ZBhHS7v+98NK56is@home.paul.comp>
+References: <20220208153639.255278-1-iwona.winiarska@intel.com>
+ <20220208153639.255278-11-iwona.winiarska@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220208153639.255278-11-iwona.winiarska@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hello,
 
+We are seeing wrong DTS temperatures on at least "Intel(R) Xeon(R)
+Bronze 3204 CPU @ 1.90GHz" and most probably other Skylake Xeon CPUs
+are also affected, see inline.
 
-On 18/03/2023 17:34, Jonathan Cameron wrote:
-> On Fri, 17 Mar 2023 11:34:49 +0000
-> James Clark <james.clark@arm.com> wrote:
-> 
->> On 11/03/2023 19:18, Jonathan Cameron wrote:
->>> On Thu,  9 Mar 2023 15:03:33 +0000
->>> James Clark <james.clark@arm.com> wrote:
->>>   
->>>> Now that it exists, use it instead of doing the multiplication manually.
->>>>
->>>> Signed-off-by: James Clark <james.clark@arm.com>  
->>>
->>> Hmm. I've stared at the users of this for a bit, and it's not actually obvious
->>> that it's being used as an array of u32.  The only typed user of this is as
->>> the 2nd parameter of  
->>> tty_insert_flip_string() which is an unsigned char *
->>>
->>> I wonder if that sizeof(u32) isn't a 'correct' description of where the 4 is coming
->>> from even if it has the right value?  Perhaps the fifo depth is just a multiple of 4?
->>>
->>> Jonathan
->>>   
->>
->> The commit that added it (b8caf69a6946) seems to hint that something
->> reads from it in words. And I see this:
->>
->>   /* We always configure 4 bytes per FIFO word */
->>   #define BYTES_PER_FIFO_WORD		4U
->>
->> Perhaps sizeof(u32) isn't as accurate of a description as using
->> BYTES_PER_FIFO_WORD but I'd be reluctant to make a change because I
->> don't really understand the implications.
-> 
-> Agreed with your analysis.  + fully understand why you don't want to change
-> it. 
-> 
-> I'd be tempted to take the view that whilst it's allocated in 4 byte chunks
-> because it's accessed elsewhere as a set of 1 byte entries, krealloc_array
-> isn't appropriate and so just leave it with devm_krealloc()
-> 
-> Risk is that a steady stream of patches will turn up 'fixing' this as
-> it will be easy for people to find with a script.  Maybe better to just add
-> a comment (either with or without your patch).
+On Tue, Feb 08, 2022 at 04:36:36PM +0100, Iwona Winiarska wrote:
+> Add peci-cputemp driver for Digital Thermal Sensor (DTS) thermal
+> readings of the processor package and processor cores that are
+> accessible via the PECI interface.
+...
+> +static const struct cpu_info cpu_hsx = {
+> +	.reg		= &resolved_cores_reg_hsx,
+> +	.min_peci_revision = 0x33,
+> +	.thermal_margin_to_millidegree = &dts_eight_dot_eight_to_millidegree,
+> +};
+> +
+> +static const struct cpu_info cpu_icx = {
+> +	.reg		= &resolved_cores_reg_icx,
+> +	.min_peci_revision = 0x40,
+> +	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
+> +};
+...
+> +	{
+> +		.name = "peci_cpu.cputemp.skx",
+> +		.driver_data = (kernel_ulong_t)&cpu_hsx,
+> +	},
 
-Ok that makes sense to me. I can add a comment instead this patch to
-change this one.
+With this configuration we get this data:
 
->>
->> There is also this in handle_rx_console():
->>
->>   unsigned char buf[sizeof(u32)];
->>
->> James
->>
->>>
->>>   
->>>> ---
->>>>  drivers/tty/serial/qcom_geni_serial.c | 6 +++---
->>>>  1 file changed, 3 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
->>>> index d69592e5e2ec..23fc33d182ac 100644
->>>> --- a/drivers/tty/serial/qcom_geni_serial.c
->>>> +++ b/drivers/tty/serial/qcom_geni_serial.c
->>>> @@ -1056,9 +1056,9 @@ static int setup_fifos(struct qcom_geni_serial_port *port)
->>>>  		(port->tx_fifo_depth * port->tx_fifo_width) / BITS_PER_BYTE;
->>>>  
->>>>  	if (port->rx_buf && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
->>>> -		port->rx_buf = devm_krealloc(uport->dev, port->rx_buf,
->>>> -					     port->rx_fifo_depth * sizeof(u32),
->>>> -					     GFP_KERNEL);
->>>> +		port->rx_buf = devm_krealloc_array(uport->dev, port->rx_buf,
->>>> +						   port->rx_fifo_depth, sizeof(u32),
->>>> +						   GFP_KERNEL);
->>>>  		if (!port->rx_buf)
->>>>  			return -ENOMEM;
->>>>  	}  
->>>   
-> 
+/sys/bus/peci/devices/0-30/peci_cpu.cputemp.skx.48/hwmon/hwmon15# grep . temp[123]_{label,input}
+temp1_label:Die
+temp2_label:DTS
+temp3_label:Tcontrol
+temp1_input:30938
+temp2_input:67735
+temp3_input:80000
+
+On the host system "sensors" report
+
+Package id 0:  +31.C (high = +80.C, crit = +90.C)
+
+So I conclude Die temperature as retrieved over PECI is correct while
+DTS is mis-calculated. The old downstream code in OpenBMC was using
+ten_dot_six_to_millidegree() function for conversion, and that was
+providing expected results. And indeed if we reverse the calculation
+here we get 80000 - ((80000-67735) * 256 / 64) = 30940 which matches
+expectations.
+
+-- 
+Be free, use free (http://www.gnu.org/philosophy/free-sw.html) software!
+mailto:fercerpav@gmail.com
