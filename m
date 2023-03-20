@@ -2,60 +2,67 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1053FC6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Mar 2023 19:46:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B742C6FD1C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Mar 2023 20:31:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjCTTqk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Mar 2023 15:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40630 "EHLO
+        id S229710AbjCTUbl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Mar 2023 16:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjCTTqR (ORCPT
+        with ESMTP id S229648AbjCTUbj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Mar 2023 15:46:17 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A6C59C3;
-        Mon, 20 Mar 2023 12:43:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679341439; x=1710877439;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Dip+6PljFbundS7RPhSnG8yoBMGZR6fzHvXGxG0Cl2U=;
-  b=AGzl7P4LDBbX5prZxsvPlmn7IG56eTSbe43RG+VXt2yt7qw9LmypXbRh
-   QI9+gsIQededz4nJgrk0VxSbVcEnWjSv4RQaWr0a5nK2xwdlWZqYX2gfK
-   Z61fwhDD1MqqVekyF+oI7JJk+jpgsdBBuvx4TDW5NcBlbmjmm1Gncy5RG
-   4/AMceA0N76movCnull+LWw9g534GE+EjbB+UlFSOshO5St9pR1iCaSgx
-   h11zwsKiacKw/vo5yun2Ki//7hwRdr0ULE9GgajFpf9FEkKi5ERfEUJ0c
-   hXMXUd21+CVAPSAedneNMfsckLurl8nDoAkkK/PqU6AhNTYBu0ATUZBj3
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="341123464"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="341123464"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 12:43:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="770317731"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="770317731"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Mar 2023 12:43:56 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1peLQB-000BGs-0J;
-        Mon, 20 Mar 2023 19:43:55 +0000
-Date:   Tue, 21 Mar 2023 03:42:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>, robh+dt@kernel.org,
-        linux@roeck-us.net, jdelvare@suse.com,
+        Mon, 20 Mar 2023 16:31:39 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38A013DD1;
+        Mon, 20 Mar 2023 13:31:32 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id f14so6025282iow.5;
+        Mon, 20 Mar 2023 13:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679344292;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8gfYK0bX5S7genRF/sON2o+bfi4WasC/1IzTrYcf/kc=;
+        b=Dvf7eQPhkolCQ5nbIMbEajl5tXNAGhCSiOcFD8LL+vgXXem2c9IK0VpXz54xaxJc8U
+         erMc7uTuKH8CQecpEms0kUiix+hsSWOm2cOAMLp3sIkTh/+ovJt09lmSruyVoCwyHJX/
+         cDLtUwFIyuZHDeWxPoBcSuUwYFZtwwK91VdLzUsmd7i/FIjXnzjYhYSDXMwmu4B8unu9
+         cPZPz+NDpvQnyCJ/TcR6KY1oRnMJxWWQaTGSBwYIz/Z3lBvpJWEvkT0fbng4/yo274Cb
+         2eKT2IO6lK+MrP6ASxBEtCCZTHIEvXTW5Z4zwi4Wrzm6DJEiCMC1bCWUWlz/0534GMOG
+         6d3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679344292;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8gfYK0bX5S7genRF/sON2o+bfi4WasC/1IzTrYcf/kc=;
+        b=fdtBs77adr3syRgBV0+8V2FAtKswR1/ruLKnoa1q2i4wYwjlM6EIdYE1Xg5kZakC74
+         LudY/rLVroofi8HMmifiP8D3QHZ6HjFFZY/yHYl6HnIS0UxYL7zYduMoS0gJlJ0uM/xZ
+         4fFNIVhpZjxSu2pAFEoX6Y14Wr/FFIwUvvxrX6Xuhkd+3qCiPOjVpfYYVAAUHJ8cwyRP
+         8XXPLlijTmjuaK2Ds/6a54AnLcqNvIrN5zZELyz4hnzsUnwGaPyyzJt9/25yC76sM2UI
+         AmCLY2JESxjyrRN2+wUPvGSpnMyghSiwdAQYSrjkyyyD6UGrTAHvZ9poHq9ZJ+KTAEK5
+         PbxA==
+X-Gm-Message-State: AO0yUKVFv0vV2PED+n/e0jNmAvWFMTzKSZaTsE25qqSTPnTU3USM/8wz
+        vNBGpmO9IcnWoiXeMHNNssY=
+X-Google-Smtp-Source: AK7set/ruFnR10D4y7bea8W7of8zkR/kM0RzakzIbpmiREdZ4IHlo+AiXbCGaQp5W+iVaOMhunpcLg==
+X-Received: by 2002:a5d:8d0b:0:b0:74c:d689:64bd with SMTP id p11-20020a5d8d0b000000b0074cd68964bdmr79548ioj.19.1679344291906;
+        Mon, 20 Mar 2023 13:31:31 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l6-20020a026646000000b003c488204c6fsm3441356jaf.76.2023.03.20.13.31.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 13:31:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 20 Mar 2023 13:31:30 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+Cc:     robh+dt@kernel.org, jdelvare@suse.com,
         krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        eajames@linux.ibm.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+        eajames@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
 Subject: Re: [PATCH v2 3/5] hwmon: (pmbus/acbel-crps) Add Acbel CRPS power
  supply driver
-Message-ID: <202303210322.ZZ2VlGIE-lkp@intel.com>
-References: <20230320154019.1943770-4-lakshmiy@us.ibm.com>
+Message-ID: <5466e42f-6a3d-4b33-8215-ae374d3d5fc9@roeck-us.net>
+References: <20230320154019.1943770-1-lakshmiy@us.ibm.com>
+ <20230320154019.1943770-4-lakshmiy@us.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -64,52 +71,205 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Lakshmi,
+On Mon, Mar 20, 2023 at 10:40:17AM -0500, Lakshmi Yadlapati wrote:
+> Add the driver to support Acbel CRPS power supply.
+> 
+> Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+> ---
+> Changes since V1
+> - Removed debugfs stuff.
+> - Removed acbel_crps_read_word_data and acbel_crps_read_byte_data.
+> - Removed PMBUS_MFR_IIN_MAX.
+> - Added validation for the supported power supply.
+> - Fix the formatting.
+> 
+>  drivers/hwmon/pmbus/Kconfig      |  10 +++
+>  drivers/hwmon/pmbus/Makefile     |   1 +
+>  drivers/hwmon/pmbus/acbel-crps.c | 102 +++++++++++++++++++++++++++++++
+>  3 files changed, 113 insertions(+)
+>  create mode 100644 drivers/hwmon/pmbus/acbel-crps.c
+> 
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 59d9a7430499..0215709c3dd2 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -27,6 +27,16 @@ config SENSORS_PMBUS
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called pmbus.
+>  
+> +config SENSORS_ACBEL_CRPS
+> +	tristate "ACBEL CRPS Power Supply"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for the ACBEL
+> +	  Common Redundant Power Supply.
+> +
 
-Thank you for the patch! Perhaps something to improve:
+This sounds like there is only one, but ...
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on robh/for-next linus/master v6.3-rc3 next-20230320]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called acbel-crps.
+> +	  Supported models: FSG032-00xG
+> +
+... here it says that only one model is (currently) supported.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lakshmi-Yadlapati/dt-bindings-vendor-prefixes-Add-prefix-for-acbel/20230320-235222
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230320154019.1943770-4-lakshmiy%40us.ibm.com
-patch subject: [PATCH v2 3/5] hwmon: (pmbus/acbel-crps) Add Acbel CRPS power supply driver
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230321/202303210322.ZZ2VlGIE-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/d873cbdc9f171b066c3f6f6c2a39736e168ad19f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lakshmi-Yadlapati/dt-bindings-vendor-prefixes-Add-prefix-for-acbel/20230320-235222
-        git checkout d873cbdc9f171b066c3f6f6c2a39736e168ad19f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/pmbus/
+This should just say "Support for Acbel FSG032-00xG CRPS Power Supply"
+and not claim that it supports any others.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303210322.ZZ2VlGIE-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/pmbus/acbel-crps.c:24:37: warning: 'acbel_crps_fops' defined but not used [-Wunused-const-variable=]
-      24 | static const struct file_operations acbel_crps_fops = {
-         |                                     ^~~~~~~~~~~~~~~
+I am also not convinced that the Kconfig option driver name should simply
+be "crps" There is no guarantee that all crps power supplies from this
+vendor will always be supported (supportable) by this driver.
 
 
-vim +/acbel_crps_fops +24 drivers/hwmon/pmbus/acbel-crps.c
+>  config SENSORS_ADM1266
+>  	tristate "Analog Devices ADM1266 Sequencer"
+>  	select CRC8
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 3ae019916267..39aef0cb9934 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -5,6 +5,7 @@
+>  
+>  obj-$(CONFIG_PMBUS)		+= pmbus_core.o
+>  obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
+> +obj-$(CONFIG_SENSORS_ACBEL_CRPS) += acbel-crps.o
+>  obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
+>  obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
+>  obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
+> diff --git a/drivers/hwmon/pmbus/acbel-crps.c b/drivers/hwmon/pmbus/acbel-crps.c
+> new file mode 100644
+> index 000000000000..ac281699709f
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/acbel-crps.c
+> @@ -0,0 +1,102 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright 2023 IBM Corp.
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <linux/fs.h>
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/pmbus.h>
+> +#include <linux/hwmon-sysfs.h>
 
-    23	
-  > 24	static const struct file_operations acbel_crps_fops = {
-    25		.llseek = noop_llseek,
-    26		.open = simple_open,
-    27	};
-    28	
+Unused include
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> +#include "pmbus.h"
+> +
+> +struct acbel_crps {
+> +	struct i2c_client *client;
+> +};
+> +
+> +static const struct i2c_device_id acbel_crps_id[] = {
+> +	{ "acbel_crps" },
+> +	{}
+> +};
+> +#define to_psu(x, y) container_of((x), struct acbel_crps, debugfs_entries[(y)])
+> +
+> +static const struct file_operations acbel_crps_fops = {
+> +	.llseek = noop_llseek,
+> +	.open = simple_open,
+> +};
+
+The above code is unused.
+
+> +
+> +static struct pmbus_driver_info acbel_crps_info = {
+> +	.pages = 1,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
+> +		   PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT |
+> +		   PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3 |
+> +		   PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_VOUT |
+> +		   PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_TEMP |
+> +		   PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_FAN12,
+> +};
+> +
+> +static int acbel_crps_probe(struct i2c_client *client)
+> +{
+> +	struct acbel_crps *psu;
+> +	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
+> +	struct device *dev = &client->dev;
+> +	int rc;
+> +
+> +	rc = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
+> +	if (rc < 0) {
+> +		dev_err(dev, "Failed to read PMBUS_MFR_ID\n");
+> +		return rc;
+> +	}
+> +	if (strncmp(buf, "ACBEL", 5)) {
+
+this also needs to check for rc
+	if (rc < 5 || ...)
+
+> +		buf[rc] = '\0';
+> +		dev_err(dev, "Manufacturer '%s' not supported\n", buf);
+> +		return -ENODEV;
+> +	}
+> +
+> +	rc = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
+> +	if (rc < 0) {
+> +		dev_err(dev, "Failed to read PMBUS_MFR_MODEL\n");
+> +		return rc;
+> +	}
+> +
+> +	if (strncmp(buf, "FSG032", 6)) {
+
+	if (rc < 6 || ...)
+
+> +		buf[rc] = '\0';
+> +		dev_err(dev, "Model '%s' not supported\n", buf);
+> +		return -ENODEV;
+> +	}
+> +
+> +	rc = pmbus_do_probe(client, &acbel_crps_info);
+> +	if (rc)
+> +		return rc;
+> +	/*
+> +         * Don't fail the probe if there isn't enough memory for debugfs.
+> +         */
+
+Formatting
+
+> +	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
+> +	if (!psu)
+> +		return 0;
+
+This code doesn't make any sense.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id acbel_crps_of_match[] = {
+> +	{ .compatible = "acbel,crps" },
+
+This is way too generic. What if there is some other Acbel power supply
+which needs some other options or supports other attributes ?
+This needs to be something like "acbel,fsg032" or similar.
+
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, acbel_crps_of_match);
+> +
+> +static struct i2c_driver acbel_crps_driver = {
+> +	.driver = {
+> +		.name = "acbel-crps",
+> +		.of_match_table = acbel_crps_of_match,
+> +	},
+> +	.probe_new = acbel_crps_probe,
+
+I think probe_new may be gone.
+
+> +	.id_table = acbel_crps_id,
+> +};
+> +
+> +module_i2c_driver(acbel_crps_driver);
+> +
+> +MODULE_AUTHOR("Lakshmi Yadlapati");
+> +MODULE_DESCRIPTION("PMBus driver for AcBel Power System power supplies");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS(PMBUS);
+> -- 
+> 2.37.2
+> 
