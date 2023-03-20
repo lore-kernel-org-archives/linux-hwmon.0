@@ -2,174 +2,102 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A4FDC6FD1C
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Mar 2023 20:32:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFE1FC6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Mar 2023 20:41:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjCTUct (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Mar 2023 16:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
+        id S230238AbjCTUld (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Mar 2023 16:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjCTUcq (ORCPT
+        with ESMTP id S230298AbjCTUl3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:32:46 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD8C5B99;
-        Mon, 20 Mar 2023 13:32:43 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id t129so6023031iof.12;
-        Mon, 20 Mar 2023 13:32:43 -0700 (PDT)
+        Mon, 20 Mar 2023 16:41:29 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511292203D;
+        Mon, 20 Mar 2023 13:41:11 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id l15so5609480ilv.4;
+        Mon, 20 Mar 2023 13:41:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679344362;
+        d=gmail.com; s=20210112; t=1679344870;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=C19puc1CjUet0EnZr5hTIF4s8WkcyV5Hqj3hnqm8iww=;
-        b=Kf3Qg7ddjIzrSZaWovacFmGN96E8CXjiP25SwSFF4XgtDoCH0LTIXikQ0dxeiOTUhw
-         CO3tuebeb3adC1dm/uEoX7prE5Iq8xDFcxeO3SNKUqVrMNOLVDtIXNOduOEQAbXb+BuD
-         ETIIV5ZdXegL7q1KY8GpYt6meRwXI8zkbBiKS3HP2XDXqNsrkgbstJTrrXrAog/VPG7w
-         5gMF9uigs+YIqRgC519Mhi7OGZfaG79i3qUxE1/Nvw+MQKaVmc7SoN04A3Qhx8gBbG2y
-         6GVzTRF4qcsr/0DFfn4B0bGyUBIUuao+RnT9UKFWBtW3YmEFn26yFsSyOxLWFhYQjSfU
-         Qp0w==
+        bh=FfP1M8AIpQDk/dFV6Re7F0lLwMe3nNKA3tGt6+sXSrA=;
+        b=fqgInDamz/2KApokQYzyEA0HcCwgH2b0u/VF5rAWQVF/3Jwx5xvqiXtEQlyd7oW65f
+         agUQ5obgzyK2bhDc6I/5ULgb+P/BCLs5i38UUwEDZuyoNiFwM0P9ZasrTUXVihlAVUBz
+         8FZ7DHyUR+T02tNZUj72EjaGYqRdmzpMRXg+hfUwogH9uzzZmPLZFUya2B57nWlaAxq2
+         o4uFCX4LO2ZnsJxYi+4xTl9UfF+iwbFFT8P3WqqPKEKphow2UhQ23JCvOtAFsunRNLka
+         3YH9kw9wFEEyAsqsKJx33ndrg8VrM1fp2/zydqUnk9EAeUqjj1x9CLDvrvZlbRmPaIti
+         Jj5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679344362;
+        d=1e100.net; s=20210112; t=1679344870;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=C19puc1CjUet0EnZr5hTIF4s8WkcyV5Hqj3hnqm8iww=;
-        b=4R33+qTQhQceR/2TtXcjPWBd6kiOB8alspcKwwEIsEz7tFer3zmsEvxcUuguUc9BOp
-         uyYU/Yk6ZzJUl8EX1otDc2e1g9Hs1hy+g5eVYcOlQS6oILf0OnesFc6ITr3CKVKCOmW+
-         CWA5Ar3uiryA9ilKi8ADzV6G3ojAaDZpvr2dQYKDrcHBSjSRHVaLtr+Grzl+BQZOhQQm
-         Bu9zJUfomTFvMUTrJAnPIvOPaT+iVjWZP6GAWEV/lVFjZISMXzaGbbkj98njw2x0iVmg
-         F5r7wUmtL7j2UMwHeUCyBmgLV92IRoJ374ejuibgMXihA12lb7y4Lun92CTiZKFiAjsV
-         LeJg==
-X-Gm-Message-State: AO0yUKV9byLu/dVRA+a2/uqNw6s5o1Z65FXg3bv1cg6veCqAg/Fts0Ij
-        B7vPHmcwpbskp890s8A5ASHaZPWlfaE=
-X-Google-Smtp-Source: AK7set+lGRVgqCvTAlOWkDWUXK2qRiOlAyqjXOmkeTiocYZ6VJUlOBKDGXKULYPkl+YRhFodxJoZ3Q==
-X-Received: by 2002:a5e:c702:0:b0:74c:e43e:48f7 with SMTP id f2-20020a5ec702000000b0074ce43e48f7mr125807iop.13.1679344362633;
-        Mon, 20 Mar 2023 13:32:42 -0700 (PDT)
+        bh=FfP1M8AIpQDk/dFV6Re7F0lLwMe3nNKA3tGt6+sXSrA=;
+        b=5drYxV6kMjtLgRMhKKdts4jrTu/FEbz3YKhZcrILuJ0Jn9ubaVKiiuW0U9GkY2OxiL
+         p6zdJRLKFSjY3+WOULSE7taF526JXIDOexth31otw+MgmgiDrED8/YGwx4+ys+ROoZK0
+         VfzW9vTWz8sIf0uToipAFjjkzxhTKt7vdQqaaBVOxPQCR2VrY0+51wzQVzSBYY8yA+tB
+         LNUeTZVoWoJ2KvlJZXd9kcAbnXijO8HfpYnPs/nUrhmwaedEGnj8AiH1NM7pJM0vSEGh
+         AfXDlVo1ooiSnQ472dMCEJRO8JrXF/nouuGQxIbRdoVEzt7wGLvHJZGMzo61UIGzxw5U
+         2/bA==
+X-Gm-Message-State: AO0yUKWCmSysMOHuOrzj/HcRiz5UfCLFwh5f7sUAwv+O/wZcJGAKLZDd
+        H8gJZy5EGeepKnoaOE1j6JWGlNkAUA8=
+X-Google-Smtp-Source: AK7set/Jy0gPn/8VLWBE5pMhbyEeAt9lpYudgFKGUHcMaHHuJnNJDBpUNJ0hyh1VDjVpYm/+stOPBQ==
+X-Received: by 2002:a92:dc42:0:b0:315:9937:600e with SMTP id x2-20020a92dc42000000b003159937600emr542324ilq.26.1679344870512;
+        Mon, 20 Mar 2023 13:41:10 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o15-20020a02a1cf000000b003b015157f47sm3502646jah.9.2023.03.20.13.32.42
+        by smtp.gmail.com with ESMTPSA id n16-20020a056638111000b0040619720af8sm3455751jal.35.2023.03.20.13.41.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 13:32:42 -0700 (PDT)
+        Mon, 20 Mar 2023 13:41:10 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 20 Mar 2023 13:32:41 -0700
+Date:   Mon, 20 Mar 2023 13:41:09 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>
 Cc:     robh+dt@kernel.org, jdelvare@suse.com,
         krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
         eajames@linux.ibm.com, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] docs: hwmon: Add documenttaion for acbel-crps PSU
-Message-ID: <3298cf17-5160-4543-ae72-0daae8384d05@roeck-us.net>
+Subject: Re: [PATCH v2 2/5] dt-bindings: trivial-devices: Add acbel,crps
+Message-ID: <13782cac-c46d-4299-896f-ac0341c26f45@roeck-us.net>
 References: <20230320154019.1943770-1-lakshmiy@us.ibm.com>
- <20230320154019.1943770-5-lakshmiy@us.ibm.com>
+ <20230320154019.1943770-3-lakshmiy@us.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230320154019.1943770-5-lakshmiy@us.ibm.com>
+In-Reply-To: <20230320154019.1943770-3-lakshmiy@us.ibm.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 10:40:18AM -0500, Lakshmi Yadlapati wrote:
-> Add documentation changes for acbel-crps psu
+On Mon, Mar 20, 2023 at 10:40:16AM -0500, Lakshmi Yadlapati wrote:
+> Add Acbel CRPS Series power supply to trivial devices.
 > 
 > Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
 > ---
->  Documentation/hwmon/acbel-crps.rst | 81 ++++++++++++++++++++++++++++++
->  1 file changed, 81 insertions(+)
->  create mode 100644 Documentation/hwmon/acbel-crps.rst
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/Documentation/hwmon/acbel-crps.rst b/Documentation/hwmon/acbel-crps.rst
-> new file mode 100644
-> index 000000000000..89a43fb88c8c
-> --- /dev/null
-> +++ b/Documentation/hwmon/acbel-crps.rst
-> @@ -0,0 +1,81 @@
-> +Kernel driver acbel-crps
-> +=======================
-> +
-> +Supported chips:
-> +
-> +  * ACBEL Common Redundant Power Supply.
-> +  Supported models: FSG032-00xG
-> +
-> +Author: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-> +
-> +Description
-> +-----------
-> +
-> +This driver supports ACBEL Common Redundant Power Supply. This driver
-> +is a client to the core PMBus driver.
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index 6f482a254a1d..ae2cf4411b39 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -30,6 +30,8 @@ properties:
+>      items:
+>        - enum:
+>              # SMBus/I2C Digital Temperature Sensor in 6-Pin SOT with SMBus Alert and Over Temperature Pin
+> +          - acbel,crps
+> +            # Acbel CRPS Series power supply
 
-No, it supports the FSG032-00xG power supply. Neither the driver nor its
-documentation should claim otherwise.
+This is way too generic. There is not just one Acbel CRPS power supply,
+there is a whole lot of them. It is very unlikely that they can all
+be described with a single devicetree "compatible" property.
 
-> +
-> +Usage Notes
-> +-----------
-> +
-> +This driver does not auto-detect devices. You will have to instantiate the
-> +devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-> +details.
-> +
-> +Sysfs entries
-> +-------------
-> +
-> +The following attributes are supported:
-> +
-> +======================= ======================================================
-> +curr1_crit          Critical maximum current.
-> +curr1_crit_alarm    Input current critical alarm.
-> +curr1_input         Measured output current.
-> +curr1_label         "iin"
-> +curr1_max           Maximum input current.
-> +curr1_max_alarm     Maximum input current high alarm.
-> +curr1_rated_max     Maximum rated input current.
-> +curr2_crit          Critical maximum current.
-> +curr2_crit_alarm    Output current critical alarm.
-> +curr2_input         Measured output current.
-> +curr2_label         "iout1"
-> +curr2_max           Maximum output current.
-> +curr2_max_alarm     Output current high alarm.
-> +curr2_rated_max     Maximum rated output current.
-> +
-> +
-> +fan1_alarm          Fan 1 warning.
-> +fan1_fault	    Fan 1 fault.
-> +fan1_input	    Fan 1 speed in RPM.
-> +fan1_target         Set fan speed reference.
-> +
-> +in1_alarm           Input voltage under-voltage alarm.
-> +in1_input           Measured input voltage.
-> +in1_label           "vin"
-> +in1_rated_max       Maximum rated input voltage.
-> +in1_rated_min       Minimum rated input voltage.
-> +in2_crit            Critical maximum output voltage.
-> +in2_crit_alarm      Output voltage critical high alarm.
-> +in2_input           Measured output voltage.
-> +in2_label           "vout1"
-> +in2_lcrit           Critical minimum output voltage.
-> +in2_lcrit_alarm     Output voltage critical low alarm.
-> +in2_rated_max       Maximum rated output voltage.
-> +in2_rated_min       Minimum rated output voltage.
-> +
-> +power1_alarm        Input fault or alarm.
-> +power1_input        Measured input power.
-> +power1_label        "pin"
-> +power1_max          Input power limit.
-> +power1_rated_max    Maximum rated input power.
-> +power2_crit         Critical output power limit.
-> +power2_crit_alarm   Output power crit alarm limit exceeded.
-> +power2_input        Measured output power.
-> +power2_label        "pout"
-> +power2_max          Output power limit.
-> +power2_max_alarm    Output power high alarm.
-> +power2_rated_max    Maximum rated output power.
-> +
-> +temp[1-3]_input     Measured temperature.
-> +temp[1-2]_max       Maximum temperature.
-> +temp[1-3]_rated_max Temperature high alarm.
-> +======================= ======================================================
+Guenter
+
+>            - ad,ad7414
+>              # ADM9240: Complete System Hardware Monitor for uProcessor-Based Systems
+>            - ad,adm9240
 > -- 
 > 2.37.2
 > 
