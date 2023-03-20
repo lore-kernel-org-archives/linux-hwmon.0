@@ -2,118 +2,102 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C86C7C77B62
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Mar 2023 15:50:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7F7AC7618D
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Mar 2023 16:36:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbjCTPu0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Mar 2023 11:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
+        id S229674AbjCTQgg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Mar 2023 12:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbjCTPtT (ORCPT
+        with ESMTP id S230109AbjCTQgM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:49:19 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0969A38B57;
-        Mon, 20 Mar 2023 08:40:56 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32KEqHdp010200;
-        Mon, 20 Mar 2023 15:40:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=47IPnaWi3GryIRG2aGPGhl/NJ5wDTsJyUvWbit6GXUg=;
- b=Z50KgXT7st920Fp3w+zbZ5edHlguyi885F5e1smZ/ZROMNsgYMpgK4UHpFEST/VfEGDL
- KwNw8l9p1//gYqO0qHJdpzG1oo49/kv3jqVcurxcHk1bFGu1oi0Wultz1ez06eU3CcFh
- s4wDae6ZvBKKfsMoQpo5xDobdHowZWnnW7/TWzXoJGxi2ZavtEVuHrpfHo23EF4lPIgT
- ldftR1txkskieH3vG5VH/KaTzZPeHGLRGucHGdLRvoEcbpxoQ9WSlRdUrqK/zLBu8gok
- 0hUIBM2f3fNiXsCgYvppY9UMt1Hnkdi58GD1IWSjBaaB2mwvG//JgGIm55KDGwrot04j ag== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pesmqs96v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 15:40:35 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32KEb7P1020743;
-        Mon, 20 Mar 2023 15:40:34 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3pd4x70vk9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 15:40:34 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32KFeW6e8848092
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Mar 2023 15:40:32 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 677CC5804E;
-        Mon, 20 Mar 2023 15:40:32 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4EE0058067;
-        Mon, 20 Mar 2023 15:40:32 +0000 (GMT)
-Received: from gfwa600.aus.stglabs.ibm.com (unknown [9.3.84.101])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 20 Mar 2023 15:40:32 +0000 (GMT)
-Received: by gfwa600.aus.stglabs.ibm.com (Postfix, from userid 181152)
-        id 2A19E74A480; Mon, 20 Mar 2023 10:40:31 -0500 (CDT)
-From:   Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-To:     robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
+        Mon, 20 Mar 2023 12:36:12 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35654468A
+        for <linux-hwmon@vger.kernel.org>; Mon, 20 Mar 2023 09:29:50 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id eg48so48927162edb.13
+        for <linux-hwmon@vger.kernel.org>; Mon, 20 Mar 2023 09:29:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679329788;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ljDW1DCJeBc6T6NBPVNN8pyn9ol9qgM9RQwkASNKOA8=;
+        b=gCXyekbQrdNhVu7FjywwAzLyawMTDALwaQ/dDmZXzYtkMwbHJvDTxmczvCTQoRVGgp
+         4IBMZyligdURAXS6baYzLqGCpWk5ru0wa3ly/Hne9EQamNDeSw9SGo2VvCv5U4O3N0Oy
+         Z5u6266V/r9eexPhQz/kq8OMYKS/G8+bD+0Rym9NQyA3+NVkC9Qv8ICFDBbtP4j31RNT
+         a89cIPodE3qCumLzz1yqGXS7TVgG71LVqCUTInjo13nCxp6JYYDx/GSMUWZqujPOU2zm
+         HGVOqe+6eCshuslVEnlgGsP0ldDmZ6oVV1DCL9FPpT0vqJcbZAQn8aBndg0xmQN3gpVB
+         xBZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679329788;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ljDW1DCJeBc6T6NBPVNN8pyn9ol9qgM9RQwkASNKOA8=;
+        b=vz/elLOL2tJ6pTg2AdzNzSbUxfzcX9BCZ6JBhxbGWUpnjMXUHWzx3UXFDJZ3ZNalO9
+         jtRhoIx7m88GO0mX1WFfrf1gfqkrj4+yYGZrVWURH8tznh31WEx35gIonpvSfNUZ7U7f
+         UTVfOiGXMgY7u6+gwCxs/MW6lRH64rl/atNySuyQCyhVAKojfHWfZ6caoAOsWntCyBrb
+         gPz3U+0qFdQUX4zfocuBM/SfBcLw3jef9KcfhbLJ3jzn499/zDnLGOMgDXeLeEotsbE7
+         ZWll8bZc0j0T/hybamGP5lF2TH2dfNlPHwkt31+cEmRtneIWQx1c2qFTkvucSi7PcDRq
+         hVEg==
+X-Gm-Message-State: AO0yUKWxwgSvsxPXRP2YDKhgBqW9Xq7e5iclA31hQrE6lG/8ZMclLaWF
+        beqq3oB/ZhFtns/Xd70X6VrS2w==
+X-Google-Smtp-Source: AK7set/qO1ZrewJn4bmj3vLDXbMy65GyvyS6dUKXJ11/6IUGi1XwJdzu7rdFlm46eTvxSINFStw9Jg==
+X-Received: by 2002:a17:906:4ed3:b0:932:2282:dbd6 with SMTP id i19-20020a1709064ed300b009322282dbd6mr11253746ejv.5.1679329788739;
+        Mon, 20 Mar 2023 09:29:48 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:458e:64e7:8cf1:78b0? ([2a02:810d:15c0:828:458e:64e7:8cf1:78b0])
+        by smtp.gmail.com with ESMTPSA id d7-20020a1709067f0700b00882f9130eafsm4603368ejr.26.2023.03.20.09.29.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 09:29:48 -0700 (PDT)
+Message-ID: <cd1eace0-7c0b-e6e3-ec56-18a88e974bc0@linaro.org>
+Date:   Mon, 20 Mar 2023 17:29:47 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 2/5] dt-bindings: trivial-devices: Add acbel,crps
+Content-Language: en-US
+To:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>, robh+dt@kernel.org,
+        linux@roeck-us.net, jdelvare@suse.com,
         krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
         eajames@linux.ibm.com
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-Subject: [PATCH v2 5/5] ARM: dts: aspeed: p10bmc: Change power supply info
-Date:   Mon, 20 Mar 2023 10:40:19 -0500
-Message-Id: <20230320154019.1943770-6-lakshmiy@us.ibm.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230320154019.1943770-1-lakshmiy@us.ibm.com>
+        devicetree@vger.kernel.org
 References: <20230320154019.1943770-1-lakshmiy@us.ibm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 87w3C5uC8l8mG6wyE6diQuQdaaNXZ0aY
-X-Proofpoint-ORIG-GUID: 87w3C5uC8l8mG6wyE6diQuQdaaNXZ0aY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-20_10,2023-03-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 suspectscore=0 bulkscore=0 mlxlogscore=702 mlxscore=0
- spamscore=0 impostorscore=0 clxscore=1015 phishscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303200128
+ <20230320154019.1943770-3-lakshmiy@us.ibm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230320154019.1943770-3-lakshmiy@us.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Change power supply driver and device address.
+On 20/03/2023 16:40, Lakshmi Yadlapati wrote:
+> Add Acbel CRPS Series power supply to trivial devices.
+> 
+> Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+> ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index 6f482a254a1d..ae2cf4411b39 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -30,6 +30,8 @@ properties:
+>      items:
+>        - enum:
+>              # SMBus/I2C Digital Temperature Sensor in 6-Pin SOT with SMBus Alert and Over Temperature Pin
+> +          - acbel,crps
+> +            # Acbel CRPS Series power supply
 
-Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
----
- arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Wrong placements of comments. This is AD, not Acbel.
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
-index a5be0ee048ec..414191b5aeba 100644
---- a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
-@@ -552,14 +552,14 @@ ucd90160@64 {
- &i2c3 {
- 	status = "okay";
- 
--	power-supply@58 {
--		compatible = "ibm,cffps";
--		reg = <0x58>;
-+	power-supply@5a {
-+		compatible = "acbel,crps";
-+		reg = <0x5a>;
- 	};
- 
--	power-supply@59 {
--		compatible = "ibm,cffps";
--		reg = <0x59>;
-+	power-supply@5b {
-+		compatible = "acbel,crps";
-+		reg = <0x5b>;
- 	};
- };
- 
--- 
-2.37.2
+>            - ad,ad7414
+>              # ADM9240: Complete System Hardware Monitor for uProcessor-Based Systems
+>            - ad,adm9240
+
+Best regards,
+Krzysztof
 
