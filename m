@@ -2,98 +2,103 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DDE2C6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Mar 2023 15:02:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 217D0C6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Mar 2023 15:03:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbjCUPCa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Mar 2023 11:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
+        id S231527AbjCUPDk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Mar 2023 11:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbjCUPC3 (ORCPT
+        with ESMTP id S231543AbjCUPDj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:02:29 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D7E4FF12
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Mar 2023 08:02:28 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id i19so8233001ila.10
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Mar 2023 08:02:28 -0700 (PDT)
+        Tue, 21 Mar 2023 11:03:39 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831034ECDC;
+        Tue, 21 Mar 2023 08:03:33 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id i19so8235085ila.10;
+        Tue, 21 Mar 2023 08:03:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679410948;
+        d=gmail.com; s=20210112; t=1679411013;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1uuN65SIjM8S4gfvUV5NCJl7fznyVaxh1cWVPeTsZSc=;
-        b=oDM5VcR/VedynO/CXHi3FZvH0J4cgk7YP+qTuDq9b5uAJP9h/TE/SL5kT19NCiu6Q+
-         u3PpaWb0RdGcMTTP/eXtigi49vBNWALZRSwKwFdMFCEeknX+CPthSR5+VJwX+OZOAJMu
-         RVSdWLtbgcMiNSFjG6h6UUn5ecX26MTLSyiIpEtsbbgo3He8YK9raknmb8mHkxnKONng
-         IjS4cr5l6phSXzP/Rl+hU2kOP/Ypzqlp4W5vOB4NxnDRJejhGgJCl0SE2Y99QLMKGkQq
-         1UcDWzTbm1hKElNuR/NHh3laAiLytaWxMiuRMdtH5TQcNOOOcwJOvl1wwZDVWIarithM
-         iepA==
+        bh=+b0RBF1TUlJAK1Wc3FXCrDrFPLmJE7FIK6+ckslK1UM=;
+        b=E7caAMzMooSNt2pe3XiJhonZVZeasaCYUm7SrzGqr4y74E6AgOhnb7Cz73APKj2skz
+         msoYNHa7K1y9M1plB+JkIVHOjbRr0gWho524Aj2+ISPGjZkk2ZdOde8e3S3aDgDoDPby
+         B/HiphsARE9+EN0I+JSZ0m7h2W5QFQUUuHqKimJwdcO7d0biGyx8KkkV4mmM/sfBfxg6
+         OnUOiN+upZDkgozFnCTcrr7VCfD0yVhPctoo+zBGuztriP+EpwtpIf2j7okKOvrJDt03
+         /MHW31VrOH6t2sgG0+PVpdGJauw+RdJfmqakO9Vlr73r+5opxk8/XKlDuFnhXUGS67S5
+         hk/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679410948;
+        d=1e100.net; s=20210112; t=1679411013;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1uuN65SIjM8S4gfvUV5NCJl7fznyVaxh1cWVPeTsZSc=;
-        b=aAitP2+N9fW87MRUs1wtvxuyRls9L8lZlYeqsQ60ZUtrRALidLX2QcrDmA9e8aUwLb
-         GNAuvbG64NnPSJbZftA1JUhwx5y7zjBDO30LDzHEA/lTb7s7HmKJBf2YDRBifJoGNk3g
-         VjYtm3SKHPg+UB5HQCTRv0yI3U9LgGqVi2zJ6K1UddMXSFJ9m1kCq8xpfMjtiznwADgv
-         Vhl9v3epwrE3A/tizVYrVB+Pyb8GyShY42jeZ3UQjFIV4DuTzlpFY5x4+rdJePjsKjyi
-         pWX9hzju0dn3r0mVm/nFIanYoCOkP1ousGXGsbfPK3nk/PSXuIXIvKJqN2ZNu9dU2KYd
-         +FaQ==
-X-Gm-Message-State: AO0yUKVhM+Pw7tEegkvqrfZ+/kzxTDT1wQpcO1tJCX2Cne884PT3wT3Y
-        6kTZtaTbOZSOR99voyIiZ0KrFdrsXv8=
-X-Google-Smtp-Source: AK7set/cGl1RPg7PZHF9mWYuVh7h4MNAWyJjuEATylbLrZfw0z7/YR0eTHGkVVxYvTRD2GvKQNoMDQ==
-X-Received: by 2002:a92:d90b:0:b0:322:f272:30d2 with SMTP id s11-20020a92d90b000000b00322f27230d2mr1541352iln.4.1679410947869;
-        Tue, 21 Mar 2023 08:02:27 -0700 (PDT)
+        bh=+b0RBF1TUlJAK1Wc3FXCrDrFPLmJE7FIK6+ckslK1UM=;
+        b=hmM8jcJCxsomXRAI6PmxUeZLTV7GeVAzWtGVJxB5+RfgzqCMqFtdI+Eh/vQzMMqOE1
+         n3ip1zr+PErYdlv0dvHXEOUAKYfBRPctXWqeExrCTmXK9Sa/pQ2Zru8alYe04l9At8sk
+         zVqPt6d9k3vrr6KfY5ZQi/m07VExkiJGqMFtosLxOJxiH40TSmqwlyEf/wUIvYcM7wqL
+         aJgwxBE0R4exJPxDCH1DrApgkulXlLuIrJUoxR9IO7YftRouNHzvmRFaJQz2bI9i/vOn
+         daqsuqzu+IIFeg2T0qsscDkWyp6sN8rv0SMepcbUIOWrKVn2GTcz9Q+GUPRl0UWofECa
+         ruIg==
+X-Gm-Message-State: AO0yUKWsvFTvB/GECjC8QHeip2Jhn7KqjXxdytK4ywfRpt+41biWUShb
+        3bD4ACa6+1D2q0vdGoyMgNWXSyShca0=
+X-Google-Smtp-Source: AK7set/3sflUDgwt0qW5/w8Wlv0pjmjn7s6jI5vidCC1rABDDOxIuRbf0McNEYdfq7wNV+6m/ueJoQ==
+X-Received: by 2002:a92:d801:0:b0:325:b60b:e2fc with SMTP id y1-20020a92d801000000b00325b60be2fcmr656289ilm.5.1679411012715;
+        Tue, 21 Mar 2023 08:03:32 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y3-20020a929503000000b00315972e90a2sm3644188ilh.64.2023.03.21.08.02.27
+        by smtp.gmail.com with ESMTPSA id c33-20020a023f61000000b003e80d0843e4sm4033746jaf.78.2023.03.21.08.03.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 08:02:27 -0700 (PDT)
+        Tue, 21 Mar 2023 08:03:32 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 21 Mar 2023 08:02:26 -0700
+Date:   Tue, 21 Mar 2023 08:03:31 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Frank Crawford <frank@crawford.emu.id.au>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon (it87): Generalise matching labels
-Message-ID: <99537fd9-2c3d-4442-9a83-b78cf5457f82@roeck-us.net>
-References: <20230318080543.1226700-1-frank@crawford.emu.id.au>
- <20230318080543.1226700-3-frank@crawford.emu.id.au>
+To:     Lorenz Brun <lorenz@brun.one>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: pwm-fan: set usage_power on PWM state
+Message-ID: <571a612a-9779-41da-b857-2880c8298d0c@roeck-us.net>
+References: <20230309011009.2109696-1-lorenz@brun.one>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230318080543.1226700-3-frank@crawford.emu.id.au>
+In-Reply-To: <20230309011009.2109696-1-lorenz@brun.one>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 07:05:43PM +1100, Frank Crawford wrote:
-> Apply scaling macro to match the labels for internal voltage sensors.
+On Thu, Mar 09, 2023 at 02:10:08AM +0100, Lorenz Brun wrote:
+> PWM fans are controlled solely by the duty cycle of the PWM signal, they
+> do not care about the exact timing. Thus set usage_power to true to
+> allow less flexible hardware to work as a PWM source for fan control.
 > 
-> Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
+> Signed-off-by: Lorenz Brun <lorenz@brun.one>
 
-Applied. Please note that I updated the subject because "Generalise
-matching labels" didn't really describe what the patch is doing.
+Applied to hwmon-next.
+
+Thanks,
+Guenter
 
 > ---
+>  drivers/hwmon/pwm-fan.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> v2:
->  * Split out the change to match labels to a separate patch.
-> 
-> ---
->  drivers/hwmon/it87.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-> index e9614eb557d4..f774a0732a7c 100644
-> --- a/drivers/hwmon/it87.c
-> +++ b/drivers/hwmon/it87.c
-> @@ -2004,7 +2004,7 @@ static ssize_t show_label(struct device *dev, struct device_attribute *attr,
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index 83a347ca35da..aa746c2bde39 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
+> @@ -507,6 +507,14 @@ static int pwm_fan_probe(struct platform_device *pdev)
 >  
->  	if (has_vin3_5v(data) && nr == 0)
->  		label = labels[0];
-> -	else if (has_12mv_adc(data) || has_10_9mv_adc(data))
-> +	else if (has_scaling(data))
->  		label = labels_it8721[nr];
->  	else
->  		label = labels[nr];
+>  	pwm_init_state(ctx->pwm, &ctx->pwm_state);
+>  
+> +	/*
+> +	 * PWM fans are controlled solely by the duty cycle of the PWM signal,
+> +	 * they do not care about the exact timing. Thus set usage_power to true
+> +	 * to allow less flexible hardware to work as a PWM source for fan
+> +	 * control.
+> +	 */
+> +	ctx->pwm_state.usage_power = true;
+> +
+>  	/*
+>  	 * set_pwm assumes that MAX_PWM * (period - 1) fits into an unsigned
+>  	 * long. Check this here to prevent the fan running at a too low
