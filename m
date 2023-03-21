@@ -2,148 +2,136 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD099C6FD1C
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Mar 2023 02:18:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8B98C6FD1C
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Mar 2023 02:26:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjCUCSP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Mar 2023 22:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
+        id S229746AbjCUC0x convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Mar 2023 22:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjCUCSO (ORCPT
+        with ESMTP id S229665AbjCUC0w (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Mar 2023 22:18:14 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D2138660;
-        Mon, 20 Mar 2023 19:18:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679365091; x=1710901091;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=W75ElsjLVFfYoLlYWFsDP8xCGZ2jEb+1E/+PqC6P454=;
-  b=S8/tnkd3kClnxiflQ3/XXbWvmn2eXvVvlmjt82/roc+QYb8R54Umeh4Z
-   qtcsTcI39gAmZJXWgQw6Xx404nIWQ3FgzOBGUX65gtpM8k7rKU8V9V9GU
-   LxJ1S09bVsdUieNi+HOkxF92FRd2YPsItazuEPgPTtS20GIqqVkOkjs+F
-   uthLT+6lSLMBQmY3fQWP+K+z8ayzUMnKbwjiCOdea7tsyaC8NsHFE8y39
-   ay1QxhinkrpvGxBl2DF6lu50bLjEXpX13nxPHJtoHDkdrkMIVVBUiWCVM
-   Xv8QecHgWz+eDC0Z4/D+tPorNZb/5k+awbWF7lXdbGNhF1LaTAH1fiKn4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="327205218"
-X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
-   d="scan'208";a="327205218"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 19:18:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="745661113"
-X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
-   d="scan'208";a="745661113"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Mar 2023 19:18:07 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1peRZe-000BV0-3C;
-        Tue, 21 Mar 2023 02:18:06 +0000
-Date:   Tue, 21 Mar 2023 10:17:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>, robh+dt@kernel.org,
-        linux@roeck-us.net, jdelvare@suse.com,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        eajames@linux.ibm.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-Subject: Re: [PATCH v2 4/5] docs: hwmon: Add documenttaion for acbel-crps PSU
-Message-ID: <202303211050.D9YSILr1-lkp@intel.com>
-References: <20230320154019.1943770-5-lakshmiy@us.ibm.com>
+        Mon, 20 Mar 2023 22:26:52 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D6C28D31;
+        Mon, 20 Mar 2023 19:26:50 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 9A8D624E211;
+        Tue, 21 Mar 2023 10:26:49 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
+ 2023 10:26:49 +0800
+Received: from ubuntu.localdomain (183.27.97.64) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
+ 2023 10:26:48 +0800
+From:   Hal Feng <hal.feng@starfivetech.com>
+To:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+CC:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v6 0/2] hwmon: Add StarFive JH71X0 temperature sensor
+Date:   Tue, 21 Mar 2023 10:26:42 +0800
+Message-ID: <20230321022644.107027-1-hal.feng@starfivetech.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320154019.1943770-5-lakshmiy@us.ibm.com>
+Content-Type: text/plain
+X-Originating-IP: [183.27.97.64]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Lakshmi,
+This adds a driver for the temperature sensor on the JH7100 and JH7110,
+RISC-V SoCs by StarFive Technology Co. Ltd.. The JH7100 is used on the
+BeagleV Starlight board and StarFive VisionFive board. The JH7110 is
+used on the StarFive VisionFive 2 board.
 
-Thank you for the patch! Perhaps something to improve:
+v6:
+* Replace SOC_STARFIVE with ARCH_STARFIVE.
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on robh/for-next linus/master v6.3-rc3 next-20230320]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+v5:
+* Drop the "interrupts" property in dt-bindings.
+* Reword the commit message of patch 2.
+* Use continuous mode instead of single mode and drop the interrupt
+  related code used in the single mode.
+* Add the missing "default:" statements in the driver.
+* Change the device name to "sfctemp" which avoids a warning when startup.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lakshmi-Yadlapati/dt-bindings-vendor-prefixes-Add-prefix-for-acbel/20230320-235222
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230320154019.1943770-5-lakshmiy%40us.ibm.com
-patch subject: [PATCH v2 4/5] docs: hwmon: Add documenttaion for acbel-crps PSU
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/e44825c6557c3020131598f7a5e842cbaf29cb1f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lakshmi-Yadlapati/dt-bindings-vendor-prefixes-Add-prefix-for-acbel/20230320-235222
-        git checkout e44825c6557c3020131598f7a5e842cbaf29cb1f
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+v4:
+* Change the node name from "tmon" to "temperature-sensor" in dt-binding
+  example, which is more generic.
+* Add support for StarFive JH7110 SoC besides JH7100.
+* Add clock and reset support in the dt-bindings and driver.
+* Add the missing headers in patch 2.
+* Use devm_platform_ioremap_resource() to remap instead of
+  platform_get_resource() and devm_ioremap_resource().
+* Use dev_err_probe() instead of dev_err().
+* Add Signed-off-by tag for Hal Feng. Add Co-developed-by tag for
+  Samin Guo in patch 2.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303211050.D9YSILr1-lkp@intel.com/
+v3:
+* Handle timeouts from wait_for_completion_interruptible_timeout
+  properly.
 
-All warnings (new ones prefixed by >>):
+v2:
+* Fix checkpatch.pl --strict warnings
+  - Add myself to MAINTAINERS
+  - Fix multiline comments
+  - Use proper case and whitespace for #defines
+  - Add comment to sfctemp::lock mutex.
+* Remaining comments by Guenter Roeck
+  - Add Documentation/hwmon/sfctemp.rst
+  - Use devm_add_action() and devm_hwmon_device_register_with_info()
+    instead of a driver .remove function.
+  - Don't do test conversion at probe time.
+  - #include <linux/io.h>
+  - Remove unused #defines
+  - Use int return variable in sfctemp_convert().
+* Add Samin's Signed-off-by to patch 2/2
 
->> Documentation/hwmon/acbel-crps.rst:2: WARNING: Title underline too short.
->> Documentation/hwmon/acbel-crps.rst:7: WARNING: Bullet list ends without a blank line; unexpected unindent.
->> Documentation/hwmon/acbel-crps.rst:30: WARNING: Malformed table.
->> Documentation/hwmon/acbel-crps.rst: WARNING: document isn't included in any toctree
+---
+History:
+v5: https://lore.kernel.org/all/20230227134125.120638-1-hal.feng@starfivetech.com/
+v4: https://lore.kernel.org/all/20230207072314.62040-1-hal.feng@starfivetech.com/
+v3: https://lore.kernel.org/all/20210726171802.1052716-1-kernel@esmil.dk/
+v2: https://lore.kernel.org/all/20210624162108.832518-1-esmil@mailme.dk/
+v1: https://lore.kernel.org/all/20210616181545.496149-1-kernel@esmil.dk/
 
-vim +2 Documentation/hwmon/acbel-crps.rst
+Emil Renner Berthing (2):
+  dt-bindings: hwmon: Add starfive,jh71x0-temp
+  hwmon: (sfctemp) Add StarFive JH71x0 temperature sensor
 
-   > 2	=======================
-     3	
-     4	Supported chips:
-     5	
-     6	  * ACBEL Common Redundant Power Supply.
-   > 7	  Supported models: FSG032-00xG
-     8	
-     9	Author: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-    10	
-    11	Description
-    12	-----------
-    13	
-    14	This driver supports ACBEL Common Redundant Power Supply. This driver
-    15	is a client to the core PMBus driver.
-    16	
-    17	Usage Notes
-    18	-----------
-    19	
-    20	This driver does not auto-detect devices. You will have to instantiate the
-    21	devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-    22	details.
-    23	
-    24	Sysfs entries
-    25	-------------
-    26	
-    27	The following attributes are supported:
-    28	
-    29	======================= ======================================================
-  > 30	curr1_crit          Critical maximum current.
-    31	curr1_crit_alarm    Input current critical alarm.
-    32	curr1_input         Measured output current.
-    33	curr1_label         "iin"
-    34	curr1_max           Maximum input current.
-    35	curr1_max_alarm     Maximum input current high alarm.
-    36	curr1_rated_max     Maximum rated input current.
-    37	curr2_crit          Critical maximum current.
-    38	curr2_crit_alarm    Output current critical alarm.
-    39	curr2_input         Measured output current.
-    40	curr2_label         "iout1"
-    41	curr2_max           Maximum output current.
-    42	curr2_max_alarm     Output current high alarm.
-    43	curr2_rated_max     Maximum rated output current.
-    44	
-    45	
+ .../bindings/hwmon/starfive,jh71x0-temp.yaml  |  70 ++++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/sfctemp.rst               |  33 ++
+ MAINTAINERS                                   |   8 +
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/sfctemp.c                       | 331 ++++++++++++++++++
+ 7 files changed, 454 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
+ create mode 100644 Documentation/hwmon/sfctemp.rst
+ create mode 100644 drivers/hwmon/sfctemp.c
 
+
+base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.38.1
+
