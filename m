@@ -2,31 +2,31 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8B98C6FD1C
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Mar 2023 02:26:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 215E3C6FD1C
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Mar 2023 02:27:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjCUC0x convert rfc822-to-8bit (ORCPT
+        id S229665AbjCUC1B convert rfc822-to-8bit (ORCPT
         <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Mar 2023 22:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
+        Mon, 20 Mar 2023 22:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjCUC0w (ORCPT
+        with ESMTP id S229826AbjCUC07 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Mar 2023 22:26:52 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D6C28D31;
-        Mon, 20 Mar 2023 19:26:50 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        Mon, 20 Mar 2023 22:26:59 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4275039BAC;
+        Mon, 20 Mar 2023 19:26:57 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 9A8D624E211;
-        Tue, 21 Mar 2023 10:26:49 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
- 2023 10:26:49 +0800
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 79FA524DF02;
+        Tue, 21 Mar 2023 10:26:50 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
+ 2023 10:26:50 +0800
 Received: from ubuntu.localdomain (183.27.97.64) by EXMBX172.cuchost.com
  (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
- 2023 10:26:48 +0800
+ 2023 10:26:49 +0800
 From:   Hal Feng <hal.feng@starfivetech.com>
 To:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>
@@ -43,10 +43,12 @@ CC:     Jean Delvare <jdelvare@suse.com>,
         Samin Guo <samin.guo@starfivetech.com>,
         Hal Feng <hal.feng@starfivetech.com>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 0/2] hwmon: Add StarFive JH71X0 temperature sensor
-Date:   Tue, 21 Mar 2023 10:26:42 +0800
-Message-ID: <20230321022644.107027-1-hal.feng@starfivetech.com>
+Subject: [PATCH v6 1/2] dt-bindings: hwmon: Add starfive,jh71x0-temp
+Date:   Tue, 21 Mar 2023 10:26:43 +0800
+Message-ID: <20230321022644.107027-2-hal.feng@starfivetech.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230321022644.107027-1-hal.feng@starfivetech.com>
+References: <20230321022644.107027-1-hal.feng@starfivetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [183.27.97.64]
@@ -58,80 +60,95 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This adds a driver for the temperature sensor on the JH7100 and JH7110,
-RISC-V SoCs by StarFive Technology Co. Ltd.. The JH7100 is used on the
-BeagleV Starlight board and StarFive VisionFive board. The JH7110 is
-used on the StarFive VisionFive 2 board.
+From: Emil Renner Berthing <kernel@esmil.dk>
 
-v6:
-* Replace SOC_STARFIVE with ARCH_STARFIVE.
+Add bindings for the temperature sensor on the StarFive JH7100 and
+JH7110 SoCs.
 
-v5:
-* Drop the "interrupts" property in dt-bindings.
-* Reword the commit message of patch 2.
-* Use continuous mode instead of single mode and drop the interrupt
-  related code used in the single mode.
-* Add the missing "default:" statements in the driver.
-* Change the device name to "sfctemp" which avoids a warning when startup.
-
-v4:
-* Change the node name from "tmon" to "temperature-sensor" in dt-binding
-  example, which is more generic.
-* Add support for StarFive JH7110 SoC besides JH7100.
-* Add clock and reset support in the dt-bindings and driver.
-* Add the missing headers in patch 2.
-* Use devm_platform_ioremap_resource() to remap instead of
-  platform_get_resource() and devm_ioremap_resource().
-* Use dev_err_probe() instead of dev_err().
-* Add Signed-off-by tag for Hal Feng. Add Co-developed-by tag for
-  Samin Guo in patch 2.
-
-v3:
-* Handle timeouts from wait_for_completion_interruptible_timeout
-  properly.
-
-v2:
-* Fix checkpatch.pl --strict warnings
-  - Add myself to MAINTAINERS
-  - Fix multiline comments
-  - Use proper case and whitespace for #defines
-  - Add comment to sfctemp::lock mutex.
-* Remaining comments by Guenter Roeck
-  - Add Documentation/hwmon/sfctemp.rst
-  - Use devm_add_action() and devm_hwmon_device_register_with_info()
-    instead of a driver .remove function.
-  - Don't do test conversion at probe time.
-  - #include <linux/io.h>
-  - Remove unused #defines
-  - Use int return variable in sfctemp_convert().
-* Add Samin's Signed-off-by to patch 2/2
-
+Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
-History:
-v5: https://lore.kernel.org/all/20230227134125.120638-1-hal.feng@starfivetech.com/
-v4: https://lore.kernel.org/all/20230207072314.62040-1-hal.feng@starfivetech.com/
-v3: https://lore.kernel.org/all/20210726171802.1052716-1-kernel@esmil.dk/
-v2: https://lore.kernel.org/all/20210624162108.832518-1-esmil@mailme.dk/
-v1: https://lore.kernel.org/all/20210616181545.496149-1-kernel@esmil.dk/
-
-Emil Renner Berthing (2):
-  dt-bindings: hwmon: Add starfive,jh71x0-temp
-  hwmon: (sfctemp) Add StarFive JH71x0 temperature sensor
-
- .../bindings/hwmon/starfive,jh71x0-temp.yaml  |  70 ++++
- Documentation/hwmon/index.rst                 |   1 +
- Documentation/hwmon/sfctemp.rst               |  33 ++
- MAINTAINERS                                   |   8 +
- drivers/hwmon/Kconfig                         |  10 +
- drivers/hwmon/Makefile                        |   1 +
- drivers/hwmon/sfctemp.c                       | 331 ++++++++++++++++++
- 7 files changed, 454 insertions(+)
+ .../bindings/hwmon/starfive,jh71x0-temp.yaml  | 70 +++++++++++++++++++
+ 1 file changed, 70 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
- create mode 100644 Documentation/hwmon/sfctemp.rst
- create mode 100644 drivers/hwmon/sfctemp.c
 
-
-base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65
+diff --git a/Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml b/Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
+new file mode 100644
+index 000000000000..f5b34528928d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
+@@ -0,0 +1,70 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/starfive,jh71x0-temp.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: StarFive JH71x0 Temperature Sensor
++
++maintainers:
++  - Emil Renner Berthing <kernel@esmil.dk>
++
++description: |
++  StarFive Technology Co. JH71x0 embedded temperature sensor
++
++properties:
++  compatible:
++    enum:
++      - starfive,jh7100-temp
++      - starfive,jh7110-temp
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    minItems: 2
++    maxItems: 2
++
++  clock-names:
++    items:
++      - const: "sense"
++      - const: "bus"
++
++  '#thermal-sensor-cells':
++    const: 0
++
++  resets:
++    minItems: 2
++    maxItems: 2
++
++  reset-names:
++    items:
++      - const: "sense"
++      - const: "bus"
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - resets
++  - reset-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/starfive-jh7100.h>
++    #include <dt-bindings/reset/starfive-jh7100.h>
++
++    temperature-sensor@124a0000 {
++        compatible = "starfive,jh7100-temp";
++        reg = <0x124a0000 0x10000>;
++        clocks = <&clkgen JH7100_CLK_TEMP_SENSE>,
++                 <&clkgen JH7100_CLK_TEMP_APB>;
++        clock-names = "sense", "bus";
++        #thermal-sensor-cells = <0>;
++        resets = <&rstgen JH7100_RSTN_TEMP_SENSE>,
++                 <&rstgen JH7100_RSTN_TEMP_APB>;
++        reset-names = "sense", "bus";
++    };
 -- 
 2.38.1
 
