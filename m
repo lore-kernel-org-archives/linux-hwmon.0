@@ -2,102 +2,148 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFE1FC6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Mar 2023 20:41:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD099C6FD1C
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Mar 2023 02:18:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjCTUld (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Mar 2023 16:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
+        id S229794AbjCUCSP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Mar 2023 22:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbjCTUl3 (ORCPT
+        with ESMTP id S229612AbjCUCSO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:41:29 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511292203D;
-        Mon, 20 Mar 2023 13:41:11 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id l15so5609480ilv.4;
-        Mon, 20 Mar 2023 13:41:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679344870;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FfP1M8AIpQDk/dFV6Re7F0lLwMe3nNKA3tGt6+sXSrA=;
-        b=fqgInDamz/2KApokQYzyEA0HcCwgH2b0u/VF5rAWQVF/3Jwx5xvqiXtEQlyd7oW65f
-         agUQ5obgzyK2bhDc6I/5ULgb+P/BCLs5i38UUwEDZuyoNiFwM0P9ZasrTUXVihlAVUBz
-         8FZ7DHyUR+T02tNZUj72EjaGYqRdmzpMRXg+hfUwogH9uzzZmPLZFUya2B57nWlaAxq2
-         o4uFCX4LO2ZnsJxYi+4xTl9UfF+iwbFFT8P3WqqPKEKphow2UhQ23JCvOtAFsunRNLka
-         3YH9kw9wFEEyAsqsKJx33ndrg8VrM1fp2/zydqUnk9EAeUqjj1x9CLDvrvZlbRmPaIti
-         Jj5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679344870;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FfP1M8AIpQDk/dFV6Re7F0lLwMe3nNKA3tGt6+sXSrA=;
-        b=5drYxV6kMjtLgRMhKKdts4jrTu/FEbz3YKhZcrILuJ0Jn9ubaVKiiuW0U9GkY2OxiL
-         p6zdJRLKFSjY3+WOULSE7taF526JXIDOexth31otw+MgmgiDrED8/YGwx4+ys+ROoZK0
-         VfzW9vTWz8sIf0uToipAFjjkzxhTKt7vdQqaaBVOxPQCR2VrY0+51wzQVzSBYY8yA+tB
-         LNUeTZVoWoJ2KvlJZXd9kcAbnXijO8HfpYnPs/nUrhmwaedEGnj8AiH1NM7pJM0vSEGh
-         AfXDlVo1ooiSnQ472dMCEJRO8JrXF/nouuGQxIbRdoVEzt7wGLvHJZGMzo61UIGzxw5U
-         2/bA==
-X-Gm-Message-State: AO0yUKWCmSysMOHuOrzj/HcRiz5UfCLFwh5f7sUAwv+O/wZcJGAKLZDd
-        H8gJZy5EGeepKnoaOE1j6JWGlNkAUA8=
-X-Google-Smtp-Source: AK7set/Jy0gPn/8VLWBE5pMhbyEeAt9lpYudgFKGUHcMaHHuJnNJDBpUNJ0hyh1VDjVpYm/+stOPBQ==
-X-Received: by 2002:a92:dc42:0:b0:315:9937:600e with SMTP id x2-20020a92dc42000000b003159937600emr542324ilq.26.1679344870512;
-        Mon, 20 Mar 2023 13:41:10 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n16-20020a056638111000b0040619720af8sm3455751jal.35.2023.03.20.13.41.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 13:41:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 20 Mar 2023 13:41:09 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-Cc:     robh+dt@kernel.org, jdelvare@suse.com,
+        Mon, 20 Mar 2023 22:18:14 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D2138660;
+        Mon, 20 Mar 2023 19:18:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679365091; x=1710901091;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W75ElsjLVFfYoLlYWFsDP8xCGZ2jEb+1E/+PqC6P454=;
+  b=S8/tnkd3kClnxiflQ3/XXbWvmn2eXvVvlmjt82/roc+QYb8R54Umeh4Z
+   qtcsTcI39gAmZJXWgQw6Xx404nIWQ3FgzOBGUX65gtpM8k7rKU8V9V9GU
+   LxJ1S09bVsdUieNi+HOkxF92FRd2YPsItazuEPgPTtS20GIqqVkOkjs+F
+   uthLT+6lSLMBQmY3fQWP+K+z8ayzUMnKbwjiCOdea7tsyaC8NsHFE8y39
+   ay1QxhinkrpvGxBl2DF6lu50bLjEXpX13nxPHJtoHDkdrkMIVVBUiWCVM
+   Xv8QecHgWz+eDC0Z4/D+tPorNZb/5k+awbWF7lXdbGNhF1LaTAH1fiKn4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="327205218"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="327205218"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 19:18:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="745661113"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="745661113"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 20 Mar 2023 19:18:07 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1peRZe-000BV0-3C;
+        Tue, 21 Mar 2023 02:18:06 +0000
+Date:   Tue, 21 Mar 2023 10:17:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>, robh+dt@kernel.org,
+        linux@roeck-us.net, jdelvare@suse.com,
         krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        eajames@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] dt-bindings: trivial-devices: Add acbel,crps
-Message-ID: <13782cac-c46d-4299-896f-ac0341c26f45@roeck-us.net>
-References: <20230320154019.1943770-1-lakshmiy@us.ibm.com>
- <20230320154019.1943770-3-lakshmiy@us.ibm.com>
+        eajames@linux.ibm.com
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+Subject: Re: [PATCH v2 4/5] docs: hwmon: Add documenttaion for acbel-crps PSU
+Message-ID: <202303211050.D9YSILr1-lkp@intel.com>
+References: <20230320154019.1943770-5-lakshmiy@us.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230320154019.1943770-3-lakshmiy@us.ibm.com>
+In-Reply-To: <20230320154019.1943770-5-lakshmiy@us.ibm.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 10:40:16AM -0500, Lakshmi Yadlapati wrote:
-> Add Acbel CRPS Series power supply to trivial devices.
-> 
-> Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index 6f482a254a1d..ae2cf4411b39 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -30,6 +30,8 @@ properties:
->      items:
->        - enum:
->              # SMBus/I2C Digital Temperature Sensor in 6-Pin SOT with SMBus Alert and Over Temperature Pin
-> +          - acbel,crps
-> +            # Acbel CRPS Series power supply
+Hi Lakshmi,
 
-This is way too generic. There is not just one Acbel CRPS power supply,
-there is a whole lot of them. It is very unlikely that they can all
-be described with a single devicetree "compatible" property.
+Thank you for the patch! Perhaps something to improve:
 
-Guenter
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on robh/for-next linus/master v6.3-rc3 next-20230320]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->            - ad,ad7414
->              # ADM9240: Complete System Hardware Monitor for uProcessor-Based Systems
->            - ad,adm9240
-> -- 
-> 2.37.2
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/Lakshmi-Yadlapati/dt-bindings-vendor-prefixes-Add-prefix-for-acbel/20230320-235222
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230320154019.1943770-5-lakshmiy%40us.ibm.com
+patch subject: [PATCH v2 4/5] docs: hwmon: Add documenttaion for acbel-crps PSU
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/e44825c6557c3020131598f7a5e842cbaf29cb1f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Lakshmi-Yadlapati/dt-bindings-vendor-prefixes-Add-prefix-for-acbel/20230320-235222
+        git checkout e44825c6557c3020131598f7a5e842cbaf29cb1f
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303211050.D9YSILr1-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Documentation/hwmon/acbel-crps.rst:2: WARNING: Title underline too short.
+>> Documentation/hwmon/acbel-crps.rst:7: WARNING: Bullet list ends without a blank line; unexpected unindent.
+>> Documentation/hwmon/acbel-crps.rst:30: WARNING: Malformed table.
+>> Documentation/hwmon/acbel-crps.rst: WARNING: document isn't included in any toctree
+
+vim +2 Documentation/hwmon/acbel-crps.rst
+
+   > 2	=======================
+     3	
+     4	Supported chips:
+     5	
+     6	  * ACBEL Common Redundant Power Supply.
+   > 7	  Supported models: FSG032-00xG
+     8	
+     9	Author: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+    10	
+    11	Description
+    12	-----------
+    13	
+    14	This driver supports ACBEL Common Redundant Power Supply. This driver
+    15	is a client to the core PMBus driver.
+    16	
+    17	Usage Notes
+    18	-----------
+    19	
+    20	This driver does not auto-detect devices. You will have to instantiate the
+    21	devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
+    22	details.
+    23	
+    24	Sysfs entries
+    25	-------------
+    26	
+    27	The following attributes are supported:
+    28	
+    29	======================= ======================================================
+  > 30	curr1_crit          Critical maximum current.
+    31	curr1_crit_alarm    Input current critical alarm.
+    32	curr1_input         Measured output current.
+    33	curr1_label         "iin"
+    34	curr1_max           Maximum input current.
+    35	curr1_max_alarm     Maximum input current high alarm.
+    36	curr1_rated_max     Maximum rated input current.
+    37	curr2_crit          Critical maximum current.
+    38	curr2_crit_alarm    Output current critical alarm.
+    39	curr2_input         Measured output current.
+    40	curr2_label         "iout1"
+    41	curr2_max           Maximum output current.
+    42	curr2_max_alarm     Output current high alarm.
+    43	curr2_rated_max     Maximum rated output current.
+    44	
+    45	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
