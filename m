@@ -2,112 +2,193 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 826ECC77B62
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Mar 2023 19:10:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E87BCC6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Mar 2023 19:10:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjCUTKC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S230114AbjCUTKC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Tue, 21 Mar 2023 15:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjCUTJ7 (ORCPT
+        with ESMTP id S229945AbjCUTJ7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Tue, 21 Mar 2023 15:09:59 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AAC1EBF5;
-        Tue, 21 Mar 2023 12:09:57 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LIxbq4008225;
-        Tue, 21 Mar 2023 19:09:33 GMT
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CE51E5EC;
+        Tue, 21 Mar 2023 12:09:58 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LIVZEW013763;
+        Tue, 21 Mar 2023 19:09:34 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=L1Qe1vNPvKWd5cR+Cfarcd9j1YdNXKNpcIxzLqrIqts=;
- b=mt0doSB2R08g8sgloVaEeMWHNhlgiKxvJ9PcMa+ciR8unJ7Jc1VS+ViGAd5Gzmw6acrB
- fTaOoRpFzC9uFIJgvv6kP0taPwumOAvQLUjniAesqFYuQ8i8osx3KEkp0QwhLLhP604r
- 3Y4x4FxUIs8hT9K0x4wXrt7qsgGmyi9k78Iw56nmLt+AJvu6G/1xvlQH13Cs+7fn7erR
- mUFY4GxzfGZwvuAhIVFNu8wQEovJGJxysg/okPo2iULjOZ86NPWBdcSi9OPODxQw7ifW
- JSTrLH0YB6ZLEvDqbb7+wrRgIwikc4eRR0F9vEcU7AddZFNcr6a0+C+WcO876Fbr3ino xw== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pfjbn07av-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=c1DB9Q+Cek+iqDACVGLynf6pmu9TXXNVC26gWlakK7A=;
+ b=Qzd7i1UhNP8hwDKLS5J9c6WdhZKtLu4NQ/lbjRbCFX5tbqHvvJKDcKfBTy7WPw90S/bO
+ r5AuGKB4cQV4s/e6wUtw04IlnSxN/n9U10391OYn9SBQmHCOlEFFnZ2/OVeylZ+lylaO
+ 1fAJvLKD1Sl967VZYkC5IPm4jT21aYHLc7HF2Mtzquu8JtP7ezjeSkwUmuKo/Qimy58E
+ 33+kX1b45HHPHqIO85ObFcnTYiW6Dbr79YmruuSrlVqQQYkcjSjodaGIYrs9pALYCdSp
+ gHfmqoWwYwAsZL/5UjsV+qEb3kc4OAUSkh8yImzYbmPkwThDLvyTeAoHyES5RIMgvOZu ng== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pfhxh11cy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 21 Mar 2023 19:09:33 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32LHKu7C021504;
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32LHJIXR014726;
         Tue, 21 Mar 2023 19:09:32 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3pd4x74abc-1
+Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3pd4x799q7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 21 Mar 2023 19:09:32 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32LJ9ULV31457854
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32LJ9UKe37290634
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 21 Mar 2023 19:09:30 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 760CE58052;
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7BB0A58055;
         Tue, 21 Mar 2023 19:09:30 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 66BCB58067;
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C73558043;
         Tue, 21 Mar 2023 19:09:30 +0000 (GMT)
 Received: from gfwa600.aus.stglabs.ibm.com (unknown [9.3.84.101])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTPS;
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTPS;
         Tue, 21 Mar 2023 19:09:30 +0000 (GMT)
 Received: by gfwa600.aus.stglabs.ibm.com (Postfix, from userid 181152)
-        id 0DE1674A47B; Tue, 21 Mar 2023 14:09:30 -0500 (CDT)
+        id 2F1FD74A47F; Tue, 21 Mar 2023 14:09:30 -0500 (CDT)
 From:   Lakshmi Yadlapati <lakshmiy@us.ibm.com>
 To:     robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
         krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
         eajames@linux.ibm.com
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-Subject: [PATCH v3 0/5] hwmon: (pmbus/acbel-fsg032) Add Acbel power supply
-Date:   Tue, 21 Mar 2023 14:09:09 -0500
-Message-Id: <20230321190914.2266216-1-lakshmiy@us.ibm.com>
+Subject: [PATCH v3 4/5] docs: hwmon: Add documentaion for acbel-fsg032 PSU
+Date:   Tue, 21 Mar 2023 14:09:13 -0500
+Message-Id: <20230321190914.2266216-5-lakshmiy@us.ibm.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230321190914.2266216-1-lakshmiy@us.ibm.com>
+References: <20230321190914.2266216-1-lakshmiy@us.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: i4UyQuLvflPLCObpkFja6jGsAdcxruSO
-X-Proofpoint-ORIG-GUID: i4UyQuLvflPLCObpkFja6jGsAdcxruSO
+X-Proofpoint-GUID: 0i95fRNdJELZoyzZd_jpwLUiXfQAdtrj
+X-Proofpoint-ORIG-GUID: 0i95fRNdJELZoyzZd_jpwLUiXfQAdtrj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
- adultscore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015 mlxscore=0
- priorityscore=1501 mlxlogscore=772 phishscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
- definitions=main-2303210152
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 bulkscore=0 mlxscore=0 spamscore=0 phishscore=0
+ malwarescore=0 adultscore=0 mlxlogscore=943 priorityscore=1501
+ suspectscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303150002 definitions=main-2303210152
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Adding new acbel,fsg032 driver and documentation updates.
+Add documentation changes for acbel-fsg032 psu
 
-Changes since V2:
-- Changed the driver name to acbel-fsg032.
-- Fix warnings in acbel-fsg032 driver.
-- Fix warnings in acbel-fsg032.rst and updated the index.
-- Fix comments in trivial-devices.yaml.
-- Fix commit message for dts changes.
-- Updated the commit messages with new driver name.
-
-Lakshmi Yadlapati (5):
-  dt-bindings: vendor-prefixes: Add prefix for acbel
-  dt-bindings: trivial-devices: Add acbel,fsg032
-  hwmon: (pmbus/acbel-fsg032) Add Acbel power supply
-  docs: hwmon: Add documentaion for acbel-fsg032 PSU
-  ARM: dts: aspeed: p10bmc: Change power supply info
-
- .../devicetree/bindings/trivial-devices.yaml  |  2 +
- .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
- Documentation/hwmon/acbel-fsg032.rst          | 80 ++++++++++++++++
- Documentation/hwmon/index.rst                 |  1 +
- arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts  | 12 +--
- drivers/hwmon/pmbus/Kconfig                   |  9 ++
- drivers/hwmon/pmbus/Makefile                  |  1 +
- drivers/hwmon/pmbus/acbel-fsg032.c            | 96 +++++++++++++++++++
- 8 files changed, 197 insertions(+), 6 deletions(-)
+Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+---
+ Documentation/hwmon/acbel-fsg032.rst | 80 ++++++++++++++++++++++++++++
+ Documentation/hwmon/index.rst        |  1 +
+ 2 files changed, 81 insertions(+)
  create mode 100644 Documentation/hwmon/acbel-fsg032.rst
- create mode 100644 drivers/hwmon/pmbus/acbel-fsg032.c
 
+diff --git a/Documentation/hwmon/acbel-fsg032.rst b/Documentation/hwmon/acbel-fsg032.rst
+new file mode 100644
+index 000000000000..f1684b95e103
+--- /dev/null
++++ b/Documentation/hwmon/acbel-fsg032.rst
+@@ -0,0 +1,80 @@
++Kernel driver acbel-fsg032
++==========================
++
++Supported chips:
++
++  * ACBEL FSG032-00xG power supply.
++
++Author: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
++
++Description
++-----------
++
++This driver supports ACBEL FSG032-00xG Power Supply. This driver
++is a client to the core PMBus driver.
++
++Usage Notes
++-----------
++
++This driver does not auto-detect devices. You will have to instantiate the
++devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
++details.
++
++Sysfs entries
++-------------
++
++The following attributes are supported:
++
++======================= ======================================================
++curr1_crit              Critical maximum current.
++curr1_crit_alarm        Input current critical alarm.
++curr1_input             Measured output current.
++curr1_label             "iin"
++curr1_max               Maximum input current.
++curr1_max_alarm         Maximum input current high alarm.
++curr1_rated_max         Maximum rated input current.
++curr2_crit              Critical maximum current.
++curr2_crit_alarm        Output current critical alarm.
++curr2_input             Measured output current.
++curr2_label             "iout1"
++curr2_max               Maximum output current.
++curr2_max_alarm         Output current high alarm.
++curr2_rated_max         Maximum rated output current.
++
++
++fan1_alarm              Fan 1 warning.
++fan1_fault	        Fan 1 fault.
++fan1_input	        Fan 1 speed in RPM.
++fan1_target             Set fan speed reference.
++
++in1_alarm               Input voltage under-voltage alarm.
++in1_input               Measured input voltage.
++in1_label               "vin"
++in1_rated_max           Maximum rated input voltage.
++in1_rated_min           Minimum rated input voltage.
++in2_crit                Critical maximum output voltage.
++in2_crit_alarm          Output voltage critical high alarm.
++in2_input               Measured output voltage.
++in2_label               "vout1"
++in2_lcrit               Critical minimum output voltage.
++in2_lcrit_alarm         Output voltage critical low alarm.
++in2_rated_max           Maximum rated output voltage.
++in2_rated_min           Minimum rated output voltage.
++
++power1_alarm            Input fault or alarm.
++power1_input            Measured input power.
++power1_label            "pin"
++power1_max              Input power limit.
++power1_rated_max        Maximum rated input power.
++power2_crit             Critical output power limit.
++power2_crit_alarm       Output power crit alarm limit exceeded.
++power2_input            Measured output power.
++power2_label            "pout"
++power2_max              Output power limit.
++power2_max_alarm        Output power high alarm.
++power2_rated_max        Maximum rated output power.
++
++temp[1-3]_input         Measured temperature.
++temp[1-2]_max           Maximum temperature.
++temp[1-3]_rated_max     Temperature high alarm.
++======================= ======================================================
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index f1fe75f596a5..dc4ebed13617 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -23,6 +23,7 @@ Hardware Monitoring Kernel Drivers
+    abituguru
+    abituguru3
+    acpi_power_meter
++   acbel-fsg032
+    ad7314
+    adc128d818
+    adm1021
 -- 
 2.37.2
 
