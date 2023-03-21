@@ -2,103 +2,120 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 217D0C6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Mar 2023 15:03:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43F2BC6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Mar 2023 19:10:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbjCUPDk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Mar 2023 11:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
+        id S229937AbjCUTJ7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Mar 2023 15:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbjCUPDj (ORCPT
+        with ESMTP id S230114AbjCUTJ6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:03:39 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831034ECDC;
-        Tue, 21 Mar 2023 08:03:33 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id i19so8235085ila.10;
-        Tue, 21 Mar 2023 08:03:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679411013;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+b0RBF1TUlJAK1Wc3FXCrDrFPLmJE7FIK6+ckslK1UM=;
-        b=E7caAMzMooSNt2pe3XiJhonZVZeasaCYUm7SrzGqr4y74E6AgOhnb7Cz73APKj2skz
-         msoYNHa7K1y9M1plB+JkIVHOjbRr0gWho524Aj2+ISPGjZkk2ZdOde8e3S3aDgDoDPby
-         B/HiphsARE9+EN0I+JSZ0m7h2W5QFQUUuHqKimJwdcO7d0biGyx8KkkV4mmM/sfBfxg6
-         OnUOiN+upZDkgozFnCTcrr7VCfD0yVhPctoo+zBGuztriP+EpwtpIf2j7okKOvrJDt03
-         /MHW31VrOH6t2sgG0+PVpdGJauw+RdJfmqakO9Vlr73r+5opxk8/XKlDuFnhXUGS67S5
-         hk/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679411013;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+b0RBF1TUlJAK1Wc3FXCrDrFPLmJE7FIK6+ckslK1UM=;
-        b=hmM8jcJCxsomXRAI6PmxUeZLTV7GeVAzWtGVJxB5+RfgzqCMqFtdI+Eh/vQzMMqOE1
-         n3ip1zr+PErYdlv0dvHXEOUAKYfBRPctXWqeExrCTmXK9Sa/pQ2Zru8alYe04l9At8sk
-         zVqPt6d9k3vrr6KfY5ZQi/m07VExkiJGqMFtosLxOJxiH40TSmqwlyEf/wUIvYcM7wqL
-         aJgwxBE0R4exJPxDCH1DrApgkulXlLuIrJUoxR9IO7YftRouNHzvmRFaJQz2bI9i/vOn
-         daqsuqzu+IIFeg2T0qsscDkWyp6sN8rv0SMepcbUIOWrKVn2GTcz9Q+GUPRl0UWofECa
-         ruIg==
-X-Gm-Message-State: AO0yUKWsvFTvB/GECjC8QHeip2Jhn7KqjXxdytK4ywfRpt+41biWUShb
-        3bD4ACa6+1D2q0vdGoyMgNWXSyShca0=
-X-Google-Smtp-Source: AK7set/3sflUDgwt0qW5/w8Wlv0pjmjn7s6jI5vidCC1rABDDOxIuRbf0McNEYdfq7wNV+6m/ueJoQ==
-X-Received: by 2002:a92:d801:0:b0:325:b60b:e2fc with SMTP id y1-20020a92d801000000b00325b60be2fcmr656289ilm.5.1679411012715;
-        Tue, 21 Mar 2023 08:03:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c33-20020a023f61000000b003e80d0843e4sm4033746jaf.78.2023.03.21.08.03.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 08:03:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 21 Mar 2023 08:03:31 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Lorenz Brun <lorenz@brun.one>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: pwm-fan: set usage_power on PWM state
-Message-ID: <571a612a-9779-41da-b857-2880c8298d0c@roeck-us.net>
-References: <20230309011009.2109696-1-lorenz@brun.one>
+        Tue, 21 Mar 2023 15:09:58 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422C45FF5;
+        Tue, 21 Mar 2023 12:09:57 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LJ9INM030048;
+        Tue, 21 Mar 2023 19:09:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=mwWJGWUbmOuS2RR0wWyJM/97XQxfYEgeMaNATuPMHNE=;
+ b=mPtLIZF+l3zXk0ixmGcJfci3kmtjI/005cYYgiiW7znGPw9CH6gUtrhNzLQiMyg1BoiD
+ Tu4fnTXewwE+BaMAqNrSjKEsgkbeghTnVdQtpAwso1SwgBNY+3mPbQ0IL5rQnNg6PsOa
+ 1Zb0uWXkgGJ+6AmleltOZHl24JRqVLtwxgJul8uJaMSfxX0cEizyKsFOdNFFxayxqfTp
+ HUYSFS5vKPiI2ZRI59NQVzeJLlQuV4Jy/EdDg+XbIrVMXl75Hyg3gELUezDBZFfNFAV6
+ RSOkbviCEztE+bHSrAnd/F+kAKmEfavlx6FAq1QXqQJ3AMBBbv3N7OZzeASOqdo/RtwG sg== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pf85y9kmy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 19:09:34 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32LI0JK6011439;
+        Tue, 21 Mar 2023 19:09:32 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
+        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3pd4x6vbkm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 19:09:32 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32LJ9VMh34013776
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Mar 2023 19:09:31 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 01D445804E;
+        Tue, 21 Mar 2023 19:09:31 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DFF315803F;
+        Tue, 21 Mar 2023 19:09:30 +0000 (GMT)
+Received: from gfwa600.aus.stglabs.ibm.com (unknown [9.3.84.101])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 21 Mar 2023 19:09:30 +0000 (GMT)
+Received: by gfwa600.aus.stglabs.ibm.com (Postfix, from userid 181152)
+        id 32D3F74A480; Tue, 21 Mar 2023 14:09:30 -0500 (CDT)
+From:   Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+To:     robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
+        eajames@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+Subject: [PATCH v3 5/5] ARM: dts: aspeed: p10bmc: Change power supply info
+Date:   Tue, 21 Mar 2023 14:09:14 -0500
+Message-Id: <20230321190914.2266216-6-lakshmiy@us.ibm.com>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230321190914.2266216-1-lakshmiy@us.ibm.com>
+References: <20230321190914.2266216-1-lakshmiy@us.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309011009.2109696-1-lorenz@brun.one>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: D4OC63YXOQZbfC3I3JYkdGhkFigMghCv
+X-Proofpoint-GUID: D4OC63YXOQZbfC3I3JYkdGhkFigMghCv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ mlxlogscore=771 adultscore=0 phishscore=0 lowpriorityscore=0
+ suspectscore=0 priorityscore=1501 impostorscore=0 bulkscore=0
+ clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303210152
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 02:10:08AM +0100, Lorenz Brun wrote:
-> PWM fans are controlled solely by the duty cycle of the PWM signal, they
-> do not care about the exact timing. Thus set usage_power to true to
-> allow less flexible hardware to work as a PWM source for fan control.
-> 
-> Signed-off-by: Lorenz Brun <lorenz@brun.one>
+Bonnell system supports new ACBEL FSG032 power supply on
+I2C addresses 5A and 5B. Update the device tree with new
+power supply information and device addresses.
 
-Applied to hwmon-next.
+Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+---
+ arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
+index a5be0ee048ec..4f959a4f8b58 100644
+--- a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
++++ b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
+@@ -552,14 +552,14 @@ ucd90160@64 {
+ &i2c3 {
+ 	status = "okay";
+ 
+-	power-supply@58 {
+-		compatible = "ibm,cffps";
+-		reg = <0x58>;
++	power-supply@5a {
++		compatible = "acbel,fsg032";
++		reg = <0x5a>;
+ 	};
+ 
+-	power-supply@59 {
+-		compatible = "ibm,cffps";
+-		reg = <0x59>;
++	power-supply@5b {
++		compatible = "acbel,fsg032";
++		reg = <0x5b>;
+ 	};
+ };
+ 
+-- 
+2.37.2
 
-> ---
->  drivers/hwmon/pwm-fan.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index 83a347ca35da..aa746c2bde39 100644
-> --- a/drivers/hwmon/pwm-fan.c
-> +++ b/drivers/hwmon/pwm-fan.c
-> @@ -507,6 +507,14 @@ static int pwm_fan_probe(struct platform_device *pdev)
->  
->  	pwm_init_state(ctx->pwm, &ctx->pwm_state);
->  
-> +	/*
-> +	 * PWM fans are controlled solely by the duty cycle of the PWM signal,
-> +	 * they do not care about the exact timing. Thus set usage_power to true
-> +	 * to allow less flexible hardware to work as a PWM source for fan
-> +	 * control.
-> +	 */
-> +	ctx->pwm_state.usage_power = true;
-> +
->  	/*
->  	 * set_pwm assumes that MAX_PWM * (period - 1) fits into an unsigned
->  	 * long. Check this here to prevent the fan running at a too low
