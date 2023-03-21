@@ -2,107 +2,96 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B3DFC74A5B
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Mar 2023 06:03:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB546C74A5B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Mar 2023 09:05:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjCUGDN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Mar 2023 02:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
+        id S230052AbjCUJF1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Mar 2023 05:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjCUGDM (ORCPT
+        with ESMTP id S231280AbjCUJE4 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Mar 2023 02:03:12 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744E730E92;
-        Mon, 20 Mar 2023 23:03:10 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32L62ZWm8014765, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32L62ZWm8014765
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Tue, 21 Mar 2023 14:02:35 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Tue, 21 Mar 2023 14:02:46 +0800
-Received: from localhost (172.21.177.105) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Tue, 21 Mar
- 2023 14:02:45 +0800
-From:   Phinex Hung <phinex@realtek.com>
-CC:     <phinex@realtek.com>, Jean Delvare <jdelvare@suse.com>,
+        Tue, 21 Mar 2023 05:04:56 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505C1113FB;
+        Tue, 21 Mar 2023 02:04:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679389466; x=1710925466;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=K/UpgIYLTihwD15Oud7TyDW4zGjAMXrk2MOqKYKZ9Vg=;
+  b=CgAZb8z6KoQprNt94fbn8G51oNthpjbjA5qGZSLQcsJoLcoHrL5ofF6a
+   oC1nmeWaABVXbLYR5Qt+1hx0tQXBYmn53XvEGGaqwEGcmE0ih3vgPQivZ
+   cfPa47c97hpeHubfXAo7dJGuGlZfOrR7YHuyYEEEXEA9A6/ITD1crLXjg
+   0aomCoOUeBE/SUbGleaRkwJaqqvpl+F8+rJmOQx61Y2N7rlPd7JPcp3K7
+   MLUoOJykiD6shmaLUvC+z2OpT5veRhStQDODcFTh3DLO2WltmEXTgfpBi
+   1JnwuiOZP326UIWTujWnNQl4KepQFrVts+kxSH4ll3uqXL2VfPDODQ5U9
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="336392746"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="336392746"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 02:04:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="683787841"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="683787841"
+Received: from mhahn1-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.37.31])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 02:04:21 -0700
+From:   Iwona Winiarska <iwona.winiarska@intel.com>
+To:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, Paul Fertser <fercerpav@gmail.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] hwmon: fix potential sensor registration fail if of_node is missing
-Date:   Tue, 21 Mar 2023 14:02:23 +0800
-Message-ID: <20230321060224.3819-1-phinex@realtek.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230315121606.GA71707@threadripper>
-References: <20230315121606.GA71707@threadripper>
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Iwona Winiarska <iwona.winiarska@intel.com>
+Subject: [PATCH] hwmon: (peci/cputemp) Fix miscalculated DTS for SKX
+Date:   Tue, 21 Mar 2023 10:04:10 +0100
+Message-Id: <20230321090410.866766-1-iwona.winiarska@intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.21.177.105]
-X-ClientProxiedBy: RTEXH36505.realtek.com.tw (172.21.6.25) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-It is not sufficient to check of_node in current device.
-In some cases, this would cause the sensor registration to fail.
+For Skylake, DTS temperature of the CPU is reported in S10.6 format
+instead of S8.8.
 
-This patch looks for device's ancestors to find a valid of_node if any.
-
-Signed-off-by: Phinex Hung <phinex@realtek.com>
+Reported-by: Paul Fertser <fercerpav@gmail.com>
+Link: https://lore.kernel.org/lkml/ZBhHS7v+98NK56is@home.paul.comp/
+Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
 ---
+ drivers/hwmon/peci/cputemp.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-v2: assign of_node from its ancestor to support sensor registration
-
----
- drivers/hwmon/hwmon.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 33edb5c02f7d..d193ed3cb35e 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -757,6 +757,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
- 	struct hwmon_device *hwdev;
- 	const char *label;
- 	struct device *hdev;
-+	struct device *tdev = dev;
- 	int i, err, id;
+diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
+index 30850a479f61..87d56f0fc888 100644
+--- a/drivers/hwmon/peci/cputemp.c
++++ b/drivers/hwmon/peci/cputemp.c
+@@ -537,6 +537,12 @@ static const struct cpu_info cpu_hsx = {
+ 	.thermal_margin_to_millidegree = &dts_eight_dot_eight_to_millidegree,
+ };
  
- 	/* Complain about invalid characters in hwmon name attribute */
-@@ -826,7 +827,9 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
- 	hwdev->name = name;
- 	hdev->class = &hwmon_class;
- 	hdev->parent = dev;
--	hdev->of_node = dev ? dev->of_node : NULL;
-+	while (tdev && !tdev->of_node)
-+		tdev = tdev->parent;
-+	hdev->of_node = tdev ? tdev->of_node : NULL;
- 	hwdev->chip = chip;
- 	dev_set_drvdata(hdev, drvdata);
- 	dev_set_name(hdev, HWMON_ID_FORMAT, id);
-@@ -838,7 +841,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
- 
- 	INIT_LIST_HEAD(&hwdev->tzdata);
- 
--	if (dev && dev->of_node && chip && chip->ops->read &&
-+	if (hdev->of_node && chip && chip->ops->read &&
- 	    chip->info[0]->type == hwmon_chip &&
- 	    (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
- 		err = hwmon_thermal_register_sensors(hdev);
++static const struct cpu_info cpu_skx = {
++	.reg		= &resolved_cores_reg_hsx,
++	.min_peci_revision = 0x33,
++	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
++};
++
+ static const struct cpu_info cpu_icx = {
+ 	.reg		= &resolved_cores_reg_icx,
+ 	.min_peci_revision = 0x40,
+@@ -558,7 +564,7 @@ static const struct auxiliary_device_id peci_cputemp_ids[] = {
+ 	},
+ 	{
+ 		.name = "peci_cpu.cputemp.skx",
+-		.driver_data = (kernel_ulong_t)&cpu_hsx,
++		.driver_data = (kernel_ulong_t)&cpu_skx,
+ 	},
+ 	{
+ 		.name = "peci_cpu.cputemp.icx",
 -- 
-2.17.1
+2.39.0
 
