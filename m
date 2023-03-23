@@ -2,103 +2,127 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34F45C6FD1C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Mar 2023 21:17:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12F11C74A5B
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Mar 2023 21:28:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjCWVRn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Mar 2023 17:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47326 "EHLO
+        id S229752AbjCWV21 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Mar 2023 17:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbjCWVRm (ORCPT
+        with ESMTP id S229644AbjCWV20 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Mar 2023 17:17:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79D725BA2
-        for <linux-hwmon@vger.kernel.org>; Thu, 23 Mar 2023 14:17:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679606220;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6KV3+ggucumc5QD34On/pnyUwkWX5K53u9B57Btq2Dg=;
-        b=IEetVWzjHoylUEe6lDHwGyDq3+yWeUxDFt8xBwKg2Y/wkQ3gvDrIumkb7WbsESZ2Bh4qlk
-        XbbP5wZI9iQZ0njN714kAhtDxptxkaKWFu1PpiOMr9c4BMdKczB0Dz21Yvr2XmOm1ecl7W
-        qSzSiBcDPuA4zUDPzSZFmX7U8GofB2g=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-304-n7XNhaO5OMqvJD9yBUIhEQ-1; Thu, 23 Mar 2023 17:15:40 -0400
-X-MC-Unique: n7XNhaO5OMqvJD9yBUIhEQ-1
-Received: by mail-qk1-f199.google.com with SMTP id b34-20020a05620a272200b007460c05a463so10998370qkp.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 23 Mar 2023 14:15:40 -0700 (PDT)
+        Thu, 23 Mar 2023 17:28:26 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F6772A8;
+        Thu, 23 Mar 2023 14:28:25 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id l15-20020a05600c4f0f00b003ed58a9a15eso1908148wmq.5;
+        Thu, 23 Mar 2023 14:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679606904;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2tYenVJRpu5Lx3WoUkk81zuugYuoL/NEIBzRRA2Hsl4=;
+        b=LGeekIVL2V4GItnQaCRznOyxFgUgTFIrkksiNUck3BLBgTA1gRRBAsP2YZClmiVynb
+         DgaEZ4hIzQ8JJYJ4TXRBDLwX6DVMNGtI/Vdedii9knjVS8FkTQ1QyaMP58PZcsT4bZFx
+         l2NMHj1KGvn22ccbKWDskLSU0mtZQgicR4twxLOm1HDU1NADeRSKpOjp55z5cAC2Q3kb
+         jVzwreB0YANEwfySQSefm6cm1QZyuw0g5IUahksd0VXidC8Ggns4tlB6NbTuKFq/lBK9
+         5Qz7ZC8n6D21Gqb/Zm2CrDqZvktCV37cfzxIhPtLW9yRY1Rdcc1jsa1d3sXe0f2/A/BP
+         KuhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679606140;
+        d=1e100.net; s=20210112; t=1679606904;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6KV3+ggucumc5QD34On/pnyUwkWX5K53u9B57Btq2Dg=;
-        b=JpWlu1HgqJLFXpd5KYGsRedUYHB7dXFzSNdVXuzY595lny12GsoqzpqlpeeOKBX+4E
-         7100gvi8LadaK9lLuHKks8HMd+N3priGj1wJSjveUnuj6FJOzGxI61HOYha602rf6AV8
-         1IZ55dELpkJveiqpeX3ifO95Urj2SSvaLDPC2XrmHZFN5xmPvHCtdX/pRFXCYQraMOme
-         4PgBOyLDmPRQBuumEhmU5UThd7gIla1lFnaF1mmrNu23Ua9fayf1XGR/AK8pS4Qj9k6R
-         z5GYCP/5txNOWrwm4iT8n5G8s/X/4TcI2VpG/QZlfNWO9toKqpF9VrY83T9W6i3yZfxL
-         mSiQ==
-X-Gm-Message-State: AO0yUKW0ERCUmandloIqqg1IIa17aqBbiSBVIFs1SryjGwXFwxcF7+lp
-        lBjXKcRsCZoaJMtIX72Bd78uTgsp+3W32XeiuZtO3SBaF3rZtWNT20RETDNHflkBiCLoctSxN93
-        KKvTzB83UeqT4uqL/RS5Xtz8=
-X-Received: by 2002:ad4:5ca7:0:b0:557:a5c5:7e01 with SMTP id q7-20020ad45ca7000000b00557a5c57e01mr11200930qvh.25.1679606139884;
-        Thu, 23 Mar 2023 14:15:39 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+tvzAycBc1q7Z1SybzVhbz3gSyQZZjVzp64y0qPk4l+LZH6qxGccQxM9QKATFbt8WTwlMI0g==
-X-Received: by 2002:ad4:5ca7:0:b0:557:a5c5:7e01 with SMTP id q7-20020ad45ca7000000b00557a5c57e01mr11200902qvh.25.1679606139628;
-        Thu, 23 Mar 2023 14:15:39 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id c23-20020a379a17000000b007436d0e9408sm8694926qke.127.2023.03.23.14.15.38
+        bh=2tYenVJRpu5Lx3WoUkk81zuugYuoL/NEIBzRRA2Hsl4=;
+        b=tQun4ru/kSKAMEp0JAopmCpvc14AMyrJ6jLK0sgHcFLlxDCjG90/ePyGxYBiMUHB2x
+         U+o1MuiEvholgHvhbPBnixsXTdGIsorLI0OKq1V7wfjqQwl26cAtJVAFfCdt9SfM6phj
+         5SWzlMailJPQh3eGcblgPc8dK0N9JfabOL0BH3plDyFTk1oXp/kRJ4kSEGQW1WNq2dOk
+         g1XDnx1q4RV44PN+IvXa4HQOAo+/r+TzGNII45NMscmR8WKoKt0C8cIV/NzcGLQF3By4
+         l6D4QHm5zUJYC1GSRdcpJr2v0fgogD4b1jDMD5C/ty0qvRHiRRdne45EuSlM+uOrURto
+         A8Ag==
+X-Gm-Message-State: AO0yUKX/0BYeTJG3GejuBGbGezbxaHrz6NjRycl35GVwUAYnlrJeiB+N
+        x4fRMPe7jjqX1/SjG/ZPnC0=
+X-Google-Smtp-Source: AK7set+Ts110wYYXC49x+NmncFCL9/MoZTa54wVG4XMrQWy22y64hFFk7joUInYvja61fm4lvQfAZA==
+X-Received: by 2002:a1c:6a0b:0:b0:3ed:76c3:50e9 with SMTP id f11-20020a1c6a0b000000b003ed76c350e9mr677108wmc.17.1679606904037;
+        Thu, 23 Mar 2023 14:28:24 -0700 (PDT)
+Received: from localhost.localdomain ([46.211.10.218])
+        by smtp.googlemail.com with ESMTPSA id o15-20020a1c750f000000b003ee1acdb036sm3015096wmc.17.2023.03.23.14.28.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 14:15:39 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     juergh@proton.me, jdelvare@suse.com, linux@roeck-us.net,
-        nathan@kernel.org, ndesaulniers@google.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] hwmon: remove unused superio_outb function
-Date:   Thu, 23 Mar 2023 17:15:35 -0400
-Message-Id: <20230323211535.2637939-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Thu, 23 Mar 2023 14:28:23 -0700 (PDT)
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     pauk.denis@gmail.com, linux@roeck-us.net, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] hwmon: (nct6775) Sort ASUS board list
+Date:   Thu, 23 Mar 2023 23:27:49 +0200
+Message-Id: <20230323212751.2474-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-clang with W=1 reports
-drivers/hwmon/vt1211.c:198:20: error: unused function
-  'superio_outb' [-Werror,-Wunused-function]
-static inline void superio_outb(int sio_cip, int reg, int val)
-                   ^
-This function is not used so remove it.
+Rearrange board list in alphabetical order by: LC_ALL=C sort -u
 
-Signed-off-by: Tom Rix <trix@redhat.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
 ---
- drivers/hwmon/vt1211.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/hwmon/nct6775-platform.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/hwmon/vt1211.c b/drivers/hwmon/vt1211.c
-index 4a5e911d26eb..fcd4be7a5a85 100644
---- a/drivers/hwmon/vt1211.c
-+++ b/drivers/hwmon/vt1211.c
-@@ -195,12 +195,6 @@ struct vt1211_data {
- /* VT1211 logical device numbers */
- #define SIO_VT1211_LDN_HWMON	0x0b	/* HW monitor */
+diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
+index 2db71b62e03d4..5ba888b7eb8c8 100644
+--- a/drivers/hwmon/nct6775-platform.c
++++ b/drivers/hwmon/nct6775-platform.c
+@@ -1052,14 +1052,6 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
+ static struct platform_device *pdev[2];
  
--static inline void superio_outb(int sio_cip, int reg, int val)
--{
--	outb(reg, sio_cip);
--	outb(val, sio_cip + 1);
--}
--
- static inline int superio_inb(int sio_cip, int reg)
- {
- 	outb(reg, sio_cip);
+ static const char * const asus_wmi_boards[] = {
+-	"Pro A520M-C",
+-	"Pro A520M-C II",
+-	"PRO H410T",
+-	"ProArt B550-CREATOR",
+-	"ProArt X570-CREATOR WIFI",
+-	"ProArt Z490-CREATOR 10G",
+-	"Pro B550M-C",
+-	"Pro WS X570-ACE",
+ 	"PRIME A520M-A",
+ 	"PRIME A520M-A II",
+ 	"PRIME A520M-E",
+@@ -1078,6 +1070,14 @@ static const char * const asus_wmi_boards[] = {
+ 	"PRIME H410M-R",
+ 	"PRIME X570-P",
+ 	"PRIME X570-PRO",
++	"PRO H410T",
++	"Pro A520M-C",
++	"Pro A520M-C II",
++	"Pro B550M-C",
++	"Pro WS X570-ACE",
++	"ProArt B550-CREATOR",
++	"ProArt X570-CREATOR WIFI",
++	"ProArt Z490-CREATOR 10G",
+ 	"ROG CROSSHAIR VIII DARK HERO",
+ 	"ROG CROSSHAIR VIII EXTREME",
+ 	"ROG CROSSHAIR VIII FORMULA",
+@@ -1109,14 +1109,14 @@ static const char * const asus_wmi_boards[] = {
+ 	"TUF GAMING A520M-PLUS",
+ 	"TUF GAMING A520M-PLUS II",
+ 	"TUF GAMING A520M-PLUS WIFI",
++	"TUF GAMING B550-PLUS",
++	"TUF GAMING B550-PLUS WIFI II",
++	"TUF GAMING B550-PRO",
+ 	"TUF GAMING B550M-E",
+ 	"TUF GAMING B550M-E WIFI",
+ 	"TUF GAMING B550M-PLUS",
+ 	"TUF GAMING B550M-PLUS (WI-FI)",
+ 	"TUF GAMING B550M-PLUS WIFI II",
+-	"TUF GAMING B550-PLUS",
+-	"TUF GAMING B550-PLUS WIFI II",
+-	"TUF GAMING B550-PRO",
+ 	"TUF GAMING X570-PLUS",
+ 	"TUF GAMING X570-PLUS (WI-FI)",
+ 	"TUF GAMING X570-PLUS_BR",
 -- 
-2.27.0
+2.39.2
 
