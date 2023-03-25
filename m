@@ -2,68 +2,98 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02538C6FD1C
-	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Mar 2023 17:57:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0375BC6FD1C
+	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Mar 2023 18:59:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbjCYR5R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 25 Mar 2023 13:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
+        id S229769AbjCYS7a (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 25 Mar 2023 14:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbjCYR5Q (ORCPT
+        with ESMTP id S229582AbjCYS7a (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 25 Mar 2023 13:57:16 -0400
+        Sat, 25 Mar 2023 14:59:30 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D4BEC6B;
-        Sat, 25 Mar 2023 10:57:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46ACF5276;
+        Sat, 25 Mar 2023 11:59:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0ADCFB807E4;
-        Sat, 25 Mar 2023 17:57:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B45F6C433EF;
-        Sat, 25 Mar 2023 17:57:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3FEDB80782;
+        Sat, 25 Mar 2023 18:59:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD1DAC433EF;
+        Sat, 25 Mar 2023 18:59:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679767031;
-        bh=mxRucQlHxVqqBwArR/9vTCRqZwnfNqObL0mrrbHPb8I=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=pqTLcIg/8kMmpd1EqTJUZzsu5ix42b1J/lMn/GgICtdeD8dkPeA0uE1WB2cW/tylK
-         3ZsLDee4gOzKNn6yklcDw+35zqPnHQ8WNL7RYOCq2noGckLSknwsrMLAYYzz5dd3ih
-         erkmzF/KDPpWhp50BMRNvhgI4LSk5JnxIB7ofVLZLEb2G0GPZRUM8JTtli+WEuWpWo
-         JqhRizk0z1M3k2Xc1fltXu2NfobcApZVW5khupKq+h6UK4hzCfRGEBr2BxHXwArhis
-         O7rypt6lIQm8MF/F3OAD5QjevJeHT8wScg00C8zBLENhoHMc8rTlzxJclLwWomPuqg
-         AwM2VMyn3j7Rw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9B67BE4D021;
-        Sat, 25 Mar 2023 17:57:11 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon fixes for v6.3-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230325140026.3591525-1-linux@roeck-us.net>
-References: <20230325140026.3591525-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230325140026.3591525-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.3-rc4
-X-PR-Tracked-Commit-Id: 968b66ffeb7956acc72836a7797aeb7b2444ec51
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4bdec23f971b1a5caf7a18ae117e44bdfaf26c93
-Message-Id: <167976703150.11290.9071296417713948818.pr-tracker-bot@kernel.org>
-Date:   Sat, 25 Mar 2023 17:57:11 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        s=k20201202; t=1679770766;
+        bh=cvkDQ5VUSugi/Mx0cXn8GHD+HIhy+RhvFVUaPPEbIaA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uQRaY0SdvHsMw3Qz1+oQ2OU67uhbpMc7NB4AyXGTJ/vep30XWbPOqxbW3fg1+ojV7
+         u34Y4IGvGvMqEtc+iLwpwoTEuXWcGUAMUFnV4umx8fuJI/ian4Ct+25DM5Hw7wsZD1
+         YCqfBlyPp/njAWIl8h2dhWigJZxZqHb1TOpTn3rGnreTCcepKTiFfZpaYBRj8SdtW3
+         7CpscxCm13XMUTxOgl7D5w3IG+8/oWhQl6wla27yb3TaNTBgy6GM1kvwNftE35OWZ7
+         ZGnP2ZtMyFSJiS4krHyoeBCpP7ehAbQarDoYa/F5JY5S3eGZ/zsYlUVhDwT3HI2G86
+         jkBrUKeIdDG5Q==
+Date:   Sat, 25 Mar 2023 19:14:26 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        michal.simek@amd.com, Jonathan.Cameron@huawei.com,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] serial: qcom_geni: Comment use of devm_krealloc
+ rather than devm_krealloc_array
+Message-ID: <20230325191426.5810b644@jic23-huawei>
+In-Reply-To: <20230320145710.1120469-5-james.clark@arm.com>
+References: <20230320145710.1120469-1-james.clark@arm.com>
+        <20230320145710.1120469-5-james.clark@arm.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Sat, 25 Mar 2023 07:00:26 -0700:
+On Mon, 20 Mar 2023 14:57:09 +0000
+James Clark <james.clark@arm.com> wrote:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.3-rc4
+> Now that devm_krealloc_array is available, add a comment justifying not
+> changing this occurrence to avoid any future auto fixups.
+> 
+> Link: https://lore.kernel.org/all/20230318173402.20a4f60d@jic23-huawei/
+> Signed-off-by: James Clark <james.clark@arm.com>
+LGTM
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4bdec23f971b1a5caf7a18ae117e44bdfaf26c93
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Thank you!
+> ---
+>  drivers/tty/serial/qcom_geni_serial.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index 28fbc927a546..8ae1fb7c2636 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -1055,6 +1055,11 @@ static int setup_fifos(struct qcom_geni_serial_port *port)
+>  		(port->tx_fifo_depth * port->tx_fifo_width) / BITS_PER_BYTE;
+>  
+>  	if (port->rx_buf && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
+> +		/*
+> +		 * Use krealloc rather than krealloc_array because rx_buf is
+> +		 * accessed as 1 byte entries as well as 4 byte entries so it's
+> +		 * not necessarily an array.
+> +		 */
+>  		port->rx_buf = devm_krealloc(uport->dev, port->rx_buf,
+>  					     port->rx_fifo_depth * sizeof(u32),
+>  					     GFP_KERNEL);
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
