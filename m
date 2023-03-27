@@ -2,200 +2,106 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E0FEC6FD1C
-	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Mar 2023 02:47:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6BF9C7619A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Mar 2023 00:47:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjCZCrb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 25 Mar 2023 22:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
+        id S230309AbjC0Arp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 26 Mar 2023 20:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjCZCra (ORCPT
+        with ESMTP id S229479AbjC0Aro (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 25 Mar 2023 22:47:30 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA4BB741
-        for <linux-hwmon@vger.kernel.org>; Sat, 25 Mar 2023 19:47:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679798849; x=1711334849;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+OuOToirJIhz/EJ7MpvtCnaT3h82/8wypBwi0K8PUIg=;
-  b=Fw7sCjteoVlFOzfqi4nSV0nDG15nC9pkv0BjJ0LywiIJ/IOw1muPwMOW
-   FtYi1XgP4f6P0AMzSY9kpH6RL9RPIvE3wZlwjmF/rAEZeVy/re2G0+dDI
-   Olp26LxQEyfEqpw/nk8tZ6RmINicA0pCyI9b26a9CbpObr85LKtIznkdd
-   xY5DrSF8Geg83t2BKmOIOhlbwDRX2xjwpF3LpYnya9qrUlcHxlWdrcBOk
-   y/MPJW7TCZbE+c3oc0mr+6hnrgfjihu4xc81fsLXdd88w7rOlVH7OO8L4
-   la1hhk7WwkW/dkS3lVbEY13cGjVRJCAkbXZoA165oktfxNffu4pPi4G1y
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="340063973"
-X-IronPort-AV: E=Sophos;i="5.98,291,1673942400"; 
-   d="scan'208";a="340063973"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 19:47:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="713466070"
-X-IronPort-AV: E=Sophos;i="5.98,291,1673942400"; 
-   d="scan'208";a="713466070"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Mar 2023 19:47:27 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pgGPm-000Gpf-2G;
-        Sun, 26 Mar 2023 02:47:26 +0000
-Date:   Sun, 26 Mar 2023 10:46:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 8a863eb1b1162653d133856702e13560f3596b85
-Message-ID: <641fb205.pucRc39DxaIEMrkD%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 26 Mar 2023 20:47:44 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2D349F5;
+        Sun, 26 Mar 2023 17:47:43 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id cn12so29355200edb.4;
+        Sun, 26 Mar 2023 17:47:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google; t=1679878062;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8U/kCluxO6B+PSARzu8RjX0sOedAO1dFag2paOw8YcA=;
+        b=dzNR+8yt25epPqrGhHtRTfI5b07bmwbKE6CGWoCN4qvZpGQSvoaFIH58ldwIDKOxaL
+         gMfNCAnEOFs3bpaebkk3ZzeF2CwWvAQ8J7+HllMrkMyFqwfGwGuZvQ/lN9ifWKAaFT+/
+         QORmeS1KOq4GJCO3QdQFGbA047MfaG2lWfvLk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679878062;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8U/kCluxO6B+PSARzu8RjX0sOedAO1dFag2paOw8YcA=;
+        b=1HyL5aelbcjONaxWl3dAOh0jn/8GDJE1UXxdaYqqCJzdxqomsKAYp00LkRbc9e7ldV
+         Ad7brlLgJwzoPkuL52xleC2VTVxgpc2cV6nZ6wAPYYdRO94aHH6QMb6RRXMrN9M9P/LH
+         MDmz8ynwHTJKBqTEN+xVl54ag/LQAPKomg1E6XJcb9oaJpCA4Z4pwD5ghnXBKmBs5V8n
+         yc2q1hXHSq5c6tOvePPbUdtYI8wymn0l1vbJVeBoDrh7C5C3ZzebXvNwfBw2l5dz+8k4
+         7GXx2eP+EY8dZtA6o9p3WzwGvQhNg1gkPXHGxa1TLq8//m0l9kokwCt7Xasx9k4D1oMc
+         437g==
+X-Gm-Message-State: AAQBX9fYS8lh5n41KHHz5DXA8u1unhqnYOyLJ1gLRJPtvy13l9gcOGqE
+        bebdOkgISUMeMhR/oW4Uraj5iy0pqaj58D721DU=
+X-Google-Smtp-Source: AKy350YuUI6Ov7M1JXz/f5WFAFINfRoDgXv40HbW6V5KKxwGX+W6DfvovjGBJyDlNfwi6fursVxWYuUD1nZNzzwuPyI=
+X-Received: by 2002:a17:907:7b8a:b0:931:6e39:3d0b with SMTP id
+ ne10-20020a1709077b8a00b009316e393d0bmr4932622ejc.15.1679878062063; Sun, 26
+ Mar 2023 17:47:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20230321190914.2266216-1-lakshmiy@us.ibm.com> <20230321190914.2266216-6-lakshmiy@us.ibm.com>
+In-Reply-To: <20230321190914.2266216-6-lakshmiy@us.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Mon, 27 Mar 2023 00:47:29 +0000
+Message-ID: <CACPK8Xd70HABKrSRXKM5vA57YUCckykKOZV1ECuJc1=g70k--Q@mail.gmail.com>
+Subject: Re: [PATCH v3 5/5] ARM: dts: aspeed: p10bmc: Change power supply info
+To:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>,
+        Eddie James <eajames@linux.ibm.com>
+Cc:     robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
+        krzysztof.kozlowski+dt@linaro.org, andrew@aj.id.au,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 8a863eb1b1162653d133856702e13560f3596b85  hwmon: (nct6775) update ASUS WMI monitoring list B360/H410/H610/Z390...
+On Tue, 21 Mar 2023 at 19:09, Lakshmi Yadlapati <lakshmiy@us.ibm.com> wrote:
+>
+> Bonnell system supports new ACBEL FSG032 power supply on
+> I2C addresses 5A and 5B. Update the device tree with new
+> power supply information and device addresses.
+>
+> Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
 
-elapsed time: 724m
+Eddie, can I get you to review?
 
-configs tested: 125
-configs skipped: 5
+I will take this through the aspeed tree.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r026-20230322   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r036-20230322   gcc  
-arc                  randconfig-r043-20230322   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                       aspeed_g4_defconfig   clang
-arm          buildonly-randconfig-r001-20230322   clang
-arm                                 defconfig   gcc  
-arm                             mxs_defconfig   clang
-arm                       omap2plus_defconfig   gcc  
-arm                  randconfig-r023-20230322   clang
-arm                  randconfig-r035-20230322   gcc  
-arm                  randconfig-r046-20230322   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r003-20230322   gcc  
-csky                 randconfig-r011-20230322   gcc  
-csky                 randconfig-r012-20230322   gcc  
-csky                 randconfig-r016-20230322   gcc  
-csky                 randconfig-r034-20230322   gcc  
-hexagon      buildonly-randconfig-r004-20230322   clang
-hexagon              randconfig-r002-20230322   clang
-hexagon              randconfig-r004-20230322   clang
-hexagon              randconfig-r014-20230322   clang
-hexagon              randconfig-r041-20230322   clang
-hexagon              randconfig-r045-20230322   clang
-i386                             allyesconfig   gcc  
-i386                         debian-10.3-func   gcc  
-i386                   debian-10.3-kselftests   gcc  
-i386                        debian-10.3-kunit   gcc  
-i386                          debian-10.3-kvm   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-i386                          randconfig-c001   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r005-20230322   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                  maltasmvp_eva_defconfig   gcc  
-mips                 randconfig-r021-20230322   clang
-nios2                               defconfig   gcc  
-openrisc             randconfig-r015-20230322   gcc  
-openrisc             randconfig-r024-20230322   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r006-20230322   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                      chrp32_defconfig   gcc  
-powerpc                     mpc512x_defconfig   clang
-powerpc                 mpc834x_itx_defconfig   gcc  
-powerpc              randconfig-r013-20230322   gcc  
-powerpc              randconfig-r033-20230322   clang
-powerpc                    sam440ep_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r003-20230322   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r022-20230322   gcc  
-riscv                randconfig-r042-20230322   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r002-20230322   gcc  
-s390         buildonly-randconfig-r006-20230322   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230322   gcc  
-sh                               allmodconfig   gcc  
-sh                            hp6xx_defconfig   gcc  
-sh                          rsk7203_defconfig   gcc  
-sh                          sdk7786_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r032-20230322   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                        randconfig-k001   clang
-x86_64                           rhel-8.3-bpf   gcc  
-x86_64                          rhel-8.3-func   gcc  
-x86_64                    rhel-8.3-kselftests   gcc  
-x86_64                         rhel-8.3-kunit   gcc  
-x86_64                           rhel-8.3-kvm   gcc  
-x86_64                           rhel-8.3-ltp   gcc  
-x86_64                           rhel-8.3-syz   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r025-20230322   gcc  
-xtensa               randconfig-r031-20230322   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+>  arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
+> index a5be0ee048ec..4f959a4f8b58 100644
+> --- a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
+> +++ b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
+> @@ -552,14 +552,14 @@ ucd90160@64 {
+>  &i2c3 {
+>         status = "okay";
+>
+> -       power-supply@58 {
+> -               compatible = "ibm,cffps";
+> -               reg = <0x58>;
+> +       power-supply@5a {
+> +               compatible = "acbel,fsg032";
+> +               reg = <0x5a>;
+>         };
+>
+> -       power-supply@59 {
+> -               compatible = "ibm,cffps";
+> -               reg = <0x59>;
+> +       power-supply@5b {
+> +               compatible = "acbel,fsg032";
+> +               reg = <0x5b>;
+>         };
+>  };
+>
+> --
+> 2.37.2
+>
