@@ -2,136 +2,122 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7EF0C6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Mar 2023 15:01:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 059F1C76195
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Mar 2023 12:17:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbjC0PBL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Mar 2023 11:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
+        id S229714AbjC1MRS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Mar 2023 08:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjC0PBK (ORCPT
+        with ESMTP id S229632AbjC1MRR (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:01:10 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10D2359D;
-        Mon, 27 Mar 2023 08:01:07 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RE5RbN001033;
-        Mon, 27 Mar 2023 15:00:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=eDLb29xSf73bZBzipAr6An1DqcWspOCRIVa5y5+44Fk=;
- b=RQJal0g/v8msy8uE0bDGf0ZM7Ly4kPeT4pQDMv5IRkMV+Z/nXQk9AKTPfDmGQ0pT/7+V
- 1RN502PiQkQiwOZY3ZQLcxccMuZoBWi12Xu93KrKfcn0BKAB5hAfR578BXkZp/Dr7/gh
- B/Weff4DaFd4DiI+5S0xiO6sS8lzwZ8u4vr08X0CeZ3KfKmI3OQWWFiN2v7FZP5ctIQ2
- vFg4ecfQh2z3fZev4e9d/9xesUxsWWIysqSZQjykT2X2cmobSYSA8MQI5baPf+twLjvP
- uSoeRM5pdSP+JHWnIbOg1cdAkaY/xg1k7/XKgiTT5zOeiuJ31BT1ZZn6CXJGbgWyD7+w VQ== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjaw33wpg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 15:00:32 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32RD4XN4019636;
-        Mon, 27 Mar 2023 15:00:31 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3phrk7en1m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 15:00:31 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32RF0UWT61735360
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Mar 2023 15:00:30 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E2D055805D;
-        Mon, 27 Mar 2023 15:00:29 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C502258061;
-        Mon, 27 Mar 2023 15:00:28 +0000 (GMT)
-Received: from [9.65.211.237] (unknown [9.65.211.237])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 27 Mar 2023 15:00:28 +0000 (GMT)
-Message-ID: <ad59ac18-caf9-c62d-e905-f19b27f67956@linux.ibm.com>
-Date:   Mon, 27 Mar 2023 10:00:28 -0500
+        Tue, 28 Mar 2023 08:17:17 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DEA8A6A
+        for <linux-hwmon@vger.kernel.org>; Tue, 28 Mar 2023 05:17:16 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id l27so11980011wrb.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 28 Mar 2023 05:17:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1680005834;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fpixAugXoZaAwUVYpLsM7+hqMka5O+Qfwz+XpgeRjTs=;
+        b=DdfEr+id/MsD4EX/KXTGF7dom2NnWml6VBX2ms3hp9tl13YcQyka7TRbrQ8kgwm98+
+         n9dglToiVSIkx7BTzyKAtydVhxOlKocYd75G0KCdl4BpnEuQq7Eku0vu+onGqGsUarvI
+         uDCxVMif68sVanItPLIYH9Xe6SkJzXfokDa8u7+2+gDNS6KvXXkd+KDmmUo+/r9yeDuu
+         W1S1+uUTovHL7LdVpoa9S2fX3EkyLJl45TezoDDNzt2CcIAf37tNBmFPUGobldCUd1Gx
+         qs5nvEkiuEJyJPcIOwKPJsQl/qcOiOMGm29n6E0Nmjm9EvgUM9Dw0/L/k93Bd3rfvpZH
+         yPZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680005834;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fpixAugXoZaAwUVYpLsM7+hqMka5O+Qfwz+XpgeRjTs=;
+        b=sUvtsK+d2WcMg6jcfmkxxJhmbHGqYsojWrBHmZJtWpol+wqEriAzSjpwbRdIbql/HN
+         WUslfuAap6NrTd5/XkbGU2newNbeBYolgIK9NiauqnFSRf+BZgO2u3kQfbvtiosXoc3D
+         1rPJJuyRHlknQ/qlfM1raRTeDFpicif26T4EyLhzYNJYnCFBJ/c9/s7+36WO+4jN3/DY
+         wSW4VXatqA/odF9NCPXnwcXOjenGhllaK7BmOqO8f2K1A9L4nCZnGAjtJ7Db8V4t6pZT
+         j2sb97hk+KrV7zbruKeo/hPsWQtbeDdbJLsOgcFV7fa0/hEx7E2J0NtZWfoXh6eK/K9O
+         IQDw==
+X-Gm-Message-State: AAQBX9cj/i5ocHnriyXgmHCXeqXkdWby2ygnYEDV4ZmgLX+TNRZkkyo9
+        HYI2nIIzkSVxIluyrWEOQlNrCzrxGDVoc45PLL3lbg==
+X-Google-Smtp-Source: AKy350Z4U/haF9SCuRslvAh7oWJBrD/bo6ZTNjsaoe00bHp+ERY97BdOBWKdeYJ4z5nRervvH+cR3w==
+X-Received: by 2002:adf:f089:0:b0:2cf:e849:e13c with SMTP id n9-20020adff089000000b002cfe849e13cmr12706092wro.61.1680005834541;
+        Tue, 28 Mar 2023 05:17:14 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id c9-20020a5d4cc9000000b002d21379bcabsm27503187wrt.110.2023.03.28.05.17.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 05:17:13 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] hwmon: (pmbus/core): Add rdev in pmbus_data struct
+Date:   Tue, 28 Mar 2023 14:17:09 +0200
+Message-Id: <20230328121712.4057359-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3 5/5] ARM: dts: aspeed: p10bmc: Change power supply info
-To:     Joel Stanley <joel@jms.id.au>,
-        Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-Cc:     robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
-        krzysztof.kozlowski+dt@linaro.org, andrew@aj.id.au,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230321190914.2266216-1-lakshmiy@us.ibm.com>
- <20230321190914.2266216-6-lakshmiy@us.ibm.com>
- <CACPK8Xd70HABKrSRXKM5vA57YUCckykKOZV1ECuJc1=g70k--Q@mail.gmail.com>
-Content-Language: en-US
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <CACPK8Xd70HABKrSRXKM5vA57YUCckykKOZV1ECuJc1=g70k--Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: h-dpPlb2BvOwZ741u871PVoFMVcNxWkt
-X-Proofpoint-ORIG-GUID: h-dpPlb2BvOwZ741u871PVoFMVcNxWkt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- impostorscore=0 priorityscore=1501 phishscore=0 malwarescore=0 bulkscore=0
- adultscore=0 lowpriorityscore=0 mlxlogscore=999 clxscore=1011 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2303270115
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Add regulator device in pmbus_data & initialize the same during PMBus
+regulator register.
 
-On 3/26/23 19:47, Joel Stanley wrote:
-> On Tue, 21 Mar 2023 at 19:09, Lakshmi Yadlapati <lakshmiy@us.ibm.com> wrote:
->> Bonnell system supports new ACBEL FSG032 power supply on
->> I2C addresses 5A and 5B. Update the device tree with new
->> power supply information and device addresses.
->>
->> Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-> Eddie, can I get you to review?
->
-> I will take this through the aspeed tree.
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 0ddef2c9ba9b..d93405f1a495 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -81,6 +81,7 @@ struct pmbus_label {
+ struct pmbus_data {
+ 	struct device *dev;
+ 	struct device *hwmon_dev;
++	struct regulator_dev **rdevs;
+ 
+ 	u32 flags;		/* from platform data */
+ 
+@@ -3109,9 +3110,13 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+ 	struct device *dev = data->dev;
+ 	const struct pmbus_driver_info *info = data->info;
+ 	const struct pmbus_platform_data *pdata = dev_get_platdata(dev);
+-	struct regulator_dev *rdev;
+ 	int i;
+ 
++	data->rdevs = devm_kzalloc(dev, sizeof(struct regulator_dev *) * info->num_regulators,
++				   GFP_KERNEL);
++	if (!data->rdevs)
++		return -ENOMEM;
++
+ 	for (i = 0; i < info->num_regulators; i++) {
+ 		struct regulator_config config = { };
+ 
+@@ -3121,10 +3126,10 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+ 		if (pdata && pdata->reg_init_data)
+ 			config.init_data = &pdata->reg_init_data[i];
+ 
+-		rdev = devm_regulator_register(dev, &info->reg_desc[i],
+-					       &config);
+-		if (IS_ERR(rdev))
+-			return dev_err_probe(dev, PTR_ERR(rdev),
++		data->rdevs[i] = devm_regulator_register(dev, &info->reg_desc[i],
++							 &config);
++		if (IS_ERR(data->rdevs[i]))
++			return dev_err_probe(dev, PTR_ERR(data->rdevs[i]),
+ 					     "Failed to register %s regulator\n",
+ 					     info->reg_desc[i].name);
+ 	}
 
-Reviewed-by: Eddie James <eajames@linux.ibm.com>
+base-commit: 8a863eb1b1162653d133856702e13560f3596b85
+-- 
+2.39.1
 
-
->
->> ---
->>   arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts | 12 ++++++------
->>   1 file changed, 6 insertions(+), 6 deletions(-)
->>
->> diff --git a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
->> index a5be0ee048ec..4f959a4f8b58 100644
->> --- a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
->> +++ b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
->> @@ -552,14 +552,14 @@ ucd90160@64 {
->>   &i2c3 {
->>          status = "okay";
->>
->> -       power-supply@58 {
->> -               compatible = "ibm,cffps";
->> -               reg = <0x58>;
->> +       power-supply@5a {
->> +               compatible = "acbel,fsg032";
->> +               reg = <0x5a>;
->>          };
->>
->> -       power-supply@59 {
->> -               compatible = "ibm,cffps";
->> -               reg = <0x59>;
->> +       power-supply@5b {
->> +               compatible = "acbel,fsg032";
->> +               reg = <0x5b>;
->>          };
->>   };
->>
->> --
->> 2.37.2
->>
