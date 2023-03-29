@@ -2,171 +2,157 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D244C74A5B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Mar 2023 18:53:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCFA4C74A5B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Mar 2023 21:49:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjC2Sxb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 Mar 2023 14:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
+        id S229703AbjC2Vtt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 Mar 2023 17:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjC2Sx2 (ORCPT
+        with ESMTP id S229456AbjC2Vts (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:53:28 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015B065A4;
-        Wed, 29 Mar 2023 11:53:22 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id r11so67279528edd.5;
-        Wed, 29 Mar 2023 11:53:22 -0700 (PDT)
+        Wed, 29 Mar 2023 17:49:48 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61C8BD;
+        Wed, 29 Mar 2023 14:49:47 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-544f7c176easo319128127b3.9;
+        Wed, 29 Mar 2023 14:49:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680116001; x=1682708001;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dV6zayjgZMuIPrwem1Ziq3l3A+7tMStcvlAeBVJqLAQ=;
-        b=EZs+gNu1TJYockxfTUjTJEf18qWEfIP4gTkb7ZSOBePNhP7JTHXm/5YPjfINIBcekw
-         aFaTgZFEQZRf39YUGZlwODA6Frk+FGZ7rXC3nf/qnzVgKmdr0wIH3vALzh1IesI8DfTm
-         1i89L/8qL8bb1sLZ/ewg8CurozpRptwoAsn1ZdRBPsJEZ+B6nKoIvn35/LiHhYUZ9h0e
-         fd8K4Srbumbz+BtoeskbFUXTOHu4wUNro+rFLCD4can421iy39B9TCoSAbdIS6C+oA1r
-         THPg8nMH9Ej5XSs5eMFqLLJS4Kdxt2UBamSlryPuZDfOqU/1Y0CHhFFb7XH8/s3rslSO
-         /D9w==
+        d=gmail.com; s=20210112; t=1680126587;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bLzqW9E7Vje/S3+bqfoRtQwKEl51pj+2gVk1LfZ98d0=;
+        b=hq3Qkjo7hoaxe1Ytv160du/memvuvOZPoKAd23HeI40umX0qtkw8qW1Hccs3T5kLp9
+         /OwaRrs5jOUiBA+thGKMaxyJQ5YtWAtWSTToUFBMjqa/gVsz3dHKEp3e9dc/f8PbfafC
+         0M8nz9W90RRJ4ByzLGrC8B54RqMkWtarGI+RHA4XIG6WlqPdSon354gUwNGDCdk11g+/
+         DrodG03cx/TlS1yktXLFoI81etmNn9HJ0wNuxIoKsUGaVlxluJCL3rQmI6f50FTYf7r4
+         tlwF0YCD5oyIHZNcElgDn2gHwGkeBHLkwEMOUQ2BIQ0eNuY0s4+i6xSV7yw+xcZSqEi8
+         JJSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680116001; x=1682708001;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dV6zayjgZMuIPrwem1Ziq3l3A+7tMStcvlAeBVJqLAQ=;
-        b=QilTdjnIYWO+WI8CYXmhPCmT0UtXkail2ZPX4c3NrEEgf7d8RLUzI5bsgN2ZHGRx68
-         Irhu+cqtw4QUbYuWn6fWaAP74UsGsHLd9rJ4E6PeGS035I2nLqM0o7LWArGGVLIGysYS
-         JlrrKKFKdLWnmwKGtWYOaOAppOJIEhRtxgsGtyeYDIvRU0Vr1L7Eu3CpPy3FGnEQsZQx
-         4rPbDzvEm01HBNyEPLdzNOfzEP5F47xRgiKYjQUQxC1jwVeVKyjgRQ2bKRFQiLjULBkg
-         sHTHaBwYX3WcoSPeCwnBYeBdfqnWt8tUVgtyFnZtybR/xwqPnPY+firWNvRj5xe0mdkF
-         6HCA==
-X-Gm-Message-State: AAQBX9cmmTYL0nzMyn13j45hAuXNZkJxYvyTE+bXBQ4E5OlmbUcM4c6p
-        6Hm90sRfoHi1E2z4nL4YCQA=
-X-Google-Smtp-Source: AKy350b/+7lvXXfGZ70KsGE8/RUfOhf0AQ14l7zUKsc7jig9CVuMUu9mlqifZ5mKKVWq42wnH6Bg8Q==
-X-Received: by 2002:a05:6402:42c2:b0:502:ffd:74a1 with SMTP id i2-20020a05640242c200b005020ffd74a1mr21089909edc.2.1680116001431;
-        Wed, 29 Mar 2023 11:53:21 -0700 (PDT)
-Received: from [10.0.7.20] (ip-084-119-241-109.um24.pools.vodafone-ip.de. [84.119.241.109])
-        by smtp.gmail.com with ESMTPSA id m27-20020a170906259b00b0093a3a663ebdsm11529380ejb.154.2023.03.29.11.53.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 11:53:20 -0700 (PDT)
-Message-ID: <881c4859-db85-b36c-de11-1552ba7e6ff4@gmail.com>
-Date:   Wed, 29 Mar 2023 20:53:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/4] coretemp: Fix spamming of ring buffer
-Content-Language: en-US
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        d=1e100.net; s=20210112; t=1680126587;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bLzqW9E7Vje/S3+bqfoRtQwKEl51pj+2gVk1LfZ98d0=;
+        b=4RlEodEsWl0wLSahSJECNI+YN8QD7hO3JRePJKRU8mofOygsnzkrlCKdnrneHgnG8u
+         VLnTn4VQfpxvzH9VkVo2GzpEo6bwqpB9XkehYRRW2iN7nhj4NScAh3BS4UiDRTKWNOt/
+         9ZW1k/5HfBfirjMV9Rjov2CNMzjlpKZg5ptlCYyjxo2MgwTHHFZSukV6Cy8hPPnNkXL5
+         Al/4k8bK+/qR53kBelIsEMvy16xThjByyQyQo3E2RdfquGgz3D6FTanks0sKAsNka9xf
+         bRcAT06omxG9sPLdCRWPdIafsnbUndt7vvFwuJjli17zy4Igo+J0gMnbujItQpacFGLq
+         fx8g==
+X-Gm-Message-State: AAQBX9elwZHzyGjb2K7bNB03+1DyA6mlZRrdnlmR9itzw0yS4jyYXC+0
+        wsGPMX3GnPHwQcsEoB8tXvU=
+X-Google-Smtp-Source: AKy350bi0gvarik5Vm5wxsu4GMrTawQ/RK/k/eub3gc/hasypwv/XXmclMYglYfJgkNe5I5IcRqmog==
+X-Received: by 2002:a81:d550:0:b0:541:6d91:fb5d with SMTP id l16-20020a81d550000000b005416d91fb5dmr18025640ywj.13.1680126587048;
+        Wed, 29 Mar 2023 14:49:47 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i82-20020a25d155000000b00b7767ca7480sm3684829ybg.29.2023.03.29.14.49.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 14:49:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 29 Mar 2023 14:49:45 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Zhang, Rui" <rui.zhang@intel.com>
+Cc:     "peter.ganzhorn@gmail.com" <peter.ganzhorn@gmail.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/4] coretemp: Fix spamming of ring buffer
+Message-ID: <6e96d2b8-d64c-417c-bbcb-4aa59921c9db@roeck-us.net>
 References: <CA+3fRbFzq38sQomFM7xJt-UoeLv_ZZbQ2uaHZ+8J_5ntweJ7TA@mail.gmail.com>
  <7e821f80b7700fcf1fb26f40bde8397f0e5e6d7e.camel@intel.com>
  <aeed703c-5dbb-4a6f-a4d7-3c6a55d99e9e@roeck-us.net>
  <51b2d540c174690a8e460ecba53b0195c4b01294.camel@intel.com>
-From:   Peter Ganzhorn <peter.ganzhorn@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <51b2d540c174690a8e460ecba53b0195c4b01294.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/29/23 16:11, Zhang, Rui wrote:
+On Wed, Mar 29, 2023 at 02:11:36PM +0000, Zhang, Rui wrote:
 > On Wed, 2023-03-29 at 05:47 -0700, Guenter Roeck wrote:
->> On Wed, Mar 29, 2023 at 03:43:58AM +0000, Zhang, Rui wrote:
->>> Hi, Peter,
->>>
->>> CC the list.
->>>
->>> On Tue, 2023-03-28 at 22:37 +0200, Peter Ganzhorn wrote:
->>>> Dear Mr. Rui,
->>>> Dear Mr. Roeck,
->>>>
->>>> please consider accepting the attached patches or
->>>> modifying the coretemp code to stop spamming my syslog.
->>>> I would appreciate it very much if you can accept the patches.
->>>>
->>>> coretemp: Improve dynamic changes of TjMax
->>>> After introduction of dynamic TjMax changes in commit
->>>> c0c67f8761cec1fe36c21d85b1a5400ea7ac30cd
->>>> my syslog gets spammed with "TjMax is ... degrees C"
->>>> messages.
->>>> If TjMax is subject to change at any time, it won't be
->>>> set in tdata anymore and re-read every time from MSR.
->>>> This causes quite a lot of dev_dbg() messages to be issued.
->>>>
->>>> The following patches change the code to read TjMax
->>>> from the MSRs into tdata->tjmax (again) but allow for a
->>>> dynamic update at any time as well. (Patches 1 and 2)
->>>> This way a message will only be issued after actual changes.
->>>> Also I replaced the dev_dbg() with dev_notice (Patch 3) and
->>>> added a additional dev_notice for the case where TjMax is
->>>> set based on assumptions. (Patch 4)
->>>>
->>>>
->>>> If you do not want to accept my patches, removing the
->>>> dev_dbg() in get_tjmax() would be the most simple
->>>> solution I guess.
->>>>
->>> Please check if below patch solves your problem or not.
->>>
->>>  From 9370ee5163a85f65230b5222f1f4dece59ce078a Mon Sep 17 00:00:00
->>> 2001
->>> From: Zhang Rui <rui.zhang@intel.com>
->>> Date: Wed, 29 Mar 2023 11:35:18 +0800
->>> Subject: [PATCH] hwmon: (coretemp) Avoid duplicate debug messages
->>>
->>> Avoid duplicate dev_dbg messages when tjmax value retrieved from
->>> MSR
->>> does not change.
->>>
->>> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
->>> ---
->>>   drivers/hwmon/coretemp.c | 6 +++++-
->>>   1 file changed, 5 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
->>> index 30d77f451937..809456967b50 100644
->>> --- a/drivers/hwmon/coretemp.c
->>> +++ b/drivers/hwmon/coretemp.c
->>> @@ -267,6 +267,7 @@ static int get_tjmax(struct temp_data *tdata,
->>> struct device *dev)
->>>   	int err;
->>>   	u32 eax, edx;
->>>   	u32 val;
->>> +	static u32 tjmax;
->> That would apply to every instance of this driver, meaning to every
->> CPU core. Is that really appropriate ?
->>
->> Guenter
->>
+> > On Wed, Mar 29, 2023 at 03:43:58AM +0000, Zhang, Rui wrote:
+> > > Hi, Peter,
+> > > 
+> > > CC the list.
+> > > 
+> > > On Tue, 2023-03-28 at 22:37 +0200, Peter Ganzhorn wrote:
+> > > > Dear Mr. Rui,
+> > > > Dear Mr. Roeck,
+> > > > 
+> > > > please consider accepting the attached patches or
+> > > > modifying the coretemp code to stop spamming my syslog.
+> > > > I would appreciate it very much if you can accept the patches.
+> > > > 
+> > > > coretemp: Improve dynamic changes of TjMax
+> > > > After introduction of dynamic TjMax changes in commit
+> > > > c0c67f8761cec1fe36c21d85b1a5400ea7ac30cd
+> > > > my syslog gets spammed with "TjMax is ... degrees C"
+> > > > messages.
+> > > > If TjMax is subject to change at any time, it won't be
+> > > > set in tdata anymore and re-read every time from MSR.
+> > > > This causes quite a lot of dev_dbg() messages to be issued.
+> > > > 
+> > > > The following patches change the code to read TjMax
+> > > > from the MSRs into tdata->tjmax (again) but allow for a
+> > > > dynamic update at any time as well. (Patches 1 and 2)
+> > > > This way a message will only be issued after actual changes.
+> > > > Also I replaced the dev_dbg() with dev_notice (Patch 3) and
+> > > > added a additional dev_notice for the case where TjMax is
+> > > > set based on assumptions. (Patch 4)
+> > > > 
+> > > > 
+> > > > If you do not want to accept my patches, removing the
+> > > > dev_dbg() in get_tjmax() would be the most simple
+> > > > solution I guess.
+> > > > 
+> > > Please check if below patch solves your problem or not.
+> > > 
+> > > From 9370ee5163a85f65230b5222f1f4dece59ce078a Mon Sep 17 00:00:00
+> > > 2001
+> > > From: Zhang Rui <rui.zhang@intel.com>
+> > > Date: Wed, 29 Mar 2023 11:35:18 +0800
+> > > Subject: [PATCH] hwmon: (coretemp) Avoid duplicate debug messages
+> > > 
+> > > Avoid duplicate dev_dbg messages when tjmax value retrieved from
+> > > MSR
+> > > does not change.
+> > > 
+> > > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> > > ---
+> > >  drivers/hwmon/coretemp.c | 6 +++++-
+> > >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+> > > index 30d77f451937..809456967b50 100644
+> > > --- a/drivers/hwmon/coretemp.c
+> > > +++ b/drivers/hwmon/coretemp.c
+> > > @@ -267,6 +267,7 @@ static int get_tjmax(struct temp_data *tdata,
+> > > struct device *dev)
+> > >  	int err;
+> > >  	u32 eax, edx;
+> > >  	u32 val;
+> > > +	static u32 tjmax;
+> > 
+> > That would apply to every instance of this driver, meaning to every
+> > CPU core. Is that really appropriate ?
+> > 
+> > Guenter
+> > 
 > Good point.
->
+> 
 > MSR_IA32_TEMPERATURE_TARGET is package scope, and the cached tjmax
 > should also be package scope, or else this message is shown for each
 > cpu when tjmax changes in one package.
->
+> 
 > Previously, the message is printed only once during driver probing time
 > thus I'm wondering how useful this is.
->
+> 
 > Maybe we can just delete it?
->
-> thanks,
-> rui
-The proposed patch from Rui Zhang does solve the issue of spamming the 
-syslog.
+> 
+Personally I would delete it. I don't see the value of clogging the kernel
+log with it.
 
-I only get one message at boot:
-
-[    1.370790] platform coretemp.0: TjMax is 96 degrees C
-
-But if different packages have different tjmax values I guess the 
-spamming issue may return.
-
-Personally I'd prefer to get a message once if tjmax changes for any 
-package.
-
-Thank you both for the quick reaction.
-Peter
+Guenter
