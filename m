@@ -2,259 +2,137 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F8D5C6FD18
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Mar 2023 06:49:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 685CAC6FD18
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Mar 2023 12:37:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjC2GtF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 Mar 2023 02:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
+        id S229579AbjC2Mhr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 Mar 2023 08:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjC2GtE (ORCPT
+        with ESMTP id S229485AbjC2Mhq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 Mar 2023 02:49:04 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F150EED;
-        Tue, 28 Mar 2023 23:49:02 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id h25so18832280lfv.6;
-        Tue, 28 Mar 2023 23:49:02 -0700 (PDT)
+        Wed, 29 Mar 2023 08:37:46 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773963ABE
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Mar 2023 05:37:45 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id cn12so62647709edb.4
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Mar 2023 05:37:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680072541;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0gt+x8l5hdO1MF7qInrd2a05e63r26ixg23F+pmR6ms=;
-        b=oS8cz5dV/5iC317d3YrYH4ZB6DI7RK2cEy5cReIMzziIxXmdvUVagCbjIAm0eZL9uu
-         YqlA35W7N/DACulrCb5TfLLlOASdplz94wU5v6OrbxgXJ5JT8pBeiymKHMf7wQx6OA5C
-         xFzxvJxhDmJDv/LaTTdhWxNSPl1Fdz/zQOMeKQsP4CZ3hOPvv/PuSrutLMeuMnQgMZU8
-         A5ttXQW2B+lpoePu1iL9Q+jxiVrrRMmAV6s3sX644/vbRIJHwuhFdGFR3aD1ekNEX9sf
-         XVFzZlT+b91A+HxM7oW525lGj3QHuACD6HTO6dBm3H6GpF2Tf7baFNOa6nOPkz8QoH/O
-         ufvw==
+        d=9elements.com; s=google; t=1680093464;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gHb6wEI0W+Q8XNFleXC4qtIxQ5KFkUssnbzkaSWTwt0=;
+        b=HG/XVNTljst0PoADYJ9a1oe2fUatY94AsdKpMHxxOpv6UuoHB6hvijDjhYLE9/25rs
+         152++Pjka5+uGRovDxe9lV+rhf8++TfTk52B//EwPFKlZ8SzAWjTwNLluSshW2RDWPnd
+         srv2pNMrlqDFWWsC173i94ItNlYGVLs5iGdN6EW6KPfp4NGuo04lpjR216LCgKHkG6hm
+         tt8ytMaBacnj2KHpooUNXKvXT476qhRY2eCUHq0XSDr3E6V5f2UW8KmHuS4qM5P/vnYo
+         c7iIw+AdSJaMxFaBxtnvEUmWHYQAhPvuAHIixL2EwShp2QWod24RpXn2eN7OXg5nz4PP
+         a8fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680072541;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0gt+x8l5hdO1MF7qInrd2a05e63r26ixg23F+pmR6ms=;
-        b=IescR4MA9CIHUa+MwaFonDHxCiAD48Pq0qckcp5Hpx0Dy7RXEw07gOKZqGfWulbYsA
-         opG9umoUsSBZMM+djps81XNySLpKFZ5hQvY/e/S2VasxIRjp+7kMk3zX/7ellaNh4+91
-         vS18ck9ADLqK/rx+n8GA+TUQAkYAyKsy0ISYMNA2zSsaLkMnbAOWzPpGMCi+2AoPIYZz
-         4svCaYCwsHYyDckseU0JC8c9h9aP1FOIjPIfJhUNVHjgqt9/ZB8TNBEBIgVZNI4KdFdm
-         +/E+btFF/6LZ1++DZa3s8ZsOs0VinZQxwygymxkKEibLT/ttxxgPncpVHXhb2uhsDY0O
-         C9KQ==
-X-Gm-Message-State: AAQBX9cuIJUQZnle6ehtlr7X/qmIPVS90yVfTjM7C9sfN+vM7UZZUSqk
-        THNE6lpFzby6n19jaudB7/0ZjFW0Szo=
-X-Google-Smtp-Source: AKy350as7m70JBI0gU0dwmbOr6Yzn2Qge/yEZ0tNaRG5uluQaV/DdDjs9Bn5L2b6w0b31eI4K2ATcg==
-X-Received: by 2002:ac2:5210:0:b0:4eb:11dc:d9a5 with SMTP id a16-20020ac25210000000b004eb11dcd9a5mr2622076lfl.32.1680072541044;
-        Tue, 28 Mar 2023 23:49:01 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id u14-20020a056512094e00b004cb35b31b96sm5339561lft.257.2023.03.28.23.49.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 23:49:00 -0700 (PDT)
-Message-ID: <c88d3cdd-fb2f-c3ac-a9e8-e49f8e98b811@gmail.com>
-Date:   Wed, 29 Mar 2023 09:48:59 +0300
+        d=1e100.net; s=20210112; t=1680093464;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gHb6wEI0W+Q8XNFleXC4qtIxQ5KFkUssnbzkaSWTwt0=;
+        b=itFCY+OjRtJT75Y4v8sFiWzjSAHPZpDsLD/aKsWnWlsG28k3fqMWZw/LZFY9VtMxe6
+         sYZWgXeFOSw/U9nzBb7jTR1A1IsDic1vqIpGwzAedwQ2Bh20r7bTu9NQjZwLt4ifr6Dj
+         pZIOGjDXk4zviQLEfw5hOuX2f0scbxdtOc+SZ7kgaE6A0BZCT8qyGGzWT194BSU69agf
+         BiwfG4mT9JOe1bVVZdnnqa/qdXre9k8z+npJSGPjgpAe/txTmx8d8/DtHw5x46oWEecO
+         zmJ+ai3DLowHAfseZDIk9MW26kZZnOHlkkru1jHxIW6F29e19uYCy+esHa2IkK/eTGb1
+         SvSQ==
+X-Gm-Message-State: AAQBX9fi2+91dLOHoV4oxYdRxSKiGEcZPCftl36cMntmGOeznq9FbAXz
+        rvQsLCj3QqlUBrVgsrxRlIuG/Xgm+qaW+k7qhCUsrfMhmUaNWqVWw+3dhg==
+X-Google-Smtp-Source: AKy350aDBwtiG5kWGJciArmsYca1qFgzqg6C3cxeEPeZkvx1P1YMyQqnsAGHM99S4BjGebJTBNJNFDacA5sFHwR7yCY=
+X-Received: by 2002:a17:907:d687:b0:93d:a14f:c9b4 with SMTP id
+ wf7-20020a170907d68700b0093da14fc9b4mr9691718ejc.2.1680093463969; Wed, 29 Mar
+ 2023 05:37:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US, en-GB
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
-        jerome Neanne <jneanne@baylibre.com>,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
-References: <20230328150335.90238-1-Naresh.Solanki@9elements.com>
- <20230328150335.90238-2-Naresh.Solanki@9elements.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/core): Add regulator event support
-In-Reply-To: <20230328150335.90238-2-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20221129161134.2672474-1-Naresh.Solanki@9elements.com>
+ <20221129161134.2672474-5-Naresh.Solanki@9elements.com> <20221129163427.dxnqfay6ur6mvivu@pengutronix.de>
+ <d2d54a34-56dc-df83-5fde-ad0a9a73a9e0@roeck-us.net> <77c5a9e2-ce25-df19-1eba-ba4808bbeb9d@9elements.com>
+In-Reply-To: <77c5a9e2-ce25-df19-1eba-ba4808bbeb9d@9elements.com>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Wed, 29 Mar 2023 18:07:34 +0530
+Message-ID: <CABqG17h1112TsJ_JtxZkLrObz0v-5dq_6B86RYA_T6efW14t1Q@mail.gmail.com>
+Subject: Re: [PATCH v8 4/4] hwmon: (max6639) Add pwm support
+To:     Guenter Roeck <linux@roeck-us.net>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-pwm@vger.kernel.org, kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Naresh, all
+Hi Rob, Guenter,
 
-This mail is maybe more of a question so that I can get on the same page 
-with the rest of the world than anything else. I just have to ask this 
-as I am trying to figure out what kind of handling there could be for 
-regulator errors. I added Mark and couple of others to the CC as I am 
-under the impression they have done some work with the regulator error 
-handling lately :)
+I need your inputs & direction on the next step for max6639 driver.
+I'm willing to work & implement changes.
 
-On 3/28/23 18:03, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> 
-> Add regulator events corresponding to regulator error in regulator flag
-> map.
-> Also capture the same in pmbus_regulator_get_flags.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
->   drivers/hwmon/pmbus/pmbus_core.c | 74 +++++++++++++++++++++-----------
->   1 file changed, 49 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index d93405f1a495..509bc0ef1706 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2693,9 +2693,9 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
->   	return 0;
->   }
->   
-> -/* A PMBus status flag and the corresponding REGULATOR_ERROR_* flag */
-> +/* A PMBus status flag and the corresponding REGULATOR_ERROR_* and REGULATOR_EVENTS_* flag */
->   struct pmbus_status_assoc {
-> -	int pflag, rflag;
-> +	int pflag, rflag, eflag;
->   };
->   
->   /* PMBus->regulator bit mappings for a PMBus status register */
-> @@ -2710,27 +2710,36 @@ static const struct pmbus_status_category __maybe_unused pmbus_status_flag_map[]
->   		.func = PMBUS_HAVE_STATUS_VOUT,
->   		.reg = PMBUS_STATUS_VOUT,
->   		.bits = (const struct pmbus_status_assoc[]) {
-> -			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
-> -			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
-> -			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
-> -			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_REGULATION_OUT },
-> +			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN,
-> +			REGULATOR_EVENT_UNDER_VOLTAGE_WARN },
-> +			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE,
-> +			REGULATOR_EVENT_UNDER_VOLTAGE },
-> +			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN,
-> +			REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-> +			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_REGULATION_OUT,
-> +			REGULATOR_EVENT_OVER_VOLTAGE_WARN },
+Thank you for your time and consideration.
 
-The question I have is: Are these mappings to regulator 
-errors/notifications always correct?
+Regards,
+Naresh Solanki
 
-(I don't know the PMBUS specification in details - and thus I am 
-_asking_ this here, not telling that the mapping is incorrect).
-
-Let me explain why I am asking this.
-
-What I have gathered is that at least some ICs allow setting for example 
-'voltage limits' for different PMBUS over-voltage WARNs/FAULTs. I 
-however don't know if for example the "fatality" of errors indicated by 
-FAULTS vs WARNs is mandated by any specification - or if a hw designers 
-have free hands to decide what these events indicate on their board - or 
-what type of action should be taken when certain ERROR/WARN is emitted.
-
-Then to the handling of regulator errors:
-
-In order to be able to create any handling for the regulator 
-errors/notifications, we should be able to classify the 
-errors/notifications at least by the severity. The very fundamental 
-decision is whether to turn-off the regulator - or even the whole system 
-- in order to protect the hardware from damage.
-
-There are few other questions related to error handling as well - for 
-example questions like:
-Who should handle error? (we may have many consumers?)
-When should consumer use for example forced regulator-off without 
-knowing the other consumers?
-When should we have in-kernel handling for errors?
-When should the errors be sent to user-space trusting someone there is 
-taking care of the situation?
-
-Following is largely my own pondering - and I would like to gain better 
-understanding while also avoid sending wrong events/errors for detected 
-HW issues so that we could actually implement recovery actions based on 
-regulator errors / notifications.
-
-I have been trying to understand how error handling with regulator 
-events should / could work. In my head (and in the regulator fault 
-detection limit setting) we have 3 severity categories:
-
-1. PROTECTION:
-The most 'severe' type of issue. This is reserved for cases where the 
-hardware shuts down the regulator(s) without any SW interaction. In most 
-cases there is no need for notification or error status because soc is 
-likely to go down when the power is cut off. Border case is when HW 
-autonomously shuts down a regulator which does not deliver power to any 
-critical component. I am unsure if such situation should be indicated by 
-ERROR level notification.
-
-2. ERROR:
-Situation where system is no longer usable but the hardware does not do 
-error handling. I would like to suggest that the proper handling for 
-this type of events is regulator or system shutdown. I think the 
-errors/notifications:
-
-#define REGULATOR_ERROR_UNDER_VOLTAGE           BIT(1)
-#define REGULATOR_ERROR_OVER_CURRENT            BIT(2)
-#define REGULATOR_ERROR_REGULATION_OUT          BIT(3)
-#define REGULATOR_ERROR_FAIL                    BIT(4)
-#define REGULATOR_ERROR_OVER_TEMP               BIT(5)
-
-#define REGULATOR_EVENT_UNDER_VOLTAGE           0x01
-#define REGULATOR_EVENT_OVER_CURRENT            0x02
-#define REGULATOR_EVENT_REGULATION_OUT          0x04
-#define REGULATOR_EVENT_FAIL                    0x08
-#define REGULATOR_EVENT_OVER_TEMP               0x10
-
-should only be used to indicate errors with this severity. That would 
-allow actually implementing the handling for these errors. If these 
-errors are sent for "less severe" issues, then we will not be able to do 
-any generic error handling.
-
-3. WARNING:
-Situation where something is off-the-spec, but system is still thought 
-to be usable. Here some - probably board/system (use-case?) specific - 
-handling may be taking place to prevent things getting worse. I added 
-following flags for this purpose:
-
-#define REGULATOR_EVENT_UNDER_VOLTAGE_WARN      0x2000
-#define REGULATOR_EVENT_OVER_CURRENT_WARN       0x4000
-#define REGULATOR_EVENT_OVER_VOLTAGE_WARN       0x8000
-#define REGULATOR_EVENT_OVER_TEMP_WARN          0x10000
-#define REGULATOR_EVENT_WARN_MASK               0x1E000
-
-#define REGULATOR_ERROR_UNDER_VOLTAGE_WARN      BIT(6)
-#define REGULATOR_ERROR_OVER_CURRENT_WARN       BIT(7)
-#define REGULATOR_ERROR_OVER_VOLTAGE_WARN       BIT(8)
-#define REGULATOR_ERROR_OVER_TEMP_WARN          BIT(9)
+Regards,
+Naresh Solanki
 
 
-So, my question(s) are:
 
-1) Is this "classification" sensible and is it still possible?
-2) does PMBUS *_WARNING status bits always indicate error which maps to 
-severity WARNING above? And more importantly
-3) does PMBUS *_FAULT status bits always indicate error which maps to 
-severity ERROR above? Eg, can we assume correct handling for _FAULT is 
-shutting down the regulator/system?
+9elements GmbH, Kortumstra=C3=9Fe 19-21, 44787 Bochum, Germany
+Email:  naresh.solanki@9elements.com
+Mobile:  +91 9538631477
 
-We have something similar in a few (non PMBUS compatible) PMICs. For 
-example the ROHM BD9576 has a PROTECTION level error detection 
-(automatic shutdown by HW) and then another error detection which just 
-generates an IRQ and allows software to decide what should be done.
+Sitz der Gesellschaft: Bochum
+Handelsregister: Amtsgericht Bochum, HRB 17519
+Gesch=C3=A4ftsf=C3=BChrung: Sebastian Deutsch, Eray Basar
 
-While writing the driver for that PMIC my thinking was that the decision 
-whether IRQ is indicating a fatal error or a warning should be on the 
-board-designer's table. Thus I implemented it so that the severity and 
-limit configuration for this error is given via device-tree - and it is 
-up to board designer to decide whether the fault is ERROR or WARN - and 
-notification sent by the driver for this IRQ will reflect the given 
-severity.
-
-I wonder if something like this is needed for PMBUS - or if we can 
-always say the *_FAULT maps to regulator ERROR and _WARNING maps to 
-regulator WARNING no matter how board using the IC is designed?
-
-Yours,
-	-- Matti
+Datenschutzhinweise nach Art. 13 DSGVO
 
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+On Tue, 6 Dec 2022 at 23:15, Naresh Solanki
+<naresh.solanki@9elements.com> wrote:
+>
+> Hi Guenter, Rob
+>
+> On 29-11-2022 10:11 pm, Guenter Roeck wrote:
+> > On 11/29/22 08:34, Uwe Kleine-K=C3=B6nig wrote:
+> >> On Tue, Nov 29, 2022 at 05:11:34PM +0100, Naresh Solanki wrote:
+> >>> Add pwm support for max6639. Also configure pwm fan speed based on pw=
+m
+> >>> provided in DT.
+> >>
+> >> Did you do anything to resolve the questions I had in reply to v5? If
+> >> yes, I must have missed it.
+> >>
+> >
+> > I don't see a response to my concerns either, especially regarding fan =
+mode
+> > (dc vs. pwm) in the bindings. For that reason, I won't even look at the
+> > series.
+> Best I can think of regulator with voltage control. Because as per my
+> understanding, DC control fan essentially control DC voltage on negative
+> pin of fan.
+>
+>
+> Regards,
+> Naresh
+> >
+> > Guenter
+> >
+> >> Note that maintainer time is scarce and with sending new versions of a
+> >> patch with no sign that you improved in the aspects that were critized
+> >> before, you're burning that scarce time and loosing the good will of t=
+he
+> >> responsible maintainers.
+> >>
+> >> Best regards
+> >> Uwe
+> >>
+> >
