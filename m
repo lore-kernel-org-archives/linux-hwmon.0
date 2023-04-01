@@ -2,73 +2,100 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80434C76196
-	for <linux-hwmon@archiver.kernel.org>; Fri, 31 Mar 2023 18:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 002F8C77B61
+	for <linux-hwmon@archiver.kernel.org>; Sat,  1 Apr 2023 01:42:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbjCaSQY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 31 Mar 2023 14:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        id S233587AbjDABmb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 31 Mar 2023 21:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbjCaSQX (ORCPT
+        with ESMTP id S233317AbjDABmZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 31 Mar 2023 14:16:23 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029C3DBF8;
-        Fri, 31 Mar 2023 11:16:23 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-17aa62d0a4aso24064766fac.4;
-        Fri, 31 Mar 2023 11:16:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680286582;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5IKPA0ADOBppfJTT2W2Ch4plvhP4oOyoQ3vJ9If7+rE=;
-        b=C03V7OKKSaj4leAzfzpH/Ek9DiUU7THeouEmHQspISF0SHF90obYh9m4Cq2cwKSwgA
-         37A883yrg0PSMOKS3cO0Hqfq0fxOjnVPytolvywW+6pN+EsDkE3dIn/b6ClwBQH50tIo
-         DOx7P0XnNls7n/urW2HqGqMcan1Hpj+olmyOxcyxAPM9e0x7mAx8DS6ZNkGZI/bSX5CG
-         S0KOCHYm3tJ98elFPRt5bc3J0yw41SsQiQsL4t4rmBognS5EKKmL5Riv87cahWIuXqBt
-         2MOrtxVDonODJMjkMUAuzSXEAqkfkGfiQIuV1hFQDKdR715eq9SRJbPHtzNHlxjpwZck
-         3hPA==
-X-Gm-Message-State: AAQBX9d2ciIlq7h7hsk4VqItdqauWA005vtvwQ1KHEcSA6Rf1eFBMBeX
-        CF0daBnRtfu3prPv/NSJhw==
-X-Google-Smtp-Source: AKy350bbJ1oniqfGXQupv7Am9GdmIkPkG2rGdl3Nxbu7FwzW8n/5xV6zuPgFcSRgI+p9mG38HNZYBQ==
-X-Received: by 2002:a05:6871:70c:b0:17e:f313:be68 with SMTP id f12-20020a056871070c00b0017ef313be68mr16700497oap.37.1680286582313;
-        Fri, 31 Mar 2023 11:16:22 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s15-20020a0568301e0f00b006a1508d348dsm1423158otr.22.2023.03.31.11.16.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 11:16:21 -0700 (PDT)
-Received: (nullmailer pid 1883565 invoked by uid 1000);
-        Fri, 31 Mar 2023 18:16:21 -0000
-Date:   Fri, 31 Mar 2023 13:16:21 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joel@jms.id.au, jdelvare@suse.com, andrew@aj.id.au,
-        devicetree@vger.kernel.org, eajames@linux.ibm.com,
-        robh+dt@kernel.org
-Subject: Re: [PATCH v4 2/5] dt-bindings: trivial-devices: Add acbel,fsg032
-Message-ID: <168028658037.1883248.3391058874077647984.robh@kernel.org>
-References: <20230322114623.2278920-1-lakshmiy@us.ibm.com>
- <20230322114623.2278920-3-lakshmiy@us.ibm.com>
+        Fri, 31 Mar 2023 21:42:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DE11EFC5;
+        Fri, 31 Mar 2023 18:41:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BE6DB832F5;
+        Sat,  1 Apr 2023 01:41:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4912BC43446;
+        Sat,  1 Apr 2023 01:41:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680313312;
+        bh=gi+aNmMLzNAw/upSPG9ogRlXPz1oNELyCI8+p65yLEk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=uP8sFP94PGdrvq4WNfQW/PaD90C9WZkhUNEWdQ+guc/p0zASw9xFCqepK3C92CR6b
+         R32El1UztfNcXyvyOoWLv6dRaQT4U3fmuCbbaa7SYWSWzk3StrG7AV8YmUfQOug/h+
+         ydhfxhUM1jyJK6ACgzhXytFd2E2wbsD+HA+9rlXVmoeMtyGRBSS5VQftpD9DPQugfK
+         KhDkDanJaNp/YV3pONr4DqZJUQ61z2GgK7nA4NICGxayP4HWfJya2BXw86g3AYjOu3
+         1NcYyCzi8r7K+HOIzUWMKApBDctmdOWAZSjjSof4angdcYShAoyBNHHTxeM4WTiKt5
+         cwujXtFjQLCeg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Iwona Winiarska <iwona.winiarska@intel.com>,
+        Paul Fertser <fercerpav@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.2 15/25] hwmon: (peci/cputemp) Fix miscalculated DTS for SKX
+Date:   Fri, 31 Mar 2023 21:41:13 -0400
+Message-Id: <20230401014126.3356410-15-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230401014126.3356410-1-sashal@kernel.org>
+References: <20230401014126.3356410-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322114623.2278920-3-lakshmiy@us.ibm.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+From: Iwona Winiarska <iwona.winiarska@intel.com>
 
-On Wed, 22 Mar 2023 06:46:20 -0500, Lakshmi Yadlapati wrote:
-> Add new Acbel FSG032 power supply to trivial devices.
-> 
-> Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+[ Upstream commit 2b91c4a870c9830eaf95e744454c9c218cccb736 ]
 
-Acked-by: Rob Herring <robh@kernel.org>
+For Skylake, DTS temperature of the CPU is reported in S10.6 format
+instead of S8.8.
+
+Reported-by: Paul Fertser <fercerpav@gmail.com>
+Link: https://lore.kernel.org/lkml/ZBhHS7v+98NK56is@home.paul.comp/
+Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
+Link: https://lore.kernel.org/r/20230321090410.866766-1-iwona.winiarska@intel.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/peci/cputemp.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
+index 30850a479f61f..87d56f0fc888c 100644
+--- a/drivers/hwmon/peci/cputemp.c
++++ b/drivers/hwmon/peci/cputemp.c
+@@ -537,6 +537,12 @@ static const struct cpu_info cpu_hsx = {
+ 	.thermal_margin_to_millidegree = &dts_eight_dot_eight_to_millidegree,
+ };
+ 
++static const struct cpu_info cpu_skx = {
++	.reg		= &resolved_cores_reg_hsx,
++	.min_peci_revision = 0x33,
++	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
++};
++
+ static const struct cpu_info cpu_icx = {
+ 	.reg		= &resolved_cores_reg_icx,
+ 	.min_peci_revision = 0x40,
+@@ -558,7 +564,7 @@ static const struct auxiliary_device_id peci_cputemp_ids[] = {
+ 	},
+ 	{
+ 		.name = "peci_cpu.cputemp.skx",
+-		.driver_data = (kernel_ulong_t)&cpu_hsx,
++		.driver_data = (kernel_ulong_t)&cpu_skx,
+ 	},
+ 	{
+ 		.name = "peci_cpu.cputemp.icx",
+-- 
+2.39.2
 
