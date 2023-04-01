@@ -2,46 +2,46 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 112AAC76196
-	for <linux-hwmon@archiver.kernel.org>; Sat,  1 Apr 2023 01:44:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F96AC76196
+	for <linux-hwmon@archiver.kernel.org>; Sat,  1 Apr 2023 01:44:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233553AbjDABoS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 31 Mar 2023 21:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
+        id S233618AbjDABoX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 31 Mar 2023 21:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233682AbjDABnm (ORCPT
+        with ESMTP id S233243AbjDABnu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 31 Mar 2023 21:43:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CC521AAD;
-        Fri, 31 Mar 2023 18:43:16 -0700 (PDT)
+        Fri, 31 Mar 2023 21:43:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AAB20C3C;
+        Fri, 31 Mar 2023 18:43:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8F4AB83311;
-        Sat,  1 Apr 2023 01:43:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D04CEC4339C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F27AF62D18;
         Sat,  1 Apr 2023 01:43:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95A19C433EF;
+        Sat,  1 Apr 2023 01:43:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680313385;
-        bh=S8EdIpybQ3dbjkW3l22hV52frnPpXw+QCFHLqqD7EJQ=;
+        s=k20201202; t=1680313384;
+        bh=gi+aNmMLzNAw/upSPG9ogRlXPz1oNELyCI8+p65yLEk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aT+yXxJ0Yn1IjO9iR5aey+zwonvneTUMgC2lzSULGs1FihwAciPGbDu/z/bBeGPuk
-         7d/c7M2PqE3V0FV3Xbpm5CLpyQ6bhYkJjEaIwEzwNsu873HTRQ3i53AWoXAC8lgjmQ
-         cyijbFK/be7ja3xP2fSrcU0xUlizPxDUD624NExuiep+LALY9nql/DdpHapTX3Xhcx
-         c7shuaKwobkdtUJRotB9NNSWQUFoTo2XhbUB4ZMQMearPNqW7tRuK+e6wT3QIIo5aj
-         hNaLFWVAq/T/H5H+gljTjw/duXmaYqQaEZVH18I8kpfYFggSornTMVnqFncsoQDJX8
-         74C+uswPQBoXg==
+        b=mtBXz90jFMYv4YUglwUG8NUcGL2/qphDCU2Rxoqza7xvGtNlSXiLNyN9Ox9uX2r27
+         zxGtvBpm4FbC6ildnSKFUpcv6os9yeFhQcqVWvL4rlw4GN9IFxSc9Q81k2FHo/2V5F
+         SKrWdk+JPxmN+5dGItimWujygUbrjNx7fqa1qHyuUvcVGPIeIuo+blnTZ10xK/dZWZ
+         DQX1NLcyKkHl9QjFBU1gCDQE3vyS2UFG9G9YulUaid4btV7Sj2Tt9lcLVR4CpJa6h6
+         623UrJLYs3/melHSHg80CeVaLEdzhBq83JdOiz+6NnSAPMJVWCoEzUv3swsSz+9G0n
+         4kmJ5TsJCogmA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tianyi Jing <jingfelix@hust.edu.cn>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
+Cc:     Iwona Winiarska <iwona.winiarska@intel.com>,
+        Paul Fertser <fercerpav@gmail.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 15/24] hwmon: (xgene) Fix ioremap and memremap leak
-Date:   Fri, 31 Mar 2023 21:42:31 -0400
-Message-Id: <20230401014242.3356780-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 14/24] hwmon: (peci/cputemp) Fix miscalculated DTS for SKX
+Date:   Fri, 31 Mar 2023 21:42:30 -0400
+Message-Id: <20230401014242.3356780-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230401014242.3356780-1-sashal@kernel.org>
 References: <20230401014242.3356780-1-sashal@kernel.org>
@@ -53,57 +53,49 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Tianyi Jing <jingfelix@hust.edu.cn>
+From: Iwona Winiarska <iwona.winiarska@intel.com>
 
-[ Upstream commit 813cc94c7847ae4a17e9f744fb4dbdf7df6bd732 ]
+[ Upstream commit 2b91c4a870c9830eaf95e744454c9c218cccb736 ]
 
-Smatch reports:
+For Skylake, DTS temperature of the CPU is reported in S10.6 format
+instead of S8.8.
 
-drivers/hwmon/xgene-hwmon.c:757 xgene_hwmon_probe() warn:
-'ctx->pcc_comm_addr' from ioremap() not released on line: 757.
-
-This is because in drivers/hwmon/xgene-hwmon.c:701 xgene_hwmon_probe(),
-ioremap and memremap is not released, which may cause a leak.
-
-To fix this, ioremap and memremap is modified to devm_ioremap and
-devm_memremap.
-
-Signed-off-by: Tianyi Jing <jingfelix@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
-Link: https://lore.kernel.org/r/20230318143851.2191625-1-jingfelix@hust.edu.cn
-[groeck: Fixed formatting and subject]
+Reported-by: Paul Fertser <fercerpav@gmail.com>
+Link: https://lore.kernel.org/lkml/ZBhHS7v+98NK56is@home.paul.comp/
+Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
+Link: https://lore.kernel.org/r/20230321090410.866766-1-iwona.winiarska@intel.com
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/xgene-hwmon.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/hwmon/peci/cputemp.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-index d1abea49f01be..78d9f52e2a719 100644
---- a/drivers/hwmon/xgene-hwmon.c
-+++ b/drivers/hwmon/xgene-hwmon.c
-@@ -698,14 +698,14 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 		ctx->comm_base_addr = pcc_chan->shmem_base_addr;
- 		if (ctx->comm_base_addr) {
- 			if (version == XGENE_HWMON_V2)
--				ctx->pcc_comm_addr = (void __force *)ioremap(
--							ctx->comm_base_addr,
--							pcc_chan->shmem_size);
-+				ctx->pcc_comm_addr = (void __force *)devm_ioremap(&pdev->dev,
-+								  ctx->comm_base_addr,
-+								  pcc_chan->shmem_size);
- 			else
--				ctx->pcc_comm_addr = memremap(
--							ctx->comm_base_addr,
--							pcc_chan->shmem_size,
--							MEMREMAP_WB);
-+				ctx->pcc_comm_addr = devm_memremap(&pdev->dev,
-+								   ctx->comm_base_addr,
-+								   pcc_chan->shmem_size,
-+								   MEMREMAP_WB);
- 		} else {
- 			dev_err(&pdev->dev, "Failed to get PCC comm region\n");
- 			rc = -ENODEV;
+diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
+index 30850a479f61f..87d56f0fc888c 100644
+--- a/drivers/hwmon/peci/cputemp.c
++++ b/drivers/hwmon/peci/cputemp.c
+@@ -537,6 +537,12 @@ static const struct cpu_info cpu_hsx = {
+ 	.thermal_margin_to_millidegree = &dts_eight_dot_eight_to_millidegree,
+ };
+ 
++static const struct cpu_info cpu_skx = {
++	.reg		= &resolved_cores_reg_hsx,
++	.min_peci_revision = 0x33,
++	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
++};
++
+ static const struct cpu_info cpu_icx = {
+ 	.reg		= &resolved_cores_reg_icx,
+ 	.min_peci_revision = 0x40,
+@@ -558,7 +564,7 @@ static const struct auxiliary_device_id peci_cputemp_ids[] = {
+ 	},
+ 	{
+ 		.name = "peci_cpu.cputemp.skx",
+-		.driver_data = (kernel_ulong_t)&cpu_hsx,
++		.driver_data = (kernel_ulong_t)&cpu_skx,
+ 	},
+ 	{
+ 		.name = "peci_cpu.cputemp.icx",
 -- 
 2.39.2
 
