@@ -2,84 +2,138 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCB3FC761AF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Apr 2023 18:27:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10AE7C76196
+	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Apr 2023 19:27:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232750AbjDCS1j (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 3 Apr 2023 14:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S230044AbjDCT1j (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 3 Apr 2023 15:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbjDCS1h (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 Apr 2023 14:27:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B7A2139;
-        Mon,  3 Apr 2023 11:27:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8413461D30;
-        Mon,  3 Apr 2023 18:27:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2B65C433D2;
-        Mon,  3 Apr 2023 18:27:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680546454;
-        bh=WCjt2Jv/YW91V4m2oQrs7DJ0U7kfjPlwg2HS+dwFJMU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qTSuFeV/ddExWkrit1fhvuaqyysRalSl+c5u+xVaLct1OfS8y1W9IX7BqLqlZQjPV
-         4UTtK8W5xMYYR6g7E0aJ81X2NTH9ZMsAp4pYFNcyq9+m9VHtCyJhg25c/a7oLSvx25
-         lfUmJ7JOvNC1s3JB7Egsb0K6n8Rd7nIQyKt00Kp4B3noI+vlm89FVFdFu4SOHh7ZoP
-         zsPLddqwka9U+KlUr83K2A88bpd0Bup5rvNNuScRQdqvy9l9S23yFUnU8979SZ3MzI
-         XvCzo+1l+n2AFXVvguS5lnqUOWqDQRn+DoWXZkWXDaeg/1+oqSOzuzdpuLw7n7iSMU
-         7SQQP8B+rjupA==
-Date:   Mon, 3 Apr 2023 19:42:46 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Daniel Matyas <daniel.matyas23@gmail.com>
-Cc:     linux-iio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: Creating a driver for MAX31827 temperature switch
-Message-ID: <20230403194246.10a56b59@jic23-huawei>
-In-Reply-To: <ZCn0KeOQFJclqiAK@daniel-Precision-5530>
-References: <ZCn0KeOQFJclqiAK@daniel-Precision-5530>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        with ESMTP id S231946AbjDCT1i (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 Apr 2023 15:27:38 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE2619B6;
+        Mon,  3 Apr 2023 12:27:36 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id ew6so121544315edb.7;
+        Mon, 03 Apr 2023 12:27:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680550055; x=1683142055;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=se3no2U1BEAjqgVkUIbiPXSr/UsK3c8ayHmiAOdc6i0=;
+        b=UARtSgQC9EuQSnmSkoADr2dvvdSuJpxE7vadF3X6wLoCGOi0sFvwP2LoUBJ2XFNyIL
+         0NYiwMV8vZpxV++leDIqavTa81a8JL1zbuPqdKC/ehXm8Hxe5GM5gw90LBIV80Z4SM9Y
+         md+Fm2835dBY8U1o5w0QPWcy78b3nyFqPvk0ZVgR/CZAbbBIwV/NKvoWmP+fg7g1ER3K
+         ejt6LbyGgDTMcKdmS3xqjD6x+lIFvVyM1+DvCnxvvSIhbjKHd96dr+iuOx4JQWM6CnLb
+         S1suinDUUSTs/4fdJr5r2GmvZTlNXNPZ1RC3d5JlLsMpjOMs/qZ+0LhGjM6bM7WaaC3q
+         yWjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680550055; x=1683142055;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=se3no2U1BEAjqgVkUIbiPXSr/UsK3c8ayHmiAOdc6i0=;
+        b=azPNUMB966tPwVJdwg6fUkPx5Vhw7+AulU2kM6UqDmM1I7Ky/KVhzRvFcaj+P4CDIB
+         jYuDrOzM4J3ovYrWO+Fe0Jc3nq/dHxS1cUMvJnq4cxM/YhKoj3452yjQNVHzwmC26g9n
+         sufBsv5Lqpit5nUBkxDTNaMEvpD6A4gv0/ycFCQSQB6gEEKXUeakhQfpg0w0s4CSbuOy
+         PEhid5wwF1TDf0nvvOYUsfLTiQhx3xpbGcyfX35WTEtr7cDit6Irt1kNyYTr9KVbVJax
+         fG1wvfJuv5ZlV0tLRljHGvIEgJ6T92JgSP/MPY+CEjkhPenl8ajIo+mqfg4HI+Wz28C5
+         MKpA==
+X-Gm-Message-State: AAQBX9f8w8OuL8wyvnFGztU2o2FgRcA363le4JS4dZOJBflHZMex3ea5
+        EkMVDjKXIwOlILxv9AHQBPn93l18fieURmpZZ5s=
+X-Google-Smtp-Source: AKy350Zp9LknbtnkEs+08Ept4WC1GhtU1o1/b9YwSKETN24Wpa6BvZayW5azg1Q+UbYSDX+WtMPzwF3uyq4N2FNX9Lw=
+X-Received: by 2002:a17:906:2357:b0:931:cac0:60ff with SMTP id
+ m23-20020a170906235700b00931cac060ffmr17646305eja.13.1680550054866; Mon, 03
+ Apr 2023 12:27:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20230403105052.426135-1-cristian.ciocaltea@collabora.com>
+ <20230403105052.426135-3-cristian.ciocaltea@collabora.com> <642b134c.4a0a0220.1d01a.5990@mx.google.com>
+In-Reply-To: <642b134c.4a0a0220.1d01a.5990@mx.google.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Mon, 3 Apr 2023 15:27:22 -0400
+Message-ID: <CAMdYzYrLjV97_Q2jhmNa9SJkraKXjttrZwovc=dmPTNLYnz5qg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: dts: rockchip: rk3588-rock-5b: Add pwm-fan
+To:     Chris Morgan <macroalpha82@gmail.com>
+Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 3 Apr 2023 00:31:21 +0300
-Daniel Matyas <daniel.matyas23@gmail.com> wrote:
+On Mon, Apr 3, 2023 at 1:56=E2=80=AFPM Chris Morgan <macroalpha82@gmail.com=
+> wrote:
+>
+> On Mon, Apr 03, 2023 at 01:50:52PM +0300, Cristian Ciocaltea wrote:
+> > Add the necessary DT changes for the Rock 5B board to enable support fo=
+r
+> > the PWM controlled heat sink fan.
+>
+> Honest question, but should we be adding this to the board file if not
+> every device has a PWM fan (they all have the socket for the fan, but
+> not the fan)? For example I have a passively cooled case that doesn't
+> include a fan.
 
-> Dear Kernel community,
-> 
-> I am developing an IIO driver for a temperature switch, which communicates through I2C at Analog Devices Inc.
-> 
-> When implementing the event handling for the comparator mode of the device, I faced a problem: I don't know how to differentiate the underTemp event from the overTemp event. To understand better, I suggest you check out the device's data sheet for Address map (page 12), Configuration Register Definition (page 13) and OT/UT Status Bits and ALARM Pin Behavior (page 15) - https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31827-MAX31829.pdf
-> 
-> I had the idea to make 2 channels with the exact same attributes, but with different indexes, so that I can store the overTemp related events on channel 0 and underTemp related events on channel 1. Even so, I don't really feel like this is the right solution. Can anyone give me some advice on this?
+Active cooling should be set up to take effect before throttling. If
+it is there great, (especially if it has feedback), if it doesn't
+exist it really doesn't affect anything because the throttling will
+kick in as necessary.
 
-If it's just a question of over and under temp, I'd imagine these map to two
-different directions of IIO event. You can have one channel with RISING and FALLING
-events on it.
-
-e.g.
-https://elixir.bootlin.com/linux/v6.2.9/source/drivers/iio/adc/max1363.c#L451
-
-The place we run into IIO limitations is if you have two events in the same direction
-(warn and critical for example)  When that happens it is almost always a device
-that fits better in hwmon anyway so we've never figured out how to enable this sort
-of thing.  Doesn't seem to apply here though.
-> 
-> Also, I was suggested that I convert my driver from IIO to HWMON. Do you think that this is needed?
-
-No obvious reason why this benefits from being in IIO so I'm agreeing with the others who have
-replied that this looks more suited to hwmon.
-
-Jonathan
-
-
-> 
-> Yours faithfully,
-> Daniel Matyas
-
+>
+> Thank you,
+> Chris Morgan.
+>
+> >
+> > Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> > ---
+> >  arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm=
+64/boot/dts/rockchip/rk3588-rock-5b.dts
+> > index 95805cb0adfa..bd74d9da2c17 100644
+> > --- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+> > +++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+> > @@ -17,6 +17,14 @@ chosen {
+> >               stdout-path =3D "serial2:1500000n8";
+> >       };
+> >
+> > +     fan: pwm-fan {
+> > +             compatible =3D "pwm-fan";
+> > +             cooling-levels =3D <0 95 145 195 255>;
+> > +             fan-supply =3D <&vcc5v0_sys>;
+> > +             pwms =3D <&pwm1 0 50000 0>;
+> > +             #cooling-cells =3D <2>;
+> > +     };
+> > +
+> >       vcc5v0_sys: vcc5v0-sys-regulator {
+> >               compatible =3D "regulator-fixed";
+> >               regulator-name =3D "vcc5v0_sys";
+> > @@ -27,6 +35,10 @@ vcc5v0_sys: vcc5v0-sys-regulator {
+> >       };
+> >  };
+> >
+> > +&pwm1 {
+> > +     status =3D "okay";
+> > +};
+> > +
+> >  &sdhci {
+> >       bus-width =3D <8>;
+> >       no-sdio;
+> > --
+> > 2.40.0
+> >
+>
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip
