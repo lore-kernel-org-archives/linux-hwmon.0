@@ -2,95 +2,122 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AA71C761A6
-	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Apr 2023 13:11:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C000C77B6C
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Apr 2023 13:55:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbjDDNLH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 4 Apr 2023 09:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S235576AbjDDNze (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 4 Apr 2023 09:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233852AbjDDNLD (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Apr 2023 09:11:03 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F5B2705
-        for <linux-hwmon@vger.kernel.org>; Tue,  4 Apr 2023 06:10:57 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id w9so130413331edc.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 04 Apr 2023 06:10:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680613856;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fqtoEDZVWkpxcyzUs7xGDK15f83XMUNAY3m/O6ttw+s=;
-        b=h+Dkbi6kOstMI39IA7cvSaywyJX4Ycw3uQ2u6jjtLZTs8F/imiXll66ajpcoXGbhEM
-         lGn5DPPGBpyNQBhkv6IltksGxH99RDtaLUyKm4d+hMiDeQuhr0QzAJUcZ3JN3ASKhtXy
-         CV6rUEJ1GsCWxcDquhpOpRx0kHERW447ObIZDbM69mQM5Yj4L2VZsgFcFI+hQtXGXBre
-         CjIUvJn818WyklraPGkuSgLG97PedNk7tMr7ufDFUFzDy+Au6LvHF91rGhZquZ5B4myF
-         MdGvYUVNSzTV+j5Q89sk950JpkemyKlPaZougK/2JqzoDCQKQzZptLwrBmA2Zq3g7oIz
-         rrmA==
+        with ESMTP id S235579AbjDDNz2 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Apr 2023 09:55:28 -0400
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658611990;
+        Tue,  4 Apr 2023 06:55:01 -0700 (PDT)
+Received: by mail-ot1-f49.google.com with SMTP id o25-20020a9d4119000000b006a11eb19f8eso16171306ote.5;
+        Tue, 04 Apr 2023 06:55:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680613856;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1680616500;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fqtoEDZVWkpxcyzUs7xGDK15f83XMUNAY3m/O6ttw+s=;
-        b=N+7v3C8D0HxjFfEzj+p7WX8JvQaMf3ZnC0AdISiAhchOQ7NESIulGKtcOnKlPqP/33
-         eA4csdKko7k/ukV+QdGeEqVavCE8S2VAceC+9PMoieHd/D/J4fBR0L11BN1liwJvEwH4
-         G8itqgfxVcXEHha+gQfh8pbTojcZu20Yl1WDlcbWTq/cvx4iXnFwoiXpmMRfhNYuKteP
-         R/Q1XARWlkFxE/nUeWynsxVq7lG80dVkIlSTtxXW7Cq92Ti9iVXyEzWwjBIml/2xg7JW
-         yHnB/TDL95Y7Ftc3EOczApTcD9aLJ3zQK1W2CwKFkW9XY/vtfwKQUatVqE3zWmMW6hw+
-         S5kQ==
-X-Gm-Message-State: AAQBX9f7i57A/GEvIfkZiX+HBr1kzZ9KOGIQOdrvr3Oymv7MoIegFYLW
-        cm7Y5oKfyNNhRLWl898cdcbtpg==
-X-Google-Smtp-Source: AKy350bvVu02KBDj6r/vYN8VfjwRMyssZiem2eDoz/ZAF9OvotcITs/vY4jFbqhN0TVVTroBZlyCfw==
-X-Received: by 2002:a17:906:3553:b0:944:6d88:206 with SMTP id s19-20020a170906355300b009446d880206mr2250852eja.71.1680613855935;
-        Tue, 04 Apr 2023 06:10:55 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:7467:56f4:40b7:cba8? ([2a02:810d:15c0:828:7467:56f4:40b7:cba8])
-        by smtp.gmail.com with ESMTPSA id r19-20020a50c013000000b004fd29e87535sm5870813edb.14.2023.04.04.06.10.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 06:10:55 -0700 (PDT)
-Message-ID: <5c4a2a12-9ae7-fb26-ed48-4fb4dfd792f3@linaro.org>
-Date:   Tue, 4 Apr 2023 15:10:54 +0200
+        bh=BJEw1H1pkfdI8k8tgnJUG93r+dsLUB9hI2v6VwBw+Ws=;
+        b=DoPgYxT62+Lbzb9yAnxIgEb8Gj9zP+Gh5RhliY4t42KEjJU8J6zlnE7ohwk2bL2FDa
+         SfRIbSOsWUh/3+iTcKIJkjFLpSno9dXuRFuzeQOGZMk2BUX1BsFb/bt4bNcFQRSGpX8d
+         VyRZ0L0a3GNCJcUi7B68nXjTDoiajQofIhJaeHCE4ejQztZj2jG/uCBEJCLK3iD38nNy
+         kqCJS7jIsYw6DBrW63fSeKQOjxcXOOY41DdGy7zcIR2Sd6U5IDNNJa/8um3F3Jz1iktY
+         fMkFPOt7Z3NytpghyBwalHUTsBNmZWUCY8AfMOtDqt2ZARWADNmcMdq1rV4WNNameUNe
+         AJvg==
+X-Gm-Message-State: AAQBX9cl2/DFg3CWd0/GyjFT7cbNOxZQ+Q1ZS2xIxS01WEZCW7gvBvvp
+        2WgG8gTCObl+5MojTw/HEg==
+X-Google-Smtp-Source: AKy350b+cqls0gSn2TeHIm4sRXtpjFeVIsHj7uZEjkZFzNbY1hEuGkXE9PfxqXau8Y9ylqfSGtmm+g==
+X-Received: by 2002:a9d:75cd:0:b0:699:896e:c9e1 with SMTP id c13-20020a9d75cd000000b00699896ec9e1mr1102300otl.34.1680616500607;
+        Tue, 04 Apr 2023 06:55:00 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s18-20020a056830149200b0069faca091acsm5499334otq.54.2023.04.04.06.54.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 06:55:00 -0700 (PDT)
+Received: (nullmailer pid 3797380 invoked by uid 1000);
+        Tue, 04 Apr 2023 13:54:59 -0000
+Date:   Tue, 4 Apr 2023 08:54:59 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Convert to DT schema
+Message-ID: <20230404135459.GA3793612-robh@kernel.org>
+References: <20230403105052.426135-1-cristian.ciocaltea@collabora.com>
+ <20230403105052.426135-2-cristian.ciocaltea@collabora.com>
+ <168052514639.463695.9544022277060710805.robh@kernel.org>
+ <dcd79e14-d9df-39c1-5465-4e9d71221659@collabora.com>
+ <79396eed-18ab-bcee-5c7e-c3e5e61f32c3@collabora.com>
+ <49c226ff-08a3-a7ca-59bd-f0b9cea865e3@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v5 1/2] drivers: rtc: add max313xx series rtc driver
-Content-Language: en-US
-To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, jdelvare@suse.com,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
- <20230403154342.3108-2-Ibrahim.Tilki@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230403154342.3108-2-Ibrahim.Tilki@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <49c226ff-08a3-a7ca-59bd-f0b9cea865e3@collabora.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 03/04/2023 17:43, Ibrahim Tilki wrote:
-> Adding support for Analog Devices MAX313XX series RTCs.
+On Mon, Apr 03, 2023 at 07:22:45PM +0300, Cristian Ciocaltea wrote:
+> On 4/3/23 17:43, AngeloGioacchino Del Regno wrote:
+> > Il 03/04/23 16:32, Cristian Ciocaltea ha scritto:
+> >> On 4/3/23 16:10, Rob Herring wrote:
+> >>>
+> >>> On Mon, 03 Apr 2023 13:50:51 +0300, Cristian Ciocaltea wrote:
+> >>>> Convert the PWM fan bindings to DT schema format.
+> >>>>
+> >>>> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> >>>> ---
+> >>>>    .../devicetree/bindings/hwmon/pwm-fan.txt     |  68 +----------
+> >>>>    .../devicetree/bindings/hwmon/pwm-fan.yaml    | 109
+> >>>> ++++++++++++++++++
+> >>>>    2 files changed, 110 insertions(+), 67 deletions(-)
+> >>>>    create mode 100644
+> >>>> Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+> >>>>
+> >>>
+> >>> Running 'make dtbs_check' with the schema in this patch gives the
+> >>> following warnings. Consider if they are expected or the schema is
+> >>> incorrect. These may not be new warnings.
+> >>>
+> >>> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+> >>> This will change in the future.
+> >>>
+> >>> Full log is available here:
+> >>> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230403105052.426135-2-cristian.ciocaltea@collabora.com
+> >>>
+> >>>
+> >>> pwm-fan: 'cooling-max-state', 'cooling-min-state' do not match any of
+> >>> the regexes: 'pinctrl-[0-9]+'
+> >>>     arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dtb
+> >>>     arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dtb
+> >>>
+> >>
+> >> The only references to the offending cooling-{min|max}-state are located
+> >> in a few DTS files. Assuming they are obsolete, may I simply drop them?
+> >>
+> > 
+> > If they're obsolete, you can mark them as `deprecated: true` in the
+> > binding, but
+> > dropping them entirely would be an ABI breakage, so no, you can't.
 > 
-> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> >From the pwm-fan driver point of view, the properties are not supported
+> and I couldn't find any indication that they could have been used in the
+> past.
+> 
+> Hence I'm not sure adding them to the binding is the proper way to
+> handle this issue.
 
-(...)
+They can be omitted.
 
-> +
-> +static int max313xx_clkout_register(struct device *dev)
-> +{
-> +	struct max313xx *rtc = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	if (!device_property_present(dev, "#clock-cells"))
-
-Why would it be not present?
-
-Best regards,
-Krzysztof
+Rob
 
