@@ -2,98 +2,86 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA5DBC6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Apr 2023 08:14:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13061C6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Apr 2023 08:56:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234078AbjDDIOi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 4 Apr 2023 04:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
+        id S233795AbjDDI4P (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 4 Apr 2023 04:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234047AbjDDIOh (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Apr 2023 04:14:37 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E114C1BC5
-        for <linux-hwmon@vger.kernel.org>; Tue,  4 Apr 2023 01:14:35 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id fi11so3657170edb.10
-        for <linux-hwmon@vger.kernel.org>; Tue, 04 Apr 2023 01:14:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680596074;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0sl7VVFpi43Dv/CruzkWtwl78mBZkfE/sbR0q5Xjw14=;
-        b=ke3PWGnD8ghioKt2YLhw4hpP95DeAyGua6RnAt/fqwsBnSmGEoqwykfMSnsl0hjkS1
-         bsWwfgeS+Cn4bvM0go645Vol+cCCCMRjY/xCdJJPI6BHZmAyVrOoewsqbHTLwY1lGcnO
-         kg2T7SHBRpAdz0PFuNf4s28AZ6lLGdKpdet3rg2hLyA9MRZRmSzAVPLev2WjymKdjziN
-         azUSWQzywA6A+GWGdnjqoca82VH8O2Bs8nz0opQeMB0qG7DzTs8gZITwB9OdG3kV6l+z
-         dgCzdi0vhGIsFjaf1zKDCQshsx6UCY+UuTbvvOP9p6u29iDpBcaiiMnt+wZ1KxV8uzDc
-         L5wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680596074;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0sl7VVFpi43Dv/CruzkWtwl78mBZkfE/sbR0q5Xjw14=;
-        b=SopTdh5hGVZrOVrRMkvHZhwejlk25CmpgBOZtZuKUV7fQd49qzQLEYtfTygCmmlg23
-         ijR1/MXdA794g2mbUubMTemKOZ1IZe174xs0XiI184UJPgbEkJXNAIfYe2mNDY8ADNIo
-         scuf6gtGiwuBdWzfsFDV4WrFnCmVkGC47PfTyeDX2FwAytCmYtb1J6rjYq+lBmy/sTrW
-         WESE4B+kpymwBvuiyUwk6Z/HTQ9rVly5lKUfwThodPNbW4bphf/qOE9tPN6wcVUJpMRr
-         bLNu7YnapQl2OUTCEGch1S9dZ6OQNOfBtTQVuUa+rDWtBNmQyGgoQsDj2bV1GdOkwpZz
-         hQOw==
-X-Gm-Message-State: AAQBX9fwuGAOiUk1dJQGlGAPKHWyD/K2EAP7bYvV0xppkr4wBMXAdkKI
-        eSJcFXYwDHxs3jTnMpwSbjqGCA==
-X-Google-Smtp-Source: AKy350Z0asUZb5+NZOLgnPMLmWfgC1CrzQ6i1qrDzxsz6ZNtQ0mRJa48QCoVmrU7tlEVVonfzbtOUg==
-X-Received: by 2002:a17:906:37cc:b0:947:df9e:4082 with SMTP id o12-20020a17090637cc00b00947df9e4082mr1432939ejc.35.1680596074451;
-        Tue, 04 Apr 2023 01:14:34 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:233a:5c18:b527:381e? ([2a02:810d:15c0:828:233a:5c18:b527:381e])
-        by smtp.gmail.com with ESMTPSA id l15-20020a17090612cf00b009222a7192b4sm5579869ejb.30.2023.04.04.01.14.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 01:14:34 -0700 (PDT)
-Message-ID: <0fd972bd-c5e7-65cc-6992-09c4c3e88f95@linaro.org>
-Date:   Tue, 4 Apr 2023 10:14:33 +0200
+        with ESMTP id S233567AbjDDI4O (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Apr 2023 04:56:14 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97AB1735;
+        Tue,  4 Apr 2023 01:56:12 -0700 (PDT)
+Received: from [IPv6:2a00:23c7:6883:e501:e15b:407b:49da:d40e] (unknown [IPv6:2a00:23c7:6883:e501:e15b:407b:49da:d40e])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: obbardc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F0656660312E;
+        Tue,  4 Apr 2023 09:56:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680598571;
+        bh=dmw4agSXfIQ/8qZuFX76Gw++1/H8qwLlzVcoLQiWdL4=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=JE4UxCzKD8diQjGDlsfvZVUHT0kV7ba5z7Y/jk/4Sn4fHYkPqFxHq1jFrBp6CC6JS
+         238j9b53QjJVJFDiqc9cx9N9r9fq6v0EUGXeNrvTbpUf9IWXcxuHBQpCUM8weWUyyK
+         0HQ4gWh1PUwXRzpTOAPLGzNJWxXlSg8cSn0vNV+uTcDEjvKpxSI0aLhmcgEeacql8H
+         2R0N607E8H79Y9kFOqoFf+UeZK7+Jnb6bXYU42OVhkORjmvttlM9S2EPmGsvnZEnUz
+         45LuVMxI0fog0dWudHGQ1jP6QMeulFVb4EUt8jhbJLeH/sNX02dwj5eqmUPx+q/Cyg
+         BH3rvkqpNZexA==
+Message-ID: <47ef157dfcceaaa2c9487cfe51400029a04ade94.camel@collabora.com>
+Subject: Re: [PATCH 2/2] arm64: dts: rockchip: rk3588-rock-5b: Add pwm-fan
+From:   Christopher Obbard <chris.obbard@collabora.com>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+Date:   Tue, 04 Apr 2023 09:56:08 +0100
+In-Reply-To: <20230403105052.426135-3-cristian.ciocaltea@collabora.com>
+References: <20230403105052.426135-1-cristian.ciocaltea@collabora.com>
+         <20230403105052.426135-3-cristian.ciocaltea@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.4-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v5 2/2] dt-bindings: rtc: add max313xx RTCs
-Content-Language: en-US
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, a.zummo@towertech.it,
-        jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
- <20230403154342.3108-3-Ibrahim.Tilki@analog.com>
- <dd6f0842-519f-1bc9-f7f5-459863dc3dcd@linaro.org>
- <202304040710049c9cc01a@mail.local>
- <996b49ab-5e2e-76bc-efb1-38c6384871f6@linaro.org>
- <2023040407444619bf5596@mail.local>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <2023040407444619bf5596@mail.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 04/04/2023 09:44, Alexandre Belloni wrote:
->>
->>> charging will always
->>> enable a diode, select a resistor and then have or not an extra diode.
->>> Figure2 of the MAX31329 datasheet is great.
->>
->> So the diode is in the max313xx? Then why enabling it is a property of
->> DT? Either this should be inferred from compatible or is even a policy,
->> not a DT property. Just because device has a register for something, is
->> not an argument that "something" should be in DT.
-> 
-> Well, it depends on the battery that is installed on the board so it
-> makes sense to have it in DT.
-
-OK, that would be a good reason, but I wonder why? Why choosing diode or
-not depends on the battery? Wouldn't you always want to have the diode?
-
-Best regards,
-Krzysztof
+SGkgQ3Jpc3RpYW4sCgpPbiBNb24sIDIwMjMtMDQtMDMgYXQgMTM6NTAgKzAzMDAsIENyaXN0aWFu
+IENpb2NhbHRlYSB3cm90ZToKPiBBZGQgdGhlIG5lY2Vzc2FyeSBEVCBjaGFuZ2VzIGZvciB0aGUg
+Um9jayA1QiBib2FyZCB0byBlbmFibGUgc3VwcG9ydCBmb3IKPiB0aGUgUFdNIGNvbnRyb2xsZWQg
+aGVhdCBzaW5rIGZhbi4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBDcmlzdGlhbiBDaW9jYWx0ZWEgPGNy
+aXN0aWFuLmNpb2NhbHRlYUBjb2xsYWJvcmEuY29tPgoKUmV2aWV3ZWQtYnk6IENocmlzdG9waGVy
+IE9iYmFyZCA8Y2hyaXMub2JiYXJkQGNvbGxhYm9yYS5jb20+Cgo+IC0tLQo+IMKgYXJjaC9hcm02
+NC9ib290L2R0cy9yb2NrY2hpcC9yazM1ODgtcm9jay01Yi5kdHMgfCAxMiArKysrKysrKysrKysK
+PiDCoDEgZmlsZSBjaGFuZ2VkLCAxMiBpbnNlcnRpb25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL2Fy
+Y2gvYXJtNjQvYm9vdC9kdHMvcm9ja2NoaXAvcmszNTg4LXJvY2stNWIuZHRzIGIvYXJjaC9hcm02
+NC9ib290L2R0cy9yb2NrY2hpcC9yazM1ODgtcm9jay01Yi5kdHMKPiBpbmRleCA5NTgwNWNiMGFk
+ZmEuLmJkNzRkOWRhMmMxNyAxMDA2NDQKPiAtLS0gYS9hcmNoL2FybTY0L2Jvb3QvZHRzL3JvY2tj
+aGlwL3JrMzU4OC1yb2NrLTViLmR0cwo+ICsrKyBiL2FyY2gvYXJtNjQvYm9vdC9kdHMvcm9ja2No
+aXAvcmszNTg4LXJvY2stNWIuZHRzCj4gQEAgLTE3LDYgKzE3LDE0IEBAIGNob3NlbiB7Cj4gwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzdGRvdXQtcGF0aCA9ICJzZXJpYWwyOjE1MDAw
+MDBuOCI7Cj4gwqDCoMKgwqDCoMKgwqDCoH07Cj4gwqAKPiArwqDCoMKgwqDCoMKgwqBmYW46IHB3
+bS1mYW4gewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjb21wYXRpYmxlID0gInB3
+bS1mYW4iOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjb29saW5nLWxldmVscyA9
+IDwwIDk1IDE0NSAxOTUgMjU1PjsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZmFu
+LXN1cHBseSA9IDwmdmNjNXYwX3N5cz47Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oHB3bXMgPSA8JnB3bTEgMCA1MDAwMCAwPjsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgI2Nvb2xpbmctY2VsbHMgPSA8Mj47Cj4gK8KgwqDCoMKgwqDCoMKgfTsKPiArCj4gwqDCoMKg
+wqDCoMKgwqDCoHZjYzV2MF9zeXM6IHZjYzV2MC1zeXMtcmVndWxhdG9yIHsKPiDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNvbXBhdGlibGUgPSAicmVndWxhdG9yLWZpeGVkIjsKPiDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlZ3VsYXRvci1uYW1lID0gInZjYzV2MF9z
+eXMiOwo+IEBAIC0yNyw2ICszNSwxMCBAQCB2Y2M1djBfc3lzOiB2Y2M1djAtc3lzLXJlZ3VsYXRv
+ciB7Cj4gwqDCoMKgwqDCoMKgwqDCoH07Cj4gwqB9Owo+IMKgCj4gKyZwd20xIHsKPiArwqDCoMKg
+wqDCoMKgwqBzdGF0dXMgPSAib2theSI7Cj4gK307Cj4gKwo+IMKgJnNkaGNpIHsKPiDCoMKgwqDC
+oMKgwqDCoMKgYnVzLXdpZHRoID0gPDg+Owo+IMKgwqDCoMKgwqDCoMKgwqBuby1zZGlvOwo+IC0t
+IAo+IDIuNDAuMAo+IAo+IAo=
 
