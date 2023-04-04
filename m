@@ -2,108 +2,114 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D64EBC77B62
-	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Apr 2023 10:06:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C65BCC6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Apr 2023 10:08:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234338AbjDDKGU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 4 Apr 2023 06:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
+        id S234356AbjDDKIY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 4 Apr 2023 06:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234324AbjDDKGT (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Apr 2023 06:06:19 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822D42727
-        for <linux-hwmon@vger.kernel.org>; Tue,  4 Apr 2023 03:06:17 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id fi11so4825699edb.10
-        for <linux-hwmon@vger.kernel.org>; Tue, 04 Apr 2023 03:06:17 -0700 (PDT)
+        with ESMTP id S234350AbjDDKIX (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Apr 2023 06:08:23 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CEC1BD6
+        for <linux-hwmon@vger.kernel.org>; Tue,  4 Apr 2023 03:08:21 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id cn12so128393812edb.4
+        for <linux-hwmon@vger.kernel.org>; Tue, 04 Apr 2023 03:08:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680602776;
+        d=linaro.org; s=google; t=1680602900;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DxM7pHYaYfeSkBdBDN7aQqaAsu+9Matzg8m3QMGN1rI=;
-        b=j5SStedHpTECGFWywLmPC52GuOUIrn9O2z99EVD38fkoZOAoRYvW/87/ggpABjeiyT
-         znLCnLu1/8W/pmgcORHwd6DhZ9HEBY/Omu3kXiUH4LRI6SdK/T+Y2OHvJ/85E/linAzZ
-         IhdTscR4J+3LJVOHTvpT/Xw1j+ZtIpyu6eGaTi2+mNA5r1oxZOQGHRci8//pN2Mr57a6
-         62yxEKN6qDed6le3JEDw6x02QWkF45UBsMGnF7bp3K418ZajeCaCzUGeFjdYJIW5XUyG
-         8sklu9Mct4hFVWbQCV0aHnw5paSyZknwqZFrmnNmvlg9+i5OFCfB2RrC6FHa7dM+pNMO
-         Ktqg==
+        bh=ZlNybzVLYx+A0XBeoH4oXwuGxi1u7KKBqs1hBUDO4vo=;
+        b=hFSvDhnr6/SiTUZWMmI6o6a09OPjQKM+CX//VRhSYtWawTDhAbGCWc9WqmkneaBOAA
+         u5ut8fQpyXa5GU3O4sCiX4dBMC0/8pzL73PzO1dTaiOvivV2ETDp2k+Yy/wyPlKkKRWz
+         VvdTl/OUrmF9GAc7YE9a9pC77VCb7VZjshJ37i4CYZ9p07oh8kI7mOxQ6y2HQ/djxp05
+         WpQIzcdwTW2QmJvEurxazwv+UhmtMJB0xcbjpqq3+ih2Y6n0iV0N6FPXzmIELq1BYRbh
+         mZSb+35C7dFZvILeDrhqfEOyPuppguyHtrw9DxTc/kffGrgVUmzhGiMtz6ciLC2GTIK3
+         ZaJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680602776;
+        d=1e100.net; s=20210112; t=1680602900;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DxM7pHYaYfeSkBdBDN7aQqaAsu+9Matzg8m3QMGN1rI=;
-        b=5iLEa2iK4lFfiGf8sHgKo78TZXNEHCMeYbzYclBl6WRBWkxFwtAVW7oLSDQl6LFgg8
-         /3lPGx/CE9eJa8yHQdneK3xs/h+D7liChA+usRyPU3HNDrgFgKJkRY8I4/jDRhNsYJQs
-         lBJBpQzhxTkhgcER21L7XOao4rEQ8fXJMjcaVKWcxQfOmG8xPQ47zD7GFoKp3iq0Lg1H
-         IKohJA9rE/dk768K0VVtkccp3LA+Ik8TU9KDmpicAJStzQvMo2gCbf74EgBDoXXLjNEF
-         5IQGyCAqae/0xqpvUzqb0Xe0xBXU7iUrIeDom2VVbzqTvm9HQUqn+1/nXkVswTIP0TXy
-         qlCQ==
-X-Gm-Message-State: AAQBX9e2pZC4T8vhI6ZVWFTVfONKJWf3BdcZaA1jV7cymY91dZrz9cfS
-        6eOp421mfthdGlHU7TimGlXnoQ==
-X-Google-Smtp-Source: AKy350Zh1SFhrfUf1rjLYpAofSLqfJ7X0dOlxbo2D8cQQ1H073suZ3iJ/Kfj/afUZBfGZEE+Se2YVg==
-X-Received: by 2002:a17:906:99c8:b0:8b1:2bde:5c70 with SMTP id s8-20020a17090699c800b008b12bde5c70mr1880750ejn.2.1680602775988;
-        Tue, 04 Apr 2023 03:06:15 -0700 (PDT)
+        bh=ZlNybzVLYx+A0XBeoH4oXwuGxi1u7KKBqs1hBUDO4vo=;
+        b=UXXjxImN1jGXr023yrxfY9x4W0Zym6u8moxx+9FvCplL39qHwhwPwWI0mJrHUJgNM4
+         ageakLFtlxOXYTat8N0Seg/+wmNiIulr0lqrCMC3fbudGEMsF0jyi5ec5YPqUlcab4aY
+         xd0/K/oxG4fXPhIEFo7rguU7g0itkxgh9JiHNYTr6Qe9iWC7DxyNm2DAw6XRT2H2Bi2C
+         S+Lo2kU/outRAiTIEndPRaq4pMy1GYss2CfLhBSMorGgRtevNJ82S/k6h6n9lP4hK3qP
+         mZCYyGUX+OWBz6mJbsDV2tQFIJ+cuRmILcTxrqW3j/g7vx3XtOd4Hy6aPwqm15Mmi9Q5
+         herA==
+X-Gm-Message-State: AAQBX9dfyoYrllEBO+ZxLd3foODK7ozcBaabcC//0JDKFclvimvlwHTv
+        OyxqsnqTxerE4tkVKuhD4DTCfw==
+X-Google-Smtp-Source: AKy350bJMw5BxtPsRrX6tWOtAUx08BJPXquoaQXRMSvM7Ko3k4DaEbSSeB4O1fnXi4QX4w3SK+g8tg==
+X-Received: by 2002:a17:906:1c0a:b0:947:f4e2:ad6d with SMTP id k10-20020a1709061c0a00b00947f4e2ad6dmr1416732ejg.72.1680602899914;
+        Tue, 04 Apr 2023 03:08:19 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:99ed:4575:6001:8bda? ([2a02:810d:15c0:828:99ed:4575:6001:8bda])
-        by smtp.gmail.com with ESMTPSA id sd19-20020a170906ce3300b00947499e0e4dsm5850768ejb.146.2023.04.04.03.06.14
+        by smtp.gmail.com with ESMTPSA id s5-20020a170906454500b008e54ac90de1sm5765184ejq.74.2023.04.04.03.08.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 03:06:15 -0700 (PDT)
-Message-ID: <847cc6c8-e097-aa3a-2cd7-a6929bec18e9@linaro.org>
-Date:   Tue, 4 Apr 2023 12:06:14 +0200
+        Tue, 04 Apr 2023 03:08:19 -0700 (PDT)
+Message-ID: <1efdb870-cac2-f6ed-72b5-d0550dbb5257@linaro.org>
+Date:   Tue, 4 Apr 2023 12:08:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
 Subject: Re: [PATCH v5 2/2] dt-bindings: rtc: add max313xx RTCs
 Content-Language: en-US
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, a.zummo@towertech.it,
-        jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+To:     "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
 References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
  <20230403154342.3108-3-Ibrahim.Tilki@analog.com>
  <dd6f0842-519f-1bc9-f7f5-459863dc3dcd@linaro.org>
  <202304040710049c9cc01a@mail.local>
- <996b49ab-5e2e-76bc-efb1-38c6384871f6@linaro.org>
- <2023040407444619bf5596@mail.local>
- <0fd972bd-c5e7-65cc-6992-09c4c3e88f95@linaro.org>
- <202304040956056c59af98@mail.local>
+ <CY4PR03MB2488DFC99C23ADE16FF40E2F96939@CY4PR03MB2488.namprd03.prod.outlook.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <202304040956056c59af98@mail.local>
+In-Reply-To: <CY4PR03MB2488DFC99C23ADE16FF40E2F96939@CY4PR03MB2488.namprd03.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 04/04/2023 11:56, Alexandre Belloni wrote:
-> On 04/04/2023 10:14:33+0200, Krzysztof Kozlowski wrote:
->> On 04/04/2023 09:44, Alexandre Belloni wrote:
->>>>
->>>>> charging will always
->>>>> enable a diode, select a resistor and then have or not an extra diode.
->>>>> Figure2 of the MAX31329 datasheet is great.
->>>>
->>>> So the diode is in the max313xx? Then why enabling it is a property of
->>>> DT? Either this should be inferred from compatible or is even a policy,
->>>> not a DT property. Just because device has a register for something, is
->>>> not an argument that "something" should be in DT.
+On 04/04/2023 11:26, Tilki, Ibrahim wrote:
+>>>> +  aux-voltage-chargeable:
+>>>> +    enum: [0, 1, 2]
+>>>> +    description: |
+>>>> +      Enables trickle charger.
+>>>> +      0: Charger is disabled (default)
+>>>> +      1: Charger is enabled
+>>>> +      2: Charger is enabled with a diode
 >>>
->>> Well, it depends on the battery that is installed on the board so it
->>> makes sense to have it in DT.
+>>> 2 is not an allowed value. I asked to drop this property. It is coming
+>>> from rtc.yaml. I also do not understand "with a diode". So otherwise it
+>>> is charging with, I don't know, FET?
 >>
->> OK, that would be a good reason, but I wonder why? Why choosing diode or
->> not depends on the battery? Wouldn't you always want to have the diode?
+>> No, what is not explained here (and maybe not unsterstood by the
+>> submitter) is that the RTC has an extra diode so, charging will always
+>> enable a diode, select a resistor and then have or not an extra diode.
+>> Figure2 of the MAX31329 datasheet is great.
 >>
 > 
-> It limits the maximum current used to charge the battery or supercap to
-> not exceed what is allowed.
+> That is exactly why I had "adi,trickle-diode-enable" property in previous patch.
+> So if I can't have "adi,trickle-diode-enable" and can't add an additional value
+> to "aux-voltage-chargeable", I am not sure how to add support for the extra
+> diode at this point.
 
-and I still wonder why someone would like to allow exceeding what is
-allowed. IOW, what is the use case to disable the diode?
+Ask the person who asked you to remove adi,trickle-diode-enable...
+Anyway even if you decided to go with such advise, the solution is not
+to create binding which fails.
+
 
 Best regards,
 Krzysztof
