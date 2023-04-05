@@ -2,81 +2,81 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 638D1C77B6E
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Apr 2023 21:35:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1387BC761A6
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Apr 2023 22:45:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232832AbjDEVfS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Apr 2023 17:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
+        id S229693AbjDEWpd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 5 Apr 2023 18:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232829AbjDEVfR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Apr 2023 17:35:17 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399C56E97;
-        Wed,  5 Apr 2023 14:35:14 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pkAmX-0001hG-Ps; Wed, 05 Apr 2023 23:35:05 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: (subset) [PATCH v2 0/2] Add PWM fan support to Rock 5B board
-Date:   Wed, 05 Apr 2023 23:35:04 +0200
-Message-ID: <840877554.0ifERbkFSE@diego>
-In-Reply-To: <1a914522-8780-febd-7224-121b1f1fc2ba@roeck-us.net>
-References: <20230404173807.490520-1-cristian.ciocaltea@collabora.com>
- <168071663557.3186456.17606522894011578076.b4-ty@sntech.de>
- <1a914522-8780-febd-7224-121b1f1fc2ba@roeck-us.net>
+        with ESMTP id S229484AbjDEWpc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Apr 2023 18:45:32 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCB4B0;
+        Wed,  5 Apr 2023 15:45:31 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id t10so144747306edd.12;
+        Wed, 05 Apr 2023 15:45:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680734730; x=1683326730;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lN2UOf7lGdFl2l+kAYg6tuaUcdYb0pcDJoziF1bC1zc=;
+        b=BJF4bVjACD8rv6d1H5BoOtERf7zbyUMOwCPar/nhq75oD9GJn3DeC8tCunIwxtIxeY
+         XpCDH1N9xhGrqFuAGmgkRuBYzKgGGXe/A98RIVMqFz748aaqEolqXbLv/DGdWfTw4OLr
+         Kvzgdi+HIQdJWj8aBgxRKJAv/YHq5iQwy6xWn6eTIl+nEMU06obsA4mQ2lgodIjy9zjY
+         MtdidHROpIUWUfJ0YA8hFqMD9YVkG8h9UyYejwDL5VPaCjGvh9SJ0ULXKEXfbJvcg4MU
+         t6jFzb7L0XleKhydZ6I+xWoB2KwSgfGldgrNHDJnMUSN0qRifoCuxD8Gw1Ib9oPAS2pw
+         bBAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680734730; x=1683326730;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lN2UOf7lGdFl2l+kAYg6tuaUcdYb0pcDJoziF1bC1zc=;
+        b=EkugsCcfQfcq3krJuS/lpwR+O/GdMehXlFuU3YUjJlLqXHIG4J0biUDHd5ZRYCqjjh
+         6mW81kmYwrXsr5ZnbKtv+NWHkyI4C5B6q9lEvQxrCrctXrgdxR1gUuKKa9ql8jjUJvsX
+         BPPxsuy/5mYZ5A0UFc03bYcERzZTUFrG9WFA+sshTrAlJQ5xcifmYs5jv3Fc8LErVRkE
+         q+MK64kzBrXlX7JSYY/jC9NJ4AB/hU1G8OZES/OtMaULLSIAqZwrVupOYJ8i+HorxTzd
+         ExW6xDjYogt+pmDGa0QQVZcBhqhhFPJiwN/Tdf++vPut+0FcDfgYxLIo8RMpLlWzYjP9
+         R/eA==
+X-Gm-Message-State: AAQBX9es0XCrP3Mens6d5p6bV1xTwv052CHRqZq4GUwp+pfTPxf6R/LR
+        KdKw+pubYb68cky+yRP0Ewo=
+X-Google-Smtp-Source: AKy350bZqYFKKMPkeVsuSgbW9WXxE+WpixlDYiFjMCTx2aNtnJiM0jvfFNLPYOqR8zQy5BHAoy/CLA==
+X-Received: by 2002:a17:907:d603:b0:931:af6a:ad08 with SMTP id wd3-20020a170907d60300b00931af6aad08mr4813359ejc.57.1680734729389;
+        Wed, 05 Apr 2023 15:45:29 -0700 (PDT)
+Received: from caracal.museclub.art (p200300cf9f2cac00f0c38d0eb7c148d4.dip0.t-ipconnect.de. [2003:cf:9f2c:ac00:f0c3:8d0e:b7c1:48d4])
+        by smtp.googlemail.com with ESMTPSA id h3-20020a1709067cc300b0094776b4ef04sm8091868ejp.10.2023.04.05.15.45.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 15:45:28 -0700 (PDT)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+To:     eugene.shalygin@gmail.com
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] (asus-ec-sensors) add two more boards
+Date:   Thu,  6 Apr 2023 00:43:37 +0200
+Message-Id: <20230405224339.358675-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am Mittwoch, 5. April 2023, 21:04:04 CEST schrieb Guenter Roeck:
-> On 4/5/23 10:45, Heiko Stuebner wrote:
-> > On Tue, 4 Apr 2023 20:38:05 +0300, Cristian Ciocaltea wrote:
-> >> This patch series enables support for the PWM controlled heat sink fan
-> >> on the Rock 5B SBC and, additionally, converts the hwmon PWM fan bindings
-> >> to DT schema format.
-> >>
-> >> Changes in v2:
-> >>   - Updated PATCH 1/2 according to Rob's review
-> >>   - Added Reviewed-by from Christopher to PATCH 2/2
-> >>   - v1: https://lore.kernel.org/lkml/20230403105052.426135-1-cristian.ciocaltea@collabora.com/
-> >>
-> >> [...]
-> > 
-> > Applied, thanks!
-> > 
-> 
-> Both patches or only the second one ?
+Adds sensor definitions for two more boards, provided and tested by
+users using this driver or Libre Hardware Monitor.
 
-only the second one of course. According to earlier talks the dts patch
-does already follow the text binding, so the yaml conversion is actually
-not a requirement for it.
+Eugene Shalygin (1):
+  hwmon: (asus-ec-sensors) add ROG STRIX Z390-F GAMING
 
-So I picked the dts patch let the binding sort itself when people have
-time for it :-) .
+fireflame90051 (1):
+  hwmon: (asus-ec-sensors) add ProArt B550-Creator
 
+ Documentation/hwmon/asus_ec_sensors.rst |  2 ++
+ drivers/hwmon/asus-ec-sensors.c         | 20 ++++++++++++++++++++
+ 2 files changed, 22 insertions(+)
 
-Looking at the mail b4 created, I guessed this would also be visible
-with the subject saying (subset) and the listed commits only showing
-
-[2/2] arm64: dts: rockchip: rk3588-rock-5b: Add pwm-fan
-      commit: f36bb17653e4b9e26bbdb1224027d20614e77636
-
-
-Heiko
-
+-- 
+2.40.0
 
