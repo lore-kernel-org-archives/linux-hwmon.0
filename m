@@ -2,77 +2,106 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 502C1C76188
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Apr 2023 07:31:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19D81C76188
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Apr 2023 08:02:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237148AbjDEHbe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Apr 2023 03:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
+        id S237225AbjDEICT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 5 Apr 2023 04:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237149AbjDEHbP (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Apr 2023 03:31:15 -0400
-Received: from s.wrqvtzvf.outbound-mail.sendgrid.net (s.wrqvtzvf.outbound-mail.sendgrid.net [149.72.126.143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC195261
-        for <linux-hwmon@vger.kernel.org>; Wed,  5 Apr 2023 00:31:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=equiv.tech;
-        h=from:subject:in-reply-to:references:mime-version:cc:
-        content-transfer-encoding:content-type:cc:content-type:from:subject:to;
-        s=org; bh=WHm2RIViCzWT3zYPU2Vw9vCyr3A/PowltDWn5Mk40eo=;
-        b=c5qHmt/IuHZZxjznRhn0jk+1NCIJWMVLSNYyvDZt0h+8FuLmwbMbN18lkfcpJ9c0td0W
-        LmIpzy3WI09Tb3xIcsYxDXQKoHBySQxdWNEUWnxln2qmYutU9tDVFJnT8aOIGcuBPs4xUr
-        oGbLdNSJrehHyCRfxpZxs6/slAoXyVR50=
-Received: by filterdrecv-5848969764-44p6h with SMTP id filterdrecv-5848969764-44p6h-1-642D23BB-7
-        2023-04-05 07:31:07.265212223 +0000 UTC m=+3657493.273161580
-Received: from localhost (unknown)
-        by geopod-ismtpd-11 (SG) with ESMTP
-        id yZLoy5XZQl6wiZgmdZCnmA
-        Wed, 05 Apr 2023 07:31:07.061 +0000 (UTC)
-From:   James Seo <james@equiv.tech>
-Subject: [PATCH 2/2] hwmon: fix typo in Makefile
-Date:   Wed, 05 Apr 2023 07:31:07 +0000 (UTC)
-Message-Id: <20230405073056.53466-3-james@equiv.tech>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230405073056.53466-1-james@equiv.tech>
-References: <20230405073056.53466-1-james@equiv.tech>
-MIME-Version: 1.0
-X-SG-EID: =?us-ascii?Q?1X41iaRO4wVP+tFXGLuxpQ0yxxMDhGIesR5UcsYKVengQKgidLJSXwOMZlPQwP?=
- =?us-ascii?Q?WsRtMyA1321KpgTLuhAnL1Q906rlnMtB0DnOXYE?=
- =?us-ascii?Q?bbiFcTMm7bAjVX0c04NwOQfq+hLlCn7ZqNW=2Fy46?=
- =?us-ascii?Q?ppxByYNwVJQ5OKxYFT9CJQIOH71j+WWKpuSR+aw?=
- =?us-ascii?Q?E0HCM=2FdYjNgXZAuxRDM5b7nBFP15clCP6hy5Su8?=
- =?us-ascii?Q?DwekMFAOMFKFovmznuABhH58gp7p09N6C3gBNI?=
-Cc:     Jean Delvare <jdelvare@suse.com>,
+        with ESMTP id S237228AbjDEICS (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Apr 2023 04:02:18 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCA83C32;
+        Wed,  5 Apr 2023 01:02:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680681737; x=1712217737;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=BbQrm2hVJXugEoU9akTq2r86Vq3neTtzZG3wnmgyjIk=;
+  b=kJ4zBewqi/LvgzEXndVxR4IjtlgOsd9R9PPjRyCkMHimVkCEIJsQg0Er
+   1uLG8hkIatGrKrdzyaZJhJ+UpFaAaR7WXlQJl6+tAKQZC1LAC2RVUP5Gg
+   MOr7izPHjwh8G6uozC7IrtUS7US4KsAO9yKgDew4BW14NGBjBvv2xw9S7
+   cf5sikeAarVlhXpOh5eHnenrRygfJXqtRqnU1U/WQzWLpA5xjWEbu77t7
+   HnUJhaG9I4BVDwhn9Wj79Mbsea2NeRqz1Oop5gzWwBfc1iF4yUWaR0j5w
+   L9KGw86UVIDG+GMgVe0wZc9BySgnyPZNOmtO0LfuMvTA0MNVTsD9yxxhZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="428680216"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="428680216"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 01:02:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="775959622"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="775959622"
+Received: from wtedesch-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.53.134])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 01:02:04 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        linux-fpga@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        James Seo <james@equiv.tech>
-X-Entity-ID: Y+qgTyM7KJvXcwsg19bS4g==
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset=us-ascii
-To:     unlisted-recipients:; (no To-header on input)
+        linux-hwmon@vger.kernel.org,
+        Russ Weight <russell.h.weight@intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 1/4] mfd: intel-m10-bmc: Move core symbols to own namespace
+Date:   Wed,  5 Apr 2023 11:01:49 +0300
+Message-Id: <20230405080152.6732-2-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com>
+References: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Fix the spelling of "ACPI" in Makefile.
+Create INTEL_M10_BMC_CORE namespace for symbols exported by
+intel-m10-bmc-core.
 
-Signed-off-by: James Seo <james@equiv.tech>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/hwmon/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mfd/intel-m10-bmc-core.c | 2 +-
+ drivers/mfd/intel-m10-bmc-pmci.c | 1 +
+ drivers/mfd/intel-m10-bmc-spi.c  | 1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 88712b5031c8..e12c111a174a 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -6,7 +6,7 @@
- obj-$(CONFIG_HWMON)		+= hwmon.o
- obj-$(CONFIG_HWMON_VID)		+= hwmon-vid.o
+diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
+index dac9cf7bcb4a..b94412813887 100644
+--- a/drivers/mfd/intel-m10-bmc-core.c
++++ b/drivers/mfd/intel-m10-bmc-core.c
+@@ -98,7 +98,7 @@ const struct attribute_group *m10bmc_dev_groups[] = {
+ 	&m10bmc_group,
+ 	NULL,
+ };
+-EXPORT_SYMBOL_GPL(m10bmc_dev_groups);
++EXPORT_SYMBOL_NS_GPL(m10bmc_dev_groups, INTEL_M10_BMC_CORE);
  
--# APCI drivers
-+# ACPI drivers
- obj-$(CONFIG_SENSORS_ACPI_POWER) += acpi_power_meter.o
- obj-$(CONFIG_SENSORS_ATK0110)	+= asus_atk0110.o
- obj-$(CONFIG_SENSORS_ASUS_EC)	+= asus-ec-sensors.o
+ int m10bmc_dev_init(struct intel_m10bmc *m10bmc, const struct intel_m10bmc_platform_info *info)
+ {
+diff --git a/drivers/mfd/intel-m10-bmc-pmci.c b/drivers/mfd/intel-m10-bmc-pmci.c
+index 8821f1876dd6..0392ef8b57d8 100644
+--- a/drivers/mfd/intel-m10-bmc-pmci.c
++++ b/drivers/mfd/intel-m10-bmc-pmci.c
+@@ -453,3 +453,4 @@ module_dfl_driver(m10bmc_pmci_driver);
+ MODULE_DESCRIPTION("MAX10 BMC PMCI-based interface");
+ MODULE_AUTHOR("Intel Corporation");
+ MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(INTEL_M10_BMC_CORE);
+diff --git a/drivers/mfd/intel-m10-bmc-spi.c b/drivers/mfd/intel-m10-bmc-spi.c
+index 957200e17fed..edd266557ab9 100644
+--- a/drivers/mfd/intel-m10-bmc-spi.c
++++ b/drivers/mfd/intel-m10-bmc-spi.c
+@@ -166,3 +166,4 @@ MODULE_DESCRIPTION("Intel MAX 10 BMC SPI bus interface");
+ MODULE_AUTHOR("Intel Corporation");
+ MODULE_LICENSE("GPL v2");
+ MODULE_ALIAS("spi:intel-m10-bmc");
++MODULE_IMPORT_NS(INTEL_M10_BMC_CORE);
 -- 
-2.34.1
+2.30.2
 
