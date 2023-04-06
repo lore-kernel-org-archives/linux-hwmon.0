@@ -2,150 +2,1307 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CA56C7618D
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 13:43:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FDB2C7618D
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 15:24:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237551AbjDFNnN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 Apr 2023 09:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47262 "EHLO
+        id S237453AbjDFPYU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Apr 2023 11:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjDFNnM (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 09:43:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F33E44;
-        Thu,  6 Apr 2023 06:43:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27EF564561;
-        Thu,  6 Apr 2023 13:43:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA4EC433D2;
-        Thu,  6 Apr 2023 13:43:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680788589;
-        bh=URoLRDtsy7mbEea/C3F3239LWhjbKmy4/+amr79krwQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GkGd837mvUOyhT4HBhNRI6A48jM4CuDNbSplt1pzQ9D337ociT1dHBn03gg0xxzql
-         GlNQG8f1XNCdT2va6GT0rmS48IRPzxbSvyMLvcMunESGxKdVnBFdPynd+iqg9oGoHh
-         996AlyVdD92z3hHSeJJ8saxeh3aib5hcxZnXR6QRNeVXf/BLaoXmBPhP2k7ZlsV0jN
-         85RSL0SRG8Kg4A/SDR9QeeaAwnpw23U2M6LJzZaue9c/Mc1iLCCtbGhRnVYyMj4u0J
-         Qu+ja2npSuKDhs8QVqR+QkWininUr2/VviYrG/uvEd5IGUlTK7bq/mDwweXxO+qiii
-         PlqwuS7W5VAIw==
-Date:   Thu, 6 Apr 2023 14:43:03 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
-        jerome Neanne <jneanne@baylibre.com>,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
-Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/core): Add regulator event support
-Message-ID: <d6a3ca82-7245-45e1-b8ff-a9970671b04f@sirena.org.uk>
-References: <20230328150335.90238-1-Naresh.Solanki@9elements.com>
- <20230328150335.90238-2-Naresh.Solanki@9elements.com>
- <c88d3cdd-fb2f-c3ac-a9e8-e49f8e98b811@gmail.com>
- <17934bff-f728-d57a-c3c8-956634bd48c8@roeck-us.net>
- <3be67394-6082-1aeb-8a8d-90149217bdc7@gmail.com>
- <aea044ab-3a83-2369-aff7-5ef153618619@roeck-us.net>
- <0672fe4d-7293-4374-9186-29b008e5f8a2@sirena.org.uk>
- <CANhJrGO3X7pSsMBg6Gtf-q3=_JiCX4Qs=pGudL=etooM2F676g@mail.gmail.com>
+        with ESMTP id S238942AbjDFPYT (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 11:24:19 -0400
+Received: from s.wrqvtbkv.outbound-mail.sendgrid.net (s.wrqvtbkv.outbound-mail.sendgrid.net [149.72.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E60CA275
+        for <linux-hwmon@vger.kernel.org>; Thu,  6 Apr 2023 08:24:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=equiv.tech;
+        h=from:subject:mime-version:cc:content-transfer-encoding:content-type:
+        cc:content-type:from:subject:to;
+        s=org; bh=ojYrw9Ntes34I37X8EruwGvuDLRaqp6VZZI41jALj+4=;
+        b=Q60Qspl7VOp7IDIhQCezoRSHNBKvXiTmE7SP+PsTv3X84IkLMm6T7HalJqvERWogn3nk
+        dzCRR7QI1dz73kzapBDJ32mV4TpNJZQDsrM7te5l9PzU6byPbijDcHDpPFp85CWU3CWDPF
+        Q6eFoKwkgmeLhFHUCUjx6VZMcze7/c688=
+Received: by filterdrecv-5848969764-qvkl2 with SMTP id filterdrecv-5848969764-qvkl2-1-642EE3F6-21
+        2023-04-06 15:23:34.683226693 +0000 UTC m=+3772326.879563925
+Received: from localhost (unknown)
+        by geopod-ismtpd-9 (SG) with ESMTP
+        id KNSupzctRBCJ00WREjze7Q
+        Thu, 06 Apr 2023 15:23:33.890 +0000 (UTC)
+From:   James Seo <james@equiv.tech>
+Subject: [PATCH v2] hwmon: add HP WMI Sensors driver
+Date:   Thu, 06 Apr 2023 15:23:34 +0000 (UTC)
+Message-Id: <20230406152321.42010-1-james@equiv.tech>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5rVUboXIZqzB+ntf"
-Content-Disposition: inline
-In-Reply-To: <CANhJrGO3X7pSsMBg6Gtf-q3=_JiCX4Qs=pGudL=etooM2F676g@mail.gmail.com>
-X-Cookie: Man and wife make one fool.
+X-SG-EID: =?us-ascii?Q?1X41iaRO4wVP+tFXGLuxpQ0yxxMDhGIesR5UcsYKVengQKgidLJSXwOMZlPQwP?=
+ =?us-ascii?Q?WssQo4YGUHHOMZCPoPZKN6BY28yboXQutcUBdU=2F?=
+ =?us-ascii?Q?EGScP+FKmT1EWRTgEhVrBroaTBxvn0Zh6ikaf5Y?=
+ =?us-ascii?Q?kTJbTjMTSEA4pt93mzP0Fnmc2n=2Fot1q7DkUJbHL?=
+ =?us-ascii?Q?WYae7C1nySYXAaN7hLyIn0AS2sf68yDS6mQRRze?=
+ =?us-ascii?Q?MoMaS7wIOyay0lbpS1nsu88CvYWjcyYlO60O1D?=
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, James Seo <james@equiv.tech>
+X-Entity-ID: Y+qgTyM7KJvXcwsg19bS4g==
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hewlett-Packard business-class computers report hardware monitoring
+information via WMI. This driver exposes that information to hwmon.
+Initial support is provided for temperature, voltage, current, and
+fan speed sensor types.
 
---5rVUboXIZqzB+ntf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+HP's WMI implementation permits many other types of numeric sensors.
+Therefore, a debugfs interface is also provided to enumerate and
+inspect all numeric sensors visible on the WMI side. This should
+facilitate adding support for other sensor types in the future.
 
-On Thu, Apr 06, 2023 at 11:00:02AM +0300, Matti Vaittinen wrote:
-> ke 5. huhtik. 2023 klo 18.19 Mark Brown (broonie@kernel.org) kirjoitti:
-> > On Wed, Apr 05, 2023 at 07:18:32AM -0700, Guenter Roeck wrote:
+Tested on a HP Z420 and a HP EliteOne 800 G1.
 
-> > > Same situation. I though a regulator driver would notify the regulator subsystem
+Note that these models only have temperature and fan speed sensors,
+so other sensor types have not been tested working yet. However, the
+driver should still work as expected. A 2005 HP whitepaper describes
+the relevant MOF definition and sensor value calculation, and both
+this driver and the official HP Performance Advisor utility comply
+with them (confirmed in the latter case by reverse engineering).
 
-> I think this notification is not processed by the regulator subsystem.
-> It is just delivered to the consumer driver(s) who have subscribed the
-> notifications.
+Link: https://h20331.www2.hp.com/hpsub/downloads/cmi_whitepaper.pdf
+Signed-off-by: James Seo <james@equiv.tech>
 
-Right.  The hardware might autonomously do something but there's nothing
-in the framework which will take any action.
+---
 
-> > The theory is that if a consumer detects that the device it's
-> > controlling has bad power then it can take corrective action if there's
-> > some specification mandated error handling (for something like a
-> > standard bus) or risk of hardware damage.
+Changes in v2:
+* Reword commit message
+* Reword documentation
+* Remove stray #include
+* Use DIV_ROUND_CLOSEST in F to C conversion
+* Consolidate uses of mutex_lock()/mutex_unlock()
+* Process sensors in forward order by type
 
-> The problem I see here is that, if the error information itself
-> (severity + notification type) does not 'classify' the error handling
-> - then I don't see how any consumers can do handling unless they are
-> targeted to one specific system only. My original thinking has been
-> that ERROR level notifications are sent only when HW is no longer
-> operable - and consumers are expected to do what-ever protective
-> actions they can, including turning off the faulty regulator. That is
-> why I originally asked about handling the PMBUS errors.
+History:
+v1: https://lore.kernel.org/linux-hwmon/20230403084859.26286-1-james@equiv.tech/
+---
+ Documentation/hwmon/hp-wmi-sensors.rst |   95 +++
+ Documentation/hwmon/index.rst          |    1 +
+ MAINTAINERS                            |    7 +
+ drivers/hwmon/Kconfig                  |   11 +
+ drivers/hwmon/Makefile                 |    1 +
+ drivers/hwmon/hp-wmi-sensors.c         | 1034 ++++++++++++++++++++++++
+ 6 files changed, 1149 insertions(+)
+ create mode 100644 Documentation/hwmon/hp-wmi-sensors.rst
+ create mode 100644 drivers/hwmon/hp-wmi-sensors.c
 
-TBH I think if you're at the point where you've got regulator hardware
-flagging problems in most system designs there's serious problems, I'm
-not sure how likely it is that it's worth trying to classify the errors.
-Perhaps there's some systems that frequently flag low level errors
-though.
+diff --git a/Documentation/hwmon/hp-wmi-sensors.rst b/Documentation/hwmon/hp-wmi-sensors.rst
+new file mode 100644
+index 000000000000..71b1391d5072
+--- /dev/null
++++ b/Documentation/hwmon/hp-wmi-sensors.rst
+@@ -0,0 +1,95 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
++
++.. include:: <isonum.txt>
++
++Linux HP WMI Sensors Driver
++===========================
++
++:Copyright: |copy| 2023 James Seo <james@equiv.tech>
++
++Description
++-----------
++
++Hewlett-Packard business-class computers report hardware monitoring information
++via Windows Management Instrumentation (WMI). This driver exposes that
++information to the Linux ``hwmon`` subsystem, allowing familiar userspace
++utilities like ``sensors`` to gather numeric sensor readings.
++
++``sysfs`` interface
++-------------------
++
++When the driver is loaded, it discovers the sensors available on the current
++system and creates the following read-only ``sysfs`` attributes as appropriate
++within ``/sys/class/hwmon/hwmonX``:
++
++================ ==================================================
++Name		 Description
++================ ==================================================
++curr[X]_input    Current in milliamperes (mA).
++curr[X]_label    Current sensor label.
++fan[X]_input     Fan speed in RPM.
++fan[X]_label     Fan sensor label.
++fan[X]_fault     Fan sensor fault indicator.
++in[X]_input      Voltage in millivolts (mV).
++in[X]_label      Voltage sensor label.
++temp[X]_input    Temperature in millidegrees Celsius (m\ |deg|\ C).
++temp[X]_label    Temperature sensor label.
++temp[X]_fault    Temperature sensor fault indicator.
++================ ==================================================
++
++Here, ``X`` is some number that depends on other available sensors and on other
++system hardware components.
++
++``fault`` attributes
++  Reading ``1`` instead of ``0`` as the ``fault`` attribute for a sensor
++  indicates that the sensor has encountered some issue during operation such
++  that measurements from it should no longer be trusted.
++
++``debugfs`` interface
++---------------------
++
++The standard ``hwmon`` interface in ``sysfs`` exposes sensors of several common
++types that are connected and operating normally as of driver initialization.
++However, there are usually other sensors on the WMI side that do not meet these
++criteria. This driver therefore provides a ``debugfs`` interface in
++``/sys/kernel/debug/hp-wmi-sensors-X`` that allows read-only access to *all* HP
++WMI sensors on the current system.
++
++.. warning:: The ``debugfs`` interface is only available when the kernel is
++             compiled with option ``CONFIG_DEBUG_FS``, and its implementation
++             is subject to change without notice at any time.
++
++One numbered entry is created per sensor with the following attributes:
++
++=============================== ==========================================
++Name				Example
++=============================== ==========================================
++name                            ``CPU0 Fan``
++description                     ``Reports CPU0 fan speed``
++sensor_type                     ``12``
++other_sensor_type               ``(null)``
++operational_status              ``2``
++current_state                   ``Normal``
++possible_states                 ``Normal\nCaution\nCritical\nNot Present``
++base_units                      ``19``
++unit_modifier                   ``0``
++current_reading                 ``1008``
++=============================== ==========================================
++
++These represent the properties of the underlying ``HP_BIOSNumericSensor`` WMI
++object. Contents may vary somewhat between systems. See [#]_ for more details.
++
++Known issues and limitations
++----------------------------
++
++- Non-numeric HP sensor types such as intrusion sensors that belong to the
++  ``HP_BIOSStateSensor`` WMI object type are not supported.
++- HP's WMI implementation permits sensors to claim to be of any type.
++  However, only sensor types already known to hwmon can be supported.
++
++References
++----------
++
++.. [#] Hewlett-Packard Development Company, L.P.,
++       "HP Client Management Interface Technical White Paper", 2005. [Online].
++       Available: https://h20331.www2.hp.com/hpsub/downloads/cmi_whitepaper.pdf
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index f1fe75f596a5..f8f3c0bef6ed 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -77,6 +77,7 @@ Hardware Monitoring Kernel Drivers
+    gl518sm
+    gxp-fan-ctrl
+    hih6130
++   hp-wmi-sensors
+    ibmaem
+    ibm-cffps
+    ibmpowernv
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 90abe83c02f3..264960e4c77e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9373,6 +9373,13 @@ L:	platform-driver-x86@vger.kernel.org
+ S:	Orphan
+ F:	drivers/platform/x86/hp/tc1100-wmi.c
+ 
++HP WMI HARDWARE MONITOR DRIVER
++M:	James Seo <james@equiv.tech>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/hwmon/hp-wmi-sensors.rst
++F:	drivers/hwmon/hp-wmi-sensors.c
++
+ HPET:	High Precision Event Timers driver
+ M:	Clemens Ladisch <clemens@ladisch.de>
+ S:	Maintained
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 5b3b76477b0e..78798e0ed5e6 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -2399,6 +2399,17 @@ config SENSORS_ASUS_EC
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called asus_ec_sensors.
+ 
++config SENSORS_HP_WMI
++	tristate "HP WMI Sensors"
++	depends on ACPI_WMI
++	help
++	  If you say yes here you get support for the ACPI hardware monitoring
++	  interface found in HP business-class computers. Temperature, voltage,
++	  current, and fan speed sensor types are supported if present.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called hp_wmi_sensors.
++
+ endif # ACPI
+ 
+ endif # HWMON
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 88712b5031c8..05cce16f37f6 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -11,6 +11,7 @@ obj-$(CONFIG_SENSORS_ACPI_POWER) += acpi_power_meter.o
+ obj-$(CONFIG_SENSORS_ATK0110)	+= asus_atk0110.o
+ obj-$(CONFIG_SENSORS_ASUS_EC)	+= asus-ec-sensors.o
+ obj-$(CONFIG_SENSORS_ASUS_WMI)	+= asus_wmi_sensors.o
++obj-$(CONFIG_SENSORS_HP_WMI)	+= hp-wmi-sensors.o
+ 
+ # Native drivers
+ # asb100, then w83781d go first, as they can override other drivers' addresses.
+diff --git a/drivers/hwmon/hp-wmi-sensors.c b/drivers/hwmon/hp-wmi-sensors.c
+new file mode 100644
+index 000000000000..8c1f09fcdfce
+--- /dev/null
++++ b/drivers/hwmon/hp-wmi-sensors.c
+@@ -0,0 +1,1034 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * hwmon driver for HP business-class computers that report numeric
++ * sensor data via Windows Management Instrumentation (WMI).
++ *
++ * Copyright (C) 2023 James Seo <james@equiv.tech>
++ *
++ * References:
++ * [1] Hewlett-Packard Development Company, L.P.,
++ *     "HP Client Management Interface Technical White Paper", 2005. [Online].
++ *     Available: https://h20331.www2.hp.com/hpsub/downloads/cmi_whitepaper.pdf
++ */
++
++#include <linux/acpi.h>
++#include <linux/debugfs.h>
++#include <linux/hwmon.h>
++#include <linux/jiffies.h>
++#include <linux/mutex.h>
++#include <linux/units.h>
++#include <linux/wmi.h>
++
++/*
++ * MOF definition of the HP_BIOSNumericSensor WMI object [1]:
++ *
++ *   #pragma namespace("\\\\.\\root\\HP\\InstrumentedBIOS");
++ *
++ *   [abstract]
++ *   class HP_BIOSSensor
++ *   {
++ *     [read] string Name;
++ *     [read] string Description;
++ *     [read, ValueMap {"0","1","2","3","4","5","6","7","8","9",
++ *      "10","11","12"}, Values {"Unknown","Other","Temperature",
++ *      "Voltage","Current","Tachometer","Counter","Switch","Lock",
++ *      "Humidity","Smoke Detection","Presence","Air Flow"}]
++ *     uint32 SensorType;
++ *     [read] string OtherSensorType;
++ *     [read, ValueMap {"0","1","2","3","4","5","6","7","8","9",
++ *      "10","11","12","13","14","15","16","17","18","..",
++ *      "0x8000.."}, Values {"Unknown","Other","OK","Degraded",
++ *      "Stressed","Predictive Failure","Error",
++ *      "Non-Recoverable Error","Starting","Stopping","Stopped",
++ *      "In Service","No Contact","Lost Communication","Aborted",
++ *      "Dormant","Supporting Entity in Error","Completed",
++ *      "Power Mode","DMTF Reserved","Vendor Reserved"}]
++ *     uint32 OperationalStatus;
++ *     [read] string CurrentState;
++ *     [read] string PossibleStates[];
++ *   };
++ *
++ *   class HP_BIOSNumericSensor : HP_BIOSSensor
++ *   {
++ *      [read, ValueMap {"0","1","2","3","4","5","6","7","8","9",
++ *       "10","11","12","13","14","15","16","17","18","19","20",
++ *       "21","22","23","24","25","26","27","28","29","30","31",
++ *       "32","33","34","35","36","37","38","39","40","41","42",
++ *       "43","44","45","46","47","48","49","50","51","52","53",
++ *       "54","55","56","57","58","59","60","61","62","63","64",
++ *       "65"}, Values {"Unknown","Other","Degrees C","Degrees F",
++ *       "Degrees K","Volts","Amps","Watts","Joules","Coulombs",
++ *       "VA","Nits","Lumens","Lux","Candelas","kPa","PSI",
++ *       "Newtons","CFM","RPM","Hertz","Seconds","Minutes",
++ *       "Hours","Days","Weeks","Mils","Inches","Feet",
++ *       "Cubic Inches","Cubic Feet","Meters","Cubic Centimeters",
++ *       "Cubic Meters","Liters","Fluid Ounces","Radians",
++ *       "Steradians","Revolutions","Cycles","Gravities","Ounces",
++ *       "Pounds","Foot-Pounds","Ounce-Inches","Gauss","Gilberts",
++ *       "Henries","Farads","Ohms","Siemens","Moles","Becquerels",
++ *       "PPM (parts/million)","Decibels","DbA","DbC","Grays",
++ *       "Sieverts","Color Temperature Degrees K","Bits","Bytes",
++ *       "Words (data)","DoubleWords","QuadWords","Percentage"}]
++ *     uint32 BaseUnits;
++ *     [read] sint32 UnitModifier;
++ *     [read] uint32 CurrentReading;
++ *   };
++ *
++ */
++
++#define HP_WMI_BIOS_GUID	   "5FB7F034-2C63-45E9-BE91-3D44E2C707E4"
++#define HP_WMI_NUMERIC_SENSOR_GUID "8F1F6435-9F42-42C8-BADC-0E9424F20C9A"
++
++/* These limits are arbitrary. The WMI implementation may vary by model. */
++
++#define HP_WMI_MAX_STR_SIZE	   128U
++#define HP_WMI_MAX_PROPERTIES	   32U
++#define HP_WMI_MAX_INSTANCES	   32U
++
++enum hp_wmi_type {
++	HP_WMI_TYPE_OTHER			   = 1,
++	HP_WMI_TYPE_TEMPERATURE			   = 2,
++	HP_WMI_TYPE_VOLTAGE			   = 3,
++	HP_WMI_TYPE_CURRENT			   = 4,
++	HP_WMI_TYPE_AIR_FLOW			   = 12,
++};
++
++enum hp_wmi_status {
++	HP_WMI_STATUS_OK			   = 2,
++};
++
++enum hp_wmi_units {
++	HP_WMI_UNITS_DEGREES_C			   = 2,
++	HP_WMI_UNITS_DEGREES_F			   = 3,
++	HP_WMI_UNITS_DEGREES_K			   = 4,
++	HP_WMI_UNITS_VOLTS			   = 5,
++	HP_WMI_UNITS_AMPS			   = 6,
++	HP_WMI_UNITS_RPM			   = 19,
++};
++
++enum hp_wmi_property {
++	HP_WMI_PROPERTY_NAME			   = 0,
++	HP_WMI_PROPERTY_DESCRIPTION		   = 1,
++	HP_WMI_PROPERTY_SENSOR_TYPE		   = 2,
++	HP_WMI_PROPERTY_OTHER_SENSOR_TYPE	   = 3,
++	HP_WMI_PROPERTY_OPERATIONAL_STATUS	   = 4,
++	HP_WMI_PROPERTY_CURRENT_STATE		   = 5,
++	HP_WMI_PROPERTY_POSSIBLE_STATES		   = 6,
++	HP_WMI_PROPERTY_BASE_UNITS		   = 7,
++	HP_WMI_PROPERTY_UNIT_MODIFIER		   = 8,
++	HP_WMI_PROPERTY_CURRENT_READING		   = 9,
++};
++
++static const acpi_object_type hp_wmi_property_map[] = {
++	[HP_WMI_PROPERTY_NAME]			   = ACPI_TYPE_STRING,
++	[HP_WMI_PROPERTY_DESCRIPTION]		   = ACPI_TYPE_STRING,
++	[HP_WMI_PROPERTY_SENSOR_TYPE]		   = ACPI_TYPE_INTEGER,
++	[HP_WMI_PROPERTY_OTHER_SENSOR_TYPE]	   = ACPI_TYPE_STRING,
++	[HP_WMI_PROPERTY_OPERATIONAL_STATUS]	   = ACPI_TYPE_INTEGER,
++	[HP_WMI_PROPERTY_CURRENT_STATE]		   = ACPI_TYPE_STRING,
++	[HP_WMI_PROPERTY_POSSIBLE_STATES]	   = ACPI_TYPE_STRING,
++	[HP_WMI_PROPERTY_BASE_UNITS]		   = ACPI_TYPE_INTEGER,
++	[HP_WMI_PROPERTY_UNIT_MODIFIER]		   = ACPI_TYPE_INTEGER,
++	[HP_WMI_PROPERTY_CURRENT_READING]	   = ACPI_TYPE_INTEGER,
++};
++
++static const enum hwmon_sensor_types hp_wmi_hwmon_type_map[] = {
++	[HP_WMI_TYPE_TEMPERATURE]		   = hwmon_temp,
++	[HP_WMI_TYPE_VOLTAGE]			   = hwmon_in,
++	[HP_WMI_TYPE_CURRENT]			   = hwmon_curr,
++	[HP_WMI_TYPE_AIR_FLOW]			   = hwmon_fan,
++};
++
++static const u32 hp_wmi_hwmon_attributes[hwmon_max] = {
++	[hwmon_chip] = HWMON_C_REGISTER_TZ,
++	[hwmon_temp] = HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_FAULT,
++	[hwmon_in]   = HWMON_I_INPUT | HWMON_I_LABEL,
++	[hwmon_curr] = HWMON_C_INPUT | HWMON_C_LABEL,
++	[hwmon_fan]  = HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_FAULT,
++};
++
++/*
++ * struct hp_wmi_numeric_sensor - a HP_BIOSNumericSensor instance
++ *
++ * Contains WMI object instance properties. See MOF definition [1].
++ */
++struct hp_wmi_numeric_sensor {
++	const char *name;
++	const char *description;
++	u32 sensor_type;
++	const char *other_sensor_type; /* Explains "Other" SensorType. */
++	u32 operational_status;
++	const char *current_state;
++	const char **possible_states;  /* Count may vary. */
++	u32 base_units;
++	s32 unit_modifier;
++	u32 current_reading;
++
++	u8 possible_states_count;
++};
++
++/*
++ * struct hp_wmi_info - sensor info
++ * @nsensor: numeric sensor properties
++ * @instance: its WMI instance number
++ * @is_active: whether the following fields are valid
++ * @type: its hwmon sensor type
++ * @cached_val: current sensor reading value, scaled for hwmon
++ * @last_updated: when these readings were last updated
++ */
++struct hp_wmi_info {
++	struct hp_wmi_numeric_sensor nsensor;
++	u8 instance;
++
++	bool is_active;
++	enum hwmon_sensor_types type;
++	long cached_val;
++	unsigned long last_updated; /* in jiffies */
++};
++
++/*
++ * struct hp_wmi_sensors - driver state
++ * @wdev: pointer to the parent WMI device
++ * @debugfs: root directory in debugfs
++ * @info: sensor info structs for all sensors visible in WMI
++ * @info_map: access info structs by hwmon type and channel number
++ * @count: count of all sensors visible in WMI
++ * @channel_count: count of hwmon channels by hwmon type
++ * @lock: mutex to lock polling WMI and changes to driver state
++ */
++struct hp_wmi_sensors {
++	struct wmi_device *wdev;
++	struct dentry *debugfs;
++	struct hp_wmi_info info[HP_WMI_MAX_INSTANCES];
++	struct hp_wmi_info **info_map[hwmon_max];
++	u8 count;
++	u8 channel_count[hwmon_max];
++
++	struct mutex lock; /* lock polling WMI, driver state changes */
++};
++
++/* hp_wmi_strdup - devm_kstrdup, but length-limited */
++static char *hp_wmi_strdup(struct device *dev, const char *src, u32 len)
++{
++	char *dst;
++
++	len = min(len, HP_WMI_MAX_STR_SIZE - 1);
++
++	dst = devm_kmalloc(dev, (len + 1) * sizeof(*dst), GFP_KERNEL);
++	if (!dst)
++		return NULL;
++
++	strscpy(dst, src, len + 1);
++
++	return dst;
++}
++
++/*
++ * hp_wmi_get_wobj - poll WMI for a HP_BIOSNumericSensor object instance
++ * @state: pointer to driver state
++ * @instance: WMI object instance number
++ *
++ * Returns a new WMI object instance on success, or NULL on error.
++ * Caller must kfree the result.
++ */
++static union acpi_object *hp_wmi_get_wobj(struct hp_wmi_sensors *state,
++					  u8 instance)
++{
++	struct wmi_device *wdev = state->wdev;
++
++	return wmidev_block_query(wdev, instance);
++}
++
++/*
++ * check_wobj - validate a HP_BIOSNumericSensor WMI object instance
++ * @wobj: pointer to WMI object instance to check
++ * @possible_states_count: out pointer to count of possible states
++ *
++ * Returns 0 on success, or a negative error code on error.
++ */
++static int check_wobj(const union acpi_object *wobj, u8 *possible_states_count)
++{
++	acpi_object_type type = wobj->type;
++	int prop = HP_WMI_PROPERTY_NAME;
++	acpi_object_type valid_type;
++	union acpi_object *elements;
++	u32 elem_count;
++	u8 count = 0;
++	u32 i;
++
++	if (type != ACPI_TYPE_PACKAGE)
++		return -EINVAL;
++
++	elem_count = wobj->package.count;
++	if (elem_count > HP_WMI_MAX_PROPERTIES)
++		return -EINVAL;
++
++	elements = wobj->package.elements;
++	for (i = 0; i < elem_count; i++, prop++) {
++		if (prop > HP_WMI_PROPERTY_CURRENT_READING)
++			return -EINVAL;
++
++		type = elements[i].type;
++		valid_type = hp_wmi_property_map[prop];
++		if (type != valid_type)
++			return -EINVAL;
++
++		/*
++		 * elements is a variable-length array of ACPI objects, one for
++		 * each property of the WMI object instance, except that the
++		 * strs in PossibleStates[] are flattened into this array, and
++		 * their count is found in the WMI BMOF. We don't decode the
++		 * BMOF, so find the count by finding the next int.
++		 */
++
++		if (prop == HP_WMI_PROPERTY_CURRENT_STATE) {
++			prop = HP_WMI_PROPERTY_POSSIBLE_STATES;
++			valid_type = hp_wmi_property_map[prop];
++			for (; i + 1 < elem_count; i++, count++) {
++				type = elements[i + 1].type;
++				if (type != valid_type)
++					break;
++			}
++		}
++	}
++
++	if (!count || prop <= HP_WMI_PROPERTY_CURRENT_READING)
++		return -EINVAL;
++
++	*possible_states_count = count;
++
++	return 0;
++}
++
++static int numeric_sensor_has_fault(const struct hp_wmi_numeric_sensor *nsensor)
++{
++	u32 operational_status = nsensor->operational_status;
++	u32 current_reading = nsensor->current_reading;
++
++	return operational_status != HP_WMI_STATUS_OK || !current_reading;
++}
++
++/* scale_numeric_sensor - scale sensor reading for hwmon */
++static long scale_numeric_sensor(const struct hp_wmi_numeric_sensor *nsensor)
++{
++	u32 current_reading = nsensor->current_reading;
++	s32 unit_modifier = nsensor->unit_modifier;
++	u32 sensor_type = nsensor->sensor_type;
++	u32 base_units = nsensor->base_units;
++	s32 target_modifier;
++	long val;
++
++	/* Fan readings are in RPM units; others are in milliunits. */
++	target_modifier = sensor_type == HP_WMI_TYPE_AIR_FLOW ? 0 : -3;
++
++	val = current_reading;
++
++	for (; unit_modifier < target_modifier; unit_modifier++)
++		val = DIV_ROUND_CLOSEST(val, 10);
++
++	for (; unit_modifier > target_modifier; unit_modifier--) {
++		if (val > LONG_MAX / 10) {
++			val = LONG_MAX;
++			break;
++		}
++		val *= 10;
++	}
++
++	if (sensor_type == HP_WMI_TYPE_TEMPERATURE) {
++		switch (base_units) {
++		case HP_WMI_UNITS_DEGREES_F:
++			val -= MILLI * 32;
++			val = val <= LONG_MAX / 5 ?
++				      DIV_ROUND_CLOSEST(val * 5, 9) :
++				      DIV_ROUND_CLOSEST(val, 9) * 5;
++			break;
++
++		case HP_WMI_UNITS_DEGREES_K:
++			val = milli_kelvin_to_millicelsius(val);
++			break;
++		}
++	}
++
++	return val;
++}
++
++/*
++ * classify_numeric_sensor - classify a numeric sensor
++ * @nsensor: pointer to numeric sensor struct
++ *
++ * Returns an enum hp_wmi_type value on success,
++ * or a negative value if the sensor type is unsupported.
++ */
++static int classify_numeric_sensor(const struct hp_wmi_numeric_sensor *nsensor)
++{
++	u32 sensor_type = nsensor->sensor_type;
++	u32 base_units = nsensor->base_units;
++
++	switch (sensor_type) {
++	case HP_WMI_TYPE_TEMPERATURE:
++		if (base_units == HP_WMI_UNITS_DEGREES_C ||
++		    base_units == HP_WMI_UNITS_DEGREES_F ||
++		    base_units == HP_WMI_UNITS_DEGREES_K)
++			return HP_WMI_TYPE_TEMPERATURE;
++		break;
++
++	case HP_WMI_TYPE_VOLTAGE:
++		if (base_units == HP_WMI_UNITS_VOLTS)
++			return HP_WMI_TYPE_VOLTAGE;
++		break;
++
++	case HP_WMI_TYPE_CURRENT:
++		if (base_units == HP_WMI_UNITS_AMPS)
++			return HP_WMI_TYPE_CURRENT;
++		break;
++
++	case HP_WMI_TYPE_AIR_FLOW:
++		if (base_units == HP_WMI_UNITS_RPM)
++			return HP_WMI_TYPE_AIR_FLOW;
++		break;
++	}
++
++	return -EINVAL;
++}
++
++static int
++populate_numeric_sensor_from_wobj(struct device *dev,
++				  struct hp_wmi_numeric_sensor *nsensor,
++				  const union acpi_object *wobj)
++{
++	const union acpi_object *element;
++	const char **possible_states;
++	u8 possible_states_count;
++	acpi_object_type type;
++	const char *string;
++	u32 value;
++	int prop;
++	int err;
++
++	err = check_wobj(wobj, &possible_states_count);
++	if (err)
++		return err;
++
++	possible_states = devm_kcalloc(dev, possible_states_count,
++				       sizeof(*possible_states),
++				       GFP_KERNEL);
++	if (!possible_states)
++		return -ENOMEM;
++
++	element = wobj->package.elements;
++	nsensor->possible_states = possible_states;
++	nsensor->possible_states_count = possible_states_count;
++
++	for (prop = 0; prop <= HP_WMI_PROPERTY_CURRENT_READING; prop++) {
++		type = hp_wmi_property_map[prop];
++
++		switch (type) {
++		case ACPI_TYPE_INTEGER:
++			value = element->integer.value;
++			break;
++
++		case ACPI_TYPE_STRING:
++			string = hp_wmi_strdup(dev, element->string.pointer,
++					       element->string.length);
++			if (!string)
++				return -ENOMEM;
++			break;
++
++		default:
++			return -EINVAL;
++		}
++
++		element++;
++
++		switch (prop) {
++		case HP_WMI_PROPERTY_NAME:
++			nsensor->name = string;
++			break;
++
++		case HP_WMI_PROPERTY_DESCRIPTION:
++			nsensor->description = string;
++			break;
++
++		case HP_WMI_PROPERTY_SENSOR_TYPE:
++			if (value > HP_WMI_TYPE_AIR_FLOW)
++				return -EINVAL;
++
++			nsensor->sensor_type = value;
++
++			/* Skip OtherSensorType if it will be meaningless. */
++			if (value != HP_WMI_TYPE_OTHER) {
++				element++;
++				prop++;
++			}
++
++			break;
++
++		case HP_WMI_PROPERTY_OTHER_SENSOR_TYPE:
++			nsensor->other_sensor_type = string;
++			break;
++
++		case HP_WMI_PROPERTY_OPERATIONAL_STATUS:
++			nsensor->operational_status = value;
++			break;
++
++		case HP_WMI_PROPERTY_CURRENT_STATE:
++			nsensor->current_state = string;
++			break;
++
++		case HP_WMI_PROPERTY_POSSIBLE_STATES:
++			*possible_states++ = string;
++			if (--possible_states_count)
++				prop--;
++			break;
++
++		case HP_WMI_PROPERTY_BASE_UNITS:
++			nsensor->base_units = value;
++			break;
++
++		case HP_WMI_PROPERTY_UNIT_MODIFIER:
++			/* UnitModifier is signed. */
++			nsensor->unit_modifier = (s32)value;
++			break;
++
++		case HP_WMI_PROPERTY_CURRENT_READING:
++			nsensor->current_reading = value;
++			break;
++
++		default:
++			return -EINVAL;
++		}
++	}
++
++	return 0;
++}
++
++/* update_numeric_sensor_from_wobj - update fungible sensor properties */
++static void
++update_numeric_sensor_from_wobj(struct device *dev,
++				struct hp_wmi_numeric_sensor *nsensor,
++				const union acpi_object *wobj)
++{
++	const union acpi_object *elements;
++	const union acpi_object *element;
++	const char *string;
++	u32 length;
++	u8 offset;
++
++	elements = wobj->package.elements;
++
++	element = &elements[HP_WMI_PROPERTY_OPERATIONAL_STATUS];
++	nsensor->operational_status = element->integer.value;
++
++	element = &elements[HP_WMI_PROPERTY_CURRENT_STATE];
++	string = element->string.pointer;
++
++	if (strcmp(string, nsensor->current_state)) {
++		length = element->string.length;
++		devm_kfree(dev, nsensor->current_state);
++		nsensor->current_state = hp_wmi_strdup(dev, string, length);
++	}
++
++	/* Offset reads into the elements array after PossibleStates[0]. */
++	offset = nsensor->possible_states_count - 1;
++
++	element = &elements[HP_WMI_PROPERTY_UNIT_MODIFIER + offset];
++	nsensor->unit_modifier = (s32)element->integer.value;
++
++	element = &elements[HP_WMI_PROPERTY_CURRENT_READING + offset];
++	nsensor->current_reading = element->integer.value;
++}
++
++/*
++ * interpret_info - interpret sensor for hwmon
++ * @info: pointer to sensor info struct
++ *
++ * Should be called after the numeric sensor member has been updated.
++ */
++static void interpret_info(struct hp_wmi_info *info)
++{
++	const struct hp_wmi_numeric_sensor *nsensor = &info->nsensor;
++
++	info->cached_val = scale_numeric_sensor(nsensor);
++	info->last_updated = jiffies;
++}
++
++/*
++ * hp_wmi_update_info - poll WMI to update sensor info
++ * @state: pointer to driver state
++ * @info: pointer to sensor info struct
++ *
++ * Returns 0 on success, or a negative error code on error.
++ */
++static int hp_wmi_update_info(struct hp_wmi_sensors *state,
++			      struct hp_wmi_info *info)
++{
++	struct hp_wmi_numeric_sensor *nsensor = &info->nsensor;
++	struct device *dev = &state->wdev->dev;
++	const union acpi_object *wobj;
++	u8 instance = info->instance;
++	int ret = 0;
++
++	if (time_after(jiffies, info->last_updated + HZ)) {
++		mutex_lock(&state->lock);
++
++		wobj = hp_wmi_get_wobj(state, instance);
++		if (!wobj) {
++			ret = -EIO;
++			goto out_free_wobj;
++		}
++
++		update_numeric_sensor_from_wobj(dev, nsensor, wobj);
++
++		interpret_info(info);
++
++out_free_wobj:
++		kfree(wobj);
++
++		mutex_unlock(&state->lock);
++	}
++
++	return ret;
++}
++
++#if CONFIG_DEBUG_FS
++
++static int basic_string_show(struct seq_file *seqf, void *ignored)
++{
++	const char *str = seqf->private;
++
++	seq_printf(seqf, "%s\n", str);
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(basic_string);
++
++static int fungible_show(struct seq_file *seqf, enum hp_wmi_property prop)
++{
++	struct hp_wmi_numeric_sensor *nsensor;
++	struct hp_wmi_sensors *state;
++	struct hp_wmi_info *info;
++	int err;
++
++	switch (prop) {
++	case HP_WMI_PROPERTY_OPERATIONAL_STATUS:
++		nsensor = container_of(seqf->private,
++				       struct hp_wmi_numeric_sensor,
++				       operational_status);
++		break;
++
++	case HP_WMI_PROPERTY_CURRENT_STATE:
++		nsensor = container_of(seqf->private,
++				       struct hp_wmi_numeric_sensor,
++				       current_state);
++		break;
++
++	case HP_WMI_PROPERTY_UNIT_MODIFIER:
++		nsensor = container_of(seqf->private,
++				       struct hp_wmi_numeric_sensor,
++				       unit_modifier);
++		break;
++
++	case HP_WMI_PROPERTY_CURRENT_READING:
++		nsensor = container_of(seqf->private,
++				       struct hp_wmi_numeric_sensor,
++				       current_reading);
++		break;
++
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	info = container_of(nsensor, struct hp_wmi_info, nsensor);
++	state = container_of(info, struct hp_wmi_sensors, info[info->instance]);
++
++	err = hp_wmi_update_info(state, info);
++	if (err)
++		return err;
++
++	switch (prop) {
++	case HP_WMI_PROPERTY_OPERATIONAL_STATUS:
++		seq_printf(seqf, "%u\n", nsensor->operational_status);
++		break;
++
++	case HP_WMI_PROPERTY_CURRENT_STATE:
++		seq_printf(seqf, "%s\n", nsensor->current_state);
++		break;
++
++	case HP_WMI_PROPERTY_UNIT_MODIFIER:
++		seq_printf(seqf, "%d\n", nsensor->unit_modifier);
++		break;
++
++	case HP_WMI_PROPERTY_CURRENT_READING:
++		seq_printf(seqf, "%u\n", nsensor->current_reading);
++		break;
++
++	default:
++		break;
++	}
++
++	return 0;
++}
++
++static int operational_status_show(struct seq_file *seqf, void *ignored)
++{
++	return fungible_show(seqf, HP_WMI_PROPERTY_OPERATIONAL_STATUS);
++}
++DEFINE_SHOW_ATTRIBUTE(operational_status);
++
++static int current_state_show(struct seq_file *seqf, void *ignored)
++{
++	return fungible_show(seqf, HP_WMI_PROPERTY_CURRENT_STATE);
++}
++DEFINE_SHOW_ATTRIBUTE(current_state);
++
++static int possible_states_show(struct seq_file *seqf, void *ignored)
++{
++	struct hp_wmi_numeric_sensor *nsensor = seqf->private;
++	u8 i;
++
++	for (i = 0; i < nsensor->possible_states_count; i++)
++		seq_printf(seqf, "%s\n", nsensor->possible_states[i]);
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(possible_states);
++
++static int unit_modifier_show(struct seq_file *seqf, void *ignored)
++{
++	return fungible_show(seqf, HP_WMI_PROPERTY_UNIT_MODIFIER);
++}
++DEFINE_SHOW_ATTRIBUTE(unit_modifier);
++
++static int current_reading_show(struct seq_file *seqf, void *ignored)
++{
++	return fungible_show(seqf, HP_WMI_PROPERTY_CURRENT_READING);
++}
++DEFINE_SHOW_ATTRIBUTE(current_reading);
++
++/* hp_wmi_devm_debugfs_remove - devm callback for debugfs cleanup */
++static void hp_wmi_devm_debugfs_remove(void *res)
++{
++	debugfs_remove_recursive(res);
++}
++
++/* hp_wmi_debugfs_init - create and populate debugfs directory tree */
++static void hp_wmi_debugfs_init(struct hp_wmi_sensors *state)
++{
++	struct device *dev = &state->wdev->dev;
++	struct hp_wmi_info *info = state->info;
++	struct hp_wmi_numeric_sensor *nsensor;
++	char buf[HP_WMI_MAX_STR_SIZE];
++	struct dentry *dir;
++	int err;
++	u8 i;
++
++	/* dev_name() gives a not-very-friendly GUID for WMI devices. */
++	scnprintf(buf, sizeof(buf), "%s-%u", "hp-wmi-sensors", dev->id);
++
++	state->debugfs = debugfs_create_dir(buf, NULL);
++	if (IS_ERR(state->debugfs))
++		return;
++
++	err = devm_add_action(dev, hp_wmi_devm_debugfs_remove, state->debugfs);
++	if (err) {
++		debugfs_remove(state->debugfs);
++		return;
++	}
++
++	for (i = 0; i < state->count; i++, info++) {
++		nsensor = &info->nsensor;
++
++		scnprintf(buf, sizeof(buf), "%u", i);
++		dir = debugfs_create_dir(buf, state->debugfs);
++
++		debugfs_create_file("name", 0444, dir,
++				    (void *)nsensor->name,
++				    &basic_string_fops);
++
++		debugfs_create_file("description", 0444, dir,
++				    (void *)nsensor->description,
++				    &basic_string_fops);
++
++		debugfs_create_u32("sensor_type", 0444, dir,
++				   &nsensor->sensor_type);
++
++		debugfs_create_file("other_sensor_type", 0444, dir,
++				    (void *)nsensor->other_sensor_type,
++				    &basic_string_fops);
++
++		debugfs_create_file("operational_status", 0444, dir,
++				    &nsensor->operational_status,
++				    &operational_status_fops);
++
++		debugfs_create_file("current_state", 0444, dir,
++				    (void *)&nsensor->current_state,
++				    &current_state_fops);
++
++		debugfs_create_file("possible_states", 0444, dir,
++				    nsensor, &possible_states_fops);
++
++		debugfs_create_u32("base_units", 0444, dir,
++				   &nsensor->base_units);
++
++		debugfs_create_file("unit_modifier", 0444, dir,
++				    &nsensor->unit_modifier,
++				    &unit_modifier_fops);
++
++		debugfs_create_file("current_reading", 0444, dir,
++				    &nsensor->current_reading,
++				    &current_reading_fops);
++	}
++}
++
++#else
++
++static void hp_wmi_debugfs_init(struct hp_wmi_sensors *state)
++{
++}
++
++#endif
++
++static umode_t hp_wmi_hwmon_is_visible(const void *drvdata,
++				       enum hwmon_sensor_types type,
++				       u32 attr, int channel)
++{
++	const struct hp_wmi_sensors *state = drvdata;
++
++	if (!state->info_map[type] || !state->info_map[type][channel])
++		return 0;
++
++	return 0444;
++}
++
++static int hp_wmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
++			     u32 attr, int channel, long *val)
++{
++	struct hp_wmi_sensors *state = dev_get_drvdata(dev);
++	const struct hp_wmi_numeric_sensor *nsensor;
++	struct hp_wmi_info *info;
++	int err;
++
++	info = state->info_map[type][channel];
++	nsensor = &info->nsensor;
++
++	err = hp_wmi_update_info(state, info);
++	if (err)
++		return err;
++
++	else if ((type == hwmon_temp && attr == hwmon_temp_fault) ||
++		 (type == hwmon_fan  && attr == hwmon_fan_fault))
++		*val = numeric_sensor_has_fault(nsensor);
++
++	else
++		*val = info->cached_val;
++
++	return 0;
++}
++
++static int hp_wmi_hwmon_read_string(struct device *dev,
++				    enum hwmon_sensor_types type, u32 attr,
++				    int channel, const char **str)
++{
++	const struct hp_wmi_sensors *state = dev_get_drvdata(dev);
++	const struct hp_wmi_info *info;
++
++	info = state->info_map[type][channel];
++	*str = info->nsensor.name;
++
++	return 0;
++}
++
++static int add_channel_info(struct device *dev,
++			    struct hwmon_channel_info *channel_info,
++			    u8 count, enum hwmon_sensor_types type)
++{
++	u32 attr = hp_wmi_hwmon_attributes[type];
++	u32 *config;
++
++	config = devm_kcalloc(dev, count + 1, sizeof(*config), GFP_KERNEL);
++	if (!config)
++		return -ENOMEM;
++
++	channel_info->type = type;
++	channel_info->config = config;
++	memset32(config, attr, count);
++
++	return 0;
++}
++
++static const struct hwmon_ops hp_wmi_hwmon_ops = {
++	.is_visible  = hp_wmi_hwmon_is_visible,
++	.read	     = hp_wmi_hwmon_read,
++	.read_string = hp_wmi_hwmon_read_string,
++};
++
++static struct hwmon_chip_info hp_wmi_chip_info = {
++	.ops         = &hp_wmi_hwmon_ops,
++	.info        = NULL,
++};
++
++static int hp_wmi_sensors_init(struct hp_wmi_sensors *state)
++{
++	struct hp_wmi_info *active_info[HP_WMI_MAX_INSTANCES];
++	const struct hwmon_channel_info **ptr_channel_info;
++	struct hwmon_channel_info *channel_info;
++	struct device *dev = &state->wdev->dev;
++	struct hp_wmi_info *info = state->info;
++	struct hp_wmi_numeric_sensor *nsensor;
++	u8 channel_count[hwmon_max] = {};
++	enum hwmon_sensor_types type;
++	union acpi_object *wobj;
++	struct device *hwdev;
++	u8 type_count = 0;
++	u8 channel;
++	int wtype;
++	int err;
++	u8 i;
++
++	for (i = 0, channel = 0; i < HP_WMI_MAX_INSTANCES; i++, info++) {
++		wobj = hp_wmi_get_wobj(state, i);
++		if (!wobj)
++			break;
++
++		info->instance = i;
++		nsensor = &info->nsensor;
++
++		err = populate_numeric_sensor_from_wobj(dev, nsensor, wobj);
++		if (err)
++			goto out_free_wobj;
++
++		if (numeric_sensor_has_fault(nsensor))
++			goto out_free_wobj;
++
++		wtype = classify_numeric_sensor(nsensor);
++		if (wtype < 0)
++			goto out_free_wobj;
++
++		type = hp_wmi_hwmon_type_map[wtype];
++		if (!channel_count[type])
++			type_count++;
++		channel_count[type]++;
++
++		info->is_active = true;
++		info->type = type;
++
++		interpret_info(info);
++
++		active_info[channel++] = info;
++
++out_free_wobj:
++		kfree(wobj);
++
++		if (err)
++			return err;
++	}
++
++	dev_dbg(dev, "Found %u sensors (%u active, %u types)\n",
++		i, channel, type_count);
++
++	state->count = i;
++	if (!state->count)
++		return -ENODATA;
++
++	hp_wmi_debugfs_init(state);
++
++	if (!channel)
++		return 0; /* Not an error, but debugfs only. */
++
++	if (channel_count[hwmon_temp]) {
++		channel_count[hwmon_chip] = 1;
++		type_count++;
++	}
++
++	memcpy(state->channel_count, channel_count, sizeof(channel_count));
++
++	channel_info = devm_kcalloc(dev, type_count,
++				    sizeof(*channel_info),
++				    GFP_KERNEL);
++	if (!channel_info)
++		return -ENOMEM;
++
++	ptr_channel_info = devm_kcalloc(dev, type_count + 1,
++					sizeof(*ptr_channel_info),
++					GFP_KERNEL);
++	if (!ptr_channel_info)
++		return -ENOMEM;
++
++	hp_wmi_chip_info.info = ptr_channel_info;
++
++	for (type = hwmon_chip; type < hwmon_max; type++) {
++		if (!channel_count[type])
++			continue;
++
++		err = add_channel_info(dev, channel_info,
++				       channel_count[type], type);
++		if (err)
++			return err;
++
++		*ptr_channel_info++ = channel_info++;
++
++		state->info_map[type] = devm_kcalloc(dev, channel_count[type],
++						     sizeof(*state->info_map),
++						     GFP_KERNEL);
++		if (!state->info_map[type])
++			return -ENOMEM;
++	}
++
++	while (channel > 0) {
++		type = active_info[--channel]->type;
++		i = --channel_count[type];
++		state->info_map[type][i] = active_info[channel];
++	}
++
++	hwdev = devm_hwmon_device_register_with_info(dev, "hp_wmi_sensors",
++						     state, &hp_wmi_chip_info,
++						     NULL);
++	return PTR_ERR_OR_ZERO(hwdev);
++}
++
++static int hp_wmi_sensors_probe(struct wmi_device *wdev, const void *context)
++{
++	struct device *dev = &wdev->dev;
++	struct hp_wmi_sensors *state;
++	int err;
++
++	/* Sanity check. */
++	if (!wmi_has_guid(HP_WMI_NUMERIC_SENSOR_GUID) ||
++	    !wmi_has_guid(HP_WMI_BIOS_GUID)) {
++		err = -ENODEV;
++		goto out_err;
++	}
++
++	state = devm_kzalloc(dev, sizeof(*state), GFP_KERNEL);
++	if (!state) {
++		err = -ENOMEM;
++		goto out_err;
++	}
++
++	state->wdev = wdev;
++
++	mutex_init(&state->lock);
++
++	dev_set_drvdata(dev, state);
++
++	err = hp_wmi_sensors_init(state);
++
++out_err:
++	return err;
++}
++
++static const struct wmi_device_id hp_wmi_sensors_id_table[] = {
++	{ HP_WMI_NUMERIC_SENSOR_GUID, NULL },
++	{},
++};
++
++static struct wmi_driver hp_wmi_sensors_driver = {
++	.driver   = { .name = "hp-wmi-sensors" },
++	.id_table = hp_wmi_sensors_id_table,
++	.probe    = hp_wmi_sensors_probe,
++};
++module_wmi_driver(hp_wmi_sensors_driver);
++
++MODULE_AUTHOR("James Seo <james@equiv.tech>");
++MODULE_DESCRIPTION("HP WMI Sensors driver");
++MODULE_LICENSE("GPL");
 
-> > It can also try to avoid
-> > interacting with hardware if that might not work.
+base-commit: 76f598ba7d8e2bfb4855b5298caedd5af0c374a8
+-- 
+2.34.1
 
-> It'd be great to have documentation / specification for sending and/or
-> handling the regulator events. I don't think we currently have such.
-> As far as I understand, the notifications can be picked up by all
-> consumers of a regulator. I am a bit worried about:
-> a) Situations where notification handlers 'collide' by doing 'actions'
-> which are unexpected by other handlers
-
-I'm not sure what you're expecting there?  A device working with itself
-shouldn't disrupt any other users.
-
-> b) Situations where different notification senders send similar
-> severity-level notifications for faults expecting different types of
-> handling.
-
-Like I say I'm not sure how much practical difference it makes to think
-too hard about differentiating the errors.
-
-> Or, is it so that no "generic handling" of these errors is to be
-> expected? Eg, consumers who implement any handling must always be
-> targeted to a very specific system? My thinking has been that the
-> device sending the notification knows the severity of the problem and
-> - for example the REGULATOR_EVENT_REGULATION_OUT is only sent with
-> such severe problems that consumers can try disabling the regulator,
-> whereas the _WARN level notifications may not warrant such action. But
-> again, I don't think we have a specification for this - so this is
-> just my thinking - which may be off.
-
-Do we actually have practical examples of systems sending warnings that
-aren't followed in very short order by more severe errors, notified or
-otherwise?
-
---5rVUboXIZqzB+ntf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQuzGcACgkQJNaLcl1U
-h9DBAwf/Y7v278IUTTFKtM8zh82+//bnj7JS7CBQUKv8QIdngzKfcbQxj5e99OmG
-O7gl9jLpOUaDIV+6aoyhoW/IL0QQL005SAbO6CcKa9aZIjCxFmXN4OZGA+6QvZam
-E7xFCccQ4+xtTM99xVM8QgpazCreNXj3Gnz4gCvXfW8t7bcAQJhlY/9gV5HYXNLY
-LlcXrsD/mRvHotYutbHQZM0pTUMy54jdxMm2JrrLDweVKomBveRAdaEj4DQRzpEN
-mSVgYm4v0eqbAgC4hKHaHGoPuqFGxb0d7cUY2l5E6O6QlvI3AHUtP9sCyddbH8Iu
-fB7Zl3zI7BNZY0Cf0Ifqh8CaOalJvg==
-=wRrb
------END PGP SIGNATURE-----
-
---5rVUboXIZqzB+ntf--
