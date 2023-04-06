@@ -2,59 +2,59 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 131F4C77B6E
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 19:17:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4BDBC76196
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 19:20:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240485AbjDFTR0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 Apr 2023 15:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
+        id S240142AbjDFTU6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Apr 2023 15:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240551AbjDFTRX (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 15:17:23 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AF54C17
-        for <linux-hwmon@vger.kernel.org>; Thu,  6 Apr 2023 12:17:21 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id 11so3840340ejw.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 06 Apr 2023 12:17:21 -0700 (PDT)
+        with ESMTP id S238771AbjDFTU6 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 15:20:58 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C980E213E
+        for <linux-hwmon@vger.kernel.org>; Thu,  6 Apr 2023 12:20:56 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5047074939fso2340788a12.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 06 Apr 2023 12:20:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680808640;
+        d=linaro.org; s=google; t=1680808855;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ijzbpgNtHL1RkS2L+qjoGrMwmwbEWamTYTlNJO92bs=;
-        b=Ea8n0AeuLrtRFB9IE3jNr3iYzxG4XpMsZIQ1il+1u7bTA6ANlawJvRJ1fnD6PVmVfk
-         AY3fBR/uI7rfX7joRBJ4jHyR5nvtOfgKgRnzqz/JlL82ReVA85m/n/rX47lfZjqk0P2I
-         7mC8Q4H804wmbI/QcMUxKmSP4vQmwafISdzph7ZySbQ8A7w+Yu+Yfkbo9gcrddWBqNdb
-         y9N0b2f0t6+QePuscOelHl1iE8aKAZo43+bUz8xUTE8Di+vMStfbGSgS0a0Zf52AyNGN
-         dXqZQc8ZeAWmemuZUs7Z4R8+hqLHW0By9N6T+3vrDF8fFMsnTUybR0oocjLey//uGApm
-         SmRg==
+        bh=uys/L8O7xZiA+IlXK1BRZhgWN+PypYAepeVXE0xpUtQ=;
+        b=szCtW94vPkczBdTnbR80adOAclPwalJ7BkvQYs3FUajLczbNu1z67JLTUQGR6/2aQn
+         J1nITuCLHCt1OQrHRUUjM6nBcb1htMQ8E0zsdGY61jwWkj7Q2P1E2itcwH+95iZyadDV
+         Gqdy+BdycFICJTw24tVxXSkUPwH0gpVW7qC4vWp/wA1R26EofpsIB5uF0Pd+WU8Jppe/
+         g1BkcWD2bqHxk1HMjgly0N+1xZgn6xPLgMLNZNLTIY0s0q5AizMhkwRTyDA4fimMvSD7
+         pVKgqjz83wkM1Owum969UhhUg4FYbDCzQej6Azc17wvOMnbPZJpmjpa3L0YSYPfbZBup
+         jDNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680808640;
+        d=1e100.net; s=20210112; t=1680808855;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ijzbpgNtHL1RkS2L+qjoGrMwmwbEWamTYTlNJO92bs=;
-        b=GhkIhQQN/xA+h3wwkbEq4url5LKoqOWK7lUZx7f5mWDNRhvTdIoFGz6P2Qf65T39Wr
-         WRlTbUbf+9yq10R9IbCsaxVEBIpc+V3Sz8VcT3FHd6U85ArRaYqHit3u+0dBGE36gcru
-         LVaAWPAGNfvd6mBSBhtMMtfO+S0vrcEtBMMKR76hxjYhEz/r49C3p/rTFXmXC+njf5vi
-         mQiFlMlGSpZMFFD1q/Al6g8u3KkgTrl+whAMhHIfdpCks7aZNs4FPxFQmwkYzjTC4lAb
-         oVvYmIKF/0PSxcuKorGDQU4C8VCLHlglrrRDs8b/tShT8UQpS1KUW/8GpAfq48jXo5ox
-         Z82A==
-X-Gm-Message-State: AAQBX9dfNPmHBhDgzrTiGclPxsSKe2f2VabHpmwglpFKdc0RnR8/4VO+
-        jknrOnRgkglxovcqLrTfpw/Q3Q==
-X-Google-Smtp-Source: AKy350b1Xq0EzRAX6tJKE72sTgus/SxFTbGctJTqPR9I03mw5W3opdbMHFF7WuJ33Uw7DbuVPdiSWA==
-X-Received: by 2002:a17:907:c24d:b0:949:b9fa:497a with SMTP id tj13-20020a170907c24d00b00949b9fa497amr3017624ejc.70.1680808639713;
-        Thu, 06 Apr 2023 12:17:19 -0700 (PDT)
+        bh=uys/L8O7xZiA+IlXK1BRZhgWN+PypYAepeVXE0xpUtQ=;
+        b=lt3LKEy50NCVYJPABxgBeTtIgZabBL3bgD2HMLk6W/CgAemh8ApjW58bFHrUf9S4Z6
+         Aszx/YLunIXrR0a/Dzw2rA6qUo/LuIOEsUIAjps1e4KfFvtfpuWiydrutchLD+GSIkLo
+         fKapuQBDIDjRdOjz816nlHOSkUcNSh1P7gvUGODd5DlmvrWuyzVmG8shzVrumFs0LzJF
+         KNJ/P7Wnxt2L5e1e2n27DIoj57Kwd2GcOjDHCG6i3SNRn8Z6q39uUyhPUYXwrqe7CGG1
+         jusFQboAia+LQbgWaNS8vXQcEV5v/XaSw6MQEwopVf/rW3rsyvFIMhnNLF7mRTjauRQS
+         T/7w==
+X-Gm-Message-State: AAQBX9c/kWVb1L1PwAITgO+9ZwyG+OHKZwQx2O6oTq+/OUlD/RIp7RJQ
+        k4EPi/o9fNq4o6wsGtII34/nHA==
+X-Google-Smtp-Source: AKy350aTrwKXuR27E5tLtNwoNoUbzzOwtElN/iIeID0/1vaD7VdGluqPSroZH3isFfJqALCgWgMs8Q==
+X-Received: by 2002:aa7:cd5b:0:b0:4fc:d331:515 with SMTP id v27-20020aa7cd5b000000b004fcd3310515mr5835266edw.5.1680808855209;
+        Thu, 06 Apr 2023 12:20:55 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id hr15-20020a1709073f8f00b009477ba90a85sm1155808ejc.69.2023.04.06.12.17.18
+        by smtp.gmail.com with ESMTPSA id t6-20020a05640203c600b004fb30fc1dabsm1041933edw.96.2023.04.06.12.20.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 12:17:19 -0700 (PDT)
-Message-ID: <2d8d417d-0a0b-9a45-a8e0-a3cb116874e5@linaro.org>
-Date:   Thu, 6 Apr 2023 21:17:18 +0200
+        Thu, 06 Apr 2023 12:20:54 -0700 (PDT)
+Message-ID: <d1feb2c0-98b1-af38-e9c6-432a72b352f1@linaro.org>
+Date:   Thu, 6 Apr 2023 21:20:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: add MAX31827
+Subject: Re: [PATCH 2/2] hwmon: max31827: add MAX31827 driver
 Content-Language: en-US
 To:     Daniel Matyas <daniel.matyas@analog.com>
 Cc:     Jean Delvare <jdelvare@suse.com>,
@@ -63,18 +63,19 @@ Cc:     Jean Delvare <jdelvare@suse.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Mark Brown <broonie@kernel.org>, Marek Vasut <marex@denx.de>,
         Vincent Tremblay <vincent@vtremblay.dev>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         "Greg.Schwendimann@infineon.com" <Greg.Schwendimann@infineon.com>,
         =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
         Conor Dooley <conor.dooley@microchip.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230406164331.6557-1-daniel.matyas@analog.com>
  <20230406164331.6557-2-daniel.matyas@analog.com>
+ <20230406164331.6557-3-daniel.matyas@analog.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230406164331.6557-2-daniel.matyas@analog.com>
+In-Reply-To: <20230406164331.6557-3-daniel.matyas@analog.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -82,108 +83,39 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 On 06/04/2023 18:43, Daniel Matyas wrote:
 > MAX31827 is a low-power temperature switch with I2C interface.
 > 
-> The device is a ±1°C accuracy from -40°C to +125°C
-> (12 bits) local temperature switch and sensor with I2C/SM-
-> Bus interface. The combination of small 6-bump wafer-lev-
-> el package (WLP) and high accuracy makes this temper-
-> ature sensor/switch ideal for a wide range of applications.
-> 
-> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
-> ---
->  .../bindings/hwmon/adi,max31827.yaml          | 48 +++++++++++++++++++
->  .../devicetree/bindings/trivial-devices.yaml  |  2 +
->  MAINTAINERS                                   |  7 +++
 
->  3 files changed, 57 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> new file mode 100644
-> index 000000000000..b6ed2d46a35d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> @@ -0,0 +1,48 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/adi,max31827.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch
-
-Where are the compatibles? I expect them in such case to be compatible
-with this 31827.
+(...)
 
 > +
-> +maintainers:
-> +  - Daniel Matyas <daniel.matyas@analog.com>
+> +static const struct hwmon_ops max31827_hwmon_ops = {
+> +	.is_visible = max31827_is_visible,
+> +	.read = max31827_read,
+> +	.write = max31827_write,
+> +};
 > +
-> +description: |
-> +  Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch with
-> +  I2C Interface
-> +  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31827-MAX31829.pdf
-
-Missing blank line
-
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,max31827
+> +static const struct hwmon_chip_info max31827_chip_info = {
+> +	.ops = &max31827_hwmon_ops,
+> +	.info = max31827_info,
+> +};
 > +
-> +  reg:
-> +    maxItems: 1
+> +static int max31827_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct device *hwmon_dev;
+> +	struct max31827_state *st;
+> +	int ret;
 > +
-> +  vref-supply:
-> +    description:
-> +      Must have values in the interval (1.6V; 3.6V) in order for the device to
-> +      function correctly.
+> +	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_WORD_DATA))
+> +		return -EOPNOTSUPP;
 > +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - vref-supply
+> +	st = devm_kzalloc(dev, sizeof(struct max31827_state), GFP_KERNEL);
+
+sizeof(*...)
+
+> +	if (!st)
+> +		return -ENOMEM;
 > +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        status = "okay";
 
-Drop status
-
-> +        max31827: max31827@42 {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Drop also label. You do not use it.
-
-
-> +            compatible = "adi,max31827";
-> +            reg = <0x42>;
-> +            vref-supply = <&reg_vdd>;
-> +        };
-> +    };
-> +...
-> \ No newline at end of file
-
-Patch error to fix.
-
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index 6f482a254a1d..7763610b97bc 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -43,6 +43,8 @@ properties:
->            - adi,adp5589
->              # Analog Devices LT7182S Dual Channel 6A, 20V PolyPhase Step-Down Silent Switcher
->            - adi,lt7182s
-> +            # MAX31827 Low-Power Temperature Switch with I2C interface
-> +          - adi,max31827
-
-No need for this.
 
 Best regards,
 Krzysztof
