@@ -2,25 +2,25 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3538C76196
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 20:45:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D7C4C7618D
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 20:45:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240326AbjDFUpD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 Apr 2023 16:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
+        id S240484AbjDFUpU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Apr 2023 16:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240595AbjDFUop (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 16:44:45 -0400
+        with ESMTP id S240496AbjDFUpD (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 16:45:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2693E1A2;
-        Thu,  6 Apr 2023 13:42:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6F3E381;
+        Thu,  6 Apr 2023 13:42:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DB8D64C7C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B45986476F;
+        Thu,  6 Apr 2023 20:42:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63752C4339B;
         Thu,  6 Apr 2023 20:42:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51134C433EF;
-        Thu,  6 Apr 2023 20:41:49 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -70,9 +70,9 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 67/68] hwmon: w83627ehf: constify pointers to hwmon_channel_info
-Date:   Thu,  6 Apr 2023 22:40:26 +0200
-Message-Id: <20230406204027.3012532-8-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 68/68] hwmon: w83773g: constify pointers to hwmon_channel_info
+Date:   Thu,  6 Apr 2023 22:40:27 +0200
+Message-Id: <20230406204027.3012532-9-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
@@ -87,22 +87,22 @@ const for safety.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/hwmon/w83627ehf.c | 2 +-
+ drivers/hwmon/w83773g.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
-index 939d4c35e713..fe960c0a624f 100644
---- a/drivers/hwmon/w83627ehf.c
-+++ b/drivers/hwmon/w83627ehf.c
-@@ -1640,7 +1640,7 @@ static const struct hwmon_ops w83627ehf_ops = {
- 	.write = w83627ehf_write,
- };
+diff --git a/drivers/hwmon/w83773g.c b/drivers/hwmon/w83773g.c
+index 88d11dc5feb9..8dbcd05abd9a 100644
+--- a/drivers/hwmon/w83773g.c
++++ b/drivers/hwmon/w83773g.c
+@@ -233,7 +233,7 @@ static umode_t w83773_is_visible(const void *data, enum hwmon_sensor_types type,
+ 	return 0;
+ }
  
--static const struct hwmon_channel_info *w83627ehf_info[] = {
-+static const struct hwmon_channel_info * const w83627ehf_info[] = {
- 	HWMON_CHANNEL_INFO(fan,
- 		HWMON_F_ALARM | HWMON_F_DIV | HWMON_F_INPUT | HWMON_F_MIN,
- 		HWMON_F_ALARM | HWMON_F_DIV | HWMON_F_INPUT | HWMON_F_MIN,
+-static const struct hwmon_channel_info *w83773_info[] = {
++static const struct hwmon_channel_info * const w83773_info[] = {
+ 	HWMON_CHANNEL_INFO(chip,
+ 			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
+ 	HWMON_CHANNEL_INFO(temp,
 -- 
 2.34.1
 
