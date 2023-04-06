@@ -2,25 +2,25 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 099E5C7618D
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 20:42:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2E04C77B6E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 20:42:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240478AbjDFUmv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 Apr 2023 16:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
+        id S240491AbjDFUmw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Apr 2023 16:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240423AbjDFUmJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 16:42:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABDDB745;
-        Thu,  6 Apr 2023 13:39:12 -0700 (PDT)
+        with ESMTP id S240096AbjDFUmS (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 16:42:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61845B766;
+        Thu,  6 Apr 2023 13:39:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB66460F91;
-        Thu,  6 Apr 2023 20:39:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAB5FC4339C;
-        Thu,  6 Apr 2023 20:38:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F217162C36;
+        Thu,  6 Apr 2023 20:39:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E02DEC4339B;
+        Thu,  6 Apr 2023 20:39:22 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -70,9 +70,9 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 53/68] hwmon: sbrmi: constify pointers to hwmon_channel_info
-Date:   Thu,  6 Apr 2023 22:38:15 +0200
-Message-Id: <20230406203821.3012402-4-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 55/68] hwmon: sch5627: constify pointers to hwmon_channel_info
+Date:   Thu,  6 Apr 2023 22:38:17 +0200
+Message-Id: <20230406203821.3012402-6-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
@@ -87,22 +87,22 @@ const for safety.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/hwmon/sbrmi.c | 2 +-
+ drivers/hwmon/sch5627.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/sbrmi.c b/drivers/hwmon/sbrmi.c
-index 8ea5a4d3219f..529f0e766319 100644
---- a/drivers/hwmon/sbrmi.c
-+++ b/drivers/hwmon/sbrmi.c
-@@ -265,7 +265,7 @@ static umode_t sbrmi_is_visible(const void *data,
- 	return 0;
- }
+diff --git a/drivers/hwmon/sch5627.c b/drivers/hwmon/sch5627.c
+index 25fbbd4c9a2b..1bbda3b05532 100644
+--- a/drivers/hwmon/sch5627.c
++++ b/drivers/hwmon/sch5627.c
+@@ -379,7 +379,7 @@ static const struct hwmon_ops sch5627_ops = {
+ 	.write = sch5627_write,
+ };
  
--static const struct hwmon_channel_info *sbrmi_info[] = {
-+static const struct hwmon_channel_info * const sbrmi_info[] = {
- 	HWMON_CHANNEL_INFO(power,
- 			   HWMON_P_INPUT | HWMON_P_CAP | HWMON_P_CAP_MAX),
- 	NULL
+-static const struct hwmon_channel_info *sch5627_info[] = {
++static const struct hwmon_channel_info * const sch5627_info[] = {
+ 	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
+ 	HWMON_CHANNEL_INFO(temp,
+ 			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT | HWMON_T_FAULT,
 -- 
 2.34.1
 
