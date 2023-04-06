@@ -2,237 +2,113 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2988EC76196
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 16:55:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7542C7618D
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 18:14:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237927AbjDFQzl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 Apr 2023 12:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
+        id S229984AbjDFSO5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Apr 2023 14:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbjDFQzk (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 12:55:40 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E300B2D7D;
-        Thu,  6 Apr 2023 09:55:38 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 02D0C66031C3;
-        Thu,  6 Apr 2023 17:55:36 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680800137;
-        bh=cdCnEQte5eTYwNIhrAJS0DEE0QkfETi9gYQ3JiJ/g3A=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=agCPh6jP8SoSWgHMQMJzuRXJx0LKX452wS8PCkLeg1gBVLOBAdXWdF4JbJ31M+ran
-         jrmwfRnPw9dLLDUe+d3JtK8aSmWHFxg1d8UCYJFcTF7myUo+gnYF4MwUqiHL+Z3SRt
-         BObObk3ykGxMViDLLH4tx2D9CJi41qRXRU9DPWBgkGQfZ+uV+cwZuMRmj93Fgjucb6
-         hYzG+trsXBPS35tr5JI5FAJke2PnOZSGzQiygcRrSd3WXa1rifioo3uMP65ljeEwBv
-         169J5xGcwAitfJELtW8T62/aQCFcwyRD3JKykzpviW/seUK6Usg5uWutq+/hUemywy
-         ofpa4t5NPfnHA==
-Message-ID: <5dd096fc-419f-b67a-9577-7021e36da009@collabora.com>
-Date:   Thu, 6 Apr 2023 19:55:34 +0300
+        with ESMTP id S240074AbjDFSOx (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 14:14:53 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA99273F;
+        Thu,  6 Apr 2023 11:14:51 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id q27so28956279oiw.0;
+        Thu, 06 Apr 2023 11:14:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680804891; x=1683396891;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ciheXCKZB+vgZz82wUWU/ASz9wUqYhZng+toBs3m01A=;
+        b=cjxYxwmB+hIIrqneWl9q/8t6N59LaKjyiKb5Vz9TO6QoIsSpT1YToMKnt28nd4BjNJ
+         sdjJ8PoHNz8Kgi84H+VBFKmao6Hwph+RSRHfqOYd5UWGd00jknKefqs1rR3P8kYwuQcm
+         wq+6DEr5qbKDTL/usd2bUoodBy8FqF54LCTkqSSWDgKi5G9baDGp5/x7wF4OAdAzQUw3
+         mqq24swXJJWt4rBIyoqvrfW3oyucOn+lic3G0YJCjSsCcwdCgCNwy1XtPOidk9B2d/Ny
+         UX1Y2dd2Nv/GjsYF/b59SRsxFpnlUn4QmpQbZtMYttgeEOPXenk5W1KkQFsnudnhoJpa
+         qKnQ==
+X-Gm-Message-State: AAQBX9e/iwbncU+kc1AkEUB60gPrElUCQ96JzgwFWeB9OwxY76XiVtVw
+        z/3RZN8Q0B90X+EtL2ZTSA==
+X-Google-Smtp-Source: AKy350aEFt4zLegKYvaQUdooApbcJACcQq8zs9llpCRpnRawOQGuLML2ErFu+4/vgMloACGhrIYGXA==
+X-Received: by 2002:aca:130e:0:b0:384:10b9:c627 with SMTP id e14-20020aca130e000000b0038410b9c627mr5620929oii.56.1680804889511;
+        Thu, 06 Apr 2023 11:14:49 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s83-20020acac256000000b00383eaea5e88sm701248oif.38.2023.04.06.11.14.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 11:14:49 -0700 (PDT)
+Received: (nullmailer pid 3681581 invoked by uid 1000);
+        Thu, 06 Apr 2023 18:14:48 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pwm-fan: Convert to DT schema
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
+From:   Rob Herring <robh@kernel.org>
+To:     Daniel Matyas <daniel.matyas@analog.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg.Schwendimann@infineon.com,
+        =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-hwmon@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-References: <20230404173807.490520-1-cristian.ciocaltea@collabora.com>
- <20230404173807.490520-2-cristian.ciocaltea@collabora.com>
- <20230406164527.GA3263961-robh@kernel.org>
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <20230406164527.GA3263961-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Conor Dooley <conor.dooley@microchip.com>,
+        Vincent Tremblay <vincent@vtremblay.dev>,
+        Marek Vasut <marex@denx.de>
+In-Reply-To: <20230406164331.6557-2-daniel.matyas@analog.com>
+References: <20230406164331.6557-1-daniel.matyas@analog.com>
+ <20230406164331.6557-2-daniel.matyas@analog.com>
+Message-Id: <168080484662.3671846.16209817137563591362.robh@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: add MAX31827
+Date:   Thu, 06 Apr 2023 13:14:48 -0500
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/6/23 19:45, Rob Herring wrote:
-> On Tue, Apr 04, 2023 at 08:38:06PM +0300, Cristian Ciocaltea wrote:
->> Convert the PWM fan bindings to DT schema format.
->>
->> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
->> ---
->>  .../devicetree/bindings/hwmon/pwm-fan.txt     |  68 +---------
->>  .../devicetree/bindings/hwmon/pwm-fan.yaml    | 119 ++++++++++++++++++
->>  2 files changed, 120 insertions(+), 67 deletions(-)
->>  create mode 100644 Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
->> index 4509e688623a..48886f0ce415 100644
->> --- a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
->> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
->> @@ -1,67 +1 @@
->> -Bindings for a fan connected to the PWM lines
->> -
->> -Required properties:
->> -- compatible	: "pwm-fan"
->> -- pwms		: the PWM that is used to control the PWM fan
->> -- cooling-levels      : PWM duty cycle values in a range from 0 to 255
->> -			which correspond to thermal cooling states
->> -
->> -Optional properties:
->> -- fan-supply		: phandle to the regulator that provides power to the fan
->> -- interrupts		: This contains an interrupt specifier for each fan
->> -			  tachometer output connected to an interrupt source.
->> -			  The output signal must generate a defined number of
->> -			  interrupts per fan revolution, which require that
->> -			  it must be self resetting edge interrupts. See
->> -			  interrupt-controller/interrupts.txt for the format.
->> -- pulses-per-revolution : define the number of pulses per fan revolution for
->> -			  each tachometer input as an integer (default is 2
->> -			  interrupts per revolution). The value must be
->> -			  greater than zero.
->> -
->> -Example:
->> -	fan0: pwm-fan {
->> -		compatible = "pwm-fan";
->> -		#cooling-cells = <2>;
->> -		pwms = <&pwm 0 10000 0>;
->> -		cooling-levels = <0 102 170 230>;
->> -	};
->> -
->> -	thermal-zones {
->> -		cpu_thermal: cpu-thermal {
->> -			     thermal-sensors = <&tmu 0>;
->> -			     polling-delay-passive = <0>;
->> -			     polling-delay = <0>;
->> -			     trips {
->> -					cpu_alert1: cpu-alert1 {
->> -						    temperature = <100000>; /* millicelsius */
->> -						    hysteresis = <2000>; /* millicelsius */
->> -						    type = "passive";
->> -					};
->> -			     };
->> -			     cooling-maps {
->> -					map0 {
->> -						    trip = <&cpu_alert1>;
->> -						    cooling-device = <&fan0 0 1>;
->> -					};
->> -			     };
->> -		};
->> -
->> -Example 2:
->> -	fan0: pwm-fan {
->> -		compatible = "pwm-fan";
->> -		pwms = <&pwm 0 40000 0>;
->> -		fan-supply = <&reg_fan>;
->> -		interrupt-parent = <&gpio5>;
->> -		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
->> -		pulses-per-revolution = <2>;
->> -	};
->> -
->> -Example 3:
->> -	fan0: pwm-fan {
->> -		compatible = "pwm-fan";
->> -		pwms = <&pwm1 0 25000 0>;
->> -		interrupts-extended = <&gpio1 1 IRQ_TYPE_EDGE_FALLING>,
->> -			<&gpio2 5 IRQ_TYPE_EDGE_FALLING>;
->> -		pulses-per-revolution = <2>, <1>;
->> -	};
->> +This file has moved to pwm-fan.yaml.
->> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
->> new file mode 100644
->> index 000000000000..048b6ea794c7
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
->> @@ -0,0 +1,119 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/hwmon/pwm-fan.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Fan connected to PWM lines
->> +
->> +maintainers:
->> +  - Jean Delvare <jdelvare@suse.com>
->> +  - Guenter Roeck <linux@roeck-us.net>
->> +
->> +properties:
->> +  compatible:
->> +    const: pwm-fan
->> +
->> +  cooling-levels:
->> +    description: PWM duty cycle values corresponding to thermal cooling states.
->> +    items:
->> +      maximum: 255
->> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->> +
->> +  fan-supply:
->> +    description: Phandle to the regulator that provides power to the fan.
->> +
->> +  interrupts:
->> +    description:
->> +      This contains an interrupt specifier for each fan tachometer output
->> +      connected to an interrupt source. The output signal must generate a
->> +      defined number of interrupts per fan revolution, which require that
->> +      it must be self resetting edge interrupts.
->> +    minItems: 1
->> +    maxItems: 5
-> 
-> I'm not so sure I'd allow for more than 1 if the example is the only 
-> case we can find. More than 1 implies you have multiple fans controlled 
-> by 1 PWM. What do you do with the tach data other than display it or 
-> detect a stuck fan. You can't really implement any control loop unless 
-> you average the rpm's? I suppose there could be h/w, so okay.
 
-I will drop the 3rd example and use 'maxItems: 1' here. Same for
-pulses-per-revolution below.
-
->> +
->> +  pulses-per-revolution:
->> +    description:
->> +      Define the number of pulses per fan revolution for each tachometer
->> +      input as an integer.
->> +    items:
->> +      minimum: 1
->> +      maximum: 4
->> +      default: 2
->> +    minItems: 1
->> +    maxItems: 5
->> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->> +
->> +  pwms:
->> +    description: The PWM that is used to control the fan.
->> +    maxItems: 1
->> +
->> +  pwm-names: true
+On Thu, 06 Apr 2023 19:43:26 +0300, Daniel Matyas wrote:
+> MAX31827 is a low-power temperature switch with I2C interface.
 > 
-> Not part of the original binding. It's not that useful in general if 
-> there's only 1 entry. It's completely useless if the name is not defined 
-> for the OS to use. So drop it.
-
-Ack.
-
->> +
->> +  "#cooling-cells":
->> +    description:
->> +      Must be 2, in order to specify minimum and maximum cooling state used in
->> +      the cooling-maps reference. The first cell is the minimum cooling state
->> +      and the second cell is the maximum cooling state requested.
+> The device is a ±1°C accuracy from -40°C to +125°C
+> (12 bits) local temperature switch and sensor with I2C/SM-
+> Bus interface. The combination of small 6-bump wafer-lev-
+> el package (WLP) and high accuracy makes this temper-
+> ature sensor/switch ideal for a wide range of applications.
 > 
-> Just duplicating the same text from thermal-cooling-devices.yaml is 
-> pointless.
+> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
+> ---
+>  .../bindings/hwmon/adi,max31827.yaml          | 48 +++++++++++++++++++
+>  .../devicetree/bindings/trivial-devices.yaml  |  2 +
+>  MAINTAINERS                                   |  7 +++
+>  3 files changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
 > 
->> +    const: 2
-> 
-> As this is globally the only allowed value, you don't need to duplicate 
-> this either.
-> 
-> '"#cooling-cells": true"' is sufficient.
 
-Sure, will do.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Thanks,
-Cristian
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/hwmon/adi,max31827.yaml:48:4: [error] no new line character at the end of file (new-line-at-end-of-file)
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/adi,max31827.example.dtb: max31827@42: 'vref-supply' does not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/trivial-devices.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230406164331.6557-2-daniel.matyas@analog.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
