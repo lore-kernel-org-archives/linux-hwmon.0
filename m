@@ -2,102 +2,233 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC72DC7618D
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 16:45:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95A1FC77B71
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 16:45:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239437AbjDFQpi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 Apr 2023 12:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
+        id S229868AbjDFQpk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Apr 2023 12:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239599AbjDFQpP (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 12:45:15 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4B1559F;
-        Thu,  6 Apr 2023 09:45:10 -0700 (PDT)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336GDdVf013755;
-        Thu, 6 Apr 2023 12:44:38 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3pqrh5qbhq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Apr 2023 12:44:37 -0400
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 336GiaJ0027386
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 6 Apr 2023 12:44:36 -0400
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Thu, 6 Apr 2023 12:44:35 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Thu, 6 Apr 2023 12:44:35 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Thu, 6 Apr 2023 12:44:35 -0400
-Received: from daniel-Precision-5530.ad.analog.com ([10.48.65.214])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 336Gi7JU002852;
-        Thu, 6 Apr 2023 12:44:11 -0400
-From:   Daniel Matyas <daniel.matyas@analog.com>
-CC:     Daniel Matyas <daniel.matyas@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
+        with ESMTP id S239618AbjDFQpa (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 12:45:30 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C17B55AE;
+        Thu,  6 Apr 2023 09:45:29 -0700 (PDT)
+Received: by mail-oi1-f171.google.com with SMTP id q27so28757021oiw.0;
+        Thu, 06 Apr 2023 09:45:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680799528; x=1683391528;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=okuqTE+nvv4kmh8nE7QP2fpvb7kyUn3ojSbnwLLBqII=;
+        b=4Mni2m8PMfPAkrUL5W4HBcUkdqlFb6/UzcW4CohDJQad7Ff0eZQjtYcj+iXaMSHxo4
+         xfmt2ClnbOiSsFIaMpU9M1qU3ug315kaGYXW+McA7NnnnySATvs8TJLbUNJRDPzC7AiA
+         Al1JpR6TQ0aEqDZwNNG/kVOZNQxXD5KRadr6eOxEWcfuqVrVvnXR8EmgB9KzMXk/4bVm
+         4+SOhVQ9nDhCWNnlQ96315ukDJG/vD7sn1MSguBrPS4OFPtfDeYcE/n9OkOo7vnKn0zl
+         ijkGiFBpDbCemSBnhnEZj+LK0IPyOg48KXqbpiYA9te/b0iGyAcx3xDPEZhxATIyT0Z3
+         l1gA==
+X-Gm-Message-State: AAQBX9fuLZkjRn97Rm2FzeTpZDikdRJhIHQbOQjj86TVopuyQmGeNCYI
+        0gY6RgQxSuJaktLIlGBTzx3hU94Dpw==
+X-Google-Smtp-Source: AKy350bDAm/OI6lhG2rX/8wo60zHeGQhQM0V+MfK/nUW0KAC7GHqFW1OHbvJ9G8jYHlAKBWmHJFcTA==
+X-Received: by 2002:a05:6808:2a8d:b0:38b:5e4:9d3b with SMTP id fc13-20020a0568082a8d00b0038b05e49d3bmr4665449oib.4.1680799528229;
+        Thu, 06 Apr 2023 09:45:28 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l64-20020acabb43000000b00383ef58c15bsm847001oif.28.2023.04.06.09.45.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 09:45:27 -0700 (PDT)
+Received: (nullmailer pid 3280156 invoked by uid 1000);
+        Thu, 06 Apr 2023 16:45:27 -0000
+Date:   Thu, 6 Apr 2023 11:45:27 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Vincent Tremblay" <vincent@vtremblay.dev>,
-        Marek Vasut <marex@denx.de>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        "Greg.Schwendimann@infineon.com" <Greg.Schwendimann@infineon.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 0/2] Hwmon driver for MAX31827 temperature switch
-Date:   Thu, 6 Apr 2023 19:43:25 +0300
-Message-ID: <20230406164331.6557-1-daniel.matyas@analog.com>
-X-Mailer: git-send-email 2.34.1
+        Heiko Stuebner <heiko@sntech.de>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pwm-fan: Convert to DT schema
+Message-ID: <20230406164527.GA3263961-robh@kernel.org>
+References: <20230404173807.490520-1-cristian.ciocaltea@collabora.com>
+ <20230404173807.490520-2-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: 7Q9DOdcOvVu9aSn3txoDtWgleruvpAyx
-X-Proofpoint-GUID: 7Q9DOdcOvVu9aSn3txoDtWgleruvpAyx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-06_10,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=721
- impostorscore=0 mlxscore=0 malwarescore=0 spamscore=0 phishscore=0
- clxscore=1011 adultscore=0 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304060149
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404173807.490520-2-cristian.ciocaltea@collabora.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The driver was tested on Raspberry Pi 4 Model B.
+On Tue, Apr 04, 2023 at 08:38:06PM +0300, Cristian Ciocaltea wrote:
+> Convert the PWM fan bindings to DT schema format.
+> 
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> ---
+>  .../devicetree/bindings/hwmon/pwm-fan.txt     |  68 +---------
+>  .../devicetree/bindings/hwmon/pwm-fan.yaml    | 119 ++++++++++++++++++
+>  2 files changed, 120 insertions(+), 67 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
+> index 4509e688623a..48886f0ce415 100644
+> --- a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
+> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
+> @@ -1,67 +1 @@
+> -Bindings for a fan connected to the PWM lines
+> -
+> -Required properties:
+> -- compatible	: "pwm-fan"
+> -- pwms		: the PWM that is used to control the PWM fan
+> -- cooling-levels      : PWM duty cycle values in a range from 0 to 255
+> -			which correspond to thermal cooling states
+> -
+> -Optional properties:
+> -- fan-supply		: phandle to the regulator that provides power to the fan
+> -- interrupts		: This contains an interrupt specifier for each fan
+> -			  tachometer output connected to an interrupt source.
+> -			  The output signal must generate a defined number of
+> -			  interrupts per fan revolution, which require that
+> -			  it must be self resetting edge interrupts. See
+> -			  interrupt-controller/interrupts.txt for the format.
+> -- pulses-per-revolution : define the number of pulses per fan revolution for
+> -			  each tachometer input as an integer (default is 2
+> -			  interrupts per revolution). The value must be
+> -			  greater than zero.
+> -
+> -Example:
+> -	fan0: pwm-fan {
+> -		compatible = "pwm-fan";
+> -		#cooling-cells = <2>;
+> -		pwms = <&pwm 0 10000 0>;
+> -		cooling-levels = <0 102 170 230>;
+> -	};
+> -
+> -	thermal-zones {
+> -		cpu_thermal: cpu-thermal {
+> -			     thermal-sensors = <&tmu 0>;
+> -			     polling-delay-passive = <0>;
+> -			     polling-delay = <0>;
+> -			     trips {
+> -					cpu_alert1: cpu-alert1 {
+> -						    temperature = <100000>; /* millicelsius */
+> -						    hysteresis = <2000>; /* millicelsius */
+> -						    type = "passive";
+> -					};
+> -			     };
+> -			     cooling-maps {
+> -					map0 {
+> -						    trip = <&cpu_alert1>;
+> -						    cooling-device = <&fan0 0 1>;
+> -					};
+> -			     };
+> -		};
+> -
+> -Example 2:
+> -	fan0: pwm-fan {
+> -		compatible = "pwm-fan";
+> -		pwms = <&pwm 0 40000 0>;
+> -		fan-supply = <&reg_fan>;
+> -		interrupt-parent = <&gpio5>;
+> -		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
+> -		pulses-per-revolution = <2>;
+> -	};
+> -
+> -Example 3:
+> -	fan0: pwm-fan {
+> -		compatible = "pwm-fan";
+> -		pwms = <&pwm1 0 25000 0>;
+> -		interrupts-extended = <&gpio1 1 IRQ_TYPE_EDGE_FALLING>,
+> -			<&gpio2 5 IRQ_TYPE_EDGE_FALLING>;
+> -		pulses-per-revolution = <2>, <1>;
+> -	};
+> +This file has moved to pwm-fan.yaml.
+> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+> new file mode 100644
+> index 000000000000..048b6ea794c7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+> @@ -0,0 +1,119 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/pwm-fan.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Fan connected to PWM lines
+> +
+> +maintainers:
+> +  - Jean Delvare <jdelvare@suse.com>
+> +  - Guenter Roeck <linux@roeck-us.net>
+> +
+> +properties:
+> +  compatible:
+> +    const: pwm-fan
+> +
+> +  cooling-levels:
+> +    description: PWM duty cycle values corresponding to thermal cooling states.
+> +    items:
+> +      maximum: 255
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +
+> +  fan-supply:
+> +    description: Phandle to the regulator that provides power to the fan.
+> +
+> +  interrupts:
+> +    description:
+> +      This contains an interrupt specifier for each fan tachometer output
+> +      connected to an interrupt source. The output signal must generate a
+> +      defined number of interrupts per fan revolution, which require that
+> +      it must be self resetting edge interrupts.
+> +    minItems: 1
+> +    maxItems: 5
 
-The implemented functionalities of it are: reading a 1shot input value
-and changing and reading the overtemperature and undertemperature alarm
-and hysteresis values. The read values are raw: signed 16 bit int
-format. To obtain the real value one must multiply the value with 0.0625.
+I'm not so sure I'd allow for more than 1 if the example is the only 
+case we can find. More than 1 implies you have multiple fans controlled 
+by 1 PWM. What do you do with the tach data other than display it or 
+detect a stuck fan. You can't really implement any control loop unless 
+you average the rpm's? I suppose there could be h/w, so okay.
 
-Daniel Matyas (2):
-  dt-bindings: hwmon: add MAX31827
-  hwmon: max31827: add MAX31827 driver
+> +
+> +  pulses-per-revolution:
+> +    description:
+> +      Define the number of pulses per fan revolution for each tachometer
+> +      input as an integer.
+> +    items:
+> +      minimum: 1
+> +      maximum: 4
+> +      default: 2
+> +    minItems: 1
+> +    maxItems: 5
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +
+> +  pwms:
+> +    description: The PWM that is used to control the fan.
+> +    maxItems: 1
+> +
+> +  pwm-names: true
 
- .../bindings/hwmon/adi,max31827.yaml          |  48 ++++
- .../devicetree/bindings/trivial-devices.yaml  |   2 +
- MAINTAINERS                                   |   8 +
- drivers/hwmon/Kconfig                         |  11 +
- drivers/hwmon/Makefile                        |   1 +
- drivers/hwmon/max31827.c                      | 240 ++++++++++++++++++
- 6 files changed, 310 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
- create mode 100644 drivers/hwmon/max31827.c
+Not part of the original binding. It's not that useful in general if 
+there's only 1 entry. It's completely useless if the name is not defined 
+for the OS to use. So drop it.
 
--- 
-2.34.1
+> +
+> +  "#cooling-cells":
+> +    description:
+> +      Must be 2, in order to specify minimum and maximum cooling state used in
+> +      the cooling-maps reference. The first cell is the minimum cooling state
+> +      and the second cell is the maximum cooling state requested.
+
+Just duplicating the same text from thermal-cooling-devices.yaml is 
+pointless.
+
+> +    const: 2
+
+As this is globally the only allowed value, you don't need to duplicate 
+this either.
+
+'"#cooling-cells": true"' is sufficient.
+
+Rob
 
