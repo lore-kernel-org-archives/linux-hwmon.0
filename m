@@ -2,53 +2,53 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B281EC77B6C
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 20:34:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD2DAC7618D
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 20:34:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239918AbjDFUeh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 Apr 2023 16:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
+        id S240041AbjDFUek (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Apr 2023 16:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239653AbjDFUd6 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 16:33:58 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6D4C178
-        for <linux-hwmon@vger.kernel.org>; Thu,  6 Apr 2023 13:32:32 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id n21so4224068ejz.4
-        for <linux-hwmon@vger.kernel.org>; Thu, 06 Apr 2023 13:32:32 -0700 (PDT)
+        with ESMTP id S239751AbjDFUeE (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 16:34:04 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B69C655
+        for <linux-hwmon@vger.kernel.org>; Thu,  6 Apr 2023 13:32:34 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id n21so4224234ejz.4
+        for <linux-hwmon@vger.kernel.org>; Thu, 06 Apr 2023 13:32:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680813150;
+        d=linaro.org; s=google; t=1680813152;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i6JbQJiorXC7teiECO3hQBxt4FlCv2MlUvUkFyuxz0k=;
-        b=U1ICoYYwYwbOimkM7r9J3JON/FvSAKmAqIWF9gCVuWs3wiDIFQtgPQz/XK8W4diEsB
-         eg5lQiZ+HP2WyZaBwXj8GEJlu4Q+QJPlmnOZGF0MguHwBvS2/iMP2yirU9rim7RbHAE3
-         /ZDGABwquYh9GoCpLqOUunF/XtxxBCtJIq2RWwO9j1NR3GbtQwNrSW/ehxBTIuyY9Q9j
-         lw6F/flDtl6Q4JW1pX0P1zj6gnu5Y8WrlTo9KrZtebRMn/OJr7yTONxCwePVGAypeYjN
-         0aFTLsdhT4TcNHCGg3HPEmOHIWIvxb1kOfWf0EKAUE18sxqvCXvLTz7rt4JC0XSVzEKi
-         +CgA==
+        bh=P/OgocotLPfWzU4xO81UUQj8QQ2q6pWI8hVfYeZF6v0=;
+        b=JCqj6HRrSMiL78IGpyhG0UjUaikqNMwazgPB7//D9j0xI4RWEpwX6e7zkloS07hVoj
+         Z7NkWYi0uQr1lefpl4Enf7aOaTfXl4K7gTo0oZQvclbSmlVcm+NvE/53KiZ7oJuVT54d
+         7Ujmod9W3PQbhXoZ6TlptoXUE8A/CHIzmgM90D+v5RwmoH5Z6h7dRswpUSITOnxcwsiN
+         R357RMVkbSQDqH1d9kJVG8A1qJbtNOnl+pHVmSiHPchrKxbFDR+ETtYyvFWhw2zlcpu9
+         ajDSO0UYZRy4a0Fvg0OVJ3rp2FjcwdUMIALu47VnM6hII1RyR+AqEnpQBRiRZKrf2FXA
+         byYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680813150;
+        d=1e100.net; s=20210112; t=1680813152;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i6JbQJiorXC7teiECO3hQBxt4FlCv2MlUvUkFyuxz0k=;
-        b=UOixUKh20yaceJybggkWiKCxEl/e3StL1D3eQaNY1/R2vo3E0hcWAB1mMigOPj7GXO
-         UdV8Oj5strrMBAhCmqqNu7ArQyPIfor8RFCSYPrRjoOhnRBsl9s9nP7uB7VunMFBg/qo
-         CTyUg0FJai7hUfWV+AidGPsySncZbtykTNv+12N/ltxq1s641Ts6s4ngWMwP/r2WIGTB
-         DpLpRL8MNWapcKWO2sVnVmxlZkAnn9yiTqKPr4MgTWkJ1NdlswEpRfEFSgg7tRoNooRf
-         23h/kT9O+TQla1Wujz+s741cfUQrzxIktt72w51HCdtWPv6+fuOClqT8L/DH1KZQ3f68
-         wmxA==
-X-Gm-Message-State: AAQBX9d9YaWwiD9iliuht2ZUCY+jsIs0ywl6OsdUTvzwlerXGSG2rtxO
-        0qG8/ltoP/t6tuHtVLNpSrU3aw==
-X-Google-Smtp-Source: AKy350bZbUwgdfxxvOH7aNNMLToPrjoY0uU/pjuSpPG3PsJDbgm/81WmB/eULaoFO7UA7TtjwHBtSQ==
-X-Received: by 2002:a17:906:cc5d:b0:932:ac6c:7ef9 with SMTP id mm29-20020a170906cc5d00b00932ac6c7ef9mr142631ejb.22.1680813150619;
-        Thu, 06 Apr 2023 13:32:30 -0700 (PDT)
+        bh=P/OgocotLPfWzU4xO81UUQj8QQ2q6pWI8hVfYeZF6v0=;
+        b=FDw9cndsdtfYInanaU3M+lXrK4GB3f+QC95x3yOUwyfx+u0B7olrClyAfBI+WgTzLY
+         kZx6e8qav6Y/fyELY+ZVKpbClJt2aOkR1TtHCwChWAl2sywOnINq1QTIJPNSsfsbTRbJ
+         ogBH37zI4PQH7xgFczlpS+/aYKdJ3Gug7nDKAAy4u8t0i8H5CPZdgO9NurZd6BXUr+ZU
+         hOR2e+9fzo/C/sigh58gfztKZj4DAbZ9VJbN3bB7UDg6Xew8MeSOBrootLGiQHZsw7X7
+         iMe/t2SkpFCtQgsYIT14wCADalcTPSCOGbXvIiTGrdge7UgjPi0KJQn0U6xOrhpJB9D1
+         VltA==
+X-Gm-Message-State: AAQBX9d2y0d3C2ZUPVq6XJ7JXrI79KcIdMe38X8rKvLBw3rUdze+9Jje
+        2DilZ8WOH3Ppl6S9HqhPA9MtcQ==
+X-Google-Smtp-Source: AKy350bUxfidEPotTu0InM0uokm/nb+xqmD4jxUxuAcr/cC92RMUZ9HUOWdYnRwe1kELJZIqEZsJUQ==
+X-Received: by 2002:a17:906:190d:b0:939:e870:2b37 with SMTP id a13-20020a170906190d00b00939e8702b37mr117470eje.70.1680813152754;
+        Thu, 06 Apr 2023 13:32:32 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id s4-20020a1709067b8400b0092bea699124sm1210330ejo.106.2023.04.06.13.32.28
+        by smtp.gmail.com with ESMTPSA id s4-20020a1709067b8400b0092bea699124sm1210330ejo.106.2023.04.06.13.32.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 13:32:30 -0700 (PDT)
+        Thu, 06 Apr 2023 13:32:32 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -99,9 +99,9 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 32/68] hwmon: ltc2992: constify pointers to hwmon_channel_info
-Date:   Thu,  6 Apr 2023 22:30:27 +0200
-Message-Id: <20230406203103.3011503-33-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 33/68] hwmon: ltc4245: constify pointers to hwmon_channel_info
+Date:   Thu,  6 Apr 2023 22:30:28 +0200
+Message-Id: <20230406203103.3011503-34-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
@@ -116,22 +116,22 @@ const for safety.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/hwmon/ltc2992.c | 2 +-
+ drivers/hwmon/ltc4245.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/ltc2992.c b/drivers/hwmon/ltc2992.c
-index 69341de397cb..429a7f5837f0 100644
---- a/drivers/hwmon/ltc2992.c
-+++ b/drivers/hwmon/ltc2992.c
-@@ -812,7 +812,7 @@ static const struct hwmon_ops ltc2992_hwmon_ops = {
- 	.write = ltc2992_write,
- };
+diff --git a/drivers/hwmon/ltc4245.c b/drivers/hwmon/ltc4245.c
+index 57cbaf3b39fa..fb9bc8dbe99b 100644
+--- a/drivers/hwmon/ltc4245.c
++++ b/drivers/hwmon/ltc4245.c
+@@ -387,7 +387,7 @@ static umode_t ltc4245_is_visible(const void *_data,
+ 	}
+ }
  
--static const struct hwmon_channel_info *ltc2992_info[] = {
-+static const struct hwmon_channel_info * const ltc2992_info[] = {
- 	HWMON_CHANNEL_INFO(chip,
- 			   HWMON_C_IN_RESET_HISTORY),
+-static const struct hwmon_channel_info *ltc4245_info[] = {
++static const struct hwmon_channel_info * const ltc4245_info[] = {
  	HWMON_CHANNEL_INFO(in,
+ 			   HWMON_I_INPUT,
+ 			   HWMON_I_INPUT | HWMON_I_MIN_ALARM,
 -- 
 2.34.1
 
