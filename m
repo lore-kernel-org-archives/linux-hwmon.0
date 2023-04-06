@@ -2,53 +2,53 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8802C76196
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 20:34:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE38DC7618D
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 20:34:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240067AbjDFUeR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 Apr 2023 16:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
+        id S239651AbjDFUeS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Apr 2023 16:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239875AbjDFUdv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 16:33:51 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43BDC15F
-        for <linux-hwmon@vger.kernel.org>; Thu,  6 Apr 2023 13:32:26 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id l15so4221865ejq.10
-        for <linux-hwmon@vger.kernel.org>; Thu, 06 Apr 2023 13:32:26 -0700 (PDT)
+        with ESMTP id S239891AbjDFUdx (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 16:33:53 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EB4C147
+        for <linux-hwmon@vger.kernel.org>; Thu,  6 Apr 2023 13:32:28 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id 11so4215926ejw.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 06 Apr 2023 13:32:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680813145;
+        d=linaro.org; s=google; t=1680813148;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eDyUmonauZ8nm6n5G/LkXb2fBKeLEqNmyMFXN+56R/0=;
-        b=YMS5yzUgMpMduF8w1083GJyyM6G6mP2dHeTaOtQucecobZTroK8AAqIAmDn6/gJfrG
-         ixVUYsEiSU+LJT4zWFOe7Ptebv771vH7Vay68cGCplldTOwBeRcj1S0c47TJagJd9Ab0
-         B0VIJAcrQ1aVhxBoW5MBMLiegaF47uXPlYUF0SJ6QCNdhhkinlV8OPOngm5VKzqrURVS
-         50xVbFPq8CtFxAmoA7S3p7KME50ER3N2prf22Ax4x/dy9mtv9rg/XqrNnj4kjT7Dqwx/
-         dxV/zlM/71fKfQn5h7ZzgAVkNSeuHav8BPytem0sIENRe/dSezZUULJjjpodkHqvG/Ex
-         l2DA==
+        bh=VO8RtXIHFkMLE4x+ayYSzlFGwtzjPkL5W8IJ6F0GzS8=;
+        b=apdHVJ8hSomWaRwNZFrCjodO6msIJ9UHad9g6Lo+PsFhBQMiPOTr2DFzkGODMoxibn
+         dpFAGVlikYfS3JUQ4Bj1RzUJgaJflrGMwCYp8yuRld3y/1Qt2+pGw11b8kJtMiIjeYq1
+         luj7//ijoJiyi1gw57kdB5YqFbm+uNlRiT8JedTrwsfM/Rrmq2gL3dqTviaYDqr9fnnp
+         1W44Dn/BiLYDuFNOJvsxyaDhZqUc6tbP9oTr2agQlLTXqG3TmDftmogdaOfBo2XEPhTM
+         rR60MZMcZSk4E8VLgEH/oaBzhF//FHfDNCXLuUsuUuitVyW0kXoHHcQLe9yMWrNgSsEL
+         A6Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680813145;
+        d=1e100.net; s=20210112; t=1680813148;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eDyUmonauZ8nm6n5G/LkXb2fBKeLEqNmyMFXN+56R/0=;
-        b=SIxHK59Rf3xndjxOZ1fCEiMu8Jh2ytyr6GJib4taBvKcZ98A4uY55M8IBFnIzbZlSp
-         hftWFEPqPwC8T0XpJtfVAqLn6+RbpC/QmoLs6ZXUHPfCwjWig6HF/xEfQg6I/FtN/KbL
-         nnrxUHhoI6sn3RcOaDIfk0aAfMPHRqYxLqQkLx6GaB7MTk2krLz8H+w8OyRwy4v92hr1
-         56qrvOpK+VK1HBUk4e4dw9O4UK9Yy/r5EKyHH+G4OMfzSCOXyBtLph7tQ6Agg3bctQ5F
-         GAZ+G6U3wvFUju4ABwi0b7KeiNhslaE6SAnrNPxvVsv6N7jeaoZhOeGhsME2YTOL+vVr
-         aygg==
-X-Gm-Message-State: AAQBX9fYdMYY8bNmh4PckgWxGEgUMovoxpd4/LA2MTeeKc9KBmcVIcgW
-        29CJtshetJA6UajICSyDLyVxMA==
-X-Google-Smtp-Source: AKy350ZF8nPTGR4RDE9lm1XOWYeECS7YDWeUJSraSmbL162uZx4DgwowpRCXrEnbKVyGKSKX+TbtLw==
-X-Received: by 2002:a17:906:80c9:b0:931:2306:f363 with SMTP id a9-20020a17090680c900b009312306f363mr150222ejx.21.1680813145115;
-        Thu, 06 Apr 2023 13:32:25 -0700 (PDT)
+        bh=VO8RtXIHFkMLE4x+ayYSzlFGwtzjPkL5W8IJ6F0GzS8=;
+        b=tRQM4l6I7h0SD/xs9EN5bR8k/VusAfJZVKFLc3Atkt1/cyigTTIe3zbBMfKpqPI4gi
+         Ep6KS4jl2+Z5St0SJvdQI6lj7nyjhjVOMALwCuiBMiIgoAhvpQBIDG7Py+K8Xjxa4urA
+         paW9BnEh786u3C3otAXUNljgYRdDgjgS6+LXYRj8IbKBf1wgyB06oE8JFUnaM92XRsOc
+         gCv/uAWb7XAyV17wzC+bB8DO3eHd9s/Q1gTdKZcZk0mxHprEabuXzYMI+zN5Kc99uKXh
+         FD+fqYgqI08RKyRA3ZEadAO0IJsqwz18+S0acTC+WPCfCq0+/BP7PPQ/X9+8/yaeGObp
+         IR8Q==
+X-Gm-Message-State: AAQBX9eZtL521RRYNDVWRYnM738dZtv3XXq/RBJE9fYWULTPtLFLsbKL
+        NLcd23hnvU6ARo5zgU3Gf158HQ==
+X-Google-Smtp-Source: AKy350YVXbd7mbMYmNs+P106hie3P3mdVmAith2NcpgquwP46kH15TOkGrlublH5uA0343kN/kALwQ==
+X-Received: by 2002:a17:906:55b:b0:93f:9b4a:12f3 with SMTP id k27-20020a170906055b00b0093f9b4a12f3mr222010eja.10.1680813148417;
+        Thu, 06 Apr 2023 13:32:28 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id s4-20020a1709067b8400b0092bea699124sm1210330ejo.106.2023.04.06.13.32.22
+        by smtp.gmail.com with ESMTPSA id s4-20020a1709067b8400b0092bea699124sm1210330ejo.106.2023.04.06.13.32.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 13:32:24 -0700 (PDT)
+        Thu, 06 Apr 2023 13:32:27 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -99,9 +99,9 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 30/68] hwmon: lochnagar: constify pointers to hwmon_channel_info
-Date:   Thu,  6 Apr 2023 22:30:25 +0200
-Message-Id: <20230406203103.3011503-31-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 31/68] hwmon: ltc2947: constify pointers to hwmon_channel_info
+Date:   Thu,  6 Apr 2023 22:30:26 +0200
+Message-Id: <20230406203103.3011503-32-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
@@ -116,22 +116,22 @@ const for safety.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/hwmon/lochnagar-hwmon.c | 2 +-
+ drivers/hwmon/ltc2947-core.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/lochnagar-hwmon.c b/drivers/hwmon/lochnagar-hwmon.c
-index 8b19adf2eeb0..9948e2f7208d 100644
---- a/drivers/hwmon/lochnagar-hwmon.c
-+++ b/drivers/hwmon/lochnagar-hwmon.c
-@@ -321,7 +321,7 @@ static const struct hwmon_ops lochnagar_ops = {
- 	.write = lochnagar_write,
- };
+diff --git a/drivers/hwmon/ltc2947-core.c b/drivers/hwmon/ltc2947-core.c
+index 2dbbbac9de09..d2ff6e700770 100644
+--- a/drivers/hwmon/ltc2947-core.c
++++ b/drivers/hwmon/ltc2947-core.c
+@@ -901,7 +901,7 @@ static umode_t ltc2947_is_visible(const void *data,
+ 	}
+ }
  
--static const struct hwmon_channel_info *lochnagar_info[] = {
-+static const struct hwmon_channel_info * const lochnagar_info[] = {
- 	HWMON_CHANNEL_INFO(temp,  HWMON_T_INPUT),
- 	HWMON_CHANNEL_INFO(in,    HWMON_I_INPUT | HWMON_I_LABEL,
- 				  HWMON_I_INPUT | HWMON_I_LABEL,
+-static const struct hwmon_channel_info *ltc2947_info[] = {
++static const struct hwmon_channel_info * const ltc2947_info[] = {
+ 	HWMON_CHANNEL_INFO(in,
+ 			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+ 			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_RESET_HISTORY |
 -- 
 2.34.1
 
