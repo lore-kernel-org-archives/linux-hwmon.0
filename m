@@ -2,25 +2,25 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2733DC76196
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 20:43:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E8CAC77B6E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 20:43:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240547AbjDFUnT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 Apr 2023 16:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
+        id S240559AbjDFUne (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Apr 2023 16:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240330AbjDFUmf (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 16:42:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0021BA260;
-        Thu,  6 Apr 2023 13:40:43 -0700 (PDT)
+        with ESMTP id S240193AbjDFUmz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 16:42:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D775BAF1E;
+        Thu,  6 Apr 2023 13:40:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54E7F64C39;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3383364C45;
+        Thu,  6 Apr 2023 20:40:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E0A3C4339B;
         Thu,  6 Apr 2023 20:40:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B771BC433EF;
-        Thu,  6 Apr 2023 20:40:31 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -70,9 +70,9 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 60/68] hwmon: sy7636a: constify pointers to hwmon_channel_info
-Date:   Thu,  6 Apr 2023 22:40:19 +0200
-Message-Id: <20230406204027.3012532-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 61/68] hwmon: tmp102: constify pointers to hwmon_channel_info
+Date:   Thu,  6 Apr 2023 22:40:20 +0200
+Message-Id: <20230406204027.3012532-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
@@ -87,22 +87,22 @@ const for safety.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/hwmon/sy7636a-hwmon.c | 2 +-
+ drivers/hwmon/tmp102.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
-index 6dd9c2a0f0e0..ed110884786b 100644
---- a/drivers/hwmon/sy7636a-hwmon.c
-+++ b/drivers/hwmon/sy7636a-hwmon.c
-@@ -52,7 +52,7 @@ static const struct hwmon_ops sy7636a_hwmon_ops = {
- 	.read = sy7636a_read,
- };
+diff --git a/drivers/hwmon/tmp102.c b/drivers/hwmon/tmp102.c
+index 2bf496a62206..e271556efe0b 100644
+--- a/drivers/hwmon/tmp102.c
++++ b/drivers/hwmon/tmp102.c
+@@ -141,7 +141,7 @@ static umode_t tmp102_is_visible(const void *data, enum hwmon_sensor_types type,
+ 	}
+ }
  
--static const struct hwmon_channel_info *sy7636a_info[] = {
-+static const struct hwmon_channel_info * const sy7636a_info[] = {
- 	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
- 	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
- 	NULL
+-static const struct hwmon_channel_info *tmp102_info[] = {
++static const struct hwmon_channel_info * const tmp102_info[] = {
+ 	HWMON_CHANNEL_INFO(chip,
+ 			   HWMON_C_REGISTER_TZ),
+ 	HWMON_CHANNEL_INFO(temp,
 -- 
 2.34.1
 
