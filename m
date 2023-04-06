@@ -2,25 +2,25 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6184C7618D
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 20:41:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD123C7618D
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Apr 2023 20:42:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240183AbjDFUlw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 Apr 2023 16:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        id S239902AbjDFUmK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Apr 2023 16:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240225AbjDFUlS (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 16:41:18 -0400
+        with ESMTP id S240190AbjDFUlj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Apr 2023 16:41:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1575EB74D;
-        Thu,  6 Apr 2023 13:37:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B0FAD18;
+        Thu,  6 Apr 2023 13:38:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A759D60F7E;
-        Thu,  6 Apr 2023 20:37:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CBD2C433EF;
-        Thu,  6 Apr 2023 20:37:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2B5160F77;
+        Thu,  6 Apr 2023 20:38:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99A21C433D2;
+        Thu,  6 Apr 2023 20:38:25 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -70,9 +70,9 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 49/68] hwmon: oxp-sensors: constify pointers to hwmon_channel_info
-Date:   Thu,  6 Apr 2023 22:35:30 +0200
-Message-Id: <20230406203530.3012191-8-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 50/68] hwmon: peci: constify pointers to hwmon_channel_info
+Date:   Thu,  6 Apr 2023 22:38:12 +0200
+Message-Id: <20230406203821.3012402-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
@@ -87,22 +87,36 @@ const for safety.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/hwmon/oxp-sensors.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hwmon/peci/cputemp.c  | 2 +-
+ drivers/hwmon/peci/dimmtemp.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-index 36872b57912a..ae67207030e8 100644
---- a/drivers/hwmon/oxp-sensors.c
-+++ b/drivers/hwmon/oxp-sensors.c
-@@ -239,7 +239,7 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
+index 87d56f0fc888..e5b65a382772 100644
+--- a/drivers/hwmon/peci/cputemp.c
++++ b/drivers/hwmon/peci/cputemp.c
+@@ -447,7 +447,7 @@ static const struct hwmon_ops peci_cputemp_ops = {
+ 	.read = cputemp_read,
+ };
+ 
+-static const struct hwmon_channel_info *peci_cputemp_info[] = {
++static const struct hwmon_channel_info * const peci_cputemp_info[] = {
+ 	HWMON_CHANNEL_INFO(temp,
+ 			   /* Die temperature */
+ 			   HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX |
+diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
+index 0a633bda3668..ed968401f93c 100644
+--- a/drivers/hwmon/peci/dimmtemp.c
++++ b/drivers/hwmon/peci/dimmtemp.c
+@@ -300,7 +300,7 @@ static int create_dimm_temp_label(struct peci_dimmtemp *priv, int chan)
+ 	return 0;
  }
  
- /* Known sensors in the OXP EC controllers */
--static const struct hwmon_channel_info *oxp_platform_sensors[] = {
-+static const struct hwmon_channel_info * const oxp_platform_sensors[] = {
- 	HWMON_CHANNEL_INFO(fan,
- 			   HWMON_F_INPUT),
- 	HWMON_CHANNEL_INFO(pwm,
+-static const struct hwmon_channel_info *peci_dimmtemp_temp_info[] = {
++static const struct hwmon_channel_info * const peci_dimmtemp_temp_info[] = {
+ 	HWMON_CHANNEL_INFO(temp,
+ 			   [0 ... DIMM_NUMS_MAX - 1] = HWMON_T_LABEL |
+ 				HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT),
 -- 
 2.34.1
 
