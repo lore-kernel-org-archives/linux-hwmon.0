@@ -2,67 +2,113 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B119EC6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 15:07:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 360A5C6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 15:29:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240908AbjDGPHo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Apr 2023 11:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
+        id S229454AbjDGP3q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Apr 2023 11:29:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234274AbjDGPHY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 11:07:24 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B33BC154;
-        Fri,  7 Apr 2023 08:06:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=EjvgYygcvsa+UmMq8t7f5AymWcOYA2y3M+AdeTsVTc4=; b=tLwvxgNy+6ErtRYM1q1/V9ArHY
-        Ppg2Q5lqzsZOQxY0ldl4LAGizqryYzfNIG7hbaQI2qpFllb8BTshQ62V0F/Z+e5eBKG/RZAlPCD7+
-        dwEXZBjKCX1vcBpDI8yhAKCm+YpCBmVFg/yutogs0MsAM/VWha47WxwVwpGGquTprZyI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pknej-009jYv-Ff; Fri, 07 Apr 2023 17:05:37 +0200
-Date:   Fri, 7 Apr 2023 17:05:37 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
+        with ESMTP id S229717AbjDGP3q (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 11:29:46 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9026A5A;
+        Fri,  7 Apr 2023 08:29:45 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17aeb49429eso45993767fac.6;
+        Fri, 07 Apr 2023 08:29:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680881384; x=1683473384;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W6QmnGy4Q8kGJSQkc03Hd5Fyd7ynCqj61KvTIEzBUaQ=;
+        b=pQd/tPiKlYZC+eNmpJyCjegxQ87sdjhxl2Tz4XT2lAGislqXeYGCJv/ZaA1yUHwJe6
+         nySGv9m0vAstXY/OHApR3OE9D2XiEAIsSQB/WcXh5wfY4Tvijp6nRA15k4320IUsBhNT
+         U1qnAImGcl5qZrdZaroG24nPT0aXOltyMtPwIfCCF0+u0GVPzgbMYk8CZTGEneVh7YtO
+         BCSMXgBWeAgCW9fUZSMaKUfZ2JT+yVuduVdijqY0iLaNC+7zdlTaRw02H+CLUvPLk8SW
+         lJpBCbZ2OzSaBfegb4xTNZ1sK7C78IzMdcTbx660NEFA97+FcJWIKJpWy12V3cfmKmhZ
+         A+9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680881384; x=1683473384;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W6QmnGy4Q8kGJSQkc03Hd5Fyd7ynCqj61KvTIEzBUaQ=;
+        b=LHfb3hzll2OjwLvLu6Fl335BZGfSnZiBCynJ/1bbg3KrgbbqjewD5EwN1rzHxWlyqr
+         NtBxKHU+1W9a42lNSdipGOd/SjVuwPkvlxgGXNAHjDoR9xjX4lr3L757OZ36lEM9+EC4
+         NbEnyqVxFSwuOI9bsO66aUxmmGsWI726xP2hhUTB+SkW+bubBgHL4upGLpFaxLhRcDLp
+         lq0Kum9VOr7jGgCQjbcPbs7Smsb1Iu2Ahu5bQRHnOiLSDJI/4YRoFLmKSoSkMJV376N3
+         o/+DpXHmBjxjBBKyR58K6h3933fxGGtseSmxN28AZ0ztJycbRbnAkugy7woAIp7u9D6v
+         Hkpw==
+X-Gm-Message-State: AAQBX9fAmmpbPf7e6ruKq87vM9/Nh81OChu6uBAFuptTZSHYyw1O53+U
+        ak8f8hWhagUwyNTdqhU4VI0qzPHOCbA=
+X-Google-Smtp-Source: AKy350Y7vPsy3E2Sc+Xg9CgybjXGySasdsV2+qnJsJf2t2y5sNE3Y+N7PoJ613x774ZIbeLHw8pteA==
+X-Received: by 2002:a05:6870:548d:b0:180:be0e:299f with SMTP id f13-20020a056870548d00b00180be0e299fmr1725438oan.0.1680881384199;
+        Fri, 07 Apr 2023 08:29:44 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u4-20020a4a9e84000000b00524faf3d2d7sm1710179ook.41.2023.04.07.08.29.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 08:29:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 7 Apr 2023 08:29:41 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Igor Russkikh <irusskikh@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 8/8] net: phy: sfp: constify pointers to
- hwmon_channel_info
-Message-ID: <c9a547ce-6781-433b-8e8e-c9a1b7fc52d6@lunn.ch>
-References: <20230407145911.79642-1-krzysztof.kozlowski@linaro.org>
- <20230407145911.79642-8-krzysztof.kozlowski@linaro.org>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] MAINTAINERS: hwmon: drop Agathe Porte
+Message-ID: <b3c1bab7-bc57-4fde-ac5d-11d638d74c89@roeck-us.net>
+References: <20230406204750.3017850-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230407145911.79642-8-krzysztof.kozlowski@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230406204750.3017850-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 04:59:11PM +0200, Krzysztof Kozlowski wrote:
-> Statically allocated array of pointed to hwmon_channel_info can be made
-> const for safety.
+On Thu, Apr 06, 2023 at 10:47:50PM +0200, Krzysztof Kozlowski wrote:
+> Mails to Agathe Porte bounce ("550 5.4.1 Recipient address rejected:
+> Access denied. AS(201806281)").
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Applied.
 
-    Andrew
+Thanks,
+Guenter
+
+> 
+> Changes since v1:
+> 1. Update also bindings.
+> ---
+>  Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml | 2 +-
+>  MAINTAINERS                                            | 1 -
+>  2 files changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+> index e7493e25a7d2..f9c00cbb2806 100644
+> --- a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: TMP464 and TMP468 temperature sensors
+>  
+>  maintainers:
+> -  - Agathe Porte <agathe.porte@nokia.com>
+> +  - Guenter Roeck <linux@roeck-us.net>
+>  
+>  description: |
+>    ±0.0625°C Remote and Local temperature sensor
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 99b665e85f0a..7f0b8076f144 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -21173,7 +21173,6 @@ F:	Documentation/hwmon/tmp401.rst
+>  F:	drivers/hwmon/tmp401.c
+>  
+>  TMP464 HARDWARE MONITOR DRIVER
+> -M:	Agathe Porte <agathe.porte@nokia.com>
+>  M:	Guenter Roeck <linux@roeck-us.net>
+>  L:	linux-hwmon@vger.kernel.org
+>  S:	Maintained
