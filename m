@@ -2,25 +2,25 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A635C77B6C
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 15:05:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C2BBC77B6C
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 15:05:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240523AbjDGPFi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Apr 2023 11:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
+        id S240652AbjDGPFn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Apr 2023 11:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240519AbjDGPFJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 11:05:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFD8E44;
-        Fri,  7 Apr 2023 08:04:20 -0700 (PDT)
+        with ESMTP id S240647AbjDGPFK (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 11:05:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36990BB92;
+        Fri,  7 Apr 2023 08:04:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 660FA649A1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B268E65204;
+        Fri,  7 Apr 2023 15:03:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58E8EC433EF;
         Fri,  7 Apr 2023 15:03:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7018C4339B;
-        Fri,  7 Apr 2023 15:03:46 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas@weissschuh.net>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -32,9 +32,9 @@ To:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas@weissschuh.net>,
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH 2/4] platform/x86: hp: constify pointers to hwmon_channel_info
-Date:   Fri,  7 Apr 2023 17:03:37 +0200
-Message-Id: <20230407150339.80218-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 3/4] platform/x86: system76: constify pointers to hwmon_channel_info
+Date:   Fri,  7 Apr 2023 17:03:38 +0200
+Message-Id: <20230407150339.80218-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230407150339.80218-1-krzysztof.kozlowski@linaro.org>
 References: <20230407150339.80218-1-krzysztof.kozlowski@linaro.org>
@@ -60,22 +60,22 @@ Cc: Jean Delvare <jdelvare@suse.com>
 Cc: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
 ---
- drivers/platform/x86/hp/hp-wmi.c | 2 +-
+ drivers/platform/x86/system76_acpi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
-index 873f59c3e280..7b6b1d089d72 100644
---- a/drivers/platform/x86/hp/hp-wmi.c
-+++ b/drivers/platform/x86/hp/hp-wmi.c
-@@ -1482,7 +1482,7 @@ static int hp_wmi_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
- 	}
- }
+diff --git a/drivers/platform/x86/system76_acpi.c b/drivers/platform/x86/system76_acpi.c
+index 97f5a8255b91..fc4708fa6ebe 100644
+--- a/drivers/platform/x86/system76_acpi.c
++++ b/drivers/platform/x86/system76_acpi.c
+@@ -581,7 +581,7 @@ static const struct hwmon_ops thermal_ops = {
+ };
  
--static const struct hwmon_channel_info *info[] = {
-+static const struct hwmon_channel_info * const info[] = {
- 	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT, HWMON_F_INPUT),
- 	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_ENABLE),
- 	NULL
+ // Allocate up to 8 fans and temperatures
+-static const struct hwmon_channel_info *thermal_channel_info[] = {
++static const struct hwmon_channel_info * const thermal_channel_info[] = {
+ 	HWMON_CHANNEL_INFO(fan,
+ 		HWMON_F_INPUT | HWMON_F_LABEL,
+ 		HWMON_F_INPUT | HWMON_F_LABEL,
 -- 
 2.34.1
 
