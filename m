@@ -2,30 +2,30 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D28DDC6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 15:07:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33AA7C77B61
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 15:07:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240811AbjDGPHX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Apr 2023 11:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
+        id S240895AbjDGPHl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Apr 2023 11:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240812AbjDGPHI (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 11:07:08 -0400
+        with ESMTP id S232416AbjDGPHW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 11:07:22 -0400
 Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15997C148;
-        Fri,  7 Apr 2023 08:06:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFB0C66A;
+        Fri,  7 Apr 2023 08:06:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
         s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
         Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
         Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Nynts4bd1r/OJX58vs98NUFmFpErJOQBAs3fbPELwGc=; b=piSCkpiloC6O7ugcApgrmNmSGL
-        WHCrKUsUciXH/kr/vMTKxwMNBCn2TLaNJvsVXbVn+fKkaJU6bB05jZZW7HKMOP8CrvJ1rsN6B/zht
-        g0+69ZmMItnliJt3sgNqjpm4yESW373MIyVB2+tbU+BwPZHy7csquDgvfPrTvwWVGxHk=;
+        bh=DYFkdCSDS4Ml86wR/rzT/lksVBmTkBHp387dpNlv8X8=; b=sk9P3KwNaBmaH2Vp3bL5s6TvB7
+        DZ8cgu9LPNMfhMLNKsjPPgv1j0wP6ro04VPJNvYKXoPLD/hg53c2e6WiY29WYMvPQUdESJMy0nhde
+        QVCkhB6+4NChbqBXwu1Ol3je+xK3SVgkMGQFlQxRSK3YTa3FcD4RlzOfskGWC0Daw/FQ=;
 Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
         (envelope-from <andrew@lunn.ch>)
-        id 1pkneD-009jXt-4I; Fri, 07 Apr 2023 17:05:05 +0200
-Date:   Fri, 7 Apr 2023 17:05:05 +0200
+        id 1pkneM-009jYG-P9; Fri, 07 Apr 2023 17:05:14 +0200
+Date:   Fri, 7 Apr 2023 17:05:14 +0200
 From:   Andrew Lunn <andrew@lunn.ch>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Igor Russkikh <irusskikh@marvell.com>,
@@ -44,20 +44,20 @@ Cc:     Igor Russkikh <irusskikh@marvell.com>,
         linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 6/8] net: phy: mxl: constify pointers to
+Subject: Re: [PATCH 7/8] net: phy: nxp-tja11xx: constify pointers to
  hwmon_channel_info
-Message-ID: <5308e96e-d535-449a-b3e5-f491b5592b63@lunn.ch>
+Message-ID: <6772fccf-df6f-43b6-b5d5-3a92c052fa37@lunn.ch>
 References: <20230407145911.79642-1-krzysztof.kozlowski@linaro.org>
- <20230407145911.79642-6-krzysztof.kozlowski@linaro.org>
+ <20230407145911.79642-7-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230407145911.79642-6-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230407145911.79642-7-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 04:59:09PM +0200, Krzysztof Kozlowski wrote:
+On Fri, Apr 07, 2023 at 04:59:10PM +0200, Krzysztof Kozlowski wrote:
 > Statically allocated array of pointed to hwmon_channel_info can be made
 > const for safety.
 > 
