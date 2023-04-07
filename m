@@ -2,101 +2,102 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9498CC6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 18:05:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1478C6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 18:08:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbjDGSFS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Apr 2023 14:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
+        id S230144AbjDGSIl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Apr 2023 14:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbjDGSFP (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 14:05:15 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4209C646;
-        Fri,  7 Apr 2023 11:05:09 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id bx42so16033355oib.6;
-        Fri, 07 Apr 2023 11:05:09 -0700 (PDT)
+        with ESMTP id S229845AbjDGSIk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 14:08:40 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F5FAF0D;
+        Fri,  7 Apr 2023 11:08:34 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id bi31so31568717oib.9;
+        Fri, 07 Apr 2023 11:08:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680890709; x=1683482709;
+        d=gmail.com; s=20210112; t=1680890914; x=1683482914;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pVWWNnevGYcIX44/9Rtg07AkMRMvtlyvu+P6BaPgs4U=;
-        b=pFSH4am2cfu0NpsQdFED1amUu7I+RuyiHsbwrU+dPzLVXwtV9eJjTOTNA8rB+tvZI5
-         6yQHEe/c7Zzm+G/C4TuH/sTU4qAG74F/+xMq+qsj+Zr6t5ndmOBPab+1itwy13NA9DAb
-         FykOKF7xIBqBc8mKZ4mXesIVc5L49vcvbXj5rmRayQD80K+pc+tkHHvzbQYyrouyUz3E
-         LBPoLVoL0Hmb3ErTKlQ/JDnpl0b2H4LT+Kdlr+Zq50Aj7iLFVSFy1PQYccnnrD6xCPhF
-         +mFYc6dhjKLpKL1JwMNwA17PX9Exv1rgUohrM3T8keLOwm2RXgKvwCQatBLYTjHxmJ3I
-         vi9g==
+        bh=OyNeQjqjXmdCX5Ucvov2m/XFmLigHPT0qRyQLFkEqn8=;
+        b=TNdSS3Yk8QukDtK86HPd/Qc2P2QkU8X3Na+0m3EtKGrSfCQcutWWJGtGO870giTKJb
+         D+izeuDlG8xMPImwRiHKIWP0KJJ8t5O5c0yx4mNU7DTbcwTay1U4LZioZhtI3Me2sAqT
+         xb2y8xszZ4LQhYUAGjIt99g17l49B6i44E3TASX0DRj4D+l3vMFF+3THFkcyAoEKsa0Z
+         ylpUziCtBKKmgsFwuSkQYsEU01kVpsD5AD8v4daFRlMVEzEI/wggLpihlOJh/DHpGwFt
+         mrl5gkQ/BSsC38P1pYxEMWVnnWu8sybbqN9cpn3TXKKZ9xDmrNJam9ua8LEPGxwO5hF1
+         SVzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680890709; x=1683482709;
+        d=1e100.net; s=20210112; t=1680890914; x=1683482914;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pVWWNnevGYcIX44/9Rtg07AkMRMvtlyvu+P6BaPgs4U=;
-        b=xx8/04IVuwEMkQRq+N8gJ4VI7V5SBJN9eZqffcY1NuedDZp0w7hRP43WcPf/jd1FVI
-         PYNZM/RiHXgVyAb81/T9bOqjw+R7EQfi/41StH+Uvt88d4+B6vbn/M/8VwBeRCXzxXU2
-         96XTzqwYRxTwFtmN2n/b7BdXoiMNlXAaoNYcaX8Entk05vqngZtaEAwcoz/ZhpI/Jtpx
-         e9WhA7Q/aZpI5B26cF3ObYkYdZ0HUBuUnnXbkzJqRH5WJuMVZFWBp/cyTRcxJTIDlyBq
-         FAsokthjnKvLAegfZb1nPv9sxN/KzU0OeDmAmU3+zGxyrGKT67Jv3QMCSH77oH9H74IF
-         jchA==
-X-Gm-Message-State: AAQBX9f6DpqJnLDHc+3Cm6HI2YftChwUZs74BE5jhx8RheG5xLVL0Rev
-        64eBdEfs5opuq+KMyxi/bgg=
-X-Google-Smtp-Source: AKy350avvLjqWh3OYQY55XilU6JN/EcZ//jxqILAkddASItdct3Il6r91YjXbWqCZs0vshJmWWX86g==
-X-Received: by 2002:aca:1e1a:0:b0:386:e3f8:2c6b with SMTP id m26-20020aca1e1a000000b00386e3f82c6bmr1152904oic.11.1680890708884;
-        Fri, 07 Apr 2023 11:05:08 -0700 (PDT)
+        bh=OyNeQjqjXmdCX5Ucvov2m/XFmLigHPT0qRyQLFkEqn8=;
+        b=7PpkpbJz78P8dodGZ4NfW6toLSoyfh0DmkgO2kUw0sU3UXJi029dYmlMM/6Gvdi4Zu
+         zNLpeDps3vUHERtW9bjVt5DzoFSH4DV/mO14VS1ebDOPVC/l4RDW53JGsKd0DmdTXULN
+         iZMm+DTOeOAQeA0ccyZUHEIK6c01syUX6rV9VY+fShVLEvo66bxt7I7c9nvA543LxL3Y
+         exphh0o9ZU0KoT1GW2olDHARdqCWVaO7SlZ8rFgpnrMZySkRbAYMeU0qmUCW662Kb5rY
+         4bIpdCg9H1Bm2c3FMe7r7XlNfypqZsWtKc/6lYTpxn1gi92oahe1UnQCtZN3iy/MNhth
+         QJmQ==
+X-Gm-Message-State: AAQBX9fVhh42/T+TVHSa6GXaK5cfAs1Pv2/TcXZlBbOOdWIPJXMDKvvA
+        4Dz8gJ9OVu7Tb3tfCOWILyk=
+X-Google-Smtp-Source: AKy350ZPJGYf188pep6pTQAz0ddSy5x2ncHueGH1lsLIwzcQ23DP1hn7SRmnZ2Jr05GRhE8SbdbIjA==
+X-Received: by 2002:a05:6808:351:b0:389:7d66:131a with SMTP id j17-20020a056808035100b003897d66131amr1433446oie.0.1680890914199;
+        Fri, 07 Apr 2023 11:08:34 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a6-20020a056808120600b003874631e249sm1899179oil.36.2023.04.07.11.05.07
+        by smtp.gmail.com with ESMTPSA id o11-20020acaf00b000000b0037fa035f4f3sm1899688oih.53.2023.04.07.11.08.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 11:05:08 -0700 (PDT)
+        Fri, 07 Apr 2023 11:08:33 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 7 Apr 2023 11:05:06 -0700
+Date:   Fri, 7 Apr 2023 11:08:32 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jakub Kicinski <kuba@kernel.org>
+To:     Sakari Ailus <sakari.ailus@iki.fi>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Igor Russkikh <irusskikh@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 1/8] net: netronome: constify pointers to
+Subject: Re: [PATCH] media: i2c: video: constify pointers to
  hwmon_channel_info
-Message-ID: <3a0391e7-21f6-432a-9872-329e298e1582@roeck-us.net>
-References: <20230407145911.79642-1-krzysztof.kozlowski@linaro.org>
- <20230407084745.3aebbc9d@kernel.org>
+Message-ID: <2294f1fa-019e-4278-804a-3a9ea807b23f@roeck-us.net>
+References: <20230407150015.79715-1-krzysztof.kozlowski@linaro.org>
+ <ZDBP7vG498h2FQ7N@valkosipuli.retiisi.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230407084745.3aebbc9d@kernel.org>
+In-Reply-To: <ZDBP7vG498h2FQ7N@valkosipuli.retiisi.eu>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 08:47:45AM -0700, Jakub Kicinski wrote:
-> On Fri,  7 Apr 2023 16:59:04 +0200 Krzysztof Kozlowski wrote:
+On Fri, Apr 07, 2023 at 08:16:30PM +0300, Sakari Ailus wrote:
+> Hi Krzysztof,
+> 
+> On Fri, Apr 07, 2023 at 05:00:15PM +0200, Krzysztof Kozlowski wrote:
+> > Statically allocated array of pointed to hwmon_channel_info can be made
+> > const for safety.
+> > 
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > 
+> > ---
+> > 
 > > This depends on hwmon core patch:
 > > https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
+> > 
+> > Therefore I propose this should also go via hwmon tree.
 > 
-> That patch should have been put on a stable branch we can pull
-> and avoid any conflict risks... Next time?
+> Works for me. Please add:
+> 
 
-Yes, and I don't feel comfortable applying all those patches through
-the hwmon tree since I have zero means to test them.
+But not for me. Krzysztof jumped the gun here a bit.
+I do not feel comfortable applying patches for 10+ subsystem
+branches through hwmon. This is asking for trouble.
 
 I created a stable branch at
-
 git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-const
 
-Feel free to use it.
+which everyone may use to merge the pre-requisite patch, or wait until
+after the next merge window. 
 
 Guenter
