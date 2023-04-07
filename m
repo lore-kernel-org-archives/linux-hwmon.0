@@ -2,118 +2,117 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E978C76196
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 06:38:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9786DC77B6C
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 12:55:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbjDGGid (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Apr 2023 02:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
+        id S233077AbjDGMy7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Apr 2023 08:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDGGib (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 02:38:31 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8435B88;
-        Thu,  6 Apr 2023 23:38:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680849510; x=1712385510;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=vVTkW3Ec4gZLzzZYVf3Rwf4yfSnUAronz8v0/X06PYw=;
-  b=oINbUe+sO0aveyOOut7kmDcW0atWqwKhK/RQkiyPvt4lnIkhBs85s5+c
-   8gtVcRgphaax3NmzmtLKXmT4E+5eszyFVCZiTz//chs08h62IOCNE+fIB
-   vH8Opc8fpxNYqwlEwNUQMOJhvz6ogd/21gpTc6M4Li37uVR7HznljYkxu
-   Nbh77/O4FnZ6Hj1TA40H78wCP1YbKQS02CetJ6p+O9PEoM4H8rRhg1fpp
-   j2u63xC/bV8Ovf/RGZpb0I9JJ0r3AJpCzi/5RDGYMxLzj4LaII5mvrj/f
-   n9IvzyiXAgDfzXIGkyVuqooXntLwBinr16QYYbwxxBZBzXoHInAjgdLST
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="370770656"
-X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="370770656"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 23:38:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="664790120"
-X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="664790120"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga006.jf.intel.com with ESMTP; 06 Apr 2023 23:38:26 -0700
-Date:   Fri, 7 Apr 2023 14:26:34 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org,
-        Russ Weight <russell.h.weight@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] mfd: intel-m10-bmc: Move core symbols to own
- namespace
-Message-ID: <ZC+3msi6ovoF55tr@yilunxu-OptiPlex-7050>
-References: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com>
- <20230405080152.6732-2-ilpo.jarvinen@linux.intel.com>
+        with ESMTP id S231338AbjDGMyw (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 08:54:52 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7675255;
+        Fri,  7 Apr 2023 05:54:51 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-17aceccdcf6so45513966fac.9;
+        Fri, 07 Apr 2023 05:54:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680872090; x=1683464090;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G0VdGwQhJdbIBIDImhMZQQz4N3I4RfbJCBc+igru00U=;
+        b=CCPSUOOsF4Fa2gC+3YgCT+EPoFFb2/IEz6LeO9YglqLf7IxcsFigEq3G6xD8gQLEHZ
+         7SW0IIpbUpGLsD1GsTHdODmR/cruRwKr00bED/ItFC3vagPCsx8+jSRUPb6qO82l0+47
+         meDveEN1zB1qM64eJb0H/CqBr4wG5Sdhi4WpmBXcgjY+VRN6oH622LeVxLtdGXHohQL3
+         HSedoBhMo/EeSk3V77tM/TMPKpbD3xXK5satWzqz/lqY0L6XJinHyKC5ya44OlKVJtZr
+         qx4to0kQMPc79bp7PaVlY1qdYdE8b0Wecj38taadpzjKsiqpdbmB7Lohdn4iUrw6gUbp
+         COMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680872090; x=1683464090;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G0VdGwQhJdbIBIDImhMZQQz4N3I4RfbJCBc+igru00U=;
+        b=7MPxBL9An8vqDt/kBRiMqy58Na2EfSuAhf/9jC3m2BYxDJjyvjrWyhWdGroXIAGKm+
+         gADRQu2s4ugpJhRkrjOIW8gWzHn/lmimLSbojJg6TziACrwOw6tAgCdVQ2bLZ+dP9ij0
+         djn69ETBP/3AC40YLHBefwzpoAbr5EhlO+NNYTVHDVr57/jwpXrKphHlkrAOxEFxgleR
+         dP5HMuVAkEYpSJBojUhjXGFeKdrRxhKy1QFWOgqLHi7TuPRdsoGeO0BIExnxYAGfysa+
+         fhgGU5faWbe5pNCgp2njfKvOQXcl4j2JOZr8xrF+zntA2wuiXzJdVuOZIGZs6NpLO6X2
+         ilNw==
+X-Gm-Message-State: AAQBX9dDRbscONcQzuFqaLw3a3b27limT85b1YkiXwFe8dlJlptoQfC6
+        Cdh5xjIHUc1MkK/Sxh3HEZqounFEYSw=
+X-Google-Smtp-Source: AKy350Y4E6V2TBoEvM494LQDPU0eBT0J9y//eSR2b0TfMKMCBbtUPlCH1pn7r5jcuwiIvl7nGFhnrw==
+X-Received: by 2002:a05:6870:b421:b0:184:256:bf57 with SMTP id x33-20020a056870b42100b001840256bf57mr1352638oap.9.1680872090327;
+        Fri, 07 Apr 2023 05:54:50 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t21-20020a0568301e3500b0069f1774cde8sm1642412otr.71.2023.04.07.05.54.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 05:54:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e256d281-49a5-2d9a-7def-fd68e177e926@roeck-us.net>
+Date:   Fri, 7 Apr 2023 05:54:48 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230405080152.6732-2-ilpo.jarvinen@linux.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US
+To:     James Seo <james@equiv.tech>, Armin Wolf <W_Armin@gmx.de>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230406152321.42010-1-james@equiv.tech>
+ <2257deba-187b-82d2-181c-f1fed08a2ff7@gmx.de> <ZC+sgnuy5bssD1DN@vb-22lts>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2] hwmon: add HP WMI Sensors driver
+In-Reply-To: <ZC+sgnuy5bssD1DN@vb-22lts>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2023-04-05 at 11:01:49 +0300, Ilpo Järvinen wrote:
-> Create INTEL_M10_BMC_CORE namespace for symbols exported by
-> intel-m10-bmc-core.
-
-Is it necessary for handshake register, or just an independent
-improvement?
-
+On 4/6/23 22:39, James Seo wrote:
+> Hi,
 > 
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->  drivers/mfd/intel-m10-bmc-core.c | 2 +-
->  drivers/mfd/intel-m10-bmc-pmci.c | 1 +
->  drivers/mfd/intel-m10-bmc-spi.c  | 1 +
->  3 files changed, 3 insertions(+), 1 deletion(-)
+>> is it guaranteed that faulty sensors wont become operational later?
+>> Also filtering out such sensors would make the support for the hwmon_temp_fault and
+>> hwmon_fan_fault attributes meaningless.
 > 
-> diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
-> index dac9cf7bcb4a..b94412813887 100644
-> --- a/drivers/mfd/intel-m10-bmc-core.c
-> +++ b/drivers/mfd/intel-m10-bmc-core.c
-> @@ -98,7 +98,7 @@ const struct attribute_group *m10bmc_dev_groups[] = {
->  	&m10bmc_group,
->  	NULL,
->  };
-> -EXPORT_SYMBOL_GPL(m10bmc_dev_groups);
-> +EXPORT_SYMBOL_NS_GPL(m10bmc_dev_groups, INTEL_M10_BMC_CORE);
->  
->  int m10bmc_dev_init(struct intel_m10bmc *m10bmc, const struct intel_m10bmc_platform_info *info)
-
-Why this function is not included in namespace?
-
-Thanks,
-Yilun
-
->  {
-> diff --git a/drivers/mfd/intel-m10-bmc-pmci.c b/drivers/mfd/intel-m10-bmc-pmci.c
-> index 8821f1876dd6..0392ef8b57d8 100644
-> --- a/drivers/mfd/intel-m10-bmc-pmci.c
-> +++ b/drivers/mfd/intel-m10-bmc-pmci.c
-> @@ -453,3 +453,4 @@ module_dfl_driver(m10bmc_pmci_driver);
->  MODULE_DESCRIPTION("MAX10 BMC PMCI-based interface");
->  MODULE_AUTHOR("Intel Corporation");
->  MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(INTEL_M10_BMC_CORE);
-> diff --git a/drivers/mfd/intel-m10-bmc-spi.c b/drivers/mfd/intel-m10-bmc-spi.c
-> index 957200e17fed..edd266557ab9 100644
-> --- a/drivers/mfd/intel-m10-bmc-spi.c
-> +++ b/drivers/mfd/intel-m10-bmc-spi.c
-> @@ -166,3 +166,4 @@ MODULE_DESCRIPTION("Intel MAX 10 BMC SPI bus interface");
->  MODULE_AUTHOR("Intel Corporation");
->  MODULE_LICENSE("GPL v2");
->  MODULE_ALIAS("spi:intel-m10-bmc");
-> +MODULE_IMPORT_NS(INTEL_M10_BMC_CORE);
-> -- 
-> 2.30.2
+> Good point. I can't be certain, but the MOF does seem to imply that
+> sensors can indeed be faulty on just a temporary basis.
 > 
+
+Your current code would explicitly exclude faulty fans from being listed,
+which does not exactly sound like a good idea.
+
+> I'll filter out only the sensors that are "Not Connected" at probe
+> time. My thinking is, even if these might turn into connected sensors
+> later, that would mean the user is e.g. hot-plugging a fan (!), and
+> keeping them could result in a large number (~10 on my Z420) of
+> pointless extra channels. And this would also match the behavior of
+> HP's official utility.
+> 
+Ultimately that is an implementation decision. Are the sensors hot-pluggable ?
+If so, how does HP's utility handle the insertion or removal of a sensor (fan) ?
+
+Either case, it is ok with me if disconnected sensors are not listed.
+Not listing faulty sensors seems like a bad idea, though.
+
+Guenter
+
+> Does that seem reasonable? Or did you mean that I shouldn't filter,
+> and leave disconnected sensors in like some other hwmon drivers do?
+> 
+>> The sanity check for HP_WMI_NUMERIC_SENSOR_GUID is unnecessary, the WMI driver core already makes sure that your driver
+>> is only matched with WMI devices containing HP_WMI_NUMERIC_SENSOR_GUID.
+>> As for the sanity check regarding HP_WMI_BIOS_GUID: this WMI GUID is not used inside the driver. Since WMI GUIDs are expected
+>> to be unique, checking for HP_WMI_BIOS_GUID (which AFAIK is used by the HP-BIOSCFG driver) without intending to use it is
+>> meaningless.
+> 
+> In that case, I'll gladly remove the checks. I was following the
+> example of the platform/x86/hp-wmi driver, which checks for that GUID
+> and another at module load.
+> 
+> Thanks for reviewing.
+> 
+> James
+
