@@ -2,113 +2,121 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 360A5C6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 15:29:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7BF8C6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 15:47:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbjDGP3q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Apr 2023 11:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
+        id S233006AbjDGPrW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Apr 2023 11:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjDGP3q (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 11:29:46 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9026A5A;
-        Fri,  7 Apr 2023 08:29:45 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17aeb49429eso45993767fac.6;
-        Fri, 07 Apr 2023 08:29:45 -0700 (PDT)
+        with ESMTP id S231868AbjDGPrV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 11:47:21 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF5FAD21;
+        Fri,  7 Apr 2023 08:47:20 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id r16so31300649oij.5;
+        Fri, 07 Apr 2023 08:47:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680881384; x=1683473384;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W6QmnGy4Q8kGJSQkc03Hd5Fyd7ynCqj61KvTIEzBUaQ=;
-        b=pQd/tPiKlYZC+eNmpJyCjegxQ87sdjhxl2Tz4XT2lAGislqXeYGCJv/ZaA1yUHwJe6
-         nySGv9m0vAstXY/OHApR3OE9D2XiEAIsSQB/WcXh5wfY4Tvijp6nRA15k4320IUsBhNT
-         U1qnAImGcl5qZrdZaroG24nPT0aXOltyMtPwIfCCF0+u0GVPzgbMYk8CZTGEneVh7YtO
-         BCSMXgBWeAgCW9fUZSMaKUfZ2JT+yVuduVdijqY0iLaNC+7zdlTaRw02H+CLUvPLk8SW
-         lJpBCbZ2OzSaBfegb4xTNZ1sK7C78IzMdcTbx660NEFA97+FcJWIKJpWy12V3cfmKmhZ
-         A+9w==
+        d=gmail.com; s=20210112; t=1680882439; x=1683474439;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=qB2M0BoOW9oaDa+VZga2Sa+0CVpbvNAMFJ6jBr8adc4=;
+        b=W9vuUYRI92ldZRHzq2CMZKG5ZLeulX1EFpCXq2jVtrk7gb8aed3kzeM6l9/9xBKKoG
+         3ZempnAh9kt6a5zjPFU0VqympiQCEQwprHwGPEL/jhzVSLiEd/USo49RfBUQvTs59sgJ
+         BPq1d0xXBJcEBxH+FIfpQwJInS+ZmAUdU2+VQBIKjpfT44ZOJqNG0cAjEhyOdydmotsc
+         VzmWEMD9ysXraekT6BPp5NFsTI/dbX8jM4/E7O+h37gPn2RJ7BT9nqa/hg6Vk1c8AagF
+         5ma5njPBTlwOFShFIVFXCmgTPPqFG5pyE3/RK2wKHG2ekZKyPhVXFMy88621KGrZ+BZG
+         O6hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680881384; x=1683473384;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W6QmnGy4Q8kGJSQkc03Hd5Fyd7ynCqj61KvTIEzBUaQ=;
-        b=LHfb3hzll2OjwLvLu6Fl335BZGfSnZiBCynJ/1bbg3KrgbbqjewD5EwN1rzHxWlyqr
-         NtBxKHU+1W9a42lNSdipGOd/SjVuwPkvlxgGXNAHjDoR9xjX4lr3L757OZ36lEM9+EC4
-         NbEnyqVxFSwuOI9bsO66aUxmmGsWI726xP2hhUTB+SkW+bubBgHL4upGLpFaxLhRcDLp
-         lq0Kum9VOr7jGgCQjbcPbs7Smsb1Iu2Ahu5bQRHnOiLSDJI/4YRoFLmKSoSkMJV376N3
-         o/+DpXHmBjxjBBKyR58K6h3933fxGGtseSmxN28AZ0ztJycbRbnAkugy7woAIp7u9D6v
-         Hkpw==
-X-Gm-Message-State: AAQBX9fAmmpbPf7e6ruKq87vM9/Nh81OChu6uBAFuptTZSHYyw1O53+U
-        ak8f8hWhagUwyNTdqhU4VI0qzPHOCbA=
-X-Google-Smtp-Source: AKy350Y7vPsy3E2Sc+Xg9CgybjXGySasdsV2+qnJsJf2t2y5sNE3Y+N7PoJ613x774ZIbeLHw8pteA==
-X-Received: by 2002:a05:6870:548d:b0:180:be0e:299f with SMTP id f13-20020a056870548d00b00180be0e299fmr1725438oan.0.1680881384199;
-        Fri, 07 Apr 2023 08:29:44 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680882439; x=1683474439;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qB2M0BoOW9oaDa+VZga2Sa+0CVpbvNAMFJ6jBr8adc4=;
+        b=FdXzAXMJyj+oUYsSi13UDB6pL6EXBHvVZWAe6cxyJip9OFGiSzOPx+tWBNf57RaQsl
+         2hM3ROYfvg8Q7x3lJWGGephCTHfVVveb0KgD0r9LXiK+wc1e1lh7vwvoOS3MZbDjkAJG
+         5Rha2TckE/jUkF5u9T26DugsKoEtCE1Zhwviz1orrASZk0cAWmSBiWC/uWhLrlgOTCJx
+         z+UnhsJ1322aJE4EEQ4qCm6/30WWeE4PhM4uLG3CRarIuypYmiFwi/GVg2TiwlI91Tk3
+         Rn1vm3II7c3zVQ3NIX7vufkjteYqjXmxBSYWpy7rnqMmtjsii42gl1fNsVagF4uHTRxj
+         RGJg==
+X-Gm-Message-State: AAQBX9dZlXXvDMh+GwSx1ABqTHzrGLNFFdpDGdd0IT2HuPUEXW+Z1Yfe
+        hTLxg44KeRbIKessgAnhn6l1Jkp4Kvc=
+X-Google-Smtp-Source: AKy350YRF1944XUhqK/zTgNLfplv2fuVJn1EoSRBMg7fIxIGXzJQxyVmCTTaZMkiFwyAd7YAHs4E7A==
+X-Received: by 2002:aca:a84e:0:b0:38b:7eab:a482 with SMTP id r75-20020acaa84e000000b0038b7eaba482mr1145836oie.58.1680882439549;
+        Fri, 07 Apr 2023 08:47:19 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u4-20020a4a9e84000000b00524faf3d2d7sm1710179ook.41.2023.04.07.08.29.42
+        by smtp.gmail.com with ESMTPSA id e3-20020a05680809a300b00389509965e3sm1770396oig.58.2023.04.07.08.47.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 08:29:43 -0700 (PDT)
+        Fri, 07 Apr 2023 08:47:19 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 7 Apr 2023 08:29:41 -0700
+Date:   Fri, 7 Apr 2023 08:47:17 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] MAINTAINERS: hwmon: drop Agathe Porte
-Message-ID: <b3c1bab7-bc57-4fde-ac5d-11d638d74c89@roeck-us.net>
-References: <20230406204750.3017850-1-krzysztof.kozlowski@linaro.org>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Marius Zachmann <mail@mariuszachmann.de>,
+        Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Clemens Ladisch <clemens@ladisch.de>,
+        Rudolf Marek <r.marek@assembler.cz>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Jonas Malaco <jonas@protocubo.io>,
+        Aleksandr Mezin <mezin.alexander@gmail.com>,
+        Derek John Clark <derekjohn.clark@gmail.com>,
+        =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>,
+        Iwona Winiarska <iwona.winiarska@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Michael Walle <michael@walle.cc>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Agathe Porte <agathe.porte@nokia.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        patches@opensource.cirrus.com, openbmc@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 01/68] hwmon: constify pointers to hwmon_channel_info
+Message-ID: <4127ea84-4217-4ae0-b88d-14e7ab5c6eff@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230406204750.3017850-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 10:47:50PM +0200, Krzysztof Kozlowski wrote:
-> Mails to Agathe Porte bounce ("550 5.4.1 Recipient address rejected:
-> Access denied. AS(201806281)").
+On Thu, Apr 06, 2023 at 10:29:56PM +0200, Krzysztof Kozlowski wrote:
+> HWmon core receives an array of pointers to hwmon_channel_info and it
+> does not modify it, thus it can be array of const pointers for safety.
+> This allows drivers to make them also const.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
 
-Applied.
+Series applied.
 
-Thanks,
+Next time please let me know the base for your patch series.
+It took me a while to figure out that it is based on linux-next.
+
 Guenter
-
-> 
-> Changes since v1:
-> 1. Update also bindings.
-> ---
->  Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml | 2 +-
->  MAINTAINERS                                            | 1 -
->  2 files changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
-> index e7493e25a7d2..f9c00cbb2806 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: TMP464 and TMP468 temperature sensors
->  
->  maintainers:
-> -  - Agathe Porte <agathe.porte@nokia.com>
-> +  - Guenter Roeck <linux@roeck-us.net>
->  
->  description: |
->    ±0.0625°C Remote and Local temperature sensor
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 99b665e85f0a..7f0b8076f144 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21173,7 +21173,6 @@ F:	Documentation/hwmon/tmp401.rst
->  F:	drivers/hwmon/tmp401.c
->  
->  TMP464 HARDWARE MONITOR DRIVER
-> -M:	Agathe Porte <agathe.porte@nokia.com>
->  M:	Guenter Roeck <linux@roeck-us.net>
->  L:	linux-hwmon@vger.kernel.org
->  S:	Maintained
