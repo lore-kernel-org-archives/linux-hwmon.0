@@ -2,50 +2,36 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E811C6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 15:01:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD135C77B61
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 15:01:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbjDGPA6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Apr 2023 11:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        id S237586AbjDGPBi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Apr 2023 11:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbjDGPAc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 11:00:32 -0400
+        with ESMTP id S239421AbjDGPBO (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 11:01:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F857C171;
-        Fri,  7 Apr 2023 08:00:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA7FB764;
+        Fri,  7 Apr 2023 08:00:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A78DA65001;
-        Fri,  7 Apr 2023 14:59:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B40B7C4339E;
-        Fri,  7 Apr 2023 14:59:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B580B64F27;
+        Fri,  7 Apr 2023 15:00:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33E28C433EF;
+        Fri,  7 Apr 2023 15:00:18 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Igor Russkikh <irusskikh@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, oss-drivers@corigine.com
+To:     Matt Ranostay <matt.ranostay@konsulko.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH 8/8] net: phy: sfp: constify pointers to hwmon_channel_info
-Date:   Fri,  7 Apr 2023 16:59:11 +0200
-Message-Id: <20230407145911.79642-8-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] media: i2c: video: constify pointers to hwmon_channel_info
+Date:   Fri,  7 Apr 2023 17:00:15 +0200
+Message-Id: <20230407150015.79715-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230407145911.79642-1-krzysztof.kozlowski@linaro.org>
-References: <20230407145911.79642-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -68,22 +54,22 @@ Cc: Jean Delvare <jdelvare@suse.com>
 Cc: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
 ---
- drivers/net/phy/sfp.c | 2 +-
+ drivers/media/i2c/video-i2c.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
-index f0fcb06fbe82..378760b1aca7 100644
---- a/drivers/net/phy/sfp.c
-+++ b/drivers/net/phy/sfp.c
-@@ -1378,7 +1378,7 @@ static const struct hwmon_ops sfp_hwmon_ops = {
- 	.read_string = sfp_hwmon_read_string,
+diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
+index dddf9827b314..abd472dcd497 100644
+--- a/drivers/media/i2c/video-i2c.c
++++ b/drivers/media/i2c/video-i2c.c
+@@ -274,7 +274,7 @@ static const struct hwmon_channel_info amg88xx_temp = {
+ 	.config = amg88xx_temp_config,
  };
  
--static const struct hwmon_channel_info *sfp_hwmon_info[] = {
-+static const struct hwmon_channel_info * const sfp_hwmon_info[] = {
- 	HWMON_CHANNEL_INFO(chip,
- 			   HWMON_C_REGISTER_TZ),
- 	HWMON_CHANNEL_INFO(in,
+-static const struct hwmon_channel_info *amg88xx_info[] = {
++static const struct hwmon_channel_info * const amg88xx_info[] = {
+ 	&amg88xx_temp,
+ 	NULL
+ };
 -- 
 2.34.1
 
