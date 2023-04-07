@@ -2,133 +2,88 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DE48C77B61
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 16:10:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43C4AC6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 16:22:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbjDGQKa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Apr 2023 12:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
+        id S230290AbjDGQWp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Apr 2023 12:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231971AbjDGQKV (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 12:10:21 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C36BB8F;
-        Fri,  7 Apr 2023 09:10:17 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-18412684c50so1974761fac.5;
-        Fri, 07 Apr 2023 09:10:17 -0700 (PDT)
+        with ESMTP id S230010AbjDGQWn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 12:22:43 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54D6BB8E;
+        Fri,  7 Apr 2023 09:22:42 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-17aceccdcf6so46092823fac.9;
+        Fri, 07 Apr 2023 09:22:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680883817; x=1683475817;
+        d=gmail.com; s=20210112; t=1680884562; x=1683476562;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DsLvnZPjZzg0dHWcEvsz63QWITXOPT4dhDFyS/J5cWc=;
-        b=gl+icpuxByBdWPer9h/dOry8KXl32HRBQLE40aGJLLqi+44Q+hVcSJ+hlnToLJMmbu
-         vLbST1fNCMZd9SfOVKRN6pDhJ72ae7qaQ31CT8tIVih8H1bGXxRQu0EOBbW2AUTNHIle
-         SVFiUevgUGxYLKOChPpyBtgsJ7kqT9c7r00yLqbj1YD9EJ5b26UaAQcP5iZEZTlwf6zO
-         dFM6NxXZ/FviheJR1x/hx/FpnABo/LYWFJHhhFPFIoB9x5H2A/NKgb2kRF+QAiczGPbP
-         FvXTeePNqzKsO81MgYiW6kcBe7z0fpUAfkXUf6+mQXXm3pY1ayEqwWQ1dsqwTcCfse5y
-         /ZGA==
+        bh=cgXvgDF0Hwz78yLb5teBoQZ5GeA/oS4aahtnvYtFVmE=;
+        b=ikUxbKSZAQa+AebeM1Eq2p9BLibeEH+35T6OrwglmZKquzeaNUJGhpRii4hkdxzSXt
+         Xu3A2unnpglsa33ZW5MKziuv1Jzbu22qqx7b421ta18hi4lIs+IFatZlHKS/9MAKF1++
+         ufBD6vVEYVLnOdfhBRPgyFgQ/LaNE/DW5JGKtsPsLsvnMEFq3jrPfQxn3Ijen210UNnU
+         9/H1OSJrSC5t3ftd/AQHsb/MV6WtB1awxKtoBlqPjnfLXMD75ZTw7vlnNJPMqv4Qm5uM
+         yJGgm0FoZABsG5y0pZV8UTBs/+UGHsOEiMSEloC0l3y5LGD5c3zRxRRdV+bCo+vvFx+N
+         XITQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680883817; x=1683475817;
+        d=1e100.net; s=20210112; t=1680884562; x=1683476562;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DsLvnZPjZzg0dHWcEvsz63QWITXOPT4dhDFyS/J5cWc=;
-        b=2bpUuMl9IKnaqAv94cYHjomupp1A0Gha3FmR9zRUFhOoBSo97VsSgiuB6HvFa4/Fz/
-         ec7WsLy39Yuj5IHr0oQzljHg2SOFSLmpoC1MavtSsMaVfF4UE7YlueuAAtx09aCyy/r7
-         clcKsMtsvEVLTZbe/UYNEj4DoH7W9GWGD0ZD9GQRazRkOo8y4Se4BA+1aDCL560UPI7p
-         i3CnENN/DPIgRQnU2W28BJFWx31Bo713EH7QltiF9ZM+5wueUDZzR8thOFPOgDcKpUL2
-         yKXRtTW0dY20en1CJNHGDyQQqnvhSaMb/psEeUddvRXVfwjRlo6S6srtSxQOJk9KJHhM
-         M5zA==
-X-Gm-Message-State: AAQBX9e/XYjqeaXk0PHkt9m71Xpgq/75S6q7W4H0bP1EGY+IozfHQ0qn
-        9ZYTli0wR87otmkh92RmL9eeUQP7NPg=
-X-Google-Smtp-Source: AKy350aQmpkzuIJCBwpF9hC39OKaMl5RRnovDFu3wk8lFMdFEt5mr/xYfzxksZ89wKZQ1TCIRktEUQ==
-X-Received: by 2002:a05:6870:304d:b0:177:824d:e944 with SMTP id u13-20020a056870304d00b00177824de944mr1634507oau.51.1680883816908;
-        Fri, 07 Apr 2023 09:10:16 -0700 (PDT)
+        bh=cgXvgDF0Hwz78yLb5teBoQZ5GeA/oS4aahtnvYtFVmE=;
+        b=yEuSPD+jaw1xDc2g6B1WuATvQwGTx/FcjouqF669BjXDiuzHP/bfF+5QxNLuDh00DJ
+         W/kmVytSQYVMH1aAxAsGdbYEtvI7+HnHBBiz9X/ViG9vscgn8tUlFh+shOHk/6poUDRj
+         9WYJSBOnajgZHXnO8/bHj5m5zGH5iskcn8NTtjKrdeTZjjDPwmdBzrrGUr1cuSGeJPDl
+         WQ2HtZ6hFB7VMoIyJnZq51+X3t3qbE9vFa431UiM6/ALazzZwnRWAJHm+oD/j7XL5WXx
+         18tvnaQBI/IFX8EA4a+QCSqg4f26fMHRb3XtPYwsCalDuqxX+VNWCDuS3NMGossHEcaw
+         9YDQ==
+X-Gm-Message-State: AAQBX9foqBW5q2mDEYthAiGuJ4b0eYyXJC0bH2e+2BX6K//5/PkhXOtP
+        oeDimj+KuWqZewcHKf306dQ=
+X-Google-Smtp-Source: AKy350bNoIkMkysFfimFYivJmWPnHJPdz+3defAKjQYpHoGEQLBnQevcqD9/dwM6Z+lHhUvnGs+mHQ==
+X-Received: by 2002:a05:6870:b69f:b0:17e:cb7:29bc with SMTP id cy31-20020a056870b69f00b0017e0cb729bcmr1943714oab.13.1680884562176;
+        Fri, 07 Apr 2023 09:22:42 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j16-20020a9d7690000000b006a2ce5f3641sm1834758otl.8.2023.04.07.09.10.16
+        by smtp.gmail.com with ESMTPSA id bf24-20020a0568700a1800b0017264f96879sm1750415oac.17.2023.04.07.09.22.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 09:10:16 -0700 (PDT)
+        Fri, 07 Apr 2023 09:22:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 7 Apr 2023 09:10:15 -0700
+Date:   Fri, 7 Apr 2023 09:22:40 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/ibm-cffps) Use default debugfs
- attributes and lock function
-Message-ID: <9c3d277f-a23b-447f-8850-354f54deb07b@roeck-us.net>
-References: <20230405145230.68631-1-eajames@linux.ibm.com>
- <20230405145230.68631-3-eajames@linux.ibm.com>
+To:     Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] Add power supply for INA2XX
+Message-ID: <68ef9b99-578f-4ea9-8c0e-613b7d27b6aa@roeck-us.net>
+References: <20230407160508.20479-1-clamor95@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230405145230.68631-3-eajames@linux.ibm.com>
+In-Reply-To: <20230407160508.20479-1-clamor95@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 09:52:30AM -0500, Eddie James wrote:
-> Switch the driver to use the default debugfs attributes instead of
-> ones that provide the same data under different names. Use the lock
-> functions for the debugfs and led attributes, and simplify the input
-> history operation by dropping the timer and lock.
+On Fri, Apr 07, 2023 at 07:05:06PM +0300, Svyatoslav Ryhel wrote:
+> TI ina2xx hwmon has vs power supply, add one for correct work.
 > 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->  drivers/hwmon/pmbus/ibm-cffps.c | 273 ++++++++++++++------------------
->  1 file changed, 118 insertions(+), 155 deletions(-)
+> Svyatoslav Ryhel (2):
+>   dt-bindings: hwmon: ina2xx: add supply property
+>   hwmon: ina2xx: add optional regulator support
 > 
-> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-> index e3294a1a54bb..2d7ec00e047b 100644
-> --- a/drivers/hwmon/pmbus/ibm-cffps.c
-> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
-> @@ -18,12 +18,6 @@
->  
-[ ... ]
->  			}
-> @@ -225,29 +183,27 @@ static ssize_t ibm_cffps_debugfs_read(struct file *file, char __user *buf,
->  			rc = i * 4;
->  			break;
->  		default:
-> -			return -EOPNOTSUPP;
-> +			rc = -EOPNOTSUPP;
-> +			break;
->  		}
-> -		goto done;
-> +		break;
->  	case CFFPS_DEBUGFS_ON_OFF_CONFIG:
-> -		rc = i2c_smbus_read_byte_data(psu->client,
-> -					      PMBUS_ON_OFF_CONFIG);
-> -		if (rc < 0)
-> -			return rc;
-> -
-> -		rc = snprintf(data, 3, "%02x", rc);
-> -		goto done;
-> +		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_ON_OFF_CONFIG);
-> +		if (rc >= 0)
-> +			rc = snprintf(data, 3, "%02x", rc);
-> +		break;
->  	default:
-> -		return -EINVAL;
-> +		rc = -EINVAL;
-> +		break;
->  	}
->  
-> -	rc = i2c_smbus_read_block_data(psu->client, cmd, data);
-> +unlock:
-> +	pmbus_unlock(psu->client);
->  	if (rc < 0)
->  		return rc;
->  
-> -done:
->  	data[rc] = '\n';
->  	rc += 2;
-> -
 
-I hate to say (repeat) that, but please refrain from whitespace changes.
+Change log missing.
 
 Guenter
 
->  	return simple_read_from_buffer(buf, count, ppos, data, rc);
->  }
+>  Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 5 +++++
+>  drivers/hwmon/ina2xx.c                                 | 4 ++++
+>  2 files changed, 9 insertions(+)
+> 
+> -- 
+> 2.37.2
+> 
