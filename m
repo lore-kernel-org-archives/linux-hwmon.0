@@ -2,87 +2,109 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F8C3C6FD1D
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 05:39:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9363AC76196
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 06:22:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbjDGFjV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Apr 2023 01:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S232848AbjDGGWT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Apr 2023 02:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbjDGFjU (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 01:39:20 -0400
-Received: from s.wrqvtzvf.outbound-mail.sendgrid.net (s.wrqvtzvf.outbound-mail.sendgrid.net [149.72.126.143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05ED9EF0
-        for <linux-hwmon@vger.kernel.org>; Thu,  6 Apr 2023 22:39:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=equiv.tech;
-        h=from:subject:references:mime-version:content-type:in-reply-to:to:cc:
-        content-transfer-encoding:cc:content-type:from:subject:to;
-        s=org; bh=G9VemBoo/oQmh90TMdsZVLhnDY3UIXhAohIfrIhUiYM=;
-        b=AGEJ3Lwe2Ksdfcc9PGVVpVBQz7EJBu4gjIBH3Zuw1j/N3vSG1n5tXmCtOaEbvANNV2dK
-        KkPYtWYIUQC5uxPJfPtrh+YRb5Kfutp9U/pFklctQsP4lTNQNKwVKGEbjSnuzTNaqZPlFZ
-        3IfdD05O0jH9aUeuVoPGQo8A3wz+9iRIo=
-Received: by filterdrecv-6c845fd887-lq6xf with SMTP id filterdrecv-6c845fd887-lq6xf-1-642FAC85-C
-        2023-04-07 05:39:17.456579464 +0000 UTC m=+3823669.134456244
-Received: from localhost (unknown)
-        by geopod-ismtpd-1 (SG) with ESMTP
-        id TokS6-f2QXuJBhfPgNZvSw
-        Fri, 07 Apr 2023 05:39:16.607 +0000 (UTC)
-Date:   Fri, 07 Apr 2023 05:39:17 +0000 (UTC)
-From:   James Seo <james@equiv.tech>
-Subject: Re: [PATCH v2] hwmon: add HP WMI Sensors driver
-Message-ID: <ZC+sgnuy5bssD1DN@vb-22lts>
-References: <20230406152321.42010-1-james@equiv.tech>
- <2257deba-187b-82d2-181c-f1fed08a2ff7@gmx.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2257deba-187b-82d2-181c-f1fed08a2ff7@gmx.de>
-X-SG-EID: =?us-ascii?Q?1X41iaRO4wVP+tFXGLuxpQ0yxxMDhGIesR5UcsYKVengQKgidLJSXwOMZlPQwP?=
- =?us-ascii?Q?WsAj56po3NRvhdf1mTxjVMIv2D1=2FDP7Bkv5o0um?=
- =?us-ascii?Q?PWoegI9wRMHmPxJcjLNe2oweeMgjlSP+NrWwbFZ?=
- =?us-ascii?Q?OqRh=2FZ=2F83w0fjvxmI9CkVfmrxjniFDdLuTf4L5A?=
- =?us-ascii?Q?F2L1XUZUQ1xCrQY1umL6j1rPF7xuorQu9MsU2Su?=
- =?us-ascii?Q?fU+BP6mC3C22J4YY5cYX2aGsuerGfvpIReKJUN?=
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     Jean Delvare <jdelvare@suse.com>,
+        with ESMTP id S229844AbjDGGWS (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 02:22:18 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2B0197;
+        Thu,  6 Apr 2023 23:22:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680848538; x=1712384538;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=4TqWjWh9StyjGPJ6nBQV26NfVy8IFel1LdqBAgI8yLs=;
+  b=BU/Rr8nQHj1PMoPK/3pCjHgmthwz0GrhmZp+YLBMDrqlavqODQT+Pn6A
+   na01Zrs1OJjPgA+KyR8/CvjYfAEAvbCedB8WCnfW/kBHE3sE+n2S5zsCP
+   rn8ANBNBR/wRPYCw+C9BttiKGR6/iFcjXGl1pcUpv9ZVMFeH02cSMT7Hz
+   L/U3h1EOh3qwEqOrhmYqhLzo22ngO3HracweKpNLxc9Mxg+UutRGVEhts
+   ITcUJW3lBQ0AaTlKfuN6is5rLgL+KFgzhB7WgNszycaX3e2BwU1862EtN
+   I0eC1yoJy1XHWqRE6HnhcQkO1VSx32Q+xGto3p+KxrKWq3uweud74NNDm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="344705150"
+X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
+   d="scan'208";a="344705150"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 23:22:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="861697968"
+X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
+   d="scan'208";a="861697968"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga005.jf.intel.com with ESMTP; 06 Apr 2023 23:22:13 -0700
+Date:   Fri, 7 Apr 2023 14:10:31 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Russ Weight <russell.h.weight@intel.com>,
         linux-kernel@vger.kernel.org
-X-Entity-ID: Y+qgTyM7KJvXcwsg19bS4g==
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 4/4] mfd: intel-m10-bmc: Manage access to MAX 10 fw
+ handshake registers
+Message-ID: <ZC+z16LvAxxyRSg/@yilunxu-OptiPlex-7050>
+References: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com>
+ <20230405080152.6732-5-ilpo.jarvinen@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230405080152.6732-5-ilpo.jarvinen@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+On 2023-04-05 at 11:01:52 +0300, Ilpo Järvinen wrote:
+> On some MAX 10 cards, the BMC firmware is not available to service
+> handshake registers during secure update erase and write phases at
+> normal speeds. This problem affects at least hwmon driver. When the MAX
+> 10 hwmon driver tries to read the sensor values during a secure update,
+> the reads are slowed down (e.g., reading all D5005 sensors takes ~24s
+> which is magnitudes worse than the normal <0.02s).
+> 
+> Manage access to the handshake registers using a rw semaphore and a FW
+> state variable to prevent accesses during those secure update phases
+> and return -EBUSY instead.
+> 
+> Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Co-developed-by: Xu Yilun <yilun.xu@intel.com>
+> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/fpga/intel-m10-bmc-sec-update.c | 17 +++++--
+>  drivers/mfd/intel-m10-bmc-core.c        | 63 ++++++++++++++++++++++++-
+>  drivers/mfd/intel-m10-bmc-pmci.c        |  4 ++
+>  drivers/mfd/intel-m10-bmc-spi.c         | 14 ++++++
+>  include/linux/mfd/intel-m10-bmc.h       | 27 +++++++++++
+>  5 files changed, 120 insertions(+), 5 deletions(-)
+>
 
-> is it guaranteed that faulty sensors wont become operational later?
-> Also filtering out such sensors would make the support for the hwmon_temp_fault and
-> hwmon_fan_fault attributes meaningless.
+[...]
+ 
+>  
+> +static const struct regmap_range null_fw_handshake_regs[0];
+> +
+>  static const struct m10bmc_csr_map m10bmc_n6000_csr_map = {
+>  	.base = M10BMC_N6000_SYS_BASE,
+>  	.build_version = M10BMC_N6000_BUILD_VER,
+> @@ -375,6 +377,8 @@ static const struct m10bmc_csr_map m10bmc_n6000_csr_map = {
+>  static const struct intel_m10bmc_platform_info m10bmc_pmci_n6000 = {
+>  	.cells = m10bmc_pmci_n6000_bmc_subdevs,
+>  	.n_cells = ARRAY_SIZE(m10bmc_pmci_n6000_bmc_subdevs),
+> +	.handshake_sys_reg_ranges = null_fw_handshake_regs,
+> +	.handshake_sys_reg_nranges = 0,
 
-Good point. I can't be certain, but the MOF does seem to imply that
-sensors can indeed be faulty on just a temporary basis.
+Not sure why a zero length array is needed? Could we just remove
+these 2 lines?
 
-I'll filter out only the sensors that are "Not Connected" at probe
-time. My thinking is, even if these might turn into connected sensors
-later, that would mean the user is e.g. hot-plugging a fan (!), and
-keeping them could result in a large number (~10 on my Z420) of
-pointless extra channels. And this would also match the behavior of
-HP's official utility.
-
-Does that seem reasonable? Or did you mean that I shouldn't filter,
-and leave disconnected sensors in like some other hwmon drivers do?
-
-> The sanity check for HP_WMI_NUMERIC_SENSOR_GUID is unnecessary, the WMI driver core already makes sure that your driver
-> is only matched with WMI devices containing HP_WMI_NUMERIC_SENSOR_GUID.
-> As for the sanity check regarding HP_WMI_BIOS_GUID: this WMI GUID is not used inside the driver. Since WMI GUIDs are expected
-> to be unique, checking for HP_WMI_BIOS_GUID (which AFAIK is used by the HP-BIOSCFG driver) without intending to use it is
-> meaningless.
-
-In that case, I'll gladly remove the checks. I was following the
-example of the platform/x86/hp-wmi driver, which checks for that GUID
-and another at module load.
-
-Thanks for reviewing.
-
-James
+Thanks,
+Yilun
