@@ -2,98 +2,101 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C141FC77B61
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 17:19:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9498CC6FD1D
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Apr 2023 18:05:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbjDGRT5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Apr 2023 13:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
+        id S231441AbjDGSFS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Apr 2023 14:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbjDGRTo (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 13:19:44 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA7DCA03;
-        Fri,  7 Apr 2023 10:19:23 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 4PtQ8Q1TtMzyR8;
-        Fri,  7 Apr 2023 20:19:17 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1680887960;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sx/v6v02tkhyVSJIxoR5pZtA5d+qnL+HKABd0KsDWkk=;
-        b=be7boNoSaCauKSf5nx7KUm+r6UvnLMDwHpf0Qa1a9fuciGNUun+OK1SRSGeD8T5v5fFGw5
-        aTLNE1hacjHpkBakgCN+euY2G497WLc7L7SLEE8F9vDdpu7AwIRmn8RhaFpRcQER5UliSe
-        ijDS2ZLYe2MH/Z+EjJu5J2Du+MqFot8=
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1680887960; a=rsa-sha256; cv=none;
-        b=T/CuPIfgtU/10f0gPBOap2JMhmhN1T1u/2qju0MziBT/3Vr4nrzcG8p2NEmQJXH1mNglmb
-        l+cDsGWgIGEVeXP0xI/hnT/jC/w3SxRxQnjqApJmrXbLr88PHNmlIBa65KfWgIeGVLPvN+
-        YWCR/PhsGIdLlCcIdbUQNUpXog/96QI=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1680887960;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sx/v6v02tkhyVSJIxoR5pZtA5d+qnL+HKABd0KsDWkk=;
-        b=TjfAYh/Fj8WFUjFOKnXU8hsAdoOF0mZs31+RQteSR9hvHGQ5zwPGmuZVTNzFsV0e4pmRa8
-        hdxXGyn2O/tXhz6Dt6g9ytC0xBluqypq9KOIOlrlY22uMfRuNhhXonGd5dgkRgqifIKvY0
-        sE0oX5FaJ5LSrXBQlXSjeEGVAkukOnI=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id B46D1634C91;
-        Fri,  7 Apr 2023 20:16:30 +0300 (EEST)
-Date:   Fri, 7 Apr 2023 20:16:30 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Matt Ranostay <matt.ranostay@konsulko.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] media: i2c: video: constify pointers to
+        with ESMTP id S231453AbjDGSFP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 14:05:15 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4209C646;
+        Fri,  7 Apr 2023 11:05:09 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id bx42so16033355oib.6;
+        Fri, 07 Apr 2023 11:05:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680890709; x=1683482709;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pVWWNnevGYcIX44/9Rtg07AkMRMvtlyvu+P6BaPgs4U=;
+        b=pFSH4am2cfu0NpsQdFED1amUu7I+RuyiHsbwrU+dPzLVXwtV9eJjTOTNA8rB+tvZI5
+         6yQHEe/c7Zzm+G/C4TuH/sTU4qAG74F/+xMq+qsj+Zr6t5ndmOBPab+1itwy13NA9DAb
+         FykOKF7xIBqBc8mKZ4mXesIVc5L49vcvbXj5rmRayQD80K+pc+tkHHvzbQYyrouyUz3E
+         LBPoLVoL0Hmb3ErTKlQ/JDnpl0b2H4LT+Kdlr+Zq50Aj7iLFVSFy1PQYccnnrD6xCPhF
+         +mFYc6dhjKLpKL1JwMNwA17PX9Exv1rgUohrM3T8keLOwm2RXgKvwCQatBLYTjHxmJ3I
+         vi9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680890709; x=1683482709;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pVWWNnevGYcIX44/9Rtg07AkMRMvtlyvu+P6BaPgs4U=;
+        b=xx8/04IVuwEMkQRq+N8gJ4VI7V5SBJN9eZqffcY1NuedDZp0w7hRP43WcPf/jd1FVI
+         PYNZM/RiHXgVyAb81/T9bOqjw+R7EQfi/41StH+Uvt88d4+B6vbn/M/8VwBeRCXzxXU2
+         96XTzqwYRxTwFtmN2n/b7BdXoiMNlXAaoNYcaX8Entk05vqngZtaEAwcoz/ZhpI/Jtpx
+         e9WhA7Q/aZpI5B26cF3ObYkYdZ0HUBuUnnXbkzJqRH5WJuMVZFWBp/cyTRcxJTIDlyBq
+         FAsokthjnKvLAegfZb1nPv9sxN/KzU0OeDmAmU3+zGxyrGKT67Jv3QMCSH77oH9H74IF
+         jchA==
+X-Gm-Message-State: AAQBX9f6DpqJnLDHc+3Cm6HI2YftChwUZs74BE5jhx8RheG5xLVL0Rev
+        64eBdEfs5opuq+KMyxi/bgg=
+X-Google-Smtp-Source: AKy350avvLjqWh3OYQY55XilU6JN/EcZ//jxqILAkddASItdct3Il6r91YjXbWqCZs0vshJmWWX86g==
+X-Received: by 2002:aca:1e1a:0:b0:386:e3f8:2c6b with SMTP id m26-20020aca1e1a000000b00386e3f82c6bmr1152904oic.11.1680890708884;
+        Fri, 07 Apr 2023 11:05:08 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a6-20020a056808120600b003874631e249sm1899179oil.36.2023.04.07.11.05.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 11:05:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 7 Apr 2023 11:05:06 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Igor Russkikh <irusskikh@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/8] net: netronome: constify pointers to
  hwmon_channel_info
-Message-ID: <ZDBP7vG498h2FQ7N@valkosipuli.retiisi.eu>
-References: <20230407150015.79715-1-krzysztof.kozlowski@linaro.org>
+Message-ID: <3a0391e7-21f6-432a-9872-329e298e1582@roeck-us.net>
+References: <20230407145911.79642-1-krzysztof.kozlowski@linaro.org>
+ <20230407084745.3aebbc9d@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230407150015.79715-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230407084745.3aebbc9d@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Krzysztof,
-
-On Fri, Apr 07, 2023 at 05:00:15PM +0200, Krzysztof Kozlowski wrote:
-> Statically allocated array of pointed to hwmon_channel_info can be made
-> const for safety.
+On Fri, Apr 07, 2023 at 08:47:45AM -0700, Jakub Kicinski wrote:
+> On Fri,  7 Apr 2023 16:59:04 +0200 Krzysztof Kozlowski wrote:
+> > This depends on hwmon core patch:
+> > https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> This depends on hwmon core patch:
-> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
-> 
-> Therefore I propose this should also go via hwmon tree.
+> That patch should have been put on a stable branch we can pull
+> and avoid any conflict risks... Next time?
 
-Works for me. Please add:
+Yes, and I don't feel comfortable applying all those patches through
+the hwmon tree since I have zero means to test them.
 
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+I created a stable branch at
 
-Thanks!
+git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-const
 
--- 
-Kind regards,
+Feel free to use it.
 
-Sakari Ailus
+Guenter
