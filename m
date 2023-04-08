@@ -2,137 +2,111 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B83D7C77B6C
-	for <linux-hwmon@archiver.kernel.org>; Sat,  8 Apr 2023 10:35:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11440C7619A
+	for <linux-hwmon@archiver.kernel.org>; Sat,  8 Apr 2023 10:46:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbjDHKfI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 8 Apr 2023 06:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
+        id S229760AbjDHKqV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 8 Apr 2023 06:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjDHKfH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 8 Apr 2023 06:35:07 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549ADD338
-        for <linux-hwmon@vger.kernel.org>; Sat,  8 Apr 2023 03:34:25 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id o25-20020a9d4119000000b006a11eb19f8eso21870552ote.5
-        for <linux-hwmon@vger.kernel.org>; Sat, 08 Apr 2023 03:34:25 -0700 (PDT)
+        with ESMTP id S229852AbjDHKqT (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 8 Apr 2023 06:46:19 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D576DE19B
+        for <linux-hwmon@vger.kernel.org>; Sat,  8 Apr 2023 03:45:43 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id jw24so13526675ejc.3
+        for <linux-hwmon@vger.kernel.org>; Sat, 08 Apr 2023 03:45:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protocubo.io; s=google; t=1680950013; x=1683542013;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=atnnfYB8H/1cRTIRhOKd2CzwH9WdqCAcJhjKRDN3luY=;
-        b=f36p8T3+z/J6u/o8geXfldjzGTUKvuBwnCOq8aVhPB5Yq0scv4lu22t0IvydiWVBM7
-         CU08wz3QuGcIPb3yAdVhAgW3usOu6fLAX0B9dTUyF+DdJBVTJT8oOMZeeGHVuzEsk8U/
-         ACJmBPiPbyDgvFE4BNoYWI2q2/7yDxQ5j48C6PILBZX/SdxNHL3oqGlqu/dDTMUrJmJs
-         0bwnWui1/dIDcDI/PfO4ScpNdmG7VY3T6R/tIZlS7SRCQlputLk0u0J6wwKpSjlPmnKv
-         U/RapLU0djwI0HQLlzVT8qQP9mV23Tbd/Y8AXD8hueIbuxcQessr9EfpsfZaTW/UQGCf
-         bfxQ==
+        d=linaro.org; s=google; t=1680950674;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=76NvAwebMnjTqXsYX2BkdeLSiN8cjCcv6+rnae8xzOo=;
+        b=Xa8EsYI1Sdc7bZI2Ys3fTD3ltinEgRkTskSBF0YLMTzzQymWWhNFJLXoKTsDmmxf8g
+         UkMPD4RMPkBlL2Mw4jkw8jEBLVDjnyWezRLrJeSmn+FvoiHSI5PQRyS9a7vBxf0UOzps
+         P1b5z7uFOT4rCBEFoBChlNac7YBGPiWCV0JmaZDOzvYSQWcpLpOwhGEXRznYg0Eo2nfm
+         Myx/e0FI7LRDchrP9m1vEM3bYhvVFE76oD48If5uPlW0bEm5Ai/eNZO7rVMh1NkzBGey
+         /zCrgSwrEqgPJ7iNwmwm1C7f+wMBmHaD8AmGZ3z/zyNbdQ7VpG+UJhsVORsP0/sBYLIW
+         sPQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680950013; x=1683542013;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20210112; t=1680950674;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=atnnfYB8H/1cRTIRhOKd2CzwH9WdqCAcJhjKRDN3luY=;
-        b=yCacbkUzwSzB5KSoGPlws27TkUeS7o6qaIc7G0y1r1MQ7EeeJexKvFI2i/RmiYsOoN
-         DNgQftMBSUwcC3z1y4ExPfFmC/jtfE8f2kZPbIzeJ4u4Y3iqoH/EQpCWL6Shrv992UZM
-         K3ltn/MeaP/W0wuL9Nnxn6RdeLiMNqPboBf6aesWQx3P8TpKKhyOVvNVNhEDfAQx8tXW
-         7lsyivzWpUVEtMDS37eNdFQltPDOE05xHcJapUZXDxVPio9OnEFwYbizwU9N3527kSWf
-         SylXw9RconBSClboO+ERoj+nkcj6jkUMv4vKv2tSVkvFALnsqxbkVtvaEYolPs35wWUt
-         niMw==
-X-Gm-Message-State: AAQBX9eJEIui5VK3KDZ6rh2X/tP3mL9db0BVAPqyCkZmA0tW9mlQlU1t
-        Az1MhnlDMIRBnknC+dImP0GLOA==
-X-Google-Smtp-Source: AKy350absmUQ6HrjCN8ybKL7JT651jVYn5RTh9izjX/ysr91076zOIBiNMnDzdw113Fn8tlB/GuQ7Q==
-X-Received: by 2002:a05:6830:101:b0:6a1:7f69:ffbf with SMTP id i1-20020a056830010100b006a17f69ffbfmr2146604otp.36.1680950013453;
-        Sat, 08 Apr 2023 03:33:33 -0700 (PDT)
-Received: from calvin.localdomain ([2804:14d:5c5e:5d5b::1000])
-        by smtp.gmail.com with ESMTPSA id m14-20020a9d6ace000000b0068bcf7995aesm2442533otq.64.2023.04.08.03.33.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 03:33:32 -0700 (PDT)
-Date:   Sat, 8 Apr 2023 07:33:20 -0300
-From:   Jonas Malaco <jonas@protocubo.io>
-To:     Aleksandr Mezin <mezin.alexander@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Aleksa Savic <savicaleksa83@gmail.com>,
-        Jack Doan <me@jackdoan.com>,
-        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
-        Marius Zachmann <mail@mariuszachmann.de>,
-        Wilken Gottwalt <wilken.gottwalt@posteo.net>,
-        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Clemens Ladisch <clemens@ladisch.de>,
-        Rudolf Marek <r.marek@assembler.cz>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Derek John Clark <derekjohn.clark@gmail.com>,
-        =?utf-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= 
-        <samsagax@gmail.com>, Iwona Winiarska <iwona.winiarska@intel.com>,
+        bh=76NvAwebMnjTqXsYX2BkdeLSiN8cjCcv6+rnae8xzOo=;
+        b=f27yBPbYciw5gsqjLJ81PfltOiYLipycs+I411WmYlvpR1kbZcSuuvVeqBfrXSvv6u
+         9yMrEX0rfZB8dnB3zTVA6XiF8YnPLL+zFxqi+e7H43KGdHuZdr7qME1e/zfQWvXgqdTk
+         VE/lB37F5C5enklsBbGIScwStoT1ZvhlubOPujO2LCW24wA+mYnj0UaFGa9k6ljg/NaF
+         qx4qmXH03eWxGFHd0H8AdAdPIdqlj5V6DUMWmJGKGApSLlQuS4xgcoGCK+fsrstKZxtZ
+         FX+80BpVgW4Ru7YwxvkLxPCCoc6Mun2ZJPmFNCg142x1011pvi6V4L3sxwRg6+kDAWCp
+         r0fQ==
+X-Gm-Message-State: AAQBX9dJRFq9IogycJ+d34FFqx2PCKvaI0MR4FrYZ012fpI0VLCFd5E9
+        jwk10ugBjgNdMszdk/k1Sx3f6g==
+X-Google-Smtp-Source: AKy350YOYqRALSeMqRhgiWj83zSI0pMTS3OCARZHurmOGMcvnDJXRHzYdsge66KEPtjQbhbegyljXg==
+X-Received: by 2002:a17:906:980d:b0:933:3aa7:57a6 with SMTP id lm13-20020a170906980d00b009333aa757a6mr1201145ejb.12.1680950673753;
+        Sat, 08 Apr 2023 03:44:33 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:4c06:aac9:100f:9d7f? ([2a02:810d:15c0:828:4c06:aac9:100f:9d7f])
+        by smtp.gmail.com with ESMTPSA id g19-20020a170906521300b00947499e0e4dsm3062802ejm.146.2023.04.08.03.44.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Apr 2023 03:44:33 -0700 (PDT)
+Message-ID: <5515891b-44f3-8c9b-ca51-0078070404af@linaro.org>
+Date:   Sat, 8 Apr 2023 12:44:31 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/8] net: netronome: constify pointers to
+ hwmon_channel_info
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Igor Russkikh <irusskikh@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Broadcom internal kernel review list 
         <bcm-kernel-feedback-list@broadcom.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Michael Walle <michael@walle.cc>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Agathe Porte <agathe.porte@nokia.com>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        patches@opensource.cirrus.com, openbmc@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 48/68] hwmon: nzxt: constify pointers to
- hwmon_channel_info
-Message-ID: <jkptl4g7jwhz3mij5wffbw2qlwvxsmnwpqhyalq2ayd76pde2h@jfdw7jisg4at>
-References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
- <20230406203530.3012191-7-krzysztof.kozlowski@linaro.org>
- <CADnvcfKwHJ=dOFH1+DsDfn6Y5k6xdzA7QR1uVDv1afwCsiso3w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADnvcfKwHJ=dOFH1+DsDfn6Y5k6xdzA7QR1uVDv1afwCsiso3w@mail.gmail.com>
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
+        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <20230407145911.79642-1-krzysztof.kozlowski@linaro.org>
+ <20230407084745.3aebbc9d@kernel.org>
+ <3a0391e7-21f6-432a-9872-329e298e1582@roeck-us.net>
+ <20230407181037.4cecfbde@kernel.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230407181037.4cecfbde@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Apr 08, 2023 at 06:14:19AM +0300, Aleksandr Mezin wrote:
-> On Thu, Apr 6, 2023 at 11:37 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> > -static const struct hwmon_channel_info *nzxt_smart2_channel_info[] = {
-> > +static const struct hwmon_channel_info * const nzxt_smart2_channel_info[] = {
+On 08/04/2023 03:10, Jakub Kicinski wrote:
+> On Fri, 7 Apr 2023 11:05:06 -0700 Guenter Roeck wrote:
+>> On Fri, Apr 07, 2023 at 08:47:45AM -0700, Jakub Kicinski wrote:
+>>> On Fri,  7 Apr 2023 16:59:04 +0200 Krzysztof Kozlowski wrote:  
+>>>> This depends on hwmon core patch:
+>>>> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/  
+>>>
+>>> That patch should have been put on a stable branch we can pull
+>>> and avoid any conflict risks... Next time?  
+>>
+>> Yes, and I don't feel comfortable applying all those patches through
+>> the hwmon tree since I have zero means to test them.
+>>
+>> I created a stable branch at
+>>
+>> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-const
 > 
-> In the rest of nzxt-smart2.c there are spaces only before "*", not on
-> both sides (and there are a few "*const" already). Would be nice to
-> keep it consistent. The same seems to be true for nzxt-kraken2.c
-> (although I'm not a maintainer)
+> Thanks! Krzysztof, give us a nod and we'll take the series to net-next.
 
-While I don't have a strong preference for either `* const` or `*const`,
-it would be prefereable to use a single style in any given file.
+Sure, go ahead, that's even better solution.
 
-As the kernel seems to favor the former style:
+Best regards,
+Krzysztof
 
-$ rg -F '*const ' | wc -l
-2593
-$ rg -F '* const ' | wc -l
-15359
-
-it would be better to change the other two locations in nzxt-kraken2.c
-to also use `* const`.
