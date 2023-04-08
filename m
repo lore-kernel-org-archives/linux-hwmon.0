@@ -2,117 +2,113 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7E1FC7619A
-	for <linux-hwmon@archiver.kernel.org>; Sat,  8 Apr 2023 03:14:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80669C77B6F
+	for <linux-hwmon@archiver.kernel.org>; Sat,  8 Apr 2023 03:58:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjDHDOf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Apr 2023 23:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
+        id S229713AbjDHD66 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Apr 2023 23:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjDHDOd (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 23:14:33 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71937CC01;
-        Fri,  7 Apr 2023 20:14:32 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id 73so109780qkg.1;
-        Fri, 07 Apr 2023 20:14:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680923670; x=1683515670;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xMTKJDQ8CdgEq5oydLbuNOEjnz2pC0DL2nvx8nYSz/g=;
-        b=Q48jvsiIcW6+33OEw+8Rq2By/0rqAJXsy0pbv5Ivxlezjf2NnrQr5WO9WV+cxoLcY4
-         P4kvSheOQQeR0uxecCxHXF+4BBRhAOXGI4WkJvpj5P7NfRHT9rW3MJ8D6DuRWfDCLkXR
-         AFXPr5fol0nMe116ZVgI6KN3Rfqc2Pq1dm9gSnEsJN/j6UYohxHtO902BVIzNVuFdVNC
-         /6lGFGdZ6rb2LdPUgWznZV/BfG818fKJT4SRzSLMRP0ZWiwsm080D2I4WjAiFqki9T3g
-         LJb/wdZ3AiTLkMiuSZDD6T/DVSEAPKUcD9BfAUZz4xCW8GxKZ/LqMV60r7GQGYdLknPi
-         4QXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680923670; x=1683515670;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xMTKJDQ8CdgEq5oydLbuNOEjnz2pC0DL2nvx8nYSz/g=;
-        b=ruf/yy/pbXr61cmIM5PT0RnR72FjHDipnF0OmLR0RnMXBQeRcjsNl7d69Pg3IsIp76
-         zGiD8m59t/F24rf5CDuCIf5jgt7ZmMerVilhvjLCD4Tmo2yQIotYwxdZ12ir1+gbZfkz
-         F9sUecURz3QVba7xQ+r7c3cJ7cxxUq0pWp4Vv3Dtmt6eqNCAaR29xc/yVgm71rxBzYD3
-         dzevwZw8zZnOL29WJVztgRtj7wz5Qcbh1s7kBVgeLGnKoIw3J5U8FDxuwie34AMuvMKm
-         dmiN9vsaETJhRvCSaWa+BM6yVQXPjjVZasQK34p4MD9oLxYXmwkw/7iNJRdBpdb4a/SE
-         8JFg==
-X-Gm-Message-State: AAQBX9c9+wI8wpu943P3VwyjOuADwmuNOY1wGrIRofD5khKhDdT1Vvcs
-        XTKtsSjk3hvlR/XvWknkA5N1lTs5m5hnD//Udgw=
-X-Google-Smtp-Source: AKy350Z3AtOV3Hj8e2V0+G3cXlcE2CUJYghvIUSBZ5M8j+IP946o3xKT9Fp538mrEE70dVq7aSFML1TYV1nrT8gDZvc=
-X-Received: by 2002:a05:620a:1981:b0:74a:5c5:944 with SMTP id
- bm1-20020a05620a198100b0074a05c50944mr1150949qkb.4.1680923670462; Fri, 07 Apr
- 2023 20:14:30 -0700 (PDT)
+        with ESMTP id S229517AbjDHD65 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 23:58:57 -0400
+Received: from s.wrqvtbkv.outbound-mail.sendgrid.net (s.wrqvtbkv.outbound-mail.sendgrid.net [149.72.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E9ABDD2
+        for <linux-hwmon@vger.kernel.org>; Fri,  7 Apr 2023 20:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=equiv.tech;
+        h=from:subject:references:mime-version:content-type:in-reply-to:to:cc:
+        content-transfer-encoding:cc:content-type:from:subject:to;
+        s=org; bh=9fXf41jSfeH8npS2SnXtOfP5uik6JpmwKRQ6ipNjZhg=;
+        b=mMH1/aZlfkigrD7oqZwotDQVo/b4Gps6GU01Cot3KtnizHwlc1YMxH8vHOuUfqdnuCGC
+        SGn+ixiHfYx6Bu2utFfKxDrVH2vcBFJQhabWRRsDqH0GXi020AkfwMnGjmS+a/ErGhtW1Y
+        4uBWi3DmmdxfeSR2TygKP3Kzcy8nlBWo4=
+Received: by filterdrecv-7457b4c9b5-zkl2v with SMTP id filterdrecv-7457b4c9b5-zkl2v-1-6430E67E-6
+        2023-04-08 03:58:54.271893053 +0000 UTC m=+3903964.849135075
+Received: from localhost (unknown)
+        by geopod-ismtpd-6 (SG) with ESMTP
+        id XJJ8jxPtQIa9xN2G75nh4A
+        Sat, 08 Apr 2023 03:58:53.421 +0000 (UTC)
+Date:   Sat, 08 Apr 2023 03:58:54 +0000 (UTC)
+From:   James Seo <james@equiv.tech>
+Subject: Re: [PATCH v2] hwmon: add HP WMI Sensors driver
+Message-ID: <ZDDmewAgPi/4jpcX@equiv.tech>
+References: <20230406152321.42010-1-james@equiv.tech>
+ <2257deba-187b-82d2-181c-f1fed08a2ff7@gmx.de>
+ <ZC+sgnuy5bssD1DN@vb-22lts>
+ <e256d281-49a5-2d9a-7def-fd68e177e926@roeck-us.net>
 MIME-Version: 1.0
-References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org> <20230406203530.3012191-7-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230406203530.3012191-7-krzysztof.kozlowski@linaro.org>
-From:   Aleksandr Mezin <mezin.alexander@gmail.com>
-Date:   Sat, 8 Apr 2023 06:14:19 +0300
-Message-ID: <CADnvcfKwHJ=dOFH1+DsDfn6Y5k6xdzA7QR1uVDv1afwCsiso3w@mail.gmail.com>
-Subject: Re: [PATCH 48/68] hwmon: nzxt: constify pointers to hwmon_channel_info
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Aleksa Savic <savicaleksa83@gmail.com>,
-        Jack Doan <me@jackdoan.com>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
-        Marius Zachmann <mail@mariuszachmann.de>,
-        Wilken Gottwalt <wilken.gottwalt@posteo.net>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Clemens Ladisch <clemens@ladisch.de>,
-        Rudolf Marek <r.marek@assembler.cz>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Jonas Malaco <jonas@protocubo.io>,
-        Derek John Clark <derekjohn.clark@gmail.com>,
-        =?UTF-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= 
-        <samsagax@gmail.com>, Iwona Winiarska <iwona.winiarska@intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Michael Walle <michael@walle.cc>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Agathe Porte <agathe.porte@nokia.com>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        patches@opensource.cirrus.com, openbmc@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e256d281-49a5-2d9a-7def-fd68e177e926@roeck-us.net>
+X-SG-EID: =?us-ascii?Q?1X41iaRO4wVP+tFXGLuxpQ0yxxMDhGIesR5UcsYKVengQKgidLJSXwOMZlPQwP?=
+ =?us-ascii?Q?WsEyzZr62PnJ8E17NJhhMO0lG3ycUBe69Gwm5XP?=
+ =?us-ascii?Q?UVOGIf7x=2FfnTSULP9ZVcTc=2FVMlX41+BWNk1aAfb?=
+ =?us-ascii?Q?WMk78u45Cq=2FEERL5toW4S9ly7nEgaC8AVM6MyMM?=
+ =?us-ascii?Q?GaM4z7WDfcY6u=2F47FdEmwIlEzs8bdpopmQA1Lrm?=
+ =?us-ascii?Q?bFycfZPVTsSe8uDnsryXg24xdHXLhmhUmT2JdG?=
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Entity-ID: Y+qgTyM7KJvXcwsg19bS4g==
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 11:37=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> -static const struct hwmon_channel_info *nzxt_smart2_channel_info[] =3D {
-> +static const struct hwmon_channel_info * const nzxt_smart2_channel_info[=
-] =3D {
+Greetings,
 
-In the rest of nzxt-smart2.c there are spaces only before "*", not on
-both sides (and there are a few "*const" already). Would be nice to
-keep it consistent. The same seems to be true for nzxt-kraken2.c
-(although I'm not a maintainer)
+On Fri, Apr 07, 2023 at 05:54:48AM -0700, Guenter Roeck wrote:
+> On 4/6/23 22:39, James Seo wrote:
+>> Hi,
+>> 
+>>> is it guaranteed that faulty sensors wont become operational later?
+>>> Also filtering out such sensors would make the support for the hwmon_temp_fault and
+>>> hwmon_fan_fault attributes meaningless.
+>> 
+>> Good point. I can't be certain, but the MOF does seem to imply that
+>> sensors can indeed be faulty on just a temporary basis.
+>> 
+> 
+> Your current code would explicitly exclude faulty fans from being listed,
+> which does not exactly sound like a good idea.
+
+True enough. I recall my reasoning being that faulty sensors would
+still be visible in debugfs. I should have seen the problem then.
+
+>> I'll filter out only the sensors that are "Not Connected" at probe
+>> time. My thinking is, even if these might turn into connected sensors
+>> later, that would mean the user is e.g. hot-plugging a fan (!), and
+>> keeping them could result in a large number (~10 on my Z420) of
+>> pointless extra channels. And this would also match the behavior of
+>> HP's official utility.
+>> 
+> Ultimately that is an implementation decision. Are the sensors hot-pluggable ?
+
+HP's WMI object specification allows sensors to be hot-pluggable in
+principle. I can't definitively say more than that due to a lack of
+test hardware (that whitepaper I referenced is from 2005, after all).
+
+So I think the answer is that it depends on the board and the WMI
+implementation. That's also what I meant in my reply to Armin when I
+said that I couldn't be certain whether faulty sensors can recover.
+
+But I take your point that the driver should be able to handle it if
+the board can.
+
+> If so, how does HP's utility handle the insertion or removal of a sensor (fan) ?
+
+HP's utility just pretty-prints a snapshot of what is in WMI at the
+moment when the user clicks a button, and then only for the sensors
+that were connected when the utility was first started. It doesn't do
+anything special to handle insertion or removal beyond that.
+
+> Either case, it is ok with me if disconnected sensors are not listed.
+> Not listing faulty sensors seems like a bad idea, though.
+> 
+> Guenter
+
+Acknowledged. Faulty sensors will be listed in the next version.
+
+Thanks for reviewing. Further suggestions or concerns from you or
+anyone else reading this are both welcome and appreciated.
+
+James
