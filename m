@@ -2,212 +2,137 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECF59C77B61
-	for <linux-hwmon@archiver.kernel.org>; Sat,  8 Apr 2023 08:29:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B83D7C77B6C
+	for <linux-hwmon@archiver.kernel.org>; Sat,  8 Apr 2023 10:35:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjDHI3n (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 8 Apr 2023 04:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
+        id S229654AbjDHKfI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 8 Apr 2023 06:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjDHI3n (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 8 Apr 2023 04:29:43 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BECD522
-        for <linux-hwmon@vger.kernel.org>; Sat,  8 Apr 2023 01:29:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680942582; x=1712478582;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hhLt8upTlSYj2GHVLabUBROfjG5snlNyLYijfPDrPkc=;
-  b=D39lM7EgPDVmmHJwk2hWgGFEI2VYK6jKcbFhW2hYCr3zDzGgwY2p/hAj
-   8v9eCfBx+PJt91so+futlJBpSq1SjzZIgSVoDLlkEZBtfPrY12bsc81IG
-   5lG6SmZP+j3f/HsVsu2QovMLhQRWWibm9ewBuhOksmXzg5qH+2mHEpgUU
-   aSbBGkdT81Nq5JEiMCEVbSNQahiSmCpEWCcoQjlSI/jEL1qUKUNci7876
-   j1Cs6mDEBXfyfRHzyOs1HBvim3CuOV5z8FuUhp7hRQW3h9P8cSnbw4gya
-   s+idwZCuL3IkseLsBuEi9td57oBY9VV7tNXciJiVVVl/Fbzc8tCovYJLn
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="345783313"
-X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="345783313"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 01:29:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="752248900"
-X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="752248900"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Apr 2023 01:29:40 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pl3x5-000TX3-0T;
-        Sat, 08 Apr 2023 08:29:39 +0000
-Date:   Sat, 08 Apr 2023 16:29:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-const] BUILD SUCCESS
- d8cc9415a40f479b666fc03e7b1f4601868e6dc8
-Message-ID: <643125da.hNWu3w+BIa6dJHMp%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229587AbjDHKfH (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 8 Apr 2023 06:35:07 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549ADD338
+        for <linux-hwmon@vger.kernel.org>; Sat,  8 Apr 2023 03:34:25 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id o25-20020a9d4119000000b006a11eb19f8eso21870552ote.5
+        for <linux-hwmon@vger.kernel.org>; Sat, 08 Apr 2023 03:34:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protocubo.io; s=google; t=1680950013; x=1683542013;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=atnnfYB8H/1cRTIRhOKd2CzwH9WdqCAcJhjKRDN3luY=;
+        b=f36p8T3+z/J6u/o8geXfldjzGTUKvuBwnCOq8aVhPB5Yq0scv4lu22t0IvydiWVBM7
+         CU08wz3QuGcIPb3yAdVhAgW3usOu6fLAX0B9dTUyF+DdJBVTJT8oOMZeeGHVuzEsk8U/
+         ACJmBPiPbyDgvFE4BNoYWI2q2/7yDxQ5j48C6PILBZX/SdxNHL3oqGlqu/dDTMUrJmJs
+         0bwnWui1/dIDcDI/PfO4ScpNdmG7VY3T6R/tIZlS7SRCQlputLk0u0J6wwKpSjlPmnKv
+         U/RapLU0djwI0HQLlzVT8qQP9mV23Tbd/Y8AXD8hueIbuxcQessr9EfpsfZaTW/UQGCf
+         bfxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680950013; x=1683542013;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=atnnfYB8H/1cRTIRhOKd2CzwH9WdqCAcJhjKRDN3luY=;
+        b=yCacbkUzwSzB5KSoGPlws27TkUeS7o6qaIc7G0y1r1MQ7EeeJexKvFI2i/RmiYsOoN
+         DNgQftMBSUwcC3z1y4ExPfFmC/jtfE8f2kZPbIzeJ4u4Y3iqoH/EQpCWL6Shrv992UZM
+         K3ltn/MeaP/W0wuL9Nnxn6RdeLiMNqPboBf6aesWQx3P8TpKKhyOVvNVNhEDfAQx8tXW
+         7lsyivzWpUVEtMDS37eNdFQltPDOE05xHcJapUZXDxVPio9OnEFwYbizwU9N3527kSWf
+         SylXw9RconBSClboO+ERoj+nkcj6jkUMv4vKv2tSVkvFALnsqxbkVtvaEYolPs35wWUt
+         niMw==
+X-Gm-Message-State: AAQBX9eJEIui5VK3KDZ6rh2X/tP3mL9db0BVAPqyCkZmA0tW9mlQlU1t
+        Az1MhnlDMIRBnknC+dImP0GLOA==
+X-Google-Smtp-Source: AKy350absmUQ6HrjCN8ybKL7JT651jVYn5RTh9izjX/ysr91076zOIBiNMnDzdw113Fn8tlB/GuQ7Q==
+X-Received: by 2002:a05:6830:101:b0:6a1:7f69:ffbf with SMTP id i1-20020a056830010100b006a17f69ffbfmr2146604otp.36.1680950013453;
+        Sat, 08 Apr 2023 03:33:33 -0700 (PDT)
+Received: from calvin.localdomain ([2804:14d:5c5e:5d5b::1000])
+        by smtp.gmail.com with ESMTPSA id m14-20020a9d6ace000000b0068bcf7995aesm2442533otq.64.2023.04.08.03.33.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Apr 2023 03:33:32 -0700 (PDT)
+Date:   Sat, 8 Apr 2023 07:33:20 -0300
+From:   Jonas Malaco <jonas@protocubo.io>
+To:     Aleksandr Mezin <mezin.alexander@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>,
+        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Marius Zachmann <mail@mariuszachmann.de>,
+        Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Clemens Ladisch <clemens@ladisch.de>,
+        Rudolf Marek <r.marek@assembler.cz>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Derek John Clark <derekjohn.clark@gmail.com>,
+        =?utf-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= 
+        <samsagax@gmail.com>, Iwona Winiarska <iwona.winiarska@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Michael Walle <michael@walle.cc>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Agathe Porte <agathe.porte@nokia.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        patches@opensource.cirrus.com, openbmc@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 48/68] hwmon: nzxt: constify pointers to
+ hwmon_channel_info
+Message-ID: <jkptl4g7jwhz3mij5wffbw2qlwvxsmnwpqhyalq2ayd76pde2h@jfdw7jisg4at>
+References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
+ <20230406203530.3012191-7-krzysztof.kozlowski@linaro.org>
+ <CADnvcfKwHJ=dOFH1+DsDfn6Y5k6xdzA7QR1uVDv1afwCsiso3w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADnvcfKwHJ=dOFH1+DsDfn6Y5k6xdzA7QR1uVDv1afwCsiso3w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-const
-branch HEAD: d8cc9415a40f479b666fc03e7b1f4601868e6dc8  hwmon: constify pointers to hwmon_channel_info
+On Sat, Apr 08, 2023 at 06:14:19AM +0300, Aleksandr Mezin wrote:
+> On Thu, Apr 6, 2023 at 11:37 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> > -static const struct hwmon_channel_info *nzxt_smart2_channel_info[] = {
+> > +static const struct hwmon_channel_info * const nzxt_smart2_channel_info[] = {
+> 
+> In the rest of nzxt-smart2.c there are spaces only before "*", not on
+> both sides (and there are a few "*const" already). Would be nice to
+> keep it consistent. The same seems to be true for nzxt-kraken2.c
+> (although I'm not a maintainer)
 
-elapsed time: 843m
+While I don't have a strong preference for either `* const` or `*const`,
+it would be prefereable to use a single style in any given file.
 
-configs tested: 138
-configs skipped: 7
+As the kernel seems to favor the former style:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+$ rg -F '*const ' | wc -l
+2593
+$ rg -F '* const ' | wc -l
+15359
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r002-20230403   gcc  
-alpha        buildonly-randconfig-r005-20230403   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r002-20230403   gcc  
-alpha                randconfig-r036-20230403   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r004-20230403   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r006-20230403   gcc  
-arc                  randconfig-r016-20230403   gcc  
-arc                  randconfig-r033-20230403   gcc  
-arc                  randconfig-r043-20230403   gcc  
-arc                  randconfig-r043-20230408   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r034-20230403   gcc  
-arm                  randconfig-r046-20230408   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r001-20230403   clang
-arm64                randconfig-r015-20230403   gcc  
-arm64                randconfig-r015-20230406   clang
-arm64                randconfig-r016-20230406   clang
-csky         buildonly-randconfig-r003-20230403   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r021-20230404   gcc  
-hexagon      buildonly-randconfig-r001-20230403   clang
-hexagon              randconfig-r004-20230403   clang
-hexagon              randconfig-r012-20230403   clang
-hexagon              randconfig-r041-20230408   clang
-hexagon              randconfig-r045-20230408   clang
-i386                             allyesconfig   gcc  
-i386                         debian-10.3-func   gcc  
-i386                   debian-10.3-kselftests   gcc  
-i386                        debian-10.3-kunit   gcc  
-i386                          debian-10.3-kvm   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230403   clang
-i386                 randconfig-a002-20230403   clang
-i386                 randconfig-a003-20230403   clang
-i386                 randconfig-a004-20230403   clang
-i386                 randconfig-a005-20230403   clang
-i386                 randconfig-a006-20230403   clang
-i386                 randconfig-a011-20230403   gcc  
-i386                 randconfig-a012-20230403   gcc  
-i386                          randconfig-a012   gcc  
-i386                 randconfig-a013-20230403   gcc  
-i386                 randconfig-a014-20230403   gcc  
-i386                          randconfig-a014   gcc  
-i386                 randconfig-a015-20230403   gcc  
-i386                 randconfig-a016-20230403   gcc  
-i386                          randconfig-a016   gcc  
-i386                 randconfig-r022-20230403   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r022-20230403   gcc  
-ia64                 randconfig-r023-20230403   gcc  
-ia64                 randconfig-r026-20230404   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r025-20230403   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r005-20230403   gcc  
-m68k         buildonly-randconfig-r006-20230403   gcc  
-m68k                                defconfig   gcc  
-microblaze           randconfig-r023-20230403   gcc  
-microblaze           randconfig-r024-20230403   gcc  
-microblaze           randconfig-r031-20230403   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r004-20230403   gcc  
-mips                 randconfig-r011-20230403   clang
-nios2        buildonly-randconfig-r003-20230403   gcc  
-nios2        buildonly-randconfig-r006-20230403   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r014-20230403   gcc  
-nios2                randconfig-r024-20230403   gcc  
-openrisc             randconfig-r025-20230403   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r004-20230403   gcc  
-powerpc              randconfig-r013-20230403   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r003-20230403   clang
-riscv                randconfig-r012-20230406   clang
-riscv                randconfig-r021-20230403   gcc  
-riscv                randconfig-r042-20230403   gcc  
-riscv                randconfig-r042-20230408   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230403   clang
-s390                 randconfig-r004-20230403   clang
-s390                 randconfig-r035-20230403   clang
-s390                 randconfig-r044-20230403   gcc  
-s390                 randconfig-r044-20230408   clang
-sh                               allmodconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r022-20230404   gcc  
-sparc                randconfig-r032-20230403   gcc  
-sparc64      buildonly-randconfig-r002-20230403   gcc  
-sparc64              randconfig-r005-20230403   gcc  
-sparc64              randconfig-r021-20230403   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230403   clang
-x86_64               randconfig-a002-20230403   clang
-x86_64               randconfig-a003-20230403   clang
-x86_64               randconfig-a004-20230403   clang
-x86_64               randconfig-a005-20230403   clang
-x86_64               randconfig-a006-20230403   clang
-x86_64               randconfig-a011-20230403   gcc  
-x86_64               randconfig-a012-20230403   gcc  
-x86_64                        randconfig-a012   clang
-x86_64               randconfig-a013-20230403   gcc  
-x86_64               randconfig-a014-20230403   gcc  
-x86_64                        randconfig-a014   clang
-x86_64               randconfig-a015-20230403   gcc  
-x86_64               randconfig-a016-20230403   gcc  
-x86_64                        randconfig-a016   clang
-x86_64               randconfig-k001-20230403   gcc  
-x86_64               randconfig-r026-20230403   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r024-20230404   gcc  
-xtensa               randconfig-r026-20230403   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+it would be better to change the other two locations in nzxt-kraken2.c
+to also use `* const`.
