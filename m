@@ -2,113 +2,208 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80669C77B6F
-	for <linux-hwmon@archiver.kernel.org>; Sat,  8 Apr 2023 03:58:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7FABC77B61
+	for <linux-hwmon@archiver.kernel.org>; Sat,  8 Apr 2023 06:31:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjDHD66 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Apr 2023 23:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
+        id S229782AbjDHGbi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 8 Apr 2023 02:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjDHD65 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Apr 2023 23:58:57 -0400
-Received: from s.wrqvtbkv.outbound-mail.sendgrid.net (s.wrqvtbkv.outbound-mail.sendgrid.net [149.72.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E9ABDD2
-        for <linux-hwmon@vger.kernel.org>; Fri,  7 Apr 2023 20:58:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=equiv.tech;
-        h=from:subject:references:mime-version:content-type:in-reply-to:to:cc:
-        content-transfer-encoding:cc:content-type:from:subject:to;
-        s=org; bh=9fXf41jSfeH8npS2SnXtOfP5uik6JpmwKRQ6ipNjZhg=;
-        b=mMH1/aZlfkigrD7oqZwotDQVo/b4Gps6GU01Cot3KtnizHwlc1YMxH8vHOuUfqdnuCGC
-        SGn+ixiHfYx6Bu2utFfKxDrVH2vcBFJQhabWRRsDqH0GXi020AkfwMnGjmS+a/ErGhtW1Y
-        4uBWi3DmmdxfeSR2TygKP3Kzcy8nlBWo4=
-Received: by filterdrecv-7457b4c9b5-zkl2v with SMTP id filterdrecv-7457b4c9b5-zkl2v-1-6430E67E-6
-        2023-04-08 03:58:54.271893053 +0000 UTC m=+3903964.849135075
-Received: from localhost (unknown)
-        by geopod-ismtpd-6 (SG) with ESMTP
-        id XJJ8jxPtQIa9xN2G75nh4A
-        Sat, 08 Apr 2023 03:58:53.421 +0000 (UTC)
-Date:   Sat, 08 Apr 2023 03:58:54 +0000 (UTC)
-From:   James Seo <james@equiv.tech>
-Subject: Re: [PATCH v2] hwmon: add HP WMI Sensors driver
-Message-ID: <ZDDmewAgPi/4jpcX@equiv.tech>
-References: <20230406152321.42010-1-james@equiv.tech>
- <2257deba-187b-82d2-181c-f1fed08a2ff7@gmx.de>
- <ZC+sgnuy5bssD1DN@vb-22lts>
- <e256d281-49a5-2d9a-7def-fd68e177e926@roeck-us.net>
+        with ESMTP id S229561AbjDHGbh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 8 Apr 2023 02:31:37 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8C1C678
+        for <linux-hwmon@vger.kernel.org>; Fri,  7 Apr 2023 23:31:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680935496; x=1712471496;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=l1UIDYua9rjxlEXpeBWgdP43enpYNlf3t6NDYBZkPmc=;
+  b=NF0Dxhao8O7Kdv/QopsiQjAb3FOjCFszMC/xENm2hP1Hew69icuPo0dH
+   UsHeaHcj0S0qTC6ISt1ai/8uGDoKV1jxZnjfXSUuQ7SOUv0Jmmbb9ySdn
+   Je2jkUp330FYFntP7q8jDaWyXFY+jjazMohg6pxgiPkpB2J34mgqJFcK/
+   TU3j+wzA8WmIN2hs8VAsWMxgCmJN2hN3xZC0adyX+gf6YuFTGEqOfEhF4
+   MmzmkEoUrb6OP41eSVDXwbXGoULPh1juZXcJ9HABxI2RnAzt32TAKg7eG
+   XU+ZuWUhPvWerJYCxAcvTMLucH6rvR1C3wtuXEw5sECga+44jRoxqmiTy
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="340604929"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="340604929"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 23:31:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="798911105"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="798911105"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 07 Apr 2023 23:31:35 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pl26o-000TQ3-1H;
+        Sat, 08 Apr 2023 06:31:34 +0000
+Date:   Sat, 08 Apr 2023 14:31:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 0ac457129feec7190059600d29e2c9387af2750b
+Message-ID: <64310a38.AbSy4ZO6waP8d10o%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e256d281-49a5-2d9a-7def-fd68e177e926@roeck-us.net>
-X-SG-EID: =?us-ascii?Q?1X41iaRO4wVP+tFXGLuxpQ0yxxMDhGIesR5UcsYKVengQKgidLJSXwOMZlPQwP?=
- =?us-ascii?Q?WsEyzZr62PnJ8E17NJhhMO0lG3ycUBe69Gwm5XP?=
- =?us-ascii?Q?UVOGIf7x=2FfnTSULP9ZVcTc=2FVMlX41+BWNk1aAfb?=
- =?us-ascii?Q?WMk78u45Cq=2FEERL5toW4S9ly7nEgaC8AVM6MyMM?=
- =?us-ascii?Q?GaM4z7WDfcY6u=2F47FdEmwIlEzs8bdpopmQA1Lrm?=
- =?us-ascii?Q?bFycfZPVTsSe8uDnsryXg24xdHXLhmhUmT2JdG?=
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Entity-ID: Y+qgTyM7KJvXcwsg19bS4g==
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Greetings,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 0ac457129feec7190059600d29e2c9387af2750b  hwmon: (coretemp) Delete an obsolete comment
 
-On Fri, Apr 07, 2023 at 05:54:48AM -0700, Guenter Roeck wrote:
-> On 4/6/23 22:39, James Seo wrote:
->> Hi,
->> 
->>> is it guaranteed that faulty sensors wont become operational later?
->>> Also filtering out such sensors would make the support for the hwmon_temp_fault and
->>> hwmon_fan_fault attributes meaningless.
->> 
->> Good point. I can't be certain, but the MOF does seem to imply that
->> sensors can indeed be faulty on just a temporary basis.
->> 
-> 
-> Your current code would explicitly exclude faulty fans from being listed,
-> which does not exactly sound like a good idea.
+elapsed time: 724m
 
-True enough. I recall my reasoning being that faulty sensors would
-still be visible in debugfs. I should have seen the problem then.
+configs tested: 134
+configs skipped: 7
 
->> I'll filter out only the sensors that are "Not Connected" at probe
->> time. My thinking is, even if these might turn into connected sensors
->> later, that would mean the user is e.g. hot-plugging a fan (!), and
->> keeping them could result in a large number (~10 on my Z420) of
->> pointless extra channels. And this would also match the behavior of
->> HP's official utility.
->> 
-> Ultimately that is an implementation decision. Are the sensors hot-pluggable ?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-HP's WMI object specification allows sensors to be hot-pluggable in
-principle. I can't definitively say more than that due to a lack of
-test hardware (that whitepaper I referenced is from 2005, after all).
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r005-20230403   gcc  
+alpha                randconfig-r036-20230403   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r004-20230403   gcc  
+arc                  randconfig-r016-20230403   gcc  
+arc                  randconfig-r033-20230403   gcc  
+arc                  randconfig-r034-20230403   gcc  
+arc                  randconfig-r043-20230403   gcc  
+arc                  randconfig-r043-20230407   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r034-20230403   gcc  
+arm                  randconfig-r046-20230403   clang
+arm                  randconfig-r046-20230407   clang
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r003-20230403   clang
+arm64                               defconfig   gcc  
+arm64                randconfig-r015-20230403   gcc  
+arm64                randconfig-r015-20230406   clang
+arm64                randconfig-r016-20230406   clang
+csky         buildonly-randconfig-r002-20230403   gcc  
+csky                                defconfig   gcc  
+hexagon      buildonly-randconfig-r004-20230403   clang
+hexagon              randconfig-r004-20230403   clang
+hexagon              randconfig-r012-20230403   clang
+hexagon              randconfig-r041-20230403   clang
+hexagon              randconfig-r041-20230407   clang
+hexagon              randconfig-r045-20230403   clang
+hexagon              randconfig-r045-20230407   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230403   clang
+i386                 randconfig-a002-20230403   clang
+i386                 randconfig-a003-20230403   clang
+i386                 randconfig-a004-20230403   clang
+i386                 randconfig-a005-20230403   clang
+i386                 randconfig-a006-20230403   clang
+i386                 randconfig-a011-20230403   gcc  
+i386                 randconfig-a012-20230403   gcc  
+i386                 randconfig-a013-20230403   gcc  
+i386                 randconfig-a014-20230403   gcc  
+i386                 randconfig-a015-20230403   gcc  
+i386                 randconfig-a016-20230403   gcc  
+i386                 randconfig-r022-20230403   gcc  
+i386                 randconfig-r035-20230403   clang
+i386                 randconfig-r036-20230403   clang
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r006-20230403   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r021-20230403   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r005-20230403   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r013-20230408   gcc  
+m68k                 randconfig-r033-20230403   gcc  
+microblaze           randconfig-r023-20230403   gcc  
+microblaze           randconfig-r024-20230403   gcc  
+microblaze           randconfig-r031-20230403   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r014-20230403   gcc  
+nios2                randconfig-r032-20230403   gcc  
+openrisc             randconfig-r012-20230408   gcc  
+openrisc             randconfig-r022-20230403   gcc  
+openrisc             randconfig-r025-20230403   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r006-20230403   clang
+powerpc              randconfig-r013-20230403   gcc  
+powerpc              randconfig-r015-20230408   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r012-20230406   clang
+riscv                randconfig-r021-20230403   gcc  
+riscv                randconfig-r042-20230403   gcc  
+riscv                randconfig-r042-20230407   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r002-20230403   clang
+s390                 randconfig-r003-20230403   clang
+s390                 randconfig-r004-20230403   clang
+s390                 randconfig-r044-20230403   gcc  
+s390                 randconfig-r044-20230407   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r001-20230403   gcc  
+sh                   randconfig-r003-20230403   gcc  
+sparc        buildonly-randconfig-r001-20230403   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r016-20230408   gcc  
+sparc                randconfig-r032-20230403   gcc  
+sparc64              randconfig-r014-20230408   gcc  
+sparc64              randconfig-r024-20230403   gcc  
+sparc64              randconfig-r025-20230403   gcc  
+sparc64              randconfig-r026-20230403   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230403   clang
+x86_64               randconfig-a002-20230403   clang
+x86_64               randconfig-a003-20230403   clang
+x86_64               randconfig-a004-20230403   clang
+x86_64               randconfig-a005-20230403   clang
+x86_64               randconfig-a006-20230403   clang
+x86_64               randconfig-a011-20230403   gcc  
+x86_64               randconfig-a012-20230403   gcc  
+x86_64                        randconfig-a012   clang
+x86_64               randconfig-a013-20230403   gcc  
+x86_64               randconfig-a014-20230403   gcc  
+x86_64                        randconfig-a014   clang
+x86_64               randconfig-a015-20230403   gcc  
+x86_64               randconfig-a016-20230403   gcc  
+x86_64                        randconfig-a016   clang
+x86_64               randconfig-k001-20230403   gcc  
+x86_64               randconfig-r026-20230403   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r023-20230403   gcc  
+xtensa               randconfig-r031-20230403   gcc  
 
-So I think the answer is that it depends on the board and the WMI
-implementation. That's also what I meant in my reply to Armin when I
-said that I couldn't be certain whether faulty sensors can recover.
-
-But I take your point that the driver should be able to handle it if
-the board can.
-
-> If so, how does HP's utility handle the insertion or removal of a sensor (fan) ?
-
-HP's utility just pretty-prints a snapshot of what is in WMI at the
-moment when the user clicks a button, and then only for the sensors
-that were connected when the utility was first started. It doesn't do
-anything special to handle insertion or removal beyond that.
-
-> Either case, it is ok with me if disconnected sensors are not listed.
-> Not listing faulty sensors seems like a bad idea, though.
-> 
-> Guenter
-
-Acknowledged. Faulty sensors will be listed in the next version.
-
-Thanks for reviewing. Further suggestions or concerns from you or
-anyone else reading this are both welcome and appreciated.
-
-James
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
