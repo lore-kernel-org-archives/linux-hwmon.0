@@ -2,178 +2,93 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D26F8C77B61
-	for <linux-hwmon@archiver.kernel.org>; Sun,  9 Apr 2023 11:24:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 053F4C77B6E
+	for <linux-hwmon@archiver.kernel.org>; Sun,  9 Apr 2023 18:36:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbjDILYd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 9 Apr 2023 07:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
+        id S229501AbjDISge (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 9 Apr 2023 14:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjDILYc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 9 Apr 2023 07:24:32 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE113C3D
-        for <linux-hwmon@vger.kernel.org>; Sun,  9 Apr 2023 04:24:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681039471; x=1712575471;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CCPtEGwLd68szxbXv/quIs1cfewe5JHe22biZmEzR68=;
-  b=jYtJ72YR9a0XCTwiK1uEFthN2LdzvApl9c+hmrGCL3FEBS+m1jgUiLwl
-   VZtKvVfmhbUA3hScTFgI9TvHQasHFEzIbSME9B/zLQ4VG+FLzhMgxujFJ
-   zTrX3csktUhUEZFnTsNVOQq35wj4cpFmbzWw23VDTHQAdmUkqbTVGxmZX
-   zHsND8t4YGNuZcbZppdAyk7uGIj26ulFuRnK+X2I1seEC8Vwe7YCynLD0
-   LIbAe9cgQIEdFJ0YnYerahRVISXCCKSZWTvxrkAQpyXoEgllOyOS8aFJp
-   kjtuFiDQG+Q8eycvfPDGPqz1nMqDToZU8IqW/YBGWIJDoo1Vd0VwhoKyL
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10674"; a="406039767"
-X-IronPort-AV: E=Sophos;i="5.98,331,1673942400"; 
-   d="scan'208";a="406039767"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2023 04:24:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10674"; a="690496898"
-X-IronPort-AV: E=Sophos;i="5.98,331,1673942400"; 
-   d="scan'208";a="690496898"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Apr 2023 04:24:29 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1plT9o-000UUl-25;
-        Sun, 09 Apr 2023 11:24:28 +0000
-Date:   Sun, 09 Apr 2023 19:23:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
- 05526b7e8d86b0dd2f408b92c08b5c5ec65c9ac9
-Message-ID: <6432a043.xF93VdM4S1KcCDiw%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229462AbjDISgd (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 9 Apr 2023 14:36:33 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F31C2718;
+        Sun,  9 Apr 2023 11:36:31 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id sb12so7888176ejc.11;
+        Sun, 09 Apr 2023 11:36:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681065390; x=1683657390;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2y4ygWlp1XtLpzWSCbAKMVQBAQ+UpChcysa/+QsWFe8=;
+        b=FXntkwshA1IsfYDjrBcvGOpZG+U4tpT5QTkAhX6HCQrlE8Jhbb+4XWAIEzoDq+i6fT
+         pTD2oxQOcOnY/V/hq49mBE2Nr8wCI/2iHQ3bWQv9hAPW8xgmk3OI4e2TpU2orpAuqNDR
+         73BrLafMJRgkLsUsIPI3JxN1GSH/ZQmWcoROZX8Ry4gAiKSv3gl8XybaUu6BrXeohDOK
+         tQbI+290+EuuaiCvNSjl2ApHpvU+dAiEoWYfhy+tfbZp1qNfTptQf4ciHKxZ25EI4Lsh
+         k2msxKKPCyf9oq9nWrEmPswmAsGdGe930O0X/roiPlFmEsw8QsMh0IF3KR5uqzSjEEwE
+         UpKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681065390; x=1683657390;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2y4ygWlp1XtLpzWSCbAKMVQBAQ+UpChcysa/+QsWFe8=;
+        b=Y5GoIstmSAgn0KRPCsqJ+DQ2GUG1d2gqD66nRZ5QH13CNaN9Xziqa27nMq6+lqLuzE
+         w98htGt8fLlKJ55Au+qMdIBng9dCwiO4/RtjgXt0upKn3uXuzX0baRjAWT+PRcrFuKRy
+         qi9eCG4XeJvsbzVPmcx3LDuEILwNA9ke4NNd/4UutBS5Jp5B2lnz/qnRbBBpCgzgHCVv
+         T+kshmffTSW+LfqBq+QTpnj/h9vcRVQvREc0M4Ok5Fr2yGFM/tugv6Cm2e4P1k/uyhBy
+         0hsMhh/wwXf3aWBh03gpV4Xvqv3xsamBXmLeB7NdI4UCoEEnR4HLW6I3HRjI58LvpEtZ
+         c6CQ==
+X-Gm-Message-State: AAQBX9f84TsnIBc4usEHOp6Smx1gBfETEhFGSaCGqEKt4McmjlqBzsUK
+        yws6oDnyaTYD7wNYJN3j3z9FevJu6fI=
+X-Google-Smtp-Source: AKy350a9BGbXQ/bwENqDYNOrVOCh458scs764LYZBb4cZGGoHX/9GIVTrCU9v4dc9bkFjYoZhT5auw==
+X-Received: by 2002:a17:907:1ca3:b0:92e:eecf:b742 with SMTP id nb35-20020a1709071ca300b0092eeecfb742mr6688894ejc.2.1681065389722;
+        Sun, 09 Apr 2023 11:36:29 -0700 (PDT)
+Received: from fedora.. ([87.116.164.178])
+        by smtp.gmail.com with ESMTPSA id op14-20020a170906bcee00b0093408d33875sm4324095ejb.49.2023.04.09.11.36.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Apr 2023 11:36:29 -0700 (PDT)
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Leonard Anderweit <leonard.anderweit@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (aquacomputer_d5next) Fix alignment of function call params
+Date:   Sun,  9 Apr 2023 20:35:49 +0200
+Message-Id: <20230409183549.12683-1-savicaleksa83@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-branch HEAD: 05526b7e8d86b0dd2f408b92c08b5c5ec65c9ac9  dt-bindings: watchdog: rockchip: Add rockchip,rk3588-wdt string
+checkpatch warns that alignment of parameters of function call around
+line 869 is off. Indent them properly.
 
-elapsed time: 809m
+Fixes: 6f5cdf9b9a86 ("hwmon: (aquacomputer_d5next) Add fan PWM control for Aquaero")
+Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+---
+ drivers/hwmon/aquacomputer_d5next.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-configs tested: 104
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r005-20230409   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r014-20230409   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r004-20230409   gcc  
-arc                  randconfig-r043-20230409   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r035-20230409   gcc  
-arm                  randconfig-r046-20230409   clang
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r002-20230409   clang
-arm64                               defconfig   gcc  
-arm64                randconfig-r002-20230409   clang
-arm64                randconfig-r026-20230409   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r021-20230409   gcc  
-hexagon              randconfig-r015-20230409   clang
-hexagon              randconfig-r041-20230409   clang
-hexagon              randconfig-r045-20230409   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r011-20230409   gcc  
-ia64                 randconfig-r033-20230409   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r003-20230409   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r031-20230409   gcc  
-m68k                 randconfig-r032-20230409   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                          ath79_defconfig   clang
-mips                      maltaaprp_defconfig   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r006-20230409   gcc  
-openrisc     buildonly-randconfig-r006-20230409   gcc  
-openrisc             randconfig-r013-20230409   gcc  
-openrisc             randconfig-r016-20230409   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r024-20230409   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r025-20230409   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r022-20230409   gcc  
-riscv                randconfig-r042-20230409   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r001-20230409   clang
-s390                 randconfig-r044-20230409   gcc  
-sh                               allmodconfig   gcc  
-sh                   randconfig-r005-20230409   gcc  
-sh                   randconfig-r023-20230409   gcc  
-sh                   randconfig-r034-20230409   gcc  
-sparc                               defconfig   gcc  
-sparc64      buildonly-randconfig-r001-20230409   gcc  
-sparc64              randconfig-r003-20230409   gcc  
-sparc64              randconfig-r012-20230409   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r036-20230409   gcc  
-
+diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+index 3bd35d833e69..7db7769fe044 100644
+--- a/drivers/hwmon/aquacomputer_d5next.c
++++ b/drivers/hwmon/aquacomputer_d5next.c
+@@ -867,8 +867,8 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 		switch (priv->kind) {
+ 		case aquaero:
+ 			ret = aqc_get_ctrl_val(priv,
+-				AQUAERO_CTRL_PRESET_START + channel * AQUAERO_CTRL_PRESET_SIZE,
+-				val, AQC_BE16);
++					       AQUAERO_CTRL_PRESET_START +
++					       channel * AQUAERO_CTRL_PRESET_SIZE, val, AQC_BE16);
+ 			if (ret < 0)
+ 				return ret;
+ 			*val = aqc_percent_to_pwm(*val);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2
+
