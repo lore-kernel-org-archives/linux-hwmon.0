@@ -2,135 +2,127 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88D0AC77B61
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Apr 2023 14:03:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2495AC77B61
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Apr 2023 14:40:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjDJODd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 10 Apr 2023 10:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45562 "EHLO
+        id S229693AbjDJOkl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 10 Apr 2023 10:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjDJODb (ORCPT
+        with ESMTP id S229670AbjDJOkk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 Apr 2023 10:03:31 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7025527B;
-        Mon, 10 Apr 2023 07:03:04 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id px4so2172682pjb.3;
-        Mon, 10 Apr 2023 07:03:04 -0700 (PDT)
+        Mon, 10 Apr 2023 10:40:40 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8437730DA;
+        Mon, 10 Apr 2023 07:40:39 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id w11so5015944pjh.5;
+        Mon, 10 Apr 2023 07:40:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681135384; x=1683727384;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=qY72AomAbMje6jRkZ+K0dBVO8y8e5SQs2AgwhNQHgaI=;
-        b=oEWIIxAFZGUXoIe7xm1Ww8Nz5Z1O+m6YP4HtPpJ8p7hF+bFb+WyuYjq7x04iikFM+V
-         rHVxzwXXMnvyiYcVtj5wcGfCt4t4q87NA1P1H95JgxzGknyyU/CEkZpl31YynsD+Jsrz
-         gumTPlz6ysQsp2NrISfE2b94qiWJga0fqfYEIii2PDW/4rLJyrHlDvXpeFWhbL/zT0U6
-         3BLmHxrSQwc14m5nuP+gak300fknTJrwK3qrf5wgFiUNEI1OF/qNEgjLUlIx+FspC1N3
-         knJ1AP9JfKHwmN7tg4SvgsKxGmFR2wSHr3Fv5TxK+a4J4zs3QkdFX5fwwamB0n/e+xX6
-         BpTQ==
+        d=gmail.com; s=20210112; t=1681137639; x=1683729639;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A31u6jRSepHToKl1ZHJ1t1wEod+/nXxHkMwASeYu3RU=;
+        b=BdufJJlPdoAH4B+HsqoNIN+mXLqOoiFqwUgIFBVcB2aICOtIllUNyANmVmxhfuFIhu
+         z/eOAyChh7PEpmso/t01uSqOjLVFbdX2HI8EqjY+vp/xMuN3YzkNdtwBxQTHqAY+46zU
+         KUH2tJ19k5oYLYRaNw+vTZQVDVHu2jIHyFSOjkHH4/uwRzJOiYqJDuQEHZVIZUm2e4fM
+         sE0rL6CS1YPpnp4Z3GxHAmMugLCG+RUWtdNWJ0lvuPka/TueYgUg24sN9AKBdX/jqJYD
+         uTlTF+umdHbR9/1CucIJbdA+Lv/3ankEad/Ul7BqedxgWM5159+ZqCoSWX1L7IYBFY+M
+         52Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681135384; x=1683727384;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qY72AomAbMje6jRkZ+K0dBVO8y8e5SQs2AgwhNQHgaI=;
-        b=qo5RnXUCgIx6Vl1orv5RofG0Da0iCx53XddGsGgsgKoR+pqay7ruJlpZvQGams58Yh
-         0s4GZcD4E3TQ5cVIo9sPU2pl0Q7vxk08JPucC6Hyd8sB4zBOAPx/L+OvJH8GRhpX3KC0
-         ONBvctjQEquqp8/n8C+HVybnzGlLIjyaOEC5ojsJPgyToIaKobo1fTBEGJ2iUO/Z6W6j
-         mMkM0jKbaPEH4T1lcXmEkAqeS0IfbosPstF6YMVvMzocRcPls6/Ib0Vg3jW9DpYfCjIN
-         4ZzyplnaI16Ym/8OuOLrtDYQqY/SZOJY4OZWQICz8/iwyg6jPsRUl2ybz18JimtKAFkQ
-         sukQ==
-X-Gm-Message-State: AAQBX9c4yDqWfZJ32LMXVCTkVZM68ioAnu76XNOZ9hM4XqYku2Q8DlKT
-        lcMaLyp4qIdM31rLNUXwUIQnUqO7rtE=
-X-Google-Smtp-Source: AKy350ZhmibEj2DixzKyVcxxNP46/k57WPd2OqJaXKP90aKYHVrwKh1KvVPgM74ZIbICsziOKIE9Sw==
-X-Received: by 2002:a17:902:f544:b0:1a1:d70f:7114 with SMTP id h4-20020a170902f54400b001a1d70f7114mr13250142plf.14.1681135384043;
-        Mon, 10 Apr 2023 07:03:04 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681137639; x=1683729639;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A31u6jRSepHToKl1ZHJ1t1wEod+/nXxHkMwASeYu3RU=;
+        b=ae6GVrqViwP6tdd3ztiS58f9dYlFJcKyBpdviyxfhul6Q6g4LuuZplrr1de98N4R/z
+         6Ibvg4Iek+p4XW176bPbkt71WHbEhfCqmbrG0gD8N/EeAsF7opEJeg5wm7QehUIz6jjC
+         FhhwVyDfT9wMva9W0466FZIWsE2mf0ofXpUO81DjEwY1wfDQsMv9EWA6RJNX1pXnWMLz
+         Zy0mf4Ob7nNlVfAz9vGQnBKRpQ6RF3dJGDUqL+0xQIui8F3Wgz7vE4+VOr2BgvP3/mO0
+         +YSXNk4Xxc2QIm7W9+GKyhrR+Vawef34RxBBV9OPWPgBfOCtjVN4AsdP6O++Hh0bU3/Q
+         eLgQ==
+X-Gm-Message-State: AAQBX9dYlTN+20TciWWy6Na/L+e2bo9+FxVlnh+xgRxSQQb1UevTAjvl
+        fxyg2i7FbolF7AVVcdkUOuY=
+X-Google-Smtp-Source: AKy350Y/Ji/yq7bdgpV8uPXL50TjXJvKLJJLww0gdapehHa/Bdh/6wQgfykIiZp/C4lj0bQGDDXWdQ==
+X-Received: by 2002:a17:902:e5c7:b0:1a1:7da3:ef5b with SMTP id u7-20020a170902e5c700b001a17da3ef5bmr12986261plf.7.1681137638805;
+        Mon, 10 Apr 2023 07:40:38 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p12-20020a1709028a8c00b001a63deeb5e2sm2108819plo.92.2023.04.10.07.03.02
+        by smtp.gmail.com with ESMTPSA id j20-20020a170902759400b0019309be03e7sm7949646pll.66.2023.04.10.07.40.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 07:03:03 -0700 (PDT)
+        Mon, 10 Apr 2023 07:40:38 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2facc7cd-81fa-b8b7-6974-217392906578@roeck-us.net>
-Date:   Mon, 10 Apr 2023 07:03:01 -0700
+Message-ID: <7c71d182-2ac5-b01e-2875-5060fb509056@roeck-us.net>
+Date:   Mon, 10 Apr 2023 07:40:36 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH] vdpa: solidrun: constify pointers to hwmon_channel_info
 Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alvaro Karsz <alvaro.karsz@solid-run.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org
-References: <20230407150130.79917-1-krzysztof.kozlowski@linaro.org>
- <0395eff6-694e-1a2f-de78-8cb9d7b129a7@roeck-us.net>
- <20230410055634-mutt-send-email-mst@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Naresh Solanki <naresh.solanki@9elements.com>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
+        jerome Neanne <jneanne@baylibre.com>,
+        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
+References: <20230328150335.90238-1-Naresh.Solanki@9elements.com>
+ <20230328150335.90238-2-Naresh.Solanki@9elements.com>
+ <c88d3cdd-fb2f-c3ac-a9e8-e49f8e98b811@gmail.com>
+ <17934bff-f728-d57a-c3c8-956634bd48c8@roeck-us.net>
+ <3be67394-6082-1aeb-8a8d-90149217bdc7@gmail.com>
+ <aea044ab-3a83-2369-aff7-5ef153618619@roeck-us.net>
+ <0672fe4d-7293-4374-9186-29b008e5f8a2@sirena.org.uk>
+ <CANhJrGO3X7pSsMBg6Gtf-q3=_JiCX4Qs=pGudL=etooM2F676g@mail.gmail.com>
+ <d6a3ca82-7245-45e1-b8ff-a9970671b04f@sirena.org.uk>
+ <CANhJrGMkwi1TVW_wGw=Boj1vRO_wGrd9=atOxKfbbdM4cwPGsw@mail.gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230410055634-mutt-send-email-mst@kernel.org>
+Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/core): Add regulator event support
+In-Reply-To: <CANhJrGMkwi1TVW_wGw=Boj1vRO_wGrd9=atOxKfbbdM4cwPGsw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/10/23 02:56, Michael S. Tsirkin wrote:
-> On Fri, Apr 07, 2023 at 04:08:30PM -0700, Guenter Roeck wrote:
->> On 4/7/23 08:01, Krzysztof Kozlowski wrote:
->>> Statically allocated array of pointed to hwmon_channel_info can be made
->>> const for safety.
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>
->>> ---
->>>
->>> This depends on hwmon core patch:
->>> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
->>>
->>> Therefore I propose this should also go via hwmon tree.
+On 4/10/23 01:19, Matti Vaittinen wrote:
+> to 6. huhtik. 2023 klo 16.43 Mark Brown (broonie@kernel.org) kirjoitti:
 >>
->> I am not going to apply patches for 10+ subsystems through the hwmon tree.
->> This can only result in chaos. The dependent patch is available at
->>
->> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-const
+>> On Thu, Apr 06, 2023 at 11:00:02AM +0300, Matti Vaittinen wrote:
+>>> ke 5. huhtik. 2023 klo 18.19 Mark Brown (broonie@kernel.org) kirjoitti:
+>>>> On Wed, Apr 05, 2023 at 07:18:32AM -0700, Guenter Roeck wrote:
 > 
-> Doesn't it cause build errors or warnings there?
+>>>> It can also try to avoid
+>>>> interacting with hardware if that might not work.
+>>
+>>> It'd be great to have documentation / specification for sending and/or
+>>> handling the regulator events. I don't think we currently have such.
+>>> As far as I understand, the notifications can be picked up by all
+>>> consumers of a regulator. I am a bit worried about:
+>>> a) Situations where notification handlers 'collide' by doing 'actions'
+>>> which are unexpected by other handlers
+>>
+>> I'm not sure what you're expecting there?  A device working with itself
+>> shouldn't disrupt any other users.
+> 
+> I have no concrete idea, just a vague uneasy feeling knowing that
+> devices tend to interact with each other. I guess it is more about the
+> amount of uncertainty caused by my lack of knowledge regarding what
+> could be done by these handlers. So, as I already said - if no one
+> else is bothered by this then I definitely don't want to block the
+> series. Still, if the error handling should be kept internal to PMBus
+> - then we should probably either say that consumer drivers must not
+> (forcibly) turn off the supply when receiving these notifications - or
+> not send these notifications from PMBus and allow PMBus to decide
+> error handling internally. (Again, I don't know if any in-tree
+> consumer drivers do turn off the supply regulator in error handlers -
+> but I don't think it is actually forbidden). Or am I just making  a
+> problem that does not exist?
 > 
 
-Are you saying that "hwmon: constify pointers to hwmon_channel_info" applied on its own
-on top of v6.3-rc5 (as done in above branch) causes build errors or warnings ?
-I have not seen any such reports, and I don't immediately see why that would be
-the case. Please elaborate.
+For my part I (still) don't understand why this is considered a problem
+for this driver but not for all the other drivers reporting various
+error conditions to the regulator subsystem. At least some of them
+also have programmable reaction to such error conditions.
 
 Guenter
-
->> or wait until after the next commit window to apply this patch.
->>
->> Thanks,
->> Guenter
->>
->>>
->>> Cc: Jean Delvare <jdelvare@suse.com>
->>> Cc: Guenter Roeck <linux@roeck-us.net>
->>> Cc: linux-hwmon@vger.kernel.org
->>> ---
->>>    drivers/vdpa/solidrun/snet_hwmon.c | 2 +-
->>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/vdpa/solidrun/snet_hwmon.c b/drivers/vdpa/solidrun/snet_hwmon.c
->>> index e695e36ff753..65304354b34a 100644
->>> --- a/drivers/vdpa/solidrun/snet_hwmon.c
->>> +++ b/drivers/vdpa/solidrun/snet_hwmon.c
->>> @@ -159,7 +159,7 @@ static const struct hwmon_ops snet_hwmon_ops = {
->>>    	.read_string = snet_hwmon_read_string
->>>    };
->>> -static const struct hwmon_channel_info *snet_hwmon_info[] = {
->>> +static const struct hwmon_channel_info * const snet_hwmon_info[] = {
->>>    	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT | HWMON_T_LABEL,
->>>    			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_LABEL),
->>>    	HWMON_CHANNEL_INFO(power, HWMON_P_INPUT | HWMON_P_LABEL),
-> 
 
