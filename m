@@ -2,192 +2,95 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD2E1C77B76
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Apr 2023 01:45:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52E8FC77B6E
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Apr 2023 02:20:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjDJBpm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 9 Apr 2023 21:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
+        id S229558AbjDJCUV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 9 Apr 2023 22:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjDJBpj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 9 Apr 2023 21:45:39 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D18D35AF;
-        Sun,  9 Apr 2023 18:45:38 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 339NpNbK011727;
-        Mon, 10 Apr 2023 01:45:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=c1DB9Q+Cek+iqDACVGLynf6pmu9TXXNVC26gWlakK7A=;
- b=BPpaCqmTzfz95o3exg98nLBCS8D+HWZZ+LPy7xpa2EiVzbsrP+Q1KsesxQOX4f7ZQ7GS
- nMz9XueaH2soXEYVWwE/zKfQfztPB9bV75PyYkPU4PXEQqvGqaEO5tNXQrqbdrzPLolK
- 3kjDEceS/VTYjnuuUQ+/ZYqAvLjVHonxUI8ERbkvrppP+XzOpdjUPvNA/AKgIb9doFbv
- 41/GwmH7Ujsx4/pJXxCjEgvKNFf+E7gu4lN0Tbhteu7oi9DZiBch+Vghpr3jLnY/7BS/
- ayocruXsqJQzToLEX0K0uQtIKtbwVuLxfk6KiqG6Ffx28xg83X9WXe6SJheub3T1Y+4r 9A== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3puj4pjh4s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 01:45:09 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 339Nnoqd012442;
-        Mon, 10 Apr 2023 01:45:09 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3pu0f9gaf7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 01:45:08 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33A1j79D15860436
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Apr 2023 01:45:07 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 488D058059;
-        Mon, 10 Apr 2023 01:45:07 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 32C8A5805B;
-        Mon, 10 Apr 2023 01:45:07 +0000 (GMT)
-Received: from gfwa600.aus.stglabs.ibm.com (unknown [9.3.84.101])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 10 Apr 2023 01:45:07 +0000 (GMT)
-Received: by gfwa600.aus.stglabs.ibm.com (Postfix, from userid 181152)
-        id A9ED674514E; Sun,  9 Apr 2023 20:45:06 -0500 (CDT)
-From:   Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-To:     robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        eajames@linux.ibm.com
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-Subject: [PATCH v5 4/5] docs: hwmon: Add documentaion for acbel-fsg032 PSU
-Date:   Sun,  9 Apr 2023 20:44:44 -0500
-Message-Id: <20230410014445.458385-5-lakshmiy@us.ibm.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230410014445.458385-1-lakshmiy@us.ibm.com>
-References: <20230410014445.458385-1-lakshmiy@us.ibm.com>
+        with ESMTP id S229475AbjDJCUV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 9 Apr 2023 22:20:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547DB1FC4;
+        Sun,  9 Apr 2023 19:20:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3C8A60F85;
+        Mon, 10 Apr 2023 02:20:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 41FCBC433D2;
+        Mon, 10 Apr 2023 02:20:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681093219;
+        bh=BN2B0mTIIibvkjrxXG0dZV9T4ql1YRSxPcqNig5X/yw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CwhkRgyN9WOhKBknjL6ShqoCUge0mz8SruJLejdLb+5OtIZCe5IMlNx5gldrgRV9g
+         N1Qvqj346tZLQGz0OvWIZ0p9mZI+hxF6drj/E8ecMV9ANRm+31eJFMTXXKJorBn1Re
+         Esl8hvIR3MepU2cV35DmqWLshu1Cd2+BHq3i47GKcZwer0zCjqHgarP1FGETDiGWQz
+         7GeIPHGnW/NbfRlSrsf8My4Meuq5CltaR6LAknVCqP2S9XKpeNtSJ1U42IG1lmQoAY
+         cd9iG86vL2rKmlCkP14bhb7USMBABe51M4Pkjh0cePQFF8/UzDMlytqMOea1MrILyM
+         ogxcEdrc2yflA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1B876E21EEE;
+        Mon, 10 Apr 2023 02:20:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: whLYNmDzmlR2kEeJT3dNa41QVzCyFDLE
-X-Proofpoint-ORIG-GUID: whLYNmDzmlR2kEeJT3dNa41QVzCyFDLE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-09_18,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
- malwarescore=0 bulkscore=0 adultscore=0 mlxlogscore=929 spamscore=0
- clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304100011
+Subject: Re: [PATCH 1/8] net: netronome: constify pointers to hwmon_channel_info
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168109321910.29680.18338473238737964479.git-patchwork-notify@kernel.org>
+Date:   Mon, 10 Apr 2023 02:20:19 +0000
+References: <20230407145911.79642-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230407145911.79642-1-krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     irusskikh@marvell.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, simon.horman@corigine.com,
+        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        kabel@kernel.org, lxu@maxlinear.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
+        jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add documentation changes for acbel-fsg032 psu
+Hello:
 
-Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
----
- Documentation/hwmon/acbel-fsg032.rst | 80 ++++++++++++++++++++++++++++
- Documentation/hwmon/index.rst        |  1 +
- 2 files changed, 81 insertions(+)
- create mode 100644 Documentation/hwmon/acbel-fsg032.rst
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-diff --git a/Documentation/hwmon/acbel-fsg032.rst b/Documentation/hwmon/acbel-fsg032.rst
-new file mode 100644
-index 000000000000..f1684b95e103
---- /dev/null
-+++ b/Documentation/hwmon/acbel-fsg032.rst
-@@ -0,0 +1,80 @@
-+Kernel driver acbel-fsg032
-+==========================
-+
-+Supported chips:
-+
-+  * ACBEL FSG032-00xG power supply.
-+
-+Author: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-+
-+Description
-+-----------
-+
-+This driver supports ACBEL FSG032-00xG Power Supply. This driver
-+is a client to the core PMBus driver.
-+
-+Usage Notes
-+-----------
-+
-+This driver does not auto-detect devices. You will have to instantiate the
-+devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-+details.
-+
-+Sysfs entries
-+-------------
-+
-+The following attributes are supported:
-+
-+======================= ======================================================
-+curr1_crit              Critical maximum current.
-+curr1_crit_alarm        Input current critical alarm.
-+curr1_input             Measured output current.
-+curr1_label             "iin"
-+curr1_max               Maximum input current.
-+curr1_max_alarm         Maximum input current high alarm.
-+curr1_rated_max         Maximum rated input current.
-+curr2_crit              Critical maximum current.
-+curr2_crit_alarm        Output current critical alarm.
-+curr2_input             Measured output current.
-+curr2_label             "iout1"
-+curr2_max               Maximum output current.
-+curr2_max_alarm         Output current high alarm.
-+curr2_rated_max         Maximum rated output current.
-+
-+
-+fan1_alarm              Fan 1 warning.
-+fan1_fault	        Fan 1 fault.
-+fan1_input	        Fan 1 speed in RPM.
-+fan1_target             Set fan speed reference.
-+
-+in1_alarm               Input voltage under-voltage alarm.
-+in1_input               Measured input voltage.
-+in1_label               "vin"
-+in1_rated_max           Maximum rated input voltage.
-+in1_rated_min           Minimum rated input voltage.
-+in2_crit                Critical maximum output voltage.
-+in2_crit_alarm          Output voltage critical high alarm.
-+in2_input               Measured output voltage.
-+in2_label               "vout1"
-+in2_lcrit               Critical minimum output voltage.
-+in2_lcrit_alarm         Output voltage critical low alarm.
-+in2_rated_max           Maximum rated output voltage.
-+in2_rated_min           Minimum rated output voltage.
-+
-+power1_alarm            Input fault or alarm.
-+power1_input            Measured input power.
-+power1_label            "pin"
-+power1_max              Input power limit.
-+power1_rated_max        Maximum rated input power.
-+power2_crit             Critical output power limit.
-+power2_crit_alarm       Output power crit alarm limit exceeded.
-+power2_input            Measured output power.
-+power2_label            "pout"
-+power2_max              Output power limit.
-+power2_max_alarm        Output power high alarm.
-+power2_rated_max        Maximum rated output power.
-+
-+temp[1-3]_input         Measured temperature.
-+temp[1-2]_max           Maximum temperature.
-+temp[1-3]_rated_max     Temperature high alarm.
-+======================= ======================================================
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index f1fe75f596a5..dc4ebed13617 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -23,6 +23,7 @@ Hardware Monitoring Kernel Drivers
-    abituguru
-    abituguru3
-    acpi_power_meter
-+   acbel-fsg032
-    ad7314
-    adc128d818
-    adm1021
+On Fri,  7 Apr 2023 16:59:04 +0200 you wrote:
+> Statically allocated array of pointed to hwmon_channel_info can be made
+> const for safety.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> [...]
+
+Here is the summary with links:
+  - [1/8] net: netronome: constify pointers to hwmon_channel_info
+    https://git.kernel.org/netdev/net-next/c/87f1c15e8759
+  - [2/8] net: aquantia: constify pointers to hwmon_channel_info
+    https://git.kernel.org/netdev/net-next/c/bc1585f611b2
+  - [3/8] net: phy: aquantia: constify pointers to hwmon_channel_info
+    https://git.kernel.org/netdev/net-next/c/234d79a5f826
+  - [4/8] net: phy: bcm54140: constify pointers to hwmon_channel_info
+    https://git.kernel.org/netdev/net-next/c/211f70be2577
+  - [5/8] net: phy: marvell: constify pointers to hwmon_channel_info
+    https://git.kernel.org/netdev/net-next/c/ff0805e2bde0
+  - [6/8] net: phy: mxl: constify pointers to hwmon_channel_info
+    https://git.kernel.org/netdev/net-next/c/2ed84c0c6f75
+  - [7/8] net: phy: nxp-tja11xx: constify pointers to hwmon_channel_info
+    https://git.kernel.org/netdev/net-next/c/0e76f1dcf487
+  - [8/8] net: phy: sfp: constify pointers to hwmon_channel_info
+    https://git.kernel.org/netdev/net-next/c/490fde262f17
+
+You are awesome, thank you!
 -- 
-2.37.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
