@@ -2,106 +2,83 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D330FC77B70
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Apr 2023 03:13:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 384AFC77B61
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Apr 2023 06:05:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjDJDNy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 9 Apr 2023 23:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
+        id S229553AbjDJGFQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 10 Apr 2023 02:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjDJDNx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 9 Apr 2023 23:13:53 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6D330D5
-        for <linux-hwmon@vger.kernel.org>; Sun,  9 Apr 2023 20:13:46 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id bi39so7756162qkb.13
-        for <linux-hwmon@vger.kernel.org>; Sun, 09 Apr 2023 20:13:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google; t=1681096426; x=1683688426;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ntZMy55/xSRNn21X5fqVWQquJJJq/aQ2W9wX/ILyeb8=;
-        b=We/zlPuaa3SYC+/fX5BSFNlnzgUbsr1Gg6ULkayZ/xS/v8Vs0BTm6b5vlt4Zb2C1dH
-         17b7yAPL1b2bNrRWXHgMUBx38MpmEOVQ4cZjJrHbMrl0Ubg24ajqElFvhyTVs1M/9BDB
-         rctP07xaMeu0kh8CZqa30Q6dfPLSH1B+ylOXo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681096426; x=1683688426;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ntZMy55/xSRNn21X5fqVWQquJJJq/aQ2W9wX/ILyeb8=;
-        b=xoEk4ptJK/Mc4pN2OtezpfqanvJM6noZY3sPD9X17DdZI86UKHfxIeCp3h+PVVwsDw
-         0d4vMBbZwvXAWt+k+G7wIySbm4ii8NMLoajITMf+l21J/d9YvJ/tUnnPfNLqmi9cMURU
-         qwrOr/kWDjtv3OI70nOsIgwkEbWjhWZn2Nmr1lLOQoUyGOKOPzg3RXp4XwBZfszUmP9x
-         +eW8zavZuDnu0dh9anRvmz2YQrnFyGXtwDt56NJ8hfGBGfs1C9AQfsQ74PAt87O5dTFn
-         fb5KlOCIUUQJxzF5pVsoR1RGk8HRYbUPZ7cUPbywxWjIuslQJl/xhI6wlY/ETiymq0Pa
-         8mqA==
-X-Gm-Message-State: AAQBX9cltTZg4H7Ev+olO6t/5t3Nh09tv2rhlnMwZ/4hetdU1bYjs8+t
-        RyyRAFsQRRngYK2+Lo5gwtJL1sCpUf9kN4wpWBF9GQ==
-X-Google-Smtp-Source: AKy350Zjr5nQvJ/lph5fNAEe0swSQUFFph/fm06j5NLpwC5FIRX+xJ+i6lqgl1Rn2EN+OxEd3AaqoyLG3nj7T8ikW0M=
-X-Received: by 2002:a05:620a:c46:b0:743:6092:91b4 with SMTP id
- u6-20020a05620a0c4600b00743609291b4mr2936652qki.14.1681096425847; Sun, 09 Apr
- 2023 20:13:45 -0700 (PDT)
+        with ESMTP id S229482AbjDJGFP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 10 Apr 2023 02:05:15 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0C43C14;
+        Sun,  9 Apr 2023 23:05:10 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 8AA8A24DC94;
+        Mon, 10 Apr 2023 14:05:01 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 10 Apr
+ 2023 14:05:01 +0800
+Received: from [192.168.125.87] (113.72.145.176) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 10 Apr
+ 2023 14:05:00 +0800
+Message-ID: <629439b9-13e4-7a69-bb56-7c3f7622c332@starfivetech.com>
+Date:   Mon, 10 Apr 2023 14:04:59 +0800
 MIME-Version: 1.0
-References: <20230407150015.79715-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230407150015.79715-1-krzysztof.kozlowski@linaro.org>
-From:   Matt Ranostay <matt.ranostay@konsulko.com>
-Date:   Sun, 9 Apr 2023 20:13:35 -0700
-Message-ID: <CAJCx=gmcRAvkBcBdEUk++rLsdiPbhOYcSkQ2Dk2evR4trFS1Vg@mail.gmail.com>
-Subject: Re: [PATCH] media: i2c: video: constify pointers to hwmon_channel_info
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v6 2/2] hwmon: (sfctemp) Add StarFive JH71x0 temperature
+ sensor
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230321022644.107027-1-hal.feng@starfivetech.com>
+ <20230321022644.107027-3-hal.feng@starfivetech.com>
+ <4423f128-dff8-421a-ae9b-b45c087481a4@roeck-us.net>
+Content-Language: en-US
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <4423f128-dff8-421a-ae9b-b45c087481a4@roeck-us.net>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.176]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Apr 7, 2023 at 8:00=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> Statically allocated array of pointed to hwmon_channel_info can be made
-> const for safety.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Sat, 8 Apr 2023 08:29:36 -0700, Guenter Roeck wrote:
+> On Tue, Mar 21, 2023 at 10:26:44AM +0800, Hal Feng wrote:
+>> From: Emil Renner Berthing <kernel@esmil.dk>
+>> 
+>> Add driver for the StarFive JH71x0 temperature sensor. You
+>> can enable/disable it and read temperature in milli Celcius
+>> through sysfs.
+>> 
+>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+>> Co-developed-by: Samin Guo <samin.guo@starfivetech.com>
+>> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> 
+> Applied.
 
-Reviewed-by: Matt Ranostay <matt.ranostay@konsulko.com>
+Thank you so much! Looking forward to seeing it in v6.4.
 
->
-> ---
->
-> This depends on hwmon core patch:
-> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@=
-linaro.org/
->
-> Therefore I propose this should also go via hwmon tree.
->
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
-> ---
->  drivers/media/i2c/video-i2c.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.=
-c
-> index dddf9827b314..abd472dcd497 100644
-> --- a/drivers/media/i2c/video-i2c.c
-> +++ b/drivers/media/i2c/video-i2c.c
-> @@ -274,7 +274,7 @@ static const struct hwmon_channel_info amg88xx_temp =
-=3D {
->         .config =3D amg88xx_temp_config,
->  };
->
-> -static const struct hwmon_channel_info *amg88xx_info[] =3D {
-> +static const struct hwmon_channel_info * const amg88xx_info[] =3D {
->         &amg88xx_temp,
->         NULL
->  };
-> --
-> 2.34.1
->
+Best regards,
+Hal
