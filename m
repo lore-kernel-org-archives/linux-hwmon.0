@@ -2,95 +2,106 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52E8FC77B6E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Apr 2023 02:20:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D330FC77B70
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Apr 2023 03:13:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjDJCUV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 9 Apr 2023 22:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
+        id S229662AbjDJDNy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 9 Apr 2023 23:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjDJCUV (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 9 Apr 2023 22:20:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547DB1FC4;
-        Sun,  9 Apr 2023 19:20:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3C8A60F85;
-        Mon, 10 Apr 2023 02:20:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 41FCBC433D2;
-        Mon, 10 Apr 2023 02:20:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681093219;
-        bh=BN2B0mTIIibvkjrxXG0dZV9T4ql1YRSxPcqNig5X/yw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=CwhkRgyN9WOhKBknjL6ShqoCUge0mz8SruJLejdLb+5OtIZCe5IMlNx5gldrgRV9g
-         N1Qvqj346tZLQGz0OvWIZ0p9mZI+hxF6drj/E8ecMV9ANRm+31eJFMTXXKJorBn1Re
-         Esl8hvIR3MepU2cV35DmqWLshu1Cd2+BHq3i47GKcZwer0zCjqHgarP1FGETDiGWQz
-         7GeIPHGnW/NbfRlSrsf8My4Meuq5CltaR6LAknVCqP2S9XKpeNtSJ1U42IG1lmQoAY
-         cd9iG86vL2rKmlCkP14bhb7USMBABe51M4Pkjh0cePQFF8/UzDMlytqMOea1MrILyM
-         ogxcEdrc2yflA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1B876E21EEE;
-        Mon, 10 Apr 2023 02:20:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229504AbjDJDNx (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 9 Apr 2023 23:13:53 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6D330D5
+        for <linux-hwmon@vger.kernel.org>; Sun,  9 Apr 2023 20:13:46 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id bi39so7756162qkb.13
+        for <linux-hwmon@vger.kernel.org>; Sun, 09 Apr 2023 20:13:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=konsulko.com; s=google; t=1681096426; x=1683688426;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ntZMy55/xSRNn21X5fqVWQquJJJq/aQ2W9wX/ILyeb8=;
+        b=We/zlPuaa3SYC+/fX5BSFNlnzgUbsr1Gg6ULkayZ/xS/v8Vs0BTm6b5vlt4Zb2C1dH
+         17b7yAPL1b2bNrRWXHgMUBx38MpmEOVQ4cZjJrHbMrl0Ubg24ajqElFvhyTVs1M/9BDB
+         rctP07xaMeu0kh8CZqa30Q6dfPLSH1B+ylOXo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681096426; x=1683688426;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ntZMy55/xSRNn21X5fqVWQquJJJq/aQ2W9wX/ILyeb8=;
+        b=xoEk4ptJK/Mc4pN2OtezpfqanvJM6noZY3sPD9X17DdZI86UKHfxIeCp3h+PVVwsDw
+         0d4vMBbZwvXAWt+k+G7wIySbm4ii8NMLoajITMf+l21J/d9YvJ/tUnnPfNLqmi9cMURU
+         qwrOr/kWDjtv3OI70nOsIgwkEbWjhWZn2Nmr1lLOQoUyGOKOPzg3RXp4XwBZfszUmP9x
+         +eW8zavZuDnu0dh9anRvmz2YQrnFyGXtwDt56NJ8hfGBGfs1C9AQfsQ74PAt87O5dTFn
+         fb5KlOCIUUQJxzF5pVsoR1RGk8HRYbUPZ7cUPbywxWjIuslQJl/xhI6wlY/ETiymq0Pa
+         8mqA==
+X-Gm-Message-State: AAQBX9cltTZg4H7Ev+olO6t/5t3Nh09tv2rhlnMwZ/4hetdU1bYjs8+t
+        RyyRAFsQRRngYK2+Lo5gwtJL1sCpUf9kN4wpWBF9GQ==
+X-Google-Smtp-Source: AKy350Zjr5nQvJ/lph5fNAEe0swSQUFFph/fm06j5NLpwC5FIRX+xJ+i6lqgl1Rn2EN+OxEd3AaqoyLG3nj7T8ikW0M=
+X-Received: by 2002:a05:620a:c46:b0:743:6092:91b4 with SMTP id
+ u6-20020a05620a0c4600b00743609291b4mr2936652qki.14.1681096425847; Sun, 09 Apr
+ 2023 20:13:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/8] net: netronome: constify pointers to hwmon_channel_info
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168109321910.29680.18338473238737964479.git-patchwork-notify@kernel.org>
-Date:   Mon, 10 Apr 2023 02:20:19 +0000
-References: <20230407145911.79642-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230407145911.79642-1-krzysztof.kozlowski@linaro.org>
+References: <20230407150015.79715-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230407150015.79715-1-krzysztof.kozlowski@linaro.org>
+From:   Matt Ranostay <matt.ranostay@konsulko.com>
+Date:   Sun, 9 Apr 2023 20:13:35 -0700
+Message-ID: <CAJCx=gmcRAvkBcBdEUk++rLsdiPbhOYcSkQ2Dk2evR4trFS1Vg@mail.gmail.com>
+Subject: Re: [PATCH] media: i2c: video: constify pointers to hwmon_channel_info
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     irusskikh@marvell.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, simon.horman@corigine.com,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        kabel@kernel.org, lxu@maxlinear.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
-        jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri,  7 Apr 2023 16:59:04 +0200 you wrote:
+On Fri, Apr 7, 2023 at 8:00=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
 > Statically allocated array of pointed to hwmon_channel_info can be made
 > const for safety.
-> 
+>
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
+
+Reviewed-by: Matt Ranostay <matt.ranostay@konsulko.com>
+
+>
 > ---
-> 
-> [...]
-
-Here is the summary with links:
-  - [1/8] net: netronome: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/87f1c15e8759
-  - [2/8] net: aquantia: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/bc1585f611b2
-  - [3/8] net: phy: aquantia: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/234d79a5f826
-  - [4/8] net: phy: bcm54140: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/211f70be2577
-  - [5/8] net: phy: marvell: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/ff0805e2bde0
-  - [6/8] net: phy: mxl: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/2ed84c0c6f75
-  - [7/8] net: phy: nxp-tja11xx: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/0e76f1dcf487
-  - [8/8] net: phy: sfp: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/490fde262f17
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>
+> This depends on hwmon core patch:
+> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@=
+linaro.org/
+>
+> Therefore I propose this should also go via hwmon tree.
+>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> ---
+>  drivers/media/i2c/video-i2c.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.=
+c
+> index dddf9827b314..abd472dcd497 100644
+> --- a/drivers/media/i2c/video-i2c.c
+> +++ b/drivers/media/i2c/video-i2c.c
+> @@ -274,7 +274,7 @@ static const struct hwmon_channel_info amg88xx_temp =
+=3D {
+>         .config =3D amg88xx_temp_config,
+>  };
+>
+> -static const struct hwmon_channel_info *amg88xx_info[] =3D {
+> +static const struct hwmon_channel_info * const amg88xx_info[] =3D {
+>         &amg88xx_temp,
+>         NULL
+>  };
+> --
+> 2.34.1
+>
