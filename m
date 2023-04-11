@@ -2,57 +2,141 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 397F6C76196
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Apr 2023 07:44:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7E3CC76196
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Apr 2023 08:32:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjDKHoI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Apr 2023 03:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
+        id S229621AbjDKIcf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Apr 2023 04:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbjDKHnv (ORCPT
+        with ESMTP id S229586AbjDKIce (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Apr 2023 03:43:51 -0400
-Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FE22D57
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Apr 2023 00:43:04 -0700 (PDT)
-Received: by mail.lokoho.com (Postfix, from userid 1001)
-        id 0DBB283312; Tue, 11 Apr 2023 08:41:21 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
-        t=1681198982; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
-        h=Date:From:To:Subject:From;
-        b=WvaPghcWpZgTd6wA5fIC37yxT2sGsUw9hH+npw9c9my9yor2wPxm6+z00YfnhCatf
-         XIh17SJLVXPfZnuljmB8mnp18Le7nE7i5/gK3/YPs6VlBkIvvSV9pkgF2dkxKwNO8h
-         sCWj6p+XsbXqBTNMYEU2KwE8mI4fX+m8CGvRHpqIjULfaUkXxURWdCN8IoRB4PAIm6
-         bgGWBJuAx50yl/9K2GlsT6wiLkjMdokjo4zTZ9vJ7ifst/AXD3eTtUMmHa0BiduK2g
-         +nS2Hjay4XeEzfjfSWWgaSezH2kKSMGNShh2RP3c/WAdD3WHpiT8l6L3LpPwzx0cNJ
-         qU714mSSMaVlA==
-Received: by mail.lokoho.com for <linux-hwmon@vger.kernel.org>; Tue, 11 Apr 2023 07:40:45 GMT
-Message-ID: <20230411074501-0.1.58.1tj9f.0.megaapqstd@lokoho.com>
-Date:   Tue, 11 Apr 2023 07:40:45 GMT
-From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
-To:     <linux-hwmon@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.lokoho.com
+        Tue, 11 Apr 2023 04:32:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5033830EC
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Apr 2023 01:31:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681201901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ItkPu5HmRlc4/iz29tmuZg74rTfbukbWjoDL5l0uPyo=;
+        b=DXo/3GFl7iEUpwTdYlnqFNB5yAw1rh5czm4yU0cpMJ2UIVVyy7yagyasB8FtnqhkwuyLOF
+        HaAHl0QjQG9Kyt19SvhghNvQqR2z3HdPajO279e9v4wnhEdj38+VTJk3YtP72FAJTI4Dod
+        +AsUdAASo6uQqRItdJ3gaRKTqNz2kAY=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-568-gnk62HHLOUeG6iq3xxAnvg-1; Tue, 11 Apr 2023 04:31:40 -0400
+X-MC-Unique: gnk62HHLOUeG6iq3xxAnvg-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-94a355cf318so109720866b.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Apr 2023 01:31:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681201899; x=1683793899;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ItkPu5HmRlc4/iz29tmuZg74rTfbukbWjoDL5l0uPyo=;
+        b=sSqLi8qJcMbMeu2WncqGsRkJ6Ynyq2lL6lbAEwelv+y3YspMjSupc8mK8JYjgtysnQ
+         G1WyTl7cEg3Xyaf4Dj+rZK//vR8/yJxXTQAIRY82H0LLXoxi2SkpF5NP80Z5kwrmASma
+         DRHz2UqQYaMPq4votcHY3T3jUcAjAn7HtCqegGVGjo1y0ieMwVR46Lg4qs0qbCQJ6bFu
+         jZyJ7hSBbym7ebAfXiPtHNkIIycqG8kMmtxR+1ouJ4AzH+s9BUhyvvQbOUXTHa2HuUq9
+         rLbWTgDLAFHVzErjN8CUwHO/ljFhtdjGjYSEU0p2+MCL0t8kX1tEemz6Pdknohhp85/5
+         P3RA==
+X-Gm-Message-State: AAQBX9eW+evFxbv3f7EjAoEXUz/cZGSoh4gYKudoIomgS2Bq3tCmnpqf
+        j3MEMohwRFzkPrDAYeM9kNLKwJMFI5LRfi0L8IAbqQ+ihEZ2j1nAm0hLlGIzr/9HNAbeKiPIzff
+        AgpoQIpY1IEHxdQMkP+XyxY8=
+X-Received: by 2002:aa7:da0f:0:b0:502:20f0:3ee1 with SMTP id r15-20020aa7da0f000000b0050220f03ee1mr9345955eds.31.1681201899283;
+        Tue, 11 Apr 2023 01:31:39 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YBcpOjnV1i0OhFJebiJlY+OH5eD74YU+5nOjlWnsizOEuKAkrdkzbfC6p7fOWf7QKbAHEk2Q==
+X-Received: by 2002:aa7:da0f:0:b0:502:20f0:3ee1 with SMTP id r15-20020aa7da0f000000b0050220f03ee1mr9345940eds.31.1681201899042;
+        Tue, 11 Apr 2023 01:31:39 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id x63-20020a50bac5000000b005024aff3bb5sm4422641ede.80.2023.04.11.01.31.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 01:31:38 -0700 (PDT)
+Message-ID: <4f609a98-6376-5993-45aa-bb5c6a213a49@redhat.com>
+Date:   Tue, 11 Apr 2023 10:31:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/4] platform/x86: gigabyte: constify pointers to
+ hwmon_channel_info
+Content-Language: en-US, nl
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas@weissschuh.net>,
+        Mark Gross <markgross@kernel.org>,
+        Jeremy Soller <jeremy@system76.com>,
+        System76 Product Development <productdev@system76.com>,
+        Azael Avalos <coproscefalo@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+References: <20230407150339.80218-1-krzysztof.kozlowski@linaro.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230407150339.80218-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hi,
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+On 4/7/23 17:03, Krzysztof Kozlowski wrote:
+> Statically allocated array of pointed to hwmon_channel_info can be made
+> const for safety.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> This depends on hwmon core patch:
+> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
+> 
+> Therefore I propose this should also go via hwmon tree.
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+Ok, taking all 4 these patches upstream through the hwmon tree
+is fine by me, here is my Ack for that:
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+Acked-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
 
 
-Pozdrawiam
-Adam Charachuta
+p.s.
+
+I'm going to drop these from my patch queue now. If for some
+reason merging these through the hwmon tree does not work out,
+please resend them after 6.4-rc1 is out (assuming that will
+have the pre-requisite patch) and then I'll apply them directly.
+
+
+
+
+
+> 
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> ---
+>  drivers/platform/x86/gigabyte-wmi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/gigabyte-wmi.c b/drivers/platform/x86/gigabyte-wmi.c
+> index 5e5b17c50eb6..7cc969fb1beb 100644
+> --- a/drivers/platform/x86/gigabyte-wmi.c
+> +++ b/drivers/platform/x86/gigabyte-wmi.c
+> @@ -99,7 +99,7 @@ static umode_t gigabyte_wmi_hwmon_is_visible(const void *data, enum hwmon_sensor
+>  	return usable_sensors_mask & BIT(channel) ? 0444  : 0;
+>  }
+>  
+> -static const struct hwmon_channel_info *gigabyte_wmi_hwmon_info[] = {
+> +static const struct hwmon_channel_info * const gigabyte_wmi_hwmon_info[] = {
+>  	HWMON_CHANNEL_INFO(temp,
+>  			   HWMON_T_INPUT,
+>  			   HWMON_T_INPUT,
+
