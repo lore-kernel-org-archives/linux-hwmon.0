@@ -2,122 +2,123 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE4A1C76196
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Apr 2023 09:12:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EEA3C7619A
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Apr 2023 09:27:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbjDKJMf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Apr 2023 05:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
+        id S229498AbjDKJ1Z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Apr 2023 05:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjDKJMf (ORCPT
+        with ESMTP id S229452AbjDKJ1Z (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Apr 2023 05:12:35 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA26A9;
-        Tue, 11 Apr 2023 02:12:33 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id t20so9474310lfd.5;
-        Tue, 11 Apr 2023 02:12:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681204352;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KtfQiofTa512tuCMPWCEjaBEGijC53jXghVYHeriOMs=;
-        b=C7Paf3ccTcR5wiekvM7kwf1t5P/j47OKMmIIwjrgnDglYVrGyCcTebk85bE4dSZoU9
-         FlO+k2zlX3gPnBZlgw9SXWRIYqFbkthwQ0+hPBFkMm5fanT+I1QaozJDbRdrr6MwqTBo
-         w3j18UQkkUyXhN/8aEg99rSlo3SWo7CKpXMXUX7C10snBSG9mJS5Xz2tsGd+1u8hXjC0
-         SdsnxfOF/LpxCkZECPGliV+MQhE1fGRvKv3JG5FOliIK11traUhp9z+9lJ+EL3zi5r/p
-         yLACuCWUVsZq/BxknvPDH0/2Cs1+fzymCuNs+JimrtkvuYHpYCk16tPymO5ewSVxSK7L
-         3MUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681204352;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KtfQiofTa512tuCMPWCEjaBEGijC53jXghVYHeriOMs=;
-        b=GgvhaQumFYfmbpBDHYGGdgYFU7ThvjqnTffTEVoYPI33epJrmCO8FTRIsEXpCgEIjo
-         7T7zACNpyA5BjnlKruFEVPkkRGqDgHaybF+gqVUe4A1Xo/ha7Y+h+P0fZUNAkKBpHnyJ
-         azKV245PVKhW3+/srhIxDw7K/77EEOXT1FpSHjKweBSmuU0GyB6xAmc6ZJUWp5V7WgXL
-         8PZWsEaGumqLGbq+lFRUV/iM252Ad+L3xyrEThyDdOnBU3UgBtqZUISLmcaeoht4ti3E
-         LQe8l84sJIL0KmxWugw4PjxiDnl9a8HViWekLWIetEy11lHujj3f1PeSuTBqCTpHFqSA
-         vNjg==
-X-Gm-Message-State: AAQBX9dcYRKsugYN4B821gMD8pquOOIogzVYHcvL4qBY+Pf+KZhbIOgj
-        ajB2WSDB6J5FXn1usrP9gtU=
-X-Google-Smtp-Source: AKy350Y2v2swTzHbkzcGh5onxpOf6MXoUWfmNQCnIQAOOkLae40oXau2rRexCymAJxSEzLMW8GdwEA==
-X-Received: by 2002:a05:6512:517:b0:4eb:18d:91de with SMTP id o23-20020a056512051700b004eb018d91demr3979091lfb.43.1681204351698;
-        Tue, 11 Apr 2023 02:12:31 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id w26-20020a19c51a000000b004dc4c5149dasm2477601lfe.301.2023.04.11.02.12.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 02:12:31 -0700 (PDT)
-Message-ID: <80b09e1b-f00e-4c78-6627-111959779376@gmail.com>
-Date:   Tue, 11 Apr 2023 12:12:30 +0300
+        Tue, 11 Apr 2023 05:27:25 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F303E1736;
+        Tue, 11 Apr 2023 02:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681205244; x=1712741244;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=iI2t87/uhLKu3MKVrrkEskkv3w9ib+0I3zw/GUEjajw=;
+  b=fA2ZYkmtZyAj46GgMkTyiTjPTIuCuEE9fAXfU0eqkdrBK5yrSfvChHDF
+   7kGfk6QekFmJKI8wnJqiv6ctceYwL6rr9V9tiY8Wi/M1+Z7Mdm07CiHxB
+   V21+kaComAvW0dZJNWWEQI+lEPgTiGPQMbt+/2MPAAdycORi3SslG3//a
+   4poAt7YCizW1pIqB8+1xOSqIjwuWYnzlV+chsF6NCi2IAeFEhomwE5NaZ
+   a3JMP8L2ajSAZrThyw9kyqcSe1qQiCVx3/MRmA9XrqAwwbhYd88Vwp7uU
+   vlm7ykAwEW9xAhsWv9amvBCIiFALgJWp2ip1MtpksKlSH7BKWB9kzMzf2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="429855761"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="429855761"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 02:27:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="718902535"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="718902535"
+Received: from tunterlu-mobl2.amr.corp.intel.com (HELO localhost) ([10.252.56.34])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 02:27:13 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        nouveau@lists.freedesktop.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/2] drm/i915: constify pointers to hwmon_channel_info
+In-Reply-To: <20230407150031.79749-1-krzysztof.kozlowski@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230407150031.79749-1-krzysztof.kozlowski@linaro.org>
+Date:   Tue, 11 Apr 2023 12:27:10 +0300
+Message-ID: <873556epld.fsf@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US, en-GB
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
-        jerome Neanne <jneanne@baylibre.com>,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
-References: <20230328150335.90238-1-Naresh.Solanki@9elements.com>
- <20230328150335.90238-2-Naresh.Solanki@9elements.com>
- <c88d3cdd-fb2f-c3ac-a9e8-e49f8e98b811@gmail.com>
- <17934bff-f728-d57a-c3c8-956634bd48c8@roeck-us.net>
- <3be67394-6082-1aeb-8a8d-90149217bdc7@gmail.com>
- <aea044ab-3a83-2369-aff7-5ef153618619@roeck-us.net>
- <0672fe4d-7293-4374-9186-29b008e5f8a2@sirena.org.uk>
- <CANhJrGO3X7pSsMBg6Gtf-q3=_JiCX4Qs=pGudL=etooM2F676g@mail.gmail.com>
- <d6a3ca82-7245-45e1-b8ff-a9970671b04f@sirena.org.uk>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/core): Add regulator event support
-In-Reply-To: <d6a3ca82-7245-45e1-b8ff-a9970671b04f@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/6/23 16:43, Mark Brown wrote:
-> On Thu, Apr 06, 2023 at 11:00:02AM +0300, Matti Vaittinen wrote:
->> ke 5. huhtik. 2023 klo 18.19 Mark Brown (broonie@kernel.org) kirjoitti:
->>> On Wed, Apr 05, 2023 at 07:18:32AM -0700, Guenter Roeck wrote:
+On Fri, 07 Apr 2023, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> Statically allocated array of pointed to hwmon_channel_info can be made
+> const for safety.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> ---
+>
+> This depends on hwmon core patch:
+> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
+>
+> Therefore I propose this should also go via hwmon tree.
 
->> Or, is it so that no "generic handling" of these errors is to be
->> expected? Eg, consumers who implement any handling must always be
->> targeted to a very specific system? My thinking has been that the
->> device sending the notification knows the severity of the problem and
->> - for example the REGULATOR_EVENT_REGULATION_OUT is only sent with
->> such severe problems that consumers can try disabling the regulator,
->> whereas the _WARN level notifications may not warrant such action. But
->> again, I don't think we have a specification for this - so this is
->> just my thinking - which may be off.
-> 
-> Do we actually have practical examples of systems sending warnings that
-> aren't followed in very short order by more severe errors, notified or
-> otherwise?
+Thanks for doing this, I couldn't be bothered to follow through with it
+[1].
 
-I asked about this from the hardware colleague(s) in Japan. This far 
-they were not able to provide me a concrete information.
+Acked-by: Jani Nikula <jani.nikula@intel.com>
 
-One potential example use-case they mentioned was "rejecting and 
-re-doing a measurement if regulator warnings are flagged". This sounds 
-(to me) like using a voltage from a regulator as some measurement 
-reference or supply, with very strict warning limits. Still, as said, I 
-did not have a concrete example if/where this is actually implemented - 
-which means the answer to your question remains still "no".
 
-Yours,
-	-- Matti
+
+[1] https://lore.kernel.org/r/20230309082841.400118-1-jani.nikula@intel.com
+
+
+>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> ---
+>  drivers/gpu/drm/i915/i915_hwmon.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
+> index 596dd2c07010..87b527a54272 100644
+> --- a/drivers/gpu/drm/i915/i915_hwmon.c
+> +++ b/drivers/gpu/drm/i915/i915_hwmon.c
+> @@ -267,7 +267,7 @@ static const struct attribute_group *hwm_groups[] = {
+>  	NULL
+>  };
+>  
+> -static const struct hwmon_channel_info *hwm_info[] = {
+> +static const struct hwmon_channel_info * const hwm_info[] = {
+>  	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
+>  	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX | HWMON_P_CRIT),
+>  	HWMON_CHANNEL_INFO(energy, HWMON_E_INPUT),
+> @@ -275,7 +275,7 @@ static const struct hwmon_channel_info *hwm_info[] = {
+>  	NULL
+>  };
+>  
+> -static const struct hwmon_channel_info *hwm_gt_info[] = {
+> +static const struct hwmon_channel_info * const hwm_gt_info[] = {
+>  	HWMON_CHANNEL_INFO(energy, HWMON_E_INPUT),
+>  	NULL
+>  };
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Jani Nikula, Intel Open Source Graphics Center
