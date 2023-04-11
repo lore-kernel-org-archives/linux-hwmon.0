@@ -2,44 +2,44 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA8A7C77B6F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Apr 2023 11:47:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EE10C76196
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Apr 2023 11:54:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjDKLry (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Apr 2023 07:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
+        id S230038AbjDKLy6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Apr 2023 07:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbjDKLrv (ORCPT
+        with ESMTP id S229721AbjDKLy5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:47:51 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085B211A;
-        Tue, 11 Apr 2023 04:47:34 -0700 (PDT)
+        Tue, 11 Apr 2023 07:54:57 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FDEE67;
+        Tue, 11 Apr 2023 04:54:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681213655; x=1712749655;
+  t=1681214096; x=1712750096;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=CFMnqxFhqLg5psuQ3SAPZVSG1LD94Tg/B/5LrnIudj0=;
-  b=nzp9OnjEhNHhR8XHnkoyPHCB3SSg9ytxhFqnVhHYuk1413X4p5+ujhkA
-   B0Qe9JQ9PDA0eUBqRCSYnBr4+rFXLMkQfIUr2jLf47ZNlhMvJs2itX0Fr
-   2YJOkL69nMVKeUAI6nL+S2hjUloe9zIr0QqlTJ3qF2tb8mQxltE4zI56/
-   MuISSr/Yz2vgRdFivXruTyYzrb53daQoy9enDPvTyyD7tRnmAZtyCZipw
-   kl7Et+35rWrSflw9TpeUwAeumtY9h9fW1/M34FibvRV7wPlUJfd871K8s
-   i/7ILRf+Ef2IRYHdLxtMCeGvNvOT5zaOv5hcDD9+3L1e+XEgy+Tz+8H1l
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="371444477"
+  bh=C8TGZFhmbYFm4VBWTD8elks6yBJ/GjsydWyFRQRkG+k=;
+  b=ko+3sF1vlYNwuLeWcd2oSYbURWxLIMSaZ81N61TulHIZVVWsURamrqgY
+   7V81iSBHPJsv5iCjPvIFk/aUm0GeAtqPFQFU+2LwSEZWWB0yYjkOB8yBd
+   Y3kpXN2lf3U7txp6lKVS6L5d3J5CJ0B7PDvCmo6PZcvg/oBlAUWrxIORi
+   0VgC6ddHqfb/C47gotW0xHug4PwSk4RhWGPiqo8c3V34q+Rz17cqH+Kkx
+   wrCo4Z+m+L/8ZPPUqxhULsmnwRwgLYLGCDZmpyJUYX2rGfi1ZG3yUkZ7v
+   gj3RZdH1i7vz0pye+3OrgCvt96ZjrDFW6gkK4Arr/QueeYASv4gi8+sG/
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="341087922"
 X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="371444477"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:45:10 -0700
+   d="scan'208";a="341087922"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:54:56 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="1018343670"
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="832314039"
 X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="1018343670"
+   d="scan'208";a="832314039"
 Received: from rwambsga-mobl.ger.corp.intel.com ([10.251.212.142])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:45:07 -0700
-Date:   Tue, 11 Apr 2023 14:45:12 +0300 (EEST)
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:54:53 -0700
+Date:   Tue, 11 Apr 2023 14:54:58 +0300 (EEST)
 From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     Xu Yilun <yilun.xu@intel.com>
 cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
@@ -51,11 +51,11 @@ cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
         LKML <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH 4/4] mfd: intel-m10-bmc: Manage access to MAX 10 fw
  handshake registers
-In-Reply-To: <ZC+z16LvAxxyRSg/@yilunxu-OptiPlex-7050>
-Message-ID: <6037f0e2-9c9d-b3d8-2641-bb362a2cec2e@linux.intel.com>
-References: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com> <20230405080152.6732-5-ilpo.jarvinen@linux.intel.com> <ZC+z16LvAxxyRSg/@yilunxu-OptiPlex-7050>
+In-Reply-To: <ZC+1rKoUNsqrjjtw@yilunxu-OptiPlex-7050>
+Message-ID: <fb95c8da-c828-12b8-aae-56bd867cff41@linux.intel.com>
+References: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com> <20230405080152.6732-5-ilpo.jarvinen@linux.intel.com> <ZC+1rKoUNsqrjjtw@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-137825018-1681213517=:2109"
+Content-Type: multipart/mixed; boundary="8323329-1451428716-1681214103=:2109"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -63,7 +63,7 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-137825018-1681213517=:2109
+--8323329-1451428716-1681214103=:2109
 Content-Type: text/plain; charset=iso-8859-1
 Content-Transfer-Encoding: 8BIT
 
@@ -98,24 +98,20 @@ On Fri, 7 Apr 2023, Xu Yilun wrote:
 > [...]
 >  
 > >  
-> > +static const struct regmap_range null_fw_handshake_regs[0];
-> > +
-> >  static const struct m10bmc_csr_map m10bmc_n6000_csr_map = {
-> >  	.base = M10BMC_N6000_SYS_BASE,
-> >  	.build_version = M10BMC_N6000_BUILD_VER,
-> > @@ -375,6 +377,8 @@ static const struct m10bmc_csr_map m10bmc_n6000_csr_map = {
-> >  static const struct intel_m10bmc_platform_info m10bmc_pmci_n6000 = {
-> >  	.cells = m10bmc_pmci_n6000_bmc_subdevs,
-> >  	.n_cells = ARRAY_SIZE(m10bmc_pmci_n6000_bmc_subdevs),
-> > +	.handshake_sys_reg_ranges = null_fw_handshake_regs,
-> > +	.handshake_sys_reg_nranges = 0,
+> > +void m10bmc_fw_state_set(struct intel_m10bmc *m10bmc, enum m10bmc_fw_state new_state)
+> > +{
+> > +	down_write(&m10bmc->bmcfw_lock);
+> > +	m10bmc->bmcfw_state = new_state;
+> > +	up_write(&m10bmc->bmcfw_lock);
 > 
-> Not sure why a zero length array is needed? Could we just remove
-> these 2 lines?
+> Could we also skip this if no handshake is possible like for PMCI?
 
-It seems to be safe to remove them so I dropped it.
+Did you mean guarding it with !m10bmc->info->handshake_sys_reg_nranges ?
+If yes, it's doable (+ I'd add comment mentioning it since it's slightly 
+trappy to not always have that state updated).
+
 
 -- 
  i.
 
---8323329-137825018-1681213517=:2109--
+--8323329-1451428716-1681214103=:2109--
