@@ -2,123 +2,97 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EEA3C7619A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Apr 2023 09:27:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F295C7619A
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Apr 2023 11:08:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbjDKJ1Z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Apr 2023 05:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
+        id S230087AbjDKLI6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Apr 2023 07:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjDKJ1Z (ORCPT
+        with ESMTP id S229852AbjDKLIz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Apr 2023 05:27:25 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F303E1736;
-        Tue, 11 Apr 2023 02:27:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681205244; x=1712741244;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=iI2t87/uhLKu3MKVrrkEskkv3w9ib+0I3zw/GUEjajw=;
-  b=fA2ZYkmtZyAj46GgMkTyiTjPTIuCuEE9fAXfU0eqkdrBK5yrSfvChHDF
-   7kGfk6QekFmJKI8wnJqiv6ctceYwL6rr9V9tiY8Wi/M1+Z7Mdm07CiHxB
-   V21+kaComAvW0dZJNWWEQI+lEPgTiGPQMbt+/2MPAAdycORi3SslG3//a
-   4poAt7YCizW1pIqB8+1xOSqIjwuWYnzlV+chsF6NCi2IAeFEhomwE5NaZ
-   a3JMP8L2ajSAZrThyw9kyqcSe1qQiCVx3/MRmA9XrqAwwbhYd88Vwp7uU
-   vlm7ykAwEW9xAhsWv9amvBCIiFALgJWp2ip1MtpksKlSH7BKWB9kzMzf2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="429855761"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="429855761"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 02:27:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="718902535"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="718902535"
-Received: from tunterlu-mobl2.amr.corp.intel.com (HELO localhost) ([10.252.56.34])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 02:27:13 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 1/2] drm/i915: constify pointers to hwmon_channel_info
-In-Reply-To: <20230407150031.79749-1-krzysztof.kozlowski@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230407150031.79749-1-krzysztof.kozlowski@linaro.org>
-Date:   Tue, 11 Apr 2023 12:27:10 +0300
-Message-ID: <873556epld.fsf@intel.com>
+        Tue, 11 Apr 2023 07:08:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FD6CA;
+        Tue, 11 Apr 2023 04:08:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB0F060B73;
+        Tue, 11 Apr 2023 11:08:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC1B2C433D2;
+        Tue, 11 Apr 2023 11:08:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681211329;
+        bh=qIOyfzkrxRB9OOp+QuQSjfXfnjkj0SIKOFRLoZwQrbU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kulBDfZ7GTodEsmRewzDDmRR0Nt0c/Zv5+WN3Skp0gkFogX8cByLFPdB2FTWmrWao
+         4x8hNIEexXqwwlUXs6g7O/pr0/ZfzeipWTZD3dQo+osoT/CTyaNCzaHatM23fAM6hF
+         f3ZdmP7zQ2b2ShZpsUxSyqmdqmsB+w3T81YixA3SiOlm0Qwia98EHhtjpCsymOKSaP
+         rK8mWoqBu4xXxzYdDbJr2lmPEgwtaicr9RhrCcYpUfQJ/KUhWSywXWBAkXm0fz7SPS
+         a261y//qIHjTy0Vw4zzlpSpp0pTuz/jGlzPy60SE1vPlOEfN1uOFhbWJ9UvhsnaATU
+         BTPVO8VMiKJIQ==
+Date:   Tue, 11 Apr 2023 12:08:43 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
+        jerome Neanne <jneanne@baylibre.com>,
+        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
+Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/core): Add regulator event support
+Message-ID: <d5bdc21e-72cf-457c-8a5f-4ccbd37272c1@sirena.org.uk>
+References: <17934bff-f728-d57a-c3c8-956634bd48c8@roeck-us.net>
+ <3be67394-6082-1aeb-8a8d-90149217bdc7@gmail.com>
+ <aea044ab-3a83-2369-aff7-5ef153618619@roeck-us.net>
+ <0672fe4d-7293-4374-9186-29b008e5f8a2@sirena.org.uk>
+ <CANhJrGO3X7pSsMBg6Gtf-q3=_JiCX4Qs=pGudL=etooM2F676g@mail.gmail.com>
+ <d6a3ca82-7245-45e1-b8ff-a9970671b04f@sirena.org.uk>
+ <CANhJrGMkwi1TVW_wGw=Boj1vRO_wGrd9=atOxKfbbdM4cwPGsw@mail.gmail.com>
+ <7c71d182-2ac5-b01e-2875-5060fb509056@roeck-us.net>
+ <65e06627-c368-d081-e18f-a45f245c37ab@gmail.com>
+ <b49cc518-634e-4812-ae4a-ee6ec45b42f2@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/rU+/PCyIIhYVt+l"
+Content-Disposition: inline
+In-Reply-To: <b49cc518-634e-4812-ae4a-ee6ec45b42f2@roeck-us.net>
+X-Cookie: In the war of wits, he's unarmed.
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 07 Apr 2023, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> Statically allocated array of pointed to hwmon_channel_info can be made
-> const for safety.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> ---
->
-> This depends on hwmon core patch:
-> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
->
-> Therefore I propose this should also go via hwmon tree.
 
-Thanks for doing this, I couldn't be bothered to follow through with it
-[1].
+--/rU+/PCyIIhYVt+l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Acked-by: Jani Nikula <jani.nikula@intel.com>
+On Mon, Apr 10, 2023 at 10:47:18AM -0700, Guenter Roeck wrote:
 
+> Personally I think you are concerned about a non-issue, but without
+> explicit guidance from regulator maintainers (and no clear definition if
+> and when regulator notifications should or may be sent) I won't be able
+> to apply this series.
 
+I would expect that regulator driver should just pass through whatever
+they get from the hardware.  I really don't understand what the
+confusion is here.
 
-[1] https://lore.kernel.org/r/20230309082841.400118-1-jani.nikula@intel.com
+--/rU+/PCyIIhYVt+l
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
->
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
-> ---
->  drivers/gpu/drm/i915/i915_hwmon.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
-> index 596dd2c07010..87b527a54272 100644
-> --- a/drivers/gpu/drm/i915/i915_hwmon.c
-> +++ b/drivers/gpu/drm/i915/i915_hwmon.c
-> @@ -267,7 +267,7 @@ static const struct attribute_group *hwm_groups[] = {
->  	NULL
->  };
->  
-> -static const struct hwmon_channel_info *hwm_info[] = {
-> +static const struct hwmon_channel_info * const hwm_info[] = {
->  	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
->  	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX | HWMON_P_CRIT),
->  	HWMON_CHANNEL_INFO(energy, HWMON_E_INPUT),
-> @@ -275,7 +275,7 @@ static const struct hwmon_channel_info *hwm_info[] = {
->  	NULL
->  };
->  
-> -static const struct hwmon_channel_info *hwm_gt_info[] = {
-> +static const struct hwmon_channel_info * const hwm_gt_info[] = {
->  	HWMON_CHANNEL_INFO(energy, HWMON_E_INPUT),
->  	NULL
->  };
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ1P7oACgkQJNaLcl1U
+h9CZEQf/U78igDONvambVgDJmwswCLzgiCuNk6cJgRmmUKJ4vbNE7S8Hex0P179X
+YkS9RRpWn4Tb0os0XeFj4oG8RWtWYvU+wlrJxZdA/lf4aOHJbQqlngtlQWjtgfGQ
+Lt0EKieZl9It5wD49BSSbP1rbTsMDQzpmsfhUg/KlurFYzBs9bM5KhEfNKUUpS9F
+csHFCacN2Dn/ZeHt2Vme50sEPN5IODa2ZEMxugVMj04G+dEDp/hdbOy9bmTicWE4
+vWN26j+t37CotdAb9h7mwyNwJ+wEuDMlOsyQ52OfZ2YWTyW5DEDK+hGq9S617P6q
+c0WLg5eewbsL5DCaaY/hiJxRquuK+w==
+=CrIZ
+-----END PGP SIGNATURE-----
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+--/rU+/PCyIIhYVt+l--
