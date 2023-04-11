@@ -2,97 +2,107 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F295C7619A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Apr 2023 11:08:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E00CC76196
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Apr 2023 11:40:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbjDKLI6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Apr 2023 07:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
+        id S229815AbjDKLko (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Apr 2023 07:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjDKLIz (ORCPT
+        with ESMTP id S229690AbjDKLko (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:08:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FD6CA;
-        Tue, 11 Apr 2023 04:08:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB0F060B73;
-        Tue, 11 Apr 2023 11:08:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC1B2C433D2;
-        Tue, 11 Apr 2023 11:08:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681211329;
-        bh=qIOyfzkrxRB9OOp+QuQSjfXfnjkj0SIKOFRLoZwQrbU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kulBDfZ7GTodEsmRewzDDmRR0Nt0c/Zv5+WN3Skp0gkFogX8cByLFPdB2FTWmrWao
-         4x8hNIEexXqwwlUXs6g7O/pr0/ZfzeipWTZD3dQo+osoT/CTyaNCzaHatM23fAM6hF
-         f3ZdmP7zQ2b2ShZpsUxSyqmdqmsB+w3T81YixA3SiOlm0Qwia98EHhtjpCsymOKSaP
-         rK8mWoqBu4xXxzYdDbJr2lmPEgwtaicr9RhrCcYpUfQJ/KUhWSywXWBAkXm0fz7SPS
-         a261y//qIHjTy0Vw4zzlpSpp0pTuz/jGlzPy60SE1vPlOEfN1uOFhbWJ9UvhsnaATU
-         BTPVO8VMiKJIQ==
-Date:   Tue, 11 Apr 2023 12:08:43 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
-        jerome Neanne <jneanne@baylibre.com>,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
-Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/core): Add regulator event support
-Message-ID: <d5bdc21e-72cf-457c-8a5f-4ccbd37272c1@sirena.org.uk>
-References: <17934bff-f728-d57a-c3c8-956634bd48c8@roeck-us.net>
- <3be67394-6082-1aeb-8a8d-90149217bdc7@gmail.com>
- <aea044ab-3a83-2369-aff7-5ef153618619@roeck-us.net>
- <0672fe4d-7293-4374-9186-29b008e5f8a2@sirena.org.uk>
- <CANhJrGO3X7pSsMBg6Gtf-q3=_JiCX4Qs=pGudL=etooM2F676g@mail.gmail.com>
- <d6a3ca82-7245-45e1-b8ff-a9970671b04f@sirena.org.uk>
- <CANhJrGMkwi1TVW_wGw=Boj1vRO_wGrd9=atOxKfbbdM4cwPGsw@mail.gmail.com>
- <7c71d182-2ac5-b01e-2875-5060fb509056@roeck-us.net>
- <65e06627-c368-d081-e18f-a45f245c37ab@gmail.com>
- <b49cc518-634e-4812-ae4a-ee6ec45b42f2@roeck-us.net>
+        Tue, 11 Apr 2023 07:40:44 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C354435B1;
+        Tue, 11 Apr 2023 04:40:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681213241; x=1712749241;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Q1KmnT6CP3gcYAB98ih7TpWtjuH/X4ISON3W+ihbGac=;
+  b=NN5LEVK/xcK9IfYFRFoPG20GfiMA6lGBXYYQ0rBPbLLa5Pj3+n63OB5E
+   RPf4wsez2ggP4XXIu9yhbN/FWukRVIXK4FSAkqxuXbvySyGj26pj7Zofh
+   BtyNa7vdlTQYePK3VxWJNO0eKoF5RSyGViLIOCeMiZMAy+1VBEC2rX0Be
+   etY+Df0imumuwbKIMdSvpEdA/Er8x+xlsrhZUw+Jy3G5U4MwHnSnoZU1+
+   kyWkZfT2yk9zjb6rnp+cK9jqLR+m11t/MmV6Oo51bnUTd7Q70uQv0US4l
+   bf+rzqa8J3sdAiJIcrp8AiYmLFhas8TaiCcENzzCSq+ypUXMv5fJmtP/0
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="408732615"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="408732615"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:40:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="638785598"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="638785598"
+Received: from rwambsga-mobl.ger.corp.intel.com ([10.251.212.142])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:40:38 -0700
+Date:   Tue, 11 Apr 2023 14:40:33 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org,
+        Russ Weight <russell.h.weight@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/4] mfd: intel-m10-bmc: Move core symbols to own
+ namespace
+In-Reply-To: <ZC+3msi6ovoF55tr@yilunxu-OptiPlex-7050>
+Message-ID: <a67058bc-8265-add0-3b89-8ee310e871b6@linux.intel.com>
+References: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com> <20230405080152.6732-2-ilpo.jarvinen@linux.intel.com> <ZC+3msi6ovoF55tr@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/rU+/PCyIIhYVt+l"
-Content-Disposition: inline
-In-Reply-To: <b49cc518-634e-4812-ae4a-ee6ec45b42f2@roeck-us.net>
-X-Cookie: In the war of wits, he's unarmed.
+Content-Type: multipart/mixed; boundary="8323329-1253313675-1681213247=:2109"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
---/rU+/PCyIIhYVt+l
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--8323329-1253313675-1681213247=:2109
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 
-On Mon, Apr 10, 2023 at 10:47:18AM -0700, Guenter Roeck wrote:
+On Fri, 7 Apr 2023, Xu Yilun wrote:
 
-> Personally I think you are concerned about a non-issue, but without
-> explicit guidance from regulator maintainers (and no clear definition if
-> and when regulator notifications should or may be sent) I won't be able
-> to apply this series.
+> On 2023-04-05 at 11:01:49 +0300, Ilpo Järvinen wrote:
+> > Create INTEL_M10_BMC_CORE namespace for symbols exported by
+> > intel-m10-bmc-core.
+> 
+> Is it necessary for handshake register, or just an independent
+> improvement?
 
-I would expect that regulator driver should just pass through whatever
-they get from the hardware.  I really don't understand what the
-confusion is here.
+It's independent improvement.
 
---/rU+/PCyIIhYVt+l
-Content-Type: application/pgp-signature; name="signature.asc"
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> >  drivers/mfd/intel-m10-bmc-core.c | 2 +-
+> >  drivers/mfd/intel-m10-bmc-pmci.c | 1 +
+> >  drivers/mfd/intel-m10-bmc-spi.c  | 1 +
+> >  3 files changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
+> > index dac9cf7bcb4a..b94412813887 100644
+> > --- a/drivers/mfd/intel-m10-bmc-core.c
+> > +++ b/drivers/mfd/intel-m10-bmc-core.c
+> > @@ -98,7 +98,7 @@ const struct attribute_group *m10bmc_dev_groups[] = {
+> >  	&m10bmc_group,
+> >  	NULL,
+> >  };
+> > -EXPORT_SYMBOL_GPL(m10bmc_dev_groups);
+> > +EXPORT_SYMBOL_NS_GPL(m10bmc_dev_groups, INTEL_M10_BMC_CORE);
+> >  
+> >  int m10bmc_dev_init(struct intel_m10bmc *m10bmc, const struct intel_m10bmc_platform_info *info)
+> 
+> Why this function is not included in namespace?
 
------BEGIN PGP SIGNATURE-----
+It was not left out on purpose, I'll add it there.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ1P7oACgkQJNaLcl1U
-h9CZEQf/U78igDONvambVgDJmwswCLzgiCuNk6cJgRmmUKJ4vbNE7S8Hex0P179X
-YkS9RRpWn4Tb0os0XeFj4oG8RWtWYvU+wlrJxZdA/lf4aOHJbQqlngtlQWjtgfGQ
-Lt0EKieZl9It5wD49BSSbP1rbTsMDQzpmsfhUg/KlurFYzBs9bM5KhEfNKUUpS9F
-csHFCacN2Dn/ZeHt2Vme50sEPN5IODa2ZEMxugVMj04G+dEDp/hdbOy9bmTicWE4
-vWN26j+t37CotdAb9h7mwyNwJ+wEuDMlOsyQ52OfZ2YWTyW5DEDK+hGq9S617P6q
-c0WLg5eewbsL5DCaaY/hiJxRquuK+w==
-=CrIZ
------END PGP SIGNATURE-----
+-- 
+ i.
 
---/rU+/PCyIIhYVt+l--
+--8323329-1253313675-1681213247=:2109--
