@@ -2,116 +2,121 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EE10C76196
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Apr 2023 11:54:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 796EFC76196
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Apr 2023 12:08:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjDKLy6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Apr 2023 07:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S229587AbjDKMI1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Apr 2023 08:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjDKLy5 (ORCPT
+        with ESMTP id S229697AbjDKMI0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:54:57 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FDEE67;
-        Tue, 11 Apr 2023 04:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681214096; x=1712750096;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=C8TGZFhmbYFm4VBWTD8elks6yBJ/GjsydWyFRQRkG+k=;
-  b=ko+3sF1vlYNwuLeWcd2oSYbURWxLIMSaZ81N61TulHIZVVWsURamrqgY
-   7V81iSBHPJsv5iCjPvIFk/aUm0GeAtqPFQFU+2LwSEZWWB0yYjkOB8yBd
-   Y3kpXN2lf3U7txp6lKVS6L5d3J5CJ0B7PDvCmo6PZcvg/oBlAUWrxIORi
-   0VgC6ddHqfb/C47gotW0xHug4PwSk4RhWGPiqo8c3V34q+Rz17cqH+Kkx
-   wrCo4Z+m+L/8ZPPUqxhULsmnwRwgLYLGCDZmpyJUYX2rGfi1ZG3yUkZ7v
-   gj3RZdH1i7vz0pye+3OrgCvt96ZjrDFW6gkK4Arr/QueeYASv4gi8+sG/
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="341087922"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="341087922"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:54:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="832314039"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="832314039"
-Received: from rwambsga-mobl.ger.corp.intel.com ([10.251.212.142])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:54:53 -0700
-Date:   Tue, 11 Apr 2023 14:54:58 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Xu Yilun <yilun.xu@intel.com>
-cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org,
-        Russ Weight <russell.h.weight@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/4] mfd: intel-m10-bmc: Manage access to MAX 10 fw
- handshake registers
-In-Reply-To: <ZC+1rKoUNsqrjjtw@yilunxu-OptiPlex-7050>
-Message-ID: <fb95c8da-c828-12b8-aae-56bd867cff41@linux.intel.com>
-References: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com> <20230405080152.6732-5-ilpo.jarvinen@linux.intel.com> <ZC+1rKoUNsqrjjtw@yilunxu-OptiPlex-7050>
+        Tue, 11 Apr 2023 08:08:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FBC44BF;
+        Tue, 11 Apr 2023 05:08:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F5B4617D4;
+        Tue, 11 Apr 2023 12:07:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75764C4339B;
+        Tue, 11 Apr 2023 12:07:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681214874;
+        bh=bfXxxqU7BPs2st8XCWNHLsB7FvX0a15Qddu/KMfKILw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=omsQjIkdpV5ZXNyGtnm7EwOZmqwpH0bLCSP/Ss95F5A+c9qm9GzZ6Cd3GTHjKJij9
+         t/1s6kAx6lyWAZjE4FXUbYKVXnzmzXNYWAkz0xUtXwVB4AbiVgFpRk3yoKrOcKmZaY
+         1H+/YJNIDnttz2SKSJc3/lhN9K/EnWb1Kr4TjSYFrVJvRmH/B8vv6GJXmKd7gM5REW
+         nGss0mTDSC5cUhmd6obkJd9Gv00u4d+c+B9of2XTeNzSlxZd8VfF4rlxjAjdgR5oYW
+         By5Hf3pk7TvHO1AUZqTh/hg/KkiI7758Wc4IAVr+SCe0i+GM+Bic3FyX0PeWAnYASI
+         w2AeoeKjCgbhw==
+Date:   Tue, 11 Apr 2023 13:07:49 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
+        jerome Neanne <jneanne@baylibre.com>,
+        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
+Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/core): Add regulator event support
+Message-ID: <74f9ebff-3e6f-496f-a776-5bd4650c566c@sirena.org.uk>
+References: <20230328150335.90238-1-Naresh.Solanki@9elements.com>
+ <20230328150335.90238-2-Naresh.Solanki@9elements.com>
+ <c88d3cdd-fb2f-c3ac-a9e8-e49f8e98b811@gmail.com>
+ <17934bff-f728-d57a-c3c8-956634bd48c8@roeck-us.net>
+ <3be67394-6082-1aeb-8a8d-90149217bdc7@gmail.com>
+ <aea044ab-3a83-2369-aff7-5ef153618619@roeck-us.net>
+ <0672fe4d-7293-4374-9186-29b008e5f8a2@sirena.org.uk>
+ <CANhJrGO3X7pSsMBg6Gtf-q3=_JiCX4Qs=pGudL=etooM2F676g@mail.gmail.com>
+ <d6a3ca82-7245-45e1-b8ff-a9970671b04f@sirena.org.uk>
+ <CANhJrGMkwi1TVW_wGw=Boj1vRO_wGrd9=atOxKfbbdM4cwPGsw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1451428716-1681214103=:2109"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iSZ5n5zgM2M88gcl"
+Content-Disposition: inline
+In-Reply-To: <CANhJrGMkwi1TVW_wGw=Boj1vRO_wGrd9=atOxKfbbdM4cwPGsw@mail.gmail.com>
+X-Cookie: In the war of wits, he's unarmed.
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-1451428716-1681214103=:2109
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
+--iSZ5n5zgM2M88gcl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 7 Apr 2023, Xu Yilun wrote:
+On Mon, Apr 10, 2023 at 11:19:41AM +0300, Matti Vaittinen wrote:
+> to 6. huhtik. 2023 klo 16.43 Mark Brown (broonie@kernel.org) kirjoitti:
 
-> On 2023-04-05 at 11:01:52 +0300, Ilpo Järvinen wrote:
-> > On some MAX 10 cards, the BMC firmware is not available to service
-> > handshake registers during secure update erase and write phases at
-> > normal speeds. This problem affects at least hwmon driver. When the MAX
-> > 10 hwmon driver tries to read the sensor values during a secure update,
-> > the reads are slowed down (e.g., reading all D5005 sensors takes ~24s
-> > which is magnitudes worse than the normal <0.02s).
-> > 
-> > Manage access to the handshake registers using a rw semaphore and a FW
-> > state variable to prevent accesses during those secure update phases
-> > and return -EBUSY instead.
-> > 
-> > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> > Co-developed-by: Xu Yilun <yilun.xu@intel.com>
-> > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >  drivers/fpga/intel-m10-bmc-sec-update.c | 17 +++++--
-> >  drivers/mfd/intel-m10-bmc-core.c        | 63 ++++++++++++++++++++++++-
-> >  drivers/mfd/intel-m10-bmc-pmci.c        |  4 ++
-> >  drivers/mfd/intel-m10-bmc-spi.c         | 14 ++++++
-> >  include/linux/mfd/intel-m10-bmc.h       | 27 +++++++++++
-> >  5 files changed, 120 insertions(+), 5 deletions(-)
-> >
-> 
-> [...]
->  
-> >  
-> > +void m10bmc_fw_state_set(struct intel_m10bmc *m10bmc, enum m10bmc_fw_state new_state)
-> > +{
-> > +	down_write(&m10bmc->bmcfw_lock);
-> > +	m10bmc->bmcfw_state = new_state;
-> > +	up_write(&m10bmc->bmcfw_lock);
-> 
-> Could we also skip this if no handshake is possible like for PMCI?
+> > I'm not sure what you're expecting there?  A device working with itself
+> > shouldn't disrupt any other users.
 
-Did you mean guarding it with !m10bmc->info->handshake_sys_reg_nranges ?
-If yes, it's doable (+ I'd add comment mentioning it since it's slightly 
-trappy to not always have that state updated).
+> I have no concrete idea, just a vague uneasy feeling knowing that
+> devices tend to interact with each other. I guess it is more about the
+> amount of uncertainty caused by my lack of knowledge regarding what
+> could be done by these handlers. So, as I already said - if no one
+> else is bothered by this then I definitely don't want to block the
+> series. Still, if the error handling should be kept internal to PMBus
+> - then we should probably either say that consumer drivers must not
+> (forcibly) turn off the supply when receiving these notifications - or
+> not send these notifications from PMBus and allow PMBus to decide
+> error handling internally. (Again, I don't know if any in-tree
+> consumer drivers do turn off the supply regulator in error handlers -
+> but I don't think it is actually forbidden). Or am I just making  a
+> problem that does not exist?
 
+I think you are making a problem that doesn't exist.
 
--- 
- i.
+> > Like I say I'm not sure how much practical difference it makes to think
+> > too hard about differentiating the errors.
 
---8323329-1451428716-1681214103=:2109--
+> I would do at least two classes.
+
+> 1) critical class - it is Ok for the consumer to forcibly shut down
+> the regulator, or maybe the whole system.
+> 2) warning class - it is not Ok to forcibly shut down the regulator.
+
+How severe an issue bad power is will be partly determined by what the
+consumer is doing with the power, it's going to be in a fairly narrow
+range but there is a range.
+
+--iSZ5n5zgM2M88gcl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ1TZQACgkQJNaLcl1U
+h9Ducwf9EHoKpcYxaSwEKyyQvCAmCsWGuRLaCXvkIox6rsTHBWQh6U5fsRdaTHBm
+6lmAvzXd5fW9OBRiDUngGOEjLtJzQw/KqdgTDB82HKxvmEqWLgDbdLTsmSJLJF+O
+/nZ7/KC3+DWgetyLVj5C7j71qnXU6Z/bxkiBwjCEF0dBCRM6unbY/visToQCgPeS
+CFlojNzqr8Eu4JWyxdPivheYQKPcfrGvBCpka2rEiv6ywc7BdrnOQOAp8r3FOUJK
+qyQ7Ef+tsCjQUxI9ZX+Zc9mukIAPbbI51cEOcCTNykd1ZTVE+0uIWv/Pq16+wR2c
+r7SSDYC9AQM7xocLnAYt4+cI/O5G0g==
+=/CrN
+-----END PGP SIGNATURE-----
+
+--iSZ5n5zgM2M88gcl--
