@@ -2,84 +2,85 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53AD9C7619A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Apr 2023 15:13:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E7CBC77B6E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Apr 2023 15:16:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbjDLPNr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Apr 2023 11:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
+        id S229826AbjDLPQO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Apr 2023 11:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjDLPNr (ORCPT
+        with ESMTP id S230241AbjDLPQK (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:13:47 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C609A19A0;
-        Wed, 12 Apr 2023 08:13:43 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id kh6so10146786plb.0;
-        Wed, 12 Apr 2023 08:13:43 -0700 (PDT)
+        Wed, 12 Apr 2023 11:16:10 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C706EA0;
+        Wed, 12 Apr 2023 08:16:07 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id p8so11788641plk.9;
+        Wed, 12 Apr 2023 08:16:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681312423; x=1683904423;
+        d=gmail.com; s=20221208; t=1681312566; x=1683904566;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sztLFyS4uvBBtM8IY9tVKFzpMMoTq4vlM6dKfrxG2Y8=;
-        b=nEPsbrR6mISEAN/2Bqwb5kiIGN2vKr9TeFPUv1Sg5Tj7/ZnnSQl4MIj474xgl0XxTu
-         kSzuJTcc9cKsUJda+snt4SW+5XP3NZCEhd/Oj6aIGJheJQCtJJ8A0ILzZwlRFd4wZX1d
-         W3k78e8u2+1w6zad4UYbSxlB9gJaGuM30Vc8/Tx//gwupTAdeXaR2aW7aQsIwS5uSFQF
-         MbHXXjYJAaDC2xnFyBPSSS2oWMTqhbyCWoAfKpAkfVQlHDadcU5n72HszeJWNLxlKsJC
-         Q7KX8exrL3cXw04+dhcLeFzgqn8wv5BSorzl/ItQk4jcBmXvTYuQMIBPPpdk2X9weX7N
-         idrA==
+        bh=ZS9yP42BKeu0nz/0Fm0spdywFD6SWet99eT1pAG4Mlk=;
+        b=fmru5TWLslHh1F/VpibtInvaPjnCtBeoXL3OSKg/2tbc79Zs68W+w9FQmiu5FGkxi/
+         xGqjIneCh6fJuwXILFrgBA/UKaQofCXgCAKojwRfrXLGL3xQ4y2GXG+LFLiLbvItCNh4
+         W8T+q1WC0NAIYZzbQQaxFpBYsepP6NVMY0CazPMQXnywBJrO8D5b1H+ArbMNag8rc1b/
+         YzQS9XZtMuuOpIpELDw97ta/XbmoIfHk7CWqGIXNhutOhRlC30VLaFXStKopgLUMrJDX
+         lJnqp/Vr4w/Q77h93wzLd3xRCaDn3e4wxx6/bbTWGz8FX5xNnOnVNC/j5XNS30yi7gsg
+         WKAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681312423; x=1683904423;
+        d=1e100.net; s=20210112; t=1681312566; x=1683904566;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sztLFyS4uvBBtM8IY9tVKFzpMMoTq4vlM6dKfrxG2Y8=;
-        b=MgmiD54+zggJnDpPmqwXYCS7Zcj5p091tsRZPqIA4ZTiVBYQ873Iqbq0ZjFzdMXj9Q
-         RS5lri9iSrDphcLDHqvRDtyhdemXW7zVeiYqe84ey8bgWQu8i+g3R4riP6fu0E+I2+1K
-         t9i1FYucYnTKHPO0ju4qQ/+vrEn5F7FTjlqFzpeeImKFDP/rYbcRMU4G8rmZGhv32K22
-         8tv35NqPsNHB5qjaabU3DtGmAvKLONgJ0xZHKNeR+98NGtsuDMoD5uOR1D+SEHQXGRm1
-         RDZNZiBS7T7kzxjNNh/x23lvY9Ksht7XhMHgejS232oDwQW9Z7e08R/GhmExCW9pN2nn
-         PDGA==
-X-Gm-Message-State: AAQBX9eOAB8/a+LWt8RBXktVV54S+bPH49tLBn151NFR1GA/T9K4+rYN
-        BlL0AATjXc6c82k39g546Ak=
-X-Google-Smtp-Source: AKy350bD3FxvTt2LckWFVO+Cd0ejFuK8YxUtabTfRk4Ikq2MR7d9TxAt6QxE2u3Tspmsi81ZQAcbWA==
-X-Received: by 2002:a17:90a:6042:b0:23a:177b:5bfa with SMTP id h2-20020a17090a604200b0023a177b5bfamr9740788pjm.22.1681312423254;
-        Wed, 12 Apr 2023 08:13:43 -0700 (PDT)
+        bh=ZS9yP42BKeu0nz/0Fm0spdywFD6SWet99eT1pAG4Mlk=;
+        b=zS6a7xMVis33nrwSQJ7XTE0ueP7rD1SMcNP7Sn5kXwyLap42TpjmTdQ8YSwgg6Fw+W
+         Ocqm12MgaJodY7WqcWFaIr/R75i4tDrLc45xwLex5YrZxVX0iIpqsQgrWwhipRktkebE
+         nUA3hTTTqbHNl28mePvmzjvQaQRrGmUBZwfk2cMUegO/S4M59Op6ZEoXrxh0x+jiT6ZT
+         9arDNp8efK39RbLR3Bjo+C5zuoyKivFqAxe3EQmZfxCWiaWjekouzbNKg59kiw7GMtOI
+         d1lVx1NYHAta10kSk8HrFqek4+c4kl2y+GIiBlUfdEiy/UMsDW+paCdD0Xujr1DerF6u
+         uyuw==
+X-Gm-Message-State: AAQBX9chyw0kc1soSA7MVVjk0i/1dahR5E4GQAY9ac/ny8GHCRoCOip5
+        6kcBuYlV2bwv8eVKSFuQKeU=
+X-Google-Smtp-Source: AKy350Y99bJLq8uRdrtvpIRU04QHFcqGKSNe9mjACrHY6Wpowj9B+kamKE3rocfSGE80O61sCYJ96w==
+X-Received: by 2002:a17:90a:44:b0:23d:39d5:f81e with SMTP id 4-20020a17090a004400b0023d39d5f81emr23204230pjb.11.1681312566441;
+        Wed, 12 Apr 2023 08:16:06 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a5-20020a17090abe0500b002407c8f89aasm1602811pjs.24.2023.04.12.08.13.42
+        by smtp.gmail.com with ESMTPSA id mp2-20020a17090b190200b0023f5c867f82sm1603745pjb.41.2023.04.12.08.16.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 08:13:42 -0700 (PDT)
+        Wed, 12 Apr 2023 08:16:06 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 12 Apr 2023 08:13:41 -0700
+Date:   Wed, 12 Apr 2023 08:16:05 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Naresh Solanki <naresh.solanki@9elements.com>
 Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/core): Add regulator event support
-Message-ID: <d3e35ca5-9924-4831-a18c-ab128c936c95@roeck-us.net>
+Subject: Re: [PATCH v2 3/3] hwmon: (pmbus/core): Notify regulator events
+Message-ID: <fff31134-4fca-400d-8f29-ebb18fe7e488@roeck-us.net>
 References: <20230328150335.90238-1-Naresh.Solanki@9elements.com>
- <20230328150335.90238-2-Naresh.Solanki@9elements.com>
+ <20230328150335.90238-3-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230328150335.90238-2-Naresh.Solanki@9elements.com>
+In-Reply-To: <20230328150335.90238-3-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 05:03:34PM +0200, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On Tue, Mar 28, 2023 at 05:03:35PM +0200, Naresh Solanki wrote:
+> Notify regulator events in PMBus irq handler.
 > 
-> Add regulator events corresponding to regulator error in regulator flag
-> map.
-> Also capture the same in pmbus_regulator_get_flags.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 
 Applied to hwmon-next.
+
+Please check your e-mail settings: checkpatch complains about a
+mismatch between Naresh.Solanki@9elements.com and
+naresh.solanki@9elements.com. Not that it matters in this case,
+but it is annoying to get a checkpatch alert each time I apply
+one of your patches.
 
 Thanks,
 Guenter
