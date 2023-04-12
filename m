@@ -2,78 +2,62 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4109C77B6E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Apr 2023 06:48:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14168C77B6E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Apr 2023 07:51:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjDLGsh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Apr 2023 02:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
+        id S229777AbjDLHvl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Apr 2023 03:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjDLGsg (ORCPT
+        with ESMTP id S229807AbjDLHvk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Apr 2023 02:48:36 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A804C1B;
-        Tue, 11 Apr 2023 23:48:35 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id E75E568AA6; Wed, 12 Apr 2023 08:48:31 +0200 (CEST)
-Date:   Wed, 12 Apr 2023 08:48:31 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Christoph Hellwig <hch@lst.de>, Guenter Roeck <linux@roeck-us.net>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] nvme: host: hwmon: constify pointers to
- hwmon_channel_info
-Message-ID: <20230412064831.GA20380@lst.de>
-References: <20230407145845.79557-1-krzysztof.kozlowski@linaro.org> <20230411060900.GD18527@lst.de> <20230411061012.GA18624@lst.de> <0d4d27e6-02e0-09e3-8e99-18b40880961c@linaro.org>
+        Wed, 12 Apr 2023 03:51:40 -0400
+Received: from mail.feshiecree.pl (mail.feshiecree.pl [89.40.114.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E31C3ABC
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Apr 2023 00:51:39 -0700 (PDT)
+Received: by mail.feshiecree.pl (Postfix, from userid 1001)
+        id 6011984D36; Wed, 12 Apr 2023 08:50:49 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=feshiecree.pl;
+        s=mail; t=1681285866;
+        bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
+        h=Date:From:To:Subject:From;
+        b=2ZFpWvFEOjByFnam3VAIb224WP54OvsrbnIySj0rd/IzYaa+MqLQWsK+KoarU12Yc
+         wFoIeSsOcWCm+EdK2UxIlE3+bjoJHUsLNX60iePI860vXDwuqyGt+YA4jM0dfuZSx2
+         Iz2FYwDFzzAZ9PBga6fg0x2a3cxB0YNM/EyEeWfelgDrk8fiIVhYuyXVzagRdZMi4w
+         hBAGZw05k0ttGrDaouVPq+ubKuCDRgmhgz1jG0CPIaKAO36osgmkCRnb1hir02YJ6W
+         vcDnWJ+vMNkQ//JfGQ78CLmaZ76TzJISvM1UkLGG3k5YKzIEQncHB3p8ww6YMEkoIP
+         ux0MqHJTOGSyQ==
+Received: by mail.feshiecree.pl for <linux-hwmon@vger.kernel.org>; Wed, 12 Apr 2023 07:50:38 GMT
+Message-ID: <20230412074502-0.1.1y.8ugt.0.0gk8y0zi2m@feshiecree.pl>
+Date:   Wed, 12 Apr 2023 07:50:38 GMT
+From:   "Krystian Wieczorek" <krystian.wieczorek@feshiecree.pl>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.feshiecree.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d4d27e6-02e0-09e3-8e99-18b40880961c@linaro.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 08:11:41AM +0200, Krzysztof Kozlowski wrote:
-> The dependency was described in the patch. Guenter also provided
-> a stable branch with the dependency:
+Dzie=C5=84 dobry,
 
-Ok.  See below for the version with the whitespace and Subject fix I'd like
-to see.  With that:
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
 
-Acked-by: Christoph Hellwig <hch@lst.de>
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
 
----
-From 882410442b1bb5730f3eec29d8dc9ccda5e92cdb Mon Sep 17 00:00:00 2001
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Date: Fri, 7 Apr 2023 16:58:45 +0200
-Subject: nvme-hwmon: constify pointers to hwmon_channel_info
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
 
-Statically allocated array of pointed to hwmon_channel_info can be made
-const for safety.
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/nvme/host/hwmon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/nvme/host/hwmon.c b/drivers/nvme/host/hwmon.c
-index 9e6e56c20ec993..6aa153f3178a60 100644
---- a/drivers/nvme/host/hwmon.c
-+++ b/drivers/nvme/host/hwmon.c
-@@ -185,7 +185,7 @@ static umode_t nvme_hwmon_is_visible(const void *_data,
- 	return 0;
- }
- 
--static const struct hwmon_channel_info *nvme_hwmon_info[] = {
-+static const struct hwmon_channel_info *const nvme_hwmon_info[] = {
- 	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
- 	HWMON_CHANNEL_INFO(temp,
- 			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MIN |
--- 
-2.39.2
-
+Pozdrawiam
+Krystian Wieczorek
