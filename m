@@ -2,72 +2,79 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20A60C7619A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Apr 2023 15:00:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21644C77B77
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Apr 2023 15:12:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjDLPAh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Apr 2023 11:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59124 "EHLO
+        id S231470AbjDLPMy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Apr 2023 11:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjDLPAg (ORCPT
+        with ESMTP id S230401AbjDLPMx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:00:36 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3515E6A;
-        Wed, 12 Apr 2023 08:00:28 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id v9-20020a05683024a900b006a42896c456so598219ots.8;
-        Wed, 12 Apr 2023 08:00:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681311628; x=1683903628;
+        Wed, 12 Apr 2023 11:12:53 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A27A59FF;
+        Wed, 12 Apr 2023 08:12:50 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1a506757855so7270975ad.2;
+        Wed, 12 Apr 2023 08:12:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681312369; x=1683904369;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EBMZhaY83xymj5F7/BlB7Ny2DX8/Qy/kIs0QCA62b9Q=;
-        b=gZu3a73tSctB3gIXYZCDqOWWSjlQHMtuaCdN1WIl2lv74zRBOMzxnmfKGSJsacTiPZ
-         E2jhRJAEJ3BH/m0C8Nmrv0SyLCWVHgRvPiEqeGUssFcwP9Q+G2AfmRHcMYHArLHBgNGd
-         BU0PvI0FPmYAGGgenqOj6KT3UpxE84EeiLLJLIKfOyqhmra0LK07xFgIsQOe+A+GIN/Q
-         7guQPIOiaz1QvRBj7XlnXzdZVYcb60gQ12AKhAD1nWjlQ3RyYe3hXtxDqdmbSTXQ9ybx
-         FbyAiBjvY5I5F2n/TR1gX+Agh7yRMncsugMthwKO20XT4J+vcJu2JiyjkoiqfNCwswOv
-         bP6g==
-X-Gm-Message-State: AAQBX9fcMUtT+h0SGhK5d5r/zfwYHJdmB1Lh8GaOKJnvST7fkVxMfRdF
-        p7EUJllh4WJKQS2925ToiQ==
-X-Google-Smtp-Source: AKy350ahlmVSiwp7FG1xKGZNzu7vJjWneYgychGJ+F3aGGp0Y7040kEhN0CWo57q96lllDT4cSrbbw==
-X-Received: by 2002:a9d:6ad9:0:b0:69c:dd41:563b with SMTP id m25-20020a9d6ad9000000b0069cdd41563bmr1397566otq.15.1681311628006;
-        Wed, 12 Apr 2023 08:00:28 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v21-20020a9d5a15000000b00684152e9ff2sm6605779oth.0.2023.04.12.08.00.27
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R7djEHIQrshlicHr42jwhKPLdZ1EvVn0N5vUUqxUmqs=;
+        b=CjvkCyRKqYzyN3zvx3QAOedCz+G9rh2V2ILPIvY2UwFt3pYrT3i6cuF3zRYjPAsByV
+         nJ02sCFbqYroAu5oPi7qLWcxcwtz/Eb+o6iA/187UrYaXf0CWpmH1eYDDqCF+Hr8Bz2y
+         Bv3JNB3vt8wKaQwVrwRF611YCDhLbeRwMQ9filNwXZZ5O34EbhGNTFWEB68IhZyB3BOT
+         D8k3GLYo1f5AqQfWg52IHoy8bm5rgzSdoICS08bQMfIjvvNP/RIZ78EMOYkGSZ9eTQe8
+         ZEqLKIglXpumZFi7C0ZJO1YxKlAQ2GkFS6w38OrZ20j45+dozTT5c3h7MwW0iIcV3FLd
+         suZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681312369; x=1683904369;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R7djEHIQrshlicHr42jwhKPLdZ1EvVn0N5vUUqxUmqs=;
+        b=EghknxYwSfPs1ZO1A//YCqAo9RKOEKQ8Jw1lJ6LRRup24WhgDZkOUpeqogZsxSV7Dt
+         BdBPrl/SsPEcC5qtjFDOAjDXIkk7yjhqlRgGIBPfvjDzAPgitW3QNDSPxbbNaoMy2ttd
+         l8rlmHgTt4O/mUUzqdcnS6KVRefSVeFgvq142epx2Ygewohy1XlGufgSunh/lKFax5HB
+         YjKK8VaTMykqIB7Hb3FptDFYta1yHhUt8DR/DUR1gbZKYmTFUG0CW/cMziicaPNtHX9D
+         fg1yErPiowgi/4vY00XKZ8aN+VfLKLgbuB6EhaWiaS5JC1F49uZFJPzlJWbhcQ2PQyrZ
+         ephw==
+X-Gm-Message-State: AAQBX9eB/3KBVp7sCi0RvxjN58hYNrohiJHZXVsN/d0ncvWGSwtJhhxg
+        Nu9VB37feYc7QlA9WVJQ/70=
+X-Google-Smtp-Source: AKy350acRcrp59SCXeSc0kywlfrpXfki4xa6IWy89wPCByupZhHsuBG80q8my0ZYopvgCwqUqX488A==
+X-Received: by 2002:aa7:96fb:0:b0:628:87f:6b5d with SMTP id i27-20020aa796fb000000b00628087f6b5dmr7218748pfq.11.1681312369495;
+        Wed, 12 Apr 2023 08:12:49 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p15-20020aa7860f000000b006227c3d5e29sm12365504pfn.16.2023.04.12.08.12.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 08:00:27 -0700 (PDT)
-Received: (nullmailer pid 2361155 invoked by uid 1000);
-        Wed, 12 Apr 2023 15:00:26 -0000
-Date:   Wed, 12 Apr 2023 10:00:26 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Svyatoslav Ryhel <clamor95@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: ina2xx: add supply property
-Message-ID: <168131162651.2361092.17375907489297100764.robh@kernel.org>
-References: <20230407160508.20479-1-clamor95@gmail.com>
- <20230407160508.20479-2-clamor95@gmail.com>
+        Wed, 12 Apr 2023 08:12:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 12 Apr 2023 08:12:47 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] hwmon: (pmbus/core): Add rdev in pmbus_data struct
+Message-ID: <24cfe115-59a1-4a25-8745-47c9dba87d25@roeck-us.net>
+References: <20230328150335.90238-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230407160508.20479-2-clamor95@gmail.com>
+In-Reply-To: <20230328150335.90238-1-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-
-On Fri, 07 Apr 2023 19:05:07 +0300, Svyatoslav Ryhel wrote:
-> Add vs-supply property.
+On Tue, Mar 28, 2023 at 05:03:33PM +0200, Naresh Solanki wrote:
+> Add regulator device in pmbus_data & initialize the same during PMBus
+> regulator register.
 > 
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> ---
->  Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+Applied to hwmon-next.
 
+Thanks,
+Guenter
