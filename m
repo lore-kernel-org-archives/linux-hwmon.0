@@ -2,109 +2,78 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63B8FC7619A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Apr 2023 05:23:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4109C77B6E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Apr 2023 06:48:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjDLFXt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Apr 2023 01:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
+        id S229649AbjDLGsh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Apr 2023 02:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjDLFXo (ORCPT
+        with ESMTP id S229484AbjDLGsg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Apr 2023 01:23:44 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0559558B;
-        Tue, 11 Apr 2023 22:23:42 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33C5DcZZ008736;
-        Wed, 12 Apr 2023 05:23:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=JBGUWeE4Kqhf4rYB4gtbBEROi3DJ1G04g/xw6cAMsFA=;
- b=ms49/7O6scAxj+rT8QHVTVfU4faL2lFcTw5uqWyLZyKaWdNeXpaY45cgNc52/jJAqjpd
- pJgtNUNfEibPz8ls4vhPRuTXaMmQHNxufjr7PJnWXjwZ2MptdmAz7aEvTWt1PDDG9smS
- PPQrAqWTc9I36lHkWPIQwslLrl3/jDfBStTiyf/ZY0d7Ao89s68X10u6E9EUjV1iDSNp
- +RnfQdliiYW3s6CPbkJGmNDCSNKsdJER6SEd3zz+JuWYOqRksjcPNhrl3iZWRwN9y+0H
- Ol8Pwr9Jh5ynFDh1Bq7ZP3OZ0dVkx22YiPpAL55u9vB4liutuKa2TKuQqITg2BU9iTTd mA== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pwm3ymdka-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 05:23:11 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33C3JBAX003076;
-        Wed, 12 Apr 2023 05:23:10 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3pu0jb43hy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 05:23:10 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33C5N9ih57016598
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Apr 2023 05:23:09 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3C0DE58068;
-        Wed, 12 Apr 2023 05:23:09 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2619558061;
-        Wed, 12 Apr 2023 05:23:09 +0000 (GMT)
-Received: from gfwa600.aus.stglabs.ibm.com (unknown [9.3.84.101])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed, 12 Apr 2023 05:23:09 +0000 (GMT)
-Received: by gfwa600.aus.stglabs.ibm.com (Postfix, from userid 181152)
-        id 9E82D74514D; Wed, 12 Apr 2023 00:23:08 -0500 (CDT)
-From:   Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-To:     robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        eajames@linux.ibm.com
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Lakshmi Yadlapati <lakshmiy@us.ibm.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 2/5] dt-bindings: trivial-devices: Add acbel,fsg032
-Date:   Wed, 12 Apr 2023 00:23:02 -0500
-Message-Id: <20230412052305.1369521-3-lakshmiy@us.ibm.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230412052305.1369521-1-lakshmiy@us.ibm.com>
-References: <20230412052305.1369521-1-lakshmiy@us.ibm.com>
+        Wed, 12 Apr 2023 02:48:36 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A804C1B;
+        Tue, 11 Apr 2023 23:48:35 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id E75E568AA6; Wed, 12 Apr 2023 08:48:31 +0200 (CEST)
+Date:   Wed, 12 Apr 2023 08:48:31 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Guenter Roeck <linux@roeck-us.net>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] nvme: host: hwmon: constify pointers to
+ hwmon_channel_info
+Message-ID: <20230412064831.GA20380@lst.de>
+References: <20230407145845.79557-1-krzysztof.kozlowski@linaro.org> <20230411060900.GD18527@lst.de> <20230411061012.GA18624@lst.de> <0d4d27e6-02e0-09e3-8e99-18b40880961c@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: E9NopzmqkJ91-7PHaBRyeJdZ2L9w4dyo
-X-Proofpoint-GUID: E9NopzmqkJ91-7PHaBRyeJdZ2L9w4dyo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-11_16,2023-04-11_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- suspectscore=0 impostorscore=0 bulkscore=0 adultscore=0 priorityscore=1501
- phishscore=0 clxscore=1015 mlxlogscore=781 mlxscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304120044
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0d4d27e6-02e0-09e3-8e99-18b40880961c@linaro.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add new Acbel FSG032 power supply to trivial devices.
+On Tue, Apr 11, 2023 at 08:11:41AM +0200, Krzysztof Kozlowski wrote:
+> The dependency was described in the patch. Guenter also provided
+> a stable branch with the dependency:
 
-Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-Acked-by: Rob Herring <robh@kernel.org>
+Ok.  See below for the version with the whitespace and Subject fix I'd like
+to see.  With that:
+
+Acked-by: Christoph Hellwig <hch@lst.de>
+
 ---
- Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+From 882410442b1bb5730f3eec29d8dc9ccda5e92cdb Mon Sep 17 00:00:00 2001
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Date: Fri, 7 Apr 2023 16:58:45 +0200
+Subject: nvme-hwmon: constify pointers to hwmon_channel_info
 
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index 6f482a254a1d..246863a9bc7e 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -29,6 +29,8 @@ properties:
-   compatible:
-     items:
-       - enum:
-+            # Acbel fsg032 power supply
-+          - acbel,fsg032
-             # SMBus/I2C Digital Temperature Sensor in 6-Pin SOT with SMBus Alert and Over Temperature Pin
-           - ad,ad7414
-             # ADM9240: Complete System Hardware Monitor for uProcessor-Based Systems
+Statically allocated array of pointed to hwmon_channel_info can be made
+const for safety.
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/nvme/host/hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/nvme/host/hwmon.c b/drivers/nvme/host/hwmon.c
+index 9e6e56c20ec993..6aa153f3178a60 100644
+--- a/drivers/nvme/host/hwmon.c
++++ b/drivers/nvme/host/hwmon.c
+@@ -185,7 +185,7 @@ static umode_t nvme_hwmon_is_visible(const void *_data,
+ 	return 0;
+ }
+ 
+-static const struct hwmon_channel_info *nvme_hwmon_info[] = {
++static const struct hwmon_channel_info *const nvme_hwmon_info[] = {
+ 	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
+ 	HWMON_CHANNEL_INFO(temp,
+ 			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MIN |
 -- 
-2.37.2
+2.39.2
 
