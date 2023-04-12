@@ -2,81 +2,79 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16A6EC77B6E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Apr 2023 15:17:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DEF12C7619A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Apr 2023 15:18:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjDLPRv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Apr 2023 11:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        id S230272AbjDLPSr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Apr 2023 11:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjDLPRo (ORCPT
+        with ESMTP id S230325AbjDLPSo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:17:44 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1227ABB;
-        Wed, 12 Apr 2023 08:17:35 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id p8so11793421plk.9;
-        Wed, 12 Apr 2023 08:17:35 -0700 (PDT)
+        Wed, 12 Apr 2023 11:18:44 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB36F19A4;
+        Wed, 12 Apr 2023 08:18:18 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id q15-20020a17090a2dcf00b0023efab0e3bfso14889039pjm.3;
+        Wed, 12 Apr 2023 08:18:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681312655; x=1683904655;
+        d=gmail.com; s=20221208; t=1681312698; x=1683904698;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lXF0M8ANb/S1+Ov1PDbB2m5VawQaqhAZf2fWUn9CoWA=;
-        b=hsuFVrxxQ6xiG07eLMH08j6NecdqR/0cfvRQl67MPuAhj4+Dvlqzw2gYdWuj33s0DK
-         ot2595G2+QNgi9c2sX/2tO3oEhwbmg+uQewBragkuiC+/Lxbkx4DzYFoQZit1xfsy6kN
-         E+VrsQTwusG8xpOtJCIfQSbkfUOIElZ+8omWH7+waQ0HZ7Vg2nFCjH5SweekQjsV/qHC
-         SsBy9zoYC0pKbIQkezJOKjYUJ0jjF8NymqCjzXYyolE4G23orKDH8hv+QsRq/Bb47nCk
-         NfKuaHJMBIrJvCny1ExYgWbkwof4c+b4ytdHgjLRBGcracw4CLMLsfxLNcbtAaBNbI2J
-         ZXgw==
+        bh=PBdAiudwsZrxAWgz03gjkUeI/ey0GGb580RTaoqKdnY=;
+        b=JQRoSmAcsAbmBQXtit40Ic4wplBUDKdYCOJDIvRtkMKSung4cSLcK1RVxuAYCAicRX
+         Anx15scGVA1uPgrmkuel5HSlsLWvW7ddc7zDyWr/vOM/4CJLxrJSZolnUZwak2U30mxp
+         02qqDcieYWLBUxBUmhAGWRnL2cqSX14+PoyWfhsH+1FhxS8zqkq9EVt2jCtKm/i3sQQB
+         bV7ysRh89vTMsdYz2gPjKnwBc3tQxHOgO9WajJVfG/5Uy0/hRvjWqiMmKGibC+TqstDl
+         PUkObe6MlqIYnqR9xLH2kayljqGOQg5Fawvfh7GyRovkVfbSyC6ZU+ys+AM8BxadnWu8
+         uPfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681312655; x=1683904655;
+        d=1e100.net; s=20210112; t=1681312698; x=1683904698;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lXF0M8ANb/S1+Ov1PDbB2m5VawQaqhAZf2fWUn9CoWA=;
-        b=eRRugrzwfRp1xEFzys/D7I1XLPMdfy28szixZ/nXo8IDGUU9wYdkPfPyUUbQ/j9b6a
-         RNdTgz1oFsB+gWPbuDCJH9t0D5u5jQxeute03OA0mD/wZWCvmz3wK4k0q/WEQliJxhzR
-         bq+cNToR4bGdqakB4yVZrDp0q7dxhTNfchx2mK52rIDfvtg4DLAQI8EL1g9LUr/FEBFo
-         txJSJVq+rvrs7FV66+IPXIWrBl8RQ6+dZs0StJnTp3If1+bh27yLA9ZjwmlhtfnfqXX/
-         chLxcb06ajRlbwdmEdqzcKA/LiKbu3TvQdZtfEYiL2oq0TZ9+7x0QTXThN6nJoKLWD0j
-         VLqg==
-X-Gm-Message-State: AAQBX9e2fV5EqKQNn9p67gRinkpRJm2dFqT1BH3jcIMQttCrV8jlXubH
-        m562ZCulhBEXXdp5ROYTsnNO/q8BxDg=
-X-Google-Smtp-Source: AKy350aodtH/90OqVyY8JXbpvT8JGcsKs6dqZXseHtJMWkNDpxI6xnlmD57rGgpA1CEM8T1G8sRidg==
-X-Received: by 2002:a17:903:124f:b0:1a5:5e7:a1c9 with SMTP id u15-20020a170903124f00b001a505e7a1c9mr9370822plh.61.1681312655059;
-        Wed, 12 Apr 2023 08:17:35 -0700 (PDT)
+        bh=PBdAiudwsZrxAWgz03gjkUeI/ey0GGb580RTaoqKdnY=;
+        b=mRQFC+s9jbalGPnc662DnUkRmduDajuQP+3yHMtbAJ3nMdtz5HXe0VOADdhO/BoRMs
+         wOcuoFQ89pB9bTvK8D1xbfTkUQ1nm+yVozkqM7TCCHk9jso4qYBlNGEaP3PDmQVGQVuu
+         vCq8RtadrKIeqZCXk0jc52dBjo2gXcPucJrVVc8+TztqI/ANzt/dx8vGRcDCU2G+7QRY
+         nRF2/tirjvcUCR6xyUHJV5oFpnUaQWk1LgrrwC4z/1ZezKPPzZrdopCkQSTJgfGmUhec
+         utvRWDswGcmrjF7cjvfM/IfWdWVKjouZ3iaZ2ET3mbFaGktvVXYKo6TUbZ7uqH04Uv1w
+         ss6w==
+X-Gm-Message-State: AAQBX9eyaZEowc6FBSM2GzfYbF8OFmd3HoqpLvSi4yloq/l4yYuVedlt
+        m3rkITvzWrBa3MQ6dicKgAk=
+X-Google-Smtp-Source: AKy350bOI1Wh66KAElENSsK5tXKePFCqIGw4hT1jsfypUkHnaIjN26j+9Ck/Bk3S0MzFGtXwqxa7Ag==
+X-Received: by 2002:a17:902:f54b:b0:1a4:f79d:67bc with SMTP id h11-20020a170902f54b00b001a4f79d67bcmr9634257plf.43.1681312698458;
+        Wed, 12 Apr 2023 08:18:18 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e12-20020a170902d38c00b001a64fb9cf54sm4124118pld.44.2023.04.12.08.17.34
+        by smtp.gmail.com with ESMTPSA id k9-20020a170902694900b001a5000ba26esm11518466plt.264.2023.04.12.08.18.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 08:17:34 -0700 (PDT)
+        Wed, 12 Apr 2023 08:18:18 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 12 Apr 2023 08:17:33 -0700
+Date:   Wed, 12 Apr 2023 08:18:17 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+To:     Svyatoslav Ryhel <clamor95@gmail.com>
 Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v3 1/1] dt-bindings: hwmon: pwm-fan: Convert to DT schema
-Message-ID: <6bd199d3-a551-4e74-bc38-3ea0558a40d6@roeck-us.net>
-References: <20230406182000.956275-1-cristian.ciocaltea@collabora.com>
- <20230406182000.956275-2-cristian.ciocaltea@collabora.com>
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: ina2xx: add supply property
+Message-ID: <970b8923-010a-481b-8521-68272b5c0e16@roeck-us.net>
+References: <20230407160508.20479-1-clamor95@gmail.com>
+ <20230407160508.20479-2-clamor95@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230406182000.956275-2-cristian.ciocaltea@collabora.com>
+In-Reply-To: <20230407160508.20479-2-clamor95@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 09:20:00PM +0300, Cristian Ciocaltea wrote:
-> Convert the PWM fan bindings to DT schema format.
+On Fri, Apr 07, 2023 at 07:05:07PM +0300, Svyatoslav Ryhel wrote:
+> Add vs-supply property.
 > 
-> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
 Applied to hwmon-next.
 
