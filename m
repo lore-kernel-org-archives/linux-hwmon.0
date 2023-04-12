@@ -2,105 +2,193 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D52BCC7619A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Apr 2023 05:18:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04589C7619A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Apr 2023 05:23:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbjDLFSN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Apr 2023 01:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
+        id S229481AbjDLFXk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Apr 2023 01:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDLFSM (ORCPT
+        with ESMTP id S229458AbjDLFXj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Apr 2023 01:18:12 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592044222;
-        Tue, 11 Apr 2023 22:18:11 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id l18so9551727wrb.9;
-        Tue, 11 Apr 2023 22:18:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681276690; x=1683868690;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=23jw4wGKLELZol6xO6kwjfhk3S68zzLUVSsJHxPhCD8=;
-        b=ZUkM5oKdb4ookaFWsqWFvBmCxeDBYZLd9D3FiN+0Qi6TRnV/WdccjioIPAL6mpJPVj
-         0qEhyYsF22F3JOqC3cVWagGijDx0dgPoETlo1DSREi1iD/6uL3Hd9waeInofJd7BnjhT
-         ONSfjWVDSDLSLJOxksqouG/urMhIUrp2Ja+UOZ5XxWEEBSd4hPSWP5EOKkc/7ucNLIJf
-         UeuIGdcocv3My7QQenqZulTkxPaybkjUPOKoi2IB0Vfto5kq09sBH2fEHfyTgzvNJAvU
-         Hc6av23QV9yv7Jl/8GcCt1/C6H46kaOsURijs0vMx45xhxJZBAiILjcso9Zyz0XTqhOS
-         LBLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681276690; x=1683868690;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=23jw4wGKLELZol6xO6kwjfhk3S68zzLUVSsJHxPhCD8=;
-        b=W33KBEVN8oddDjBcVOhkOwnPQib+Ce/uohR+WWvfBxtZkB945OokGTSfuHs/VBZ5DG
-         woXtdTXr+Bp5KuzYXN0TXA5opIrq8+MYtp3JFcmRY1e4gfIAGTN+h3h2aZV+FhyBRXVW
-         WtFUjcZ6yfBgzVDO2b2wCpZPxzy/TeF3iJVDzaTnQyoKuZh+sF6JFu0XTfI1Fw2d+P7h
-         UOHxpDWZOlOYS9WVh+7RaxJPz778drGb/OxLfPgb50wA05/f5Tgy40cFI3aEdc674NHa
-         ZmwFmkgDw6BMp9MFL7S5K3RjwR4ira05Tz/UfyI1yfr2ywRjVgeniT0zoJH4+OM1J2y6
-         lJdQ==
-X-Gm-Message-State: AAQBX9fyjZShJ4AME9tWLPQnF854+BE/RDsClbY71wx/xvr5h3Ujn/GS
-        hRMrxZuGBFtLIqSM25xNSTRrkvZRWJjJSQ==
-X-Google-Smtp-Source: AKy350b01aD4wQXPQCnVvryxDWQadGDFF+swBMFZwGRtWEWz7Eh1hiBU4r4t1USDzKLxOWAAvukKKQ==
-X-Received: by 2002:a5d:6804:0:b0:2c8:f78:2772 with SMTP id w4-20020a5d6804000000b002c80f782772mr10177676wru.19.1681276689567;
-        Tue, 11 Apr 2023 22:18:09 -0700 (PDT)
-Received: from [192.168.0.22] ([87.116.164.178])
-        by smtp.gmail.com with ESMTPSA id h16-20020a5d5490000000b002c8476dde7asm16113421wrv.114.2023.04.11.22.18.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 22:18:09 -0700 (PDT)
-Message-ID: <9d8194bc-34d0-bbe9-825b-2b7635056a10@gmail.com>
-Date:   Wed, 12 Apr 2023 07:18:07 +0200
+        Wed, 12 Apr 2023 01:23:39 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CC31FFB;
+        Tue, 11 Apr 2023 22:23:38 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33C3tlCW039830;
+        Wed, 12 Apr 2023 05:23:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=c1DB9Q+Cek+iqDACVGLynf6pmu9TXXNVC26gWlakK7A=;
+ b=gs4oOCkiYfQvxAhdEQyIqMFseCWqBr6c0qJmAPgYNU/uo6oN703JBlq4JYMKo5cdG2HC
+ SgGFkk1jskEMNI9AwXLkPNLF0VoW/8BksOkipIxxPBjeQxzzaX8Bt8rLpNOKBeev/k4R
+ xUQdK7sX+eWDlJ6oLNlvwWxa8gF+LwD2aHc/6rvW63dmwfUhdLQXle50aehOcLkfGToe
+ 40zVX3Q4VtDCfHSslXnmFS9t1GKAdaovV8uDtlbTJBacIel+9OC0WsHkEn3xhXBsz4o0
+ 6trCCM3TmkPSI0a0RIWrqZIzI0HqGHo1QKQ/jI+4hNo83j3gu6g+5T4LxINscZtyXUhz Ww== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pwn5gah9y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 05:23:11 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33C3QYeB013554;
+        Wed, 12 Apr 2023 05:23:10 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3pu0m6m2xq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 05:23:10 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33C5N9HL10682900
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Apr 2023 05:23:09 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 423AA5806B;
+        Wed, 12 Apr 2023 05:23:09 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 36B1858062;
+        Wed, 12 Apr 2023 05:23:09 +0000 (GMT)
+Received: from gfwa600.aus.stglabs.ibm.com (unknown [9.3.84.101])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 12 Apr 2023 05:23:09 +0000 (GMT)
+Received: by gfwa600.aus.stglabs.ibm.com (Postfix, from userid 181152)
+        id A87F774514F; Wed, 12 Apr 2023 00:23:08 -0500 (CDT)
+From:   Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+To:     robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
+        eajames@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+Subject: [PATCH v6 4/5] docs: hwmon: Add documentaion for acbel-fsg032 PSU
+Date:   Wed, 12 Apr 2023 00:23:04 -0500
+Message-Id: <20230412052305.1369521-5-lakshmiy@us.ibm.com>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230412052305.1369521-1-lakshmiy@us.ibm.com>
+References: <20230412052305.1369521-1-lakshmiy@us.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Cc:     savicaleksa83@gmail.com, linux-hwmon@vger.kernel.org,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Leonard Anderweit <leonard.anderweit@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Fix alignment of function
- call params
-To:     Guenter Roeck <linux@roeck-us.net>
-References: <20230409183549.12683-1-savicaleksa83@gmail.com>
- <c24a071e-b191-4626-8edc-1658a01d80ef@roeck-us.net>
- <5f24cb94-d7f1-f8b0-71f0-2b39a89bb2dc@gmail.com>
- <07419415-3087-48e6-955a-b5024d943e07@roeck-us.net>
-Content-Language: en-US
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-In-Reply-To: <07419415-3087-48e6-955a-b5024d943e07@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: aaRv3EnYOC0WOPRxAU-Y1Pc44YkJBZer
+X-Proofpoint-GUID: aaRv3EnYOC0WOPRxAU-Y1Pc44YkJBZer
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_16,2023-04-11_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
+ suspectscore=0 clxscore=1015 bulkscore=0 priorityscore=1501
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 spamscore=0 mlxlogscore=930
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304120044
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2023-04-11 22:19:21 GMT+02:00, Guenter Roeck wrote:
-> On Tue, Apr 11, 2023 at 08:26:32PM +0200, Aleksa Savic wrote:
->> On 2023-04-10 18:53:08 GMT+02:00, Guenter Roeck wrote:
->>>
->>> I am not sure I understand how this would improve readability.
->>> It seems to accomplish the opposite. Sure, I know, checkpatch --strict
->>> complains, but that is still better than unreadable code just to make
->>> checkpatch happy.
->>>
->>> Guenter
->>
->> Both seemed fine to me, the idea was to fix the checkpatch warning.
->> If it's OK for it to complain about this, plus the changes would make it
->> harder to read, please ignore this patch.
->>
-> 
-> checkpatch is useful, but not in situations where following its guidance
-> results in code which is diffficult to read. I run checkpatch --strict when
-> applying patches, so I do notice when it complains. If I want a report
-> to be addressed, I'll say that (such as, for example, when people are
-> overly generous with empty lines). If not, you can assume that I am ok with
-> the report and find it more important to have readable code than being
-> checkpatch-clean.
-> 
-> Guenter
+Add documentation changes for acbel-fsg032 psu
 
-That clears it up, thanks!
+Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+---
+ Documentation/hwmon/acbel-fsg032.rst | 80 ++++++++++++++++++++++++++++
+ Documentation/hwmon/index.rst        |  1 +
+ 2 files changed, 81 insertions(+)
+ create mode 100644 Documentation/hwmon/acbel-fsg032.rst
 
-Aleksa
+diff --git a/Documentation/hwmon/acbel-fsg032.rst b/Documentation/hwmon/acbel-fsg032.rst
+new file mode 100644
+index 000000000000..f1684b95e103
+--- /dev/null
++++ b/Documentation/hwmon/acbel-fsg032.rst
+@@ -0,0 +1,80 @@
++Kernel driver acbel-fsg032
++==========================
++
++Supported chips:
++
++  * ACBEL FSG032-00xG power supply.
++
++Author: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
++
++Description
++-----------
++
++This driver supports ACBEL FSG032-00xG Power Supply. This driver
++is a client to the core PMBus driver.
++
++Usage Notes
++-----------
++
++This driver does not auto-detect devices. You will have to instantiate the
++devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
++details.
++
++Sysfs entries
++-------------
++
++The following attributes are supported:
++
++======================= ======================================================
++curr1_crit              Critical maximum current.
++curr1_crit_alarm        Input current critical alarm.
++curr1_input             Measured output current.
++curr1_label             "iin"
++curr1_max               Maximum input current.
++curr1_max_alarm         Maximum input current high alarm.
++curr1_rated_max         Maximum rated input current.
++curr2_crit              Critical maximum current.
++curr2_crit_alarm        Output current critical alarm.
++curr2_input             Measured output current.
++curr2_label             "iout1"
++curr2_max               Maximum output current.
++curr2_max_alarm         Output current high alarm.
++curr2_rated_max         Maximum rated output current.
++
++
++fan1_alarm              Fan 1 warning.
++fan1_fault	        Fan 1 fault.
++fan1_input	        Fan 1 speed in RPM.
++fan1_target             Set fan speed reference.
++
++in1_alarm               Input voltage under-voltage alarm.
++in1_input               Measured input voltage.
++in1_label               "vin"
++in1_rated_max           Maximum rated input voltage.
++in1_rated_min           Minimum rated input voltage.
++in2_crit                Critical maximum output voltage.
++in2_crit_alarm          Output voltage critical high alarm.
++in2_input               Measured output voltage.
++in2_label               "vout1"
++in2_lcrit               Critical minimum output voltage.
++in2_lcrit_alarm         Output voltage critical low alarm.
++in2_rated_max           Maximum rated output voltage.
++in2_rated_min           Minimum rated output voltage.
++
++power1_alarm            Input fault or alarm.
++power1_input            Measured input power.
++power1_label            "pin"
++power1_max              Input power limit.
++power1_rated_max        Maximum rated input power.
++power2_crit             Critical output power limit.
++power2_crit_alarm       Output power crit alarm limit exceeded.
++power2_input            Measured output power.
++power2_label            "pout"
++power2_max              Output power limit.
++power2_max_alarm        Output power high alarm.
++power2_rated_max        Maximum rated output power.
++
++temp[1-3]_input         Measured temperature.
++temp[1-2]_max           Maximum temperature.
++temp[1-3]_rated_max     Temperature high alarm.
++======================= ======================================================
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index f1fe75f596a5..dc4ebed13617 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -23,6 +23,7 @@ Hardware Monitoring Kernel Drivers
+    abituguru
+    abituguru3
+    acpi_power_meter
++   acbel-fsg032
+    ad7314
+    adc128d818
+    adm1021
+-- 
+2.37.2
+
