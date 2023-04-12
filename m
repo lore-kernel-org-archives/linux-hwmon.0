@@ -2,85 +2,83 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E7CBC77B6E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Apr 2023 15:16:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16A6EC77B6E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Apr 2023 15:17:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjDLPQO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Apr 2023 11:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
+        id S230177AbjDLPRv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Apr 2023 11:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbjDLPQK (ORCPT
+        with ESMTP id S230414AbjDLPRo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:16:10 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C706EA0;
-        Wed, 12 Apr 2023 08:16:07 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id p8so11788641plk.9;
-        Wed, 12 Apr 2023 08:16:07 -0700 (PDT)
+        Wed, 12 Apr 2023 11:17:44 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1227ABB;
+        Wed, 12 Apr 2023 08:17:35 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id p8so11793421plk.9;
+        Wed, 12 Apr 2023 08:17:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681312566; x=1683904566;
+        d=gmail.com; s=20221208; t=1681312655; x=1683904655;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZS9yP42BKeu0nz/0Fm0spdywFD6SWet99eT1pAG4Mlk=;
-        b=fmru5TWLslHh1F/VpibtInvaPjnCtBeoXL3OSKg/2tbc79Zs68W+w9FQmiu5FGkxi/
-         xGqjIneCh6fJuwXILFrgBA/UKaQofCXgCAKojwRfrXLGL3xQ4y2GXG+LFLiLbvItCNh4
-         W8T+q1WC0NAIYZzbQQaxFpBYsepP6NVMY0CazPMQXnywBJrO8D5b1H+ArbMNag8rc1b/
-         YzQS9XZtMuuOpIpELDw97ta/XbmoIfHk7CWqGIXNhutOhRlC30VLaFXStKopgLUMrJDX
-         lJnqp/Vr4w/Q77h93wzLd3xRCaDn3e4wxx6/bbTWGz8FX5xNnOnVNC/j5XNS30yi7gsg
-         WKAA==
+        bh=lXF0M8ANb/S1+Ov1PDbB2m5VawQaqhAZf2fWUn9CoWA=;
+        b=hsuFVrxxQ6xiG07eLMH08j6NecdqR/0cfvRQl67MPuAhj4+Dvlqzw2gYdWuj33s0DK
+         ot2595G2+QNgi9c2sX/2tO3oEhwbmg+uQewBragkuiC+/Lxbkx4DzYFoQZit1xfsy6kN
+         E+VrsQTwusG8xpOtJCIfQSbkfUOIElZ+8omWH7+waQ0HZ7Vg2nFCjH5SweekQjsV/qHC
+         SsBy9zoYC0pKbIQkezJOKjYUJ0jjF8NymqCjzXYyolE4G23orKDH8hv+QsRq/Bb47nCk
+         NfKuaHJMBIrJvCny1ExYgWbkwof4c+b4ytdHgjLRBGcracw4CLMLsfxLNcbtAaBNbI2J
+         ZXgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681312566; x=1683904566;
+        d=1e100.net; s=20210112; t=1681312655; x=1683904655;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZS9yP42BKeu0nz/0Fm0spdywFD6SWet99eT1pAG4Mlk=;
-        b=zS6a7xMVis33nrwSQJ7XTE0ueP7rD1SMcNP7Sn5kXwyLap42TpjmTdQ8YSwgg6Fw+W
-         Ocqm12MgaJodY7WqcWFaIr/R75i4tDrLc45xwLex5YrZxVX0iIpqsQgrWwhipRktkebE
-         nUA3hTTTqbHNl28mePvmzjvQaQRrGmUBZwfk2cMUegO/S4M59Op6ZEoXrxh0x+jiT6ZT
-         9arDNp8efK39RbLR3Bjo+C5zuoyKivFqAxe3EQmZfxCWiaWjekouzbNKg59kiw7GMtOI
-         d1lVx1NYHAta10kSk8HrFqek4+c4kl2y+GIiBlUfdEiy/UMsDW+paCdD0Xujr1DerF6u
-         uyuw==
-X-Gm-Message-State: AAQBX9chyw0kc1soSA7MVVjk0i/1dahR5E4GQAY9ac/ny8GHCRoCOip5
-        6kcBuYlV2bwv8eVKSFuQKeU=
-X-Google-Smtp-Source: AKy350Y99bJLq8uRdrtvpIRU04QHFcqGKSNe9mjACrHY6Wpowj9B+kamKE3rocfSGE80O61sCYJ96w==
-X-Received: by 2002:a17:90a:44:b0:23d:39d5:f81e with SMTP id 4-20020a17090a004400b0023d39d5f81emr23204230pjb.11.1681312566441;
-        Wed, 12 Apr 2023 08:16:06 -0700 (PDT)
+        bh=lXF0M8ANb/S1+Ov1PDbB2m5VawQaqhAZf2fWUn9CoWA=;
+        b=eRRugrzwfRp1xEFzys/D7I1XLPMdfy28szixZ/nXo8IDGUU9wYdkPfPyUUbQ/j9b6a
+         RNdTgz1oFsB+gWPbuDCJH9t0D5u5jQxeute03OA0mD/wZWCvmz3wK4k0q/WEQliJxhzR
+         bq+cNToR4bGdqakB4yVZrDp0q7dxhTNfchx2mK52rIDfvtg4DLAQI8EL1g9LUr/FEBFo
+         txJSJVq+rvrs7FV66+IPXIWrBl8RQ6+dZs0StJnTp3If1+bh27yLA9ZjwmlhtfnfqXX/
+         chLxcb06ajRlbwdmEdqzcKA/LiKbu3TvQdZtfEYiL2oq0TZ9+7x0QTXThN6nJoKLWD0j
+         VLqg==
+X-Gm-Message-State: AAQBX9e2fV5EqKQNn9p67gRinkpRJm2dFqT1BH3jcIMQttCrV8jlXubH
+        m562ZCulhBEXXdp5ROYTsnNO/q8BxDg=
+X-Google-Smtp-Source: AKy350aodtH/90OqVyY8JXbpvT8JGcsKs6dqZXseHtJMWkNDpxI6xnlmD57rGgpA1CEM8T1G8sRidg==
+X-Received: by 2002:a17:903:124f:b0:1a5:5e7:a1c9 with SMTP id u15-20020a170903124f00b001a505e7a1c9mr9370822plh.61.1681312655059;
+        Wed, 12 Apr 2023 08:17:35 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id mp2-20020a17090b190200b0023f5c867f82sm1603745pjb.41.2023.04.12.08.16.05
+        by smtp.gmail.com with ESMTPSA id e12-20020a170902d38c00b001a64fb9cf54sm4124118pld.44.2023.04.12.08.17.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 08:16:06 -0700 (PDT)
+        Wed, 12 Apr 2023 08:17:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 12 Apr 2023 08:16:05 -0700
+Date:   Wed, 12 Apr 2023 08:17:33 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] hwmon: (pmbus/core): Notify regulator events
-Message-ID: <fff31134-4fca-400d-8f29-ebb18fe7e488@roeck-us.net>
-References: <20230328150335.90238-1-Naresh.Solanki@9elements.com>
- <20230328150335.90238-3-Naresh.Solanki@9elements.com>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH v3 1/1] dt-bindings: hwmon: pwm-fan: Convert to DT schema
+Message-ID: <6bd199d3-a551-4e74-bc38-3ea0558a40d6@roeck-us.net>
+References: <20230406182000.956275-1-cristian.ciocaltea@collabora.com>
+ <20230406182000.956275-2-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230328150335.90238-3-Naresh.Solanki@9elements.com>
+In-Reply-To: <20230406182000.956275-2-cristian.ciocaltea@collabora.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 05:03:35PM +0200, Naresh Solanki wrote:
-> Notify regulator events in PMBus irq handler.
+On Thu, Apr 06, 2023 at 09:20:00PM +0300, Cristian Ciocaltea wrote:
+> Convert the PWM fan bindings to DT schema format.
 > 
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
 Applied to hwmon-next.
-
-Please check your e-mail settings: checkpatch complains about a
-mismatch between Naresh.Solanki@9elements.com and
-naresh.solanki@9elements.com. Not that it matters in this case,
-but it is annoying to get a checkpatch alert each time I apply
-one of your patches.
 
 Thanks,
 Guenter
