@@ -2,160 +2,131 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26BF3C77B6C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Apr 2023 04:57:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63B8AC77B61
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Apr 2023 07:49:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjDME5j (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 13 Apr 2023 00:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
+        id S230143AbjDMHti (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Apr 2023 03:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjDME5i (ORCPT
+        with ESMTP id S230017AbjDMHte (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 13 Apr 2023 00:57:38 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29D259D2
-        for <linux-hwmon@vger.kernel.org>; Wed, 12 Apr 2023 21:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681361857; x=1712897857;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=APRZ01iYV1LnoDG/mpD1GRvhloLmTs7Ad3Hhb8Gi4fw=;
-  b=YSsUbwusybUlhIJLc7tV15vnG4CIek212GGvuctZc0rnFk2RAIaE1UpM
-   1cRuAj8M26e+IFGBU79ZbLiycbxjGUMmWrJCXzaoawJaZtF18dtfBgEVl
-   nCBIUV90lgdwZmiP/sCIEMx/Gm4LcJHT5ESIMTHoXRvPn1Uy7al5d4nJt
-   IjE1IRg8eOKHjfYpDArf8clp6iQBGLLSIVBgDPTb98y74HEHieQBRXCuY
-   ZYkKkQxyjIKCaqrPekI2hYynb8DcMMc0LvLsaXx8fcqetBHMQHGeLcxBV
-   JKB7r+c0tD1Q4C3LuG/8v2StEg6jpCpmQ4Lw02hzpUfiDBl8y1y3BD0id
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="371941704"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="371941704"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 21:57:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="682746535"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="682746535"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 12 Apr 2023 21:57:35 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pmp1b-000YMe-0L;
-        Thu, 13 Apr 2023 04:57:35 +0000
-Date:   Thu, 13 Apr 2023 12:57:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 04dc3c9e432a63a87424b9c974c2e95d449ac5f0
-Message-ID: <64378ba3.3VYLiyjP7lc1mMU1%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 13 Apr 2023 03:49:34 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5F793C0
+        for <linux-hwmon@vger.kernel.org>; Thu, 13 Apr 2023 00:49:11 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-94e102534d6so191847366b.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 13 Apr 2023 00:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681372144; x=1683964144;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0c4wLhFBCiAcjjbeOa5jABwRP5DFI69Pbg7hP6byo5Y=;
+        b=BceMhjYoTf/jVj4ZdOfZAmdXc1J1JKQQg2gDJBriG6HwIgqQa+TXhTrSgKSZqoDwGB
+         fxxNkkFJzz3+LPIPCcTrTXKUzkxMJKM15KMVbrHVfbNBhCLcgfhYV1M10c+aUBsJSiCt
+         6By92BXEHv2K4uCb2yNV5AQowESEtaDAb106riHjBqPBR5dXnbMbxbS2R65tGyqVEUrI
+         yhvp/oQ2CTyQUzXofZPoMMGkZTiH398qKqWOrfWU5M2rj8Cj/GGsudekAFQtnto+GRWt
+         B7nJbvo5WYPQQjH38U2tCqAOXitUQPyyxU36VtV8LtG4it4DbZL5PnPdj6iIg8vvKzNJ
+         vE7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681372144; x=1683964144;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0c4wLhFBCiAcjjbeOa5jABwRP5DFI69Pbg7hP6byo5Y=;
+        b=iOVJ8BNBZ7BSIXJUsIksgyaKYvZs5neE6jKG+smHW2tQ7iPHwgfNWPSkNdwN2OZI2f
+         ib/Ca9PsqVukSFn3uKxgruL4682kumUMxsZdBiLQZH89GCJyuOKYwxLC+wCoCdPIDv9F
+         Uo8t+XBMsWcyKiOA61c7VKIB6nu4OGw4weXYKc7/y+eOfyk9HWJkosWq26o3XwPXwZV2
+         U1VdZF7H0IUmBW1dqJZpbgUl/KblX96mgvtBIEmHT/sZHyFuM/wXncTM18o6il7QoQLk
+         u6HchWreMYa9sSyOx+7tIiQZahq0OVWAYuN8QWwrA4VkiCMvBvXcXqnGJssDAlth4x5o
+         y/jQ==
+X-Gm-Message-State: AAQBX9fxQ0XcYzgkxLXPNXD9i1q6uDnm9JkNMLuz4/6MNAU6WRu0HnjB
+        lyumNxjoURCEcPhn1IjbFy8BTA==
+X-Google-Smtp-Source: AKy350YbuGbPy57eqcdQLbG1h6GrL64vwjvVuJuqM/r/TYOQUCL0VheUuXgUL2yMgaNE1GwSq69GUA==
+X-Received: by 2002:aa7:c2d4:0:b0:501:fe52:d301 with SMTP id m20-20020aa7c2d4000000b00501fe52d301mr1684934edp.23.1681372144162;
+        Thu, 13 Apr 2023 00:49:04 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ec6f:1b33:ab3f:bfd7? ([2a02:810d:15c0:828:ec6f:1b33:ab3f:bfd7])
+        by smtp.gmail.com with ESMTPSA id s2-20020aa7cb02000000b004bd6e3ed196sm463252edt.86.2023.04.13.00.49.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 00:49:03 -0700 (PDT)
+Message-ID: <342b3e6c-fd1b-d256-bcc2-2b9bda206b60@linaro.org>
+Date:   Thu, 13 Apr 2023 09:49:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 1/2] [PATCH v1 1/2] dt-bindings: hwmon: add MAX31827
+Content-Language: en-US
+To:     Daniel Matyas <daniel.matyas@analog.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20230412153334.181852-1-daniel.matyas@analog.com>
+ <20230412153334.181852-2-daniel.matyas@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230412153334.181852-2-daniel.matyas@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 04dc3c9e432a63a87424b9c974c2e95d449ac5f0  hwmon: (nct6775) update ASUS WMI monitoring list A620/B760/W790
+On 12/04/2023 17:33, Daniel Matyas wrote:
+> MAX31827 is a low-power temperature switch with I2C interface.
+> 
+> The device is a ±1°C accuracy from -40°C to +125°C
+> (12 bits) local temperature switch and sensor with I2C/SM-
+> Bus interface. The combination of small 6-bump wafer-lev-
+> el package (WLP) and high accuracy makes this temper-
+> ature sensor/switch ideal for a wide range of applications.
+> 
+> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
+> ---
+>  .../bindings/hwmon/adi,max31827.yaml          | 51 +++++++++++++++++++
+>  MAINTAINERS                                   |  7 +++
+>  2 files changed, 58 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+> new file mode 100644
+> index 000000000000..37177eb9c039
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/adi,max31827.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch
+> +
+> +maintainers:
+> +  - Daniel Matyas <daniel.matyas@analog.com>
+> +
+> +description: |
+> +  Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch with
+> +  I2C Interface
+> +  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31827-MAX31829.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,max31827
+> +      - adi,max31828
+> +      - adi,max31829
 
-elapsed time: 728m
+Why suddenly these are all incompatible? This is not what I suggested.
 
-configs tested: 85
-configs skipped: 8
+> +
+> +  reg:
+> +    maxItems: 1
+> +
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Best regards,
+Krzysztof
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r006-20230410   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230412   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r002-20230409   clang
-arm          buildonly-randconfig-r005-20230409   clang
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230412   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-hexagon              randconfig-r041-20230412   clang
-hexagon              randconfig-r045-20230412   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230410   clang
-i386                 randconfig-a002-20230410   clang
-i386                 randconfig-a003-20230410   clang
-i386                 randconfig-a004-20230410   clang
-i386                 randconfig-a005-20230410   clang
-i386                 randconfig-a006-20230410   clang
-i386                 randconfig-a011-20230410   gcc  
-i386                 randconfig-a012-20230410   gcc  
-i386                 randconfig-a013-20230410   gcc  
-i386                 randconfig-a014-20230410   gcc  
-i386                 randconfig-a015-20230410   gcc  
-i386                 randconfig-a016-20230410   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r006-20230409   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r005-20230410   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r021-20230410   gcc  
-m68k                 randconfig-r024-20230409   gcc  
-microblaze   buildonly-randconfig-r002-20230410   gcc  
-microblaze           randconfig-r023-20230410   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2        buildonly-randconfig-r004-20230409   gcc  
-nios2                               defconfig   gcc  
-openrisc             randconfig-r024-20230410   gcc  
-parisc       buildonly-randconfig-r001-20230410   gcc  
-parisc       buildonly-randconfig-r003-20230410   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r026-20230410   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r004-20230410   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230412   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230412   gcc  
-sh                               allmodconfig   gcc  
-sparc        buildonly-randconfig-r001-20230409   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r022-20230410   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230410   clang
-x86_64               randconfig-a002-20230410   clang
-x86_64               randconfig-a003-20230410   clang
-x86_64               randconfig-a004-20230410   clang
-x86_64               randconfig-a005-20230410   clang
-x86_64               randconfig-a006-20230410   clang
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r003-20230409   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
