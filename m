@@ -2,121 +2,107 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D706EC77B7A
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Apr 2023 13:27:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBD23C77B7D
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Apr 2023 13:27:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbjDMN1I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 13 Apr 2023 09:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
+        id S231281AbjDMN1J (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Apr 2023 09:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbjDMN1G (ORCPT
+        with ESMTP id S231199AbjDMN1G (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Thu, 13 Apr 2023 09:27:06 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55D52697;
-        Thu, 13 Apr 2023 06:27:00 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33DDOdE1031521;
-        Thu, 13 Apr 2023 13:26:38 GMT
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABB5213A;
+        Thu, 13 Apr 2023 06:27:05 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33DCWslK002107;
+        Thu, 13 Apr 2023 13:26:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=lACip7+EkKWDEeQBT2iYREjHR0TDo6jILmW0mTPMejc=;
- b=r9qLy0K1CkxZy/9wcPgtoMVR8QXHLuHlDj2XWWZtmCvyLLxXECnrI7eYkXT5PXutJTZk
- cYhqeXMSBStKVd0cVBvQK3ssnY+Rw5e7BlNvv6za9EzI928Ga8oVH7jUiIwHDLSSoJfE
- nIQirsMlCEuSCDBOHhFun3OiWe6DoGr2/jOxbQVPHFhZktjpFp7p6gCl8pEm/xHngpV1
- eMPHgTwg9TbCDRBJQlbUVcp2utRLsjbegW2tzcCYn1d4o2KW0v/yTDe6jHaL0OijI6o/
- C9yngNJ6eAdpR6T00SexjqwsWKOP/nZzdUkUOOvupBEyroAANsfkgLY/DvIzqjbcox0h MQ== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pxgvn43t5-1
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=MZ8xHDXxvd55d7GkmH7Efrjfx3+t7H3EHF5QqjwpB+I=;
+ b=pkgWyRmMlb4kLZHEGbDDfOoFb8e/STx7G3rrTQuriBdJ0rSOYTgXhd1e8RX8aGCWleak
+ iTj3VwhgYqWPg5ypctXIzmIxXaatY6ANjdshmlksXLhDrIjiYfko3FAn3A8ph8ZusT3K
+ 4Eaz8Rsc00onLiEVGkjSKOYHkkrPmuwhKcB7mpwpss2MZJh0bIV2X4lY8MTHoEnCaUvf
+ Q8j39EAdFRH40B43csCh67K7mg3/rHaolLfpMVm/V2YrEmxgoW+U4eJPPCxgRWQTPjdp
+ bQU2O1uDS8OcWA2MeTT0UnKU9/wJZ3lqJ52MncFMBdGQW7VHfbcLaiQ007cSX0MybrIk uQ== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pxgefp6bf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Apr 2023 13:26:39 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33DC7LC3029751;
+        Thu, 13 Apr 2023 13:26:37 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3pu0fqtg4j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 13 Apr 2023 13:26:37 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33DCuweE028289;
-        Thu, 13 Apr 2023 13:26:36 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3pu0frbq6m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Apr 2023 13:26:36 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33DDQZGt38404466
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33DDQZTG27656882
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 13 Apr 2023 13:26:35 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41F165806F;
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 526C658068;
         Thu, 13 Apr 2023 13:26:35 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 321B95806D;
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3B7CB58063;
         Thu, 13 Apr 2023 13:26:35 +0000 (GMT)
 Received: from gfwa600.aus.stglabs.ibm.com (unknown [9.3.84.101])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTPS;
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
         Thu, 13 Apr 2023 13:26:35 +0000 (GMT)
 Received: by gfwa600.aus.stglabs.ibm.com (Postfix, from userid 181152)
-        id B3719745150; Thu, 13 Apr 2023 08:26:34 -0500 (CDT)
+        id 9C52B74514B; Thu, 13 Apr 2023 08:26:34 -0500 (CDT)
 From:   Lakshmi Yadlapati <lakshmiy@us.ibm.com>
 To:     robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
         krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
         eajames@linux.ibm.com
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-Subject: [PATCH v7 5/5] ARM: dts: aspeed: p10bmc: Change power supply info
-Date:   Thu, 13 Apr 2023 08:26:27 -0500
-Message-Id: <20230413132627.3444119-6-lakshmiy@us.ibm.com>
+Subject: [PATCH v7 0/5] hwmon: (pmbus/acbel-fsg032) Add Acbel power supply
+Date:   Thu, 13 Apr 2023 08:26:22 -0500
+Message-Id: <20230413132627.3444119-1-lakshmiy@us.ibm.com>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230413132627.3444119-1-lakshmiy@us.ibm.com>
-References: <20230413132627.3444119-1-lakshmiy@us.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: R4Hj-2SDmrpHUTXwHqKx7w8ezevAHEdu
-X-Proofpoint-ORIG-GUID: R4Hj-2SDmrpHUTXwHqKx7w8ezevAHEdu
+X-Proofpoint-GUID: wxha0F46N20Cils9gMd9SDkD4Jv5ggmm
+X-Proofpoint-ORIG-GUID: wxha0F46N20Cils9gMd9SDkD4Jv5ggmm
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-13_08,2023-04-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 bulkscore=0 adultscore=0 mlxscore=0 mlxlogscore=852
- lowpriorityscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
- phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 adultscore=0 mlxscore=0 clxscore=1015 phishscore=0
+ spamscore=0 bulkscore=0 suspectscore=0 mlxlogscore=624 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2303200000 definitions=main-2304130116
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Bonnell system supports new ACBEL FSG032 power supply on
-I2C addresses 5A and 5B. Update the device tree with new
-power supply information and device addresses.
+Adding new acbel,fsg032 driver and documentation updates.
 
-Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-Reviewed-by: Eddie James <eajames@linux.ibm.com>
----
- arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Changes since V6:
+Remove ccin changes in V6.
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
-index a5be0ee048ec..4f959a4f8b58 100644
---- a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
-@@ -552,14 +552,14 @@ ucd90160@64 {
- &i2c3 {
- 	status = "okay";
- 
--	power-supply@58 {
--		compatible = "ibm,cffps";
--		reg = <0x58>;
-+	power-supply@5a {
-+		compatible = "acbel,fsg032";
-+		reg = <0x5a>;
- 	};
- 
--	power-supply@59 {
--		compatible = "ibm,cffps";
--		reg = <0x59>;
-+	power-supply@5b {
-+		compatible = "acbel,fsg032";
-+		reg = <0x5b>;
- 	};
- };
- 
+Lakshmi Yadlapati (5):
+  dt-bindings: vendor-prefixes: Add prefix for acbel
+  dt-bindings: trivial-devices: Add acbel,fsg032
+  hwmon: (pmbus/acbel-fsg032) Add Acbel power supply
+  docs: hwmon: Add documentaion for acbel-fsg032 PSU
+  ARM: dts: aspeed: p10bmc: Change power supply info
+
+ .../devicetree/bindings/trivial-devices.yaml  |  2 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+ Documentation/hwmon/acbel-fsg032.rst          | 80 +++++++++++++++++
+ Documentation/hwmon/index.rst                 |  1 +
+ arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts  | 12 +--
+ drivers/hwmon/pmbus/Kconfig                   |  9 ++
+ drivers/hwmon/pmbus/Makefile                  |  1 +
+ drivers/hwmon/pmbus/acbel-fsg032.c            | 85 +++++++++++++++++++
+ 8 files changed, 186 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/hwmon/acbel-fsg032.rst
+ create mode 100644 drivers/hwmon/pmbus/acbel-fsg032.c
+
 -- 
 2.37.2
 
