@@ -2,159 +2,122 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D96CC77B6F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Apr 2023 21:40:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6555C77B6E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Apr 2023 03:45:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjDMVkQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 13 Apr 2023 17:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
+        id S229449AbjDNDpL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Apr 2023 23:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjDMVkQ (ORCPT
+        with ESMTP id S229597AbjDNDow (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 13 Apr 2023 17:40:16 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C4D4489;
-        Thu, 13 Apr 2023 14:40:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CZ2uKVHK032ulsuKc/G8IJTYN/qK1zHjDjFs55eSzWdkm/RqsHWMHMSgcAFe+xOHrJCMhNHyqjHQ4PGftbBcVL11x2vUhPeoHIZ0DlI5ov0xFIKazeED5tjS318Mq4F9Im9dvbY/gXYPLi5Eebc/Kwu3rETk7+ZmB9jtEKk4H4+h46fkTnOeb+zaeHZwOCneJxCCnETCDAABOy9ShdMDu1BDzVpNIZ8vtoMN55Uhe5Ka8XSRRO8/3L0LGHUSCM1u1HabpFo17kX245Eaqek5lD+kLEhQaZzJJedxxO30KbTsWFjMxT2tbAaZhasjqJYIFYzI0Uq9gWzEcEBojFI5cw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CiHuUUfrrrH6loJm8iG6n+fxqUJFZfXt7+aVHIqiuo0=;
- b=X9DbayXVPzuFYsk601gDjUu/5GGV7OO617EpEEJyQtl9acYlaufyqDRqB2y93FyyJfU24XjuVAd9NXmbg7+adffptWCijTEy5OSjcKw/0mUMfcCqHOA0X3PztVv4Bs828e2w2W4wD5KcLNF7dWhkFTj9aKhYTJOe4Uulx5oN4P7qT8bnBJYTciuXOhFLhjg8BKx0v2efH0wG2GIgpQMHO/Flad5yyMYLNKHMUwJhZ4HdmsIB07qNUrm8Kh/i+T+buVaNH9olwLisHenmw7y4j/MU1HbaVvPNzcm0gHQm8RyWDDoqYefrw/KR4BZyI/rrVlIWyu1XOibva8r/YAKuMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=ladisch.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CiHuUUfrrrH6loJm8iG6n+fxqUJFZfXt7+aVHIqiuo0=;
- b=c9goM+M/tQOpse/EAFaKMoDWdsqJ3JOf7ftXnjJqh149C3Ug+NaPwqD1rX8crqhjCFSjAarLx3Bat/fMLMqlDQpz/Zgodc0rLbSwEGNzcvFY612xHA1HHT7j+CYScm0XhZs8GxA5aGnXAYYCmp5DRcdxfzIxEjDPCFO+yFWmmLc=
-Received: from BN9PR03CA0919.namprd03.prod.outlook.com (2603:10b6:408:107::24)
- by CH0PR12MB5236.namprd12.prod.outlook.com (2603:10b6:610:d3::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Thu, 13 Apr
- 2023 21:40:13 +0000
-Received: from BN8NAM11FT086.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:107:cafe::82) by BN9PR03CA0919.outlook.office365.com
- (2603:10b6:408:107::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.32 via Frontend
- Transport; Thu, 13 Apr 2023 21:40:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT086.mail.protection.outlook.com (10.13.176.220) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6298.32 via Frontend Transport; Thu, 13 Apr 2023 21:40:12 +0000
-Received: from bmoger-ubuntu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 13 Apr
- 2023 16:40:11 -0500
-From:   Babu Moger <babu.moger@amd.com>
-To:     <clemens@ladisch.de>, <jdelvare@suse.com>, <linux@roeck-us.net>
-CC:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <babu.moger@amd.com>, <Baski.Kannan@amd.com>,
-        <yannick.hemery@corp.ovh.com>
-Subject: [PATCH] hwmon: (k10temp): Check range scale when CUR_TEMP register is read-write
-Date:   Thu, 13 Apr 2023 16:39:58 -0500
-Message-ID: <20230413213958.847634-1-babu.moger@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 13 Apr 2023 23:44:52 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2092849C7;
+        Thu, 13 Apr 2023 20:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681443891; x=1712979891;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=im+rD4DdLuPF1wz2y+TfK5jmNNjayVIPFPfTpu5gAhU=;
+  b=PmbOyZALgSaTundQfKgKt0GFpnTYBZkL5849ULe+FiOUdCoTzLwsVQkg
+   lm2x5JgDYOxJigOSnfSeOhaHcoZGXuP1valkp9VzXhL3g5HT2XnGEyGTp
+   eBqRkqncO94LrOYdghDcOeqo/AxYyE4A6wGYkrfnIuOaxsH47jaZiag3R
+   iFB/UHzB8f6Gd3nzqSvjj1RP78iAOMbS9d1FhIC+gWJQVqRlpgN12HOgc
+   r+8C27sSC1TyRzHvOVk45l0PIMiZlKshMkZUcD84UNvRIAoQ9tk8MvyoU
+   7/HI9df1aMGcktcm+Y75ykMqxuHmQtANVtuYV49dhrEKfW7AArKbHB0P3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="328521106"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="328521106"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 20:44:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="935857419"
+X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
+   d="scan'208";a="935857419"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga006.fm.intel.com with ESMTP; 13 Apr 2023 20:44:47 -0700
+Date:   Fri, 14 Apr 2023 11:45:26 +0000
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org,
+        Russ Weight <russell.h.weight@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/4] mfd: intel-m10-bmc: Manage access to MAX 10 fw
+ handshake registers
+Message-ID: <ZDk81v7DuSVh6228@yilunxu-OptiPlex-7050>
+References: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com>
+ <20230405080152.6732-5-ilpo.jarvinen@linux.intel.com>
+ <ZC+1rKoUNsqrjjtw@yilunxu-OptiPlex-7050>
+ <fb95c8da-c828-12b8-aae-56bd867cff41@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT086:EE_|CH0PR12MB5236:EE_
-X-MS-Office365-Filtering-Correlation-Id: a77c57ce-c90a-422d-c00e-08db3c67a978
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: n/tbKcZdimLSykOTyEeJYV50MG1ba9tVAnIranCvveQNhU7R1sz6go1KDUmLJocPVakLNHhyYDOqWp8u5KcrY3WztmP/N++2OOfTDAQMYC89GltSveenrVxVvvQZ9VMBpX7CosvbCWqXrcLXQUvzdV/e02UfwhByPZEdvHU4nngJoTlTkhugJQFvu3rxJZvBgUzkQMOrTU0O181LmskmtgLYqr6N1lEmYS4uA6FwaWuCOv4nOUY3ej+3qJnvkJE3p5f3QBtKMzMrIkkTB8JBQLdwWIUaDNLI6yyguZ88RfLgyK3sW51l786qwUK1A0Gpbo9/yx6Yovrh7j9xJUpoEJVs+eRMjTYygV5PvYCDuUGBWVeVhmjuEzo1nTqNHjdB+iLDcm6DEP26XA+5AiB391nmViNiGJOFYSnIE9m5nh/WiDxC1pAhKL4E2ZtnmlwyPs5rbzmGIBeTim+UqN1GgPM4b9KqHyWezXGx4iy5wifK+aNr+tpcRCa5ImebJZja65ehPsJhezmSLl5qD57BrqYG+HlRxG0y7HK6XAZDlfKvbNGDTOAbHlLUZuHDVKFCdcf9UcDMixIru5vqXtIMZOpHuQPQeAXhEx8oGZ4Dcq+4bwE8KUdudpPgXubIXjgRJ7w5Py/9I6UMK/rvQeNRIa16BiBvpC6/47hxj/pB2QfS+tvrvbgQzHxzH2rOZN51QUcvYem3b/cXeLsSU+OTCZ40zWi2i/LrrohYF0G/Tzc=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(39860400002)(376002)(451199021)(36840700001)(46966006)(40470700004)(6666004)(7696005)(40460700003)(36756003)(4326008)(70586007)(70206006)(110136005)(2906002)(44832011)(86362001)(81166007)(356005)(41300700001)(5660300002)(8676002)(8936002)(82740400003)(82310400005)(316002)(478600001)(40480700001)(54906003)(1076003)(336012)(26005)(426003)(2616005)(36860700001)(16526019)(186003)(47076005)(83380400001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2023 21:40:12.5305
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a77c57ce-c90a-422d-c00e-08db3c67a978
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT086.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5236
+In-Reply-To: <fb95c8da-c828-12b8-aae-56bd867cff41@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Babu Moger <Babu.Moger@amd.com>
+On 2023-04-11 at 14:54:58 +0300, Ilpo J�rvinen wrote:
+> On Fri, 7 Apr 2023, Xu Yilun wrote:
+> 
+> > On 2023-04-05 at 11:01:52 +0300, Ilpo J�rvinen wrote:
+> > > On some MAX 10 cards, the BMC firmware is not available to service
+> > > handshake registers during secure update erase and write phases at
+> > > normal speeds. This problem affects at least hwmon driver. When the MAX
+> > > 10 hwmon driver tries to read the sensor values during a secure update,
+> > > the reads are slowed down (e.g., reading all D5005 sensors takes ~24s
+> > > which is magnitudes worse than the normal <0.02s).
+> > > 
+> > > Manage access to the handshake registers using a rw semaphore and a FW
+> > > state variable to prevent accesses during those secure update phases
+> > > and return -EBUSY instead.
+> > > 
+> > > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> > > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> > > Co-developed-by: Xu Yilun <yilun.xu@intel.com>
+> > > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> > > Signed-off-by: Ilpo J�rvinen <ilpo.jarvinen@linux.intel.com>
+> > > ---
+> > >  drivers/fpga/intel-m10-bmc-sec-update.c | 17 +++++--
+> > >  drivers/mfd/intel-m10-bmc-core.c        | 63 ++++++++++++++++++++++++-
+> > >  drivers/mfd/intel-m10-bmc-pmci.c        |  4 ++
+> > >  drivers/mfd/intel-m10-bmc-spi.c         | 14 ++++++
+> > >  include/linux/mfd/intel-m10-bmc.h       | 27 +++++++++++
+> > >  5 files changed, 120 insertions(+), 5 deletions(-)
+> > >
+> > 
+> > [...]
+> >  
+> > >  
+> > > +void m10bmc_fw_state_set(struct intel_m10bmc *m10bmc, enum m10bmc_fw_state new_state)
+> > > +{
+> > > +	down_write(&m10bmc->bmcfw_lock);
+> > > +	m10bmc->bmcfw_state = new_state;
+> > > +	up_write(&m10bmc->bmcfw_lock);
+> > 
+> > Could we also skip this if no handshake is possible like for PMCI?
+> 
+> Did you mean guarding it with !m10bmc->info->handshake_sys_reg_nranges ?
 
-Spec says, when CUR_TEMP_TJ_SEL == 3 and CUR_TEMP_RANGE_SEL == 0,
-it should use RangeUnadjusted is 0, which is (CurTmp*0.125 -49) C. The
-CUR_TEMP register is read-write when CUR_TEMP_TJ_SEL == 3 (bit 17-16).
+Yes. My concern is, the handshake_sys_reg_nranges is the constant value
+for a device, so if the device doesn't have handshake registers, we
+could save the locking costs.
 
-Add the check to detect it.
+Thanks,
+Yilun
 
-Sensors command's output before the patch.
-$sensors
- k10temp-pci-00c3
- Adapter: PCI adapter
- Tctl:         +76.6°C <- Wrong value
- Tccd1:        +26.5°C
- Tccd2:        +27.5°C
- Tccd3:        +27.2°C
- Tccd4:        +27.5°C
- Tccd5:        +26.0°C
- Tccd6:        +26.2°C
- Tccd7:        +25.0°C
- Tccd8:        +26.5°C
-
-Sensors command's output after the patch.
-$sensors
- k10temp-pci-00c3
- Adapter: PCI adapter
- Tctl:         +28.8°C <- corrected value
- Tccd1:        +27.5°C
- Tccd2:        +28.5°C
- Tccd3:        +28.5°C
- Tccd4:        +28.5°C
- Tccd5:        +27.0°C
- Tccd6:        +27.5°C
- Tccd7:        +27.0°C
- Tccd8:        +27.5°C
-
-Signed-off-by: Babu Moger <babu.moger@amd.com>
----
- drivers/hwmon/k10temp.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 5a9d47a229e4..be8bbb1c3a02 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -75,6 +75,7 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
- 
- #define ZEN_CUR_TEMP_SHIFT			21
- #define ZEN_CUR_TEMP_RANGE_SEL_MASK		BIT(19)
-+#define ZEN_CUR_TEMP_TJ_SEL_MASK		GENMASK(17, 16)
- 
- struct k10temp_data {
- 	struct pci_dev *pdev;
-@@ -155,7 +156,8 @@ static long get_raw_temp(struct k10temp_data *data)
- 
- 	data->read_tempreg(data->pdev, &regval);
- 	temp = (regval >> ZEN_CUR_TEMP_SHIFT) * 125;
--	if (regval & data->temp_adjust_mask)
-+	if ((regval & data->temp_adjust_mask) ||
-+	    (regval & ZEN_CUR_TEMP_TJ_SEL_MASK) == ZEN_CUR_TEMP_TJ_SEL_MASK)
- 		temp -= 49000;
- 	return temp;
- }
--- 
-2.34.1
+> If yes, it's doable (+ I'd add comment mentioning it since it's slightly 
+> trappy to not always have that state updated).
+> 
+> 
+> -- 
+>  i.
 
