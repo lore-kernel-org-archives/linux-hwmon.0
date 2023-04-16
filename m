@@ -2,61 +2,60 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF4ACC77B73
-	for <linux-hwmon@archiver.kernel.org>; Sun, 16 Apr 2023 14:48:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7D20C77B73
+	for <linux-hwmon@archiver.kernel.org>; Sun, 16 Apr 2023 14:49:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229446AbjDPOst (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 16 Apr 2023 10:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
+        id S229547AbjDPOtQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 16 Apr 2023 10:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjDPOss (ORCPT
+        with ESMTP id S229672AbjDPOtP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 16 Apr 2023 10:48:48 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3518E0
-        for <linux-hwmon@vger.kernel.org>; Sun, 16 Apr 2023 07:48:47 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-760d4091047so85896139f.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 16 Apr 2023 07:48:47 -0700 (PDT)
+        Sun, 16 Apr 2023 10:49:15 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76B8A4
+        for <linux-hwmon@vger.kernel.org>; Sun, 16 Apr 2023 07:49:14 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id ca18e2360f4ac-7606d948295so58237539f.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 16 Apr 2023 07:49:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681656527; x=1684248527;
+        d=gmail.com; s=20221208; t=1681656554; x=1684248554;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=X5MWmOYUq5ATKjS1q9oPJThxh0BklLPQcOS0c7ifYVE=;
-        b=sbmqbnMHgoxNvTrY1qpVlBgtYlJ6oTu2shwgwhpQFKlzvv46IG0+EGIC40dKXd52Tt
-         qGit11mZq9f1CU0nd6P/0VWyxJ79gbU39OSJucYEgZTJrn2Y/uyEUtXFC1Z9FFvdyhjN
-         1i4Z8lE0ZhRP1Kr+i4u0EaGzNA2XxeySvhHq44ngV3K59qhjJjRdV+1A2W0L5ebftJ3V
-         yUf2CdGzq5hZQ0hUxBUeliKhCmQPBmjVyY5Cb0jWTUgiwCSlfeR9kck2WoEUh4J4oQZp
-         wtY9oaKXbaqNQyV9TVpGUU11i2vh0xL1f28bh6Nud+KcoFkp8HS4WlDu0bBQtUZ4S8rR
-         bhEw==
+        bh=LXdwd9Z6xsYo+zOZ1MD918NWhWwbfIEB33DLJVT4cnU=;
+        b=sPiVVS6LtmbgM/55jmLR+A8u4mmi1lD7H4ini9c63eWcTvoVRvOltDRYp8+mX2G+F6
+         08W2CnO4Z3/4Gco3HJczira4ACbuJ3ExbrR9UXfzg48lUiVx8c69kRld0rnnyduEkIYp
+         Aa7X7MOAWCFmxn9DbHcEs2LOWRBoKAkPf8WmCNtiRp41fn7qFXYCIIyY4ykoGX/Qp19C
+         a6lfBeTnONAJGk+ylWz48esjI7ydnRbeG0jOBjR6Qx6Pczr3buoeSrptKDYw9NJ0udHi
+         y0m1ejS88cmhbiu6F07KQ/EfqyNxv5VFhqeXp6OVA5BUuo8xJRlH3xTVUBuUXEN6/F4E
+         Y80A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681656527; x=1684248527;
+        d=1e100.net; s=20221208; t=1681656554; x=1684248554;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=X5MWmOYUq5ATKjS1q9oPJThxh0BklLPQcOS0c7ifYVE=;
-        b=RbWPYD46U+J6E+uEwlXssH5XWWwgW8MTRwIUBGtXPJQIv5yDxmS3GwAH1Q63J+VFz4
-         9d5TBxmE8r7vV+NVvn+RUQf0rxNO3SkyzrSQMtzU5A6tTEqNwdKBu6iBZnE3D9LwcNPt
-         byl4Y74xwoukl7pGjE/13JOMBGbzDNOQLIJDfDdxeQzfJIvur/g++j1pN568dPMoLfja
-         5p5utLQYnH8lJ8zKfPx7o2VifL1oMVF8vpyI73FJ2VWcgiofNbfU7LG65zmUnLJ7VhJD
-         Y/0IUIijgaCRloclQf60p8AUqTV8j7Ps9OdbqSxwTdNkYhx9wuqcSd3+nGf93eKLrY8/
-         /OcQ==
-X-Gm-Message-State: AAQBX9exQbHE1nnFYr7wo3/eB5kSZVzsnXYoixuuLzf7o4MiEZqtHH3h
-        z5xWNDHQJBE5pveL/COMRRQxYOL6foo=
-X-Google-Smtp-Source: AKy350bP29lHpLezMxwhml5W72cv3LtrpttuVjPUFaAVvm41uDVrxjHKmYqWUdfm4AuPkZGKanXwhA==
-X-Received: by 2002:a92:d9c2:0:b0:32b:1d01:84f3 with SMTP id n2-20020a92d9c2000000b0032b1d0184f3mr55857ilq.25.1681656527089;
-        Sun, 16 Apr 2023 07:48:47 -0700 (PDT)
+        bh=LXdwd9Z6xsYo+zOZ1MD918NWhWwbfIEB33DLJVT4cnU=;
+        b=HCpuVcg8EFznCDD4JU8dDwWaEWk2hlKfwNa/6pn9vgTh/I2qGeEL2spbMhCQuqQSaE
+         X1ivT9thhDpEoIrwaWrDqVjqML2lPiB6wrRzGO8d2N7umKdvUtmHDjStakwog6nyH7v8
+         inlo7zIvbsVhdGDTgig/TxeJ8vOkTsKJhGx91Qo+cgAw6iAh63M1z85BM2yr4uDU08Nd
+         LgwlIIqmu7ogLtNS9G0HcQPCGjtYQYw1fZihLz3hdEy/E1HyyLC6Zf8Y5KAXyp1sRIlU
+         XZGrdBpJiT93J8bSoyg7W+ySm32JlgGYhVxz2OtnJJKN3s7olz9cPdVAgDQm2Tsf70Af
+         UfPw==
+X-Gm-Message-State: AAQBX9ciO6ymkMl0Qynq9G1ceuQkq4Q56dk2Q4/tRVJcGwLG969mucjd
+        VOM1VMc9+7b1L7sojLwACrWZ/Q8XsQE=
+X-Google-Smtp-Source: AKy350YtSIQDse9oF1cbH3hoblux3mFidvC2qhBMy4X7IwGl3/gE8/at2xg+1t/Mps2OloQTrTbagQ==
+X-Received: by 2002:a92:bf0b:0:b0:325:bb3d:4f7 with SMTP id z11-20020a92bf0b000000b00325bb3d04f7mr6633640ilh.1.1681656554191;
+        Sun, 16 Apr 2023 07:49:14 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h15-20020a022b0f000000b0040d944282b5sm2552521jaa.152.2023.04.16.07.48.46
+        by smtp.gmail.com with ESMTPSA id j3-20020a92c203000000b0032ac75019c6sm1307787ilo.50.2023.04.16.07.49.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 07:48:46 -0700 (PDT)
+        Sun, 16 Apr 2023 07:49:13 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 16 Apr 2023 07:48:45 -0700
+Date:   Sun, 16 Apr 2023 07:49:12 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Frank Crawford <frank@crawford.emu.id.au>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] hwmon: (it87) Disable SMBus access for
- environmental controller registers.
-Message-ID: <abf2e8b3-1c4e-4614-beb8-3087933586da@roeck-us.net>
+Subject: Re: [PATCH v2 2/4] hwmon: (it87) Test for error in it87_update_device
+Message-ID: <5d965c73-a95a-40e5-b0a1-b72d665422a8@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -64,11 +63,12 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 02:25:07PM +1000, Frank Crawford wrote:
-> Add functions to disable and re-enable access by the SMBus for specific
-> chips.
+On Sun, Apr 16, 2023 at 02:25:08PM +1000, Frank Crawford wrote:
+> Handle errors from it87_update_device(), which currently only occurs if
+> SMBus access locking fails.
 > 
 > Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
+> ---
 
 Applied.
 
