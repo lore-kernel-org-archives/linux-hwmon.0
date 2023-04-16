@@ -2,291 +2,140 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2034EC77B76
-	for <linux-hwmon@archiver.kernel.org>; Sun, 16 Apr 2023 04:25:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F93DC77B61
+	for <linux-hwmon@archiver.kernel.org>; Sun, 16 Apr 2023 04:25:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbjDPEZm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 16 Apr 2023 00:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58410 "EHLO
+        id S229970AbjDPEZn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 16 Apr 2023 00:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbjDPEZk (ORCPT
+        with ESMTP id S229967AbjDPEZm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 16 Apr 2023 00:25:40 -0400
+        Sun, 16 Apr 2023 00:25:42 -0400
 Received: from ipmail03.adl2.internode.on.net (ipmail03.adl2.internode.on.net [150.101.137.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73D832D4C
-        for <linux-hwmon@vger.kernel.org>; Sat, 15 Apr 2023 21:25:38 -0700 (PDT)
-IronPort-SDR: 643b78bc_346VmSdYT6N+7JQEOH1quHds0GXE6/TOou35kH2FZ4+rfAL
- WQglDyjH97FtK57y6FX0ReI3Pkeaudw4Cc8DL+w==
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 023542D4C
+        for <linux-hwmon@vger.kernel.org>; Sat, 15 Apr 2023 21:25:40 -0700 (PDT)
+IronPort-SDR: 643b78c3_2F9B1D0oTPNsjasTbE69YPfHHiXBniVAFLCyukcUH1a9Hs/
+ Uvfx1xio4ETL28FP604p5JRRcM8PfHznr9+1HLA==
 X-SMTP-MATCH: 0
-X-IPAS-Result: =?us-ascii?q?A2CwAACkdztkjPQc8jxaGwEBAQEBAQEBBQEBARIBAQEDA?=
- =?us-ascii?q?wEBAUmBRoIugk+uCIdXDwEPAQFEBAEBhQYChTwmOBMBAgQBAQEBAwIDAQEBA?=
- =?us-ascii?q?QEBAwEBBgEBAQEBAQYEFAEBAQFARYVoDYYEAgEDJwsBDQEBNwEPGThXBgESg?=
- =?us-ascii?q?n6CXa8EM4EBgggBAQaCYppqgV4JgUGLdYEWgzZ6Qj+BToEVgTyCLYEPiXeaV?=
- =?us-ascii?q?oE0doEgDkpygQQCCQIRa4EQCGp+e0ACDWQLDm+BSYMqBAIURA5UAwkDBwVJQ?=
- =?us-ascii?q?AMLGA0WOhMsNRQgXGwtEhIFAwsVKkcECDgGGzQRAggPEg8sRAxCNzMTBlwBK?=
- =?us-ascii?q?QgDDhEDTkIZbASCCgYBJiSfGQd7E5VVA7EQhAiBWZ8UTYFGp3wul0kgohKBG?=
- =?us-ascii?q?IQsAgoHFoF6gX5NHxmDIk8DGQ+OIAwNCYIKkVFjPQIHCwEBAwmLRQEB?=
-IronPort-PHdr: A9a23:dpOUbhF+7JKGZ+z47qaOTp1GfhYY04WdBeZdwpAml6kIeb6q4JrlJ
- kCZ6PBwyl7FG4zGuLpNkeGDtafmVCQb5IqZ9moPdZtQWloEkZAYkwB6UpGMAEGpIKK1P35jT
- pZJXgY9rXqwaRc9JQ==
-IronPort-Data: A9a23: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
- psLzxUc5PRqLk1BHo7/PsCGvNo=
-IronPort-HdrOrdr: A9a23:x3NlJatXpRn6UcqQI1lX3kM/7skDrNV00zEX/kB9WHVpm6yj/f
- xGUs576faSskdpZJlD8ersBEDkex/hHPFOkOos1NuZMzUO/VHYSL2KjrGSpQEIZReOlNK1vJ
- 0IG8ND4Z/LfD9HZK3BgDVQfexP/DEJnZrY/ds2t00dKD2Cc5sQkzuRFDzrb3GemzM2fqbQxf
- Knl7B6mwY=
-X-Talos-CUID: 9a23:5WWwS2/n/tYcd0Qh776Vv1c7Fcd1SFKH9lzzHGS4BmUzQeC6Y0DFrQ==
-X-Talos-MUID: 9a23:tAAvdwk5PcSgWCxwzq3gdnpuHedSxvSoJXxOroUUuMeFKHJ/JG202WE=
+X-IPAS-Result: =?us-ascii?q?A2ArAACkdztkjPQc8jxaHAEBAQEBAQcBARIBAQQEAQFJg?=
+ =?us-ascii?q?TMGAQELAYItgk+zYYF+DwEPAQFEBAEBhQYChTwmNQgOAQIEAQEBAQMCAwEBA?=
+ =?us-ascii?q?QEBAQMBAQYBAQEBAQEGBBQBAQEBQEWFaA2GBAIBAzIBDQEBNwEPGThXBgESg?=
+ =?us-ascii?q?n6CXa83gQGCCAEBBoJimmqBXgmBQQGLdIEWgzZ6Qj+BToR+gQWKAZpWgTR2g?=
+ =?us-ascii?q?SAOSnKBBAIJAhFrgRAIaoF5QAINZAsOb4FJgyoEAhREDlQDCQMHBUlAAwsYD?=
+ =?us-ascii?q?RY6Eyw1FCBcbC0SEgUDCxUqRwQIOAYbNBECCA8SDyxEDEI3MxMGXAEpCw4RA?=
+ =?us-ascii?q?05CGWwEggoGASYknx8BWTWkSqIehAiBWZ8UTYFGp3yXdyCiEoEYhCwCCgcWg?=
+ =?us-ascii?q?WQBghNNHxmDIk8DGQ+OIBcCghORUWM9AgcLAQEDCYtFAQE?=
+IronPort-PHdr: A9a23:bAiebxLiQmneXPO+JdmcuVEyDhhOgF28FgQU9oFhgKhHbaqk5ZikM
+ UnCo/RhylbUDs3S8fkRje3Qvuj7XHAYp4yMtXcefdlNT0oLhclMzVMpCcLXBRGkfKyzPX4xF
+ p0aBlRupy7TDA==
+IronPort-Data: A9a23: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
+ cpU70iY0sJdGX21bb17CiSHvNpa
+IronPort-HdrOrdr: A9a23:Kd6lCa4RueerDBX71gPXwBLXdLJyesId70hD6qkQc3ZomwKj9v
+ xG+85rrCMd6l4qNU3I/OrtBEDuewK+yXcY2+Ys1PKZLW3bUQiTXedfBPXZsl/d8kTFn4Y36U
+ 4jSdkYNDSaNzhHZKjBjjVRnLsbsaG6GdiT9ILjJm9WPH1Xgr9bnnpE49mgYzZLrNgvP+tCKK
+ ah
+X-Talos-CUID: =?us-ascii?q?9a23=3A6q2himi3i4lfbjzxSRoOWT2/lDJuWXPZ91jacl2?=
+ =?us-ascii?q?DDjhKZeGZGWDXof5Eqp87?=
+X-Talos-MUID: 9a23:KZWxMQX7fR+MuADq/AHmujJ/F8E42IuvORoGwJcW58OKKBUlbg==
 X-IronPort-Anti-Spam-Filtered: true
 Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
-  by ipmail03.adl2.internode.on.net with ESMTP; 16 Apr 2023 13:55:33 +0930
+  by ipmail03.adl2.internode.on.net with ESMTP; 16 Apr 2023 13:55:40 +0930
 Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
         (authenticated bits=0)
-        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 33G4PCj33415316
+        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 33G4PCj53415316
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sun, 16 Apr 2023 14:25:28 +1000
+        Sun, 16 Apr 2023 14:25:36 +1000
 Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
-DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 33G4PCj33415316
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 33G4PCj53415316
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
-        s=s1; t=1681619128; bh=JbYOTgMbk5IKKqjYsYlQvml8l3PzjdpEW1kEeeNYd3w=;
+        s=s1; t=1681619136; bh=U6BktsoWzMH67w/TwPnlaIRCOv4RVUAHhIuHtUPVPf0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pBXOJOYn84PmU0cSv3FzUQbN/GARSr6OUDecwDKFKY4b6i6MP0RwIthqCXswxsufc
-         XSNk/6hUtxV0jJwWa+BmiWuEuO5PY0muOiRR6mWbRbELIzZstNVGveI6Q9bdsjIfg9
-         kaXjkQNkYj7Ah1nkM57m/wWDebBupUz2egHjnKvAEca7XOY+ze5XxJ3Re2CspM5/3Y
-         aJSZszFPBXREVEq75exmY96rl7g8XVn/0aUdqoX4Z4ryAOvIs9fUrEQq3huekjLr2p
-         JAVHqCUAR1m3Xnm0UE6L6jaB5b1+tXHtkdhLmIvKG79XgJypkI3VLzZVH75PzDDRpm
-         51Q+Ww5UeePSA==
+        b=CZwPdFm98aEvH2ToOjyYBSYfC7fZfdKNp+JYSkb+24UMmKF33WohszdAfzuUPB7e9
+         YsuoIF9uPGcS8vppAsVeHkJ7mTlPxfJOdgF+9s/8FiGezGyG/B7cinvY1yPFUdAetL
+         TuNAMcxJZprr+VPG6CDodMu+DQo3cpjbD9eH42q2GDGwulI8TZGna9H38lJV5BCe0i
+         PdFSM09yiYQxgmdIqJqHrnrXAiRHdjAhmivBBIQS1BAldmvmPMKm8n6nbMBYqf/HkC
+         FH0NBuJ13tuW9G2Lfsnccmb8gH8hGzMuwhHMoL6646T6xwEEpOPFR3Aw9zvUUH9XuC
+         7I99mSyN73J+g==
 From:   Frank Crawford <frank@crawford.emu.id.au>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org,
         Frank Crawford <frank@crawford.emu.id.au>
-Subject: [PATCH v2 2/4] hwmon: (it87) Test for error in it87_update_device
-Date:   Sun, 16 Apr 2023 14:25:08 +1000
-Message-Id: <20230416042510.1929077-3-frank@crawford.emu.id.au>
+Subject: [PATCH v2 4/4] hwmon: (it87) Disable/enable SMBus access for IT8622E chipset
+Date:   Sun, 16 Apr 2023 14:25:10 +1000
+Message-Id: <20230416042510.1929077-5-frank@crawford.emu.id.au>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230416042510.1929077-1-frank@crawford.emu.id.au>
 References: <20230416042510.1929077-1-frank@crawford.emu.id.au>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sun, 16 Apr 2023 14:25:28 +1000 (AEST)
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sun, 16 Apr 2023 14:25:36 +1000 (AEST)
 X-Virus-Scanned: clamav-milter 0.103.8 at bits.crawford.emu.id.au
 X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Handle errors from it87_update_device(), which currently only occurs if
-SMBus access locking fails.
+Configure the IT8622E chip to disable/re-enable access via an SMBus when
+reading or writing the chip's registers.
 
 Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
 ---
 
 v2:
- * Reorder patches within patchset.
+ * No change.
 
 ---
- drivers/hwmon/it87.c | 48 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ drivers/hwmon/it87.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index b74dd861f0fe..920fb9b6b2e2 100644
+index 2922f551b717..9b7628b2a678 100644
 --- a/drivers/hwmon/it87.c
 +++ b/drivers/hwmon/it87.c
-@@ -942,6 +942,9 @@ static ssize_t show_in(struct device *dev, struct device_attribute *attr,
- 	int index = sattr->index;
- 	int nr = sattr->nr;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n", in_from_reg(data, nr, data->in[nr][index]));
- }
- 
-@@ -1030,6 +1033,9 @@ static ssize_t show_temp(struct device *dev, struct device_attribute *attr,
- 	int index = sattr->index;
- 	struct it87_data *data = it87_update_device(dev);
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp[nr][index]));
- }
- 
-@@ -1107,6 +1113,9 @@ static ssize_t show_temp_type(struct device *dev, struct device_attribute *attr,
- 	u8 reg = data->sensor;	    /* In case value is updated while used */
- 	u8 extra = data->extra;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	if ((has_temp_peci(data, nr) && (reg >> 6 == nr + 1)) ||
- 	    (has_temp_old_peci(data, nr) && (extra & 0x80)))
- 		return sprintf(buf, "6\n");  /* Intel PECI */
-@@ -1197,6 +1206,9 @@ static ssize_t show_fan(struct device *dev, struct device_attribute *attr,
- 	int speed;
- 	struct it87_data *data = it87_update_device(dev);
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	speed = has_16bit_fans(data) ?
- 		FAN16_FROM_REG(data->fan[nr][index]) :
- 		FAN_FROM_REG(data->fan[nr][index],
-@@ -1211,6 +1223,9 @@ static ssize_t show_fan_div(struct device *dev, struct device_attribute *attr,
- 	struct it87_data *data = it87_update_device(dev);
- 	int nr = sensor_attr->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%lu\n", DIV_FROM_REG(data->fan_div[nr]));
- }
- 
-@@ -1221,6 +1236,9 @@ static ssize_t show_pwm_enable(struct device *dev,
- 	struct it87_data *data = it87_update_device(dev);
- 	int nr = sensor_attr->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n", pwm_mode(data, nr));
- }
- 
-@@ -1231,6 +1249,9 @@ static ssize_t show_pwm(struct device *dev, struct device_attribute *attr,
- 	struct it87_data *data = it87_update_device(dev);
- 	int nr = sensor_attr->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n",
- 		       pwm_from_reg(data, data->pwm_duty[nr]));
- }
-@@ -1244,6 +1265,9 @@ static ssize_t show_pwm_freq(struct device *dev, struct device_attribute *attr,
- 	unsigned int freq;
- 	int index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	if (has_pwm_freq2(data) && nr == 1)
- 		index = (data->extra >> 4) & 0x07;
- 	else
-@@ -1531,6 +1555,9 @@ static ssize_t show_pwm_temp_map(struct device *dev,
- 	int nr = sensor_attr->index;
- 	int map;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	map = data->pwm_temp_map[nr];
- 	if (map >= 3)
- 		map = 0;	/* Should never happen */
-@@ -1595,6 +1622,9 @@ static ssize_t show_auto_pwm(struct device *dev, struct device_attribute *attr,
- 	int nr = sensor_attr->nr;
- 	int point = sensor_attr->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n",
- 		       pwm_from_reg(data, data->auto_pwm[nr][point]));
- }
-@@ -1631,6 +1661,9 @@ static ssize_t show_auto_pwm_slope(struct device *dev,
- 	struct sensor_device_attribute *sensor_attr = to_sensor_dev_attr(attr);
- 	int nr = sensor_attr->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%d\n", data->auto_pwm[nr][1] & 0x7f);
- }
- 
-@@ -1664,6 +1697,9 @@ static ssize_t show_auto_temp(struct device *dev, struct device_attribute *attr,
- 	int point = sensor_attr->index;
- 	int reg;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	if (has_old_autopwm(data) || point)
- 		reg = data->auto_temp[nr][point];
- 	else
-@@ -1884,6 +1920,9 @@ static ssize_t alarms_show(struct device *dev, struct device_attribute *attr,
- {
- 	struct it87_data *data = it87_update_device(dev);
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%u\n", data->alarms);
- }
- static DEVICE_ATTR_RO(alarms);
-@@ -1894,6 +1933,9 @@ static ssize_t show_alarm(struct device *dev, struct device_attribute *attr,
- 	struct it87_data *data = it87_update_device(dev);
- 	int bitnr = to_sensor_dev_attr(attr)->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%u\n", (data->alarms >> bitnr) & 1);
- }
- 
-@@ -1949,6 +1991,9 @@ static ssize_t show_beep(struct device *dev, struct device_attribute *attr,
- 	struct it87_data *data = it87_update_device(dev);
- 	int bitnr = to_sensor_dev_attr(attr)->index;
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%u\n", (data->beeps >> bitnr) & 1);
- }
- 
-@@ -2022,6 +2067,9 @@ static ssize_t cpu0_vid_show(struct device *dev,
- {
- 	struct it87_data *data = it87_update_device(dev);
- 
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
- 	return sprintf(buf, "%ld\n", (long)vid_from_reg(data->vid, data->vrm));
- }
- static DEVICE_ATTR_RO(cpu0_vid);
+@@ -474,6 +474,7 @@ static const struct it87_devices it87_devices[] = {
+ 		  | FEAT_FIVE_PWM | FEAT_IN7_INTERNAL | FEAT_PWM_FREQ2
+ 		  | FEAT_AVCC3 | FEAT_VIN3_5V,
+ 		.peci_mask = 0x07,
++		.smbus_bitmap = BIT(1) | BIT(2),
+ 	},
+ 	[it8628] = {
+ 		.name = "it8628",
 -- 
 2.39.2
 
