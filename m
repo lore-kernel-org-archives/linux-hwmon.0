@@ -2,117 +2,79 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CE45C77B61
-	for <linux-hwmon@archiver.kernel.org>; Sun, 16 Apr 2023 14:35:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A940AC77B61
+	for <linux-hwmon@archiver.kernel.org>; Sun, 16 Apr 2023 14:39:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjDPOfT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 16 Apr 2023 10:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
+        id S230356AbjDPOj1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 16 Apr 2023 10:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjDPOfR (ORCPT
+        with ESMTP id S229695AbjDPOj1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 16 Apr 2023 10:35:17 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F887210B;
-        Sun, 16 Apr 2023 07:35:17 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-760f5070ccfso8251639f.2;
-        Sun, 16 Apr 2023 07:35:17 -0700 (PDT)
+        Sun, 16 Apr 2023 10:39:27 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5F5BA;
+        Sun, 16 Apr 2023 07:39:26 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-7606cf9fc63so43166239f.0;
+        Sun, 16 Apr 2023 07:39:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681655716; x=1684247716;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W9KpJPbflQXiEf80alEmLHqabDQeRGmdrd1yTysWYt0=;
-        b=qAZFn2gH3LvXz4mZOwXu789cAJoBQsrJOy4++peDdsvhJphXOmrT1jU1POKwf0LS8s
-         YFmiJV4LWgPcc1vUWzy1i4oqpifC2FV8ZgmSPfoGN5trktOsWYjmMUeDaBSSGObuIP1I
-         +SiLYcS2wsRwidD4TZ9Om5dW0foOiW552wKrdevdUumP/LFJIGdg7k/xbiY2Lplv0qK7
-         0KJnF/rEpzkPam7tKscmaVNoEpuYNiPKjyrme1SN1Ha1lpfPPY2NRk3udTPKY8k12IvS
-         1cj8CJTd8HHknE+VLqIuRkgub8oExfLhKnZVGNBYAXar9wotnW1dltLbcWrfFYjks/Bz
-         Q54w==
+        d=gmail.com; s=20221208; t=1681655965; x=1684247965;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w8ZkUiUebkjTrLhA1EwJs1l6uyjwxYDbX00ZSR/CmGU=;
+        b=KoRkjtb3WWSudJ8cPL8IWMqVW9q6LSpBtGBdqIcd/iAtxfnY7hIsogJuKhfY9Csxs4
+         VQz0WhTwwODj0ZknGpSg3UXSBAOaavllUKLZzV+lQelvUu8WXNV/eRv9iKJxj9wEra+7
+         2mayJ53t/dShfi+j+mvqKE3UoXXU8d1Ipi01UeJiyIf6zRxnIlvU4tPylCDpYrdxen1+
+         mj6t5j7GWz8ZG5QoZOupd/SJ0hQkTveuIKZ2LrzaS3SFfFdxwTpESMDbdgBAXSXtw9MI
+         /Z60L+9CgE1uYg17sUeI+qAZbfaF2WuBOiC/+8WAA25u5sHXioi+0LEwaYyikyMv5HaN
+         VALQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681655716; x=1684247716;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W9KpJPbflQXiEf80alEmLHqabDQeRGmdrd1yTysWYt0=;
-        b=C4mIbIZFFgP9zDtE3CbpB7LxJT0X4rBlJWLNEPQcT08eft0z5VK5u2WEp060h/9ln4
-         ytgUXLfBJP86tko1mrA2Y7O8haGzTZGOD5wUYoMB5QY2/Mv6DKFtJLYc1hdsRyR3LY9b
-         dNu+0m3Q+mwcyvQ8RW/RQLHdGW9FjOunjWJ58N694fBOhnQHkkcWsdvxq8dPbrteDUYA
-         9rl4ZjcLQAdkuSE0UOU4yM0EEeVM1HQOAPUnF//NdMZSOwOuX/DBzhenTfQSy3DQ6JCW
-         1f7av2WgnPVYmVTut8wWUEw/rqxEfoLikPqBhmjb7dhoZ7n0x91FC28C3kqXHxE/NQHj
-         FTIg==
-X-Gm-Message-State: AAQBX9eoT+eT2/KH/KftKJZjaMnS1qLVnzmBrOBTV/J0JC6p3Z5MHEpP
-        ov3CBQMdV7ObD2Pb6p0UrhIKK4WIuVQ=
-X-Google-Smtp-Source: AKy350YAVnDhsREuWeyJPfIshNjOz1BwxduyrE7Og3xQsyke8n4KwvohLauIkunC/pamjPDJBbmDwA==
-X-Received: by 2002:a92:c8cf:0:b0:32a:b78f:e7d5 with SMTP id c15-20020a92c8cf000000b0032ab78fe7d5mr4595380ilq.27.1681655716411;
-        Sun, 16 Apr 2023 07:35:16 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681655965; x=1684247965;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w8ZkUiUebkjTrLhA1EwJs1l6uyjwxYDbX00ZSR/CmGU=;
+        b=HTjtey3w5/xZW3lXlNMchq5Zh+CS4Nx6lhCSaPs7gqSwD6ix+B3cudem/JPNbZBJS3
+         ZQSjXpMj/ZzaM4pfESZstkful8jEukORzGjWp14bWB6KF5EInpmbk5ysmVlaBTG6kmTl
+         027357yPkUXPVKBfhkQk7qGZDg2B6kmqE9HwA/nuj0ptGB4QXkjqzwTBycGN5zOt6n/V
+         BmqQwVoduxugVXnmFL4Xbu9kYsKe1QYda3v9n+2Gm86qWEynropTxoeCyRTyQq7Ia1og
+         D0Qvm8bQ4Jo0NIJY42uzFvpTDD199nlsq4/61/5PLCMnkORtIS5o1jaAYkluCNamf/X1
+         jGDA==
+X-Gm-Message-State: AAQBX9eTtCwwPtHaPuNubUex5K5Svm6ORoYZ4brXKM2XJc+J0RgThVtf
+        yjw3U4AidsarayrsTFglTw3rF/6/RJw=
+X-Google-Smtp-Source: AKy350b7q5fGnvGl8yGQIHPpDZ5OFwlCVkm47u3RzbBXx0WRZsTSXDxHMB53CiwdwuEpdFGUQJYsUA==
+X-Received: by 2002:a92:d451:0:b0:325:cc57:df63 with SMTP id r17-20020a92d451000000b00325cc57df63mr7272769ilm.22.1681655965581;
+        Sun, 16 Apr 2023 07:39:25 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l15-20020a02cd8f000000b0040bd610a08asm2626623jap.18.2023.04.16.07.35.15
+        by smtp.gmail.com with ESMTPSA id cn11-20020a0566383a0b00b0040f72526b1fsm1463291jab.16.2023.04.16.07.39.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 07:35:16 -0700 (PDT)
+        Sun, 16 Apr 2023 07:39:25 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 16 Apr 2023 07:35:14 -0700
+Date:   Sun, 16 Apr 2023 07:39:24 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Babu Moger <babu.moger@amd.com>
-Cc:     clemens@ladisch.de, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Baski.Kannan@amd.com,
-        yannick.hemery@corp.ovh.com
-Subject: Re: [PATCH] hwmon: (k10temp): Check range scale when CUR_TEMP
- register is read-write
-Message-ID: <1afe95f1-cea1-418f-b9a1-23be6817157f@roeck-us.net>
-References: <20230413213958.847634-1-babu.moger@amd.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Emil Renner Berthing <kernel@esmil.dk>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (sfctemp) Simplify error message
+Message-ID: <cb54f91a-5b34-4e88-9afc-d2c714933e7d@roeck-us.net>
+References: <f32a6e877f399e11ca130476002f85c2b48ba7ec.1681575790.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230413213958.847634-1-babu.moger@amd.com>
+In-Reply-To: <f32a6e877f399e11ca130476002f85c2b48ba7ec.1681575790.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 04:39:58PM -0500, Babu Moger wrote:
-> From: Babu Moger <Babu.Moger@amd.com>
+On Sat, Apr 15, 2023 at 06:23:37PM +0200, Christophe JAILLET wrote:
+> dev_err_probe() already display the error code. There is no need to
+> duplicate it explicitly in the error message.
 > 
-> Spec says, when CUR_TEMP_TJ_SEL == 3 and CUR_TEMP_RANGE_SEL == 0,
-> it should use RangeUnadjusted is 0, which is (CurTmp*0.125 -49) C. The
-> CUR_TEMP register is read-write when CUR_TEMP_TJ_SEL == 3 (bit 17-16).
-> 
-> Add the check to detect it.
-> 
-> Sensors command's output before the patch.
-> $sensors
->  k10temp-pci-00c3
->  Adapter: PCI adapter
->  Tctl:         +76.6°C <- Wrong value
->  Tccd1:        +26.5°C
->  Tccd2:        +27.5°C
->  Tccd3:        +27.2°C
->  Tccd4:        +27.5°C
->  Tccd5:        +26.0°C
->  Tccd6:        +26.2°C
->  Tccd7:        +25.0°C
->  Tccd8:        +26.5°C
-> 
-> Sensors command's output after the patch.
-> $sensors
->  k10temp-pci-00c3
->  Adapter: PCI adapter
->  Tctl:         +28.8°C <- corrected value
->  Tccd1:        +27.5°C
->  Tccd2:        +28.5°C
->  Tccd3:        +28.5°C
->  Tccd4:        +28.5°C
->  Tccd5:        +27.0°C
->  Tccd6:        +27.5°C
->  Tccd7:        +27.0°C
->  Tccd8:        +27.5°C
-> 
-> Signed-off-by: Babu Moger <babu.moger@amd.com>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Applied. Please update your e-mail address configuration to avoid the
-following checkpatch message.
-
-CHECK: From:/Signed-off-by: email comments mismatch: 'From: Babu Moger <Babu.Moger@amd.com>' != 'Signed-off-by: Babu Moger <babu.moger@amd.com>'
+Applied.
 
 Thanks,
 Guenter
