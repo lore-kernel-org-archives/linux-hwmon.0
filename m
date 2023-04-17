@@ -2,94 +2,118 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 642DAC77B61
-	for <linux-hwmon@archiver.kernel.org>; Sun, 16 Apr 2023 21:33:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C352C77B61
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Apr 2023 03:10:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbjDPVd5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 16 Apr 2023 17:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
+        id S230303AbjDQDKR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 16 Apr 2023 23:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDPVd4 (ORCPT
+        with ESMTP id S230351AbjDQDJj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 16 Apr 2023 17:33:56 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631AD1FEF;
-        Sun, 16 Apr 2023 14:33:55 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id r9so5040698iot.6;
-        Sun, 16 Apr 2023 14:33:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681680835; x=1684272835;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2gy3kFSOdkDvzSy0w35GiiIQBcHUHIwrasUl9Oa3Jx8=;
-        b=errXwELZEzPDIHRC2szYREDSwC1VyoYlgifGrauB7RuTnJPXpvbGOzJYqBOaJL+Gf4
-         uZvB4KJVyOUi3CUXKJujK7QBLFVXMsb42kOdXDESoIwscK9MJWDWb5fypfSi9qoni5Kp
-         w1ibolryRpAW1U7LOSuNE32a1yx8fVQbR+5Kw0AVD9UfvYBLS6NAUMps/E1JBuvucRnR
-         XCs4RUdap7VlBcqtTpXUol4+dqog/ZQEpfnxEDUwZFCNe85thK8K2+k7GL7fYTnRi+hz
-         NSfbaH+WamWmPQKR3Lx0IoGpzeSK7fKmEetvFNuxLIbP6y+5GgXkDWTu+Zhlh0l15YLb
-         17BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681680835; x=1684272835;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2gy3kFSOdkDvzSy0w35GiiIQBcHUHIwrasUl9Oa3Jx8=;
-        b=ERMrlIuW4KkBhcdjW3Q2xqs5+UDEIA5XyPP6/lCGxRRbP9Fn0nv+30aB6p/bgOzoVx
-         jnMOZwcLzkR0GINz05MuUcGzhm7kXsF7umjowjqb/WttcaVnvZ94mVok86un5mAo9eWN
-         bELJbQXLk5daaPAMW0gtp7Hsk6SHnfc2VTxUxzOesk5tFXhb8FGKONWdXsMQ/0pOCBtb
-         CENOPRikdRq8OWC9AHm1UNocF2QdZm6F1rm3eMF/cOhTjrpopO8R2FaoyO3+uS2+SauI
-         CAjiZ+j1cYbuTbzgeThMgblo6t1WF3jD54g6V/U4AZxcA8G1Woan8Ni2+xsfYjOyZ62q
-         2msw==
-X-Gm-Message-State: AAQBX9fAOSsMgY/0zeh+BKFR3yJ1Rn8xrUGFlu3RAjSQ/46aMN2iRzfS
-        xT50tRru6fFrOwmrcqMugRDRhGgNUVE=
-X-Google-Smtp-Source: AKy350ZNWi0kZ8/te/K1qqoQvEOEoH2Mq1PWoxohXBZvSFupT5upL+8B/xmOtXXPNlWrJ4iwWAzzsw==
-X-Received: by 2002:a6b:e506:0:b0:760:ea10:757 with SMTP id y6-20020a6be506000000b00760ea100757mr2756166ioc.20.1681680834744;
-        Sun, 16 Apr 2023 14:33:54 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s2-20020a6bdc02000000b007587774bec7sm2674930ioc.54.2023.04.16.14.33.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 14:33:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 16 Apr 2023 14:33:52 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Aleksa Savic <savicaleksa83@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for
- Aquacomputer Aquastream XT
-Message-ID: <4edb2285-904f-4dee-8bf8-7fdf42b2b7ce@roeck-us.net>
-References: <20230416181702.9892-1-savicaleksa83@gmail.com>
+        Sun, 16 Apr 2023 23:09:39 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5206E40EF
+        for <linux-hwmon@vger.kernel.org>; Sun, 16 Apr 2023 20:09:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681700944; x=1713236944;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4iqkQhPATmaD9dv7+zYQ+xHwMhmk/tVDTbQ7Ak7QTHE=;
+  b=gkxaWqJ0zgDSP1IW/iC8j7VWBdZGA3vebU41EBsJZWYFkRecVLyRqJKU
+   scFNQrFz5tC37IZiJcz86SyVNt51UffIC9m1iNyjSSWek/xdEwz14Kwxp
+   ZqvDT+k7P1olOrbBgXmViUl7hS0CGoUYePMF0FIrWSu1DI1qyzaP1oscp
+   yJILSmA4I1kkxGJx+DrpjtIVMq3dYJEICe4WL0sNeWcnYgTcOftFaDPw/
+   d6piEddf18hIiSQmuIgheyLQ9Tao2s7OWNYh+5teS2qGiHi/a1+QRXj5o
+   SRQkwRWAW86JLs1Nr7pe7ACwy9W+/AnZ9QIX5A4ndeSI5xV6YHhXBcLOU
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="328955163"
+X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
+   d="scan'208";a="328955163"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 20:08:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="723111196"
+X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
+   d="scan'208";a="723111196"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 16 Apr 2023 20:08:31 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1poFEE-000c5n-1c;
+        Mon, 17 Apr 2023 03:08:30 +0000
+Date:   Mon, 17 Apr 2023 11:08:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon] BUILD SUCCESS
+ 1dc8e097967b69a56531c9ccb70b854771310e85
+Message-ID: <643cb812.Uih5RmX4TPBuXaZr%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230416181702.9892-1-savicaleksa83@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 08:17:01PM +0200, Aleksa Savic wrote:
-> Extend aquacomputer_d5next driver to expose various hardware sensors of the
-> Aquacomputer Aquastream XT watercooling pump, which communicates
-> through a proprietary USB HID protocol. Implemented by Leonard Anderweit
-> [1] [2].
-> 
-> Coolant temp, fan IC and external temp sensor readings are available, along
-> with speed and voltage of both the pump and optionally connected fan.
-> It also exposes pump current.
-> 
-> Additionally, serial number and firmware version are exposed through
-> debugfs.
-> 
-> [1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/46
-> [2] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/49
-> 
-> Originally-from: Leonard Anderweit <leonard.anderweit@gmail.com>
-> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: 1dc8e097967b69a56531c9ccb70b854771310e85  hwmon: (k10temp) Check range scale when CUR_TEMP register is read-write
 
-Applied.
+elapsed time: 722m
 
-Thanks,
-Guenter
+configs tested: 43
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sparc                               defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
