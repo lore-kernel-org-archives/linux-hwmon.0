@@ -2,196 +2,144 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B888AC77B71
-	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Apr 2023 05:17:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67999C77B75
+	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Apr 2023 11:32:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjDRFRh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Apr 2023 01:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55494 "EHLO
+        id S230517AbjDRLca (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 18 Apr 2023 07:32:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjDRFRY (ORCPT
+        with ESMTP id S229598AbjDRLc3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Apr 2023 01:17:24 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F14F189
-        for <linux-hwmon@vger.kernel.org>; Mon, 17 Apr 2023 22:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681795043; x=1713331043;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KjjSzgRgGeIOqxNa2XJRBVzGIB7JsrYDq7gO3+exg9k=;
-  b=Ayq5lfcD/f6LT57JajMKI6W2uRvKkKb9pgQeOPWMPIcGtxwHP6uEuzvI
-   h47d1c3QdnUyJ/XLJtHVz5AN8Q2auTwCQSoobiMhrJ6OdshfWRmOp/8X7
-   v6bbqvav6JOrxQwgvcsPtkoZ+5TXqVxkLyfrTufcyNGwuyBJZdurfzOSl
-   H3BF3rAp2YOfsKZgo4Ayfll6KVcWZ+pRfAnFFy+dHr0kPoBgwIZxm5cYN
-   3BiWKHJMCNFm2JzRkws+oZkPzi0lay8IL/Xko3nDHsFKV+PzWcXubJTGC
-   45MeOOHtVeFFLPfAgI1f956O/FMdmMt+nx29dBBGKZoRD30fAQ5XdopKZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="325417148"
-X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
-   d="scan'208";a="325417148"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 22:17:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="834719621"
-X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
-   d="scan'208";a="834719621"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Apr 2023 22:17:22 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1podiT-000d0x-1L;
-        Tue, 18 Apr 2023 05:17:21 +0000
-Date:   Tue, 18 Apr 2023 13:16:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
- fcf5181e0dea2f42d6b3d387b5aa1bbb775bcf38
-Message-ID: <643e27bb.UdvRVJIKc++ECHO2%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 18 Apr 2023 07:32:29 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F03E1713
+        for <linux-hwmon@vger.kernel.org>; Tue, 18 Apr 2023 04:32:28 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f09b9ac51dso64972775e9.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 18 Apr 2023 04:32:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1681817546; x=1684409546;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=D2PeO5e/Aox7QzhHkYSjxJqeqgTXFUOLxZJv9Qdfgrk=;
+        b=RH+YGD10Qb+PdrpuxWIl9buclhbzz5Ju3+49P2MB/c7gpU4g2hk4+mSyz85yBYRsRu
+         aKITw2+IQkCfCQ/0uSPr2JODdW+xMEbyEzwguAaWzn6UUjHGkfwYH84T18/xtv7AC7jI
+         ed/gaTsAM/tl4cLmjAk9YYppNvDUMC8Uw4APXW+BrcTD2/sK8IlrdkN76zlQ97u0vuJY
+         3V45h3AjW5ApD/uJ+zlRSGfolS1unFBNSLN4N87sx0Y4HZ9/rRiqxtDciIpXTH23zZVl
+         NxiQgMQrushL1wTMbAMIKmFqzSuFFh0brDJ1t5z+YFLoEbXOW3zUtl8XM/e18Upje8Yt
+         bJEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681817546; x=1684409546;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D2PeO5e/Aox7QzhHkYSjxJqeqgTXFUOLxZJv9Qdfgrk=;
+        b=b3mgbQ3/YIf0tEkux96QuS5QahEpUlslHuPqdxPDMCFeI+lmrPNE2G4uufzjmfb4rj
+         kLvs7qPXRvnBclwOPk1Wy+EcdNPfe7hx7BUG+xhwb4jemFV8O8ibEq8JP91CCc6MYdKd
+         Cx37tDY86KIOXrfexjYiM2nfYwClwLxUNcNJtaQq09tjgsB7rgSq5VbTggAFi+9IMAmV
+         NDrnp/nywQZQZO3Yf1UCwShuzIrmAECSPPfJO/CekvncqjZCBX8iqPl9Zygc7w1O0USX
+         nzEK1r4UmkK9IutGWr8f6JWyDhER6tdQORHd8J3U2+Q/SC6H1APPqKHTFSTsv2b+bv0g
+         V9gw==
+X-Gm-Message-State: AAQBX9c1n/5YqxLB4gRKEmgldiXieajWI8BvBjN058M0hryvlL02XHDF
+        88I6gPyIEhgfGRVh+sBQYtG3vA==
+X-Google-Smtp-Source: AKy350ZZ7JKXwDmajPANDwbPxlCPBGMo6pL+KeoOJlnqA1YkpHnOvBcZY+OjgAj90miPiCIyerGrPQ==
+X-Received: by 2002:adf:f7c5:0:b0:2fb:a0eb:feaa with SMTP id a5-20020adff7c5000000b002fba0ebfeaamr1619941wrq.17.1681817546464;
+        Tue, 18 Apr 2023 04:32:26 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id z18-20020adfd0d2000000b002da75c5e143sm12901633wrh.29.2023.04.18.04.32.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 04:32:26 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: hwmon: Add binding for max6639
+Date:   Tue, 18 Apr 2023 13:32:16 +0200
+Message-Id: <20230418113217.781524-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-branch HEAD: fcf5181e0dea2f42d6b3d387b5aa1bbb775bcf38  watchdog: loongson1_wdt: Implement restart handler
+Add Devicetree binding documentation for Maxim MAX6639 temperature
+monitor with PWM fan-speed controller.
 
-elapsed time: 871m
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+---
+ .../bindings/hwmon/maxim,max6639.yaml         | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
 
-configs tested: 121
-configs skipped: 15
+diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+new file mode 100644
+index 000000000000..20b28cd36555
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+@@ -0,0 +1,55 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Maxim max6639 Dual fan controller
++
++maintainers:
++  - Naresh Solanki <Naresh.Solanki@9elements.com>
++
++description: |
++  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
++  fan-speed controller.  It monitors its own temperature and one external
++  diode-connected transistor or the temperatures of two external diode-connected
++  transistors, typically available in CPUs, FPGAs, or GPUs.
++
++  Datasheets:
++    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
++
++properties:
++  compatible:
++    enum:
++      - maxim,max6639
++
++  reg:
++    maxItems: 1
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      max6639@10 {
++        compatible = "maxim,max6639";
++        reg = <0x10>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++      };
++    };
++...
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r006-20230417   gcc  
-arc                  randconfig-r014-20230417   gcc  
-arc                  randconfig-r025-20230417   gcc  
-arc                  randconfig-r043-20230416   gcc  
-arc                  randconfig-r043-20230417   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r005-20230417   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r002-20230416   gcc  
-arm                  randconfig-r002-20230417   clang
-arm                  randconfig-r021-20230416   clang
-arm                  randconfig-r025-20230416   clang
-arm                  randconfig-r046-20230416   clang
-arm                  randconfig-r046-20230417   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r004-20230417   gcc  
-arm64                randconfig-r026-20230416   gcc  
-arm64                randconfig-r036-20230416   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r016-20230417   gcc  
-csky                 randconfig-r023-20230416   gcc  
-hexagon              randconfig-r005-20230416   clang
-hexagon              randconfig-r013-20230416   clang
-hexagon              randconfig-r035-20230416   clang
-hexagon              randconfig-r041-20230416   clang
-hexagon              randconfig-r041-20230417   clang
-hexagon              randconfig-r045-20230416   clang
-hexagon              randconfig-r045-20230417   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230417   gcc  
-i386                 randconfig-a002-20230417   gcc  
-i386                 randconfig-a003-20230417   gcc  
-i386                 randconfig-a004-20230417   gcc  
-i386                 randconfig-a005-20230417   gcc  
-i386                 randconfig-a006-20230417   gcc  
-i386                 randconfig-a011-20230417   clang
-i386                 randconfig-a012-20230417   clang
-i386                 randconfig-a013-20230417   clang
-i386                 randconfig-a014-20230417   clang
-i386                 randconfig-a015-20230417   clang
-i386                 randconfig-a016-20230417   clang
-i386                 randconfig-r023-20230417   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r011-20230416   gcc  
-ia64                 randconfig-r034-20230416   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r004-20230416   gcc  
-m68k                 randconfig-r015-20230416   gcc  
-microblaze   buildonly-randconfig-r002-20230416   gcc  
-microblaze           randconfig-r021-20230417   gcc  
-microblaze           randconfig-r024-20230416   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r003-20230417   clang
-mips                 randconfig-r013-20230417   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r001-20230416   gcc  
-nios2                randconfig-r022-20230417   gcc  
-openrisc     buildonly-randconfig-r004-20230417   gcc  
-openrisc             randconfig-r014-20230416   gcc  
-parisc       buildonly-randconfig-r002-20230417   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r005-20230417   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r003-20230417   clang
-powerpc              randconfig-r015-20230417   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r006-20230416   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r032-20230416   clang
-riscv                randconfig-r042-20230416   gcc  
-riscv                randconfig-r042-20230417   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230416   gcc  
-s390                 randconfig-r044-20230417   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r012-20230417   gcc  
-sparc        buildonly-randconfig-r001-20230416   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r012-20230416   gcc  
-sparc64              randconfig-r003-20230416   gcc  
-sparc64              randconfig-r016-20230416   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r006-20230417   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230417   gcc  
-x86_64               randconfig-a002-20230417   gcc  
-x86_64               randconfig-a003-20230417   gcc  
-x86_64               randconfig-a004-20230417   gcc  
-x86_64               randconfig-a005-20230417   gcc  
-x86_64               randconfig-a006-20230417   gcc  
-x86_64               randconfig-a011-20230417   clang
-x86_64               randconfig-a012-20230417   clang
-x86_64               randconfig-a013-20230417   clang
-x86_64               randconfig-a014-20230417   clang
-x86_64               randconfig-a015-20230417   clang
-x86_64               randconfig-a016-20230417   clang
-x86_64                               rhel-8.3   gcc  
-
+base-commit: b8610e0fe08f1476895f141be60f8dd842f0adac
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.1
+
