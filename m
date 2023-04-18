@@ -2,193 +2,92 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 441C2C6FD18
-	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Apr 2023 19:34:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CF1CC6FD18
+	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Apr 2023 20:41:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232226AbjDRTeO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Apr 2023 15:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
+        id S232740AbjDRUlx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 18 Apr 2023 16:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232385AbjDRTeK (ORCPT
+        with ESMTP id S232573AbjDRUlh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Apr 2023 15:34:10 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F447A94;
-        Tue, 18 Apr 2023 12:34:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681846448; x=1713382448;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=R0lX7KXSIGZeRWlUbbQwoFAWMx1W4y2vJ5k94Ji5BBE=;
-  b=U8DEWkQ1bxiULp9coTdpBEeIOnaKdPmcA9gTdu5rPoVJntFevLWtCsP9
-   LVgy4J7Dz9JU6ayXS/RzMIjOeUBxuB+R84q+DlEQe5AdYBxM35M/TR+n0
-   E0cvpegn8EPrGaebyXyi4B2QxoVtYQUytx0fPPPzNQawTfmjp5EJka0CS
-   p70FazOFMM7oZTtwcdMUcqVfqQhKAoFHfG7Sb9XROPry9mq9ShicQDgC/
-   ZyIL7lr3x0Ny1TcFz58h3zi7h2VFe56X01dWsY6/9ax/9U9MwXINmJvFP
-   TNoGALFXRTInKwBZ92j/poxBuv620bHYUDavB20hIcuj4BFD/3T5k5U/p
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="431551437"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="431551437"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 12:34:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="780601955"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="780601955"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 Apr 2023 12:34:05 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1por5Y-000dxX-0V;
-        Tue, 18 Apr 2023 19:34:04 +0000
-Date:   Wed, 19 Apr 2023 03:33:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     nick.hawkins@hpe.com, verdun@hpe.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jdelvare@suse.com,
-        linux@roeck-us.net, linux@armlinux.org.uk,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v1 3/9] hwmon: (gxp-psu) Add driver to read HPE PSUs
-Message-ID: <202304190301.9jtv8uzG-lkp@intel.com>
-References: <20230418152824.110823-4-nick.hawkins@hpe.com>
+        Tue, 18 Apr 2023 16:41:37 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C599010259
+        for <linux-hwmon@vger.kernel.org>; Tue, 18 Apr 2023 13:41:35 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 0BA922C0533;
+        Wed, 19 Apr 2023 08:41:33 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1681850493;
+        bh=b3HTt0Kmrn0e7txKrycgHrd50xUzJaZcGOGUB1isLRc=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=hCZDkBEsDDb2j7gCxweVXXC8Y9OvfipBoeC995+DSYXyC01umbagxQrIaADGQk9dO
+         BHx3ilK/Zo9xN1S3UmhwDHC2PJHjVEqa31XiMTQ3HXGWDeqRizVcBWqA1cSoNEnzDv
+         j+9atOUBz+210kP5B/wAOr3Fonw7ItnWylNEj7pC9dpfJJSB4tYvMbBnqplK/bqlW6
+         o2D6+x+wSQnwFHMskaTlZYvmR1Nfewxea4MK+9HvhFpS4tqz0tcmUh+dTcmMpYz2rH
+         jhC8VaIuxzICoyTKH49Kp3ZYPFjuPTH4FQSTCE6qJ6d+PMQbuy4tt77bVqvS6KFDBF
+         rxEJaehMvgpVw==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B643f007c0001>; Wed, 19 Apr 2023 08:41:32 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.26; Wed, 19 Apr 2023 08:41:32 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
+ SMTP Server (TLS) id 15.0.1497.48; Wed, 19 Apr 2023 08:41:32 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.026; Wed, 19 Apr 2023 08:41:32 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     =?utf-8?B?TWFyaXVzeiBCaWHFgm/FhGN6eWs=?= <manio@skyboo.net>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: hwmon: (adt7475) Add support for inverting pwm output
+Thread-Topic: hwmon: (adt7475) Add support for inverting pwm output
+Thread-Index: AQHZceXWdXchU+yVXUm4m0tN5Sjguq8wv1sA
+Date:   Tue, 18 Apr 2023 20:41:32 +0000
+Message-ID: <e398560f-f8d1-afbc-4aae-ab3cf2555e8e@alliedtelesis.co.nz>
+References: <20230418110623.vk6kettnjondulri@skyboo.net>
+In-Reply-To: <20230418110623.vk6kettnjondulri@skyboo.net>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.33.22.30]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <EC7428B434BA4542BA77958505AF8516@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230418152824.110823-4-nick.hawkins@hpe.com>
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=VfuJw2h9 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=dKHAf1wccvYA:10 a=UbjIg8FyWNnKGg8gc2YA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on robh/for-next linus/master v6.3-rc7]
-[cannot apply to brgl/gpio/for-next next-20230417]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/nick-hawkins-hpe-com/gpio-gxp-Add-HPE-GXP-GPIO/20230418-233513
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230418152824.110823-4-nick.hawkins%40hpe.com
-patch subject: [PATCH v1 3/9] hwmon: (gxp-psu) Add driver to read HPE PSUs
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230419/202304190301.9jtv8uzG-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4006e868883aedc37a54480167f6f9dc377db1cc
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review nick-hawkins-hpe-com/gpio-gxp-Add-HPE-GXP-GPIO/20230418-233513
-        git checkout 4006e868883aedc37a54480167f6f9dc377db1cc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/hwmon/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304190301.9jtv8uzG-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/gxp-psu.c:62:4: warning: no previous prototype for 'get_psu_inst' [-Wmissing-prototypes]
-      62 | u8 get_psu_inst(void)
-         |    ^~~~~~~~~~~~
->> drivers/hwmon/gxp-psu.c:71:4: warning: no previous prototype for 'get_psu_ac' [-Wmissing-prototypes]
-      71 | u8 get_psu_ac(void)
-         |    ^~~~~~~~~~
->> drivers/hwmon/gxp-psu.c:80:4: warning: no previous prototype for 'get_psu_dc' [-Wmissing-prototypes]
-      80 | u8 get_psu_dc(void)
-         |    ^~~~~~~~~~
->> drivers/hwmon/gxp-psu.c:89:6: warning: no previous prototype for 'update_presence' [-Wmissing-prototypes]
-      89 | void update_presence(u8 id)
-         |      ^~~~~~~~~~~~~~~
->> drivers/hwmon/gxp-psu.c:376:6: warning: no previous prototype for 'swapbytes' [-Wmissing-prototypes]
-     376 | void swapbytes(void *input, size_t len)
-         |      ^~~~~~~~~
-   drivers/hwmon/gxp-psu.c: In function 'gxp_psu_read_string':
->> drivers/hwmon/gxp-psu.c:528:17: warning: this statement may fall through [-Wimplicit-fallthrough=]
-     528 |                 switch (attr) {
-         |                 ^~~~~~
-   drivers/hwmon/gxp-psu.c:535:9: note: here
-     535 |         case hwmon_in:
-         |         ^~~~
-   drivers/hwmon/gxp-psu.c:536:17: warning: this statement may fall through [-Wimplicit-fallthrough=]
-     536 |                 switch (attr) {
-         |                 ^~~~~~
-   drivers/hwmon/gxp-psu.c:543:9: note: here
-     543 |         case hwmon_fan:
-         |         ^~~~
-   drivers/hwmon/gxp-psu.c:544:17: warning: this statement may fall through [-Wimplicit-fallthrough=]
-     544 |                 switch (attr) {
-         |                 ^~~~~~
-   drivers/hwmon/gxp-psu.c:551:9: note: here
-     551 |         case hwmon_curr:
-         |         ^~~~
-   drivers/hwmon/gxp-psu.c:552:17: warning: this statement may fall through [-Wimplicit-fallthrough=]
-     552 |                 switch (attr) {
-         |                 ^~~~~~
-   drivers/hwmon/gxp-psu.c:559:9: note: here
-     559 |         case hwmon_temp:
-         |         ^~~~
-
-
-vim +/get_psu_inst +62 drivers/hwmon/gxp-psu.c
-
-    61	
-  > 62	u8 get_psu_inst(void)
-    63	{
-    64		if (!pl_psu)
-    65			return 0;
-    66	
-    67		return readb(pl_psu);
-    68	}
-    69	EXPORT_SYMBOL(get_psu_inst);
-    70	
-  > 71	u8 get_psu_ac(void)
-    72	{
-    73		if (!pl_psu)
-    74			return 0;
-    75	
-    76		return readb(pl_psu + 0x02);
-    77	}
-    78	EXPORT_SYMBOL(get_psu_ac);
-    79	
-  > 80	u8 get_psu_dc(void)
-    81	{
-    82		if (!pl_psu)
-    83			return 0;
-    84	
-    85		return readb(pl_psu + 0x03);
-    86	}
-    87	EXPORT_SYMBOL(get_psu_dc);
-    88	
-  > 89	void update_presence(u8 id)
-    90	{
-    91		unsigned int i;
-    92		unsigned long temp = (unsigned long)readb(pl_psu);
-    93	
-    94		for_each_set_bit(i, &temp, 8) {
-    95			if (i == id)
-    96				psus[id]->present = true;
-    97		}
-    98	
-    99		temp = ~temp;
-   100		for_each_set_bit(i, &temp, 8) {
-   101			if (i == id)
-   102				psus[id]->present = false;
-   103		}
-   104	}
-   105	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+SGkgTWFyaXVzLA0KDQorY2MgbGludXgtaHdtb24sIGxrbWwNCg0KT24gMTgvMDQvMjMgMjM6MDYs
+IE1hcml1c3ogQmlhxYJvxYRjenlrIHdyb3RlOg0KPiBIaSBDaHJpcywNCj4gSSBkaXNjb3ZlcmVk
+IGJ5IGFjY2lkZW50IHRoYXQgbXkgZG1lc2cgaXMgdGVsbGluZyBtZToNCj4gW01vbiBBcHIgMTcg
+MTk6MDg6NTkgMjAyM10gYWR0NzQ3NSAxOS0wMDJlOiBFcnJvciBjb25maWd1cmluZyBwd20gcG9s
+YXJpdHkNCj4gW01vbiBBcHIgMTcgMTk6MDg6NTkgMjAyM10gYWR0NzQ3NSAxOS0wMDJlOiBBRFQ3
+NDczIGRldmljZSwgcmV2aXNpb24gMQ0KPg0KPiBtb3RoZXJib2FyZDoNCj4gRE1JOiBTeXN0ZW0g
+bWFudWZhY3R1cmVyIFN5c3RlbSBQcm9kdWN0IE5hbWUvTTRBNzg1VEQtViBFVk8sIEJJT1MgMjEw
+NSAgICAwNy8yMy8yMDEwDQo+DQo+IElzIHRoaXMgc29tZXRoaW5nIGkgbmVlZCB0byBiZSBhZnJh
+aWQsIG9yIGl0J3Mgbm90aGluZyBzZXJpb3VzPw0KDQpJdCdzIHByb2JhYmx5IGhhcm1sZXNzLCB1
+bmxlc3MgeW91ciBib2FyZCBpcyBpbnRlbnRpb25hbGx5IHNldHRpbmcgdGhlIA0KcHdtLWFjdGl2
+ZS1zdGF0ZSAod2hpY2ggSSBzdXNwZWN0IGl0IHdvbid0IGJlIGFzIHlvdXIgQklPUyBpcyBwcm9i
+YWJseSANCnRha2luZyBjYXJlIG9mIHRoYXQgaWYgcmVxdWlyZWQpLiBJIHN1c3BlY3QgaXQncyBt
+b3JlIGEgY2FzZSBvZiB0aGUgY29kZSANCm5vdCBoYW5kbGluZyB0aGUgYWJzZW5jZSBvZiBhIGRl
+dmljZSB0cmVlIHdoaWNoIHRoZSBjaGVjayBmb3IgLUVJTlZBTCANCndhcyBzdXBwb3NlZCB0byBk
+ZWFsIHdpdGguIFRoZXJlJ3MgYW4gb3V0c2lkZSBjaGFuY2UgdGhhdCB0aGVyZSBpcyBhIA0KcHJv
+YmxlbSBvbiB0aGUgSTJDIGJ1cyBidXQgdGhhdCB3b3VsZCByZXF1aXJlIHlvdXIgcGxhdGZvcm0g
+dG8gYmUgDQphY3RpdmVseSB1c2luZyB0aGUgcHdtIHBvbGFyaXR5IGZlYXR1cmUgdmlhIGEgZGV2
+aWNlIHRyZWUgKHVubGlrZWx5IA0Kb3V0c2lkZSBvZiBlbWJlZGRlZCBkZXZpY2VzKS4NCg0KSSB0
+aGluayBpdCdkIHN0aWxsIGJlIGEgZ29vZCBpZGVhIHRvIHNxdWFzaCB0aGUgZXJyYW50IHdhcm5p
+bmcgc28gDQpnZW51aW5lIGVycm9ycyBhcmUgY2F1Z2h0LiBJJ2xsIHNlZSBpZiBJIGNhbiBwcm92
+b2tlIHRoZSBpc3N1ZSBvbiANCmRldmljZXMgSSBoYXZlIGFjY2VzcyB0by4gQXJlIHlvdSBpbiBh
+IHBvc2l0aW9uIHRvIHRyeSBhIHBhdGNoIGlmIEkgY29tZSANCnVwIHdpdGggb25lPw0K
