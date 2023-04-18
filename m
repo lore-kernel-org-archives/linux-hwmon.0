@@ -2,92 +2,98 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CF1CC6FD18
-	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Apr 2023 20:41:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2EEAC77B75
+	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Apr 2023 21:20:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbjDRUlx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Apr 2023 16:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
+        id S232607AbjDRVUK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 18 Apr 2023 17:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232573AbjDRUlh (ORCPT
+        with ESMTP id S232904AbjDRVUJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Apr 2023 16:41:37 -0400
+        Tue, 18 Apr 2023 17:20:09 -0400
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C599010259
-        for <linux-hwmon@vger.kernel.org>; Tue, 18 Apr 2023 13:41:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E1A7EE8
+        for <linux-hwmon@vger.kernel.org>; Tue, 18 Apr 2023 14:20:07 -0700 (PDT)
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 0BA922C0533;
-        Wed, 19 Apr 2023 08:41:33 +1200 (NZST)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id DC9982C0533;
+        Wed, 19 Apr 2023 09:20:02 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1681850493;
-        bh=b3HTt0Kmrn0e7txKrycgHrd50xUzJaZcGOGUB1isLRc=;
+        s=mail181024; t=1681852802;
+        bh=x3alwfNlBzfwbZU57e4dV0T0LMpuH29WAw4zSK/aQEs=;
         h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=hCZDkBEsDDb2j7gCxweVXXC8Y9OvfipBoeC995+DSYXyC01umbagxQrIaADGQk9dO
-         BHx3ilK/Zo9xN1S3UmhwDHC2PJHjVEqa31XiMTQ3HXGWDeqRizVcBWqA1cSoNEnzDv
-         j+9atOUBz+210kP5B/wAOr3Fonw7ItnWylNEj7pC9dpfJJSB4tYvMbBnqplK/bqlW6
-         o2D6+x+wSQnwFHMskaTlZYvmR1Nfewxea4MK+9HvhFpS4tqz0tcmUh+dTcmMpYz2rH
-         jhC8VaIuxzICoyTKH49Kp3ZYPFjuPTH4FQSTCE6qJ6d+PMQbuy4tt77bVqvS6KFDBF
-         rxEJaehMvgpVw==
+        b=VJ6+kckm30bjQHWv+Q0VSx9mID/fpv778oeUfJlMxUG/0CIfl014QFUvBmb3flN3x
+         azlZLBaaQ0ZN8XjU7IXDVLsi8qqUNtFNH8YYYodhXltYxxoQKByCKHBTnHrPQePJfp
+         ejKhJGSCNQakSYG76E90tHPtnJ11Wyi6vNvDanJoKHNaoYsS/vPcRdgu6xfB6zW1Di
+         M0uSq0E/iMBcZt2+T0WhXwJGUxa7FXKovpYvDx+m7llHEWMyh+Dqgpqui0mR5Ht2xk
+         SKzhyozPYa/R5irCAkrbJh5gIZ0VkPyzZrBBoArJBKJ0wcnhXFwMlzx7tB6hWKsgj/
+         T6tjr41Ijfsgw==
 Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B643f007c0001>; Wed, 19 Apr 2023 08:41:32 +1200
+        id <B643f09820001>; Wed, 19 Apr 2023 09:20:02 +1200
 Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
  svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.26; Wed, 19 Apr 2023 08:41:32 +1200
+ 15.2.1118.26; Wed, 19 Apr 2023 09:20:02 +1200
 Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
  svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
- SMTP Server (TLS) id 15.0.1497.48; Wed, 19 Apr 2023 08:41:32 +1200
+ SMTP Server (TLS) id 15.0.1497.48; Wed, 19 Apr 2023 09:20:02 +1200
 Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
  svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.026; Wed, 19 Apr 2023 08:41:32 +1200
+ 15.02.1118.026; Wed, 19 Apr 2023 09:20:02 +1200
 From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
 To:     =?utf-8?B?TWFyaXVzeiBCaWHFgm/FhGN6eWs=?= <manio@skyboo.net>
 CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: hwmon: (adt7475) Add support for inverting pwm output
 Thread-Topic: hwmon: (adt7475) Add support for inverting pwm output
-Thread-Index: AQHZceXWdXchU+yVXUm4m0tN5Sjguq8wv1sA
-Date:   Tue, 18 Apr 2023 20:41:32 +0000
-Message-ID: <e398560f-f8d1-afbc-4aae-ab3cf2555e8e@alliedtelesis.co.nz>
+Thread-Index: AQHZceXWdXchU+yVXUm4m0tN5Sjguq8wv1sAgAAKwIA=
+Date:   Tue, 18 Apr 2023 21:20:02 +0000
+Message-ID: <52e26a67-9131-2dc0-40cb-db5c07370027@alliedtelesis.co.nz>
 References: <20230418110623.vk6kettnjondulri@skyboo.net>
-In-Reply-To: <20230418110623.vk6kettnjondulri@skyboo.net>
+ <e398560f-f8d1-afbc-4aae-ab3cf2555e8e@alliedtelesis.co.nz>
+In-Reply-To: <e398560f-f8d1-afbc-4aae-ab3cf2555e8e@alliedtelesis.co.nz>
 Accept-Language: en-NZ, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-originating-ip: [10.33.22.30]
 Content-Type: text/plain; charset="utf-8"
-Content-ID: <EC7428B434BA4542BA77958505AF8516@atlnz.lc>
+Content-ID: <A1C4F17850891D4B9F2E6621A96860AB@atlnz.lc>
 Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=VfuJw2h9 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=dKHAf1wccvYA:10 a=UbjIg8FyWNnKGg8gc2YA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=VfuJw2h9 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=dKHAf1wccvYA:10 a=rPQhiZsA37OnAWj8wpIA:9 a=QEXdDO2ut3YA:10
 X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-SGkgTWFyaXVzLA0KDQorY2MgbGludXgtaHdtb24sIGxrbWwNCg0KT24gMTgvMDQvMjMgMjM6MDYs
-IE1hcml1c3ogQmlhxYJvxYRjenlrIHdyb3RlOg0KPiBIaSBDaHJpcywNCj4gSSBkaXNjb3ZlcmVk
-IGJ5IGFjY2lkZW50IHRoYXQgbXkgZG1lc2cgaXMgdGVsbGluZyBtZToNCj4gW01vbiBBcHIgMTcg
-MTk6MDg6NTkgMjAyM10gYWR0NzQ3NSAxOS0wMDJlOiBFcnJvciBjb25maWd1cmluZyBwd20gcG9s
-YXJpdHkNCj4gW01vbiBBcHIgMTcgMTk6MDg6NTkgMjAyM10gYWR0NzQ3NSAxOS0wMDJlOiBBRFQ3
-NDczIGRldmljZSwgcmV2aXNpb24gMQ0KPg0KPiBtb3RoZXJib2FyZDoNCj4gRE1JOiBTeXN0ZW0g
-bWFudWZhY3R1cmVyIFN5c3RlbSBQcm9kdWN0IE5hbWUvTTRBNzg1VEQtViBFVk8sIEJJT1MgMjEw
-NSAgICAwNy8yMy8yMDEwDQo+DQo+IElzIHRoaXMgc29tZXRoaW5nIGkgbmVlZCB0byBiZSBhZnJh
-aWQsIG9yIGl0J3Mgbm90aGluZyBzZXJpb3VzPw0KDQpJdCdzIHByb2JhYmx5IGhhcm1sZXNzLCB1
-bmxlc3MgeW91ciBib2FyZCBpcyBpbnRlbnRpb25hbGx5IHNldHRpbmcgdGhlIA0KcHdtLWFjdGl2
-ZS1zdGF0ZSAod2hpY2ggSSBzdXNwZWN0IGl0IHdvbid0IGJlIGFzIHlvdXIgQklPUyBpcyBwcm9i
-YWJseSANCnRha2luZyBjYXJlIG9mIHRoYXQgaWYgcmVxdWlyZWQpLiBJIHN1c3BlY3QgaXQncyBt
-b3JlIGEgY2FzZSBvZiB0aGUgY29kZSANCm5vdCBoYW5kbGluZyB0aGUgYWJzZW5jZSBvZiBhIGRl
-dmljZSB0cmVlIHdoaWNoIHRoZSBjaGVjayBmb3IgLUVJTlZBTCANCndhcyBzdXBwb3NlZCB0byBk
-ZWFsIHdpdGguIFRoZXJlJ3MgYW4gb3V0c2lkZSBjaGFuY2UgdGhhdCB0aGVyZSBpcyBhIA0KcHJv
-YmxlbSBvbiB0aGUgSTJDIGJ1cyBidXQgdGhhdCB3b3VsZCByZXF1aXJlIHlvdXIgcGxhdGZvcm0g
-dG8gYmUgDQphY3RpdmVseSB1c2luZyB0aGUgcHdtIHBvbGFyaXR5IGZlYXR1cmUgdmlhIGEgZGV2
-aWNlIHRyZWUgKHVubGlrZWx5IA0Kb3V0c2lkZSBvZiBlbWJlZGRlZCBkZXZpY2VzKS4NCg0KSSB0
-aGluayBpdCdkIHN0aWxsIGJlIGEgZ29vZCBpZGVhIHRvIHNxdWFzaCB0aGUgZXJyYW50IHdhcm5p
-bmcgc28gDQpnZW51aW5lIGVycm9ycyBhcmUgY2F1Z2h0LiBJJ2xsIHNlZSBpZiBJIGNhbiBwcm92
-b2tlIHRoZSBpc3N1ZSBvbiANCmRldmljZXMgSSBoYXZlIGFjY2VzcyB0by4gQXJlIHlvdSBpbiBh
-IHBvc2l0aW9uIHRvIHRyeSBhIHBhdGNoIGlmIEkgY29tZSANCnVwIHdpdGggb25lPw0K
+DQpPbiAxOS8wNC8yMyAwODo0MSwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4gSGkgTWFyaXVzLA0K
+Pg0KPiArY2MgbGludXgtaHdtb24sIGxrbWwNCj4NCj4gT24gMTgvMDQvMjMgMjM6MDYsIE1hcml1
+c3ogQmlhxYJvxYRjenlrIHdyb3RlOg0KPj4gSGkgQ2hyaXMsDQo+PiBJIGRpc2NvdmVyZWQgYnkg
+YWNjaWRlbnQgdGhhdCBteSBkbWVzZyBpcyB0ZWxsaW5nIG1lOg0KPj4gW01vbiBBcHIgMTcgMTk6
+MDg6NTkgMjAyM10gYWR0NzQ3NSAxOS0wMDJlOiBFcnJvciBjb25maWd1cmluZyBwd20gDQo+PiBw
+b2xhcml0eQ0KPj4gW01vbiBBcHIgMTcgMTk6MDg6NTkgMjAyM10gYWR0NzQ3NSAxOS0wMDJlOiBB
+RFQ3NDczIGRldmljZSwgcmV2aXNpb24gMQ0KPj4NCj4+IG1vdGhlcmJvYXJkOg0KPj4gRE1JOiBT
+eXN0ZW0gbWFudWZhY3R1cmVyIFN5c3RlbSBQcm9kdWN0IE5hbWUvTTRBNzg1VEQtViBFVk8sIEJJ
+T1MgDQo+PiAyMTA1wqDCoMKgIDA3LzIzLzIwMTANCj4+DQo+PiBJcyB0aGlzIHNvbWV0aGluZyBp
+IG5lZWQgdG8gYmUgYWZyYWlkLCBvciBpdCdzIG5vdGhpbmcgc2VyaW91cz8NCj4NCj4gSXQncyBw
+cm9iYWJseSBoYXJtbGVzcywgdW5sZXNzIHlvdXIgYm9hcmQgaXMgaW50ZW50aW9uYWxseSBzZXR0
+aW5nIHRoZSANCj4gcHdtLWFjdGl2ZS1zdGF0ZSAod2hpY2ggSSBzdXNwZWN0IGl0IHdvbid0IGJl
+IGFzIHlvdXIgQklPUyBpcyBwcm9iYWJseSANCj4gdGFraW5nIGNhcmUgb2YgdGhhdCBpZiByZXF1
+aXJlZCkuIEkgc3VzcGVjdCBpdCdzIG1vcmUgYSBjYXNlIG9mIHRoZSANCj4gY29kZSBub3QgaGFu
+ZGxpbmcgdGhlIGFic2VuY2Ugb2YgYSBkZXZpY2UgdHJlZSB3aGljaCB0aGUgY2hlY2sgZm9yIA0K
+PiAtRUlOVkFMIHdhcyBzdXBwb3NlZCB0byBkZWFsIHdpdGguIFRoZXJlJ3MgYW4gb3V0c2lkZSBj
+aGFuY2UgdGhhdCANCj4gdGhlcmUgaXMgYSBwcm9ibGVtIG9uIHRoZSBJMkMgYnVzIGJ1dCB0aGF0
+IHdvdWxkIHJlcXVpcmUgeW91ciBwbGF0Zm9ybSANCj4gdG8gYmUgYWN0aXZlbHkgdXNpbmcgdGhl
+IHB3bSBwb2xhcml0eSBmZWF0dXJlIHZpYSBhIGRldmljZSB0cmVlIA0KPiAodW5saWtlbHkgb3V0
+c2lkZSBvZiBlbWJlZGRlZCBkZXZpY2VzKS4NCj4NCj4gSSB0aGluayBpdCdkIHN0aWxsIGJlIGEg
+Z29vZCBpZGVhIHRvIHNxdWFzaCB0aGUgZXJyYW50IHdhcm5pbmcgc28gDQo+IGdlbnVpbmUgZXJy
+b3JzIGFyZSBjYXVnaHQuIEknbGwgc2VlIGlmIEkgY2FuIHByb3Zva2UgdGhlIGlzc3VlIG9uIA0K
+PiBkZXZpY2VzIEkgaGF2ZSBhY2Nlc3MgdG8uIEFyZSB5b3UgaW4gYSBwb3NpdGlvbiB0byB0cnkg
+YSBwYXRjaCBpZiBJIA0KPiBjb21lIHVwIHdpdGggb25lPw0KQWggSSB0aGluayBJIHNlZSB0aGUg
+cHJvYmxlbS4gT24gcGxhdGZvcm1zIHdpdGhvdXQgZGV2aWNlIHRyZWUgc3VwcG9ydCANCnRoZSBv
+Zl9wcm9wZXJ0eV9yZWFkXyooKSBmdW5jdGlvbnMgcmV0dXJuIC1FTk9TWVMgc28gSSBuZWVkIHRv
+IGRlYWwgd2l0aCANCnRoYXQgZXJyb3IgY29kZSBhcyB3ZWxsIGFzIC1FSU5WQUwu
