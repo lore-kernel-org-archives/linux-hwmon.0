@@ -2,119 +2,130 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D7DDC77B73
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Apr 2023 03:57:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F12EC6FD18
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Apr 2023 07:49:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbjDSD5u (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Apr 2023 23:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
+        id S232482AbjDSHtu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 Apr 2023 03:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232287AbjDSD5j (ORCPT
+        with ESMTP id S231230AbjDSHtp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Apr 2023 23:57:39 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985E618D;
-        Tue, 18 Apr 2023 20:57:09 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63b73203e0aso13373752b3a.1;
-        Tue, 18 Apr 2023 20:57:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681876628; x=1684468628;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=grc+ub6ijDlFnEvTScV9a0JXsVYmXuW0YDqW8bPTTxA=;
-        b=sg0qDVyj7ncELAnlDx/lX9rtsRNxPX6piPkYXBpO6EMQlvVTLJ0A14gEhXS61SKqqF
-         c5nB2Zd2JlaKmxsDxecI0OcSH7PUTvirh9xZM1guVJNHGV+vh/9yZoAEhxHAVJyv/GMS
-         Gg987wsYDkenge12wtyUMIvVV1hojoKc2tugYW5tikKsLxm3x0V6b0JP6QzAPC3BnAdc
-         xTOCX4+SbzbvMVfPbq3sA8rD7RTKBhdC9/GVu1fd8ith9GN6b7U9XwTMsCQeuGNxQPcf
-         HvfaEiUMGg8i7XwmkCFp4VZE7PDiu9cIZjy5sO+BkP/c3Len/hkYZM2QGnq48Lco/Yh+
-         XqIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681876628; x=1684468628;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=grc+ub6ijDlFnEvTScV9a0JXsVYmXuW0YDqW8bPTTxA=;
-        b=HSe+c/9hSHUipIYsYT6whEtHIPRO6XYj5UXDgUCRpPlfUKt9/JqpZJGn5OZsIo+mlg
-         6CMWGxq9Dbdq5rbD3jafkdPNbQUvR0RcRhsFsJrblXEo8c8xczBAX+i4gmSlMBK3URDv
-         nQd2xr/ARNQPWNVaGHla6X+/2KrQWlC3ZG4R0nBPl7R6U+ASKImWgnoacmtcmSKXbIZ1
-         p+FqR9RJXv5j1K86GqwbrOtLVHgtpt98KZKZlJ+84DjKjDzXafWPJ4A1Sk/GwFLXh8UI
-         UcrfHQD4LLxrMxot1QnSAWcbNwS56ddnS0yHwwq0jA9p0xsG+EZir/yNoJdrMxlXk88s
-         Lnrw==
-X-Gm-Message-State: AAQBX9en81G4Y6MjvYYyW7Zb16vomPOqtm5cXJSZYZtZjF1sAfkNHi0P
-        atNGWxzNo3aXkbfLRZeqm0fHOTF2aVc=
-X-Google-Smtp-Source: AKy350alx0Kv3OCpTXkKHT49l4ihSjQWmIkJPoVmq+M/ZGlZ0bPBLL4s09v7ve2StIWHDvxIS1G/GQ==
-X-Received: by 2002:a05:6a00:4489:b0:63b:7bab:26ff with SMTP id cu9-20020a056a00448900b0063b7bab26ffmr1063217pfb.16.1681876628243;
-        Tue, 18 Apr 2023 20:57:08 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q22-20020a62ae16000000b0063b778f0952sm6984420pff.70.2023.04.18.20.57.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 20:57:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 18 Apr 2023 20:57:06 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     jdelvare@suse.com, manio@skyboo.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] hwmon: (adt7475) Use device_property APIs when
- configuring polarity
-Message-ID: <3b4b7e11-9df5-489a-8e72-86ab6bbecab7@roeck-us.net>
-References: <20230418233656.869055-1-chris.packham@alliedtelesis.co.nz>
- <20230418233656.869055-2-chris.packham@alliedtelesis.co.nz>
+        Wed, 19 Apr 2023 03:49:45 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E31E5
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 Apr 2023 00:49:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681890584; x=1713426584;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=p3iDbj2loVy8usAtfHvBOjklyO6gkTqb06QgM20zksw=;
+  b=oEslhBQncA7Y0eAr/h20iCmExgA8gE7bcu5gTEZcckzsdHPCtxrZ+j0F
+   23tfycqTIQEAb6Z4lU6GkNfzQH+RqGnM/ew5jHEm1wEKk5s5/yzHNWTWL
+   WRA6CRrPu+qFtqjyMwZ1ja/EovB0ggeWPR6N+mjbbcCTEtD4OtZdtk78w
+   t6OPKH30e9Y4sax+yVqq2o2qeqPKTnYm4uQTk6LkdeNbpXLP0+feZPu++
+   TVnmaMKiUraCflLb9BjB4sOZdoGLqGQKZI6aQzSj8DPhFUK0XKkaVTXRq
+   nU1gVYjUBQD+DbLUEJAkW7ZqlYa1S1MNh0wNbgSH/RfxY2sBel1vkQmNd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="431659648"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="431659648"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 00:49:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="723957762"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="723957762"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 19 Apr 2023 00:49:42 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pp2ZR-000ehI-2B;
+        Wed, 19 Apr 2023 07:49:41 +0000
+Date:   Wed, 19 Apr 2023 15:49:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
+ f616619d9f206214783324e54b094cff0f7afcc5
+Message-ID: <643f9cfd.eWrteDg9HFi/NiwF%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230418233656.869055-2-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 11:36:55AM +1200, Chris Packham wrote:
-> On DT unaware platforms of_property_read_u32_array() returns -ENOSYS
-> which wasn't handled by the code treating adi,pwm-active-state as
-> optional. Update the code to use device_property_read_u32_array() which
-> deals gracefully with DT unaware platforms.
-> 
-> Fixes: 86da28eed4fb ("hwmon: (adt7475) Add support for inverting pwm output")
-> Reported-by: Mariusz Białończyk <manio@skyboo.net>
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     I've not currently got access to a DT unaware platform with an ADT7475
->     chip so I'm not 100% sure that this will fix the problem Mariusz
->     reported but looking at drivers I think this approach is correct.
->     
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: f616619d9f206214783324e54b094cff0f7afcc5  watchdog: menz069_wdt: fix timeout setting
 
-What happens if there is no such property anywhere, neither in
-devicetree nor in acpi ?
+elapsed time: 728m
 
-Guenter
+configs tested: 55
+configs skipped: 3
 
->     Changes in v2:
->     - use device_property_read_u32_array instead of checking for -ENOSYS
-> 
->  drivers/hwmon/adt7475.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> index 6e4c92b500b8..6a6ebcc896b1 100644
-> --- a/drivers/hwmon/adt7475.c
-> +++ b/drivers/hwmon/adt7475.c
-> @@ -1604,9 +1604,9 @@ static int adt7475_set_pwm_polarity(struct i2c_client *client)
->  	int ret, i;
->  	u8 val;
->  
-> -	ret = of_property_read_u32_array(client->dev.of_node,
-> -					 "adi,pwm-active-state", states,
-> -					 ARRAY_SIZE(states));
-> +	ret = device_property_read_u32_array(&client->dev,
-> +					     "adi,pwm-active-state", states,
-> +					     ARRAY_SIZE(states));
->  	if (ret)
->  		return ret;
->  
-> -- 
-> 2.40.0
-> 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sparc                               defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230417   gcc  
+x86_64               randconfig-a002-20230417   gcc  
+x86_64               randconfig-a003-20230417   gcc  
+x86_64               randconfig-a004-20230417   gcc  
+x86_64               randconfig-a005-20230417   gcc  
+x86_64               randconfig-a006-20230417   gcc  
+x86_64               randconfig-a011-20230417   clang
+x86_64               randconfig-a012-20230417   clang
+x86_64               randconfig-a013-20230417   clang
+x86_64               randconfig-a014-20230417   clang
+x86_64               randconfig-a015-20230417   clang
+x86_64               randconfig-a016-20230417   clang
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
