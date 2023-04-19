@@ -2,71 +2,119 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FA9FC77B7C
-	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Apr 2023 23:40:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D7DDC77B73
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Apr 2023 03:57:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbjDRXkP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Apr 2023 19:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
+        id S232289AbjDSD5u (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 18 Apr 2023 23:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbjDRXj6 (ORCPT
+        with ESMTP id S232287AbjDSD5j (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Apr 2023 19:39:58 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C4D13843
-        for <linux-hwmon@vger.kernel.org>; Tue, 18 Apr 2023 16:37:11 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 342D42C053A;
-        Wed, 19 Apr 2023 11:37:08 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1681861028;
-        bh=SzQiiHYPUR+RgZsSBcwi55KAk1olWQNToXXLoUY6B/M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=N5RNNuqb7JjdrYoDbCmTRNYj53mwMxwB0SKAI6PxioR9rto0uT+6A8k27zvQEPbxM
-         C3cmbhQRLJyJj4t5exRPMsrqhDFqeu7JqcW4LD8syK86o3WRadz6jmdtvbO9Ixh08O
-         fykWANBOH3/EsGkZCeCbUbSnGxUq9CjxvxRfrgAEc2O7idO+0CvXaEGxeBnAUi0/Hn
-         E5x63FR8Vbe06KZLHbqTJ8OC2U8drEVGpl0Qe6ea8XlpdaRRzhRZnB2YPYwtLTpVc7
-         Iugf5wXgwxeJkpIAvlNy94tzZV8L40PNrLKTo3g0g4e98S1Q6cII6mhyJmrWiw/Tdd
-         LFjiOA5v1bZKA==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B643f29a40000>; Wed, 19 Apr 2023 11:37:08 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id 0246313EDC3;
-        Wed, 19 Apr 2023 11:37:08 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 05C29283BBF; Wed, 19 Apr 2023 11:37:08 +1200 (NZST)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     jdelvare@suse.com, linux@roeck-us.net, manio@skyboo.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v2 0/2] hwmon: (adt7475) Handle DT unaware platforms
-Date:   Wed, 19 Apr 2023 11:36:54 +1200
-Message-Id: <20230418233656.869055-1-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.40.0
+        Tue, 18 Apr 2023 23:57:39 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985E618D;
+        Tue, 18 Apr 2023 20:57:09 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63b73203e0aso13373752b3a.1;
+        Tue, 18 Apr 2023 20:57:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681876628; x=1684468628;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=grc+ub6ijDlFnEvTScV9a0JXsVYmXuW0YDqW8bPTTxA=;
+        b=sg0qDVyj7ncELAnlDx/lX9rtsRNxPX6piPkYXBpO6EMQlvVTLJ0A14gEhXS61SKqqF
+         c5nB2Zd2JlaKmxsDxecI0OcSH7PUTvirh9xZM1guVJNHGV+vh/9yZoAEhxHAVJyv/GMS
+         Gg987wsYDkenge12wtyUMIvVV1hojoKc2tugYW5tikKsLxm3x0V6b0JP6QzAPC3BnAdc
+         xTOCX4+SbzbvMVfPbq3sA8rD7RTKBhdC9/GVu1fd8ith9GN6b7U9XwTMsCQeuGNxQPcf
+         HvfaEiUMGg8i7XwmkCFp4VZE7PDiu9cIZjy5sO+BkP/c3Len/hkYZM2QGnq48Lco/Yh+
+         XqIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681876628; x=1684468628;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=grc+ub6ijDlFnEvTScV9a0JXsVYmXuW0YDqW8bPTTxA=;
+        b=HSe+c/9hSHUipIYsYT6whEtHIPRO6XYj5UXDgUCRpPlfUKt9/JqpZJGn5OZsIo+mlg
+         6CMWGxq9Dbdq5rbD3jafkdPNbQUvR0RcRhsFsJrblXEo8c8xczBAX+i4gmSlMBK3URDv
+         nQd2xr/ARNQPWNVaGHla6X+/2KrQWlC3ZG4R0nBPl7R6U+ASKImWgnoacmtcmSKXbIZ1
+         p+FqR9RJXv5j1K86GqwbrOtLVHgtpt98KZKZlJ+84DjKjDzXafWPJ4A1Sk/GwFLXh8UI
+         UcrfHQD4LLxrMxot1QnSAWcbNwS56ddnS0yHwwq0jA9p0xsG+EZir/yNoJdrMxlXk88s
+         Lnrw==
+X-Gm-Message-State: AAQBX9en81G4Y6MjvYYyW7Zb16vomPOqtm5cXJSZYZtZjF1sAfkNHi0P
+        atNGWxzNo3aXkbfLRZeqm0fHOTF2aVc=
+X-Google-Smtp-Source: AKy350alx0Kv3OCpTXkKHT49l4ihSjQWmIkJPoVmq+M/ZGlZ0bPBLL4s09v7ve2StIWHDvxIS1G/GQ==
+X-Received: by 2002:a05:6a00:4489:b0:63b:7bab:26ff with SMTP id cu9-20020a056a00448900b0063b7bab26ffmr1063217pfb.16.1681876628243;
+        Tue, 18 Apr 2023 20:57:08 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q22-20020a62ae16000000b0063b778f0952sm6984420pff.70.2023.04.18.20.57.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 20:57:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 18 Apr 2023 20:57:06 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     jdelvare@suse.com, manio@skyboo.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] hwmon: (adt7475) Use device_property APIs when
+ configuring polarity
+Message-ID: <3b4b7e11-9df5-489a-8e72-86ab6bbecab7@roeck-us.net>
+References: <20230418233656.869055-1-chris.packham@alliedtelesis.co.nz>
+ <20230418233656.869055-2-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=VfuJw2h9 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=dKHAf1wccvYA:10 a=ncuk2GtSjpeHEJ13v3AA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230418233656.869055-2-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This series addresses an issue reported by Mariusz and has an additional
-cleanup for master. The changes are all updating of_property_read* ->
-device_property_read* so it should be a noop for DT aware platforms.
+On Wed, Apr 19, 2023 at 11:36:55AM +1200, Chris Packham wrote:
+> On DT unaware platforms of_property_read_u32_array() returns -ENOSYS
+> which wasn't handled by the code treating adi,pwm-active-state as
+> optional. Update the code to use device_property_read_u32_array() which
+> deals gracefully with DT unaware platforms.
+> 
+> Fixes: 86da28eed4fb ("hwmon: (adt7475) Add support for inverting pwm output")
+> Reported-by: Mariusz Białończyk <manio@skyboo.net>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+> 
+> Notes:
+>     I've not currently got access to a DT unaware platform with an ADT7475
+>     chip so I'm not 100% sure that this will fix the problem Mariusz
+>     reported but looking at drivers I think this approach is correct.
+>     
 
-Chris Packham (2):
-  hwmon: (adt7475) Use device_property APIs when configuring polarity
-  hwmon: (adt7475) Convert to use device_property APIs
+What happens if there is no such property anywhere, neither in
+devicetree nor in acpi ?
 
- drivers/hwmon/adt7475.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Guenter
 
---=20
-2.40.0
-
+>     Changes in v2:
+>     - use device_property_read_u32_array instead of checking for -ENOSYS
+> 
+>  drivers/hwmon/adt7475.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+> index 6e4c92b500b8..6a6ebcc896b1 100644
+> --- a/drivers/hwmon/adt7475.c
+> +++ b/drivers/hwmon/adt7475.c
+> @@ -1604,9 +1604,9 @@ static int adt7475_set_pwm_polarity(struct i2c_client *client)
+>  	int ret, i;
+>  	u8 val;
+>  
+> -	ret = of_property_read_u32_array(client->dev.of_node,
+> -					 "adi,pwm-active-state", states,
+> -					 ARRAY_SIZE(states));
+> +	ret = device_property_read_u32_array(&client->dev,
+> +					     "adi,pwm-active-state", states,
+> +					     ARRAY_SIZE(states));
+>  	if (ret)
+>  		return ret;
+>  
+> -- 
+> 2.40.0
+> 
