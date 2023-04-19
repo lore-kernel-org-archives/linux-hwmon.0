@@ -2,121 +2,113 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFEFAC77B73
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Apr 2023 09:54:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55722C6FD18
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Apr 2023 11:47:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232513AbjDSJy1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 Apr 2023 05:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
+        id S232861AbjDSLrI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 Apr 2023 07:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232282AbjDSJy0 (ORCPT
+        with ESMTP id S231560AbjDSLrH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 Apr 2023 05:54:26 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805B02D4C
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 Apr 2023 02:54:25 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id u3so28057125ejj.12
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 Apr 2023 02:54:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google; t=1681898064; x=1684490064;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=muwelnoIGuFTrNlkvI5AZYcYnQRcg63hFkIGB0cnf90=;
-        b=gzM8VZXmrQVbczHknCfQVIIH0PP8rJwpRMXa+7n/DdbVq9IQiguv3GBX8MciP04CUi
-         T+7Cmz2cGI8fcnNRYhKnxvLZ+kPie4pE1WnyhSVkJc1GbrI6wxi1aJ5nZ+06UI6d8zSc
-         O9aYGg30Ct2E6l9T8GnwaFHOZ0C2S4fXTgU1uxgv1hLlZ0qop2H3xntFLNiKDWOmJWOy
-         NnFlKJQDqM5cYd6H2GeC6TIbdNQmX5MBRUfulWHZUSgaGAxyWMwW4Iaod307My3EA/DZ
-         5C3SCtmb/uz6WZWkj/cmMFI7Lsba9ZW0vbJnfY/T1j2T6gDPsyX5bUlbPh2lGk3Qebkp
-         bheA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681898064; x=1684490064;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=muwelnoIGuFTrNlkvI5AZYcYnQRcg63hFkIGB0cnf90=;
-        b=E7JS7vAfsPiATzBdNWQV+TL0p7Vl61csOC1HLpJeNo1w0pQh7dkeLDSoYHfRxuaudt
-         Wf71PQWWxsha4XYT/jsCQiXJMaohW6mk7ppyxAeMcFdE/OJ4Mvvm02WQbh0m/Qlq2h5c
-         GlMPjxsB4kdx2y4O+ZUaYNlC/FCYu2V8p/VrFg3ngzPmHzXVd6CRsZbmeDaRuOUdKksq
-         psmEZfeC2PgNPOCcrO/0KZT6aCdDE29m3+KrVg/PYJQ+Oh2ePs9USlVh5vyXXbPZYDWf
-         eFiip+A598Cl93aOWWxJvXnoS1Tm4tbHdQAzMi5NsvS4JSr44fXBzDcAvw7X6k4EYJjm
-         tZWA==
-X-Gm-Message-State: AAQBX9ekR3frLlzFfxVYV7xY3UGuUG8t/dyMuzYhwbxJwqEPFb4NxffL
-        WhoOTEsaD2Zin9gdWm7CZZND6YvamCnvdulnP+1vTU1Nu0N02ofjHd8=
-X-Google-Smtp-Source: AKy350bsBSTOu8+wY/bXEm/jYTvdWs4BL2wUN0qr/cy8bJaonNIv0NZsz1T6AxAoVSyZSaiqFBJi24TMlMB7tqUhMfw=
-X-Received: by 2002:a17:906:57c6:b0:87f:e5af:416e with SMTP id
- u6-20020a17090657c600b0087fe5af416emr6912678ejr.7.1681898063810; Wed, 19 Apr
- 2023 02:54:23 -0700 (PDT)
+        Wed, 19 Apr 2023 07:47:07 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA264C22;
+        Wed, 19 Apr 2023 04:47:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681904824; x=1713440824;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=iZ9zP/czoiwzuGqd+7mx8aaZzCqymmjJky/8w2YBO04=;
+  b=GgvKPk+mwm7KiUFEw7XrE0YujxMqz2by6rrkwi2/ApqTB/p18T46wKRJ
+   W/WNg6ntzZAhQJzxBVzIuwvLUsOxVlJGb+6+7AbelE2kGUCQ3tNbKxGum
+   HOLFAGxB1sQFVCJZ42a1peO/SvIjL4Mp0ENv8ZEL3UISiUrs0f1WprJD/
+   fSBDkFrnntw5waSZytW3iPJEYkEYRj7ODfmpvi6qHXToUAx24nhiIJqDj
+   FDoKqtdfj90NqM8Q0cZpN2o5mGQnQa2+oZ+Fa1d1MNQp23N3Afl/cU4Xt
+   cLMw97VDIE9bdf/Yo1De6FiL89pzIODT2kHDoeTVpueiONq3F6sqY728j
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="325759615"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="325759615"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 04:47:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="721902168"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="721902168"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 19 Apr 2023 04:47:00 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pp6H5-002DIC-0p;
+        Wed, 19 Apr 2023 14:46:59 +0300
+Date:   Wed, 19 Apr 2023 14:46:58 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dinh Nguyen <dinh.nguyen@linux.intel.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        dinguyen@kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, jdelvare@suse.com
+Subject: Re: [PATCH 3/5] hwmon: (socfpga) Add hardware monitoring support on
+ SoCFPGA platforms
+Message-ID: <ZD/UsuzhZmK3AFJn@smile.fi.intel.com>
+References: <20230410153314.27127-1-dinh.nguyen@linux.intel.com>
+ <20230410153314.27127-3-dinh.nguyen@linux.intel.com>
+ <09730359-8731-e21e-3335-bf60ba7f1280@roeck-us.net>
+ <a3e966f8-8e9d-7081-1665-9d2e87acb310@linux.intel.com>
+ <8d158880-1e6a-5fdd-dae7-a7647794eb60@roeck-us.net>
+ <a1a34c32-dbd4-7a77-ab7e-5e34af85900f@linux.intel.com>
 MIME-Version: 1.0
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Wed, 19 Apr 2023 11:54:12 +0200
-Message-ID: <CAMGffE=65we13bDe=iOkkefF4PrNBNg96qi=ebU7nCs=GA6cCw@mail.gmail.com>
-Subject: k10temp show over 100 degrees temperature on EPYC Milan servers from
- DELL and SMC
-To:     linux-hwmon@vger.kernel.org, clemens@ladisch.de,
-        Guenter Roeck <linux@roeck-us.net>, mario.limonciello@amd.com,
-        babu.moger@amd.com
-Cc:     open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a1a34c32-dbd4-7a77-ab7e-5e34af85900f@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dear experts on the list,
+On Tue, Apr 18, 2023 at 12:29:40PM -0500, Dinh Nguyen wrote:
+> On 4/17/2023 4:51 PM, Guenter Roeck wrote:
+> > On 4/17/23 13:55, Dinh Nguyen wrote:
 
-We've noticed many of our EPYC Milan servers from different vendors
-(DELL  and SMC) show 100 degrees, eg
+...
 
-sudo sensors
-k10temp-pci-00c3
-Adapter: PCI adapter
-Tctl:        +117.5=C2=B0C
-Tdie:        +117.5=C2=B0C
-Tccd1:        +67.0=C2=B0C
-Tccd2:        +65.2=C2=B0C
-Tccd3:        +63.2=C2=B0C
-Tccd4:        +63.8=C2=B0C
-Tccd5:        +67.2=C2=B0C
-Tccd6:        +63.5=C2=B0C
-Tccd7:        +64.2=C2=B0C
-Tccd8:        +64.8=C2=B0C
+> > ... and this contradict each other. If bit 31 indicates an error,
+> > this can not be a signed 32-bit value.
+> > 
+> You're right! I've re-read the spec and should have the the code look for
+> the specific error values:
+> 
+> 0x80000000 - inactive
+> 0x80000001 - old value
+> 0x80000002 - invalid channel
+> 0x80000003 -  corrupted.
 
- sudo lscpu
-Architecture:                    x86_64
-CPU op-mode(s):                  32-bit, 64-bit
-Byte Order:                      Little Endian
-Address sizes:                   48 bits physical, 48 bits virtual
-CPU(s):                          128
-On-line CPU(s) list:             0-127
-Thread(s) per core:              2
-Core(s) per socket:              64
-Socket(s):                       1
-NUMA node(s):                    1
-Vendor ID:                       AuthenticAMD
-CPU family:                      25
-Model:                           1
-Model name:                      AMD EPYC 7713P 64-Core Processor
-Stepping:                        1
-Frequency boost:                 enabled
-CPU MHz:                         2479.705
-CPU max MHz:                     3720,7029
-CPU min MHz:                     1500,0000
-BogoMIPS:                        3992.43
-Virtualization:                  AMD-V
-L1d cache:                       2 MiB
-L1i cache:                       2 MiB
-L2 cache:                        32 MiB
-L3 cache:                        256 MiB
-NUMA node0 CPU(s):               0-127
+No, they are not hex. Probably you need to define an error space with it, but
+at least just use signed _decimal_ values.
 
-We've seen such high temperatures even on  idle servers.
+Instead of BIT(31) this should go as
 
-We are running LTS kernel 5.10.136, but checking the git history for
-k10temp driver, I don't find any missing fix.
-My questions are:
-1. Is it normal to have such high temperatures for tctl?  can we trust
-the value?
-2  Do we need to worry about such high temperatures?
+#define ..._ERR_BASE   INT_MIN // or equivalent if the type is not int
+#define ..._ERR_MAX ... // or whatever name is better
 
-Thx!
-Jinpu Wang @ IONOS Cloud.
+Then in your code
+
+	if (value >= _ERR_MAX)
+		return 0;
+
+	err = _ERR_MAX - value;
+	switch (err) {
+		...
+	}
+
+P.S. I asked during internal review if the values are bit fielded when errors.
+AFAIU that time they are, now it seems different.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
