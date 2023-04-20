@@ -2,82 +2,104 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70411C77B72
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Apr 2023 08:09:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96B47C77B73
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Apr 2023 11:21:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234106AbjDTIJi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 Apr 2023 04:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S233846AbjDTLVW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 Apr 2023 07:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234179AbjDTIJh (ORCPT
+        with ESMTP id S234335AbjDTLVA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:09:37 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADA644AE;
-        Thu, 20 Apr 2023 01:09:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681978173; x=1713514173;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=8ddX+VmcWmMACs+SZZN/sWFDmJ8vp2NZ3Kdawxtx/cs=;
-  b=RFspTM0jluEokWIBuYUG/HAJHJi6k7eyt+wfm8MnyNz3V5eGfHimoIBS
-   Bf+Tm9C2C8jZIVRaBD9JwU6sIphEPD+jqP9frk4qUpP1n4RnXCR3SKwNJ
-   GREwXCK4dl/oFE4qOJWgLXj/stn03TZk9BExA4K8hZcVvxuPM6LvFXwNL
-   lpBa0x2Bi+ro3Pc7s1cU1i4mvoHd2MgDzxRK5v2bsX6ozO3hBdeMTE8IV
-   FIZ7EwpfD7dD//ffaM6cQzBq9lIUMRsKU0Mgwg9QjHJWZLMMbEBjROfL1
-   LILHpLrWt5D/IlALBd0WrhxO2v4PmQI7/m4lSpNYeKeU+77vssft2ASVi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="344422775"
-X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="344422775"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 01:09:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="803266837"
-X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="803266837"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga002.fm.intel.com with ESMTP; 20 Apr 2023 01:09:29 -0700
-Date:   Fri, 21 Apr 2023 00:10:00 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russ Weight <russell.h.weight@intel.com>,
+        Thu, 20 Apr 2023 07:21:00 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30C8B44C
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Apr 2023 04:19:03 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f17edbc15eso5560245e9.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Apr 2023 04:19:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1681989485; x=1684581485;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m4k5Fd94R9nLjCjAwI4E4MAJpGxclTYpMwHmMXByQv0=;
+        b=cdLVhWQoxAkHBYdXzMuuUwNvj15Zc8MDSC5ep0imZVcVoFvKyF/XeNtvFIc3omyM0t
+         0l2kDkuyMSca5eyhK3Cyzy2Nl0mNt1VrOd1rUDpDRhTZ0nEQtzTxiMf67nn3A4eo572h
+         655YJumRKYb8iGxpO94vSuf+XtmE0ukB+WK2Hlo/tWin7aTjC6oITEvKNpbQHMDlJ/Ez
+         mg/RXOloIXJPIvk9mH6zz3IbeMLhbUwDgsBntAV1nF37Ag7pSsVYNT6o4nLwDP7yjwf6
+         YSdN8XmTqXx7OyUYXXfefLQQvH1YGl4bGJd++JgsHH38R1MKDy+JDyBC0mgJLG+HKURR
+         nxqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681989485; x=1684581485;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m4k5Fd94R9nLjCjAwI4E4MAJpGxclTYpMwHmMXByQv0=;
+        b=PF+w27UYMDh5FU/JPKBXUFmIi6lD4NZX2YGQt5m/3a7Ee2GC+vARMO9n++BidsMzp3
+         q5F4uJ1TuYW+QEgGU3thhEMfjOI2mWMBxQPAdjNqwV2Wl66tOm+afO7BWLWxkgbUehiL
+         OSw76aWt6K86Em8dVR6UdIppA7PqNXRUIpex/dnNKmgAmB8MZkmBl0T0Yu7XJ79xnicO
+         qPYrUDWJlJhtjmsH4pI7UNCldA9KFRlk5ua/mx/IUPdekZGY1oMZsTFfO2ZNCTepcTRY
+         ZyFPwBB43JO/vJw/hNKvwCowwJ+fiS/U6UFKbyk9tj5eaZ+ubE0CCtzGnrgFXWy7dY0n
+         P3fw==
+X-Gm-Message-State: AAQBX9dTiuJ7tlZ9PLmos7nt7gaAPLheYJo2uVSaq36Xgia9dpL+d+xz
+        aMmeXa+K//xgHv2C6DdPLdMz3g==
+X-Google-Smtp-Source: AKy350byrrnVOJNt/Cuj6UEUIsfXADX07C+ZOFJV8Pt6UBM80NkWQ8m8g8Ir0J51KPl6jttGn4icrw==
+X-Received: by 2002:adf:e84b:0:b0:2fc:37be:af9c with SMTP id d11-20020adfe84b000000b002fc37beaf9cmr986687wrn.71.1681989484931;
+        Thu, 20 Apr 2023 04:18:04 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id h3-20020a5d5043000000b002c70ce264bfsm1680980wrt.76.2023.04.20.04.18.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 04:18:04 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Naresh Solanki <Naresh.Solanki@9elements.com>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] mfd: intel-m10-bmc: Move m10bmc_sys_read() away
- from header
-Message-ID: <ZEFj2ImqK7Uk3E/p@yilunxu-OptiPlex-7050>
-References: <20230417092653.16487-1-ilpo.jarvinen@linux.intel.com>
- <20230417092653.16487-4-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 2/2] hwmon: (max6639) Add compatible string
+Date:   Thu, 20 Apr 2023 13:17:58 +0200
+Message-Id: <20230420111759.2687001-2-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230420111759.2687001-1-Naresh.Solanki@9elements.com>
+References: <20230420111759.2687001-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230417092653.16487-4-ilpo.jarvinen@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2023-04-17 at 12:26:52 +0300, Ilpo Järvinen wrote:
-> Move m10bmc_sys_read() out from the header to prepare it for adding
-> more code into the function which would make it too large to be a
-> static inline any more.
-> 
-> While at it, replace the vague wording in function comment with more
-> precise statements.
-> 
-> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> Acked-by: Guenter Roeck <linux@roeck-us.net> # For hwmon
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Use maxim,max6639 as compatible string for the driver.
 
-Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+...
+Changes in V2:
+- None, Updated DT patch
+---
+ drivers/hwmon/max6639.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> ---
->  drivers/hwmon/intel-m10-bmc-hwmon.c |  1 +
->  drivers/mfd/intel-m10-bmc-core.c    | 14 ++++++++++++++
->  include/linux/mfd/intel-m10-bmc.h   | 17 +----------------
->  3 files changed, 16 insertions(+), 16 deletions(-)
+diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
+index 9b895402c80d..ada410bfb7b6 100644
+--- a/drivers/hwmon/max6639.c
++++ b/drivers/hwmon/max6639.c
+@@ -618,11 +618,17 @@ MODULE_DEVICE_TABLE(i2c, max6639_id);
+ 
+ static DEFINE_SIMPLE_DEV_PM_OPS(max6639_pm_ops, max6639_suspend, max6639_resume);
+ 
++static const struct of_device_id max6639_of_match[] = {
++	{ .compatible = "maxim,max6639", },
++	{ },
++};
++
+ static struct i2c_driver max6639_driver = {
+ 	.class = I2C_CLASS_HWMON,
+ 	.driver = {
+ 		   .name = "max6639",
+ 		   .pm = pm_sleep_ptr(&max6639_pm_ops),
++		   .of_match_table = max6639_of_match,
+ 		   },
+ 	.probe_new = max6639_probe,
+ 	.id_table = max6639_id,
+-- 
+2.39.1
+
