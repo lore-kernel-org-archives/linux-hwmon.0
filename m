@@ -2,132 +2,84 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 086C3C77B7F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Apr 2023 14:46:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FED3C77B73
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Apr 2023 17:42:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232420AbjDTOq3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 Apr 2023 10:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
+        id S231648AbjDTRmf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 Apr 2023 13:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbjDTOq2 (ORCPT
+        with ESMTP id S229792AbjDTRme (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 Apr 2023 10:46:28 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A845244A0;
-        Thu, 20 Apr 2023 07:46:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682001987; x=1713537987;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=llG0vdmQ3GbbFQezbra+B4SwkMPYTwzKiy7sh3sn9Fs=;
-  b=EVzQ7I0ptt9wxb+pBii/1+KbPm4O2Awl3pEosZ4bicfT9OLNbIQYYyMI
-   jmG2SyMuYJ8aP44UyOQ5n6tWMBmvOBhY4lyG8xRim4Ctr8pbtr6luhyX8
-   45taG984eyjRLqvcGbqPZJzMN0tz3UC4NmkK5ANMUkQc7V8UiF1bCCew5
-   +qbmp56/YtHBZn3fWpcJjXFlaxSo/9OaE7Mbu3PKvTCXH8acEemmPuSWb
-   rV/Xhak5ZoLkoxy8vQjAHfv2dH7ERPPIUEGMqQV/sszHN1sk9ebAiEiOq
-   QdrgVI4UZE6xqslYiHMhvOyHT3pzz3Hdhb0ZALsXymdn8NfpL9wb/Hk4h
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="373656941"
-X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="373656941"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 07:46:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="642163287"
-X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="642163287"
-Received: from shwetag-mobl4.amr.corp.intel.com (HELO [10.209.147.40]) ([10.209.147.40])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 07:46:22 -0700
-Message-ID: <f6e4a78d-0199-3135-f85d-800457a731b0@linux.intel.com>
-Date:   Thu, 20 Apr 2023 09:46:20 -0500
+        Thu, 20 Apr 2023 13:42:34 -0400
+X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Apr 2023 10:42:32 PDT
+Received: from office2.cesnet.cz (office2.cesnet.cz [195.113.144.244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F721B5;
+        Thu, 20 Apr 2023 10:42:32 -0700 (PDT)
+Received: from enterprise-D.prg (unknown [94.142.238.97])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by office2.cesnet.cz (Postfix) with ESMTPSA id 33E9640007C;
+        Thu, 20 Apr 2023 19:22:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
+        s=office2-2020; t=1682011356;
+        bh=SUXILnLNP9xhXmVLWIYgxWv+q4S958kHVGoCjkMxmDY=;
+        h=From:To:Cc:Subject:Date;
+        b=KgGw4/57FBReT+WhPxv3gYxQw8vlYFEIjuBMBMJwgriskhiFKHs6LevlIzmT1k1I0
+         mm2Zlsza9K1Tlpf99HQm6WSqf7Ox8PLX9aJVHvVkcB/NwunBAuoj5hSh9JHLq4FFfV
+         12/A0w9LU6c3Ga7vZ3XBpDvrFOrJP3iiTfmFRP5SpLRHLyBgoO4w3fOMFdAO5I5wfh
+         MkLG+IlOjHrKiCYGYSoEclAfXGxT++RwfEIQoTgZGwbZ2eTGkW41LrxvpfD6a6I921
+         H/mZNBo7uwXz9d0VYzS3gZ89GM7siGbqPo+DqizrE9rvnrAjaa/ygwZEhtKBmgFlY9
+         sznIdDio1fW1g==
+From:   =?UTF-8?q?Tom=C3=A1=C5=A1=20Pecka?= <tomas.pecka@cesnet.cz>
+To:     linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Tom=C3=A1=C5=A1=20Pecka?= <tomas.pecka@cesnet.cz>,
+        =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
+Subject: [PATCH 1/1] hwmon: (pmbus/fsp-3y) Fix functionality bitmask in FSP-3Y YM-2151E
+Date:   Thu, 20 Apr 2023 19:19:39 +0200
+Message-Id: <20230420171939.212040-1-tomas.pecka@cesnet.cz>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 3/5] hwmon: (socfpga) Add hardware monitoring support on
- SoCFPGA platforms
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-        dinguyen@kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, jdelvare@suse.com
-References: <20230410153314.27127-1-dinh.nguyen@linux.intel.com>
- <20230410153314.27127-3-dinh.nguyen@linux.intel.com>
- <09730359-8731-e21e-3335-bf60ba7f1280@roeck-us.net>
- <a3e966f8-8e9d-7081-1665-9d2e87acb310@linux.intel.com>
- <8d158880-1e6a-5fdd-dae7-a7647794eb60@roeck-us.net>
- <a1a34c32-dbd4-7a77-ab7e-5e34af85900f@linux.intel.com>
- <ZD/UsuzhZmK3AFJn@smile.fi.intel.com>
-Content-Language: en-US
-From:   Dinh Nguyen <dinh.nguyen@linux.intel.com>
-In-Reply-To: <ZD/UsuzhZmK3AFJn@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+The bit flags in pmbus_driver_info functionality for YM-2151E chip were
+joined with a comma operator instead of a bitwise OR. This means that
+the last constant PMBUS_HAVE_IIN was not OR-ed with the other
+PM_BUS_HAVE_* constants for this page but it initialized the next element
+of the func array (which was not accessed from anywhere because of the
+number of pages).
 
-On 4/19/2023 6:46 AM, Andy Shevchenko wrote:
-> On Tue, Apr 18, 2023 at 12:29:40PM -0500, Dinh Nguyen wrote:
->> On 4/17/2023 4:51 PM, Guenter Roeck wrote:
->>> On 4/17/23 13:55, Dinh Nguyen wrote:
-> ...
->
->>> ... and this contradict each other. If bit 31 indicates an error,
->>> this can not be a signed 32-bit value.
->>>
->> You're right! I've re-read the spec and should have the the code look for
->> the specific error values:
->>
->> 0x80000000 - inactive
->> 0x80000001 - old value
->> 0x80000002 - invalid channel
->> 0x80000003 -  corrupted.
-> No, they are not hex. Probably you need to define an error space with it, but
-> at least just use signed _decimal_ values.
->
-> Instead of BIT(31) this should go as
->
-> #define ..._ERR_BASE   INT_MIN // or equivalent if the type is not int
-> #define ..._ERR_MAX ... // or whatever name is better
->
-> Then in your code
->
-> 	if (value >= _ERR_MAX)
-> 		return 0;
->
-> 	err = _ERR_MAX - value;
-> 	switch (err) {
-> 		...
-> 	}
->
-> P.S. I asked during internal review if the values are bit fielded when errors.
-> AFAIU that time they are, now it seems different.
+However, there is no need for setting PMBUS_HAVE_IIN in the 5Vsb page
+because this command does not seem to be paged. Obviously, the device
+only has one IIN sensor, so it doesn't make sense to query it again from
+the second page.
 
-Can I ask what's wrong with this simple implementation?
+Fixes: 1734b4135a62 ("hwmon: Add driver for fsp-3y PSUs and PDUs")
+Co-developed-by: Jan Kundrát <jan.kundrat@cesnet.cz>
+Signed-off-by: Jan Kundrát <jan.kundrat@cesnet.cz>
+Signed-off-by: Tomáš Pecka <tomas.pecka@cesnet.cz>
+---
+ drivers/hwmon/pmbus/fsp-3y.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-static int socfpga_hwmon_err_to_errno(struct socfpga_hwmon_priv *priv)
-{
-         int value = priv->temperature.value;
-
-         switch (value) {
-         case ETEMP_NOT_PRESENT:
-                 return -ENOENT;
-         case ETEMP_CORRUPT:
-         case ETEMP_NOT_INITIALIZED:
-                 return -ENODATA;
-         case ETEMP_BUSY:
-                 return -EBUSY;
-         case ETEMP_INACTIVE:
-         case ETEMP_TIMEOUT:
-         case ETEMP_TOO_OLD:
-                 return -EAGAIN;
-         default:
-                 /* No error */
-                 return 0;
-         }
-}
-
-Dinh
+diff --git a/drivers/hwmon/pmbus/fsp-3y.c b/drivers/hwmon/pmbus/fsp-3y.c
+index aec294cc72d1..c7469d2cdedc 100644
+--- a/drivers/hwmon/pmbus/fsp-3y.c
++++ b/drivers/hwmon/pmbus/fsp-3y.c
+@@ -180,7 +180,6 @@ static struct pmbus_driver_info fsp3y_info[] = {
+ 			PMBUS_HAVE_FAN12,
+ 		.func[YM2151_PAGE_5VSB_LOG] =
+ 			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT,
+-			PMBUS_HAVE_IIN,
+ 		.read_word_data = fsp3y_read_word_data,
+ 		.read_byte_data = fsp3y_read_byte_data,
+ 	},
+-- 
+2.40.0
 
