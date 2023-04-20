@@ -2,167 +2,132 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C824C77B76
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Apr 2023 13:28:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 086C3C77B7F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Apr 2023 14:46:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbjDTN2p (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 Apr 2023 09:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S232420AbjDTOq3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 Apr 2023 10:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbjDTN2p (ORCPT
+        with ESMTP id S231607AbjDTOq2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 Apr 2023 09:28:45 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E8444AD
-        for <linux-hwmon@vger.kernel.org>; Thu, 20 Apr 2023 06:28:44 -0700 (PDT)
+        Thu, 20 Apr 2023 10:46:28 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A845244A0;
+        Thu, 20 Apr 2023 07:46:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681997324; x=1713533324;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=NP+kf8Nbir0XU/kpyf0JX6fo/DphW+8Lg1eNEvZ4Zdk=;
-  b=Phdagazh8N+NQl0IWyPmxSQ1voUih4KJEnb76FBTorjwbJnTncucq6Xy
-   rxlMm3ldBHeyoBaCaMxWHUHhS8sB+iqg3LU3+l3NCwunrmeMP+EJUt8M8
-   x7hwx49CWLfO+IWjcOse5JBZAnfaFkta6QGLdM//OJ44mXZRwr4XecT54
-   boMNvHbrOi0U4dmxNSNYt2PQqZ/KWF52kk7wxc2dYkZMYeWKwJOn5/wZ4
-   Fj9B0QohZRBlU8ToNnncY2nsoAZUaifV2BnKr/hcinFbFY6CRyH2qAxq7
-   GgcQQZ1MMXTboP4WyEOUsDeIPEZpGEa/mrcJhKdmj2vUiO0grkLBz/xiT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="326061983"
-X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="326061983"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 06:28:43 -0700
+  t=1682001987; x=1713537987;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=llG0vdmQ3GbbFQezbra+B4SwkMPYTwzKiy7sh3sn9Fs=;
+  b=EVzQ7I0ptt9wxb+pBii/1+KbPm4O2Awl3pEosZ4bicfT9OLNbIQYYyMI
+   jmG2SyMuYJ8aP44UyOQ5n6tWMBmvOBhY4lyG8xRim4Ctr8pbtr6luhyX8
+   45taG984eyjRLqvcGbqPZJzMN0tz3UC4NmkK5ANMUkQc7V8UiF1bCCew5
+   +qbmp56/YtHBZn3fWpcJjXFlaxSo/9OaE7Mbu3PKvTCXH8acEemmPuSWb
+   rV/Xhak5ZoLkoxy8vQjAHfv2dH7ERPPIUEGMqQV/sszHN1sk9ebAiEiOq
+   QdrgVI4UZE6xqslYiHMhvOyHT3pzz3Hdhb0ZALsXymdn8NfpL9wb/Hk4h
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="373656941"
+X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
+   d="scan'208";a="373656941"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 07:46:26 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="816015067"
-X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="816015067"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 20 Apr 2023 06:28:42 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ppUL3-000frQ-2S;
-        Thu, 20 Apr 2023 13:28:41 +0000
-Date:   Thu, 20 Apr 2023 21:28:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- 0c072385348e3ac5229145644055d3e2afb5b3db
-Message-ID: <64413dfa.5cJ1I+kRqKyaq/ku%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="642163287"
+X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
+   d="scan'208";a="642163287"
+Received: from shwetag-mobl4.amr.corp.intel.com (HELO [10.209.147.40]) ([10.209.147.40])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 07:46:22 -0700
+Message-ID: <f6e4a78d-0199-3135-f85d-800457a731b0@linux.intel.com>
+Date:   Thu, 20 Apr 2023 09:46:20 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 3/5] hwmon: (socfpga) Add hardware monitoring support on
+ SoCFPGA platforms
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        dinguyen@kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, jdelvare@suse.com
+References: <20230410153314.27127-1-dinh.nguyen@linux.intel.com>
+ <20230410153314.27127-3-dinh.nguyen@linux.intel.com>
+ <09730359-8731-e21e-3335-bf60ba7f1280@roeck-us.net>
+ <a3e966f8-8e9d-7081-1665-9d2e87acb310@linux.intel.com>
+ <8d158880-1e6a-5fdd-dae7-a7647794eb60@roeck-us.net>
+ <a1a34c32-dbd4-7a77-ab7e-5e34af85900f@linux.intel.com>
+ <ZD/UsuzhZmK3AFJn@smile.fi.intel.com>
+Content-Language: en-US
+From:   Dinh Nguyen <dinh.nguyen@linux.intel.com>
+In-Reply-To: <ZD/UsuzhZmK3AFJn@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: 0c072385348e3ac5229145644055d3e2afb5b3db  hwmon: (k10temp) Check range scale when CUR_TEMP register is read-write
 
-elapsed time: 1269m
+On 4/19/2023 6:46 AM, Andy Shevchenko wrote:
+> On Tue, Apr 18, 2023 at 12:29:40PM -0500, Dinh Nguyen wrote:
+>> On 4/17/2023 4:51 PM, Guenter Roeck wrote:
+>>> On 4/17/23 13:55, Dinh Nguyen wrote:
+> ...
+>
+>>> ... and this contradict each other. If bit 31 indicates an error,
+>>> this can not be a signed 32-bit value.
+>>>
+>> You're right! I've re-read the spec and should have the the code look for
+>> the specific error values:
+>>
+>> 0x80000000 - inactive
+>> 0x80000001 - old value
+>> 0x80000002 - invalid channel
+>> 0x80000003 -  corrupted.
+> No, they are not hex. Probably you need to define an error space with it, but
+> at least just use signed _decimal_ values.
+>
+> Instead of BIT(31) this should go as
+>
+> #define ..._ERR_BASE   INT_MIN // or equivalent if the type is not int
+> #define ..._ERR_MAX ... // or whatever name is better
+>
+> Then in your code
+>
+> 	if (value >= _ERR_MAX)
+> 		return 0;
+>
+> 	err = _ERR_MAX - value;
+> 	switch (err) {
+> 		...
+> 	}
+>
+> P.S. I asked during internal review if the values are bit fielded when errors.
+> AFAIU that time they are, now it seems different.
 
-configs tested: 92
-configs skipped: 7
+Can I ask what's wrong with this simple implementation?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+static int socfpga_hwmon_err_to_errno(struct socfpga_hwmon_priv *priv)
+{
+         int value = priv->temperature.value;
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r006-20230417   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r002-20230416   gcc  
-arm                  randconfig-r046-20230416   clang
-arm                  randconfig-r046-20230418   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r004-20230417   gcc  
-arm64                randconfig-r022-20230416   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r024-20230416   gcc  
-hexagon              randconfig-r041-20230416   clang
-hexagon              randconfig-r041-20230417   clang
-hexagon              randconfig-r041-20230418   clang
-hexagon              randconfig-r045-20230416   clang
-hexagon              randconfig-r045-20230417   clang
-hexagon              randconfig-r045-20230418   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230417   gcc  
-i386                 randconfig-a002-20230417   gcc  
-i386                 randconfig-a003-20230417   gcc  
-i386                 randconfig-a004-20230417   gcc  
-i386                 randconfig-a005-20230417   gcc  
-i386                 randconfig-a006-20230417   gcc  
-i386                 randconfig-a011-20230417   clang
-i386                 randconfig-a012-20230417   clang
-i386                 randconfig-a013-20230417   clang
-i386                 randconfig-a014-20230417   clang
-i386                 randconfig-a015-20230417   clang
-i386                 randconfig-a016-20230417   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r004-20230416   gcc  
-m68k                 randconfig-r024-20230417   gcc  
-m68k                 randconfig-r026-20230417   gcc  
-microblaze           randconfig-r004-20230418   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r025-20230417   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r001-20230416   gcc  
-nios2                randconfig-r003-20230418   gcc  
-openrisc             randconfig-r005-20230418   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r005-20230417   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                    gamecube_defconfig   clang
-powerpc              randconfig-r026-20230416   gcc  
-powerpc                    sam440ep_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230417   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230417   clang
-sh                               allmodconfig   gcc  
-sh                          kfr2r09_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r023-20230417   gcc  
-sparc64              randconfig-r003-20230416   gcc  
-sparc64              randconfig-r021-20230416   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a011-20230417   clang
-x86_64               randconfig-a012-20230417   clang
-x86_64               randconfig-a013-20230417   clang
-x86_64               randconfig-a014-20230417   clang
-x86_64               randconfig-a015-20230417   clang
-x86_64               randconfig-a016-20230417   clang
-x86_64                               rhel-8.3   gcc  
+         switch (value) {
+         case ETEMP_NOT_PRESENT:
+                 return -ENOENT;
+         case ETEMP_CORRUPT:
+         case ETEMP_NOT_INITIALIZED:
+                 return -ENODATA;
+         case ETEMP_BUSY:
+                 return -EBUSY;
+         case ETEMP_INACTIVE:
+         case ETEMP_TIMEOUT:
+         case ETEMP_TOO_OLD:
+                 return -EAGAIN;
+         default:
+                 /* No error */
+                 return 0;
+         }
+}
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Dinh
+
