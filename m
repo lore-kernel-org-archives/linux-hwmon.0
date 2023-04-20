@@ -2,129 +2,163 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E997C6FD18
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Apr 2023 21:00:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 362F9C77B72
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Apr 2023 04:28:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjDSVAT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 Apr 2023 17:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
+        id S232536AbjDTE23 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 Apr 2023 00:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjDSVAT (ORCPT
+        with ESMTP id S229646AbjDTE22 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 Apr 2023 17:00:19 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DAE6E8A;
-        Wed, 19 Apr 2023 13:59:59 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d8so270295plg.2;
-        Wed, 19 Apr 2023 13:59:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681937999; x=1684529999;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wg5/dukhZYhdc8/qhlvP79OyWl4s5S4ymsYixZdIlFA=;
-        b=EmF/wqTN1e6Vo6VR2i3nUJkCGPqdk4zF5rMVl6Ab6+cPxC8QNeHvZNuLn16TPCIYoa
-         oX55blNRJzrsH2VAli6MNUDYMK+w1HkfjQOTaE/DwOiQ0doJEmQMdK1dMPs9aHinxfMn
-         z+h53r74LYETZ0Ft1A0Ydfr+CZcAZUDXxidfRCMrf/OQ2JLhqLmm/W2J/v+DJTaxSFvi
-         9eed52cyssAAKAk1wLOcZmlQ6j8jjPVfeFYGbpFWAfus0r18dFrYC1SG5M0LJj+Or9Ya
-         g7Vh4KF33LJceBGbN4nBjs7odj0MmgpCGQ1umfWvl4i0X8F56dC7aKSokc6YXW/oI6xB
-         s8+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681937999; x=1684529999;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wg5/dukhZYhdc8/qhlvP79OyWl4s5S4ymsYixZdIlFA=;
-        b=YWSiwLnLnz/3F5zROM+0Fs+uLy1fInKhBhYcVxRbVVwVXUbwMRNFz+X0T6FQeh9IVR
-         YQqOA81xVFO86AyaR295GhpX6gey/Dfv0h81KjspSRN3zWEnM5Z/QozP3uCzeD5HtCx5
-         5eDuYQ+g5aSpaQuOnT809Rdeqh0R3F1oMUMkRc0AOptaL82bLq734to9uKJq0Z+XY9o+
-         AV/hfHDdQoSskom7Pv+eTbO4TdVAGqZtzgf3h+o8hBXxSHiThL1rM99hJHKgEm/1BrbV
-         VQFAreHVOhq8cQFFhsuh0gR/qy76imTETP9rtRwn1ciOas93nVPRFaymaHeoEYCC7X0P
-         3Mqg==
-X-Gm-Message-State: AAQBX9dvorRMH9XxXrIzxJMq74I2h8GTa+UOTB8MD5Xy00gOV+lL7M4Y
-        Y46P1lI47tQRSqP93B5bE7Py/bspBSs=
-X-Google-Smtp-Source: AKy350ZxjbBI/jPnVNOn+1XD21Vx7dF1Mp51++44aInh80sRab5HciSEK9bZ1d19O93S/okvFM8k0Q==
-X-Received: by 2002:a05:6a20:748f:b0:ef:c5b6:b6a8 with SMTP id p15-20020a056a20748f00b000efc5b6b6a8mr4613767pzd.45.1681937999155;
-        Wed, 19 Apr 2023 13:59:59 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2-20020a63d642000000b005140ce70582sm10718610pgj.44.2023.04.19.13.59.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 13:59:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <76ae207d-9872-95e9-277c-d98f5f979659@roeck-us.net>
-Date:   Wed, 19 Apr 2023 13:59:56 -0700
+        Thu, 20 Apr 2023 00:28:28 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D4040C9
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 Apr 2023 21:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681964908; x=1713500908;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qnNt+NRyxFy9Q9iUhl1uWaR5kAu25Asdu/w5P5Zqx2g=;
+  b=itholSNgK5dsO5Z04qJA+l0mTQUq78yoZW2V/sBuEnS/9VGpUsv5YQdq
+   UN5XhE+wt2O3Vd8D+KxjPwyqRUkofVg1hyOow+rIxDwsolohSa7EMURpW
+   j3dxBak9gYJOnzXVM3dr29lQDD2JZI2qbntJdECSbrP9KT9nj21fHlg8U
+   75WODp8miq2fovbXRVyCFHVowwYVrcbyoZJspI7EuXRA3QSCtA7Jc6ELI
+   qkqWvdLvdICK94vznNvIm/sRv/Yz6zoCKzEil7PxyuyG5mm2JgtKgaGJW
+   Oudb5D8nFvG8zw1PIe6SOI21f+ssUk+uMtHf9Ra32WSWKY6pzJnOBni8R
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="347490046"
+X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
+   d="scan'208";a="347490046"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 21:28:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="760994649"
+X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
+   d="scan'208";a="760994649"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Apr 2023 21:28:26 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ppLuD-000fT8-1w;
+        Thu, 20 Apr 2023 04:28:25 +0000
+Date:   Thu, 20 Apr 2023 12:28:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 8a51184ed91ba8a82fb31a69b511cc5dc7a9fa07
+Message-ID: <6440bf53.nHlbBS1MNSMhwdX7%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "manio@skyboo.net" <manio@skyboo.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230418233656.869055-1-chris.packham@alliedtelesis.co.nz>
- <20230418233656.869055-3-chris.packham@alliedtelesis.co.nz>
- <4d78b62f-1592-45d9-874a-30f1906cd2d3@roeck-us.net>
- <9ad2433a-676f-0a90-809c-f256d2b9ba79@alliedtelesis.co.nz>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 2/2] hwmon: (adt7475) Convert to use device_property
- APIs
-In-Reply-To: <9ad2433a-676f-0a90-809c-f256d2b9ba79@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/19/23 13:49, Chris Packham wrote:
-> 
-> On 20/04/23 04:06, Guenter Roeck wrote:
->> On Wed, Apr 19, 2023 at 11:36:56AM +1200, Chris Packham wrote:
->>> Instead of of_property_read_*() use the equivalent
->>> device_property_read_*() API. This will allow these properties to be
->>> used on DT unaware platforms. For DT aware platforms this will be a
->>> noop.
->>>
->>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
->>> ---
->>>
->>> Notes:
->>>       This is an additional update for master from the preceeding bugfix
->>>       commit. I've not added a fixes tag for this one because I don't think
->>>       there will be a behaviour change for existing usages.
->>>       
->>>       I know we have one upcoming DT unaware platform that we may want to use
->>>       some of these properties via ACPI tables so I won't object if this ends
->>>       up on the stable track but I don't think it meets the criteria for
->>>       stable.
->>>
->>>    drivers/hwmon/adt7475.c | 8 ++++----
->>>    1 file changed, 4 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
->>> index 6a6ebcc896b1..3b9289bc5997 100644
->>> --- a/drivers/hwmon/adt7475.c
->>> +++ b/drivers/hwmon/adt7475.c
->>> @@ -1468,7 +1468,7 @@ static int load_config3(const struct i2c_client *client, const char *propname)
->>>    	u8 config3;
->>>    	int ret;
->>>    
->>> -	ret = of_property_read_string(client->dev.of_node, propname, &function);
->>> +	ret = device_property_read_string(&client->dev, propname, &function);
->> Unfortunately that is a problem because the parameter passed to
->> load_config3 is a pointer to a const data structure and
->> device_property_read_string doesn't like that (afaics for
->> no good reason). You'll also have to change the client parameter
->> to load_config() and friends to not be const.
-> 
-> Not sure how I didn't notice that. Probably rushing to get the fix part out.
-> 
-> I do have a v3 that drops the const where needed to silence the warnings
-> but I'll sit on that for now in the hope that your patch gets accepted.
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 8a51184ed91ba8a82fb31a69b511cc5dc7a9fa07  hwmon: (adt7475) Use device_property APIs when configuring polarity
 
-Sounds good to me. There is no hurry with this one, after all.
+elapsed time: 727m
 
-Thanks,
-Guenter
+configs tested: 88
+configs skipped: 5
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230416   clang
+arm                  randconfig-r046-20230418   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r022-20230416   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r024-20230416   gcc  
+hexagon              randconfig-r041-20230416   clang
+hexagon              randconfig-r041-20230417   clang
+hexagon              randconfig-r041-20230418   clang
+hexagon              randconfig-r045-20230416   clang
+hexagon              randconfig-r045-20230417   clang
+hexagon              randconfig-r045-20230418   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230417   gcc  
+i386                 randconfig-a002-20230417   gcc  
+i386                 randconfig-a003-20230417   gcc  
+i386                 randconfig-a004-20230417   gcc  
+i386                 randconfig-a005-20230417   gcc  
+i386                 randconfig-a006-20230417   gcc  
+i386                 randconfig-a011-20230417   clang
+i386                 randconfig-a012-20230417   clang
+i386                 randconfig-a013-20230417   clang
+i386                 randconfig-a014-20230417   clang
+i386                 randconfig-a015-20230417   clang
+i386                 randconfig-a016-20230417   clang
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+loongarch                        alldefconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r024-20230417   gcc  
+m68k                 randconfig-r026-20230417   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r025-20230417   gcc  
+nios2                               defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                    gamecube_defconfig   clang
+powerpc              randconfig-r026-20230416   gcc  
+powerpc                    sam440ep_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230417   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230417   clang
+sh                               allmodconfig   gcc  
+sh                          kfr2r09_defconfig   gcc  
+sh                          r7785rp_defconfig   gcc  
+sh                          rsk7201_defconfig   gcc  
+sh                           se7712_defconfig   gcc  
+sh                  sh7785lcr_32bit_defconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r023-20230417   gcc  
+sparc64              randconfig-r021-20230416   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a011-20230417   clang
+x86_64               randconfig-a012-20230417   clang
+x86_64               randconfig-a013-20230417   clang
+x86_64               randconfig-a014-20230417   clang
+x86_64               randconfig-a015-20230417   clang
+x86_64               randconfig-a016-20230417   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                          iss_defconfig   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
