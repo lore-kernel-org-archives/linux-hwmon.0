@@ -2,163 +2,150 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 362F9C77B72
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Apr 2023 04:28:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77DD8C77B73
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Apr 2023 05:33:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232536AbjDTE23 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 Apr 2023 00:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
+        id S232009AbjDTFdP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 Apr 2023 01:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjDTE22 (ORCPT
+        with ESMTP id S233784AbjDTFdM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 Apr 2023 00:28:28 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D4040C9
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 Apr 2023 21:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681964908; x=1713500908;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qnNt+NRyxFy9Q9iUhl1uWaR5kAu25Asdu/w5P5Zqx2g=;
-  b=itholSNgK5dsO5Z04qJA+l0mTQUq78yoZW2V/sBuEnS/9VGpUsv5YQdq
-   UN5XhE+wt2O3Vd8D+KxjPwyqRUkofVg1hyOow+rIxDwsolohSa7EMURpW
-   j3dxBak9gYJOnzXVM3dr29lQDD2JZI2qbntJdECSbrP9KT9nj21fHlg8U
-   75WODp8miq2fovbXRVyCFHVowwYVrcbyoZJspI7EuXRA3QSCtA7Jc6ELI
-   qkqWvdLvdICK94vznNvIm/sRv/Yz6zoCKzEil7PxyuyG5mm2JgtKgaGJW
-   Oudb5D8nFvG8zw1PIe6SOI21f+ssUk+uMtHf9Ra32WSWKY6pzJnOBni8R
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="347490046"
-X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
-   d="scan'208";a="347490046"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 21:28:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="760994649"
-X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
-   d="scan'208";a="760994649"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 19 Apr 2023 21:28:26 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ppLuD-000fT8-1w;
-        Thu, 20 Apr 2023 04:28:25 +0000
-Date:   Thu, 20 Apr 2023 12:28:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 8a51184ed91ba8a82fb31a69b511cc5dc7a9fa07
-Message-ID: <6440bf53.nHlbBS1MNSMhwdX7%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 20 Apr 2023 01:33:12 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5AB26B2
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 Apr 2023 22:33:04 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id c9so3790827ejz.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 Apr 2023 22:33:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google; t=1681968783; x=1684560783;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qJVC98QYgVO5xnuQwE5GmGiDe7U5RkqIcikyFxfYAVk=;
+        b=e+VESYo/xNSiP1FkwoH+/rGV8BGOsFMbAAIvgjLn3gR675gDWh/sGHe0s6fpzf/GF9
+         ulqroFuZCKarvKdf11NUNdg9yRwVoNbIiFZAkXiyLGD576aZ7KLGFJGWjnjRhpLzs0+K
+         sUUDVOO037UzwdAb6cFfam12O00xdObF7d6+G5is3/2LSEPPboPlNMzH4tOAytwPTse0
+         pNOFdOwuM7yV1CIYQasvKeyt4xHParAtGcPXOj4SZVslyAWFJQl2Rl0rD+BxD53Cx2RA
+         LVD3p+Svv2mULsc4lISfXLr9ufjlL+fVAvnDYmfcJHJpMiK4yhpg0k9J3H0LBQoQL1Op
+         PKDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681968783; x=1684560783;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qJVC98QYgVO5xnuQwE5GmGiDe7U5RkqIcikyFxfYAVk=;
+        b=LtC9h7bLA4LrWlzIZQ5pSsnu9H4vq1+s/1jFmNpLARJ90bPftipwBkU5UYU60v5tlO
+         /lkdTmebWolwGcyKeBD68Qzb68fc2SymUO5g5tLh2uM/AuZyla5kSiOCVRfOo4kBYLaK
+         8cUhpQDPAg5Wh3RP+sl10+NCEno2bRaR0RGECD55igZkbAS5Mo3H9JSQkKd6R50ci6Ya
+         aock/7KZmUtYT8IwYNwwa9iuMoYVe+dw1ZWm9uHgMqt80WjfKEoTy9ubtvegx7y/9Fzg
+         2RjnJDfnhwv0Trn5FqERonKzMO/cvb5wamKFNxgm2Z1bnN6wxso8J/cwnmwiKbUkn0O+
+         0ghQ==
+X-Gm-Message-State: AAQBX9fuuzRU6h49hNq4P4S42h8cqU5RrjXo/Yj6F5o0tTRk5MGz5r/s
+        oTHPLaRlupo1w/k9x3zclcdT6agumCZgu5DxWKCOSw==
+X-Google-Smtp-Source: AKy350bkJamRIp/B0PDfHXNay3lltuaJoSnsn7OFsFgY8084+LGKIYTb/LftIeHE5AuSU+cikDFg98MBQCbd4UTuciE=
+X-Received: by 2002:a17:906:841:b0:87f:e5af:416e with SMTP id
+ f1-20020a170906084100b0087fe5af416emr139871ejd.7.1681968782950; Wed, 19 Apr
+ 2023 22:33:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <CAMGffE=65we13bDe=iOkkefF4PrNBNg96qi=ebU7nCs=GA6cCw@mail.gmail.com>
+ <MN0PR12MB6101B5E3BCCB7B3BA28B9269E2629@MN0PR12MB6101.namprd12.prod.outlook.com>
+In-Reply-To: <MN0PR12MB6101B5E3BCCB7B3BA28B9269E2629@MN0PR12MB6101.namprd12.prod.outlook.com>
+From:   Jinpu Wang <jinpu.wang@ionos.com>
+Date:   Thu, 20 Apr 2023 07:32:51 +0200
+Message-ID: <CAMGffEniDCMc89D=G2bwn8_O9eep1X7Q3CYGrBaV6bTuX3KLdg@mail.gmail.com>
+Subject: Re: k10temp show over 100 degrees temperature on EPYC Milan servers
+ from DELL and SMC
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "clemens@ladisch.de" <clemens@ladisch.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 8a51184ed91ba8a82fb31a69b511cc5dc7a9fa07  hwmon: (adt7475) Use device_property APIs when configuring polarity
+On Wed, Apr 19, 2023 at 3:33=E2=80=AFPM Limonciello, Mario
+<Mario.Limonciello@amd.com> wrote:
+>
+> [Public]
+>
+> Hi,
+>
+> > Dear experts on the list,
+> >
+> > We've noticed many of our EPYC Milan servers from different vendors
+> > (DELL  and SMC) show 100 degrees, eg
+> >
+> > sudo sensors
+> > k10temp-pci-00c3
+> > Adapter: PCI adapter
+> > Tctl:        +117.5=C2=B0C
+> > Tdie:        +117.5=C2=B0C
+> > Tccd1:        +67.0=C2=B0C
+> > Tccd2:        +65.2=C2=B0C
+> > Tccd3:        +63.2=C2=B0C
+> > Tccd4:        +63.8=C2=B0C
+> > Tccd5:        +67.2=C2=B0C
+> > Tccd6:        +63.5=C2=B0C
+> > Tccd7:        +64.2=C2=B0C
+> > Tccd8:        +64.8=C2=B0C
+> >
+> >  sudo lscpu
+> > Architecture:                    x86_64
+> > CPU op-mode(s):                  32-bit, 64-bit
+> > Byte Order:                      Little Endian
+> > Address sizes:                   48 bits physical, 48 bits virtual
+> > CPU(s):                          128
+> > On-line CPU(s) list:             0-127
+> > Thread(s) per core:              2
+> > Core(s) per socket:              64
+> > Socket(s):                       1
+> > NUMA node(s):                    1
+> > Vendor ID:                       AuthenticAMD
+> > CPU family:                      25
+> > Model:                           1
+> > Model name:                      AMD EPYC 7713P 64-Core Processor
+> > Stepping:                        1
+> > Frequency boost:                 enabled
+> > CPU MHz:                         2479.705
+> > CPU max MHz:                     3720,7029
+> > CPU min MHz:                     1500,0000
+> > BogoMIPS:                        3992.43
+> > Virtualization:                  AMD-V
+> > L1d cache:                       2 MiB
+> > L1i cache:                       2 MiB
+> > L2 cache:                        32 MiB
+> > L3 cache:                        256 MiB
+> > NUMA node0 CPU(s):               0-127
+> >
+> > We've seen such high temperatures even on  idle servers.
+> >
+> > We are running LTS kernel 5.10.136, but checking the git history for
+> > k10temp driver, I don't find any missing fix.
+> > My questions are:
+> > 1. Is it normal to have such high temperatures for tctl?  can we trust
+> > the value?
+> > 2  Do we need to worry about such high temperatures?
+> >
+> > Thx!
+> > Jinpu Wang @ IONOS Cloud.
+>
+> It's fixed by this patch that will be going into 6.4.
+> https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/=
+commit/?h=3Dhwmon-next&id=3D1dc8e097967b69a56531c9ccb70b854771310e85
 
-elapsed time: 727m
+Hi,
 
-configs tested: 88
-configs skipped: 5
+I tested on affected server, the tctl output looks normal now.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230416   clang
-arm                  randconfig-r046-20230418   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r022-20230416   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r024-20230416   gcc  
-hexagon              randconfig-r041-20230416   clang
-hexagon              randconfig-r041-20230417   clang
-hexagon              randconfig-r041-20230418   clang
-hexagon              randconfig-r045-20230416   clang
-hexagon              randconfig-r045-20230417   clang
-hexagon              randconfig-r045-20230418   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230417   gcc  
-i386                 randconfig-a002-20230417   gcc  
-i386                 randconfig-a003-20230417   gcc  
-i386                 randconfig-a004-20230417   gcc  
-i386                 randconfig-a005-20230417   gcc  
-i386                 randconfig-a006-20230417   gcc  
-i386                 randconfig-a011-20230417   clang
-i386                 randconfig-a012-20230417   clang
-i386                 randconfig-a013-20230417   clang
-i386                 randconfig-a014-20230417   clang
-i386                 randconfig-a015-20230417   clang
-i386                 randconfig-a016-20230417   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-loongarch                        alldefconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r024-20230417   gcc  
-m68k                 randconfig-r026-20230417   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r025-20230417   gcc  
-nios2                               defconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                    gamecube_defconfig   clang
-powerpc              randconfig-r026-20230416   gcc  
-powerpc                    sam440ep_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230417   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230417   clang
-sh                               allmodconfig   gcc  
-sh                          kfr2r09_defconfig   gcc  
-sh                          r7785rp_defconfig   gcc  
-sh                          rsk7201_defconfig   gcc  
-sh                           se7712_defconfig   gcc  
-sh                  sh7785lcr_32bit_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r023-20230417   gcc  
-sparc64              randconfig-r021-20230416   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a011-20230417   clang
-x86_64               randconfig-a012-20230417   clang
-x86_64               randconfig-a013-20230417   clang
-x86_64               randconfig-a014-20230417   clang
-x86_64               randconfig-a015-20230417   clang
-x86_64               randconfig-a016-20230417   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                          iss_defconfig   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thx for quick reply.
+>
+> Guenter,
+>
+> If you didn't already send your 6.4 PR, can you please add
+> Cc: stable@vger.kernel.org to the patch in your tree?
+>
+> Thanks,
