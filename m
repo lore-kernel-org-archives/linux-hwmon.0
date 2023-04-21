@@ -2,114 +2,103 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7C87C77B72
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Apr 2023 18:19:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37677C77B73
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Apr 2023 01:52:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbjDTSTk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 Apr 2023 14:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
+        id S233396AbjDUBwI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 Apr 2023 21:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjDTSTk (ORCPT
+        with ESMTP id S233409AbjDUBwF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 Apr 2023 14:19:40 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558AE2736;
-        Thu, 20 Apr 2023 11:19:39 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a667067275so12572855ad.1;
-        Thu, 20 Apr 2023 11:19:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682014779; x=1684606779;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M7m896v0zwclnMzE5M32YGgcorfSqd9qtXANPeD/BFc=;
-        b=EKZvXX4qyof85ohLLAM5XOERZrpcAuvSepl8jPQj89JQnPoSBqtiUH4jqb7JZM7fZD
-         0civ84sZ/NmZG1iKoJVlVTw2vqfKIEV8sawSg7c86w27iZSS9qrOQRrja9a9oke80Blx
-         MqdNhUJMGCU/MvsriLgCm5AUPugCkmxFsysaRm6EdWRcAa/g47WF9nc5ykOYMvKw6vY9
-         wyAlCnn5PoHo5lqOnf+8AagDwFN+zC7dn3Fxc9rU6OzN5zc9tsOSQvQqIHgahjZxfCrm
-         2r9C2gA3NILtzH/0+J3VtL41AsFOvi551NgCuX63BF1Bz6KQJ7L9RiLNMJnGajFRYpch
-         9l6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682014779; x=1684606779;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M7m896v0zwclnMzE5M32YGgcorfSqd9qtXANPeD/BFc=;
-        b=CJKcfIaqAZierY2wyY2tHzTeyKaFgQHcPSUi7y2Xipigb/u//JGY+olakKJiCDKSq3
-         X+073CczelAfabxfSok94OTjyJYCN57Wj+kLK+gJuANp8JpuKXRuNsXJb0MR/2WOnhNk
-         k52sHGfsAGHXCZy6+vK4Xw9A0bcPNXb98nQDxWY7S0dFH6Yz9oNMSBKHLuyEYjD8WRYP
-         AQgIqHO2Ti7wjdNH1iuexKxXebgBj7AHiXsuaWhDFgdX64kC3RP1DRSlFF1uRzhrO4+p
-         mhemNwQrNYN4IjrGOn+QekFtwC9DnoXuJ6RiZwfV7bcUcRJ2QB+zBKVH+wf2otxXFOP8
-         KPOQ==
-X-Gm-Message-State: AAQBX9d5tppCOdu4COV4SziW4San/TXqSX1728VDOg00x6SDZpzIIEIt
-        Quhkfcb+40XgqJFr4w2jpKK8Esb/z4I=
-X-Google-Smtp-Source: AKy350YbizgwIxj66WbsohtGqdUE092BhFj/u0NcCBirM0AovG5ih/cigIPbpby5y4HLhgcFKqJvDg==
-X-Received: by 2002:a17:903:244f:b0:1a8:16d2:a867 with SMTP id l15-20020a170903244f00b001a816d2a867mr3002668pls.62.1682014778706;
-        Thu, 20 Apr 2023 11:19:38 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y11-20020a170902b48b00b001a63ba28053sm1453017plr.68.2023.04.20.11.19.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 11:19:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 20 Apr 2023 11:19:36 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     =?utf-8?B?VG9tw6HFoQ==?= Pecka <tomas.pecka@cesnet.cz>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan =?iso-8859-1?Q?Kundr=E1t?= <jan.kundrat@cesnet.cz>
-Subject: Re: [PATCH 1/1] hwmon: (pmbus/fsp-3y) Fix functionality bitmask in
- FSP-3Y YM-2151E
-Message-ID: <1eb61572-591b-44ac-8415-7f18875202f7@roeck-us.net>
-References: <20230420171939.212040-1-tomas.pecka@cesnet.cz>
+        Thu, 20 Apr 2023 21:52:05 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE5D6EB5;
+        Thu, 20 Apr 2023 18:51:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682041912; x=1713577912;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=qOaIZhCM0M7nCC0PwmJL4rbJwQkhe6qCcFlSkgzP2Os=;
+  b=RSWBlnD2SngH43rjO9rq0WYogV+r0yij3ASnFjEHs56l3mzaiZlJFSJi
+   DwePIYUtXUtGgGHGtnOImF894CtzJDNxCvk1QjR8At3HLsdytcqp1JOHI
+   1DVE0OfhcKAam6m9P0ErgOB70+nOR2aTExmYR4AVNbxhPqvwdA8bWb5Xq
+   BedIMxnJgJlmsXSwgaT09YzJ3u+j3r+wEfsGq6jXOOcPf5NEMtE0TRkJL
+   BwjnmDxgHyqKPROGnfm3AqzQ2heqnGFebnSEun5HGowKyeOGMj3xbhgs3
+   3Hdr8hwWBDWihop6pnrvqbH0IBq6W3eJc3fGEolxtSqBQ0X38/By+L1vu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="330092938"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="330092938"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 18:51:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="836003730"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="836003730"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Apr 2023 18:51:49 -0700
+Date:   Fri, 21 Apr 2023 17:52:19 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russ Weight <russell.h.weight@intel.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] mfd: intel-m10-bmc: Manage access to MAX 10 fw
+ handshake registers
+Message-ID: <ZEJc06oNSS2ICS1F@yilunxu-OptiPlex-7050>
+References: <20230417092653.16487-1-ilpo.jarvinen@linux.intel.com>
+ <20230417092653.16487-5-ilpo.jarvinen@linux.intel.com>
+ <ZEFjQtOCQCvQJ1k/@yilunxu-OptiPlex-7050>
+ <20230420111324.GA970483@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230420171939.212040-1-tomas.pecka@cesnet.cz>
+In-Reply-To: <20230420111324.GA970483@google.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 07:19:39PM +0200, Tomáš Pecka wrote:
-> The bit flags in pmbus_driver_info functionality for YM-2151E chip were
-> joined with a comma operator instead of a bitwise OR. This means that
-> the last constant PMBUS_HAVE_IIN was not OR-ed with the other
-> PM_BUS_HAVE_* constants for this page but it initialized the next element
-> of the func array (which was not accessed from anywhere because of the
-> number of pages).
+On 2023-04-20 at 12:13:24 +0100, Lee Jones wrote:
+> On Fri, 21 Apr 2023, Xu Yilun wrote:
 > 
-> However, there is no need for setting PMBUS_HAVE_IIN in the 5Vsb page
-> because this command does not seem to be paged. Obviously, the device
-> only has one IIN sensor, so it doesn't make sense to query it again from
-> the second page.
+> > On 2023-04-17 at 12:26:53 +0300, Ilpo Järvinen wrote:
+> > > On some MAX 10 cards, the BMC firmware is not available to service
+> > > handshake registers during secure update erase and write phases at
+> > > normal speeds. This problem affects at least hwmon driver. When the MAX
+> > > 10 hwmon driver tries to read the sensor values during a secure update,
+> > > the reads are slowed down (e.g., reading all D5005 sensors takes ~24s
+> > > which is magnitudes worse than the normal <0.02s).
+> > > 
+> > > Manage access to the handshake registers using a rw semaphore and a FW
+> > > state variable to prevent accesses during those secure update phases
+> > > and return -EBUSY instead.
+> > > 
+> > > If handshake_sys_reg_nranges == 0, don't update bwcfw_state as it is not
+> > > used. This avoids the locking cost.
+> > > 
+> > > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> > > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> > > Co-developed-by: Xu Yilun <yilun.xu@intel.com>
+> > > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > 
+> > Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+> > 
+> > Hi Lee:
+> > 
+> > Could the fpga part also been applied to mfd tree when everyone is good?
 > 
-> Fixes: 1734b4135a62 ("hwmon: Add driver for fsp-3y PSUs and PDUs")
-> Co-developed-by: Jan Kundrát <jan.kundrat@cesnet.cz>
-> Signed-off-by: Jan Kundrát <jan.kundrat@cesnet.cz>
+> Yes, with an Acked-by it can.
 
-FWIW, adding both Co-developed-by: and Signed-off-by: tags doesn't
-make sense since Signed-off-by: implies Co-developed-by:.
-I'll drop the first tag.
+Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-> Signed-off-by: Tomáš Pecka <tomas.pecka@cesnet.cz>
-
-Applied.
-
-Thanks,
-Guenter
-
-> ---
->  drivers/hwmon/pmbus/fsp-3y.c | 1 -
->  1 file changed, 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/pmbus/fsp-3y.c b/drivers/hwmon/pmbus/fsp-3y.c
-> index aec294cc72d1..c7469d2cdedc 100644
-> --- a/drivers/hwmon/pmbus/fsp-3y.c
-> +++ b/drivers/hwmon/pmbus/fsp-3y.c
-> @@ -180,7 +180,6 @@ static struct pmbus_driver_info fsp3y_info[] = {
->  			PMBUS_HAVE_FAN12,
->  		.func[YM2151_PAGE_5VSB_LOG] =
->  			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT,
-> -			PMBUS_HAVE_IIN,
->  		.read_word_data = fsp3y_read_word_data,
->  		.read_byte_data = fsp3y_read_byte_data,
->  	},
+> -- 
+> Lee Jones [李琼斯]
