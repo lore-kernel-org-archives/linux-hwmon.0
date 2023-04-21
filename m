@@ -2,151 +2,165 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57DB5C77B75
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Apr 2023 04:34:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33F70C77B75
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Apr 2023 05:53:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232683AbjDUEeQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 Apr 2023 00:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
+        id S233635AbjDUFx3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 Apr 2023 01:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjDUEeP (ORCPT
+        with ESMTP id S232138AbjDUFxZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Apr 2023 00:34:15 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B3B5FEB;
-        Thu, 20 Apr 2023 21:34:13 -0700 (PDT)
+        Fri, 21 Apr 2023 01:53:25 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3567B2109
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Apr 2023 22:53:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682051653; x=1713587653;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HcG2OaQaMXxW7kOzW0omM87pnvqjWJ8bghxZYMQSVrk=;
-  b=FHQPx7JE/u8lXxu76QY2KwVcDbLxAmZWHodg4L90QHqIntBBNb/X/ZQp
-   Uny80K15vEMUrVcmUyho/Mjbj16USbwa9RznFZPkUcYzspoaIxdaUDpQ1
-   /Zn8dFpjZaGssHk2HlHGfvVzkW0vOCTwGNxKE34Toxbw2EEIxMLOstslP
-   NvP3yW8ct/JdYkU3fH0Atm2HfO9eEK8mrBHfWmxfdot1EC24jzdrHtN8O
-   HIn0nyf3WuK2YP6ILvxr0IQSQb0EeML5AV8oPN9ngqD8JvGut+NYMAr6J
-   t6Mahoh5vmLYVTcGkIFcncXCn5FuWhxyOt6IFSRCrFaqXpH019nYXAMhz
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="325514898"
+  t=1682056387; x=1713592387;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fHXiMP/ZYm5H4PMjELrrX2pw131VRBvrWDDvILJrAnM=;
+  b=YiPD2TpVSynEDd3ayuDA6TuwqY0BN33QCLyF7HI+xKFkAaqUohXoR77e
+   imrwUagyNjtDP3zX8LR7ZdFPSQAaMkn2fMAvwHAXytGSUaZtuXgR5mYQB
+   Gohbn1aC4kDq+OgHLY5yB2uY5PDSmMawdQUD0T+ZOj7VvnXKn/QECo8jm
+   o6edVLlPdk7YKMnHhhrrdjjyaFePxTqFTt34H03Ig12KMwhpSKvrrwgZK
+   akIirW468+vXAmH/SnQNFnA8CHEsvLH2rCVWHWxEA9TtfVSbas8LziwkC
+   gSBa73+eHK/JV7xqbnP5Nw+iM4jQE7W5khznBC60HU2cOaqzpn3VbCgUG
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="408860903"
 X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="325514898"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 21:34:06 -0700
+   d="scan'208";a="408860903"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 22:53:06 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="669598926"
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="722649052"
 X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="669598926"
+   d="scan'208";a="722649052"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Apr 2023 21:34:03 -0700
+  by orsmga008.jf.intel.com with ESMTP; 20 Apr 2023 22:53:05 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1ppiTC-000gJw-2d;
-        Fri, 21 Apr 2023 04:34:02 +0000
-Date:   Fri, 21 Apr 2023 12:33:41 +0800
+        id 1ppjhg-000gMI-12;
+        Fri, 21 Apr 2023 05:53:04 +0000
+Date:   Fri, 21 Apr 2023 13:52:25 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        jdelvare@suse.com, linux@roeck-us.net, manio@skyboo.net
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH v2 2/2] hwmon: (adt7475) Convert to use device_property
- APIs
-Message-ID: <202304211232.U03a7306-lkp@intel.com>
-References: <20230418233656.869055-3-chris.packham@alliedtelesis.co.nz>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
+ ce28f5d4c6651999c247e0e7e1d65f6d85e577fd
+Message-ID: <64422499.xi+4k67/igQE3jjb%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230418233656.869055-3-chris.packham@alliedtelesis.co.nz>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Chris,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: ce28f5d4c6651999c247e0e7e1d65f6d85e577fd  MAINTAINERS: Add fragment for Xilinx watchdog driver
 
-kernel test robot noticed the following build errors:
+elapsed time: 726m
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.3-rc7]
-[cannot apply to next-20230420]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+configs tested: 91
+configs skipped: 3
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Packham/hwmon-adt7475-Use-device_property-APIs-when-configuring-polarity/20230419-074117
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230418233656.869055-3-chris.packham%40alliedtelesis.co.nz
-patch subject: [PATCH v2 2/2] hwmon: (adt7475) Convert to use device_property APIs
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230421/202304211232.U03a7306-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/59836340c66130951595e2adebf284eca3063ccd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chris-Packham/hwmon-adt7475-Use-device_property-APIs-when-configuring-polarity/20230419-074117
-        git checkout 59836340c66130951595e2adebf284eca3063ccd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/ drivers/net/ethernet/intel/ice/ kernel/rcu/
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304211232.U03a7306-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/hwmon/adt7475.c:1471:36: error: passing 'const struct device *' to parameter of type 'struct device *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           ret = device_property_read_string(&client->dev, propname, &function);
-                                             ^~~~~~~~~~~~
-   include/linux/property.h:54:48: note: passing argument to parameter 'dev' here
-   int device_property_read_string(struct device *dev, const char *propname,
-                                                  ^
-   drivers/hwmon/adt7475.c:1497:36: error: passing 'const struct device *' to parameter of type 'struct device *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           ret = device_property_read_string(&client->dev, propname, &function);
-                                             ^~~~~~~~~~~~
-   include/linux/property.h:54:48: note: passing argument to parameter 'dev' here
-   int device_property_read_string(struct device *dev, const char *propname,
-                                                  ^
-   drivers/hwmon/adt7475.c:1559:37: error: passing 'const struct device *' to parameter of type 'struct device *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           int ret = device_property_read_u32(&client->dev, property,
-                                              ^~~~~~~~~~~~
-   include/linux/property.h:164:59: note: passing argument to parameter 'dev' here
-   static inline int device_property_read_u32(struct device *dev,
-                                                             ^
-   3 errors generated.
-
-
-vim +1471 drivers/hwmon/adt7475.c
-
-  1464	
-  1465	static int load_config3(const struct i2c_client *client, const char *propname)
-  1466	{
-  1467		const char *function;
-  1468		u8 config3;
-  1469		int ret;
-  1470	
-> 1471		ret = device_property_read_string(&client->dev, propname, &function);
-  1472		if (!ret) {
-  1473			ret = adt7475_read(REG_CONFIG3);
-  1474			if (ret < 0)
-  1475				return ret;
-  1476	
-  1477			config3 = ret & ~CONFIG3_SMBALERT;
-  1478			if (!strcmp("pwm2", function))
-  1479				;
-  1480			else if (!strcmp("smbalert#", function))
-  1481				config3 |= CONFIG3_SMBALERT;
-  1482			else
-  1483				return -EINVAL;
-  1484	
-  1485			return i2c_smbus_write_byte_data(client, REG_CONFIG3, config3);
-  1486		}
-  1487	
-  1488		return 0;
-  1489	}
-  1490	
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230416   gcc  
+arc                  randconfig-r043-20230417   gcc  
+arc                  randconfig-r043-20230419   gcc  
+arc                  randconfig-r043-20230420   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230416   clang
+arm                  randconfig-r046-20230417   gcc  
+arm                  randconfig-r046-20230419   gcc  
+arm                  randconfig-r046-20230420   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r041-20230416   clang
+hexagon              randconfig-r041-20230417   clang
+hexagon              randconfig-r041-20230419   clang
+hexagon              randconfig-r041-20230420   clang
+hexagon              randconfig-r045-20230416   clang
+hexagon              randconfig-r045-20230417   clang
+hexagon              randconfig-r045-20230419   clang
+hexagon              randconfig-r045-20230420   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230417   gcc  
+i386                 randconfig-a002-20230417   gcc  
+i386                 randconfig-a003-20230417   gcc  
+i386                 randconfig-a004-20230417   gcc  
+i386                 randconfig-a005-20230417   gcc  
+i386                 randconfig-a006-20230417   gcc  
+i386                 randconfig-a011-20230417   clang
+i386                 randconfig-a012-20230417   clang
+i386                 randconfig-a013-20230417   clang
+i386                 randconfig-a014-20230417   clang
+i386                 randconfig-a015-20230417   clang
+i386                 randconfig-a016-20230417   clang
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230416   gcc  
+riscv                randconfig-r042-20230417   clang
+riscv                randconfig-r042-20230419   clang
+riscv                randconfig-r042-20230420   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230416   gcc  
+s390                 randconfig-r044-20230417   clang
+s390                 randconfig-r044-20230419   clang
+s390                 randconfig-r044-20230420   gcc  
+sh                               allmodconfig   gcc  
+sparc                               defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230417   gcc  
+x86_64               randconfig-a002-20230417   gcc  
+x86_64               randconfig-a003-20230417   gcc  
+x86_64               randconfig-a004-20230417   gcc  
+x86_64               randconfig-a005-20230417   gcc  
+x86_64               randconfig-a006-20230417   gcc  
+x86_64               randconfig-a011-20230417   clang
+x86_64               randconfig-a012-20230417   clang
+x86_64               randconfig-a013-20230417   clang
+x86_64               randconfig-a014-20230417   clang
+x86_64               randconfig-a015-20230417   clang
+x86_64               randconfig-a016-20230417   clang
+x86_64                               rhel-8.3   gcc  
 
 -- 
 0-DAY CI Kernel Test Service
