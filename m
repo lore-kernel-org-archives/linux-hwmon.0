@@ -2,180 +2,147 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2233DC7618E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Apr 2023 08:36:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEE84C77B78
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Apr 2023 09:36:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbjDUIgN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 Apr 2023 04:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
+        id S230025AbjDUJg1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 Apr 2023 05:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjDUIgM (ORCPT
+        with ESMTP id S229938AbjDUJg0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:36:12 -0400
+        Fri, 21 Apr 2023 05:36:26 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092E25B8F
-        for <linux-hwmon@vger.kernel.org>; Fri, 21 Apr 2023 01:36:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6577D93CF;
+        Fri, 21 Apr 2023 02:36:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682066172; x=1713602172;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DvfZL3MJnZvE6FfbhnVVGw8l6i2dSeAyW2ynpRUqMLg=;
-  b=WOpg+IdKZHTLgp5zY16mz+xzrNeQhM9pzuLc1DulapQqD5rnPOFioPSB
-   YQq6mmivJR51CJybPZKerUg3APDmwX9gTBhooONQLrKqOwyOlAvxpwHDI
-   TfOfQYmes79bgQNtyiDynN4h4Z33mL3SQaWhh1EMOKkTidL21EMwOtWQD
-   8UgRL0k28FHeMRMJvnuMqjNNh3EKyUYRjxQ14IJbR1r7nKWy6KUvjZyR4
-   maaZrGyPz7pSA/Zo2p1xdtwIitBSIdPyWqkR5s8frtKFsFOFRQ+ZU67H7
-   tQG+qiIXdAys9FNEC9c3Y5k8nLdCjvrFEnHlyogBaMDdk4t1l7gpFG0W4
+  t=1682069785; x=1713605785;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ZdhPVeSYHPtv0zuACx4Eqg5I8pftb2XTKuKHkbl9AJ0=;
+  b=Yb3PXKOBfMh0IgF/yzrg1OGxLn8V/prPTa9Ih9i1BR7k9NCRYTpL9xhQ
+   jMsxEyuF3LTavZYyux3mBuXEgHYdMbzKEZu9DgVBZiTD3aRdLrPwSlx9p
+   wRx7vpIXFA/sM84Nc+7JWftdZOHtFNIqWZ3JF3Z1/w+BBkGnRIap2+AYi
+   3uWsNT5VgFcl4xixjZ5v+kRJHy2XsPhjH5DbvTZg1+5QpjwlJjkbPuK4+
+   LFsJPJlsR/zseqEkRbXEqwBh/7U1M6zOpOXDKGgYeVuhwMVZRQD9GjUGP
+   eq3qfT4FHoQmbOROh2ZeUM7WB3jLgMSCtX5kK8FOsINaS2NfTPpHcedWR
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="326273542"
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="326283980"
 X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="326273542"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 01:36:10 -0700
+   d="scan'208";a="326283980"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 02:36:24 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="694901093"
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="692216444"
 X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="694901093"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Apr 2023 01:36:09 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ppmFU-000gSO-1Q;
-        Fri, 21 Apr 2023 08:36:08 +0000
-Date:   Fri, 21 Apr 2023 16:35:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 5e0ca524ad60e46b3834ec5401f8a50b5b18fc39
-Message-ID: <64424ac6.Fzu6PbaZsmXp5Nvg%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="692216444"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 21 Apr 2023 02:36:21 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ppnBj-0035cy-3C;
+        Fri, 21 Apr 2023 12:36:19 +0300
+Date:   Fri, 21 Apr 2023 12:36:19 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dinh Nguyen <dinh.nguyen@linux.intel.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        dinguyen@kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, jdelvare@suse.com
+Subject: Re: [PATCH 3/5] hwmon: (socfpga) Add hardware monitoring support on
+ SoCFPGA platforms
+Message-ID: <ZEJZE5bxyXsrAZPJ@smile.fi.intel.com>
+References: <20230410153314.27127-1-dinh.nguyen@linux.intel.com>
+ <20230410153314.27127-3-dinh.nguyen@linux.intel.com>
+ <09730359-8731-e21e-3335-bf60ba7f1280@roeck-us.net>
+ <a3e966f8-8e9d-7081-1665-9d2e87acb310@linux.intel.com>
+ <8d158880-1e6a-5fdd-dae7-a7647794eb60@roeck-us.net>
+ <a1a34c32-dbd4-7a77-ab7e-5e34af85900f@linux.intel.com>
+ <ZD/UsuzhZmK3AFJn@smile.fi.intel.com>
+ <f6e4a78d-0199-3135-f85d-800457a731b0@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f6e4a78d-0199-3135-f85d-800457a731b0@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 5e0ca524ad60e46b3834ec5401f8a50b5b18fc39  hwmon: (pmbus/fsp-3y) Fix functionality bitmask in FSP-3Y YM-2151E
+On Thu, Apr 20, 2023 at 09:46:20AM -0500, Dinh Nguyen wrote:
+> On 4/19/2023 6:46 AM, Andy Shevchenko wrote:
+> > On Tue, Apr 18, 2023 at 12:29:40PM -0500, Dinh Nguyen wrote:
+> > > On 4/17/2023 4:51 PM, Guenter Roeck wrote:
+> > > > On 4/17/23 13:55, Dinh Nguyen wrote:
 
-elapsed time: 821m
+...
 
-configs tested: 105
-configs skipped: 4
+> > > > ... and this contradict each other. If bit 31 indicates an error,
+> > > > this can not be a signed 32-bit value.
+> > > > 
+> > > You're right! I've re-read the spec and should have the the code look for
+> > > the specific error values:
+> > > 
+> > > 0x80000000 - inactive
+> > > 0x80000001 - old value
+> > > 0x80000002 - invalid channel
+> > > 0x80000003 -  corrupted.
+> > No, they are not hex. Probably you need to define an error space with it, but
+> > at least just use signed _decimal_ values.
+> > 
+> > Instead of BIT(31) this should go as
+> > 
+> > #define ..._ERR_BASE   INT_MIN // or equivalent if the type is not int
+> > #define ..._ERR_MAX ... // or whatever name is better
+> > 
+> > Then in your code
+> > 
+> > 	if (value >= _ERR_MAX)
+> > 		return 0;
+> > 
+> > 	err = _ERR_MAX - value;
+> > 	switch (err) {
+> > 		...
+> > 	}
+> > 
+> > P.S. I asked during internal review if the values are bit fielded when errors.
+> > AFAIU that time they are, now it seems different.
+> 
+> Can I ask what's wrong with this simple implementation?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Technically, nothing, but from understanding point of view it would be better
+to have explicit ranges of error number space vs. actual value space.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r005-20230417   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r006-20230416   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230416   gcc  
-arc                  randconfig-r043-20230417   gcc  
-arc                  randconfig-r043-20230419   gcc  
-arc                  randconfig-r043-20230420   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230417   gcc  
-arm                  randconfig-r046-20230419   gcc  
-arm                  randconfig-r046-20230420   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r003-20230417   gcc  
-hexagon              randconfig-r041-20230420   clang
-hexagon              randconfig-r045-20230420   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230417   gcc  
-i386                 randconfig-a002-20230417   gcc  
-i386                 randconfig-a003-20230417   gcc  
-i386                 randconfig-a004-20230417   gcc  
-i386                 randconfig-a005-20230417   gcc  
-i386                 randconfig-a006-20230417   gcc  
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r002-20230417   gcc  
-ia64         buildonly-randconfig-r005-20230416   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r005-20230416   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r006-20230418   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r005-20230418   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r006-20230417   gcc  
-microblaze   buildonly-randconfig-r003-20230418   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r006-20230416   gcc  
-openrisc     buildonly-randconfig-r006-20230417   gcc  
-parisc       buildonly-randconfig-r004-20230416   gcc  
-parisc       buildonly-randconfig-r004-20230417   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r001-20230416   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230416   gcc  
-riscv                randconfig-r042-20230420   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r005-20230417   gcc  
-s390                 randconfig-r044-20230416   gcc  
-s390                 randconfig-r044-20230420   gcc  
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r003-20230416   gcc  
-sparc        buildonly-randconfig-r001-20230416   gcc  
-sparc        buildonly-randconfig-r002-20230418   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r002-20230417   gcc  
-sparc                randconfig-r003-20230416   gcc  
-sparc64      buildonly-randconfig-r002-20230416   gcc  
-sparc64              randconfig-r004-20230417   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230417   gcc  
-x86_64               randconfig-a002-20230417   gcc  
-x86_64               randconfig-a003-20230417   gcc  
-x86_64               randconfig-a004-20230417   gcc  
-x86_64               randconfig-a005-20230417   gcc  
-x86_64               randconfig-a006-20230417   gcc  
-x86_64               randconfig-a011-20230417   clang
-x86_64               randconfig-a012-20230417   clang
-x86_64               randconfig-a013-20230417   clang
-x86_64               randconfig-a014-20230417   clang
-x86_64               randconfig-a015-20230417   clang
-x86_64               randconfig-a016-20230417   clang
-x86_64               randconfig-k001-20230417   clang
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r001-20230418   gcc  
+The idea in the firmware of that device seems to me similar to what we have in
+the Linux kernel. Note, it may be not _so_ explicitly, but the error number
+space is limited by a PAGE_SIZE. All the same may be applied here.
+
+> static int socfpga_hwmon_err_to_errno(struct socfpga_hwmon_priv *priv)
+> {
+>         int value = priv->temperature.value;
+> 
+>         switch (value) {
+>         case ETEMP_NOT_PRESENT:
+>                 return -ENOENT;
+>         case ETEMP_CORRUPT:
+>         case ETEMP_NOT_INITIALIZED:
+>                 return -ENODATA;
+>         case ETEMP_BUSY:
+>                 return -EBUSY;
+>         case ETEMP_INACTIVE:
+>         case ETEMP_TIMEOUT:
+>         case ETEMP_TOO_OLD:
+>                 return -EAGAIN;
+>         default:
+>                 /* No error */
+>                 return 0;
+>         }
+> }
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+With Best Regards,
+Andy Shevchenko
+
+
