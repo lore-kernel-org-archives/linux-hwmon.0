@@ -2,147 +2,93 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEE84C77B78
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Apr 2023 09:36:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 489FEC77B75
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Apr 2023 10:45:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjDUJg1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 Apr 2023 05:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
+        id S229938AbjDUKpl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 Apr 2023 06:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjDUJg0 (ORCPT
+        with ESMTP id S230102AbjDUKpj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:36:26 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6577D93CF;
-        Fri, 21 Apr 2023 02:36:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682069785; x=1713605785;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ZdhPVeSYHPtv0zuACx4Eqg5I8pftb2XTKuKHkbl9AJ0=;
-  b=Yb3PXKOBfMh0IgF/yzrg1OGxLn8V/prPTa9Ih9i1BR7k9NCRYTpL9xhQ
-   jMsxEyuF3LTavZYyux3mBuXEgHYdMbzKEZu9DgVBZiTD3aRdLrPwSlx9p
-   wRx7vpIXFA/sM84Nc+7JWftdZOHtFNIqWZ3JF3Z1/w+BBkGnRIap2+AYi
-   3uWsNT5VgFcl4xixjZ5v+kRJHy2XsPhjH5DbvTZg1+5QpjwlJjkbPuK4+
-   LFsJPJlsR/zseqEkRbXEqwBh/7U1M6zOpOXDKGgYeVuhwMVZRQD9GjUGP
-   eq3qfT4FHoQmbOROh2ZeUM7WB3jLgMSCtX5kK8FOsINaS2NfTPpHcedWR
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="326283980"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="326283980"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 02:36:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="692216444"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="692216444"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 21 Apr 2023 02:36:21 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ppnBj-0035cy-3C;
-        Fri, 21 Apr 2023 12:36:19 +0300
-Date:   Fri, 21 Apr 2023 12:36:19 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dinh Nguyen <dinh.nguyen@linux.intel.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-        dinguyen@kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, jdelvare@suse.com
-Subject: Re: [PATCH 3/5] hwmon: (socfpga) Add hardware monitoring support on
- SoCFPGA platforms
-Message-ID: <ZEJZE5bxyXsrAZPJ@smile.fi.intel.com>
-References: <20230410153314.27127-1-dinh.nguyen@linux.intel.com>
- <20230410153314.27127-3-dinh.nguyen@linux.intel.com>
- <09730359-8731-e21e-3335-bf60ba7f1280@roeck-us.net>
- <a3e966f8-8e9d-7081-1665-9d2e87acb310@linux.intel.com>
- <8d158880-1e6a-5fdd-dae7-a7647794eb60@roeck-us.net>
- <a1a34c32-dbd4-7a77-ab7e-5e34af85900f@linux.intel.com>
- <ZD/UsuzhZmK3AFJn@smile.fi.intel.com>
- <f6e4a78d-0199-3135-f85d-800457a731b0@linux.intel.com>
+        Fri, 21 Apr 2023 06:45:39 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5A683D7
+        for <linux-hwmon@vger.kernel.org>; Fri, 21 Apr 2023 03:45:38 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f177cb2c6cso10467825e9.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 21 Apr 2023 03:45:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682073937; x=1684665937;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XGLmrMK5hsFt7MA5b3W8QYIlMFhbrcD7TuHUS1xnhIQ=;
+        b=X8DROEXFxyZ07cP94UtuVZq8wSUIvv+PnECEGV7tBz5+h5ovQDIJi9bYTAF+LVBXRq
+         WeXh81F961KSQ7tzFVVnRHl5RwCCS+ADpY2mY/TG+TOA/CRLSV6AAIH6eUy+TNqp+ugW
+         gDNAOPbtUDimFdW4YpprBPOH3HzX6foxPX8VjZx6bapCCqGayuEJYhFT9Z4cfG3o+BAi
+         GkctPgswnJ+gq/LyxVjTWaDR1BvVsjSx1RSDUZXMpFON4f++ad+nVc+1A67U6n12mzKH
+         jYegIkhJFjuVY5zzk88oJsVNpa7iW5dCa+3HV6KdxcSKtmVSiHARRJkpPJ8nxK3E84OT
+         0/tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682073937; x=1684665937;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XGLmrMK5hsFt7MA5b3W8QYIlMFhbrcD7TuHUS1xnhIQ=;
+        b=AqEKvlUXXfywk7CaXaiirxoPLmw41tDDhNPPuU0WffyCQLE/p+mfCOeBNLzUEjyl9D
+         bm8cJ7rPixr4yIbKU+IiQ9Ssvl2rxN8wB7DGfj0bwOZqhxLAJLqhhha5wPomc8QqX9XL
+         IfghcRj9o7ILJlekY02cU+m4gpF0S88AarhMVAAqzI4dLDO3XlpKth17eT5PX+5Qp6UB
+         zpOnl0IY83YbAYtu//2/1GUXUzlU6GIgzVCce0iOU2Q88MIKXhowkQniiRDQyn6JCXCO
+         ZW+9cPsL5+C4IN6ejMwsDkFGtekgYFiN3oelnouvovLYMRVwEO48AaMl8ZJrnKqjQNGl
+         JvDA==
+X-Gm-Message-State: AAQBX9eNwll7IqUhYr23zf41r/JF7TwoqVsq5b/Ij8q8QjZJA7r4AYYW
+        1zX03NfUciZRKRlqnz3suSPIDg==
+X-Google-Smtp-Source: AKy350b4srZl/XudFA4rBIoycHDM7OBO5cvvyp95edDz5txCJsTlxFz5U5Qi3sX/aSnb6BIJGo908A==
+X-Received: by 2002:a05:600c:244:b0:3f1:954f:82e3 with SMTP id 4-20020a05600c024400b003f1954f82e3mr516147wmj.24.1682073937022;
+        Fri, 21 Apr 2023 03:45:37 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003f191c9c4b0sm1488547wmc.11.2023.04.21.03.45.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 03:45:36 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 13:45:34 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     frank@crawford.emu.id.au
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [bug report] hwmon: (it87) Test for error in it87_update_device
+Message-ID: <112b38d0-54b5-435d-9ce6-250b8b0e78fb@kili.mountain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f6e4a78d-0199-3135-f85d-800457a731b0@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 09:46:20AM -0500, Dinh Nguyen wrote:
-> On 4/19/2023 6:46 AM, Andy Shevchenko wrote:
-> > On Tue, Apr 18, 2023 at 12:29:40PM -0500, Dinh Nguyen wrote:
-> > > On 4/17/2023 4:51 PM, Guenter Roeck wrote:
-> > > > On 4/17/23 13:55, Dinh Nguyen wrote:
+Hello Frank Crawford,
 
-...
+The patch 27302e7a46f5: "hwmon: (it87) Test for error in
+it87_update_device" from Apr 16, 2023, leads to the following Smatch
+static checker warning:
 
-> > > > ... and this contradict each other. If bit 31 indicates an error,
-> > > > this can not be a signed 32-bit value.
-> > > > 
-> > > You're right! I've re-read the spec and should have the the code look for
-> > > the specific error values:
-> > > 
-> > > 0x80000000 - inactive
-> > > 0x80000001 - old value
-> > > 0x80000002 - invalid channel
-> > > 0x80000003 -  corrupted.
-> > No, they are not hex. Probably you need to define an error space with it, but
-> > at least just use signed _decimal_ values.
-> > 
-> > Instead of BIT(31) this should go as
-> > 
-> > #define ..._ERR_BASE   INT_MIN // or equivalent if the type is not int
-> > #define ..._ERR_MAX ... // or whatever name is better
-> > 
-> > Then in your code
-> > 
-> > 	if (value >= _ERR_MAX)
-> > 		return 0;
-> > 
-> > 	err = _ERR_MAX - value;
-> > 	switch (err) {
-> > 		...
-> > 	}
-> > 
-> > P.S. I asked during internal review if the values are bit fielded when errors.
-> > AFAIU that time they are, now it seems different.
-> 
-> Can I ask what's wrong with this simple implementation?
+	drivers/hwmon/it87.c:1147 show_temp_type()
+	error: 'data' dereferencing possible ERR_PTR()
 
-Technically, nothing, but from understanding point of view it would be better
-to have explicit ranges of error number space vs. actual value space.
+drivers/hwmon/it87.c
+    1141 static ssize_t show_temp_type(struct device *dev, struct device_attribute *attr,
+    1142                               char *buf)
+    1143 {
+    1144         struct sensor_device_attribute *sensor_attr = to_sensor_dev_attr(attr);
+    1145         int nr = sensor_attr->index;
+    1146         struct it87_data *data = it87_update_device(dev);
+--> 1147         u8 reg = data->sensor;            /* In case value is updated while used */
+                          ^^^^^^^^^^^^
+    1148         u8 extra = data->extra;
+                            ^^^^^^^^^^^
 
-The idea in the firmware of that device seems to me similar to what we have in
-the Linux kernel. Note, it may be not _so_ explicitly, but the error number
-space is limited by a PAGE_SIZE. All the same may be applied here.
+    1149 
+    1150         if (IS_ERR(data))
 
-> static int socfpga_hwmon_err_to_errno(struct socfpga_hwmon_priv *priv)
-> {
->         int value = priv->temperature.value;
-> 
->         switch (value) {
->         case ETEMP_NOT_PRESENT:
->                 return -ENOENT;
->         case ETEMP_CORRUPT:
->         case ETEMP_NOT_INITIALIZED:
->                 return -ENODATA;
->         case ETEMP_BUSY:
->                 return -EBUSY;
->         case ETEMP_INACTIVE:
->         case ETEMP_TIMEOUT:
->         case ETEMP_TOO_OLD:
->                 return -EAGAIN;
->         default:
->                 /* No error */
->                 return 0;
->         }
-> }
+This new check happens too late.
 
--- 
-With Best Regards,
-Andy Shevchenko
+    1151                 return PTR_ERR(data);
+    1152 
 
-
+regards,
+dan carpenter
