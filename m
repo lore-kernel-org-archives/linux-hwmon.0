@@ -2,44 +2,44 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BA43C77B7E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Apr 2023 09:54:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 650C9C77B7E
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Apr 2023 09:54:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbjDXJyV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Apr 2023 05:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        id S231611AbjDXJye (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Apr 2023 05:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbjDXJyT (ORCPT
+        with ESMTP id S231643AbjDXJyb (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Apr 2023 05:54:19 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E7B35A8;
-        Mon, 24 Apr 2023 02:54:10 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33O9rkYx022437;
-        Mon, 24 Apr 2023 04:53:46 -0500
+        Mon, 24 Apr 2023 05:54:31 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABF130C4;
+        Mon, 24 Apr 2023 02:54:13 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33O9rdkP095206;
+        Mon, 24 Apr 2023 04:53:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682330026;
-        bh=1GIZKi464DswWpYYI8PkLUvrxRe5Lbt01DrvEsUrNoA=;
+        s=ti-com-17Q1; t=1682330019;
+        bh=Cl5M1/Sa57+bU+iBeDHEnYz6kWjr3RV+s1L4CQPjc5I=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=CC6bZUZVMPjPTjCCtX/uNomQ6oYrTjWnfGUltVHBe7N9Ljd28csKgo2Qycfkn2YC8
-         vPLs7PAXBZG1BRXcNUQqh1cKWGsCp1JpEt6KWEkEsoCuwnujEslIhHT/txztRRLkjG
-         fsJe0J2LkXy1VOZwYsWGnXSZJ08qC3BjQBPgNDoA=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33O9rk5l015437
+        b=H0ZufswqQ0ESkDx+D4oAQmUEbs0c23on40WyP47N7/ygxt97SuXhJzHB2AihLmHss
+         ckIHR/DmVzUY9EQ+ztyqCYnQPzHlwLN3JcEx8JhapekEH+WBYLpLk26NiH0HQHB5JW
+         vsHObMrHYQuECm9QTw/1jJgKRk0C/NufdbfvW5Kc=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33O9rdJp128495
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 24 Apr 2023 04:53:46 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 24 Apr 2023 04:53:39 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
- Apr 2023 04:53:46 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2023 04:53:39 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 24 Apr 2023 04:53:46 -0500
+ Frontend Transport; Mon, 24 Apr 2023 04:53:39 -0500
 Received: from ula0497641.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33O9rV9t009313;
-        Mon, 24 Apr 2023 04:53:43 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33O9rV9r009313;
+        Mon, 24 Apr 2023 04:53:35 -0500
 From:   Neha Malcom Francis <n-francis@ti.com>
 To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -47,9 +47,9 @@ To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>
 CC:     <n-francis@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
         <u-kumar1@ti.com>, <kristo@kernel.org>
-Subject: [PATCH v3 3/3] arm64: dts: ti: k3-j7200: Add ESM support
-Date:   Mon, 24 Apr 2023 15:23:31 +0530
-Message-ID: <20230424095331.45351-4-n-francis@ti.com>
+Subject: [PATCH v3 1/3] dt-bindings: misc: esm: Add ESM support for TI K3 devices
+Date:   Mon, 24 Apr 2023 15:23:29 +0530
+Message-ID: <20230424095331.45351-2-n-francis@ti.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230424095331.45351-1-n-francis@ti.com>
 References: <20230424095331.45351-1-n-francis@ti.com>
@@ -61,41 +61,73 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add address entry mapping ESM on J7200.
+Document the binding for TI K3 ESM (Error Signaling Module) block.
 
 Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 6 ++++++
- arch/arm64/boot/dts/ti/k3-j7200.dtsi      | 1 +
- 2 files changed, 7 insertions(+)
+ .../bindings/hwmon/ti,j721e-esm.yaml          | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ti,j721e-esm.yaml
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-index ef352e32f19d..89f816f5e53d 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-@@ -1010,4 +1010,10 @@ main_r5fss0_core1: r5f@5d00000 {
- 			ti,loczrama = <1>;
- 		};
- 	};
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,j721e-esm.yaml b/Documentation/devicetree/bindings/hwmon/ti,j721e-esm.yaml
+new file mode 100644
+index 000000000000..c5eb7f46cc46
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/ti,j721e-esm.yaml
+@@ -0,0 +1,53 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2022 Texas Instruments Incorporated
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/ti,j721e-esm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	main_esm: esm@700000 {
-+		compatible = "ti,j721e-esm";
-+		reg = <0x0 0x700000 0x0 0x1000>;
-+		ti,esm-pins = <656>, <657>;
-+	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200.dtsi b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-index bbe380c72a7e..4998eb4fbe75 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-@@ -128,6 +128,7 @@ cbass_main: bus@100000 {
- 		#size-cells = <2>;
- 		ranges = <0x00 0x00100000 0x00 0x00100000 0x00 0x00020000>, /* ctrl mmr */
- 			 <0x00 0x00600000 0x00 0x00600000 0x00 0x00031100>, /* GPIO */
-+			 <0x00 0x00700000 0x00 0x00700000 0x00 0x00001000>, /* ESM */
- 			 <0x00 0x00a40000 0x00 0x00a40000 0x00 0x00000800>, /* timesync router */
- 			 <0x00 0x01000000 0x00 0x01000000 0x00 0x0d000000>, /* Most peripherals */
- 			 <0x00 0x30000000 0x00 0x30000000 0x00 0x0c400000>, /* MAIN NAVSS */
++title: Texas Instruments K3 ESM
++
++maintainers:
++  - Neha Malcom Francis <n-francis@ti.com>
++
++description:
++  The ESM (Error Signaling Module) is an IP block on TI K3 devices
++  that allows handling of safety events somewhat similar to what interrupt
++  controller would do. The safety signals have their separate paths within
++  the SoC, and they are handled by the ESM, which routes them to the proper
++  destination, which can be system reset, interrupt controller, etc. In the
++  simplest configuration the signals are just routed to reset the SoC.
++
++properties:
++  compatible:
++    const: ti,j721e-esm
++
++  reg:
++    maxItems: 1
++
++  ti,esm-pins:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    description:
++      integer array of ESM interrupt pins to route to external event pin
++      which can be used to reset the SoC.
++    minItems: 1
++    maxItems: 255
++
++additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - ti,esm-pins
++
++examples:
++  - |
++    bus {
++        #address-cells = <2>;
++        #size-cells = <2>;
++        esm@700000 {
++            compatible = "ti,j721e-esm";
++            reg = <0x0 0x700000 0x0 0x1000>;
++            ti,esm-pins = <344>, <345>;
++        };
++    };
 -- 
 2.34.1
 
