@@ -2,100 +2,111 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 002FEC7EE20
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Apr 2023 10:50:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC4AAC77B78
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Apr 2023 13:28:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbjDXKuy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Apr 2023 06:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
+        id S232321AbjDXN2r (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Apr 2023 09:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbjDXKuu (ORCPT
+        with ESMTP id S232225AbjDXN2n (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Apr 2023 06:50:50 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F8435A2;
-        Mon, 24 Apr 2023 03:50:47 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33OAoROo106984;
-        Mon, 24 Apr 2023 05:50:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682333427;
-        bh=1GIZKi464DswWpYYI8PkLUvrxRe5Lbt01DrvEsUrNoA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=oIlDSvPiw+yJCBqGRoptOkevkOjqTY8i6GXoR8lCsQI9K0cLnUrlYcxtDxoez3flH
-         7Hsqr2ScRHuuy8PpxpLYrFcGZ0u5KPG2pSDoxOkuz5Twyco+sMwn1hP8P1XeWkTnPf
-         ngbnhxb9oUVWhBrOHYE9p0DZAp7Rhyv66Du23OFI=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33OAoRuR027592
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 24 Apr 2023 05:50:27 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 24
- Apr 2023 05:50:26 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 24 Apr 2023 05:50:26 -0500
-Received: from ula0497641.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33OAoBPG004376;
-        Mon, 24 Apr 2023 05:50:23 -0500
-From:   Neha Malcom Francis <n-francis@ti.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <jdelvare@suse.com>,
-        <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>
-CC:     <n-francis@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
-        <u-kumar1@ti.com>, <kristo@kernel.org>
-Subject: [PATCH RESEND v3 3/3] arm64: dts: ti: k3-j7200: Add ESM support
-Date:   Mon, 24 Apr 2023 16:20:11 +0530
-Message-ID: <20230424105011.70674-4-n-francis@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230424105011.70674-1-n-francis@ti.com>
-References: <20230424105011.70674-1-n-francis@ti.com>
+        Mon, 24 Apr 2023 09:28:43 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D656E8A;
+        Mon, 24 Apr 2023 06:28:28 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-38c35975545so3297060b6e.1;
+        Mon, 24 Apr 2023 06:28:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682342893; x=1684934893;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gY8hrXNwbYgQ5hLI5h332CojeiGsOYICAo5dCroy2lQ=;
+        b=LVSupP1936OxcO0WiqfFbbw9lk4g8gntNmL/STtFIaMv+YS5Xs8V5u/VXlWudNwyas
+         5l9mV282gHs3Rpt0+R/azx41opR64NIlgVIqaNNgjqJ0Dbz+c9F8BYPXAGUW12lDuAyp
+         sTc+7bW6RxMCRB4seLVy+HkU1uTIW9Hbp6jgO82UoxP86ntZxuSG27wz0NkPkTAD3eLs
+         EePWWIrFoJry62LFqNRi43WuCQFr2Lz/Kn/I7qajWf0yfxEYAstXLVdDYeXUTHQNiIPs
+         dL8EpDPOpUevm12kDu9PGAQC1/YHiXNo7uFtYfHYf7UWgv8xuVGJM+GAqOH946svG9Rm
+         M5+w==
+X-Gm-Message-State: AAQBX9dySGSPdKacXm5rvqwnBdrW2GRXQpFSgFMF7rK+qzhe+JlVHgTi
+        S57dvLVNrcB0OPtoF0WPWw==
+X-Google-Smtp-Source: AKy350aHyMng2QoKCc18TU/ZFGYuy+IOUzcAsszb+A6bsy1fPX+RPEaIvQ8jI9zBld6hKtxYuqrW7g==
+X-Received: by 2002:a05:6808:17:b0:38e:8e21:d042 with SMTP id u23-20020a056808001700b0038e8e21d042mr5028866oic.58.1682342891865;
+        Mon, 24 Apr 2023 06:28:11 -0700 (PDT)
+Received: from robh_at_kernel.org ([2605:ef80:80e7:4387:ec9f:155:c2d2:6e82])
+        by smtp.gmail.com with ESMTPSA id i25-20020a056808031900b0038bf8c6151fsm4551118oie.6.2023.04.24.06.28.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 06:28:11 -0700 (PDT)
+Received: (nullmailer pid 2494965 invoked by uid 1000);
+        Mon, 24 Apr 2023 13:28:08 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+From:   Rob Herring <robh@kernel.org>
+To:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+Cc:     patrick@stwcx.xyz,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230424101352.28117-2-Delphine_CC_Chiu@Wiwynn.com>
+References: <20230424101352.28117-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20230424101352.28117-2-Delphine_CC_Chiu@Wiwynn.com>
+Message-Id: <168234106840.2461053.15248983062211825110.robh@kernel.org>
+Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
+ bindings
+Date:   Mon, 24 Apr 2023 08:28:08 -0500
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add address entry mapping ESM on J7200.
 
-Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
----
- arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 6 ++++++
- arch/arm64/boot/dts/ti/k3-j7200.dtsi      | 1 +
- 2 files changed, 7 insertions(+)
+On Mon, 24 Apr 2023 18:13:49 +0800, Delphine CC Chiu wrote:
+> Add a device tree bindings for ltc4286 driver.
+> 
+> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+> ---
+>  .../bindings/hwmon/lltc,ltc4286.yaml          | 47 +++++++++++++++++++
+>  MAINTAINERS                                   |  9 ++++
+>  2 files changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
+> 
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-index ef352e32f19d..89f816f5e53d 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-@@ -1010,4 +1010,10 @@ main_r5fss0_core1: r5f@5d00000 {
- 			ti,loczrama = <1>;
- 		};
- 	};
-+
-+	main_esm: esm@700000 {
-+		compatible = "ti,j721e-esm";
-+		reg = <0x0 0x700000 0x0 0x1000>;
-+		ti,esm-pins = <656>, <657>;
-+	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200.dtsi b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-index bbe380c72a7e..4998eb4fbe75 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-@@ -128,6 +128,7 @@ cbass_main: bus@100000 {
- 		#size-cells = <2>;
- 		ranges = <0x00 0x00100000 0x00 0x00100000 0x00 0x00020000>, /* ctrl mmr */
- 			 <0x00 0x00600000 0x00 0x00600000 0x00 0x00031100>, /* GPIO */
-+			 <0x00 0x00700000 0x00 0x00700000 0x00 0x00001000>, /* ESM */
- 			 <0x00 0x00a40000 0x00 0x00a40000 0x00 0x00000800>, /* timesync router */
- 			 <0x00 0x01000000 0x00 0x01000000 0x00 0x0d000000>, /* Most peripherals */
- 			 <0x00 0x30000000 0x00 0x30000000 0x00 0x0c400000>, /* MAIN NAVSS */
--- 
-2.34.1
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/hwmon/lltc,ltc4286.example.dts:22.17-30: Warning (reg_format): /example-0/i2c/ltc4286@40:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
+Documentation/devicetree/bindings/hwmon/lltc,ltc4286.example.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/hwmon/lltc,ltc4286.example.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/hwmon/lltc,ltc4286.example.dtb: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/hwmon/lltc,ltc4286.example.dts:18.13-26.11: Warning (i2c_bus_bridge): /example-0/i2c: incorrect #address-cells for I2C bus
+Documentation/devicetree/bindings/hwmon/lltc,ltc4286.example.dts:18.13-26.11: Warning (i2c_bus_bridge): /example-0/i2c: incorrect #size-cells for I2C bus
+Documentation/devicetree/bindings/hwmon/lltc,ltc4286.example.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/hwmon/lltc,ltc4286.example.dtb: Warning (i2c_bus_reg): Failed prerequisite 'i2c_bus_bridge'
+Documentation/devicetree/bindings/hwmon/lltc,ltc4286.example.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/hwmon/lltc,ltc4286.example.dts:20.24-25.15: Warning (avoid_default_addr_size): /example-0/i2c/ltc4286@40: Relying on default #address-cells value
+Documentation/devicetree/bindings/hwmon/lltc,ltc4286.example.dts:20.24-25.15: Warning (avoid_default_addr_size): /example-0/i2c/ltc4286@40: Relying on default #size-cells value
+Documentation/devicetree/bindings/hwmon/lltc,ltc4286.example.dtb: Warning (unique_unit_address_if_enabled): Failed prerequisite 'avoid_default_addr_size'
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230424101352.28117-2-Delphine_CC_Chiu@Wiwynn.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
