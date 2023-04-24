@@ -2,182 +2,183 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDC70C7618E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Apr 2023 03:38:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C69CEC7618E
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Apr 2023 09:18:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbjDXDiu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 23 Apr 2023 23:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
+        id S231236AbjDXJSe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Apr 2023 05:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjDXDin (ORCPT
+        with ESMTP id S230499AbjDXJSd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 23 Apr 2023 23:38:43 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95D6271F
-        for <linux-hwmon@vger.kernel.org>; Sun, 23 Apr 2023 20:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682307521; x=1713843521;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=D4sttiWcFzZtOg7ZwoOEf3Yac5YSqS6PDywLZRVoOok=;
-  b=McvtJQ4Ink/heMdLp6fAn3EvqR0dIu5IOk1OSWZP9ZkCWzPdTaNJURzf
-   nM1YD7zwbwFY+OhQ4NqaO6ig3ZkbB+7+Ao+Xgpde2yt0NUPYxKYPBv+xh
-   U/FH0whpkEvPibKGhBuB1IPobIXvzYtiVn2paGeUycn9d72yRQ5H2ROEm
-   aqQMTHLxqXhi+5XW+AsVSLWM+tfcABL6gLhZWe9WNHzGU/BSdVYds3Icm
-   lTsPd8zuzjdbGZGw9txvVXwCPd/jlDRpK8ME0UBC5Cnld9I7wFTlLDZGw
-   1xKoDTeiXYsxQ/3fXiXbcChKrBMpLBb9/8Sjw1H9pVjAscV/k1SUiqC0j
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="348263029"
-X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="348263029"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 20:38:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="692920017"
-X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="692920017"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 23 Apr 2023 20:38:40 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pqn2F-000iFz-1A;
-        Mon, 24 Apr 2023 03:38:39 +0000
-Date:   Mon, 24 Apr 2023 11:38:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 1c19ac768b8eeb0304c4ed7db66c2bb89c6ad226
-Message-ID: <6445f9b9.03qLWghoqDS+Vj2A%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 24 Apr 2023 05:18:33 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5DEE4B
+        for <linux-hwmon@vger.kernel.org>; Mon, 24 Apr 2023 02:18:31 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f086770a50so27114955e9.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 24 Apr 2023 02:18:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1682327910; x=1684919910;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1GKb2MfFHqAxRiWVMxosJOA3T0vRRUpNHRuZO4/Hffw=;
+        b=S6zdTQg3wxGbgDEGRPfw8cxHmqLs0+/2um6Euw0O8amsm8UP/LLESZeB+OWVwDrYj0
+         E6IaigWqifPuEqkVEg324o9AK0vH1UPRbMpFoNip37c08I+jbTSu7r7PW+FnosSN+Iba
+         YbP6bRPs2B7NMokSd6vENMKHDnyYaip7ufuJKyhMejayoKoWwzUUGAbzS3RI5dr5ljom
+         d/UYPe5HjNIIYrHIr58pAFYArrByMnP6jO+w5G+pIetSNkg681Ke/kTol4tLNfgBsSxJ
+         U1XTNWCep9QBcwrxEoBfEFzprBigBxh+DwvluZV1BEQPqf5Ecs8oGtADgucR6SLlT6tz
+         9iPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682327910; x=1684919910;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1GKb2MfFHqAxRiWVMxosJOA3T0vRRUpNHRuZO4/Hffw=;
+        b=NraLipyQDBk/agN0Y88VO6eFINK1t6AHCu4kOCvmAe50au3+v5kevguTbxTio06R+S
+         J/GYQm8UKn2TaY55x/SHLpwubk3D/5uTFnufo3QUNB21DZymXQQCiYKEeAiUlcwDEMX/
+         M/fW4SSdecwErODB/4mZb/xnbZhCAPRYq25zmm3BQDXQNCBjMkol+TQ6zXA6LUlHkofc
+         4fdPsAqf8qXaTDv1tPO0H4NJxP1bxDaYvmaNqZ7D4nvbr/zXrfmqiHvjDTFdV7Xnkgx1
+         8mDk8I0KlNB6NxBJdekQP3RJjCaTSjNVxj7+C1CRCT1/BEhBI4CDuMCkYUzYPK+TKzMJ
+         40Gg==
+X-Gm-Message-State: AAQBX9fnLUGZEfpskYHbEgyGNKzXB92D0utMzzpLdDrFoPL9QP8Up3rL
+        16O8sQSGCzcMc/68MXxAAQAmlYmcU9uYEbDnf3s=
+X-Google-Smtp-Source: AKy350YPeUoY+IEjaaF2haqXti0vS0NgSAVN/8bb/anHZSftdw3PG/29tzDzaK4hXU3je9qmwqhOkg==
+X-Received: by 2002:a05:600c:22da:b0:3f1:79b3:a594 with SMTP id 26-20020a05600c22da00b003f179b3a594mr7699418wmg.3.1682327910421;
+        Mon, 24 Apr 2023 02:18:30 -0700 (PDT)
+Received: from [192.168.29.232] ([49.37.170.173])
+        by smtp.gmail.com with ESMTPSA id k13-20020a5d6e8d000000b002fae2a08089sm10421597wrz.70.2023.04.24.02.18.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 02:18:30 -0700 (PDT)
+Message-ID: <c8d1b5db-318e-3401-0834-b89769831eca@9elements.com>
+Date:   Mon, 24 Apr 2023 14:48:22 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add max6639
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230420111759.2687001-1-Naresh.Solanki@9elements.com>
+ <76e57634-75dd-01e8-9c56-36ed7de17812@linaro.org>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <76e57634-75dd-01e8-9c56-36ed7de17812@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 1c19ac768b8eeb0304c4ed7db66c2bb89c6ad226  hwmon: lochnagar: Remove the unneeded include <linux/i2c.h>
+Hi Krzysztof,
 
-elapsed time: 722m
 
-configs tested: 107
-configs skipped: 5
+On 21-04-2023 01:07 pm, Krzysztof Kozlowski wrote:
+> On 20/04/2023 13:17, Naresh Solanki wrote:
+>> From: Marcello Sylvester Bauer <sylv@sylv.io>
+>>
+>> Add Devicetree binding documentation for Maxim MAX6639 temperature
+>> monitor with PWM fan-speed controller.
+>>
+>> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>> ...
+> 
+> Wrong syntax. '...' do not mean anything, it's ---
+Ack
+> 
+>> Changes in V2:
+>> - Update subject
+>> - Drop blank lines
+>> ---
+>>   .../bindings/hwmon/maxim,max6639.yaml         | 52 +++++++++++++++++++
+>>   1 file changed, 52 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>> new file mode 100644
+>> index 000000000000..1aaedfd7cee0
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>> @@ -0,0 +1,52 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Maxim max6639
+> 
+> What is this device? fan controller?
+Yes Fan controller.
+Do you want me to update the title here as:
+"Maxim MAC6639 2 channel fan controller & temperature monitor" ?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r005-20230423   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r035-20230423   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230423   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   milbeaut_m10v_defconfig   clang
-arm                  randconfig-r023-20230423   gcc  
-arm                  randconfig-r032-20230423   clang
-arm                  randconfig-r046-20230423   gcc  
-arm                        realview_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r015-20230423   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r033-20230423   gcc  
-hexagon      buildonly-randconfig-r002-20230423   clang
-hexagon      buildonly-randconfig-r006-20230423   clang
-hexagon              randconfig-r003-20230423   clang
-hexagon              randconfig-r041-20230423   clang
-hexagon              randconfig-r045-20230423   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r005-20230423   gcc  
-ia64                 randconfig-r014-20230423   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r016-20230423   gcc  
-microblaze           randconfig-r011-20230423   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r001-20230423   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r004-20230423   gcc  
-nios2                randconfig-r031-20230423   gcc  
-openrisc     buildonly-randconfig-r004-20230423   gcc  
-openrisc             randconfig-r001-20230423   gcc  
-openrisc             randconfig-r006-20230423   gcc  
-openrisc             randconfig-r021-20230423   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r012-20230423   gcc  
-parisc64                            defconfig   gcc  
-powerpc                      acadia_defconfig   clang
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r003-20230423   clang
-powerpc                      chrp32_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r024-20230423   clang
-riscv                randconfig-r042-20230423   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230423   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r022-20230423   gcc  
-sh                        sh7757lcr_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r013-20230423   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r002-20230423   gcc  
-xtensa               randconfig-r025-20230423   gcc  
-xtensa               randconfig-r034-20230423   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> 
+>> +
+>> +maintainers:
+>> +  - Naresh Solanki <Naresh.Solanki@9elements.com>
+>> +
+>> +description: |
+>> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
+>> +  fan-speed controller.  It monitors its own temperature and one external
+>> +  diode-connected transistor or the temperatures of two external diode-connected
+>> +  transistors, typically available in CPUs, FPGAs, or GPUs.
+>> +
+>> +  Datasheets:
+>> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - maxim,max6639
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  '#address-cells':
+>> +    const: 1
+>> +
+>> +  '#size-cells':
+>> +    const: 0
+> 
+> Why do you need these two properties?
+Ack. Will remove them.
+> 
+> Anyway, the binding looks incomplete. Where are the supplies? Interrupts?
+This patch just adds basic support to the existing platform driver.
+Intention is to be able to call the driver from DT with basic 
+initialization from driver the existing driver.
+> 
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    i2c {
+>> +      #address-cells = <1>;
+>> +      #size-cells = <0>;
+>> +
+>> +      fan-controller@10 {
+>> +        compatible = "maxim,max6639";
+>> +        reg = <0x10>;
+>> +      };
+>> +    };
+>> +...
+>>
+>> base-commit: b8610e0fe08f1476895f141be60f8dd842f0adac
+> 
+> Best regards,
+> Krzysztof
+> 
+Regards,
+Naresh
