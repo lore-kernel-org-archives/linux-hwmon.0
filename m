@@ -2,125 +2,104 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96786C77B61
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Apr 2023 08:50:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D803C77B61
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Apr 2023 09:07:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232847AbjDYIuT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Apr 2023 04:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
+        id S233247AbjDYJHN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Apr 2023 05:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjDYIuS (ORCPT
+        with ESMTP id S232274AbjDYJHN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Apr 2023 04:50:18 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C083B4;
-        Tue, 25 Apr 2023 01:50:14 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33P8nmbq116180;
-        Tue, 25 Apr 2023 03:49:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682412588;
-        bh=F6uUKvlJXnHtyqmkArJksL0ShD4iEzTqe8kOtuCpooU=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=cwDxKnMPag+538P9Q4PSp7xXsYWgWjU9rTlg4akysmDb59Po7UhABk4IN27wz2TEY
-         WSQ3kd2YYuTGzxcG9xN24w2wy+fMyGB0aqd9cyQ4TcT2w+5Y9GEx4NGLXmhVvKaBCg
-         xnT2rE1GIHH6b1sjG7FXUOIUR1iP91dVjVHNBl9k=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33P8nmIh122945
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Apr 2023 03:49:48 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
- Apr 2023 03:49:47 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 25 Apr 2023 03:49:47 -0500
-Received: from [172.24.145.195] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33P8ni6w058505;
-        Tue, 25 Apr 2023 03:49:44 -0500
-Message-ID: <705557cd-0a60-3cda-d78b-d78e2faef856@ti.com>
-Date:   Tue, 25 Apr 2023 14:19:43 +0530
+        Tue, 25 Apr 2023 05:07:13 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B015BA2
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 Apr 2023 02:07:09 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94f4b911570so823090166b.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 Apr 2023 02:07:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682413628; x=1685005628;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LCVMEbF9OBiT9IqLI0a7Ll8JBgTJIKseELbvcgMa+QA=;
+        b=Co2cU+wPJZR1SeYAhk4O3NhECwXRRGKYeIMirElj9M6t4dU8JRDhOtG2JGHDpmlGYd
+         XJ+F5ox9wF2Nj80odVqTN9LBO9ek4cjOR3mAG4nSNu+YRbiLzZQDqT3RFVk0/5A041F7
+         yYBvlillH7XimkXH5CWeeYWS6RCSf3N4MLW9tr9VZeWPtEMQki0/v2uTuQxLfOPqD9jR
+         WIhl3SmFlF8p+RLYyP15yOtGKYcqhUw0DzGbofqvBci78ej2kn1NsxtGkIeU1JWOy/u+
+         7WwrPk/MzMsRs3DbihkT69EkUEgph7VVvQuxvqclPjcXHZ4P0V3V88Ok/MuCq3ra9i/Z
+         0+kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682413628; x=1685005628;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LCVMEbF9OBiT9IqLI0a7Ll8JBgTJIKseELbvcgMa+QA=;
+        b=lYei+JhOPj0GyalTF7Y7GbkKsjXed40KQujxuCxjcNwL5LphctmcGdPDFHF2+8o8Iy
+         tvG3RsxSPhKKQ5FudqTDU0XAT73dpvQN72A3K3SniIvEkeFIqv37YKyreO+ZCYVFr4Bh
+         vfudYmZhe2fgugVkFyjHDNvjrwj3PKJYARQ9cO36pte+RQxzmJlI1D3IC2bXCBD9Iq68
+         fH4LFTjX8W6uQVZ4PvOrHgnxKgdIf6h9Qw67/Lho2KqlN+hzyxX6Wka+t30PkU0hPrmz
+         4nmwoL7Lo5am/81ztfGCKHdskJ4Ws5dXU4SA6AcFo+eesdJ7gePtSVhxtbwc0yoPSE7m
+         gJBw==
+X-Gm-Message-State: AAQBX9f9MCEcxsHM90HLCf7pc3MW5fJ3G5W20D3vKH6roqfQS47ZRj91
+        ZA6yI7jdH6EK4C4dBZ6kqAzpAA==
+X-Google-Smtp-Source: AKy350bjyupMOPUHuvbuOJ256AYJlB5ByBhqUmj8+IC3dYbt+xT2nHPx4Vqwiv4xCvayJ2aGpwMZog==
+X-Received: by 2002:a17:907:9304:b0:958:4c75:705e with SMTP id bu4-20020a170907930400b009584c75705emr9621312ejc.17.1682413628283;
+        Tue, 25 Apr 2023 02:07:08 -0700 (PDT)
+Received: from [192.168.9.102] ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id jt20-20020a170906ca1400b008e54ac90de1sm6476900ejb.74.2023.04.25.02.07.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 02:07:07 -0700 (PDT)
+Message-ID: <8ae78a2c-bbf7-24ce-b47f-3d0b7a258ba0@linaro.org>
+Date:   Tue, 25 Apr 2023 11:07:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH RESEND v3 0/3] Add support for ESM
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <jdelvare@suse.com>,
-        <linux-hwmon@vger.kernel.org>
-CC:     <nm@ti.com>, <vigneshr@ti.com>, <u-kumar1@ti.com>,
-        <kristo@kernel.org>
+Subject: Re: [PATCH RESEND v3 1/3] dt-bindings: hwmon: esm: Add ESM support
+ for TI K3 devices
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Neha Malcom Francis <n-francis@ti.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, nm@ti.com, vigneshr@ti.com,
+        u-kumar1@ti.com, kristo@kernel.org
 References: <20230424105011.70674-1-n-francis@ti.com>
- <aabe7488-29b8-895b-38b8-67e5a7d1dd35@roeck-us.net>
-From:   Neha Malcom Francis <n-francis@ti.com>
-In-Reply-To: <aabe7488-29b8-895b-38b8-67e5a7d1dd35@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+ <20230424105011.70674-2-n-francis@ti.com>
+ <0ddd5777-cfd0-4b35-a724-681ef9e86d2b@roeck-us.net>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0ddd5777-cfd0-4b35-a724-681ef9e86d2b@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter
-
-On 24/04/23 20:27, Guenter Roeck wrote:
-> On 4/24/23 03:50, Neha Malcom Francis wrote:
->> Resending as no major changes, commit subject change only.
+On 24/04/2023 16:44, Guenter Roeck wrote:
+> On Mon, Apr 24, 2023 at 04:20:09PM +0530, Neha Malcom Francis wrote:
+>> Document the binding for TI K3 ESM (Error Signaling Module) block.
 >>
+>> Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
 > 
-> Maybe you consider changing the subject of the bindings from "misc"
-> to "hwmon" as not being a major change, but it made me aware that you
-> are trying to sneak bindings which in my opinion don't belong there
-> into the hwmon bindings directory. This is not a hardware monitoring
-> device, it doesn't have anything to do with hardware monitoring, and the
-> bindings do not belong into bindings/hwmon/.
-> 
+> I think I am missing what this has to do with hardware
+> monitoring. I see a driver submission into drivers/misc,
+> but that doesn't explain the suggested location of the
+> devicetree bindings, and I kind of resist the idea that hwmon
+> should be the dumping ground for bindings which don't have
+> a home.
 
-I understand, it's a thin line across which I pushed ESM into hwmon; my 
-reasoning was ESM also actively looks for signals that it aggregates, 
-and is overall monitoring the device health. But if there was an option, 
-in order of fitting: fault/ > misc/ > hwmon/
+Hi Guenter,
 
-Using misc/ was questioned in an earlier review; and fault/ is not yet 
-created and I did not think there were enough instances to back me up on 
-creating a new dt-bindings dir
+This was my suggestion in the previous version, that this device could
+look like something related to fault handling or hardware monitoring.
+Whether it fits hwmon, I am no sure, just proposed it. Definitely I do
+not think of hwmon as dumping ground, but I am rather trying to find
+proper place for esm, instead of dumping it in misc (which is a dumping
+ground :) ).
 
-To come to a common solution, let us keep this binding in misc/ along 
-with other fault detection mechanisms existing and take it up as a 
-follow up action to create a fault/ ?
+https://lore.kernel.org/all/eb6bfe2e-1e44-bfb5-01b9-bbf53eba6501@linaro.org/
 
-> Maybe you can convince the devicetree maintainers to accept the bindings
-> into the suggested location, but that will be over my objection.
-> 
-> Guenter
-> 
-> 
->> ESM (Error Signaling Module) is a fundamental IP responsible for
->> handling safety events. The driver currently present in U-Boot is
->> responsible for configuring ESM. This patch series adds dt-binding and
->> nodes for J721E and J7200. This goes towards end goal of having DTB sync
->> with that of U-Boot as well as ensuring completeness of hardware
->> description in devicetree.
->>
->> Neha Malcom Francis (3):
->>    dt-bindings: hwmon: esm: Add ESM support for TI K3 devices
->>    arm64: dts: ti: k3-j721e: Add ESM support
->>    arm64: dts: ti: k3-j7200: Add ESM support
->>
->>   .../bindings/hwmon/ti,j721e-esm.yaml          | 53 +++++++++++++++++++
->>   arch/arm64/boot/dts/ti/k3-j7200-main.dtsi     |  6 +++
->>   arch/arm64/boot/dts/ti/k3-j7200.dtsi          |  1 +
->>   arch/arm64/boot/dts/ti/k3-j721e.dtsi          |  1 +
->>   4 files changed, 61 insertions(+)
->>   create mode 100644 
->> Documentation/devicetree/bindings/hwmon/ti,j721e-esm.yaml
->>
-> 
+Best regards,
+Krzysztof
 
--- 
-Thanking You
-Neha Malcom Francis
