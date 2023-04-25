@@ -2,138 +2,101 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81385C6FD18
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Apr 2023 14:09:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA686C77B61
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Apr 2023 14:34:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234199AbjDYOJ0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Apr 2023 10:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54396 "EHLO
+        id S234176AbjDYOea (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Apr 2023 10:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234220AbjDYOJZ (ORCPT
+        with ESMTP id S233838AbjDYOe3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:09:25 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F14A10EB;
-        Tue, 25 Apr 2023 07:09:24 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63b73203e0aso35703074b3a.1;
-        Tue, 25 Apr 2023 07:09:24 -0700 (PDT)
+        Tue, 25 Apr 2023 10:34:29 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EBD4EDF;
+        Tue, 25 Apr 2023 07:34:28 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-63b70ca0a84so7291850b3a.2;
+        Tue, 25 Apr 2023 07:34:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682431763; x=1685023763;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=3xw+BHdORTGVKTA8blkRS/DTjnBNoDy+SuKaT8k7XdY=;
-        b=msswW182Tyq0PSGUu7Weqp4+k0V9RWFRWUxa7nA81uhcXyAbGUDXqj+gRDf+diBp2c
-         2uHeODOIamsabfhANrwTdGh2FYWnKB09fAeJn3Ek8Iqz5IQvtvTeidsHEwD3K8AizUOg
-         iiWGx+NqTJRzCijWAqLwupWs1YGI13fC4ijCidxzLdBcZJ6aI6YQv0uEvLkfTHM6MoRT
-         y44920VH1JLyjQpJdCIkYDn+FA61vhdswxqknrnHWpImlWWhCTKSr7lqXXIquTq48ns+
-         5ek4j9a07czgUo8vkDIfW+Ednu0ouFzXjGCV1tolg5cwYh416zMVr3ejO4upV/opnbKp
-         yQDg==
+        d=gmail.com; s=20221208; t=1682433268; x=1685025268;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IqwUK/4eDJzCyEyFFhnH/3a1vPRmvk8A4cA3eKhviTk=;
+        b=quJ+O1JlEpa0/H7U9zxcAuDqT+96tvcHOGzW2761RkODSrwBIzReeuokM+2BIehR25
+         DZHnZziOGE2b55/n5niAtH2oGOqNU1EWGVoE+Si6hltvPCjw8xh9xQu+gjWQtj6n9yio
+         9WbQGHC9lhSnx3fpHcS5/4+E5ga2yLKcFiYJPhpvdsZaJJoxoZPab7DtQY6fVzUPGmo6
+         pQTVY3fmbuqLFQ9iwGU9aPo3etOD3aq9VQMzxv9pQia35k5yWICtiTjuKnpXs0J5ABP3
+         54v8nNfmdTIdKNk3ogwoR9Zgvw7WDveDDR4tTWYO4enThTwO/t9U6h3XH7D6APl5IbFX
+         uyrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682431763; x=1685023763;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3xw+BHdORTGVKTA8blkRS/DTjnBNoDy+SuKaT8k7XdY=;
-        b=gSdrpzd9xm72ahr+RcisRZ1UuxjMaELCo01dxkhnQpgIC1VlNnCJrGz8830KsWeE/8
-         sIXGbcBEEVC4Qxz7sXXfaihCM5ZU0pW7pd8t37Rxp9dH6gDr0ugtbBhpBWvKKHEpyKoX
-         nLs2lxUSX1NRB0C49fCGXAcZn3bJMAy0VqYkyUuQQreP7yqLxrG5AVrUqZ6APLhn3ROn
-         U3efoV54MPzG6pONoB1icKSz7GyBDfDMjn257nLz4zmSYUdbvYbp17/ZWMXLHyhWEOc4
-         ktzv/8MrHE40Xxl+BKjvcxMXC04KhqfOUmNXj+ZFUHnwnb0oXyy2Yex5WckvlFf5yg8l
-         zXBQ==
-X-Gm-Message-State: AAQBX9dC4O6AKjlPojsYJIFW3mBYAH2Qpls2vVU61NUzkuqExpm1RkuA
-        u6ru+txO29gHnTdo4tdM+u8=
-X-Google-Smtp-Source: AKy350a2npN+62JYHbVOqk1QSV0NuQTdqIKvT8rZHPSvkfX7ovD6A/q/cH1c5IC+6K5ecKeU8ha49w==
-X-Received: by 2002:a17:903:1c1:b0:1a1:cb18:7f99 with SMTP id e1-20020a17090301c100b001a1cb187f99mr19550907plh.30.1682431763570;
-        Tue, 25 Apr 2023 07:09:23 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682433268; x=1685025268;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IqwUK/4eDJzCyEyFFhnH/3a1vPRmvk8A4cA3eKhviTk=;
+        b=jyovsDe1kk+7vooogB7OzEp2xZoH/ICgpwsHjNmLkaZEpxiQJhFCzwjJHZz1ZLxWK7
+         cQGI7P6rX69PA7xUB6IfykbO3n5ij3EbAig4S3/fgwjkStMqCmV9bwssYcQFjFMVof6Z
+         r1+diBeJ5VMPpV+AzengDdDQExONLEKqPq8zpEeUTO7uCkdEUIB3ewcT/lSUDoxt3puk
+         jrffgwccmkdzTDXvksanQOpni02LpKmVnoUn7zTanH63TODgoJmcXSU2UveUwBWhnP0H
+         /vc5F/flktF4UkWlXwETbQmwVn/altKQs8WZccdByVq4/0NSzcw5n3rkoHS639LQSjXV
+         BkOg==
+X-Gm-Message-State: AAQBX9eXcnQK41SMc8weefPYVyqNxOYudeTWFntfGNTocMhL8gHEhN4K
+        CqGEiuAMSsc+TVp4VKhMkx4=
+X-Google-Smtp-Source: AKy350Y/E8488smZu+2JGMu6TX8xn7ALx3Mxgu5yA+GFI+yG+/7nEkaAj10nUbQhH/HxbbANkIq0Iw==
+X-Received: by 2002:a05:6a00:b51:b0:628:1b3:d499 with SMTP id p17-20020a056a000b5100b0062801b3d499mr23898372pfo.21.1682433267834;
+        Tue, 25 Apr 2023 07:34:27 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t10-20020a170902b20a00b001a6b02659c0sm6266958plr.159.2023.04.25.07.09.21
+        by smtp.gmail.com with ESMTPSA id h133-20020a62838b000000b0063b8a30b571sm9329133pfe.9.2023.04.25.07.34.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 07:09:23 -0700 (PDT)
+        Tue, 25 Apr 2023 07:34:27 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ccbced2f-0258-cfd7-2f91-e246dadae8fb@roeck-us.net>
-Date:   Tue, 25 Apr 2023 07:09:20 -0700
+Message-ID: <a1e940aa-7ede-572a-80ca-d950273e5ba6@roeck-us.net>
+Date:   Tue, 25 Apr 2023 07:34:25 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v1 2/2] hwmon: pmbus: Add ltc4286 driver
 Content-Language: en-US
-To:     Andi Shyti <andi.shyti@kernel.org>,
-        Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-Cc:     patrick@stwcx.xyz, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230424101352.28117-1-Delphine_CC_Chiu@Wiwynn.com>
- <20230424101352.28117-3-Delphine_CC_Chiu@Wiwynn.com>
- <20230425134537.pzsplcpkrog2552r@intel.intel>
+To:     Neha Malcom Francis <n-francis@ti.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Cc:     nm@ti.com, vigneshr@ti.com, u-kumar1@ti.com, kristo@kernel.org
+References: <20230424105011.70674-1-n-francis@ti.com>
+ <aabe7488-29b8-895b-38b8-67e5a7d1dd35@roeck-us.net>
+ <705557cd-0a60-3cda-d78b-d78e2faef856@ti.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230425134537.pzsplcpkrog2552r@intel.intel>
+Subject: Re: [PATCH RESEND v3 0/3] Add support for ESM
+In-Reply-To: <705557cd-0a60-3cda-d78b-d78e2faef856@ti.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/25/23 06:45, Andi Shyti wrote:
-> Hi Delphine,
+On 4/25/23 01:49, Neha Malcom Francis wrote:
+> Hi Guenter
 > 
-> On top of Guenter's comments,
+> On 24/04/23 20:27, Guenter Roeck wrote:
+>> On 4/24/23 03:50, Neha Malcom Francis wrote:
+>>> Resending as no major changes, commit subject change only.
+>>>
+>>
+>> Maybe you consider changing the subject of the bindings from "misc"
+>> to "hwmon" as not being a major change, but it made me aware that you
+>> are trying to sneak bindings which in my opinion don't belong there
+>> into the hwmon bindings directory. This is not a hardware monitoring
+>> device, it doesn't have anything to do with hardware monitoring, and the
+>> bindings do not belong into bindings/hwmon/.
+>>
 > 
-> [...]
-> 
->> +config SENSORS_LTC4286
->> +	bool "Linear Technologies LTC4286"
->> +	help
->> +	  If you say yes here you get hardware monitoring support for Linear
->> +	  Technology LTC4286.
-> 
-> could you add a couple of words more here?
-> 
-> [...]
-> 
->> +static int ltc4286_probe(struct i2c_client *client,
->> +			 const struct i2c_device_id *id)
->> +{
->> +	int ret;
->> +	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
->> +	struct device *dev = &client->dev;
->> +	struct pmbus_driver_info *info;
->> +	u32 rsense;
->> +
->> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, block_buffer);
->> +	if (ret < 0) {
->> +		dev_err(&client->dev, "failed to read manufacturer id\n");
-> 
-> you can use dev_err_probe() here:
-> 
-> 	return dev_err_probe(&client->dev, err, "failed to read manufacturer id\n");
-> 
->> +		return ret;
->> +	}
->> +
->> +	/* Refer to ltc4286 datasheet page 20
->> +	 * the default manufacturer id is LTC
->> +	 */
->> +	if (ret != LTC4286_MFR_ID_SIZE ||
->> +	    strncmp(block_buffer, "LTC", LTC4286_MFR_ID_SIZE)) {
->> +		dev_err(&client->dev, "unsupported manufacturer id\n");
->> +		return -ENODEV;
->> +	}
->> +
->> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
->> +	if (ret < 0) {
->> +		dev_err(&client->dev, "failed to read manufacturer model\n");
->> +		return ret;
->> +	}
-> 
-> Is this read really needed?
+> I understand, it's a thin line across which I pushed ESM into hwmon; my reasoning was ESM also actively looks for signals that it aggregates, and is overall monitoring the device health. But if there was an option, in order of fitting: fault/ > misc/ > hwmon/
 > 
 
-It only makes sense if the returned string is actually validated.
-Otherwise no.
+That is really a stretch. It doesn't monitor anything. It is a signal
+routing mechanism.
+
+With that logic every transistor would be a hardware monitoring device.
 
 Guenter
 
