@@ -2,110 +2,138 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83B6BC6FD18
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Apr 2023 13:45:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81385C6FD18
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Apr 2023 14:09:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234308AbjDYNp4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Apr 2023 09:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
+        id S234199AbjDYOJ0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Apr 2023 10:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234309AbjDYNpv (ORCPT
+        with ESMTP id S234220AbjDYOJZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Apr 2023 09:45:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B041445C;
-        Tue, 25 Apr 2023 06:45:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4B7262A1B;
-        Tue, 25 Apr 2023 13:45:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 962E6C4339B;
-        Tue, 25 Apr 2023 13:45:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682430341;
-        bh=9L0RFEhgc5pVrEurXwJyQS6iOhvUqopnPSSKaj6qHrk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l9rN0yXvw4qGwOHeti8o5qBtfLR1pBuf64qdQ83RRLdFbTYYcutmEc94K4lo9BCQG
-         SyOqoxZBLPNi5/ZS7CZhbGdEXN5wu32UITol5ums0ldYHMT9iFhwUXabdmtZ0tB36w
-         3lPsP2eKjxgOJuAIn1Rw44gVKrSaP8avWcNZ8eGaJ9FzILmvuQFQ0JI+mXxT9SnHQr
-         I0Gxde5M8dlNSIkiH57of5qh8J1S83x4CTijHAx799ZeCABTMLQCZ/Hagk5t5PmXG3
-         V5eR97+IhdE2f9tj9bU6u4TFF+/uneh1nBC14aYWjyftXr8yWYG/fTaxEOwycyL31s
-         tkIajbtM3LHwA==
-Date:   Tue, 25 Apr 2023 15:45:37 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-Cc:     patrick@stwcx.xyz, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
+        Tue, 25 Apr 2023 10:09:25 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F14A10EB;
+        Tue, 25 Apr 2023 07:09:24 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63b73203e0aso35703074b3a.1;
+        Tue, 25 Apr 2023 07:09:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682431763; x=1685023763;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=3xw+BHdORTGVKTA8blkRS/DTjnBNoDy+SuKaT8k7XdY=;
+        b=msswW182Tyq0PSGUu7Weqp4+k0V9RWFRWUxa7nA81uhcXyAbGUDXqj+gRDf+diBp2c
+         2uHeODOIamsabfhANrwTdGh2FYWnKB09fAeJn3Ek8Iqz5IQvtvTeidsHEwD3K8AizUOg
+         iiWGx+NqTJRzCijWAqLwupWs1YGI13fC4ijCidxzLdBcZJ6aI6YQv0uEvLkfTHM6MoRT
+         y44920VH1JLyjQpJdCIkYDn+FA61vhdswxqknrnHWpImlWWhCTKSr7lqXXIquTq48ns+
+         5ek4j9a07czgUo8vkDIfW+Ednu0ouFzXjGCV1tolg5cwYh416zMVr3ejO4upV/opnbKp
+         yQDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682431763; x=1685023763;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3xw+BHdORTGVKTA8blkRS/DTjnBNoDy+SuKaT8k7XdY=;
+        b=gSdrpzd9xm72ahr+RcisRZ1UuxjMaELCo01dxkhnQpgIC1VlNnCJrGz8830KsWeE/8
+         sIXGbcBEEVC4Qxz7sXXfaihCM5ZU0pW7pd8t37Rxp9dH6gDr0ugtbBhpBWvKKHEpyKoX
+         nLs2lxUSX1NRB0C49fCGXAcZn3bJMAy0VqYkyUuQQreP7yqLxrG5AVrUqZ6APLhn3ROn
+         U3efoV54MPzG6pONoB1icKSz7GyBDfDMjn257nLz4zmSYUdbvYbp17/ZWMXLHyhWEOc4
+         ktzv/8MrHE40Xxl+BKjvcxMXC04KhqfOUmNXj+ZFUHnwnb0oXyy2Yex5WckvlFf5yg8l
+         zXBQ==
+X-Gm-Message-State: AAQBX9dC4O6AKjlPojsYJIFW3mBYAH2Qpls2vVU61NUzkuqExpm1RkuA
+        u6ru+txO29gHnTdo4tdM+u8=
+X-Google-Smtp-Source: AKy350a2npN+62JYHbVOqk1QSV0NuQTdqIKvT8rZHPSvkfX7ovD6A/q/cH1c5IC+6K5ecKeU8ha49w==
+X-Received: by 2002:a17:903:1c1:b0:1a1:cb18:7f99 with SMTP id e1-20020a17090301c100b001a1cb187f99mr19550907plh.30.1682431763570;
+        Tue, 25 Apr 2023 07:09:23 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t10-20020a170902b20a00b001a6b02659c0sm6266958plr.159.2023.04.25.07.09.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 07:09:23 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ccbced2f-0258-cfd7-2f91-e246dadae8fb@roeck-us.net>
+Date:   Tue, 25 Apr 2023 07:09:20 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1 2/2] hwmon: pmbus: Add ltc4286 driver
+Content-Language: en-US
+To:     Andi Shyti <andi.shyti@kernel.org>,
+        Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+Cc:     patrick@stwcx.xyz, Jean Delvare <jdelvare@suse.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] hwmon: pmbus: Add ltc4286 driver
-Message-ID: <20230425134537.pzsplcpkrog2552r@intel.intel>
 References: <20230424101352.28117-1-Delphine_CC_Chiu@Wiwynn.com>
  <20230424101352.28117-3-Delphine_CC_Chiu@Wiwynn.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230424101352.28117-3-Delphine_CC_Chiu@Wiwynn.com>
+ <20230425134537.pzsplcpkrog2552r@intel.intel>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230425134537.pzsplcpkrog2552r@intel.intel>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Delphine,
+On 4/25/23 06:45, Andi Shyti wrote:
+> Hi Delphine,
+> 
+> On top of Guenter's comments,
+> 
+> [...]
+> 
+>> +config SENSORS_LTC4286
+>> +	bool "Linear Technologies LTC4286"
+>> +	help
+>> +	  If you say yes here you get hardware monitoring support for Linear
+>> +	  Technology LTC4286.
+> 
+> could you add a couple of words more here?
+> 
+> [...]
+> 
+>> +static int ltc4286_probe(struct i2c_client *client,
+>> +			 const struct i2c_device_id *id)
+>> +{
+>> +	int ret;
+>> +	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
+>> +	struct device *dev = &client->dev;
+>> +	struct pmbus_driver_info *info;
+>> +	u32 rsense;
+>> +
+>> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, block_buffer);
+>> +	if (ret < 0) {
+>> +		dev_err(&client->dev, "failed to read manufacturer id\n");
+> 
+> you can use dev_err_probe() here:
+> 
+> 	return dev_err_probe(&client->dev, err, "failed to read manufacturer id\n");
+> 
+>> +		return ret;
+>> +	}
+>> +
+>> +	/* Refer to ltc4286 datasheet page 20
+>> +	 * the default manufacturer id is LTC
+>> +	 */
+>> +	if (ret != LTC4286_MFR_ID_SIZE ||
+>> +	    strncmp(block_buffer, "LTC", LTC4286_MFR_ID_SIZE)) {
+>> +		dev_err(&client->dev, "unsupported manufacturer id\n");
+>> +		return -ENODEV;
+>> +	}
+>> +
+>> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
+>> +	if (ret < 0) {
+>> +		dev_err(&client->dev, "failed to read manufacturer model\n");
+>> +		return ret;
+>> +	}
+> 
+> Is this read really needed?
+> 
 
-On top of Guenter's comments,
+It only makes sense if the returned string is actually validated.
+Otherwise no.
 
-[...]
+Guenter
 
-> +config SENSORS_LTC4286
-> +	bool "Linear Technologies LTC4286"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Linear
-> +	  Technology LTC4286.
-
-could you add a couple of words more here?
-
-[...]
-
-> +static int ltc4286_probe(struct i2c_client *client,
-> +			 const struct i2c_device_id *id)
-> +{
-> +	int ret;
-> +	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
-> +	struct device *dev = &client->dev;
-> +	struct pmbus_driver_info *info;
-> +	u32 rsense;
-> +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, block_buffer);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "failed to read manufacturer id\n");
-
-you can use dev_err_probe() here:
-
-	return dev_err_probe(&client->dev, err, "failed to read manufacturer id\n");
-
-> +		return ret;
-> +	}
-> +
-> +	/* Refer to ltc4286 datasheet page 20
-> +	 * the default manufacturer id is LTC
-> +	 */
-> +	if (ret != LTC4286_MFR_ID_SIZE ||
-> +	    strncmp(block_buffer, "LTC", LTC4286_MFR_ID_SIZE)) {
-> +		dev_err(&client->dev, "unsupported manufacturer id\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "failed to read manufacturer model\n");
-> +		return ret;
-> +	}
-
-Is this read really needed?
-
-Andi
-
-[...]
