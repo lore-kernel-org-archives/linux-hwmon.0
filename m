@@ -2,229 +2,125 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29450C77B61
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Apr 2023 04:49:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96786C77B61
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Apr 2023 08:50:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbjDYEtX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Apr 2023 00:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
+        id S232847AbjDYIuT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Apr 2023 04:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjDYEtW (ORCPT
+        with ESMTP id S229705AbjDYIuS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Apr 2023 00:49:22 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B28E7D97;
-        Mon, 24 Apr 2023 21:49:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682398161; x=1713934161;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7rZnvjZU75nXYCbRspPe2A4WrOUI0wNa/u5RdGhCn8U=;
-  b=WC2r/tuyNZ6Nh7isRIk9Hhry8VI0o8MseUVNAFdOUsCZRmfBhv1qitPB
-   ocHQ0BHHEgtM4jJEFSjY1QuTXJiz4K5bR2Q3N28GZsXuJperHzkJAdwxV
-   mEn5HWggXixwAEhVNmBCeRW1MJJfNOf4MphHVhdGaD8NZpgBVu9SYmAwg
-   aDc1AB51D0AYGhk2YYbYsczCfE1h9eZkHzvXBFn1VfcqRVlK7D8i3lx0z
-   5WdFQ9cOS8fjs/S/5PPBm37pwqG0Yq4igiooyisLrrNS/Vm0zrvxvopWj
-   whFpnh3LLna5Y0UNK5eDiwSYDbd+XKzu95ETmCdj45FXyWLs8gSjN6C8T
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="432911947"
-X-IronPort-AV: E=Sophos;i="5.99,224,1677571200"; 
-   d="scan'208";a="432911947"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 21:49:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="867747810"
-X-IronPort-AV: E=Sophos;i="5.99,224,1677571200"; 
-   d="scan'208";a="867747810"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 24 Apr 2023 21:49:17 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1prAc8-000izS-0r;
-        Tue, 25 Apr 2023 04:49:16 +0000
-Date:   Tue, 25 Apr 2023 12:48:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, patrick@stwcx.xyz,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] hwmon: pmbus: Add ltc4286 driver
-Message-ID: <202304251257.oiVqQ5cl-lkp@intel.com>
-References: <20230424101352.28117-3-Delphine_CC_Chiu@Wiwynn.com>
+        Tue, 25 Apr 2023 04:50:18 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C083B4;
+        Tue, 25 Apr 2023 01:50:14 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33P8nmbq116180;
+        Tue, 25 Apr 2023 03:49:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682412588;
+        bh=F6uUKvlJXnHtyqmkArJksL0ShD4iEzTqe8kOtuCpooU=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=cwDxKnMPag+538P9Q4PSp7xXsYWgWjU9rTlg4akysmDb59Po7UhABk4IN27wz2TEY
+         WSQ3kd2YYuTGzxcG9xN24w2wy+fMyGB0aqd9cyQ4TcT2w+5Y9GEx4NGLXmhVvKaBCg
+         xnT2rE1GIHH6b1sjG7FXUOIUR1iP91dVjVHNBl9k=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33P8nmIh122945
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 25 Apr 2023 03:49:48 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
+ Apr 2023 03:49:47 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 25 Apr 2023 03:49:47 -0500
+Received: from [172.24.145.195] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33P8ni6w058505;
+        Tue, 25 Apr 2023 03:49:44 -0500
+Message-ID: <705557cd-0a60-3cda-d78b-d78e2faef856@ti.com>
+Date:   Tue, 25 Apr 2023 14:19:43 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230424101352.28117-3-Delphine_CC_Chiu@Wiwynn.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH RESEND v3 0/3] Add support for ESM
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <jdelvare@suse.com>,
+        <linux-hwmon@vger.kernel.org>
+CC:     <nm@ti.com>, <vigneshr@ti.com>, <u-kumar1@ti.com>,
+        <kristo@kernel.org>
+References: <20230424105011.70674-1-n-francis@ti.com>
+ <aabe7488-29b8-895b-38b8-67e5a7d1dd35@roeck-us.net>
+From:   Neha Malcom Francis <n-francis@ti.com>
+In-Reply-To: <aabe7488-29b8-895b-38b8-67e5a7d1dd35@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Delphine,
+Hi Guenter
 
-kernel test robot noticed the following build errors:
+On 24/04/23 20:27, Guenter Roeck wrote:
+> On 4/24/23 03:50, Neha Malcom Francis wrote:
+>> Resending as no major changes, commit subject change only.
+>>
+> 
+> Maybe you consider changing the subject of the bindings from "misc"
+> to "hwmon" as not being a major change, but it made me aware that you
+> are trying to sneak bindings which in my opinion don't belong there
+> into the hwmon bindings directory. This is not a hardware monitoring
+> device, it doesn't have anything to do with hardware monitoring, and the
+> bindings do not belong into bindings/hwmon/.
+> 
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.3 next-20230424]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I understand, it's a thin line across which I pushed ESM into hwmon; my 
+reasoning was ESM also actively looks for signals that it aggregates, 
+and is overall monitoring the device health. But if there was an option, 
+in order of fitting: fault/ > misc/ > hwmon/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Delphine-CC-Chiu/dt-bindings-hwmon-Add-lltc-ltc4286-driver-bindings/20230424-181521
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230424101352.28117-3-Delphine_CC_Chiu%40Wiwynn.com
-patch subject: [PATCH v1 2/2] hwmon: pmbus: Add ltc4286 driver
-config: riscv-randconfig-r021-20230425 (https://download.01.org/0day-ci/archive/20230425/202304251257.oiVqQ5cl-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/318b8a252bb2d7430f1cf7b93bb5df8d0e4fee29
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Delphine-CC-Chiu/dt-bindings-hwmon-Add-lltc-ltc4286-driver-bindings/20230424-181521
-        git checkout 318b8a252bb2d7430f1cf7b93bb5df8d0e4fee29
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/hwmon/pmbus/
+Using misc/ was questioned in an earlier review; and fault/ is not yet 
+created and I did not think there were enough instances to back me up on 
+creating a new dt-bindings dir
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304251257.oiVqQ5cl-lkp@intel.com/
+To come to a common solution, let us keep this binding in misc/ along 
+with other fault detection mechanisms existing and take it up as a 
+follow up action to create a fault/ ?
 
-All error/warnings (new ones prefixed by >>):
-
->> drivers/hwmon/pmbus/ltc4286.c:46:24: warning: implicit conversion from 'double' to 'int' changes value from 273.15 to 273 [-Wliteral-conversion]
-           .b[PSC_TEMPERATURE] = 273.15,
-                                 ^~~~~~
->> drivers/hwmon/pmbus/ltc4286.c:134:11: error: incompatible function pointer types initializing 'int (*)(struct i2c_client *)' with an expression of type 'int (struct i2c_client *, const struct i2c_device_id *)' [-Wincompatible-function-pointer-types]
-           .probe = ltc4286_probe,
-                    ^~~~~~~~~~~~~
-   1 warning and 1 error generated.
-
-
-vim +134 drivers/hwmon/pmbus/ltc4286.c
-
-    25	
-    26	static struct pmbus_driver_info ltc4286_info = {
-    27		.pages = 1,
-    28		.format[PSC_VOLTAGE_IN] = direct,
-    29		.format[PSC_VOLTAGE_OUT] = direct,
-    30		.format[PSC_CURRENT_OUT] = direct,
-    31		.format[PSC_POWER] = direct,
-    32		.format[PSC_TEMPERATURE] = direct,
-    33		.m[PSC_VOLTAGE_IN] = 32,
-    34		.b[PSC_VOLTAGE_IN] = 0,
-    35		.R[PSC_VOLTAGE_IN] = 1,
-    36		.m[PSC_VOLTAGE_OUT] = 32,
-    37		.b[PSC_VOLTAGE_OUT] = 0,
-    38		.R[PSC_VOLTAGE_OUT] = 1,
-    39		.m[PSC_CURRENT_OUT] = 1024,
-    40		.b[PSC_CURRENT_OUT] = 0,
-    41		.R[PSC_CURRENT_OUT] = 3 - 6,
-    42		.m[PSC_POWER] = 1,
-    43		.b[PSC_POWER] = 0,
-    44		.R[PSC_POWER] = 4 - 6,
-    45		.m[PSC_TEMPERATURE] = 1,
-  > 46		.b[PSC_TEMPERATURE] = 273.15,
-    47		.R[PSC_TEMPERATURE] = 0,
-    48		.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-    49			   PMBUS_HAVE_PIN | PMBUS_HAVE_TEMP,
-    50	};
-    51	
-    52	static int ltc4286_probe(struct i2c_client *client,
-    53				 const struct i2c_device_id *id)
-    54	{
-    55		int ret;
-    56		u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
-    57		struct device *dev = &client->dev;
-    58		struct pmbus_driver_info *info;
-    59		u32 rsense;
-    60	
-    61		ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, block_buffer);
-    62		if (ret < 0) {
-    63			dev_err(&client->dev, "failed to read manufacturer id\n");
-    64			return ret;
-    65		}
-    66	
-    67		/* Refer to ltc4286 datasheet page 20
-    68		 * the default manufacturer id is LTC
-    69		 */
-    70		if (ret != LTC4286_MFR_ID_SIZE ||
-    71		    strncmp(block_buffer, "LTC", LTC4286_MFR_ID_SIZE)) {
-    72			dev_err(&client->dev, "unsupported manufacturer id\n");
-    73			return -ENODEV;
-    74		}
-    75	
-    76		ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
-    77		if (ret < 0) {
-    78			dev_err(&client->dev, "failed to read manufacturer model\n");
-    79			return ret;
-    80		}
-    81	
-    82		ret = of_property_read_u32(client->dev.of_node, "rsense-micro-ohms",
-    83					   &rsense);
-    84		if (ret < 0)
-    85			return ret;
-    86	
-    87		if (rsense == 0)
-    88			return -EINVAL;
-    89	
-    90		info = &ltc4286_info;
-    91	
-    92		/* Default of VRANGE_SELECT = 1 */
-    93		if (device_property_read_bool(dev, "vrange_select_25p6")) {
-    94			/* Setup MFR1 CONFIG register bit 1 VRANGE_SELECT */
-    95			ret = i2c_smbus_read_word_data(client, LTC4286_MFR_CONFIG1);
-    96			if (ret < 0) {
-    97				dev_err(&client->dev,
-    98					"failed to read manufacturer configuration one\n");
-    99				return ret;
-   100			}
-   101	
-   102			ret &= ~VRANGE_SELECT; /* VRANGE_SELECT = 0, 25.6V */
-   103			i2c_smbus_write_word_data(client, LTC4286_MFR_CONFIG1, ret);
-   104	
-   105			info->m[PSC_VOLTAGE_IN] = 128;
-   106			info->m[PSC_VOLTAGE_OUT] = 128;
-   107			info->m[PSC_POWER] = 4 * rsense;
-   108		} else {
-   109			info->m[PSC_POWER] = rsense;
-   110		}
-   111	
-   112		info->m[PSC_CURRENT_OUT] = 1024 * rsense;
-   113	
-   114		return pmbus_do_probe(client, info);
-   115	}
-   116	
-   117	static const struct i2c_device_id ltc4286_id[] = { { "ltc4286", ltc4286 },
-   118							   { "ltc4287", ltc4287 },
-   119							   {} };
-   120	MODULE_DEVICE_TABLE(i2c, ltc4286_id);
-   121	
-   122	static const struct of_device_id ltc4286_of_match[] = {
-   123		{ .compatible = "lltc,ltc4286" },
-   124		{ .compatible = "lltc,ltc4287" },
-   125		{}
-   126	};
-   127	
-   128	/* This is the driver that will be inserted */
-   129	static struct i2c_driver ltc4286_driver = {
-   130		.driver = {
-   131			.name = "ltc4286",
-   132			.of_match_table = ltc4286_of_match,
-   133		},
- > 134		.probe = ltc4286_probe,
-   135		.id_table = ltc4286_id,
-   136	};
-   137	
+> Maybe you can convince the devicetree maintainers to accept the bindings
+> into the suggested location, but that will be over my objection.
+> 
+> Guenter
+> 
+> 
+>> ESM (Error Signaling Module) is a fundamental IP responsible for
+>> handling safety events. The driver currently present in U-Boot is
+>> responsible for configuring ESM. This patch series adds dt-binding and
+>> nodes for J721E and J7200. This goes towards end goal of having DTB sync
+>> with that of U-Boot as well as ensuring completeness of hardware
+>> description in devicetree.
+>>
+>> Neha Malcom Francis (3):
+>>    dt-bindings: hwmon: esm: Add ESM support for TI K3 devices
+>>    arm64: dts: ti: k3-j721e: Add ESM support
+>>    arm64: dts: ti: k3-j7200: Add ESM support
+>>
+>>   .../bindings/hwmon/ti,j721e-esm.yaml          | 53 +++++++++++++++++++
+>>   arch/arm64/boot/dts/ti/k3-j7200-main.dtsi     |  6 +++
+>>   arch/arm64/boot/dts/ti/k3-j7200.dtsi          |  1 +
+>>   arch/arm64/boot/dts/ti/k3-j721e.dtsi          |  1 +
+>>   4 files changed, 61 insertions(+)
+>>   create mode 100644 
+>> Documentation/devicetree/bindings/hwmon/ti,j721e-esm.yaml
+>>
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanking You
+Neha Malcom Francis
