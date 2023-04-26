@@ -2,176 +2,163 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F69FC77B78
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Apr 2023 16:27:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 704A6C7618E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Apr 2023 18:44:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbjDZQ1r (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 Apr 2023 12:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
+        id S233615AbjDZSox (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 26 Apr 2023 14:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbjDZQ1q (ORCPT
+        with ESMTP id S231186AbjDZSow (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Apr 2023 12:27:46 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EE5769E
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 Apr 2023 09:27:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682526465; x=1714062465;
-  h=date:from:to:cc:subject:message-id;
-  bh=tCCf87wqw7aU4fTzPuM/VGvAeVQQbFlhTQhj6MRw1+w=;
-  b=hQPGCqUiPL6gT15VkQvcb7fhoF8muLnA5o+m+VCR5WC1omPyobb0xAVm
-   6z1t9Os+7UyrtKcE7VE8SDivm+4cKWk7T8A2aV0t3wGBUd1Rd3z/LuDaX
-   RRjImIjNWm5txUVK5c31xG6AcdrKxCRpr2LlK5++E+qirHlmY+ozc7km0
-   xH82A7qpHbCsiJZs7ceEtdVC/ik5yH1TqtHVeZRtxrl7tGYYFFGbg/y3z
-   hd3SxbHfW90etgzjm3g+Eh3VpC0WxGyXeAxsCHiB0P9nEP5AosX0TFvd2
-   kGL8uEaVwC1yc8xu5tp7EHISA8VGzrHVCYH6/sCtWCDfMrgtm87jmywft
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="345919714"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="345919714"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 09:27:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="763387646"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="763387646"
-Received: from lkp-server01.sh.intel.com (HELO 041f065c1b1b) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 26 Apr 2023 09:27:44 -0700
-Received: from kbuild by 041f065c1b1b with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1prhzb-0000Mq-2F;
-        Wed, 26 Apr 2023 16:27:43 +0000
-Date:   Thu, 27 Apr 2023 00:26:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:watchdog-next] BUILD SUCCESS
- 4b4c88a11480ab3a0ea37c81f15b1e6999b5652b
-Message-ID: <20230426162649.vII5O%lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        Wed, 26 Apr 2023 14:44:52 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9BA44BA;
+        Wed, 26 Apr 2023 11:44:51 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6a5f765d5b8so5763192a34.3;
+        Wed, 26 Apr 2023 11:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682534691; x=1685126691;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=19DcYFOzr7bYWgxAGD4nb6l+fYJhmF+vtyo3LpAEbFI=;
+        b=q8StYfd7PyIZ+wYaYPJzn38ROM6BjLJ+nJ+jB8GQLB+n9BKNJ9thubM43pxGxiail+
+         rtiLYoQeUdu6M4Dc/p4B3los1qXqepTdTcnaQPO6vM2MoXzHm+YnGZNqVCq+PRkIgilv
+         C0Au7sxr6uKC376PYjVoF4BJkNrHSlAS0FE6fHgLdyawDqaFEBuUm45JKn9Q1HfpiSNl
+         v8MIBR67iDd0Yb6Dk6zj4rYXCBmrNnzKu0Tg7l0tl8c2e3FUkPOnv/2CIb1VkwbTUnqI
+         +0oI8k1N74V2oxfEvtyclb8VLXoSxcDiN/5fu7mbL0Wm6BojjN69CgOTkIS83TsswbT9
+         WdsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682534691; x=1685126691;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=19DcYFOzr7bYWgxAGD4nb6l+fYJhmF+vtyo3LpAEbFI=;
+        b=XDEPsfanHZ48tv7IfaXfXGHuW/sqiQtHwigL6c39YtHZHmfec9vxKuPRY4u/8QXMqS
+         NsMpaSGukcHYjVTLQ/QQCt153kbfTL8pU8Y0RbgznwpOBeXKMa4Wk0w7ntOkt49adRSj
+         DczeKbx+IvtFte7nmFQAcsiYg8bycsSPhbSRJHuwiiXM0JbmVDvrPbLHfoDAbhJefNth
+         Owsrfp58N18/XfwhGXOflhjXBHQXUXgCnRfVMJ8GyKufr4Kk46WqDQ5PSekDayI7pIAG
+         kMg+DOq+dHM2PF+HsmabhlWBMP969qVjuxjZ2gAeqwcvNZcuQMeavnBaAdAMckr9j0l/
+         96RA==
+X-Gm-Message-State: AC+VfDwD/FMHRuAnbI2Qz3RPO09Q2rW3ze5Bjm8ZOz3GHiGMECQOXh57
+        B1ML99XDYXdRlRNEAmCLNHU=
+X-Google-Smtp-Source: AKy350Z3O+cgN8178KDyjnlW8gw1rrrtW92Jw4nHiK+SPthg9GNdfERoXYxU9SzATJ4rBwRIXsTzhg==
+X-Received: by 2002:a9d:6251:0:b0:6a7:bced:4121 with SMTP id i17-20020a9d6251000000b006a7bced4121mr2483500otk.5.1682534690696;
+        Wed, 26 Apr 2023 11:44:50 -0700 (PDT)
+Received: from smeagol.fibertel.com.ar ([201.235.4.68])
+        by smtp.gmail.com with ESMTPSA id j14-20020a9d7f0e000000b0069f0a85fa36sm7097580otq.57.2023.04.26.11.44.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 11:44:50 -0700 (PDT)
+From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+To:     linux@roeck-us.net
+Cc:     =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>, derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (oxp-sensors) Add AYANEO 2 and Geek models
+Date:   Wed, 26 Apr 2023 15:44:20 -0300
+Message-Id: <20230426184420.99945-1-samsagax@gmail.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-branch HEAD: 4b4c88a11480ab3a0ea37c81f15b1e6999b5652b  watchdog: starfive: Fix the probe return error if PM and early_enable are both disabled
+Add support for handhelds with same EC registers
+  - AYANEO 2
+  - AYANEO GEEK
 
-elapsed time: 732m
+All functionality tests succeed on AYANEO 2 by "pastaq" user on Discord
+and AYANEO GEEK tested by "oneoc" Discord user.
 
-configs tested: 105
-configs skipped: 7
+Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
+---
+ Documentation/hwmon/oxp-sensors.rst |  2 ++
+ drivers/hwmon/oxp-sensors.c         | 20 ++++++++++++++++++++
+ 2 files changed, 22 insertions(+)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r003-20230426   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r001-20230423   gcc  
-alpha                randconfig-r014-20230426   gcc  
-alpha                randconfig-r015-20230426   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r001-20230426   gcc  
-arc                  randconfig-r003-20230424   gcc  
-arc                  randconfig-r026-20230426   gcc  
-arc                  randconfig-r043-20230426   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r004-20230426   gcc  
-arm                  randconfig-r046-20230426   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r005-20230426   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r002-20230424   gcc  
-csky                 randconfig-r023-20230426   gcc  
-hexagon      buildonly-randconfig-r005-20230426   clang
-hexagon              randconfig-r006-20230426   clang
-hexagon              randconfig-r034-20230426   clang
-hexagon              randconfig-r041-20230426   clang
-hexagon              randconfig-r045-20230426   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230424   clang
-i386                 randconfig-a002-20230424   clang
-i386                 randconfig-a003-20230424   clang
-i386                 randconfig-a004-20230424   clang
-i386                 randconfig-a005-20230424   clang
-i386                 randconfig-a006-20230424   clang
-i386                 randconfig-a011-20230424   gcc  
-i386                 randconfig-a012-20230424   gcc  
-i386                 randconfig-a013-20230424   gcc  
-i386                 randconfig-a014-20230424   gcc  
-i386                 randconfig-a015-20230424   gcc  
-i386                 randconfig-a016-20230424   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r001-20230424   gcc  
-ia64                 randconfig-r012-20230426   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r006-20230426   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r005-20230423   gcc  
-m68k                 randconfig-r036-20230426   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r005-20230424   gcc  
-nios2                               defconfig   gcc  
-openrisc             randconfig-r035-20230426   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r004-20230423   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r025-20230426   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r006-20230424   clang
-riscv                randconfig-r016-20230426   gcc  
-riscv                randconfig-r042-20230426   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r002-20230426   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230423   gcc  
-s390                 randconfig-r024-20230426   gcc  
-s390                 randconfig-r032-20230426   clang
-s390                 randconfig-r044-20230426   gcc  
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r001-20230426   gcc  
-sh           buildonly-randconfig-r004-20230426   gcc  
-sh                   randconfig-r011-20230426   gcc  
-sh                   randconfig-r031-20230426   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r002-20230423   gcc  
-sparc                randconfig-r021-20230426   gcc  
-sparc64              randconfig-r004-20230424   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a011-20230424   gcc  
-x86_64               randconfig-a012-20230424   gcc  
-x86_64               randconfig-a013-20230424   gcc  
-x86_64               randconfig-a014-20230424   gcc  
-x86_64               randconfig-a015-20230424   gcc  
-x86_64               randconfig-a016-20230424   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r022-20230426   gcc  
-xtensa               randconfig-r033-20230426   gcc  
-
+diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
+index 566a8d5bde08..4ab442301415 100644
+--- a/Documentation/hwmon/oxp-sensors.rst
++++ b/Documentation/hwmon/oxp-sensors.rst
+@@ -25,8 +25,10 @@ Supported devices
+ Currently the driver supports the following handhelds:
+ 
+  - AOK ZOE A1
++ - Aya Neo 2
+  - Aya Neo AIR
+  - Aya Neo AIR Pro
++ - Aya Neo Geek
+  - OneXPlayer AMD
+  - OneXPlayer mini AMD
+  - OneXPlayer mini AMD PRO
+diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+index ae67207030e8..9093c608dee0 100644
+--- a/drivers/hwmon/oxp-sensors.c
++++ b/drivers/hwmon/oxp-sensors.c
+@@ -42,8 +42,10 @@ static bool unlock_global_acpi_lock(void)
+ 
+ enum oxp_board {
+ 	aok_zoe_a1 = 1,
++	aya_neo_2,
+ 	aya_neo_air,
+ 	aya_neo_air_pro,
++	aya_neo_geek,
+ 	oxp_mini_amd,
+ 	oxp_mini_amd_pro,
+ };
+@@ -62,6 +64,13 @@ static const struct dmi_system_id dmi_table[] = {
+ 		},
+ 		.driver_data = (void *) &(enum oxp_board) {aok_zoe_a1},
+ 	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AYANEO 2"),
++		},
++		.driver_data = (void *) &(enum oxp_board) {aya_neo_2},
++	},
+ 	{
+ 		.matches = {
+ 			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
+@@ -76,6 +85,13 @@ static const struct dmi_system_id dmi_table[] = {
+ 		},
+ 		.driver_data = (void *) &(enum oxp_board) {aya_neo_air_pro},
+ 	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "GEEK"),
++		},
++		.driver_data = (void *) &(enum oxp_board) {aya_neo_geek},
++	},
+ 	{
+ 		.matches = {
+ 			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
+@@ -178,8 +194,10 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+ 			if (ret)
+ 				return ret;
+ 			switch (board) {
++			case aya_neo_2:
+ 			case aya_neo_air:
+ 			case aya_neo_air_pro:
++			case aya_neo_geek:
+ 			case oxp_mini_amd:
+ 				*val = (*val * 255) / 100;
+ 				break;
+@@ -217,8 +235,10 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+ 			if (val < 0 || val > 255)
+ 				return -EINVAL;
+ 			switch (board) {
++			case aya_neo_2:
+ 			case aya_neo_air:
+ 			case aya_neo_air_pro:
++			case aya_neo_geek:
+ 			case oxp_mini_amd:
+ 				val = (val * 100) / 255;
+ 				break;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.40.1
+
