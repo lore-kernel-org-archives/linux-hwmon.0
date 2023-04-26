@@ -2,343 +2,150 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F4C1C77B60
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Apr 2023 11:01:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9150EC77B60
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Apr 2023 12:35:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240281AbjDZLB4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 Apr 2023 07:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
+        id S240517AbjDZMfh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 26 Apr 2023 08:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240123AbjDZLBz (ORCPT
+        with ESMTP id S240494AbjDZMfg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Apr 2023 07:01:55 -0400
-Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA00212D
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 Apr 2023 04:01:52 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id rcuDpKT0qFuuVrcuDpbgiJ; Wed, 26 Apr 2023 13:01:50 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1682506911;
-        bh=P6l6zetgQcrJakLHGkVzKt0vOihvntcZ5fakSmWckj4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=PMEc6EQZwrcoHkmUPELBMsggN7cgyIcmkBlP420dZSsfD2LFWzC2yoMEIX/BtzafN
-         yzv9x8T2KSBN2kryQderxNm0qgN3UNHF1EmkuuF0lC/54uwLDWe6fqaRP/fuQHHbMe
-         UJNY3GQG15k35PL95iySi4ZUscH9mGXaA5k8X83gUJSmTADIrCBzsdvOTw1HMm8mEV
-         kpdeFsSxuT6dFizpHEQg+ehgVpVpo9OjC+fhmnxgERZhIOcVVglikBxHRIVJUz9RxP
-         8u8iIh5syS3fccjH6xvnhnacbRYqBR2G6X/R5NF6G4pE/xBvvjQ4LwGC2MYInWvaeR
-         kdQfj9OlKoXHw==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 26 Apr 2023 13:01:50 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <8ff8025f-bdbb-ec5f-9e2b-a182e3ff2e7d@wanadoo.fr>
-Date:   Wed, 26 Apr 2023 13:01:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] hwmon: (max597x) Add Maxim Max597x
-Content-Language: fr, en-US
+        Wed, 26 Apr 2023 08:35:36 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1AE3C39;
+        Wed, 26 Apr 2023 05:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682512535; x=1714048535;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DVAQ2H9eYhFnYmY1Vo/YzInzguOJas3HkypWUdYady0=;
+  b=YbPAdJQKXQbzR43LuRiPLKowSmoRTLCowqJ73z4TTaIPekue3j+j+Nfu
+   Ht+1gGfQ7yoNJCI3q8KxJ5Vf+g6LUiMffBX7/3Hurd1bCZ/rCcTzsXo9E
+   TokIikitfe/SkNeBrE0GjjH2395uYE8WqLvMuuPWj0SoEM9AJPMHBlZkc
+   dWea1TsuvkHcFQuQ0tw17hZRAkf6hEAInkV5tRw2Rk+33dDYi9B/ZRVzk
+   zMTidBdu50I/6fr/kMYbTREL/BLXWYMcjeLoe0wo8IOe9KOeI+/22fwud
+   DhP+Trl2BqpWdJEHAnbd6VSu/T7dIPReRKOtzfDSG1GQvIMmEn6WXpWYC
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="375045837"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="375045837"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 05:35:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="1023600017"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="1023600017"
+Received: from lkp-server01.sh.intel.com (HELO 041f065c1b1b) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Apr 2023 05:35:32 -0700
+Received: from kbuild by 041f065c1b1b with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1preMt-00008Y-1w;
+        Wed, 26 Apr 2023 12:35:31 +0000
+Date:   Wed, 26 Apr 2023 20:35:08 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Naresh Solanki <naresh.solanki@9elements.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (max597x) Add Maxim Max597x
+Message-ID: <202304262021.nGJgsK76-lkp@intel.com>
 References: <20230426090356.745979-1-Naresh.Solanki@9elements.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20230426090356.745979-1-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Le 26/04/2023 à 11:03, Naresh Solanki a écrit :
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> 
-> Add support for the Maxim Max59x power switch with current/voltage
-> monitor.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+Hi Naresh,
 
-Hi,
+kernel test robot noticed the following build warnings:
 
-a few nit below, should there be a v2.
+[auto build test WARNING on b4c288cfd2f84c44994330c408e14645d45dee5b]
 
-CJ
+url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/hwmon-max597x-Add-Maxim-Max597x/20230426-170556
+base:   b4c288cfd2f84c44994330c408e14645d45dee5b
+patch link:    https://lore.kernel.org/r/20230426090356.745979-1-Naresh.Solanki%409elements.com
+patch subject: [PATCH] hwmon: (max597x) Add Maxim Max597x
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230426/202304262021.nGJgsK76-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3d6f729d86a79adf0603717c79bc389a5dcc4444
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Naresh-Solanki/hwmon-max597x-Add-Maxim-Max597x/20230426-170556
+        git checkout 3d6f729d86a79adf0603717c79bc389a5dcc4444
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/
 
-> ---
->   drivers/hwmon/Kconfig   |   9 ++
->   drivers/hwmon/Makefile  |   1 +
->   drivers/hwmon/max597x.c | 212 ++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 222 insertions(+)
->   create mode 100644 drivers/hwmon/max597x.c
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 5b3b76477b0e..164d980d9de2 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1097,6 +1097,15 @@ config SENSORS_MAX31760
->   	  This driver can also be built as a module. If so, the module
->   	  will be called max31760.
->   
-> +config SENSORS_MAX597X
-> +	tristate "Maxim 597x power switch and monitor"
-> +	depends on I2C
-> +	depends on OF
-> +	select MFD_MAX597X
-> +	help
-> +	  This driver exposes Maxim 5970/5978 voltage/current monitoring
-> +	  interface.
-> +
->   config SENSORS_MAX6620
->   	tristate "Maxim MAX6620 fan controller"
->   	depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 88712b5031c8..720eb7d5fe46 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -142,6 +142,7 @@ obj-$(CONFIG_SENSORS_MAX197)	+= max197.o
->   obj-$(CONFIG_SENSORS_MAX31722)	+= max31722.o
->   obj-$(CONFIG_SENSORS_MAX31730)	+= max31730.o
->   obj-$(CONFIG_SENSORS_MAX31760)  += max31760.o
-> +obj-$(CONFIG_SENSORS_MAX597X)	+= max597x.o
->   obj-$(CONFIG_SENSORS_MAX6620)	+= max6620.o
->   obj-$(CONFIG_SENSORS_MAX6621)	+= max6621.o
->   obj-$(CONFIG_SENSORS_MAX6639)	+= max6639.o
-> diff --git a/drivers/hwmon/max597x.c b/drivers/hwmon/max597x.c
-> new file mode 100644
-> index 000000000000..d4d8c2faf55c
-> --- /dev/null
-> +++ b/drivers/hwmon/max597x.c
-> @@ -0,0 +1,212 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Device driver for regulators in MAX5970 and MAX5978 IC
-> + *
-> + * Copyright (c) 2022 9elements GmbH
-> + *
-> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
-> + */
-> +
-> +#include <linux/hwmon.h>
-> +#include <linux/i2c.h>
-> +#include <linux/mfd/max597x.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +struct max597x_hwmon {
-> +	int num_switches, irng[MAX5970_NUM_SWITCHES], mon_rng[MAX5970_NUM_SWITCHES];
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304262021.nGJgsK76-lkp@intel.com/
 
-Having 1 item per line is much more usual.
+All warnings (new ones prefixed by >>):
 
-> +	struct regmap *regmap;
-> +};
-> +
-> +static int max597x_read_reg(struct max597x_hwmon *ddata, int reg, int range, long *val)
-> +{
-> +	u8 reg_data[2];
-> +	int ret;
-> +
-> +	ret = regmap_bulk_read(ddata->regmap, reg, &reg_data[0], 2);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*val = (reg_data[0] << 2) | (reg_data[1] & 3);
-> +	*val = *val * range;
-> +	/*
-> +	 * From datasheet, the range is fractionally less.
-> +	 * To compensate that, divide with 1033 number.
-> +	 */
-> +	*val = *val / 1033;
-> +
-> +	return 0;
-> +}
-> +
-> +static int max597x_read(struct device *dev, enum hwmon_sensor_types type,
-> +			u32 attr, int channel, long *val)
-> +{
-> +	struct max597x_hwmon *ddata = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	switch (type) {
-> +	case hwmon_curr:
-> +		switch (attr) {
-> +		case hwmon_curr_input:
-> +			ret = max597x_read_reg(ddata, MAX5970_REG_CURRENT_H(channel),
-> +					       ddata->irng[channel], val);
-> +			if (ret < 0)
-> +				return ret;
-> +
-> +			return 0;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_input:
-> +			ret = max597x_read_reg(ddata, MAX5970_REG_VOLTAGE_H(channel),
-> +					       ddata->mon_rng[channel], val);
-> +			if (ret < 0)
-> +				return ret;
-> +			return 0;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	}
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static umode_t max597x_is_visible(const void *data,
-> +				  enum hwmon_sensor_types type,
-> +				  u32 attr, int channel)
-> +{
-> +	struct max597x_hwmon *ddata = (struct max597x_hwmon *)data;
-> +
-> +	if (channel >= ddata->num_switches)
-> +		return 0;
-> +
-> +	switch (type) {
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_input:
-> +			return 0444;
-> +		}
-> +		break;
-> +	case hwmon_curr:
-> +		switch (attr) {
-> +		case hwmon_curr_input:
-> +			return 0444;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_ops max597x_hwmon_ops = {
-> +	.is_visible = max597x_is_visible,
-> +	.read = max597x_read,
-> +};
-> +
-> +#define HWMON_CURRENT	HWMON_C_INPUT
-> +#define HWMON_VOLTAGE	HWMON_I_INPUT
-> +
-> +static const struct hwmon_channel_info *max597x_info[] = {
-> +	HWMON_CHANNEL_INFO(in, HWMON_VOLTAGE, HWMON_VOLTAGE),
-> +	HWMON_CHANNEL_INFO(curr, HWMON_CURRENT, HWMON_CURRENT),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_chip_info max597x_chip_info = {
-> +	.ops = &max597x_hwmon_ops,
-> +	.info = max597x_info,
-> +};
-> +
-> +static int max597x_adc_range(struct regmap *regmap, const int ch,
-> +			     u32 *irng, u32 *mon_rng)
-> +{
-> +	unsigned int reg;
-> +	int ret;
-> +
-> +	/* Decode current ADC range */
-> +	ret = regmap_read(regmap, MAX5970_REG_STATUS2, &reg);
-> +	if (ret)
-> +		return ret;
-> +	switch (MAX5970_IRNG(reg, ch)) {
-> +	case 0:
-> +		*irng = 100000;	/* 100 mV */
-> +		break;
-> +	case 1:
-> +		*irng = 50000;	/* 50 mV */
-> +		break;
-> +	case 2:
-> +		*irng = 25000;	/* 25 mV */
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Decode current voltage monitor range */
-> +	ret = regmap_read(regmap, MAX5970_REG_MON_RANGE, &reg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*mon_rng = MAX5970_MON_MAX_RANGE_UV >> MAX5970_MON(reg, ch);
-> +	*mon_rng /= 1000; /* uV to mV */
-> +
-> +	return 0;
-> +}
-> +
-> +static int max597x_sensor_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct i2c_client *i2c = to_i2c_client(pdev->dev.parent);
-> +	struct max597x_hwmon *ddata;
-> +	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> +	struct device *hwmon_dev;
-> +	int err;
-> +
-> +	if (!regmap)
-> +		return -EPROBE_DEFER;
-> +
-> +	ddata = devm_kzalloc(dev, sizeof(struct max597x_hwmon), GFP_KERNEL);
-> +	if (!ddata)
-> +		return -ENOMEM;
-> +
-> +	if (of_device_is_compatible(i2c->dev.of_node, "maxim,max5978"))
-> +		ddata->num_switches = MAX597x_TYPE_MAX5978;
-> +	else if (of_device_is_compatible(i2c->dev.of_node, "maxim,max5970"))
-> +		ddata->num_switches = MAX597x_TYPE_MAX5970;
-> +	else
-> +		return -ENODEV;
-> +
-> +	ddata->regmap = regmap;
-> +
-> +	for (int i = 0; i < ddata->num_switches; i++) {
+   drivers/hwmon/max597x.c: In function 'max597x_read':
+>> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_chip' not handled in switch [-Wswitch]
+      47 |         switch (type) {
+         |         ^~~~~~
+>> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_temp' not handled in switch [-Wswitch]
+>> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_power' not handled in switch [-Wswitch]
+>> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_energy' not handled in switch [-Wswitch]
+>> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_humidity' not handled in switch [-Wswitch]
+>> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_fan' not handled in switch [-Wswitch]
+>> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_pwm' not handled in switch [-Wswitch]
+>> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_intrusion' not handled in switch [-Wswitch]
+>> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_max' not handled in switch [-Wswitch]
 
-This is unusual to define 'i' within a 'for' loop.
 
-> +		err = max597x_adc_range(regmap, i, &ddata->irng[i], &ddata->mon_rng[i]);
-> +		if (err < 0)
-> +			return err;
-> +	}
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev,
-> +							 "max597x_hwmon", ddata,
-> +							 &max597x_chip_info, NULL);
-> +
+vim +/hwmon_chip +47 drivers/hwmon/max597x.c
 
-Unneeded empty line.
+    40	
+    41	static int max597x_read(struct device *dev, enum hwmon_sensor_types type,
+    42				u32 attr, int channel, long *val)
+    43	{
+    44		struct max597x_hwmon *ddata = dev_get_drvdata(dev);
+    45		int ret;
+    46	
+  > 47		switch (type) {
+    48		case hwmon_curr:
+    49			switch (attr) {
+    50			case hwmon_curr_input:
+    51				ret = max597x_read_reg(ddata, MAX5970_REG_CURRENT_H(channel),
+    52						       ddata->irng[channel], val);
+    53				if (ret < 0)
+    54					return ret;
+    55	
+    56				return 0;
+    57			default:
+    58				return -EOPNOTSUPP;
+    59			}
+    60	
+    61		case hwmon_in:
+    62			switch (attr) {
+    63			case hwmon_in_input:
+    64				ret = max597x_read_reg(ddata, MAX5970_REG_VOLTAGE_H(channel),
+    65						       ddata->mon_rng[channel], val);
+    66				if (ret < 0)
+    67					return ret;
+    68				return 0;
+    69			default:
+    70				return -EOPNOTSUPP;
+    71			}
+    72		}
+    73		return -EOPNOTSUPP;
+    74	}
+    75	
 
-> +	if (IS_ERR(hwmon_dev)) {
-> +		err = PTR_ERR(hwmon_dev);
-> +		dev_err(dev, "Unable to register hwmon device, returned %d\n", err);
-> +		return err;
-
-return dev_err_probe()?
-
-CJ
-
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver max597x_sensor_driver = {
-> +	.probe = max597x_sensor_probe,
-> +	.driver = {
-> +		.name = "max597x-hwmon",
-> +	},
-> +};
-> +module_platform_driver(max597x_sensor_driver);
-> +
-> +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
-> +MODULE_DESCRIPTION("MAX5970_hot-swap controller driver");
-> +MODULE_LICENSE("GPL v2");
-> 
-> base-commit: b4c288cfd2f84c44994330c408e14645d45dee5b
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
