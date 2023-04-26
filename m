@@ -2,94 +2,143 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59A92C77B78
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Apr 2023 18:50:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2216C77B7C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Apr 2023 19:35:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236276AbjDZSu4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 Apr 2023 14:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
+        id S236122AbjDZTf6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 26 Apr 2023 15:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235605AbjDZSuu (ORCPT
+        with ESMTP id S234139AbjDZTf5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Apr 2023 14:50:50 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9848699
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 Apr 2023 11:50:49 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63b4e5fdb1eso8815473b3a.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 Apr 2023 11:50:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682535048; x=1685127048;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AGlHwl4C/tjU+EyG1bSGJkwdQ/pjbSdAgso3xqSLYaI=;
-        b=r2SQqyEJcjipV2dBn90GorMeZwerCL+MVZRw+3sKFQoWFJ/LEr419MC02stK4wUxau
-         wd2ugIxOcGwPMoBOESVs0wthtGLN09aK0FxypcKuPUU/TDvQKX4yiuSQaNq8/op1u7ie
-         CPuvRvgMW83wIKaaaiYc/0RSvmjUPHQD5X7JSnqwUvKQsMDWCzpL224e3guCbjO9oUJS
-         zKJIssVPKer8ux9E7dLb1AysaO/HRPlM4+tPScjKWnM8dx73FolqQxp8eAPaUEsvF/B+
-         fcaX8Gnre5+ossW2faUO5Hsquj7uzEXcqYa/m42bixhT56wq2JYZw1FPAqjAjxQOPZgX
-         PgOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682535048; x=1685127048;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AGlHwl4C/tjU+EyG1bSGJkwdQ/pjbSdAgso3xqSLYaI=;
-        b=Tq6rcPi7Rb0rjQRT2kxvrr6tdwLU1qQx/Vm5kjTVC2df4BZ6kxzPSPwlE+Z9+pgTEH
-         FEtVOSO/eCprhSczv7S9Jm5vUZmhoZRHFR6+icGFLklGw6RSrTWkAU/IX5BJRjXpm6gm
-         wHkb8N1VUHXzBl6yMfS12GtuhIIBrOHIsxQM420vYUqWGa5HGv9s5hxoXwE9eUfe3M6v
-         iq5msV1ZB6390HtpuK2M8IyQlO5o0rrumVlOF24wvL2XY8Y5UxVS83VFxKmlQLEB84dW
-         hH0tVS4VsF/huG9TB3MgSQDiAOSHHaZmqODr0v4mR3rFon0Zi1hRatBtd++oFSKWLsds
-         IoYA==
-X-Gm-Message-State: AAQBX9fiqOXovi54fXu6/5BGNkpWBsFzMLCouRrBHyu5PprMiR7erf+W
-        pr7jZpCsvsMPLIv5mS0r9/k=
-X-Google-Smtp-Source: AKy350Y8vEbk9rFEg3xPfEVBPdO7iVIasqTmwPlAtCoSq1XmgB5RIDiq4msK9O7/TnC3JLh+9V3BSQ==
-X-Received: by 2002:a05:6a00:1947:b0:63f:18ae:1d5f with SMTP id s7-20020a056a00194700b0063f18ae1d5fmr26395531pfk.29.1682535048267;
-        Wed, 26 Apr 2023 11:50:48 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u29-20020a056a00099d00b0063d2bb0d107sm11694654pfg.64.2023.04.26.11.50.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 11:50:47 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 26 Apr 2023 11:50:46 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Renaud Lepage <root@cybikbase.com>
-Cc:     Denis Pauk <pauk.denis@gmail.com>, linux-hwmon@vger.kernel.org
-Subject: Re: hwmon patch
-Message-ID: <638be9f0-4258-4418-834d-4f8123fefa26@roeck-us.net>
-References: <SJ0PR12MB5673DC1F156198075B347F90BF659@SJ0PR12MB5673.namprd12.prod.outlook.com>
+        Wed, 26 Apr 2023 15:35:57 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB72114;
+        Wed, 26 Apr 2023 12:35:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1682537734; i=w_armin@gmx.de;
+        bh=XUyH3MfpE05wPAy94z/OMdVQELABtgu+fF1W2bG9JFE=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=TejFsH/6s5qsgGmRxhUaCTudQowayTMcrbFkJX8pL0zm0cpTuVu5O6Kn5I9FZdX8W
+         4MgewEr3Wf46200+6QAAZ7+1CvSRcVBu9Z5PPnHpmGga8glEgvirsR3yoCMVtnt/Rq
+         6VBZkN2IKWJfy1Irfh1vSQON9dxvKOsZUWwVF0cZT/lkSqruQyL+t5f4D1SEkBZq1+
+         VKrlKFSF7DoRulTcVCmNyK39atzxkWTxkcBVMLQ4mGTuHpUpQJ1qPGqjWjuw6ReNKa
+         m1v5J4h+gO4IvsVja0qDhPCYmPA9FrsE5I9pxh5qzkj9PQrbaZgL2P0iajDBceWdwc
+         WVnr/FXfqbGNQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.14] ([141.30.226.119]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MKsj7-1pYhRL1mRB-00LEfw; Wed, 26
+ Apr 2023 21:35:34 +0200
+Subject: Re: [PATCH v3] hwmon: add HP WMI Sensors driver
+To:     James Seo <james@equiv.tech>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230424100459.41672-1-james@equiv.tech>
+ <cd81a7d6-4b81-f074-1f28-6d1b5300b937@gmx.de> <ZEkkLggFLCGlvq8f@equiv.tech>
+From:   Armin Wolf <W_Armin@gmx.de>
+Message-ID: <30339393-0ba2-9788-6ad8-98c89afc6994@gmx.de>
+Date:   Wed, 26 Apr 2023 21:35:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <SJ0PR12MB5673DC1F156198075B347F90BF659@SJ0PR12MB5673.namprd12.prod.outlook.com>
+In-Reply-To: <ZEkkLggFLCGlvq8f@equiv.tech>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:JICnlOZNxItB8HUgNhCGxiBjBIfr4pYanULL+MdXEvBHoz27QIr
+ ASWWzKRP+r1wLi8W6l5YmQDwM6nczVZac4VvqajxEt7ywl/+7aX3CZ71v3u6SDSqSfNwQzm
+ jDZvzrqErUg3VJHpaa9/KE/r5SyRO3fDaU9FP7vuUhhP8AOkW8uzwFgzYZ1Wp1TRObbP5Dj
+ 9MRSKtTGWlBvFVNbQAM5g==
+UI-OutboundReport: notjunk:1;M01:P0:pR37t2XA8UM=;Cr1AtwwTuiNUxuE9z126nonbvxT
+ lJYSojLUODYDt/x7H09x34tjf1+yuWlmNrqMJYKuqiECHRj/g6IkCpNzYhmIhil5p5nULX6RI
+ bi1t9BLuPAThPC5KEbRcxqo6Ez/Y7xKFSRmc5V00mObjzYIH7Uy9bl3/3+bcBVzrmXbVGRMIb
+ YSc/XezvG+K529+0tXhvrvvUzaixidYBOGrReIuidBtv8aWX/1PiyNYaHJMNFbyIzUcCHqXMk
+ 62LQIbLoTiRtsiatsJ5s5mwSWl4Vb5Hi3O87931ANXHBCIckG0j9HmJZssB5nrsHbLApZ7U8t
+ BtYANDpPsFns+pGQwNYcqoEXf6Tjks4NunE82kTfOfvU/BiEJkXsQuxCM+n38uO8GNnzcwZOZ
+ tE9uvASScl2UX7T0UXsDuVNXOFpcvUkHLkCzQaNwmRKd0kFh2T7UTx8+znH4qm9go3npIvy7r
+ 0wC/Oron4FL6tRNz3QhBSRZONUeXpQhVrsY2MHjxpOFsXE+zfnwywQOFa0z662W5hOlSEoubQ
+ QkkpsFtFRcaDPxXD61i09kfKyrwhv3MPCAjdxL1+CA/TIJ4IIvaIRhiEMP0hUjNRcAljWdowX
+ H6X4gv+cKqABED9NR5DMo1LoPaPcAT4hqXxtlZo4B1XlTbUH/N2thnVoTEntd5JtJw7L1s2FX
+ SM3u9GaCvTxOaTX/DMNIS3ALg/FUPY5PlwDqH4EU9LHI96Gk3lrSveL2KjhVt/XDvSqdEiv4F
+ lxfADIquxlXa1QKaguMJlM6Lx8YQJ0yoqw7xh8eIWBMoqexJ3sz0xyOpPYvspBmPLulg8HFnQ
+ 2OMC40K3GkXOgrjdRJ7takVowXOi02ebWBhib7XFLxWKG4/O7FuGFW2HfwYMEt3GWfCh0Ysai
+ BgG/zIhv/79xZjs1QJF9ipfozhgzcs9rN0a/IEuRs9geK11Au+lrzrw4GKzE6/+2t2IXD1vD4
+ TAz54nwGT62SkQJ+PUIzRXaxoHI=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 04:38:53PM +0000, Renaud Lepage wrote:
-> Hello! Sorry for reaching out at random.
-> 
+Am 26.04.23 um 15:16 schrieb James Seo:
 
-In the future, please use the linux-hwmon@vger.kernel.org mailing list
-to reach out.
+> On Mon, Apr 24, 2023 at 11:13:36PM +0200, Armin Wolf wrote:
+>> Am 24.04.23 um 12:05 schrieb James Seo:
+>>
+>>> +	for (i = 0; i < HP_WMI_MAX_INSTANCES; i++, pevents++) {
+>> Hi,
+>>
+>> the WMI driver core already knows how many instances of a given WMI object are available.
+>> Unfortunately, this information is currently unavailable to drivers. Would it be convenient
+>> for you to access this information? I could try to implement such a function if needed.
+>>
+>>> +	for (i = 0; i < HP_WMI_MAX_INSTANCES; i++, info++) {
+>> Same as above.
+>>
+> Hello,
+>
+> Having the WMI object instance count wouldn't make much difference to
+> me for now. The driver has to iterate through all instances during
+> init anyway. If I were forced to accommodate 50+ sensors, I'd rewrite
+> some things and I think I'd want such a function then, but I picked
+> the current arbitrary limit of 32 because even that seems unlikely.
+>
+> So, maybe don't worry about it unless you want to. Or am I missing
+> something?
+>
+Hi,
 
-> nct6775-platform.c lists support for a NUMBER of motherboards, of which mine isn't listed. Is there any specific reason why the Strix B360-*, H370-* and Z390-* are listed, but the Z370-* are (conspicuously) not present?
-> 
+i already have a experimental patch available which adds such a function.
+If you could test this patch to see if it works, then i could submit it upstream
+where other drivers could profit from being able to know the number of
+WMI object instances.
 
-Presumably because no one submitted a patch adding support for it,
-or maybe because it doesn't work. Denis, any comments / feedback ?
+Your driver could also profit from such a function, as it could optimize the amount
+of memory allocated to store WMI object data. The current instance discovery algorithm
+(using a for-loop and break on error) also has a potential issue: when a single WMI call
+fails for some reason (ACPI error, ...), all following WMI instances are being ignored.
 
-On a side note, please never use all-capitals for words.
-That is equivalent to shouting.
+I will post a RFC patch implementing such a function and CC you and a couple of people
+who might be interested. If you want to test this function, then you can use this patch.
+If you find out that the function does not work for you, then you can just continue with
+your current approach.
 
-Thanks,
-Guenter
+Armin Wolf
 
-> If it's lack of testing, I volunteer as tribute. I'm running a https://www.amazon.com/gp/product/B075RHWCBT/ right now.
-> 
-> --
-> Renaud Lepage
-> BScA Informatique et Génie Logiciel
-> BAsc CompSci & Software Eng
-> 
+>>> +	err = wmi_install_notify_handler(HP_WMI_EVENT_GUID,
+>>> +					 hp_wmi_notify, state);
+>> As a side note: the GUID-based interface for accessing WMI devices is deprecated.
+>> It has known problems handling WMI devices sharing GUIDs and/or notification IDs. However,
+>> the modern bus-based WMI interface (currently) does not support such aggregate devices well,
+>> so i think using wmi_install_notify_handler() is still the best thing you can currently do.
+>>
+> Interesting. Of course I had no idea. Though, for some strange
+> reason, it does look like some documentation to that effect has
+> emerged on the topic since the last time I checked ;)
+>
+>>> +	if (err) {
+>>> +		dev_info(dev, "Failed to subscribe to WMI event\n");
+>>> +		return false;
+>>> +	}
+>>> +
+>>> +	err = devm_add_action(dev, hp_wmi_devm_notify_remove, NULL);
+>>> +	if (err) {
+>>> +		wmi_remove_notify_handler(HP_WMI_EVENT_GUID);
+>>> +		return false;
+>>> +	}
+>> Maybe use devm_add_action_or_reset() here?
+> Will do.
+>
+> Thanks for reviewing/writing.
+>
+> James
