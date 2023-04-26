@@ -2,150 +2,93 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9150EC77B60
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Apr 2023 12:35:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4262C77B60
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Apr 2023 12:43:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240517AbjDZMfh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 Apr 2023 08:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
+        id S240523AbjDZMnd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 26 Apr 2023 08:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240494AbjDZMfg (ORCPT
+        with ESMTP id S240503AbjDZMnc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Apr 2023 08:35:36 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1AE3C39;
-        Wed, 26 Apr 2023 05:35:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682512535; x=1714048535;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DVAQ2H9eYhFnYmY1Vo/YzInzguOJas3HkypWUdYady0=;
-  b=YbPAdJQKXQbzR43LuRiPLKowSmoRTLCowqJ73z4TTaIPekue3j+j+Nfu
-   Ht+1gGfQ7yoNJCI3q8KxJ5Vf+g6LUiMffBX7/3Hurd1bCZ/rCcTzsXo9E
-   TokIikitfe/SkNeBrE0GjjH2395uYE8WqLvMuuPWj0SoEM9AJPMHBlZkc
-   dWea1TsuvkHcFQuQ0tw17hZRAkf6hEAInkV5tRw2Rk+33dDYi9B/ZRVzk
-   zMTidBdu50I/6fr/kMYbTREL/BLXWYMcjeLoe0wo8IOe9KOeI+/22fwud
-   DhP+Trl2BqpWdJEHAnbd6VSu/T7dIPReRKOtzfDSG1GQvIMmEn6WXpWYC
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="375045837"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="375045837"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 05:35:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="1023600017"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="1023600017"
-Received: from lkp-server01.sh.intel.com (HELO 041f065c1b1b) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Apr 2023 05:35:32 -0700
-Received: from kbuild by 041f065c1b1b with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1preMt-00008Y-1w;
-        Wed, 26 Apr 2023 12:35:31 +0000
-Date:   Wed, 26 Apr 2023 20:35:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        Wed, 26 Apr 2023 08:43:32 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93EE26B8;
+        Wed, 26 Apr 2023 05:42:59 -0700 (PDT)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QC3sHE030568;
+        Wed, 26 Apr 2023 08:41:54 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3q69tgstkt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Apr 2023 08:41:54 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 33QCfrH9055259
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Apr 2023 08:41:53 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 26 Apr
+ 2023 08:41:52 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 26 Apr 2023 08:41:52 -0400
+Received: from daniel-Precision-5530.ad.analog.com ([10.48.65.214])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 33QCfabG007637;
+        Wed, 26 Apr 2023 08:41:39 -0400
+From:   Daniel Matyas <daniel.matyas@analog.com>
+CC:     Daniel Matyas <daniel.matyas@analog.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (max597x) Add Maxim Max597x
-Message-ID: <202304262021.nGJgsK76-lkp@intel.com>
-References: <20230426090356.745979-1-Naresh.Solanki@9elements.com>
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+Subject: [PATCH v3 0/2] Hwmon driver for MAX31827 temperature switch
+Date:   Wed, 26 Apr 2023 15:40:44 +0300
+Message-ID: <20230426124049.258359-1-daniel.matyas@analog.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230426090356.745979-1-Naresh.Solanki@9elements.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: 3KyfBKNOltwzu48e15GFaiydW99z2GYF
+X-Proofpoint-ORIG-GUID: 3KyfBKNOltwzu48e15GFaiydW99z2GYF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-26_05,2023-04-26_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ bulkscore=0 lowpriorityscore=0 adultscore=0 impostorscore=0 mlxscore=0
+ spamscore=0 priorityscore=1501 mlxlogscore=714 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304260113
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Naresh,
+Removed of_match_table and kept only id_table. Removed other device id's
+from id_table (I have them only in the devicetree-binding).
 
-kernel test robot noticed the following build warnings:
+Added mutex protection where it was needed.
 
-[auto build test WARNING on b4c288cfd2f84c44994330c408e14645d45dee5b]
+Daniel Matyas (2):
+  dt-bindings: hwmon: add MAX31827
+  hwmon: max31827: add MAX31827 driver
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/hwmon-max597x-Add-Maxim-Max597x/20230426-170556
-base:   b4c288cfd2f84c44994330c408e14645d45dee5b
-patch link:    https://lore.kernel.org/r/20230426090356.745979-1-Naresh.Solanki%409elements.com
-patch subject: [PATCH] hwmon: (max597x) Add Maxim Max597x
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230426/202304262021.nGJgsK76-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3d6f729d86a79adf0603717c79bc389a5dcc4444
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Naresh-Solanki/hwmon-max597x-Add-Maxim-Max597x/20230426-170556
-        git checkout 3d6f729d86a79adf0603717c79bc389a5dcc4444
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304262021.nGJgsK76-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/hwmon/max597x.c: In function 'max597x_read':
->> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_chip' not handled in switch [-Wswitch]
-      47 |         switch (type) {
-         |         ^~~~~~
->> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_temp' not handled in switch [-Wswitch]
->> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_power' not handled in switch [-Wswitch]
->> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_energy' not handled in switch [-Wswitch]
->> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_humidity' not handled in switch [-Wswitch]
->> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_fan' not handled in switch [-Wswitch]
->> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_pwm' not handled in switch [-Wswitch]
->> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_intrusion' not handled in switch [-Wswitch]
->> drivers/hwmon/max597x.c:47:9: warning: enumeration value 'hwmon_max' not handled in switch [-Wswitch]
-
-
-vim +/hwmon_chip +47 drivers/hwmon/max597x.c
-
-    40	
-    41	static int max597x_read(struct device *dev, enum hwmon_sensor_types type,
-    42				u32 attr, int channel, long *val)
-    43	{
-    44		struct max597x_hwmon *ddata = dev_get_drvdata(dev);
-    45		int ret;
-    46	
-  > 47		switch (type) {
-    48		case hwmon_curr:
-    49			switch (attr) {
-    50			case hwmon_curr_input:
-    51				ret = max597x_read_reg(ddata, MAX5970_REG_CURRENT_H(channel),
-    52						       ddata->irng[channel], val);
-    53				if (ret < 0)
-    54					return ret;
-    55	
-    56				return 0;
-    57			default:
-    58				return -EOPNOTSUPP;
-    59			}
-    60	
-    61		case hwmon_in:
-    62			switch (attr) {
-    63			case hwmon_in_input:
-    64				ret = max597x_read_reg(ddata, MAX5970_REG_VOLTAGE_H(channel),
-    65						       ddata->mon_rng[channel], val);
-    66				if (ret < 0)
-    67					return ret;
-    68				return 0;
-    69			default:
-    70				return -EOPNOTSUPP;
-    71			}
-    72		}
-    73		return -EOPNOTSUPP;
-    74	}
-    75	
+ .../bindings/hwmon/adi,max31827.yaml          |  54 +++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/max31827.rst              |  83 ++++
+ MAINTAINERS                                   |   9 +
+ drivers/hwmon/Kconfig                         |  11 +
+ drivers/hwmon/Makefile                        |   2 +-
+ drivers/hwmon/max31827.c                      | 406 ++++++++++++++++++
+ 7 files changed, 565 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+ create mode 100644 Documentation/hwmon/max31827.rst
+ create mode 100644 drivers/hwmon/max31827.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
