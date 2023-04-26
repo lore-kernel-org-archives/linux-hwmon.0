@@ -2,163 +2,94 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 704A6C7618E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Apr 2023 18:44:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59A92C77B78
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Apr 2023 18:50:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233615AbjDZSox (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 Apr 2023 14:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
+        id S236276AbjDZSu4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 26 Apr 2023 14:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbjDZSow (ORCPT
+        with ESMTP id S235605AbjDZSuu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Apr 2023 14:44:52 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9BA44BA;
-        Wed, 26 Apr 2023 11:44:51 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6a5f765d5b8so5763192a34.3;
-        Wed, 26 Apr 2023 11:44:51 -0700 (PDT)
+        Wed, 26 Apr 2023 14:50:50 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9848699
+        for <linux-hwmon@vger.kernel.org>; Wed, 26 Apr 2023 11:50:49 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63b4e5fdb1eso8815473b3a.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 26 Apr 2023 11:50:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682534691; x=1685126691;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=19DcYFOzr7bYWgxAGD4nb6l+fYJhmF+vtyo3LpAEbFI=;
-        b=q8StYfd7PyIZ+wYaYPJzn38ROM6BjLJ+nJ+jB8GQLB+n9BKNJ9thubM43pxGxiail+
-         rtiLYoQeUdu6M4Dc/p4B3los1qXqepTdTcnaQPO6vM2MoXzHm+YnGZNqVCq+PRkIgilv
-         C0Au7sxr6uKC376PYjVoF4BJkNrHSlAS0FE6fHgLdyawDqaFEBuUm45JKn9Q1HfpiSNl
-         v8MIBR67iDd0Yb6Dk6zj4rYXCBmrNnzKu0Tg7l0tl8c2e3FUkPOnv/2CIb1VkwbTUnqI
-         +0oI8k1N74V2oxfEvtyclb8VLXoSxcDiN/5fu7mbL0Wm6BojjN69CgOTkIS83TsswbT9
-         WdsA==
+        d=gmail.com; s=20221208; t=1682535048; x=1685127048;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AGlHwl4C/tjU+EyG1bSGJkwdQ/pjbSdAgso3xqSLYaI=;
+        b=r2SQqyEJcjipV2dBn90GorMeZwerCL+MVZRw+3sKFQoWFJ/LEr419MC02stK4wUxau
+         wd2ugIxOcGwPMoBOESVs0wthtGLN09aK0FxypcKuPUU/TDvQKX4yiuSQaNq8/op1u7ie
+         CPuvRvgMW83wIKaaaiYc/0RSvmjUPHQD5X7JSnqwUvKQsMDWCzpL224e3guCbjO9oUJS
+         zKJIssVPKer8ux9E7dLb1AysaO/HRPlM4+tPScjKWnM8dx73FolqQxp8eAPaUEsvF/B+
+         fcaX8Gnre5+ossW2faUO5Hsquj7uzEXcqYa/m42bixhT56wq2JYZw1FPAqjAjxQOPZgX
+         PgOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682534691; x=1685126691;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=19DcYFOzr7bYWgxAGD4nb6l+fYJhmF+vtyo3LpAEbFI=;
-        b=XDEPsfanHZ48tv7IfaXfXGHuW/sqiQtHwigL6c39YtHZHmfec9vxKuPRY4u/8QXMqS
-         NsMpaSGukcHYjVTLQ/QQCt153kbfTL8pU8Y0RbgznwpOBeXKMa4Wk0w7ntOkt49adRSj
-         DczeKbx+IvtFte7nmFQAcsiYg8bycsSPhbSRJHuwiiXM0JbmVDvrPbLHfoDAbhJefNth
-         Owsrfp58N18/XfwhGXOflhjXBHQXUXgCnRfVMJ8GyKufr4Kk46WqDQ5PSekDayI7pIAG
-         kMg+DOq+dHM2PF+HsmabhlWBMP969qVjuxjZ2gAeqwcvNZcuQMeavnBaAdAMckr9j0l/
-         96RA==
-X-Gm-Message-State: AC+VfDwD/FMHRuAnbI2Qz3RPO09Q2rW3ze5Bjm8ZOz3GHiGMECQOXh57
-        B1ML99XDYXdRlRNEAmCLNHU=
-X-Google-Smtp-Source: AKy350Z3O+cgN8178KDyjnlW8gw1rrrtW92Jw4nHiK+SPthg9GNdfERoXYxU9SzATJ4rBwRIXsTzhg==
-X-Received: by 2002:a9d:6251:0:b0:6a7:bced:4121 with SMTP id i17-20020a9d6251000000b006a7bced4121mr2483500otk.5.1682534690696;
-        Wed, 26 Apr 2023 11:44:50 -0700 (PDT)
-Received: from smeagol.fibertel.com.ar ([201.235.4.68])
-        by smtp.gmail.com with ESMTPSA id j14-20020a9d7f0e000000b0069f0a85fa36sm7097580otq.57.2023.04.26.11.44.48
+        d=1e100.net; s=20221208; t=1682535048; x=1685127048;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AGlHwl4C/tjU+EyG1bSGJkwdQ/pjbSdAgso3xqSLYaI=;
+        b=Tq6rcPi7Rb0rjQRT2kxvrr6tdwLU1qQx/Vm5kjTVC2df4BZ6kxzPSPwlE+Z9+pgTEH
+         FEtVOSO/eCprhSczv7S9Jm5vUZmhoZRHFR6+icGFLklGw6RSrTWkAU/IX5BJRjXpm6gm
+         wHkb8N1VUHXzBl6yMfS12GtuhIIBrOHIsxQM420vYUqWGa5HGv9s5hxoXwE9eUfe3M6v
+         iq5msV1ZB6390HtpuK2M8IyQlO5o0rrumVlOF24wvL2XY8Y5UxVS83VFxKmlQLEB84dW
+         hH0tVS4VsF/huG9TB3MgSQDiAOSHHaZmqODr0v4mR3rFon0Zi1hRatBtd++oFSKWLsds
+         IoYA==
+X-Gm-Message-State: AAQBX9fiqOXovi54fXu6/5BGNkpWBsFzMLCouRrBHyu5PprMiR7erf+W
+        pr7jZpCsvsMPLIv5mS0r9/k=
+X-Google-Smtp-Source: AKy350Y8vEbk9rFEg3xPfEVBPdO7iVIasqTmwPlAtCoSq1XmgB5RIDiq4msK9O7/TnC3JLh+9V3BSQ==
+X-Received: by 2002:a05:6a00:1947:b0:63f:18ae:1d5f with SMTP id s7-20020a056a00194700b0063f18ae1d5fmr26395531pfk.29.1682535048267;
+        Wed, 26 Apr 2023 11:50:48 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u29-20020a056a00099d00b0063d2bb0d107sm11694654pfg.64.2023.04.26.11.50.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 11:44:50 -0700 (PDT)
-From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>
-To:     linux@roeck-us.net
-Cc:     =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>, derekjohn.clark@gmail.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (oxp-sensors) Add AYANEO 2 and Geek models
-Date:   Wed, 26 Apr 2023 15:44:20 -0300
-Message-Id: <20230426184420.99945-1-samsagax@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Wed, 26 Apr 2023 11:50:47 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 26 Apr 2023 11:50:46 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Renaud Lepage <root@cybikbase.com>
+Cc:     Denis Pauk <pauk.denis@gmail.com>, linux-hwmon@vger.kernel.org
+Subject: Re: hwmon patch
+Message-ID: <638be9f0-4258-4418-834d-4f8123fefa26@roeck-us.net>
+References: <SJ0PR12MB5673DC1F156198075B347F90BF659@SJ0PR12MB5673.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <SJ0PR12MB5673DC1F156198075B347F90BF659@SJ0PR12MB5673.namprd12.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for handhelds with same EC registers
-  - AYANEO 2
-  - AYANEO GEEK
+On Wed, Apr 26, 2023 at 04:38:53PM +0000, Renaud Lepage wrote:
+> Hello! Sorry for reaching out at random.
+> 
 
-All functionality tests succeed on AYANEO 2 by "pastaq" user on Discord
-and AYANEO GEEK tested by "oneoc" Discord user.
+In the future, please use the linux-hwmon@vger.kernel.org mailing list
+to reach out.
 
-Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
----
- Documentation/hwmon/oxp-sensors.rst |  2 ++
- drivers/hwmon/oxp-sensors.c         | 20 ++++++++++++++++++++
- 2 files changed, 22 insertions(+)
+> nct6775-platform.c lists support for a NUMBER of motherboards, of which mine isn't listed. Is there any specific reason why the Strix B360-*, H370-* and Z390-* are listed, but the Z370-* are (conspicuously) not present?
+> 
 
-diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
-index 566a8d5bde08..4ab442301415 100644
---- a/Documentation/hwmon/oxp-sensors.rst
-+++ b/Documentation/hwmon/oxp-sensors.rst
-@@ -25,8 +25,10 @@ Supported devices
- Currently the driver supports the following handhelds:
- 
-  - AOK ZOE A1
-+ - Aya Neo 2
-  - Aya Neo AIR
-  - Aya Neo AIR Pro
-+ - Aya Neo Geek
-  - OneXPlayer AMD
-  - OneXPlayer mini AMD
-  - OneXPlayer mini AMD PRO
-diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-index ae67207030e8..9093c608dee0 100644
---- a/drivers/hwmon/oxp-sensors.c
-+++ b/drivers/hwmon/oxp-sensors.c
-@@ -42,8 +42,10 @@ static bool unlock_global_acpi_lock(void)
- 
- enum oxp_board {
- 	aok_zoe_a1 = 1,
-+	aya_neo_2,
- 	aya_neo_air,
- 	aya_neo_air_pro,
-+	aya_neo_geek,
- 	oxp_mini_amd,
- 	oxp_mini_amd_pro,
- };
-@@ -62,6 +64,13 @@ static const struct dmi_system_id dmi_table[] = {
- 		},
- 		.driver_data = (void *) &(enum oxp_board) {aok_zoe_a1},
- 	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AYANEO 2"),
-+		},
-+		.driver_data = (void *) &(enum oxp_board) {aya_neo_2},
-+	},
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-@@ -76,6 +85,13 @@ static const struct dmi_system_id dmi_table[] = {
- 		},
- 		.driver_data = (void *) &(enum oxp_board) {aya_neo_air_pro},
- 	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "GEEK"),
-+		},
-+		.driver_data = (void *) &(enum oxp_board) {aya_neo_geek},
-+	},
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-@@ -178,8 +194,10 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
- 			if (ret)
- 				return ret;
- 			switch (board) {
-+			case aya_neo_2:
- 			case aya_neo_air:
- 			case aya_neo_air_pro:
-+			case aya_neo_geek:
- 			case oxp_mini_amd:
- 				*val = (*val * 255) / 100;
- 				break;
-@@ -217,8 +235,10 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
- 			if (val < 0 || val > 255)
- 				return -EINVAL;
- 			switch (board) {
-+			case aya_neo_2:
- 			case aya_neo_air:
- 			case aya_neo_air_pro:
-+			case aya_neo_geek:
- 			case oxp_mini_amd:
- 				val = (val * 100) / 255;
- 				break;
--- 
-2.40.1
+Presumably because no one submitted a patch adding support for it,
+or maybe because it doesn't work. Denis, any comments / feedback ?
 
+On a side note, please never use all-capitals for words.
+That is equivalent to shouting.
+
+Thanks,
+Guenter
+
+> If it's lack of testing, I volunteer as tribute. I'm running a https://www.amazon.com/gp/product/B075RHWCBT/ right now.
+> 
+> --
+> Renaud Lepage
+> BScA Informatique et G�nie Logiciel
+> BAsc CompSci & Software Eng
+> 
