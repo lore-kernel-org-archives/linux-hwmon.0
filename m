@@ -2,68 +2,336 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06BBAC77B7F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Apr 2023 00:50:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6669C77B60
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Apr 2023 09:04:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238990AbjDZAuP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Apr 2023 20:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
+        id S235251AbjDZJEJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 26 Apr 2023 05:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239025AbjDZAuA (ORCPT
+        with ESMTP id S239449AbjDZJEJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Apr 2023 20:50:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D364193ED;
-        Tue, 25 Apr 2023 17:49:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C52D63241;
-        Wed, 26 Apr 2023 00:49:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E82F7C433AA;
-        Wed, 26 Apr 2023 00:49:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682470179;
-        bh=DLvGRa8jJkYQFMo6jH03wsw8rfT+N16U/Auo8b7ckas=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=rvGtDT+K2XQatCyp9Z0TLMj/iem7paEeky2fj1OJXa1Hb4ieWZhnjoKN1fMHw+OXe
-         6sEwuLgKBQFyYoVh7aVFqnvP+ax9ujsLpgPnh9PqSsvQXz7tiK82Lnpq4STSI6Z7J4
-         SwGNEiLs8ewDbYsdrswh99hm0EjgFaD+JoJszNArc7gbN8LP9oVHVHdw6Trwr1onN7
-         bnwMDeGeNrZfTYv3p40Fh66yaM+r/dKrMnJddZ0vfkra39UuuENjABQHHsslxVKF1J
-         44GS5WnpMaft/DzhnXAjLaqA9LiGTa/O0d9Asow5WeieqPqXvoLM1pu8gJ3XrbAEln
-         GZP+1AGZ46afw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D8223E5FFC5;
-        Wed, 26 Apr 2023 00:49:39 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon updates for v6.4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230424133601.567008-1-linux@roeck-us.net>
-References: <20230424133601.567008-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230424133601.567008-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.4
-X-PR-Tracked-Commit-Id: 1c19ac768b8eeb0304c4ed7db66c2bb89c6ad226
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4173cf6fb6b7d1b4569cca08af318c4561356fb5
-Message-Id: <168247017988.10866.8283880248832418384.pr-tracker-bot@kernel.org>
-Date:   Wed, 26 Apr 2023 00:49:39 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        Wed, 26 Apr 2023 05:04:09 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA25C40D5
+        for <linux-hwmon@vger.kernel.org>; Wed, 26 Apr 2023 02:04:04 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f199696149so30150835e9.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 26 Apr 2023 02:04:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1682499843; x=1685091843;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gTe9Erp8A3FszZ2u9J7n6BQSH7RUrGdSBEbUVVQT+CU=;
+        b=DvWydOSzPpE2ZNg3OBCevSDs4MTY/t+5ZWETDzwzyN/I8tIzRI7Rx/OzTu3xjeWW73
+         zbgJfjtIT4VgZfH5XGr8bu7Gy6imXfp/UJeYV2m+KhUrHru4hkVUma6NyJUbgISv7RhE
+         aF04cjZI+7kgTyyaHrPHyl7rTdNFaQqXavFx2M/q2WJqSFnnwiLDsKG9SGIyuEYm5qsQ
+         +Nb59obfPcbFYgUuAcJjNEibJOIq0JiQ8uWPHcfFjZRVFDPscJa32HZgp5smEGNFNKxw
+         X5RpuPt0EtCYDTTO4dzc1ZbZGY2+c/I9JdDnBx+34f3aXZM+oPYWuBW/qpMTlYor3Awn
+         ceWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682499843; x=1685091843;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gTe9Erp8A3FszZ2u9J7n6BQSH7RUrGdSBEbUVVQT+CU=;
+        b=lYxy+EZ30Dog2cffzUMo2jqnWCoJCCxDTP1UdOO45r05ZO+WIzNY6RybFXU6dcOxso
+         uvKARGk2V8udW6EXGGRkg1sl8HS3p9KKIov4dVp/Rv5P0HZ1ndCWlEbHmfNwDLOD/zUD
+         uPlCEs79/GhEqj24jIhy9T8Wupigg4lFWh1PXKdt6oxcrcgRnVRjGAT0GdNkhco/y51A
+         wr+sFJPusP0g6VqTdLdyQ1Onavdkz7MnEsXnohwQ9Zn7ErBf2vJMm21yfBjcE3Zl5oNh
+         yDJDCH/BRGv7QtoXMhq/xVv0weSWGPeiQDbaFvE692ws986r0oBiBIQN0luTbraRzFQ/
+         yV8A==
+X-Gm-Message-State: AAQBX9cwzdqHrGCSc8MPHahHchnatYrfMoq7avSv0MifEdenYGdTFhLW
+        8NK8MC6Pvl2RZa4PspkbV4CZHA==
+X-Google-Smtp-Source: AKy350bKiZnHIZkU69q2t7FbxHuEOy8iMEQ+J0Vc3jVLtV490stbBq/2MUC8X0rk6GPFseUQ1Kv9Yw==
+X-Received: by 2002:a05:600c:3657:b0:3f0:4734:bef8 with SMTP id y23-20020a05600c365700b003f04734bef8mr12041627wmq.39.1682499843148;
+        Wed, 26 Apr 2023 02:04:03 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id k18-20020a05600c0b5200b003edf2dc7ca3sm17243673wmr.34.2023.04.26.02.04.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 02:04:02 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: (max597x) Add Maxim Max597x
+Date:   Wed, 26 Apr 2023 11:03:55 +0200
+Message-Id: <20230426090356.745979-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Mon, 24 Apr 2023 06:36:01 -0700:
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.4
+Add support for the Maxim Max59x power switch with current/voltage
+monitor.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4173cf6fb6b7d1b4569cca08af318c4561356fb5
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+---
+ drivers/hwmon/Kconfig   |   9 ++
+ drivers/hwmon/Makefile  |   1 +
+ drivers/hwmon/max597x.c | 212 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 222 insertions(+)
+ create mode 100644 drivers/hwmon/max597x.c
 
-Thank you!
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 5b3b76477b0e..164d980d9de2 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1097,6 +1097,15 @@ config SENSORS_MAX31760
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called max31760.
+ 
++config SENSORS_MAX597X
++	tristate "Maxim 597x power switch and monitor"
++	depends on I2C
++	depends on OF
++	select MFD_MAX597X
++	help
++	  This driver exposes Maxim 5970/5978 voltage/current monitoring
++	  interface.
++
+ config SENSORS_MAX6620
+ 	tristate "Maxim MAX6620 fan controller"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 88712b5031c8..720eb7d5fe46 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -142,6 +142,7 @@ obj-$(CONFIG_SENSORS_MAX197)	+= max197.o
+ obj-$(CONFIG_SENSORS_MAX31722)	+= max31722.o
+ obj-$(CONFIG_SENSORS_MAX31730)	+= max31730.o
+ obj-$(CONFIG_SENSORS_MAX31760)  += max31760.o
++obj-$(CONFIG_SENSORS_MAX597X)	+= max597x.o
+ obj-$(CONFIG_SENSORS_MAX6620)	+= max6620.o
+ obj-$(CONFIG_SENSORS_MAX6621)	+= max6621.o
+ obj-$(CONFIG_SENSORS_MAX6639)	+= max6639.o
+diff --git a/drivers/hwmon/max597x.c b/drivers/hwmon/max597x.c
+new file mode 100644
+index 000000000000..d4d8c2faf55c
+--- /dev/null
++++ b/drivers/hwmon/max597x.c
+@@ -0,0 +1,212 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Device driver for regulators in MAX5970 and MAX5978 IC
++ *
++ * Copyright (c) 2022 9elements GmbH
++ *
++ * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
++ */
++
++#include <linux/hwmon.h>
++#include <linux/i2c.h>
++#include <linux/mfd/max597x.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++
++struct max597x_hwmon {
++	int num_switches, irng[MAX5970_NUM_SWITCHES], mon_rng[MAX5970_NUM_SWITCHES];
++	struct regmap *regmap;
++};
++
++static int max597x_read_reg(struct max597x_hwmon *ddata, int reg, int range, long *val)
++{
++	u8 reg_data[2];
++	int ret;
++
++	ret = regmap_bulk_read(ddata->regmap, reg, &reg_data[0], 2);
++	if (ret < 0)
++		return ret;
++
++	*val = (reg_data[0] << 2) | (reg_data[1] & 3);
++	*val = *val * range;
++	/*
++	 * From datasheet, the range is fractionally less.
++	 * To compensate that, divide with 1033 number.
++	 */
++	*val = *val / 1033;
++
++	return 0;
++}
++
++static int max597x_read(struct device *dev, enum hwmon_sensor_types type,
++			u32 attr, int channel, long *val)
++{
++	struct max597x_hwmon *ddata = dev_get_drvdata(dev);
++	int ret;
++
++	switch (type) {
++	case hwmon_curr:
++		switch (attr) {
++		case hwmon_curr_input:
++			ret = max597x_read_reg(ddata, MAX5970_REG_CURRENT_H(channel),
++					       ddata->irng[channel], val);
++			if (ret < 0)
++				return ret;
++
++			return 0;
++		default:
++			return -EOPNOTSUPP;
++		}
++
++	case hwmon_in:
++		switch (attr) {
++		case hwmon_in_input:
++			ret = max597x_read_reg(ddata, MAX5970_REG_VOLTAGE_H(channel),
++					       ddata->mon_rng[channel], val);
++			if (ret < 0)
++				return ret;
++			return 0;
++		default:
++			return -EOPNOTSUPP;
++		}
++	}
++	return -EOPNOTSUPP;
++}
++
++static umode_t max597x_is_visible(const void *data,
++				  enum hwmon_sensor_types type,
++				  u32 attr, int channel)
++{
++	struct max597x_hwmon *ddata = (struct max597x_hwmon *)data;
++
++	if (channel >= ddata->num_switches)
++		return 0;
++
++	switch (type) {
++	case hwmon_in:
++		switch (attr) {
++		case hwmon_in_input:
++			return 0444;
++		}
++		break;
++	case hwmon_curr:
++		switch (attr) {
++		case hwmon_curr_input:
++			return 0444;
++		}
++		break;
++	default:
++		break;
++	}
++	return 0;
++}
++
++static const struct hwmon_ops max597x_hwmon_ops = {
++	.is_visible = max597x_is_visible,
++	.read = max597x_read,
++};
++
++#define HWMON_CURRENT	HWMON_C_INPUT
++#define HWMON_VOLTAGE	HWMON_I_INPUT
++
++static const struct hwmon_channel_info *max597x_info[] = {
++	HWMON_CHANNEL_INFO(in, HWMON_VOLTAGE, HWMON_VOLTAGE),
++	HWMON_CHANNEL_INFO(curr, HWMON_CURRENT, HWMON_CURRENT),
++	NULL
++};
++
++static const struct hwmon_chip_info max597x_chip_info = {
++	.ops = &max597x_hwmon_ops,
++	.info = max597x_info,
++};
++
++static int max597x_adc_range(struct regmap *regmap, const int ch,
++			     u32 *irng, u32 *mon_rng)
++{
++	unsigned int reg;
++	int ret;
++
++	/* Decode current ADC range */
++	ret = regmap_read(regmap, MAX5970_REG_STATUS2, &reg);
++	if (ret)
++		return ret;
++	switch (MAX5970_IRNG(reg, ch)) {
++	case 0:
++		*irng = 100000;	/* 100 mV */
++		break;
++	case 1:
++		*irng = 50000;	/* 50 mV */
++		break;
++	case 2:
++		*irng = 25000;	/* 25 mV */
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	/* Decode current voltage monitor range */
++	ret = regmap_read(regmap, MAX5970_REG_MON_RANGE, &reg);
++	if (ret)
++		return ret;
++
++	*mon_rng = MAX5970_MON_MAX_RANGE_UV >> MAX5970_MON(reg, ch);
++	*mon_rng /= 1000; /* uV to mV */
++
++	return 0;
++}
++
++static int max597x_sensor_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct i2c_client *i2c = to_i2c_client(pdev->dev.parent);
++	struct max597x_hwmon *ddata;
++	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
++	struct device *hwmon_dev;
++	int err;
++
++	if (!regmap)
++		return -EPROBE_DEFER;
++
++	ddata = devm_kzalloc(dev, sizeof(struct max597x_hwmon), GFP_KERNEL);
++	if (!ddata)
++		return -ENOMEM;
++
++	if (of_device_is_compatible(i2c->dev.of_node, "maxim,max5978"))
++		ddata->num_switches = MAX597x_TYPE_MAX5978;
++	else if (of_device_is_compatible(i2c->dev.of_node, "maxim,max5970"))
++		ddata->num_switches = MAX597x_TYPE_MAX5970;
++	else
++		return -ENODEV;
++
++	ddata->regmap = regmap;
++
++	for (int i = 0; i < ddata->num_switches; i++) {
++		err = max597x_adc_range(regmap, i, &ddata->irng[i], &ddata->mon_rng[i]);
++		if (err < 0)
++			return err;
++	}
++
++	hwmon_dev = devm_hwmon_device_register_with_info(dev,
++							 "max597x_hwmon", ddata,
++							 &max597x_chip_info, NULL);
++
++	if (IS_ERR(hwmon_dev)) {
++		err = PTR_ERR(hwmon_dev);
++		dev_err(dev, "Unable to register hwmon device, returned %d\n", err);
++		return err;
++	}
++
++	return 0;
++}
++
++static struct platform_driver max597x_sensor_driver = {
++	.probe = max597x_sensor_probe,
++	.driver = {
++		.name = "max597x-hwmon",
++	},
++};
++module_platform_driver(max597x_sensor_driver);
++
++MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
++MODULE_DESCRIPTION("MAX5970_hot-swap controller driver");
++MODULE_LICENSE("GPL v2");
 
+base-commit: b4c288cfd2f84c44994330c408e14645d45dee5b
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.39.1
+
