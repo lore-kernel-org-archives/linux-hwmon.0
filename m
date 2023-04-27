@@ -2,70 +2,90 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47617C77B7C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Apr 2023 22:42:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 949D1C77B61
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Apr 2023 23:16:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344170AbjD0WmR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 27 Apr 2023 18:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
+        id S1344283AbjD0XQU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Apr 2023 19:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbjD0WmP (ORCPT
+        with ESMTP id S1344179AbjD0XQS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Apr 2023 18:42:15 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E7CC0;
-        Thu, 27 Apr 2023 15:42:12 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B7872E0007;
-        Thu, 27 Apr 2023 22:42:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1682635330;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vuOyXz5JVpVmfnHiWfsKmhETCfXaasy0XMv5v+E9ol4=;
-        b=X8BBH/TSW/xzv5EVaVXh6SXzBU6yfzv5Nbk9TyUIoIsdEO3kNgx5Ug06FwhVYAGNCqBX5T
-        sZGFMq9v4HMx2GTXA9cZyWfrx1UId2Vm4sSN3MvKXPlPwDcr0y2jUtWBr9mGssCdERNRH6
-        tJONXuxx3e8YA556mCr+urM7Rjs4rvuK0kRnJBqjyrBC1s5hS2dCvcAw/XIlC205fth9BN
-        xwpgkmh88iNMc62UqVswueX7Vo4brA1XDHu/6Aug8lJ9PwR3gnFK5kJSKSAdnEEqWoS8nR
-        OxTcIvDOOTK0jp87fYqhMTLPV24LFk+HOU4tcGpeay5o72p4NvhhLhAjn4uTFw==
-Date:   Fri, 28 Apr 2023 00:42:09 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 1/4] rtc: ab-eoz9: constify pointers to hwmon_channel_info
-Message-ID: <168263530235.78879.11958237032842726405.b4-ty@bootlin.com>
-References: <20230407150306.80141-1-krzysztof.kozlowski@linaro.org>
+        Thu, 27 Apr 2023 19:16:18 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154ED2701;
+        Thu, 27 Apr 2023 16:16:18 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54f9b37c634so112328087b3.2;
+        Thu, 27 Apr 2023 16:16:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682637377; x=1685229377;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xGpWkonDzJU7+QB3sE4Mk+2aNDCSINLhf6pizTNjlbk=;
+        b=gjHN8YelBpsoiAqUzc4CL4MWJqhS6Jdye5Gd4OKpOLBYPxYCEnw4PyrwrVtN5tJd4C
+         vNywh+vFVW/Sxm4t8Pm0wgLaVZbT1SFuhlkAjfnIRMuSTDllEp39spv0qP+cTAFQM06n
+         JJ5lGuKz1I6YFpvjAsiEQV/OH4D1WHc9l/nLRCl2+QIizbEWk4amnXGctNG+5e5gi/E+
+         A0neO7GHsSase8Vfx2zrBxJQgWxeyNHFvKGAb7y8TlC87sEJQRwCPXUuIfzcvUlZO3fV
+         kV96cmTLs8G7vz9VbdtLotc/AA378cJUhTMAWhVO2Ciq01jQZYqq0jhiNYOYlrYsxclH
+         Zjkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682637377; x=1685229377;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xGpWkonDzJU7+QB3sE4Mk+2aNDCSINLhf6pizTNjlbk=;
+        b=MBDki3/hcAAjZDZGSzGGzfJNp+7I+0+VC+bSOC3M4dWhJp042Y09XN3GpxvBGYyJRe
+         yhloYMKc54WjW/fyOx/5bepbpZLWRse0hhV5Uo8qfJb2HKoDbeJtdFNWnlzQKHk+CV2X
+         OhURGSfe52QoMKxlqmpfyM3JaWfCRoA99WffOhp9uAMWqksKsrS3IfgXEfZpS/0vmeJv
+         kx0d0xcGZ+VrMvQBVOF4T2pvhmA4b0o7NcQRXwdm5BC20ThRoOYfXr/d+OGz6eN3psQI
+         tHiODG0cY24JBRLB2ZWOWHE3SONRnDabOdcwgSNA3jwBxaayXqx3LE0t4jvv7pFLjg4p
+         DfBw==
+X-Gm-Message-State: AC+VfDyj5iVlI/GyiP7+OYNMX3OerfDzZNYRlkjtFzr45WCCfUBpRZAP
+        ekGGNlRyTu9v9y/L7ZUwuNfnisPAjhoEU3quKJ8=
+X-Google-Smtp-Source: ACHHUZ4WO1LJTTgQo9Y82F8sUVKEwnGwETAY5RAvp1c5jQLhZ9s9sPxvB3CTr5pWPyMa0/gwbDNqldVKoq65NmbOi1w=
+X-Received: by 2002:a0d:dd88:0:b0:54b:fe8c:350 with SMTP id
+ g130-20020a0ddd88000000b0054bfe8c0350mr2556618ywe.19.1682637377262; Thu, 27
+ Apr 2023 16:16:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407150306.80141-1-krzysztof.kozlowski@linaro.org>
+References: <20230426184420.99945-1-samsagax@gmail.com> <720c2b48-ca48-4ee3-9158-f453e48cb012@roeck-us.net>
+In-Reply-To: <720c2b48-ca48-4ee3-9158-f453e48cb012@roeck-us.net>
+From:   Joaquin Aramendia <samsagax@gmail.com>
+Date:   Thu, 27 Apr 2023 20:16:05 -0300
+Message-ID: <CABgtM3i+HZJDearvBK-sBrWnfqdrsuNCDYfxASC3QVsn8rAy-Q@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (oxp-sensors) Add AYANEO 2 and Geek models
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hello Guenter and thanks for your quick review.
 
-On Fri, 07 Apr 2023 17:03:03 +0200, Krzysztof Kozlowski wrote:
-> Statically allocated array of pointed to hwmon_channel_info can be made
-> const for safety.
-> 
-> 
+> Please run checkpatch --strict on your patches. Never mind, I'll apply th=
+e
+> patch anyway - I see the other entries are the same.
+I've run it before on the other patches... did something change in the
+checkpatch?
+Nevermid, After this one I may submit a patch to fix all styling in one go
 
-Applied, thanks!
+> That makes me have a closer look at the code. What is the purpose of the
+> odd typecast anyway ? Why not just
+>         .driver_data =3D (void *)aya_neo_2,
+> and
+>         board =3D (enum oxp_board)dmi_entry->driver_data;
+> ?
+I don't know why but the compiler would complain with the casting from
+enum to void*.
+Found out that explicitly casting the enum literal before casting it
+to void* works and
+the compiler stopped complaining so I went with it.
 
-[1/4] rtc: ab-eoz9: constify pointers to hwmon_channel_info
-      commit: 4c3f19ce70d7a008953a8d2e9584a20c328699c6
-[2/4] rtc: ds3232: constify pointers to hwmon_channel_info
-      commit: e4133995fe80251ad2abb0261745ea27ab97c2e7
-[3/4] rtc: isl12022: constify pointers to hwmon_channel_info
-      commit: a176de9fffcb97ee885b2ade3dbb23dc9be33b29
-[4/4] rtc: rv3032: constify pointers to hwmon_channel_info
-      commit: eaa9cec95de9405ee7400e8888e6d3d42173df28
+As a follow up question, since this driver has become more AYANEO than
+OXP since its inception,
+ wouldn't  it be better to change the description?
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Joaqu=C3=ADn Aramend=C3=ADa
