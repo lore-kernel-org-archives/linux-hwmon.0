@@ -2,207 +2,70 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D19CC77B73
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Apr 2023 21:09:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47617C77B7C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Apr 2023 22:42:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344157AbjD0VJR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 27 Apr 2023 17:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
+        id S1344170AbjD0WmR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Apr 2023 18:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344150AbjD0VJQ (ORCPT
+        with ESMTP id S229870AbjD0WmP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Apr 2023 17:09:16 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75CD3ABC;
-        Thu, 27 Apr 2023 14:09:15 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-2478485fd76so6172110a91.2;
-        Thu, 27 Apr 2023 14:09:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682629755; x=1685221755;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KFDXJZIPaM+pqQLwG66fN/jTkXrC7sSivzGv6mtbm3c=;
-        b=PPrsSTe1bAp1dKlcBnSXNSudWSQ1LnBOt426D/P/8GTHob8zTIay9PveFM+eRcMngN
-         1o14jBuBCFgTWhPg9PZU5sJAca672L1ooDAWDNWb1Xx+WIe0bBJRbG2qm7EQPk+albFV
-         PHjWHnrdlVvvoopHIyjfrWTrBbf+2O9StsjwdZLoYqSAsK0BezOTgXmVPVIbTdn9d9+w
-         /0td/xwbq/Atcf+YC5hOMhLNfEa7x1rROCq5dvaS/xCjTrCgdb2h0SRYpxvg/bDmkuf9
-         CPhQvJT7nwapn14ItSJ4BNLaiL3hf1p8NlDO4hNSLUK0ExcOO0+iLN0tLKrP1JCAAEdL
-         PmSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682629755; x=1685221755;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KFDXJZIPaM+pqQLwG66fN/jTkXrC7sSivzGv6mtbm3c=;
-        b=lKEnWE3juvqIx1M2OFuJnkAtfU0Fg5Z49ITNROcKla+sq9WGVEuhTJm8qnApwRhkGS
-         wDFwId/5xU0IkHyzNb3xFCzJFzQN84yREjfpEOr94J3+eITqMsevMS8tXodVorH29N3A
-         Fq+L2v3mdRp+fsFeGpHoGA84o4XFTDisqhgWzfrdKyiWzy3f905vW+XOr+NeSfrYHcj5
-         R8oPDhPNKQIPqfYcJat0UFJyCgMrddzjw3p8zE3180y6pWUiw0q/STbj+xDKqkMtMmrM
-         r7qzNP/hiPjKWq52qsPXdyWSHbzMd3k3mRnNC+CTYA3mR1ZtZH/i5nY+P18VYjy06NPU
-         E6SQ==
-X-Gm-Message-State: AC+VfDwQhkywPtXGkrLNJ+DzfiTp8AQg4zymoAUwCKkTrXIJxTnS0hyL
-        yGISUupWSnhGKSIqW7D++y6fSMjy0vs=
-X-Google-Smtp-Source: ACHHUZ4mIsMHhH/4ygnusk5BTWZYoaP37jVx0U9QGy0Nlp9qwvJQQhf0G7EHbTbM/Dc0dn9Ftb1kgw==
-X-Received: by 2002:a17:90a:bd98:b0:23d:16d6:2f05 with SMTP id z24-20020a17090abd9800b0023d16d62f05mr3019092pjr.22.1682629754911;
-        Thu, 27 Apr 2023 14:09:14 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id gv17-20020a17090b11d100b00246b0faa6b1sm11683839pjb.5.2023.04.27.14.09.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 14:09:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fefa43d8-e013-6656-d27d-27ac65cc953d@roeck-us.net>
-Date:   Thu, 27 Apr 2023 14:09:12 -0700
+        Thu, 27 Apr 2023 18:42:15 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E7CC0;
+        Thu, 27 Apr 2023 15:42:12 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B7872E0007;
+        Thu, 27 Apr 2023 22:42:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1682635330;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vuOyXz5JVpVmfnHiWfsKmhETCfXaasy0XMv5v+E9ol4=;
+        b=X8BBH/TSW/xzv5EVaVXh6SXzBU6yfzv5Nbk9TyUIoIsdEO3kNgx5Ug06FwhVYAGNCqBX5T
+        sZGFMq9v4HMx2GTXA9cZyWfrx1UId2Vm4sSN3MvKXPlPwDcr0y2jUtWBr9mGssCdERNRH6
+        tJONXuxx3e8YA556mCr+urM7Rjs4rvuK0kRnJBqjyrBC1s5hS2dCvcAw/XIlC205fth9BN
+        xwpgkmh88iNMc62UqVswueX7Vo4brA1XDHu/6Aug8lJ9PwR3gnFK5kJSKSAdnEEqWoS8nR
+        OxTcIvDOOTK0jp87fYqhMTLPV24LFk+HOU4tcGpeay5o72p4NvhhLhAjn4uTFw==
+Date:   Fri, 28 Apr 2023 00:42:09 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/4] rtc: ab-eoz9: constify pointers to hwmon_channel_info
+Message-ID: <168263530235.78879.11958237032842726405.b4-ty@bootlin.com>
+References: <20230407150306.80141-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     Scott Smith <scott8440@gmail.com>, jdelvare@suse.com
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20230427193533.718526-1-scott8440@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] hwmon: (pmbus) add ir35215 driver
-In-Reply-To: <20230427193533.718526-1-scott8440@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407150306.80141-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/27/23 12:35, Scott Smith wrote:
-> IR35215 is a digital multi-phase controller.
+
+On Fri, 07 Apr 2023 17:03:03 +0200, Krzysztof Kozlowski wrote:
+> Statically allocated array of pointed to hwmon_channel_info can be made
+> const for safety.
 > 
-> Signed-off-by: Scott Smith <scott8440@gmail.com>
-
-Does this chip really need its own driver ? Please check if it can be added
-to pmbus.c instead. If not, please provide a rationale explaining why
-that does not work. Also, if you have access to the datasheet, please
-make sure that the chip is sufficiently different from IR35221 to warrant
-a separate driver.
-
-Additional comments inline.
-
-Thanks,
-Guenter
-
-> ---
->   drivers/hwmon/pmbus/Kconfig   |  9 +++++
->   drivers/hwmon/pmbus/Makefile  |  1 +
->   drivers/hwmon/pmbus/ir35215.c | 65 +++++++++++++++++++++++++++++++++++
-
-Documentation/hwmon/ir35215.rst needed (if this driver is needed).
-
->   3 files changed, 75 insertions(+)
->   create mode 100644 drivers/hwmon/pmbus/ir35215.c
 > 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 270b6336b76d..5c089f7e4423 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig1 
-> @@ -123,6 +123,15 @@ config SENSORS_INSPUR_IPSPS
->   	  This driver can also be built as a module. If so, the module will
->   	  be called inspur-ipsps.
->   
-> +config SENSORS_IR35215
-> +       tristate "Infineon IR35215"
-> +       help
-> +         If you say yes here you get hardware monitoring support for the
-> +         Infineon IR35215 controller.
-> +
-> +         This driver can also be built as a module. If so, the module will
-> +         be called ir35215.
-> +
->   config SENSORS_IR35221
->   	tristate "Infineon IR35221"
->   	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 84ee960a6c2d..fbb9cf048326 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -15,6 +15,7 @@ obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
->   obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
->   obj-$(CONFIG_SENSORS_DPS920AB)	+= dps920ab.o
->   obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
-> +obj-$(CONFIG_SENSORS_IR35215)   += ir35215.o
->   obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
->   obj-$(CONFIG_SENSORS_IR36021)	+= ir36021.o
->   obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
-> diff --git a/drivers/hwmon/pmbus/ir35215.c b/drivers/hwmon/pmbus/ir35215.c
-> new file mode 100644
-> index 000000000000..92d59e78bfd0
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/ir35215.c
-> @@ -0,0 +1,65 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Hardware monitoring driver for Infineon IR35215
-> + *
-> + * Copyright (c) Meta Platforms, Inc. and affiliates.
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/hwmon-sysfs.h>
 
-Not needed.
+Applied, thanks!
 
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include "pmbus.h"
-> +
-> +static const u32 functionality = PMBUS_HAVE_TEMP
-> +	| PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
-> +	| PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
-> +	| PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
-> +	| PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT
-> +	| PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP;
-> +
-> +static struct pmbus_driver_info ir35215_info = {
-> +	.pages = 2,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_VOLTAGE_OUT] = linear,
-> +	.format[PSC_CURRENT_IN] = linear,
-> +	.format[PSC_CURRENT_OUT] = linear,
-> +	.format[PSC_POWER] = linear,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.func[0] = functionality,
-> +	.func[1] = functionality,
-> +};
-> +
-> +static int ir35215_probe(struct i2c_client *client)
-> +{
-> +	/*
-> +	 * IR35215 devices may not stay in page 0 during device
-> +	 * probe which leads to probe failure (read status word failed).
-> +	 * So let's set the device to page 0 at the beginning.
-> +	 */
-> +	i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
+[1/4] rtc: ab-eoz9: constify pointers to hwmon_channel_info
+      commit: 4c3f19ce70d7a008953a8d2e9584a20c328699c6
+[2/4] rtc: ds3232: constify pointers to hwmon_channel_info
+      commit: e4133995fe80251ad2abb0261745ea27ab97c2e7
+[3/4] rtc: isl12022: constify pointers to hwmon_channel_info
+      commit: a176de9fffcb97ee885b2ade3dbb23dc9be33b29
+[4/4] rtc: rv3032: constify pointers to hwmon_channel_info
+      commit: eaa9cec95de9405ee7400e8888e6d3d42173df28
 
-That should probably be added to the pmbus core code since
-it potentially affects all PMBus chips.
-
-> +	return pmbus_do_probe(client, &ir35215_info);
-> +}
-> +
-> +static const struct i2c_device_id ir35215_id[] = {
-> +	{ "ir35215", 0 },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, ir35215_id);
-> +
-> +static struct i2c_driver ir35215_driver = {
-> +	.driver = {
-> +		   .name = "ir35215",
-> +	},
-> +	.probe_new = ir35215_probe,
-> +	.id_table = ir35215_id,
-> +};
-> +
-> +module_i2c_driver(ir35215_driver);
-> +
-> +MODULE_AUTHOR("Tao Ren <rentao.bupt@gmail.com>");
-> +MODULE_DESCRIPTION("PMBus driver for Infineon IR35215");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
