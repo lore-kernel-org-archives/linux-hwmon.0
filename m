@@ -2,300 +2,135 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA8CAC77B73
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Apr 2023 16:29:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D3ACC77B73
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Apr 2023 16:39:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244100AbjD0Q3L (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 27 Apr 2023 12:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
+        id S243284AbjD0Qj6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Apr 2023 12:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244068AbjD0Q3K (ORCPT
+        with ESMTP id S243926AbjD0Qj5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Apr 2023 12:29:10 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Apr 2023 09:29:09 PDT
-Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA3110EC
-        for <linux-hwmon@vger.kernel.org>; Thu, 27 Apr 2023 09:29:09 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw23.mail.saunalahti.fi (Halon) with ESMTP
-        id 7ad0272f-e518-11ed-b972-005056bdfda7;
-        Thu, 27 Apr 2023 19:28:03 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Thu, 27 Apr 2023 19:28:02 +0300
-To:     nick.hawkins@hpe.com
-Cc:     verdun@hpe.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jdelvare@suse.com, linux@roeck-us.net, linux@armlinux.org.uk,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 1/9] gpio: gxp: Add HPE GXP GPIO
-Message-ID: <ZEqikkknyRrFTh2t@surfacebook>
-References: <20230418152824.110823-1-nick.hawkins@hpe.com>
- <20230418152824.110823-2-nick.hawkins@hpe.com>
+        Thu, 27 Apr 2023 12:39:57 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF9710CA;
+        Thu, 27 Apr 2023 09:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1682613574; i=w_armin@gmx.de;
+        bh=wIQuDcQk6w2wCann6GJTP1l0oz5xWwIyaPeXTwbAmHY=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=STIdIdHdDb73/pPg3h/tFMgpQD1XwIT5+hGx3VaIQm5QlNhtlaLBt41fHIOzxk8j9
+         fXR0CHq3nWKjvJBRcW+AZunuZt/EeSY1aCqqX1tpV7zYb9U/qt7y+0vJI/3kAyvnBO
+         ZXK8uI74Bc2T1IYXW0ltXn1NW4ukUOKyy0U8k1U7oxxI/NPnLxAHpvrL1wbSp5tEvj
+         ksIxuoiGI/7hskf0Tytdp7ylpIgueGXCc4c0lO6K18u4fdxENgOHvTWc75IiHwZ8CC
+         GBmt7CLg/ux4n3e4fAE0YarPQrtG3mDZsZ7c15pva9cGbbdG1R80cQ+RrjYno9Sdt/
+         J/9eZuPnzyZdA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1McYCb-1qQJTf091h-00cutE; Thu, 27
+ Apr 2023 18:39:34 +0200
+Subject: Re: [PATCH v3] hwmon: add HP WMI Sensors driver
+To:     James Seo <james@equiv.tech>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230424100459.41672-1-james@equiv.tech>
+ <cd81a7d6-4b81-f074-1f28-6d1b5300b937@gmx.de> <ZEkkLggFLCGlvq8f@equiv.tech>
+ <30339393-0ba2-9788-6ad8-98c89afc6994@gmx.de> <ZEomR842t6QrahyO@equiv.tech>
+From:   Armin Wolf <W_Armin@gmx.de>
+Message-ID: <de4c28c1-6e70-ceb9-484a-143c2b1ebccc@gmx.de>
+Date:   Thu, 27 Apr 2023 18:39:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230418152824.110823-2-nick.hawkins@hpe.com>
+In-Reply-To: <ZEomR842t6QrahyO@equiv.tech>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:KYRjlB2gpZfeoo05t5SD0A5qhSGRhf+qZJrMVzF/7wb/g+a7MK6
+ HvHaSrIERBjyVBlMjAGGPQuYeEVgFNnNcn3ABgBkHGLwTUw+NIfU5u2cRky32z+ZOZUlyY6
+ c3gbSXbSFqhJPmmByYy6d9hBB+qzGZEjObdufVUaFxFO4IgDLJgHsvQ6a3uaRFeCuSBfXTL
+ jVIpmptxt3EZN6tqCB+qA==
+UI-OutboundReport: notjunk:1;M01:P0:BJzmJgDuYBk=;ZpNuOSj0oeDyUitaktFBk8in2er
+ hKW+yH55ZYRzrObb1fCwlGj/ycXH5Tk4QY5aUCsTDIiuPoN0OB75WD++ixtRa9UnrQqXsZUkX
+ mDWh/nRVohsngDZBBqOEjpFBjPzy/srQ5J3xUOjhTyt7LlVlECpLh3saMSxC59LQvD9aYzuWq
+ 8cMmO8B+FbQJGU5vjTCjQngkNx1bcJk1vZ4XlkhFfsW/01Umzm9GQIHKV17JeSSbLnCvxIdJ1
+ F6qRad63Av4XTWjCO5bVA7sB+ozkSUYhTw79caI/Zm+pZVlbqhq1usIvWXHi4Ve2uR2J+q2UP
+ wrnz0JjvkvSRJI3isGxPAp3C1M+Cj3iGmV5S5+87LqqSRR8SBVANmSDnw+Q2pE6CHyt76VtYu
+ aSQ7wQHO93IlOfHtVdaAJHi7gtrOHAoxQTao//jlul0nlKxGvhZAPH4a28V4tJ19fEbUNV7Ak
+ LLl+jCQuDpUW/mBzzt4eVpbcdqhMcIGyQFoOrzZ8CmuO9a4TG7WaSdYLN4yvdJ6KoWMMEdxoK
+ RRuaXk1ZPvupuxQaHPw98cCkqrdqwTt0ZQK5R0xF59hmnPOsiN2DXR1MmU9C4/KroLPKenxZO
+ 67Y/Cykl6mGpGILlJeg4MmAA5aBNISdnYMsKyXOnUDpX37AZ91aLC/ARkWgLviYLOiSFG9EB6
+ Ft5CozySo1O3cJaHPy3XpIupHYww2LH9f8hNxcXQDn5n8hzbQnatbl2EcI1W4120Q9OkNTuxC
+ 0GK+uzo8zTxMg8pM64tKWG0R8hookNEBY8Kex5IT/Y1WLpdN08tJKL8btH4WOejsXj14DeMOA
+ 9oT2L2LdvZmLrm4bDdXk/Jh26pk+F/5eS5+AHvpdiU1bf25yKmw3X/bO9dXV4cz/SFMYnWPZm
+ 2AO8PfjRZ3CHpZ9tsg035M8oONNWmHgamxVAn3WtmBup8vQnN8gc26NjMKEZhnal7LjERDcp1
+ IjjU3+yS38XLj2a4XYMrdtWPt8I=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Tue, Apr 18, 2023 at 10:28:16AM -0500, nick.hawkins@hpe.com kirjoitti:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> The GXP SoC supports GPIO on multiple interfaces: Host, CPLD and Soc
-> pins. The interface from CPLD and Host are interruptable from vic0
-> and vic1. This driver allows support for both of these interfaces
-> through the use of different compatible bindings.
-
-Thank you for your contribution. To begin with, I don't believe a simple GPIO
-driver needs 1000+ LoCs. But see more comments below.
-
-...
-
-> +config GPIO_GXP
-> +        tristate "GXP GPIO support"
-> +        depends on ARCH_HPE_GXP
-> +        select GPIOLIB_IRQCHIP
-> +        help
-> +	  Say Y here to support GXP GPIO controllers. It provides
-> +	  support for the multiple GPIO interfaces available to be
-> +	  available to the Host.
-
-The indentation is rather problematic. Had you run checkpatch.pl?
-
-...
-
-> +#include <linux/gpio.h>
-
-No, new code may not include this header.
-
-...
-
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-
-Why? I haven't seen much evidence of needing of these. What you need are
-rather mod_devicetable.h and property.h (see also below).
-
-...
-
-> +#define GPIDATL		0x40
-> +#define GPIDATH		0x60
-> +#define GPODATL		0xb0
-> +#define GPODATH		0xb4
-> +#define GPODAT2L	0xf8
-> +#define GPODAT2H	0xfc
-
-Use same size of the values, e.g. 0x0fc
-
-> +#define GPOOWNL		0x110
-> +#define GPOOWNH		0x114
-> +#define GPOOWN2L	0x118
-> +#define GPOOWN2H	0x11c
-
-To me this sounds like a 2 8-lines bank GPIO array. Drop those H and L suffixes
-and use proper offset calculation based on the bank number. There are plenty of
-existing GPIO drivers that do that way.
-
-Also why gpio-regmap is not in use?
-
-...
-
-> +#define GPIO_DIR_OUT	0
-> +#define GPIO_DIR_IN	1
-
-Oh, what is this?! You must not interfere with the GPIO_ namespace.
-
-...
-
-> +#define PGOOD_MASK		1
-
-For mask use BIT() / GENMASK()
-
-> +#define PLREG_INT_GRP_STAT_MASK	0x8
-
-Ditto.
-
-...
-
-> +#define PLREG_INT_HI_PRI_EN	0xC
-
-Is it register offset or value?
-
-> +#define PLREG_INT_GRP5_BASE	0x31
-> +#define PLREG_INT_GRP6_BASE	0x35
-> +#define PLREG_INT_GRP5_FLAG	0x30
-> +#define PLREG_INT_GRP6_FLAG	0x34
-
-These need more expanation what they are for and why these specific values are
-being used.
-
-...
-
-
-> +#define PLREG_INT_GRP5_PIN_BASE	59
-> +#define PLREG_INT_GRP6_PIN_BASE	90
-
-What are these for?
-
-...
-
-> +enum plreg_gpio_pn {
-> +	RESET = 192,
-> +	NMI_OUT = 193,
-> +	VPBTN = 210,
-> +	PGOOD,
-> +	PERST,
-> +	POST_COMPLETE,
-
-Why these numbers? If it comes from hardware specification, make _all_ them
-explicitly assigned.
-
-> +};
-
-...
-
-> +struct gxp_gpio_drvdata {
-> +	struct regmap *csm_map;
-> +	void __iomem *fn2_vbtn;
-> +	struct regmap *fn2_stat;
-> +	struct regmap *vuhc0_map;
-> +	void __iomem *vbtn;
-> +	struct regmap *pl_led;
-> +	struct regmap *pl_health;
-> +	struct regmap *pl_int;
-
-> +	struct gpio_chip chip;
-
-Move it to be the first member in the structure. Might save a few bytes in the
-code. 
-
-> +	int irq;
-> +};
-
-...
-
-> +static int gxp_gpio_csm_get(struct gpio_chip *chip, unsigned int offset)
-> +{
-> +	struct gxp_gpio_drvdata *drvdata = dev_get_drvdata(chip->parent);
-> +	int ret = 0;
-
-> +	switch (offset) {
-> +	case 0 ... 31:
-> +		regmap_read(drvdata->csm_map, GPIDATL,	&ret);
-> +		ret = (ret & BIT(offset)) ? 1 : 0;
-> +		break;
-> +	case 32 ... 63:
-> +		regmap_read(drvdata->csm_map, GPIDATH,	&ret);
-> +		ret = (ret & BIT(offset - 32)) ? 1 : 0;
-> +		break;
-> +	case 64 ... 95:
-> +		regmap_read(drvdata->csm_map, GPODATL,	&ret);
-> +		ret = (ret & BIT(offset - 64)) ? 1 : 0;
-> +		break;
-> +	case 96 ... 127:
-> +		regmap_read(drvdata->csm_map, GPODATH,	&ret);
-> +		ret = (ret & BIT(offset - 96)) ? 1 : 0;
-> +		break;
-> +	case 128 ...  159:
-> +		regmap_read(drvdata->csm_map, GPODAT2L,	&ret);
-> +		ret = (ret & BIT(offset - 128)) ? 1 : 0;
-> +		break;
-> +	case 160 ... 191:
-> +		regmap_read(drvdata->csm_map, GPODAT2H,	&ret);
-> +		ret = (ret & BIT(offset - 160)) ? 1 : 0;
-> +		break;
-> +	case 192:
-> +		/* SW_RESET */
-> +		regmap_read(drvdata->csm_map, 0x5C, &ret);
-> +		ret = (ret & BIT(15)) ? 1 : 0;
-> +		break;
-
-Besides redundant " ? 1 : 0" parts, see what I wrote above and calculate offset
-properly and then apply. Ditto for other functions.
-
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-
-I stopped here, this driver requires a lot more work to be done before
-considering for upstream, sorry.
-
-...
-
-> +	girq->default_type = IRQ_TYPE_NONE;
-> +	girq->handler = handle_edge_irq;
-
-Should be handle_bad_irq() by default.
-
-...
-
-> +	ret = devm_gpiochip_add_data(&pdev->dev, &drvdata->chip, drvdata);
-> +	if (ret < 0)
-> +		dev_err(&pdev->dev, "Could not register gpiochip for plreg, %d\n",
-> +			ret);
-
-Huh?! No bailing out?
-
-...
-
-> +	regmap_update_bits(drvdata->pl_int, PLREG_INT_HI_PRI_EN,
-> +			   BIT(4) | BIT(5), BIT(4) | BIT(5));
-
-GENMASK(), but do it as a defined value with meaningful name.
-
-> +	regmap_update_bits(drvdata->pl_int, PLREG_INT_GRP_STAT_MASK,
-> +			   BIT(4) | BIT(5), 0x00);
-
-Ditto.
-
-...
-
-> +	ret = platform_get_irq(pdev, 0);
-> +	if (ret < 0) {
-
-> +		dev_err(&pdev->dev, "Get irq from platform fail - %d\n", ret);
-
-No. The message is already printed by platform code. You are not supposed to
-pollute logs with duplicative noise.
-
-> +		return ret;
-> +	}
-
-...
-
-> +static const struct of_device_id gxp_gpio_of_match[] = {
-> +	{ .compatible = "hpe,gxp-gpio"},
-> +	{ .compatible = "hpe,gxp-gpio-pl"},
-
-Missing spaces in above two lines.
-
-> +	{}
-> +};
-
-...
-
-> +	const struct of_device_id *match = of_match_device(gxp_gpio_of_match, dev);
-
-device_get_match_data()
-
-...
-
-> +	drvdata = devm_kzalloc(&pdev->dev, sizeof(struct gxp_gpio_drvdata),
-> +			       GFP_KERNEL);
-
-sizeof(*drvdata) and make it one line.
-
-> +	if (!drvdata)
-> +		return -ENOMEM;
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Am 27.04.23 um 09:37 schrieb James Seo:
+
+> On Wed, Apr 26, 2023 at 09:35:33PM +0200, Armin Wolf wrote:
+>> Am 26.04.23 um 15:16 schrieb James Seo:
+>>
+>>> On Mon, Apr 24, 2023 at 11:13:36PM +0200, Armin Wolf wrote:
+>>>> Am 24.04.23 um 12:05 schrieb James Seo:
+>>>>
+>>>>> +	for (i = 0; i < HP_WMI_MAX_INSTANCES; i++, pevents++) {
+>>>> Hi,
+>>>>
+>>>> the WMI driver core already knows how many instances of a given WMI object are available.
+>>>> Unfortunately, this information is currently unavailable to drivers. Would it be convenient
+>>>> for you to access this information? I could try to implement such a function if needed.
+>>>>
+>>>>> +	for (i = 0; i < HP_WMI_MAX_INSTANCES; i++, info++) {
+>>>> Same as above.
+>>>>
+>>> Hello,
+>>>
+>>> Having the WMI object instance count wouldn't make much difference to
+>>> me for now. The driver has to iterate through all instances during
+>>> init anyway. If I were forced to accommodate 50+ sensors, I'd rewrite
+>>> some things and I think I'd want such a function then, but I picked
+>>> the current arbitrary limit of 32 because even that seems unlikely.
+>>>
+>>> So, maybe don't worry about it unless you want to. Or am I missing
+>>> something?
+>>>
+>> Hi,
+>>
+>> i already have a experimental patch available which adds such a function.
+>> If you could test this patch to see if it works, then i could submit it upstream
+>> where other drivers could profit from being able to know the number of
+>> WMI object instances.
+>>
+> Both your proposed functions worked as expected.
+>
+>> Your driver could also profit from such a function, as it could optimize the amount
+>> of memory allocated to store WMI object data.
+> I suppose I might as well. I assume I'm supposed to wait until your
+> new functions are merged before making changes that rely on them?
+
+I think you can submit this driver as-is and provide a follow-up patch once
+the changes are merged.
+
+>> The current instance discovery algorithm
+>> (using a for-loop and break on error) also has a potential issue: when a single WMI call
+>> fails for some reason (ACPI error, ...), all following WMI instances are being ignored.
+>>
+> This is the intended behavior for now, on the assumption that a real
+> ACPI failure probably indicates that the system has bigger problems.
+> I do have vague plans to make the driver more tolerant of failure to
+> retrieve or validate instances, but haven't decided anything yet.
+>
+> Regards,
+>
+> James
+
+Ok.
+
+Armin Wolf
 
