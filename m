@@ -2,68 +2,69 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 218F6C77B60
-	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Apr 2023 06:52:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 017A9C77B7C
+	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Apr 2023 13:32:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345323AbjD1GwO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 28 Apr 2023 02:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
+        id S1346282AbjD1Ncr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 28 Apr 2023 09:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345160AbjD1GwM (ORCPT
+        with ESMTP id S1346298AbjD1Ncp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 28 Apr 2023 02:52:12 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B19130E8;
-        Thu, 27 Apr 2023 23:52:11 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-75131c2997bso517445085a.1;
-        Thu, 27 Apr 2023 23:52:11 -0700 (PDT)
+        Fri, 28 Apr 2023 09:32:45 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B6346BB;
+        Fri, 28 Apr 2023 06:32:43 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1a6f0d8cdfeso75793425ad.2;
+        Fri, 28 Apr 2023 06:32:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682664730; x=1685256730;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4Hh+4d6qEtRWEqTzMTpVx8b14Wn3cPmdU68INgb/XVM=;
-        b=KPUYVzw9jn2uhW/Uez5nBfu2RIgjhrhln4a+62XCb3gqOxkcyHLRhYrANpOrw4f2bk
-         kbeVaud4lZUiebkJ7H4FGYs3eWFdu3fE26e1AgFc5F34GnhlHMvy8zgzMveK0vI/Sb4Y
-         0pQU1lRq/iz151s1q73W6lly38usuvMQIiqgiRDI6W75LBZoe93CVqbTPuqq4DrpY0cl
-         UE5pawmpmFJS8ZTs47qCR3UcnPlezzKz/FoFg2xRloTW+tqjxQHWR7GVxJ40XbIGINSx
-         bJ0EKSOtp4NGLNAW7YzsJC4ZbPQ94jEBVdnvoWjJItLK4PSlo+6oBwuhfsxTXRxkDQPk
-         H5SA==
+        d=gmail.com; s=20221208; t=1682688763; x=1685280763;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ecf3y//8as8pmNBqc+FV/KL+yi6EQ2HAAYSLWqdkKMY=;
+        b=S8lRCV5XNase7pRtd37xsGAZzTDD6LYZluEpOiqWveUN07ffsE754Ypw1bTZS8+Ri3
+         iNhAND76FztYXHLw8cHxo3ZFPtOanPUx2/7cmTo1PIjXf3kFnF3wetAybVUNKAXg6mss
+         nGJ8yinhECeQ0K0ehiocBmq9TSphAmxKsis/LJw7K1wKm4Kph/pweqWndZ15sk9oE6G6
+         IFbL5zqrXNU6KQtDAOuPZ7X+qFAVE/uhXDcV9lNvwlv+RLTNtw+Toz7AbI9Q6aoQorDt
+         nx9g+PL/PTf1t4Yy8SZwi1BCl+aAgxQnJgjlkNiVsyOwYt9WYWHtnY7xO+RDEE/HtGo2
+         mQeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682664730; x=1685256730;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4Hh+4d6qEtRWEqTzMTpVx8b14Wn3cPmdU68INgb/XVM=;
-        b=EdWrRU4XDGPeXV7uRh2bzxuQO3SWrwSrntRucmI1ZnZm3bP6jWHDK5If6ZdLHZJMmG
-         TAmLikR3Zn6LaxAu12X2VHMeQpeD4KrS6i4+mTdKToqtzVOP9Cbii+1eROXUvLJlgyno
-         Zr1o4NTBrLFDGDLk3ni1c/zY8DgwprrrXC/Pak/CB4BRTUSpIH8tDfZc1VSDP8Bxn3N1
-         LAJxJFIIr7da2RJ3Xk2yAzp50CKRONytNPIXsXqschAU5Wag84ysPRoBimoRfb9iAsmP
-         D95nZrTRNhBuP5UEBuT9xLFnSlfWQt+Uqo7Nx+nu+0jEzWktQMI1KBXHIdqiZ355Posy
-         1l2A==
-X-Gm-Message-State: AC+VfDwkSEfCTs/YVweDTo2czZ8MOq6IDQ/JGT2cWfOOTytuUcEfxGzq
-        lTWoRj6qf/NET2SSFm6lvUV8HjWOO/NuqWFpqUk=
-X-Google-Smtp-Source: ACHHUZ5MhkN9DXCli9pgQwuci1geP1laLgORrWdNozlIMtV4s74aRHKPqvcv8BBXC6s2ewQ+w0wXmNP4JeSDMUOVNRU=
-X-Received: by 2002:ac8:7e93:0:b0:3e6:9429:1e01 with SMTP id
- w19-20020ac87e93000000b003e694291e01mr15567860qtj.11.1682664730653; Thu, 27
- Apr 2023 23:52:10 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682688763; x=1685280763;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ecf3y//8as8pmNBqc+FV/KL+yi6EQ2HAAYSLWqdkKMY=;
+        b=grLy7fcAEBOhv79yQC1iwDj0+XZMGx4PeoWfYZBHDL0pJw1fzYZjHhV2USi7yvEc6O
+         IO21u7rQ4s89i79lWaru48mm8iOLGFMlOmdhnJg8CzJWXudVc8aK02FaTMNgt0ZbvHGA
+         PKwjNLxGawf2wOmyfAWdJH0MOhA/OYc4DVQ/NHmtln5vS7OzzNanBe84HAgKMjFGde/o
+         D8j6ZuFZNdMZ2JreLO/pEvUJtJc3Qzg+Gy/ccKyFtYHtPta7c1NcYfgj26H5sp4n2M/U
+         emaNQuv4oe2JipqApsyuq4UN8VNjlRv/n+l/3z6A9iu+7ytxQ5V+vE2lNqYzixIjDd2i
+         Sgjw==
+X-Gm-Message-State: AC+VfDygc2jNwMu8TIFdZSBIaIbFixSJeOvBnLCNGi0DirbIfWiYsXlZ
+        T+6rV35YwPVYHlfBYVFlgHw=
+X-Google-Smtp-Source: ACHHUZ6MuvKOGxaqrdszoikil1JyMqWsmcNZ0YJGxut2ugRIYmruVervYbpv5rJ01rxEqUYJPDjMrA==
+X-Received: by 2002:a17:902:ec83:b0:1a6:f93a:a135 with SMTP id x3-20020a170902ec8300b001a6f93aa135mr5944888plg.61.1682688763155;
+        Fri, 28 Apr 2023 06:32:43 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f5-20020a170902ab8500b001991f3d85acsm13241904plr.299.2023.04.28.06.32.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Apr 2023 06:32:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b0bbd842-2262-8979-d8f8-ec611310c44f@roeck-us.net>
+Date:   Fri, 28 Apr 2023 06:32:39 -0700
 MIME-Version: 1.0
-References: <20230418152824.110823-1-nick.hawkins@hpe.com> <20230418152824.110823-2-nick.hawkins@hpe.com>
- <ZEqikkknyRrFTh2t@surfacebook> <DM4PR84MB19272617D9E728DC09715A45886A9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-In-Reply-To: <DM4PR84MB19272617D9E728DC09715A45886A9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 28 Apr 2023 09:51:34 +0300
-Message-ID: <CAHp75Vc3JX1tjzHmXWQwgHArc2S=xbxJfvdbbJzutKjXFwNDog@mail.gmail.com>
-Subject: Re: [PATCH v1 1/9] gpio: gxp: Add HPE GXP GPIO
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
         "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
         "brgl@bgdev.pl" <brgl@bgdev.pl>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "krzysztof.kozlowski+dt@linaro.org" 
         <krzysztof.kozlowski+dt@linaro.org>,
         "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
         "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
         "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
@@ -71,43 +72,47 @@ Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20230418152824.110823-1-nick.hawkins@hpe.com>
+ <20230418152824.110823-2-nick.hawkins@hpe.com>
+ <c27e07d2-8eb1-16a8-4619-280967fc0de9@roeck-us.net>
+ <DM4PR84MB1927C9D3C5CC5B001713CE57886A9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v1 1/9] gpio: gxp: Add HPE GXP GPIO
+In-Reply-To: <DM4PR84MB1927C9D3C5CC5B001713CE57886A9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 10:01=E2=80=AFPM Hawkins, Nick <nick.hawkins@hpe.co=
-m> wrote:
-> > Thank you for your contribution. To begin with, I don't believe a simpl=
-e GPIO
-> > driver needs 1000+ LoCs. But see more comments below.
->
-> Andy,
->
-> Thank you for your feedback. I will apply all the input you have provided=
-.
+On 4/27/23 07:53, Hawkins, Nick wrote:
+> 
+> 
+> 
+>> This is not information which should be reported through a gpio driver.
+>> Besides, the functions don't exist at this point in the series,
+>> and there should be no extern declarations in source files.
+> 
+>> If you want to model fan or psu information through gpio, drop
+>> the hwmon drivers and implement reading the status here, then use
+>> the existing gpio-fan hwmon driver to report it in the hwmon subsystem.
+> 
+> Thank you for the feedback Guenter,
+> 
+> I see how it is possible to use gpio-fan for the fan. As for the gxp-psu
+> Hwmon driver can I model the gpio-fan driver to get the necessary
+> gpio information for power supplies?
+> 
 
-You are welcome!
+Sorry, I don't understand. Looking into the code again, the major problem
+I see is that you want to model fan install status and fan fault
+status as gpio pins. The same is true for psu information (installed,
+ac, dc flags).
 
-> I will need to rewrite this code and I am considering the need to
-> perhaps create two files instead of one to keep code length down. As
-> implied by the description I was trying to have one file handle two
-> different compatible strings.
->
-> I believe that one file will need to be the regular IO from the host and
-> memory mapped IO pins of our SoC. The other will need to be the memory
-> mapped IO pins coming from our CPLD. Both of these sources are interrupti=
-ble
-> which does cause some complexity.
->
-> Please let me know if what I have described above is not a good approach =
-to
-> take with GPIO drivers. Any guidance would be greatly appreciated.
+If you want to do this, fine, but then get the status from the gpio
+driver and don't export anything to the gpio driver. The kernel supports
+means to do that (look at gpiod_get and similar functions). It makes the
+code more complex, but I assume you know what you are doing.
 
-I don't know your hardware, otherwise what you wrote above sounds good to m=
-e.
+Guenter
 
---=20
-With Best Regards,
-Andy Shevchenko
