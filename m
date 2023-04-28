@@ -2,117 +2,95 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 017A9C77B7C
-	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Apr 2023 13:32:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 035FAC77B60
+	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Apr 2023 19:16:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346282AbjD1Ncr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 28 Apr 2023 09:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
+        id S240110AbjD1TQA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 28 Apr 2023 15:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346298AbjD1Ncp (ORCPT
+        with ESMTP id S229862AbjD1TP7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 28 Apr 2023 09:32:45 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B6346BB;
-        Fri, 28 Apr 2023 06:32:43 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1a6f0d8cdfeso75793425ad.2;
-        Fri, 28 Apr 2023 06:32:43 -0700 (PDT)
+        Fri, 28 Apr 2023 15:15:59 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A82126A6;
+        Fri, 28 Apr 2023 12:15:56 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-b9d87dffadfso58930276.3;
+        Fri, 28 Apr 2023 12:15:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682688763; x=1685280763;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ecf3y//8as8pmNBqc+FV/KL+yi6EQ2HAAYSLWqdkKMY=;
-        b=S8lRCV5XNase7pRtd37xsGAZzTDD6LYZluEpOiqWveUN07ffsE754Ypw1bTZS8+Ri3
-         iNhAND76FztYXHLw8cHxo3ZFPtOanPUx2/7cmTo1PIjXf3kFnF3wetAybVUNKAXg6mss
-         nGJ8yinhECeQ0K0ehiocBmq9TSphAmxKsis/LJw7K1wKm4Kph/pweqWndZ15sk9oE6G6
-         IFbL5zqrXNU6KQtDAOuPZ7X+qFAVE/uhXDcV9lNvwlv+RLTNtw+Toz7AbI9Q6aoQorDt
-         nx9g+PL/PTf1t4Yy8SZwi1BCl+aAgxQnJgjlkNiVsyOwYt9WYWHtnY7xO+RDEE/HtGo2
-         mQeg==
+        d=gmail.com; s=20221208; t=1682709355; x=1685301355;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tat8phzj3dH3eTznCo+ElpRNyVEo+jl2/PvFuCvuY5E=;
+        b=smC3hGwPmnBKSDbiWk5UMKclZegGbmzc6a6zT3GvwMIPNa5IuHdxfl1TPjBtLKFwfo
+         yVpHsu8re+QnHIPj3air+5KJfZa6dYZY0OKkmOnBV9CdWHrK/ZINRInfoZIILQ3yMJOm
+         CzMjimvdsK0eCKbqLyzI9b/AU6dQUrKDpsAKFGylx5QTwaIobaV7s9khdFFRGT+Lmipz
+         Y/iQ6AWB7Ae1eTHoAGIhJ6zqqet+aGo8mvTz1OKWPUCP/Yg++1H+RYy4xzgo/jQzhsmP
+         lfRMQnEeojsXuwHI4LbtNkxuDveGElOnY2xSCSmFtLStXtZWR3XaGCrZqkDABUJ7f2Q2
+         KRpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682688763; x=1685280763;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ecf3y//8as8pmNBqc+FV/KL+yi6EQ2HAAYSLWqdkKMY=;
-        b=grLy7fcAEBOhv79yQC1iwDj0+XZMGx4PeoWfYZBHDL0pJw1fzYZjHhV2USi7yvEc6O
-         IO21u7rQ4s89i79lWaru48mm8iOLGFMlOmdhnJg8CzJWXudVc8aK02FaTMNgt0ZbvHGA
-         PKwjNLxGawf2wOmyfAWdJH0MOhA/OYc4DVQ/NHmtln5vS7OzzNanBe84HAgKMjFGde/o
-         D8j6ZuFZNdMZ2JreLO/pEvUJtJc3Qzg+Gy/ccKyFtYHtPta7c1NcYfgj26H5sp4n2M/U
-         emaNQuv4oe2JipqApsyuq4UN8VNjlRv/n+l/3z6A9iu+7ytxQ5V+vE2lNqYzixIjDd2i
-         Sgjw==
-X-Gm-Message-State: AC+VfDygc2jNwMu8TIFdZSBIaIbFixSJeOvBnLCNGi0DirbIfWiYsXlZ
-        T+6rV35YwPVYHlfBYVFlgHw=
-X-Google-Smtp-Source: ACHHUZ6MuvKOGxaqrdszoikil1JyMqWsmcNZ0YJGxut2ugRIYmruVervYbpv5rJ01rxEqUYJPDjMrA==
-X-Received: by 2002:a17:902:ec83:b0:1a6:f93a:a135 with SMTP id x3-20020a170902ec8300b001a6f93aa135mr5944888plg.61.1682688763155;
-        Fri, 28 Apr 2023 06:32:43 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f5-20020a170902ab8500b001991f3d85acsm13241904plr.299.2023.04.28.06.32.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 06:32:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b0bbd842-2262-8979-d8f8-ec611310c44f@roeck-us.net>
-Date:   Fri, 28 Apr 2023 06:32:39 -0700
+        d=1e100.net; s=20221208; t=1682709355; x=1685301355;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tat8phzj3dH3eTznCo+ElpRNyVEo+jl2/PvFuCvuY5E=;
+        b=F1ULzBP7tHk3E2UdCDd6gCa3MrfmNA5/OM04MDm83U33n+YdRh2lUNGQIzqkFSlYMM
+         s8QwoQWIS2n3WBiz3LPafPJt/+8xmDCJMkwkBdpjF6UHpRmcZGLuOYqTKFOhvEDQAszT
+         KjnZY844wuN/SyV6xFAMvtk8pAupysYSYjU+lpsn6JZI82hoAC/+C5i3qBy/32fxGkuj
+         Jt/mtS5PN8/Hg8NzHtKbI006TZSMTWrjEbAaA4sJZsOEL9p+EK8HWJG9TJtxEMJgwkif
+         3OORvQggN2+qbVNk6FhsMPNyn1cR8cq6BV5DPPVLR54euzNM91my9pbsBi2ou5uPzhJr
+         sfJw==
+X-Gm-Message-State: AC+VfDxaF12OoQB48ZHfKhEYd5JAILoyoB+FNM9fICUwX6vfLb8xMsOd
+        oeT4uQO+0sVXWk+SEs8npmeNQh6R9tjY+clbbPo=
+X-Google-Smtp-Source: ACHHUZ6UFKCoOr8/ayyLcJW3Syhh0NLJYpMAf/HjNXa6xKbxKEUmPKPEeL8k97o8DdMBQS/VvcunTl8y4N/LMhkrwGw=
+X-Received: by 2002:a81:87c4:0:b0:54f:9cd0:990 with SMTP id
+ x187-20020a8187c4000000b0054f9cd00990mr4552114ywf.18.1682709355642; Fri, 28
+ Apr 2023 12:15:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230418152824.110823-1-nick.hawkins@hpe.com>
- <20230418152824.110823-2-nick.hawkins@hpe.com>
- <c27e07d2-8eb1-16a8-4619-280967fc0de9@roeck-us.net>
- <DM4PR84MB1927C9D3C5CC5B001713CE57886A9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v1 1/9] gpio: gxp: Add HPE GXP GPIO
-In-Reply-To: <DM4PR84MB1927C9D3C5CC5B001713CE57886A9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20230426184420.99945-1-samsagax@gmail.com> <720c2b48-ca48-4ee3-9158-f453e48cb012@roeck-us.net>
+ <CABgtM3i+HZJDearvBK-sBrWnfqdrsuNCDYfxASC3QVsn8rAy-Q@mail.gmail.com> <dfcd56d1-102d-ace6-c8b3-8f668e5f6872@roeck-us.net>
+In-Reply-To: <dfcd56d1-102d-ace6-c8b3-8f668e5f6872@roeck-us.net>
+From:   Joaquin Aramendia <samsagax@gmail.com>
+Date:   Fri, 28 Apr 2023 16:15:44 -0300
+Message-ID: <CABgtM3gydDb7gv-GQvu6mMku0KLAM+DSXqd4+FQDsk9jcXV3YA@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (oxp-sensors) Add AYANEO 2 and Geek models
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/27/23 07:53, Hawkins, Nick wrote:
-> 
-> 
-> 
->> This is not information which should be reported through a gpio driver.
->> Besides, the functions don't exist at this point in the series,
->> and there should be no extern declarations in source files.
-> 
->> If you want to model fan or psu information through gpio, drop
->> the hwmon drivers and implement reading the status here, then use
->> the existing gpio-fan hwmon driver to report it in the hwmon subsystem.
-> 
-> Thank you for the feedback Guenter,
-> 
-> I see how it is possible to use gpio-fan for the fan. As for the gxp-psu
-> Hwmon driver can I model the gpio-fan driver to get the necessary
-> gpio information for power supplies?
-> 
+> > I don't know why but the compiler would complain with the casting from
+> > enum to void*.
+>
+> Really ? I tried with both 32 bit and 64 bit targets, and the above worke=
+d
+> just fine (with W=3D1). I tried with gcc 10.3 as well as 11.3. What is
+> your compiler version, what exactly is the warning/error message you
+> observed, and how exactly did your code look like ?
 
-Sorry, I don't understand. Looking into the code again, the major problem
-I see is that you want to model fan install status and fan fault
-status as gpio pins. The same is true for psu information (installed,
-ac, dc flags).
+Said something about an invalid cast of an lvalue? I can=C2=B4t remember ex=
+actly
+and couldn't reproduce it again. Will change all to your form after
+this patch gets
+merged if you like, just to keep things atomic.
 
-If you want to do this, fine, but then get the status from the gpio
-driver and don't export anything to the gpio driver. The kernel supports
-means to do that (look at gpiod_get and similar functions). It makes the
-code more complex, but I assume you know what you are doing.
+>
+> > Found out that explicitly casting the enum literal before casting it
+> > to void* works and
+> > the compiler stopped complaining so I went with it.
+> >
+>
+> You are not casting the enum literal, but a pointer to it.
 
-Guenter
+Yes. I'm taking an enum literal and taking its pointer to cast it to a void=
+*.
+A little cumbersome, but maybe it can be avoided by using your proposed
+form directly and after making sure it works.
 
+--=20
+Joaqu=C3=ADn I. Aramend=C3=ADa
