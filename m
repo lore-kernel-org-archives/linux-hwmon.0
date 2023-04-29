@@ -2,78 +2,92 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66AF5C77B60
-	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Apr 2023 14:46:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADF6EC77B7C
+	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Apr 2023 14:49:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjD2Oqf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 29 Apr 2023 10:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
+        id S231182AbjD2OtG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 29 Apr 2023 10:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbjD2Oqf (ORCPT
+        with ESMTP id S230507AbjD2OtF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 29 Apr 2023 10:46:35 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A755C173D
-        for <linux-hwmon@vger.kernel.org>; Sat, 29 Apr 2023 07:46:33 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b60366047so751311b3a.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 29 Apr 2023 07:46:33 -0700 (PDT)
+        Sat, 29 Apr 2023 10:49:05 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79524171B;
+        Sat, 29 Apr 2023 07:49:04 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-555e853d3c5so8781697b3.2;
+        Sat, 29 Apr 2023 07:49:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682779593; x=1685371593;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RX3TtPQHNaus0jnJSvVjcRbkLoOx3db3UZv/dnFywfc=;
-        b=X9UsCbcnfuNcx2oxLbhfPYEUyAxile3TFGP3I+RoxutKvfUFeQh5poutE3acQTxMwo
-         xL+BWXlPMOhwHV/Twu2Tq/YtzMMcX5ALjIiMDQaMfPe3RYQEqL7Al9vaG5BprUcsukmf
-         7NzjiDgJ7v1qyD5Qd932TsIbECLj0D9Iy20F0448ifZsrHTquB9kyW7XWCfBPWyNFl6m
-         PJeAg7EsVsCewgvvga7XMHxeRiFoGuJephohT61+0YaZ8lRuzZz1FVWQLOHu1TT4K8JP
-         idZAVxIumuVMFHcO9PMcnApfXXvSDhBHMET3d3gLrQ6CX2+QwEWV4Zqt/AngPOtiIW9j
-         B2+g==
+        d=gmail.com; s=20221208; t=1682779743; x=1685371743;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mAAQBlElYSJ/lUA1HDuQ/lPfFlPU+q4Pqd13n8Qey/4=;
+        b=NjcG1Eqp32KDMChclqGfpAl1AdgNB0vFLHatV2ipjz8irmf4W+/MXDdev6cTwaAcr+
+         BjzHCnzXvppQ5MIjAtk1htEYdUd08SM8tjXRxKwrslrG4ICgwyDbzs+jOondoO+q/R4M
+         ZvUCUzuP09fQUzUKx9OfibJNufustQew/4lvblPt12VnnQMkw85iEc6/rQYDSC/y7mmH
+         CvMJikLz2RYTgNZqB3JyVhFIf8DLBI13Oh5V+FxeMw0+T5XZyRRtkHu9psu/BNtRWlVE
+         HtpppdZeU384MBEuQJnfS8PdfFGSFGmw9ZgPdTZ/iTN33gsWUTK2cnNe+vvthi7kLmka
+         5x3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682779593; x=1685371593;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1682779743; x=1685371743;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RX3TtPQHNaus0jnJSvVjcRbkLoOx3db3UZv/dnFywfc=;
-        b=RKrqvo0bAizenL7EVTl70zo6CohFPHXaihT7JkrCBQZiOx2BKYhEpGrV/F+yFnIogo
-         hVsqHiMqwzbJj7SZyL3PTdfghjuKZUHM1hQIIdtgs71bEzW3HPqkg38OVnHkFGXdXU7p
-         bAxMNHx2c3Q7CWTbBz2va9vfyKm/V1WhM+uasvrXwun8mNU7j1QqwuNgLBVcQOC4cU6s
-         14JrR8oY5BLRD1A4kHQiDe2RVS9S5zY3AMwoLbuCNUGgDCqipegGRjsMol/s79Fj6RpC
-         4P+w4yKV087ii+r22RqKBOOsRprGvd/gZjqJezjhnsduegCAcs9uVkf6cakMvV2MvnWz
-         wWxw==
-X-Gm-Message-State: AC+VfDyUZnHpUlLF6GFZif7LNx0riki7vZyz6Pm3xngmkdyjaPTxlPVh
-        iuTPXIwipmAo1JH9ZoiVclI=
-X-Google-Smtp-Source: ACHHUZ7wirAS6cv83aG9zLbyr18cyVNqJWnXRJn2z4BtaP0/eV60H6tuSKYru3aYkd/Eeg7Y0j97Fg==
-X-Received: by 2002:a05:6a00:22d3:b0:63b:89a2:d624 with SMTP id f19-20020a056a0022d300b0063b89a2d624mr14021912pfj.12.1682779593168;
-        Sat, 29 Apr 2023 07:46:33 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c17-20020a056a000ad100b005ae02dc5b94sm17101087pfl.219.2023.04.29.07.46.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Apr 2023 07:46:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 29 Apr 2023 07:46:31 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Frank Crawford <frank@crawford.emu.id.au>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v1 3/3] hwmon: (it87) Update IT8732F chip for 4 fans and
- PWMs
-Message-ID: <fcb584b1-9e96-4d8f-a966-6e3569916074@roeck-us.net>
-References: <20230429115205.1547251-1-frank@crawford.emu.id.au>
- <20230429115205.1547251-4-frank@crawford.emu.id.au>
+        bh=mAAQBlElYSJ/lUA1HDuQ/lPfFlPU+q4Pqd13n8Qey/4=;
+        b=KudvcAPvK75DKAHEsyKvsdan8ZuBPiY0Hx4aL126B7WwavDMpVam1b8E6ixoq2yzSp
+         mK4VUJ5GEGaV6A2mtYKGSW9hYQcjx4y6H+Rpz2kFBMnTg+crpnuXU6gCgUUXgK5pJY3X
+         HpxOOXB2jb490gaKHcAtssIaPOhZ2D+TH61RH8rZ3UbhcILIeHqF3o7qwNxeJmq3veXA
+         KPgTgI2CK/k14C7X7FA5WU43rmCwjackyjRRpq3yNkTPCCm7LXeBKcF9uUqdjga8yWbQ
+         7aQUYqDcaKYrQGECAglA5J8aOS0G+Ha+zbWTxAhFXCqnXK5qXqC1z+lOgoNyJsTq/OK/
+         exkA==
+X-Gm-Message-State: AC+VfDwnfmZ7XKnho7n+HfnI/TIFprGsYUA9o5VfS8h4+i+oHSWcCl/7
+        TA6QZJEmWFbNM4q3Usf9X8Wh0BxVQsEGwKZQC+s=
+X-Google-Smtp-Source: ACHHUZ5ZBPdoWBjca0sMHAhKwwRtzgGBN0NmGyhanWoeVLSxU58ypBn3NJAAjovntGuo3+YSHqZMzs8oBgcsPKbN9xk=
+X-Received: by 2002:a0d:e64a:0:b0:54f:8171:38db with SMTP id
+ p71-20020a0de64a000000b0054f817138dbmr7075672ywe.32.1682779743632; Sat, 29
+ Apr 2023 07:49:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230429115205.1547251-4-frank@crawford.emu.id.au>
+References: <20230429142547.328125-1-samsagax@gmail.com> <18804132-56f2-436e-ba1c-298653324d37@roeck-us.net>
+In-Reply-To: <18804132-56f2-436e-ba1c-298653324d37@roeck-us.net>
+From:   Joaquin Aramendia <samsagax@gmail.com>
+Date:   Sat, 29 Apr 2023 11:48:52 -0300
+Message-ID: <CABgtM3ifjcZa5HGXrUKTStPZua0W-cXZOv=gkVg_3mQNS6o4vg@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (oxp-sensors) Use less convoluted enum cast
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Apr 29, 2023 at 09:52:05PM +1000, Frank Crawford wrote:
-> Add support for 4 fans and 4 PWMs to chipset IT8732F.
-> 
-> Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
+Thanks, Guenter!
 
-Applied to hwmon-next.
+El s=C3=A1b, 29 abr 2023 a la(s) 11:43, Guenter Roeck (linux@roeck-us.net) =
+escribi=C3=B3:
+>
+> On Sat, Apr 29, 2023 at 11:25:48AM -0300, Joaqu=C3=ADn Ignacio Aramend=C3=
+=ADa wrote:
+> > Change
+> >
+> >   .driver_data =3D (void *) &(enum type) {enum_literal};
+> >
+> > to more readable form:
+> >
+> >   .driver_data =3D (void *) enum_literal;
+> >
+> > and corresponding cast usage as board type flag.
+> >
+> > Signed-off-by: Joaqu=C3=ADn Ignacio Aramend=C3=ADa <samsagax@gmail.com>
+>
+> Applied to hwmon-next.
+>
+> Thanks,
+> Guenter
 
-Thanks,
-Guenter
+
+
+--=20
+Joaqu=C3=ADn I. Aramend=C3=ADa
