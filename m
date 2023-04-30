@@ -2,80 +2,76 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A6C0C77B60
-	for <linux-hwmon@archiver.kernel.org>; Sun, 30 Apr 2023 12:49:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F06DAC77B60
+	for <linux-hwmon@archiver.kernel.org>; Sun, 30 Apr 2023 12:51:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjD3Mtv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 30 Apr 2023 08:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
+        id S229478AbjD3Mvg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 30 Apr 2023 08:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjD3Mtu (ORCPT
+        with ESMTP id S229461AbjD3Mvf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 30 Apr 2023 08:49:50 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D98119A5;
-        Sun, 30 Apr 2023 05:49:49 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-63b60365f53so1987454b3a.0;
-        Sun, 30 Apr 2023 05:49:49 -0700 (PDT)
+        Sun, 30 Apr 2023 08:51:35 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8192137
+        for <linux-hwmon@vger.kernel.org>; Sun, 30 Apr 2023 05:51:34 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-63b5c830d5eso1117006b3a.2
+        for <linux-hwmon@vger.kernel.org>; Sun, 30 Apr 2023 05:51:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682858989; x=1685450989;
+        d=gmail.com; s=20221208; t=1682859094; x=1685451094;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AskwpvcZACrusV969mOwr01id7ph7N4caZ81qYgEcK8=;
-        b=NP1DZtlHxJ1/oSnp43mwZJa55OPL4nIgR3Brls9mZBz3ifCQ0bvz91Rw8+GLMgTAfP
-         IwhWdBF9H06A5Zou3DlNDiBn8LrZB0DYsEfbX+Eahp8NdVHSbWNC25a285leWFkEOQxe
-         YqKjcXn+lSwsnUjzTnffzy9QhuGD0sa0DKoEJT2Lb7rGbJL3uE7Wz1sCJAaOht+8SVCD
-         rGOyYHy4swB7yiJ8qCyrs509VGuh2iPjxGhBZjXCF6XLBtmj2pEoldjMmwtE02FJecUd
-         sAGqAsi3SoxhRQ9XzLkw2Z7NhMz/hz24cynKStzU1ITygaraSUsdZtjsGui6j0Bk04Di
-         yYhw==
+        bh=4OTzd74f1RlsWQW1G51seG7SwOjNCWR9P1UgNfjM4G0=;
+        b=iFxYTdXw17aN65z2ultxIKja4Z7RV4blHIMLo5mvH9CmMe7dVSw4xiuqSmQbR3b3Kw
+         lMUWfjupwCkUnwzfEDbIpHotf9FfB0BASca30+FkQwYGRmbwYgFJg9Z4YKLgj8jIjggt
+         HduPsiWTcI0R4Lo6ACKe1vILW+DGHIU8ByWCNP29XiLNzJRIGsX/V99xKZmAr0dwG1WR
+         lxZtsHoYYszXtH6nIx/iYfLee7BbioAd6zHEwY/LYhUIBWD0bK68ztSIr0Iok7KKl0/o
+         DSYsdvmxYObx9uDkc+Fb4RAAsH4U44VkGcZkVVp6NN/Vl4g/xSmhTxTRLMl0WiIedXzX
+         enZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682858989; x=1685450989;
+        d=1e100.net; s=20221208; t=1682859094; x=1685451094;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AskwpvcZACrusV969mOwr01id7ph7N4caZ81qYgEcK8=;
-        b=MmvsTyO/gGHOWa/RQ7EPauSbAhPIa7yVMUntz+deu3+uNIam75b5TGMUtpxbqygLot
-         HWdHbnBRjYp3jxx83NlDDM2fpVML59YXXo3kIapSR/EBHBw66hwRI8YHilNMcxfa94g4
-         xnnoSkiMcRgDHYi6H3TbUHGZnG3NKHimOjC+vZ3zFxRtldQiift+rd5ldWOJbeaH8Jx6
-         pY4mgtsra+k+B/9cbb4N30T4q+6dTtQkr+JZcXXIveXtcowou63zQs5X1w88uMib8eWZ
-         sOhzDaXhcimL/nQfQVMKnGHkGx6QP/jmyKM8W/ad4mMCTRn8m2IpjzOWbD/39u155se7
-         3AVw==
-X-Gm-Message-State: AC+VfDyC+2imMhTlOWEO/5cHBV0jRi4A8AVfipmUY9agFcv2bBMw00s0
-        4pxqGAY5qwqbThpHHgJq98jnmfpx4s0=
-X-Google-Smtp-Source: ACHHUZ6mvdI6MU96aj9UwrSDXPSI0L+71/pNsWMP6nG3txWRCMzAg425kzNs/bGfSSHNmpboFGk22A==
-X-Received: by 2002:a17:902:ab44:b0:1a9:8769:36bb with SMTP id ij4-20020a170902ab4400b001a9876936bbmr9653391plb.54.1682858988546;
-        Sun, 30 Apr 2023 05:49:48 -0700 (PDT)
+        bh=4OTzd74f1RlsWQW1G51seG7SwOjNCWR9P1UgNfjM4G0=;
+        b=Un8Wowa7iFLD6PJt+QgnsssicF9Nh5h1C7j45mSRSNjIJU4c+27HUpuzoXgREorzci
+         0ivfCAZxcO/XEeRl22Bfc2JO3PnCDF0Klpq63ICQ1Wrzp1gEFeymoEWY9wzYBRmW8W9l
+         DKOpP9JVbnF6UDiG2SEnHZyBlXCh1pMPF++C5QSfPx8zy/vkEoAfzSLAD9RGDXP68MoX
+         dVJQX7KwqrBltP0ckEOIk1TJ6uPRJ5/5DdopAwgZCakzcBTihLNAxvxXvAceDHHKo3uo
+         Nr3tfircrbqzED1jhPgnOVSjGvAE6czL5t+n8g8lblpYQp7q1nLDatDTmkHKM4o75umh
+         Oi8g==
+X-Gm-Message-State: AC+VfDxXhEggNysOS6cLGTrkAX1h6mNsilTm/q+mpwNiPtKwzJMyOTN7
+        tpNas6tZMZWZNoRwLsXMfGE0EZx9nuQ=
+X-Google-Smtp-Source: ACHHUZ78wGLYvntCmshdv3v01/hL2N+sp6y0UZ2JxJRtdxJQjaZZuk/Q2Do7F4RNxgL63ztg6gTdKQ==
+X-Received: by 2002:a05:6a00:995:b0:641:3bf8:6510 with SMTP id u21-20020a056a00099500b006413bf86510mr9283809pfg.5.1682859093781;
+        Sun, 30 Apr 2023 05:51:33 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u7-20020a170903124700b001a260b5319bsm2788245plh.91.2023.04.30.05.49.47
+        by smtp.gmail.com with ESMTPSA id n41-20020a056a000d6900b00637b0c719c5sm18190782pfv.201.2023.04.30.05.51.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Apr 2023 05:49:48 -0700 (PDT)
+        Sun, 30 Apr 2023 05:51:33 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 30 Apr 2023 05:49:46 -0700
+Date:   Sun, 30 Apr 2023 05:51:32 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     jdelvare@suse.com, manio@skyboo.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (adt7475) Convert to use device_property
- APIs
-Message-ID: <a52663d8-dc5f-4360-87c7-5089f942dfe3@roeck-us.net>
-References: <20230418233656.869055-1-chris.packham@alliedtelesis.co.nz>
- <20230418233656.869055-3-chris.packham@alliedtelesis.co.nz>
+To:     Frank Crawford <frank@crawford.emu.id.au>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v1] hwmon: (it87) Allow for chips with only 4 temp sensors
+Message-ID: <47dde581-cd51-42b9-83c7-429bd5c9416c@roeck-us.net>
+References: <20230430045032.1723288-1-frank@crawford.emu.id.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230418233656.869055-3-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20230430045032.1723288-1-frank@crawford.emu.id.au>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 11:36:56AM +1200, Chris Packham wrote:
-> Instead of of_property_read_*() use the equivalent
-> device_property_read_*() API. This will allow these properties to be
-> used on DT unaware platforms. For DT aware platforms this will be a
-> noop.
+On Sun, Apr 30, 2023 at 02:50:32PM +1000, Frank Crawford wrote:
+> Some chips are known to only have 4 temperature sensors and there is no
+> requirement to test for more.  Currently only the IT8622E fits this
+> category.
 > 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
 
 Applied to hwmon-next.
 
@@ -83,50 +79,46 @@ Thanks,
 Guenter
 
 > ---
+>  drivers/hwmon/it87.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 > 
-> Notes:
->     This is an additional update for master from the preceeding bugfix
->     commit. I've not added a fixes tag for this one because I don't think
->     there will be a behaviour change for existing usages.
->     
->     I know we have one upcoming DT unaware platform that we may want to use
->     some of these properties via ACPI tables so I won't object if this ends
->     up on the stable track but I don't think it meets the criteria for
->     stable.
-> 
->  drivers/hwmon/adt7475.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> index 6a6ebcc896b1..3b9289bc5997 100644
-> --- a/drivers/hwmon/adt7475.c
-> +++ b/drivers/hwmon/adt7475.c
-> @@ -1468,7 +1468,7 @@ static int load_config3(const struct i2c_client *client, const char *propname)
->  	u8 config3;
->  	int ret;
+> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+> index 96c17660ff0f..4c3641d28a6a 100644
+> --- a/drivers/hwmon/it87.c
+> +++ b/drivers/hwmon/it87.c
+> @@ -319,6 +319,7 @@ struct it87_devices {
+>  #define FEAT_CONF_NOEXIT	BIT(19)	/* Chip should not exit conf mode */
+>  #define FEAT_FOUR_FANS		BIT(20)	/* Supports four fans */
+>  #define FEAT_FOUR_PWM		BIT(21)	/* Supports four fan controls */
+> +#define FEAT_FOUR_TEMP		BIT(22)
 >  
-> -	ret = of_property_read_string(client->dev.of_node, propname, &function);
-> +	ret = device_property_read_string(&client->dev, propname, &function);
->  	if (!ret) {
->  		ret = adt7475_read(REG_CONFIG3);
->  		if (ret < 0)
-> @@ -1494,7 +1494,7 @@ static int load_config4(const struct i2c_client *client, const char *propname)
->  	u8 config4;
->  	int ret;
+>  static const struct it87_devices it87_devices[] = {
+>  	[it87] = {
+> @@ -475,7 +476,7 @@ static const struct it87_devices it87_devices[] = {
+>  		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+>  		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_FIVE_FANS
+>  		  | FEAT_FIVE_PWM | FEAT_IN7_INTERNAL | FEAT_PWM_FREQ2
+> -		  | FEAT_AVCC3 | FEAT_VIN3_5V,
+> +		  | FEAT_AVCC3 | FEAT_VIN3_5V | FEAT_FOUR_TEMP,
+>  		.peci_mask = 0x07,
+>  		.smbus_bitmap = BIT(1) | BIT(2),
+>  	},
+> @@ -527,6 +528,7 @@ static const struct it87_devices it87_devices[] = {
+>  						     FEAT_SIX_PWM))
+>  #define has_six_pwm(data)	((data)->features & FEAT_SIX_PWM)
+>  #define has_pwm_freq2(data)	((data)->features & FEAT_PWM_FREQ2)
+> +#define has_four_temp(data)	((data)->features & FEAT_FOUR_TEMP)
+>  #define has_six_temp(data)	((data)->features & FEAT_SIX_TEMP)
+>  #define has_vin3_5v(data)	((data)->features & FEAT_VIN3_5V)
+>  #define has_conf_noexit(data)	((data)->features & FEAT_CONF_NOEXIT)
+> @@ -3393,7 +3395,9 @@ static int it87_probe(struct platform_device *pdev)
+>  	data->need_in7_reroute = sio_data->need_in7_reroute;
+>  	data->has_in = 0x3ff & ~sio_data->skip_in;
 >  
-> -	ret = of_property_read_string(client->dev.of_node, propname, &function);
-> +	ret = device_property_read_string(&client->dev, propname, &function);
->  	if (!ret) {
->  		ret = adt7475_read(REG_CONFIG4);
->  		if (ret < 0)
-> @@ -1556,8 +1556,8 @@ static int set_property_bit(const struct i2c_client *client, char *property,
->  			    u8 *config, u8 bit_index)
->  {
->  	u32 prop_value = 0;
-> -	int ret = of_property_read_u32(client->dev.of_node, property,
-> -					&prop_value);
-> +	int ret = device_property_read_u32(&client->dev, property,
-> +					   &prop_value);
+> -	if (has_six_temp(data)) {
+> +	if (has_four_temp(data)) {
+> +		data->has_temp |= BIT(3);
+> +	} else if (has_six_temp(data)) {
+>  		u8 reg = it87_read_value(data, IT87_REG_TEMP456_ENABLE);
 >  
->  	if (!ret) {
->  		if (prop_value)
+>  		/* Check for additional temperature sensors */
