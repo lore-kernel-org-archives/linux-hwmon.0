@@ -2,94 +2,105 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF010C7EE23
-	for <linux-hwmon@archiver.kernel.org>; Mon,  1 May 2023 03:03:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9458C7EE21
+	for <linux-hwmon@archiver.kernel.org>; Mon,  1 May 2023 10:05:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbjEADDl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 30 Apr 2023 23:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49448 "EHLO
+        id S232132AbjEAKFz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 1 May 2023 06:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232547AbjEADDH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:03:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EE54230;
-        Sun, 30 Apr 2023 20:00:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4DA960EA5;
-        Mon,  1 May 2023 02:59:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EAF6C4339B;
-        Mon,  1 May 2023 02:59:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682909983;
-        bh=IjRiUvLYQP+9kc1hC+PvjP2DMMMkl/v+LroeMGs/n30=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uvmIci96yyl8uSa9P6VujKLD0jOJPLe7jvuT6W7gD3Op4hxr1B7txLMyuwE7rswRH
-         yXb7Ss+F3fW/oMuztqfZjum6Y/DuamuduJdO2FWBTUFEzZZ3INxzFtx8B5v9EtV4uA
-         9gPRLFLsVcGYtbPERjKt8Pyi1yxPLrkbsTpdZWSd8MCSbtu+KnZdodGyVvdZukEKyY
-         dMj7b/NNjSEj/hcxcNw0TzCeZ2zESOn3jPvL+opQHgSV7wAvyvUCS7BmRGJVx0U3uk
-         VqeNP7cx7fRnMZkwY7hFTlA36NnLavt97aIDiVdKtzHSsLRkFjV93YMTYk866l+Bgw
-         EhT/EZNU6RlYQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Aleksandr Mezin <mezin.alexander@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 44/44] hwmon: (nzxt-smart2) add another USB ID
-Date:   Sun, 30 Apr 2023 22:56:32 -0400
-Message-Id: <20230501025632.3253067-44-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230501025632.3253067-1-sashal@kernel.org>
-References: <20230501025632.3253067-1-sashal@kernel.org>
+        with ESMTP id S229519AbjEAKFy (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 1 May 2023 06:05:54 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF884E47
+        for <linux-hwmon@vger.kernel.org>; Mon,  1 May 2023 03:05:52 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-956ff2399c9so478699166b.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 01 May 2023 03:05:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682935551; x=1685527551;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Nc4PhAMrOLTlbgqbAftOku7N9NpDflo5yDtm5yYgPu8=;
+        b=zD+V+ei/Do9FxEWNmNm7WCDVOl9mdYftzjEpPNd7ek4D4hcaCNzCLetn2p7HrXE+cG
+         Ev7r6Rv/6e3TwcnpHueVX9FN7+gv4WnS3HTFJ0QHLliFdsKsksJrPbI5eVrLUr1DMHx5
+         AavRbXydzgyW2cfCcMvDYk8Z0sa2wABOz1VFx+BzI2x6uA4e35p2ID0s7b5GAuVg+fjA
+         cNeXcNY3memsjLQTM+pKxYkq88UOrqIS3CYqhc/VrSfjSOZ8NHbdOpW5p9IOdsTTw3BW
+         DKOVcL9PZ8OarRxIHB1Yx+1hCow5D3E4+wtu6rhMJitwtum5PxZsCGg+UQ3XStKZS26F
+         SIUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682935551; x=1685527551;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nc4PhAMrOLTlbgqbAftOku7N9NpDflo5yDtm5yYgPu8=;
+        b=TIoGOlGL1hujHX5CsFztn7kcC+VfgGA5pf6MxPQulXRdIZf2Ktz1m0EF0dtM9piALq
+         9HmrPbt90/y7CSB79ysHwMw1kgaXjAWI4hVXYFZGRsymxKwrN+keCi/nc5eZHGNdSfP+
+         kVIfR9Dbtfv6zuQ3CUc7HNfgBVBmY7u198+imfxHKRCIAu1hfizrohOdpOi98OKuXYAS
+         G3lKHtshq9W8dEBMO8QxzxTjYOagFjoVH6VYsknvtQh9ufPuI+4wQIMyY6KfZnBKbCC+
+         MOTyUkx4MlpUkC8O95DxE8DfCV8rQ96HRfwVNvrcOW/nNPfdBaEI9gxTLHjIJ252kWZd
+         OHeg==
+X-Gm-Message-State: AC+VfDzNfT0tfmg9pM7WktexoLIdL987XB11UdE0KrjJvojizvkzO+lM
+        wsd96aKr06xtm0+jERohzWL7wg==
+X-Google-Smtp-Source: ACHHUZ61UINPj5jaB3EFD4qHRZNHQQ8lpUzoHUfZ2aELodqL0E1nMYYOtJqjTPUsWoYWZ4H0JjWb7A==
+X-Received: by 2002:a17:907:9285:b0:95e:d74b:d171 with SMTP id bw5-20020a170907928500b0095ed74bd171mr12138929ejc.28.1682935551059;
+        Mon, 01 May 2023 03:05:51 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:637a:fd0c:58fd:9f00? ([2a02:810d:15c0:828:637a:fd0c:58fd:9f00])
+        by smtp.gmail.com with ESMTPSA id b21-20020a05640202d500b005083bc605f9sm12011239edx.72.2023.05.01.03.05.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 May 2023 03:05:50 -0700 (PDT)
+Message-ID: <1a30fc8b-b57e-de40-d396-892b55649a77@linaro.org>
+Date:   Mon, 1 May 2023 12:05:49 +0200
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH RESEND v3 0/3] Add support for ESM
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Neha Malcom Francis <n-francis@ti.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Cc:     nm@ti.com, vigneshr@ti.com, u-kumar1@ti.com, kristo@kernel.org
+References: <20230424105011.70674-1-n-francis@ti.com>
+ <aabe7488-29b8-895b-38b8-67e5a7d1dd35@roeck-us.net>
+ <705557cd-0a60-3cda-d78b-d78e2faef856@ti.com>
+ <a1e940aa-7ede-572a-80ca-d950273e5ba6@roeck-us.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <a1e940aa-7ede-572a-80ca-d950273e5ba6@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Aleksandr Mezin <mezin.alexander@gmail.com>
+On 25/04/2023 16:34, Guenter Roeck wrote:
+> On 4/25/23 01:49, Neha Malcom Francis wrote:
+>> Hi Guenter
+>>
+>> On 24/04/23 20:27, Guenter Roeck wrote:
+>>> On 4/24/23 03:50, Neha Malcom Francis wrote:
+>>>> Resending as no major changes, commit subject change only.
+>>>>
+>>>
+>>> Maybe you consider changing the subject of the bindings from "misc"
+>>> to "hwmon" as not being a major change, but it made me aware that you
+>>> are trying to sneak bindings which in my opinion don't belong there
+>>> into the hwmon bindings directory. This is not a hardware monitoring
+>>> device, it doesn't have anything to do with hardware monitoring, and the
+>>> bindings do not belong into bindings/hwmon/.
+>>>
+>>
+>> I understand, it's a thin line across which I pushed ESM into hwmon; my reasoning was ESM also actively looks for signals that it aggregates, and is overall monitoring the device health. But if there was an option, in order of fitting: fault/ > misc/ > hwmon/
+>>
+> 
+> That is really a stretch. It doesn't monitor anything. It is a signal
+> routing mechanism.
+> 
+> With that logic every transistor would be a hardware monitoring device.
 
-[ Upstream commit 4a148e9b1ee04e608263fa9536a96214d5561220 ]
+Then let's move it to misc/ as I don't have other ideas for the placement.
 
-This seems to be a new revision of the device. RGB controls have changed,
-but this driver doesn't touch them anyway.
-
-Fan speed control reported to be working with existing userspace (hidraw)
-software, so I assume it's compatible. Fan channel count is the same.
-
-Recently added (0x1e71, 0x2019) seems to be the same device.
-
-Discovered in liquidctl project:
-
-https://github.com/liquidctl/liquidctl/issues/541
-
-Signed-off-by: Aleksandr Mezin <mezin.alexander@gmail.com>
-Link: https://lore.kernel.org/r/20230219105924.333007-1-mezin.alexander@gmail.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/hwmon/nzxt-smart2.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-index 2b93ba89610ae..a8e72d8fd0605 100644
---- a/drivers/hwmon/nzxt-smart2.c
-+++ b/drivers/hwmon/nzxt-smart2.c
-@@ -791,7 +791,8 @@ static const struct hid_device_id nzxt_smart2_hid_id_table[] = {
- 	{ HID_USB_DEVICE(0x1e71, 0x2009) }, /* NZXT RGB & Fan Controller */
- 	{ HID_USB_DEVICE(0x1e71, 0x200e) }, /* NZXT RGB & Fan Controller */
- 	{ HID_USB_DEVICE(0x1e71, 0x2010) }, /* NZXT RGB & Fan Controller */
--	{ HID_USB_DEVICE(0x1e71, 0x2019) }, /* NZXT RGB & Fan Controller */
-+	{ HID_USB_DEVICE(0x1e71, 0x2011) }, /* NZXT RGB & Fan Controller (6 RGB) */
-+	{ HID_USB_DEVICE(0x1e71, 0x2019) }, /* NZXT RGB & Fan Controller (6 RGB) */
- 	{},
- };
- 
--- 
-2.39.2
+Best regards,
+Krzysztof
 
