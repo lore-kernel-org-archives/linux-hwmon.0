@@ -2,28 +2,28 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5F3CC77B7C
-	for <linux-hwmon@archiver.kernel.org>; Thu,  4 May 2023 08:13:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A662EC7EE22
+	for <linux-hwmon@archiver.kernel.org>; Thu,  4 May 2023 08:13:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbjEDINQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 4 May 2023 04:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
+        id S229965AbjEDIN4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 4 May 2023 04:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbjEDIMP (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 4 May 2023 04:12:15 -0400
-Received: from m228-4.mailgun.net (m228-4.mailgun.net [159.135.228.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6804687
-        for <linux-hwmon@vger.kernel.org>; Thu,  4 May 2023 01:09:44 -0700 (PDT)
+        with ESMTP id S229963AbjEDIMe (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 4 May 2023 04:12:34 -0400
+Received: from m228-13.mailgun.net (m228-13.mailgun.net [159.135.228.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35EA4ED3
+        for <linux-hwmon@vger.kernel.org>; Thu,  4 May 2023 01:10:05 -0700 (PDT)
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
- s=mx; t=1683187784; x=1683194984; h=Content-Transfer-Encoding: MIME-Version:
+ s=mx; t=1683187804; x=1683195004; h=Content-Transfer-Encoding: MIME-Version:
  References: In-Reply-To: Message-Id: Date: Subject: Subject: Cc: To: To:
- From: From: Sender: Sender; bh=C+tRpfsf1TDVCYSsdj7KhPUYicNLucwZCghh4G9pejI=;
- b=TmxJHabASCQUi5F0N/EQB84zkd/h9g7sl1X9dMQjeYWr4NR+VUTbA3mD159tY/MVAGyNfhAhWe2ECuMyVublp9PtZHZSzTalmgUFvjRwvZT+bzfxj8XOTrgVK9nK9sGJvCiVq9J+G0w6MC5GAMUxNvZXZqOj9F53LMdAOstpOUKRSu7hBZwelSmRWsk/jtfnKtllzmoygcfl/ym/y3SP3Vv4ZYiormwHeusMhjZxGzJPHUSj2BrjqH5LUZO2Zuru+kg9xRTYaemOutqn+FJ/gbFJf6RBu3B6/FmOOEP+Wa/NalkixDEtP/SBkLmcxzS6fAS9pATjgQdDBntHmH78kA==
-X-Mailgun-Sending-Ip: 159.135.228.4
+ From: From: Sender: Sender; bh=31Q4Ro1pFyBL9G3wOnVJ2u79v4uFUgKaZchoxW9ol9Q=;
+ b=R4Z6tafp2IIDrMX+McEptOOvxLn1vSYSEQd2c0kMpNxhyEKKXqIEB/fG9otKNqtt2sLyeLFZhxusRZg1CxTfmU4F+w2CbGYVQjFRoRYz7WQzhp7UYq3FbzrItXF4Sq/ZaozUkjKR+dwqrSgaoO+yjXuji5GCXo/CKfwM+HGqpRisUnzKDsMWDZX8dxzd4ZI1oFje/LocJ74eU3pA5KV9e2AqNhBogBoIKVKYwGPtuUimhiOzQBNoCm2z92YmwaHecsUq2jWT7kRxz9vsOW5NT7RK3e/N6poaOetaf179w4Im8Pb16V/VR1yVGXtQl1Ot4O+5Ok84NRHW+577Wqj0qw==
+X-Mailgun-Sending-Ip: 159.135.228.13
 X-Mailgun-Sid: WyJkOWUwNSIsImxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZyIsIjkzZDVhYiJd
-Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by f5ac2268c446 with SMTP id
- 645365d1f77227a83038cb50 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 04 May 2023 07:59:13 GMT
+Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 57d6487547fc with SMTP id
+ 645365e6f77227a83038fba8 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 04 May 2023 07:59:34 GMT
 Sender: james@equiv.tech
 From:   James Seo <james@equiv.tech>
 To:     Jean Delvare <jdelvare@suse.com>,
@@ -31,9 +31,9 @@ To:     Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>
 Cc:     James Seo <james@equiv.tech>, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC 06/11] Documentation/hwmon: Revise patch submission checklist
-Date:   Thu,  4 May 2023 00:57:47 -0700
-Message-Id: <20230504075752.1320967-7-james@equiv.tech>
+Subject: [RFC 08/11] Documentation/hwmon: Revise userspace tools documentation
+Date:   Thu,  4 May 2023 00:57:49 -0700
+Message-Id: <20230504075752.1320967-9-james@equiv.tech>
 In-Reply-To: <20230504075752.1320967-1-james@equiv.tech>
 References: <20230504075752.1320967-1-james@equiv.tech>
 MIME-Version: 1.0
@@ -42,218 +42,166 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Drop capitals from document title for consistency.
+Rewrite lm-sensors installation and usage guidelines
+and mark the list of third-party utilities as outdated.
 Fix minor issues (typos, grammar, etc.) and add markup.
 
 Signed-off-by: James Seo <james@equiv.tech>
 ---
- Documentation/hwmon/submitting-patches.rst | 110 +++++++++++----------
- 1 file changed, 58 insertions(+), 52 deletions(-)
+ Documentation/hwmon/userspace-tools.rst | 129 +++++++++++++++++++-----
+ 1 file changed, 103 insertions(+), 26 deletions(-)
 
-diff --git a/Documentation/hwmon/submitting-patches.rst b/Documentation/hwmon/submitting-patches.rst
-index 6482c4f137dc..3ef4b20223ea 100644
---- a/Documentation/hwmon/submitting-patches.rst
-+++ b/Documentation/hwmon/submitting-patches.rst
-@@ -1,13 +1,15 @@
--How to Get Your Patch Accepted Into the Hwmon Subsystem
- =======================================================
-+How to get your patch accepted into the hwmon subsystem
-+=======================================================
-+
+diff --git a/Documentation/hwmon/userspace-tools.rst b/Documentation/hwmon/userspace-tools.rst
+index bf3797c8e734..79c932954e4a 100644
+--- a/Documentation/hwmon/userspace-tools.rst
++++ b/Documentation/hwmon/userspace-tools.rst
+@@ -1,43 +1,120 @@
++===============
+ Userspace tools
+ ===============
+ 
 +.. contents::
++
+ Introduction
++============
++
++Hardware monitoring information is pertinent to almost every Linux system.
++For instance, most computer mainboards manufactured since the late 1990s have
++reported system health data such as temperatures, voltages, and fan speeds.
++All modern CPUs, GPUs, and SoCs have built-in internal temperature sensors and
++often have other types of sensors as well. In addition, an increasing number
++of components, such as power supplies and liquid CPU coolers, are now embedded
++systems ("smart devices") capable of measuring and providing relevant sensor
++data themselves.
++
++The Linux Hardware Monitoring subsystem (``hwmon``) supports most common types
++of hardware monitoring sensors, regardless of how they are connected to the
++system. Sensor measurements are made available in the ``/sys`` virtual
++filesystem at ``/sys/class/hwmon``. Userspace tools are then used to display
++the measured values or configure the sensors and data sources in a more
++friendly manner.
++
++``lm-sensors``
++==============
++
++``lm-sensors`` is a collection of command-line utilities that allows you to
++view hardware monitoring information and set monitoring limits. On some
++systems, it is used to process raw sensor data into a usable form. It may also
++be used to probe the system at a low level to help detect available sensors.
++
++While active development has largely ceased as of 2023, its status is closer
++to "finished" than "abandoned". It has strong historical ties to ``hwmon``,
++and a properly configured installation of ``lm-sensors`` (or its
++``libsensors`` library component) is often required by other hardware
++monitoring utilities.
++
++Installation
+ ------------
  
- This text is a collection of suggestions for people writing patches or
--drivers for the hwmon subsystem. Following these suggestions will greatly
-+drivers for the ``hwmon`` subsystem. Following these suggestions will greatly
- increase the chances of your change being accepted.
+-Most mainboards have sensor chips to monitor system health (like temperatures,
+-voltages, fans speed). They are often connected through an I2C bus, but some
+-are also connected directly through the ISA bus.
++Most Linux distributions provide the ``lm-sensors`` suite as a package.
++It is recommended that you use this package for ease of installation.
++Please consult your Linux distribution's documentation for more information.
++
++If needed, sources may be found at https://hwmon.wiki.kernel.org/lm_sensors.
++Basic compilation, installation, and uninstallation may be accomplished with
++``make all``, ``make install``, and ``make uninstall``, respectively.
++
++Usage
++-----
++
++General hints to get things working after installation:
  
--
--1. General
+-The kernel drivers make the data from the sensor chips available in the /sys
+-virtual filesystem. Userspace tools are then used to display the measured
+-values or configure the chips in a more friendly manner.
++* Run the ``sensors`` command. Note the available sensors on your system.
+ 
+-Lm-sensors
 -----------
-+General
-+=======
++* If you don't see the sensors you expect, here are a few possibilities:
  
- * It should be unnecessary to mention, but please read and follow:
+-Core set of utilities that will allow you to obtain health information,
+-setup monitoring limits etc. You can get them on their homepage
+-http://www.lm-sensors.org/ or as a package from your Linux distribution.
++  * You must run the ``sensors-detect`` command to detect available sensors.
++    It will try to find the correct kernel modules (i.e. ``hwmon`` drivers)
++    for your hardware and make the necessary changes to load them
++    automatically. You may have to make these changes yourself in some cases.
  
-@@ -15,69 +17,69 @@ increase the chances of your change being accepted.
-     - Documentation/process/submitting-patches.rst
-     - Documentation/process/coding-style.rst
+-If from website:
+-Get lm-sensors from project web site. Please note, you need only userspace
+-part, so compile with "make user" and install with "make user_install".
++    .. attention::
++      Though unlikely, ``sensors-detect`` may damage your system while
++      conducting certain low-level checks. You will have the chance to refuse.
  
--* Please run your patch through 'checkpatch --strict'. There should be no
--  errors, no warnings, and few if any check messages. If there are any
--  messages, please be prepared to explain.
-+* Please run your patch through ``scripts/checkpatch.pl --strict``.
-+  There should be no errors, no warnings, and few if any check messages.
-+  If there are any messages, please be prepared to explain.
+-General hints to get things working:
++  * You are missing the kernel module(s) you need, but it is just a matter of
++    installing it.
  
- * Please use the standard multi-line comment style. Do not mix C and C++
-   style comments in a single driver (with the exception of the SPDX license
-   identifier).
+-0) get lm-sensors userspace utils
+-1) compile all drivers in I2C and Hardware Monitoring sections as modules
+-   in your kernel
+-2) run sensors-detect script, it will tell you what modules you need to load.
+-3) load them and run "sensors" command, you should see some results.
+-4) fix sensors.conf, labels, limits, fan divisors
+-5) if any more problems consult FAQ, or documentation
++    Some Linux distributions already include all in-kernel ``hwmon`` drivers
++    as part of a base installation, but others may only provide them in a
++    "kernel modules" or "extra kernel modules" package. Please consult your
++    Linux distribution's documentation for more information.
++
++    If you are using a self-compiled kernel, ensure that the necessary driver
++    is set to be compiled as modules in the kernel config, then recompile and
++    reinstall.
++
++    In some cases, a hardware vendor or an open-source developer provides an
++    unofficial third-party driver for your hardware. Please refer to the
++    documentation for that driver for more information.
++
++  * The module that you need exists and has been updated to work with your
++    hardware, but only for a later kernel version, or it has not been updated
++    yet, or it does not exist.
++
++    Unfortunately, you will need to upgrade your kernel or Linux distribution,
++    or wait and do so later, or implement support for your hardware yourself.
++
++* Once ``sensors`` is working, you may still need to edit its configuration
++  file (most likely ``/etc/sensors3.conf``) before its output becomes usable.
++
++  For example, this is necessary if several mainboards use the same sensor
++  chip for hardware monitoring duties, but due to design differences between
++  boards, the same measured value means different things on each.
++
++  You may also want to edit the config file to change sensor names, change how
++  displayed values are calculated, and/or hide sensors from view.
++
++  For more information, please refer to the ``man`` pages for ``sensors`` and
++  ``sensors.conf``.
++
++* If you run into more problems, consult FAQs and documentation as needed, or
++  try searching for your particular mainboard or computer system to see what
++  has worked for others.
  
--* If your patch generates checkpatch errors, warnings, or check messages,
-+* If your patch generates ``checkpatch`` errors, warnings, or check messages,
-   please refrain from explanations such as "I prefer that coding style".
--  Keep in mind that each unnecessary message helps hiding a real problem,
-+  Keep in mind that each unnecessary message helps to hide a real problem,
-   and a consistent coding style makes it easier for others to understand
-   and review the code.
+ Other utilities
+----------------
++===============
++
++.. warning ::
++  This section is outdated and in need of attention.  Please use this
++  information with caution, and please consider sending patches to update it.
  
- * Please test your patch thoroughly. We are not your test group.
--  Sometimes a patch can not or not completely be tested because of missing
-+  Sometimes a patch cannot or cannot completely be tested because of missing
-   hardware. In such cases, you should test-build the code on at least one
--  architecture. If run-time testing was not achieved, it should be written
-+  architecture. If runtime testing was not achieved, this should be written
-   explicitly below the patch header.
+ If you want some graphical indicators of system health look for applications
+-like: gkrellm, ksensors, xsensors, wmtemp, wmsensors, wmgtemp, ksysguardd,
+-hardware-monitor
++like: ``gkrellm``, ``ksensors``, ``xsensors``, ``wmtemp``, ``wmsensors``,
++``wmgtemp``, ``ksysguardd``, ``hardware-monitor``
  
- * If your patch (or the driver) is affected by configuration options such as
--  CONFIG_SMP, make sure it compiles for all configuration variants.
-+  ``CONFIG_SMP``, make sure it compiles for all configuration variants.
- 
- 
--2. Adding functionality to existing drivers
---------------------------------------------
-+Adding functionality to existing drivers
-+========================================
- 
--* Make sure the documentation in Documentation/hwmon/<driver_name>.rst is up to
--  date.
-+* Make sure the documentation in ``Documentation/hwmon/<driver_name>.rst`` is
-+  up-to-date.
- 
--* Make sure the information in Kconfig is up to date.
-+* Make sure the information in ``Kconfig`` is up-to-date.
- 
- * If the added functionality requires some cleanup or structural changes, split
-   your patch into a cleanup part and the actual addition. This makes it easier
--  to review your changes, and to bisect any resulting problems.
-+  to review your changes and to bisect any resulting problems.
- 
- * Never mix bug fixes, cleanup, and functional enhancements in a single patch.
- 
- 
--3. New drivers
----------------
-+New drivers
-+===========
- 
--* Running your patch or driver file(s) through checkpatch does not mean its
-+* Running your patch or driver file(s) through ``checkpatch`` does not mean its
-   formatting is clean. If unsure about formatting in your new driver, run it
--  through Lindent. Lindent is not perfect, and you may have to do some minor
--  cleanup, but it is a good start.
-+  through ``scripts/Lindent``. ``Lindent`` is not perfect, and you may have to
-+  do some minor cleanup, but it is a good start.
- 
--* Consider adding yourself to MAINTAINERS.
-+* Consider adding yourself to ``MAINTAINERS``.
- 
--* Document the driver in Documentation/hwmon/<driver_name>.rst.
-+* Document the driver in ``Documentation/hwmon/<driver_name>.rst``.
- 
--* Add the driver to Kconfig and Makefile in alphabetical order.
-+* Add the driver to ``Kconfig`` and ``Makefile`` in alphabetical order.
- 
--* Make sure that all dependencies are listed in Kconfig.
-+* Make sure that all dependencies are listed in ``Kconfig``.
- 
- * Please list include files in alphabetic order.
- 
--* Please align continuation lines with '(' on the previous line.
-+* Please align continuation lines with '``(``' on the previous line.
- 
- * Avoid forward declarations if you can. Rearrange the code if necessary.
- 
- * Avoid macros to generate groups of sensor attributes. It not only confuses
--  checkpatch, but also makes it more difficult to review the code.
-+  ``checkpatch``, but also makes it more difficult to review the code.
- 
- * Avoid calculations in macros and macro-generated functions. While such macros
-   may save a line or so in the source, it obfuscates the code and makes code
-@@ -88,16 +90,17 @@ increase the chances of your change being accepted.
-   generate an error message just because a runtime operation failed. Report
-   errors to user space instead, using an appropriate error code. Keep in mind
-   that kernel error log messages not only fill up the kernel log, but also are
--  printed synchronously, most likely with interrupt disabled, often to a serial
--  console. Excessive logging can seriously affect system performance.
-+  printed synchronously, most likely with interrupts disabled, and often to a
-+  serial console. Excessive logging can seriously affect system performance.
- 
--* Use devres functions whenever possible to allocate resources. For rationale
--  and supported functions, please see Documentation/driver-api/driver-model/devres.rst.
--  If a function is not supported by devres, consider using devm_add_action().
-+* Use ``devres`` functions whenever possible to allocate resources. For
-+  rationale and supported functions, please see
-+  Documentation/driver-api/driver-model/devres.rst. If a function is not
-+  supported by ``devres``, consider using devm_add_action().
- 
- * If the driver has a detect function, make sure it is silent. Debug messages
-   and messages printed after a successful detection are acceptable, but it
--  must not print messages such as "Chip XXX not found/supported".
-+  must not print messages such as ``Chip XXX not found/supported``.
- 
-   Keep in mind that the detect function will run for all drivers supporting an
-   address if a chip is detected on that address. Unnecessary messages will just
-@@ -105,14 +108,14 @@ increase the chances of your change being accepted.
- 
- * Provide a detect function if and only if a chip can be detected reliably.
- 
--* Only the following I2C addresses shall be probed: 0x18-0x1f, 0x28-0x2f,
--  0x48-0x4f, 0x58, 0x5c, 0x73 and 0x77. Probing other addresses is strongly
--  discouraged as it is known to cause trouble with other (non-hwmon) I2C
--  chips. If your chip lives at an address which can't be probed then the
--  device will have to be instantiated explicitly (which is always better
--  anyway.)
-+* Only the following I2C addresses shall be probed: ``0x18``-``0x1f``,
-+  ``0x28``-``0x2f``, ``0x48``-``0x4f``, ``0x58``, ``0x5c``, ``0x73``,
-+  and ``0x77``. Probing other addresses is strongly discouraged, as it is
-+  known to cause trouble with other (non-``hwmon``) I2C chips. If your chip
-+  lives at an address which can't be probed, then the device will have to be
-+  instantiated explicitly (which is always better anyway).
- 
--* Avoid writing to chip registers in the detect function. If you have to write,
-+* Avoid writing to chip registers in the detect function. If you must,
-   only do it after you have already gathered enough data to be certain that the
-   detection is going to be successful.
- 
-@@ -121,25 +124,28 @@ increase the chances of your change being accepted.
- 
- * Make sure there are no race conditions in the probe function. Specifically,
-   completely initialize your chip and your driver first, then register with
--  the hwmon subsystem.
-+  the ``hwmon`` subsystem.
- 
--* Use devm_hwmon_device_register_with_info() or, if your driver needs a remove
--  function, hwmon_device_register_with_info() to register your driver with the
--  hwmon subsystem. Try using devm_add_action() instead of a remove function if
--  possible. Do not use any of the deprecated registration functions.
-+* Use
-+  :ref:`devm_hwmon_device_register_with_info() <devm_hwmon_device_register_with_info>`
-+  or, if your driver needs a remove function,
-+  :ref:`hwmon_device_register_with_info() <hwmon_device_register_with_info>` to
-+  register your driver with the ``hwmon`` subsystem. Try using devm_add_action()
-+  instead of a remove function if possible. Do not use any of the deprecated
-+  registration functions.
- 
--* Your driver should be buildable as module. If not, please be prepared to
-+* Your driver should be buildable as a module. If not, please be prepared to
-   explain why it has to be built into the kernel.
- 
--* Do not provide support for deprecated sysfs attributes.
-+* Do not provide support for deprecated ``sysfs`` attributes.
- 
- * Do not create non-standard attributes unless really needed. If you have to use
-   non-standard attributes, or you believe you do, discuss it on the mailing list
--  first. Either case, provide a detailed explanation why you need the
-+  first. In either case, provide a detailed explanation why you need the
-   non-standard attribute(s).
-   Standard attributes are specified in Documentation/hwmon/sysfs-interface.rst.
- 
--* When deciding which sysfs attributes to support, look at the chip's
-+* When deciding which ``sysfs`` attributes to support, look at the chip's
-   capabilities. While we do not expect your driver to support everything the
-   chip may offer, it should at least support all limits and alarms.
- 
+-If you are server administrator you can try snmpd or mrtgutils.
++If you are server administrator you can try ``snmpd`` or ``mrtgutils``.
 -- 
 2.34.1
 
