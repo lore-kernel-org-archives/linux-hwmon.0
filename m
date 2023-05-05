@@ -2,120 +2,102 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED156C77B7F
-	for <linux-hwmon@archiver.kernel.org>; Fri,  5 May 2023 04:51:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6746C77B75
+	for <linux-hwmon@archiver.kernel.org>; Fri,  5 May 2023 04:58:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjEEEvM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 5 May 2023 00:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
+        id S230090AbjEEE6L (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 5 May 2023 00:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjEEEvL (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 5 May 2023 00:51:11 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3AD124A4;
-        Thu,  4 May 2023 21:51:07 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-51b33c72686so835564a12.1;
-        Thu, 04 May 2023 21:51:07 -0700 (PDT)
+        with ESMTP id S229577AbjEEE6L (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 5 May 2023 00:58:11 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E16A243;
+        Thu,  4 May 2023 21:58:10 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-52c759b7d45so1104375a12.3;
+        Thu, 04 May 2023 21:58:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683262267; x=1685854267;
+        d=gmail.com; s=20221208; t=1683262690; x=1685854690;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YooAtw31lGxcIUhMg0BPeeMyIWHgmiQZvQRtd4wuZao=;
-        b=dCBYWfDpPELasq2WVOGKy6/gkOf2OC924S1QjMBcH9uHwRkf94RKNmntd2XUdo1BSM
-         K7aQSaLiE2IK0D9tst5n9iM/iAsvOiXQihEQZA+DkfgCRSON1COxYD/Ap+7XucWqMTY4
-         2S0swD0kDpffBnfJTyumA4a+lNTax/7VTqU18z3cf4ofbLpqPnPKtaO5ENIRSUj16Rum
-         3hb4kUxeSRm7rFMXn4Ppd7f51YdidJqTQyHIo9LxdQtdhQUwR84ZNdVgGj3hK/nNBeqy
-         Zf0iRqJUQ2uzVHSHSjH+XYbdLjuLQ+92L/tl4BiUJxYnO3F5qOnU8JX/0zQEGKyqiq9f
-         AhtQ==
+        bh=OzSdDfhBu6bM4Kn30esE8MtemEERFMfw7x5S/4OC1sw=;
+        b=NmheHr+Z1mwGDvHYu4u1v77FlJfg0c1889VcrZpmimKxEzIeZwnGCcohEBsBEY899b
+         2JMiaMqS/HSexEkDhxnvl3BGfoUWYddUGK6qiZ4rNIecGjsmNRd2r7iiqxKN+pfrTrWQ
+         dzYOlHVhC3MjsgXGwqiX1DJFXZyTSSbTiVVsV5yUH4aFNkH1BnTOqlyYFjVNPq+RLWDb
+         t6bJHdN9c1+JPy3v8zh6+2h+XCM8uB4y358qXrXP6vgJ6b68vK0w3hHks8bSpbhGi1zT
+         8ZoPO6bc2cD9tOYir5YzMZ/cEekXk1VoPjA1kgo9IR1DZeF9ZOj9Uig/PCuxeKfKQo1g
+         HrXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683262267; x=1685854267;
+        d=1e100.net; s=20221208; t=1683262690; x=1685854690;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YooAtw31lGxcIUhMg0BPeeMyIWHgmiQZvQRtd4wuZao=;
-        b=DWQfjO3i20i1mdDYR/fvK1uGmdeRhGvOZIsPj6HK5cPOt/fgkj/Chx9a2GHsikVi4H
-         JVmcKov9Q4lhXdLykBC+sSz7dZYLnVzlB1HZ4+tc2UioWpkEbUbzQ95k8Tbz2cEdX1Gr
-         XF1+f5S4OO/4DjlnFKe2eFqnV7ACs68xUU/2gnZPiZbYUi9rqx8AyFN3wC0M+8yjeUja
-         zd2QdF1w9arw0RU5HCsxJVXrX9+hHDBvcXCJWf7HnGcINr3pap9OIY2JDnM0zOkyaiwi
-         xEha8WreSXzxf1CQ8pZXBLQeakKCsHFWshWvd8v6NO+RiO5pMQuMc8MSMEluhvozxr+h
-         OSaQ==
-X-Gm-Message-State: AC+VfDwy8qZ9/0lXgvnH8rjxhNuPVUNKU9+T90WzsMUjwMOH4TTUjSjU
-        9Act79kq2c3AOJVBSQkZfsE=
-X-Google-Smtp-Source: ACHHUZ4pWwKVZoUBzdsksfoWiCbmgttPdGcK6wDv7QKrRhr+jZ4SPaSB+i6gKkkXkndq7gPQ9VNh/Q==
-X-Received: by 2002:a17:902:d491:b0:1ab:26a8:5401 with SMTP id c17-20020a170902d49100b001ab26a85401mr203140plg.31.1683262266824;
-        Thu, 04 May 2023 21:51:06 -0700 (PDT)
+        bh=OzSdDfhBu6bM4Kn30esE8MtemEERFMfw7x5S/4OC1sw=;
+        b=UFfuO1ErZO0gq1ojrxKoR/qSFwvsL8HJR79TEbGs95SSUjwb5ii/yliybqxUwg2zTz
+         nHCLVc9SdkbFinl9q612tTcsYrpXlL0QmZKM4lQwqxD1+weyFZJf5WEdGHg/bp9Qldes
+         kaiVw6tpJaLXC0LTKJtinHqBYrxJfCQtGiNQ03prOLzYC4OEh1pd3STubl6i/7XowsHI
+         BvxJrkQEb5fR7jH1gZfZhylsluBR+PHWuqhUxdHXmGbTzPjnlmNiyWECCq8RyqFdi7PL
+         gCHNMKh0XIHvTt3pLiDsKbLymTIcxJOHZ0H96yx4cdKTcOK8Lhs+PYoefM83VyY0Iz/F
+         rmqQ==
+X-Gm-Message-State: AC+VfDyKcBG9SKo5LSstE1FzB6CdQMR/awtc7YYA6HuqKIDwdxcSgoUO
+        ZUMecFIfDrMhSkSQKPeHLUM=
+X-Google-Smtp-Source: ACHHUZ5H88IkGNh3Gu8DErn2VUMjYaTQeqHheVJPulViN2lgF+XyXcX62POjrzVhIegqOJUiaZUxdQ==
+X-Received: by 2002:a17:902:ab91:b0:1a6:9906:1eb7 with SMTP id f17-20020a170902ab9100b001a699061eb7mr163551plr.35.1683262689640;
+        Thu, 04 May 2023 21:58:09 -0700 (PDT)
 Received: from debian.me (subs03-180-214-233-25.three.co.id. [180.214.233.25])
-        by smtp.gmail.com with ESMTPSA id m11-20020a170902bb8b00b001a6d08eb054sm562502pls.78.2023.05.04.21.51.06
+        by smtp.gmail.com with ESMTPSA id jw21-20020a170903279500b001aaecc15d66sm547655plb.289.2023.05.04.21.58.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 21:51:06 -0700 (PDT)
+        Thu, 04 May 2023 21:58:09 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id B4586106861; Fri,  5 May 2023 11:51:03 +0700 (WIB)
-Date:   Fri, 5 May 2023 11:51:03 +0700
+        id ACC011068DB; Fri,  5 May 2023 11:58:06 +0700 (WIB)
+Date:   Fri, 5 May 2023 11:58:06 +0700
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Jonathan Corbet <corbet@lwn.net>
 Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC 07/11] Documentation/hwmon: Revise sysfs interface
- specification
-Message-ID: <ZFSLN6KmGgfW4YzE@debian.me>
+Subject: Re: [RFC 01/11] Documentation/hwmon: Move misplaced entry in hwmon
+ docs index
+Message-ID: <ZFSM3txfu5Aqv52E@debian.me>
 References: <20230504075752.1320967-1-james@equiv.tech>
- <20230504075752.1320967-8-james@equiv.tech>
+ <20230504075752.1320967-2-james@equiv.tech>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="85j7XFAgyxDylWtE"
+        protocol="application/pgp-signature"; boundary="iIATXFk7rJgLSivV"
 Content-Disposition: inline
-In-Reply-To: <20230504075752.1320967-8-james@equiv.tech>
+In-Reply-To: <20230504075752.1320967-2-james@equiv.tech>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
---85j7XFAgyxDylWtE
+--iIATXFk7rJgLSivV
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 04, 2023 at 12:57:48AM -0700, James Seo wrote:
-> +**RO**    Read-only value.
-> +**WO**    Write-only value.
-> +**RW**    Read/write value.
+On Thu, May 04, 2023 at 12:57:42AM -0700, James Seo wrote:
+> Move the entry for the inspur-ipsps1 driver so that it no
+> longer appears in the hwmon docs TOC as a document relating
+> to the hwmon subsystem itself.
 
-Why are the permissions be emphasized?
+LGTM, thanks!
 
-> +| | ``pwm[1-*]_auto_point[1-*]_pwm``        | **RW** | PWM temperature c=
-urve definition    |
-> +| | ``pwm[1-*]_auto_point[1-*]_temp``       |        | for chips that as=
-sociate trip       |
-> +| | ``pwm[1-*]_auto_point[1-*]_temp_hyst``  |        | points with PWM o=
-utput channels.    |
-> ++-------------------------------------------+--------+------------------=
--------------------+
-> +| | ``temp[1-*]_auto_point[1-*]_pwm``       | **RW** | PWM temperature c=
-urve definition    |
-> +| | ``temp[1-*]_auto_point[1-*]_temp``      |        | for chips that as=
-sociate trip       |
-> +| | ``temp[1-*]_auto_point[1-*]_temp_hyst`` |        | points with tempe=
-rature channels.   |
-
-Dunno if replacing line blocks with bullet lists should improve the semantic
-of three sysfs files having the same description.
-
-Thanks.
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
 --=20
 An old man doll... just what I always wanted! - Clara
 
---85j7XFAgyxDylWtE
+--iIATXFk7rJgLSivV
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFSLNwAKCRD2uYlJVVFO
-o/iiAP9iRiM37NSCrYnWxOpiAozg/UqXIm4W8AZVo/2uFptc/gD9Fc/hfDLuhUXw
-J0N/LrUM66JwC/CC6kQm8Sd9buz6TgM=
-=J291
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFSM3gAKCRD2uYlJVVFO
+o5XkAQC8ROGTO44qE5aHeQZw4rH9/6ROsEZ3Ri5uyzXUUr+DMAEA8yvh10mEBEc6
+ct2CvF+064jM9BFSdGu9We3yM8ozKQA=
+=A+NR
 -----END PGP SIGNATURE-----
 
---85j7XFAgyxDylWtE--
+--iIATXFk7rJgLSivV--
