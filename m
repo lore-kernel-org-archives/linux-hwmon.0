@@ -2,105 +2,99 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB89BC7EE26
-	for <linux-hwmon@archiver.kernel.org>; Fri,  5 May 2023 14:40:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41BEAC77B7F
+	for <linux-hwmon@archiver.kernel.org>; Fri,  5 May 2023 14:50:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232414AbjEEOkR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 5 May 2023 10:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
+        id S232317AbjEEOuq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 5 May 2023 10:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbjEEOkQ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 5 May 2023 10:40:16 -0400
+        with ESMTP id S232526AbjEEOuq (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 5 May 2023 10:50:46 -0400
 Received: from m228-13.mailgun.net (m228-13.mailgun.net [159.135.228.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C7F17FEB
-        for <linux-hwmon@vger.kernel.org>; Fri,  5 May 2023 07:39:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C6C17DF0
+        for <linux-hwmon@vger.kernel.org>; Fri,  5 May 2023 07:50:42 -0700 (PDT)
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
- s=mx; t=1683297596; x=1683304796; h=In-Reply-To: Content-Type: MIME-Version:
+ s=mx; t=1683298241; x=1683305441; h=In-Reply-To: Content-Type: MIME-Version:
  References: Message-ID: Subject: Subject: Cc: To: To: From: From: Date:
- Sender: Sender; bh=1zV5HkaO4AcJ2oJf1urH6etlYKt5oTziBWscnFyDS8k=;
- b=n+LvbNTlTR2M84lzJEseOk1nD6juue+aeZkwijoJpEL9FbziPK70KE89+n3EyvMdrBdZnBBidJg+IXfcU5u7YW7nDGOWGVpqNuHzP0Vb8QOCp6sndu2sklYhImQTMf64nfUp3ehcVEO+oJKM+mHJ9IJWkSf4ewjwhzecAp0Aw+8PiQPOPpWnhHNhjy7XJMXyR86hhvcX8EOeMCQR5LW0PPYL4LHihipJMFqIon0mKhaI3xZlUVjL4Qr5vovp5Pr67rjIEtOIl/uKlmFEnMgju4EPwjrxnFnGjJNCE1oxq02G68us8SB5NWj26EEnWHTQKNXwgiMtSUmZ0RcBbranbQ==
+ Sender: Sender; bh=EK1JydfP+yDGRYuOn6HFDzhJ0o/Eh62PlPzIuRHXoLQ=;
+ b=PbMDolKVXgUqRXif2rABTxGo3KYghGDttEzbjFIBqyqoO8b6+8YqO29s/DEELWrjA9m+zGPI9lrhmC3kppjlFJCtMQah454H/V9WClcOgKQpyylyrZQfEl2PrtnxnRQGTXwIllgcakDlTdKplpu5/1pYxPpUaaEZMVo6KOZR5QvgwiI9V3AKc2aIsPU8bVkJTRlItZCoeQM8aAPDdr5Q6+9nLmxhqBYpKbx8/WLfafBbgPqowUvTFnoJ4QBrywPXfhCjooZXECcafGQdM+QQgsWa/iSJrY9DoKDe1Wn06+nXj2cPk/Fwe2h9ONAz+aS56u4zEe1xLQG0P5qWhk4V1g==
 X-Mailgun-Sending-Ip: 159.135.228.13
 X-Mailgun-Sid: WyJkOWUwNSIsImxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZyIsIjkzZDVhYiJd
-Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by f5ac2268c446 with SMTP id
- 6455153cf77227a8301b0175 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 05 May 2023 14:39:56 GMT
+Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 43f335790acc with SMTP id
+ 645517c1dd415858cb8b0910 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 05 May 2023 14:50:41 GMT
 Sender: james@equiv.tech
-Date:   Fri, 5 May 2023 07:39:55 -0700
+Date:   Fri, 5 May 2023 07:50:40 -0700
 From:   James Seo <james@equiv.tech>
-To:     Guenter Roeck <linux@roeck-us.net>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
 Cc:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC 02/11] hwmon: (core) Rename last parameter of
- devm_hwmon_register_with_info()
-Message-ID: <ZFUVO4ECF0Xlcmx8@equiv.tech>
+Subject: Re: [RFC 06/11] Documentation/hwmon: Revise patch submission
+ checklist
+Message-ID: <ZFUXwOlQ73lJDHFr@equiv.tech>
 References: <20230504075752.1320967-1-james@equiv.tech>
- <20230504075752.1320967-3-james@equiv.tech>
- <ff6efe53-2173-1372-a1ca-c0928cf8a160@roeck-us.net>
- <ZFUBZyG5eoz2TpZX@equiv.tech>
- <ec28c2c2-4623-0d92-00bc-b8cd53c965b2@roeck-us.net>
+ <20230504075752.1320967-7-james@equiv.tech>
+ <ZFSHa2ThLorH5fwI@debian.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ec28c2c2-4623-0d92-00bc-b8cd53c965b2@roeck-us.net>
+In-Reply-To: <ZFSHa2ThLorH5fwI@debian.me>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, May 05, 2023 at 06:30:53AM -0700, Guenter Roeck wrote:
-> On 5/5/23 06:15, James Seo wrote:
->> On Thu, May 04, 2023 at 08:29:57AM -0700, Guenter Roeck wrote:
->> 
->> Hello,
->> 
->> Of course arbitrarily changing variable names is pointless. But this
->> patch fulfills the intent of 848ba0a2f20dc121a3ef5272a24641d2bd963d8b,
->> which makes this change for devm_hwmon_device_register_with_info() in
->> hwmon-kernel-api.txt and in hwmon.h - but not in hwmon.c. The same
->> commit makes the same change for hwmon_device_register_with_info() in
->> all three files, so it obviously should have been in tree already.
->> 
->> The other reason for this patch is that for the purpose of generating
->> function documentation from kerneldocs, it is not feasible to call
->> this parameter "extra_groups" in the kerneldoc and still call it
->> "groups" in the function itself. Doing so results in the lines
->> "const struct attribute_group **groups / undescribed" and no mention
->> of "extra_groups" in the generated document. Leaving things as is, so
->> that [devm_]hwmon_device_register_with_info() have different names
->> for this parameter, is potentially confusing and more noticeable to
->> to the eye than I would like once rendered.
->> 
->> Is this good enough to proceed? And as a subsystem maintainer, is
->> there anything else, specifically or in general, that you would like
+On Fri, May 05, 2023 at 11:34:51AM +0700, Bagas Sanjaya wrote:
+> On Thu, May 04, 2023 at 12:57:47AM -0700, James Seo wrote:
+>> -* Only the following I2C addresses shall be probed: 0x18-0x1f, 0x28-0x2f,
+>> -  0x48-0x4f, 0x58, 0x5c, 0x73 and 0x77. Probing other addresses is strongly
+>> -  discouraged as it is known to cause trouble with other (non-hwmon) I2C
+>> -  chips. If your chip lives at an address which can't be probed then the
+>> -  device will have to be instantiated explicitly (which is always better
+>> -  anyway.)
+>> +* Only the following I2C addresses shall be probed: ``0x18``-``0x1f``,
+>> +  ``0x28``-``0x2f``, ``0x48``-``0x4f``, ``0x58``, ``0x5c``, ``0x73``,
+>> +  and ``0x77``. Probing other addresses is strongly discouraged, as it is
+>> +  known to cause trouble with other (non-``hwmon``) I2C chips. If your chip
+>> +  lives at an address which can't be probed, then the device will have to be
+>> +  instantiated explicitly (which is always better anyway).
 > 
-> Marginally. That should have been explained in more detail in the
-> description.
-
-OK, I will add more detail.
-
+> IMO hwmon here refers to the subsystem (not code identifier name), so
+> inlining here isn't needed.
 > 
->> to see addressed?
->> 
+>>  * Make sure there are no race conditions in the probe function. Specifically,
+>>    completely initialize your chip and your driver first, then register with
+>> -  the hwmon subsystem.
+>> +  the ``hwmon`` subsystem.
 > 
-> I don't know. There are changes which seem to be more based on POV
-> than real improvement (such as the removal of the credit from the
-> PMBus document). I'll have to verify each and every reference to determine
-> if the change is appropriate. Also, the changes are substantial.
-
-Yes, sorry. At some point comparing a local make htmldocs build to
-docs.kernel.org became much easier to follow than slogging through
-diffs, and some of the markup only makes sense once rendered next to
-the automatic cross-references that Sphinx adds.
-
-> It will take a lot of time for me to review, and right now I do not have
-> that time. I have a hard time keeping up with code reviews.
+> Also here.
 > 
-> Guenter
+>>  
+>> -* Use devm_hwmon_device_register_with_info() or, if your driver needs a remove
+>> -  function, hwmon_device_register_with_info() to register your driver with the
+>> -  hwmon subsystem. Try using devm_add_action() instead of a remove function if
+>> -  possible. Do not use any of the deprecated registration functions.
+>> +* Use
+>> +  :ref:`devm_hwmon_device_register_with_info() <devm_hwmon_device_register_with_info>`
+>> +  or, if your driver needs a remove function,
+>> +  :ref:`hwmon_device_register_with_info() <hwmon_device_register_with_info>` to
+>> +  register your driver with the ``hwmon`` subsystem. Try using devm_add_action()
+>> +  instead of a remove function if possible. Do not use any of the deprecated
+>> +  registration functions.
 > 
+> And here.
+> 
+>> -* Do not provide support for deprecated sysfs attributes.
+>> +* Do not provide support for deprecated ``sysfs`` attributes.
+> 
+> Dunno if sysfs (as subsystem name) also needs to be inlined.
+> 
+> Thanks.
+> 
+> -- 
+> An old man doll... just what I always wanted! - Clara
 
-No rush. Your time is always appreciated. As I have gathered some
-feedback from Bagas, I will submit the smaller changes as a PATCH
-series in a day or two and an updated RFC series that you can
-tackle at your leisure.
+Good point. I will remove inline references to hwmon and sysfs.
 
-James
