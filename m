@@ -2,102 +2,102 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6746C77B75
-	for <linux-hwmon@archiver.kernel.org>; Fri,  5 May 2023 04:58:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C968C77B75
+	for <linux-hwmon@archiver.kernel.org>; Fri,  5 May 2023 05:03:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjEEE6L (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 5 May 2023 00:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
+        id S230163AbjEEFDf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 5 May 2023 01:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjEEE6L (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 5 May 2023 00:58:11 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E16A243;
-        Thu,  4 May 2023 21:58:10 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-52c759b7d45so1104375a12.3;
-        Thu, 04 May 2023 21:58:10 -0700 (PDT)
+        with ESMTP id S229577AbjEEFDe (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 5 May 2023 01:03:34 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026EC3C3A;
+        Thu,  4 May 2023 22:03:33 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-52c6504974dso1108874a12.2;
+        Thu, 04 May 2023 22:03:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683262690; x=1685854690;
+        d=gmail.com; s=20221208; t=1683263012; x=1685855012;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OzSdDfhBu6bM4Kn30esE8MtemEERFMfw7x5S/4OC1sw=;
-        b=NmheHr+Z1mwGDvHYu4u1v77FlJfg0c1889VcrZpmimKxEzIeZwnGCcohEBsBEY899b
-         2JMiaMqS/HSexEkDhxnvl3BGfoUWYddUGK6qiZ4rNIecGjsmNRd2r7iiqxKN+pfrTrWQ
-         dzYOlHVhC3MjsgXGwqiX1DJFXZyTSSbTiVVsV5yUH4aFNkH1BnTOqlyYFjVNPq+RLWDb
-         t6bJHdN9c1+JPy3v8zh6+2h+XCM8uB4y358qXrXP6vgJ6b68vK0w3hHks8bSpbhGi1zT
-         8ZoPO6bc2cD9tOYir5YzMZ/cEekXk1VoPjA1kgo9IR1DZeF9ZOj9Uig/PCuxeKfKQo1g
-         HrXQ==
+        bh=9P08im9sPfCiPnd7jByL05GkSqJFCFxG7xsuCu021rc=;
+        b=q8HM1T5uCbzfzDlEbKV08u3a/aqw6+7ouKpsUrq6qyKhR3gal0y6Jm7vCM7S71lmYj
+         1oLYzPZDJhW/0oHO/F9cbDWz5BbeYFRCF6v4GsjMYusdmk421xKWysoGoH/Go7yYjmKd
+         EXsqMc8LDx4MqJ674Wp4DnosnjSssZTakDFftrLvwNPNqh+dkuE4y4W2hgfi++Vy07Zo
+         MtS6zMw9sEOE9WP1JXj2PjHGbdil6b2xclggUURoHF4aEpxg9w9Afic3N5K8kaNEAaWs
+         FoJJvHBrJcSBKosFCFW1epkWYwZYH2KfuC3ONx2zOPgHB4Xa4SAJEKJjqLeqFasZHxj/
+         2GZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683262690; x=1685854690;
+        d=1e100.net; s=20221208; t=1683263012; x=1685855012;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OzSdDfhBu6bM4Kn30esE8MtemEERFMfw7x5S/4OC1sw=;
-        b=UFfuO1ErZO0gq1ojrxKoR/qSFwvsL8HJR79TEbGs95SSUjwb5ii/yliybqxUwg2zTz
-         nHCLVc9SdkbFinl9q612tTcsYrpXlL0QmZKM4lQwqxD1+weyFZJf5WEdGHg/bp9Qldes
-         kaiVw6tpJaLXC0LTKJtinHqBYrxJfCQtGiNQ03prOLzYC4OEh1pd3STubl6i/7XowsHI
-         BvxJrkQEb5fR7jH1gZfZhylsluBR+PHWuqhUxdHXmGbTzPjnlmNiyWECCq8RyqFdi7PL
-         gCHNMKh0XIHvTt3pLiDsKbLymTIcxJOHZ0H96yx4cdKTcOK8Lhs+PYoefM83VyY0Iz/F
-         rmqQ==
-X-Gm-Message-State: AC+VfDyKcBG9SKo5LSstE1FzB6CdQMR/awtc7YYA6HuqKIDwdxcSgoUO
-        ZUMecFIfDrMhSkSQKPeHLUM=
-X-Google-Smtp-Source: ACHHUZ5H88IkGNh3Gu8DErn2VUMjYaTQeqHheVJPulViN2lgF+XyXcX62POjrzVhIegqOJUiaZUxdQ==
-X-Received: by 2002:a17:902:ab91:b0:1a6:9906:1eb7 with SMTP id f17-20020a170902ab9100b001a699061eb7mr163551plr.35.1683262689640;
-        Thu, 04 May 2023 21:58:09 -0700 (PDT)
+        bh=9P08im9sPfCiPnd7jByL05GkSqJFCFxG7xsuCu021rc=;
+        b=WeXLNppndkfrZyZnZxm5qdeXr6UfaQddNEEM6ZPNv6h617PaLKOumq3+ITCrn+RuoQ
+         76U4FBY7jNlVFJ5EeIxEOr0wL1kxFkEE6dPR66EkgmsFOpm8KmMzhODnkj0CGZ4QxsrW
+         LKgR0IBIrNcyZYIRgy8uwxzqe8NesWBElHQi98HjZ/BRp0ZEL0FfNQ0QpSxuhSvKhHA7
+         lM7+N1q4lsMDXdDvn8fa/2IB2U9xBKW8VfhjFvN4yyNgrf7iE23XpWWdvd97dAoV1+Dq
+         Kgn8y4QqEF/UHJ3biyeYwyEq0kEM1DqmQmH5aYUYVsIx8GSPZL/24ua0OJFrOLGHb2j1
+         aDYw==
+X-Gm-Message-State: AC+VfDwKbOFjtUxH7iAI4r1r4UXF5uPyWzWz0kxaFH/YcS4IolETRt+L
+        qIfAkpwf5Z/rhPXHYPjMxhk=
+X-Google-Smtp-Source: ACHHUZ7UEaifxFSFaaQhmiKJiRCxXq6tFGzRcH07iM296lkhN/Rk5255PRVQMiXSh6OYEGdCn2MJ/A==
+X-Received: by 2002:a05:6a20:1608:b0:f2:c2a3:3a1 with SMTP id l8-20020a056a20160800b000f2c2a303a1mr274751pzj.43.1683263012397;
+        Thu, 04 May 2023 22:03:32 -0700 (PDT)
 Received: from debian.me (subs03-180-214-233-25.three.co.id. [180.214.233.25])
-        by smtp.gmail.com with ESMTPSA id jw21-20020a170903279500b001aaecc15d66sm547655plb.289.2023.05.04.21.58.08
+        by smtp.gmail.com with ESMTPSA id t9-20020a635f09000000b00514256c05c2sm665250pgb.7.2023.05.04.22.03.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 21:58:09 -0700 (PDT)
+        Thu, 04 May 2023 22:03:31 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id ACC011068DB; Fri,  5 May 2023 11:58:06 +0700 (WIB)
-Date:   Fri, 5 May 2023 11:58:06 +0700
+        id 3A353106861; Fri,  5 May 2023 12:03:29 +0700 (WIB)
+Date:   Fri, 5 May 2023 12:03:29 +0700
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Jonathan Corbet <corbet@lwn.net>
 Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC 01/11] Documentation/hwmon: Move misplaced entry in hwmon
- docs index
-Message-ID: <ZFSM3txfu5Aqv52E@debian.me>
+Subject: Re: [RFC 08/11] Documentation/hwmon: Revise userspace tools
+ documentation
+Message-ID: <ZFSOIXLCnd01ofBv@debian.me>
 References: <20230504075752.1320967-1-james@equiv.tech>
- <20230504075752.1320967-2-james@equiv.tech>
+ <20230504075752.1320967-9-james@equiv.tech>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iIATXFk7rJgLSivV"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230504075752.1320967-2-james@equiv.tech>
+In-Reply-To: <20230504075752.1320967-9-james@equiv.tech>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Thu, May 04, 2023 at 12:57:49AM -0700, James Seo wrote:
+> +If needed, sources may be found at https://hwmon.wiki.kernel.org/lm_sensors.
+> +Basic compilation, installation, and uninstallation may be accomplished with
+> +``make all``, ``make install``, and ``make uninstall``, respectively.
+> +
 
---iIATXFk7rJgLSivV
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The sources is on GitHub:
 
-On Thu, May 04, 2023 at 12:57:42AM -0700, James Seo wrote:
-> Move the entry for the inspur-ipsps1 driver so that it no
-> longer appears in the hwmon docs TOC as a document relating
-> to the hwmon subsystem itself.
+---- >8 ----
+diff --git a/Documentation/hwmon/userspace-tools.rst b/Documentation/hwmon/userspace-tools.rst
+index 79c932954e4af5..fd96ea92f72eea 100644
+--- a/Documentation/hwmon/userspace-tools.rst
++++ b/Documentation/hwmon/userspace-tools.rst
+@@ -44,9 +44,9 @@ Most Linux distributions provide the ``lm-sensors`` suite as a package.
+ It is recommended that you use this package for ease of installation.
+ Please consult your Linux distribution's documentation for more information.
+ 
+-If needed, sources may be found at https://hwmon.wiki.kernel.org/lm_sensors.
+-Basic compilation, installation, and uninstallation may be accomplished with
+-``make all``, ``make install``, and ``make uninstall``, respectively.
++If the distribution package isn't available, sources can be obtained at
++`GitHub <https://github.com/lm-sensors/lm-sensors>`_.
++See ``INSTALL`` in the sources for how to build the suite.
+ 
+ Usage
+ -----
 
-LGTM, thanks!
+Thanks.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
+-- 
 An old man doll... just what I always wanted! - Clara
-
---iIATXFk7rJgLSivV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFSM3gAKCRD2uYlJVVFO
-o5XkAQC8ROGTO44qE5aHeQZw4rH9/6ROsEZ3Ri5uyzXUUr+DMAEA8yvh10mEBEc6
-ct2CvF+064jM9BFSdGu9We3yM8ozKQA=
-=A+NR
------END PGP SIGNATURE-----
-
---iIATXFk7rJgLSivV--
