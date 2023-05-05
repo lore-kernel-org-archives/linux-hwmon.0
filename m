@@ -2,125 +2,103 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06D61C77B78
-	for <linux-hwmon@archiver.kernel.org>; Thu,  4 May 2023 15:30:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1EEBC77B7C
+	for <linux-hwmon@archiver.kernel.org>; Fri,  5 May 2023 04:12:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjEDPaB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 4 May 2023 11:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
+        id S229890AbjEEEMb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 5 May 2023 00:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjEDPaA (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 4 May 2023 11:30:00 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4CB1BF6;
-        Thu,  4 May 2023 08:29:59 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1aaec6f189cso4242955ad.3;
-        Thu, 04 May 2023 08:29:59 -0700 (PDT)
+        with ESMTP id S229751AbjEEEMa (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 5 May 2023 00:12:30 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D579011B76;
+        Thu,  4 May 2023 21:12:29 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-643995a47f7so1010093b3a.1;
+        Thu, 04 May 2023 21:12:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683214199; x=1685806199;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=oVmgbsTTYAE2SuVdpLUJpCznPOcGAHHuXu5H5Lu16ck=;
-        b=FRo6MVK4pbbaummo1xXtvLlSdNifl2sLcDFkIyPqaYEWofH7TQ7irGQq8N7WTPD0U9
-         Aa80lrKNWnjMrmi/4Dr2BZK3gPxPnrC4U5FSy89DjaKShSBAvvEVAVpavo7w6kQdz3kW
-         vTLcdjseD5sjMU1IqV3LXyB6PLedXXI7xs2jW1yRCRWJTcgLpxIjQgSwayh3AB9lABsu
-         Q5N2EzLEiVXwtQ+mNJtqSxVysuyfetGFuTolFVWkTM5xt1RaAa+4E17NiqFmiIp60jaq
-         Xv+eKgUr++Vqa1b95SCAldDu/NNbRv19vfSxBvN264hU0vy3EGPmZr8Ur9zGeSrw3Ne4
-         l4rQ==
+        d=gmail.com; s=20221208; t=1683259949; x=1685851949;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lH7DdaAqtoGsvrBlBaE7fQdtK2Ol6Msxd6emTLzyGrQ=;
+        b=Poazv1uDV4XKBT3piMhHtD6/2sQxy/T4NfrzewHTA/kyTBxBmidHndlOxHgFuYJL/3
+         M8YUA29MuAjU1HEtB2729G1Yx1isvMIHHypbAbvSIzRnJeI9Z32VLDrTLQ0Ox6wLf5ZE
+         d+SEdbG/UfsyVKMOhMKy1bWUo4QtQOSV/vl9ajCQu4naXW+HEGWxQ+33TLluH9DwiIpL
+         T33h7xpjUs2kBe4RhgCUyAcppzciTT8PAk9CC7hQt5BwWkIoQAS8Efi3w5sL4YYhhtfN
+         rerDw1l0Q2JwLBQIpJYc8eBIG9JpKqiodYnTvHA50bPvS8/QFkeEyMRrHz2OYmRWRVXc
+         uxSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683214199; x=1685806199;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oVmgbsTTYAE2SuVdpLUJpCznPOcGAHHuXu5H5Lu16ck=;
-        b=EbcH4xEWTbB36q6AbDM4DxGO3p60YiXnl/MFe6dqoDh1sUFZYLkfdgXVZcGdywyuw/
-         rSkjT5kpvGlxdn09Hw7Vd3ZBEhJAw+lzznbsXNSlGpp6+378uGRC5y+LdOTjjKkVCccu
-         +dU5tMUQZTkXuLcDtIl3pK4iXo86u56nxr3oc6wUJXwYuWdoA/SXLvgHyzNyqum97zgw
-         zaYZgzRby5Pg1MHanm7/UkSua9IcXLPNFybTp7uH3o8mSZj/2mBmhr/SyZ36evy9DTCU
-         2VQTLEl6Lb60WNq5tUyBhzTV/jZ/LA+/UQMWUJPXwzALZKBi6FiUBvlf8de52STR6PVp
-         87hg==
-X-Gm-Message-State: AC+VfDzo4dihVFgONKabIYMSGj5NmDtuRkOO26TdGX5CqK712GuB6//G
-        nzlyvA7W1Zohy07SICs6aXTq7aCenLA=
-X-Google-Smtp-Source: ACHHUZ6n5MkRwSCzzuP1xCmJLx1k8vOdQqG2TUwaL5nKLLYevh7i8q8IV41iqHdH69Dop0nuOOGr4A==
-X-Received: by 2002:a17:902:7048:b0:1a5:a1b:bbd8 with SMTP id h8-20020a170902704800b001a50a1bbbd8mr3480874plt.45.1683214198998;
-        Thu, 04 May 2023 08:29:58 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b3-20020a170902bd4300b001aaf83873dbsm7431099plx.162.2023.05.04.08.29.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 08:29:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ff6efe53-2173-1372-a1ca-c0928cf8a160@roeck-us.net>
-Date:   Thu, 4 May 2023 08:29:57 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC 02/11] hwmon: (core) Rename last parameter of
- devm_hwmon_register_with_info()
-Content-Language: en-US
+        d=1e100.net; s=20221208; t=1683259949; x=1685851949;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lH7DdaAqtoGsvrBlBaE7fQdtK2Ol6Msxd6emTLzyGrQ=;
+        b=HtCPPwF4ydBEVoZXpeAlk4t61jx3+lDBznagsOZLJKUx5cgpideX5qfoRzZ59InyXv
+         u6G1nZT/59bcTcgovokAi3spQ6MXjYfdAjoeDXNnM/F0py+5VLLpioFwjA8HgaJSB9eL
+         BkPJqShmlHgGzob3nGCLai5BDXDyKNL7h2VdkkbOfIzkG2c0THJzQ93tVoC/q6+Fynf/
+         F/VXkl9oPhZzLcKbV+PzwoSIEnxt178jTNb6PoHvOUx/Is+9K35biHEhn3WYNZtf71lq
+         dVZU9oTBajr0dHoVOG7/q/GC9qmpFEIVNIXPoAS6Ewj77av1mL0fq0XAvnEP2/rKoKKY
+         NZCQ==
+X-Gm-Message-State: AC+VfDyQK/GMNZZ6PlUuH7vqXE44tXptJAzzP3B9UZA2AUsHO65mYb3/
+        WZmRAOKjoE/k40kI9gS8Clk=
+X-Google-Smtp-Source: ACHHUZ4P/UW9z5k6xy2K7UR6Gp/5gMFGUx9Lk04zz/+HQGVTJgHMobKi7VdFmH1rK4pbldP8MSt6KA==
+X-Received: by 2002:a05:6a20:4293:b0:f2:64f8:b214 with SMTP id o19-20020a056a20429300b000f264f8b214mr248640pzj.13.1683259949146;
+        Thu, 04 May 2023 21:12:29 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-25.three.co.id. [180.214.233.25])
+        by smtp.gmail.com with ESMTPSA id j6-20020aa78dc6000000b00640e01dfba0sm537123pfr.175.2023.05.04.21.12.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 21:12:28 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 598EE1068DB; Fri,  5 May 2023 11:12:25 +0700 (WIB)
+Date:   Fri, 5 May 2023 11:12:25 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Jonathan Corbet <corbet@lwn.net>
 Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
+Subject: Re: [RFC 04/11] Documentation/hwmon: Revise hwmon kernel API
+ reference
+Message-ID: <ZFSCKa0SaH6pqDVC@debian.me>
 References: <20230504075752.1320967-1-james@equiv.tech>
- <20230504075752.1320967-3-james@equiv.tech>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230504075752.1320967-3-james@equiv.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <20230504075752.1320967-5-james@equiv.tech>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TArBaNHqyhj2iQWJ"
+Content-Disposition: inline
+In-Reply-To: <20230504075752.1320967-5-james@equiv.tech>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/4/23 00:57, James Seo wrote:
-> Change the name of the groups parameter of
-> devm_hwmon_device_register_with_info() to extra_groups to
-> match the name given by the hwmon API reference and in
-> hwmon_device_register_with_info().
-> 
-> Signed-off-by: James Seo <james@equiv.tech>
-> ---
->   drivers/hwmon/hwmon.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index 573b83b6c08c..5f205686065e 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -1029,7 +1029,7 @@ EXPORT_SYMBOL_GPL(devm_hwmon_device_register_with_groups);
->    * @name:	hwmon name attribute
->    * @drvdata:	driver data to attach to created device
->    * @chip:	pointer to hwmon chip information
-> - * @groups:	pointer to list of driver specific attribute groups
-> + * @extra_groups: pointer to list of driver specific attribute groups
->    *
->    * Returns the pointer to the new device. The new device is automatically
->    * unregistered with the parent device.
-> @@ -1038,7 +1038,7 @@ struct device *
->   devm_hwmon_device_register_with_info(struct device *dev, const char *name,
->   				     void *drvdata,
->   				     const struct hwmon_chip_info *chip,
-> -				     const struct attribute_group **groups)
-> +				     const struct attribute_group **extra_groups)
 
-Please please please no such changes. I don't want to have to deal with
-patch wars just because people believe variables should have other names.
+--TArBaNHqyhj2iQWJ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Such changes add zero value unless one counts wasted review time as a "value".
+On Thu, May 04, 2023 at 12:57:45AM -0700, James Seo wrote:
+> Reorganize content into coherent sections.
+> Use kerneldocs to document functions and data structures when
+> possible and add more details on using various API facilities.
+> Fix minor issues (typos, grammar, etc.) and add markup.
 
-Guenter
+LGTM, thanks!
 
->   {
->   	struct device **ptr, *hwdev;
->   
-> @@ -1050,7 +1050,7 @@ devm_hwmon_device_register_with_info(struct device *dev, const char *name,
->   		return ERR_PTR(-ENOMEM);
->   
->   	hwdev = hwmon_device_register_with_info(dev, name, drvdata, chip,
-> -						groups);
-> +						extra_groups);
->   	if (IS_ERR(hwdev))
->   		goto error;
->   
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--TArBaNHqyhj2iQWJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFSCHwAKCRD2uYlJVVFO
+o1wjAP9Lud+NvAPsROUHXOvKVK9niGxnyshZqeA40JS/oqx4swD/dZdarpQrNkhJ
+o5DYlxSM/vISrRx/FgNI0JrOVnWvrgw=
+=UKtj
+-----END PGP SIGNATURE-----
+
+--TArBaNHqyhj2iQWJ--
