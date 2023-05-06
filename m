@@ -2,106 +2,127 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5AE1C77B7F
-	for <linux-hwmon@archiver.kernel.org>; Sat,  6 May 2023 13:43:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0590C77B7F
+	for <linux-hwmon@archiver.kernel.org>; Sat,  6 May 2023 13:52:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231986AbjEFNnf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 6 May 2023 09:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
+        id S232340AbjEFNwO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 6 May 2023 09:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbjEFNne (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 6 May 2023 09:43:34 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9860E23A05;
-        Sat,  6 May 2023 06:43:33 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so2510705a12.1;
-        Sat, 06 May 2023 06:43:33 -0700 (PDT)
+        with ESMTP id S231892AbjEFNwN (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 6 May 2023 09:52:13 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FD923A0C;
+        Sat,  6 May 2023 06:52:12 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-517bfdf55c3so1376038a12.2;
+        Sat, 06 May 2023 06:52:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683380613; x=1685972613;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=66Oa0Tt4V09m3CKz7RlcxzCofTUAwWazL0ZtiHsb8NA=;
-        b=JM9FmwxcFQ5R9hdtlqj7wHQZVTqEMBKCRk+AsKrBCZvXVs3SONqurZDsoIySHmtgzg
-         ghjbH8xzcrD/IY+rRV3m5f0KxJkGMDMAMaBWhMov5tC9wt4zl8UKtkFLp2IYOwT912af
-         qgLpMDX3bULFCjzVtIRRhfm38XoAq/rwVfuiFaGWNzM7TjgBYmBNzE8+hVbubDHON5og
-         kYR1Or6RemAeqHWDxHZVB01e+b0wwAO6wvfZbuXHOPYomc8eLV8giKSdbiPYQQP9TvBZ
-         EEF718b9MosOiOZds2uNUVGqAk3vyRtIa2vAUy7V4QldWQLEohKAb5uSRXCk6fqQcjOf
-         Q0sQ==
+        d=gmail.com; s=20221208; t=1683381132; x=1685973132;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nH3aciUcYWZij0Kp0FJnKmzfOIAjxDn8kv06DNsAoc4=;
+        b=nFGY9DUNTbIBD4xuCbyXHOZsu/e7ssdk1yHYQNn1nqG2smiH9Hr5OskB9rYX+sVv4P
+         VrMPvmGIhKGj+K7F2fTIzQ47cwpxBUcOF54ea0s9zuFyGbhKA+2q3/C0NCY3tB8WJBsC
+         el97UOOOGE3CVv0iWYT9QrAOl8QMurB6/rk7mmozjN9wJ8IbQHOWu/gZcEIxOPtGN9F2
+         KZbbMqJGkaSYhzjt+BtcQ09x52TGhnrsA5C1PIT/OVdEx9L7NWa4DD8PvkbAUdcNOc1R
+         t4JQZKzdEwiEQ6kpY+jeBNG7UBVR1keBDgbfoY+SXS3kHTqX4VDAOen+uI4Ql3/LhODi
+         n9+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683380613; x=1685972613;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=66Oa0Tt4V09m3CKz7RlcxzCofTUAwWazL0ZtiHsb8NA=;
-        b=jmc44Nllcc/x7dym97rzI0lNr8PJgWDrleW4nmwxuakakiszw0rGYXMGBEnYsnBCDb
-         mSqMxpQ0z3dYEDJNgqu8WYgyTLnjdVO+w4Dj4RXvMyVlbAp0wuFdQQAXSt1ZlzuGvd7j
-         OXrjpFrmnLl3XM+8ZU9hnjvrTDeReKGkIyJ1AHiHDa1gwkEYHPmWTJAsHXN4s1bsDxEe
-         HTOwLrQ21nZyi9W8Dbuwv7npEAiHCEfOw+qltWbT0pQQzEh/id0DEIA2T6KVIT6CQzxv
-         SGqyuFiVG7ublWx0YTZMpvE96nGQd+JCDtA3Cvbe//hgGBkEant935YklEhdKL+2aUSN
-         yb4g==
-X-Gm-Message-State: AC+VfDyZYDZ41w5xqQJqFj7PAYS1PmsKf1bCmh+nOGT23K1vA7vOX1iU
-        pwIXii2a4qAF0jHgmFv9m84=
-X-Google-Smtp-Source: ACHHUZ7vb5/rSDcNye9osPpI2TAmN+0Ho3gyng9zOi/F8J0qlCjnLb/SV+kQfkdLFiCfBtqmJnQ5nw==
-X-Received: by 2002:a17:90a:a785:b0:250:31b2:9677 with SMTP id f5-20020a17090aa78500b0025031b29677mr4541598pjq.22.1683380613033;
-        Sat, 06 May 2023 06:43:33 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n11-20020a17090a9f0b00b0025023726fc4sm3341188pjp.26.2023.05.06.06.43.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 May 2023 06:43:32 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683381132; x=1685973132;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nH3aciUcYWZij0Kp0FJnKmzfOIAjxDn8kv06DNsAoc4=;
+        b=Am9PP2i5hOMeYuxTBJgFaYZU1fFTcTOfE9nxVv+XchPflsa6tEFKhe18+hYel7KgJe
+         jxjJV67aVl0z9jRovUh0Z03RvxvbDCsRbUGsAHx3Wu2b1MwDSXfSR3BgP+SnSm3eZPDX
+         wci81xnQ5J2X6unxii15O/Y1pdllGblQLaDTaN27iJ1YrfWXhrf0MfHYLqmohJGOGrrX
+         yN9AmWEHYv0EcfiRX8c+xc0outvdT8dzUTCzsSo1BTV2Fy/LEwZ+CflHyPuVOxmaHVJr
+         K5DstzFWrwyfYjUd02PoeIKzC8LTkOLXHubpLsfwkleSmnVf4Qm9trZAdA6+zcUBeqwb
+         Jx+Q==
+X-Gm-Message-State: AC+VfDz99Asl8ThelAm5eDUdj9XwKgVQIoxdMYM1SU92d1IE2U4m6QtM
+        e8YRTrY8wkY+3Yx+rQH+bao=
+X-Google-Smtp-Source: ACHHUZ5ZjsuG/vBhxtPHtJ+TD1wVNZ7JcjiMlPbOoWxS4CvZTYdmRhVZ2rnTP8zM8NydKL4Y6ksTGw==
+X-Received: by 2002:a17:90a:eb15:b0:23d:286:47d3 with SMTP id j21-20020a17090aeb1500b0023d028647d3mr4699619pjz.40.1683381132058;
+        Sat, 06 May 2023 06:52:12 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t15-20020a17090ad14f00b0024b6a90741esm6619646pjw.49.2023.05.06.06.52.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 May 2023 06:52:11 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 6 May 2023 06:43:31 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     James Seo <james@equiv.tech>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC 01/11] Documentation/hwmon: Move misplaced entry in hwmon
- docs index
-Message-ID: <89848a16-ccb3-4124-8546-90049e4ca948@roeck-us.net>
-References: <20230504075752.1320967-1-james@equiv.tech>
- <20230504075752.1320967-2-james@equiv.tech>
+Message-ID: <512351f8-e571-620a-1b2b-54989c079803@roeck-us.net>
+Date:   Sat, 6 May 2023 06:52:09 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230504075752.1320967-2-james@equiv.tech>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230504075752.1320967-1-james@equiv.tech>
+ <20230504075752.1320967-5-james@equiv.tech>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC 04/11] Documentation/hwmon: Revise hwmon kernel API
+ reference
+In-Reply-To: <20230504075752.1320967-5-james@equiv.tech>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, May 04, 2023 at 12:57:42AM -0700, James Seo wrote:
-> Move the entry for the inspur-ipsps1 driver so that it no
-> longer appears in the hwmon docs TOC as a document relating
-> to the hwmon subsystem itself.
+On 5/4/23 00:57, James Seo wrote:
+> Reorganize content into coherent sections.
+> Use kerneldocs to document functions and data structures when
+> possible and add more details on using various API facilities.
+> Fix minor issues (typos, grammar, etc.) and add markup.
 > 
 > Signed-off-by: James Seo <james@equiv.tech>
-> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>   Documentation/hwmon/hwmon-kernel-api.rst | 740 ++++++++++++-----------
+>   1 file changed, 384 insertions(+), 356 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
+> index c2d1e0299d8d..cf084e040522 100644
+> --- a/Documentation/hwmon/hwmon-kernel-api.rst
+> +++ b/Documentation/hwmon/hwmon-kernel-api.rst
+> @@ -1,374 +1,402 @@
+> +========================================
+>   The Linux Hardware Monitoring kernel API
+>   ========================================
+>   
+>   Guenter Roeck
+>   
+> +.. contents::
+> +
+>   Introduction
+> -------------
+> +============
+>   
+>   This document describes the API that can be used by hardware monitoring
+>   drivers that want to use the hardware monitoring framework.
+>   
+> -This document does not describe what a hardware monitoring (hwmon) Driver or
+> -Device is. It also does not describe the API which can be used by user space
+> -to communicate with a hardware monitoring device. If you want to know this
+> -then please read the following file: Documentation/hwmon/sysfs-interface.rst.
+> +This document does not describe what a hardware monitoring (``hwmon``) driver
+> +or device is, nor does it describe the API for communicating with a hardware
+> +monitoring device from userspace. For more information on these topics,
+> +please read Documentation/hwmon/sysfs-interface.rst.
+>   
 
-Applied to hwmon-next.
+There is a lot of nnecessary churn in your patches, where you reformat entire
+paragrahps just to add a few "``". This makes it almost impossible to identify
+the actual changes. For me it means that the review burden is so much that I'll
+probably never get to actually review those changes.
+
+Please split the changes into subjects, following the "one logical change per
+patch" rule, and please refrain from changing entire paragraphs when adding
+markups. Also, a reference to the markup rules explaining if and when markups
+are warranted would be nice. For example, I have no idea why "hwmon" would
+warrant a markup.
 
 Guenter
 
-> ---
->  Documentation/hwmon/index.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index fa1208c62855..03b30a94a9e6 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -9,7 +9,6 @@ Hardware Monitoring
->  
->     hwmon-kernel-api
->     pmbus-core
-> -   inspur-ipsps1
->     submitting-patches
->     sysfs-interface
->     userspace-tools
-> @@ -85,6 +84,7 @@ Hardware Monitoring Kernel Drivers
->     ina2xx
->     ina238
->     ina3221
-> +   inspur-ipsps1
->     intel-m10-bmc-hwmon
->     ir35221
->     ir38064
