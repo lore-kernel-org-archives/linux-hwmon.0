@@ -2,36 +2,36 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E074C77B7C
-	for <linux-hwmon@archiver.kernel.org>; Sun,  7 May 2023 15:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2092BC77B75
+	for <linux-hwmon@archiver.kernel.org>; Sun,  7 May 2023 15:22:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbjEGPMi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 7 May 2023 11:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
+        id S231487AbjEGPWi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 7 May 2023 11:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbjEGPMg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 May 2023 11:12:36 -0400
+        with ESMTP id S229986AbjEGPWh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 May 2023 11:22:37 -0400
 Received: from m228-13.mailgun.net (m228-13.mailgun.net [159.135.228.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231E5124A9
-        for <linux-hwmon@vger.kernel.org>; Sun,  7 May 2023 08:12:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D50B17FE4
+        for <linux-hwmon@vger.kernel.org>; Sun,  7 May 2023 08:22:32 -0700 (PDT)
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
- s=mx; t=1683472353; x=1683479553; h=Content-Transfer-Encoding: MIME-Version:
+ s=mx; t=1683472951; x=1683480151; h=Content-Transfer-Encoding: MIME-Version:
  Message-Id: Date: Subject: Subject: Cc: To: To: From: From: Sender: Sender;
- bh=iEF9ELS6y2W+KeqiETl7W+iS9hegD/SWm2vaKhD9F68=;
- b=duUY3MfTS8g1jvqeei1CWG8l8Br3fOHgZEqCe41NdcPmV7p3+uOL0xStWdzOf04fzht8iY0mrLNxBLs44NtcuMVqhqiF8U3Bkal6UsXiQ9/ezZgo8CSLtZnPXjBY4NLV6jCLjjCEKst93D+JSUSpXxps/94+501M1dDfY36B8btdTlSiD4n9Bm9/WwNQyrIJrgeeA2Z87ww3tZL7nsyVcssUT9XOvzYp5/OZJI3HW3H3gxaPxCDnBXteyUTIDRF2h8pCWetp9oNiJixJebRRLgBZKdU4jHq8wEIP1LRCydObZ0pFbQ+zbyPCPXVlMRdkq+zSELjKyHmx+2aVIXRlPg==
+ bh=JtCD7a2ohwxE6zrU/2xEaJh6Zoqff/FhUPQTLdec9mI=;
+ b=AounJ9vHQ8JNltbfdKcnz/lrjbL0JOo1LKwrezskn+5wYsIac5sOLgr95V2DQLVMs4ZyhQGVl74yiMkgrKBK+5UFLLFKKnVfqpW7b3cpU1NLYey3PKLI9cl3H8x1zTB3AoXQG784ELUTsLg/2iDeeBNW8ZPxidjjmSFHv5eP9W0TDkdPo/mgY1bnlzvKmBAssvZWWWbuIW8Ia3zgsvKXYWRdAzgPTQ95IRKCetc0OCWN+L3cAErtjdUyHwERmC6IjvvELMfhy1zmRNhwKMbazY7kN8ZKH4OXJL0jlaLl+KFcI768/ABWiQgYYtLt3UUy/rtpQUX9Cau+2npc1Lm9fg==
 X-Mailgun-Sending-Ip: 159.135.228.13
 X-Mailgun-Sid: WyJkOWUwNSIsImxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZyIsIjkzZDVhYiJd
-Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by ffb17371f780 with SMTP id
- 6457bfe1621871856c131dc4 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sun, 07 May 2023 15:12:33 GMT
+Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 70825b0c4f46 with SMTP id
+ 6457c2375e23e5f95b11d540 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sun, 07 May 2023 15:22:31 GMT
 Sender: james@equiv.tech
 From:   James Seo <james@equiv.tech>
 Cc:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (core) Finish renaming groups parameter in API to extra_groups
-Date:   Sun,  7 May 2023 08:10:53 -0700
-Message-Id: <20230507151051.1861929-1-james@equiv.tech>
+Subject: [PATCH] hwmon: (core) Add missing beep-related standard attributes
+Date:   Sun,  7 May 2023 08:22:17 -0700
+Message-Id: <20230507152216.1862653-1-james@equiv.tech>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
@@ -39,61 +39,157 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Commit 848ba0a2f20dc121a3ef5272a24641d2bd963d8b renames the
-'groups' parameter of devm_hwmon_device_register_with_info()
-to 'extra_groups' in hwmon-kernel-api.txt (later .rst) and
-hwmon.h, but this change was not propagated to the function
-code itself in hwmon.c. Finish the job.
+beep_enable, inX_beep, currX_beep, fanX_beep, and tempX_beep
+are standard attributes mentioned in the sysfs interface
+specification but not implemented in the hwmon core. Since
+these are not deprecated, implement them.
 
-Note that hwmon_device_register_with_info() has the same
-parameter, and the name of that parameter was changed in all
-three files. Harmonizing the name between these related
-functions also removes a potential source of confusion.
+Adding beep_mask is not necessary, as it is deprecated and
+the drivers already using it are manually defining it.
 
 Signed-off-by: James Seo <james@equiv.tech>
 ---
 
 Changes from RFC:
-* Rewrote commit message
+* Revised commit message
+* Fixed misdefinition of fanX_beep attribute template
 
 History:
-RFC: https://lore.kernel.org/linux-hwmon/20230504075752.1320967-3-james@equiv.tech/
+RFC: https://lore.kernel.org/linux-hwmon/20230504075752.1320967-11-james@equiv.tech/
 
 ---
- drivers/hwmon/hwmon.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/hwmon/hwmon.c |  5 +++++
+ include/linux/hwmon.h | 10 ++++++++++
+ 2 files changed, 15 insertions(+)
 
 diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 573b83b6c08c..5f205686065e 100644
+index 5f205686065e..c7dd3f5b2bd5 100644
 --- a/drivers/hwmon/hwmon.c
 +++ b/drivers/hwmon/hwmon.c
-@@ -1029,7 +1029,7 @@ EXPORT_SYMBOL_GPL(devm_hwmon_device_register_with_groups);
-  * @name:	hwmon name attribute
-  * @drvdata:	driver data to attach to created device
-  * @chip:	pointer to hwmon chip information
-- * @groups:	pointer to list of driver specific attribute groups
-+ * @extra_groups: pointer to list of driver specific attribute groups
-  *
-  * Returns the pointer to the new device. The new device is automatically
-  * unregistered with the parent device.
-@@ -1038,7 +1038,7 @@ struct device *
- devm_hwmon_device_register_with_info(struct device *dev, const char *name,
- 				     void *drvdata,
- 				     const struct hwmon_chip_info *chip,
--				     const struct attribute_group **groups)
-+				     const struct attribute_group **extra_groups)
- {
- 	struct device **ptr, *hwdev;
+@@ -456,6 +456,7 @@ static const char * const hwmon_chip_attrs[] = {
+ 	[hwmon_chip_in_samples] = "in_samples",
+ 	[hwmon_chip_power_samples] = "power_samples",
+ 	[hwmon_chip_temp_samples] = "temp_samples",
++	[hwmon_chip_beep_enable] = "beep_enable",
+ };
  
-@@ -1050,7 +1050,7 @@ devm_hwmon_device_register_with_info(struct device *dev, const char *name,
- 		return ERR_PTR(-ENOMEM);
+ static const char * const hwmon_temp_attr_templates[] = {
+@@ -486,6 +487,7 @@ static const char * const hwmon_temp_attr_templates[] = {
+ 	[hwmon_temp_reset_history] = "temp%d_reset_history",
+ 	[hwmon_temp_rated_min] = "temp%d_rated_min",
+ 	[hwmon_temp_rated_max] = "temp%d_rated_max",
++	[hwmon_temp_beep] = "temp%d_beep",
+ };
  
- 	hwdev = hwmon_device_register_with_info(dev, name, drvdata, chip,
--						groups);
-+						extra_groups);
- 	if (IS_ERR(hwdev))
- 		goto error;
+ static const char * const hwmon_in_attr_templates[] = {
+@@ -507,6 +509,7 @@ static const char * const hwmon_in_attr_templates[] = {
+ 	[hwmon_in_crit_alarm] = "in%d_crit_alarm",
+ 	[hwmon_in_rated_min] = "in%d_rated_min",
+ 	[hwmon_in_rated_max] = "in%d_rated_max",
++	[hwmon_in_beep] = "in%d_beep",
+ };
  
+ static const char * const hwmon_curr_attr_templates[] = {
+@@ -528,6 +531,7 @@ static const char * const hwmon_curr_attr_templates[] = {
+ 	[hwmon_curr_crit_alarm] = "curr%d_crit_alarm",
+ 	[hwmon_curr_rated_min] = "curr%d_rated_min",
+ 	[hwmon_curr_rated_max] = "curr%d_rated_max",
++	[hwmon_curr_beep] = "curr%d_beep",
+ };
+ 
+ static const char * const hwmon_power_attr_templates[] = {
+@@ -597,6 +601,7 @@ static const char * const hwmon_fan_attr_templates[] = {
+ 	[hwmon_fan_min_alarm] = "fan%d_min_alarm",
+ 	[hwmon_fan_max_alarm] = "fan%d_max_alarm",
+ 	[hwmon_fan_fault] = "fan%d_fault",
++	[hwmon_fan_beep] = "fan%d_beep",
+ };
+ 
+ static const char * const hwmon_pwm_attr_templates[] = {
+diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+index 492dd27a5dd8..8cd6a6b33593 100644
+--- a/include/linux/hwmon.h
++++ b/include/linux/hwmon.h
+@@ -44,6 +44,7 @@ enum hwmon_chip_attributes {
+ 	hwmon_chip_in_samples,
+ 	hwmon_chip_power_samples,
+ 	hwmon_chip_temp_samples,
++	hwmon_chip_beep_enable,
+ };
+ 
+ #define HWMON_C_TEMP_RESET_HISTORY	BIT(hwmon_chip_temp_reset_history)
+@@ -58,6 +59,7 @@ enum hwmon_chip_attributes {
+ #define HWMON_C_IN_SAMPLES		BIT(hwmon_chip_in_samples)
+ #define HWMON_C_POWER_SAMPLES		BIT(hwmon_chip_power_samples)
+ #define HWMON_C_TEMP_SAMPLES		BIT(hwmon_chip_temp_samples)
++#define HWMON_C_BEEP_ENABLE		BIT(hwmon_chip_beep_enable)
+ 
+ enum hwmon_temp_attributes {
+ 	hwmon_temp_enable,
+@@ -87,6 +89,7 @@ enum hwmon_temp_attributes {
+ 	hwmon_temp_reset_history,
+ 	hwmon_temp_rated_min,
+ 	hwmon_temp_rated_max,
++	hwmon_temp_beep,
+ };
+ 
+ #define HWMON_T_ENABLE		BIT(hwmon_temp_enable)
+@@ -116,6 +119,7 @@ enum hwmon_temp_attributes {
+ #define HWMON_T_RESET_HISTORY	BIT(hwmon_temp_reset_history)
+ #define HWMON_T_RATED_MIN	BIT(hwmon_temp_rated_min)
+ #define HWMON_T_RATED_MAX	BIT(hwmon_temp_rated_max)
++#define HWMON_T_BEEP		BIT(hwmon_temp_beep)
+ 
+ enum hwmon_in_attributes {
+ 	hwmon_in_enable,
+@@ -136,6 +140,7 @@ enum hwmon_in_attributes {
+ 	hwmon_in_crit_alarm,
+ 	hwmon_in_rated_min,
+ 	hwmon_in_rated_max,
++	hwmon_in_beep,
+ };
+ 
+ #define HWMON_I_ENABLE		BIT(hwmon_in_enable)
+@@ -156,6 +161,7 @@ enum hwmon_in_attributes {
+ #define HWMON_I_CRIT_ALARM	BIT(hwmon_in_crit_alarm)
+ #define HWMON_I_RATED_MIN	BIT(hwmon_in_rated_min)
+ #define HWMON_I_RATED_MAX	BIT(hwmon_in_rated_max)
++#define HWMON_I_BEEP		BIT(hwmon_in_beep)
+ 
+ enum hwmon_curr_attributes {
+ 	hwmon_curr_enable,
+@@ -176,6 +182,7 @@ enum hwmon_curr_attributes {
+ 	hwmon_curr_crit_alarm,
+ 	hwmon_curr_rated_min,
+ 	hwmon_curr_rated_max,
++	hwmon_curr_beep,
+ };
+ 
+ #define HWMON_C_ENABLE		BIT(hwmon_curr_enable)
+@@ -196,6 +203,7 @@ enum hwmon_curr_attributes {
+ #define HWMON_C_CRIT_ALARM	BIT(hwmon_curr_crit_alarm)
+ #define HWMON_C_RATED_MIN	BIT(hwmon_curr_rated_min)
+ #define HWMON_C_RATED_MAX	BIT(hwmon_curr_rated_max)
++#define HWMON_C_BEEP		BIT(hwmon_curr_beep)
+ 
+ enum hwmon_power_attributes {
+ 	hwmon_power_enable,
+@@ -312,6 +320,7 @@ enum hwmon_fan_attributes {
+ 	hwmon_fan_min_alarm,
+ 	hwmon_fan_max_alarm,
+ 	hwmon_fan_fault,
++	hwmon_fan_beep,
+ };
+ 
+ #define HWMON_F_ENABLE			BIT(hwmon_fan_enable)
+@@ -326,6 +335,7 @@ enum hwmon_fan_attributes {
+ #define HWMON_F_MIN_ALARM		BIT(hwmon_fan_min_alarm)
+ #define HWMON_F_MAX_ALARM		BIT(hwmon_fan_max_alarm)
+ #define HWMON_F_FAULT			BIT(hwmon_fan_fault)
++#define HWMON_F_BEEP			BIT(hwmon_fan_beep)
+ 
+ enum hwmon_pwm_attributes {
+ 	hwmon_pwm_input,
 -- 
 2.34.1
 
