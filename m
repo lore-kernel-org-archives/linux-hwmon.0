@@ -2,127 +2,122 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0590C77B7F
-	for <linux-hwmon@archiver.kernel.org>; Sat,  6 May 2023 13:52:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3FD0C77B75
+	for <linux-hwmon@archiver.kernel.org>; Sun,  7 May 2023 10:41:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbjEFNwO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 6 May 2023 09:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
+        id S231339AbjEGKla (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 7 May 2023 06:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbjEFNwN (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 6 May 2023 09:52:13 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FD923A0C;
-        Sat,  6 May 2023 06:52:12 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-517bfdf55c3so1376038a12.2;
-        Sat, 06 May 2023 06:52:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683381132; x=1685973132;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nH3aciUcYWZij0Kp0FJnKmzfOIAjxDn8kv06DNsAoc4=;
-        b=nFGY9DUNTbIBD4xuCbyXHOZsu/e7ssdk1yHYQNn1nqG2smiH9Hr5OskB9rYX+sVv4P
-         VrMPvmGIhKGj+K7F2fTIzQ47cwpxBUcOF54ea0s9zuFyGbhKA+2q3/C0NCY3tB8WJBsC
-         el97UOOOGE3CVv0iWYT9QrAOl8QMurB6/rk7mmozjN9wJ8IbQHOWu/gZcEIxOPtGN9F2
-         KZbbMqJGkaSYhzjt+BtcQ09x52TGhnrsA5C1PIT/OVdEx9L7NWa4DD8PvkbAUdcNOc1R
-         t4JQZKzdEwiEQ6kpY+jeBNG7UBVR1keBDgbfoY+SXS3kHTqX4VDAOen+uI4Ql3/LhODi
-         n9+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683381132; x=1685973132;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nH3aciUcYWZij0Kp0FJnKmzfOIAjxDn8kv06DNsAoc4=;
-        b=Am9PP2i5hOMeYuxTBJgFaYZU1fFTcTOfE9nxVv+XchPflsa6tEFKhe18+hYel7KgJe
-         jxjJV67aVl0z9jRovUh0Z03RvxvbDCsRbUGsAHx3Wu2b1MwDSXfSR3BgP+SnSm3eZPDX
-         wci81xnQ5J2X6unxii15O/Y1pdllGblQLaDTaN27iJ1YrfWXhrf0MfHYLqmohJGOGrrX
-         yN9AmWEHYv0EcfiRX8c+xc0outvdT8dzUTCzsSo1BTV2Fy/LEwZ+CflHyPuVOxmaHVJr
-         K5DstzFWrwyfYjUd02PoeIKzC8LTkOLXHubpLsfwkleSmnVf4Qm9trZAdA6+zcUBeqwb
-         Jx+Q==
-X-Gm-Message-State: AC+VfDz99Asl8ThelAm5eDUdj9XwKgVQIoxdMYM1SU92d1IE2U4m6QtM
-        e8YRTrY8wkY+3Yx+rQH+bao=
-X-Google-Smtp-Source: ACHHUZ5ZjsuG/vBhxtPHtJ+TD1wVNZ7JcjiMlPbOoWxS4CvZTYdmRhVZ2rnTP8zM8NydKL4Y6ksTGw==
-X-Received: by 2002:a17:90a:eb15:b0:23d:286:47d3 with SMTP id j21-20020a17090aeb1500b0023d028647d3mr4699619pjz.40.1683381132058;
-        Sat, 06 May 2023 06:52:12 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t15-20020a17090ad14f00b0024b6a90741esm6619646pjw.49.2023.05.06.06.52.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 May 2023 06:52:11 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <512351f8-e571-620a-1b2b-54989c079803@roeck-us.net>
-Date:   Sat, 6 May 2023 06:52:09 -0700
+        with ESMTP id S229778AbjEGKl3 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 May 2023 06:41:29 -0400
+Received: from ipmail03.adl6.internode.on.net (ipmail03.adl6.internode.on.net [150.101.137.143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 338BB100DC
+        for <linux-hwmon@vger.kernel.org>; Sun,  7 May 2023 03:41:24 -0700 (PDT)
+IronPort-SDR: 64578051_fMbwL8KRD/NNMi8e47sE+JF7/lA+YPK37m9ZRRb9CuwKOTY
+ ZNXAbqpIDNbfCdw4VdRKcQqAj0fd+goke2bC6YA==
+X-SMTP-MATCH: 0
+X-IPAS-Result: =?us-ascii?q?A2AEAwBgf1dkjPQc8jxaHQEBAQEJARIBBQUBSYFGgi6CT?=
+ =?us-ascii?q?7VnDwEPAQFEBAEBhQaFSCY4EwECBAEBAQEDAgMBAQEBAQEDAQEGAQEBAQEBB?=
+ =?us-ascii?q?gQUAQEBAUBFhWgNhgc2AQ0BATcBKIEVAYMQgl2sRIEBgggBAQaCZJpqgV4Jg?=
+ =?us-ascii?q?UGMDoEWgzeBPD+BToR+iwaZGIEwdIEnP22BBAIJAhFpgRAIaIF0QAINZAsLb?=
+ =?us-ascii?q?IFAgwsEAhFCDBRdAmsaCBIBEwMHBwIBgRgQOgcEPjIHCR9oAwkDBwVJQAMLG?=
+ =?us-ascii?q?A0WNxEsNRQfLSCBCRhjBIIFByUkmwlaNIJpknmxJ4QJgVqfF02BRoIkpV8ul?=
+ =?us-ascii?q?1QgozSELQIKBxaBeoF+TR8ZgyJPAxkPjiAZghORUWM9AgcLAQEDCYtFAQE?=
+IronPort-PHdr: A9a23:jv9QcBE9YESH6GScqh1W/J1GfhYY04WdBeZdwpAml6kIeb6q4JrlJ
+ kCZ6PBwyl7FG4zGuLpNkeGDtafmVCQb5IqZ9moPdZtQWloEkZAYkwB6UpGMAEGpIKK1P35jT
+ pZJXgY9rXqwaRc9JQ==
+IronPort-Data: A9a23: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
+ j3C0iaY0sCN/6xU
+IronPort-HdrOrdr: A9a23:HTKVBqDw48DN9A3lHemC55DYdb4zR+YMi2TDt3oadfWaSK2lfq
+ eV7ZMmPX2dslsssRQb9exoV5PwIk80maQb3WBzB8bHYOCZghrLEGgK1+KLqAEIcBefygcy78
+ ldmycSMqyXMbEDt7ee3OChKadb/DCYytHSuQ4A9QYVcem6A5sQlztENg==
+X-Talos-CUID: =?us-ascii?q?9a23=3AxUql3WlLOipzAaDX1egGJt2vZwvXOSPC3TDTDha?=
+ =?us-ascii?q?gMEkqFeaodHyqofh+iMU7zg=3D=3D?=
+X-Talos-MUID: 9a23:YIhSKQSHvKAeBUZvRXSz3TZIbJp5wZ2oFUAiuo82ppCDBDFvbmI=
+X-IronPort-Anti-Spam-Filtered: true
+Received: from 60-242-28-244.static.tpgi.com.au (HELO bits.crawford.emu.id.au) ([60.242.28.244])
+  by ipmail03.adl6.internode.on.net with ESMTP; 07 May 2023 20:11:22 +0930
+Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
+        (authenticated bits=0)
+        by bits.crawford.emu.id.au (8.17.1/8.17.1) with ESMTPSA id 347Af9h33600390
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Sun, 7 May 2023 20:41:17 +1000
+Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 347Af9h33600390
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
+        s=s1; t=1683456078; bh=oryrz/nI9m/XVNaGCg4kH28I4eS8qUeg3r4l21XZgsQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Z0OQPih2PKbnsuAYqjaDki420SSVFr6A4FIx+cxWRAXcmbolRfzHJtdBTCi4HUZI6
+         SMvat3HLuH8WEunV5IneRbylulIaqmecgaGNa6CukkgqMafjoZgLKnZXFD81MtqYRr
+         lv+O7/QS5KENnxEcKuGIbBtF7vU7zeMRiWgZu71sVnmoz/HV4KwnNOioEldXG5QPd4
+         4de3R+oi4mI9mdh5ydEtfKggASH9MeBYTgUX+e9n+6H/YYTuJVdheffwYU2ifWXs0r
+         iZgwle2MxjAC4pGDhcldOCt+RDD/IIB/Afmv8kSIuXAMWkrQ3EJ/z0wzj5QlJA1UfU
+         fBXg6tXtABxQQ==
+From:   Frank Crawford <frank@crawford.emu.id.au>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org,
+        Frank Crawford <frank@crawford.emu.id.au>
+Subject: [PATCH v1 0/2] hwmon: (it87) Generalise FAN_CTL ON/OFF Support
+Date:   Sun,  7 May 2023 20:41:04 +1000
+Message-Id: <20230507104106.1808726-1-frank@crawford.emu.id.au>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230504075752.1320967-1-james@equiv.tech>
- <20230504075752.1320967-5-james@equiv.tech>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC 04/11] Documentation/hwmon: Revise hwmon kernel API
- reference
-In-Reply-To: <20230504075752.1320967-5-james@equiv.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Sun, 07 May 2023 20:41:18 +1000 (AEST)
+X-Virus-Scanned: clamav-milter 0.103.8 at bits.crawford.emu.id.au
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/4/23 00:57, James Seo wrote:
-> Reorganize content into coherent sections.
-> Use kerneldocs to document functions and data structures when
-> possible and add more details on using various API facilities.
-> Fix minor issues (typos, grammar, etc.) and add markup.
-> 
-> Signed-off-by: James Seo <james@equiv.tech>
-> ---
->   Documentation/hwmon/hwmon-kernel-api.rst | 740 ++++++++++++-----------
->   1 file changed, 384 insertions(+), 356 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-> index c2d1e0299d8d..cf084e040522 100644
-> --- a/Documentation/hwmon/hwmon-kernel-api.rst
-> +++ b/Documentation/hwmon/hwmon-kernel-api.rst
-> @@ -1,374 +1,402 @@
-> +========================================
->   The Linux Hardware Monitoring kernel API
->   ========================================
->   
->   Guenter Roeck
->   
-> +.. contents::
-> +
->   Introduction
-> -------------
-> +============
->   
->   This document describes the API that can be used by hardware monitoring
->   drivers that want to use the hardware monitoring framework.
->   
-> -This document does not describe what a hardware monitoring (hwmon) Driver or
-> -Device is. It also does not describe the API which can be used by user space
-> -to communicate with a hardware monitoring device. If you want to know this
-> -then please read the following file: Documentation/hwmon/sysfs-interface.rst.
-> +This document does not describe what a hardware monitoring (``hwmon``) driver
-> +or device is, nor does it describe the API for communicating with a hardware
-> +monitoring device from userspace. For more information on these topics,
-> +please read Documentation/hwmon/sysfs-interface.rst.
->   
+Support for FAN_CTL ON/OFF is currently disabled only for IT8603E but
+there are severl chips that don't support the configuration bits to turn
+off fan control entirely.  Generalise this support for any chip.
 
-There is a lot of nnecessary churn in your patches, where you reformat entire
-paragrahps just to add a few "``". This makes it almost impossible to identify
-the actual changes. For me it means that the review burden is so much that I'll
-probably never get to actually review those changes.
+---
+Frank Crawford (2):
+  Generalise support for FAN_CTL ON/OFF
+  Add FAN_CTL feature for relevant chipsets
 
-Please split the changes into subjects, following the "one logical change per
-patch" rule, and please refrain from changing entire paragraphs when adding
-markups. Also, a reference to the markup rules explaining if and when markups
-are warranted would be nice. For example, I have no idea why "hwmon" would
-warrant a markup.
+ drivers/hwmon/it87.c | 63 ++++++++++++++++++++++++++------------------
+ 1 file changed, 37 insertions(+), 26 deletions(-)
 
-Guenter
+-- 
+2.40.0
 
