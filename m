@@ -2,194 +2,119 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2092BC77B75
-	for <linux-hwmon@archiver.kernel.org>; Sun,  7 May 2023 15:22:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F00F9C77B7F
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 May 2023 08:24:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbjEGPWi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 7 May 2023 11:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S232562AbjEHIXs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 May 2023 04:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjEGPWh (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 May 2023 11:22:37 -0400
-Received: from m228-13.mailgun.net (m228-13.mailgun.net [159.135.228.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D50B17FE4
-        for <linux-hwmon@vger.kernel.org>; Sun,  7 May 2023 08:22:32 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
- s=mx; t=1683472951; x=1683480151; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Subject: Cc: To: To: From: From: Sender: Sender;
- bh=JtCD7a2ohwxE6zrU/2xEaJh6Zoqff/FhUPQTLdec9mI=;
- b=AounJ9vHQ8JNltbfdKcnz/lrjbL0JOo1LKwrezskn+5wYsIac5sOLgr95V2DQLVMs4ZyhQGVl74yiMkgrKBK+5UFLLFKKnVfqpW7b3cpU1NLYey3PKLI9cl3H8x1zTB3AoXQG784ELUTsLg/2iDeeBNW8ZPxidjjmSFHv5eP9W0TDkdPo/mgY1bnlzvKmBAssvZWWWbuIW8Ia3zgsvKXYWRdAzgPTQ95IRKCetc0OCWN+L3cAErtjdUyHwERmC6IjvvELMfhy1zmRNhwKMbazY7kN8ZKH4OXJL0jlaLl+KFcI768/ABWiQgYYtLt3UUy/rtpQUX9Cau+2npc1Lm9fg==
-X-Mailgun-Sending-Ip: 159.135.228.13
-X-Mailgun-Sid: WyJkOWUwNSIsImxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZyIsIjkzZDVhYiJd
-Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 70825b0c4f46 with SMTP id
- 6457c2375e23e5f95b11d540 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sun, 07 May 2023 15:22:31 GMT
-Sender: james@equiv.tech
-From:   James Seo <james@equiv.tech>
-Cc:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (core) Add missing beep-related standard attributes
-Date:   Sun,  7 May 2023 08:22:17 -0700
-Message-Id: <20230507152216.1862653-1-james@equiv.tech>
+        with ESMTP id S233061AbjEHIXa (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 May 2023 04:23:30 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D931707
+        for <linux-hwmon@vger.kernel.org>; Mon,  8 May 2023 01:23:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683534209; x=1715070209;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=d8hef3ly/B44n04COlg3yUbiCm7locyauOjKHCixXJI=;
+  b=TJkfruB991JkM1snG2uVq2wcaorPGA9cIQUQKkQxsQ1XavObABWmpP82
+   nu8Zo5DMV0VOAcuxqKqEvvQEZAB9YIE3gMPXd4jqJoDUdORnhjxuzS1Te
+   bfEIMWKvsFg0qLnItc3Jkm+wkmAjaBaSdy8w34JaBK3PwmAvzrJZvj9be
+   9rvAb9FZeJCe+ldG6ghdloz3Bnv91tNVKW7gyQNKr/xsryB7REH+Dm0Cw
+   xFLQqknnAKfi5gGF65l+lRm8o6KUgBDzy7roHPEz5KHxwaFLATmIJQTDZ
+   xyfI78HwjJkrKYvDDI0CNFt7YsDRV4ZVtx1ThauBpzkdmA6dPFJsZCKOV
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="329949673"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="329949673"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 01:23:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="872714982"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="872714982"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 08 May 2023 01:23:26 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pvw9W-00018n-0s;
+        Mon, 08 May 2023 08:23:26 +0000
+Date:   Mon, 8 May 2023 16:23:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [groeck-staging:hwmon-next 3/10] drivers/hwmon/oxp-sensors.c:299:10:
+ warning: cast to smaller integer type 'enum oxp_board' from 'void *'
+Message-ID: <202305081625.IMCuQoxj-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-beep_enable, inX_beep, currX_beep, fanX_beep, and tempX_beep
-are standard attributes mentioned in the sysfs interface
-specification but not implemented in the hwmon core. Since
-these are not deprecated, implement them.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   92613681c0090612f0368dcebdcc232af9d74ae8
+commit: bfae15559531b4aacd626152ffea929c27304dd8 [3/10] hwmon: (oxp-sensors) Use less convoluted enum cast
+config: x86_64-randconfig-a006-20230508 (https://download.01.org/0day-ci/archive/20230508/202305081625.IMCuQoxj-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=bfae15559531b4aacd626152ffea929c27304dd8
+        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+        git fetch --no-tags groeck-staging hwmon-next
+        git checkout bfae15559531b4aacd626152ffea929c27304dd8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hwmon/
 
-Adding beep_mask is not necessary, as it is deprecated and
-the drivers already using it are manually defining it.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305081625.IMCuQoxj-lkp@intel.com/
 
-Signed-off-by: James Seo <james@equiv.tech>
----
+All warnings (new ones prefixed by >>):
 
-Changes from RFC:
-* Revised commit message
-* Fixed misdefinition of fanX_beep attribute template
+>> drivers/hwmon/oxp-sensors.c:299:10: warning: cast to smaller integer type 'enum oxp_board' from 'void *' [-Wvoid-pointer-to-enum-cast]
+           board = (enum oxp_board)dmi_entry->driver_data;
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
-History:
-RFC: https://lore.kernel.org/linux-hwmon/20230504075752.1320967-11-james@equiv.tech/
 
----
- drivers/hwmon/hwmon.c |  5 +++++
- include/linux/hwmon.h | 10 ++++++++++
- 2 files changed, 15 insertions(+)
+vim +299 drivers/hwmon/oxp-sensors.c
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 5f205686065e..c7dd3f5b2bd5 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -456,6 +456,7 @@ static const char * const hwmon_chip_attrs[] = {
- 	[hwmon_chip_in_samples] = "in_samples",
- 	[hwmon_chip_power_samples] = "power_samples",
- 	[hwmon_chip_temp_samples] = "temp_samples",
-+	[hwmon_chip_beep_enable] = "beep_enable",
- };
- 
- static const char * const hwmon_temp_attr_templates[] = {
-@@ -486,6 +487,7 @@ static const char * const hwmon_temp_attr_templates[] = {
- 	[hwmon_temp_reset_history] = "temp%d_reset_history",
- 	[hwmon_temp_rated_min] = "temp%d_rated_min",
- 	[hwmon_temp_rated_max] = "temp%d_rated_max",
-+	[hwmon_temp_beep] = "temp%d_beep",
- };
- 
- static const char * const hwmon_in_attr_templates[] = {
-@@ -507,6 +509,7 @@ static const char * const hwmon_in_attr_templates[] = {
- 	[hwmon_in_crit_alarm] = "in%d_crit_alarm",
- 	[hwmon_in_rated_min] = "in%d_rated_min",
- 	[hwmon_in_rated_max] = "in%d_rated_max",
-+	[hwmon_in_beep] = "in%d_beep",
- };
- 
- static const char * const hwmon_curr_attr_templates[] = {
-@@ -528,6 +531,7 @@ static const char * const hwmon_curr_attr_templates[] = {
- 	[hwmon_curr_crit_alarm] = "curr%d_crit_alarm",
- 	[hwmon_curr_rated_min] = "curr%d_rated_min",
- 	[hwmon_curr_rated_max] = "curr%d_rated_max",
-+	[hwmon_curr_beep] = "curr%d_beep",
- };
- 
- static const char * const hwmon_power_attr_templates[] = {
-@@ -597,6 +601,7 @@ static const char * const hwmon_fan_attr_templates[] = {
- 	[hwmon_fan_min_alarm] = "fan%d_min_alarm",
- 	[hwmon_fan_max_alarm] = "fan%d_max_alarm",
- 	[hwmon_fan_fault] = "fan%d_fault",
-+	[hwmon_fan_beep] = "fan%d_beep",
- };
- 
- static const char * const hwmon_pwm_attr_templates[] = {
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index 492dd27a5dd8..8cd6a6b33593 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -44,6 +44,7 @@ enum hwmon_chip_attributes {
- 	hwmon_chip_in_samples,
- 	hwmon_chip_power_samples,
- 	hwmon_chip_temp_samples,
-+	hwmon_chip_beep_enable,
- };
- 
- #define HWMON_C_TEMP_RESET_HISTORY	BIT(hwmon_chip_temp_reset_history)
-@@ -58,6 +59,7 @@ enum hwmon_chip_attributes {
- #define HWMON_C_IN_SAMPLES		BIT(hwmon_chip_in_samples)
- #define HWMON_C_POWER_SAMPLES		BIT(hwmon_chip_power_samples)
- #define HWMON_C_TEMP_SAMPLES		BIT(hwmon_chip_temp_samples)
-+#define HWMON_C_BEEP_ENABLE		BIT(hwmon_chip_beep_enable)
- 
- enum hwmon_temp_attributes {
- 	hwmon_temp_enable,
-@@ -87,6 +89,7 @@ enum hwmon_temp_attributes {
- 	hwmon_temp_reset_history,
- 	hwmon_temp_rated_min,
- 	hwmon_temp_rated_max,
-+	hwmon_temp_beep,
- };
- 
- #define HWMON_T_ENABLE		BIT(hwmon_temp_enable)
-@@ -116,6 +119,7 @@ enum hwmon_temp_attributes {
- #define HWMON_T_RESET_HISTORY	BIT(hwmon_temp_reset_history)
- #define HWMON_T_RATED_MIN	BIT(hwmon_temp_rated_min)
- #define HWMON_T_RATED_MAX	BIT(hwmon_temp_rated_max)
-+#define HWMON_T_BEEP		BIT(hwmon_temp_beep)
- 
- enum hwmon_in_attributes {
- 	hwmon_in_enable,
-@@ -136,6 +140,7 @@ enum hwmon_in_attributes {
- 	hwmon_in_crit_alarm,
- 	hwmon_in_rated_min,
- 	hwmon_in_rated_max,
-+	hwmon_in_beep,
- };
- 
- #define HWMON_I_ENABLE		BIT(hwmon_in_enable)
-@@ -156,6 +161,7 @@ enum hwmon_in_attributes {
- #define HWMON_I_CRIT_ALARM	BIT(hwmon_in_crit_alarm)
- #define HWMON_I_RATED_MIN	BIT(hwmon_in_rated_min)
- #define HWMON_I_RATED_MAX	BIT(hwmon_in_rated_max)
-+#define HWMON_I_BEEP		BIT(hwmon_in_beep)
- 
- enum hwmon_curr_attributes {
- 	hwmon_curr_enable,
-@@ -176,6 +182,7 @@ enum hwmon_curr_attributes {
- 	hwmon_curr_crit_alarm,
- 	hwmon_curr_rated_min,
- 	hwmon_curr_rated_max,
-+	hwmon_curr_beep,
- };
- 
- #define HWMON_C_ENABLE		BIT(hwmon_curr_enable)
-@@ -196,6 +203,7 @@ enum hwmon_curr_attributes {
- #define HWMON_C_CRIT_ALARM	BIT(hwmon_curr_crit_alarm)
- #define HWMON_C_RATED_MIN	BIT(hwmon_curr_rated_min)
- #define HWMON_C_RATED_MAX	BIT(hwmon_curr_rated_max)
-+#define HWMON_C_BEEP		BIT(hwmon_curr_beep)
- 
- enum hwmon_power_attributes {
- 	hwmon_power_enable,
-@@ -312,6 +320,7 @@ enum hwmon_fan_attributes {
- 	hwmon_fan_min_alarm,
- 	hwmon_fan_max_alarm,
- 	hwmon_fan_fault,
-+	hwmon_fan_beep,
- };
- 
- #define HWMON_F_ENABLE			BIT(hwmon_fan_enable)
-@@ -326,6 +335,7 @@ enum hwmon_fan_attributes {
- #define HWMON_F_MIN_ALARM		BIT(hwmon_fan_min_alarm)
- #define HWMON_F_MAX_ALARM		BIT(hwmon_fan_max_alarm)
- #define HWMON_F_FAULT			BIT(hwmon_fan_fault)
-+#define HWMON_F_BEEP			BIT(hwmon_fan_beep)
- 
- enum hwmon_pwm_attributes {
- 	hwmon_pwm_input,
+   280	
+   281	/* Initialization logic */
+   282	static int oxp_platform_probe(struct platform_device *pdev)
+   283	{
+   284		const struct dmi_system_id *dmi_entry;
+   285		struct device *dev = &pdev->dev;
+   286		struct device *hwdev;
+   287	
+   288		/*
+   289		 * Have to check for AMD processor here because DMI strings are the
+   290		 * same between Intel and AMD boards, the only way to tell them apart
+   291		 * is the CPU.
+   292		 * Intel boards seem to have different EC registers and values to
+   293		 * read/write.
+   294		 */
+   295		dmi_entry = dmi_first_match(dmi_table);
+   296		if (!dmi_entry || boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
+   297			return -ENODEV;
+   298	
+ > 299		board = (enum oxp_board)dmi_entry->driver_data;
+   300	
+   301		hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
+   302							     &oxp_ec_chip_info, NULL);
+   303	
+   304		return PTR_ERR_OR_ZERO(hwdev);
+   305	}
+   306	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
