@@ -2,119 +2,84 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F00F9C77B7F
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 May 2023 08:24:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B068FC7EE22
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 May 2023 09:01:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232562AbjEHIXs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 May 2023 04:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
+        id S233719AbjEHJBk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 May 2023 05:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233061AbjEHIXa (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 May 2023 04:23:30 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D931707
-        for <linux-hwmon@vger.kernel.org>; Mon,  8 May 2023 01:23:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683534209; x=1715070209;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=d8hef3ly/B44n04COlg3yUbiCm7locyauOjKHCixXJI=;
-  b=TJkfruB991JkM1snG2uVq2wcaorPGA9cIQUQKkQxsQ1XavObABWmpP82
-   nu8Zo5DMV0VOAcuxqKqEvvQEZAB9YIE3gMPXd4jqJoDUdORnhjxuzS1Te
-   bfEIMWKvsFg0qLnItc3Jkm+wkmAjaBaSdy8w34JaBK3PwmAvzrJZvj9be
-   9rvAb9FZeJCe+ldG6ghdloz3Bnv91tNVKW7gyQNKr/xsryB7REH+Dm0Cw
-   xFLQqknnAKfi5gGF65l+lRm8o6KUgBDzy7roHPEz5KHxwaFLATmIJQTDZ
-   xyfI78HwjJkrKYvDDI0CNFt7YsDRV4ZVtx1ThauBpzkdmA6dPFJsZCKOV
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="329949673"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="329949673"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 01:23:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="872714982"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="872714982"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 08 May 2023 01:23:26 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pvw9W-00018n-0s;
-        Mon, 08 May 2023 08:23:26 +0000
-Date:   Mon, 8 May 2023 16:23:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [groeck-staging:hwmon-next 3/10] drivers/hwmon/oxp-sensors.c:299:10:
- warning: cast to smaller integer type 'enum oxp_board' from 'void *'
-Message-ID: <202305081625.IMCuQoxj-lkp@intel.com>
+        with ESMTP id S233422AbjEHJA7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 May 2023 05:00:59 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0C0171A
+        for <linux-hwmon@vger.kernel.org>; Mon,  8 May 2023 02:00:36 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-965d73eb65fso601608266b.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 08 May 2023 02:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683536415; x=1686128415;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+ZK4HXU+j2dP/a9t3IMfCPc5nhez1B0OHSKgYXQ0vJI=;
+        b=paJcSMDXBxw/b9+X9ALSXZ35DpzalJ10w4uWRfTSsr+wuwv54FU9A8X4xw5ffWW1Jp
+         hY5nqafL5x6tVhOO28qkYVy94GMY+DBOLziwlO12YUDsElKPmOJjElI5YaOo1gw1Cp+2
+         dloSS4uCbUSaZ5riyyxZX5F4SkU05eBMLMJYqpurcyq61vYAZHFR3keCg4KRiJm3Vg2s
+         oqzDOZQa9lrt75OeeVay5li22isi0TUyO5SCHTa7mkXSBCWmSzNmvlazh/68SfajyCOh
+         8h9XiRwBRIjEytRgzIuSTPb7570jHicewnL4JGfXcePPGZIrrBMbsP2IJxY4azyIqSqQ
+         Xs+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683536415; x=1686128415;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+ZK4HXU+j2dP/a9t3IMfCPc5nhez1B0OHSKgYXQ0vJI=;
+        b=iDaWsNxpNEPQC0GBTx2I3t5T9wMF+x7Goex69CevCJCeheEz8NvexkGjisMvhCUiWt
+         OKsxhF3qhOoWjvvxoN4ZjStFqxTJPpjkgSiFS3vUg/o3OUmMWBcWhEFvepcF+zGlcRHL
+         ylNi0ynqXD6hJPWgfcylY8alD3VuJeiQB+GJLVJEYDTwdd1zH0WXBXsM7bTnikAZQaWy
+         O+m9w2yBcrQlx4KkRsHgc7pkJtRYpEEcfZCaBUaMLco21mL/LTNiVjFBIFjBamlfZ322
+         9PRO/dXqe554VpmwyFDlf0eLerGoWsbfwscf2vE2aztt8WFe8WFBjfDkUSYgTtdewccU
+         N+vQ==
+X-Gm-Message-State: AC+VfDw6BCTq3EQQv7MDImhB3yWjgCAsUpZ7ZSbCllaAgzHLWbCzGXzO
+        Il/RAB+lnDfHub7QY9JwX2yD/Q==
+X-Google-Smtp-Source: ACHHUZ6WZKuGaVzlSS+2SCWz23y4bxXqR/Q/LG/FYevd+yIv81CV9MJsXYDKhfnV+ww6rEfbvb1cCQ==
+X-Received: by 2002:a17:907:6e0b:b0:949:5db4:7888 with SMTP id sd11-20020a1709076e0b00b009495db47888mr9222849ejc.27.1683536415023;
+        Mon, 08 May 2023 02:00:15 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
+        by smtp.gmail.com with ESMTPSA id jz4-20020a170906bb0400b0094bb4c75695sm4718953ejb.194.2023.05.08.02.00.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 02:00:14 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     zbr@ioremap.net, jdelvare@suse.com, linux@roeck-us.net,
+        Liang He <windhl@126.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] drivers: w1: Add missing of_node_put() in w1.c
+Date:   Mon,  8 May 2023 10:59:47 +0200
+Message-Id: <168353638587.78189.13850750261340939366.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220615125105.3966317-1-windhl@126.com>
+References: <20220615125105.3966317-1-windhl@126.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   92613681c0090612f0368dcebdcc232af9d74ae8
-commit: bfae15559531b4aacd626152ffea929c27304dd8 [3/10] hwmon: (oxp-sensors) Use less convoluted enum cast
-config: x86_64-randconfig-a006-20230508 (https://download.01.org/0day-ci/archive/20230508/202305081625.IMCuQoxj-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=bfae15559531b4aacd626152ffea929c27304dd8
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch --no-tags groeck-staging hwmon-next
-        git checkout bfae15559531b4aacd626152ffea929c27304dd8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hwmon/
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305081625.IMCuQoxj-lkp@intel.com/
+On Wed, 15 Jun 2022 20:51:05 +0800, Liang He wrote:
+> In __w1_attach_slave_device, we really need not to use of_node_put
+> in normal path as the reference is escaped by sl. However, we need
+> of_node_put in the fail path before put_device.
+> 
+> 
 
-All warnings (new ones prefixed by >>):
+Applied, thanks!
 
->> drivers/hwmon/oxp-sensors.c:299:10: warning: cast to smaller integer type 'enum oxp_board' from 'void *' [-Wvoid-pointer-to-enum-cast]
-           board = (enum oxp_board)dmi_entry->driver_data;
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+[1/1] drivers: w1: Add missing of_node_put() in w1.c
+      https://git.kernel.org/krzk/linux-w1/c/51cbbcd6469b2a32e222ec220039af20a16f2769
 
-
-vim +299 drivers/hwmon/oxp-sensors.c
-
-   280	
-   281	/* Initialization logic */
-   282	static int oxp_platform_probe(struct platform_device *pdev)
-   283	{
-   284		const struct dmi_system_id *dmi_entry;
-   285		struct device *dev = &pdev->dev;
-   286		struct device *hwdev;
-   287	
-   288		/*
-   289		 * Have to check for AMD processor here because DMI strings are the
-   290		 * same between Intel and AMD boards, the only way to tell them apart
-   291		 * is the CPU.
-   292		 * Intel boards seem to have different EC registers and values to
-   293		 * read/write.
-   294		 */
-   295		dmi_entry = dmi_first_match(dmi_table);
-   296		if (!dmi_entry || boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
-   297			return -ENODEV;
-   298	
- > 299		board = (enum oxp_board)dmi_entry->driver_data;
-   300	
-   301		hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
-   302							     &oxp_ec_chip_info, NULL);
-   303	
-   304		return PTR_ERR_OR_ZERO(hwdev);
-   305	}
-   306	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
