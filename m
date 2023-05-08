@@ -2,127 +2,206 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96C8AC77B7F
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 May 2023 16:37:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60224C77B75
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 May 2023 17:41:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234282AbjEHQhj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 May 2023 12:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
+        id S232241AbjEHRlm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 May 2023 13:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234256AbjEHQhh (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 May 2023 12:37:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42E56E8E;
-        Mon,  8 May 2023 09:37:34 -0700 (PDT)
-Received: from mercury (195-23-45-170.net.novis.pt [195.23.45.170])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 539FA66032C9;
-        Mon,  8 May 2023 17:37:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1683563852;
-        bh=udDMBajQiOPVdGZyg8mQ3I6M6Uy1zjD8NZ9JgkagEVA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LpI11uVtHUtq6e129Ry21XqOUdkwH+VfEBkkO1IDaIjlDshx2iaaRPrS0AsYReOrx
-         DztirCNlLJa6b0Fo2rVH+70sNgYXyjWpqR/CDS6lM4Qfz9/pJud+hX7RgYD7JPpyLs
-         vC3RUHa2O7WOtqzdZv2xqn/javd160IiA4pTW589wPSAIba3APsiSflEcou1QUOMck
-         4hZ3KD3QN9WbKAuqppz8xWfzs16W1ZCFGaNqK1vCwKbJJUswK46A4/5lCKabE0gbYo
-         qNel3EsRIH6nek2mKOu7Tt8jTKMu/4CAhwVySWpoTak9cuBjtkL//ir5BRaV5xNCLO
-         QFS9qgy7PQbXA==
-Received: by mercury (Postfix, from userid 1000)
-        id 3827E1067084; Mon,  8 May 2023 15:34:13 +0200 (CEST)
-Date:   Mon, 8 May 2023 15:34:13 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] power: supply: hwmon: constify pointers to
- hwmon_channel_info
-Message-ID: <20230508133413.ojt4hjxbxofixxh7@mercury.elektranox.org>
-References: <20230407150326.80183-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dguijg5cxkkxb3fj"
-Content-Disposition: inline
-In-Reply-To: <20230407150326.80183-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S229523AbjEHRll (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 May 2023 13:41:41 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5218AE55
+        for <linux-hwmon@vger.kernel.org>; Mon,  8 May 2023 10:41:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683567700; x=1715103700;
+  h=date:from:to:cc:subject:message-id;
+  bh=+9smzEml2BoorGLhZhvRwiVh1feLxmusjkLfBWp4Tjw=;
+  b=awj9H3iXGXqZOMygm9BAJnYp0PkZ+0O/eTH4MC4W4g4lt6KMTAaQVrgA
+   /MvBKhcc6/hnr6WSWO7ZqHOOcTkC04wyL9MFiREgpqiI63C0SNFYO+G4d
+   PKEa9HLz3hzQMdoCazTlXmcqx/xAS9drKBvwd5uNhw5tQqK34bBmasOPj
+   8XzaTwyHI3cdDMUtpui0pGFAqiHqF+NEdpdUC6OQpyEXTli4ZlEwaQAHR
+   01cAQ/sKDR4a2EAtykbMJlsM1xSwXnsbEK3Tpc2f/VGb6B6wiGpu0zQap
+   TbCS2CPOdnFrfAgH5sTfs4PvLEeuta5YfDnJrixGmXcLdKCBDRERCmX8f
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="436032793"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="436032793"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 10:41:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="822770345"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="822770345"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 08 May 2023 10:41:38 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pw4rh-0001Ld-2E;
+        Mon, 08 May 2023 17:41:37 +0000
+Date:   Tue, 09 May 2023 01:41:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS WITH WARNING
+ 92613681c0090612f0368dcebdcc232af9d74ae8
+Message-ID: <20230508174121.bEiNI%lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 92613681c0090612f0368dcebdcc232af9d74ae8  Documentation/hwmon: Move misplaced entry in hwmon docs index
 
---dguijg5cxkkxb3fj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Warning reports:
 
-Hi,
+https://lore.kernel.org/oe-kbuild-all/202305081625.IMCuQoxj-lkp@intel.com
 
-On Fri, Apr 07, 2023 at 05:03:26PM +0200, Krzysztof Kozlowski wrote:
-> Statically allocated array of pointed to hwmon_channel_info can be made
-> const for safety.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->=20
-> ---
-> This depends on hwmon core patch:
-> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@=
-linaro.org/
->=20
-> Therefore I propose this should also go via hwmon tree.
->=20
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
-> ---
+Warning: (recently discovered and may have been fixed)
 
-Thanks, queued (to my for-next branch).
+drivers/hwmon/oxp-sensors.c:299:10: warning: cast to smaller integer type 'enum oxp_board' from 'void *' [-Wvoid-pointer-to-enum-cast]
 
--- Sebastian
+Warning ids grouped by kconfigs:
 
->  drivers/power/supply/power_supply_hwmon.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/su=
-pply/power_supply_hwmon.c
-> index a48aa4afb828..c97893d4c25e 100644
-> --- a/drivers/power/supply/power_supply_hwmon.c
-> +++ b/drivers/power/supply/power_supply_hwmon.c
-> @@ -293,7 +293,7 @@ static const struct hwmon_ops power_supply_hwmon_ops =
-=3D {
->  	.read_string	=3D power_supply_hwmon_read_string,
->  };
-> =20
-> -static const struct hwmon_channel_info *power_supply_hwmon_info[] =3D {
-> +static const struct hwmon_channel_info * const power_supply_hwmon_info[]=
- =3D {
->  	HWMON_CHANNEL_INFO(temp,
->  			   HWMON_T_LABEL     |
->  			   HWMON_T_INPUT     |
-> --=20
-> 2.34.1
->=20
+clang_recent_errors
+`-- x86_64-randconfig-a006-20230508
+    `-- drivers-hwmon-oxp-sensors.c:warning:cast-to-smaller-integer-type-enum-oxp_board-from-void
 
---dguijg5cxkkxb3fj
-Content-Type: application/pgp-signature; name="signature.asc"
+elapsed time: 799m
 
------BEGIN PGP SIGNATURE-----
+configs tested: 125
+configs skipped: 11
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRY+lQACgkQ2O7X88g7
-+prO+Q//QSMdR1Hjn+1cUVSJn9lLDExWtvOYSWrSiECUCpLfCIZCr+QeClYYUYcN
-xLtZc9441/a54EYbGt6EjkJh+WqZbmnl5SI8PUUfIb465oLCqwAh3ZkreSzIhWjs
-H6C6HLKKCI+kWTL1zAQC6RENWAU8X0nZrFaZT/yuGexfOyHBtakTk/Ki1lkANP90
-8/jPrSPtvhwS53VzAiVloRLX/GsJsaIc8pywv6UUygJDcOR7Xy+U4AXp4Y0ZLgqg
-ITTYFpi+qbG1fxdOJ2HSHx0ozEa1kERCz7diAJOixlpzGkxq0qg+Kf1StpqFcKvQ
-qwNUkGuheCMw+/ehTM+wIZXy2wGRuQzqZ8asuu8UwHGlFOWo+lCxvBWyTNAOSnQy
-nJVXs3DWyTp+rVqk5rSQ7s0D7Urnca1RcbVtE8yfkr9OT+HuHeqcrIwygeVsigbD
-iBDKd98yVfEs9k/DvJHVdmiowJVJPJ//vVEOkTMR528UBDWJxIA9YOIVoWtb/M38
-LeGFOptAH6hDKHSezFz4HfKEE+KoZ/nnitIbYTND97OZU1Kf+AuFp8j1PErW1AkX
-sf1XvYAdUJ91DicxsVuNdIuGcd6SRQPxzm/tmS5Z12IT3icfX2cGBuWUjYW+yyJP
-ng/tRI1EJEWMjDuFFL3LYLwZS505c05Lwv66CDRRS0cJhPFP4GY=
-=fKk0
------END PGP SIGNATURE-----
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r001-20230507   gcc  
+alpha                randconfig-r014-20230507   gcc  
+alpha                randconfig-r016-20230507   gcc  
+alpha                randconfig-r036-20230508   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r005-20230507   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r032-20230508   gcc  
+arc                  randconfig-r043-20230507   gcc  
+arc                  randconfig-r043-20230508   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r023-20230508   clang
+arm                  randconfig-r046-20230507   gcc  
+arm                  randconfig-r046-20230508   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r003-20230507   gcc  
+csky                 randconfig-r015-20230507   gcc  
+hexagon      buildonly-randconfig-r004-20230508   clang
+hexagon              randconfig-r041-20230507   clang
+hexagon              randconfig-r041-20230508   clang
+hexagon              randconfig-r045-20230507   clang
+hexagon              randconfig-r045-20230508   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r001-20230508   clang
+i386         buildonly-randconfig-r005-20230508   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230508   clang
+i386                 randconfig-a002-20230508   clang
+i386                 randconfig-a003-20230508   clang
+i386                 randconfig-a004-20230508   clang
+i386                 randconfig-a005-20230508   clang
+i386                 randconfig-a006-20230508   clang
+i386                 randconfig-a011-20230508   gcc  
+i386                 randconfig-a012-20230508   gcc  
+i386                 randconfig-a013-20230508   gcc  
+i386                 randconfig-a014-20230508   gcc  
+i386                 randconfig-a015-20230508   gcc  
+i386                 randconfig-a016-20230508   gcc  
+i386                 randconfig-r013-20230508   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r011-20230508   gcc  
+ia64                 randconfig-r015-20230508   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r006-20230507   gcc  
+loongarch            randconfig-r012-20230507   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips         buildonly-randconfig-r003-20230507   clang
+mips                 randconfig-r021-20230508   clang
+mips                 randconfig-r022-20230507   gcc  
+mips                 randconfig-r022-20230508   clang
+mips                 randconfig-r024-20230508   clang
+mips                 randconfig-r025-20230508   clang
+mips                 randconfig-r035-20230508   gcc  
+nios2                               defconfig   gcc  
+openrisc     buildonly-randconfig-r001-20230507   gcc  
+openrisc             randconfig-r035-20230507   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r014-20230508   gcc  
+parisc               randconfig-r023-20230507   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc      buildonly-randconfig-r004-20230507   clang
+powerpc              randconfig-r002-20230507   gcc  
+powerpc              randconfig-r026-20230508   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230507   clang
+riscv                randconfig-r042-20230508   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230507   clang
+s390                 randconfig-r044-20230508   gcc  
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r002-20230507   gcc  
+sh                   randconfig-r032-20230507   gcc  
+sh                   randconfig-r034-20230507   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r005-20230507   gcc  
+sparc                randconfig-r024-20230507   gcc  
+sparc                randconfig-r031-20230507   gcc  
+sparc64      buildonly-randconfig-r006-20230507   gcc  
+sparc64              randconfig-r011-20230507   gcc  
+sparc64              randconfig-r013-20230507   gcc  
+sparc64              randconfig-r021-20230507   gcc  
+sparc64              randconfig-r026-20230507   gcc  
+sparc64              randconfig-r036-20230507   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r002-20230508   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230508   clang
+x86_64               randconfig-a002-20230508   clang
+x86_64               randconfig-a003-20230508   clang
+x86_64               randconfig-a004-20230508   clang
+x86_64               randconfig-a005-20230508   clang
+x86_64               randconfig-a006-20230508   clang
+x86_64               randconfig-a011-20230508   gcc  
+x86_64               randconfig-a012-20230508   gcc  
+x86_64               randconfig-a013-20230508   gcc  
+x86_64               randconfig-a014-20230508   gcc  
+x86_64               randconfig-a015-20230508   gcc  
+x86_64               randconfig-a016-20230508   gcc  
+x86_64               randconfig-r016-20230508   gcc  
+x86_64               randconfig-r033-20230508   clang
+x86_64                               rhel-8.3   gcc  
 
---dguijg5cxkkxb3fj--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
