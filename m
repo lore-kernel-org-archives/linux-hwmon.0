@@ -2,103 +2,97 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AE78C7EE22
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 May 2023 09:27:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7AB6C7EE22
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 May 2023 10:07:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240197AbjEOJ1a (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 May 2023 05:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
+        id S238850AbjEOKHZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 May 2023 06:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239176AbjEOJ1E (ORCPT
+        with ESMTP id S239649AbjEOKHG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 May 2023 05:27:04 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392231BD;
-        Mon, 15 May 2023 02:26:51 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1aafa41116fso84709345ad.1;
-        Mon, 15 May 2023 02:26:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684142810; x=1686734810;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=90pB5A/EQuvWbtw/9XpRxtR12GPJwYDdwY3t8pMrqK4=;
-        b=R/z7crlS/lPhV3h3BFgkiLR/iJZliaUKgbrxk1eP748n7dGAtbCTPRVputyxufSEV+
-         9kJ3TK/qNPlrWi2p7duVwYOwUEGwba/ZScDo2KIlmRpCJv8TEOo5Ngwu67yJIDTdgurO
-         YBmY5p/gD6m5rDc7BtdXnt5PXFyCe78Z09QxmVGUWKiLyaNiGBtRU4PaJ05OSwm0YVba
-         wfYWjkL2Xlfp6wIuS4lJ2DTEICs0iFtbpaPW3aLasQPuYl5wqgB/Vtw5jFGZkgwZNTDc
-         MFjxVTQhiSZAN3rGvDILlQUOXiYnwk5ANFMi1eWRRekFKY9NGXpQeSZ2tViByDnc/g1h
-         3COQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684142810; x=1686734810;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=90pB5A/EQuvWbtw/9XpRxtR12GPJwYDdwY3t8pMrqK4=;
-        b=BQLSdREsBOaPJWDV3ysCAItNei+6UCyu7qdnsdmyH/1v16gLZYEQtzSC3cYUNPTRuK
-         VDDT73Je6b3Wbe645WC5T7hCvVjPmhDry5nPf810s+4svrzr9e9ANd1mLhTznwLdnANK
-         ikI1L+46OL0pBQsCWrsMY5sOXpiRhFkaHcjk46JfSwbk09cSzr6V9Y1oIUzUc/MJVS96
-         OtyhCEf8nCO95GbVRofZDB6qUPE5fyc2w0xVn5B9zMQMjccHKCactLIBblLfE+qJ/pBF
-         o7CNTUPA7ResoxVM1DNjCuM8DgVRWTkqKQUn31AGbpL/HLnuMsYdiC9prpaRV/53b0BM
-         9njg==
-X-Gm-Message-State: AC+VfDxre5lJ83pkfeeEWLSvwG5X1AM1ujAp2wmYfgQvFRU6bY+pBcGR
-        hwUCxPfNQ96UG2qFSpnhEAyLXzYqHe4X0g==
-X-Google-Smtp-Source: ACHHUZ63EuXr6T3H06Ba3BCMy3sIZXN0pFAkJlCz7cVT3s+tR6hJ5mXHiII/P8Nw2wIrMgseyTGSsg==
-X-Received: by 2002:a17:902:d2c6:b0:1ab:16e0:ef49 with SMTP id n6-20020a170902d2c600b001ab16e0ef49mr43599590plc.24.1684142810639;
-        Mon, 15 May 2023 02:26:50 -0700 (PDT)
-Received: from localhost.localdomain ([103.194.71.110])
-        by smtp.gmail.com with ESMTPSA id bd1-20020a170902830100b001aaecc0b6ffsm13015605plb.160.2023.05.15.02.26.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 02:26:50 -0700 (PDT)
-From:   llyyr <llyyr.public@gmail.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     llyyr <llyyr.public@gmail.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (nct6683) Add another chip ID for NCT6687D sensor chip found on some MSI boards.
-Date:   Mon, 15 May 2023 14:55:46 +0530
-Message-Id: <20230515092546.21154-1-llyyr.public@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Mon, 15 May 2023 06:07:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A8426A5;
+        Mon, 15 May 2023 03:06:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A319621FD;
+        Mon, 15 May 2023 10:06:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70CBC433D2;
+        Mon, 15 May 2023 10:06:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684145181;
+        bh=8ayaAuYB/kceB1weTjmH44O2MoHflgKCJFCWUHfcFQs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QJFmBO2914iPhBK2y/pzhOn8EsqM4aJVDlSeAie995e5GJqyMiOnO1xylkfUxsxuM
+         Mw5ZVuZp5+y1dqPz5szkFxCI5PfuF7PIz33EQAz2jVPH3c/BHmyY5pSd9DOJeKOV6Z
+         jd1WAmg5kynCKeVjCdMCE+swyrKmolI2pjUFO2+GtCLCmD7XGiYduQQmc8A6p2P+Kw
+         yTMtLfrQbQ0OIKdf9ZOMFfBAZyJRcd2MPf6AaImpaCHqRhl2YGZz0+kbr0xq0H3Vit
+         9x9KhzkN8AmOcWBe7wUCHl/6D4tuPBRXn6mZzWScR9xrbrKViRrwyW5fswxLHhkIrp
+         11WpIBcFgoUKg==
+Date:   Mon, 15 May 2023 11:06:15 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Xu Yilun <yilun.xu@intel.com>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        linux-fpga@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russ Weight <russell.h.weight@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] mfd: intel-m10-bmc: Manage access to MAX 10 fw
+ handshake registers
+Message-ID: <20230515100615.GH8963@google.com>
+References: <20230417092653.16487-1-ilpo.jarvinen@linux.intel.com>
+ <20230417092653.16487-5-ilpo.jarvinen@linux.intel.com>
+ <20230427150712.GV50521@google.com>
+ <dc53f4a2-b91f-e114-6da8-72cac82d508d@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <dc53f4a2-b91f-e114-6da8-72cac82d508d@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This value was found on MSI Z690-A PRO DDR5, with a NCT6687D chip.
+On Wed, 10 May 2023, Ilpo Järvinen wrote:
 
-Signed-off-by: llyyr <llyyr.public@gmail.com>
----
- drivers/hwmon/nct6683.c | 3 +++
- 1 file changed, 3 insertions(+)
+> On Thu, 27 Apr 2023, Lee Jones wrote:
+> > On Mon, 17 Apr 2023, Ilpo Järvinen wrote:
+> > > On some MAX 10 cards, the BMC firmware is not available to service
+> > > handshake registers during secure update erase and write phases at
+> > > normal speeds. This problem affects at least hwmon driver. When the MAX
+> > > 10 hwmon driver tries to read the sensor values during a secure update,
+> > > the reads are slowed down (e.g., reading all D5005 sensors takes ~24s
+> > > which is magnitudes worse than the normal <0.02s).
+> > > 
+> > > Manage access to the handshake registers using a rw semaphore and a FW
+> > > state variable to prevent accesses during those secure update phases
+> > > and return -EBUSY instead.
+> > > 
+> > > If handshake_sys_reg_nranges == 0, don't update bwcfw_state as it is not
+> > > used. This avoids the locking cost.
+> > > 
+> > > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> > > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> > > Co-developed-by: Xu Yilun <yilun.xu@intel.com>
+> > > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > > ---
+> > >  drivers/fpga/intel-m10-bmc-sec-update.c | 17 +++++--
+> > >  drivers/mfd/intel-m10-bmc-core.c        | 67 ++++++++++++++++++++++++-
+> > >  drivers/mfd/intel-m10-bmc-spi.c         | 14 ++++++
+> > >  include/linux/mfd/intel-m10-bmc.h       | 28 +++++++++++
+> > >  4 files changed, 121 insertions(+), 5 deletions(-)
+> > 
+> > Applied, thanks
+> 
+> Did these end up falling throught the cracks as I've not been able to 
+> locate where they were applied?
 
-diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
-index a872f783e..5df9b9ce7 100644
---- a/drivers/hwmon/nct6683.c
-+++ b/drivers/hwmon/nct6683.c
-@@ -14,6 +14,7 @@
-  * nct6683d     21(1)   16      8       32(1) 0xc730
-  * nct6686d     21(1)   16      8       32(1) 0xd440
-  * nct6687d     21(1)   16      8       32(1) 0xd590
-+ *                                           (0xd592)
-  *
-  * Notes:
-  *	(1) Total number of vin and temp inputs is 32.
-@@ -71,6 +72,7 @@ static const char * const nct6683_chip_names[] = {
- #define SIO_NCT6683_ID		0xc730
- #define SIO_NCT6686_ID		0xd440
- #define SIO_NCT6687_ID		0xd590
-+#define SIO_NCT6687_ID2		0xd592
- #define SIO_ID_MASK		0xFFF0
- 
- static inline void
-@@ -1362,6 +1364,7 @@ static int __init nct6683_find(int sioaddr, struct nct6683_sio_data *sio_data)
- 		sio_data->kind = nct6686;
- 		break;
- 	case SIO_NCT6687_ID:
-+	case SIO_NCT6687_ID2:
- 		sio_data->kind = nct6687;
- 		break;
- 	default:
+They've been in -next for a couple of weeks.
+
 -- 
-2.40.1
-
+Lee Jones [李琼斯]
