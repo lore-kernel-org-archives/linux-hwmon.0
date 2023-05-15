@@ -2,97 +2,132 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7AB6C7EE22
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 May 2023 10:07:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC1BAC77B75
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 May 2023 11:58:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238850AbjEOKHZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 May 2023 06:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
+        id S241604AbjEOL6T (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 May 2023 07:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239649AbjEOKHG (ORCPT
+        with ESMTP id S241606AbjEOL6A (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 May 2023 06:07:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A8426A5;
-        Mon, 15 May 2023 03:06:22 -0700 (PDT)
+        Mon, 15 May 2023 07:58:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAB12699;
+        Mon, 15 May 2023 04:55:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A319621FD;
-        Mon, 15 May 2023 10:06:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70CBC433D2;
-        Mon, 15 May 2023 10:06:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684145181;
-        bh=8ayaAuYB/kceB1weTjmH44O2MoHflgKCJFCWUHfcFQs=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84E2A6224D;
+        Mon, 15 May 2023 11:55:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74BDAC4339E;
+        Mon, 15 May 2023 11:55:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1684151719;
+        bh=LM25J4KXPt/WwdGCWg9t6HOTk+4FHz+nzlXEdIACN18=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QJFmBO2914iPhBK2y/pzhOn8EsqM4aJVDlSeAie995e5GJqyMiOnO1xylkfUxsxuM
-         Mw5ZVuZp5+y1dqPz5szkFxCI5PfuF7PIz33EQAz2jVPH3c/BHmyY5pSd9DOJeKOV6Z
-         jd1WAmg5kynCKeVjCdMCE+swyrKmolI2pjUFO2+GtCLCmD7XGiYduQQmc8A6p2P+Kw
-         yTMtLfrQbQ0OIKdf9ZOMFfBAZyJRcd2MPf6AaImpaCHqRhl2YGZz0+kbr0xq0H3Vit
-         9x9KhzkN8AmOcWBe7wUCHl/6D4tuPBRXn6mZzWScR9xrbrKViRrwyW5fswxLHhkIrp
-         11WpIBcFgoUKg==
-Date:   Mon, 15 May 2023 11:06:15 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Xu Yilun <yilun.xu@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        linux-fpga@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russ Weight <russell.h.weight@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] mfd: intel-m10-bmc: Manage access to MAX 10 fw
- handshake registers
-Message-ID: <20230515100615.GH8963@google.com>
-References: <20230417092653.16487-1-ilpo.jarvinen@linux.intel.com>
- <20230417092653.16487-5-ilpo.jarvinen@linux.intel.com>
- <20230427150712.GV50521@google.com>
- <dc53f4a2-b91f-e114-6da8-72cac82d508d@linux.intel.com>
+        b=ytX9itB6cmA/S/w3NnY7T9t+f3m7iFGkc9RX9/gTRkP+L2NMqoXGbWx5yM8gIDhqW
+         DmwR3Ru+tm95NbuH3zNF/uB9dkKlLR4uLj0+zQz1JGxRsBmjR64nW4aIlm74xBPWaM
+         ibHRNb0kzhWgcE7DVopBy0yPsVXYadJZIoXdlbDc=
+Date:   Mon, 15 May 2023 13:55:16 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        michal.simek@amd.com, Jonathan.Cameron@huawei.com,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] devres: Provide krealloc_array
+Message-ID: <2023051530-immunize-pony-49ef@gregkh>
+References: <20230509094942.396150-1-james.clark@arm.com>
+ <20230509094942.396150-2-james.clark@arm.com>
+ <2023051340-sinuous-darkroom-2497@gregkh>
+ <89ad5070-db72-7bf1-5d86-a89fea54e789@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dc53f4a2-b91f-e114-6da8-72cac82d508d@linux.intel.com>
+In-Reply-To: <89ad5070-db72-7bf1-5d86-a89fea54e789@arm.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 10 May 2023, Ilpo Järvinen wrote:
-
-> On Thu, 27 Apr 2023, Lee Jones wrote:
-> > On Mon, 17 Apr 2023, Ilpo Järvinen wrote:
-> > > On some MAX 10 cards, the BMC firmware is not available to service
-> > > handshake registers during secure update erase and write phases at
-> > > normal speeds. This problem affects at least hwmon driver. When the MAX
-> > > 10 hwmon driver tries to read the sensor values during a secure update,
-> > > the reads are slowed down (e.g., reading all D5005 sensors takes ~24s
-> > > which is magnitudes worse than the normal <0.02s).
-> > > 
-> > > Manage access to the handshake registers using a rw semaphore and a FW
-> > > state variable to prevent accesses during those secure update phases
-> > > and return -EBUSY instead.
-> > > 
-> > > If handshake_sys_reg_nranges == 0, don't update bwcfw_state as it is not
-> > > used. This avoids the locking cost.
-> > > 
-> > > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> > > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> > > Co-developed-by: Xu Yilun <yilun.xu@intel.com>
-> > > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > > ---
-> > >  drivers/fpga/intel-m10-bmc-sec-update.c | 17 +++++--
-> > >  drivers/mfd/intel-m10-bmc-core.c        | 67 ++++++++++++++++++++++++-
-> > >  drivers/mfd/intel-m10-bmc-spi.c         | 14 ++++++
-> > >  include/linux/mfd/intel-m10-bmc.h       | 28 +++++++++++
-> > >  4 files changed, 121 insertions(+), 5 deletions(-)
-> > 
-> > Applied, thanks
+On Mon, May 15, 2023 at 08:55:33AM +0100, James Clark wrote:
 > 
-> Did these end up falling throught the cracks as I've not been able to 
-> locate where they were applied?
+> 
+> On 13/05/2023 12:04, Greg KH wrote:
+> > On Tue, May 09, 2023 at 10:49:38AM +0100, James Clark wrote:
+> >> There is no krealloc_array equivalent in devres. Users would have to
+> >> do their own multiplication overflow check so provide one.
+> >>
+> >> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> >> Signed-off-by: James Clark <james.clark@arm.com>
+> >> ---
+> >>  Documentation/driver-api/driver-model/devres.rst |  1 +
+> >>  include/linux/device.h                           | 11 +++++++++++
+> >>  2 files changed, 12 insertions(+)
+> >>
+> >> diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
+> >> index 4249eb4239e0..8be086b3f829 100644
+> >> --- a/Documentation/driver-api/driver-model/devres.rst
+> >> +++ b/Documentation/driver-api/driver-model/devres.rst
+> >> @@ -364,6 +364,7 @@ MEM
+> >>    devm_kmalloc_array()
+> >>    devm_kmemdup()
+> >>    devm_krealloc()
+> >> +  devm_krealloc_array()
+> >>    devm_kstrdup()
+> >>    devm_kstrdup_const()
+> >>    devm_kvasprintf()
+> >> diff --git a/include/linux/device.h b/include/linux/device.h
+> >> index 472dd24d4823..58f4f5948edb 100644
+> >> --- a/include/linux/device.h
+> >> +++ b/include/linux/device.h
+> >> @@ -223,6 +223,17 @@ static inline void *devm_kcalloc(struct device *dev,
+> >>  {
+> >>  	return devm_kmalloc_array(dev, n, size, flags | __GFP_ZERO);
+> >>  }
+> >> +static inline __realloc_size(3, 4) void * __must_check
+> > 
+> > Shouldn't you have a blank line before this one?
+> 
+> I was going for consistency with the rest of this section which doesn't
+> have newlines between the functions for some reason. I can add one and
+> resubmit but it might look a bit out of place?
 
-They've been in -next for a couple of weeks.
+Ah, wasn't aware of that, given the lack of context.  So nevermind, it's
+fine for now.
 
--- 
-Lee Jones [李琼斯]
+> >> +devm_krealloc_array(struct device *dev, void *p, size_t new_n, size_t new_size, gfp_t flags)
+> >> +{
+> >> +	size_t bytes;
+> >> +
+> >> +	if (unlikely(check_mul_overflow(new_n, new_size, &bytes)))
+> >> +		return NULL;
+> >> +
+> >> +	return devm_krealloc(dev, p, bytes, flags);
+> >> +}
+> > 
+> > I dislike how we have to keep copying the "real" functions (i.e.
+> > krealloc_array) into something like this, but I can't think of a better
+> > way to do it.
+> > 
+> 
+> Maybe something could be done with some macro magic, but it would
+> probably end up being worse than just copying them and would affect the
+> real ones as well. So yeah I can't think of any easy gains either.
+
+Ok, that's good.  Given a lack of objections from others, I'll just take
+this through my driver core tree in a few days.
+
+thanks,
+
+greg k-h
