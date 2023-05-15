@@ -2,96 +2,106 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DC53C7EE22
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 May 2023 14:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C58CAC77B75
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 May 2023 18:59:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjEOOtr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 May 2023 10:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
+        id S242892AbjEOS73 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 May 2023 14:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234849AbjEOOtq (ORCPT
+        with ESMTP id S243904AbjEOS72 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 May 2023 10:49:46 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C89410E7;
-        Mon, 15 May 2023 07:49:42 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-52caed90d17so8196477a12.0;
-        Mon, 15 May 2023 07:49:42 -0700 (PDT)
+        Mon, 15 May 2023 14:59:28 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BDA176FE;
+        Mon, 15 May 2023 11:59:26 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-250175762b8so11440746a91.1;
+        Mon, 15 May 2023 11:59:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684162182; x=1686754182;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=57VzcyPuA7BEKGnVhD0e6Z7x74rWRavME0frZ5YKs9Y=;
-        b=VRt7+CVjEumhGywZRHZ0Ii6ISVXYXyq3As5d7B2vOCTGTtG/5HKprnIWtad1TXxzt2
-         OG8IY9QmxYghmF/2RTF+ORBiF1HYXrjq7X/HIYlvvTs3xVegaH3jPFva/mUVbGYV4O9K
-         Sp+xYSBmr29fk1F/B84Y77rAvHIc/5Wtm0NeXX5bZJFxUjE+RqniTnDeIDLJAWqdr6Yn
-         w4dYOsdST7/WJX4BXbk0JRnHQwPT5gSkIc+/VI1sUTGB4lxxUtK4EHjZjUjJPtk3CqVc
-         VdLaq3QyROHjo9fFctQW4sYdiYe5BIYm15o9n4dlaly0qHmQX6LAwjMS1lNMJEndtu1q
-         gBwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684162182; x=1686754182;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1684177166; x=1686769166;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=57VzcyPuA7BEKGnVhD0e6Z7x74rWRavME0frZ5YKs9Y=;
-        b=Cu5wBWd1VcDPKG6FG+fK5HCQTm2VfU17wGp1/qinndNeekBHZID1Wylp7yRNa5EfHU
-         kc65Ja+3aNcUmcwEHfuoY2CUORG44JQ2EvToNrZKJy/ALa9lvVFP5Nrp7MR2621PPUeO
-         XGF0ph0vmZDiSi0bVS2OixwZ2Ywy8soMsy9mARfa8c71QNRBCe9Ygdwc43x0U1Btk7T5
-         7vZymZEVk9MaP/HjF0ZWfCzbeCGLBwueaEqAjUcKjeSecaelM6ZK14O0/GIbhHIalmDN
-         YPY9MBxs8zupXYHwbX+pVt8QSr+WqdSzJCMn6DkwnwbyIzcjOEXbAtaWRePe+bztIWQo
-         vvIg==
-X-Gm-Message-State: AC+VfDxYcugfOzRz3Iaqdyjvnq/aWTBj//cNtSRCoJULRNG4aRDzZla/
-        ze31ecWy9uwAztYQPFEav9o=
-X-Google-Smtp-Source: ACHHUZ5DEMRmMSpfNxApnb/08HztqIwNtkhEE5NDX/bKULOjvcovt2TsoSXkaF9iWZ0vFuLFACmcOw==
-X-Received: by 2002:a05:6a20:a113:b0:104:45df:42d8 with SMTP id q19-20020a056a20a11300b0010445df42d8mr14295089pzk.10.1684162181947;
-        Mon, 15 May 2023 07:49:41 -0700 (PDT)
-Received: from localhost.localdomain ([103.194.71.110])
-        by smtp.gmail.com with ESMTPSA id r19-20020a62e413000000b0062d859a33d1sm11854437pfh.84.2023.05.15.07.49.39
+        bh=IlvUfXrVKILqxFedr05emePJ92D43kiYSthuZW0xPTA=;
+        b=svSpD4vUmSifPUWJ9iAEua6vTgE2cbzEJzRqtz/3dG5dHuYRsh/zc4ESeYJNNMnLOU
+         byJ+lpb8kkjLNs1Z8fmfxGg9rGXcntkeJ7Vi+7ZcypH9rpZqxZci2kLHD/pM5ifOCkuQ
+         zsbc8jgRTHehwKxepU5KWAj2iGH4KCqccQGBdFyuiCjC/ShSCK6wVw2/upXSHjWZwA6C
+         DuP5LQ8bH+/N8N1YTbaT0Qlgz+Twle9l6Tv5TsYh24lDH4/sRdbkxVq0ZrTxRkm6pfz2
+         NYtftunwNMFF1XhQ+QD4sa7WILQ+/6lkZ9LTIIYtC21A6Y11b57hWEZbjf6cNDlDcTKs
+         HI0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684177166; x=1686769166;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IlvUfXrVKILqxFedr05emePJ92D43kiYSthuZW0xPTA=;
+        b=I/PC5cC0ymWNQzo7inIDqpP4pOSmZaQBv1MIcxzzqvSfbps/hIW/5aWxLsjAW/y2HX
+         srUf62YwCU2w7YsclY0D29IymIAj/32lQzon8v1Fs4Ijjh+rBVCZ3O2B5eqLAMz1K8z+
+         N9AATUHnk5W/Rhg9RuzUNV6J/R8RpUz+GVgVIEsDDfcfCzpGe/N1u3qErugK1/u/oz8T
+         KGjfOkCe/Rsp+0EPAqFp25SmcVgFjLHqAze6ey8iDduBHaM6vmbh+oTo5z6Z3LKZzbQm
+         4z8dpHlqASLvKEmAWw7ejQUejMz0JSIFEmQE1U7GXl5Zzm5eTs83JnJ4SOtf8EWfb2ks
+         vO0g==
+X-Gm-Message-State: AC+VfDyyXxr7Z2Gnk8pfegEhwMmEK4zRgLi7ljl446xKMqg54WyBTpN8
+        CVtNSQIcDfxzZqAaS3K6IBDegfjh9NY=
+X-Google-Smtp-Source: ACHHUZ4f3MmUJg0Pa/8FmrHo/PnwleIl/6bP2T0NoZtVvVeY797iWSzgrtoy8bm2ItNZ6f08XKDubw==
+X-Received: by 2002:a17:90a:3ccd:b0:250:4847:426a with SMTP id k13-20020a17090a3ccd00b002504847426amr31791596pjd.11.1684177166198;
+        Mon, 15 May 2023 11:59:26 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i6-20020a1709026ac600b001aadfdfcd06sm9204861plt.299.2023.05.15.11.59.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 07:49:41 -0700 (PDT)
-From:   llyyr <llyyr.public@gmail.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     llyyr <llyyr.public@gmail.com>, linux-hwmon@vger.kernel.org,
+        Mon, 15 May 2023 11:59:25 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 15 May 2023 11:59:23 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     llyyr <llyyr.public@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (nct6683) Add another customer ID for NCT6687D sensor chip on some MSI boards.
-Date:   Mon, 15 May 2023 20:19:10 +0530
-Message-Id: <20230515144910.13514-1-llyyr.public@gmail.com>
-X-Mailer: git-send-email 2.40.1
+Subject: Re: [PATCH] hwmon: (nct6683) Add another customer ID for NCT6687D
+ sensor chip on some MSI boards.
+Message-ID: <54471eb9-3cd0-429d-b652-07fd380f359d@roeck-us.net>
+References: <20230515144910.13514-1-llyyr.public@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515144910.13514-1-llyyr.public@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This value was found on a MSI Z690-A PRO DDR5 with NCT6687D.
+On Mon, May 15, 2023 at 08:19:10PM +0530, llyyr wrote:
+> This value was found on a MSI Z690-A PRO DDR5 with NCT6687D.
+> 
+> Signed-off-by: llyyr <llyyr.public@gmail.com>
 
-Signed-off-by: llyyr <llyyr.public@gmail.com>
----
- drivers/hwmon/nct6683.c | 3 +++
- 1 file changed, 3 insertions(+)
+This needs to be a real name.
 
-diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
-index a872f783e..f673f7d07 100644
---- a/drivers/hwmon/nct6683.c
-+++ b/drivers/hwmon/nct6683.c
-@@ -173,6 +173,7 @@ superio_exit(int ioreg)
- #define NCT6683_CUSTOMER_ID_INTEL	0x805
- #define NCT6683_CUSTOMER_ID_MITAC	0xa0e
- #define NCT6683_CUSTOMER_ID_MSI		0x201
-+#define NCT6683_CUSTOMER_ID_MSI2	0x200
- #define NCT6683_CUSTOMER_ID_ASROCK		0xe2c
- #define NCT6683_CUSTOMER_ID_ASROCK2	0xe1b
- 
-@@ -1220,6 +1221,8 @@ static int nct6683_probe(struct platform_device *pdev)
- 		break;
- 	case NCT6683_CUSTOMER_ID_MSI:
- 		break;
-+	case NCT6683_CUSTOMER_ID_MSI2:
-+		break;
- 	case NCT6683_CUSTOMER_ID_ASROCK:
- 		break;
- 	case NCT6683_CUSTOMER_ID_ASROCK2:
--- 
-2.40.1
+Guenter
 
+> ---
+>  drivers/hwmon/nct6683.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+> index a872f783e..f673f7d07 100644
+> --- a/drivers/hwmon/nct6683.c
+> +++ b/drivers/hwmon/nct6683.c
+> @@ -173,6 +173,7 @@ superio_exit(int ioreg)
+>  #define NCT6683_CUSTOMER_ID_INTEL	0x805
+>  #define NCT6683_CUSTOMER_ID_MITAC	0xa0e
+>  #define NCT6683_CUSTOMER_ID_MSI		0x201
+> +#define NCT6683_CUSTOMER_ID_MSI2	0x200
+>  #define NCT6683_CUSTOMER_ID_ASROCK		0xe2c
+>  #define NCT6683_CUSTOMER_ID_ASROCK2	0xe1b
+>  
+> @@ -1220,6 +1221,8 @@ static int nct6683_probe(struct platform_device *pdev)
+>  		break;
+>  	case NCT6683_CUSTOMER_ID_MSI:
+>  		break;
+> +	case NCT6683_CUSTOMER_ID_MSI2:
+> +		break;
+>  	case NCT6683_CUSTOMER_ID_ASROCK:
+>  		break;
+>  	case NCT6683_CUSTOMER_ID_ASROCK2:
+> -- 
+> 2.40.1
+> 
