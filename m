@@ -2,64 +2,64 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F553C77B75
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 May 2023 08:53:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AE78C7EE22
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 May 2023 09:27:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238461AbjEOIxk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 May 2023 04:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
+        id S240197AbjEOJ1a (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 May 2023 05:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238353AbjEOIxd (ORCPT
+        with ESMTP id S239176AbjEOJ1E (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 May 2023 04:53:33 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB5D1999;
-        Mon, 15 May 2023 01:53:24 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-24e24b0193fso9164279a91.2;
-        Mon, 15 May 2023 01:53:24 -0700 (PDT)
+        Mon, 15 May 2023 05:27:04 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392231BD;
+        Mon, 15 May 2023 02:26:51 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1aafa41116fso84709345ad.1;
+        Mon, 15 May 2023 02:26:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684140804; x=1686732804;
+        d=gmail.com; s=20221208; t=1684142810; x=1686734810;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
         bh=90pB5A/EQuvWbtw/9XpRxtR12GPJwYDdwY3t8pMrqK4=;
-        b=rrjJSu5dEN+5HyCOyI72T+Gvgn5XjTJ0mqt7hEQCkH4j5JM/zpR3yQIRDOTckAojYe
-         b1Mah5ub5/eI+Jrvzsc6BjDyGMqG4WheHyiy1AsKHuwrQjnefAHcDhA1pQyUbxxoQ4OR
-         7EnNI6u1vYdMk79npzgEDljrsbZ0OBqUr1RPSkagqVrbi6R6BHDpuMfnlBuvl2x1EgSb
-         YHm4ahgcOe459nrY7OUuXZ82APwIP51HAae3zuVzpJWVxlQ6Hm2bhNCA8DlRs6tI9UWx
-         LeC/rWcXd9vVtbDH/o+zAZ4NLeQ/xChbAkr/zIp6EsVyv1BXnoDpyPAf3c75Yxo6hI3K
-         VXaQ==
+        b=R/z7crlS/lPhV3h3BFgkiLR/iJZliaUKgbrxk1eP748n7dGAtbCTPRVputyxufSEV+
+         9kJ3TK/qNPlrWi2p7duVwYOwUEGwba/ZScDo2KIlmRpCJv8TEOo5Ngwu67yJIDTdgurO
+         YBmY5p/gD6m5rDc7BtdXnt5PXFyCe78Z09QxmVGUWKiLyaNiGBtRU4PaJ05OSwm0YVba
+         wfYWjkL2Xlfp6wIuS4lJ2DTEICs0iFtbpaPW3aLasQPuYl5wqgB/Vtw5jFGZkgwZNTDc
+         MFjxVTQhiSZAN3rGvDILlQUOXiYnwk5ANFMi1eWRRekFKY9NGXpQeSZ2tViByDnc/g1h
+         3COQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684140804; x=1686732804;
+        d=1e100.net; s=20221208; t=1684142810; x=1686734810;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
         bh=90pB5A/EQuvWbtw/9XpRxtR12GPJwYDdwY3t8pMrqK4=;
-        b=GTbkhW/ttOQ0KjemRNotClc2rTD4rrXUyXYnvDjnUwZEduMyNHHytqDMSUSRRVX+6p
-         fmp7MfSKkIuiCK+FXBmgc30G0ta8Bui/ll62bjkHsshI7NhXYcP40SAuFBa99m4mOU7Y
-         mbbOkJbP1S41bfWYN53mRrExitrYLJkLest+snBPmRDFjchzbpMYCDKLLfC4kp3/1Enn
-         cQmwepPXhm7NBasSqWElm1pLpg4Q1Q0WTjdvZqKzhKeauxwOvmFsuR43nNds2UBhwUTo
-         BpgiJXMAvvHg77zV8RZ/S+0v+Uvf5TzP792MTWYONes4CEcVmboxYs4TeVP70BZfBn2S
-         S3CQ==
-X-Gm-Message-State: AC+VfDy3MIdi4T5BdMDWGgwqcklryI16BSEAtZ4SRVZ8DQWRd9SzvYsV
-        7qAo9um2LIFdRxWpCcXrT7A=
-X-Google-Smtp-Source: ACHHUZ67t9VbnVUKOhfMbNA+fprqTYg2pcVWFNpKNYW8x4+/JhVaWlSW4u4tEeQp+3L0nw6ccNDXhQ==
-X-Received: by 2002:a17:90b:3004:b0:246:b6f9:148a with SMTP id hg4-20020a17090b300400b00246b6f9148amr33835665pjb.21.1684140804210;
-        Mon, 15 May 2023 01:53:24 -0700 (PDT)
+        b=BQLSdREsBOaPJWDV3ysCAItNei+6UCyu7qdnsdmyH/1v16gLZYEQtzSC3cYUNPTRuK
+         VDDT73Je6b3Wbe645WC5T7hCvVjPmhDry5nPf810s+4svrzr9e9ANd1mLhTznwLdnANK
+         ikI1L+46OL0pBQsCWrsMY5sOXpiRhFkaHcjk46JfSwbk09cSzr6V9Y1oIUzUc/MJVS96
+         OtyhCEf8nCO95GbVRofZDB6qUPE5fyc2w0xVn5B9zMQMjccHKCactLIBblLfE+qJ/pBF
+         o7CNTUPA7ResoxVM1DNjCuM8DgVRWTkqKQUn31AGbpL/HLnuMsYdiC9prpaRV/53b0BM
+         9njg==
+X-Gm-Message-State: AC+VfDxre5lJ83pkfeeEWLSvwG5X1AM1ujAp2wmYfgQvFRU6bY+pBcGR
+        hwUCxPfNQ96UG2qFSpnhEAyLXzYqHe4X0g==
+X-Google-Smtp-Source: ACHHUZ63EuXr6T3H06Ba3BCMy3sIZXN0pFAkJlCz7cVT3s+tR6hJ5mXHiII/P8Nw2wIrMgseyTGSsg==
+X-Received: by 2002:a17:902:d2c6:b0:1ab:16e0:ef49 with SMTP id n6-20020a170902d2c600b001ab16e0ef49mr43599590plc.24.1684142810639;
+        Mon, 15 May 2023 02:26:50 -0700 (PDT)
 Received: from localhost.localdomain ([103.194.71.110])
-        by smtp.gmail.com with ESMTPSA id t3-20020a17090a024300b0024499d4b72esm22078370pje.51.2023.05.15.01.53.21
+        by smtp.gmail.com with ESMTPSA id bd1-20020a170902830100b001aaecc0b6ffsm13015605plb.160.2023.05.15.02.26.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 01:53:23 -0700 (PDT)
+        Mon, 15 May 2023 02:26:50 -0700 (PDT)
 From:   llyyr <llyyr.public@gmail.com>
-Cc:     llyyr.public@gmail.com, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     llyyr <llyyr.public@gmail.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Subject: [PATCH] hwmon: (nct6683) Add another chip ID for NCT6687D sensor chip found on some MSI boards.
-Date:   Mon, 15 May 2023 14:23:07 +0530
-Message-Id: <20230515085307.18868-1-llyyr.public@gmail.com>
+Date:   Mon, 15 May 2023 14:55:46 +0530
+Message-Id: <20230515092546.21154-1-llyyr.public@gmail.com>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
