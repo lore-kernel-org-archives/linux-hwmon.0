@@ -2,85 +2,173 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8809FC7EE24
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 May 2023 20:53:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2ECBC77B75
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 May 2023 10:46:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245279AbjEOUxE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 May 2023 16:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
+        id S232211AbjEPKq7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 May 2023 06:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244817AbjEOUxD (ORCPT
+        with ESMTP id S230372AbjEPKq6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 May 2023 16:53:03 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFAD9EED;
-        Mon, 15 May 2023 13:53:01 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1aaebed5bd6so94266635ad.1;
-        Mon, 15 May 2023 13:53:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684183981; x=1686775981;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u63krdDNVLfrPpdPZ+6BGPurtOU3qe+NV5dmHvImCAg=;
-        b=W1qyfspbckSC/az3IhluIlC3RAFMg0x+d5BDA5Oer3oOR04IlM1DmY9uQsu0t7y55/
-         2YsWEOpwl/hcPtFzKi/+A9b+JJIMplOxyloFCBKmrPeBqGpfqWmjCH9S02c0VSr+7GxB
-         b6rCARWbBZCXd8DPgkmp95695PLW0vCAPGhQT0F2LryTTsoO0J6KMYC65NDNBiwMz2e2
-         ObkL5ntrDDl08C73k2EqBDZes/IroG6YQNrJnp41ryLxpMzmRx9iHE8USYkZtHOyvW2q
-         0BeoxzUU/vJ8WPIBvXO3m1imy7Z/p1AJOHEUK60Xa6G9FsCZFtERhu54biXI10KW3Zkg
-         F/nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684183981; x=1686775981;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u63krdDNVLfrPpdPZ+6BGPurtOU3qe+NV5dmHvImCAg=;
-        b=LKZ/q54aiPCcR97LGBwUgad8a7h8BlhHhkofJHtv+UKOVwauSrHGL0BLfVLqp+ttxV
-         AYkXaXm693zNNZapfzJ7rP12BOs9eWABk7AyFzS3x6cMjpdsmC3FyVTMRA3jv3tKNw7d
-         R2AEhVMVccVAcd5Ks3Cuyevth8D07uqzD4dYyCdKBLukI5IsnDcVlJxtAFdNSAO7HFM5
-         uUVcqm9RgV0Gy+1JHD/bHndZrYMD9tZ6krsAp1zZPTX23z/FGUikA2HxpZime2n7AQZC
-         dnQOoggnG4ZnoKFAOW8pEhQjs74VzmA0h8mBCZdQiME7zKBRNdgyYQOxHr3BG+26KZAe
-         ziNw==
-X-Gm-Message-State: AC+VfDznlW820Qv8cOM/ykAJQqB2/E5JbWdHz00GxcCeSTSQkpockRVL
-        N9MYJ0p6PsY9+l12OfQvoT2jDsdW9ok=
-X-Google-Smtp-Source: ACHHUZ7YpluVHjMWKFwQVvEZwF56Mg9loXHBtMgyNO6I3/3cRxlu3zez5U9amXZU9oJrv9DmQybTrA==
-X-Received: by 2002:a17:902:654c:b0:1ae:175a:44f2 with SMTP id d12-20020a170902654c00b001ae175a44f2mr5476497pln.25.1684183980886;
-        Mon, 15 May 2023 13:53:00 -0700 (PDT)
-Received: from [192.168.1.107] ([103.194.71.110])
-        by smtp.gmail.com with ESMTPSA id jj3-20020a170903048300b001a9666376a9sm13947855plb.226.2023.05.15.13.52.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 13:53:00 -0700 (PDT)
-Message-ID: <b9999e76-357f-44c3-23a0-f1554ceb11af@gmail.com>
-Date:   Tue, 16 May 2023 02:22:55 +0530
+        Tue, 16 May 2023 06:46:58 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF291BFC;
+        Tue, 16 May 2023 03:46:56 -0700 (PDT)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34G7ru2b003542;
+        Tue, 16 May 2023 06:46:33 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3qj4d6b5yd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 06:46:33 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 34GAkWmp061588
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 16 May 2023 06:46:32 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Tue, 16 May
+ 2023 06:46:31 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Tue, 16 May 2023 06:46:31 -0400
+Received: from daniel-Precision-5530.ad.analog.com ([10.48.65.214])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 34GAkHps016852;
+        Tue, 16 May 2023 06:46:20 -0400
+From:   Daniel Matyas <daniel.matyas@analog.com>
+CC:     Daniel Matyas <daniel.matyas@analog.com>,
+        Rob Herring <robh@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+Subject: [PATCH v9 1/2] dt-bindings: hwmon: add MAX31827
+Date:   Tue, 16 May 2023 13:46:06 +0300
+Message-ID: <20230516104609.7095-1-daniel.matyas@analog.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] hwmon: (nct6683) Add another customer ID for NCT6687D
- sensor chip on some MSI boards.
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230515144910.13514-1-llyyr.public@gmail.com>
- <54471eb9-3cd0-429d-b652-07fd380f359d@roeck-us.net>
-From:   llyyr <llyyr.public@gmail.com>
-In-Reply-To: <54471eb9-3cd0-429d-b652-07fd380f359d@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: MmjBDTxzrG3wWBVm2kvTt0eRChbFK2WY
+X-Proofpoint-ORIG-GUID: MmjBDTxzrG3wWBVm2kvTt0eRChbFK2WY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_04,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
+ mlxscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0
+ impostorscore=0 priorityscore=1501 adultscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305160091
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/16/23 00:29, Guenter Roeck wrote:
-> On Mon, May 15, 2023 at 08:19:10PM +0530, llyyr wrote:
->> This value was found on a MSI Z690-A PRO DDR5 with NCT6687D.
->>
->> Signed-off-by: llyyr <llyyr.public@gmail.com>
-> 
-> This needs to be a real name.
-> 
-> Guenter
-> 
+MAX31827 is a low-power temperature switch with I2C interface.
 
-Do I need to resubmit the patch, or can you change it to Gopal Prasad then?
+The device is a ±1°C accuracy from -40°C to +125°C
+(12 bits) local temperature switch and sensor with I2C/SM-
+Bus interface. The combination of small 6-bump wafer-lev-
+el package (WLP) and high accuracy makes this temper-
+ature sensor/switch ideal for a wide range of applications.
+
+Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+
+v8 -> v9: Removed the '--base' option when using 'git format-patch'
+
+I really hope it will be ok this way... 
+
+.../bindings/hwmon/adi,max31827.yaml          | 54 +++++++++++++++++++
+ MAINTAINERS                                   |  7 +++
+ 2 files changed, 61 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+new file mode 100644
+index 000000000000..2dc8b07b4d3b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/adi,max31827.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch
++
++maintainers:
++  - Daniel Matyas <daniel.matyas@analog.com>
++
++description: |
++  Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch with
++  I2C Interface
++  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31827-MAX31829.pdf
++
++properties:
++  compatible:
++    oneOf:
++      - const: adi,max31827
++      - items:
++          - enum:
++              - adi,max31828
++              - adi,max31829
++          - const: adi,max31827
++
++  reg:
++    maxItems: 1
++
++  vref-supply:
++    description:
++      Must have values in the interval (1.6V; 3.6V) in order for the device to
++      function correctly.
++
++required:
++  - compatible
++  - reg
++  - vref-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        temperature-sensor@42 {
++            compatible = "adi,max31827";
++            reg = <0x42>;
++            vref-supply = <&reg_vdd>;
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e0ad886d3163..5d5359f59af5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12617,6 +12617,13 @@ F:	Documentation/userspace-api/media/drivers/max2175.rst
+ F:	drivers/media/i2c/max2175*
+ F:	include/uapi/linux/max2175.h
+ 
++MAX31827 TEMPERATURE SWITCH DRIVER
++M:	Daniel Matyas <daniel.matyas@analog.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Supported
++W:	http://ez.analog.com/community/linux-device-drivers
++F:	Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
++
+ MAX6650 HARDWARE MONITOR AND FAN CONTROLLER DRIVER
+ L:	linux-hwmon@vger.kernel.org
+ S:	Orphan
+-- 
+2.34.1
 
