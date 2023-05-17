@@ -2,178 +2,98 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69D2AC7EE2C
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 May 2023 20:25:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AEB3C77B75
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 May 2023 04:20:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjEPUZL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 May 2023 16:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44438 "EHLO
+        id S231715AbjEQEUj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 17 May 2023 00:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbjEPUZC (ORCPT
+        with ESMTP id S229509AbjEQEUi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 May 2023 16:25:02 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2042.outbound.protection.outlook.com [40.107.244.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0FF132;
-        Tue, 16 May 2023 13:25:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O7kunu7eQukSFf2suKLEuuDy06BWYv28Oh80C2YgC8HryyxkgVX2OEL79yWoTXejg/PJedZEL+D3Jv9NHexkUFPY6D6gmwqMv28dIhypWCMiQt7IV7pmDaZWSW5skRXcqBRrpD7ppNYKzlbIarqaKjGju3SlPssm8IXZyCBMxSO42i0SBBv83bW9BLtkJ4SAe8ArFpkiNCHQ+28GN99T9VpsyYHHgL/Ar3HQMWg2trhg+3GRmh6q42Xceb1xRmhZZS2N5Y5qIZkqUXKPEzLbRz5xAhFMgCI5IPL5iGR/5KeuX6E4ufyz1zPahzqZ26EbrnRJGXI7QzjDNl6yjx+Zvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=upqSgRjvn3kgYne4u2rmiqfVXMmajGzToqGyHGD3JE4=;
- b=ij+ePoE2R1zU32Pk6OxBJ8yK3qTdbtSiSxNFHiN5egbCZkeT4AeRQ91mxe3fb7m4eJgs1dwyXID0MC5eNbosrPQ9xgrlN63KnryAkGUhirSnU/Q3+WA+IA3tAWTuMkv1msdCvX/gX5CieArl7M/SPrh7z5ZkeEksu4IbiWaHdZ0v5MO/7QXrFk5/8j02OHh8h0vAb5x4h2p+jnjO4euV2W07x+2wks2BfYPOO7PDt6assjkrwidpmp0gFuLQYIN2v98zFrGstiRVGKMu1F+DysJLq5cPu1qA+X7Uxvi39DY+EOYF34KxMNda6NtR7BeY73uGHPhR03T8cqsxueniIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=upqSgRjvn3kgYne4u2rmiqfVXMmajGzToqGyHGD3JE4=;
- b=W5vdo0ysY/07aHTncVJMcpEjJy7zzwqtYm6DuFynqlu2QqpsPFqZFgxJxWR0mTQQuqgXAhaFxkCZkT9k30HG0ITlxV4SPbwPD8x0RwYl2N/hB/lmN+geALMdNJZub//NDSKmK31zd743xKqHaYtIu1288haPf+3XrOh3NUZrh7Y=
-Received: from BN6PR17CA0046.namprd17.prod.outlook.com (2603:10b6:405:75::35)
- by PH0PR12MB7011.namprd12.prod.outlook.com (2603:10b6:510:21c::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Tue, 16 May
- 2023 20:24:56 +0000
-Received: from BN8NAM11FT054.eop-nam11.prod.protection.outlook.com
- (2603:10b6:405:75:cafe::ad) by BN6PR17CA0046.outlook.office365.com
- (2603:10b6:405:75::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33 via Frontend
- Transport; Tue, 16 May 2023 20:24:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT054.mail.protection.outlook.com (10.13.177.102) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.15 via Frontend Transport; Tue, 16 May 2023 20:24:55 +0000
-Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 16 May
- 2023 15:24:51 -0500
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     <x86@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>, <markgross@kernel.org>,
-        <hdegoede@redhat.com>, <Shyam-sundar.S-k@amd.com>,
-        <linux-edac@vger.kernel.org>, <clemens@ladisch.de>,
-        <jdelvare@suse.com>, <linux@roeck-us.net>,
-        <linux-hwmon@vger.kernel.org>, <mario.limonciello@amd.com>,
-        <babu.moger@amd.com>, Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH 6/6] hwmon: (k10temp) Reduce k10temp_get_ccd_support() parameters
-Date:   Tue, 16 May 2023 15:24:30 -0500
-Message-ID: <20230516202430.4157216-7-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230516202430.4157216-1-yazen.ghannam@amd.com>
-References: <20230516202430.4157216-1-yazen.ghannam@amd.com>
+        Wed, 17 May 2023 00:20:38 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1D5AF;
+        Tue, 16 May 2023 21:20:37 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ae54b623c2so1048725ad.3;
+        Tue, 16 May 2023 21:20:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684297237; x=1686889237;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2aoFAuuRJ+3/FgXJuVSbqFP12TbWQw7U72znx29l5uc=;
+        b=heQMvSQ1dyrAsZJ8zQwEYDR/zCov6s8Sp52fRrdVadWJzdV6EQ9TIREO/His8NtXRP
+         qnDLa7s8qV/15DeIp0TYXdXgLmgFrPOmR/Ss1nEVIe9ayA1ng+j5r6xeN8v7lpQyIW1d
+         e4m06tVViNy2S8jVSYlkm/9IynBoeCQ64mkspHEgZ38vmp3D67su1UQm3Tlx4ckwesAy
+         QS55fBbLIqReCbnKT750tgoxaA6GWaeUPui0Fqw+a4TFzqF2OugY2bFJNIbnGnTrNp/W
+         Xix/1E7uYgMCpNkGwArB8bxypCrIaAyibcB/U8+IMnbA62qJqALBhJ8mE/MrUmxM630m
+         H2mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684297237; x=1686889237;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2aoFAuuRJ+3/FgXJuVSbqFP12TbWQw7U72znx29l5uc=;
+        b=RcHm0eJQ/hWg8RAHdnByLZke9U5rIxIIky75kQVCDCXO3qok3K989qm494JorMrM37
+         DRCR836impswol88dLqT29uPq3xErYpXz6bRMG47ldeljbSkE9pazjRyzSrkAd3rK5Oq
+         HEihd2uf2+Zz4v1okG2IyMkw4HI9VJ6qsBaQKISal/0nzYkID9j/RHWjlfoXTHM3ywG/
+         Vcozzlw6O8fQzNVz+5qcljqSXUebSex2WvfNjlUzjhYDSOAm8x+dKYb5fXD4GQhIJZYz
+         PrrTUrHWv8VX0CbuX4kOzwf3Ag7W696dMrcQOX5+gcsdFfhVIDW8ocC8Q05AC5Sk4/sj
+         AKag==
+X-Gm-Message-State: AC+VfDwEBomSjrF/8Y1xvaqlbcbki+yoP/KWFFkIZC+CYD4KXjKd8pD5
+        RVnt8Dfz6V00XPgIv2EH9ak=
+X-Google-Smtp-Source: ACHHUZ4vp2o4Yf3m9Fq/OZYBym9MUmCXdpyllWFF9srlJYzjkK/oJLc8OL+jdDtdZp6qJmNQFQHJiQ==
+X-Received: by 2002:a17:903:230e:b0:1ab:1b45:7972 with SMTP id d14-20020a170903230e00b001ab1b457972mr47914643plh.0.1684297236766;
+        Tue, 16 May 2023 21:20:36 -0700 (PDT)
+Received: from localhost.localdomain ([103.194.71.110])
+        by smtp.gmail.com with ESMTPSA id r15-20020a170903020f00b001aae625e422sm16383057plh.37.2023.05.16.21.20.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 21:20:36 -0700 (PDT)
+From:   Gopal Prasad <llyyr.public@gmail.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     llyyr <llyyr.public@gmail.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (nct6683) Add another customer ID for NCT6687D sensor chip on some MSI boards.
+Date:   Wed, 17 May 2023 09:50:25 +0530
+Message-Id: <20230517042025.16942-1-llyyr.public@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT054:EE_|PH0PR12MB7011:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5d542207-6bd2-4fe9-0be6-08db564b9cae
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3Q00+mEaaWNMa0Jkoky6j49pr/oCmL50EvJkg3lQ0Hf8MdS+zw8wheKF3iIBVxZifgyANnruXyGSM2bgjjqL7qNu33oJxN3mSDKR3tLaSyJyVQRYXVD/bjS8paJjzZy9njNIGZKJ/oQ1wrFhQMj4CgIQ/TY9ZkxNx83vm/kmJi4wZzATnXA6FVVPPnmTT+ba2kIMU/bSKCtsTwNuSAzzbAdFCyoOH3QvAXhBU1mXC/S1xPbso+mlW1H1KWeVpB1YEmBroH3z40/n5LHkKlDxDE2YwnkByBQV1UkhI7yEdqskf04dFVVv3EXVKq6Mbd46fvj2pkO0+UUrmsnTNdfEjJkhZVtnLNUWnSFnexetwr9Q/wpr5B18Txk/hNtHkUbgBIJxzpgeqEZw0sJra4qZo04O0IlSmnjwaNsMNDU1P4ccYxtYsX6A8pW4bW5nPv/Q6OHvR6hGrGrMJv9SW8Z0I5wGayk5+oSTzdZvKAZzg2xymD/cPjYSnFV1/tvxmPQYof1WXqeAltvj/L10lYlRmYNeyPwX95fJ+BX1dOV/QUTf3/cu4Kr4B0EeQdp2lXTTWg9ifhQMHO1sCmAJn8wL5eZqAiOw0YdwaFpIHJhYEc4g7izRRdFOmBLWaEOXvZ7q8F0o9HnoR6OyMYMK8CLRUdakOoU9Am6/+kTwN9/qkI02za7GGnildtdzvuDSZHK6v4BYsV4zEotNCH7CxEBHPS/ItDV3BwXOeONXLnhJmNsvwxI4rv35DHo0S6VslpmCAgnGAa8CT/2qHEGmOugVSA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(39860400002)(346002)(451199021)(46966006)(36840700001)(40470700004)(82740400003)(83380400001)(478600001)(54906003)(70586007)(70206006)(6666004)(7696005)(41300700001)(6916009)(36756003)(86362001)(40460700003)(4326008)(316002)(82310400005)(40480700001)(36860700001)(1076003)(336012)(47076005)(2616005)(426003)(356005)(81166007)(186003)(5660300002)(2906002)(44832011)(7416002)(8676002)(8936002)(26005)(16526019)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 20:24:55.3932
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d542207-6bd2-4fe9-0be6-08db564b9cae
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT054.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7011
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Currently, k10temp_get_ccd_support() takes as input "pdev" and "data".
-However, "pdev" is already included in "data". Furthermore, the "pdev"
-parameter is no longer used in k10temp_get_ccd_support(), since its use
-was moved into read_ccd_temp_reg().
+From: llyyr <llyyr.public@gmail.com>
 
-Drop the "pdev" input parameter as it is no longer needed.
+This value was found on a MSI Z690-A PRO DDR5 with NCT6687D.
 
-No functional change is intended.
-
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Gopal Prasad <llyyr.public@gmail.com>
 ---
- drivers/hwmon/k10temp.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+ drivers/hwmon/nct6683.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 06af1fe38af7..873dbe0f5806 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -379,8 +379,7 @@ static const struct hwmon_chip_info k10temp_chip_info = {
- 	.info = k10temp_info,
- };
+diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+index a872f783e..f673f7d07 100644
+--- a/drivers/hwmon/nct6683.c
++++ b/drivers/hwmon/nct6683.c
+@@ -173,6 +173,7 @@ superio_exit(int ioreg)
+ #define NCT6683_CUSTOMER_ID_INTEL	0x805
+ #define NCT6683_CUSTOMER_ID_MITAC	0xa0e
+ #define NCT6683_CUSTOMER_ID_MSI		0x201
++#define NCT6683_CUSTOMER_ID_MSI2	0x200
+ #define NCT6683_CUSTOMER_ID_ASROCK		0xe2c
+ #define NCT6683_CUSTOMER_ID_ASROCK2	0xe1b
  
--static void k10temp_get_ccd_support(struct pci_dev *pdev,
--				    struct k10temp_data *data, int limit)
-+static void k10temp_get_ccd_support(struct k10temp_data *data, int limit)
- {
- 	u32 regval;
- 	int i;
-@@ -435,18 +434,18 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		case 0x11:	/* Zen APU */
- 		case 0x18:	/* Zen+ APU */
- 			data->ccd_offset = 0x154;
--			k10temp_get_ccd_support(pdev, data, 4);
-+			k10temp_get_ccd_support(data, 4);
- 			break;
- 		case 0x31:	/* Zen2 Threadripper */
- 		case 0x60:	/* Renoir */
- 		case 0x68:	/* Lucienne */
- 		case 0x71:	/* Zen2 */
- 			data->ccd_offset = 0x154;
--			k10temp_get_ccd_support(pdev, data, 8);
-+			k10temp_get_ccd_support(data, 8);
- 			break;
- 		case 0xa0 ... 0xaf:
- 			data->ccd_offset = 0x300;
--			k10temp_get_ccd_support(pdev, data, 8);
-+			k10temp_get_ccd_support(data, 8);
- 			break;
- 		}
- 	} else if (boot_cpu_data.x86 == 0x19) {
-@@ -459,21 +458,21 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		case 0x21:		/* Zen3 Ryzen Desktop */
- 		case 0x50 ... 0x5f:	/* Green Sardine */
- 			data->ccd_offset = 0x154;
--			k10temp_get_ccd_support(pdev, data, 8);
-+			k10temp_get_ccd_support(data, 8);
- 			break;
- 		case 0x40 ... 0x4f:	/* Yellow Carp */
- 			data->ccd_offset = 0x300;
--			k10temp_get_ccd_support(pdev, data, 8);
-+			k10temp_get_ccd_support(data, 8);
- 			break;
- 		case 0x60 ... 0x6f:
- 		case 0x70 ... 0x7f:
- 			data->ccd_offset = 0x308;
--			k10temp_get_ccd_support(pdev, data, 8);
-+			k10temp_get_ccd_support(data, 8);
- 			break;
- 		case 0x10 ... 0x1f:
- 		case 0xa0 ... 0xaf:
- 			data->ccd_offset = 0x300;
--			k10temp_get_ccd_support(pdev, data, 12);
-+			k10temp_get_ccd_support(data, 12);
- 			break;
- 		}
- 	} else {
+@@ -1220,6 +1221,8 @@ static int nct6683_probe(struct platform_device *pdev)
+ 		break;
+ 	case NCT6683_CUSTOMER_ID_MSI:
+ 		break;
++	case NCT6683_CUSTOMER_ID_MSI2:
++		break;
+ 	case NCT6683_CUSTOMER_ID_ASROCK:
+ 		break;
+ 	case NCT6683_CUSTOMER_ID_ASROCK2:
 -- 
-2.34.1
+2.40.1
 
