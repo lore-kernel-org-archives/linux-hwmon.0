@@ -2,98 +2,161 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AEB3C77B75
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 May 2023 04:20:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D5B6C7EE22
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 May 2023 12:25:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbjEQEUj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 17 May 2023 00:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46006 "EHLO
+        id S231622AbjEQMZK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 17 May 2023 08:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjEQEUi (ORCPT
+        with ESMTP id S231381AbjEQMZJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 17 May 2023 00:20:38 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1D5AF;
-        Tue, 16 May 2023 21:20:37 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ae54b623c2so1048725ad.3;
-        Tue, 16 May 2023 21:20:37 -0700 (PDT)
+        Wed, 17 May 2023 08:25:09 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F84193;
+        Wed, 17 May 2023 05:25:08 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53202149ae2so471241a12.3;
+        Wed, 17 May 2023 05:25:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684297237; x=1686889237;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2aoFAuuRJ+3/FgXJuVSbqFP12TbWQw7U72znx29l5uc=;
-        b=heQMvSQ1dyrAsZJ8zQwEYDR/zCov6s8Sp52fRrdVadWJzdV6EQ9TIREO/His8NtXRP
-         qnDLa7s8qV/15DeIp0TYXdXgLmgFrPOmR/Ss1nEVIe9ayA1ng+j5r6xeN8v7lpQyIW1d
-         e4m06tVViNy2S8jVSYlkm/9IynBoeCQ64mkspHEgZ38vmp3D67su1UQm3Tlx4ckwesAy
-         QS55fBbLIqReCbnKT750tgoxaA6GWaeUPui0Fqw+a4TFzqF2OugY2bFJNIbnGnTrNp/W
-         Xix/1E7uYgMCpNkGwArB8bxypCrIaAyibcB/U8+IMnbA62qJqALBhJ8mE/MrUmxM630m
-         H2mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684297237; x=1686889237;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1684326308; x=1686918308;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2aoFAuuRJ+3/FgXJuVSbqFP12TbWQw7U72znx29l5uc=;
-        b=RcHm0eJQ/hWg8RAHdnByLZke9U5rIxIIky75kQVCDCXO3qok3K989qm494JorMrM37
-         DRCR836impswol88dLqT29uPq3xErYpXz6bRMG47ldeljbSkE9pazjRyzSrkAd3rK5Oq
-         HEihd2uf2+Zz4v1okG2IyMkw4HI9VJ6qsBaQKISal/0nzYkID9j/RHWjlfoXTHM3ywG/
-         Vcozzlw6O8fQzNVz+5qcljqSXUebSex2WvfNjlUzjhYDSOAm8x+dKYb5fXD4GQhIJZYz
-         PrrTUrHWv8VX0CbuX4kOzwf3Ag7W696dMrcQOX5+gcsdFfhVIDW8ocC8Q05AC5Sk4/sj
-         AKag==
-X-Gm-Message-State: AC+VfDwEBomSjrF/8Y1xvaqlbcbki+yoP/KWFFkIZC+CYD4KXjKd8pD5
-        RVnt8Dfz6V00XPgIv2EH9ak=
-X-Google-Smtp-Source: ACHHUZ4vp2o4Yf3m9Fq/OZYBym9MUmCXdpyllWFF9srlJYzjkK/oJLc8OL+jdDtdZp6qJmNQFQHJiQ==
-X-Received: by 2002:a17:903:230e:b0:1ab:1b45:7972 with SMTP id d14-20020a170903230e00b001ab1b457972mr47914643plh.0.1684297236766;
-        Tue, 16 May 2023 21:20:36 -0700 (PDT)
-Received: from localhost.localdomain ([103.194.71.110])
-        by smtp.gmail.com with ESMTPSA id r15-20020a170903020f00b001aae625e422sm16383057plh.37.2023.05.16.21.20.33
+        bh=fEGoGpyrR60B8AjfNbHQnj78PfieDYrQkkUy4eueo0Q=;
+        b=kML+gvuAXtKqecLJrYpLLONtf5q3VxVj0mH3+jLLtkrkQE8d0WMDK3AeuWKiwiVBp6
+         CaxruwpHKGXvSNpTOiZ4WdaHHyG+gizh3lTsL7qFJ8fRgdCLVMZlxDGXLjjydp9T9iZf
+         v0wHNvQEkKfdpantj/99n9AktsRB8s+2WZlSolJJNo6MVJF8C1yg3HvCYMdZ4JCQn0sa
+         gwK+NvVHhiE20LuxQxyJqhYUXWpE1qCz5M/K4+4785N0wj2CkXV8SsjdN2TQFYq/toJG
+         /L9R5GU9GnqA82WbP/Zrx1wlDqJIti20Mc+hbYt9s5BdBP/0VKLOYUBfIF/2b4rEnllD
+         n4Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684326308; x=1686918308;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fEGoGpyrR60B8AjfNbHQnj78PfieDYrQkkUy4eueo0Q=;
+        b=S2GNJJcyzKFiYF0ukg3mSW9NWiSUCEDQasmcCahv8uf4JbCV+y10hJWJpAm4XjC8DA
+         AfwSAha9ewiT9HPj553DtYoPaemQ95fCW8tUfvugLerh2Bh8Tf4vXqMUrnbY745Oi+wE
+         fBpHxkxToxcEHKedLQWv+wn7ZmQRy5cBcA0AfYM6tFh6wPa5boLmruEvdM92T/SKUN8K
+         32b7iW0IMjoDWHME2FSUFb1PtbdpLGpPa7Rt1fmA8rShzFsZOoXoCARfD8LPJJyZONk3
+         e3WLkYyy0INiz5W+BCclcGhalfSiforUDp3KKQ8mTg5t8SIN+MBMh2pmjahTX5N/q4I2
+         81+w==
+X-Gm-Message-State: AC+VfDxHSBNMWvxd+MyfUZuVrZ+0/Uh9EDRrQlfm/EbyPQtYwnhy18v3
+        0zkqHDgLgXKdGf4IuvvEX6ccHOw5I2A=
+X-Google-Smtp-Source: ACHHUZ7tqN6XkclPOdB4GxCwvfImnp1nRD4DeA0mvf0+zmf9LZjB55uWWQyMz3U1XE9oy2JrH/3jiA==
+X-Received: by 2002:a05:6a20:8416:b0:ec:d7cf:bcf7 with SMTP id c22-20020a056a20841600b000ecd7cfbcf7mr51311098pzd.17.1684326307884;
+        Wed, 17 May 2023 05:25:07 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c25-20020a631c59000000b005143448896csm15283973pgm.58.2023.05.17.05.25.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 21:20:36 -0700 (PDT)
-From:   Gopal Prasad <llyyr.public@gmail.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     llyyr <llyyr.public@gmail.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (nct6683) Add another customer ID for NCT6687D sensor chip on some MSI boards.
-Date:   Wed, 17 May 2023 09:50:25 +0530
-Message-Id: <20230517042025.16942-1-llyyr.public@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Wed, 17 May 2023 05:25:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 17 May 2023 05:25:06 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, markgross@kernel.org,
+        hdegoede@redhat.com, Shyam-sundar.S-k@amd.com,
+        linux-edac@vger.kernel.org, clemens@ladisch.de, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, mario.limonciello@amd.com,
+        babu.moger@amd.com
+Subject: Re: [PATCH 3/6] hwmon: (k10temp) Check return value of amd_smn_read()
+Message-ID: <f3cce515-845c-480e-a096-8e24e0079454@roeck-us.net>
+References: <20230516202430.4157216-1-yazen.ghannam@amd.com>
+ <20230516202430.4157216-4-yazen.ghannam@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516202430.4157216-4-yazen.ghannam@amd.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: llyyr <llyyr.public@gmail.com>
+On Tue, May 16, 2023 at 03:24:27PM -0500, Yazen Ghannam wrote:
+> Check the return value of amd_smn_read() before saving a value. This
+> ensures invalid values aren't saved or used.
+> 
+> There are three cases here with slightly different behavior.
+> 
+> 1) read_tempreg_nb_zen():
+> 	This is a function pointer which does not include a return code.
+> 	In this case, set the register value to 0 on failure. This
+> 	enforces Read-as-Zero behavior.
+> 
+> 2) k10temp_read_temp():
+> 	This function does have return codes, so return -EINVAL on a
+> 	failed register read. Continued operation is not necessary,
+> 	since there is no valid data from the register. Furthermore, if
+> 	the register value was set to 0, then the following operation
+> 	would underflow.
+> 
+> 3) k10temp_get_ccd_support():
+> 	This function reads the same register from multiple CCD
+> 	instances in a loop. And a bitmask is formed if a specific bit
+> 	is set in each register instance. The loop should continue on a
+> 	failed register read, skipping the bit check.
+> 
+> Furthermore, the __must_check attribute will be added to amd_smn_read().
+> Therefore, this change is required to avoid compile-time warnings.
+> 
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/hwmon/k10temp.c | 19 ++++++++++++-------
+>  1 file changed, 12 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+> index 7b177b9fbb09..6ea1fa62b7c1 100644
+> --- a/drivers/hwmon/k10temp.c
+> +++ b/drivers/hwmon/k10temp.c
+> @@ -145,8 +145,9 @@ static void read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
+>  
+>  static void read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
+>  {
+> -	amd_smn_read(amd_pci_dev_to_node_id(pdev),
+> -		     ZEN_REPORTED_TEMP_CTRL_BASE, regval);
+> +	if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
+> +			 ZEN_REPORTED_TEMP_CTRL_BASE, regval))
+> +		*regval = 0;
+>  }
+>  
+>  static long get_raw_temp(struct k10temp_data *data)
+> @@ -213,9 +214,11 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+>  				*val = 0;
+>  			break;
+>  		case 2 ... 13:		/* Tccd{1-12} */
+> -			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
+> -				     ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
+> -						  &regval);
+> +			if (amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
+> +					 ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
+> +					 &regval))
+> +				return -EINVAL;
+> +
 
-This value was found on a MSI Z690-A PRO DDR5 with NCT6687D.
+-EINVAL: Invalid Argument, supposed to be used for bad user input.
+I don't see how that would apply here. amd_smn_read() returns
+a valid error code. This error core should be returned to the caller,
+or there needs to be an explanation why this is not appropriate.
 
-Signed-off-by: Gopal Prasad <llyyr.public@gmail.com>
----
- drivers/hwmon/nct6683.c | 3 +++
- 1 file changed, 3 insertions(+)
+>  			*val = (regval & ZEN_CCD_TEMP_MASK) * 125 - 49000;
+>  			break;
+>  		default:
+> @@ -373,8 +376,10 @@ static void k10temp_get_ccd_support(struct pci_dev *pdev,
+>  	int i;
+>  
+>  	for (i = 0; i < limit; i++) {
+> -		amd_smn_read(amd_pci_dev_to_node_id(pdev),
+> -			     ZEN_CCD_TEMP(data->ccd_offset, i), &regval);
+> +		if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
+> +				 ZEN_CCD_TEMP(data->ccd_offset, i), &regval))
+> +			continue;
+> +
+The reason for ignoring the error should be explained here.
 
-diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
-index a872f783e..f673f7d07 100644
---- a/drivers/hwmon/nct6683.c
-+++ b/drivers/hwmon/nct6683.c
-@@ -173,6 +173,7 @@ superio_exit(int ioreg)
- #define NCT6683_CUSTOMER_ID_INTEL	0x805
- #define NCT6683_CUSTOMER_ID_MITAC	0xa0e
- #define NCT6683_CUSTOMER_ID_MSI		0x201
-+#define NCT6683_CUSTOMER_ID_MSI2	0x200
- #define NCT6683_CUSTOMER_ID_ASROCK		0xe2c
- #define NCT6683_CUSTOMER_ID_ASROCK2	0xe1b
- 
-@@ -1220,6 +1221,8 @@ static int nct6683_probe(struct platform_device *pdev)
- 		break;
- 	case NCT6683_CUSTOMER_ID_MSI:
- 		break;
-+	case NCT6683_CUSTOMER_ID_MSI2:
-+		break;
- 	case NCT6683_CUSTOMER_ID_ASROCK:
- 		break;
- 	case NCT6683_CUSTOMER_ID_ASROCK2:
--- 
-2.40.1
-
+>  		if (regval & ZEN_CCD_TEMP_VALID)
+>  			data->show_temp |= BIT(TCCD_BIT(i));
+>  	}
+> -- 
+> 2.34.1
+> 
