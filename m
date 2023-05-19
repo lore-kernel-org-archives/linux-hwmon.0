@@ -2,166 +2,170 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C27E7C77B7A
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 May 2023 13:34:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E56E8C77B75
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 May 2023 13:44:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjESNe6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 May 2023 09:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53058 "EHLO
+        id S229981AbjESNoO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 May 2023 09:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbjESNet (ORCPT
+        with ESMTP id S229524AbjESNoN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 May 2023 09:34:49 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD94BA1
-        for <linux-hwmon@vger.kernel.org>; Fri, 19 May 2023 06:34:48 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64d3578c25bso601902b3a.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 19 May 2023 06:34:48 -0700 (PDT)
+        Fri, 19 May 2023 09:44:13 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4EABB
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 May 2023 06:44:11 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1ae452c2777so6582765ad.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 May 2023 06:44:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684503288; x=1687095288;
+        d=gmail.com; s=20221208; t=1684503850; x=1687095850;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Ue6IlpFzRJeo0akOn8qPsmw6b6KPmwZSaJBnVp/l85w=;
-        b=YPI0tKHwFH8zfJKeNBg7HCF46wENu8TetPB5Tf4ZOYp7lgXVcICWNY4G1GgqId6QLj
-         goLBRSeYr/6azckeG7vaXAdRNEEzwywMplj8HMZSBX0HQAGZ+YYJgpnwixJjf0w+R+AS
-         laDkxUEuXFRI+1d4E64CQrUtZmbmFKaBdh7I/KMC3jyDdZxziRfsrKytxMBaczqeVZan
-         s/a9Rw02bHTM4fASbaORgF6hJskJid6eH/oUZUwbkGbjrg4+/GAg3XrzrZXpmg5TKHHm
-         +4fW6WoLo+IAiJvDD8pZwOhwhJI6fa9tTPTZN15g/NBlZfXY8SOBsmxmMKrXmNRXh7Y2
-         byNQ==
+        bh=flZYUFrQa1G+ajNcjv7M8ohgaFNaDyCQm2DQQNtCRqk=;
+        b=g0NEHCfXzAA/GyVkYM17ePcTU/VWPG+diYOd2n/WWqE+i2Flda2ZK13yquHRm3fTWg
+         Z40mfEdx4A0YjwttLOKPWPYdgLR7OBfXZpWgUu2hNuZ3I+p8UX4lXR4RGG+6mUO88Y8S
+         xVh57B02gDv3xwfnKdyma3XIdbNigSYsHuqdlo7ZMydEXgvEnodUBk9I63Lalwujii/c
+         PWRFqN/fsOSDOM9VRPA+IeHXffVzk3Oz6AmhNnYmqDwmR6rkehaYTVe1kMLgz2nLF4sY
+         MNPBD0NDwmh9lrUylyH3WzaF+jE/kcuU4gaNNDKJEzhrAPMSsZb3bQAXsq8FxSyx0ifN
+         tgOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684503288; x=1687095288;
+        d=1e100.net; s=20221208; t=1684503850; x=1687095850;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ue6IlpFzRJeo0akOn8qPsmw6b6KPmwZSaJBnVp/l85w=;
-        b=cS6ckxnPvpTCja3RiqC8wrqnUIm76h5cHB4BQu1UWoO9qxKGur1MC3OvNrftfvLEg/
-         Cx+TBQEg8eq/bi0Ml+UWl+V67tSacgmfcKlPGtebyZuxqvK400t6gvY1alk1dpugNC3R
-         7a8n2K8ryypq1NJs80NrkupG9nHAIvzvoSHRm9FFWxFjZN9BnPaU9jLq3XZU+tNcbwKq
-         ceQdRaboz8hFMNl3a8YZs7mx3Epx311JlFraSWEkjntYunS8XMEEfsk/VBeJmMnzXYYm
-         06+MK0d15XgypzM+mb+gfdqu6Ov3zffdE6GxqQFa1tli3Q3NEoqSzK1bt+9q/2DrBvLj
-         JlGA==
-X-Gm-Message-State: AC+VfDw8oLNb2KshTF4XQKydFbr4Suqs+n9G2tNkzIDpIE/fEyVNTL7Q
-        xOAlSDIWwTo17hMiYS8q22A=
-X-Google-Smtp-Source: ACHHUZ4FDBGwzVrR4RZyBkZeGkW/YAFmx7usGqIv53qdQo+8yq+jsNitrb6ZkWnRmNx8573AI4rA5A==
-X-Received: by 2002:a05:6a20:e68e:b0:101:2160:ff89 with SMTP id mz14-20020a056a20e68e00b001012160ff89mr2050222pzb.38.1684503288273;
-        Fri, 19 May 2023 06:34:48 -0700 (PDT)
+        bh=flZYUFrQa1G+ajNcjv7M8ohgaFNaDyCQm2DQQNtCRqk=;
+        b=FzOW3M4h9o3gyGy3MwGEWYXsni372L8DhPoM7j4G3KJkimTF9pMg2w6k/OqM2BiPjp
+         jw87H45seI2jrjPfeVwHk8qFzHjigeeHzyLGZCsbilTLHpcHieeeNlM6J4Uw1H3XuiKL
+         4FtQeivM3EwKTvCDbq0pn9zgM16QIXp6Ayf6lYhsSTwWOH+CpMF7tO+ajuGBWotgh7zx
+         ZNRc4reKohvnKj9XtHqhxfo9eak95kGvRQV+bV/dyQ8bUlZWzhdOWB6wcqellWfQbMd3
+         ACj+05eenpwefzGX3ff88k/dGLwZPwFy9fkAhCL2ew6yKvo8Urjq8EttHk2cj8oL9/OB
+         NP7g==
+X-Gm-Message-State: AC+VfDyLxOba5NpsNutvv2pEAK+D7O4y/M8PEOgr4kLM4m5mN1oSlM63
+        i3Z41yil66a86OI9KcSkYTr9zNcDBMU=
+X-Google-Smtp-Source: ACHHUZ4BkHEU3QMTrg+IchvJBbaNIHS2zx8xmXbsIk1nOm11oc1+BNZKcMpT2pd2jS+yFdhQxDuYnw==
+X-Received: by 2002:a17:902:d4c2:b0:1a9:6604:2b1b with SMTP id o2-20020a170902d4c200b001a966042b1bmr2724105plg.20.1684503850582;
+        Fri, 19 May 2023 06:44:10 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e23-20020a63e017000000b0051303d3e3c5sm3086422pgh.42.2023.05.19.06.34.47
+        by smtp.gmail.com with ESMTPSA id q7-20020a170902edc700b001ae0b373382sm3448448plk.198.2023.05.19.06.44.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 06:34:47 -0700 (PDT)
+        Fri, 19 May 2023 06:44:10 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 19 May 2023 06:34:46 -0700
+Date:   Fri, 19 May 2023 06:44:09 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Kirill Yatsenko <kiriyatsenko@gmail.com>
 Cc:     linux-hwmon@vger.kernel.org, delvare@suse.com, jcdra1@gmail.com
-Subject: Re: [PATCH 2/3] hwmon: (aht10) Refactor aht10_read_values function
-Message-ID: <55a1e9c6-c7ab-4a49-8130-561293760dea@roeck-us.net>
+Subject: Re: [PATCH 3/3] hwmon: (aht10) Add support for compatible aht20
+Message-ID: <dbc4cf0f-1cd7-4294-976c-e1a718cc896a@roeck-us.net>
 References: <20230511202633.299174-1-kiriyatsenko@gmail.com>
- <20230511202633.299174-2-kiriyatsenko@gmail.com>
+ <20230511202633.299174-3-kiriyatsenko@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230511202633.299174-2-kiriyatsenko@gmail.com>
+In-Reply-To: <20230511202633.299174-3-kiriyatsenko@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, May 11, 2023 at 10:26:32PM +0200, Kirill Yatsenko wrote:
-> Exit from the function immediately if the poll time hasn't yet expired.
-> Therefore the code after the check can be moved one tab to the left which
-> improves readability.
+On Thu, May 11, 2023 at 10:26:33PM +0200, Kirill Yatsenko wrote:
+> Add support for compatible AHT20 temperature/humidity sensor. The only
+> software difference between the two is that AHT20 has additional crc8
+> byte.
+> 
+> It seems like AHT15 is also supported by the driver but it wasn't
+> verified and tested yet.
+> 
+> Tested on Beaglebone black rev C.
 > 
 > Signed-off-by: Kirill Yatsenko <kiriyatsenko@gmail.com>
 > ---
->  drivers/hwmon/aht10.c | 67 ++++++++++++++++++++++---------------------
->  1 file changed, 35 insertions(+), 32 deletions(-)
+>  Documentation/hwmon/aht10.rst | 20 +++++++++----
+>  drivers/hwmon/Kconfig         | 11 +++++--
+>  drivers/hwmon/aht10.c         | 54 ++++++++++++++++++++++++++++-------
+>  3 files changed, 68 insertions(+), 17 deletions(-)
 > 
-> diff --git a/drivers/hwmon/aht10.c b/drivers/hwmon/aht10.c
-> index 87a433e570e1..17ceec9aab66 100644
-> --- a/drivers/hwmon/aht10.c
-> +++ b/drivers/hwmon/aht10.c
-> @@ -135,40 +135,43 @@ static int aht10_read_values(struct aht10_data *data)
->  	struct i2c_client *client = data->client;
+> diff --git a/Documentation/hwmon/aht10.rst b/Documentation/hwmon/aht10.rst
+> index 4e198c5eb683..213644b4ecba 100644
+> --- a/Documentation/hwmon/aht10.rst
+> +++ b/Documentation/hwmon/aht10.rst
+> @@ -5,32 +5,42 @@ Kernel driver aht10
 >  
->  	mutex_lock(&data->lock);
-> -	if (aht10_polltime_expired(data)) {
-> -		res = i2c_master_send(client, cmd_meas, sizeof(cmd_meas));
-> -		if (res < 0) {
-> -			mutex_unlock(&data->lock);
-> +	if (!aht10_polltime_expired(data)) {
-> +		mutex_unlock(&data->lock);
-> +		return 0;
-> +	}
+>  Supported chips:
+>  
+> -  * Aosong AHT10
+> +  * Aosong AHT10/AHT20
+>  
+>      Prefix: 'aht10'
+>  
+>      Addresses scanned: None
+>  
+> -    Datasheet:
+> +    Datasheet(AHT10):
+>  
+>        Chinese: http://www.aosong.com/userfiles/files/media/AHT10%E4%BA%A7%E5%93%81%E6%89%8B%E5%86%8C%20A3%2020201210.pdf
+>        English: https://server4.eca.ir/eshop/AHT10/Aosong_AHT10_en_draft_0c.pdf
+>  
+> +    Datasheet(AHT20):
 > +
-> +	res = i2c_master_send(client, cmd_meas, sizeof(cmd_meas));
-> +	if (res < 0) {
-> +		mutex_unlock(&data->lock);
-> +		return res;
-> +	}
+> +      English: http://www.aosong.com/userfiles/files/media/Data%20Sheet%20AHT20.pdf
 > +
-> +	usleep_range(AHT10_MEAS_DELAY, AHT10_MEAS_DELAY + AHT10_DELAY_EXTRA);
+>  Author: Johannes Cornelis Draaijer <jcdra1@gmail.com>
+>  
+>  
+>  Description
+>  -----------
+>  
+> -The AHT10 is a Temperature and Humidity sensor
+> +The AHT10/AHT20 is a Temperature and Humidity sensor
+>  
+>  The address of this i2c device may only be 0x38
+>  
+> +Special Features
+> +----------------
 > +
-> +	res = i2c_master_recv(client, raw_data, AHT10_MEAS_SIZE);
-> +	if (res != AHT10_MEAS_SIZE) {
-> +		mutex_unlock(&data->lock);
-> +		if (res >= 0)
-> +			return -ENODATA;
-> +		else
->  			return res;
+> +AHT20 has additional CRC8 support which is sent as the last byte of the sensor
+> +values.
+> +
+>  Usage Notes
+>  -----------
+>  
+> -This driver does not probe for AHT10 devices, as there is no reliable
+> -way to determine if an i2c chip is or isn't an AHT10. The device has
+> +This driver does not probe for AHT10/ATH20 devices, as there is no reliable
+> +way to determine if an i2c chip is or isn't an AHT10/AHT20. The device has
+>  to be instantiated explicitly with the address 0x38. See
+>  Documentation/i2c/instantiating-devices.rst for details.
+>  
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index fc640201a2de..ccb295312102 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -255,15 +255,22 @@ config SENSORS_ADT7475
+>  	  will be called adt7475.
+>  
+>  config SENSORS_AHT10
+> -	tristate "Aosong AHT10"
+> +	tristate "Aosong AHT10, AHT20"
+>  	depends on I2C
+>  	help
+> -	  If you say yes here, you get support for the Aosong AHT10
+> +	  If you say yes here, you get support for the Aosong AHT10 and AHT20
+>  	  temperature and humidity sensors
+>  
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called aht10.
+>  
+> +config SENSORS_AHT20_CRC
+> +	bool "Aosong AHT20 crc8 check"
+> +	depends on SENSORS_AHT10
+> +	select CRC8
+> +	help
+> +	  If you say yes here, you get support for the Aosong AHT20 CRC8 check
+> +
 
-else after return is pointless (and static analyzers complain about it).
-
-No need to resend (I see it is inherited from old code). I'll fix it up
-when applying the patch.
+This is not an appropriate configuration flag. aht20 needs to be added
+to aht10_id, and the code needs to use a flag in driver data (struct
+aht10_data) to determine if the crc check needs to be applied or not.
+There must be no related ifdefs in the code.
 
 Guenter
-
-> -		}
-> -
-> -		usleep_range(AHT10_MEAS_DELAY,
-> -			     AHT10_MEAS_DELAY + AHT10_DELAY_EXTRA);
-> -
-> -		res = i2c_master_recv(client, raw_data, AHT10_MEAS_SIZE);
-> -		if (res != AHT10_MEAS_SIZE) {
-> -			mutex_unlock(&data->lock);
-> -			if (res >= 0)
-> -				return -ENODATA;
-> -			else
-> -				return res;
-> -		}
-> -
-> -		hum =   ((u32)raw_data[1] << 12u) |
-> -			((u32)raw_data[2] << 4u) |
-> -			((raw_data[3] & 0xF0u) >> 4u);
-> -
-> -		temp =  ((u32)(raw_data[3] & 0x0Fu) << 16u) |
-> -			((u32)raw_data[4] << 8u) |
-> -			raw_data[5];
-> -
-> -		temp = ((temp * 625) >> 15u) * 10;
-> -		hum = ((hum * 625) >> 16u) * 10;
-> -
-> -		data->temperature = (int)temp - 50000;
-> -		data->humidity = hum;
-> -		data->previous_poll_time = ktime_get_boottime();
->  	}
-> +
-> +	hum =   ((u32)raw_data[1] << 12u) |
-> +		((u32)raw_data[2] << 4u) |
-> +		((raw_data[3] & 0xF0u) >> 4u);
-> +
-> +	temp =  ((u32)(raw_data[3] & 0x0Fu) << 16u) |
-> +		((u32)raw_data[4] << 8u) |
-> +		raw_data[5];
-> +
-> +	temp = ((temp * 625) >> 15u) * 10;
-> +	hum = ((hum * 625) >> 16u) * 10;
-> +
-> +	data->temperature = (int)temp - 50000;
-> +	data->humidity = hum;
-> +	data->previous_poll_time = ktime_get_boottime();
-> +
->  	mutex_unlock(&data->lock);
->  	return 0;
->  }
