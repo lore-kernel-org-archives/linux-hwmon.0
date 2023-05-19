@@ -2,86 +2,130 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A6E1C7EE23
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 May 2023 13:47:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34F65C77B7F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 May 2023 13:49:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjESNrG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 May 2023 09:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
+        id S229737AbjESNtL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 May 2023 09:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbjESNrF (ORCPT
+        with ESMTP id S231680AbjESNtK (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 May 2023 09:47:05 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED58BF;
-        Fri, 19 May 2023 06:46:59 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d3fbb8c1cso208119b3a.3;
-        Fri, 19 May 2023 06:46:59 -0700 (PDT)
+        Fri, 19 May 2023 09:49:10 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021FABB
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 May 2023 06:49:09 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-64d2c865e4eso924373b3a.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 May 2023 06:49:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684504019; x=1687096019;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1684504148; x=1687096148;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wx/EigUiLPdkmDFCtrc7s+gWm6j0goDpXSxzDYLHIZg=;
-        b=dzTfTmyDFBKejCgCWckgX2Z5PgmIhjznf44wRaca5hLftJt4U9rBrKkgT+qGbDWBEg
-         o2lgjjdjCAhzdPGkpQFEl3TO8feFV+5RhpC1nKUexVgdu3do0v9HdXXuDDbaRJT2pOfi
-         xWql5xJfPsDY//uJxPDP8WdkVgG1OeBWS4LWsazdm7ugkGLM78NXbblXd5c8veMRkg1Y
-         0r9x5ph2qlDFKmVPgNAmIBaE+PSWFs632YOEGbjn9SGZahersSoMztGJ0eOmP2OJNBRr
-         rEsKmpfEXbsZvUauwTt5wFWNzE36EmA8iFjUljdu4VNcQkEV9q2BFRi3Um2xrk+0B1Rx
-         euaA==
+        bh=/uXqkbgg682geqq2iW+Dm3tS9R5qE+4ylmNW+VI328s=;
+        b=gXi2WAYNjRpzLNFE+lmcMfXmJlY7x98veM7pe7xk7J2dFFGTRwE8gJa7fmFSx2A3oc
+         w1Cuf1116iEy3n3FXXf/QFM6VsnJdxQ+ka1+HfHwQZJPtExqXugLTGNdCkv0DWGUslT2
+         R461USdtn12xUHz7T5dZJgUASuo7/FSIR+1QDz635WDbXXtFl9ZdtPHhGl4R2DnmFlik
+         EXnjYw8GuXpdSCCiAGoqhcVrsh8OY7JKutWvNoEPq59a1JUEalICq+/qc22raR6sPpOk
+         +0Blv9lwCjzlaEiQFdynUlD8GJSEE3K+SAeG7/PZ+Ps6La3YHrOCzf4f6bNjmgaLUpsy
+         YDuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684504019; x=1687096019;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1684504148; x=1687096148;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wx/EigUiLPdkmDFCtrc7s+gWm6j0goDpXSxzDYLHIZg=;
-        b=It4Sh8/dWfIW75lmqx1gimeVXwmTpy/PvThFes5rrw0Jtb+idQrsOX0mC3sHWKTGXM
-         GMn1gbWupSBipkkoBbt0L5nKTJLvUB/jU0NIdgeN0zPvUt5FCfPxoxWSrvpkTE/v7r3h
-         Rm63mCM26Eozbiil81Rp+XSMeuX4u67Ilb3rQgMuGsUFAveFpY59qxU5pDyDHABYMLWX
-         j1lJZf7aALYwbq66BvQW1Gb6Wc39SPwJCmGDagn70npTuJO4Oa1bIydUbfIc7jGdjol6
-         xwAYQZRKgBoU0Vwjp4dsvcJQA4Bk7Cza3JJcazRHUezRlcUXCLqt0XaZf97pz7xcvhkZ
-         w+HA==
-X-Gm-Message-State: AC+VfDxmtlbdAoQyv0ijKF3g1TLUQNSPtv8EQ+y60Z1TAIFc6YtzUmu+
-        ywD68pDjZxbsdRldF4lujV0=
-X-Google-Smtp-Source: ACHHUZ5sikUTpFACM5X1FwlPzBoZ1eTtmkWQC4dkupFmbbQaFbUzgqKpW41OSAJ+WiXLXJShmFVplw==
-X-Received: by 2002:a17:902:ea0f:b0:1ad:c736:2090 with SMTP id s15-20020a170902ea0f00b001adc7362090mr3178938plg.3.1684504019137;
-        Fri, 19 May 2023 06:46:59 -0700 (PDT)
-Received: from [192.168.1.107] ([103.194.71.110])
-        by smtp.gmail.com with ESMTPSA id l4-20020a170902eb0400b001ab0b2dad2fsm3422257plb.211.2023.05.19.06.46.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 06:46:58 -0700 (PDT)
-Message-ID: <bac9f57b-7a4e-40a2-5006-9074109a50d0@gmail.com>
-Date:   Fri, 19 May 2023 19:16:53 +0530
+        bh=/uXqkbgg682geqq2iW+Dm3tS9R5qE+4ylmNW+VI328s=;
+        b=G+eabiDbRQ6RlmNaU4hhvBDi2DugR5I0Mn1VM68VOtI20E0ESSzY0AqMu3+YkMhrGE
+         vUTNl48SUzkpTPpjM2qBHStVCDPVXynG0EhrD6QluddhbVc7kQkZS7sChrnHpUSfRYBz
+         EHd+aJFPxvKXXSuKxcdUzyFznnEvlgv5DLSZt9qrvWfVGhyqoQ653RNWinyJ9R4+e0xf
+         r020Jd+FLFXHf+NKDLhT+ZAk60KeJRGMWb/ZUaoZMlK2mfXTjMQd6At7bm4ul/f4Jeya
+         SGNbYMArnH/EpUXXCfdNtlv0xwUItGiKr9pjuyLRYL08dcC3dIEck4wjw+bjPQ/ZNk7v
+         73BA==
+X-Gm-Message-State: AC+VfDzj5Q1gqEBrT5+VfvYo0X7F7QHB5uO4KcNnL1FVfKkfojvRmw51
+        YC1n4eapM3W6/1yX8TlbwTW3fBxKEiE=
+X-Google-Smtp-Source: ACHHUZ4DljzsYD1GpamCeztdtJlYIIlLOkd3H7tsLiA3uOUtgMQdUK57ypvBPiqzJMYpUw0VByjRQQ==
+X-Received: by 2002:a05:6a00:138a:b0:646:663a:9d60 with SMTP id t10-20020a056a00138a00b00646663a9d60mr3922893pfg.10.1684504148433;
+        Fri, 19 May 2023 06:49:08 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j27-20020a634a5b000000b0051b460fd90fsm3109751pgl.8.2023.05.19.06.49.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 06:49:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 19 May 2023 06:49:07 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     jurgenacc@tutanota.com
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: ASRock B650E Taichi support
+Message-ID: <94fd7588-dd3a-4530-bfe8-a213b68dfc33@roeck-us.net>
+References: <NUjvz8u--3-9@tutanota.com>
+ <5704a3ac-3097-74d5-e5a7-993fcd78a1e7@roeck-us.net>
+ <NVUpwQa--3-9@tutanota.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] hwmon: (nct6683) Add another customer ID for NCT6687D
- sensor chip on some MSI boards.
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230517042025.16942-1-llyyr.public@gmail.com>
- <f7b24380-cbb1-410b-9507-006c142c41b0@roeck-us.net>
-From:   llyyr <llyyr.public@gmail.com>
-In-Reply-To: <f7b24380-cbb1-410b-9507-006c142c41b0@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <NVUpwQa--3-9@tutanota.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/19/23 18:23, Guenter Roeck wrote:
-> On Wed, May 17, 2023 at 09:50:25AM +0530, Gopal Prasad wrote:
->> From: llyyr <llyyr.public@gmail.com>
->>
+On Mon, May 15, 2023 at 04:36:55PM +0200, jurgenacc@tutanota.com wrote:
+> Hi,
 > 
-> The above is still wrong. Never mind, I fixed that.
+> Here is the output for sensors-detect:
+> 
+> # sensors-detect version 3.6.0+git
+> # System: ASRock B650E Taichi [Default string]
+> # Kernel: 6.3.1-arch1-1 x86_64
+> # Processor: AMD Ryzen 9 7900X 12-Core Processor (25/97/2)
+> 
+> This program will help you determine which kernel modules you need
+> to load to use lm_sensors most effectively. It is generally safe
+> and recommended to accept the default answers to all questions,
+> unless you know what you're doing.
+> 
+> Some south bridges, CPUs or memory controllers contain embedded sensors.
+> Do you want to scan for them? This is totally safe. (YES/no):  
+> Silicon Integrated Systems SIS5595...                       No
+> VIA VT82C686 Integrated Sensors...                          No
+> VIA VT8231 Integrated Sensors...                            No
+> AMD K8 thermal sensors...                                   No
+> AMD Family 10h thermal sensors...                           No
+> AMD Family 11h thermal sensors...                           No
+> AMD Family 12h and 14h thermal sensors...                   No
+> AMD Family 15h thermal sensors...                           No
+> AMD Family 16h thermal sensors...                           No
+> AMD Family 17h thermal sensors...                           No
+> AMD Family 15h power sensors...                             No
+> AMD Family 16h power sensors...                             No
+> Hygon Family 18h thermal sensors...                         No
+> AMD Family 19h thermal sensors...                           No
+> Intel digital thermal sensor...                             No
+> Intel AMB FB-DIMM thermal sensor...                         No
+> Intel 5500/5520/X58 thermal sensor...                       No
+> VIA C7 thermal sensor...                                    No
+> VIA Nano thermal sensor...                                  No
+> 
+> Some Super I/O chips contain embedded sensors. We have to write to
+> standard I/O ports to probe them. This is usually safe.
+> Do you want to scan for Super I/O sensors? (YES/no):  
+> Probing for Super-I/O at 0x2e/0x2f
+> Trying family `National Semiconductor/ITE'...               No
+> Trying family `SMSC'...                                     No
+> Trying family `VIA/Winbond/Nuvoton/Fintek'...               Yes
+> Found unknown chip with ID 0xd802
+>    (logical device B has address 0x290, could be sensors)
 
-I wasn't sure about it, but I checked and I'm pretty sure pseudonyms are 
-allowed [1]. Is the problem here that my online handle not have a first 
-name and a last name part?
+This is a NCT6799D. Support for it is pending.
 
-* 
-https://www.kernel.org/doc/html/v6.3/process/submitting-patches.html#developer-s-certificate-of-origin-1-1
+> Probing for Super-I/O at 0x4e/0x4f
+> Trying family `National Semiconductor/ITE'...               No
+> Trying family `SMSC'...                                     No
+> Trying family `VIA/Winbond/Nuvoton/Fintek'...               Yes
+> Found unknown chip with ID 0xd441
 
+This is a NCT6686D. It _should_ be supported by the nct6683 driver, though
+the vendor may use an unknown vendor ID. WHat happens if you try loading
+the nct6683 driver ?
+
+Guenter
