@@ -2,104 +2,166 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74A3AC77B75
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 May 2023 13:30:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C27E7C77B7A
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 May 2023 13:34:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjESNaq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 May 2023 09:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50128 "EHLO
+        id S229525AbjESNe6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 May 2023 09:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbjESNan (ORCPT
+        with ESMTP id S230368AbjESNet (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 May 2023 09:30:43 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F8A10FA
-        for <linux-hwmon@vger.kernel.org>; Fri, 19 May 2023 06:30:17 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64ab2a37812so605618b3a.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 19 May 2023 06:30:17 -0700 (PDT)
+        Fri, 19 May 2023 09:34:49 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD94BA1
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 May 2023 06:34:48 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64d3578c25bso601902b3a.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 May 2023 06:34:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684502989; x=1687094989;
+        d=gmail.com; s=20221208; t=1684503288; x=1687095288;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3SJZdpXFnFhebNso7WhlMDXDF29Wj2kASnBat0SRnGM=;
-        b=V7rlmkP7YXDgVTkbbBGty0bv49uNdBusC41NTKn9BE879K1rgmWMrgtkD8BXDIfdbw
-         CHIf0+TbbOW4FAteqre7WPgir6d2m6qZ4K3CCGFVKYTCMs78xw3VB6F33y6G+aFz/eiA
-         NvuFLKj+WV4sr3IQci7bZIczQi5mzZEECIoriS4aTAF2cIFGLLXoVXm5OOtF1uCCk3Dk
-         VRV/3bdOERpxiWH5kEhWzSvDfevl0cKrN1GZoRP81dzxr7fgGfWvs8lqJUUGxbAqDiwr
-         Uvflz9bnHI9F1LiNH0M1DQB0nEWutAQIn3vWWPdNBwiqg4Ozeh+0mBSJtCC9iqeCo9qV
-         DTGw==
+        bh=Ue6IlpFzRJeo0akOn8qPsmw6b6KPmwZSaJBnVp/l85w=;
+        b=YPI0tKHwFH8zfJKeNBg7HCF46wENu8TetPB5Tf4ZOYp7lgXVcICWNY4G1GgqId6QLj
+         goLBRSeYr/6azckeG7vaXAdRNEEzwywMplj8HMZSBX0HQAGZ+YYJgpnwixJjf0w+R+AS
+         laDkxUEuXFRI+1d4E64CQrUtZmbmFKaBdh7I/KMC3jyDdZxziRfsrKytxMBaczqeVZan
+         s/a9Rw02bHTM4fASbaORgF6hJskJid6eH/oUZUwbkGbjrg4+/GAg3XrzrZXpmg5TKHHm
+         +4fW6WoLo+IAiJvDD8pZwOhwhJI6fa9tTPTZN15g/NBlZfXY8SOBsmxmMKrXmNRXh7Y2
+         byNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684502989; x=1687094989;
+        d=1e100.net; s=20221208; t=1684503288; x=1687095288;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3SJZdpXFnFhebNso7WhlMDXDF29Wj2kASnBat0SRnGM=;
-        b=JcuYwpfIGqiUtKCQhKegHcqNqDNlzdyVXLcQ4Q59KyEt7WmQquICvjAL+q3g17DvR7
-         +v7CCKCivyIhfkmU7+G4C9Q4F0vbj822pt6oGuYPid0k0qvwHGDIEb3yVsAiVSr0jKCH
-         bqiF0tIyvDFjhAARd6pGeJlOZduzmSuX7uoruX9s6h7YfkcwnMp0MCGSO5dJikzQlvqB
-         1BI2zavpyLBnxHgCHuuLfpUnm/8WEmxd5bg7P9+FnJpFnO4/dMF7DUnal8lwU3Mv5Fbd
-         soKXBH21Ym/7HGsMXwNppN0bnoDsdlstn0X9XXdDZV7M2dsnjApKDRFdt9oBOUo7kjPj
-         MsQg==
-X-Gm-Message-State: AC+VfDy0sNGpm5BlJ7COeo7qo3JChQT6iy1/I4CmjKo7vQTnMsBZjhyg
-        xsWrRmCgkcnGBMSmAdO1/pAeXrAPQHQ=
-X-Google-Smtp-Source: ACHHUZ6sfklynfqzH02OnwCD2jG56327t3Xx9NBDHySE3Ve1cTY+Ws81fDchxywguY+vj2T8tEG3nw==
-X-Received: by 2002:a17:90a:1116:b0:250:69de:7157 with SMTP id d22-20020a17090a111600b0025069de7157mr6645846pja.2.1684502989349;
-        Fri, 19 May 2023 06:29:49 -0700 (PDT)
+        bh=Ue6IlpFzRJeo0akOn8qPsmw6b6KPmwZSaJBnVp/l85w=;
+        b=cS6ckxnPvpTCja3RiqC8wrqnUIm76h5cHB4BQu1UWoO9qxKGur1MC3OvNrftfvLEg/
+         Cx+TBQEg8eq/bi0Ml+UWl+V67tSacgmfcKlPGtebyZuxqvK400t6gvY1alk1dpugNC3R
+         7a8n2K8ryypq1NJs80NrkupG9nHAIvzvoSHRm9FFWxFjZN9BnPaU9jLq3XZU+tNcbwKq
+         ceQdRaboz8hFMNl3a8YZs7mx3Epx311JlFraSWEkjntYunS8XMEEfsk/VBeJmMnzXYYm
+         06+MK0d15XgypzM+mb+gfdqu6Ov3zffdE6GxqQFa1tli3Q3NEoqSzK1bt+9q/2DrBvLj
+         JlGA==
+X-Gm-Message-State: AC+VfDw8oLNb2KshTF4XQKydFbr4Suqs+n9G2tNkzIDpIE/fEyVNTL7Q
+        xOAlSDIWwTo17hMiYS8q22A=
+X-Google-Smtp-Source: ACHHUZ4FDBGwzVrR4RZyBkZeGkW/YAFmx7usGqIv53qdQo+8yq+jsNitrb6ZkWnRmNx8573AI4rA5A==
+X-Received: by 2002:a05:6a20:e68e:b0:101:2160:ff89 with SMTP id mz14-20020a056a20e68e00b001012160ff89mr2050222pzb.38.1684503288273;
+        Fri, 19 May 2023 06:34:48 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n15-20020a17090a4e0f00b002367325203fsm1431900pjh.50.2023.05.19.06.29.48
+        by smtp.gmail.com with ESMTPSA id e23-20020a63e017000000b0051303d3e3c5sm3086422pgh.42.2023.05.19.06.34.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 06:29:48 -0700 (PDT)
+        Fri, 19 May 2023 06:34:47 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 19 May 2023 06:29:47 -0700
+Date:   Fri, 19 May 2023 06:34:46 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Kirill Yatsenko <kiriyatsenko@gmail.com>
 Cc:     linux-hwmon@vger.kernel.org, delvare@suse.com, jcdra1@gmail.com
-Subject: Re: [PATCH 1/3] hwmon: (aht10) Fix typos in comments
-Message-ID: <fbfbb3c1-0e97-475f-9822-14e4e9a48bfa@roeck-us.net>
+Subject: Re: [PATCH 2/3] hwmon: (aht10) Refactor aht10_read_values function
+Message-ID: <55a1e9c6-c7ab-4a49-8130-561293760dea@roeck-us.net>
 References: <20230511202633.299174-1-kiriyatsenko@gmail.com>
+ <20230511202633.299174-2-kiriyatsenko@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230511202633.299174-1-kiriyatsenko@gmail.com>
+In-Reply-To: <20230511202633.299174-2-kiriyatsenko@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, May 11, 2023 at 10:26:31PM +0200, Kirill Yatsenko wrote:
-> Fix typos in the description of the return value section of the
-> functions. The word 'succesfull' is incorrect, it should be 'successful'.
+On Thu, May 11, 2023 at 10:26:32PM +0200, Kirill Yatsenko wrote:
+> Exit from the function immediately if the poll time hasn't yet expired.
+> Therefore the code after the check can be moved one tab to the left which
+> improves readability.
 > 
 > Signed-off-by: Kirill Yatsenko <kiriyatsenko@gmail.com>
-
-Applied.
-
-Thanks,
-Guenter
-
 > ---
->  drivers/hwmon/aht10.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/hwmon/aht10.c | 67 ++++++++++++++++++++++---------------------
+>  1 file changed, 35 insertions(+), 32 deletions(-)
 > 
 > diff --git a/drivers/hwmon/aht10.c b/drivers/hwmon/aht10.c
-> index b8fe3f7248ba..87a433e570e1 100644
+> index 87a433e570e1..17ceec9aab66 100644
 > --- a/drivers/hwmon/aht10.c
 > +++ b/drivers/hwmon/aht10.c
-> @@ -80,7 +80,7 @@ struct aht10_data {
->  /**
->   * aht10_init() - Initialize an AHT10 chip
->   * @data: the data associated with this AHT10 chip
-> - * Return: 0 if succesfull, 1 if not
-> + * Return: 0 if successful, 1 if not
->   */
->  static int aht10_init(struct aht10_data *data)
->  {
-> @@ -124,7 +124,7 @@ static int aht10_polltime_expired(struct aht10_data *data)
->  /**
->   * aht10_read_values() - read and parse the raw data from the AHT10
->   * @data: the struct aht10_data to use for the lock
-> - * Return: 0 if succesfull, 1 if not
-> + * Return: 0 if successful, 1 if not
->   */
->  static int aht10_read_values(struct aht10_data *data)
->  {
+> @@ -135,40 +135,43 @@ static int aht10_read_values(struct aht10_data *data)
+>  	struct i2c_client *client = data->client;
+>  
+>  	mutex_lock(&data->lock);
+> -	if (aht10_polltime_expired(data)) {
+> -		res = i2c_master_send(client, cmd_meas, sizeof(cmd_meas));
+> -		if (res < 0) {
+> -			mutex_unlock(&data->lock);
+> +	if (!aht10_polltime_expired(data)) {
+> +		mutex_unlock(&data->lock);
+> +		return 0;
+> +	}
+> +
+> +	res = i2c_master_send(client, cmd_meas, sizeof(cmd_meas));
+> +	if (res < 0) {
+> +		mutex_unlock(&data->lock);
+> +		return res;
+> +	}
+> +
+> +	usleep_range(AHT10_MEAS_DELAY, AHT10_MEAS_DELAY + AHT10_DELAY_EXTRA);
+> +
+> +	res = i2c_master_recv(client, raw_data, AHT10_MEAS_SIZE);
+> +	if (res != AHT10_MEAS_SIZE) {
+> +		mutex_unlock(&data->lock);
+> +		if (res >= 0)
+> +			return -ENODATA;
+> +		else
+>  			return res;
+
+else after return is pointless (and static analyzers complain about it).
+
+No need to resend (I see it is inherited from old code). I'll fix it up
+when applying the patch.
+
+Guenter
+
+> -		}
+> -
+> -		usleep_range(AHT10_MEAS_DELAY,
+> -			     AHT10_MEAS_DELAY + AHT10_DELAY_EXTRA);
+> -
+> -		res = i2c_master_recv(client, raw_data, AHT10_MEAS_SIZE);
+> -		if (res != AHT10_MEAS_SIZE) {
+> -			mutex_unlock(&data->lock);
+> -			if (res >= 0)
+> -				return -ENODATA;
+> -			else
+> -				return res;
+> -		}
+> -
+> -		hum =   ((u32)raw_data[1] << 12u) |
+> -			((u32)raw_data[2] << 4u) |
+> -			((raw_data[3] & 0xF0u) >> 4u);
+> -
+> -		temp =  ((u32)(raw_data[3] & 0x0Fu) << 16u) |
+> -			((u32)raw_data[4] << 8u) |
+> -			raw_data[5];
+> -
+> -		temp = ((temp * 625) >> 15u) * 10;
+> -		hum = ((hum * 625) >> 16u) * 10;
+> -
+> -		data->temperature = (int)temp - 50000;
+> -		data->humidity = hum;
+> -		data->previous_poll_time = ktime_get_boottime();
+>  	}
+> +
+> +	hum =   ((u32)raw_data[1] << 12u) |
+> +		((u32)raw_data[2] << 4u) |
+> +		((raw_data[3] & 0xF0u) >> 4u);
+> +
+> +	temp =  ((u32)(raw_data[3] & 0x0Fu) << 16u) |
+> +		((u32)raw_data[4] << 8u) |
+> +		raw_data[5];
+> +
+> +	temp = ((temp * 625) >> 15u) * 10;
+> +	hum = ((hum * 625) >> 16u) * 10;
+> +
+> +	data->temperature = (int)temp - 50000;
+> +	data->humidity = hum;
+> +	data->previous_poll_time = ktime_get_boottime();
+> +
+>  	mutex_unlock(&data->lock);
+>  	return 0;
+>  }
