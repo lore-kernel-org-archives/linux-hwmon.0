@@ -2,88 +2,75 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29190C77B7A
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 May 2023 13:00:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74A3AC77B75
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 May 2023 13:30:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbjESNAD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 May 2023 09:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
+        id S230210AbjESNaq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 May 2023 09:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjESNAC (ORCPT
+        with ESMTP id S231589AbjESNan (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 May 2023 09:00:02 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC2FB6;
-        Fri, 19 May 2023 06:00:00 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-5343c3daff0so2178418a12.0;
-        Fri, 19 May 2023 06:00:00 -0700 (PDT)
+        Fri, 19 May 2023 09:30:43 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F8A10FA
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 May 2023 06:30:17 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64ab2a37812so605618b3a.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 May 2023 06:30:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684501200; x=1687093200;
+        d=gmail.com; s=20221208; t=1684502989; x=1687094989;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VAVZ/hcKkVx3SOcsuiVqtU8lahyp0IGSQNT0LUV/NnQ=;
-        b=drvh6gtgE45NmbhBhrcPPtNZ/nk584pEPv08g1awcZCFZ32cQ0FYbn+gjJD35As3AZ
-         41okulVz8jzzBm9oUZcCSiL42bV/ots28rzlAY8V5KrYNyOr8uh6WpiWsDjyikfJbjlD
-         5mfYuksC7bHFGiSWdHFpb+xi0NodAYcG9G4Nn0W7iZ8YThfFQyzqd+sKOP4zKqgMOLmI
-         i2RRrfCdRvF+SMQAanzH/Qq+DeU5Fd4E4zQIFaGkt6LwIjs58ER2xpuG+2hqp+h+7zQq
-         iXZOR9djA/D38JZd2UL+PjfAmFiAIf6Mqr8deurxtpN+C4UnNtmECOmZoVqlcOZbfrUV
-         6uWQ==
+        bh=3SJZdpXFnFhebNso7WhlMDXDF29Wj2kASnBat0SRnGM=;
+        b=V7rlmkP7YXDgVTkbbBGty0bv49uNdBusC41NTKn9BE879K1rgmWMrgtkD8BXDIfdbw
+         CHIf0+TbbOW4FAteqre7WPgir6d2m6qZ4K3CCGFVKYTCMs78xw3VB6F33y6G+aFz/eiA
+         NvuFLKj+WV4sr3IQci7bZIczQi5mzZEECIoriS4aTAF2cIFGLLXoVXm5OOtF1uCCk3Dk
+         VRV/3bdOERpxiWH5kEhWzSvDfevl0cKrN1GZoRP81dzxr7fgGfWvs8lqJUUGxbAqDiwr
+         Uvflz9bnHI9F1LiNH0M1DQB0nEWutAQIn3vWWPdNBwiqg4Ozeh+0mBSJtCC9iqeCo9qV
+         DTGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684501200; x=1687093200;
+        d=1e100.net; s=20221208; t=1684502989; x=1687094989;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VAVZ/hcKkVx3SOcsuiVqtU8lahyp0IGSQNT0LUV/NnQ=;
-        b=jpHJlZm9/EnbI8LhOEaC84yurH/Bb+2zFnLMK5z9ib72LoiJZEYMMzSYOsH+e3LW/O
-         M9YR71NVqSJAQfcd0guxPOVYaJtPXhHxAULbAZP1moS/5Sggr60ot2ibvT4w+WX4GDkU
-         9Hx+GsNjHxvI+OjrWGoSc4Gv8fLKb2RkRkUxQpbNubsPzZdF3uKU/ZWGDhH1IdOFasoH
-         x3QK9QgG4w8p1/73YI0CQNThdLfU0WmBJFCtpsYn/xQtX9vSEEXXmkOc8zHvn8B5Cai7
-         LldkcitGBL3QKBdKQ7yKLiqKvfKeFQgwlRdOcW6NbxrT5jnAHHWS3HckbBOrKk1PjCPb
-         se0A==
-X-Gm-Message-State: AC+VfDwHr4QVx9gTV0jVncp7MucfiicgtlEtG7dryQudx1SnTyIJXzOy
-        ZNlIUSRqXA7AJoPbp5gJcpc=
-X-Google-Smtp-Source: ACHHUZ5Ne0SC1ojcfWREVJ6pYIonctRWlaLc8jNCHR7v4xDIInky3rzMMR563d0mO1C4qENHEodyuw==
-X-Received: by 2002:a17:902:cecf:b0:1ae:6003:2ded with SMTP id d15-20020a170902cecf00b001ae60032dedmr2620513plg.65.1684501200052;
-        Fri, 19 May 2023 06:00:00 -0700 (PDT)
+        bh=3SJZdpXFnFhebNso7WhlMDXDF29Wj2kASnBat0SRnGM=;
+        b=JcuYwpfIGqiUtKCQhKegHcqNqDNlzdyVXLcQ4Q59KyEt7WmQquICvjAL+q3g17DvR7
+         +v7CCKCivyIhfkmU7+G4C9Q4F0vbj822pt6oGuYPid0k0qvwHGDIEb3yVsAiVSr0jKCH
+         bqiF0tIyvDFjhAARd6pGeJlOZduzmSuX7uoruX9s6h7YfkcwnMp0MCGSO5dJikzQlvqB
+         1BI2zavpyLBnxHgCHuuLfpUnm/8WEmxd5bg7P9+FnJpFnO4/dMF7DUnal8lwU3Mv5Fbd
+         soKXBH21Ym/7HGsMXwNppN0bnoDsdlstn0X9XXdDZV7M2dsnjApKDRFdt9oBOUo7kjPj
+         MsQg==
+X-Gm-Message-State: AC+VfDy0sNGpm5BlJ7COeo7qo3JChQT6iy1/I4CmjKo7vQTnMsBZjhyg
+        xsWrRmCgkcnGBMSmAdO1/pAeXrAPQHQ=
+X-Google-Smtp-Source: ACHHUZ6sfklynfqzH02OnwCD2jG56327t3Xx9NBDHySE3Ve1cTY+Ws81fDchxywguY+vj2T8tEG3nw==
+X-Received: by 2002:a17:90a:1116:b0:250:69de:7157 with SMTP id d22-20020a17090a111600b0025069de7157mr6645846pja.2.1684502989349;
+        Fri, 19 May 2023 06:29:49 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x24-20020a1709027c1800b001ae4edacce5sm2796046pll.94.2023.05.19.05.59.59
+        by smtp.gmail.com with ESMTPSA id n15-20020a17090a4e0f00b002367325203fsm1431900pjh.50.2023.05.19.06.29.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 05:59:59 -0700 (PDT)
+        Fri, 19 May 2023 06:29:48 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 19 May 2023 05:59:58 -0700
+Date:   Fri, 19 May 2023 06:29:47 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH] hwmon: (f71882fg) prevent possible division by zero
-Message-ID: <af1f4106-62a7-4cd0-9891-2d9aaa77f057@roeck-us.net>
-References: <20230510143537.145060-1-n.zhandarovich@fintech.ru>
+To:     Kirill Yatsenko <kiriyatsenko@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, delvare@suse.com, jcdra1@gmail.com
+Subject: Re: [PATCH 1/3] hwmon: (aht10) Fix typos in comments
+Message-ID: <fbfbb3c1-0e97-475f-9822-14e4e9a48bfa@roeck-us.net>
+References: <20230511202633.299174-1-kiriyatsenko@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230510143537.145060-1-n.zhandarovich@fintech.ru>
+In-Reply-To: <20230511202633.299174-1-kiriyatsenko@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, May 10, 2023 at 07:35:37AM -0700, Nikita Zhandarovich wrote:
-> In the unlikely event that something goes wrong with the device and
-> its registers, the fan_from_reg() function may return 0. This value
-> will cause a division-by-zero error in the show_pwm() function.
+On Thu, May 11, 2023 at 10:26:31PM +0200, Kirill Yatsenko wrote:
+> Fix typos in the description of the return value section of the
+> functions. The word 'succesfull' is incorrect, it should be 'successful'.
 > 
-> To prevent this, test the value of
-> fan_from_reg(data->fan_full_speed[nr]) against 0 before performing
-> the division. If the division-by-zero error is avoided, assign 0 to
-> the val variable.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with static
-> analysis tool SVACE.
-> 
-> Fixes: df9ec2dae094 ("hwmon: (f71882fg) Reorder symbols to get rid of a few forward declarations")
-> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+> Signed-off-by: Kirill Yatsenko <kiriyatsenko@gmail.com>
 
 Applied.
 
@@ -91,24 +78,28 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/f71882fg.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+>  drivers/hwmon/aht10.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/hwmon/f71882fg.c b/drivers/hwmon/f71882fg.c
-> index 70121482a617..27207ec6f7fe 100644
-> --- a/drivers/hwmon/f71882fg.c
-> +++ b/drivers/hwmon/f71882fg.c
-> @@ -1096,8 +1096,11 @@ static ssize_t show_pwm(struct device *dev,
->  		val = data->pwm[nr];
->  	else {
->  		/* RPM mode */
-> -		val = 255 * fan_from_reg(data->fan_target[nr])
-> -			/ fan_from_reg(data->fan_full_speed[nr]);
-> +		if (fan_from_reg(data->fan_full_speed[nr]))
-> +			val = 255 * fan_from_reg(data->fan_target[nr])
-> +				/ fan_from_reg(data->fan_full_speed[nr]);
-> +		else
-> +			val = 0;
->  	}
->  	mutex_unlock(&data->update_lock);
->  	return sprintf(buf, "%d\n", val);
+> diff --git a/drivers/hwmon/aht10.c b/drivers/hwmon/aht10.c
+> index b8fe3f7248ba..87a433e570e1 100644
+> --- a/drivers/hwmon/aht10.c
+> +++ b/drivers/hwmon/aht10.c
+> @@ -80,7 +80,7 @@ struct aht10_data {
+>  /**
+>   * aht10_init() - Initialize an AHT10 chip
+>   * @data: the data associated with this AHT10 chip
+> - * Return: 0 if succesfull, 1 if not
+> + * Return: 0 if successful, 1 if not
+>   */
+>  static int aht10_init(struct aht10_data *data)
+>  {
+> @@ -124,7 +124,7 @@ static int aht10_polltime_expired(struct aht10_data *data)
+>  /**
+>   * aht10_read_values() - read and parse the raw data from the AHT10
+>   * @data: the struct aht10_data to use for the lock
+> - * Return: 0 if succesfull, 1 if not
+> + * Return: 0 if successful, 1 if not
+>   */
+>  static int aht10_read_values(struct aht10_data *data)
+>  {
