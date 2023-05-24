@@ -2,109 +2,182 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B433C7EE3A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 May 2023 21:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5C3CC77B7A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 24 May 2023 13:03:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238678AbjEWVqs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 23 May 2023 17:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
+        id S234997AbjEXND6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 24 May 2023 09:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238682AbjEWVqr (ORCPT
+        with ESMTP id S235205AbjEXNDg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 23 May 2023 17:46:47 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D725F119;
-        Tue, 23 May 2023 14:46:46 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64d293746e0so19874b3a.2;
-        Tue, 23 May 2023 14:46:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684878406; x=1687470406;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EPUHuPEdS1O9T/6qdNTmqpTzsbixnf5MzsB/1qIuHjA=;
-        b=ZyLwvXIXAoTy0w71K3zjkqPULZ6EimCFq9xm4oqr3pwXBWfDcPE6xq3SwY80LP/tr4
-         hQ7BD/gSX+QDa8LGx6E8viSOy7OWkNTRjMImLwj75qrAmsZzkFM5FfrSZysh5E+WWxO4
-         kItws/5Gm6Xhxc+1Y5j524Aw0Oc9GdWXp7+aasGbSfL+GmhVmHwNGVsu0TXpMRveRAUw
-         E8/O+aYzOetG6AozzS2haLTEbDX3pap83/qSt9aabb/gAwfaQWAXg+y4u2hL4DakGsdH
-         zjs6fNgPX2/Nw43w+DdUyEZ/r4vgLcuXhBe6pAanRseX6hppPY2/JQveKqvH8yDTXZVa
-         RnYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684878406; x=1687470406;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EPUHuPEdS1O9T/6qdNTmqpTzsbixnf5MzsB/1qIuHjA=;
-        b=Dn2Gh3BVC5aclvB1LyRP8cbaC7BlWkCnuN5g7GzBYVBzuPbZlKqreJf3i8cV2hZvBk
-         AUB/eSRfxB/NVIbUQDoJSZoCrdRfq9R2RR/02U1Zguo5eywg27LfM5hcyo3VrPO3ablT
-         1nxXQBypeZyVUmcVQ2Ic/VQ01h76+pUnluRxnrZIvRM1ej05heptNHnOfoBHngXywq4j
-         oPP0VWDZwpDt3aPV4Ai9AyglTSnagsEZiRwaOTUjA3ONTJkmSlJqQMAvLWGUfqd+mSUR
-         SCGCS0CcVYlesVznxGbCkAqG2NRr0Vp6fQabMVFJsm3MNFeJdzlRJlQfp9aFkDzDyosY
-         BNdA==
-X-Gm-Message-State: AC+VfDzXHorxkyu1z3ZNF3hvlfcnEtZEbSevn8921bKLgBdMqc9nnIGt
-        6ZUG2VxNXeigbuhJFjX88vbneQbT8oo=
-X-Google-Smtp-Source: ACHHUZ4iRH+7sX3dPJCiTFvyLNH85ASD3kZKS3pL1C7nh6cZtltSqQpfToZy1SkAji9b4hLTIwb0DA==
-X-Received: by 2002:a05:6a20:3d0c:b0:104:1f67:1157 with SMTP id y12-20020a056a203d0c00b001041f671157mr18267140pzi.26.1684878406159;
-        Tue, 23 May 2023 14:46:46 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u12-20020a170902bf4c00b001ac7ab3e7ecsm7191269pls.210.2023.05.23.14.46.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 14:46:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 23 May 2023 14:46:43 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Baskaran Kannan <Baski.Kannan@amd.com>
-Cc:     babu.moger@amd.com, clemens@ladisch.de, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (k10temp) Report negative temperatures
-Message-ID: <68c53a76-efd5-42da-af98-442bd80c7300@roeck-us.net>
-References: <20230523204932.2679-1-Baski.Kannan@amd.com>
+        Wed, 24 May 2023 09:03:36 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1DFE44;
+        Wed, 24 May 2023 06:03:20 -0700 (PDT)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34OArOT9031201;
+        Wed, 24 May 2023 09:02:54 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3qpr27bpte-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 09:02:45 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 34OD23Ci017607
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 24 May 2023 09:02:03 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 24 May 2023 09:02:02 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 24 May 2023 09:02:02 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 24 May 2023 09:02:02 -0400
+Received: from daniel-Precision-5530.ad.analog.com ([10.48.65.214])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 34OD1npV000947;
+        Wed, 24 May 2023 09:01:52 -0400
+From:   Daniel Matyas <daniel.matyas@analog.com>
+CC:     Daniel Matyas <daniel.matyas@analog.com>,
+        Rob Herring <robh@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+Subject: [PATCH v10 1/2] dt-bindings: hwmon: add MAX31827
+Date:   Wed, 24 May 2023 19:01:29 +0300
+Message-ID: <20230524160131.14081-1-daniel.matyas@analog.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523204932.2679-1-Baski.Kannan@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: eguqr4SGfYA-mSGxZHz18lrx9__7x59L
+X-Proofpoint-ORIG-GUID: eguqr4SGfYA-mSGxZHz18lrx9__7x59L
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-24_08,2023-05-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0 malwarescore=0
+ phishscore=0 mlxscore=0 clxscore=1015 mlxlogscore=999 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305240107
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, May 23, 2023 at 03:49:32PM -0500, Baskaran Kannan wrote:
-> Currently, the tctl and die temperatures are rounded off to zero
-> if they are less than 0. There are industrial processors which work
-> below zero.
+MAX31827 is a low-power temperature switch with I2C interface.
 
-This was introduced with commit aef17ca12719 ("hwmon: (k10temp) Only apply
-temperature offset if result is positive"). This patch would effecively
-revert that change. Given the reason for introducing it I am not convinced
-that it is a good idea to unconditionally revert it.
+The device is a ±1°C accuracy from -40°C to +125°C
+(12 bits) local temperature switch and sensor with I2C/SM-
+Bus interface. The combination of small 6-bump wafer-lev-
+el package (WLP) and high accuracy makes this temper-
+ature sensor/switch ideal for a wide range of applications.
 
-Guenter
+Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+Change log:
+v9 -> v10: Added proper change log.
+v8 -> v9: Did not use '--base'.
+v7 -> v8: Added '--base=[Linux 6.4-rc1 commmit]' when using 'git format-patch'
+v6 -> v7: No change.
+v5 -> v6: Added Reviewed-by tag.
+v3 -> v5: Forgot to add Reviewed-by tag.
+v2 -> v3: Made max31828 and max31829 compatible with max31827.
+v1 -> v2: Resolved dt_binding_check errors. Dropped status at i2c node. Made node name generic. 
 
-> 
-> To display the correct temperature remove the rounding off.
-> 
-> Signed-off-by: Baskaran Kannan <Baski.Kannan@amd.com>
-> ---
->  drivers/hwmon/k10temp.c | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index 7b177b9fbb09..489ad0b1bc74 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -204,13 +204,9 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
->  		switch (channel) {
->  		case 0:		/* Tctl */
->  			*val = get_raw_temp(data);
-> -			if (*val < 0)
-> -				*val = 0;
->  			break;
->  		case 1:		/* Tdie */
->  			*val = get_raw_temp(data) - data->temp_offset;
-> -			if (*val < 0)
-> -				*val = 0;
->  			break;
->  		case 2 ... 13:		/* Tccd{1-12} */
->  			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
-> -- 
-> 2.25.1
-> 
+ .../bindings/hwmon/adi,max31827.yaml          | 54 +++++++++++++++++++
+ MAINTAINERS                                   |  7 +++
+ 2 files changed, 61 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+new file mode 100644
+index 000000000000..2dc8b07b4d3b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/adi,max31827.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch
++
++maintainers:
++  - Daniel Matyas <daniel.matyas@analog.com>
++
++description: |
++  Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch with
++  I2C Interface
++  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31827-MAX31829.pdf
++
++properties:
++  compatible:
++    oneOf:
++      - const: adi,max31827
++      - items:
++          - enum:
++              - adi,max31828
++              - adi,max31829
++          - const: adi,max31827
++
++  reg:
++    maxItems: 1
++
++  vref-supply:
++    description:
++      Must have values in the interval (1.6V; 3.6V) in order for the device to
++      function correctly.
++
++required:
++  - compatible
++  - reg
++  - vref-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        temperature-sensor@42 {
++            compatible = "adi,max31827";
++            reg = <0x42>;
++            vref-supply = <&reg_vdd>;
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 27ef11624748..752c7e9c4e4a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12612,6 +12612,13 @@ F:	Documentation/userspace-api/media/drivers/max2175.rst
+ F:	drivers/media/i2c/max2175*
+ F:	include/uapi/linux/max2175.h
+ 
++MAX31827 TEMPERATURE SWITCH DRIVER
++M:	Daniel Matyas <daniel.matyas@analog.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Supported
++W:	http://ez.analog.com/community/linux-device-drivers
++F:	Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
++
+ MAX6650 HARDWARE MONITOR AND FAN CONTROLLER DRIVER
+ L:	linux-hwmon@vger.kernel.org
+ S:	Orphan
+-- 
+2.34.1
+
