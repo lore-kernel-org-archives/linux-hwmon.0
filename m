@@ -2,131 +2,100 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5058BC7EE29
-	for <linux-hwmon@archiver.kernel.org>; Thu, 25 May 2023 19:57:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65E46C77B7E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 25 May 2023 20:49:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240840AbjEYT5p (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 25 May 2023 15:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47226 "EHLO
+        id S233496AbjEYUtp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 25 May 2023 16:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242073AbjEYT5p (ORCPT
+        with ESMTP id S231495AbjEYUto (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 May 2023 15:57:45 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BC090;
-        Thu, 25 May 2023 12:57:40 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64d24136685so111915b3a.1;
-        Thu, 25 May 2023 12:57:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685044659; x=1687636659;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lmmhv48Wx/MF3uObt6Yd6M6kPhlVT9sswyKngMoKdcs=;
-        b=EqwqEAgYGJlXkvyZSp9BoOnkX9RBzwi1lmKDN/4ViqE9ZW0KuzjVgd1x8mTKmEL+Op
-         NwTZ1Rd27SKwSNH54bftHDLo2Ow3GxlGFIHmpkRGu8G6n/zR/zYhSX4JM8SDkH7REg8Z
-         mG7C5Ic/u3Y+b4hvRapeq3RNqJuyy7YrcZ220F+CkEBU+5avXbqeeR5SbW+6Glv9wG17
-         /hPU/D4zalh60sx235eFE28AzBPTpHf0JHHLc0Ccqfxg71M9FPFES7qINQiYQ8UY0G+Y
-         zob0W3ChlEWhp4sx1B31wIc53iLMvDU6JTDpVtv00x8b9nCiikCEz3hk4F8fyM9ahvcX
-         uASg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685044659; x=1687636659;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lmmhv48Wx/MF3uObt6Yd6M6kPhlVT9sswyKngMoKdcs=;
-        b=b9yftLywSV5PnL5aQMhTwwlZnY3JQvZR4HNhSGsH34tIvrmqXmQfBn+hcg4ABTeHXW
-         JpnCOJRxay43NprzmlWtIpApStr2onotV4sM3C9/SJSS8RbpGdpRSLQv0W99GjjldKtw
-         8ipExWrcIHHcSmCBvN7m1AXMyFOPYnZQvrh6MDmA71Aeqf04Dhu7i59AT+lWbvkB2/Og
-         L6CBCmVTLrBtVgqJBjJ95fvyBJpJYKZXIw1bWFw1kxkVfeDMK9R8mslcxgETYy7wyJNQ
-         t8ljBo+xfa+jHqPnOMHFTfyvtfVxECLeL2KAmHWd0EXcZUS/o8MMFJ1Xk3kTFPY6BxNh
-         BxxA==
-X-Gm-Message-State: AC+VfDwHdCF4hmGuJ7J2ngVTFThuWUQ5lUfrQZ9wki2Uf6ppqFq03XId
-        f5nBEjm3OZzSnFZcICX8a72CM/nNPBQ=
-X-Google-Smtp-Source: ACHHUZ6cmr25whO+G61Zw3VzKaiM0Il0TQcSkFmnNz0POgKKw3OdvBR6jz3axl4B7ayDTklTHfZz7w==
-X-Received: by 2002:a05:6a20:3953:b0:103:e813:77a1 with SMTP id r19-20020a056a20395300b00103e81377a1mr5194887pzg.15.1685044659594;
-        Thu, 25 May 2023 12:57:39 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e6-20020a656786000000b0053f1d55676fsm1426479pgr.2.2023.05.25.12.57.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 12:57:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 25 May 2023 12:57:37 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Osama Muhammad <osmtendev@gmail.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ucd9000.c: Drop error checking for debugfs_create_dir
-Message-ID: <dbb45a03-ed29-450f-a653-b1cc3c4838a2@roeck-us.net>
-References: <20230525161313.15745-1-osmtendev@gmail.com>
- <efe65d37-0e15-4685-b071-5ddf2b07c6ef@roeck-us.net>
- <CAK6rUAObC7_r1Riqfr7nd_B1BKx=abGXYk7F+5euGCiB2+xmWg@mail.gmail.com>
+        Thu, 25 May 2023 16:49:44 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98CA97;
+        Thu, 25 May 2023 13:49:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685047783; x=1716583783;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=M3hydNvGn1B4ey9GeGKTs3TFBTlEgyvaKvG4ZpFXN2s=;
+  b=ZCa2mqzUTlBVKnZ1MtxyHdMo8x56FtifHJnMaCJ84zUQFjWLv0hxM4cY
+   8ZuMNjXqwaNXtl76v2AVnPMe95yZs9XxiiJuFKOgWDgBo9diiOIpalC48
+   TyZPR37i5XTnRgOcMnDnTi/2ndKAXcSA0+47bmQacJ1OGx+X+el7dlFbA
+   qFN5HtuCidJF/xPoqcaxSbDIDeuX0PQ0zWijr0BA81E9rymS3ndFgdkGS
+   gumQ2c0tt9avt0DmAUeGdQxGf9x29xSZYJq9oFLfAMdxXBSyy5QkZOm0g
+   Y1kfMQKe1Q+M727g35dnl3wdNTdUZy8hawUixMpvTNkPupnHE/cwwSl8q
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="356407478"
+X-IronPort-AV: E=Sophos;i="6.00,192,1681196400"; 
+   d="scan'208";a="356407478"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 13:48:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="829239914"
+X-IronPort-AV: E=Sophos;i="6.00,192,1681196400"; 
+   d="scan'208";a="829239914"
+Received: from dinguyen-mobl1.amr.corp.intel.com (HELO [10.92.18.74]) ([10.92.18.74])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 13:48:01 -0700
+Message-ID: <e1e0895e-4c8d-6453-d098-972beb4d0255@linux.intel.com>
+Date:   Thu, 25 May 2023 15:47:46 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK6rUAObC7_r1Riqfr7nd_B1BKx=abGXYk7F+5euGCiB2+xmWg@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCHv2 3/6] hwmon: (socfpga) Add hardware monitoring support on
+ SoCFPGA platforms
+To:     Armin Wolf <W_Armin@gmx.de>, linux-hwmon@vger.kernel.org
+Cc:     dinguyen@kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, jdelvare@suse.com,
+        linux@roeck-us.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20230508212852.8413-1-dinh.nguyen@linux.intel.com>
+ <20230508212852.8413-3-dinh.nguyen@linux.intel.com>
+ <4aa37522-9072-ac8d-0ba7-c2234c3228bc@gmx.de>
+Content-Language: en-US
+From:   Dinh Nguyen <dinh.nguyen@linux.intel.com>
+In-Reply-To: <4aa37522-9072-ac8d-0ba7-c2234c3228bc@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, May 25, 2023 at 11:36:51PM +0500, Osama Muhammad wrote:
-> On Thu, 25 May 2023 at 23:21, Guenter Roeck <linux@roeck-us.net> wrote:
-> 
-> > On Thu, May 25, 2023 at 09:13:13PM +0500, Osama Muhammad wrote:
-> > > This patch fixes the error checking in ucd9000.c.
-> >
-> > Sure, but you should also explain what is wrong with the code
-> > (i.e., that debugfs_create_dir() does not return NULL but an ERR_PTR
-> > after an error).
-> >
-> Should I send another version of the patch?
-> 
-Please do.
+Hi Armin,
 
-Guenter
-> 
-> >
-> > > The DebugFS kernel API is developed in
-> > > a way that the caller can safely ignore the errors that
-> > > occur during the creation of DebugFS nodes.
-> > >
-> >
-> > If you plan t send more patches, please watch out for the subject line
-> > to match subject lines used in a subsystem. Here it should start with
-> > something like
-> >
-> > hwmon: (pmbus/ucd9000) ...
-> >
-> > Thanks for the information and will keep it in mind while sending patches
-> afterwards.
-> 
-> > Thanks,
-> > Guenter
-> >
-> > > Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
-> > > ---
-> > >  drivers/hwmon/pmbus/ucd9000.c | 2 --
-> > >  1 file changed, 2 deletions(-)
-> > >
-> > > diff --git a/drivers/hwmon/pmbus/ucd9000.c
-> > b/drivers/hwmon/pmbus/ucd9000.c
-> > > index 3daaf2237832..73559afa8ba7 100644
-> > > --- a/drivers/hwmon/pmbus/ucd9000.c
-> > > +++ b/drivers/hwmon/pmbus/ucd9000.c
-> > > @@ -512,8 +512,6 @@ static int ucd9000_init_debugfs(struct i2c_client
-> > *client,
-> > >               return -ENOENT;
-> > >
-> > >       data->debugfs = debugfs_create_dir(client->name, debugfs);
-> > > -     if (!data->debugfs)
-> > > -             return -ENOENT;
-> > >
-> > >       /*
-> > >        * Of the chips this driver supports, only the UCD9090, UCD90160,
-> > > --
-> > > 2.34.1
-> > >
-> 
-> 
-> Thanks,
-> Osmten
+On 5/8/2023 7:57 PM, Armin Wolf wrote:
+> Am 08.05.23 um 23:28 schrieb dinh.nguyen@linux.intel.com:
+>
+>> From: Dinh Nguyen <dinh.nguyen@linux.intel.com>
+>>
+>> The driver supports 64-bit SoCFPGA platforms for temperature and voltage
+>> reading using the platform's SDM(Secure Device Manager). The driver
+>> also uses the Stratix10 Service layer driver.
+>>
+>> This driver only supports OF SoCFPGA 64-bit platforms.
+>>
+>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> Signed-off-by: Dinh Nguyen <dinh.nguyen@linux.intel.com>
+>> ---
+>> v2: clean up race conditions in probe/remove functions
+>>      move changes in service driver to a separate patch
+>>      fix undefined 'ret' value in socfpga_read()
+>>      fix up socfpga_hwmon_err_to_errno() to handle signed integer
+>>      add platform specific dts binding
+>> ---
+>>   Documentation/hwmon/index.rst         |   1 +
+>>   Documentation/hwmon/socfpga-hwmon.rst |  30 ++
+>>   drivers/hwmon/Kconfig                 |  11 +
+>>   drivers/hwmon/Makefile                |   1 +
+>>   drivers/hwmon/socfpga-hwmon.c         | 408 ++++++++++++++++++++++++++
+>>   5 files changed, 451 insertions(+)
+>>   create mode 100644 Documentation/hwmon/socfpga-hwmon.rst
+>>   create mode 100644 drivers/hwmon/socfpga-hwmon.c ICENSE("GPL");
+
+Thanks for the review. I've addressed all of your comments in V3.
+
+Dinh
+
