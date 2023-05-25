@@ -2,60 +2,60 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8874AC77B7A
-	for <linux-hwmon@archiver.kernel.org>; Thu, 25 May 2023 15:58:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A005C77B7A
+	for <linux-hwmon@archiver.kernel.org>; Thu, 25 May 2023 16:09:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241761AbjEYP6b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 25 May 2023 11:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
+        id S231451AbjEYQJe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 25 May 2023 12:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231635AbjEYP6b (ORCPT
+        with ESMTP id S231596AbjEYQJc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 May 2023 11:58:31 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E704BB;
-        Thu, 25 May 2023 08:58:30 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9707313e32eso153267466b.2;
-        Thu, 25 May 2023 08:58:30 -0700 (PDT)
+        Thu, 25 May 2023 12:09:32 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211D910D1;
+        Thu, 25 May 2023 09:09:01 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bcb00a4c2so4135568a12.1;
+        Thu, 25 May 2023 09:09:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685030308; x=1687622308;
+        d=gmail.com; s=20221208; t=1685030939; x=1687622939;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=p0SyaWafeaO92rAJilaK8J8zpaESqC5U4EG8uSUxpmE=;
-        b=NJaGmSfFDQfEvhGlHs4jc0o9BsWZfCx9O6WOoxFPc7jW9izgi0u3wCS/ILu5/qyQOs
-         R1dOXTI+YdGf9et+0qhFiIzD70MDvP5GAd6JRYwWGfMwRStrVZ/Bh6ZjmEho4UCbRGO2
-         wpLSNUZ5+rFvXc8quaboZP0hok6MWitQ+Hl+DeGSC0HvBPAAZi67sPhTc8j81IlhMOL/
-         nBxk1aWDhIcdHFOuoRgKheL7p3+anq1qst4ZnWWg+0kglOSpZ/AZBeHTatQSzEFsTntw
-         BfvF+qNPYR4TT7YD37sWQz/tXSqLYMl/m1Iq70maXtcXyK/juMpbMeK59bhtu0GYuuY4
-         1W3w==
+        bh=IcWAv44UOzgNnQAtx1ryJsdICiVGnUV50w5gHYxHJdU=;
+        b=fbFXoVxPVQEDK7R8QBWEC1K7HGxa802C//fMX4YnZw56/6do6hgNWVtWFd0pT0D7cB
+         MgnUBF1qWGggCG/RHGZeovTjKBygDmm6a4B9CbLVgjnLNDkM1Xsmm+nW4pEZtz6ceD6f
+         hGEea4ie7UGIAJX/jej/kVh75RNnaQv5bfUEnDeCv3aYyUxX58fHipmAVlrjyfvNMLdn
+         I2qywoGy2W5Ly3KvxSmu1cXeNl9q+u/iOkzlgSlJVcMU36SjpovBaAgZA16nefeCqbHh
+         oNj4YPjA39Qk8cKiF7hHabev8Nq35vPVnXxtlzYewwerqQZcFZXxXKasdFB8zO7LmSb5
+         Y9uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685030308; x=1687622308;
+        d=1e100.net; s=20221208; t=1685030939; x=1687622939;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=p0SyaWafeaO92rAJilaK8J8zpaESqC5U4EG8uSUxpmE=;
-        b=OGnlkL3V+HlIdWfrwF5OlBsHbTaC9lfCoAtEgAckf2gzCdSijApyeDbinZYTjN8Bp2
-         FOjv8Fk8wE8iSP4/ZfqCLidTCI0+r/rndsA3cItp203f3G/JXQ3KK3Xd9tVCLNr4WGi3
-         7w5i5DRgA/Cvql6vwFSiNABXEPKaPfiV/4BMjrrVO8IcDFXkeBEijD2p5NQHjFveIGUb
-         FXr/eVFZCG2MBNbk0EIF20Q21wtSYFYgLouHT7BnPpDVUEubjmSYV+tvS25eLv1rolYb
-         CmOJVLdjgfnvLKg9d5V1HKb3m7xvgyzdKAAsVoFJFZLDiw8Y7FEfncZ3iaVv62EJMKl6
-         3EFA==
-X-Gm-Message-State: AC+VfDzSzXNJoVOp3pZAgET0aG6qBg0r3Jc+vswEb+8lYcXmP+xHTm7e
-        C2MdXToKjLG9kFbeidy8YxFcH89ZHhLuCA==
-X-Google-Smtp-Source: ACHHUZ5xX5DhzOFm4j2x2B8WyfZhd/gc356MLb/fIhdzi9MxVsr97MyzrPSMzxibR4ayP/D+o0p2fw==
-X-Received: by 2002:a17:907:86a0:b0:96f:98f1:6512 with SMTP id qa32-20020a17090786a000b0096f98f16512mr1960294ejc.41.1685030308025;
-        Thu, 25 May 2023 08:58:28 -0700 (PDT)
+        bh=IcWAv44UOzgNnQAtx1ryJsdICiVGnUV50w5gHYxHJdU=;
+        b=J5WZ4xsrUtiGlNT9d3iybEU0LFpNY6oFirVH+IqKfUn1oP94TvIoozgd8aJXFu82ti
+         NuZMUJ+Diyb2BReEr9YFYztreyr7cHqpjDDPvlvYE3JG/leTwEhRKzWgpQ/vA0VNUN9J
+         m+RmjrtXYxsJfvpyPzDtiqOODt4GWirIHQ8etGiUHxqgZBnvzJGiYqoZA/Yq3Qm+RwXw
+         rL8mnnzesETdUi+V5YTMtCuRA8deR2LTdTBxBL71qE2ayGg9vjbgDuutf52z4pXaSW2G
+         OWFOrVP6nC32qBF2m/UXkWe/WKlwFjGpJ7kGd+iS3bcZjOmHZfJYGNzRWLpE8yao93b6
+         Yj+g==
+X-Gm-Message-State: AC+VfDzMILB192OXMjkzIy1g+2TGRaQTEiYVEz5prepTkMe6ZoAX2TGp
+        WCuONJbTPivsuVSGOEZO51A=
+X-Google-Smtp-Source: ACHHUZ5aRnoSIRNdiIHvkgCkLYnZLc8qfPsO3XjpYKTNfLJB6im8Hvz60RomEksrR7SmVMKhDhgvSA==
+X-Received: by 2002:aa7:d484:0:b0:50d:b7e5:fdde with SMTP id b4-20020aa7d484000000b0050db7e5fddemr4782214edr.19.1685030938612;
+        Thu, 25 May 2023 09:08:58 -0700 (PDT)
 Received: from Osmten.. ([103.84.150.78])
-        by smtp.gmail.com with ESMTPSA id x23-20020a170906149700b00969dc13d0b1sm999164ejc.43.2023.05.25.08.58.25
+        by smtp.gmail.com with ESMTPSA id a15-20020aa7d90f000000b00510d8e43fe0sm696613edr.7.2023.05.25.09.08.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 08:58:27 -0700 (PDT)
+        Thu, 25 May 2023 09:08:58 -0700 (PDT)
 From:   Osama Muhammad <osmtendev@gmail.com>
 To:     linux@roeck-us.net, jdelvare@suse.com
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         Osama Muhammad <osmtendev@gmail.com>
-Subject: [PATCH v2] adm1266.c: Fix error checking for debugfs_create_dir
-Date:   Thu, 25 May 2023 20:58:06 +0500
-Message-Id: <20230525155806.14690-1-osmtendev@gmail.com>
+Subject: [PATCH] adm1266.c: Drop error checking for debugfs_create_dir
+Date:   Thu, 25 May 2023 21:08:27 +0500
+Message-Id: <20230525160827.15285-1-osmtendev@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -63,30 +63,25 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This patch fixes the error checking in adm1266.
+This patch fixes the error checking in adm1266.c.
 The DebugFS kernel API is developed in
 a way that the caller can safely ignore the errors that
 occur during the creation of DebugFS nodes.
 
 Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
-
----
-
-changes since v1:
-	-Dropped the error checking for debugfs_create_dir
 ---
  drivers/hwmon/pmbus/adm1266.c | 2 --
  1 file changed, 2 deletions(-)
 
 diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-index d88b6115b42e..184d75269d2b 100644
+index 1ac2b2f4c570..184d75269d2b 100644
 --- a/drivers/hwmon/pmbus/adm1266.c
 +++ b/drivers/hwmon/pmbus/adm1266.c
 @@ -340,8 +340,6 @@ static void adm1266_init_debugfs(struct adm1266_data *data)
  		return;
  
  	data->debugfs_dir = debugfs_create_dir(data->client->name, root);
--	if (IS_ERR(data->debugfs_dir))
+-	if (!data->debugfs_dir)
 -		return;
  
  	debugfs_create_devm_seqfile(&data->client->dev, "sequencer_state", data->debugfs_dir,
