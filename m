@@ -2,105 +2,131 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DA18C7EE29
-	for <linux-hwmon@archiver.kernel.org>; Thu, 25 May 2023 18:22:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5058BC7EE29
+	for <linux-hwmon@archiver.kernel.org>; Thu, 25 May 2023 19:57:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232800AbjEYSWs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 25 May 2023 14:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
+        id S240840AbjEYT5p (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 25 May 2023 15:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbjEYSWr (ORCPT
+        with ESMTP id S242073AbjEYT5p (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 May 2023 14:22:47 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C58E2;
-        Thu, 25 May 2023 11:22:46 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-6238b15d298so608836d6.0;
-        Thu, 25 May 2023 11:22:46 -0700 (PDT)
+        Thu, 25 May 2023 15:57:45 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BC090;
+        Thu, 25 May 2023 12:57:40 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64d24136685so111915b3a.1;
+        Thu, 25 May 2023 12:57:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685038965; x=1687630965;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LCYamoQ/cXfRxWQHGyTpAloY70tX3p/WOFuPH93ZdDs=;
-        b=XlNv5bmBO2/P2UMavmyGO/KB0uJyMnUJVb3bQRFl0h5XQjwYkdvlKy2pdjBhYxFubn
-         TAn9OranLZ0ZLYYP3fzBuU2gc2K36TiK8fUW/x/XbevnIFxdpGXNjrO4PqKBVbNiJPaB
-         LyFzGKg9kYFTq3t/FYxJHm2AE8/kwn5DKWP0fUErSMRWsgLjAaYKseWUvc2gAb6Zt86P
-         0LVZbkO3/W/VB6E/ig5rpop9QCbTnie0OIgY0tB4mUCO+HlpkSru/1GJ7CAR54qnN9SI
-         C2SKAnM+Z1WJtCPlJnKXVTu/eJDwNPuebq54wh5SAj6VipGTT8iUkboeydLfPIiDncO4
-         owVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685038965; x=1687630965;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1685044659; x=1687636659;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LCYamoQ/cXfRxWQHGyTpAloY70tX3p/WOFuPH93ZdDs=;
-        b=mE3yYcBSC0kXbBUbT4jfVqB4eHC9msHaDBtvx7cr4sBW3CAe10cCPOaplVfIQZ1VO/
-         5yU5YZmAyZwJUaC3dx0FkLig3oSwHje885zSJ2dimufiN0eLqkdxSDtG7Lkad5eMSTWk
-         cyXxrEu5HLRJ19hDZ8uEz97w8vMksqYFBE2dIcY2ILdHhyNVQKKO/Qnp8EbqdYc8+XCK
-         YMrXQZtlWy2Pdf7lYWZ+ZpRympNEL5Uifwscp+EINF5NBX5IFUaUDcsYbBiGiB8j8yRq
-         /SlYEiHWeTyapCNGPbWsGsLO7wErZ791GF85WMQ0HocGJP8jgqUMd8uBg0tTJx5fkZ2y
-         iiVw==
-X-Gm-Message-State: AC+VfDxsPrxZBA3XuZImTn+rYbEPfZfKPeE0rIM20D20gc20igntG403
-        GbvIF6NQ4LtTWzneL8bhsk2KoNY9tINCwk7wl0qR2mIkQwA=
-X-Google-Smtp-Source: ACHHUZ6EJqO8TVHnz2hJCncpsFXCQc+8nMEQG9UNvnORiP4h3NLCPKj2bidP8fho0TkzAcKX96mzg0Kl8gVOeQhsJng=
-X-Received: by 2002:ad4:5cce:0:b0:625:aa49:ceb0 with SMTP id
- iu14-20020ad45cce000000b00625aa49ceb0mr2750957qvb.57.1685038964984; Thu, 25
- May 2023 11:22:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230525160827.15285-1-osmtendev@gmail.com> <5b8700fb-d455-469e-a34d-62cb6f68d324@roeck-us.net>
-In-Reply-To: <5b8700fb-d455-469e-a34d-62cb6f68d324@roeck-us.net>
-From:   Osama Muhammad <osmtendev@gmail.com>
-Date:   Thu, 25 May 2023 23:22:33 +0500
-Message-ID: <CAK6rUANVnXctUoxPdqefRjEe1BQ_AkDrksJN9bpuE6KkOXBTjA@mail.gmail.com>
-Subject: Re: [PATCH] adm1266.c: Drop error checking for debugfs_create_dir
-To:     Guenter Roeck <linux@roeck-us.net>
+        bh=lmmhv48Wx/MF3uObt6Yd6M6kPhlVT9sswyKngMoKdcs=;
+        b=EqwqEAgYGJlXkvyZSp9BoOnkX9RBzwi1lmKDN/4ViqE9ZW0KuzjVgd1x8mTKmEL+Op
+         NwTZ1Rd27SKwSNH54bftHDLo2Ow3GxlGFIHmpkRGu8G6n/zR/zYhSX4JM8SDkH7REg8Z
+         mG7C5Ic/u3Y+b4hvRapeq3RNqJuyy7YrcZ220F+CkEBU+5avXbqeeR5SbW+6Glv9wG17
+         /hPU/D4zalh60sx235eFE28AzBPTpHf0JHHLc0Ccqfxg71M9FPFES7qINQiYQ8UY0G+Y
+         zob0W3ChlEWhp4sx1B31wIc53iLMvDU6JTDpVtv00x8b9nCiikCEz3hk4F8fyM9ahvcX
+         uASg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685044659; x=1687636659;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lmmhv48Wx/MF3uObt6Yd6M6kPhlVT9sswyKngMoKdcs=;
+        b=b9yftLywSV5PnL5aQMhTwwlZnY3JQvZR4HNhSGsH34tIvrmqXmQfBn+hcg4ABTeHXW
+         JpnCOJRxay43NprzmlWtIpApStr2onotV4sM3C9/SJSS8RbpGdpRSLQv0W99GjjldKtw
+         8ipExWrcIHHcSmCBvN7m1AXMyFOPYnZQvrh6MDmA71Aeqf04Dhu7i59AT+lWbvkB2/Og
+         L6CBCmVTLrBtVgqJBjJ95fvyBJpJYKZXIw1bWFw1kxkVfeDMK9R8mslcxgETYy7wyJNQ
+         t8ljBo+xfa+jHqPnOMHFTfyvtfVxECLeL2KAmHWd0EXcZUS/o8MMFJ1Xk3kTFPY6BxNh
+         BxxA==
+X-Gm-Message-State: AC+VfDwHdCF4hmGuJ7J2ngVTFThuWUQ5lUfrQZ9wki2Uf6ppqFq03XId
+        f5nBEjm3OZzSnFZcICX8a72CM/nNPBQ=
+X-Google-Smtp-Source: ACHHUZ6cmr25whO+G61Zw3VzKaiM0Il0TQcSkFmnNz0POgKKw3OdvBR6jz3axl4B7ayDTklTHfZz7w==
+X-Received: by 2002:a05:6a20:3953:b0:103:e813:77a1 with SMTP id r19-20020a056a20395300b00103e81377a1mr5194887pzg.15.1685044659594;
+        Thu, 25 May 2023 12:57:39 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e6-20020a656786000000b0053f1d55676fsm1426479pgr.2.2023.05.25.12.57.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 12:57:39 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 25 May 2023 12:57:37 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Osama Muhammad <osmtendev@gmail.com>
 Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] ucd9000.c: Drop error checking for debugfs_create_dir
+Message-ID: <dbb45a03-ed29-450f-a653-b1cc3c4838a2@roeck-us.net>
+References: <20230525161313.15745-1-osmtendev@gmail.com>
+ <efe65d37-0e15-4685-b071-5ddf2b07c6ef@roeck-us.net>
+ <CAK6rUAObC7_r1Riqfr7nd_B1BKx=abGXYk7F+5euGCiB2+xmWg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK6rUAObC7_r1Riqfr7nd_B1BKx=abGXYk7F+5euGCiB2+xmWg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This is the new patch not v3. The patch I sent as v2 was a mistake.
-Please discard the patch I sent earlier as v2 .
-Apologies for the confusion.Hope it clarifies.
+On Thu, May 25, 2023 at 11:36:51PM +0500, Osama Muhammad wrote:
+> On Thu, 25 May 2023 at 23:21, Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+> > On Thu, May 25, 2023 at 09:13:13PM +0500, Osama Muhammad wrote:
+> > > This patch fixes the error checking in ucd9000.c.
+> >
+> > Sure, but you should also explain what is wrong with the code
+> > (i.e., that debugfs_create_dir() does not return NULL but an ERR_PTR
+> > after an error).
+> >
+> Should I send another version of the patch?
+> 
+Please do.
 
-Regards,
-Osmten
-
-
-
-On Thu, 25 May 2023 at 23:17, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Thu, May 25, 2023 at 09:08:27PM +0500, Osama Muhammad wrote:
-> > This patch fixes the error checking in adm1266.c.
-> > The DebugFS kernel API is developed in
-> > a way that the caller can safely ignore the errors that
-> > occur during the creation of DebugFS nodes.
+Guenter
+> 
 > >
-> > Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
->
-> Confusing. Is this v3 of the patch ?
->
-> Guenter
->
-> > ---
-> >  drivers/hwmon/pmbus/adm1266.c | 2 --
-> >  1 file changed, 2 deletions(-)
+> > > The DebugFS kernel API is developed in
+> > > a way that the caller can safely ignore the errors that
+> > > occur during the creation of DebugFS nodes.
+> > >
 > >
-> > diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-> > index 1ac2b2f4c570..184d75269d2b 100644
-> > --- a/drivers/hwmon/pmbus/adm1266.c
-> > +++ b/drivers/hwmon/pmbus/adm1266.c
-> > @@ -340,8 +340,6 @@ static void adm1266_init_debugfs(struct adm1266_data *data)
-> >               return;
+> > If you plan t send more patches, please watch out for the subject line
+> > to match subject lines used in a subsystem. Here it should start with
+> > something like
 > >
-> >       data->debugfs_dir = debugfs_create_dir(data->client->name, root);
-> > -     if (!data->debugfs_dir)
-> > -             return;
+> > hwmon: (pmbus/ucd9000) ...
 > >
-> >       debugfs_create_devm_seqfile(&data->client->dev, "sequencer_state", data->debugfs_dir,
-> >                                   adm1266_state_read);
-> > --
-> > 2.34.1
+> > Thanks for the information and will keep it in mind while sending patches
+> afterwards.
+> 
+> > Thanks,
+> > Guenter
 > >
+> > > Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+> > > ---
+> > >  drivers/hwmon/pmbus/ucd9000.c | 2 --
+> > >  1 file changed, 2 deletions(-)
+> > >
+> > > diff --git a/drivers/hwmon/pmbus/ucd9000.c
+> > b/drivers/hwmon/pmbus/ucd9000.c
+> > > index 3daaf2237832..73559afa8ba7 100644
+> > > --- a/drivers/hwmon/pmbus/ucd9000.c
+> > > +++ b/drivers/hwmon/pmbus/ucd9000.c
+> > > @@ -512,8 +512,6 @@ static int ucd9000_init_debugfs(struct i2c_client
+> > *client,
+> > >               return -ENOENT;
+> > >
+> > >       data->debugfs = debugfs_create_dir(client->name, debugfs);
+> > > -     if (!data->debugfs)
+> > > -             return -ENOENT;
+> > >
+> > >       /*
+> > >        * Of the chips this driver supports, only the UCD9090, UCD90160,
+> > > --
+> > > 2.34.1
+> > >
+> 
+> 
+> Thanks,
+> Osmten
