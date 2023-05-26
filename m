@@ -2,94 +2,107 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9B58C77B7A
-	for <linux-hwmon@archiver.kernel.org>; Fri, 26 May 2023 17:13:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF2C7C77B7A
+	for <linux-hwmon@archiver.kernel.org>; Fri, 26 May 2023 21:07:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242401AbjEZRNm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 26 May 2023 13:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
+        id S244009AbjEZVHn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 26 May 2023 17:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231679AbjEZRNd (ORCPT
+        with ESMTP id S237887AbjEZVHm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 26 May 2023 13:13:33 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55B9E55;
-        Fri, 26 May 2023 10:13:15 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53063897412so895232a12.0;
-        Fri, 26 May 2023 10:13:15 -0700 (PDT)
+        Fri, 26 May 2023 17:07:42 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2879C18D
+        for <linux-hwmon@vger.kernel.org>; Fri, 26 May 2023 14:07:41 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-2564b0921f1so14256a91.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 26 May 2023 14:07:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685121195; x=1687713195;
+        d=gmail.com; s=20221208; t=1685135260; x=1687727260;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZlQHkKnfhl85SPjjrArwZ6AQVNhnLN/Xet9CRnwYrw0=;
-        b=A3Lh+N6fJO0IkjxwSqXx7EAW/qC9140wcOLmB3/aiO24+t5FtzDfFse4NueeariLTI
-         WJPzAS/1qFrbRR0T8+J9w2diOuCZMgPBSxi/FA+c2ceI9a53XnyIUbsiTNH/kJbD9J6E
-         2JqnHb+BX/gWS94rsRSYkqsghnNilSDYiiSvjbmgRn+D98CRl2sR4kgSS3WqReag53cX
-         AFMbdMAt1xjwYP0wI+Ri+GuqFt+2VbXyaojKkSzDcvzysSR/8ZxF1C0BhE56A43BJXKs
-         jMEYQ8QAkGGUiJmXYUfQh1HfGzdsUFx3vU/lNv05AG6fQdt2Nr22iwp9csmda84/k548
-         IR/Q==
+        bh=ne0yELtV2QExS3Xji+nzfMBu1HvSnw5v3FXjRlzj9Dc=;
+        b=rlFPyz+BVsyFg3Sb+3EUfANuFDvku95CmnS/Pk+dsi62XzLgqQriDLPY8QVTPdsyYZ
+         H5xKvsor0pG08j+Hefkxwp621Qd2XmFHhvP1vI9BJM4jdDO/IOpjwPbzDDzMM2a2IHS0
+         jzes84tthQ1jMAL61Y8Cbopoe2VpUljTvQqsosfiSyFkiiyukW8JUmkYVLM/khlJUgP6
+         G9fryXjWeLun1LS50zQQ0nuTAgPvC3qmqtdDAqbjKlMN/59tpkf/0gvFKHsQ2gD1KUn0
+         hT/H7MIUEmXbyh45Ma/wuKGiQPq15W34q0aWy1i9OpktHdT3ByqloM4llYxK41GIOZxw
+         RAQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685121195; x=1687713195;
+        d=1e100.net; s=20221208; t=1685135260; x=1687727260;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZlQHkKnfhl85SPjjrArwZ6AQVNhnLN/Xet9CRnwYrw0=;
-        b=VoWCe0v6eGcn+e2klM/J1m9qngwVCHDgVjnfy1IdzZV4O4KolhmBXKdYgV6hNXPjKk
-         gp565uhiO1rAxRQiR3nQEYNgxhXcX+DjSLDJg7R9LzWjDaaIBeYQfBza5p92qmmWOfsp
-         Of6RivO6f1/dJ8ii/Uj+IcPOj/cDFg/WhWqx7CX3RKZaVlHTNghdYChEYtR4I1il75e8
-         K3NiVs2upnhbGAEww6SVQsB/Ya/VVRzFuBSDWXP0nIARkCqEg55h7Kj0kiowDuFAlwKH
-         hoGjkLUP+fp0hBK30iQK8LvjnzZenqginIwi2RqVGZOo9MS6ewnQ4TOQ2E4fmWf6ZJdq
-         LLYw==
-X-Gm-Message-State: AC+VfDzL/uVPMS35pmd0eoNUheK51zfR6F+uddTV3zq4NKkkKPefKLFv
-        xEZDbWpZGNhqKNHsatJiF0s=
-X-Google-Smtp-Source: ACHHUZ6z6YWhk46iYE/hP6ucChzj5Ph/02XwIeeQgx1zna6CPOkm/MJbWgn5imibuH81foXcpOhvHw==
-X-Received: by 2002:a17:903:228a:b0:1ae:536c:3d9c with SMTP id b10-20020a170903228a00b001ae536c3d9cmr3777231plh.37.1685121194707;
-        Fri, 26 May 2023 10:13:14 -0700 (PDT)
+        bh=ne0yELtV2QExS3Xji+nzfMBu1HvSnw5v3FXjRlzj9Dc=;
+        b=c1g+0iV7YweoVQ/PcSnhSoonUrUXGLwkGKw6UIRKaGKHI8D9Gza9U5RtgXTHG8cCiF
+         vmZvoAAZsBKYJ93eahk1vJmMrBrugG3kj6nsbkeW+CKJX7TVce1/KAqrISES93+E3T2M
+         mshjw2YgdmJVlzWLKwlAveE9Wdx0FIg0bDGLNwbX88JQYZiWPkWEHQIKxuvC/4fvGzSQ
+         I2mnArHXpauoeHNJ1Z3P5O7rvR7ByQTGgVm3MhDyQJnCFrpHntgBaG6/FKMSdVPnS+SO
+         89S21ZuUo8Nt6bYY5p7+Bci9DnYEAyCmo39C0MrTz5piuBTmme4if05AoFTsi72qSx0H
+         AcZw==
+X-Gm-Message-State: AC+VfDy1r7jhojPmam4gOiSaf5DaIC4oZYuU54XvhDAQfKsKhqHnrtq0
+        OAIHJKqUOE1ya/abeAYCGEwRw7WJLvg=
+X-Google-Smtp-Source: ACHHUZ71CptY5xdK7LoHlszttu5QJFNjme4jKykf8l2S/D3cbVzPvQPi7h/UGza41tHf7kBuO4T49g==
+X-Received: by 2002:a17:90a:9403:b0:252:8f70:c807 with SMTP id r3-20020a17090a940300b002528f70c807mr3745576pjo.12.1685135260530;
+        Fri, 26 May 2023 14:07:40 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c10-20020a170902c1ca00b001afccb29d69sm3491115plc.303.2023.05.26.10.13.13
+        by smtp.gmail.com with ESMTPSA id v4-20020a17090a458400b00246f9725ffcsm3147636pjg.33.2023.05.26.14.07.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 10:13:14 -0700 (PDT)
+        Fri, 26 May 2023 14:07:39 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 26 May 2023 10:13:13 -0700
+Date:   Fri, 26 May 2023 14:07:38 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Noah Wang <noahwang.wang@outlook.com>
-Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: mp2891: add MP2891 driver
-Message-ID: <c22c8d90-b26a-44db-9930-25f9d4a180fe@roeck-us.net>
-References: <TYZPR03MB7130A7F41D61BFB611DDF0C7FA479@TYZPR03MB7130.apcprd03.prod.outlook.com>
- <44cf26ec-172d-41a8-a700-4b1e3307200b@roeck-us.net>
+To:     Osama Muhammad <osmtendev@gmail.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon:(pmbus/ucd9000): Drop unnecessary error check
+ for debugfs_create_dir
+Message-ID: <9e9f9b29-f1e5-48aa-93e1-a9f7a664f355@roeck-us.net>
+References: <20230526154906.6370-1-osmtendev@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <44cf26ec-172d-41a8-a700-4b1e3307200b@roeck-us.net>
+In-Reply-To: <20230526154906.6370-1-osmtendev@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, May 26, 2023 at 09:23:12AM -0700, Guenter Roeck wrote:
-[ ... ]
+On Fri, May 26, 2023 at 08:49:06PM +0500, Osama Muhammad wrote:
+> This patch removes the error checking for debugfs_create_dir
+> in ucd9000.c. This is because the debugfs_create_dir() does not
+> return NULL but an ERR_PTR after an error.
+> The DebugFS kernel API is developed in a way that the
+> caller can safely ignore the errors that occur during
+> the creation of DebugFS nodes.The debugfs Api handles
+> it gracefully. The check is unnecessary.
 > 
-> The above functions really do not make any sense whatsoever, meaning I do
-> not trust that any of the remaining functions are needed either. Please
-> only provide necessary private functions. For each function which is
-> actually needed please explain why the core function can not be used.
+> Link to the comment above debugfs_create_dir:
+> https://elixir.bootlin.com/linux/latest/source/fs/debugfs/inode.c#L565
 > 
-> Note that access to the datasheet would help me to determine which of
-> those functions are really needed. Requiring me to create an account
-> just to read a non-descriptive one-page "datasheet" doesn't help at all
-> (and, FWIW, is really pointless).
-> 
+> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
 
-Adding to that: An internal source with access to the datasheet stated
-that almost all registers/command would be standard, and that only VID
-handling would be special. Even for that I am not sure if that is really
-correct, and that the VID stepping is so far out of standard VID coding
-that it can't be modeled as standard VID stepping. As such, I am not
-inclined to accept a driver which re-implements pretty much all telemetry
-registers without some very specific and confirmable information that
-and why this is really needed. A vague reference to the datasheet won't
-help, sorry.
+Applied.
 
+Thanks,
 Guenter
+
+> ---
+> changes since v1
+> 	-Added more descriptive commit message.
+> ---
+>  drivers/hwmon/pmbus/ucd9000.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
+> index 3daaf2237832..73559afa8ba7 100644
+> --- a/drivers/hwmon/pmbus/ucd9000.c
+> +++ b/drivers/hwmon/pmbus/ucd9000.c
+> @@ -512,8 +512,6 @@ static int ucd9000_init_debugfs(struct i2c_client *client,
+>  		return -ENOENT;
+>  
+>  	data->debugfs = debugfs_create_dir(client->name, debugfs);
+> -	if (!data->debugfs)
+> -		return -ENOENT;
+>  
+>  	/*
+>  	 * Of the chips this driver supports, only the UCD9090, UCD90160,
