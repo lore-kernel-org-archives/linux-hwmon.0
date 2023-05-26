@@ -2,102 +2,94 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDB72C77B73
-	for <linux-hwmon@archiver.kernel.org>; Fri, 26 May 2023 16:39:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9B58C77B7A
+	for <linux-hwmon@archiver.kernel.org>; Fri, 26 May 2023 17:13:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjEZQj7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 26 May 2023 12:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
+        id S242401AbjEZRNm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 26 May 2023 13:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjEZQj6 (ORCPT
+        with ESMTP id S231679AbjEZRNd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 26 May 2023 12:39:58 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F17D9
-        for <linux-hwmon@vger.kernel.org>; Fri, 26 May 2023 09:39:57 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d2a87b9daso894457b3a.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 26 May 2023 09:39:57 -0700 (PDT)
+        Fri, 26 May 2023 13:13:33 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55B9E55;
+        Fri, 26 May 2023 10:13:15 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53063897412so895232a12.0;
+        Fri, 26 May 2023 10:13:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685119196; x=1687711196;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qhb/vOFF2NqgnJM1Rv40XPvcXse6tdFjLG2Lqc9aS7A=;
-        b=ELa+Z/oqn7//d9oMW6QBYham0tHrixc3lsUFhz/y9kXbcJYuCACIj3318IBPpO4uNX
-         dKBgleJxx0WKCEG9o7FhIZpNUZbN04AON6qj/Z3t3wd4lJORIAFgIIlww1OMWeiVAIhX
-         dZxc4n/Pp5iOv+pkphMrgySJ20Bl4eTQaTNvEAIWP7cZ8xjhZQwBI8HFwbfT6dlGtpUS
-         I+nnugGvKqYrI5NVHEFsaNuqlEDmj2zfFFg6JwMJ/ZdCJyT+H4Fi0L9jRzunCse5IOGF
-         +OLgf+5uRqtzwFerzlOwrbU1YCavSLVvcfPou/G8upt1NrhIArCBW/8E6NSr4S8d/Jyd
-         VmVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685119196; x=1687711196;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1685121195; x=1687713195;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Qhb/vOFF2NqgnJM1Rv40XPvcXse6tdFjLG2Lqc9aS7A=;
-        b=eP8nUYTn8joi8IExMm9SqKTFBzt6XH1C6ACHbUyvWm0ZZs5k5ldd4VtbJfxMt/5hg7
-         bGP0SVU4rHUZ1/HMhXtr7CygTxBXo6iUtjSojLqkNXWmysLhnZvIwcVzXXbyAWwLO1h9
-         jrpINLaiiYbfEbG29ueeXRi96qlg6lQx0ScecaJjRFB2dgYiSXHITcSv8uRywuSAq8zu
-         eRFMuNy4R0PBwZ+qdhL3JCVsdgaz6L8PfvjJzkPSgIoalZrt43xUoLBcfglZo9Amnbdx
-         ZM3HxuQ+e5Cf1W3DmaqU4FlTGfulQbWVQ0/EgSkFP2e4sOsbSIqS8I+ulFZO150G4G53
-         3HKw==
-X-Gm-Message-State: AC+VfDzmFaeDHYik1nM4ZaXkU0BdpdLPLo/GRnbzAhrua29WaA1F9ur3
-        hDBGyBn/Un1qUyA1zO4fLbM=
-X-Google-Smtp-Source: ACHHUZ7B9auA1927/suqZVkD02v6JHlUMPqmsO/ObWj/baaaCUPp6nES00AZCvXBctnR+X9y47NTuA==
-X-Received: by 2002:a05:6a20:12c7:b0:10c:80a:47fd with SMTP id v7-20020a056a2012c700b0010c080a47fdmr3266308pzg.36.1685119195860;
-        Fri, 26 May 2023 09:39:55 -0700 (PDT)
-Received: from Osmten.. ([103.84.150.92])
-        by smtp.gmail.com with ESMTPSA id b16-20020aa78710000000b00627ed4e23e0sm2933731pfo.101.2023.05.26.09.39.52
+        bh=ZlQHkKnfhl85SPjjrArwZ6AQVNhnLN/Xet9CRnwYrw0=;
+        b=A3Lh+N6fJO0IkjxwSqXx7EAW/qC9140wcOLmB3/aiO24+t5FtzDfFse4NueeariLTI
+         WJPzAS/1qFrbRR0T8+J9w2diOuCZMgPBSxi/FA+c2ceI9a53XnyIUbsiTNH/kJbD9J6E
+         2JqnHb+BX/gWS94rsRSYkqsghnNilSDYiiSvjbmgRn+D98CRl2sR4kgSS3WqReag53cX
+         AFMbdMAt1xjwYP0wI+Ri+GuqFt+2VbXyaojKkSzDcvzysSR/8ZxF1C0BhE56A43BJXKs
+         jMEYQ8QAkGGUiJmXYUfQh1HfGzdsUFx3vU/lNv05AG6fQdt2Nr22iwp9csmda84/k548
+         IR/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685121195; x=1687713195;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZlQHkKnfhl85SPjjrArwZ6AQVNhnLN/Xet9CRnwYrw0=;
+        b=VoWCe0v6eGcn+e2klM/J1m9qngwVCHDgVjnfy1IdzZV4O4KolhmBXKdYgV6hNXPjKk
+         gp565uhiO1rAxRQiR3nQEYNgxhXcX+DjSLDJg7R9LzWjDaaIBeYQfBza5p92qmmWOfsp
+         Of6RivO6f1/dJ8ii/Uj+IcPOj/cDFg/WhWqx7CX3RKZaVlHTNghdYChEYtR4I1il75e8
+         K3NiVs2upnhbGAEww6SVQsB/Ya/VVRzFuBSDWXP0nIARkCqEg55h7Kj0kiowDuFAlwKH
+         hoGjkLUP+fp0hBK30iQK8LvjnzZenqginIwi2RqVGZOo9MS6ewnQ4TOQ2E4fmWf6ZJdq
+         LLYw==
+X-Gm-Message-State: AC+VfDzL/uVPMS35pmd0eoNUheK51zfR6F+uddTV3zq4NKkkKPefKLFv
+        xEZDbWpZGNhqKNHsatJiF0s=
+X-Google-Smtp-Source: ACHHUZ6z6YWhk46iYE/hP6ucChzj5Ph/02XwIeeQgx1zna6CPOkm/MJbWgn5imibuH81foXcpOhvHw==
+X-Received: by 2002:a17:903:228a:b0:1ae:536c:3d9c with SMTP id b10-20020a170903228a00b001ae536c3d9cmr3777231plh.37.1685121194707;
+        Fri, 26 May 2023 10:13:14 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170902c1ca00b001afccb29d69sm3491115plc.303.2023.05.26.10.13.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 09:39:55 -0700 (PDT)
-From:   Osama Muhammad <osmtendev@gmail.com>
-To:     linux@roeck-us.net, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, Osama Muhammad <osmtendev@gmail.com>
-Subject: [PATCH v3] hwmon:(pmbus/adm1266): Drop unnecessary error check for debugfs_create_dir
-Date:   Fri, 26 May 2023 21:39:38 +0500
-Message-Id: <20230526163938.9903-1-osmtendev@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 26 May 2023 10:13:14 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 26 May 2023 10:13:13 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Noah Wang <noahwang.wang@outlook.com>
+Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: mp2891: add MP2891 driver
+Message-ID: <c22c8d90-b26a-44db-9930-25f9d4a180fe@roeck-us.net>
+References: <TYZPR03MB7130A7F41D61BFB611DDF0C7FA479@TYZPR03MB7130.apcprd03.prod.outlook.com>
+ <44cf26ec-172d-41a8-a700-4b1e3307200b@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <44cf26ec-172d-41a8-a700-4b1e3307200b@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This patch removes the error checking for debugfs_create_dir
-in adm1266.c. This is because the debugfs_create_dir() does not
-return NULL but an ERR_PTR after an error.
-The DebugFS kernel API is developed in a way that the
-caller can safely ignore the errors that occur during
-the creation of DebugFS nodes.The debugfs Api handles
-it gracefully. The check is unnecessary.
+On Fri, May 26, 2023 at 09:23:12AM -0700, Guenter Roeck wrote:
+[ ... ]
+> 
+> The above functions really do not make any sense whatsoever, meaning I do
+> not trust that any of the remaining functions are needed either. Please
+> only provide necessary private functions. For each function which is
+> actually needed please explain why the core function can not be used.
+> 
+> Note that access to the datasheet would help me to determine which of
+> those functions are really needed. Requiring me to create an account
+> just to read a non-descriptive one-page "datasheet" doesn't help at all
+> (and, FWIW, is really pointless).
+> 
 
-Link to the comment above debugfs_create_dir:
-https://elixir.bootlin.com/linux/latest/source/fs/debugfs/inode.c#L565
+Adding to that: An internal source with access to the datasheet stated
+that almost all registers/command would be standard, and that only VID
+handling would be special. Even for that I am not sure if that is really
+correct, and that the VID stepping is so far out of standard VID coding
+that it can't be modeled as standard VID stepping. As such, I am not
+inclined to accept a driver which re-implements pretty much all telemetry
+registers without some very specific and confirmable information that
+and why this is really needed. A vague reference to the datasheet won't
+help, sorry.
 
-Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
-
----
-changes since v2
-	-Added more descriptive commit message.
-
-changes since v1
-	-In v1 the IS_ERR was used for error checking which is dropped now.
----
- drivers/hwmon/pmbus/adm1266.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-index 1ac2b2f4c570..184d75269d2b 100644
---- a/drivers/hwmon/pmbus/adm1266.c
-+++ b/drivers/hwmon/pmbus/adm1266.c
-@@ -340,8 +340,6 @@ static void adm1266_init_debugfs(struct adm1266_data *data)
- 		return;
- 
- 	data->debugfs_dir = debugfs_create_dir(data->client->name, root);
--	if (!data->debugfs_dir)
--		return;
- 
- 	debugfs_create_devm_seqfile(&data->client->dev, "sequencer_state", data->debugfs_dir,
- 				    adm1266_state_read);
--- 
-2.34.1
-
+Guenter
