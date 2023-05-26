@@ -2,110 +2,115 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EC47C77B7A
-	for <linux-hwmon@archiver.kernel.org>; Fri, 26 May 2023 21:08:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC54FC77B7C
+	for <linux-hwmon@archiver.kernel.org>; Fri, 26 May 2023 21:58:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237887AbjEZVIu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 26 May 2023 17:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
+        id S244440AbjEZV6y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 26 May 2023 17:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjEZVIu (ORCPT
+        with ESMTP id S244342AbjEZV6j (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 26 May 2023 17:08:50 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCEBBD
-        for <linux-hwmon@vger.kernel.org>; Fri, 26 May 2023 14:08:48 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-53202149ae2so759531a12.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 26 May 2023 14:08:48 -0700 (PDT)
+        Fri, 26 May 2023 17:58:39 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B966CE57;
+        Fri, 26 May 2023 14:58:12 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id 5614622812f47-39831cb47fbso870176b6e.1;
+        Fri, 26 May 2023 14:58:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685135328; x=1687727328;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FcmpkuCH+m52q+434kVc1+jB9feVNqg53nYBzec4upM=;
-        b=rcwHyr/DAe78hVyid5CE6/86I7VeHOovVrcmpU2LUR0AjvjpO7OTri87bO/DbF4L3F
-         S15BYYuBN9VyF+Iyi1lsNXgJc2fTxjhD2paBAJo9/UMMxx5cyysvbOHZwif/UdLDBz9K
-         FEcgAK4Cgr6Sm+LdzGM6pmOnhvXzRtBtjzi+K8+r+ozNwg2ywBNTT3MsLrx+iAunM3z3
-         0wv5fU8FGMtFzWzZMdXP+kMmxB7AkVbUn6IcCA/TE7GxHT7nq9peoAvDLY04xH9lj8aq
-         NLpFxmWd2fdpglwetvfNPuVO4/btSTFIcDHDo/HdGQywEq59bqnZlYwE9zQsHZsO5d5N
-         ipag==
+        d=gmail.com; s=20221208; t=1685138198; x=1687730198;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oobY8Hnr+V4wGPCWsnIMgT9DHlRXZoBkbIC6BEX23SU=;
+        b=aWxVHnmKMVbtSgYUQYksmmw46grMNqXatXG37GenPMK6H2zm72YHpscZDwyPN8T/m1
+         Tecjxqo/3hceavTncqvVwiooAL9aqvP0Q4boolJrJzMvIMasnWtNDTbHcgVfVcD68LxZ
+         oA3lbIbMtjcQNCA+LK6FbF2oChOcTdMzhedMmlavhDXJ6Fzd/H0BiIs2L9s15HNyrKuw
+         2LCRpsRUDZjMlVzham69+vGuVb984kaoKlkPdtqfibEn2/zQFiOFGJ2y6oo+brMzSa45
+         +zOTYntAgaV2e59iBia3KAgwUNlxWlQc8SKKdNCfz5QzrBqpzq7il/w93zw/3lBiWvx4
+         lsAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685135328; x=1687727328;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FcmpkuCH+m52q+434kVc1+jB9feVNqg53nYBzec4upM=;
-        b=MJMDeN9qrSwL7WMD4yERUi3o7jJMlNiDjgvUV5iHqEjdtPyOYbOACUgqHJXMcu++1Z
-         fhG3LXkbyU4+vWzRc/zaY942t/EgTvCooSiqU0La3TIVGUpsEfLw2yUJfQMV9hKzP00i
-         cva3Tb7+5kYGR3ZhbIOA2NtHpp9EmNMPWbo16s4rhEVKWO2aZocsm44jHhXYu0HyKKl2
-         fjSNr6R39bWxs7k5tiBkkmBjIIpQgHKKe7peFRJAVBrdNxOA84e4uf6RN1Ma3ncqlnLU
-         k5+BmsbXeXQyLJ1Px2bMymQREG2czQTGknSO0WOk0k1PkEe3/vPoIOlTFgsu6CXrXpKb
-         +59A==
-X-Gm-Message-State: AC+VfDz2Z7IiukzdMyQhSpK40ENl4K5YEXOONpRFLCIhydSPRsQsww0x
-        3LawXSitPYsiWivI+yKVrIw=
-X-Google-Smtp-Source: ACHHUZ6iAN484lrf478dFpoSZUOAMpovicAmqAo6huNtyEOWXODiDnNXPTFbWC983QyBRbDFOi1/IA==
-X-Received: by 2002:a17:902:e547:b0:1b0:103a:53e9 with SMTP id n7-20020a170902e54700b001b0103a53e9mr4235638plf.57.1685135328222;
-        Fri, 26 May 2023 14:08:48 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v11-20020a1709029a0b00b001aface7bdd8sm3642011plp.31.2023.05.26.14.08.47
+        d=1e100.net; s=20221208; t=1685138198; x=1687730198;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oobY8Hnr+V4wGPCWsnIMgT9DHlRXZoBkbIC6BEX23SU=;
+        b=R/bwr0YRj3E6S9hL9/hf71FgHRt6UUsWzyp7MhtOLDWbfDuO0zrhJAjn7gdG0wMVa5
+         KIk0jmytE9vz+joxHzrpcLQw1VEBbVcqYoCVNTtFgZhjDDoiJDB7Q5L8DuEIBlZhTWtf
+         Td5DMGBNkkIb+ryhuAMuuU7kMuw40V6kFJpf6X1ILRG0nFA1l0g487VANZy4eomBoGpv
+         D+j5M05NTrwZeekP/JqM5Fg0UIQgf4kWIyY+0GycJ8yz2eDzHMm2SeZndjEhzkZrFiZG
+         FwK2D4VTuxZn3tIVAtI1+g2/KCQ99VyUn/33vj/tHexxQDh3svU5Q5GQWKUUOpQ0WkeI
+         D71w==
+X-Gm-Message-State: AC+VfDwPMA1EE5AJ5g0aCIiQYKBsUbQfCxwBhGpDBaj89i1gXzKeUvOD
+        DLVAabFZu4z/SV56roTIAJYdGniBwvY=
+X-Google-Smtp-Source: ACHHUZ5vqRPNUlPl/PxXDCBxq23GlkCHJUIAAGgBUV49sTtbrptu+KjfMeiPo/Vb3A3vPP0+oPWnDQ==
+X-Received: by 2002:a05:6808:8ca:b0:398:523a:f1ee with SMTP id k10-20020a05680808ca00b00398523af1eemr1741000oij.21.1685138198134;
+        Fri, 26 May 2023 14:56:38 -0700 (PDT)
+Received: from smeagol.fibertel.com.ar ([201.235.4.68])
+        by smtp.gmail.com with ESMTPSA id q6-20020acaf206000000b00399ee6330a9sm756978oih.52.2023.05.26.14.56.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 14:08:47 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 26 May 2023 14:08:46 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Osama Muhammad <osmtendev@gmail.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon:(pmbus/adm1266): Drop unnecessary error check
- for debugfs_create_dir
-Message-ID: <2d7ed370-169c-4ad9-ac35-afb96cba1d6f@roeck-us.net>
-References: <20230526163938.9903-1-osmtendev@gmail.com>
+        Fri, 26 May 2023 14:56:37 -0700 (PDT)
+From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+To:     linux@roeck-us.net
+Cc:     =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>, derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (oxp-sensors) Differentiate new BIOS for the Mini
+Date:   Fri, 26 May 2023 18:56:22 -0300
+Message-Id: <20230526215621.16075-1-samsagax@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526163938.9903-1-osmtendev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, May 26, 2023 at 09:39:38PM +0500, Osama Muhammad wrote:
-> This patch removes the error checking for debugfs_create_dir
-> in adm1266.c. This is because the debugfs_create_dir() does not
-> return NULL but an ERR_PTR after an error.
-> The DebugFS kernel API is developed in a way that the
-> caller can safely ignore the errors that occur during
-> the creation of DebugFS nodes.The debugfs Api handles
-> it gracefully. The check is unnecessary.
-> 
-> Link to the comment above debugfs_create_dir:
-> https://elixir.bootlin.com/linux/latest/source/fs/debugfs/inode.c#L565
-> 
-> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+Newer BIOS got some other changes aside from string changes. Add a board
+enum to differentiate it from the old OneXplayer Mini AMD BIOS.
 
-Applied.
+Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
+---
+ drivers/hwmon/oxp-sensors.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+index 0ec7588610ad..423307ed4930 100644
+--- a/drivers/hwmon/oxp-sensors.c
++++ b/drivers/hwmon/oxp-sensors.c
+@@ -47,6 +47,7 @@ enum oxp_board {
+ 	aya_neo_air_pro,
+ 	aya_neo_geek,
+ 	oxp_mini_amd,
++	oxp_mini_amd_a07,
+ 	oxp_mini_amd_pro,
+ };
+ 
+@@ -104,7 +105,7 @@ static const struct dmi_system_id dmi_table[] = {
+ 			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
+ 			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER mini A07"),
+ 		},
+-		.driver_data = (void *)oxp_mini_amd,
++		.driver_data = (void *)oxp_mini_amd_a07,
+ 	},
+ 	{
+ 		.matches = {
+@@ -206,6 +207,7 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+ 			case aya_neo_air_pro:
+ 			case aya_neo_geek:
+ 			case oxp_mini_amd:
++			case oxp_mini_amd_a07:
+ 				*val = (*val * 255) / 100;
+ 				break;
+ 			case oxp_mini_amd_pro:
+@@ -247,6 +249,7 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+ 			case aya_neo_air_pro:
+ 			case aya_neo_geek:
+ 			case oxp_mini_amd:
++			case oxp_mini_amd_a07:
+ 				val = (val * 100) / 255;
+ 				break;
+ 			case aok_zoe_a1:
+-- 
+2.40.1
 
-> ---
-> changes since v2
-> 	-Added more descriptive commit message.
-> 
-> changes since v1
-> 	-In v1 the IS_ERR was used for error checking which is dropped now.
-> ---
->  drivers/hwmon/pmbus/adm1266.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-> index 1ac2b2f4c570..184d75269d2b 100644
-> --- a/drivers/hwmon/pmbus/adm1266.c
-> +++ b/drivers/hwmon/pmbus/adm1266.c
-> @@ -340,8 +340,6 @@ static void adm1266_init_debugfs(struct adm1266_data *data)
->  		return;
->  
->  	data->debugfs_dir = debugfs_create_dir(data->client->name, root);
-> -	if (!data->debugfs_dir)
-> -		return;
->  
->  	debugfs_create_devm_seqfile(&data->client->dev, "sequencer_state", data->debugfs_dir,
->  				    adm1266_state_read);
