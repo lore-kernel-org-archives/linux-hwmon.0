@@ -2,337 +2,90 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B219DC77B7C
-	for <linux-hwmon@archiver.kernel.org>; Sat, 27 May 2023 01:24:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41658C77B7C
+	for <linux-hwmon@archiver.kernel.org>; Sat, 27 May 2023 08:28:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjE0BYc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 26 May 2023 21:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
+        id S231592AbjE0I2l (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 27 May 2023 04:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjE0BYa (ORCPT
+        with ESMTP id S229684AbjE0I2l (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 26 May 2023 21:24:30 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57893A7;
-        Fri, 26 May 2023 18:24:29 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6af7a84b2bdso1136544a34.2;
-        Fri, 26 May 2023 18:24:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685150668; x=1687742668;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tKKQUdhvmst45itFXxTG/3YLpUX8lObiN8yQaG6Ix/k=;
-        b=kZ75hBo+9r3Zj16dkx2//i5QIFfHyKciEjn50EnOVARf0uuFGxnxI8shFC2FFQQRJQ
-         x4SBHOPJKl34aJHlYXX5AS4BOZrQK6s9T2AVCuOWy6PsGNYjGW4FcfSOnkS6Vk10/thd
-         KwevDKlQcuAay+IFk6UC7K/AXb2Lg6Wj1D4dvdOj8Xbecac2XUzY3WDK00h3+MNJzycU
-         3se8SDciUz8/SgP1YSg4qhEJKBQ48jkkq//wLugqlRh8s5ajaLhc1UNWaLwwz2z3gKOn
-         Dl75+gCQv+nwRFVbyxA4k35u10EhqCR2YP7IiNnFiWo/AEezuQ+fIcEXGQDiK0T4UBMb
-         vuZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685150668; x=1687742668;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tKKQUdhvmst45itFXxTG/3YLpUX8lObiN8yQaG6Ix/k=;
-        b=VI/1EdjKhYf4eR87mTK8Wa6VqWuEKHyoCEJHKEtOZx+D8liC2UKvYbAmPewjgnxrbZ
-         MqUHeiMSdGm7qAPoN31awHrosxSONbdneqar54l9L0WQio6DfvgiVEvRUOLGiMRF6LlJ
-         hPGG79A6kw0+Yd/taRx06etpvk58IrMUoq/wODtTyDbmLQJhd+8XdfjYSArWjQubbu+h
-         oSQafIKhOcUWRQH3C+wgjB5M0QXc8R8n5N23DbQZSxevvuhd48PpB+Oc50Oi80dTCAYj
-         GNvOP73MQVxSVd5iQ3/Rq0iblX3vS4ztFJUMI2LqzNC/QICusVqVdjeM9YkoZwM85u3U
-         zT4Q==
-X-Gm-Message-State: AC+VfDzh26LT5aP9/4CUmhA4071K27iuM4itxVqpDv0dm6nJK/1x7P5P
-        pURkRyHBunXjXH4PVQq/W7CWeaANCQU=
-X-Google-Smtp-Source: ACHHUZ6kS//nLc2/9XTcy6It+EacIZsdCc8dkZewyHI7hi7bXtfFqTS2RzJBwraX2YK2kgVs4vHSCg==
-X-Received: by 2002:a9d:7d18:0:b0:6a4:4252:47aa with SMTP id v24-20020a9d7d18000000b006a4425247aamr1829222otn.21.1685150668442;
-        Fri, 26 May 2023 18:24:28 -0700 (PDT)
-Received: from smeagol.fibertel.com.ar ([201.235.4.68])
-        by smtp.gmail.com with ESMTPSA id d3-20020a0568301b6300b006af99ac5832sm2345700ote.47.2023.05.26.18.24.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 18:24:27 -0700 (PDT)
-From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>
-To:     linux@roeck-us.net
-Cc:     =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>, derekjohn.clark@gmail.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (oxp-sensors) Add tt_toggle attribute on supported boards
-Date:   Fri, 26 May 2023 22:22:06 -0300
-Message-Id: <20230527012206.133464-1-samsagax@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Sat, 27 May 2023 04:28:41 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9311DDF;
+        Sat, 27 May 2023 01:28:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685176119; x=1716712119;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=m5Dgm34GX4qBJ01nGG2Ddz46agLUsvcgLlnRbhbhx0g=;
+  b=fEpdKUPClII1LWfYhUIrl0gCDzHnwGFMf9rIXp6K3m1c1UQiMS3v06qC
+   7zV9/usL2RuPGk0t2GHwf39qy+AyqVu53f7icx+8vuD0O4jCsDDZAN+nv
+   fETc3Ufu18gfrYopecnAmhrUjpBVxNuy2Rr2y7Qk9tbe32Ct1BXJ97LCn
+   K9Rh3uR7oS9ClbLgGGKeHwz02kFpTOiIaxdyYt6XYIiLipaRrJ0v90Sgn
+   zpHTk0WZNCpoW3BoIPJesba2VSBuDXUysk+QhIMpj0weH+CI5g2YJditc
+   DfezNi2iv1oevmbdtzuEsZ3FfUFR1NhLPnAaiLnYaQLYE0lLT07PRdrjE
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="343876274"
+X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
+   d="scan'208";a="343876274"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 01:28:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="879781595"
+X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
+   d="scan'208";a="879781595"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 27 May 2023 01:28:36 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q2pHv-000Ipz-0C;
+        Sat, 27 May 2023 11:28:35 +0300
+Date:   Sat, 27 May 2023 11:28:34 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dinh Nguyen <dinh.nguyen@linux.intel.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-hwmon@vger.kernel.org, dinguyen@kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net
+Subject: Re: [PATCHv2 3/6] hwmon: (socfpga) Add hardware monitoring support
+ on SoCFPGA platforms
+Message-ID: <ZHG/Mvb+Ivf87u/8@smile.fi.intel.com>
+References: <20230508212852.8413-1-dinh.nguyen@linux.intel.com>
+ <20230508212852.8413-3-dinh.nguyen@linux.intel.com>
+ <9459547a-0ff9-9972-602d-3098b616602b@linaro.org>
+ <b36bd5d9-a7dc-b478-9b89-ed3b10bd6725@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b36bd5d9-a7dc-b478-9b89-ed3b10bd6725@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-OneXPlayer boards from the last generation (both for OneXPlayer and AOK
-ZOE brands) have a toggle in the EC to switch the "Turbo/Silent" button
-into a different keyboard event.
+On Thu, May 25, 2023 at 04:20:12PM -0500, Dinh Nguyen wrote:
+> On 5/9/2023 1:57 AM, Krzysztof Kozlowski wrote:
+> > On 08/05/2023 23:28, dinh.nguyen@linux.intel.com wrote:
 
-Add a means to use that "Turbo button takeover" function and expose it
-to userspace in a custom sysfs `tt_toggle` attribute. It can be read to
-take the current state. Write 1|0 to activate the function. The specific
-keycode is dependent on the board but can be checked by running
-`evtest` utility.
+> > > +	for_each_child_of_node(child, grandchild) {
+> > > +		ret = of_property_read_u32(grandchild, "reg", &val);
+> > > +		if (ret)
+> > > +			return dev_err_probe(dev, ret, "missing reg property of %pOF\n",
+> > > +					     grandchild);
+> > Where do you drop child reference?
+> 
+> Not sure what you mean here? Can you clarify?
 
-Newer BIOS on the OneXPlayer added this function aside from string changes.
-Add a board enum to differentiate it from the old OneXplayer Mini AMD BIOS.
+for_each_child_of_node() bumps a reference of the current (iterator) node, when
+the loop is interrupted it's a user (of for_each macro) responsibility to drop
+it.
 
-Currently known supported boards:
-- AOK ZOE A1
-- OneXPlayer Mini AMD (only newer BIOS version supported)
-- OneXPlayer Mini Pro
-
-Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
----
-This patch includes the one in https://lore.kernel.org/linux-hwmon/20230526215621.16075-1-samsagax@gmail.com/
-so it should be discarded.
----
- Documentation/hwmon/oxp-sensors.rst |  16 ++++
- drivers/hwmon/oxp-sensors.c         | 140 +++++++++++++++++++++++++++-
- 2 files changed, 153 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
-index 4ab442301415..131c89fad03a 100644
---- a/Documentation/hwmon/oxp-sensors.rst
-+++ b/Documentation/hwmon/oxp-sensors.rst
-@@ -19,6 +19,11 @@ out the EC registers and values to write to since the EC layout and model is
- different. Aya Neo devices preceding the AIR may not be supportable as the EC
- model is different and do not appear to have manual control capabilities.
- 
-+Some models have a toggle for changing the behaviour of the "Turbo/Silent"
-+button of the device. It will change the key event that it triggers with
-+a flip of the `tt_toggle` attribute. See below for boards that support this
-+function.
-+
- Supported devices
- -----------------
- 
-@@ -33,6 +38,11 @@ Currently the driver supports the following handhelds:
-  - OneXPlayer mini AMD
-  - OneXPlayer mini AMD PRO
- 
-+"Turbo/Silent" button behaviour toggle is only supported on:
-+ - AOK ZOE A1
-+ - OneXPlayer mini AMD (only with updated alpha BIOS)
-+ - OneXPlayer mini AMD PRO
-+
- Sysfs entries
- -------------
- 
-@@ -49,3 +59,9 @@ pwm1
-   Read Write. Read this attribute to see current duty cycle in the range [0-255].
-   When pwm1_enable is set to "1" (manual) write any value in the range [0-255]
-   to set fan speed.
-+
-+tt_toggle
-+  Read Write. Read this attribute to check the status of the turbo/silent
-+  button behaviour function. Write "1" to activate the switch and "0" to
-+  deactivate it. The specific keycodes and behaviour is specific to the device
-+  both with this function on and off.
-diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-index 0ec7588610ad..80fd153253fc 100644
---- a/drivers/hwmon/oxp-sensors.c
-+++ b/drivers/hwmon/oxp-sensors.c
-@@ -47,15 +47,29 @@ enum oxp_board {
- 	aya_neo_air_pro,
- 	aya_neo_geek,
- 	oxp_mini_amd,
-+	oxp_mini_amd_a07,
- 	oxp_mini_amd_pro,
- };
- 
- static enum oxp_board board;
- 
-+/* Fan reading and PWM */
- #define OXP_SENSOR_FAN_REG		0x76 /* Fan reading is 2 registers long */
- #define OXP_SENSOR_PWM_ENABLE_REG	0x4A /* PWM enable is 1 register long */
- #define OXP_SENSOR_PWM_REG		0x4B /* PWM reading is 1 register long */
- 
-+/* Turbo button takeover function
-+ * Older boards have different values and EC registers
-+ * for the same function
-+ */
-+#define OXP_OLD_TURBO_SWITCH_REG	0x1E
-+#define OXP_OLD_TURBO_TAKE_VAL		0x01
-+#define OXP_OLD_TURBO_RETURN_VAL	0x00
-+
-+#define OXP_TURBO_SWITCH_REG		0xF1
-+#define OXP_TURBO_TAKE_VAL		0x40
-+#define OXP_TURBO_RETURN_VAL		0x00
-+
- static const struct dmi_system_id dmi_table[] = {
- 	{
- 		.matches = {
-@@ -104,7 +118,7 @@ static const struct dmi_system_id dmi_table[] = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
- 			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER mini A07"),
- 		},
--		.driver_data = (void *)oxp_mini_amd,
-+		.driver_data = (void *)oxp_mini_amd_a07,
- 	},
- 	{
- 		.matches = {
-@@ -156,6 +170,108 @@ static int write_to_ec(u8 reg, u8 value)
- 	return ret;
- }
- 
-+/* Turbo button toggle functions */
-+static int tt_toggle_enable(void)
-+{
-+	u8 reg;
-+	u8 val;
-+
-+	switch (board) {
-+	case oxp_mini_amd_a07:
-+		reg = OXP_OLD_TURBO_SWITCH_REG;
-+		val = OXP_OLD_TURBO_TAKE_VAL;
-+		break;
-+	case oxp_mini_amd_pro:
-+	case aok_zoe_a1:
-+		reg = OXP_TURBO_SWITCH_REG;
-+		val = OXP_TURBO_TAKE_VAL;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	return write_to_ec(reg, val);
-+}
-+
-+static int tt_toggle_disable(void)
-+{
-+	u8 reg;
-+	u8 val;
-+
-+	switch (board) {
-+	case oxp_mini_amd_a07:
-+		reg = OXP_OLD_TURBO_SWITCH_REG;
-+		val = OXP_OLD_TURBO_RETURN_VAL;
-+		break;
-+	case oxp_mini_amd_pro:
-+	case aok_zoe_a1:
-+		reg = OXP_TURBO_SWITCH_REG;
-+		val = OXP_TURBO_RETURN_VAL;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	return write_to_ec(reg, val);
-+}
-+
-+/* Callbacks for turbo toggle attribute */
-+static ssize_t tt_toggle_store(struct device *dev,
-+			       struct device_attribute *attr, const char *buf,
-+			       size_t count)
-+{
-+	int rval;
-+	unsigned int value;
-+
-+	rval = kstrtouint(buf, 10, &value);
-+	if (rval)
-+		return rval;
-+
-+	switch (value) {
-+	case 0:
-+		rval = tt_toggle_disable();
-+		if (rval)
-+			return rval;
-+		return count;
-+	case 1:
-+		rval = tt_toggle_enable();
-+		if (rval)
-+			return rval;
-+		return count;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static ssize_t tt_toggle_show(struct device *dev,
-+			      struct device_attribute *attr, char *buf)
-+{
-+	int retval;
-+	u8 reg;
-+	long val;
-+
-+	switch (board) {
-+	case oxp_mini_amd_a07:
-+		reg = OXP_OLD_TURBO_SWITCH_REG;
-+		val = OXP_OLD_TURBO_RETURN_VAL;
-+		break;
-+	case oxp_mini_amd_pro:
-+	case aok_zoe_a1:
-+		reg = OXP_TURBO_SWITCH_REG;
-+		val = OXP_TURBO_RETURN_VAL;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	retval = read_from_ec(reg, 1, &val);
-+	if (retval)
-+		return retval;
-+
-+	return sysfs_emit(buf, "%ld\n", val);
-+}
-+
-+static DEVICE_ATTR_RW(tt_toggle);
-+
-+/* PWM enable/disable functions */
- static int oxp_pwm_enable(void)
- {
- 	return write_to_ec(OXP_SENSOR_PWM_ENABLE_REG, 0x01);
-@@ -206,6 +322,7 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
- 			case aya_neo_air_pro:
- 			case aya_neo_geek:
- 			case oxp_mini_amd:
-+			case oxp_mini_amd_a07:
- 				*val = (*val * 255) / 100;
- 				break;
- 			case oxp_mini_amd_pro:
-@@ -247,6 +364,7 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
- 			case aya_neo_air_pro:
- 			case aya_neo_geek:
- 			case oxp_mini_amd:
-+			case oxp_mini_amd_a07:
- 				val = (val * 100) / 255;
- 				break;
- 			case aok_zoe_a1:
-@@ -274,6 +392,13 @@ static const struct hwmon_channel_info * const oxp_platform_sensors[] = {
- 	NULL,
- };
- 
-+static struct attribute *oxp_ec_attrs[] = {
-+	&dev_attr_tt_toggle.attr,
-+	NULL
-+};
-+
-+ATTRIBUTE_GROUPS(oxp_ec);
-+
- static const struct hwmon_ops oxp_ec_hwmon_ops = {
- 	.is_visible = oxp_ec_hwmon_is_visible,
- 	.read = oxp_platform_read,
-@@ -305,8 +430,17 @@ static int oxp_platform_probe(struct platform_device *pdev)
- 
- 	board = (enum oxp_board)(unsigned long)dmi_entry->driver_data;
- 
--	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
--						     &oxp_ec_chip_info, NULL);
-+	switch (board) {
-+	case aok_zoe_a1:
-+	case oxp_mini_amd_a07:
-+	case oxp_mini_amd_pro:
-+		hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
-+							     &oxp_ec_chip_info, oxp_ec_groups);
-+		break;
-+	default:
-+		hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
-+							     &oxp_ec_chip_info, NULL);
-+	}
- 
- 	return PTR_ERR_OR_ZERO(hwdev);
- }
 -- 
-2.40.1
+With Best Regards,
+Andy Shevchenko
+
 
