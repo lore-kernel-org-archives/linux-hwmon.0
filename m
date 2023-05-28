@@ -2,536 +2,354 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32006C77B7E
-	for <linux-hwmon@archiver.kernel.org>; Sat, 27 May 2023 14:43:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45737C7EE23
+	for <linux-hwmon@archiver.kernel.org>; Sun, 28 May 2023 23:52:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjE0Onc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 27 May 2023 10:43:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
+        id S230207AbjE1Xwo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 28 May 2023 19:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjE0Onb (ORCPT
+        with ESMTP id S229505AbjE1Xwn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 27 May 2023 10:43:31 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E9BE1;
-        Sat, 27 May 2023 07:43:29 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-5144a9c11c7so1580600a12.2;
-        Sat, 27 May 2023 07:43:29 -0700 (PDT)
+        Sun, 28 May 2023 19:52:43 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A37B8;
+        Sun, 28 May 2023 16:52:42 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64f47448aeaso1971646b3a.0;
+        Sun, 28 May 2023 16:52:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685198609; x=1687790609;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hrPrq7jQ13X6gsw0ep79C70R5adI2Y/s+LGq0H1kKqk=;
-        b=iQDsw/leakTX3iOvsfVUPhh30Tt08QIClxcPUhbPwGVl6PcYn9sADXnhWYIRlhydvq
-         iKUz0FeLjaf2TQYFv658Oka2MxhyHB9LU7mLP24alPgS2QoGat30WWRLL4om4OlxTBmG
-         jX7Rs/YS6vbDMYUo9hVKfZFiJM5rzXHTQvJ6KJNvCd7YXgk/sMqtK0Of2YjlFmTS2iYp
-         W8NMeXDol+DuJgARXGXBJKNLroTJkZ2OkuLiaV4cjKmIB0BORdlIHfzvKDMexOzzVzKe
-         jBXfh3j1K7xqV7pNhawVmj8orw98eulDxHqvuqnlHo4Tlalnqh99yAl+D0GpxpPQ1KsI
-         GXJw==
+        d=gmail.com; s=20221208; t=1685317962; x=1687909962;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k4cIU343BEC8Polo9T4ezxjw9Hqkv/ZWf69ZG2MdWIE=;
+        b=FQhhNPDGIS/oiO7wzJjwtnDBH4rGKB9rjw8BIjaI8ofLJWOnmfHZCkURatxY38rTcA
+         DzGsCgWEtabde/2CNy+OCAPp5lm+cAdUF/pEv150sBDIIxYzB/ZNLo6OiOsEXJiq5AjF
+         5u0rQdK8gfgJs3cNV91bQkhpMUkDQs8AQ7g/aYzc/lj++uuxRhwpK1k4j7dJvq1eZcGq
+         GkM/WrPIaYAuYoX/SkAASYdjb6WzP1V25GZV9cYa3fsJqgRbAfahAGemzq3GV/na/vOW
+         9H2s4ANetXGVZJD9gKL0hs78xyv4401WmouUXkGGKFNvsKqwX2gsi5NN5yHmIcbPUR3e
+         20dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685198609; x=1687790609;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hrPrq7jQ13X6gsw0ep79C70R5adI2Y/s+LGq0H1kKqk=;
-        b=arNsf0vUsR3pBaApPHYVwnnru15GEONSXMdYTOYEVCx98XiUQxNWrvX1/3yZsP7kik
-         t2MvwV257VZoNoLtiaT8ggHOZiiCE4Ilfd5+S0unVq18anSHOIeLSDjmw+oZx2Na1LHj
-         GglXcL7pj9HpeaUlOLg1APLG7942A9xg73qRPXXpWCG31Rh3LcXY9GWlIVwNigcZ0Cdh
-         v/yvP1JAcF7GD3ZqAGkl8u99UZP16ik23JBGlNayZ/p69/Imyg/zGZwOR4k6kaCBHoNZ
-         nTj0FVSjAXW4j8DgDzkzEL5MwhzzYkr0olb69E9tLNSbQY5WO65ttHpucEHpkKAM+L9L
-         TwUw==
-X-Gm-Message-State: AC+VfDySbg9+zN2eFYIxwVYHoZscQaXK6mP1DJpZ4rHGpAtEpr+mTfp2
-        Wm+OaTm60ahiHktiZLBptKo=
-X-Google-Smtp-Source: ACHHUZ6Jxa09IoXkVA8Cc5fzsx16fCI5JapMIhGEUA8LAgcIO38SBomLsrIZvjk3t4lVvozGNsSS0Q==
-X-Received: by 2002:a17:902:da85:b0:1af:f926:a662 with SMTP id j5-20020a170902da8500b001aff926a662mr6195839plx.52.1685198608678;
-        Sat, 27 May 2023 07:43:28 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685317962; x=1687909962;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k4cIU343BEC8Polo9T4ezxjw9Hqkv/ZWf69ZG2MdWIE=;
+        b=EdPrJq9UMYV2jplwG6V/HOBf9A55OIkP0db+KIvF2s+2BVNp0bel9wxAsspER5LyxU
+         QIyzjFu/tVT2clnH1MA+m5HZujYG+wlhdBTB18nTvNJWmEQtVSVPD3x7/Pb+cFhUycBe
+         +nSAKTWjIxDXMjKeyFxHpI92Qe+8QDMxe6KvRHj076AMCJusVfv+48ujHI4jj/D7T4Kv
+         lCjbCju5N/KIDEtAQydtpxzi0Eu86qAwNRkGtdd2Y60CwEEy9AaW0O1mwVnCxYerRzZB
+         YNAHe6VAXH3aV1/GXi/393OMlHa1aMT1vQDIigF3/DnxO7IGdTj+9D8Rau7p0torINXa
+         sWpg==
+X-Gm-Message-State: AC+VfDwDQ5bcWr49KW240vOI8abbyafNkwBTCnYWQe9Yqua8AsLzykB2
+        2C4WiOusjyugDMTKmer/COo0ta3mLJs=
+X-Google-Smtp-Source: ACHHUZ4fM27dZdzm+X+q2iLjNFymw+3Z60HLT0DVzZfZkgONZXrrQLZ2rwN/pX4tF0XuWm72Kemp1g==
+X-Received: by 2002:a05:6a00:cc5:b0:648:ebb2:3d6 with SMTP id b5-20020a056a000cc500b00648ebb203d6mr14668391pfv.26.1685317961748;
+        Sun, 28 May 2023 16:52:41 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j21-20020a170902c3d500b001ae8587d60csm4981532plj.265.2023.05.27.07.43.27
+        by smtp.gmail.com with ESMTPSA id u17-20020aa78491000000b0064358d032a4sm5819586pfn.145.2023.05.28.16.52.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 May 2023 07:43:27 -0700 (PDT)
+        Sun, 28 May 2023 16:52:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 27 May 2023 07:43:26 -0700
+Date:   Sun, 28 May 2023 16:52:39 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Noah Wang <noahwang.wang@outlook.com>
-Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: mp2891: add MP2891 driver
-Message-ID: <a40eeb84-ae35-460c-9794-7ea3c4768470@roeck-us.net>
-References: <TYZPR03MB7130A7F41D61BFB611DDF0C7FA479@TYZPR03MB7130.apcprd03.prod.outlook.com>
+To:     =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>
+Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (oxp-sensors) Add tt_toggle attribute on
+ supported boards
+Message-ID: <8ae3e2ad-27ff-4339-88d4-504c2f59e501@roeck-us.net>
+References: <20230527012206.133464-1-samsagax@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <TYZPR03MB7130A7F41D61BFB611DDF0C7FA479@TYZPR03MB7130.apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230527012206.133464-1-samsagax@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, May 26, 2023 at 05:42:07PM +0800, Noah Wang wrote:
-> This driver is designed for MPS VR controller mp2891. The sum
-> of input voltage, output voltage, output current, input power,
-> output power and temperature of per rail can be obtained from
-> hwmon interfaces that the driver provided.
+On Fri, May 26, 2023 at 10:22:06PM -0300, Joaquín Ignacio Aramendía wrote:
+> OneXPlayer boards from the last generation (both for OneXPlayer and AOK
+> ZOE brands) have a toggle in the EC to switch the "Turbo/Silent" button
+> into a different keyboard event.
 > 
-> Firstly, the driver get the vid_step of output voltage and
-> current scale(iout_scale) from the mps specific register
-> MFR_VOUT_LOOP_CTRL(0xBD) and MFR_SVI3_IOUT_PRT(0x65). These
-> two parameters are used to calculate the output voltage and
-> output current. Then, if the hwmon interfaces that the driver
-> provided are read by the userspace, the driver will obtain
-> corresponding data from mp2891 and the data will be submitted
-> to the pmbus-core. Finally, userspace can obtain the result.
+> Add a means to use that "Turbo button takeover" function and expose it
+> to userspace in a custom sysfs `tt_toggle` attribute. It can be read to
+> take the current state. Write 1|0 to activate the function. The specific
+> keycode is dependent on the board but can be checked by running
+> `evtest` utility.
 > 
-> Signed-off-by: Noah Wang <noahwang.wang@outlook.com>
 
-After getting some more information:
+This attribute is a no-go. It is not even remotely related to hardware
+monitoring, and thus must not be attached to the hwmon device.
 
-- POUT is reported in Linear11 mode and should be configured accordingly.
-  No driver specific code is required.
-- Per-rail PIN is indeed reported in register 0x94 in linear11 mode
-  and should be configured accordingly. If rail specific data is
-  desired, a comment should be added to the code explaining the
-  reason.
-- Per-rail IIN is reported in register 0x95 in linear11 mode.
-  The standard PMBus command to read the input current does not appear
-  to be supported. Since per-rail PIN is reported, per-rail IIN should
-  be supported as well.
-- Per-rail IOUT is reported in register 0x8c in linear11 mode. There
-  is no indication in the datasheet that this value would need to be
-  scaled in software. It should be configured as Linear11, and should
-  not require special processing.
-- VIN is reported in page 0 in Linear11 form. It should be configured
-  accordingly and not require any special processing.
-- Temperature is reported in Linear11 format. It should be configured
-  accordingly and not require any special processing.
-
-This leaves VOUT, which in practice reports values with an LSB as
-configured in MFR_VOUT_LOOP_CTRL. Instead of local conversions, the
-output voltage should be configured in direct mode, with coefficients
-configured to match the step size. Again, there should be no special
-processing in the driver.
-
-Additional note:
-
-- PMBUS_PHASE_VIRTUAL only makes sense for chips with per-phase telemetry
-  support. Setting the flag in this driver does not provide any value.
+I don't know exactly where it belongs, but it appears to be related
+to the keyboard. Its natural place therefore seems to be a keyboard driver.
+We could possibly also attach it to the platform device, but there would
+have to be some precedence of other drivers doing the same. Question
+in that case though would be if this is just the first of many attributes
+to come. If so, we would need to find a different solution.
 
 Guenter
 
-> ---
->  drivers/hwmon/pmbus/Kconfig  |  10 +
->  drivers/hwmon/pmbus/Makefile |   1 +
->  drivers/hwmon/pmbus/mp2891.c | 371 +++++++++++++++++++++++++++++++++++
->  3 files changed, 382 insertions(+)
->  create mode 100644 drivers/hwmon/pmbus/mp2891.c
+> Newer BIOS on the OneXPlayer added this function aside from string changes.
+> Add a board enum to differentiate it from the old OneXplayer Mini AMD BIOS.
 > 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 270b6336b76d..8e930c15aa89 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -326,6 +326,16 @@ config SENSORS_MP5023
->  	  This driver can also be built as a module. If so, the module will
->  	  be called mp5023.
+> Currently known supported boards:
+> - AOK ZOE A1
+> - OneXPlayer Mini AMD (only newer BIOS version supported)
+> - OneXPlayer Mini Pro
+> 
+> Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
+> ---
+> This patch includes the one in https://lore.kernel.org/linux-hwmon/20230526215621.16075-1-samsagax@gmail.com/
+> so it should be discarded.
+> ---
+>  Documentation/hwmon/oxp-sensors.rst |  16 ++++
+>  drivers/hwmon/oxp-sensors.c         | 140 +++++++++++++++++++++++++++-
+>  2 files changed, 153 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
+> index 4ab442301415..131c89fad03a 100644
+> --- a/Documentation/hwmon/oxp-sensors.rst
+> +++ b/Documentation/hwmon/oxp-sensors.rst
+> @@ -19,6 +19,11 @@ out the EC registers and values to write to since the EC layout and model is
+>  different. Aya Neo devices preceding the AIR may not be supportable as the EC
+>  model is different and do not appear to have manual control capabilities.
 >  
-> +config SENSORS_MP2891
-> +	tristate "MPS MP2891"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for MPS
-> +	  MP2891 Dual Loop Digital Multi-Phase Controller.
+> +Some models have a toggle for changing the behaviour of the "Turbo/Silent"
+> +button of the device. It will change the key event that it triggers with
+> +a flip of the `tt_toggle` attribute. See below for boards that support this
+> +function.
 > +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called mp2891.
+>  Supported devices
+>  -----------------
+>  
+> @@ -33,6 +38,11 @@ Currently the driver supports the following handhelds:
+>   - OneXPlayer mini AMD
+>   - OneXPlayer mini AMD PRO
+>  
+> +"Turbo/Silent" button behaviour toggle is only supported on:
+> + - AOK ZOE A1
+> + - OneXPlayer mini AMD (only with updated alpha BIOS)
+> + - OneXPlayer mini AMD PRO
 > +
+>  Sysfs entries
+>  -------------
+>  
+> @@ -49,3 +59,9 @@ pwm1
+>    Read Write. Read this attribute to see current duty cycle in the range [0-255].
+>    When pwm1_enable is set to "1" (manual) write any value in the range [0-255]
+>    to set fan speed.
 > +
->  config SENSORS_MPQ7932_REGULATOR
->  	bool "Regulator support for MPQ7932"
->  	depends on SENSORS_MPQ7932 && REGULATOR
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 84ee960a6c2d..1a3884fd4b1a 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -35,6 +35,7 @@ obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
->  obj-$(CONFIG_SENSORS_MP2888)	+= mp2888.o
->  obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
->  obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
-> +obj-$(CONFIG_SENSORS_MP2891)	+= mp2891.o
->  obj-$(CONFIG_SENSORS_MPQ7932)	+= mpq7932.o
->  obj-$(CONFIG_SENSORS_PLI1209BC)	+= pli1209bc.o
->  obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
-> diff --git a/drivers/hwmon/pmbus/mp2891.c b/drivers/hwmon/pmbus/mp2891.c
-> new file mode 100644
-> index 000000000000..07adf5f9871f
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/mp2891.c
-> @@ -0,0 +1,371 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Hardware monitoring driver for MPS Multi-phase Digital VR Controllers(MP2891)
-> + *
-> + * Copyright (C) 2023 MPS
+> +tt_toggle
+> +  Read Write. Read this attribute to check the status of the turbo/silent
+> +  button behaviour function. Write "1" to activate the switch and "0" to
+> +  deactivate it. The specific keycodes and behaviour is specific to the device
+> +  both with this function on and off.
+> diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+> index 0ec7588610ad..80fd153253fc 100644
+> --- a/drivers/hwmon/oxp-sensors.c
+> +++ b/drivers/hwmon/oxp-sensors.c
+> @@ -47,15 +47,29 @@ enum oxp_board {
+>  	aya_neo_air_pro,
+>  	aya_neo_geek,
+>  	oxp_mini_amd,
+> +	oxp_mini_amd_a07,
+>  	oxp_mini_amd_pro,
+>  };
+>  
+>  static enum oxp_board board;
+>  
+> +/* Fan reading and PWM */
+>  #define OXP_SENSOR_FAN_REG		0x76 /* Fan reading is 2 registers long */
+>  #define OXP_SENSOR_PWM_ENABLE_REG	0x4A /* PWM enable is 1 register long */
+>  #define OXP_SENSOR_PWM_REG		0x4B /* PWM reading is 1 register long */
+>  
+> +/* Turbo button takeover function
+> + * Older boards have different values and EC registers
+> + * for the same function
 > + */
+> +#define OXP_OLD_TURBO_SWITCH_REG	0x1E
+> +#define OXP_OLD_TURBO_TAKE_VAL		0x01
+> +#define OXP_OLD_TURBO_RETURN_VAL	0x00
 > +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include "pmbus.h"
+> +#define OXP_TURBO_SWITCH_REG		0xF1
+> +#define OXP_TURBO_TAKE_VAL		0x40
+> +#define OXP_TURBO_RETURN_VAL		0x00
 > +
-> +/* Vendor specific registers. */
-> +#define MFR_VOUT_LOOP_CTRL      0xBD
-> +#define MFR_SVI3_IOUT_PRT       0x65
-> +#define READ_PIN_EST            0x94
-> +
-> +#define VID_STEP_POS            14
-> +#define VID_STEP_MSK            (0x3 << VID_STEP_POS)
-> +#define DAC_2P5MV_POS           13
-> +#define DAC_2P5MV_MSK           (0x1 << DAC_2P5MV_POS)
-> +#define IOUT_SCALE_POS          0
-> +#define IOUT_SCALE_MSK          (0x7 << IOUT_SCALE_POS)
-> +
-> +#define MP2891_PAGE_NUM			2
-> +
-> +#define MP2891_RAIL1_FUNC	(PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | \
-> +							PMBUS_HAVE_IOUT | PMBUS_HAVE_TEMP | \
-> +							PMBUS_HAVE_POUT | PMBUS_HAVE_PIN | \
-> +							PMBUS_PHASE_VIRTUAL)
-> +
-> +#define MP2891_RAIL2_FUNC	(PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT | \
-> +							PMBUS_HAVE_TEMP | PMBUS_HAVE_POUT | \
-> +							PMBUS_PHASE_VIRTUAL)
-> +
-> +struct mp2891_data {
-> +	struct pmbus_driver_info info;
-> +	int vid_step[MP2891_PAGE_NUM];
-> +	int iout_scale[MP2891_PAGE_NUM];
-> +};
-> +
-> +#define to_mp2891_data(x) container_of(x, struct mp2891_data, info)
-> +
-> +static int
-> +mp2891_read_pout(struct i2c_client *client, int page, int phase, int reg)
+>  static const struct dmi_system_id dmi_table[] = {
+>  	{
+>  		.matches = {
+> @@ -104,7 +118,7 @@ static const struct dmi_system_id dmi_table[] = {
+>  			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
+>  			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER mini A07"),
+>  		},
+> -		.driver_data = (void *)oxp_mini_amd,
+> +		.driver_data = (void *)oxp_mini_amd_a07,
+>  	},
+>  	{
+>  		.matches = {
+> @@ -156,6 +170,108 @@ static int write_to_ec(u8 reg, u8 value)
+>  	return ret;
+>  }
+>  
+> +/* Turbo button toggle functions */
+> +static int tt_toggle_enable(void)
 > +{
-> +	int ret;
+> +	u8 reg;
+> +	u8 val;
 > +
-> +	ret = pmbus_read_word_data(client, page, phase, reg);
-> +
-> +	return ret;
-> +}
-> +
-> +static int
-> +mp2891_read_pin(struct i2c_client *client, int page, int phase, int reg)
-> +{
-> +	int ret;
-> +
-> +	ret = pmbus_read_word_data(client, page, phase, reg);
-> +
-> +	return ret;
-> +}
-> +
-> +static int
-> +mp2891_read_vin(struct i2c_client *client, int page, int phase, int reg)
-> +{
-> +	int ret;
-> +
-> +	ret = pmbus_read_word_data(client, page, phase, reg);
-> +	ret = ((ret & 0x7FF) * 1000) >> 5;
-> +
-> +	return ret;
-> +}
-> +
-> +static int
-> +mp2891_read_vout(struct i2c_client *client, int page, int phase, int reg)
-> +{
-> +	int ret;
-> +
-> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-> +	struct mp2891_data *data = to_mp2891_data(info);
-> +
-> +	ret = pmbus_read_word_data(client, page, phase, reg);
-> +	ret = (ret & 0x7FF) * data->vid_step[page] / 100;
-> +
-> +	return ret;
-> +}
-> +
-> +static int
-> +mp2891_read_iout(struct i2c_client *client, int page, int phase, int reg)
-> +{
-> +	int ret;
-> +
-> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-> +	struct mp2891_data *data = to_mp2891_data(info);
-> +
-> +	ret = pmbus_read_word_data(client, page, phase, reg);
-> +
-> +	if (((ret & 0x8000) >> 15) == 0)
-> +		ret = (ret & 0x7FF) * (((ret & 0x7800) >> 11) + 1);
-> +	else
-> +		ret = (ret & 0x7FF) >> (32 - ((ret & 0xF800) >> 11));
-> +
-> +	ret = ret * data->iout_scale[page];
-> +
-> +	return ret;
-> +}
-> +
-> +static int
-> +mp2891_read_temperature(struct i2c_client *client, int page, int phase, int reg)
-> +{
-> +	int ret;
-> +
-> +	ret = pmbus_read_word_data(client, page, phase, reg);
-> +
-> +	if (((ret & 0x400) >> 10) == 0)
-> +		ret = ret & 0x7FF;
-> +	else
-> +		ret = ~(ret & 0x7FF) + 1;
-> +
-> +	return ret;
-> +}
-> +
-> +static int mp2891_read_byte_data(struct i2c_client *client, int page, int reg)
-> +{
-> +	int ret;
-> +
-> +	switch (reg) {
-> +	case PMBUS_VOUT_MODE:
-> +		/*
-> +		 * Enforce VOUT direct format, since device allows to set the
-> +		 * different formats for the different rails. Conversion from
-> +		 * VID to direct provided by driver internally, in case it is
-> +		 * necessary.
-> +		 */
-> +		ret = PB_VOUT_MODE_DIRECT;
+> +	switch (board) {
+> +	case oxp_mini_amd_a07:
+> +		reg = OXP_OLD_TURBO_SWITCH_REG;
+> +		val = OXP_OLD_TURBO_TAKE_VAL;
+> +		break;
+> +	case oxp_mini_amd_pro:
+> +	case aok_zoe_a1:
+> +		reg = OXP_TURBO_SWITCH_REG;
+> +		val = OXP_TURBO_TAKE_VAL;
 > +		break;
 > +	default:
-> +		ret = -EINVAL;
-> +		break;
+> +		return -EINVAL;
 > +	}
-> +
-> +	return ret;
+> +	return write_to_ec(reg, val);
 > +}
 > +
-> +static int mp2891_read_word_data(struct i2c_client *client, int page, int phase,
-> +			      int reg)
+> +static int tt_toggle_disable(void)
 > +{
-> +	int ret;
+> +	u8 reg;
+> +	u8 val;
 > +
-> +	switch (reg) {
-> +	case PMBUS_READ_VIN:
-> +		ret = mp2891_read_vin(client, page, phase, reg);
+> +	switch (board) {
+> +	case oxp_mini_amd_a07:
+> +		reg = OXP_OLD_TURBO_SWITCH_REG;
+> +		val = OXP_OLD_TURBO_RETURN_VAL;
 > +		break;
-> +	case PMBUS_READ_VOUT:
-> +		ret = mp2891_read_vout(client, page, phase, reg);
-> +		break;
-> +	case PMBUS_READ_IOUT:
-> +		ret = mp2891_read_iout(client, page, phase, reg);
-> +		break;
-> +	case PMBUS_READ_TEMPERATURE_1:
-> +		ret = mp2891_read_temperature(client, page, phase, reg);
-> +		break;
-> +	case PMBUS_READ_PIN:
-> +		ret = mp2891_read_pin(client, page, phase, READ_PIN_EST);
-> +		break;
-> +	case PMBUS_READ_POUT:
-> +		ret = mp2891_read_pout(client, page, phase, reg);
+> +	case oxp_mini_amd_pro:
+> +	case aok_zoe_a1:
+> +		reg = OXP_TURBO_SWITCH_REG;
+> +		val = OXP_TURBO_RETURN_VAL;
 > +		break;
 > +	default:
-> +		ret = -EINVAL;
+> +		return -EINVAL;
+> +	}
+> +	return write_to_ec(reg, val);
+> +}
+> +
+> +/* Callbacks for turbo toggle attribute */
+> +static ssize_t tt_toggle_store(struct device *dev,
+> +			       struct device_attribute *attr, const char *buf,
+> +			       size_t count)
+> +{
+> +	int rval;
+> +	unsigned int value;
+> +
+> +	rval = kstrtouint(buf, 10, &value);
+> +	if (rval)
+> +		return rval;
+> +
+> +	switch (value) {
+> +	case 0:
+> +		rval = tt_toggle_disable();
+> +		if (rval)
+> +			return rval;
+> +		return count;
+> +	case 1:
+> +		rval = tt_toggle_enable();
+> +		if (rval)
+> +			return rval;
+> +		return count;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static ssize_t tt_toggle_show(struct device *dev,
+> +			      struct device_attribute *attr, char *buf)
+> +{
+> +	int retval;
+> +	u8 reg;
+> +	long val;
+> +
+> +	switch (board) {
+> +	case oxp_mini_amd_a07:
+> +		reg = OXP_OLD_TURBO_SWITCH_REG;
+> +		val = OXP_OLD_TURBO_RETURN_VAL;
 > +		break;
+> +	case oxp_mini_amd_pro:
+> +	case aok_zoe_a1:
+> +		reg = OXP_TURBO_SWITCH_REG;
+> +		val = OXP_TURBO_RETURN_VAL;
+> +		break;
+> +	default:
+> +		return -EINVAL;
 > +	}
 > +
-> +	return ret;
+> +	retval = read_from_ec(reg, 1, &val);
+> +	if (retval)
+> +		return retval;
+> +
+> +	return sysfs_emit(buf, "%ld\n", val);
 > +}
 > +
-> +static int
-> +mp2891_identify_vid(struct i2c_client *client, struct mp2891_data *data,
-> +						u32 reg, int page)
-> +{
-> +	int ret;
+> +static DEVICE_ATTR_RW(tt_toggle);
 > +
-> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
-> +	if (ret < 0)
-> +		return ret;
+> +/* PWM enable/disable functions */
+>  static int oxp_pwm_enable(void)
+>  {
+>  	return write_to_ec(OXP_SENSOR_PWM_ENABLE_REG, 0x01);
+> @@ -206,6 +322,7 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+>  			case aya_neo_air_pro:
+>  			case aya_neo_geek:
+>  			case oxp_mini_amd:
+> +			case oxp_mini_amd_a07:
+>  				*val = (*val * 255) / 100;
+>  				break;
+>  			case oxp_mini_amd_pro:
+> @@ -247,6 +364,7 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+>  			case aya_neo_air_pro:
+>  			case aya_neo_geek:
+>  			case oxp_mini_amd:
+> +			case oxp_mini_amd_a07:
+>  				val = (val * 100) / 255;
+>  				break;
+>  			case aok_zoe_a1:
+> @@ -274,6 +392,13 @@ static const struct hwmon_channel_info * const oxp_platform_sensors[] = {
+>  	NULL,
+>  };
+>  
+> +static struct attribute *oxp_ec_attrs[] = {
+> +	&dev_attr_tt_toggle.attr,
+> +	NULL
+> +};
 > +
-> +	ret = i2c_smbus_read_word_data(client, reg);
-> +	if (ret < 0)
-> +		return ret;
+> +ATTRIBUTE_GROUPS(oxp_ec);
 > +
-> +	/*
-> +	 * Obtain vid_step from the register MFR_VOUT_LOOP_CTRL, bits 15-14,bit 13.
-> +	 * If MFR_VOUT_LOOP_CTRL[13] = 1, the vid_step is below:
-> +	 * 2.5mV/LSB
-> +	 * If MFR_VOUT_LOOP_CTRL[13] = 0, the vid_step is decided by
-> +	 * MFR_VOUT_LOOP_CTRL[15:14]:
-> +	 * 00b - 6.25mV/LSB, 01b - 5mV/LSB, 10b - 2mV/LSB, 11b - 1mV
-> +	 */
-> +	if (((ret & DAC_2P5MV_MSK) >> VID_STEP_POS))
-> +		data->vid_step[page] = 250;
-> +	else {
-> +		ret = ((ret & VID_STEP_MSK) >> VID_STEP_POS);
-> +		if (ret == 0)
-> +			data->vid_step[page] = 625;
-> +		else if (ret == 1)
-> +			data->vid_step[page] = 500;
-> +		else if (ret == 2)
-> +			data->vid_step[page] = 200;
-> +		else
-> +			data->vid_step[page] = 100;
+>  static const struct hwmon_ops oxp_ec_hwmon_ops = {
+>  	.is_visible = oxp_ec_hwmon_is_visible,
+>  	.read = oxp_platform_read,
+> @@ -305,8 +430,17 @@ static int oxp_platform_probe(struct platform_device *pdev)
+>  
+>  	board = (enum oxp_board)(unsigned long)dmi_entry->driver_data;
+>  
+> -	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
+> -						     &oxp_ec_chip_info, NULL);
+> +	switch (board) {
+> +	case aok_zoe_a1:
+> +	case oxp_mini_amd_a07:
+> +	case oxp_mini_amd_pro:
+> +		hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
+> +							     &oxp_ec_chip_info, oxp_ec_groups);
+> +		break;
+> +	default:
+> +		hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
+> +							     &oxp_ec_chip_info, NULL);
 > +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +mp2891_identify_rails_vid(struct i2c_client *client, struct mp2891_data *data)
-> +{
-> +	int ret;
-> +
-> +	/* Identify vid_step from register  MFR_VOUT_LOOP_CTRL. */
-> +	/* Identify vid_step for rail 1. */
-> +	ret = mp2891_identify_vid(client, data, MFR_VOUT_LOOP_CTRL, 0);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Identify vid_step for rail 2. */
-> +	ret = mp2891_identify_vid(client, data, MFR_VOUT_LOOP_CTRL, 1);
-> +
-> +	return ret;
-> +}
-> +
-> +static int
-> +mp2891_iout_scale_get(struct i2c_client *client, struct mp2891_data *data,
-> +						u32 reg, int page)
-> +{
-> +	int ret;
-> +
-> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = i2c_smbus_read_word_data(client, reg);
-> +
-> +	/*
-> +	 * Obtain iout_scale from the register MFR_SVI3_IOUT_PRT, bits 2-0.
-> +	 * The value is selected as below:
-> +	 * 000b - 1A/LSB, 001b - (1/32)A/LSB, 010b - (1/16)A/LSB,
-> +	 * 011b - (1/8)A/LSB, 100b - (1/4)A/LSB, 101b - (1/2)A/LSB
-> +	 * 110b - 1A/LSB, 111b - 2A/LSB
-> +	 */
-> +	ret = (ret & IOUT_SCALE_MSK) >> IOUT_SCALE_POS;
-> +	if ((ret == 0) | (ret == 6))
-> +		data->iout_scale[page] = 32;
-> +	else if (ret == 1)
-> +		data->iout_scale[page] = 1;
-> +	else if (ret == 2)
-> +		data->iout_scale[page] = 2;
-> +	else if (ret == 3)
-> +		data->iout_scale[page] = 4;
-> +	else if (ret == 4)
-> +		data->iout_scale[page] = 8;
-> +	else if (ret == 5)
-> +		data->iout_scale[page] = 16;
-> +	else
-> +		data->iout_scale[page] = 64;
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +mp2891_rails_iout_scale_get(struct i2c_client *client, struct mp2891_data *data)
-> +{
-> +	int ret;
-> +
-> +	/* Get iout_scale from register MFR_SVI3_IOUT_PRT. */
-> +	/* Get iout_scale for rail 1. */
-> +	ret = mp2891_iout_scale_get(client, data, MFR_SVI3_IOUT_PRT, 0);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Get iout_scale for rail 2. */
-> +	ret = mp2891_iout_scale_get(client, data, MFR_SVI3_IOUT_PRT, 1);
-> +
-> +	return ret;
-> +}
-> +
-> +static struct pmbus_driver_info mp2891_info = {
-> +	.pages = MP2891_PAGE_NUM,
-> +	.format[PSC_VOLTAGE_IN] = direct,
-> +	.format[PSC_VOLTAGE_OUT] = direct,
-> +	.format[PSC_CURRENT_OUT] = direct,
-> +	.format[PSC_TEMPERATURE] = direct,
-> +	.format[PSC_POWER] = linear,
-> +
-> +	.m[PSC_VOLTAGE_IN] = 1,
-> +	.m[PSC_VOLTAGE_OUT] = 1,
-> +	.m[PSC_CURRENT_OUT] = 32,
-> +	.m[PSC_TEMPERATURE] = 1,
-> +	.R[PSC_VOLTAGE_IN] = 3,
-> +	.R[PSC_VOLTAGE_OUT] = 3,
-> +	.R[PSC_CURRENT_OUT] = 0,
-> +	.R[PSC_TEMPERATURE] = 0,
-> +	.b[PSC_VOLTAGE_IN] = 0,
-> +	.b[PSC_VOLTAGE_OUT] = 0,
-> +	.b[PSC_CURRENT_OUT] = 0,
-> +	.b[PSC_TEMPERATURE] = 0,
-> +
-> +	.func[0] = MP2891_RAIL1_FUNC,
-> +	.func[1] = MP2891_RAIL2_FUNC,
-> +	.read_word_data = mp2891_read_word_data,
-> +	.read_byte_data = mp2891_read_byte_data,
-> +};
-> +
-> +static int mp2891_probe(struct i2c_client *client, const struct i2c_device_id *id)
-> +{
-> +	struct pmbus_driver_info *info;
-> +	struct mp2891_data *data;
-> +	int ret;
-> +
-> +	data = devm_kzalloc(&client->dev, sizeof(struct mp2891_data), GFP_KERNEL);
-> +
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	memcpy(&data->info, &mp2891_info, sizeof(*info));
-> +	info = &data->info;
-> +
-> +	/* Identify VID setting per rail. */
-> +	ret = mp2891_identify_rails_vid(client, data);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Get iout scale per rail. */
-> +	ret = mp2891_rails_iout_scale_get(client, data);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return pmbus_do_probe(client, info);
-> +}
-> +
-> +static const struct i2c_device_id mp2891_id[] = {
-> +	{"mp2891", 0},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, mp2891_id);
-> +
-> +static const struct of_device_id __maybe_unused mp2891_of_match[] = {
-> +	{.compatible = "mps,mp2891"},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, mp2891_of_match);
-> +
-> +static struct i2c_driver mp2891_driver = {
-> +	.driver = {
-> +		.name = "mp2891",
-> +		.of_match_table = mp2891_of_match,
-> +	},
-> +	.probe = mp2891_probe,
-> +	.id_table = mp2891_id,
-> +};
-> +
-> +module_i2c_driver(mp2891_driver);
-> +
-> +MODULE_AUTHOR("Noah Wang <noahwang.wang@outlook.com>");
-> +MODULE_DESCRIPTION("PMBus driver for MPS MP2891 device");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
+>  
+>  	return PTR_ERR_OR_ZERO(hwdev);
+>  }
+> -- 
+> 2.40.1
+> 
