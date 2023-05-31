@@ -2,62 +2,96 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4808CC77B7C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 31 May 2023 09:06:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B53A8C77B7A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 31 May 2023 12:05:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235286AbjEaJGr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 31 May 2023 05:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
+        id S235953AbjEaMFc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 31 May 2023 08:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235315AbjEaJGM (ORCPT
+        with ESMTP id S235828AbjEaMFT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 31 May 2023 05:06:12 -0400
-X-Greylist: delayed 2523 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 May 2023 02:05:46 PDT
-Received: from mail.ettrick.pl (mail.ettrick.pl [141.94.21.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADF511F
-        for <linux-hwmon@vger.kernel.org>; Wed, 31 May 2023 02:05:46 -0700 (PDT)
-Received: by mail.ettrick.pl (Postfix, from userid 1002)
-        id 7A622AC0D1; Wed, 31 May 2023 08:16:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ettrick.pl; s=mail;
-        t=1685521020; bh=ZOVeXw1jXE9TbyZP9aLdRwM96AORcRfum8b+rry5JMw=;
-        h=Date:From:To:Subject:From;
-        b=BDOxyQ72eQa7qfr+zwRNp1pDXhY4r+yeOiv+h3EIVJ44uHY2aMPjVOlU13w4a3p93
-         PmCkjflrBL0/JyjEjlnU/2hAHcun6POz42A5Jgc5TY+3uhdf+B8dgVdiXh4pS+JC9P
-         8xdE1nN7ngLCpO5yd/RCy/CC3UPISsyOcC7GK8epfK0HFw2gKk/EIji57D0BlmIBwJ
-         /L7BTTmtdBvfb4yz9Lj3reZVQuoSq8kYDZySyHCrwnRfeBH1J9dIxm5hBPxcP9FxQH
-         JI20xe7of0uQqqQFOgU07dfAdGE4FPX/nNicGE5hycKdfSBZonjgdou+5G9aajcDDX
-         X6WWXz7Xx5K+w==
-Received: by mail.ettrick.pl for <linux-hwmon@vger.kernel.org>; Wed, 31 May 2023 08:15:40 GMT
-Message-ID: <20230531064500-0.1.ax.4bmbe.0.lbqs51ojm9@ettrick.pl>
-Date:   Wed, 31 May 2023 08:15:40 GMT
-From:   "Norbert Karecki" <norbert.karecki@ettrick.pl>
-To:     <linux-hwmon@vger.kernel.org>
-Subject: Fotowoltaika- propozycja instalacji
-X-Mailer: mail.ettrick.pl
+        Wed, 31 May 2023 08:05:19 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA081AD;
+        Wed, 31 May 2023 05:05:03 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-bad0c4f6f50so1313007276.1;
+        Wed, 31 May 2023 05:05:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685534702; x=1688126702;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=90EYsaaut8Hp0lsfigX/jDM1gZJQqV5otkFZlFhJNrc=;
+        b=LO9z7akObMs+flCvgEiN7Ww9vOe4EGy6hwFM09vjWA4Fm3RRZFO/eKxe+kO5RB2Cfc
+         c69aVw0P8hWiaP+AssKqJNpPQiiEnV6jcycCQT3yZ84uzKjwzzuzKPU7qnKUZAZTn4f8
+         87S6yF9S+G3bRJZj8RopHm2zeyA4MINRoOt2QfGRtVlawGI9j4MzLzBUk0jiej4xP9x4
+         Jc7fqqv7IJeQIyedpIhCRagSNEYZfGOfGBHefkOIIwbdOMOlvH+6/Pv1zUAWh/nRyv6/
+         GLW7KGexR1gyMIso4d1+WPd+QLmHrp0Eo6uCOwnBOhKvuMh0uiyNsCgH/NyVCpFsFLMO
+         7Raw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685534702; x=1688126702;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=90EYsaaut8Hp0lsfigX/jDM1gZJQqV5otkFZlFhJNrc=;
+        b=KSWVLIiomQXCujN+Wua6/MbUoT4BoP6Uboe+KmWSOvY/o8DaDMl3EmT0sNDy13M9fz
+         JUQ6iQa6IZSz5gJ7oH5oRMh9M5Y2o3chtxbtLIhzGEW5t2w1ZhGFE17MPQ8AVQgK279V
+         T7mliHoiEkpQCK64UJvwibH/5IvNjdBpYm70kqV8RqqKU/jRIACmvrOQLFgPFKR4KOYr
+         74mTcj7TRekzzu5vNwuftOvfwfbZACKmVsDllHpVrb4eWThFjl9dOsDa4srKmGa0Gz0h
+         KlryIZ17D8OYbv6GJVme8LlMkpYArDL+OB77s4sHjo3skYOpdAp2vykFrKIU6CZNP4le
+         QB/A==
+X-Gm-Message-State: AC+VfDwHQJJ/L3ZQUg3ewYWNrmq+H3PWHJ7qVs3hTwDIahPUkgcdq+Za
+        evme/cNzj/g6tArqBNBYd6zJCf8u96qpV6Fl3ue3RwN/
+X-Google-Smtp-Source: ACHHUZ55R8CtsEj+7X29bkdOuuVetNFI1MoEEvPsUsgG3RjGiPmflERC1G9L+kWBQa8t/0i3JO+qJsnUQH4MlCQdlfM=
+X-Received: by 2002:a25:508c:0:b0:b94:bbf2:19a3 with SMTP id
+ e134-20020a25508c000000b00b94bbf219a3mr6284726ybb.18.1685534702013; Wed, 31
+ May 2023 05:05:02 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230527012206.133464-1-samsagax@gmail.com> <8ae3e2ad-27ff-4339-88d4-504c2f59e501@roeck-us.net>
+In-Reply-To: <8ae3e2ad-27ff-4339-88d4-504c2f59e501@roeck-us.net>
+From:   Joaquin Aramendia <samsagax@gmail.com>
+Date:   Wed, 31 May 2023 09:04:51 -0300
+Message-ID: <CABgtM3h8DXs0swGQth=dcE3J_W8k8iejvfFgjVSm9nKbRmxHDQ@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (oxp-sensors) Add tt_toggle attribute on supported boards
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dzie=C5=84 dobry,
-=20
-Czy rozwa=C5=BCali Pa=C5=84stwo monta=C5=BC systemu fotowoltaicznego?
-=20
-Instalacja fotowoltaiczna jest najlepszym sposobem na obni=C5=BCenie wyso=
-ko=C5=9Bci rachunk=C3=B3w za pr=C4=85d (pozostaj=C4=85 tylko op=C5=82aty =
-sta=C5=82e) i zabezpieczenie si=C4=99 przed rosn=C4=85cymi cenami energii=
- elektrycznej. Jest to w pe=C5=82ni odnawialne i bezemisyjne =C5=BAr=C3=B3=
-d=C5=82o energii, dzi=C4=99ki czemu przyczyniamy si=C4=99 do ochrony =C5=9B=
-rodowiska naturalnego.
-=20
-Dzia=C5=82amy od wielu lat na rynku energetycznym. Przygotujemy projekt, =
-wycen=C4=99 oraz kompleksowo wykonamy i zg=C5=82osimy realizacj=C4=99 do =
-zak=C5=82adu energetycznego.=20
-=20
-Czy chc=C4=85 Pa=C5=84stwo pozna=C4=87 nasz=C4=85 propozycj=C4=99? =20
+> This attribute is a no-go. It is not even remotely related to hardware
+> monitoring, and thus must not be attached to the hwmon device.
+>
+> I don't know exactly where it belongs, but it appears to be related
+> to the keyboard. Its natural place therefore seems to be a keyboard drive=
+r.
+> We could possibly also attach it to the platform device, but there would
+> have to be some precedence of other drivers doing the same. Question
+> in that case though would be if this is just the first of many attributes
+> to come. If so, we would need to find a different solution.
+>
+> Guenter
 
+Sure! Should this driver with those changes go into a platform driver?
+Seems a better fit to me. The case against keyboard driver is the
+switch changes behaviour of the key but both the behaviour with the
+switch on and off is device defined. Some use the key as part of an AT
+Translated Keyboard and others just operate on the EC itself to grab
+the fan and set a special TDP for "Silent mode".
+For now this is the first such attribute found by the community and
+some talks with the manufacturer but it doesn't mean there wouldn't be
+others. Specially with such new form factors adding some "control
+panels" on Windows to set some hardware behaviour via EC writes. My
+goal is to allow those same functions to be available to linux users
+in a way some other userspace tools can serve as front ends.
 
-Pozdrawiam,
-Norbert Karecki
+Would taking this same driver to the platform side be a solution to
+that going forward? It would be a combination of hwmon monitoring
+attributes and some other special functions with custom attributes.
+Seems a better fit to me.
+--=20
+Joaqu=C3=ADn I. Aramend=C3=ADa
