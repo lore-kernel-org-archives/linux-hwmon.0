@@ -2,127 +2,105 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D69CAC7EE2A
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Jun 2023 17:45:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5000C77B7E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Jun 2023 21:32:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbjFARpQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Jun 2023 13:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
+        id S232225AbjFAVcY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Jun 2023 17:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbjFARpO (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Jun 2023 13:45:14 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68529189;
-        Thu,  1 Jun 2023 10:45:13 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b05e96dabbso6864005ad.2;
-        Thu, 01 Jun 2023 10:45:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685641513; x=1688233513;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=FYUbj1PxaWtwh4DzW6Vay4H94hGaPyKVZYWuV3ZbcXc=;
-        b=OZaoMOIBOQ/WOz1KN5ulk6CR+Y5gFgXSaO22TTBv+bmZLnL+Ld1I5u4DYlklnEQyde
-         aW54XdWuPR5ilO0qi3REMv/tarOQi6Dm5vDOWDhxrG7S0kmhygCNWnmWMbUbiKla4F42
-         wlnkhqEVBaNuV3nJh7oKwDRSAoROzdcqlu1jom2iZJghbk8a5SH8Fym1duIEYuVXipWr
-         8gIc+wA3v8ga9RnPbOVuskX3ZBwHeFUsDUSPkmtRyhA60RkR/aGE9IJjfyPNvlQS9jvz
-         JWvTuj2M6Rw37IdWXleSCzSNDXhiBgn/0dZrfQSG4Rr8pRm8lCHP7ICsnuEwGBTJAr60
-         ke4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685641513; x=1688233513;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FYUbj1PxaWtwh4DzW6Vay4H94hGaPyKVZYWuV3ZbcXc=;
-        b=S9y1ovQLZhImZl+9pdRQa6qhXvykMFT8hUuF4NKp5kJoFScrFJHWAmU0ijRAVa9QOG
-         sIPk5M/+PlUT/KThkoINwmoUKfjG7V/WB9aVE49gH7fkIiVqjCK5xY0PD4YxgLCjRCF6
-         EWv0B6KTpRDWLvfIgD7fkgXpJ6z9gf7pk0kbnK3Q/Kne2F98xRIBVi+M37AHHSW7Rhhe
-         rYkoTUT+B+reudGF6V6wpAvShphUvG1V3Toy13sgTUA4WsSt7imumUxZ+6Ldc4uQIZcU
-         bTKyqtDXE9egY8zgrQ4bcQYtVAqtMfjgSp9o+jo1mQg8h0x4M55rsQjmlXSuuFjMbJsn
-         Zl4g==
-X-Gm-Message-State: AC+VfDzHcZaA70EURqPELBlY6B7lNPApiYEqDhbHJWTTwiJgSd3lI8GO
-        sCybTYBX59SLEuIR/z9iq8E=
-X-Google-Smtp-Source: ACHHUZ4zagpsQ+SjZ4Qm58lG7Do6V5t3Qo41xpHVOqY52Y6876LAbjAqiXp98gMaeErSNLCycz6LFw==
-X-Received: by 2002:a17:902:aa96:b0:1b0:4687:ba0c with SMTP id d22-20020a170902aa9600b001b04687ba0cmr151029plr.8.1685641512798;
-        Thu, 01 Jun 2023 10:45:12 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b1-20020a170902d50100b001b01547d0e8sm3794525plg.142.2023.06.01.10.45.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 10:45:12 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8bd7d122-18b5-b9b4-0090-6344caf903fd@roeck-us.net>
-Date:   Thu, 1 Jun 2023 10:45:10 -0700
+        with ESMTP id S229610AbjFAVcX (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Jun 2023 17:32:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B00A195;
+        Thu,  1 Jun 2023 14:32:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D490E649ED;
+        Thu,  1 Jun 2023 21:32:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA003C433D2;
+        Thu,  1 Jun 2023 21:32:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685655141;
+        bh=ZayG3JtKeRHBP3Of0x1sbbjcfUFrfkdCXWyh5YaG/eA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dHow6iXjWYevbjQ3KEQ4bE5SmRC4qESv9PCCRjo3MZazJoiwBgDufOlI8fwXvn4Z4
+         HnEaxdRrvyT0N6smSTH5kxL5aL/LGmFLFe1o+h5Lf/e2G2ODOGil3HVkd1D7E8nKAQ
+         /ssQPVfNTow/IiKVw2Mf7WGvL+AfPDov641uyqeMp4wtldDMjyjyKd9guZMJnWx2P4
+         jnL/lxvF5fn6Vz+1q5CxgX5+fJR+RHmfZkDRn43jY6+oTX+I3Cz323F6j9ynG3RAwq
+         i2OSIkJdTkGYrKgTGWzaAzOcr+ztFZTiZmBeJ2cKh+6karepdZqx9jpzAfCkwgWXIe
+         sz9CnHZ8g6Z7Q==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: hp-wmi-sensors: fix debugfs check
+Date:   Thu,  1 Jun 2023 23:31:54 +0200
+Message-Id: <20230601213216.3220550-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 4/5] hwmon: (gxp_fan_ctrl) Provide fan info via gpio
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <20230531151918.105223-1-nick.hawkins@hpe.com>
- <20230531151918.105223-5-nick.hawkins@hpe.com>
- <07b2a2f7-5ddc-0f10-6b1f-184dc21fa580@roeck-us.net>
- <DM4PR84MB19274F575858CBCB2FA5C23E88489@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
- <b1d8f851-4e87-333c-229c-b9dc37ea3c40@roeck-us.net>
- <DM4PR84MB19273A008BB11589CEEF697188499@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
- <CACRpkdarJCSCif+r1e_jXbbAgv03OgGAO6pkW9x-yiYZJxdGeQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CACRpkdarJCSCif+r1e_jXbbAgv03OgGAO6pkW9x-yiYZJxdGeQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/1/23 10:11, Linus Walleij wrote:
-> On Thu, Jun 1, 2023 at 5:48 PM Hawkins, Nick <nick.hawkins@hpe.com> wrote:
-> 
->> Thank you for your valuable feedback with the solutions you have provided.
->> Before I proceed though I have a quick query about the fan driver.
->> If I were to let the user space "own" gpio pins, would it be permissible for
->> the userspace to feed a kernel driver data via sysfs?
->>
->> Ex:
->> GPIO Driver -> (OpenBMC) -> Fandriver (sysfs).
->>
->> Here the GPIO driver would provide fan presence information to OpenBMC
->> and then OpenBMC would provide fan presence info to the fan driver.
-> 
-> But why? Don't be so obsessed about userspace doing stuff using
-> sysfs, usually it is a better idea to let the kernel handle hardware.
-> 
-> I think this is a simple thermal zone you can define in the device
-> tree as indicated in my previous comment.
-> 
->> If it were permissible to provide data to the driver via this method I could
->> apply it to the PSU driver as well. the PSU driver which requires presence
->> info to verify a PSU is inserted / removed.
-> 
-> It feels like you are looking for a way for two drivers to communicate
-> with each other.
-> 
-> This can be done several ways, the most straight-forward is notifiers.
-> include/linux/notifier.h
-> 
+From: Arnd Bergmann <arnd@arndb.de>
 
-This is all unnecessary. The hwmon driver could register a gpio pin,
-including interrupt, and then report state changes to userspace with
-sysfs or udev events on the registered hwmon sysfs attributes.
+Checking for Kconfig symbols with #if is wrong:
 
-If they really want to use userspace for everything, they should
-just use userspace for everything and not bother with a kernel driver.
+drivers/hwmon/hp-wmi-sensors.c:1141:5: error: "CONFIG_DEBUG_FS" is not defined, evaluates to 0 [-Werror=undef]
 
-Guenter
+This could be an #ifdef, but an IS_ENABLED() check is even better to
+give the best compile coverage.
+
+Fixes: 602bef0fa281f ("hwmon: add HP WMI Sensors driver")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/hwmon/hp-wmi-sensors.c | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/hwmon/hp-wmi-sensors.c b/drivers/hwmon/hp-wmi-sensors.c
+index 7218945bd03fc..ebe2fb5134805 100644
+--- a/drivers/hwmon/hp-wmi-sensors.c
++++ b/drivers/hwmon/hp-wmi-sensors.c
+@@ -1138,8 +1138,6 @@ static int hp_wmi_update_info(struct hp_wmi_sensors *state,
+ 	return ret;
+ }
+ 
+-#if CONFIG_DEBUG_FS
+-
+ static int basic_string_show(struct seq_file *seqf, void *ignored)
+ {
+ 	const char *str = seqf->private;
+@@ -1341,16 +1339,6 @@ static void hp_wmi_debugfs_init(struct device *dev, struct hp_wmi_info *info,
+ 	}
+ }
+ 
+-#else
+-
+-static void hp_wmi_debugfs_init(struct device *dev, struct hp_wmi_info *info,
+-				struct hp_wmi_platform_events *pevents,
+-				u8 icount, u8 pcount, bool is_new)
+-{
+-}
+-
+-#endif
+-
+ static umode_t hp_wmi_hwmon_is_visible(const void *drvdata,
+ 				       enum hwmon_sensor_types type,
+ 				       u32 attr, int channel)
+@@ -1959,7 +1947,8 @@ static int hp_wmi_sensors_init(struct hp_wmi_sensors *state)
+ 	if (err)
+ 		return err;
+ 
+-	hp_wmi_debugfs_init(dev, info, pevents, icount, pcount, is_new);
++	if (IS_ENABLED(CONFIG_DEBUG_FS))
++		hp_wmi_debugfs_init(dev, info, pevents, icount, pcount, is_new);
+ 
+ 	if (!count)
+ 		return 0;	/* No connected sensors; debugfs only. */
+-- 
+2.39.2
 
