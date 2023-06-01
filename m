@@ -2,881 +2,195 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB93CC7EE2F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Jun 2023 14:49:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97938C77B7E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Jun 2023 15:50:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234514AbjFAOtZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Jun 2023 10:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
+        id S235439AbjFAPuS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Jun 2023 11:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjFAOtY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Jun 2023 10:49:24 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE64C0;
-        Thu,  1 Jun 2023 07:49:21 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b0314f057cso4228545ad.1;
-        Thu, 01 Jun 2023 07:49:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685630961; x=1688222961;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2z1cQ5eh9oQigVR+PZ7Zoa5pVuUlECl/torKKHKpvec=;
-        b=sJGp7gsxcgIFhPb/BkNvK0Q1mhH01TVfpngpKXxmk7o6k9yR5rLGyufbSfmH15uLaB
-         qGpDrhRlPBAvg7ugJ27M/ZvlYuYpBPgc3QD3JRCj79ewGFUfAkabL68Rhm/oNIx2rYPO
-         zv+2Kdm7VUhNDGNxlhqZRzuhc0UJb5WxBq9MmBo2RTD5LJVqQqAu8GYHWAosUBE0u4XO
-         yPj8shaqWW/U5VF8v7+rLVw59dJtYJQoTeB8dGY/hEjdDCcKBQZCWi2oxy2yRgkFhE9G
-         +0iCD5i2rLSjTHo/GBCfSm4eRWOnNk5gIuJE/ffTSWPj4tr2Fwhar7s+o69lrm1AkICD
-         boBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685630961; x=1688222961;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2z1cQ5eh9oQigVR+PZ7Zoa5pVuUlECl/torKKHKpvec=;
-        b=TLKb/Xxn2ycDgHqlQ0/k/2irjxTmSNw64qzW2Dcs/XY9XH8azv6WSWtHAm+++81q12
-         Nuy67sYW95b30RGZ7Fd8fl7Ntwa0HqQmxAtCqIFZ0s4FLAgfsZYWfjdE0ldbOaPNAH7G
-         jAwwPa6pZqJxHC7rdpLsxV1bE/Cxa1h8wJkTChjKPVJZvGV7QNIPBmkQY3KOV99+eyii
-         92y0+GuARj/02FvKFB5/VV0blTQcWydmrYG7gv1V44R5+xSiFzlG8bFAbxMaBAvOvPxy
-         S0LyHLwEkvEi6fqIaU7r3SjMAw99uhy9Ot/jVRDRzH7sONraQ3Gk9JaS3x5TRPJJDy6U
-         KqEg==
-X-Gm-Message-State: AC+VfDx4oW2hWEyMTZRedGGmgfzNXEClUAFRFp0E/Y/Vv9eLuGVdtQz5
-        hpijM8T+bNGuxdRovWFNqMMmL2B5ZUg=
-X-Google-Smtp-Source: ACHHUZ7Br+RccfEhlBUB0KzAOSvxS0oRuEpmkrsUstqOjHUyxExtJcTbe6hLCTbxD1LcxQQ1tp9rmA==
-X-Received: by 2002:a17:902:c403:b0:1b0:61dd:e523 with SMTP id k3-20020a170902c40300b001b061dde523mr7351463plk.41.1685630960578;
-        Thu, 01 Jun 2023 07:49:20 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j4-20020a170902c3c400b001add2ba4459sm3592962plj.32.2023.06.01.07.49.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 07:49:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <675848b6-df00-b2de-84b4-7cc9038f64d8@roeck-us.net>
-Date:   Thu, 1 Jun 2023 07:49:18 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
+        with ESMTP id S235119AbjFAPtV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Jun 2023 11:49:21 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FFA10C2;
+        Thu,  1 Jun 2023 08:48:43 -0700 (PDT)
+Received: from pps.filterd (m0134421.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351DbDVM010537;
+        Thu, 1 Jun 2023 15:48:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=KniJvSduPurqAX8RGTvH8Z0EWsc+AoEAhUYpnCTgq1o=;
+ b=pll+ziCzuv6HFkfJfg3uPU/1J/fsDB3ZOWiiILotbJ/PnY3YbfffjugROZiD2X8mvV3x
+ tgo5buGQ3zEA/lqwTZkK3oB0teEVAzq+jCv1fP8vz24dHRmCaiYjVbMJCtbwjwSOWvKL
+ njNpoVRA2mgfMK+wDqpUHo+TQLeiUY5sMTM4pQVBvUQTGT4K2RbqLqODviOfJfnzImRh
+ F2GVhW2ESX220VIokPxvoz3rpPitPNWAPnFLerTOOd8nSfNIoOCF3ccztnvlme8ldq0h
+ QrUGAe9+3jyGmyZtPyvgpVYHa8iv9MunZJQ5IJmrSAF0iHEboBsDiAbzZ7CYizjwrfz0 3A== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3qxvce186u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 15:48:16 +0000
+Received: from p1wg14925.americas.hpqcorp.net (unknown [10.119.18.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 1033712B47;
+        Thu,  1 Jun 2023 15:48:14 +0000 (UTC)
+Received: from p1wg14925.americas.hpqcorp.net (10.119.18.114) by
+ p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 1 Jun 2023 03:47:54 -1200
+Received: from p1wg14920.americas.hpqcorp.net (16.230.19.123) by
+ p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42
+ via Frontend Transport; Thu, 1 Jun 2023 03:47:54 -1200
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.123) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 1 Jun 2023 03:47:54 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VOp2RYdciOkyvt9Ma274Cf+QP63weqsUj+eN9uLfjqUHPrvAtXWBVb/AfE3g29olS6wCM5raFDglF4FGf+0vahQvU9Wzc/r2kEpPzJSmtDOJsb7Q+Qw+nSwWI2bIyUHvJ8z/ypH2+o2tfUgwWx2ozylku0n+SUz2mGxPYqIEag303TazrYEkYZ8YwDHMUOxtAiGP8WHFPmBv6M4ccQMPP/Z7Jlmxf8vTbqr/MtzNGpgd3/YWEc4EPfdjCM9uX+qp12lEhGoIJgGFBZ1EHHNf9Fiv0VJWY3pSpX3PmleFCA7ZyxneBatwrtoVupmp8lzecAAwGnegbjVi9TQlntp9kg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KniJvSduPurqAX8RGTvH8Z0EWsc+AoEAhUYpnCTgq1o=;
+ b=bozvGu6lC0TXjxLq9wd+x866tp+G7e3zaCyAsUBkWxw/vidEMPTOa996cC6FcQ4zKnqxmFVtdBShhkc7eWD4zxsa7Il+i3U+33Wdcgd3wpZTp/XB4MPcA36KWTCLtAzrCTejaoHBelsByHBFfBgIA1z3x+8IciepBoxK6qNkWTYYZYwazBBUFuskJK45n39QJjntc0n69rdhwRC32Fv27KzE0hJvw+Z4hzJJ+LjDeIx0p7bn0IMU+7MxzkkXuHkonejzpk5HY3JPAtPrQo9DAVa8N1278jBdwoErxS+8VUC2/UmSoPjnik+F4PDxzhtUdPSKvZYr4MpaiT3e71Bkxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
+ PH0PR84MB1478.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:171::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Thu, 1 Jun
+ 2023 15:47:52 +0000
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2a07:1ac6:6523:8682]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2a07:1ac6:6523:8682%5]) with mapi id 15.20.6455.020; Thu, 1 Jun 2023
+ 15:47:52 +0000
+From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: RE: [PATCH v2 4/5] hwmon: (gxp_fan_ctrl) Provide fan info via gpio
+Thread-Topic: [PATCH v2 4/5] hwmon: (gxp_fan_ctrl) Provide fan info via gpio
+Thread-Index: AQHZk9PWKQUBcQjeO0mLSJz9z8PkXK90ljUAgAAVFxCAABXlgIABVANQ
+Date:   Thu, 1 Jun 2023 15:47:52 +0000
+Message-ID: <DM4PR84MB19273A008BB11589CEEF697188499@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20230531151918.105223-1-nick.hawkins@hpe.com>
+ <20230531151918.105223-5-nick.hawkins@hpe.com>
+ <07b2a2f7-5ddc-0f10-6b1f-184dc21fa580@roeck-us.net>
+ <DM4PR84MB19274F575858CBCB2FA5C23E88489@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+ <b1d8f851-4e87-333c-229c-b9dc37ea3c40@roeck-us.net>
+In-Reply-To: <b1d8f851-4e87-333c-229c-b9dc37ea3c40@roeck-us.net>
+Accept-Language: en-US
 Content-Language: en-US
-To:     David Ober <dober6023@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jdelvare@suse.com, corbet@lwn.net,
-        David Ober <dober@lenovo.com>
-References: <20230601123830.82476-1-dober6023@gmail.com>
- <cfa7f046-5447-6c3e-4b6e-09e7ebb6809a@roeck-us.net>
- <CAFvZm1Fg+AF2dcTTgQnOugubeJsqfkM-dLuqA=Qv18eY9=fapg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] New module to add NCT6692D watchdog funtionality
-In-Reply-To: <CAFvZm1Fg+AF2dcTTgQnOugubeJsqfkM-dLuqA=Qv18eY9=fapg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|PH0PR84MB1478:EE_
+x-ms-office365-filtering-correlation-id: c737322b-1bf6-448f-6fd9-08db62b78f4a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Fmk/ykCTmSx/iQorfqYKuWpne3aDXdqzUOfvd/uawThYK6I+5ArHkhyw9GcVSLbwuYEAxZUAGnt7Jh4JM8GhDMqiucZgcClP9VkVu+M1aCZ/qytgwMsSmp+yMPfmmB3sAZJmGrddP0dBIag+2DiTtfcfFjM0eDC6SBXYED0m/Pso+FRWiBhB3+V6tCiRaQSaAOKMnfZGw+EB9xgD9/UftAEg0ku824vsz737DX4H0daKk2QSu2FDsNCqU44u9oG5+M18a77EQKkUE3NfmJHO5SXORXZ5HQeIvrEB2acHRTGI4k8uYORFzUgb8qGEV5wDuXMUJyUFCjUd3UF1Z3CuOGBLxwQhRKhXdTYDDYX62IUyQzTzeDv+0IbQgmc1m8UPhpLYpMB9H7rhMP/O9fzPk1aTwijJljC8Pl6xf30yR4zgFHiz4hGh+Jgs8T9K6I/+b52W3x85acM2Y8K25lEkEq32JvK6mJuLGAhJBeCl7uP9EONSFKsXWl1C1v9uQn+kldaEbcrdnDpgbK+n83QmJYsdv+18Y8FHQ2U5+Pyo8IdySO8nYO1Qda4Po1SrJti5MtAcGcTTB/PMa1t/pExeDDa7FfMWv01pLlRoOTuSXGR+W0F33l9ImanGYl6vOqQ1
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(366004)(136003)(39860400002)(346002)(396003)(376002)(451199021)(86362001)(33656002)(82960400001)(122000001)(38100700002)(38070700005)(71200400001)(478600001)(54906003)(64756008)(7696005)(8936002)(5660300002)(66446008)(2906002)(7416002)(6916009)(52536014)(66476007)(66946007)(66556008)(316002)(76116006)(41300700001)(8676002)(4326008)(55016003)(6506007)(186003)(83380400001)(9686003)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MCtGcU9acTg5WlM2UWd6RW4yc0k1cUsySjVzdkZVMVI5OXI2dWo3NU5jRnV5?=
+ =?utf-8?B?bzlpL2RSVkhxbVBlK0NwTm11b09GL0tQSVBESkJkZkFVTFAwRXFlRlJQdUQz?=
+ =?utf-8?B?WWVwaWIvTVZ4ZU5wSnhpYmh1S2FRN0t3S2JRbUZLVW5tTVgvTzJTNm5lUEVV?=
+ =?utf-8?B?aVdsTHdmazlpYml0V0ZGRy80K0NZZFYyMmcxTFA2U2lzRWhLdjJzZkNRdzZj?=
+ =?utf-8?B?VjJOUUc1ajFVZkJTYXZNYUVHRWNEd0tIY0JCT1hRbXJzZWE4TE5sMi9keDVz?=
+ =?utf-8?B?cU40dU9JZnd6R0p0Qnlwc0xsMHJ0alpzUEJCS0RvWUFaWkxtRDlVQkhBOTZ4?=
+ =?utf-8?B?d1J4R0NmQWpNTVh2b080b3dzaE13eVVzVWFjd0djM3Zxd3o5VWY2RVY0WmtU?=
+ =?utf-8?B?bWprMVB4bWoyaFB1a0ZkMmJvYzU0Y0syVnRlOGkySGNuVTlKQzBSV1dnMWdI?=
+ =?utf-8?B?UzdEaDEvME1udVFtUWZGWVlhSXZpbENWRWdRWVBUeVpnMUd6RTQ4a0M0RVJj?=
+ =?utf-8?B?SVFkNkVuU0NCREE2Yy83WkIzdmhvSFNTNC9NR1dSUW9Sd1RyYzI0ZElZL0ov?=
+ =?utf-8?B?c2pwTUV1N01KbEVBZ2tuT1VSVjhtVldqS2N5cGZWVDNTYXRTNVJwR1dMSDhK?=
+ =?utf-8?B?cS94TnpCS0Y3NzhkU3RTdUYyWWpQYTdSRFFlSzFMaGprdnBKRlF5NEhqWWRZ?=
+ =?utf-8?B?R3NkRkFNcXRKWWdpOTU5c1ExZ3JzeVZBVHp2UDI1U2krTm1uV1BKakJLUjY2?=
+ =?utf-8?B?TFVoOXUxZHRYTlMyTjI5MFJCSGppQW45M3E0SHdwS3lGRi8xYWFqcFFWeHl4?=
+ =?utf-8?B?azc3c1RUZElaNENJZmhLbnR6RzBQclM5QjFHM213aklsTVdKQlhhRGFOdCtl?=
+ =?utf-8?B?R2RwN3FLUjBXY2VYQUQ1ckpRc2ZQY0dQZnVCL05wcXdXSEVJVVcvQWsvbi9i?=
+ =?utf-8?B?b2JyRHVsWUFwNEdoakNBV0ptYUNUZnRwYjVtRnRLK3hIcTVqbEFnTHNKaUVZ?=
+ =?utf-8?B?ZkJ5blNwSUMwMkpkTVpVTmxDdVVqS2taczEvMGp4bnNqT1VKcXc4V0RIRDJN?=
+ =?utf-8?B?Kytxd3RBUmJacDhVRWQ4ZDZNQVE3V0tpa0hzRmY3UVVFanhoa09wUnNjWHQz?=
+ =?utf-8?B?MnBEUG40REc2d25SdDc5Sk9SaDJpaCtWNTd4SFFZbEtLQjFFZ1hydytOejNU?=
+ =?utf-8?B?WXArVU96VmFBaTFUMDlycHNEV3NCUEJ4ZFV0VnFEdks3V1lIM2NSS2hiSmFy?=
+ =?utf-8?B?ck8rbU1LeEw3c0J2WkNWS0JVM0JjYjIwYVd0ZkNKN2Z1VnAzVGREVGlWSUhO?=
+ =?utf-8?B?bzdwL29ZeGh5RmdTS0FzaERPQXhvNml6WjFoQllna1pzQit4RVlZcmNxblh2?=
+ =?utf-8?B?VG9KTEg0M2swSFI1RnFibDRPNWVBOVlKdDY0Y3hLQzIyR0RSc0M4Tk5NM3JP?=
+ =?utf-8?B?MllBajZzczdCWGwyaUIyRm5NQm5lVXFTbWZWM0NZTGNPYjd5WDJuR0Qwc2xo?=
+ =?utf-8?B?QUk3VU5kdy9mOXdXZkJGcGdNUSttb3luemFqdFhvK1lXYTcwMHFwZHZaQ3Bn?=
+ =?utf-8?B?WnBhY052Zk1idjhJcHhDWG1UemlxdVRleTNudjI4c3lYMnkvUTVWQ2cvTnFB?=
+ =?utf-8?B?cmgveUNaUW5wbGxhV2ZWVWNnbFM3L1JFTGdwOWNjVkZBVzhjUkkvSm5qTW93?=
+ =?utf-8?B?WUxORjRVU3RDSkhjWTdEOG5MZ2o5TzhhQm16N2V5aWtFc2prR09BQ1hVVUwv?=
+ =?utf-8?B?VGE5c2JZYkd2Smpsd1U2WWR4WW80VnhqWHZZNXd4cHJ5OSsyQzNCQitTMlFT?=
+ =?utf-8?B?am1VTEgyMlBoSmZMdU5MNzZUcUtwUjdxNXFiTWdzWDAyTHFHYmNMUDF6OGpT?=
+ =?utf-8?B?M1lJMmZNZGhvaFN4d0d0UExmRlEvbUhmZ3FocFozdGtRendkbDNiZFFRMXlW?=
+ =?utf-8?B?MklhQ1F6cVRUNVE2QmVzM0RGc1JWdk1YTXdmQlRJUFplaVdGci9ZcEMrNDJU?=
+ =?utf-8?B?dndOQ1d2YjY3Y0xadjF0SlJKKzFmRG8rTDJjTXpqNzdjN1d0enlkeEJxQzdT?=
+ =?utf-8?B?WUhJUFhuZmovY2dMcXUzMzRTQnppQUJKZXBxeGlMaGpIY2RGZVRXYkk0UTBF?=
+ =?utf-8?Q?XkDxT500QXL97MPnG4yXapsa2?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: c737322b-1bf6-448f-6fd9-08db62b78f4a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2023 15:47:52.5432
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: AeYwgEY55Kh20dpCjcHzYMuBxLbP3QzurCbZINErE6v4201w4J9HKtXBbYagLgiv8dazMEf4SW57ximdVoG/pQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR84MB1478
+X-OriginatorOrg: hpe.com
+X-Proofpoint-ORIG-GUID: 78pYT7IqWj0VD6JZw69Y_mF3kkYOqW16
+X-Proofpoint-GUID: 78pYT7IqWj0VD6JZw69Y_mF3kkYOqW16
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=610 clxscore=1015
+ phishscore=0 adultscore=0 priorityscore=1501 bulkscore=0 malwarescore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306010137
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/1/23 07:38, David Ober wrote:
-> Since there is at least one other EC chip monitor device that implemented the watchdog this way and I do plan to add other sensor output later I thought this was the best place for this
-> 
-
-No, it isn't. It is barely acceptable if the chip doesn't cleanly separate
-watchdog and hardware monitoring functionality, but even then it is marginal.
-It is most definitely not acceptable if a driver is initially submitted as
-watchdog driver.
-
-If anything, you have convinced me to no longer accept such combined drivers.
-If the functionality can not be separated (that is, if the chip uses the
-same memory region for hwmon and watchdog functionality), implement a mfd
-driver instead, with watchdog and hwmon drivers as client drivers.
-
-Guenter
-
-> On Thu, Jun 1, 2023, 9:48 AM Guenter Roeck <linux@roeck-us.net <mailto:linux@roeck-us.net>> wrote:
-> 
->     On 6/1/23 05:38, David Ober wrote:
->      > The new module adds in the basic functionality of the NCT6692D
->      > watchdog driver. This functionality is added to support the
->      > Lenovo SE30 device
->      >
->      > Signed-off-by: David Ober <dober6023@gmail.com <mailto:dober6023@gmail.com>>
->      > ---
->      >   Documentation/hwmon/nct6692.rst |  30 ++
->      >   drivers/hwmon/Kconfig           |  10 +
->      >   drivers/hwmon/Makefile          |   1 +
->      >   drivers/hwmon/nct6692.c         | 691 ++++++++++++++++++++++++++++++++
-> 
->     Why are you submitting a watchdog driver into the hwmon subsystem ?
-> 
->     Guenter
-> 
->      >   4 files changed, 732 insertions(+)
->      >   create mode 100644 Documentation/hwmon/nct6692.rst
->      >   create mode 100644 drivers/hwmon/nct6692.c
->      >
->      > diff --git a/Documentation/hwmon/nct6692.rst b/Documentation/hwmon/nct6692.rst
->      > new file mode 100644
->      > index 000000000000..3bb1a4cccc62
->      > --- /dev/null
->      > +++ b/Documentation/hwmon/nct6692.rst
->      > @@ -0,0 +1,30 @@
->      > +.. SPDX-License-Identifier: GPL-2.0
->      > +
->      > +Kernel driver nct6692
->      > +=====================
->      > +
->      > +Supported chips:
->      > +
->      > +  * Nuvoton NCT6692D
->      > +
->      > +    Prefix: 'nct6692'
->      > +
->      > +    Addresses scanned: ISA address retrieved from Super I/O registers
->      > +
->      > +    Datasheet: Available from Nuvoton upon request
->      > +
->      > +Authors:
->      > +
->      > +     David Ober <dober@lenovo.com <mailto:dober@lenovo.com>>
->      > +
->      > +Description
->      > +-----------
->      > +
->      > +This driver implements support for the Nuvoton NCT6692D eSIO chip.
->      > +
->      > +
->      > +Usage Note
->      > +----------
->      > +
->      > +Implement the watchdog functionality of the NCT6692D eSIO chip
->      > +
->      > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->      > index 0d3fd47db918..54907f5dbbce 100644
->      > --- a/drivers/hwmon/Kconfig
->      > +++ b/drivers/hwmon/Kconfig
->      > @@ -1528,6 +1528,16 @@ config SENSORS_NCT6683
->      >         This driver can also be built as a module. If so, the module
->      >         will be called nct6683.
->      >
->      > +config SENSORS_NCT6692
->      > +     tristate "Nuvoton NCT6692D"
->      > +     depends on !PPC
->      > +     help
->      > +       If you say yes here you get support for the hardware monitoring
->      > +       functionality of the Nuvoton NCT6692D eSIO chip.
->      > +
->      > +       This driver can also be built as a module. If so, the module
->      > +       will be called nct6692.
->      > +
->      >   config SENSORS_NCT6775_CORE
->      >       tristate
->      >       select REGMAP
->      > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
->      > index 708e612e4ead..d9cd0735dd26 100644
->      > --- a/drivers/hwmon/Makefile
->      > +++ b/drivers/hwmon/Makefile
->      > @@ -159,6 +159,7 @@ obj-$(CONFIG_SENSORS_MLXREG_FAN) += mlxreg-fan.o
->      >   obj-$(CONFIG_SENSORS_MENF21BMC_HWMON) += menf21bmc_hwmon.o
->      >   obj-$(CONFIG_SENSORS_MR75203)       += mr75203.o
->      >   obj-$(CONFIG_SENSORS_NCT6683)       += nct6683.o
->      > +obj-$(CONFIG_SENSORS_NCT6692)        += nct6692.o
->      >   obj-$(CONFIG_SENSORS_NCT6775_CORE) += nct6775-core.o
->      >   nct6775-objs                        := nct6775-platform.o
->      >   obj-$(CONFIG_SENSORS_NCT6775)       += nct6775.o
->      > diff --git a/drivers/hwmon/nct6692.c b/drivers/hwmon/nct6692.c
->      > new file mode 100644
->      > index 000000000000..2fd5d51d888c
->      > --- /dev/null
->      > +++ b/drivers/hwmon/nct6692.c
->      > @@ -0,0 +1,691 @@
->      > The new module adds in the basic functionality of the NCT6692D
->      > watchdog driver. This functionality is added to support the
->      > Lenovo SE30 device
->      > +// SPDX-License-Identifier: GPL-2.0-or-later
->      > +/*
->      > + * ThinkEdge Watchdog Driver
->      > + */
->      > +
->      > +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->      > +
->      > +#include <linux/acpi.h>
->      > +#include <linux/module.h>
->      > +#include <linux/moduleparam.h>
->      > +#include <linux/platform_device.h>
->      > +#include <linux/types.h>
->      > +#include <linux/watchdog.h>
->      > +#include <linux/ioport.h>
->      > +#include <linux/init.h>
->      > +#include <linux/io.h>
->      > +#include <linux/pci.h>
->      > +
->      > +#include <linux/string.h>
->      > +
->      > +/*
->      > + * ISA constants
->      > + */
->      > +
->      > +#define IOREGION_ALIGNMENT      (~7)
->      > +#define IOREGION_OFFSET         4       /* Use EC port 1 */
->      > +#define IOREGION_LENGTH         4
->      > +
->      > +#define WATCHDOG_TIMEOUT 60 /* 60 sec default timeout */
->      > +#define WATCHDOG_WDT_SEL 1
->      > +
->      > +/*The timeout range is 1-255 minutes*/
->      > +#define MIN_TIMEOUT       1
->      > +#define MAX_TIMEOUT       255
->      > +
->      > +#define THINKEDGE_MAX_PARAM_STRING_LEN 16
->      > +
->      > +static int timeout; /* in seconds */
->      > +module_param(timeout, int, 0);
->      > +MODULE_PARM_DESC(timeout,
->      > +              "Watchdog timeout in seconds. 1 <= timeout <= 255, default="
->      > +              __MODULE_STRING(WATCHDOG_TIMEOUT) ".");
->      > +
->      > +static bool nowayout = WATCHDOG_NOWAYOUT;
->      > +module_param(nowayout, bool, 0);
->      > +MODULE_PARM_DESC(nowayout,
->      > +              "Watchdog cannot be stopped once started (default="
->      > +              __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
->      > +
->      > +static int early_disable;
->      > +module_param(early_disable, int, 0);
->      > +MODULE_PARM_DESC(early_disable, "Disable watchdog at boot time (default=0)");
->      > +
->      > +#define DRVNAME "nct6692"
->      > +
->      > +#define NCT6692 "nct6692"
->      > +#define NCT6692_ID 0x0110
->      > +
->      > +#define WDT_EFER(X) (X + 0)  /* Extended Function Enable Registers */
->      > +#define WDT_EFIR(X) (X + 0)  /* Extended Function Index Register(same as EFER) */
->      > +#define WDT_EFDR(X) (WDT_EFIR(X) + 1) /* Extended Function Data Register */
->      > +#define CHIPID_MASK 0xFFF0
->      > +
->      > +#define NCT6692_MAX_IO_RETRY_NUM 0x300
->      > +
->      > +#define NCT6692_EC_NAME "nct6692_ec"
->      > +#define NCT6692_EC_REPORT_NAME "nct6692_ec_rep"
->      > +#define NCT6692_HWM_CFG               0x180
->      > +
->      > +#define NCT6692_SIO_UNLOCK_KEY 0x87
->      > +#define NCT6692_SIO_LOCK_KEY 0xAA
->      > +
->      > +#define NCT6692_LD_NUM_SHM 0x0F
->      > +#define NCT6692_LD_WIN2_BASE_ADDR 0xF8
->      > +#define NCT6692_LD_REPORT_BASE_ADDR 0xE4
->      > +
->      > +// Host Interface WIN2 offset definition
->      > +#define SHM_WIN_MOD_OFFSET 0x01
->      > +#define SHM_WIN_CMD_OFFSET 0x02
->      > +#define SHM_WIN_SEL_OFFSET 0x03
->      > +#define SHM_WIN_CTL_OFFSET 0x04
->      > +#define VAL_SHM_WIN_CTRL_WR 0x40
->      > +#define VAL_SHM_WIN_CTRL_RD 0x80
->      > +#define SHM_WIN_ID_OFFSET 0x08
->      > +#define SHM_WIN_DAT_OFFSET 0x10
->      > +
->      > +struct nct6692_shm_t {
->      > +     u_char *base_addr;
->      > +     u_long base_phys;
->      > +     u_char offset_mod;
->      > +     u_char offset_cmd;
->      > +     u_char offset_sel;
->      > +     u_char offset_ctl;
->      > +     u_char offset_id;
->      > +     u_char offset_dat;
->      > +     u_char *report_addr;
->      > +     u_long report_phys;
->      > +};
->      > +
->      > +/* REGs definitions */
->      > +enum nct6692_channel_type {
->      > +     NCT6692_CHANNEL_DEFAULT,
->      > +     NCT6692_CHANNEL_REPORT,      /* Not used in this driver. */
->      > +};
->      > +
->      > +struct nct6692_sio_data {
->      > +     u_long base_phys;
->      > +     u_long report_phys;
->      > +     int sioreg;
->      > +};
->      > +
->      > +struct nct6692_reg_t {
->      > +     u_char channel;  /* nct6692_channel_type */
->      > +     u_char mod;
->      > +     u_char cmd;
->      > +     u_char sel;
->      > +     u_int idx;
->      > +};
->      > +
->      > +struct nct6692_data_t {
->      > +     struct nct6692_shm_t shm;
->      > +     struct nct6692_reg_t cfg;
->      > +     struct nct6692_reg_t cnt;
->      > +     u_char timeout;
->      > +     struct watchdog_device wdt;
->      > +};
->      > +
->      > +static inline void superio_outb(int ioreg, int reg, int val)
->      > +{
->      > +     outb(reg, WDT_EFER(ioreg));
->      > +     outb(val, WDT_EFDR(ioreg));
->      > +}
->      > +
->      > +static inline int superio_inb(int ioreg, int reg)
->      > +{
->      > +     outb(reg, WDT_EFER(ioreg));
->      > +     return inb(WDT_EFDR(ioreg));
->      > +}
->      > +
->      > +static inline int superio_enter(int key, int addr, const char *name)
->      > +{
->      > +     if (!request_muxed_region(addr, 2, name)) {
->      > +             pr_err("I/O address 0x%04x already in use\n", addr);
->      > +             return -EBUSY;
->      > +     }
->      > +     outb_p(key, WDT_EFER(addr)); /* Enter extended function mode */
->      > +     outb_p(key, WDT_EFER(addr)); /* Again according to manual */
->      > +
->      > +     return 0;
->      > +}
->      > +
->      > +static inline void superio_select(int ioreg, int ld)
->      > +{
->      > +     superio_outb(ioreg, 0x07, ld);
->      > +}
->      > +
->      > +static inline void superio_exit(int key, int addr)
->      > +{
->      > +     outb_p(key, WDT_EFER(addr)); /* Leave extended function mode */
->      > +     release_region(addr, 2);
->      > +}
->      > +
->      > +/*
->      > + * The following several functions are used to access host interface according
->      > + * to the definition of memory region, reg (as a base addr) and an index offset
->      > + * It uses (shm.base_addr + shm.offset) format to locate the data area of the
->      > + * host interface channel. Then access the address "reg.idx + idx_offset" that
->      > + * are suitable for a loop accessing. Where the idx_offset is an extra offset
->      > + * based on the definition of reg for accessing the address based on the reg.
->      > + *
->      > + * Functions with suffix of 'report' are used to access report channel.
->      > + */
->      > +
->      > +int read_shm_win(const struct nct6692_shm_t *shm,
->      > +              const struct nct6692_reg_t *reg,
->      > +              u_char idx_offset)
->      > +{
->      > +     int retval;
->      > +     u_char pre_id;
->      > +     u_char new_id;
->      > +     u_int count = 0;
->      > +
->      > +     if (!request_mem_region(shm->base_phys, 256, NCT6692_EC_NAME)) {
->      > +             pr_err("nuv:request channel mutex fail (base_addr=%lX)\n",
->      > +                    shm->base_phys);
->      > +             retval = -EBUSY;
->      > +             goto exit;
->      > +     }
->      > +
->      > +     iowrite8(reg->mod, shm->base_addr + shm->offset_mod);
->      > +     iowrite8(reg->cmd, shm->base_addr + shm->offset_cmd);
->      > +     iowrite8(reg->sel, shm->base_addr + shm->offset_sel);
->      > +     pre_id = ioread8(shm->base_addr + shm->offset_id);
->      > +     iowrite8(VAL_SHM_WIN_CTRL_RD, shm->base_addr + shm->offset_ctl);
->      > +     do {
->      > +             new_id = ioread8(shm->base_addr + shm->offset_id);
->      > +             if (count == NCT6692_MAX_IO_RETRY_NUM) {
->      > +                     pr_warn("nuv:Wait ID count timeout in %s!\n", __func__);
->      > +                     retval = 0;
->      > +                     goto exit_release;
->      > +             }
->      > +             count++;
->      > +     } while (pre_id == new_id);
->      > +     retval = ioread8(shm->base_addr + shm->offset_dat + reg->idx + idx_offset);
->      > +
->      > +exit_release:
->      > +     release_mem_region(shm->base_phys, 256);
->      > +exit:
->      > +     return retval;
->      > +}
->      > +
->      > +int write_shm_win(const struct nct6692_shm_t *shm,
->      > +               const struct nct6692_reg_t *reg,
->      > +               u_char idx_offset,
->      > +               u_char val)
->      > +{
->      > +     int err = 0;
->      > +     u_char pre_id;
->      > +     u_char new_id;
->      > +     u_int count = 0;
->      > +
->      > +     if (!request_mem_region(shm->base_phys, 256, NCT6692_EC_NAME)) {
->      > +             pr_err("nuv:request channel mutex fail (base_addr=%lX)\n",
->      > +                    shm->base_phys);
->      > +             err = -EBUSY;
->      > +             goto err_exit;
->      > +     }
->      > +
->      > +     iowrite8(reg->mod, shm->base_addr + shm->offset_mod);
->      > +     iowrite8(reg->cmd, shm->base_addr + shm->offset_cmd);
->      > +     iowrite8(reg->sel, shm->base_addr + shm->offset_sel);
->      > +
->      > +     pre_id = ioread8(shm->base_addr + shm->offset_id);
->      > +     iowrite8(VAL_SHM_WIN_CTRL_RD, shm->base_addr + shm->offset_ctl);
->      > +     do {
->      > +             new_id = ioread8(shm->base_addr + shm->offset_id);
->      > +             if (count == NCT6692_MAX_IO_RETRY_NUM) {
->      > +                     pr_warn("nuv:Wait ID count timeout in %s!\n", __func__);
->      > +                     err = -EINVAL;
->      > +                     goto err_exit_release;
->      > +             }
->      > +             count++;
->      > +     } while (pre_id == new_id);
->      > +
->      > +     iowrite8(val, shm->base_addr + shm->offset_dat + reg->idx + idx_offset);
->      > +
->      > +     pre_id = new_id;
->      > +
->      > +     iowrite8(VAL_SHM_WIN_CTRL_WR, shm->base_addr + shm->offset_ctl);
->      > +     do {
->      > +             new_id = ioread8(shm->base_addr + shm->offset_id);
->      > +             if (count == NCT6692_MAX_IO_RETRY_NUM) {
->      > +                     pr_warn("nuv:Wait ID count timeout in %s!\n", __func__);
->      > +                     err = -EINVAL;
->      > +                     goto err_exit_release;
->      > +             }
->      > +             count++;
->      > +     } while (pre_id == new_id);
->      > +
->      > +err_exit_release:
->      > +     release_mem_region(shm->base_phys, 256);
->      > +
->      > +err_exit:
->      > +     return err;
->      > +}
->      > +
->      > +int read_shm_report(const struct nct6692_shm_t *shm,
->      > +                 const struct nct6692_reg_t *reg,
->      > +                 u_char idx_offset)
->      > +{
->      > +     int val;
->      > +
->      > +     if (!request_mem_region(shm->report_phys, 256,
->      > +                             NCT6692_EC_REPORT_NAME)) {
->      > +             pr_err("nuv:request channel mutex fail (base_addr=%lX)\n",
->      > +                    shm->report_phys);
->      > +             return -EBUSY;
->      > +     }
->      > +
->      > +     val = ioread8(shm->report_addr + reg->idx + idx_offset);
->      > +
->      > +     release_mem_region(shm->report_phys, 256);
->      > +
->      > +     return val;
->      > +}
->      > +
->      > +int read_shm(const struct nct6692_shm_t *shm,
->      > +          const struct nct6692_reg_t *reg)
->      > +{
->      > +     if (reg->channel == NCT6692_CHANNEL_DEFAULT)
->      > +             return read_shm_win(shm, reg, 0);
->      > +
->      > +     return read_shm_report(shm, reg, 0);
->      > +}
->      > +
->      > +int write_shm(const struct nct6692_shm_t *shm,
->      > +           const struct nct6692_reg_t *reg,
->      > +           u_char val)
->      > +{
->      > +     if (reg->channel == NCT6692_CHANNEL_DEFAULT)
->      > +             return write_shm_win(shm, reg, 0, val);
->      > +
->      > +     pr_warn("Report channel CAN NOT be written!\n");
->      > +     return -EINVAL;
->      > +}
->      > +
->      > +int read_shm_with_offset(const struct nct6692_shm_t *shm,
->      > +                      const struct nct6692_reg_t *reg,
->      > +                      u_char idx_offset)
->      > +{
->      > +     if (reg->channel == NCT6692_CHANNEL_DEFAULT)
->      > +             return read_shm_win(shm, reg, idx_offset);
->      > +
->      > +     return read_shm_report(shm, reg, idx_offset);
->      > +}
->      > +
->      > +int write_shm_with_offset(const struct nct6692_shm_t *shm,
->      > +                       const struct nct6692_reg_t *reg,
->      > +                       u_char idx_offset,
->      > +                       u_char val)
->      > +{
->      > +     if (reg->channel == NCT6692_CHANNEL_DEFAULT)
->      > +             return write_shm_win(shm, reg, idx_offset, val);
->      > +
->      > +     pr_warn("Report channel CAN NOT be written!\n");
->      > +     return -EINVAL;
->      > +}
->      > +
->      > +static int nct6692_wdt_init(struct watchdog_device *wdog)
->      > +{
->      > +     int err = 0;
->      > +     u_char timeout, cfg;
->      > +     struct nct6692_data_t *data = watchdog_get_drvdata(wdog);
->      > +
->      > +     timeout = read_shm(&data->shm, &data->cnt);
->      > +     cfg = read_shm(&data->shm, &data->cfg);
->      > +
->      > +     if (timeout < 0)
->      > +             return timeout;
->      > +     if (timeout == 0)
->      > +             return 0;
->      > +
->      > +     if (early_disable) {
->      > +             pr_warn("Stopping previously enabled watchdog until userland kicks in\n");
->      > +             // Disable WDT and clear timeout count
->      > +             data->timeout = 0;
->      > +             err = write_shm(&data->shm, &data->cnt, data->timeout);
->      > +     } else {
->      > +             pr_info("Watchdog already running. Resetting timeout to %d sec\n",
->      > +                     wdog->timeout);
->      > +             data->timeout = wdog->timeout;
->      > +             err = write_shm(&data->shm, &data->cnt, data->timeout);
->      > +     }
->      > +
->      > +     return err;
->      > +}
->      > +
->      > +static int nct6692_wdt_enable(bool enable, u_int timeout,
->      > +                             struct nct6692_data_t *data)
->      > +{
->      > +     u_char reg;
->      > +
->      > +     reg = read_shm(&data->shm, &data->cfg);
->      > +
->      > +     if (enable) {
->      > +             write_shm(&data->shm, &data->cfg, 0x02);
->      > +             /* ^^^^ 0x00 to disable reboot */
->      > +             data->timeout = timeout;
->      > +             write_shm(&data->shm, &data->cnt, data->timeout);
->      > +             reg = read_shm(&data->shm, &data->cfg);
->      > +     } else {
->      > +             data->timeout = 0;
->      > +             write_shm(&data->shm, &data->cnt, data->timeout);
->      > +     }
->      > +     reg = read_shm(&data->shm, &data->cfg);
->      > +     reg = read_shm(&data->shm, &data->cnt);
->      > +     return 0;
->      > +}
->      > +
->      > +static int nct6692_wdt_set_time(struct watchdog_device *wdog, u_int timeout)
->      > +{
->      > +     struct nct6692_data_t *data = watchdog_get_drvdata(wdog);
->      > +
->      > +     if (timeout != 0)
->      > +             nct6692_wdt_enable(true, timeout, data);
->      > +     else
->      > +             nct6692_wdt_enable(false, timeout, data);
->      > +
->      > +     return 0;
->      > +}
->      > +
->      > +static int nct6692_wdt_setup(struct watchdog_device *wdt)
->      > +{
->      > +     int err = 0;
->      > +
->      > +     watchdog_stop_on_reboot(wdt);
->      > +
->      > +     err = nct6692_wdt_init(wdt);
->      > +     if (err) {
->      > +             pr_err("failed to initialize watchdog (err=%d)\n", err);
->      > +             return err;
->      > +     }
->      > +     return err;
->      > +}
->      > +
->      > +static int nct6692_wdt_start(struct watchdog_device *wdog)
->      > +{
->      > +     struct nct6692_data_t *data = watchdog_get_drvdata(wdog);
->      > +
->      > +     nct6692_wdt_setup(wdog);
->      > +     nct6692_wdt_set_time(wdog, data->timeout);
->      > +     return 0;
->      > +}
->      > +
->      > +static int nct6692_wdt_stop(struct watchdog_device *wdog)
->      > +{
->      > +     return nct6692_wdt_set_time(wdog, 0);
->      > +}
->      > +
->      > +static int nct6692_wdt_set_timeout(struct watchdog_device *wdog,
->      > +                                  u_int timeout)
->      > +{
->      > +     wdog->timeout = timeout;
->      > +     return 0;
->      > +}
->      > +
->      > +static u_int nct6692_wdt_get_timeleft(struct watchdog_device *wdog)
->      > +{
->      > +     struct nct6692_data_t *data = watchdog_get_drvdata(wdog);
->      > +     u_int timeleft;
->      > +
->      > +     timeleft = read_shm(&data->shm, &data->cnt);
->      > +     return timeleft;
->      > +}
->      > +
->      > +static int nct6692_wdt_ping(struct watchdog_device *wdt)
->      > +{
->      > +     struct nct6692_data_t *data = watchdog_get_drvdata(wdt);
->      > +     int timeout;
->      > +
->      > +     /*
->      > +      * Note:
->      > +      * NCT6692 does not support refreshing WDT_TIMER_REG register when
->      > +      * the watchdog is active. Please disable watchdog before feeding
->      > +      * the watchdog and enable it again.
->      > +      */
->      > +     /* Disable soft watchdog timer */
->      > +     timeout = 0;
->      > +     nct6692_wdt_enable(false, timeout, data);
->      > +
->      > +     /* feed watchdog */
->      > +     timeout = wdt->timeout;
->      > +     write_shm(&data->shm, &data->cnt, data->timeout);
->      > +
->      > +     /* Enable soft watchdog timer */
->      > +     nct6692_wdt_enable(true, timeout, data);
->      > +     return 0;
->      > +
->      > +}
->      > +
->      > +static const struct watchdog_info nct6692_wdt_info = {
->      > +     .options        = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
->      > +                       WDIOF_MAGICCLOSE,
->      > +     .identity       = "nct6692 watchdog",
->      > +};
->      > +
->      > +static const struct watchdog_ops nct6692_wdt_ops = {
->      > +     .owner    = THIS_MODULE,
->      > +     .start    = nct6692_wdt_start,
->      > +     .stop      = nct6692_wdt_stop,
->      > +     .ping      = nct6692_wdt_ping,
->      > +     .set_timeout    = nct6692_wdt_set_timeout,
->      > +     .get_timeleft   = nct6692_wdt_get_timeleft,
->      > +};
->      > +
->      > +static int nct6692_probe(struct platform_device *pdev)
->      > +{
->      > +     struct device *dev = &pdev->dev;
->      > +     struct nct6692_data_t *data = NULL;
->      > +     struct nct6692_sio_data *sio_data = dev->platform_data;
->      > +     struct resource *res;
->      > +
->      > +     pr_info("Probe NCT6692 called\n");
->      > +     res = platform_get_resource(pdev, IORESOURCE_IO, 0);
->      > +
->      > +     data = kzalloc(sizeof(struct nct6692_data_t), GFP_KERNEL);
->      > +     if (!data)
->      > +             return -ENOMEM;
->      > +
->      > +     // init value
->      > +     data->shm.base_addr = 0;
->      > +     data->shm.report_addr = 0;
->      > +
->      > +     data->shm.base_phys = sio_data->base_phys;
->      > +     data->shm.base_addr = (u_char *)ioremap_cache(data->shm.base_phys, 256);
->      > +
->      > +     data->shm.offset_mod = SHM_WIN_MOD_OFFSET;
->      > +     data->shm.offset_cmd = SHM_WIN_CMD_OFFSET;
->      > +     data->shm.offset_sel = SHM_WIN_SEL_OFFSET;
->      > +     data->shm.offset_ctl = SHM_WIN_CTL_OFFSET;
->      > +     data->shm.offset_id = SHM_WIN_ID_OFFSET;
->      > +     data->shm.offset_dat = SHM_WIN_DAT_OFFSET;
->      > +
->      > +     // Base for REPORT Channel
->      > +     data->shm.report_phys = sio_data->report_phys;
->      > +     data->shm.report_addr = (u_char *)ioremap_cache(data->shm.report_phys, 256);
->      > +
->      > +     data->cfg.channel = NCT6692_CHANNEL_DEFAULT;
->      > +     data->cfg.mod = 0x10;
->      > +     data->cfg.cmd = 0;
->      > +     data->cfg.sel = 0;
->      > +     data->cfg.idx = 0x15;
->      > +     data->cnt.channel = NCT6692_CHANNEL_DEFAULT;
->      > +     data->cnt.mod = 0x10;
->      > +     data->cnt.cmd = 0;
->      > +     data->cnt.sel = 0;
->      > +     data->cnt.idx = 0x16;
->      > +
->      > +     data->wdt.ops = &nct6692_wdt_ops;
->      > +     data->wdt.info <http://wdt.info> = &nct6692_wdt_info;
->      > +
->      > +     data->wdt.timeout = WATCHDOG_TIMEOUT; /* Set default timeout */
->      > +     data->wdt.min_timeout = MIN_TIMEOUT;
->      > +     data->wdt.max_timeout = MAX_TIMEOUT;
->      > +     data->wdt.parent = &pdev->dev;
->      > +
->      > +     watchdog_init_timeout(&data->wdt, timeout, &pdev->dev);
->      > +     watchdog_set_nowayout(&data->wdt, nowayout);
->      > +     watchdog_set_drvdata(&data->wdt, data);
->      > +
->      > +     watchdog_stop_on_unregister(&data->wdt);
->      > +
->      > +     return devm_watchdog_register_device(dev, &data->wdt);
->      > +}
->      > +
->      > +static struct platform_driver nct6692_driver = {
->      > +     .driver = {
->      > +             .name = DRVNAME,
->      > +             /*.pm   = NCT6692_DEV_PM_OPS,*/
->      > +     },
->      > +     .probe  = nct6692_probe,
->      > +};
->      > +
->      > +static int __init nct6692_find(int addr, u_long *base_phys,
->      > +                           u_long *report_phys)
->      > +{
->      > +     u16 val;
->      > +     int err = 0;
->      > +     u_long tmp_base_phys;
->      > +     u_long tmp_report_phys;
->      > +
->      > +     err = superio_enter(NCT6692_SIO_UNLOCK_KEY, addr, NCT6692);
->      > +     if (err)
->      > +             return err;
->      > +
->      > +     val = superio_inb(addr, 0x20);
->      > +     val = ((val << 8) | (superio_inb(addr, 0x21) & 0xFF)) & CHIPID_MASK;
->      > +
->      > +     if (val != NCT6692_ID) {
->      > +             err = -ENODEV;
->      > +             goto fail;
->      > +     }
->      > +
->      > +     superio_select(addr, NCT6692_LD_NUM_SHM);
->      > +     tmp_base_phys = ((superio_inb(addr, NCT6692_LD_WIN2_BASE_ADDR) & 0xFF) |
->      > +                      ((superio_inb(addr, NCT6692_LD_WIN2_BASE_ADDR + 1) & 0xFF) << 8) |
->      > +                      ((superio_inb(addr, NCT6692_LD_WIN2_BASE_ADDR + 2) & 0xFF) << 16) |
->      > +                      ((superio_inb(addr, NCT6692_LD_WIN2_BASE_ADDR + 3) & 0xFF) << 24)) &
->      > +             0xFFFFFFFF;
->      > +
->      > +     if ((tmp_base_phys == 0xFFFFFFFF) || (tmp_base_phys == 0)) {
->      > +             err = -ENODEV;
->      > +             goto fail;
->      > +     }
->      > +
->      > +     tmp_report_phys = ((superio_inb(addr, NCT6692_LD_REPORT_BASE_ADDR) & 0xFF) |
->      > +                        ((superio_inb(addr, NCT6692_LD_REPORT_BASE_ADDR + 1) & 0xFF) << 8) |
->      > +                        ((superio_inb(addr, NCT6692_LD_REPORT_BASE_ADDR + 2) & 0xFF) << 16) |
->      > +                        ((superio_inb(addr, NCT6692_LD_REPORT_BASE_ADDR + 3) & 0xFF) << 24)) &
->      > +             0xFFFFFFFF;
->      > +
->      > +     if ((tmp_report_phys == 0xFFFFFFFF) || (tmp_report_phys == 0)) {
->      > +             err = -ENODEV;
->      > +             goto fail;
->      > +     }
->      > +
->      > +fail:
->      > +     superio_exit(NCT6692_SIO_LOCK_KEY, addr);
->      > +     if (!err) {
->      > +             if (base_phys != NULL)
->      > +                     *base_phys = tmp_base_phys;
->      > +             if (report_phys != NULL)
->      > +                     *report_phys = tmp_report_phys;
->      > +     }
->      > +     return err;
->      > +}
->      > +
->      > +static struct platform_device *pdev;
->      > +
->      > +static int __init nct6692_init(void)
->      > +{
->      > +     struct nct6692_sio_data sio_data;
->      > +     int sioaddr[2] = { 0x2e, 0x4e };
->      > +     struct resource res;
->      > +     int err;
->      > +     int address;
->      > +     bool found = false;
->      > +     u_long base_phys = 0;
->      > +     u_long report_phys = 0;
->      > +
->      > +     platform_driver_register(&nct6692_driver);
->      > +
->      > +     /*
->      > +      * initialize sio_data->kind and sio_data->sioreg.
->      > +      *
->      > +      * when Super-I/O functions move to a separate file, the Super-I/O
->      > +      * driver will probe 0x2e and 0x4e and auto-detect the presence of a
->      > +      * nct6692 hardware monitor, and call probe()
->      > +      */
->      > +     err = nct6692_find(sioaddr[0], &base_phys, &report_phys);
->      > +     if (err) {
->      > +             err = nct6692_find(sioaddr[1], &base_phys, &report_phys);
->      > +             if (err)
->      > +                     return -ENODEV;
->      > +     }
->      > +     found = true;
->      > +     sio_data.base_phys = base_phys;
->      > +     sio_data.report_phys = report_phys;
->      > +
->      > +     pr_info("NCT6692 device found\n");
->      > +     pdev = platform_device_alloc(DRVNAME, base_phys);
->      > +     if (!pdev) {
->      > +             err = -ENOMEM;
->      > +             goto exit_device_unregister;
->      > +     }
->      > +     err = platform_device_add_data(pdev, &sio_data,
->      > +                                     sizeof(struct nct6692_sio_data));
->      > +     if (err)
->      > +             goto exit_device_put;
->      > +
->      > +     memset(&res, 0, sizeof(res));
->      > + res.name <http://res.name> = DRVNAME;
->      > +     res.start = address + IOREGION_OFFSET;
->      > +     res.end = address + IOREGION_OFFSET + IOREGION_LENGTH - 1;
->      > +     res.flags = IORESOURCE_IO;
->      > +
->      > +     err = acpi_check_resource_conflict(&res);
->      > +     if (err) {
->      > +             platform_device_put(pdev);
->      > +             pdev = NULL;
->      > +     }
->      > +
->      > +     err = platform_device_add_resources(pdev, &res, 1);
->      > +     if (err)
->      > +             goto exit_device_put;
->      > +
->      > +     /* platform_device_add calls probe() */
->      > +     err = platform_device_add(pdev);
->      > +     if (err)
->      > +             goto exit_device_put;
->      > +
->      > +     if (!found) {
->      > +             err = -ENODEV;
->      > +             goto exit_unregister;
->      > +     }
->      > +
->      > +     return 0;
->      > +exit_device_put:
->      > +     platform_device_put(pdev);
->      > +exit_device_unregister:
->      > +     if (pdev)
->      > +             platform_device_unregister(pdev);
->      > +exit_unregister:
->      > +     platform_driver_unregister(&nct6692_driver);
->      > +     return err;
->      > +}
->      > +
->      > +static void __exit nct6692_exit(void)
->      > +{
->      > +     platform_device_unregister(pdev);
->      > +     platform_driver_unregister(&nct6692_driver);
->      > +}
->      > +
->      > +MODULE_AUTHOR("David Ober <dober@lenovo.com <mailto:dober@lenovo.com>>");
->      > +MODULE_DESCRIPTION("NCT6692D driver");
->      > +MODULE_LICENSE("GPL");
->      > +
->      > +module_init(nct6692_init);
->      > +module_exit(nct6692_exit);
->      > +
-> 
-
+PiBJZiB0aGUgaG9zdCB3YW50cyB0byBvd24gdGhlIGZhbiBzdGF0dXMgZnJvbSBncGlvIHBpbnMs
+IGl0IGhhcyB0byBsaXZlIHVwIHRvDQo+IGl0IGFuZCBvd24gaXQgZW50aXJlbHkuIFRoZSBrZXJu
+ZWwgaHdtb24gZHJpdmVyIGRvZXMgbm90IGhhdmUgYWNjZXNzIGluIHRoYXQNCj4gY2FzZS4NCg0K
+PiBJbiBhIG1vcmUgIm5vcm1hbCIgd29ybGQsIHRoZSBod21vbiBkcml2ZXIgd291bGQgIm93biIg
+dGhlIGdwaW8gcGluKHMpDQo+IGFuZCB1c2VyIHNwYWNlIHdvdWxkIGxpc3RlbiB0byBhc3NvY2lh
+dGVkIGh3bW9uIGF0dHJpYnV0ZSBldmVudHMgKHByZXN1bWFibHkNCj4gZmFuX2VuYWJsZSBhbmQg
+ZmFuX2ZhdWx0KSwgZWl0aGVyIGJ5IGxpc3RlbmluZyBmb3Igc3lzZnMgYXR0cmlidXRlIGV2ZW50
+cw0KPiBvciB2aWEgdWRldiBvciBib3RoLiBBZ2FpbiwgaWYgeW91IGRvbid0IHdhbnQgdG8gZG8g
+dGhhdCwgYW5kIHdhbnQgdXNlciBzcGFjZQ0KPiB0byBoYXZlIGFjY2VzcyB0byB0aGUgcmF3IGdw
+aW8gcGlucywgeW91J2xsIGhhdmUgdG8gbGl2ZSB3aXRoIHRoZSBjb25zZXF1ZW5jZXMuDQo+IEkg
+ZG9uJ3Qgc2VlIHRoZSBuZWVkIHRvIGJ5cGFzcyBleGlzdGluZyBtZWNoYW5pc21zIGp1c3QgYmVj
+YXVzZSB1c2VyIHNwYWNlDQo+IHByb2dyYW1tZXJzIHdhbnQgZGlyZWN0IGFjY2VzcyB0byBncGlv
+IHBpbnMuDQoNCkdyZWV0aW5ncyBHdWVudGVyLA0KDQpUaGFuayB5b3UgZm9yIHlvdXIgdmFsdWFi
+bGUgZmVlZGJhY2sgd2l0aCB0aGUgc29sdXRpb25zIHlvdSBoYXZlIHByb3ZpZGVkLg0KQmVmb3Jl
+IEkgcHJvY2VlZCB0aG91Z2ggSSBoYXZlIGEgcXVpY2sgcXVlcnkgYWJvdXQgdGhlIGZhbiBkcml2
+ZXIuDQpJZiBJIHdlcmUgdG8gbGV0IHRoZSB1c2VyIHNwYWNlICJvd24iIGdwaW8gcGlucywgd291
+bGQgaXQgYmUgcGVybWlzc2libGUgZm9yDQp0aGUgdXNlcnNwYWNlIHRvIGZlZWQgYSBrZXJuZWwg
+ZHJpdmVyIGRhdGEgdmlhIHN5c2ZzPw0KDQpFeDoNCkdQSU8gRHJpdmVyIC0+IChPcGVuQk1DKSAt
+PiBGYW5kcml2ZXIgKHN5c2ZzKS4NCg0KSGVyZSB0aGUgR1BJTyBkcml2ZXIgd291bGQgcHJvdmlk
+ZSBmYW4gcHJlc2VuY2UgaW5mb3JtYXRpb24gdG8gT3BlbkJNQw0KYW5kIHRoZW4gT3BlbkJNQyB3
+b3VsZCBwcm92aWRlIGZhbiBwcmVzZW5jZSBpbmZvIHRvIHRoZSBmYW4gZHJpdmVyLg0KDQpJZiBp
+dCB3ZXJlIHBlcm1pc3NpYmxlIHRvIHByb3ZpZGUgZGF0YSB0byB0aGUgZHJpdmVyIHZpYSB0aGlz
+IG1ldGhvZCBJIGNvdWxkDQphcHBseSBpdCB0byB0aGUgUFNVIGRyaXZlciBhcyB3ZWxsLiB0aGUg
+UFNVIGRyaXZlciB3aGljaCByZXF1aXJlcyBwcmVzZW5jZQ0KaW5mbyB0byB2ZXJpZnkgYSBQU1Ug
+aXMgaW5zZXJ0ZWQgLyByZW1vdmVkLg0KDQpUaGFua3MsDQoNCi1OaWNrIEhhd2tpbnMNCg==
