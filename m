@@ -2,123 +2,105 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99F4DC7EE2A
-	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Jun 2023 01:09:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5103C7EE24
+	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Jun 2023 07:13:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbjFBBJE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Jun 2023 21:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
+        id S233979AbjFBHND (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 2 Jun 2023 03:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231407AbjFBBJC (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Jun 2023 21:09:02 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB69E2;
-        Thu,  1 Jun 2023 18:09:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685668141; x=1717204141;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=chfMVfnhp5j03xinVitce1S1i2pv18p9kLtJKoM0g+I=;
-  b=FJfxuU0rSHVWF3g0zgzEv1POgrCZfBow08kSo2MhTh1G1HuPBxrr5RId
-   94JT5DCXCWIVRJlXQVWHgITzwdOCZBwPSTFQ9BQrhQ0nHvqUxCuoFD7RB
-   c3pgpZgGEnk1r2wBv4F4NUvzWNTkCAA3h27IlLCfwdyQrdFhvVE3++MU0
-   TXHZVE/DUWEpSth7ZenwGAz70JgWQTkBq5lJuFwC5GcWLofQizOANG2zW
-   /R0xzshOf7wYCmwnVbPtre0o0mHE2ViEema5axsohcY+VGCZ68Oeai/P0
-   yQKZPvToQrUv77a16AcHoGWetMrqjNEFPzo/hPsvBnZ2F+N2hox3Qg4j8
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="358159962"
-X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
-   d="scan'208";a="358159962"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 18:09:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="954251520"
-X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
-   d="scan'208";a="954251520"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 01 Jun 2023 18:08:58 -0700
-Received: from dkhamitk-mobl1.amr.corp.intel.com (dkhamitk-mobl1.amr.corp.intel.com [10.251.3.100])
-        by linux.intel.com (Postfix) with ESMTP id 98D64580CD0;
-        Thu,  1 Jun 2023 18:08:57 -0700 (PDT)
-Message-ID: <b067f6990c7e6e58c487770126a804500ce8a54a.camel@linux.intel.com>
-Subject: Re: [PATCH v4 35/35] acpi/bus: Remove notify callback and flags
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Michal Wilczynski <michal.wilczynski@intel.com>, rafael@kernel.org,
-        lenb@kernel.org, dan.j.williams@intel.com,
-        vishal.l.verma@intel.com, dave.jiang@intel.com,
-        ira.weiny@intel.com, rui.zhang@intel.com, jdelvare@suse.com,
-        linux@roeck-us.net, jic23@kernel.org, lars@metafoo.de,
-        bleung@chromium.org, yu.c.chen@intel.com, hdegoede@redhat.com,
-        markgross@kernel.org, luzmaximilian@gmail.com,
-        corentin.chary@gmail.com, jprvita@gmail.com,
-        cascardo@holoscopio.com, don@syst.com.br, pali@kernel.org,
-        jwoithe@just42.net, matan@svgalib.org, kenneth.t.chan@gmail.com,
-        malattia@linux.it, jeremy@system76.com, productdev@system76.com,
-        herton@canonical.com, coproscefalo@gmail.com, tytso@mit.edu,
-        Jason@zx2c4.com, robert.moore@intel.com
-Cc:     linux-acpi@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        chrome-platform@lists.linux.dev,
-        platform-driver-x86@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net,
-        acpica-devel@lists.linuxfoundation.org
-Date:   Thu, 01 Jun 2023 18:08:57 -0700
-In-Reply-To: <20230601132137.301802-1-michal.wilczynski@intel.com>
-References: <20230601132137.301802-1-michal.wilczynski@intel.com>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        with ESMTP id S234312AbjFBHMb (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Jun 2023 03:12:31 -0400
+Received: from m228-13.mailgun.net (m228-13.mailgun.net [159.135.228.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEFD1B4
+        for <linux-hwmon@vger.kernel.org>; Fri,  2 Jun 2023 00:12:29 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
+ s=mx; t=1685689948; x=1685697148; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Subject: Cc: To: To: From: From: Date:
+ Sender: Sender; bh=rcYboFVd7AE2p0CUNEz6a2jsGbJCMFxFjqC+A9m1lBw=;
+ b=oua6mHVg/PrauupNsyfY86SDR1DZTONWPDageeVj0gTD0S97alcTPsttTqmT+M89N9mN/p0+/I9pEq8nKqhYSqVzeN/U2lGP601VKJBcYd0gtDZHe5Jsj4YamGqBpaEDoTh0ZGsQE7Rvn3RIhv9vK+54VcyYEU2yfSEJJXB5qXmkq6INIeOV+F/FZu2lqQ0E6nvo41JqGWwKSWiqJCB2qr4E1kWcLdxQuyrFBLF/qasiHEQL89wumVCDgVVRGg5PsjX8Sf7Q2eHLB897eUFuqAvxnjc5oXU+ysb/ISIflbZMhy0ECp+CrF4Q1SsGFIS8UTLlUO1WwLM1x36LZpF3Qg==
+X-Mailgun-Sending-Ip: 159.135.228.13
+X-Mailgun-Sid: WyJkOWUwNSIsImxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZyIsIjkzZDVhYiJd
+Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 29052c795feb with SMTP id
+ 6479965c2853aaaeeb0645ac (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 02 Jun 2023 07:12:28 GMT
+Sender: james@equiv.tech
+Date:   Fri, 2 Jun 2023 00:12:27 -0700
+From:   James Seo <james@equiv.tech>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: hp-wmi-sensors: fix debugfs check
+Message-ID: <ZHmWWzb3PiCiExJf@equiv.tech>
+References: <20230601213216.3220550-1-arnd@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230601213216.3220550-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Michal,
-
-On Thu, 2023-06-01 at 15:21 +0200, Michal Wilczynski wrote:
-> As callback has been replaced by drivers installing their handlers in
-> .add it's presence is not useful anymore.
->=20
-> Remove .notify callback and flags variable from struct acpi_driver,
-> as they're not needed anymore.
->=20
-> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
+On Thu, Jun 01, 2023 at 11:31:54PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Checking for Kconfig symbols with #if is wrong:
+> 
+> drivers/hwmon/hp-wmi-sensors.c:1141:5: error: "CONFIG_DEBUG_FS" is not defined, evaluates to 0 [-Werror=undef]
+> 
+> This could be an #ifdef, but an IS_ENABLED() check is even better to
+> give the best compile coverage.
+> 
+> Fixes: 602bef0fa281f ("hwmon: add HP WMI Sensors driver")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
-> =C2=A0include/acpi/acpi_bus.h | 3 ---
-> =C2=A01 file changed, 3 deletions(-)
->=20
-> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-> index 7fb411438b6f..3326794d5b70 100644
-> --- a/include/acpi/acpi_bus.h
-> +++ b/include/acpi/acpi_bus.h
-> @@ -151,12 +151,10 @@ struct acpi_hotplug_context {
-> =C2=A0
-> =C2=A0typedef int (*acpi_op_add) (struct acpi_device * device);
-> =C2=A0typedef void (*acpi_op_remove) (struct acpi_device *device);
-> -typedef void (*acpi_op_notify) (struct acpi_device * device, u32 event);
-> =C2=A0
-> =C2=A0struct acpi_device_ops {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0acpi_op_add add;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0acpi_op_remove remove;
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0acpi_op_notify notify;
-> =C2=A0};
-> =C2=A0
-> =C2=A0#define ACPI_DRIVER_ALL_NOTIFY_EVENTS=C2=A0=C2=A00x1=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0/* system AND device events */
-> @@ -165,7 +163,6 @@ struct acpi_driver {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0char name[80];
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0char class[80];
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct acpi_device_=
-id *ids; /* Supported Hardware IDs */
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int flags;
+>  drivers/hwmon/hp-wmi-sensors.c | 15 ++-------------
+>  1 file changed, 2 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/hwmon/hp-wmi-sensors.c b/drivers/hwmon/hp-wmi-sensors.c
+> index 7218945bd03fc..ebe2fb5134805 100644
+> --- a/drivers/hwmon/hp-wmi-sensors.c
+> +++ b/drivers/hwmon/hp-wmi-sensors.c
+> @@ -1138,8 +1138,6 @@ static int hp_wmi_update_info(struct hp_wmi_sensors *state,
+>  	return ret;
+>  }
+>  
+> -#if CONFIG_DEBUG_FS
+> -
+>  static int basic_string_show(struct seq_file *seqf, void *ignored)
+>  {
+>  	const char *str = seqf->private;
+> @@ -1341,16 +1339,6 @@ static void hp_wmi_debugfs_init(struct device *dev, struct hp_wmi_info *info,
+>  	}
+>  }
+>  
+> -#else
+> -
+> -static void hp_wmi_debugfs_init(struct device *dev, struct hp_wmi_info *info,
+> -				struct hp_wmi_platform_events *pevents,
+> -				u8 icount, u8 pcount, bool is_new)
+> -{
+> -}
+> -
+> -#endif
+> -
+>  static umode_t hp_wmi_hwmon_is_visible(const void *drvdata,
+>  				       enum hwmon_sensor_types type,
+>  				       u32 attr, int channel)
+> @@ -1959,7 +1947,8 @@ static int hp_wmi_sensors_init(struct hp_wmi_sensors *state)
+>  	if (err)
+>  		return err;
+>  
+> -	hp_wmi_debugfs_init(dev, info, pevents, icount, pcount, is_new);
+> +	if (IS_ENABLED(CONFIG_DEBUG_FS))
+> +		hp_wmi_debugfs_init(dev, info, pevents, icount, pcount, is_new);
+>  
+>  	if (!count)
+>  		return 0;	/* No connected sensors; debugfs only. */
+> -- 
+> 2.39.2
+>
 
-Can ACPI_DRIVER_ALL_NOTIFY_EVENTS be removed as well?
-
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct acpi_device_ops op=
-s;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct device_driver drv;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct module *owner;
+Acked-by: James Seo <james@equiv.tech>
 
