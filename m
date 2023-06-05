@@ -2,267 +2,188 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46D57C7EE2C
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jun 2023 15:17:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8950DC7EE2D
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Jun 2023 16:53:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233932AbjFEPRl convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Jun 2023 11:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
+        id S230453AbjFEQx1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Jun 2023 12:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232874AbjFEPRk (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Jun 2023 11:17:40 -0400
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89238C5;
-        Mon,  5 Jun 2023 08:17:38 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-977fae250easo9371166b.1;
-        Mon, 05 Jun 2023 08:17:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685978257; x=1688570257;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tbfcYeB2w7B50q0ysWHxmmSLJ1HrD1Fyk9f2XcX1nIM=;
-        b=YIlScVvTydX5ArkYaSK1NS1gUYAnlM/j3L12Aoaeu+qOFcnUNdFNNKrncINuS//ULe
-         geSI35ep17cwD6+uVsfAKgPKApy5kEQntGTP68h3IJeO+qB7nDVleKrB4IQLpsp+FqmJ
-         N0F90Ambw9BjRyACw2QSl/YGpoHVb2pDAxReQp9NmUBCg18uG3O2RKhe7wwmTb1IygPi
-         ewVH6jnJNlUgkYSTZLPHB7bJxxHP+uokKl3n/P2glbmQ5HnSNFHqeCnmdg1ZNZTjnOey
-         jhTg0DokShSB/yodNat8JOZTMmuRxFgzpSwPfx2D19EbemniriSjOVA9tQFfX0XFYDGK
-         QZ2A==
-X-Gm-Message-State: AC+VfDztjc78RPmbXIX8RnkwGey35AE3lir9KgG0hhWvm0DsmttB5L/2
-        xGTk21aGwpwinUNExNB8MknilOIddQAFuM7xlBk=
-X-Google-Smtp-Source: ACHHUZ6uIrTpJo8B2/LjSDlhZ/ojQ4YYPlmrHQ5V4qFBg1Aj+EgMbPqMXHJF0QkTRIqCxxEEOydVwz23MR772NERjco=
-X-Received: by 2002:a17:906:5188:b0:974:6025:cc6 with SMTP id
- y8-20020a170906518800b0097460250cc6mr7300451ejk.6.1685978256665; Mon, 05 Jun
- 2023 08:17:36 -0700 (PDT)
+        with ESMTP id S235181AbjFEQx0 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Jun 2023 12:53:26 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03544D9;
+        Mon,  5 Jun 2023 09:53:24 -0700 (PDT)
+Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355G8Bjh013207;
+        Mon, 5 Jun 2023 16:53:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=DqgmTjElAzCNxuQUwfS3Kd0tQXAQTtCpPACWULnTTuc=;
+ b=YKWYnks5q7ZMveXF+mzOXhwRX5bzmkGSEQogSmF/68urRAbtOwnrORuFDzBd9W5LLCOo
+ vVCFx6lku6/zvUC1K4hRwsPSvKf2i9p5Xmh3Y9YQG76Huu+Vsc+Bj3RnjECe7YfNfZNy
+ 5MWYQZswKvJC42KMfBdGoEF4IHZcZkea4ibi/Z8lzJ237OrLh38FA6OxYDHVKCg0Evox
+ g+PEjUDxSCR+SOE2w4BJU63T/Wa4YJqfvCmkvgYEbnDlSaf55NZLRTuBRHsg/66xLN6w
+ ednhYAW84+z6ACyIQbYl/X+VjGU4B4zf9OTa4bsbBNwIDw/2HP0cMozpbHowOnkdmRjN IQ== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3r1fyg242a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Jun 2023 16:52:59 +0000
+Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id A674D800195;
+        Mon,  5 Jun 2023 16:52:58 +0000 (UTC)
+Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
+ p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 5 Jun 2023 04:52:50 -1200
+Received: from p1wg14919.americas.hpqcorp.net (16.230.19.122) by
+ p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42
+ via Frontend Transport; Mon, 5 Jun 2023 04:52:50 -1200
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.122) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 5 Jun 2023 04:52:50 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FaaC1vmUdigp/7SvPFvlhWKr9h3rXFF+8zcFQ9fQZGB+UuMAUjzXEp2Z2HYL4rWFjSaHgHwr7eeZYKdLrXJmphmndRlhjK00H5Aq3uSFSJQ0O5JrDd7XBULGpYPLXiOxVgyhMIMI3Cxagk1g/yL6UzjqqXSA+qv+B8lwKzeWA9cvUrItAaFog2+FUdyU+fT1KB9l4CPZCBRro8UaZ7yQUcktX+oSjON9jXpZttMlV2o1lXD0eB1cK5o9UbXWcFkS83RAR8vqCPdPu2tok4GcZOEV+fNslICpCzaOJYPzpXjFmsH5y+o1x8kq1J38g1nUylEd4Ci0DRI2cQTWwOsnfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DqgmTjElAzCNxuQUwfS3Kd0tQXAQTtCpPACWULnTTuc=;
+ b=AQoDvRXx9PXt5bd2S7G1aZ9wLnmXZC8jJ9EdMGqmhGUtMurNEv9MRjpOvlHwxFtz8sPXzhbSYZRRFQ5KwlPjDMMgaxgB01suqrfQp9ZdmP+RAUPmeFohlUNjfSskPxp9ZUyO6OKpN+MWI0Em07ZZSJ9MfBsG7/04tpDyGqXse+/GaH/asJkdJgJ7xdNTl6oDMxh9jteaWsgo1wvqzkrVevXVP4ArPwncy/bQWEFL1umaDu17CLGbyxx/rcBBiAzHFEPzVVhejwqYZFlioWnS8DIA9UuFLX8j8MbDPg6XINPSn+x77LqjNd9849pOo9cYZqp0ts8wO6eIb3Fw2Xyc6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
+ MW5PR84MB1772.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1c6::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.27; Mon, 5 Jun
+ 2023 16:52:48 +0000
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2a07:1ac6:6523:8682]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2a07:1ac6:6523:8682%5]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
+ 16:52:48 +0000
+From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Subject: RE: [PATCH v2 3/5] dt-bindings: hwmon: hpe,gxp-fanctrl: remove fn2
+ and pl regs
+Thread-Topic: [PATCH v2 3/5] dt-bindings: hwmon: hpe,gxp-fanctrl: remove fn2
+ and pl regs
+Thread-Index: AQHZk9PWOZXG2Bdm1kuv4PPPnYdx5a91g/kAgAbottA=
+Date:   Mon, 5 Jun 2023 16:52:48 +0000
+Message-ID: <DM4PR84MB1927707FA782DC565C22B8A2884DA@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20230531151918.105223-1-nick.hawkins@hpe.com>
+ <20230531151918.105223-4-nick.hawkins@hpe.com>
+ <d2232369-c7e9-c572-8528-243800f0bc08@linaro.org>
+In-Reply-To: <d2232369-c7e9-c572-8528-243800f0bc08@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|MW5PR84MB1772:EE_
+x-ms-office365-filtering-correlation-id: 17064c0a-17b0-4fd1-41ea-08db65e54af0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3lVFDrEAZ6hme37itKb2E4u68XAK3oYhuZdZ+7dQEhwiI4TlGZPb8+uWVcx5IENpiD+lf5GmwarKzf8LEi/695D6+qqsIqKEJu8d6VnijjD9BYVY/KHIEH2Db8dOEnZemUuESqrA6qbGKAezndjRZ/G4UED/XAEZKUHFlh7Tb2sucdCY6djr0krno4NTZGHFTRmWjMCMWPa1bkerbZBu0ZIiIbdxFIZ1YuEah+vTTV0S8Hqna0LYtg4hznQDxD9htDcnmy54uF2p8Rk/bsppLa2uIUOA1oJtp0Zg1VsOVaUSVXZI5N+s/hcOLhXPSlcIdk0bCa+3+akzRJAjTpnjqfbORuYhl0nnRvQJ4EH7THWTWQ5/LR5KDmAMpeqAu1lTd5R77RrqomYyhFLR1VVU6JzoKlQ/Eup2SpQ/jgnGOhPiyd+B0/006hjNtZwLITRbEuM0UrG+ERwD5zDG1y2Dksm1QV/gQQeKHkxy4gHy0CIeE+XtABn+XIKQjonXIjDVzWTfWmF28S99jxjXJZNzDig0v17BsRfbgkQX0PQ4O7Ke97HqyZca0dq+06pOIfQwyYc0gQXOoHs/isk1bv6S2kukydUOqigzQEa+53r23hVv4XnLK7B9Am6nHlQYZXER
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(346002)(376002)(39860400002)(366004)(451199021)(38070700005)(86362001)(33656002)(55016003)(122000001)(38100700002)(82960400001)(478600001)(71200400001)(54906003)(110136005)(4744005)(7696005)(8676002)(8936002)(4326008)(52536014)(2906002)(7416002)(5660300002)(76116006)(66476007)(66946007)(66446008)(64756008)(66556008)(316002)(41300700001)(186003)(83380400001)(26005)(9686003)(6506007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YWJxM2c2bysrcmxTZHVSQzNKWE9VeEZHb2gyY0o1WXVpaTFXZFluUTBlV2FG?=
+ =?utf-8?B?cGJCbER5OVpIaWI2VGQzOXptQjJWUGNtOUJYM2gzdzR5M25PMHUvWVYyOTFG?=
+ =?utf-8?B?N2RJMDRBOUlXS09TeUJXOFJjN2FDOHZYYW1hRkYrQmZuV1pVTDJIS01ES2tQ?=
+ =?utf-8?B?RUFQQjdTOStQa3VSejJNZEJoeVJzS1BTR3phRm9HNUxxVk9aOEVkazQ1dDZm?=
+ =?utf-8?B?b0VET2VnWXBwY2dLdWFwNVNWc2kzdXV4OW8rRFUrek81SFN4MWg5UGZTb1dQ?=
+ =?utf-8?B?dW9aWkNuUllQc0xJNTZqOXVPdTV1TVRYeExCMXU4MUxudkQzazF5RURUUXBB?=
+ =?utf-8?B?WnRwRlAzUlRqbEhFYStFQXFtN1ZCZk5DaVZBbERFcUhPUFBDTVVXc2FldEts?=
+ =?utf-8?B?d1pwb0JZcEw3U0wwbHhMeDhWZjR5eXFINzhjeUQzTk4vTjh6K2ovLzdPcHlH?=
+ =?utf-8?B?S0RQa1JDUXNlSVM4cGFCU2VrZTFyN2FQeGZGeCtEUkZZbHlRREhMdURxTmw5?=
+ =?utf-8?B?QWVwcENGSE94bitmcFI5UmlDbjAzNGF6Y2tkWTB6bm0vbURVZzcvdlYwR29V?=
+ =?utf-8?B?b3pZWVFjYjVUMjdPUVpxMnBCZFVRdDBvYWx4YlZoV09na01NZGM3L1lPbkpX?=
+ =?utf-8?B?NTFjQTZ3OXdKczR0WHpnWHZBMjVFL25XQXdQSVcycHQ5cENyVnNla1g5Q1NP?=
+ =?utf-8?B?SUhHSDMxdVV5RlVic1dVYk15RGlrcTViS0I5TFR6UFNUR3dHcHAvQnRXTU5q?=
+ =?utf-8?B?enYyS0JDUGhVOWViNW9XNzlsYS9FYWVTNTBabTNnZDRUbnpCR2NsT0tmQ0pr?=
+ =?utf-8?B?MEJxRGRIU0NFb01zUm43N0wwYTdjQ1V6alppTS9YRXZybDREeENUOFhqMTVo?=
+ =?utf-8?B?Qmk4ejFNdFErTU9tVlpCMFBNNVpJck5ocktGTER4VzJaMVIvR2t3K2xDeFh5?=
+ =?utf-8?B?amRucWdBK1ZwNnVnSXJuSXQ2TlhkNXBtVE0yTEVzNjNYNFRuSzJrRTVYTUhp?=
+ =?utf-8?B?QXM5Qk9Wc1gyR0JNT0NuSlJtdURVVExlZjVWSnJLb1d0cUwvSGdtdXRacW8v?=
+ =?utf-8?B?QWMxdkVWV2FWUXJvQ1RINEcvOUNjOW1tZXVuNEtZaC9Eang0NzY0SlpHYkZp?=
+ =?utf-8?B?NFlmNHNDYWU1dUZDaHVwNmhDVUlFN3ZiTU1IRmhZWUhuL1FYUHRLclR3RnFF?=
+ =?utf-8?B?enc2NkNsNk9GZmRtWWdkbWFvZEFwUytmRGZuaDI4akg3em9mWWcrZVZsblg5?=
+ =?utf-8?B?SnIyYW9QVzdXQTVBTzJBNEVUR3RWUDNPdjRsOG02N3hUMGpqY1p1TmlYSklH?=
+ =?utf-8?B?TTM5ZXE2ZUMzcDVtdFRDSHR4U1FXRTYyS29GZUkxblVRNHFmN05yRTdPQkNz?=
+ =?utf-8?B?NWVwY0dPSDFsS1cxRVhraERoWjlBRXg4UmllR0ZONmwyKytsTHhGR0N5VjI5?=
+ =?utf-8?B?b2tUR2xLTUthQVdKWDdmcVFZQmsvU1RRa1c4akNoY29YLzFGN21mTlpROER4?=
+ =?utf-8?B?L2x1S1Ixd2JsbDMzWTBFVldzTnpzSWZwRlcvYW1UV0c1TE9WbEVaUHlCbExt?=
+ =?utf-8?B?Y3Q0TDR5cDRSWlY3VUVaYTMyLy9EWTM4K3VnV0dXblZWSjRNY0VtZk1JU3VB?=
+ =?utf-8?B?Uk5rbDZFYVFyUERxU3UwZC9QS1QweDUxM25FSmZnR3Jhakd4cGdQOGM3RTYy?=
+ =?utf-8?B?WEJLYzUvcGphMWlBNkpwcGxIRGJHWnhEMXBYcVZxZjFTeTZ4YnIvWldrbDVy?=
+ =?utf-8?B?eGprak9rU2R2OFgwbDNFb1VqWTdFeVJPaWx0dElsU2VCa3doSnc3STNyNlRl?=
+ =?utf-8?B?RjNZWTF6Nk1HRHMxM0pydDM3NmRGL0JlQU9WdEIzMUdpNlZHMG01TkJNR0ts?=
+ =?utf-8?B?Qkh0TURycnFMalJrWUF1a1cxS0xEdXZid283MXk2SzVLS3dHN2luSUtUZDVJ?=
+ =?utf-8?B?QjU1S3FEcExabGlrYzIxYkdPbmNObCsweWs0SmVOa0pjQ01GTU9Xb0JrQTk4?=
+ =?utf-8?B?SkF6aDVGL2xrY2RuRlpjd2J3YUxRQ2J6YStPN1k0Ym1QV3JSRTN2ZmJjZytC?=
+ =?utf-8?B?Ym1tKytLbG12WjcybkVOdWc5ckxVZnN4STYzb3ZhYmhkR3IzTHNRSE9oTmlw?=
+ =?utf-8?Q?QwUjTJuSR9QDi//kUQ7w+gkqH?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230601131719.300720-1-michal.wilczynski@intel.com>
- <4500594.LvFx2qVVIh@kreacher> <eb5ed997-201a-ffc4-6181-b2f8a6d451a8@intel.com>
-In-Reply-To: <eb5ed997-201a-ffc4-6181-b2f8a6d451a8@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 5 Jun 2023 17:17:17 +0200
-Message-ID: <CAJZ5v0hWKUbX0vdp09uD2-QNH611S4gZEirnQtj78oXiQ2YJQA@mail.gmail.com>
-Subject: Re: [PATCH v4 01/35] acpi: Adjust functions installing bus event handlers
-To:     "Wilczynski, Michal" <michal.wilczynski@intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, rafael@kernel.org,
-        lenb@kernel.org, dan.j.williams@intel.com,
-        vishal.l.verma@intel.com, dave.jiang@intel.com,
-        ira.weiny@intel.com, rui.zhang@intel.com, jdelvare@suse.com,
-        linux@roeck-us.net, jic23@kernel.org, lars@metafoo.de,
-        bleung@chromium.org, yu.c.chen@intel.com, hdegoede@redhat.com,
-        markgross@kernel.org, luzmaximilian@gmail.com,
-        corentin.chary@gmail.com, jprvita@gmail.com,
-        cascardo@holoscopio.com, don@syst.com.br, pali@kernel.org,
-        jwoithe@just42.net, matan@svgalib.org, kenneth.t.chan@gmail.com,
-        malattia@linux.it, jeremy@system76.com, productdev@system76.com,
-        herton@canonical.com, coproscefalo@gmail.com, tytso@mit.edu,
-        Jason@zx2c4.com, robert.moore@intel.com,
-        linux-acpi@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        chrome-platform@lists.linux.dev,
-        platform-driver-x86@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net,
-        acpica-devel@lists.linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 17064c0a-17b0-4fd1-41ea-08db65e54af0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jun 2023 16:52:48.2165
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: EuJarh+wA44kygpOF8f0psgT+fEqPijacrbQdBzy6C4Rnwryv+qtGxk2T+8FQJ/mVBzhG6PGJ06HSYIcGGRCMA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR84MB1772
+X-OriginatorOrg: hpe.com
+X-Proofpoint-GUID: QXxqHZiSDsiikJEj9Ev3QwY_osDTiuKX
+X-Proofpoint-ORIG-GUID: QXxqHZiSDsiikJEj9Ev3QwY_osDTiuKX
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-05_31,2023-06-02_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=608 phishscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 lowpriorityscore=0
+ clxscore=1011 mlxscore=0 spamscore=0 bulkscore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306050144
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 10:44 AM Wilczynski, Michal
-<michal.wilczynski@intel.com> wrote:
->
-> On 6/2/2023 8:34 PM, Rafael J. Wysocki wrote:
-> > On Thursday, June 1, 2023 3:17:19 PM CEST Michal Wilczynski wrote:
-> >> Currently acpi_device_install_notify_handler() and
-> >> acpi_device_remove_notify_handler() always install acpi_notify_device()
-> >> as a function handler, and only then the real .notify callback gets
-> >> called. This is not efficient and doesn't provide any real advantage.
-> >>
-> >> Introduce new acpi_device_install_event_handler() and
-> >> acpi_device_remove_event_handler(). Those functions are replacing old
-> >> installers, and after all drivers switch to the new model, old installers
-> >> will be removed at the end of the patchset.
-> >>
-> >> Make new installer/removal function arguments to take function pointer as
-> >> an argument instead of using .notify callback. Introduce new variable in
-> >> struct acpi_device, as fixed events still needs to be handled by an
-> >> intermediary that would schedule them for later execution. This is due to
-> >> fixed hardware event handlers being executed in interrupt context.
-> >>
-> >> Make acpi_device_install_event_handler() and
-> >> acpi_device_remove_event_handler() non-static, and export symbols. This
-> >> will allow the drivers to call them directly, instead of relying on
-> >> .notify callback.
-> >>
-> >> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
-> >> ---
-> >>  drivers/acpi/bus.c      | 59 ++++++++++++++++++++++++++++++++++++++++-
-> >>  include/acpi/acpi_bus.h |  7 +++++
-> >>  2 files changed, 65 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-> >> index d161ff707de4..cf2c2bfe29a0 100644
-> >> --- a/drivers/acpi/bus.c
-> >> +++ b/drivers/acpi/bus.c
-> >> @@ -535,7 +535,7 @@ static void acpi_notify_device_fixed(void *data)
-> >>      struct acpi_device *device = data;
-> >>
-> >>      /* Fixed hardware devices have no handles */
-> >> -    acpi_notify_device(NULL, ACPI_FIXED_HARDWARE_EVENT, device);
-> >> +    device->fixed_event_notify(NULL, ACPI_FIXED_HARDWARE_EVENT, device);
-> >>  }
-> >>
-> >>  static u32 acpi_device_fixed_event(void *data)
-> >> @@ -550,11 +550,13 @@ static int acpi_device_install_notify_handler(struct acpi_device *device,
-> >>      acpi_status status;
-> >>
-> >>      if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
-> >> +            device->fixed_event_notify = acpi_notify_device;
-> >>              status =
-> >>                  acpi_install_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
-> >>                                                   acpi_device_fixed_event,
-> >>                                                   device);
-> >>      } else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
-> >> +            device->fixed_event_notify = acpi_notify_device;
-> >>              status =
-> >>                  acpi_install_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
-> >>                                                   acpi_device_fixed_event,
-> >> @@ -579,9 +581,11 @@ static void acpi_device_remove_notify_handler(struct acpi_device *device,
-> >>      if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
-> >>              acpi_remove_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
-> >>                                              acpi_device_fixed_event);
-> >> +            device->fixed_event_notify = NULL;
-> >>      } else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
-> >>              acpi_remove_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
-> >>                                              acpi_device_fixed_event);
-> >> +            device->fixed_event_notify = NULL;
-> >>      } else {
-> >>              u32 type = acpi_drv->flags & ACPI_DRIVER_ALL_NOTIFY_EVENTS ?
-> >>                              ACPI_ALL_NOTIFY : ACPI_DEVICE_NOTIFY;
-> >> @@ -592,6 +596,59 @@ static void acpi_device_remove_notify_handler(struct acpi_device *device,
-> >>      acpi_os_wait_events_complete();
-> >>  }
-> >>
-> >> +int acpi_device_install_event_handler(struct acpi_device *device,
-> >> +                                  u32 type,
-> >> +                                  void (*notify)(acpi_handle, u32, void*))
-> >> +{
-> >> +    acpi_status status;
-> >> +
-> >> +    if (!notify)
-> >> +            return -EINVAL;
-> >> +
-> >> +    if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
-> >> +            device->fixed_event_notify = notify;
-> >> +            status =
-> >> +                acpi_install_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
-> >> +                                                 acpi_device_fixed_event,
-> >> +                                                 device);
-> >> +    } else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
-> >> +            device->fixed_event_notify = notify;
-> >> +            status =
-> >> +                acpi_install_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
-> >> +                                                 acpi_device_fixed_event,
-> >> +                                                 device);
-> >> +    } else {
-> >> +            status = acpi_install_notify_handler(device->handle, type,
-> >> +                                                 notify,
-> >> +                                                 device);
-> >> +    }
-> >> +
-> >> +    if (ACPI_FAILURE(status))
-> >> +            return -EINVAL;
-> >> +    return 0;
-> >> +}
-> >> +EXPORT_SYMBOL(acpi_device_install_event_handler);
-> >> +
-> >> +void acpi_device_remove_event_handler(struct acpi_device *device,
-> >> +                                  u32 type,
-> >> +                                  void (*notify)(acpi_handle, u32, void*))
-> >> +{
-> >> +    if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
-> >> +            acpi_remove_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
-> >> +                                            acpi_device_fixed_event);
-> >> +            device->fixed_event_notify = NULL;
-> >> +    } else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
-> >> +            acpi_remove_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
-> >> +                                            acpi_device_fixed_event);
-> >> +            device->fixed_event_notify = NULL;
-> >> +    } else {
-> >> +            acpi_remove_notify_handler(device->handle, type,
-> >> +                                       notify);
-> >> +    }
-> >> +    acpi_os_wait_events_complete();
-> >> +}
-> >> +EXPORT_SYMBOL(acpi_device_remove_event_handler);
-> >> +
-> >>  /* Handle events targeting \_SB device (at present only graceful shutdown) */
-> >>
-> >>  #define ACPI_SB_NOTIFY_SHUTDOWN_REQUEST 0x81
-> >> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-> >> index a6affc0550b0..7fb411438b6f 100644
-> >> --- a/include/acpi/acpi_bus.h
-> >> +++ b/include/acpi/acpi_bus.h
-> >> @@ -387,6 +387,7 @@ struct acpi_device {
-> >>      struct list_head physical_node_list;
-> >>      struct mutex physical_node_lock;
-> >>      void (*remove)(struct acpi_device *);
-> >> +    void (*fixed_event_notify)(acpi_handle handle, u32 type, void *data);
->
->
-> Hi,
-> Thank for you review,
->
-> > This is a rather confusing change, because ->remove() above is not a driver
-> > callback, whereas the new one would be.
-> >
-> > Moreover, it is rather wasteful, because the only devices needing it are
-> > buttons, so for all of the other ACPI device objects the new callback pointer
-> > would always be NULL.
-> >
-> > Finally, it is not necessary even.
->
-> I was thinking about resolving this somehow in compile-time, but I guess was a bit
-> afraid of refactoring too much code - didn't want to break anything.
->
-> >
-> > The key observation here is that there are only 2 drivers handling power and
-> > sleep buttons that use ACPI fixed events: the ACPI button driver (button.c in
-> > drivers/acpi) and the "tiny power button" driver (tiny-power-button.c in
-> > drivers/acpi).  All of the other drivers don't need the "fixed event notify"
-> > thing and these two can be modified to take care of all of it by themselves.
-> >
-> > So if something like the below is done prior to the rest of your series, the
-> > rest will be about acpi_install/remove_notify_handler() only and you won't
-> > even need the wrapper routines any more: driver may just be switched over
-> > to using the ACPICA functions directly.
->
-> Sure, will get your patch, apply it before my series and fix individual drivers to use acpica
-> functions directly.
-
-I have posted this series which replaces it  in the meantime:
-https://lore.kernel.org/linux-acpi/1847933.atdPhlSkOF@kreacher
-
-Moreover, I think that there's still a reason to use the wrappers.
-
-Namely, the unregistration part needs to call
-acpi_os_wait_events_complete() after the notify handler has been
-unregistered and it's better to avoid code duplication related to
-that.
-
-Also the registration wrapper can be something like:
-
-int acpi_dev_install_notify_handler(struct acpi_device *adev,
-acpi_notify_handler handler, u32 handler_type)
-{
-    if (ACPI_FAILURE(acpi_install_notify_handler(adev->handle,
-handler_type, handler, adev)))
-        return -ENODEV;
-
-    return 0;
-}
-
-which would be simpler to use than the "raw"
-acpi_install_notify_handler() and using it would avoid a tiny bit of
-code duplication IMV.
+PiA+IFJlbW92ZSB0aGUgZm4yIHJlZ2lzdGVyIGFuZCBwbCByZWdpc3RlciByZWZlcmVuY2VzIGFz
+IHRoZXNlIG1lbW9yeSBhcmVhcw0KPiA+IGFyZSBub3cgY29uc3VtZWQgYnkgdGhlIEdYUCBHUElP
+IGRyaXZlci4gVGhlIGZhbiBkcml2ZXIgbm93IGdhdGhlcnMgZmFuDQo+ID4gaW5mb3JtYXRpb24g
+ZnJvbSBHUElPIGRyaXZlci4NCg0KPiBIb3cgaXMgaXQgZXhwcmVzc2VkIGluIGJpbmRpbmdzPyBJ
+IGRvbid0IHNlZSBpdC4NCg0KR3JlZXRpbmdzIEtyenlzenRvZiwNCg0KVGhhbmtzIGZvciB0aGUg
+ZmVlZGJhY2suIEp1c3QgdG8gY29uZmlybTogSXMgdGhpcyBjb21tZW50IHJlZmVycmluZyB0byB0
+aGUNCmNvbnRlbnQgb2YgdGhlIHBhdGNoIGRlc2NyaXB0aW9uPyBGb3IgdGhlIHRoaXJkIHZlcnNp
+b24gSSB3YW50IHRvIG1ha2Ugc3VyZQ0KSSBhZGRyZXNzIHlvdXIgY29uY2Vybi4NCg0KSW4gdGhl
+IHRoaXJkIHZlcnNpb24gSSB3aWxsIGJlIG1vZGlmeWluZyB0aGUgZGVzY3JpcHRpb24gb25jZSBt
+b3JlIGFzIEkgd2lsbA0Kbm8gbG9uZ2VyIHJldHJpZXZlIGRhdGEgZnJvbSB0aGUgR1BJTyBkcml2
+ZXIuIEhlcmUgaXMgdGhlIG5ldyBhdHRlbXB0Og0KDQpkdC1iaW5kaW5nczogaHdtb246IGhwZSxn
+eHAtZmFuLWN0cmw6IHJlbW92ZSBmbjIgYW5kIHBsIHJlZ2lzdGVyIHJlZmVyZW5jZXMNCg0KUmVk
+dWNlIHRoZSBocGUsZ3hwLWZhbi1jdHJsIHJlZ2lzdGVyIHJlZmVyZW5jZXMgZnJvbSAzIHRvIDEu
+IFRoZSBmdW5jdGlvbjINCihmbjIpIGFuZCBwcm9ncmFtbWFibGUgbG9naWMgKHBsKSByZWZlcmVu
+Y2VzIGFyZSByZW1vdmVkLiBUaGUgcHVycG9zZQ0Kb2YgcmVtb3ZhbCBiZWluZyB0aGVpciBmdW5j
+dGlvbmFsaXR5IHdpbGwgYmUgY29uc3VtZWQgYnkgYSBuZXcgR1BJTw0KZHJpdmVyLg0KDQpUaGFu
+ayB5b3UgZm9yIHRoZSBhc3Npc3RhbmNlLA0KDQotTmljayBIYXdraW5zDQo=
