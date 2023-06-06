@@ -2,89 +2,134 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6E89C7EE29
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jun 2023 14:18:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F149BC7EE29
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jun 2023 14:24:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237787AbjFFOSe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Jun 2023 10:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53966 "EHLO
+        id S235864AbjFFOYA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Jun 2023 10:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233365AbjFFOSe (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Jun 2023 10:18:34 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A430E18B;
-        Tue,  6 Jun 2023 07:18:33 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b02d0942caso28854185ad.1;
-        Tue, 06 Jun 2023 07:18:33 -0700 (PDT)
+        with ESMTP id S233083AbjFFOX7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Jun 2023 10:23:59 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D669810CC
+        for <linux-hwmon@vger.kernel.org>; Tue,  6 Jun 2023 07:23:56 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51480d3e161so8986160a12.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 06 Jun 2023 07:23:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686061113; x=1688653113;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+JU5bs373RCUOgXJLUDTSML0K5+ZCRMog9EmfC27Cho=;
-        b=TgULhQk1Qffs+vjFYJckFp6sI812uCDLS3xBoVRd+823Rwwpi8mxXSngSIqM1/Rrts
-         Rcdqu+pv8MeCxsLVZsDm5mQJ6aYN24vL2LMNIGRTo7Sds1IZxnNNOaErqHSImCJslcMx
-         zlBdkPLZfIlyc0Hrjal3QWcM5AtB4MAUZ7XndMvLWhKUFReX0qzqTdn0KZAPl/ZsryvT
-         foJQ6LejTAOIqtwmy7r8hdpCZGslzDWaGJkwyIIS9i+fSb0mhZhi6j2icU+CwpcQ1vKh
-         XHm+89z3ooeHKCFPhuenknZAiUoc4CyUUqLzk8kgiS0t/cFfCicDnIkkqroC0pPa5Me+
-         sGiQ==
+        d=linaro.org; s=google; t=1686061435; x=1688653435;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZrVZ+SOBI/x4uatGRzhwg8fwXrewUsr2gOgY5H5Ft9g=;
+        b=fjsh3FJuBj9U15nWQpVdEMJbpDHN4ljEkK9i2Vw7zwBuDx4W8rMjbHbsp9EmQtjyMn
+         eJF3j78A6GgKT5UmL33X70+Hn7Vza2duvJhoTuMmw2WP9K0uDsTiDNGs9f79C6arQHPg
+         9jVHZeruC6m8xpteMR0Dla+l2bhyabByCOIwilQYD4nT33q7Pbu31UeXpHuYVaaVGTBZ
+         CC4NtSF+mfmdaB3EUVgPZWPkbVVb8i81qGDd4Gj//FwS3EtZ7pyGd9yqlQkcYI1T4rVB
+         nGmGUBb9O5E9PZSf45Qkw5rPLiKqEavRcfFfNH7iu9n14Y5qV4u03o9Dy3NyKApuUmvb
+         vduQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686061113; x=1688653113;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+JU5bs373RCUOgXJLUDTSML0K5+ZCRMog9EmfC27Cho=;
-        b=jNQYFtN93+qlQ0GCSTCOlE21QXeEjfpq7+QhQ2NrjbDzW1uxmdy//p+oTOcSmCE3+O
-         xNTv9XYVuzNmSbf4ueTESAs3FyYJL5e/wfCTQr4MVnzIJFGcdU/cS5f0p+tRbGujVgRx
-         33alg4r6dD8jxuVcVAItKnF3rjaL4tD9o1IENU7kRm4XATls8AEZ8YQ9o9CCF7LigwmJ
-         f1/byLnTpsv+TwzOrD1vB2PSTpevSQJ6GUXH41IU5/09PRoCps4l8IYSxCqi8y7yzrIJ
-         LxEgr8ghVTKZrPwuweJcL9d7tQCtyiJc18S6J17xHXv2NGOqtq1nsh8j4q2n3j1Xllim
-         6olw==
-X-Gm-Message-State: AC+VfDwO6u2hKohD/W9sTzx3NY74JxZ7k6I9clvqqg6jlctYvigV+h8L
-        LHD6KfmioZ/uNVEHLo+aG68=
-X-Google-Smtp-Source: ACHHUZ5UKJgO5MIyr1LCARXSsR3GdPMcC2rCTCQhTsMaHYFgMYIhNslpRd7axkM5nWnCaY7+s7D04g==
-X-Received: by 2002:a17:902:c412:b0:1b0:34c6:3be2 with SMTP id k18-20020a170902c41200b001b034c63be2mr1421801plk.1.1686061113033;
-        Tue, 06 Jun 2023 07:18:33 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q1-20020a170902b10100b001a6a6169d45sm8596280plr.168.2023.06.06.07.18.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 07:18:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 6 Jun 2023 07:18:31 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     nick.hawkins@hpe.com
-Cc:     verdun@hpe.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jdelvare@suse.com, andy.shevchenko@gmail.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 4/5] hwmon: (gxp_fan_ctrl) Provide fan info via gpio
-Message-ID: <22d5f12e-578b-4484-a90e-6e81289ed458@roeck-us.net>
-References: <20230606014234.29491-1-nick.hawkins@hpe.com>
- <20230606014234.29491-5-nick.hawkins@hpe.com>
+        d=1e100.net; s=20221208; t=1686061435; x=1688653435;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZrVZ+SOBI/x4uatGRzhwg8fwXrewUsr2gOgY5H5Ft9g=;
+        b=kyXosHcB/MZnkmXmASg4BxFxspHTtUepUQeuq34B53bs0ibRyqcO9BxgQ51wGYWh77
+         X+vuQvH4yj8liWc/44TytrNOQVqZFp3NAMbomX/rOquXKzsbb1ddLwmoRFhu2lslllCD
+         RhuHPJI8HAulhaihqlF85RQdjxSoF1wwGF770wJHer9SMKbbd/2bmUD/Onlhy7OQX8Jn
+         pwS33xUT5TNGDUomZliPUFB0Kmq8YYLC98XXBIZ5sxKRcdMLdgdR+KiXFLSsdZasTyma
+         15eSSR4LYo2Pm5MZn/qxONlVUCKSoeRMge6iovEMjWDjEtLwJ4gyshqCtIMiGTxfQn0d
+         UqYA==
+X-Gm-Message-State: AC+VfDxdqZaeJ9z0pKAIOGRwtQSOBjguM+hjqzKbTZjj1fhHV6sFZpXp
+        d1iVrcTX35/kIyL7XOM7lrosNA==
+X-Google-Smtp-Source: ACHHUZ4tNfkNmafis8UY8kYNaoiMX1MZKlLqdyE0bOdqVbjV255h69EPHklsSAMRYGIU1YtOe+jhjQ==
+X-Received: by 2002:a17:907:2da9:b0:966:5730:c3fe with SMTP id gt41-20020a1709072da900b009665730c3femr2925794ejc.52.1686061435313;
+        Tue, 06 Jun 2023 07:23:55 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id qc16-20020a170906d8b000b00965d294e633sm5624319ejb.58.2023.06.06.07.23.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 07:23:54 -0700 (PDT)
+Message-ID: <c28f963e-d13c-6b5c-c389-996e986f81d5@linaro.org>
+Date:   Tue, 6 Jun 2023 16:23:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606014234.29491-5-nick.hawkins@hpe.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [v5 3/5] dt-bindings: mfd: Add aspeed pwm-tach binding
+Content-Language: en-US
+To:     Patrick Williams <patrick@stwcx.xyz>
+Cc:     Billy Tsai <billy_tsai@aspeedtech.com>, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
+        lee@kernel.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, corbet@lwn.net,
+        p.zabel@pengutronix.de, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20230606094535.5388-1-billy_tsai@aspeedtech.com>
+ <20230606094535.5388-4-billy_tsai@aspeedtech.com>
+ <35bf0a69-bcf6-ae35-eb3c-e74cfcf9c571@linaro.org>
+ <ZH89fXknZlhGmM_H@heinlein.vulture-banana.ts.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZH89fXknZlhGmM_H@heinlein.vulture-banana.ts.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 08:42:33PM -0500, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
+On 06/06/2023 16:06, Patrick Williams wrote:
+> On Tue, Jun 06, 2023 at 12:49:04PM +0200, Krzysztof Kozlowski wrote:
 > 
-> The fan driver now is independent of the fan plreg GPIO information.
-> Therefore there will no longer be presence or fail information available
-> from the driver. Part of the changes includes removing a system power check
-> as the GPIO driver needs it to report power state to host.
+> Hi Krzysztof,
 > 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> Thank you for reviewing this from Billy.
+> 
+> The Aspeed chip is heavily used by the OpenBMC community and the 2600
+> has been used in production systems for almost 2 years now.  Many
+> companies are having to carry previous versions of these as patches, and
+> some of the APIs changed since the last revision from Billy.  So, I had
+> asked him to submit the latest patch set with as many revisions as he
+> understood what to change, since the conversation seemed to have died
+> since last time he submitted.  
+> 
+> I don't believe Billy is intentionally ignoring your feedback and he is
+> motivated to get this patch set wrapped up into an acceptable state.
+> 
+>> On 06/06/2023 11:45, Billy Tsai wrote:
+>  
+>> NAK. You got here clear comment. You cannot have simple MFD with
+>> resources. It is not simple anymore.
+>>
+> 
+> In fairness, Billy asked for clarification from you on this point and didn't
+> receive it.
+> 
+> https://lore.kernel.org/lkml/24DD1FEB-95F3-47BE-BE61-8B0E6FBDE20F@aspeedtech.com/
 
-For my reference:
+I gave the instruction what Billy should do:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+https://lore.kernel.org/lkml/41500a04-b004-0e2c-20a1-3a3092b90e6d@linaro.org/
 
-Let me know if you want me to apply this patch now or if I should wait
-for the gpio patches to be accepted.
+What about other ignored comments? About subject, quotes and more? Even
+if this one was unclear, then why ignoring all the rest?
 
-Guenter
+> 
+> He felt what he was trying to accomplish met the documented
+> expectations.  Are there some changes that need to be done in mfd.txt to
+> further clarify when to use it and when not to?
+
+I think mfd.txt clearly states:
+"For more complex devices, when the nexus driver has to
+probe registers to figure out what child devices exist etc, this should
+not be used. In the latter case the child devices will be determined by
+the operating system."
+
+Also, repeated many times:
+https://lore.kernel.org/all/YXhINE00HG6hbQI4@robh.at.kernel.org/
+https://lore.kernel.org/all/20220701000959.GA3588170-robh@kernel.org/
+https://osseu2022.sched.com/event/15z0W
+
+Best regards,
+Krzysztof
+
