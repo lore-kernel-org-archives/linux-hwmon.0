@@ -2,110 +2,122 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 874EAC77B7A
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jun 2023 10:27:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7107DC77B7A
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jun 2023 10:30:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234826AbjFFK1b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Jun 2023 06:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        id S233032AbjFFKaf convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Jun 2023 06:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbjFFK13 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Jun 2023 06:27:29 -0400
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDACE55;
-        Tue,  6 Jun 2023 03:27:28 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7748d634a70so229920839f.2;
-        Tue, 06 Jun 2023 03:27:28 -0700 (PDT)
+        with ESMTP id S236548AbjFFKaQ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Jun 2023 06:30:16 -0400
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A90A10C4;
+        Tue,  6 Jun 2023 03:30:14 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-bacfc573647so6610996276.1;
+        Tue, 06 Jun 2023 03:30:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686047248; x=1688639248;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JAPwM9u2F/Ud8Dzoq+JTM/HoPHsb9s153yZMWbPc3GE=;
-        b=PKTRNP9chvoAjEIzlHfBHCw2r/ttla4TUGpqBQZsijSTR0fhQ6HIs7/iE20gRvLXiH
-         bc9nx7HtcQPDEogQNUoTkt6NrsERSN2uH0yV39f37Ikk3YTgBWqfSgn0VVdznJtGnclq
-         NY+dxPqmYX42WirHI166x1+JMIXkMDhLaMZ+BBU/asqSo1EGrNG8tjErKUQStW8YPEXX
-         3jZOOb2Qq4v+5oZFWmnuLREb+D0uHOCTLux4nccmSZ5Jfi+McX9inphI43HTG0EXCfHp
-         vp8wCfvhJjZ1RsDssoJzMZeQFjzPaMMRAZC1EYzZutFjwHdRtB23AW8mQrBwayQ62ImU
-         YXNA==
-X-Gm-Message-State: AC+VfDwARxDjfCXKiHHwLgX84NEP4vSfhC8RUadwzz81X9R2hNB9zJUG
-        KhKvbdG6i2t9UlN+wy73xw==
-X-Google-Smtp-Source: ACHHUZ68E0V6jIRjSy2wh4tmUQtFk1OPqANyFaBsAC3f1lK9fAcvLfnZ2Yb+yr9jd5qlQIhh7Sju9w==
-X-Received: by 2002:a5d:9544:0:b0:775:8241:724a with SMTP id a4-20020a5d9544000000b007758241724amr1726719ios.16.1686047247601;
-        Tue, 06 Jun 2023 03:27:27 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id o22-20020a02c6b6000000b00408df9534c9sm2670058jan.130.2023.06.06.03.27.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 03:27:26 -0700 (PDT)
-Received: (nullmailer pid 411520 invoked by uid 1000);
-        Tue, 06 Jun 2023 10:27:24 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20221208; t=1686047414; x=1688639414;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M37GgvWJac+ezE60S1jjJkXuBuA94LzOcGnWhPva6Xo=;
+        b=c7fb746mWD+9lG95gEIrNQIDHsgBK3tdVZLMRyFMKQoTTFPt7XkHgTuZ57iaW5LJ+h
+         ZiSif0UO6Bcnh76TY2outzXQbztNfLlMPU6cf7WQzP8C/tpsqJpttyDbFRGxjf0JeTyP
+         GZz+G6or0wYLqn1lLqA3R072JWhzMuvJeDUNKTTHt2uMRWyZ2iJ3jnNzH/UaiMHUbSMj
+         e0oDN06b1ppO2hCxm3LVAww7wsqrxYM7f4BrzCjCAA8nLaOMgPprYUPndGP972OKvyCE
+         0/w0GcDmFIowvE8iogxpFLHxmxQaUaoVOxiAyUth6vIHl1TOC6WF61YgZgRhuGYTuDsT
+         csfQ==
+X-Gm-Message-State: AC+VfDzxjrhyAAFDNW4hVnKb3ttnu+DgS93pedrA2ZBhYonqntp4sGFW
+        ++NruZdzFT2ifTU/d2Ckoi2zFU9jO3LUKw==
+X-Google-Smtp-Source: ACHHUZ4VIRTe2RtHNxMHWgdDLyBjdwB+R7JihWfg0hnFU2BZYxaSmgeEDhhLZlyP/Vyool5sa9mSCg==
+X-Received: by 2002:a5b:6cb:0:b0:b9e:8a8b:b073 with SMTP id r11-20020a5b06cb000000b00b9e8a8bb073mr1508479ybq.39.1686047413986;
+        Tue, 06 Jun 2023 03:30:13 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id 194-20020a2503cb000000b00ba8c2f3e1a4sm3144590ybd.56.2023.06.06.03.30.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 03:30:11 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-566586b180fso64494187b3.0;
+        Tue, 06 Jun 2023 03:30:11 -0700 (PDT)
+X-Received: by 2002:a81:8484:0:b0:568:bd5c:2f6b with SMTP id
+ u126-20020a818484000000b00568bd5c2f6bmr1809215ywf.39.1686047410733; Tue, 06
+ Jun 2023 03:30:10 -0700 (PDT)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Billy Tsai <billy_tsai@aspeedtech.com>
-Cc:     andrew@aj.id.au, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-doc@vger.kernel.org,
-        u.kleine-koenig@pengutronix.de, linux-aspeed@lists.ozlabs.org,
-        lee@kernel.org, linux-pwm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, p.zabel@pengutronix.de,
-        joel@jms.id.au, patrick@stwcx.xyz, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, linux@roeck-us.net, corbet@lwn.net,
-        thierry.reding@gmail.com
-In-Reply-To: <20230606094535.5388-4-billy_tsai@aspeedtech.com>
-References: <20230606094535.5388-1-billy_tsai@aspeedtech.com>
- <20230606094535.5388-4-billy_tsai@aspeedtech.com>
-Message-Id: <168604724448.411496.12229634069665354962.robh@kernel.org>
-Subject: Re: [v5 3/5] dt-bindings: mfd: Add aspeed pwm-tach binding
-Date:   Tue, 06 Jun 2023 04:27:24 -0600
+References: <20230111212241.7456-1-pauk.denis@gmail.com>
+In-Reply-To: <20230111212241.7456-1-pauk.denis@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 6 Jun 2023 12:29:59 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXGO17cKKvwA5sZQ+WBPzdMvghZkvv1gWvQ00X-N+EF9A@mail.gmail.com>
+Message-ID: <CAMuHMdXGO17cKKvwA5sZQ+WBPzdMvghZkvv1gWvQ00X-N+EF9A@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] hwmon: (nct6775) Directly call ASUS ACPI WMI method
+To:     Denis Pauk <pauk.denis@gmail.com>
+Cc:     ahmad@khalifa.ws, chunkeey@gmail.com, greg@krypto.org,
+        hubert.banas@gmail.com, igor@svelig.com, jaap.dehaan@freenet.de,
+        jdelvare@suse.com, jeroen@beerstra.org, jonfarr87@gmail.com,
+        jwp@redhat.com, kdudka@redhat.com, kernel@melin.net,
+        kpietrzak@disroot.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@roeck-us.net, me@rebtoor.com,
+        metalcaedes@gmail.com, michael@theoddone.net,
+        mikhail.v.gavrilov@gmail.com, mundanedefoliation@gmail.com,
+        nephartyz@gmail.com, oleksandr@natalenko.name, pehlm@pekholm.org,
+        renedis@hotmail.com, robert@swiecki.net,
+        sahan.h.fernando@gmail.com, sebastian.arnhold@posteo.de,
+        sst@poczta.fm, to.eivind@gmail.com, torvic9@mailbox.org,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hi Denis,
 
-On Tue, 06 Jun 2023 17:45:33 +0800, Billy Tsai wrote:
-> Add device binding for aspeed pwm-tach device which is a multi-function
-> device include pwm and tach function.
-> 
-> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
-> 
-> ---
->  .../bindings/mfd/aspeed,ast2600-pwm-tach.yaml | 76 +++++++++++++++++++
->  1 file changed, 76 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml
-> 
+On Wed, Jan 11, 2023 at 10:24 PM Denis Pauk <pauk.denis@gmail.com> wrote:
+> New ASUS B650/B660/X670 boards firmware have not exposed WMI monitoring
+> GUID  and entrypoint method WMBD could be implemented for different device
+> UID.
+>
+> Implement the direct call to entrypoint method for monitoring the device
+> UID of B550/X570 boards.
+>
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+> Co-developed-by: Ahmad Khalifa <ahmad@khalifa.ws>
+> Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Thanks for your patch, which is now commit c3b3747d02f571da ("hwmon:
+(nct6775) Directly call ASUS ACPI WMI method") in  v6.3-rc1.
 
-yamllint warnings/errors:
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1516,7 +1516,7 @@ config SENSORS_NCT6775_CORE
+>  config SENSORS_NCT6775
+>         tristate "Platform driver for Nuvoton NCT6775F and compatibles"
+>         depends on !PPC
+> -       depends on ACPI_WMI || ACPI_WMI=n
+> +       depends on ACPI || ACPI=n
+>         select HWMON_VID
+>         select SENSORS_NCT6775_CORE
+>         help
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.example.dts:37.15-28: Warning (reg_format): /example-0/pwm-tach@1e610000/tach/fan@0:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.example.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.example.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.example.dtb: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.example.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.example.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.example.dts:36.19-38.15: Warning (avoid_default_addr_size): /example-0/pwm-tach@1e610000/tach/fan@0: Relying on default #address-cells value
-Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.example.dts:36.19-38.15: Warning (avoid_default_addr_size): /example-0/pwm-tach@1e610000/tach/fan@0: Relying on default #size-cells value
-Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.example.dtb: Warning (unique_unit_address_if_enabled): Failed prerequisite 'avoid_default_addr_size'
+The recent patches to add support for ACPI on RISC-V caused me to
+see a question about this driver again when running "make oldconfig",
+and I had a closer look at the driver...
+Unless I am missing something, this is a really dangerous driver which
+just bangs blindly into I/O space without doing any platform checks,
+which could cause a crash or system lock-up?
 
-doc reference errors (make refcheckdocs):
+Does the SENSORS_NCT6775 symbol need a better platform dependenc
+than !PPC?
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230606094535.5388-4-billy_tsai@aspeedtech.com
+Gr{oetje,eeting}s,
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+                        Geert
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
