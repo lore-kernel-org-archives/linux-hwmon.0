@@ -2,137 +2,131 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BF11C7EE2C
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jun 2023 10:57:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C1B6C77B7A
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Jun 2023 13:51:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236313AbjFFK5u (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Jun 2023 06:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
+        id S233283AbjFFNv4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Jun 2023 09:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233068AbjFFK5M (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Jun 2023 06:57:12 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0361B10D0
-        for <linux-hwmon@vger.kernel.org>; Tue,  6 Jun 2023 03:56:46 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5147a478c38so8428044a12.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 06 Jun 2023 03:56:46 -0700 (PDT)
+        with ESMTP id S238047AbjFFNvz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Jun 2023 09:51:55 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF5FB1;
+        Tue,  6 Jun 2023 06:51:53 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-651ffcc1d3dso3571430b3a.3;
+        Tue, 06 Jun 2023 06:51:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686049005; x=1688641005;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=gmail.com; s=20221208; t=1686059513; x=1688651513;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HEsKBsSffmKc/zSAV6wOrR7iFLeq5WaYkyI3CvHytZU=;
-        b=vt7AVfq2arf4Qp5A3xYsMz1wdt5wTOuR1cIUFGDWwF34x+Q/CxhGrrilLmcuPuOVH3
-         KVXiwsYRji6W04RLTHcRSTQzeiIOEuWZ6mWZRGZihFV3sZffr1KKmXaDNapD+zgymF39
-         uI86z8eovwuubmiRV4jiHBV9by8kf4WULN+PXNgC2ld0+DsG6jfzqItIh4AdQgSZWi0b
-         HpPjqi3HSEDLr9PpLkdMR8lZkKlK+U7FP4pAATmu646c+ykxn1/TYDhre/cjK1XeMUR8
-         DBq/ELdF0EidJYsbnFzm/J0+u95cIC4hDlWJVFQlv3ecvunmjTIJkp+A5EhFt4DIPGan
-         BTIA==
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=/meAPIsis+AXLZEtvKaqLr9I/b5AhX0Z28qNlrQqqbE=;
+        b=Fv8s+7TokXGsfeC2LEaAc+xqng0Ju1MaH/xGf16DNJmcLHaJqjmtJJg+abJka+mdy7
+         kCsmQ+exiZ7/tFNT8Weswe3ih7jVFwfhViBOVL2uxwXmDkxmhGO7tJCA4D/7hLKBfat7
+         LPtv7+bKZFOkxA2z5aEMk3Z+CegOJtXZ6kKlHEv99oN8JGjcPtMYcnUBEZZ57WIKtAhA
+         5gpdjrGpVvBq8TGmkm0yrYKhyGhSoXPNrfmG3uGah03YVqpgqEhaxtMrxJtRGIt0eF5Q
+         dlHgNS8douww2BSBYItB5qFHtISgzYZkgeLzAg+GjmBLt3zIDVP1SD0dQApsFCYFweec
+         X8vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686049005; x=1688641005;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=1e100.net; s=20221208; t=1686059513; x=1688651513;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HEsKBsSffmKc/zSAV6wOrR7iFLeq5WaYkyI3CvHytZU=;
-        b=Z7pB6++zk7OTnhtyTLiDJxRqd8YXnlyQwuqBxneaDNM0JDL4pW/wXjlM+cfmu1NlHO
-         K60aZnEFLNYlCEsvuBAu4ahXCV8MYbMJmblWwaq1b7dIJ8dpFBqjxpofnT2oOkEjP5iU
-         YVYvNaSeuH3vYD9BOJxV/1KwWsCBwZGWgrAhW8aA5zNR8gDyzHBvTpXgXF9YiKyvkDad
-         5pSGT+OxNHz6NvnVuiE1ZygJBjmuqCCLjx4BwSYsi9ac3KxbPwnVS6IYhziEx3dg6e/l
-         cRpCe1ZGOqFI/5sAk2ytj2Pyt+FTvnrKP4xjCMcmdOZMm3r85ckf+GGXn0MTn3efjNM7
-         op7g==
-X-Gm-Message-State: AC+VfDwRX+vvO2DCb22Fk3HcPY0GGWgGsBSAR/LVS5lGX7KqHvyq1YTf
-        YDObMD0GJd37XzfC2uj0mD5CXw==
-X-Google-Smtp-Source: ACHHUZ50UOBCxUsXhaGVyDZif/C/c1U/u3c87IyMXAQmNbsv2lf0xkReTrxYEjK7HQ/nqHXyEVfvlQ==
-X-Received: by 2002:a17:906:794a:b0:966:eb8:2f12 with SMTP id l10-20020a170906794a00b009660eb82f12mr1715450ejo.11.1686049005533;
-        Tue, 06 Jun 2023 03:56:45 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id o23-20020aa7c7d7000000b00514ad0e3167sm4878151eds.71.2023.06.06.03.56.32
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/meAPIsis+AXLZEtvKaqLr9I/b5AhX0Z28qNlrQqqbE=;
+        b=cNKAh1esbs+44HvKOGCVlawyjGOqqAJukeCo5prHsK17sG8VtJolmp8w7JzWt/tzey
+         J1TsfqIBphKj9CvVohiDOlkdF7ep4GYSPD15DqaPNSr6CIt3xs/+FSxw9Xtrj3pLyJR9
+         N47w3DYgAuHKBSEJWyCeerr4sF+4jk5ql66X7a0ZfaFGBU0qO3fDzVCB0jhgXIlQ1U4o
+         TkBxYDHQpEB0fSghH+4O9/XhQ0YNK7JQKqhF1P5eFA6CjBmT86dOy3B/rkGYCtCEbXIm
+         jYAYUIjpaGaXN5HI9PCnBnfXZ2STlljHmIwGDr3P1WuccnVVF9c/OsejZIxfVpPYT3qw
+         4grw==
+X-Gm-Message-State: AC+VfDwFqlMoWlZxWLIamAOWIOPYhiRB/osS1MYARLa4uuKd0sa7ocyC
+        sB4qfnjNCrtF8r0tyCDf7dc=
+X-Google-Smtp-Source: ACHHUZ7AdTODNyw4dWQnFLD+N5s+hcbMRMZ3B99ZCAjJ5ZMGxXh5YoMjJk7n85NSxLTQnViRgrWobw==
+X-Received: by 2002:a05:6a20:258b:b0:10b:dca5:74e5 with SMTP id k11-20020a056a20258b00b0010bdca574e5mr2224688pzd.0.1686059512635;
+        Tue, 06 Jun 2023 06:51:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q3-20020a17090311c300b001b0f727bc44sm8518658plh.16.2023.06.06.06.51.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 03:56:44 -0700 (PDT)
-Message-ID: <47d95067-12e0-4b19-6b6d-104532fae1e0@linaro.org>
-Date:   Tue, 6 Jun 2023 12:56:31 +0200
+        Tue, 06 Jun 2023 06:51:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e9850b67-6c6f-4079-fa35-862b102c8ddd@roeck-us.net>
+Date:   Tue, 6 Jun 2023 06:51:47 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [v5 5/5] hwmon: Add Aspeed ast2600 TACH support
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 1/2] hwmon: (nct6775) Directly call ASUS ACPI WMI
+ method
 Content-Language: en-US
-To:     Billy Tsai <billy_tsai@aspeedtech.com>, jdelvare@suse.com,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        lee@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, corbet@lwn.net,
-        p.zabel@pengutronix.de, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-doc@vger.kernel.org,
-        patrick@stwcx.xyz
-References: <20230606094535.5388-1-billy_tsai@aspeedtech.com>
- <20230606094535.5388-6-billy_tsai@aspeedtech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230606094535.5388-6-billy_tsai@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Denis Pauk <pauk.denis@gmail.com>
+Cc:     ahmad@khalifa.ws, chunkeey@gmail.com, greg@krypto.org,
+        hubert.banas@gmail.com, igor@svelig.com, jaap.dehaan@freenet.de,
+        jdelvare@suse.com, jeroen@beerstra.org, jonfarr87@gmail.com,
+        jwp@redhat.com, kdudka@redhat.com, kernel@melin.net,
+        kpietrzak@disroot.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, me@rebtoor.com,
+        metalcaedes@gmail.com, michael@theoddone.net,
+        mikhail.v.gavrilov@gmail.com, mundanedefoliation@gmail.com,
+        nephartyz@gmail.com, oleksandr@natalenko.name, pehlm@pekholm.org,
+        renedis@hotmail.com, robert@swiecki.net,
+        sahan.h.fernando@gmail.com, sebastian.arnhold@posteo.de,
+        sst@poczta.fm, to.eivind@gmail.com, torvic9@mailbox.org,
+        linux-riscv <linux-riscv@lists.infradead.org>
+References: <20230111212241.7456-1-pauk.denis@gmail.com>
+ <CAMuHMdXGO17cKKvwA5sZQ+WBPzdMvghZkvv1gWvQ00X-N+EF9A@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAMuHMdXGO17cKKvwA5sZQ+WBPzdMvghZkvv1gWvQ00X-N+EF9A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 06/06/2023 11:45, Billy Tsai wrote:
-> Add the support of Tachometer which can use to monitor the frequency of
-> the input. The tach supports up to 16 channels and it's part function of
-> multi-function device "pwm-tach controller".
+On 6/6/23 03:29, Geert Uytterhoeven wrote:
+> Hi Denis,
 > 
-> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> On Wed, Jan 11, 2023 at 10:24 PM Denis Pauk <pauk.denis@gmail.com> wrote:
+>> New ASUS B650/B660/X670 boards firmware have not exposed WMI monitoring
+>> GUID  and entrypoint method WMBD could be implemented for different device
+>> UID.
+>>
+>> Implement the direct call to entrypoint method for monitoring the device
+>> UID of B550/X570 boards.
+>>
+>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+>> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+>> Co-developed-by: Ahmad Khalifa <ahmad@khalifa.ws>
+>> Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
+> 
+> Thanks for your patch, which is now commit c3b3747d02f571da ("hwmon:
+> (nct6775) Directly call ASUS ACPI WMI method") in  v6.3-rc1.
+> 
+>> --- a/drivers/hwmon/Kconfig
+>> +++ b/drivers/hwmon/Kconfig
+>> @@ -1516,7 +1516,7 @@ config SENSORS_NCT6775_CORE
+>>   config SENSORS_NCT6775
+>>          tristate "Platform driver for Nuvoton NCT6775F and compatibles"
+>>          depends on !PPC
+>> -       depends on ACPI_WMI || ACPI_WMI=n
+>> +       depends on ACPI || ACPI=n
+>>          select HWMON_VID
+>>          select SENSORS_NCT6775_CORE
+>>          help
+> 
+> The recent patches to add support for ACPI on RISC-V caused me to
+> see a question about this driver again when running "make oldconfig",
+> and I had a closer look at the driver...
+> Unless I am missing something, this is a really dangerous driver which
+> just bangs blindly into I/O space without doing any platform checks,
+> which could cause a crash or system lock-up?
+> 
+> Does the SENSORS_NCT6775 symbol need a better platform dependenc
+> than !PPC?
+> 
 
+This is no different than all the other SuperIO drivers.
 
-> +
-> +static void aspeed_tach_reset_assert(void *data)
-> +{
-> +	struct reset_control *rst = data;
-> +
-> +	reset_control_assert(rst);
-> +}
-> +
-> +static int aspeed_tach_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *np, *child;
-> +	struct aspeed_tach_data *priv;
-> +	struct device *hwmon;
-> +	int ret;
-> +
-> +	np = dev->parent->of_node;
-> +	if (!of_device_is_compatible(np, "aspeed,ast2600-pwm-tach"))
-
-Drop.
-
-> +		return dev_err_probe(dev, -ENODEV,
-> +				     "Unsupported tach device binding\n");
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +	priv->dev = &pdev->dev;
-> +
-> +	priv->regmap = syscon_node_to_regmap(np);
-> +	if (IS_ERR(priv->regmap))
-> +		return dev_err_probe(dev, PTR_ERR(priv->regmap),
-> +				     "Couldn't get regmap\n");
-> +
-> +	priv->clk = devm_clk_get_enabled(dev->parent, NULL);
-
-NAK. Parent is simple-mfd, means it must not have clock.
-
-
-> +	if (IS_ERR(priv->clk))
-> +		return dev_err_probe(dev, PTR_ERR(priv->clk),
-> +				     "Couldn't get clock\n");
-> +
-> +	priv->clk_source = clk_get_rate(priv->clk);
-> +
-> +	priv->reset = devm_reset_control_get_shared(dev->parent, NULL);
-
-NAK, same reasons.
-
-Best regards,
-Krzysztof
+Guenter
 
