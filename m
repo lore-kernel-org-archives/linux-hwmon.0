@@ -2,742 +2,920 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C048C7EE25
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jun 2023 17:40:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61683C77B7A
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jun 2023 18:00:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjFGRkG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 7 Jun 2023 13:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S231319AbjFGSAv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 7 Jun 2023 14:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232283AbjFGRkF (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Jun 2023 13:40:05 -0400
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D80E128;
-        Wed,  7 Jun 2023 10:40:02 -0700 (PDT)
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-33b22221da6so5943085ab.1;
-        Wed, 07 Jun 2023 10:40:02 -0700 (PDT)
+        with ESMTP id S229785AbjFGSAu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Jun 2023 14:00:50 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E7FEB;
+        Wed,  7 Jun 2023 11:00:47 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-65299178ac5so7437639b3a.1;
+        Wed, 07 Jun 2023 11:00:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686160847; x=1688752847;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EcKMov27uwVjVyly49MGTwG427GG+d6TEpG2hoha14o=;
+        b=mpKnXh7tA4hSCCH6oq3hzMkX0oRe2q4I9XJZZQlrUsAmral1RB++f8ie2rTi8yZZ/a
+         LB6AlRRgu3nM0Rn4/4uDBLg1JpUKfdsx99ADENOal0psiTFC3xr5yr/aKfFxPFgoNNnP
+         YfI4p6Da0VxGIewIdcdprKB4Xramfuux3SoJB4yl6fMsp0PGDOJviuwOl4UiG8LguDBq
+         Noy4IyJeiDfn2IZ+UGNY4SQCkFRN2dL+gIyqzh+0URbcBhgOpuJjjQxhA2fxXSRhM8Mk
+         skyA+8WGKcS11myEAmsmCUf+aWxmust0BTL6GIgjEGWX7VKz4mYX3Yco46PkNu6xttSR
+         KiHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686159601; x=1688751601;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CaLFShxhXREyYKjQSx2pJODc4wr9Dqyj4ZKNw7f6LFU=;
-        b=MxnLF5BZeFH/jIuFO8n1JT+l0TohWtHHozha2fnRWkmRvSK3TARCuRtwVFLm7Qjxug
-         rjJRGzwsQ5mi846Bw6A58jfllCT4DJ+T24iVUF6Q/CXC8dAeA+db8EFoXWACB+fGWBjv
-         R8DK/zx+2IzN9/9blL0Rb3tjKini/hCKbbr9s+dsnB5wHJnuMwMMI++0NBmKr7PC7Beu
-         NQAxKgUAWBi8Smt5l6JoS1+xeti/JCsyeIvxWLDwzsmgn71Y4+ZyJGiIp8vRkZGOWETF
-         QyzumhtcRlu5SrsdtuExzHXW8OF1cBnFrA0nW4MdWgwwwaIs8DfiEOeaUbpJQd5dgWeG
-         BgYg==
-X-Gm-Message-State: AC+VfDxowUwCpAzFpKxa39+w0+xR5MpS8mTqxQGvmDXzUvcJi9O1sZ6z
-        sOW8Ko/NDwSLNixdi9eDogwU5AE/pw==
-X-Google-Smtp-Source: ACHHUZ7h1eYURjY76KswhJaepgwDNmYrdAcbbkk22EEipfEQ1wwEJ2eL9YJLFc2589TOC0o/R+h5FQ==
-X-Received: by 2002:a92:c905:0:b0:33c:792a:af50 with SMTP id t5-20020a92c905000000b0033c792aaf50mr7610131ilp.4.1686159601108;
-        Wed, 07 Jun 2023 10:40:01 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id f13-20020a92cb4d000000b00338a1272ce1sm3833550ilq.52.2023.06.07.10.39.59
+        d=1e100.net; s=20221208; t=1686160847; x=1688752847;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EcKMov27uwVjVyly49MGTwG427GG+d6TEpG2hoha14o=;
+        b=EObpBqHR21g7UDzdS6RTP1mfVjHu+CpVdVcaWHNutFNlFGibLXB76G77nR3utjDOP8
+         ZPqs6t000gdfcEwq1eNreiWD01y0V8+Me/+GJkKqyRK07evihEhlJfe1TSCuFZ5xFt/i
+         lYV1Lkyvha9XBxV4cD41hYEJD6v+RIBEYs6cNpBrR3B4RjWUg/nj9n/BnhUmPTCREL2d
+         IJNtNErZ9qhNTPYh2Oz3HW26qZ4neh3ZEVc2bl996CdvyP+9BYVuakeS2LdghIuDmvnP
+         qv9+s0y1xIbpmxvg7NkggaddxT5Qn14/VRUKQssbpD+SdkJF0oQWFjKwW51B+goVutMH
+         1OlQ==
+X-Gm-Message-State: AC+VfDx4tcVEo1+51FDom9j1y8SNSE2Ml4qyVR3/nqj7qBwJTCYJGsYg
+        FZqWtFwb0mmFJ5/Bqf4vO1E=
+X-Google-Smtp-Source: ACHHUZ77bsgrrHeUo7JYOp8lnxbFUNvnv972TswbHP9nn/2WzERJVfhbwLFxJm6eaurr4maECpkzGg==
+X-Received: by 2002:a05:6a21:9986:b0:10b:e88f:5983 with SMTP id ve6-20020a056a21998600b0010be88f5983mr4178972pzb.43.1686160846698;
+        Wed, 07 Jun 2023 11:00:46 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k185-20020a6324c2000000b00513cc8c9597sm9217892pgk.10.2023.06.07.11.00.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 10:40:00 -0700 (PDT)
-Received: (nullmailer pid 3617213 invoked by uid 1000);
-        Wed, 07 Jun 2023 17:39:58 -0000
-Date:   Wed, 7 Jun 2023 11:39:58 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Daniel Matyas <daniel.matyas@analog.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v10 2/2] hwmon: max31827: add MAX31827 driver
-Message-ID: <20230607173917.GA3614069-robh@kernel.org>
-References: <20230524160131.14081-1-daniel.matyas@analog.com>
- <20230524160131.14081-2-daniel.matyas@analog.com>
+        Wed, 07 Jun 2023 11:00:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 7 Jun 2023 11:00:44 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: Re: [PATCH 2/2] hwmon: (nct7362) Add nct7362 driver
+Message-ID: <f927c9e4-8f75-4e1e-97f6-71b24bab1a9f@roeck-us.net>
+References: <20230607101827.8544-4-zev@bewilderbeest.net>
+ <20230607101827.8544-6-zev@bewilderbeest.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230524160131.14081-2-daniel.matyas@analog.com>
+In-Reply-To: <20230607101827.8544-6-zev@bewilderbeest.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, May 24, 2023 at 07:01:30PM +0300, Daniel Matyas wrote:
-> MAX31827 is a low-power temperature switch with I2C interface.
+On Wed, Jun 07, 2023 at 03:18:30AM -0700, Zev Weiss wrote:
+> This driver supports the Nuvoton NCT7362Y, an I2C fan controller with
+> 16 channels independently configurable for operation as PWM outputs,
+> fan tachometer inputs, or GPIOs.  Most aspects of the chip's
+
+Is this a secret chip ?
+
+> functionality are supported, including PWM duty cycle, frequency,
+> enable/disable, and DC-mode operation.  To support its GPIO
+> functionality, the driver also exposes a gpiochip interface if
+> CONFIG_SENSORS_NCT7362_GPIO is enabled.
+
+I do not see the point of this configuration flag. Why not just
+always enable it ?
+
 > 
-> The device is a ±1°C accuracy from -40°C to +125°C
-> (12 bits) local temperature switch and sensor with I2C/SM-
-> Bus interface. The combination of small 6-bump wafer-lev-
-> el package (WLP) and high accuracy makes this temper-
-> ature sensor/switch ideal for a wide range of applications.
-> 
-> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 > ---
+>  MAINTAINERS             |   7 +
+>  drivers/hwmon/Kconfig   |  18 ++
+>  drivers/hwmon/Makefile  |   1 +
+>  drivers/hwmon/nct7362.c | 697 ++++++++++++++++++++++++++++++++++++++++
+
+Driver documentation is missing.
+
+>  4 files changed, 723 insertions(+)
+>  create mode 100644 drivers/hwmon/nct7362.c
 > 
-> v9 -> v10: Added a proper change log.
-> 
-> v8 -> v9: No change.
-> 
-> v7 -> v8: Initialised ret in max31827_read function, so that it
-> has a value, even if 'type == hwmon_chip && attr !=
-> hwmon_chip_update_interval'. (in reality it will never go there, but
-> needed to this this, because compiler warning)
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202305112351.DBkFfs76-lkp@intel.com/
-> 
-> v6 -> v7 : Used goto instead of return in write_alarm_val function.
-> Unlocked mutex in goto label. Used mutex for enable. Now update_interval
-> can only be modified if the device is enabled. I did this, b.c. modifying
-> the update interval, when the device is in shutdown mode, automatically
-> enables the device.
-> 
-> v5 -> v6: Corrected the mistakes with mutex. Explained why I shift the
-> last 4 bits in the .rst file. (because the LSB is 0.0625 degrees Celsius).
-> 
-> v4 -> v5: Used sign_extend32 to convert to and from milli-degrees.
-> 
-> v3 -> v4: Made consistency tweaks. Extended mutex_lock to every instance
-> of reading from or writing to st->enable. Added conversion to and from
-> milli-degrees. Added of_table. 
-> 
-> v2 -> v3: Added mutex protection to reading and writing to configuration
-> register. Dropped of_table. Converted update_interval to Hertz.
-> 
-> v1 -> v2: Added max31827.rst documentation. Removed unused defines.
-> Removed i2c_client from private struct. Made code consistent and
-> cleaner. Resolved ABI abuse in hwmon_temp_enable. Added alarm attribute
-> support. Added write_alarm_value function to put the device in shutdown
-> mode before changing the alarm value and hysteresis registers. Removed
-> redundant error message if something went wrong with regmap_init. Used
-> sizeof(*st) instead of sizeof(struct max31827_state) in kzalloc.
-> 
->  Documentation/hwmon/index.rst    |   1 +
->  Documentation/hwmon/max31827.rst |  90 ++++++
->  MAINTAINERS                      |   2 +
->  drivers/hwmon/Kconfig            |  11 +
->  drivers/hwmon/Makefile           |   2 +-
->  drivers/hwmon/max31827.c         | 466 +++++++++++++++++++++++++++++++
->  6 files changed, 571 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/hwmon/max31827.rst
->  create mode 100644 drivers/hwmon/max31827.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index fa1208c62855..8cc0922f3b36 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -140,6 +140,7 @@ Hardware Monitoring Kernel Drivers
->     max31760
->     max31785
->     max31790
-> +   max31827
->     max34440
->     max6620
->     max6639
-> diff --git a/Documentation/hwmon/max31827.rst b/Documentation/hwmon/max31827.rst
-> new file mode 100644
-> index 000000000000..b0971d05b8a4
-> --- /dev/null
-> +++ b/Documentation/hwmon/max31827.rst
-> @@ -0,0 +1,90 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver max31827
-> +======================
-> +
-> +Supported chips:
-> +
-> +  * Maxim MAX31827
-> +
-> +    Prefix: 'max31827'
-> +
-> +    Addresses scanned: I2C 0x40 - 0x5f
-> +
-> +    Datasheet: Publicly available at the Analog Devices website
-> +
-> +  * Maxim MAX31828
-> +
-> +    Prefix: 'max31828'
-> +
-> +    Addresses scanned: I2C 0x40 - 0x5f
-> +
-> +    Datasheet: Publicly available at the Analog Devices website
-> +
-> +  * Maxim MAX31829
-> +
-> +    Prefix: 'max31829'
-> +
-> +    Addresses scanned: I2C 0x40 - 0x5f
-> +
-> +    Datasheet: Publicly available at the Analog Devices website
-> +
-> +
-> +Authors:
-> +	- Daniel Matyas <daniel.matyas@analog.com>
-> +
-> +Description
-> +-----------
-> +
-> +The chips supported by this driver are quite similar. The only difference
-> +between them is found in the default power-on behaviour of the chips. While the
-> +MAX31827's fault queue is set to 1, the other two chip's fault queue is set to
-> +4. Besides this, the MAX31829's alarm active state is high, while the other two
-> +chip's alarms are active on low. It is important to note that the chips can be
-> +configured to operate in the same manner with 1 write operation to the
-> +configuration register. From here on, we will refer to all these chips as
-> +MAX31827.
-> +
-> +MAX31827 implements a temperature sensor with a 6 WLP packaging scheme. This
-> +sensor measures the temperature of the chip itself.
-> +
-> +MAX31827 has low and over temperature alarms with an effective value and a
-> +hysteresis value: -40 and -30 degrees for under temperature alarm and +100 and
-> ++90 degrees for over temperature alarm.
-> +
-> +The alarm can be configured in comparator and interrupt mode. Currently only
-> +comparator mode is implemented. In Comparator mode, the OT/UT status bits have a
-> +value of 1 when the temperature rises above the TH value or falls below TL,
-> +which is also subject to the Fault Queue selection. OT status returns to 0 when
-> +the temperature drops below the TH_HYST value or when shutdown mode is entered.
-> +Similarly, UT status returns to 0 when the temperature rises above TL_HYST value
-> +or when shutdown mode is entered.
-> +
-> +Putting the MAX31827 into shutdown mode also resets the OT/UT status bits. Note
-> +that if the mode is changed while OT/UT status bits are set, an OT/UT status
-> +reset may be required before it begins to behave normally. To prevent this,
-> +it is recommended to perform a read of the configuration/status register to
-> +clear the status bits before changing the operating mode.
-> +
-> +The conversions can be manual with the one-shot functionality and automatic with
-> +a set frequency. When powered on, the chip measures temperatures with 1 conv/s.
-> +Enabling the device when it is already enabled has the side effect of setting
-> +the conversion frequency to 1 conv/s. The conversion time varies depending on
-> +the resolution. The conversion time doubles with every bit of increased
-> +resolution. For 10 bit resolution 35ms are needed, while for 12 bit resolution
-> +(default) 140ms. When chip is in shutdown mode and a read operation is
-> +requested, one-shot is triggered, the device waits for 140 (conversion time) + 1
-> +(error) ms, and only after that is the temperature value register read.
-> +
-> +The LSB of the temperature values is 0.0625 degrees Celsius, but the values of
-> +the temperatures are displayed in milli-degrees. This means, that some data is
-> +lost. The step between 2 consecutive values is 62 or 63. This effect can be seen
-> +in the writing of alarm values too. For positive numbers the user-input value
-> +will always be rounded down to the nearest possible value, for negative numbers
-> +the user-input will always be rounded up to the nearest possible value.
-> +
-> +Notes
-> +-----
-> +
-> +Currently fault queue, alarm polarity and resolution cannot be modified.
-> +PEC is not implemented either.
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index 752c7e9c4e4a..53f5bd58989a 100644
+> index e0ad886d3163..7b2abff6d049 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -12618,6 +12618,8 @@ L:	linux-hwmon@vger.kernel.org
->  S:	Supported
->  W:	http://ez.analog.com/community/linux-device-drivers
->  F:	Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> +F:	Documentation/hwmon/max31827.rst
-> +F:	drivers/hwmon/max31827.c
+> @@ -14468,6 +14468,13 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+>  F:	drivers/hwmon/nct6775-i2c.c
 >  
->  MAX6650 HARDWARE MONITOR AND FAN CONTROLLER DRIVER
->  L:	linux-hwmon@vger.kernel.org
+> +NCT7362 HARDWARE MONITOR DRIVER
+> +M:	Zev Weiss <zev@bewilderbeest.net>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/hwmon/nuvoton,nct7362.yaml
+> +F:	drivers/hwmon/nct7362.c
+> +
+>  NETDEVSIM
+>  M:	Jakub Kicinski <kuba@kernel.org>
+>  S:	Maintained
 > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index fc640201a2de..12bd17075dc4 100644
+> index fc640201a2de..5ca51b4b52b6 100644
 > --- a/drivers/hwmon/Kconfig
 > +++ b/drivers/hwmon/Kconfig
-> @@ -1097,6 +1097,17 @@ config SENSORS_MAX31760
+> @@ -1562,6 +1562,24 @@ config SENSORS_NCT6775_I2C
 >  	  This driver can also be built as a module. If so, the module
->  	  will be called max31760.
+>  	  will be called nct6775-i2c.
 >  
-> +config MAX31827
-> +	tristate "MAX31827 low-power temperature switch and similar devices"
+> +config SENSORS_NCT7362
+> +	tristate "Nuvoton NCT7362Y fan controller"
 > +	depends on I2C
 > +	select REGMAP_I2C
 > +	help
-> +	  If you say yes here you get support for MAX31827, MAX31828 and
-> +	  MAX31829 low-power temperature switches and sensors connected with I2C.
+> +	  If you say yes here you get support for the Nuvoton NCT7362Y
+> +	  fan controller.
 > +
-> +	  This driver can also be built as a module.  If so, the module
-> +	  will be called max31827.
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called nct7362.
 > +
->  config SENSORS_MAX6620
->  	tristate "Maxim MAX6620 fan controller"
+> +config SENSORS_NCT7362_GPIO
+> +	bool "Enable NCT7362Y GPIO support"
+> +	depends on SENSORS_NCT7362 && GPIOLIB
+
+Why depends on GPIOLIB and not "select GPIOLIB" like everywhere else ?
+
+> +	help
+> +	  Allow nct7362 pins not used as PWM outputs or tach inputs to
+> +	  be used as GPIOs.
+> +
+>  config SENSORS_NCT7802
+>  	tristate "Nuvoton NCT7802Y"
 >  	depends on I2C
 > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index cd8c568c80a9..8a8021f9ca9e 100644
+> index cd8c568c80a9..29c674979280 100644
 > --- a/drivers/hwmon/Makefile
 > +++ b/drivers/hwmon/Makefile
-> @@ -149,6 +149,7 @@ obj-$(CONFIG_SENSORS_MAX6642)	+= max6642.o
->  obj-$(CONFIG_SENSORS_MAX6650)	+= max6650.o
->  obj-$(CONFIG_SENSORS_MAX6697)	+= max6697.o
->  obj-$(CONFIG_SENSORS_MAX31790)	+= max31790.o
-> +obj-$(CONFIG_MAX31827) += max31827.o
->  obj-$(CONFIG_SENSORS_MC13783_ADC)+= mc13783-adc.o
->  obj-$(CONFIG_SENSORS_MC34VR500)	+= mc34vr500.o
->  obj-$(CONFIG_SENSORS_MCP3021)	+= mcp3021.o
-> @@ -224,4 +225,3 @@ obj-$(CONFIG_SENSORS_PECI)	+= peci/
->  obj-$(CONFIG_PMBUS)		+= pmbus/
->  
->  ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
-> -
-> diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
+> @@ -162,6 +162,7 @@ obj-$(CONFIG_SENSORS_NCT6775_CORE) += nct6775-core.o
+>  nct6775-objs			:= nct6775-platform.o
+>  obj-$(CONFIG_SENSORS_NCT6775)	+= nct6775.o
+>  obj-$(CONFIG_SENSORS_NCT6775_I2C) += nct6775-i2c.o
+> +obj-$(CONFIG_SENSORS_NCT7362)	+= nct7362.o
+>  obj-$(CONFIG_SENSORS_NCT7802)	+= nct7802.o
+>  obj-$(CONFIG_SENSORS_NCT7904)	+= nct7904.o
+>  obj-$(CONFIG_SENSORS_NPCM7XX)	+= npcm750-pwm-fan.o
+> diff --git a/drivers/hwmon/nct7362.c b/drivers/hwmon/nct7362.c
 > new file mode 100644
-> index 000000000000..fa86e5a72935
+> index 000000000000..8f8e49097710
 > --- /dev/null
-> +++ b/drivers/hwmon/max31827.c
-> @@ -0,0 +1,466 @@
-> +// SPDX-License-Identifier: GPL-2.0
+> +++ b/drivers/hwmon/nct7362.c
+> @@ -0,0 +1,697 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
 > +/*
-> + * max31827.c - Support for Maxim Low-Power Switch
+> + * nct7362 - Driver for Nuvoton NCT7362Y fan controller
 > + *
-> + * Copyright (c) 2023 Daniel Matyas <daniel.matyas@analog.com>
+> + * Copyright (C) 2023 Zev Weiss <zev@bewilderbeest.net>
 > + */
 > +
-> +#include <linux/bitfield.h>
-> +#include <linux/bitops.h>
-> +#include <linux/delay.h>
-> +#include <linux/hwmon.h>
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/of.h>
 > +#include <linux/i2c.h>
-> +#include <linux/mutex.h>
 > +#include <linux/regmap.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/module.h>
+> +#include <linux/gpio/driver.h>
+
+Alphabetic order, please.
+
 > +
-> +#define MAX31827_T_REG	0x0
-> +#define MAX31827_CONFIGURATION_REG	0x2
-> +#define MAX31827_TH_REG	0x4
-> +#define MAX31827_TL_REG 0x6
-> +#define MAX31827_TH_HYST_REG	0x8
-> +#define MAX31827_TL_HYST_REG	0xA
+> +#define DRVNAME "nct7362"
 > +
-> +#define MAX31827_CONFIGURATION_1SHOT_MASK	BIT(0)
-> +#define MAX31827_CONFIGURATION_CNV_RATE_MASK	GENMASK(3, 1)
-> +#define MAX31827_CONFIGURATION_U_TEMP_STAT_MASK BIT(14)
-> +#define MAX31827_CONFIGURATION_O_TEMP_STAT_MASK BIT(15)
+> +#define REG_GPIO0_INPUT 0x00
+> +#define REG_GPIO1_INPUT 0x10
+
+Please always use
+
+#define<space>DEFINE<tab>value
+
 > +
-> +#define MAX31827_12_BIT_CNV_TIME	141
+> +#define REG_GPIO0_OUTPUT 0x01
+> +#define REG_GPIO1_OUTPUT 0x11
 > +
-> +#define MAX31827_CNV_1_DIV_64_HZ	0x1
-> +#define MAX31827_CNV_1_DIV_32_HZ	0x2
-> +#define MAX31827_CNV_1_DIV_16_HZ	0x3
-> +#define MAX31827_CNV_1_DIV_4_HZ		0x4
-> +#define MAX31827_CNV_1_HZ	0x5
-> +#define MAX31827_CNV_4_HZ	0x6
-> +#define MAX31827_CNV_8_HZ	0x7
+> +#define REG_GPIO0_IOCFG 0x03
+> +#define REG_GPIO1_IOCFG 0x13
 > +
-> +#define MAX31827_16_BIT_TO_M_DGR(x)	(sign_extend32(x, 15) * 1000 / 16)
-> +#define MAX31827_M_DGR_TO_16_BIT(x)	(((x) << 4) / 1000)
-> +#define MAX31827_DEVICE_ENABLE(x)	((x) ? 0xA : 0x0)
+> +#define REG_GPIO0_OUTMODE 0x05
+> +#define REG_GPIO1_OUTMODE 0x15
 > +
-> +struct max31827_state {
-> +	/*
-> +	 * Prevent simultaneous access to the i2c client.
-> +	 */
-> +	struct mutex lock;
+> +#define REG_PINCTRL_00 0x20
+> +#define REG_PINCTRL_04 0x21
+> +#define REG_PINCTRL_10 0x22
+> +#define REG_PINCTRL_14 0x23
+> +
+> +#define REG_PWM_0_7_EN 0x38
+> +#define REG_PWM_8_15_EN 0x39
+> +
+> +#define REG_TACH_GLOBAL_CTL 0x40
+> +#define REG_TACH_0_7_EN 0x41
+> +#define REG_TACH_8_15_EN 0x42
+> +
+> +#define REG_TACH_HVAL(n) (0x48 + (2 * (n)))
+> +#define REG_TACH_LVAL(n) (0x49 + (2 * (n)))
+> +
+> +#define REG_FSCP_DUTY(n) (0x90 + (2 * (n)))
+> +#define REG_FSCP_DIV(n) (0x91 + (2 * (n)))
+> +#define REG_FSCP_CFG_BASE 0xb0
+> +
+> +/*
+> + * For use in REG_PINCTRL_xx sub-fields.  ALERT (3) also exists for some pins,
+> + * but is currently unsupported.
+> + */
+> +#define PIN_MODE_GPIO 0
+> +#define PIN_MODE_PWM  1
+> +#define PIN_MODE_TACH 2
+> +
+> +#define NUM_CHANNELS 16
+> +
+> +/* Default all PWM channels to 100% */
+> +#define DEFAULT_PWM_DUTY 0xff
+> +
+> +/* Default all PWMs to 1/256 resolution, non-inverted, PWM mode (non-DC) */
+> +#define DEFAULT_FSCP_CFG 0x44
+> +
+> +struct nct7362_data {
+> +	struct i2c_client *client;
 > +	struct regmap *regmap;
-> +	bool enable;
-> +};
-> +
-> +static const struct regmap_config max31827_regmap = {
-> +	.reg_bits = 8,
-> +	.val_bits = 16,
-> +	.max_register = 0xA,
-> +};
-> +
-> +static int write_alarm_val(struct max31827_state *st, unsigned int reg,
-> +			   long val)
-> +{
-> +	unsigned int cfg;
-> +	unsigned int tmp;
-> +	int ret;
-> +
-> +	val = MAX31827_M_DGR_TO_16_BIT(val);
 > +
 > +	/*
-> +	 * Before the Temperature Threshold Alarm and Alarm Hysteresis Threshold
-> +	 * register values are changed over I2C, the part must be in shutdown
-> +	 * mode.
-> +	 *
-> +	 * Mutex is used to ensure, that some other process doesn't change the
-> +	 * configuration register.
+> +	 * Bitmasks of which channels of which functions are enabled (offset by
+> +	 * one so channel 1 is at bit 0).  Because the correspondence between
+> +	 * pin numbers and tach channels differs from that of GPIO/PWM channels,
+> +	 * some bit positions may be set in more than one of these (and some may
+> +	 * be set in none).
 > +	 */
-> +	mutex_lock(&st->lock);
+> +	struct {
+> +		u16 gpio;
+> +		u16 pwm;
+> +		u16 tach;
+> +	} functions;
 > +
-> +	if (!st->enable) {
-> +		ret = regmap_write(st->regmap, reg, val);
-> +		goto unlock;
-> +	}
+> +	/* Pulses-per-revolution for each tach channel */
+> +	u32 tach_ppr[NUM_CHANNELS];
 > +
-> +	ret = regmap_read(st->regmap, MAX31827_CONFIGURATION_REG, &cfg);
-> +	if (ret)
-> +		goto unlock;
+> +#ifdef CONFIG_SENSORS_NCT7362_GPIO
+> +	/* In-use pins, either as PWM/tach or an actively-used GPIO */
+> +	unsigned long active_pins;
 > +
-> +	tmp = cfg & ~(MAX31827_CONFIGURATION_1SHOT_MASK |
-> +		      MAX31827_CONFIGURATION_CNV_RATE_MASK);
-> +	ret = regmap_write(st->regmap, MAX31827_CONFIGURATION_REG, tmp);
-> +	if (ret)
-> +		goto unlock;
+> +	struct gpio_chip gpio;
+> +#endif
+> +};
 > +
-> +	ret = regmap_write(st->regmap, reg, val);
-> +	if (ret)
-> +		goto unlock;
+> +#ifdef CONFIG_SENSORS_NCT7362_GPIO
+> +static int nct7362_gpio_direction_input(struct gpio_chip *gpio, unsigned int offset)
+> +{
+> +	struct nct7362_data *chip = gpiochip_get_data(gpio);
+> +	u8 iocfg = offset < 8 ? REG_GPIO0_IOCFG : REG_GPIO1_IOCFG;
+> +	u8 bit = BIT(offset % 8);
 > +
-> +	ret = regmap_write(st->regmap, MAX31827_CONFIGURATION_REG, cfg);
-> +
-> +unlock:
-> +	mutex_unlock(&st->lock);
-> +	return ret;
+> +	return regmap_update_bits(chip->regmap, iocfg, bit, bit);
 > +}
 > +
-> +static umode_t max31827_is_visible(const void *state,
-> +				   enum hwmon_sensor_types type, u32 attr,
-> +				   int channel)
+> +static int nct7362_gpio_direction_output(struct gpio_chip *gpio, unsigned int offset, int val)
 > +{
-> +	if (type == hwmon_temp) {
-> +		switch (attr) {
-> +		case hwmon_temp_enable:
-> +		case hwmon_temp_max:
-> +		case hwmon_temp_min:
-> +		case hwmon_temp_max_hyst:
-> +		case hwmon_temp_min_hyst:
-> +			return 0644;
-> +		case hwmon_temp_input:
-> +		case hwmon_temp_min_alarm:
-> +		case hwmon_temp_max_alarm:
-> +			return 0444;
-> +		default:
-> +			return 0;
+> +	int status;
+> +	struct nct7362_data *chip = gpiochip_get_data(gpio);
+> +	u8 outreg = offset < 8 ? REG_GPIO0_OUTPUT : REG_GPIO1_OUTPUT;
+> +	u8 iocfg = offset < 8 ? REG_GPIO0_IOCFG : REG_GPIO1_IOCFG;
+> +	u8 bit = BIT(offset % 8);
+> +
+> +	status = regmap_update_bits(chip->regmap, iocfg, bit, 0);
+> +	if (status)
+> +		return status;
+> +
+> +	return regmap_update_bits(chip->regmap, outreg, bit, val ? bit : 0);
+> +}
+> +
+> +static int nct7362_gpio_get_value(struct gpio_chip *gpio, unsigned int offset)
+> +{
+> +	unsigned int inbits;
+> +	struct nct7362_data *chip = gpiochip_get_data(gpio);
+> +	u8 inreg = offset < 8 ? REG_GPIO0_INPUT : REG_GPIO1_INPUT;
+> +	int status = regmap_read(chip->regmap, inreg, &inbits);
+> +
+> +	return status ? : !!(inbits & BIT(offset % 8));
+> +}
+> +
+> +static void nct7362_gpio_set_value(struct gpio_chip *gpio, unsigned int offset, int value)
+> +{
+> +	struct nct7362_data *chip = gpiochip_get_data(gpio);
+> +	u8 outreg = offset < 8 ? REG_GPIO0_OUTPUT : REG_GPIO1_OUTPUT;
+> +	u8 bit = BIT(offset % 8);
+> +	int status = regmap_update_bits(chip->regmap, outreg, bit, value ? bit : 0);
+> +
+> +	/* No other way to report failure */
+> +	if (status)
+> +		dev_dbg(&chip->client->dev, "regmap_update_bits() failed: %d\n", status);
+> +}
+> +
+> +static int nct7362_gpio_request_pin(struct gpio_chip *gpio, unsigned int offset)
+> +{
+> +	struct nct7362_data *chip = gpiochip_get_data(gpio);
+> +
+> +	return test_and_set_bit(offset, &chip->active_pins) ? -EBUSY : 0;
+> +}
+> +
+> +static void nct7362_gpio_free_pin(struct gpio_chip *gpio, unsigned int offset)
+> +{
+> +	struct nct7362_data *chip = gpiochip_get_data(gpio);
+> +
+> +	clear_bit(offset, &chip->active_pins);
+> +}
+> +
+> +static int nct7362_gpio_set_config(struct gpio_chip *gpio, unsigned int offset,
+> +				   unsigned long config)
+> +{
+> +	struct nct7362_data *chip = gpiochip_get_data(gpio);
+> +	u8 modereg = offset < 8 ? REG_GPIO0_OUTMODE : REG_GPIO1_OUTMODE;
+> +	u8 bit = BIT(offset % 8);
+> +	int setting;
+> +	enum pin_config_param param = pinconf_to_config_param(config);
+> +
+> +	switch (param) {
+> +	case PIN_CONFIG_DRIVE_OPEN_DRAIN:
+> +		setting = 0;
+> +		break;
+> +	case PIN_CONFIG_DRIVE_PUSH_PULL:
+> +		setting = 1;
+> +		break;
+> +	default:
+> +		dev_dbg(&chip->client->dev, "unsupported config param %d\n", param);
+> +		return -ENOTSUPP;
+
+checkpatch:
+
+WARNING: ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
+#268: FILE: drivers/hwmon/nct7362.c:173:
++		return -ENOTSUPP;
+
+> +	}
+> +
+> +	return regmap_update_bits(chip->regmap, modereg, bit, setting ? bit : 0);
+
+Why not just set "setting" to "bit" directly and avoid the conditinal here ?
+
+> +}
+> +#endif
+> +
+> +/* Convert a pin number to a PWM channel number */
+> +static inline int pin_to_pwm(int pin)
+> +{
+> +	return pin < 9 ? (pin - 1) : (pin - 2);
+> +}
+> +
+> +#ifdef CONFIG_SENSORS_NCT7362_GPIO
+> +/*
+> + * Convert a pin number to a GPIO number -- interpreting the numbers in the
+> + * datasheet as octal, these are the same as the (decimal) PWM numbers.
+> + */
+> +static inline int pin_to_gpio(int pin)
+> +{
+> +	return pin_to_pwm(pin);
+> +}
+> +
+> +/* GPIO that shares the same pin as the given PWM */
+> +static inline int pwm_to_gpio(int pwm)
+> +{
+> +	/* GPIO & PWM numbering are the same */
+> +	return pwm;
+> +}
+> +
+> +/* GPIO that shares the same pin as the given tach */
+> +static inline int tach_to_gpio(int tach)
+> +{
+> +	int pin = tach < 8 ? (tach + 10) : (tach - 7);
+> +
+> +	return pin_to_gpio(pin);
+> +}
+> +#endif
+> +
+> +/* Convert a pin number to a tach (FANIN) channel number */
+> +static inline int pin_to_tach(int pin)
+> +{
+> +	return pin < 9 ? (pin + 7) : (pin - 10);
+> +}
+> +
+> +static int nct7362_init_pin_functions(struct nct7362_data *chip)
+> +{
+> +	int channel, reg, status;
+> +	u16 *mask;
+> +	u8 function;
+> +	struct device_node *child;
+> +	u8 pinctrl[] = { 0, 0, 0, 0, };
+> +	struct device *dev = &chip->client->dev;
+> +
+> +	for_each_available_child_of_node(dev->of_node, child) {
+> +		int pwmnum, pinctrl_idx, pinctrl_shift;
+> +		u32 pin;
+> +
+> +		if (of_property_read_u32(child, "reg", &pin)) {
+> +			dev_warn(dev, "skipping %pOF due to missing 'reg' property\n", child);
+> +			continue;
+
+This should abort with an error.
+
 > +		}
-> +	} else if (type == hwmon_chip) {
-> +		if (attr == hwmon_chip_update_interval)
-> +			return 0644;
+> +
+> +		if (pin == 0 || pin == 9 || pin > 17) {
+> +			dev_warn(dev, "skipping %pOF with invalid pin number %u\n", child, pin);
+> +			continue;
+
+Same here.
+
+> +		}
+> +
+> +		pwmnum = pin_to_pwm(pin);
+> +		pinctrl_idx = pwmnum / 4;
+> +		pinctrl_shift = 2 * (pwmnum % 4);
+> +
+> +		if (of_node_name_prefix(child, "pwm")) {
+> +			function = PIN_MODE_PWM;
+> +			channel = pin_to_pwm(pin);
+> +			mask = &chip->functions.pwm;
+> +		} else if (of_node_name_prefix(child, "tach")) {
+> +			function = PIN_MODE_TACH;
+> +			channel = pin_to_tach(pin);
+> +			mask = &chip->functions.tach;
+> +			if (of_property_read_u32(child, "nuvoton,pulses-per-revolution",
+> +						 &chip->tach_ppr[channel]))
+> +				chip->tach_ppr[channel] = 2;
+> +#ifdef CONFIG_SENSORS_NCT7362_GPIO
+> +		} else if (of_node_name_prefix(child, "gpio")) {
+> +			function = PIN_MODE_GPIO;
+> +			channel = pin_to_gpio(pin);
+> +			mask = &chip->functions.gpio;
+> +#endif
+> +		} else {
+> +			dev_warn(dev, "skipping %pOF of unknown function\n", child);
+
+and here.
+
+> +			continue;
+> +		}
+> +
+> +		*mask |= BIT(channel);
+> +
+> +		pinctrl[pinctrl_idx] |= function << pinctrl_shift;
+> +	}
+> +
+> +	for (reg = 0; reg < 4; reg++) {
+> +		status = regmap_write(chip->regmap, REG_PINCTRL_00 + reg, pinctrl[reg]);
+> +		if (status)
+> +			return status;
 > +	}
 > +
 > +	return 0;
 > +}
 > +
-> +static int max31827_read(struct device *dev, enum hwmon_sensor_types type,
-> +			 u32 attr, int channel, long *val)
+> +static int nct7362_init_pwm(struct nct7362_data *chip)
 > +{
-> +	struct max31827_state *st = dev_get_drvdata(dev);
-> +	unsigned int uval;
-> +	int ret = 0;
+> +	int ret;
 > +
+> +	for (int i = 0; i < 8; i++) {
+> +		ret = regmap_write(chip->regmap, REG_FSCP_CFG_BASE + i, DEFAULT_FSCP_CFG);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	for (int i = 0; i < NUM_CHANNELS; i++) {
+> +		ret = regmap_write(chip->regmap, REG_FSCP_DUTY(i), DEFAULT_PWM_DUTY);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	for (int i = 0; i < 2; i++) {
+> +		ret = regmap_write(chip->regmap, REG_PWM_0_7_EN + i, 0xff);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int nct7362_init_fan(struct nct7362_data *chip)
+> +{
+> +	int ret;
+> +
+> +	/*
+> +	 * tach_ppr *should* be set for all configured tach channels by this
+> +	 * point, but to ensure we don't end up dividing by zero let's make sure.
+> +	 */
+> +	for (int i = 0; i < 16; i++) {
+> +		if (!chip->tach_ppr[i])
+> +			chip->tach_ppr[i] = 2;
+> +	}
+> +
+> +	/* Enable individual fan tachs */
+> +	for (int i = 0; i < 2; i++) {
+> +		ret = regmap_write(chip->regmap, REG_TACH_0_7_EN + i, 0xff);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	/* Ensure global fan tach enable is on */
+> +	return regmap_update_bits(chip->regmap, REG_TACH_GLOBAL_CTL, 0x80, 0x80);
+> +}
+> +
+> +static int nct7362_init_gpio(struct nct7362_data *chip)
+> +{
+> +#ifdef CONFIG_SENSORS_NCT7362_GPIO
+> +	struct gpio_chip *gpio = &chip->gpio;
+> +
+> +	for (int i = 0; i < 16; i++) {
+> +		/* Pins in use as PWM or tach are permanently active */
+> +		if (chip->functions.pwm & BIT(i))
+> +			set_bit(pwm_to_gpio(i), &chip->active_pins);
+> +		if (chip->functions.tach & BIT(i))
+> +			set_bit(tach_to_gpio(i), &chip->active_pins);
+> +	}
+> +
+> +	gpio->label = dev_name(&chip->client->dev);
+> +	gpio->direction_input = nct7362_gpio_direction_input;
+> +	gpio->direction_output = nct7362_gpio_direction_output;
+> +	gpio->get = nct7362_gpio_get_value;
+> +	gpio->set = nct7362_gpio_set_value;
+> +	gpio->request = nct7362_gpio_request_pin;
+> +	gpio->free = nct7362_gpio_free_pin;
+> +	gpio->set_config = nct7362_gpio_set_config;
+> +	gpio->can_sleep = 1;
+> +	gpio->base = -1;
+> +	gpio->ngpio = NUM_CHANNELS;
+> +	gpio->parent = &chip->client->dev;
+> +	gpio->owner = THIS_MODULE;
+> +
+> +	return devm_gpiochip_add_data(&chip->client->dev, gpio, chip);
+> +#else
+> +	return 0;
+> +#endif
+> +}
+> +
+> +static umode_t nct7362_is_visible(const void *data, enum hwmon_sensor_types type,
+> +				  u32 attr, int channel)
+> +{
+> +	umode_t mode = 0;
+> +	const struct nct7362_data *chip = data;
+> +
+
+Please try to declare variables in reverse christmas tree order where
+possible to improve readability.
+
 > +	switch (type) {
-> +	case hwmon_temp:
+> +	case hwmon_pwm:
+> +		if (!(chip->functions.pwm & BIT(channel)))
+> +			break;
 > +		switch (attr) {
-> +		case hwmon_temp_enable:
-> +			ret = regmap_read(st->regmap,
-> +					  MAX31827_CONFIGURATION_REG, &uval);
-> +			if (ret)
-> +				break;
-> +
-> +			uval = FIELD_GET(MAX31827_CONFIGURATION_1SHOT_MASK |
-> +					 MAX31827_CONFIGURATION_CNV_RATE_MASK,
-> +					 uval);
-> +			*val = !!uval;
-> +
-> +			break;
-> +		case hwmon_temp_input:
-> +			mutex_lock(&st->lock);
-> +
-> +			if (!st->enable) {
-> +				/*
-> +				 * This operation requires mutex protection,
-> +				 * because the chip configuration should not
-> +				 * be changed during the conversion process.
-> +				 */
-> +
-> +				ret = regmap_update_bits(st->regmap,
-> +							 MAX31827_CONFIGURATION_REG,
-> +							 MAX31827_CONFIGURATION_1SHOT_MASK,
-> +							 1);
-> +				if (ret) {
-> +					mutex_unlock(&st->lock);
-> +					return ret;
-> +				}
-> +
-> +				msleep(MAX31827_12_BIT_CNV_TIME);
-> +			}
-> +			ret = regmap_read(st->regmap, MAX31827_T_REG, &uval);
-> +
-> +			mutex_unlock(&st->lock);
-> +
-> +			if (ret)
-> +				break;
-> +
-> +			*val = MAX31827_16_BIT_TO_M_DGR(uval);
-> +
-> +			break;
-> +		case hwmon_temp_max:
-> +			ret = regmap_read(st->regmap, MAX31827_TH_REG, &uval);
-> +			if (ret)
-> +				break;
-> +
-> +			*val = MAX31827_16_BIT_TO_M_DGR(uval);
-> +			break;
-> +		case hwmon_temp_max_hyst:
-> +			ret = regmap_read(st->regmap, MAX31827_TH_HYST_REG,
-> +					  &uval);
-> +			if (ret)
-> +				break;
-> +
-> +			*val = MAX31827_16_BIT_TO_M_DGR(uval);
-> +			break;
-> +		case hwmon_temp_max_alarm:
-> +			ret = regmap_read(st->regmap,
-> +					  MAX31827_CONFIGURATION_REG, &uval);
-> +			if (ret)
-> +				break;
-> +
-> +			*val = FIELD_GET(MAX31827_CONFIGURATION_O_TEMP_STAT_MASK,
-> +					 uval);
-> +			break;
-> +		case hwmon_temp_min:
-> +			ret = regmap_read(st->regmap, MAX31827_TL_REG, &uval);
-> +			if (ret)
-> +				break;
-> +
-> +			*val = MAX31827_16_BIT_TO_M_DGR(uval);
-> +			break;
-> +		case hwmon_temp_min_hyst:
-> +			ret = regmap_read(st->regmap, MAX31827_TL_HYST_REG,
-> +					  &uval);
-> +			if (ret)
-> +				break;
-> +
-> +			*val = MAX31827_16_BIT_TO_M_DGR(uval);
-> +			break;
-> +		case hwmon_temp_min_alarm:
-> +			ret = regmap_read(st->regmap,
-> +					  MAX31827_CONFIGURATION_REG, &uval);
-> +			if (ret)
-> +				break;
-> +
-> +			*val = FIELD_GET(MAX31827_CONFIGURATION_U_TEMP_STAT_MASK,
-> +					 uval);
+> +		case hwmon_pwm_enable:
+> +		case hwmon_pwm_input:
+> +		case hwmon_pwm_freq:
+> +		case hwmon_pwm_mode:
+> +			mode = 0644;
 > +			break;
 > +		default:
-> +			ret = -EOPNOTSUPP;
 > +			break;
 > +		}
-> +
 > +		break;
-> +
-> +	case hwmon_chip:
-> +		if (attr == hwmon_chip_update_interval) {
-> +			ret = regmap_read(st->regmap,
-> +					  MAX31827_CONFIGURATION_REG, &uval);
-> +			if (ret)
-> +				break;
-> +
-> +			uval = FIELD_GET(MAX31827_CONFIGURATION_CNV_RATE_MASK,
-> +					 uval);
-> +			switch (uval) {
-> +			case MAX31827_CNV_1_DIV_64_HZ:
-> +				*val = 64000;
-> +				break;
-> +			case MAX31827_CNV_1_DIV_32_HZ:
-> +				*val = 32000;
-> +				break;
-> +			case MAX31827_CNV_1_DIV_16_HZ:
-> +				*val = 16000;
-> +				break;
-> +			case MAX31827_CNV_1_DIV_4_HZ:
-> +				*val = 4000;
-> +				break;
-> +			case MAX31827_CNV_1_HZ:
-> +				*val = 1000;
-> +				break;
-> +			case MAX31827_CNV_4_HZ:
-> +				*val = 250;
-> +				break;
-> +			case MAX31827_CNV_8_HZ:
-> +				*val = 125;
-> +				break;
-> +			default:
-> +				*val = 0;
-> +				break;
-> +			}
+> +	case hwmon_fan:
+> +		if (!(chip->functions.tach & BIT(channel)))
+> +			break;
+> +		switch (attr) {
+> +		case hwmon_fan_input:
+> +			mode = 0444;
+> +			break;
+> +		default:
+> +			break;
 > +		}
 > +		break;
-> +
 > +	default:
-> +		ret = -EOPNOTSUPP;
 > +		break;
 > +	}
 > +
-> +	return ret;
+> +	return mode;
 > +}
 > +
-> +static int max31827_write(struct device *dev, enum hwmon_sensor_types type,
-> +			  u32 attr, int channel, long val)
+> +/*
+> + * We set STEP to 1 on all PWM channels during initialization (for
+> + * higher-resolution duty cycle control) and never change it, so our frequency
+> + * calculations all assume it's set to 1 rather than re-reading the register all
+> + * the time.
+> + *
+> + * Supported frequency ranges:
+> + *  DIVSEL=0: 488Hz - 62.5KHz
+> + *  DIVSEL=1: 2Hz - 244Hz
+> + */
+> +#define PWM_STEP 1
+> +#define BASE_FANCLK 16000000
+> +#define PWM_FREQ_MIN_DIVSEL0 (BASE_FANCLK / 32768) /* 488 */
+> +#define PWM_FREQ_MAX_DIVSEL1 (BASE_FANCLK / 65536) /* 244 */
+> +
+> +/* Frequency threshold below which we switch to DIVSEL=1 */
+> +#define PWM_DIVSEL_CUTOFF ((PWM_FREQ_MIN_DIVSEL0 + PWM_FREQ_MAX_DIVSEL1) / 2)
+> +
+> +static long nct7362_pwm_freq(long divisor, bool divsel)
 > +{
-> +	struct max31827_state *st = dev_get_drvdata(dev);
-> +	int ret;
+> +	long denom = (divisor + 1) << (7 + PWM_STEP + (divsel ? 8 : 0));
 > +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_enable:
-> +			if (val >> 1)
-> +				return -EOPNOTSUPP;
+> +	return BASE_FANCLK / denom;
+> +}
 > +
-> +			mutex_lock(&st->lock);
-> +			/**
-> +			 * The chip should not be enabled while a conversion is
-> +			 * performed. Neither should the chip be enabled when
-> +			 * the alarm values are changed.
-> +			 */
+> +static int nct7362_read_pwm(struct nct7362_data *chip, u32 attr, int channel, long *val)
+> +{
+> +	u8 reg;
+> +	int status;
+> +	unsigned int tmp;
 > +
-> +			st->enable = val;
+> +	if (!(chip->functions.pwm & BIT(channel)))
+> +		return -EBUSY;
+
+Why is this needed ? If the bit is configured as gpio the pwm channel
+should not be available.
+
 > +
-> +			ret = regmap_update_bits(st->regmap,
-> +						 MAX31827_CONFIGURATION_REG,
-> +						 MAX31827_CONFIGURATION_1SHOT_MASK |
-> +						 MAX31827_CONFIGURATION_CNV_RATE_MASK,
-> +						 MAX31827_DEVICE_ENABLE(val));
+> +	switch (attr) {
+> +	case hwmon_pwm_enable:
+> +		reg = channel < 8 ? REG_PWM_0_7_EN : REG_PWM_8_15_EN;
+> +		status = regmap_read(chip->regmap, reg, &tmp);
+> +		if (!status)
+> +			*val = !!(tmp & BIT(channel % 8));
+
+Please consistently use
+		if (status)
+			return status;
+		*val = ...
+
+> +		break;
 > +
-> +			mutex_unlock(&st->lock);
+> +	case hwmon_pwm_freq:
+> +		reg = REG_FSCP_DIV(channel);
+> +		status = regmap_read(chip->regmap, reg, &tmp);
+> +		if (status)
+> +			return status;
 > +
-> +			return ret;
+> +		*val = nct7362_pwm_freq(tmp & 0x7f, !!(tmp & 0x80));
+> +		break;
 > +
-> +		case hwmon_temp_max:
-> +			return write_alarm_val(st, MAX31827_TH_REG, val);
+> +	case hwmon_pwm_input:
+> +		reg = REG_FSCP_DUTY(channel);
+> +		status = regmap_read(chip->regmap, reg, &tmp);
+> +		if (!status)
+> +			*val = tmp;
+> +		break;
 > +
-> +		case hwmon_temp_max_hyst:
-> +			return write_alarm_val(st, MAX31827_TH_HYST_REG, val);
-> +
-> +		case hwmon_temp_min:
-> +			return write_alarm_val(st, MAX31827_TL_REG, val);
-> +
-> +		case hwmon_temp_min_hyst:
-> +			return write_alarm_val(st, MAX31827_TL_HYST_REG, val);
-> +
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +	case hwmon_chip:
-> +		if (attr == hwmon_chip_update_interval) {
-> +			if (!st->enable)
-> +				return -EOPNOTSUPP;
-> +
-> +			switch (val) {
-> +			case 125:
-> +				val = MAX31827_CNV_8_HZ;
-> +				break;
-> +			case 250:
-> +				val = MAX31827_CNV_4_HZ;
-> +				break;
-> +			case 1000:
-> +				val = MAX31827_CNV_1_HZ;
-> +				break;
-> +			case 4000:
-> +				val = MAX31827_CNV_1_DIV_4_HZ;
-> +				break;
-> +			case 16000:
-> +				val = MAX31827_CNV_1_DIV_16_HZ;
-> +				break;
-> +			case 32000:
-> +				val = MAX31827_CNV_1_DIV_32_HZ;
-> +				break;
-> +			case 64000:
-> +				val = MAX31827_CNV_1_DIV_64_HZ;
-> +				break;
-> +			default:
-> +				return -EOPNOTSUPP;
-> +			}
-> +
-> +			val = FIELD_PREP(MAX31827_CONFIGURATION_CNV_RATE_MASK,
-> +					 val);
-> +
-> +			return regmap_update_bits(st->regmap,
-> +						  MAX31827_CONFIGURATION_REG,
-> +						  MAX31827_CONFIGURATION_CNV_RATE_MASK,
-> +						  val);
-> +		}
+> +	case hwmon_pwm_mode:
+> +		reg = REG_FSCP_CFG_BASE + (channel / 2);
+> +		status = regmap_read(chip->regmap, reg, &tmp);
+> +		if (!status)
+> +			*val = !(tmp & BIT(4 * (channel % 2)));
 > +		break;
 > +
 > +	default:
 > +		return -EOPNOTSUPP;
 > +	}
 > +
-> +	return -EOPNOTSUPP;
+> +	return status;
 > +}
 > +
-> +static int max31827_init_client(struct max31827_state *st)
+> +static int nct7362_write_pwm(struct nct7362_data *chip, u32 attr, int channel, long val)
 > +{
-> +	st->enable = true;
+> +	u8 reg, bit, divsel;
+> +	long divisor;
+> +	int status;
 > +
-> +	return regmap_update_bits(st->regmap, MAX31827_CONFIGURATION_REG,
-> +				  MAX31827_CONFIGURATION_1SHOT_MASK |
-> +					  MAX31827_CONFIGURATION_CNV_RATE_MASK,
-> +				  MAX31827_DEVICE_ENABLE(1));
+> +	if (!(chip->functions.pwm & BIT(channel)))
+> +		return -EBUSY;
+
+Same question as above.
+
+> +
+> +	switch (attr) {
+> +	case hwmon_pwm_input:
+> +		reg = REG_FSCP_DUTY(channel);
+> +		status = regmap_write(chip->regmap, reg, val);
+> +		break;
+> +
+> +	case hwmon_pwm_enable:
+> +		reg = channel < 8 ? REG_PWM_0_7_EN : REG_PWM_8_15_EN;
+> +		bit = BIT(channel % 8);
+> +		status = regmap_update_bits(chip->regmap, reg, bit, val ? bit : 0);
+
+This (and other functions below) should not accept random values.
+
+> +		break;
+> +
+> +	case hwmon_pwm_mode:
+> +		reg = REG_FSCP_CFG_BASE + (channel / 2);
+> +		bit = BIT(4 * (channel % 2));
+> +		status = regmap_update_bits(chip->regmap, reg, bit, val ? 0 : bit);
+> +		break;
+> +
+> +	case hwmon_pwm_freq:
+> +		divsel = val < PWM_DIVSEL_CUTOFF;
+> +
+> +		divisor = BASE_FANCLK / (val << (7 + PWM_STEP + (divsel ? 8 : 0))) - 1;
+> +		divisor = clamp(divisor, 0L, 0x7fL);
+> +		divisor |= divsel << 7;
+> +
+> +		reg = REG_FSCP_DIV(channel);
+> +		status = regmap_write(chip->regmap, reg, divisor);
+> +		break;
+> +
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return status;
 > +}
 > +
-> +static const struct hwmon_channel_info *max31827_info[] = {
-> +	HWMON_CHANNEL_INFO(temp, HWMON_T_ENABLE | HWMON_T_INPUT | HWMON_T_MIN |
-> +					 HWMON_T_MIN_HYST | HWMON_T_MIN_ALARM |
-> +					 HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +					 HWMON_T_MAX_ALARM),
-> +	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
+> +static int nct7362_read_fan_speed(struct nct7362_data *chip, int channel, long *val)
+> +{
+> +	unsigned int hi, lo, count;
+> +	int status;
+> +
+> +	status = regmap_read(chip->regmap, REG_TACH_HVAL(channel), &hi);
+> +	if (status)
+> +		return status;
+> +
+> +	status = regmap_read(chip->regmap, REG_TACH_LVAL(channel), &lo);
+> +	if (status)
+> +		return status;
+> +
+> +	count = (hi << 5) | (lo & 0x1f);
+> +
+
+The problem with this approach is that hval could change after it was read.
+The datasheet is not public, so there is no means for me to verify if the
+chip prevents this from happening. Please add a comment explaining why this
+can not result in bogus readings.
+
+> +	*val = 1350000 / (count * chip->tach_ppr[channel] / 2);
+> +
+> +	return 0;
+> +}
+> +
+> +static int nct7362_read_tach(struct nct7362_data *chip, u32 attr, int channel, long *val)
+> +{
+> +	if (!(chip->functions.tach & BIT(channel)))
+> +		return -EBUSY;
+> +
+
+Same question as above.
+
+> +	switch (attr) {
+> +	case hwmon_fan_input:
+> +		return nct7362_read_fan_speed(chip, channel, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int nct7362_read(struct device *dev, enum hwmon_sensor_types type,
+> +			u32 attr, int channel, long *val)
+> +{
+> +	struct nct7362_data *chip = dev_get_drvdata(dev);
+> +
+> +	switch (type) {
+> +	case hwmon_pwm:
+> +		return nct7362_read_pwm(chip, attr, channel, val);
+> +	case hwmon_fan:
+> +		return nct7362_read_tach(chip, attr, channel, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int nct7362_write(struct device *dev, enum hwmon_sensor_types type,
+> +			 u32 attr, int channel, long val)
+> +{
+> +	struct nct7362_data *chip = dev_get_drvdata(dev);
+> +
+> +	switch (type) {
+> +	case hwmon_pwm:
+> +		return nct7362_write_pwm(chip, attr, channel, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static const struct hwmon_ops nct7362_hwmon_ops = {
+> +	.is_visible = nct7362_is_visible,
+> +	.read = nct7362_read,
+> +	.write = nct7362_write,
+> +};
+> +
+> +static const struct hwmon_channel_info *nct7362_info[] = {
+> +	HWMON_CHANNEL_INFO(fan,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT),
+> +	HWMON_CHANNEL_INFO(pwm,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_FREQ | HWMON_PWM_MODE),
 > +	NULL,
 > +};
 > +
-> +static const struct hwmon_ops max31827_hwmon_ops = {
-> +	.is_visible = max31827_is_visible,
-> +	.read = max31827_read,
-> +	.write = max31827_write,
+> +static const struct hwmon_chip_info nct7362_chip_info = {
+> +	.ops = &nct7362_hwmon_ops,
+> +	.info = nct7362_info,
 > +};
 > +
-> +static const struct hwmon_chip_info max31827_chip_info = {
-> +	.ops = &max31827_hwmon_ops,
-> +	.info = max31827_info,
+> +static const struct regmap_config nct7362_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
 > +};
 > +
-> +static int max31827_probe(struct i2c_client *client)
+> +static int nct7362_probe(struct i2c_client *client)
 > +{
-> +	struct device *dev = &client->dev;
 > +	struct device *hwmon_dev;
-> +	struct max31827_state *st;
-> +	int err;
+> +	struct device *dev = &client->dev;
+> +	struct nct7362_data *chip;
+> +	int ret;
 > +
-> +	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_WORD_DATA))
-> +		return -EOPNOTSUPP;
-> +
-> +	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
-> +	if (!st)
+> +	chip = devm_kzalloc(dev, sizeof(*chip), GFP_KERNEL);
+> +	if (!chip)
 > +		return -ENOMEM;
 > +
-> +	mutex_init(&st->lock);
+> +	chip->client = client;
+> +	chip->regmap = devm_regmap_init_i2c(client, &nct7362_regmap_config);
+> +	if (IS_ERR(chip->regmap))
+> +		return PTR_ERR(chip->regmap);
 > +
-> +	st->regmap = devm_regmap_init_i2c(client, &max31827_regmap);
-> +	if (IS_ERR(st->regmap))
-> +		return dev_err_probe(dev, PTR_ERR(st->regmap),
-> +				     "Failed to allocate regmap.\n");
+> +	ret = nct7362_init_pin_functions(chip);
+> +	if (ret)
+> +		return ret;
 > +
-> +	err = max31827_init_client(st);
-> +	if (err)
-> +		return err;
+> +	ret = nct7362_init_pwm(chip);
+> +	if (ret)
+> +		return ret;
 > +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, st,
-> +							 &max31827_chip_info,
-> +							 NULL);
+> +	ret = nct7362_init_fan(chip);
+> +	if (ret)
+> +		return ret;
 > +
+> +	ret = nct7362_init_gpio(chip);
+> +	if (ret)
+> +		return ret;
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, chip,
+> +							 &nct7362_chip_info, NULL);
 > +	return PTR_ERR_OR_ZERO(hwmon_dev);
 > +}
 > +
-> +static const struct i2c_device_id max31827_i2c_ids[] = {
-> +	{ "max31827", 0 },
+> +static const struct i2c_device_id nct7362_idtable[] = {
+> +	{ "nct7362", },
 > +	{ }
 > +};
-> +MODULE_DEVICE_TABLE(i2c, max31827_i2c_ids);
+> +MODULE_DEVICE_TABLE(i2c, nct7362_idtable);
 > +
-> +static const struct of_device_id max31827_of_match[] = {
-> +	{ .compatible = "max31827" },
-
-Doesn't match what the binding says (binding is correct).
-
-Reported by 'make dt_compatible_check'.
-
-Rob
+> +static const struct of_device_id __maybe_unused nct7362_of_match[] = {
+> +	{ .compatible = "nuvoton,nct7362", },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, nct7362_of_match);
+> +
+> +static struct i2c_driver nct7362_driver = {
+> +	.class = I2C_CLASS_HWMON,
+> +	.driver = {
+> +		.name = DRVNAME,
+> +		.of_match_table = of_match_ptr(nct7362_of_match),
+> +	},
+> +	.probe_new = nct7362_probe,
+> +	.id_table = nct7362_idtable,
+> +};
+> +
+> +module_i2c_driver(nct7362_driver);
+> +
+> +MODULE_AUTHOR("Zev Weiss <zev@bewilderbeest.net>");
+> +MODULE_DESCRIPTION("NCT7362Y fan controller driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.40.0.5.gf6e3b97ba6d2.dirty
+> 
