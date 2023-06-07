@@ -2,59 +2,60 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0D49C7EE43
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jun 2023 07:10:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA407C7EE29
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jun 2023 08:34:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233837AbjFGHKQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 7 Jun 2023 03:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
+        id S238532AbjFGIec (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 7 Jun 2023 04:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234052AbjFGHKP (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Jun 2023 03:10:15 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A79F198B
-        for <linux-hwmon@vger.kernel.org>; Wed,  7 Jun 2023 00:10:11 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9741caaf9d4so1033074266b.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 07 Jun 2023 00:10:11 -0700 (PDT)
+        with ESMTP id S237056AbjFGIeb (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Jun 2023 04:34:31 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8A01988
+        for <linux-hwmon@vger.kernel.org>; Wed,  7 Jun 2023 01:34:02 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-5147e40bbbbso837893a12.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 07 Jun 2023 01:34:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686121809; x=1688713809;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1686126840; x=1688718840;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=RNbd0rV0wgo4TlBHE0Z+HQIt/9tYb3WUn2Xisg5I4Vk=;
-        b=UOSj4A+2ZRDTz2ZtgutALrHXYmvxP82XQkIEWX5OyM4RK3+i2hw5jh9/t/vT+D6xP0
-         C5jQg/TV6Qk3cOSJgmDaFnNbkCcBkNSheyfauSsdM5ZP4o3gyWe6x85+0Cd2ntOe1kRe
-         yiWkhIGIpVEr35zhrEWAYou+0Q5j/0X3PPEkS1AT4MgWBVlHVRnfZdJTGypF0t6EgUIY
-         8am/szsW/5k//patGgsMyH3FCAqRqDe6o5tZnVgouzp68VDOppdXE2Jqh3EkIkXkjW6Y
-         JGAdMAWsWWRjZOIZ70i3I6JNz7RJtrMtaVaBM57nyZdhRHS3S/NlEJYLdyBVdS1Rp5YD
-         Ud9Q==
+        bh=NHYmPirAe/9yvPI0Un/v2zVHDoxK5QiPyOUyzdkadvI=;
+        b=U2hVnnnQHDbTv1gfXtWS8Pqlo7XQNgezPdGgIOH15eBZc69fe4DzqxB+O0KT+AwOd0
+         U/ONfqGQEzf+j24bGuDllsF83FLGhDWc19JJWKjOeDe4bNSvAtGmeBPYHdMjrZsakqcD
+         NaiGPG6Ts0znHSVO4WYEQVESzMF8KM4qlRZPKL6QCxWPRecPCQsKEZJmLaHIs0QWtwv9
+         XGOG4DtNMaj67xC4rdSipeUjR4h+PxN9m4SGyy9kc3xrSsLiR7l2EaHPO94FL2RT8xwf
+         aTQMXrc1m90PqKIfLUJr3psB9ASdlkyuH2y+nqiyxMkhx1sgmXUBP5Sk8XiFZ/fbeGj8
+         djDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686121809; x=1688713809;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686126840; x=1688718840;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RNbd0rV0wgo4TlBHE0Z+HQIt/9tYb3WUn2Xisg5I4Vk=;
-        b=TUZ7V//wFgy+9DHQTjAzLFQQieNsILpxMbZzggpfhtu4GD2eAayDKCjtNoa4LNxKDI
-         K3ivVWtCZSb+7vVrtDC8ZMkePYG3IldHwKaAT1ZLah0jBzQ4kPBIr1yc2Ktw7kJ1B9td
-         FdNTnOw2rrguY60Pm7z2yG/kG8e492VM0HYZpEk6/fPRsWqsfgtcsWNVlCqzJR5ILmOE
-         OYWv/uehGIXqA42MQHKjbn3Cd/dAUFlLh+mPe+i6xWn2xVBiWpSTJYVsU2ed/ykL9XrC
-         IfDLo0mJqmHnYDcATs8tAyMf6jaYu8wIpz44q59osCus9T0OVLqyExcenWQsz420wa/B
-         BD3A==
-X-Gm-Message-State: AC+VfDy0RBBHuapsVd843kdU2a1I5yg2utLnlMizuBeeIf+eejbOt0x3
-        KTrqDsVMz2GrxSNsJI8Y7iXCsA==
-X-Google-Smtp-Source: ACHHUZ7aeESog1csl2k7sGYQ2vfcQCGBYNFejR21FOhToVA+9TBvt7DhY+vJamrZ7lva5yKLFFVEcA==
-X-Received: by 2002:a17:907:3f9a:b0:96f:8666:5fc4 with SMTP id hr26-20020a1709073f9a00b0096f86665fc4mr6012541ejc.50.1686121809565;
-        Wed, 07 Jun 2023 00:10:09 -0700 (PDT)
+        bh=NHYmPirAe/9yvPI0Un/v2zVHDoxK5QiPyOUyzdkadvI=;
+        b=gMEadWhihro1Dr2gsLne9gBydmGhkXclcTxzZARGQLCNEVmwn5wCpe0B40d92Eeq42
+         aQGSOFWBufXx6z0bj5giSa8ONJSdF2njo03jFhk6ozgkbqNP7lwFQTwV/XO7g+e3JH3V
+         qNM+8qyvTO8xDfypRKxC0O0AI4eaoV2UP4QG0nz2RZZTkH/bwff5V/moxJ+1joYLinlZ
+         1hgnTbDad17pgwigcOYj+GaO1MGWL9jKPn1RrCBwSEkuWxw5QNmxZZ4tcMktKe7FhRxe
+         gd/YU0GfUwk3WOh1EbsiPhJo40jvxrQ3zxwamyKSXt7m8V5q9/Pkfrz/Q/fvDSeRGvNs
+         T0SQ==
+X-Gm-Message-State: AC+VfDyJccuxLckrY9Me2vzuUZWoeOCw1Hw4TerEgVWmDb2hH5vV3xic
+        gW0efmi1w0+EjifYKVm9w24hhw==
+X-Google-Smtp-Source: ACHHUZ6h6766vJMwn/tNHn3JSBfjpWgC88xarXppxRZ+ze1TywPShnS202vrMK1Xo6zB8ufvs3B7nw==
+X-Received: by 2002:a17:907:e8f:b0:978:8925:7a00 with SMTP id ho15-20020a1709070e8f00b0097889257a00mr266294ejc.15.1686126840620;
+        Wed, 07 Jun 2023 01:34:00 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id fx4-20020a170906b74400b00977d0f1c5bcsm4203514ejb.69.2023.06.07.00.10.06
+        by smtp.gmail.com with ESMTPSA id ci17-20020a170906c35100b009787ad3157bsm823497ejb.39.2023.06.07.01.33.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 00:10:09 -0700 (PDT)
-Message-ID: <742d3161-3a4d-ea77-7bd4-85f6636bf400@linaro.org>
-Date:   Wed, 7 Jun 2023 09:10:05 +0200
+        Wed, 07 Jun 2023 01:34:00 -0700 (PDT)
+Message-ID: <2af1bc5b-0be6-46cc-3155-307f13fbba11@linaro.org>
+Date:   Wed, 7 Jun 2023 10:33:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
 Subject: Re: [v5 3/5] dt-bindings: mfd: Add aspeed pwm-tach binding
+Content-Language: en-US
 To:     Billy Tsai <billy_tsai@aspeedtech.com>,
         Patrick Williams <patrick@stwcx.xyz>
 Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
@@ -83,123 +84,26 @@ References: <20230606094535.5388-1-billy_tsai@aspeedtech.com>
  <ZH89fXknZlhGmM_H@heinlein.vulture-banana.ts.net>
  <c28f963e-d13c-6b5c-c389-996e986f81d5@linaro.org>
  <SG2PR06MB33652E18980E9CF8E4F0894D8B53A@SG2PR06MB3365.apcprd06.prod.outlook.com>
-Content-Language: en-US
+ <742d3161-3a4d-ea77-7bd4-85f6636bf400@linaro.org>
+ <SG2PR06MB33657063A2E3239AD0A21F718B53A@SG2PR06MB3365.apcprd06.prod.outlook.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <SG2PR06MB33652E18980E9CF8E4F0894D8B53A@SG2PR06MB3365.apcprd06.prod.outlook.com>
+In-Reply-To: <SG2PR06MB33657063A2E3239AD0A21F718B53A@SG2PR06MB3365.apcprd06.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 07/06/2023 08:26, Billy Tsai wrote:
->         On 06/06/2023 16:06, Patrick Williams wrote:
->         >> On Tue, Jun 06, 2023 at 12:49:04PM +0200, Krzysztof Kozlowski wrote:
->         >>
->         >> Hi Krzysztof,
->         >>
->         >> Thank you for reviewing this from Billy.
->         >>
->         >> The Aspeed chip is heavily used by the OpenBMC community and the 2600
->         >> has been used in production systems for almost 2 years now.  Many
->         >> companies are having to carry previous versions of these as patches, and
->         >> some of the APIs changed since the last revision from Billy.  So, I had
->         >> asked him to submit the latest patch set with as many revisions as he
->         >> understood what to change, since the conversation seemed to have died
->         >> since last time he submitted.
->         >>
->         >> I don't believe Billy is intentionally ignoring your feedback and he is
->         >> motivated to get this patch set wrapped up into an acceptable state.
->         >>
->         >>> On 06/06/2023 11:45, Billy Tsai wrote:
->         >>
->         >>> NAK. You got here clear comment. You cannot have simple MFD with
->         >>> resources. It is not simple anymore.
->         >>>
->         >>
->         >> In fairness, Billy asked for clarification from you on this point and didn't
->         >> receive it.
->         >>
->         >> https://lore.kernel.org/lkml/24DD1FEB-95F3-47BE-BE61-8B0E6FBDE20F@aspeedtech.com/
+On 07/06/2023 10:32, Billy Tsai wrote:
+> Ok, I got it. I will remove usage of the simple-mfd and parent node in next version of the patch.
+> Thanks
 > 
->         > I gave the instruction what Billy should do:
-> 
->         > https://lore.kernel.org/lkml/41500a04-b004-0e2c-20a1-3a3092b90e6d@linaro.org/
-> 
->         > What about other ignored comments? About subject, quotes and more? Even
->         > if this one was unclear, then why ignoring all the rest?
-> 
-> It's possible that there was some confusion regarding your message. I apologize for any misunderstanding.
-> About the subject: I apologize for the misunderstanding. I just drop the redundant "bindings" in the commit message.
 
-Read entire message, not some parts of it.
+1. Whether parent node stays or not, depends on the hardware. Please do
+not make random changes which do not correspond to the hardware.
 
-"Subject: drop second, redundant "bindings".
-Also use proper PATCH prefix."
-
-Where did you drop the bindings in the subject? I still see it, look:
-"dt-bindings: mfd: Add aspeed pwm-tach binding"
-                                       ^^^^^^^^ what is this?
-
-> About the quotes: I believe the issue was simply related to the order of the patches, and I have resolved it. Did I misunderstand?
-
-I still see them, so how did you solve them?
-
-> About the Missing description:
-> 
->> +patternProperties:
->> +  "^fan@[a-z0-9]+$":
->> +    type: object
-> 
->> Missing description. But more important - why do you have such child
->> nodes? Your example does not have them. What's the point? Do you expect
->> different number of fans per one device (one compatible)?
-> 
-> In this patch series, I have included examples and descriptions to provide additional information.
-> The child node is used to enable the channel of this tach controller.
-
-You do not need children for this.
-
-> I expect that the dts will include information regarding the number of fans connected to the board and their corresponding channels.
-
-Your example DTS must be complete and nothing like this was there. There
-is still no point in the children.
-
-> 
->         >>
->         >> He felt what he was trying to accomplish met the documented
->         >> expectations.  Are there some changes that need to be done in mfd.txt to
->         >> further clarify when to use it and when not to?
-> 
->         > I think mfd.txt clearly states:
->         > "For more complex devices, when the nexus driver has to
->         > probe registers to figure out what child devices exist etc, this should
->         > not be used. In the latter case the child devices will be determined by
->         > the operating system."
-> 
-> About the mfd:
-> For our pwm and tach devices, there is no need to check/apply any hardware register from parent to determine child’s existence or functional.
-> They don’t have any dependency on the parent node. 
-
-You are joking right? The dependency is clearly visible in the driver.
-You are getting parent's node to get its resources. That's the
-dependency which is not allowed. Children should take care of their
-resources, not parent's!
-
-> In fact, it doesn’t require a specific driver to bind with the "aspeed,ast2600-pwm-tach" label. Their purpose is solely to share the same clock, reset phandle and base address.
-
-That's what the drivers are for, so you need it...
-
-> The main reason for using simple-mfd in this case is because these two independent devices share the same base address. In fact, I can relocate the clock and reset configurations to the child nodes rather than the parent node.
-
-How? These are clocks of parent. Don't create fake DTS to represent
-workarounds. Or you want to say that current DTS is fake and does not
-match the hardware?
-
->  In this case, I still can't use simple-mfd?
-
-For the last time: No. You cannot, because you have resources needed for
-children.
+2. Implement all, *all* the comments from previous discussions, not only
+this one.
 
 Best regards,
 Krzysztof
