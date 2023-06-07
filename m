@@ -2,118 +2,189 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C10EC77B7A
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jun 2023 08:56:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCF54C7EE29
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Jun 2023 10:25:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239617AbjFGI4d (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 7 Jun 2023 04:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
+        id S239099AbjFGKYr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 7 Jun 2023 06:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239626AbjFGI4M (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Jun 2023 04:56:12 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811931BFB
-        for <linux-hwmon@vger.kernel.org>; Wed,  7 Jun 2023 01:55:13 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-516a008e495so369614a12.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 07 Jun 2023 01:55:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686128112; x=1688720112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RTpA5qOAPRS8MQZfyN8Ss9cXLKE3reuQWNe17eVOs98=;
-        b=D2ESwCvV3EMJ4Ca9Xo0YrNr2h8zDu3w8UAFRDTvjKd+CzOHysYAMrUv95WmgXW6pef
-         PsKk6OT+GE3LhG59KbziqQ8SX2zQaEPT9u8GVDR84WIwdNAJaeEZI0k91AdVnjG4fkba
-         7QfIE+0YEtfGCqwMJjmHD0uUn7sG3yGccZKVA9w7gvuWa2pSa7UzCkUG/q57UumGb1EA
-         4OKi4guQJOqGhlKfXqujVgAzpzyCQ7hJotGxoUFQ9FHVd4N13KRLYrRg+JJE1C5Pxxon
-         yqRiF+kOeMILJ7ArRRRzkzEFaxvUjTteQsnxlZPRwwLMcnLuFClt6rOtK1yjIsDrIlmd
-         ftfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686128112; x=1688720112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RTpA5qOAPRS8MQZfyN8Ss9cXLKE3reuQWNe17eVOs98=;
-        b=lPH7N/KVdrg/t9RRjFch+H9EuG+LFQCkQVFKEM2g8Az0cdNt+SK3o/+KGoJT9dTH9T
-         DuPVL7FDGChgVonyAOWmxGj6PpcpwlPgSChggCu9Inkg0QFserlaFeLPZs1ryNw3V9MZ
-         ENcXTzr+/+ilfaWJonUTYfxd96NLr2vF0YvyTvQrrYn5NCvBG/3QRa51eViDJK2V9oll
-         QwjJro4smNAJY4mwZyqBItebvJ7/bxYjoG3uLrCFwahpn64f/hfOxAM/xMs1GR5m3NFk
-         lrfd0S3r2qcJgfz3t4QEglkJOaOXV0H+qV60W+/s8Wdv9vfjN//vvpVjwHuGBuemUbcl
-         qAeg==
-X-Gm-Message-State: AC+VfDxnbGkh4kZjYknDWiHa0KXEuzfCNvKF1yhB9bpfoh6Yjmh1VBLD
-        VdPYliu9GXOsk+GMQUY2dw6EwA==
-X-Google-Smtp-Source: ACHHUZ68EljsPgkNMfLt/pjzYCbcf3rch3Eqf0hQ739bCBHvP3l1XP1YD46PoScoXp1Rg3YgbqRIWg==
-X-Received: by 2002:aa7:c59a:0:b0:514:9e47:4319 with SMTP id g26-20020aa7c59a000000b005149e474319mr4990483edq.5.1686128111991;
-        Wed, 07 Jun 2023 01:55:11 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id u6-20020aa7d0c6000000b0050488d1d376sm5951735edo.0.2023.06.07.01.55.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 01:55:11 -0700 (PDT)
-Message-ID: <c8fe71a4-f8bb-d0a5-a227-14040fa024a9@linaro.org>
-Date:   Wed, 7 Jun 2023 10:55:08 +0200
+        with ESMTP id S238701AbjFGKYn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Jun 2023 06:24:43 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CA21BD8;
+        Wed,  7 Jun 2023 03:24:40 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (174-21-172-149.tukw.qwest.net [174.21.172.149])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 13008CFC;
+        Wed,  7 Jun 2023 03:18:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1686133121;
+        bh=Wi0tNbMeMIxnA5OELgarZDXHHas4dR4zF0TSjLM+/t0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=UQcFsAPOgEw0D/5m+IYx2uAnFOA9vOUQM/J1vHoGB4QVEnJYUF48kp4gy0+RJMu7J
+         W1JjgcqeawV/YqmKHrhx11mLag50cCb0hm5y8P353DlvYBJ1xSzGhi85q81xqW+HVt
+         N2bs5WjhQ741nN++oU2HPzEtzhY2mfE1xPlf/h5c=
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Cc:     Zev Weiss <zev@bewilderbeest.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: [PATCH 1/2] dt-bindings: hwmon: Add Nuvoton NCT7362Y binding
+Date:   Wed,  7 Jun 2023 03:18:29 -0700
+Message-ID: <20230607101827.8544-5-zev@bewilderbeest.net>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230607101827.8544-4-zev@bewilderbeest.net>
+References: <20230607101827.8544-4-zev@bewilderbeest.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [v5 3/5] dt-bindings: mfd: Add aspeed pwm-tach binding
-Content-Language: en-US
-To:     Billy Tsai <billy_tsai@aspeedtech.com>,
-        Patrick Williams <patrick@stwcx.xyz>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-References: <20230606094535.5388-1-billy_tsai@aspeedtech.com>
- <20230606094535.5388-4-billy_tsai@aspeedtech.com>
- <35bf0a69-bcf6-ae35-eb3c-e74cfcf9c571@linaro.org>
- <ZH89fXknZlhGmM_H@heinlein.vulture-banana.ts.net>
- <c28f963e-d13c-6b5c-c389-996e986f81d5@linaro.org>
- <SG2PR06MB33652E18980E9CF8E4F0894D8B53A@SG2PR06MB3365.apcprd06.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <SG2PR06MB33652E18980E9CF8E4F0894D8B53A@SG2PR06MB3365.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 07/06/2023 08:26, Billy Tsai wrote:
->         >>
->         >> He felt what he was trying to accomplish met the documented
->         >> expectations.  Are there some changes that need to be done in mfd.txt to
->         >> further clarify when to use it and when not to?
-> 
->         > I think mfd.txt clearly states:
->         > "For more complex devices, when the nexus driver has to
->         > probe registers to figure out what child devices exist etc, this should
->         > not be used. In the latter case the child devices will be determined by
->         > the operating system."
-> 
-> About the mfd:
-> For our pwm and tach devices, there is no need to check/apply any hardware register from parent to determine child’s existence or functional.
-> They don’t have any dependency on the parent node. In fact, it doesn’t require a specific driver to bind with the "aspeed,ast2600-pwm-tach" label. Their purpose is solely to share the same clock, reset phandle and base address. The main reason for using simple-mfd in this case is because these two independent devices share the same base address.
+This binding describes the NCT7362Y, a 16-channel fan/GPIO controller.
 
-Actually one more thoughts. I have doubt that you have two independent
-devices. If you share the clock, reset line and register address space,
-this means *you do not have two independent devices*.
+Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+---
+ .../bindings/hwmon/nuvoton,nct7362.yaml       | 123 ++++++++++++++++++
+ 1 file changed, 123 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct7362.yaml
 
-You have most likely only one device.
-
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct7362.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7362.yaml
+new file mode 100644
+index 000000000000..630dcce7a14c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7362.yaml
+@@ -0,0 +1,123 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/nuvoton,nct7362.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nuvoton NCT7362Y fan controller
++
++maintainers:
++  - Zev Weiss <zev@bewilderbeest.net>
++
++description: |
++  The Nuvoton NCT7362Y is an I2C fan controller with 16 pins that can
++  be independently configured for PWM, fan tach, or GPIO
++  functionality.  Each pin's functionality is represented by a child
++  node.
++
++  The datasheet is not publicly available but can be requested from
++  Nuvoton via their web site.
++
++properties:
++  compatible:
++    enum:
++      - nuvoton,nct7362
++
++  reg:
++    maxItems: 1
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++  gpio-controller: true
++
++  "#gpio-cells":
++    const: 2
++
++  gpio-line-names:
++    minItems: 1
++    maxItems: 16
++
++patternProperties:
++  "^tach@([1-8]|1[0-7])$":
++    type: object
++    properties:
++      reg:
++        maxItems: 1
++        description: The pin number.
++
++      nuvoton,pulses-per-revolution:
++        description: |
++          The number of tach pulses per revolution of the fan.
++        $ref: /schemas/types.yaml#/definitions/uint32
++        minimum: 1
++        default: 2
++
++    required:
++      - reg
++
++  "^pwm@([1-8]|1[0-7])$":
++    type: object
++    properties:
++      reg:
++        maxItems: 1
++        description: The pin number.
++    required:
++      - reg
++
++  "^gpio@([1-8]|1[0-7])$":
++    type: object
++    properties:
++      reg:
++        maxItems: 1
++        description: The pin number.
++    required:
++      - reg
++
++required:
++  - compatible
++  - reg
++  - "#address-cells"
++  - "#size-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++      fanctl@22 {
++        compatible = "nuvoton,nct7362";
++        gpio-controller;
++        #gpio-cells = <2>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++        reg = <0x22>;
++        gpio-line-names = "", "", "", "", "", "", "", "",
++          "", "", "", "", "", "", "led1", "led2";
++
++        tach@1 {
++          reg = <1>;
++        };
++        tach@2 {
++          reg = <2>;
++          nuvoton,pulses-per-revolution = <1>;
++        };
++        pwm@10 {
++          reg = <10>;
++        };
++        pwm@11 {
++          reg = <11>;
++        };
++        gpio@16 {
++          reg = <16>;
++        };
++        gpio@17 {
++          reg = <17>;
++        };
++      };
++    };
+-- 
+2.40.0.5.gf6e3b97ba6d2.dirty
 
