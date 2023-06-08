@@ -2,160 +2,113 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DF46C7EE25
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 09:27:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00729C7EE43
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 10:23:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235799AbjFHJ1x (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Jun 2023 05:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
+        id S236007AbjFHKXV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Jun 2023 06:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235753AbjFHJ1w (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 05:27:52 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD94E2136
-        for <linux-hwmon@vger.kernel.org>; Thu,  8 Jun 2023 02:27:50 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5149c76f4dbso667664a12.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 08 Jun 2023 02:27:50 -0700 (PDT)
+        with ESMTP id S235934AbjFHKXU (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 06:23:20 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34691FE9;
+        Thu,  8 Jun 2023 03:23:18 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-3f805551a19so2983371cf.3;
+        Thu, 08 Jun 2023 03:23:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686216469; x=1688808469;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4M4AXwuus3QNcxn5wLRmX6dWFPy9Bx8ysuH50InMwSo=;
-        b=Iv/XXxWBX0f2XCCR6QA12a+irtrS/oHxhfmmy7hqMHSK7RAzwb9HV+XNm5fKtRB0QF
-         k6beldcZQW2GRHQE+1UonNwxq60CY/l6n4IJeMZpujS1xMr50FRH9qLdxDCIgRCsuTDu
-         Z2vqQqsbZ/BvujbnKRRIIbZ0mc4/U5+4GEzJw9aI4wOEMpeidmed3Dc21wgupOgRVec1
-         7mMA04e5O3EeoB9JJ7pSX2P2ftncDThKdmmxKh7fVi5MXEf7vSwk78e+JVIqwLaXYnTn
-         rFTUV59anSVgY9cSY/QoPl6O4eGFQOOwkRaTAyJAZpNqAFZq6sl+KqPvyaB0W9RozFm/
-         t5rg==
+        d=gmail.com; s=20221208; t=1686219798; x=1688811798;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kTGc9+CSoeOkMBrTWKiVuewpGFLPDLPpalEIUi+52BA=;
+        b=kMHuP+l6AXKx3KQnUOjWbYWoygOj0EqlCR/SK6JXYS+kMBFEU6Rc0eujR7UkxtqWiS
+         PFNuVRkOld8O9nw/mj5VeVXmSX0JxgBmHGPhsUBVcyFvSickkEiNBG8j1LhYi5TD+cYd
+         I5+N+MIwfLY7HVC98OSVb1lPZSFebqzyfkpj1onClKIC5dyTV8QvMi90Czq8CiUSKsi1
+         MG5xq0NPfANPTYKkHgFgqYrKwDAlkoqMTWp15YW84I3d/H5i/0U1/aKkvMN9z+IgVz+p
+         L373YuR0Obd7S9i57laQRaPTyYVPvSjBLsZfwxco9/RvhgjeIVqugHwba9mm8xFVft+h
+         NeYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686216469; x=1688808469;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4M4AXwuus3QNcxn5wLRmX6dWFPy9Bx8ysuH50InMwSo=;
-        b=AfOOjeJikVg5233NoaNtZBC7n9sgrrZlb01hYl8vqXiuPLJANOhHpozVAKFD548d7i
-         44tP+beEPk8OWx8ABJ3opIQBhO0uHEcavoZLIqepvEZQpnGquKu90D5dD6yEAmnp43OH
-         u2UdeiWkQoajW7e4FAtNcftPzyOdaF6A8hW7xdlahXs7tTYxIkmoXkeLoOfLCQ1oI2n+
-         3jYeJLlwgxole02gxIPQo2fO/wZpvLV4wxLSmSVczHFABeGe7P6ExMJClKT/UUKrxOyw
-         TvrSlsLsmEJszWAqEZah6/oF9HvqWdBoEul3UgVGRDcHYWw6VxfTpHhupcmZuvDCmcKP
-         P27Q==
-X-Gm-Message-State: AC+VfDxWcJMkLLBf9P9YneiCv1Zrr36qK0xBv0VT5vKMqMqTaDZ7tDg8
-        GtSldJKDa7nKczuSYB/i8psNxA==
-X-Google-Smtp-Source: ACHHUZ61lgRdfNH+4iXxEctmcKpZlKsW/Cb7gNYirHVgh00nzDxu+CtNqzKNbg5xj0GFO96YbeoOVQ==
-X-Received: by 2002:a05:6402:613:b0:516:7928:ed70 with SMTP id n19-20020a056402061300b005167928ed70mr6344488edv.3.1686216469187;
-        Thu, 08 Jun 2023 02:27:49 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id n17-20020aa7c691000000b005105f002fd1sm316888edq.66.2023.06.08.02.27.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 02:27:48 -0700 (PDT)
-Message-ID: <5b5ccfb9-d6ea-9f22-bc8f-c048da726cc9@linaro.org>
-Date:   Thu, 8 Jun 2023 11:27:46 +0200
+        d=1e100.net; s=20221208; t=1686219798; x=1688811798;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kTGc9+CSoeOkMBrTWKiVuewpGFLPDLPpalEIUi+52BA=;
+        b=BHpe/r0S46w/kFpx62JLs/UI2piH0qyDlPwtKBo0WW610XTztEZqZuKXWQW/fhiJsH
+         srugB8K1ebQpazABhrR6G5lrB3d8ybNfUJu7ZZsuThEVBd+ZcvxaVGU6ZBDijF+5PBtx
+         9KKA3JmYmsNGJdZa8JPNng/hUiM+u+QhvxgQobXIaexXRsjt0RyA0XQlms5Vc0zzxy+k
+         z4TcQBJbhwWRF90jd0yUMLgwV3cdpDpcmoS9Sm8vzx7NUwEK31h/v1wqmPUYHTqroZRE
+         104k343EZz6q5Wt7RUbC4GbgQ3Ntx8b6sZ/WudJhbl2skU0KkaOGQUTAnwxIcNODEDRb
+         2Sgg==
+X-Gm-Message-State: AC+VfDynQQbVNUdbLEoVDjxY81cG0TxvM3oRb2oo8NRb6i4DAix+NwN2
+        apWVZN+XzDparXT3HUBctnOCSpiMJlJM4q08lHU=
+X-Google-Smtp-Source: ACHHUZ6z0z1c6MZ/b7vwZN5NjCnABNDqKYUfgcFRXC3Draq6zwT1osRCCxn9GS7FNS/Wdk25um1UK7eE6Ytu4bxgJq4=
+X-Received: by 2002:ac8:5a11:0:b0:3f6:e3aa:a61f with SMTP id
+ n17-20020ac85a11000000b003f6e3aaa61fmr6798441qta.19.1686219797956; Thu, 08
+ Jun 2023 03:23:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [v6 1/4] dt-bindings: pwm: Add ASPEED PWM Control documentation
-Content-Language: en-US
-To:     Billy Tsai <billy_tsai@aspeedtech.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
+References: <20230606014234.29491-1-nick.hawkins@hpe.com> <20230606014234.29491-3-nick.hawkins@hpe.com>
+ <ZH76x6E9cbfrJHeu@surfacebook> <DM4PR84MB19278E9DD0BF34C570F714708852A@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+ <CAHp75Vcc9hh6MYPSCJa1vniU=rC4Y+j9pCS4Np-b-Pyh5eUwNg@mail.gmail.com>
+ <81CFCEE8-5276-475A-A2AB-A814DEDA04B2@hpe.com> <CAHp75VeZkLSTw8OFmDMYb+im0qK0NQRHpndzBM7fMHm=HZCzeA@mail.gmail.com>
+ <7FEECBB4-482E-4719-94CA-6D10E4C08078@hpe.com>
+In-Reply-To: <7FEECBB4-482E-4719-94CA-6D10E4C08078@hpe.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 8 Jun 2023 13:22:42 +0300
+Message-ID: <CAHp75VfQguYENE0EtZ-ou=CXo0mAmeDT9byTu6hffT6w_cgM=Q@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] gpio: gxp: Add HPE GXP GPIO
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "krzysztof.kozlowski+dt@linaro.org" 
         <krzysztof.kozlowski+dt@linaro.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "patrick@stwcx.xyz" <patrick@stwcx.xyz>
-References: <20230608021839.12769-1-billy_tsai@aspeedtech.com>
- <20230608021839.12769-2-billy_tsai@aspeedtech.com>
- <4dffd320-8e30-fb30-6ded-79519afddc21@linaro.org>
- <SG2PR06MB3365DD80EA2FD026D400C4A78B50A@SG2PR06MB3365.apcprd06.prod.outlook.com>
- <61278e12-ba39-4503-ca74-a7118b0f6e99@linaro.org>
- <SG2PR06MB336528007D2685F8D95DF4078B50A@SG2PR06MB3365.apcprd06.prod.outlook.com>
- <fb3cb26b-61d7-5f57-41de-f419aa50ac0b@linaro.org>
- <SG2PR06MB3365558F9A3127744CEF1C068B50A@SG2PR06MB3365.apcprd06.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <SG2PR06MB3365558F9A3127744CEF1C068B50A@SG2PR06MB3365.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 08/06/2023 11:15, Billy Tsai wrote:
-> On 08/06/2023 10:21, Billy Tsai wrote:
->         >>         On 08/06/2023 09:47, Billy Tsai wrote:
->         >>         >>
->         >>         >>   >> +
->         >>         >>   >> +allOf:
->         >>         >>   >> +  - $ref: pwm.yaml#
->         >>         >>   >> +
->         >>         >>   >> +properties:
->         >>         >>   >> +  compatible:
->         >>         >>   >> +    enum:
->         >>         >>   >> +      - aspeed,ast2600-pwm
->         >>         >>   >> +
->         >>         >>   >> +  "#pwm-cells":
->         >>         >>   >> +    const: 3
->         >>         >>
->         >>         >>   > 3 cells? For one PWM? What are they?
->         >>         >>
->         >>         >> channel, period and polarity.
->         >>
->         >>         > Don't cut my responses. You wrote you have one PWM output, so only one
->         >>         > channel. What do you put then in the channel?
->         >>
->         >> You need to put 0 in the cell of the channel, the example of the dts usage will like following:
->         >>
->         >> pwm0: pwm0@1e610000 {
->         >>         compatible = "aspeed,ast2600-pwm";
->         >>         reg = <0x1e610000 0x8>;
->         >>         #pwm-cells = <3>;
->         >>         #address-cells = <1>;
->         >>         #size-cells = <0>;
->         >>         pinctrl-names = "default";
->         >>         pinctrl-0 = <&pinctrl_pwm0_default>;
->         >>         clocks = <&syscon ASPEED_CLK_AHB>;
->         >>         resets = <&syscon ASPEED_RESET_PWM>;
->         >>         status = "okay";
->         >> };
->         >>
->         >> pwm1: pwm1@1e610010 {
->         >>         compatible = "aspeed,ast2600-pwm";
->         >>         reg = <0x1e610010 0x8>;
->         >>         #pwm-cells = <3>;
->         >>         #address-cells = <1>;
->         >>         #size-cells = <0>;
->         >>         pinctrl-names = "default";
->         >>         pinctrl-0 = <&pinctrl_pwm1_default>;
->         >>         clocks = <&syscon ASPEED_CLK_AHB>;
->         >>         resets = <&syscon ASPEED_RESET_PWM>;
->         >>         status = "okay";
-> 
->         > BTW, these are not two PWM devices but one. I don't understand why you
->         > changed previous design into something like this, but this is not
->         > representing your hardware.
-> 
-> The previous design of my patch treated our PWM controller as having 16 PWM channels.
-> However, from a hardware perspective, it consists of 16 individual PWM chips, each
-> with its own set of two 4-byte control registers. These chips operate independently
-> and are not affected by each other.
+On Wed, Jun 7, 2023 at 11:45=E2=80=AFPM Hawkins, Nick <nick.hawkins@hpe.com=
+> wrote:
+>
+> > It does care about things the average GPIO controller driver needs to
+> > repeat. So at least you may try and see how it will look.
 
-They are affected by each other - you use the same clock and reset line.
-I really doubt you have 16 PWM controllers. Anyway, I cannot judge.
-Either your previous submissions were totally bogus or this one is.
+...
 
-Best regards,
-Krzysztof
+> Is there any documents available describing how regmap_gpio
+> populates the GPIO lines? Does it automatically go through and add lines
+> for each successful regmap_read and bits per byte?
 
+Nope, it assumes one bit per register or something different if xlate
+callback is defined. This is my understanding. That said, it might be
+that this is a limitation which does not allow you to switch to that
+library.
+
+...
+
+> static const struct regmap_config gxp_int_regmap_config =3D {
+>         .reg_bits =3D 8,
+
+>         .reg_stride =3D 1,
+
+AFAIU 0 is the same as 1, so this can be dropped.
+
+>         .val_bits =3D 8,
+>         .readable_reg =3D gxp_read_write_int_register,
+>         .writeable_reg =3D gxp_read_write_int_register,
+>         .max_register =3D 0x7f
+>         .name =3D "gxp-gpio-pl-int"
+> };
+
+--=20
+With Best Regards,
+Andy Shevchenko
