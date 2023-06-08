@@ -2,189 +2,90 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D170DC7EE2E
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 19:18:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0384C7EE29
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 22:42:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236272AbjFHTSo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Jun 2023 15:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
+        id S235403AbjFHWm6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Jun 2023 18:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236730AbjFHTSm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 15:18:42 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF9730FD;
-        Thu,  8 Jun 2023 12:18:02 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so46098a12.1;
-        Thu, 08 Jun 2023 12:18:02 -0700 (PDT)
+        with ESMTP id S229503AbjFHWm5 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 18:42:57 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC152D4B;
+        Thu,  8 Jun 2023 15:42:56 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f732d37d7bso8741265e9.0;
+        Thu, 08 Jun 2023 15:42:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686251880; x=1688843880;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Zdtq3aechG9dWaWO6P+uzqtp9QxJlC9wiqaNRVmaUg=;
-        b=FveTNjkQlBUCVuzZ64Qc21p/NHhCXTszPNygCXI2yd7utlbXxWQqmtqHDjXbn8S1Ae
-         aEGM9Dk1WOgTdYWXKpAG/7Z5XuSZKRz3dUfOVx20DFmoxrBnKndoKljJ5VIVArr3TYyL
-         GoHOe7+O9tfQe7z28smkvl1AVXM5vtrfGI1l19o7oM7Se3RZcZcu3Vy9r1iRCvNgcPRL
-         gYRaW0VLl4grfGGVOfWUV9cDw9tbVLNryyakhiW9L2eBd1XGjNZ70TB4Y8Jd5hiAtvgF
-         dqAjBIo5JBOZxzf9/5ExLkWBCt8gc9ZkolUPnrC5lWExJY7O/G/mzLnq9y9F+jjBzman
-         kSqA==
+        d=gmail.com; s=20221208; t=1686264175; x=1688856175;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z5+I2QWhzf+RiNGGieH6S0XhkG75IeU581JZPazQ2GI=;
+        b=IqSmXlKKrCQF3YfLlNtzZEwjkn2rJP/t6RfM79OSim9NNQSqdhL7Mx/hj/B4VryRkP
+         Q9eaghh9EiGHItvCrIu/FMhbk0+r3lbnkMQZYHVBtUGDddE+CPoXTSq6145NOrU99HyJ
+         BMzuFB/FRiIA/dyTHlbGhNW/TgOFnHUlc39h1mJrNlmzUWqIM8zv8kqfp/3DSwg1g6NC
+         2H/xk4O8IE4Fq6++kCspk0MHRc5S6Qavc/JIYvWR1Jq7kUS6RggUPqkztmaYJqKvvDEk
+         w90nEEktVeJC9Fs6kzMMytD8EaMOPAnSzwF5MmnJoAvtXlaFNev+G322CqVep8i49GGB
+         idKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686251880; x=1688843880;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1686264175; x=1688856175;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8Zdtq3aechG9dWaWO6P+uzqtp9QxJlC9wiqaNRVmaUg=;
-        b=ecApMxflQsuUyJVsemtyxoU+9Bax4XXBnRLT+Hq4mR+8KfUpfr//ThXxtsfRd4bxmd
-         hYzOdG8nzuxdBbgagbP0WC9i/TX8orPa8Qpo67e4evKRt+f/5Rq3jWM8TTeazoUcFdQL
-         afJQ1kb0ClHrm2PgOsVO7fnAY4d/ApI1Sa5Zy1nno958Skjm+qt322TKelJDJcamaXs5
-         PKi4G7X3ib+wY1kub/4j88o+KCJAFuQlPNvpR7Nprgqv9+f/XHR2hoEv3WOJwwtBmh1P
-         GzBGt1BfAnIs5JKddhviuLzyaeoTQLJPtHyhogsMX/gep7wmSy/d8qu07zQmaxut5KT4
-         0W0w==
-X-Gm-Message-State: AC+VfDxChDjKTXyLGDf2AeVxIp/agfDUQ+Rbl0Mcfzp19qWJ5b/9CUMq
-        CEd7C/nLpAmwaoV74HUB9mVYk56U+kU=
-X-Google-Smtp-Source: ACHHUZ7gEhJ6hXamB11rpXUigFXAHcI7UOZo3lopmVVFwyYsvG8shxCV1Ur1cL0JFwtbsXmv0+EXnQ==
-X-Received: by 2002:a17:902:db0f:b0:1b0:4bc7:31ee with SMTP id m15-20020a170902db0f00b001b04bc731eemr9740751plx.32.1686251880078;
-        Thu, 08 Jun 2023 12:18:00 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 21-20020a170902c11500b001ae365072ccsm1771361pli.122.2023.06.08.12.17.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 12:17:59 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <581d8c60-e3f8-ac3d-55d2-93bb42c34aa1@roeck-us.net>
-Date:   Thu, 8 Jun 2023 12:17:56 -0700
+        bh=z5+I2QWhzf+RiNGGieH6S0XhkG75IeU581JZPazQ2GI=;
+        b=WFQ6bCsxZzogmJJ1fcAgcyFdJu0gkIuikq2YGui2v5+RvGZKqrhFcBD7xKvemxGpyM
+         ngVusdZDTIxmjBOHcWS011o5jI/ZV4ZzKbjXVXdGrOsM4az/uqvr8O8LhTwvZgbhdlBB
+         CUkF7B2TQfeY7j8QQWqF32TSQD6JOLybY5xSC/STQBorNAY9QZ466NcN76CI4no+aQDJ
+         Z+1jyc4oh9KP4Wdmh5MeY6gnA5xtvRmh+hl5V6Ijpl+b+Su0gHViTdIRtr9GZ6I55Via
+         nGvk/1aRyWSl304+Wq3UzJAUA49nQjd4s9aTtVdUtaMn0sHBiPrZpVNSIXbLongzywEE
+         1qWA==
+X-Gm-Message-State: AC+VfDwPhYfrf/uNa2+Jq+sdZNF8idAATImeT9tb/q7Ho0IYBOV80vaD
+        8G1WcUXKEu67XDB1v9S99c4=
+X-Google-Smtp-Source: ACHHUZ4xO0JlZa9TP0ZuhFKWPo+2u51TbDZEONZ5ifIh/0+ViToGtZphCf+S8K0f2fGLbDBibEpcDA==
+X-Received: by 2002:a7b:c40b:0:b0:3f8:1a:6b9f with SMTP id k11-20020a7bc40b000000b003f8001a6b9fmr1250070wmi.2.1686264174959;
+        Thu, 08 Jun 2023 15:42:54 -0700 (PDT)
+Received: from localhost.localdomain (bba-2-50-150-163.alshamil.net.ae. [2.50.150.163])
+        by smtp.gmail.com with ESMTPSA id x5-20020adff0c5000000b003078a3f3a24sm2693912wro.114.2023.06.08.15.42.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 15:42:53 -0700 (PDT)
+From:   YYang <iyysheng@gmail.com>
+To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net
+Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, YYang <iyysheng@gmai.com>
+Subject: [PATCH] Documentation/hwmon: Fix description of devm_hwmon_device_unregister
+Date:   Fri,  9 Jun 2023 02:42:30 +0400
+Message-ID: <20230608224231.1156-1-iyysheng@gmail.com>
+X-Mailer: git-send-email 2.41.0.windows.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] hwmon: (k10temp) Report negative temperatures
-To:     "Kannan, Baski" <Baski.Kannan@amd.com>
-Cc:     "Moger, Babu" <Babu.Moger@amd.com>,
-        "clemens@ladisch.de" <clemens@ladisch.de>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Ramayanam, Pavan" <Pavan.Ramayanam@amd.com>
-References: <20230523204932.2679-1-Baski.Kannan@amd.com>
- <68c53a76-efd5-42da-af98-442bd80c7300@roeck-us.net>
- <64e6164a-c874-403e-b899-45f741db2130@roeck-us.net>
- <CY5PR12MB64326FB8A8E84A2698FEBB4D8450A@CY5PR12MB6432.namprd12.prod.outlook.com>
- <866a6d6b-c75e-26d7-a323-f8840c1228c3@roeck-us.net>
- <CY5PR12MB6432845EE4F8019062837FB88450A@CY5PR12MB6432.namprd12.prod.outlook.com>
-Content-Language: en-US
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CY5PR12MB6432845EE4F8019062837FB88450A@CY5PR12MB6432.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/8/23 11:25, Kannan, Baski wrote:
-> [AMD Official Use Only - General]
-> 
-> To not spawn any new problems, we can go ahead with option 2.  i.e., "do not apply it to processors which are known to _not_ be affected by the problem."
-> 
+From: YYang <iyysheng@gmai.com>
 
-Sounds good to me.
+Use devm_hwmon_device_register_with_info to replace
+hwmon_device_register_with_info in description of
+devm_hwmon_device_unregister.
 
-Guenter
+Signed-off-by: YYang <iyysheng@gmai.com>
+---
+ Documentation/hwmon/hwmon-kernel-api.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Thanks
-> - Baski
-> 
-> -----Original Message-----
-> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-> Sent: Thursday, June 8, 2023 1:03 PM
-> To: Kannan, Baski <Baski.Kannan@amd.com>
-> Cc: Moger, Babu <Babu.Moger@amd.com>; clemens@ladisch.de; jdelvare@suse.com; linux-hwmon@vger.kernel.org; linux-kernel@vger.kernel.org; Ramayanam, Pavan <Pavan.Ramayanam@amd.com>
-> Subject: Re: [PATCH] hwmon: (k10temp) Report negative temperatures
-> 
-> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
-> 
-> 
-> On 6/8/23 10:09, Kannan, Baski wrote:
->> [AMD Official Use Only - General]
->>
->> The patch you have mentioned, aef17ca12719, sounds like a work-around for a problem found in some Ryzen Threadripper processors.
->> If I understand correctly, this work-around (aef17ca12719) has been provided as a blanket fix for all the processors.
->>
-> 
-> Due to lack of better knowledge and understanding, yes. See https://github.com/lm-sensors/lm-sensors/issues/70. That doesn't mean that a blanket revert would be appropriate.
-> 
->> The Industrial Processor in question is the Epyc3k i3255.
->> AMD Family 17h (boot_cpu_data.x86)
->> AMD model 00h - 0fh (boot_cpu_data.x86_model) Model Name - contains
->> string "3255"
->>
->> It supports temperature ranging from -40 degree Celsius to 105 deg Celsius.
->> We have customers' machines running at -20 deg Celsius. They require that the correct temperature be passed to their tools.
->>
-> 
-> We have two options: Either limit the workaround to the list of processors which may be affected by the original problem, or do not apply it to processors which are known to _not_ be affected by the problem. Either can easily be implemented by adding a flag to struct k10temp_data and setting it in the probe function.
-> 
-> No one outside AMD knows which processors may or may not be affected by the original problem. It was reported on 1950X at the time, but it may exist on all processors with the ability to set Sense MI Skew (and possibly Sense MI Offset), whatever that is. With that in mind, the fix will have to be provided by AMD.
-> 
-> Guenter
-> 
->> -----Original Message-----
->> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->> Sent: Thursday, June 8, 2023 8:52 AM
->> To: Kannan, Baski <Baski.Kannan@amd.com>
->> Cc: Moger, Babu <Babu.Moger@amd.com>; clemens@ladisch.de;
->> jdelvare@suse.com; linux-hwmon@vger.kernel.org;
->> linux-kernel@vger.kernel.org
->> Subject: Re: [PATCH] hwmon: (k10temp) Report negative temperatures
->>
->> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
->>
->>
->> On Tue, May 23, 2023 at 02:46:46PM -0700, Guenter Roeck wrote:
->>> On Tue, May 23, 2023 at 03:49:32PM -0500, Baskaran Kannan wrote:
->>>> Currently, the tctl and die temperatures are rounded off to zero if
->>>> they are less than 0. There are industrial processors which work
->>>> below zero.
->>>
->>> This was introduced with commit aef17ca12719 ("hwmon: (k10temp) Only
->>> apply temperature offset if result is positive"). This patch would
->>> effecively revert that change. Given the reason for introducing it I
->>> am not convinced that it is a good idea to unconditionally revert it.
->>>
->>
->> Any comments ? I am not inclined to accept this patch as-is. What are the industrial processors ? Is there a means to detect them ?
->>
->> Guenter
->>
->>> Guenter
->>>
->>>>
->>>> To display the correct temperature remove the rounding off.
->>>>
->>>> Signed-off-by: Baskaran Kannan <Baski.Kannan@amd.com>
->>>> ---
->>>>    drivers/hwmon/k10temp.c | 4 ----
->>>>    1 file changed, 4 deletions(-)
->>>>
->>>> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c index
->>>> 7b177b9fbb09..489ad0b1bc74 100644
->>>> --- a/drivers/hwmon/k10temp.c
->>>> +++ b/drivers/hwmon/k10temp.c
->>>> @@ -204,13 +204,9 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
->>>>               switch (channel) {
->>>>               case 0:         /* Tctl */
->>>>                       *val = get_raw_temp(data);
->>>> -                   if (*val < 0)
->>>> -                           *val = 0;
->>>>                       break;
->>>>               case 1:         /* Tdie */
->>>>                       *val = get_raw_temp(data) - data->temp_offset;
->>>> -                   if (*val < 0)
->>>> -                           *val = 0;
->>>>                       break;
->>>>               case 2 ... 13:          /* Tccd{1-12} */
->>>>
->>>> amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
->>>> --
->>>> 2.25.1
->>>>
-> 
+diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
+index c2d1e0299d8d..6cacf7daf25c 100644
+--- a/Documentation/hwmon/hwmon-kernel-api.rst
++++ b/Documentation/hwmon/hwmon-kernel-api.rst
+@@ -66,7 +66,7 @@ hwmon_device_register_with_info.
+ 
+ devm_hwmon_device_unregister does not normally have to be called. It is only
+ needed for error handling, and only needed if the driver probe fails after
+-the call to hwmon_device_register_with_info and if the automatic (device
++the call to devm_hwmon_device_register_with_info and if the automatic (device
+ managed) removal would be too late.
+ 
+ All supported hwmon device registration functions only accept valid device
+-- 
+2.37.1
 
