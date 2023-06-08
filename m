@@ -2,82 +2,116 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30A8FC7EE25
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 13:44:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84D87C7EE25
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 13:51:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjFHNof (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Jun 2023 09:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
+        id S236320AbjFHNvz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Jun 2023 09:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236288AbjFHNoe (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 09:44:34 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5831FD6
-        for <linux-hwmon@vger.kernel.org>; Thu,  8 Jun 2023 06:44:32 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-653436fcc1bso376982b3a.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 08 Jun 2023 06:44:32 -0700 (PDT)
+        with ESMTP id S233538AbjFHNvy (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 09:51:54 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B2E19BB;
+        Thu,  8 Jun 2023 06:51:53 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b0424c5137so4496025ad.1;
+        Thu, 08 Jun 2023 06:51:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686231872; x=1688823872;
+        d=gmail.com; s=20221208; t=1686232313; x=1688824313;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=i6Gwh0FKywTi4x3LopXoPp8aAEkhBLZJc416GFZDHiE=;
-        b=i/vlJ6j/KUvHzzGFQRfet1MhTHczV2B3eM/ZuOPxGh0wMpytz84ZuSuXud1tvoXAUx
-         I4liRu0mAvQe5l5/p1wo6YVpawT8sNTszdenUqj+f7Yf4LSOviwBIBSdeUY8hM1qqdKR
-         8chS1PiqOMmXbMj6KFu9FzR9YWaD3OffzGogUy2dC2vREeZdNutetzvxFWiS1xOtXTRx
-         5HiGeEYV4lGmhpxI9rU07BAb72s7dqjL3164JKckOK4ExZg+A2NF2aFMSc+TUIDltMex
-         0ZtsXDKlaeLjWY4OVmU04tgeV6yMRAWsh4RKdpweZXABrb1EJOnIkVy5U2yyU4Nu6Nhh
-         iSUA==
+        bh=uVU4ia+uWzC6rzcUeHtrRHPc2aAMft5u4K82EZ822aU=;
+        b=iUv6fBe+iMwYTDbtfK4oJ+14pjttNADPFI9CMs8nRoemKdhdVvd5Si8U1ApXnJT9rK
+         HCKKsbGjIzSeXuqXXn1g9xHVNDgfFt5oPcwUPUiOVltV+8f9rAMCgBoQNztaosegUWMU
+         xESrMCn/zwn/VnNSRG2Op78apdZSSobhWVRh/NxfiVbp6cfjEgQ82aBHwKVPBqCLjUXM
+         NC/Dul1QJVT2ht4CN6L2ODcxlewdjt+71PLIqXR/nDB/IXFUqskXGNQNARGMXFj8noJc
+         022zx+HI1LYYKrUzRl8pQBMUlIWtQlsHX6OkEwO8XuFfTIx5dZFZ/iIbKNMSgp5zrNeK
+         3alQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686231872; x=1688823872;
+        d=1e100.net; s=20221208; t=1686232313; x=1688824313;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i6Gwh0FKywTi4x3LopXoPp8aAEkhBLZJc416GFZDHiE=;
-        b=WtH2YyboDW24bJ7VubStj1JslXmHRjRPN1p36+VoJ/Z2MWlNPTj4fZuaPayYbYx9sI
-         tDrELHcWE0TamA5t8O2/E2BmugzjiJYzwHAlEc85Cp8Pn/4gCvnwwRoBmD7UUz5K4wQG
-         QjgDCRxLcJJg2JngLE9pWfyic0IqYHsqVkiuNdAdpGTHC3q1R0hniYdKma1lPa4LzXLT
-         Otnsi/uD+FCpTcRg0EqMhQ5KPtg9i08MYRxDeOpR6E0ZNxaAePjdWmAD3iHPUPSVlVkp
-         0gWRCy+eqzk0SOSJDMMr/in7Zm/s9c6qDRgj9KWh2f2cbbYVT43WyNQJBQ7MO+mXm9Ko
-         n3jA==
-X-Gm-Message-State: AC+VfDyTtAha+ytodW8Hk026fsI1r8i6URMgvxZgYQCy1jR6l6XX9tDU
-        3pJ3CpMBbv7Tpt0mJ6CuaVMzQBSzmN4=
-X-Google-Smtp-Source: ACHHUZ6fEV6aLF2+kOCWsMHZcaoB5qkdL3gLHsUxB9NsY2dEvfwKPwIm9pxlwHRgOGPRng6u23Xg+Q==
-X-Received: by 2002:a17:902:ce89:b0:1ae:4c3b:bb0b with SMTP id f9-20020a170902ce8900b001ae4c3bbb0bmr5260428plg.5.1686231872265;
-        Thu, 08 Jun 2023 06:44:32 -0700 (PDT)
+        bh=uVU4ia+uWzC6rzcUeHtrRHPc2aAMft5u4K82EZ822aU=;
+        b=XiQSllcoHnSnpjyOVgV5TpBMZd+aIfakPH4u7nlB32VsajPQrUALmb1TRx0m84A8Il
+         D7B5z4TauuAfmx0dm9THkDx3Yye5cZhvXPyx1PeO4PZQDL+zqvGFY/boT1uK043G7Azw
+         IkeYQPDXY11GT48MmZ6P7+CKI6hPyoO8OE6CeWmxXTa3Jtr1sBH6AVsi4wlrgougoU2Q
+         /Chx1WcfzipUwuUKZzPCHCOfgUnCG28xW4Wx6AnPg1k3DRRwt9C9v+VXl/7ZMqNFsTjo
+         jyzkvBfcjCxpFk+a/ksvNBoDh7vGattM2oD3KNzPluJj75uL50na6oWGSeULNGL/41su
+         5o6Q==
+X-Gm-Message-State: AC+VfDzPDQfzh2S/SBFO97HZeWAGYZKDhWgXav03M68BDGNG9+QLh3LS
+        cmh+o8+qyaHhdKLlC6G8SMrpDd3JE08=
+X-Google-Smtp-Source: ACHHUZ5lcvPCM6FvWKAV3fSk5CMpDyR9cqmN7PCdoE2GKBun6tKc2B+W/2EkGU4kza0bZ0Aei7es/w==
+X-Received: by 2002:a17:903:22c3:b0:1b0:3df1:c293 with SMTP id y3-20020a17090322c300b001b03df1c293mr9254927plg.45.1686232312873;
+        Thu, 08 Jun 2023 06:51:52 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q13-20020a170902dacd00b001b2404c7d53sm1447158plx.175.2023.06.08.06.44.31
+        by smtp.gmail.com with ESMTPSA id d6-20020a170903230600b001ae57277a87sm1446635plh.255.2023.06.08.06.51.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 06:44:31 -0700 (PDT)
+        Thu, 08 Jun 2023 06:51:52 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 8 Jun 2023 06:44:30 -0700
+Date:   Thu, 8 Jun 2023 06:51:51 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Frank Crawford <frank@crawford.emu.id.au>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] hwmon: (it87) Generalise support for FAN_CTL
- ON/OFF
-Message-ID: <2afb6d4a-0750-4eb0-b518-d89353ff06dd@roeck-us.net>
-References: <20230527094756.3464256-1-frank@crawford.emu.id.au>
+To:     Baskaran Kannan <Baski.Kannan@amd.com>
+Cc:     babu.moger@amd.com, clemens@ladisch.de, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (k10temp) Report negative temperatures
+Message-ID: <64e6164a-c874-403e-b899-45f741db2130@roeck-us.net>
+References: <20230523204932.2679-1-Baski.Kannan@amd.com>
+ <68c53a76-efd5-42da-af98-442bd80c7300@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230527094756.3464256-1-frank@crawford.emu.id.au>
+In-Reply-To: <68c53a76-efd5-42da-af98-442bd80c7300@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, May 27, 2023 at 07:47:56PM +1000, Frank Crawford wrote:
-> Support for FAN_CTL ON/OFF is currently disabled only for IT8603E but
-> there are severl chips that don't support the configuration bits to turn
-> off fan control entirely.  Generalise this support for any chip.
+On Tue, May 23, 2023 at 02:46:46PM -0700, Guenter Roeck wrote:
+> On Tue, May 23, 2023 at 03:49:32PM -0500, Baskaran Kannan wrote:
+> > Currently, the tctl and die temperatures are rounded off to zero
+> > if they are less than 0. There are industrial processors which work
+> > below zero.
 > 
-> Add feature flag FEAT_FANCTL_ONOFF for chips that support configuration
-> bits for management of fan control off and assign all chips that support
-> the configuration.
+> This was introduced with commit aef17ca12719 ("hwmon: (k10temp) Only apply
+> temperature offset if result is positive"). This patch would effecively
+> revert that change. Given the reason for introducing it I am not convinced
+> that it is a good idea to unconditionally revert it.
 > 
-> Signed-off-by: Frank Crawford <frank@crawford.emu.id.au>
 
-Applied.
+Any comments ? I am not inclined to accept this patch as-is. What are
+the industrial processors ? Is there a means to detect them ?
 
-Thanks,
 Guenter
+
+> Guenter
+> 
+> > 
+> > To display the correct temperature remove the rounding off.
+> > 
+> > Signed-off-by: Baskaran Kannan <Baski.Kannan@amd.com>
+> > ---
+> >  drivers/hwmon/k10temp.c | 4 ----
+> >  1 file changed, 4 deletions(-)
+> > 
+> > diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+> > index 7b177b9fbb09..489ad0b1bc74 100644
+> > --- a/drivers/hwmon/k10temp.c
+> > +++ b/drivers/hwmon/k10temp.c
+> > @@ -204,13 +204,9 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+> >  		switch (channel) {
+> >  		case 0:		/* Tctl */
+> >  			*val = get_raw_temp(data);
+> > -			if (*val < 0)
+> > -				*val = 0;
+> >  			break;
+> >  		case 1:		/* Tdie */
+> >  			*val = get_raw_temp(data) - data->temp_offset;
+> > -			if (*val < 0)
+> > -				*val = 0;
+> >  			break;
+> >  		case 2 ... 13:		/* Tccd{1-12} */
+> >  			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
+> > -- 
+> > 2.25.1
+> > 
