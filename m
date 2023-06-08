@@ -2,169 +2,211 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BA21C7EE23
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 18:03:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75569C7EE25
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 18:25:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233826AbjFHSDV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Jun 2023 14:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
+        id S233006AbjFHSZm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Jun 2023 14:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232940AbjFHSDU (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 14:03:20 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F37125;
-        Thu,  8 Jun 2023 11:03:18 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-2568fc3d8a9so529534a91.2;
-        Thu, 08 Jun 2023 11:03:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686247398; x=1688839398;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mKHY3wIPe/FgArP9mk/k8pyooXPh//tEjcokR2FpzzM=;
-        b=bFihchBMwqutTcZ4w3PsjhdDW/xW9zU7ub9iSFs8IhdlaD+0hmHcCf5uyD3ITSCtGM
-         hEES6SS29HN+hPY9QZq2rsPlpDxYbZ2WFQISoGqFpuScCk/n2D4ubfwfDpejD8ZjrHBS
-         dQm2W3ThBK7V0PDay7veFwfU3jjpqRD2ZYyd48meiqrsB9SGHlsmtNaSDUmbePOMS26d
-         931OtOb5FqFbpHKjfWdqTKTMxkNjCcgZqIMg61qNlVRnf1BU9gbBoPDsB61yyhf7QZhJ
-         OmNs7a6IyIynENg/7X36l9tqsMhRLZLLEtVtXqbs0TlYWUcQJ3Z8wKYl38qLU9eyUI1M
-         1P+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686247398; x=1688839398;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mKHY3wIPe/FgArP9mk/k8pyooXPh//tEjcokR2FpzzM=;
-        b=WVYHCGxp/MHFcu6WEQ+PdYhb7oW37UKDql8tYl9tBFgRTAKTPtqWCSK87FNrkfu3O5
-         2Oyn3Ptq7rsU098NenAW3/XlUN8hXzvn8ym8kAhjLfQaEQI/+GhGtjyPB2gqeAQglU2g
-         CijW+QHj73bBMRNr2Dvm0RSxYKgLSI08Wg2LLFbZvmcfe27DdqxcrwJN0k3Dx6ylKDQF
-         5Ndm91eyenzevqp94Vj992MD6nL1oOE+5Mi5unAUouznoXtKYk9bsLMdTXDoEbcDAHvo
-         4fqly0Z/fg/pxfEFjMV5lHrp9f59XBJPAasux3vCvgu9UmCeo072ut8HwMDvl3DHG9XV
-         yiVg==
-X-Gm-Message-State: AC+VfDzXPUG9/RKHwT7v4vRIX9szkOex3dhGal6DyIn3PtXn0EVVhy7s
-        Rn5c90v40Ms4llkR+HjNpx0=
-X-Google-Smtp-Source: ACHHUZ59JgTCa3GPmZI5cGz144nTnL94zHtiIUPlGhZYa+pY5hASlzkStwSs4IP1AgAKekyB1kmZew==
-X-Received: by 2002:a17:90a:d154:b0:259:24c4:4dda with SMTP id t20-20020a17090ad15400b0025924c44ddamr4063348pjw.39.1686247398087;
-        Thu, 08 Jun 2023 11:03:18 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g6-20020a17090a300600b0025069c8a151sm1528816pjb.53.2023.06.08.11.03.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 11:03:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <866a6d6b-c75e-26d7-a323-f8840c1228c3@roeck-us.net>
-Date:   Thu, 8 Jun 2023 11:03:15 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     "Kannan, Baski" <Baski.Kannan@amd.com>
-Cc:     "Moger, Babu" <Babu.Moger@amd.com>,
+        with ESMTP id S232727AbjFHSZl (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 14:25:41 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2083.outbound.protection.outlook.com [40.107.93.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E6E1FDC;
+        Thu,  8 Jun 2023 11:25:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GREZMWydfsdnxpGI8g8GIQz7X56stDteW6xS0vw66g7CbSQ39RgKcUC43M9GquwiyRuJ3ummkEfnsoMHetQmXus9bx1otO1JwuNk21RzHxJkDbcbEmvP/sp8VOOyUpJq18gAPBN88iUeDs7aIhJe78XCM6MrDhHxrF5I7PhPLaKGe9lP/ztpAyHbDnE+8xh40tSHfLH3clD0NZC7WWN8vnyt78aYJ6E5tfXAhJjkYl88V1rJ0jx6mKasJTdIjhnrXeLhWqAbSbi2FmIvAcRcb4PhIjt+eeJiiBIUVvtDkKHwWCuuRyPG4R7r2vCqe/l12+NvAbkFjZGnFM9HLMej9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+EAz/JO8o0z8BrG23wag7EtYnjnZyjgOanHdVaTNSBQ=;
+ b=A90i0VpPDKM72wbwZ8gS+ERq7ZyvZpY+pMnH5NlKPRNyFG1iS7Rxxn8qbltyDwYyEwoMOBHVqsm9Sxqhyz7m8TtUY1rxPR0lPdsZb4DmaMLkZHpw0hg8NtjGCzCPd/fvvHQR6vR1TO7a9zHyjdyh4H18QQJ7RgMJt9uoVqUhDbxhfDOCk/o5MxY8FEwyo/REo8Z65uVjqr2wQGOJBpvj3WodQELgj8G2IYPgSjJYt27kpMnKeg6pHGEqaiUQFBXC4VyWhmd3nmUTmgvGPr8/uDUqKGJSFgkJDPGQ5qup9g9LCevZ2F4LJPrJnt9UntvGhqUkVf/mX/CulSt0RSNXfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+EAz/JO8o0z8BrG23wag7EtYnjnZyjgOanHdVaTNSBQ=;
+ b=NRnZoTnSqyUmDBoKu8c+jNSWVmRwSc2gNBTP1HsO3rMC1STKE5xzmzTV3hBaIbA+qAaNsUNLCe/JJZcnkUB0zr38HvWwX6/PppEDVEoFy+xVLVra1F7va+AkrQ/Alt3ru9IF9bX4EoAA057bJQUgjnP6yOfyOYuWnFdD6KpLv4A=
+Received: from CY5PR12MB6432.namprd12.prod.outlook.com (2603:10b6:930:38::8)
+ by PH7PR12MB7140.namprd12.prod.outlook.com (2603:10b6:510:200::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Thu, 8 Jun
+ 2023 18:25:36 +0000
+Received: from CY5PR12MB6432.namprd12.prod.outlook.com
+ ([fe80::1747:b643:24a6:1030]) by CY5PR12MB6432.namprd12.prod.outlook.com
+ ([fe80::1747:b643:24a6:1030%7]) with mapi id 15.20.6455.039; Thu, 8 Jun 2023
+ 18:25:36 +0000
+From:   "Kannan, Baski" <Baski.Kannan@amd.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "Moger, Babu" <Babu.Moger@amd.com>,
         "clemens@ladisch.de" <clemens@ladisch.de>,
         "jdelvare@suse.com" <jdelvare@suse.com>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "Ramayanam, Pavan" <Pavan.Ramayanam@amd.com>
+Subject: RE: [PATCH] hwmon: (k10temp) Report negative temperatures
+Thread-Topic: [PATCH] hwmon: (k10temp) Report negative temperatures
+Thread-Index: AQHZjbgeStd3Ox1FN0ak11gIaKMq1q9oZLCAgBigoICAABOSYIAAMquAgAAFeUA=
+Date:   Thu, 8 Jun 2023 18:25:36 +0000
+Message-ID: <CY5PR12MB6432845EE4F8019062837FB88450A@CY5PR12MB6432.namprd12.prod.outlook.com>
 References: <20230523204932.2679-1-Baski.Kannan@amd.com>
  <68c53a76-efd5-42da-af98-442bd80c7300@roeck-us.net>
  <64e6164a-c874-403e-b899-45f741db2130@roeck-us.net>
  <CY5PR12MB64326FB8A8E84A2698FEBB4D8450A@CY5PR12MB6432.namprd12.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] hwmon: (k10temp) Report negative temperatures
-In-Reply-To: <CY5PR12MB64326FB8A8E84A2698FEBB4D8450A@CY5PR12MB6432.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <866a6d6b-c75e-26d7-a323-f8840c1228c3@roeck-us.net>
+In-Reply-To: <866a6d6b-c75e-26d7-a323-f8840c1228c3@roeck-us.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=fb604a50-6de1-4b67-a950-e3933a2c0701;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-06-08T18:22:50Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY5PR12MB6432:EE_|PH7PR12MB7140:EE_
+x-ms-office365-filtering-correlation-id: e7ef54a4-f9d7-4f10-eac6-08db684dc13e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Gsnkx1W2OftO03wAcDpS+rNl86VzeTumSpwvm0IrO0+bII5BmlX6v18LUEjEiK07jU+YV/US5XICW9tNjcWe2Dzi7Dq4pJugjiBH79YR0l/PFvUACuf+C0gWkuAmHE9XnHKuSk+6dRnAElDcP6pfmGovVvFDcllGBhNmOuckhnkyF2eAZ/pDcaUPsHX21TBv8dEAf/2cA5mRi4y4U4NcpruHsFycjrk2THy+3NsUgdb6fEyQVONHiT0P1x99sWy1eDF1J30jW9yzd4qqN36seK9uFnNwIFosdzBuXPnfOYbC9M9AFNjWacJACEk6xlru/v9R5gcJUDIXEWio+aNAF72Lx8I1RzjXLdECxVCbLkf3rZMG3HnVudsrnjTeY0z5pfSRDUGqfGJv/idGkRuNWfV0sHkO8hsWDW+F8qg42+05es371Zo4elMBtRFJoHnuFtBzj7R0iDRNuAhyHC02BTlm0stS2F0VdW3PJiKUm+6nqsnKnoLD6qWU5cbMU+oh53K4IuWhVwrUmJ3FFB3yZaOsK8LzZkrIlMapzq2EJw/ZE9ZEFtBEJrdgt5lulgTOfzJwNsCVkNni7XLwvwJqFZCpTmSPWdy+uKkkjXMqxrw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6432.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(346002)(136003)(39860400002)(451199021)(83380400001)(478600001)(33656002)(55016003)(8676002)(41300700001)(8936002)(66476007)(66946007)(64756008)(66556008)(76116006)(316002)(86362001)(6916009)(38070700005)(122000001)(4326008)(38100700002)(5660300002)(52536014)(66446008)(71200400001)(54906003)(2906002)(7696005)(26005)(966005)(186003)(9686003)(6506007)(53546011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dzAxRVhEeXI3OXBjcC9CRnozdk13ZWxKYW40d0UzMHk0cDMwdHE4U1oyYzdv?=
+ =?utf-8?B?b2FzWHdXTkJMWW5XRVc3VFNpSnUyNmRuMmNtU2drTFh4YytmYy9kRFlRQVpW?=
+ =?utf-8?B?Vnd3TmVZb1pYWTdzZGZZMDdab3VMbGRPcy9KQk56S0hKbFhBRHZWaWJOVWtG?=
+ =?utf-8?B?TE95UU50bFBpN0hqQkR1NWI5bHZ1Vk5QdlNtOHgwSVZpTm9UL1h1TTZHK0Ez?=
+ =?utf-8?B?Q2tROUptbURZb2x6eUpoZG9LUlBnZDVBYS95QWRHVVlDVXVJMTVWVUtmZ3hz?=
+ =?utf-8?B?R3hTb0crSkxlNEFoN2dSaTU0UVJCaWI4c0xmRDN6R1RpdnBObHo3YlZrTmE3?=
+ =?utf-8?B?SlBlbTNESVdHdnJpa283L3pCMnBKOXF5UXFBNW1GZzQzQUQ5RVVKT2dRTFlk?=
+ =?utf-8?B?R2RLdmZORzdUTXV1dk1CN3NDNm1KU25pZU01UmJNdmp1NlBXMGIxL0RsSUlw?=
+ =?utf-8?B?Vk4wQUhLcElBMU13SXZXdDFkVkI2L0cvVjFCYitsckJ0NFhuSGF4RndzdTBN?=
+ =?utf-8?B?RjJzZTcxb3V2dUhXV3pMNlk3MjkyaEhsZFA5bFAxTG5Dd1djWi9FQVFXZ2tF?=
+ =?utf-8?B?bEcwNkw5N0Mxb1dOL2twSTQ3a2RFc01RZzQvL2VvR2hTMmlwL2NGY2NZaG1T?=
+ =?utf-8?B?dFkwcjBJZDlVQStHQzdxUkJjVW12YUlQbHg1QVVvU005V05qaC90cXQ5L0lp?=
+ =?utf-8?B?cnVBOWo5cUxWUkZTbm0zT0d5clFBYnVLcmp1eEdNVFI5dG1TbFhhNHZLSHpr?=
+ =?utf-8?B?NFdGcWFFa1E0YnJ2dkdtQVRNd2lnMFVjVWtpcUdKVzZ1aTJOQnVyTGNFbHNH?=
+ =?utf-8?B?TGVNOFdyMXZVZ3pIS1ExWDJSMm1hMGdtaHhuQkx4K1EyaGpodzBpU0VvZW9C?=
+ =?utf-8?B?UWcxclZHclc0Z0I0U1U0QWhzbW01Q2hPTEpNWnpVOXVVeVN3dzRhL25rTjJR?=
+ =?utf-8?B?b1Mvakh3VHNzZUloNEFnd3AxYkxGVzZ6NlRiMkpJM1kvYThaZnNlTzRRdndG?=
+ =?utf-8?B?L0FTVy9ZZERjdlg5NmhhWGNob2c3c3JwT09uWnNRUzZ0QkRzS1Y3NURLNVYz?=
+ =?utf-8?B?NWZlcndPNmN1bURCK2cydGNheTd3NlZqcUZxdWY5Tk5FZXJLdHJNc0xKclBl?=
+ =?utf-8?B?MXphTFdqaG80amdrOUlCdXFyM1oyanFNZGlhS1JZNjRsVUZlVGw5dHdQTWZD?=
+ =?utf-8?B?RXJuTVhyMjhUdHk2VnpsaTJTZDg4Q1NpSUZqVFF3T1NKTDRyeXVaOGl0WTVE?=
+ =?utf-8?B?TUdCL2QvTjhIaW9qZWU4REp2N1FvOENneUVMdktkdHo4R0M2b0NSWmFhYTE0?=
+ =?utf-8?B?c0xGSllXMUVoaldMUXMveENxRVVpTlhvRlZKaVA0OWRsYUFlcGlxMWZVcnZL?=
+ =?utf-8?B?KzFuSHgwcE16aVppeEExK09UQ2c1Ym5LdGFCYWw0YTVoZk93SGFMeHE0MW9O?=
+ =?utf-8?B?UjcyL0lLWnVZVHI5d2ZmREFFSU02VDZUVnRZNGJ2VUd0T2gzRVZtejc4OHlV?=
+ =?utf-8?B?VUFSNHU2dmRLeUE2UE5BQ2lscFcwL21OZ1NKbVRhWUhoN0U3WmNpbUlTd095?=
+ =?utf-8?B?MjF1MWRQWVFhQWpSaG5oWndGa1dSM2VvdEFUWnM1TTBSSm1kdy9tRk5vSStx?=
+ =?utf-8?B?a3I3M0NJQW1pd1NVdk81SkZsU0FPUEpicWR6bHkxQ0Z1ZmUyQmMxKzIzaFp3?=
+ =?utf-8?B?ZW1VSWJXL3ZiQUx4dmNLNnhmYWJWQ2RyV0svd0F2b0N6VGpTRit6RkNvSFBD?=
+ =?utf-8?B?dWMrVG5pZllpeWZkUStrQlhSR2xuTFVIL2YwbWFlN3FJL0hTZHg5ZXNLQ0JZ?=
+ =?utf-8?B?OWQrTzk0TUIyeVFQMlZYL0NDcU1lRnZkcHNGbW02VkV5ZVRkYUVUTXl5eDUw?=
+ =?utf-8?B?bk56ekdvMnJOQnFrYU1rU1FtTWJFZnV4MytMVFVETDMzRnBHQWVYaU1EeXRm?=
+ =?utf-8?B?M3JtcHhNVEVLOHFNN1Y1Zm5mUGhqRGVQMEdEaWlzNFoyRlhUZFJ6WC9iTDNC?=
+ =?utf-8?B?aVBVdENXQkZDR0lDd1B4eEJFWUx5bTRtYTBqRjFFK1F1VkFNRnIxcS8rY2F4?=
+ =?utf-8?B?eEx3c3JVUU9ZY0hHRm1EcG1ZWThOVzRFbjUrSmNRdXM4dEhySDZ6M1Fncndp?=
+ =?utf-8?Q?vpL0=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6432.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7ef54a4-f9d7-4f10-eac6-08db684dc13e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2023 18:25:36.6395
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: I8BjQk/azFJ9Q5w05Uvos5+N7W2fWPt/XrzICTyIrhRm0mPvutLgq0N2c33G/Bnb7Mt3mSqD+HHqu5M4VNZZtw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7140
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/8/23 10:09, Kannan, Baski wrote:
-> [AMD Official Use Only - General]
-> 
-> The patch you have mentioned, aef17ca12719, sounds like a work-around for a problem found in some Ryzen Threadripper processors.
-> If I understand correctly, this work-around (aef17ca12719) has been provided as a blanket fix for all the processors.
-> 
-
-Due to lack of better knowledge and understanding, yes. See
-https://github.com/lm-sensors/lm-sensors/issues/70. That doesn't
-mean that a blanket revert would be appropriate.
-
-> The Industrial Processor in question is the Epyc3k i3255.
-> AMD Family 17h (boot_cpu_data.x86)
-> AMD model 00h - 0fh (boot_cpu_data.x86_model)
-> Model Name - contains string "3255"
-> 
-> It supports temperature ranging from -40 degree Celsius to 105 deg Celsius.
-> We have customers' machines running at -20 deg Celsius. They require that the correct temperature be passed to their tools.
-> 
-
-We have two options: Either limit the workaround to the list of processors
-which may be affected by the original problem, or do not apply it to
-processors which are known to _not_ be affected by the problem. Either
-can easily be implemented by adding a flag to struct k10temp_data and
-setting it in the probe function.
-
-No one outside AMD knows which processors may or may not be affected
-by the original problem. It was reported on 1950X at the time, but
-it may exist on all processors with the ability to set Sense MI Skew
-(and possibly Sense MI Offset), whatever that is. With that in mind,
-the fix will have to be provided by AMD.
-
-Guenter
-
-> -----Original Message-----
-> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-> Sent: Thursday, June 8, 2023 8:52 AM
-> To: Kannan, Baski <Baski.Kannan@amd.com>
-> Cc: Moger, Babu <Babu.Moger@amd.com>; clemens@ladisch.de; jdelvare@suse.com; linux-hwmon@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH] hwmon: (k10temp) Report negative temperatures
-> 
-> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
-> 
-> 
-> On Tue, May 23, 2023 at 02:46:46PM -0700, Guenter Roeck wrote:
->> On Tue, May 23, 2023 at 03:49:32PM -0500, Baskaran Kannan wrote:
->>> Currently, the tctl and die temperatures are rounded off to zero if
->>> they are less than 0. There are industrial processors which work
->>> below zero.
->>
->> This was introduced with commit aef17ca12719 ("hwmon: (k10temp) Only
->> apply temperature offset if result is positive"). This patch would
->> effecively revert that change. Given the reason for introducing it I
->> am not convinced that it is a good idea to unconditionally revert it.
->>
-> 
-> Any comments ? I am not inclined to accept this patch as-is. What are the industrial processors ? Is there a means to detect them ?
-> 
-> Guenter
-> 
->> Guenter
->>
->>>
->>> To display the correct temperature remove the rounding off.
->>>
->>> Signed-off-by: Baskaran Kannan <Baski.Kannan@amd.com>
->>> ---
->>>   drivers/hwmon/k10temp.c | 4 ----
->>>   1 file changed, 4 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c index
->>> 7b177b9fbb09..489ad0b1bc74 100644
->>> --- a/drivers/hwmon/k10temp.c
->>> +++ b/drivers/hwmon/k10temp.c
->>> @@ -204,13 +204,9 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
->>>              switch (channel) {
->>>              case 0:         /* Tctl */
->>>                      *val = get_raw_temp(data);
->>> -                   if (*val < 0)
->>> -                           *val = 0;
->>>                      break;
->>>              case 1:         /* Tdie */
->>>                      *val = get_raw_temp(data) - data->temp_offset;
->>> -                   if (*val < 0)
->>> -                           *val = 0;
->>>                      break;
->>>              case 2 ... 13:          /* Tccd{1-12} */
->>>                      amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
->>> --
->>> 2.25.1
->>>
-
+W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNClRvIG5vdCBzcGF3biBhbnkgbmV3
+IHByb2JsZW1zLCB3ZSBjYW4gZ28gYWhlYWQgd2l0aCBvcHRpb24gMi4gIGkuZS4sICJkbyBub3Qg
+YXBwbHkgaXQgdG8gcHJvY2Vzc29ycyB3aGljaCBhcmUga25vd24gdG8gX25vdF8gYmUgYWZmZWN0
+ZWQgYnkgdGhlIHByb2JsZW0uIg0KDQpUaGFua3MNCi0gQmFza2kNCg0KLS0tLS1PcmlnaW5hbCBN
+ZXNzYWdlLS0tLS0NCkZyb206IEd1ZW50ZXIgUm9lY2sgPGdyb2VjazdAZ21haWwuY29tPiBPbiBC
+ZWhhbGYgT2YgR3VlbnRlciBSb2Vjaw0KU2VudDogVGh1cnNkYXksIEp1bmUgOCwgMjAyMyAxOjAz
+IFBNDQpUbzogS2FubmFuLCBCYXNraSA8QmFza2kuS2FubmFuQGFtZC5jb20+DQpDYzogTW9nZXIs
+IEJhYnUgPEJhYnUuTW9nZXJAYW1kLmNvbT47IGNsZW1lbnNAbGFkaXNjaC5kZTsgamRlbHZhcmVA
+c3VzZS5jb207IGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIu
+a2VybmVsLm9yZzsgUmFtYXlhbmFtLCBQYXZhbiA8UGF2YW4uUmFtYXlhbmFtQGFtZC5jb20+DQpT
+dWJqZWN0OiBSZTogW1BBVENIXSBod21vbjogKGsxMHRlbXApIFJlcG9ydCBuZWdhdGl2ZSB0ZW1w
+ZXJhdHVyZXMNCg0KQ2F1dGlvbjogVGhpcyBtZXNzYWdlIG9yaWdpbmF0ZWQgZnJvbSBhbiBFeHRl
+cm5hbCBTb3VyY2UuIFVzZSBwcm9wZXIgY2F1dGlvbiB3aGVuIG9wZW5pbmcgYXR0YWNobWVudHMs
+IGNsaWNraW5nIGxpbmtzLCBvciByZXNwb25kaW5nLg0KDQoNCk9uIDYvOC8yMyAxMDowOSwgS2Fu
+bmFuLCBCYXNraSB3cm90ZToNCj4gW0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQo+
+DQo+IFRoZSBwYXRjaCB5b3UgaGF2ZSBtZW50aW9uZWQsIGFlZjE3Y2ExMjcxOSwgc291bmRzIGxp
+a2UgYSB3b3JrLWFyb3VuZCBmb3IgYSBwcm9ibGVtIGZvdW5kIGluIHNvbWUgUnl6ZW4gVGhyZWFk
+cmlwcGVyIHByb2Nlc3NvcnMuDQo+IElmIEkgdW5kZXJzdGFuZCBjb3JyZWN0bHksIHRoaXMgd29y
+ay1hcm91bmQgKGFlZjE3Y2ExMjcxOSkgaGFzIGJlZW4gcHJvdmlkZWQgYXMgYSBibGFua2V0IGZp
+eCBmb3IgYWxsIHRoZSBwcm9jZXNzb3JzLg0KPg0KDQpEdWUgdG8gbGFjayBvZiBiZXR0ZXIga25v
+d2xlZGdlIGFuZCB1bmRlcnN0YW5kaW5nLCB5ZXMuIFNlZSBodHRwczovL2dpdGh1Yi5jb20vbG0t
+c2Vuc29ycy9sbS1zZW5zb3JzL2lzc3Vlcy83MC4gVGhhdCBkb2Vzbid0IG1lYW4gdGhhdCBhIGJs
+YW5rZXQgcmV2ZXJ0IHdvdWxkIGJlIGFwcHJvcHJpYXRlLg0KDQo+IFRoZSBJbmR1c3RyaWFsIFBy
+b2Nlc3NvciBpbiBxdWVzdGlvbiBpcyB0aGUgRXB5YzNrIGkzMjU1Lg0KPiBBTUQgRmFtaWx5IDE3
+aCAoYm9vdF9jcHVfZGF0YS54ODYpDQo+IEFNRCBtb2RlbCAwMGggLSAwZmggKGJvb3RfY3B1X2Rh
+dGEueDg2X21vZGVsKSBNb2RlbCBOYW1lIC0gY29udGFpbnMNCj4gc3RyaW5nICIzMjU1Ig0KPg0K
+PiBJdCBzdXBwb3J0cyB0ZW1wZXJhdHVyZSByYW5naW5nIGZyb20gLTQwIGRlZ3JlZSBDZWxzaXVz
+IHRvIDEwNSBkZWcgQ2Vsc2l1cy4NCj4gV2UgaGF2ZSBjdXN0b21lcnMnIG1hY2hpbmVzIHJ1bm5p
+bmcgYXQgLTIwIGRlZyBDZWxzaXVzLiBUaGV5IHJlcXVpcmUgdGhhdCB0aGUgY29ycmVjdCB0ZW1w
+ZXJhdHVyZSBiZSBwYXNzZWQgdG8gdGhlaXIgdG9vbHMuDQo+DQoNCldlIGhhdmUgdHdvIG9wdGlv
+bnM6IEVpdGhlciBsaW1pdCB0aGUgd29ya2Fyb3VuZCB0byB0aGUgbGlzdCBvZiBwcm9jZXNzb3Jz
+IHdoaWNoIG1heSBiZSBhZmZlY3RlZCBieSB0aGUgb3JpZ2luYWwgcHJvYmxlbSwgb3IgZG8gbm90
+IGFwcGx5IGl0IHRvIHByb2Nlc3NvcnMgd2hpY2ggYXJlIGtub3duIHRvIF9ub3RfIGJlIGFmZmVj
+dGVkIGJ5IHRoZSBwcm9ibGVtLiBFaXRoZXIgY2FuIGVhc2lseSBiZSBpbXBsZW1lbnRlZCBieSBh
+ZGRpbmcgYSBmbGFnIHRvIHN0cnVjdCBrMTB0ZW1wX2RhdGEgYW5kIHNldHRpbmcgaXQgaW4gdGhl
+IHByb2JlIGZ1bmN0aW9uLg0KDQpObyBvbmUgb3V0c2lkZSBBTUQga25vd3Mgd2hpY2ggcHJvY2Vz
+c29ycyBtYXkgb3IgbWF5IG5vdCBiZSBhZmZlY3RlZCBieSB0aGUgb3JpZ2luYWwgcHJvYmxlbS4g
+SXQgd2FzIHJlcG9ydGVkIG9uIDE5NTBYIGF0IHRoZSB0aW1lLCBidXQgaXQgbWF5IGV4aXN0IG9u
+IGFsbCBwcm9jZXNzb3JzIHdpdGggdGhlIGFiaWxpdHkgdG8gc2V0IFNlbnNlIE1JIFNrZXcgKGFu
+ZCBwb3NzaWJseSBTZW5zZSBNSSBPZmZzZXQpLCB3aGF0ZXZlciB0aGF0IGlzLiBXaXRoIHRoYXQg
+aW4gbWluZCwgdGhlIGZpeCB3aWxsIGhhdmUgdG8gYmUgcHJvdmlkZWQgYnkgQU1ELg0KDQpHdWVu
+dGVyDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogR3VlbnRlciBSb2Vj
+ayA8Z3JvZWNrN0BnbWFpbC5jb20+IE9uIEJlaGFsZiBPZiBHdWVudGVyIFJvZWNrDQo+IFNlbnQ6
+IFRodXJzZGF5LCBKdW5lIDgsIDIwMjMgODo1MiBBTQ0KPiBUbzogS2FubmFuLCBCYXNraSA8QmFz
+a2kuS2FubmFuQGFtZC5jb20+DQo+IENjOiBNb2dlciwgQmFidSA8QmFidS5Nb2dlckBhbWQuY29t
+PjsgY2xlbWVuc0BsYWRpc2NoLmRlOw0KPiBqZGVsdmFyZUBzdXNlLmNvbTsgbGludXgtaHdtb25A
+dmdlci5rZXJuZWwub3JnOw0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IFN1Ympl
+Y3Q6IFJlOiBbUEFUQ0hdIGh3bW9uOiAoazEwdGVtcCkgUmVwb3J0IG5lZ2F0aXZlIHRlbXBlcmF0
+dXJlcw0KPg0KPiBDYXV0aW9uOiBUaGlzIG1lc3NhZ2Ugb3JpZ2luYXRlZCBmcm9tIGFuIEV4dGVy
+bmFsIFNvdXJjZS4gVXNlIHByb3BlciBjYXV0aW9uIHdoZW4gb3BlbmluZyBhdHRhY2htZW50cywg
+Y2xpY2tpbmcgbGlua3MsIG9yIHJlc3BvbmRpbmcuDQo+DQo+DQo+IE9uIFR1ZSwgTWF5IDIzLCAy
+MDIzIGF0IDAyOjQ2OjQ2UE0gLTA3MDAsIEd1ZW50ZXIgUm9lY2sgd3JvdGU6DQo+PiBPbiBUdWUs
+IE1heSAyMywgMjAyMyBhdCAwMzo0OTozMlBNIC0wNTAwLCBCYXNrYXJhbiBLYW5uYW4gd3JvdGU6
+DQo+Pj4gQ3VycmVudGx5LCB0aGUgdGN0bCBhbmQgZGllIHRlbXBlcmF0dXJlcyBhcmUgcm91bmRl
+ZCBvZmYgdG8gemVybyBpZg0KPj4+IHRoZXkgYXJlIGxlc3MgdGhhbiAwLiBUaGVyZSBhcmUgaW5k
+dXN0cmlhbCBwcm9jZXNzb3JzIHdoaWNoIHdvcmsNCj4+PiBiZWxvdyB6ZXJvLg0KPj4NCj4+IFRo
+aXMgd2FzIGludHJvZHVjZWQgd2l0aCBjb21taXQgYWVmMTdjYTEyNzE5ICgiaHdtb246IChrMTB0
+ZW1wKSBPbmx5DQo+PiBhcHBseSB0ZW1wZXJhdHVyZSBvZmZzZXQgaWYgcmVzdWx0IGlzIHBvc2l0
+aXZlIikuIFRoaXMgcGF0Y2ggd291bGQNCj4+IGVmZmVjaXZlbHkgcmV2ZXJ0IHRoYXQgY2hhbmdl
+LiBHaXZlbiB0aGUgcmVhc29uIGZvciBpbnRyb2R1Y2luZyBpdCBJDQo+PiBhbSBub3QgY29udmlu
+Y2VkIHRoYXQgaXQgaXMgYSBnb29kIGlkZWEgdG8gdW5jb25kaXRpb25hbGx5IHJldmVydCBpdC4N
+Cj4+DQo+DQo+IEFueSBjb21tZW50cyA/IEkgYW0gbm90IGluY2xpbmVkIHRvIGFjY2VwdCB0aGlz
+IHBhdGNoIGFzLWlzLiBXaGF0IGFyZSB0aGUgaW5kdXN0cmlhbCBwcm9jZXNzb3JzID8gSXMgdGhl
+cmUgYSBtZWFucyB0byBkZXRlY3QgdGhlbSA/DQo+DQo+IEd1ZW50ZXINCj4NCj4+IEd1ZW50ZXIN
+Cj4+DQo+Pj4NCj4+PiBUbyBkaXNwbGF5IHRoZSBjb3JyZWN0IHRlbXBlcmF0dXJlIHJlbW92ZSB0
+aGUgcm91bmRpbmcgb2ZmLg0KPj4+DQo+Pj4gU2lnbmVkLW9mZi1ieTogQmFza2FyYW4gS2FubmFu
+IDxCYXNraS5LYW5uYW5AYW1kLmNvbT4NCj4+PiAtLS0NCj4+PiAgIGRyaXZlcnMvaHdtb24vazEw
+dGVtcC5jIHwgNCAtLS0tDQo+Pj4gICAxIGZpbGUgY2hhbmdlZCwgNCBkZWxldGlvbnMoLSkNCj4+
+Pg0KPj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL2sxMHRlbXAuYyBiL2RyaXZlcnMvaHdt
+b24vazEwdGVtcC5jIGluZGV4DQo+Pj4gN2IxNzdiOWZiYjA5Li40ODlhZDBiMWJjNzQgMTAwNjQ0
+DQo+Pj4gLS0tIGEvZHJpdmVycy9od21vbi9rMTB0ZW1wLmMNCj4+PiArKysgYi9kcml2ZXJzL2h3
+bW9uL2sxMHRlbXAuYw0KPj4+IEBAIC0yMDQsMTMgKzIwNCw5IEBAIHN0YXRpYyBpbnQgazEwdGVt
+cF9yZWFkX3RlbXAoc3RydWN0IGRldmljZSAqZGV2LCB1MzIgYXR0ciwgaW50IGNoYW5uZWwsDQo+
+Pj4gICAgICAgICAgICAgIHN3aXRjaCAoY2hhbm5lbCkgew0KPj4+ICAgICAgICAgICAgICBjYXNl
+IDA6ICAgICAgICAgLyogVGN0bCAqLw0KPj4+ICAgICAgICAgICAgICAgICAgICAgICp2YWwgPSBn
+ZXRfcmF3X3RlbXAoZGF0YSk7DQo+Pj4gLSAgICAgICAgICAgICAgICAgICBpZiAoKnZhbCA8IDAp
+DQo+Pj4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICp2YWwgPSAwOw0KPj4+ICAgICAgICAg
+ICAgICAgICAgICAgIGJyZWFrOw0KPj4+ICAgICAgICAgICAgICBjYXNlIDE6ICAgICAgICAgLyog
+VGRpZSAqLw0KPj4+ICAgICAgICAgICAgICAgICAgICAgICp2YWwgPSBnZXRfcmF3X3RlbXAoZGF0
+YSkgLSBkYXRhLT50ZW1wX29mZnNldDsNCj4+PiAtICAgICAgICAgICAgICAgICAgIGlmICgqdmFs
+IDwgMCkNCj4+PiAtICAgICAgICAgICAgICAgICAgICAgICAgICAgKnZhbCA9IDA7DQo+Pj4gICAg
+ICAgICAgICAgICAgICAgICAgYnJlYWs7DQo+Pj4gICAgICAgICAgICAgIGNhc2UgMiAuLi4gMTM6
+ICAgICAgICAgIC8qIFRjY2R7MS0xMn0gKi8NCj4+Pg0KPj4+IGFtZF9zbW5fcmVhZChhbWRfcGNp
+X2Rldl90b19ub2RlX2lkKGRhdGEtPnBkZXYpLA0KPj4+IC0tDQo+Pj4gMi4yNS4xDQo+Pj4NCg0K
