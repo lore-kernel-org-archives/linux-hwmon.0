@@ -2,141 +2,115 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5720BC7EE37
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 06:46:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F00AC7EE2E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 07:20:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234566AbjFHGqj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Jun 2023 02:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
+        id S234957AbjFHHU2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Jun 2023 03:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234951AbjFHGqi (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 02:46:38 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDE32132
-        for <linux-hwmon@vger.kernel.org>; Wed,  7 Jun 2023 23:46:36 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-973f78329e3so51067866b.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 07 Jun 2023 23:46:36 -0700 (PDT)
+        with ESMTP id S235151AbjFHHUW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 03:20:22 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA3B1BE4
+        for <linux-hwmon@vger.kernel.org>; Thu,  8 Jun 2023 00:20:12 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-977d55ac17bso57466366b.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 08 Jun 2023 00:20:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686206795; x=1688798795;
+        d=linaro.org; s=google; t=1686208811; x=1688800811;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=IZgN/pq4zJXDMGVU52SbNy/IfFWaN7LSvJZjeMzXd3A=;
-        b=iGdtH8Yqn6jyihGPQrVSC70sM4ACObapuBk2v11OGmQBItBAukIcUpZpLTmfOoBuMH
-         MHMA687Xp4MEV2oWdJP/Wn/K3E5glM6aPgQL+wxe5WGRKiOHlCEefmESBl0dNa7Y1BSI
-         J3bKeUuKfB2HIqfxCO/S/dQUt2PdVGLQmRA+DX2hVHY43g0SQfyYlk26IAh8GMiPJAAK
-         k8oZ27dbhxkySftlDFX9G7fu82nMV96SdFjcG1j/pvBA6anzLU9pO1YuQUUebDzPcmol
-         +y4mxiKfkVli1IYAh7BCSbrk1hcSw5wlO0WwSjUWivy5UYahTuamqSnpcWSrg+dTFkQ5
-         eG7Q==
+        bh=sCl6rtqI/lnsAp34i7m13i8YaVFA5i7mUTO1m89CYUc=;
+        b=l725wZUxx6r1Ycdzj7cFBsrukTjy35bP8IPHmCSPAz2hwoQ7qy8PxBKnau50bylSgD
+         HR75/QKRHMZqVnep07+5VoUwjXIK1GOar8CmX+kSwjwZWQBzxsrJ3vI/jvm6cGzwUz0G
+         h4BXewrylaAkKZWViWZzgE2aRhGAcI6xcMtveDLMcSp9Cl6zrvAKlUt0b7xoRBdosabR
+         MOoX7D2/feSpNpjMkhKJM30W0R1//Ojj8UTP/OZW+U47/wyyxY6cduOrMp4VijBrz+7a
+         NveV1pzoP2fV+SB8xaAMgkXATbpJ4PAH5tckzUVAwOU8ilr5RuWYZXWQ/NtkyW/CFKc1
+         6VEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686206795; x=1688798795;
+        d=1e100.net; s=20221208; t=1686208811; x=1688800811;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IZgN/pq4zJXDMGVU52SbNy/IfFWaN7LSvJZjeMzXd3A=;
-        b=kyfk4qcpdvEiJGX1LkxttteqonvAqO2FrE1gQjki19mchFSgi4c+Ydp8HgxJu7qxBr
-         NCw0o2LxRLFjhxV6RTD5UzGLK6CLqCCMtAdS4eYuc63mhTUT0N/t/EgFCl877yuHEcYq
-         JtbGE2AYbQkZLQrNPCMsLFSeaHSe834AitfbFQg0lQ6JmXsviQSYohzLau64oH6uTskv
-         PBIoXSXLMw+ikNR+zIu0oAU+xbFMFdJ2CV1gRNNGX51QQakiFqr13j1jjcJ/41XES5Fe
-         qCOhwE0PajYzbwMmiqCx6q9Vzx1kZr92xQLSZRwZQz4z5kwVvJE30J4Uv0e2O5rC2oNU
-         K8KA==
-X-Gm-Message-State: AC+VfDwGxsUssV+GuLqikydKfCHZA/tO1O9iDPYivejxC1BBLsB+hHGK
-        gUvCcWy+XfYYOJ9YxLHyACOWuQ==
-X-Google-Smtp-Source: ACHHUZ5p6fnCJHV5uldMrLu0wmGEQEGXksmv6Ojnv/qWf/9hyk16AeQy+XeNgmX+HuGIJCAn8kxjXg==
-X-Received: by 2002:a17:907:72d0:b0:974:5ece:19a6 with SMTP id du16-20020a17090772d000b009745ece19a6mr9808402ejc.54.1686206794751;
-        Wed, 07 Jun 2023 23:46:34 -0700 (PDT)
+        bh=sCl6rtqI/lnsAp34i7m13i8YaVFA5i7mUTO1m89CYUc=;
+        b=O4JHihaFf84nZyCniyZEhVruOt1YadmoQz/uGArwjJOq+0kLqlycef7XdF3P8QmQzb
+         L4YWWlJ3qH4eGsD1q7E4L/veefxBPevcZdWg1M8jcw1/N7aL4rQQPtkSMg2WoJzp03Ik
+         q8AyQkxkLmt7SSQGyeU/AAYfHcVnTAiM82qdhDs5bhOya+chSS9JmqsSstMQ9ET5L1C7
+         9kN+d0959X9Nq/vQKsdw/1v79mHiNfI8DceEhSm+ZrjAwEAIREbHRaf2QI+0kDJGqGtf
+         fN/1lYckwbmvPAH9yg+3M/5IbMuQwO8PNcQcpcOYTwGxTOQwddDMJDwaooikS95hqwyF
+         2LJA==
+X-Gm-Message-State: AC+VfDzP947MPDfjnKzDaf/6E+E/LCu5skXei6u+dtS8n/xCW8qWFWWv
+        5MpNf9O6bA3EKh3AaNwI7kTMYg==
+X-Google-Smtp-Source: ACHHUZ5dyxvogNuartC9WpRJfkks70+K3BJ8tJOfNobMtwn0tLJXermHSdQpCm9l7vzWKuJsNrZRpA==
+X-Received: by 2002:a17:907:1628:b0:974:5e8b:fc35 with SMTP id hb40-20020a170907162800b009745e8bfc35mr8746192ejc.26.1686208811151;
+        Thu, 08 Jun 2023 00:20:11 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id z18-20020a170906945200b00978874d1083sm273646ejx.135.2023.06.07.23.46.32
+        by smtp.gmail.com with ESMTPSA id j24-20020a170906051800b00965e1be3002sm309402eja.166.2023.06.08.00.20.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 23:46:34 -0700 (PDT)
-Message-ID: <4dffd320-8e30-fb30-6ded-79519afddc21@linaro.org>
-Date:   Thu, 8 Jun 2023 08:46:31 +0200
+        Thu, 08 Jun 2023 00:20:10 -0700 (PDT)
+Message-ID: <5000d481-2125-95e0-4033-d9c71a49cbd7@linaro.org>
+Date:   Thu, 8 Jun 2023 09:20:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [v6 1/4] dt-bindings: pwm: Add ASPEED PWM Control documentation
+Subject: Re: [v4 1/5] dt-bindings: mfd: Add aspeed pwm-tach binding
 Content-Language: en-US
-To:     Billy Tsai <billy_tsai@aspeedtech.com>, jdelvare@suse.com,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        corbet@lwn.net, p.zabel@pengutronix.de,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-doc@vger.kernel.org,
-        patrick@stwcx.xyz
-References: <20230608021839.12769-1-billy_tsai@aspeedtech.com>
- <20230608021839.12769-2-billy_tsai@aspeedtech.com>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+References: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
+ <20221123061635.32025-2-billy_tsai@aspeedtech.com>
+ <c4b188b1-06a4-3cb0-a758-e12942e1f67b@linaro.org>
+ <ce99a709-ba4a-eb53-39ac-88a194879000@linaro.org>
+ <SG2PR06MB3365AE9D075601CB62C6E7F78B50A@SG2PR06MB3365.apcprd06.prod.outlook.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230608021839.12769-2-billy_tsai@aspeedtech.com>
+In-Reply-To: <SG2PR06MB3365AE9D075601CB62C6E7F78B50A@SG2PR06MB3365.apcprd06.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 08/06/2023 04:18, Billy Tsai wrote:
-> Document the compatible for aspeed,ast2600-pwm device.
+On 08/06/2023 09:15, Billy Tsai wrote:
+>         On 23/11/2022 09:24, Krzysztof Kozlowski wrote:
+>         >> On 23/11/2022 07:16, Billy Tsai wrote:
+>         >>> Add device binding for aspeed pwm-tach device which is a multi-function
+>         >>> device include pwm and tach function.
+>         >>
+>         >> Subject: drop second, redundant "bindings".
 > 
-> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
-> ---
->  .../bindings/pwm/aspeed,ast2600-pwm.yaml      | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
+>         > Where did you implement this comment in your v6?
 > 
-> diff --git a/Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml b/Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
-> new file mode 100644
-> index 000000000000..a9e040263578
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
-> @@ -0,0 +1,38 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) 2021 Aspeed, Inc.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pwm/aspeed,ast2600-pwm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Aspeed Ast2600 PWM controller
-> +
-> +maintainers:
-> +  - Billy Tsai <billy_tsai@aspeedtech.com>
-> +
-> +description: |
-> +  The Aspeed PWM controller supports up to 1 PWM outputs.
+> Sorry, I guess by "Subject: drop second, redundant "bindings"" you meant to remove the second "bindings" string from my subject. So I change the subject from "dt-bindings: hwmon: Add bindings for aspeed tach controller" and "dt-bindings: pwm: Add bindings for aspeed pwm controller" in v4 to "dt-bindings: hwmon: Add ASPEED TACH Control documentation" and "dt-bindings: pwm: Add ASPEED PWM Control documentation" in v6.
 
-This does not look right.
+A nit, subject: drop second/last, redundant "documentation". The
+"dt-bindings" prefix is already stating that these are bindings and
+documentation.
 
-> +
-> +allOf:
-> +  - $ref: pwm.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - aspeed,ast2600-pwm
-> +
-> +  "#pwm-cells":
-> +    const: 3
+> If I have misunderstood your comment, please let me know.
 
-3 cells? For one PWM? What are they?
+You replaced one redundant with other redundant. I only asked to drop
+it, not replace it.
 
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - resets
-> +
-> +additionalProperties: false
-
-Missing examples. All bindings need examples.
 
 Best regards,
 Krzysztof
