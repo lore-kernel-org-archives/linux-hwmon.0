@@ -2,113 +2,180 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00729C7EE43
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 10:23:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D5EDC7EE23
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 10:42:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236007AbjFHKXV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Jun 2023 06:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        id S234872AbjFHKmp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Jun 2023 06:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235934AbjFHKXU (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 06:23:20 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34691FE9;
-        Thu,  8 Jun 2023 03:23:18 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-3f805551a19so2983371cf.3;
-        Thu, 08 Jun 2023 03:23:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686219798; x=1688811798;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kTGc9+CSoeOkMBrTWKiVuewpGFLPDLPpalEIUi+52BA=;
-        b=kMHuP+l6AXKx3KQnUOjWbYWoygOj0EqlCR/SK6JXYS+kMBFEU6Rc0eujR7UkxtqWiS
-         PFNuVRkOld8O9nw/mj5VeVXmSX0JxgBmHGPhsUBVcyFvSickkEiNBG8j1LhYi5TD+cYd
-         I5+N+MIwfLY7HVC98OSVb1lPZSFebqzyfkpj1onClKIC5dyTV8QvMi90Czq8CiUSKsi1
-         MG5xq0NPfANPTYKkHgFgqYrKwDAlkoqMTWp15YW84I3d/H5i/0U1/aKkvMN9z+IgVz+p
-         L373YuR0Obd7S9i57laQRaPTyYVPvSjBLsZfwxco9/RvhgjeIVqugHwba9mm8xFVft+h
-         NeYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686219798; x=1688811798;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kTGc9+CSoeOkMBrTWKiVuewpGFLPDLPpalEIUi+52BA=;
-        b=BHpe/r0S46w/kFpx62JLs/UI2piH0qyDlPwtKBo0WW610XTztEZqZuKXWQW/fhiJsH
-         srugB8K1ebQpazABhrR6G5lrB3d8ybNfUJu7ZZsuThEVBd+ZcvxaVGU6ZBDijF+5PBtx
-         9KKA3JmYmsNGJdZa8JPNng/hUiM+u+QhvxgQobXIaexXRsjt0RyA0XQlms5Vc0zzxy+k
-         z4TcQBJbhwWRF90jd0yUMLgwV3cdpDpcmoS9Sm8vzx7NUwEK31h/v1wqmPUYHTqroZRE
-         104k343EZz6q5Wt7RUbC4GbgQ3Ntx8b6sZ/WudJhbl2skU0KkaOGQUTAnwxIcNODEDRb
-         2Sgg==
-X-Gm-Message-State: AC+VfDynQQbVNUdbLEoVDjxY81cG0TxvM3oRb2oo8NRb6i4DAix+NwN2
-        apWVZN+XzDparXT3HUBctnOCSpiMJlJM4q08lHU=
-X-Google-Smtp-Source: ACHHUZ6z0z1c6MZ/b7vwZN5NjCnABNDqKYUfgcFRXC3Draq6zwT1osRCCxn9GS7FNS/Wdk25um1UK7eE6Ytu4bxgJq4=
-X-Received: by 2002:ac8:5a11:0:b0:3f6:e3aa:a61f with SMTP id
- n17-20020ac85a11000000b003f6e3aaa61fmr6798441qta.19.1686219797956; Thu, 08
- Jun 2023 03:23:17 -0700 (PDT)
+        with ESMTP id S234666AbjFHKml (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 06:42:41 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE782D47;
+        Thu,  8 Jun 2023 03:42:39 -0700 (PDT)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3588gtZX008719;
+        Thu, 8 Jun 2023 06:42:22 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3r2a9dvdxf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jun 2023 06:42:21 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 358AgKMa060703
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 8 Jun 2023 06:42:20 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 8 Jun 2023
+ 06:42:19 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Thu, 8 Jun 2023 06:42:19 -0400
+Received: from daniel-Precision-5530.ad.analog.com ([10.48.65.214])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 358Ag6lb015182;
+        Thu, 8 Jun 2023 06:42:08 -0400
+From:   Daniel Matyas <daniel.matyas@analog.com>
+CC:     Daniel Matyas <daniel.matyas@analog.com>,
+        Rob Herring <robh@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+Subject: [PATCH v11 1/2] dt-bindings: hwmon: add MAX31827
+Date:   Thu, 8 Jun 2023 13:41:48 +0300
+Message-ID: <20230608104152.14249-1-daniel.matyas@analog.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230606014234.29491-1-nick.hawkins@hpe.com> <20230606014234.29491-3-nick.hawkins@hpe.com>
- <ZH76x6E9cbfrJHeu@surfacebook> <DM4PR84MB19278E9DD0BF34C570F714708852A@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
- <CAHp75Vcc9hh6MYPSCJa1vniU=rC4Y+j9pCS4Np-b-Pyh5eUwNg@mail.gmail.com>
- <81CFCEE8-5276-475A-A2AB-A814DEDA04B2@hpe.com> <CAHp75VeZkLSTw8OFmDMYb+im0qK0NQRHpndzBM7fMHm=HZCzeA@mail.gmail.com>
- <7FEECBB4-482E-4719-94CA-6D10E4C08078@hpe.com>
-In-Reply-To: <7FEECBB4-482E-4719-94CA-6D10E4C08078@hpe.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 8 Jun 2023 13:22:42 +0300
-Message-ID: <CAHp75VfQguYENE0EtZ-ou=CXo0mAmeDT9byTu6hffT6w_cgM=Q@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] gpio: gxp: Add HPE GXP GPIO
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: 3xzTneVN_t0juPP8nOkfhJukPiGQkVWX
+X-Proofpoint-ORIG-GUID: 3xzTneVN_t0juPP8nOkfhJukPiGQkVWX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-08_07,2023-06-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ priorityscore=1501 clxscore=1011 mlxscore=0 spamscore=0 lowpriorityscore=0
+ phishscore=0 bulkscore=0 adultscore=0 impostorscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306080090
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 11:45=E2=80=AFPM Hawkins, Nick <nick.hawkins@hpe.com=
-> wrote:
->
-> > It does care about things the average GPIO controller driver needs to
-> > repeat. So at least you may try and see how it will look.
+MAX31827 is a low-power temperature switch with I2C interface.
 
-...
+The device is a ±1°C accuracy from -40°C to +125°C
+(12 bits) local temperature switch and sensor with I2C/SM-
+Bus interface. The combination of small 6-bump wafer-lev-
+el package (WLP) and high accuracy makes this temper-
+ature sensor/switch ideal for a wide range of applications.
 
-> Is there any documents available describing how regmap_gpio
-> populates the GPIO lines? Does it automatically go through and add lines
-> for each successful regmap_read and bits per byte?
+Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
 
-Nope, it assumes one bit per register or something different if xlate
-callback is defined. This is my understanding. That said, it might be
-that this is a limitation which does not allow you to switch to that
-library.
+Change log:
+v10 -> v11: No change.
+v9 -> v10: Added proper change log.
+v8 -> v9: Did not use '--base'.
+v7 -> v8: Added '--base=[Linux 6.4-rc1 commmit]' when using 'git format-patch'
+v6 -> v7: No change.
+v5 -> v6: Added Reviewed-by tag.
+v3 -> v5: Forgot to add Reviewed-by tag.
+v2 -> v3: Made max31828 and max31829 compatible with max31827.
+v1 -> v2: Resolved dt_binding_check errors. Dropped status at i2c node. Made node name generic. 
 
-...
 
-> static const struct regmap_config gxp_int_regmap_config =3D {
->         .reg_bits =3D 8,
+ .../bindings/hwmon/adi,max31827.yaml          | 54 +++++++++++++++++++
+ MAINTAINERS                                   |  7 +++
+ 2 files changed, 61 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
 
->         .reg_stride =3D 1,
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+new file mode 100644
+index 000000000000..2dc8b07b4d3b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/adi,max31827.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch
++
++maintainers:
++  - Daniel Matyas <daniel.matyas@analog.com>
++
++description: |
++  Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch with
++  I2C Interface
++  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31827-MAX31829.pdf
++
++properties:
++  compatible:
++    oneOf:
++      - const: adi,max31827
++      - items:
++          - enum:
++              - adi,max31828
++              - adi,max31829
++          - const: adi,max31827
++
++  reg:
++    maxItems: 1
++
++  vref-supply:
++    description:
++      Must have values in the interval (1.6V; 3.6V) in order for the device to
++      function correctly.
++
++required:
++  - compatible
++  - reg
++  - vref-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        temperature-sensor@42 {
++            compatible = "adi,max31827";
++            reg = <0x42>;
++            vref-supply = <&reg_vdd>;
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 27ef11624748..752c7e9c4e4a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12612,6 +12612,13 @@ F:	Documentation/userspace-api/media/drivers/max2175.rst
+ F:	drivers/media/i2c/max2175*
+ F:	include/uapi/linux/max2175.h
+ 
++MAX31827 TEMPERATURE SWITCH DRIVER
++M:	Daniel Matyas <daniel.matyas@analog.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Supported
++W:	http://ez.analog.com/community/linux-device-drivers
++F:	Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
++
+ MAX6650 HARDWARE MONITOR AND FAN CONTROLLER DRIVER
+ L:	linux-hwmon@vger.kernel.org
+ S:	Orphan
+-- 
+2.34.1
 
-AFAIU 0 is the same as 1, so this can be dropped.
-
->         .val_bits =3D 8,
->         .readable_reg =3D gxp_read_write_int_register,
->         .writeable_reg =3D gxp_read_write_int_register,
->         .max_register =3D 0x7f
->         .name =3D "gxp-gpio-pl-int"
-> };
-
---=20
-With Best Regards,
-Andy Shevchenko
