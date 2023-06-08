@@ -2,96 +2,140 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B729C7EE29
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 11:31:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C0CEC7EE43
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 13:18:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236030AbjFHLbK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Jun 2023 07:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47632 "EHLO
+        id S236406AbjFHNSR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Jun 2023 09:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236149AbjFHLbF (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 07:31:05 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FE02D75
-        for <linux-hwmon@vger.kernel.org>; Thu,  8 Jun 2023 04:30:48 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-516a0546230so701523a12.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 08 Jun 2023 04:30:47 -0700 (PDT)
+        with ESMTP id S235911AbjFHNSP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 09:18:15 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8EED210C;
+        Thu,  8 Jun 2023 06:18:14 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b2439e9004so2693645ad.3;
+        Thu, 08 Jun 2023 06:18:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686223846; x=1688815846;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=gmail.com; s=20221208; t=1686230294; x=1688822294;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U7+yLjS2Rdd8+uD9LEVYNPNGYkGBInfOHop83YoJaEA=;
-        b=dLQKRo/NGUR6kw/0uWRJAYY+OEFxZpAL5WHNmgT7OPeQgtqnDBUMIruxm+6wPKf0bi
-         p6xt3+Mgo3R2a8JRPyZ9SegJycNN0k81HfuXLpcNMAChNJsSuhDbh2AfycsFa7KQ1PxH
-         qm948QlMwm4anohfh4c5xJMz98HB8ukVeDoQHb/szhjxKCtd2cafGzE/4ygBVYeXC9Hk
-         F9yCSItCwBZSpmEuGzUiePsqaO+5zJVggEsQiMa54cUZuLRsY2bab+rg3wGwD3l4WsQN
-         vFl3pGNNZY1VNXM24tsJIt06+lbj8qW1/zqCf0QLl0uDyz9bm6WGhjBr2zvnmAEdGzcg
-         13kg==
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=D7t/IcsLb1sT149B6ebMikIHDMKdt1t6KHWtlJh10/o=;
+        b=K4GWIYXT3UU+cMQQ9MmBi0hMM0SFVFnM2dt0AhYzqQABRQdYWtL79TlQGkIPQz1jS4
+         j55JKWZeEMYrCfaH0CB8RQ4z0/XvIjIbQw9FiHIi7qRO7VgKAU8XSSVRO50Le2wUROBy
+         hYx/mbWxDd4z4XSFH1+weJ6o3Bf3DpMs3zuPZdEXLf0ugnP4e2nFAFemUqcGc1CfBZ9H
+         POQRpHfPq75yAiPFGsOCS/CN+kzmaTuAXs/BqMdfn6LCKHXq5GeH09gv4X8E8/kRDclF
+         yOoVOoMoM0da32wBUR44aUNaE2gGyfmbgDJwWHq9632pppxAtP2vwHnkJ5zZhcqrC/ng
+         nZxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686223846; x=1688815846;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1686230294; x=1688822294;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U7+yLjS2Rdd8+uD9LEVYNPNGYkGBInfOHop83YoJaEA=;
-        b=MFLRtXoQ9JmGfrrGJTH369fhXfl2303Z2CsuCCAnLnY3zqyjcaMEWnKDSZCI+gC/sJ
-         gfkAob6ZtksgeLO8Z7V81+DFSb2tJFHS9ZOYwNFtIF5CNH/47Xn4D/RHEymGMdkRo0HF
-         ZrDt8sYxJ6fd2fd3sZrtoMW2AQtSLX2UkvgSkXV1cM0IqXmfQr4I4fJ+k/QnaKlTwkKj
-         cG3XB8Y+z0bAJkDhqwgewwtmwhCv9RA8sOZHw781eI7cQkdWtr7Y9zOsh/rM5w9X2lKs
-         ADDaAZpWqiVCaqpx04PbtN0o4Cfwp374d2jrw05dlTytvkpgb8gZDYN0h/2kbAKPZwDE
-         qXRQ==
-X-Gm-Message-State: AC+VfDx/xs1TFzZfgJncgTKnacz72lf0/EPYB7yAv5l9yNWLi7DGMK0X
-        kUuTo0V3VoeHn3PqgYZqhG6f5g==
-X-Google-Smtp-Source: ACHHUZ7IDl+KBpIUAFfVeokHth5486E9vBPZCjaiGmbSJYszj03jrLtK14VAf3gKtwBkyl3ykX/jLg==
-X-Received: by 2002:aa7:c602:0:b0:514:75ff:6a86 with SMTP id h2-20020aa7c602000000b0051475ff6a86mr7037567edq.29.1686223846434;
-        Thu, 08 Jun 2023 04:30:46 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id n21-20020aa7d055000000b0050bc7c882bfsm426433edo.65.2023.06.08.04.30.45
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D7t/IcsLb1sT149B6ebMikIHDMKdt1t6KHWtlJh10/o=;
+        b=Y4RXF2/rhEMuJm2PFmAjFQuvL7KIhYNy0M92nIrHyJhRbbGmhv5fKatXnBVI3BXhcD
+         MZWjUwt1xnNo1XNfZ1b0uCkZOanDH+B3vij6Tqt8WAsf7BBaCpg1Uj0adl3hVanqRCUw
+         MxWHK6afDKdNTcU9hv66VSimGyWsVXhqEsBVmZbM0eQBRlOHU4x+KK6NX6Hcpq2OoPHr
+         pkgXyxu2ZxELPJX1LtTkPjh7H+0Vi8Ns6shvbjeUdfslxhY8QmzfXrRzH/Y+Kg2+uihz
+         +Q+J7dRRswvLOVTa/Hrw5PUFCfDR1ZVPZ1nVd50FiSOjyjLe/EvJsP0ow0Sspd3zSwhq
+         HIMQ==
+X-Gm-Message-State: AC+VfDxjjvMTLfqpc3s1eiTd8Gtrsq35aI8J9R96TgZ3Rna5gopFHln9
+        89uTySC9cHOFmQsL8e0MRck=
+X-Google-Smtp-Source: ACHHUZ5M/cI7gc7yzFDF3kqFxm4rWeaJQMCH5IYlgrLd2Urk2wIeKfwBQ3qpgm5c0VI/CYCFNUAMfg==
+X-Received: by 2002:a17:903:1207:b0:1b0:ec0:7d01 with SMTP id l7-20020a170903120700b001b00ec07d01mr4863322plh.35.1686230294140;
+        Thu, 08 Jun 2023 06:18:14 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t12-20020a170902b20c00b001ac741dfd29sm1387520plr.295.2023.06.08.06.18.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 04:30:45 -0700 (PDT)
-Message-ID: <aeef2066-72f4-8e41-cec3-f5c6815820a6@linaro.org>
-Date:   Thu, 8 Jun 2023 13:30:44 +0200
+        Thu, 08 Jun 2023 06:18:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f76f89a0-7773-6f64-c890-293093d4aba3@roeck-us.net>
+Date:   Thu, 8 Jun 2023 06:18:10 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v11 1/2] dt-bindings: hwmon: add MAX31827
+ Thunderbird/102.10.0
+Subject: Re: [v6 2/4] dt-bindings: hwmon: Add ASPEED TACH Control
+ documentation
 Content-Language: en-US
-To:     Daniel Matyas <daniel.matyas@analog.com>
-Cc:     Rob Herring <robh@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230608104152.14249-1-daniel.matyas@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230608104152.14249-1-daniel.matyas@analog.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Billy Tsai <billy_tsai@aspeedtech.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "patrick@stwcx.xyz" <patrick@stwcx.xyz>
+References: <20230608021839.12769-1-billy_tsai@aspeedtech.com>
+ <20230608021839.12769-3-billy_tsai@aspeedtech.com>
+ <c1c485b0-b68b-4db7-4b67-5d59f1ecb84e@roeck-us.net>
+ <SG2PR06MB3365E360F3FCDE639F3D2D1E8B50A@SG2PR06MB3365.apcprd06.prod.outlook.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <SG2PR06MB3365E360F3FCDE639F3D2D1E8B50A@SG2PR06MB3365.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 08/06/2023 12:41, Daniel Matyas wrote:
-> MAX31827 is a low-power temperature switch with I2C interface.
+On 6/7/23 23:21, Billy Tsai wrote:
+>          > The code says:
 > 
-> The device is a ±1°C accuracy from -40°C to +125°C
-> (12 bits) local temperature switch and sensor with I2C/SM-
-> Bus interface. The combination of small 6-bump wafer-lev-
-> el package (WLP) and high accuracy makes this temper-
-> ature sensor/switch ideal for a wide range of applications.
+>          > In Aspeed AST2600 SoC features 16 TACH controllers, with each
 > 
-> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
+>          > controller capable of supporting up to 1 input.
 > 
-> Change log:
-> v10 -> v11: No change.
+>          > which is a bit different. I guess there are no examples anymore,
+> 
+>          > but I'd really like to see how this looks like in the devicetree file,
+> 
+>          > and how the driver is supposed to distinguish/select the 16 inputs.
+> 
+> Hi Roeck,
+> 
+> The node in the devicetree file will looks like following:
+> 
+> tach0: tach0@1e610008 {
+> 
+>          compatible = "aspeed,ast2600-tach";
+> 
+>          reg = <0x1e610008 0x8>;
+> 
+>          #address-cells = <1>;
+> 
+>          #size-cells = <0>;
+> 
+>          pinctrl-names = "default";
+> 
+>          pinctrl-0 = <&pinctrl_tach0_default>;
+> 
+>          clocks = <&syscon ASPEED_CLK_AHB>;
+> 
+>          resets = <&syscon ASPEED_RESET_PWM>;
+> 
+>          status = "disabled";
+> 
+> };
+> 
 
-Wasn't this applied? Why do you send it again?
+Neither reg nor pinctrl is mentioned in the bindings. Maybe that is not needed nowadays,
+but I find it confusing.
 
-Best regards,
-Krzysztof
+Either case, it is highly unusual that there would be 16 instances of this device
+instead of one. Why is this done ? It doesn't really make sense to me.
+
+Guenter
 
