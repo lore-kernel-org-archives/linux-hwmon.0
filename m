@@ -2,106 +2,107 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED7ABC7EE45
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 13:27:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A29EEC7EE23
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 13:36:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236177AbjFHN1p (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Jun 2023 09:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S233743AbjFHNgT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Jun 2023 09:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234860AbjFHN1o (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 09:27:44 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5DE2136;
-        Thu,  8 Jun 2023 06:27:43 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-6537d2a8c20so351297b3a.2;
-        Thu, 08 Jun 2023 06:27:43 -0700 (PDT)
+        with ESMTP id S232637AbjFHNgS (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 09:36:18 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54224268E;
+        Thu,  8 Jun 2023 06:36:17 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b24eba185cso3162125ad.2;
+        Thu, 08 Jun 2023 06:36:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686230863; x=1688822863;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=qTMZtxLsgZNc3cuP7Uokky79RRouOuEgPTdkBkwmwtc=;
-        b=kxqpzDX+UXXviHrKawFn8GFyawmYEm1odpfT91KAzRbE0urbs58ds+pSUX1koV9UnJ
-         eCipIZ8Cm30xJZzrhikbzxwmIPptF2O5QHVzMwNxt6LgXXRYxOSPd0hh6uLjfMmGPbOX
-         gF9Gx6rpO/H8xS3rR0yoL0r90Jo32qIJMO2nhZs10q9VSGwZXVl1qmsYyWA7MAW/u93f
-         skP+4Ujzujnh+4O1xrP2VqzglY8u4NTYuZfOJLp1TBGydVc7tvpTDtxRtKsiBDw9q2ja
-         2Vqnng0lLxwFWytR6BjeCWp5dcZ4/ghPNrjZt8tESSxI7SprYx7yIO47KHaBcmbaES6J
-         7Y8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686230863; x=1688822863;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1686231377; x=1688823377;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qTMZtxLsgZNc3cuP7Uokky79RRouOuEgPTdkBkwmwtc=;
-        b=YxDjN1Rm5w8tSHM/QN8GN1O9eoaVYX63hpeZAMOB5XOBAxmzuhDEYFanT6/C/GtH78
-         Liqv7KQDKC3D/sxqLODevLjcfkL9BV9aOwI24QOoEb+f+D0QVRjFp5c0CLYaB8wwEcLq
-         JY92Mq0bcYuZ1xIT1OzY8KQa9PGMczhxyr6XkhA93VysRo0sgfTx5eyivIYfrau6kzPE
-         8a+QKJlTmtHBBwMxhJK543mUjpKqIe3qTHdyeDim0ReIl4Aw5UddzUTHAnDGj52E+nTQ
-         Dhjwe1SLWRxl9ZnZz2UR0nAI0y/q1qkJTmp2PUwETBua/vc8h6h72OPeyJZ9HtWOKdv5
-         ePfw==
-X-Gm-Message-State: AC+VfDzO2oQFLuDaJrHms0/rRIJc8lmSvcIGbkq2oTbk2gjoonIeiuTE
-        cRUq7/Pgnkyc+trtxo6vwHNTkdTsDlc=
-X-Google-Smtp-Source: ACHHUZ7XnHRkgrU20otn1V777Rw1TPxhaBNfOWLz68sNpQjXPu7waU9jRrBNs3zlEfTXX61ue966dQ==
-X-Received: by 2002:a05:6a00:24d1:b0:662:93b5:56b9 with SMTP id d17-20020a056a0024d100b0066293b556b9mr3850834pfv.14.1686230862785;
-        Thu, 08 Jun 2023 06:27:42 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e21-20020a62aa15000000b0065014c15a57sm1130991pff.35.2023.06.08.06.27.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 06:27:42 -0700 (PDT)
+        bh=SyrwbuUr776SC2K8+O8G4rOMXSZnIJmVLUQTvFM48oM=;
+        b=Ip1V9XqFu4mMt4kvofbtTw68g1yrjQP2WuOdQe+Fl49EzLKD3o1Z38RBIG1PMfOLvW
+         xWqcosrR4qz7lkstcC+kzL11j0qFTj7rPlHZM5cukMx1JGqN742XTPbj9JfJFDbFXBkM
+         J3uEri+WabUxP4ebNed0GLNXd8CKHXs4UvPVfgMGpg9g85g0vsSDse7I6Wnuo3PZIftn
+         RbP92JwABevhVtY4WlFEJ3UttU6reXPUuM+8lZpTkA7ge0yOqoQk++fD+CAcGJQeOg22
+         3rmmsGrem0KADOp//NcFyzPV0wdMghfGsicF/g0uxLJn2om8jJbPevvUmIg2aMssGqSh
+         NsWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686231377; x=1688823377;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SyrwbuUr776SC2K8+O8G4rOMXSZnIJmVLUQTvFM48oM=;
+        b=iZuMu+YBPs5IGY+DVxKmTSUchXPKce2TsFOKBCR7fAVB1XFWzL/dRefdJl9zUTWjHg
+         9YWijYtYlRnhHlyTYbeHn8rzDHHWGGlTgHTKoqwJhZJPhLbTU83UYAxCqlq/nBBNuEz0
+         bje/d4+sA8QHW9WkkTRwskxA49OFKjPZ0RLhnoaKhtO5h0VyiI2mTzVDzZQai960aUoj
+         G209IlB7MhohcYPU7SGYQ8kxpw6hcMHSzZSEVienOD4E1qjqjqOTYst3zgotvaApLvu5
+         J7n+3m+McQYXog0f5ICnz8Zafj33OnPaVpSXQbLmYNu9WHmCYT1+ZqBUQXMTGoRRMF7z
+         4Z9g==
+X-Gm-Message-State: AC+VfDy5ePqEncjyudmJj2PrGbacJiW3RArkmceSjbLoc0kiAMtgWsnl
+        ETvFLYq+nihdBGKjEU6uSYvunFg3rr0=
+X-Google-Smtp-Source: ACHHUZ6uq3+K8KP81mA2v6LknKsjp0S2YMs1XMeXh7E8PzGJE/gQxaLPwYLeRyTGmlzayyOFmdTDTA==
+X-Received: by 2002:a17:902:ba83:b0:1b1:d51c:f3f6 with SMTP id k3-20020a170902ba8300b001b1d51cf3f6mr4599445pls.57.1686231376751;
+        Thu, 08 Jun 2023 06:36:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k1-20020a170902694100b00199203a4fa3sm1430740plt.203.2023.06.08.06.36.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 06:36:16 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <da56e9c8-ed4a-c11f-fe8c-a97fbbddb736@roeck-us.net>
-Date:   Thu, 8 Jun 2023 06:27:39 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v11 1/2] dt-bindings: hwmon: add MAX31827
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Daniel Matyas <daniel.matyas@analog.com>
-Cc:     Rob Herring <robh@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230608104152.14249-1-daniel.matyas@analog.com>
- <aeef2066-72f4-8e41-cec3-f5c6815820a6@linaro.org>
+Date:   Thu, 8 Jun 2023 06:36:14 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <aeef2066-72f4-8e41-cec3-f5c6815820a6@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH] hwmon: (gsc-hwmon) fix fan pwm temperature scaling
+Message-ID: <5acc2640-7bf9-488f-bbca-c35542915a2f@roeck-us.net>
+References: <20230606153004.1448086-1-tharvey@gateworks.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606153004.1448086-1-tharvey@gateworks.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/8/23 04:30, Krzysztof Kozlowski wrote:
-> On 08/06/2023 12:41, Daniel Matyas wrote:
->> MAX31827 is a low-power temperature switch with I2C interface.
->>
->> The device is a ±1°C accuracy from -40°C to +125°C
->> (12 bits) local temperature switch and sensor with I2C/SM-
->> Bus interface. The combination of small 6-bump wafer-lev-
->> el package (WLP) and high accuracy makes this temper-
->> ature sensor/switch ideal for a wide range of applications.
->>
->> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> ---
->>
->> Change log:
->> v10 -> v11: No change.
+On Tue, Jun 06, 2023 at 08:30:04AM -0700, Tim Harvey wrote:
+> The GSC fan pwm temperature register is in centidegrees celcius but the
+> Linux hwmon convention is to use milidegrees celcius. Fix the scaling.
 > 
-> Wasn't this applied? Why do you send it again?
-> 
+> Fixes: 3bce5377ef66 ("hwmon: Add Gateworks System Controller support")
+> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
 
-There was a problem reported in the driver implementation
-(bad compatible entry). The submitter chose to send
-v11 instead of a patch fixing the already applied driver.
+Applied.
 
-I'll fix up the original driver patch instead. Please ignore.
-
+Thanks,
 Guenter
 
+> ---
+>  drivers/hwmon/gsc-hwmon.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/gsc-hwmon.c b/drivers/hwmon/gsc-hwmon.c
+> index 73e5d92b200b..1501ceb551e7 100644
+> --- a/drivers/hwmon/gsc-hwmon.c
+> +++ b/drivers/hwmon/gsc-hwmon.c
+> @@ -82,8 +82,8 @@ static ssize_t pwm_auto_point_temp_store(struct device *dev,
+>  	if (kstrtol(buf, 10, &temp))
+>  		return -EINVAL;
+>  
+> -	temp = clamp_val(temp, 0, 10000);
+> -	temp = DIV_ROUND_CLOSEST(temp, 10);
+> +	temp = clamp_val(temp, 0, 100000);
+> +	temp = DIV_ROUND_CLOSEST(temp, 100);
+>  
+>  	regs[0] = temp & 0xff;
+>  	regs[1] = (temp >> 8) & 0xff;
+> @@ -100,7 +100,7 @@ static ssize_t pwm_auto_point_pwm_show(struct device *dev,
+>  {
+>  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+>  
+> -	return sprintf(buf, "%d\n", 255 * (50 + (attr->index * 10)) / 100);
+> +	return sprintf(buf, "%d\n", 255 * (50 + (attr->index * 10)));
+>  }
+>  
+>  static SENSOR_DEVICE_ATTR_RO(pwm1_auto_point1_pwm, pwm_auto_point_pwm, 0);
