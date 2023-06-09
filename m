@@ -2,108 +2,98 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01D88C7EE25
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jun 2023 14:37:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 275AFC7EE37
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jun 2023 18:35:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241506AbjFIOhR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Jun 2023 10:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
+        id S232085AbjFISfB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Jun 2023 14:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238413AbjFIOhQ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Jun 2023 10:37:16 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5753E269A;
-        Fri,  9 Jun 2023 07:37:12 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b246dd3390so8215305ad.2;
-        Fri, 09 Jun 2023 07:37:12 -0700 (PDT)
+        with ESMTP id S231758AbjFISev (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Jun 2023 14:34:51 -0400
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DBF3A81
+        for <linux-hwmon@vger.kernel.org>; Fri,  9 Jun 2023 11:34:38 -0700 (PDT)
+Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-55ab0f777acso1396291eaf.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 09 Jun 2023 11:34:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686321431; x=1688913431;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SWIW6qqJd51uSzlmPSBiiIp+Xswi2pR+42bNT8oGIsQ=;
-        b=pxCWtpYRge3pwe27XGgdApJPJ8Iw7aNAl2IqLBDtpki1gj+vpMsBbZMSodkLyRk3Hs
-         xwDqhju+KmMxSv5E1OdnS8FuZkPtSqEusAP1yAG3vlV2aOEOq0I4mHEb7gi4em2/mhJ4
-         /o+60u3n8p1wSH0I4K3LA1miyRlk0ne/CzkQef5Y6lf1i1uN7WzSB3UU3SaU72hjquvQ
-         7c/tB4J65PHAwVTlIxLw769W/YeFB9hHyV8thAAPM/h8CjPI7CTnP5RnM82fVc9C7Tl9
-         9kS8U2x5fjIJAxHpdKdxVnYrjZifyVaK2aePVrdjSZ0PFRr7Id2jsV2x3kOCwqBFcfz3
-         SVAw==
+        d=gmail.com; s=20221208; t=1686335677; x=1688927677;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=tzN8nupiDg4YTMNsf4FMJfF6dPn08x98RlKFzo5rvEk=;
+        b=nZ7zcwHlnEAtnIz58YVuXlNnQ3dkE5OWjv2P6V5EVIi+wp48l3Id586oW3fZXImO81
+         ZGfhowfd7/ZyzW0tGzUI1/qOdyUOpjRfh7XnBkwYEWmyhGC1G2kIbpsuQl1/v2VzWBHn
+         +WbgSjWz10fGb8hq6vDv8fDNrOzOYZHDB/t7x40ozLwGauxyzZBuElRQo9HOEc9rfSZ4
+         eXCgxS1PscEqueoTyQH2dYessvHEAwiUBB3c3UeAoO6YtzjETkebAPzO7oZkGzgYsEgj
+         Sb0+X5a1Ub8kUdMGwUDEWXP55AD5MoyYQSWYngHnEWAZwDVcQDdnwC5K0cebEVd54/uZ
+         I8yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686321431; x=1688913431;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SWIW6qqJd51uSzlmPSBiiIp+Xswi2pR+42bNT8oGIsQ=;
-        b=D0htRTYbpoUet9vffaus/w2XmBu17YgnUK0UUsneCJ9dpvJSGX4OwiXohwQUMBFXoJ
-         fOuazBzVaFWu/+Eb22B7NNIOCp+MeSH4Fhjg7wTLcAtVOml3jLlNLnWm9UixZRz/NyoS
-         rRPeIKkYGOcLorg58ewHU8PjlLSnhTbQVUHssGw0bW+aa1go2Rz+rtcTPwgMXC1N4qyx
-         NpR5H4CWEFCg+BP1/kmMyZ9fOVRj7TzdzlsE8PG2v/zVix5Quh+TFl0r9ePeHQtrURIE
-         QLVjUPDPpFGxLWwdalgk4F/1OqsaccwWhY+1GaoAo2KZn4UllAsV1vUfRNdU3mYhB7fV
-         6wlw==
-X-Gm-Message-State: AC+VfDz/SNfsuCGHnQCW3TGuyz0WnIe/PxOb/kXr/6PhOfb6KkPJsq2D
-        lXaLGCA5r+bwSJG5kzzIE54=
-X-Google-Smtp-Source: ACHHUZ5deXOSS0HUy8LZ8fKjZooRMCA/p/ysVl9XgLfbmmifLolNcr7GdZcEMRNdi1IlHXxvnSDiVQ==
-X-Received: by 2002:a17:903:120c:b0:1b0:3224:e53a with SMTP id l12-20020a170903120c00b001b03224e53amr1607974plh.20.1686321431215;
-        Fri, 09 Jun 2023 07:37:11 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s11-20020a170902ea0b00b001b23eb0b4bbsm3352652plg.147.2023.06.09.07.37.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 07:37:10 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686335677; x=1688927677;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tzN8nupiDg4YTMNsf4FMJfF6dPn08x98RlKFzo5rvEk=;
+        b=Tq/KhOUneMRIRddz12u8OpzKnTKod0Vk+bEhb3UqTN9YjET5H8fRZL0exL8nUvhS4D
+         NzgnrNcOZPFgvLrrn8BsdVEUbnrZcL6H6ev6m+tWDtgL0fI9CUAZ6345Yk56kjtucal3
+         hYQsmryogbubI9qWG5IEe6TAghUVngQCFnC2L0jMNj2Xorh3b00Hp7O7eVt3I/M6dJ1m
+         GYTljIZCkFaH388w2JeWupbZsF8KvhP0mHnU0N1iBtdl/jvaceo2b3ichsysIjU/0RHJ
+         XiBIZZRpfqQtEbFw8osKrjC3JUsLDvs0emQWOmBAUKMp1kX2Jx4X488PqP710hSMNNYm
+         +7Xg==
+X-Gm-Message-State: AC+VfDwcsN/vdr2Gs/IcLNx3IYR/cKkWwoWMieditmfFRcwxvZj4GS6g
+        ThroSdNC5etEun6/TUEbgBSVicrxxIY=
+X-Google-Smtp-Source: ACHHUZ4hyoB8e+CjdalIqh45L6Gf6nPXTnYYHCFxqiTVSMBBziGBVhM3x3jAsOHpH9usTNCaLWn19g==
+X-Received: by 2002:a05:6359:587:b0:129:c30e:5c2c with SMTP id ee7-20020a056359058700b00129c30e5c2cmr2158516rwb.8.1686335676991;
+        Fri, 09 Jun 2023 11:34:36 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l191-20020a6391c8000000b00544c0c45c21sm3199721pge.19.2023.06.09.11.34.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 11:34:36 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <363c1fc1-5ed7-8a21-a627-58d1338c446f@roeck-us.net>
-Date:   Fri, 9 Jun 2023 07:37:08 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Joaquin Aramendia <samsagax@gmail.com>
-Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230527012206.133464-1-samsagax@gmail.com>
- <8ae3e2ad-27ff-4339-88d4-504c2f59e501@roeck-us.net>
- <CABgtM3h8DXs0swGQth=dcE3J_W8k8iejvfFgjVSm9nKbRmxHDQ@mail.gmail.com>
- <820cef00-4768-46ae-c5a5-ea7c0dff71c5@roeck-us.net>
- <CABgtM3h0KMsOzZZvYKZLsFXn9A81V59ygSKizoF3TTkraMWr-Q@mail.gmail.com>
- <94f78001-13df-8c39-4771-7842dc94195e@roeck-us.net>
- <CABgtM3iOyCDgDY1gj-gJ4DXaXCY41FKzy-=miz0iiT8ywjbMHg@mail.gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] hwmon: (oxp-sensors) Add tt_toggle attribute on supported
- boards
-In-Reply-To: <CABgtM3iOyCDgDY1gj-gJ4DXaXCY41FKzy-=miz0iiT8ywjbMHg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Vlad Sytchenko <vsytch@google.com>,
+        Steve Foreman <foremans@google.com>
+Subject: [PATCH] hwmon: (pmbus/max16601) Add support for new revisions of MAX16508
+Date:   Fri,  9 Jun 2023 11:34:33 -0700
+Message-Id: <20230609183433.3633598-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/9/23 05:50, Joaquin Aramendia wrote:
->> Why don't you just attach the attribute to the platform device as I
->> had suggested earlier ?
-> 
-> You mean I should do something like this in probe():
-> 
-> static int oxp_platform_probe(struct platform_device *pdev)
-> {
->    ...
-> 
-> switch (board) {
->      case aok_zoe_a1:
->      case oxp_mini_amd_a07:
->      case oxp_mini_amd_pro:
->          pdev->dev.groups = oxp_ec_groups;
-> }
->      hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
->          &oxp_ec_chip_info, NULL);
-> ...
-> }
-> 
-> Would that work? Or even be correct?
+New revisions of MAX16508 report MAX16508.xx or MAX16508y.xx as device ID,
+but are functionally similar to MAX16508. Add support for those chip
+variants.
 
+Cc: Vlad Sytchenko <vsytch@google.com>
+Cc: Steve Foreman <foremans@google.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/pmbus/max16601.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-No, that would not work, because the platform device already exists.
-It would have to be added in the init function, or if done in the probe
-function it would have to be added to the platform device with an
-explicit call to devm_device_add_group().
-
-Guenter
+diff --git a/drivers/hwmon/pmbus/max16601.c b/drivers/hwmon/pmbus/max16601.c
+index 6724f723f74c..2eb8a61decee 100644
+--- a/drivers/hwmon/pmbus/max16601.c
++++ b/drivers/hwmon/pmbus/max16601.c
+@@ -283,10 +283,10 @@ static int max16601_get_id(struct i2c_client *client)
+ 		return -ENODEV;
+ 
+ 	/*
+-	 * PMBUS_IC_DEVICE_ID is expected to return MAX1660[012]y.xx" or
+-	 * "MAX16500y.xx".cdxxcccccccccc
++	 * PMBUS_IC_DEVICE_ID is expected to return MAX1660[012]y.xx",
++	 * "MAX16500y.xx".cdxxcccccccccc, or "MAX16508y.xx".
+ 	 */
+-	if (!strncmp(buf, "MAX16500", 8)) {
++	if (!strncmp(buf, "MAX16500", 8) || !strncmp(buf, "MAX16508", 8)) {
+ 		id = max16508;
+ 	} else if (!strncmp(buf, "MAX16600", 8)) {
+ 		id = max16600;
+-- 
+2.39.2
 
