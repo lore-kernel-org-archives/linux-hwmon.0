@@ -2,89 +2,93 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E69BCC88CB3
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jun 2023 12:51:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9097C7EE2E
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jun 2023 13:44:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237713AbjFIMvW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Jun 2023 08:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52638 "EHLO
+        id S230523AbjFINol (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Jun 2023 09:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240955AbjFIMvE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Jun 2023 08:51:04 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D77210A;
-        Fri,  9 Jun 2023 05:51:03 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-ba841216e92so1748215276.1;
-        Fri, 09 Jun 2023 05:51:03 -0700 (PDT)
+        with ESMTP id S229568AbjFINok (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Jun 2023 09:44:40 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDE030E4;
+        Fri,  9 Jun 2023 06:44:39 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-652a6cf1918so1508543b3a.1;
+        Fri, 09 Jun 2023 06:44:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686315063; x=1688907063;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HGZuJbgC740YLODlkWmjW5DXUdE1JToY+I5MmfvcPe8=;
-        b=mvNcCHBWzHzNrO5q//rYg4MIP+yevdSZDgHg069w9JYhCxodazO3P0y1RhJZcahL3r
-         XRBlpalsVTX7DHdxNerlk7owLreS7cT55RUWTlFS2K9zWzz/nP2nGlqr5As0fjqzDmZt
-         6fRFUj9vNnn4g/kCU5Oy2zaQ7uIbM2QyNevd+slCegXUirOZcn2sH6hYb9mgrKOA3l1P
-         a8L416qBpaJcP858J3isZqocEckWOeMw+0Vj8VjH6ZQadugzAaalzSY9axGPO3jEOVw7
-         pHdmJeroiqyI2qf63yxYzuFQ71pRKUmaCfvXo9zxCA+i/FORWSD3rR7hHOOFoVZ7+NaQ
-         Qq5w==
+        d=gmail.com; s=20221208; t=1686318279; x=1688910279;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pvl1ODfYpXdx5tiAQ2WeY28wbqmcjr4dGt9a9iD0Qkc=;
+        b=RqLUiqe3bKvGMoQWoC9hgzNFXKbZgVj5odcAej97eabKbRmt+tz2anHGDAk8bfz+vH
+         /EdWl9n43tr9OkVKFZhyb8hrp9y0QXJDsHXIvlf8wFZv8Ta0ndCEKe3dc8KhR8nw3ayq
+         Z+VpAVGflI5TnnKLR5TwzujcSl192nvfvwtM7/w6rFErnXTk7tZzDeeA2rxIijcal4Cs
+         VU6CGK5rwDZxGQ7xlSHC/E49eM0kiZLK762eo2qfY+xJ4H2GGWcKMuRU7gHlPPRtHh02
+         fqG6dtOb/MI5ibyJzf1GAXiu9KPeBamu1lboul6ICMdnE0reLhVyhm8ZuxbLUBDIjMJK
+         SARQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686315063; x=1688907063;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HGZuJbgC740YLODlkWmjW5DXUdE1JToY+I5MmfvcPe8=;
-        b=l3R1FvtJc6aBUB2GnOEs2/wnyaKuUsJlRCNT7UXiM/11COVq3SPPU+lCIFNngmV2/v
-         Wmu7604j4VPhbl3MRRdeAP6fngkyUFS08NeaCCsrDbFO+wJbVSFJ7cTtB1W0RBbnQzb2
-         nHvyWkzAEFfPL73NJaq2SgbKos4eb5kEq51IWh4/M51GUJobEgx+bUEQ15gTBh+6V3Pb
-         FzCu8Pc8F+VMKuVuTEKezpOIFSSK9egDLcuIAEyTq1daRv49ums7LLhuiBbnYnD8+eP7
-         0ehZ1qJpRbyAxCi4ykI02hjM+zE6tKIb4Ki1sGpfc6PLYWYkSFoonoHAXvO48WWOapj9
-         7oow==
-X-Gm-Message-State: AC+VfDyJwmpUVcQTgiIQNeHjoVWyA31JwXEg2Hc7uXL7BvlP5Bv2Xvpx
-        ftt1UafTOK2HcBshhHWipN7oghxPOiExzxWVf4c=
-X-Google-Smtp-Source: ACHHUZ4aVtkFfkgl4fgQB7uOXF3tOafM5qe9D4x6OESrQ1rM9j7Aqh1/llk80MiU2+LBJmpFtsk0oN63TU9oBDk5v7M=
-X-Received: by 2002:a81:a009:0:b0:56a:3b3e:bcc with SMTP id
- x9-20020a81a009000000b0056a3b3e0bccmr1023511ywg.17.1686315062773; Fri, 09 Jun
- 2023 05:51:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686318279; x=1688910279;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pvl1ODfYpXdx5tiAQ2WeY28wbqmcjr4dGt9a9iD0Qkc=;
+        b=CpxVihmCbL96cS0vfslHoys86tfxvGEDRNu82BjaUnANoP2CohjGdvweMwfqYRz8rc
+         m0zNKyI/fzRmgWmFjzSrxHAYXkKKS/nn1qf+SNnV+1WBVo0kEY1JYcpZt3qRxR/my/RI
+         wX/xmvNpObJirdsAzewHRffCdrtOglcCT9GFxDy9T3Z2FFcPkjnMAnE5GsMz/L7D7wKd
+         jto3fM2FdNYAGR/2y5oXmA4IXXHno9wL3kX63xQbm4xYPceE16mgXxkwQtglu0/0a05P
+         Rvy0rN8zf1uAfFw9KiS+jRuDgLzY5hwaR1etPZ3CA+YSbH9qrgpSgMZZ/PPDM5j56rgl
+         u4aQ==
+X-Gm-Message-State: AC+VfDya4phKjPfzs7DtBfcknXDQ4+iM4t1gZgw/jAMDTdozzJwyEgaC
+        1MacTIqIgcxUbObVamFqYKU=
+X-Google-Smtp-Source: ACHHUZ5riBRDaiPf46nnW5WFnf6pFsL8GqhhPnOabQB9l8wewVAzCQqFkI4KTsewTCuT0ULe3sl7eQ==
+X-Received: by 2002:a17:902:7c94:b0:1b0:4b65:7a10 with SMTP id y20-20020a1709027c9400b001b04b657a10mr983932pll.53.1686318279053;
+        Fri, 09 Jun 2023 06:44:39 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-68.three.co.id. [180.214.232.68])
+        by smtp.gmail.com with ESMTPSA id h13-20020a170902f7cd00b001b0034557afsm3310111plw.15.2023.06.09.06.44.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 06:44:38 -0700 (PDT)
+Message-ID: <88c195a1-21ee-2b9c-3606-8c3928e3dff2@gmail.com>
+Date:   Fri, 9 Jun 2023 20:44:34 +0700
 MIME-Version: 1.0
-References: <20230527012206.133464-1-samsagax@gmail.com> <8ae3e2ad-27ff-4339-88d4-504c2f59e501@roeck-us.net>
- <CABgtM3h8DXs0swGQth=dcE3J_W8k8iejvfFgjVSm9nKbRmxHDQ@mail.gmail.com>
- <820cef00-4768-46ae-c5a5-ea7c0dff71c5@roeck-us.net> <CABgtM3h0KMsOzZZvYKZLsFXn9A81V59ygSKizoF3TTkraMWr-Q@mail.gmail.com>
- <94f78001-13df-8c39-4771-7842dc94195e@roeck-us.net>
-In-Reply-To: <94f78001-13df-8c39-4771-7842dc94195e@roeck-us.net>
-From:   Joaquin Aramendia <samsagax@gmail.com>
-Date:   Fri, 9 Jun 2023 09:50:51 -0300
-Message-ID: <CABgtM3iOyCDgDY1gj-gJ4DXaXCY41FKzy-=miz0iiT8ywjbMHg@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (oxp-sensors) Add tt_toggle attribute on supported boards
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2] Documentation/hwmon: Fix description of
+ devm_hwmon_device_unregister()
+To:     Yongsheng Yang <iyysheng@gmail.com>, jdelvare@suse.com,
+        linux@roeck-us.net, corbet@lwn.net
+Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230609075510.1305-1-iyysheng@gmail.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20230609075510.1305-1-iyysheng@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> Why don't you just attach the attribute to the platform device as I
-> had suggested earlier ?
+On 6/9/23 14:55, Yongsheng Yang wrote:
+> diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
+> index c2d1e0299d8d..6cacf7daf25c 100644
+> --- a/Documentation/hwmon/hwmon-kernel-api.rst
+> +++ b/Documentation/hwmon/hwmon-kernel-api.rst
+> @@ -66,7 +66,7 @@ hwmon_device_register_with_info.
+>  
+>  devm_hwmon_device_unregister does not normally have to be called. It is only
+>  needed for error handling, and only needed if the driver probe fails after
+> -the call to hwmon_device_register_with_info and if the automatic (device
+> +the call to devm_hwmon_device_register_with_info and if the automatic (device
+>  managed) removal would be too late.
+>  
+>  All supported hwmon device registration functions only accept valid device
 
-You mean I should do something like this in probe():
+LGTM, thanks!
 
-static int oxp_platform_probe(struct platform_device *pdev)
-{
-  ...
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-switch (board) {
-    case aok_zoe_a1:
-    case oxp_mini_amd_a07:
-    case oxp_mini_amd_pro:
-        pdev->dev.groups =3D oxp_ec_groups;
-}
-    hwdev =3D devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
-        &oxp_ec_chip_info, NULL);
-...
-}
+-- 
+An old man doll... just what I always wanted! - Clara
 
-Would that work? Or even be correct?
---=20
-Joaqu=C3=ADn I. Aramend=C3=ADa
