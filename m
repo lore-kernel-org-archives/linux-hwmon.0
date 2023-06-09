@@ -2,78 +2,90 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83990C7EE2F
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jun 2023 06:45:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DE44C7EE29
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jun 2023 07:47:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjFIGpN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Jun 2023 02:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
+        id S239043AbjFIHra (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Jun 2023 03:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238705AbjFIGpI (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Jun 2023 02:45:08 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE159E;
-        Thu,  8 Jun 2023 23:45:06 -0700 (PDT)
-Received: from localhost (mdns.lwn.net [45.79.72.68])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 95BC0218;
-        Fri,  9 Jun 2023 06:45:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 95BC0218
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1686293104; bh=3rg0WjJw4hPJ60vNtrNt09H4yyqqTmW+xSH4eaVGQ4E=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=fWfK+2HjxgovIqkglzIVgkIQkgiDxV2Bc5hYjkaChsm+Lx4UzF6+Krg18reMCcd4F
-         XoC6Jj10WSF2u76SET8xVN4id6QXQ7vtN1vjR6TjFuD35FrkD62PWscd77BIyIf/wg
-         d4/I/JN2uANqHBpJJRQ9B8x6RaHg6YKK1sAdoF0ZcQ9Or1R6Vp9AAu9rXhGCSgw93m
-         8S7Rba0hEdak1iAFTHVaqDP3bKcx9ePGuEbFcSNhX6GrMhKlmXOcJCl0hsNuxLPQ+I
-         VMJzQHgMFbKU7JrEe7wr34CZa2VHtJ5z+3h0NK1VdTjKM9nbLkWPHtgRZRQFuM6Mho
-         8Xy4nRAwKyoJg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     YYang <iyysheng@gmail.com>, jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, YYang <iyysheng@gmai.com>
-Subject: Re: [PATCH] Documentation/hwmon: Fix description of
- devm_hwmon_device_unregister
-In-Reply-To: <20230608224231.1156-1-iyysheng@gmail.com>
-References: <20230608224231.1156-1-iyysheng@gmail.com>
-Date:   Fri, 09 Jun 2023 00:45:00 -0600
-Message-ID: <871qilqglv.fsf@meer.lwn.net>
+        with ESMTP id S239034AbjFIHr3 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Jun 2023 03:47:29 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985D830D1;
+        Fri,  9 Jun 2023 00:47:21 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f738f579ceso10408685e9.3;
+        Fri, 09 Jun 2023 00:47:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686296840; x=1688888840;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E3GyzALgiAbKVN3scNeYJuUugUOGcxM8aiFsKeh7Wl4=;
+        b=R+uUnQnUw8AxfbwxaV8YiwuF1jLiTqyc3ikoithVKsDf2XRY1Grc2neL5OuPsMvI6k
+         Aut8pa1a2xznKmSJPHM79kd4zTp2KNIeOMqs4W3Wjd8riKCaPnH77NhiEtQmqZG4n3NK
+         KzQ1qM0MzBY+88JxJK+2WDoQZuavecnHTvzKehTsL7N7zPp0/WZ+PvlMw2mQEpcgkbSu
+         yVnxPDfcBhbfvA6vh6cHEdyhrmYkXKbtuup90Sjm/+Kg2+rYjB4OyWcQA/cWvT4GlI4W
+         lLXRzq1YM3cJLPIOnE6j7u0TMrthQANIHCdVbhGvnQ02OS0DGXcr847XvPzB3ilzkzXP
+         udBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686296840; x=1688888840;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E3GyzALgiAbKVN3scNeYJuUugUOGcxM8aiFsKeh7Wl4=;
+        b=Stx5YS4vcxeyGG3nYfMc5/yubY4PaZ17n+npM9KVk6OWt3QlBYAtP56QwE7PN/9lX1
+         99jvdFG4AXwwWHFfhnYnTHG5Ekxdz1ysxNHOR8X+LHDZ7JkZLj4niBZ65FkZM9ISvaAO
+         liiNbpdLMF/hOIk7b1ANTLtnNNZFbZejwVjh/c6YpDbgIXy58MMC9qvC83Huj/ZKT16F
+         oBsIIaeUP1texsHgTEkZOzhBy0psRUizBbB/y4sRkmiHnVqcu31SGVC4o47Aj/fomw4h
+         twGU8pU1Hg+U5JhGGezwNDsEvgFPhLMAw5Vj3v+6f4bTgXdVSSptBItJejpFBTiU5CfI
+         KuDw==
+X-Gm-Message-State: AC+VfDyRR4oHT8y7UXMA85PwRrgDuvEckdAOopafrVLBK3J9QPiY9yRH
+        uduQnYM0zikti1mCdzX5+fc=
+X-Google-Smtp-Source: ACHHUZ4gwo6kHA7MJ+HM5oTO2Vi7xTZ8RW4693y0tK8OmSBoiP3YJ6/wNOeC+7NfEEjhZUC5Q5wcNg==
+X-Received: by 2002:a05:600c:21c7:b0:3f6:11cb:4926 with SMTP id x7-20020a05600c21c700b003f611cb4926mr288758wmj.22.1686296839703;
+        Fri, 09 Jun 2023 00:47:19 -0700 (PDT)
+Received: from localhost.localdomain (bba-2-50-150-163.alshamil.net.ae. [2.50.150.163])
+        by smtp.gmail.com with ESMTPSA id b10-20020adfe30a000000b00300aee6c9cesm3693602wrj.20.2023.06.09.00.47.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 00:47:19 -0700 (PDT)
+From:   Yongsheng Yang <iyysheng@gmail.com>
+To:     linux@roeck-us.net
+Cc:     bagasdotme@gmail.com, corbet@lwn.net, iyysheng@gmail.com,
+        jdelvare@suse.com, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Documentation/hwmon: Fix description of devm_hwmon_device_unregister
+Date:   Fri,  9 Jun 2023 11:47:04 +0400
+Message-ID: <20230609074704.1259-1-iyysheng@gmail.com>
+X-Mailer: git-send-email 2.41.0.windows.1
+In-Reply-To: <e1fcbb8d-c9b3-868e-8053-6ebc33a3e66a@roeck-us.net>
+References: <e1fcbb8d-c9b3-868e-8053-6ebc33a3e66a@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-YYang <iyysheng@gmail.com> writes:
+> On 6/8/23 18:31, Bagas Sanjaya wrote:
+> > On Fri, Jun 09, 2023 at 02:42:30AM +0400, YYang wrote:
+> >> From: YYang <iyysheng@gmai.com>
+> >>
+> >> Use devm_hwmon_device_register_with_info to replace
+> >> hwmon_device_register_with_info in description of
+> >> devm_hwmon_device_unregister.
+> >>
+> >> Signed-off-by: YYang <iyysheng@gmai.com>
+> > 
+> > Is your SoB address gmail one (sounds typo here)?
+> > 
+> 
+> Looks like it. YYang - please resubmit with correct SoB.
+> 
+> Thanks,
+> Guenter
 
-> From: YYang <iyysheng@gmai.com>
->
-> Use devm_hwmon_device_register_with_info to replace
-> hwmon_device_register_with_info in description of
-> devm_hwmon_device_unregister.
->
-> Signed-off-by: YYang <iyysheng@gmai.com>
-> ---
->  Documentation/hwmon/hwmon-kernel-api.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-> index c2d1e0299d8d..6cacf7daf25c 100644
-> --- a/Documentation/hwmon/hwmon-kernel-api.rst
-> +++ b/Documentation/hwmon/hwmon-kernel-api.rst
-> @@ -66,7 +66,7 @@ hwmon_device_register_with_info.
->  
->  devm_hwmon_device_unregister does not normally have to be called. It is only
->  needed for error handling, and only needed if the driver probe fails after
-> -the call to hwmon_device_register_with_info and if the automatic (device
-> +the call to devm_hwmon_device_register_with_info and if the automatic (device
->  managed) removal would be too late.
+Sorry for my mistake, I fixed the misspelling. Will post the updated version.
 
-If, while you're at it, you add the trailing parentheses() to the
-function name, then the docs build will automatically make a cross-link
-to the documentation.
+Thanks
 
-Thanks,
-
-jon
+Yongsheng
