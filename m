@@ -2,90 +2,102 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0384C7EE29
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Jun 2023 22:42:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39554C7EE25
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jun 2023 01:31:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235403AbjFHWm6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Jun 2023 18:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60644 "EHLO
+        id S237597AbjFIBbQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Jun 2023 21:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjFHWm5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 18:42:57 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC152D4B;
-        Thu,  8 Jun 2023 15:42:56 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f732d37d7bso8741265e9.0;
-        Thu, 08 Jun 2023 15:42:56 -0700 (PDT)
+        with ESMTP id S230094AbjFIBbP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2023 21:31:15 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9E730E5;
+        Thu,  8 Jun 2023 18:31:13 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6b29f53137cso245119a34.0;
+        Thu, 08 Jun 2023 18:31:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686264175; x=1688856175;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=z5+I2QWhzf+RiNGGieH6S0XhkG75IeU581JZPazQ2GI=;
-        b=IqSmXlKKrCQF3YfLlNtzZEwjkn2rJP/t6RfM79OSim9NNQSqdhL7Mx/hj/B4VryRkP
-         Q9eaghh9EiGHItvCrIu/FMhbk0+r3lbnkMQZYHVBtUGDddE+CPoXTSq6145NOrU99HyJ
-         BMzuFB/FRiIA/dyTHlbGhNW/TgOFnHUlc39h1mJrNlmzUWqIM8zv8kqfp/3DSwg1g6NC
-         2H/xk4O8IE4Fq6++kCspk0MHRc5S6Qavc/JIYvWR1Jq7kUS6RggUPqkztmaYJqKvvDEk
-         w90nEEktVeJC9Fs6kzMMytD8EaMOPAnSzwF5MmnJoAvtXlaFNev+G322CqVep8i49GGB
-         idKg==
+        d=gmail.com; s=20221208; t=1686274272; x=1688866272;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PqSIVqIbhvB4rmJOey1iHJ+X1yWJ58Fl1SFIwWhVA8w=;
+        b=jsUAJXrHmW4EpzF1ONbKjs3hnU8sOZKSA8s1tpTQA+xcSNpKPjVYPmPwN/lBKPHOSt
+         tZca40zD+Ss49oe38g3y5akjy1auIU8Hy7GgpuZxKLcPNU6BNk1tJ5PAuXHEZ6pnBJox
+         rLCVqlGT5zsdYEsI7l0AQg20hUMEfWMHHQLNbgk/Z68SS5rRUmGmHJ1ndXAV7Y6/JnQk
+         wILVdaMiwHbzgAOkmJe1/3cv9By5e7Gu+F8JS7DUDUDEz8+QjPUlDuaTf8KbDbqEropQ
+         EIP0nEu/FoDtUmogtkXcsD0xBjx9YEBoCt/lFp7TsHZ1WPRcQ+uPe/PiJ1Y5L2tgyZrP
+         fh+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686264175; x=1688856175;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z5+I2QWhzf+RiNGGieH6S0XhkG75IeU581JZPazQ2GI=;
-        b=WFQ6bCsxZzogmJJ1fcAgcyFdJu0gkIuikq2YGui2v5+RvGZKqrhFcBD7xKvemxGpyM
-         ngVusdZDTIxmjBOHcWS011o5jI/ZV4ZzKbjXVXdGrOsM4az/uqvr8O8LhTwvZgbhdlBB
-         CUkF7B2TQfeY7j8QQWqF32TSQD6JOLybY5xSC/STQBorNAY9QZ466NcN76CI4no+aQDJ
-         Z+1jyc4oh9KP4Wdmh5MeY6gnA5xtvRmh+hl5V6Ijpl+b+Su0gHViTdIRtr9GZ6I55Via
-         nGvk/1aRyWSl304+Wq3UzJAUA49nQjd4s9aTtVdUtaMn0sHBiPrZpVNSIXbLongzywEE
-         1qWA==
-X-Gm-Message-State: AC+VfDwPhYfrf/uNa2+Jq+sdZNF8idAATImeT9tb/q7Ho0IYBOV80vaD
-        8G1WcUXKEu67XDB1v9S99c4=
-X-Google-Smtp-Source: ACHHUZ4xO0JlZa9TP0ZuhFKWPo+2u51TbDZEONZ5ifIh/0+ViToGtZphCf+S8K0f2fGLbDBibEpcDA==
-X-Received: by 2002:a7b:c40b:0:b0:3f8:1a:6b9f with SMTP id k11-20020a7bc40b000000b003f8001a6b9fmr1250070wmi.2.1686264174959;
-        Thu, 08 Jun 2023 15:42:54 -0700 (PDT)
-Received: from localhost.localdomain (bba-2-50-150-163.alshamil.net.ae. [2.50.150.163])
-        by smtp.gmail.com with ESMTPSA id x5-20020adff0c5000000b003078a3f3a24sm2693912wro.114.2023.06.08.15.42.50
+        d=1e100.net; s=20221208; t=1686274272; x=1688866272;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PqSIVqIbhvB4rmJOey1iHJ+X1yWJ58Fl1SFIwWhVA8w=;
+        b=LryrT6scDbrgwdEPgpRKDlaQTIS6L+nao72S9rs2Pibnmq9VWXC+kTIcUdeKjuycYt
+         8wv+CiRVAE0BA6JIoReYQkUW6HCuQn9UdkyCMJNdK8Q0OSIrE97pJ5FY1WUyrgAJZ5+g
+         a7HEo3AAjhwawK7Ez03CHou3+KgfZ7i3IVvn+TasSFta3wlzVtowvtK2TgQ5Zd9a3o+w
+         q50+IgPOEUZDU2ee1ttP7b0S+5nSWsYpECh7MNNfihawh9bcKUB8CGdE/SckxhuwSxTR
+         CzEiKWOe9y+/Y5E8PqZYvxLu2xQ80pwYM3uL/v0WPQLhPjy9oqesubxb3z4Y6peOY/A+
+         Tpvg==
+X-Gm-Message-State: AC+VfDygnEAKiCfb3y94Ou/ae1A++vzDap1Hgl65Vl4mqN3w1yoqGL0/
+        LQFHnvgh7HWzTnj1L0CCWv2JHHzflQA=
+X-Google-Smtp-Source: ACHHUZ6gG30QgCfWIj0+/u7njvliCHLsh/OCuKU7WfVIO108gqyszdDpvJLLjmJmvkUNb5TMWxOCTA==
+X-Received: by 2002:a05:6808:1a06:b0:39c:7d2a:435c with SMTP id bk6-20020a0568081a0600b0039c7d2a435cmr232083oib.6.1686274272491;
+        Thu, 08 Jun 2023 18:31:12 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-24.three.co.id. [116.206.28.24])
+        by smtp.gmail.com with ESMTPSA id m8-20020a17090a4d8800b00259a750fc89sm3551439pjh.33.2023.06.08.18.31.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 15:42:53 -0700 (PDT)
-From:   YYang <iyysheng@gmail.com>
-To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net
+        Thu, 08 Jun 2023 18:31:11 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 7B4C6106A94; Fri,  9 Jun 2023 08:31:08 +0700 (WIB)
+Date:   Fri, 9 Jun 2023 08:31:08 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     YYang <iyysheng@gmail.com>, jdelvare@suse.com, linux@roeck-us.net,
+        corbet@lwn.net
 Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, YYang <iyysheng@gmai.com>
-Subject: [PATCH] Documentation/hwmon: Fix description of devm_hwmon_device_unregister
-Date:   Fri,  9 Jun 2023 02:42:30 +0400
-Message-ID: <20230608224231.1156-1-iyysheng@gmail.com>
-X-Mailer: git-send-email 2.41.0.windows.1
+Subject: Re: [PATCH] Documentation/hwmon: Fix description of
+ devm_hwmon_device_unregister
+Message-ID: <ZIKA3MNR1t2HvnHo@debian.me>
+References: <20230608224231.1156-1-iyysheng@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SkxO4Mw1tUNGMQAP"
+Content-Disposition: inline
+In-Reply-To: <20230608224231.1156-1-iyysheng@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: YYang <iyysheng@gmai.com>
 
-Use devm_hwmon_device_register_with_info to replace
-hwmon_device_register_with_info in description of
-devm_hwmon_device_unregister.
+--SkxO4Mw1tUNGMQAP
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: YYang <iyysheng@gmai.com>
----
- Documentation/hwmon/hwmon-kernel-api.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, Jun 09, 2023 at 02:42:30AM +0400, YYang wrote:
+> From: YYang <iyysheng@gmai.com>
+>=20
+> Use devm_hwmon_device_register_with_info to replace
+> hwmon_device_register_with_info in description of
+> devm_hwmon_device_unregister.
+>=20
+> Signed-off-by: YYang <iyysheng@gmai.com>
 
-diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-index c2d1e0299d8d..6cacf7daf25c 100644
---- a/Documentation/hwmon/hwmon-kernel-api.rst
-+++ b/Documentation/hwmon/hwmon-kernel-api.rst
-@@ -66,7 +66,7 @@ hwmon_device_register_with_info.
- 
- devm_hwmon_device_unregister does not normally have to be called. It is only
- needed for error handling, and only needed if the driver probe fails after
--the call to hwmon_device_register_with_info and if the automatic (device
-+the call to devm_hwmon_device_register_with_info and if the automatic (device
- managed) removal would be too late.
- 
- All supported hwmon device registration functions only accept valid device
--- 
-2.37.1
+Is your SoB address gmail one (sounds typo here)?
 
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--SkxO4Mw1tUNGMQAP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZIKA1wAKCRD2uYlJVVFO
+ozpvAP0ZNtMzsuVLNqpN2YGo0fQquHjfI80lWbvv+5Ntg7Eg7AEAnP02qG+MXcdp
+0YZUc2EMyxgYJVgnJzTDNc/Z/RhkvQs=
+=p3Nb
+-----END PGP SIGNATURE-----
+
+--SkxO4Mw1tUNGMQAP--
