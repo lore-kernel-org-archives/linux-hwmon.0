@@ -2,106 +2,89 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D85CC7EE37
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jun 2023 08:40:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E69BCC88CB3
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Jun 2023 12:51:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238405AbjFIIkX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Jun 2023 04:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
+        id S237713AbjFIMvW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Jun 2023 08:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241315AbjFIIkS (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Jun 2023 04:40:18 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBA6B9;
-        Fri,  9 Jun 2023 01:39:53 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f6255ad8aeso1877390e87.2;
-        Fri, 09 Jun 2023 01:39:53 -0700 (PDT)
+        with ESMTP id S240955AbjFIMvE (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Jun 2023 08:51:04 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D77210A;
+        Fri,  9 Jun 2023 05:51:03 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-ba841216e92so1748215276.1;
+        Fri, 09 Jun 2023 05:51:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686299991; x=1688891991;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1686315063; x=1688907063;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U7KaDvTnSiAOhtxrXI9e8hMyb073N1sL1o/KOoe1nTE=;
-        b=SfbPH9cruR9dotCW+msb0IPgb0ZkIkiwSYD6FkssF3SKcA03WufipUvsO93SujLTgR
-         VDYAIbYSy2N6zKdy8zBPoEeoowKMrvZZ1j2qiib8zRWJk3Yy068xuaSuC5/NAbqFT4ny
-         DMCqiL4bAE1TyK0qUGJb2BhDsBbUEupZ4JjQwZMA17pObSI9FllmDfhtFGZB31RVw/KQ
-         Nt6o3FBL27+SHSggzJTkDuvRCFJnJgzQUCz8zohGAK9c0A3yn1i2ZKQNeIUKHt4ShLli
-         eqomdVDcOi1p1Nj+BsdoRjzwFbgbkuj8jZIE7+Xz1tqICwMVx0Tj3iQtxn7e7BalX2YH
-         oi+A==
+        bh=HGZuJbgC740YLODlkWmjW5DXUdE1JToY+I5MmfvcPe8=;
+        b=mvNcCHBWzHzNrO5q//rYg4MIP+yevdSZDgHg069w9JYhCxodazO3P0y1RhJZcahL3r
+         XRBlpalsVTX7DHdxNerlk7owLreS7cT55RUWTlFS2K9zWzz/nP2nGlqr5As0fjqzDmZt
+         6fRFUj9vNnn4g/kCU5Oy2zaQ7uIbM2QyNevd+slCegXUirOZcn2sH6hYb9mgrKOA3l1P
+         a8L416qBpaJcP858J3isZqocEckWOeMw+0Vj8VjH6ZQadugzAaalzSY9axGPO3jEOVw7
+         pHdmJeroiqyI2qf63yxYzuFQ71pRKUmaCfvXo9zxCA+i/FORWSD3rR7hHOOFoVZ7+NaQ
+         Qq5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686299991; x=1688891991;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1686315063; x=1688907063;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=U7KaDvTnSiAOhtxrXI9e8hMyb073N1sL1o/KOoe1nTE=;
-        b=jByHbs+1O4mFTMlf5qLRbu6+DfhSsNu6z/OSID0meSKj3Kh8SFDjkNKNth6f1qTL82
-         54rzaRB22E6P9drPUERkU3HYDPGLo3cJIhF/auyynNXdbNLrZV8/nvYyKXTnD2W6Fc1u
-         CWIMCQ2ERiLhvLQJONRQjiENWUiARhZGKd81vY7Bg2gwV/j1pk7osYWXdfjGhgTZOSH/
-         5dadOmdRje8RT9g62VuMORNW34bbLINtXXz0seyEq0Efyyq2Fks7FUzah7r0dqY3R4uY
-         fFBjPzUKxGPUvyLu4twtU6e5qaF5iiuigSSiAAapo3IBvJ9Aby9J6PwgDnBwRTETunHr
-         Cs3g==
-X-Gm-Message-State: AC+VfDxquSo/ijOTxQymhhB1bdTyisOAIfzTRXhuk16j2utYOFrdy4vZ
-        K2ABCNGUQSRXP1vDlju41Pg=
-X-Google-Smtp-Source: ACHHUZ5b2lXvg8Y2AGqYGWqPf+6jSt6zYXUwI8SAye1fksrRg33WvFhKbs2Bqa0QwlMR1jDaSfubYA==
-X-Received: by 2002:ac2:505a:0:b0:4f4:db63:239f with SMTP id a26-20020ac2505a000000b004f4db63239fmr522757lfm.24.1686299991486;
-        Fri, 09 Jun 2023 01:39:51 -0700 (PDT)
-Received: from localhost.localdomain (bba-2-50-150-163.alshamil.net.ae. [2.50.150.163])
-        by smtp.gmail.com with ESMTPSA id d6-20020adffd86000000b0030ae87bd3e3sm3810587wrr.18.2023.06.09.01.39.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 01:39:50 -0700 (PDT)
-From:   Yongsheng Yang <iyysheng@gmail.com>
-To:     corbet@lwn.net
-Cc:     iyysheng@gmai.com, iyysheng@gmail.com, jdelvare@suse.com,
-        linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@roeck-us.net
-Subject: Re: [PATCH] Documentation/hwmon: Fix description of devm_hwmon_device_unregister
-Date:   Fri,  9 Jun 2023 12:39:35 +0400
-Message-ID: <20230609083935.1340-1-iyysheng@gmail.com>
-X-Mailer: git-send-email 2.41.0.windows.1
-In-Reply-To: <871qilqglv.fsf@meer.lwn.net>
-References: <871qilqglv.fsf@meer.lwn.net>
+        bh=HGZuJbgC740YLODlkWmjW5DXUdE1JToY+I5MmfvcPe8=;
+        b=l3R1FvtJc6aBUB2GnOEs2/wnyaKuUsJlRCNT7UXiM/11COVq3SPPU+lCIFNngmV2/v
+         Wmu7604j4VPhbl3MRRdeAP6fngkyUFS08NeaCCsrDbFO+wJbVSFJ7cTtB1W0RBbnQzb2
+         nHvyWkzAEFfPL73NJaq2SgbKos4eb5kEq51IWh4/M51GUJobEgx+bUEQ15gTBh+6V3Pb
+         FzCu8Pc8F+VMKuVuTEKezpOIFSSK9egDLcuIAEyTq1daRv49ums7LLhuiBbnYnD8+eP7
+         0ehZ1qJpRbyAxCi4ykI02hjM+zE6tKIb4Ki1sGpfc6PLYWYkSFoonoHAXvO48WWOapj9
+         7oow==
+X-Gm-Message-State: AC+VfDyJwmpUVcQTgiIQNeHjoVWyA31JwXEg2Hc7uXL7BvlP5Bv2Xvpx
+        ftt1UafTOK2HcBshhHWipN7oghxPOiExzxWVf4c=
+X-Google-Smtp-Source: ACHHUZ4aVtkFfkgl4fgQB7uOXF3tOafM5qe9D4x6OESrQ1rM9j7Aqh1/llk80MiU2+LBJmpFtsk0oN63TU9oBDk5v7M=
+X-Received: by 2002:a81:a009:0:b0:56a:3b3e:bcc with SMTP id
+ x9-20020a81a009000000b0056a3b3e0bccmr1023511ywg.17.1686315062773; Fri, 09 Jun
+ 2023 05:51:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230527012206.133464-1-samsagax@gmail.com> <8ae3e2ad-27ff-4339-88d4-504c2f59e501@roeck-us.net>
+ <CABgtM3h8DXs0swGQth=dcE3J_W8k8iejvfFgjVSm9nKbRmxHDQ@mail.gmail.com>
+ <820cef00-4768-46ae-c5a5-ea7c0dff71c5@roeck-us.net> <CABgtM3h0KMsOzZZvYKZLsFXn9A81V59ygSKizoF3TTkraMWr-Q@mail.gmail.com>
+ <94f78001-13df-8c39-4771-7842dc94195e@roeck-us.net>
+In-Reply-To: <94f78001-13df-8c39-4771-7842dc94195e@roeck-us.net>
+From:   Joaquin Aramendia <samsagax@gmail.com>
+Date:   Fri, 9 Jun 2023 09:50:51 -0300
+Message-ID: <CABgtM3iOyCDgDY1gj-gJ4DXaXCY41FKzy-=miz0iiT8ywjbMHg@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (oxp-sensors) Add tt_toggle attribute on supported boards
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> YYang <iyysheng@gmail.com> writes:
-> 
-> > From: YYang <iyysheng@gmai.com>
-> >
-> > Use devm_hwmon_device_register_with_info to replace
-> > hwmon_device_register_with_info in description of
-> > devm_hwmon_device_unregister.
-> >
-> > Signed-off-by: YYang <iyysheng@gmai.com>
-> > ---
-> >  Documentation/hwmon/hwmon-kernel-api.rst | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-> > index c2d1e0299d8d..6cacf7daf25c 100644
-> > --- a/Documentation/hwmon/hwmon-kernel-api.rst
-> > +++ b/Documentation/hwmon/hwmon-kernel-api.rst
-> > @@ -66,7 +66,7 @@ hwmon_device_register_with_info.
-> >  
-> >  devm_hwmon_device_unregister does not normally have to be called. It is only
-> >  needed for error handling, and only needed if the driver probe fails after
-> > -the call to hwmon_device_register_with_info and if the automatic (device
-> > +the call to devm_hwmon_device_register_with_info and if the automatic (device
-> >  managed) removal would be too late.
-> 
-> If, while you're at it, you add the trailing parentheses() to the
-> function name, then the docs build will automatically make a cross-link
-> to the documentation.
-> 
-> Thanks,
-> 
-> jon
+> Why don't you just attach the attribute to the platform device as I
+> had suggested earlier ?
 
-Sure, I have modfied the commit message and post the updated version. Thanks
-for your advice.
+You mean I should do something like this in probe():
 
-Thanks
+static int oxp_platform_probe(struct platform_device *pdev)
+{
+  ...
 
-Yongsheng
+switch (board) {
+    case aok_zoe_a1:
+    case oxp_mini_amd_a07:
+    case oxp_mini_amd_pro:
+        pdev->dev.groups =3D oxp_ec_groups;
+}
+    hwdev =3D devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
+        &oxp_ec_chip_info, NULL);
+...
+}
+
+Would that work? Or even be correct?
+--=20
+Joaqu=C3=ADn I. Aramend=C3=ADa
