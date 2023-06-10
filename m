@@ -2,347 +2,158 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 206C4C77B7A
-	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Jun 2023 19:25:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC314C7EE2E
+	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Jun 2023 20:54:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbjFJTZO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 10 Jun 2023 15:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S232604AbjFJUyt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 10 Jun 2023 16:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjFJTZN (ORCPT
+        with ESMTP id S232965AbjFJUys (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 10 Jun 2023 15:25:13 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EBBA2712;
-        Sat, 10 Jun 2023 12:25:12 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id 5614622812f47-39cc64e4a22so113885b6e.3;
-        Sat, 10 Jun 2023 12:25:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686425110; x=1689017110;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OAHMT2j854kXCGo1A78pLYErqZjR1XtVMTE5AO+1mBY=;
-        b=ieCtUlYKdVSjYBDTmrAYsQkMn+zF600Bsq8btpLBKk0Y5AbZaMKcGNPBBz9ds0efIk
-         acp8hn3ctO/4Ye2L+XdBJZdR0RekGmf600ElMtR6am3/QDATkokxUjnRSTNdNX5XsH1e
-         ywa3aSJvEakNdx9BPaefUdoi91Lbw9dEOIb2a8YSC2MKH6SABSVTG+DmGYCDXeaYqCpr
-         Iyu0Oz0RyPQqHJ8P5zCVQ6ixeBXqFRXIly99+FetVtKjOu8hsMtsPHU94vWSXhx3Lo9C
-         BnQ90Yj+g7RaRyA9GD8pveZC/79b/hE+VAq7CVQXCoI9J9wIm6c/NRi1ph3wGvsKI9mW
-         1pjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686425110; x=1689017110;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OAHMT2j854kXCGo1A78pLYErqZjR1XtVMTE5AO+1mBY=;
-        b=fdinBMYGPgVTzl8ByyIkbRR5lffWEBZ8HGWAyCyokuWXs8JdsWtmEwoGILMX6z20zo
-         EXv5lYk7rdLGFJp2e4XMXGamTLCOAnM4KX4wrDNsamw9KmTFg9wHAqrElfoBDv6IG6jC
-         yuhmgztnJRxmrMzRT10lqtaVR/dEKQmGGZlOz3Z42LZm6EBa7cKmB/xEc5/eudUWgZg/
-         RwAM8SXDO95tOobnRLnb+m94pboox8fUZglQpDne1QJ/3scupx4c8FOyCCPAlZDkr9Qw
-         scmShh7f7B+0OOyRL5QmwVoXjZ22iLLfudj/GMWE/h79KHY67dX1tyiM5Lvf06GdNivY
-         a4og==
-X-Gm-Message-State: AC+VfDyM5swsmOLzS7AErt4h6swuAWum6krZjMEf0hWlWeQEuJL8CJSL
-        4pSrmqI62oLqkPp7kexPydg=
-X-Google-Smtp-Source: ACHHUZ7C8AMxcqmF7iYIrDwXzObIbToMqYgQs9LoqW84ddsqOPMmqrwxqi3hE2njobvlRpruTBy2ng==
-X-Received: by 2002:a05:6808:1308:b0:398:1807:84bc with SMTP id y8-20020a056808130800b00398180784bcmr1572225oiv.26.1686425110578;
-        Sat, 10 Jun 2023 12:25:10 -0700 (PDT)
-Received: from smeagol.fibertel.com.ar ([201.235.4.68])
-        by smtp.gmail.com with ESMTPSA id bu9-20020a0568201ac900b0054f6fb0ec57sm1895998oob.11.2023.06.10.12.25.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Jun 2023 12:25:10 -0700 (PDT)
-From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>
-To:     linux@roeck-us.net
-Cc:     =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>, derekjohn.clark@gmail.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: (oxp-sensors) Add tt_toggle attribute on supported boards
-Date:   Sat, 10 Jun 2023 16:23:49 -0300
-Message-ID: <20230610192400.80611-2-samsagax@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        Sat, 10 Jun 2023 16:54:48 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2072.outbound.protection.outlook.com [40.107.212.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0034135BB;
+        Sat, 10 Jun 2023 13:54:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W0kDISr7t3izrJQDWoZrF/fnKiCE5CWE/0Foc9ELT0qgmpzr0IfyMpnmcWQURcnt+t/KnpTAbfutPwj0e13jYGxBubQ+3L6yfgBEvpscCwdzVz3qurHjssLt5TNvvXwy81psR8aiJ4sowq9vPHJEMZ75xDhVw7HMh7huL5cq4j5UvTYXLebMRzp4qEoMAc2vYpQsYufB1pejfvL7Czlq21GEMEkpgTkBOt6V6yWxLH1wVCEjPTl3Y22Er9B3kYBLmaRZlsK01JDJuh9QLJYdr0OJp818wxAcbdmq0xQWeexkBJfqp5qkwP1KXJiNPlbI3HNZH37BMujFR6RQdYbyPg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KNJJKJ56fqKIL1+lznfaPOxV5osmbrRWq2OVi+lysXk=;
+ b=WwserfByy3ObXI0ftelrsrCINj/49JoDWql2izA1homG0OcIrZbChiZAwO0w+M57ShtB9VhRipk5qYvMt9wSYoLkhJZKVKp4DfvLGb2qZeI3dA9KjqWe+zUt7wdYMomnN77rdj2xXxVvudRdBC3kdD8UZdZaora2vHGDQiXdtIRMtudgWdrgku63ddIjJsYZ/dybkryro+O50jYLQyb+aUnp0VLC6m/Z2dIb+5/66WtMSRFX6nv+Lqej0UBijDN344xj6xXmtXXXML3Lkz4ceLccSqDYLbYdbjNHU9qGLoCH44zkdb0QAaMfl+PsX4jCjFqzgJy9GMHub9roqUK7tQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=ladisch.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KNJJKJ56fqKIL1+lznfaPOxV5osmbrRWq2OVi+lysXk=;
+ b=Rfn9HAMVMUUskxdfTqNRKBI0YpVWsrEG/3sF2oMcNpew3m3hCgI4Yn4I1wJxRbxyExUsIzUQBM8xzsqih4YeZpT8Hoh9TdyI/vLhZms7V2PbVa4Ui7EdEtwLzTBtmKdaT/ynH25C0CxZj4UajdJJR2WObmrul5tYpeVReZaM0vc=
+Received: from MW4PR04CA0051.namprd04.prod.outlook.com (2603:10b6:303:6a::26)
+ by PH7PR12MB7017.namprd12.prod.outlook.com (2603:10b6:510:1b7::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.38; Sat, 10 Jun
+ 2023 20:54:44 +0000
+Received: from CO1PEPF000042A7.namprd03.prod.outlook.com
+ (2603:10b6:303:6a:cafe::eb) by MW4PR04CA0051.outlook.office365.com
+ (2603:10b6:303:6a::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29 via Frontend
+ Transport; Sat, 10 Jun 2023 20:54:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF000042A7.mail.protection.outlook.com (10.167.243.36) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6500.20 via Frontend Transport; Sat, 10 Jun 2023 20:54:43 +0000
+Received: from amd-ETHANOL-X.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Sat, 10 Jun
+ 2023 15:54:41 -0500
+From:   Baskaran Kannan <Baski.Kannan@amd.com>
+To:     <Mario.Limonciello@amd.com>, <babu.moger@amd.com>,
+        <baski.kannan@amd.com>, <clemens@ladisch.de>, <jdelvare@suse.com>,
+        <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Baskaran Kannan <bakannan@amd.com>,
+        Baskaran Kannan <Baski.Kannan@amd.com>
+Subject: [PATCH] Enable AMD3255 Proc to show negative temperature
+Date:   Sat, 10 Jun 2023 15:53:57 -0500
+Message-ID: <20230610205357.5658-1-Baski.Kannan@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000042A7:EE_|PH7PR12MB7017:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0589a712-7499-4b57-e2d6-08db69f4eb03
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IciasRFSPGlnjQBtc3jx+MGac4NClMi5SUmnG/7clQxU6baP2a8dwueMgAut/UCO9uTeJY/GRTWM3AMTOt9VIcb+scEUzgXuElto1AVW7UO2KWWIMA+WsPwtGLpdIQ5QJ57MuXGZvoePASsZKohKdto+AxhxZLEE9R4VKtskT96UNmxGBuqMnFruUlBGtZIRXXOOu33DJiMirPDICdIAe2/WMyTXq7K8N1DGzOte+lDNiTv2VCCdP057vRlaD3E3F3Iook3RfF6nS+VFy/uQr8TIw/pymogsttDQfKhFK9FpUP6/7yPfjsKSvb4mrMgwsQxJBsv6bRo+PawqgM1PMlUiItE/RoGbsQzllTGVvCX85aDrrEhMdRMee4h5NkYjoU2zqLwPzRimZCRU+X0csj4W724uJd81UXrhXcqZWckzwzCFBM2y+BaKYqvgarAEm+sUXC09Qx84O7XjbbAIx15f1Gxufv+QOIXjZwWfvHPfz0kHxmfjXSgrsGekHCiovcMXxSFZ+GdC24B6i47dUYdH4dfQVjYqzr3/sCVn31ZHG3yiAL/7XTi3Q7kMmhblv3n0JVsQ3vxkKwk559hxqDWpYK5ikZ/9l24EtJhz/dk0YmrnPOHwtnccnSnhabm41XzWWRzC3OjrW+dyrQQzkU482Jq39q+zWcAbu7RLccw10YqzDOsIe7fNxgi48mluMyrgZ+lSWjCVR6+dzGhDV131zJf1tJHAPPC/ssSnZwMBQQ1XytURhVl6vliKJsfFUhyPkpu6320I+uwZX302n/EOk1NfFgZU5PiOQt+FTKo=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(376002)(396003)(346002)(451199021)(36840700001)(46966006)(40470700004)(26005)(1076003)(16526019)(336012)(2616005)(426003)(36860700001)(47076005)(186003)(82310400005)(6666004)(356005)(70206006)(82740400003)(70586007)(2906002)(81166007)(478600001)(7696005)(40460700003)(54906003)(5660300002)(8936002)(8676002)(36756003)(110136005)(316002)(41300700001)(86362001)(40480700001)(4326008)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2023 20:54:43.7488
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0589a712-7499-4b57-e2d6-08db69f4eb03
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000042A7.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7017
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-OneXPlayer boards from the last generation (both for OneXPlayer and AOK
-ZOE brands) have a toggle in the EC to switch the "Turbo/Silent" button
-into a different keyboard event.
+From: Baskaran Kannan <bakannan@amd.com>
 
-Add a means to use that "Turbo button takeover" function and expose it
-to userspace in a custom sysfs `tt_toggle` attribute. It can be read to
-take the current state. Write 1|0 to activate the function. The specific
-keycode is dependent on the board but can be checked by running
-`evtest` utility.
-
-Newer BIOS on the OneXPlayer added this function aside from string changes.
-Add a board enum to differentiate it from the old OneXplayer Mini AMD BIOS.
-
-Currently known supported boards:
-- AOK ZOE A1
-- OneXPlayer Mini AMD (only newer BIOS version supported)
-- OneXPlayer Mini Pro
-
-Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
+Signed-off-by: Baskaran Kannan <Baski.Kannan@amd.com>
 ---
-v2 changes:
-- Attach the attribute to the platform device as per review
-- Make the attribute return status 0|1 instead of read value
----
- Documentation/hwmon/oxp-sensors.rst |  16 ++++
- drivers/hwmon/oxp-sensors.c         | 142 +++++++++++++++++++++++++++-
- 2 files changed, 157 insertions(+), 1 deletion(-)
+ drivers/hwmon/k10temp.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
-index 4ab442301415..131c89fad03a 100644
---- a/Documentation/hwmon/oxp-sensors.rst
-+++ b/Documentation/hwmon/oxp-sensors.rst
-@@ -19,6 +19,11 @@ out the EC registers and values to write to since the EC layout and model is
- different. Aya Neo devices preceding the AIR may not be supportable as the EC
- model is different and do not appear to have manual control capabilities.
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index 489ad0b1bc74..a79aac0596e5 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -77,6 +77,12 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
+ #define ZEN_CUR_TEMP_RANGE_SEL_MASK		BIT(19)
+ #define ZEN_CUR_TEMP_TJ_SEL_MASK		GENMASK(17, 16)
  
-+Some models have a toggle for changing the behaviour of the "Turbo/Silent"
-+button of the device. It will change the key event that it triggers with
-+a flip of the `tt_toggle` attribute. See below for boards that support this
-+function.
-+
- Supported devices
- -----------------
- 
-@@ -33,6 +38,11 @@ Currently the driver supports the following handhelds:
-  - OneXPlayer mini AMD
-  - OneXPlayer mini AMD PRO
- 
-+"Turbo/Silent" button behaviour toggle is only supported on:
-+ - AOK ZOE A1
-+ - OneXPlayer mini AMD (only with updated alpha BIOS)
-+ - OneXPlayer mini AMD PRO
-+
- Sysfs entries
- -------------
- 
-@@ -49,3 +59,9 @@ pwm1
-   Read Write. Read this attribute to see current duty cycle in the range [0-255].
-   When pwm1_enable is set to "1" (manual) write any value in the range [0-255]
-   to set fan speed.
-+
-+tt_toggle
-+  Read Write. Read this attribute to check the status of the turbo/silent
-+  button behaviour function. Write "1" to activate the switch and "0" to
-+  deactivate it. The specific keycodes and behaviour is specific to the device
-+  both with this function on and off.
-diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-index 0ec7588610ad..59e4e906ced5 100644
---- a/drivers/hwmon/oxp-sensors.c
-+++ b/drivers/hwmon/oxp-sensors.c
-@@ -47,15 +47,29 @@ enum oxp_board {
- 	aya_neo_air_pro,
- 	aya_neo_geek,
- 	oxp_mini_amd,
-+	oxp_mini_amd_a07,
- 	oxp_mini_amd_pro,
- };
- 
- static enum oxp_board board;
- 
-+/* Fan reading and PWM */
- #define OXP_SENSOR_FAN_REG		0x76 /* Fan reading is 2 registers long */
- #define OXP_SENSOR_PWM_ENABLE_REG	0x4A /* PWM enable is 1 register long */
- #define OXP_SENSOR_PWM_REG		0x4B /* PWM reading is 1 register long */
- 
-+/* Turbo button takeover function
-+ * Older boards have different values and EC registers
-+ * for the same function
++/* 
++ * AMD's Industrial processor 3255 supports temperature from -40 deg to 105 deg Celsius.
++ * Do not round off to zero for negative Tctl or Tdie values.
 + */
-+#define OXP_OLD_TURBO_SWITCH_REG	0x1E
-+#define OXP_OLD_TURBO_TAKE_VAL		0x01
-+#define OXP_OLD_TURBO_RETURN_VAL	0x00
++#define AMD_I3255_STR				"3255"
 +
-+#define OXP_TURBO_SWITCH_REG		0xF1
-+#define OXP_TURBO_TAKE_VAL		0x40
-+#define OXP_TURBO_RETURN_VAL		0x00
-+
- static const struct dmi_system_id dmi_table[] = {
- 	{
- 		.matches = {
-@@ -104,7 +118,7 @@ static const struct dmi_system_id dmi_table[] = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
- 			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER mini A07"),
- 		},
--		.driver_data = (void *)oxp_mini_amd,
-+		.driver_data = (void *)oxp_mini_amd_a07,
- 	},
- 	{
- 		.matches = {
-@@ -156,6 +170,112 @@ static int write_to_ec(u8 reg, u8 value)
- 	return ret;
- }
- 
-+/* Turbo button toggle functions */
-+static int tt_toggle_enable(void)
-+{
-+	u8 reg;
-+	u8 val;
-+
-+	switch (board) {
-+	case oxp_mini_amd_a07:
-+		reg = OXP_OLD_TURBO_SWITCH_REG;
-+		val = OXP_OLD_TURBO_TAKE_VAL;
-+		break;
-+	case oxp_mini_amd_pro:
-+	case aok_zoe_a1:
-+		reg = OXP_TURBO_SWITCH_REG;
-+		val = OXP_TURBO_TAKE_VAL;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	return write_to_ec(reg, val);
-+}
-+
-+static int tt_toggle_disable(void)
-+{
-+	u8 reg;
-+	u8 val;
-+
-+	switch (board) {
-+	case oxp_mini_amd_a07:
-+		reg = OXP_OLD_TURBO_SWITCH_REG;
-+		val = OXP_OLD_TURBO_RETURN_VAL;
-+		break;
-+	case oxp_mini_amd_pro:
-+	case aok_zoe_a1:
-+		reg = OXP_TURBO_SWITCH_REG;
-+		val = OXP_TURBO_RETURN_VAL;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	return write_to_ec(reg, val);
-+}
-+
-+/* Callbacks for turbo toggle attribute */
-+static ssize_t tt_toggle_store(struct device *dev,
-+			       struct device_attribute *attr, const char *buf,
-+			       size_t count)
-+{
-+	int rval;
-+	unsigned int value;
-+
-+	rval = kstrtouint(buf, 10, &value);
-+	if (rval)
-+		return rval;
-+
-+	switch (value) {
-+	case 0:
-+		rval = tt_toggle_disable();
-+		if (rval)
-+			return rval;
-+		return count;
-+	case 1:
-+		rval = tt_toggle_enable();
-+		if (rval)
-+			return rval;
-+		return count;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static ssize_t tt_toggle_show(struct device *dev,
-+			      struct device_attribute *attr, char *buf)
-+{
-+	int retval;
-+	u8 reg;
-+	long val;
-+	int status;
-+
-+	switch (board) {
-+	case oxp_mini_amd_a07:
-+		reg = OXP_OLD_TURBO_SWITCH_REG;
-+		break;
-+	case oxp_mini_amd_pro:
-+	case aok_zoe_a1:
-+		reg = OXP_TURBO_SWITCH_REG;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	retval = read_from_ec(reg, 1, &val);
-+	if (retval)
-+		return retval;
-+
-+	if (val)
-+		status = 1;
-+	else
-+		status = 0;
-+
-+	return sysfs_emit(buf, "%d\n", status);
-+}
-+
-+static DEVICE_ATTR_RW(tt_toggle);
-+
-+/* PWM enable/disable functions */
- static int oxp_pwm_enable(void)
- {
- 	return write_to_ec(OXP_SENSOR_PWM_ENABLE_REG, 0x01);
-@@ -206,6 +326,7 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
- 			case aya_neo_air_pro:
- 			case aya_neo_geek:
- 			case oxp_mini_amd:
-+			case oxp_mini_amd_a07:
- 				*val = (*val * 255) / 100;
- 				break;
- 			case oxp_mini_amd_pro:
-@@ -247,6 +368,7 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
- 			case aya_neo_air_pro:
- 			case aya_neo_geek:
- 			case oxp_mini_amd:
-+			case oxp_mini_amd_a07:
- 				val = (val * 100) / 255;
- 				break;
- 			case aok_zoe_a1:
-@@ -274,6 +396,13 @@ static const struct hwmon_channel_info * const oxp_platform_sensors[] = {
- 	NULL,
+ struct k10temp_data {
+ 	struct pci_dev *pdev;
+ 	void (*read_htcreg)(struct pci_dev *pdev, u32 *regval);
+@@ -86,6 +92,7 @@ struct k10temp_data {
+ 	u32 show_temp;
+ 	bool is_zen;
+ 	u32 ccd_offset;
++	bool disp_negative; /*Flag set for AMD i3255. Family 17h, Model 0x0-0xf */
  };
  
-+static struct attribute *oxp_ec_attrs[] = {
-+	&dev_attr_tt_toggle.attr,
-+	NULL
-+};
-+
-+ATTRIBUTE_GROUPS(oxp_ec);
-+
- static const struct hwmon_ops oxp_ec_hwmon_ops = {
- 	.is_visible = oxp_ec_hwmon_is_visible,
- 	.read = oxp_platform_read,
-@@ -291,6 +420,7 @@ static int oxp_platform_probe(struct platform_device *pdev)
- 	const struct dmi_system_id *dmi_entry;
- 	struct device *dev = &pdev->dev;
- 	struct device *hwdev;
-+	int ret;
+ #define TCTL_BIT	0
+@@ -204,9 +211,15 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+ 		switch (channel) {
+ 		case 0:		/* Tctl */
+ 			*val = get_raw_temp(data);
++			if (*val < 0 && (data->disp_negative == false) ){
++				*val = 0;
++			}
+ 			break;
+ 		case 1:		/* Tdie */
+ 			*val = get_raw_temp(data) - data->temp_offset;
++			if (*val < 0 && (data->disp_negative == false) ){
++				*val = 0;
++			}
+ 			break;
+ 		case 2 ... 13:		/* Tccd{1-12} */
+ 			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
+@@ -401,6 +414,11 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	data->pdev = pdev;
+ 	data->show_temp |= BIT(TCTL_BIT);	/* Always show Tctl */
  
- 	/*
- 	 * Have to check for AMD processor here because DMI strings are the
-@@ -305,6 +435,16 @@ static int oxp_platform_probe(struct platform_device *pdev)
- 
- 	board = (enum oxp_board)(unsigned long)dmi_entry->driver_data;
- 
-+	switch (board) {
-+	case aok_zoe_a1:
-+	case oxp_mini_amd_a07:
-+	case oxp_mini_amd_pro:
-+		ret = devm_device_add_groups(dev, oxp_ec_groups);
-+		if (ret)
-+			return ret;
-+	default:
++	if (boot_cpu_data.x86 == 0x17 &&
++		strstr(boot_cpu_data.x86_model_id, AMD_I3255_STR)) {
++		data->disp_negative = true;
 +	}
 +
- 	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
- 						     &oxp_ec_chip_info, NULL);
- 
+ 	if (boot_cpu_data.x86 == 0x15 &&
+ 	    ((boot_cpu_data.x86_model & 0xf0) == 0x60 ||
+ 	     (boot_cpu_data.x86_model & 0xf0) == 0x70)) {
 -- 
-2.41.0
+2.25.1
 
