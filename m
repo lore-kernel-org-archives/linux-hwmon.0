@@ -2,102 +2,157 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 046BFC77B7A
-	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Jun 2023 14:39:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31695C7EE37
+	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Jun 2023 15:27:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233392AbjFJOjI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 10 Jun 2023 10:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
+        id S232544AbjFJP14 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 10 Jun 2023 11:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjFJOjH (ORCPT
+        with ESMTP id S235101AbjFJP1y (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 10 Jun 2023 10:39:07 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6184B30E8;
-        Sat, 10 Jun 2023 07:39:06 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b39d67ea37so5472175ad.1;
-        Sat, 10 Jun 2023 07:39:06 -0700 (PDT)
+        Sat, 10 Jun 2023 11:27:54 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91BA1993
+        for <linux-hwmon@vger.kernel.org>; Sat, 10 Jun 2023 08:27:16 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b3b56dcf1bso1783155ad.2
+        for <linux-hwmon@vger.kernel.org>; Sat, 10 Jun 2023 08:27:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686407946; x=1688999946;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2qopnUmixAlEvP9yxsQYqJj5bG7AmKHZ/6sELnX42H8=;
-        b=ZdE2YLOTcbyc6PpFjkmgx3+/CngX9h3/j6lDjBEa/rq1+4+nHL9A3lHgi4uYoReT8z
-         NsfriXBi1GJb5bVj9xJWpQxWApUs/1vOvWn1PyNiblHq/yuMr0FWcy6WKDhoT3oNJe52
-         9pR6SYw8L//3245SVUY6JBPqXheUqCyWj9xdeglCDj4huGp3ZpjRWpcUGA69tfsyR3Jk
-         fK7JaahGNLjscgl7criBCcqhfp4o3cYJO60WV9oBp9VbOv+Mk7kG6r+0CRy7rnRuQsv9
-         93LgVumOXiLQLMafKZdbXRGl6yMweiJmYvBUj1uZwT1qo90VKOTCPnkYdxsh2Mc9Qtm4
-         I7Hw==
+        d=gmail.com; s=20221208; t=1686410836; x=1689002836;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=xe9XR6J9vmxjX2jyXwwHARkMH7q4u8p5SGQDnJ0SzlQ=;
+        b=KRL4tpyDKVfCZ+8YLAmIWUEyo/tyS2v1hq+Rpkn13Ook6RJlMSX86vxyRf8g09Lhdp
+         MO7T7CYccsbAW9LKrn37TqLyu/3rRmkOdCLoKvRy2BdWrog4Y73IUwoxCEM43zrP4HM/
+         D2U2olgm8qvXJeFIn8CAR2rrIbEe1QnO3ZfK3vt44CnV24rzzV8ofgnQmF8xkg2IeSdI
+         GaT+HMwWAsHS645y3CYnERs/UEIsI8c3BEkCyyTK5np6LiZqc/Ar2aDx/eFBLSif1mFs
+         Rf1dERzRfVmzQIvkFjeqEuEhqQe7HptFjKwOTphEW/Z14S5UirrMz4mBhy7qBpMSsBmG
+         p9Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686407946; x=1688999946;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2qopnUmixAlEvP9yxsQYqJj5bG7AmKHZ/6sELnX42H8=;
-        b=LTbaAY7EfMkv1ERUsEGwvlOF0NNN6kjweV9L/v7xDQY1/fS0FxHdrbLjn2XRdbZLx7
-         lSphAr1aohl9vAF7aRwj+xCpFlvYVVE6d4PiREZqo7KJmnkgU+huxojDYWcKcn/OUcRk
-         DNndt2G+g0gbkbQ0h+50zoJSCoF1CSzpGd0XjqmP39mq9zXZBsS73Ahoyzmrw8EqYgRH
-         WXkhAU7O4y0nAoK1B1Oc7ZhVLXuAnYPPpgV/3CeFtSGI46QD0M7CEb85zDbN5nZG1R53
-         JoVsIhn6QTVQRyViVnPt+8nxxW9b0vqkc6SqpViKp/Q0l9IaSg3sKg7T60FJYa6DhBdm
-         k8UQ==
-X-Gm-Message-State: AC+VfDxppX2Hm/lvf17DH1TyvDn5wz6UMeogzcoWRq/7ZScstmPUWkrm
-        ME2Omcv3k7jxsCgwTmwfdsc=
-X-Google-Smtp-Source: ACHHUZ5Z/BtdYjB3c1V/mcqJqbzIASBeXrjux+w7gQXgzxmlDEM+pXVTnOu3vb5AcRNf6DYhKCrINw==
-X-Received: by 2002:a17:903:2285:b0:1a3:cd4c:8d08 with SMTP id b5-20020a170903228500b001a3cd4c8d08mr2381010plh.38.1686407945841;
-        Sat, 10 Jun 2023 07:39:05 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686410836; x=1689002836;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xe9XR6J9vmxjX2jyXwwHARkMH7q4u8p5SGQDnJ0SzlQ=;
+        b=mAHvetg1aaHCIjPRTUXtrcABi13O9MBcvvvh5+gotbcV6JfKPun02FSUyg60yc/rQs
+         CFYx8mKbBpW03zIAYxj64l6kKYeh0E6Xd6VC7BQzJLx1rEcR+WsOfihipQQ+iwijdXdP
+         4cOPIlY8KGIrndRBFbXxwUgczRQcAtRwKCALSeIJaAqF74rf4PDjPy2eIxn2nbaO3wra
+         e9ACsiT4Dh661VCNIkmH36Ilc81uRq6nXf074xYThPHR3f1zbMh9Y+V/oNYLHQG+ODYD
+         oEMCzxlfIFC+uExBUl7EaEbdoGBE1zRQcBxe63R2/EVeNgG9aZvwdwFzY1+B6y0U1cs1
+         j8Xw==
+X-Gm-Message-State: AC+VfDyvyMXi3tmaeYUv1WRUZPsuGFdAjOgPnc+1hJrXu8WHugouE0/O
+        NMmo5j25pyFUiT1cAdLjuL6lNoWmyAM=
+X-Google-Smtp-Source: ACHHUZ5cDxPrgBuRlywTQE6iHqKIIvLFxOIYbxx+3VbWnreoBldw81HlIMDrwhTabZJ/tjD5XVM1sQ==
+X-Received: by 2002:a17:902:c944:b0:1b0:5d15:3132 with SMTP id i4-20020a170902c94400b001b05d153132mr2535185pla.58.1686410835919;
+        Sat, 10 Jun 2023 08:27:15 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p4-20020a1709026b8400b001b034d2e71csm5082178plk.34.2023.06.10.07.39.05
+        by smtp.gmail.com with ESMTPSA id q13-20020a170902dacd00b001b2404c7d53sm5127198plx.175.2023.06.10.08.27.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Jun 2023 07:39:05 -0700 (PDT)
+        Sat, 10 Jun 2023 08:27:15 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 10 Jun 2023 07:39:04 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Yongsheng Yang <iyysheng@gmail.com>
-Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] Documentation/hwmon: Fix description of
- devm_hwmon_device_unregister()
-Message-ID: <e605a8d8-4f40-447d-8238-eccb7e22342a@roeck-us.net>
-References: <20230609075510.1305-1-iyysheng@gmail.com>
+To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [RFC PATCH] Documentation/hwmon: Add trailing paranthesis() to function names
+Date:   Sat, 10 Jun 2023 08:27:09 -0700
+Message-Id: <20230610152709.2730159-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609075510.1305-1-iyysheng@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 11:55:10AM +0400, Yongsheng Yang wrote:
-> Use devm_hwmon_device_register_with_info to replace
-> hwmon_device_register_with_info in description of
-> devm_hwmon_device_unregister.
-> 
+With trailing paranthesis(), the docs build will automatically generate
+cross-links to the documentation.
 
-You didn't add () to function names, but I guess it is better to do that
-in a separate patch anyway.
+Suggested-by: Jonathan Corbet <corbet@lwn.net>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+Jonathan:
+	Did I misunderstand something ? "make htmldocs" did not result
+	in any additional hyperlinks.
 
-Applied.
+ Documentation/hwmon/hwmon-kernel-api.rst | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
+index 6cacf7daf25c..9edc8521d310 100644
+--- a/Documentation/hwmon/hwmon-kernel-api.rst
++++ b/Documentation/hwmon/hwmon-kernel-api.rst
+@@ -44,29 +44,29 @@ register/unregister functions::
+ 
+   char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
+ 
+-hwmon_device_register_with_info registers a hardware monitoring device.
++hwmon_device_register_with_info() registers a hardware monitoring device.
+ It creates the standard sysfs attributes in the hardware monitoring core,
+ letting the driver focus on reading from and writing to the chip instead
+ of having to bother with sysfs attributes. The parent device parameter
+ as well as the chip parameter must not be NULL. Its parameters are described
+ in more detail below.
+ 
+-devm_hwmon_device_register_with_info is similar to
+-hwmon_device_register_with_info. However, it is device managed, meaning the
++devm_hwmon_device_register_with_info() is similar to
++hwmon_device_register_with_info(). However, it is device managed, meaning the
+ hwmon device does not have to be removed explicitly by the removal function.
+ 
+ All other hardware monitoring device registration functions are deprecated
+ and must not be used in new drivers.
+ 
+-hwmon_device_unregister deregisters a registered hardware monitoring device.
++hwmon_device_unregister() deregisters a registered hardware monitoring device.
+ The parameter of this function is the pointer to the registered hardware
+ monitoring device structure. This function must be called from the driver
+ remove function if the hardware monitoring device was registered with
+-hwmon_device_register_with_info.
++hwmon_device_register_with_info().
+ 
+-devm_hwmon_device_unregister does not normally have to be called. It is only
++devm_hwmon_device_unregister() does not normally have to be called. It is only
+ needed for error handling, and only needed if the driver probe fails after
+-the call to devm_hwmon_device_register_with_info and if the automatic (device
++the call to devm_hwmon_device_register_with_info() and if the automatic (device
+ managed) removal would be too late.
+ 
+ All supported hwmon device registration functions only accept valid device
+@@ -75,14 +75,14 @@ will be rejected. The 'name' parameter is mandatory.
+ 
+ If the driver doesn't use a static device name (for example it uses
+ dev_name()), and therefore cannot make sure the name only contains valid
+-characters, hwmon_sanitize_name can be used. This convenience function
++characters, hwmon_sanitize_name() can be used. This convenience function
+ will duplicate the string and replace any invalid characters with an
+ underscore. It will allocate memory for the new string and it is the
+ responsibility of the caller to release the memory when the device is
+ removed.
+ 
+-devm_hwmon_sanitize_name is the resource managed version of
+-hwmon_sanitize_name; the memory will be freed automatically on device
++devm_hwmon_sanitize_name() is the resource managed version of
++hwmon_sanitize_name(); the memory will be freed automatically on device
+ removal.
+ 
+ Using devm_hwmon_device_register_with_info()
+@@ -357,7 +357,7 @@ variable. This structure has the following fields::
+ 		int index;
+ 	};
+ 
+-You can use to_sensor_dev_attr to get the pointer to this structure from the
++You can use to_sensor_dev_attr() to get the pointer to this structure from the
+ attribute read or write function. Its parameter is the device to which the
+ attribute is attached.
+ 
+@@ -370,5 +370,5 @@ variable, which is defined as follows::
+ 		u8 nr;
+ 	};
+ 
+-Use to_sensor_dev_attr_2 to get the pointer to this structure. Its parameter
++Use to_sensor_dev_attr_2() to get the pointer to this structure. Its parameter
+ is the device to which the attribute is attached.
+-- 
+2.39.2
 
-> Signed-off-by: Yongsheng Yang <iyysheng@gmail.com>
-> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  Documentation/hwmon/hwmon-kernel-api.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-> index c2d1e0299d8d..6cacf7daf25c 100644
-> --- a/Documentation/hwmon/hwmon-kernel-api.rst
-> +++ b/Documentation/hwmon/hwmon-kernel-api.rst
-> @@ -66,7 +66,7 @@ hwmon_device_register_with_info.
->  
->  devm_hwmon_device_unregister does not normally have to be called. It is only
->  needed for error handling, and only needed if the driver probe fails after
-> -the call to hwmon_device_register_with_info and if the automatic (device
-> +the call to devm_hwmon_device_register_with_info and if the automatic (device
->  managed) removal would be too late.
->  
->  All supported hwmon device registration functions only accept valid device
