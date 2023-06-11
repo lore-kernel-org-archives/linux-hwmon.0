@@ -2,191 +2,346 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA41DC77B7A
-	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Jun 2023 04:51:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 843EDC7EE2E
+	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Jun 2023 14:36:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbjFKEu5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 11 Jun 2023 00:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
+        id S233894AbjFKOgq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 11 Jun 2023 10:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232604AbjFKEuw (ORCPT
+        with ESMTP id S233646AbjFKOgq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 11 Jun 2023 00:50:52 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350BE30F5
-        for <linux-hwmon@vger.kernel.org>; Sat, 10 Jun 2023 21:50:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686459050; x=1717995050;
-  h=date:from:to:cc:subject:message-id;
-  bh=nwwaLm16ZC1GAvJnQjGGprQaKGGON5C0EebGp1AGFuI=;
-  b=G7Vm9ZywW+mZowkazhrc5nKRVfiWh3F2UnOlFQ5If5N84Runn8XJa/KS
-   3YBtMianUM1IwH8fjYreYwhw7z955Lz9eIZgoNnwkTYNdfWkBloU2SOVa
-   t9SIwnEIjFY7aero1w61sypwfdSSZsqXH321+uUJK807jW3v3fu6iM70U
-   OELHYxzGnC16nZknsHFFwYeT0tSTS7+OZfyKl8ciyiCO7N1K+p0kKQ9js
-   V+ILpwhng40f9VEJNoq5FIs64IoIWSngPJLG+qi0U0DzWjkJf3hxgUSd0
-   VHf532CZC3tnUI+ibWrUcuIH0aT2WpjCOh5ujW+qUZZY0WuzGrYYzGh0o
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="347474133"
-X-IronPort-AV: E=Sophos;i="6.00,233,1681196400"; 
-   d="scan'208";a="347474133"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 21:50:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="855185667"
-X-IronPort-AV: E=Sophos;i="6.00,233,1681196400"; 
-   d="scan'208";a="855185667"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Jun 2023 21:50:48 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q8D2N-000Adu-28;
-        Sun, 11 Jun 2023 04:50:47 +0000
-Date:   Sun, 11 Jun 2023 12:50:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 7357b1876b212742a5bec59786d660cfcf66defb
-Message-ID: <202306111257.kz0yj7DA-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        Sun, 11 Jun 2023 10:36:46 -0400
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF9883;
+        Sun, 11 Jun 2023 07:36:44 -0700 (PDT)
+Received: by mail-oo1-xc33.google.com with SMTP id 006d021491bc7-55b77d50465so573523eaf.0;
+        Sun, 11 Jun 2023 07:36:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686494204; x=1689086204;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dvdshtR/+hGfnmqrqTGGF2xCkrUO24uwCSGtFWk45gM=;
+        b=Wi5I+GzwbYrmHVOK+PXtdkU7H9V+d/Mm/xKC/UlFPCsn9MpT6YRy76DD546ZeC/HhT
+         Ah1qm7p50zHtJ2unRHTAjR5TeXaOxqARNMfd/rNxa2xip0da1Fy8XbquhiLB/1zPyLBy
+         Ixaj5TCJ+XcrIpumr93OseAzRyaDgVgwNxXSRbmW3mZdp88BrmRe7BtSyT0MSf4HowUn
+         CbadhpDhnXP0gdjpSSCPhUASv6oxaKHlknTqFksDPd2wnCOj6xHAUKKEZUsI3pr/6geO
+         WppeO0+1ekJVWncPQpRW4QiAaYWwP99+jrOQozjIpVO9RNEGi/hZhYQPQxfTrJF+5uZw
+         1cPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686494204; x=1689086204;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dvdshtR/+hGfnmqrqTGGF2xCkrUO24uwCSGtFWk45gM=;
+        b=Nmw19vlBR2R2RMDL0LzENU3NB9isufOwemOz8Jf4SOqWX69w2K+ADNSfaCoWgvevfH
+         xiEPrk3y8GmXMMrR1HpbjY4KVd63YK3FSIBft9/Lse2BnVLhJpAQLEgk+Aa42T9LdgWb
+         RE3PNriKMhobeUSMGskxGJ3PpagSJ+MzY5XZLeUMkXGYdb2Y93+kW/TIwN7e5LrRGtIJ
+         LwIWahPhxRYZ5eiTbjYzBfc84NRcmDtpYF9xEvKwSu6GqnLPkUK/E3GT/INQzwsF5d5J
+         e2I5OFXFu3WrIqXHQBN66tQKg9DIsGU6YvoEZ9JZhbh6ZDOIiBeRy3StvkG/rQOQUJZg
+         QWyw==
+X-Gm-Message-State: AC+VfDyLPvyaQa7LBkKYfkgOXtzqj7/WDlsCOWMOEl5weYITQFx/xl41
+        KCyf+fwR1n85q/Pep/06x9yWAioux9Y=
+X-Google-Smtp-Source: ACHHUZ6qSR0ZGW4zVdMRzuqyVvMJhTE3KkApcvfoyshecHRXcLgVClwIdswINMfg3aC71zZCUWfE/w==
+X-Received: by 2002:a05:6808:181f:b0:39a:acfd:e5a3 with SMTP id bh31-20020a056808181f00b0039aacfde5a3mr2156164oib.23.1686494203891;
+        Sun, 11 Jun 2023 07:36:43 -0700 (PDT)
+Received: from smeagol.fibertel.com.ar ([201.235.4.68])
+        by smtp.gmail.com with ESMTPSA id j9-20020aca1709000000b00397bc1af159sm3092444oii.18.2023.06.11.07.36.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Jun 2023 07:36:43 -0700 (PDT)
+From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+To:     linux@roeck-us.net
+Cc:     =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>, derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] hwmon: (oxp-sensors) Add tt_toggle attribute on supported boards
+Date:   Sun, 11 Jun 2023 11:33:20 -0300
+Message-ID: <20230611143332.40590-2-samsagax@gmail.com>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 7357b1876b212742a5bec59786d660cfcf66defb  hwmon: (tmp464) Use maple tree register cache
+OneXPlayer boards from the last generation (both for OneXPlayer and AOK
+ZOE brands) have a toggle in the EC to switch the "Turbo/Silent" button
+into a different keyboard event.
 
-elapsed time: 805m
+Add a means to use that "Turbo button takeover" function and expose it
+to userspace in a custom sysfs `tt_toggle` attribute. It can be read to
+take the current state. Write 1|0 to activate the function. The specific
+keycode is dependent on the board but can be checked by running
+`evtest` utility.
 
-configs tested: 119
-configs skipped: 6
+Newer BIOS on the OneXPlayer added this function aside from string changes.
+Add a board enum to differentiate it from the old OneXplayer Mini AMD BIOS.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Currently known supported boards:
+- AOK ZOE A1
+- OneXPlayer Mini AMD (only newer BIOS version supported)
+- OneXPlayer Mini Pro
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r006-20230610   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r002-20230610   gcc  
-arc                                 defconfig   gcc  
-arc                 nsimosci_hs_smp_defconfig   gcc  
-arc                  randconfig-r012-20230610   gcc  
-arc                  randconfig-r043-20230610   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                      integrator_defconfig   gcc  
-arm                        keystone_defconfig   gcc  
-arm                             pxa_defconfig   gcc  
-arm                  randconfig-r046-20230610   clang
-arm                        vexpress_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r004-20230610   clang
-arm64                               defconfig   gcc  
-arm64                randconfig-r031-20230610   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r011-20230610   gcc  
-hexagon              randconfig-r005-20230610   clang
-hexagon              randconfig-r041-20230610   clang
-hexagon              randconfig-r045-20230610   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230610   clang
-i386                 randconfig-i002-20230610   clang
-i386                 randconfig-i003-20230610   clang
-i386                 randconfig-i004-20230610   clang
-i386                 randconfig-i005-20230610   clang
-i386                 randconfig-i006-20230610   clang
-i386                 randconfig-i011-20230608   clang
-i386                 randconfig-i012-20230608   clang
-i386                 randconfig-i013-20230608   clang
-i386                 randconfig-i014-20230608   clang
-i386                 randconfig-i015-20230608   clang
-i386                 randconfig-i016-20230608   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r001-20230610   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r023-20230610   gcc  
-loongarch            randconfig-r024-20230610   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                            q40_defconfig   gcc  
-m68k                 randconfig-r016-20230610   gcc  
-m68k                 randconfig-r022-20230610   gcc  
-m68k                           sun3_defconfig   gcc  
-microblaze           randconfig-r036-20230610   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                      loongson3_defconfig   gcc  
-mips                 randconfig-r015-20230610   clang
-nios2                               defconfig   gcc  
-openrisc             randconfig-r001-20230610   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r026-20230610   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                 canyonlands_defconfig   gcc  
-powerpc                        fsp2_defconfig   clang
-powerpc                       holly_defconfig   gcc  
-powerpc                  mpc866_ads_defconfig   clang
-powerpc                      tqm8xx_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv        buildonly-randconfig-r006-20230610   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r014-20230610   gcc  
-riscv                randconfig-r033-20230610   clang
-riscv                randconfig-r035-20230610   clang
-riscv                randconfig-r042-20230610   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230610   clang
-s390                 randconfig-r044-20230610   gcc  
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r005-20230610   gcc  
-sh                        edosk7705_defconfig   gcc  
-sh                   rts7751r2dplus_defconfig   gcc  
-sh                             sh03_defconfig   gcc  
-sh                        sh7763rdp_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r032-20230610   gcc  
-sparc64              randconfig-r002-20230610   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230610   clang
-x86_64               randconfig-a002-20230610   clang
-x86_64               randconfig-a003-20230610   clang
-x86_64               randconfig-a004-20230610   clang
-x86_64               randconfig-a005-20230610   clang
-x86_64               randconfig-a006-20230610   clang
-x86_64               randconfig-a011-20230610   gcc  
-x86_64               randconfig-a012-20230610   gcc  
-x86_64               randconfig-a013-20230610   gcc  
-x86_64               randconfig-a014-20230610   gcc  
-x86_64               randconfig-a015-20230610   gcc  
-x86_64               randconfig-a016-20230610   gcc  
-x86_64               randconfig-r004-20230610   clang
-x86_64               randconfig-r025-20230610   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                    smp_lx200_defconfig   gcc  
+Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
+---
+v2 changes:
+- Attach the attribute to the platform device as per review
+- Make the attribute return status 0|1 instead of read value
 
+v3 changes:
+- Mention the attribute attached to the platform device on Documentation
+- Use boolean instead of base 10 int in tt_toggle_store()
+- Remove unnecesary status logic in tt_toggle_show() (use !!val instead)
+- Add missing breaks in probe()
+---
+ Documentation/hwmon/oxp-sensors.rst |  17 ++++
+ drivers/hwmon/oxp-sensors.c         | 134 +++++++++++++++++++++++++++-
+ 2 files changed, 150 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
+index 4ab442301415..0ca1f7728c34 100644
+--- a/Documentation/hwmon/oxp-sensors.rst
++++ b/Documentation/hwmon/oxp-sensors.rst
+@@ -19,6 +19,11 @@ out the EC registers and values to write to since the EC layout and model is
+ different. Aya Neo devices preceding the AIR may not be supportable as the EC
+ model is different and do not appear to have manual control capabilities.
+ 
++Some models have a toggle for changing the behaviour of the "Turbo/Silent"
++button of the device. It will change the key event that it triggers with
++a flip of the `tt_toggle` attribute. See below for boards that support this
++function.
++
+ Supported devices
+ -----------------
+ 
+@@ -33,6 +38,11 @@ Currently the driver supports the following handhelds:
+  - OneXPlayer mini AMD
+  - OneXPlayer mini AMD PRO
+ 
++"Turbo/Silent" button behaviour toggle is only supported on:
++ - AOK ZOE A1
++ - OneXPlayer mini AMD (only with updated alpha BIOS)
++ - OneXPlayer mini AMD PRO
++
+ Sysfs entries
+ -------------
+ 
+@@ -49,3 +59,10 @@ pwm1
+   Read Write. Read this attribute to see current duty cycle in the range [0-255].
+   When pwm1_enable is set to "1" (manual) write any value in the range [0-255]
+   to set fan speed.
++
++tt_toggle
++  Read Write. Read this attribute to check the status of the turbo/silent
++  button behaviour function. Write "1" to activate the switch and "0" to
++  deactivate it. The specific keycodes and behaviour is specific to the device
++  both with this function on and off. This attribute is attached to the platform
++  driver and not to the hwmon driver (/sys/devices/platform/oxp-platform/tt_toggle)
+diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+index 0ec7588610ad..be36d38f13d9 100644
+--- a/drivers/hwmon/oxp-sensors.c
++++ b/drivers/hwmon/oxp-sensors.c
+@@ -47,15 +47,29 @@ enum oxp_board {
+ 	aya_neo_air_pro,
+ 	aya_neo_geek,
+ 	oxp_mini_amd,
++	oxp_mini_amd_a07,
+ 	oxp_mini_amd_pro,
+ };
+ 
+ static enum oxp_board board;
+ 
++/* Fan reading and PWM */
+ #define OXP_SENSOR_FAN_REG		0x76 /* Fan reading is 2 registers long */
+ #define OXP_SENSOR_PWM_ENABLE_REG	0x4A /* PWM enable is 1 register long */
+ #define OXP_SENSOR_PWM_REG		0x4B /* PWM reading is 1 register long */
+ 
++/* Turbo button takeover function
++ * Older boards have different values and EC registers
++ * for the same function
++ */
++#define OXP_OLD_TURBO_SWITCH_REG	0x1E
++#define OXP_OLD_TURBO_TAKE_VAL		0x01
++#define OXP_OLD_TURBO_RETURN_VAL	0x00
++
++#define OXP_TURBO_SWITCH_REG		0xF1
++#define OXP_TURBO_TAKE_VAL		0x40
++#define OXP_TURBO_RETURN_VAL		0x00
++
+ static const struct dmi_system_id dmi_table[] = {
+ 	{
+ 		.matches = {
+@@ -104,7 +118,7 @@ static const struct dmi_system_id dmi_table[] = {
+ 			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
+ 			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER mini A07"),
+ 		},
+-		.driver_data = (void *)oxp_mini_amd,
++		.driver_data = (void *)oxp_mini_amd_a07,
+ 	},
+ 	{
+ 		.matches = {
+@@ -156,6 +170,102 @@ static int write_to_ec(u8 reg, u8 value)
+ 	return ret;
+ }
+ 
++/* Turbo button toggle functions */
++static int tt_toggle_enable(void)
++{
++	u8 reg;
++	u8 val;
++
++	switch (board) {
++	case oxp_mini_amd_a07:
++		reg = OXP_OLD_TURBO_SWITCH_REG;
++		val = OXP_OLD_TURBO_TAKE_VAL;
++		break;
++	case oxp_mini_amd_pro:
++	case aok_zoe_a1:
++		reg = OXP_TURBO_SWITCH_REG;
++		val = OXP_TURBO_TAKE_VAL;
++		break;
++	default:
++		return -EINVAL;
++	}
++	return write_to_ec(reg, val);
++}
++
++static int tt_toggle_disable(void)
++{
++	u8 reg;
++	u8 val;
++
++	switch (board) {
++	case oxp_mini_amd_a07:
++		reg = OXP_OLD_TURBO_SWITCH_REG;
++		val = OXP_OLD_TURBO_RETURN_VAL;
++		break;
++	case oxp_mini_amd_pro:
++	case aok_zoe_a1:
++		reg = OXP_TURBO_SWITCH_REG;
++		val = OXP_TURBO_RETURN_VAL;
++		break;
++	default:
++		return -EINVAL;
++	}
++	return write_to_ec(reg, val);
++}
++
++/* Callbacks for turbo toggle attribute */
++static ssize_t tt_toggle_store(struct device *dev,
++			       struct device_attribute *attr, const char *buf,
++			       size_t count)
++{
++	int rval;
++	bool value;
++
++	rval = kstrtobool(buf, &value);
++	if (rval)
++		return rval;
++
++	if (value) {
++		rval = tt_toggle_enable();
++		if (rval)
++			return rval;
++	} else {
++		rval = tt_toggle_disable();
++		if (rval)
++			return rval;
++	}
++	return count;
++}
++
++static ssize_t tt_toggle_show(struct device *dev,
++			      struct device_attribute *attr, char *buf)
++{
++	int retval;
++	u8 reg;
++	long val;
++
++	switch (board) {
++	case oxp_mini_amd_a07:
++		reg = OXP_OLD_TURBO_SWITCH_REG;
++		break;
++	case oxp_mini_amd_pro:
++	case aok_zoe_a1:
++		reg = OXP_TURBO_SWITCH_REG;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	retval = read_from_ec(reg, 1, &val);
++	if (retval)
++		return retval;
++
++	return sysfs_emit(buf, "%d\n", !!val);
++}
++
++static DEVICE_ATTR_RW(tt_toggle);
++
++/* PWM enable/disable functions */
+ static int oxp_pwm_enable(void)
+ {
+ 	return write_to_ec(OXP_SENSOR_PWM_ENABLE_REG, 0x01);
+@@ -206,6 +316,7 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+ 			case aya_neo_air_pro:
+ 			case aya_neo_geek:
+ 			case oxp_mini_amd:
++			case oxp_mini_amd_a07:
+ 				*val = (*val * 255) / 100;
+ 				break;
+ 			case oxp_mini_amd_pro:
+@@ -247,6 +358,7 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+ 			case aya_neo_air_pro:
+ 			case aya_neo_geek:
+ 			case oxp_mini_amd:
++			case oxp_mini_amd_a07:
+ 				val = (val * 100) / 255;
+ 				break;
+ 			case aok_zoe_a1:
+@@ -274,6 +386,13 @@ static const struct hwmon_channel_info * const oxp_platform_sensors[] = {
+ 	NULL,
+ };
+ 
++static struct attribute *oxp_ec_attrs[] = {
++	&dev_attr_tt_toggle.attr,
++	NULL
++};
++
++ATTRIBUTE_GROUPS(oxp_ec);
++
+ static const struct hwmon_ops oxp_ec_hwmon_ops = {
+ 	.is_visible = oxp_ec_hwmon_is_visible,
+ 	.read = oxp_platform_read,
+@@ -291,6 +410,7 @@ static int oxp_platform_probe(struct platform_device *pdev)
+ 	const struct dmi_system_id *dmi_entry;
+ 	struct device *dev = &pdev->dev;
+ 	struct device *hwdev;
++	int ret;
+ 
+ 	/*
+ 	 * Have to check for AMD processor here because DMI strings are the
+@@ -305,6 +425,18 @@ static int oxp_platform_probe(struct platform_device *pdev)
+ 
+ 	board = (enum oxp_board)(unsigned long)dmi_entry->driver_data;
+ 
++	switch (board) {
++	case aok_zoe_a1:
++	case oxp_mini_amd_a07:
++	case oxp_mini_amd_pro:
++		ret = devm_device_add_groups(dev, oxp_ec_groups);
++		if (ret)
++			return ret;
++		break;
++	default:
++		break;
++	}
++
+ 	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
+ 						     &oxp_ec_chip_info, NULL);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.41.0
+
