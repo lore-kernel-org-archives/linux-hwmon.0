@@ -2,89 +2,121 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AC78C7EE2E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Jun 2023 01:45:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B616FC7EE2E
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Jun 2023 02:16:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231764AbjFLBp6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 11 Jun 2023 21:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53702 "EHLO
+        id S229754AbjFLCQY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 11 Jun 2023 22:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjFLBp5 (ORCPT
+        with ESMTP id S229477AbjFLCQY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 11 Jun 2023 21:45:57 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE567F0;
-        Sun, 11 Jun 2023 18:45:56 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f7f6341bf9so38082605e9.1;
-        Sun, 11 Jun 2023 18:45:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686534355; x=1689126355;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ERhjlW5Y7nSKYA99YG69XuklrOuLnBz2WHAZvzU2WSA=;
-        b=q7uuUGigrvzJ22nk9TaB8M91ZXOrRIOHZeXXKyq5Z5v5t20LSp/IU3X85y3CKys0sH
-         nbcPnZghWesXPKzvlsvZ9X/YhDxpM570BWgpZkM9hh91T60OyaR4jPRVQfPRnFpa1rOt
-         lBfzhF46qRmQIXFz1IZ5pXXYmW6IIRWxjZJMKMRnzf8CnrdQeEmVmjMI7rkrQ6I4/kuf
-         NYNruxGWWgJivbR2cJqUxjlc6fDkibOSrz1UJEvr6ddecM0l/8KCSc7BmcyKsUf5kMAi
-         kcZWDsLVHntELxeffqfpRojHz8UMA+mUVOKNprXns4KYPX17QgI7xCOPISajBLNhl+OF
-         cvzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686534355; x=1689126355;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ERhjlW5Y7nSKYA99YG69XuklrOuLnBz2WHAZvzU2WSA=;
-        b=jKg9scrrAB2v0eUc7c6ceFml1b1hcptKKA+wyo9l8p9U6FZHaIHw/snpXJRKuVMOAi
-         gbkE760fvsLQMDubkRoYRsNYfrrsaQMrP5BIHbPtynJoIl6eHTWk2VeE9zMQ6L/GPSKD
-         tMwJsKidgFuOXaJUBnjLToAyL4zdauRH/JT1dWdyG7Z0/IgyN5z/TdcT4QONRtkiUITp
-         Nwf3rVGrQB/OpsvaXiykRBsldCEfBE+Yskserdi6mAt+CpW613ru3LgaQyCeHqZffoJ2
-         Oj8ldYnz5aB7lvDmjCMB31Bnc32c3eKFvHJZCn5vqdykde8Zav7C/BqAMXn2iXWwmTaI
-         UYUA==
-X-Gm-Message-State: AC+VfDyxjCNadtlEX+Vh4lp7tMAyXyHhe5rBaqSsI/ZY+Xkp8+jysIK9
-        Y4dkUAQwNL8+H6EJnXn+OGs=
-X-Google-Smtp-Source: ACHHUZ6GvDD0NGNbjw8iF2TxKFeM/CleBCGE/EJoMUmOg9PV3FezRg2QIuZKvR1Nyn+/Ytp5B/nBzA==
-X-Received: by 2002:a1c:ed15:0:b0:3f6:da2:bc86 with SMTP id l21-20020a1ced15000000b003f60da2bc86mr5902025wmh.7.1686534355268;
-        Sun, 11 Jun 2023 18:45:55 -0700 (PDT)
-Received: from localhost.localdomain (bba-2-50-150-163.alshamil.net.ae. [2.50.150.163])
-        by smtp.gmail.com with ESMTPSA id m7-20020a7bca47000000b003f80b96097esm7140919wml.31.2023.06.11.18.45.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 18:45:54 -0700 (PDT)
-From:   Yongsheng Yang <iyysheng@gmail.com>
-To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net
-Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yongsheng Yang <iyysheng@gmail.com>
-Subject: [PATCH v3] Documentation/hwmon: Fix description of devm_hwmon_device_unregister()
-Date:   Mon, 12 Jun 2023 05:45:35 +0400
-Message-ID: <20230612014535.1433-1-iyysheng@gmail.com>
-X-Mailer: git-send-email 2.41.0.windows.1
+        Sun, 11 Jun 2023 22:16:24 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04olkn2058.outbound.protection.outlook.com [40.92.73.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF891B8;
+        Sun, 11 Jun 2023 19:16:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c2J+b0vdYqkB6YPFepAuhdjj3DsMboiqoizutHNnV5TzQHGKxjvgMM1YW4OJ+bg+y5uLHibV0Fuhkw4kHdFlHU71EBQorFhbaQFb6xGqvNh02y5ujYwcAnOXS8HrjBG0N8l1T5lJvdTCFljAae0hMSLplm/wpBMxkHQPwX70tQ3NA3jqDR5SWKyDuXLud827M8zeXuqVs2kbjkKxos1Ppq2LuSkwkyL+SramArWXjSgGr28TCB7TUhVlRIqaYdUyxAHMtU1H34hxty2Jg3pCgDs7crnM0MrO0AM1MKAYWVnHUspa5JPBagkGwp7qlytpMqmUn3fQcGHtlu1L0OCT0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vBLd7KdQCfOOyvK4UM2GCbHHYivuqymItDssFwI4X2o=;
+ b=PwNXXscR5iHfaI8E8TJfDGCZCrxP1cHNX45L+mAuIZxFFih9rk2kdWOGcE7Nn5W4hYM7ZOrWJYDaH1STkAXW++1YzjEbb6BFG5HnUFjX0gU4kMNIukU9pkv7Bz7iF3C1xgvR4AbgbmYy/wotRmu2xJ2qAjQ1YQNx8wtTX4GKiekSR2suPBS2kCJU4PCBE26qWI/wec194Ag1wuUAgaLLWjCK52APtmy54Rv1iSb4p1838l5NLy9ekvUsI1Eih5Z7zPM2Gc/+hRsn4NRnjRzcLlZ1ji8wNwpLxWJUuWRYA+t3jOVUh3EXwtyoBCQp9cciWl/HVKe9mMWpTgdVGUYvgw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vBLd7KdQCfOOyvK4UM2GCbHHYivuqymItDssFwI4X2o=;
+ b=V7KJ5hCz/YsqCsThlkA3RD4uYQHPUkasqLvG43uR9g6FKEPNhDobmETGX67smTX5IuNB8Xv9z5u79EZxsnf24IVq4bv+vvT43+zNP6Tyr+xWu18TdmqXdq6DAm+sapcUmoSs1OOOVddhcjiraakIi8MPVfv6ddxwqVtoQzdfhB94+7ojbPRtamraD7ihyiiQmhT8q1bTYqcp07M5SxLAzA1twevaPX2Gw0iv72XKaHEg6akTwImnmi5d5Ab/3ZB+2Z7Nt3bgNDvBCEK0IkwuG3OF9yCmTnSHibkaSqXC7MbZNTN+RYmdbcfu/TuDUsgdWyNUIR7V74cpB9FHOnQv6Q==
+Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:383::21)
+ by AS4PR10MB5173.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:4c1::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Mon, 12 Jun
+ 2023 02:16:20 +0000
+Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::628a:d617:46f:2a88]) by DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::628a:d617:46f:2a88%6]) with mapi id 15.20.6455.030; Mon, 12 Jun 2023
+ 02:16:20 +0000
+Message-ID: <DB4PR10MB62612F917CF1BF8FB03927609254A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+Date:   Mon, 12 Jun 2023 10:16:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   JuenKit Yip <JuenKit_Yip@hotmail.com>
+Subject: [RFC] sht3x code modifcation
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TMN:  [vZmGsBdGRSCJFA2w9D3beEpA2aYUtmx7]
+X-ClientProxiedBy: TYAPR01CA0227.jpnprd01.prod.outlook.com
+ (2603:1096:404:11e::23) To DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:10:383::21)
+X-Microsoft-Original-Message-ID: <29238a02-b259-e834-a710-22b417bf4322@hotmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB4PR10MB6261:EE_|AS4PR10MB5173:EE_
+X-MS-Office365-Filtering-Correlation-Id: cebf2c11-332c-4bd8-e084-08db6aeb02ba
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BcTN7haFzfBqJxKKABahAFkSrLHollO1pN5Va44qWYbHJ/1DtdZxaYefhZzRmN5QjWBJ8PRls/jm6jCxe7xpFGPLagD2s/64m9uhYRdBmuNOvMtbnr5VR2z2YdyTSTPiXiEaYrODDedb+ARhQFqaHXGD1wCrb9cbWLYL/IV79Dve+mBp7KgI+P3p1cLVm0B3D2y8lTYsGUKqovWLKr/PFS+k0bEhkmse8XeQUah7hAaBYxHMrTS6h0MxW3Om3lKWHtu7KW48kk7PdnnYXyuKpyQr22R9k9AfjPseASrScGlX2XocEFR/c4O2sHasf5FN66R9Np+5VGHtUD2FdxB2pkQLpChzZ8hup8DQDDlUGezfZun2tRnD2XYKwPG46o8SpdotxLU2v9hpCMrWYs6GckdTQMVdME+p1qsqBp+qkA6pooyt4iCaEKQjeTQRQcVDyBO0RRbGJGPq8+yh+1ua96j04SXTimig3B4FVps3kosG76MXBqZtSJC4el+/i+VA7ZQh59GZ9++9MiD6aCJEAj4/xEP9FHKbDVIuBng6UIBB3Fsnebh7oCmKgaU7PlhI
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UG1BaU43SENSTUZGVUhCai84ZkZMbk8vK1phMXdrOGN1Wi8vOWIvUlJDUXVD?=
+ =?utf-8?B?NE9LeXI4UUhBc0htZzBCU1plNytEeExCQ015VjF3UnJTS1hPYk5sb3hzSjEw?=
+ =?utf-8?B?NXhoa0RJbFd5OGxKaGNSL0tqNG90Q1hXaWZqbTk2aE9UZzFjTm5kTTNvVzlT?=
+ =?utf-8?B?dlM0eVhZb1ZWSTQ1M2dlSExaS0RkSitRT3FkcjhneitIcG1MLytsMmI4dlAz?=
+ =?utf-8?B?UFE2SlZyZXp0SXJ1cm90Nm1yQXBscmFNcnFrMGxxdllCU0ZLUlNqeVlPbXZn?=
+ =?utf-8?B?ZUN1ZmNkc09ENWhleVZkTmlpaTQ2WHh1d0dmQWRSYXkrM3NXb2tCNlh6eUl2?=
+ =?utf-8?B?U2xCakdVUS9mR0l2QVRwYWpXSGRQTGZYOG1ZK2JBTjBrK1VSTWhHVWtyZENw?=
+ =?utf-8?B?UldTR2cvWGMzTzV4bGRiV095dFowQ1BhUEdHNnNOaEd3V1c1MjJoOFRjbmY3?=
+ =?utf-8?B?S1RPQmRUTWUveGM1NTc0L043aFVwU2Y0SHZ1VEdaditXQmNjaGYwUUVDRXU1?=
+ =?utf-8?B?RXNyWUExWi9XaE0vL3Q1ZVZnS0pGK1dtQXVlc2Nybk02dEIwVi9qVGE2QW5t?=
+ =?utf-8?B?STV5cW5Ja3dZdGlBVXhWUXREN1I2dTNzaHkwYStxSm0ycUFLRDdIVmhtYWg5?=
+ =?utf-8?B?enpzMVlNN0pJeExPZUJlcEpUQ3RxcjZtbnZtZmxMcGRzQi91UjQreVpCVUFR?=
+ =?utf-8?B?cjB4RmMzZ1YvOVBveVJwTTQ1R2FuMU02cW40ZkE3YmJsUDd2UkFacGlwbUVP?=
+ =?utf-8?B?YmZidUVaU2ZKTmFUZys5TGx3U1ZGdmR0ZnpiUmNTYmo5eTBJSkdkRllOTXpZ?=
+ =?utf-8?B?NnY0c3VoY0JyUXI2NFlDK1ZEUWxTL3pSdHJFSU5wTS96ejVpLzRzZkdYYTJt?=
+ =?utf-8?B?TzYvK3JsZVR6eVF3VUJaRlo0bGhOK2hTVytodWEvSGZiaU0vNmtCdzgxSTRh?=
+ =?utf-8?B?RlNLODhpWEhpT3lXM0owSTUwUE5JZU5vUkpQb3d2aVhoNkpzU04yN1loY0dx?=
+ =?utf-8?B?cHFlSGFTdkRKYkcwdVRIWXFSczNCK0VWOTQ0SnQ5TFcxb3cyR2x5OGYvYlNY?=
+ =?utf-8?B?Tm8vb0RFcE1odzVkWmNiRXFCR3lZSEtGZFVyeHRoOWFCRHpCRlBLdlZXdlV2?=
+ =?utf-8?B?RllacmhjcGJiYjllNUtBSzhrTWZoVGZVUTROQTFqckVsWHVGeEdHZzFrZFRZ?=
+ =?utf-8?B?bTdMd0p6MXdJVU9ySDQ1QlkxNDhlZFJMbUxRU09mUE1MQVBQL1dLdlM3dHN3?=
+ =?utf-8?B?eFkzaWRGdU1VVW1uUThwZDVNTFlpellMdm5ManVCc3RaZFltQitRUVhHb1BJ?=
+ =?utf-8?B?Y2w5YkRmVnBBOG5RYlphbVVFUk5CMWJPbC9BTUhQdGQwSjdySnFDWGYrZmJC?=
+ =?utf-8?B?cEY4OXFEOUlMTzlCZjhxZGZ6NnloVGdaMlN2aUxSc2xBb0xhVGJETmxIaGo2?=
+ =?utf-8?B?eVhOZWs5UFpFWlo4dUx6eUNuM1UrQ2p2UVBoaWt0MWxHdXhyVHBRMy83K3Zt?=
+ =?utf-8?B?d2JpNnh4Z1hGWFhzcERLemx6clEvQlVkNE43NCtZVUdXcDFidDNVM1dUYW1C?=
+ =?utf-8?B?cmtmdTBKclNlM0xYSkJSVVBBc0U5Nlg5WWxkUjViMzliK3czNkFHRHBSQ1Rx?=
+ =?utf-8?Q?npqT0LaNsrWBk3SkznGHDpqIVfOO2FKoXWV49TNJd2ng=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-6b909.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: cebf2c11-332c-4bd8-e084-08db6aeb02ba
+X-MS-Exchange-CrossTenant-AuthSource: DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 02:16:20.4247
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR10MB5173
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Use devm_hwmon_device_register_with_info() to replace
-hwmon_device_register_with_info() in description of
-devm_hwmon_device_unregister().
+Hi All,
 
-Signed-off-by: Yongsheng Yang <iyysheng@gmail.com>
----
- Documentation/hwmon/hwmon-kernel-api.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I was using sht3x driver in my linux device but I saw that it should be 
+put in IIO module properly.
 
-diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-index c2d1e0299d8d..6cacf7daf25c 100644
---- a/Documentation/hwmon/hwmon-kernel-api.rst
-+++ b/Documentation/hwmon/hwmon-kernel-api.rst
-@@ -66,7 +66,7 @@ hwmon_device_register_with_info.
- 
- devm_hwmon_device_unregister does not normally have to be called. It is only
- needed for error handling, and only needed if the driver probe fails after
--the call to hwmon_device_register_with_info and if the automatic (device
-+the call to devm_hwmon_device_register_with_info and if the automatic (device
- managed) removal would be too late.
- 
- All supported hwmon device registration functions only accept valid device
--- 
-2.37.1
+In fact, I am going to add medium-repeatabilty and device-tree support 
+on it, and planning to add more sysfs interface "repeatability". The 
+orginal version did not support to modify the repeatability after device 
+loaded.
+
+If there is any comment or idea, kindly show it.
+
+
+Thanks
+
+Juen Kit Yip
 
