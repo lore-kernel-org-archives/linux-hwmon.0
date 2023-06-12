@@ -2,121 +2,94 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B616FC7EE2E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Jun 2023 02:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49962C77B7A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Jun 2023 03:12:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjFLCQY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 11 Jun 2023 22:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
+        id S234622AbjFLDMo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 11 Jun 2023 23:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjFLCQY (ORCPT
+        with ESMTP id S234498AbjFLDMD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 11 Jun 2023 22:16:24 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04olkn2058.outbound.protection.outlook.com [40.92.73.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF891B8;
-        Sun, 11 Jun 2023 19:16:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c2J+b0vdYqkB6YPFepAuhdjj3DsMboiqoizutHNnV5TzQHGKxjvgMM1YW4OJ+bg+y5uLHibV0Fuhkw4kHdFlHU71EBQorFhbaQFb6xGqvNh02y5ujYwcAnOXS8HrjBG0N8l1T5lJvdTCFljAae0hMSLplm/wpBMxkHQPwX70tQ3NA3jqDR5SWKyDuXLud827M8zeXuqVs2kbjkKxos1Ppq2LuSkwkyL+SramArWXjSgGr28TCB7TUhVlRIqaYdUyxAHMtU1H34hxty2Jg3pCgDs7crnM0MrO0AM1MKAYWVnHUspa5JPBagkGwp7qlytpMqmUn3fQcGHtlu1L0OCT0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vBLd7KdQCfOOyvK4UM2GCbHHYivuqymItDssFwI4X2o=;
- b=PwNXXscR5iHfaI8E8TJfDGCZCrxP1cHNX45L+mAuIZxFFih9rk2kdWOGcE7Nn5W4hYM7ZOrWJYDaH1STkAXW++1YzjEbb6BFG5HnUFjX0gU4kMNIukU9pkv7Bz7iF3C1xgvR4AbgbmYy/wotRmu2xJ2qAjQ1YQNx8wtTX4GKiekSR2suPBS2kCJU4PCBE26qWI/wec194Ag1wuUAgaLLWjCK52APtmy54Rv1iSb4p1838l5NLy9ekvUsI1Eih5Z7zPM2Gc/+hRsn4NRnjRzcLlZ1ji8wNwpLxWJUuWRYA+t3jOVUh3EXwtyoBCQp9cciWl/HVKe9mMWpTgdVGUYvgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vBLd7KdQCfOOyvK4UM2GCbHHYivuqymItDssFwI4X2o=;
- b=V7KJ5hCz/YsqCsThlkA3RD4uYQHPUkasqLvG43uR9g6FKEPNhDobmETGX67smTX5IuNB8Xv9z5u79EZxsnf24IVq4bv+vvT43+zNP6Tyr+xWu18TdmqXdq6DAm+sapcUmoSs1OOOVddhcjiraakIi8MPVfv6ddxwqVtoQzdfhB94+7ojbPRtamraD7ihyiiQmhT8q1bTYqcp07M5SxLAzA1twevaPX2Gw0iv72XKaHEg6akTwImnmi5d5Ab/3ZB+2Z7Nt3bgNDvBCEK0IkwuG3OF9yCmTnSHibkaSqXC7MbZNTN+RYmdbcfu/TuDUsgdWyNUIR7V74cpB9FHOnQv6Q==
-Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:383::21)
- by AS4PR10MB5173.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:4c1::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Mon, 12 Jun
- 2023 02:16:20 +0000
-Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::628a:d617:46f:2a88]) by DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::628a:d617:46f:2a88%6]) with mapi id 15.20.6455.030; Mon, 12 Jun 2023
- 02:16:20 +0000
-Message-ID: <DB4PR10MB62612F917CF1BF8FB03927609254A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-Date:   Mon, 12 Jun 2023 10:16:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-To:     jdelvare@suse.com, linux@roeck-us.net
+        Sun, 11 Jun 2023 23:12:03 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8D01708;
+        Sun, 11 Jun 2023 20:11:01 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b3b3f67ad6so12458515ad.3;
+        Sun, 11 Jun 2023 20:11:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686539460; x=1689131460;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=L6KNbaFn2nG2SIGK/gZ66YDTXs40QpUnGoY8mioLa8s=;
+        b=lBXuMbEAI+d/a17F/z0dRn8RWtleBtTS4saBM/sSHTcjRIt08ZLyAEh9+16NanOfmm
+         HMJi4EhSnsCccVLjnSZSF6zciNU0kXsoW2LGxTPBA3dwe09h926aoOZUokv9y0uyA9Th
+         K/f0Et0APIwdPSdwahU729BbKI92BVxf5bWGMTggwXEJnbNBm5uRLhmv8gV+84RDZq6x
+         sbWe9ciO8FcFQq6ho66/H5Hh0dqWCPpvV3t4acOi+F1GLApycFLQzUyYCxENdfhUusTn
+         QR5nWs3lKi9kmTfe4QERnG4JxIxjOW878DCS8FMTO+64KFdick7pGr1cJL4Dngj0clGw
+         qNGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686539460; x=1689131460;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L6KNbaFn2nG2SIGK/gZ66YDTXs40QpUnGoY8mioLa8s=;
+        b=WOjSfOaZxcxy2Y/T0IKzfeucoBNJHIkdJTpnyGWNnHZJumEBz0RUpw2lcMHCRvx/Ap
+         nBX1AL/rtiGbXH52wwugeGCOqHB5M1TXgYwXT5mTLKXc8TE9Nxdxy4FYy1Rmta4TRLKt
+         PD/35yFJQw9n8BbwkgUj+07RAJGPcrFYfd6oZyoXpeXuXk6xUIUP+m6uKZYeT40PzywD
+         HJhDxBWO4vpv//JyjBEmi/owxy2alMVU6BKNT5x0dILw2gfmhYArEo6/zW7jlCB7F0xh
+         MKY1XM7JWrci8Bw6fpymtpt6ewA1TzoblNC+PHJ3JkygDVZHVHmnKC23tsjV4MhizJ5q
+         9uzg==
+X-Gm-Message-State: AC+VfDwlIB+blJ2D+0+LujDjSage/eNppjtCbD2Seuzpdz40+8jyj/u7
+        Oq6KTAYnd8LmK/sfI45dcj2pzt1aRME=
+X-Google-Smtp-Source: ACHHUZ5wZr9qOHFUvmerp0a4J9VaQhZ8h1Dq44zp133YyZaRR8UzBZ+oosivN3bLdcSADgfOv6IJGA==
+X-Received: by 2002:a17:902:db0f:b0:1af:981b:eeff with SMTP id m15-20020a170902db0f00b001af981beeffmr6481619plx.64.1686539460405;
+        Sun, 11 Jun 2023 20:11:00 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e6-20020a170902cf4600b001b24857d1f2sm6986103plg.188.2023.06.11.20.10.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Jun 2023 20:10:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <898a6ebb-b0cc-5a48-30da-c4a5dc19d1a4@roeck-us.net>
+Date:   Sun, 11 Jun 2023 20:10:57 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RFC] sht3x code modifcation
+To:     JuenKit Yip <JuenKit_Yip@hotmail.com>, jdelvare@suse.com
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   JuenKit Yip <JuenKit_Yip@hotmail.com>
-Subject: [RFC] sht3x code modifcation
+References: <DB4PR10MB62612F917CF1BF8FB03927609254A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+Content-Language: en-US
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <DB4PR10MB62612F917CF1BF8FB03927609254A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TMN:  [vZmGsBdGRSCJFA2w9D3beEpA2aYUtmx7]
-X-ClientProxiedBy: TYAPR01CA0227.jpnprd01.prod.outlook.com
- (2603:1096:404:11e::23) To DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:10:383::21)
-X-Microsoft-Original-Message-ID: <29238a02-b259-e834-a710-22b417bf4322@hotmail.com>
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB4PR10MB6261:EE_|AS4PR10MB5173:EE_
-X-MS-Office365-Filtering-Correlation-Id: cebf2c11-332c-4bd8-e084-08db6aeb02ba
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BcTN7haFzfBqJxKKABahAFkSrLHollO1pN5Va44qWYbHJ/1DtdZxaYefhZzRmN5QjWBJ8PRls/jm6jCxe7xpFGPLagD2s/64m9uhYRdBmuNOvMtbnr5VR2z2YdyTSTPiXiEaYrODDedb+ARhQFqaHXGD1wCrb9cbWLYL/IV79Dve+mBp7KgI+P3p1cLVm0B3D2y8lTYsGUKqovWLKr/PFS+k0bEhkmse8XeQUah7hAaBYxHMrTS6h0MxW3Om3lKWHtu7KW48kk7PdnnYXyuKpyQr22R9k9AfjPseASrScGlX2XocEFR/c4O2sHasf5FN66R9Np+5VGHtUD2FdxB2pkQLpChzZ8hup8DQDDlUGezfZun2tRnD2XYKwPG46o8SpdotxLU2v9hpCMrWYs6GckdTQMVdME+p1qsqBp+qkA6pooyt4iCaEKQjeTQRQcVDyBO0RRbGJGPq8+yh+1ua96j04SXTimig3B4FVps3kosG76MXBqZtSJC4el+/i+VA7ZQh59GZ9++9MiD6aCJEAj4/xEP9FHKbDVIuBng6UIBB3Fsnebh7oCmKgaU7PlhI
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UG1BaU43SENSTUZGVUhCai84ZkZMbk8vK1phMXdrOGN1Wi8vOWIvUlJDUXVD?=
- =?utf-8?B?NE9LeXI4UUhBc0htZzBCU1plNytEeExCQ015VjF3UnJTS1hPYk5sb3hzSjEw?=
- =?utf-8?B?NXhoa0RJbFd5OGxKaGNSL0tqNG90Q1hXaWZqbTk2aE9UZzFjTm5kTTNvVzlT?=
- =?utf-8?B?dlM0eVhZb1ZWSTQ1M2dlSExaS0RkSitRT3FkcjhneitIcG1MLytsMmI4dlAz?=
- =?utf-8?B?UFE2SlZyZXp0SXJ1cm90Nm1yQXBscmFNcnFrMGxxdllCU0ZLUlNqeVlPbXZn?=
- =?utf-8?B?ZUN1ZmNkc09ENWhleVZkTmlpaTQ2WHh1d0dmQWRSYXkrM3NXb2tCNlh6eUl2?=
- =?utf-8?B?U2xCakdVUS9mR0l2QVRwYWpXSGRQTGZYOG1ZK2JBTjBrK1VSTWhHVWtyZENw?=
- =?utf-8?B?UldTR2cvWGMzTzV4bGRiV095dFowQ1BhUEdHNnNOaEd3V1c1MjJoOFRjbmY3?=
- =?utf-8?B?S1RPQmRUTWUveGM1NTc0L043aFVwU2Y0SHZ1VEdaditXQmNjaGYwUUVDRXU1?=
- =?utf-8?B?RXNyWUExWi9XaE0vL3Q1ZVZnS0pGK1dtQXVlc2Nybk02dEIwVi9qVGE2QW5t?=
- =?utf-8?B?STV5cW5Ja3dZdGlBVXhWUXREN1I2dTNzaHkwYStxSm0ycUFLRDdIVmhtYWg5?=
- =?utf-8?B?enpzMVlNN0pJeExPZUJlcEpUQ3RxcjZtbnZtZmxMcGRzQi91UjQreVpCVUFR?=
- =?utf-8?B?cjB4RmMzZ1YvOVBveVJwTTQ1R2FuMU02cW40ZkE3YmJsUDd2UkFacGlwbUVP?=
- =?utf-8?B?YmZidUVaU2ZKTmFUZys5TGx3U1ZGdmR0ZnpiUmNTYmo5eTBJSkdkRllOTXpZ?=
- =?utf-8?B?NnY0c3VoY0JyUXI2NFlDK1ZEUWxTL3pSdHJFSU5wTS96ejVpLzRzZkdYYTJt?=
- =?utf-8?B?TzYvK3JsZVR6eVF3VUJaRlo0bGhOK2hTVytodWEvSGZiaU0vNmtCdzgxSTRh?=
- =?utf-8?B?RlNLODhpWEhpT3lXM0owSTUwUE5JZU5vUkpQb3d2aVhoNkpzU04yN1loY0dx?=
- =?utf-8?B?cHFlSGFTdkRKYkcwdVRIWXFSczNCK0VWOTQ0SnQ5TFcxb3cyR2x5OGYvYlNY?=
- =?utf-8?B?Tm8vb0RFcE1odzVkWmNiRXFCR3lZSEtGZFVyeHRoOWFCRHpCRlBLdlZXdlV2?=
- =?utf-8?B?RllacmhjcGJiYjllNUtBSzhrTWZoVGZVUTROQTFqckVsWHVGeEdHZzFrZFRZ?=
- =?utf-8?B?bTdMd0p6MXdJVU9ySDQ1QlkxNDhlZFJMbUxRU09mUE1MQVBQL1dLdlM3dHN3?=
- =?utf-8?B?eFkzaWRGdU1VVW1uUThwZDVNTFlpellMdm5ManVCc3RaZFltQitRUVhHb1BJ?=
- =?utf-8?B?Y2w5YkRmVnBBOG5RYlphbVVFUk5CMWJPbC9BTUhQdGQwSjdySnFDWGYrZmJC?=
- =?utf-8?B?cEY4OXFEOUlMTzlCZjhxZGZ6NnloVGdaMlN2aUxSc2xBb0xhVGJETmxIaGo2?=
- =?utf-8?B?eVhOZWs5UFpFWlo4dUx6eUNuM1UrQ2p2UVBoaWt0MWxHdXhyVHBRMy83K3Zt?=
- =?utf-8?B?d2JpNnh4Z1hGWFhzcERLemx6clEvQlVkNE43NCtZVUdXcDFidDNVM1dUYW1C?=
- =?utf-8?B?cmtmdTBKclNlM0xYSkJSVVBBc0U5Nlg5WWxkUjViMzliK3czNkFHRHBSQ1Rx?=
- =?utf-8?Q?npqT0LaNsrWBk3SkznGHDpqIVfOO2FKoXWV49TNJd2ng=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-6b909.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: cebf2c11-332c-4bd8-e084-08db6aeb02ba
-X-MS-Exchange-CrossTenant-AuthSource: DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 02:16:20.4247
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR10MB5173
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi All,
+On 6/11/23 19:16, JuenKit Yip wrote:
+> Hi All,
+> 
+> I was using sht3x driver in my linux device but I saw that it should be put in IIO module properly.
+> 
 
-I was using sht3x driver in my linux device but I saw that it should be 
-put in IIO module properly.
+Why ?
 
-In fact, I am going to add medium-repeatabilty and device-tree support 
-on it, and planning to add more sysfs interface "repeatability". The 
-orginal version did not support to modify the repeatability after device 
-loaded.
+> In fact, I am going to add medium-repeatabilty and device-tree support on it, and planning to add more sysfs interface "repeatability". The orginal version did not support to modify the repeatability after device loaded.
+> 
 
-If there is any comment or idea, kindly show it.
+I have no idea what you are talking about.
 
+Guenter
 
-Thanks
-
-Juen Kit Yip
+> If there is any comment or idea, kindly show it.
+> 
+> 
+> Thanks
+> 
+> Juen Kit Yip
+> 
 
