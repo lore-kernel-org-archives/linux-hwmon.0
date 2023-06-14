@@ -2,117 +2,283 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D00CEB64D9
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jun 2023 17:17:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05BAAEB64D8
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jun 2023 19:15:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjFNRRX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Jun 2023 13:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
+        id S235466AbjFNTPe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Jun 2023 15:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236787AbjFNRRS (ORCPT
+        with ESMTP id S229728AbjFNTPd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Jun 2023 13:17:18 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94033268F;
-        Wed, 14 Jun 2023 10:17:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686763033; x=1718299033;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1rVknc6eI0s2SyaBRaLfKBU3jy707I2xZOIeKDgA+gA=;
-  b=SEU2SiRNmCVtgm6gafrsHL0GhcNeyLOsOtf91h9Iz1QXHbUXvzPZMoUS
-   YkbB7WEPiR+e7kPs/yr2yuCto69bYdSWOlMR1lJmo+BNv7AWHBOtnpPoX
-   A6Qi3YbiAPFpD7v9Bls/Z+tvVwLx/6Xn3qcAgnJL2TZeodymbIA2zMY+8
-   iTzFi5/T53xkUqs/icIPQkWMOodwd81zktMpMRK55F4qAjEpEy3OZho8n
-   jbYH8b58B+27iEcwg1DeiR3gQR2tn1mP6pjVMG2S8VIxwUFShRmxXfdPn
-   DUa6mDouWgAGUvsH/1ZDwHeJpYsGQ5b/4htNg3/DEicBHoKr58YkcTTrm
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="362053903"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="362053903"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 10:17:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="782176086"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="782176086"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Jun 2023 10:17:10 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9U6v-0000t3-1a;
-        Wed, 14 Jun 2023 17:16:49 +0000
-Date:   Thu, 15 Jun 2023 01:15:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     JuenKit Yip <JuenKit_Yip@hotmail.com>, linux@roeck-us.net,
-        jdelvare@suse.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, JuenKit Yip <JuenKit_Yip@hotmail.com>
-Subject: Re: [PATCH 1/3] hwmon: (sht3x)remove sht3x_platform_data
-Message-ID: <202306150115.i0k7ulfo-lkp@intel.com>
-References: <DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+        Wed, 14 Jun 2023 15:15:33 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A365B1FD5;
+        Wed, 14 Jun 2023 12:15:31 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b51488ad67so976475ad.3;
+        Wed, 14 Jun 2023 12:15:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686770131; x=1689362131;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZwVnnvAR61SVmA8K+L6k3JplE72FMZjpd+z4ZCDUOjw=;
+        b=HModpr/YgZniSlk15X3u4sIoRNnKDj+VqOv7El31jTAA8JnjBgV07EpIScrrVgk0CI
+         JTT5S1iT8MMz+wcYTTiaMJvFVxS5SyvTfry66rJNHNoOlDSK+gn6AIjuf/qjJPeJ5VOY
+         pPYzzPXP53HgugeUag0KQX07BVEqphStHqkUXSrSuOajcRBv42NAUHoVdCFF9s0vFWf0
+         ZFu0xv7jXTQR+OJ485gx4d9IH6XFSq8vyI0PDaKuPVAfLET8RN1JvvNvJuuDCyhYXd+s
+         VR3yKnXBvC2CfctQSduGbJtkz7/CvB/cXV/kXmRtDbSqV81DX1dQJhgMZlNyLmC1Q8MG
+         zQiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686770131; x=1689362131;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZwVnnvAR61SVmA8K+L6k3JplE72FMZjpd+z4ZCDUOjw=;
+        b=KF4RVy6Ity0FYd6UpLb93zcn54vXtwKDAbYq8e9nV4zBJkvUD4RUyMiscHoge6+xpN
+         VrUgwBhEV5STbAO90DiREKG+sku1fJdBUxMr6RMJt90wFShz4UX+U5sKSGITYQM2kO0B
+         5/K925EybfEvPri+NHU4JiqcqWHz3xKMUmrabmwWftLbrRa90EBkUqSBjVzfpcUeZGUC
+         h7uYqQs4ub0syTXghAwOVOQJVaVQE/AazSsVLhkPZca9AAUr+oYiQwrecyjOL+F21tfM
+         smy+KC70HO7o/aK9Pk9JeQltoig2q0oT3N2Xw2jarO/gW/Itm12uHaunV6gpTf7bFNPw
+         4uUQ==
+X-Gm-Message-State: AC+VfDzJbuyxh2l3QVPT7dlRab6xA4WSPN46EsrLisOje4vgLI1eOgnx
+        HFhUZrC+d5xaEIq1LAMGsSb8GrbUt3A=
+X-Google-Smtp-Source: ACHHUZ60VnwAIhlmMF2So1US2hDoekRE3cE33WuG7oFAaSD06QhMSQdsttgHaVMX2NrP2ZpXxWVTfQ==
+X-Received: by 2002:a17:902:ea0e:b0:1b0:3576:c2a9 with SMTP id s14-20020a170902ea0e00b001b03576c2a9mr13363294plg.33.1686770130848;
+        Wed, 14 Jun 2023 12:15:30 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b12-20020a170902d88c00b001ac40488620sm12560590plz.92.2023.06.14.12.15.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 12:15:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <45c8771d-47c1-c007-1cd5-97eebedef147@roeck-us.net>
+Date:   Wed, 14 Jun 2023 12:15:28 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     JuenKit Yip <JuenKit_Yip@hotmail.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jdelvare@suse.com
+References: <DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+ <6d1209e9-0d40-c2ba-b94c-6590e98070d7@roeck-us.net>
+ <DB4PR10MB626134E4213F378A430E5EED925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/3] hwmon: (sht3x)remove sht3x_platform_data
+In-Reply-To: <DB4PR10MB626134E4213F378A430E5EED925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi JuenKit,
+On 6/14/23 08:02, JuenKit Yip wrote:
+> 
+> 在 2023/6/14 20:57, Guenter Roeck 写道:
+>> On 6/13/23 23:24, JuenKit Yip wrote:
+>>> Since no in-tree driver supports it, the sht3x_platform_data was
+>>> removed.
+>>>
+>>> - "blocking_io" property and its related code have been removed, and
+>>> Single-Shot mode should be blocking in default.
+>>>
+>>> - "high-precision" property has been replaced to "repeatability" for
+>>> matching datasheet.
+>>>
+>>
+>> That needs to be three patches.
+> 
+> Patch 1: remove sht3x_platform_data and its header file
+> 
+> Patch 2: move "blocking_io" to struct sht3x_data
+> 
+Essentially merge it with update_interval==0 since (if I understand
+correctly) blocking mode and update_interval==0 will be equivalent.
+With that in mind, a separate "blocking_io" variable should no
+longer be needed.
 
-kernel test robot noticed the following build warnings:
+> Patch 3: replace "high-precision" property to "repeatability"
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.4-rc6 next-20230614]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+precision -> reliability would apply to both high and low
+precision. I think "low repeatability" is currently called
+"low power mode", so you'll want to update that as well.
+I also see "high accuracy" and "low accuracy" use in the
+documentation, but I see you removed that already below.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/JuenKit-Yip/hwmon-sht3x-add-medium-repeatability-support/20230614-143100
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/DB4PR10MB6261D79FE16EC2BBD5316B91925AA%40DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
-patch subject: [PATCH 1/3] hwmon: (sht3x)remove sht3x_platform_data
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230615/202306150115.i0k7ulfo-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build):
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch groeck-staging hwmon-next
-        git checkout groeck-staging/hwmon-next
-        b4 shazam https://lore.kernel.org/r/DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/
+> 
+> Is it correct or I am misunderstand your statement?
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306150115.i0k7ulfo-lkp@intel.com/
+Yes, that is what I meant.
 
-All warnings (new ones prefixed by >>):
+Thanks,
+Guenter
 
->> drivers/hwmon/sht3x.c:29:28: warning: 'sht3x_cmd_measure_blocking_lpm' defined but not used [-Wunused-const-variable=]
-      29 | static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hwmon/sht3x.c:25:28: warning: 'sht3x_cmd_measure_blocking_hpm' defined but not used [-Wunused-const-variable=]
-      25 | static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Thanks for your instruction
+> 
+>>
+>>> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
+>>> ---
+>>>   Documentation/hwmon/sht3x.rst       | 12 +++++------
+>>>   drivers/hwmon/sht3x.c               | 32 ++++++++++++-----------------
+>>>   include/linux/platform_data/sht3x.h | 15 --------------
+>>>   3 files changed, 18 insertions(+), 41 deletions(-)
+>>>   delete mode 100644 include/linux/platform_data/sht3x.h
+>>>
+>>> diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
+>>> index 95a850d5b..2c87c8f58 100644
+>>> --- a/Documentation/hwmon/sht3x.rst
+>>> +++ b/Documentation/hwmon/sht3x.rst
+>>> @@ -28,28 +28,26 @@ The device communicates with the I2C protocol. Sensors can have the I2C
+>>>   addresses 0x44 or 0x45, depending on the wiring. See
+>>>   Documentation/i2c/instantiating-devices.rst for methods to instantiate the device.
+>>>   -There are two options configurable by means of sht3x_platform_data:
+>>> +This driver supports block and non-block mode:
+>>>   -1. blocking (pull the I2C clock line down while performing the measurement) or
+>>> +   blocking (pull the I2C clock line down while performing the measurement) or
+>>>      non-blocking mode. Blocking mode will guarantee the fastest result but
+>>>      the I2C bus will be busy during that time. By default, non-blocking mode
+>>>      is used. Make sure clock-stretching works properly on your device if you
+>>>      want to use blocking mode.
+>>> -2. high or low accuracy. High accuracy is used by default and using it is
+>>> -   strongly recommended.
+>>>     The sht3x sensor supports a single shot mode as well as 5 periodic measure
+>>>   modes, which can be controlled with the update_interval sysfs interface.
+>>>   The allowed update_interval in milliseconds are as follows:
+>>>   -    ===== ======= ====================
+>>> -       0          single shot mode
+>>> +    ===== ======= ==========================
+>>> +       0          single shot mode(blocking)
+>>>       2000   0.5 Hz periodic measurement
+>>>       1000   1   Hz periodic measurement
+>>>        500   2   Hz periodic measurement
+>>>        250   4   Hz periodic measurement
+>>>        100  10   Hz periodic measurement
+>>> -    ===== ======= ====================
+>>> +    ===== ======= ==========================
+>>>     In the periodic measure mode, the sensor automatically triggers a measurement
+>>>   with the configured update interval on the chip. When a temperature or humidity
+>>> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+>>> index 8305e44d9..5bc0001b1 100644
+>>> --- a/drivers/hwmon/sht3x.c
+>>> +++ b/drivers/hwmon/sht3x.c
+>>> @@ -20,13 +20,12 @@
+>>>   #include <linux/module.h>
+>>>   #include <linux/slab.h>
+>>>   #include <linux/jiffies.h>
+>>> -#include <linux/platform_data/sht3x.h>
+>>>   -/* commands (high precision mode) */
+>>> +/* commands (high repeatability mode) */
+>>>   static const unsigned char sht3x_cmd_measure_blocking_hpm[] = { 0x2c, 0x06 };
+>>>   static const unsigned char sht3x_cmd_measure_nonblocking_hpm[] = { 0x24, 0x00 };
+>>>   -/* commands (low power mode) */
+>>> +/* commands (low repeatability mode) */
+>>>   static const unsigned char sht3x_cmd_measure_blocking_lpm[] = { 0x2c, 0x10 };
+>>>   static const unsigned char sht3x_cmd_measure_nonblocking_lpm[] = { 0x24, 0x16 };
+>>>   @@ -69,9 +68,14 @@ enum sht3x_limits {
+>>>       limit_min_hyst,
+>>>   };
+>>>   +enum sht3x_repeatability {
+>>> +    low_repeatability,
+>>> +    high_repeatability,
+>>> +};
+>>> +
+>>>   DECLARE_CRC8_TABLE(sht3x_crc8_table);
+>>>   -/* periodic measure commands (high precision mode) */
+>>> +/* periodic measure commands (high repeatability mode) */
+>>>   static const char periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
+>>>       /* 0.5 measurements per second */
+>>>       {0x20, 0x32},
+>>> @@ -85,7 +89,7 @@ static const char periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
+>>>       {0x27, 0x37},
+>>>   };
+>>>   -/* periodic measure commands (low power mode) */
+>>> +/* periodic measure commands (low repeatability mode) */
+>>>   static const char periodic_measure_commands_lpm[][SHT3X_CMD_LENGTH] = {
+>>>       /* 0.5 measurements per second */
+>>>       {0x20, 0x2f},
+>>> @@ -132,12 +136,11 @@ struct sht3x_data {
+>>>       struct mutex data_lock; /* lock for updating driver data */
+>>>         u8 mode;
+>>> +    enum sht3x_repeatability repeatability;
+>>>       const unsigned char *command;
+>>>       u32 wait_time;            /* in us*/
+>>>       unsigned long last_update;    /* last update in periodic mode*/
+>>>   -    struct sht3x_platform_data setup;
+>>> -
+>>>       /*
+>>>        * cached values for temperature and humidity and limits
+>>>        * the limits arrays have the following order:
+>>> @@ -441,13 +444,8 @@ static void sht3x_select_command(struct sht3x_data *data)
+>>>       if (data->mode > 0) {
+>>>           data->command = sht3x_cmd_measure_periodic_mode;
+>>>           data->wait_time = 0;
+>>> -    } else if (data->setup.blocking_io) {
+>>> -        data->command = data->setup.high_precision ?
+>>> -                sht3x_cmd_measure_blocking_hpm :
+>>> -                sht3x_cmd_measure_blocking_lpm;
+>>> -        data->wait_time = 0;
+>>
+>> If update_interval is 0, those would presumably still be needed.
+>> I don't know if the current code updating the interval is wrong
+>> (that may well be), but removing this code entirely seems wrong.
+> 
+> update_interval "0" means Single-Shot mode and respectively data->command
+> 
+> should be in blocking mode.
+> 
+> Thanks for your correctness.
+> 
+>>
+>>>       } else {
+>>> -        if (data->setup.high_precision) {
+>>> +        if (data->repeatability == high_repeatability) {
+>>>               data->command = sht3x_cmd_measure_nonblocking_hpm;
+>>>               data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_HPM;
+>>>           } else {
+>>> @@ -595,7 +593,7 @@ static ssize_t update_interval_store(struct device *dev,
+>>>       }
+>>>         if (mode > 0) {
+>>> -        if (data->setup.high_precision)
+>>> +        if (data->repeatability == high_repeatability)
+>>>               command = periodic_measure_commands_hpm[mode - 1];
+>>>           else
+>>>               command = periodic_measure_commands_lpm[mode - 1];
+>>> @@ -690,16 +688,12 @@ static int sht3x_probe(struct i2c_client *client)
+>>>       if (!data)
+>>>           return -ENOMEM;
+>>>   -    data->setup.blocking_io = false;
+>>> -    data->setup.high_precision = true;
+>>> +    data->repeatability = high_repeatability;
+>>>       data->mode = 0;
+>>>       data->last_update = jiffies - msecs_to_jiffies(3000);
+>>>       data->client = client;
+>>>       crc8_populate_msb(sht3x_crc8_table, SHT3X_CRC8_POLYNOMIAL);
+>>>   -    if (client->dev.platform_data)
+>>> -        data->setup = *(struct sht3x_platform_data *)dev->platform_data;
+>>> -
+>>>       sht3x_select_command(data);
+>>>         mutex_init(&data->i2c_lock);
+>>> diff --git a/include/linux/platform_data/sht3x.h b/include/linux/platform_data/sht3x.h
+>>> deleted file mode 100644
+>>> index 14680d2a9..000000000
+>>> --- a/include/linux/platform_data/sht3x.h
+>>> +++ /dev/null
+>>> @@ -1,15 +0,0 @@
+>>> -/* SPDX-License-Identifier: GPL-2.0-or-later */
+>>> -/*
+>>> - * Copyright (C) 2016 Sensirion AG, Switzerland
+>>> - * Author: David Frey <david.frey@sensirion.com>
+>>> - * Author: Pascal Sachs <pascal.sachs@sensirion.com>
+>>> - */
+>>> -
+>>> -#ifndef __SHT3X_H_
+>>> -#define __SHT3X_H_
+>>> -
+>>> -struct sht3x_platform_data {
+>>> -    bool blocking_io;
+>>> -    bool high_precision;
+>>> -};
+>>> -#endif /* __SHT3X_H_ */
+>>
 
-
-vim +/sht3x_cmd_measure_blocking_lpm +29 drivers/hwmon/sht3x.c
-
-7c84f7f80d6fcea David Frey  2016-06-02  23  
-cecbab8bdd40311 JuenKit Yip 2023-06-14  24  /* commands (high repeatability mode) */
-7c84f7f80d6fcea David Frey  2016-06-02 @25  static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
-7c84f7f80d6fcea David Frey  2016-06-02  26  static const unsigned char sht3x_cmd_measure_nonblocking_hpm[] = { 0x24, 0x00 };
-7c84f7f80d6fcea David Frey  2016-06-02  27  
-cecbab8bdd40311 JuenKit Yip 2023-06-14  28  /* commands (low repeatability mode) */
-7c84f7f80d6fcea David Frey  2016-06-02 @29  static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
-7c84f7f80d6fcea David Frey  2016-06-02  30  static const unsigned char sht3x_cmd_measure_nonblocking_lpm[] = { 0x24, 0x16 };
-7c84f7f80d6fcea David Frey  2016-06-02  31  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
