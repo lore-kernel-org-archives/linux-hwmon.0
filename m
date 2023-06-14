@@ -2,116 +2,145 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8F01EB64D8
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jun 2023 19:54:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 616D5EB64D9
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jun 2023 22:58:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjFNTyl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Jun 2023 15:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
+        id S233697AbjFNW6E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Jun 2023 18:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234621AbjFNTyP (ORCPT
+        with ESMTP id S229453AbjFNW6D (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:54:15 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FCC10A;
-        Wed, 14 Jun 2023 12:54:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686772454; x=1718308454;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o3obp4i2jUIjt8vzR2TGZg5v1YKLTj/rBX9LHefdqSg=;
-  b=bAAuQ/qjwD0pbsh/Wm9NO7SAZpI07Q5sUVaKamXMWGe7IF4H9za2AHzQ
-   1WQyt9LyWWJ15JzY6r7/OPv17BzcS6GWXBfGxe0WzzRpenK7p6xbvfOnC
-   LY2SYCHrrmP96pNQugsrwfPoRK+vK6UB5+HDSHdrJTC9j2HfdXSGUeYFV
-   9Afs9SlaOTABQ7wPiOn8ICSMpKiLkAqdBt0ezPD9tUhiaQYXPbFuygbcX
-   f/+MGcuSi3QmodTmYYEpadet8LqWQsvJiT78BDCbf1fPSVqzN7B67tK/J
-   VO/5TJSlc19z5nTdc6/JRHAgLiwKk8LcoDd0UhnVY7OOZD8Xqe/gKijlN
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="339070183"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="339070183"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 12:54:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="706355766"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="706355766"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 14 Jun 2023 12:53:59 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9WYh-000123-2X;
-        Wed, 14 Jun 2023 19:53:44 +0000
-Date:   Thu, 15 Jun 2023 03:51:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     JuenKit Yip <JuenKit_Yip@hotmail.com>, linux@roeck-us.net,
-        jdelvare@suse.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, JuenKit Yip <JuenKit_Yip@hotmail.com>
-Subject: Re: [PATCH 2/3] hwmon: (sht3x) add medium repeatability support
-Message-ID: <202306150333.vy0slw1N-lkp@intel.com>
-References: <DB4PR10MB62615481D91BA8A598234A18925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+        Wed, 14 Jun 2023 18:58:03 -0400
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1B8211D;
+        Wed, 14 Jun 2023 15:58:02 -0700 (PDT)
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-340b48c180bso3445365ab.0;
+        Wed, 14 Jun 2023 15:58:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686783482; x=1689375482;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BLGM39FLWeHazKbyQ5qG1ef0mVobIExKkf/G6dZDYYk=;
+        b=H8Lzr+iFAzjw5EJ/iz3jIAx3KTj+IG/VB9DMmsQdsp/9fGtS/FnE53FRVRol3xZseG
+         6u/OwzNEwBXtKGEQMJuJduGvLanZB/WrSwBBI62/Cx6ZDGwZZjxyMlR1nEIt87p992AZ
+         Ovf9SdhUYqvGWE5U3YyrDDOVgdcWde+ep+svGMc6vafzsjPckiaw09ghvC19Ye7bCGj1
+         cn9h1I6EbOPcoQhM2xxbeUNi9z/mTt43jEd4xWBUaR+zAyrdt/ySeSRUb6VVm7hNGcFA
+         gHsUC1aAYVzvicYvuUlBmWeuEiijLb6XawBpRdINtNKyu6nPlxYSDs8MIqCkD/7M3D4g
+         tf1g==
+X-Gm-Message-State: AC+VfDyV+WUxQHX05SYc3sJz4dABAIThkqQZYEhAUrTPj7L+Xb6h2yUM
+        jTVUH4UnimzQGxBiLgjQ6Q==
+X-Google-Smtp-Source: ACHHUZ4k17CCU/Cdgkvy8zZd1iBM9okPT7i/UNDIJhF1Nh6e59EfqO7f9Vf5PDbEGaNZhJDBaJyQ1w==
+X-Received: by 2002:a92:c992:0:b0:337:a0d8:cdf9 with SMTP id y18-20020a92c992000000b00337a0d8cdf9mr16280943iln.28.1686783482112;
+        Wed, 14 Jun 2023 15:58:02 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id k11-20020a02cccb000000b004065707eb2bsm5292604jaq.42.2023.06.14.15.58.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 15:58:01 -0700 (PDT)
+Received: (nullmailer pid 3018539 invoked by uid 1000);
+        Wed, 14 Jun 2023 22:57:59 -0000
+Date:   Wed, 14 Jun 2023 16:57:59 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add Nuvoton NCT7362Y binding
+Message-ID: <20230614225759.GA3003701-robh@kernel.org>
+References: <20230607101827.8544-4-zev@bewilderbeest.net>
+ <20230607101827.8544-5-zev@bewilderbeest.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DB4PR10MB62615481D91BA8A598234A18925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+In-Reply-To: <20230607101827.8544-5-zev@bewilderbeest.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi JuenKit,
+On Wed, Jun 07, 2023 at 03:18:29AM -0700, Zev Weiss wrote:
+> This binding describes the NCT7362Y, a 16-channel fan/GPIO controller.
+> 
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> ---
+>  .../bindings/hwmon/nuvoton,nct7362.yaml       | 123 ++++++++++++++++++
+>  1 file changed, 123 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct7362.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct7362.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7362.yaml
+> new file mode 100644
+> index 000000000000..630dcce7a14c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7362.yaml
+> @@ -0,0 +1,123 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/nuvoton,nct7362.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton NCT7362Y fan controller
+> +
+> +maintainers:
+> +  - Zev Weiss <zev@bewilderbeest.net>
+> +
+> +description: |
+> +  The Nuvoton NCT7362Y is an I2C fan controller with 16 pins that can
+> +  be independently configured for PWM, fan tach, or GPIO
+> +  functionality.  Each pin's functionality is represented by a child
+> +  node.
+> +
+> +  The datasheet is not publicly available but can be requested from
+> +  Nuvoton via their web site.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nuvoton,nct7362
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  gpio-controller: true
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  gpio-line-names:
+> +    minItems: 1
+> +    maxItems: 16
+> +
+> +patternProperties:
+> +  "^tach@([1-8]|1[0-7])$":
 
-kernel test robot noticed the following build warnings:
+Unit-addresses are hex typically.
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.4-rc6 next-20230614]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Why do you need a child node for tach. Is that a separate h/w block.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/JuenKit-Yip/hwmon-sht3x-add-medium-repeatability-support/20230614-143100
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/DB4PR10MB62615481D91BA8A598234A18925AA%40DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
-patch subject: [PATCH 2/3] hwmon: (sht3x) add medium repeatability support
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230615/202306150333.vy0slw1N-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build):
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch groeck-staging hwmon-next
-        git checkout groeck-staging/hwmon-next
-        b4 shazam https://lore.kernel.org/r/DB4PR10MB62615481D91BA8A598234A18925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/
+> +    type: object
+> +    properties:
+> +      reg:
+> +        maxItems: 1
+> +        description: The pin number.
+> +
+> +      nuvoton,pulses-per-revolution:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306150333.vy0slw1N-lkp@intel.com/
+This is a property of the fan attached and belongs in a fan node 
+describing the fan(s) properties. Until a common binding exists, further 
+fan controller bindings are going to be rejected.
 
-All warnings (new ones prefixed by >>):
+The furthest attempt was here[1]. And there's the Aspeed effort[2] which 
+keeps ignoring our feedback. Please work together on these.
 
-   drivers/hwmon/sht3x.c:33:28: warning: 'sht3x_cmd_measure_blocking_lpm' defined but not used [-Wunused-const-variable=]
-      33 | static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hwmon/sht3x.c:29:28: warning: 'sht3x_cmd_measure_blocking_mpm' defined but not used [-Wunused-const-variable=]
-      29 | static const unsigned char sht3x_cmd_measure_blocking_mpm[]    = { 0x2c, 0x0d };
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/sht3x.c:25:28: warning: 'sht3x_cmd_measure_blocking_hpm' defined but not used [-Wunused-const-variable=]
-      25 | static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Rob
 
-
-vim +/sht3x_cmd_measure_blocking_mpm +29 drivers/hwmon/sht3x.c
-
-    27	
-    28	/* commands (medium repeatability mode) */
-  > 29	static const unsigned char sht3x_cmd_measure_blocking_mpm[]    = { 0x2c, 0x0d };
-    30	static const unsigned char sht3x_cmd_measure_nonblocking_mpm[] = { 0x24, 0x0b };
-    31	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[1] https://lore.kernel.org/all/20221121122932.2493174-2-Naresh.Solanki@9elements.com/ 
+[2] https://lore.kernel.org/all/20230608021839.12769-1-billy_tsai@aspeedtech.com/
