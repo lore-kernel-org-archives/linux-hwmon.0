@@ -2,162 +2,162 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01079EB64D8
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jun 2023 13:00:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75F63EB64D8
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jun 2023 13:04:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236096AbjFNNAr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Jun 2023 09:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
+        id S236466AbjFNNET (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Jun 2023 09:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236010AbjFNNAq (ORCPT
+        with ESMTP id S235964AbjFNNES (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Jun 2023 09:00:46 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8CD13E;
-        Wed, 14 Jun 2023 06:00:45 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6667a0811a2so146705b3a.0;
-        Wed, 14 Jun 2023 06:00:45 -0700 (PDT)
+        Wed, 14 Jun 2023 09:04:18 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6786A1BC3;
+        Wed, 14 Jun 2023 06:04:17 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-66577752f05so2657962b3a.0;
+        Wed, 14 Jun 2023 06:04:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686747645; x=1689339645;
+        d=gmail.com; s=20221208; t=1686747857; x=1689339857;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=z0efkXJXQRoP2b5ddM9nLHPg0LpXd7kPRZgd4cVIsio=;
-        b=o/AcTrtw33RRPhA12x67m8DQ0xENbk9LNyspxNo2W/r0voy5v89rKnadGsYg3Mmwvq
-         3tzCy6zQD0Iqbc8tx/9IpUjQaMtXWWWP7+YtRjSeUFtBkTuepy45BaCTrrEhbG6hsM75
-         aORkpqLTf5+lYCPGLOPs+KKhY4mNP3Qcr4LUQZticZHHO8UE31CNInhT1wEYrhb+l3Op
-         mkZmDq0sORnlrn+nM+SdTITwLFfwIowGHDprtXhiG7l0FhnACqa4j9+9CC+9bRd8ItbS
-         mdjT+ONzzgKC91pWVFgFCMbEDy/AmVeerSAqUK5bsYy5OCgmRM3ShKPiHwZim6hoD+iS
-         79uA==
+        bh=8Sw1gB+vCV+Osid5cBqyQVazdg28STr+FplDdL8t5QI=;
+        b=efChFDGVrkrkAf8nrrUyDUFwfpKZVgwX4p7wfS2WFgAEee/AA1ZgbWvvxXVZQvMq+y
+         koHDVZ+Y2ZPakxbS8v2RoBE44fcYCO+IW1y1y5C4Ph7iwyIQzp7oRa/Xhu7f8Pg96pua
+         azQkK75cKB/lQB1I+ExajBBlsopLPPRyXLMGVRqwzDg65yECUwRnZgF68K70uAGi+l5a
+         ZoFsZtB6P8iuIkRtHrY6xdLH1Ehwp9Y5wVbu5gY/vAgmN4NwJ1IyQiovZ6muSUbVCggK
+         Zr12bGFMafMF0lj/91KueJocOPtqnu7uoUB17YZb1HO+Y1abnxy/HQxeQukd6l+f+DyB
+         lm9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686747645; x=1689339645;
+        d=1e100.net; s=20221208; t=1686747857; x=1689339857;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=z0efkXJXQRoP2b5ddM9nLHPg0LpXd7kPRZgd4cVIsio=;
-        b=OZ6nsd1kw/N1t+tp7v8mOocwSIckOwXI08BrUFwv8gtc37Kn3Bz9miUK/tuoI1Y7Zm
-         QfoXiuV8tomMauD1pQsMJlvFFZcNZ1ArqtfeQ0tfqpMQDytuYHxNv9Yg9vbNhspC42WM
-         vKne/xlwytErj2mNxjLF3iGGLdjIfELS61aBiPtrchgY9P39P0Pdz+vb/LXgzobW7PVu
-         dHozAykrXyc5QJrlQtkuuuQW2mfcR6t1aaGDQzdVHvowq18BB9sbH0UnA/7gxkwr3qQE
-         lxJS4TqOfly57i3wOG70GzEVnUzD6ylUa9xNDI0DZL085+Rf+iK/IgyaazBF9BvAmyNg
-         VJMQ==
-X-Gm-Message-State: AC+VfDybnr96lpTdWgVdbTMDkk9qsgs5jaINS/MmOvGNWHDcg+3VDSpp
-        3l+3Qr3fyHldzlFc1QOaBXgmV+TLK0I=
-X-Google-Smtp-Source: ACHHUZ5k8hRt8+JNWzzK12jsDb0xJvMAtEqPQgr4wA3edtGtHZxKqjY7EHaecZw27+80y7gDw0MvrQ==
-X-Received: by 2002:a05:6a20:734c:b0:ff:a017:2b07 with SMTP id v12-20020a056a20734c00b000ffa0172b07mr1423809pzc.20.1686747644594;
-        Wed, 14 Jun 2023 06:00:44 -0700 (PDT)
+        bh=8Sw1gB+vCV+Osid5cBqyQVazdg28STr+FplDdL8t5QI=;
+        b=OhCvZohWtKm/u0mIihtV4mwmvfmkFIPRyJZ7AP3VpVP2syXtMpoLPDtUugBdIB6Ds6
+         i4uM2P0sH4r/0o1ughdUYfPLMBzBDEdYSAo572xo+RP/GSaAHR2w4Msc73KQrRvKkBjY
+         P7+23pVJBdbMCVkT7CnNU4wFCR44jEe7srEQgHOKc/ikUOQc5U9z6Cps7dFd/Hw99kpN
+         9aENIa6ImV2ZtBFMqK/ZvwssAkdKCqBXryqp2MC6pvxoDzMAl6Yl8CFMRtar57nV8wmw
+         u/afw6bdxx/7a7prPxdj3zb8eVCReXXz1wp1lduMdUzaqMoNw6jwvyWVdGickOtM0AdB
+         HDcw==
+X-Gm-Message-State: AC+VfDwWQ68T6XAcgZVdeeBaQ4YxsajouujplvxITjasN6y24vfPEXkh
+        gAmTiDqJBaNgpjMNK3SZK0AMP8+bDuw=
+X-Google-Smtp-Source: ACHHUZ4T9N2RvYxZvTlMDI4bVpDD81pW5pNqQGYji3xmazcmDcuqMFG00xknptCDkzeAkUV+6wHNPw==
+X-Received: by 2002:a05:6a21:789a:b0:114:c11c:7ad5 with SMTP id bf26-20020a056a21789a00b00114c11c7ad5mr2157252pzc.52.1686747856126;
+        Wed, 14 Jun 2023 06:04:16 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v5-20020aa78505000000b006579b062d5dsm1890623pfn.21.2023.06.14.06.00.43
+        by smtp.gmail.com with ESMTPSA id x2-20020a056a00270200b005d22639b577sm2128723pfv.165.2023.06.14.06.04.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 06:00:44 -0700 (PDT)
+        Wed, 14 Jun 2023 06:04:15 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9e9a7066-b841-db97-f8a5-44b2bdac124c@roeck-us.net>
-Date:   Wed, 14 Jun 2023 06:00:42 -0700
+Message-ID: <7594a5cd-9ef1-4093-20e3-b824cb91194d@roeck-us.net>
+Date:   Wed, 14 Jun 2023 06:04:14 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 2/3] hwmon: (sht3x) add medium repeatability support
+Subject: Re: [PATCH 3/3] hwmon: (sht3x)add new non-stardard sysfs interface
 Content-Language: en-US
 To:     JuenKit Yip <JuenKit_Yip@hotmail.com>, jdelvare@suse.com
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <DB4PR10MB62615481D91BA8A598234A18925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+References: <DB4PR10MB6261C3FAA8B183F94B007163925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <DB4PR10MB62615481D91BA8A598234A18925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+In-Reply-To: <DB4PR10MB6261C3FAA8B183F94B007163925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/13/23 23:27, JuenKit Yip wrote:
-> add medium repeatability support for matching datasheet
+On 6/13/23 23:28, JuenKit Yip wrote:
+> add "repeatability" interface to sysfs, it could be
+> read or written to control the sensor.
 > 
 > Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
 > ---
->   drivers/hwmon/sht3x.c | 29 +++++++++++++++++++++++++++--
->   1 file changed, 27 insertions(+), 2 deletions(-)
+>   Documentation/hwmon/sht3x.rst |  7 +++++++
+>   drivers/hwmon/sht3x.c         | 29 +++++++++++++++++++++++++++++
+>   2 files changed, 36 insertions(+)
 > 
+> diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
+> index 2c87c8f58..3dc4b9c14 100644
+> --- a/Documentation/hwmon/sht3x.rst
+> +++ b/Documentation/hwmon/sht3x.rst
+> @@ -83,4 +83,11 @@ heater_enable:      heater enable, heating element removes excess humidity from
+>   update_interval:    update interval, 0 for single shot, interval in msec
+>   		    for periodic measurement. If the interval is not supported
+>   		    by the sensor, the next faster interval is chosen
+> +repeatability:      write or read repeatability, the higher repeatability means
+> +                    the longer measurement duration, the lower noise level and
+> +                    the larger energy consumption:
+
+s/the//g
+
+> +
+> +                        - 0: low repeatability
+> +                        - 1: medium repeatability
+> +                        - 2: high repeatability
+>   =================== ============================================================
 > diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-> index 5bc0001b1..eb968b9d3 100644
+> index eb968b9d3..209090a48 100644
 > --- a/drivers/hwmon/sht3x.c
 > +++ b/drivers/hwmon/sht3x.c
-> @@ -25,6 +25,10 @@
->   static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
->   static const unsigned char sht3x_cmd_measure_nonblocking_hpm[] = { 0x24, 0x00 };
+> @@ -642,6 +642,33 @@ static ssize_t update_interval_store(struct device *dev,
+>   	return count;
+>   }
 >   
-> +/* commands (medium repeatability mode) */
-> +static const unsigned char sht3x_cmd_measure_blocking_mpm[]    = { 0x2c, 0x0d };
-> +static const unsigned char sht3x_cmd_measure_nonblocking_mpm[] = { 0x24, 0x0b };
+> +static ssize_t repeatability_show(struct device *dev,
+> +				  struct device_attribute *attr,
+> +				  char *buf)
+> +{
+> +	struct sht3x_data *data = dev_get_drvdata(dev);
 > +
->   /* commands (low repeatability mode) */
->   static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
->   static const unsigned char sht3x_cmd_measure_nonblocking_lpm[] = { 0x24, 0x16 };
-> @@ -43,6 +47,7 @@ static const unsigned char sht3x_cmd_clear_status_reg[]        = { 0x30, 0x41 };
->   
->   /* delays for non-blocking i2c commands, both in us */
->   #define SHT3X_NONBLOCKING_WAIT_TIME_HPM  15000
-> +#define SHT3X_NONBLOCKING_WAIT_TIME_MPM   6000
->   #define SHT3X_NONBLOCKING_WAIT_TIME_LPM   4000
->   
->   #define SHT3X_WORD_LEN         2
-> @@ -69,8 +74,9 @@ enum sht3x_limits {
->   };
->   
->   enum sht3x_repeatability {
-> -	low_repeatability,
-> -	high_repeatability,
-> +	low_repeatability    = 0,
-> +	medium_repeatability = 1,
-> +	high_repeatability   = 2,
-
-Why the assignments ?
-
->   };
->   
->   DECLARE_CRC8_TABLE(sht3x_crc8_table);
-> @@ -89,6 +95,20 @@ static const char periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
->   	{0x27, 0x37},
->   };
->   
-> +/* periodic measure commands (medium repeatability) */
-> +static const char periodic_measure_commands_mpm[][SHT3X_CMD_LENGTH] = {
-
-FWIW, it might make sense to add the command for blocking mode
-(0 measurements per second) into this table to simplify the code.
-
-> +	/* 0.5 measurements per second */
-> +	{0x20, 0x24},
-> +	/* 1 measurements per second */
-> +	{0x21, 0x26},
-> +	/* 2 measurements per second */
-> +	{0x22, 0x20},
-> +	/* 4 measurements per second */
-> +	{0x23, 0x22},
-> +	/* 10 measurements per second */
-> +	{0x27, 0x21},
-> +};
+> +	return sysfs_emit(buf, "%d\n", data->repeatability);
+> +}
 > +
->   /* periodic measure commands (low repeatability mode) */
->   static const char periodic_measure_commands_lpm[][SHT3X_CMD_LENGTH] = {
->   	/* 0.5 measurements per second */
-> @@ -448,6 +468,9 @@ static void sht3x_select_command(struct sht3x_data *data)
->   		if (data->repeatability == high_repeatability) {
->   			data->command = sht3x_cmd_measure_nonblocking_hpm;
->   			data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_HPM;
-> +		} else if (data->repeatability ==  medium_repeatability) {
-> +			data->command = sht3x_cmd_measure_nonblocking_mpm;
-> +			data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_MPM;
->   		} else {
->   			data->command = sht3x_cmd_measure_nonblocking_lpm;
->   			data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_LPM;
-> @@ -595,6 +618,8 @@ static ssize_t update_interval_store(struct device *dev,
->   	if (mode > 0) {
->   		if (data->repeatability == high_repeatability)
->   			command = periodic_measure_commands_hpm[mode - 1];
-> +		else if (data->repeatability == medium_repeatability)
-> +			command = periodic_measure_commands_mpm[mode - 1];
->   		else
->   			command = periodic_measure_commands_lpm[mode - 1];
+> +static ssize_t repeatability_store(struct device *dev,
+> +				     struct device_attribute *attr,
+> +				     const char *buf,
+> +				     size_t count)
+> +{
+> +	u8 val;
+> +	struct sht3x_data *data = dev_get_drvdata(dev);
+> +
+> +	val = kstrtou8(buf, 0, &val);
+> +	if (val)
+> +		return val;
+
+You need a separate ret variable with type int.
+
+> +
+> +	val = clamp_val(val, low_repeatability, high_repeatability);
+
+This should not be clamped; the accepted values are well defined,
+and this is not a range.
+
+> +	data->repeatability = val;
+> +
+> +	return count;
+> +}
+> +
+>   static SENSOR_DEVICE_ATTR_RO(temp1_input, temp1_input, 0);
+>   static SENSOR_DEVICE_ATTR_RO(humidity1_input, humidity1_input, 0);
+>   static SENSOR_DEVICE_ATTR_RW(temp1_max, temp1_limit, limit_max);
+> @@ -658,6 +685,7 @@ static SENSOR_DEVICE_ATTR_RO(temp1_alarm, temp1_alarm, 0);
+>   static SENSOR_DEVICE_ATTR_RO(humidity1_alarm, humidity1_alarm, 0);
+>   static SENSOR_DEVICE_ATTR_RW(heater_enable, heater_enable, 0);
+>   static SENSOR_DEVICE_ATTR_RW(update_interval, update_interval, 0);
+> +static SENSOR_DEVICE_ATTR_RW(repeatability, repeatability, 0);
+>   
+>   static struct attribute *sht3x_attrs[] = {
+>   	&sensor_dev_attr_temp1_input.dev_attr.attr,
+> @@ -674,6 +702,7 @@ static struct attribute *sht3x_attrs[] = {
+>   	&sensor_dev_attr_humidity1_alarm.dev_attr.attr,
+>   	&sensor_dev_attr_heater_enable.dev_attr.attr,
+>   	&sensor_dev_attr_update_interval.dev_attr.attr,
+> +	&sensor_dev_attr_repeatability.dev_attr.attr,
+>   	NULL
+>   };
 >   
 
