@@ -2,125 +2,117 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A463C001B0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jun 2023 16:36:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D00CEB64D9
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jun 2023 17:17:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235144AbjFNQg3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Jun 2023 12:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
+        id S230150AbjFNRRX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Jun 2023 13:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234807AbjFNQgO (ORCPT
+        with ESMTP id S236787AbjFNRRS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:36:14 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068D5211F
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Jun 2023 09:36:12 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b3be39e666so30193555ad.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Jun 2023 09:36:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686760572; x=1689352572;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j7upm71Mfdwx6Tf4aDWDzB7ClLiD/VZcy8GFLsE3Xpw=;
-        b=GhqzUDk+dGghsNxq5TiCUIVQO15PbkGYNmA5zvJAnuJl+nemK02cV7cilQe0BP72Yp
-         7PltHl2NSEutVK7Hl18VqXkWF5HWfy6C2fV7Z1OBVt45O3S4WfstRhPsrw72TNB2UlgA
-         qWY6ofGj02t+WnFGHV5YkaAarg/6cdwPjEy75rwgL8MolMPqtyH3wdZinO5BBKQyijkw
-         Hfc08UYB0EuWbb1lEs4AYczVlt17Ak9ioi0CJwbaj1NNU1eEg1PCbbUNc5UJ91Z6Qzxb
-         7UZguTMM1eWRTOtVne5qnGWy3Oz+Rl1nzrVKo66G7Vaaee0sidX5qUa0ZFnWy0HREh2f
-         ramQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686760572; x=1689352572;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=j7upm71Mfdwx6Tf4aDWDzB7ClLiD/VZcy8GFLsE3Xpw=;
-        b=gzmuYvyhDd/prvkgKyMv36LUX+fEUUIqACeePodxiu+MupPYRdiA2eweVeEd7q4jkl
-         Zbm1mhcnJLMayo3sSAp0Ri7uwwAS9xN6A09a6MBjIrmPtalRe4QPd4IbMp1+LIuuJjxX
-         qUVGAXWjepy3z+HHiW3nGEU5DxActH7CWFGbVFq+qtl+UVmvPKOIhVsOtexwUEe7HE1P
-         KJ4Fx5azBmcKsUDZfPKGoSyIQXHiHpMQ1Sv94lxInXf+R5tpfmpqrUaah/bllkhK6DSB
-         sjuXaz6AnJGnz8TKoRwnLdH7sRx/PjXsqiYzQ0gZbi2xnIEL83fnYbAPgC9sbaTsmuhr
-         ul9g==
-X-Gm-Message-State: AC+VfDwnHFdLHr47rJjCKvf4e5Fq4q/0yw0lHC8hJh8UFZHDFluTnf2F
-        nlWKPeAKtfAVgx+eAHU2BJFP2mXaJOs=
-X-Google-Smtp-Source: ACHHUZ6V0HO7uOkAH+jta77uRxoNqe8xaI5wHd6RFBEHg6aZeov5m/QDeSZQIbMk/xHb80w9p22uwg==
-X-Received: by 2002:a17:902:ec85:b0:1b0:f31:a386 with SMTP id x5-20020a170902ec8500b001b00f31a386mr3272443plg.26.1686760571979;
-        Wed, 14 Jun 2023 09:36:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q16-20020a170902dad000b001ae2b94701fsm12358148plx.21.2023.06.14.09.36.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 09:36:11 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Arthur Korn <akorn@google.com>, Guenter Roeck <linux@roeck-us.net>
-Subject: [RFT PATCH 2/2] hwmon: (pmbus/adm1275) Disable ADC while updating PMON_CONFIG
-Date:   Wed, 14 Jun 2023 09:36:05 -0700
-Message-Id: <20230614163605.3688964-3-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230614163605.3688964-1-linux@roeck-us.net>
-References: <20230614163605.3688964-1-linux@roeck-us.net>
+        Wed, 14 Jun 2023 13:17:18 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94033268F;
+        Wed, 14 Jun 2023 10:17:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686763033; x=1718299033;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1rVknc6eI0s2SyaBRaLfKBU3jy707I2xZOIeKDgA+gA=;
+  b=SEU2SiRNmCVtgm6gafrsHL0GhcNeyLOsOtf91h9Iz1QXHbUXvzPZMoUS
+   YkbB7WEPiR+e7kPs/yr2yuCto69bYdSWOlMR1lJmo+BNv7AWHBOtnpPoX
+   A6Qi3YbiAPFpD7v9Bls/Z+tvVwLx/6Xn3qcAgnJL2TZeodymbIA2zMY+8
+   iTzFi5/T53xkUqs/icIPQkWMOodwd81zktMpMRK55F4qAjEpEy3OZho8n
+   jbYH8b58B+27iEcwg1DeiR3gQR2tn1mP6pjVMG2S8VIxwUFShRmxXfdPn
+   DUa6mDouWgAGUvsH/1ZDwHeJpYsGQ5b/4htNg3/DEicBHoKr58YkcTTrm
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="362053903"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="362053903"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 10:17:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="782176086"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="782176086"
+Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Jun 2023 10:17:10 -0700
+Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q9U6v-0000t3-1a;
+        Wed, 14 Jun 2023 17:16:49 +0000
+Date:   Thu, 15 Jun 2023 01:15:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     JuenKit Yip <JuenKit_Yip@hotmail.com>, linux@roeck-us.net,
+        jdelvare@suse.com
+Cc:     oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, JuenKit Yip <JuenKit_Yip@hotmail.com>
+Subject: Re: [PATCH 1/3] hwmon: (sht3x)remove sht3x_platform_data
+Message-ID: <202306150115.i0k7ulfo-lkp@intel.com>
+References: <DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-According to ADI, changing PMON_CONFIG while the ADC is running can have
-unexpected results. ADI recommends halting the ADC with PMON_CONTROL
-before setting PMON_CONFIG and then resume after. Follow ADI
-recommendation and disable ADC while PMON_CONFIG is updated.
+Hi JuenKit,
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/pmbus/adm1275.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
-index eaa691b98c14..501646cbef10 100644
---- a/drivers/hwmon/pmbus/adm1275.c
-+++ b/drivers/hwmon/pmbus/adm1275.c
-@@ -27,8 +27,11 @@ enum chips { adm1075, adm1272, adm1275, adm1276, adm1278, adm1293, adm1294 };
- #define ADM1275_PEAK_IOUT		0xd0
- #define ADM1275_PEAK_VIN		0xd1
- #define ADM1275_PEAK_VOUT		0xd2
-+#define ADM1275_PMON_CONTROL		0xd3
- #define ADM1275_PMON_CONFIG		0xd4
- 
-+#define ADM1275_CONVERT_EN		BIT(0)
-+
- #define ADM1275_VIN_VOUT_SELECT		BIT(6)
- #define ADM1275_VRANGE			BIT(5)
- #define ADM1075_IRANGE_50		BIT(4)
-@@ -202,7 +205,11 @@ static int adm1275_read_samples(const struct adm1275_data *data,
- static int adm1275_write_pmon_config(const struct adm1275_data *data,
- 				     struct i2c_client *client, u16 word)
- {
--	int ret;
-+	int ret, ret2;
-+
-+	ret = i2c_smbus_write_byte_data(client, ADM1275_PMON_CONTROL, 0);
-+	if (ret)
-+		return ret;
- 
- 	if (data->have_power_sampling)
- 		ret = i2c_smbus_write_word_data(client, ADM1275_PMON_CONFIG,
-@@ -211,6 +218,15 @@ static int adm1275_write_pmon_config(const struct adm1275_data *data,
- 		ret = i2c_smbus_write_byte_data(client, ADM1275_PMON_CONFIG,
- 						word);
- 
-+	/*
-+	 * We still want to re-enable conversions if writing into
-+	 * ADM1275_PMON_CONFIG failed.
-+	 */
-+	ret2 = i2c_smbus_write_byte_data(client, ADM1275_PMON_CONTROL,
-+					 ADM1275_CONVERT_EN);
-+	if (!ret)
-+		ret = ret2;
-+
- 	return ret;
- }
- 
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.4-rc6 next-20230614]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/JuenKit-Yip/hwmon-sht3x-add-medium-repeatability-support/20230614-143100
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/DB4PR10MB6261D79FE16EC2BBD5316B91925AA%40DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+patch subject: [PATCH 1/3] hwmon: (sht3x)remove sht3x_platform_data
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230615/202306150115.i0k7ulfo-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build):
+        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+        git fetch groeck-staging hwmon-next
+        git checkout groeck-staging/hwmon-next
+        b4 shazam https://lore.kernel.org/r/DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306150115.i0k7ulfo-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/sht3x.c:29:28: warning: 'sht3x_cmd_measure_blocking_lpm' defined but not used [-Wunused-const-variable=]
+      29 | static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hwmon/sht3x.c:25:28: warning: 'sht3x_cmd_measure_blocking_hpm' defined but not used [-Wunused-const-variable=]
+      25 | static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/sht3x_cmd_measure_blocking_lpm +29 drivers/hwmon/sht3x.c
+
+7c84f7f80d6fcea David Frey  2016-06-02  23  
+cecbab8bdd40311 JuenKit Yip 2023-06-14  24  /* commands (high repeatability mode) */
+7c84f7f80d6fcea David Frey  2016-06-02 @25  static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
+7c84f7f80d6fcea David Frey  2016-06-02  26  static const unsigned char sht3x_cmd_measure_nonblocking_hpm[] = { 0x24, 0x00 };
+7c84f7f80d6fcea David Frey  2016-06-02  27  
+cecbab8bdd40311 JuenKit Yip 2023-06-14  28  /* commands (low repeatability mode) */
+7c84f7f80d6fcea David Frey  2016-06-02 @29  static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
+7c84f7f80d6fcea David Frey  2016-06-02  30  static const unsigned char sht3x_cmd_measure_nonblocking_lpm[] = { 0x24, 0x16 };
+7c84f7f80d6fcea David Frey  2016-06-02  31  
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
