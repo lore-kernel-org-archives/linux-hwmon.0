@@ -2,61 +2,61 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8FEDEB64DB
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jun 2023 10:06:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE87FEB64D9
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jun 2023 11:10:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242689AbjFNKG4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Jun 2023 06:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
+        id S233170AbjFNLKH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Jun 2023 07:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243620AbjFNKGa (ORCPT
+        with ESMTP id S243690AbjFNLKF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Jun 2023 06:06:30 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450E6E53;
-        Wed, 14 Jun 2023 03:06:24 -0700 (PDT)
+        Wed, 14 Jun 2023 07:10:05 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68533199B;
+        Wed, 14 Jun 2023 04:10:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686737184; x=1718273184;
+  t=1686741003; x=1718277003;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=jWzfPbhC79qqaHTqzQY7E8PHAXtRi83kN66lly81vR4=;
-  b=eXK7NMJDkytpVIDIHorf/r1W44Fy/007vZo+4MWhpoLJk0YiEnLSIhI8
-   C9/FbQ2/5W0fvfasnaozzdoM0PGHxy/QgQwNiNpPoh3QqSxfVYJkhZDS2
-   5ocu4pj+GRDGfPvWxDFuHfHmdirc9il/TVOxUbWP5Xjy2+H1PJAPGSLNS
-   b0NVDFl6RXujwGPfl0ixVH1TAwtz1CUh+wUkd91O9n3Fq7JjvDW+dQE6L
-   xRhiL5pGbOvd6ystQyFAv6qiR1Rn8S/9ESdTlNhPAnfwIF4tQzK2iQQRU
-   HxvTqzt7z652aoNnun5DveJyN/XOfqXf9us9rhwqMwDe5Vliq1zUWE2Dy
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="361945621"
+  bh=sKUKsnbp/6owMK8pQSW/r9IccTSZ64R2EVqQyGjuXRU=;
+  b=Lfky4yi52FPK2cU/ToJxd9A6X9/iB4AwAIi8xApurCjArHH0lelBqXn+
+   z4cl4NEtj20JTh9O0QoU1ImjbjWmdqsgiFcGE9sMwtjpO2TIeSBRsUFNK
+   L/QjLPIkIhRbzLyqb8hLmJ5zDdiizVsiBeJEkrwDMBD84CPWodyK0uRvx
+   4nL2VnuaZps6TdJmXqw6RuBr94YXOoVjr3T76T3iGHD/eRsnYB+v2kutW
+   eBQ+qh+JCWSceXUQmawlmZMpz8261AeRUb49AAYITOlegnWjmws+nahhL
+   L8XoCJl/83hX1jSoJxVERE29F27iUYLrsimcKHY+Yo2zlYuZc0W6Jk/k7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="424468897"
 X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="361945621"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 03:06:23 -0700
+   d="scan'208";a="424468897"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 04:10:02 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="745021639"
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="689377072"
 X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="745021639"
+   d="scan'208";a="689377072"
 Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 14 Jun 2023 03:06:21 -0700
+  by orsmga006.jf.intel.com with ESMTP; 14 Jun 2023 04:10:00 -0700
 Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1q9NOO-0000Vl-39;
-        Wed, 14 Jun 2023 10:06:20 +0000
-Date:   Wed, 14 Jun 2023 18:05:43 +0800
+        id 1q9OMs-0000Xd-1F;
+        Wed, 14 Jun 2023 11:09:08 +0000
+Date:   Wed, 14 Jun 2023 19:07:59 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     JuenKit Yip <JuenKit_Yip@hotmail.com>, linux@roeck-us.net,
         jdelvare@suse.com
 Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         JuenKit Yip <JuenKit_Yip@hotmail.com>
-Subject: Re: [PATCH 1/3] hwmon: (sht3x)remove sht3x_platform_data
-Message-ID: <202306141736.b9bPRO0Z-lkp@intel.com>
-References: <DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+Subject: Re: [PATCH 2/3] hwmon: (sht3x) add medium repeatability support
+Message-ID: <202306141807.dzcXTxhF-lkp@intel.com>
+References: <DB4PR10MB62615481D91BA8A598234A18925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+In-Reply-To: <DB4PR10MB62615481D91BA8A598234A18925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -73,9 +73,9 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/JuenKit-Yip/hwmon-sht3x-add-medium-repeatability-support/20230614-143100
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/DB4PR10MB6261D79FE16EC2BBD5316B91925AA%40DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
-patch subject: [PATCH 1/3] hwmon: (sht3x)remove sht3x_platform_data
-config: hexagon-randconfig-r045-20230612 (https://download.01.org/0day-ci/archive/20230614/202306141736.b9bPRO0Z-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/DB4PR10MB62615481D91BA8A598234A18925AA%40DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+patch subject: [PATCH 2/3] hwmon: (sht3x) add medium repeatability support
+config: hexagon-randconfig-r045-20230612 (https://download.01.org/0day-ci/archive/20230614/202306141807.dzcXTxhF-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
@@ -84,7 +84,7 @@ reproduce (this is a W=1 build):
         git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
         git fetch groeck-staging hwmon-next
         git checkout groeck-staging/hwmon-next
-        b4 shazam https://lore.kernel.org/r/DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+        b4 shazam https://lore.kernel.org/r/DB4PR10MB62615481D91BA8A598234A18925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
@@ -93,7 +93,7 @@ reproduce (this is a W=1 build):
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306141736.b9bPRO0Z-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306141807.dzcXTxhF-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
@@ -166,26 +166,25 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
          |                                                       ~~~~~~~~~~ ^
->> drivers/hwmon/sht3x.c:25:28: warning: unused variable 'sht3x_cmd_measure_blocking_hpm' [-Wunused-const-variable]
+   drivers/hwmon/sht3x.c:25:28: warning: unused variable 'sht3x_cmd_measure_blocking_hpm' [-Wunused-const-variable]
       25 | static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
          |                            ^
->> drivers/hwmon/sht3x.c:29:28: warning: unused variable 'sht3x_cmd_measure_blocking_lpm' [-Wunused-const-variable]
-      29 | static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
+>> drivers/hwmon/sht3x.c:29:28: warning: unused variable 'sht3x_cmd_measure_blocking_mpm' [-Wunused-const-variable]
+      29 | static const unsigned char sht3x_cmd_measure_blocking_mpm[]    = { 0x2c, 0x0d };
          |                            ^
-   8 warnings generated.
+   drivers/hwmon/sht3x.c:33:28: warning: unused variable 'sht3x_cmd_measure_blocking_lpm' [-Wunused-const-variable]
+      33 | static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
+         |                            ^
+   9 warnings generated.
 
 
-vim +/sht3x_cmd_measure_blocking_hpm +25 drivers/hwmon/sht3x.c
+vim +/sht3x_cmd_measure_blocking_mpm +29 drivers/hwmon/sht3x.c
 
-7c84f7f80d6fcea David Frey  2016-06-02  23  
-cecbab8bdd40311 JuenKit Yip 2023-06-14  24  /* commands (high repeatability mode) */
-7c84f7f80d6fcea David Frey  2016-06-02 @25  static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
-7c84f7f80d6fcea David Frey  2016-06-02  26  static const unsigned char sht3x_cmd_measure_nonblocking_hpm[] = { 0x24, 0x00 };
-7c84f7f80d6fcea David Frey  2016-06-02  27  
-cecbab8bdd40311 JuenKit Yip 2023-06-14  28  /* commands (low repeatability mode) */
-7c84f7f80d6fcea David Frey  2016-06-02 @29  static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
-7c84f7f80d6fcea David Frey  2016-06-02  30  static const unsigned char sht3x_cmd_measure_nonblocking_lpm[] = { 0x24, 0x16 };
-7c84f7f80d6fcea David Frey  2016-06-02  31  
+    27	
+    28	/* commands (medium repeatability mode) */
+  > 29	static const unsigned char sht3x_cmd_measure_blocking_mpm[]    = { 0x2c, 0x0d };
+    30	static const unsigned char sht3x_cmd_measure_nonblocking_mpm[] = { 0x24, 0x0b };
+    31	
 
 -- 
 0-DAY CI Kernel Test Service
