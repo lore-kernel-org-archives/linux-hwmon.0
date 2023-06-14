@@ -2,183 +2,180 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2B15EB64D8
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jun 2023 06:27:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36FADEB64D8
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Jun 2023 06:30:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242281AbjFNG1y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Jun 2023 02:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
+        id S242947AbjFNGaB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Jun 2023 02:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242549AbjFNG1w (ORCPT
+        with ESMTP id S243179AbjFNG33 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Jun 2023 02:27:52 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05olkn2063.outbound.protection.outlook.com [40.92.90.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547461702;
-        Tue, 13 Jun 2023 23:27:51 -0700 (PDT)
+        Wed, 14 Jun 2023 02:29:29 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03olkn2097.outbound.protection.outlook.com [40.92.59.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DD02102;
+        Tue, 13 Jun 2023 23:29:20 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mQR2x2EJnWujb7L8ZNbc1GY4SO/7DSvEJs10lGT5ncCbeS6keE9A3TM9fwt0vy+nooImiofOlvuiC9YLk8vJvfXPar3XqjkNxmxYa74kruk5BvQkJyO6Uh5OJFbvsNxoydI5IyV1zFdmTMgy3osEmqhjottv2gEfEgHto54sMvQT0X7EIUa9T52s2wngseiTzV+pdqSiFT9BB5U7c/CMZgb5NG0vAs6xH9aNl5BC4ntHFRpbNByTtcZ4RtF3gAxBtH4XQTi2gbLpejRFJx8dPnpOYURtweHctm2nCB16NkQ/PMmeUAiXPnI6PpE8ENG8wzd3US8YvKVMPQ0FLR+aXQ==
+ b=mGrhvYFsUAJQM0PHPCBy3c9uwl7KoZhnjvnW03q++r2Gj9YhufJRkgj0C97+6OsNl6oXXRIFJjYo65Z1q2hUlycthykFiDOtel060RJcn76gSRa/31RnDADc0CBcfHSRFKB/zIkzBznGKaOijtTuMK22FEEauYqgnxmY5qqvxayvZq+OAx10pV6VBQvZ/SIvwnPEAuCx3z/RwtG3pgrtlvwLHzCUAyPRX/MSPUtHGhJAyNLKQhNu6wMKDEcU/yd7gJs1D7YoUdHe71N75j1BG0N2e2MgFf4fOr6ICC4CJXyhYGCgI3QnpEf4ncGYHpAbTU5wkzDq1RgkfdpwIFvHmA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2oOuiYIgBbrGBq2ClEQzloAW/IZrZ+uV4T5YD2V35So=;
- b=a5byp3H/sbLVGVjjQ8n5nsgoKwoPvA8tzt2wq/sa3mj+v8qYPSpOuh69tj0bl1eBqZ2jaF4ml9ecMbu7D4lXnMezUHmXgecrgLLfbRu4AGW6y6syBEVK2qCdlTeL9mwz1b1CIh8dVA5Qb0BX2D7aqsB4z4xCHtMUvtR5a74KmCoFYOhFpGVVodWIG/DfpEW24NKln97bYRhsD49WhvWjWlLXAApUTpCI47bhMVEBUnF0X9EcUuykvU3a7b82tpHQ+ZdBaOnravVWfqmmjCiAG7sddDFgowkL4MmaUi9K7deWS0mHQktVuIO5B6Xh2hcnoWkL1pILQ15Bj75Lpzh44g==
+ bh=T4ztIYSyuNhSxWFttmUJQdXlXz3wECbts3tnhkCTfT4=;
+ b=M3SHuAcoTGvap5+Z+fbCj5Gn+aiX5NeK0PNdK47gTqY+Y9PDlrfNp5eisdUeYfye2ODbMoy/gf0g8pxgsXAsd5sdQ+dWIObyPUQLBty8rPE89pRa1l2pbbURJozU/Bvz5Q/RFcLKLz5kqTtWv1WTzA7CSDWVI5Gt/JUBZ7lK0+pgVM19oGIZR+LNQjCqduoabACjbVF5OJqWRb2xZN9F/BDaGE83+VCwE6soDV31x4hqg3m2JysmWLt6648+BbF0SjhsqG8cOvdKvtheXwR72LaJfwIgyVBqOX7PhjUqX1Y9xZB6Zao8HNVfcMCuOYMe/rZC3IbTa3sd6Ybw1pPJiA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2oOuiYIgBbrGBq2ClEQzloAW/IZrZ+uV4T5YD2V35So=;
- b=jTI5GzPftmxjzYvy9xuCbYxkfWSM4WsFka9fNu8VHDZeNGmf5TT5FdXXU9mMOme9hSICZk2Bq6gtWz/8y+A/W+jCCvkjx3bhSW783yR2Vp8a+Hp0JB9x8x7myp3jmpG6h0MuEhAIPKNJuzIhDMDQgNXQbMsypQRot0S8Yem5ZGNKx+/6APZfboXw9w250QL59NBCuGoSkrPMAeeHk7jIPJjxk2hveIv/0N0GFnTzgyfUwKXfZiiTI1LgNhJKTvLXBTIkzbzKZZEoTUBLszt47YfUHHt4ybpZfE7gxUEdWAzjtfqK6J+eiMspYn8t4fCCSAkHwzj3EtJKjPRzvjhXag==
+ bh=T4ztIYSyuNhSxWFttmUJQdXlXz3wECbts3tnhkCTfT4=;
+ b=bXlZ2MqurA5H3BwrE96tnoY5OsvzTNxoZoaTmFY21PMTEGzTzIDLMKiA5R1Kl0BA07M1116nou2pIb1YisI5SQz/4JwmRLhVa4k8PTTfxwFQNHIcsYYv2TWjpPqrWRFbSHFKlaCdFD5r20yDp99ltzmX+NwXV9WqjRZrFyhpyRKjCUmc+EvmiVF7St/6+pm3IsOJiXmkX/JT1tQCv1u7Rsocd/4eC9nQsMaGNH65DAK1lZc2Q0oNNwCcH+G9XocikpkoGdY+RHf2AvaDxSJdcgmiMvP7ts44A7Yld/NFB4JM/kR34jJKQQagZyrwQ+QYExyWYTIppFiVoNTa3+46gg==
 Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:383::21)
- by GV2PR10MB6981.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:de::7) with
+ by AS1PR10MB5601.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:478::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.46; Wed, 14 Jun
- 2023 06:27:49 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Wed, 14 Jun
+ 2023 06:29:18 +0000
 Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::628a:d617:46f:2a88]) by DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::628a:d617:46f:2a88%6]) with mapi id 15.20.6455.030; Wed, 14 Jun 2023
- 06:27:49 +0000
+ 06:29:18 +0000
 From:   JuenKit Yip <JuenKit_Yip@hotmail.com>
 To:     linux@roeck-us.net, jdelvare@suse.com
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         JuenKit Yip <JuenKit_Yip@hotmail.com>
-Subject: [PATCH 2/3] hwmon: (sht3x) add medium repeatability support
-Date:   Wed, 14 Jun 2023 14:27:23 +0800
-Message-ID: <DB4PR10MB62615481D91BA8A598234A18925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+Subject: [PATCH 3/3] hwmon: (sht3x)add new non-stardard sysfs interface
+Date:   Wed, 14 Jun 2023 14:28:43 +0800
+Message-ID: <DB4PR10MB6261C3FAA8B183F94B007163925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.30.2
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TMN:  [T1qJXBObZldXK0pSSwLd58JnLDV85iep]
-X-ClientProxiedBy: TYWP286CA0013.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:178::9) To DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+X-TMN:  [34bP/Isi1jIGgTIKxsGpxRwWq5jDMX7O]
+X-ClientProxiedBy: TYCP286CA0021.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:263::11) To DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
  (2603:10a6:10:383::21)
-X-Microsoft-Original-Message-ID: <20230614062723.888171-1-JuenKit_Yip@hotmail.com>
+X-Microsoft-Original-Message-ID: <20230614062843.888225-1-JuenKit_Yip@hotmail.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB4PR10MB6261:EE_|GV2PR10MB6981:EE_
-X-MS-Office365-Filtering-Correlation-Id: aaeacb4a-c051-4e16-ef7b-08db6ca07904
-X-MS-Exchange-SLBlob-MailProps: EgT5Wr3QDKzwu8YPsqYDy7f7AA4ui0PNriGzB6Pm435daW4chHiPdy5Hpqg7lL0VqiX2x4RnTEZpS4kT1/6Pan/YbJ6XuJ0F77dx4l2D/03gAlSCdeiHEqFLPRcfeTlGaNzQ4e5jWP6BaKa1QmDlEwP3HMr6iJybyq2QeBAxPuHKRDwLbeYVj926JyNpeAdmu/SNbOzYWXkppXJH6MbofqyD/Aj8eRMd9IrNz2YBywii3LSC+wl0b17eP20CwPw7ETzpqMrT4oE/04HLw+F4xLjEM1wlYS0vmJEarI7JdVtD/Hl0LMvHkXqv8UlUzcvEv1Vas1Km7on9ABAM/s5Fh/NTT1owdHPTUDoUOxM3rCeD4cTEf2jTqPMMnt8SYpvjO+QYqHiHgrtECvwn+SDod0g92zRMa/RwezquI9jZ3uvvjmikAyMMCfM4Kx1DWA9dhHZJZ4tjRtGRgOG3/Xu3vMMYMUvsIGDlre3DWPAZx4OMpMHLiV7Pt9b14r7sMxc/ZP4AmLApsB3To+XDdU9XZ+jRYiVkugfSdeMbwg75seacf02ZpzK2Fl+O02XM0g8b+OW7LZD6G7l6qmxbTJO4u7UYX9oO/xVXXHcVZ016IK0mBP0LvHWPTV7rUnh0iQEAu5uj9wJ0o4gm/OipKogFGf2BwX8mitXOCYF/D/vee8MoSVyEPdgSKpfjakfPFyQ2aRRM8FLOzUCqFvE4do3o3iz8YVr1eg+0FxClVG9zm34=
+X-MS-TrafficTypeDiagnostic: DB4PR10MB6261:EE_|AS1PR10MB5601:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6ea40210-c86b-4529-8d03-08db6ca0ae7c
+X-MS-Exchange-SLBlob-MailProps: 5fu/r660v9PvfFeBhIdXTOajjuRTH3Fbkt9oQBP2HWLQSHV22AkrgfAHkhLa77SuidZ+rcKFzpXiL4iRTFmoJ+5StkLwF2TRDIkon1tGEuyfOTRL4Mco74VW/VYYUXt/hbh9n7TMjCBGCPhd+/G518RH8+uTIoeLppXnvyh21h0/Uzm+2lngWhGvZicDEJ6etZ6kJGgQHjuehKA9FI+N8vHwWSP+TemM6OVYYMUwzW7UoTdSU4LAt9cf7k+gcg92IlDpZn6JE30tO3Lgu/DclVre3IpxR9l9PaFpvZSiNBhRAD5VljWn7TRctm/1aIorfxO+TnwJt2vb3L0vGqAy4N+U857+VQQ4PZ07SrcPlV3pzcLwy5Cnd6Aca0HE5uKdPd+oDS8lrGiMEisPmMIi+fKiVjLUYeNpeVdX30AsAX6wfaDmR9QXNVBKZzYa4y9ooFk+oAAuWY9/MIyeMvVvMoRV1v5wk6TDbYefGZGr+rGJl1jNXGTCcmb8SFi+7sd04BbSYSt/VuAcDb6dpGYyLXsGTw618gyQYSCHpN8QTreZgb14rYst+w4U/8q2BfxbjTnQ3uhW5cBIWOcCuR7A2qD+TRmyba2W+Mh1zj68zgfZ1YqZmOddEyUCg3lWWnV3vkbWPCQ2D55FQRRgNXg9CECN+I0AkH1wtCN5u0qtAmpSLQSg6y0rJyHmPD+JuO1RwzxcUaNAMgQkNFIRyE9oSUKvIheeFAzlxAXWA6HMKRw=
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D587KTrSf2RTXN6OVD/RWdTzzja2okmXDYRXPpfWAzOGO8wC2xR7A6EA+C9ZONonBsGIYduWkGcv9r+h8YuU9BJiU/qg82nhOgqy3GhkUJ0tB4KAAdeGysBYfUlMzIxDnvEIkNgATVfr0rJCsQ35/j+EkHmhHjVIqMFtnvh7jv+kzC1w8t5CvzCaPuvY6CPT/V5EavIWd3m937h5pPGlazgHO9UdmdHTFjq0GWgFTVqAHyPgQlROZLEbNUX+NUktOv/Y9YeMqVHuHcnGMqY/GLIWpz2jAdIa1f5AUXKYRU3R72fq4xvJeZBGOHqIzbjup76tZk66Cyk4o+Y4gyjh75yn8SaDLLMSNSqxjUoEOCLUOQefma4jOFie9OWENqjdPOPJiv09Hk7RdasBinziJfGyF6p/8uTXdy92vNKHzytMtZdnqXza5Za1MFNPgs4gx/7eTaRIWWMSzU4cCGWBZGygwWowk079xsxitstaE/4o9xqI9RdoUx0t39RdqLEAvoa469NixUdKmtIdKYFGD+z+4nxzqL3O3wGdcJMU0KmsWJLE3M70pFL7bc+rv2jO6avyLpJIQ+v48CHfuWDZExvJ1H7I1XL6BvWsvzBrDuHbXZT+d4iFA+++IMMdybtI
+X-Microsoft-Antispam-Message-Info: 5ngS9rIOS6Xh6A6g3HHzRWNkYG7iZzQwdpXCzFYY31uBGeNJLykmrZ2kSzEpQ8Zs0ER9ch8IfwKcSDSEwXZOt6Q2DZEQfXFngbYOwEaXjQBFyAe+MsQNVJoTfMe9wbm7JOZ1IZgKH7Jwjv3RyQ0kQ0qFF+X3TA3jMDeX7dEuvE++vn+llzItoMhx2D7cE4YO4Ehghz7sRCrdHWLdxaxV/BzYsO8J5G8apXQeEfsOqMW/j6JOpwFGDCCjBb/fDin/7ehKoWDA3JtUtp73CatJNuk43RAzgQJ2lc7+0UQc+erWeLmOM+ivCDy7DgO9/GYtdYkiroBK8zLkQRzuftoCy9dhtBqI5UMqGeftkICgye+95x3jvotGGdzGePR2zRnt8Zpn3Smf+ba6ePIyN5uiJf/3mNZ8LU/L4wMxAEDn5yWv9exj1xc8qSOqKSLxRyIy+fstvTq7+bFsctOD5vPHUeCZCs2dkyUHxGCGvGFMnYssFG2CGSvnpyk0sQh62N557+Ev9OAd4Za6r+SUl5BgUJQImOdBFdNBxi/RY3opxaLACfYZYYJcDpcy46l9Y1EBRVB6lg+jdlohBLFrtliHaatOGsk4T0Z7tKOXVZsh0fAPouTFyDIa6ovBE1iT2vB7
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dTueGx782A9LK4l5mfT3h1UIaT9D1L5+r1RfBPW9D+3Jg3lzBzT0kXazlo0K?=
- =?us-ascii?Q?NxiT+pCPxmHJM2vsRpL1fvRC2gKJ+itpGr8nhSi2F+2VSU28K98wJwjwJfHt?=
- =?us-ascii?Q?Knrwk2OcouMclPMvX+DrBMZy8+hVUE1zsnqx7W4Odt3gbcyjhRWviBFH778p?=
- =?us-ascii?Q?JaJWJrQDXdilEpTf7TkUxJqcLMdiHEAfX+6mS5GbcDRHbF6jVv8/1soaqMzC?=
- =?us-ascii?Q?9noMu9OOouzdbTC7C7Q04B7FpiLYtIOvB04rQdyO2DirAGALgzf/WWuM5AEl?=
- =?us-ascii?Q?2WRGsGWd72f/MWaKPyjDHy/qvofmQoR7ArXOBu1o1qg89IPIhGOChcIQHgb0?=
- =?us-ascii?Q?nX1cL4QvGFP+xu6IeHxLRSR1P0TPRy/92NHjLBFMWg2wwytiCZhbIl3YJ8Ct?=
- =?us-ascii?Q?5dOUhBfhjS5zCTfW3q5ldDwUSjR0AEYHzqwYmSokuzFPhHXMuTnnIc3KBnI4?=
- =?us-ascii?Q?qjAI7fFlOydGyAkugsr3jdsdE66b9UrFRx9YFt6sn+hTZQAaVKAy7MPVFl2Z?=
- =?us-ascii?Q?ODil7FpFa7l5svuDR8WDJsJOZpziiE4gxBpjyuGR7q649tc8oI1E0mfJZCSk?=
- =?us-ascii?Q?JmrdnhC4pquKhUxUeHL/D4W356OGD5uVwgldwur4/mfq8c//o0xAvR9ir2YC?=
- =?us-ascii?Q?Ah8R70VQgsXSL08e7H1ajE0t1Cn7g35F8JxODxC3tMlc8yZlnPE1zDeXqw/J?=
- =?us-ascii?Q?AmjfYuBsMgUYpAGmOwlGRTsra2rNb6Z7Mv0RWK0kD6kEje2NxKW25BpS5y0y?=
- =?us-ascii?Q?d+XNNi5wWRXHBsnzez9rlw1etT6Nu8D1iZ9Ps2/LXrOxTfBxt3oINLbv+Ogb?=
- =?us-ascii?Q?mCzfbP1Gs4N+myr4YAA6BE0RktjaUG9mEmM5CuQBGn3ZZZAf7RcC912LaTMo?=
- =?us-ascii?Q?e7Sh8O+WoOT04mWLs7DIcn7F/wXxoOQeQNr7ZjaKlFiK6qd3q6yg9ni6FGbh?=
- =?us-ascii?Q?Zy5jwsCjxLqFrmjBhipd4FoZSVmUPyodIfOV0XNFhyrB7dxWRlEByNbe2bVR?=
- =?us-ascii?Q?6meJTmYkjXg5B7XOrHyUNQqVh1w31n81fyoTB76Z1uI2MD0oYvEyxbtosiV8?=
- =?us-ascii?Q?0xrrz9LsKS8gL6Dsm6jbdFQe06kd1cafpEmJRNtXb86zyZYre6LRT0vtO4bH?=
- =?us-ascii?Q?usLxdElRvtobiZYeQtB8yIjugDZvrWBl11Z7B8vGUCg3nrBAV/YailIefyD4?=
- =?us-ascii?Q?V/33e1RPt3nD14or/+2/DPNGUdCk0Wq5O6cxf1qPdSR82TWwP9F4hPjnC9E?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Q4x+bev22q+0aJrddFidqo66u7jrVkI5yMcflV+vj+suJGibtbeXsg9GG8zz?=
+ =?us-ascii?Q?gNCiIPYEcn0krN220Pzdub9OhiZHG6xtAGCiS8OyzJKjXCQw6qi3c+k6dDro?=
+ =?us-ascii?Q?n4/s40AEZWoAwjOV+2V8CcI8xxcB0WNrbW1IK5Ocu/jOfO5tE5RjhKsv1MEQ?=
+ =?us-ascii?Q?Yb3TWundxjmnxn4m5Ak2C7E+TrYggOJsEJDBoFHAn1NNdxzg8T6zAPy31o0x?=
+ =?us-ascii?Q?q3IfqV0+wsWrzwm1lxauuFuH7G1R2rpU8hNhHBrxl/RowpktjowVPdEwgvPZ?=
+ =?us-ascii?Q?gSAVz494WAgVgAKCfXfzZ9jwTtJ+lMuEm/m7p/o4rwYUxAqzASggEeXtZLsN?=
+ =?us-ascii?Q?ur80ZhAM6DLebHTyhWCVJIoU5G63tmJQU3IazN1VKxwopNnkE+2+kxHRGjjy?=
+ =?us-ascii?Q?YYto8ObTg+gSZJrxnBp154msa1+y+nPHt8d9Rc94Yv6xzkXMguxvsi76oKQ8?=
+ =?us-ascii?Q?OPqExN2YrH0gl1pVp2eqk6bSAakpWLYQLWkFWzhgyTlMNMmRtt3ANCljPt7R?=
+ =?us-ascii?Q?u/AB0UbcfBM367vFfyt3UnY6z/UCZrNWRb1xgzYai8BJXNMzktrXkrHmghGA?=
+ =?us-ascii?Q?DTu/6Ahf+Bimph1ZDn0knr3krUdUjt2eeNPHPR6FaUDhrHXlbk8XqZ3fZv2m?=
+ =?us-ascii?Q?uR/K1rSz7xpF2ys6yNTIH9AQeJycaNmMLFbY0V95DD7qNuUjL7cf9Xbe4szu?=
+ =?us-ascii?Q?HGirBDAwlGvKvBQwUmmHcp602FJ+1+CX2VHWfdvDJCPunPrmi1dpEctFBfy2?=
+ =?us-ascii?Q?Cq2TqStJyWJJQPTiSggv1KnuPVHQeQcjmP2xTUBDJE4LGNNrBwbhKUs0k9WJ?=
+ =?us-ascii?Q?FcXMLifjban5INuD8vhgS5i1EWQrFqE6FrWiIk4Dy4BAFa6JrOyWBF3e5IDA?=
+ =?us-ascii?Q?5pdS7xNAIKpKO++h5lkUsleyKvo1UQ5W4xxvsxH2RL2jTt5UCP4d43cBHQmC?=
+ =?us-ascii?Q?bO5CzmSGi8Y2IUDSG9i7nhbNBBRGC1Y8hk5qHO7PC4Vpek6IZmiLud5OlVE8?=
+ =?us-ascii?Q?LJDJl7S1uq4UFU4IvW/MHuaiiCwmAvzCVJ794VQBTYLfPqmftkU1i59Z/duT?=
+ =?us-ascii?Q?WNGyMc86Pb1a2tejOZy74vmAXHsMptdWlX7+DSG3jMP8d6ueMEr8jw3aQ2c4?=
+ =?us-ascii?Q?9UgP82EdI5rcTD/YKu7WCTo4/0C+LovHwuXowisQI+rJ7WtEGYVlUM2Y92G3?=
+ =?us-ascii?Q?hnAIzbw8XAf2trkWt0EY/uCT86kDD+B/w6f+3vp9RFSetvoAAo8GlF9mb6M?=
  =?us-ascii?Q?=3D?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-6b909.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: aaeacb4a-c051-4e16-ef7b-08db6ca07904
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ea40210-c86b-4529-8d03-08db6ca0ae7c
 X-MS-Exchange-CrossTenant-AuthSource: DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 06:27:48.9803
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 06:29:18.3443
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR10MB6981
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR10MB5601
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-add medium repeatability support for matching datasheet
+add "repeatability" interface to sysfs, it could be
+read or written to control the sensor.
 
 Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
 ---
- drivers/hwmon/sht3x.c | 29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+ Documentation/hwmon/sht3x.rst |  7 +++++++
+ drivers/hwmon/sht3x.c         | 29 +++++++++++++++++++++++++++++
+ 2 files changed, 36 insertions(+)
 
+diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
+index 2c87c8f58..3dc4b9c14 100644
+--- a/Documentation/hwmon/sht3x.rst
++++ b/Documentation/hwmon/sht3x.rst
+@@ -83,4 +83,11 @@ heater_enable:      heater enable, heating element removes excess humidity from
+ update_interval:    update interval, 0 for single shot, interval in msec
+ 		    for periodic measurement. If the interval is not supported
+ 		    by the sensor, the next faster interval is chosen
++repeatability:      write or read repeatability, the higher repeatability means
++                    the longer measurement duration, the lower noise level and
++                    the larger energy consumption:
++
++                        - 0: low repeatability
++                        - 1: medium repeatability
++                        - 2: high repeatability
+ =================== ============================================================
 diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-index 5bc0001b1..eb968b9d3 100644
+index eb968b9d3..209090a48 100644
 --- a/drivers/hwmon/sht3x.c
 +++ b/drivers/hwmon/sht3x.c
-@@ -25,6 +25,10 @@
- static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
- static const unsigned char sht3x_cmd_measure_nonblocking_hpm[] = { 0x24, 0x00 };
+@@ -642,6 +642,33 @@ static ssize_t update_interval_store(struct device *dev,
+ 	return count;
+ }
  
-+/* commands (medium repeatability mode) */
-+static const unsigned char sht3x_cmd_measure_blocking_mpm[]    = { 0x2c, 0x0d };
-+static const unsigned char sht3x_cmd_measure_nonblocking_mpm[] = { 0x24, 0x0b };
++static ssize_t repeatability_show(struct device *dev,
++				  struct device_attribute *attr,
++				  char *buf)
++{
++	struct sht3x_data *data = dev_get_drvdata(dev);
 +
- /* commands (low repeatability mode) */
- static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
- static const unsigned char sht3x_cmd_measure_nonblocking_lpm[] = { 0x24, 0x16 };
-@@ -43,6 +47,7 @@ static const unsigned char sht3x_cmd_clear_status_reg[]        = { 0x30, 0x41 };
- 
- /* delays for non-blocking i2c commands, both in us */
- #define SHT3X_NONBLOCKING_WAIT_TIME_HPM  15000
-+#define SHT3X_NONBLOCKING_WAIT_TIME_MPM   6000
- #define SHT3X_NONBLOCKING_WAIT_TIME_LPM   4000
- 
- #define SHT3X_WORD_LEN         2
-@@ -69,8 +74,9 @@ enum sht3x_limits {
- };
- 
- enum sht3x_repeatability {
--	low_repeatability,
--	high_repeatability,
-+	low_repeatability    = 0,
-+	medium_repeatability = 1,
-+	high_repeatability   = 2,
- };
- 
- DECLARE_CRC8_TABLE(sht3x_crc8_table);
-@@ -89,6 +95,20 @@ static const char periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
- 	{0x27, 0x37},
- };
- 
-+/* periodic measure commands (medium repeatability) */
-+static const char periodic_measure_commands_mpm[][SHT3X_CMD_LENGTH] = {
-+	/* 0.5 measurements per second */
-+	{0x20, 0x24},
-+	/* 1 measurements per second */
-+	{0x21, 0x26},
-+	/* 2 measurements per second */
-+	{0x22, 0x20},
-+	/* 4 measurements per second */
-+	{0x23, 0x22},
-+	/* 10 measurements per second */
-+	{0x27, 0x21},
-+};
++	return sysfs_emit(buf, "%d\n", data->repeatability);
++}
 +
- /* periodic measure commands (low repeatability mode) */
- static const char periodic_measure_commands_lpm[][SHT3X_CMD_LENGTH] = {
- 	/* 0.5 measurements per second */
-@@ -448,6 +468,9 @@ static void sht3x_select_command(struct sht3x_data *data)
- 		if (data->repeatability == high_repeatability) {
- 			data->command = sht3x_cmd_measure_nonblocking_hpm;
- 			data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_HPM;
-+		} else if (data->repeatability ==  medium_repeatability) {
-+			data->command = sht3x_cmd_measure_nonblocking_mpm;
-+			data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_MPM;
- 		} else {
- 			data->command = sht3x_cmd_measure_nonblocking_lpm;
- 			data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_LPM;
-@@ -595,6 +618,8 @@ static ssize_t update_interval_store(struct device *dev,
- 	if (mode > 0) {
- 		if (data->repeatability == high_repeatability)
- 			command = periodic_measure_commands_hpm[mode - 1];
-+		else if (data->repeatability == medium_repeatability)
-+			command = periodic_measure_commands_mpm[mode - 1];
- 		else
- 			command = periodic_measure_commands_lpm[mode - 1];
++static ssize_t repeatability_store(struct device *dev,
++				     struct device_attribute *attr,
++				     const char *buf,
++				     size_t count)
++{
++	u8 val;
++	struct sht3x_data *data = dev_get_drvdata(dev);
++
++	val = kstrtou8(buf, 0, &val);
++	if (val)
++		return val;
++
++	val = clamp_val(val, low_repeatability, high_repeatability);
++	data->repeatability = val;
++
++	return count;
++}
++
+ static SENSOR_DEVICE_ATTR_RO(temp1_input, temp1_input, 0);
+ static SENSOR_DEVICE_ATTR_RO(humidity1_input, humidity1_input, 0);
+ static SENSOR_DEVICE_ATTR_RW(temp1_max, temp1_limit, limit_max);
+@@ -658,6 +685,7 @@ static SENSOR_DEVICE_ATTR_RO(temp1_alarm, temp1_alarm, 0);
+ static SENSOR_DEVICE_ATTR_RO(humidity1_alarm, humidity1_alarm, 0);
+ static SENSOR_DEVICE_ATTR_RW(heater_enable, heater_enable, 0);
+ static SENSOR_DEVICE_ATTR_RW(update_interval, update_interval, 0);
++static SENSOR_DEVICE_ATTR_RW(repeatability, repeatability, 0);
+ 
+ static struct attribute *sht3x_attrs[] = {
+ 	&sensor_dev_attr_temp1_input.dev_attr.attr,
+@@ -674,6 +702,7 @@ static struct attribute *sht3x_attrs[] = {
+ 	&sensor_dev_attr_humidity1_alarm.dev_attr.attr,
+ 	&sensor_dev_attr_heater_enable.dev_attr.attr,
+ 	&sensor_dev_attr_update_interval.dev_attr.attr,
++	&sensor_dev_attr_repeatability.dev_attr.attr,
+ 	NULL
+ };
  
 -- 
 2.30.2
