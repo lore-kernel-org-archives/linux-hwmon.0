@@ -2,44 +2,44 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3AA7EB64DB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jun 2023 16:03:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0F3DC001B1
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Jun 2023 16:03:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235457AbjFOQDw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 15 Jun 2023 12:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        id S236242AbjFOQDz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 15 Jun 2023 12:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234041AbjFOQDt (ORCPT
+        with ESMTP id S234795AbjFOQDv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:03:49 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2065.outbound.protection.outlook.com [40.107.237.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C45B10F6;
-        Thu, 15 Jun 2023 09:03:48 -0700 (PDT)
+        Thu, 15 Jun 2023 12:03:51 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2064.outbound.protection.outlook.com [40.107.100.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1082949;
+        Thu, 15 Jun 2023 09:03:50 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W/aCEWUfHbKbmFj0zH6Pusnpw247qDHRx/iLk6hS396CqoLv4XbGgS12uC1sWqyS1Rap51ml1sgrRrCyylt9gunIBZ+CbMzaIUS/+RwZOvYEfCGxf67/Z7eu7gWhjxsDIZ7oCLcKa9PG+GmE8IzNDwQQ4H3HdyKMenspqHc7WiBahfc86FJuorUpZ4KdcCeGE823d4qMW0ZtUpMI4nAYkYmPgFigqDHgdsL4BGYw0T2LUOw8iE/1z/g1nEIV66JMOYh7caVA9nIviVrab5ynos0EfxNprrBXfCfHcgF32eVw+V2G02kntbYWpXIeIHS8K2iIUacilzN4ccb56wdPLg==
+ b=VJEBnYGYkfHpsQFSP0OYJ7EBJbBHzP+K4pEF/mduHIm9d0a080EuUusR5TtFHbjx888YTnAXzS8J3s3nRXJQRjqEHG+K4P2dC/jJo16n2d+AK+eqVjDrK3S96wAl+u8+UtwELjGfykEGMSmE6L+DuwRokQz6xitbM+dUAClJWzV9dAec4nURKwG4ENnjF9pr50LaqwDS3iDLHF1MktPFpezHFIu/+giqPSa+z09Czp8xptjDaMjZlc17E4CbuYefJuqwHpjWl8rUmdZfCt+3Sx9Wu5nepTM2HOt0NXSwrjDk8wEojcRGZPuPBcGt+ZPMgxZE0xzCOiyk1oa7QB8ZZQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wv09vh/3iS3GQHdwiIKsRLm5TCml32iKvra5Gp72h3I=;
- b=HXdc5zNVr+Ifi2wC/LlzXYFnO7gNXtMAXm6dEQ+Gu0z8F/nB/4RYLkbl+z4iPH6vRhy+sDGYsvhWQv9Q8AuKX3IhsVUVGNy6weOAZseoM1FaKhpeByuSvqPUW/6/RXIvezUKOWF0IFNhPb83y0sB09AvXFBq1TLgj96eogG7ZIi2A3m34BIfEtJWdTCY5E8t++RVscSqKAjX+EWu/kQfN07JCookJ3UZY7XCvqBadHS6GZxwKtfZgluW5SpbN/Kefyn110vwJZi+aWeaRRKz8+Onvvy4YYTWBOd+tLVPt3Lk8eLvU5ZNv0YWXyDEJDsnfG4i1Iko2UsC+zIqMNjGGw==
+ bh=7p4zo5ayo+Kmd3jmSYZOOe8kuz8N+Ns8XahyJ3wyjPo=;
+ b=gqOKnh46bW7FvzwwjaL5BpHgnZyhYAbdzrKCexTrJPEsgCpy17z0M5rFDogz/q8irG+CTTKdghgYXCcG6Tp5ahJDWeySGIuYgEzzGeHcQdtHOqcexqq/+GibKLlIy6a+U1mOFoEQKH+HwCFCs01KLI+x8lRUVWrp/RYa6N9B3Fq7fdlVNE1h67Vwet0GOhuFKdfR/skTx+cWSgz4Gm0/cnUUMqpZ3chKuzMcpZccH44vvw8P4pbpVNGhmsPy8Iduuire+WIu+J/xNScpFF3gVPrlFmDf81voZrjuloaPee7pZ9DIom2g/EI1Zp7sC5UX1ZuZzzSI3TSl05gBY2rhtA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wv09vh/3iS3GQHdwiIKsRLm5TCml32iKvra5Gp72h3I=;
- b=VjgZkjUmaEpJx7u7h4VB2aSezS+pYHE1OHDrGJlWn3Mj1OvKljUpWv9lbvekBsRZj+qEzEIR/UG4S5pYPIbxglztbjROUDxrFc3LJZ8iY/V/36TBppwgV5SqtLKCY0EHMXKZxY5OA9NyOvbSm+tTw/cnssHwix1bWg+wbJp0CFE=
-Received: from MW4PR03CA0268.namprd03.prod.outlook.com (2603:10b6:303:b4::33)
- by SA1PR12MB6774.namprd12.prod.outlook.com (2603:10b6:806:259::13) with
+ bh=7p4zo5ayo+Kmd3jmSYZOOe8kuz8N+Ns8XahyJ3wyjPo=;
+ b=iYS+dmLPpmOY85TFiCyJoH4sJ0HNRHQPI1yt6nbiYCYTU5Q4pH34mm/M7TY/iY/K/kmT3EvW0r12wCRDBwTlY6r01/pX22ArjXo+FYml1tNh+ph8Z2OjQmrMC2npA5pkTr4rsqe8JuPNEnEAmkawjRMbqBmV5VxFWIkKXP3mXWo=
+Received: from MW4PR03CA0255.namprd03.prod.outlook.com (2603:10b6:303:b4::20)
+ by MW3PR12MB4507.namprd12.prod.outlook.com (2603:10b6:303:2c::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Thu, 15 Jun
- 2023 16:03:44 +0000
+ 2023 16:03:47 +0000
 Received: from MWH0EPF000989E8.namprd02.prod.outlook.com
- (2603:10b6:303:b4:cafe::41) by MW4PR03CA0268.outlook.office365.com
- (2603:10b6:303:b4::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.27 via Frontend
- Transport; Thu, 15 Jun 2023 16:03:44 +0000
+ (2603:10b6:303:b4:cafe::91) by MW4PR03CA0255.outlook.office365.com
+ (2603:10b6:303:b4::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25 via Frontend
+ Transport; Thu, 15 Jun 2023 16:03:47 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -49,11 +49,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  MWH0EPF000989E8.mail.protection.outlook.com (10.167.241.135) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.27 via Frontend Transport; Thu, 15 Jun 2023 16:03:44 +0000
+ 15.20.6500.27 via Frontend Transport; Thu, 15 Jun 2023 16:03:46 +0000
 Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 15 Jun
- 2023 11:03:43 -0500
+ 2023 11:03:45 -0500
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
 To:     <x86@kernel.org>
 CC:     <linux-kernel@vger.kernel.org>,
@@ -63,9 +63,9 @@ CC:     <linux-kernel@vger.kernel.org>,
         <jdelvare@suse.com>, <linux@roeck-us.net>,
         <linux-hwmon@vger.kernel.org>, <mario.limonciello@amd.com>,
         <babu.moger@amd.com>, Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH v2 3/6] hwmon: (k10temp) Check return value of amd_smn_read()
-Date:   Thu, 15 Jun 2023 11:03:25 -0500
-Message-ID: <20230615160328.419610-4-yazen.ghannam@amd.com>
+Subject: [PATCH v2 6/6] hwmon: (k10temp) Reduce k10temp_get_ccd_support() parameters
+Date:   Thu, 15 Jun 2023 11:03:28 -0500
+Message-ID: <20230615160328.419610-7-yazen.ghannam@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230615160328.419610-1-yazen.ghannam@amd.com>
 References: <20230615160328.419610-1-yazen.ghannam@amd.com>
@@ -77,143 +77,110 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000989E8:EE_|SA1PR12MB6774:EE_
-X-MS-Office365-Filtering-Correlation-Id: c14fe072-7f39-4e5d-d9f7-08db6dba1897
+X-MS-TrafficTypeDiagnostic: MWH0EPF000989E8:EE_|MW3PR12MB4507:EE_
+X-MS-Office365-Filtering-Correlation-Id: 580ed92a-a9aa-46c1-6628-08db6dba1a09
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FVo/Z3uo5/jMUUC3oyvWuFvujJ2hh3ljp0e/iU2Ck0/Cn+6M9baQnFj087DXdnfNsoeabbIy33ngLMaZgfWS9K+nyuAranbKjZsIcWIpbDYne+2lSSxTaTI7+5Z2+hM+82Wi7HV6KHwO15YeDhO8aZbymc3Gy6nRT83+UfiQ3N0glDBEFiUdlI4Vpq2GgxNRQGt+r69J/AX7w+pAarbbHJCUKSgdigSiqS8ZSX4P1CFtLEu01lKpKyauD9LiFhfBb2agHDz0kj0K9ddmZEAfHB8tsb/WDYGrn6rkjaPQIVmxUdlUK0six1/EoCAhwO3Z6WiwHdyi5soyisoqmIRRkAp5IT/7OIcnZn6oyuqeh1UtyJt1B5FbbFRnjHHtZ82KGTrvcLfUk+YbWFnSehqrxbUC6tvI8/IF+uPmHSuVDNIcXJnHq0PitjDRj0ItoW3BC6wZ7eG4tMiqcxCNkW1AYGrhnkOiERwNMG9X6lyb+l/B2/6iGHe6a3+yEYqoFZr0pKyFUEuHWu172MbTKwd3bStFg5V7Mh4i2Pk2Rl/7Unkd8tZO/2WjBd4Z1+pba79YNHGqWjlsn+tK3je8rmMUu7/BU++rY9h871E/Yl9Pp5lYYQQw4q804PjXD5AcsyeFFSU2V512rSiOKmUPlCyqVnznmQoYGWEYWyIvR1p9X/Jox5Ew9da2VxkIvBnD4zcs9XoUf0kSrHUV3DFHKWICUKhQV1NZ/3SatU9sh5K8XSiNjh7RuiFHf6MFwCmGnMV3zbOKhS+6LVSnh4s5m2xNaQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(376002)(396003)(346002)(451199021)(46966006)(40470700004)(36840700001)(186003)(82310400005)(40480700001)(40460700003)(966005)(7696005)(6666004)(478600001)(16526019)(2616005)(26005)(1076003)(8676002)(41300700001)(8936002)(70586007)(316002)(7416002)(44832011)(5660300002)(36756003)(4326008)(70206006)(54906003)(82740400003)(81166007)(356005)(6916009)(47076005)(86362001)(2906002)(83380400001)(426003)(36860700001)(336012)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: tRg7L7/RA1vJFmRNhWYr4C/gLSgSlrN+1va26FJrxeLBpN0M7e5Ic2BbZLXIixSDXxseQd4xdVg8c6lnWty7CQSe6BHBS04sBciA6bXKDtq+Mab/8Y7XfDn7IRN8GqiFcdGANIMblN7T5tczqzgzEDeJUINBpWGP9HGMM61y/w8WlvK7wBsrw9Gq7p6mS82s8GOcYNyq9DouhnPkOc20XKnWga+tiS93dBg+CgKE/QL4OzKdlqmXZC8tn2JvB/WWKH2KI1AwtSS845ja5yGQXvU+t3uaKKlGlCDmfQYJkug3KplMGkPgWcLsE7DKlrZI56S6Xn+OAziLQI+nIe+UY4KYwLd6SryITW1kZ7PfGMIWhBJMDeBqDMHZLwkUVrIPWP0aP6ke4MA2kk4unSUCqZDPTEN3E5+ubyHN9+JTLkUjGpLjEeYTZ323MGkeAFbwx4kG7yApxJCBvhyv6/lmgesK3jxq0KNWZDXRQ+oo23uScbk3j23BC0x7pdlAIfjlnQVx8sdQPXggtnCF7vqkTy9HWoROYA1rOT1NduElUFlrXtkQ3lDXw7dZhJPTmtRiZSbaAQBT1sDnHmQwaoa8RFULJBvistTeW8rimDyMolFEpd8mWZyvgaCm++5+5LEFLq2cpeNj0GTqLlCUgekO0PFpweqV6opbAxKRu1XaQPnIq/KXLg8zZtJWOpzt35er1RpTheyJv8b1mWx4ohrYEcc1ytfMgdYW8VbvOMVJjE6YP8myoyPSj8xhpckMCYZsbVRWEY24RWlW4VvH4Jmr3g==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(346002)(39860400002)(451199021)(46966006)(40470700004)(36840700001)(5660300002)(44832011)(7416002)(8676002)(8936002)(41300700001)(40460700003)(2906002)(82310400005)(36756003)(40480700001)(478600001)(26005)(86362001)(1076003)(2616005)(47076005)(83380400001)(336012)(966005)(7696005)(426003)(6666004)(36860700001)(356005)(81166007)(4326008)(6916009)(70586007)(70206006)(316002)(186003)(82740400003)(16526019)(54906003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 16:03:44.5444
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 16:03:46.9819
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c14fe072-7f39-4e5d-d9f7-08db6dba1897
+X-MS-Exchange-CrossTenant-Network-Message-Id: 580ed92a-a9aa-46c1-6628-08db6dba1a09
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000989E8.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6774
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4507
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Check the return value of amd_smn_read() before saving a value. This
-ensures invalid values aren't saved or used.
+Currently, k10temp_get_ccd_support() takes as input "pdev" and "data".
+However, "pdev" is already included in "data". Furthermore, the "pdev"
+parameter is no longer used in k10temp_get_ccd_support(), since its use
+was moved into read_ccd_temp_reg().
 
-There are three cases here with slightly different behavior.
+Drop the "pdev" input parameter as it is no longer needed.
 
-1) read_tempreg_nb_zen():
-	This is a function pointer which does not include a return code.
-	In this case, set the register value to 0 on failure. This
-	enforces Read-as-Zero behavior.
-
-2) k10temp_read_temp():
-	This function does have return codes, so return the error code
-	from the failed register read. Continued operation is not
-	necessary, since there is no valid data from the register.
-	Furthermore, if the register value was set to 0, then the
-	following operation would underflow.
-
-3) k10temp_get_ccd_support():
-	This function reads the same register from multiple CCD
-	instances in a loop. And a bitmask is formed if a specific bit
-	is set in each register instance. The loop should continue on a
-	failed register read, skipping the bit check.
-
-Furthermore, the __must_check attribute will be added to amd_smn_read().
-Therefore, this change is required to avoid compile-time warnings.
+No functional change is intended.
 
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: stable@vger.kernel.org
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 ---
 Link:
-https://lore.kernel.org/r/20230516202430.4157216-4-yazen.ghannam@amd.com
+https://lore.kernel.org/r/20230516202430.4157216-7-yazen.ghannam@amd.com
 
 v1->v2:
-* Address comments from Guenter.
+* Add Acked-by from Guenter.
 
- drivers/hwmon/k10temp.c | 36 +++++++++++++++++++++++++++---------
- 1 file changed, 27 insertions(+), 9 deletions(-)
+ drivers/hwmon/k10temp.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 7b177b9fbb09..70f7b77e6ece 100644
+index dfbba8b72f43..dce97aab2fa7 100644
 --- a/drivers/hwmon/k10temp.c
 +++ b/drivers/hwmon/k10temp.c
-@@ -145,8 +145,9 @@ static void read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
+@@ -377,8 +377,7 @@ static const struct hwmon_chip_info k10temp_chip_info = {
+ 	.info = k10temp_info,
+ };
  
- static void read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
+-static void k10temp_get_ccd_support(struct pci_dev *pdev,
+-				    struct k10temp_data *data, int limit)
++static void k10temp_get_ccd_support(struct k10temp_data *data, int limit)
  {
--	amd_smn_read(amd_pci_dev_to_node_id(pdev),
--		     ZEN_REPORTED_TEMP_CTRL_BASE, regval);
-+	if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
-+			 ZEN_REPORTED_TEMP_CTRL_BASE, regval))
-+		*regval = 0;
- }
- 
- static long get_raw_temp(struct k10temp_data *data)
-@@ -197,6 +198,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
- 			     long *val)
- {
- 	struct k10temp_data *data = dev_get_drvdata(dev);
-+	int ret = -EOPNOTSUPP;
  	u32 regval;
- 
- 	switch (attr) {
-@@ -213,13 +215,17 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
- 				*val = 0;
- 			break;
- 		case 2 ... 13:		/* Tccd{1-12} */
--			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
--				     ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
--						  &regval);
-+			ret = amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
-+					   ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
-+					   &regval);
-+
-+			if (ret)
-+				return ret;
-+
- 			*val = (regval & ZEN_CCD_TEMP_MASK) * 125 - 49000;
- 			break;
- 		default:
--			return -EOPNOTSUPP;
-+			return ret;
- 		}
- 		break;
- 	case hwmon_temp_max:
-@@ -235,7 +241,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
- 			- ((regval >> 24) & 0xf)) * 500 + 52000;
- 		break;
- 	default:
--		return -EOPNOTSUPP;
-+		return ret;
- 	}
- 	return 0;
- }
-@@ -373,8 +379,20 @@ static void k10temp_get_ccd_support(struct pci_dev *pdev,
  	int i;
- 
- 	for (i = 0; i < limit; i++) {
--		amd_smn_read(amd_pci_dev_to_node_id(pdev),
--			     ZEN_CCD_TEMP(data->ccd_offset, i), &regval);
-+		/*
-+		 * Ignore inaccessible CCDs.
-+		 *
-+		 * Some systems will return a register value of 0, and the TEMP_VALID
-+		 * bit check below will naturally fail.
-+		 *
-+		 * Other systems will return a PCI_ERROR_RESPONSE (0xFFFFFFFF) for
-+		 * the register value. And this will incorrectly pass the TEMP_VALID
-+		 * bit check.
-+		 */
-+		if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
-+				 ZEN_CCD_TEMP(data->ccd_offset, i), &regval))
-+			continue;
-+
- 		if (regval & ZEN_CCD_TEMP_VALID)
- 			data->show_temp |= BIT(TCCD_BIT(i));
- 	}
+@@ -443,18 +442,18 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		case 0x11:	/* Zen APU */
+ 		case 0x18:	/* Zen+ APU */
+ 			data->ccd_offset = 0x154;
+-			k10temp_get_ccd_support(pdev, data, 4);
++			k10temp_get_ccd_support(data, 4);
+ 			break;
+ 		case 0x31:	/* Zen2 Threadripper */
+ 		case 0x60:	/* Renoir */
+ 		case 0x68:	/* Lucienne */
+ 		case 0x71:	/* Zen2 */
+ 			data->ccd_offset = 0x154;
+-			k10temp_get_ccd_support(pdev, data, 8);
++			k10temp_get_ccd_support(data, 8);
+ 			break;
+ 		case 0xa0 ... 0xaf:
+ 			data->ccd_offset = 0x300;
+-			k10temp_get_ccd_support(pdev, data, 8);
++			k10temp_get_ccd_support(data, 8);
+ 			break;
+ 		}
+ 	} else if (boot_cpu_data.x86 == 0x19) {
+@@ -467,21 +466,21 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		case 0x21:		/* Zen3 Ryzen Desktop */
+ 		case 0x50 ... 0x5f:	/* Green Sardine */
+ 			data->ccd_offset = 0x154;
+-			k10temp_get_ccd_support(pdev, data, 8);
++			k10temp_get_ccd_support(data, 8);
+ 			break;
+ 		case 0x40 ... 0x4f:	/* Yellow Carp */
+ 			data->ccd_offset = 0x300;
+-			k10temp_get_ccd_support(pdev, data, 8);
++			k10temp_get_ccd_support(data, 8);
+ 			break;
+ 		case 0x60 ... 0x6f:
+ 		case 0x70 ... 0x7f:
+ 			data->ccd_offset = 0x308;
+-			k10temp_get_ccd_support(pdev, data, 8);
++			k10temp_get_ccd_support(data, 8);
+ 			break;
+ 		case 0x10 ... 0x1f:
+ 		case 0xa0 ... 0xaf:
+ 			data->ccd_offset = 0x300;
+-			k10temp_get_ccd_support(pdev, data, 12);
++			k10temp_get_ccd_support(data, 12);
+ 			break;
+ 		}
+ 	} else {
 -- 
 2.34.1
 
