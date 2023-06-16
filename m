@@ -2,141 +2,215 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B35BBEB64D9
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jun 2023 02:22:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52430EB64DA
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jun 2023 16:00:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240780AbjFPCWK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 15 Jun 2023 22:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
+        id S1343871AbjFPQAz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 16 Jun 2023 12:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjFPCWI (ORCPT
+        with ESMTP id S229551AbjFPQAy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Jun 2023 22:22:08 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49926296A;
-        Thu, 15 Jun 2023 19:22:06 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-25e8b2931f2so250827a91.2;
-        Thu, 15 Jun 2023 19:22:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686882126; x=1689474126;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=5eZgw2S76QQ9i+Vu82FM8gCv7COjZdfQOZElNWsSHa0=;
-        b=DptmAA0dT/mFpOM144GNm5EXHhgGvC8YnD7ALkbKGVyTW60TZXh8ctQ4SmMfJjcFDL
-         yOzbnAfFRthjH8bW+yUA6D1tPCvpBgFsY7ehGK6z8JsxGo0y1121KBPhpyd3evlZ7o5a
-         TBxAzJrc9YEJb2FggvKk+a24da7KDo+3/9vwoHbU5uVUH6pFE1OMu+IjN3GP2V7QtjaW
-         9AQfTpgbBoqnvbxso6kFSz7JlnqqgUI1HQCG5xGGBzBE4cKnYlTXhLvDn6NCP+J1Jawn
-         Xs5SkHhXxyPdmauGcUM3/1QpOPP8uDrfAT38HUb5THkIkY5jMLGYXDfJc6yBc/RDma9v
-         LoBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686882126; x=1689474126;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5eZgw2S76QQ9i+Vu82FM8gCv7COjZdfQOZElNWsSHa0=;
-        b=bz3bcHA8Rotp0OAdKuQgpot5dBCXinioL6jvd/D4nBkvh+3HHWtHCFFqHRL0jmUJZg
-         W4iKRFG7qO5jdmSDla9Tscu7RDprDD2DHAz+QEhEoa58LIJCciIXWWWX/Rn8XL1Xf5dB
-         NLNGanjFvU02bi2hLvi/jZ7HvNUEjntpMUfmafeskSnY6cnLLgDO6JVx2IYa908ILCfi
-         RdoJ8Xz7u9F6ZPnuseelunZUQ/QlTEbtr1dFLuHGqmK3KviQBl+P+4afFmD1IZpsGHUm
-         W+wgQ52emXTIs1rQve/3J6kJtg5M7iUxTd9f4fO92es9i01RbeEI4l1vA1cP6B7H63Kh
-         C5ag==
-X-Gm-Message-State: AC+VfDwZa6JVOYYxJc1YFc5c+KwxycBm6qZEANO3+WBcuRInHjfkCC2N
-        5Bn5FamlqaCbYQ3mn+CPCtA=
-X-Google-Smtp-Source: ACHHUZ6tvqASSvnu0Sg/ZYy4sno9YLhlwDv5wGPsKX0UtNv/c8p0FitqDeAgEfxSWu3+1693oKvjcg==
-X-Received: by 2002:a17:90a:1d48:b0:25b:ba0c:ab7c with SMTP id u8-20020a17090a1d4800b0025bba0cab7cmr572128pju.27.1686882125636;
-        Thu, 15 Jun 2023 19:22:05 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e30-20020a17090a6fa100b002567501040csm280501pjk.42.2023.06.15.19.22.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 19:22:05 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fa773f17-250f-d753-b15a-953efbe972ee@roeck-us.net>
-Date:   Thu, 15 Jun 2023 19:22:03 -0700
+        Fri, 16 Jun 2023 12:00:54 -0400
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03olkn2103.outbound.protection.outlook.com [40.92.58.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D14A30E1;
+        Fri, 16 Jun 2023 09:00:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g2Ts6HK3zRVRselOactB2t83NYUG9Jyel//UWZUgReY7oShoSLKjLTQwsP0XHj0xQcjR3yP4iH9Jo6/+OhAIFejNDrSaiYxby8Uk42sNnY8aJhjIJNe604yLyIBoUWg4sQ9hWRaydJTdWGVbHtzcSddul/ICTDPFMueFmonjBr9BN7Hioun/9lMqvv75nlK4fLzXC0Wm2+hsTu/VPWDvQFUSZi4ywQJLolX6ybJ+Cebj+y3NeuEMnZ/1Kq07Afy/qynNoynhO4VGPFwBb2jE3gkEhuX/1dKHkYlgSrGC7L3d1hf5i8pK5qMkfD/MaPZDqnB1SHjNS1rtY3dldSJbBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5BrAIRCuOeDynpskuZWGk3ST1Q83K2Ra3b6M01Mplrk=;
+ b=GLQio8/ehngca0s1gWndf+OgvFkhE1ySj88P9R5JQrf/PPo7F/iqTlzlm+U6vCMS50xOr7RYZAsqZF+FzbHGHYJ8SkoH+dotE5EvQCzg5lMul+vmSBLSeDNu9wfN/JTcgJfellswv/Z8ASvv5naC1md3hGo4QGR5tJbDB2XA44DwIEABCFnJshYYfrzvW3+TYyzO1j0NfZXbHtS8HYKdWgl6RgT9a11L7OPcZJo9r2kn+6GGsuFeA2h8ruy9TMRot2/Mfl08v8LQWG7As/NXlB0MxMQcQUrVucdYkq0l13tgI6YUp1iERZVYCwJhJnVrifyB4/5GFPPq75f8SlTydw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5BrAIRCuOeDynpskuZWGk3ST1Q83K2Ra3b6M01Mplrk=;
+ b=GDrYfJvUFAVFyOABL4VC90q1B28VtWlfe5pBFPEzhvv2+G7hTL7gaHWJsmddR8xyw1vlWcU4bFz+y7tM3BgA5P9yQBDCovRhObBajgfNHWoOTlCKgfoEMS9bMNWcziqJ+qOxQJriJdzZimYgouk8DlBI5X4ZLN9nzCM57VzwU20fF51z8f6nDsU2Mps9OE3Veew+KmCBrEbQt/irnogX80AJdRt/W9swCJNuOfzZrkDx/v7M5jJKTYAtI8kQwp/nH3EP/IVExubc0ugtMdm/2UP8IK40hZSuYIZapxCjofrT07kDjmivcFJEdlwZKYHCpfdOYKVRJl7liK0OnzKz6g==
+Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:383::21)
+ by AS1PR10MB7959.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:471::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
+ 2023 16:00:50 +0000
+Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::628a:d617:46f:2a88]) by DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::628a:d617:46f:2a88%7]) with mapi id 15.20.6477.037; Fri, 16 Jun 2023
+ 16:00:50 +0000
+From:   JuenKit Yip <JuenKit_Yip@hotmail.com>
+To:     linux@roeck-us.net, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        JuenKit Yip <JuenKit_Yip@hotmail.com>
+Subject: [PATCH v2 1/6] hwmon: (sht3x) remove sht3x_platform_data
+Date:   Sat, 17 Jun 2023 00:00:12 +0800
+Message-ID: <DB4PR10MB626126FB7226D5AF341197449258A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.30.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [qRkT3yNQMXNXYm4KR2fV2kna12xvbb4T]
+X-ClientProxiedBy: TY2PR04CA0009.apcprd04.prod.outlook.com
+ (2603:1096:404:f6::21) To DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:10:383::21)
+X-Microsoft-Original-Message-ID: <20230616160017.21228-1-JuenKit_Yip@hotmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 5/6] hwmon: (k10temp) Define helper function to read
- CCD temp
-Content-Language: en-US
-To:     Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        markgross@kernel.org, hdegoede@redhat.com,
-        Shyam-sundar.S-k@amd.com, linux-edac@vger.kernel.org,
-        clemens@ladisch.de, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        mario.limonciello@amd.com, babu.moger@amd.com
-References: <20230615160328.419610-1-yazen.ghannam@amd.com>
- <20230615160328.419610-6-yazen.ghannam@amd.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230615160328.419610-6-yazen.ghannam@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB4PR10MB6261:EE_|AS1PR10MB7959:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54ed9e3d-eb7d-4e94-5c3c-08db6e82dac7
+X-MS-Exchange-SLBlob-MailProps: AZnQBsB9XmrST/aUJU0/QQB6BlKfxJxwRhS+efwxDM36yKh/25osQbTJTDnwhVK/GkeGFJggNiTfO4ncpxmO3oG37yBJkrobIfPAGc0qieiz3tgannIUByEFfZvfkxgQBOt/94O2pjHqyy+ybrY7EHE7m+B42XMp/2+w4dSoV64eqrrflV56nXxjBPZSt+7flhP7TtnR0pf4bpFnCt2iWhu+Q7s6V2HP3YOive+BwIfj8suROU5iYc1Sax0aheePmB4PgBTpSEy3sjuSGmA9iJS5kHJlih8Tk86+UbrxxvlIRF1Rqm3oKKKBKMxSBTmJhGSy0LW1j36tKC0lQ3FMiiz2gjsF/yTLFBmM2aI6QSwKFpS49HPSvGDUo5CzPxbPamA5tcsS0bc7HMbsD42m90p9l30WMXpQoXE+jYmlhOg5Tsgrj1Ob6pcmgrHb/ZWosr9m4I2/ZXuE8t7uNJiEW1aG6YCGDjiVWzNxuwQz89LCuTA6J8xbrVj6rsIbY8K/r5O/M1RIkJWQK2d5akO1S+BG2HmwJ+5YZVO3XslRrzfhltzAj4VRhsKH7Fxdn0SfdHuoNldy7a9Iv6TQrXqb0vu6NFtF4HBaOSyC5c7xd96lbHYvyP2xoGvobfNqZlosi0DoC0RQGRL7Zzy5QrwMGqtoL5aE3OSO3RQYVG4YDhU+iss8HVgxEESoopoxdlv2zmpsPlKkXgbKGftpgfsIhbrCYpZUje/pfCMeeJ4bKfKD0Q4Thld/RjrSuvLpWKBluOqCarrnSR4=
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AvBsVJvwCY+62xpQUsCNbCNEu7FjPjk2D2gquoIcqOfhFCYbxQVg3frjYouK1CnK6FJbUq7lAcREwGc0xwODNtn7M1t9SNcDYd9UtysnaR77yvwvc5vwKH5xnOEFZBVWb9oGchIkuggmLhgSD1h5K4EufDxP99lO+RegmXjEgnj9745wkiOtXu7UQfZH0qI7dqS0w4+2u0WZUebXyWeuO5cbzaWl3S9bLqLG9bKJuYIkkEiqrOjuHHtbraLjrto722Esct7Pq4uvVfH7K/GvmPzp5sZ7d6pW2NI4AHNDMx9JA3ILy8fw8zjbQNpUVMlR0E0WAGljxwoKF4ZqFBesqq1Gl+GHvwiTV6y2L0lLIQ/UBm/MHzb7GFGg1mIsxCa8H5jiYxFft6dch1CavrOVLrxB+GWUXKbUp8rtWh5zb92BBsW0QtNp+PxdszTn7tNHaKtSawcUaXBSnhHSOieYnIaVocQ6mKfQgjWvhME6YwiM/tNcI7aW/ADXnNUePprDT6xDV9O4wmyF96RIEZ5VPPBdbhCw6NlrW8Ix88l6RCd2DtwFiNFD1Rx7T4cJE/ZKx8tgd+GIFGF+X2zolcSk6hmXXIrNrKOIqNP+ffCspZdxfnljsTXG3HOPht6AR4fV
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iiHqTj/lGoee/N/L/Qm2Ke8gMP88zkiYsS6ADwPH/YuCviUTVnx0Qo3/2ze2?=
+ =?us-ascii?Q?q2qRAphLbnu+Buy9KYM/tuidpKU+EHAWPqkVGNqF7m6bLgPQu9KOEtz3IZ8X?=
+ =?us-ascii?Q?HjKzJegrK8Z66svfigIM3N3WSk87lMQBBuRR0yfbIU6fOfMJBThiGlqz3IwW?=
+ =?us-ascii?Q?0Mf/78cFetbvIPRzl5XpIwqmKM1UY3U109fYfEe6Zhin8e/50AKmwAkhfoOP?=
+ =?us-ascii?Q?6ou3/9odvtyZATl6xYSHHPDnoB5SNqj/TJgBBzdIO8MdaUD/noznhlT0G0e8?=
+ =?us-ascii?Q?lp0JTC0pIGCF+wRdUXP1DwFUL7B2yHQ6XQXCRfflGHdwxGMq6XdZgZSbtpHE?=
+ =?us-ascii?Q?jQMcY3LAX1NG2BGjRZU+v8zLEX1fOO2FUygrZ+HAcjFbfe+zB3RZ1dDRy5Nh?=
+ =?us-ascii?Q?aNAGQ8qKcLsD69F+DvDYe12B+ioIArw5L1z/ZY+l0wLHZ0I6zIx4tS9G4cmO?=
+ =?us-ascii?Q?jigg24n0k/y8cIwvD9pH6vZldf1lk26aXmf3qsAbMk+S3Xj6YgB4Hne1eKCp?=
+ =?us-ascii?Q?hc0QJhLhdF+Y2JbXq3lzg3pFpdw3MpDMAgRrZ7fX0UTsqTqlk81KbcJS2tbH?=
+ =?us-ascii?Q?nfqGtMrHInVMn1kv9VPHEwIDWi6Ii8A9oDR74OXvpy7rt7efo1DwnGzISgGz?=
+ =?us-ascii?Q?rP90bJ4J3MOAitVaTO06BNEl0lYE2uYBKHI5947EETsiqTZNgwsQE11n5S/1?=
+ =?us-ascii?Q?aygsGHzfAn75vHanMuTm4KT38f9XuWXOOxxqkJyLMCbcPnj9/FbNjyTViZZi?=
+ =?us-ascii?Q?TYThs558jhR6M7NzY+KlODtAweSPkaRYm6Zb2lfDczXLAC0T+gRZb4iFWSb2?=
+ =?us-ascii?Q?FPaYdSpAkLERqVW1lMHAmYNLvxEtyYl2gnYv4pT+WVdtJ9KKYW8EHpuaOAZT?=
+ =?us-ascii?Q?Tl8pnqGC5N5VyyQCDm/anjtVt+NLuUqxTylk5HGzD3iPv2mY0+CtBsnoVWIL?=
+ =?us-ascii?Q?viLDa/qKMYDqruTdjpv4zentJHqMKupVHWf6z4UJEAjpYYEHQhbAw7G5ILXP?=
+ =?us-ascii?Q?janussEHW+WfyWfO2tJDEf7F8dmub/n/2VsyhSsry/EzF4zHO2tzIBkw0mCU?=
+ =?us-ascii?Q?jH25DZqLxz+GxIG8nXgGuXDYjYTGgfYCxkAnaQGTG8fL9y93YUe3tqYPh909?=
+ =?us-ascii?Q?8svshMqxX0zbCbVcgASLKmDfM42ypeEWAZn1/oMol/kSlQqu0a+yDtk1k4wO?=
+ =?us-ascii?Q?xYe/94gai4SevsnJYojb25atI51/ePBQTiY5fNOrYGSYJEZSMC9JAb0ia9g?=
+ =?us-ascii?Q?=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-6b909.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54ed9e3d-eb7d-4e94-5c3c-08db6e82dac7
+X-MS-Exchange-CrossTenant-AuthSource: DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 16:00:50.2758
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR10MB7959
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/15/23 09:03, Yazen Ghannam wrote:
-> The CCD temperature register is read in two places. These reads are done
-> using an AMD SMN access, and a number of parameters are needed for the
-> operation.
-> 
-> Move the SMN access and parameter gathering into a helper function in
-> order to simply the code flow. This also has a benefit of centralizing
-> the hardware register access in a single place in case fixes or special
-> decoding is required.
-> 
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Since no in-tree driver supports it, sht3x_platform_data has been
+removed and the relevant properties have been moved to sht3x_data.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
+---
+ Documentation/hwmon/sht3x.rst       |  2 +-
+ drivers/hwmon/sht3x.c               | 20 ++++++++------------
+ include/linux/platform_data/sht3x.h | 15 ---------------
+ 3 files changed, 9 insertions(+), 28 deletions(-)
+ delete mode 100644 include/linux/platform_data/sht3x.h
 
-> ---
-> Link:
-> https://lore.kernel.org/r/20230516202430.4157216-6-yazen.ghannam@amd.com
-> 
-> v1->v2:
-> * Address comments from Guenter.
-> 
->   drivers/hwmon/k10temp.c | 14 +++++++++-----
->   1 file changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index 70f7b77e6ece..dfbba8b72f43 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -150,6 +150,13 @@ static void read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
->   		*regval = 0;
->   }
->   
-> +static int read_ccd_temp_reg(struct k10temp_data *data, int ccd, u32 *regval)
-> +{
-> +	u16 node_id = amd_pci_dev_to_node_id(data->pdev);
-> +
-> +	return amd_smn_read(node_id, ZEN_CCD_TEMP(data->ccd_offset, ccd), regval);
-> +}
-> +
->   static long get_raw_temp(struct k10temp_data *data)
->   {
->   	u32 regval;
-> @@ -215,9 +222,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
->   				*val = 0;
->   			break;
->   		case 2 ... 13:		/* Tccd{1-12} */
-> -			ret = amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
-> -					   ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
-> -					   &regval);
-> +			ret = read_ccd_temp_reg(data, channel - 2, &regval);
->   
->   			if (ret)
->   				return ret;
-> @@ -389,8 +394,7 @@ static void k10temp_get_ccd_support(struct pci_dev *pdev,
->   		 * the register value. And this will incorrectly pass the TEMP_VALID
->   		 * bit check.
->   		 */
-> -		if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
-> -				 ZEN_CCD_TEMP(data->ccd_offset, i), &regval))
-> +		if (read_ccd_temp_reg(data, i, &regval))
->   			continue;
->   
->   		if (regval & ZEN_CCD_TEMP_VALID)
+diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
+index 95a850d5b..31fd36b14 100644
+--- a/Documentation/hwmon/sht3x.rst
++++ b/Documentation/hwmon/sht3x.rst
+@@ -28,7 +28,7 @@ The device communicates with the I2C protocol. Sensors can have the I2C
+ addresses 0x44 or 0x45, depending on the wiring. See
+ Documentation/i2c/instantiating-devices.rst for methods to instantiate the device.
+ 
+-There are two options configurable by means of sht3x_platform_data:
++There are two options configurable by means of sht3x_data:
+ 
+ 1. blocking (pull the I2C clock line down while performing the measurement) or
+    non-blocking mode. Blocking mode will guarantee the fastest result but
+diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+index 8305e44d9..580704d93 100644
+--- a/drivers/hwmon/sht3x.c
++++ b/drivers/hwmon/sht3x.c
+@@ -20,7 +20,6 @@
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/jiffies.h>
+-#include <linux/platform_data/sht3x.h>
+ 
+ /* commands (high precision mode) */
+ static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
+@@ -135,8 +134,8 @@ struct sht3x_data {
+ 	const unsigned char *command;
+ 	u32 wait_time;			/* in us*/
+ 	unsigned long last_update;	/* last update in periodic mode*/
+-
+-	struct sht3x_platform_data setup;
++	bool blocking_io;
++	bool high_precision;
+ 
+ 	/*
+ 	 * cached values for temperature and humidity and limits
+@@ -441,13 +440,13 @@ static void sht3x_select_command(struct sht3x_data *data)
+ 	if (data->mode > 0) {
+ 		data->command = sht3x_cmd_measure_periodic_mode;
+ 		data->wait_time = 0;
+-	} else if (data->setup.blocking_io) {
+-		data->command = data->setup.high_precision ?
++	} else if (data->blocking_io) {
++		data->command = data->high_precision ?
+ 				sht3x_cmd_measure_blocking_hpm :
+ 				sht3x_cmd_measure_blocking_lpm;
+ 		data->wait_time = 0;
+ 	} else {
+-		if (data->setup.high_precision) {
++		if (data->high_precision) {
+ 			data->command = sht3x_cmd_measure_nonblocking_hpm;
+ 			data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_HPM;
+ 		} else {
+@@ -595,7 +594,7 @@ static ssize_t update_interval_store(struct device *dev,
+ 	}
+ 
+ 	if (mode > 0) {
+-		if (data->setup.high_precision)
++		if (data->high_precision)
+ 			command = periodic_measure_commands_hpm[mode - 1];
+ 		else
+ 			command = periodic_measure_commands_lpm[mode - 1];
+@@ -690,16 +689,13 @@ static int sht3x_probe(struct i2c_client *client)
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+-	data->setup.blocking_io = false;
+-	data->setup.high_precision = true;
++	data->blocking_io = false;
++	data->high_precision = true;
+ 	data->mode = 0;
+ 	data->last_update = jiffies - msecs_to_jiffies(3000);
+ 	data->client = client;
+ 	crc8_populate_msb(sht3x_crc8_table, SHT3X_CRC8_POLYNOMIAL);
+ 
+-	if (client->dev.platform_data)
+-		data->setup = *(struct sht3x_platform_data *)dev->platform_data;
+-
+ 	sht3x_select_command(data);
+ 
+ 	mutex_init(&data->i2c_lock);
+diff --git a/include/linux/platform_data/sht3x.h b/include/linux/platform_data/sht3x.h
+deleted file mode 100644
+index 14680d2a9..000000000
+--- a/include/linux/platform_data/sht3x.h
++++ /dev/null
+@@ -1,15 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2016 Sensirion AG, Switzerland
+- * Author: David Frey <david.frey@sensirion.com>
+- * Author: Pascal Sachs <pascal.sachs@sensirion.com>
+- */
+-
+-#ifndef __SHT3X_H_
+-#define __SHT3X_H_
+-
+-struct sht3x_platform_data {
+-	bool blocking_io;
+-	bool high_precision;
+-};
+-#endif /* __SHT3X_H_ */
+-- 
+2.30.2
 
