@@ -2,131 +2,188 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2951CEB64D7
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Jun 2023 16:02:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48651EB64D9
+	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Jun 2023 15:50:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbjFPQCK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 16 Jun 2023 12:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
+        id S229721AbjFQPuq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 17 Jun 2023 11:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345781AbjFPQB4 (ORCPT
+        with ESMTP id S229675AbjFQPup (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 16 Jun 2023 12:01:56 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05olkn2035.outbound.protection.outlook.com [40.92.91.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1027E35A6;
-        Fri, 16 Jun 2023 09:01:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KOpZAPShBW3w5SckE2p9wLlA3a+hpnc4/aHV3wPjnQxQXTiG0Wp4vygjOIZq12LehyRKbcp7X/dOJzlNzIx3LNIYw6hVPgSQ8RdhzI8t5DYj9WrFxnhTOg1JKnfAwmICv8sxoORSc1OwVhpJ5ieyXKZe3hKQEMzHrvnB2brAZJk27Jnjy0nuugwnu1NyCceNe0PjLIFtdff8j/pGPoabhprXRY5AMgRyanURGSkRjNyA5lNkUcQmK7JkYNr/6uTObMOZ3oTmMMaF0Y2O0hIUUOPvGvSGdA+0Bi4mrgv1KqqCcg305LfPU4qlcG6Plq/fWiI4sjRF6CcdPcmTAvFJxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vZSjapdVjZVj0bWCTKjxCgRkFqSFvPX9XHSxOUu5Awk=;
- b=W9lU2scaT2pALF8LPw2fLoIu45/ZgzssaAUudnRSn4Wfcjv9eKWvKLbk3j5+XCu8NNftpdSGNs0UavGqkay/K3Go9sXWNowv1rSQIfrl6AsZ353LAMUqyEDlC0crA4u8KLbII0kVLZuPI2A3g4RsZZvZoFCYFi9K2f3ryZMfXKwrMRebflI7ut969o7chTUa+fbV4rR4SKUtQhdKADg7IJqNGBTLS6+sN/AV6LalfSJ1h8Bj7ma20BtDB66Jt4eMeWONGyGFZwwzQ/LgYCrEpWN4X9dBMhxYMMosR7ic1sZAzVwzxUEmcVlI/ZlB3oIUSRBaf4uMJnZtCQRfRT5Jlg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vZSjapdVjZVj0bWCTKjxCgRkFqSFvPX9XHSxOUu5Awk=;
- b=YamZZQZR4IMZWAu9gtp/xfjwwhD8C+10fqCinuQW8LzXG5TFEIhqgNX9D5Y6dMYAFzlGr4rQvMM+wYa0F2Em0QCtdpGIlpzEGrX2UDqbx6S+vmnUNEzbv3i2TN97VnHeOPyXdOE8G1on7pcWJBxKA7Nb31XiXGHc12bs04XO8myBBsd9OS8f0jJ8MQNSsob4mEykXxVJhAGJLcC4cz7k2upJO0AZWrDl58xYkyS53vPkReiwa085ojzRitHdhevvSQJ2IG5mXAg1KFRlrA4mfwGhzO0YyEPESzJ6Ghy3VmI3CnNlAaZ2UbXoV8qvV2+cE07SbZDGW0jF7HTPZwzsNA==
-Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:383::21)
- by AS1PR10MB7959.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:471::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
- 2023 16:01:17 +0000
-Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::628a:d617:46f:2a88]) by DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::628a:d617:46f:2a88%7]) with mapi id 15.20.6477.037; Fri, 16 Jun 2023
- 16:01:17 +0000
-From:   JuenKit Yip <JuenKit_Yip@hotmail.com>
-To:     linux@roeck-us.net, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        JuenKit Yip <JuenKit_Yip@hotmail.com>
-Subject: [PATCH v2 6/6] hwmon: (sht3x) complement sysfs interface for sts3x
-Date:   Sat, 17 Jun 2023 00:00:17 +0800
-Message-ID: <DB4PR10MB6261B912ADFA6BB78240596F9258A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230616160017.21228-1-JuenKit_Yip@hotmail.com>
-References: <20230616160017.21228-1-JuenKit_Yip@hotmail.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [AT3G0djnuRdrcONJf57lmpxNJkYiKOCB]
-X-ClientProxiedBy: TY2PR04CA0009.apcprd04.prod.outlook.com
- (2603:1096:404:f6::21) To DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:10:383::21)
-X-Microsoft-Original-Message-ID: <20230616160017.21228-6-JuenKit_Yip@hotmail.com>
+        Sat, 17 Jun 2023 11:50:45 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205C213E;
+        Sat, 17 Jun 2023 08:50:44 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6b44b5adfd3so1328603a34.3;
+        Sat, 17 Jun 2023 08:50:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687017043; x=1689609043;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a6jpAqFNkP/8S4XUEZft9Vl6zwQ1+A99YTwALsQl1bI=;
+        b=VsIFglwHvEbDefxZE/xPqIzgAdul6NIfK3+g7VLKc+XlaueX1qDqx+spQ/1nu/RzkW
+         zxpaepiSk3yJr2aSw7txq73PwOSwcb3/8tiXmG7dEm2jcRiFBItGq84mLKXN9tpMx62U
+         E8q/yAqkKQuHpOaU/mj66sAcodBqonDtUlm5CGqO/AZARYWKnuwCqEgZi8CNFgsDmqUN
+         51MQX47P9gcoP7cdj/wFyebc798+tc7twqzM5Pm41IQZuI2A5i6KjUp2Mh3uT98cTzyI
+         zl29wC4bb0K+OHlUnmUTxpRuPA9Ao1phdBdO/AsOESqZcYQO+NMP1Sd42RDlYlrr5Ke0
+         ndCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687017043; x=1689609043;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a6jpAqFNkP/8S4XUEZft9Vl6zwQ1+A99YTwALsQl1bI=;
+        b=jFhONp19+Fy/jselNzg/D7I1t6sE/A+QophRoVAqIkpKG/AvBv6jXjjCvI6noI5l5w
+         lIe9Yio+cIp2m2UvL2qSSs1ZVpX++FTWT9bfsnlt6o/FHIICPbhHMkrYbPEBWYPvwWRU
+         lJzl+K7D7VXcpxRCy7EPbs8Mx1hMew9s+sSpPn7VimUXhtM2Y7EkWp9CaLEmmmpWF3rD
+         xrdNRQnX50xav66JrGVgpYfdIBo4MHUPpDLdW730Uz6FELW1BmJDElnzLvcLM+Jvgxv+
+         +zc5UmXTPyA8h/RS6b2BSFpvcuQ/Eu488jEJClYmJM/NoxvK65YcKJJldi3dRAhDoNrW
+         BdeA==
+X-Gm-Message-State: AC+VfDwLY1dak+ooLlFiWBPhITJ31SthS2Bki9zbzTR3dWzq8ifSNQuN
+        W3ituIcxX4h5UENhIVwgIwu/wY+4HR8=
+X-Google-Smtp-Source: ACHHUZ5JbV2p17FPxWhQdXg2vC8yMKBFBn2Vm2EiOEtdhfNM/gYIiGWoZUxzNFkj7aG/Qjc6BOzQtg==
+X-Received: by 2002:a9d:73c3:0:b0:6b4:6119:7d0d with SMTP id m3-20020a9d73c3000000b006b461197d0dmr1411625otk.29.1687017043299;
+        Sat, 17 Jun 2023 08:50:43 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s18-20020aa78d52000000b00653dc27acadsm14992400pfe.205.2023.06.17.08.50.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Jun 2023 08:50:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 17 Jun 2023 08:50:40 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     JuenKit Yip <JuenKit_Yip@hotmail.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] hwmon: (sht3x) remove sht3x_platform_data
+Message-ID: <15084315-2f70-4209-933d-b28230e32abd@roeck-us.net>
+References: <DB4PR10MB626126FB7226D5AF341197449258A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB4PR10MB6261:EE_|AS1PR10MB7959:EE_
-X-MS-Office365-Filtering-Correlation-Id: d20ff2f7-e032-4962-0df6-08db6e82eae8
-X-MS-Exchange-SLBlob-MailProps: AZnQBsB9XmrST/aUJU0/QQB6BlKfxJxwnjHkkJa2LdIc0PMZ2Gs687d1ToFcU0kKJrNBjb/s13yKQi+5kFeu1eGgKSVaysLsseebnHZvEVKvnrusjPFT2qGbMZnSpZ0Ayx5I/7sT6iTp43y/Hn/rGDjNUUue5PPQ48Qq0CFqoDaFo8oSNiXxQeE6XcbPjyamNg6dG7Fb192n/dAiwVZ1xG9x+apLuP8z56drISaJTl0ILqXW0s6qVA3gL9ziCYAFzNY2S53Pk5sbzKpi9Z9eP7dxdexSeIg0Rvaux2QtSLlo+uQ7OrubUtnBaP6vn0qOtraek0lxP/oF34BCIeS4Nv2aMqCyqs23ZUoywO93D6bfEQgEz0CqfPyUlC9I7lCAYl0s52635Jxos8ZolAq74N5bSeTQDgyUDrdawR4RCVooO//qiSRsCXQdgcJLXHg0lixgwWQ80ZaGLAy43C3Mj/HczpJGf0cm6gyMfBjPeNGGWyNoUFhpJOrta8AqLHt8gE0MhMjdFhveeUlO5ctK/S5kJ2aNlF5/uqSS6jClPDIB2JN3/TiMdZylsGTthxe2EomEi2kVRwvzBAlWXLwmrYup2803cjOubnpFjevs7aRkLo2rSovkxLg6Y9Np9L1gs6F9PtXZWu6lGpO6e436rXR47kaF/f0gBtRrMzhg7RhMO6Pyr0Ly/V1q0haGILyMx0msP4v+mQ5DHzv2hF3jsKRaiEWZAOcOTmeWZ0a7f8QdG2iURB9NaS3fM5JgGRL9tMFyvNjv69g=
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Uq/Fi2QVyZNw2jzy67JwWYJY+vROm980jJlpgrXJNIFQXDvbThIYUgZYffG5FD6YVyo7XxmcobU7VL1SmrvutyyTqh++9lty/ZLxiLV/RlaBcOeMrw2dBsxq1KFVV+m5FZN/ozGF7KtE2JDIaH2Yz9EpIp/Lv1CgcyBknt3hIPrtSrBSLr6NmbMhvyqbPfx6zOUTg32lI5Rdk1yqZNpoxjveOW/FmohlzqeJfMZFFLHaB+VbKoouImWALUERECcO+0qwCf4hC1GUF8SXy9QeypQj3uBYDriJYGpHU4Jdf5MG5Z2Zeo+tzLFjFIecIHpCk+k1RscXIOPTTO3NFKMAqqiQtmnqI1FnuWHFURgz0+TFMD9zd/yC6S0DecvJcS1igyPIyaY23wwgjYJbfvvEbAGSm0SFosokOaHssN2B3yezCIXhWkDFtAi/TGd5Q++zSlbGC6kOJ3aikaSu9s988EkyVgiCXMr7SCu1p63l3Xo0vTK03AlT08Z4oybQL1TtRrIDVQGEzdcRuYNah4k0Al8c6n5sCUSjxr3RsOaiuEgVTJsjJuh0OSK89oxDWtuUgeQwt1F7LdBVrze+CH3FLfkbVndBiJ7z1fYKQqpvpYAfwIR1yUzf/qW6vYv7HlcO
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UgC7qTdKiNOGF3+sqLkrLC7HC4Iw/Dj789GaWsBnlzHz8eOpylkb/I3mrMMg?=
- =?us-ascii?Q?aJL8M3Z/VaKi1eUcKhgiDHTfEBqsqC4QLmWiPHPV6POY/eaa/M14xk5Y/m5F?=
- =?us-ascii?Q?kbPES1p67QCn/OYvXZOVjfLzxnkqYPVRYkMviqDp0V1CKMRN0J0sKpByHhKI?=
- =?us-ascii?Q?JddbvbnN0QJKHbjjAPbvsFZ6j/A9jVdlFWc6fy6hGA3lOmIEyBPAlbZr4z+5?=
- =?us-ascii?Q?bXQ8fjME6/tDeS4shvQQ2UK3soCDN74VF71UFgkY+N+I+QBQ8wKs7kOKGhVi?=
- =?us-ascii?Q?jsBDqhL63YI1PdQy67s6T+IOOGr9AkRYcvRQ+pQTGuRSm9IX66+8Y+wQdjAR?=
- =?us-ascii?Q?fr41YV8vmBHrPn2BfEPBFOo+9QUbCjvAd98FMhhGRjPrpV6hpxUcbUuTmM1F?=
- =?us-ascii?Q?IUH/FWevBg9ggj2NU7uwguuIjdbhTW8PZ3cFooTRAuGN9iFzV4+ubQjO17zl?=
- =?us-ascii?Q?aF6VEzEEQQipAxFzaXZyPHikDUeEzK5is+yXDORJRACKfg3dvluIDT13SgpQ?=
- =?us-ascii?Q?S0kU2WC80/kHN5MVyNJDf0aFvT13JHuSw1ifbifPW5V62lQ0gzKk/N3ZWmDK?=
- =?us-ascii?Q?1JGQdAB7qqok1w3wPK+957JbVGnY/RNPXw4NT9hotGEM6Oe2fG1hZ+AyLgW4?=
- =?us-ascii?Q?U/pUfCJDNs8RQyLYPj5prh+CYMdwZZmSf82kfx6AwHX/3CDB4IpTztexUjkV?=
- =?us-ascii?Q?r2U5l+Q6Mxe3eLmtpwTKt39zR+rzEFSJq3lHTBa9TcaamrPUjF5EsIralyJ4?=
- =?us-ascii?Q?vAAAx4m//hjshUr3KucZo2v+GZRmR+1NW29KQStT4V0Tb/lWXRYNvYpJiNh5?=
- =?us-ascii?Q?hngViv+eZyysBSy6+bOGrJXrvLJMwlreSjqWxVxgFFGd/QNhz1605SZ4fWz/?=
- =?us-ascii?Q?d9/QkcB8U1732/sTJlvq5ZPh3naU953zNmt+jlLwMXUbAa33JxJxMnerFjkW?=
- =?us-ascii?Q?bwmEcZVjUo5t/0u7mcTO3peIFLtuyNAwFgfhmYziTaGD8+jwgbAg/YOPMlt5?=
- =?us-ascii?Q?hTu8kb8ZV5+QAIFrDYIRvGVBKqipdD+u+Br/CH6GP7nrjqCq4KLTsy6CmPv2?=
- =?us-ascii?Q?Y0OPAFWyPYaHSIHjLQt1cPJQg4gyhXylTwBp6Zxz6FOaBRkAJYZ5JLcxdERm?=
- =?us-ascii?Q?VF0FbCpZx52Ogw+zycUbVSOwaayK+2isBpo2KReEzhZ/kPhfYhcU8ucaTTC/?=
- =?us-ascii?Q?OKlSje7yl1PJWSKLGn1zTBB/pGJrk3xLxoKFbgao71RpHZw3zqoUSQbIvH0?=
- =?us-ascii?Q?=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-6b909.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: d20ff2f7-e032-4962-0df6-08db6e82eae8
-X-MS-Exchange-CrossTenant-AuthSource: DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 16:01:17.3092
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR10MB7959
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DB4PR10MB626126FB7226D5AF341197449258A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Compared to sht3x, sts3x has the similiar functions and operations
-but it has no humidity sensor.
+On Sat, Jun 17, 2023 at 12:00:12AM +0800, JuenKit Yip wrote:
+> Since no in-tree driver supports it, sht3x_platform_data has been
+> removed and the relevant properties have been moved to sht3x_data.
+> 
+> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
 
-Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
----
- drivers/hwmon/sht3x.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Applied to hwmon-next.
 
-diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-index adfc11c12..ae384ced7 100644
---- a/drivers/hwmon/sht3x.c
-+++ b/drivers/hwmon/sht3x.c
-@@ -707,6 +707,14 @@ static struct attribute *sht3x_attrs[] = {
- 
- static struct attribute *sts3x_attrs[] = {
- 	&sensor_dev_attr_temp1_input.dev_attr.attr,
-+	&sensor_dev_attr_temp1_max.dev_attr.attr,
-+	&sensor_dev_attr_temp1_max_hyst.dev_attr.attr,
-+	&sensor_dev_attr_temp1_min.dev_attr.attr,
-+	&sensor_dev_attr_temp1_min_hyst.dev_attr.attr,
-+	&sensor_dev_attr_temp1_alarm.dev_attr.attr,
-+	&sensor_dev_attr_heater_enable.dev_attr.attr,
-+	&sensor_dev_attr_update_interval.dev_attr.attr,
-+	&sensor_dev_attr_repeatability.dev_attr.attr,
- 	NULL
- };
- 
--- 
-2.30.2
+Thanks,
+Guenter
 
+> ---
+>  Documentation/hwmon/sht3x.rst       |  2 +-
+>  drivers/hwmon/sht3x.c               | 20 ++++++++------------
+>  include/linux/platform_data/sht3x.h | 15 ---------------
+>  3 files changed, 9 insertions(+), 28 deletions(-)
+>  delete mode 100644 include/linux/platform_data/sht3x.h
+> 
+> diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
+> index 95a850d5b..31fd36b14 100644
+> --- a/Documentation/hwmon/sht3x.rst
+> +++ b/Documentation/hwmon/sht3x.rst
+> @@ -28,7 +28,7 @@ The device communicates with the I2C protocol. Sensors can have the I2C
+>  addresses 0x44 or 0x45, depending on the wiring. See
+>  Documentation/i2c/instantiating-devices.rst for methods to instantiate the device.
+>  
+> -There are two options configurable by means of sht3x_platform_data:
+> +There are two options configurable by means of sht3x_data:
+>  
+>  1. blocking (pull the I2C clock line down while performing the measurement) or
+>     non-blocking mode. Blocking mode will guarantee the fastest result but
+> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+> index 8305e44d9..580704d93 100644
+> --- a/drivers/hwmon/sht3x.c
+> +++ b/drivers/hwmon/sht3x.c
+> @@ -20,7 +20,6 @@
+>  #include <linux/module.h>
+>  #include <linux/slab.h>
+>  #include <linux/jiffies.h>
+> -#include <linux/platform_data/sht3x.h>
+>  
+>  /* commands (high precision mode) */
+>  static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
+> @@ -135,8 +134,8 @@ struct sht3x_data {
+>  	const unsigned char *command;
+>  	u32 wait_time;			/* in us*/
+>  	unsigned long last_update;	/* last update in periodic mode*/
+> -
+> -	struct sht3x_platform_data setup;
+> +	bool blocking_io;
+> +	bool high_precision;
+>  
+>  	/*
+>  	 * cached values for temperature and humidity and limits
+> @@ -441,13 +440,13 @@ static void sht3x_select_command(struct sht3x_data *data)
+>  	if (data->mode > 0) {
+>  		data->command = sht3x_cmd_measure_periodic_mode;
+>  		data->wait_time = 0;
+> -	} else if (data->setup.blocking_io) {
+> -		data->command = data->setup.high_precision ?
+> +	} else if (data->blocking_io) {
+> +		data->command = data->high_precision ?
+>  				sht3x_cmd_measure_blocking_hpm :
+>  				sht3x_cmd_measure_blocking_lpm;
+>  		data->wait_time = 0;
+>  	} else {
+> -		if (data->setup.high_precision) {
+> +		if (data->high_precision) {
+>  			data->command = sht3x_cmd_measure_nonblocking_hpm;
+>  			data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_HPM;
+>  		} else {
+> @@ -595,7 +594,7 @@ static ssize_t update_interval_store(struct device *dev,
+>  	}
+>  
+>  	if (mode > 0) {
+> -		if (data->setup.high_precision)
+> +		if (data->high_precision)
+>  			command = periodic_measure_commands_hpm[mode - 1];
+>  		else
+>  			command = periodic_measure_commands_lpm[mode - 1];
+> @@ -690,16 +689,13 @@ static int sht3x_probe(struct i2c_client *client)
+>  	if (!data)
+>  		return -ENOMEM;
+>  
+> -	data->setup.blocking_io = false;
+> -	data->setup.high_precision = true;
+> +	data->blocking_io = false;
+> +	data->high_precision = true;
+>  	data->mode = 0;
+>  	data->last_update = jiffies - msecs_to_jiffies(3000);
+>  	data->client = client;
+>  	crc8_populate_msb(sht3x_crc8_table, SHT3X_CRC8_POLYNOMIAL);
+>  
+> -	if (client->dev.platform_data)
+> -		data->setup = *(struct sht3x_platform_data *)dev->platform_data;
+> -
+>  	sht3x_select_command(data);
+>  
+>  	mutex_init(&data->i2c_lock);
+> diff --git a/include/linux/platform_data/sht3x.h b/include/linux/platform_data/sht3x.h
+> deleted file mode 100644
+> index 14680d2a9..000000000
+> --- a/include/linux/platform_data/sht3x.h
+> +++ /dev/null
+> @@ -1,15 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0-or-later */
+> -/*
+> - * Copyright (C) 2016 Sensirion AG, Switzerland
+> - * Author: David Frey <david.frey@sensirion.com>
+> - * Author: Pascal Sachs <pascal.sachs@sensirion.com>
+> - */
+> -
+> -#ifndef __SHT3X_H_
+> -#define __SHT3X_H_
+> -
+> -struct sht3x_platform_data {
+> -	bool blocking_io;
+> -	bool high_precision;
+> -};
+> -#endif /* __SHT3X_H_ */
