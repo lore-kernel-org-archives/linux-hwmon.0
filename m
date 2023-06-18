@@ -2,106 +2,192 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3018EB64D7
-	for <linux-hwmon@archiver.kernel.org>; Sun, 18 Jun 2023 15:55:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83E77EB64D7
+	for <linux-hwmon@archiver.kernel.org>; Sun, 18 Jun 2023 16:29:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjFRPzA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 18 Jun 2023 11:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33600 "EHLO
+        id S229533AbjFRQ31 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 18 Jun 2023 12:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjFRPy7 (ORCPT
+        with ESMTP id S229519AbjFRQ30 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 18 Jun 2023 11:54:59 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5964EB1;
-        Sun, 18 Jun 2023 08:54:58 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6b291d55f52so1912103a34.2;
-        Sun, 18 Jun 2023 08:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687103697; x=1689695697;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f9vWNjtJCgOYE0tvi5Fu/c1AUdXqlTISD3uczbjGvzs=;
-        b=CoIysCD1HM2TssfWHrOwMlh90AgP2v+1atKljpwamrXbuvPa+pR2xCvSf82eHXB4lu
-         wNg2AzC8McRLVHZB70BE1H8D0QzpMLy0NwC12eNhu5TZpHakRl1eNmbdD9syqu6idRIh
-         vee72Ovqkmh6BJdW0Ag5x4vlDbiyW0anYS/Imc7ORJJJq+/vyRvPei/wMSDF5vtu71Ul
-         sQh9i4qSzNCDCgZ0thmlbEhyniZxTSdgN8gh5pl5OVu+ADGCYKNJ8T/ST2WzV3N/phld
-         2iCJIhyvKdoelcsFJBy4D9Ordkyhg6YPOef7l05zdcM5RXYOmF6Xk0uR1STkdmuRCJ6z
-         B8hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687103697; x=1689695697;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f9vWNjtJCgOYE0tvi5Fu/c1AUdXqlTISD3uczbjGvzs=;
-        b=fSFMXGlwxMiPonglUtM1ez9x5j5oHw37pQWorL0SviS0s2Fs1agE+i6zjt0gA3PoZn
-         3sm7TYyIeEOv76/HyFb10k060zzNZrdi11EZ/Tiv/puYZ+OCA0HC15tj3jD6mq6dNtsb
-         qef77cg4OecaTirx8U1EjH4rVg1HcCerJIacw2WBMo4/uMU1myJFJJ60l5SnBxniromw
-         MP+39SehXdET+GIFkOz2ii3QUkEYHrcen9FmTP50yC5i4cnctLzKhLvOKs0xB2vvJ9Oo
-         dPdwUPNAyM8UEyhAJ2/zOKkkt6y1AZO4NiZqew1O22SefbzVMMl3dcjYN2+7bMrJP+pX
-         TOLg==
-X-Gm-Message-State: AC+VfDzxmwzS9KzF4D2rR39C9NyoKB11fDc63WKbAaRpY6MAIXnAagEE
-        Gp1mHKpa85J+yCaj6bwFnvEK6MnOcBs=
-X-Google-Smtp-Source: ACHHUZ471e4AtCyrzgxu6sCf49OreiuhV2fCgC1fcfHHWCih4U0WCoQZdQUDsT+rSzQdH9biNI3b2g==
-X-Received: by 2002:a05:6830:148d:b0:6b1:5e8f:e50c with SMTP id s13-20020a056830148d00b006b15e8fe50cmr5599616otq.30.1687103697637;
-        Sun, 18 Jun 2023 08:54:57 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c3-20020aa78c03000000b0062e0c39977csm2454022pfd.139.2023.06.18.08.54.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jun 2023 08:54:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 18 Jun 2023 08:54:56 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>
-Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: (oxp-sensors) Simplify logic of error return
-Message-ID: <1c7961f5-a7d0-4c9d-a25d-6929ec4ea2da@roeck-us.net>
-References: <20230617181159.32844-1-samsagax@gmail.com>
- <20230617181159.32844-3-samsagax@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230617181159.32844-3-samsagax@gmail.com>
+        Sun, 18 Jun 2023 12:29:26 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54B81B0
+        for <linux-hwmon@vger.kernel.org>; Sun, 18 Jun 2023 09:29:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687105765; x=1718641765;
+  h=date:from:to:cc:subject:message-id;
+  bh=C0zbmiPaSV47pg1YiZvtAL30mwGH6ih7X2MKl0KXinY=;
+  b=CqSPdLOzFWqWUkITMK0rs4GcTrB1C1IrexAeaiWb4oVePrd21GfJQXvu
+   R95fRCR//PyJotdBmOrqwJYxY8LB9G4tRr5JKdaf157W3QYtOgea8vy+h
+   OeEp7U37voLB7nK6hIsHEn9zdq0LP7mfw3gGBTKlGFRRLFcS6/I8N1DN5
+   KIcybSGjMG4X8w3mAtkjQDH+iBvUvo98ns/OcM05E8lhhJqHpjR3wSFBm
+   SKaKJe51vC1sbrdnkrWfuUipWEVkaS6L43T3taYe3fXXK0mXvw862bcwN
+   u7DgLLpWZp957WgvBqYI+vkhzqlON7ElBLnWMfgWjE5LErHkNZwOoftF6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="344235444"
+X-IronPort-AV: E=Sophos;i="6.00,252,1681196400"; 
+   d="scan'208";a="344235444"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2023 09:29:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="826344631"
+X-IronPort-AV: E=Sophos;i="6.00,252,1681196400"; 
+   d="scan'208";a="826344631"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Jun 2023 09:29:24 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qAvHH-0003su-1C;
+        Sun, 18 Jun 2023 16:29:23 +0000
+Date:   Mon, 19 Jun 2023 00:28:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ aee395bb190564a3fa22aa65c60812c25410e94a
+Message-ID: <202306190055.Vf4VppI0-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 03:11:43PM -0300, Joaquín Ignacio Aramendía wrote:
-> Take return logic on error out of if-else, eliminating
-> duplicated code in tt_togle_store() function.
-> 
-> Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: aee395bb190564a3fa22aa65c60812c25410e94a  hwmon: (nct6755) Add support for NCT6799D
 
-Applied.
+elapsed time: 721m
 
-Thanks,
-Guenter
+configs tested: 121
+configs skipped: 5
 
-> ---
->  drivers/hwmon/oxp-sensors.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-> index 584e48d8106e..1e59d97219c4 100644
-> --- a/drivers/hwmon/oxp-sensors.c
-> +++ b/drivers/hwmon/oxp-sensors.c
-> @@ -226,13 +226,12 @@ static ssize_t tt_toggle_store(struct device *dev,
->  
->  	if (value) {
->  		rval = tt_toggle_enable();
-> -		if (rval)
-> -			return rval;
->  	} else {
->  		rval = tt_toggle_disable();
-> -		if (rval)
-> -			return rval;
->  	}
-> +	if (rval)
-> +		return rval;
-> +
->  	return count;
->  }
->  
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            alldefconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r023-20230618   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                 nsimosci_hs_smp_defconfig   gcc  
+arc                  randconfig-r014-20230618   gcc  
+arc                  randconfig-r043-20230618   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                          ep93xx_defconfig   clang
+arm                       imx_v4_v5_defconfig   clang
+arm                        mvebu_v7_defconfig   gcc  
+arm                  randconfig-r003-20230618   gcc  
+arm                  randconfig-r046-20230618   clang
+arm                           u8500_defconfig   gcc  
+arm                         wpcm450_defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r021-20230618   clang
+hexagon              randconfig-r041-20230618   clang
+hexagon              randconfig-r045-20230618   clang
+i386                             alldefconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230618   clang
+i386         buildonly-randconfig-r005-20230618   clang
+i386         buildonly-randconfig-r006-20230618   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230618   clang
+i386                 randconfig-i002-20230618   clang
+i386                 randconfig-i003-20230618   clang
+i386                 randconfig-i004-20230618   clang
+i386                 randconfig-i005-20230618   clang
+i386                 randconfig-i006-20230618   clang
+i386                 randconfig-i011-20230618   gcc  
+i386                 randconfig-i012-20230618   gcc  
+i386                 randconfig-i013-20230618   gcc  
+i386                 randconfig-i014-20230618   gcc  
+i386                 randconfig-i015-20230618   gcc  
+i386                 randconfig-i016-20230618   gcc  
+i386                 randconfig-r033-20230618   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r032-20230618   gcc  
+loongarch            randconfig-r036-20230618   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze           randconfig-r002-20230618   gcc  
+microblaze           randconfig-r016-20230618   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                      fuloong2e_defconfig   gcc  
+mips                       lemote2f_defconfig   clang
+mips                          rm200_defconfig   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r012-20230618   gcc  
+openrisc             randconfig-r015-20230618   gcc  
+openrisc             randconfig-r025-20230618   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r001-20230618   gcc  
+parisc               randconfig-r013-20230618   gcc  
+parisc               randconfig-r024-20230618   gcc  
+parisc64                            defconfig   gcc  
+powerpc                      acadia_defconfig   clang
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                 mpc8313_rdb_defconfig   clang
+powerpc                     rainier_defconfig   gcc  
+powerpc                    socrates_defconfig   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230618   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r034-20230618   clang
+s390                 randconfig-r035-20230618   clang
+s390                 randconfig-r044-20230618   gcc  
+sh                               allmodconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r006-20230618   gcc  
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r005-20230618   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230618   clang
+x86_64       buildonly-randconfig-r002-20230618   clang
+x86_64       buildonly-randconfig-r003-20230618   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230618   clang
+x86_64               randconfig-a002-20230618   clang
+x86_64               randconfig-a003-20230618   clang
+x86_64               randconfig-a004-20230618   clang
+x86_64               randconfig-a005-20230618   clang
+x86_64               randconfig-a006-20230618   clang
+x86_64               randconfig-a011-20230618   gcc  
+x86_64               randconfig-a012-20230618   gcc  
+x86_64               randconfig-a013-20230618   gcc  
+x86_64               randconfig-a014-20230618   gcc  
+x86_64               randconfig-a015-20230618   gcc  
+x86_64               randconfig-a016-20230618   gcc  
+x86_64               randconfig-r026-20230618   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                  audio_kc705_defconfig   gcc  
+xtensa                       common_defconfig   gcc  
+xtensa               randconfig-r022-20230618   gcc  
+xtensa                         virt_defconfig   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
