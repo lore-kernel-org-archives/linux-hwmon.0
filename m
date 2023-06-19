@@ -2,58 +2,58 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65B01EB64D9
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Jun 2023 19:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9270EB64DA
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Jun 2023 20:40:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjFSTsr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 19 Jun 2023 15:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
+        id S229613AbjFSUke (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 19 Jun 2023 16:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjFSTsr (ORCPT
+        with ESMTP id S229530AbjFSUkd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 19 Jun 2023 15:48:47 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B99610F2;
-        Mon, 19 Jun 2023 12:48:27 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-666eba6f3d6so1297480b3a.3;
-        Mon, 19 Jun 2023 12:48:27 -0700 (PDT)
+        Mon, 19 Jun 2023 16:40:33 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E86128;
+        Mon, 19 Jun 2023 13:40:32 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id 5614622812f47-39ca48cd4c6so2542809b6e.0;
+        Mon, 19 Jun 2023 13:40:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687204105; x=1689796105;
+        d=gmail.com; s=20221208; t=1687207231; x=1689799231;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=E7KkfLpi3l6gCUuNlm+7kZCAQ12I62eGTlh/1JYDgMY=;
-        b=IDpUDVdVuxOhfgsGCa2B27RISf9xOIuosHH069kBR36yOsr6kZ0Db2MzKtL+Z3b8G2
-         D2lxaycZJPA6JBfOpWlTj9F3OEC8+vmreysHOl+57ne/myVjLvWigfn/OPUni6Bvi+iM
-         8QufmddbKS6PdDsOYgzV06dVJlbz9Ndck0DmUXT2/aNJIc4MiKnxmVtkZKfR/oJLHf4N
-         msWbGYedFvA1M3BDB3ZjVjuXdThzXE4jkmq2FCU8qdd+ejXWPe8khp+8DpZpi3utpfa8
-         HJyvCJRn3xw68xlWXAhuQxWjKUqj9MqbG8ykeGSrhpqNpA3IWwzZMOjxziJBc0B0/Ilc
-         MSRg==
+        bh=8OmJOKb9s+fcDbS/sj7n7U1iFY0sQLOmiWn97pgiWB4=;
+        b=XX9i3xNupKSfMvXZr3bus/3QFqcu+CfiRB/vkNy35rDAqBGixc+VfP4OQDeqFZmjs6
+         NaI8bF/EpSwM2oPlAAADHxHEUPTLcDfN6S8LupWJAxkzt6Slvf4vXL+FOd9h8tyAYIYn
+         XuW9o+xxvCnsihoB0dp16XJOyaYOYpc2vDF38XuW5qY3uUVtELlnWr9DqAuAc5xHS9R+
+         tjwJsOYRaaYFpugBjIZddYM0rIbHcoVneKQOAc1f5NpDVaq9PhjjKCf/wJWoV8k5sJBd
+         /1HUEDR80VH4u80bDDAkvjU+KMhNCmYNoZNuiO/aJxPCif90FwPhGz1MpRsAiS6sxmv3
+         zdLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687204105; x=1689796105;
+        d=1e100.net; s=20221208; t=1687207231; x=1689799231;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=E7KkfLpi3l6gCUuNlm+7kZCAQ12I62eGTlh/1JYDgMY=;
-        b=YzKMe2qt6pFnITVUiRP5ArokqgV2IGBoAeuNWURBS4FItZwIk1wSQhxpAOAAYM9K5+
-         PPHFdKcjNrNSfh7k6jqPd9QeqM6pp4PbUytl5EgOHYnWbkBR8HjtbURguai418ND6F3b
-         jjOu7aRO8g/3/oHTw23RApPJsdlLw/jxieMKGRnSKMq3Fyyp8FSyzY7kNtqjq8lI9ga9
-         acTjyhZAqk2L+8a6r+sCpQG6KXpZexfI9Ic+NmA26S4XQvWMJm0lUcd9KrA1kqgfM0fy
-         ErjEK7cEO9bJ+4CslkiWt8NyFHzVNfntkogO890kMc0PbsxbXztjpoCeZRXYQ4xbkLlF
-         lIrg==
-X-Gm-Message-State: AC+VfDyleXqNU6Kf2eaqARA47cFKgS6lZ0WQ8vXEtFgC1dlpR1XK88u+
-        HuglXSVrvTMQYXlHKhmkGG9fXE7S05E=
-X-Google-Smtp-Source: ACHHUZ6BQl8FLKmwAS00w0vVlb2sKbE3jUFW3qQxqWnAmoJ03YXTPomCVRUCVBlstmyclKOuqSp2Bg==
-X-Received: by 2002:a05:6a00:15cc:b0:666:5f59:cfe8 with SMTP id o12-20020a056a0015cc00b006665f59cfe8mr1984688pfu.34.1687204104736;
-        Mon, 19 Jun 2023 12:48:24 -0700 (PDT)
+        bh=8OmJOKb9s+fcDbS/sj7n7U1iFY0sQLOmiWn97pgiWB4=;
+        b=N1G0/fElNAM/iNhkfeqNhYiaxM+Ghx8IgRv2w68NzoysI7Xa2aZM049FdQVAcsR6pM
+         jJJ2ApCCRmSZbGRvK7RTb4DrhyVToHn1BAhKbK7KuYqvY9N+wFd9ktK6S4O+RpEtTjVA
+         hpM5PWc7uPGGDTqxTf9uXS0aBF+/TbUIQi6KW9tlTtfFCGgSOKEppHGlyIrkVlfOFm5j
+         xhEceE5Hik7ISzsoq/F9SNR0DcnR4TalHP2Fwigq2Z7WZT96u79Ifz77Ev9mU/jM5mUA
+         kYm1Sajy4asuEmrWgtHbDhP1m78fHcA9QTdbYY9QTGDO2IEwUALbTcUIpBrIeNqTrkCa
+         FhGQ==
+X-Gm-Message-State: AC+VfDxmLOl4/AIszi0va+3za8Zv4TqVi+oYX/sUAsl3IsCd6SWpfrGw
+        QIYioJ2Lyw8uFg0qixivHAg=
+X-Google-Smtp-Source: ACHHUZ76U4DT4t3XKpnjTBevB1UxNB/cJqZAjlHDZO9zvx4PQBh7MWCBXZJ3TBwvnKdE1gkr3y3b3w==
+X-Received: by 2002:aca:2b14:0:b0:39a:bbd4:bab with SMTP id i20-20020aca2b14000000b0039abbd40babmr8063403oik.31.1687207231356;
+        Mon, 19 Jun 2023 13:40:31 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c24-20020aa78818000000b00640f588b36dsm68430pfo.8.2023.06.19.12.48.22
+        by smtp.gmail.com with ESMTPSA id ji21-20020a170903325500b001b034d2e71csm255136plb.34.2023.06.19.13.40.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 12:48:23 -0700 (PDT)
+        Mon, 19 Jun 2023 13:40:30 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <99f95783-176a-c227-6a75-1c6e05a8020e@roeck-us.net>
-Date:   Mon, 19 Jun 2023 12:48:21 -0700
+Message-ID: <88525fc7-ee7b-969a-cb14-02ca8736f229@roeck-us.net>
+Date:   Mon, 19 Jun 2023 13:40:28 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
@@ -69,28 +69,57 @@ References: <20230619165413.806450-1-Baski.Kannan@amd.com>
  <012ea369-52ec-4a7a-ec66-812690d430ad@amd.com>
  <598247ee-3ff8-8413-274a-7d313c2af324@roeck-us.net>
  <a8107f7d-3163-4f03-9f17-82e1a93d8e91@amd.com>
+ <99f95783-176a-c227-6a75-1c6e05a8020e@roeck-us.net>
+ <65eb7961-755a-a11b-906b-aae237216d5f@amd.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <a8107f7d-3163-4f03-9f17-82e1a93d8e91@amd.com>
+In-Reply-To: <65eb7961-755a-a11b-906b-aae237216d5f@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/19/23 11:53, Limonciello, Mario wrote:
-[ ,,, ]
-
-> So Pinnacle Ridge and Summit Ridge (Zen/Zen+) have model_id_str values of 'B1' and 'B2'.
-> I think we should be able to detect those and only avoid showing the negative values when:
+On 6/19/23 12:58, Limonciello, Mario wrote:
 > 
-> * Family 17h
-> * Model > 0x00
-> * Model <= 0x0f
-> * Model ID str B1 or B2
+> On 6/19/2023 2:48 PM, Guenter Roeck wrote:
+>> On 6/19/23 11:53, Limonciello, Mario wrote:
+>> [ ,,, ]
+>>
+>>> So Pinnacle Ridge and Summit Ridge (Zen/Zen+) have model_id_str values of 'B1' and 'B2'.
+>>> I think we should be able to detect those and only avoid showing the negative values when:
+>>>
+>>> * Family 17h
+>>> * Model > 0x00
+>>> * Model <= 0x0f
+>>> * Model ID str B1 or B2
+>>>
+>>
+>> Threadripper 1950X model string is "AMD Ryzen Threadripper 1950X 16-Core Processor".
+>> Not sure where B1 or B2 is seen, but it is not in the model string.
+>>
+>> Guenter
+>>
+> Sorry; I thought you were talking about desktop parts and didn't realize it was a Threadripper
+> part that prompted all of this.
+> 
+> I looked at the old commit aef17ca127, and it seems that this is tied to the usage of some
+> overclocking knobs offered by some BIOS vendors.
 > 
 
-Threadripper 1950X model string is "AMD Ryzen Threadripper 1950X 16-Core Processor".
-Not sure where B1 or B2 is seen, but it is not in the model string.
+Correct.
 
+> As an idea to avoid the initial issue and all these hacks; what about changing the logic to
+> compare the calculated temperature against the max temperature?  If it's greater than the max
+> THEN set it to zero.
+> 
+
+No, that won't work anymore. In the old code, negative temperatures were displayed as large
+positive temperatures. This was changed later, and temperatures are now reported as
+negative temperatures.
+
+Is there a way to detect if those overclocking knobs are set ? Alternatively, we could\
+possibly just check if the CPU is a Threadripper and limit the hack to Threadripper CPUs.
+
+Thanks,
 Guenter
 
