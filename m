@@ -2,82 +2,72 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA1E2EB64D9
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Jun 2023 13:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8870EB64D9
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Jun 2023 14:00:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjFSNcw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 19 Jun 2023 09:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
+        id S230495AbjFSOAD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 19 Jun 2023 10:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjFSNcw (ORCPT
+        with ESMTP id S229575AbjFSOAC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 19 Jun 2023 09:32:52 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FB7101;
-        Mon, 19 Jun 2023 06:32:51 -0700 (PDT)
+        Mon, 19 Jun 2023 10:00:02 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B7510D;
+        Mon, 19 Jun 2023 07:00:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687181571; x=1718717571;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iFF5DN6oG5LxHqftmodvyVCWe0fRqJT8Cy4sLlEHdrc=;
-  b=HKmlcFLm0GzMRuFpJ/bpByHDN3Ry0OGrGPlsaBPV0+D/vAN+srMrsh/B
-   cIf71UiJpTHZxDe3iFDeLHeNoWTMRQIPjxbW6Y1OHrH9/k9PKpB7OZ/xN
-   u3pJcXXCNLZ/pxFqFOqlwzrMedhgSi4AZ9n3liEXd/ph6TRcr+GLQtdri
-   qw2U7sDXejwgidH0dJo3CjXvTKmWz7bvwHmMEGPCsUrz9jmB0xi4985ED
-   9rEaGNNwfpIwFyGgxrMqE7enPh4VJFLWEabT1GRqSigHbIVkuI65mXNWf
-   rlAXjGTiC1HsPQwJVNEzafW1dct3VmVc6lVsWhk+NK85x7HJD+IOmZ5rQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="388692012"
+  t=1687183202; x=1718719202;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aNx8S4OIFY8xE2BLxsMN2xAvre7uW5zou6Scu0EBKkE=;
+  b=QTaLGw1AuAgsc3zyDYHaMjhM52kh5746k89HNWob7CBFAAg2il3ZlsGj
+   DPlpDzjojDacYbuiNq1YxAteWmqE+jcu1lhsujrrU8TuT3puuABflohJD
+   DoNLzx42R8Ok2VVWVLoItVApRdo5nBoYwPVqqr+N1R1fc0jZgNKi2SpHt
+   2lafXHyE+J8x+/BevKDVGK9VsevB/HepdQkiSeKscfMfRYJj3rpzGN2rs
+   jqyc7ESHmJ5Ibjh5D8HNgPFBTszuyObnSunaZJgbFh6Tn/Hw7YOakgPSb
+   vajyMM19SQtMlvwXI7+1uZW0IuiWju6jR3FxjbGY2VUA/oPdi/9veXeng
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="349356663"
 X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="388692012"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 06:32:51 -0700
+   d="scan'208";a="349356663"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 07:00:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="743464098"
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="713688032"
 X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="743464098"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 19 Jun 2023 06:32:49 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id E4F6E40F; Mon, 19 Jun 2023 16:32:58 +0300 (EEST)
+   d="scan'208";a="713688032"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 19 Jun 2023 07:00:00 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qBFQE-0050XJ-34;
+        Mon, 19 Jun 2023 16:59:58 +0300
+Date:   Mon, 19 Jun 2023 16:59:58 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
-Subject: [PATCH v1 1/1] hwmon: (nct6775) Fix use of undefined variable
-Date:   Mon, 19 Jun 2023 16:32:57 +0300
-Message-Id: <20230619133257.57569-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+Subject: Re: [PATCH v1 1/1] hwmon: (nct6775) Fix use of undefined variable
+Message-ID: <ZJBfXlRXmdL/RJ4a@smile.fi.intel.com>
+References: <20230619133257.57569-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619133257.57569-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-It's unknown how, but in one place in the code the undefined variable
-is still in use. Replace it with the respective bitmap API call.
+On Mon, Jun 19, 2023 at 04:32:57PM +0300, Andy Shevchenko wrote:
+> It's unknown how, but in one place in the code the undefined variable
+> is still in use. Replace it with the respective bitmap API call.
 
-Fixes: d7f4737c37b5 ("hwmon: (nct6775) Switch to use bitmap type and APIs")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/hwmon/nct6775-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+zOMG, it's against internal patch. Sorry for the noise.
 
-diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-index a334fcf9406d..56aa68875c42 100644
---- a/drivers/hwmon/nct6775-core.c
-+++ b/drivers/hwmon/nct6775-core.c
-@@ -3829,7 +3829,7 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
- 	case nct6797:
- 	case nct6798:
- 	case nct6799:
--		data->in_num = 15;
-+		bitmap_set(data->have_in, 0, 15);
- 		data->pwm_num = (data->kind == nct6796 ||
- 				 data->kind == nct6797 ||
- 				 data->kind == nct6798 ||
 -- 
-2.40.0.1.gaa8946217a0b
+With Best Regards,
+Andy Shevchenko
+
 
