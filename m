@@ -2,66 +2,64 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ECCBEB64DA
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Jun 2023 02:58:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AAB9EB64DB
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Jun 2023 03:01:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjFTC6M (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 19 Jun 2023 22:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
+        id S229928AbjFTDBb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 19 Jun 2023 23:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjFTC6K (ORCPT
+        with ESMTP id S230111AbjFTDB0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 19 Jun 2023 22:58:10 -0400
+        Mon, 19 Jun 2023 23:01:26 -0400
 Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28B110DE;
-        Mon, 19 Jun 2023 19:57:42 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id F28135C01F3;
-        Mon, 19 Jun 2023 22:57:33 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EC91995;
+        Mon, 19 Jun 2023 20:00:56 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id A3A8B5C00C5;
+        Mon, 19 Jun 2023 23:00:55 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 19 Jun 2023 22:57:33 -0400
+  by compute2.internal (MEProxy); Mon, 19 Jun 2023 23:00:55 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1687229853; x=
-        1687316253; bh=320HCxo0m6kqsTndJmmY8l9xJ3+BedXN0i38xL7mNwQ=; b=u
-        mDcJSERBSJI9yCIl3k70MvctiU9ltynKcSj6YwKEfJFUk+Lt5Ml496RuhVSNvuzP
-        ipP42JeHs1a4i6M4K3o1TyhaPUD1O2phOdjGqRwC5FQrGKzL2PM59+qhhmvxhKta
-        iVEFNfDF18lmsM/03drgET8K+Z5RTL+dPSRa4m+OFFFHm/frFbt05JFFAtpMJvYb
-        pCaIIiwcjcfWpZImAK5mmc+j2e+kEizqVCX2AgqYmWHagvmWh6PqRLjJmXTlRrCj
-        MCQtmDSY4y0VHrq55vjn+3wyBBTKQVrN3GH4xD0heIRtulB8w+o+pd+S+eKYfYvU
-        HZBP0CFXAPynBQdpfMt/Q==
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1687230055; x=1687316455; bh=WIMSQ26wsM
+        Ddg38DEAukRd9TdGdHyLx8UuCr2w4i4vQ=; b=s9AONZSg7gSD/doKtqXky6xTei
+        SYWUyE6T6JezynPinG+IL41CM4s5yg8g6hAKFuwJA7Zbhg6O6+/+Qu3JM4cDftCc
+        85GZ90I5IZCPgm7sIH8Ai60FavTl0x/+A4W99Dt4FrWODN24SavoeQdH7x86/PfC
+        SleVzhX2Y9+MQBZn5N/j+j3DWXVqGAa313btxUgRSKNaMuxcsn/jF1ppbXe+BKVx
+        tEzgoNVMny7DLxNA9ynTJjlcQnYAHvVuBUBM9PKlxODvJ1mjAFUWUGjLuaymOjAZ
+        1+/h5MVcCPy4uDu1+k1Y3/gQifv2icaTgNohp97N3n4MiTSe/rYi2WOLM3+Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1687229853; x=
-        1687316253; bh=320HCxo0m6kqsTndJmmY8l9xJ3+BedXN0i38xL7mNwQ=; b=j
-        hhqgncBCIgwU1Rv7lz1TM5RzQSJtGENImMEVZcPjd4Qet4wpXS4dlQvNqzx6YWKo
-        m+zZl84eEi9ZKejyf2RFM6CwxAwajjFGD+NcSoRiumq0i33GSeiB9KvAKNb9ioch
-        IfXy5zKTS8TK9D9IBjrv6qlxa/oKlwOJDi7hxqViBTz2CkegnU+cn0Tdh70GvFhU
-        chMsDX8aa9/Biy19mrqSgwXLQD8nBAqYXM2C0bQdmw/aOoeGebLjDO6dxmcIxM7g
-        /Q2qB2UTPjC3bHLiI8fXWF+5Tca9lc10QeipQL44f0yenrA11WgTy8QJhVdWCCKX
-        bpLNo8h7QnQ9QA4SvjUYQ==
-X-ME-Sender: <xms:nRWRZKbi1KzaAiMzyng3otmSA3DuMNZa1ed9qc5XwkWlt_1tvd4__Q>
-    <xme:nRWRZNbAQwceq_5DiDjY5Uz5yDSFx_iVpevRHSv3AOBPBECrQHC4hRSsRGJE_e6rj
-    HTCV401MVffbFn0N48>
-X-ME-Received: <xmr:nRWRZE-3wUdsqLEDUQZtCdfzRDONl3ZYtYykvnbaaYqnWkVeLfC2bXD2miPb>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefgedgvddvucetufdoteggodetrfdotf
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687230055; x=1687316455; bh=WIMSQ26wsMDdg
+        38DEAukRd9TdGdHyLx8UuCr2w4i4vQ=; b=eeMmppisYTnmQwYD7oOnUCFpy5CSF
+        1VVqMUTW+mzmeGLB1e1kHAGFMLekD/TOHgDLO7dEnZyPf4Y83Ww52/ULRXxsVf42
+        44esKZ0KEs2uJBMCBQqtgjDjNVw80s4t1ZfE8ggKpRan0RcMDlLeY9uP3lrYTz2K
+        K8Y7YcumSOT8yOE7rJJZn7q0cWPuQJdiCoq6oK2AdlNhbuhYyWDT66k0rDiHBYoW
+        74x9wzJ8xZaqmn/r5zUpx/LnwRrMSGDjSdpZ1wfgO9zn5TySCD5iAK+J1lSe8eCA
+        t9htPQYtWQcT5MS5AmqeRlL18Fp96gBdoBxq93vXRIrQ5wExjAxyPhOwg==
+X-ME-Sender: <xms:ZxaRZIsC_R24s3om4GAz28u5hm9B6oLABSCq-e-WSgeo-VThCIbtew>
+    <xme:ZxaRZFcTHT9NOE2S5IoP2cUx2j529lyho9uVLJgbNPkvGdGsy28xaKZa-dpsWv_uM
+    Q69HCdxWdxTyw1Pleg>
+X-ME-Received: <xmr:ZxaRZDy-VTxTXgAbOQWJUsz1z5J_3sFJz2Tx3tHX3eRfPcq0AVkhgnypsEaZ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefgedgvdefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehl
-    jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
-    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgepvden
-    ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:nRWRZMpy41sAcP5H-GT_c43zs4QPlmO6p8YcF0wO3odgmzz0YAAaLA>
-    <xmx:nRWRZFogdbM6S59jZ1pdJOCGZsZjxN-vwBRacrvFrYT_NaRX0oHWpA>
-    <xmx:nRWRZKQ-zgMq6wpz9pyzDgHyd6m2bDpQVlwX5K_0-1XNl9xXB5heVg>
-    <xmx:nRWRZJIsF_M5ubHU9-lytwX8kU32hoUPtMPU9_S413gIAcUCGvxFcA>
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehljhho
+    nhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfdujedthfduudekffefkeeiffdttd
+    dvhfegudduueffuefhfefggeefteevvdegnecuvehluhhsthgvrhfuihiivgeptdenucfr
+    rghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:ZxaRZLNTn2VnWXFUrsgMEUWyxoIq6aDLuhbxe1fWAbNOADOLgO2EnA>
+    <xmx:ZxaRZI85UQkrJrqNQfYb1geG7GVh400MJVRIbtVVu2UqRPf6H3ewoA>
+    <xmx:ZxaRZDWYBoQUgLuePXFXQQw8-AOL6i2lbfObqa4izI1kXLR038y3pw>
+    <xmx:ZxaRZFMhXpYmeqv7qBcLuVLG17GVm2qE9TA9aDvl7gfRkrtrrHfWcg>
 Feedback-ID: i5ec1447f:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 19 Jun 2023 22:57:30 -0400 (EDT)
+ 19 Jun 2023 23:00:52 -0400 (EDT)
 From:   "Luke D. Jones" <luke@ljones.dev>
 To:     hdegoede@redhat.com
 Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
@@ -69,548 +67,45 @@ Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
         linux-hwmon@vger.kernel.org, markgross@kernel.org,
         jdelvare@suse.com, linux@roeck-us.net,
         "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH 8/8] platform/x86: asus-wmi: expose dGPU and CPU tunables for ROG
-Date:   Tue, 20 Jun 2023 14:56:41 +1200
-Message-Id: <20230620025641.53197-9-luke@ljones.dev>
+Subject: [PATCH v3 0/1] asus-wmi: add support for ASUS screenpad
+Date:   Tue, 20 Jun 2023 15:00:32 +1200
+Message-Id: <20230620030033.55033-1-luke@ljones.dev>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230620025641.53197-1-luke@ljones.dev>
-References: <20230620025641.53197-1-luke@ljones.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Expose various CPU and dGPU tunables that are available on many ASUS
-ROG laptops. The tunables shown in sysfs will vary depending on the CPU
-and dGPU vendor.
+Adds support for the screenpad(-plus) found on a few ASUS laptops that have a main 16:9 or 16:10 screen and a shorter screen below the main but above the keyboard.
+The support consists of:
+- On off control
+- Setting brightness from 0-255
 
-All of these variables are write only and there is no easy way to find
-what the defaults are. In general they seem to default to the max value
-the vendor sets for the CPU and dGPU package - this is not the same as
-the min/max writable value. Values written to these variables that are
-beyond the capabilities of the CPU are ignored by the laptop.
+There are some small quirks with this device when considering only the raw WMI methods:
+1. The Off method can only switch the device off
+2. Changing the brightness turns the device back on
+3. To turn the device back on the brightness must be > 1
+4. When the device is off the brightness can't be changed (so it is stored by the driver if device is off).
+5. Booting with a value of 0 brightness (retained by bios) means the bios will set a value of > 0, < 15 which is far too dim and was unexpected by testers. The compromise was to set the brightness to 60 which is a usable brightness if the module init brightness was under 15.
+6. When the device is off it is "unplugged"
 
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
----
- .../ABI/testing/sysfs-platform-asus-wmi       |  72 ++++
- drivers/platform/x86/asus-wmi.c               | 365 ++++++++++++++++++
- include/linux/platform_data/x86/asus-wmi.h    |  11 +
- 3 files changed, 448 insertions(+)
+All of the above points are addressed within the patch to create a good user experience and keep within user expectations.
 
-diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi b/Documentation/ABI/testing/sysfs-platform-asus-wmi
-index 5624bdef49cb..64c1c76d3fb8 100644
---- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
-+++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
-@@ -126,3 +126,75 @@ Description:
- 		Change the mini-LED mode:
- 			* 0 - Single-zone,
- 			* 1 - Multi-zone
-+
-+What:		/sys/devices/platform/<platform>/ppt_total
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the Package Power Target total of CPU, corresponds to PL1 on Intel:
-+			* min=5, max=250
-+
-+What:		/sys/devices/platform/<platform>/ppt_sppt
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the Slow Package Power Tracking Limit of CPU, corresponds to PL2 on Intel:
-+			* min=5, max=250
-+
-+What:		/sys/devices/platform/<platform>/ppt_fppt
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the Fast Package Power Tracking Limit of CPU:
-+			* min=5, max=250
-+
-+What:		/sys/devices/platform/<platform>/ppt_edc
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the Electrical Design Current for the CPU, peak current:
-+			* min=5, max=250
-+
-+What:		/sys/devices/platform/<platform>/ppt_tdc
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the Thermal Design Current for the CPU, sustained current:
-+			* min=5, max=250
-+
-+What:		/sys/devices/platform/<platform>/ppt_limit
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the CPU PPT limit:
-+			* min=5, max=130
-+
-+What:		/sys/devices/platform/<platform>/ppt_limit_slow
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the CPU PPT slow limit:
-+			* min=5, max=130
-+
-+What:		/sys/devices/platform/<platform>/nv_gpu_boost
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the extra current boost of the Nvidia dGPU:
-+			* min=5, max=25
-+
-+What:		/sys/devices/platform/<platform>/nv_gpu_temp_target
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the temperature limit of the Nvidia dGPU:
-+			* min=75, max=87
-diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-index 1fc9e8afc2f3..62cee13f5576 100644
---- a/drivers/platform/x86/asus-wmi.c
-+++ b/drivers/platform/x86/asus-wmi.c
-@@ -117,6 +117,16 @@ module_param(fnlock_default, bool, 0444);
- /* Mask to determine if setting temperature or percentage */
- #define FAN_CURVE_PWM_MASK		0x04
- 
-+/* Limits for tunables available on ASUS ROG laptops */
-+#define PPT_TOTAL_MIN	5
-+#define PPT_TOTAL_MAX	250
-+#define PPT_CPU_MIN	5
-+#define PPT_CPU_MAX	130
-+#define NVIDIA_GPU_BOOST_MIN	5
-+#define NVIDIA_GPU_BOOST_MAX	25
-+#define NVIDIA_GPU_TEMP_MIN	75
-+#define NVIDIA_GPU_TEMP_MAX	87
-+
- static const char * const ashs_ids[] = { "ATK4001", "ATK4002", NULL };
- 
- static int throttle_thermal_policy_write(struct asus_wmi *);
-@@ -247,6 +257,17 @@ struct asus_wmi {
- 	bool dgpu_disable_available;
- 	bool gpu_mux_mode_available;
- 
-+	/* Tunables provided by ASUS for gaming laptops */
-+	bool ppt_total_available;
-+	bool ppt_edc_available;
-+	bool ppt_tdc_available;
-+	bool ppt_sppt_available;
-+	bool ppt_limit_available;
-+	bool ppt_limit_slow_available;
-+	bool ppt_fppt_available;
-+	bool nv_gpu_boost_available;
-+	bool nv_gpu_temp_target_available;
-+
- 	bool kbd_rgb_mode_available;
- 	bool kbd_rgb_state_available;
- 
-@@ -946,6 +967,312 @@ static const struct attribute_group *kbd_rgb_mode_groups[] = {
- 	NULL,
- };
- 
-+/* Tunable: PPT Total **********************************************************/
-+static ssize_t ppt_total_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < PPT_TOTAL_MIN || value > PPT_TOTAL_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PPT_TOTAL, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set ppt_total: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set ppt_total (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "ppt_total");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(ppt_total);
-+
-+/* Tunable: PPT EDC **********************************************************/
-+static ssize_t ppt_edc_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < PPT_TOTAL_MIN || value > PPT_TOTAL_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PPT_EDC, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set ppt_edc: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set ppt_edc (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "ppt_edc");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(ppt_edc);
-+
-+/* Tunable: PPT TDC ***********************************************************/
-+static ssize_t ppt_tdc_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < PPT_TOTAL_MIN || value > PPT_TOTAL_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PPT_TDC, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set ppt_tdc: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set ppt_tdc (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "ppt_tdc");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(ppt_tdc);
-+
-+/* Tunable: PPT APU sPPT ******************************************************/
-+static ssize_t ppt_sppt_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < PPT_TOTAL_MIN || value > PPT_TOTAL_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PPT_SPPT, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set ppt_sppt: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set ppt_sppt (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "ppt_sppt");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(ppt_sppt);
-+
-+/* Tunable: PPT APU fPPT ******************************************************/
-+static ssize_t ppt_fppt_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < PPT_TOTAL_MIN || value > PPT_TOTAL_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PPT_FPPT, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set ppt_fppt: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set ppt_fppt (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "ppt_fpu_sppt");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(ppt_fppt);
-+
-+/* Tunable: PPT APU limit *****************************************************/
-+static ssize_t ppt_limit_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < PPT_CPU_MIN || value > PPT_CPU_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PPT_LIMIT, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set ppt_limit: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set ppt_limit (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "ppt_limit");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(ppt_limit);
-+
-+/* Tunable: PPT limit slow ****************************************************/
-+static ssize_t ppt_limit_slow_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < PPT_CPU_MIN || value > PPT_CPU_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PPT_LIMIT_SLOW, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set ppt_limit_slow: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set ppt_limit_slow (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "ppt_limit_slow");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(ppt_limit_slow);
-+
-+/* Tunable: NVIDIA GPU boost **************************************************/
-+static ssize_t nv_gpu_boost_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < NVIDIA_GPU_BOOST_MIN || value > NVIDIA_GPU_BOOST_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_NV_GPU_BOOST, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set nv_gpu_boost: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set nv_gpu_boost (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "nv_gpu_boost");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(nv_gpu_boost);
-+
-+/* Tunable: NVIDIA GPU temperature target *************************************/
-+static ssize_t nv_gpu_temp_target_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < NVIDIA_GPU_TEMP_MIN || value > NVIDIA_GPU_TEMP_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_NV_GPU_TEMP_TARGET, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set nv_gpu_temp_target: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set nv_gpu_temp_target (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "nv_gpu_temp_target");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(nv_gpu_temp_target);
-+
- /* Battery ********************************************************************/
- 
- /* The battery maximum charging percentage */
-@@ -3775,6 +4102,15 @@ static struct attribute *platform_attributes[] = {
- 	&dev_attr_als_enable.attr,
- 	&dev_attr_fan_boost_mode.attr,
- 	&dev_attr_throttle_thermal_policy.attr,
-+	&dev_attr_ppt_total.attr,
-+	&dev_attr_ppt_edc.attr,
-+	&dev_attr_ppt_tdc.attr,
-+	&dev_attr_ppt_sppt.attr,
-+	&dev_attr_ppt_fppt.attr,
-+	&dev_attr_ppt_limit.attr,
-+	&dev_attr_ppt_limit_slow.attr,
-+	&dev_attr_nv_gpu_boost.attr,
-+	&dev_attr_nv_gpu_temp_target.attr,
- 	&dev_attr_panel_od.attr,
- 	&dev_attr_mini_led_mode.attr,
- 	NULL
-@@ -3812,6 +4148,24 @@ static umode_t asus_sysfs_is_visible(struct kobject *kobj,
- 		ok = asus->fan_boost_mode_available;
- 	else if (attr == &dev_attr_throttle_thermal_policy.attr)
- 		ok = asus->throttle_thermal_policy_available;
-+	else if (attr == &dev_attr_ppt_total.attr)
-+		ok = asus->ppt_total_available;
-+	else if (attr == &dev_attr_ppt_edc.attr)
-+		ok = asus->ppt_edc_available;
-+	else if (attr == &dev_attr_ppt_tdc.attr)
-+		ok = asus->ppt_tdc_available;
-+	else if (attr == &dev_attr_ppt_sppt.attr)
-+		ok = asus->ppt_sppt_available;
-+	else if (attr == &dev_attr_ppt_fppt.attr)
-+		ok = asus->ppt_fppt_available;
-+	else if (attr == &dev_attr_ppt_limit.attr)
-+		ok = asus->ppt_limit_available;
-+	else if (attr == &dev_attr_ppt_limit_slow.attr)
-+		ok = asus->ppt_limit_slow_available;
-+	else if (attr == &dev_attr_nv_gpu_boost.attr)
-+		ok = asus->nv_gpu_boost_available;
-+	else if (attr == &dev_attr_nv_gpu_temp_target.attr)
-+		ok = asus->nv_gpu_temp_target_available;
- 	else if (attr == &dev_attr_panel_od.attr)
- 		ok = asus->panel_overdrive_available;
- 	else if (attr == &dev_attr_mini_led_mode.attr)
-@@ -4077,6 +4431,17 @@ static int asus_wmi_add(struct platform_device *pdev)
- 	asus->gpu_mux_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_GPU_MUX);
- 	asus->kbd_rgb_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_TUF_RGB_MODE);
- 	asus->kbd_rgb_state_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_TUF_RGB_STATE);
-+	asus->ppt_total_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PPT_TOTAL);
-+	asus->ppt_edc_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PPT_EDC);
-+	asus->ppt_tdc_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PPT_TDC);
-+	asus->ppt_sppt_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PPT_SPPT);
-+	asus->ppt_fppt_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PPT_FPPT);
-+	asus->ppt_limit_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PPT_LIMIT);
-+	asus->ppt_limit_slow_available = asus_wmi_dev_is_present(asus,
-+								ASUS_WMI_DEVID_PPT_LIMIT_SLOW);
-+	asus->nv_gpu_boost_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_NV_GPU_BOOST);
-+	asus->nv_gpu_temp_target_available = asus_wmi_dev_is_present(asus,
-+								ASUS_WMI_DEVID_NV_GPU_TEMP_TARGET);
- 	asus->panel_overdrive_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PANEL_OD);
- 	asus->mini_led_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_MINI_LED_MODE);
- 
-diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
-index ea80361ac6c7..d17ae2eb0f8d 100644
---- a/include/linux/platform_data/x86/asus-wmi.h
-+++ b/include/linux/platform_data/x86/asus-wmi.h
-@@ -86,6 +86,17 @@
- #define ASUS_WMI_DEVID_GPU_FAN_CURVE	0x00110025
- #define ASUS_WMI_DEVID_MID_FAN_CURVE	0x00110032
- 
-+/* Tunables for AUS ROG laptops */
-+#define ASUS_WMI_DEVID_PPT_TOTAL	0x001200A0
-+#define ASUS_WMI_DEVID_PPT_EDC		0x001200A1
-+#define ASUS_WMI_DEVID_PPT_TDC		0x001200A2
-+#define ASUS_WMI_DEVID_PPT_SPPT		0x001200A3
-+#define ASUS_WMI_DEVID_PPT_LIMIT	0x001200B0
-+#define ASUS_WMI_DEVID_PPT_LIMIT_SLOW	0x001200B1
-+#define ASUS_WMI_DEVID_PPT_FPPT		0x001200C1
-+#define ASUS_WMI_DEVID_NV_GPU_BOOST	0x001200C0
-+#define ASUS_WMI_DEVID_NV_GPU_TEMP_TARGET	0x001200C2
-+
- /* Power */
- #define ASUS_WMI_DEVID_PROCESSOR_STATE	0x00120012
- 
+Changelog:
+- V3
+  - Refactor error handling in all functions
+- V2
+  - Complete refactor to use as a backlight device
+
+Luke D. Jones (1):
+  platform/x86: asus-wmi: add support for ASUS screenpad
+
+ drivers/platform/x86/asus-wmi.c            | 129 +++++++++++++++++++++
+ drivers/platform/x86/asus-wmi.h            |   1 +
+ include/linux/platform_data/x86/asus-wmi.h |   4 +
+ 3 files changed, 134 insertions(+)
+
 -- 
 2.40.1
 
