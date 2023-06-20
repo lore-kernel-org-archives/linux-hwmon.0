@@ -2,124 +2,121 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9270EB64DA
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Jun 2023 20:40:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 957A0EB64DA
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Jun 2023 02:57:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjFSUke (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 19 Jun 2023 16:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
+        id S229981AbjFTC5K (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 19 Jun 2023 22:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjFSUkd (ORCPT
+        with ESMTP id S229522AbjFTC5J (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 19 Jun 2023 16:40:33 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E86128;
-        Mon, 19 Jun 2023 13:40:32 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id 5614622812f47-39ca48cd4c6so2542809b6e.0;
-        Mon, 19 Jun 2023 13:40:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687207231; x=1689799231;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=8OmJOKb9s+fcDbS/sj7n7U1iFY0sQLOmiWn97pgiWB4=;
-        b=XX9i3xNupKSfMvXZr3bus/3QFqcu+CfiRB/vkNy35rDAqBGixc+VfP4OQDeqFZmjs6
-         NaI8bF/EpSwM2oPlAAADHxHEUPTLcDfN6S8LupWJAxkzt6Slvf4vXL+FOd9h8tyAYIYn
-         XuW9o+xxvCnsihoB0dp16XJOyaYOYpc2vDF38XuW5qY3uUVtELlnWr9DqAuAc5xHS9R+
-         tjwJsOYRaaYFpugBjIZddYM0rIbHcoVneKQOAc1f5NpDVaq9PhjjKCf/wJWoV8k5sJBd
-         /1HUEDR80VH4u80bDDAkvjU+KMhNCmYNoZNuiO/aJxPCif90FwPhGz1MpRsAiS6sxmv3
-         zdLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687207231; x=1689799231;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8OmJOKb9s+fcDbS/sj7n7U1iFY0sQLOmiWn97pgiWB4=;
-        b=N1G0/fElNAM/iNhkfeqNhYiaxM+Ghx8IgRv2w68NzoysI7Xa2aZM049FdQVAcsR6pM
-         jJJ2ApCCRmSZbGRvK7RTb4DrhyVToHn1BAhKbK7KuYqvY9N+wFd9ktK6S4O+RpEtTjVA
-         hpM5PWc7uPGGDTqxTf9uXS0aBF+/TbUIQi6KW9tlTtfFCGgSOKEppHGlyIrkVlfOFm5j
-         xhEceE5Hik7ISzsoq/F9SNR0DcnR4TalHP2Fwigq2Z7WZT96u79Ifz77Ev9mU/jM5mUA
-         kYm1Sajy4asuEmrWgtHbDhP1m78fHcA9QTdbYY9QTGDO2IEwUALbTcUIpBrIeNqTrkCa
-         FhGQ==
-X-Gm-Message-State: AC+VfDxmLOl4/AIszi0va+3za8Zv4TqVi+oYX/sUAsl3IsCd6SWpfrGw
-        QIYioJ2Lyw8uFg0qixivHAg=
-X-Google-Smtp-Source: ACHHUZ76U4DT4t3XKpnjTBevB1UxNB/cJqZAjlHDZO9zvx4PQBh7MWCBXZJ3TBwvnKdE1gkr3y3b3w==
-X-Received: by 2002:aca:2b14:0:b0:39a:bbd4:bab with SMTP id i20-20020aca2b14000000b0039abbd40babmr8063403oik.31.1687207231356;
-        Mon, 19 Jun 2023 13:40:31 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ji21-20020a170903325500b001b034d2e71csm255136plb.34.2023.06.19.13.40.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 13:40:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <88525fc7-ee7b-969a-cb14-02ca8736f229@roeck-us.net>
-Date:   Mon, 19 Jun 2023 13:40:28 -0700
+        Mon, 19 Jun 2023 22:57:09 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4601AC;
+        Mon, 19 Jun 2023 19:57:07 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 99F8A5C01ED;
+        Mon, 19 Jun 2023 22:57:05 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Mon, 19 Jun 2023 22:57:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1687229825; x=1687316225; bh=9GbRm5CtvL
+        ke73jGmzLqa1s16vX991t6TY9JsVkBVzQ=; b=L2Z8EDoHD1b0HgywJKMUqbYghi
+        w4HOj/I3nsuQ8KI0h0O2GxCR7l4G//W7cOwYkjvuMRDmH7804KZHJlajDMSmFjHs
+        g/a8at4dlV6WXwjhBatXLVqtTCXMqJKWyAMCECbgj7d8O51mbyLa5Mt1Snk8hpr1
+        5NpTA4/nm4XwQw99O40jQ0bTdxnInqu97uTX+rcYaUZ2+D8vahBTMr10sWPYZXgq
+        NxYUdhpB1cBDA1cta5dQ7UWMfjHomzpeTzvZkekIApVl628quWkQ9SRIA3LB8BLM
+        wz235mhV9NcwQvC8wsA3I9YbIGoJ6s/7XKE7++/OfwaV3efAlHTHUMZUh/Sw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687229825; x=1687316225; bh=9GbRm5CtvLke7
+        3jGmzLqa1s16vX991t6TY9JsVkBVzQ=; b=mT6b9Wt/th9vO+9nY9HJrhkhYuiwy
+        dOEqXs54lJv1wJ/SdI2/cmiK7UXp7IbtvzVUP37+OKARidx+9pguIGKQh+xInlwJ
+        ZxV5XTucqdKGwyGEXXRM3CtuAY9CX8AtlQQvCM76sBGXLCjs5rqVKXYrHBrHO2ct
+        Z3lOpEPpH5rOh+pP8SQK664s7GxwflndtvRwyPZXhh29ffYGJusMXaN3VHiW7aPC
+        5f1PEYRzaCNYaM9qOQsaTkRUPRPruq3vy8dPbYaIDfadj8LeXd7RVFUG2RsDWfDw
+        u0Eu+k5NMdn2mtVUl4LSmZU65A86egATcePEzoTfetUJmYZGUFZDVUu1w==
+X-ME-Sender: <xms:gRWRZMy83k_1lVNQnylydsu3rpwGRJop8333gbooZTJJOONYCUKrNQ>
+    <xme:gRWRZATHe1vCimEDWsJpRfT07ScwWDueYoji43aD2pwlotRc6IcA1S6vzMXVmChLa
+    mnfUrCo6beL24M22_s>
+X-ME-Received: <xmr:gRWRZOWskQ9jdMMaIoGdbgBp5Wj9ESeh7YGbwSK8zFmL5z-PBwoyDVMJxDHt>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefgedgvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehljhho
+    nhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfdujedthfduudekffefkeeiffdttd
+    dvhfegudduueffuefhfefggeefteevvdegnecuvehluhhsthgvrhfuihiivgeptdenucfr
+    rghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:gRWRZKjHW8BHuCvf1TLgIAhMqH88kO2_v1qnz39FAHJNSpeEbS1v_g>
+    <xmx:gRWRZOC2mFdRzFtrQxjnh7iis7fR1TezmZB7CnymAgaJ9w0pgrWT1Q>
+    <xmx:gRWRZLK5udewIp7phIf2DQcx_zKHRCXZM_93ox95S2qYsZEn1Nl6kg>
+    <xmx:gRWRZEAaNdL5-4H32xxfw1j0k_6hPL3Y0SqiiyVuwlHq3-vdXMjDJQ>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 19 Jun 2023 22:57:02 -0400 (EDT)
+From:   "Luke D. Jones" <luke@ljones.dev>
+To:     hdegoede@redhat.com
+Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, markgross@kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net,
+        "Luke D. Jones" <luke@ljones.dev>
+Subject: [PATCH 0/8] asus-wmi: add/expose more features, fixes
+Date:   Tue, 20 Jun 2023 14:56:33 +1200
+Message-Id: <20230620025641.53197-1-luke@ljones.dev>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3] hwmon: (k10temp) Enable AMD3255 Proc to show negative
- temperature
-Content-Language: en-US
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Baskaran Kannan <Baski.Kannan@amd.com>, babu.moger@amd.com,
-        clemens@ladisch.de, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230619165413.806450-1-Baski.Kannan@amd.com>
- <4585ec62-b7bb-9f2a-eee0-07032648e55a@roeck-us.net>
- <012ea369-52ec-4a7a-ec66-812690d430ad@amd.com>
- <598247ee-3ff8-8413-274a-7d313c2af324@roeck-us.net>
- <a8107f7d-3163-4f03-9f17-82e1a93d8e91@amd.com>
- <99f95783-176a-c227-6a75-1c6e05a8020e@roeck-us.net>
- <65eb7961-755a-a11b-906b-aae237216d5f@amd.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <65eb7961-755a-a11b-906b-aae237216d5f@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/19/23 12:58, Limonciello, Mario wrote:
-> 
-> On 6/19/2023 2:48 PM, Guenter Roeck wrote:
->> On 6/19/23 11:53, Limonciello, Mario wrote:
->> [ ,,, ]
->>
->>> So Pinnacle Ridge and Summit Ridge (Zen/Zen+) have model_id_str values of 'B1' and 'B2'.
->>> I think we should be able to detect those and only avoid showing the negative values when:
->>>
->>> * Family 17h
->>> * Model > 0x00
->>> * Model <= 0x0f
->>> * Model ID str B1 or B2
->>>
->>
->> Threadripper 1950X model string is "AMD Ryzen Threadripper 1950X 16-Core Processor".
->> Not sure where B1 or B2 is seen, but it is not in the model string.
->>
->> Guenter
->>
-> Sorry; I thought you were talking about desktop parts and didn't realize it was a Threadripper
-> part that prompted all of this.
-> 
-> I looked at the old commit aef17ca127, and it seems that this is tied to the usage of some
-> overclocking knobs offered by some BIOS vendors.
-> 
+This patch series adds or exposes more features that are available in the ROG
+laptop series.
 
-Correct.
+- expose dGPU and CPU tunables for ROG
+  - These are things like GPU boost, CPU Pl1 and PL2, package power limits
+- support setting mini-LED mode
+  - Some newer laptops have a screen that can toggle between regular style
+    backlight and using mini-LED backlight
+- add WMI method to show if egpu connected
+  - This WMI method can be monitored/queried to see if it is possible to begin
+    the change-over to eGPU
+- support middle fan custom curves
+  - Some newer laptops have a center/middle fan which blows across the CPU and GPU
+- add support for showing middle fan RPM
+- add support for showing charger mode (AC, USB-C, both plugged)
+- add additional checks to GPU switching code
+  - These try to prevent a sceanrio such as the user disabling the dGPU while it
+    is driving the internal panel via MUX, resulting in no output at all.
+    There are no checks in the ACPI code for this, but on some newer models ASUS
+    did finally add a switch in the BIOS menu. It is best to try and prevent this
+    at the kernel level rather than userland level.
 
-> As an idea to avoid the initial issue and all these hacks; what about changing the logic to
-> compare the calculated temperature against the max temperature?  If it's greater than the max
-> THEN set it to zero.
-> 
+All patches pass ./scripts/checkpatch.pl
 
-No, that won't work anymore. In the old code, negative temperatures were displayed as large
-positive temperatures. This was changed later, and temperatures are now reported as
-negative temperatures.
+Luke D. Jones (8):
+  platform/x86: asus-wmi: add support for showing charger mode
+  platform/x86: asus-wmi: add support for showing middle fan RPM
+  platform/x86: asus-wmi: support middle fan custom curves
+  platform/x86: asus-wmi: add WMI method to show if egpu connected
+  platform/x86: asus-wmi: don't allow eGPU switching if eGPU not
+    connected
+  platform/x86: asus-wmi: add safety checks to gpu switching
+  platform/x86: asus-wmi: support setting mini-LED mode
+  platform/x86: asus-wmi: expose dGPU and CPU tunables for ROG
 
-Is there a way to detect if those overclocking knobs are set ? Alternatively, we could\
-possibly just check if the CPU is a Threadripper and limit the hack to Threadripper CPUs.
+ .../ABI/testing/sysfs-platform-asus-wmi       | 100 +++
+ drivers/platform/x86/asus-wmi.c               | 685 +++++++++++++++++-
+ include/linux/platform_data/x86/asus-wmi.h    |  21 +-
+ 3 files changed, 803 insertions(+), 3 deletions(-)
 
-Thanks,
-Guenter
+-- 
+2.40.1
 
