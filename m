@@ -2,108 +2,169 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29A41EB64D7
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jun 2023 15:36:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB3F7EB64D7
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Jun 2023 21:35:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233526AbjFUPgi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 21 Jun 2023 11:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S230360AbjFUVfx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 21 Jun 2023 17:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233529AbjFUPg1 (ORCPT
+        with ESMTP id S230030AbjFUVfx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:36:27 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A426410D2;
-        Wed, 21 Jun 2023 08:36:01 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6687466137bso2198781b3a.0;
-        Wed, 21 Jun 2023 08:36:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687361755; x=1689953755;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/VLyHKxS+lH/Fue6XmqBO/Tpruco+NZkj5IzkvO/H/A=;
-        b=ixIcm9YgMHpHuG6PX0p2ttszK5ATZpcE5fHf7NLlE99PK6ileRl4ixJLdqQnvYbxQG
-         yEpOECtg7epSzcDoVRW7tE4KRkWpdbioLUT+4/OkwiJOZoRa3JxG7b+Y/HgmwCgpPJwS
-         tj+OKiojM3Wum14Vq73Lh6+k+kHGTK00/iD1TVU99f/vbotMAOjznmlxb9Xu3SogIvTr
-         2OtS95bxu2I+sxvIso2Mlpg0mIkjh54RLQolb5I61895LhEIHYNj9FgoZKMKIqSiCO8y
-         nHtDufvicrjVIee7SqAYCRFgI0+5ahHUr3ARpxuvILpB2K3H4Kt74MtMIqA+NFqyyAcW
-         NPTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687361755; x=1689953755;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/VLyHKxS+lH/Fue6XmqBO/Tpruco+NZkj5IzkvO/H/A=;
-        b=QMp1yOSCxPLCs2KG4rw1y9TFtKM+F4/T5jaVMZ4TGsJzMbFlCcZVCV3webolDr3ulO
-         m45UVT9rTg23Y564r+HcR5Q85QDFQwsnRIP7RpQsw7OdN4emB1VUzRLySxGlkfJo9Fwc
-         gHF0OsCuxzlOXyiJMrmY8h0/nfBXgrnkK9KKXu0sbGKnTnR1DNhj6KwgrVhLLL4hOMBK
-         DdaAU96oTia32yRsKijBKtjo2sLK2pjdh/7ouUyFTZxr1PY6KcAGhSfbRsS+eoj2eRKn
-         2QPe3hmV5h6y4C5//D/M4Z+32EP1dTyH5IKLmj7lCh3yUaIzNo9QT3oqUUi+w91G4ZhN
-         gYjA==
-X-Gm-Message-State: AC+VfDwYieg5AwbLqIuqBamr1Y64jedDWILOCHlZNPltzeb/7xrEz4ds
-        JT40o1QmKmHHigW9ojd9iVOo7HGVi8I=
-X-Google-Smtp-Source: ACHHUZ7AKJiw6/b1SiHTwE6EOrMO+Ol1BOWipmyfA+Th0QGtP2sCbKf6NTxDo8CMLUo4aVwacs82Tg==
-X-Received: by 2002:a17:90a:c08b:b0:25e:83a7:abab with SMTP id o11-20020a17090ac08b00b0025e83a7ababmr10508156pjs.8.1687361755067;
-        Wed, 21 Jun 2023 08:35:55 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 19-20020a17090a1a5300b0025de9b9542dsm1275973pjl.39.2023.06.21.08.35.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 08:35:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 21 Jun 2023 08:35:53 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     JuenKit Yip <JuenKit_Yip@hotmail.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] hwmon: (sht3x) add device-tree support
-Message-ID: <6673f3d4-b6d6-4024-8d44-2f120649d937@roeck-us.net>
-References: <20230621035937.58721-1-JuenKit_Yip@hotmail.com>
- <DB4PR10MB62611629FD3764FB7FF61D24925DA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DB4PR10MB62611629FD3764FB7FF61D24925DA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+        Wed, 21 Jun 2023 17:35:53 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530641997;
+        Wed, 21 Jun 2023 14:35:49 -0700 (PDT)
+Received: from pps.filterd (m0150245.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LEW6aC010185;
+        Wed, 21 Jun 2023 21:35:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id; s=pps0720;
+ bh=dOnLMTe71ueXWXu7ixj2T7RioYTKLLqCgbtdE+W/8f0=;
+ b=dgWnsItg3TvGT7+3pU6iFVpsHNMR1s01xAQO8MNE3+poWJzZ6PzEaGuS5YWrAC1BJ9NZ
+ PgG+u7eA9pd8fYameSzJKxyLd0ZhAiswj2ekBil/BdH7BjUjNGCMloKdu9pDhhhlOS7h
+ idOoggxh9Luov02f5rUehAkIGE/+Tr4PiTRJpU0F+8BcOUMoaw6JcKORIpgCCorRQ1Cm
+ onfYAtuQdxg9DAz71HxXk5F4CmP8Dg15DzN5wD3bdIlwX0CiARttBsZl/GuY4UgTiMkE
+ goW6aBVR8ecZhWABPwJmC/ugWH9KT9pN3ZOr9uOWG6UZfjkbiRfMNOf6w4q9iQ/QEeuG Hg== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3rby2gnrmg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 21:35:24 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 6F9D9130F9;
+        Wed, 21 Jun 2023 21:35:23 +0000 (UTC)
+Received: from hpe.com (unknown [16.231.227.36])
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 5AEF6810744;
+        Wed, 21 Jun 2023 21:35:22 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     verdun@hpe.com, nick.hawkins@hpe.com, linus.walleij@linaro.org,
+        brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jdelvare@suse.com,
+        linux@roeck-us.net, andy.shevchenko@gmail.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: [PATCH v4 0/5] ARM: Add GPIO support
+Date:   Wed, 21 Jun 2023 16:31:10 -0500
+Message-Id: <20230621213115.113266-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-ORIG-GUID: K9RpdomJqc81DR2COciWWafaNqv_6sQ2
+X-Proofpoint-GUID: K9RpdomJqc81DR2COciWWafaNqv_6sQ2
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_12,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 impostorscore=0 malwarescore=0
+ mlxlogscore=999 adultscore=0 bulkscore=0 lowpriorityscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306210181
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 11:59:37AM +0800, JuenKit Yip wrote:
-> add "compatible" property for supporting device-tree
-> 
-> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
-> ---
->  drivers/hwmon/sht3x.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-> index 31013b5b6..edcf6820c 100644
-> --- a/drivers/hwmon/sht3x.c
-> +++ b/drivers/hwmon/sht3x.c
-> @@ -923,8 +923,18 @@ static const struct i2c_device_id sht3x_ids[] = {
->  
->  MODULE_DEVICE_TABLE(i2c, sht3x_ids);
->  
-> +/* devicetree ID table */
-> +static const struct of_device_id sht3x_of_match[] = {
-> +	{ .compatible = "sensirion,sht3x" },
-> +	{ .compatible = "sensirion,sts3x" },
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-Also needs a separate patch addding the two devices
-to Documentation/devicetree/bindings/trivial-devices.yaml.
+The GXP SoC supports GPIO on multiple interfaces. The interfaces are
+CPLD and Host. The GPIOs is a combination of both physical and virtual
+I/O across the interfaces. The gpio-gxp driver specifically covers the
+CSM(physical), FN2(virtual), and VUHC(virtual) which are the host. The
+gpio-gxp-pl driver covers the CPLD which takes physical I/O from the
+board and shares it with GXP via a propriety interface that maps the I/O
+onto a specific register area of the GXP. The drivers both support
+interrupts but from different interrupt parents.
 
-> +	{},
-> +};
-> +
->  static struct i2c_driver sht3x_i2c_driver = {
-> -	.driver.name = "sht3x",
-> +	.driver = {
-> +		.name = "sht3x",
-> +		.of_match_table = of_match_ptr(sht3x_of_match),
-> +	},
->  	.probe       = sht3x_probe,
->  	.id_table    = sht3x_ids,
->  };
-> -- 
-> 2.30.2
-> 
+After exploring the recommendation of using regmap_gpio it does not seem
+like a good fit. Some of the GPIOs are a combination of several bits in
+a byte where others are not contiguous blocks of GPIOs.
+
+The gxp-fan-ctrl driver in HWMON no longer will report fan presence
+or fan failure states as these GPIOs providing this information will be
+consumed by the host. It will be the hosts function to keep track of
+fan presence and status.
+  
+---
+
+Changes since v3:
+ *Added called with debugfs to read server id
+ *Added reviewed-by: tags to hwmon fan driver and fan yaml
+ *Changed maxItems to be 4 instead of 6 on reg and reg-names in gpio
+  yaml
+ *Moved gpio-gxp-pl.c to be in a separate patch/commit.
+ *Moved regmap_config out of function in both gpio drivers to turn into
+  static const
+ *Removed unnecesary variables and redundant conditionals
+ *Modified regmap_read switch statements to calculate offset and mask
+  then read at end
+ *Removed use of -EOPNOTSUPP in favor of -ENOTSUPP
+ *Removed redundant casting
+ *Switched generic_handle_irq for generic_handle_domain_irq
+ *Used GENMASK where applicable
+ *Used bitmap_xor and for_each_bit_set in PL PSU interrupt
+ *Made GPIO chip const and marked as a template (in the name)
+ *Made irq_chip const and immutable
+ *Corrected check on devm_gpiochip_add_data
+ *Removed dev_err_probe on platform_get_irq
+ *Changed return 0 to devm_request_irq
+
+Changes since v2:
+ *Removed shared fan variables between HWMON and GPIO based on feedback
+ *Removed reporting fan presence and failure from hwmon gxp-fan-ctrl
+  driver
+ *Removed GPIO dependency from gxp-fan-ctrl driver
+ *Changed description and title for hpe,gxp-gpio binding
+ *Corrected indention on example for hpe,gxp-gpio binding
+ *Removed additional example from hpe,gxp-gpio binding
+
+Changes since v1:
+ *Removed ARM device tree changes and defconfig changes to reduce
+  patchset size
+ *Removed GXP PSU changes to reduce patchset size
+ *Corrected hpe,gxp-gpio YAML file based on feedback
+ *Created new gpio-gxp-pl file to reduce complexity
+ *Separated code into two files to keep size down: gpio-gxp.c and
+  gpio-gxp-pl.c
+ *Fixed Kconfig indentation as well as add new entry for gpio-gxp-pl
+ *Removed use of linux/of.h and linux/of_device.h
+ *Added mod_devicetable.h and property.h
+ *Fixed indentation of defines and uses consistent number of digits
+ *Corrected defines with improper GPIO_ namespace.
+ *For masks now use BIT()
+ *Added comment for PLREG offsets
+ *Move gpio_chip to be first in structure
+ *Calculate offset for high and low byte GPIO reads instead of having
+  H(High) and L(Low) letters added to the variables.
+ *Removed repeditive use of "? 1 : 0"
+ *Switched to handle_bad_irq()
+ *Removed improper bailout on gpiochip_add_data
+ *Used GENMASK to arm interrupts
+ *Removed use of of_match_device
+ *fixed sizeof in devm_kzalloc
+ *Added COMPILE_TEST to Kconfig
+ *Added dev_err_probe where applicable
+ *Removed unecessary parent and compatible checks
+
+Nick Hawkins (5):
+  gpio: gxp: Add HPE GXP GPIO
+  gpio: gxp: Add HPE GXP GPIO PL
+  dt-bindings: hwmon: hpe,gxp-fan-ctrl: remove fn2 and pl registers
+  hwmon: (gxp_fan_ctrl) Provide fan info via gpio
+  MAINTAINERS: hpe: Add GPIO
+
+ .../bindings/hwmon/hpe,gxp-fan-ctrl.yaml      |  16 +-
+ MAINTAINERS                                   |   2 +
+ drivers/gpio/Kconfig                          |  18 +
+ drivers/gpio/Makefile                         |   2 +
+ drivers/gpio/gpio-gxp-pl.c                    | 582 ++++++++++++++++++
+ drivers/gpio/gpio-gxp.c                       | 573 +++++++++++++++++
+ drivers/hwmon/Kconfig                         |   2 +-
+ drivers/hwmon/gxp-fan-ctrl.c                  | 108 +---
+ 8 files changed, 1184 insertions(+), 119 deletions(-)
+ create mode 100644 drivers/gpio/gpio-gxp-pl.c
+ create mode 100644 drivers/gpio/gpio-gxp.c
+
+-- 
+2.17.1
+
