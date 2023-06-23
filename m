@@ -2,65 +2,69 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF0FFEB64DD
-	for <linux-hwmon@archiver.kernel.org>; Fri, 23 Jun 2023 06:02:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD56BEB64DD
+	for <linux-hwmon@archiver.kernel.org>; Fri, 23 Jun 2023 12:46:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjFWGCW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 23 Jun 2023 02:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
+        id S231441AbjFWMqX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 23 Jun 2023 08:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjFWGCV (ORCPT
+        with ESMTP id S231689AbjFWMp4 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 23 Jun 2023 02:02:21 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67CDE46;
-        Thu, 22 Jun 2023 23:02:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687500139; x=1719036139;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Vodh8wAG7sJf3qs+Aw5XI9b3gtoEQcZ37TMv9wZhJAw=;
-  b=IqM+zcJFVp8xZ91p74L4XTdCccCnLhdRaa2TYYwNE2TSLCkn8oJFmqts
-   nYgIlK3JOnO72GwZ19On6Yh5/+josU/pVDidt4P31dLQlFvwbuBEfmbpQ
-   oxGuOnHeiRxodsluBP9uFawVUwFg1XiOlcR7I32q7wRPFZp6bmSpdXEbM
-   K8UbueXeG1bIDGC+QIaU1PT36Ny7yj/zgjWs9hL/UbmoIlvPNWlT0DneY
-   2MmkeaNlrZvQj0SNwBPzEaWyJ1HAMUOfw/L4sJtyJMKHE9mjkVUfLc09P
-   2ufRjEYkViC28jevmE63Bo3BhAdi5qzPLLkytCFV0nEqpqpCIAmy2gocZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="390612532"
-X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
-   d="scan'208";a="390612532"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 23:02:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="828253855"
-X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
-   d="scan'208";a="828253855"
-Received: from choongyo-mobl.gar.corp.intel.com (HELO [10.215.253.116]) ([10.215.253.116])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 23:02:06 -0700
-Message-ID: <20b1302a-a437-bd66-e7a4-0224875488f2@linux.intel.com>
-Date:   Fri, 23 Jun 2023 14:02:04 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH net-next 3/6] net: phy: update in-band AN mode when
- changing interface by PHY driver
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Simon Horman <simon.horman@corigine.com>
-Cc:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        Fri, 23 Jun 2023 08:45:56 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893D52130;
+        Fri, 23 Jun 2023 05:45:07 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-666e6541c98so418205b3a.2;
+        Fri, 23 Jun 2023 05:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687524307; x=1690116307;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2sk22LSjhy08WjBidsivSikrImU390NZZ49H7BXVoJQ=;
+        b=dgy9ZZ/B/vzCfojJVvZFlMcbLu3U6AgURT7rc5FqQVNQ1ELPMyoJgnhNKdbnnSvKHw
+         4ed/xa08bzusVTq2xsiDkJz8HAbslFeisfotHSzb6BROJQgM8Lhk3T/hvBq8jzvYlKcq
+         27lIJ13qyy2Q+8VUVrDZwzgW44vlG4VhrBgv3yIyS9GDwH/KFZdjU9yBQyC0r6Nsa2xm
+         GZa6mWGhu9Wi7yv1VnipgVBE9u3228i3fyfJeTHBRpxcYLyyjjef2luCa/bWKz+X2kSd
+         En6B81JiqQtZmTiVcTuYkZdw7Ht1YzZDb4TjLongLYNkUAgS7hNxC5LOKFlNfYrA9/I2
+         IrPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687524307; x=1690116307;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2sk22LSjhy08WjBidsivSikrImU390NZZ49H7BXVoJQ=;
+        b=Nrm863dTY6S/l2y1nc4DXSlRCavc56OMMTx8U4pAAw8i8U8JpQFLHsyf+GL5Eit6Zq
+         IGjdWzTO3FCeZ56flzRpoRCOLHoxOgDQ92+Vv0CH8zC6bXBNcB9az58zObP74Nd8x/x7
+         35+kNhJq+zY6wl+Ufyc+1RFU+zUj6rcxETV6rzNIzXei8ZlimrrrlzbEoPafYuH158RU
+         CvyYOqSb9pDIsQBRDYg7QtDp35Cfei0h5mfHug33ejjFok2eLghCszv2QdRwSmhIATB9
+         hnhhRNg4GeJa1434XAdH29LHTQDKFakpNZocRLJh9F43jme7S0TSFzKaer1uCDyt0ewl
+         ey8w==
+X-Gm-Message-State: AC+VfDyk8ihSxJUEQrPWhifPZeG8nV//iwBay908+A+jNSPaCaS3+LqX
+        KHN6BBhFAnZHe3ICByYHAPg=
+X-Google-Smtp-Source: ACHHUZ6yh1r1E1jdJMamk8/pwcIqXZFbn5z9Z4TX1FSYCK9sWTPK/gmdJAqZ5PY9Qy0QovhJWcDbvw==
+X-Received: by 2002:a05:6a20:54aa:b0:112:2843:b546 with SMTP id i42-20020a056a2054aa00b001122843b546mr26730950pzk.58.1687524306826;
+        Fri, 23 Jun 2023 05:45:06 -0700 (PDT)
+Received: from VkUbuntu ([150.117.130.6])
+        by smtp.gmail.com with ESMTPSA id y20-20020a1709027c9400b001b53c8659fesm7120300pll.30.2023.06.23.05.44.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 05:45:06 -0700 (PDT)
+Date:   Fri, 23 Jun 2023 20:44:54 +0800
+From:   Wong Vee Khee <veekhee@gmail.com>
+To:     Choong Yong Liang <yong.liang.choong@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
         David E Box <david.e.box@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
         Mark Gross <markgross@kernel.org>,
         Jose Abreu <Jose.Abreu@synopsys.com>,
         Andrew Lunn <andrew@lunn.ch>,
         Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
         "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Giuseppe Cavallaro <peppe.cavallaro@st.com>,
@@ -85,94 +89,32 @@ Cc:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
         linux-arm-kernel@lists.infradead.org,
         platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
         bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
-        "Tan, Tee Min" <tee.min.tan@linux.intel.com>,
+        Tee Min <tee.min.tan@linux.intel.com>,
         Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
         Lai Peter Jun Ann <jun.ann.lai@intel.com>
+Subject: Re: [PATCH net-next 1/6] platform/x86: intel_pmc_core: Add IPC
+ mailbox accessor function and add SoC register access
+Message-ID: <ZJWTxiJA4Z028/2G@VkUbuntu>
 References: <20230622041905.629430-1-yong.liang.choong@linux.intel.com>
- <20230622041905.629430-4-yong.liang.choong@linux.intel.com>
- <ZJReJ2yxqKGQx1BU@corigine.com> <ZJRjd0oqj95U0nHc@shell.armlinux.org.uk>
-From:   Choong Yong Liang <yong.liang.choong@linux.intel.com>
-In-Reply-To: <ZJRjd0oqj95U0nHc@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <20230622041905.629430-2-yong.liang.choong@linux.intel.com>
+ <0652c9c8-27ee-0af9-9aa8-a2909142d405@redhat.com>
+ <1599dd7a-f297-577b-7f5c-295a660c0c9c@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1599dd7a-f297-577b-7f5c-295a660c0c9c@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Russell,
+On Fri, Jun 23, 2023 at 01:52:49PM +0800, Choong Yong Liang wrote:
+> Hi Hans,
+> 
+> I will discuss it with David but currently he is on vacation. It might take
+> some time to get the final output. Thank you.
+>
 
-Thank you for pointing that out.
-I will fix it and send out version 2.
+Please remember not to top post on ML.
 
-On 22/6/2023 11:06 pm, Russell King (Oracle) wrote:
-> On Thu, Jun 22, 2023 at 04:43:51PM +0200, Simon Horman wrote:
->> On Thu, Jun 22, 2023 at 12:19:02PM +0800, Choong Yong Liang wrote:
->>> From: "Tan, Tee Min" <tee.min.tan@linux.intel.com>
->>>
->>> Add cur_link_an_mode into phy_device struct for PHY drivers to
->>> communicate the in-band AN mode setting with phylink framework.
->>>
->>> As there is a mechanism in PHY drivers to switch the PHY interface
->>> between SGMII and 2500BaseX according to link speed. In this case,
->>> the in-band AN mode should be switching based on the PHY interface
->>> as well, if the PHY interface has been changed/updated by PHY driver.
->>>
->>> For e.g., disable in-band AN in 2500BaseX mode, or enable in-band AN
->>> back for SGMII mode (10/100/1000Mbps).
->>>
->>> Signed-off-by: Tan, Tee Min <tee.min.tan@linux.intel.com>
->>> Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
->>
->> ...
->>
->>> diff --git a/include/linux/phy.h b/include/linux/phy.h
->>> index 11c1e91563d4..c685b526e307 100644
->>> --- a/include/linux/phy.h
->>> +++ b/include/linux/phy.h
->>> @@ -756,6 +756,8 @@ struct phy_device {
->>>   	/* MACsec management functions */
->>>   	const struct macsec_ops *macsec_ops;
->>>   #endif
->>> +	/* For communicate the AN mode setting with phylink framework. */
->>> +	u8 cur_link_an_mode;
->>>   };
->>
->> Hi Choong Yong Liang,
->>
->> Please consider adding cur_link_an_mode to the kernel doc
->> for struct phy_device - which is above the definition of struct phy_device.
-> 
-> This looks like it's grabbing something from phylink and stuffing it
-> into phylib.  However, I have no idea, because I don't seem to have
-> received the original patches. I'm guessing the reason is:
-> 
-> 2023-06-22 05:21:24 1qCBoy-0003ji-G9 H=mga03.intel.com
-> [134.134.136.65]:57703 I=[78.32.30.218]:25
-> X=TLS1.2:ECDHE_SECP521R1__RSA_SHA512__AES_256_GCM:256
-> F=<yong.liang.choong@linux.intel.com> rejected after DATA: unqualified
-> address not permitted: failing address in "Cc:" header is: Tan
-> 
-> Which I suspect came from:
-> 
-> 	Tan, Tee Min <tee.min.tan@linux.intel.com>
-> 
-> and someone doesn't realise that a "," in the display-name part of
-> an address *must* be quoted, otherwise "," is taken to be a separator
-> in the address list.
-> 
-> Consequently, it has now become:
-> 
-> 	Tan@web.codeaurora.org, Tee Min <tee.min.tan@linux.intel.com>,
-> 
-> It should have been:
-> 
-> 	"Tan, Tee Min" <tee.min.tan@linux.intel.com>
-> 
-> with the double-quotes.
-> 
-> Please do not review this series further, but instead, please can the
-> author repost it forthwith with correct conformant headers so that a
-> proper review can be undertaken by all?
-> 
-> Thanks.
-> 
+Regards,
+ Vee Khee
