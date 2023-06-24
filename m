@@ -2,131 +2,83 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EF6EEB64DA
-	for <linux-hwmon@archiver.kernel.org>; Sat, 24 Jun 2023 10:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA689EB64DA
+	for <linux-hwmon@archiver.kernel.org>; Sat, 24 Jun 2023 15:48:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbjFXKOO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 24 Jun 2023 06:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
+        id S232834AbjFXPsD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 24 Jun 2023 11:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbjFXKON (ORCPT
+        with ESMTP id S230319AbjFXPsB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 24 Jun 2023 06:14:13 -0400
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5E61FF2
-        for <linux-hwmon@vger.kernel.org>; Sat, 24 Jun 2023 03:14:11 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id C64D0240104
-        for <linux-hwmon@vger.kernel.org>; Sat, 24 Jun 2023 12:14:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1687601649; bh=iaUVSnuKkwJ5a4hvz5q/EtjfvAaUpU9k26WNESxBnHk=;
-        h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Disposition:From;
-        b=FkwnP9SG0IAJ1xf2B2Ao385/XAu2sz4Zi+knE//LcNf+GyMt6qAzLwGDx5gBMAQTc
-         l64GcuNCJQ7Qo/LT8y1QQcMA4GPusrqW3SuUoTaDabKCUXGbdD1P9mDt7S8NKUlonf
-         NuFloxpxHo9GIYB0HAh1EO3HHRxDN0a0bn6h1TNcGxR5u4RikJtxVzZBMoo7OrHyIj
-         n3v5OMagFISTVak5mF+nkaociI10RNQ1QyPSzY3buIKuT7t3t8yU/LQjmkvX7avevS
-         tjSR0h6z02ONspL33X+pOtALudwn52hdGn1G9CsH/vgY4k6An9Kt55Jz5UKhhK5Pb0
-         UVAAgJsRJbgoA==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4Qp91r6Ppfz6tvJ;
-        Sat, 24 Jun 2023 12:14:08 +0200 (CEST)
-Date:   Sat, 24 Jun 2023 10:14:07 +0000
-From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Sat, 24 Jun 2023 11:48:01 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345062107;
+        Sat, 24 Jun 2023 08:47:54 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-666e3b15370so997886b3a.0;
+        Sat, 24 Jun 2023 08:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687621673; x=1690213673;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CdfaXGINEtUTeyhGC2oZ9KhV4VlXowGN9+aWjM7UxFk=;
+        b=YLYiKQHxQ/47fDD+6FaPo0MEQSWW8UW6LFqlMK7VW5v5V8ZN4EiMIFqRdzxdTzVha1
+         tSdFL+mGfKbWBqWHkIYkpO4coniQ/xxXLCu8zkzlkwLhBUHr7xUZxF8xYhFUseiudtWW
+         FT4cqx/CFxZdtDLsVzD24iCFSWYYf+W5WgsjotmL4zkEl/pfMWUaANFmidIkq/+TkG/O
+         oPFTaANByahwV3ffbSBcshuBen1JI80qHmHZhQsQr9VqPCMXcdxAosuwvF5/q0fNjfC9
+         P0aI3IsV8PzjZnfOppq0F4bGFbhi0g4hMXcMufp0pI8xxOa0XsNfazIH5d8Pup6mq+fe
+         zXqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687621673; x=1690213673;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CdfaXGINEtUTeyhGC2oZ9KhV4VlXowGN9+aWjM7UxFk=;
+        b=GVyXyDipsAmY+9j9ZzKJaSLB6xquIesBJj2jK7SigKd/Exnc725FJlz+evert+HXzM
+         A4sTq0fThDJvuKZErzwfSHB10RtFFsiyHAn9nvu/pl9Xa+BB4UdSGz1MDKd91zZj5ru+
+         oNoC5qWheobdEc4GgFFxk1FtkgICNk229f9hXnBurGp7Eyvk5L9SHqm+H3+TyQsQB1c8
+         CTw4QYaCbZI89RSa8CFIl/cqZhsK/0gihGxqNAudLH0ZNAbSUSZ208M1BEs/eNIikyTk
+         I5COHXEmxjSGsjD8wd0/q7qriFs/LtCeUk8R8JWkN3NkhUXFwelLuWsSs/piyBdwKS5p
+         07GQ==
+X-Gm-Message-State: AC+VfDyK9TI/olg/eqJdysi+pXVnQHFxg33VKXhUFXYS7Alx1dYv7N0o
+        bYKSdED83fAJaDmEVGW3TTM=
+X-Google-Smtp-Source: ACHHUZ7Y1KSpYGFshUqzzlwvSDfdQqN1fIfjk1aqrr3ck4chwdfuvHVevfsuvkj0Aqg6rPnT/81gWA==
+X-Received: by 2002:a05:6a20:8428:b0:11f:6dc:4f38 with SMTP id c40-20020a056a20842800b0011f06dc4f38mr22638472pzd.55.1687621673440;
+        Sat, 24 Jun 2023 08:47:53 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x10-20020aa793aa000000b0063b86aff031sm1228474pff.108.2023.06.24.08.47.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Jun 2023 08:47:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 24 Jun 2023 08:47:51 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: corsair-psu: update Series 2022 and 2023 support
-Message-ID: <ZJbB72CAPmLflhHG@monster.localdomain>
+Subject: Re: [PATCH] hwmon: corsair-psu: update Series 2022 and 2023 support
+Message-ID: <81368b1a-3b29-4c13-8a36-074f3346bd67@roeck-us.net>
+References: <ZJbB72CAPmLflhHG@monster.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <ZJbB72CAPmLflhHG@monster.localdomain>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The series 2022/2023 reports slightly longer vendor/product strings
-and shares USB ids. Technically the reply size is the USB HID packet
-size (64 bytes) but all the supported commands do not use more than 8
-bytes and replies reporting back strings do not use more then 24 bytes
-(vendor and product are in one string in the newer devices now). The
-rest of the reply is always filled with '\0'. Also update comments
-and documentation accordingly.
+On Sat, Jun 24, 2023 at 10:14:07AM +0000, Wilken Gottwalt wrote:
+> The series 2022/2023 reports slightly longer vendor/product strings
+> and shares USB ids. Technically the reply size is the USB HID packet
+> size (64 bytes) but all the supported commands do not use more than 8
+> bytes and replies reporting back strings do not use more then 24 bytes
+> (vendor and product are in one string in the newer devices now). The
+> rest of the reply is always filled with '\0'. Also update comments
+> and documentation accordingly.
+> 
+> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
 
-Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
----
- Documentation/hwmon/corsair-psu.rst | 13 ++++++++-----
- drivers/hwmon/corsair-psu.c         |  9 ++++++---
- 2 files changed, 14 insertions(+), 8 deletions(-)
+Applied.
 
-diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
-index 47f8ff632267..16db34d464dd 100644
---- a/Documentation/hwmon/corsair-psu.rst
-+++ b/Documentation/hwmon/corsair-psu.rst
-@@ -15,11 +15,11 @@ Supported devices:
- 
-   Corsair HX850i
- 
--  Corsair HX1000i (Series 2022 and Series 2023)
-+  Corsair HX1000i (Series 2022 and 2023)
- 
-   Corsair HX1200i
- 
--  Corsair HX1500i (Series 2022)
-+  Corsair HX1500i (Series 2022 and 2023)
- 
-   Corsair RM550i
- 
-@@ -80,11 +80,14 @@ temp2_crit		Temperature max critical value of psu case
- Usage Notes
- -----------
- 
--It is an USB HID device, so it is auto-detected and supports hot-swapping.
-+It is an USB HID device, so it is auto-detected, supports hot-swapping and
-+several devices at once.
- 
- Flickering values in the rail voltage levels can be an indicator for a failing
--PSU. The driver also provides some additional useful values via debugfs, which
--do not fit into the hwmon class.
-+PSU. Accordingly to the default automatic fan speed plan the fan starts at about
-+30% of the wattage rating. If this does not happen, a fan failure is likely. The
-+driver also provides some additional useful values via debugfs, which do not fit
-+into the hwmon class.
- 
- Debugfs entries
- ---------------
-diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-index 9e3e3c0a3bdd..904890598c11 100644
---- a/drivers/hwmon/corsair-psu.c
-+++ b/drivers/hwmon/corsair-psu.c
-@@ -42,12 +42,15 @@
-  *	- the driver supports debugfs for values not fitting into the hwmon class
-  *	- not every device class (HXi or RMi) supports all commands
-  *	- if configured wrong the PSU resets or shuts down, often before actually hitting the
-- *	- reported critical temperature
-+ *	  reported critical temperature
-+ *	- new models like HX1500i Series 2023 have changes in the reported vendor and product
-+ *	  strings, both are slightly longer now, report vendor and product in one string and are
-+ *	  the same now
-  */
- 
- #define DRIVER_NAME		"corsair-psu"
- 
--#define REPLY_SIZE		16 /* max length of a reply to a single command */
-+#define REPLY_SIZE		24 /* max length of a reply to a single command */
- #define CMD_BUFFER_SIZE		64
- #define CMD_TIMEOUT_MS		250
- #define SECONDS_PER_HOUR	(60 * 60)
-@@ -880,7 +883,7 @@ static const struct hid_device_id corsairpsu_idtable[] = {
- 	{ HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
- 	{ HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
- 	{ HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsair HX1000i Series 2023 */
--	{ HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Series 2022 */
-+	{ HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Series 2022 and 2023 */
- 	{ },
- };
- MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
--- 
-2.41.0
-
+Thanks,
+Guenter
