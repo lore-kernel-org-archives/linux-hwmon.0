@@ -2,107 +2,123 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FFCFEB64DA
-	for <linux-hwmon@archiver.kernel.org>; Sat, 24 Jun 2023 17:25:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BB01EB64DA
+	for <linux-hwmon@archiver.kernel.org>; Sat, 24 Jun 2023 23:17:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjFXRZe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 24 Jun 2023 13:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S229577AbjFXXRe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 24 Jun 2023 19:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFXRZd (ORCPT
+        with ESMTP id S229537AbjFXXRe (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 24 Jun 2023 13:25:33 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A593610D2;
-        Sat, 24 Jun 2023 10:25:32 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-780d9f1bf85so83070339f.0;
-        Sat, 24 Jun 2023 10:25:32 -0700 (PDT)
+        Sat, 24 Jun 2023 19:17:34 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C701A1;
+        Sat, 24 Jun 2023 16:17:33 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6b5915d0816so1679562a34.1;
+        Sat, 24 Jun 2023 16:17:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687648652; x=1690240652;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4WdDt11MYZioKMB3gqCGdUJFk6irWr34L7VPfhui5X0=;
+        b=QF2t+42ZS3kkfqWiy5x68D9/icqbQeVXG7007BWDQvOdK8xdc0E811AzokmBtAg1dM
+         4qDoC1sl12bC0wyeeIl1ZdXwWJHaDmwTgQw66+snmRa0+RrDSYHKnoBdRPH23Aaoi18r
+         ZdyFG2LCoh8fYMfRhM8K+b22Xp+/uK+YAyn0MIGAPJA7yKx40+T8gy2q5j+KQH/qeV4S
+         gQee7pB6JeqBKrYLfftanC81JRVHDpjBYpg+3BHo0230YkdyH1yqOEogQXup1B7Jv6xU
+         6g6B05P871MzJQicDhVIe3Vj1kTA3ItZ3yM0s+QudcSCCsmnlzKt0Ad16zDBUQjiV3LU
+         Pcvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687627532; x=1690219532;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Rbq4vJktFS9BBGT+vfHjQB0z6sUAkBFuaWTct5wa/a8=;
-        b=JYO9IfXAWC2EMu3kQ2lCr6Qbe5MT9BRz6lEwAJx2SsbyfSks/MU2XJsoAEcBzCYdBK
-         OD7Klv9Wd5M+NiNMwEym0tvCBNjkqaVzAAS5Yla2jBsm3cFWy4M2mCQuNa39wjYCKtmw
-         5vpR6RMcUwHI4MJQe4vf3e8x124qJxV1ddIyWn+pVF1WoayQV0x6KAAN11Yu5Cdz8DYq
-         nJ80N6EofyxjFCR4rLytID5zXNztpCwweirpUl6d2+MqD6Vaa/kIOjQkSJBzEcmPhn0a
-         IPv3lqDdyp6TE8bW8CPkb+iGKOopuUb55wOUvwsckL6BIs5S9Rz3sftwcOf2dbgJlfdo
-         uzfg==
-X-Gm-Message-State: AC+VfDx0nv1SXCleBVX8aVsTSBf7gAeB8q7vL0n80CGGFkgM6RPPbAiT
-        9ym1sZEOumCUJ/zMgXRoJg==
-X-Google-Smtp-Source: ACHHUZ5jTICnMb0WuM2/jvI6dSsywUGWCmKkiiNUEfOJU40TNRrz3QzG/8eEqqSJ0MQhmBnQQvj5TQ==
-X-Received: by 2002:a5d:9941:0:b0:780:bf50:32c9 with SMTP id v1-20020a5d9941000000b00780bf5032c9mr11347401ios.15.1687627531742;
-        Sat, 24 Jun 2023 10:25:31 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id z6-20020a5ec906000000b0077e25471a7fsm723230iol.48.2023.06.24.10.25.30
+        d=1e100.net; s=20221208; t=1687648652; x=1690240652;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4WdDt11MYZioKMB3gqCGdUJFk6irWr34L7VPfhui5X0=;
+        b=eGucHQAUQxYHRLxEATE7ZH68QKAa2rkAVt4gMGAY8fu9MQIj4dU76806ARtBu2OtGm
+         AmVNBtOCDD1XGtTzO4c2gJO8Rn3GHIVrRxRU64VmjNCzlk9NVfrcggDKpIE9w6K27XGP
+         5q1JhCyjlIGB8cCXztsYIt9qmfYkoZQkr9ecxvWyUEnSCb6muqbvH+iIxkaFO1jfakmV
+         u0De9ZAr8iR95bO44dJ+4UjHefypqQER2PA8AHX1DZecL9h2HGzxkE5rpi3QEertsV3d
+         kqiobLWr3unyTr7VoX7S20mXh7StnYwKb3b0Bg6Xi62ecWoPBuQQipHZr1Mi+MvR1uFu
+         lPeQ==
+X-Gm-Message-State: AC+VfDxCwrDuPr8rbK/UAIclZsqzyCCvVLOq1JcLfIIFTx8GcWQqj8i3
+        XiJ9pREiK0r37ames+RA3aFrbStm6vE=
+X-Google-Smtp-Source: ACHHUZ7vVQSxbHx2xn9+X8KL47TXb/MKqY3Q4envHApbfY3f5paoMuiF/bR7e3Lfcke87zfacr8u2w==
+X-Received: by 2002:a9d:61d0:0:b0:6b7:3fda:20d5 with SMTP id h16-20020a9d61d0000000b006b73fda20d5mr276236otk.32.1687648652223;
+        Sat, 24 Jun 2023 16:17:32 -0700 (PDT)
+Received: from smeagol.fibertel.com.ar ([201.235.4.68])
+        by smtp.gmail.com with ESMTPSA id h17-20020a9d6411000000b006b720475c38sm1189811otl.45.2023.06.24.16.17.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Jun 2023 10:25:30 -0700 (PDT)
-Received: (nullmailer pid 3243734 invoked by uid 1000);
-        Sat, 24 Jun 2023 17:25:29 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Sat, 24 Jun 2023 16:17:30 -0700 (PDT)
+From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+To:     linux@roeck-us.net
+Cc:     Jerrod Frost <jcfrosty@proton.me>, derekjohn.clark@gmail.com,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+Subject: [PATCH] hwmon: (oxp-sensors) Add support for AOKZOE A1 PRO
+Date:   Sat, 24 Jun 2023 20:16:33 -0300
+Message-ID: <20230624231637.14941-2-samsagax@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     JuenKit_Yip@hotmail.com
-Cc:     vincent@vtremblay.dev, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowki+dt@linaro.org, geert+renesas@glider.be,
-        linux@roeck-us.net, michal.simek@amd.com,
-        linux-hwmon@vger.kernel.org, jdelvare@suse.com, broonie@kernel.org,
-        conor+dt@kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <DB4PR10MB626179DE1C511B10ECA74D209220A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-References: <20230624160148.218786-1-JuenKit_Yip@hotmail.com>
- <DB4PR10MB626179DE1C511B10ECA74D209220A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-Message-Id: <168762752922.3243704.2220547927763336288.robh@kernel.org>
-Subject: Re: [PATCH 3/3] dt-bindings: <hwmon>: add sht3x devicetree binding
-Date:   Sat, 24 Jun 2023 11:25:29 -0600
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+From: Jerrod Frost <jcfrosty@proton.me>
 
-On Sun, 25 Jun 2023 00:01:48 +0800, JuenKit_Yip@hotmail.com wrote:
-> From: JuenKit Yip <JuenKit_Yip@hotmail.com>
-> 
-> add sht3x devicetree binding files
-> 
-> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
-> ---
->  .../devicetree/bindings/hwmon/sht3x.yaml      | 31 +++++++++++++++++++
->  .../devicetree/bindings/trivial-devices.yaml  |  4 +++
->  2 files changed, 35 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/sht3x.yaml
-> 
+This device is an iteration over the AOKZOE A1 with the same EC mapping
+and features. It also has support for tt_toggle.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Thanks to Jerrod for authoring and testing.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/hwmon/sht3x.yaml:2:2: [error] syntax error: expected alphabetic or numeric character, but found ' ' (syntax)
+Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
+---
+ Documentation/hwmon/oxp-sensors.rst | 2 ++
+ drivers/hwmon/oxp-sensors.c         | 7 +++++++
+ 2 files changed, 9 insertions(+)
 
-dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/hwmon/sht3x.example.dts'
-Documentation/devicetree/bindings/hwmon/sht3x.yaml:2:2: could not find expected directive name
-make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/hwmon/sht3x.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-./Documentation/devicetree/bindings/hwmon/sht3x.yaml:2:2: could not find expected directive name
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/sht3x.yaml: ignoring, error parsing file
-make: *** [Makefile:1512: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/DB4PR10MB626179DE1C511B10ECA74D209220A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
+index 0ca1f7728c34..3adeb7406243 100644
+--- a/Documentation/hwmon/oxp-sensors.rst
++++ b/Documentation/hwmon/oxp-sensors.rst
+@@ -30,6 +30,7 @@ Supported devices
+ Currently the driver supports the following handhelds:
+ 
+  - AOK ZOE A1
++ - AOK ZOE A1 PRO
+  - Aya Neo 2
+  - Aya Neo AIR
+  - Aya Neo AIR Pro
+@@ -40,6 +41,7 @@ Currently the driver supports the following handhelds:
+ 
+ "Turbo/Silent" button behaviour toggle is only supported on:
+  - AOK ZOE A1
++ - AOK ZOE A1 PRO
+  - OneXPlayer mini AMD (only with updated alpha BIOS)
+  - OneXPlayer mini AMD PRO
+ 
+diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+index 1e59d97219c4..e1a907cae820 100644
+--- a/drivers/hwmon/oxp-sensors.c
++++ b/drivers/hwmon/oxp-sensors.c
+@@ -77,6 +77,13 @@ static const struct dmi_system_id dmi_table[] = {
+ 		},
+ 		.driver_data = (void *)aok_zoe_a1,
+ 	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "AOKZOE"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AOKZOE A1 Pro"),
++		},
++		.driver_data = (void *)aok_zoe_a1,
++	},
+ 	{
+ 		.matches = {
+ 			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
+-- 
+2.41.0
 
