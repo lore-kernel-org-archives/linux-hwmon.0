@@ -2,126 +2,85 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39652EB64DA
-	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Jun 2023 01:24:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA676EB64DA
+	for <linux-hwmon@archiver.kernel.org>; Sun, 25 Jun 2023 03:17:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjFYBYV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 24 Jun 2023 21:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
+        id S231528AbjFYDRy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 24 Jun 2023 23:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjFYBYU (ORCPT
+        with ESMTP id S231506AbjFYDRx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 24 Jun 2023 21:24:20 -0400
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E71E54;
-        Sat, 24 Jun 2023 18:24:18 -0700 (PDT)
-Received: by mail-oo1-xc35.google.com with SMTP id 006d021491bc7-560c617c820so1565054eaf.3;
-        Sat, 24 Jun 2023 18:24:18 -0700 (PDT)
+        Sat, 24 Jun 2023 23:17:53 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7476106;
+        Sat, 24 Jun 2023 20:17:51 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-3a0457d6b77so1919706b6e.0;
+        Sat, 24 Jun 2023 20:17:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687656258; x=1690248258;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=e1efT16ug32Wj/IcB7velfMS/W9dxeMLEvWoz2Xvc88=;
-        b=Mv3zAvYL9k98W91B4UuI7FxsAoZliNAy632c2cWyoOmOzXgTT5OHGdIHThCF5PrkYT
-         nkUHvFJ8sR8tO03nWpJIvitEHXV5Ii6WdcnIXOVfDsl/sOpU0e3OuN4S/YSQzQxzV0M+
-         95XWGgPeTanvjrqN50yJQH/+7YYAKvwHOFHvoEcbOeFzqPvuOFkoQlUQ+bxswGmGy8eK
-         TmTUjxhPh3S7sW9xQVnuAgXAkpPKhquLGjL3qv9h8Jq8yb6uJrdhPisy1iYOt+lfUl9F
-         czMzxgfBMdItcsJe3mFCst5rJ/oxZKoHfpRDnyRdVg3176dvgX0fB5qABeFmOpvz2bTZ
-         gA3Q==
+        d=gmail.com; s=20221208; t=1687663071; x=1690255071;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zBilisKOTg9JZolq21bCIv/Br31Fsns6PGz19Vp4DGo=;
+        b=YKehVqZOBt54T6vymM835Yhw7wB7mjpYt8PQrAOqdakKDfI5E2cLKdJrCzQi3tHV4R
+         aO468GQDPg9PDHBvu6Kv8AY2xT90HDSwOq48vTU0sH1nu/SG7ymZFUwHvs2Mm0G4INtY
+         ymgZD5DdbIdnq4ed/lwx7dqVZF98dXw95TSm4Avz9nKwWOH8/g/2rF3wYyRkjJzF6V5V
+         0Wg9Djrm07LKZDCbkQnMQzwd5WxIyEU+E1VxhhbcAbW1rSlG6uiDrx98UZvXAK0+6v2y
+         DJFnqNeUoTHAYN8zbTKU1f6zxrydOr/vRpATLjbIxCzESg6EJ/kD2rnJobHJjECrw6OQ
+         xh3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687656258; x=1690248258;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e1efT16ug32Wj/IcB7velfMS/W9dxeMLEvWoz2Xvc88=;
-        b=CCc7EPVObUhQIap7AZHrmGJ0R/ZxJxLx4g09Guri90NTTLhCXH166CW4kmzNZRC4ND
-         VS7guXq8CxIzMrM5C+kp9FpLXIN6IHYMYLMYLYKidWCUy77ApkSMs6VblsqB8SHY8BdO
-         1S5wxrt/g1TYIyAOcoJ3qxjCmIOGBaLreqMmDpuX7wRfI8ojEJOXJtGxVlEmjomkZ+VS
-         4bauxkcv/7v6WL2vPbVJuACKmVo9/tplX4Q3H014QQekQXfKZosSohIrU/m7GKzVWdGB
-         5Rypk5Oot6z+rYcCSiz+FCU6o9mCyco+iVx4BpbijfAQA8GH5ILi/N93OQJe8DEdbkgy
-         YurQ==
-X-Gm-Message-State: AC+VfDxomX/4aICjYM6e8Xtrcp0qlnlVDzBaF4cuBzQ9MiU2Zdm+YtBO
-        4dLlQS//pbi4t1RxkgzUJ64=
-X-Google-Smtp-Source: ACHHUZ65xB8Vy3g58wdMURysw6wuJ8fZ2aqYEiZNVh0Ct7QT/nR9J1wfzXbUWegZ4hkucXqtQdEycg==
-X-Received: by 2002:a4a:de82:0:b0:55c:6812:27c5 with SMTP id v2-20020a4ade82000000b0055c681227c5mr20253372oou.9.1687656257855;
-        Sat, 24 Jun 2023 18:24:17 -0700 (PDT)
-Received: from smeagol.fibertel.com.ar ([201.235.4.68])
-        by smtp.gmail.com with ESMTPSA id i17-20020a4ad391000000b0054fba751207sm1090022oos.47.2023.06.24.18.24.14
+        d=1e100.net; s=20221208; t=1687663071; x=1690255071;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zBilisKOTg9JZolq21bCIv/Br31Fsns6PGz19Vp4DGo=;
+        b=MPtxcRANOpYP1YaqsUamT8kHXBvDd0cwiRtnnoxvMbIHuT2a+O8+pehfynjrMRe7/C
+         pFDvUwp3IbQkxLS4TRUH33QE54kX5payVmrvZigkUgL5w0QTO4uGvZN5bzhGiQwUp9ph
+         KwPW6BZA50JplX3OFFWLxBDWAGyd5+hXequH/gDD9EVO34XqC3T0cVWuAt96Y+zH3g60
+         FE8DLd5xk9AGLDuDK7zAe32XBhHwKHeWZzUklJH5I3pXabxrNJnNN4ZzSOwTDlqGJ4+P
+         Hb3qmy83teBgkHQcYe0U3FbP2RALf08dADaFczMnZeqwLGyfkSq29LIukpFJFEuYCLwE
+         aL1w==
+X-Gm-Message-State: AC+VfDxBVOqzFai+wrP6x6Z54FXbslKlydlwIe44alK0hnkbQbw6giC2
+        lo3wNor/dPdXwH7uxILs9HY=
+X-Google-Smtp-Source: ACHHUZ7/Jy5NTcD3WQf00SgbwK/z6pHXBZJrcLxhWoeULa8d+UVF+ZY0WURnPFlyNpd+GdqZxi5Ujg==
+X-Received: by 2002:a05:6808:bca:b0:3a0:3587:ff56 with SMTP id o10-20020a0568080bca00b003a03587ff56mr20862227oik.24.1687663071039;
+        Sat, 24 Jun 2023 20:17:51 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v8-20020a17090a898800b0025eaeaae318sm1897898pjn.7.2023.06.24.20.17.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Jun 2023 18:24:17 -0700 (PDT)
-From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>
-To:     linux@roeck-us.net
+        Sat, 24 Jun 2023 20:17:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 24 Jun 2023 20:17:49 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>
 Cc:     Jerrod Frost <jcfrosty@proton.me>, derekjohn.clark@gmail.com,
         jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>
-Subject: [PATCH v2] hwmon: (oxp-sensors) Add support for AOKZOE A1 PRO
-Date:   Sat, 24 Jun 2023 22:23:44 -0300
-Message-ID: <20230625012347.121352-2-samsagax@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (oxp-sensors) Add support for AOKZOE A1 PRO
+Message-ID: <a5a5ae9e-a7fe-4d0c-bd86-34d104681dba@roeck-us.net>
+References: <20230625012347.121352-2-samsagax@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230625012347.121352-2-samsagax@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Jerrod Frost <jcfrosty@proton.me>
+On Sat, Jun 24, 2023 at 10:23:44PM -0300, Joaquín Ignacio Aramendía wrote:
+> From: Jerrod Frost <jcfrosty@proton.me>
+> 
+> This device is an iteration over the AOKZOE A1 with the same EC mapping
+> and features.
+> 
+> It also has support for tt_toggle.
+> 
+> Signed-off-by: Jerrod Frost <jcfrosty@proton.me>
+> Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
 
-This device is an iteration over the AOKZOE A1 with the same EC mapping
-and features.
+Applied.
 
-It also has support for tt_toggle.
-
-Signed-off-by: Jerrod Frost <jcfrosty@proton.me>
-Signed-off-by: JoaquÃ­n Ignacio AramendÃ­a <samsagax@gmail.com>
----
-v2: added Jerrod signoff
----
- Documentation/hwmon/oxp-sensors.rst | 2 ++
- drivers/hwmon/oxp-sensors.c         | 7 +++++++
- 2 files changed, 9 insertions(+)
-
-diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
-index 0ca1f7728c34..3adeb7406243 100644
---- a/Documentation/hwmon/oxp-sensors.rst
-+++ b/Documentation/hwmon/oxp-sensors.rst
-@@ -30,6 +30,7 @@ Supported devices
- Currently the driver supports the following handhelds:
- 
-  - AOK ZOE A1
-+ - AOK ZOE A1 PRO
-  - Aya Neo 2
-  - Aya Neo AIR
-  - Aya Neo AIR Pro
-@@ -40,6 +41,7 @@ Currently the driver supports the following handhelds:
- 
- "Turbo/Silent" button behaviour toggle is only supported on:
-  - AOK ZOE A1
-+ - AOK ZOE A1 PRO
-  - OneXPlayer mini AMD (only with updated alpha BIOS)
-  - OneXPlayer mini AMD PRO
- 
-diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-index 1e59d97219c4..e1a907cae820 100644
---- a/drivers/hwmon/oxp-sensors.c
-+++ b/drivers/hwmon/oxp-sensors.c
-@@ -77,6 +77,13 @@ static const struct dmi_system_id dmi_table[] = {
- 		},
- 		.driver_data = (void *)aok_zoe_a1,
- 	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "AOKZOE"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AOKZOE A1 Pro"),
-+		},
-+		.driver_data = (void *)aok_zoe_a1,
-+	},
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
--- 
-2.41.0
-
+Thanks,
+Guenter
