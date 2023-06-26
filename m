@@ -2,748 +2,263 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11E17EB64DA
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Jun 2023 15:03:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D5DAEB64DC
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Jun 2023 22:06:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjFZPDz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 26 Jun 2023 11:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
+        id S231991AbjFZWGN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 26 Jun 2023 18:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjFZPDy (ORCPT
+        with ESMTP id S232010AbjFZWFt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 26 Jun 2023 11:03:54 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E71130;
-        Mon, 26 Jun 2023 08:03:52 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6686c74183cso3171811b3a.1;
-        Mon, 26 Jun 2023 08:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687791831; x=1690383831;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z5LrfGVd/PCi3tcNHR5GX7EOlr/r0pb0+B1UXQubGOU=;
-        b=MdmZhVOgyz8J9ZeLXgyM7KlEx7lmWrNEzEpWV3kSeT0TA2Faz/EPh88qxzc1KBJE0Z
-         vB+9vKBanMryQiSABTHpyppOiFQapj9bOBiZi+HG8IWQsd997v133I38KfpanI4Jrne3
-         OOUoSLn9RYcB6uqukgOhq4VZEBdRSIdB45gmpWrs2NkX5sw4HuCRERGxUBABJTpdu1KK
-         D+CUR00fN4jyhJjbV1n1Y6A5Q9+ByASy9Jrt6UuUH590QXYZiv5tx48x046C4tSK2v7H
-         WhmusH2ELsF+OchND5j3YUra1xGe7fy6VLVq6YYRZ1CTa46kFtmXHlhFQHwWU+bmt+Yf
-         zdjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687791831; x=1690383831;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z5LrfGVd/PCi3tcNHR5GX7EOlr/r0pb0+B1UXQubGOU=;
-        b=I8PW3OQxwGwJiZcFB6e9w2G1Tme3L+1n2pKq8isxM94O7IENz9ZQo15mf+/Whj0Mi7
-         VV0KgBbYQp78LJHXtYKqyVIG/MipJx05B6+Pg3KaTcRhPWQSIUPNbOOoqK0NcsmVF2GT
-         NDIEJ7b0w3o+wvDCUUZM/2MJU/aBhGKdKOnGp6Pn+DKvLud9NYsgdItV8IdF+OayM3Ly
-         BiZhu9T4h9P7JBydyfSqlrmjIj63zcwM8/5WGTN5HOSPPbIshppawYSYsMA4MuR0k3Un
-         VtS3VvIKADWLELrD/Pm/GvJEGJ+7kAQq3BlJwNq3FrAXdJADZw8uUh2fEWv4mDMTKJuy
-         uvkw==
-X-Gm-Message-State: AC+VfDyvmNpCRMfHbnxYkBhFXX/w5gerTPI46AvqemUqRp3J7OEffMkq
-        nKswoRSifnO3kH4Pbf0tnsk=
-X-Google-Smtp-Source: ACHHUZ4K35rpZSBPUbERIINb8kCm60xeVbD8SV5Te9TR6ycMOTT2j09tjeYqGj90hmwMRXcw4IoYYQ==
-X-Received: by 2002:a05:6a20:6a22:b0:122:b613:8b2 with SMTP id p34-20020a056a206a2200b00122b61308b2mr21913105pzk.0.1687791830937;
-        Mon, 26 Jun 2023 08:03:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h18-20020a63f912000000b0051b36aee4f6sm4240692pgi.83.2023.06.26.08.03.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 08:03:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3928521f-9672-862b-fd26-647453717ecf@roeck-us.net>
-Date:   Mon, 26 Jun 2023 08:03:48 -0700
+        Mon, 26 Jun 2023 18:05:49 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A003030E9;
+        Mon, 26 Jun 2023 15:01:52 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 64574320090A;
+        Mon, 26 Jun 2023 17:51:26 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 26 Jun 2023 17:51:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1687816286; x=1687902686; bh=JQJm5kvuShE/x+BolA9xjlp0+3FWuk+Xo4l
+        q8nBqcrM=; b=v1UW5Vk+qvEELxUd9wcUn451EbpYG7KhwoFm7Fzxyol1M5oHMxW
+        KrvlYL70/OaJ3GkDK8CtFicJTj9+YlZW1v+8bb2jN+pcrdc/29l4LN7wdLDkmrOQ
+        W2q/13+q+3HD8JzWL/8QhoDEpNFtYqrm8ZOVPn+iBqzBV1mzfWxLmFXHdqesh9cT
+        GzF7cWE+OoJO5tCQrcQfnpdrurECH1kn3MmSDLQXVdtm0rj5TlpWnfDA+x9BTr9/
+        +geq6puSGqtmy2iSDdz0v46WAWCxGvTdAORC8RYdJ5H7NTZiAYTFYz060jfCes1h
+        m/V25ojfmSSiZo0ZW1UAwxa0Lvyyy/eMDwA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1687816286; x=1687902686; bh=JQJm5kvuShE/x+BolA9xjlp0+3FWuk+Xo4l
+        q8nBqcrM=; b=XCsBGl/8EoanAifx+wNTdJjXHcSSua4LE+IXGyUKckbr1Qqo+NN
+        nle/gdJ17baxknXSbx874W/4ThjT3LbRqLA8bCd+4QtMqsL/MssnoeTsCkdf3kic
+        Gme/nXvhK+Btm5PyY4RdnAQnmUT/g8Q1lsN82Vgj8DBnZ7K9IZNwT3+1jxNpmXcZ
+        NVimWUcPuQesElJ+OzRkI9eQ6kKELMs5PNDyFBJBrXeYsMcnK2B4u+PBWDjnyOCw
+        onoRuBEjuFcvsYsqAFiqnR9ExtgTYZVgJ+KjHPFEOrnxA4uN7IcNTos6AEKiuw3h
+        JrJU21OrcsHV96tu8LuuuzF8bfxPh04LN+A==
+X-ME-Sender: <xms:XQiaZIobQ2qfBphvB7-U2REShppSWjuT35sUSxwMrlOA_Njd08Fsig>
+    <xme:XQiaZOrRfuBNIPDvsOjXkJcC-iB2N576-BaM_81SvBvRg_SLUtWphB-XQwuDbsQPu
+    rLV83GhA7nT23g7j80>
+X-ME-Received: <xmr:XQiaZNP0r-27Kzh6BnJhj55DHD8xe1SsCqaDzMk1-M0Q43rf7lqqR3Xp9mC5_ebQwaxZ9A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeehgedgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefkuffhvfevffgjfhgtgfgfggesth
+    gsredttderjeenucfhrhhomhepnfhukhgvucflohhnvghsuceolhhukhgvsehljhhonhgv
+    shdruggvvheqnecuggftrfgrthhtvghrnhepfffgfeeiudeutdeftdevudeflefhffduke
+    dttdevtddvveegfeevleeutdetgfeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghr
+    rghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:XQiaZP47SDuJbApE1L1MugAS3EPczBsFTnJp9-wamT2YclMN2gQmUA>
+    <xmx:XQiaZH6DE_KJdmoG6ATqykbQPdRVJaQUL9-6AEr45nAd6JjfSgW6dA>
+    <xmx:XQiaZPjMgJcYR67hfa2VKLXUmLKwWeoRCgDWVjmGW8EkXP5cI1wPow>
+    <xmx:XgiaZEt3NmfpRjzM9H3YLthMeqPCzwVwCtSpXHdcE7L0Ta7fzd6_VA>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 26 Jun 2023 17:51:21 -0400 (EDT)
+Message-ID: <28b91c278ee279e28eaeb2bc82e1b61f171239dc.camel@ljones.dev>
+Subject: Re: [PATCH v3 1/1] platform/x86: asus-wmi: add support for ASUS
+ screenpad
+From:   Luke Jones <luke@ljones.dev>
+To:     hdegoede@redhat.com
+Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, markgross@kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net
+Date:   Tue, 27 Jun 2023 09:51:13 +1200
+In-Reply-To: <20230620030033.55033-2-luke@ljones.dev>
+References: <20230620030033.55033-1-luke@ljones.dev>
+         <20230620030033.55033-2-luke@ljones.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.48.3 (by Flathub.org) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     JuenKit_Yip@hotmail.com, jdelvare@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        corbet@lwn.net
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <DB4PR10MB626103F3A3C361C9BD4988099226A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v1 1/3] hwmon: (sht3x) convert some of sysfs interface to
- hwmon
-In-Reply-To: <DB4PR10MB626103F3A3C361C9BD4988099226A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/26/23 00:29, JuenKit_Yip@hotmail.com wrote:
-> From: JuenKit Yip <JuenKit_Yip@hotmail.com>
-> 
-> update_interval, temperature/humidity max/min and hyst
-> were moved to new hwmon interface, and only heater and
-> repeatability were reserved as non-stardard sysfs interface.
-> 
-> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
-> ---
-> v1:
-
-This is v2.
-
->    - remove forward declearations
->    - fix switch statement about "return 0" and "break" for consistency
->    - convert type of "val" from string to numeric value
-
-- store chip type in struct sht3x_data
-
-> 
->   Documentation/hwmon/sht3x.rst |  21 +-
->   drivers/hwmon/sht3x.c         | 389 ++++++++++++++++++++++------------
->   2 files changed, 254 insertions(+), 156 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
-> index 87864ffd1777..572df2be1689 100644
-> --- a/Documentation/hwmon/sht3x.rst
-> +++ b/Documentation/hwmon/sht3x.rst
-> @@ -52,32 +52,15 @@ When the temperature and humidity readings move back between the hysteresis
->   values, the alert bit is set to 0 and the alert pin on the sensor is set to
->   low.
->   
-> -sysfs-Interface
-> ----------------
-> +non-standard sysfs-Interface
-> +----------------------------
->   
->   =================== ============================================================
-> -temp1_input:        temperature input
-> -humidity1_input:    humidity input
-> -temp1_max:          temperature max value
-> -temp1_max_hyst:     temperature hysteresis value for max limit
-> -humidity1_max:      humidity max value
-> -humidity1_max_hyst: humidity hysteresis value for max limit
-> -temp1_min:          temperature min value
-> -temp1_min_hyst:     temperature hysteresis value for min limit
-> -humidity1_min:      humidity min value
-> -humidity1_min_hyst: humidity hysteresis value for min limit
-> -temp1_alarm:        alarm flag is set to 1 if the temperature is outside the
-> -		    configured limits. Alarm only works in periodic measure mode
-> -humidity1_alarm:    alarm flag is set to 1 if the humidity is outside the
-> -		    configured limits. Alarm only works in periodic measure mode
->   heater_enable:      heater enable, heating element removes excess humidity from
->   		    sensor:
->   
->   			- 0: turned off
->   			- 1: turned on
-> -update_interval:    update interval, 0 for single shot, interval in msec
-> -		    for periodic measurement. If the interval is not supported
-> -		    by the sensor, the next faster interval is chosen
->   repeatability:      write or read repeatability, higher repeatability means
->                       longer measurement duration, lower noise level and
->                       larger energy consumption:
-
-Sorry I did not notice this before. There is no reason to drop standard attributes
-from the documentation.
-
-> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-> index bf18630619e0..bd483af1c5ab 100644
-> --- a/drivers/hwmon/sht3x.c
-> +++ b/drivers/hwmon/sht3x.c
-> @@ -147,8 +147,20 @@ static const u16 mode_to_update_interval[] = {
->   	 100,
->   };
->   
-> +static const struct hwmon_channel_info * const sht3x_channel_info[] = {
-> +	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
-> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_MIN |
-> +				HWMON_T_MIN_HYST | HWMON_T_MAX |
-> +				HWMON_T_MAX_HYST | HWMON_T_ALARM),
-> +	HWMON_CHANNEL_INFO(humidity, HWMON_H_INPUT | HWMON_H_MIN |
-> +				HWMON_H_MIN_HYST | HWMON_H_MAX |
-> +				HWMON_H_MAX_HYST | HWMON_H_ALARM),
-> +	NULL,
-> +};
-> +
->   struct sht3x_data {
->   	struct i2c_client *client;
-> +	enum sht3x_chips chip_info;
->   	struct mutex i2c_lock; /* lock for sending i2c commands */
->   	struct mutex data_lock; /* lock for updating driver data */
->   
-> @@ -276,27 +288,24 @@ static struct sht3x_data *sht3x_update_client(struct device *dev)
->   	return data;
->   }
->   
-> -/* sysfs attributes */
-> -static ssize_t temp1_input_show(struct device *dev,
-> -				struct device_attribute *attr, char *buf)
-> +static int temp1_input_read(struct device *dev)
->   {
->   	struct sht3x_data *data = sht3x_update_client(dev);
->   
->   	if (IS_ERR(data))
->   		return PTR_ERR(data);
->   
-> -	return sprintf(buf, "%d\n", data->temperature);
-> +	return data->temperature;
-
-Another detail I just realized: The temperature can be negative.
-Therefore, you can not use the return value as error indicator.
-The same applies to temperature limits.
-
->   }
->   
-> -static ssize_t humidity1_input_show(struct device *dev,
-> -				    struct device_attribute *attr, char *buf)
-> +static int humidity1_input_read(struct device *dev)
->   {
->   	struct sht3x_data *data = sht3x_update_client(dev);
->   
->   	if (IS_ERR(data))
->   		return PTR_ERR(data);
->   
-> -	return sprintf(buf, "%u\n", data->humidity);
-> +	return data->humidity;
->   }
->   
->   /*
-> @@ -332,33 +341,24 @@ static int limits_update(struct sht3x_data *data)
->   	return ret;
->   }
->   
-> -static ssize_t temp1_limit_show(struct device *dev,
-> -				struct device_attribute *attr,
-> -				char *buf)
-> +static int temp1_limit_read(struct device *dev, int index)
->   {
->   	struct sht3x_data *data = dev_get_drvdata(dev);
-> -	u8 index = to_sensor_dev_attr(attr)->index;
-> -	int temperature_limit = data->temperature_limits[index];
->   
-> -	return sysfs_emit(buf, "%d\n", temperature_limit);
-> +	return data->temperature_limits[index];
->   }
->   
-> -static ssize_t humidity1_limit_show(struct device *dev,
-> -				    struct device_attribute *attr,
-> -				    char *buf)
-> +static int humidity1_limit_read(struct device *dev, int index)
->   {
->   	struct sht3x_data *data = dev_get_drvdata(dev);
-> -	u8 index = to_sensor_dev_attr(attr)->index;
-> -	u32 humidity_limit = data->humidity_limits[index];
->   
-> -	return sysfs_emit(buf, "%u\n", humidity_limit);
-> +	return data->humidity_limits[index];
->   }
->   
->   /*
-> - * limit_store must only be called with data_lock held
-> + * limit_write must only be called with data_lock held
->    */
-> -static size_t limit_store(struct device *dev,
-> -			  size_t count,
-> +static size_t limit_write(struct device *dev,
-
-This is still wrong. return value has to be int (and there
-should be a separate patch changing it first to ssize_t which
-can be applied to stable releases).
-
->   			  u8 index,
->   			  int temperature,
->   			  u32 humidity)
-> @@ -379,7 +379,7 @@ static size_t limit_store(struct device *dev,
->   	 * ST = (T + 45) / 175 * 2^16
->   	 * SRH = RH / 100 * 2^16
->   	 * adapted for fixed point arithmetic and packed the same as
-> -	 * in limit_show()
-> +	 * in limit_read()
->   	 */
->   	raw = ((u32)(temperature + 45000) * 24543) >> (16 + 7);
->   	raw |= ((humidity * 42950) >> 16) & 0xfe00;
-> @@ -400,50 +400,35 @@ static size_t limit_store(struct device *dev,
->   
->   	data->temperature_limits[index] = temperature;
->   	data->humidity_limits[index] = humidity;
-> -	return count;
-> +
-> +	return 0;
->   }
->   
-> -static ssize_t temp1_limit_store(struct device *dev,
-> -				 struct device_attribute *attr,
-> -				 const char *buf,
-> -				 size_t count)
-> +static int temp1_limit_write(struct device *dev, int index, int val)
->   {
->   	int temperature;
->   	int ret;
->   	struct sht3x_data *data = dev_get_drvdata(dev);
-> -	u8 index = to_sensor_dev_attr(attr)->index;
->   
-> -	ret = kstrtoint(buf, 0, &temperature);
-> -	if (ret)
-> -		return ret;
-> -
-> -	temperature = clamp_val(temperature, SHT3X_MIN_TEMPERATURE,
-> +	temperature = clamp_val(val, SHT3X_MIN_TEMPERATURE,
->   				SHT3X_MAX_TEMPERATURE);
->   	mutex_lock(&data->data_lock);
-> -	ret = limit_store(dev, count, index, temperature,
-> +	ret = limit_write(dev, index, temperature,
->   			  data->humidity_limits[index]);
->   	mutex_unlock(&data->data_lock);
->   
->   	return ret;
->   }
->    > -static ssize_t humidity1_limit_store(struct device *dev,
-> -				     struct device_attribute *attr,
-> -				     const char *buf,
-> -				     size_t count)
-> +static int humidity1_limit_write(struct device *dev, int index, int val)
-
-The value passed from the hwmon core is a long. If sizeof(long) != sizeof(int)
-this will result in overflow problems. This applies to all write functions.
-
->   {
-> -	u32 humidity;
-> +	int humidity;
->   	int ret;
->   	struct sht3x_data *data = dev_get_drvdata(dev);
-> -	u8 index = to_sensor_dev_attr(attr)->index;
->   
-> -	ret = kstrtou32(buf, 0, &humidity);
-> -	if (ret)
-> -		return ret;
-> -
-> -	humidity = clamp_val(humidity, SHT3X_MIN_HUMIDITY, SHT3X_MAX_HUMIDITY);
-> +	humidity = clamp_val(val, SHT3X_MIN_HUMIDITY, SHT3X_MAX_HUMIDITY);
->   	mutex_lock(&data->data_lock);
-> -	ret = limit_store(dev, count, index, data->temperature_limits[index],
-> +	ret = limit_write(dev, index, data->temperature_limits[index],
->   			  humidity);
->   	mutex_unlock(&data->data_lock);
->   
-> @@ -474,7 +459,6 @@ static void sht3x_select_command(struct sht3x_data *data)
->   }
->   
->   static int status_register_read(struct device *dev,
-> -				struct device_attribute *attr,
->   				char *buffer, int length)
->   {
->   	int ret;
-> @@ -487,34 +471,30 @@ static int status_register_read(struct device *dev,
->   	return ret;
->   }
->   
-> -static ssize_t temp1_alarm_show(struct device *dev,
-> -				struct device_attribute *attr,
-> -				char *buf)
-> +static int temp1_alarm_read(struct device *dev)
->   {
->   	char buffer[SHT3X_WORD_LEN + SHT3X_CRC8_LEN];
->   	int ret;
->   
-> -	ret = status_register_read(dev, attr, buffer,
-> +	ret = status_register_read(dev, buffer,
->   				   SHT3X_WORD_LEN + SHT3X_CRC8_LEN);
->   	if (ret)
->   		return ret;
->   
-> -	return sysfs_emit(buf, "%d\n", !!(buffer[0] & 0x04));
-> +	return !!(buffer[0] & 0x04);
->   }
->   
-> -static ssize_t humidity1_alarm_show(struct device *dev,
-> -				    struct device_attribute *attr,
-> -				    char *buf)
-> +static int humidity1_alarm_read(struct device *dev)
->   {
->   	char buffer[SHT3X_WORD_LEN + SHT3X_CRC8_LEN];
->   	int ret;
->   
-> -	ret = status_register_read(dev, attr, buffer,
-> +	ret = status_register_read(dev, buffer,
->   				   SHT3X_WORD_LEN + SHT3X_CRC8_LEN);
->   	if (ret)
->   		return ret;
->   
-> -	return sysfs_emit(buf, "%d\n", !!(buffer[0] & 0x08));
-> +	return !!(buffer[0] & 0x08);
->   }
->   
->   static ssize_t heater_enable_show(struct device *dev,
-> @@ -524,7 +504,7 @@ static ssize_t heater_enable_show(struct device *dev,
->   	char buffer[SHT3X_WORD_LEN + SHT3X_CRC8_LEN];
->   	int ret;
->   
-> -	ret = status_register_read(dev, attr, buffer,
-> +	ret = status_register_read(dev, buffer,
->   				   SHT3X_WORD_LEN + SHT3X_CRC8_LEN);
->   	if (ret)
->   		return ret;
-> @@ -560,39 +540,28 @@ static ssize_t heater_enable_store(struct device *dev,
->   	return ret;
->   }
->   
-> -static ssize_t update_interval_show(struct device *dev,
-> -				    struct device_attribute *attr,
-> -				    char *buf)
-> +static int update_interval_read(struct device *dev)
->   {
->   	struct sht3x_data *data = dev_get_drvdata(dev);
->   
-> -	return sysfs_emit(buf, "%u\n",
-> -			 mode_to_update_interval[data->mode]);
-> +	return mode_to_update_interval[data->mode];
->   }
->   
-> -static ssize_t update_interval_store(struct device *dev,
-> -				     struct device_attribute *attr,
-> -				     const char *buf,
-> -				     size_t count)
-> +static int update_interval_write(struct device *dev, u16 val)
->   {
-> -	u16 update_interval;
->   	u8 mode;
->   	int ret;
->   	const char *command;
->   	struct sht3x_data *data = dev_get_drvdata(dev);
->   	struct i2c_client *client = data->client;
->   
-> -	ret = kstrtou16(buf, 0, &update_interval);
-> -	if (ret)
-> -		return ret;
-> -
-> -	mode = get_mode_from_update_interval(update_interval);
-> +	mode = get_mode_from_update_interval(val);
->   
->   	mutex_lock(&data->data_lock);
->   	/* mode did not change */
->   	if (mode == data->mode) {
->   		mutex_unlock(&data->data_lock);
-> -		return count;
-> +		return 0;
->   	}
->   
->   	mutex_lock(&data->i2c_lock);
-> @@ -634,7 +603,7 @@ static ssize_t update_interval_store(struct device *dev,
->   	if (ret != SHT3X_CMD_LENGTH)
->   		return ret < 0 ? ret : -EIO;
->   
-> -	return count;
-> +	return 0;
->   }
->   
->   static ssize_t repeatability_show(struct device *dev,
-> @@ -668,60 +637,219 @@ static ssize_t repeatability_store(struct device *dev,
->   	return count;
->   }
->   
-> -static SENSOR_DEVICE_ATTR_RO(temp1_input, temp1_input, 0);
-> -static SENSOR_DEVICE_ATTR_RO(humidity1_input, humidity1_input, 0);
-> -static SENSOR_DEVICE_ATTR_RW(temp1_max, temp1_limit, limit_max);
-> -static SENSOR_DEVICE_ATTR_RW(humidity1_max, humidity1_limit, limit_max);
-> -static SENSOR_DEVICE_ATTR_RW(temp1_max_hyst, temp1_limit, limit_max_hyst);
-> -static SENSOR_DEVICE_ATTR_RW(humidity1_max_hyst, humidity1_limit,
-> -			     limit_max_hyst);
-> -static SENSOR_DEVICE_ATTR_RW(temp1_min, temp1_limit, limit_min);
-> -static SENSOR_DEVICE_ATTR_RW(humidity1_min, humidity1_limit, limit_min);
-> -static SENSOR_DEVICE_ATTR_RW(temp1_min_hyst, temp1_limit, limit_min_hyst);
-> -static SENSOR_DEVICE_ATTR_RW(humidity1_min_hyst, humidity1_limit,
-> -			     limit_min_hyst);
-> -static SENSOR_DEVICE_ATTR_RO(temp1_alarm, temp1_alarm, 0);
-> -static SENSOR_DEVICE_ATTR_RO(humidity1_alarm, humidity1_alarm, 0);
->   static SENSOR_DEVICE_ATTR_RW(heater_enable, heater_enable, 0);
-> -static SENSOR_DEVICE_ATTR_RW(update_interval, update_interval, 0);
->   static SENSOR_DEVICE_ATTR_RW(repeatability, repeatability, 0);
->   
->   static struct attribute *sht3x_attrs[] = {
-> -	&sensor_dev_attr_temp1_input.dev_attr.attr,
-> -	&sensor_dev_attr_humidity1_input.dev_attr.attr,
-> -	&sensor_dev_attr_temp1_max.dev_attr.attr,
-> -	&sensor_dev_attr_temp1_max_hyst.dev_attr.attr,
-> -	&sensor_dev_attr_humidity1_max.dev_attr.attr,
-> -	&sensor_dev_attr_humidity1_max_hyst.dev_attr.attr,
-> -	&sensor_dev_attr_temp1_min.dev_attr.attr,
-> -	&sensor_dev_attr_temp1_min_hyst.dev_attr.attr,
-> -	&sensor_dev_attr_humidity1_min.dev_attr.attr,
-> -	&sensor_dev_attr_humidity1_min_hyst.dev_attr.attr,
-> -	&sensor_dev_attr_temp1_alarm.dev_attr.attr,
-> -	&sensor_dev_attr_humidity1_alarm.dev_attr.attr,
->   	&sensor_dev_attr_heater_enable.dev_attr.attr,
-> -	&sensor_dev_attr_update_interval.dev_attr.attr,
->   	&sensor_dev_attr_repeatability.dev_attr.attr,
->   	NULL
->   };
->   
-> -static struct attribute *sts3x_attrs[] = {
-> -	&sensor_dev_attr_temp1_input.dev_attr.attr,
-> -	&sensor_dev_attr_temp1_max.dev_attr.attr,
-> -	&sensor_dev_attr_temp1_max_hyst.dev_attr.attr,
-> -	&sensor_dev_attr_temp1_min.dev_attr.attr,
-> -	&sensor_dev_attr_temp1_min_hyst.dev_attr.attr,
-> -	&sensor_dev_attr_temp1_alarm.dev_attr.attr,
-> -	&sensor_dev_attr_heater_enable.dev_attr.attr,
-> -	&sensor_dev_attr_update_interval.dev_attr.attr,
-> -	&sensor_dev_attr_repeatability.dev_attr.attr,
-> -	NULL
-> +ATTRIBUTE_GROUPS(sht3x);
-> +
-> +static umode_t sht3x_is_visible(const void *data, enum hwmon_sensor_types type,
-> +				u32 attr, int channel)
-> +{
-> +	const struct sht3x_data *chip_data = data;
-> +
-> +	switch (type) {
-> +	case hwmon_chip:
-> +		switch (attr) {
-> +		case hwmon_chip_update_interval:
-> +			return 0644;
-> +		default:
-> +			break;
-> +		}
-> +		break;
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_input:
-> +		case hwmon_temp_alarm:
-> +			return 0444;
-> +		case hwmon_temp_max:
-> +		case hwmon_temp_max_hyst:
-> +		case hwmon_temp_min:
-> +		case hwmon_temp_min_hyst:
-> +			return 0644;
-> +		default:
-> +			break;
-> +		}
-> +		break;
-> +	case hwmon_humidity:
-> +		if (chip_data->chip_info == sts3x)
-> +			break;
-> +		switch (attr) {
-> +		case hwmon_humidity_input:
-> +		case hwmon_humidity_alarm:
-> +			return 0444;
-> +		case hwmon_humidity_max:
-> +		case hwmon_humidity_max_hyst:
-> +		case hwmon_humidity_min:
-> +		case hwmon_humidity_min_hyst:
-> +			return 0644;
-> +		default:
-> +			break;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int sht3x_read(struct device *dev, enum hwmon_sensor_types type,
-> +		      u32 attr, int channel, long *val)
-> +{
-> +	enum sht3x_limits index;
-> +
-> +	switch (type) {
-> +	case hwmon_chip:
-> +		switch (attr) {
-> +		case hwmon_chip_update_interval:
-> +			*val = update_interval_read(dev);
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +		break;
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_input:
-> +			*val = temp1_input_read(dev);
-> +			break;
-> +		case hwmon_temp_alarm:
-> +			*val = temp1_alarm_read(dev);
-> +			break;
-> +		case hwmon_temp_max:
-> +			index = limit_max;
-> +			*val = temp1_limit_read(dev, index);
-> +			break;
-> +		case hwmon_temp_max_hyst:
-> +			index = limit_max_hyst;
-> +			*val = temp1_limit_read(dev, index);
-> +			break;
-> +		case hwmon_temp_min:
-> +			index = limit_min;
-> +			*val = temp1_limit_read(dev, index);
-> +			break;
-> +		case hwmon_temp_min_hyst:
-> +			index = limit_min_hyst;
-> +			*val = temp1_limit_read(dev, index);
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +		break;
-> +	case hwmon_humidity:
-> +		switch (attr) {
-> +		case hwmon_humidity_input:
-> +			*val = humidity1_input_read(dev);
-> +			break;
-> +		case hwmon_humidity_alarm:
-> +			*val = humidity1_alarm_read(dev);
-> +			break;
-> +		case hwmon_humidity_max:
-> +			index = limit_max;
-> +			*val = humidity1_limit_read(dev, index);
-> +			break;
-> +		case hwmon_humidity_max_hyst:
-> +			index = limit_max_hyst;
-> +			*val = humidity1_limit_read(dev, index);
-> +			break;
-> +		case hwmon_humidity_min:
-> +			index = limit_min;
-> +			*val = humidity1_limit_read(dev, index);
-> +			break;
-> +		case hwmon_humidity_min_hyst:
-> +			index = limit_min_hyst;
-> +			*val = humidity1_limit_read(dev, index);
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int sht3x_write(struct device *dev, enum hwmon_sensor_types type,
-> +		       u32 attr, int channel, long val)
-> +{
-> +	enum sht3x_limits index;
-> +
-> +	switch (type) {
-> +	case hwmon_chip:
-> +		switch (attr) {
-> +		case hwmon_chip_update_interval:
-> +			return update_interval_write(dev, val);
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_max:
-> +			index = limit_max;
-> +			break;
-> +		case hwmon_temp_max_hyst:
-> +			index = limit_max_hyst;
-> +			break;
-> +		case hwmon_temp_min:
-> +			index = limit_min;
-> +			break;
-> +		case hwmon_temp_min_hyst:
-> +			index = limit_min_hyst;
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +		return temp1_limit_write(dev, index, val);
-> +	case hwmon_humidity:
-> +		switch (attr) {
-> +		case hwmon_humidity_max:
-> +			index = limit_max;
-> +			break;
-> +		case hwmon_humidity_max_hyst:
-> +			index = limit_max_hyst;
-> +			break;
-> +		case hwmon_humidity_min:
-> +			index = limit_min;
-> +			break;
-> +		case hwmon_humidity_min_hyst:
-> +			index = limit_min_hyst;
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +		return humidity1_limit_write(dev, index, val);
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static const struct hwmon_ops sht3x_ops = {
-> +	.is_visible = sht3x_is_visible,
-> +	.read = sht3x_read,
-> +	.write = sht3x_write,
->   };
->   
-> -ATTRIBUTE_GROUPS(sht3x);
-> -ATTRIBUTE_GROUPS(sts3x);
-> +static const struct hwmon_chip_info sht3x_chip_info = {
-> +	.ops = &sht3x_ops,
-> +	.info = sht3x_channel_info,
-> +};
-> +
-> +/* device ID table */
-> +static const struct i2c_device_id sht3x_ids[] = {
-> +	{"sht3x", sht3x},
-> +	{"sts3x", sts3x},
-> +	{}
-> +};
->   
-> -static const struct i2c_device_id sht3x_ids[];
-> +MODULE_DEVICE_TABLE(i2c, sht3x_ids);
->   
->   static int sht3x_probe(struct i2c_client *client)
->   {
-> @@ -730,7 +858,6 @@ static int sht3x_probe(struct i2c_client *client)
->   	struct device *hwmon_dev;
->   	struct i2c_adapter *adap = client->adapter;
->   	struct device *dev = &client->dev;
-> -	const struct attribute_group **attribute_groups;
->   
->   	/*
->   	 * we require full i2c support since the sht3x uses multi-byte read and
-> @@ -753,6 +880,7 @@ static int sht3x_probe(struct i2c_client *client)
->   	data->mode = 0;
->   	data->last_update = jiffies - msecs_to_jiffies(3000);
->   	data->client = client;
-> +	data->chip_info = i2c_match_id(sht3x_ids, client)->driver_data;
->   	crc8_populate_msb(sht3x_crc8_table, SHT3X_CRC8_POLYNOMIAL);
->   
->   	sht3x_select_command(data);
-> @@ -771,15 +899,11 @@ static int sht3x_probe(struct i2c_client *client)
->   	if (ret)
->   		return ret;
->   
-> -	if (i2c_match_id(sht3x_ids, client)->driver_data == sts3x)
-> -		attribute_groups = sts3x_groups;
-> -	else
-> -		attribute_groups = sht3x_groups;
-> -
-> -	hwmon_dev = devm_hwmon_device_register_with_groups(dev,
-> -							   client->name,
-> -							   data,
-> -							   attribute_groups);
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev,
-> +							 client->name,
-> +							 data,
-> +							 &sht3x_chip_info,
-> +							 sht3x_groups);
->   
->   	if (IS_ERR(hwmon_dev))
->   		dev_dbg(dev, "unable to register hwmon device\n");
-> @@ -787,15 +911,6 @@ static int sht3x_probe(struct i2c_client *client)
->   	return PTR_ERR_OR_ZERO(hwmon_dev);
->   }
->   
-> -/* device ID table */
-> -static const struct i2c_device_id sht3x_ids[] = {
-> -	{"sht3x", sht3x},
-> -	{"sts3x", sts3x},
-> -	{}
-> -};
-> -
-> -MODULE_DEVICE_TABLE(i2c, sht3x_ids);
-> -
->   static struct i2c_driver sht3x_i2c_driver = {
->   	.driver.name = "sht3x",
->   	.probe       = sht3x_probe,
+T24gVHVlLCAyMDIzLTA2LTIwIGF0IDE1OjAwICsxMjAwLCBMdWtlIEQuIEpvbmVzIHdyb3RlOgo+
+IEFkZCBzdXBwb3J0IGZvciB0aGUgV01JIG1ldGhvZHMgdXNlZCB0byB0dXJuIG9mZiBhbmQgYWRq
+dXN0IHRoZQo+IGJyaWdodG5lc3Mgb2YgdGhlIHNlY29uZGFyeSAic2NyZWVucGFkIiBkZXZpY2Ug
+Zm91bmQgb24gc29tZSBoaWdoLWVuZAo+IEFTVVMgbGFwdG9wcyBsaWtlIHRoZSBHWDY1MFAgc2Vy
+aWVzIGFuZCBvdGhlcnMuCj4gCj4gVGhlc2UgbWV0aG9kcyBhcmUgdXRpbGlzZWQgaW4gYSBuZXcg
+YmFja2xpZ2h0IGRldmljZSBuYW1lZAo+IGFzdXNfc2NyZWVucGFkLgo+IAo+IFNpZ25lZC1vZmYt
+Ynk6IEx1a2UgRC4gSm9uZXMgPGx1a2VAbGpvbmVzLmRldj4KPiAtLS0KPiDCoGRyaXZlcnMvcGxh
+dGZvcm0veDg2L2FzdXMtd21pLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMTI5Cj4gKysrKysr
+KysrKysrKysrKysrKysrCj4gwqBkcml2ZXJzL3BsYXRmb3JtL3g4Ni9hc3VzLXdtaS5owqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCB8wqDCoCAxICsKPiDCoGluY2x1ZGUvbGludXgvcGxhdGZvcm1fZGF0
+YS94ODYvYXN1cy13bWkuaCB8wqDCoCA0ICsKPiDCoDMgZmlsZXMgY2hhbmdlZCwgMTM0IGluc2Vy
+dGlvbnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9wbGF0Zm9ybS94ODYvYXN1cy13bWku
+Ywo+IGIvZHJpdmVycy9wbGF0Zm9ybS94ODYvYXN1cy13bWkuYwo+IGluZGV4IDYyY2VlMTNmNTU3
+Ni4uYzg3ZmJkODFkNjU4IDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvcGxhdGZvcm0veDg2L2FzdXMt
+d21pLmMKPiArKysgYi9kcml2ZXJzL3BsYXRmb3JtL3g4Ni9hc3VzLXdtaS5jCj4gQEAgLTI1LDYg
+KzI1LDcgQEAKPiDCoCNpbmNsdWRlIDxsaW51eC9pbnB1dC9zcGFyc2Uta2V5bWFwLmg+Cj4gwqAj
+aW5jbHVkZSA8bGludXgva2VybmVsLmg+Cj4gwqAjaW5jbHVkZSA8bGludXgvbGVkcy5oPgo+ICsj
+aW5jbHVkZSA8bGludXgvbWlubWF4Lmg+Cj4gwqAjaW5jbHVkZSA8bGludXgvbW9kdWxlLmg+Cj4g
+wqAjaW5jbHVkZSA8bGludXgvcGNpLmg+Cj4gwqAjaW5jbHVkZSA8bGludXgvcGNpX2hvdHBsdWcu
+aD4KPiBAQCAtMjEyLDYgKzIxMyw3IEBAIHN0cnVjdCBhc3VzX3dtaSB7Cj4gwqAKPiDCoMKgwqDC
+oMKgwqDCoMKgc3RydWN0IGlucHV0X2RldiAqaW5wdXRkZXY7Cj4gwqDCoMKgwqDCoMKgwqDCoHN0
+cnVjdCBiYWNrbGlnaHRfZGV2aWNlICpiYWNrbGlnaHRfZGV2aWNlOwo+ICvCoMKgwqDCoMKgwqDC
+oHN0cnVjdCBiYWNrbGlnaHRfZGV2aWNlICpzY3JlZW5wYWRfYmFja2xpZ2h0X2RldmljZTsKPiDC
+oMKgwqDCoMKgwqDCoMKgc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGxhdGZvcm1fZGV2aWNlOwo+
+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCBsZWRfY2xhc3NkZXYgd2xhbl9sZWQ7Cj4gQEAg
+LTM4MzksNiArMzg0MSwxMjQgQEAgc3RhdGljIGludCBpc19kaXNwbGF5X3RvZ2dsZShpbnQgY29k
+ZSkKPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIDA7Cj4gwqB9Cj4gwqAKPiArLyogU2NyZWVucGFk
+IGJhY2tsaWdodAo+ICoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKiovCj4gKwo+ICtzdGF0aWMgaW50IHJlYWRfc2NyZWVucGFkX2JhY2tsaWdodF9w
+b3dlcihzdHJ1Y3QgYXN1c193bWkgKmFzdXMpCj4gK3sKPiArwqDCoMKgwqDCoMKgwqBpbnQgcmV0
+Owo+ICsKPiArwqDCoMKgwqDCoMKgwqByZXQgPSBhc3VzX3dtaV9nZXRfZGV2c3RhdGVfc2ltcGxl
+KGFzdXMsCj4gQVNVU19XTUlfREVWSURfU0NSRUVOUEFEX1BPV0VSKTsKPiArwqDCoMKgwqDCoMKg
+wqBpZiAocmV0IDwgMCkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHJl
+dDsKPiArwqDCoMKgwqDCoMKgwqAvKiAxID09IHBvd2VyZWQgKi8KPiArwqDCoMKgwqDCoMKgwqBy
+ZXR1cm4gcmV0ID8gRkJfQkxBTktfVU5CTEFOSyA6IEZCX0JMQU5LX1BPV0VSRE9XTjsKPiArfQo+
+ICsKPiArc3RhdGljIGludCByZWFkX3NjcmVlbnBhZF9icmlnaHRuZXNzKHN0cnVjdCBiYWNrbGln
+aHRfZGV2aWNlICpiZCkKPiArewo+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBhc3VzX3dtaSAqYXN1
+cyA9IGJsX2dldF9kYXRhKGJkKTsKPiArwqDCoMKgwqDCoMKgwqB1MzIgcmV0dmFsOwo+ICvCoMKg
+wqDCoMKgwqDCoGludCBlcnI7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGVyciA9IHJlYWRfc2NyZWVu
+cGFkX2JhY2tsaWdodF9wb3dlcihhc3VzKTsKPiArwqDCoMKgwqDCoMKgwqBpZiAoZXJyIDwgMCkK
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIGVycjsKPiArwqDCoMKgwqDC
+oMKgwqAvKiBUaGUgZGV2aWNlIGJyaWdodG5lc3MgY2FuIG9ubHkgYmUgcmVhZCBpZiBwb3dlcmVk
+LCBzbwo+IHJldHVybiBzdG9yZWQgKi8KPiArwqDCoMKgwqDCoMKgwqBpZiAoZXJyID09IEZCX0JM
+QU5LX1BPV0VSRE9XTikKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIGFz
+dXMtPmRyaXZlci0+c2NyZWVucGFkX2JyaWdodG5lc3M7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGVy
+ciA9IGFzdXNfd21pX2dldF9kZXZzdGF0ZShhc3VzLAo+IEFTVVNfV01JX0RFVklEX1NDUkVFTlBB
+RF9MSUdIVCwgJnJldHZhbCk7Cj4gK8KgwqDCoMKgwqDCoMKgaWYgKGVyciA8IDApCj4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiBlcnI7Cj4gKwo+ICvCoMKgwqDCoMKgwqDC
+oHJldHVybiByZXR2YWwgJiBBU1VTX1dNSV9EU1RTX0JSSUdIVE5FU1NfTUFTSzsKPiArfQo+ICsK
+PiArc3RhdGljIGludCB1cGRhdGVfc2NyZWVucGFkX2JsX3N0YXR1cyhzdHJ1Y3QgYmFja2xpZ2h0
+X2RldmljZSAqYmQpCj4gK3sKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgYXN1c193bWkgKmFzdXMg
+PSBibF9nZXRfZGF0YShiZCk7Cj4gK8KgwqDCoMKgwqDCoMKgaW50IHBvd2VyLCBlcnIgPSAwOwo+
+ICvCoMKgwqDCoMKgwqDCoHUzMiBjdHJsX3BhcmFtOwo+ICsKPiArwqDCoMKgwqDCoMKgwqBwb3dl
+ciA9IHJlYWRfc2NyZWVucGFkX2JhY2tsaWdodF9wb3dlcihhc3VzKTsKPiArwqDCoMKgwqDCoMKg
+wqBpZiAocG93ZXIgPCAwKQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4g
+cG93ZXI7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGlmIChiZC0+cHJvcHMucG93ZXIgIT0gcG93ZXIp
+IHsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHBvd2VyICE9IEZCX0JMQU5L
+X1VOQkxBTkspIHsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoC8qIE9ubHkgYnJpZ2h0bmVzcyA+IDAgY2FuIHBvd2VyIGl0IGJhY2sgb24KPiAqLwo+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY3RybF9wYXJhbSA9
+IG1heCgxLCBhc3VzLT5kcml2ZXItCj4gPnNjcmVlbnBhZF9icmlnaHRuZXNzKTsKPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGVyciA9Cj4gYXN1c193bWlf
+c2V0X2RldnN0YXRlKEFTVVNfV01JX0RFVklEX1NDUkVFTlBBRF9MSUdIVCwKPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjdHJsX3BhcmFtLAo+IE5VTEwpOwo+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9IGVsc2Ugewo+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZXJyID0KPiBhc3VzX3dtaV9zZXRfZGV2
+c3RhdGUoQVNVU19XTUlfREVWSURfU0NSRUVOUEFEX1BPV0VSLCAwLCBOVUxMKTsKPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfQo+ICvCoMKgwqDCoMKgwqDCoH0gZWxzZSBpZiAocG93
+ZXIgPT0gRkJfQkxBTktfVU5CTEFOSykgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAvKiBPbmx5IHNldCBicmlnaHRuZXNzIGlmIHBvd2VyZWQgb24gb3Igd2UgZ2V0Cj4gaW52YWxp
+ZC91bnN5bmMgc3RhdGUgKi8KPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY3RybF9w
+YXJhbSA9IGJkLT5wcm9wcy5icmlnaHRuZXNzOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBlcnIgPQo+IGFzdXNfd21pX3NldF9kZXZzdGF0ZShBU1VTX1dNSV9ERVZJRF9TQ1JFRU5Q
+QURfTElHSFQsIGN0cmxfcGFyYW0sCj4gTlVMTCk7Cj4gK8KgwqDCoMKgwqDCoMKgfQo+ICsKPiAr
+wqDCoMKgwqDCoMKgwqAvKiBFbnN1cmUgYnJpZ2h0bmVzcyBpcyBzdG9yZWQgdG8gdHVybiBiYWNr
+IG9uIHdpdGggKi8KPiArwqDCoMKgwqDCoMKgwqBhc3VzLT5kcml2ZXItPnNjcmVlbnBhZF9icmln
+aHRuZXNzID0gYmQtPnByb3BzLmJyaWdodG5lc3M7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoHJldHVy
+biBlcnI7Cj4gK30KPiArCj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3QgYmFja2xpZ2h0X29wcyBhc3Vz
+X3NjcmVlbnBhZF9ibF9vcHMgPSB7Cj4gK8KgwqDCoMKgwqDCoMKgLmdldF9icmlnaHRuZXNzID0g
+cmVhZF9zY3JlZW5wYWRfYnJpZ2h0bmVzcywKPiArwqDCoMKgwqDCoMKgwqAudXBkYXRlX3N0YXR1
+cyA9IHVwZGF0ZV9zY3JlZW5wYWRfYmxfc3RhdHVzLAo+ICvCoMKgwqDCoMKgwqDCoC5vcHRpb25z
+ID0gQkxfQ09SRV9TVVNQRU5EUkVTVU1FLAo+ICt9Owo+ICsKPiArc3RhdGljIGludCBhc3VzX3Nj
+cmVlbnBhZF9pbml0KHN0cnVjdCBhc3VzX3dtaSAqYXN1cykKPiArewo+ICvCoMKgwqDCoMKgwqDC
+oHN0cnVjdCBiYWNrbGlnaHRfZGV2aWNlICpiZDsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgYmFj
+a2xpZ2h0X3Byb3BlcnRpZXMgcHJvcHM7Cj4gK8KgwqDCoMKgwqDCoMKgaW50IHBvd2VyLCBicmln
+aHRuZXNzOwo+ICsKPiArwqDCoMKgwqDCoMKgwqBwb3dlciA9IHJlYWRfc2NyZWVucGFkX2JhY2ts
+aWdodF9wb3dlcihhc3VzKTsKPiArwqDCoMKgwqDCoMKgwqBpZiAocG93ZXIgPCAwKQo+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gcG93ZXI7Cj4gKwo+ICvCoMKgwqDCoMKg
+wqDCoGJyaWdodG5lc3MgPSByZWFkX3NjcmVlbnBhZF9icmlnaHRuZXNzKGJkKTsKPiArwqDCoMKg
+wqDCoMKgwqBpZiAoYnJpZ2h0bmVzcyA8IDApCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoHJldHVybiBicmlnaHRuZXNzOwoKSSBoYXZlIG1hZGUgYSBtaXN0YWtlIGhlcmUuIElmIHBv
+d2VyIGlzIG9mZiB0aGVuCnJlYWRfc2NyZWVucGFkX2JhY2tsaWdodF9wb3dlcigpIHRyaWVzIHRv
+IHJldHVybiBhIHN0b3JlZCBicmlnaHRuZXNzCmZyb20gdGhlIGRldiBzdHJ1Y3QgYnV0IHRoaXMg
+aXMgdW5pbml0aWFsaXNlZCBhdCB0aGlzIHBvaW50LgoKSSB3aWxsIHN1Ym1pdCB2NC4KCj4gKwo+
+ICvCoMKgwqDCoMKgwqDCoG1lbXNldCgmcHJvcHMsIDAsIHNpemVvZihzdHJ1Y3QgYmFja2xpZ2h0
+X3Byb3BlcnRpZXMpKTsKPiArwqDCoMKgwqDCoMKgwqBwcm9wcy50eXBlID0gQkFDS0xJR0hUX1JB
+VzsgLyogZW5zdXJlIHRoaXMgYmQgaXMgbGFzdCB0byBiZQo+IHBpY2tlZCAqLwo+ICvCoMKgwqDC
+oMKgwqDCoHByb3BzLm1heF9icmlnaHRuZXNzID0gMjU1Owo+ICvCoMKgwqDCoMKgwqDCoGJkID0g
+YmFja2xpZ2h0X2RldmljZV9yZWdpc3RlcigiYXN1c19zY3JlZW5wYWQiLAo+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCAmYXN1cy0+cGxhdGZvcm1fZGV2aWNlLT5kZXYsCj4gYXN1cywKPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgJmFzdXNfc2NyZWVucGFkX2JsX29wcywKPiAmcHJvcHMpOwo+ICvCoMKgwqDCoMKg
+wqDCoGlmIChJU19FUlIoYmQpKSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBy
+X2VycigiQ291bGQgbm90IHJlZ2lzdGVyIGJhY2tsaWdodCBkZXZpY2VcbiIpOwo+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gUFRSX0VSUihiZCk7Cj4gK8KgwqDCoMKgwqDC
+oMKgfQo+ICsKPiArwqDCoMKgwqDCoMKgwqBhc3VzLT5zY3JlZW5wYWRfYmFja2xpZ2h0X2Rldmlj
+ZSA9IGJkOwo+ICvCoMKgwqDCoMKgwqDCoC8qCj4gK8KgwqDCoMKgwqDCoMKgICogQ291bnRlciBh
+biBvZGQgYmVoYXZpb3VyIHdoZXJlIGRlZmF1bHQgaXMgc2V0IHRvIDwgMTMgaWYKPiBpdCB3YXMg
+MCBvbiBib290Lgo+ICvCoMKgwqDCoMKgwqDCoCAqIDYwIGlzIHN1YmplY3RpdmUsIGJ1dCBhY2Nl
+cHRlZCBhcyBhIGdvb2QgY29tcHJvbWlzZSB0bwo+IHJldGFpbiB2aXNpYmlsaXR5Lgo+ICvCoMKg
+wqDCoMKgwqDCoCAqLwo+ICvCoMKgwqDCoMKgwqDCoGlmIChicmlnaHRuZXNzIDwgNjApCj4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJyaWdodG5lc3MgPSA2MDsKPiArCj4gK8KgwqDC
+oMKgwqDCoMKgYXN1cy0+ZHJpdmVyLT5zY3JlZW5wYWRfYnJpZ2h0bmVzcyA9IGJyaWdodG5lc3M7
+Cj4gK8KgwqDCoMKgwqDCoMKgYmQtPnByb3BzLmJyaWdodG5lc3MgPSBicmlnaHRuZXNzOwo+ICvC
+oMKgwqDCoMKgwqDCoGJkLT5wcm9wcy5wb3dlciA9IHBvd2VyOwo+ICvCoMKgwqDCoMKgwqDCoGJh
+Y2tsaWdodF91cGRhdGVfc3RhdHVzKGJkKTsKPiArCj4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuIDA7
+Cj4gK30KPiArCj4gK3N0YXRpYyB2b2lkIGFzdXNfc2NyZWVucGFkX2V4aXQoc3RydWN0IGFzdXNf
+d21pICphc3VzKQo+ICt7Cj4gK8KgwqDCoMKgwqDCoMKgYmFja2xpZ2h0X2RldmljZV91bnJlZ2lz
+dGVyKGFzdXMtCj4gPnNjcmVlbnBhZF9iYWNrbGlnaHRfZGV2aWNlKTsKPiArCj4gK8KgwqDCoMKg
+wqDCoMKgYXN1cy0+c2NyZWVucGFkX2JhY2tsaWdodF9kZXZpY2UgPSBOVUxMOwo+ICt9Cj4gKwo+
+IMKgLyogRm4tbG9jawo+ICoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqLwo+IMKgCj4gwqBzdGF0aWMgYm9vbCBhc3VzX3dt
+aV9oYXNfZm5sb2NrX2tleShzdHJ1Y3QgYXN1c193bWkgKmFzdXMpCj4gQEAgLTQ1MDQsNiArNDYy
+NCwxMiBAQCBzdGF0aWMgaW50IGFzdXNfd21pX2FkZChzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlCj4g
+KnBkZXYpCj4gwqDCoMKgwqDCoMKgwqDCoH0gZWxzZSBpZiAoYXN1cy0+ZHJpdmVyLT5xdWlya3Mt
+PndtaV9iYWNrbGlnaHRfc2V0X2RldnN0YXRlKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgZXJyID0gYXN1c193bWlfc2V0X2RldnN0YXRlKEFTVVNfV01JX0RFVklEX0JBQ0tMSUdI
+VCwKPiAyLCBOVUxMKTsKPiDCoAo+ICvCoMKgwqDCoMKgwqDCoGlmIChhc3VzX3dtaV9kZXZfaXNf
+cHJlc2VudChhc3VzLAo+IEFTVVNfV01JX0RFVklEX1NDUkVFTlBBRF9MSUdIVCkpIHsKPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZXJyID0gYXN1c19zY3JlZW5wYWRfaW5pdChhc3Vz
+KTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKGVyciAmJiBlcnIgIT0gLUVO
+T0RFVikKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdv
+dG8gZmFpbF9zY3JlZW5wYWQ7Cj4gK8KgwqDCoMKgwqDCoMKgfQo+ICsKPiDCoMKgwqDCoMKgwqDC
+oMKgaWYgKGFzdXNfd21pX2hhc19mbmxvY2tfa2V5KGFzdXMpKSB7Cj4gwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBhc3VzLT5mbmxvY2tfbG9ja2VkID0gZm5sb2NrX2RlZmF1bHQ7Cj4g
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBhc3VzX3dtaV9mbmxvY2tfdXBkYXRlKGFz
+dXMpOwo+IEBAIC00NTI3LDYgKzQ2NTMsOCBAQCBzdGF0aWMgaW50IGFzdXNfd21pX2FkZChzdHJ1
+Y3QgcGxhdGZvcm1fZGV2aWNlCj4gKnBkZXYpCj4gwqDCoMKgwqDCoMKgwqDCoGFzdXNfd21pX2Jh
+Y2tsaWdodF9leGl0KGFzdXMpOwo+IMKgZmFpbF9iYWNrbGlnaHQ6Cj4gwqDCoMKgwqDCoMKgwqDC
+oGFzdXNfd21pX3Jma2lsbF9leGl0KGFzdXMpOwo+ICtmYWlsX3NjcmVlbnBhZDoKPiArwqDCoMKg
+wqDCoMKgwqBhc3VzX3NjcmVlbnBhZF9leGl0KGFzdXMpOwo+IMKgZmFpbF9yZmtpbGw6Cj4gwqDC
+oMKgwqDCoMKgwqDCoGFzdXNfd21pX2xlZF9leGl0KGFzdXMpOwo+IMKgZmFpbF9sZWRzOgo+IEBA
+IC00NTUzLDYgKzQ2ODEsNyBAQCBzdGF0aWMgaW50IGFzdXNfd21pX3JlbW92ZShzdHJ1Y3QKPiBw
+bGF0Zm9ybV9kZXZpY2UgKmRldmljZSkKPiDCoMKgwqDCoMKgwqDCoMKgYXN1cyA9IHBsYXRmb3Jt
+X2dldF9kcnZkYXRhKGRldmljZSk7Cj4gwqDCoMKgwqDCoMKgwqDCoHdtaV9yZW1vdmVfbm90aWZ5
+X2hhbmRsZXIoYXN1cy0+ZHJpdmVyLT5ldmVudF9ndWlkKTsKPiDCoMKgwqDCoMKgwqDCoMKgYXN1
+c193bWlfYmFja2xpZ2h0X2V4aXQoYXN1cyk7Cj4gK8KgwqDCoMKgwqDCoMKgYXN1c19zY3JlZW5w
+YWRfZXhpdChhc3VzKTsKPiDCoMKgwqDCoMKgwqDCoMKgYXN1c193bWlfaW5wdXRfZXhpdChhc3Vz
+KTsKPiDCoMKgwqDCoMKgwqDCoMKgYXN1c193bWlfbGVkX2V4aXQoYXN1cyk7Cj4gwqDCoMKgwqDC
+oMKgwqDCoGFzdXNfd21pX3Jma2lsbF9leGl0KGFzdXMpOwo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
+L3BsYXRmb3JtL3g4Ni9hc3VzLXdtaS5oCj4gYi9kcml2ZXJzL3BsYXRmb3JtL3g4Ni9hc3VzLXdt
+aS5oCj4gaW5kZXggYTQ3OGViZmQzNGRmLi41ZmJkZDBlYWZhMDIgMTAwNjQ0Cj4gLS0tIGEvZHJp
+dmVycy9wbGF0Zm9ybS94ODYvYXN1cy13bWkuaAo+ICsrKyBiL2RyaXZlcnMvcGxhdGZvcm0veDg2
+L2FzdXMtd21pLmgKPiBAQCAtNTcsNiArNTcsNyBAQCBzdHJ1Y3QgcXVpcmtfZW50cnkgewo+IMKg
+c3RydWN0IGFzdXNfd21pX2RyaXZlciB7Cj4gwqDCoMKgwqDCoMKgwqDCoGludMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJyaWdodG5lc3M7Cj4gwqDCoMKgwqDCoMKg
+wqDCoGludMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBhbmVsX3Bv
+d2VyOwo+ICvCoMKgwqDCoMKgwqDCoGludMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoHNjcmVlbnBhZF9icmlnaHRuZXNzOwo+IMKgwqDCoMKgwqDCoMKgwqBpbnTCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB3bGFuX2N0cmxfYnlfdXNlcjsK
+PiDCoAo+IMKgwqDCoMKgwqDCoMKgwqBjb25zdCBjaGFywqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCpuYW1lOwo+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3BsYXRmb3JtX2RhdGEveDg2
+L2FzdXMtd21pLmgKPiBiL2luY2x1ZGUvbGludXgvcGxhdGZvcm1fZGF0YS94ODYvYXN1cy13bWku
+aAo+IGluZGV4IGQxN2FlMmViMGY4ZC4uNjFiYTcwYjMyODQ2IDEwMDY0NAo+IC0tLSBhL2luY2x1
+ZGUvbGludXgvcGxhdGZvcm1fZGF0YS94ODYvYXN1cy13bWkuaAo+ICsrKyBiL2luY2x1ZGUvbGlu
+dXgvcGxhdGZvcm1fZGF0YS94ODYvYXN1cy13bWkuaAo+IEBAIC01OCw2ICs1OCwxMCBAQAo+IMKg
+I2RlZmluZSBBU1VTX1dNSV9ERVZJRF9LQkRfQkFDS0xJR0hUwqDCoMKgMHgwMDA1MDAyMQo+IMKg
+I2RlZmluZSBBU1VTX1dNSV9ERVZJRF9MSUdIVF9TRU5TT1LCoMKgwqDCoDB4MDAwNTAwMjIgLyog
+Pz8gKi8KPiDCoCNkZWZpbmUgQVNVU19XTUlfREVWSURfTElHSFRCQVLCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoDB4MDAwNTAwMjUKPiArLyogVGhpcyBjYW4gb25seSBiZSB1c2VkIHRv
+IGRpc2FibGUgdGhlIHNjcmVlbiwgbm90IHJlLWVuYWJsZSAqLwo+ICsjZGVmaW5lIEFTVVNfV01J
+X0RFVklEX1NDUkVFTlBBRF9QT1dFUsKgMHgwMDA1MDAzMQo+ICsvKiBXcml0aW5nIGEgYnJpZ2h0
+bmVzcyByZS1lbmFibGVzIHRoZSBzY3JlZW4gaWYgZGlzYWJsZWQgKi8KPiArI2RlZmluZSBBU1VT
+X1dNSV9ERVZJRF9TQ1JFRU5QQURfTElHSFTCoDB4MDAwNTAwMzIKPiDCoCNkZWZpbmUgQVNVU19X
+TUlfREVWSURfRkFOX0JPT1NUX01PREXCoMKgMHgwMDExMDAxOAo+IMKgI2RlZmluZSBBU1VTX1dN
+SV9ERVZJRF9USFJPVFRMRV9USEVSTUFMX1BPTElDWSAweDAwMTIwMDc1Cj4gwqAKCgoK
 
