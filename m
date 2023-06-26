@@ -2,146 +2,77 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B697DEB64DC
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Jun 2023 07:36:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDF11EB64D7
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Jun 2023 08:58:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjFZHgv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 26 Jun 2023 03:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
+        id S230322AbjFZI6A (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 26 Jun 2023 04:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjFZHgs (ORCPT
+        with ESMTP id S230449AbjFZI5d (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 26 Jun 2023 03:36:48 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C925AA
-        for <linux-hwmon@vger.kernel.org>; Mon, 26 Jun 2023 00:36:47 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51d9bf5411aso550663a12.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 26 Jun 2023 00:36:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687765005; x=1690357005;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g32nP1QLfDJeYDMctwmCGM9lFurdMtNiOQvgUHmW7j4=;
-        b=t+edhplh/zMSi0p3lIjlGet/TZI20VTCuGlHDId4JMBSXoEIAsIJokUNoFSdsoY6So
-         uDoddZZ5HCc+4sxK6A6duuXzb1KdyomjPtmINErHzNABwk3PMCb6rjOx3Sqb9oXvHrG5
-         StR7eTLuySakEs4UbfeXEOUyXObHJSKnxyfwtyXSxOxkqpt+t/0M1I8yRXGuKyUdQEPh
-         bOF6zQDS9Cas77cSjCvMbThO5zdvy/CilRombhJ0A5Ndf4M+3W88nBaYDtHCvgQOIWEj
-         xB6Kc3/xTh2B/YiKECd2K99AzyU8WdVP/wFnMQfR0dF4vvoAzXiiBVwO0j9PJQ5FPb7N
-         /1Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687765005; x=1690357005;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g32nP1QLfDJeYDMctwmCGM9lFurdMtNiOQvgUHmW7j4=;
-        b=am6/5jsDECNY8nhIRDtOK6va685JsmEEglYRjq6zuNRJTVG2YDEWNE/3UsCgEkVBCN
-         /Y0Z1QU705tuWX7i9jEzIuAn7mrMRvK8IPOZfZG+yJeaRlSUP6wLVuyhv8knwYM3OGNV
-         zKEYlpLnPWbj3tHoE84VLYyzKkVNMUmnD/bmH/FWbOi7jU2BzEdjMUQb47sqNyytZSEr
-         6Iy2mxF+QgC1IYtcJWz05cR2YwDs1m0r68uyP4Jxqq6/IwZ0EOUAEctPd0S/c/YDYiw3
-         FpQXhLopzbyxPkhK6YOlylbs0y//1faFvowWwiIjJA76wqjvsAnuX14AnGN0q8jm2cGO
-         fBjQ==
-X-Gm-Message-State: AC+VfDwaXEBnX4Y+dXEbGHPEOwzoPS7iQcpjYiUfLjTxbHtz0vtKsaDl
-        KKRuYQBrICmT3FzXS0SfGiJdjQ==
-X-Google-Smtp-Source: ACHHUZ48yMwg7cIFAuy5JolwNOf5XDoT9UCulIRCuSVDeD0QgeXytMtaWsMR7rKPSIlKf9bngOQExw==
-X-Received: by 2002:aa7:d9d7:0:b0:51d:914a:9f43 with SMTP id v23-20020aa7d9d7000000b0051d914a9f43mr2896633eds.36.1687765005473;
-        Mon, 26 Jun 2023 00:36:45 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id l4-20020aa7c3c4000000b0051879e2505bsm2511680edr.40.2023.06.26.00.36.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 00:36:44 -0700 (PDT)
-Message-ID: <326cc8a4-3366-e8af-8051-7284bfb6dfaa@linaro.org>
-Date:   Mon, 26 Jun 2023 09:36:42 +0200
+        Mon, 26 Jun 2023 04:57:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D112D2710
+        for <linux-hwmon@vger.kernel.org>; Mon, 26 Jun 2023 01:53:48 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qDhws-0006Jc-7G; Mon, 26 Jun 2023 10:51:50 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qDhwp-00AA3z-Sy; Mon, 26 Jun 2023 10:51:47 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qDhwo-00HUjB-S0; Mon, 26 Jun 2023 10:51:46 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Daniel Matyas <daniel.matyas@analog.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-hwmon@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH] hwmon: max31827: Switch back to use struct i2c_driver::probe
+Date:   Mon, 26 Jun 2023 10:51:45 +0200
+Message-Id: <20230626085145.554616-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1 3/3] dt-bindings: hwmon: add sht3x devicetree binding
-To:     JuenKit_Yip@hotmail.com, jdelvare@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        corbet@lwn.net
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230626072923.340544-1-JuenKit_Yip@hotmail.com>
- <DB4PR10MB6261859DA1087597DDC3CCB39226A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DB4PR10MB6261859DA1087597DDC3CCB39226A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=793; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=85jXwe0so+chwGCHKtlyYWTjg7YEAQiQpjaHOLBT9WA=; b=owGbwMvMwMXY3/A7olbonx/jabUkhpSZgQve/j6u96bHRiHqnJpAV5abyBvRgF9usboLoxrbC 9pKd4t2MhqzMDByMciKKbLYN67JtKqSi+xc++8yzCBWJpApDFycAjAR5mT2P5wXloRundi6cIXL 48ttnZ9jLxy5Wxa12nDeiVdrPYSnWF8xeeBxu+nfW683H3+22De5Xbi5ws7kxhFDKUk7Qw0G0Q8 nQxYq6H7JMteomr6VI7Mh9PVlqdK8wwa10yMEt3/lTlvwuebxPa160x4LVz19d48DSY1K7Gkfj8 UwRx8qu+J5WZ9hU79h5oR5h1eVLDLL5fSz7Qk/d5wz60Bwxc13tUZbuzpvnvwd5aRvtYr358Ppv 9qs2jYuNFwdvlmHs90p54n685gY3u39rzgOvp6ga9bYrnE99aVZ9SSVCR8Evtl/yg2v0eTdav6l kLsjoa00Lf/bTtWAlouFa20EF6o0ihtumXlgnpZR5Hl1AA==
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 26/06/2023 09:29, JuenKit_Yip@hotmail.com wrote:
-> From: JuenKit Yip <JuenKit_Yip@hotmail.com>
-> 
-> add sht3x devicetree binding files
-> 
-> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
-> ---
-> v1:
->   - fix semantics error
+struct i2c_driver::probe_new is about to go away. Switch the driver to
+use the probe callback with the same prototype.
 
-How first release can have already fixes? Against what? Is it truly v1?
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/hwmon/max31827.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-What is a "semantics error"?
+diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
+index 7735e8087df3..602f4e4f81ff 100644
+--- a/drivers/hwmon/max31827.c
++++ b/drivers/hwmon/max31827.c
+@@ -456,7 +456,7 @@ static struct i2c_driver max31827_driver = {
+ 		.name = "max31827",
+ 		.of_match_table = max31827_of_match,
+ 	},
+-	.probe_new = max31827_probe,
++	.probe = max31827_probe,
+ 	.id_table = max31827_i2c_ids,
+ };
+ module_i2c_driver(max31827_driver);
 
-A nit, subject: drop second/last, redundant "devicetree binding". The
-"dt-bindings" prefix is already stating that these are bindings.
-
-
-> 
->  .../bindings/hwmon/sensirion,sht3x.yaml       | 35 +++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
-> new file mode 100644
-> index 000000000000..71a50bd57af2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
-> @@ -0,0 +1,35 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/sensirion,sht3x.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sensirion SHT3x-DIS humidity and temperature sensor
-> +
-> +maintainers:
-> +  - JuenKit Yip <JuenKit_Yip@hotmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sensirion,sht3x
-
-The actual devices are SHT30, 31 and 35. I understand they don't differ
-in programming interface, but still don't use wildcard, so just
-sensirion,sht30
-
-> +      - sensirion,sts3x
-
-Similarly - no wildcards.
-
-Missing blank line.
-
-
-> +  reg:
-> +    maxItems: 1
-
-Missing vdd-supply (required) and reset-gpios (optional).
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-
-
-Best regards,
-Krzysztof
+base-commit: 16d60ba8fdc4c6e4745005889dea6ed82b6b5cbd
+-- 
+2.39.2
 
