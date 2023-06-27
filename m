@@ -2,161 +2,165 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA341EB64D9
-	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Jun 2023 19:05:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3468EB64D9
+	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Jun 2023 22:19:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbjF0TFT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 27 Jun 2023 15:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
+        id S229437AbjF0WTa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 27 Jun 2023 18:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231396AbjF0TFQ (ORCPT
+        with ESMTP id S229841AbjF0WT3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 27 Jun 2023 15:05:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD3D185;
-        Tue, 27 Jun 2023 12:05:15 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35RIxaTa031473;
-        Tue, 27 Jun 2023 19:05:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=C3D/P4FPq9C11xGqw+J0fMya1etpgORpNTBZHmpQ5a0=;
- b=PGitqmLY/HXn5BLhQYJs51QT78xDtZP6o3Dnyte/7G9Ugd5eciKJ+3/VoHZgNF1QqVGr
- Yn2kNib6u56WbS+hJCJGWn6szXh/GOp8uiQ1OXDTATHHmzybJDJ6ArOhNeeGllikOrPS
- E3LjynpYYCdNBBI8x1qEHBZt27l6AdezA5ouoQmdbsovq3QQrAN1WqjHdRChtIHTA6Y+
- QpIkrd5lCLnul+TdcOpPyilQODVw1Ykh+4rr0cocdPY0Su7hYKDGZ9JBPNZjWWNFeytD
- 1mSxwzTTGTDoPHWZzDWCUqL/HPWLEvfAUJA9xg9Me8vPadg8qt/4eVvdydavl1CFMdTk wQ== 
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rg5hag6et-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 19:05:01 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35RHkVFN013240;
-        Tue, 27 Jun 2023 18:40:32 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3rdr45j2e6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 18:40:32 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35RIeUNe66257280
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Jun 2023 18:40:31 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9593658043;
-        Tue, 27 Jun 2023 18:40:30 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 639B258055;
-        Tue, 27 Jun 2023 18:40:30 +0000 (GMT)
-Received: from slate16.aus.stglabs.ibm.com (unknown [9.61.104.152])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 27 Jun 2023 18:40:30 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        jdelvare@suse.com, lakshmiy@us.ibm.com,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH] hwmon: (pmbus/acbel-fsg032) Add firmware version debugfs attribute
-Date:   Tue, 27 Jun 2023 13:40:27 -0500
-Message-Id: <20230627184027.16343-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.39.3
+        Tue, 27 Jun 2023 18:19:29 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC471272D;
+        Tue, 27 Jun 2023 15:19:28 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b6824141b4so2300145ad.1;
+        Tue, 27 Jun 2023 15:19:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687904368; x=1690496368;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=P+Fhk2g29iBTSAUG5HoCrEIPD53b4WWF0g9930Rklbc=;
+        b=cpYDer6oYIb+sxh+QqbDBsxj2hMClIrc/xSpxzZLzX+9t8CUGinJC5eiLwFXpI9qH0
+         kXyK3AOjSKq1qRCo7BDpEJAuOUUbA4K26eCE3/xZCZBolAY71Hxt/yHrVUVI6pL8HqNV
+         2Den0f6dGuWPx2lrKHZ64yXcuUiOeJXBrDk9CjaSGGjp8FXR+znhYYldMco+AhBblF0D
+         IcpSu4Q5jDveyTeqXZrjlg8DIryUJjfW+crOIlvltFK7iynt40/vR5eQpXIWvJKFGiRh
+         FZdD81uZP3tjKmf223pwLSRpLRcsRvoKCkivuGVyvIOs9gbZuq/G2w8J15H42C44qmNZ
+         7Siw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687904368; x=1690496368;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P+Fhk2g29iBTSAUG5HoCrEIPD53b4WWF0g9930Rklbc=;
+        b=TBkyOOzTKCYQnQERnSf4jmAlBVzoKWfa3gezG/AEvyWSYAAuKO7HFNguWrRX1alQBo
+         zjpozTGhWBW+OlVALKZqXJIzWi8QEz64xMoCzl7stV0JRC6rYPLYvfNZLwntwp9/irM4
+         RBbrbobw9gyu9AfHso0KNbCEP4KmsJ0G5dh+VOk3cZKyArfANnArvC2uE3rD9yPtWy0Q
+         sO73KjeefQILoS8g3wb+SPHEaSdb7Qzo81vqHtRv9GGVIfMQ5zx3DvoDvx+Ut0hNI7NI
+         VRsM19FYL7yTEU/2bZ8GG2wqGIyR/SWKOhiltIe46mLItoTvoqNeG55JGlislh2DZr8U
+         fGGg==
+X-Gm-Message-State: AC+VfDwXnGMR4e62fcKQEt6WITuAtjKyrockIelNPRFuFzCJ/OFVh4gJ
+        SUYvCYHvaPs1X+0qi+cJuEk=
+X-Google-Smtp-Source: ACHHUZ4BL92o5s7HbEGrIxLqFW0xDI1fsPAebcBrhWoA23bcMEiVdiVman2cCs3uR7zgWt/GMoaCgw==
+X-Received: by 2002:a17:902:d2c7:b0:1b8:2c2a:9629 with SMTP id n7-20020a170902d2c700b001b82c2a9629mr2332579plc.19.1687904368241;
+        Tue, 27 Jun 2023 15:19:28 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e6-20020a170902cf4600b001b1c4d875f5sm6430822plg.44.2023.06.27.15.19.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 15:19:27 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <460709cb-3c5f-436a-e9e7-2562ab079677@roeck-us.net>
+Date:   Tue, 27 Jun 2023 15:19:26 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: yCImGPd8-ZGvACJ7YC59vgajXeidnTVp
-X-Proofpoint-GUID: yCImGPd8-ZGvACJ7YC59vgajXeidnTVp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-27_13,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- clxscore=1011 lowpriorityscore=0 mlxlogscore=999 suspectscore=0
- spamscore=0 impostorscore=0 malwarescore=0 mlxscore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306270173
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] hwmon: (pmbus/acbel-fsg032) Add firmware version debugfs
+ attribute
+Content-Language: en-US
+To:     Eddie James <eajames@linux.ibm.com>, linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jdelvare@suse.com,
+        lakshmiy@us.ibm.com
+References: <20230627184027.16343-1-eajames@linux.ibm.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230627184027.16343-1-eajames@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Like the IBM CFFPS driver, export the PSU's firmware version to a
-debugfs attribute as reported in the manufacturer register.
+On 6/27/23 11:40, Eddie James wrote:
+> Like the IBM CFFPS driver, export the PSU's firmware version to a
+> debugfs attribute as reported in the manufacturer register.
+> 
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>   drivers/hwmon/pmbus/acbel-fsg032.c | 48 ++++++++++++++++++++++++++++++
+>   1 file changed, 48 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/acbel-fsg032.c b/drivers/hwmon/pmbus/acbel-fsg032.c
+> index 0a0ef4ce3493..4b97f108cfe3 100644
+> --- a/drivers/hwmon/pmbus/acbel-fsg032.c
+> +++ b/drivers/hwmon/pmbus/acbel-fsg032.c
+> @@ -3,6 +3,7 @@
+>    * Copyright 2023 IBM Corp.
+>    */
+>   
+> +#include <linux/debugfs.h>
+>   #include <linux/device.h>
+>   #include <linux/fs.h>
+>   #include <linux/i2c.h>
+> @@ -11,6 +12,52 @@
+>   #include <linux/hwmon-sysfs.h>
+>   #include "pmbus.h"
+>   
+> +#define ACBEL_MFR_FW_REVISION	0xd9
+> +
+> +static ssize_t acbel_fsg032_debugfs_read(struct file *file, char __user *buf, size_t count,
+> +					 loff_t *ppos)
+> +{
+> +	struct i2c_client *client = file->private_data;
+> +	char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
+> +	char out[8];
+> +	int rc;
+> +	int i;
+> +
+> +	rc = pmbus_lock_interruptible(client);
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/hwmon/pmbus/acbel-fsg032.c | 48 ++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+Is that needed here ?
 
-diff --git a/drivers/hwmon/pmbus/acbel-fsg032.c b/drivers/hwmon/pmbus/acbel-fsg032.c
-index 0a0ef4ce3493..4b97f108cfe3 100644
---- a/drivers/hwmon/pmbus/acbel-fsg032.c
-+++ b/drivers/hwmon/pmbus/acbel-fsg032.c
-@@ -3,6 +3,7 @@
-  * Copyright 2023 IBM Corp.
-  */
- 
-+#include <linux/debugfs.h>
- #include <linux/device.h>
- #include <linux/fs.h>
- #include <linux/i2c.h>
-@@ -11,6 +12,52 @@
- #include <linux/hwmon-sysfs.h>
- #include "pmbus.h"
- 
-+#define ACBEL_MFR_FW_REVISION	0xd9
-+
-+static ssize_t acbel_fsg032_debugfs_read(struct file *file, char __user *buf, size_t count,
-+					 loff_t *ppos)
-+{
-+	struct i2c_client *client = file->private_data;
-+	char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
-+	char out[8];
-+	int rc;
-+	int i;
-+
-+	rc = pmbus_lock_interruptible(client);
-+	if (rc)
-+		return rc;
-+
-+	rc = i2c_smbus_read_block_data(client, ACBEL_MFR_FW_REVISION, data);
-+	pmbus_unlock(client);
-+	if (rc < 0)
-+		return rc;
-+
-+	for (i = 0; i < rc && i < 3; ++i)
-+		snprintf(&out[i * 2], 3, "%02X", data[i]);
-+
-+	rc = i * 2;
-+	out[rc++] = '\n';
-+	out[rc++] = 0;
-+	return simple_read_from_buffer(buf, count, ppos, out, rc);
-+}
-+
-+static const struct file_operations acbel_debugfs_ops = {
-+	.llseek = noop_llseek,
-+	.read = acbel_fsg032_debugfs_read,
-+	.write = NULL,
-+	.open = simple_open,
-+};
-+
-+static void acbel_fsg032_init_debugfs(struct i2c_client *client)
-+{
-+	struct dentry *debugfs = pmbus_get_debugfs_dir(client);
-+
-+	if (!debugfs)
-+		return;
-+
-+	debugfs_create_file("fw_version", 0444, debugfs, client, &acbel_debugfs_ops);
-+}
-+
- static const struct i2c_device_id acbel_fsg032_id[] = {
- 	{ "acbel_fsg032" },
- 	{}
-@@ -59,6 +106,7 @@ static int acbel_fsg032_probe(struct i2c_client *client)
- 	if (rc)
- 		return rc;
- 
-+	acbel_fsg032_init_debugfs(client);
- 	return 0;
- }
- 
--- 
-2.39.3
+> +	if (rc)
+> +		return rc;
+> +
+> +	rc = i2c_smbus_read_block_data(client, ACBEL_MFR_FW_REVISION, data);
+> +	pmbus_unlock(client);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	for (i = 0; i < rc && i < 3; ++i)
+> +		snprintf(&out[i * 2], 3, "%02X", data[i]);
+> +
+> +	rc = i * 2;
+> +	out[rc++] = '\n';
+> +	out[rc++] = 0;
+
+Any reason for not using one of the %*ph variants ?
+
+Thanks,
+Guenter
+
+> +	return simple_read_from_buffer(buf, count, ppos, out, rc);
+> +}
+> +
+> +static const struct file_operations acbel_debugfs_ops = {
+> +	.llseek = noop_llseek,
+> +	.read = acbel_fsg032_debugfs_read,
+> +	.write = NULL,
+> +	.open = simple_open,
+> +};
+> +
+> +static void acbel_fsg032_init_debugfs(struct i2c_client *client)
+> +{
+> +	struct dentry *debugfs = pmbus_get_debugfs_dir(client);
+> +
+> +	if (!debugfs)
+> +		return;
+> +
+> +	debugfs_create_file("fw_version", 0444, debugfs, client, &acbel_debugfs_ops);
+> +}
+> +
+>   static const struct i2c_device_id acbel_fsg032_id[] = {
+>   	{ "acbel_fsg032" },
+>   	{}
+> @@ -59,6 +106,7 @@ static int acbel_fsg032_probe(struct i2c_client *client)
+>   	if (rc)
+>   		return rc;
+>   
+> +	acbel_fsg032_init_debugfs(client);
+>   	return 0;
+>   }
+>   
 
