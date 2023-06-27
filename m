@@ -2,302 +2,257 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F16E5EB64DD
-	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Jun 2023 18:25:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C461EB64D9
+	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Jun 2023 18:56:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjF0SZ3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 27 Jun 2023 14:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
+        id S229788AbjF0S4B (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 27 Jun 2023 14:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbjF0SZ2 (ORCPT
+        with ESMTP id S229482AbjF0S4A (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 27 Jun 2023 14:25:28 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADEAB8
-        for <linux-hwmon@vger.kernel.org>; Tue, 27 Jun 2023 11:25:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687890327; x=1719426327;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=wgFOWDPXALst9CVuUIDfJ8ehUxgO75NWNBvVV3QkvR8=;
-  b=M6y9OLkWZviepf+UBU95/xQ0dXx28nboiJZE2NKlvpkzLUiZK6GxNaC0
-   AbnhIxXyVFlo7fWij5pSk1MqSTdf7ymCGzs4KM55Afh9JJ4He0EJOYazY
-   59Oenn6/oiZfXxDqkofOadqdOHNGp/Ae3AXKsYY26HANJUzRjkcx2fCGS
-   xaEZhhBhwI5QbQp7a4g0/7Coq6QUp10xLF8VUCGB47VF/WEtwefO2rAfg
-   4/6jiLAc6KPNLJZ/TVl8iMTNK6sHXVli3igGJjgSSO4FguHtWBhIU+wpM
-   XgXmNA4CfwlRUmyyLRmAqzsa1zqFSuYuXtTuKfTQEjj5Y8LlxTcZKZDvd
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="359148972"
-X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="359148972"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 11:25:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="829767231"
-X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="829767231"
-Received: from bnilawar-desk1.iind.intel.com ([10.145.169.158])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 11:25:24 -0700
-From:   Badal Nilawar <badal.nilawar@intel.com>
-To:     intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org
-Cc:     anshuman.gupta@intel.com, ashutosh.dixit@intel.com,
-        linux@roeck-us.net, andi.shyti@linux.intel.com,
-        riana.tauro@intel.com, matthew.brost@intel.com
-Subject: [PATCH v2 6/6] drm/xe/hwmon: Expose power1_max_interval
-Date:   Wed, 28 Jun 2023 00:00:43 +0530
-Message-Id: <20230627183043.2024530-7-badal.nilawar@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230627183043.2024530-1-badal.nilawar@intel.com>
-References: <20230627183043.2024530-1-badal.nilawar@intel.com>
+        Tue, 27 Jun 2023 14:56:00 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C001198E;
+        Tue, 27 Jun 2023 11:55:55 -0700 (PDT)
+Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35RIWAWF021991;
+        Tue, 27 Jun 2023 18:55:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=pps0720;
+ bh=5ynX//FPlvUSK1Jk5FKM3E62GDzTwN4zvKoA8LIct4A=;
+ b=QfyloNNyn9amJ/J+F4V1MshIbmu9Q0SRzs4INjy2UrYz+Q1WPPC5ZOsdkMw2r7KMg2b+
+ TzJYDP1pM4f/cR+HLrXVnWP+WmlECZQKsL1yUkpxiAXpSWNsqagt/3u3ppcp4Zv/YHhj
+ a5Q0XePU5eHq5xCmSAl5BaklJTgu76UAK0eZZj0d7CK/LywJg8UFldQsGWaErA9zDD42
+ LlU0PsVhZj/J0xfkmuoDeT9icSiNJr9rsFbBW39uYXtoc58zpi7jgsUnYC8RoPFas0nU
+ PitJDyLx34FkCPBgV24jvM2bwxzps/Jva1KBA9hbaXexQ09M15lkldKUoWM34HwMAOqn mw== 
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3rg0dyawej-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 18:55:28 +0000
+Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 8752114786;
+        Tue, 27 Jun 2023 18:55:27 +0000 (UTC)
+Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 27 Jun 2023 06:55:09 -1200
+Received: from p1wg14926.americas.hpqcorp.net (10.119.18.115) by
+ p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 27 Jun 2023 06:55:09 -1200
+Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
+ p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42
+ via Frontend Transport; Tue, 27 Jun 2023 06:55:09 -1200
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 27 Jun 2023 18:55:09 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n1sr2tFeAG/utjH7BWYfWREJn+xptsMmJwUMH53IoWY1FE4wLdNqTKdk6o+5ntWzpaLoNwEHx9cmza8+dfSchnTNf/PBT5ruhKiuJUqWB/20bETaTFQLfNnJot5Mq4rrHvIiKX9dJizxEgDpZHiRy/DsWCEIEqK2gPG5TA7sNC4qaz7nk90gy3XhxexhHhf725Wh0UXBrDXX1qO+opzNFK4kON40zuAJJD44GggeWsoRkuTjEDkOGRgrfp542PXAYakceWDKb+dHRXvOh/qf09Q2byNfCbKNEtOhyPKxR925mBd4Gh/WHlqx4Hi4wpxG02Vu3nzZw3QoQekpHsKEyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5ynX//FPlvUSK1Jk5FKM3E62GDzTwN4zvKoA8LIct4A=;
+ b=iKaTafIbRhP8aYJlsxeSRtZyKFYb+SidbMHvPFgYXPkQ82cI8Ce8kvVt+isQFpHU4smmwxiAzVAQVpUPMK56WS7PjMUQ7OzxmMoaKgFN69M0VNYptmjKSuGANO761K162LSKDTYhzrVyisvBXZtg7tvNE2VXSezjwnmnnNVdeMbobhhJZZBkWgXpUwEkr8GwOWCIYFbnB7cgW1/3Dg+O+nkDDXf1sNs9yxVovWoiRpmch0ya2UIE7qaVby0hmCoVJrkY+AT9Y/JkA3Rf2tLaVDtgovAcj9EoUDJ7pDh+iJt+aeYzZNqfqPQ9j1ZLnYl7PqRgaSS/hHrH8Yrp+S5Hpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
+ MW4PR84MB1443.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1a6::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.24; Tue, 27 Jun 2023 18:55:07 +0000
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2a07:1ac6:6523:8682]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2a07:1ac6:6523:8682%7]) with mapi id 15.20.6521.026; Tue, 27 Jun 2023
+ 18:55:07 +0000
+From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v4 1/5] gpio: gxp: Add HPE GXP GPIO
+Thread-Topic: [PATCH v4 1/5] gpio: gxp: Add HPE GXP GPIO
+Thread-Index: AQHZpIhVq9wKn+gl5UKKNmA/guoG66+er70AgAAFJYA=
+Date:   Tue, 27 Jun 2023 18:55:07 +0000
+Message-ID: <49BFF623-06D0-4689-9057-F3D4BFBA0DEF@hpe.com>
+References: <20230621213115.113266-1-nick.hawkins@hpe.com>
+ <20230621213115.113266-2-nick.hawkins@hpe.com>
+ <CAHp75Vczq+5JCFW+qi4Y7M7+JY3MPe7GAMdjMzOpVukcBybH7A@mail.gmail.com>
+In-Reply-To: <CAHp75Vczq+5JCFW+qi4Y7M7+JY3MPe7GAMdjMzOpVukcBybH7A@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Microsoft-MacOutlook/16.74.23061800
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|MW4PR84MB1443:EE_
+x-ms-office365-filtering-correlation-id: 82abce11-0bcc-4bf3-2285-08db77400664
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +1UZT+3qEbrVuyvf53DxUGeNoAscSm/O4r5NcZ7ctZdk36IchGfXiHp6rdz5oevGvSvESqDYvzQ/hfWf22WBHIhKJOBOeeLNOBUef3axzaVZH8O4HCBOq23Pvgkf5iuP7UONZHIDDVkmqM5fs9+hjvBb5uQAkyDA9E9brhPEeNk9N2TbBToeEQ23IwH18Dbn2orXY38JaUEWJjHNFQLHdqGR1vGIM0de1+y77z1RsKh/ptWOQXCblmDnTAegzOdik/3eqiE9TJa1u3oagAqzQ76NV1pseTLEHQjy24AgiWQ3g+Y/ylVHu1EKu6QaeRSbMWC2qnScBn3KbrkEcc9YqV6C7yaOX8WAJfJ1AP4XJsFx25/ofJO74O5gd+nUrwfz8J7JoJ3DdBEE7zEQ5kCuK70UjcNHF1I6RhNGGWk/UD7o7IBR35KdpCJXDGntuMcartzFzuC2QeVzYwlK/3kyt5641XlslWzALKABvomxOodQpoe6iWCqV+fAhWg5r+5RLUduG6YNMy7MLPf5TFOkPxwg7KW0uyfyPRXrBsO1OmTsMSMvdLJAIsieTU85uh8gBptAicE1c68p1lrKpNKtr5kYWTm284maZyeYAhCDTOyvHg3IhuWjv47431mv4Dw2uxKKHaseRNHxJLvqIxypmw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(366004)(346002)(376002)(39860400002)(396003)(136003)(451199021)(2906002)(186003)(71200400001)(6486002)(122000001)(82960400001)(38100700002)(83380400001)(2616005)(66574015)(6506007)(6512007)(86362001)(41300700001)(38070700005)(54906003)(316002)(478600001)(36756003)(66556008)(66446008)(4326008)(66946007)(76116006)(33656002)(64756008)(6916009)(66476007)(7416002)(5660300002)(8676002)(8936002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dWNLM3BESERiWTluVDN2Wmd1Qi91T09jRnRxaUQ5SXlyWG05K2xxMTVLblFQ?=
+ =?utf-8?B?dmJLNytNdUJXVXA2QkpPWXdlenl3WGJnT0h3NVI0V3ZBcFJFaVdWcHpKQW10?=
+ =?utf-8?B?bjAyeUVyWHRjcHRlNER3QlhOUzhiVGdEbG0xeTlKZkt0Sys1MUhYVkJJUmdX?=
+ =?utf-8?B?bWc5MlVZdVZFcUpoSXQ2Sko5L3ZSN0krcnpzR1hYVXQ4dkxTYVlCR3BVcVQ5?=
+ =?utf-8?B?YjJnOUxBSGJJOWZoQ29HVmdLOXFBc2c0UHE4c2YxeVZaYS96cmd3M0hQNHla?=
+ =?utf-8?B?S3YyYy9xY0M1T0pHaE10eVJ3a1ZUNXBaeUgzZ3dmYmpsNDRkdjVJRmJDaXQ4?=
+ =?utf-8?B?L1k5eGd5c0cwVjdTa2R0bm9iRkZ6L1pDb3pzWEtoWEF2eXUxdHNtbzRXTzFD?=
+ =?utf-8?B?NU5LcG04d0J2SXdiODNkYU90aDJ2a0pBaC9tbHJGRE1YV3RxdkplbHc2aC85?=
+ =?utf-8?B?WWt1SzdVQVVHczd2d2dnVEhSVGlqdU5wYVA3c3hycE9TcEtiVDI5d24vbnFp?=
+ =?utf-8?B?Rnp4NTVNSHpPeVRjMWE2aE9PSzA5L3JpYXFESlo4VnB3aTJnNS80aktNMk5O?=
+ =?utf-8?B?SEM4d1V2MW02eTlTU2JaWHFNTFVrVVpQaDZ1eWFWaUhkdWd2L0FIbFZreFZG?=
+ =?utf-8?B?N0p5WVV0VUo1WjBoakhaK0Q2KzRET0NHN0c0Z1lSdURLVVB6RTdBb2NGZE9Z?=
+ =?utf-8?B?NStkOWNrdzJjOXFmemxKS2F0VUpoNXp0c1puaG85TUJUeDcxMW1jTnNMUWFL?=
+ =?utf-8?B?ZnNxNXVwVDVITXlOTm1uVTFFdUkwaVcxWWRyZkVwR3hrbkxibWhJd2RsWCtx?=
+ =?utf-8?B?VW1oSnYrbEJIdCtYMUNrVk1WZDRVT1BDL1AwUWdIaUpVUnArV0hRZkRET2du?=
+ =?utf-8?B?SEl3RXZTRE5LYmhvTXRjZnAwc2pvTHp4ckI4QWZVelNqOXJ2MkJXMVNlRzcz?=
+ =?utf-8?B?cTJFNHErVFBtT0RsaUt5bis5aWU4REJUS2JsSlJueUJUdUswWVIzbWllcEpT?=
+ =?utf-8?B?QjB3U2w0LzFqYXFnaWZTVTNaTVB6SE1wWFlmamxFVkxReUEvZXJ5dVM3czFS?=
+ =?utf-8?B?U1U5L1hrVCtTaXFEVElmMXE5dmNzY2VuNXg5WkxlMkY5eEpiekd3d2NqVjdS?=
+ =?utf-8?B?aEpSSjVXQVRWVnArMHpvWktOZ0taRUkzanNTcjRVeFA1bzc0akpKRUNYcG9G?=
+ =?utf-8?B?TXc2bHV3MlRxWHF4YXQ3YXNSalk1TGdyOGhUcGZHNmtCaUNsdSt5aThkOVFS?=
+ =?utf-8?B?aXJIRFA2QktVZEN6dUd4alVLeElNNC9YclBoUDRaVFF1YWlWeHl3bEZ6R0wy?=
+ =?utf-8?B?WG81Y3dCck9JdnpmcjRRdHN3cmZNUW5nazlYbSt2aWNtTDc1Y01YTXErdkVP?=
+ =?utf-8?B?aEQ2eTVTK1M0ODczYUdaZndTM2FyQU52TWgwNHpLdHlxWnRIa29kK1lUTC9r?=
+ =?utf-8?B?ME41NUtLeFdNVm55ODNDaGhIeWlhRklsUUxTbjlUQUo4eVJKQUpFZ29HTzlx?=
+ =?utf-8?B?SDlUMWRkb0FlSTNPaHRIbk1lZS81bHhpMFpnWXJLYlh3Z3grUDJRQ2lER3A3?=
+ =?utf-8?B?cy9YaEZYcjZpOXVjQTZ5aENOSlpmZnZZNStrYTVPa2pxSERNcXhXY2ZWLzJr?=
+ =?utf-8?B?bFdYdE5QUHduRUtySUpQYWZ2WXhBcUxEUTNOa2hXdXViOHJML2RmcmUxdC83?=
+ =?utf-8?B?djVHTXhFVWV6cVNXcm5vc1NEa2EwbUM5UVhROUFuK25qekl6RTlicVBmRzVD?=
+ =?utf-8?B?Z0pHRjNyeHQvWnpIaWZwRkpzWmFQOHpEZklGY1NnSVJXc0RlV2NCN1RlWGsz?=
+ =?utf-8?B?TkFCaFZZTTZtWklrMmxydVZEMExzMjdHbXhVNHpXT1JCTG0vbEN5VmZveTFP?=
+ =?utf-8?B?Z0hRUFV2cnhVaWtxNnNKNW5JeEZEbHowNnVSNTI0L1NFNTN6R0J1UnZDWTlv?=
+ =?utf-8?B?S0JqMFRNdExJR2hIWGJlNFVSWG1wK3Ewb0gyY1ZqdjZYeUtFVnhmclBlU1JW?=
+ =?utf-8?B?WkxESCtrSG1SNEszZkdId2RENVQ5K3ZUN2JLdWRIeVExbU1obUdOM1RQdG5p?=
+ =?utf-8?B?TnRRWjMxekJSeWoyZS8rNDFQQm0xakxwQ1ZLdmdqMDlpR1R0MUVMMWdBVU1n?=
+ =?utf-8?B?dFZ1TUtscTFnUjkvZ1JWK0tONjB4QmhncU8zZmwyajkyVHR1bmVzT1JmMGw2?=
+ =?utf-8?B?d1E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <299F037BC86F4D45974E77B3171B0B1A@NAMPRD84.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82abce11-0bcc-4bf3-2285-08db77400664
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2023 18:55:07.1425
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: eInSTLX2HfNyEuz9oPQbL+bSyYBPXv8AOa+By0qciFSlnA7cBjCkk9eCY3HEyd4EjudI7Z6qY/FPslZ9enlJOA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR84MB1443
+X-OriginatorOrg: hpe.com
+X-Proofpoint-ORIG-GUID: 83qZkS4BrQDscXQc3yOzi1a2jv9ZgV5E
+X-Proofpoint-GUID: 83qZkS4BrQDscXQc3yOzi1a2jv9ZgV5E
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-27_12,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ bulkscore=0 adultscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0
+ mlxlogscore=999 malwarescore=0 clxscore=1015 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306270171
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Expose power1_max_interval, that is the tau corresponding to PL1, as a
-custom hwmon attribute. Some bit manipulation is needed because of the
-format of PKG_PWR_LIM_1_TIME in
-PACKAGE_RAPL_LIMIT register (1.x * power(2,y))
-This is port from i915 hwmon.
-
-v2: Get rpm wake ref while accessing power1_max_interval
-
-Signed-off-by: Badal Nilawar <badal.nilawar@intel.com>
----
- .../ABI/testing/sysfs-driver-intel-xe-hwmon   |  11 ++
- drivers/gpu/drm/xe/regs/xe_mchbar_regs.h      |   8 +
- drivers/gpu/drm/xe/xe_hwmon.c                 | 140 +++++++++++++++++-
- 3 files changed, 158 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
-index f76f4c691946..4895b59f96c6 100644
---- a/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
-+++ b/Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon
-@@ -64,3 +64,14 @@ Description:	RO. Energy input of device or tile in microjoules.
- 		for the gt.
- 
- 		Only supported for particular Intel xe graphics platforms.
-+
-+What:		/sys/devices/.../hwmon/hwmon<i>/power1_max_interval
-+Date:		July 2023
-+KernelVersion:	6.3
-+Contact:	intel-gfx@lists.freedesktop.org
-+Description:	RW. Sustained power limit interval (Tau in PL1/Tau) in
-+		milliseconds over which sustained power is averaged.
-+
-+		Only supported for particular Intel i915 graphics platforms.
-+
-+
-diff --git a/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h b/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
-index 473a44bd7c56..6897fe70b243 100644
---- a/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
-+++ b/drivers/gpu/drm/xe/regs/xe_mchbar_regs.h
-@@ -22,16 +22,24 @@
- #define   PKG_PKG_TDP				GENMASK_ULL(14, 0)
- #define   PKG_MIN_PWR				GENMASK_ULL(30, 16)
- #define   PKG_MAX_PWR				GENMASK_ULL(46, 32)
-+#define   PKG_MAX_WIN				GENMASK_ULL(54, 48)
-+#define     PKG_MAX_WIN_X			GENMASK_ULL(54, 53)
-+#define     PKG_MAX_WIN_Y			GENMASK_ULL(52, 48)
-+
- 
- #define PCU_CR_PACKAGE_POWER_SKU_UNIT		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x5938)
- #define   PKG_PWR_UNIT				REG_GENMASK(3, 0)
- #define   PKG_ENERGY_UNIT			REG_GENMASK(12, 8)
-+#define   PKG_TIME_UNIT				REG_GENMASK(19, 16)
- 
- #define PCU_CR_PACKAGE_ENERGY_STATUS		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x593c)
- 
- #define PCU_CR_PACKAGE_RAPL_LIMIT		XE_REG(MCHBAR_MIRROR_BASE_SNB + 0x59a0)
- #define   PKG_PWR_LIM_1				REG_GENMASK(14, 0)
- #define   PKG_PWR_LIM_1_EN			REG_BIT(15)
-+#define   PKG_PWR_LIM_1_TIME			REG_GENMASK(23, 17)
-+#define   PKG_PWR_LIM_1_TIME_X			REG_GENMASK(23, 22)
-+#define   PKG_PWR_LIM_1_TIME_Y			REG_GENMASK(21, 17)
- 
- #endif
- 
-diff --git a/drivers/gpu/drm/xe/xe_hwmon.c b/drivers/gpu/drm/xe/xe_hwmon.c
-index 2faf0f43f2d5..b8a2e327a22b 100644
---- a/drivers/gpu/drm/xe/xe_hwmon.c
-+++ b/drivers/gpu/drm/xe/xe_hwmon.c
-@@ -43,6 +43,7 @@ enum hwm_reg_operation {
- #define SF_CURR		1000
- #define SF_VOLTAGE	1000
- #define SF_ENERGY	1000000
-+#define SF_TIME		1000
- 
- struct hwm_energy_info {
- 	u32 reg_val_prev;
-@@ -66,6 +67,7 @@ struct xe_hwmon {
- 	struct mutex hwmon_lock;
- 	int scl_shift_power;
- 	int scl_shift_energy;
-+	int scl_shift_time;
- };
- 
- struct xe_reg hwm_get_reg(struct hwm_drvdata *ddat, enum hwm_reg_name reg_name)
-@@ -324,6 +326,141 @@ hwm_energy(struct hwm_drvdata *ddat, long *energy)
- 	xe_device_mem_access_put(gt_to_xe(ddat->gt));
- }
- 
-+static ssize_t
-+hwm_power1_max_interval_show(struct device *dev, struct device_attribute *attr,
-+			     char *buf)
-+{
-+	struct hwm_drvdata *ddat = dev_get_drvdata(dev);
-+	struct xe_hwmon *hwmon = ddat->hwmon;
-+	u32 r, x, y, x_w = 2; /* 2 bits */
-+	u64 tau4, out;
-+
-+	xe_device_mem_access_get(gt_to_xe(ddat->gt));
-+
-+	process_hwmon_reg(ddat, pkg_rapl_limit,
-+			  reg_read, &r, 0, 0);
-+
-+	xe_device_mem_access_put(gt_to_xe(ddat->gt));
-+
-+	x = REG_FIELD_GET(PKG_PWR_LIM_1_TIME_X, r);
-+	y = REG_FIELD_GET(PKG_PWR_LIM_1_TIME_Y, r);
-+	/*
-+	 * tau = 1.x * power(2,y), x = bits(23:22), y = bits(21:17)
-+	 *     = (4 | x) << (y - 2)
-+	 * where (y - 2) ensures a 1.x fixed point representation of 1.x
-+	 * However because y can be < 2, we compute
-+	 *     tau4 = (4 | x) << y
-+	 * but add 2 when doing the final right shift to account for units
-+	 */
-+	tau4 = ((1 << x_w) | x) << y;
-+	/* val in hwmon interface units (millisec) */
-+	out = mul_u64_u32_shr(tau4, SF_TIME, hwmon->scl_shift_time + x_w);
-+
-+	return sysfs_emit(buf, "%llu\n", out);
-+}
-+
-+static ssize_t
-+hwm_power1_max_interval_store(struct device *dev,
-+			      struct device_attribute *attr,
-+			      const char *buf, size_t count)
-+{
-+	struct hwm_drvdata *ddat = dev_get_drvdata(dev);
-+	struct xe_hwmon *hwmon = ddat->hwmon;
-+	u32 x, y, rxy, x_w = 2; /* 2 bits */
-+	u64 tau4, r, max_win;
-+	unsigned long val;
-+	int ret;
-+
-+	ret = kstrtoul(buf, 0, &val);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Max HW supported tau in '1.x * power(2,y)' format, x = 0, y = 0x12
-+	 * The hwmon->scl_shift_time default of 0xa results in a max tau of 256 seconds
-+	 */
-+#define PKG_MAX_WIN_DEFAULT 0x12ull
-+
-+	/*
-+	 * val must be < max in hwmon interface units. The steps below are
-+	 * explained in hwm_power1_max_interval_show()
-+	 */
-+	r = FIELD_PREP(PKG_MAX_WIN, PKG_MAX_WIN_DEFAULT);
-+	x = REG_FIELD_GET(PKG_MAX_WIN_X, r);
-+	y = REG_FIELD_GET(PKG_MAX_WIN_Y, r);
-+	tau4 = ((1 << x_w) | x) << y;
-+	max_win = mul_u64_u32_shr(tau4, SF_TIME, hwmon->scl_shift_time + x_w);
-+
-+	if (val > max_win)
-+		return -EINVAL;
-+
-+	/* val in hw units */
-+	val = DIV_ROUND_CLOSEST_ULL((u64)val << hwmon->scl_shift_time, SF_TIME);
-+	/* Convert to 1.x * power(2,y) */
-+	if (!val) {
-+		/* Avoid ilog2(0) */
-+		y = 0;
-+		x = 0;
-+	} else {
-+		y = ilog2(val);
-+		/* x = (val - (1 << y)) >> (y - 2); */
-+		x = (val - (1ul << y)) << x_w >> y;
-+	}
-+
-+	rxy = REG_FIELD_PREP(PKG_PWR_LIM_1_TIME_X, x) | REG_FIELD_PREP(PKG_PWR_LIM_1_TIME_Y, y);
-+
-+	xe_device_mem_access_get(gt_to_xe(ddat->gt));
-+
-+	mutex_lock(&hwmon->hwmon_lock);
-+
-+	process_hwmon_reg(ddat, pkg_rapl_limit, reg_rmw, (u32 *)&r,
-+			  PKG_PWR_LIM_1_TIME, rxy);
-+
-+	mutex_unlock(&hwmon->hwmon_lock);
-+
-+	xe_device_mem_access_put(gt_to_xe(ddat->gt));
-+
-+	return count;
-+}
-+
-+static SENSOR_DEVICE_ATTR(power1_max_interval, 0664,
-+			  hwm_power1_max_interval_show,
-+			  hwm_power1_max_interval_store, 0);
-+
-+static struct attribute *hwm_attributes[] = {
-+	&sensor_dev_attr_power1_max_interval.dev_attr.attr,
-+	NULL
-+};
-+
-+static umode_t hwm_attributes_visible(struct kobject *kobj,
-+				      struct attribute *attr, int index)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct hwm_drvdata *ddat = dev_get_drvdata(dev);
-+	u32 reg_val;
-+	int ret = 0;
-+
-+	xe_device_mem_access_get(gt_to_xe(ddat->gt));
-+
-+	if (attr == &sensor_dev_attr_power1_max_interval.dev_attr.attr)
-+		ret =  process_hwmon_reg(ddat, pkg_rapl_limit,
-+					 reg_read, &reg_val, 0, 0) ? 0 : attr->mode;
-+
-+	xe_device_mem_access_put(gt_to_xe(ddat->gt));
-+
-+	return ret;
-+}
-+
-+static const struct attribute_group hwm_attrgroup = {
-+	.attrs = hwm_attributes,
-+	.is_visible = hwm_attributes_visible,
-+};
-+
-+static const struct attribute_group *hwm_groups[] = {
-+	&hwm_attrgroup,
-+	NULL
-+};
-+
- static const struct hwmon_channel_info *hwm_info[] = {
- 	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX | HWMON_P_CRIT),
- 	HWMON_CHANNEL_INFO(curr, HWMON_C_CRIT),
-@@ -754,6 +891,7 @@ hwm_get_preregistration_info(struct hwm_drvdata *ddat)
- 	if (!ret) {
- 		hwmon->scl_shift_power = REG_FIELD_GET(PKG_PWR_UNIT, val_sku_unit);
- 		hwmon->scl_shift_energy = REG_FIELD_GET(PKG_ENERGY_UNIT, val_sku_unit);
-+		hwmon->scl_shift_time = REG_FIELD_GET(PKG_TIME_UNIT, val_sku_unit);
- 	}
- 
- 	/*
-@@ -817,7 +955,7 @@ void xe_hwmon_register(struct xe_device *xe)
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, ddat->name,
- 							 ddat,
- 							 &hwm_chip_info,
--							 NULL);
-+							 hwm_groups);
- 
- 	if (IS_ERR(hwmon_dev)) {
- 		drm_warn(&xe->drm, "Fail to register xe hwmon\n");
--- 
-2.25.1
-
+PiBkZWZpbmluZyAoSSBoYXZlIGEgZMOpasOgIHZ1IG9mIGFscmVhZHkgc2hvd2luZyB5b3UgdHlw
+b3MgaW4gdGhlIGNvbW1pdA0KPiBtZXNzYWdlIGFuZCBjb21tZW50cyBhbmQgaXQgbG9va3MgbGlr
+ZSB5b3UgaWdub3JlZCBhbGwgb2YgdGhhdC4gSWYgc28sDQo+IHRoZW4gd2h5PykNCg0KQXBvbG9n
+aWVzIEFuZHksDQoNCkkgc29tZWhvdyBjb21wbGV0ZWx5IG1pc3NlZCAvIGxvc3QgeW91ciBtZW50
+aW9uIG9mIGEgdHlwbyBpbiBib3RoIHRoZQ0KY29tbWl0IGFuZCBjb21tZW50cy4gSSBoYXZlIG5v
+IGludGVudGlvbiBvZiBpZ25vcmluZyBpdC4gSSB3aWxsIGNvcnJlY3QNCnRoaXMuIFRoYW5rIHlv
+dSBmb3IgdGhlIGlucHV0IHlvdSBoYXZlIHByb3ZpZGVkLiBJIGhhdmUgc2V2ZXJhbA0KcXVlc3Rp
+b25zIGFuZCBjb21tZW50cyBiZWxvdy4NCg0KDQo+ID4gKyAqIGFyZSBzcGVjaWZpY2FsbHkgZGVm
+aW5lZCBpbiBEVFMgYW5kIG9mZnNldHMgYXJlIHVzZWQgaGVyZS4NCj4gPiArICovDQo+ID4gK2Vu
+dW0gZ3hwX2dwaW9fcG4gew0KPiA+ICsgUkVTRVQgPSAxOTIsDQo+ID4gKyBWUEJUTiA9IDIxMCwg
+LyogYWthIFBPV0VSX09LICovDQo+ID4gKyBQR09PRCA9IDIxMSwgLyogYWthIFBTX1BXUk9LICov
+DQo+ID4gKyBQRVJTVCA9IDIxMiwgLyogYWthIFBDSUVSU1QgKi8NCj4gPiArIFBPU1RfQ09NUExF
+VEUgPSAyMTMsDQoNCg0KPiBTbywgdmJ0biBpcyBhIEdQSU8/IFdoeSBkb2VzIGl0IG5lZWQgYSBz
+cGVjaWFsIHRyZWF0bWVudD8NCg0KSSB3YXMgc3BlY2lmaWNhbGx5IGdyYWJiaW5nIHRoZSBhcmVh
+cyBvZiBtZW1vcnkgdGhhdCBJIG5lZWRlZCBpbnN0ZWFkIG9mDQptYXBwaW5nIHRoZSBlbnRpcmUg
+Zm4yIGFyZWEgb2YgbWVtb3J5LiBJIGJlbGlldmUgSSBjYW4gbWFwIHRoZSBlbnRpcmUNCmFyZWEg
+aW5zdGVhZC4NCg0KLi4uDQoNCj4gPiArIGNhc2UgNjQgLi4uIDk1Og0KPiA+ICsgcmVnX29mZnNl
+dCA9IEdQT0RBVDsNCj4gPiArIHJlZ19tYXNrID0gQklUKG9mZnNldCAtIDY0KTsNCj4gPiArIGJy
+ZWFrOw0KPiA+ICsgY2FzZSA5NiAuLi4gMTI3Og0KPiA+ICsgcmVnX29mZnNldCA9IEdQT0RBVCAr
+IDB4MDQ7DQo+ID4gKyByZWdfbWFzayA9IEJJVChvZmZzZXQgLSA5Nik7DQo+ID4gKyBicmVhazsN
+Cg0KDQo+IC4uLmFuZCBoZXJlIChiZXR3ZWVuIHR3byBncm91cHMgb2YgR1BPKSBpcyAweDQ4LiBM
+b29rcyBhIGJpdCB3ZWlyZC4NCj4gRG9lcyB0aGlzIEdQSU8gaGF2ZSBtb3JlIGZ1bmN0aW9ucyB0
+aGFuIHNpbXBseSBiZWluZyBhIEdQSU8/IFRvIG1lDQo+IGxvb2tzIGxpa2UgYSBQTUlDLWlzaCBv
+bmUuIElzIHRoZXJlIGFueSBkYXRhc2hlZXQgYXZhaWxhYmxlPw0KDQpVbmZvcnR1bmF0ZWx5LCB0
+aGVyZSBpcyBubyBwdWJsaWMgZGF0YXNoZWV0IGF2YWlsYWJsZSBjdXJyZW50bHkuIFRoZXJlDQph
+cmUgaG93ZXZlciBzb21lIHNwZWNpYWwgZnVuY3Rpb25zIG90aGVycyB0aGFuIGJlaW5nIGEgc2lt
+cGxlIEdQSU8uDQpUaGVyZSBhcmUgb3duZXJzaGlwIGJpdHMgYXMgdGhlIHNhbWUgYXJlYSBpcyBh
+Y2Nlc3NpYmxlIFZJQSBQQ0kuDQoNCj4gPiArIGNhc2UgUkVTRVQ6DQo+ID4gKyAvKiBTV19SRVNF
+VCAqLw0KPiA+ICsgcmVnX29mZnNldCA9IEFTUl9PRlM7DQo+ID4gKyByZWdfbWFzayA9IEJJVCgx
+NSk7DQo+ID4gKyBicmVhazsNCg0KPiBEb2VzIGl0IHJlYWxseSBiZWxvbmcgdG8gdGhpcyBkcml2
+ZXI/IE1heWJlIGl0IHNob3VsZCBiZSBhbiBNRkQgd2l0aA0KPiBHUElPIGFuZCBzcGVjaWFsIGZ1
+bmN0aW9ucyB3aXRoIHZhbGlkX21hc2sgcHJvcGVybHkgYXNzaWduZWQ/DQoNClVubGlrZSB5b3Vy
+IHN1Z2dlc3Rpb24gSSBxdW90ZSBkaXJlY3RseSBiZWxvdyBhcmUgeW91IGltcGx5aW5nIHRoYXQN
+Ck15IGFjY2Vzc2VzIHRvIHRoZSBDU00gYXJlYSBvZiBtZW1vcnkgY2FuIGJlIGl0cyBvd24gc2Vw
+YXJhdGUNCmRyaXZlciB0aGF0IGlzIE1GRCBhbmQgcHJvdmlkZXMgR1BJTyBsaW5lcyB0byByZWFk
+Pw0KDQo+IC4uLiANCg0KPiA+ICsgY2FzZSAxOTI6DQo+ID4gKyBpZiAodmFsdWUpIHsNCj4gPiAr
+IHJlZ21hcF91cGRhdGVfYml0cyhkcnZkYXRhLT5jc21fbWFwLCBBU1JfT0ZTLA0KPiA+ICsgQklU
+KDApLCBCSVQoMCkpOw0KPiA+ICsgcmVnbWFwX3VwZGF0ZV9iaXRzKGRydmRhdGEtPmNzbV9tYXAs
+IEFTUl9PRlMsDQo+ID4gKyBCSVQoMTUpLCBCSVQoMTUpKTsNCj4gPiArIH0gZWxzZSB7DQo+ID4g
+KyByZWdtYXBfdXBkYXRlX2JpdHMoZHJ2ZGF0YS0+Y3NtX21hcCwgQVNSX09GUywNCj4gPiArIEJJ
+VCgxNSksIDApOw0KPiA+ICsgfQ0KPiA+ICsgYnJlYWs7DQoNCg0KPiBBZ2Fpbiwgc2VlbXMgbGlr
+ZSBhIHNwZWNpYWwgZnVuY3Rpb24gb2YgR1BJTyB0aGF0IHNob3VsZCBwcm9iYWJseSBoYXZlDQo+
+IGFub3RoZXIgZHJpdmVyIHRoYXQgc2hhcmVzIHJlZ21hcCB3aXRoIEdQSU8gYW5kIEdQSU8gbWFy
+a3MgdGhpcyBvbmUgaXMNCj4gbm90IHZhbGlkIGZvciB0aGUgR1BJTyBvcGVyYXRpb25zLg0KDQpX
+aGF0IGRvIHlvdSBtZWFuIGJ5IEdQSU8gbWFya2luZyB0aGlzIG9uZSBhcyBub3QgdmFsaWQgZm9y
+IEdQSU8NCm9wZXJhdGlvbnM/DQoNCi4uLg0KDQo+ID4gK3N0YXRpYyBpbnQgZ3hwX2dwaW9fdnVo
+Y19nZXQoc3RydWN0IGdwaW9fY2hpcCAqY2hpcCwgdW5zaWduZWQgaW50IG9mZnNldCkNCj4gPiAr
+ew0KPiA+ICsgc3RydWN0IGd4cF9ncGlvX2RydmRhdGEgKmRydmRhdGEgPSBkZXZfZ2V0X2RydmRh
+dGEoY2hpcC0+cGFyZW50KTsNCj4gPiArIHVuc2lnbmVkIGludCB2YWw7DQo+ID4gKyBpbnQgcmV0
+ID0gMDsNCj4gPiArDQo+ID4gKyBpZiAob2Zmc2V0IDwgOCkgew0KPiA+ICsgcmVnbWFwX3JlYWQo
+ZHJ2ZGF0YS0+dnVoYzBfbWFwLCBWVUhDX09GUyArIDQgKiBvZmZzZXQsICZ2YWwpOw0KPiA+ICsg
+cmV0ID0gKHZhbCAmIEJJVCgxMykpID8gMSA6IDA7DQo+ID4gKyB9DQo+ID4gKw0KPiA+ICsgcmV0
+dXJuIHJldDsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIHZvaWQgZ3hwX2dwaW9fdnVoY19z
+ZXQoc3RydWN0IGdwaW9fY2hpcCAqY2hpcCwgdW5zaWduZWQgaW50IG9mZnNldCwNCj4gPiArIGlu
+dCB2YWx1ZSkNCj4gPiArew0KPiA+ICsgLyogQ3VycmVudGx5IHdlIGFyZSBub3Qgc3VwcG9ydGlu
+ZyBzZXR0aW5nIG9mIHRoZXNlIHZhbHVlcyB5ZXQgKi8NCj4gPiArIHN3aXRjaCAob2Zmc2V0KSB7
+DQo+ID4gKyBkZWZhdWx0Og0KPiA+ICsgYnJlYWs7DQo+ID4gKyB9DQo+ID4gK30NCj4gPiArDQo+
+ID4gK3N0YXRpYyBpbnQgZ3hwX2dwaW9fdnVoY19nZXRfZGlyZWN0aW9uKHN0cnVjdCBncGlvX2No
+aXAgKmNoaXAsDQo+ID4gKyB1bnNpZ25lZCBpbnQgb2Zmc2V0KQ0KPiA+ICt7DQo+ID4gKyBzd2l0
+Y2ggKG9mZnNldCkgew0KPiA+ICsgY2FzZSAwOg0KPiA+ICsgY2FzZSAxOg0KPiA+ICsgY2FzZSAy
+Og0KPiA+ICsgcmV0dXJuIEdYUF9HUElPX0RJUl9JTjsNCj4gPiArIGRlZmF1bHQ6DQo+ID4gKyBy
+ZXR1cm4gLUVOT1RTVVBQOw0KPiA+ICsgfQ0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgaW50
+IGd4cF9ncGlvX3Z1aGNfZGlyZWN0aW9uX2lucHV0KHN0cnVjdCBncGlvX2NoaXAgKmNoaXAsDQo+
+ID4gKyB1bnNpZ25lZCBpbnQgb2Zmc2V0KQ0KPiA+ICt7DQo+ID4gKyBzd2l0Y2ggKG9mZnNldCkg
+ew0KPiA+ICsgY2FzZSAwOg0KPiA+ICsgY2FzZSAxOg0KPiA+ICsgY2FzZSAyOg0KPiA+ICsgcmV0
+dXJuIDA7DQo+ID4gKyBkZWZhdWx0Og0KPiA+ICsgcmV0dXJuIC1FTk9UU1VQUDsNCj4gPiArIH0N
+Cj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGludCBneHBfZ3Bpb192dWhjX2RpcmVjdGlvbl9v
+dXRwdXQoc3RydWN0IGdwaW9fY2hpcCAqY2hpcCwNCj4gPiArIHVuc2lnbmVkIGludCBvZmZzZXQs
+IGludCB2YWx1ZSkNCj4gPiArew0KPiA+ICsgc3dpdGNoIChvZmZzZXQpIHsNCj4gPiArIGRlZmF1
+bHQ6DQo+ID4gKyByZXR1cm4gLUVOT1RTVVBQOw0KPiA+ICsgfQ0KPiA+ICt9DQoNCg0KPiBJJ20g
+bm90IHN1cmUgdGhpcyBiZWxvbmdzIHRvIHRoZSBHUElPIGRyaXZlci4NCg0KQnkgdGhpcyBkbyB5
+b3UgbWVhbiB0aGF0IGl0IG5lZWRzIHRvIGJlIGluIGEgc2VwYXJhdGUgbm9uIEdQSU8gZHJpdmVy
+DQp0aGF0IHNoYXJlcyBhIHJlZ21hcCBhcyBzdWdnZXN0ZWQgYWJvdmU/DQoNCi4uLg0KDQo+IFNv
+LCBvdmVyYWxsIGl0IGxvb2tzIHRvIG1lIGxpa2UgYW4gTUZEIGRldmljZSB3aGljaCBzaG91bGQg
+YmUgc3BsaXQgdG8NCj4gR1BJTywgR1BJTyB3aXRoIElSUSAoZmgyKSwgc3BlY2lhbCBjYXNlcyBh
+bmQgZGVzaWduYXRlZA0KPiBmdW5jdGlvbmFsaXRpZXMgKHNvbWVsaWtlIH41IGRyaXZlcnMgYWxs
+IHRvZ2V0aGVyKS4gV2l0aG91dCBoYXZpbmcgYQ0KPiBkYXRhc2hlZXQgaXQncyBoYXJkIHRvIHNh
+eS4NCg0KWWVzIHRoYXQgc291bmRzIGxpa2UgYSBnb29kIHBsYW4gdG8gbWUgSSB3aWxsIHNlZSB3
+aGF0IEkgY2FuIHdvcmsgdXAuDQpJIG1pZ2h0IGVuZCB1cCByZW1vdmluZyB0aGlscyBmaWxlIGVu
+dGlyZWx5IGFuZCBqdXN0IHN0aWNraW5nIHdpdGgNCmdwaW8tZ3hwLXBsLmMgQXMgZm9yIHRoZSBn
+cGlvLWd4cC1wbC5jIGFyZSB5b3Ugb2theSB3aXRoIGl0Pw0KDQoNClRoYW5rIHlvdSBmb3IgdGhl
+IGFzc2lzdGFuY2UgYW5kIHJldmlldywNCg0KLU5pY2sgSGF3a2lucw0KDQoNCg0K
