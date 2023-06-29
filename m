@@ -2,62 +2,68 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48253EB64D7
-	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Jun 2023 03:07:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E980CEB64D9
+	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Jun 2023 06:53:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjF2DHN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 28 Jun 2023 23:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
+        id S231190AbjF2Gx1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 29 Jun 2023 02:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbjF2DHM (ORCPT
+        with ESMTP id S230466AbjF2GxY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Jun 2023 23:07:12 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0533187;
-        Wed, 28 Jun 2023 20:07:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688008030; x=1719544030;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WjCAfnt/nHeBSUFVGk8/zhh8nPrwxb2Uy0oDYIyW57k=;
-  b=ZCvecZemlJ/SSsbmEoQlncI4rNnFA8jwYUad0KVx7Vl/o/YdhX/n+hTU
-   HqD0uRxNYFeRrVFF3r00IccoPwV7mWAySqMgxEoVUdcFISCG3IguchVav
-   DLizK1s3EzODSERoV/blH9GNSJLEMNqhSnv7hAgb3RH/y6GSfLm5tr9sB
-   nbGhjmbspNQqAVyIvKrzxQvUEdscShLDnEpjAh+3pYIbb2bEGch/69SQe
-   UxWzwbEaQpsqdi7BPuBBg3tVpGx0zdwTxJ4Yj/FcbCB2j0YqxrF6AUHYD
-   GAwLMdQwS+8coPTN9EJr5OOV6fBCYQiDu3vrjPvdPkZpkoeD50Nsz4WE5
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="362050472"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="362050472"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 20:07:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="711261829"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="711261829"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 28 Jun 2023 20:07:06 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qEhzt-000DjV-2O;
-        Thu, 29 Jun 2023 03:07:05 +0000
-Date:   Thu, 29 Jun 2023 11:06:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Eddie James <eajames@linux.ibm.com>, linux-hwmon@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Thu, 29 Jun 2023 02:53:24 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396151727
+        for <linux-hwmon@vger.kernel.org>; Wed, 28 Jun 2023 23:53:22 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fb4146e8ceso3562975e9.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 28 Jun 2023 23:53:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688021600; x=1690613600;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uhjK6sIK66Oywf/hcY6JkHXpmd2mlEaON7WL3gqbXH4=;
+        b=D+3t7hoc/1nO9xEQOaUH4DjrV2tZRA6ANa3fEKpuly6OsUUHjgRTgovgBE1jbaBdkB
+         xSvXFcIG4RIp9fmnve4EbO3FXBHU2oHvnF+87T71qiJ1mC2CJIPNWr+Rm0itZI4+hNuk
+         i9zJpjTTWrwRYZ/QXRvMp3kx5cxTLn96djJMMbJo637w/wmDnrxiGHUmI7GRYSwrj46C
+         9FV1gtZcMYYNCxcgKYSJswguPHGENF2Ll7YnT2z/KKbxzqBO+T1sSSt0Xrs9mzsbMjF5
+         a/KsnVyaJ7gFonhdBC66rrQ3dI7PazD/xXL8oAqQtmUMzRZzmekLANYZ5EEmAWJhesLe
+         voOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688021600; x=1690613600;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uhjK6sIK66Oywf/hcY6JkHXpmd2mlEaON7WL3gqbXH4=;
+        b=PtNYOnRir8f4ajD4v9LFxyROxDsuPf/oCwHdgV3H7jI9G9ljjup/Er9ijiSoYIs51w
+         lBUXcFCjvzTZXXWd6duWwcmLRdg8Kx22LeXuxMUz/NBl4P+pGFvsOPsX8y58nlsTb5Vn
+         lUAx5sselzKk3h60v3KfdgtKJEVub0MtdcO3NrH/ryHaELoHwXLMhJ341NelYslv3/NA
+         MxIW8EoR4x6GkqeRn8xLvulJu1wXuERkWvsCj+5biTHGRogJ7NmOCRgUGsixjpBlGiJd
+         X/kw8Mz6x0QmJm/uPyEzWlRfd9zd3CgTjYBUQ57xgAo2FZOy4CdEMy/mya5pHBlyop6Z
+         xWVw==
+X-Gm-Message-State: AC+VfDzLPT1xM5lINDCZj8wi0zGQtwQZc3Gvpa5EPqmFOnISKfGkruBi
+        qBUDl0MvKdSOgLIUIPTstBdGvA==
+X-Google-Smtp-Source: ACHHUZ5xh5DE+84LDhRuxDKNAqTYdinTroqj86PueXQ/JA1QuzF2Lz4rvH8/zpTEMfGEjqGZkXSB0w==
+X-Received: by 2002:a7b:ca5a:0:b0:3fb:afa0:9a33 with SMTP id m26-20020a7bca5a000000b003fbafa09a33mr3407620wml.15.1688021600677;
+        Wed, 28 Jun 2023 23:53:20 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id c13-20020a7bc00d000000b003f735ba7736sm15873675wmb.46.2023.06.28.23.53.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 23:53:19 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 09:53:16 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     oe-kbuild@lists.linux.dev, Eddie James <eajames@linux.ibm.com>,
+        linux-hwmon@vger.kernel.org
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux@roeck-us.net,
         jdelvare@suse.com, lakshmiy@us.ibm.com,
         Eddie James <eajames@linux.ibm.com>
-Subject: Re: [PATCH v2] hwmon: (pmbus/acbel-fsg032) Add firmware version
- debugfs attribute
-Message-ID: <202306291012.dDHxs13l-lkp@intel.com>
-References: <20230628153453.122213-1-eajames@linux.ibm.com>
+Subject: Re: [PATCH] hwmon: (pmbus/acbel-fsg032) Add firmware version debugfs
+ attribute
+Message-ID: <b12935a2-a8b7-4d70-8c7d-6fd1e92037c2@kadam.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230628153453.122213-1-eajames@linux.ibm.com>
+In-Reply-To: <20230627184027.16343-1-eajames@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -66,54 +72,62 @@ Hi Eddie,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.4 next-20230628]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/hwmon-pmbus-acbel-fsg032-Add-firmware-version-debugfs-attribute/20230628-233840
+url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/hwmon-pmbus-acbel-fsg032-Add-firmware-version-debugfs-attribute/20230628-030615
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230628153453.122213-1-eajames%40linux.ibm.com
-patch subject: [PATCH v2] hwmon: (pmbus/acbel-fsg032) Add firmware version debugfs attribute
-config: x86_64-randconfig-x016-20230628 (https://download.01.org/0day-ci/archive/20230629/202306291012.dDHxs13l-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230629/202306291012.dDHxs13l-lkp@intel.com/reproduce)
+patch link:    https://lore.kernel.org/r/20230627184027.16343-1-eajames%40linux.ibm.com
+patch subject: [PATCH] hwmon: (pmbus/acbel-fsg032) Add firmware version debugfs attribute
+config: x86_64-randconfig-m001-20230627 (https://download.01.org/0day-ci/archive/20230628/202306281205.NFXmu7xb-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230628/202306281205.NFXmu7xb-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306291012.dDHxs13l-lkp@intel.com/
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202306281205.NFXmu7xb-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+smatch warnings:
+drivers/hwmon/pmbus/acbel-fsg032.c:36 acbel_fsg032_debugfs_read() warn: argument 4 to %02X specifier has type 'char'
 
->> drivers/hwmon/pmbus/acbel-fsg032.c:25:6: warning: unused variable 'i' [-Wunused-variable]
-           int i;
-               ^
-   1 warning generated.
+vim +/char +36 drivers/hwmon/pmbus/acbel-fsg032.c
 
+d2c6444389b625 Eddie James 2023-06-27  17  static ssize_t acbel_fsg032_debugfs_read(struct file *file, char __user *buf, size_t count,
+d2c6444389b625 Eddie James 2023-06-27  18  					 loff_t *ppos)
+d2c6444389b625 Eddie James 2023-06-27  19  {
+d2c6444389b625 Eddie James 2023-06-27  20  	struct i2c_client *client = file->private_data;
+d2c6444389b625 Eddie James 2023-06-27  21  	char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
 
-vim +/i +25 drivers/hwmon/pmbus/acbel-fsg032.c
+data should probably be a u8.
 
-    17	
-    18	static ssize_t acbel_fsg032_debugfs_read(struct file *file, char __user *buf, size_t count,
-    19						 loff_t *ppos)
-    20	{
-    21		struct i2c_client *client = file->private_data;
-    22		char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
-    23		char out[8];
-    24		int rc;
-  > 25		int i;
-    26	
-    27		rc = i2c_smbus_read_block_data(client, ACBEL_MFR_FW_REVISION, data);
-    28		if (rc < 0)
-    29			return rc;
-    30	
-    31		rc = snprintf(out, sizeof(out), "%*phN\n", min(rc, 3), data);
-    32		return simple_read_from_buffer(buf, count, ppos, out, rc);
-    33	}
-    34	
+d2c6444389b625 Eddie James 2023-06-27  22  	char out[8];
+d2c6444389b625 Eddie James 2023-06-27  23  	int rc;
+d2c6444389b625 Eddie James 2023-06-27  24  	int i;
+d2c6444389b625 Eddie James 2023-06-27  25  
+d2c6444389b625 Eddie James 2023-06-27  26  	rc = pmbus_lock_interruptible(client);
+d2c6444389b625 Eddie James 2023-06-27  27  	if (rc)
+d2c6444389b625 Eddie James 2023-06-27  28  		return rc;
+d2c6444389b625 Eddie James 2023-06-27  29  
+d2c6444389b625 Eddie James 2023-06-27  30  	rc = i2c_smbus_read_block_data(client, ACBEL_MFR_FW_REVISION, data);
+d2c6444389b625 Eddie James 2023-06-27  31  	pmbus_unlock(client);
+d2c6444389b625 Eddie James 2023-06-27  32  	if (rc < 0)
+d2c6444389b625 Eddie James 2023-06-27  33  		return rc;
+d2c6444389b625 Eddie James 2023-06-27  34  
+d2c6444389b625 Eddie James 2023-06-27  35  	for (i = 0; i < rc && i < 3; ++i)
+d2c6444389b625 Eddie James 2023-06-27 @36  		snprintf(&out[i * 2], 3, "%02X", data[i]);
+
+If data[i] is negative this will print FFFFFFF1 etc.  (This is an x86
+config...  Did we ever merge that patch to make char signed by default?)
+
+d2c6444389b625 Eddie James 2023-06-27  37  
+d2c6444389b625 Eddie James 2023-06-27  38  	rc = i * 2;
+d2c6444389b625 Eddie James 2023-06-27  39  	out[rc++] = '\n';
+d2c6444389b625 Eddie James 2023-06-27  40  	out[rc++] = 0;
+d2c6444389b625 Eddie James 2023-06-27  41  	return simple_read_from_buffer(buf, count, ppos, out, rc);
+d2c6444389b625 Eddie James 2023-06-27  42  }
 
 -- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
+
