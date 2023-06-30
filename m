@@ -2,66 +2,64 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A45EAEB64D7
-	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Jun 2023 04:18:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2361EB64DC
+	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Jun 2023 05:36:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232103AbjF3ESJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 30 Jun 2023 00:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
+        id S229801AbjF3FgF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 30 Jun 2023 01:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbjF3ESH (ORCPT
+        with ESMTP id S229578AbjF3FgE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 30 Jun 2023 00:18:07 -0400
+        Fri, 30 Jun 2023 01:36:04 -0400
 Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66F62D78;
-        Thu, 29 Jun 2023 21:18:05 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 74CD53200993;
-        Fri, 30 Jun 2023 00:18:04 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 30 Jun 2023 00:18:05 -0400
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C546410F8;
+        Thu, 29 Jun 2023 22:36:02 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 590893200987;
+        Fri, 30 Jun 2023 01:36:01 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 30 Jun 2023 01:36:02 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1688098683; x=
-        1688185083; bh=H/pUv3JCTYWhxJUqPomsdfiSjJ4CWy36omlus/C29XY=; b=S
-        lrdTj/0us1dt4y+be3qEc470vYYYbpkXQsNd/PD/zrIc9PmeWiXoUbNWxdcdjlin
-        /vdfEKGbMI6cLwtZjJm87LyByQP7f/Jmcx/W+Z29ojZUmRma5OlkBjVjDEx4Gnp7
-        e7xAkjxMI0f5mG6j1psobZs4ty6e7GtybP46oZGwf1WXfl8k/ymSmsQKQp5s2WQ4
-        Tx63Do/EEyJbqUVi3PGMsLzEq3j3hCoP81U1AzNeTbZFmJlpmQ8Pp//LCrPcGzsi
-        bAPUwbj5IklG/EiHJ5vCoZU7RZE+b56uAHcaLKuB4igsLBY6TA1IMmvV7EgP8MiU
-        Wcrxn2vt929COhvLQQvdA==
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1688103360; x=1688189760; bh=MYM7zcS68e
+        tgcFaROVR2fVfdgFG8CJYtLYbZNZStSYw=; b=kVoxg5IE+bVDjQxJRo2gA3KmBY
+        O1Gr+TOEjCWAcagetji6lPFPodsYVRadAxkBk4zjPzIZEolWDH/jisqyuJpfZ1F0
+        0nJa47jSurjcs4Yd3ZT9z/TQAD5UaCRBf8exaAKC3GNX2QIFRGq3eHkTYkswGEHp
+        SvD2vHtFWmIiiY49vVcuemwo/Bkz1fI1Jt1RW835wGBooarN+nXGVxSeaGPqGCMA
+        gA/smpg2SeugeeO78q5TGmps9cxBheNUrbxcslmjg0Qm192Ng1thY8VSXyCa4JSI
+        CiuqnaU3fomQaM2w64ijnqpSjMY79NySXDP0o5kRjDwvIfK7ZQffqD3YNJsw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1688098683; x=
-        1688185083; bh=H/pUv3JCTYWhxJUqPomsdfiSjJ4CWy36omlus/C29XY=; b=p
-        TW9Xr46DmOYa/irZY0maKloJxYvC8LskpBq2ofcM19DpyhjaedyvfZmPC8Srx4Bq
-        Nf8ZPVOqe8A/mKAvQA6Im+jDeWdFeJGeCgzS9TlAwfzuSlgjnL7s7k176cZPD1ME
-        Piux2G/wdPuo+THF4M+hsmpmQ6CCo/gRKChQbIuC4yoyt6sWDYFZe+Xl1qRPP74M
-        J/7QFBWfRdbQwHCnwzFaG4ASCQzaMHMrEaeJVdi2JWxGbNNwoUmsxXgVy5EI1KI5
-        xyAo1ddIL2ykF8WOTociQqvfBi0VHfAn3UNoyBHhFW8DcjLm9l0DPZR1/ZwwxNZ1
-        wVzNStnmxk3aIfn/QDapQ==
-X-ME-Sender: <xms:e1eeZBthdS9QGbxmfL2rTnCertl5hcEEx83jPfN1U1KhTF0R-Ebtqg>
-    <xme:e1eeZKe2EuHW7iBuHbzAch4jRkxazkY3PhTBRsMXciiSfNAJtHfJV726ASDWfu4y5
-    kkBqlHeVKm6wdt6x5s>
-X-ME-Received: <xmr:e1eeZEwnZtDRIQTLRJgxOABMGS4B3Kcr3ybRU_Gud80LqJNObE2scyqUI3ST>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdehgdekgecutefuodetggdotefrodftvf
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688103360; x=1688189760; bh=MYM7zcS68etgc
+        FaROVR2fVfdgFG8CJYtLYbZNZStSYw=; b=MuoYYEgkZKG+jnZu6nsXiC0OW6oxc
+        Nm0hdF/XIuK5rSqD0hnvRTIu3NJwb3A+fAEhlPd5fGT2Kh8Uq+3nrTTI58O7+Mns
+        9eJ2g1iXxLd9dHUdheDX9Pnoi03zqbrY4cVScUVrIFM44XZtEKPREKPXrq0A/jz7
+        Qoixv2jHtD7h+5b70evRKa/aukbLPlNmZD26bAFocB1EuHrlb8BxSEsHcEmf7fyi
+        1j+eOXyVy4Sp2lH7lhscbdp3Dfcoi59LN1DetUYG7WdS/qoRkXLGAJCP/r2aMLi8
+        p3lMoMdHiayKZ32SSWJpYGwKJwsppYl8PU2f7vv7FIOFmr5VIFcTf4Elw==
+X-ME-Sender: <xms:wGmeZNvhlLl5A9J3hP0X4hIQDzRoGsSkYgTEJtbbTjts60uRFnFUgA>
+    <xme:wGmeZGcIKS9SVvOwUlKdlVk8nyzHAOM2bKLQ4m0LRWG-FhnCikyni8w0KO-BlQoWB
+    3lDWUFlY0B66wOYJ8U>
+X-ME-Received: <xmr:wGmeZAx2WfqxnIdP5xCYpnVY0jGRBHy_M5-o_l0YF4nr9xvh6Mo2CeE-aBUC>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdehgdellecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestdekre
-    dtredttdenucfhrhhomhepfdfnuhhkvgcuffdrucflohhnvghsfdcuoehluhhkvgeslhhj
-    ohhnvghsrdguvghvqeenucggtffrrghtthgvrhhnpefgteefudfgteduueehteejhfeugf
-    fgleeltedvveethfeuueejfedvgeelveehgfenucevlhhushhtvghrufhiiigvpedtnecu
-    rfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvgeslhhjohhnvghsrdguvghv
-X-ME-Proxy: <xmx:e1eeZINvwOkQ4k65HlYt43jTEkMWSp0LyuMq6DuBzpa34W3eHMHKdQ>
-    <xmx:e1eeZB_xJg7NWrlq7Gg-sAouylm5KYV3aMrdONGlXxcRKnv6mDnLcg>
-    <xmx:e1eeZIUgsa65VFQbSNqfRxzfyn1nB8jqETLaELMgK4K3Y5kUPglucQ>
-    <xmx:e1eeZKM4Q6GhJd80PJ9jEvS4DOIT30M36Asc5ITHWu_-X9d1tPYGqA>
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekredtre
+    dttdenucfhrhhomhepfdfnuhhkvgcuffdrucflohhnvghsfdcuoehluhhkvgeslhhjohhn
+    vghsrdguvghvqeenucggtffrrghtthgvrhhnpefgudejtdfhuddukefffeekiefftddtvd
+    fhgeduudeuffeuhfefgfegfeetvedvgeenucevlhhushhtvghrufhiiigvpedtnecurfgr
+    rhgrmhepmhgrihhlfhhrohhmpehluhhkvgeslhhjohhnvghsrdguvghv
+X-ME-Proxy: <xmx:wGmeZEN3GXiS_-6Z_o_aR6vJqqQrSZHyAeilvCLgniFkOztDnK8oKg>
+    <xmx:wGmeZN-9BUyJgr5FJGzypMdV293q5ZiTEK1OgHWYKOhU04bIZV6zQQ>
+    <xmx:wGmeZEXOgnO5vSPLk0QY1VF_5jZnJg2RlGXTH3uYv8bHdX0bFFErfQ>
+    <xmx:wGmeZGN6kayqlQQMhStZrmH4PCuacUWScscDZKDAeih4-vrPK9OlHQ>
 Feedback-ID: i5ec1447f:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 30 Jun 2023 00:18:00 -0400 (EDT)
+ 30 Jun 2023 01:35:57 -0400 (EDT)
 From:   "Luke D. Jones" <luke@ljones.dev>
 To:     hdegoede@redhat.com
 Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
@@ -69,232 +67,64 @@ Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
         linux-hwmon@vger.kernel.org, markgross@kernel.org,
         jdelvare@suse.com, linux@roeck-us.net,
         "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH v4 1/1] platform/x86: asus-wmi: add support for ASUS screenpad
-Date:   Fri, 30 Jun 2023 16:17:43 +1200
-Message-ID: <20230630041743.911303-2-luke@ljones.dev>
+Subject: [PATCH v2 0/8] platform/x86: asus-wmi:
+Date:   Fri, 30 Jun 2023 17:35:44 +1200
+Message-ID: <20230630053552.976579-1-luke@ljones.dev>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230630041743.911303-1-luke@ljones.dev>
-References: <20230630041743.911303-1-luke@ljones.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for the WMI methods used to turn off and adjust the
-brightness of the secondary "screenpad" device found on some high-end
-ASUS laptops like the GX650P series and others.
+This patch series adds or exposes more features that are available in the ROG
+laptop series.
 
-These methods are utilised in a new backlight device named asus_screenpad.
+- expose dGPU and CPU tunables for ROG
+  - These are things like GPU boost, CPU Pl1 and PL2, package power limits
+- support setting mini-LED mode
+  - Some newer laptops have a screen that can toggle between regular style
+    backlight and using mini-LED backlight
+- add WMI method to show if egpu connected
+  - This WMI method can be monitored/queried to see if it is possible to begin
+    the change-over to eGPU
+- support middle fan custom curves
+  - Some newer laptops have a center/middle fan which blows across the CPU and GPU
+- add support for showing middle fan RPM
+- add support for showing charger mode (AC, USB-C, both plugged)
+- add additional checks to GPU switching code
+  - These try to prevent a sceanrio such as the user disabling the dGPU while it
+    is driving the internal panel via MUX, resulting in no output at all.
+    There are no checks in the ACPI code for this, but on some newer models ASUS
+    did finally add a switch in the BIOS menu. It is best to try and prevent this
+    at the kernel level rather than userland level.
 
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
----
- drivers/platform/x86/asus-wmi.c            | 128 +++++++++++++++++++++
- drivers/platform/x86/asus-wmi.h            |   1 +
- include/linux/platform_data/x86/asus-wmi.h |   4 +
- 3 files changed, 133 insertions(+)
+All patches pass ./scripts/checkpatch.pl
 
-diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-index 62cee13f5576..967c92ceb041 100644
---- a/drivers/platform/x86/asus-wmi.c
-+++ b/drivers/platform/x86/asus-wmi.c
-@@ -25,6 +25,7 @@
- #include <linux/input/sparse-keymap.h>
- #include <linux/kernel.h>
- #include <linux/leds.h>
-+#include <linux/minmax.h>
- #include <linux/module.h>
- #include <linux/pci.h>
- #include <linux/pci_hotplug.h>
-@@ -212,6 +213,7 @@ struct asus_wmi {
- 
- 	struct input_dev *inputdev;
- 	struct backlight_device *backlight_device;
-+	struct backlight_device *screenpad_backlight_device;
- 	struct platform_device *platform_device;
- 
- 	struct led_classdev wlan_led;
-@@ -3839,6 +3841,123 @@ static int is_display_toggle(int code)
- 	return 0;
- }
- 
-+/* Screenpad backlight *******************************************************/
-+
-+static int read_screenpad_backlight_power(struct asus_wmi *asus)
-+{
-+	int ret;
-+
-+	ret = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_SCREENPAD_POWER);
-+	if (ret < 0)
-+		return ret;
-+	/* 1 == powered */
-+	return ret ? FB_BLANK_UNBLANK : FB_BLANK_POWERDOWN;
-+}
-+
-+static int read_screenpad_brightness(struct backlight_device *bd)
-+{
-+	struct asus_wmi *asus = bl_get_data(bd);
-+	u32 retval;
-+	int err;
-+
-+	err = read_screenpad_backlight_power(asus);
-+	if (err < 0)
-+		return err;
-+	/* The device brightness can only be read if powered, so return stored */
-+	if (err == FB_BLANK_POWERDOWN)
-+		return asus->driver->screenpad_brightness;
-+
-+	err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_SCREENPAD_LIGHT, &retval);
-+	if (err < 0)
-+		return err;
-+
-+	return retval & ASUS_WMI_DSTS_BRIGHTNESS_MASK;
-+}
-+
-+static int update_screenpad_bl_status(struct backlight_device *bd)
-+{
-+	struct asus_wmi *asus = bl_get_data(bd);
-+	int power, err = 0;
-+	u32 ctrl_param;
-+
-+	power = read_screenpad_backlight_power(asus);
-+	if (power < 0)
-+		return power;
-+
-+	if (bd->props.power != power) {
-+		if (power != FB_BLANK_UNBLANK) {
-+			/* Only brightness > 0 can power it back on */
-+			ctrl_param = max(1, asus->driver->screenpad_brightness);
-+			err = asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_LIGHT,
-+						    ctrl_param, NULL);
-+		} else {
-+			err = asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_POWER, 0, NULL);
-+		}
-+	} else if (power == FB_BLANK_UNBLANK) {
-+		/* Only set brightness if powered on or we get invalid/unsync state */
-+		ctrl_param = bd->props.brightness;
-+		err = asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_LIGHT, ctrl_param, NULL);
-+	}
-+
-+	/* Ensure brightness is stored to turn back on with */
-+	asus->driver->screenpad_brightness = bd->props.brightness;
-+
-+	return err;
-+}
-+
-+static const struct backlight_ops asus_screenpad_bl_ops = {
-+	.get_brightness = read_screenpad_brightness,
-+	.update_status = update_screenpad_bl_status,
-+	.options = BL_CORE_SUSPENDRESUME,
-+};
-+
-+static int asus_screenpad_init(struct asus_wmi *asus)
-+{
-+	struct backlight_device *bd;
-+	struct backlight_properties props;
-+	int err, power;
-+	int brightness = 0;
-+
-+	power = read_screenpad_backlight_power(asus);
-+	if (power < 0)
-+		return power;
-+
-+	if (power != FB_BLANK_POWERDOWN) {
-+		err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_SCREENPAD_LIGHT, &brightness);
-+		if (err < 0)
-+			return err;
-+	}
-+	/* default to an acceptable min brightness on boot if too low */
-+	if (brightness < 60)
-+		brightness = 60;
-+
-+	memset(&props, 0, sizeof(struct backlight_properties));
-+	props.type = BACKLIGHT_RAW; /* ensure this bd is last to be picked */
-+	props.max_brightness = 255;
-+	bd = backlight_device_register("asus_screenpad",
-+				       &asus->platform_device->dev, asus,
-+				       &asus_screenpad_bl_ops, &props);
-+	if (IS_ERR(bd)) {
-+		pr_err("Could not register backlight device\n");
-+		return PTR_ERR(bd);
-+	}
-+
-+	asus->screenpad_backlight_device = bd;
-+	asus->driver->screenpad_brightness = brightness;
-+	bd->props.brightness = brightness;
-+	bd->props.power = power;
-+	backlight_update_status(bd);
-+
-+	return 0;
-+}
-+
-+static void asus_screenpad_exit(struct asus_wmi *asus)
-+{
-+	backlight_device_unregister(asus->screenpad_backlight_device);
-+
-+	asus->screenpad_backlight_device = NULL;
-+}
-+
- /* Fn-lock ********************************************************************/
- 
- static bool asus_wmi_has_fnlock_key(struct asus_wmi *asus)
-@@ -4504,6 +4623,12 @@ static int asus_wmi_add(struct platform_device *pdev)
- 	} else if (asus->driver->quirks->wmi_backlight_set_devstate)
- 		err = asus_wmi_set_devstate(ASUS_WMI_DEVID_BACKLIGHT, 2, NULL);
- 
-+	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_SCREENPAD_LIGHT)) {
-+		err = asus_screenpad_init(asus);
-+		if (err && err != -ENODEV)
-+			goto fail_screenpad;
-+	}
-+
- 	if (asus_wmi_has_fnlock_key(asus)) {
- 		asus->fnlock_locked = fnlock_default;
- 		asus_wmi_fnlock_update(asus);
-@@ -4527,6 +4652,8 @@ static int asus_wmi_add(struct platform_device *pdev)
- 	asus_wmi_backlight_exit(asus);
- fail_backlight:
- 	asus_wmi_rfkill_exit(asus);
-+fail_screenpad:
-+	asus_screenpad_exit(asus);
- fail_rfkill:
- 	asus_wmi_led_exit(asus);
- fail_leds:
-@@ -4553,6 +4680,7 @@ static int asus_wmi_remove(struct platform_device *device)
- 	asus = platform_get_drvdata(device);
- 	wmi_remove_notify_handler(asus->driver->event_guid);
- 	asus_wmi_backlight_exit(asus);
-+	asus_screenpad_exit(asus);
- 	asus_wmi_input_exit(asus);
- 	asus_wmi_led_exit(asus);
- 	asus_wmi_rfkill_exit(asus);
-diff --git a/drivers/platform/x86/asus-wmi.h b/drivers/platform/x86/asus-wmi.h
-index a478ebfd34df..5fbdd0eafa02 100644
---- a/drivers/platform/x86/asus-wmi.h
-+++ b/drivers/platform/x86/asus-wmi.h
-@@ -57,6 +57,7 @@ struct quirk_entry {
- struct asus_wmi_driver {
- 	int			brightness;
- 	int			panel_power;
-+	int			screenpad_brightness;
- 	int			wlan_ctrl_by_user;
- 
- 	const char		*name;
-diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
-index d17ae2eb0f8d..61ba70b32846 100644
---- a/include/linux/platform_data/x86/asus-wmi.h
-+++ b/include/linux/platform_data/x86/asus-wmi.h
-@@ -58,6 +58,10 @@
- #define ASUS_WMI_DEVID_KBD_BACKLIGHT	0x00050021
- #define ASUS_WMI_DEVID_LIGHT_SENSOR	0x00050022 /* ?? */
- #define ASUS_WMI_DEVID_LIGHTBAR		0x00050025
-+/* This can only be used to disable the screen, not re-enable */
-+#define ASUS_WMI_DEVID_SCREENPAD_POWER	0x00050031
-+/* Writing a brightness re-enables the screen if disabled */
-+#define ASUS_WMI_DEVID_SCREENPAD_LIGHT	0x00050032
- #define ASUS_WMI_DEVID_FAN_BOOST_MODE	0x00110018
- #define ASUS_WMI_DEVID_THROTTLE_THERMAL_POLICY 0x00120075
- 
+Changelog:
+- v2-0008-platform-x86-asus-wmi-expose-dGPU-and-CPU-tunable.patch
+	- Rename the WMI defs to match what ASUS supplied as names
+	- Remove EDC and TDC exposure (unsafe)
+	- Slight change to formatting
+	- Add better notes to documentation
+		
+
+Luke D. Jones (8):
+  platform/x86: asus-wmi: add support for showing charger mode
+  platform/x86: asus-wmi: add support for showing middle fan RPM
+  platform/x86: asus-wmi: support middle fan custom curves
+  platform/x86: asus-wmi: add WMI method to show if egpu connected
+  platform/x86: asus-wmi: don't allow eGPU switching if eGPU not
+    connected
+  platform/x86: asus-wmi: add safety checks to gpu switching
+  platform/x86: asus-wmi: support setting mini-LED mode
+  platform/x86: asus-wmi: expose dGPU and CPU tunables for ROG
+
+ .../ABI/testing/sysfs-platform-asus-wmi       |  86 +++
+ drivers/platform/x86/asus-wmi.c               | 605 +++++++++++++++++-
+ include/linux/platform_data/x86/asus-wmi.h    |  19 +-
+ 3 files changed, 707 insertions(+), 3 deletions(-)
+
 -- 
 2.41.0
 
