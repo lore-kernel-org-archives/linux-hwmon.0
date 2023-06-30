@@ -2,519 +2,126 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E191EB64D7
-	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Jun 2023 05:36:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48740EB64D7
+	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Jun 2023 06:19:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232291AbjF3Fgs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 30 Jun 2023 01:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42360 "EHLO
+        id S232427AbjF3GTb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 30 Jun 2023 02:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232284AbjF3Fgp (ORCPT
+        with ESMTP id S232444AbjF3GTZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 30 Jun 2023 01:36:45 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B1010C3;
-        Thu, 29 Jun 2023 22:36:44 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 181FB3200983;
-        Fri, 30 Jun 2023 01:36:43 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 30 Jun 2023 01:36:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1688103402; x=
-        1688189802; bh=mR7QSVgW/nu39AuwrZ0rmfk/cdu9OmaRYy7gYgT4/qg=; b=w
-        JK76dQegZVX2AcB+2qYzzgriDfKJqWT24Dl2nDadwWT8FagYyfxufpPfTQW5O9T2
-        96U2x+1T9aWhtSEn49P7nifxBiXnVxqYHdnT8/0OLiCJdo5tw7P/1Hwh5g/vQlCj
-        wIipq/qlVnoTYg8I8uMskU+XGRQY5jzVPL6WCecFdzevDIZWhfsdrPr0WzC4rjWY
-        eD1RyGiTDiylOMOdDgjYxTdleKi6jQdYwo2Mq/KzUGuNDA9vUavLq4p1t2XEUFEx
-        rpHuCyho06TU9cRu9udzxdCN7WIc7oD2O5EhhM9avGf6lb5J+cOJLiCeB7CLQlKt
-        ddb6LiOd+t3E8CxL3afxw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1688103402; x=
-        1688189802; bh=mR7QSVgW/nu39AuwrZ0rmfk/cdu9OmaRYy7gYgT4/qg=; b=G
-        IMDHkguwxtLiWi7C3sTKPtInmoqGwbxfIdAGQWCBvD+CF9kL2Tumx0Mr9ZRO6alH
-        G69jklMD9C4uHJPjn7jAoshXxDQ32G+S2OjnvODim+d92nmr2o0I3CqOoOeylspb
-        6w4cU79K5NSSwLVrkziiN66imYXohHr1Q1gEkGFEBEVhuQXuTKBddk6jMwLL6zjd
-        o0/7GWgJxz1cERBfbmjJGVuyCMjVyKIRCziDUafWW54cQRlMubKO9LbDgPKWbv/K
-        V/hR2AXEJuW8N17B+nm9yz9/JAOQljS+szkxAn9/va8NAf755T0G5ee7OgY1XwD0
-        C+V7TQ7zOmqNF7tbDEEnw==
-X-ME-Sender: <xms:6mmeZCha34pUlftNjRUC9dwB2N7_TiPGELLzaNe0gL9gN5wjiqjQNA>
-    <xme:6mmeZDBv7-DBUY6-5I4o3jZJciGmacjmQ53XIFuZml-agKxP9nA9NZ_jiuOSXONYx
-    Amrk8sNqxE4-zpvGdo>
-X-ME-Received: <xmr:6mmeZKHPd_utFwPJ7MB5WW07FPUJaeunC_y4POToUkxTZn8wQjoLldWh6mf8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdehgdellecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestdekre
-    dtredttdenucfhrhhomhepfdfnuhhkvgcuffdrucflohhnvghsfdcuoehluhhkvgeslhhj
-    ohhnvghsrdguvghvqeenucggtffrrghtthgvrhhnpefgteefudfgteduueehteejhfeugf
-    fgleeltedvveethfeuueejfedvgeelveehgfenucevlhhushhtvghrufhiiigvpedunecu
-    rfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvgeslhhjohhnvghsrdguvghv
-X-ME-Proxy: <xmx:6mmeZLR53QGQx7ipsxMOKfIfWWs_M1NUcNCeSmYw_JRaZ4zxOt7Bwg>
-    <xmx:6mmeZPxN2Ew6NSyhj5bnKp7xFMIw_QPre-t1W6KH__dcHgz667O-eQ>
-    <xmx:6mmeZJ44YPt1uzK9FePi2DxWYwCtRYbzeTB_P9K11Ee753fzITRhXg>
-    <xmx:6mmeZGwl00-vSN7IPWZd2iPQqC-fEcCEzYgbdD_GvrAGHUObf_vh8Q>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 30 Jun 2023 01:36:39 -0400 (EDT)
-From:   "Luke D. Jones" <luke@ljones.dev>
-To:     hdegoede@redhat.com
-Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, markgross@kernel.org,
-        jdelvare@suse.com, linux@roeck-us.net,
-        "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH v2 8/8] platform/x86: asus-wmi: expose dGPU and CPU tunables for ROG
-Date:   Fri, 30 Jun 2023 17:35:52 +1200
-Message-ID: <20230630053552.976579-9-luke@ljones.dev>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230630053552.976579-1-luke@ljones.dev>
-References: <20230630053552.976579-1-luke@ljones.dev>
+        Fri, 30 Jun 2023 02:19:25 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C77D3C00
+        for <linux-hwmon@vger.kernel.org>; Thu, 29 Jun 2023 23:18:55 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fbc5d5742eso5272195e9.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 29 Jun 2023 23:18:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688105933; x=1690697933;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zr5rF21wCxAgCyW7DuVdlBs4zYqth3c0/Oqjm5ElJHw=;
+        b=QX1GbHZHOMS/I6qduXCOvQHqbJKZov2iJoruAGrNr6y2rYLwgeZN26SBlS64A1M1Lj
+         YW9umBOvF6cfJPlxpPZJcwrucrulpyAjKTfGH8C6id3fVVhYx3LfyfMhd1K+7993wIOP
+         qMSfysesD8oqYY+3aQer4bI68T87PwQ15b1oWm9Tqfi42jL7nyqcf0HniCxzrt8+UnCG
+         tsWojuyS+Td5TbMp45LEdHvV9sBqY8kK9V6QlsVYVRzUxMbikZkKJ+xGE/w+ZyaiynLS
+         bAboVJkBsOuEvUvMa1nUkckbSIYsJmuMNA0GyzxFzyMFZDTvX3m6MUZVbFNw4F/M30QA
+         mfEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688105933; x=1690697933;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zr5rF21wCxAgCyW7DuVdlBs4zYqth3c0/Oqjm5ElJHw=;
+        b=YUilIjzppWjazqZJaUaGHnh9kEAg71Izixh+6ZBWO+SouGdhKjZVVdMSIeU8QC8iDL
+         lHd2a8/VIqV7CiLkj4uOMSYIruLPsVFUmTlRwmBGGXLAc6pCe2TkeAd3AwSQ8TMd7H+7
+         CCM1PZIyt2TMS9+4xTVPHvrT69f3KtqrTdZ0R7QqOPf6TtOlv3wuKDLlM6dQW6KIPKHK
+         W+00GjkTXA58MvszoYOaVw+hE5yuNYovdq5pWELsFvIwANlNPyqJ4FgduhjkVg/9SXaC
+         rJtIGUkidAw6vpnjWVJkFo45BiOgE4oITZuVNFF+AuNCaY/6FAJze0VpA9W5m7mI1qnT
+         uh5Q==
+X-Gm-Message-State: AC+VfDwOLNCygj0tm5KXAaqLwHDuv5OPnXJyMEtAszEb5meifLzBGFIq
+        0/pYwhr+lR24scqW4CrpJUURxg==
+X-Google-Smtp-Source: ACHHUZ4nsmWQ8xs40ltmSBhxGzZcDTQ5vdYqASDgeCzIG3MODNSzst18118PLv/Va6+AHyucJZwfDg==
+X-Received: by 2002:a05:600c:2201:b0:3fa:91d2:55b6 with SMTP id z1-20020a05600c220100b003fa91d255b6mr1098206wml.9.1688105933535;
+        Thu, 29 Jun 2023 23:18:53 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id q9-20020a1ce909000000b003fbc90e030csm191540wmc.37.2023.06.29.23.18.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 23:18:51 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 09:18:48 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     oe-kbuild@lists.linux.dev, Eddie James <eajames@linux.ibm.com>,
+        linux-hwmon@vger.kernel.org, lkp@intel.com,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        jdelvare@suse.com, lakshmiy@us.ibm.com
+Subject: Re: [PATCH] hwmon: (pmbus/acbel-fsg032) Add firmware version debugfs
+ attribute
+Message-ID: <07dac6f4-5b40-4a62-b1a9-257ec13938ed@kadam.mountain>
+References: <20230627184027.16343-1-eajames@linux.ibm.com>
+ <b12935a2-a8b7-4d70-8c7d-6fd1e92037c2@kadam.mountain>
+ <45a29025-4c06-4f88-b82f-a8002c25c376@kadam.mountain>
+ <1a27469a-4cdb-8cf0-c539-05103f2e0b8f@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1a27469a-4cdb-8cf0-c539-05103f2e0b8f@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Expose various CPU and dGPU tunables that are available on many ASUS
-ROG laptops. The tunables shown in sysfs will vary depending on the CPU
-and dGPU vendor.
+On Thu, Jun 29, 2023 at 12:09:17PM -0700, Guenter Roeck wrote:
+> On 6/29/23 11:59, Dan Carpenter wrote:
+> > On Thu, Jun 29, 2023 at 09:53:16AM +0300, Dan Carpenter wrote:
+> > > d2c6444389b625 Eddie James 2023-06-27  22  	char out[8];
+> > > d2c6444389b625 Eddie James 2023-06-27  23  	int rc;
+> > > d2c6444389b625 Eddie James 2023-06-27  24  	int i;
+> > > d2c6444389b625 Eddie James 2023-06-27  25
+> > > d2c6444389b625 Eddie James 2023-06-27  26  	rc = pmbus_lock_interruptible(client);
+> > > d2c6444389b625 Eddie James 2023-06-27  27  	if (rc)
+> > > d2c6444389b625 Eddie James 2023-06-27  28  		return rc;
+> > > d2c6444389b625 Eddie James 2023-06-27  29
+> > > d2c6444389b625 Eddie James 2023-06-27  30  	rc = i2c_smbus_read_block_data(client, ACBEL_MFR_FW_REVISION, data);
+> > > d2c6444389b625 Eddie James 2023-06-27  31  	pmbus_unlock(client);
+> > > d2c6444389b625 Eddie James 2023-06-27  32  	if (rc < 0)
+> > > d2c6444389b625 Eddie James 2023-06-27  33  		return rc;
+> > > d2c6444389b625 Eddie James 2023-06-27  34
+> > > d2c6444389b625 Eddie James 2023-06-27  35  	for (i = 0; i < rc && i < 3; ++i)
+> > > d2c6444389b625 Eddie James 2023-06-27 @36  		snprintf(&out[i * 2], 3, "%02X", data[i]);
+> > > 
+> > > If data[i] is negative this will print FFFFFFF1 etc.  (This is an x86
+> > > config...  Did we ever merge that patch to make char signed by default?)
+> > 
+> > I meant unsigned not signed.  But actually we debated both ways...
+> > Signed by default would annoy PowerPC devs since they try to really
+> > lean into the fact that char is unsigned on that arch.  :P
+> > 
+> > https://lwn.net/Articles/911914/
+> > 
+> 
+> As if anything would be easy nowadays ;-). Anyway, in this case, the array
+> should be explicitly unsigned, so changing the type to u8 was the right
+> thing to do. Also, the driver should be usable on non-Intel systems,
+> which is another reason to make the type sign-specific (even more so in
+> the context of the above discussion).
 
-All of these variables are write only and there is no easy way to find
-what the defaults are. In general they seem to default to the max value
-the vendor sets for the CPU and dGPU package - this is not the same as
-the min/max writable value. Values written to these variables that are
-beyond the capabilities of the CPU are ignored by the laptop.
+Actually we did make char unsigned.  I don't know if I'm super
+comfortable with code that assumes char is unsigned.  It's makes
+backporting trickier.  But this is definitely a false positive so I have
+silenced the warning in Smatch.
 
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
----
- .../ABI/testing/sysfs-platform-asus-wmi       |  58 ++++
- drivers/platform/x86/asus-wmi.c               | 285 ++++++++++++++++++
- include/linux/platform_data/x86/asus-wmi.h    |   9 +
- 3 files changed, 352 insertions(+)
+regards,
+dan carpenter
 
-diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi b/Documentation/ABI/testing/sysfs-platform-asus-wmi
-index 5624bdef49cb..caaccd28fabf 100644
---- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
-+++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
-@@ -126,3 +126,61 @@ Description:
- 		Change the mini-LED mode:
- 			* 0 - Single-zone,
- 			* 1 - Multi-zone
-+
-+What:		/sys/devices/platform/<platform>/ppt_pl1_spl
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the Package Power Target total of CPU: PL1 on Intel, SPL on AMD.
-+		Shown on Intel+Nvidia or AMD+Nvidia based systems.
-+			* min=5, max=250
-+
-+What:		/sys/devices/platform/<platform>/ppt_pl2_sppt
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the Slow Package Power Tracking Limit of CPU: PL2 on Intel, SPPT,
-+		on AMD. Shown on Intel+Nvidia or AMD+Nvidia based systems.
-+			* min=5, max=250
-+
-+What:		/sys/devices/platform/<platform>/ppt_fppt
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the Fast Package Power Tracking Limit of CPU. AMD+Nvidia only.
-+			* min=5, max=250
-+
-+What:		/sys/devices/platform/<platform>/ppt_apu_sppt
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the APU SPPT limit. Shown on full AMD systems only.
-+			* min=5, max=130
-+
-+What:		/sys/devices/platform/<platform>/ppt_platform_sppt
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the platform SPPT limit. Shown on full AMD systems only.
-+			* min=5, max=130
-+
-+What:		/sys/devices/platform/<platform>/nv_dynamic_boost
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the dynamic boost limit of the Nvidia dGPU:
-+			* min=5, max=25
-+
-+What:		/sys/devices/platform/<platform>/nv_temp_target
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set the target temperature limit of the Nvidia dGPU:
-+			* min=75, max=87
-diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-index 1fc9e8afc2f3..d9a353081f91 100644
---- a/drivers/platform/x86/asus-wmi.c
-+++ b/drivers/platform/x86/asus-wmi.c
-@@ -117,6 +117,16 @@ module_param(fnlock_default, bool, 0444);
- /* Mask to determine if setting temperature or percentage */
- #define FAN_CURVE_PWM_MASK		0x04
- 
-+/* Limits for tunables available on ASUS ROG laptops */
-+#define PPT_TOTAL_MIN		5
-+#define PPT_TOTAL_MAX		250
-+#define PPT_CPU_MIN			5
-+#define PPT_CPU_MAX			130
-+#define NVIDIA_BOOST_MIN	5
-+#define NVIDIA_BOOST_MAX	25
-+#define NVIDIA_TEMP_MIN		75
-+#define NVIDIA_TEMP_MAX		87
-+
- static const char * const ashs_ids[] = { "ATK4001", "ATK4002", NULL };
- 
- static int throttle_thermal_policy_write(struct asus_wmi *);
-@@ -247,6 +257,15 @@ struct asus_wmi {
- 	bool dgpu_disable_available;
- 	bool gpu_mux_mode_available;
- 
-+	/* Tunables provided by ASUS for gaming laptops */
-+	bool ppt_pl2_sppt_available;
-+	bool ppt_pl1_spl_available;
-+	bool ppt_apu_sppt_available;
-+	bool ppt_plat_sppt_available;
-+	bool ppt_fppt_available;
-+	bool nv_dyn_boost_available;
-+	bool nv_temp_tgt_available;
-+
- 	bool kbd_rgb_mode_available;
- 	bool kbd_rgb_state_available;
- 
-@@ -946,6 +965,244 @@ static const struct attribute_group *kbd_rgb_mode_groups[] = {
- 	NULL,
- };
- 
-+/* Tunable: PPT: Intel=PL1, AMD=SPPT *****************************************/
-+static ssize_t ppt_pl2_sppt_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < PPT_TOTAL_MIN || value > PPT_TOTAL_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PPT_PL2_SPPT, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set ppt_pl2_sppt: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set ppt_pl2_sppt (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "ppt_pl2_sppt");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(ppt_pl2_sppt);
-+
-+/* Tunable: PPT, Intel=PL1, AMD=SPL ******************************************/
-+static ssize_t ppt_pl1_spl_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < PPT_TOTAL_MIN || value > PPT_TOTAL_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PPT_PL1_SPL, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set ppt_pl1_spl: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set ppt_pl1_spl (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "ppt_pl1_spl");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(ppt_pl1_spl);
-+
-+/* Tunable: PPT APU FPPT ******************************************************/
-+static ssize_t ppt_fppt_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < PPT_TOTAL_MIN || value > PPT_TOTAL_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PPT_FPPT, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set ppt_fppt: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set ppt_fppt (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "ppt_fpu_sppt");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(ppt_fppt);
-+
-+/* Tunable: PPT APU SPPT *****************************************************/
-+static ssize_t ppt_apu_sppt_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < PPT_CPU_MIN || value > PPT_CPU_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PPT_APU_SPPT, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set ppt_apu_sppt: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set ppt_apu_sppt (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "ppt_apu_sppt");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(ppt_apu_sppt);
-+
-+/* Tunable: PPT platform SPPT ************************************************/
-+static ssize_t ppt_platform_sppt_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < PPT_CPU_MIN || value > PPT_CPU_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PPT_PLAT_SPPT, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set ppt_platform_sppt: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set ppt_platform_sppt (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "ppt_platform_sppt");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(ppt_platform_sppt);
-+
-+/* Tunable: NVIDIA dynamic boost *********************************************/
-+static ssize_t nv_dynamic_boost_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < NVIDIA_BOOST_MIN || value > NVIDIA_BOOST_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_NV_DYN_BOOST, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set nv_dynamic_boost: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set nv_dynamic_boost (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "nv_dynamic_boost");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(nv_dynamic_boost);
-+
-+/* Tunable: NVIDIA temperature target ****************************************/
-+static ssize_t nv_temp_target_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	int result, err;
-+	u32 value;
-+
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	result = kstrtou32(buf, 10, &value);
-+	if (result)
-+		return result;
-+
-+	if (value < NVIDIA_TEMP_MIN || value > NVIDIA_TEMP_MAX)
-+		return -EINVAL;
-+
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_NV_THERM_TARGET, value, &result);
-+	if (err) {
-+		pr_warn("Failed to set nv_temp_target: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set nv_temp_target (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "nv_temp_target");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(nv_temp_target);
-+
- /* Battery ********************************************************************/
- 
- /* The battery maximum charging percentage */
-@@ -3775,6 +4032,13 @@ static struct attribute *platform_attributes[] = {
- 	&dev_attr_als_enable.attr,
- 	&dev_attr_fan_boost_mode.attr,
- 	&dev_attr_throttle_thermal_policy.attr,
-+	&dev_attr_ppt_pl2_sppt.attr,
-+	&dev_attr_ppt_pl1_spl.attr,
-+	&dev_attr_ppt_fppt.attr,
-+	&dev_attr_ppt_apu_sppt.attr,
-+	&dev_attr_ppt_platform_sppt.attr,
-+	&dev_attr_nv_dynamic_boost.attr,
-+	&dev_attr_nv_temp_target.attr,
- 	&dev_attr_panel_od.attr,
- 	&dev_attr_mini_led_mode.attr,
- 	NULL
-@@ -3812,6 +4076,20 @@ static umode_t asus_sysfs_is_visible(struct kobject *kobj,
- 		ok = asus->fan_boost_mode_available;
- 	else if (attr == &dev_attr_throttle_thermal_policy.attr)
- 		ok = asus->throttle_thermal_policy_available;
-+	else if (attr == &dev_attr_ppt_pl2_sppt.attr)
-+		ok = asus->ppt_pl2_sppt_available;
-+	else if (attr == &dev_attr_ppt_pl1_spl.attr)
-+		ok = asus->ppt_pl1_spl_available;
-+	else if (attr == &dev_attr_ppt_fppt.attr)
-+		ok = asus->ppt_fppt_available;
-+	else if (attr == &dev_attr_ppt_apu_sppt.attr)
-+		ok = asus->ppt_apu_sppt_available;
-+	else if (attr == &dev_attr_ppt_platform_sppt.attr)
-+		ok = asus->ppt_plat_sppt_available;
-+	else if (attr == &dev_attr_nv_dynamic_boost.attr)
-+		ok = asus->nv_dyn_boost_available;
-+	else if (attr == &dev_attr_nv_temp_target.attr)
-+		ok = asus->nv_temp_tgt_available;
- 	else if (attr == &dev_attr_panel_od.attr)
- 		ok = asus->panel_overdrive_available;
- 	else if (attr == &dev_attr_mini_led_mode.attr)
-@@ -4077,6 +4355,13 @@ static int asus_wmi_add(struct platform_device *pdev)
- 	asus->gpu_mux_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_GPU_MUX);
- 	asus->kbd_rgb_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_TUF_RGB_MODE);
- 	asus->kbd_rgb_state_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_TUF_RGB_STATE);
-+	asus->ppt_pl2_sppt_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PPT_PL2_SPPT);
-+	asus->ppt_pl1_spl_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PPT_PL1_SPL);
-+	asus->ppt_fppt_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PPT_FPPT);
-+	asus->ppt_apu_sppt_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PPT_APU_SPPT);
-+	asus->ppt_plat_sppt_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PPT_PLAT_SPPT);
-+	asus->nv_dyn_boost_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_NV_DYN_BOOST);
-+	asus->nv_temp_tgt_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_NV_THERM_TARGET);
- 	asus->panel_overdrive_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PANEL_OD);
- 	asus->mini_led_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_MINI_LED_MODE);
- 
-diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
-index ea80361ac6c7..16e99a1c37fc 100644
---- a/include/linux/platform_data/x86/asus-wmi.h
-+++ b/include/linux/platform_data/x86/asus-wmi.h
-@@ -86,6 +86,15 @@
- #define ASUS_WMI_DEVID_GPU_FAN_CURVE	0x00110025
- #define ASUS_WMI_DEVID_MID_FAN_CURVE	0x00110032
- 
-+/* Tunables for AUS ROG laptops */
-+#define ASUS_WMI_DEVID_PPT_PL2_SPPT		0x001200A0
-+#define ASUS_WMI_DEVID_PPT_PL1_SPL		0x001200A3
-+#define ASUS_WMI_DEVID_PPT_APU_SPPT		0x001200B0
-+#define ASUS_WMI_DEVID_PPT_PLAT_SPPT	0x001200B1
-+#define ASUS_WMI_DEVID_PPT_FPPT			0x001200C1
-+#define ASUS_WMI_DEVID_NV_DYN_BOOST		0x001200C0
-+#define ASUS_WMI_DEVID_NV_THERM_TARGET	0x001200C2
-+
- /* Power */
- #define ASUS_WMI_DEVID_PROCESSOR_STATE	0x00120012
- 
--- 
-2.41.0
-
+--- a/check_kernel_printf.c
++++ b/check_kernel_printf.c
+@@ -827,7 +827,7 @@ hexbyte(const char *fmt, int fmt_len, struct expression *arg, int vaidx, struct
+                sm_warning("could not determine type of argument %d", vaidx);
+                return;
+        }
+-       if (type == &char_ctype || type == &schar_ctype)
++       if (type_signed(type) && (type == &char_ctype || type == &schar_ctype))
+                sm_warning("argument %d to %.*s specifier has type '%s'",
+                       vaidx, fmt_len, fmt, type_to_str(type));
+ }
