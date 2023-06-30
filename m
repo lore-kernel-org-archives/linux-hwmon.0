@@ -2,114 +2,114 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D927EB64DD
-	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Jun 2023 19:18:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31FEFEB64D7
+	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Jun 2023 04:18:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjF2TR7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 29 Jun 2023 15:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47272 "EHLO
+        id S231755AbjF3ESH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 30 Jun 2023 00:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbjF2TRl (ORCPT
+        with ESMTP id S231508AbjF3ESE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 29 Jun 2023 15:17:41 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1429E18536;
-        Thu, 29 Jun 2023 12:09:21 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-55ae2075990so626591a12.0;
-        Thu, 29 Jun 2023 12:09:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688065760; x=1690657760;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GHxUo6xmiZ7UJTmxLdtD1BHWN7DAFibiiT2PwkiPplg=;
-        b=dkblGDhOczYF7XZYo470P1DCjNQH8FV9XL0PGG+hD+i2tKz8Zu4X8SYjDgm27akZnK
-         1TemU5ktkZmvu/TQupvUMEPDb3gprAG6dLvr/+qi1G90lQWDNyNtp9ViUkDhSw1463xR
-         FSdamd+Bycidk0/lP24wJrPsyskplBkpWJYiPBm9zpG7ABlX54DO2BSXhI5MiJALKgLv
-         y77rPBVeRS2ArpE+D8WyEQgZz6hGkBsSLDkbXwKyAsrG4CuOsgwKNZ3UkHECXVH5UmTt
-         /yCRZpQIZ+DaHttFVVDv3GrzWLiB9zHQY43TCTg/I15K12z45V2K4ZH8bG0qjjpqzyfp
-         Zhxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688065760; x=1690657760;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GHxUo6xmiZ7UJTmxLdtD1BHWN7DAFibiiT2PwkiPplg=;
-        b=SuIvpCsk55L7kv8sIrhRXyYiXVoNAm5Jgn5vspoJZ7pRAk8jZHI+CxvZMYRH+wp3A/
-         agQDYRnZ0z1P5Y5d6EapnYEKQPrDbkwePOQ+91MyXnKHDNU8sZYR3rkub1Qb5OAVwF+K
-         clQGn7Zf/922odb3XYrBeCxQSl2yiOq+uILAONQ7y4e3OlbzH0ScjKSNufPDn0KYj5a+
-         Hz2cpRvHzRE6TEdJZvuPLFZ/eZ4BLD3Tq6W5CrZDVdztt98WwRrmLNWqORY9RfpFUNae
-         HCHPoAGJ83uTpzU66u1BR85zgKZtIFapjb6NuKybpnV1S9Ei/ZwfsSZbs/oZYHdCkLOA
-         JSBg==
-X-Gm-Message-State: AC+VfDxNFyBNobr0t4DMQJ4LacebFZfTmEf/h24MhVfDXTchftxiPsJf
-        5qmj4nPii0wZbzva2IfrmBuDOoHHN4Q=
-X-Google-Smtp-Source: ACHHUZ5ts0HuX+l+OlWWcaPzm44ZWfCrd+jBcwultPqhcIKPqEEJMAbPF34Pn5uh3O4z1VA32Ef9Cw==
-X-Received: by 2002:a05:6a20:258b:b0:124:3ad9:7455 with SMTP id k11-20020a056a20258b00b001243ad97455mr810517pzd.2.1688065760351;
-        Thu, 29 Jun 2023 12:09:20 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j6-20020a655586000000b0054fe7736ac1sm8157228pgs.76.2023.06.29.12.09.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 12:09:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1a27469a-4cdb-8cf0-c539-05103f2e0b8f@roeck-us.net>
-Date:   Thu, 29 Jun 2023 12:09:17 -0700
+        Fri, 30 Jun 2023 00:18:04 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895D61FE9;
+        Thu, 29 Jun 2023 21:18:02 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 3FC123200991;
+        Fri, 30 Jun 2023 00:17:59 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Fri, 30 Jun 2023 00:18:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1688098678; x=1688185078; bh=BZ7oSZ7ADh
+        AqExrANywARhivzR2LpwYy+ka8YnAU4tU=; b=wTiKImwwMnCqcR+Eq8CR0by2NY
+        bI6YWmJRCxn7TJI0w3GG1xU/fZ9kxItzAlmTP/j/I9LTwVq5fKeBkFrJQb4f2Gqn
+        9oU19ed4o5AHJYBNn1jaEv/IJpPXifC4F7WTPs7Noy32x/R2vklP+2oWwweXm59E
+        y4csHhQUf39Ny1VAtnkfct33xHIR3dkS2shRd2z5wYygNYuFKw2UP2Hpb6jTXtWH
+        m+yX1QhDEWoF+Fu+zIJsy9De41N75ywuwxD2dWbYVcnpj/lSr30HLx4sPowBFSbJ
+        PfSA952qkoZ8Bz6dNgebnM1goAhLxG1MHCsyC47lPkVXrtXVtqrFaowoCCiw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688098678; x=1688185078; bh=BZ7oSZ7ADhAqE
+        xrANywARhivzR2LpwYy+ka8YnAU4tU=; b=WRQdhcNyWuJWvIheSEdlea5YyVPv8
+        t+z9Lm9f5bl6oy/SvMxjE/3M+Zj1gK3uWVH83EzZeTi41tMZkrBW1ZAUNQ1siaL7
+        TYbD1IhuCvv/7FhdR3FAO//THbI0bv/aUrpLxMlcQG9FqZx7pfyfOXMAJ4/CjD9i
+        lXQm/eaRD+h1d3Nt5cJlJ6HXm1+l/ku744P0Y0D8ru4nFFSPFLUIrQgdvMs3ha+x
+        iBqr6RSC0L5wPEU9y5v/FgzaGy23E04QWKoXBgFjvW7AH4A/knZuh6nVvqi615Aj
+        flRoSftBP4l4oh92hDuv4oZMZHEqXF1e/pPde5OintQHVuYVBtOjl7q5A==
+X-ME-Sender: <xms:dVeeZOp-mASquYwxk1y-MBEiwJNl4md2mOFrOrsGpWnbX3lz-Gbypg>
+    <xme:dVeeZMphoiokhQPRFCQcBFfvp8C9qWm9B4f9-pWN22MrUDKFyFNDGb9VnMda9ZqUy
+    sgd4Fdfn5AAeyRfMSE>
+X-ME-Received: <xmr:dVeeZDN3l1Q4tStmTRGb4S5VeBJY7vdifhZFrtCcVtyPOqBi6xQFLJ-82416>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdehgdekgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekredtre
+    dttdenucfhrhhomhepfdfnuhhkvgcuffdrucflohhnvghsfdcuoehluhhkvgeslhhjohhn
+    vghsrdguvghvqeenucggtffrrghtthgvrhhnpedtheekieeggefgleekueeffeejuddvje
+    evuddvhedtgeevfedtueegtedvledtjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhg
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheplhhukh
+    gvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:dVeeZN7-fHsEyHi39_db5KGyfLu-xR2XjmJpz8hcXJrdwnyX0tYmbw>
+    <xmx:dVeeZN68H5ZqkKwSdqbAm-Vtv8zn8wJcK4Z-kOJhH4JjrmXK6GlbVw>
+    <xmx:dVeeZNh6wZAQEDyBQLWdCst2XR4lZRs4fYnvCPsMC1RQKlXaUlCXXg>
+    <xmx:dleeZIby7xk8qKjl0H8OxKMBynguzzLP5Pd0A_NAByJdTKt-F51qgQ>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 30 Jun 2023 00:17:54 -0400 (EDT)
+From:   "Luke D. Jones" <luke@ljones.dev>
+To:     hdegoede@redhat.com
+Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, markgross@kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net,
+        "Luke D. Jones" <luke@ljones.dev>
+Subject: [PATCH v4 0/1] asus-wmi: add support for ASUS screenpad
+Date:   Fri, 30 Jun 2023 16:17:42 +1200
+Message-ID: <20230630041743.911303-1-luke@ljones.dev>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@linaro.org>,
-        oe-kbuild@lists.linux.dev, Eddie James <eajames@linux.ibm.com>,
-        linux-hwmon@vger.kernel.org
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, jdelvare@suse.com,
-        lakshmiy@us.ibm.com
-References: <20230627184027.16343-1-eajames@linux.ibm.com>
- <b12935a2-a8b7-4d70-8c7d-6fd1e92037c2@kadam.mountain>
- <45a29025-4c06-4f88-b82f-a8002c25c376@kadam.mountain>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] hwmon: (pmbus/acbel-fsg032) Add firmware version debugfs
- attribute
-In-Reply-To: <45a29025-4c06-4f88-b82f-a8002c25c376@kadam.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/29/23 11:59, Dan Carpenter wrote:
-> On Thu, Jun 29, 2023 at 09:53:16AM +0300, Dan Carpenter wrote:
->> d2c6444389b625 Eddie James 2023-06-27  22  	char out[8];
->> d2c6444389b625 Eddie James 2023-06-27  23  	int rc;
->> d2c6444389b625 Eddie James 2023-06-27  24  	int i;
->> d2c6444389b625 Eddie James 2023-06-27  25
->> d2c6444389b625 Eddie James 2023-06-27  26  	rc = pmbus_lock_interruptible(client);
->> d2c6444389b625 Eddie James 2023-06-27  27  	if (rc)
->> d2c6444389b625 Eddie James 2023-06-27  28  		return rc;
->> d2c6444389b625 Eddie James 2023-06-27  29
->> d2c6444389b625 Eddie James 2023-06-27  30  	rc = i2c_smbus_read_block_data(client, ACBEL_MFR_FW_REVISION, data);
->> d2c6444389b625 Eddie James 2023-06-27  31  	pmbus_unlock(client);
->> d2c6444389b625 Eddie James 2023-06-27  32  	if (rc < 0)
->> d2c6444389b625 Eddie James 2023-06-27  33  		return rc;
->> d2c6444389b625 Eddie James 2023-06-27  34
->> d2c6444389b625 Eddie James 2023-06-27  35  	for (i = 0; i < rc && i < 3; ++i)
->> d2c6444389b625 Eddie James 2023-06-27 @36  		snprintf(&out[i * 2], 3, "%02X", data[i]);
->>
->> If data[i] is negative this will print FFFFFFF1 etc.  (This is an x86
->> config...  Did we ever merge that patch to make char signed by default?)
-> 
-> I meant unsigned not signed.  But actually we debated both ways...
-> Signed by default would annoy PowerPC devs since they try to really
-> lean into the fact that char is unsigned on that arch.  :P
-> 
-> https://lwn.net/Articles/911914/
-> 
+Adds support for the screenpad(-plus) found on a few ASUS laptops that have a main 16:9 or 16:10 screen and a shorter screen below the main but above the keyboard.
+The support consists of:
+- On off control
+- Setting brightness from 0-255
 
-As if anything would be easy nowadays ;-). Anyway, in this case, the array
-should be explicitly unsigned, so changing the type to u8 was the right
-thing to do. Also, the driver should be usable on non-Intel systems,
-which is another reason to make the type sign-specific (even more so in
-the context of the above discussion).
+There are some small quirks with this device when considering only the raw WMI methods:
+1. The Off method can only switch the device off
+2. Changing the brightness turns the device back on
+3. To turn the device back on the brightness must be > 1
+4. When the device is off the brightness can't be changed (so it is stored by the driver if device is off).
+5. Booting with a value of 0 brightness (retained by bios) means the bios will set a value of > 0, < 15 which is far too dim and was unexpected by testers. The compromise was to set the brightness to 60 which is a usable brightness if the module init brightness was under 15.
+6. When the device is off it is "unplugged"
 
-Thanks,
-Guenter
+All of the above points are addressed within the patch to create a good user experience and keep within user expectations.
+
+Changelog:
+- V4
+  - Fix a null dereference that happened if the display was powered off and dev struct uninitialised yet
+  - Previous: https://lore.kernel.org/all/20230620030033.55033-1-luke@ljones.dev/
+- V3
+  - Refactor error handling in all functions
+- V2
+  - Complete refactor to use as a backlight device
+
+Luke D. Jones (1):
+  platform/x86: asus-wmi: add support for ASUS screenpad
+
+ drivers/platform/x86/asus-wmi.c            | 128 +++++++++++++++++++++
+ drivers/platform/x86/asus-wmi.h            |   1 +
+ include/linux/platform_data/x86/asus-wmi.h |   4 +
+ 3 files changed, 133 insertions(+)
+
+-- 
+2.41.0
 
