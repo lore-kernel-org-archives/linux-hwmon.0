@@ -2,97 +2,98 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37FA3EB64D9
-	for <linux-hwmon@archiver.kernel.org>; Sun,  2 Jul 2023 21:14:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01503EB64D9
+	for <linux-hwmon@archiver.kernel.org>; Sun,  2 Jul 2023 22:52:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbjGBVO4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 2 Jul 2023 17:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
+        id S229800AbjGBWwT convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 2 Jul 2023 18:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjGBVOz (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 2 Jul 2023 17:14:55 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D22E54;
-        Sun,  2 Jul 2023 14:14:54 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b89bc52cd1so104695ad.1;
-        Sun, 02 Jul 2023 14:14:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688332494; x=1690924494;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4cN3JSQg0LROpUkwJ5OAt46ArJ76XLCWxuJ783Zv6aE=;
-        b=qNRV+7gEAgLRd0BVi+m3pRcVO+/d+b5oGaeVl1fFnDRuUoRPGVqqftO11e96GC+Qc5
-         uXYQxHRpPnTqhcG+RxWF4goVgc4BxE6jWfNxqc0UPD9Cj3+foqNIQkkkcufr/nKV1Lz1
-         ZlYd6sl2l/nVsXt7o729HPLWIkePUH/FYSLt11xQnwtEpHEHB+loOzSRTqmdt9ccfyfy
-         ie9J+S3IXtb7hZCCA/3mqRMOMCZ+SPSZEDUvgIUmRuvNaj6aXfhg1qGaeznNhJ4s8FFR
-         mwfXohBLWijFhh9g8lFsUUHmfjU1TKf+mLPnm933y2DGz43E1h77WS2aZCWiERxyM15r
-         NHLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688332494; x=1690924494;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4cN3JSQg0LROpUkwJ5OAt46ArJ76XLCWxuJ783Zv6aE=;
-        b=GqJmIyhGMZ8z8u1Zehn43fvyn+C3Fe+Z1XvUlxpUrOiuEUl5xz0xZnpJEc7bOWveQr
-         2eaZJWxKLsXf6QRc2yZj8wf8Kl9uboOAdn9V4eymKq9vM4CcZli6plo7Lgo7C9OsYOki
-         cUNPs6m9C0Ha1FxqPO31v7Ic4/W+mVr+6xIINx9VdThaudr8p5SxhsI9fDUgW0MSR5FE
-         mufHt9a0dyFw1fTgEZ3aORyZcyzdIBAQMhs24ahOG3kSVS2PfTBoA0fcVwQhwbLPEvT6
-         pOkbG2CP4JenFzBWMhJ/AUu7e8HKgImVWT/EqVu1RU9KEo/9uHdKiqJtLuf0q4YN8/jc
-         4GAQ==
-X-Gm-Message-State: ABy/qLZfUT8AwPDJprChSZM7EWYMlGlOsNQpYeOhb8JxdCipxRTT7SfP
-        KLq9Sgs+Ev2VSAz+QyvEJE4=
-X-Google-Smtp-Source: APBJJlEO623g2YL+Etf09gJJ8RoSXjsIxGh2Un45Tya8tBOsXcBssWyK7ePBW1oLinExeAWuul/jQg==
-X-Received: by 2002:a17:90b:350e:b0:260:ea8f:613d with SMTP id ls14-20020a17090b350e00b00260ea8f613dmr7140457pjb.20.1688332493730;
-        Sun, 02 Jul 2023 14:14:53 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k7-20020a17090a658700b00262eccfa29fsm11721292pjj.33.2023.07.02.14.14.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 14:14:53 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Joe Perches <joe@perches.com>
+        with ESMTP id S229500AbjGBWwR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 2 Jul 2023 18:52:17 -0400
+X-Greylist: delayed 560 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 02 Jul 2023 15:52:16 PDT
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3E494
+        for <linux-hwmon@vger.kernel.org>; Sun,  2 Jul 2023 15:52:16 -0700 (PDT)
+Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay09.hostedemail.com (Postfix) with ESMTP id CE8EA801E0;
+        Sun,  2 Jul 2023 22:42:54 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id E83FA2E;
+        Sun,  2 Jul 2023 22:42:50 +0000 (UTC)
+Message-ID: <676aae2eb65d228796d6f18e86d261ed96540a87.camel@perches.com>
+Subject: Re: [PATCH] checkpatch: Add old hwmon APIs to deprecated list
+From:   Joe Perches <joe@perches.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cocci <cocci@systeme.lip6.fr>
 Cc:     Andy Whitcroft <apw@canonical.com>,
         Dwaipayan Ray <dwaipayanray1@gmail.com>,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] checkpatch: Add old hwmon APIs to deprecated list
-Date:   Sun,  2 Jul 2023 14:14:50 -0700
-Message-Id: <20230702211450.3789779-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
+        linux-kernel@vger.kernel.org
+Date:   Sun, 02 Jul 2023 15:42:49 -0700
+In-Reply-To: <20230702211450.3789779-1-linux@roeck-us.net>
+References: <20230702211450.3789779-1-linux@roeck-us.net>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: E83FA2E
+X-Stat-Signature: bfeaq6gichdq81k7hu5k5oimpab7xfeg
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/sQuA5+nZy/pfq6uwytRuxrKRnezCVJsc=
+X-HE-Tag: 1688337770-526317
+X-HE-Meta: U2FsdGVkX1/3Qxn72CVdm3HS4t8RNpgLWezkUt+V2uq9C7bSpmDtJmyCEC+N+THnCCSdQCuLVGCMXfqDZWym8pzcMyyctlJ6HhrAmQPXuBRGklu9pHE/MXHITPxRNpADLFaaUPNv5iHPMRAc5NGk2RQf2d0gO6vWONwBlqc3rWNfu/WlAym7nGlawab0CPj1rEhHazx9UCJtfJ1p7BmCuNwWt6ITIAMJrGB1aHBN8QGMTDhmkFgRQOgUvhBupaGOI2Nyhgjg7hxza6X72xpaJdLRQ+psvEWYlV+jc4bA8ehFr/6pP4RLN2GiqwH+ZucEs1grCyGty1IUASOx7E7iIQCn/Cv6reeElitF3kOrTwTJYC3JQRsq1q5+OTV16e9x
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-hwmon_device_register() and [devm_]hwmon_device_register_with_groups()
-have been deprecated. All hardware monitoring drivers should use
-[devm_]hwmon_device_register_with_info() instead.
+On Sun, 2023-07-02 at 14:14 -0700, Guenter Roeck wrote:
+> hwmon_device_register() and [devm_]hwmon_device_register_with_groups()
+> have been deprecated. All hardware monitoring drivers should use
+> [devm_]hwmon_device_register_with_info() instead.
+> 
+> The problem with the old API functions is that they require sysfs attribute
+> handling in driver code. The new API handles sysfs attributes in the
+> hwmon core. Using the new API typically reduces driver code size by 20-40%.
+> 
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-The problem with the old API functions is that they require sysfs attribute
-handling in driver code. The new API handles sysfs attributes in the
-hwmon core. Using the new API typically reduces driver code size by 20-40%.
+Seems sensible, thanks.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- scripts/checkpatch.pl | 3 +++
- 1 file changed, 3 insertions(+)
+But how big an effort is it to convert all the existing uses
+and remove the code?  There are less than 200 uses.
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 7bfa4d39d17f..6d97f1a6028e 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -842,6 +842,9 @@ our %deprecated_apis = (
- 	"kunmap"				=> "kunmap_local",
- 	"kmap_atomic"				=> "kmap_local_page",
- 	"kunmap_atomic"				=> "kunmap_local",
-+	"hwmon_device_register"			=> "hwmon_device_register_with_info",
-+	"hwmon_device_register_with_groups"	=> "hwmon_device_register_with_info",
-+	"devm_hwmon_device_register_with_groups"=> "devm_hwmon_device_register_with_info",
- );
- 
- #Create a search pattern for all these strings to speed up a loop below
--- 
-2.39.2
+Perhaps it's not that onerous.
+Is it something that coccinelle could do reasonably well?
+
+$ git grep -w hwmon_device_register | wc -l
+49
+
+$ git grep -w hwmon_device_register_with_groups | wc -l
+22
+
+$ git grep -w devm_hwmon_device_register_with_groups | wc -l
+108
+
+> ---..
+>  scripts/checkpatch.pl | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> index 7bfa4d39d17f..6d97f1a6028e 100755
+> --- a/scripts/checkpatch.pl
+> +++ b/scripts/checkpatch.pl
+> @@ -842,6 +842,9 @@ our %deprecated_apis = (
+>  	"kunmap"				=> "kunmap_local",
+>  	"kmap_atomic"				=> "kmap_local_page",
+>  	"kunmap_atomic"				=> "kunmap_local",
+> +	"hwmon_device_register"			=> "hwmon_device_register_with_info",
+> +	"hwmon_device_register_with_groups"	=> "hwmon_device_register_with_info",
+> +	"devm_hwmon_device_register_with_groups"=> "devm_hwmon_device_register_with_info",
+>  );
+>  
+>  #Create a search pattern for all these strings to speed up a loop below
 
