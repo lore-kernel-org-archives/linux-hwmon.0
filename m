@@ -2,148 +2,88 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF56FEB64D9
-	for <linux-hwmon@archiver.kernel.org>; Sun,  2 Jul 2023 20:34:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89B62EB64D9
+	for <linux-hwmon@archiver.kernel.org>; Sun,  2 Jul 2023 20:51:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbjGBUeo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 2 Jul 2023 16:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42094 "EHLO
+        id S229664AbjGBUvo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 2 Jul 2023 16:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjGBUen (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 2 Jul 2023 16:34:43 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695AEE6
-        for <linux-hwmon@vger.kernel.org>; Sun,  2 Jul 2023 13:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688330082; x=1719866082;
-  h=date:message-id:from:to:cc:subject:in-reply-to:
-   references:mime-version;
-  bh=7eBhRgqyFzpFC5DVC4MgzmUoDpalDn5pA7JaWPPwasc=;
-  b=Oimh9fW+yTK0tVXuVig5a/xZbc4rs8MCv/ndysKqeXNNR985/KqaDm7C
-   mRGUfXurhwD1iXHmO93lYv+uZuoV13ayW9QlAT1R1tT734lY1B6FzLMpE
-   7tJw0eKvId6iMAmq54x2n/BoW40RPRORJgkB2SDE/t0Iko0W+ZAlRrUT1
-   kNCM7uAlA/aYVBMerOpmUPdefklZP+avs4lUxL3rVj2yU3mS5XIGh5dst
-   iWA8n4QOM1Js257tCBXSRq6WqTCCrVq0zdxIU+766qUZcgbgfUn4IV1YC
-   9arvks5bHC6QYQHQWN7YnR0+q6RjNjyN5D+cCc3aIeykS2iA2IAZZ2uVH
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="360213896"
-X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="360213896"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 13:34:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="831580250"
-X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="831580250"
-Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.255.228.125])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 13:34:41 -0700
-Date:   Sun, 02 Jul 2023 13:29:44 -0700
-Message-ID: <873526dpl3.wl-ashutosh.dixit@intel.com>
-From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
+        with ESMTP id S229569AbjGBUvo (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 2 Jul 2023 16:51:44 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A86BA6
+        for <linux-hwmon@vger.kernel.org>; Sun,  2 Jul 2023 13:51:43 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b84c7a2716so18410585ad.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 02 Jul 2023 13:51:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688331102; x=1690923102;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=GNQ7MCU0vFQALsRwU6Qk+wtv/uz0hK2eGYJI5C64+Mc=;
+        b=iB1xxEuaDfR9jwFh1VUCMJb6A4gHq9fWcLuQPvrmXjGWdDfNjVrL6LzQUlDL43L9TD
+         KhfKfqr7RFwwRIWI+4MiKRz7Fxp/KozJfZbvsMhlSxHU2lIKqEepDWZu/ZfLFvD96p1d
+         8IoRBPLVKqirYqjtspeeSsUv9aiEi7rh7P5Y1V6bVGK3eU+ZqpFDOHlwMRPglEwN4SVk
+         OQHrv2fHXLqGW8iP9TuryOO7GHLfbMcpCgl/9WMVVXHkpbJo9isY9xxgH/biOQKL3OoI
+         zIEU+pn6PgNMcsrtoJGG1yHqTvJMGeS3x+LAmEVsm/OGvzDiRCcKUa69CyOZd1kyHDO6
+         5CJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688331102; x=1690923102;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GNQ7MCU0vFQALsRwU6Qk+wtv/uz0hK2eGYJI5C64+Mc=;
+        b=hUCLetT5wmEwYyVxAM1mObm905Xqaa9J1b5ZTthrP0sFtNvZc78Ie0AwXXGknT99DA
+         /AQXpCEjGfVGxfGd3sMgCm8B0dgBptp5WbTfWq6uXQb7G94+FAHB2RjCFeBqKHBRk3vt
+         c7NrMy9QZU3fm121Y2AJ8CT2XD/kij6dUaODS86Ybr2BiL0qe6kKPYeMmc33VV296cOO
+         WCNxMZhAqm/rPEoXoNSLMyk6CVr7UBcOyq0de9rUPu++KOUDUmPrctSS+MxFjsxushjQ
+         88B2Fw86edXydP0Z0gjwLe26uBq1Kh2z1Mp12A5+xYQcLmSpqY+ugRXugh8EF34vOOkn
+         R4dQ==
+X-Gm-Message-State: ABy/qLYXSOsx/w0u7HWLEJ46sKodn8mD/Nm/5pxT2rGCcNNHbax+o8S6
+        MWVjWhynSpOywTB6QCfctsE=
+X-Google-Smtp-Source: APBJJlF4OXSrfI76rKfx9UR12l626wyyHZoSLHdtd8sAf0dFkhpcSZPIEvVjGOQKRQ+IFwfHbFqIsg==
+X-Received: by 2002:a17:902:b209:b0:1ac:63ac:10a7 with SMTP id t9-20020a170902b20900b001ac63ac10a7mr5439520plr.68.1688331102607;
+        Sun, 02 Jul 2023 13:51:42 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 8-20020a17090a004800b00262af345953sm16463236pjb.4.2023.07.02.13.51.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Jul 2023 13:51:41 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4b71ba43-4cbb-0840-a46a-3fe4518254d0@roeck-us.net>
+Date:   Sun, 2 Jul 2023 13:51:40 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 0/6] Add HWMON support for DGFX
+Content-Language: en-US
+To:     "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
 Cc:     Badal Nilawar <badal.nilawar@intel.com>,
         intel-xe@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
         anshuman.gupta@intel.com, andi.shyti@linux.intel.com,
         riana.tauro@intel.com, matthew.brost@intel.com
-Subject: Re: [PATCH v2 0/6] Add HWMON support for DGFX
-In-Reply-To: <d571bfca-9156-7280-a5eb-783c431500c3@roeck-us.net>
-References: <20230627183043.2024530-1-badal.nilawar@intel.com>  <87ilb385fv.wl-ashutosh.dixit@intel.com>        <5aa93c3a-a4c5-9ca3-6ecd-38cef9f59605@roeck-us.net>     <874jmme276.wl-ashutosh.dixit@intel.com>        <d571bfca-9156-7280-a5eb-783c431500c3@roeck-us.net>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
- Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+References: <20230627183043.2024530-1-badal.nilawar@intel.com>
+ <87ilb385fv.wl-ashutosh.dixit@intel.com>
+ <5aa93c3a-a4c5-9ca3-6ecd-38cef9f59605@roeck-us.net>
+ <874jmme276.wl-ashutosh.dixit@intel.com>
+ <d571bfca-9156-7280-a5eb-783c431500c3@roeck-us.net>
+ <873526dpl3.wl-ashutosh.dixit@intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <873526dpl3.wl-ashutosh.dixit@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, 02 Jul 2023 10:01:00 -0700, Guenter Roeck wrote:
->
-> On 7/2/23 08:57, Dixit, Ashutosh wrote:
-> > On Sat, 01 Jul 2023 20:02:51 -0700, Guenter Roeck wrote:
-> >>
-> >> On 7/1/23 18:31, Dixit, Ashutosh wrote:
-> >>> On Tue, 27 Jun 2023 11:30:37 -0700, Badal Nilawar wrote:
-> >>>>
-> >>>
-> >>> Hi Badal,
-> >>>
-> >>>> This series adds the hwmon support on xe driver for DGFX
-> >>>
-> >>> Needs some discussion but I have a general comment on this series
-> >>> first. The implementation here follow what was done for i915. But how
-> >>> "hwmon attributes are defined" I think we should look at how this was done
-> >>> in other drm drivers, namely amdgpu and radeon. Look here (search for
-> >>> "hwmon_attributes"):
-> >>>
-> >>> drivers/gpu/drm/amd/pm/amdgpu_pm.c, and
-> >>> drivers/gpu/drm/radeon/radeon_pm.c
-> >>>
-> >>> Here the hwmon attribute definition is very similar to how general sysfs
-> >>> attributes are defined (they will just appear in hwmon directories) and
-> >>> does not carry baggage of the hwmon infrastructure (what i915 has). So my
-> >>> preference is to shift to this amd/radeon way for xe.
-> >>>
-> >>
-> >> You mean your preference is to use a deprecated hardware monitoring
-> >> registration function and to explicitly violate the following statement
-> >> from Documentation/hwmon/hwmon-kernel-api.rst ?
-> >>
-> >>    All other hardware monitoring device registration functions are deprecated
-> >>    and must not be used in new drivers.
-> >
-> > I missed that, but since we also have this in ddaefa209c4a ("hwmon: Make
-> > chip parameter for with_info API mandatory"), yes that is what it would
-> > boil down to.
-> >
->
-> The chip parameter covers all standard hwmon sysfs attributes. A hwmon driver
-> without standard sysfs attributes is not a hwmon driver. It abuses the hwmon
-> subsystem and its API/ABI.
+On 7/2/23 13:29, Dixit, Ashutosh wrote:
 
-To me, hwmon is a means to expose some standard attributes to standard
-userspace apps so that those apps can find those attributes. What kernel
-API's are used internally is an internal matter of the kernel. As subsytem
-maintainer you may have reasons for allowing only certain API's.
+> Of course people might have been abusing the deprecated API's (or NULL chip
+> parameter) but to me it seems there is also some legitimate use for them.
+> 
 
-> If I catch such a driver, I'll NACK it. If I find one in the kernel, I
-> will do my best to get it removed.
->
-> >> That is quite interesting. Please elaborate and explain your rationale.
-> >
-> > Basically, like those other drm drivers, the chip parameter is of no use to
-> > us (or at least we'd be totally fine not using it), hence the desire to
-> > skip it.
-> >
-> > But we are still required to use what we don't need? Do you care about
-> > drivers outside drivers/hwmon?
-> >
->
-> I would suggest to read the hwmon API more closely to understand it. Your claim
-> that "the chip parameter is of no use to us" is simply wrong, as should be obvious
-> when you read this submission. Actually, if you would convert the other
-> drm drivers to use it, it would reduce the size of the hwmon specific code
-> in those drivers, typically by 20-40%. Given that, I must admit that I am quite
-> baffled by your claim. Maybe you could explain that in more detail.
+You still neglect to explain what you think that legitimate use would be.
 
-Of course when the chip parameter helps it likely reduces code. But when it
-is not needed it adds unnecessary code. Those drm drivers
-(amdgpu/radeon/i915) I mentioned above are available in the kernel, anyone
-can see and judge for themselves.
+Guenter
 
-Of course people might have been abusing the deprecated API's (or NULL chip
-parameter) but to me it seems there is also some legitimate use for them.
-
-> Of course, I care about use of the hardware monitoring subsystem
-> outside drivers/hwmon. Unlike other maintainers, I let people register drivers
-> from outside that directory, but that doesn't mean that I don't care.
->
-> FWIW, you are close to convincing me to add a warning message to the kernel
-> to tell users of deprecated hwmon APIs that the API is deprecated.
-> Alternatively, I may stop permitting new hwmon drivers outside drivers/hwmon.
-
-OK, thanks for clarifying, since you disagree we will not use deprecated
-API's, so we will continue with the approach taken in this series.
-
-Ashutosh
