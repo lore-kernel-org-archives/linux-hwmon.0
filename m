@@ -2,137 +2,332 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D6E7EB64D9
-	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Jul 2023 09:44:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBD53EB64DA
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Jul 2023 11:19:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbjGDJn7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 4 Jul 2023 05:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
+        id S229914AbjGDLTo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 4 Jul 2023 07:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjGDJna (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Jul 2023 05:43:30 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2111.outbound.protection.outlook.com [40.107.215.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF509C;
-        Tue,  4 Jul 2023 02:43:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gAIqOZoPNwFuFVAIW8AsFmg/5UQKLfDc30NOO/bbLFYexxARUN0/tuWch1yWLTXv5C/6EOnPNlHw66WWtct4qE+3I9y2h6nfKZfuMpQoikYdai0FoQxe0+DD68mKqzPprJvGZnczZ/NoQe8BnzSQHHzfCARJ/w77G9TrjbYID2CiKc/PYwNLijTePTilefgoIv18t83m0RwMrPED3O7T21ig4lc7uQsuLXF7raEU/5YST3bBreYlhZ/cQVZatA7gnvFt81uNXUF6v1rQ41/IbQhABE8CZWOJu7pMhnH93ViQi2i8O9auwF2+6LbFsrSbiEJhvB+7MclUgRLxCWoxZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FpDzsysTxZRt0yrJPmnU4EvQAW9TZdyhB7OhVnP00aA=;
- b=MjX+wsrNuonAkt6TolVu/CawmhUvNfjVNX3R7WN5eDzNRjyzo/KtyWVNZONU7/UlikSXrjRgIyxCfSXwHOjJ+CKvrc85U6P+vIqRikiERNW0VqVxlHvfOXo0FMTWmsKsZD8DhJ4H9m0Izu+mHQNwOotQVjFUtXUSidexxgTADU9SRR3cVI2hquSzD77nU996x+olafRMSaqacr7mlLPYV0qxRDRaDPZi7w78sdCFb8u+JtJDsLpsOyTLAYrj3OizKgN9DnjWf4WqJHPIDg1JR9KiuadQQKOTHkM+PWyKaRGAu4wnzig3cSoJ/k5DOwZdfCSEtt7jL044V3sHuTh1HQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FpDzsysTxZRt0yrJPmnU4EvQAW9TZdyhB7OhVnP00aA=;
- b=ngKV1sh7BUyq5CCUmf7lr9kZKR+c40Nmv7Qg/c42M3KzcC1KbmMf9C3aJ4nKHrRWugneSUA8/WmCfb2Igc8XkDoV3N3f6s0PvZtxQOY3cz1leHTzf6hX77iYte1iA2cc9wDxlcYPFH8S7memvlo1ATLeJm6vn/vOnGXOaHCfL6ULWfJjd6UYA8NclAkjOudfp5QkDmdEpzImiz4gpDY+Nph8imtDOBJou4OotQkSTAicKOtaneQFIP+EibhGpyXM2+1NmlgiABGI/PNCYmzsckimy4M8v9zHVusag0QW8EMu+KvyhSlbj720Y7yFf+PCuoOUlbV6bNu2iKkm3qxSlw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SEZPR06MB6743.apcprd06.prod.outlook.com (2603:1096:101:17a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Tue, 4 Jul
- 2023 09:43:20 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
- 09:43:20 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Yangtao Li <frank.li@vivo.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: bt1-pvt: Convert to devm_platform_ioremap_resource()
-Date:   Tue,  4 Jul 2023 17:43:06 +0800
-Message-Id: <20230704094306.21933-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0007.apcprd01.prod.exchangelabs.com
- (2603:1096:4:191::11) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        with ESMTP id S230195AbjGDLTn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Jul 2023 07:19:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A8B10FC
+        for <linux-hwmon@vger.kernel.org>; Tue,  4 Jul 2023 04:18:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688469405;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=579u74/n50LxRe/EUX1QN56hzduU1yIaTqid7Yezzh8=;
+        b=Or83zuYPRfmrXY40KY5AjRbw83AIWj0aerPOMM4nDOe18P2vo2IbHem5LXBE+4BLEGfd+9
+        h5jYLed8DGs4cFDJxV1g6G19Ze6+THgdm5ec62RP7uCQjT5QV8HXNhmWoIvxZxTxAzqLTd
+        wpZ3R4PXC+J4Vi5LPTw5J1eOJuvEZ64=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-277-v8eoMVCHNxa2fwT2GqMejg-1; Tue, 04 Jul 2023 07:16:44 -0400
+X-MC-Unique: v8eoMVCHNxa2fwT2GqMejg-1
+Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2b6f51c5cb3so5500391fa.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 04 Jul 2023 04:16:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688469403; x=1691061403;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=579u74/n50LxRe/EUX1QN56hzduU1yIaTqid7Yezzh8=;
+        b=jjvwiXEXJdi0xbe414eqjFV5dPNI1luhhu+CsxZ3z4uc3FEpmnWYqqf/FwcKcPshl0
+         NGngw2ZK5Jge6bsEvykjJ8V7br0qDBoIktv4V2BnC4FxXX7eIwJh6DXReVkf85oOcoyD
+         f+BGNgo9ubSL5Ow6AY1oOB2ZMD5+Ea/24D37N757tQq8sctgJk0ZGQCGnMHhh4FVMC3E
+         ZrG+P447LORZWkMjkgvh7SPVFdePRGgSQrWB/1K2pfrox83sR2hph5im1J287t+vRiCF
+         /W+76ecHbVChrTcQaum2qDWlXco5iDG/HFMKXuQMojOW/B+xR/psqxTlmybZdpxrjOKP
+         MOSQ==
+X-Gm-Message-State: ABy/qLaYjCy3SmGHGkI+TfTjOHlQQgtJ7TzNr2Uv3OrsVNjES9efY83T
+        zVDu8Nom0DYa8V3RUcfVZmqRutn6nDqTlIJqWvAVUxQy5Ptud82AT1LU/Zoq8FV5dQuEieInz9f
+        O9iKhvF1mt5CwzFpGWbY+v28=
+X-Received: by 2002:a2e:9159:0:b0:2b6:a3b0:f4d3 with SMTP id q25-20020a2e9159000000b002b6a3b0f4d3mr10279235ljg.26.1688469402805;
+        Tue, 04 Jul 2023 04:16:42 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFxVuYr4Lsv3k/Ylm6oCnyx0dsiv49hhs7GCElvoMHQXjQT0I+UDc0jn2FW9CEnEqHkOn0Vsg==
+X-Received: by 2002:a2e:9159:0:b0:2b6:a3b0:f4d3 with SMTP id q25-20020a2e9159000000b002b6a3b0f4d3mr10279213ljg.26.1688469402409;
+        Tue, 04 Jul 2023 04:16:42 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a11-20020a170906468b00b0099364d9f0e6sm3087361ejr.117.2023.07.04.04.16.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 04:16:41 -0700 (PDT)
+Message-ID: <974093b4-5dac-dc29-8f86-304eb5c6c19b@redhat.com>
+Date:   Tue, 4 Jul 2023 13:16:41 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEZPR06MB6743:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0477b216-23e3-485c-7529-08db7c7319b3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: b69Uyg8aCU//kvVDbmTGhRTS+msDI/FCB81JasRv+W7KwOfzdPQEAwgrPHrTccVOJa4mpo0YNPsSZ+4RqjIe4fmofEhLHUugjT7p+SYO7Rz/Or9fsfKiH9TYJsNfv5AD7eg6Dkq5p/jx+sV7YIh0sBE3xJO2g03EaxVlQX9fnulO3TY9DavAZHEuFVQXYDOJhhNk6HBqmFK3tbBaDt56zASrsWq+9xaRsf5bU1qa48gQKUAin2g+EeS6oj6TmBK4oRGRw6C3SFWKLqb06SkbGAN7ewOc1+FYSA1IIZcuk6uXEeXYFy9Q/ctEJwhBQAqn+p1F3iMWSqc/0xSLTUZxypfQ8f/VNmvdgQdzI3NfUOFjXS9GkzKMi9RND/02aRxrwm2wVsCooUSpYSdnRYE4rEdVPQJpfj/c0l8N7VJd34NN7QKV8r4a/1cq55JLkqUgH9FV2Ey3+el4Fu6GruEdfJdgTtk7VQ5qttzfQ7DsvF/j/UorZw/3zilBfvSlZGDbbhEZJmcSIymDsxg3wuwkC2NRV+4rgIkbX94AOEcfQflXUOS0wK5zZ62tfWpc7Pp4tjAwBowavG2g2IcpNCkFT0Fo9dKKOLtBZzEYYn2EdcPK1/AMMcARzSecTrLuRDdd
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(366004)(376002)(136003)(396003)(451199021)(6666004)(1076003)(52116002)(4744005)(38350700002)(2906002)(2616005)(83380400001)(38100700002)(26005)(6486002)(186003)(6506007)(6512007)(110136005)(41300700001)(86362001)(4326008)(8676002)(5660300002)(478600001)(66946007)(66476007)(8936002)(36756003)(66556008)(316002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1sODQvWnIzh/Swv68s4yTcyO9G0qRfT++nJA6AxA53Zd5s2xueCaSwkkuuvM?=
- =?us-ascii?Q?A+XRo7q/c3o0gfzJCvk/oPxv74XsWwy+iOwRObRQnqLhCkDkyujnXRrEGYF/?=
- =?us-ascii?Q?zc2a97DwNH2oTPAslFXkfayL/xuxtjMt/VU73qF9VTub9WeR2RWkhBe6hNvh?=
- =?us-ascii?Q?qwjOLPJ/hIesoJeNPO/U3y4Mk+eEUQJXTJ6ojBJNyiZkqxStfcYRqFoPSoF3?=
- =?us-ascii?Q?B0x/oDBLeGUIPoff3GltWy0PqjpxY1soToY4IrFrWIu7B3N2phRDeX5EE6vY?=
- =?us-ascii?Q?S90nEO0sBCOz3/Rs4aXUW4YJkTRqWbkyiOGHtAmqYUgjrvK7KhqRmwJ9Jfd2?=
- =?us-ascii?Q?mzUNW7s6gPeBqpTFYHmHm8uvhUw+XNErMs1JVy/AefbNW7Qu4oyRtr8mTBZF?=
- =?us-ascii?Q?aL1evQqDTM6DAR1kQSZujnovf+upOapFO2yoPqAmdC3giX/TRWRDq/e+aYkD?=
- =?us-ascii?Q?pxcFxlbqJmXqjmI3A6juVRYh6wAJrR1r/qBgllZoVCL2aYp9y+UEt5ZFKidc?=
- =?us-ascii?Q?3AIvn8K/oieITf6Tsf4fvrHFGtyj0/0sAG4H9A+qzSuzlurDJvT66gaUF8vA?=
- =?us-ascii?Q?/jyFRDIi6MSaBkoLIskJfmgVdLKkCasxCHIgvB1IDaNQ05SuRBo4hsiRUh46?=
- =?us-ascii?Q?TD2XiQXr2FJfiAMkPz1/7HowGTkkPO91uCB3/e9fR80zOUJ1n67Hd1f+RJ09?=
- =?us-ascii?Q?VUtcuz8XBRYsCUrHNVbW2RbjkifZEhtFXk+WhWi3vrvWsp9vIoeJUQ/wq7IB?=
- =?us-ascii?Q?2j2M0Npk5/rt2sl/GE/+VANmvs/rKD6TMpUo8YcexC72+vPrOHuG9xmeKyMU?=
- =?us-ascii?Q?v3Rd6AgAFVOzuw4o9TLF2hvrsbuAc/dhf5BZC4NHiN2DeIgxgDx4SBpk2nPr?=
- =?us-ascii?Q?syeUc8asb+vGGVfHX7ny954GoQ4jLdsautGkC3FHeLuQ47piJ03C0uShRPUG?=
- =?us-ascii?Q?mbhpiHYO77wWj5lVXbpHL0ZRxuVTqLW/IA8VQRJqoCdmrc7tm0nQleXsbOBO?=
- =?us-ascii?Q?0Q5YJgrA3yqASo0TZXThmbs92tOhCWYjcl9zqJHHHY5KnmIq9qIQhvgHmncL?=
- =?us-ascii?Q?bRBMBobMOt2lDgOjKicDDD7u+sSGN9/seY5a2RFSlMKQ7w/bXGABVJUvqeyd?=
- =?us-ascii?Q?HLXlqpkor5dTW6iE5Ke1ckRuj3OWu8OiyaQJ8k399zy3x7WPZtSyiVSMU5OC?=
- =?us-ascii?Q?CT3xH1CQu4ZS1qUhxYtVVOQefXM8J7hPSSswztTRqJxKtXjcAvoW+gscWmUT?=
- =?us-ascii?Q?ZqbC1i8jk4UR6eAPZT81clAftz0o2I0SuSD/bBBkK1ZEkb2Nkb07TX2S6rrn?=
- =?us-ascii?Q?OiUKnt9Jpnj+Rd3uSQBI3L9AsceqQtDDy8LVp/TvbhrL9nV3QYZvf1MoKQJW?=
- =?us-ascii?Q?+usPNcfYAdB2G1USHMKhn1OQNKdbglHCuEPgOQmqzq4H5UeEFa46H5kW29Md?=
- =?us-ascii?Q?RXj1Rtu7IOQ72GYf3Q3XWyGKqEDR4XGT4Z9CW1NkqZUnvpM73l+r0ZMqfIWV?=
- =?us-ascii?Q?vdioRf+NaLckj6UQdxpIYCDLY9ovsXzZP73M+fkH2FU9M2htdP45IekaR/0s?=
- =?us-ascii?Q?Trl68UTZ1ES3cfcnYJ8OMMPxp4diuG+WxBJXUudU?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0477b216-23e3-485c-7529-08db7c7319b3
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 09:43:19.9573
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OkyCZzzFNJQA2dI04YS90QfNrci2QDIZ/qKXx1qmaZdEP1ibv0LRgHSgAfzx/Wsoc/WkfpOAZDGeU38NHSaiyg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB6743
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 1/1] platform/x86: asus-wmi: add support for ASUS
+ screenpad
+Content-Language: en-US, nl
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, markgross@kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net
+References: <20230630041743.911303-1-luke@ljones.dev>
+ <20230630041743.911303-2-luke@ljones.dev>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230630041743.911303-2-luke@ljones.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Use devm_platform_ioremap_resource() to simplify code.
+Hi Luke,
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- drivers/hwmon/bt1-pvt.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+On 6/30/23 06:17, Luke D. Jones wrote:
+> Add support for the WMI methods used to turn off and adjust the
+> brightness of the secondary "screenpad" device found on some high-end
+> ASUS laptops like the GX650P series and others.
+> 
+> These methods are utilised in a new backlight device named asus_screenpad.
+> 
+> Signed-off-by: Luke D. Jones <luke@ljones.dev>
 
-diff --git a/drivers/hwmon/bt1-pvt.c b/drivers/hwmon/bt1-pvt.c
-index 8d402a627306..b77ebac2e0ce 100644
---- a/drivers/hwmon/bt1-pvt.c
-+++ b/drivers/hwmon/bt1-pvt.c
-@@ -891,15 +891,8 @@ static struct pvt_hwmon *pvt_create_data(struct platform_device *pdev)
- static int pvt_request_regs(struct pvt_hwmon *pvt)
- {
- 	struct platform_device *pdev = to_platform_device(pvt->dev);
--	struct resource *res;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res) {
--		dev_err(pvt->dev, "Couldn't find PVT memresource\n");
--		return -EINVAL;
--	}
--
--	pvt->regs = devm_ioremap_resource(pvt->dev, res);
-+	pvt->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(pvt->regs))
- 		return PTR_ERR(pvt->regs);
- 
--- 
-2.39.0
+Thank you for your work on this. I have one small change request
+and then v5 should be ready for merging, see me inline comment
+below.
+
+> ---
+>  drivers/platform/x86/asus-wmi.c            | 128 +++++++++++++++++++++
+>  drivers/platform/x86/asus-wmi.h            |   1 +
+>  include/linux/platform_data/x86/asus-wmi.h |   4 +
+>  3 files changed, 133 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+> index 62cee13f5576..967c92ceb041 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/input/sparse-keymap.h>
+>  #include <linux/kernel.h>
+>  #include <linux/leds.h>
+> +#include <linux/minmax.h>
+>  #include <linux/module.h>
+>  #include <linux/pci.h>
+>  #include <linux/pci_hotplug.h>
+> @@ -212,6 +213,7 @@ struct asus_wmi {
+>  
+>  	struct input_dev *inputdev;
+>  	struct backlight_device *backlight_device;
+> +	struct backlight_device *screenpad_backlight_device;
+>  	struct platform_device *platform_device;
+>  
+>  	struct led_classdev wlan_led;
+> @@ -3839,6 +3841,123 @@ static int is_display_toggle(int code)
+>  	return 0;
+>  }
+>  
+> +/* Screenpad backlight *******************************************************/
+> +
+> +static int read_screenpad_backlight_power(struct asus_wmi *asus)
+> +{
+> +	int ret;
+> +
+> +	ret = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_SCREENPAD_POWER);
+> +	if (ret < 0)
+> +		return ret;
+> +	/* 1 == powered */
+> +	return ret ? FB_BLANK_UNBLANK : FB_BLANK_POWERDOWN;
+> +}
+> +
+> +static int read_screenpad_brightness(struct backlight_device *bd)
+> +{
+> +	struct asus_wmi *asus = bl_get_data(bd);
+> +	u32 retval;
+> +	int err;
+> +
+> +	err = read_screenpad_backlight_power(asus);
+> +	if (err < 0)
+> +		return err;
+> +	/* The device brightness can only be read if powered, so return stored */
+> +	if (err == FB_BLANK_POWERDOWN)
+> +		return asus->driver->screenpad_brightness;
+> +
+> +	err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_SCREENPAD_LIGHT, &retval);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	return retval & ASUS_WMI_DSTS_BRIGHTNESS_MASK;
+> +}
+> +
+> +static int update_screenpad_bl_status(struct backlight_device *bd)
+> +{
+> +	struct asus_wmi *asus = bl_get_data(bd);
+> +	int power, err = 0;
+> +	u32 ctrl_param;
+> +
+> +	power = read_screenpad_backlight_power(asus);
+> +	if (power < 0)
+> +		return power;
+> +
+> +	if (bd->props.power != power) {
+> +		if (power != FB_BLANK_UNBLANK) {
+> +			/* Only brightness > 0 can power it back on */
+> +			ctrl_param = max(1, asus->driver->screenpad_brightness);
+> +			err = asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_LIGHT,
+> +						    ctrl_param, NULL);
+> +		} else {
+> +			err = asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_POWER, 0, NULL);
+> +		}
+> +	} else if (power == FB_BLANK_UNBLANK) {
+> +		/* Only set brightness if powered on or we get invalid/unsync state */
+> +		ctrl_param = bd->props.brightness;
+> +		err = asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_LIGHT, ctrl_param, NULL);
+> +	}
+> +
+> +	/* Ensure brightness is stored to turn back on with */
+> +	asus->driver->screenpad_brightness = bd->props.brightness;
+> +
+> +	return err;
+> +}
+> +
+> +static const struct backlight_ops asus_screenpad_bl_ops = {
+> +	.get_brightness = read_screenpad_brightness,
+> +	.update_status = update_screenpad_bl_status,
+> +	.options = BL_CORE_SUSPENDRESUME,
+> +};
+> +
+> +static int asus_screenpad_init(struct asus_wmi *asus)
+> +{
+> +	struct backlight_device *bd;
+> +	struct backlight_properties props;
+> +	int err, power;
+> +	int brightness = 0;
+> +
+> +	power = read_screenpad_backlight_power(asus);
+> +	if (power < 0)
+> +		return power;
+> +
+> +	if (power != FB_BLANK_POWERDOWN) {
+> +		err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_SCREENPAD_LIGHT, &brightness);
+> +		if (err < 0)
+> +			return err;
+> +	}
+> +	/* default to an acceptable min brightness on boot if too low */
+> +	if (brightness < 60)
+> +		brightness = 60;
+
+If settings below 60 are no good, then the correct way to handle
+this is to limit the range to 0 - (255-60) and add / substract
+60 when setting / getting the brightness.
+
+E.g. do something like this:
+
+#define SCREENPAD_MIN_BRIGHTNESS	60
+#define SCREENPAD_MAX_BRIGHTNESS	255
+
+	props.max_brightness = SCREENPAD_MAX_BRIGHTNESS - SCREENPAD_MIN_BRIGHTNESS;
+
+And in update_screenpad_bl_status() do:
+
+	ctrl_param = bd->props.brightness + SCREENPAD_MIN_BRIGHTNESS;
+
+And when reading the brightness substract SCREENPAD_MIN_BRIGHTNESS,
+clamping to a minimum value of 0.
+
+This avoids a dead-zone in the brightness range between 0-60 .
+
+Regards,
+
+Hans
+
+
+
+
+
+
+> +
+> +	memset(&props, 0, sizeof(struct backlight_properties));
+> +	props.type = BACKLIGHT_RAW; /* ensure this bd is last to be picked */
+> +	props.max_brightness = 255;
+> +	bd = backlight_device_register("asus_screenpad",
+> +				       &asus->platform_device->dev, asus,
+> +				       &asus_screenpad_bl_ops, &props);
+> +	if (IS_ERR(bd)) {
+> +		pr_err("Could not register backlight device\n");
+> +		return PTR_ERR(bd);
+> +	}
+> +
+> +	asus->screenpad_backlight_device = bd;
+> +	asus->driver->screenpad_brightness = brightness;
+> +	bd->props.brightness = brightness;
+> +	bd->props.power = power;
+> +	backlight_update_status(bd);
+> +
+> +	return 0;
+> +}
+> +
+> +static void asus_screenpad_exit(struct asus_wmi *asus)
+> +{
+> +	backlight_device_unregister(asus->screenpad_backlight_device);
+> +
+> +	asus->screenpad_backlight_device = NULL;
+> +}
+> +
+>  /* Fn-lock ********************************************************************/
+>  
+>  static bool asus_wmi_has_fnlock_key(struct asus_wmi *asus)
+> @@ -4504,6 +4623,12 @@ static int asus_wmi_add(struct platform_device *pdev)
+>  	} else if (asus->driver->quirks->wmi_backlight_set_devstate)
+>  		err = asus_wmi_set_devstate(ASUS_WMI_DEVID_BACKLIGHT, 2, NULL);
+>  
+> +	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_SCREENPAD_LIGHT)) {
+> +		err = asus_screenpad_init(asus);
+> +		if (err && err != -ENODEV)
+> +			goto fail_screenpad;
+> +	}
+> +
+>  	if (asus_wmi_has_fnlock_key(asus)) {
+>  		asus->fnlock_locked = fnlock_default;
+>  		asus_wmi_fnlock_update(asus);
+> @@ -4527,6 +4652,8 @@ static int asus_wmi_add(struct platform_device *pdev)
+>  	asus_wmi_backlight_exit(asus);
+>  fail_backlight:
+>  	asus_wmi_rfkill_exit(asus);
+> +fail_screenpad:
+> +	asus_screenpad_exit(asus);
+>  fail_rfkill:
+>  	asus_wmi_led_exit(asus);
+>  fail_leds:
+> @@ -4553,6 +4680,7 @@ static int asus_wmi_remove(struct platform_device *device)
+>  	asus = platform_get_drvdata(device);
+>  	wmi_remove_notify_handler(asus->driver->event_guid);
+>  	asus_wmi_backlight_exit(asus);
+> +	asus_screenpad_exit(asus);
+>  	asus_wmi_input_exit(asus);
+>  	asus_wmi_led_exit(asus);
+>  	asus_wmi_rfkill_exit(asus);
+> diff --git a/drivers/platform/x86/asus-wmi.h b/drivers/platform/x86/asus-wmi.h
+> index a478ebfd34df..5fbdd0eafa02 100644
+> --- a/drivers/platform/x86/asus-wmi.h
+> +++ b/drivers/platform/x86/asus-wmi.h
+> @@ -57,6 +57,7 @@ struct quirk_entry {
+>  struct asus_wmi_driver {
+>  	int			brightness;
+>  	int			panel_power;
+> +	int			screenpad_brightness;
+>  	int			wlan_ctrl_by_user;
+>  
+>  	const char		*name;
+> diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
+> index d17ae2eb0f8d..61ba70b32846 100644
+> --- a/include/linux/platform_data/x86/asus-wmi.h
+> +++ b/include/linux/platform_data/x86/asus-wmi.h
+> @@ -58,6 +58,10 @@
+>  #define ASUS_WMI_DEVID_KBD_BACKLIGHT	0x00050021
+>  #define ASUS_WMI_DEVID_LIGHT_SENSOR	0x00050022 /* ?? */
+>  #define ASUS_WMI_DEVID_LIGHTBAR		0x00050025
+> +/* This can only be used to disable the screen, not re-enable */
+> +#define ASUS_WMI_DEVID_SCREENPAD_POWER	0x00050031
+> +/* Writing a brightness re-enables the screen if disabled */
+> +#define ASUS_WMI_DEVID_SCREENPAD_LIGHT	0x00050032
+>  #define ASUS_WMI_DEVID_FAN_BOOST_MODE	0x00110018
+>  #define ASUS_WMI_DEVID_THROTTLE_THERMAL_POLICY 0x00120075
+>  
 
