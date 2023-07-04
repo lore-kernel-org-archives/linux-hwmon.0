@@ -2,129 +2,85 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44F38C001B0
-	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Jul 2023 16:53:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDD05EB64D9
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Jul 2023 19:44:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbjGDQxe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 4 Jul 2023 12:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
+        id S231233AbjGDTok (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 4 Jul 2023 15:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbjGDQxT (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Jul 2023 12:53:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B63B19B4;
-        Tue,  4 Jul 2023 09:52:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3B156131D;
-        Tue,  4 Jul 2023 16:52:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5FDAC433C7;
-        Tue,  4 Jul 2023 16:52:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688489566;
-        bh=GB/Rdvj+JyWe7WpPDtMzus3DrdwxG/xoxqmHr0YmZLo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ujDoJ7yb8zX9Py7fV0KIW1BnP4JjNmT3zOtFbV69JFDi41Vl3g3WeGARbGcGhHoRR
-         ZLacTr+rTnr8WtaQcnZzO/cv8BscYEoUyDH53+mBFMFmRsKQaIgo8oNZLU+fhR3gJ0
-         G0MblMGO5IcxfwU4vWD2doVuIk8E8cjNjqr0NMdY=
-Date:   Tue, 4 Jul 2023 17:52:43 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, samsagax@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] hwmon: (oxp-sensors): remove static board variable
-Message-ID: <2023070424-strangely-whiff-7d97@gregkh>
-References: <20230704131715.44454-5-gregkh@linuxfoundation.org>
- <20230704131715.44454-6-gregkh@linuxfoundation.org>
- <a9c6c44c-21fb-9d42-9a6d-6685e110015d@roeck-us.net>
- <2023070402-festive-rind-9274@gregkh>
- <cb71b00e-0225-ea24-b30e-4d615af026f0@roeck-us.net>
- <2023070425-jujitsu-ladder-195e@gregkh>
- <fd1cab46-0a51-6aab-8fda-f603fd4e0058@roeck-us.net>
+        with ESMTP id S229451AbjGDToj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Jul 2023 15:44:39 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6C310CF;
+        Tue,  4 Jul 2023 12:44:38 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-5703d12ab9aso72395027b3.2;
+        Tue, 04 Jul 2023 12:44:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688499877; x=1691091877;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cwfdFxLnz2FRAYtKqKmj4b/IYrsbglqXAF9+qfbe5K0=;
+        b=fIkXGW5SzTQnVanAdBKLRIui1tnMupzY6X4m+moKXsIXlWp85WTrn+bLoMZRSvZiC9
+         oTQRF31FImWEgwDWM1kFKabWLPXA1RHYyDxWylNomB6XpCCQBceYUUQIkBn/Gy8AYE21
+         0Oq9kX6FIbUEL8WLz/axyagGAXHQpRlfB5n7yFxMLy8LqXU0XJ6hDvjteA0tsUc9jNUQ
+         FerDXy8o/sL0Kf9/Jv/dwsKCRV6FpETzx8hPuX+kV5c16w44VHz2S4uvBAqI+PkPaRGh
+         tecvzzhvURt2dvwCU1P50RFKoHiKBHrC5qy/3BfytxGbNFmNtbrNGtF2yOlYqVoZA+LP
+         RFFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688499877; x=1691091877;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cwfdFxLnz2FRAYtKqKmj4b/IYrsbglqXAF9+qfbe5K0=;
+        b=NMG8KIz8vDAKdbpul51i6TqDzWsfAdAmYTZqZ9bAa0cLjpF/zTT06FQNH8VKlkCiq1
+         tIrJ4xNVUOfGANNpQF/Lw2dHYfadZceECW/ZcbdlUpZ7mY8SIQZwKkZ2OexpLtBO7UbK
+         CK6y5yNC/eg7aEngApzKos2HFpQ3rJ4jnmyjvY1uyJAhcj/ge1EU94x3k8G/GRU9tgNy
+         EY1JLzWJI5TrKgkPz6Q1CD2rO0i4ZOATOk5u1q2bYTuvhMklW0CVfjM4W4CAw5MUWpMk
+         Li8VS4K/9D5rRHy8Ikd0LuAu50BE8JcMuz7I4NDdeqVi/omx5rV5OkyXKnCmenvWYrDq
+         +OOA==
+X-Gm-Message-State: ABy/qLaO3uN0AcxhLRxXfBGrVV6kSOKe8zFDnY2WN2dzmuLo1Dr6SB4v
+        cnpg1Kymww1huLamc0JQ3oksLJRUgm3Cte6dIW4=
+X-Google-Smtp-Source: APBJJlGeNxZLiIdiIciCrp+/JDchClBogoOdy2+YZQ7E+/tkRLYhhyQYtmrGZmuZ3SXs7GTI9sZHuSHj1qxKJ2MAiN4=
+X-Received: by 2002:a0d:ca55:0:b0:56f:fba4:9b85 with SMTP id
+ m82-20020a0dca55000000b0056ffba49b85mr13441942ywd.7.1688499877233; Tue, 04
+ Jul 2023 12:44:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd1cab46-0a51-6aab-8fda-f603fd4e0058@roeck-us.net>
+References: <20230704131715.44454-5-gregkh@linuxfoundation.org>
+ <20230704131715.44454-6-gregkh@linuxfoundation.org> <a9c6c44c-21fb-9d42-9a6d-6685e110015d@roeck-us.net>
+In-Reply-To: <a9c6c44c-21fb-9d42-9a6d-6685e110015d@roeck-us.net>
+From:   Joaquin Aramendia <samsagax@gmail.com>
+Date:   Tue, 4 Jul 2023 16:44:25 -0300
+Message-ID: <CABgtM3jpj4AdS5nydni0a4X98hXUzVLdWrPQva_B2E=kCBEnxA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] hwmon: (oxp-sensors): remove static board variable
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 09:43:39AM -0700, Guenter Roeck wrote:
-> On 7/4/23 09:14, Greg Kroah-Hartman wrote:
-> > On Tue, Jul 04, 2023 at 07:14:54AM -0700, Guenter Roeck wrote:
-> > > On 7/4/23 06:44, Greg Kroah-Hartman wrote:
-> > > > On Tue, Jul 04, 2023 at 06:39:07AM -0700, Guenter Roeck wrote:
-> > > > > On 7/4/23 06:17, Greg Kroah-Hartman wrote:
-> > > > > > Drivers should not have a single static variable for the type of device
-> > > > > > they are bound to.  While this driver is really going to only have one
-> > > > > > device at a time in the system, remove the static variable and instead,
-> > > > > > look up the device type when needed.
-> > > > > > 
-> > > > > 
-> > > > > This is expensive. I think it would be much better to just move
-> > > > > the board type detection into the init code and not instantiate
-> > > > > the driver in the fist place if the board type is unknown.
-> > > > 
-> > > > The board type detection is all over the place in the driver, it's not
-> > > > just for "unknown" types, so how about just saving the board type at
-> > > > probe time and using it then for all other places?
-> > > > 
-> > > 
-> > > I must be missing something. The current code detects the board type
-> > > only once, in the probe function. Otherwise the static variable is used.
-> > > You are replacing it with repeated calls to get_board_type().
-> > > The whole point of the static variable is to avoid the cost of repeated
-> > > calls to dmi_first_match().
-> > 
-> > Ah, ok, yes, I was refering to the fact that the driver relies on the
-> > detection of the device type in lots of different places (and doesn't
-> > ever error out from the detection call.)
-> > 
-> 
-> I am lost again. Current code:
-> 
->         dmi_entry = dmi_first_match(dmi_table);
->         if (!dmi_entry || boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
->                 return -ENODEV;
-> 
-> 
-> 
-> > > > > We can handle the static variable separately if it really bothers
-> > > > > you that much.
-> > > > 
-> > > > I did this change to make patch 2/3 more "obvious" what is happening
-> > > > when the in_visible() callback happens, so that you don't have to worry
-> > > > about the saved value or not.  But this whole patch isn't really needed
-> > > > if you don't mind the lookup just happening in the in_visible() callback
-> > > > for the first time.
-> > > > 
-> > > 
-> > > That would at least be a minimal change, and just add one extra lookup
-> > > which is only called once (or zero, if it is used to save the board type).
-> > 
-> > Ok, I'll switch it up, but really, it's just a simple table lookup loop,
-> > and none of the detection calls are on a "hot path" that I can
-> > determine.  Or am I missing something?
-> > 
-> > > As I said, my solution would be to move the board type detection
-> > > into the init function and not instantiate the driver in the first
-> > > place if the probe function would bail out anyway.
-> > 
-> > That's not the case today, the only way the probe function would fail
-> > today is if the registering of the sysfs files fail.  It does not matter
-> > if the board detection call passes or not.
-> > 
-> 
-> Again,
->         dmi_entry = dmi_first_match(dmi_table);
->         if (!dmi_entry || boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
->                 return -ENODEV;
->                 ^^^^^^^^^^^^^^^
-> 
-> What am I missing ?
+Hello.
 
-Nothing, I'm missing it, sorry.  Been a long day, let me redo this...
+>
+> On 7/4/23 06:17, Greg Kroah-Hartman wrote:
+> > Drivers should not have a single static variable for the type of device
+> > they are bound to.  While this driver is really going to only have one
+> > device at a time in the system, remove the static variable and instead,
+> > look up the device type when needed.
+> >
+>
+> This is expensive. I think it would be much better to just move
+> the board type detection into the init code and not instantiate
+> the driver in the fist place if the board type is unknown.
 
-greg k-h
+I meant to do this, since the probe function is called only once and
+is meant for hotpluggable things. But since it works as it is and only
+loads in supported hardware it didn't seem necessary.
+Modify what you see fit. And thanks for the attention to the quality
+of the driver.
+
+Joaqu=C3=ADn
