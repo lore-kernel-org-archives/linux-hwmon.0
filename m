@@ -2,332 +2,196 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBD53EB64DA
-	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Jul 2023 11:19:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52422EB64D9
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Jul 2023 11:34:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjGDLTo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 4 Jul 2023 07:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39316 "EHLO
+        id S230028AbjGDLeW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 4 Jul 2023 07:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjGDLTn (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Jul 2023 07:19:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A8B10FC
-        for <linux-hwmon@vger.kernel.org>; Tue,  4 Jul 2023 04:18:15 -0700 (PDT)
+        with ESMTP id S230091AbjGDLeW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Jul 2023 07:34:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4E5113
+        for <linux-hwmon@vger.kernel.org>; Tue,  4 Jul 2023 04:33:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688469405;
+        s=mimecast20190719; t=1688470418;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=579u74/n50LxRe/EUX1QN56hzduU1yIaTqid7Yezzh8=;
-        b=Or83zuYPRfmrXY40KY5AjRbw83AIWj0aerPOMM4nDOe18P2vo2IbHem5LXBE+4BLEGfd+9
-        h5jYLed8DGs4cFDJxV1g6G19Ze6+THgdm5ec62RP7uCQjT5QV8HXNhmWoIvxZxTxAzqLTd
-        wpZ3R4PXC+J4Vi5LPTw5J1eOJuvEZ64=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=cEMNAN1VW4G+/yTzgfqsNrZ5FGOPNiH5MyEs3oCQmQw=;
+        b=IFfTlM27kSjyHtkeShFHD7lEz5VIlToYmhSuwCGtlWXGS9FQ49U6LaRb3hG/c4WXE+L407
+        OyiUvf/zCHuEAF38Q4YWn+IGMnOHS7l5b12wIie2l2hyRCCyKeraVKdEI034CEa1B8DXzM
+        HNB89wp3uVuPmDSSGDs8PTLh55vds/Y=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-277-v8eoMVCHNxa2fwT2GqMejg-1; Tue, 04 Jul 2023 07:16:44 -0400
-X-MC-Unique: v8eoMVCHNxa2fwT2GqMejg-1
-Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2b6f51c5cb3so5500391fa.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 04 Jul 2023 04:16:44 -0700 (PDT)
+ us-mta-530-tlnDB9NPPAK9zDdjGPCD1w-1; Tue, 04 Jul 2023 07:33:37 -0400
+X-MC-Unique: tlnDB9NPPAK9zDdjGPCD1w-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-993831c639aso74438866b.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 04 Jul 2023 04:33:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688469403; x=1691061403;
+        d=1e100.net; s=20221208; t=1688470416; x=1691062416;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=579u74/n50LxRe/EUX1QN56hzduU1yIaTqid7Yezzh8=;
-        b=jjvwiXEXJdi0xbe414eqjFV5dPNI1luhhu+CsxZ3z4uc3FEpmnWYqqf/FwcKcPshl0
-         NGngw2ZK5Jge6bsEvykjJ8V7br0qDBoIktv4V2BnC4FxXX7eIwJh6DXReVkf85oOcoyD
-         f+BGNgo9ubSL5Ow6AY1oOB2ZMD5+Ea/24D37N757tQq8sctgJk0ZGQCGnMHhh4FVMC3E
-         ZrG+P447LORZWkMjkgvh7SPVFdePRGgSQrWB/1K2pfrox83sR2hph5im1J287t+vRiCF
-         /W+76ecHbVChrTcQaum2qDWlXco5iDG/HFMKXuQMojOW/B+xR/psqxTlmybZdpxrjOKP
-         MOSQ==
-X-Gm-Message-State: ABy/qLaYjCy3SmGHGkI+TfTjOHlQQgtJ7TzNr2Uv3OrsVNjES9efY83T
-        zVDu8Nom0DYa8V3RUcfVZmqRutn6nDqTlIJqWvAVUxQy5Ptud82AT1LU/Zoq8FV5dQuEieInz9f
-        O9iKhvF1mt5CwzFpGWbY+v28=
-X-Received: by 2002:a2e:9159:0:b0:2b6:a3b0:f4d3 with SMTP id q25-20020a2e9159000000b002b6a3b0f4d3mr10279235ljg.26.1688469402805;
-        Tue, 04 Jul 2023 04:16:42 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFxVuYr4Lsv3k/Ylm6oCnyx0dsiv49hhs7GCElvoMHQXjQT0I+UDc0jn2FW9CEnEqHkOn0Vsg==
-X-Received: by 2002:a2e:9159:0:b0:2b6:a3b0:f4d3 with SMTP id q25-20020a2e9159000000b002b6a3b0f4d3mr10279213ljg.26.1688469402409;
-        Tue, 04 Jul 2023 04:16:42 -0700 (PDT)
+        bh=cEMNAN1VW4G+/yTzgfqsNrZ5FGOPNiH5MyEs3oCQmQw=;
+        b=HSWWdb+FGFnV2BvO6jefBNfhSsHzDLsM4aoBF2pdSNE/hd1A7fQasl2X+/Gg6mK7ir
+         BWLDDYStVg0wj+fiMnFl+UsshGpHyWoQ5P+rrnvAH5SZrOOyxoUgMNb6L9IPUB7ZuFX5
+         XegbmDVqnb1KwJXKgZbDtq3mtPCf53A5IWtOAyto6IzbLKdh+B1bvmg/7Dc1ByxWZsEC
+         8NqorA+a5EM+A1kv56PkEBHfmjcFTEBXEI+HEZXtThP+scaMgv66VG97I+vZGys1n/Lx
+         6crDGqug4tmoy4IV4c51HhxmBKBEwF9TDL31k2uHCKTvQyPwY9xYL8XARvK7Bssu/+Fy
+         x7mQ==
+X-Gm-Message-State: ABy/qLYXErGMUJkKarKA9KLs7dLww/ivrBwPXtktBfTCMvF4YR5vmMXF
+        iu1pV/8bMadW/qdgeCf37D55mLkLZqGs7cUSkHgms4NHl3L99MU9Njt+R27/QTZIVo9InpWUxpe
+        H2J+9r/lHY0UbuZDAU4WN5qc=
+X-Received: by 2002:a05:6402:619:b0:51e:1634:e5a9 with SMTP id n25-20020a056402061900b0051e1634e5a9mr3506015edv.28.1688470416331;
+        Tue, 04 Jul 2023 04:33:36 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlEXhQoLHTMnEQgCl2b7+LWgNUbG0w68arjmAdaHxl7eIs86U3yHhxSVSJIes9qAdwrUFVz0wg==
+X-Received: by 2002:a05:6402:619:b0:51e:1634:e5a9 with SMTP id n25-20020a056402061900b0051e1634e5a9mr3506006edv.28.1688470416177;
+        Tue, 04 Jul 2023 04:33:36 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a11-20020a170906468b00b0099364d9f0e6sm3087361ejr.117.2023.07.04.04.16.41
+        by smtp.gmail.com with ESMTPSA id l11-20020a056402028b00b0051e0272ad00sm4383003edv.75.2023.07.04.04.33.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 04:16:41 -0700 (PDT)
-Message-ID: <974093b4-5dac-dc29-8f86-304eb5c6c19b@redhat.com>
-Date:   Tue, 4 Jul 2023 13:16:41 +0200
+        Tue, 04 Jul 2023 04:33:35 -0700 (PDT)
+Message-ID: <3356d7b0-08fa-1b15-ef03-35781fc899c0@redhat.com>
+Date:   Tue, 4 Jul 2023 13:33:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v4 1/1] platform/x86: asus-wmi: add support for ASUS
- screenpad
+Subject: Re: [PATCH v2 1/8] platform/x86: asus-wmi: add support for showing
+ charger mode
 Content-Language: en-US, nl
 To:     "Luke D. Jones" <luke@ljones.dev>
 Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, markgross@kernel.org,
         jdelvare@suse.com, linux@roeck-us.net
-References: <20230630041743.911303-1-luke@ljones.dev>
- <20230630041743.911303-2-luke@ljones.dev>
+References: <20230630053552.976579-1-luke@ljones.dev>
+ <20230630053552.976579-2-luke@ljones.dev>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230630041743.911303-2-luke@ljones.dev>
+In-Reply-To: <20230630053552.976579-2-luke@ljones.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Luke,
+Hi,
 
-On 6/30/23 06:17, Luke D. Jones wrote:
-> Add support for the WMI methods used to turn off and adjust the
-> brightness of the secondary "screenpad" device found on some high-end
-> ASUS laptops like the GX650P series and others.
-> 
-> These methods are utilised in a new backlight device named asus_screenpad.
+On 6/30/23 07:35, Luke D. Jones wrote:
+> Expose a WMI method in sysfs platform for showing which connected
+> charger the laptop is currently using.
 > 
 > Signed-off-by: Luke D. Jones <luke@ljones.dev>
 
-Thank you for your work on this. I have one small change request
-and then v5 should be ready for merging, see me inline comment
-below.
+Thanks, patch looks good to me:
 
-> ---
->  drivers/platform/x86/asus-wmi.c            | 128 +++++++++++++++++++++
->  drivers/platform/x86/asus-wmi.h            |   1 +
->  include/linux/platform_data/x86/asus-wmi.h |   4 +
->  3 files changed, 133 insertions(+)
-> 
-> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-> index 62cee13f5576..967c92ceb041 100644
-> --- a/drivers/platform/x86/asus-wmi.c
-> +++ b/drivers/platform/x86/asus-wmi.c
-> @@ -25,6 +25,7 @@
->  #include <linux/input/sparse-keymap.h>
->  #include <linux/kernel.h>
->  #include <linux/leds.h>
-> +#include <linux/minmax.h>
->  #include <linux/module.h>
->  #include <linux/pci.h>
->  #include <linux/pci_hotplug.h>
-> @@ -212,6 +213,7 @@ struct asus_wmi {
->  
->  	struct input_dev *inputdev;
->  	struct backlight_device *backlight_device;
-> +	struct backlight_device *screenpad_backlight_device;
->  	struct platform_device *platform_device;
->  
->  	struct led_classdev wlan_led;
-> @@ -3839,6 +3841,123 @@ static int is_display_toggle(int code)
->  	return 0;
->  }
->  
-> +/* Screenpad backlight *******************************************************/
-> +
-> +static int read_screenpad_backlight_power(struct asus_wmi *asus)
-> +{
-> +	int ret;
-> +
-> +	ret = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_SCREENPAD_POWER);
-> +	if (ret < 0)
-> +		return ret;
-> +	/* 1 == powered */
-> +	return ret ? FB_BLANK_UNBLANK : FB_BLANK_POWERDOWN;
-> +}
-> +
-> +static int read_screenpad_brightness(struct backlight_device *bd)
-> +{
-> +	struct asus_wmi *asus = bl_get_data(bd);
-> +	u32 retval;
-> +	int err;
-> +
-> +	err = read_screenpad_backlight_power(asus);
-> +	if (err < 0)
-> +		return err;
-> +	/* The device brightness can only be read if powered, so return stored */
-> +	if (err == FB_BLANK_POWERDOWN)
-> +		return asus->driver->screenpad_brightness;
-> +
-> +	err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_SCREENPAD_LIGHT, &retval);
-> +	if (err < 0)
-> +		return err;
-> +
-> +	return retval & ASUS_WMI_DSTS_BRIGHTNESS_MASK;
-> +}
-> +
-> +static int update_screenpad_bl_status(struct backlight_device *bd)
-> +{
-> +	struct asus_wmi *asus = bl_get_data(bd);
-> +	int power, err = 0;
-> +	u32 ctrl_param;
-> +
-> +	power = read_screenpad_backlight_power(asus);
-> +	if (power < 0)
-> +		return power;
-> +
-> +	if (bd->props.power != power) {
-> +		if (power != FB_BLANK_UNBLANK) {
-> +			/* Only brightness > 0 can power it back on */
-> +			ctrl_param = max(1, asus->driver->screenpad_brightness);
-> +			err = asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_LIGHT,
-> +						    ctrl_param, NULL);
-> +		} else {
-> +			err = asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_POWER, 0, NULL);
-> +		}
-> +	} else if (power == FB_BLANK_UNBLANK) {
-> +		/* Only set brightness if powered on or we get invalid/unsync state */
-> +		ctrl_param = bd->props.brightness;
-> +		err = asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_LIGHT, ctrl_param, NULL);
-> +	}
-> +
-> +	/* Ensure brightness is stored to turn back on with */
-> +	asus->driver->screenpad_brightness = bd->props.brightness;
-> +
-> +	return err;
-> +}
-> +
-> +static const struct backlight_ops asus_screenpad_bl_ops = {
-> +	.get_brightness = read_screenpad_brightness,
-> +	.update_status = update_screenpad_bl_status,
-> +	.options = BL_CORE_SUSPENDRESUME,
-> +};
-> +
-> +static int asus_screenpad_init(struct asus_wmi *asus)
-> +{
-> +	struct backlight_device *bd;
-> +	struct backlight_properties props;
-> +	int err, power;
-> +	int brightness = 0;
-> +
-> +	power = read_screenpad_backlight_power(asus);
-> +	if (power < 0)
-> +		return power;
-> +
-> +	if (power != FB_BLANK_POWERDOWN) {
-> +		err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_SCREENPAD_LIGHT, &brightness);
-> +		if (err < 0)
-> +			return err;
-> +	}
-> +	/* default to an acceptable min brightness on boot if too low */
-> +	if (brightness < 60)
-> +		brightness = 60;
-
-If settings below 60 are no good, then the correct way to handle
-this is to limit the range to 0 - (255-60) and add / substract
-60 when setting / getting the brightness.
-
-E.g. do something like this:
-
-#define SCREENPAD_MIN_BRIGHTNESS	60
-#define SCREENPAD_MAX_BRIGHTNESS	255
-
-	props.max_brightness = SCREENPAD_MAX_BRIGHTNESS - SCREENPAD_MIN_BRIGHTNESS;
-
-And in update_screenpad_bl_status() do:
-
-	ctrl_param = bd->props.brightness + SCREENPAD_MIN_BRIGHTNESS;
-
-And when reading the brightness substract SCREENPAD_MIN_BRIGHTNESS,
-clamping to a minimum value of 0.
-
-This avoids a dead-zone in the brightness range between 0-60 .
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
 Regards,
 
 Hans
 
 
-
-
-
-
+> ---
+>  .../ABI/testing/sysfs-platform-asus-wmi       | 10 +++++++++
+>  drivers/platform/x86/asus-wmi.c               | 21 +++++++++++++++++++
+>  include/linux/platform_data/x86/asus-wmi.h    |  3 +++
+>  3 files changed, 34 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+> index a77a004a1baa..eb29e3023c7b 100644
+> --- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
+> +++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+> @@ -98,3 +98,13 @@ Description:
+>  		Enable an LCD response-time boost to reduce or remove ghosting:
+>  			* 0 - Disable,
+>  			* 1 - Enable
 > +
-> +	memset(&props, 0, sizeof(struct backlight_properties));
-> +	props.type = BACKLIGHT_RAW; /* ensure this bd is last to be picked */
-> +	props.max_brightness = 255;
-> +	bd = backlight_device_register("asus_screenpad",
-> +				       &asus->platform_device->dev, asus,
-> +				       &asus_screenpad_bl_ops, &props);
-> +	if (IS_ERR(bd)) {
-> +		pr_err("Could not register backlight device\n");
-> +		return PTR_ERR(bd);
-> +	}
-> +
-> +	asus->screenpad_backlight_device = bd;
-> +	asus->driver->screenpad_brightness = brightness;
-> +	bd->props.brightness = brightness;
-> +	bd->props.power = power;
-> +	backlight_update_status(bd);
-> +
-> +	return 0;
-> +}
-> +
-> +static void asus_screenpad_exit(struct asus_wmi *asus)
+> +What:		/sys/devices/platform/<platform>/charge_mode
+> +Date:		Jun 2023
+> +KernelVersion:	6.5
+> +Contact:	"Luke Jones" <luke@ljones.dev>
+> +Description:
+> +		Get the current charging mode being used:
+> +			* 1 - Barrel connected charger,
+> +			* 2 - USB-C charging
+> +			* 3 - Both connected, barrel used for charging
+> \ No newline at end of file
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+> index 1038dfdcdd32..f23375d5fb82 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -237,6 +237,7 @@ struct asus_wmi {
+>  	u8 fan_boost_mode_mask;
+>  	u8 fan_boost_mode;
+>  
+> +	bool charge_mode_available;
+>  	bool egpu_enable_available;
+>  	bool dgpu_disable_available;
+>  	bool gpu_mux_mode_available;
+> @@ -586,6 +587,22 @@ static void asus_wmi_tablet_mode_get_state(struct asus_wmi *asus)
+>  		asus_wmi_tablet_sw_report(asus, result);
+>  }
+>  
+> +/* Charging mode, 1=Barrel, 2=USB ******************************************/
+> +static ssize_t charge_mode_show(struct device *dev,
+> +				   struct device_attribute *attr, char *buf)
 > +{
-> +	backlight_device_unregister(asus->screenpad_backlight_device);
+> +	struct asus_wmi *asus = dev_get_drvdata(dev);
+> +	int result, value;
 > +
-> +	asus->screenpad_backlight_device = NULL;
+> +	result = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_CHARGE_MODE, &value);
+> +	if (result < 0)
+> +		return result;
+> +
+> +	return sysfs_emit(buf, "%d\n", value & 0xff);
 > +}
 > +
->  /* Fn-lock ********************************************************************/
->  
->  static bool asus_wmi_has_fnlock_key(struct asus_wmi *asus)
-> @@ -4504,6 +4623,12 @@ static int asus_wmi_add(struct platform_device *pdev)
->  	} else if (asus->driver->quirks->wmi_backlight_set_devstate)
->  		err = asus_wmi_set_devstate(ASUS_WMI_DEVID_BACKLIGHT, 2, NULL);
->  
-> +	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_SCREENPAD_LIGHT)) {
-> +		err = asus_screenpad_init(asus);
-> +		if (err && err != -ENODEV)
-> +			goto fail_screenpad;
-> +	}
+> +static DEVICE_ATTR_RO(charge_mode);
 > +
->  	if (asus_wmi_has_fnlock_key(asus)) {
->  		asus->fnlock_locked = fnlock_default;
->  		asus_wmi_fnlock_update(asus);
-> @@ -4527,6 +4652,8 @@ static int asus_wmi_add(struct platform_device *pdev)
->  	asus_wmi_backlight_exit(asus);
->  fail_backlight:
->  	asus_wmi_rfkill_exit(asus);
-> +fail_screenpad:
-> +	asus_screenpad_exit(asus);
->  fail_rfkill:
->  	asus_wmi_led_exit(asus);
->  fail_leds:
-> @@ -4553,6 +4680,7 @@ static int asus_wmi_remove(struct platform_device *device)
->  	asus = platform_get_drvdata(device);
->  	wmi_remove_notify_handler(asus->driver->event_guid);
->  	asus_wmi_backlight_exit(asus);
-> +	asus_screenpad_exit(asus);
->  	asus_wmi_input_exit(asus);
->  	asus_wmi_led_exit(asus);
->  	asus_wmi_rfkill_exit(asus);
-> diff --git a/drivers/platform/x86/asus-wmi.h b/drivers/platform/x86/asus-wmi.h
-> index a478ebfd34df..5fbdd0eafa02 100644
-> --- a/drivers/platform/x86/asus-wmi.h
-> +++ b/drivers/platform/x86/asus-wmi.h
-> @@ -57,6 +57,7 @@ struct quirk_entry {
->  struct asus_wmi_driver {
->  	int			brightness;
->  	int			panel_power;
-> +	int			screenpad_brightness;
->  	int			wlan_ctrl_by_user;
+>  /* dGPU ********************************************************************/
+>  static ssize_t dgpu_disable_show(struct device *dev,
+>  				   struct device_attribute *attr, char *buf)
+> @@ -3462,6 +3479,7 @@ static struct attribute *platform_attributes[] = {
+>  	&dev_attr_camera.attr,
+>  	&dev_attr_cardr.attr,
+>  	&dev_attr_touchpad.attr,
+> +	&dev_attr_charge_mode.attr,
+>  	&dev_attr_egpu_enable.attr,
+>  	&dev_attr_dgpu_disable.attr,
+>  	&dev_attr_gpu_mux_mode.attr,
+> @@ -3491,6 +3509,8 @@ static umode_t asus_sysfs_is_visible(struct kobject *kobj,
+>  		devid = ASUS_WMI_DEVID_LID_RESUME;
+>  	else if (attr == &dev_attr_als_enable.attr)
+>  		devid = ASUS_WMI_DEVID_ALS_ENABLE;
+> +	else if (attr == &dev_attr_charge_mode.attr)
+> +		ok = asus->charge_mode_available;
+>  	else if (attr == &dev_attr_egpu_enable.attr)
+>  		ok = asus->egpu_enable_available;
+>  	else if (attr == &dev_attr_dgpu_disable.attr)
+> @@ -3757,6 +3777,7 @@ static int asus_wmi_add(struct platform_device *pdev)
+>  	if (err)
+>  		goto fail_platform;
 >  
->  	const char		*name;
+> +	asus->charge_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_CHARGE_MODE);
+>  	asus->egpu_enable_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_EGPU);
+>  	asus->dgpu_disable_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_DGPU);
+>  	asus->gpu_mux_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_GPU_MUX);
 > diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
-> index d17ae2eb0f8d..61ba70b32846 100644
+> index 28234dc9fa6a..f90cafe26af1 100644
 > --- a/include/linux/platform_data/x86/asus-wmi.h
 > +++ b/include/linux/platform_data/x86/asus-wmi.h
-> @@ -58,6 +58,10 @@
->  #define ASUS_WMI_DEVID_KBD_BACKLIGHT	0x00050021
->  #define ASUS_WMI_DEVID_LIGHT_SENSOR	0x00050022 /* ?? */
->  #define ASUS_WMI_DEVID_LIGHTBAR		0x00050025
-> +/* This can only be used to disable the screen, not re-enable */
-> +#define ASUS_WMI_DEVID_SCREENPAD_POWER	0x00050031
-> +/* Writing a brightness re-enables the screen if disabled */
-> +#define ASUS_WMI_DEVID_SCREENPAD_LIGHT	0x00050032
->  #define ASUS_WMI_DEVID_FAN_BOOST_MODE	0x00110018
->  #define ASUS_WMI_DEVID_THROTTLE_THERMAL_POLICY 0x00120075
+> @@ -95,6 +95,9 @@
+>  /* Keyboard dock */
+>  #define ASUS_WMI_DEVID_KBD_DOCK		0x00120063
+>  
+> +/* Charging mode - 1=Barrel, 2=USB */
+> +#define ASUS_WMI_DEVID_CHARGE_MODE	0x0012006C
+> +
+>  /* dgpu on/off */
+>  #define ASUS_WMI_DEVID_EGPU		0x00090019
 >  
 
