@@ -2,150 +2,116 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ED36EB64D9
-	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Jul 2023 16:06:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67049EB64D9
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Jul 2023 16:14:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjGDQGI convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 4 Jul 2023 12:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
+        id S229955AbjGDQOn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 4 Jul 2023 12:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjGDQGI (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Jul 2023 12:06:08 -0400
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0543BE7A;
-        Tue,  4 Jul 2023 09:06:07 -0700 (PDT)
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2b58330576fso18767341fa.1;
-        Tue, 04 Jul 2023 09:06:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688486765; x=1691078765;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FUYQR1OTGV83aKP/E1cbbGWILiLZ1oIf9GaUQyPplb4=;
-        b=JhLjzIXXQitNFysoATz+whhkqk25+IYV+qgGb72YdQFYX4qic7renoTsCoC5/4ujed
-         4iuHXUSeVY/dI8X1VIcWSfJ5vo3C/ONF3EguI6bQkbtzo8Lhuw4WNz9r6X1Kx4E76D4r
-         6aks8nq5nI4iK9USejm2TMuuJF1o4v+8lcJNU+yAEqkbK6EkF4J7bxzZYmKrMl71Ilxl
-         kj/OQEJ4oO0RSGPlC/Z25vMOOQvmAV3fna8EWI/gekZEI6Or9g2Ri8thg6E724LYJ6OP
-         zIkdts8aa5o5iOpkWszOk+OrBfDrLEKgdXU4c7c5wy4vQFQWC2GP0e6llLvNg4QvAUVi
-         tLpw==
-X-Gm-Message-State: ABy/qLYep9riB43GF7UWNIhYH50tZbT5g5l4+SeOyd7EWVf7+d6mNadY
-        0JtYzL8aYU+7KSmx3E2CXsh4bHiMbwFEsvLNHLqOtQsQoKE=
-X-Google-Smtp-Source: APBJJlGtPqvxIQi/tu5cWjUHqXqFID5rJfjUKqOOlGmPxjKNAk7P4iDoje+JynoZ9YtiqnyubftxILjsC45WIiyNKCM=
-X-Received: by 2002:a2e:870c:0:b0:2b6:cd7f:5ea8 with SMTP id
- m12-20020a2e870c000000b002b6cd7f5ea8mr9298617lji.1.1688486764797; Tue, 04 Jul
- 2023 09:06:04 -0700 (PDT)
+        with ESMTP id S230385AbjGDQOn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Jul 2023 12:14:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B917DA;
+        Tue,  4 Jul 2023 09:14:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 932996129E;
+        Tue,  4 Jul 2023 16:14:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88E6FC433C7;
+        Tue,  4 Jul 2023 16:14:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688487281;
+        bh=WaqoCbbAiAIa8lE0EoMoQvZ3t15hwghN4poN3anXYpY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pevey5kYhx8mtiMCHZsX1JthVxYJ4L1EziGcd2lkqPcNrbj662Hh4R5D8IrR+6LP9
+         e2qL1aGZUjA0KEWzYARLVPpds+SiGRTJVL8z7Tb5KTpNqsfFGx2B1MSvwheoV9NbRy
+         PllaxXVOQYatcZobwOsNBpDJo3NXIRsbMNja4y6A=
+Date:   Tue, 4 Jul 2023 17:14:37 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, samsagax@gmail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] hwmon: (oxp-sensors): remove static board variable
+Message-ID: <2023070425-jujitsu-ladder-195e@gregkh>
+References: <20230704131715.44454-5-gregkh@linuxfoundation.org>
+ <20230704131715.44454-6-gregkh@linuxfoundation.org>
+ <a9c6c44c-21fb-9d42-9a6d-6685e110015d@roeck-us.net>
+ <2023070402-festive-rind-9274@gregkh>
+ <cb71b00e-0225-ea24-b30e-4d615af026f0@roeck-us.net>
 MIME-Version: 1.0
-References: <20230704131715.44454-5-gregkh@linuxfoundation.org> <20230704131715.44454-8-gregkh@linuxfoundation.org>
-In-Reply-To: <20230704131715.44454-8-gregkh@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 4 Jul 2023 18:05:53 +0200
-Message-ID: <CAJZ5v0jsK+o=auHMwcOnqamLS1_cw6D9YRJ4YDs2n-46R=zGYw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] driver core: remove devm_device_add_groups()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux@roeck-us.net,
-        samsagax@gmail.com, linux-kernel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cb71b00e-0225-ea24-b30e-4d615af026f0@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jul 4, 2023 at 3:17 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> There is no more in-kernel users of this function, and no driver should
-> ever be using it, so remove it from the kernel.
->
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Tue, Jul 04, 2023 at 07:14:54AM -0700, Guenter Roeck wrote:
+> On 7/4/23 06:44, Greg Kroah-Hartman wrote:
+> > On Tue, Jul 04, 2023 at 06:39:07AM -0700, Guenter Roeck wrote:
+> > > On 7/4/23 06:17, Greg Kroah-Hartman wrote:
+> > > > Drivers should not have a single static variable for the type of device
+> > > > they are bound to.  While this driver is really going to only have one
+> > > > device at a time in the system, remove the static variable and instead,
+> > > > look up the device type when needed.
+> > > > 
+> > > 
+> > > This is expensive. I think it would be much better to just move
+> > > the board type detection into the init code and not instantiate
+> > > the driver in the fist place if the board type is unknown.
+> > 
+> > The board type detection is all over the place in the driver, it's not
+> > just for "unknown" types, so how about just saving the board type at
+> > probe time and using it then for all other places?
+> > 
+> 
+> I must be missing something. The current code detects the board type
+> only once, in the probe function. Otherwise the static variable is used.
+> You are replacing it with repeated calls to get_board_type().
+> The whole point of the static variable is to avoid the cost of repeated
+> calls to dmi_first_match().
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Ah, ok, yes, I was refering to the fact that the driver relies on the
+detection of the device type in lots of different places (and doesn't
+ever error out from the detection call.)
 
-> ---
->  drivers/base/core.c    | 45 ------------------------------------------
->  include/linux/device.h |  2 --
->  2 files changed, 47 deletions(-)
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 3dff5037943e..94187c0b577d 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -2748,15 +2748,6 @@ static void devm_attr_group_remove(struct device *dev, void *res)
->         sysfs_remove_group(&dev->kobj, group);
->  }
->
-> -static void devm_attr_groups_remove(struct device *dev, void *res)
-> -{
-> -       union device_attr_group_devres *devres = res;
-> -       const struct attribute_group **groups = devres->groups;
-> -
-> -       dev_dbg(dev, "%s: removing groups %p\n", __func__, groups);
-> -       sysfs_remove_groups(&dev->kobj, groups);
-> -}
-> -
->  /**
->   * devm_device_add_group - given a device, create a managed attribute group
->   * @dev:       The device to create the group for
-> @@ -2789,42 +2780,6 @@ int devm_device_add_group(struct device *dev, const struct attribute_group *grp)
->  }
->  EXPORT_SYMBOL_GPL(devm_device_add_group);
->
-> -/**
-> - * devm_device_add_groups - create a bunch of managed attribute groups
-> - * @dev:       The device to create the group for
-> - * @groups:    The attribute groups to create, NULL terminated
-> - *
-> - * This function creates a bunch of managed attribute groups.  If an error
-> - * occurs when creating a group, all previously created groups will be
-> - * removed, unwinding everything back to the original state when this
-> - * function was called.  It will explicitly warn and error if any of the
-> - * attribute files being created already exist.
-> - *
-> - * Returns 0 on success or error code from sysfs_create_group on failure.
-> - */
-> -int devm_device_add_groups(struct device *dev,
-> -                          const struct attribute_group **groups)
-> -{
-> -       union device_attr_group_devres *devres;
-> -       int error;
-> -
-> -       devres = devres_alloc(devm_attr_groups_remove,
-> -                             sizeof(*devres), GFP_KERNEL);
-> -       if (!devres)
-> -               return -ENOMEM;
-> -
-> -       error = sysfs_create_groups(&dev->kobj, groups);
-> -       if (error) {
-> -               devres_free(devres);
-> -               return error;
-> -       }
-> -
-> -       devres->groups = groups;
-> -       devres_add(dev, devres);
-> -       return 0;
-> -}
-> -EXPORT_SYMBOL_GPL(devm_device_add_groups);
-> -
->  static int device_add_attrs(struct device *dev)
->  {
->         const struct class *class = dev->class;
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 66c13965153d..6dd087e4223d 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -1164,8 +1164,6 @@ static inline void device_remove_group(struct device *dev,
->         return device_remove_groups(dev, groups);
->  }
->
-> -int __must_check devm_device_add_groups(struct device *dev,
-> -                                       const struct attribute_group **groups);
->  int __must_check devm_device_add_group(struct device *dev,
->                                        const struct attribute_group *grp);
->
-> --
-> 2.41.0
->
+> > > We can handle the static variable separately if it really bothers
+> > > you that much.
+> > 
+> > I did this change to make patch 2/3 more "obvious" what is happening
+> > when the in_visible() callback happens, so that you don't have to worry
+> > about the saved value or not.  But this whole patch isn't really needed
+> > if you don't mind the lookup just happening in the in_visible() callback
+> > for the first time.
+> > 
+> 
+> That would at least be a minimal change, and just add one extra lookup
+> which is only called once (or zero, if it is used to save the board type).
+
+Ok, I'll switch it up, but really, it's just a simple table lookup loop,
+and none of the detection calls are on a "hot path" that I can
+determine.  Or am I missing something?
+
+> As I said, my solution would be to move the board type detection
+> into the init function and not instantiate the driver in the first
+> place if the probe function would bail out anyway.
+
+That's not the case today, the only way the probe function would fail
+today is if the registering of the sysfs files fail.  It does not matter
+if the board detection call passes or not.
+
+> Personally I'd keep
+> the static variable for simplicity, but if you really dislike it
+> that much, we could pass it around in platform and later driver data.
+> But it seems to me that this could (and should) be a separate patch
+> that doesn't have to be hurried in.
+
+Fair enough, let me rework this and resend a v2 series when I get a
+chance soon.
+
+thanks for the review.
+
+greg k-h
