@@ -2,42 +2,42 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2052C001E0
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jul 2023 19:50:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3A55EB64DD
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jul 2023 19:50:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234318AbjGETuS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Jul 2023 15:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
+        id S234273AbjGETuQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 5 Jul 2023 15:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234274AbjGETuQ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jul 2023 15:50:16 -0400
+        with ESMTP id S234085AbjGETuN (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jul 2023 15:50:13 -0400
 Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EC0199E;
-        Wed,  5 Jul 2023 12:50:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D79B1988;
+        Wed,  5 Jul 2023 12:50:12 -0700 (PDT)
 Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365H2ApZ012208;
-        Wed, 5 Jul 2023 19:49:48 GMT
+        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365Gs6SR025924;
+        Wed, 5 Jul 2023 19:49:45 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=pps0720;
- bh=5x3OxXEwu0z070b92aDOhncsAuFg1T2+MQocbqikStQ=;
- b=Zyj4W4YsyRXvjYy//+Eawjq8l+FuHJx+j96098Z1b5adgzx5b3fuceDvaZj2AGvnlTCB
- ZHPL38zGE5jI/wGogVS+95gpR5nvdIIjD9RgG0uSgvqvfzTzC1Szzix1wVTsQoyLcJFq
- gRMuGNgA3WmdhBoJ0zScShHZs7i18jwaHpgKKynu7AbQyTUFOgk1M2K9UpWOBW7qksIU
- K2sWbHGl+tFHWbO5bKeyxIvwDK7y1FB8edNe6+SDQu6VDv/yPw74GmwBv9gghnz/OedK
- HIAsayEtqJeD0639Ey2TH8NhvrQTyF7YM2L0vUsvg7wSDFn5KmyQAyzqIy8YRNtsBzqi nw== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3rn65h49yh-1
+ date : message-id : in-reply-to : references : mime-version; s=pps0720;
+ bh=aGYJS90h8fRFRzOi9MHpAud7Cymuch3rZ8+F5GiJGfo=;
+ b=QJ+RdLbu9uSk/MrFecLLwFJiE9U2WmOQz5vvuEio6yupYV3zC/xlmo29787z4oEkjaOt
+ oTtj74co6YCbO9uYvVWykeyxA3i8wfVwbGbjw+yqz/VsoOFuTdg5hnvcTYWa16tvnxEe
+ HvfzJDAQlDSVDV6pjMtk+ShkqZz4DurSndtVnKV/cFi4SQl4LYBhTBlcxBWmfIJckhWi
+ ExRQlWCLUajt2z6s+fkVET8h5N0b1b3/W4W9vSXJtfKjvd0Yd10EY+coGzeXNx6YKtR6
+ s9RVD8a1iyZphhDMBsKc5i26ndb5hP6AM1WryfHoLMTJuW4sWdDoBMC1o0deYAiKer9t 0Q== 
+Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3rn65h49y4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 19:49:48 +0000
+        Wed, 05 Jul 2023 19:49:44 +0000
 Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 9A5458014CC;
-        Wed,  5 Jul 2023 19:49:46 +0000 (UTC)
+        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 31736804DED;
+        Wed,  5 Jul 2023 19:49:44 +0000 (UTC)
 Received: from hpe.com (unknown [16.231.227.36])
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id F34B9808DBD;
-        Wed,  5 Jul 2023 19:49:45 +0000 (UTC)
+        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 99C8D808D9C;
+        Wed,  5 Jul 2023 19:49:43 +0000 (UTC)
 From:   nick.hawkins@hpe.com
 To:     verdun@hpe.com, nick.hawkins@hpe.com, linus.walleij@linaro.org,
         brgl@bgdev.pl, robh+dt@kernel.org,
@@ -45,20 +45,22 @@ To:     verdun@hpe.com, nick.hawkins@hpe.com, linus.walleij@linaro.org,
         linux@roeck-us.net, andy.shevchenko@gmail.com,
         linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: [PATCH v5 5/5] MAINTAINERS: hpe: Add GPIO
-Date:   Wed,  5 Jul 2023 14:45:44 -0500
-Message-Id: <20230705194544.100370-6-nick.hawkins@hpe.com>
+Subject: [PATCH v5 1/5] dt-bindings: gpio: Add HPE GXP GPIO
+Date:   Wed,  5 Jul 2023 14:45:40 -0500
+Message-Id: <20230705194544.100370-2-nick.hawkins@hpe.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230705194544.100370-1-nick.hawkins@hpe.com>
 References: <20230705194544.100370-1-nick.hawkins@hpe.com>
-X-Proofpoint-GUID: SvNEoVgX5QQsL72i0ZSYxikjGwIw1es_
-X-Proofpoint-ORIG-GUID: SvNEoVgX5QQsL72i0ZSYxikjGwIw1es_
+X-Proofpoint-GUID: dtCtYME4XMneRTiXkJl3mt55IUZVRAb1
+X-Proofpoint-ORIG-GUID: dtCtYME4XMneRTiXkJl3mt55IUZVRAb1
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-05_11,2023-07-05_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- mlxlogscore=999 malwarescore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0
+ mlxlogscore=945 malwarescore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0
  priorityscore=1501 suspectscore=0 phishscore=0 clxscore=1015 spamscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
  definitions=main-2307050180
@@ -68,46 +70,116 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Nick Hawkins <nick.hawkins@hpe.com>
 
-List the files added for GPIO.
+Provide access to the register regions and interrupt for GPIO. The
+driver under the hpe,gxp-gpio-pl will provide GPIO information from the
+CPLD interface. The CPLD interface represents all physical GPIOs. The
+GPIO interface with the CPLD allows use of interrupts.
 
 Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 
 ---
 
 v5:
- *Remove gpio-gxp.c reference as it has been discarded for separate
-  commit
- *Added missing gpio-gxp-pl.c reference
+ *Removed use of gpio-gxp in favor of just supporting
+  hpe,gxp-gpio-pl for now as the full gpio-gxp will
+  require a much larger patchset
+ *Modified commit description to reflect removal of
+  hpe,gxp-gpio
 v4:
- *No change
+ *Fix min and max values for regs
 v3:
- *No change
+ *Remove extra example in examples
+ *Actually fixed indentation on example - Aligned
+  GPIO line names with " above.
 v2:
- *Removed reference to PSU changes as they have been discarded.
+ *Put binding patch before the driver in the series
+ *Improved patch description
+ *Removed oneOf and items in compatible definition
+ *Moved additionalProperties definition to correct spot in file
+ *Fixed indentation on example
+ *Improved description in .yaml
 ---
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+ .../bindings/gpio/hpe,gxp-gpio.yaml           | 71 +++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 27ef11624748..559d4ecb65e9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2241,6 +2241,7 @@ M:	Jean-Marie Verdun <verdun@hpe.com>
- M:	Nick Hawkins <nick.hawkins@hpe.com>
- S:	Maintained
- F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
-+F:	Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
- F:	Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
- F:	Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
- F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
-@@ -2250,6 +2251,7 @@ F:	arch/arm/boot/dts/hpe-bmc*
- F:	arch/arm/boot/dts/hpe-gxp*
- F:	arch/arm/mach-hpe/
- F:	drivers/clocksource/timer-gxp.c
-+F:	drivers/gpio/gpio-gxp-pl.c
- F:	drivers/hwmon/gxp-fan-ctrl.c
- F:	drivers/i2c/busses/i2c-gxp.c
- F:	drivers/spi/spi-gxp.c
+diff --git a/Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml b/Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
+new file mode 100644
+index 000000000000..799643c1a0c2
+--- /dev/null
++++ b/Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
+@@ -0,0 +1,71 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/gpio/hpe,gxp-gpio.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: HPE GXP gpio controllers
++
++maintainers:
++  - Nick Hawkins <nick.hawkins@hpe.com>
++
++description:
++  Interruptable GPIO drivers for the HPE GXP that covers multiple interfaces
++  of both physical and virtual GPIO pins.
++
++properties:
++  compatible:
++    const: hpe,gxp-gpio-pl
++
++  reg:
++    items:
++      - description: pl base gpio
++      - description: pl interrupt gpio
++
++  reg-names:
++    items:
++      - const: base
++      - const: interrupt
++
++  gpio-controller: true
++
++  "#gpio-cells":
++    const: 2
++
++  gpio-line-names:
++    maxItems: 80
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - gpio-controller
++  - "#gpio-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++        gpio@51000300 {
++          compatible = "hpe,gxp-gpio-pl";
++          reg = <0x51000300 0x7f>, <0x51000380 0x20>;
++          reg-names = "base", "interrupt";
++          gpio-controller;
++          #gpio-cells = <2>;
++          interrupt-parent = <&vic0>;
++          interrupts = <24>;
++          gpio-line-names =
++          "IOP_LED1", "IOP_LED2", "IOP_LED3", "IOP_LED4", "IOP_LED5", "IOP_LED6", "IOP_LED7", "IOP_LED8",
++          "FAN1_INST", "FAN2_INST", "FAN3_INST", "FAN4_INST", "FAN5_INST", "FAN6_INST", "FAN7_INST",
++          "FAN8_INST", "FAN1_FAIL", "FAN2_FAIL", "FAN3_FAIL", "FAN4_FAIL", "FAN5_FAIL", "FAN6_FAIL",
++          "FAN7_FAIL", "FAN8_FAIL", "FAN1_ID", "FAN2_ID", "FAN3_ID", "FAN4_ID", "FAN5_ID", "FAN6_ID",
++          "FAN7_ID", "FAN8_ID", "IDENTIFY", "HEALTH_RED", "HEALTH_AMBER", "POWER_BUTTON", "UID_PRESS",
++          "SLP", "NMI_BUTTON", "RESET_BUTTON", "SIO_S5", "SO_ON_CONTROL", "PSU1_INST", "PSU2_INST",
++          "PSU3_INST", "PSU4_INST", "PSU5_INST", "PSU6_INST", "PSU7_INST", "PSU8_INST", "PSU1_AC",
++          "PSU2_AC", "PSU3_AC", "PSU4_AC", "PSU5_AC", "PSU6_AC", "PSU7_AC", "PSU8_AC", "PSU1_DC",
++          "PSU2_DC", "PSU3_DC", "PSU4_DC", "PSU5_DC", "PSU6_DC", "PSU7_DC", "PSU8_DC", "", "", "", "",
++          "", "", "", "", "", "", "", "", "", "";
++        };
 -- 
 2.17.1
 
