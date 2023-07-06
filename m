@@ -2,186 +2,205 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C371FC001E0
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jul 2023 19:50:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E18F8EB64DC
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jul 2023 06:24:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234212AbjGETu1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Jul 2023 15:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
+        id S233393AbjGFGYA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Jul 2023 02:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234070AbjGETuO (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jul 2023 15:50:14 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E617121;
-        Wed,  5 Jul 2023 12:50:12 -0700 (PDT)
-Received: from pps.filterd (m0134421.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365GsBDP028057;
-        Wed, 5 Jul 2023 19:49:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id; s=pps0720;
- bh=2TZ7uWy+KV2H+l6ExuqmbxwHBn84OisbQ+LUXCERh7E=;
- b=S51fsHBgKxibwrnifbcQzN2WRS7KkID5Pq4PV/hUen/ZeVsl/o4p2fQ20oCcOikTcBg+
- VysStpbHr3ZFgtJj+qGYW2HVNrCBnIQBUQ0cNe0KMST9F6aGzOhKCbBtt74YhCTVDFsz
- 9/GZWEy63G0JReltp09LFmPrbJrQyKbKVv2xMXafgjFOlq/IGP+6AazezDG0ByqtwRmu
- esjPOvS5IQdTaRSyYPOqZmENJazWJFiaF7SyO2rX7ktn0RUXma8Kd96dqH0HjJHMMKmG
- Bfth5tkDA9qb/4DizJZFr5xtOWx9ozs3kQrSvFzaBWwtvAFISrUSMbYqwOfY6dXk0/JX Lw== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3rn93utu08-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 19:49:44 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 9CCBC804DF3;
-        Wed,  5 Jul 2023 19:49:43 +0000 (UTC)
-Received: from hpe.com (unknown [16.231.227.36])
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 2C0F28081E4;
-        Wed,  5 Jul 2023 19:49:42 +0000 (UTC)
-From:   nick.hawkins@hpe.com
-To:     verdun@hpe.com, nick.hawkins@hpe.com, linus.walleij@linaro.org,
+        with ESMTP id S232446AbjGFGX6 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Jul 2023 02:23:58 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB381FEF
+        for <linux-hwmon@vger.kernel.org>; Wed,  5 Jul 2023 23:22:59 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51d8fa4dbf9so473295a12.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 05 Jul 2023 23:22:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688624576; x=1691216576;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9HBGNjA/AFaYPQtAfARvvX4VPrQmoZY1RYa/BV2PKyw=;
+        b=jQUEjdB/XzCIlnlw7mfxPpowKF/8Bb9UIhtQIfj2jkkVohOJQjHMYFFLaYw0RwNGl8
+         YaZoUjjpOwP4Ra8Ps8aR88ZtTjrKo+MEvrzM/XFa4UmJ37FpKwEMqxXcK8BTzXoHX5pU
+         URxfLiqjCXREHmhij11331U6N8byRxOJxrCt07BNrOfMxe4wN2R0cvBlZAO5G0PXtyGj
+         XKsmm5yH1YE6sq54M1Y0hOS29fOmS9yxQ3Ajvc/vcSt29N2YzoDwskCj/bGgYBZ7zFgd
+         Omavvkai6NfdVaeB8JuH3fqquUL62S/RuyFoa2GjBroz+vkDVYWr3odccgU1nTIRdzH/
+         tUfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688624576; x=1691216576;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9HBGNjA/AFaYPQtAfARvvX4VPrQmoZY1RYa/BV2PKyw=;
+        b=jsTsT2cxqZkNGAN7ctOdTtF1daJHsKDdEizPlyCm8SyPEfD1u94oRBHVaRR2PLGXnS
+         YLhBgySO/wdv3JHbOiZYkEeYSUlpttw+LE2EbFXo627DCJ9WE+koJDbG2HrXp2s1ZrS4
+         yLDrAoa9QrRvEYtMjfdoG+PBQB1E9puDwcFhaSwCmY4qqvVpIKtqfkoZDqflOWupOdtW
+         uVSp5WPdWcGwz0iR6NmqqBWuQLjpxJ21NfEq0eGEyzb8AXuIaCQfGXiOUXfzFpi+mcGK
+         wq4wIao4mlVISTrLS9iZZ+ze9Pm4gxrmUbOraBMXyEDRsU5gnSQHZ3qKju066yJlnVSe
+         qzng==
+X-Gm-Message-State: ABy/qLYtWop9A+FnDhSEORtASXv09gpVA8gc5WDJPJsRzKqpq4pT6t61
+        +0l7F1lMotvXCgxOb3V5d3MSMQ==
+X-Google-Smtp-Source: APBJJlECTV1XySP1t2wRIGpWXPZNKDpC1/U0MAaYZTvZDI1ciIxeA5aoBkBeICCqVtb8gSTOtE3wLw==
+X-Received: by 2002:a17:907:8184:b0:992:6656:4043 with SMTP id iy4-20020a170907818400b0099266564043mr540927ejc.53.1688624576526;
+        Wed, 05 Jul 2023 23:22:56 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id c24-20020a170906171800b009933eccf46fsm381745eje.6.2023.07.05.23.22.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 23:22:55 -0700 (PDT)
+Message-ID: <046d4744-9521-7b5d-759c-6dedbafd9205@linaro.org>
+Date:   Thu, 6 Jul 2023 08:22:53 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v5 1/5] dt-bindings: gpio: Add HPE GXP GPIO
+Content-Language: en-US
+To:     nick.hawkins@hpe.com, verdun@hpe.com, linus.walleij@linaro.org,
         brgl@bgdev.pl, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, jdelvare@suse.com,
         linux@roeck-us.net, andy.shevchenko@gmail.com,
         linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: [PATCH v5 0/5] ARM: Add GPIO support
-Date:   Wed,  5 Jul 2023 14:45:39 -0500
-Message-Id: <20230705194544.100370-1-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-X-Proofpoint-ORIG-GUID: 6x1Osdyk7klH7nzwkV0PSvzArQMoD4SW
-X-Proofpoint-GUID: 6x1Osdyk7klH7nzwkV0PSvzArQMoD4SW
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-05_11,2023-07-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- mlxlogscore=999 priorityscore=1501 clxscore=1015 suspectscore=0
- adultscore=0 malwarescore=0 impostorscore=0 lowpriorityscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307050180
+References: <20230705194544.100370-1-nick.hawkins@hpe.com>
+ <20230705194544.100370-2-nick.hawkins@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230705194544.100370-2-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
+On 05/07/2023 21:45, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> Provide access to the register regions and interrupt for GPIO. The
+> driver under the hpe,gxp-gpio-pl will provide GPIO information from the
+> CPLD interface. The CPLD interface represents all physical GPIOs. The
+> GPIO interface with the CPLD allows use of interrupts.
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> ---
+> 
+> v5:
+>  *Removed use of gpio-gxp in favor of just supporting
+>   hpe,gxp-gpio-pl for now as the full gpio-gxp will
+>   require a much larger patchset
 
-The GXP SoC supports GPIO on multiple interfaces. The interfaces are
-CPLD and Host. The GPIOs are a combination of both physical and virtual
-I/O across the interfaces. The gpio-gxp-pl driver covers the CPLD which
-takes physical I/O from the board and shares it with GXP via a proprietary
-interface that maps the I/O onto a specific register area of the GXP.
-The CPLD interface supports interrupts.
+Bindings describe hardware, not drivers, and should be rather complete.
 
-Notes:
 
-Based on previous feedback the gpio-gxp.c driver has been discarded in
-favor of it going into a separate larger patchset. This leaves behind
-only the gpio-gxp-pl.c driver.
+>  *Modified commit description to reflect removal of
+>   hpe,gxp-gpio
+> v4:
+>  *Fix min and max values for regs
+> v3:
+>  *Remove extra example in examples
+>  *Actually fixed indentation on example - Aligned
+>   GPIO line names with " above.
+> v2:
+>  *Put binding patch before the driver in the series
+>  *Improved patch description
+>  *Removed oneOf and items in compatible definition
+>  *Moved additionalProperties definition to correct spot in file
+>  *Fixed indentation on example
+>  *Improved description in .yaml
+> ---
+>  .../bindings/gpio/hpe,gxp-gpio.yaml           | 71 +++++++++++++++++++
+>  1 file changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml b/Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
+> new file mode 100644
+> index 000000000000..799643c1a0c2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
+> @@ -0,0 +1,71 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/hpe,gxp-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: HPE GXP gpio controllers
 
-After exploring the recommendation of using regmap_gpio it does not seem
-like a good fit. Some of the GPIOs are a combination of several bits in
-a byte where others are not contiguous blocks of GPIOs.
+GPIO
+> +
+> +maintainers:
+> +  - Nick Hawkins <nick.hawkins@hpe.com>
+> +
+> +description:
+> +  Interruptable GPIO drivers for the HPE GXP that covers multiple interfaces
 
-The gxp-fan-ctrl driver in HWMON no longer will report fan presence
-or fan failure states as these GPIOs providing this information will be
-consumed by the host. It will be the hosts function to keep track of
-fan presence and status. There was an excellent suggestion to have linux
-handle the entire thermal management of the system however the HPE
-OpenBMC developers prefer to handle this inside OpenBMC stack instead.
+"drivers" as Linux drivers? If so, then drop and rephrase to describe
+hardware.
 
----
+> +  of both physical and virtual GPIO pins.
+> +
+> +properties:
+> +  compatible:
+> +    const: hpe,gxp-gpio-pl> +
+> +  reg:
+> +    items:
+> +      - description: pl base gpio
+> +      - description: pl interrupt gpio
+> +
+> +  reg-names:
+> +    items:
+> +      - const: base
+> +      - const: interrupt
+> +
+> +  gpio-controller: true
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  gpio-line-names:
+> +    maxItems: 80
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - gpio-controller
+> +  - "#gpio-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +        gpio@51000300 {
 
-Changes since v4:
- *Removed gpio-gxp.c patch as it requires a much larger patchset based
-  on feedback.
- *Modified MAINTAINERS Removing gpio-gxp.c and adding missing
-  gpio-gxp-pl.c
- *Modified hpe,gxp-gpio.yaml by removing hpe,gxp-gpio compatible
-  reference for now in favor of adding it later with separate patchset.
- *Modified cover letter to explain that although there is a suggestion
-  to have the kernel handle all thermal matters the HPE OpenBMC developers
-  prefer to handle it there instead.
- *Modified cover letter to explain gpio-gxp.c removal
+Wrong indentation. Use 2 or 4 (preferred) spaces, not 8.
 
-Changes since v3:
- *Added called with debugfs to read server id
- *Added reviewed-by: tags to hwmon fan driver and fan yaml
- *Changed maxItems to be 4 instead of 6 on reg and reg-names in gpio
-  yaml
- *Moved gpio-gxp-pl.c to be in a separate patch/commit.
- *Moved regmap_config out of function in both gpio drivers to turn into
-  static const
- *Removed unnecesary variables and redundant conditionals
- *Modified regmap_read switch statements to calculate offset and mask
-  then read at end
- *Removed use of -EOPNOTSUPP in favor of -ENOTSUPP
- *Removed redundant casting
- *Switched generic_handle_irq for generic_handle_domain_irq
- *Used GENMASK where applicable
- *Used bitmap_xor and for_each_bit_set in PL PSU interrupt
- *Made GPIO chip const and marked as a template (in the name)
- *Made irq_chip const and immutable
- *Corrected check on devm_gpiochip_add_data
- *Removed dev_err_probe on platform_get_irq
- *Changed return 0 to devm_request_irq
+> +          compatible = "hpe,gxp-gpio-pl";
+> +          reg = <0x51000300 0x7f>, <0x51000380 0x20>;
+> +          reg-names = "base", "interrupt";
+> +          gpio-controller;
+> +          #gpio-cells = <2>;
+> +          interrupt-parent = <&vic0>;
+> +          interrupts = <24>;
+> +          gpio-line-names =
+> +          "IOP_LED1", "IOP_LED2", "IOP_LED3", "IOP_LED4", "IOP_LED5", "IOP_LED6", "IOP_LED7", "IOP_LED8",
 
-Changes since v2:
- *Removed shared fan variables between HWMON and GPIO based on feedback
- *Removed reporting fan presence and failure from hwmon gxp-fan-ctrl
-  driver
- *Removed GPIO dependency from gxp-fan-ctrl driver
- *Changed description and title for hpe,gxp-gpio binding
- *Corrected indention on example for hpe,gxp-gpio binding
- *Removed additional example from hpe,gxp-gpio binding
+And this is even worse.
 
-Changes since v1:
- *Removed ARM device tree changes and defconfig changes to reduce
-  patchset size
- *Removed GXP PSU changes to reduce patchset size
- *Corrected hpe,gxp-gpio YAML file based on feedback
- *Created new gpio-gxp-pl file to reduce complexity
- *Separated code into two files to keep size down: gpio-gxp.c and
-  gpio-gxp-pl.c
- *Fixed Kconfig indentation as well as add new entry for gpio-gxp-pl
- *Removed use of linux/of.h and linux/of_device.h
- *Added mod_devicetable.h and property.h
- *Fixed indentation of defines and uses consistent number of digits
- *Corrected defines with improper GPIO_ namespace.
- *For masks now use BIT()
- *Added comment for PLREG offsets
- *Move gpio_chip to be first in structure
- *Calculate offset for high and low byte GPIO reads instead of having
-  H(High) and L(Low) letters added to the variables.
- *Removed repeditive use of "? 1 : 0"
- *Switched to handle_bad_irq()
- *Removed improper bailout on gpiochip_add_data
- *Used GENMASK to arm interrupts
- *Removed use of of_match_device
- *fixed sizeof in devm_kzalloc
- *Added COMPILE_TEST to Kconfig
- *Added dev_err_probe where applicable
- *Removed unecessary parent and compatible checks
+> +          "FAN1_INST", "FAN2_INST", "FAN3_INST", "FAN4_INST", "FAN5_INST", "FAN6_INST", "FAN7_INST",
+> +          "FAN8_INST", "FAN1_FAIL", "FAN2_FAIL", "FAN3_FAIL", "FAN4_FAIL", "FAN5_FAIL", "FAN6_FAIL",
+> +          "FAN7_FAIL", "FAN8_FAIL", "FAN1_ID", "FAN2_ID", "FAN3_ID", "FAN4_ID", "FAN5_ID", "FAN6_ID",
+> +          "FAN7_ID", "FAN8_ID", "IDENTIFY", "HEALTH_RED", "HEALTH_AMBER", "POWER_BUTTON", "UID_PRESS",
+> +          "SLP", "NMI_BUTTON", "RESET_BUTTON", "SIO_S5", "SO_ON_CONTROL", "PSU1_INST", "PSU2_INST",
+> +          "PSU3_INST", "PSU4_INST", "PSU5_INST", "PSU6_INST", "PSU7_INST", "PSU8_INST", "PSU1_AC",
+> +          "PSU2_AC", "PSU3_AC", "PSU4_AC", "PSU5_AC", "PSU6_AC", "PSU7_AC", "PSU8_AC", "PSU1_DC",
+> +          "PSU2_DC", "PSU3_DC", "PSU4_DC", "PSU5_DC", "PSU6_DC", "PSU7_DC", "PSU8_DC", "", "", "", "",
+> +          "", "", "", "", "", "", "", "", "", "";
+> +        };
 
-Nick Hawkins (5):
-  dt-bindings: gpio: Add HPE GXP GPIO
-  gpio: gxp: Add HPE GXP GPIO PL
-  dt-bindings: hwmon: hpe,gxp-fan-ctrl: remove fn2 and pl registers
-  hwmon: (gxp_fan_ctrl) Provide fan info via gpio
-  MAINTAINERS: hpe: Add GPIO
-
- .../bindings/gpio/hpe,gxp-gpio.yaml           |  71 +++
- .../bindings/hwmon/hpe,gxp-fan-ctrl.yaml      |  16 +-
- MAINTAINERS                                   |   2 +
- drivers/gpio/Kconfig                          |   9 +
- drivers/gpio/Makefile                         |   1 +
- drivers/gpio/gpio-gxp-pl.c                    | 582 ++++++++++++++++++
- drivers/hwmon/Kconfig                         |   2 +-
- drivers/hwmon/gxp-fan-ctrl.c                  | 106 +---
- 8 files changed, 671 insertions(+), 118 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
- create mode 100644 drivers/gpio/gpio-gxp-pl.c
-
--- 
-2.17.1
+Best regards,
+Krzysztof
 
