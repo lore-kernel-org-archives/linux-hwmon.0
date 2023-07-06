@@ -2,124 +2,94 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E999CEB64D9
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jul 2023 17:31:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99653EB64DC
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jul 2023 19:05:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjGFRbS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 Jul 2023 13:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36408 "EHLO
+        id S231953AbjGFTF2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Jul 2023 15:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjGFRbR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Jul 2023 13:31:17 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697C01BE9;
-        Thu,  6 Jul 2023 10:31:16 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-579ef51428eso13506587b3.2;
-        Thu, 06 Jul 2023 10:31:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688664675; x=1691256675;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=EeHnP6FEAY8beKK8Mr7sdNGsHC/F9D6slb2TyVEj6KU=;
-        b=UATOUeGmcDIJ+udtUwBgvpCk84qoI4x/no+wV28rIdROiBMdWeQEEP5eB2Mfs/GYlq
-         82ihjmssfYifaUVs0YkTkR4jx68kfnbpYI6WL1eQ9wNmpfKW+ZcxWCO71E94eMIhhxwc
-         CvgnLcm9exlnNLR/TK429jdoW9YJ5nW1yc/L3tUL5spZ5QwaRzBfouOUCIbzO25UU0IQ
-         sUj38NRjxnfKu/i5COHVqaBGKl+cSx3PnE8cheGRU4Vlvb35hW+ajUQGX5rVG6hpOedF
-         qTgGg/sifkjrSApnlFnci81qmp3tGuCUzUu3PrT5Yl4DHs1IuLEto7rAxUaWFA2chkwC
-         GIhw==
+        with ESMTP id S231213AbjGFTF1 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Jul 2023 15:05:27 -0400
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAE61BE9;
+        Thu,  6 Jul 2023 12:05:26 -0700 (PDT)
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3461053677eso2487005ab.0;
+        Thu, 06 Jul 2023 12:05:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688664675; x=1691256675;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EeHnP6FEAY8beKK8Mr7sdNGsHC/F9D6slb2TyVEj6KU=;
-        b=L5EMd0JCZy+tfA8hQLXxLkRDRtkWQIGvL5uA/jxRvfwb2tCyNyvKERzozvpQ6MWceZ
-         rZe1RpvP6gs2Av/YWLTiF+X9gzN4cPSvmx7spXz2uHzMGuPZYBufJ+rn32rm9iTYcndx
-         GEBSKazoAreaS5k/eW1uE7+yKhciPdVishDha2eYjUNX3KIXE0kobuzJ+NVxzyOAykVO
-         ZwAPhhiJ7HBInll6OCOPx27cPgW1MSUC+aBEAvWZD0RYwvvRiIGovK/HBt55scL6Av2x
-         1pXUn4krs5S/0LuCFRyKbapPrMRXXYRZGcVv61nllBfsn4yHIiQIUeyqkKI+NpluNnSi
-         NSLQ==
-X-Gm-Message-State: ABy/qLZ3vkID/d0VjzwB64DyaVaLh3wTNMMKN88fLeG8m2EKwj31kXUJ
-        RzxddKqplLWvyjToN7JB9Go=
-X-Google-Smtp-Source: APBJJlHwifPgA07q0UBg/oW6/o71vD9UhyXXj/PQpvvW2wwyWd/wGIFZmKnON5LVyBEG8hC0l7BsoA==
-X-Received: by 2002:a0d:ef07:0:b0:577:616e:2d72 with SMTP id y7-20020a0def07000000b00577616e2d72mr4508493ywe.5.1688664675515;
-        Thu, 06 Jul 2023 10:31:15 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o207-20020a0dccd8000000b00568c1c919d2sm481870ywd.29.2023.07.06.10.31.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 10:31:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <364e0970-e047-59e6-7b75-c5b43b32270a@roeck-us.net>
-Date:   Thu, 6 Jul 2023 10:31:13 -0700
+        d=1e100.net; s=20221208; t=1688670326; x=1691262326;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=INiY27iokPzj3Y1hOMTtz8s7AtrmF9FaFbozx7zoZLU=;
+        b=W1c723sDPJ2oAiZR+yMJ9083t92gMcyW7hoKzk4V1xIogizAq3Ilr1I6X8kOI//oYP
+         zC3ICMq3N/qrqiMHQ7lhfUni4rEYNnK9DobgCq9ATSFT4Pk0FXTP4FSbGNA7ZLX9pneS
+         W+YqN5/OCkiHIDQjQsc8K+oJf0yl42pIzcN8/qfP+fdGnWsSBUIsaxNlC/KsyaGrO4Du
+         CoUOBtnTFdqG8mtZfBAW8xrCRB6qQ/XbpoEBibE59BygvFisElaJcehWVHRCduAc3yKM
+         ZGdGDq7wnF+qeccOnWyPPaxQetfwy8/X0YMPSFkLP150eSejyB5S1imec49yroFWOBWS
+         XdOQ==
+X-Gm-Message-State: ABy/qLZGrRXYYDwJuhMYnbRqZ+Gk19NPnfHBiYYOIZsM4M1fy9/StGaC
+        pw4OehahkwqtxEEcvHBYM8zBcb/MbA==
+X-Google-Smtp-Source: APBJJlGq+znRNSnBSPJIa8qV/04lud2M3uRgd+NToHUyy9pq7rIwA8yfqAo9o7Op8Ys7KfdCPel/7Q==
+X-Received: by 2002:a92:bd0c:0:b0:343:ef5e:8286 with SMTP id c12-20020a92bd0c000000b00343ef5e8286mr3482247ile.7.1688670325885;
+        Thu, 06 Jul 2023 12:05:25 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id a5-20020a92d345000000b0034248a56432sm698327ilh.32.2023.07.06.12.05.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 12:05:24 -0700 (PDT)
+Received: (nullmailer pid 159125 invoked by uid 1000);
+        Thu, 06 Jul 2023 19:05:23 -0000
+Date:   Thu, 6 Jul 2023 13:05:23 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v5 1/5] dt-bindings: gpio: Add HPE GXP GPIO
+Message-ID: <20230706190523.GA155073-robh@kernel.org>
+References: <20230705194544.100370-1-nick.hawkins@hpe.com>
+ <20230705194544.100370-2-nick.hawkins@hpe.com>
+ <046d4744-9521-7b5d-759c-6dedbafd9205@linaro.org>
+ <31F41D4F-D386-48B5-B941-D5B7C691280A@hpe.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1 2/3] hwmon: (k10temp) Add thermal support for AMD
- Family 1Ah-based models
-Content-Language: en-US
-To:     Avadhut Naik <avadhut.naik@amd.com>, bp@alien8.de, x86@kernel.org,
-        linux-hwmon@vger.kernel.org, linux-edac@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, mario.limonciello@amd.com,
-        yazen.ghannam@amd.com, avadnaik@amd.com
-References: <20230706171323.3722900-1-avadhut.naik@amd.com>
- <20230706171323.3722900-3-avadhut.naik@amd.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230706171323.3722900-3-avadhut.naik@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <31F41D4F-D386-48B5-B941-D5B7C691280A@hpe.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/6/23 10:13, Avadhut Naik wrote:
-> From: Avadhut Naik <Avadhut.Naik@amd.com>
+On Thu, Jul 06, 2023 at 02:12:12PM +0000, Hawkins, Nick wrote:
+> Greetings Krzysztof,
 > 
-> Add thermal info support for AMD Family 1Ah-based models. Support is
-> provided on a per-socket granularity.
+> Thank you for the feedback. I see that due to a patch conflict I
+> reintroduced some of the alignment issues you had me fix in
+> a previous version. This was a mistake and I will correct this.
 > 
-> Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> Signed-off-by: Avadhut Naik <Avadhut.Naik@amd.com>
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->   drivers/hwmon/k10temp.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
+> > > v5:
+> > > *Removed use of gpio-gxp in favor of just supporting
+> > > hpe,gxp-gpio-pl for now as the full gpio-gxp will
+> > > require a much larger patchset
 > 
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index 7b177b9fbb09..c61837fbc315 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -65,7 +65,7 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
->   #define F15H_M60H_HARDWARE_TEMP_CTRL_OFFSET	0xd8200c64
->   #define F15H_M60H_REPORTED_TEMP_CTRL_OFFSET	0xd8200ca4
->   
-> -/* Common for Zen CPU families (Family 17h and 18h and 19h) */
-> +/* Common for Zen CPU families (Family 17h and 18h and 19h and 1Ah) */
->   #define ZEN_REPORTED_TEMP_CTRL_BASE		0x00059800
->   
->   #define ZEN_CCD_TEMP(offset, x)			(ZEN_REPORTED_TEMP_CTRL_BASE + \
-> @@ -462,6 +462,10 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   			k10temp_get_ccd_support(pdev, data, 12);
->   			break;
->   		}
-> +	} else if (boot_cpu_data.x86 == 0x1a) {
-> +		data->temp_adjust_mask = ZEN_CUR_TEMP_RANGE_SEL_MASK;
-> +		data->read_tempreg = read_tempreg_nb_zen;
-> +		data->is_zen = true;
->   	} else {
->   		data->read_htcreg = read_htcreg_pci;
->   		data->read_tempreg = read_tempreg_pci;
-> @@ -508,6 +512,8 @@ static const struct pci_device_id k10temp_id_table[] = {
->   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M60H_DF_F3) },
->   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M70H_DF_F3) },
->   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M78H_DF_F3) },
-> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M00H_DF_F3) },
-> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M20H_DF_F3) },
->   	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
->   	{}
->   };
+> > Bindings describe hardware, not drivers, and should be rather complete.
+> 
+> This patch is intended to still cover the hardware interface between our
+> BMC and our CPLD which gathers GPIO for us. The part of the binding I
+> removed was a completely separate interface with different mechanisms
+> for reading GPIOs. With that said I could keep these two interfaces
+> separate in yaml files: Having a yaml for hpe,gxp-gpio and another for
+> hpe,gxp-gpio-pl. Would this be a better approach?
 
+If they are independent (and it sounds like they are), then yes.
+
+Rob
