@@ -2,94 +2,90 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99653EB64DC
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jul 2023 19:05:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E22CFEB64DD
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jul 2023 19:23:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbjGFTF2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 Jul 2023 15:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
+        id S229872AbjGFTX6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Jul 2023 15:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjGFTF1 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Jul 2023 15:05:27 -0400
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAE61BE9;
-        Thu,  6 Jul 2023 12:05:26 -0700 (PDT)
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3461053677eso2487005ab.0;
-        Thu, 06 Jul 2023 12:05:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688670326; x=1691262326;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=INiY27iokPzj3Y1hOMTtz8s7AtrmF9FaFbozx7zoZLU=;
-        b=W1c723sDPJ2oAiZR+yMJ9083t92gMcyW7hoKzk4V1xIogizAq3Ilr1I6X8kOI//oYP
-         zC3ICMq3N/qrqiMHQ7lhfUni4rEYNnK9DobgCq9ATSFT4Pk0FXTP4FSbGNA7ZLX9pneS
-         W+YqN5/OCkiHIDQjQsc8K+oJf0yl42pIzcN8/qfP+fdGnWsSBUIsaxNlC/KsyaGrO4Du
-         CoUOBtnTFdqG8mtZfBAW8xrCRB6qQ/XbpoEBibE59BygvFisElaJcehWVHRCduAc3yKM
-         ZGdGDq7wnF+qeccOnWyPPaxQetfwy8/X0YMPSFkLP150eSejyB5S1imec49yroFWOBWS
-         XdOQ==
-X-Gm-Message-State: ABy/qLZGrRXYYDwJuhMYnbRqZ+Gk19NPnfHBiYYOIZsM4M1fy9/StGaC
-        pw4OehahkwqtxEEcvHBYM8zBcb/MbA==
-X-Google-Smtp-Source: APBJJlGq+znRNSnBSPJIa8qV/04lud2M3uRgd+NToHUyy9pq7rIwA8yfqAo9o7Op8Ys7KfdCPel/7Q==
-X-Received: by 2002:a92:bd0c:0:b0:343:ef5e:8286 with SMTP id c12-20020a92bd0c000000b00343ef5e8286mr3482247ile.7.1688670325885;
-        Thu, 06 Jul 2023 12:05:25 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id a5-20020a92d345000000b0034248a56432sm698327ilh.32.2023.07.06.12.05.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 12:05:24 -0700 (PDT)
-Received: (nullmailer pid 159125 invoked by uid 1000);
-        Thu, 06 Jul 2023 19:05:23 -0000
-Date:   Thu, 6 Jul 2023 13:05:23 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v5 1/5] dt-bindings: gpio: Add HPE GXP GPIO
-Message-ID: <20230706190523.GA155073-robh@kernel.org>
-References: <20230705194544.100370-1-nick.hawkins@hpe.com>
- <20230705194544.100370-2-nick.hawkins@hpe.com>
- <046d4744-9521-7b5d-759c-6dedbafd9205@linaro.org>
- <31F41D4F-D386-48B5-B941-D5B7C691280A@hpe.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <31F41D4F-D386-48B5-B941-D5B7C691280A@hpe.com>
+        with ESMTP id S229527AbjGFTX4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Jul 2023 15:23:56 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9501BD3
+        for <linux-hwmon@vger.kernel.org>; Thu,  6 Jul 2023 12:23:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688671435; x=1720207435;
+  h=date:message-id:from:to:cc:subject:in-reply-to:
+   references:mime-version;
+  bh=Nhw6s4SOMPrSSWK+Re2Vk8OOih8KG7zMgjKc6bdoKLg=;
+  b=GCfwlBHeoWCrPN2Mjf/MXQREEQjlo44GafjhV8tr/faO9/vXJdqM81un
+   SbqYTrf22gXw369feiv9FTMf8+gILDkDbrR1J85OZ6+3JiMNTzPmeAvox
+   wVk3EvxlkadGf4eeKdHzRBzBLrcnLUI8tNm/3/EI4vCdWH3noAMgPX7Ez
+   B0/ZUmIOuDtwV4Bh43WBkdWTpYLk/MrNJL+bnZB7pAZEhE1e10T3Nh4ye
+   YyvaK6mh0rCVT1dOd1BtqNpBQz761tFYQs9HBtMbKJi2wfnI25BRgEJUS
+   KRR1+GHhjPB75ZRsOR3uqRU+bxPSKv9uci9dZ1IXvbVtc9q//hoiHLfvs
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="450060260"
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="scan'208";a="450060260"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 12:23:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="1050211702"
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="scan'208";a="1050211702"
+Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.212.197.88])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 12:23:54 -0700
+Date:   Thu, 06 Jul 2023 12:05:26 -0700
+Message-ID: <87ilawdfnt.wl-ashutosh.dixit@intel.com>
+From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
+To:     Andi Shyti <andi.shyti@linux.intel.com>
+Cc:     Badal Nilawar <badal.nilawar@intel.com>,
+        <intel-xe@lists.freedesktop.org>, <linux-hwmon@vger.kernel.org>,
+        <anshuman.gupta@intel.com>, <linux@roeck-us.net>,
+        <riana.tauro@intel.com>, <matthew.brost@intel.com>
+Subject: Re: [PATCH v2 3/6] drm/xe/hwmon: Expose card reactive critical power
+In-Reply-To: <ZJ2XwFlgq4DUTrZr@ashyti-mobl2.lan>
+References: <20230627183043.2024530-1-badal.nilawar@intel.com>
+        <20230627183043.2024530-4-badal.nilawar@intel.com>
+        <ZJ2XwFlgq4DUTrZr@ashyti-mobl2.lan>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 02:12:12PM +0000, Hawkins, Nick wrote:
-> Greetings Krzysztof,
-> 
-> Thank you for the feedback. I see that due to a patch conflict I
-> reintroduced some of the alignment issues you had me fix in
-> a previous version. This was a mistake and I will correct this.
-> 
-> > > v5:
-> > > *Removed use of gpio-gxp in favor of just supporting
-> > > hpe,gxp-gpio-pl for now as the full gpio-gxp will
-> > > require a much larger patchset
-> 
-> > Bindings describe hardware, not drivers, and should be rather complete.
-> 
-> This patch is intended to still cover the hardware interface between our
-> BMC and our CPLD which gathers GPIO for us. The part of the binding I
-> removed was a completely separate interface with different mechanisms
-> for reading GPIOs. With that said I could keep these two interfaces
-> separate in yaml files: Having a yaml for hpe,gxp-gpio and another for
-> hpe,gxp-gpio-pl. Would this be a better approach?
+On Thu, 29 Jun 2023 07:40:00 -0700, Andi Shyti wrote:
+>
 
-If they are independent (and it sounds like they are), then yes.
+Hi Andi,
 
-Rob
+> > Expose the card reactive critical (I1) power. I1 is exposed as
+> > power1_crit in microwatts (typically for client products) or as
+> > curr1_crit in milliamperes (typically for server).
+> > This is port from i915 hwmon.
+>
+> Should this, then be a more generic framework for more gpu
+> drivers? Now we are having some code duplication.
+
+There are several subsystems where we will see such duplication. These
+include things like PMU, OA which are either on the mailing list of in
+preparation.
+
+You can argue there is already code duplication between XE and i915, it's
+just hidden in xe way of doing things.
+
+The only way to avoid code duplication would be to invent sharing code
+between i915 and xe as display has done. It may be possible in some cases
+but in others sharing code will make matters worse for both xe and i915.
+
+So in general I am not seeing a way around "code duplication".
+
+Thanks.
+--
+Ashutosh
