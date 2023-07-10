@@ -2,137 +2,149 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16651EB64DA
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Jul 2023 13:45:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80C09EB64D9
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Jul 2023 16:27:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbjGJNpW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 10 Jul 2023 09:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
+        id S229804AbjGJQ1g (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 10 Jul 2023 12:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjGJNpV (ORCPT
+        with ESMTP id S229583AbjGJQ1g (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:45:21 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE37D2;
-        Mon, 10 Jul 2023 06:45:17 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-c6cad6a3998so4257074276.3;
-        Mon, 10 Jul 2023 06:45:17 -0700 (PDT)
+        Mon, 10 Jul 2023 12:27:36 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D663511F
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 Jul 2023 09:27:34 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-31297125334so3478475f8f.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 Jul 2023 09:27:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688996716; x=1691588716;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BgDibfR0vAy+tLjLyuDFWsMqKLHBAQDTBnmpMQZgZHM=;
-        b=NEh20sQA0/Nk1JUkAoZXMpAvCOBQ3PofbPqSWNWdTAiY0a08l5a6wDUeHSzoXxGpp1
-         7osD9g+aPAJWMGG4R4q1LuqrdfjORuD4rrpniZGYfbCePnIJ9AgUul7UiOmxP8bL1/cX
-         QfqTzWeHyTtaFOsP2u1JfcRNSnNJvxFnW6OY7x5Izxamti7wTCQ9Cj6eIROe1Rb1OI+T
-         8ARbMUqLucJxl7miJt+iTVPM8Zg1XqRf2eswqsIKMyhmCUvp+sTAsc9Xgb0CY2P0bjvR
-         2pHmLYUIpcLvxZ1bQ+p0JENGcsWeRrYAu25k36PieRIb9ME+FjB0nWmmHSd0e4i6NaCH
-         82Bg==
+        d=9elements.com; s=google; t=1689006453; x=1691598453;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WVlZJd24DRUTRrQURnZ7yN63fxP+eJTyjrLPGCN3yY4=;
+        b=Bnwq/Qi/JmJjvgrXJcJ4mxBmPQeRQvv390HGFGyUuTvK+3qjIUcYFRnHUurd+gHv3i
+         USKmOQi84077zEMtO7p2FhECnBcE9G7vjQgZ19Kds60m7VHN0MpNvyJc4V5XavGlJpQm
+         tjZrqL2UC/kdcEONl+g1Uc+2eRQ7ftePacgIlBr5xUWoDde/to5RoEqMdvh8dD0JioYY
+         Z79ws2GNv5acVnlc8DqjGQE8i58IFkKYB/YyLALneu1RcQGXdztWFuVVlVueOY/+fE7A
+         6tajkBjIlsf57ytcpElDPl7q4gUgmS5UOyD7x10Y4Kew82jwdMv5HIQAswHYrbSUZ1md
+         X7Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688996716; x=1691588716;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BgDibfR0vAy+tLjLyuDFWsMqKLHBAQDTBnmpMQZgZHM=;
-        b=W5hK4moHT2ZhnQN5ZmocrYy5PhlB3vtSpT9lK9HeldHO3ic6K/95w8Jgpt2Ob8ZLZz
-         GxIsTqGQUZoaL6B/+tlPw5T0vtdQaniDmvDvELhiG3HOZnMdoMq/tX6VZH7/AaxMBmg3
-         QIFUfmmwRLzagpQ1c2aKeM8fVNmUrapQDkU0kGohn1yfBaJ7ydDIjsf2aget/a+q1CNC
-         wtTJaYBBecXLpNvPwALCjPYDAZGqLA3nI7zNm5eI7KBh7AUmPwHrSnj7cjEbFVocGZVm
-         6ytttM0cuumPWHtFffWu/r1JDBXbqKL3cffeC/x+QIiKwmxlfxaPxo+Zq2f0V9Yyx+Tq
-         lVjg==
-X-Gm-Message-State: ABy/qLad35qxN/XpiinO/c0pNptwaDM2O9ax52W1XH4HK6kkol+FYCte
-        IID8e9cbhb5/jWxWLIoOrXV/Lg8u+zM=
-X-Google-Smtp-Source: APBJJlEY+dyUdKH6Z2Inbsz5UG/wmI+GW2BQqQIJgC6nYrh9+GwOQruu8eXHiIFkeCcRkH7uVV83SQ==
-X-Received: by 2002:a5b:345:0:b0:c83:add0:889f with SMTP id q5-20020a5b0345000000b00c83add0889fmr2344630ybp.51.1688996716257;
-        Mon, 10 Jul 2023 06:45:16 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c12-20020a5b014c000000b00c624de0d9absm2544316ybp.5.2023.07.10.06.45.15
+        d=1e100.net; s=20221208; t=1689006453; x=1691598453;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WVlZJd24DRUTRrQURnZ7yN63fxP+eJTyjrLPGCN3yY4=;
+        b=OFwVBBOdDwuZ8oF+Jzy8yQWLGqQsCxjClkkMvr8Qyx19BhHuexuDK5CpHKEVsFrSSf
+         tqjAH2KDhkdRTqYVLW2hLdJt04lneINZiMf8V/+FiluWgnM5jzwh1/lTnni4UnBs3Ilg
+         RP+xxuvYKIt/V2Ok9o2yXE1tdroSo8y08VeAdu9OMVNCEAoh+mrqXZwzdHRXE0SryyRN
+         vw6qm6OnvFk2T6hE+q1MUupjpNUWCKAvaytghp9sffEaXOMySQmgitd1Nqfx2k0pYeIf
+         GihwRAZ20zAfwj8etcgJva9YM2MsO7iE/T+aiFOVdAOIzSyNLzSZ0wXMfBkgHCijlMhx
+         nKPA==
+X-Gm-Message-State: ABy/qLaVMun+uih0V7lSnU8eh9uDMomlCbpyN2ZL2+B6Sgy0giSN/nm6
+        m3ItniV7XenRMpip+MHmeM9Upw==
+X-Google-Smtp-Source: APBJJlFhwyy6ydGp2WjaMZUpUK1JbYJNqOtWi+1SPoy1P4WD5lmV5bX0C2TlnZFlc4ZK4sKA1DrIFQ==
+X-Received: by 2002:a5d:65ce:0:b0:315:7f1d:7790 with SMTP id e14-20020a5d65ce000000b003157f1d7790mr6145269wrw.6.1689006453352;
+        Mon, 10 Jul 2023 09:27:33 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id h16-20020adff190000000b003144b95e1ecsm12029064wro.93.2023.07.10.09.27.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 06:45:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 10 Jul 2023 06:45:14 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Henning Schild <henning.schild@siemens.com>,
-        Mark Gross <markgross@kernel.org>,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mon, 10 Jul 2023 09:27:33 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Tobias Schaffner <tobias.schaffner@siemens.com>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-Subject: Re: [PATCH 1/2] watchdog: simatic-ipc-wdt: make IO region access of
- one model muxed
-Message-ID: <087368d7-15d6-45e2-bd1e-5955bf81d206@roeck-us.net>
-References: <20230706154831.19100-1-henning.schild@siemens.com>
- <20230706154831.19100-2-henning.schild@siemens.com>
- <876f6a08-1850-21cd-83d1-b309e7e1e912@roeck-us.net>
- <4a11393d-69bb-8e9d-3bfe-21aa7a7fb1e3@redhat.com>
+        Iwona Winiarska <iwona.winiarska@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        openbmc@lists.ozlabs.org
+Subject: [PATCH] hwmon: (peci/cputemp) Add Intel Sapphire Rapids support
+Date:   Mon, 10 Jul 2023 18:27:23 +0200
+Message-ID: <20230710162724.827833-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <4a11393d-69bb-8e9d-3bfe-21aa7a7fb1e3@redhat.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 03:33:45PM +0200, Hans de Goede wrote:
-> Hi Guenter,
-> 
-> On 7/6/23 18:03, Guenter Roeck wrote:
-> > On 7/6/23 08:48, Henning Schild wrote:
-> >> The IO region used for the watchdog also hold CMOS battery monitoring
-> >> information. Make the access muxed so that a hwmon driver can use the
-> >> region as well.
-> >>
-> >> Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> > 
-> > Acked-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> Thank you. Is it ok if I pick up his patch and merge it together with 2/2
-> through the pdx86 tree ?
-> 
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Yes. That was my assumption.
+Add support to read DTS for reading Intel Sapphire Rapids platform.
 
-Guenter
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+---
+ drivers/hwmon/peci/cputemp.c | 18 ++++++++++++++++++
+ drivers/peci/cpu.c           |  5 +++++
+ 2 files changed, 23 insertions(+)
 
-> Regards,
-> 
-> Hans
-> 
-> 
-> > 
-> >> ---
-> >>   drivers/watchdog/simatic-ipc-wdt.c | 9 ++++++---
-> >>   1 file changed, 6 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/drivers/watchdog/simatic-ipc-wdt.c b/drivers/watchdog/simatic-ipc-wdt.c
-> >> index 6599695dc672..cdc1a2e15180 100644
-> >> --- a/drivers/watchdog/simatic-ipc-wdt.c
-> >> +++ b/drivers/watchdog/simatic-ipc-wdt.c
-> >> @@ -155,9 +155,8 @@ static int simatic_ipc_wdt_probe(struct platform_device *pdev)
-> >>         switch (plat->devmode) {
-> >>       case SIMATIC_IPC_DEVICE_227E:
-> >> -        if (!devm_request_region(dev, gp_status_reg_227e_res.start,
-> >> -                     resource_size(&gp_status_reg_227e_res),
-> >> -                     KBUILD_MODNAME)) {
-> >> +        res = &gp_status_reg_227e_res;
-> >> +        if (!request_muxed_region(res->start, resource_size(res), res->name)) {
-> >>               dev_err(dev,
-> >>                   "Unable to register IO resource at %pR\n",
-> >>                   &gp_status_reg_227e_res);
-> >> @@ -210,6 +209,10 @@ static int simatic_ipc_wdt_probe(struct platform_device *pdev)
-> >>       if (wdd_data.bootstatus)
-> >>           dev_warn(dev, "last reboot caused by watchdog reset\n");
-> >>   +    if (plat->devmode == SIMATIC_IPC_DEVICE_227E)
-> >> +        release_region(gp_status_reg_227e_res.start,
-> >> +                   resource_size(&gp_status_reg_227e_res));
-> >> +
-> >>       watchdog_set_nowayout(&wdd_data, nowayout);
-> >>       watchdog_stop_on_reboot(&wdd_data);
-> >>       return devm_watchdog_register_device(dev, &wdd_data);
-> > 
-> 
+diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
+index e5b65a382772..a812c15948d9 100644
+--- a/drivers/hwmon/peci/cputemp.c
++++ b/drivers/hwmon/peci/cputemp.c
+@@ -363,6 +363,7 @@ static int init_core_mask(struct peci_cputemp *priv)
+ 	switch (peci_dev->info.model) {
+ 	case INTEL_FAM6_ICELAKE_X:
+ 	case INTEL_FAM6_ICELAKE_D:
++	case INTEL_FAM6_SAPPHIRERAPIDS_X:
+ 		ret = peci_ep_pci_local_read(peci_dev, 0, reg->bus, reg->dev,
+ 					     reg->func, reg->offset + 4, &data);
+ 		if (ret)
+@@ -531,6 +532,13 @@ static struct resolved_cores_reg resolved_cores_reg_icx = {
+ 	.offset = 0xd0,
+ };
+ 
++static struct resolved_cores_reg resolved_cores_reg_spr = {
++	.bus = 31,
++	.dev = 30,
++	.func = 6,
++	.offset = 0x80,
++};
++
+ static const struct cpu_info cpu_hsx = {
+ 	.reg		= &resolved_cores_reg_hsx,
+ 	.min_peci_revision = 0x33,
+@@ -549,6 +557,12 @@ static const struct cpu_info cpu_icx = {
+ 	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
+ };
+ 
++static const struct cpu_info cpu_spr = {
++	.reg		= &resolved_cores_reg_spr,
++	.min_peci_revision = 0x40,
++	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
++};
++
+ static const struct auxiliary_device_id peci_cputemp_ids[] = {
+ 	{
+ 		.name = "peci_cpu.cputemp.hsx",
+@@ -574,6 +588,10 @@ static const struct auxiliary_device_id peci_cputemp_ids[] = {
+ 		.name = "peci_cpu.cputemp.icxd",
+ 		.driver_data = (kernel_ulong_t)&cpu_icx,
+ 	},
++	{
++		.name = "peci_cpu.cputemp.spr",
++		.driver_data = (kernel_ulong_t)&cpu_spr,
++	},
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(auxiliary, peci_cputemp_ids);
+diff --git a/drivers/peci/cpu.c b/drivers/peci/cpu.c
+index de4a7b3e5966..3668a908d259 100644
+--- a/drivers/peci/cpu.c
++++ b/drivers/peci/cpu.c
+@@ -318,6 +318,11 @@ static const struct peci_device_id peci_cpu_device_ids[] = {
+ 		.model	= INTEL_FAM6_ICELAKE_X,
+ 		.data	= "icx",
+ 	},
++	{ /* Sapphire Rapids Xeon */
++		.family	= 6,
++		.model	= INTEL_FAM6_SAPPHIRERAPIDS_X,
++		.data	= "spr",
++	},
+ 	{ /* Icelake Xeon D */
+ 		.family	= 6,
+ 		.model	= INTEL_FAM6_ICELAKE_D,
+
+base-commit: 4dbbaf8fbdbd13adc80731b2452257857e4c2d8b
+-- 
+2.41.0
+
