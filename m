@@ -2,64 +2,63 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80C09EB64D9
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Jul 2023 16:27:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 290D1EB64DC
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Jul 2023 16:47:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjGJQ1g (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 10 Jul 2023 12:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
+        id S230245AbjGJQrP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 10 Jul 2023 12:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjGJQ1g (ORCPT
+        with ESMTP id S230227AbjGJQrO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 Jul 2023 12:27:36 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D663511F
-        for <linux-hwmon@vger.kernel.org>; Mon, 10 Jul 2023 09:27:34 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-31297125334so3478475f8f.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 10 Jul 2023 09:27:34 -0700 (PDT)
+        Mon, 10 Jul 2023 12:47:14 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DBAF4
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 Jul 2023 09:47:13 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fbc656873eso60614635e9.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 Jul 2023 09:47:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1689006453; x=1691598453;
+        d=9elements.com; s=google; t=1689007632; x=1691599632;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WVlZJd24DRUTRrQURnZ7yN63fxP+eJTyjrLPGCN3yY4=;
-        b=Bnwq/Qi/JmJjvgrXJcJ4mxBmPQeRQvv390HGFGyUuTvK+3qjIUcYFRnHUurd+gHv3i
-         USKmOQi84077zEMtO7p2FhECnBcE9G7vjQgZ19Kds60m7VHN0MpNvyJc4V5XavGlJpQm
-         tjZrqL2UC/kdcEONl+g1Uc+2eRQ7ftePacgIlBr5xUWoDde/to5RoEqMdvh8dD0JioYY
-         Z79ws2GNv5acVnlc8DqjGQE8i58IFkKYB/YyLALneu1RcQGXdztWFuVVlVueOY/+fE7A
-         6tajkBjIlsf57ytcpElDPl7q4gUgmS5UOyD7x10Y4Kew82jwdMv5HIQAswHYrbSUZ1md
-         X7Uw==
+        bh=v/t6qi+ZyC/g4PTUhHmZaN3Bd0vINMuJ9GK/6w6tG3Y=;
+        b=V1OY1iakMDqwmTsPidEnik2bW4XQPEfQTlKGXnR6DntnWGM9nQ6OTH48seUGb92Z+U
+         ijjbTIy/sx9vD90XypKgtbEF6jZaw+kcCltr/KrQzGnNrY5mf11v+YaLXgYJW21crfh5
+         LYRraPw94Ds60uV2jNH49ETwBrWE/f7bMy/ce326mc4LWHBQY3Jp0MXJyWVZSVk0wdyL
+         noxFjfWKjKC1Mm4AMB2+g8cfadTsT09TgcBWslOQFz1Hv0oFF0k1oTaILGyWnN/YJRdI
+         LkKF8/bZlQwa96jxM2Z5GbEohPyqpEMd2rptUrvgzrO73X4WR7pJCTjFnZZXANlDU6yT
+         LFyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689006453; x=1691598453;
+        d=1e100.net; s=20221208; t=1689007632; x=1691599632;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WVlZJd24DRUTRrQURnZ7yN63fxP+eJTyjrLPGCN3yY4=;
-        b=OFwVBBOdDwuZ8oF+Jzy8yQWLGqQsCxjClkkMvr8Qyx19BhHuexuDK5CpHKEVsFrSSf
-         tqjAH2KDhkdRTqYVLW2hLdJt04lneINZiMf8V/+FiluWgnM5jzwh1/lTnni4UnBs3Ilg
-         RP+xxuvYKIt/V2Ok9o2yXE1tdroSo8y08VeAdu9OMVNCEAoh+mrqXZwzdHRXE0SryyRN
-         vw6qm6OnvFk2T6hE+q1MUupjpNUWCKAvaytghp9sffEaXOMySQmgitd1Nqfx2k0pYeIf
-         GihwRAZ20zAfwj8etcgJva9YM2MsO7iE/T+aiFOVdAOIzSyNLzSZ0wXMfBkgHCijlMhx
-         nKPA==
-X-Gm-Message-State: ABy/qLaVMun+uih0V7lSnU8eh9uDMomlCbpyN2ZL2+B6Sgy0giSN/nm6
-        m3ItniV7XenRMpip+MHmeM9Upw==
-X-Google-Smtp-Source: APBJJlFhwyy6ydGp2WjaMZUpUK1JbYJNqOtWi+1SPoy1P4WD5lmV5bX0C2TlnZFlc4ZK4sKA1DrIFQ==
-X-Received: by 2002:a5d:65ce:0:b0:315:7f1d:7790 with SMTP id e14-20020a5d65ce000000b003157f1d7790mr6145269wrw.6.1689006453352;
-        Mon, 10 Jul 2023 09:27:33 -0700 (PDT)
+        bh=v/t6qi+ZyC/g4PTUhHmZaN3Bd0vINMuJ9GK/6w6tG3Y=;
+        b=IoOCwyTHmegwWnGMPgqoP3WIJBFNtthRIMALd6uVZTaOiNMxZsHT4zOnJ0b/QAeBEK
+         PED+SY5U2AMTjE5TfDKrVNJW/jRR3WC/Y/o3MDti42qop5efjf7iawHKu7LGPHiciOYa
+         TNbStU0K7mcdZ4ITYvDnoJoRFzC+FkwxzheYN77tEbxSSao/iHZSYZAPhi59YdnmSa7N
+         JH61/ONY9hJtMgL073mBMi+sXdp0XOtuhLjS6RkafSiwj4XkuXAt45vV0CN0S6iShCwA
+         BA8oURwNxJxURF/C29I53ZVWw7kcxwKZ2j1cv2yIzLSSTAegbx22lI0OwkfT2Fd3Yk3b
+         TE3A==
+X-Gm-Message-State: ABy/qLbTbuXfqHem74XA7VM9uqhVU6v8yWNQ9sEMUT9OkXBvzisIK1nl
+        7IMYFm8AXADpjFNT0MIsUWQEgPLsOc6XJzFws7X7wg==
+X-Google-Smtp-Source: APBJJlE7AnlZK1RZo5W0XD+eszpl4R8XQAZAgpYb4pdp/gmgV/vbap7e6x7nIqCaMoyNeSDIomMr/w==
+X-Received: by 2002:a7b:ce18:0:b0:3fb:b280:f548 with SMTP id m24-20020a7bce18000000b003fbb280f548mr16210018wmc.0.1689007631860;
+        Mon, 10 Jul 2023 09:47:11 -0700 (PDT)
 Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id h16-20020adff190000000b003144b95e1ecsm12029064wro.93.2023.07.10.09.27.32
+        by smtp.gmail.com with ESMTPSA id n2-20020a05600c294200b003fbe791a0e8sm394704wmd.0.2023.07.10.09.47.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 09:27:33 -0700 (PDT)
+        Mon, 10 Jul 2023 09:47:11 -0700 (PDT)
 From:   Naresh Solanki <naresh.solanki@9elements.com>
 X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
 To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
         Iwona Winiarska <iwona.winiarska@intel.com>
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        openbmc@lists.ozlabs.org
-Subject: [PATCH] hwmon: (peci/cputemp) Add Intel Sapphire Rapids support
-Date:   Mon, 10 Jul 2023 18:27:23 +0200
-Message-ID: <20230710162724.827833-1-Naresh.Solanki@9elements.com>
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: [PATCH 1/2] hwmon: (dimmtemp) Support more than 32 DIMMs
+Date:   Mon, 10 Jul 2023 18:47:03 +0200
+Message-ID: <20230710164705.3985996-1-Naresh.Solanki@9elements.com>
 X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -69,80 +68,93 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Add support to read DTS for reading Intel Sapphire Rapids platform.
+This patch introduces support for handling more than 32 DIMMs by
+utilizing bitmap operations. The changes ensure that the driver can
+handle a higher number of DIMMs efficiently.
 
 Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 ---
- drivers/hwmon/peci/cputemp.c | 18 ++++++++++++++++++
- drivers/peci/cpu.c           |  5 +++++
- 2 files changed, 23 insertions(+)
+ drivers/hwmon/peci/dimmtemp.c | 26 +++++++++++++++-----------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
-index e5b65a382772..a812c15948d9 100644
---- a/drivers/hwmon/peci/cputemp.c
-+++ b/drivers/hwmon/peci/cputemp.c
-@@ -363,6 +363,7 @@ static int init_core_mask(struct peci_cputemp *priv)
- 	switch (peci_dev->info.model) {
- 	case INTEL_FAM6_ICELAKE_X:
- 	case INTEL_FAM6_ICELAKE_D:
-+	case INTEL_FAM6_SAPPHIRERAPIDS_X:
- 		ret = peci_ep_pci_local_read(peci_dev, 0, reg->bus, reg->dev,
- 					     reg->func, reg->offset + 4, &data);
- 		if (ret)
-@@ -531,6 +532,13 @@ static struct resolved_cores_reg resolved_cores_reg_icx = {
- 	.offset = 0xd0,
- };
- 
-+static struct resolved_cores_reg resolved_cores_reg_spr = {
-+	.bus = 31,
-+	.dev = 30,
-+	.func = 6,
-+	.offset = 0x80,
-+};
+diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
+index ed968401f93c..ce89da3937a0 100644
+--- a/drivers/hwmon/peci/dimmtemp.c
++++ b/drivers/hwmon/peci/dimmtemp.c
+@@ -219,19 +219,21 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+ {
+ 	int chan_rank_max = priv->gen_info->chan_rank_max;
+ 	int dimm_idx_max = priv->gen_info->dimm_idx_max;
+-	u32 chan_rank_empty = 0;
+-	u32 dimm_mask = 0;
+-	int chan_rank, dimm_idx, ret;
++	DECLARE_BITMAP(dimm_mask, DIMM_NUMS_MAX);
++	DECLARE_BITMAP(chan_rank_empty, CHAN_RANK_MAX);
 +
- static const struct cpu_info cpu_hsx = {
- 	.reg		= &resolved_cores_reg_hsx,
- 	.min_peci_revision = 0x33,
-@@ -549,6 +557,12 @@ static const struct cpu_info cpu_icx = {
- 	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
- };
++	int chan_rank, dimm_idx, ret, i;
+ 	u32 pcs;
  
-+static const struct cpu_info cpu_spr = {
-+	.reg		= &resolved_cores_reg_spr,
-+	.min_peci_revision = 0x40,
-+	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
-+};
+-	BUILD_BUG_ON(BITS_PER_TYPE(chan_rank_empty) < CHAN_RANK_MAX);
+-	BUILD_BUG_ON(BITS_PER_TYPE(dimm_mask) < DIMM_NUMS_MAX);
+ 	if (chan_rank_max * dimm_idx_max > DIMM_NUMS_MAX) {
+ 		WARN_ONCE(1, "Unsupported number of DIMMs - chan_rank_max: %d, dimm_idx_max: %d",
+ 			  chan_rank_max, dimm_idx_max);
+ 		return -EINVAL;
+ 	}
+ 
++	bitmap_zero(dimm_mask, DIMM_NUMS_MAX);
++	bitmap_zero(chan_rank_empty, CHAN_RANK_MAX);
 +
- static const struct auxiliary_device_id peci_cputemp_ids[] = {
- 	{
- 		.name = "peci_cpu.cputemp.hsx",
-@@ -574,6 +588,10 @@ static const struct auxiliary_device_id peci_cputemp_ids[] = {
- 		.name = "peci_cpu.cputemp.icxd",
- 		.driver_data = (kernel_ulong_t)&cpu_icx,
- 	},
-+	{
-+		.name = "peci_cpu.cputemp.spr",
-+		.driver_data = (kernel_ulong_t)&cpu_spr,
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(auxiliary, peci_cputemp_ids);
-diff --git a/drivers/peci/cpu.c b/drivers/peci/cpu.c
-index de4a7b3e5966..3668a908d259 100644
---- a/drivers/peci/cpu.c
-+++ b/drivers/peci/cpu.c
-@@ -318,6 +318,11 @@ static const struct peci_device_id peci_cpu_device_ids[] = {
- 		.model	= INTEL_FAM6_ICELAKE_X,
- 		.data	= "icx",
- 	},
-+	{ /* Sapphire Rapids Xeon */
-+		.family	= 6,
-+		.model	= INTEL_FAM6_SAPPHIRERAPIDS_X,
-+		.data	= "spr",
-+	},
- 	{ /* Icelake Xeon D */
- 		.family	= 6,
- 		.model	= INTEL_FAM6_ICELAKE_D,
+ 	for (chan_rank = 0; chan_rank < chan_rank_max; chan_rank++) {
+ 		ret = peci_pcs_read(priv->peci_dev, PECI_PCS_DDR_DIMM_TEMP, chan_rank, &pcs);
+ 		if (ret) {
+@@ -242,7 +244,7 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+ 			 * detection to be performed at a later point in time.
+ 			 */
+ 			if (ret == -EINVAL) {
+-				chan_rank_empty |= BIT(chan_rank);
++				bitmap_set(chan_rank_empty, chan_rank, 1);
+ 				continue;
+ 			}
+ 
+@@ -251,7 +253,7 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+ 
+ 		for (dimm_idx = 0; dimm_idx < dimm_idx_max; dimm_idx++)
+ 			if (__dimm_temp(pcs, dimm_idx))
+-				dimm_mask |= BIT(chan_rank * dimm_idx_max + dimm_idx);
++				bitmap_set(dimm_mask, chan_rank * dimm_idx_max + dimm_idx, 1);
+ 	}
+ 
+ 	/*
+@@ -260,7 +262,7 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+ 	 * host platform boot. Retrying a couple of times lets us make sure
+ 	 * that the state is persistent.
+ 	 */
+-	if (chan_rank_empty == GENMASK(chan_rank_max - 1, 0)) {
++	if (bitmap_full(chan_rank_empty, chan_rank_max)) {
+ 		if (priv->no_dimm_retry_count < NO_DIMM_RETRY_COUNT_MAX) {
+ 			priv->no_dimm_retry_count++;
+ 
+@@ -274,14 +276,16 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+ 	 * It's possible that memory training is not done yet. In this case we
+ 	 * defer the detection to be performed at a later point in time.
+ 	 */
+-	if (!dimm_mask) {
++	if (bitmap_empty(dimm_mask, DIMM_NUMS_MAX)) {
+ 		priv->no_dimm_retry_count = 0;
+ 		return -EAGAIN;
+ 	}
+ 
+-	dev_dbg(priv->dev, "Scanned populated DIMMs: %#x\n", dimm_mask);
++	for_each_set_bit(i, dimm_mask, DIMM_NUMS_MAX) {
++		dev_dbg(priv->dev, "Found DIMM%#x\n", i);
++	}
+ 
+-	bitmap_from_arr32(priv->dimm_mask, &dimm_mask, DIMM_NUMS_MAX);
++	bitmap_copy(priv->dimm_mask, dimm_mask, DIMM_NUMS_MAX);
+ 
+ 	return 0;
+ }
 
 base-commit: 4dbbaf8fbdbd13adc80731b2452257857e4c2d8b
 -- 
