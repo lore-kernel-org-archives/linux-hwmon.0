@@ -2,106 +2,137 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3BC2EB64DA
-	for <linux-hwmon@archiver.kernel.org>; Sat,  8 Jul 2023 06:00:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D533EB64DC
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Jul 2023 13:34:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbjGHGAI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 8 Jul 2023 02:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
+        id S232159AbjGJNe5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 10 Jul 2023 09:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjGHGAH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 8 Jul 2023 02:00:07 -0400
-X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 07 Jul 2023 23:00:06 PDT
-Received: from smtp.smtpout.orange.fr (smtp-13.smtpout.orange.fr [80.12.242.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CD3A1FD7
-        for <linux-hwmon@vger.kernel.org>; Fri,  7 Jul 2023 23:00:06 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id I0rxqTlyvRB5SI0rxquFMX; Sat, 08 Jul 2023 07:52:34 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1688795554;
-        bh=EGyCQ+d+OCqRwxDpLY5KNbRs5E578htE1W8st+IJ468=;
-        h=From:To:Cc:Subject:Date;
-        b=Dui6EM4NFd593PWVsaO0qpmZ9aFC5da/oWzPekGtAcOsAuhiR0ldfmxWXbDN9oQ8O
-         WKT15IGBP4I8q7bYNfiCn9ro0y1zyKrY2gQu4dHQmtq1izRrYuHIu8PGmmMRq4lN9M
-         1FlydBmKeggC44TLVoUj5Tl2PSA5x4/tlp54ruLRdDpvg6FDdnfj/O+S9kZHxpUg5Q
-         XtqVuez2vfFnllirHeczZeVwubOkiDhzr/wBzzvjaTg1v7AuYTFA/GXTDfa1sDKf8i
-         PI+EiChH+RP9KNqqie1j+vlcQKP1gAl3S8UcixzTwIkWCvvtXiUC1Lsn+iayRMQ7Ml
-         8+Qqxy2uJS+Bg==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 08 Jul 2023 07:52:34 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: lan966x: Use the devm_clk_get_enabled() helper function
-Date:   Sat,  8 Jul 2023 07:52:31 +0200
-Message-Id: <25f2ab4c61d4fc48e8200f8754bb446f2b89ea89.1688795527.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S232761AbjGJNez (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 10 Jul 2023 09:34:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF5E1710
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 Jul 2023 06:33:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688996029;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ak9fRbxuixcIYTWvlnH4cZYdZvxzAVmoXYAJWfQ6iRg=;
+        b=h+Z0sMJfmkmR0u/i9eqClIvtNUXjitjXAzijoVWuVAKYoNOn0vWqBzgjzSOIDpJng8ky3g
+        I6cn4te35Lj0I37ruhKagCSDDrLqpKd7VhHXXxOaUorL876NaCawD7DscTZuQM0rDOHwka
+        Gfng7CHmy1yhDlipFDcO6cUfKxBOFX4=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-412-e9q52qkDMUmZvOtIl79Xsw-1; Mon, 10 Jul 2023 09:33:48 -0400
+X-MC-Unique: e9q52qkDMUmZvOtIl79Xsw-1
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-513f337d478so2670123a12.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 Jul 2023 06:33:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688996027; x=1691588027;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ak9fRbxuixcIYTWvlnH4cZYdZvxzAVmoXYAJWfQ6iRg=;
+        b=HP69ryC+dyzOPSaFmksa8T9V+IPt0+EGR+TQXJmWzcIIU2rk82fHzxrY8SGzj0sJDY
+         5VIVNEGY1FpKy1Qfiuy4YlexkGeJnNmwlOz/H692n5Bl/1ih+F/8B1IM+Dn5GdH/mNwN
+         nHr51Nnl8wQbiE9LbWAymqsxL9WioIl8w5XAEDfRvKbhhMXTywCHB7dY1JXqADk+zH5B
+         GdBXdwHQ6Ws5RPd5J7cZ/5qGijXXADQUnnNgvcsM0yaa+bhoP4iHqgKgkfrMFm98tk0O
+         W88PhMkj/qeSrWz/e8thHJ+ijTdoMzy92hDS98FnYNugtvk+z9yfZ3WLKUawruOeqa/M
+         c4dA==
+X-Gm-Message-State: ABy/qLZBmryEPA92JFFkCrBJ0aG7eEjcD863N7Wk0Owp2sfDHGoTF1U2
+        vCXc89426T+wVQck77Hv85cnj55vfgGUQD1fsOjSC1cFpRtPHOOYRhsP/8SZtL4CuEAGjZnHXkn
+        f+Z2hUzdjIfJ6MxTRBZCZXkk=
+X-Received: by 2002:a05:6402:1391:b0:51d:d48b:9978 with SMTP id b17-20020a056402139100b0051dd48b9978mr10787672edv.8.1688996027422;
+        Mon, 10 Jul 2023 06:33:47 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGwnIs3wUYSW3/n22GQIxO2F9IABGWqGeuoH+p/ffkYlO8rC66v0dSUKr9zH82kM+1IYioUig==
+X-Received: by 2002:a05:6402:1391:b0:51d:d48b:9978 with SMTP id b17-20020a056402139100b0051dd48b9978mr10787639edv.8.1688996027023;
+        Mon, 10 Jul 2023 06:33:47 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id e16-20020a50ec90000000b0051e2a5d9290sm5781645edr.77.2023.07.10.06.33.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 06:33:46 -0700 (PDT)
+Message-ID: <4a11393d-69bb-8e9d-3bfe-21aa7a7fb1e3@redhat.com>
+Date:   Mon, 10 Jul 2023 15:33:45 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/2] watchdog: simatic-ipc-wdt: make IO region access of
+ one model muxed
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Henning Schild <henning.schild@siemens.com>,
+        Mark Gross <markgross@kernel.org>,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Tobias Schaffner <tobias.schaffner@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+References: <20230706154831.19100-1-henning.schild@siemens.com>
+ <20230706154831.19100-2-henning.schild@siemens.com>
+ <876f6a08-1850-21cd-83d1-b309e7e1e912@roeck-us.net>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <876f6a08-1850-21cd-83d1-b309e7e1e912@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Use the devm_clk_get_enabled() helper function instead of hand-writing it.
-It saves some line of codes.
+Hi Guenter,
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/hwmon/lan966x-hwmon.c | 24 +-----------------------
- 1 file changed, 1 insertion(+), 23 deletions(-)
+On 7/6/23 18:03, Guenter Roeck wrote:
+> On 7/6/23 08:48, Henning Schild wrote:
+>> The IO region used for the watchdog also hold CMOS battery monitoring
+>> information. Make the access muxed so that a hwmon driver can use the
+>> region as well.
+>>
+>> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> 
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/drivers/hwmon/lan966x-hwmon.c b/drivers/hwmon/lan966x-hwmon.c
-index f8658359a098..7247c03e4f44 100644
---- a/drivers/hwmon/lan966x-hwmon.c
-+++ b/drivers/hwmon/lan966x-hwmon.c
-@@ -334,24 +334,6 @@ static struct regmap *lan966x_init_regmap(struct platform_device *pdev,
- 	return devm_regmap_init_mmio(&pdev->dev, base, &regmap_config);
- }
- 
--static void lan966x_clk_disable(void *data)
--{
--	struct lan966x_hwmon *hwmon = data;
--
--	clk_disable_unprepare(hwmon->clk);
--}
--
--static int lan966x_clk_enable(struct device *dev, struct lan966x_hwmon *hwmon)
--{
--	int ret;
--
--	ret = clk_prepare_enable(hwmon->clk);
--	if (ret)
--		return ret;
--
--	return devm_add_action_or_reset(dev, lan966x_clk_disable, hwmon);
--}
--
- static int lan966x_hwmon_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -363,15 +345,11 @@ static int lan966x_hwmon_probe(struct platform_device *pdev)
- 	if (!hwmon)
- 		return -ENOMEM;
- 
--	hwmon->clk = devm_clk_get(dev, NULL);
-+	hwmon->clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(hwmon->clk))
- 		return dev_err_probe(dev, PTR_ERR(hwmon->clk),
- 				     "failed to get clock\n");
- 
--	ret = lan966x_clk_enable(dev, hwmon);
--	if (ret)
--		return dev_err_probe(dev, ret, "failed to enable clock\n");
--
- 	hwmon->clk_rate = clk_get_rate(hwmon->clk);
- 
- 	hwmon->regmap_pvt = lan966x_init_regmap(pdev, "pvt");
--- 
-2.34.1
+Thank you. Is it ok if I pick up his patch and merge it together with 2/2
+through the pdx86 tree ?
+
+Regards,
+
+Hans
+
+
+> 
+>> ---
+>>   drivers/watchdog/simatic-ipc-wdt.c | 9 ++++++---
+>>   1 file changed, 6 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/watchdog/simatic-ipc-wdt.c b/drivers/watchdog/simatic-ipc-wdt.c
+>> index 6599695dc672..cdc1a2e15180 100644
+>> --- a/drivers/watchdog/simatic-ipc-wdt.c
+>> +++ b/drivers/watchdog/simatic-ipc-wdt.c
+>> @@ -155,9 +155,8 @@ static int simatic_ipc_wdt_probe(struct platform_device *pdev)
+>>         switch (plat->devmode) {
+>>       case SIMATIC_IPC_DEVICE_227E:
+>> -        if (!devm_request_region(dev, gp_status_reg_227e_res.start,
+>> -                     resource_size(&gp_status_reg_227e_res),
+>> -                     KBUILD_MODNAME)) {
+>> +        res = &gp_status_reg_227e_res;
+>> +        if (!request_muxed_region(res->start, resource_size(res), res->name)) {
+>>               dev_err(dev,
+>>                   "Unable to register IO resource at %pR\n",
+>>                   &gp_status_reg_227e_res);
+>> @@ -210,6 +209,10 @@ static int simatic_ipc_wdt_probe(struct platform_device *pdev)
+>>       if (wdd_data.bootstatus)
+>>           dev_warn(dev, "last reboot caused by watchdog reset\n");
+>>   +    if (plat->devmode == SIMATIC_IPC_DEVICE_227E)
+>> +        release_region(gp_status_reg_227e_res.start,
+>> +                   resource_size(&gp_status_reg_227e_res));
+>> +
+>>       watchdog_set_nowayout(&wdd_data, nowayout);
+>>       watchdog_stop_on_reboot(&wdd_data);
+>>       return devm_watchdog_register_device(dev, &wdd_data);
+> 
 
