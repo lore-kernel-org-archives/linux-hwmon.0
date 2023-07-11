@@ -2,319 +2,104 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2556EB64DC
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jul 2023 09:43:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28FA4C001B0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jul 2023 09:56:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbjGKJn0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Jul 2023 05:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
+        id S231976AbjGKJ4F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Jul 2023 05:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbjGKJnZ (ORCPT
+        with ESMTP id S231618AbjGKJ4C (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:43:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A182BE56
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Jul 2023 02:42:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689068548;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5tXuHSt42vOhi/RR7LZmETd8IFscnoA25c33wyaRGfc=;
-        b=InUJIdVHVqTfujB+2wEyO9QwAg5kIL4xZi2xzJ/QVEOp5Jzc6x2C/YCV3c2/7PYs8aNWPN
-        3xC2UHGVsCZArIJ9faSpAHS4ln5Hu8E2AgTLDXXoX19zsG+E78IAGaEOntCISv06gXJEom
-        DTNgVXBIS0/ioDUoSp1uIVqvQ71KLgM=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-115-_QWduQ0iPFqV4Pu3KEU2mw-1; Tue, 11 Jul 2023 05:42:27 -0400
-X-MC-Unique: _QWduQ0iPFqV4Pu3KEU2mw-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-94a355cf318so368454166b.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Jul 2023 02:42:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689068546; x=1691660546;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5tXuHSt42vOhi/RR7LZmETd8IFscnoA25c33wyaRGfc=;
-        b=GX/jbeBfcOfcvt8g7k1ssy6fp15cVAlv0xE4YHM96j2Xjusa8bjd5KZOkxoGaeoEHO
-         H/x8CD/JzAr1GBHaIxe1lte+Uou21R6qgrnK2fgLH7iYvBtQz8w30+aCsY+/wxxycVc0
-         5TO39n+JwKsBuXBwaeFpdoR86r9DosPDUx+nrEE7ztnTrNOOwLnMsd+LeV/HXDNpARqg
-         ofYQJMARk12hudcuYEfm9aS9oPABE4HCR6r+bfd+Kbi3ht/gJRn+cFBuNzB9nPCotja4
-         xdLHodKy9TxOYoqF3v/A7XUH3Zi29a1tjK14lnKR45TzkM8xYQxbRvxSzC9uEeie+eEw
-         9OPw==
-X-Gm-Message-State: ABy/qLaMF+LebWooKmKCUP/+gHFba/eseVfQ/pHpBBvGTtgnsFjxBv6N
-        It8eBwzeCRKe2M7JbVgOlwKnKvTNRbX9+5NH4b6zexG32H07/YysU0lK7XUUua1xeqJ5SDCKVf5
-        Cfax7fM7jwf9lu7idpzb7pTw=
-X-Received: by 2002:a17:906:1392:b0:97e:aace:b6bc with SMTP id f18-20020a170906139200b0097eaaceb6bcmr14187406ejc.53.1689068546624;
-        Tue, 11 Jul 2023 02:42:26 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlG5oNHW/3l71/L8d2Jx6e6y4wCLbtZsMzUF9WeJiuUI31nQYW8MwxDMb6YtJIa3Ct+4x4Mjvw==
-X-Received: by 2002:a17:906:1392:b0:97e:aace:b6bc with SMTP id f18-20020a170906139200b0097eaaceb6bcmr14187392ejc.53.1689068546321;
-        Tue, 11 Jul 2023 02:42:26 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id rk21-20020a170907215500b00993150e5325sm928676ejb.60.2023.07.11.02.42.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 02:42:25 -0700 (PDT)
-Message-ID: <350cfb54-f435-4482-5a40-18d4358bf747@redhat.com>
-Date:   Tue, 11 Jul 2023 11:42:25 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 1/1] platform/x86: asus-wmi: add support for ASUS
- screenpad
-Content-Language: en-US, nl
-To:     Luke Jones <luke@ljones.dev>
-Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
+        Tue, 11 Jul 2023 05:56:02 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE96A1;
+        Tue, 11 Jul 2023 02:56:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689069361; x=1720605361;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=M/f+ykgD0/00bi7s9VfR+ZWCB9q02eWktKsVZC95AV4=;
+  b=YW9rZdgQxBi7gWLadRP6qG8+TjxfpZbX2QtUtKxk948Z+ajbXQytarDf
+   +DTMZuEc4pygVCwl4sAMRGzQkOrpbyNpZcwXMjIrDIRjAZbrnR17Tl9no
+   U29yBgVQT0xAKxgaDFY8AaonJE0Z2qgb+dkOSssH+RbW/3zAMkqOVLXhu
+   qLaPTNykJ3VfTo/vytgIg3zMLhtehUSNr0buYZOn6ouCJr2OcdtkZgx2F
+   S257R7u94ZI8m8vAWAXn9pV22lVYiCWLFsbDdbWHfmgUPc7j3cZriE9pw
+   DmKm5juLZjo2KNUNZOyP1uwnL+EMCO4PRtaKNBbdeKX6jFghvyub6Jouj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="368075976"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="368075976"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 02:56:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="715126919"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="715126919"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 11 Jul 2023 02:55:58 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qJA69-0004hd-1f;
+        Tue, 11 Jul 2023 09:55:57 +0000
+Date:   Tue, 11 Jul 2023 17:55:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Luke D. Jones" <luke@ljones.dev>, hdegoede@redhat.com
+Cc:     oe-kbuild-all@lists.linux.dev, corentin.chary@gmail.com,
+        acpi4asus-user@lists.sourceforge.net,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, markgross@kernel.org,
-        jdelvare@suse.com, linux@roeck-us.net
-References: <20230630041743.911303-1-luke@ljones.dev>
- <20230630041743.911303-2-luke@ljones.dev>
- <974093b4-5dac-dc29-8f86-304eb5c6c19b@redhat.com>
- <39e6044b960c1099ecc34d76f78aad12496b23e2.camel@ljones.dev>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <39e6044b960c1099ecc34d76f78aad12496b23e2.camel@ljones.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        jdelvare@suse.com, linux@roeck-us.net,
+        "Luke D. Jones" <luke@ljones.dev>
+Subject: Re: [PATCH v2 8/8] platform/x86: asus-wmi: expose dGPU and CPU
+ tunables for ROG
+Message-ID: <202307111702.ErlUZY2B-lkp@intel.com>
+References: <20230630053552.976579-9-luke@ljones.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230630053552.976579-9-luke@ljones.dev>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+Hi Luke,
 
-On 7/7/23 00:23, Luke Jones wrote:
-> On Tue, 2023-07-04 at 13:16 +0200, Hans de Goede wrote:
->> Hi Luke,
->>
->> On 6/30/23 06:17, Luke D. Jones wrote:
->>> Add support for the WMI methods used to turn off and adjust the
->>> brightness of the secondary "screenpad" device found on some high-
->>> end
->>> ASUS laptops like the GX650P series and others.
->>>
->>> These methods are utilised in a new backlight device named
->>> asus_screenpad.
->>>
->>> Signed-off-by: Luke D. Jones <luke@ljones.dev>
->>
->> Thank you for your work on this. I have one small change request
->> and then v5 should be ready for merging, see me inline comment
->> below.
->>
->>> ---
->>>  drivers/platform/x86/asus-wmi.c            | 128
->>> +++++++++++++++++++++
->>>  drivers/platform/x86/asus-wmi.h            |   1 +
->>>  include/linux/platform_data/x86/asus-wmi.h |   4 +
->>>  3 files changed, 133 insertions(+)
->>>
->>> diff --git a/drivers/platform/x86/asus-wmi.c
->>> b/drivers/platform/x86/asus-wmi.c
->>> index 62cee13f5576..967c92ceb041 100644
->>> --- a/drivers/platform/x86/asus-wmi.c
->>> +++ b/drivers/platform/x86/asus-wmi.c
->>> @@ -25,6 +25,7 @@
->>>  #include <linux/input/sparse-keymap.h>
->>>  #include <linux/kernel.h>
->>>  #include <linux/leds.h>
->>> +#include <linux/minmax.h>
->>>  #include <linux/module.h>
->>>  #include <linux/pci.h>
->>>  #include <linux/pci_hotplug.h>
->>> @@ -212,6 +213,7 @@ struct asus_wmi {
->>>  
->>>         struct input_dev *inputdev;
->>>         struct backlight_device *backlight_device;
->>> +       struct backlight_device *screenpad_backlight_device;
->>>         struct platform_device *platform_device;
->>>  
->>>         struct led_classdev wlan_led;
->>> @@ -3839,6 +3841,123 @@ static int is_display_toggle(int code)
->>>         return 0;
->>>  }
->>>  
->>> +/* Screenpad backlight
->>> *******************************************************/
->>> +
->>> +static int read_screenpad_backlight_power(struct asus_wmi *asus)
->>> +{
->>> +       int ret;
->>> +
->>> +       ret = asus_wmi_get_devstate_simple(asus,
->>> ASUS_WMI_DEVID_SCREENPAD_POWER);
->>> +       if (ret < 0)
->>> +               return ret;
->>> +       /* 1 == powered */
->>> +       return ret ? FB_BLANK_UNBLANK : FB_BLANK_POWERDOWN;
->>> +}
->>> +
->>> +static int read_screenpad_brightness(struct backlight_device *bd)
->>> +{
->>> +       struct asus_wmi *asus = bl_get_data(bd);
->>> +       u32 retval;
->>> +       int err;
->>> +
->>> +       err = read_screenpad_backlight_power(asus);
->>> +       if (err < 0)
->>> +               return err;
->>> +       /* The device brightness can only be read if powered, so
->>> return stored */
->>> +       if (err == FB_BLANK_POWERDOWN)
->>> +               return asus->driver->screenpad_brightness;
->>> +
->>> +       err = asus_wmi_get_devstate(asus,
->>> ASUS_WMI_DEVID_SCREENPAD_LIGHT, &retval);
->>> +       if (err < 0)
->>> +               return err;
->>> +
->>> +       return retval & ASUS_WMI_DSTS_BRIGHTNESS_MASK;
->>> +}
->>> +
->>> +static int update_screenpad_bl_status(struct backlight_device *bd)
->>> +{
->>> +       struct asus_wmi *asus = bl_get_data(bd);
->>> +       int power, err = 0;
->>> +       u32 ctrl_param;
->>> +
->>> +       power = read_screenpad_backlight_power(asus);
->>> +       if (power < 0)
->>> +               return power;
->>> +
->>> +       if (bd->props.power != power) {
->>> +               if (power != FB_BLANK_UNBLANK) {
->>> +                       /* Only brightness > 0 can power it back on
->>> */
->>> +                       ctrl_param = max(1, asus->driver-
->>>> screenpad_brightness);
->>> +                       err =
->>> asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_LIGHT,
->>> +                                                   ctrl_param,
->>> NULL);
->>> +               } else {
->>> +                       err =
->>> asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_POWER, 0, NULL);
->>> +               }
->>> +       } else if (power == FB_BLANK_UNBLANK) {
->>> +               /* Only set brightness if powered on or we get
->>> invalid/unsync state */
->>> +               ctrl_param = bd->props.brightness;
->>> +               err =
->>> asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_LIGHT, ctrl_param,
->>> NULL);
->>> +       }
->>> +
->>> +       /* Ensure brightness is stored to turn back on with */
->>> +       asus->driver->screenpad_brightness = bd->props.brightness;
->>> +
->>> +       return err;
->>> +}
->>> +
->>> +static const struct backlight_ops asus_screenpad_bl_ops = {
->>> +       .get_brightness = read_screenpad_brightness,
->>> +       .update_status = update_screenpad_bl_status,
->>> +       .options = BL_CORE_SUSPENDRESUME,
->>> +};
->>> +
->>> +static int asus_screenpad_init(struct asus_wmi *asus)
->>> +{
->>> +       struct backlight_device *bd;
->>> +       struct backlight_properties props;
->>> +       int err, power;
->>> +       int brightness = 0;
->>> +
->>> +       power = read_screenpad_backlight_power(asus);
->>> +       if (power < 0)
->>> +               return power;
->>> +
->>> +       if (power != FB_BLANK_POWERDOWN) {
->>> +               err = asus_wmi_get_devstate(asus,
->>> ASUS_WMI_DEVID_SCREENPAD_LIGHT, &brightness);
->>> +               if (err < 0)
->>> +                       return err;
->>> +       }
->>> +       /* default to an acceptable min brightness on boot if too
->>> low */
->>> +       if (brightness < 60)
->>> +               brightness = 60;
->>
->> If settings below 60 are no good, then the correct way to handle
->> this is to limit the range to 0 - (255-60) and add / substract
->> 60 when setting / getting the brightness.
->>
->> E.g. do something like this:
->>
->> #define SCREENPAD_MIN_BRIGHTNESS        60
->> #define SCREENPAD_MAX_BRIGHTNESS        255
->>
->>         props.max_brightness = SCREENPAD_MAX_BRIGHTNESS -
->> SCREENPAD_MIN_BRIGHTNESS;
->>
->> And in update_screenpad_bl_status() do:
->>
->>         ctrl_param = bd->props.brightness + SCREENPAD_MIN_BRIGHTNESS;
->>
->> And when reading the brightness substract SCREENPAD_MIN_BRIGHTNESS,
->> clamping to a minimum value of 0.
->>
->> This avoids a dead-zone in the brightness range between 0-60 .
-> 
-> Hi Hans, I think this is the wrong thing to do.
-> 
-> The initial point of that first `brightness = 60;` is only to set it to
-> an acceptable brightness on boot. We don't want to prevent the user
-> from going below that brightness at all - this is just to ensure the
-> screen is visible on boot if the brightness was under that value, and
-> it is usually only under that value if it was set to off before
-> shutdown/reboot.
-> 
-> It's not to try and put the range between 60-255, it's just to make the
-> screen visible on boot if it was off previously. The folks who have
-> tested this have found that this is the desired behaviour they expect.
+kernel test robot noticed the following build warnings:
 
-I see.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.5-rc1 next-20230711]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-So if I understand things correctly then 60 is a good default,
-but the screen can go darker and still be usable.
+url:    https://github.com/intel-lab-lkp/linux/commits/Luke-D-Jones/platform-x86-asus-wmi-add-support-for-showing-charger-mode/20230630-133937
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230630053552.976579-9-luke%40ljones.dev
+patch subject: [PATCH v2 8/8] platform/x86: asus-wmi: expose dGPU and CPU tunables for ROG
+reproduce: (https://download.01.org/0day-ci/archive/20230711/202307111702.ErlUZY2B-lkp@intel.com/reproduce)
 
-But 1 leads to an unusable screen, so we still need
-a SCREENPAD_MIN_BRIGHTNESS to avoid the screen being able
-to go so dark that it is no longer usable and then still
-move the range a bit, but just not by 60, but by some
-other number (something in the 10-30 range I guess?)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307111702.ErlUZY2B-lkp@intel.com/
 
-Combined with adding a:
+All warnings (new ones prefixed by >>):
 
-#define SCREENPAD_DEFAULT_BRIGHTNESS        60
+>> Documentation/ABI/testing/sysfs-platform-asus-wmi:131: WARNING: Unexpected indentation.
 
-And at boot when the read back brightness <
-SCREENPAD_MIN_BRIGHTNESS set it to SCREENPAD_DEFAULT_BRIGHTNESS.
+vim +131 Documentation/ABI/testing/sysfs-platform-asus-wmi
 
-We really want to avoid users to be able to set an unusable
-low brightness level. As mentioned in the new panel brightness
-API proposal:
+ > 131	Date:		Jun 2023
+   132	KernelVersion:	6.5
+   133	Contact:	"Luke Jones" <luke@ljones.dev>
+   134	Description:
+   135			Set the Package Power Target total of CPU: PL1 on Intel, SPL on AMD.
+   136			Shown on Intel+Nvidia or AMD+Nvidia based systems.
+   137				* min=5, max=250
+   138	
 
-https://lore.kernel.org/dri-devel/b61d3eeb-6213-afac-2e70-7b9791c86d2e@redhat.com/
-
-"3. The meaning of 0 is not clearly defined, it can be either off,
-   or minimum brightness at which the display is still readable
-  (in a low light environment)"
-
-and the plan going forward is to:
-
-"Unlike the /sys/class/backlight/foo/brightness this brightness property
-has a clear definition for the value 0. The kernel must ensure that 0
-means minimum brightness (so 0 should _never_ turn the backlight off).
-If necessary the kernel must enforce a minimum value by adding
-an offset to the value seen in the property to ensure this behavior."
-
-So I really want to see this new backlight driver implement the
-new planned behavior for 0 from the start, with 0 meaning minimum
-*usable* brightness.
-
-Regards,
-
-Hans
-
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
