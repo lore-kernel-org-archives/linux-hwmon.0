@@ -2,104 +2,139 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28FA4C001B0
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jul 2023 09:56:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88FA9EB64DD
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jul 2023 10:08:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbjGKJ4F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Jul 2023 05:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
+        id S229954AbjGKKIG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Jul 2023 06:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjGKJ4C (ORCPT
+        with ESMTP id S229548AbjGKKIG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:56:02 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE96A1;
-        Tue, 11 Jul 2023 02:56:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689069361; x=1720605361;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M/f+ykgD0/00bi7s9VfR+ZWCB9q02eWktKsVZC95AV4=;
-  b=YW9rZdgQxBi7gWLadRP6qG8+TjxfpZbX2QtUtKxk948Z+ajbXQytarDf
-   +DTMZuEc4pygVCwl4sAMRGzQkOrpbyNpZcwXMjIrDIRjAZbrnR17Tl9no
-   U29yBgVQT0xAKxgaDFY8AaonJE0Z2qgb+dkOSssH+RbW/3zAMkqOVLXhu
-   qLaPTNykJ3VfTo/vytgIg3zMLhtehUSNr0buYZOn6ouCJr2OcdtkZgx2F
-   S257R7u94ZI8m8vAWAXn9pV22lVYiCWLFsbDdbWHfmgUPc7j3cZriE9pw
-   DmKm5juLZjo2KNUNZOyP1uwnL+EMCO4PRtaKNBbdeKX6jFghvyub6Jouj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="368075976"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="368075976"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 02:56:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="715126919"
-X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
-   d="scan'208";a="715126919"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 11 Jul 2023 02:55:58 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qJA69-0004hd-1f;
-        Tue, 11 Jul 2023 09:55:57 +0000
-Date:   Tue, 11 Jul 2023 17:55:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Luke D. Jones" <luke@ljones.dev>, hdegoede@redhat.com
-Cc:     oe-kbuild-all@lists.linux.dev, corentin.chary@gmail.com,
-        acpi4asus-user@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, markgross@kernel.org,
-        jdelvare@suse.com, linux@roeck-us.net,
-        "Luke D. Jones" <luke@ljones.dev>
-Subject: Re: [PATCH v2 8/8] platform/x86: asus-wmi: expose dGPU and CPU
- tunables for ROG
-Message-ID: <202307111702.ErlUZY2B-lkp@intel.com>
-References: <20230630053552.976579-9-luke@ljones.dev>
+        Tue, 11 Jul 2023 06:08:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8604210A
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Jul 2023 03:07:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689070038;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kZ1Zgpgj63HwlWEwsThyu6JQTmo8pm99b3bKVT/0+Bg=;
+        b=TF+PxuUPt6YCzAkLp6iEsplm4Zo+Ajd512Jwcrls+8uCT7Hwmtqt7yRm7hStxl63wlIDT8
+        UFI3LtZzuD/txldRabect52wajAB4S8xhCvIDSQ67u5CtzFYX4oUV3S0GWHxFDGZjrFt+s
+        lj6gdyOhM9vlkRya73598PCGvBN6vsM=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-84-IBPff0wVPcCHBTvQJAo3cQ-1; Tue, 11 Jul 2023 06:07:17 -0400
+X-MC-Unique: IBPff0wVPcCHBTvQJAo3cQ-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-94a34a0b75eso347366166b.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Jul 2023 03:07:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689070036; x=1691662036;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kZ1Zgpgj63HwlWEwsThyu6JQTmo8pm99b3bKVT/0+Bg=;
+        b=Z08B1JqM/7uEJ6xi9abwzoow0exAaVMPpPsm6Vulm6dqaFHZAZ4/A5p4gVm8AnPaTF
+         wpT1w7gn04XecsJ63NwAPTkIHR3+fzHy1PjQtShecoyw8J82iC/GXCsOaEiLETmZefC/
+         dxfRhiF7MaqWwmzXMwM2VMEqseH6GJfieHlgVr84akoBtpuithsMelfrLMFX7MkIuau7
+         u9S2HUEPwIzojFjMA+J38iPWI8uT8rw4pkZFbWP4XfkS81N8QQK9K0W2cwte4WTSC2WE
+         w5hVr4BGrU8RGWSQoHNl2Nw3W3NdKitxMr2Mz3IyqZAFeTLzB398ysm4I1H+8hu98Jiy
+         3jKw==
+X-Gm-Message-State: ABy/qLZXseGMQjK6Kv6XcejYfGW4sHzwCpiJJ8PazjqOgjOf71tmvRX5
+        kCJOeoHHcP+1ahBOnBT4hIe2vrJeEmXPFkp1AIPp2PlL9APplY5HRfUIa0IR4bJ81M5BBnuJTDx
+        TmAuM6mMqGyTLiTBAOqqptsM=
+X-Received: by 2002:a17:906:7a0a:b0:993:d6bc:a48c with SMTP id d10-20020a1709067a0a00b00993d6bca48cmr14516420ejo.1.1689070036100;
+        Tue, 11 Jul 2023 03:07:16 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlH+/om4tcSMyQz1hCZ852VhrJeYEsGhn+t+zR2tDcDzsnqJcXQM+57d0CWh2h2C5po5WopocQ==
+X-Received: by 2002:a17:906:7a0a:b0:993:d6bc:a48c with SMTP id d10-20020a1709067a0a00b00993d6bca48cmr14516399ejo.1.1689070035842;
+        Tue, 11 Jul 2023 03:07:15 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id lf16-20020a170907175000b00993928e4d1bsm960476ejc.24.2023.07.11.03.07.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 03:07:15 -0700 (PDT)
+Message-ID: <be62be68-d69a-9081-68d2-8202da3a49f1@redhat.com>
+Date:   Tue, 11 Jul 2023 12:07:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630053552.976579-9-luke@ljones.dev>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/2] platform/x86: dell-ddv: Improve error handling
+Content-Language: en-US, nl
+To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230707010333.12954-1-W_Armin@gmx.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230707010333.12954-1-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Luke,
+Hi,
 
-kernel test robot noticed the following build warnings:
+On 7/7/23 03:03, Armin Wolf wrote:
+> If for some reason a external function returns -ENODEV,
+> no error message is being displayed because the driver
+> assumes that -ENODEV can only be returned internally if
+> no sensors, etc where found.
+> Fix this by explicitly returning 0 in such a case since
+> missing hardware is no error. Also remove the now obsolete
+> check for -ENODEV.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.5-rc1 next-20230711]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thank you for your series, I've applied this series to my fixes
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Luke-D-Jones/platform-x86-asus-wmi-add-support-for-showing-charger-mode/20230630-133937
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230630053552.976579-9-luke%40ljones.dev
-patch subject: [PATCH v2 8/8] platform/x86: asus-wmi: expose dGPU and CPU tunables for ROG
-reproduce: (https://download.01.org/0day-ci/archive/20230711/202307111702.ErlUZY2B-lkp@intel.com/reproduce)
+I will include this series in my next fixes pull-req to Linus
+for the current kernel development cycle.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307111702.ErlUZY2B-lkp@intel.com/
+Regards,
 
-All warnings (new ones prefixed by >>):
+Hans
 
->> Documentation/ABI/testing/sysfs-platform-asus-wmi:131: WARNING: Unexpected indentation.
+> ---
+>  drivers/platform/x86/dell/dell-wmi-ddv.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> index 2750dee99c3e..db1e9240dd02 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> @@ -616,7 +616,8 @@ static int dell_wmi_ddv_hwmon_add(struct dell_wmi_ddv_data *data)
+>  	}
+> 
+>  	if (index < 2) {
+> -		ret = -ENODEV;
+> +		/* Finding no available sensors is not an error */
+> +		ret = 0;
+> 
+>  		goto err_release;
+>  	}
+> @@ -841,13 +842,13 @@ static int dell_wmi_ddv_probe(struct wmi_device *wdev, const void *context)
+> 
+>  	if (IS_REACHABLE(CONFIG_ACPI_BATTERY)) {
+>  		ret = dell_wmi_ddv_battery_add(data);
+> -		if (ret < 0 && ret != -ENODEV)
+> +		if (ret < 0)
+>  			dev_warn(&wdev->dev, "Unable to register ACPI battery hook: %d\n", ret);
+>  	}
+> 
+>  	if (IS_REACHABLE(CONFIG_HWMON)) {
+>  		ret = dell_wmi_ddv_hwmon_add(data);
+> -		if (ret < 0 && ret != -ENODEV)
+> +		if (ret < 0)
+>  			dev_warn(&wdev->dev, "Unable to register hwmon interface: %d\n", ret);
+>  	}
+> 
+> --
+> 2.30.2
+> 
 
-vim +131 Documentation/ABI/testing/sysfs-platform-asus-wmi
-
- > 131	Date:		Jun 2023
-   132	KernelVersion:	6.5
-   133	Contact:	"Luke Jones" <luke@ljones.dev>
-   134	Description:
-   135			Set the Package Power Target total of CPU: PL1 on Intel, SPL on AMD.
-   136			Shown on Intel+Nvidia or AMD+Nvidia based systems.
-   137				* min=5, max=250
-   138	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
