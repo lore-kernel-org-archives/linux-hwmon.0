@@ -2,162 +2,161 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78B49EB64DC
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jul 2023 15:06:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3534EB64DC
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jul 2023 15:21:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjGKPGp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Jul 2023 11:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
+        id S231782AbjGKPVx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Jul 2023 11:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjGKPGn (ORCPT
+        with ESMTP id S230178AbjGKPVw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Jul 2023 11:06:43 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DA910CA
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Jul 2023 08:06:42 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-5577900c06bso4424671a12.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Jul 2023 08:06:42 -0700 (PDT)
+        Tue, 11 Jul 2023 11:21:52 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835AF120
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Jul 2023 08:21:50 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fbfcc6daa9so48775395e9.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Jul 2023 08:21:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1689088002; x=1691680002;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JvD88681HbiR2SoA2cEn2GGKO41btg39V7tlXMdvHns=;
-        b=SVxtXNSX/kk+vJJKUkRSVBRWD1pizRMYKn3HL0clFDyxAD/8hCluES1y3RMCdY63hR
-         /+KoCLJD7jD6dXnlqLbcuIuASY+2JsGoGy1fRXXMTUAcQKU35+etOofgjGazN7fNyEw3
-         vakYdfPQfA3ZW8jCjhyhbLwp8uOWsF+aectobcPRJO50KIVh9qSPKIXhhmwe1QVU7rqQ
-         RrP60Ps0s4wf1/XbulQeaE+rsPNHzoVxj7i+Gav14CO2UDAQRrLUnP7lQT4kJknDTR6X
-         p3D5Ymrq18qQ1DTz0p5KnygCq+e7Z/zF96du2xWPHRoeroGq5p/lpkrYckrxVcsF9eRl
-         P1Sw==
+        d=9elements.com; s=google; t=1689088909; x=1691680909;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=v/t6qi+ZyC/g4PTUhHmZaN3Bd0vINMuJ9GK/6w6tG3Y=;
+        b=NGdSCtEbbcI54tvXZi5EFRKNLYcvV4MbW+cSR1SllhjKokjuRkbK8nXanzVnbroUKY
+         8VhyP2t+Eye9PN0czoBYcdnN/2/JPSe71Jb3tcNsp3AmeoW14BMFRocoKBesooLATb+E
+         uN7AD8lykUwjmTEQwMAyZ5mPsr7IDHTgkQD/Lp890sUWlaEk7JI8pA3USaWCxT3c3mCC
+         sEDtz6R4N1niSTZAJhTKMvXyWLtI3DN1y8iMYj9D7jOpfTknUa0Lv4wM2FgLDcTmrDie
+         Q3qOguTpN8D+dVx3V/2qFKF0tR+0NYpURe8QYSngakjyYVThsVY5PR0bR5W7+tc83pWT
+         5aiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689088002; x=1691680002;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1689088909; x=1691680909;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JvD88681HbiR2SoA2cEn2GGKO41btg39V7tlXMdvHns=;
-        b=aj8c5bjLCh/OopZT58t6Li0UDNzEMM/9pM+avBTttISQ8ifuRVok1zweaiAPGmDHy9
-         9fatd6nQmVfmVBTfg7E0zrmVYDY3apzlhhEWuPedKOUm/p1WjZUEAE3zV4fq5ifx0E3B
-         OxJ9T1AvsPh/OsmIRxo1qg1h4044Bo5rY9aVflMNcaawsUgQb0LEEKvxzE2UQtR91phq
-         rTT1Z6bkOOjbHAyFiQnk2PjsCr8v/DX85iNz445KKA6AzFVjG3M+FHBzI+NrFrtYWov8
-         sjp343c8r9vaTSDRx1m3+dV4lbAwJphzUJK1nxUpKun6E4p+Q90H/Q7WLB6AE4IGx6Uy
-         aJPA==
-X-Gm-Message-State: ABy/qLYjgc34hEVL2iS/IMJCDdaqzq23bwKkoijSREiYTFZMTGoX74Uh
-        MxQC6ijAGzz8kOxfTYNSkx6H0TYyF9lW0uDJhN7MbuZSA1I7ePwtF74=
-X-Google-Smtp-Source: APBJJlFioyrNC+tB096lda4kFRj/UzJoN48xYCtcyAoXLHRvqiM1qJKYlTnKrYWB6Pr0UoaN+kLQW+T0aBD1vXiuBbI=
-X-Received: by 2002:a17:90a:ac0d:b0:262:ec13:d3a with SMTP id
- o13-20020a17090aac0d00b00262ec130d3amr17436983pjq.28.1689088001969; Tue, 11
- Jul 2023 08:06:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230710164705.3985996-1-Naresh.Solanki@9elements.com>
- <20230710164705.3985996-2-Naresh.Solanki@9elements.com> <a307e9d6-bdd3-4fff-bf9b-f8919b6b0d69@roeck-us.net>
-In-Reply-To: <a307e9d6-bdd3-4fff-bf9b-f8919b6b0d69@roeck-us.net>
+        bh=v/t6qi+ZyC/g4PTUhHmZaN3Bd0vINMuJ9GK/6w6tG3Y=;
+        b=NG1CpzsKpKutsQaTJXitW4UGAn4DCNQS+SG7FmjOHPxJOugJePADzzAo0hRiHvhmRx
+         AVYsm+4SRuaqrjmSH95CDtmc6hfeWbEGJRp8FRr9RPDAdwB4SPY4PIHuiv3kp+Jhri+g
+         P86tlyMMQgVz3MZEGIeeaVoG2/ck6xR7oFMFqZ2Ewhm8cpEHVTWjrFev7lHXHBt8G0pX
+         cma4s8g96OGdH8+6U+JlRXieK/8c1bnXbaiXvOGN4pKcUtw5Z+Su4N0wHV2cqEKCjvbb
+         hsSU/DsQ5pohCArb27o4MMFwJLXVesvxSDUBykwG9Dc2se5O6hicHWCQtgM+rMODiuuO
+         y4mg==
+X-Gm-Message-State: ABy/qLYEdSzH7kgbF+vHJQN0rk+uWCpeQfeEHMFrj4TWkLGfsgz0ib9H
+        uiYiEdohCa/oLf8GjbVPncK5jJxeO3SYyvwBfl2HvA==
+X-Google-Smtp-Source: APBJJlGoF48cAVirjD+BVx9K2iUXnkdsU3a+i47sE/S/Bueis1YDVOqdkrh/SI21rEPghqLoMX1I1g==
+X-Received: by 2002:a7b:c7d9:0:b0:3f8:f6fe:26bf with SMTP id z25-20020a7bc7d9000000b003f8f6fe26bfmr14903024wmk.12.1689088908735;
+        Tue, 11 Jul 2023 08:21:48 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id m8-20020a7bca48000000b003fbdd9c72aasm2822762wml.21.2023.07.11.08.21.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 08:21:48 -0700 (PDT)
 From:   Naresh Solanki <naresh.solanki@9elements.com>
-Date:   Tue, 11 Jul 2023 17:06:30 +0200
-Message-ID: <CABqG17iNH7tzs4GqJKu=Wd+nq3e03zjrJMKOcrd9eGpBf0aRWw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] hwmon: (dimmtemp) Add Sapphire Rappids support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Iwona Winiarska <iwona.winiarska@intel.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Iwona Winiarska <iwona.winiarska@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH] hwmon: (dimmtemp) Support more than 32 DIMMs
+Date:   Tue, 11 Jul 2023 17:21:43 +0200
+Message-ID: <20230711152144.755177-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-On Mon, 10 Jul 2023 at 20:48, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Mon, Jul 10, 2023 at 06:47:04PM +0200, Naresh Solanki wrote:
-> > From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> >
-> > This patch extends the functionality of the hwmon (dimmtemp) to include
-> > support for Sapphire Rappids platform.
-> >
-> > Sapphire Rappids can accommodate up to 8 CPUs, each with 16 DIMMs. To
-> > accommodate this configuration, the maximum supported DIMM count is
-> > increased, and the corresponding Sapphire Rappids ID and threshold code
-> > are added.
-> >
-> > The patch has been tested on a 4S system with 64 DIMMs installed.
-> > Default thresholds are utilized for Sapphire Rappids, as accessing the
-> > threshold requires accessing the UBOX device on Uncore bus 0, which can
-> > only be achieved using MSR access. The non-PCI-compliant MMIO BARs are
-> > not available for this purpose.
-> >
-> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->
-> Does this patch depend on the other patch, the one introducing
-> Sapphire Rappids to peci/cputemp ?
-Yes they are dependent.
-Will bundle them together & resend.
+This patch introduces support for handling more than 32 DIMMs by
+utilizing bitmap operations. The changes ensure that the driver can
+handle a higher number of DIMMs efficiently.
 
-~Naresh
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+---
+ drivers/hwmon/peci/dimmtemp.c | 26 +++++++++++++++-----------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
 
->
-> Guenter
->
-> > ---
-> >  drivers/hwmon/peci/dimmtemp.c | 24 +++++++++++++++++++++++-
-> >  1 file changed, 23 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
-> > index ce89da3937a0..ea4ac5a023cf 100644
-> > --- a/drivers/hwmon/peci/dimmtemp.c
-> > +++ b/drivers/hwmon/peci/dimmtemp.c
-> > @@ -30,8 +30,10 @@
-> >  #define DIMM_IDX_MAX_ON_ICX  2
-> >  #define CHAN_RANK_MAX_ON_ICXD        4
-> >  #define DIMM_IDX_MAX_ON_ICXD 2
-> > +#define CHAN_RANK_MAX_ON_SPR 128
-> > +#define DIMM_IDX_MAX_ON_SPR  2
-> >
-> > -#define CHAN_RANK_MAX                CHAN_RANK_MAX_ON_HSX
-> > +#define CHAN_RANK_MAX                CHAN_RANK_MAX_ON_SPR
-> >  #define DIMM_IDX_MAX         DIMM_IDX_MAX_ON_HSX
-> >  #define DIMM_NUMS_MAX                (CHAN_RANK_MAX * DIMM_IDX_MAX)
-> >
-> > @@ -534,6 +536,15 @@ read_thresholds_icx(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u
-> >       return 0;
-> >  }
-> >
-> > +static int
-> > +read_thresholds_spr(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u32 *data)
-> > +{
-> > +     /* Use defaults */
-> > +     *data = (95 << 16) | (90 << 8);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> >  static const struct dimm_info dimm_hsx = {
-> >       .chan_rank_max  = CHAN_RANK_MAX_ON_HSX,
-> >       .dimm_idx_max   = DIMM_IDX_MAX_ON_HSX,
-> > @@ -576,6 +587,13 @@ static const struct dimm_info dimm_icxd = {
-> >       .read_thresholds = &read_thresholds_icx,
-> >  };
-> >
-> > +static const struct dimm_info dimm_spr = {
-> > +     .chan_rank_max  = CHAN_RANK_MAX_ON_SPR,
-> > +     .dimm_idx_max   = DIMM_IDX_MAX_ON_SPR,
-> > +     .min_peci_revision = 0x40,
-> > +     .read_thresholds = &read_thresholds_spr,
-> > +};
-> > +
-> >  static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
-> >       {
-> >               .name = "peci_cpu.dimmtemp.hsx",
-> > @@ -601,6 +619,10 @@ static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
-> >               .name = "peci_cpu.dimmtemp.icxd",
-> >               .driver_data = (kernel_ulong_t)&dimm_icxd,
-> >       },
-> > +     {
-> > +             .name = "peci_cpu.dimmtemp.spr",
-> > +             .driver_data = (kernel_ulong_t)&dimm_spr,
-> > +     },
-> >       { }
-> >  };
-> >  MODULE_DEVICE_TABLE(auxiliary, peci_dimmtemp_ids);
-> > --
-> > 2.41.0
-> >
+diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
+index ed968401f93c..ce89da3937a0 100644
+--- a/drivers/hwmon/peci/dimmtemp.c
++++ b/drivers/hwmon/peci/dimmtemp.c
+@@ -219,19 +219,21 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+ {
+ 	int chan_rank_max = priv->gen_info->chan_rank_max;
+ 	int dimm_idx_max = priv->gen_info->dimm_idx_max;
+-	u32 chan_rank_empty = 0;
+-	u32 dimm_mask = 0;
+-	int chan_rank, dimm_idx, ret;
++	DECLARE_BITMAP(dimm_mask, DIMM_NUMS_MAX);
++	DECLARE_BITMAP(chan_rank_empty, CHAN_RANK_MAX);
++
++	int chan_rank, dimm_idx, ret, i;
+ 	u32 pcs;
+ 
+-	BUILD_BUG_ON(BITS_PER_TYPE(chan_rank_empty) < CHAN_RANK_MAX);
+-	BUILD_BUG_ON(BITS_PER_TYPE(dimm_mask) < DIMM_NUMS_MAX);
+ 	if (chan_rank_max * dimm_idx_max > DIMM_NUMS_MAX) {
+ 		WARN_ONCE(1, "Unsupported number of DIMMs - chan_rank_max: %d, dimm_idx_max: %d",
+ 			  chan_rank_max, dimm_idx_max);
+ 		return -EINVAL;
+ 	}
+ 
++	bitmap_zero(dimm_mask, DIMM_NUMS_MAX);
++	bitmap_zero(chan_rank_empty, CHAN_RANK_MAX);
++
+ 	for (chan_rank = 0; chan_rank < chan_rank_max; chan_rank++) {
+ 		ret = peci_pcs_read(priv->peci_dev, PECI_PCS_DDR_DIMM_TEMP, chan_rank, &pcs);
+ 		if (ret) {
+@@ -242,7 +244,7 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+ 			 * detection to be performed at a later point in time.
+ 			 */
+ 			if (ret == -EINVAL) {
+-				chan_rank_empty |= BIT(chan_rank);
++				bitmap_set(chan_rank_empty, chan_rank, 1);
+ 				continue;
+ 			}
+ 
+@@ -251,7 +253,7 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+ 
+ 		for (dimm_idx = 0; dimm_idx < dimm_idx_max; dimm_idx++)
+ 			if (__dimm_temp(pcs, dimm_idx))
+-				dimm_mask |= BIT(chan_rank * dimm_idx_max + dimm_idx);
++				bitmap_set(dimm_mask, chan_rank * dimm_idx_max + dimm_idx, 1);
+ 	}
+ 
+ 	/*
+@@ -260,7 +262,7 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+ 	 * host platform boot. Retrying a couple of times lets us make sure
+ 	 * that the state is persistent.
+ 	 */
+-	if (chan_rank_empty == GENMASK(chan_rank_max - 1, 0)) {
++	if (bitmap_full(chan_rank_empty, chan_rank_max)) {
+ 		if (priv->no_dimm_retry_count < NO_DIMM_RETRY_COUNT_MAX) {
+ 			priv->no_dimm_retry_count++;
+ 
+@@ -274,14 +276,16 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+ 	 * It's possible that memory training is not done yet. In this case we
+ 	 * defer the detection to be performed at a later point in time.
+ 	 */
+-	if (!dimm_mask) {
++	if (bitmap_empty(dimm_mask, DIMM_NUMS_MAX)) {
+ 		priv->no_dimm_retry_count = 0;
+ 		return -EAGAIN;
+ 	}
+ 
+-	dev_dbg(priv->dev, "Scanned populated DIMMs: %#x\n", dimm_mask);
++	for_each_set_bit(i, dimm_mask, DIMM_NUMS_MAX) {
++		dev_dbg(priv->dev, "Found DIMM%#x\n", i);
++	}
+ 
+-	bitmap_from_arr32(priv->dimm_mask, &dimm_mask, DIMM_NUMS_MAX);
++	bitmap_copy(priv->dimm_mask, dimm_mask, DIMM_NUMS_MAX);
+ 
+ 	return 0;
+ }
+
+base-commit: 4dbbaf8fbdbd13adc80731b2452257857e4c2d8b
+-- 
+2.41.0
+
