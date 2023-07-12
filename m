@@ -2,66 +2,71 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3997EB64DD
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Jul 2023 09:13:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 457C0EB64D9
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Jul 2023 11:49:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbjGLJNK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Jul 2023 05:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
+        id S233410AbjGLLtf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Jul 2023 07:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbjGLJMy (ORCPT
+        with ESMTP id S233218AbjGLLtE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:12:54 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AD4106
-        for <linux-hwmon@vger.kernel.org>; Wed, 12 Jul 2023 02:12:50 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fbef8ad9bbso72732445e9.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 12 Jul 2023 02:12:50 -0700 (PDT)
+        Wed, 12 Jul 2023 07:49:04 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FEB1BEA
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Jul 2023 04:48:20 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fc0aecf107so40806255e9.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Jul 2023 04:48:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1689153169; x=1691745169;
+        d=9elements.com; s=google; t=1689162495; x=1691754495;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=As2y1S5d2MKNIGGSQpxsJqwHM8ix7xWAPQggfbywHb4=;
-        b=Hs0IRBomcYhxipA/LiintP1gtFz4DiE7t+yEZ7uHGCq082dAK1i0xqnOkPPKy9gv5R
-         0FbdI+i1lgZQUBWsNbBF1NsciF7dLdCfuXHCR0pN2QqY5JCCOwqRfSp1GpctvmPzUR72
-         w7h1i24zz9YT8gJoyYvHKhgMm0MNZbQ39XCgCj4TS1023eCnO52jesVLqxrsnIQN/lZX
-         tcH8lTgu3BTy+9Q2I5EhZcilGQu6ttx8rSMi2VN97cTrlhP76iw6Nmun8PiGMYOghkPR
-         /rhtyX0UCFPiXW9Vvx+rPVS2AkypAuUgi+7DRcxcPzQy9a3WGrj5nXOsbsYs6EmAXL/v
-         sepA==
+        bh=fjCB4TOOxP7qsKNovkEsxKqV1LmaPoV1I20uND0A77g=;
+        b=BFmaEGMw6Ft9GutczKIxNVxp9G1Ddpl+pAgdl5Rgpma7ch99AWsRPEuMfBkkyVQl3F
+         w1DxYcYB2jI2O/b5AF4obdotjBMVItmIAe06ELlYExaTXCB7XCC0WXlLlH66OzSLgj5J
+         AADN8Ldh/8dyv371o8tQebfv3N8vr5lpSVcvYq7YLNyqSWIj4K7HvTxAMDkMIsG8TJTQ
+         EpiE2QRyOaK24dqPlG42Rp8LzMu6/Yxj2l2Q3lbotJHwMDSvXULRAXgEwCFNoBSAol0A
+         vUQ1Qb7nVVipVPGN/KB2VLM4MeJw84QZNiBvwL8c0C2Py/SrL4qZgpHyCMpZszMiDa2p
+         FPQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689153169; x=1691745169;
+        d=1e100.net; s=20221208; t=1689162495; x=1691754495;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=As2y1S5d2MKNIGGSQpxsJqwHM8ix7xWAPQggfbywHb4=;
-        b=VfMPkCe4Gn162it8S0dpxEjDhtDgsZrSByzBW78uMMPh3avRvm50zpHKSFPU/O4P8e
-         35L3yI7pChlm9sD/zpF+TzS1EyI3GA3vBHATXWeaIwFRSlKjufLZIxncT/Urflrna3mo
-         +ATPx0t63+99AnSvYaYrpibHC2ochLS28z1zWJESMPkCy4MX20FLD4S4XKmhtw9/4Ziz
-         yvHKL9tUDxz2BVTW4Q7uDkwUS0rEsVlA18y/SfmRdmZ/3BOB8NQLFJdtp9M8AqdX1y7e
-         qaHC3wTtEwV6AS7CTvISEHlJYzdMpgtiq8ZQLhOhWKrKnTADp23n34TfyvcATMUz4tRu
-         5sLA==
-X-Gm-Message-State: ABy/qLakYoWSdTpFrSKJUuBNd5ARU/7tjIFbXB5B+MPORNAz4unj23xJ
-        3bZ4/O+TJof1jpf8xvSYYOMv6Q==
-X-Google-Smtp-Source: APBJJlG+8CvYiKqmaycbha1cyDEg2VMoqqT40oIx06ECrjzd+sS/mZtwA/vlvGg/cL6i7ymTaVLp1w==
-X-Received: by 2002:a7b:c5d4:0:b0:3fa:9e61:19ed with SMTP id n20-20020a7bc5d4000000b003fa9e6119edmr16894535wmk.23.1689153168720;
-        Wed, 12 Jul 2023 02:12:48 -0700 (PDT)
+        bh=fjCB4TOOxP7qsKNovkEsxKqV1LmaPoV1I20uND0A77g=;
+        b=OCQlp3Dx9/Q2JT+pusdD/60GD53Jk6syL1PzVLJYbaWLPCcxkSaIuOXY54JRK2gYOA
+         puUOmIb88lW2nW7S9jsDb1f74u8W5KcNbGJMI7YzDi/BhQxL7vbiTEsLpJ2eMPPcJrlO
+         Yml7GoNhMlEKATGG8kl0ZN3tut5YxAtDj0/AE7RgeBcdm6mCkwiHJrXJ72im9ws1CZJS
+         /7wg80QFRxegaN9yZfcNHgMyFgbYkl7rJ706KHEGdYpZpfn/G8dENm2gFb/0j4ywho3E
+         4ln5wfRE99ihWj3bC3nt/1QeLtSPFluOgw75wQxpQxWut349mXz/5cqs22HHCv1K8TCr
+         APOA==
+X-Gm-Message-State: ABy/qLb/EoiwiVoac8TWVDg4ahz86C8o5Wp0JZfL+T0mwKiSuImi1MTa
+        O5dksZeiG70KQqdC7lyOvbVW3g==
+X-Google-Smtp-Source: APBJJlGvjdJB4E4+Oxx5hArMzW3BaecO1LGH1ByTg5gSqGeb4fmHvUE3RMYyoe3voqT7+sJJxfCHKw==
+X-Received: by 2002:a05:600c:221a:b0:3fc:1bd:95a6 with SMTP id z26-20020a05600c221a00b003fc01bd95a6mr13025227wml.31.1689162495408;
+        Wed, 12 Jul 2023 04:48:15 -0700 (PDT)
 Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id y11-20020a05600c364b00b003f90b9b2c31sm15013711wmq.28.2023.07.12.02.12.48
+        by smtp.gmail.com with ESMTPSA id j2-20020a5d4482000000b003143867d2ebsm4867463wrq.63.2023.07.12.04.48.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 02:12:48 -0700 (PDT)
+        Wed, 12 Jul 2023 04:48:15 -0700 (PDT)
 From:   Naresh Solanki <naresh.solanki@9elements.com>
 X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        iwona.winiarska@intel.com, linux@roeck-us.net, jdelvare@suse.com
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v2 2/3] hwmon: (peci/cputemp) Add Intel Sapphire Rapids support
-Date:   Wed, 12 Jul 2023 11:12:39 +0200
-Message-ID: <20230712091241.3668454-2-Naresh.Solanki@9elements.com>
+To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH 2/8] dt-bindings: trivial-devices: Add MPS MP2971 and MP2973
+Date:   Wed, 12 Jul 2023 13:47:43 +0200
+Message-ID: <20230712114754.500477-2-Naresh.Solanki@9elements.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230712091241.3668454-1-Naresh.Solanki@9elements.com>
-References: <20230712091241.3668454-1-Naresh.Solanki@9elements.com>
+In-Reply-To: <20230712114754.500477-1-Naresh.Solanki@9elements.com>
+References: <20230712114754.500477-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -70,67 +75,29 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Add support to read DTS for reading Intel Sapphire Rapids platform.
+Add Monolithic Power Systems MP2971 & MP2973 to trivial devices.
 
 Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 ---
-Changes in V2:
-- Refactored from previous patchset as seperate patch based on subsystem.
----
- drivers/hwmon/peci/cputemp.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
-index e5b65a382772..a812c15948d9 100644
---- a/drivers/hwmon/peci/cputemp.c
-+++ b/drivers/hwmon/peci/cputemp.c
-@@ -363,6 +363,7 @@ static int init_core_mask(struct peci_cputemp *priv)
- 	switch (peci_dev->info.model) {
- 	case INTEL_FAM6_ICELAKE_X:
- 	case INTEL_FAM6_ICELAKE_D:
-+	case INTEL_FAM6_SAPPHIRERAPIDS_X:
- 		ret = peci_ep_pci_local_read(peci_dev, 0, reg->bus, reg->dev,
- 					     reg->func, reg->offset + 4, &data);
- 		if (ret)
-@@ -531,6 +532,13 @@ static struct resolved_cores_reg resolved_cores_reg_icx = {
- 	.offset = 0xd0,
- };
- 
-+static struct resolved_cores_reg resolved_cores_reg_spr = {
-+	.bus = 31,
-+	.dev = 30,
-+	.func = 6,
-+	.offset = 0x80,
-+};
-+
- static const struct cpu_info cpu_hsx = {
- 	.reg		= &resolved_cores_reg_hsx,
- 	.min_peci_revision = 0x33,
-@@ -549,6 +557,12 @@ static const struct cpu_info cpu_icx = {
- 	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
- };
- 
-+static const struct cpu_info cpu_spr = {
-+	.reg		= &resolved_cores_reg_spr,
-+	.min_peci_revision = 0x40,
-+	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
-+};
-+
- static const struct auxiliary_device_id peci_cputemp_ids[] = {
- 	{
- 		.name = "peci_cpu.cputemp.hsx",
-@@ -574,6 +588,10 @@ static const struct auxiliary_device_id peci_cputemp_ids[] = {
- 		.name = "peci_cpu.cputemp.icxd",
- 		.driver_data = (kernel_ulong_t)&cpu_icx,
- 	},
-+	{
-+		.name = "peci_cpu.cputemp.spr",
-+		.driver_data = (kernel_ulong_t)&cpu_spr,
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(auxiliary, peci_cputemp_ids);
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 246863a9bc7e..f639618508a9 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -119,6 +119,10 @@ properties:
+           - fsl,mpr121
+             # Monolithic Power Systems Inc. multi-phase controller mp2888
+           - mps,mp2888
++            # Monolithic Power Systems Inc. multi-phase controller mp2971
++          - mps,mp2971
++            # Monolithic Power Systems Inc. multi-phase controller mp2973
++          - mps,mp2973
+             # Monolithic Power Systems Inc. multi-phase controller mp2975
+           - mps,mp2975
+             # Honeywell Humidicon HIH-6130 humidity/temperature sensor
 -- 
 2.41.0
 
