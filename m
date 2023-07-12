@@ -2,54 +2,54 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4117BC001B0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB067EB64D9
 	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Jul 2023 11:49:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233247AbjGLLth (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S233278AbjGLLth (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Wed, 12 Jul 2023 07:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233250AbjGLLtE (ORCPT
+        with ESMTP id S233260AbjGLLtG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:49:04 -0400
+        Wed, 12 Jul 2023 07:49:06 -0400
 Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F14C1FFB
-        for <linux-hwmon@vger.kernel.org>; Wed, 12 Jul 2023 04:48:21 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-31454996e06so6482209f8f.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 12 Jul 2023 04:48:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FD41FFE
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Jul 2023 04:48:22 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3143b88faebso7702293f8f.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Jul 2023 04:48:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1689162496; x=1691754496;
+        d=9elements.com; s=google; t=1689162498; x=1691754498;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nNQjkE8rt0loSfu/6IF9XOAi/Sv+jFDCxC5ymTmcAL4=;
-        b=QW1OxwFcn9/fM3iz2FPMk84jEGix8ud6DvyCVmxBy/7qEKrS9e/ynEzWm9B+Am0Hg/
-         QQmzkhQhEPk14OWaW4uMddOPGEYsw+4C/4LqtG2r4YaDKwhKwwh2w8FJQ16TOnsNzET8
-         ymxGgCI2DCwcXjH/0bcJMQlO+w+iaR+QY5GeOT+7C/93teYnYK+UBNGc4E8qFIPyN//b
-         rwlaGuN8g0yMFFFSnnyjaMqJXHYHB//ROaId+Dvm8/cXVeyQRREweVth953vMnFKU+69
-         eixZmccmqrDJ5M9O03PIuS5DGnkQY0ShbrD2vWEKqPQNRaWPL8qH43rZN3XuaVO43G7i
-         H7rQ==
+        bh=0Saa7jbAnKv6/aFJ04VhkVrkgcqBc2X3n9e+eP71Ul0=;
+        b=W+m1h90UlA3oYUb3/8IOQdifd8XsTo1zwO6iXBzuAoaxwGzw5vcpBqrzf70aBY14Z3
+         duJX33JDVt/bOavIUTs14hm0hL8HTBzCAivTDyTYGV5f8qIQzdOFawuJzDpwVxsl2R18
+         w1AOZy+OuASSwvB9M22iJnCs51ElmT65kQkvVOFK780opEQP7wDNYP9OWDDoit+CPM6f
+         n2q5XJLkhuQYUgYYhvK8Mx45nZJ5BOOX5cKfUBfTXaqZYJUs4AXm97zbCoiCsgv9qUs9
+         cBQSGEmYugaT7ki5ceYheZ4ZPeeBHRKJL/hsi6/dOmHDMQko3TK5L5ZpGScm/9S3np3D
+         Ae0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689162496; x=1691754496;
+        d=1e100.net; s=20221208; t=1689162498; x=1691754498;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nNQjkE8rt0loSfu/6IF9XOAi/Sv+jFDCxC5ymTmcAL4=;
-        b=i0l9O92GuLw4ecey6OX+3u5xErTvRwRXPUmpqOHRbS1T86TJQ4LR5mDL2oPezLeWSk
-         zG36RHnV+0cvBYlraTk5+gGpdzt1nZMkFah+vYr6uPTb75BMiyl0+dQNsLLiA5IuB82O
-         wPBDYuGJugFkR0PmnoY9yiRirCPIRB00/2Dc0/ui7EkHr4cXzZEI52Q4AVernOqQvP/s
-         H9WgCJml2GDIDv997oCLCR6gSR8qzMCKhGcnpTGHcfjmHCqKA+efVutc5bjUb64VZrr2
-         pYrZmQy63m/KgFZfqvJq3Sh/8jiHJrFqfRr64mdN8GEAMeHAYKYuILVLZWw5EHQjybx2
-         KD3Q==
-X-Gm-Message-State: ABy/qLY8/Tp7vhajfz/JImyOGVi2uumN/qOM0DMRZZQXq0Epj7ScslKB
-        Lm06DeNUGEhwSkqvEcY7AS40Vw==
-X-Google-Smtp-Source: APBJJlEHu+LWsBZwzQyp91w3w+GjYNtGjUEvFktx8zUoyy7jJBprAPT714dEj1P/lQRadTB1gApCwg==
-X-Received: by 2002:adf:e483:0:b0:314:1bb7:8a19 with SMTP id i3-20020adfe483000000b003141bb78a19mr15814202wrm.35.1689162496665;
-        Wed, 12 Jul 2023 04:48:16 -0700 (PDT)
+        bh=0Saa7jbAnKv6/aFJ04VhkVrkgcqBc2X3n9e+eP71Ul0=;
+        b=S/nbILO++3Y8CxSWfZplAIwxHkC2CGvA98VO+jg2ORpv9/vkpzPWv86wuiaO/UxH1G
+         xZ5Dr4xFKLaMhi+ivh9+j/9VTzIrNWiwRvwOqxc91acw7H8xZRYQUaDFvKOyHO5MGryK
+         5WwAceqKVIgteKRcJyyw8C26s5VSsIHImVr46c0kpErm5UaDQvWWypFdzsoeLy4sqP8X
+         kNdZAbewutC90oXqUtlMjDBLOP3ih6HYPYDmU5fca93Lvcs7WGVVvCFvwsDP8eBLIauW
+         TDUlKNHXs32mp1X7XStNKQFcjKC1D772mQW+MA0AYyjP25GyQ1EtnmrGZKJfuOVl2+K4
+         9gJw==
+X-Gm-Message-State: ABy/qLYDHH2iZio69ei0rgsnXSQe+mKhisFq27pK/dmzgkX6LPDPI93q
+        Se531aqm8s71GUBUaSxlCJt+0Q==
+X-Google-Smtp-Source: APBJJlGTxLkm+W+9MJG5o9kxu8f/PALLlF4e4GVIaXopTy0Q6wputWK3KlVi68XyQAGwHQC9oZgiqQ==
+X-Received: by 2002:a5d:5912:0:b0:314:c2a:31c5 with SMTP id v18-20020a5d5912000000b003140c2a31c5mr19304030wrd.19.1689162498000;
+        Wed, 12 Jul 2023 04:48:18 -0700 (PDT)
 Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id j2-20020a5d4482000000b003143867d2ebsm4867463wrq.63.2023.07.12.04.48.15
+        by smtp.gmail.com with ESMTPSA id j2-20020a5d4482000000b003143867d2ebsm4867463wrq.63.2023.07.12.04.48.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 04:48:16 -0700 (PDT)
+        Wed, 12 Jul 2023 04:48:17 -0700 (PDT)
 From:   Naresh Solanki <naresh.solanki@9elements.com>
 X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
 To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
@@ -57,9 +57,9 @@ To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
         Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH 3/8] hwmon: (pmbus/mp2975) Prepare for MP2973 and MP2971
-Date:   Wed, 12 Jul 2023 13:47:44 +0200
-Message-ID: <20230712114754.500477-3-Naresh.Solanki@9elements.com>
+Subject: [PATCH 4/8] hwmon: (pmbus/mp2975) Simplify VOUT code
+Date:   Wed, 12 Jul 2023 13:47:45 +0200
+Message-ID: <20230712114754.500477-4-Naresh.Solanki@9elements.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230712114754.500477-1-Naresh.Solanki@9elements.com>
 References: <20230712114754.500477-1-Naresh.Solanki@9elements.com>
@@ -71,84 +71,136 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Add support for differntiating between the chips.
-The following commits will make use of this mechanism.
+In order to upstream MP2973/MP2971 simplify the code by removing support
+for various VOUT formats. The MP2973 and MP2971 supports all PMBUS
+supported formats for VOUT, while the MP2975 only support DIRECT and
+VID for VOUT.
+
+In DIRECT mode all chips report the voltage in 1mV/LSB.
+
+Configure the chip to use DIRECT format for VOUT and drop the code
+conversion code for other formats. The to be added chips MP2973/MP2971
+will be configured to also report VOUT in DIRECT format.
+
+The maximum voltage that can be reported in DIRECT format is 32768mV.
+This is sufficient as the maximum output voltage for VR12/VR13 is
+3040 mV.
 
 Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 ---
- drivers/hwmon/pmbus/mp2975.c | 27 +++++++++++++++++++--------
- 1 file changed, 19 insertions(+), 8 deletions(-)
+ drivers/hwmon/pmbus/mp2975.c | 54 ++++++------------------------------
+ 1 file changed, 8 insertions(+), 46 deletions(-)
 
 diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
-index 130cfde52e42..04778f2dcbdb 100644
+index 04778f2dcbdb..ebc9a84b8ad3 100644
 --- a/drivers/hwmon/pmbus/mp2975.c
 +++ b/drivers/hwmon/pmbus/mp2975.c
-@@ -10,6 +10,7 @@
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/of_device.h>
- #include "pmbus.h"
- 
- /* Vendor specific registers. */
-@@ -56,8 +57,13 @@
- 				 PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | \
- 				 PMBUS_HAVE_POUT | PMBUS_PHASE_VIRTUAL)
- 
-+enum chips {
-+	mp2975
-+};
-+
- struct mp2975_data {
- 	struct pmbus_driver_info info;
-+	enum chips chip_id;
- 	int vout_scale;
- 	int vid_step[MP2975_PAGE_NUM];
- 	int vref[MP2975_PAGE_NUM];
-@@ -68,6 +74,13 @@ struct mp2975_data {
+@@ -70,7 +70,6 @@ struct mp2975_data {
+ 	int vref_off[MP2975_PAGE_NUM];
+ 	int vout_max[MP2975_PAGE_NUM];
+ 	int vout_ov_fixed[MP2975_PAGE_NUM];
+-	int vout_format[MP2975_PAGE_NUM];
  	int curr_sense_gain[MP2975_PAGE_NUM];
  };
  
-+static const struct i2c_device_id mp2975_id[] = {
-+	{"mp2975", mp2975},
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, mp2975_id);
-+
+@@ -83,22 +82,6 @@ MODULE_DEVICE_TABLE(i2c, mp2975_id);
+ 
  #define to_mp2975_data(x)  container_of(x, struct mp2975_data, info)
  
- static int mp2975_read_byte_data(struct i2c_client *client, int page, int reg)
-@@ -691,6 +704,11 @@ static int mp2975_probe(struct i2c_client *client)
- 	if (!data)
- 		return -ENOMEM;
- 
-+	if (client->dev.of_node)
-+		data->chip_id = (enum chips)of_device_get_match_data(&client->dev);
-+	else
-+		data->chip_id = i2c_match_id(mp2975_id, client)->driver_data;
-+
- 	memcpy(&data->info, &mp2975_info, sizeof(*info));
- 	info = &data->info;
- 
-@@ -739,15 +757,8 @@ static int mp2975_probe(struct i2c_client *client)
- 	return pmbus_do_probe(client, info);
+-static int mp2975_read_byte_data(struct i2c_client *client, int page, int reg)
+-{
+-	switch (reg) {
+-	case PMBUS_VOUT_MODE:
+-		/*
+-		 * Enforce VOUT direct format, since device allows to set the
+-		 * different formats for the different rails. Conversion from
+-		 * VID to direct provided by driver internally, in case it is
+-		 * necessary.
+-		 */
+-		return PB_VOUT_MODE_DIRECT;
+-	default:
+-		return -ENODATA;
+-	}
+-}
+-
+ static int
+ mp2975_read_word_helper(struct i2c_client *client, int page, int phase, u8 reg,
+ 			u16 mask)
+@@ -273,24 +256,6 @@ static int mp2975_read_word_data(struct i2c_client *client, int page,
+ 		ret = DIV_ROUND_CLOSEST(data->vref[page] * 10 - 50 *
+ 					(ret + 1) * data->vout_scale, 10);
+ 		break;
+-	case PMBUS_READ_VOUT:
+-		ret = mp2975_read_word_helper(client, page, phase, reg,
+-					      GENMASK(11, 0));
+-		if (ret < 0)
+-			return ret;
+-
+-		/*
+-		 * READ_VOUT can be provided in VID or direct format. The
+-		 * format type is specified by bit 15 of the register
+-		 * MP2975_MFR_DC_LOOP_CTRL. The driver enforces VOUT direct
+-		 * format, since device allows to set the different formats for
+-		 * the different rails and also all VOUT limits registers are
+-		 * provided in a direct format. In case format is VID - convert
+-		 * to direct.
+-		 */
+-		if (data->vout_format[page] == vid)
+-			ret = mp2975_vid2direct(info->vrm_version[page], ret);
+-		break;
+ 	case PMBUS_VIRT_READ_POUT_MAX:
+ 		ret = mp2975_read_word_helper(client, page, phase,
+ 					      MP2975_MFR_READ_POUT_PK,
+@@ -578,20 +543,18 @@ mp2975_vout_max_get(struct i2c_client *client, struct mp2975_data *data,
  }
  
--static const struct i2c_device_id mp2975_id[] = {
--	{"mp2975", 0},
--	{}
--};
+ static int
+-mp2975_identify_vout_format(struct i2c_client *client,
+-			    struct mp2975_data *data, int page)
++mp2975_set_vout_format(struct i2c_client *client,
++		       struct mp2975_data *data, int page)
+ {
+ 	int ret;
+ 
+ 	ret = i2c_smbus_read_word_data(client, MP2975_MFR_DC_LOOP_CTRL);
+ 	if (ret < 0)
+ 		return ret;
 -
--MODULE_DEVICE_TABLE(i2c, mp2975_id);
--
- static const struct of_device_id __maybe_unused mp2975_of_match[] = {
--	{.compatible = "mps,mp2975"},
-+	{.compatible = "mps,mp2975", .data = (void *)mp2975},
- 	{}
+-	if (ret & MP2975_VOUT_FORMAT)
+-		data->vout_format[page] = vid;
+-	else
+-		data->vout_format[page] = direct;
+-	return 0;
++	/* Enable DIRECT VOUT format 1mV/LSB */
++	ret &= ~MP2975_VOUT_FORMAT;
++	ret = i2c_smbus_write_word_data(client, MP2975_MFR_DC_LOOP_CTRL, ret);
++	return ret;
+ }
+ 
+ static int
+@@ -650,11 +613,11 @@ mp2975_vout_per_rail_config_get(struct i2c_client *client,
+ 			return ret;
+ 
+ 		/*
+-		 * Get VOUT format for READ_VOUT command : VID or direct.
++		 * Set VOUT format for READ_VOUT command : direct.
+ 		 * Pages on same device can be configured with different
+ 		 * formats.
+ 		 */
+-		ret = mp2975_identify_vout_format(client, data, i);
++		ret = mp2975_set_vout_format(client, data, i);
+ 		if (ret < 0)
+ 			return ret;
+ 
+@@ -689,7 +652,6 @@ static struct pmbus_driver_info mp2975_info = {
+ 		PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+ 		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_POUT |
+ 		PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT | PMBUS_PHASE_VIRTUAL,
+-	.read_byte_data = mp2975_read_byte_data,
+ 	.read_word_data = mp2975_read_word_data,
  };
- MODULE_DEVICE_TABLE(of, mp2975_of_match);
+ 
 -- 
 2.41.0
 
