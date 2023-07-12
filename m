@@ -2,84 +2,244 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDA8EEB64DD
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Jul 2023 19:26:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44EA7EB64DA
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Jul 2023 21:43:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbjGLT0G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Jul 2023 15:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
+        id S229904AbjGLVnQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Jul 2023 17:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbjGLT0G (ORCPT
+        with ESMTP id S229480AbjGLVnP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Jul 2023 15:26:06 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FEE61FC1;
-        Wed, 12 Jul 2023 12:26:05 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-57764a6bf8cso84174327b3.3;
-        Wed, 12 Jul 2023 12:26:05 -0700 (PDT)
+        Wed, 12 Jul 2023 17:43:15 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA371BEF;
+        Wed, 12 Jul 2023 14:43:14 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id ca18e2360f4ac-785cbc5bfd2so344368339f.2;
+        Wed, 12 Jul 2023 14:43:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689189964; x=1691781964;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k3NLC7atfJJsYoIzJOjRPYIOxthVMt03n8zToq5Ub4E=;
-        b=jIla5nm+kACeRc+UraotMgVfcbmtdX9GwY5VRaIBkEkWPY3pt3FzaVQHXs9YMLQxZI
-         GarJgLxvGDjevNEr7RLpxGvpJ5+ltqEDgegwPmlo6T3oFU61s+pR30IZkdDieosK9wdS
-         iiSmlXsAq/V7C8Fqb6PDpSK+24NXqIZOIjodYagtAlZPBDEVSkAoQO7lIVtGic2MIhQ4
-         yrrNUEsElywTo8MtMkPXzr7VK/LKV9CZQSbZgk82qoF3V5eFOoXIhc1pPkjCUDFa0sNf
-         QomTc1hb1mkbau105cZ1AeRKMUKcrMVnqruOMu5x7Ucqz0WbnWb4tmy11LkICwqnKDiT
-         /dkg==
+        d=gmail.com; s=20221208; t=1689198194; x=1691790194;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qRm3jgos2zmvvlEHIgv8GCkkPRupEusUu4b46dYKwrg=;
+        b=H83t0gRvoc47tAmQYeQxdd5H/bNzm6YLCmV/TIcLz4DdzRYKTSX50Mn58YkWAQvUzf
+         rh7lDSWUFgELfLP/8fFYMOJ73WTPWDQgX1NW7anpi/eR0TrhJiDP808UQ6ONTKe9ZwX5
+         g85cYeUuTIsCqz08/6215paIiNnMZONkpdAUqd0c8ddCKOuzk8gfgr7mILTlhXZAvdV/
+         jPovjbsCTYQV2jaCUFME+QpN+lDH0jOjbsfmA2CK+w2zlo31IuPMmNg5POvQ2IZ1PN/N
+         8zY0AkwKFP+CJAg4LUIITkwunSMi7k3fwzJWwo3V6BsEZIDl0d1hZdnPSP3In77faFEG
+         b75Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689189964; x=1691781964;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k3NLC7atfJJsYoIzJOjRPYIOxthVMt03n8zToq5Ub4E=;
-        b=aFHtQ0IA+gNXlDni6VmaRHVmYNr2Z2KomIZPcEPMZhRnlM5rf8JYBZ0XKjDGSYRQIv
-         B4018iKdj/OsfjuaFw5D3NPxoI7uC9LKc7iDIxc1l+HA+l2TMw2YQVsOuAxRJrfgJ0JD
-         w8Jj3QLQvXsDNQOaMqkDTUj5WprMLVwrQbhYFmW17a0u09NQNVxgJwRRxVvFPuo7Q4D+
-         Fkkjw37U/1pj6Q2yyrmsO1eqygIGQYmZp7n36h9BrpaiCBvxfUnUnRET54RgbWWcWpXK
-         QFPKOJHy82VNtx3FpB3xFRSXaT+Hl4tIVdcuENQVqir7+h3d8OkuQEnkiQg08H6ygH41
-         fwKw==
-X-Gm-Message-State: ABy/qLYBfe5RIgpP7FsCJYXLX45MU4h4mbozifs54pCyu7lGM3VSffCz
-        89BAASVIqsl3qt1Fxbrh6HjD781opxam2mN09pPQOh8XaZozng==
-X-Google-Smtp-Source: APBJJlGvTEroD7+OVZ6alFtQq/nLKt30xH0xv5++6k9See/OnfymBucoDonuQ4Oy8u8/k1Fl4JwVSz1K1S50lY8gG+A=
-X-Received: by 2002:a0d:e8d3:0:b0:570:8856:5dbc with SMTP id
- r202-20020a0de8d3000000b0057088565dbcmr20120192ywe.41.1689189964551; Wed, 12
- Jul 2023 12:26:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230712144429.2845940-1-azeemshaikh38@gmail.com>
- <3034082b-4ec8-2a8d-35a2-2551e9feef34@roeck-us.net> <202307121100.A6E650B@keescook>
-In-Reply-To: <202307121100.A6E650B@keescook>
+        d=1e100.net; s=20221208; t=1689198194; x=1691790194;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qRm3jgos2zmvvlEHIgv8GCkkPRupEusUu4b46dYKwrg=;
+        b=RkhU+S2kWb3AidbGSkNB+6/0LWo2XXkY+MqOd4D7COrS9EgDGW3BUrPngJMQhnJfK8
+         njJb2/dVkFtXSmWO0Dsi6MR1nM9xiuyA7L5wsbT6UMbuSxybmvhnY7xGxMoRFUEMoEG6
+         teWgsvWSEi3pQxG4qxCPio8SDnZBdVwIAayOCKjwoRbHRN6sJC/bZLa4HMUOwH+Uhn69
+         teNjqBZLmN0T0EbyuGTK2ziCmNyY7urPgral2SOmGiY/qqqAXUxsbzahek3dGE31ejVM
+         nUJeKfQkbn2TJaRp1O6POOiPn/eC4qylh/6fS727c2Z91q9qQfDxZLG4JPEinLnKVb2V
+         ZK2A==
+X-Gm-Message-State: ABy/qLYTejVNuZsrVBmIFTD3r+rOLnMghGyCshYALsU9JpNKD9tqmPza
+        lSh34a0Q+zHhRUcqlaHCueI=
+X-Google-Smtp-Source: APBJJlGeEFuMaM0W/FQocan8VJSxWKEFeS2eB3uQiJVXfzJJbo7NZK6n5vQ/OdQmNpSvWeYJiXJu6w==
+X-Received: by 2002:a6b:7012:0:b0:786:cc36:360c with SMTP id l18-20020a6b7012000000b00786cc36360cmr34008ioc.8.1689198193917;
+        Wed, 12 Jul 2023 14:43:13 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id o27-20020a056602125b00b00777b94e8efasm1592778iou.18.2023.07.12.14.43.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 14:43:13 -0700 (PDT)
 From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-Date:   Wed, 12 Jul 2023 15:25:53 -0400
-Message-ID: <CADmuW3WfOwAD2MLmNkua5d3Tzjh3RWDSjZomQ_Tu6ucJ+B+bqA@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: Remove strlcpy occurences
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        linux-hardening@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>
+Subject: [PATCH v2] hwmon: (pmbus/max20730) Remove strlcpy occurences
+Date:   Wed, 12 Jul 2023 21:43:07 +0000
+Message-ID: <20230712214307.2424810-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 2:04=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
-rote:
->
-> On Wed, Jul 12, 2023 at 08:16:39AM -0700, Guenter Roeck wrote:
-> > On 7/12/23 07:44, Azeem Shaikh wrote:
-> > > [...]
-> > > +   len =3D strlen(result);
-> > >     return simple_read_from_buffer(buf, count, ppos, tbuf, len);
-> >
-> > This still copies tbuf, meaning all those constant strings won't actual=
-ly
-> > be reported.
->
-> Ah dang, thanks for catching that. Yeah, "tbuf" should be replaced by
-> "result" in the simple_read_from_buffer().
->
+strlcpy() reads the entire source buffer first.
+This read may exceed the destination size limit.
+This is both inefficient and can lead to linear read
+overflows if a source string is not NUL-terminated [1].
+In an effort to remove strlcpy() completely [2], replace
+strlcpy() here with direct assignment.
 
-Thanks for review folks, will send out a v2 shortly.
+strlcpy in this file is used to copy fixed-length strings which can be
+completely avoided by direct assignment and is safe to do so. strlen()
+is used to return the length of @tbuf.
+
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
+
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+---
+v2:
+ * Includes driver name in commit header.
+ * Removes unrelated change tbuf{ 0 } -> tbuf{}.
+ * Fixes bug where @tbuf was being passed instead of @result.
+
+v1:
+ * https://lore.kernel.org/all/20230712144429.2845940-1-azeemshaikh38@gmail.com/
+
+ drivers/hwmon/pmbus/max20730.c |   64 +++++++++++++++++++++--------------------
+ 1 file changed, 33 insertions(+), 31 deletions(-)
+
+diff --git a/drivers/hwmon/pmbus/max20730.c b/drivers/hwmon/pmbus/max20730.c
+index 7bcf27995033..1de34da177c9 100644
+--- a/drivers/hwmon/pmbus/max20730.c
++++ b/drivers/hwmon/pmbus/max20730.c
+@@ -114,6 +114,7 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 	const struct pmbus_driver_info *info;
+ 	const struct max20730_data *data;
+ 	char tbuf[DEBUG_FS_DATA_MAX] = { 0 };
++	char *result = tbuf;
+ 	u16 val;
+
+ 	info = pmbus_get_driver_info(psu->client);
+@@ -148,13 +149,13 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 			>> MAX20730_MFR_DEVSET1_TSTAT_BIT_POS;
+
+ 		if (val == 0)
+-			len = strlcpy(tbuf, "2000\n", DEBUG_FS_DATA_MAX);
++			result = "2000\n";
+ 		else if (val == 1)
+-			len = strlcpy(tbuf, "125\n", DEBUG_FS_DATA_MAX);
++			result = "125\n";
+ 		else if (val == 2)
+-			len = strlcpy(tbuf, "62.5\n", DEBUG_FS_DATA_MAX);
++			result = "62.5\n";
+ 		else
+-			len = strlcpy(tbuf, "32\n", DEBUG_FS_DATA_MAX);
++			result = "32\n";
+ 		break;
+ 	case MAX20730_DEBUGFS_INTERNAL_GAIN:
+ 		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_RGAIN_MASK)
+@@ -163,35 +164,35 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 		if (data->id == max20734) {
+ 			/* AN6209 */
+ 			if (val == 0)
+-				len = strlcpy(tbuf, "0.8\n", DEBUG_FS_DATA_MAX);
++				result = "0.8\n";
+ 			else if (val == 1)
+-				len = strlcpy(tbuf, "3.2\n", DEBUG_FS_DATA_MAX);
++				result = "3.2\n";
+ 			else if (val == 2)
+-				len = strlcpy(tbuf, "1.6\n", DEBUG_FS_DATA_MAX);
++				result = "1.6\n";
+ 			else
+-				len = strlcpy(tbuf, "6.4\n", DEBUG_FS_DATA_MAX);
++				result = "6.4\n";
+ 		} else if (data->id == max20730 || data->id == max20710) {
+ 			/* AN6042 or AN6140 */
+ 			if (val == 0)
+-				len = strlcpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
++				result = "0.9\n";
+ 			else if (val == 1)
+-				len = strlcpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
++				result = "3.6\n";
+ 			else if (val == 2)
+-				len = strlcpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
++				result = "1.8\n";
+ 			else
+-				len = strlcpy(tbuf, "7.2\n", DEBUG_FS_DATA_MAX);
++				result = "7.2\n";
+ 		} else if (data->id == max20743) {
+ 			/* AN6042 */
+ 			if (val == 0)
+-				len = strlcpy(tbuf, "0.45\n", DEBUG_FS_DATA_MAX);
++				result = "0.45\n";
+ 			else if (val == 1)
+-				len = strlcpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
++				result = "1.8\n";
+ 			else if (val == 2)
+-				len = strlcpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
++				result = "0.9\n";
+ 			else
+-				len = strlcpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
++				result = "3.6\n";
+ 		} else {
+-			len = strlcpy(tbuf, "Not supported\n", DEBUG_FS_DATA_MAX);
++			result = "Not supported\n";
+ 		}
+ 		break;
+ 	case MAX20730_DEBUGFS_BOOT_VOLTAGE:
+@@ -199,26 +200,26 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 			>> MAX20730_MFR_DEVSET1_VBOOT_BIT_POS;
+
+ 		if (val == 0)
+-			len = strlcpy(tbuf, "0.6484\n", DEBUG_FS_DATA_MAX);
++			result = "0.6484\n";
+ 		else if (val == 1)
+-			len = strlcpy(tbuf, "0.8984\n", DEBUG_FS_DATA_MAX);
++			result = "0.8984\n";
+ 		else if (val == 2)
+-			len = strlcpy(tbuf, "1.0\n", DEBUG_FS_DATA_MAX);
++			result = "1.0\n";
+ 		else
+-			len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
++			result = "Invalid\n";
+ 		break;
+ 	case MAX20730_DEBUGFS_OUT_V_RAMP_RATE:
+ 		val = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_VRATE)
+ 			>> MAX20730_MFR_DEVSET2_VRATE_BIT_POS;
+
+ 		if (val == 0)
+-			len = strlcpy(tbuf, "4\n", DEBUG_FS_DATA_MAX);
++			result = "4\n";
+ 		else if (val == 1)
+-			len = strlcpy(tbuf, "2\n", DEBUG_FS_DATA_MAX);
++			result = "2\n";
+ 		else if (val == 2)
+-			len = strlcpy(tbuf, "1\n", DEBUG_FS_DATA_MAX);
++			result = "1\n";
+ 		else
+-			len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
++			result = "Invalid\n";
+ 		break;
+ 	case MAX20730_DEBUGFS_OC_PROTECT_MODE:
+ 		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_OCPM_MASK)
+@@ -230,13 +231,13 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 			>> MAX20730_MFR_DEVSET2_SS_BIT_POS;
+
+ 		if (val == 0)
+-			len = strlcpy(tbuf, "0.75\n", DEBUG_FS_DATA_MAX);
++			result = "0.75\n";
+ 		else if (val == 1)
+-			len = strlcpy(tbuf, "1.5\n", DEBUG_FS_DATA_MAX);
++			result = "1.5\n";
+ 		else if (val == 2)
+-			len = strlcpy(tbuf, "3\n", DEBUG_FS_DATA_MAX);
++			result = "3\n";
+ 		else
+-			len = strlcpy(tbuf, "6\n", DEBUG_FS_DATA_MAX);
++			result = "6\n";
+ 		break;
+ 	case MAX20730_DEBUGFS_IMAX:
+ 		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_IMAX_MASK)
+@@ -287,10 +288,11 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 				"%d.%d\n", ret / 10000, ret % 10000);
+ 		break;
+ 	default:
+-		len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
++		result = "Invalid\n";
+ 	}
+
+-	return simple_read_from_buffer(buf, count, ppos, tbuf, len);
++	len = strlen(result);
++	return simple_read_from_buffer(buf, count, ppos, result, len);
+ }
+
+ static const struct file_operations max20730_fops = {
+--
+2.41.0.255.g8b1d071c50-goog
+
+
