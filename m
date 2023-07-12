@@ -2,131 +2,111 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 834DEEB64DA
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Jul 2023 11:59:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67C7AEB64DD
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Jul 2023 12:07:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbjGLL7E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Jul 2023 07:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49688 "EHLO
+        id S231984AbjGLMHu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Jul 2023 08:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbjGLL7D (ORCPT
+        with ESMTP id S232597AbjGLMHt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Jul 2023 07:59:03 -0400
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA72173C;
-        Wed, 12 Jul 2023 04:58:47 -0700 (PDT)
+        Wed, 12 Jul 2023 08:07:49 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB391BC0
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Jul 2023 05:07:35 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-991ef0b464cso151027466b.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Jul 2023 05:07:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1689163128; x=1720699128;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=OJouoYxXrVKCuCSEo9CjWQgz9MDgSlk0EBb35C5ZGhk=;
-  b=nG6rOHQmlcHkvsHvggjw9cY3iT9lUW6mh1TzbhUyzXVqlwEAE4DegdhN
-   8vQbBdPnJt2UXkb9FOfc8po9k63uvDaMpub1t7UlGJ5Q4duUqW3g0EQLR
-   IawOO98bYBlRhKDeE9JgTZgHMfTXM4ScAFrm7SohMh6dtCTqfeMboiqJq
-   c=;
-X-IronPort-AV: E=Sophos;i="6.01,199,1684800000"; 
-   d="scan'208";a="226107911"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-189d700f.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 11:58:26 +0000
-Received: from EX19D004EUA004.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-189d700f.us-west-2.amazon.com (Postfix) with ESMTPS id 2263140D5A;
-        Wed, 12 Jul 2023 11:58:25 +0000 (UTC)
-Received: from EX19D044EUA002.ant.amazon.com (10.252.50.212) by
- EX19D004EUA004.ant.amazon.com (10.252.50.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 12 Jul 2023 11:58:24 +0000
-Received: from [192.168.102.31] (10.85.143.172) by
- EX19D044EUA002.ant.amazon.com (10.252.50.212) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.30;
- Wed, 12 Jul 2023 11:58:19 +0000
-Message-ID: <4d9a0899-145e-3223-41da-b91b81afaaa2@amazon.com>
-Date:   Wed, 12 Jul 2023 14:58:14 +0300
+        d=linaro.org; s=google; t=1689163653; x=1691755653;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yIlGfu8m5d5ZQkeZoOR0iSZhRUvPSChL4hPGHRMsFF0=;
+        b=g/1xVqjy/HPBV5OmMqyjLrlIDKpCIp3xzzy81/AMgFSyXl4v5CvWjM1AmYYRy+7TdE
+         jfwW9wv/FJzEd8MdK2XWlQMffknItrG95PHwgBlleVcgmho7dbwS8TwhO87+FSt0P2T1
+         45UnZzOXv8Ce/MSH5T+aOxTkOXSR+8+QAS4VoBqAGglkowXLgV7z2G5GF2/vtPPFQIpx
+         7xo+/1H0FzrBfQ1oHUPXV4LQtBB/mA25ITDQKFB2W6b1us7blXZgu9Rr7h4I+nkv9+5F
+         Sc74Emd/VUyTrIRapYlktFn90wjboJKRZp8Vvhf4YzK4MCBUXLOYzaOAuZjocosnpMHB
+         Yemg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689163653; x=1691755653;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yIlGfu8m5d5ZQkeZoOR0iSZhRUvPSChL4hPGHRMsFF0=;
+        b=UcVHRIBOGNsrprVRkI7MHHBHnQRrBLtyKB4mWXSPE9rpaRXQaqdohkog9UeJt3/gz9
+         6gs6MsTmTb7kWSXoI8JaJ+z/Lr40E/grPCZLtoKcDn2pGfhB+LYre/9GMMfLDUX2w4s3
+         8487u2yFlGVvvSLTXCO6r62zjxV3dAdHy6CjeayWv2KR6gWZ6Iom9ZmCj5YDeYz1hBL8
+         KaTkv5W2GGPz4afne7IWycSBhU2+GWsCSmEUDjJLeHK6nhx1OpBCwXTPrQLNjJH7O2qW
+         E8zCPMRG0xFpsmcPEi4x6Ne2jWFGhACFX4cGA6kfmq/PK4MLSWmf6CtEXov3iUdNkKzF
+         3fMA==
+X-Gm-Message-State: ABy/qLbRQIpjsWd8Y3wLXDEMPCK0QE12zCJTJJAawyLci+WLbl94qv2u
+        vCM5SC9KbMWMcJO/5Al75B9+DQ==
+X-Google-Smtp-Source: APBJJlEykDE6ERuH6spFAbf69B6y/WO55GrI76PSo9E9V8DqXVkCs5tSDioJtQrJYxUHVR6wBeikUg==
+X-Received: by 2002:a17:906:8e:b0:993:e81a:f093 with SMTP id 14-20020a170906008e00b00993e81af093mr2496708ejc.26.1689163653331;
+        Wed, 12 Jul 2023 05:07:33 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id sd6-20020a170906ce2600b0099275c59bc9sm2488709ejb.33.2023.07.12.05.07.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 05:07:32 -0700 (PDT)
+Message-ID: <36182c36-07fc-e6f6-eb63-bf51ee3d8a86@linaro.org>
+Date:   Wed, 12 Jul 2023 14:07:31 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
 Subject: Re: [PATCH] dt-bindings: hwmon: moortec, mr75203: fix multipleOf for
  coefficients
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     "Farber, Eliav" <farbere@amazon.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Rahul Tanwar <rtanwar@maxlinear.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <farbere@amazon.com>
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 References: <20230712081124.110345-1-krzysztof.kozlowski@linaro.org>
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <20230712081124.110345-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+ <4d9a0899-145e-3223-41da-b91b81afaaa2@amazon.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4d9a0899-145e-3223-41da-b91b81afaaa2@amazon.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.85.143.172]
-X-ClientProxiedBy: EX19D035UWB004.ant.amazon.com (10.13.138.104) To
- EX19D044EUA002.ant.amazon.com (10.252.50.212)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/12/2023 11:11 AM, Krzysztof Kozlowski wrote:
-> Few coefficients use default values multiple of 100, not 1000 (in the
-> example DTS and in the Linux driver):
->
->  moortec,mr75203.example.dtb: pvt@e0680000: moortec,ts-coeff-g:0:0: 
-> 61400 is not a multiple of 1000
+On 12/07/2023 13:58, Farber, Eliav wrote:
+> On 7/12/2023 11:11 AM, Krzysztof Kozlowski wrote:
+>> Few coefficients use default values multiple of 100, not 1000 (in the
+>> example DTS and in the Linux driver):
+>>
+>>  moortec,mr75203.example.dtb: pvt@e0680000: moortec,ts-coeff-g:0:0: 
+>> 61400 is not a multiple of 1000
+> 
+> Why isn't multiple of 1000 correct?
 
-Why isn't multiple of 1000 correct?
-According to the Moortec datasheet for the series 6 of the temperature 
-sensor
-the coefficients are:
-G = 57.4 (57.4 * 1000 = 57400)
-H = 249.4
-For series 5 coefficients are:
-G = 60 (60 * 1000 = 60000)
-H = 200
-J = -0.1
+61400 is not a multiple of 1000, at least not in integers. 61400 is a
+multiple of 100.
 
-> Fixes: bf1fdafdbc61 ("dt-bindings: hwmon: (mr75203) add coefficient 
-> properties for the thermal equation")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> .../devicetree/bindings/hwmon/moortec,mr75203.yaml          | 6 +++---
-> 1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git 
-> a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml 
-> b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> index ae4f68d4e696..bd67cfee6d19 100644
-> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> @@ -105,7 +105,7 @@ properties:
->       G coefficient for temperature equation.
->       Default for series 5 = 60000
->       Default for series 6 = 57400
-> -    multipleOf: 1000
-> +    multipleOf: 100
->     minimum: 1000
->     $ref: /schemas/types.yaml#/definitions/uint32
->
-> @@ -114,7 +114,7 @@ properties:
->       H coefficient for temperature equation.
->       Default for series 5 = 200000
->       Default for series 6 = 249400
-> -    multipleOf: 1000
-> +    multipleOf: 100
->     minimum: 1000
->     $ref: /schemas/types.yaml#/definitions/uint32
->
-> @@ -131,7 +131,7 @@ properties:
->       J coefficient for temperature equation.
->       Default for series 5 = -100
->       Default for series 6 = 0
-> -    multipleOf: 1000
-> +    multipleOf: 100
->     maximum: 0
->     $ref: /schemas/types.yaml#/definitions/int32
->
-> -- 
-> 2.34.1
->
+> According to the Moortec datasheet for the series 6 of the temperature 
+> sensor
+> the coefficients are:
+> G = 57.4 (57.4 * 1000 = 57400)
+
+57.4 is not integer. With that approach 1 is also multiple of 1000, because:
+
+G = 1 * 0.001 * 1000.
+
+> H = 249.4
+> For series 5 coefficients are:
+> G = 60 (60 * 1000 = 60000)
+> H = 200
+> J = -0.1
+
+Trim the context of replies. No need to quote entire text below.
+
+Best regards,
+Krzysztof
+
