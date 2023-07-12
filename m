@@ -2,252 +2,149 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40A3DEB64D9
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Jul 2023 15:16:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A8C0EB64D9
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Jul 2023 15:20:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232749AbjGLPQw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Jul 2023 11:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
+        id S232209AbjGLPUt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Jul 2023 11:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232376AbjGLPQv (ORCPT
+        with ESMTP id S231696AbjGLPUs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Jul 2023 11:16:51 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5531BDC;
-        Wed, 12 Jul 2023 08:16:42 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-666e64e97e2so4009449b3a.1;
-        Wed, 12 Jul 2023 08:16:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689175002; x=1691767002;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=PAhy3IB4is5+53Cfgz4S3Ovfr+OJ4+hbHoYpYABgHdE=;
-        b=RylKbdAUXmcCQa+90CeWC/IM/RY2Pbxdu5zkYXRdJljnel320X9SqmKsDlWuRMuXIk
-         QA+PRvI8BxW4tsJ43MrOcGrIDwtjPPVXiQ0j3dQ9YBUDl6t+enLp79Jpb0D8V9r3i9og
-         IvaSfeollIyJlHAxipeoJ5LedcY9wEytLk5UQPhW8uAPqp46UNLoKlrYbeINCIQCkCw3
-         txsEoSYkbo6/rrfGAdiKdU24t+cE4HtIF3msr6LsrCUiMaoaS4r2ItbHE2e3myXo0+pS
-         D+qXlV9EAzB6aBrD7Ac/qJcgaCmzMSUry2ePWZxAPZHz4eV2B/oFab7YQ/+GHFBqb2bI
-         nlGQ==
+        Wed, 12 Jul 2023 11:20:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F261BF9
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Jul 2023 08:19:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689175140;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PCzMnIk4EUAlNIXsbTPgnejSeR7W3lLfeJIjDNvrQT4=;
+        b=GjjZKEoxZ97kaWsjJtWXo6RNOJhdA+3U8lVv2feMwsW0f+7qIR9IQVNjx7+YqJc0BTRFwJ
+        2BlmpRhQL+EB/hxuZ3ILJbMDzniwr5cGVBZIGFBM56d2CIejpmAqKe7z1wM8934x3QtQ/B
+        /2ShlAAII0CuBAEuH6XQRKZ1VmB8WSo=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-536-F9w7JvxpO5-Rrl-GCZgTaw-1; Wed, 12 Jul 2023 11:18:58 -0400
+X-MC-Unique: F9w7JvxpO5-Rrl-GCZgTaw-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-993dc6fbdaaso286199966b.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Jul 2023 08:18:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689175002; x=1691767002;
+        d=1e100.net; s=20221208; t=1689175137; x=1691767137;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PAhy3IB4is5+53Cfgz4S3Ovfr+OJ4+hbHoYpYABgHdE=;
-        b=fcTab1/d1IrMClehXcZXaVvmlpZUHNEEE153Py62IPEgQKs7cLyrCyxesNySnZ3feG
-         zcoyjqk6dAvUuxHLFw01b3Xfk6owrwo04vxxW6u6PiWqAC51WFrdRCATX/oDAkF34L8n
-         OBYoAFWc00rOAtoJa44uAFQ9PzIh00MP7NT57t5UinocnrV26bfzDii2HelsGYMnyPWN
-         CZFOI5Y0tUzSIczk+gIay152b5CIZ6T7VI05s/WoD+DHAxWiwRBz9j6SmTwF1/zla+/q
-         CWMeQ262mgnkYexIKtwGyIXKO+eDt41iJAcB5zmSRRSxbV9b+XrryWtK8W9E+xp40Eie
-         aPyA==
-X-Gm-Message-State: ABy/qLZ6FO4R7mim/DTxGYFhW/jTmao5c5cf1TnQKlx8IHp6QLLiqxUt
-        cWSnw3pku3B2Vjep1diH7FeREnHEg8M=
-X-Google-Smtp-Source: APBJJlF2DIK4lShlq1EwSfEqG8LaHBv7UCF/L0LJXieSJjIfg1uOo8L7E5uL/zwzT832MbthaJ7MvA==
-X-Received: by 2002:a05:6a00:1a0b:b0:67a:31b7:456c with SMTP id g11-20020a056a001a0b00b0067a31b7456cmr16435226pfv.9.1689175001922;
-        Wed, 12 Jul 2023 08:16:41 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d18-20020aa78692000000b0067a50223e44sm3764796pfo.74.2023.07.12.08.16.40
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PCzMnIk4EUAlNIXsbTPgnejSeR7W3lLfeJIjDNvrQT4=;
+        b=QN/0KQp0fIEtFtNJd1eZZHCG0YF2vNFrjWmxnoIeQ+5k+PQ/ODPR3fo53nqgqwrP2U
+         kDcApeUW3NG6LZ6jxBz9NusKXRSiRm+KTMwT1CxN2GTsJnuZZsb+5vq1zVn7mDKid+af
+         nh1HPmUcqMDKuNwO+qK/qfRoCI9iOho0FGw7KYq8mUcYqKRz3LMr7Vk/jrB39ELd/Sc6
+         6yPQGzlWCse0ndQsvoYt1tgxihFEHLg4xvGJcAnkZCIdhrcmNektrR5medRqpCznusZK
+         VXeOLNfNjNCPppBkJ9qv/IOhPe+1+YwFLGVQLdZvJfwMfYmiQ8T3BhfKE6CtIR/e3Cpl
+         rpaA==
+X-Gm-Message-State: ABy/qLb66cKi5xpUWBJG6LVdRqGWRCRo12ymT7CMpRbW0mtvXDereleV
+        hia62uLeD5unbE/S2jZNsrQoK8h7rvaM2gAQZH1kow7NprVnrlhwRbdCkxZcCL03wbfxc6twe9u
+        GGWHlsOApccSSGCUOUr63b1s=
+X-Received: by 2002:a17:906:7a4c:b0:993:d617:bdc5 with SMTP id i12-20020a1709067a4c00b00993d617bdc5mr15974670ejo.37.1689175137744;
+        Wed, 12 Jul 2023 08:18:57 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFcNAAKYJsGE//IOnyL66tt6b+ZlctKs3M4YV0iRoylH/+zyuyjTaePkU8BFtzDx/53R0C8HQ==
+X-Received: by 2002:a17:906:7a4c:b0:993:d617:bdc5 with SMTP id i12-20020a1709067a4c00b00993d617bdc5mr15974659ejo.37.1689175137468;
+        Wed, 12 Jul 2023 08:18:57 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id p6-20020a170906614600b00993a508b818sm2729216ejl.1.2023.07.12.08.18.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 08:16:41 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3034082b-4ec8-2a8d-35a2-2551e9feef34@roeck-us.net>
-Date:   Wed, 12 Jul 2023 08:16:39 -0700
+        Wed, 12 Jul 2023 08:18:56 -0700 (PDT)
+Message-ID: <365026b2-86a1-3984-e602-c818a9739df3@redhat.com>
+Date:   Wed, 12 Jul 2023 17:18:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] hwmon: Remove strlcpy occurences
-Content-Language: en-US
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>
-Cc:     linux-hardening@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Kees Cook <keescook@chromium.org>
-References: <20230712144429.2845940-1-azeemshaikh38@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230712144429.2845940-1-azeemshaikh38@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 0/8] platform/x86: asus-wmi:
+Content-Language: en-US, nl
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, markgross@kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net
+References: <20230630053552.976579-1-luke@ljones.dev>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230630053552.976579-1-luke@ljones.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/12/23 07:44, Azeem Shaikh wrote:
-> strlcpy() reads the entire source buffer first.
-> This read may exceed the destination size limit.
-> This is both inefficient and can lead to linear read
-> overflows if a source string is not NUL-terminated [1].
-> In an effort to remove strlcpy() completely [2], replace
-> strlcpy() here with direct assignment.
-> 
-> strlcpy in this file is used to copy fixed-length strings which can be
-> completely avoided by direct assignment and is safe to do so. strlen()
-> is used to return the length of @tbuf.
-> 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-> [2] https://github.com/KSPP/linux/issues/89
-> 
-> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> ---
->   drivers/hwmon/pmbus/max20730.c |   64 +++++++++++++++++++++--------------------
->   1 file changed, 33 insertions(+), 31 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/max20730.c b/drivers/hwmon/pmbus/max20730.c
-> index 7bcf27995033..f5ba23f0fed5 100644
-> --- a/drivers/hwmon/pmbus/max20730.c
-> +++ b/drivers/hwmon/pmbus/max20730.c
-> @@ -113,7 +113,8 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->   	struct max20730_debugfs_data *psu = to_psu(idxp, idx);
->   	const struct pmbus_driver_info *info;
->   	const struct max20730_data *data;
-> -	char tbuf[DEBUG_FS_DATA_MAX] = { 0 };
-> +	char tbuf[DEBUG_FS_DATA_MAX] = {};
+Hi,
 
-Unrelated change.
+On 6/30/23 07:35, Luke D. Jones wrote:
+> This patch series adds or exposes more features that are available in the ROG
+> laptop series.
+> 
+> - expose dGPU and CPU tunables for ROG
+>   - These are things like GPU boost, CPU Pl1 and PL2, package power limits
+> - support setting mini-LED mode
+>   - Some newer laptops have a screen that can toggle between regular style
+>     backlight and using mini-LED backlight
+> - add WMI method to show if egpu connected
+>   - This WMI method can be monitored/queried to see if it is possible to begin
+>     the change-over to eGPU
+> - support middle fan custom curves
+>   - Some newer laptops have a center/middle fan which blows across the CPU and GPU
+> - add support for showing middle fan RPM
+> - add support for showing charger mode (AC, USB-C, both plugged)
+> - add additional checks to GPU switching code
+>   - These try to prevent a sceanrio such as the user disabling the dGPU while it
+>     is driving the internal panel via MUX, resulting in no output at all.
+>     There are no checks in the ACPI code for this, but on some newer models ASUS
+>     did finally add a switch in the BIOS menu. It is best to try and prevent this
+>     at the kernel level rather than userland level.
+> 
+> All patches pass ./scripts/checkpatch.pl
 
-> +	char *result = tbuf;
->   	u16 val;
-> 
->   	info = pmbus_get_driver_info(psu->client);
-> @@ -148,13 +149,13 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->   			>> MAX20730_MFR_DEVSET1_TSTAT_BIT_POS;
-> 
->   		if (val == 0)
-> -			len = strlcpy(tbuf, "2000\n", DEBUG_FS_DATA_MAX);
-> +			result = "2000\n";
->   		else if (val == 1)
-> -			len = strlcpy(tbuf, "125\n", DEBUG_FS_DATA_MAX);
-> +			result = "125\n";
->   		else if (val == 2)
-> -			len = strlcpy(tbuf, "62.5\n", DEBUG_FS_DATA_MAX);
-> +			result = "62.5\n";
->   		else
-> -			len = strlcpy(tbuf, "32\n", DEBUG_FS_DATA_MAX);
-> +			result = "32\n";
->   		break;
->   	case MAX20730_DEBUGFS_INTERNAL_GAIN:
->   		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_RGAIN_MASK)
-> @@ -163,35 +164,35 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->   		if (data->id == max20734) {
->   			/* AN6209 */
->   			if (val == 0)
-> -				len = strlcpy(tbuf, "0.8\n", DEBUG_FS_DATA_MAX);
-> +				result = "0.8\n";
->   			else if (val == 1)
-> -				len = strlcpy(tbuf, "3.2\n", DEBUG_FS_DATA_MAX);
-> +				result = "3.2\n";
->   			else if (val == 2)
-> -				len = strlcpy(tbuf, "1.6\n", DEBUG_FS_DATA_MAX);
-> +				result = "1.6\n";
->   			else
-> -				len = strlcpy(tbuf, "6.4\n", DEBUG_FS_DATA_MAX);
-> +				result = "6.4\n";
->   		} else if (data->id == max20730 || data->id == max20710) {
->   			/* AN6042 or AN6140 */
->   			if (val == 0)
-> -				len = strlcpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
-> +				result = "0.9\n";
->   			else if (val == 1)
-> -				len = strlcpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
-> +				result = "3.6\n";
->   			else if (val == 2)
-> -				len = strlcpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
-> +				result = "1.8\n";
->   			else
-> -				len = strlcpy(tbuf, "7.2\n", DEBUG_FS_DATA_MAX);
-> +				result = "7.2\n";
->   		} else if (data->id == max20743) {
->   			/* AN6042 */
->   			if (val == 0)
-> -				len = strlcpy(tbuf, "0.45\n", DEBUG_FS_DATA_MAX);
-> +				result = "0.45\n";
->   			else if (val == 1)
-> -				len = strlcpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
-> +				result = "1.8\n";
->   			else if (val == 2)
-> -				len = strlcpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
-> +				result = "0.9\n";
->   			else
-> -				len = strlcpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
-> +				result = "3.6\n";
->   		} else {
-> -			len = strlcpy(tbuf, "Not supported\n", DEBUG_FS_DATA_MAX);
-> +			result = "Not supported\n";
->   		}
->   		break;
->   	case MAX20730_DEBUGFS_BOOT_VOLTAGE:
-> @@ -199,26 +200,26 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->   			>> MAX20730_MFR_DEVSET1_VBOOT_BIT_POS;
-> 
->   		if (val == 0)
-> -			len = strlcpy(tbuf, "0.6484\n", DEBUG_FS_DATA_MAX);
-> +			result = "0.6484\n";
->   		else if (val == 1)
-> -			len = strlcpy(tbuf, "0.8984\n", DEBUG_FS_DATA_MAX);
-> +			result = "0.8984\n";
->   		else if (val == 2)
-> -			len = strlcpy(tbuf, "1.0\n", DEBUG_FS_DATA_MAX);
-> +			result = "1.0\n";
->   		else
-> -			len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
-> +			result = "Invalid\n";
->   		break;
->   	case MAX20730_DEBUGFS_OUT_V_RAMP_RATE:
->   		val = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_VRATE)
->   			>> MAX20730_MFR_DEVSET2_VRATE_BIT_POS;
-> 
->   		if (val == 0)
-> -			len = strlcpy(tbuf, "4\n", DEBUG_FS_DATA_MAX);
-> +			result = "4\n";
->   		else if (val == 1)
-> -			len = strlcpy(tbuf, "2\n", DEBUG_FS_DATA_MAX);
-> +			result = "2\n";
->   		else if (val == 2)
-> -			len = strlcpy(tbuf, "1\n", DEBUG_FS_DATA_MAX);
-> +			result = "1\n";
->   		else
-> -			len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
-> +			result = "Invalid\n";
->   		break;
->   	case MAX20730_DEBUGFS_OC_PROTECT_MODE:
->   		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_OCPM_MASK)
-> @@ -230,13 +231,13 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->   			>> MAX20730_MFR_DEVSET2_SS_BIT_POS;
-> 
->   		if (val == 0)
-> -			len = strlcpy(tbuf, "0.75\n", DEBUG_FS_DATA_MAX);
-> +			result = "0.75\n";
->   		else if (val == 1)
-> -			len = strlcpy(tbuf, "1.5\n", DEBUG_FS_DATA_MAX);
-> +			result = "1.5\n";
->   		else if (val == 2)
-> -			len = strlcpy(tbuf, "3\n", DEBUG_FS_DATA_MAX);
-> +			result = "3\n";
->   		else
-> -			len = strlcpy(tbuf, "6\n", DEBUG_FS_DATA_MAX);
-> +			result = "6\n";
->   		break;
->   	case MAX20730_DEBUGFS_IMAX:
->   		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_IMAX_MASK)
-> @@ -287,9 +288,10 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->   				"%d.%d\n", ret / 10000, ret % 10000);
->   		break;
->   	default:
-> -		len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
-> +		result = "Invalid\n";
->   	}
-> 
-> +	len = strlen(result);
->   	return simple_read_from_buffer(buf, count, ppos, tbuf, len);
+Thank you for your patch-series, I've applied the series to my
+review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-This still copies tbuf, meaning all those constant strings won't actually
-be reported.
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
 
 
->   }
+
 > 
-> --
-> 2.41.0.255.g8b1d071c50-goog
+> Changelog:
+> - v2-0008-platform-x86-asus-wmi-expose-dGPU-and-CPU-tunable.patch
+> 	- Rename the WMI defs to match what ASUS supplied as names
+> 	- Remove EDC and TDC exposure (unsafe)
+> 	- Slight change to formatting
+> 	- Add better notes to documentation
+> 		
 > 
+> Luke D. Jones (8):
+>   platform/x86: asus-wmi: add support for showing charger mode
+>   platform/x86: asus-wmi: add support for showing middle fan RPM
+>   platform/x86: asus-wmi: support middle fan custom curves
+>   platform/x86: asus-wmi: add WMI method to show if egpu connected
+>   platform/x86: asus-wmi: don't allow eGPU switching if eGPU not
+>     connected
+>   platform/x86: asus-wmi: add safety checks to gpu switching
+>   platform/x86: asus-wmi: support setting mini-LED mode
+>   platform/x86: asus-wmi: expose dGPU and CPU tunables for ROG
+> 
+>  .../ABI/testing/sysfs-platform-asus-wmi       |  86 +++
+>  drivers/platform/x86/asus-wmi.c               | 605 +++++++++++++++++-
+>  include/linux/platform_data/x86/asus-wmi.h    |  19 +-
+>  3 files changed, 707 insertions(+), 3 deletions(-)
 > 
 
