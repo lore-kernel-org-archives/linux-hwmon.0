@@ -2,158 +2,115 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5407AEB64DC
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Jul 2023 01:07:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6BF5EB64DD
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Jul 2023 08:11:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjGLBHk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Jul 2023 21:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
+        id S232026AbjGLILc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Jul 2023 04:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjGLBHj (ORCPT
+        with ESMTP id S231221AbjGLILb (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Jul 2023 21:07:39 -0400
-Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40769E49
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Jul 2023 18:07:38 -0700 (PDT)
-Date:   Wed, 12 Jul 2023 01:07:30 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1689124055; x=1689383255;
-        bh=g7kGVsClTy/iWJCP+6nLX2Ne55mJ+O961CXlN41wCfg=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=CXf/Esvi4EHk+HW3QA+Oq7ej2JiKOHNGVGZN4u0m1OyQmtRQ/1qlzVLLtxEg3FBWF
-         4Q/PLIKx2jdYpI5Jx6iyjL0QSfJOvTsf39Al0hy7vyueqLgIh0dEiZwqEzH6CNj60f
-         AlIGv0oHz3J0eaoNO90vyr5sSCN8GxdJp2Wjk8CNgMCxiN+EsIZUpXXH0VTy1rOBAF
-         bWRAZtWTrhvtEP/Ux5pR4usdqASLGb0i96C/IlJAXIl3Hp53lFJBXtnX/Zwowub1sv
-         h93zkkFAOUvtdOiNknRLQTXxr2EMiRMRJ/RgLuD8t6Lwa4fMmo2ZVGkkLlefJX1qUZ
-         T8quqEd47S5dQ==
-To:     Hans de Goede <hdegoede@redhat.com>
-From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
-Cc:     acpi4asus-user@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v4 1/1] platform/x86: asus-wmi: add support for ASUS screenpad
-Message-ID: <MFcnkX194DPlx9DJUNWx43ia7ew825I6K1k8hOoUYImBv390MzOdWngMLTzr5g4iv_9o9x8qE2FqoVcKUcN6s6lHdbIzfj3eDXQLgtU3w9o=@protonmail.com>
-In-Reply-To: <350cfb54-f435-4482-5a40-18d4358bf747@redhat.com>
-References: <20230630041743.911303-1-luke@ljones.dev> <20230630041743.911303-2-luke@ljones.dev> <974093b4-5dac-dc29-8f86-304eb5c6c19b@redhat.com> <39e6044b960c1099ecc34d76f78aad12496b23e2.camel@ljones.dev> <350cfb54-f435-4482-5a40-18d4358bf747@redhat.com>
-Feedback-ID: 20568564:user:proton
+        Wed, 12 Jul 2023 04:11:31 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6C110EF
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Jul 2023 01:11:29 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51e4c868ee4so5513393a12.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Jul 2023 01:11:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689149488; x=1691741488;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jHkdHjFrM5AfGKbyzbpp4QoR422wNpy9DNc8+HlwIYs=;
+        b=AzJbvXxgl40Rh5LpkFIrmNi/6CwG7cp23unkfzcyCmTh6Vfe+T7HaKu0u8e6ykzg8z
+         95T0Ho47gQFvBalUnsu3IHe3eFf2cX0jj/hlHVrQjRdVT2IFsSGObXP+3s21P0MlcY3k
+         jy/JBDKyKvq6v55fEeFaOAkDNM9jyuyuhB5md3cx1GKu2WpkcHN2gtUH1Bs/pZNq5L8j
+         1DOyiNXPxUGruMBe9F0xnub1wQKKSLACgevYyxMUQmHo5JATS4U1iHcswqNQcq01J4TU
+         y5bJJhyil0rBNkljL0YPehL6poUpoO9/hKvmRsC4IR6EeC3Idf0i1LpZtbUwOS2SuhON
+         LM+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689149488; x=1691741488;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jHkdHjFrM5AfGKbyzbpp4QoR422wNpy9DNc8+HlwIYs=;
+        b=EegIk8WNSmdc5oHE3zvYPN60C/8jVLy1uF7igDrfHrWx5THGAN6FZQQl0dGToxtOD9
+         cddKIZgXJD0wyBsnoV3Jv2PN8gnQyD+Rx4dUh2pODZOQtrjJWpSxHCCKJJz675NSCSV/
+         Jae9zyRmq2FV9H3K42KRoUVbSocQ4J92PpRwIfg6+xhYfR9HDFhllK6qAfdqe+aYIPIt
+         LnvdEWz8lmw+vMsiWI0DfY66VtmBvJqM5jkce9FHV8lt8FbS8McP2Lzqi4F7FNaGMxBc
+         cQEOXuJ461VO/05BQ4QwHvNTaTVZczeDpH4BCtmxDtVf+RWay+VsWuTam8cWEGh9Zy7f
+         +2DA==
+X-Gm-Message-State: ABy/qLbVwYGGTz06WlEdeQJvc9pdT6HZvOG2L47/y9mKqld5iRCr6/wT
+        7LseNUHCHXH8+zW3H82iQlhbjA==
+X-Google-Smtp-Source: APBJJlG9168Y3yKpvGkO+PSj4hvN4VDwnF2KzycYIa/xWbJHW3ppkxTBzsAdI7Sty/NnqkSrhIdnRA==
+X-Received: by 2002:aa7:c544:0:b0:51e:1bf3:f4ac with SMTP id s4-20020aa7c544000000b0051e1bf3f4acmr15556921edr.27.1689149488039;
+        Wed, 12 Jul 2023 01:11:28 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id t3-20020aa7d4c3000000b0051d87e72159sm2368024edr.13.2023.07.12.01.11.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 01:11:27 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        Eliav Farber <farbere@amazon.com>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: hwmon: moortec,mr75203: fix multipleOf for coefficients
+Date:   Wed, 12 Jul 2023 10:11:24 +0200
+Message-Id: <20230712081124.110345-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi
+Few coefficients use default values multiple of 100, not 1000 (in the
+example DTS and in the Linux driver):
 
+  moortec,mr75203.example.dtb: pvt@e0680000: moortec,ts-coeff-g:0:0: 61400 is not a multiple of 1000
 
-2023. j=C3=BAlius 11., kedd 11:42 keltez=C3=A9ssel, Hans de Goede <hdegoede=
-@redhat.com> =C3=ADrta:
+Fixes: bf1fdafdbc61 ("dt-bindings: hwmon: (mr75203) add coefficient properties for the thermal equation")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../devicetree/bindings/hwmon/moortec,mr75203.yaml          | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> [...]
-> >>
-> >> If settings below 60 are no good, then the correct way to handle
-> >> this is to limit the range to 0 - (255-60) and add / substract
-> >> 60 when setting / getting the brightness.
-> >>
-> >> E.g. do something like this:
-> >>
-> >> #define SCREENPAD_MIN_BRIGHTNESS        60
-> >> #define SCREENPAD_MAX_BRIGHTNESS        255
-> >>
-> >>         props.max_brightness =3D SCREENPAD_MAX_BRIGHTNESS -
-> >> SCREENPAD_MIN_BRIGHTNESS;
-> >>
-> >> And in update_screenpad_bl_status() do:
-> >>
-> >>         ctrl_param =3D bd->props.brightness + SCREENPAD_MIN_BRIGHTNESS=
-;
-> >>
-> >> And when reading the brightness substract SCREENPAD_MIN_BRIGHTNESS,
-> >> clamping to a minimum value of 0.
-> >>
-> >> This avoids a dead-zone in the brightness range between 0-60 .
-> >
-> > Hi Hans, I think this is the wrong thing to do.
-> >
-> > The initial point of that first `brightness =3D 60;` is only to set it =
-to
-> > an acceptable brightness on boot. We don't want to prevent the user
-> > from going below that brightness at all - this is just to ensure the
-> > screen is visible on boot if the brightness was under that value, and
-> > it is usually only under that value if it was set to off before
-> > shutdown/reboot.
-> >
-> > It's not to try and put the range between 60-255, it's just to make the
-> > screen visible on boot if it was off previously. The folks who have
-> > tested this have found that this is the desired behaviour they expect.
->=20
-> I see.
->=20
-> So if I understand things correctly then 60 is a good default,
-> but the screen can go darker and still be usable.
->=20
-> But 1 leads to an unusable screen, so we still need
-> a SCREENPAD_MIN_BRIGHTNESS to avoid the screen being able
-> to go so dark that it is no longer usable and then still
-> move the range a bit, but just not by 60, but by some
-> other number (something in the 10-30 range I guess?)
->=20
-> Combined with adding a:
->=20
-> #define SCREENPAD_DEFAULT_BRIGHTNESS        60
->=20
-> And at boot when the read back brightness <
-> SCREENPAD_MIN_BRIGHTNESS set it to SCREENPAD_DEFAULT_BRIGHTNESS.
->=20
-> We really want to avoid users to be able to set an unusable
-> low brightness level. As mentioned in the new panel brightness
-> API proposal:
->=20
-> https://lore.kernel.org/dri-devel/b61d3eeb-6213-afac-2e70-7b9791c86d2e@re=
-dhat.com/
->=20
-> "3. The meaning of 0 is not clearly defined, it can be either off,
->    or minimum brightness at which the display is still readable
->   (in a low light environment)"
->=20
-> and the plan going forward is to:
->=20
-> "Unlike the /sys/class/backlight/foo/brightness this brightness property
-> has a clear definition for the value 0. The kernel must ensure that 0
-> means minimum brightness (so 0 should _never_ turn the backlight off).
-> If necessary the kernel must enforce a minimum value by adding
-> an offset to the value seen in the property to ensure this behavior."
->=20
-> So I really want to see this new backlight driver implement the
-> new planned behavior for 0 from the start, with 0 meaning minimum
-> *usable* brightness.
->=20
-> Regards,
->=20
-> Hans
+diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+index ae4f68d4e696..bd67cfee6d19 100644
+--- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
++++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+@@ -105,7 +105,7 @@ properties:
+       G coefficient for temperature equation.
+       Default for series 5 = 60000
+       Default for series 6 = 57400
+-    multipleOf: 1000
++    multipleOf: 100
+     minimum: 1000
+     $ref: /schemas/types.yaml#/definitions/uint32
+ 
+@@ -114,7 +114,7 @@ properties:
+       H coefficient for temperature equation.
+       Default for series 5 = 200000
+       Default for series 6 = 249400
+-    multipleOf: 1000
++    multipleOf: 100
+     minimum: 1000
+     $ref: /schemas/types.yaml#/definitions/uint32
+ 
+@@ -131,7 +131,7 @@ properties:
+       J coefficient for temperature equation.
+       Default for series 5 = -100
+       Default for series 6 = 0
+-    multipleOf: 1000
++    multipleOf: 100
+     maximum: 0
+     $ref: /schemas/types.yaml#/definitions/int32
+ 
+-- 
+2.34.1
 
-
-Sorry for hijacking this thread, but then how can I turn backlight off?
-I quite liked how I was able to turn my laptop display (almost) completely =
-off
-with the brightness hotkeys / brightness slider in gnome-shell, and I was q=
-uite
-annoyed when this was changed in gnome-settings-daemon and forced the minim=
-um
-brightness to be 1% of max_brightness.
-
-(https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/17)
-
-Also, "minimum brightness at which the display is still readable" is not re=
-ally
-well-defined, so it can (will) happen that the minimum brightness values do=
-n't match,
-so it is theoretically possible that I cannot set both my laptop panel and =
-external
-monitor to the same desired brightness level. Or am I missing something?
-
-
-Regards,
-Barnab=C3=A1s P=C5=91cze
