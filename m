@@ -2,54 +2,54 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E23FBC001DF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Jul 2023 13:51:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0325C0015E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Jul 2023 13:51:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235848AbjGNNvp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 14 Jul 2023 09:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
+        id S235759AbjGNNvr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 14 Jul 2023 09:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235846AbjGNNvm (ORCPT
+        with ESMTP id S234916AbjGNNvo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Jul 2023 09:51:42 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0424E35AD
-        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jul 2023 06:51:34 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fa16c6a85cso3251130e87.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jul 2023 06:51:33 -0700 (PDT)
+        Fri, 14 Jul 2023 09:51:44 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B65535B0
+        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jul 2023 06:51:36 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-99364ae9596so257405066b.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jul 2023 06:51:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1689342692; x=1691934692;
+        d=9elements.com; s=google; t=1689342694; x=1691934694;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nNQjkE8rt0loSfu/6IF9XOAi/Sv+jFDCxC5ymTmcAL4=;
-        b=CAoScYrac6wbsvgf3sCMIHSfG/XzOgLvZwMP16U/7iGRxj0aeq6Qmevw4df6X9scar
-         SzZtfeh+IvZxJHqY+y8996NhE8uM/yj4/2X1rLO/2mc7fUJwLd/MJHEYcklGEEtg9dVE
-         HfVkUBg1Hu0OBW0vJ+5vJZzpXhPnMobGOs9u5EdqsCTFSK90I0Cbl0wd8C6gdOf5+K7N
-         0C5hoKxZir6Xxx3OVQ5clhrtdGIyJcXS8v0fDYj79V7kM4Xoqx9HVXvQKXcaTH07j5wI
-         78S4zgXWu4YOvicqE/rw6CJ2GSLWHKXQiq7gyJxy4EC4h0UYo8C40ct9Ap8DgdBPLmxV
-         Fy2Q==
+        bh=cANOGybmFj7Zq4gL4JbpXEsjPGs2Mp7a7KHpPLol+0g=;
+        b=elMOQ6Cxyp9aePnQwUVZxGZTe4HItRyaljpXRaHdVNx/HyYZ23eUe7m33iV3g49oXx
+         NFcl6ARzebs0GWpgPd3Vi9I1gICQQnzRvkdswTqsAsBAdRgIOJx634dJwFvY6oY49zpU
+         axKNjNfX8hBv4Mt5+m+1rQRoD+r9aj1lVYTXgOtFT+mTNMXuZozFvVmpoOM7AhRkko1u
+         uGjvfuAETqeLMd5R9AMcdENX7wFmQwLFY9EL63YTBsajxaPqQI7S/f1LbUM+LQ9FfWCw
+         bCuSaAflH/DJZ9hBqqE6FX++XRmd6y2DRZN09jegNLBz5RbkpVCKpuUXKOJ05RywichT
+         eHLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689342692; x=1691934692;
+        d=1e100.net; s=20221208; t=1689342694; x=1691934694;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nNQjkE8rt0loSfu/6IF9XOAi/Sv+jFDCxC5ymTmcAL4=;
-        b=e6lIlhFieC89sOjiQFsvmeisoKiexLNQ9cyzrNVxlveJHPTid6QR6fGIZv9EhSZWTS
-         Yt9rOe29rXCoyrN7aYYNgd0vDHyuSQ0d7L2/uOVCQzm0fN7VFxECcOR3c1XXIRV5vZOj
-         XzEMRUofFCa+on5FyBYFowruVf+RX43z82JuDeCgTTf+Uf6zcnkyMp6l7rH0zVk/lqet
-         E0ZfIC6SAAeEY6URgGI01/qYIgL6ZUyT7pKLvLwXB2LMvSsMswHvccf3IJZB7nuHC/F/
-         9AZIYTVGZe74S26v75XzTIUkxP9dxEyMSZAAosiHIyBvgSzMuKw/lx3eHAhCM/HTypD+
-         /I+Q==
-X-Gm-Message-State: ABy/qLYogKsvYFTz2L6Ww8CQnKuvwMGA/B5BVuanDwzsEZlORfD8Du/E
-        QcjQfAXf+8TK9HsI48lUTHGQFQ==
-X-Google-Smtp-Source: APBJJlEtcarDtuEPzDUyEAOM2S+8mXuE4bWTS+fzJGLSHttt9cEGE2oEfk1B/l9ervCqaopUQXL+JQ==
-X-Received: by 2002:a05:6512:2202:b0:4f6:2a02:fc1a with SMTP id h2-20020a056512220200b004f62a02fc1amr4347481lfu.17.1689342692293;
-        Fri, 14 Jul 2023 06:51:32 -0700 (PDT)
+        bh=cANOGybmFj7Zq4gL4JbpXEsjPGs2Mp7a7KHpPLol+0g=;
+        b=I50h32j6uzro1UuDltqfsFjh/ovV8yVLCbRY5oHgKOadU7821VUATsVV7WleBaTrGz
+         SH252N5+b5EhMZLCG28UZjErhkWRVw991t82Qj3PIyDrohq+u4McF3YZ2SPb9YPq57u8
+         RRE2+e5WUMrlNyu7BO1nkkJxjhv2YDtXwMOljXHMTPYdpIOEXI9Xcp5dwVT2Wc+Bzxs6
+         G89t5HPH3OqDL6xCHvZEgEaYpd3VhMjq2EbxDWiP0OPNIwg9sYSl2YgEvG7+DVrDCr8F
+         6C3K+5nhqRcTWdM8eVJig2bFracTmJvRogik9wA0483HzoVvfxsl4liXz01l3rA3FvwJ
+         3Dsw==
+X-Gm-Message-State: ABy/qLZ++yIXTtoGnaxh9WvhTFPIopBkGhRgnZtuJYmu4tdCB6i4RxUn
+        qRbC70e1pRoB5r8239AlMG+fUw==
+X-Google-Smtp-Source: APBJJlEOFHP+bl7m0zAqVK4MnGT5p2kOeFC8XU46qTTTSOnF48gexnMF58zEckeUIP/wZGVZ1HOOow==
+X-Received: by 2002:a17:906:35c2:b0:98d:ef34:c0c8 with SMTP id p2-20020a17090635c200b0098def34c0c8mr3479555ejb.67.1689342694776;
+        Fri, 14 Jul 2023 06:51:34 -0700 (PDT)
 Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id h21-20020a170906261500b0099236e3f270sm5405991ejc.58.2023.07.14.06.51.31
+        by smtp.gmail.com with ESMTPSA id h21-20020a170906261500b0099236e3f270sm5405991ejc.58.2023.07.14.06.51.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jul 2023 06:51:31 -0700 (PDT)
+        Fri, 14 Jul 2023 06:51:34 -0700 (PDT)
 From:   Naresh Solanki <naresh.solanki@9elements.com>
 X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
 To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
@@ -57,13 +57,14 @@ To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
         Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v2 3/8] hwmon: (pmbus/mp2975) Prepare for MP2973 and MP2971
-Date:   Fri, 14 Jul 2023 15:51:11 +0200
-Message-ID: <20230714135124.2645339-3-Naresh.Solanki@9elements.com>
+Subject: [PATCH v2 5/8] hwmon: (pmbus/mp2975) Make phase count variable
+Date:   Fri, 14 Jul 2023 15:51:13 +0200
+Message-ID: <20230714135124.2645339-5-Naresh.Solanki@9elements.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230714135124.2645339-1-Naresh.Solanki@9elements.com>
 References: <20230714135124.2645339-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
@@ -71,84 +72,116 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Add support for differntiating between the chips.
-The following commits will make use of this mechanism.
+In order to add support for MP2973 and MP2971 replace hardcoded
+phase count for both channels by a variable.
 
 Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 ---
- drivers/hwmon/pmbus/mp2975.c | 27 +++++++++++++++++++--------
- 1 file changed, 19 insertions(+), 8 deletions(-)
+ drivers/hwmon/pmbus/mp2975.c | 33 ++++++++++++++++++++-------------
+ 1 file changed, 20 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
-index 130cfde52e42..04778f2dcbdb 100644
+index 0dca4c24fe5a..a4453b9284fa 100644
 --- a/drivers/hwmon/pmbus/mp2975.c
 +++ b/drivers/hwmon/pmbus/mp2975.c
-@@ -10,6 +10,7 @@
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/of_device.h>
- #include "pmbus.h"
+@@ -61,10 +61,15 @@ enum chips {
+ 	mp2975
+ };
  
- /* Vendor specific registers. */
-@@ -56,8 +57,13 @@
- 				 PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | \
- 				 PMBUS_HAVE_POUT | PMBUS_PHASE_VIRTUAL)
- 
-+enum chips {
-+	mp2975
++static const int mp2975_max_phases[][MP2975_PAGE_NUM] = {
++	[mp2975] = { MP2975_MAX_PHASE_RAIL1, MP2975_MAX_PHASE_RAIL2 },
 +};
 +
  struct mp2975_data {
  	struct pmbus_driver_info info;
-+	enum chips chip_id;
+ 	enum chips chip_id;
  	int vout_scale;
++	int max_phases[MP2975_PAGE_NUM];
  	int vid_step[MP2975_PAGE_NUM];
  	int vref[MP2975_PAGE_NUM];
-@@ -68,6 +74,13 @@ struct mp2975_data {
- 	int curr_sense_gain[MP2975_PAGE_NUM];
- };
- 
-+static const struct i2c_device_id mp2975_id[] = {
-+	{"mp2975", mp2975},
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, mp2975_id);
-+
- #define to_mp2975_data(x)  container_of(x, struct mp2975_data, info)
- 
- static int mp2975_read_byte_data(struct i2c_client *client, int page, int reg)
-@@ -691,6 +704,11 @@ static int mp2975_probe(struct i2c_client *client)
- 	if (!data)
- 		return -ENOMEM;
- 
-+	if (client->dev.of_node)
-+		data->chip_id = (enum chips)of_device_get_match_data(&client->dev);
-+	else
-+		data->chip_id = i2c_match_id(mp2975_id, client)->driver_data;
-+
- 	memcpy(&data->info, &mp2975_info, sizeof(*info));
- 	info = &data->info;
- 
-@@ -739,15 +757,8 @@ static int mp2975_probe(struct i2c_client *client)
- 	return pmbus_do_probe(client, info);
+ 	int vref_off[MP2975_PAGE_NUM];
+@@ -304,25 +309,25 @@ static int mp2975_read_word_data(struct i2c_client *client, int page,
+ 	return ret;
  }
  
--static const struct i2c_device_id mp2975_id[] = {
--	{"mp2975", 0},
--	{}
--};
--
--MODULE_DEVICE_TABLE(i2c, mp2975_id);
--
- static const struct of_device_id __maybe_unused mp2975_of_match[] = {
--	{.compatible = "mps,mp2975"},
-+	{.compatible = "mps,mp2975", .data = (void *)mp2975},
- 	{}
- };
- MODULE_DEVICE_TABLE(of, mp2975_of_match);
+-static int mp2975_identify_multiphase_rail2(struct i2c_client *client)
++static int mp2975_identify_multiphase_rail2(struct i2c_client *client,
++					    struct mp2975_data *data)
+ {
+ 	int ret;
+ 
+ 	/*
+-	 * Identify multiphase for rail 2 - could be from 0 to 4.
++	 * Identify multiphase for rail 2 - could be from 0 to data->max_phases[1].
+ 	 * In case phase number is zero – only page zero is supported
+ 	 */
+ 	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 2);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	/* Identify multiphase for rail 2 - could be from 0 to 4. */
+ 	ret = i2c_smbus_read_word_data(client, MP2975_MFR_VR_MULTI_CONFIG_R2);
+ 	if (ret < 0)
+ 		return ret;
+ 
+ 	ret &= GENMASK(2, 0);
+-	return (ret >= 4) ? 4 : ret;
++	return (ret >= data->max_phases[1]) ? data->max_phases[1] : ret;
+ }
+ 
+ static void mp2975_set_phase_rail1(struct pmbus_driver_info *info)
+@@ -353,7 +358,7 @@ mp2975_identify_multiphase(struct i2c_client *client, struct mp2975_data *data,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	/* Identify multiphase for rail 1 - could be from 1 to 8. */
++	/* Identify multiphase for rail 1 - could be from 1 to data->max_phases[0]. */
+ 	ret = i2c_smbus_read_word_data(client, MP2975_MFR_VR_MULTI_CONFIG_R1);
+ 	if (ret <= 0)
+ 		return ret;
+@@ -361,19 +366,19 @@ mp2975_identify_multiphase(struct i2c_client *client, struct mp2975_data *data,
+ 	info->phases[0] = ret & GENMASK(3, 0);
+ 
+ 	/*
+-	 * The device provides a total of 8 PWM pins, and can be configured
++	 * The device provides a total of $n PWM pins, and can be configured
+ 	 * to different phase count applications for rail 1 and rail 2.
+-	 * Rail 1 can be set to 8 phases, while rail 2 can only be set to 4
+-	 * phases at most. When rail 1’s phase count is configured as 0, rail
++	 * Rail 1 can be set to $n phases, while rail 2 can be set to less than
++	 * that. When rail 1’s phase count is configured as 0, rail
+ 	 * 1 operates with 1-phase DCM. When rail 2 phase count is configured
+ 	 * as 0, rail 2 is disabled.
+ 	 */
+-	if (info->phases[0] > MP2975_MAX_PHASE_RAIL1)
++	if (info->phases[0] > data->max_phases[0])
+ 		return -EINVAL;
+ 
+ 	mp2975_set_phase_rail1(info);
+-	num_phases2 = min(MP2975_MAX_PHASE_RAIL1 - info->phases[0],
+-			  MP2975_MAX_PHASE_RAIL2);
++	num_phases2 = min(data->max_phases[0] - info->phases[0],
++			  data->max_phases[1]);
+ 	if (info->phases[1] && info->phases[1] <= num_phases2)
+ 		mp2975_set_phase_rail2(info, num_phases2);
+ 
+@@ -669,11 +674,13 @@ static int mp2975_probe(struct i2c_client *client)
+ 	else
+ 		data->chip_id = i2c_match_id(mp2975_id, client)->driver_data;
+ 
+-	memcpy(&data->info, &mp2975_info, sizeof(*info));
++	memcpy(data->max_phases, mp2975_max_phases[data->chip_id],
++	       sizeof(data->max_phases));
++
+ 	info = &data->info;
+ 
+ 	/* Identify multiphase configuration for rail 2. */
+-	ret = mp2975_identify_multiphase_rail2(client);
++	ret = mp2975_identify_multiphase_rail2(client, data);
+ 	if (ret < 0)
+ 		return ret;
+ 
 -- 
 2.41.0
 
