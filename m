@@ -2,134 +2,131 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8181BC0015E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Jul 2023 09:29:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE4B4EB64DC
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Jul 2023 09:59:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235703AbjGNJ3S (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 14 Jul 2023 05:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
+        id S235355AbjGNJ7q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 14 Jul 2023 05:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235664AbjGNJ3R (ORCPT
+        with ESMTP id S234881AbjGNJ7p (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Jul 2023 05:29:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EE12D5F
-        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jul 2023 02:28:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689326908;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e917PWoV2EQP18RF0PKWLGfuOBS2EM7fSGv2w9B6FsA=;
-        b=NSI6sbh0vtHaj8n03MCccQo0UbORJlrxuJ4JnMU8Hu4GqxtUFBTJb4kYDQ3gJenKVAxBSV
-        xpKMSW/Z+eKsthfxoiEuIse+dAVYve+KKuKWSlXTwb9qpvAEUJR4a3OQ5AvGk8zPqo94+V
-        Y5ihu+mQ6JwCYTEIQL5ilZTF3iFXy2g=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-132-hpXyK4EXPEGLuTsWT3yLmw-1; Fri, 14 Jul 2023 05:28:27 -0400
-X-MC-Unique: hpXyK4EXPEGLuTsWT3yLmw-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-94a355c9028so93688866b.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jul 2023 02:28:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689326906; x=1691918906;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        Fri, 14 Jul 2023 05:59:45 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C328E211E;
+        Fri, 14 Jul 2023 02:59:43 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b852785a65so11004165ad.0;
+        Fri, 14 Jul 2023 02:59:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689328783; x=1691920783;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e917PWoV2EQP18RF0PKWLGfuOBS2EM7fSGv2w9B6FsA=;
-        b=AZZjOblx4z/FOvb0TO55BxrOhKS13A84DjNlolpytGGvC4S7uCUp/gZSP0PTqounBX
-         XgJS4QBXpB06znvaAf5d4mbNMFeGGfH3Vq54kBYUXl9k2nHOZpqwKCm3t8SlwhfkpdC2
-         ma30vVrbQN+Gx3X3QR7DsCxkKKcu/YAy83rwJhDO2YAa9ndrwxWN2dZS5A5iJnRLgf6/
-         DSkgS4TUYDsRNyBRzF0NNSlxQoix6nVkz9uvscKS4uz4DYQ0VP4URSqn0OHKIk7xXY3W
-         LZ4Y6L+q0wg9YNiDmS8gC1Wd5fgEY98LXrhp28TeXh6JRYJRl2II6UUb+juOJQD3gneJ
-         EBxQ==
-X-Gm-Message-State: ABy/qLaX5fostYFoo1PM8c/N9M/TjiS0i/Ib02JjHhPYuu3PU57RX1ET
-        kYbRWfewWOYMq0d6h5Ai9dnBLW2lsNysZWJQvNpCXWqoy2mCISlsJyCJOC/zxXyP30yxpHaaMO6
-        wybaOxjW/7dprqGeLPuEpAlQ=
-X-Received: by 2002:a17:907:3fa8:b0:988:9621:d85f with SMTP id hr40-20020a1709073fa800b009889621d85fmr4159786ejc.58.1689326906214;
-        Fri, 14 Jul 2023 02:28:26 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFU+Pc68BnX42o35KIETq90KYLk34BYAn7ZOZ1KHJLjq5Wb9nfi46Kj9Z/2DbOisETUAh4Weg==
-X-Received: by 2002:a17:907:3fa8:b0:988:9621:d85f with SMTP id hr40-20020a1709073fa800b009889621d85fmr4159768ejc.58.1689326905941;
-        Fri, 14 Jul 2023 02:28:25 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id k12-20020a1709063e0c00b00988c0c175c6sm5173154eji.189.2023.07.14.02.28.25
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=vShZQMcarPkzUmWVXK6Ziq55LsnSbqaxjxY6sf8cpZQ=;
+        b=K4QzBf7A6YFEWHUA6ixpR5W1HoUYkbJ4J1W17P4+oIwAt4hv00eR5M3A3DYwAiyYjl
+         Cjhii1S2FLEqAefU1CBl2X9rFNItYL/fGQlJMxPXKPyUGG4FDXri1Ih33KHD/9hn/lMN
+         NQ0G9M7ye3B4cQl1ZvnapuP2jXPAHTKFlVrBt23TKLyNNc7zAp1PHl7yViwtSvzO0bqV
+         liXLvZ3vVOMKUviDUwGEALJnSnSmTuxXNrUATYeEnDbMAiHwPUvuzG43gGffELywmCcf
+         jM7gPAux+Gc5dhxfbdaHdPyoX6/L4dCz+Kxd4eSHxIoem3MZU0hK60IE1u6b6YMy7vw2
+         L/Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689328783; x=1691920783;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vShZQMcarPkzUmWVXK6Ziq55LsnSbqaxjxY6sf8cpZQ=;
+        b=XldzDDrr4CkKSAT2cNl+Umw9pKrYOMV6pTANsp0fzuQEcJbraD5zTUSvF2h3Mc4Y0b
+         pDMTNLHySh+eFteNHOZriopV5ObS9drBSTTJuTAB2ClC/mK04nI+aRWne1hGoEgA3e0I
+         SaUTHfQ8EzZTjupeN24qV9EgYSBZpciKWueXtQvxKQxrCru2CZgyf+Ke1SGPXqcax99c
+         RsgK1kLS9RghdehPCsYp4g/46eBUHWSSHPQd6UulWCeOCWSL+Wtn4dtHTrbKir4Alrkt
+         lP+pjAXqiEtKnP9WFSGHIiTwKx9IQ8tCRQdFmiGNkREpotZpbc+zfdZ6aJMIIDQFvtVm
+         WOgw==
+X-Gm-Message-State: ABy/qLbu87vwBhWz6nrcpPirWkr7y///AC7NYNMUGmdvJkO4qEPUo2Fm
+        BfogrxC6rQg5MO8WagpSNhk=
+X-Google-Smtp-Source: APBJJlHHDmGNSykHBKxMZGwxSLLnEVvuoPUPo9OdWpoStDfN/OVYQwEXP4FINTJblZuIsfG93KAeHQ==
+X-Received: by 2002:a17:902:f2d4:b0:1b8:a39e:ff4b with SMTP id h20-20020a170902f2d400b001b8a39eff4bmr1847417plc.32.1689328782949;
+        Fri, 14 Jul 2023 02:59:42 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c1-20020a170902848100b001b801044466sm7400745plo.114.2023.07.14.02.59.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jul 2023 02:28:25 -0700 (PDT)
-Message-ID: <51386a3b-7a77-a18b-78b9-57f53d4979a4@redhat.com>
-Date:   Fri, 14 Jul 2023 11:28:24 +0200
+        Fri, 14 Jul 2023 02:59:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0ba3767c-d481-6e2c-2d32-b79af0e1efd8@roeck-us.net>
+Date:   Fri, 14 Jul 2023 02:59:40 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 0/2] platform/x86: add CMOS battery monitoring for simatic
- IPCs
-Content-Language: en-US, nl
-To:     Henning Schild <henning.schild@siemens.com>,
-        Mark Gross <markgross@kernel.org>,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Tobias Schaffner <tobias.schaffner@siemens.com>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-References: <20230706154831.19100-1-henning.schild@siemens.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230706154831.19100-1-henning.schild@siemens.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ Thunderbird/102.13.0
+Subject: Re: [v6 2/4] dt-bindings: hwmon: Add ASPEED TACH Control
+ documentation
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        =?UTF-8?B?6JSh5om/6YGU?= <billyking19920205@gmail.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
+        Billy Tsai <billy_tsai@aspeedtech.com>
+References: <CAGUgbhCqOJaEPjS96o2au21uW4NhqFScm4Ayd8PzOQvqxQ94SQ@mail.gmail.com>
+ <0b9dd5cf-f4ca-2e6b-624d-0b451bbc2f30@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <0b9dd5cf-f4ca-2e6b-624d-0b451bbc2f30@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
-
-On 7/6/23 17:48, Henning Schild wrote:
-> The real change is in p2 and p1 just prepares to multiplex an IO region.
-> We introduce a custom driver to read CMOS battery information on several
-> of the Industrial PCs.
+On 7/14/23 00:13, Krzysztof Kozlowski wrote:
+> On 14/07/2023 09:04, 蔡承達 wrote:
 > 
-> This is based on
->  "[PATCH 0/1] leds: simatic-ipc-leds-gpio: add new model BX-21A"
+>>          > This is because our register layout for PWM and Tach is not
+>> continuous.
+>>
+>>          > PWM0 used 0x0 0x4, Tach0 used 0x8 0xc
+>>
+>>          > PWM1 used 0x10 0x14, Tach1 used 0x18 0x1c
+>>
+>>          > ...
+>>
+>>          > Each PWM/Tach instance has its own controller register and is not
+>> dependent on others.
 > 
-> Henning Schild (2):
->   watchdog: simatic-ipc-wdt: make IO region access of one model muxed
->   platform/x86: add CMOS battery monitoring for simatic IPCs
-
-Thank you. I've merged both into a platform-drivers-x86-simatic-ipc
-branch where I'm collecting all the pending platform/x86: simatic-ipc
-work.
-
-I'll tag + send a pull-request to Lee Jones (for some dependent LED
-patches) later today.
-
-Guenter, I'll Cc you on the pull-req in case you also want to merge
-the (immutable) tag to pick up the small watchdog change in this
-series.
-
-Regards,
-
-Hans
-
-
-
-
+> Your email reply quoting style is very difficult to read.
 > 
->  drivers/platform/x86/Kconfig                  |  48 ++++
->  drivers/platform/x86/Makefile                 |   6 +-
->  .../x86/simatic-ipc-batt-apollolake.c         |  51 ++++
->  .../x86/simatic-ipc-batt-elkhartlake.c        |  51 ++++
->  .../platform/x86/simatic-ipc-batt-f7188x.c    |  70 +++++
->  drivers/platform/x86/simatic-ipc-batt.c       | 250 ++++++++++++++++++
->  drivers/platform/x86/simatic-ipc-batt.h       |  20 ++
->  drivers/platform/x86/simatic-ipc.c            |  65 ++++-
->  drivers/watchdog/simatic-ipc-wdt.c            |   9 +-
->  .../platform_data/x86/simatic-ipc-base.h      |   1 +
->  10 files changed, 553 insertions(+), 18 deletions(-)
->  create mode 100644 drivers/platform/x86/simatic-ipc-batt-apollolake.c
->  create mode 100644 drivers/platform/x86/simatic-ipc-batt-elkhartlake.c
->  create mode 100644 drivers/platform/x86/simatic-ipc-batt-f7188x.c
->  create mode 100644 drivers/platform/x86/simatic-ipc-batt.c
->  create mode 100644 drivers/platform/x86/simatic-ipc-batt.h
+>>
+>>
+>>
+>> Hi Guenter,
+>>
+>>
+>>
+>> Did you receive a response to my previous email?
+>>
+>> I would like to inquire if you have any further concerns regarding the PWM
+>> and Tach with 16 instances.
 > 
+> But isn't like this in all PWMs in all SoCs?
+> 
+
+Correct, pretty much every fan controller is implemented that way.
+I don't understand the logic.
+
+Guenter
+
 
