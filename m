@@ -2,95 +2,222 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 394A1EB64DA
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Jul 2023 12:08:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7D49C001B0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Jul 2023 12:21:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234562AbjGNMIi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 14 Jul 2023 08:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56538 "EHLO
+        id S235692AbjGNMVn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 14 Jul 2023 08:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235132AbjGNMIh (ORCPT
+        with ESMTP id S235798AbjGNMVl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Jul 2023 08:08:37 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5210E358D;
-        Fri, 14 Jul 2023 05:08:34 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9922d6f003cso241551366b.0;
-        Fri, 14 Jul 2023 05:08:34 -0700 (PDT)
+        Fri, 14 Jul 2023 08:21:41 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796E53588
+        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jul 2023 05:21:37 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-553b2979fceso837704a12.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jul 2023 05:21:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689336512; x=1691928512;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EIFl8xI2UuButzAPajsmIgl+1a2EybRrJWZfodELGUY=;
-        b=aVNQhIPQ1nkqW5pkVpZdSjcL6JZy9VedWY2TZHdFs0Lu7/c2LpssorRCvcSTCioaBA
-         iCNUmw5Efykan1bmbS11TBRHhNY3ryMQACoTDO11aEOvIA3kIgnLF6dBa9fZsYyxECFi
-         n9XU5n+danqERRXMIbR/IXKpBwwnrrhHFYBDH1Oi1mRB4ImVyNclf9Zjwq1/8V2jcMR/
-         n6p83BdU82ZU2WHwVFkNeZO3bAnDwdSeqEKNiA4spxHbzZQb+HBORs+Pks5oswT19hHG
-         V8ItEOdMC/5XGUFGzrKsqw3xUop9xFU6nkbZBGRUXJKabP834zs2VNGCbMlIUPr50Qcu
-         +y1A==
+        d=9elements.com; s=google; t=1689337297; x=1691929297;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vKPCYi6KH5ixV5Dyvebx4XZChTDDw8w3UlWPbSm3lU8=;
+        b=KtiElmlb3CgSrlUVicYRXjQ/XqqtuVJKzBYOd4mPPyTCmzmOF99bc4smFNRnkzEdOV
+         ja9Ef76Rzhcg2BI2I8QkhBWwTEl55sQ7HtnkPG6UNL4LnHiUs2LfhLrMxo2gsIDJ/Ytp
+         rWCMvP1oSoy8dGxYpkbzpmYkQibESzrlBznET3zQRnKUfss8bfbIBpAg6TiMPrpOS3pf
+         UvyY6q5+BaqL3bdkFshqY//L5dOJgPRVYIZyIhir9KXnvpwuOYW57IMrXPvzF1Ho+U8H
+         IHsoYCWdcbSJRbnU2tq3F1OCJo0jKqFtz2CxAwIwBjPNVYveZvUkeG8H9MeuSzXBMgO0
+         NPKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689336512; x=1691928512;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1689337297; x=1691929297;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EIFl8xI2UuButzAPajsmIgl+1a2EybRrJWZfodELGUY=;
-        b=Fvug0N5fFmFXO4OnXDFiUkS/rDF2h1IMcfoqYYPAnVI6hRkmcO+5uwXCRKrEwhn7gt
-         1GZN+ZM4jXozC0UOY6hDvHFyxB2KFewCJxj8DPQ/zPmklCDYD5DQtIIuChmq2mNC0BOJ
-         zyYQgU1MASk+fBzVlHpxhHS3idsmYJBrbyiMHe6X7LeYTWbnZXbnUuz2G1j1upPI+ZVk
-         FWjHOWt5P84gN5oZNNYSg8Hn+BsrjuygIkGVUIAkoaiL2bGqNRZH6v63A/IbGO+BCTEk
-         37Uu/F+RsyGEPI58ARYzBV3ky0alyxIZNf03QT1Dn/doo3jaxRQWewNsihIZvKGcOUNR
-         h8zA==
-X-Gm-Message-State: ABy/qLb270s/iCuGMAr17mIeIs1H6sriNBgmQdfYBsztfOYbx8+bS0th
-        zP0tPgRg9npOIKeYxANZdNWmNrUrsLa7YA==
-X-Google-Smtp-Source: APBJJlH1q7yzLA0bE26y5w8EyiRv4iKEZe0nRQzu/y4KSzbt2jvjkm0gwGSyym2gR35OsQskcy8z0g==
-X-Received: by 2002:a17:906:ce3a:b0:988:9d0f:db52 with SMTP id sd26-20020a170906ce3a00b009889d0fdb52mr3941880ejb.35.1689336512361;
-        Fri, 14 Jul 2023 05:08:32 -0700 (PDT)
-Received: from fedora.. (cable-178-148-234-71.dynamic.sbb.rs. [178.148.234.71])
-        by smtp.gmail.com with ESMTPSA id hb24-20020a170906b89800b00977c7566ccbsm5238148ejb.164.2023.07.14.05.08.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jul 2023 05:08:31 -0700 (PDT)
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Aleksa Savic <savicaleksa83@gmail.com>, stable@vger.kernel.org,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (aquacomputer_d5next) Fix incorrect PWM value readout
-Date:   Fri, 14 Jul 2023 14:07:11 +0200
-Message-ID: <20230714120712.16721-1-savicaleksa83@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        bh=vKPCYi6KH5ixV5Dyvebx4XZChTDDw8w3UlWPbSm3lU8=;
+        b=OSQyKjuFFiZ/YpLTLB9GtjZY7S8d51xJGnqdx58AS40GxrLy7ZLt3xcWIzLZv3uz1g
+         pI4ekeV7QNI2vh7uxoK3U33CjOQW3ZqVIp0DBMs7Z0KYOTqCmlbVu3Cw36SQzigoMOMG
+         JsskTmu9yYPitlQC0eimdhff0GUIv+fxB8KfCZ5MqL++Cdit69yTv/Thxsp43kwqQN/j
+         i+ycjQLjNVb+La3O+wFlxN3vZNGKJoq+p9nR0IIdBUAFMkL9dWK+hywTatrlEx+lBSTO
+         fgSK3TEbJYpyf+VYRvtlNAlm6JNxP6fivRDghOw7B1+uMAu14116YxxjINuQ0m1wqVun
+         KraA==
+X-Gm-Message-State: ABy/qLYt4stMdkE0pXT3lW7w93cpDeryB/TJ9uomS/dAeVBm2j6nqmZg
+        wcXCluUe9ZO32qyFSA/VnSx4fHaVERnDxDA1Cdm0Ow==
+X-Google-Smtp-Source: APBJJlFaY1AZjySEwrcQoAaRIWzNqIw/3VXJQbvL09Jy8JFNwV/tPuhq1DMwL3B40xDM6NGLU6GNjHpUyRIzJ4ZjWC4=
+X-Received: by 2002:a17:90b:388:b0:263:abea:94d1 with SMTP id
+ ga8-20020a17090b038800b00263abea94d1mr2879280pjb.44.1689337296871; Fri, 14
+ Jul 2023 05:21:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230712114754.500477-1-Naresh.Solanki@9elements.com>
+ <20230712114754.500477-4-Naresh.Solanki@9elements.com> <38157958-9723-73bc-f79a-1ac8c80c512e@roeck-us.net>
+In-Reply-To: <38157958-9723-73bc-f79a-1ac8c80c512e@roeck-us.net>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Fri, 14 Jul 2023 13:23:26 +0200
+Message-ID: <CABqG17gHj+wAVqHR0o9ospcAMYPTnO0xtcPGPc8GqNb03mO58w@mail.gmail.com>
+Subject: Re: [PATCH 4/8] hwmon: (pmbus/mp2975) Simplify VOUT code
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Commit 662d20b3a5af ("hwmon: (aquacomputer_d5next) Add support for
-temperature sensor offsets") changed aqc_get_ctrl_val() to return
-the value through a parameter instead of through the return value,
-but didn't fix up a case that relied on the old behavior. Fix it
-to use the proper received value and not the return code.
+Hi Guenter,
 
-Fixes: 662d20b3a5af ("hwmon: (aquacomputer_d5next) Add support for temperature sensor offsets")
-Cc: stable@vger.kernel.org
-Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
----
- drivers/hwmon/aquacomputer_d5next.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 12 Jul 2023 at 17:50, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 7/12/23 04:47, Naresh Solanki wrote:
+> > From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> >
+> > In order to upstream MP2973/MP2971 simplify the code by removing support
+> > for various VOUT formats. The MP2973 and MP2971 supports all PMBUS
+> > supported formats for VOUT, while the MP2975 only support DIRECT and
+> > VID for VOUT.
+> >
+> > In DIRECT mode all chips report the voltage in 1mV/LSB.
+> >
+> > Configure the chip to use DIRECT format for VOUT and drop the code
+> > conversion code for other formats. The to be added chips MP2973/MP2971
+> > will be configured to also report VOUT in DIRECT format.
+> >
+> > The maximum voltage that can be reported in DIRECT format is 32768mV.
+> > This is sufficient as the maximum output voltage for VR12/VR13 is
+> > 3040 mV.
+> >
+> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > ---
+> >   drivers/hwmon/pmbus/mp2975.c | 54 ++++++------------------------------
+> >   1 file changed, 8 insertions(+), 46 deletions(-)
+> >
+> > diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
+> > index 04778f2dcbdb..ebc9a84b8ad3 100644
+> > --- a/drivers/hwmon/pmbus/mp2975.c
+> > +++ b/drivers/hwmon/pmbus/mp2975.c
+> > @@ -70,7 +70,6 @@ struct mp2975_data {
+> >       int vref_off[MP2975_PAGE_NUM];
+> >       int vout_max[MP2975_PAGE_NUM];
+> >       int vout_ov_fixed[MP2975_PAGE_NUM];
+> > -     int vout_format[MP2975_PAGE_NUM];
+> >       int curr_sense_gain[MP2975_PAGE_NUM];
+> >   };
+> >
+> > @@ -83,22 +82,6 @@ MODULE_DEVICE_TABLE(i2c, mp2975_id);
+> >
+> >   #define to_mp2975_data(x)  container_of(x, struct mp2975_data, info)
+> >
+> > -static int mp2975_read_byte_data(struct i2c_client *client, int page, int reg)
+> > -{
+> > -     switch (reg) {
+> > -     case PMBUS_VOUT_MODE:
+> > -             /*
+> > -              * Enforce VOUT direct format, since device allows to set the
+> > -              * different formats for the different rails. Conversion from
+> > -              * VID to direct provided by driver internally, in case it is
+> > -              * necessary.
+> > -              */
+> > -             return PB_VOUT_MODE_DIRECT;
+> > -     default:
+> > -             return -ENODATA;
+> > -     }
+> > -}
+> > -
+> >   static int
+> >   mp2975_read_word_helper(struct i2c_client *client, int page, int phase, u8 reg,
+> >                       u16 mask)
+> > @@ -273,24 +256,6 @@ static int mp2975_read_word_data(struct i2c_client *client, int page,
+> >               ret = DIV_ROUND_CLOSEST(data->vref[page] * 10 - 50 *
+> >                                       (ret + 1) * data->vout_scale, 10);
+> >               break;
+> > -     case PMBUS_READ_VOUT:
+> > -             ret = mp2975_read_word_helper(client, page, phase, reg,
+> > -                                           GENMASK(11, 0));
+> > -             if (ret < 0)
+> > -                     return ret;
+> > -
+> > -             /*
+> > -              * READ_VOUT can be provided in VID or direct format. The
+> > -              * format type is specified by bit 15 of the register
+> > -              * MP2975_MFR_DC_LOOP_CTRL. The driver enforces VOUT direct
+> > -              * format, since device allows to set the different formats for
+> > -              * the different rails and also all VOUT limits registers are
+> > -              * provided in a direct format. In case format is VID - convert
+> > -              * to direct.
+> > -              */
+> > -             if (data->vout_format[page] == vid)
+> > -                     ret = mp2975_vid2direct(info->vrm_version[page], ret);
+> > -             break;
+> >       case PMBUS_VIRT_READ_POUT_MAX:
+> >               ret = mp2975_read_word_helper(client, page, phase,
+> >                                             MP2975_MFR_READ_POUT_PK,
+> > @@ -578,20 +543,18 @@ mp2975_vout_max_get(struct i2c_client *client, struct mp2975_data *data,
+> >   }
+> >
+> >   static int
+> > -mp2975_identify_vout_format(struct i2c_client *client,
+> > -                         struct mp2975_data *data, int page)
+> > +mp2975_set_vout_format(struct i2c_client *client,
+> > +                    struct mp2975_data *data, int page)
+> >   {
+> >       int ret;
+> >
+> >       ret = i2c_smbus_read_word_data(client, MP2975_MFR_DC_LOOP_CTRL);
+> >       if (ret < 0)
+> >               return ret;
+> > -
+> > -     if (ret & MP2975_VOUT_FORMAT)
+> > -             data->vout_format[page] = vid;
+> > -     else
+> > -             data->vout_format[page] = direct;
+> > -     return 0;
+> > +     /* Enable DIRECT VOUT format 1mV/LSB */
+> > +     ret &= ~MP2975_VOUT_FORMAT;
+> > +     ret = i2c_smbus_write_word_data(client, MP2975_MFR_DC_LOOP_CTRL, ret);
+>
+> Writing this back is only needed if MP2975_VOUT_FORMAT was not already cleared.
+Yes. Will optimize it as:
+if (ret & MP2975_VOUT_FORMAT) {
+ret &= ~MP2975_VOUT_FORMAT;
+ret = i2c_smbus_write_word_data(client, MP2975_MFR_DC_LOOP_CTRL, ret);
+}
 
-diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-index a981f7086114..a997dbcb563f 100644
---- a/drivers/hwmon/aquacomputer_d5next.c
-+++ b/drivers/hwmon/aquacomputer_d5next.c
-@@ -1027,7 +1027,7 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 			if (ret < 0)
- 				return ret;
- 
--			*val = aqc_percent_to_pwm(ret);
-+			*val = aqc_percent_to_pwm(*val);
- 			break;
- 		}
- 		break;
--- 
-2.35.0
 
+>
+> > +     return ret;
+> >   }
+> >
+> >   static int
+> > @@ -650,11 +613,11 @@ mp2975_vout_per_rail_config_get(struct i2c_client *client,
+> >                       return ret;
+> >
+> >               /*
+> > -              * Get VOUT format for READ_VOUT command : VID or direct.
+> > +              * Set VOUT format for READ_VOUT command : direct.
+> >                * Pages on same device can be configured with different
+> >                * formats.
+>
+> Not sure if this comment still makes sense.
+Yes. Updated the comment as below:
+/* Set VOUT format for READ_VOUT command : direct. */
+ret = mp2975_set_vout_format(....
+
+>
+> >                */
+> > -             ret = mp2975_identify_vout_format(client, data, i);
+> > +             ret = mp2975_set_vout_format(client, data, i);
+> >               if (ret < 0)
+> >                       return ret;
+> >
+> > @@ -689,7 +652,6 @@ static struct pmbus_driver_info mp2975_info = {
+> >               PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+> >               PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_POUT |
+> >               PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT | PMBUS_PHASE_VIRTUAL,
+> > -     .read_byte_data = mp2975_read_byte_data,
+> >       .read_word_data = mp2975_read_word_data,
+> >   };
+> >
+>
+
+Regards,
+Naresh Solanki
