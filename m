@@ -2,66 +2,61 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE4B4EB64DC
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Jul 2023 09:59:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9267C001DF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Jul 2023 10:19:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235355AbjGNJ7q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 14 Jul 2023 05:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
+        id S236142AbjGNKTB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 14 Jul 2023 06:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234881AbjGNJ7p (ORCPT
+        with ESMTP id S236108AbjGNKS4 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Jul 2023 05:59:45 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C328E211E;
-        Fri, 14 Jul 2023 02:59:43 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b852785a65so11004165ad.0;
-        Fri, 14 Jul 2023 02:59:43 -0700 (PDT)
+        Fri, 14 Jul 2023 06:18:56 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D49358C;
+        Fri, 14 Jul 2023 03:18:40 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id 5614622812f47-3a40b756eb0so1075351b6e.2;
+        Fri, 14 Jul 2023 03:18:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689328783; x=1691920783;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=vShZQMcarPkzUmWVXK6Ziq55LsnSbqaxjxY6sf8cpZQ=;
-        b=K4QzBf7A6YFEWHUA6ixpR5W1HoUYkbJ4J1W17P4+oIwAt4hv00eR5M3A3DYwAiyYjl
-         Cjhii1S2FLEqAefU1CBl2X9rFNItYL/fGQlJMxPXKPyUGG4FDXri1Ih33KHD/9hn/lMN
-         NQ0G9M7ye3B4cQl1ZvnapuP2jXPAHTKFlVrBt23TKLyNNc7zAp1PHl7yViwtSvzO0bqV
-         liXLvZ3vVOMKUviDUwGEALJnSnSmTuxXNrUATYeEnDbMAiHwPUvuzG43gGffELywmCcf
-         jM7gPAux+Gc5dhxfbdaHdPyoX6/L4dCz+Kxd4eSHxIoem3MZU0hK60IE1u6b6YMy7vw2
-         L/Fg==
+        d=gmail.com; s=20221208; t=1689329919; x=1691921919;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G5S/Su+LnonQlJtv6h9aSSkyuGTPnasq4Gs6B9RnTFM=;
+        b=VNRWJ0vyETvMhGB3+48qAa5PT2NK/MARU30eKt5SIUMCo36TbT07+MGuFWUOU75kwn
+         9N4ENPVsAiqeCos8lwVFUgNCbBqN4VghsOWOcMLGJU0C6eWmxpLLOFb5temWQPOvvnyf
+         d+MBkEw/eV+X5Hy0BBNvVVLtTwavKPVuHAvJDEx2gksI45eodF27o+ZSmmXcF1WMEreI
+         TqLFQ1l3LJdeF9wJgPds1M24aiNnAGP2CwN2KYO9TcIczutklkOTHFS5LlZbXNHPaOuy
+         sifBZhHGvU1fviBCC4xY91oOZqMghBO6flASgNI9qJgpNGDp56Y6SyNqJCNkVHYpp8Tr
+         GQKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689328783; x=1691920783;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vShZQMcarPkzUmWVXK6Ziq55LsnSbqaxjxY6sf8cpZQ=;
-        b=XldzDDrr4CkKSAT2cNl+Umw9pKrYOMV6pTANsp0fzuQEcJbraD5zTUSvF2h3Mc4Y0b
-         pDMTNLHySh+eFteNHOZriopV5ObS9drBSTTJuTAB2ClC/mK04nI+aRWne1hGoEgA3e0I
-         SaUTHfQ8EzZTjupeN24qV9EgYSBZpciKWueXtQvxKQxrCru2CZgyf+Ke1SGPXqcax99c
-         RsgK1kLS9RghdehPCsYp4g/46eBUHWSSHPQd6UulWCeOCWSL+Wtn4dtHTrbKir4Alrkt
-         lP+pjAXqiEtKnP9WFSGHIiTwKx9IQ8tCRQdFmiGNkREpotZpbc+zfdZ6aJMIIDQFvtVm
-         WOgw==
-X-Gm-Message-State: ABy/qLbu87vwBhWz6nrcpPirWkr7y///AC7NYNMUGmdvJkO4qEPUo2Fm
-        BfogrxC6rQg5MO8WagpSNhk=
-X-Google-Smtp-Source: APBJJlHHDmGNSykHBKxMZGwxSLLnEVvuoPUPo9OdWpoStDfN/OVYQwEXP4FINTJblZuIsfG93KAeHQ==
-X-Received: by 2002:a17:902:f2d4:b0:1b8:a39e:ff4b with SMTP id h20-20020a170902f2d400b001b8a39eff4bmr1847417plc.32.1689328782949;
-        Fri, 14 Jul 2023 02:59:42 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c1-20020a170902848100b001b801044466sm7400745plo.114.2023.07.14.02.59.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jul 2023 02:59:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0ba3767c-d481-6e2c-2d32-b79af0e1efd8@roeck-us.net>
-Date:   Fri, 14 Jul 2023 02:59:40 -0700
+        d=1e100.net; s=20221208; t=1689329919; x=1691921919;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G5S/Su+LnonQlJtv6h9aSSkyuGTPnasq4Gs6B9RnTFM=;
+        b=DIWftiVk3G0Jw465u9czy8fko4b0Bth8DLlUgnZemU6S9QOZ36tW4DM7NegeXKMReX
+         fmSoIyuIRaSwke+Mn6bHVA22F6SN40IftAk1qEYhBa+ckkR2BUGK9MLfDC6FLAmsUvdL
+         T78ZZ0UeNxOKZmDiA9vSM/wYNGPHc0PmfMaN9GIk/UcEEr7dSU8gdZZHNqpbLyPvAMjt
+         FoDekVafzAnv5uyuciJS8iOg9LoG9MhIcDYe0dOpwnWFOP+X/2mxFY+bLKsHhmfF4nVE
+         y2wfJNQamZgeLmJxztZt4QJXl3PU7SyOlGqYOjaJk7k+NLY+DtOmCI268LB+vEXYitml
+         MVWw==
+X-Gm-Message-State: ABy/qLYxlTLZp06wpA8xeLY2dfct76VDVXCuvNzXIHi52XrdtiGoBqjq
+        MHK66tqdB3YQdIrcvcKdHxffFkQVDTpo+4EeBcA=
+X-Google-Smtp-Source: APBJJlFnmD26TrqVTOxm7Zyo2EOzSV61byUJyWgGAvIuT7uv/IVd5NbGKL7x4j5UPbh+Zfun/v4Fdt3+B1C0/pI0qWQ=
+X-Received: by 2002:a05:6808:13cf:b0:3a3:820e:2f05 with SMTP id
+ d15-20020a05680813cf00b003a3820e2f05mr4930470oiw.1.1689329919411; Fri, 14 Jul
+ 2023 03:18:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [v6 2/4] dt-bindings: hwmon: Add ASPEED TACH Control
- documentation
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        =?UTF-8?B?6JSh5om/6YGU?= <billyking19920205@gmail.com>,
+References: <CAGUgbhCqOJaEPjS96o2au21uW4NhqFScm4Ayd8PzOQvqxQ94SQ@mail.gmail.com>
+ <0b9dd5cf-f4ca-2e6b-624d-0b451bbc2f30@linaro.org> <0ba3767c-d481-6e2c-2d32-b79af0e1efd8@roeck-us.net>
+In-Reply-To: <0ba3767c-d481-6e2c-2d32-b79af0e1efd8@roeck-us.net>
+From:   =?UTF-8?B?6JSh5om/6YGU?= <billyking19920205@gmail.com>
+Date:   Fri, 14 Jul 2023 18:18:28 +0800
+Message-ID: <CAGUgbhC34-pUp4ECULc0ScaN7hUF1L-z69h+ji-TiVrv4gKd3Q@mail.gmail.com>
+Subject: Re: [v6 2/4] dt-bindings: hwmon: Add ASPEED TACH Control documentation
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         "jdelvare@suse.com" <jdelvare@suse.com>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "krzysztof.kozlowski+dt@linaro.org" 
@@ -82,51 +77,60 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
         Billy Tsai <billy_tsai@aspeedtech.com>
-References: <CAGUgbhCqOJaEPjS96o2au21uW4NhqFScm4Ayd8PzOQvqxQ94SQ@mail.gmail.com>
- <0b9dd5cf-f4ca-2e6b-624d-0b451bbc2f30@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <0b9dd5cf-f4ca-2e6b-624d-0b451bbc2f30@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/14/23 00:13, Krzysztof Kozlowski wrote:
-> On 14/07/2023 09:04, 蔡承達 wrote:
-> 
->>          > This is because our register layout for PWM and Tach is not
->> continuous.
->>
->>          > PWM0 used 0x0 0x4, Tach0 used 0x8 0xc
->>
->>          > PWM1 used 0x10 0x14, Tach1 used 0x18 0x1c
->>
->>          > ...
->>
->>          > Each PWM/Tach instance has its own controller register and is not
->> dependent on others.
-> 
-> Your email reply quoting style is very difficult to read.
-> 
->>
->>
->>
->> Hi Guenter,
->>
->>
->>
->> Did you receive a response to my previous email?
->>
->> I would like to inquire if you have any further concerns regarding the PWM
->> and Tach with 16 instances.
-> 
-> But isn't like this in all PWMs in all SoCs?
-> 
+Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2023=E5=B9=B47=E6=9C=8814=E6=
+=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:59=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On 7/14/23 00:13, Krzysztof Kozlowski wrote:
+> > On 14/07/2023 09:04, =E8=94=A1=E6=89=BF=E9=81=94 wrote:
+> >
+> >>          > This is because our register layout for PWM and Tach is not
+> >> continuous.
+> >>
+> >>          > PWM0 used 0x0 0x4, Tach0 used 0x8 0xc
+> >>
+> >>          > PWM1 used 0x10 0x14, Tach1 used 0x18 0x1c
+> >>
+> >>          > ...
+> >>
+> >>          > Each PWM/Tach instance has its own controller register and =
+is not
+> >> dependent on others.
+> >
+> > Your email reply quoting style is very difficult to read.
+> >
+> >>
+> >>
+> >>
+> >> Hi Guenter,
+> >>
+> >>
+> >>
+> >> Did you receive a response to my previous email?
+> >>
+> >> I would like to inquire if you have any further concerns regarding the=
+ PWM
+> >> and Tach with 16 instances.
+> >
+> > But isn't like this in all PWMs in all SoCs?
+> >
+>
+> Correct, pretty much every fan controller is implemented that way.
+> I don't understand the logic.
+>
 
-Correct, pretty much every fan controller is implemented that way.
-I don't understand the logic.
+Hi Krzysztof and Guenter,
 
-Guenter
+Apologies for any confusion earlier.
+So, you think that the implementation with 16 instances of TACH/PWM
+device nodes in dts instead of one is ok to you, right?
 
+Thanks
 
+Best regards,
+Billy Tsai
