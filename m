@@ -2,69 +2,64 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09929EB64DA
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Jul 2023 13:51:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E23FBC001DF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Jul 2023 13:51:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235860AbjGNNvn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 14 Jul 2023 09:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
+        id S235848AbjGNNvp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 14 Jul 2023 09:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235699AbjGNNvj (ORCPT
+        with ESMTP id S235846AbjGNNvm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Jul 2023 09:51:39 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD98435AA
-        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jul 2023 06:51:32 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-991da766865so261171166b.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jul 2023 06:51:32 -0700 (PDT)
+        Fri, 14 Jul 2023 09:51:42 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0424E35AD
+        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jul 2023 06:51:34 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fa16c6a85cso3251130e87.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 14 Jul 2023 06:51:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1689342691; x=1691934691;
+        d=9elements.com; s=google; t=1689342692; x=1691934692;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=urifUudkEPyq2FzlaT1w1iDQxgnQEtIqwDDZrLy2t8E=;
-        b=HoaYNMUc+3aRJuYOwNmUedlSGEpUBUGY6lxQ/zMGvOj9K2wQntSgnZkBPOSKVBU3n9
-         JOvML0jRSQx9AFX+U5PqI7PKiQSTaXK1lU7Dy/gIxiq58+VImnTu2PfOsBg5IpZI7VsK
-         q3ulnWZAbSdgguL2WOpDHUaXFDAJj0wjLYErKrHkU/vRdKd/ZCqrP0XfIsws61YnV9Vx
-         xGpfr7pSgCyoguvUWuGLjnubcw/zm1ifpg/0MFj7sMwdRoA/yO5g2essZAU7CA/VYFIl
-         8RzBub+t/S83+3GlRVYB1TLsoYZhmkHzYSA2vZs3sz4JGC2q3tg1JgEoPyaV+cs//2g1
-         pYag==
+        bh=nNQjkE8rt0loSfu/6IF9XOAi/Sv+jFDCxC5ymTmcAL4=;
+        b=CAoScYrac6wbsvgf3sCMIHSfG/XzOgLvZwMP16U/7iGRxj0aeq6Qmevw4df6X9scar
+         SzZtfeh+IvZxJHqY+y8996NhE8uM/yj4/2X1rLO/2mc7fUJwLd/MJHEYcklGEEtg9dVE
+         HfVkUBg1Hu0OBW0vJ+5vJZzpXhPnMobGOs9u5EdqsCTFSK90I0Cbl0wd8C6gdOf5+K7N
+         0C5hoKxZir6Xxx3OVQ5clhrtdGIyJcXS8v0fDYj79V7kM4Xoqx9HVXvQKXcaTH07j5wI
+         78S4zgXWu4YOvicqE/rw6CJ2GSLWHKXQiq7gyJxy4EC4h0UYo8C40ct9Ap8DgdBPLmxV
+         Fy2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689342691; x=1691934691;
+        d=1e100.net; s=20221208; t=1689342692; x=1691934692;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=urifUudkEPyq2FzlaT1w1iDQxgnQEtIqwDDZrLy2t8E=;
-        b=ernhfE5LVxFEdhmf/10++5pguqpyFzhODsW2yq/A7/HI9qUQ2FzStGNqzN0BMnyzWs
-         rohjabn0Wpo4zHf/zIpnlQl4koJUh0tsuG1cMdPWkFgD9osU4VHU9SOr0DGQhYsR36GU
-         +o9OlTPN+G5IIskJnuEYQkzP6U2vJoizU+I4dI63lOYs+FWGd1X00PJ1QtDznQIkDI0L
-         AQDUsP+ytIXCVG+TQ20yptSBazOPYp65+2hAALorRdPw/MuALlGXIndxoQsHqPgGXxHE
-         ogSMBZWI1kBm9eEogCXyADmRVx97PQpQGsZivI9kPo0tclmofClfoq6B05EbgFWp2i48
-         QD+Q==
-X-Gm-Message-State: ABy/qLZFJkonFlVihz0+y2vOUJE2N0yTYcIC0ipNCd4NdTgcN4FroBRS
-        0Es/Upd03P5UFTiK06HFH9nPgQ==
-X-Google-Smtp-Source: APBJJlGAmr0/UJAC8kytY2+fUeQfkDE7VGTOGWyv7yqIHO7IS3vrc7CDFjtiUckxYVrj8UVqqkr0DA==
-X-Received: by 2002:a17:906:57c7:b0:991:fef4:bb7 with SMTP id u7-20020a17090657c700b00991fef40bb7mr3750894ejr.73.1689342691040;
-        Fri, 14 Jul 2023 06:51:31 -0700 (PDT)
+        bh=nNQjkE8rt0loSfu/6IF9XOAi/Sv+jFDCxC5ymTmcAL4=;
+        b=e6lIlhFieC89sOjiQFsvmeisoKiexLNQ9cyzrNVxlveJHPTid6QR6fGIZv9EhSZWTS
+         Yt9rOe29rXCoyrN7aYYNgd0vDHyuSQ0d7L2/uOVCQzm0fN7VFxECcOR3c1XXIRV5vZOj
+         XzEMRUofFCa+on5FyBYFowruVf+RX43z82JuDeCgTTf+Uf6zcnkyMp6l7rH0zVk/lqet
+         E0ZfIC6SAAeEY6URgGI01/qYIgL6ZUyT7pKLvLwXB2LMvSsMswHvccf3IJZB7nuHC/F/
+         9AZIYTVGZe74S26v75XzTIUkxP9dxEyMSZAAosiHIyBvgSzMuKw/lx3eHAhCM/HTypD+
+         /I+Q==
+X-Gm-Message-State: ABy/qLYogKsvYFTz2L6Ww8CQnKuvwMGA/B5BVuanDwzsEZlORfD8Du/E
+        QcjQfAXf+8TK9HsI48lUTHGQFQ==
+X-Google-Smtp-Source: APBJJlEtcarDtuEPzDUyEAOM2S+8mXuE4bWTS+fzJGLSHttt9cEGE2oEfk1B/l9ervCqaopUQXL+JQ==
+X-Received: by 2002:a05:6512:2202:b0:4f6:2a02:fc1a with SMTP id h2-20020a056512220200b004f62a02fc1amr4347481lfu.17.1689342692293;
+        Fri, 14 Jul 2023 06:51:32 -0700 (PDT)
 Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id h21-20020a170906261500b0099236e3f270sm5405991ejc.58.2023.07.14.06.51.30
+        by smtp.gmail.com with ESMTPSA id h21-20020a170906261500b0099236e3f270sm5405991ejc.58.2023.07.14.06.51.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jul 2023 06:51:30 -0700 (PDT)
+        Fri, 14 Jul 2023 06:51:31 -0700 (PDT)
 From:   Naresh Solanki <naresh.solanki@9elements.com>
 X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
 To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
+        Jean Delvare <jdelvare@suse.com>
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 2/8] dt-bindings: trivial-devices: Add MPS MP2971 and MP2973
-Date:   Fri, 14 Jul 2023 15:51:10 +0200
-Message-ID: <20230714135124.2645339-2-Naresh.Solanki@9elements.com>
+        Naresh Solanki <Naresh.Solanki@9elements.com>
+Subject: [PATCH v2 3/8] hwmon: (pmbus/mp2975) Prepare for MP2973 and MP2971
+Date:   Fri, 14 Jul 2023 15:51:11 +0200
+Message-ID: <20230714135124.2645339-3-Naresh.Solanki@9elements.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230714135124.2645339-1-Naresh.Solanki@9elements.com>
 References: <20230714135124.2645339-1-Naresh.Solanki@9elements.com>
@@ -76,30 +71,84 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Add Monolithic Power Systems MP2971 & MP2973 to trivial devices.
+Add support for differntiating between the chips.
+The following commits will make use of this mechanism.
 
 Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/hwmon/pmbus/mp2975.c | 27 +++++++++++++++++++--------
+ 1 file changed, 19 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index 246863a9bc7e..f639618508a9 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -119,6 +119,10 @@ properties:
-           - fsl,mpr121
-             # Monolithic Power Systems Inc. multi-phase controller mp2888
-           - mps,mp2888
-+            # Monolithic Power Systems Inc. multi-phase controller mp2971
-+          - mps,mp2971
-+            # Monolithic Power Systems Inc. multi-phase controller mp2973
-+          - mps,mp2973
-             # Monolithic Power Systems Inc. multi-phase controller mp2975
-           - mps,mp2975
-             # Honeywell Humidicon HIH-6130 humidity/temperature sensor
+diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
+index 130cfde52e42..04778f2dcbdb 100644
+--- a/drivers/hwmon/pmbus/mp2975.c
++++ b/drivers/hwmon/pmbus/mp2975.c
+@@ -10,6 +10,7 @@
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/of_device.h>
+ #include "pmbus.h"
+ 
+ /* Vendor specific registers. */
+@@ -56,8 +57,13 @@
+ 				 PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | \
+ 				 PMBUS_HAVE_POUT | PMBUS_PHASE_VIRTUAL)
+ 
++enum chips {
++	mp2975
++};
++
+ struct mp2975_data {
+ 	struct pmbus_driver_info info;
++	enum chips chip_id;
+ 	int vout_scale;
+ 	int vid_step[MP2975_PAGE_NUM];
+ 	int vref[MP2975_PAGE_NUM];
+@@ -68,6 +74,13 @@ struct mp2975_data {
+ 	int curr_sense_gain[MP2975_PAGE_NUM];
+ };
+ 
++static const struct i2c_device_id mp2975_id[] = {
++	{"mp2975", mp2975},
++	{}
++};
++
++MODULE_DEVICE_TABLE(i2c, mp2975_id);
++
+ #define to_mp2975_data(x)  container_of(x, struct mp2975_data, info)
+ 
+ static int mp2975_read_byte_data(struct i2c_client *client, int page, int reg)
+@@ -691,6 +704,11 @@ static int mp2975_probe(struct i2c_client *client)
+ 	if (!data)
+ 		return -ENOMEM;
+ 
++	if (client->dev.of_node)
++		data->chip_id = (enum chips)of_device_get_match_data(&client->dev);
++	else
++		data->chip_id = i2c_match_id(mp2975_id, client)->driver_data;
++
+ 	memcpy(&data->info, &mp2975_info, sizeof(*info));
+ 	info = &data->info;
+ 
+@@ -739,15 +757,8 @@ static int mp2975_probe(struct i2c_client *client)
+ 	return pmbus_do_probe(client, info);
+ }
+ 
+-static const struct i2c_device_id mp2975_id[] = {
+-	{"mp2975", 0},
+-	{}
+-};
+-
+-MODULE_DEVICE_TABLE(i2c, mp2975_id);
+-
+ static const struct of_device_id __maybe_unused mp2975_of_match[] = {
+-	{.compatible = "mps,mp2975"},
++	{.compatible = "mps,mp2975", .data = (void *)mp2975},
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, mp2975_of_match);
 -- 
 2.41.0
 
