@@ -2,104 +2,72 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD58FC001DC
-	for <linux-hwmon@archiver.kernel.org>; Sat, 15 Jul 2023 17:01:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 494F8C001B0
+	for <linux-hwmon@archiver.kernel.org>; Sat, 15 Jul 2023 17:03:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjGORBu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 15 Jul 2023 13:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
+        id S229601AbjGORDL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 15 Jul 2023 13:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjGORBt (ORCPT
+        with ESMTP id S229483AbjGORDK (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 15 Jul 2023 13:01:49 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3732211F;
-        Sat, 15 Jul 2023 10:01:47 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6686708c986so3087696b3a.0;
-        Sat, 15 Jul 2023 10:01:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689440507; x=1692032507;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dw+eoPoIl4WIKQoi7mqkPxMf2lZDlf/tWVipPCRQAg8=;
-        b=NC55uBLUfK5ne801vham6DNzUo/4JkQjmlgzRQDLA707GvHz9U6Kb3irR1ePYxTmsf
-         0IQ7PKH/BXrQYU0o18s2xem58yBgDr2e7dyBQKeuDgLwBu4omwG4ELhLOVrNfX/qL4SJ
-         9Gi9+3z+jHyiXxlq7T3LULUaDX1N69N2+qw6gGEQN7iq0JunyGz/Qq+44soVWrftYZvk
-         Vfbg6iAj4sP1uEqb1jqriRYtWnYr0lHILGHAjHWzJIg9qnR/kmj6arSEV58CIMz47Hjf
-         YNGV+6mxIoaii0bLsg3n3c907dKcb1pfTLg4C1wyu4kxqFT6azVBtn1x+CdFIs3Bu69n
-         5OLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689440507; x=1692032507;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dw+eoPoIl4WIKQoi7mqkPxMf2lZDlf/tWVipPCRQAg8=;
-        b=RByhgreFtWrXh1wX+IuoHSy3WmowE+N99KN/9UlGT6yxmWsE12hs64RBg8VeIyGp29
-         csytGVEm+Ew5ZicpLaMZ1NOWJ84zwrIHrBEPoNNN/QWwfRqt6l/5lXyUg86jPE16BA32
-         ZBFrnD2JsH7HA6xXb0FWQT6EABcR2Nqn1oI1p/1BIkjw7Jsx6GwOPTvAOg1jVROA/157
-         8fNTDCtz0lcrfPnsJvTB0M+h4K87jDPEDWTd4KgSP8lqNpq5t8YJYYfWA/qP5BZ22K+m
-         E5IQmTL9Eutgb4jfkp6qgJ25SMXb/gvZdH13NAzwUGg7fbHaK9u2jZIcE6GVb3GG7Uej
-         WtGA==
-X-Gm-Message-State: ABy/qLZaWbg1Q1xpVMqRV7pcCDjPSHYU06zkHXj4CLiX3EkxypAwHWVz
-        HPmLAbDBO/P9pMkn/8QH/2H3QvKpp2U=
-X-Google-Smtp-Source: APBJJlGBabrwPs81eXRpURpIhIooj7BgKoOPst9/16pmUGvxnMe1oZ7JQppBcpbDJ+KQcpiYtaaW4w==
-X-Received: by 2002:a05:6a00:9a0:b0:668:8545:cbeb with SMTP id u32-20020a056a0009a000b006688545cbebmr11867620pfg.15.1689440507285;
-        Sat, 15 Jul 2023 10:01:47 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m19-20020aa79013000000b0067b384d5955sm8972768pfo.26.2023.07.15.10.01.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Jul 2023 10:01:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 15 Jul 2023 10:01:46 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: bt1-pvt: Convert to
- devm_platform_ioremap_resource()
-Message-ID: <e0408d4f-3569-4a60-8cf6-8fdd40c3cbf7@roeck-us.net>
-References: <20230704094306.21933-1-frank.li@vivo.com>
+        Sat, 15 Jul 2023 13:03:10 -0400
+Received: from doubleyoutf.uk (doubleyoutf.uk [IPv6:2a00:da00:1800:3a8::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED830B5
+        for <linux-hwmon@vger.kernel.org>; Sat, 15 Jul 2023 10:03:09 -0700 (PDT)
+Received: from [2a00:23c5:dcb3:8b33::b56]
+        by doubleyoutf.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <ahmad@khalifa.ws>)
+        id 1qKifk-002vIe-FN; Sat, 15 Jul 2023 17:03:08 +0000
+Message-ID: <9271e276-7727-25ee-5c46-c25f479b73d7@khalifa.ws>
+Date:   Sat, 15 Jul 2023 18:03:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230704094306.21933-1-frank.li@vivo.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] hwmon: (nct6775) Add support for 18 IN readings for
+ nct6799
+Content-Language: en-GB
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+References: <20230715153113.1307220-1-ahmad@khalifa.ws>
+ <9c4d7f9d-d417-077d-a709-d372214bf35c@roeck-us.net>
+From:   Ahmad Khalifa <ahmad@khalifa.ws>
+In-Reply-To: <9c4d7f9d-d417-077d-a709-d372214bf35c@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 05:43:06PM +0800, Yangtao Li wrote:
-> Use devm_platform_ioremap_resource() to simplify code.
+On 15/07/2023 17:48, Guenter Roeck wrote:
+> On 7/15/23 08:31, Ahmad Khalifa wrote:
+>> nct6799 supports 18 voltage readings where this driver stops at 16.
+> You are adding three sets of registers, though, not just two. I think
+> you meant to say that the driver stops at 15.
+
+Yes, currently 15 IN defined. It was influenced by the ALARM bits
+comment. I'll change it.
+
+>> +/* NCT6799 layout of alarm bits is indexed by the REG_VIN
+>> + * order, which is
+>> + *      CPUVC,  VIN1,  AVSB,  3VCC,  VIN0,  VIN8,  VIN4, 3VSB
+>> + *       VBAT,   VTT,  VIN5,  VIN6,  VIN2,  VIN3,  VIN7, VIN9
+>> + * no space for 16-17: VHIF, VIN10 (bits 31, -1)
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> Why not use bit 31 ?
 
-Applied.
+Well, this is the part that made me say "driver supports up to 16".
+The ALARM bits have FAN_BASE starting at index 16, so the IN alarms
+can only take up 0-15, unless all alarm bits have extra padding
+added to push FAN_BASE/TEMP_BASE/INTRUSION_BASE up.
 
-Thanks,
-Guenter
+I took the easy option here and left out the 16 IN alarm.
 
-> ---
->  drivers/hwmon/bt1-pvt.c | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
-> 
-> diff --git a/drivers/hwmon/bt1-pvt.c b/drivers/hwmon/bt1-pvt.c
-> index 8d402a627306..b77ebac2e0ce 100644
-> --- a/drivers/hwmon/bt1-pvt.c
-> +++ b/drivers/hwmon/bt1-pvt.c
-> @@ -891,15 +891,8 @@ static struct pvt_hwmon *pvt_create_data(struct platform_device *pdev)
->  static int pvt_request_regs(struct pvt_hwmon *pvt)
->  {
->  	struct platform_device *pdev = to_platform_device(pvt->dev);
-> -	struct resource *res;
->  
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	if (!res) {
-> -		dev_err(pvt->dev, "Couldn't find PVT memresource\n");
-> -		return -EINVAL;
-> -	}
-> -
-> -	pvt->regs = devm_ioremap_resource(pvt->dev, res);
-> +	pvt->regs = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(pvt->regs))
->  		return PTR_ERR(pvt->regs);
->  
+Did I count this wrong?
+nct6775_fan_is_visible()
+	`data->ALARM_BITS[FAN_ALARM_BASE + fan]`
+
+
+-- 
+Regards,
+Ahmad Khalifa
