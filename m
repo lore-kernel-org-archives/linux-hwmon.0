@@ -2,253 +2,172 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43FD5C001DC
-	for <linux-hwmon@archiver.kernel.org>; Sat, 15 Jul 2023 16:56:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B669C001B0
+	for <linux-hwmon@archiver.kernel.org>; Sat, 15 Jul 2023 16:59:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbjGOQ42 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 15 Jul 2023 12:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
+        id S229879AbjGOQ7A (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 15 Jul 2023 12:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjGOQ41 (ORCPT
+        with ESMTP id S229567AbjGOQ7A (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 15 Jul 2023 12:56:27 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F17FD;
-        Sat, 15 Jul 2023 09:56:26 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-5440e98616cso2709521a12.0;
-        Sat, 15 Jul 2023 09:56:26 -0700 (PDT)
+        Sat, 15 Jul 2023 12:59:00 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD62211F;
+        Sat, 15 Jul 2023 09:58:59 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-676f16e0bc4so2035122b3a.0;
+        Sat, 15 Jul 2023 09:58:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689440186; x=1692032186;
+        d=gmail.com; s=20221208; t=1689440338; x=1692032338;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OvfZoyg2FH97ZqUsaABaPTbas5CzIMCCVK9y4nrfBLw=;
-        b=UUmLasDCoIjp6Iz4ZEI6n02kILYbIYZ8PYQrpPSuIfONNMGiuEysDiibWE7QC7CrGe
-         qTZOhUp3yxVJk4n0Kyvu09ypkOD51nOK7V2WCs+tP5zjUbqy48c8Ab8lExlqTyLmHLqt
-         TkkBTbsj0LGx5YVasm8WLNB4LJ8WqFoxGn0eRZqrvOyyUBuYxoCrTe3RaPdLXN/0owHk
-         fjyQuAYXopJyA+8yEGflnZ2e33t8kmuXRF3wgSwwZm7E97TiacyRuAyBEAbloqjqK7eK
-         RhHI7Jaf6y55O/ivUutPtjMH98J8LrZjCy84g5slq1uqql6bUhucjFFMEp+0RQQUG0i+
-         BPWQ==
+        bh=pU7ac+9pDZ4Mqla5h1KE9SHucYdisyawSiO9AoaaMOY=;
+        b=YPyf3URfcAVoWfNhouyN06BfQSeWKGhVshmAFjprQgqP0aVjYzlHsKAuWbQ6M408er
+         ozqNNU4EBQ0pU+u1mwGpkirEbHIuMaecgkwmwkaZb+va43pCHQZ9l5KsVl7G0stqurd8
+         604OsGM1zO9mZ/YD7aHP4wipGR6db0OsRlg4T3FAVqqdHESwa/Nn/fqglQilg7hniTOj
+         lXB8TAGkJ4P3Os7+aVLgI9DFQESLd9TklIjRXaEZCmjpY764FYbb/JmE52C1igdJKFf+
+         4V48OKsjkVRpcI13S789vjHwz88m3QkINZm+5rIWt3OgbZDwiEAJdq15lCTnA9phFav3
+         WEmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689440186; x=1692032186;
+        d=1e100.net; s=20221208; t=1689440338; x=1692032338;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OvfZoyg2FH97ZqUsaABaPTbas5CzIMCCVK9y4nrfBLw=;
-        b=Ejv1hzhYQVqA66W65Ahj6NYNd3oSaDSfBxkoy56hJ8qXTY3jbNOpDvaYFu5f+VW+kM
-         MPHOI0UWyXP2rrKZysO+YPNMsQbEMleWRnc56XDwJ720nufq1+RVmAbYzrz8isE87+Vz
-         AzroGXpCF2C8vIoAvH1ejv8+Yc2cmqey3W3CwCK2ep6sr1BMGMdlkBbEAOLL0Zc+1qNB
-         oKoU8e1QDxgOkenZ3NiIOWkj2uZSLOI4ne627A49xBDNFI5m0wkmyR15k4K/FbQcm6vc
-         KUBhTbiM9bBineGxqMOVgeIwu9RO7LCvgv2U2JFa6q/zxsubFrqm+4sQa9eoS339FKq/
-         IxHQ==
-X-Gm-Message-State: ABy/qLZinvVk0xBEgm5UWbku/NzI+MmyhygtXIGs0NN5QcqVTEibo33b
-        H3CsJBY6r5//1eWaCOokqTJhLPmlBxg=
-X-Google-Smtp-Source: APBJJlEzgnPBiVXPjCj1oC6XTCJX4Mpsy9P08FKlDvqjSRTYRXtsej4OdH1CO52tg83sgiT3KSnq8A==
-X-Received: by 2002:a17:90a:f82:b0:262:f550:6413 with SMTP id 2-20020a17090a0f8200b00262f5506413mr7572485pjz.6.1689440185772;
-        Sat, 15 Jul 2023 09:56:25 -0700 (PDT)
+        bh=pU7ac+9pDZ4Mqla5h1KE9SHucYdisyawSiO9AoaaMOY=;
+        b=hTmeFJRzcEtKLg/+GbHePq58YtiwNRwcpRf4gV1TdEomN+TQ3ZeJnThmYGiBghGDGP
+         Tw1up0UuEHPHxVVIKs+RpYxIqdL1sL+pgTKmSLJp4uzejMT3ki6bYBFJHAv8zdMKSXqB
+         77ISc8ezSrw86FdXR7yM5dFC5MvZcXC7Ap/Ef/IQ1DeVmrLvdA0FXKLfdfFqT3SckDti
+         JH47jFOVquCZFDPX4z2xBg3zBvGxY7lbt7q8d2lvLHl/qsPxftS/D5e50e/PJlNpTYMr
+         2XPcv0Rb0BCM3eskZ6RkYHZoZFOoI4dWDbmenNiTaJHd1ciVmu0FG3ZMpshCOqtqpn/U
+         IuNg==
+X-Gm-Message-State: ABy/qLYkc2hh8JbnR5Q7nYwh4NOAQfzKfc/KTnVPFI8mLShDbPzWgiFn
+        BcBrfUe+ZfTgC7pYTQsd4oo=
+X-Google-Smtp-Source: APBJJlFhMaVLXopI1t7xBtWfMwS6HNPY/DVNEZC5AjOCySjMncZRNjzaYJJTicjtzpQh5n7vXXhB2g==
+X-Received: by 2002:a05:6a00:23c2:b0:680:fa5f:4ed6 with SMTP id g2-20020a056a0023c200b00680fa5f4ed6mr8781186pfc.27.1689440338466;
+        Sat, 15 Jul 2023 09:58:58 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 5-20020a17090a000500b0026307fa0442sm2891876pja.49.2023.07.15.09.56.25
+        by smtp.gmail.com with ESMTPSA id m17-20020a637111000000b0051b8172fa68sm9521718pgc.38.2023.07.15.09.58.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Jul 2023 09:56:25 -0700 (PDT)
+        Sat, 15 Jul 2023 09:58:58 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 15 Jul 2023 09:56:24 -0700
+Date:   Sat, 15 Jul 2023 09:58:57 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>
-Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v2] hwmon: (pmbus/max20730) Remove strlcpy occurences
-Message-ID: <4b256962-5472-4174-a4c1-38d46795df0c@roeck-us.net>
-References: <20230712214307.2424810-1-azeemshaikh38@gmail.com>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Iwona Winiarska <iwona.winiarska@intel.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH] hwmon: (dimmtemp) Support more than 32 DIMMs
+Message-ID: <16080951-743c-4f3c-bec2-153ff38d922f@roeck-us.net>
+References: <20230711152144.755177-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230712214307.2424810-1-azeemshaikh38@gmail.com>
+In-Reply-To: <20230711152144.755177-1-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 09:43:07PM +0000, Azeem Shaikh wrote:
-> strlcpy() reads the entire source buffer first.
-> This read may exceed the destination size limit.
-> This is both inefficient and can lead to linear read
-> overflows if a source string is not NUL-terminated [1].
-> In an effort to remove strlcpy() completely [2], replace
-> strlcpy() here with direct assignment.
+On Tue, Jul 11, 2023 at 05:21:43PM +0200, Naresh Solanki wrote:
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
 > 
-> strlcpy in this file is used to copy fixed-length strings which can be
-> completely avoided by direct assignment and is safe to do so. strlen()
-> is used to return the length of @tbuf.
+> This patch introduces support for handling more than 32 DIMMs by
+> utilizing bitmap operations. The changes ensure that the driver can
+> handle a higher number of DIMMs efficiently.
 > 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-> [2] https://github.com/KSPP/linux/issues/89
-> 
-> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Applied.
+Applied to hwmon-next.
+
+Note: I got multiple versions of this patch. In the future
+please version your patches and provide change logs.
 
 Thanks,
 Guenter
 
 > ---
-> v2:
->  * Includes driver name in commit header.
->  * Removes unrelated change tbuf{ 0 } -> tbuf{}.
->  * Fixes bug where @tbuf was being passed instead of @result.
+>  drivers/hwmon/peci/dimmtemp.c | 26 +++++++++++++++-----------
+>  1 file changed, 15 insertions(+), 11 deletions(-)
 > 
-> v1:
->  * https://lore.kernel.org/all/20230712144429.2845940-1-azeemshaikh38@gmail.com/
 > 
->  drivers/hwmon/pmbus/max20730.c |   64 +++++++++++++++++++++--------------------
->  1 file changed, 33 insertions(+), 31 deletions(-)
+> base-commit: 4dbbaf8fbdbd13adc80731b2452257857e4c2d8b
 > 
-> --
-> 2.41.0.255.g8b1d071c50-goog
-> 
-> diff --git a/drivers/hwmon/pmbus/max20730.c b/drivers/hwmon/pmbus/max20730.c
-> index 7bcf27995033..1de34da177c9 100644
-> --- a/drivers/hwmon/pmbus/max20730.c
-> +++ b/drivers/hwmon/pmbus/max20730.c
-> @@ -114,6 +114,7 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->  	const struct pmbus_driver_info *info;
->  	const struct max20730_data *data;
->  	char tbuf[DEBUG_FS_DATA_MAX] = { 0 };
-> +	char *result = tbuf;
->  	u16 val;
-> 
->  	info = pmbus_get_driver_info(psu->client);
-> @@ -148,13 +149,13 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->  			>> MAX20730_MFR_DEVSET1_TSTAT_BIT_POS;
-> 
->  		if (val == 0)
-> -			len = strlcpy(tbuf, "2000\n", DEBUG_FS_DATA_MAX);
-> +			result = "2000\n";
->  		else if (val == 1)
-> -			len = strlcpy(tbuf, "125\n", DEBUG_FS_DATA_MAX);
-> +			result = "125\n";
->  		else if (val == 2)
-> -			len = strlcpy(tbuf, "62.5\n", DEBUG_FS_DATA_MAX);
-> +			result = "62.5\n";
->  		else
-> -			len = strlcpy(tbuf, "32\n", DEBUG_FS_DATA_MAX);
-> +			result = "32\n";
->  		break;
->  	case MAX20730_DEBUGFS_INTERNAL_GAIN:
->  		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_RGAIN_MASK)
-> @@ -163,35 +164,35 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->  		if (data->id == max20734) {
->  			/* AN6209 */
->  			if (val == 0)
-> -				len = strlcpy(tbuf, "0.8\n", DEBUG_FS_DATA_MAX);
-> +				result = "0.8\n";
->  			else if (val == 1)
-> -				len = strlcpy(tbuf, "3.2\n", DEBUG_FS_DATA_MAX);
-> +				result = "3.2\n";
->  			else if (val == 2)
-> -				len = strlcpy(tbuf, "1.6\n", DEBUG_FS_DATA_MAX);
-> +				result = "1.6\n";
->  			else
-> -				len = strlcpy(tbuf, "6.4\n", DEBUG_FS_DATA_MAX);
-> +				result = "6.4\n";
->  		} else if (data->id == max20730 || data->id == max20710) {
->  			/* AN6042 or AN6140 */
->  			if (val == 0)
-> -				len = strlcpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
-> +				result = "0.9\n";
->  			else if (val == 1)
-> -				len = strlcpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
-> +				result = "3.6\n";
->  			else if (val == 2)
-> -				len = strlcpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
-> +				result = "1.8\n";
->  			else
-> -				len = strlcpy(tbuf, "7.2\n", DEBUG_FS_DATA_MAX);
-> +				result = "7.2\n";
->  		} else if (data->id == max20743) {
->  			/* AN6042 */
->  			if (val == 0)
-> -				len = strlcpy(tbuf, "0.45\n", DEBUG_FS_DATA_MAX);
-> +				result = "0.45\n";
->  			else if (val == 1)
-> -				len = strlcpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
-> +				result = "1.8\n";
->  			else if (val == 2)
-> -				len = strlcpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
-> +				result = "0.9\n";
->  			else
-> -				len = strlcpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
-> +				result = "3.6\n";
->  		} else {
-> -			len = strlcpy(tbuf, "Not supported\n", DEBUG_FS_DATA_MAX);
-> +			result = "Not supported\n";
->  		}
->  		break;
->  	case MAX20730_DEBUGFS_BOOT_VOLTAGE:
-> @@ -199,26 +200,26 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->  			>> MAX20730_MFR_DEVSET1_VBOOT_BIT_POS;
-> 
->  		if (val == 0)
-> -			len = strlcpy(tbuf, "0.6484\n", DEBUG_FS_DATA_MAX);
-> +			result = "0.6484\n";
->  		else if (val == 1)
-> -			len = strlcpy(tbuf, "0.8984\n", DEBUG_FS_DATA_MAX);
-> +			result = "0.8984\n";
->  		else if (val == 2)
-> -			len = strlcpy(tbuf, "1.0\n", DEBUG_FS_DATA_MAX);
-> +			result = "1.0\n";
->  		else
-> -			len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
-> +			result = "Invalid\n";
->  		break;
->  	case MAX20730_DEBUGFS_OUT_V_RAMP_RATE:
->  		val = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_VRATE)
->  			>> MAX20730_MFR_DEVSET2_VRATE_BIT_POS;
-> 
->  		if (val == 0)
-> -			len = strlcpy(tbuf, "4\n", DEBUG_FS_DATA_MAX);
-> +			result = "4\n";
->  		else if (val == 1)
-> -			len = strlcpy(tbuf, "2\n", DEBUG_FS_DATA_MAX);
-> +			result = "2\n";
->  		else if (val == 2)
-> -			len = strlcpy(tbuf, "1\n", DEBUG_FS_DATA_MAX);
-> +			result = "1\n";
->  		else
-> -			len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
-> +			result = "Invalid\n";
->  		break;
->  	case MAX20730_DEBUGFS_OC_PROTECT_MODE:
->  		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_OCPM_MASK)
-> @@ -230,13 +231,13 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->  			>> MAX20730_MFR_DEVSET2_SS_BIT_POS;
-> 
->  		if (val == 0)
-> -			len = strlcpy(tbuf, "0.75\n", DEBUG_FS_DATA_MAX);
-> +			result = "0.75\n";
->  		else if (val == 1)
-> -			len = strlcpy(tbuf, "1.5\n", DEBUG_FS_DATA_MAX);
-> +			result = "1.5\n";
->  		else if (val == 2)
-> -			len = strlcpy(tbuf, "3\n", DEBUG_FS_DATA_MAX);
-> +			result = "3\n";
->  		else
-> -			len = strlcpy(tbuf, "6\n", DEBUG_FS_DATA_MAX);
-> +			result = "6\n";
->  		break;
->  	case MAX20730_DEBUGFS_IMAX:
->  		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_IMAX_MASK)
-> @@ -287,10 +288,11 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->  				"%d.%d\n", ret / 10000, ret % 10000);
->  		break;
->  	default:
-> -		len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
-> +		result = "Invalid\n";
+> diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
+> index ed968401f93c..ce89da3937a0 100644
+> --- a/drivers/hwmon/peci/dimmtemp.c
+> +++ b/drivers/hwmon/peci/dimmtemp.c
+> @@ -219,19 +219,21 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+>  {
+>  	int chan_rank_max = priv->gen_info->chan_rank_max;
+>  	int dimm_idx_max = priv->gen_info->dimm_idx_max;
+> -	u32 chan_rank_empty = 0;
+> -	u32 dimm_mask = 0;
+> -	int chan_rank, dimm_idx, ret;
+> +	DECLARE_BITMAP(dimm_mask, DIMM_NUMS_MAX);
+> +	DECLARE_BITMAP(chan_rank_empty, CHAN_RANK_MAX);
+> +
+> +	int chan_rank, dimm_idx, ret, i;
+>  	u32 pcs;
+>  
+> -	BUILD_BUG_ON(BITS_PER_TYPE(chan_rank_empty) < CHAN_RANK_MAX);
+> -	BUILD_BUG_ON(BITS_PER_TYPE(dimm_mask) < DIMM_NUMS_MAX);
+>  	if (chan_rank_max * dimm_idx_max > DIMM_NUMS_MAX) {
+>  		WARN_ONCE(1, "Unsupported number of DIMMs - chan_rank_max: %d, dimm_idx_max: %d",
+>  			  chan_rank_max, dimm_idx_max);
+>  		return -EINVAL;
 >  	}
-> 
-> -	return simple_read_from_buffer(buf, count, ppos, tbuf, len);
-> +	len = strlen(result);
-> +	return simple_read_from_buffer(buf, count, ppos, result, len);
+>  
+> +	bitmap_zero(dimm_mask, DIMM_NUMS_MAX);
+> +	bitmap_zero(chan_rank_empty, CHAN_RANK_MAX);
+> +
+>  	for (chan_rank = 0; chan_rank < chan_rank_max; chan_rank++) {
+>  		ret = peci_pcs_read(priv->peci_dev, PECI_PCS_DDR_DIMM_TEMP, chan_rank, &pcs);
+>  		if (ret) {
+> @@ -242,7 +244,7 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+>  			 * detection to be performed at a later point in time.
+>  			 */
+>  			if (ret == -EINVAL) {
+> -				chan_rank_empty |= BIT(chan_rank);
+> +				bitmap_set(chan_rank_empty, chan_rank, 1);
+>  				continue;
+>  			}
+>  
+> @@ -251,7 +253,7 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+>  
+>  		for (dimm_idx = 0; dimm_idx < dimm_idx_max; dimm_idx++)
+>  			if (__dimm_temp(pcs, dimm_idx))
+> -				dimm_mask |= BIT(chan_rank * dimm_idx_max + dimm_idx);
+> +				bitmap_set(dimm_mask, chan_rank * dimm_idx_max + dimm_idx, 1);
+>  	}
+>  
+>  	/*
+> @@ -260,7 +262,7 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+>  	 * host platform boot. Retrying a couple of times lets us make sure
+>  	 * that the state is persistent.
+>  	 */
+> -	if (chan_rank_empty == GENMASK(chan_rank_max - 1, 0)) {
+> +	if (bitmap_full(chan_rank_empty, chan_rank_max)) {
+>  		if (priv->no_dimm_retry_count < NO_DIMM_RETRY_COUNT_MAX) {
+>  			priv->no_dimm_retry_count++;
+>  
+> @@ -274,14 +276,16 @@ static int check_populated_dimms(struct peci_dimmtemp *priv)
+>  	 * It's possible that memory training is not done yet. In this case we
+>  	 * defer the detection to be performed at a later point in time.
+>  	 */
+> -	if (!dimm_mask) {
+> +	if (bitmap_empty(dimm_mask, DIMM_NUMS_MAX)) {
+>  		priv->no_dimm_retry_count = 0;
+>  		return -EAGAIN;
+>  	}
+>  
+> -	dev_dbg(priv->dev, "Scanned populated DIMMs: %#x\n", dimm_mask);
+> +	for_each_set_bit(i, dimm_mask, DIMM_NUMS_MAX) {
+> +		dev_dbg(priv->dev, "Found DIMM%#x\n", i);
+> +	}
+>  
+> -	bitmap_from_arr32(priv->dimm_mask, &dimm_mask, DIMM_NUMS_MAX);
+> +	bitmap_copy(priv->dimm_mask, dimm_mask, DIMM_NUMS_MAX);
+>  
+>  	return 0;
 >  }
-> 
->  static const struct file_operations max20730_fops = {
