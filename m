@@ -2,144 +2,117 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34684C001E0
-	for <linux-hwmon@archiver.kernel.org>; Sun, 16 Jul 2023 17:00:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4E92EB64DD
+	for <linux-hwmon@archiver.kernel.org>; Sun, 16 Jul 2023 17:05:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjGPRAG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 16 Jul 2023 13:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
+        id S229585AbjGPRFX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 16 Jul 2023 13:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjGPRAF (ORCPT
+        with ESMTP id S229454AbjGPRFW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 16 Jul 2023 13:00:05 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2DF1B1;
-        Sun, 16 Jul 2023 10:00:04 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-666e5f0d60bso2262956b3a.3;
-        Sun, 16 Jul 2023 10:00:04 -0700 (PDT)
+        Sun, 16 Jul 2023 13:05:22 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9477BE52;
+        Sun, 16 Jul 2023 10:05:21 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b9d80e33fbso22506425ad.0;
+        Sun, 16 Jul 2023 10:05:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689526804; x=1692118804;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7RZBSC9VlSCWDDQ9NaldE02NH19Agbf9l1F2PLZ3gMU=;
-        b=Xhgz+LJBK80DgVAlAdMzAf9hJLuv4SUnLFdgKVhm7CIJMmSwB4uOUnzvuj91L751x6
-         BdutsfJZ8dpA+kY1eU+7kkGYO80pdi2UHVijW6BxEp+xX7MTPEezQmcZ5jLqudo034zH
-         z8q56R0ND8Ev7G40aXSvWeknaOnLokeZ+dhGaCwk6E+klX2YjhVmDNIKh91EjQSRRsXn
-         CvuXXqon+6/PsPOzfN1Jz6DlTG5JJBlBofVFnjUpxZ50O1dfd/g9qZcWRV2iGww2magn
-         i/Iq7vuXYgcWuoWeSsGzLY73/xU4wa710bYCPOET+TD/9JV0P70gEOfIwwT8LrBWUMnU
-         ypVA==
+        d=gmail.com; s=20221208; t=1689527121; x=1692119121;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=56N0FWY67kwv0l0oCm41cdPkUcQgcQjinlre/d9a1zU=;
+        b=M4oX9j2woHibPfW3PxFbPA2ksy0QWa8kxicR5FrNnVkaq/yCjO6mv8FQ16ZLCdEIcU
+         l9XKWKj30McT5LlPIg0wnKYitys5Aiew3fshgiQQi5bLHY0U3gpFkXxEXOD0CzCIurgv
+         3gaIsFI0XdU97DGoEoXNWnUOfrvqgAlK3QT1/hRUyMqeZjwxulYQm86YovRHMrjXkte+
+         6ltoRC37sx//NnXlskA8LC590KQsBLPG1OA1cL2Rpj1fjZhaHggv0U03QBgZ3euXuut/
+         BPcuXh6agm9rSgyeFodUPlAenI4vvwtx/ZCPu/PerNP8iN4IRL3p64h/WRIzDUQWPgSU
+         EkgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689526804; x=1692118804;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7RZBSC9VlSCWDDQ9NaldE02NH19Agbf9l1F2PLZ3gMU=;
-        b=egdKT1rcuijo3eQgzAZ3CWfMewn250aoDiOhuq9K70p/qJ/XRy1winyw6zoK/EYF7o
-         cACFdjrt//8m06vKz13V90FTPstT2oedbFPOvbjnp0NSe4YMyYnLLYhipS/UkFxM8ShZ
-         NEY4EMB6+4EYeamj1rcomDUnBxKcIQHKVkb1yJRS9R+kx9rGAMKGqTkqfWNo84eqQJX4
-         mWuXqJJGSncKqwktbag7Zl1neqPX7qEeHjiR57LFT3qjUffFGcn/+zXNdNYIZ5h9dbQJ
-         yBppmrRJOEbliuDOsaY8LaPzfPO9V1rPUGeuIfRqq9op0FEqSJtsL7a9wZwC8wy7uRYZ
-         roOQ==
-X-Gm-Message-State: ABy/qLYOtfbyBZLN5Yz2ln9i9hsO1XCubeE8yO35iCIPOic3bon8t566
-        3+pdQieulq3U6xXO19v7XO4=
-X-Google-Smtp-Source: APBJJlEf5Hxvs83+h5l+00e+naQWCiqNakhSinl9PZLGOJ0G+eMabdQR6VlF1n/dqXxDfUKPyylETg==
-X-Received: by 2002:a17:903:2310:b0:1b8:7618:5414 with SMTP id d16-20020a170903231000b001b876185414mr9372013plh.60.1689526803628;
-        Sun, 16 Jul 2023 10:00:03 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689527121; x=1692119121;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=56N0FWY67kwv0l0oCm41cdPkUcQgcQjinlre/d9a1zU=;
+        b=TrnOYrVAIpTNFj64zguXy8rJbX+Ep+pclCenIBHx3jkXFv02/bkiq+sLiybvIN/7bh
+         xkdf82TOxZ9Sj8NwWk4OjUaH8lrSruuPcaxnyWKO6BSGWZ7ga579BlprrLI13r8OFnLR
+         RqZ7lsE5hB3XjO8bwqaBck5AQ61bJy+CHF38A7JYi+qR47665zUoLKSHojAYTttrcFbY
+         1pjlHTz/ZnximTVe1yJQu/W1jvSuIaUI2ScxspRkV4OBh/ZZ2dWWHL48X4Zw0uCPJVXN
+         tx/TZW5PJuBhmh+RLOQkS03WlwY16AjfAo2WWWTST8tYMUbF3M/ixPrtbCXSwJeVKaD4
+         nTyA==
+X-Gm-Message-State: ABy/qLbW+OoepNsRqYi7Bl9APxDJzPDapyhI9IHw4b/49WUzauJMFTWS
+        WldFxhBMUC3z7yyrJP4KsLL5EuakHDU=
+X-Google-Smtp-Source: APBJJlE5Gwc8TJ1An6zIfMpovJfBWIaH9GHYqjMawBey5XOo4r9n86875z8dknTOs+6G0jvEFnripA==
+X-Received: by 2002:a17:902:ea05:b0:1b8:9b17:f63d with SMTP id s5-20020a170902ea0500b001b89b17f63dmr12304871plg.23.1689527120792;
+        Sun, 16 Jul 2023 10:05:20 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y4-20020a170902ed4400b001b8a54f99d1sm11183638plb.275.2023.07.16.10.00.01
+        by smtp.gmail.com with ESMTPSA id 17-20020a170902e9d100b001b8ab115ce4sm11218068plk.278.2023.07.16.10.05.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jul 2023 10:00:02 -0700 (PDT)
+        Sun, 16 Jul 2023 10:05:20 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7a69bda1-5f4c-5b1f-8eb6-6fd58917a9b1@roeck-us.net>
-Date:   Sun, 16 Jul 2023 10:00:00 -0700
+Message-ID: <9ca518f1-4cd1-f024-4e67-5abc67eb6507@roeck-us.net>
+Date:   Sun, 16 Jul 2023 10:05:19 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add description for new hwmon
+ driver hs3001
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        =?UTF-8?B?6JSh5om/6YGU?= <billyking19920205@gmail.com>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
-        Billy Tsai <billy_tsai@aspeedtech.com>
-References: <CAGUgbhCqOJaEPjS96o2au21uW4NhqFScm4Ayd8PzOQvqxQ94SQ@mail.gmail.com>
- <0b9dd5cf-f4ca-2e6b-624d-0b451bbc2f30@linaro.org>
- <0ba3767c-d481-6e2c-2d32-b79af0e1efd8@roeck-us.net>
- <CAGUgbhC34-pUp4ECULc0ScaN7hUF1L-z69h+ji-TiVrv4gKd3Q@mail.gmail.com>
- <7b198d57-ddec-3074-314a-3e5e5b8f48f9@roeck-us.net>
- <CAGUgbhDbFedVe-pc+muD_NtDpjHpGqMDdrS3A73C-QbxeHn4oQ@mail.gmail.com>
- <cf91edc9-1093-495b-48eb-6b05198c2541@linaro.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Andre Werner <werneazc@gmail.com>, jdelvare@suse.com,
+        robh+dt@kernel.org
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Andre Werner <andre.werner@systec-electronic.com>
+References: <20230716150556.26155-1-andre.werner@systec-electronic.com>
+ <f0c8adfb-bc72-3424-c021-d694e98a8537@kernel.org>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [v6 2/4] dt-bindings: hwmon: Add ASPEED TACH Control
- documentation
-In-Reply-To: <cf91edc9-1093-495b-48eb-6b05198c2541@linaro.org>
+In-Reply-To: <f0c8adfb-bc72-3424-c021-d694e98a8537@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/16/23 09:08, Krzysztof Kozlowski wrote:
-
-[ ... ]
-
+On 7/16/23 09:33, Krzysztof Kozlowski wrote:
+> On 16/07/2023 17:05, Andre Werner wrote:
+>> This is the initial description.
 >>
->> This patch serial doesn't use to binding the fan control h/w. It is
->> used to binding the two independent h/w blocks.
->> One is used to provide pwm output and another is used to monitor the
->> speed of the input.
->> My patch is used to point out that the pwm and the tach is the
->> different function and don't need to
->> bind together. You can not only combine them as the fan usage but also
->> treat them as the individual module for
->> use. For example: the pwm can use to be the beeper (pwm-beeper.c), the
->> tach can be used to monitor the heart beat signal.
+>> Signed-off-by: Andre Werner <andre.werner@systec-electronic.com>
 > 
-> Isn't this exactly the same as in every other SoC? PWMs can be used in
-> different ways?
+> Duplicated patch, but my comments stay - you did not CC people I asked for.
+> 
+>> ---
+>>   Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+>> index ba2bfb547909..5a5de3f6cd37 100644
+>> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+>> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+>> @@ -320,6 +320,8 @@ properties:
+>>               # Rohm DH2228FV
+>>             - rohm,dh2228fv
+>>               # S524AD0XF1 (128K/256K-bit Serial EEPROM for Low Power)
+>> +          - renesas,hs3001
+>> +            # Renesas HS300[1,2,3,4] Temperature and Relative Humidity Sensors
+> 
+> wrong comment.
 > 
 
-... and in every fan controller. Not that it really makes sense because
-normally the pwm controller part of such chips is tied to the fan input,
-to enable automatic fan control, but it is technically possible.
-In many cases this is also the case in SoCs, for example, in ast2500.
-Apparently this was redesigned in ast2600 where they two blocks are
-only lightly coupled (there are two pwm status bits in the fan status
-register, but I have no idea what those mean). If the blocks are tightly
-coupled, separate drivers don't really make sense.
+Maybe clarify that the comment comes first, i.e., that it should be
 
-There are multiple ways to separate the pwm controller part from the
-fan inputs if that is really necessary. One would be to provide a
-sequence of address mappings, the other would be to pass the memory
-region from an mfd driver. It is not necessary to have N instances
-of the fan controller, even if the address space is not continuous.
++            # Renesas HS300[1,2,3,4] Temperature and Relative Humidity Sensors
++          - renesas,hs3001
+
+and that it should be added before renesas,isl29501 to retain alphabetic order.
 
 Guenter
 
-> Anyway, it is tricky to keep the discussion since you avoid posting
-> entire DTS. I already said:
+>>             - samsung,24ad0xd1
 > 
-> "I will start NAKing such patches without DTS user. It's like reviewing
-> fake code for some unknown solution and trying to get from you piece of
-> answers one by one, because you do not want to share entire part."
-> 
+> Samsung, not Renesas
 > 
 > 
 > Best regards,
