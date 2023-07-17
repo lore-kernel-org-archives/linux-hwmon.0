@@ -2,210 +2,176 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94316EB64DC
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jul 2023 13:52:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61974C001DC
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jul 2023 15:03:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbjGQNwE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 17 Jul 2023 09:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
+        id S229765AbjGQPDE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 Jul 2023 11:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231508AbjGQNwD (ORCPT
+        with ESMTP id S231246AbjGQPDD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 Jul 2023 09:52:03 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70225A3
-        for <linux-hwmon@vger.kernel.org>; Mon, 17 Jul 2023 06:52:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689601921; x=1721137921;
-  h=date:from:to:cc:subject:message-id;
-  bh=ydxr4Js318Zx4Hs7RCXeIr1UMFuKOS2n6poGJ9McIQM=;
-  b=eJh7U1tGZ2HgehhWZywy4Zpefx14rfivaNyrBAjhCLgk2y1xwcByNVDb
-   3tfKjwSXdFy1upj7/IFO9e7HPLCgQ6XQf606olM+HAWRrQBaRNt0vEN10
-   bmrKIdFri6z3iLkG2EoEr5yUgTXrfjBTQUDlUl56EAiz75zcU1OP2c7li
-   fzFZygRTHb2VfUHUbY3392wfwDuQj2iMzkzhE3Rhn5/6qbQ6gV9BN675/
-   bow25cQSCZ2W1ymeqmcNNFayk8Ky+wjWvrhE1uohNSi/t11CmtKU7LeUd
-   K05sfkr5WwUFtFp7ItnBwOKsGqwA7PWkIHJmG/6v5E4GaCRUeRHUHCvUE
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="429694311"
-X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="429694311"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:52:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="866740396"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Jul 2023 06:51:59 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qLOdq-0009bc-0L;
-        Mon, 17 Jul 2023 13:51:58 +0000
-Date:   Mon, 17 Jul 2023 21:51:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 8b6e7cf4e1729fd33267e970b5019b50dceb25f9
-Message-ID: <202307172121.ORgw5s9B-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        Mon, 17 Jul 2023 11:03:03 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B1AB9;
+        Mon, 17 Jul 2023 08:03:02 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b89d47ffb6so24997405ad.2;
+        Mon, 17 Jul 2023 08:03:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689606181; x=1692198181;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZHqJrkmtDswIsjlMcdZq22dzszSmSwDk8/wNYIYi+70=;
+        b=afJTzRLO9V6t0Lirw7J7nwtH2DID5MFA9N4H/cD+cDOQFzVtNr3dakW1mfdWRC9MSz
+         f8pf/GL7wBomoYtzzEFsqScTiyLPSv4JM+kqmTFhG1D94blG9yjSAj68Mi074qaLlbST
+         PIFFkKbNjz+u3x0nkPirO9RdHHYyfdnP3t5wyIRosh0JcM02CNL7MWLWJf9dnSYgRxHc
+         2TwRtWKtOZLbWGxaB2L+anpcAAz8yvdUE2vKmNoAJdJ5XDY7V+eE49FZ3UbzwrLCJovg
+         jT+/RWl+XOARyxK3BrtiikTibmTwvLmdZsGVI7pstuIj7meXFkHTX/mpalC0ekND6iKr
+         BSXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689606181; x=1692198181;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZHqJrkmtDswIsjlMcdZq22dzszSmSwDk8/wNYIYi+70=;
+        b=Q6VS7IcSbkt7cN2yneyY2QheGj9TshnTQZGp0nW+izeI+Uw3TXk4bKC29fytFbsiNx
+         o7X69pL7WMsQdwR7O8ra4yYjDpgrEE/oD7kzdJjii25nQifDYAJvrJ2gb8Z3hG3h1W7J
+         Y/jKLxFYB6bmV4f5K2GqUTnIKyjMbR+p/5g05Eb2MiYN+xnq6Dnj6Nn0NdPPfNeHDn/t
+         cs46VVtlPdeDftLqOlrztu7Jo9qM6XTM9uABR1bHTxp7WsFIXEUsvSUDjRRHzhIkSc4w
+         eAUZbWYhwccna6ZlDoXU1nwUJrzkAm9LRRtn3ORvL8QWbSsiKSzGpnfCfBRJCRQm09F6
+         SLRg==
+X-Gm-Message-State: ABy/qLabsO2au2PmaXr29EhC5wUlqdlqC8zE1ot3tGXnG4waZWR26ctK
+        Fe3JPt7gVCIdxUxvzKRSA+lhhLDvcmY=
+X-Google-Smtp-Source: APBJJlEur6epoP3Py26emMND6bS/Fs7JkbcSrttix5WAbUIxPTizBVeSGz4w34c8AKhvvYR9rt2Ogg==
+X-Received: by 2002:a17:903:482:b0:1b8:a2af:fe23 with SMTP id jj2-20020a170903048200b001b8a2affe23mr8731004plb.2.1689606181061;
+        Mon, 17 Jul 2023 08:03:01 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u7-20020a170902b28700b001b9e59d6ddesm7132plr.124.2023.07.17.08.02.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jul 2023 08:03:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <89c6c7e8-0407-b6bb-7085-be11efce2524@roeck-us.net>
+Date:   Mon, 17 Jul 2023 08:02:58 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Joaqu=c3=adn_Ignacio_Aramend=c3=ada?= 
+        <samsagax@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230717124013.38796-2-samsagax@gmail.com>
+ <20230717124013.38796-5-samsagax@gmail.com>
+ <2023071739-remedy-sloping-64f6@gregkh>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 3/3] hwmon: (oxp-sensors) Refactor init() and remove
+ probe()
+In-Reply-To: <2023071739-remedy-sloping-64f6@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 8b6e7cf4e1729fd33267e970b5019b50dceb25f9  hwmon: Remove smm665 driver
+On 7/17/23 06:45, Greg KH wrote:
+> On Mon, Jul 17, 2023 at 09:40:06AM -0300, Joaquín Ignacio Aramendía wrote:
+>> Since the driver is not hotpluggable the probe() funtion is not used
+>> more than once.
+>>
+>> Move all attribute registration logic to the init() function.
+> 
+> Again, as in patch 2/3, you forgot a signed-off-by line.
+> 
+> But this change isn't correct, just because a device is not
+> hotpluggable, does not mean it should not be using probe/release, in
+> fact just the opposite, it should be using that and NOT init.
+> 
+> But I understand why you changed the init call in patch 2/3, that is ok,
+> this isn't because:
+> 
+>> ---
+>>   drivers/hwmon/oxp-sensors.c | 33 ++++++++++++++++-----------------
+>>   1 file changed, 16 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+>> index c70d9355eeba..39de49c8a392 100644
+>> --- a/drivers/hwmon/oxp-sensors.c
+>> +++ b/drivers/hwmon/oxp-sensors.c
+>> @@ -431,32 +431,20 @@ static const struct hwmon_chip_info oxp_ec_chip_info = {
+>>   	.info = oxp_platform_sensors,
+>>   };
+>>   
+>> -/* Initialization logic */
+>> -static int oxp_platform_probe(struct platform_device *pdev)
+>> -{
+>> -	const struct dmi_system_id *dmi_entry;
+>> -	struct device *dev = &pdev->dev;
+>> -	struct device *hwdev;
+>> -
+>> -	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
+>> -						     &oxp_ec_chip_info, NULL);
+>> -
+>> -	return PTR_ERR_OR_ZERO(hwdev);
+>> -}
+>> -
+>>   static struct platform_driver oxp_platform_driver = {
+>>   	.driver = {
+>>   		.name = "oxp-platform",
+>>   		.dev_groups = oxp_ec_groups,
+>>   	},
+>> -	.probe = oxp_platform_probe,
+>>   };
+>>   
+>>   static struct platform_device *oxp_platform_device;
+>>   
+>> +/* Initialization logic */
+>>   static int __init oxp_platform_init(void)
+>>   {
+>>   	const struct dmi_system_id *dmi_entry;
+>> +	struct device *hwdev;
+>>   
+>>   	/*
+>>   	 * Have to check for AMD processor here because DMI strings are the
+>> @@ -472,10 +460,21 @@ static int __init oxp_platform_init(void)
+>>   	board = (enum oxp_board)(unsigned long)dmi_entry->driver_data;
+>>   
+>>   	oxp_platform_device =
+>> -		platform_create_bundle(&oxp_platform_driver,
+>> -				       oxp_platform_probe, NULL, 0, NULL, 0);
+>> +		platform_create_bundle(&oxp_platform_driver, NULL, NULL, 0,
+>> +				       NULL, 0);
+>> +	if (IS_ERR(oxp_platform_device))
+>> +		return PTR_ERR(oxp_platform_device);
+>>   
+>> -	return PTR_ERR_OR_ZERO(oxp_platform_device);
+>> +	hwdev = devm_hwmon_device_register_with_info(&oxp_platform_device->dev,
+>> +						     "oxpec", NULL,
+>> +						     &oxp_ec_chip_info, NULL);
+> 
+> You are creating a fake platform device out of no where here, which is
+> tied to nothing, which isn't ok.  Keep it in the proper device tree and
+> have it be passed to you by the driver core in the probe() function.
+> 
 
-elapsed time: 726m
+This is a system with dmi data, so it won't support devicetree. Other
+than that, you are correct, this patch is definitely not a good idea
+and needs to be dropped.
 
-configs tested: 140
-configs skipped: 4
+Thanks,
+Guenter
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> I think you will see that this changed where in /sys/devices/ your
+> device is now, right?
+> 
+> 
+>> +	if (IS_ERR(hwdev)) {
+>> +		platform_device_unregister(oxp_platform_device);
+> 
+> Making fake platform devices is generally never a good idea, please
+> don't do that.
+> 
+> thanks,
+> 
+> greg k-h
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r024-20230717   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                 nsimosci_hs_smp_defconfig   gcc  
-arc                  randconfig-r016-20230717   gcc  
-arc                  randconfig-r021-20230717   gcc  
-arc                  randconfig-r043-20230717   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                          exynos_defconfig   gcc  
-arm                         lpc18xx_defconfig   gcc  
-arm                  randconfig-r046-20230717   clang
-arm                        realview_defconfig   gcc  
-arm                           tegra_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r013-20230717   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r001-20230717   gcc  
-csky                 randconfig-r026-20230717   gcc  
-csky                 randconfig-r031-20230717   gcc  
-hexagon              randconfig-r005-20230717   clang
-hexagon              randconfig-r034-20230717   clang
-hexagon              randconfig-r041-20230717   clang
-hexagon              randconfig-r045-20230717   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230717   clang
-i386         buildonly-randconfig-r005-20230717   clang
-i386         buildonly-randconfig-r006-20230717   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230717   clang
-i386                 randconfig-i002-20230717   clang
-i386                 randconfig-i003-20230717   clang
-i386                 randconfig-i004-20230717   clang
-i386                 randconfig-i005-20230717   clang
-i386                 randconfig-i006-20230717   clang
-i386                 randconfig-i011-20230717   gcc  
-i386                 randconfig-i012-20230717   gcc  
-i386                 randconfig-i013-20230717   gcc  
-i386                 randconfig-i014-20230717   gcc  
-i386                 randconfig-i015-20230717   gcc  
-i386                 randconfig-i016-20230717   gcc  
-i386                 randconfig-r004-20230717   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r032-20230717   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        m5272c3_defconfig   gcc  
-m68k                        mvme16x_defconfig   gcc  
-microblaze           randconfig-r006-20230717   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                         bigsur_defconfig   gcc  
-mips                     decstation_defconfig   gcc  
-mips                      maltaaprp_defconfig   clang
-mips                        omega2p_defconfig   clang
-nios2                               defconfig   gcc  
-openrisc             randconfig-r012-20230717   gcc  
-openrisc             randconfig-r025-20230717   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r015-20230717   gcc  
-parisc64                            defconfig   gcc  
-powerpc                      acadia_defconfig   clang
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                     asp8347_defconfig   gcc  
-powerpc                      chrp32_defconfig   gcc  
-powerpc                    ge_imp3a_defconfig   clang
-powerpc                     kmeter1_defconfig   clang
-powerpc                      pasemi_defconfig   gcc  
-powerpc                      ppc44x_defconfig   clang
-powerpc              randconfig-r023-20230717   gcc  
-powerpc                     redwood_defconfig   gcc  
-powerpc                     sequoia_defconfig   gcc  
-powerpc                     tqm8548_defconfig   gcc  
-powerpc                     tqm8555_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r022-20230717   gcc  
-riscv                randconfig-r042-20230717   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r002-20230717   clang
-s390                 randconfig-r044-20230717   gcc  
-sh                               allmodconfig   gcc  
-sh                         ap325rxa_defconfig   gcc  
-sh                        dreamcast_defconfig   gcc  
-sh                        edosk7760_defconfig   gcc  
-sh                     magicpanelr2_defconfig   gcc  
-sh                   randconfig-r014-20230717   gcc  
-sh                      rts7751r2d1_defconfig   gcc  
-sh                           se7712_defconfig   gcc  
-sh                           se7750_defconfig   gcc  
-sh                          urquell_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r035-20230717   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230717   clang
-x86_64       buildonly-randconfig-r002-20230717   clang
-x86_64       buildonly-randconfig-r003-20230717   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-r003-20230717   clang
-x86_64               randconfig-r011-20230717   gcc  
-x86_64               randconfig-x001-20230717   gcc  
-x86_64               randconfig-x002-20230717   gcc  
-x86_64               randconfig-x003-20230717   gcc  
-x86_64               randconfig-x004-20230717   gcc  
-x86_64               randconfig-x005-20230717   gcc  
-x86_64               randconfig-x006-20230717   gcc  
-x86_64               randconfig-x011-20230717   clang
-x86_64               randconfig-x012-20230717   clang
-x86_64               randconfig-x013-20230717   clang
-x86_64               randconfig-x014-20230717   clang
-x86_64               randconfig-x015-20230717   clang
-x86_64               randconfig-x016-20230717   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                           alldefconfig   gcc  
-xtensa                       common_defconfig   gcc  
-xtensa                generic_kc705_defconfig   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
