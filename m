@@ -2,61 +2,61 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E802C00528
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jul 2023 16:29:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66A1EC001B0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jul 2023 16:40:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjGQQ3t (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 17 Jul 2023 12:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
+        id S229982AbjGQQkn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 Jul 2023 12:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbjGQQ3X (ORCPT
+        with ESMTP id S230116AbjGQQkm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 Jul 2023 12:29:23 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B45A10CC;
-        Mon, 17 Jul 2023 09:29:22 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-cae0ad435b6so4976752276.0;
-        Mon, 17 Jul 2023 09:29:22 -0700 (PDT)
+        Mon, 17 Jul 2023 12:40:42 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F0CA9;
+        Mon, 17 Jul 2023 09:40:41 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-57a8080e4a7so47447217b3.0;
+        Mon, 17 Jul 2023 09:40:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689611361; x=1692203361;
+        d=gmail.com; s=20221208; t=1689612041; x=1692204041;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OcmyLdl4Ow+L6bBQB/pcmUUoBJf5ws2D2mBZxyE15nc=;
-        b=scdh5BkgyyPSzX16exQ83vP1epiQ42gXUCms3PVBKk742Ufg71UhDVWHXlNenCS7V4
-         f+X7DlGztkTcDf2kZZhkH/S7DKRV0zp/JJBivMp466Tkbyw48CpyDzjJMRMHZ2TaNdKm
-         TE5uPJ7/f2hZk39zL/pv4TtIZJ6GBosHkUXAKHBIinDInEpemIxDLJllsTcaedxGE76r
-         6Bfzmjr3vHpbM2tspoYRSkX6R6CvPr/Gkr9KP6miMukjQ49q3grkQ/jnRiGvbFak+XKf
-         MEdxb14d2LQU5d8AZ6ujI0oylYccrFDeDi7aHiiDa7X4i7zqPxNqLVcoUCr0CKiZd9Ab
-         V6uA==
+        bh=dMb9H4PkmkiPa0FVYqc3RLn9o2P2FrhAS3xYXAFVgv8=;
+        b=iwI61PncG4Y3Zzb2Zm6QxwurzzIJc/IRk72CpUeXExIe5JmlGi28GseD9dT/g1gQlF
+         hmiIZi0JD1BWJZvxWxup0d6oFd87nHipIRPqquXqb2dLQ3ewE++qic5bGzt7G6FB8mJE
+         8JgOgdrur0OsbCiMNZpnNehsSlCxWtzQP/rEA+XARRsijNVWa/sYRfguLY2Ekqx2WOFU
+         VsDSaQwZnTi3fv8/+Ca/caWoq4KEEt4aG6Hii4cKL+LNuhAd4VV5oCgnLVkECB0p3Qfc
+         zJikZUQ0QMn2+OITKj8kv5gEv7ypfbiO0rAvDJR7xy0ozhwmDm+ehzPOM4rCrcYm9+wc
+         Iimg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689611361; x=1692203361;
+        d=1e100.net; s=20221208; t=1689612041; x=1692204041;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OcmyLdl4Ow+L6bBQB/pcmUUoBJf5ws2D2mBZxyE15nc=;
-        b=lbvrgc2QzeJMXa7syIqMlOKgR5QQtQtI2n0CHs9vbarFUYAWUpUTxXc+E64c8YXQrO
-         235xgAPV54hi17OKP1pxqGLsRy6WlHrDrE9LFf75cZ9q+dkAmkisGz4h1abVonI+waEu
-         kewCRHZexhuIeIlm04Y06SgDuKfDrIVwtMspIv+i6eCC4pzHSqOu5OFoI0gtaMN6gdoL
-         atsdULapl3N3wptgUSMrzoNwdJe+zLyp2UMo+7f1OhgkEiH5FAINSXnBQVtpxC/H3sXa
-         um700Q7Q1Z7pgqumjYZIP1MzcYa4HPI+w7Y22lxxK+osnsgAR8jU0eOWE6UFJXT1Wk0S
-         bOmQ==
-X-Gm-Message-State: ABy/qLYPJ/RkehGVaVT8ScgePejesgI3wEYE7VRxczIif2x29Fc620/s
-        Th2I2OBCzwfc9yqgQq0xk0PyIdIEsUHta8qeXpan9IzN
-X-Google-Smtp-Source: APBJJlEov+clBur4A1ye7VipequueyeI3L7Q8xxNTDYSps3y7uE+GM8p65/xlmEA4piAJSYpofxQ9ksPX2a5p2hjF7E=
-X-Received: by 2002:a25:aa24:0:b0:c5f:3df2:d26f with SMTP id
- s33-20020a25aa24000000b00c5f3df2d26fmr12081127ybi.43.1689611361216; Mon, 17
- Jul 2023 09:29:21 -0700 (PDT)
+        bh=dMb9H4PkmkiPa0FVYqc3RLn9o2P2FrhAS3xYXAFVgv8=;
+        b=VlPMHic73jwsHrJsv3yB0XyvT0R881HYjdzLk/pQMV6Ywb8eILQ+N5v8r7xd6D+jH5
+         8uA/3DMfgz9xmgy+lxZcuxVAjA7wRGGyOLFvkdXSxudlqxC9teHODutuPSA+g1TYJ22P
+         teah0ZTRoG1DEGU91UHx4fkxvZlw+Hd+2EaN+Yizr1TQPJWecg8fvYd1F65OUwib7nTK
+         7DSnZNW+qEko+8yKKUdCLGpSBP1ABhY83TPGkAWT4zBJ8/UD1jXI/BRcBEQXnMKQmsHv
+         jXeFH2bqOHP8wR50PkLkKVgiXJx3hj4ehM6U6j5X8QDqcq3JrolPiqnO4/hz83bNelH1
+         YzHg==
+X-Gm-Message-State: ABy/qLYCPpWlhv48w6+flzFqqS74wxWygV3oJlPxdAfGJ5Fxdvon3sgk
+        +/zcv+uQFuHHcKpwdaJu/ypi6abHq0FJ/RFo4HUE0tWdbAw=
+X-Google-Smtp-Source: APBJJlG43/bsUgpNQRfJ8+xO2X2ZbFkaLTVO+ZbD9D9VGw0BO5K7aCt7Lc+Ou1w0D6mDt5je9+KWjaOJpCJo3DSZZ9I=
+X-Received: by 2002:a81:c30b:0:b0:56d:2e22:8b31 with SMTP id
+ r11-20020a81c30b000000b0056d2e228b31mr11778471ywk.41.1689612041047; Mon, 17
+ Jul 2023 09:40:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230717124013.38796-2-samsagax@gmail.com> <20230717124013.38796-3-samsagax@gmail.com>
- <2023071726-zap-sesame-c8ff@gregkh>
-In-Reply-To: <2023071726-zap-sesame-c8ff@gregkh>
+References: <20230717124013.38796-2-samsagax@gmail.com> <20230717124013.38796-5-samsagax@gmail.com>
+ <2023071739-remedy-sloping-64f6@gregkh> <89c6c7e8-0407-b6bb-7085-be11efce2524@roeck-us.net>
+In-Reply-To: <89c6c7e8-0407-b6bb-7085-be11efce2524@roeck-us.net>
 From:   Joaquin Aramendia <samsagax@gmail.com>
-Date:   Mon, 17 Jul 2023 13:29:09 -0300
-Message-ID: <CABgtM3haYQAn28eYiwD9OyHeotyvd-qHD9r4G9WUg=+iMeaOhg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] hwmon: (oxp-sensors) Move tt_toggle attribute to dev_groups
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+Date:   Mon, 17 Jul 2023 13:40:30 -0300
+Message-ID: <CABgtM3i9__CghL1ikLDRRL3n+kSU2K7jCiQouNTjyZZdAbTVew@mail.gmail.com>
+Subject: Re: [PATCH 3/3] hwmon: (oxp-sensors) Refactor init() and remove probe()
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -64,10 +64,32 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> Nice, but you forgot a signed-off-by: line :(
+Hello Guenter and Greg:
 
-Note to self: don't submit without morning coffee
+> > Again, as in patch 2/3, you forgot a signed-off-by line.
 
-Will add it and submit. Thanks for your review.
+Will resubmit with proper Sign-off
+
+> > You are creating a fake platform device out of no where here, which is
+> > tied to nothing, which isn't ok.  Keep it in the proper device tree and
+> > have it be passed to you by the driver core in the probe() function.
+> >
+>
+> This is a system with dmi data, so it won't support devicetree. Other
+> than that, you are correct, this patch is definitely not a good idea
+> and needs to be dropped.
+>
+> Thanks,
+> Guenter
+>
+> > I think you will see that this changed where in /sys/devices/ your
+> > device is now, right?
+
+The attribute is created in the same place as before this patch. And
+works the same as before this patch.
+
+I can drop this patch and only resubmit 1 and 2. Thanks for the review
+to both of you.
+
 --=20
 Joaqu=C3=ADn I. Aramend=C3=ADa
