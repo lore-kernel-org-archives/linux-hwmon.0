@@ -2,342 +2,95 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71090EB64DC
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jul 2023 20:12:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6304EB64DC
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jul 2023 21:14:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjGQUMU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 17 Jul 2023 16:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
+        id S231340AbjGQVOC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 Jul 2023 17:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjGQUMT (ORCPT
+        with ESMTP id S229669AbjGQVOB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 Jul 2023 16:12:19 -0400
-Received: from doubleyoutf.uk (doubleyoutf.uk [IPv6:2a00:da00:1800:3a8::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15E698
-        for <linux-hwmon@vger.kernel.org>; Mon, 17 Jul 2023 13:12:17 -0700 (PDT)
-Received: from [2a00:23c5:dcb3:8b33::b56] (helo=orangina.lan)
-        by doubleyoutf.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ahmad@khalifa.ws>)
-        id 1qLUZq-0035xd-C0; Mon, 17 Jul 2023 20:12:14 +0000
-From:   Ahmad Khalifa <ahmad@khalifa.ws>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Cc:     Ahmad Khalifa <ahmad@khalifa.ws>
-Subject: [PATCH v2] hwmon: (nct6775) Increase and reorder ALARM/BEEP bits
-Date:   Mon, 17 Jul 2023 21:10:51 +0100
-Message-Id: <20230717201050.1657809-1-ahmad@khalifa.ws>
-X-Mailer: git-send-email 2.30.2
+        Mon, 17 Jul 2023 17:14:01 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8F7F3
+        for <linux-hwmon@vger.kernel.org>; Mon, 17 Jul 2023 14:14:00 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-cabf1dbafc4so5043977276.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 17 Jul 2023 14:14:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689628440; x=1692220440;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DiAwjywY+o6AydFAzzRqhrzlFzFr7K/AvHOWd5Odg+A=;
+        b=quXvFsCdfkdgi2LD00nVbmaJpdUFccPnP4HsH9qxD52OMq+ZV/7hg2OBaS5Iau5fbx
+         lAWSFe76WQ2zn4sMM8FAPESSA6MCAuYPyXH/HozdYtbXyWiV4Yb5OPsRsxb0323GXR8r
+         DuSrg26B+WP3V9XjFR5uewcOF3SzwpWK11UBO4vk/KxgHcYaLgjcr7pexG1YfI1Tm16F
+         Qb9GPLh+usvFmuv8XqlG2iPDK+HjRYbjIL01LQR3cLA+iDgH7ao7zp+SPXMO49xOhX6C
+         nINdIOOyxve7aWcKVQVWmL38oDN0ruS48IlZD7MSG+3qI2Fkc4zCmDSleeP0kEWb2iSV
+         J6WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689628440; x=1692220440;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DiAwjywY+o6AydFAzzRqhrzlFzFr7K/AvHOWd5Odg+A=;
+        b=VJoJFnvOcHJBmZd+C5YeuoRZl6g7ECsQuOhGg5MbyGvteyY+jJJUglm1l1wHWOIyrU
+         GvxRF4PwucjGJwL4tR3WAlBkFRT2L9vX5qn59VZ2yrtYpKG2rpzwLCcu36EZruIbgsjM
+         KeH8kEEB1GS3wfuxtv9xBzbPeaM7OLc+GCgRATtPjJk4LoGtCqu4MV7u63QgxXOa3xcA
+         pi+D7z7JuaDj68pl87DFzy6WsN5lVJtEk8quMLKQxt1XoJLLAU6tlnLmQRCK46XOV1aK
+         lxkFaFzQO7nWB9K1LhBmELaJd5fIMr1bEdHhHlATTcR+s/XArcYqnVdFT36PvPEwFvkq
+         O+8w==
+X-Gm-Message-State: ABy/qLYkNqGDKOI0ac2CN45vWHuKd030KM38DniR0fJMVg1fy7SEa6RT
+        nAgclrYSuuUJo7AL4zfK+Zo=
+X-Google-Smtp-Source: APBJJlH9eGdcqklmwKcgBUIxwTAbDm0fW35Wv161aZ9BwrZm1jXlWchyvQTX3WxIh9iBx6AmD3Qp+w==
+X-Received: by 2002:a0d:eb14:0:b0:56c:f8f1:eed5 with SMTP id u20-20020a0deb14000000b0056cf8f1eed5mr12953292ywe.6.1689628439721;
+        Mon, 17 Jul 2023 14:13:59 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w65-20020a0ded44000000b005463e45458bsm82895ywe.123.2023.07.17.14.13.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jul 2023 14:13:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 17 Jul 2023 14:13:57 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Ahmad Khalifa <ahmad@khalifa.ws>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (nct6775) Increase and reorder ALARM/BEEP bits
+Message-ID: <c5257431-cdb0-49ad-bbec-861c6b233b25@roeck-us.net>
+References: <20230717201050.1657809-1-ahmad@khalifa.ws>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230717201050.1657809-1-ahmad@khalifa.ws>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-* Increase available bits, IN: 16 to 24, FAN: 8 to 12,
-  TEMP: 6 to 12
-* Reorder alarm/beep definitions to match in order to allow
-  additional inputs in the future
-* Remove comments about 'unused' bits as probe() is a better
-  reference
+On Mon, Jul 17, 2023 at 09:10:51PM +0100, Ahmad Khalifa wrote:
+> * Increase available bits, IN: 16 to 24, FAN: 8 to 12,
+>   TEMP: 6 to 12
+> * Reorder alarm/beep definitions to match in order to allow
+>   additional inputs in the future
+> * Remove comments about 'unused' bits as probe() is a better
+>   reference
+> 
+> Testing note:
+> * Tested on nct6799 with IN/FAN/TEMP, and changing min/max/high/hyst,
+>   that triggers the corresponding alarms correctly. Good confirmation
+>   on the original mapping of the registers and masks.
+>   As to be expected, only 4 fans and 2 temps (fixed) have limits
+>   currently on nct6799 on my board.
+> * Trouble with testing intrusion alarms and beeps, no way to confirm
+>   those. As I understand now, intrusion/caseopen is probably not
+>   connected on my board.
+>   And I haven't seen a buzzer on a board in ages.
+> 
+> Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
 
-Testing note:
-* Tested on nct6799 with IN/FAN/TEMP, and changing min/max/high/hyst,
-  that triggers the corresponding alarms correctly. Good confirmation
-  on the original mapping of the registers and masks.
-  As to be expected, only 4 fans and 2 temps (fixed) have limits
-  currently on nct6799 on my board.
-* Trouble with testing intrusion alarms and beeps, no way to confirm
-  those. As I understand now, intrusion/caseopen is probably not
-  connected on my board.
-  And I haven't seen a buzzer on a board in ages.
+Tested working on nct6797, with no functional differences observed,
+and the code looks good to me.
 
-Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
----
-Tried different ways to define the bits (arrays by type - too long,
-double dimensional - too complicated, a padding macro - rough to
-read and checkpatch won't allow it), so kept the original
-method as seems the neatest for readability, but expanded it to a
-consistent 12 entries per row (8 too long, 16 too wide).
-That way it's the least number of lines and easy to read.
-All BITS now take up around 572 bytes instead of 352 bytes.
+Applied to hwmon-next.
 
-v2 changes:
-* Reduce intrusion back to 2 values from 4
-* Fix incorrect temp ALARM bits
-* Fix spacing on macro
-
----
- drivers/hwmon/nct6775-core.c | 169 +++++++++++++++--------------------
- drivers/hwmon/nct6775.h      |  23 ++++-
- 2 files changed, 93 insertions(+), 99 deletions(-)
-
-diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-index 029344b933ed..1664d2a1e6c3 100644
---- a/drivers/hwmon/nct6775-core.c
-+++ b/drivers/hwmon/nct6775-core.c
-@@ -98,31 +98,23 @@ static const u16 NCT6775_REG_IN[] = {
- 
- static const u16 NCT6775_REG_ALARM[NUM_REG_ALARM] = { 0x459, 0x45A, 0x45B };
- 
--/* 0..15 voltages, 16..23 fans, 24..29 temperatures, 30..31 intrusion */
--
--static const s8 NCT6775_ALARM_BITS[] = {
--	0, 1, 2, 3, 8, 21, 20, 16,	/* in0.. in7 */
--	17, -1, -1, -1, -1, -1, -1,	/* in8..in14 */
--	-1,				/* unused */
--	6, 7, 11, -1, -1,		/* fan1..fan5 */
--	-1, -1, -1,			/* unused */
--	4, 5, 13, -1, -1, -1,		/* temp1..temp6 */
--	12, -1 };			/* intrusion0, intrusion1 */
-+static const s8 NCT6775_ALARM_BITS[NUM_ALARM_BITS] = {
-+	 0,  1,  2,  3,  8, 21, 20, 16, 17, -1, -1, -1,	  /* in0-in11     */
-+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* in12-in23    */
-+	 6,  7, 11, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* fan1-fan12   */
-+	 4,  5, 13, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* temp1-temp12 */
-+	12, -1,						  /* intr0-intr1  */
-+};
- 
- static const u16 NCT6775_REG_BEEP[NUM_REG_BEEP] = { 0x56, 0x57, 0x453, 0x4e };
- 
--/*
-- * 0..14 voltages, 15 global beep enable, 16..23 fans, 24..29 temperatures,
-- * 30..31 intrusion
-- */
--static const s8 NCT6775_BEEP_BITS[] = {
--	0, 1, 2, 3, 8, 9, 10, 16,	/* in0.. in7 */
--	17, -1, -1, -1, -1, -1, -1,	/* in8..in14 */
--	21,				/* global beep enable */
--	6, 7, 11, 28, -1,		/* fan1..fan5 */
--	-1, -1, -1,			/* unused */
--	4, 5, 13, -1, -1, -1,		/* temp1..temp6 */
--	12, -1 };			/* intrusion0, intrusion1 */
-+static const s8 NCT6775_BEEP_BITS[NUM_BEEP_BITS] = {
-+	 0,  1,  2,  3,  8,  9, 10, 16, 17, -1, -1, -1,	  /* in0-in11     */
-+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* in12-in23    */
-+	 6,  7, 11, 28, -1, -1, -1, -1, -1, -1, -1, -1,	  /* fan1-fan12   */
-+	 4,  5, 13, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* temp1-temp12 */
-+	12, -1, 21					  /* intr0-intr1, beep_en */
-+};
- 
- /* DC or PWM output fan configuration */
- static const u8 NCT6775_REG_PWM_MODE[] = { 0x04, 0x04, 0x12 };
-@@ -256,25 +248,23 @@ static const u16 NCT6775_REG_TSI_TEMP[] = { 0x669 };
- #define NCT6776_REG_FAN_STEP_UP_TIME NCT6775_REG_FAN_STEP_DOWN_TIME
- #define NCT6776_REG_FAN_STEP_DOWN_TIME NCT6775_REG_FAN_STEP_UP_TIME
- 
--static const s8 NCT6776_ALARM_BITS[] = {
--	0, 1, 2, 3, 8, 21, 20, 16,	/* in0.. in7 */
--	17, -1, -1, -1, -1, -1, -1,	/* in8..in14 */
--	-1,				/* unused */
--	6, 7, 11, 10, 23,		/* fan1..fan5 */
--	-1, -1, -1,			/* unused */
--	4, 5, 13, -1, -1, -1,		/* temp1..temp6 */
--	12, 9 };			/* intrusion0, intrusion1 */
-+static const s8 NCT6776_ALARM_BITS[NUM_ALARM_BITS] = {
-+	 0,  1,  2,  3,  8, 21, 20, 16, 17, -1, -1, -1,	  /* in0-in11     */
-+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* in12-in23    */
-+	 6,  7, 11, 10, 23, -1, -1, -1, -1, -1, -1, -1,	  /* fan1-fan12   */
-+	 4,  5, 13, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* temp1-temp12 */
-+	12,  9,						  /* intr0-intr1  */
-+};
- 
- static const u16 NCT6776_REG_BEEP[NUM_REG_BEEP] = { 0xb2, 0xb3, 0xb4, 0xb5 };
- 
--static const s8 NCT6776_BEEP_BITS[] = {
--	0, 1, 2, 3, 4, 5, 6, 7,		/* in0.. in7 */
--	8, -1, -1, -1, -1, -1, -1,	/* in8..in14 */
--	24,				/* global beep enable */
--	25, 26, 27, 28, 29,		/* fan1..fan5 */
--	-1, -1, -1,			/* unused */
--	16, 17, 18, 19, 20, 21,		/* temp1..temp6 */
--	30, 31 };			/* intrusion0, intrusion1 */
-+static const s8 NCT6776_BEEP_BITS[NUM_BEEP_BITS] = {
-+	 0,  1,  2,  3,  4,  5,  6,  7,  8, -1, -1, -1,	  /* in0-in11     */
-+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* in12-in23    */
-+	25, 26, 27, 28, 29, -1, -1, -1, -1, -1, -1, -1,	  /* fan1-fan12   */
-+	16, 17, 18, 19, 20, 21, -1, -1, -1, -1, -1, -1,	  /* temp1-temp12 */
-+	30, 31, 24					  /* intr0-intr1, beep_en */
-+};
- 
- static const u16 NCT6776_REG_TOLERANCE_H[] = {
- 	0x10c, 0x20c, 0x30c, 0x80c, 0x90c, 0xa0c, 0xb0c };
-@@ -345,23 +335,21 @@ static const u16 NCT6779_REG_IN[] = {
- static const u16 NCT6779_REG_ALARM[NUM_REG_ALARM] = {
- 	0x459, 0x45A, 0x45B, 0x568 };
- 
--static const s8 NCT6779_ALARM_BITS[] = {
--	0, 1, 2, 3, 8, 21, 20, 16,	/* in0.. in7 */
--	17, 24, 25, 26, 27, 28, 29,	/* in8..in14 */
--	-1,				/* unused */
--	6, 7, 11, 10, 23,		/* fan1..fan5 */
--	-1, -1, -1,			/* unused */
--	4, 5, 13, -1, -1, -1,		/* temp1..temp6 */
--	12, 9 };			/* intrusion0, intrusion1 */
--
--static const s8 NCT6779_BEEP_BITS[] = {
--	0, 1, 2, 3, 4, 5, 6, 7,		/* in0.. in7 */
--	8, 9, 10, 11, 12, 13, 14,	/* in8..in14 */
--	24,				/* global beep enable */
--	25, 26, 27, 28, 29,		/* fan1..fan5 */
--	-1, -1, -1,			/* unused */
--	16, 17, -1, -1, -1, -1,		/* temp1..temp6 */
--	30, 31 };			/* intrusion0, intrusion1 */
-+static const s8 NCT6779_ALARM_BITS[NUM_ALARM_BITS] = {
-+	 0,  1,  2,  3,  8, 21, 20, 16, 17, 24, 25, 26,	  /* in0-in11     */
-+	27, 28, 29, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* in12-in23    */
-+	 6,  7, 11, 10, 23, -1, -1, -1, -1, -1, -1, -1,	  /* fan1-fan12   */
-+	 4,  5, 13, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* temp1-temp12 */
-+	12,  9,						  /* intr0-intr1  */
-+};
-+
-+static const s8 NCT6779_BEEP_BITS[NUM_BEEP_BITS] = {
-+	 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11,	  /* in0-in11     */
-+	12, 13, 14, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* in12-in23    */
-+	25, 26, 27, 28, 29, -1, -1, -1, -1, -1, -1, -1,	  /* fan1-fan12   */
-+	16, 17, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* temp1-temp12 */
-+	30, 31, 24					  /* intr0-intr1, beep_en */
-+};
- 
- static const u16 NCT6779_REG_FAN[] = {
- 	0x4c0, 0x4c2, 0x4c4, 0x4c6, 0x4c8, 0x4ca, 0x4ce };
-@@ -449,14 +437,13 @@ static const u16 NCT6791_REG_WEIGHT_DUTY_BASE[NUM_FAN] = { 0, 0x23e };
- static const u16 NCT6791_REG_ALARM[NUM_REG_ALARM] = {
- 	0x459, 0x45A, 0x45B, 0x568, 0x45D };
- 
--static const s8 NCT6791_ALARM_BITS[] = {
--	0, 1, 2, 3, 8, 21, 20, 16,	/* in0.. in7 */
--	17, 24, 25, 26, 27, 28, 29,	/* in8..in14 */
--	-1,				/* unused */
--	6, 7, 11, 10, 23, 33,		/* fan1..fan6 */
--	-1, -1,				/* unused */
--	4, 5, 13, -1, -1, -1,		/* temp1..temp6 */
--	12, 9 };			/* intrusion0, intrusion1 */
-+static const s8 NCT6791_ALARM_BITS[NUM_ALARM_BITS] = {
-+	 0,  1,  2,  3,  8, 21, 20, 16, 17, 24, 25, 26,	  /* in0-in11     */
-+	27, 28, 29, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* in12-in23    */
-+	 6,  7, 11, 10, 23, 33, -1, -1, -1, -1, -1, -1,	  /* fan1-fan12   */
-+	 4,  5, 13, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* temp1-temp12 */
-+	12,  9,						  /* intr0-intr1  */
-+};
- 
- /* NCT6792/NCT6793 specific data */
- 
-@@ -764,27 +751,23 @@ static const u16 NCT6106_REG_AUTO_PWM[] = { 0x164, 0x174, 0x184 };
- static const u16 NCT6106_REG_ALARM[NUM_REG_ALARM] = {
- 	0x77, 0x78, 0x79, 0x7a, 0x7b, 0x7c, 0x7d };
- 
--static const s8 NCT6106_ALARM_BITS[] = {
--	0, 1, 2, 3, 4, 5, 7, 8,		/* in0.. in7 */
--	9, -1, -1, -1, -1, -1, -1,	/* in8..in14 */
--	-1,				/* unused */
--	32, 33, 34, -1, -1,		/* fan1..fan5 */
--	-1, -1, -1,			/* unused */
--	16, 17, 18, 19, 20, 21,		/* temp1..temp6 */
--	48, -1				/* intrusion0, intrusion1 */
-+static const s8 NCT6106_ALARM_BITS[NUM_ALARM_BITS] = {
-+	 0,  1,  2,  3,  4,  5,  7,  8,  9, -1, -1, -1,	  /* in0-in11     */
-+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* in12-in23    */
-+	32, 33, 34, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* fan1-fan12   */
-+	16, 17, 18, 19, 20, 21, -1, -1, -1, -1, -1, -1,	  /* temp1-temp12 */
-+	48, -1,						  /* intr0-intr1  */
- };
- 
- static const u16 NCT6106_REG_BEEP[NUM_REG_BEEP] = {
- 	0x3c0, 0x3c1, 0x3c2, 0x3c3, 0x3c4 };
- 
--static const s8 NCT6106_BEEP_BITS[] = {
--	0, 1, 2, 3, 4, 5, 7, 8,		/* in0.. in7 */
--	9, 10, 11, 12, -1, -1, -1,	/* in8..in14 */
--	32,				/* global beep enable */
--	24, 25, 26, 27, 28,		/* fan1..fan5 */
--	-1, -1, -1,			/* unused */
--	16, 17, 18, 19, 20, 21,		/* temp1..temp6 */
--	34, -1				/* intrusion0, intrusion1 */
-+static const s8 NCT6106_BEEP_BITS[NUM_BEEP_BITS] = {
-+	 0,  1,  2,  3,  4,  5,  7,  8,  9, 10, 11, 12,	  /* in0-in11     */
-+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* in12-in23    */
-+	24, 25, 26, 27, 28, -1, -1, -1, -1, -1, -1, -1,	  /* fan1-fan12   */
-+	16, 17, 18, 19, 20, 21, -1, -1, -1, -1, -1, -1,	  /* temp1-temp12 */
-+	34, -1, 32					  /* intr0-intr1, beep_en */
- };
- 
- static const u16 NCT6106_REG_TEMP_ALTERNATE[32] = {
-@@ -844,24 +827,20 @@ static const u16 NCT6116_REG_AUTO_TEMP[] = {
- static const u16 NCT6116_REG_AUTO_PWM[] = {
- 	0x164, 0x174, 0x184, 0x1d4, 0x1e4 };
- 
--static const s8 NCT6116_ALARM_BITS[] = {
--	0, 1, 2, 3, 4, 5, 7, 8,		/* in0.. in7 */
--	9, -1, -1, -1, -1, -1, -1,	/* in8..in9 */
--	-1,				/* unused */
--	32, 33, 34, 35, 36,		/* fan1..fan5 */
--	-1, -1, -1,			/* unused */
--	16, 17, 18, -1, -1, -1,		/* temp1..temp6 */
--	48, -1				/* intrusion0, intrusion1 */
-+static const s8 NCT6116_ALARM_BITS[NUM_ALARM_BITS] = {
-+	 0,  1,  2,  3,  4,  5,  7,  8,  9, -1, -1, -1,	  /* in0-in11     */
-+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* in12-in23    */
-+	32, 33, 34, 35, 36, -1, -1, -1, -1, -1, -1, -1,	  /* fan1-fan12   */
-+	16, 17, 18, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* temp1-temp12 */
-+	48, -1,						  /* intr0-intr1  */
- };
- 
--static const s8 NCT6116_BEEP_BITS[] = {
--	0, 1, 2, 3, 4, 5, 7, 8,		/* in0.. in7 */
--	9, 10, 11, 12, -1, -1, -1,	/* in8..in14 */
--	32,				/* global beep enable */
--	24, 25, 26, 27, 28,		/* fan1..fan5 */
--	-1, -1, -1,			/* unused */
--	16, 17, 18, -1, -1, -1,		/* temp1..temp6 */
--	34, -1				/* intrusion0, intrusion1 */
-+static const s8 NCT6116_BEEP_BITS[NUM_BEEP_BITS] = {
-+	 0,  1,  2,  3,  4,  5,  7,  8,  9, 10, 11, 12,	  /* in0-in11     */
-+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* in12-in23    */
-+	24, 25, 26, 27, 28, -1, -1, -1, -1, -1, -1, -1,	  /* fan1-fan12   */
-+	16, 17, 18, -1, -1, -1, -1, -1, -1, -1, -1, -1,	  /* temp1-temp12 */
-+	34, -1, 32					  /* intr0-intr1, beep_en */
- };
- 
- static const u16 NCT6116_REG_TSI_TEMP[] = { 0x59, 0x5b };
-diff --git a/drivers/hwmon/nct6775.h b/drivers/hwmon/nct6775.h
-index 44f79c5726a9..e8cc4f0544b8 100644
---- a/drivers/hwmon/nct6775.h
-+++ b/drivers/hwmon/nct6775.h
-@@ -238,10 +238,25 @@ nct6775_add_attr_group(struct nct6775_data *data, const struct attribute_group *
- 
- #define NCT6791_REG_HM_IO_SPACE_LOCK_ENABLE	0x28
- 
--#define FAN_ALARM_BASE		16
--#define TEMP_ALARM_BASE		24
--#define INTRUSION_ALARM_BASE	30
--#define BEEP_ENABLE_BASE	15
-+/*
-+ * ALARM_BITS and BEEP_BITS store bit-index for the mask of the registers
-+ * loaded into data->alarm and data->beep.
-+ *
-+ * Every input register (IN/TEMP/FAN) must have a corresponding
-+ *   ALARM/BEEP bit at the same index BITS[BASE + index]
-+ * Set value to -1 to disable the visibility of that '*_alarm' attribute and
-+ * to pad the bits until the next BASE
-+ *
-+ * Beep has an additional GLOBAL_BEEP_ENABLE bit
-+ */
-+#define VIN_ALARM_BASE		 0
-+#define FAN_ALARM_BASE		24
-+#define TEMP_ALARM_BASE		36
-+#define INTRUSION_ALARM_BASE	48
-+#define BEEP_ENABLE_BASE	50
-+
-+#define NUM_ALARM_BITS		(INTRUSION_ALARM_BASE + 4)
-+#define NUM_BEEP_BITS		(BEEP_ENABLE_BASE + 1)
- 
- /*
-  * Not currently used:
-
-base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-prerequisite-patch-id: 36e3467bd9ea72cb3ad2bef638a8389a9537d111
-prerequisite-patch-id: 716ba83170c6c7a969faead5189f4b336097fcb5
--- 
-2.39.2
-
+Thanks,
+Guenter
