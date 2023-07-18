@@ -2,195 +2,98 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D4A4EB64DD
-	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Jul 2023 07:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A366EB64DA
+	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Jul 2023 11:28:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjGRHZh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Jul 2023 03:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+        id S231253AbjGRL2i (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 18 Jul 2023 07:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbjGRHZg (ORCPT
+        with ESMTP id S229969AbjGRL2i (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Jul 2023 03:25:36 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6872F1B1
-        for <linux-hwmon@vger.kernel.org>; Tue, 18 Jul 2023 00:25:34 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51e28b299adso7525415a12.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 18 Jul 2023 00:25:34 -0700 (PDT)
+        Tue, 18 Jul 2023 07:28:38 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E0AD8;
+        Tue, 18 Jul 2023 04:28:34 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3143b88faebso5933381f8f.3;
+        Tue, 18 Jul 2023 04:28:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689665133; x=1692257133;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JnChA2abQJj2t20iF0rmM2KRjUtf8yEoGrz0epdwIwA=;
-        b=s3KXxn3UjfmySXlb9R13dXwt2vOxldjL+SFerhMavt8UY5Bg4Ap33PKmouxryfUBUL
-         pSsnwc4xPzjpDKC6//dbnxjyd1V9y1wwohrpHJcDqWBqXZtlKTP+q7ElaSrsDN6FNiTt
-         OZ0FxmJjFbNL9+XjsjM9L5WJQ3/AN+Cvc+XGkq3MKZLbqPekyFh+wbG/Elf40koE617j
-         9fWJpVLvHSAZFn1I8XRTs3Q5iFGZbemwwMhyu7YXMnf40jgKJaKCHFOrK2rlrXmob27d
-         E3pB7+hoV/O6S3T6PYN5e8DepW4/IsU9o2CEAba/UTjCYuzypD6cuB9Khf2bBoCqc1Ev
-         wrZQ==
+        d=gmail.com; s=20221208; t=1689679712; x=1692271712;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iJzMzEpgcfTGMfv1gl34ORzO1G62V99e1OasbGiTK8o=;
+        b=gjteU6pXV3sw5zGc0HpF0z9o5SDa28qjhNP9aCK4floMaZBS/AYUxFEOa2Co36zT0U
+         HgadPkVVgfH57whitVO1+mzkeP6UcX5/dSoUpEo3zoeMBfP26R5WcKVxjGNbyPfHbxQj
+         Y0OEmsbSJuOlfzrUNoPyblg8TpRWt6M3nYaizrPMNGUlJJwRm9KNbolqJgKLRBat4RU2
+         455VyEWqlpTWu53aakCi//wLqAJhgqQBu2qrEvyLYP8xV24Gf+AR4NIADu6wqkVAmupu
+         ZCZisShniqjs8RK6EodlxrSenjYKdRCYeRvyOH91P6NGHroaRdiCOHXNuokwJGcAXLH/
+         +ZFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689665133; x=1692257133;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JnChA2abQJj2t20iF0rmM2KRjUtf8yEoGrz0epdwIwA=;
-        b=HT2TiOEUpqDOtxB4KnDlfHSLxiVu3lvC5GHldgnnXAaHNBbf5mAAimeK/md8bgs38S
-         4hzcevCDWvc9vO1/AxOFu3R+CgaieYKA7hgPFmSHQHq3iexgzoavuDceM2eY8fkH8o4t
-         JdqEHz1TjDKQS0t9rN3ONZ9LHIS85pMlXkaeHSXKXBzbsWSu6HDkq67ByC8eLRRS8vf7
-         dTqUmc415T7DvVgJcHxV8pp029mvom7Rjhd3vE6PVtcYksIvIS5OrCVOfdOWrovkrjgl
-         SwEwPqyeaUQBV9J1elRZAPgKQjgnH1ZHG/YQ95te+p1q1Q3L94EvEum/oI/I3EsZ1Tf1
-         AtKQ==
-X-Gm-Message-State: ABy/qLYhKFWUmyfXcalLLHteZhakqEdl0Ta3i0pTF2MbdyT4cLnXmnSP
-        hKaAH/qLtEVXYQD+p7ymP4612g==
-X-Google-Smtp-Source: APBJJlHNIgdPzuJuy0x0YY6gCWMzF3fXiWlCo1CLf7hC2EVud/HeJbKo3c+l/iBnVk4NT6FJHwhTSw==
-X-Received: by 2002:aa7:d986:0:b0:51e:1638:e52f with SMTP id u6-20020aa7d986000000b0051e1638e52fmr11323553eds.40.1689665132900;
-        Tue, 18 Jul 2023 00:25:32 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id x11-20020aa7d6cb000000b0051e0bf5807bsm769716edr.49.2023.07.18.00.25.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jul 2023 00:25:32 -0700 (PDT)
-Message-ID: <fb19946c-b95c-cfd1-1034-7542d38e554e@linaro.org>
-Date:   Tue, 18 Jul 2023 09:25:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 2/2] hwmon: (hs3001) Add driver for Renesas HS3001
-Content-Language: en-US
-To:     Andre Werner <werneazc@gmail.com>, jdelvare@suse.com,
-        linux@roeck-us.net, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, robh+dt@kernel.org
+        d=1e100.net; s=20221208; t=1689679712; x=1692271712;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iJzMzEpgcfTGMfv1gl34ORzO1G62V99e1OasbGiTK8o=;
+        b=Ds9nfyFWHKKtUdIPPI4R5rOn+hBCmHBPsm9viSaRGKx21GTXlDvEFHiA0oz4fsrtU6
+         7NyLMruk5zpq/KjZpmEmOeD8Nb7pRsSF1DhF2TtmMH1MFtf7bPcp/30W4mra8y3rGI7W
+         3sLi7Wvtc0DNlo+5poFLZEfVoa2vZwS2ym2KxWgztsOewzCGkCbg+Wt0OJLNAaNDwggv
+         ivfnzjpY9lOdEfCuPPGA/E0IT8K8gb2MOCQ0P0aW0I7loO+dMmqGV6Y+pFHKEXNoLhjy
+         SS2dtsu7N6yQdg/ov/HOsd+MZ7oi9/2CU1iafqLyo/aRVogJ6wmSPaWsJqhaeG8oUpaU
+         G59Q==
+X-Gm-Message-State: ABy/qLaf0gV35ZHF6inulKygKuBmwAY6CKlVGbspiSfSD4slCN3byp8s
+        p2L4N571DHnyUY+atDGx5BnyjXcCFpU=
+X-Google-Smtp-Source: APBJJlFBtooWrm7dU3QzTEdD53zihCfebB6PfxBMXJduvyzdDjpeoSSNixcQtPfetxqfAHD24C4NrA==
+X-Received: by 2002:adf:dd51:0:b0:314:4a15:e557 with SMTP id u17-20020adfdd51000000b003144a15e557mr12788974wrm.5.1689679712282;
+        Tue, 18 Jul 2023 04:28:32 -0700 (PDT)
+Received: from ws-565760.systec.local ([212.185.67.148])
+        by smtp.gmail.com with ESMTPSA id x12-20020adfec0c000000b003142c85fbcdsm2155433wrn.11.2023.07.18.04.28.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jul 2023 04:28:32 -0700 (PDT)
+From:   Andre Werner <werneazc@gmail.com>
+X-Google-Original-From: Andre Werner <andre.werner@systec-electronic.com>
+To:     jdelvare@suse.com, linux@roeck-us.net,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        robh+dt@kernel.org
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Andre Werner <andre.werner@systec-electronic.com>
-References: <20230718070114.3871-1-andre.werner@systec-electronic.com>
- <20230718070114.3871-2-andre.werner@systec-electronic.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230718070114.3871-2-andre.werner@systec-electronic.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH v3 1/2] dt-bindings: hwmon: Add description for new hwmon driver hs3001
+Date:   Tue, 18 Jul 2023 13:28:09 +0200
+Message-ID: <20230718112810.21322-1-andre.werner@systec-electronic.com>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 18/07/2023 09:01, Andre Werner wrote:
-> Add base support for Renesas HS3001 temperature
-> and humidity sensors and its compatibles HS3002,
-> HS3003 and HS3004.
-> 
-> The sensor has a fix I2C address 0x44. The resolution
-> is fixed to 14bit (ref. Missing feature).
-> 
+This is the initial description.
 
-> Missing feature:
-> - Accessing non-volatile memory: Custom board has no
->   possibility to control voltage supply of sensor. Thus,
->   we cannot send the necessary control commands within
->   the first 10ms after power-on.
-> 
-> Signed-off-by: Andre Werner <andre.werner@systec-electronic.com>
-> 
-> Changelog:
-> v1: Initial version
-> v2: Extensive refactoring following recommendations of reviewers:
->  - Delete unused defines and device properties. These are added in
->    the initial version because the device supports a programming mode,
->    but I was not able to implement it, because the custom board was
->    not able to control the power supply of the device and so I cannot
->    enter the programming mode of the device.
->  - Correct missunderstanding comments for defines.
->  - Delete mutexes for data and I2C bus accesses.
->  - Replace attributes with recommented chip-info structure. In the
->    initial version I followed the sth3x.c implementation that uses
->    files and attributes in sysfs. The show functions are replaced by
->    is_visible and read callbacks from the HWMON ABI. I also  delete pointless
->    function argument checks.
->  - Correct Yoda programming.
->  - Refactor probe function and delete sleep and measurement of humidity
->    and temperature in probe function. I kept an initial I2C
->    communication to ensure that the device is accessible during probe.
->  - Reduce the number of atteributes to humidity and temperature input.
+Signed-off-by: Andre Werner <andre.werner@systec-electronic.com>
 
-Also wrong placement of SoB and changelog.
+---
+v1: Using separate dt-binding hs300x.yaml
+v2: Reviewer recommends documentation of driver dt-binding in
+trivial-devices.yaml because the driver has no special properties
+to describe.
+v3: Simplify description of sensors compatible
+---
+ Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> ---
->  Documentation/hwmon/hs3001.rst |  37 +++++
->  MAINTAINERS                    |   6 +
->  drivers/hwmon/Kconfig          |  10 ++
->  drivers/hwmon/Makefile         |   1 +
->  drivers/hwmon/hs3001.c         | 261 +++++++++++++++++++++++++++++++++
->  5 files changed, 315 insertions(+)
->  create mode 100644 Documentation/hwmon/hs3001.rst
->  create mode 100644 drivers/hwmon/hs3001.c
-
-...
-
-> +/* Definitions for Status Bits of A/D Data */
-> +#define HS3001_DATA_VALID	0x00	/* Valid Data */
-> +#define HS3001_DATA_STALE	0x01	/* Stale Data */
-> +
-> +#define LIMIT_MAX	0
-> +#define LIMIT_MIN	1
-> +
-> +enum hs3001_chips {
-> +	hs3001,
-
-Drop, not effectively used.
-
-> +};
-
-...
-
-> +
-> +/* device ID table */
-> +static const struct i2c_device_id hs3001_ids[] = {
-> +	{ "hs3001", hs3001 },
-
-Drop match data
-
-> +	{ },
-> +};
-> +
-> +MODULE_DEVICE_TABLE(i2c, hs3001_ids);
-> +
-> +static const struct of_device_id hs3001_of_match[] = {
-> +	{.compatible = "renesas,hs3001",
-> +	 .data = (void *)hs3001
-
-Drop
-
-> +	},
-> +	{ },
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, hs3001_of_match);
-> +
-> +static int hs3001_probe(struct i2c_client *client)
-> +{
-> +	struct hs3001_data *data;
-> +	struct device *hwmon_dev;
-> +	struct device *dev = &client->dev;
-> +	int ret;
-> +
-> +	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-> +		return -EOPNOTSUPP;
-> +
-> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->client = client;
-> +
-> +	if (client->dev.of_node)
-> +		data->type = (enum hs3001_chips)of_device_get_match_data(&client->dev);
-> +	else
-> +		data->type = i2c_match_id(hs3001_ids, client)->driver_data;
-
-This is useless and dead code. You have only one type of device. Don't
-over-complicate simple things.
-
-
-
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index ba2bfb547909..96eb59e56eb7 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -315,6 +315,8 @@ properties:
+           - plx,pex8648
+             # Pulsedlight LIDAR range-finding sensor
+           - pulsedlight,lidar-lite-v2
++            # Renesas HS3001 Temperature and Relative Humidity Sensors
++          - renesas,hs3001
+             # Renesas ISL29501 time-of-flight sensor
+           - renesas,isl29501
+             # Rohm DH2228FV
+-- 
+2.41.0
 
