@@ -2,59 +2,100 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 835B8EB64DC
-	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Jul 2023 00:28:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 108CCEB64DC
+	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Jul 2023 00:30:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjGRA2t (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 17 Jul 2023 20:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
+        id S230449AbjGRAao (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 Jul 2023 20:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbjGRA2t (ORCPT
+        with ESMTP id S230008AbjGRAaj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 Jul 2023 20:28:49 -0400
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDE610C4;
-        Mon, 17 Jul 2023 17:28:40 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VnfMp9j_1689640117;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VnfMp9j_1689640117)
-          by smtp.aliyun-inc.com;
-          Tue, 18 Jul 2023 08:28:38 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     jdelvare@suse.com
-Cc:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] hwmon: Remove duplicated include in lm75.c
-Date:   Tue, 18 Jul 2023 08:28:36 +0800
-Message-Id: <20230718002836.118268-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Mon, 17 Jul 2023 20:30:39 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072D8E55;
+        Mon, 17 Jul 2023 17:30:39 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-c5ffb6cda23so5150204276.0;
+        Mon, 17 Jul 2023 17:30:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689640238; x=1692232238;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=EiMZKpl53JQSB9rulZ6MDgvkhDFysXrAr8elkbqn8cI=;
+        b=VivF9ac2wYpN3rqbrqWSprPvaOkNZ/NIK0XY89VxJyJunyGIh16wp4f8jMvu2pqOH/
+         thf213MfarUJ0udydtgn/qn0+crNQim3t/LUTEPPv645baYrUAgw+s1k0U4PHdrryqiS
+         fbJC4aPz8cnXMo09KxcPK7jk5pVtxfzXwoygvqHt21v7FQe3L1P4Refgrmdm6WFWK61G
+         HB2Jsh3o/VQxqBFAVMM1ik7OubKpkBnL2iempCfqET/JeAdzwwlf4OfyV/tVrDvkKT3l
+         BSp0fJDtcE71xnySuIpw5HkNgir3nY84/Metdt7mSNrqr+ekZVDRNvBo3nDBEdemYU7e
+         re4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689640238; x=1692232238;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EiMZKpl53JQSB9rulZ6MDgvkhDFysXrAr8elkbqn8cI=;
+        b=MgW8Yh6ZetOK2fhbEEYp5I+yWbSAi1WiDk/Ysu9Iln2ThGwfDtEyLXr6qOw+43KDCq
+         uB4XliQf9X7I1rtjZlcUDRysz8r4GXjydr7AbQ7kO2+x/acpdZH3XhmXgpHet1DliA3t
+         nt3ULRE2goBREuOp5Nc1s0BcN+B70tHVf7mwB75xT3W2Eat5vAJo5KG583wZ8/yacF/F
+         oKyLLBZ0UL2Y8k8UEZ/FXTUE9EJ7Ka9nETHu7OGOCFIiJ8bv46UpX6GaPIIVgkBbnPQo
+         0N592mq5QJxBSghQgpnEUItSpTX9gooS3qN6khhIcQpZuyxOJbDiBATU2uh7Z0JWcw2I
+         KpPQ==
+X-Gm-Message-State: ABy/qLYf+NLdRF6r1yZ8tMkfNYye0IzCsQ8ZeCxkilnc2n2lF/jkLUip
+        MwsSyfKhEM7yQd8dNdxCzpPhg1TUbyk=
+X-Google-Smtp-Source: APBJJlHNs/rzoUoojBPcaqol1N+YaQJ1LaI6HOB8O8hnGxZobezq44TZtAJvYU7xwBG2wwBTFG9TQA==
+X-Received: by 2002:a81:83d2:0:b0:57a:63f:f760 with SMTP id t201-20020a8183d2000000b0057a063ff760mr12601175ywf.7.1689640238193;
+        Mon, 17 Jul 2023 17:30:38 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r74-20020a0de84d000000b00545a081849esm169670ywe.46.2023.07.17.17.30.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jul 2023 17:30:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <53d3823c-1ec3-56a3-e20f-5dfdbd2b02f5@roeck-us.net>
+Date:   Mon, 17 Jul 2023 17:30:36 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH -next] hwmon: Remove duplicated include in lm75.c
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20230718002836.118268-1-yang.lee@linux.alibaba.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230718002836.118268-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-./drivers/hwmon/lm75.c: linux/of.h is included more than once.
+On 7/17/23 17:28, Yang Li wrote:
+> ./drivers/hwmon/lm75.c: linux/of.h is included more than once.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5900
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5900
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/hwmon/lm75.c | 1 -
- 1 file changed, 1 deletion(-)
+Already fixed in hwmon-next.
 
-diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index 72cdc405a3b0..bcfa8193e5e7 100644
---- a/drivers/hwmon/lm75.c
-+++ b/drivers/hwmon/lm75.c
-@@ -14,7 +14,6 @@
- #include <linux/hwmon-sysfs.h>
- #include <linux/err.h>
- #include <linux/of.h>
--#include <linux/of.h>
- #include <linux/regmap.h>
- #include <linux/util_macros.h>
- #include <linux/regulator/consumer.h>
--- 
-2.20.1.7.g153144c
+Guenter
+
+> ---
+>   drivers/hwmon/lm75.c | 1 -
+>   1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+> index 72cdc405a3b0..bcfa8193e5e7 100644
+> --- a/drivers/hwmon/lm75.c
+> +++ b/drivers/hwmon/lm75.c
+> @@ -14,7 +14,6 @@
+>   #include <linux/hwmon-sysfs.h>
+>   #include <linux/err.h>
+>   #include <linux/of.h>
+> -#include <linux/of.h>
+>   #include <linux/regmap.h>
+>   #include <linux/util_macros.h>
+>   #include <linux/regulator/consumer.h>
 
