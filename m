@@ -2,70 +2,70 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C97EEB64DA
-	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Jul 2023 06:45:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C6FEEB64DD
+	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Jul 2023 06:54:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjGRGpn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Jul 2023 02:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48680 "EHLO
+        id S230083AbjGRGyd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 18 Jul 2023 02:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjGRGpm (ORCPT
+        with ESMTP id S229511AbjGRGyc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Jul 2023 02:45:42 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4306B134;
-        Mon, 17 Jul 2023 23:45:41 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-579efc32377so48925517b3.1;
-        Mon, 17 Jul 2023 23:45:41 -0700 (PDT)
+        Tue, 18 Jul 2023 02:54:32 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A701A6;
+        Mon, 17 Jul 2023 23:54:31 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-bd61dd9a346so5516377276.2;
+        Mon, 17 Jul 2023 23:54:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689662740; x=1692254740;
+        d=gmail.com; s=20221208; t=1689663270; x=1692255270;
         h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
          :content-language:user-agent:mime-version:date:message-id:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=RYEnSjRbogv2a232Wt5RDLOlCRVr+Svj4aNxG7iOabY=;
-        b=IwDTdBvUotAJ6wdv/OTm3JQdIY4yNNG35zChngIg4ZCkWq3ozLCPEKIqlFaTDkZbr1
-         edULVY3jQJBOdNogAVNd42ziCBu2FBs7guV7ybZCBRmNAZnCJNWGyj9wLn8iGpjb6jGd
-         jSoskA24vJCXlOcQaLKeEnfFcRJA4kOEJOU9phJ76DbVHq05wPszB6XpT7Bsc8HfB7yf
-         LMl3bFu8B2PrqGL/AX1Fcm9Se39pv4pGqcGqAeEYzMeXtz2dbf6Ac/TF0BouVw7qF/YA
-         T8h6XcZLy5OYYoj4Xwd3xTxtnxFFdwzS7f4TPFl+ibSxfkM68iFl+O9/SdsfBLG8a+F/
-         Womg==
+        bh=sgDGchMF6LAYxhWhPSHJoTeV4E/Z+JNbtA7x+AzWiuU=;
+        b=FKyretqAvz6qN5R7y+kMmkuYlpEmZmg5fIOt9zIVM+/zIGHzw7FlGbZgawcRA7dQwK
+         Pe5qhDZ7G424Vj1QMADCJka6kdqm0nNMQLDFLgrOW9vOXiKWvK/I3+Qo4Cbq5OGBaIbI
+         GYbSlmiDhFL4nDrqz/qO//ERN+dLT1PP00grTkSGK92K1yx201AlcgYQKbeQZpysI68G
+         Zzqmmio50SmDnD7JtIsm7jO/cSpfTlb9Asp+nbfNtpkXLeHAEYw9WCE1/aPkDaRKJeZ6
+         NLjgcWz8RIF3w9Tqyaj8VwxYe3S6pZ6i4PLeT+8QNq8BorQoioPS3+SHcxNWAec0aQoY
+         xgaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689662740; x=1692254740;
+        d=1e100.net; s=20221208; t=1689663270; x=1692255270;
         h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
          :content-language:user-agent:mime-version:date:message-id:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RYEnSjRbogv2a232Wt5RDLOlCRVr+Svj4aNxG7iOabY=;
-        b=CubGpVfD6tsD7ZpNna7GX1O1cXH4TAZbr+8y6KazAAUWBnHOSZb8EBy2pAjJCON298
-         /d28PX0zLyUiPuZLq2rbT8+3M+I6DINCgKe/+m8/QjoZNMV4PEOm155kj/2chM92cpEb
-         R33kgGY2girWdPJlNgOQ5owalAK2f1nt65g46XlMVfql8dnSQCGFSnBwrticN+sxCQcf
-         2HPjdMdivZr8KHVarEVZRLd+M/s3X4sZ/VGYZoHwPGj7xT2BCyizyRMPEQfPntyURpr5
-         XLA1K0bpcrNR39eY4EjhXwjHBAQjTIu/G4TVvTZwPun4Joj6+qntlUAbuvl3cVytMdEV
-         zGug==
-X-Gm-Message-State: ABy/qLYjBs3dkbDrncfNm+296r7LM70HbapWQf9ST6gq9tqMxavEwKD7
-        bKpBnwwaa/JJNELjHrLDHms=
-X-Google-Smtp-Source: APBJJlEVFHpC4q1Ty43rQaP0AAaXKieldjAQFSqMe0k3ca6qKhRfDgD7Hdc09UiTORQI8lPRk4A5gg==
-X-Received: by 2002:a81:8343:0:b0:573:9e0a:b8bf with SMTP id t64-20020a818343000000b005739e0ab8bfmr12214681ywf.9.1689662740452;
-        Mon, 17 Jul 2023 23:45:40 -0700 (PDT)
+        bh=sgDGchMF6LAYxhWhPSHJoTeV4E/Z+JNbtA7x+AzWiuU=;
+        b=fTl+Nhf8Aeqej7zC5VdCEvoIths5TidyS4hztTJTJ6yLZTIPQ7pmzRGmEpA/zLh9m2
+         2qW+gwAiGQY/gn7MpNpOAa75GF4RUWdrZjLkVavUl1rY8IrXucDIKfHUOaa/ahtGwN7u
+         jRxx6kdhSr+ooZOpZOoww497Rauo5VPd1iExrGvatF1LJe//peBPD0/sPGTT8KMi4XRG
+         bW3hG7wLdtMHZiXYWDHYjd7bltoPAM9MjuQufSenMXGz2qwpDL/csQVBM5+MDL3fHuj/
+         48vgBB4kFs2/qbgrGBTrAZpK7bTkhEHPanHztyrrE/yy7aQmZFy5Ww5uDoK2Qx5ZcFSh
+         +q4g==
+X-Gm-Message-State: ABy/qLbiv2YfGiK1yC0sYnRLR9NI+PIzvN/GzgpMSUxUBGQqFGptgqA+
+        3nQZxhgskOiZnZKtUeuvbt8=
+X-Google-Smtp-Source: APBJJlGG7jeJfAdlvA3jfevXWNsX7Z6XDnEdzmBFjE/l3f7O0vfTOPwf+XRLDlNSHZlqc8rEVsYa8w==
+X-Received: by 2002:a25:aa74:0:b0:cea:5d93:3cc4 with SMTP id s107-20020a25aa74000000b00cea5d933cc4mr810955ybi.31.1689663270348;
+        Mon, 17 Jul 2023 23:54:30 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u187-20020a8184c4000000b00577357201e2sm306905ywf.14.2023.07.17.23.45.37
+        by smtp.gmail.com with ESMTPSA id j11-20020a25550b000000b00bceb538a275sm303404ybb.21.2023.07.17.23.54.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jul 2023 23:45:39 -0700 (PDT)
+        Mon, 17 Jul 2023 23:54:29 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <28de46d5-bf6a-da0c-ad24-5404ad416b3a@roeck-us.net>
-Date:   Mon, 17 Jul 2023 23:45:36 -0700
+Message-ID: <709d738c-3bf3-d808-4172-468d7ad947d7@roeck-us.net>
+Date:   Mon, 17 Jul 2023 23:54:26 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Thierry Reding <thierry.reding@gmail.com>,
         =?UTF-8?B?6JSh5om/6YGU?= <billyking19920205@gmail.com>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "krzysztof.kozlowski+dt@linaro.org" 
         <krzysztof.kozlowski+dt@linaro.org>,
         "joel@jms.id.au" <joel@jms.id.au>,
         "andrew@aj.id.au" <andrew@aj.id.au>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
         "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
         "corbet@lwn.net" <corbet@lwn.net>,
         "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
@@ -79,9 +79,7 @@ Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
         Billy Tsai <billy_tsai@aspeedtech.com>
-References: <CAGUgbhCqOJaEPjS96o2au21uW4NhqFScm4Ayd8PzOQvqxQ94SQ@mail.gmail.com>
- <0b9dd5cf-f4ca-2e6b-624d-0b451bbc2f30@linaro.org>
- <0ba3767c-d481-6e2c-2d32-b79af0e1efd8@roeck-us.net>
+References: <0ba3767c-d481-6e2c-2d32-b79af0e1efd8@roeck-us.net>
  <CAGUgbhC34-pUp4ECULc0ScaN7hUF1L-z69h+ji-TiVrv4gKd3Q@mail.gmail.com>
  <7b198d57-ddec-3074-314a-3e5e5b8f48f9@roeck-us.net>
  <CAGUgbhDbFedVe-pc+muD_NtDpjHpGqMDdrS3A73C-QbxeHn4oQ@mail.gmail.com>
@@ -90,37 +88,167 @@ References: <CAGUgbhCqOJaEPjS96o2au21uW4NhqFScm4Ayd8PzOQvqxQ94SQ@mail.gmail.com>
  <CAGUgbhCTDPGt_vpbfaEreX+iuLJ3WUBqt4kppxyaFZQus9Zf0Q@mail.gmail.com>
  <b22b2ccc-6760-0db6-067b-109c3864d2e8@linaro.org>
  <CAGUgbhDmXnyxYCL9h9C0P4ByDSTstWnGqW=uFoDVVHeK3BerHA@mail.gmail.com>
- <3756dffd-1407-d656-485a-9cf1eefd9ae1@linaro.org>
+ <3756dffd-1407-d656-485a-9cf1eefd9ae1@linaro.org> <ZLYziWcIWcNnzMXR@orome>
 From:   Guenter Roeck <linux@roeck-us.net>
 Subject: Re: [v6 2/4] dt-bindings: hwmon: Add ASPEED TACH Control
  documentation
-In-Reply-To: <3756dffd-1407-d656-485a-9cf1eefd9ae1@linaro.org>
+In-Reply-To: <ZLYziWcIWcNnzMXR@orome>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/17/23 23:04, Krzysztof Kozlowski wrote:
-
-[ ... ]
-
->> The first method involves passing the memory region from an MFD
->> driver, which was the
+On 7/17/23 23:39, Thierry Reding wrote:
+> On Tue, Jul 18, 2023 at 08:04:24AM +0200, Krzysztof Kozlowski wrote:
+>> On 18/07/2023 06:01, 蔡承達 wrote:
+>>>>
+>>>> On 17/07/2023 11:01, 蔡承達 wrote:
+>>>>> Guenter Roeck <linux@roeck-us.net> 於 2023年7月17日 週一 上午1:00寫道：
+>>>>>>
+>>>>>> On 7/16/23 09:08, Krzysztof Kozlowski wrote:
+>>>>>>
+>>>>>> [ ... ]
+>>>>>>
+>>>>>>>>
+>>>>>>>> This patch serial doesn't use to binding the fan control h/w. It is
+>>>>>>>> used to binding the two independent h/w blocks.
+>>>>>>>> One is used to provide pwm output and another is used to monitor the
+>>>>>>>> speed of the input.
+>>>>>>>> My patch is used to point out that the pwm and the tach is the
+>>>>>>>> different function and don't need to
+>>>>>>>> bind together. You can not only combine them as the fan usage but also
+>>>>>>>> treat them as the individual module for
+>>>>>>>> use. For example: the pwm can use to be the beeper (pwm-beeper.c), the
+>>>>>>>> tach can be used to monitor the heart beat signal.
+>>>>>>>
+>>>>>>> Isn't this exactly the same as in every other SoC? PWMs can be used in
+>>>>>>> different ways?
+>>>>>>>
+>>>>>>
+>>>>>> ... and in every fan controller. Not that it really makes sense because
+>>>>>> normally the pwm controller part of such chips is tied to the fan input,
+>>>>>> to enable automatic fan control, but it is technically possible.
+>>>>>> In many cases this is also the case in SoCs, for example, in ast2500.
+>>>>>> Apparently this was redesigned in ast2600 where they two blocks are
+>>>>>> only lightly coupled (there are two pwm status bits in the fan status
+>>>>>> register, but I have no idea what those mean). If the blocks are tightly
+>>>>>> coupled, separate drivers don't really make sense.
+>>>>>>
+>>>>>> There are multiple ways to separate the pwm controller part from the
+>>>>>> fan inputs if that is really necessary. One would be to provide a
+>>>>>> sequence of address mappings, the other would be to pass the memory
+>>>>>> region from an mfd driver. It is not necessary to have N instances
+>>>>>> of the fan controller, even if the address space is not continuous.
+>>>>>>
+>>>>>
+>>>>> Hi Guenter,
+>>>>>
+>>>>> May I ask about the meaning of the sequence of address mappings? It appears
+>>>>> to consist of multiple tuples within the 'reg' property, indicating
+>>>>> the usage of PWM/Tach
+>>>>> registers within a single instance. After that I can use the dts like following:
+>>>>>
+>>>>> pwm: pwm@1e610000 {
+>>>>> ...
+>>>>> reg = <0x1e610000 0x8
+>>>>> 0x1e610010 0x8
+>>>>> 0x1e610020 0x8
+>>>>> 0x1e610030 0x8
+>>>>> 0x1e610040 0x8
+>>>>> 0x1e610050 0x8
+>>>>> 0x1e610060 0x8
+>>>>> 0x1e610070 0x8
+>>>>> 0x1e610080 0x8
+>>>>> 0x1e610090 0x8
+>>>>> 0x1e6100A0 0x8
+>>>>> 0x1e6100B0 0x8
+>>>>> 0x1e6100C0 0x8
+>>>>> 0x1e6100D0 0x8
+>>>>> 0x1e6100E0 0x8
+>>>>> 0x1e6100F0 0x8>;
+>>>>
+>>>>
+>>>> Uh, no... I mean, why? We keep pointing out that this should not be done
+>>>> differently than any other SoC. Open any other SoC PWM controller and
+>>>> tell me why this is different? Why this cannot be one address space?
+>>>
+>>> Hi Krzysztof,
+>>>
+>>> This is because the register layout for PWM and Tach is not continuous.
+>>> Each PWM/Tach instance has its own set of controller registers, and they
+>>> are independent of each other.
+>>
+>> Register layout is not continuous in many other devices, so again - why
+>> this must be different?
+>>
+>>>
+>>> For example:
+>>> PWM0 uses registers 0x0 and 0x4, while Tach0 uses registers 0x8 and 0xc.
+>>> PWM1 uses registers 0x10 and 0x14, while Tach1 uses registers 0x18 and 0x1c.
+>>> ...
+>>>
+>>> To separate the PWM controller part from the fan inputs, Guenter has
+>>> provided two methods.
+>>> The first method involves passing the memory region from an MFD
+>>> driver, which was the
+>>
+>> I have no clue how can you pass memory region
+>> (Documentation/devicetree/bindings/reserved-memory/) from MFD and why
+>> does it make sense here.
+>>
+>>> initial method I intended to use. However, it seems that this method
+>>> does not make sense to you.
+>>>
+>>> Therefore, I would like to explore the second method suggested by
+>>> Guenter, which involves providing
+>>> a sequence of address mappings.
 > 
-> I have no clue how can you pass memory region
-> (Documentation/devicetree/bindings/reserved-memory/) from MFD and why
-> does it make sense here.
+> At the risk of saying what others have said: given that there's a single
+> reset line and a single clock line controlling all of these channels and
+> given what I recall of how address demuxers work in chips, everything
+> indicates that this is a single hardware block/device.
+> 
+> So the way that this should be described in DT is:
+> 
+> 	pwm@1e610000 {
+> 		reg = <0x1e610000 0x100>;
+> 		clocks = ...;
+> 		resets = ...
+> 	};
+> 
+> That'd be the most accurate representation of this hardware in DT. It is
+> then up to the driver to expose this in any way you see fit. For Linux
+> it may make sense to expose this as 16 PWM channels and 16 hardware
+> monitoring devices. Other operating systems using the same DT may choose
+
+It is single chip. It should be a single hardware monitoring device with
+16 channels. I don't even want to think about the mess we'd get if people
+start modeling a single chip as N hardware monitoring devices, one for
+each monitoring channel supported by that chip. It would be even more messy
+if the driver supporting those N devices would be marked for asynchronous
+probe, which would result in random hwmon device assignments.
+
+> to expose this differently, depending on their frameworks, etc. A simple
+> operating system may not expose this as separate resources at all but
+> instead directly program individual registers from this block.
+> 
+> I'd also like to add that I think trying to split this up into multiple
+> drivers in Linux is a bit overkill. In my opinion, though I know not
+> everyone shares this view, it's perfectly fine for one driver to expose
+> multiple types of resources. There's plenty of use-cases across the
+> kernel where tightly coupled devices like this have a single driver that
+> registers with multiple subsystems. Going through MFD only because this
+> particular hardware doesn't split registers nicely along Linux subsystem
+> boundaries.
+> 
+> So FWIW, I'm fine carrying hwmon code in a PWM driver and I'm equally
+> fine if PWM code ends up in a hwmon driver (or any other subsystem
+> really) if that makes sense for a given hardware.
 > 
 
-It is quite common for mfd drivers to pass regmap information to
-child drivers. Child drivers typically call dev_get_regmap() with
-the parent device as parameter. Granted, that is typically used
-for spi or i2c devices, but I don't see why it would not work
-here as well.
-
-Then there s syscon, but I don't know if that works with overlapping
-memory regions.
+I am fine either way as well, as long as we are talking about a single
+hwmon device and not 16 of them.
 
 Guenter
 
