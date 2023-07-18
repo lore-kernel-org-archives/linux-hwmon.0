@@ -2,56 +2,56 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0C1BEB64DD
-	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Jul 2023 07:22:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 795BAEB64DA
+	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Jul 2023 07:23:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbjGRHWB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Jul 2023 03:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
+        id S230199AbjGRHXj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 18 Jul 2023 03:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbjGRHV7 (ORCPT
+        with ESMTP id S231406AbjGRHXi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Jul 2023 03:21:59 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B6910C4
-        for <linux-hwmon@vger.kernel.org>; Tue, 18 Jul 2023 00:21:54 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98dfb3f9af6so742585066b.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 18 Jul 2023 00:21:54 -0700 (PDT)
+        Tue, 18 Jul 2023 03:23:38 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC4E10C7
+        for <linux-hwmon@vger.kernel.org>; Tue, 18 Jul 2023 00:23:36 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51e28b299adso7523224a12.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 18 Jul 2023 00:23:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689664913; x=1692256913;
+        d=linaro.org; s=google; t=1689665015; x=1692257015;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4n4qqgB+2hjrsOUL30ez1Ai+t/nxxoWxeb0EXPeYD3U=;
-        b=es1bxeLfaO0xY+BuGQ4kbRDr+cUVqBg0CW/7pnqWC5hYPhAuLqZ9tvVecxsqADBy/f
-         OtRsfX+WHQVbkcqdQzYmznL/LliMQFYqThwOlYsj0eeO+sGktPsawONakijDItPqHBdE
-         JRin/J42CfUzbHg4OQzKvvmsRdDZ+ai3U7u4Lu48pUcadEsgjlJsLu3mZjRqllItIaJO
-         n3fhwoXIf7Bzt6u0cE2zpyXUwS78Efty+mYquLY7nASpnKPwGwfQhN/KfhYjlwpvvnME
-         pwcqz3Wx7QIZfGGoOrNW6lgB3R02af3IUEGfwuQJPbmph/pHYIBSxD9WjptKLDuR6BEA
-         4n6Q==
+        bh=iSCltwnxHWzRk7Y0cpNIDArzz5ZlpHqXZ9iMuTI+OfI=;
+        b=J3Au4Ibv4sJBTBwp5hff3IG5hjiz2HQ7R60pq1w96sXSgKgHSZpCbiEmYh6VYt5D//
+         v26B4j5tRf+TzLdiXvmJDEN3otxqD4+DAiNx/xPqmiFQL5YSo6+brxkxz2Dck6rHgJQr
+         Ds7UajxieXovAmZ3F8+tXxuIVvSJmCJwmOyuWsB9hllCx5+FnwCAw/V160TW6/jxow10
+         NLu3hFA076fFgR9o4HOQHjlMmOVkCpmnYLsU6QYLGwiFiMWvxB5Hj7CVIkri3TsR8Kbq
+         Es8YHHxXEG9wVEnlKvyrYNLXSxMVsytHlGceVn//iPMy5GMgu6U4hqhSxY6S5ikrI45H
+         0yEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689664913; x=1692256913;
+        d=1e100.net; s=20221208; t=1689665015; x=1692257015;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4n4qqgB+2hjrsOUL30ez1Ai+t/nxxoWxeb0EXPeYD3U=;
-        b=j6PKWAXTxx7WtP7s0HWCug+RUa8vsO062JknR8ZQdE8uFXo1VCJpadvbH2ZjaiotAZ
-         yEZ0wphV3lA3kGv6XPR3R20gT1fUGVXgEehft3P5keAif9ael+k06Gk59wySaLWo/paJ
-         8ACXuBWHqS89jYSuV/Ft2rdkRxgSK/QeBpjs+eEj5BuOVFeM3PqCKVNNA65L3t1cWD2L
-         jRhFaO6gbeOOlLOBaOcyK+5r3PbL0UXWrZXjnqLnfOm1BO5c47XZpJAY+IDdz+BnvDg6
-         +bwyzXKvaM2gBmSoPYNXF4gg3INhxJ+CgRi74kG3VS36NQBN12Fs64WZOdAwlg2YdYg/
-         +GXA==
-X-Gm-Message-State: ABy/qLa69hKdnsnBB5h9bPJbSzdbyWhdVGZ+zepDxHIdrZnMilaZlcaP
-        L8ONNVsNUY4EuvxcycnYXJYzTA==
-X-Google-Smtp-Source: APBJJlEPoEma6epYYKdKLymUlkCZUVI81YFqxVkZojmkdpGMGOEf3L+HYHZiUca0m/klUjEdyT2CrA==
-X-Received: by 2002:a17:906:2308:b0:98d:e7e3:5ab7 with SMTP id l8-20020a170906230800b0098de7e35ab7mr11265940eja.11.1689664913098;
-        Tue, 18 Jul 2023 00:21:53 -0700 (PDT)
+        bh=iSCltwnxHWzRk7Y0cpNIDArzz5ZlpHqXZ9iMuTI+OfI=;
+        b=biqcDKIYE5mqKHH6ZP5csepZPlXUXlGTQ87sBMfPiFo7PRJvD4b926N1VwzIHOcPIM
+         CIT7Vd+h1u5eIaPuAncw0XNRnIir25wOPozhTnqUtj7wANJ4cG/aYcRZs8wqzuGb4Kr0
+         6rZ7u41LKwfsBH1eQYf2jM1D8/eZHPS7+jbo1mZgnuzEBiM6vdCGbaUeUbMdrnINICOu
+         FxImHvkAFpDk7bv2rf36MdoeyH09V4+QOqSar4x3LYbUChuYMQ6Mc3iN7NSWb1S4SOOM
+         hsDQAHG4dXPdQF6cIXFTdVowNyQPQoPex3OC8LVlOvmWxY1s6gQUzlZ4v6JD7e0ZgE+x
+         zLgw==
+X-Gm-Message-State: ABy/qLb2gA/dRvv/bGGplL3lJ+Gipss8vry+2GzCw85hsjUAX5FiDOwR
+        S+fYTLl7VgiJzFx3l5yvmKr8tg==
+X-Google-Smtp-Source: APBJJlEJWK3IpPoAF1MaJSbNIxYudv8k8QIAIToUGUIbAOix+a6dif5mC+LwN0ZJE9o3qJu2NgnD3w==
+X-Received: by 2002:aa7:cd52:0:b0:51e:3558:5eb6 with SMTP id v18-20020aa7cd52000000b0051e35585eb6mr12997197edw.3.1689665015019;
+        Tue, 18 Jul 2023 00:23:35 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id f18-20020a1709062c5200b0098d2f703408sm631266ejh.118.2023.07.18.00.21.51
+        by smtp.gmail.com with ESMTPSA id n3-20020aa7c683000000b005219864c7cfsm776223edq.39.2023.07.18.00.23.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jul 2023 00:21:52 -0700 (PDT)
-Message-ID: <ef46f22a-4556-34b8-101a-ff913b42bb45@linaro.org>
-Date:   Tue, 18 Jul 2023 09:21:50 +0200
+        Tue, 18 Jul 2023 00:23:34 -0700 (PDT)
+Message-ID: <91725f89-f3fe-7879-1346-e4cd2eb8d2e9@linaro.org>
+Date:   Tue, 18 Jul 2023 09:23:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
@@ -83,27 +83,8 @@ On 18/07/2023 09:01, Andre Werner wrote:
 > trivial-devices.yaml because the driver has no special properties
 > to describe.
 
-Changelog goes after ---. Even if you intended to keep it in commit msg,
-definitely not after SoB. Does this even pass checkpatch?
-
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index ba2bfb547909..a4f4701337cf 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -315,6 +315,8 @@ properties:
->            - plx,pex8648
->              # Pulsedlight LIDAR range-finding sensor
->            - pulsedlight,lidar-lite-v2
-> +            # Renesas HS300[1,2,3,4] Temperature and Relative Humidity Sensors
-> +          - renesas,hs3001
-
-What about the rest of the devices - hs300[234]? Usually we ask for
-specific compatibles, that's why separate binding made some sense.
-
+BTW, you already sent v2, so this is v3. Please version your patches
+correctly.
 
 Best regards,
 Krzysztof
