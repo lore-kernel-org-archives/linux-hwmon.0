@@ -2,157 +2,152 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BDDEC00528
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jul 2023 18:42:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C771C001B0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jul 2023 19:29:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjGSSmL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 Jul 2023 14:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
+        id S229524AbjGST3N (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 Jul 2023 15:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjGSSmK (ORCPT
+        with ESMTP id S229452AbjGST3N (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 Jul 2023 14:42:10 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0CD171E
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 Jul 2023 11:42:08 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fbc5d5742bso72678435e9.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 Jul 2023 11:42:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1689792127; x=1692384127;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BKnRhR7SITJIXe1vnVFks13dyzhvxpmyGiR6BjT9xJM=;
-        b=NmNkf+DRDYzm5b1OTfm96Wl1eiAht1ady4xiYxiNSgU8CB9ZR+xngnXbhZqVatugDU
-         8I0BWNcR8fyfxW+Z2izS/RO1kXH/RkhTSjO0NH9jUXMTVrMF3voUFAUNoGra/unRKffF
-         PUOtHxztCR4WiWOo3nCp+sVGwXxvaUFIcrFXPkpY3u2xQd05pOxK0UWUsEumCkIvx/uE
-         sRhK0lWG0NdyfzRuEgcrKQpoXzLCC8Zfsw+zwKUPdZCUdwZ/sWlFQUX7YelWfMpTnEdQ
-         f56lnd3mGoreGO3ENq0bWUN2yKcoGwSJSwMR3jX0HWayZ/Ib09DXK93mjRiZsXXDyYQW
-         WoGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689792127; x=1692384127;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BKnRhR7SITJIXe1vnVFks13dyzhvxpmyGiR6BjT9xJM=;
-        b=WoifWQjIMgdLYPnuRqRxpb0Gdrva1zLas2wcTiUyRe3ugzIWqzMOXkaAzgChSMRQKq
-         eYDiNjzn0q1l9api7gra7wQ2dcNohSNMTV0nTuJjDQBECZaJhbi2VtcuPubSBNxf/bB5
-         qxwHQAl/i6kISDA9dzFl27+sbNVDKTCOtP93Vj1WNYKkOpi5ZXctHTMyoc6sIazGBg2/
-         7QXpVJ4dFOslvbcvpgFKTVMF3leZgttlZNSXSBWSdqRlrQSREUSi/W9xwFe49wByYBQd
-         iHf0hSmXc9Kes7iY+xXzXda2mzo4XHqwdteNPZX9NAYH3KVM/6d8eIRY8Mtder/NhbcY
-         UAAg==
-X-Gm-Message-State: ABy/qLb+fQNmE43iE+zvj/ZXxWPG/B5apPLro9xOc5CbyfE3okGy/cqJ
-        guluUsxKBKBpyB8UBn/xASB6qQ==
-X-Google-Smtp-Source: APBJJlF5XQQ83QnSlsJ/G3DODSNDYpBEW7lGEoRF0OGmD0iZLAH2sT5nlf+kshDVz02Czb9io0/XKg==
-X-Received: by 2002:a05:6000:10d2:b0:314:350a:6912 with SMTP id b18-20020a05600010d200b00314350a6912mr547850wrx.36.1689792127211;
-        Wed, 19 Jul 2023 11:42:07 -0700 (PDT)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id n18-20020adffe12000000b003143be36d99sm5948877wrr.58.2023.07.19.11.42.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jul 2023 11:42:06 -0700 (PDT)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        iwona.winiarska@intel.com, linux@roeck-us.net, jdelvare@suse.com
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v3 3/3] hwmon: (peci/dimmtemp) Add Sapphire Rapids support
-Date:   Wed, 19 Jul 2023 20:41:54 +0200
-Message-ID: <20230719184155.59375-3-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230719184155.59375-1-Naresh.Solanki@9elements.com>
-References: <20230719184155.59375-1-Naresh.Solanki@9elements.com>
+        Wed, 19 Jul 2023 15:29:13 -0400
+Received: from doubleyoutf.uk (doubleyoutf.uk [IPv6:2a00:da00:1800:3a8::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC791FD9
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 Jul 2023 12:29:08 -0700 (PDT)
+Received: from [2a00:23c5:dcb3:8b33::b56] (helo=orangina.lan)
+        by doubleyoutf.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ahmad@khalifa.ws>)
+        id 1qMCrB-003DVh-GF; Wed, 19 Jul 2023 19:29:05 +0000
+From:   Ahmad Khalifa <ahmad@khalifa.ws>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Cc:     Ahmad Khalifa <ahmad@khalifa.ws>
+Subject: [PATCH] hwmon: (nct6775) Fix IN scaling factors for 6798/6799
+Date:   Wed, 19 Jul 2023 20:28:48 +0100
+Message-Id: <20230719192848.337508-1-ahmad@khalifa.ws>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+Scaling for VTT/VIN5/VIN6 registers were based on prior chips
+* Split scaling factors for 6798/6799 and assign at probe()
+* Pass them through driver data to sysfs functions
 
-This patch extends the functionality of the hwmon (peci/dimmtemp) to
-include support for Sapphire Rapids platform.
+Tested on nct6799 with old/new input/min/max
 
-Sapphire Rapids can accommodate up to 8 CPUs, each with 16 DIMMs. To
-accommodate this configuration, the maximum supported DIMM count is
-increased, and the corresponding Sapphire Rapids ID and threshold code
-are added.
-
-The patch has been tested on a 4S system with 64 DIMMs installed.
-Default thresholds are utilized for Sapphire Rapids, as accessing the
-threshold requires accessing the UBOX device on Uncore bus 0, which can
-only be achieved using MSR access. The non-PCI-compliant MMIO BARs are
-not available for this purpose.
-
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: 0599682b826f ("hwmon: (nct6775) Add support for NCT6798D")
+Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
 ---
-Changes in V3:
-- Update Acked-by in commit message.
-Changes in V2:
-- Update subject.
----
- drivers/hwmon/peci/dimmtemp.c | 24 +++++++++++++++++++++++-
- 1 file changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
-index ed968401f93c..edafbfd66fef 100644
---- a/drivers/hwmon/peci/dimmtemp.c
-+++ b/drivers/hwmon/peci/dimmtemp.c
-@@ -30,8 +30,10 @@
- #define DIMM_IDX_MAX_ON_ICX	2
- #define CHAN_RANK_MAX_ON_ICXD	4
- #define DIMM_IDX_MAX_ON_ICXD	2
-+#define CHAN_RANK_MAX_ON_SPR	128
-+#define DIMM_IDX_MAX_ON_SPR	2
- 
--#define CHAN_RANK_MAX		CHAN_RANK_MAX_ON_HSX
-+#define CHAN_RANK_MAX		CHAN_RANK_MAX_ON_SPR
- #define DIMM_IDX_MAX		DIMM_IDX_MAX_ON_HSX
- #define DIMM_NUMS_MAX		(CHAN_RANK_MAX * DIMM_IDX_MAX)
- 
-@@ -530,6 +532,15 @@ read_thresholds_icx(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u
- 	return 0;
- }
- 
-+static int
-+read_thresholds_spr(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u32 *data)
-+{
-+	/* Use defaults */
-+	*data = (95 << 16) | (90 << 8);
-+
-+	return 0;
-+}
-+
- static const struct dimm_info dimm_hsx = {
- 	.chan_rank_max	= CHAN_RANK_MAX_ON_HSX,
- 	.dimm_idx_max	= DIMM_IDX_MAX_ON_HSX,
-@@ -572,6 +583,13 @@ static const struct dimm_info dimm_icxd = {
- 	.read_thresholds = &read_thresholds_icx,
+Notes:
+    Parked remaining 2 registers in the comments as
+    setting them would be an "add" patch rather than a fix
+    
+    diff of affected sensors:
+    - 9 VTT:         1.64 V  (min =  +0.00 V, max =  +1.80 V)
+    -10 VIN5:      552.00 mV (min =  +0.45 V, max =  +0.60 V)
+    -11 VIN6:      544.00 mV (min =  +0.45 V, max =  +0.60 V)
+    + 9 VTT:         3.30 V  (min =  +0.00 V, max =  +3.60 V)
+    +10 VIN5:        1.10 V  (min =  +0.90 V, max =  +1.20 V)
+    +11 VIN6:        1.10 V  (min =  +0.90 V, max =  +1.20 V)
+
+ drivers/hwmon/nct6775-core.c | 28 ++++++++++++++++++++++------
+ drivers/hwmon/nct6775.h      |  1 +
+ 2 files changed, 23 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
+index 1664d2a1e6c3..fa0b7551ebf5 100644
+--- a/drivers/hwmon/nct6775-core.c
++++ b/drivers/hwmon/nct6775-core.c
+@@ -935,14 +935,25 @@ static const u16 scale_in[15] = {
+ 	800, 800
  };
  
-+static const struct dimm_info dimm_spr = {
-+	.chan_rank_max	= CHAN_RANK_MAX_ON_SPR,
-+	.dimm_idx_max	= DIMM_IDX_MAX_ON_SPR,
-+	.min_peci_revision = 0x40,
-+	.read_thresholds = &read_thresholds_spr,
+-static inline long in_from_reg(u8 reg, u8 nr)
++/*
++ * NCT6798 scaling:
++ *    CPUVC, IN1, AVSB, 3VCC, IN0, IN8, IN4, 3VSB, VBAT,  VTT,  IN5,  IN6, IN2,
++ *      IN3, IN7
++ * Additional scales to be added later: IN9 (800), VHIF (1600)
++ */
++static const u16 scale_in_6798[15] = {
++	800, 800, 1600, 1600, 800, 800, 800, 1600, 1600, 1600, 1600, 1600, 800,
++	800, 800
 +};
 +
- static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
- 	{
- 		.name = "peci_cpu.dimmtemp.hsx",
-@@ -597,6 +615,10 @@ static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
- 		.name = "peci_cpu.dimmtemp.icxd",
- 		.driver_data = (kernel_ulong_t)&dimm_icxd,
- 	},
-+	{
-+		.name = "peci_cpu.dimmtemp.spr",
-+		.driver_data = (kernel_ulong_t)&dimm_spr,
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(auxiliary, peci_dimmtemp_ids);
++static inline long in_from_reg(u8 reg, u8 nr, const u16 *scales)
+ {
+-	return DIV_ROUND_CLOSEST(reg * scale_in[nr], 100);
++	return DIV_ROUND_CLOSEST(reg * scales[nr], 100);
+ }
+ 
+-static inline u8 in_to_reg(u32 val, u8 nr)
++static inline u8 in_to_reg(u32 val, u8 nr, const u16 *scales)
+ {
+-	return clamp_val(DIV_ROUND_CLOSEST(val * 100, scale_in[nr]), 0, 255);
++	return clamp_val(DIV_ROUND_CLOSEST(val * 100, scales[nr]), 0, 255);
+ }
+ 
+ /* TSI temperatures are in 8.3 format */
+@@ -1653,7 +1664,8 @@ show_in_reg(struct device *dev, struct device_attribute *attr, char *buf)
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 
+-	return sprintf(buf, "%ld\n", in_from_reg(data->in[nr][index], nr));
++	return sprintf(buf, "%ld\n",
++		       in_from_reg(data->in[nr][index], nr, data->scale_in));
+ }
+ 
+ static ssize_t
+@@ -1671,7 +1683,7 @@ store_in_reg(struct device *dev, struct device_attribute *attr, const char *buf,
+ 	if (err < 0)
+ 		return err;
+ 	mutex_lock(&data->update_lock);
+-	data->in[nr][index] = in_to_reg(val, nr);
++	data->in[nr][index] = in_to_reg(val, nr, data->scale_in);
+ 	err = nct6775_write_value(data, data->REG_IN_MINMAX[index - 1][nr], data->in[nr][index]);
+ 	mutex_unlock(&data->update_lock);
+ 	return err ? : count;
+@@ -3442,6 +3454,7 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
+ 	mutex_init(&data->update_lock);
+ 	data->name = nct6775_device_names[data->kind];
+ 	data->bank = 0xff;		/* Force initial bank selection */
++	data->scale_in = scale_in;
+ 
+ 	switch (data->kind) {
+ 	case nct6106:
+@@ -3957,6 +3970,9 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
+ 			break;
+ 		}
+ 
++		if (data->kind == nct6798 || data->kind == nct6799)
++			data->scale_in = scale_in_6798;
++
+ 		reg_temp = NCT6779_REG_TEMP;
+ 		num_reg_temp = ARRAY_SIZE(NCT6779_REG_TEMP);
+ 		if (data->kind == nct6791) {
+diff --git a/drivers/hwmon/nct6775.h b/drivers/hwmon/nct6775.h
+index e8cc4f0544b8..c752bc7bbe72 100644
+--- a/drivers/hwmon/nct6775.h
++++ b/drivers/hwmon/nct6775.h
+@@ -98,6 +98,7 @@ struct nct6775_data {
+ 	u8 bank;		/* current register bank */
+ 	u8 in_num;		/* number of in inputs we have */
+ 	u8 in[15][3];		/* [0]=in, [1]=in_max, [2]=in_min */
++	const u16 *scale_in;	/* internal scaling factors */
+ 	unsigned int rpm[NUM_FAN];
+ 	u16 fan_min[NUM_FAN];
+ 	u8 fan_pulses[NUM_FAN];
+
+base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+prerequisite-patch-id: 36e3467bd9ea72cb3ad2bef638a8389a9537d111
+prerequisite-patch-id: 716ba83170c6c7a969faead5189f4b336097fcb5
+prerequisite-patch-id: 57e03c9561d046b45ce1fd2cafa4061add8c68a0
 -- 
-2.41.0
+2.39.2
 
