@@ -2,91 +2,77 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85033EB64DC
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jul 2023 03:07:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EC50EB64DC
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jul 2023 03:07:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjGSDHA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Jul 2023 23:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40594 "EHLO
+        id S229672AbjGSDHy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 18 Jul 2023 23:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjGSDG6 (ORCPT
+        with ESMTP id S229495AbjGSDHx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Jul 2023 23:06:58 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D9A1BFC;
-        Tue, 18 Jul 2023 20:06:44 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-3a1d9b64837so4727326b6e.0;
-        Tue, 18 Jul 2023 20:06:44 -0700 (PDT)
+        Tue, 18 Jul 2023 23:07:53 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DA11BDC;
+        Tue, 18 Jul 2023 20:07:52 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-55b1238a013so4913383a12.3;
+        Tue, 18 Jul 2023 20:07:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689736003; x=1692328003;
+        d=gmail.com; s=20221208; t=1689736072; x=1692328072;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Zs2jiLd+rCjtxlqNbdpcaREYCsXzaDDdr1rUXdltDm8=;
-        b=fWpvFvyq2mpfEHRrR/4YvfPrdKOFZguQwE2XyAjFhhYCPkbMSr6cQwGzATz4+m7rLe
-         +iY2upNmNLTkrpBVOKof2h/QZgt0UjjHhWrWWdl6iRQQqbNCH7shzZUN7KBR+Nl2T+eU
-         YbHfVEDs4AhJ/jSwbEuwpXMmj5VF/yR5jo07vjyketoalp8GBytorIEprVDFraJtIc4w
-         0s/ZEHo0Sa1UiefaV47fS7OPEZM/dnpQC1jP19r+ABSAdASDrwqszDmM/WaTwGDAqvTQ
-         +HpM5UjKJ8wyaZ3RGNEi2cm1SVLRKFUciSNvXFnxKLnsJpL/FaWGIH0cp3Pj6DL5xaQF
-         gUsQ==
+        bh=WFE8vQN8EwQOZwCatIjB/twUGRI06Jr11e01KPcsW9w=;
+        b=TQFwmJ4R9HTIMNNnDFiw+XOTZ7Hi+XYBAgvMKcKiRRmgf9mEEd9gs0M+T+fnBytlvd
+         CS91obCUXhzK42bBGQ15dcOMVGwA+xWmMa6yBIiD7XO3urhCq1P36hEbnc1JRLf+63Dw
+         TgxHEoVFsCjkS88pBVoQLxCS4NKV4Lu+ks7OS0p1zJYrMIRxg+uZtJK+a02wIXSnyB4Z
+         VPBUVvr+8YmLdbAQAcbrB24Qb5D+wpy+bV7QdGwXXta9pXRXFJ4Q9GIoobO4i37SFawe
+         95CIup06fqrF3CVgwgpK+GUDtwGeXDQIYP3NV4+VxA5ALlv+fylAqp4A4rYMVlXUrpWc
+         kU8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689736003; x=1692328003;
+        d=1e100.net; s=20221208; t=1689736072; x=1692328072;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Zs2jiLd+rCjtxlqNbdpcaREYCsXzaDDdr1rUXdltDm8=;
-        b=DJPzVIIPUuW/8M1zUKAHv/NBjpTD6yzHXLlX/tRfi4wlBBbG3E6VtCWo+VhfEVPSOd
-         s1InsVXQnKwjaSh3xEwvxQXrKISPo8vCyRdloDvRMjYFF2MjaOy0CsqTXltuYCMHziPA
-         dBKF9SrNq0Mx3XU9sf+DewE+boiTaNgtS8uxtVSNPEltOxZaUnG5gnNjOoN1IKF5r6G1
-         y1QY/eraS8bbIKTq58OXYhv6TwUGVYzZtfKEyRI655YsTRdlSdO3k5yaKwXc9lzih+aq
-         FySqvO5z0sg74phEP19df/esaCX34Shlcm3+UTsJwK0/Q4eoeiYTxQGIK3tnW+rSkwgl
-         oeYg==
-X-Gm-Message-State: ABy/qLaYh0KDSQLVxcTLnfAbFcpKJvbSsVV6aYaZMloVeZYwyWaQvSSl
-        23v8AVmlhQlgviebzsgTmXEJqTnsb44=
-X-Google-Smtp-Source: APBJJlGLIrx3XGA1yLwJYKQQgdoXl1bIHpwBSQa1v+qcNDeMVJbOSnCdUlUIG5OgTTctJpFbcvvX0w==
-X-Received: by 2002:a05:6808:13d2:b0:39e:7af4:7eea with SMTP id d18-20020a05680813d200b0039e7af47eeamr5947676oiw.55.1689736003428;
-        Tue, 18 Jul 2023 20:06:43 -0700 (PDT)
+        bh=WFE8vQN8EwQOZwCatIjB/twUGRI06Jr11e01KPcsW9w=;
+        b=FDSFcpothLsJp55jRjxy4YAgjFaJ3BLSChky5Hr5Uk2SUfv8uBNgm/dt4CVjRcOOS1
+         p9t8h2mpyNA/HMJvaGjJAGGdNjbxCSmL/ejhKWRn7pEs2jEpyjAr1qTzSvXJ/+S02og2
+         u5+qi5bj65P7V3AiP+1I89PDbzVbC+/i4mjxiExKnh19P+ljqZP3n5E0srs1LH1WlbNZ
+         2tkItKUkhmoaOOGu8IYfLTrdN/rBesS1q/QFWh4vkRafwBw0Ai0uN3QekGkTwhZeBBeV
+         8tJC4vM5PAcfhwdSEYmZ3qemmRUGFfk55EIskpuzeMsoSS3dRNClPVRSdy3mKgAXI520
+         TNXw==
+X-Gm-Message-State: ABy/qLa7nPHDUT5D/6Lv8m0OGrv23sQCXBBfUWuOBK16C/u+kTcRALzz
+        ZAfIBMeL9hompTP4LWi6g98=
+X-Google-Smtp-Source: APBJJlGHlZYToOsYLlSttf/cqzYEOJaCgjC3H4I5HZlTngYiGK95Hdd4Gu5pUfukFMlqEM197lZzRA==
+X-Received: by 2002:a17:902:758b:b0:1b8:903d:8dd0 with SMTP id j11-20020a170902758b00b001b8903d8dd0mr16761969pll.32.1689736071934;
+        Tue, 18 Jul 2023 20:07:51 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 23-20020a17090a0f1700b00256b67208b1sm253515pjy.56.2023.07.18.20.06.42
+        by smtp.gmail.com with ESMTPSA id bf6-20020a170902b90600b001b890b3bbb1sm2596203plb.211.2023.07.18.20.07.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jul 2023 20:06:42 -0700 (PDT)
+        Tue, 18 Jul 2023 20:07:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 18 Jul 2023 20:06:42 -0700
+Date:   Tue, 18 Jul 2023 20:07:50 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Naresh Solanki <naresh.solanki@9elements.com>
 Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>
-Subject: Re: [PATCH v2 6/8] hwmon: (pmbus/mp2975) Add support for MP2971 and
- MP2973
-Message-ID: <0817fd19-0b69-401e-a25c-6d3e2679b9ab@roeck-us.net>
+Subject: Re: [PATCH v2 7/8] hwmon: (pmbus/mp2975) Add regulator support
+Message-ID: <8e209b78-8d81-4dfc-a88f-a11bbe4b03f0@roeck-us.net>
 References: <20230714135124.2645339-1-Naresh.Solanki@9elements.com>
- <20230714135124.2645339-6-Naresh.Solanki@9elements.com>
+ <20230714135124.2645339-7-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230714135124.2645339-6-Naresh.Solanki@9elements.com>
+In-Reply-To: <20230714135124.2645339-7-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jul 14, 2023 at 03:51:14PM +0200, Naresh Solanki wrote:
+On Fri, Jul 14, 2023 at 03:51:15PM +0200, Naresh Solanki wrote:
 > From: Patrick Rudolph <patrick.rudolph@9elements.com>
 > 
-> Add support for MP2971 and MP2973, the successor of MP2975.
-> 
-> The major differences are:
->  - On MP2973 and MP2971 the Vref cannot be read and thus most of
->    the OVP/current calculations won't work.
->  - MP2973 and MP2971 also support LINEAR format for VOUT
->  - MP2973 and MP2971 do not support OVP2
->  - On MP2973 and MP2971 most registers are in LINEAR format
->  - The IMVP9_EN bit has a different position
->  - Per phase current sense haven't been implemented.
-> 
-> As on MP2975 most of the FAULT_LIMIT and WARN_LIMIT registers
-> have been redefined and doesn't provide the functionality as
-> defined in PMBUS spec.
+> Add support to expose the PMBUS regulator.
 > 
 > Tested on MP2973 and MP2971.
 > 
