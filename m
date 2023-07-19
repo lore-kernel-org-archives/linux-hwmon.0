@@ -2,79 +2,87 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48EA2EB64DC
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jul 2023 03:01:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0449AEB64DD
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Jul 2023 03:01:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbjGSDBF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Jul 2023 23:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
+        id S229553AbjGSDBz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 18 Jul 2023 23:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjGSDBE (ORCPT
+        with ESMTP id S229475AbjGSDBy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Jul 2023 23:01:04 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BE31BCF;
-        Tue, 18 Jul 2023 20:01:03 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-668711086f4so241730b3a.1;
-        Tue, 18 Jul 2023 20:01:03 -0700 (PDT)
+        Tue, 18 Jul 2023 23:01:54 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F38130;
+        Tue, 18 Jul 2023 20:01:53 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b89e10d356so40574225ad.3;
+        Tue, 18 Jul 2023 20:01:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689735663; x=1692327663;
+        d=gmail.com; s=20221208; t=1689735713; x=1692327713;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nBdhAihI/pvqPTCcmtBB0ArfD329ikLZodkvSFP3iRU=;
-        b=KmjarVaF0CLu0X2VjzUfypGXT/EO9RM1swQd3UDyqF64ZwLURPj7HezfpXJNUOjmUR
-         qupX/zKVH73vB8204BbPG8wHqGvqds1RrL6KDn0wwfbi7vbwZO60laXCdlxhGwOPl7Ra
-         8ndr7jxPGuOY34lZ1qd9ZprImQe/L4VjW4l4/6vHvQ2nWluJ/1mOkLEn9p4u7PGwfcj1
-         QQS2goeGxzwzD3o/9AWwlqwsHTskirxImTbbo87MQM8t2gsGO28tU2HQnjASaQm5g1/Z
-         JyDsc0xUEcSiXZ4jKElRAKsftQKPtKEyoXDTq0vhHE/vY51+gw+pYSUO56DAt+U5C23h
-         oUyg==
+        bh=thEXipIY2P8Bpgx7Y1frh4stUCxjS6n/WqeDaPQ8aHk=;
+        b=Iy+R6Qd0V4s4bT9RJ3FezOfc7WJQ+rb+9QXAkxeEjwybR5cizWC/UZEdrl8YM3hwg8
+         dW2DaSkYKOUIsDJ0u56J/xojUdPc6NxQFhRFYAqDCWAfBkDN3yMPMre3Az5pmIo6uXz8
+         UffuZpkXHn2l5N017tblb9mOtiwoEQQeJfCGfgG5/PCPYhD9LIni/eSbIMl2BeP3L1vf
+         3RqZkDFC+CbZfkzdS1gbb/0ZVcBKZAA+RP5NCoj7k7CEwDzoE2BI38XZMqSR8Mxdh05R
+         BzlQFcwjOjvctwIZpfvxIiF9nGJg0RbibV8NJ8IBitopl5N2xZhm5mqVqZpfJ50fQ1Tg
+         8cRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689735663; x=1692327663;
+        d=1e100.net; s=20221208; t=1689735713; x=1692327713;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nBdhAihI/pvqPTCcmtBB0ArfD329ikLZodkvSFP3iRU=;
-        b=dBQkHCenTdE9dDwM8hboS2MOraLBJmdQZAVpPqjg0hQGY/aVllYsd2GHoGUv2b0ly5
-         UMVCdvAUxeKZa4HGDryZyaGvpSM+ap3i0SORN00Ga7aWi+5WwI/ND32gBvp3hBqxaxua
-         go+fuYtdSBBEilRykq2DzfggvPVejXwuoLPD1ExgxJFdR+ptdW4kgK82Ptu79CwCClmA
-         ujIMfJ6aUc17Nb1auecvADr+lys9m8gMNAzAMjAM3cJhQR7UnM5v8BK2idgbAiKjD771
-         6INrY0fn1JBookfAYWGujnnxrcTToimxoWuJqbfV3Amx+XCsIE/qQRUh7yc/ZLG+zSrc
-         xb6Q==
-X-Gm-Message-State: ABy/qLYMA4z7vCXu6maaE75DFpUj28xJ/O7RBZx5xmaZu+4ytWp+Ryyi
-        1gmC9cYZytHSj2MnO4Q/VHQ/BPWz0CY=
-X-Google-Smtp-Source: APBJJlGgxGAUyfDYuULzHH9cCly69Zj30aNV5aCSfKpMEgn2YmqAE/64MHTOhR++6KlqmoiHiXwOLA==
-X-Received: by 2002:a05:6a21:99a6:b0:12b:40d3:aeb1 with SMTP id ve38-20020a056a2199a600b0012b40d3aeb1mr1303070pzb.25.1689735662813;
-        Tue, 18 Jul 2023 20:01:02 -0700 (PDT)
+        bh=thEXipIY2P8Bpgx7Y1frh4stUCxjS6n/WqeDaPQ8aHk=;
+        b=J2mxAqTaOfzkexyYlBZv7i+ig0H2XDta0YnSK9E7f2giuh6JmcUB5XRm3BmR4X0qNq
+         cQ0KTGP39+Bl8gAMoMe5AowbpozNeS0UkTCDSWWodbvi5n7HXG7dQuTpF3eNkD0pfOdy
+         8EzYKjNEGrP/SDexdQ0bnmNzZlJj88iKw+rT7vkkMsmC8n5uLqqHsVJHv4dfU8VSUcJi
+         Y818+bdjjjczevn2Ich/z/un4sFM6neQdz/yGRsgiJiyJJnkXv2qC53DVhJRWHC86l7J
+         ESdaxD2fb0kucwwQOzYaL12WvYYC05xxKNuP2ft68uOzhJUf/77DO6TMNIdVHsORE7JB
+         7IZw==
+X-Gm-Message-State: ABy/qLavrrwURoouotr/JdxHzdUATgh7Wp5ZuEvz+lPSsZ6i/DdqcR0V
+        oiJnEq9IapeyklxqLPo2sRRJ55fcCKU=
+X-Google-Smtp-Source: APBJJlFjdttqoYssE/6qZLiIsLBdjGeqg7VNST6scNwR5mrv0qTImM0RWKAdc+W3gejnhWkBT2u6VA==
+X-Received: by 2002:a17:902:f693:b0:1ae:6cf0:94eb with SMTP id l19-20020a170902f69300b001ae6cf094ebmr4306055plg.5.1689735712656;
+        Tue, 18 Jul 2023 20:01:52 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 10-20020aa7924a000000b0066a31111cc5sm2164225pfp.152.2023.07.18.20.01.02
+        by smtp.gmail.com with ESMTPSA id p12-20020a170902eacc00b001b89466a5f4sm2610007pld.105.2023.07.18.20.01.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jul 2023 20:01:02 -0700 (PDT)
+        Tue, 18 Jul 2023 20:01:52 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 18 Jul 2023 20:01:01 -0700
+Date:   Tue, 18 Jul 2023 20:01:51 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Naresh Solanki <naresh.solanki@9elements.com>
 Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Subject: Re: [PATCH v2 1/8] hwmon: (pmbus/mp2975) Fix whitespace error
-Message-ID: <6a69e320-1bec-486f-9f9b-93b9d1ae30d8@roeck-us.net>
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 2/8] dt-bindings: trivial-devices: Add MPS MP2971 and
+ MP2973
+Message-ID: <a023d225-2a6c-4c98-9bbc-61fb6a6896b7@roeck-us.net>
 References: <20230714135124.2645339-1-Naresh.Solanki@9elements.com>
+ <20230714135124.2645339-2-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230714135124.2645339-1-Naresh.Solanki@9elements.com>
+In-Reply-To: <20230714135124.2645339-2-Naresh.Solanki@9elements.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jul 14, 2023 at 03:51:09PM +0200, Naresh Solanki wrote:
+On Fri, Jul 14, 2023 at 03:51:10PM +0200, Naresh Solanki wrote:
 > From: Patrick Rudolph <patrick.rudolph@9elements.com>
 > 
-> Fix whitespace error reported by checkpatch.pl
+> Add Monolithic Power Systems MP2971 & MP2973 to trivial devices.
 > 
 > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Applied.
 
